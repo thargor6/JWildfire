@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+
+<project name="JWildfire" basedir="." default="packageJar">
+
+	<property name="build.dir" location="build/classes" />
+	<property name="lib.dir" location="lib" />
+	<property name="src.dir" location="src/" />
+	<property name="jar.name" value="build/j-wildfire.jar" />
+	
+	<path id="build.classpath">
+		<fileset dir="${lib.dir}">
+			<include name="*.jar" />
+		</fileset>
+		<pathelement path="${build.dir}" />
+	</path>
+
+
+	<target name="init">
+      <delete dir="${build.dir}" />
+  		<mkdir dir="${build.dir}" />
+	</target>
+
+	<target name="compile" depends="init" 
+	        description="Compile main source tree java files">
+		<javac destdir="${build.dir}"
+		       target="1.6"
+		       source="1.6"
+		       debug="true"
+		       deprecation="false"
+           encoding="ISO-8859-1"
+		       optimize="false"
+		       failonerror="true">
+			<src path="${src.dir}" />
+			<classpath refid="build.classpath" />
+		</javac>
+	</target>
+
+	
+	<target name="packageJar" depends="compile" description="Package Jar">
+		<jar destfile="${jar.name}">
+			<fileset dir="${build.dir}" includes="org/jwildfire/"/>
+      <fileset dir="${src.dir}" includes="com/**/*.properties"/>
+      <fileset dir="${src.dir}" includes="com/**/)*.gif"/>
+      <fileset dir="${build.dir}" includes="com/"/>
+      <zipfileset src="lib/jep-2.4.1.jar"/>
+      <manifest>
+        <attribute name="Main-Class" value="org.jwildfire.swing.Desktop"/>
+      </manifest>			
+		</jar>
+	</target>
+
+
+
+</project>

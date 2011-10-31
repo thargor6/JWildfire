@@ -1,0 +1,10 @@
+*.class
+j-wildfire.jar
+history.txt
+trash
+*l2fprod*
+*toedter*
+lib/*
+*.prefs
+gitlog.sh
+.classpath
