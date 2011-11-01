@@ -46,7 +46,6 @@ import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
 import javax.swing.JSlider;
-import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
@@ -68,13 +67,9 @@ public class Desktop extends JApplet {
   private JPanel jContentPane = null;
   private JMenuBar mainJMenuBar = null;
   private JMenu fileMenu = null;
-  private JMenu editMenu = null;
   private JMenu helpMenu = null;
   private JMenuItem exitMenuItem = null;
   private JMenuItem aboutMenuItem = null;
-  private JMenuItem cutMenuItem = null;
-  private JMenuItem copyMenuItem = null;
-  private JMenuItem pasteMenuItem = null;
   private JMenuItem saveMenuItem = null;
   private JDesktopPane mainDesktopPane = null;
   private JMenu windowMenu = null;
@@ -124,15 +119,18 @@ public class Desktop extends JApplet {
           getRenderPreviewImg2Panel(), renderPreviewImg2Label,
           getRenderPreviewImg3Panel(), renderPreviewImg3Label,
           getRenderFrameStartREd(), getRenderFrameEndREd());
+
+      FormulaExplorerInternalFrame formulaExplorerFrame = (FormulaExplorerInternalFrame) getFormulaExplorerInternalFrame();
+
       formulaExplorerController = new FormulaExplorerController(
-          (FormulaPanel) getFormulaPanel(),
-          getFormulaExplorerFormula1REd(),
-          getFormulaExplorerFormula2REd(),
-          getFormulaExplorerFormula3REd(),
-          getFormulaExplorerFormulaXMinREd(),
-          getFormulaExplorerFormulaXMaxREd(),
-          getFormulaExplorerFormulaXCountREd(),
-          getFormulaExplorerValuesTextArea());
+          (FormulaPanel) formulaExplorerFrame.getFormulaPanel(),
+          formulaExplorerFrame.getFormulaExplorerFormula1REd(),
+          formulaExplorerFrame.getFormulaExplorerFormula2REd(),
+          formulaExplorerFrame.getFormulaExplorerFormula3REd(),
+          formulaExplorerFrame.getFormulaExplorerFormulaXMinREd(),
+          formulaExplorerFrame.getFormulaExplorerFormulaXMaxREd(),
+          formulaExplorerFrame.getFormulaExplorerFormulaXCountREd(),
+          formulaExplorerFrame.getFormulaExplorerValuesTextArea());
 
       OperatorsInternalFrame operatorsFrame = (OperatorsInternalFrame) getOperatorsInternalFrame();
       operatorsFrame.setDesktop(this);
@@ -152,6 +150,8 @@ public class Desktop extends JApplet {
       scriptFrame.setMainController(mainController);
       scriptFrame.setOperatorsFrame(operatorsFrame);
       operatorsFrame.setMainController(mainController);
+      formulaExplorerFrame.setMainController(mainController);
+      formulaExplorerFrame.setFormulaExplorerController(formulaExplorerController);
 
     }
     return mainDesktopPane;
@@ -202,7 +202,7 @@ public class Desktop extends JApplet {
     if (tinaMenuItem == null) {
       tinaMenuItem = new JCheckBoxMenuItem();
       tinaMenuItem.setText("T.I.N.A.");
-      tinaMenuItem.setEnabled(false);
+      tinaMenuItem.setEnabled(true);
       tinaMenuItem
           .addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -1364,17 +1364,13 @@ public class Desktop extends JApplet {
    */
   private JInternalFrame getFormulaExplorerInternalFrame() {
     if (formulaExplorerInternalFrame == null) {
-      formulaExplorerInternalFrame = new JInternalFrame();
-      formulaExplorerInternalFrame.setBounds(new Rectangle(1070, 252, 596, 605));
-      formulaExplorerInternalFrame.setTitle("Formula Explorer");
+      formulaExplorerInternalFrame = new FormulaExplorerInternalFrame();
       formulaExplorerInternalFrame.setResizable(true);
       formulaExplorerInternalFrame.setClosable(true);
       formulaExplorerInternalFrame.setIconifiable(true);
       formulaExplorerInternalFrame
           .setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
       formulaExplorerInternalFrame.setVisible(false);
-      formulaExplorerInternalFrame
-          .setContentPane(getFormulaExplorerContentPane());
       formulaExplorerInternalFrame
           .addInternalFrameListener(new javax.swing.event.InternalFrameAdapter() {
             public void internalFrameDeactivated(
@@ -1389,23 +1385,6 @@ public class Desktop extends JApplet {
           });
     }
     return formulaExplorerInternalFrame;
-  }
-
-  /**
-   * This method initializes formulaExplorerContentPane
-   * 
-   * @return javax.swing.JPanel
-   */
-  private JPanel getFormulaExplorerContentPane() {
-    if (formulaExplorerContentPane == null) {
-      formulaExplorerContentPane = new JPanel();
-      formulaExplorerContentPane.setLayout(new BorderLayout());
-      formulaExplorerContentPane.add(getFormulaExplorerBottomPanel(),
-          BorderLayout.SOUTH);
-      formulaExplorerContentPane.add(getFormulaExplorerCenterPanel(),
-          BorderLayout.CENTER);
-    }
-    return formulaExplorerContentPane;
   }
 
   /**
@@ -1439,309 +1418,6 @@ public class Desktop extends JApplet {
           });
     }
     return formulaExplorerMenuItem;
-  }
-
-  /**
-   * This method initializes formulaExplorerBottomPanel
-   * 
-   * @return javax.swing.JPanel
-   */
-  private JPanel getFormulaExplorerBottomPanel() {
-    if (formulaExplorerBottomPanel == null) {
-      formulaExplorerFormula1Lbl = new JLabel();
-      formulaExplorerFormula1Lbl.setBounds(new Rectangle(5, 9, 133, 26));
-      formulaExplorerFormula1Lbl
-          .setHorizontalAlignment(SwingConstants.RIGHT);
-      formulaExplorerFormula1Lbl.setText("Formula1 (yellow)");
-      formulaExplorerFormula1Lbl.setPreferredSize(new Dimension(50, 26));
-      formulaExplorerFormula3Lbl = new JLabel();
-      formulaExplorerFormula3Lbl.setBounds(new Rectangle(8, 66, 134, 26));
-      formulaExplorerFormula3Lbl
-          .setHorizontalAlignment(SwingConstants.RIGHT);
-      formulaExplorerFormula3Lbl.setText("Formula3 (green)");
-      formulaExplorerFormula3Lbl.setPreferredSize(new Dimension(50, 26));
-      formulaExplorerFormula2Lbl = new JLabel();
-      formulaExplorerFormula2Lbl.setBounds(new Rectangle(6, 38, 136, 26));
-      formulaExplorerFormula2Lbl
-          .setHorizontalAlignment(SwingConstants.RIGHT);
-      formulaExplorerFormula2Lbl.setText("Formula2 (red)");
-      formulaExplorerFormula2Lbl.setPreferredSize(new Dimension(50, 26));
-      formulaExplorerXCountLbl = new JLabel();
-      formulaExplorerXCountLbl.setBounds(new Rectangle(381, 106, 50, 26));
-      formulaExplorerXCountLbl
-          .setHorizontalAlignment(SwingConstants.RIGHT);
-      formulaExplorerXCountLbl.setText("Count");
-      formulaExplorerXCountLbl.setPreferredSize(new Dimension(50, 26));
-      formulaExplorerXRangeLbl = new JLabel();
-      formulaExplorerXRangeLbl.setBounds(new Rectangle(5, 109, 62, 26));
-      formulaExplorerXRangeLbl
-          .setHorizontalAlignment(SwingConstants.RIGHT);
-      formulaExplorerXRangeLbl.setText("X-Range");
-      formulaExplorerXRangeLbl.setPreferredSize(new Dimension(50, 26));
-      formulaExplorerBottomPanel = new JPanel();
-      formulaExplorerBottomPanel.setLayout(null);
-      formulaExplorerBottomPanel.setPreferredSize(new Dimension(0, 170));
-      formulaExplorerBottomPanel.add(getFormulaExplorerCalculateBtn(),
-          null);
-      formulaExplorerBottomPanel.add(getFormulaExplorerFormula1REd(),
-          null);
-      formulaExplorerBottomPanel.add(getFormulaExplorerFormulaXMinREd(),
-          null);
-      formulaExplorerBottomPanel.add(getFormulaExplorerFormulaXMaxREd(),
-          null);
-      formulaExplorerBottomPanel.add(
-          getFormulaExplorerFormulaXCountREd(), null);
-      formulaExplorerBottomPanel.add(formulaExplorerXRangeLbl, null);
-      formulaExplorerBottomPanel.add(formulaExplorerXCountLbl, null);
-      formulaExplorerBottomPanel.add(formulaExplorerFormula2Lbl, null);
-      formulaExplorerBottomPanel.add(formulaExplorerFormula3Lbl, null);
-      formulaExplorerBottomPanel.add(getFormulaExplorerFormula2REd(),
-          null);
-      formulaExplorerBottomPanel.add(getFormulaExplorerFormula3REd(),
-          null);
-      formulaExplorerBottomPanel.add(formulaExplorerFormula1Lbl, null);
-    }
-    return formulaExplorerBottomPanel;
-  }
-
-  /**
-   * This method initializes formulaExplorerCenterPanel
-   * 
-   * @return javax.swing.JPanel
-   */
-  private JPanel getFormulaExplorerCenterPanel() {
-    if (formulaExplorerCenterPanel == null) {
-      GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
-      gridBagConstraints2.fill = GridBagConstraints.BOTH;
-      gridBagConstraints2.gridy = 0;
-      gridBagConstraints2.weightx = 1.0;
-      gridBagConstraints2.weighty = 1.0;
-      gridBagConstraints2.gridx = 0;
-      formulaExplorerCenterPanel = new JPanel();
-      formulaExplorerCenterPanel.setLayout(new GridBagLayout());
-      formulaExplorerCenterPanel.add(getFormulaExplorerSplitPane(),
-          gridBagConstraints2);
-    }
-    return formulaExplorerCenterPanel;
-  }
-
-  /**
-   * This method initializes formulaExplorerFormula1REd
-   * 
-   * @return javax.swing.JTextField
-   */
-  private JTextField getFormulaExplorerFormula1REd() {
-    if (formulaExplorerFormula1REd == null) {
-      formulaExplorerFormula1REd = new JTextField();
-      formulaExplorerFormula1REd.setPreferredSize(new Dimension(60, 26));
-      formulaExplorerFormula1REd.setText("rect(5*x-7)");
-      formulaExplorerFormula1REd
-          .setBounds(new Rectangle(143, 8, 427, 26));
-      formulaExplorerFormula1REd.setFont(new Font("Dialog", Font.PLAIN,
-          12));
-    }
-    return formulaExplorerFormula1REd;
-  }
-
-  /**
-   * This method initializes formulaExplorerFormulaXMinREd
-   * 
-   * @return javax.swing.JTextField
-   */
-  private JTextField getFormulaExplorerFormulaXMinREd() {
-    if (formulaExplorerFormulaXMinREd == null) {
-      formulaExplorerFormulaXMinREd = new JTextField();
-      formulaExplorerFormulaXMinREd
-          .setPreferredSize(new Dimension(60, 26));
-      formulaExplorerFormulaXMinREd.setText("0.0");
-      formulaExplorerFormulaXMinREd.setBounds(new Rectangle(70, 106, 134,
-          26));
-      formulaExplorerFormulaXMinREd.setFont(new Font("Dialog",
-          Font.PLAIN, 12));
-    }
-    return formulaExplorerFormulaXMinREd;
-  }
-
-  /**
-   * This method initializes formulaExplorerFormulaXMaxREd
-   * 
-   * @return javax.swing.JTextField
-   */
-  private JTextField getFormulaExplorerFormulaXMaxREd() {
-    if (formulaExplorerFormulaXMaxREd == null) {
-      formulaExplorerFormulaXMaxREd = new JTextField();
-      formulaExplorerFormulaXMaxREd
-          .setPreferredSize(new Dimension(60, 26));
-      formulaExplorerFormulaXMaxREd.setText("2");
-      formulaExplorerFormulaXMaxREd.setLocation(new Point(206, 106));
-      formulaExplorerFormulaXMaxREd.setSize(new Dimension(134, 26));
-      formulaExplorerFormulaXMaxREd.setFont(new Font("Dialog",
-          Font.PLAIN, 12));
-    }
-    return formulaExplorerFormulaXMaxREd;
-  }
-
-  /**
-   * This method initializes formulaExplorerFormulaXCountREd
-   * 
-   * @return javax.swing.JTextField
-   */
-  private JTextField getFormulaExplorerFormulaXCountREd() {
-    if (formulaExplorerFormulaXCountREd == null) {
-      formulaExplorerFormulaXCountREd = new JTextField();
-      formulaExplorerFormulaXCountREd.setPreferredSize(new Dimension(60,
-          26));
-      formulaExplorerFormulaXCountREd.setText("500");
-      formulaExplorerFormulaXCountREd.setLocation(new Point(434, 107));
-      formulaExplorerFormulaXCountREd.setSize(new Dimension(134, 26));
-      formulaExplorerFormulaXCountREd.setFont(new Font("Dialog",
-          Font.PLAIN, 12));
-    }
-    return formulaExplorerFormulaXCountREd;
-  }
-
-  /**
-   * This method initializes formulaExplorerCalculateBtn
-   * 
-   * @return javax.swing.JButton
-   */
-  private JButton getFormulaExplorerCalculateBtn() {
-    if (formulaExplorerCalculateBtn == null) {
-      formulaExplorerCalculateBtn = new JButton();
-      formulaExplorerCalculateBtn.setMnemonic(KeyEvent.VK_C);
-      formulaExplorerCalculateBtn.setText("Calculate");
-      formulaExplorerCalculateBtn.setActionCommand("Calculate");
-      formulaExplorerCalculateBtn.setBounds(new Rectangle(144, 138, 303,
-          26));
-      formulaExplorerCalculateBtn
-          .setPreferredSize(new Dimension(120, 26));
-      formulaExplorerCalculateBtn
-          .addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent e) {
-              try {
-                formulaExplorerController.calculate();
-              }
-              catch (Throwable ex) {
-                mainController.handleError(ex);
-              }
-            }
-          });
-    }
-    return formulaExplorerCalculateBtn;
-  }
-
-  /**
-   * This method initializes formulaExplorerSplitPane
-   * 
-   * @return javax.swing.JSplitPane
-   */
-  private JSplitPane getFormulaExplorerSplitPane() {
-    if (formulaExplorerSplitPane == null) {
-      formulaExplorerSplitPane = new JSplitPane();
-      formulaExplorerSplitPane.setOrientation(JSplitPane.VERTICAL_SPLIT);
-      formulaExplorerSplitPane
-          .setTopComponent(getFormulaExplorerDrawPanel());
-      formulaExplorerSplitPane
-          .setBottomComponent(getFormulaExplorerValuesPanel());
-      formulaExplorerSplitPane.setDividerLocation(300);
-    }
-    return formulaExplorerSplitPane;
-  }
-
-  /**
-   * This method initializes formulaExplorerDrawPanel
-   * 
-   * @return javax.swing.JPanel
-   */
-  private JPanel getFormulaExplorerDrawPanel() {
-    if (formulaExplorerDrawPanel == null) {
-      formulaExplorerDrawPanel = new JPanel();
-      formulaExplorerDrawPanel.setLayout(new BorderLayout());
-    }
-    return formulaExplorerDrawPanel;
-  }
-
-  /**
-   * This method initializes formulaExplorerValuesPanel
-   * 
-   * @return javax.swing.JPanel
-   */
-  private JPanel getFormulaExplorerValuesPanel() {
-    if (formulaExplorerValuesPanel == null) {
-      GridBagConstraints gridBagConstraints3 = new GridBagConstraints();
-      gridBagConstraints3.fill = GridBagConstraints.BOTH;
-      gridBagConstraints3.gridy = 0;
-      gridBagConstraints3.weightx = 1.0;
-      gridBagConstraints3.weighty = 1.0;
-      gridBagConstraints3.gridx = 0;
-      formulaExplorerValuesPanel = new JPanel();
-      formulaExplorerValuesPanel.setLayout(new GridBagLayout());
-      formulaExplorerValuesPanel.add(
-          getFormulaExplorerValuesScrollPane(), gridBagConstraints3);
-    }
-    return formulaExplorerValuesPanel;
-  }
-
-  /**
-   * This method initializes formulaExplorerValuesScrollPane
-   * 
-   * @return javax.swing.JScrollPane
-   */
-  private JScrollPane getFormulaExplorerValuesScrollPane() {
-    if (formulaExplorerValuesScrollPane == null) {
-      formulaExplorerValuesScrollPane = new JScrollPane();
-      formulaExplorerValuesScrollPane
-          .setViewportView(getFormulaExplorerValuesTextArea());
-    }
-    return formulaExplorerValuesScrollPane;
-  }
-
-  /**
-   * This method initializes formulaExplorerValuesTextArea
-   * 
-   * @return javax.swing.JTextArea
-   */
-  private JTextArea getFormulaExplorerValuesTextArea() {
-    if (formulaExplorerValuesTextArea == null) {
-      formulaExplorerValuesTextArea = new JTextArea();
-    }
-    return formulaExplorerValuesTextArea;
-  }
-
-  /**
-   * This method initializes formulaExplorerFormula2REd
-   * 
-   * @return javax.swing.JTextField
-   */
-  private JTextField getFormulaExplorerFormula2REd() {
-    if (formulaExplorerFormula2REd == null) {
-      formulaExplorerFormula2REd = new JTextField();
-      formulaExplorerFormula2REd
-          .setBounds(new Rectangle(143, 40, 424, 26));
-      formulaExplorerFormula2REd.setPreferredSize(new Dimension(60, 26));
-      formulaExplorerFormula2REd.setText("sin(5*x-7)");
-      formulaExplorerFormula2REd.setFont(new Font("Dialog", Font.PLAIN,
-          12));
-    }
-    return formulaExplorerFormula2REd;
-  }
-
-  /**
-   * This method initializes formulaExplorerFormula3REd
-   * 
-   * @return javax.swing.JTextField
-   */
-  private JTextField getFormulaExplorerFormula3REd() {
-    if (formulaExplorerFormula3REd == null) {
-      formulaExplorerFormula3REd = new JTextField();
-      formulaExplorerFormula3REd
-          .setBounds(new Rectangle(144, 68, 419, 26));
-      formulaExplorerFormula3REd.setPreferredSize(new Dimension(60, 26));
-      formulaExplorerFormula3REd.setText("triangle(5*x-7)*sin(5*x-7)");
-      formulaExplorerFormula3REd.setFont(new Font("Dialog", Font.PLAIN,
-          12));
-    }
-    return formulaExplorerFormula3REd;
   }
 
   /**
@@ -4137,7 +3813,6 @@ public class Desktop extends JApplet {
     if (mainJMenuBar == null) {
       mainJMenuBar = new JMenuBar();
       mainJMenuBar.add(getFileMenu());
-      mainJMenuBar.add(getEditMenu());
       mainJMenuBar.add(getWindowMenu());
       mainJMenuBar.add(getHelpMenu());
     }
@@ -4166,22 +3841,6 @@ public class Desktop extends JApplet {
       fileMenu.add(getExitMenuItem());
     }
     return fileMenu;
-  }
-
-  /**
-   * This method initializes jMenu
-   * 
-   * @return javax.swing.JMenu
-   */
-  private JMenu getEditMenu() {
-    if (editMenu == null) {
-      editMenu = new JMenu();
-      editMenu.setText("Edit");
-      editMenu.add(getCutMenuItem());
-      editMenu.add(getCopyMenuItem());
-      editMenu.add(getPasteMenuItem());
-    }
-    return editMenu;
   }
 
   /**
@@ -4227,51 +3886,6 @@ public class Desktop extends JApplet {
       aboutMenuItem.setText("About");
     }
     return aboutMenuItem;
-  }
-
-  /**
-   * This method initializes jMenuItem
-   * 
-   * @return javax.swing.JMenuItem
-   */
-  private JMenuItem getCutMenuItem() {
-    if (cutMenuItem == null) {
-      cutMenuItem = new JMenuItem();
-      cutMenuItem.setText("Cut");
-      cutMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X,
-          Event.CTRL_MASK, true));
-    }
-    return cutMenuItem;
-  }
-
-  /**
-   * This method initializes jMenuItem
-   * 
-   * @return javax.swing.JMenuItem
-   */
-  private JMenuItem getCopyMenuItem() {
-    if (copyMenuItem == null) {
-      copyMenuItem = new JMenuItem();
-      copyMenuItem.setText("Copy");
-      copyMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C,
-          Event.CTRL_MASK, true));
-    }
-    return copyMenuItem;
-  }
-
-  /**
-   * This method initializes jMenuItem
-   * 
-   * @return javax.swing.JMenuItem
-   */
-  private JMenuItem getPasteMenuItem() {
-    if (pasteMenuItem == null) {
-      pasteMenuItem = new JMenuItem();
-      pasteMenuItem.setText("Paste");
-      pasteMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_V,
-          Event.CTRL_MASK, true));
-    }
-    return pasteMenuItem;
   }
 
   /**
@@ -4439,8 +4053,11 @@ public class Desktop extends JApplet {
       OperatorsInternalFrame operatorsFrame = (OperatorsInternalFrame) getOperatorsInternalFrame();
       operatorsFrame.initApp();
     }
-    formulaExplorerDrawPanel.add((JPanel) getFormulaPanel(),
-        BorderLayout.CENTER);
+    {
+      FormulaExplorerInternalFrame formulaExplorerFrame = (FormulaExplorerInternalFrame) getFormulaExplorerInternalFrame();
+      formulaExplorerFrame.initApp();
+    }
+
     mainController.refreshWindowMenu();
     mainController.scriptFrameChanged(1, null, "60");
 
@@ -4452,17 +4069,6 @@ public class Desktop extends JApplet {
     }
 
     enableControls();
-  }
-
-  // hide from Editor
-  private Object formulaPanel; // @jve:decl-index=0:
-
-  private Object getFormulaPanel() {
-    if (formulaPanel == null) {
-      formulaPanel = new FormulaPanel();
-      ((JPanel) formulaPanel).setLayout(null);
-    }
-    return formulaPanel;
   }
 
   private void saveMenuItem_actionPerformed(java.awt.event.ActionEvent e) {
@@ -4657,47 +4263,7 @@ public class Desktop extends JApplet {
 
   private JInternalFrame formulaExplorerInternalFrame = null;
 
-  private JPanel formulaExplorerContentPane = null;
-
   private JCheckBoxMenuItem formulaExplorerMenuItem = null;
-
-  private JPanel formulaExplorerBottomPanel = null;
-
-  private JPanel formulaExplorerCenterPanel = null;
-
-  private JTextField formulaExplorerFormula1REd = null;
-
-  private JTextField formulaExplorerFormulaXMinREd = null;
-
-  private JTextField formulaExplorerFormulaXMaxREd = null;
-
-  private JTextField formulaExplorerFormulaXCountREd = null;
-
-  private JButton formulaExplorerCalculateBtn = null;
-
-  private JSplitPane formulaExplorerSplitPane = null;
-
-  private JPanel formulaExplorerDrawPanel = null;
-
-  private JPanel formulaExplorerValuesPanel = null;
-
-  private JScrollPane formulaExplorerValuesScrollPane = null;
-
-  private JTextArea formulaExplorerValuesTextArea = null;
-
-  private JLabel formulaExplorerXRangeLbl = null;
-
-  private JLabel formulaExplorerXCountLbl = null;
-
-  private JLabel formulaExplorerFormula2Lbl = null;
-
-  private JLabel formulaExplorerFormula3Lbl = null;
-
-  private JTextField formulaExplorerFormula2REd = null;
-
-  private JTextField formulaExplorerFormula3REd = null;
-
-  private JLabel formulaExplorerFormula1Lbl = null;
 
   private JInternalFrame tinaInternalFrame = null;
 
