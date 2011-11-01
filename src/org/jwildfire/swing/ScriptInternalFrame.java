@@ -45,13 +45,13 @@ import org.jwildfire.base.Tools;
 import org.jwildfire.envelope.Envelope;
 import org.jwildfire.envelope.EnvelopePanel;
 
-
 public class ScriptInternalFrame extends JInternalFrame {
   private static final long serialVersionUID = 1L; // @jve:decl-index=0:
   private MainController mainController = null; // @jve:decl-index=0:
   private EnvelopeController envelopeController = null; // @jve:decl-index=0:
   private RenderController renderController = null; // @jve:decl-index=0:
-  private Desktop desktop;
+  private OperatorsInternalFrame operatorsFrame = null;// @jve:decl-index=0:
+  private Desktop desktop = null;// @jve:decl-index=0:
 
   private JButton renderScriptButton = null;
 
@@ -1338,21 +1338,21 @@ public class ScriptInternalFrame extends JInternalFrame {
                     try {
                       mainController.syncActionAction();
                       if (mainController.getTransformer() != null) {
-                        desktop.getTransformersList().setSelectedValue(
+                        operatorsFrame.getTransformersList().setSelectedValue(
                             mainController.getTransformer()
                                 .getName(), true);
-                        desktop.switchTransformerPropertiesPanel();
+                        operatorsFrame.switchTransformerPropertiesPanel();
                       }
                       if (mainController.getCreator() != null) {
-                        desktop.getCreatorsList().setSelectedValue(
+                        operatorsFrame.getCreatorsList().setSelectedValue(
                             mainController.getCreator()
                                 .getName(), true);
-                        desktop.switchCreatorPropertiesPanel();
+                        operatorsFrame.switchCreatorPropertiesPanel();
                       }
                       if (mainController.getLoader() != null) {
-                        desktop.getLoadersList().setSelectedValue(mainController
+                        operatorsFrame.getLoadersList().setSelectedValue(mainController
                             .getLoader().getName(), true);
-                        desktop.switchLoaderPropertiesPanel();
+                        operatorsFrame.switchLoaderPropertiesPanel();
                       }
                     }
                     catch (Throwable ex) {
@@ -1420,6 +1420,10 @@ public class ScriptInternalFrame extends JInternalFrame {
 
   public void setRenderController(RenderController renderController) {
     this.renderController = renderController;
+  }
+
+  public void setOperatorsFrame(OperatorsInternalFrame pOperatorsFrame) {
+    operatorsFrame = pOperatorsFrame;
   }
 
 } //  @jve:decl-index=0:visual-constraint="21,13"
