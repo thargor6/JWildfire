@@ -30,6 +30,10 @@ public class Prefs {
   private String lastInputFlamePath = null;
   private String outputFlamePath = "C:\\TMP\\wf\\Apophysis";
   private String lastOutputFlamePath = null;
+  private String inputScenePath = "F:\\DEV\\sunflow";
+  private String lastInputScenePath = null;
+  private String outputScenePath = "C:\\DEV\\sunflow";
+  private String lastOutputScenePath = null;
 
   public String getScriptPath() {
     return lastScriptPath != null ? lastScriptPath : scriptPath;
@@ -82,4 +86,21 @@ public class Prefs {
   public void setLastOutputFlameFile(File pFile) {
     lastOutputFlamePath = pFile.getParent();
   }
+
+  public String getInputScenePath() {
+    return lastInputScenePath != null ? lastInputScenePath : inputScenePath;
+  }
+
+  public void setLastInputSceneFile(File pFile) {
+    lastInputScenePath = pFile.getParent();
+  }
+
+  public String getOutputScenePath() {
+    return lastOutputScenePath != null ? lastOutputScenePath : outputScenePath;
+  }
+
+  public void setLastOutputSceneFile(File pFile) {
+    lastOutputScenePath = pFile.getParent();
+  }
+
 }

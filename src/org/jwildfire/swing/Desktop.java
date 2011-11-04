@@ -126,6 +126,12 @@ public class Desktop extends JApplet {
       scriptFrame.setDesktop(this);
       scriptFrame.setRenderController(renderController);
 
+      SunflowInternalFrame sunflowFrame = (SunflowInternalFrame) getSunFlowInternalFrame();
+      sunflowController = new SunflowController(errorHandler, prefs, sunflowFrame.getEditorTextArea(), sunflowFrame.getConsoleTextArea(),
+          sunflowFrame.getImagePanel());
+      sunflowFrame.setSunflowController(sunflowController);
+      sunflowController.newScene();
+
       mainController = new MainController(prefs, errorHandler, mainDesktopPane,
           getWindowMenu(), operatorsFrame.getTransformerInputCmb(), operatorsFrame.getTransformerPresetCmb(), operatorsFrame.getCreatorPresetCmb(),
           getShowMessageDlg(), getShowMessageDlgTextArea(), scriptFrame.getScriptTable(),
@@ -1439,7 +1445,7 @@ public class Desktop extends JApplet {
    */
   private JInternalFrame getSunFlowInternalFrame() {
     if (sunFlowInternalFrame == null) {
-      sunFlowInternalFrame = new SunFlowInternalFrame();
+      sunFlowInternalFrame = new SunflowInternalFrame();
       sunFlowInternalFrame
           .addInternalFrameListener(new javax.swing.event.InternalFrameAdapter() {
             public void internalFrameDeactivated(
@@ -1649,6 +1655,7 @@ public class Desktop extends JApplet {
   private RenderController renderController = null; // @jve:decl-index=0:
   private FormulaExplorerController formulaExplorerController = null; // @jve:decl-index=0:
   private TINAController tinaController = null; // @jve:decl-index=0:
+  private SunflowController sunflowController = null; // @jve:decl-index=0:
 
   private JMenuItem openFavourite1MenuItem = null;
 
