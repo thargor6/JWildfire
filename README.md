@@ -17,6 +17,9 @@ but this time implemented in Java and with a more sophisticated user interface a
 ## Public builds
 Currently all public builds are available at http://www.andreas-maschke.com. 
 
+## Contribute
+Feel free to contact me at thargor6@googlemail.com
+
 ## License
 Copyright (C) 1995-2011 Andreas Maschke
 
