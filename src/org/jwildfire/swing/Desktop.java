@@ -23,7 +23,6 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Point;
-import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -72,6 +71,7 @@ public class Desktop extends JApplet {
   private JMenu windowMenu = null;
   private JCheckBoxMenuItem operatorsMenuItem = null;
   private JCheckBoxMenuItem tinaMenuItem = null;
+  private JCheckBoxMenuItem sunFlowMenuItem = null;
   private JMenuItem openMenuItem = null;
 
   private StandardErrorHandler errorHandler = null;
@@ -88,6 +88,7 @@ public class Desktop extends JApplet {
       mainDesktopPane.add(getOperatorsInternalFrame(), null);
       mainDesktopPane.add(getFormulaExplorerInternalFrame(), null);
       mainDesktopPane.add(getTinaInternalFrame(), null);
+      mainDesktopPane.add(getSunFlowInternalFrame(), null);
       errorHandler = new StandardErrorHandler(mainDesktopPane, getShowErrorDlg(), getShowErrorDlgMessageTextArea(),
           getShowErrorDlgStacktraceTextArea());
 
@@ -156,6 +157,7 @@ public class Desktop extends JApplet {
       windowMenu.add(getScriptMenuItem());
       windowMenu.add(getFormulaExplorerMenuItem());
       windowMenu.add(getTinaMenuItem());
+      windowMenu.add(getSunFlowMenuItem());
     }
     return windowMenu;
   }
@@ -187,7 +189,7 @@ public class Desktop extends JApplet {
   private JCheckBoxMenuItem getTinaMenuItem() {
     if (tinaMenuItem == null) {
       tinaMenuItem = new JCheckBoxMenuItem();
-      tinaMenuItem.setText("T.I.N.A.");
+      tinaMenuItem.setText("Fractal flames");
       tinaMenuItem.setEnabled(true);
       tinaMenuItem
           .addActionListener(new java.awt.event.ActionListener() {
@@ -197,6 +199,25 @@ public class Desktop extends JApplet {
           });
     }
     return tinaMenuItem;
+  }
+
+  /**
+   * This method initializes operatorsMenuItem
+   * 
+   * @return javax.swing.JCheckBoxMenuItem
+   */
+  private JCheckBoxMenuItem getSunFlowMenuItem() {
+    if (sunFlowMenuItem == null) {
+      sunFlowMenuItem = new JCheckBoxMenuItem();
+      sunFlowMenuItem.setText("SunFlow");
+      sunFlowMenuItem.setEnabled(true);
+      sunFlowMenuItem.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent e) {
+          sunFlowMenuItem_actionPerformed(e);
+        }
+      });
+    }
+    return sunFlowMenuItem;
   }
 
   /**
@@ -763,15 +784,6 @@ public class Desktop extends JApplet {
   private JInternalFrame getScriptInternalFrame() {
     if (scriptInternalFrame == null) {
       scriptInternalFrame = new ScriptInternalFrame();
-      scriptInternalFrame.setBounds(new Rectangle(385, 52, 792, 495));
-      scriptInternalFrame.setTitle("Script");
-      scriptInternalFrame.setResizable(true);
-      scriptInternalFrame.setMaximizable(true);
-      scriptInternalFrame.setIconifiable(true);
-      scriptInternalFrame.setClosable(true);
-      scriptInternalFrame.setVisible(true);
-      scriptInternalFrame
-          .setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
       scriptInternalFrame
           .addInternalFrameListener(new javax.swing.event.InternalFrameAdapter() {
             public void internalFrameDeactivated(
@@ -816,15 +828,6 @@ public class Desktop extends JApplet {
   private JInternalFrame getOperatorsInternalFrame() {
     if (operatorsInternalFrame == null) {
       operatorsInternalFrame = new OperatorsInternalFrame();
-      operatorsInternalFrame.setBounds(new Rectangle(813, 14, 355, 652));
-      operatorsInternalFrame
-          .setTitle("Operators (<F2>/<DblClick> to edit)");
-      operatorsInternalFrame
-          .setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
-      operatorsInternalFrame.setClosable(true);
-      operatorsInternalFrame.setIconifiable(true);
-      operatorsInternalFrame.setVisible(true);
-      operatorsInternalFrame.setResizable(true);
       operatorsInternalFrame
           .addInternalFrameListener(new javax.swing.event.InternalFrameAdapter() {
             public void internalFrameDeactivated(
@@ -1351,12 +1354,6 @@ public class Desktop extends JApplet {
   private JInternalFrame getFormulaExplorerInternalFrame() {
     if (formulaExplorerInternalFrame == null) {
       formulaExplorerInternalFrame = new FormulaExplorerInternalFrame();
-      formulaExplorerInternalFrame.setResizable(true);
-      formulaExplorerInternalFrame.setClosable(true);
-      formulaExplorerInternalFrame.setIconifiable(true);
-      formulaExplorerInternalFrame
-          .setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
-      formulaExplorerInternalFrame.setVisible(false);
       formulaExplorerInternalFrame
           .addInternalFrameListener(new javax.swing.event.InternalFrameAdapter() {
             public void internalFrameDeactivated(
@@ -1414,13 +1411,6 @@ public class Desktop extends JApplet {
   private JInternalFrame getTinaInternalFrame() {
     if (tinaInternalFrame == null) {
       tinaInternalFrame = new TinaInternalFrame();
-      tinaInternalFrame.setBounds(new Rectangle(3, 41, 1039, 665));
-      tinaInternalFrame.setClosable(true);
-      tinaInternalFrame.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
-      tinaInternalFrame.setIconifiable(true);
-      tinaInternalFrame.setTitle("T.I.N.A.");
-      tinaInternalFrame.setVisible(true);
-      tinaInternalFrame.setResizable(true);
       tinaInternalFrame
           .addInternalFrameListener(new javax.swing.event.InternalFrameAdapter() {
             public void internalFrameDeactivated(
@@ -1440,6 +1430,30 @@ public class Desktop extends JApplet {
       });
     }
     return tinaInternalFrame;
+  }
+
+  /**
+   * This method initializes sunFlowInternalFrame	
+   * 	
+   * @return javax.swing.JInternalFrame	
+   */
+  private JInternalFrame getSunFlowInternalFrame() {
+    if (sunFlowInternalFrame == null) {
+      sunFlowInternalFrame = new SunFlowInternalFrame();
+      sunFlowInternalFrame
+          .addInternalFrameListener(new javax.swing.event.InternalFrameAdapter() {
+            public void internalFrameDeactivated(
+                javax.swing.event.InternalFrameEvent e) {
+              enableControls();
+            }
+
+            public void internalFrameClosed(
+                javax.swing.event.InternalFrameEvent e) {
+              enableControls();
+            }
+          });
+    }
+    return sunFlowInternalFrame;
   }
 
   /**
@@ -1718,6 +1732,21 @@ public class Desktop extends JApplet {
     }
   }
 
+  private void sunFlowMenuItem_actionPerformed(java.awt.event.ActionEvent e) {
+    if (sunFlowMenuItem.isSelected()) {
+      sunFlowInternalFrame.setVisible(true);
+      try {
+        sunFlowInternalFrame.setSelected(true);
+      }
+      catch (PropertyVetoException ex) {
+        ex.printStackTrace();
+      }
+    }
+    else {
+      sunFlowInternalFrame.setVisible(false);
+    }
+  }
+
   private void openMenuItem_actionPerformed(java.awt.event.ActionEvent e) {
     try {
       mainController.loadImage(true);
@@ -1951,7 +1980,10 @@ public class Desktop extends JApplet {
 
   private JInternalFrame tinaInternalFrame = null;
 
+  private JInternalFrame sunFlowInternalFrame = null;
+
   void enableControls() {
+    sunFlowMenuItem.setSelected(sunFlowInternalFrame.isVisible());
     tinaMenuItem.setSelected(tinaInternalFrame.isVisible());
     operatorsMenuItem.setSelected(operatorsInternalFrame.isVisible());
     scriptMenuItem.setSelected(scriptInternalFrame.isVisible());

@@ -34,6 +34,7 @@ import javax.swing.JSplitPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+import javax.swing.WindowConstants;
 
 public class FormulaExplorerInternalFrame extends JInternalFrame {
   /**
@@ -96,6 +97,11 @@ public class FormulaExplorerInternalFrame extends JInternalFrame {
   private void initialize() {
     this.setSize(596, 605);
     this.setBounds(new Rectangle(650, 36, 596, 605));
+    this.setResizable(true);
+    this.setClosable(true);
+    this.setIconifiable(true);
+    this.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
+    this.setVisible(false);
     this.setTitle("Formula Explorer");
     this.setContentPane(getJContentPane());
   }

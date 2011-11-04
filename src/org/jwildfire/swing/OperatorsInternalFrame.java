@@ -22,6 +22,7 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
+import javax.swing.WindowConstants;
 
 import org.jwildfire.create.CreatorsList;
 import org.jwildfire.loader.LoadersList;
@@ -120,6 +121,13 @@ public class OperatorsInternalFrame extends JInternalFrame {
    */
   private void initialize() {
     this.setSize(300, 200);
+    this.setBounds(new Rectangle(813, 14, 355, 652));
+    this.setTitle("Operators (<F2>/<DblClick> to edit)");
+    this.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
+    this.setClosable(true);
+    this.setIconifiable(true);
+    this.setVisible(true);
+    this.setResizable(true);
     this.setContentPane(getJContentPane());
   }
 

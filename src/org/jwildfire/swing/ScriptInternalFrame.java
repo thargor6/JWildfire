@@ -22,6 +22,7 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.event.KeyEvent;
 
 import javax.swing.BorderFactory;
@@ -40,6 +41,7 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
+import javax.swing.WindowConstants;
 
 import org.jwildfire.base.Tools;
 import org.jwildfire.envelope.Envelope;
@@ -187,6 +189,14 @@ public class ScriptInternalFrame extends JInternalFrame {
    * @return void
    */
   private void initialize() {
+    this.setBounds(new Rectangle(385, 52, 792, 495));
+    this.setTitle("Script");
+    this.setResizable(true);
+    this.setMaximizable(true);
+    this.setIconifiable(true);
+    this.setClosable(true);
+    this.setVisible(true);
+    this.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
     this.setSize(822, 584);
     this.setContentPane(getJContentPane());
   }

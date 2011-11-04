@@ -18,6 +18,7 @@ import javax.swing.JSlider;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.WindowConstants;
 
 import org.jwildfire.base.Prefs;
 
@@ -299,6 +300,13 @@ public class TinaInternalFrame extends JInternalFrame {
    */
   private void initialize() {
     this.setSize(988, 641);
+    this.setBounds(new Rectangle(561, 116, 1039, 665));
+    this.setClosable(true);
+    this.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
+    this.setIconifiable(true);
+    this.setTitle("Fractal flames");
+    this.setVisible(false);
+    this.setResizable(true);
     this.setContentPane(getJContentPane());
   }
 

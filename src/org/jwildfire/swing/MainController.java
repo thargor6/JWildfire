@@ -50,7 +50,6 @@ import org.jwildfire.script.Parameter;
 import org.jwildfire.swing.Buffer.BufferType;
 import org.jwildfire.transform.Transformer;
 
-
 public class MainController {
   private final JDesktopPane desktop;
   private final JMenu windowMenu;
@@ -328,7 +327,7 @@ public class MainController {
     errorHandler.handleError(pThrowable);
   }
 
-  private final static int DESIGNED_WINDOW_MENU_COUNT = 4;
+  private final static int DESIGNED_WINDOW_MENU_COUNT = 5;
 
   public void refreshWindowMenu() {
     while (windowMenu.getItemCount() > DESIGNED_WINDOW_MENU_COUNT)
