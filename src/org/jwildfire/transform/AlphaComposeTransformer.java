@@ -27,7 +27,6 @@ import org.jwildfire.swing.BufferComboBoxEditor;
 
 import com.l2fprod.common.beans.editor.ComboBoxPropertyEditor;
 
-
 public class AlphaComposeTransformer extends Mesh2DTransformer {
   public enum HAlignment {
     OFF, CENTRE, LEFT, RIGHT
@@ -41,7 +40,7 @@ public class AlphaComposeTransformer extends Mesh2DTransformer {
     NONE, COLOR, IN_RANGE, OUT_RANGE
   }
 
-  @Property(category = PropertyCategory.PRIMARY, description = "Image to put in foreground", editorClass = BufferComboBoxEditor.class)
+  @Property(category = PropertyCategory.PRIMARY, description = "Image to put in foreground (background image is received from the input channel)", editorClass = BufferComboBoxEditor.class)
   private Buffer foreground;
   private SimpleImage foregroundImage; // Alternative way to specify the foreground image directly
   @Property(category = PropertyCategory.PRIMARY, description = "Image which holds the alpha channel information", editorClass = BufferComboBoxEditor.class)
@@ -278,8 +277,7 @@ public class AlphaComposeTransformer extends Mesh2DTransformer {
           hPixel.setARGBValue(fImg.getARGBValue(sleft + j, stop + i));
           if (((hPixel.r < credA) || (hPixel.r > credB))
               && ((hPixel.g < cgreenA) || (hPixel.g > cgreenB))
-              && ((hPixel.b < cblueA) || (hPixel.b > cblueB)))
-          {
+              && ((hPixel.b < cblueA) || (hPixel.b > cblueB))) {
             int bgX = bgleft + j;
             int bgY = bgtop + i;
             int aX = bgX - aleft;
@@ -302,8 +300,7 @@ public class AlphaComposeTransformer extends Mesh2DTransformer {
           hPixel.setARGBValue(fImg.getARGBValue(sleft + j, stop + i));
           if (((hPixel.r >= credA) && (hPixel.r <= credB))
               && ((hPixel.g >= cgreenA) && (hPixel.g <= cgreenB))
-              && ((hPixel.b >= cblueA) && (hPixel.b <= cblueB)))
-          {
+              && ((hPixel.b >= cblueA) && (hPixel.b <= cblueB))) {
             int bgX = bgleft + j;
             int bgY = bgtop + i;
             int aX = bgX - aleft;

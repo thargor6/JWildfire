@@ -25,11 +25,13 @@ import java.awt.event.KeyEvent;
 import javax.swing.JButton;
 import javax.swing.JInternalFrame;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 import javax.swing.WindowConstants;
 
+import org.jwildfire.base.Prefs;
 import org.sunflow.system.ImagePanel;
 
 public class SunflowInternalFrame extends JInternalFrame {
@@ -92,9 +94,14 @@ public class SunflowInternalFrame extends JInternalFrame {
    */
   private JPanel getNorthPanel() {
     if (northPanel == null) {
+      FlowLayout flowLayout1 = new FlowLayout();
+      flowLayout1.setAlignment(FlowLayout.RIGHT);
       northPanel = new JPanel();
-      northPanel.setLayout(new GridBagLayout());
-      northPanel.setPreferredSize(new Dimension(0, 26));
+      northPanel.setLayout(flowLayout1);
+      northPanel.setPreferredSize(new Dimension(0, 36));
+      northPanel.add(getRenderButton(), null);
+      northPanel.add(getIprButton(), null);
+      northPanel.add(getCancelRenderButton(), null);
     }
     return northPanel;
   }
@@ -121,7 +128,8 @@ public class SunflowInternalFrame extends JInternalFrame {
   private JSplitPane getHSplitPane() {
     if (hSplitPane == null) {
       hSplitPane = new JSplitPane();
-      hSplitPane.setDividerSize(10);
+      hSplitPane.setDividerSize(16);
+      hSplitPane.setOneTouchExpandable(true);
       hSplitPane.setLeftComponent(getLeftSplitPanel());
       hSplitPane.setRightComponent(getRightSplitPanel());
       hSplitPane.setDividerLocation(500);
@@ -139,11 +147,18 @@ public class SunflowInternalFrame extends JInternalFrame {
   private JPanel consoleNorthPanel = null;
   private JPanel consoleCenterPanel = null;
   private JPanel editorCenterPanel = null;
-  private JTextArea editorTextArea = null;
-  private JTextArea consoleTextArea = null;
   private JButton buildSceneButton = null;
   private JButton loadSceneButton = null;
-  private JButton renderSceneButton = null;
+  private JButton renderButton = null;
+  private JButton cancelRenderButton = null;
+  private JButton iprButton = null;
+  private JButton saveSceneButton = null;
+  private JButton clearConsoleButton = null;
+  private JScrollPane editorScrollPane = null;
+  private JTextArea editorTextArea1 = null;
+  private JScrollPane consoleScrollPane = null;
+  private JTextArea consoleTextArea1 = null;
+  private JButton newSceneButton = null;
 
   private JPanel getLeftSplitPanel() {
     if (leftSplitPanel == null) {
@@ -177,7 +192,7 @@ public class SunflowInternalFrame extends JInternalFrame {
   private JTabbedPane getRightTabbedPane() {
     if (rightTabbedPane == null) {
       rightTabbedPane = new JTabbedPane();
-      rightTabbedPane.addTab("Editor", null, getEditorPanel(), null);
+      rightTabbedPane.addTab("Scene Editor", null, getEditorPanel(), null);
       rightTabbedPane.addTab("Console", null, getConsolePanel(), null);
     }
     return rightTabbedPane;
@@ -227,7 +242,8 @@ public class SunflowInternalFrame extends JInternalFrame {
       editorNorthPanel.setPreferredSize(new Dimension(0, 36));
       editorNorthPanel.add(getBuildSceneButton(), null);
       editorNorthPanel.add(getLoadSceneButton(), null);
-      editorNorthPanel.add(getRenderSceneButton(), null);
+      editorNorthPanel.add(getSaveSceneButton(), null);
+      editorNorthPanel.add(getNewSceneButton(), null);
     }
     return editorNorthPanel;
   }
@@ -239,9 +255,12 @@ public class SunflowInternalFrame extends JInternalFrame {
    */
   private JPanel getConsoleNorthPanel() {
     if (consoleNorthPanel == null) {
+      FlowLayout flowLayout2 = new FlowLayout();
+      flowLayout2.setAlignment(FlowLayout.LEFT);
       consoleNorthPanel = new JPanel();
-      consoleNorthPanel.setLayout(new GridBagLayout());
-      consoleNorthPanel.setPreferredSize(new Dimension(0, 50));
+      consoleNorthPanel.setLayout(flowLayout2);
+      consoleNorthPanel.setPreferredSize(new Dimension(0, 36));
+      consoleNorthPanel.add(getClearConsoleButton(), null);
     }
     return consoleNorthPanel;
   }
@@ -255,7 +274,7 @@ public class SunflowInternalFrame extends JInternalFrame {
     if (consoleCenterPanel == null) {
       consoleCenterPanel = new JPanel();
       consoleCenterPanel.setLayout(new BorderLayout());
-      consoleCenterPanel.add(getConsoleTextArea(), BorderLayout.CENTER);
+      consoleCenterPanel.add(getConsoleScrollPane(), BorderLayout.CENTER);
     }
     return consoleCenterPanel;
   }
@@ -269,33 +288,9 @@ public class SunflowInternalFrame extends JInternalFrame {
     if (editorCenterPanel == null) {
       editorCenterPanel = new JPanel();
       editorCenterPanel.setLayout(new BorderLayout());
-      editorCenterPanel.add(getEditorTextArea(), BorderLayout.CENTER);
+      editorCenterPanel.add(getEditorScrollPane(), BorderLayout.CENTER);
     }
     return editorCenterPanel;
-  }
-
-  /**
-   * This method initializes editorTextArea	
-   * 	
-   * @return javax.swing.JTextArea	
-   */
-  JTextArea getEditorTextArea() {
-    if (editorTextArea == null) {
-      editorTextArea = new JTextArea();
-    }
-    return editorTextArea;
-  }
-
-  /**
-   * This method initializes consoleTextArea	
-   * 	
-   * @return javax.swing.JTextArea	
-   */
-  JTextArea getConsoleTextArea() {
-    if (consoleTextArea == null) {
-      consoleTextArea = new JTextArea();
-    }
-    return consoleTextArea;
   }
 
   /**
@@ -306,7 +301,7 @@ public class SunflowInternalFrame extends JInternalFrame {
   private JButton getBuildSceneButton() {
     if (buildSceneButton == null) {
       buildSceneButton = new JButton();
-      buildSceneButton.setPreferredSize(new Dimension(141, 26));
+      buildSceneButton.setPreferredSize(new Dimension(111, 26));
       buildSceneButton.setMnemonic(KeyEvent.VK_B);
       buildSceneButton.setText("Build Scene");
       buildSceneButton.addActionListener(new java.awt.event.ActionListener() {
@@ -326,7 +321,7 @@ public class SunflowInternalFrame extends JInternalFrame {
   private JButton getLoadSceneButton() {
     if (loadSceneButton == null) {
       loadSceneButton = new JButton();
-      loadSceneButton.setPreferredSize(new Dimension(141, 26));
+      loadSceneButton.setPreferredSize(new Dimension(111, 26));
       loadSceneButton.setMnemonic(KeyEvent.VK_L);
       loadSceneButton.setText("Load Scene");
       loadSceneButton.addActionListener(new java.awt.event.ActionListener() {
@@ -339,32 +334,188 @@ public class SunflowInternalFrame extends JInternalFrame {
   }
 
   /**
-   * This method initializes renderSceneButton	
+   * This method initializes renderButton	
    * 	
    * @return javax.swing.JButton	
    */
-  private JButton getRenderSceneButton() {
-    if (renderSceneButton == null) {
-      renderSceneButton = new JButton();
-      renderSceneButton.setPreferredSize(new Dimension(141, 26));
-      renderSceneButton.setMnemonic(KeyEvent.VK_R);
-      renderSceneButton.setText("Render Scene");
-      renderSceneButton.addActionListener(new java.awt.event.ActionListener() {
+  private JButton getRenderButton() {
+    if (renderButton == null) {
+      renderButton = new JButton();
+      renderButton.setPreferredSize(new Dimension(141, 26));
+      renderButton.setMnemonic(KeyEvent.VK_R);
+      renderButton.setText("Render");
+      renderButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
           sunflowController.renderScene();
         }
       });
     }
-    return renderSceneButton;
+    return renderButton;
   }
 
   public void setSunflowController(SunflowController sunflowController) {
     this.sunflowController = sunflowController;
   }
 
-  public ImagePanel getImagePanel() {
+  private ImagePanel getImagePanel() {
     getLeftSplitPanel();
     return imagePanel;
   }
 
+  /**
+   * This method initializes cancelRenderButton	
+   * 	
+   * @return javax.swing.JButton	
+   */
+  private JButton getCancelRenderButton() {
+    if (cancelRenderButton == null) {
+      cancelRenderButton = new JButton();
+      cancelRenderButton.setPreferredSize(new Dimension(141, 26));
+      cancelRenderButton.setText("Cancel");
+      cancelRenderButton.setMnemonic(KeyEvent.VK_C);
+      cancelRenderButton.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent e) {
+          sunflowController.cancelRendering();
+        }
+      });
+    }
+    return cancelRenderButton;
+  }
+
+  /**
+   * This method initializes iprButton	
+   * 	
+   * @return javax.swing.JButton	
+   */
+  private JButton getIprButton() {
+    if (iprButton == null) {
+      iprButton = new JButton();
+      iprButton.setPreferredSize(new Dimension(141, 26));
+      iprButton.setText("IPR");
+      iprButton.setMnemonic(KeyEvent.VK_I);
+      iprButton.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent e) {
+          sunflowController.iprScene();
+        }
+      });
+    }
+    return iprButton;
+  }
+
+  /**
+   * This method initializes saveSceneButton	
+   * 	
+   * @return javax.swing.JButton	
+   */
+  private JButton getSaveSceneButton() {
+    if (saveSceneButton == null) {
+      saveSceneButton = new JButton();
+      saveSceneButton.setPreferredSize(new Dimension(111, 26));
+      saveSceneButton.setText("Save Scene");
+      saveSceneButton.setMnemonic(KeyEvent.VK_S);
+      saveSceneButton.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent e) {
+          sunflowController.saveScene();
+        }
+      });
+    }
+    return saveSceneButton;
+  }
+
+  /**
+   * This method initializes clearConsoleButton	
+   * 	
+   * @return javax.swing.JButton	
+   */
+  private JButton getClearConsoleButton() {
+    if (clearConsoleButton == null) {
+      clearConsoleButton = new JButton();
+      clearConsoleButton.setPreferredSize(new Dimension(141, 26));
+      clearConsoleButton.setText("Clear");
+      clearConsoleButton.setMnemonic(KeyEvent.VK_L);
+      clearConsoleButton.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent e) {
+          sunflowController.clearConsole();
+        }
+      });
+    }
+    return clearConsoleButton;
+  }
+
+  /**
+   * This method initializes editorScrollPane	
+   * 	
+   * @return javax.swing.JScrollPane	
+   */
+  private JScrollPane getEditorScrollPane() {
+    if (editorScrollPane == null) {
+      editorScrollPane = new JScrollPane();
+      editorScrollPane.setViewportView(getEditorTextArea());
+    }
+    return editorScrollPane;
+  }
+
+  /**
+   * This method initializes editorTextArea1	
+   * 	
+   * @return javax.swing.JTextArea	
+   */
+  private JTextArea getEditorTextArea() {
+    if (editorTextArea1 == null) {
+      editorTextArea1 = new JTextArea();
+    }
+    return editorTextArea1;
+  }
+
+  /**
+   * This method initializes consoleScrollPane	
+   * 	
+   * @return javax.swing.JScrollPane	
+   */
+  private JScrollPane getConsoleScrollPane() {
+    if (consoleScrollPane == null) {
+      consoleScrollPane = new JScrollPane();
+      consoleScrollPane.setViewportView(getConsoleTextArea());
+    }
+    return consoleScrollPane;
+  }
+
+  /**
+   * This method initializes consoleTextArea1	
+   * 	
+   * @return javax.swing.JTextArea	
+   */
+  private JTextArea getConsoleTextArea() {
+    if (consoleTextArea1 == null) {
+      consoleTextArea1 = new JTextArea();
+    }
+    return consoleTextArea1;
+  }
+
+  public SunflowController createController(ErrorHandler pErrorHandler, Prefs pPrefs) {
+    sunflowController = new SunflowController(pErrorHandler, pPrefs, getEditorTextArea(), getConsoleTextArea(),
+        getImagePanel(), getRenderButton(), getIprButton(), getLoadSceneButton(), getCancelRenderButton(),
+        getBuildSceneButton(), getSaveSceneButton(), getClearConsoleButton(), getNewSceneButton());
+    return sunflowController;
+  }
+
+  /**
+   * This method initializes newSceneButton	
+   * 	
+   * @return javax.swing.JButton	
+   */
+  private JButton getNewSceneButton() {
+    if (newSceneButton == null) {
+      newSceneButton = new JButton();
+      newSceneButton.setPreferredSize(new Dimension(111, 26));
+      newSceneButton.setText("New Scene");
+      newSceneButton.setMnemonic(KeyEvent.VK_N);
+      newSceneButton.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent e) {
+          sunflowController.newScene();
+        }
+      });
+    }
+    return newSceneButton;
+  }
 } //  @jve:decl-index=0:visual-constraint="10,10"

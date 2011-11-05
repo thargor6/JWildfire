@@ -18,6 +18,7 @@ package org.jwildfire.swing;
 
 import java.io.File;
 
+import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
@@ -35,6 +36,18 @@ import org.sunflow.system.UI.PrintLevel;
 import org.sunflow.system.UserInterface;
 
 public class SunflowController implements UserInterface {
+  private enum SceneType {
+    JAVA, SC
+  };
+
+  private enum Status {
+    IDLE, RENDERING
+  };
+
+  private enum Sampler {
+    BUCKET, IPR
+  }
+
   private String currentFile;
   private SunflowAPI api;
   private final Prefs prefs;
@@ -42,12 +55,33 @@ public class SunflowController implements UserInterface {
   private final JTextArea editorTextArea;
   private final JTextArea consoleTextArea;
   private final ImagePanel imagePanel;
+  private final JButton renderButton;
+  private final JButton iprButton;
+  private final JButton loadSceneButton;
+  private final JButton cancelRenderButton;
+  private final JButton buildSceneButton;
+  private final JButton saveSceneButton;
+  private final JButton clearConsoleButton;
+  private final JButton newSceneButton;
 
-  public SunflowController(ErrorHandler pErrorHandler, Prefs pPrefs, JTextArea pEditorTextArea, JTextArea pConsoleTextArea, ImagePanel pImagePanel) {
+  private SceneType sceneType = null;
+  private Status status = Status.IDLE;
+
+  public SunflowController(ErrorHandler pErrorHandler, Prefs pPrefs, JTextArea pEditorTextArea, JTextArea pConsoleTextArea, ImagePanel pImagePanel,
+      JButton pRenderButton, JButton pIprButton, JButton pLoadSceneButton, JButton pCancelRenderButton, JButton pBuildSceneButton, JButton pSaveSceneButton,
+      JButton pClearConsoleButton, JButton pNewSceneButton) {
     errorHandler = pErrorHandler;
     prefs = pPrefs;
     editorTextArea = pEditorTextArea;
     consoleTextArea = pConsoleTextArea;
+    renderButton = pRenderButton;
+    iprButton = pIprButton;
+    loadSceneButton = pLoadSceneButton;
+    cancelRenderButton = pCancelRenderButton;
+    buildSceneButton = pBuildSceneButton;
+    saveSceneButton = pSaveSceneButton;
+    clearConsoleButton = pClearConsoleButton;
+    newSceneButton = pNewSceneButton;
     imagePanel = pImagePanel;
     UI.set(this);
   }
@@ -55,8 +89,11 @@ public class SunflowController implements UserInterface {
   public void newScene() {
     currentFile = null;
     api = null;
-    String template = "import org.sunflow.core.*;\nimport org.sunflow.core.accel.*;\nimport org.sunflow.core.camera.*;\nimport org.sunflow.core.primitive.*;\nimport org.sunflow.core.shader.*;\nimport org.sunflow.image.Color;\nimport org.sunflow.math.*;\n\npublic void build() {\n  // your code goes here\n\n}\n";
+    // TODO
+    String template = "";
+
     editorTextArea.setText(template);
+    enableControls();
   }
 
   public class SceneFileFilter extends FileFilter {
@@ -97,17 +134,19 @@ public class SunflowController implements UserInterface {
       JFileChooser chooser = getSceneJFileChooser();
       chooser.setCurrentDirectory(new File(prefs.getInputScenePath()));
       if (chooser.showOpenDialog(editorTextArea) == JFileChooser.APPROVE_OPTION) {
+        api = null;
         File file = chooser.getSelectedFile();
         String filename = file.getAbsolutePath();
         if (filename.endsWith(".java")) {
-          editorTextArea.setText(Tools.readUTF8Textfile(filename));
+          sceneType = SceneType.JAVA;
         }
         else {
-          String template = "import org.sunflow.core.*;\nimport org.sunflow.core.accel.*;\nimport org.sunflow.core.camera.*;\nimport org.sunflow.core.primitive.*;\nimport org.sunflow.core.shader.*;\nimport org.sunflow.image.Color;\nimport org.sunflow.math.*;\n\npublic void build() {\n  include(\"" + filename.replace("\\", "\\\\") + "\");\n}\n";
-          editorTextArea.setText(template);
+          sceneType = SceneType.SC;
         }
+        editorTextArea.setText(Tools.readUTF8Textfile(filename));
         prefs.setLastInputSceneFile(file);
         currentFile = filename;
+        enableControls();
       }
     }
     catch (Throwable ex) {
@@ -120,7 +159,24 @@ public class SunflowController implements UserInterface {
       clearConsole();
       Timer t = new Timer();
       t.start();
-      api = SunflowAPI.compile(editorTextArea.getText());
+      switch (sceneType) {
+        case JAVA:
+          api = SunflowAPI.compile(editorTextArea.getText());
+          break;
+        case SC: {
+          File tmpFile = File.createTempFile("jwf", ".sc");
+          try {
+            String filename = tmpFile.getAbsolutePath();
+            Tools.writeUTF8Textfile(filename, editorTextArea.getText());
+            String template = "import org.sunflow.core.*;\nimport org.sunflow.core.accel.*;\nimport org.sunflow.core.camera.*;\nimport org.sunflow.core.primitive.*;\nimport org.sunflow.core.shader.*;\nimport org.sunflow.image.Color;\nimport org.sunflow.math.*;\n\npublic void build() {\n  include(\"" + filename.replace("\\", "\\\\") + "\");\n}\n";
+            api = SunflowAPI.compile(template);
+          }
+          finally {
+            tmpFile.deleteOnExit();
+          }
+        }
+          break;
+      }
       if (currentFile != null) {
         String dir = new File(currentFile).getAbsoluteFile().getParent();
         api.searchpath("texture", dir);
@@ -129,13 +185,15 @@ public class SunflowController implements UserInterface {
       api.build();
       t.end();
       UI.printInfo(Module.GUI, "Build time: %s", t.toString());
+      enableControls();
     }
     catch (Throwable ex) {
+      api = null;
       errorHandler.handleError(ex);
     }
   }
 
-  private void clearConsole() {
+  void clearConsole() {
     consoleTextArea.setText("");
   }
 
@@ -173,26 +231,85 @@ public class SunflowController implements UserInterface {
   }
 
   public void renderScene() {
+    doRender(Sampler.BUCKET);
+  }
+
+  public void doRender(final Sampler pSampler) {
+    if (status == Status.RENDERING) {
+      return;
+    }
+    buildScene();
     new Thread() {
       @Override
       public void run() {
-        setEnableInterface(false);
-        clearConsole();
-        if (api != null) {
-          api.parameter("sampler", "bucket");
+        status = Status.RENDERING;
+        try {
+          enableControls();
+          clearConsole();
+          api.parameter("sampler", pSampler == Sampler.BUCKET ? "bucket" : "ipr");
           api.options(SunflowAPI.DEFAULT_OPTIONS);
           api.render(SunflowAPI.DEFAULT_OPTIONS, imagePanel);
         }
-        else
-          UI.printError(Module.GUI, "Nothing to render!");
-        setEnableInterface(true);
+        finally {
+          status = Status.IDLE;
+          enableControls();
+        }
       }
-
     }.start();
   }
 
-  private void setEnableInterface(boolean b) {
-    // TODO Auto-generated method stub
-
+  private void enableControls() {
+    boolean hasScene = editorTextArea.getText().length() > 0;
+    boolean idle = status == Status.IDLE;
+    renderButton.setEnabled(idle && hasScene);
+    iprButton.setEnabled(renderButton.isEnabled());
+    loadSceneButton.setEnabled(idle);
+    cancelRenderButton.setEnabled(!idle);
+    buildSceneButton.setEnabled(renderButton.isEnabled());
+    saveSceneButton.setEnabled(renderButton.isEnabled());
+    newSceneButton.setEnabled(loadSceneButton.isEnabled());
+    clearConsoleButton.setEnabled(idle);
   }
+
+  public void cancelRendering() {
+    UI.taskCancel();
+  }
+
+  public void iprScene() {
+    doRender(Sampler.IPR);
+  }
+
+  public void saveScene() {
+    try {
+      JFileChooser chooser = getSceneJFileChooser();
+      chooser.setCurrentDirectory(new File(prefs.getOutputScenePath()));
+      if (currentFile != null) {
+        chooser.setSelectedFile(new File(currentFile));
+      }
+      if (chooser.showSaveDialog(editorTextArea) == JFileChooser.APPROVE_OPTION) {
+        File file = chooser.getSelectedFile();
+        String filename = file.getAbsolutePath();
+        switch (sceneType) {
+          case JAVA:
+            if (!filename.endsWith(".java")) {
+              filename += ".java";
+            }
+            break;
+          case SC:
+            if (!filename.endsWith(".sc")) {
+              filename += ".sc";
+            }
+            break;
+          default:
+            throw new IllegalStateException();
+        }
+        Tools.writeUTF8Textfile(filename, editorTextArea.getText());
+        prefs.setLastOutputSceneFile(file);
+      }
+    }
+    catch (Throwable ex) {
+      errorHandler.handleError(ex);
+    }
+  }
+
 }
