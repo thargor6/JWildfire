@@ -41,6 +41,7 @@
 			<fileset dir="${build.dir}" includes="org/jwildfire/"/>
       <fileset dir="${src.dir}" includes="com/**/*.properties"/>
       <fileset dir="${src.dir}" includes="com/**/)*.gif"/>
+      <fileset dir="${src.dir}" includes="org/jwildfire/swing/icons/*.gif"/>
       <fileset dir="${build.dir}" includes="com/"/>
       <zipfileset src="lib/jep-2.4.1.jar"/>
       <zipfileset src="lib/sunflow.jar"/>

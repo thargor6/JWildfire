@@ -2,6 +2,7 @@ package org.jwildfire.swing;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.Point;
@@ -9,16 +10,22 @@ import java.awt.Rectangle;
 import java.awt.event.KeyEvent;
 
 import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSlider;
+import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
 import javax.swing.WindowConstants;
+import javax.swing.border.EtchedBorder;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 import org.jwildfire.base.Prefs;
 
@@ -185,8 +192,6 @@ public class TinaInternalFrame extends JInternalFrame {
 
   private JPanel tinaPalettePanel = null;
 
-  private JButton tinaResetTransformationButton = null;
-
   private JButton tinaDeleteTransformationButton = null;
 
   private JButton tinaDuplicateTransformationButton = null;
@@ -284,6 +289,33 @@ public class TinaInternalFrame extends JInternalFrame {
   private JTextField tinaRenderWidthREd = null;
 
   private JTextField tinaRenderHeightREd = null;
+  private JButton tinaAddFinalTransformationButton = null;
+  private JLabel affineC00Lbl = null;
+  private JTextField affineC00REd = null;
+  private JLabel affineC01Lbl = null;
+  private JTextField affineC01REd = null;
+  private JLabel affineC10Lbl = null;
+  private JLabel affineC11Lbl = null;
+  private JTextField affineC10REd = null;
+  private JTextField affineC11REd = null;
+  private JLabel affineC20Lbl = null;
+  private JLabel affineC21Lbl = null;
+  private JTextField affineC20REd = null;
+  private JTextField affineC21REd = null;
+  private JButton affineRotateLeftButton = null;
+  private JButton affineRotateRightButton = null;
+  private JButton affineEnlargeButton = null;
+  private JButton affineShrinkButton = null;
+  private JTextField affineRotateAmountREd = null;
+  private JPanel transformationsNorthPanel = null;
+  private JPanel trnsformationsEastPanel = null;
+  private JSplitPane transformationsSplitPane = null;
+  private JTextField affineScaleAmountREd = null;
+  private JButton affineMoveUpButton = null;
+  private JButton affineMoveDownButton = null;
+  private JButton affineMoveLeftButton = null;
+  private JButton affineMoveRightButton = null;
+  private JTextField affineMoveAmountREd = null;
 
   /**
    * This is the xxx default constructor
@@ -299,13 +331,13 @@ public class TinaInternalFrame extends JInternalFrame {
    * @return void
    */
   private void initialize() {
-    this.setSize(988, 641);
-    this.setBounds(new Rectangle(561, 116, 1039, 665));
+    this.setSize(988, 680);
+    this.setLocation(new Point(561, 116));
     this.setClosable(true);
     this.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
     this.setIconifiable(true);
     this.setTitle("Fractal flames");
-    this.setVisible(false);
+    this.setVisible(true);
     this.setResizable(true);
     this.setContentPane(getJContentPane());
   }
@@ -371,7 +403,7 @@ public class TinaInternalFrame extends JInternalFrame {
       gridBagConstraints4.gridy = 0;
       tinaEastPanel = new JPanel();
       tinaEastPanel.setLayout(new BorderLayout());
-      tinaEastPanel.setPreferredSize(new Dimension(320, 0));
+      tinaEastPanel.setPreferredSize(new Dimension(310, 0));
       tinaEastPanel.add(getTinaEastTabbedPane(), BorderLayout.CENTER);
     }
     return tinaEastPanel;
@@ -401,6 +433,7 @@ public class TinaInternalFrame extends JInternalFrame {
     if (tinaCenterPanel == null) {
       tinaCenterPanel = new JPanel();
       tinaCenterPanel.setLayout(new BorderLayout());
+      tinaCenterPanel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
     }
     return tinaCenterPanel;
   }
@@ -1658,7 +1691,13 @@ public class TinaInternalFrame extends JInternalFrame {
     if (tinaAddTransformationButton == null) {
       tinaAddTransformationButton = new JButton();
       tinaAddTransformationButton.setText("Add");
-      tinaAddTransformationButton.setBounds(new Rectangle(6, 4, 70, 26));
+      tinaAddTransformationButton.setPreferredSize(new Dimension(81, 24));
+      tinaAddTransformationButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      tinaAddTransformationButton.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent e) {
+          System.out.println("actionPerformed()"); // TODO Auto-generated Event stub actionPerformed()
+        }
+      });
     }
     return tinaAddTransformationButton;
   }
@@ -1734,14 +1773,9 @@ public class TinaInternalFrame extends JInternalFrame {
   private JPanel getTinaTransformationsPanel() {
     if (tinaTransformationsPanel == null) {
       tinaTransformationsPanel = new JPanel();
-      tinaTransformationsPanel.setLayout(null);
+      tinaTransformationsPanel.setLayout(new BorderLayout());
       tinaTransformationsPanel.setToolTipText("");
-      tinaTransformationsPanel.add(getTinaAddTransformationButton(), null);
-      tinaTransformationsPanel.add(getTinaResetTransformationButton(), null);
-      tinaTransformationsPanel.add(getTinaDeleteTransformationButton(), null);
-      tinaTransformationsPanel.add(getTinaDuplicateTransformationButton(), null);
-      tinaTransformationsPanel.add(getTinaTransformationsScrollPane(), null);
-      tinaTransformationsPanel.add(getTinaTransformationsTabbedPane(), null);
+      tinaTransformationsPanel.add(getTransformationsSplitPane(), BorderLayout.CENTER);
     }
     return tinaTransformationsPanel;
   }
@@ -1779,20 +1813,6 @@ public class TinaInternalFrame extends JInternalFrame {
   }
 
   /**
-   * This method initializes tinaResetTransformationButton  
-   *  
-   * @return javax.swing.JButton  
-   */
-  private JButton getTinaResetTransformationButton() {
-    if (tinaResetTransformationButton == null) {
-      tinaResetTransformationButton = new JButton();
-      tinaResetTransformationButton.setBounds(new Rectangle(246, 4, 74, 26));
-      tinaResetTransformationButton.setText("Reset");
-    }
-    return tinaResetTransformationButton;
-  }
-
-  /**
    * This method initializes tinaDeleteTransformationButton 
    *  
    * @return javax.swing.JButton  
@@ -1800,8 +1820,14 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton getTinaDeleteTransformationButton() {
     if (tinaDeleteTransformationButton == null) {
       tinaDeleteTransformationButton = new JButton();
-      tinaDeleteTransformationButton.setBounds(new Rectangle(78, 4, 75, 26));
       tinaDeleteTransformationButton.setText("Delete");
+      tinaDeleteTransformationButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      tinaDeleteTransformationButton.setPreferredSize(new Dimension(81, 24));
+      tinaDeleteTransformationButton.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent e) {
+          System.out.println("actionPerformed()"); // TODO Auto-generated Event stub actionPerformed()
+        }
+      });
     }
     return tinaDeleteTransformationButton;
   }
@@ -1814,8 +1840,14 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton getTinaDuplicateTransformationButton() {
     if (tinaDuplicateTransformationButton == null) {
       tinaDuplicateTransformationButton = new JButton();
-      tinaDuplicateTransformationButton.setBounds(new Rectangle(155, 4, 89, 26));
       tinaDuplicateTransformationButton.setText("Duplicate");
+      tinaDuplicateTransformationButton.setPreferredSize(new Dimension(81, 24));
+      tinaDuplicateTransformationButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      tinaDuplicateTransformationButton.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent e) {
+          System.out.println("actionPerformed()"); // TODO Auto-generated Event stub actionPerformed()
+        }
+      });
     }
     return tinaDuplicateTransformationButton;
   }
@@ -1828,7 +1860,6 @@ public class TinaInternalFrame extends JInternalFrame {
   private JScrollPane getTinaTransformationsScrollPane() {
     if (tinaTransformationsScrollPane == null) {
       tinaTransformationsScrollPane = new JScrollPane();
-      tinaTransformationsScrollPane.setBounds(new Rectangle(13, 46, 285, 72));
       tinaTransformationsScrollPane.setViewportView(getTinaTransformationsTable());
     }
     return tinaTransformationsScrollPane;
@@ -1842,6 +1873,16 @@ public class TinaInternalFrame extends JInternalFrame {
   private JTable getTinaTransformationsTable() {
     if (tinaTransformationsTable == null) {
       tinaTransformationsTable = new JTable();
+      tinaTransformationsTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+      tinaTransformationsTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+
+        @Override
+        public void valueChanged(ListSelectionEvent e) {
+          tinaController.transformationTableClicked();
+        }
+
+      });
+
     }
     return tinaTransformationsTable;
   }
@@ -1854,7 +1895,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JTabbedPane getTinaTransformationsTabbedPane() {
     if (tinaTransformationsTabbedPane == null) {
       tinaTransformationsTabbedPane = new JTabbedPane();
-      tinaTransformationsTabbedPane.setBounds(new Rectangle(8, 124, 301, 170));
+      tinaTransformationsTabbedPane.setFont(new Font("Dialog", Font.BOLD, 10));
       tinaTransformationsTabbedPane.addTab("Affine", null, getTinaAffineTransformationPanel(), null);
       tinaTransformationsTabbedPane.addTab("Nonlinear", null, getTinaVariationPanel(), null);
       tinaTransformationsTabbedPane.addTab("Rel. weights", null, getTinaModifiedWeightsPanel(), null);
@@ -1870,8 +1911,68 @@ public class TinaInternalFrame extends JInternalFrame {
    */
   private JPanel getTinaAffineTransformationPanel() {
     if (tinaAffineTransformationPanel == null) {
+      affineC21Lbl = new JLabel();
+      affineC21Lbl.setText("c21");
+      affineC21Lbl.setLocation(new Point(188, 28));
+      affineC21Lbl.setSize(new Dimension(24, 22));
+      affineC21Lbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      affineC21Lbl.setPreferredSize(new Dimension(24, 22));
+      affineC20Lbl = new JLabel();
+      affineC20Lbl.setText("c20");
+      affineC20Lbl.setLocation(new Point(188, 4));
+      affineC20Lbl.setSize(new Dimension(24, 22));
+      affineC20Lbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      affineC20Lbl.setPreferredSize(new Dimension(24, 22));
+      affineC11Lbl = new JLabel();
+      affineC11Lbl.setText("c11");
+      affineC11Lbl.setLocation(new Point(96, 28));
+      affineC11Lbl.setSize(new Dimension(24, 22));
+      affineC11Lbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      affineC11Lbl.setPreferredSize(new Dimension(24, 22));
+      affineC10Lbl = new JLabel();
+      affineC10Lbl.setText("c10");
+      affineC10Lbl.setLocation(new Point(96, 4));
+      affineC10Lbl.setSize(new Dimension(24, 22));
+      affineC10Lbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      affineC10Lbl.setPreferredSize(new Dimension(24, 22));
+      affineC01Lbl = new JLabel();
+      affineC01Lbl.setText("c01");
+      affineC01Lbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      affineC01Lbl.setLocation(new Point(4, 28));
+      affineC01Lbl.setSize(new Dimension(24, 22));
+      affineC01Lbl.setPreferredSize(new Dimension(24, 22));
+      affineC00Lbl = new JLabel();
+      affineC00Lbl.setText("c00");
+      affineC00Lbl.setLocation(new Point(4, 4));
+      affineC00Lbl.setSize(new Dimension(24, 22));
+      affineC00Lbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      affineC00Lbl.setPreferredSize(new Dimension(24, 22));
       tinaAffineTransformationPanel = new JPanel();
       tinaAffineTransformationPanel.setLayout(null);
+      tinaAffineTransformationPanel.setFont(new Font("Dialog", Font.PLAIN, 10));
+      tinaAffineTransformationPanel.add(affineC00Lbl, null);
+      tinaAffineTransformationPanel.add(getAffineC00REd(), null);
+      tinaAffineTransformationPanel.add(affineC01Lbl, null);
+      tinaAffineTransformationPanel.add(getAffineC01REd(), null);
+      tinaAffineTransformationPanel.add(affineC10Lbl, null);
+      tinaAffineTransformationPanel.add(affineC11Lbl, null);
+      tinaAffineTransformationPanel.add(getAffineC10REd(), null);
+      tinaAffineTransformationPanel.add(getAffineC11REd(), null);
+      tinaAffineTransformationPanel.add(affineC20Lbl, null);
+      tinaAffineTransformationPanel.add(affineC21Lbl, null);
+      tinaAffineTransformationPanel.add(getAffineC20REd(), null);
+      tinaAffineTransformationPanel.add(getAffineC21REd(), null);
+      tinaAffineTransformationPanel.add(getAffineRotateLeftButton(), null);
+      tinaAffineTransformationPanel.add(getAffineRotateRightButton(), null);
+      tinaAffineTransformationPanel.add(getAffineEnlargeButton(), null);
+      tinaAffineTransformationPanel.add(getAffineShrinkButton(), null);
+      tinaAffineTransformationPanel.add(getAffineRotateAmountREd(), null);
+      tinaAffineTransformationPanel.add(getAffineScaleAmountREd(), null);
+      tinaAffineTransformationPanel.add(getAffineMoveUpButton(), null);
+      tinaAffineTransformationPanel.add(getAffineMoveDownButton(), null);
+      tinaAffineTransformationPanel.add(getAffineMoveLeftButton(), null);
+      tinaAffineTransformationPanel.add(getAffineMoveRightButton(), null);
+      tinaAffineTransformationPanel.add(getAffineMoveAmountREd(), null);
     }
     return tinaAffineTransformationPanel;
   }
@@ -2624,8 +2725,436 @@ public class TinaInternalFrame extends JInternalFrame {
         getTinaPaletteRedREd(), getTinaPaletteRedSlider(), getTinaPaletteGreenREd(), getTinaPaletteGreenSlider(), getTinaPaletteBlueREd(),
         getTinaPaletteBlueSlider(), getTinaPaletteHueREd(), getTinaPaletteHueSlider(), getTinaPaletteSaturationREd(), getTinaPaletteSaturationSlider(),
         getTinaPaletteContrastREd(), getTinaPaletteContrastSlider(), getTinaPaletteGammaREd(), getTinaPaletteGammaSlider(), getTinaPaletteBrightnessREd(),
-        getTinaPaletteBrightnessSlider(), getTinaRenderWidthREd(), getTinaRenderHeightREd());
+        getTinaPaletteBrightnessSlider(), getTinaRenderWidthREd(), getTinaRenderHeightREd(), getTinaTransformationsTable(), getAffineC00REd(),
+        getAffineC01REd(), getAffineC10REd(), getAffineC11REd(), getAffineC20REd(), getAffineC21REd(), getAffineRotateAmountREd(), getAffineScaleAmountREd(),
+        getAffineMoveAmountREd(), getAffineRotateLeftButton(), getAffineRotateRightButton(), getAffineEnlargeButton(), getAffineShrinkButton(),
+        getAffineMoveUpButton(), getAffineMoveLeftButton(), getAffineMoveRightButton(), getAffineMoveDownButton(), getTinaAddTransformationButton(),
+        getTinaDuplicateTransformationButton(), getTinaDeleteTransformationButton(), getTinaAddFinalTransformationButton());
     return tinaController;
+  }
+
+  /**
+   * This method initializes tinaAddFinalTransformationButton	
+   * 	
+   * @return javax.swing.JButton	
+   */
+  private JButton getTinaAddFinalTransformationButton() {
+    if (tinaAddFinalTransformationButton == null) {
+      tinaAddFinalTransformationButton = new JButton();
+      tinaAddFinalTransformationButton.setActionCommand("Add Final");
+      tinaAddFinalTransformationButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      tinaAddFinalTransformationButton.setPreferredSize(new Dimension(81, 24));
+      tinaAddFinalTransformationButton.setText("Add Final");
+      tinaAddFinalTransformationButton.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent e) {
+          System.out.println("actionPerformed()"); // TODO Auto-generated Event stub actionPerformed()
+        }
+      });
+    }
+    return tinaAddFinalTransformationButton;
+  }
+
+  /**
+   * This method initializes affineC00REd	
+   * 	
+   * @return javax.swing.JTextField	
+   */
+  private JTextField getAffineC00REd() {
+    if (affineC00REd == null) {
+      affineC00REd = new JTextField();
+      affineC00REd.setPreferredSize(new Dimension(56, 22));
+      affineC00REd.setText("");
+      affineC00REd.setLocation(new Point(30, 4));
+      affineC00REd.setSize(new Dimension(56, 22));
+      affineC00REd.setEditable(false);
+      affineC00REd.setHorizontalAlignment(JTextField.RIGHT);
+      affineC00REd.setFont(new Font("Dialog", Font.PLAIN, 10));
+    }
+    return affineC00REd;
+  }
+
+  /**
+   * This method initializes affineC01REd	
+   * 	
+   * @return javax.swing.JTextField	
+   */
+  private JTextField getAffineC01REd() {
+    if (affineC01REd == null) {
+      affineC01REd = new JTextField();
+      affineC01REd.setPreferredSize(new Dimension(56, 22));
+      affineC01REd.setText("");
+      affineC01REd.setLocation(new Point(30, 28));
+      affineC01REd.setSize(new Dimension(56, 22));
+      affineC01REd.setEditable(false);
+      affineC01REd.setHorizontalAlignment(JTextField.RIGHT);
+      affineC01REd.setFont(new Font("Dialog", Font.PLAIN, 10));
+    }
+    return affineC01REd;
+  }
+
+  /**
+   * This method initializes affineC10REd	
+   * 	
+   * @return javax.swing.JTextField	
+   */
+  private JTextField getAffineC10REd() {
+    if (affineC10REd == null) {
+      affineC10REd = new JTextField();
+      affineC10REd.setPreferredSize(new Dimension(56, 22));
+      affineC10REd.setText("");
+      affineC10REd.setLocation(new Point(122, 4));
+      affineC10REd.setSize(new Dimension(56, 22));
+      affineC10REd.setEditable(false);
+      affineC10REd.setHorizontalAlignment(JTextField.RIGHT);
+      affineC10REd.setFont(new Font("Dialog", Font.PLAIN, 10));
+    }
+    return affineC10REd;
+  }
+
+  /**
+   * This method initializes affineC11REd	
+   * 	
+   * @return javax.swing.JTextField	
+   */
+  private JTextField getAffineC11REd() {
+    if (affineC11REd == null) {
+      affineC11REd = new JTextField();
+      affineC11REd.setPreferredSize(new Dimension(56, 22));
+      affineC11REd.setText("");
+      affineC11REd.setLocation(new Point(122, 28));
+      affineC11REd.setSize(new Dimension(56, 22));
+      affineC11REd.setEditable(false);
+      affineC11REd.setHorizontalAlignment(JTextField.RIGHT);
+      affineC11REd.setFont(new Font("Dialog", Font.PLAIN, 10));
+    }
+    return affineC11REd;
+  }
+
+  /**
+   * This method initializes affineC20REd	
+   * 	
+   * @return javax.swing.JTextField	
+   */
+  private JTextField getAffineC20REd() {
+    if (affineC20REd == null) {
+      affineC20REd = new JTextField();
+      affineC20REd.setPreferredSize(new Dimension(56, 22));
+      affineC20REd.setText("");
+      affineC20REd.setLocation(new Point(214, 4));
+      affineC20REd.setSize(new Dimension(56, 22));
+      affineC20REd.setEditable(false);
+      affineC20REd.setHorizontalAlignment(JTextField.RIGHT);
+      affineC20REd.setFont(new Font("Dialog", Font.PLAIN, 10));
+    }
+    return affineC20REd;
+  }
+
+  /**
+   * This method initializes affineC21REd	
+   * 	
+   * @return javax.swing.JTextField	
+   */
+  private JTextField getAffineC21REd() {
+    if (affineC21REd == null) {
+      affineC21REd = new JTextField();
+      affineC21REd.setPreferredSize(new Dimension(56, 22));
+      affineC21REd.setText("");
+      affineC21REd.setLocation(new Point(214, 28));
+      affineC21REd.setSize(new Dimension(56, 22));
+      affineC21REd.setEditable(false);
+      affineC21REd.setHorizontalAlignment(JTextField.RIGHT);
+      affineC21REd.setFont(new Font("Dialog", Font.PLAIN, 10));
+    }
+    return affineC21REd;
+  }
+
+  /**
+   * This method initializes affineRotateLeftButton	
+   * 	
+   * @return javax.swing.JButton	
+   */
+  private JButton getAffineRotateLeftButton() {
+    if (affineRotateLeftButton == null) {
+      affineRotateLeftButton = new JButton();
+      affineRotateLeftButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      affineRotateLeftButton.setPreferredSize(new Dimension(55, 26));
+      affineRotateLeftButton.setSize(new Dimension(55, 26));
+      affineRotateLeftButton.setLocation(new Point(4, 56));
+      affineRotateLeftButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/turnLeft.gif")));
+      affineRotateLeftButton.setText("");
+      affineRotateLeftButton.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent e) {
+          System.out.println("actionPerformed()"); // TODO Auto-generated Event stub actionPerformed()
+        }
+      });
+    }
+    return affineRotateLeftButton;
+  }
+
+  /**
+   * This method initializes affineRotateRightButton	
+   * 	
+   * @return javax.swing.JButton	
+   */
+  private JButton getAffineRotateRightButton() {
+    if (affineRotateRightButton == null) {
+      affineRotateRightButton = new JButton();
+      affineRotateRightButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      affineRotateRightButton.setPreferredSize(new Dimension(55, 26));
+      affineRotateRightButton.setLocation(new Point(4, 105));
+      affineRotateRightButton.setSize(new Dimension(55, 26));
+      affineRotateRightButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/turnRight.gif")));
+      affineRotateRightButton.setText("");
+      affineRotateRightButton.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent e) {
+          System.out.println("actionPerformed()"); // TODO Auto-generated Event stub actionPerformed()
+        }
+      });
+    }
+    return affineRotateRightButton;
+  }
+
+  /**
+   * This method initializes affineEnlargeButton	
+   * 	
+   * @return javax.swing.JButton	
+   */
+  private JButton getAffineEnlargeButton() {
+    if (affineEnlargeButton == null) {
+      affineEnlargeButton = new JButton();
+      affineEnlargeButton.setFont(new Font("Dialog", Font.BOLD, 8));
+      affineEnlargeButton.setPreferredSize(new Dimension(55, 26));
+      affineEnlargeButton.setLocation(new Point(66, 56));
+      affineEnlargeButton.setSize(new Dimension(55, 26));
+      affineEnlargeButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/enlarge.gif")));
+      affineEnlargeButton.setText("");
+      affineEnlargeButton.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent e) {
+          System.out.println("actionPerformed()"); // TODO Auto-generated Event stub actionPerformed()
+        }
+      });
+    }
+    return affineEnlargeButton;
+  }
+
+  /**
+   * This method initializes affineShrinkButton	
+   * 	
+   * @return javax.swing.JButton	
+   */
+  private JButton getAffineShrinkButton() {
+    if (affineShrinkButton == null) {
+      affineShrinkButton = new JButton();
+      affineShrinkButton.setFont(new Font("Dialog", Font.BOLD, 8));
+      affineShrinkButton.setPreferredSize(new Dimension(55, 26));
+      affineShrinkButton.setLocation(new Point(66, 105));
+      affineShrinkButton.setSize(new Dimension(55, 26));
+      affineShrinkButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/shrink.gif")));
+      affineShrinkButton.setText("");
+      affineShrinkButton.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent e) {
+          System.out.println("actionPerformed()"); // TODO Auto-generated Event stub actionPerformed()
+        }
+      });
+    }
+    return affineShrinkButton;
+  }
+
+  /**
+   * This method initializes affineRotateAmountREd	
+   * 	
+   * @return javax.swing.JTextField	
+   */
+  private JTextField getAffineRotateAmountREd() {
+    if (affineRotateAmountREd == null) {
+      affineRotateAmountREd = new JTextField();
+      affineRotateAmountREd.setPreferredSize(new Dimension(56, 22));
+      affineRotateAmountREd.setText("5");
+      affineRotateAmountREd.setHorizontalAlignment(JTextField.RIGHT);
+      affineRotateAmountREd.setSize(new Dimension(56, 22));
+      affineRotateAmountREd.setLocation(new Point(4, 83));
+      affineRotateAmountREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+    }
+    return affineRotateAmountREd;
+  }
+
+  /**
+   * This method initializes transformationsNorthPanel	
+   * 	
+   * @return javax.swing.JPanel	
+   */
+  private JPanel getTransformationsNorthPanel() {
+    if (transformationsNorthPanel == null) {
+      transformationsNorthPanel = new JPanel();
+      transformationsNorthPanel.setLayout(new BorderLayout());
+      transformationsNorthPanel.add(getTrnsformationsEastPanel(), BorderLayout.EAST);
+      transformationsNorthPanel.add(getTinaTransformationsScrollPane(), BorderLayout.CENTER);
+    }
+    return transformationsNorthPanel;
+  }
+
+  /**
+   * This method initializes trnsformationsEastPanel	
+   * 	
+   * @return javax.swing.JPanel	
+   */
+  private JPanel getTrnsformationsEastPanel() {
+    if (trnsformationsEastPanel == null) {
+      FlowLayout flowLayout = new FlowLayout();
+      flowLayout.setAlignment(FlowLayout.LEFT);
+      trnsformationsEastPanel = new JPanel();
+      trnsformationsEastPanel.setLayout(flowLayout);
+      trnsformationsEastPanel.setPreferredSize(new Dimension(91, 0));
+      trnsformationsEastPanel.add(getTinaAddTransformationButton(), null);
+      trnsformationsEastPanel.add(getTinaDuplicateTransformationButton(), null);
+      trnsformationsEastPanel.add(getTinaDeleteTransformationButton(), null);
+      trnsformationsEastPanel.add(getTinaAddFinalTransformationButton(), null);
+    }
+    return trnsformationsEastPanel;
+  }
+
+  /**
+   * This method initializes transformationsSplitPane	
+   * 	
+   * @return javax.swing.JSplitPane	
+   */
+  private JSplitPane getTransformationsSplitPane() {
+    if (transformationsSplitPane == null) {
+      transformationsSplitPane = new JSplitPane();
+      transformationsSplitPane.setDividerLocation(146);
+      transformationsSplitPane.setTopComponent(getTransformationsNorthPanel());
+      transformationsSplitPane.setBottomComponent(getTinaTransformationsTabbedPane());
+      transformationsSplitPane.setOrientation(JSplitPane.VERTICAL_SPLIT);
+    }
+    return transformationsSplitPane;
+  }
+
+  /**
+   * This method initializes affineScaleAmountREd	
+   * 	
+   * @return javax.swing.JTextField	
+   */
+  private JTextField getAffineScaleAmountREd() {
+    if (affineScaleAmountREd == null) {
+      affineScaleAmountREd = new JTextField();
+      affineScaleAmountREd.setPreferredSize(new Dimension(56, 22));
+      affineScaleAmountREd.setText("0.1");
+      affineScaleAmountREd.setHorizontalAlignment(JTextField.RIGHT);
+      affineScaleAmountREd.setSize(new Dimension(56, 22));
+      affineScaleAmountREd.setLocation(new Point(66, 83));
+      affineScaleAmountREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+    }
+    return affineScaleAmountREd;
+  }
+
+  /**
+   * This method initializes affineMoveUpButton	
+   * 	
+   * @return javax.swing.JButton	
+   */
+  private JButton getAffineMoveUpButton() {
+    if (affineMoveUpButton == null) {
+      affineMoveUpButton = new JButton();
+      affineMoveUpButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      affineMoveUpButton.setPreferredSize(new Dimension(55, 26));
+      affineMoveUpButton.setLocation(new Point(182, 56));
+      affineMoveUpButton.setSize(new Dimension(55, 26));
+      affineMoveUpButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/moveUp.gif")));
+      affineMoveUpButton.setText("");
+      affineMoveUpButton.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent e) {
+          System.out.println("actionPerformed()"); // TODO Auto-generated Event stub actionPerformed()
+        }
+      });
+    }
+    return affineMoveUpButton;
+  }
+
+  /**
+   * This method initializes affineMoveDownButton	
+   * 	
+   * @return javax.swing.JButton	
+   */
+  private JButton getAffineMoveDownButton() {
+    if (affineMoveDownButton == null) {
+      affineMoveDownButton = new JButton();
+      affineMoveDownButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      affineMoveDownButton.setPreferredSize(new Dimension(55, 26));
+      affineMoveDownButton.setLocation(new Point(182, 105));
+      affineMoveDownButton.setSize(new Dimension(55, 26));
+      affineMoveDownButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/moveDown.gif")));
+      affineMoveDownButton.setText("");
+      affineMoveDownButton.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent e) {
+          System.out.println("actionPerformed()"); // TODO Auto-generated Event stub actionPerformed()
+        }
+      });
+    }
+    return affineMoveDownButton;
+  }
+
+  /**
+   * This method initializes affineMoveLeftButton	
+   * 	
+   * @return javax.swing.JButton	
+   */
+  private JButton getAffineMoveLeftButton() {
+    if (affineMoveLeftButton == null) {
+      affineMoveLeftButton = new JButton();
+      affineMoveLeftButton.setText("");
+      affineMoveLeftButton.setPreferredSize(new Dimension(55, 26));
+      affineMoveLeftButton.setLocation(new Point(126, 83));
+      affineMoveLeftButton.setSize(new Dimension(55, 26));
+      affineMoveLeftButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/moveLeft.gif")));
+      affineMoveLeftButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      affineMoveLeftButton.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent e) {
+          System.out.println("actionPerformed()"); // TODO Auto-generated Event stub actionPerformed()
+        }
+      });
+    }
+    return affineMoveLeftButton;
+  }
+
+  /**
+   * This method initializes affineMoveRightButton	
+   * 	
+   * @return javax.swing.JButton	
+   */
+  private JButton getAffineMoveRightButton() {
+    if (affineMoveRightButton == null) {
+      affineMoveRightButton = new JButton();
+      affineMoveRightButton.setText("");
+      affineMoveRightButton.setLocation(new Point(238, 83));
+      affineMoveRightButton.setSize(new Dimension(55, 26));
+      affineMoveRightButton.setPreferredSize(new Dimension(55, 26));
+      affineMoveRightButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/moveRight.gif")));
+      affineMoveRightButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      affineMoveRightButton.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent e) {
+          System.out.println("actionPerformed()"); // TODO Auto-generated Event stub actionPerformed()
+        }
+      });
+    }
+    return affineMoveRightButton;
+  }
+
+  /**
+   * This method initializes affineMoveAmountREd	
+   * 	
+   * @return javax.swing.JTextField	
+   */
+  private JTextField getAffineMoveAmountREd() {
+    if (affineMoveAmountREd == null) {
+      affineMoveAmountREd = new JTextField();
+      affineMoveAmountREd.setPreferredSize(new Dimension(56, 22));
+      affineMoveAmountREd.setText("0.1");
+      affineMoveAmountREd.setHorizontalAlignment(JTextField.RIGHT);
+      affineMoveAmountREd.setSize(new Dimension(56, 22));
+      affineMoveAmountREd.setLocation(new Point(182, 83));
+      affineMoveAmountREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+    }
+    return affineMoveAmountREd;
   }
 
 } //  @jve:decl-index=0:visual-constraint="10,10"

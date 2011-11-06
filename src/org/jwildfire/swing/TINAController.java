@@ -22,17 +22,21 @@ import java.io.File;
 import java.lang.reflect.Field;
 import java.util.List;
 
+import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
+import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.event.ChangeEvent;
 import javax.swing.filechooser.FileFilter;
+import javax.swing.table.DefaultTableModel;
 
 import org.jwildfire.base.Prefs;
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.RandomFlameGenerator;
+import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.io.Flam3Reader;
 import org.jwildfire.create.tina.io.Flam3Writer;
 import org.jwildfire.create.tina.palette.RGBPalette;
@@ -43,7 +47,6 @@ import org.jwildfire.create.tina.render.FlameRenderer;
 import org.jwildfire.image.SimpleImage;
 import org.jwildfire.io.ImageReader;
 import org.jwildfire.io.ImageWriter;
-
 
 public class TINAController {
   private static final double SLIDER_SCALE_PERSPECTIVE = 100.0;
@@ -126,6 +129,29 @@ public class TINAController {
   private final JSlider paletteGammaSlider;
   private final JTextField paletteBrightnessREd;
   private final JSlider paletteBrightnessSlider;
+  // Transformations
+  private final JTable transformationsTable;
+  private final JTextField affineC00REd;
+  private final JTextField affineC01REd;
+  private final JTextField affineC10REd;
+  private final JTextField affineC11REd;
+  private final JTextField affineC20REd;
+  private final JTextField affineC21REd;
+  private final JTextField affineRotateAmountREd;
+  private final JTextField affineScaleAmountREd;
+  private final JTextField affineMoveAmountREd;
+  private final JButton affineRotateLeftButton;
+  private final JButton affineRotateRightButton;
+  private final JButton affineEnlargeButton;
+  private final JButton affineShrinkButton;
+  private final JButton affineMoveUpButton;
+  private final JButton affineMoveLeftButton;
+  private final JButton affineMoveRightButton;
+  private final JButton affineMoveDownButton;
+  private final JButton addTransformationButton;
+  private final JButton duplicateTransformationButton;
+  private final JButton deleteTransformationButton;
+  private final JButton addFinalTransformationButton;
 
   // misc
   private Flame currFlame;
@@ -143,7 +169,12 @@ public class TINAController {
       JTextField pPaletteRedREd, JSlider pPaletteRedSlider, JTextField pPaletteGreenREd, JSlider pPaletteGreenSlider, JTextField pPaletteBlueREd,
       JSlider pPaletteBlueSlider, JTextField pPaletteHueREd, JSlider pPaletteHueSlider, JTextField pPaletteSaturationREd, JSlider pPaletteSaturationSlider,
       JTextField pPaletteContrastREd, JSlider pPaletteContrastSlider, JTextField pPaletteGammaREd, JSlider pPaletteGammaSlider, JTextField pPaletteBrightnessREd,
-      JSlider pPaletteBrightnessSlider, JTextField pRenderWidthREd, JTextField pRenderHeightREd) {
+      JSlider pPaletteBrightnessSlider, JTextField pRenderWidthREd, JTextField pRenderHeightREd, JTable pTransformationsTable, JTextField pAffineC00REd,
+      JTextField pAffineC01REd, JTextField pAffineC10REd, JTextField pAffineC11REd, JTextField pAffineC20REd, JTextField pAffineC21REd,
+      JTextField pAffineRotateAmountREd, JTextField pAffineScaleAmountREd, JTextField pAffineMoveAmountREd, JButton pAffineRotateLeftButton,
+      JButton pAffineRotateRightButton, JButton pAffineEnlargeButton, JButton pAffineShrinkButton, JButton pAffineMoveUpButton, JButton pAffineMoveLeftButton,
+      JButton pAffineMoveRightButton, JButton pAffineMoveDownButton, JButton pAddTransformationButton, JButton pDuplicateTransformationButton,
+      JButton pDeleteTransformationButton, JButton pAddFinalTransformationButton) {
     errorHandler = pErrorHandler;
     prefs = pPrefs;
     centerPanel = pCenterPanel;
@@ -211,6 +242,30 @@ public class TINAController {
     paletteGammaSlider = pPaletteGammaSlider;
     paletteBrightnessREd = pPaletteBrightnessREd;
     paletteBrightnessSlider = pPaletteBrightnessSlider;
+
+    transformationsTable = pTransformationsTable;
+    affineC00REd = pAffineC00REd;
+    affineC01REd = pAffineC01REd;
+    affineC10REd = pAffineC10REd;
+    affineC11REd = pAffineC11REd;
+    affineC20REd = pAffineC20REd;
+    affineC21REd = pAffineC21REd;
+    affineRotateAmountREd = pAffineRotateAmountREd;
+    affineScaleAmountREd = pAffineScaleAmountREd;
+    affineMoveAmountREd = pAffineMoveAmountREd;
+    affineRotateLeftButton = pAffineRotateLeftButton;
+    affineRotateRightButton = pAffineRotateRightButton;
+    affineEnlargeButton = pAffineEnlargeButton;
+    affineShrinkButton = pAffineShrinkButton;
+    affineMoveUpButton = pAffineMoveUpButton;
+    affineMoveLeftButton = pAffineMoveLeftButton;
+    affineMoveRightButton = pAffineMoveRightButton;
+    affineMoveDownButton = pAffineMoveDownButton;
+    addTransformationButton = pAddTransformationButton;
+    duplicateTransformationButton = pDuplicateTransformationButton;
+    deleteTransformationButton = pDeleteTransformationButton;
+    addFinalTransformationButton = pAddFinalTransformationButton;
+    enableControls(null);
   }
 
   private ImagePanel getFlamePanel() {
@@ -329,6 +384,9 @@ public class TINAController {
       bgColorBlueREd.setText(String.valueOf(currFlame.getBGColorBlue()));
       bgColorBlueSlider.setValue(currFlame.getBGColorBlue());
 
+      refreshTransformationsTable();
+      transformationTableClicked();
+
       refreshFlameImage();
 
       refreshPaletteUI(currFlame.getPalette());
@@ -336,6 +394,59 @@ public class TINAController {
     finally {
       noRefresh = false;
     }
+  }
+
+  private void refreshTransformationsTable() {
+    final int COL_TRANSFORM = 0;
+    final int COL_VARIATIONS = 1;
+    transformationsTable.setModel(new DefaultTableModel() {
+      private static final long serialVersionUID = 1L;
+
+      @Override
+      public int getRowCount() {
+        return currFlame != null ? currFlame.getXForms().size() + (currFlame.getFinalXForm() != null ? 1 : 0) : 0;
+      }
+
+      @Override
+      public int getColumnCount() {
+        return 2;
+      }
+
+      @Override
+      public String getColumnName(int columnIndex) {
+        switch (columnIndex) {
+          case COL_TRANSFORM:
+            return "Transform";
+          case COL_VARIATIONS:
+            return "Variations";
+        }
+        return null;
+      }
+
+      @Override
+      public Object getValueAt(int rowIndex, int columnIndex) {
+        if (currFlame != null) {
+          XForm xForm = rowIndex < currFlame.getXForms().size() ? currFlame.getXForms().get(rowIndex) : currFlame.getFinalXForm();
+          switch (columnIndex) {
+            case COL_TRANSFORM:
+              return rowIndex < currFlame.getXForms().size() ? String.valueOf(rowIndex + 1) : "Final";
+            case COL_VARIATIONS:
+              {
+              String hs = "";
+              for (int i = 0; i < xForm.getVariations().size() - 1; i++) {
+                hs += xForm.getVariations().get(i).getFunc().getName() + ", ";
+              }
+              hs += xForm.getVariations().get(xForm.getVariations().size() - 1).getFunc().getName();
+              return hs;
+            }
+          }
+        }
+        return null;
+      }
+
+    });
+
+    transformationsTable.getColumnModel().getColumn(COL_TRANSFORM).setPreferredWidth(20);
   }
 
   private void refreshPaletteUI(RGBPalette pPalette) {
@@ -908,4 +1019,58 @@ public class TINAController {
     refreshUI();
   }
 
+  public XForm getCurrXForm() {
+    XForm xForm = null;
+    if (currFlame != null) {
+      int row = transformationsTable.getSelectedRow();
+      if (row >= 0 && row < currFlame.getXForms().size()) {
+        xForm = currFlame.getXForms().get(row);
+      }
+      else if (row == currFlame.getXForms().size()) {
+        xForm = currFlame.getFinalXForm();
+      }
+    }
+    return xForm;
+  }
+
+  public void transformationTableClicked() {
+    XForm xForm = getCurrXForm();
+    refreshXFormUI(xForm);
+    enableControls(xForm);
+  }
+
+  private void enableControls(XForm xForm) {
+    boolean enabled = xForm != null;
+    affineRotateLeftButton.setEnabled(enabled);
+    affineRotateRightButton.setEnabled(enabled);
+    affineEnlargeButton.setEnabled(enabled);
+    affineShrinkButton.setEnabled(enabled);
+    affineMoveUpButton.setEnabled(enabled);
+    affineMoveLeftButton.setEnabled(enabled);
+    affineMoveRightButton.setEnabled(enabled);
+    affineMoveDownButton.setEnabled(enabled);
+    addTransformationButton.setEnabled(currFlame != null);
+    duplicateTransformationButton.setEnabled(enabled);
+    deleteTransformationButton.setEnabled(enabled);
+    addFinalTransformationButton.setEnabled(currFlame != null && currFlame.getFinalXForm() == null);
+  }
+
+  private void refreshXFormUI(XForm pXForm) {
+    if (pXForm != null) {
+      affineC00REd.setText(Tools.doubleToString(pXForm.getCoeff00()));
+      affineC01REd.setText(Tools.doubleToString(pXForm.getCoeff01()));
+      affineC10REd.setText(Tools.doubleToString(pXForm.getCoeff10()));
+      affineC11REd.setText(Tools.doubleToString(pXForm.getCoeff11()));
+      affineC20REd.setText(Tools.doubleToString(pXForm.getCoeff20()));
+      affineC21REd.setText(Tools.doubleToString(pXForm.getCoeff21()));
+    }
+    else {
+      affineC00REd.setText(null);
+      affineC01REd.setText(null);
+      affineC10REd.setText(null);
+      affineC11REd.setText(null);
+      affineC20REd.setText(null);
+      affineC21REd.setText(null);
+    }
+  }
 }
