@@ -48,4 +48,9 @@ public class Variation {
     return func.getName() + "(" + amount + ")";
   }
 
+  public void assign(Variation var) {
+    amount = var.amount;
+    func = VariationFuncList.getVariationFuncInstance(var.func.getName());
+  }
+
 }

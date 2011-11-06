@@ -1695,7 +1695,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaAddTransformationButton.setFont(new Font("Dialog", Font.BOLD, 10));
       tinaAddTransformationButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
-          System.out.println("actionPerformed()"); // TODO Auto-generated Event stub actionPerformed()
+          tinaController.addXForm();
         }
       });
     }
@@ -1825,7 +1825,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaDeleteTransformationButton.setPreferredSize(new Dimension(81, 24));
       tinaDeleteTransformationButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
-          System.out.println("actionPerformed()"); // TODO Auto-generated Event stub actionPerformed()
+          tinaController.deleteXForm();
         }
       });
     }
@@ -1845,7 +1845,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaDuplicateTransformationButton.setFont(new Font("Dialog", Font.BOLD, 10));
       tinaDuplicateTransformationButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
-          System.out.println("actionPerformed()"); // TODO Auto-generated Event stub actionPerformed()
+          tinaController.duplicateXForm();
         }
       });
     }
@@ -2747,7 +2747,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaAddFinalTransformationButton.setText("Add Final");
       tinaAddFinalTransformationButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
-          System.out.println("actionPerformed()"); // TODO Auto-generated Event stub actionPerformed()
+          tinaController.addFinalXForm();
         }
       });
     }
@@ -2884,7 +2884,7 @@ public class TinaInternalFrame extends JInternalFrame {
       affineRotateLeftButton.setText("");
       affineRotateLeftButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
-          System.out.println("actionPerformed()"); // TODO Auto-generated Event stub actionPerformed()
+          tinaController.xForm_rotateLeft();
         }
       });
     }
@@ -2907,7 +2907,7 @@ public class TinaInternalFrame extends JInternalFrame {
       affineRotateRightButton.setText("");
       affineRotateRightButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
-          System.out.println("actionPerformed()"); // TODO Auto-generated Event stub actionPerformed()
+          tinaController.xForm_rotateRight();
         }
       });
     }
@@ -2930,7 +2930,7 @@ public class TinaInternalFrame extends JInternalFrame {
       affineEnlargeButton.setText("");
       affineEnlargeButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
-          System.out.println("actionPerformed()"); // TODO Auto-generated Event stub actionPerformed()
+          tinaController.xForm_enlarge();
         }
       });
     }
@@ -2953,7 +2953,7 @@ public class TinaInternalFrame extends JInternalFrame {
       affineShrinkButton.setText("");
       affineShrinkButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
-          System.out.println("actionPerformed()"); // TODO Auto-generated Event stub actionPerformed()
+          tinaController.xForm_shrink();
         }
       });
     }
@@ -3038,7 +3038,7 @@ public class TinaInternalFrame extends JInternalFrame {
     if (affineScaleAmountREd == null) {
       affineScaleAmountREd = new JTextField();
       affineScaleAmountREd.setPreferredSize(new Dimension(56, 22));
-      affineScaleAmountREd.setText("0.1");
+      affineScaleAmountREd.setText("0.05");
       affineScaleAmountREd.setHorizontalAlignment(JTextField.RIGHT);
       affineScaleAmountREd.setSize(new Dimension(56, 22));
       affineScaleAmountREd.setLocation(new Point(66, 83));
@@ -3063,7 +3063,7 @@ public class TinaInternalFrame extends JInternalFrame {
       affineMoveUpButton.setText("");
       affineMoveUpButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
-          System.out.println("actionPerformed()"); // TODO Auto-generated Event stub actionPerformed()
+          tinaController.xForm_moveUp();
         }
       });
     }
@@ -3086,7 +3086,7 @@ public class TinaInternalFrame extends JInternalFrame {
       affineMoveDownButton.setText("");
       affineMoveDownButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
-          System.out.println("actionPerformed()"); // TODO Auto-generated Event stub actionPerformed()
+          tinaController.xForm_moveDown();
         }
       });
     }
@@ -3109,7 +3109,7 @@ public class TinaInternalFrame extends JInternalFrame {
       affineMoveLeftButton.setFont(new Font("Dialog", Font.BOLD, 10));
       affineMoveLeftButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
-          System.out.println("actionPerformed()"); // TODO Auto-generated Event stub actionPerformed()
+          tinaController.xForm_moveLeft();
         }
       });
     }
@@ -3132,7 +3132,7 @@ public class TinaInternalFrame extends JInternalFrame {
       affineMoveRightButton.setFont(new Font("Dialog", Font.BOLD, 10));
       affineMoveRightButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
-          System.out.println("actionPerformed()"); // TODO Auto-generated Event stub actionPerformed()
+          tinaController.xForm_moveRight();
         }
       });
     }

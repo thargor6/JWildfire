@@ -8,3 +8,4 @@ lib/*
 *.prefs
 gitlog.sh
 .classpath
+bin/*

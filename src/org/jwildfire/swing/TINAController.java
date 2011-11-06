@@ -44,6 +44,8 @@ import org.jwildfire.create.tina.palette.RGBPaletteImporter;
 import org.jwildfire.create.tina.palette.RGBPaletteRenderer;
 import org.jwildfire.create.tina.palette.RandomRGBPaletteGenerator;
 import org.jwildfire.create.tina.render.FlameRenderer;
+import org.jwildfire.create.tina.transform.XFormTransformService;
+import org.jwildfire.create.tina.variation.Linear3DFunc;
 import org.jwildfire.image.SimpleImage;
 import org.jwildfire.io.ImageReader;
 import org.jwildfire.io.ImageWriter;
@@ -62,6 +64,7 @@ public class TINAController {
 
   private final Prefs prefs;
   private final ErrorHandler errorHandler;
+  private boolean gridRefreshing = false;
 
   // camera, coloring
   private final JTextField cameraRollREd;
@@ -1034,9 +1037,11 @@ public class TINAController {
   }
 
   public void transformationTableClicked() {
-    XForm xForm = getCurrXForm();
-    refreshXFormUI(xForm);
-    enableControls(xForm);
+    if (!gridRefreshing) {
+      XForm xForm = getCurrXForm();
+      refreshXFormUI(xForm);
+      enableControls(xForm);
+    }
   }
 
   private void enableControls(XForm xForm) {
@@ -1072,5 +1077,127 @@ public class TINAController {
       affineC20REd.setText(null);
       affineC21REd.setText(null);
     }
+  }
+
+  public void addXForm() {
+    XForm xForm = new XForm();
+    xForm.addVariation(1.0, new Linear3DFunc());
+    currFlame.getXForms().add(xForm);
+    gridRefreshing = true;
+    try {
+      refreshTransformationsTable();
+    }
+    finally {
+      gridRefreshing = false;
+    }
+    int row = currFlame.getXForms().size() - 1;
+    transformationsTable.getSelectionModel().setSelectionInterval(row, row);
+    refreshFlameImage();
+  }
+
+  public void duplicateXForm() {
+    XForm xForm = new XForm();
+    xForm.assign(getCurrXForm());
+    currFlame.getXForms().add(xForm);
+    gridRefreshing = true;
+    try {
+      refreshTransformationsTable();
+    }
+    finally {
+      gridRefreshing = false;
+    }
+    int row = currFlame.getXForms().size() - 1;
+    transformationsTable.getSelectionModel().setSelectionInterval(row, row);
+    refreshFlameImage();
+  }
+
+  public void deleteXForm() {
+    int row = transformationsTable.getSelectedRow();
+    if (currFlame.getFinalXForm() != null && row == currFlame.getXForms().size()) {
+      currFlame.setFinalXForm(null);
+    }
+    else {
+      currFlame.getXForms().remove(getCurrXForm());
+    }
+    gridRefreshing = true;
+    try {
+      refreshTransformationsTable();
+    }
+    finally {
+      gridRefreshing = false;
+    }
+    refreshFlameImage();
+  }
+
+  public void addFinalXForm() {
+    XForm xForm = new XForm();
+    xForm.addVariation(1.0, new Linear3DFunc());
+    currFlame.setFinalXForm(xForm);
+    gridRefreshing = true;
+    try {
+      refreshTransformationsTable();
+    }
+    finally {
+      gridRefreshing = false;
+    }
+    int row = currFlame.getXForms().size();
+    transformationsTable.getSelectionModel().setSelectionInterval(row, row);
+    refreshFlameImage();
+  }
+
+  public void xForm_moveRight() {
+    double amount = Tools.stringToDouble(affineMoveAmountREd.getText());
+    XFormTransformService.translate(getCurrXForm(), amount, 0);
+    transformationTableClicked();
+    refreshFlameImage();
+  }
+
+  public void xForm_rotateRight() {
+    double amount = Tools.stringToDouble(affineRotateAmountREd.getText());
+    XFormTransformService.rotate(getCurrXForm(), -amount);
+    transformationTableClicked();
+    refreshFlameImage();
+  }
+
+  public void xForm_moveLeft() {
+    double amount = Tools.stringToDouble(affineMoveAmountREd.getText());
+    XFormTransformService.translate(getCurrXForm(), -amount, 0);
+    transformationTableClicked();
+    refreshFlameImage();
+  }
+
+  public void xForm_enlarge() {
+    double amount = 1.0 + Tools.stringToDouble(affineScaleAmountREd.getText());
+    XFormTransformService.scale(getCurrXForm(), amount);
+    transformationTableClicked();
+    refreshFlameImage();
+  }
+
+  public void xForm_shrink() {
+    double amount = 1.0 - Tools.stringToDouble(affineScaleAmountREd.getText());
+    XFormTransformService.scale(getCurrXForm(), amount);
+    transformationTableClicked();
+    refreshFlameImage();
+  }
+
+  public void xForm_rotateLeft() {
+    double amount = Tools.stringToDouble(affineRotateAmountREd.getText());
+    XFormTransformService.rotate(getCurrXForm(), amount);
+    transformationTableClicked();
+    refreshFlameImage();
+  }
+
+  public void xForm_moveUp() {
+    double amount = Tools.stringToDouble(affineMoveAmountREd.getText());
+    XFormTransformService.translate(getCurrXForm(), 0, amount);
+    transformationTableClicked();
+    refreshFlameImage();
+  }
+
+  public void xForm_moveDown() {
+    double amount = Tools.stringToDouble(affineMoveAmountREd.getText());
+    XFormTransformService.translate(getCurrXForm(), 0, -amount);
+    transformationTableClicked();
+    refreshFlameImage();
   }
 }

@@ -23,7 +23,6 @@ import org.jwildfire.create.tina.variation.TransformationContext;
 import org.jwildfire.create.tina.variation.Variation;
 import org.jwildfire.create.tina.variation.VariationFunc;
 
-
 public class XForm {
   private double weight;
   private double color;
@@ -116,9 +115,9 @@ public class XForm {
     return variations;
   }
 
-  public Variation addVariation(double pCoef, VariationFunc pVariationFunc) {
+  public Variation addVariation(double pAmount, VariationFunc pVariationFunc) {
     Variation variation = new Variation();
-    variation.setAmount(pCoef);
+    variation.setAmount(pAmount);
     variation.setFunc(pVariationFunc);
     variations.add(variation);
     return variation;
@@ -186,5 +185,25 @@ public class XForm {
 
   public void setDrawMode(DrawMode drawMode) {
     this.drawMode = drawMode;
+  }
+
+  public void assign(XForm pXForm) {
+    weight = pXForm.weight;
+    color = pXForm.color;
+    colorSymmetry = pXForm.colorSymmetry;
+    coeff00 = pXForm.coeff00;
+    coeff01 = pXForm.coeff01;
+    coeff10 = pXForm.coeff10;
+    coeff11 = pXForm.coeff11;
+    coeff20 = pXForm.coeff20;
+    coeff21 = pXForm.coeff21;
+    variations.clear();
+    for (Variation var : pXForm.variations) {
+      Variation newVar = new Variation();
+      newVar.assign(var);
+      variations.add(newVar);
+    }
+    opacity = pXForm.opacity;
+    drawMode = pXForm.drawMode;
   }
 }
