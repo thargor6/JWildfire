@@ -23,8 +23,8 @@ public class RandomFlameGenerator {
 
   public Flame createFlame() {
     Flame flame = new Flame();
-    flame.setCentreX(0.5);
-    flame.setCentreY(0.5);
+    flame.setCentreX(0.0);
+    flame.setCentreY(0.0);
     flame.setPixelsPerUnit(200);
     flame.setSpatialFilterRadius(1.0);
 
@@ -32,7 +32,7 @@ public class RandomFlameGenerator {
     flame.getXForms().clear();
 
     int maxXForms = (int) (1.0 + Math.random() * 5.0);
-
+    double scl = 1.0;
     for (int i = 0; i < maxXForms; i++) {
       XForm xForm = new XForm();
       flame.getXForms().add(xForm);
@@ -43,11 +43,12 @@ public class RandomFlameGenerator {
         XFormTransformService.rotate(xForm, -360.0 * Math.random());
       }
       XFormTransformService.translate(xForm, Math.random() - 1.0, Math.random() - 1.0);
-      XFormTransformService.scale(xForm, 0.5 + Math.random() / 2);
+      scl *= 0.75 + Math.random() / 4;
+      XFormTransformService.scale(xForm, scl);
 
       xForm.setColor(Math.random());
-      xForm.addVariation(Math.random(), new Linear3DFunc());
-      xForm.setWeight(Math.random());
+      xForm.addVariation(Math.random() * 0.8 + 0.2, new Linear3DFunc());
+      xForm.setWeight(Math.random() * 0.9 + 0.1);
     }
     return flame;
   }
