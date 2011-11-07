@@ -23,7 +23,6 @@ import org.jwildfire.image.SimpleImage;
 
 import com.l2fprod.common.beans.editor.ComboBoxPropertyEditor;
 
-
 public class BalancingGradientTransformer extends Mesh2DTransformer {
   public enum Mode {
     RED, GREEN, BLUE, CONTRAST, BRIGHTNESS, GAMMA, SATURATION
@@ -790,4 +789,10 @@ public class BalancingGradientTransformer extends Mesh2DTransformer {
   public void setBaseRadius(int baseRadius) {
     this.baseRadius = baseRadius;
   }
+
+  @Override
+  protected boolean allowShowStats() {
+    return false;
+  }
+
 }

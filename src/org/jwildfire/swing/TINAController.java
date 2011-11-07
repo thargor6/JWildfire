@@ -17,17 +17,21 @@
 package org.jwildfire.swing;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.io.File;
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JSlider;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.ScrollPaneConstants;
 import javax.swing.event.ChangeEvent;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.table.DefaultTableModel;
@@ -46,6 +50,7 @@ import org.jwildfire.create.tina.palette.RandomRGBPaletteGenerator;
 import org.jwildfire.create.tina.render.FlameRenderer;
 import org.jwildfire.create.tina.transform.XFormTransformService;
 import org.jwildfire.create.tina.variation.Linear3DFunc;
+import org.jwildfire.image.Pixel;
 import org.jwildfire.image.SimpleImage;
 import org.jwildfire.io.ImageReader;
 import org.jwildfire.io.ImageWriter;
@@ -155,6 +160,9 @@ public class TINAController {
   private final JButton duplicateTransformationButton;
   private final JButton deleteTransformationButton;
   private final JButton addFinalTransformationButton;
+  // Random batch
+  private final JPanel randomBatchPanel;
+  private JScrollPane randomBatchScrollPane = null;
 
   // misc
   private Flame currFlame;
@@ -177,7 +185,7 @@ public class TINAController {
       JTextField pAffineRotateAmountREd, JTextField pAffineScaleAmountREd, JTextField pAffineMoveAmountREd, JButton pAffineRotateLeftButton,
       JButton pAffineRotateRightButton, JButton pAffineEnlargeButton, JButton pAffineShrinkButton, JButton pAffineMoveUpButton, JButton pAffineMoveLeftButton,
       JButton pAffineMoveRightButton, JButton pAffineMoveDownButton, JButton pAddTransformationButton, JButton pDuplicateTransformationButton,
-      JButton pDeleteTransformationButton, JButton pAddFinalTransformationButton) {
+      JButton pDeleteTransformationButton, JButton pAddFinalTransformationButton, JPanel pRandomBatchPanel) {
     errorHandler = pErrorHandler;
     prefs = pPrefs;
     centerPanel = pCenterPanel;
@@ -268,6 +276,9 @@ public class TINAController {
     duplicateTransformationButton = pDuplicateTransformationButton;
     deleteTransformationButton = pDeleteTransformationButton;
     addFinalTransformationButton = pAddFinalTransformationButton;
+
+    randomBatchPanel = pRandomBatchPanel;
+
     enableControls(null);
   }
 
@@ -279,6 +290,7 @@ public class TINAController {
       img.fillBackground(0, 0, 0);
       flamePanel = new ImagePanel(img, 0, 0, centerPanel.getWidth());
       centerPanel.add(flamePanel, BorderLayout.CENTER);
+      centerPanel.getParent().validate();
       centerPanel.repaint();
     }
     return flamePanel;
@@ -292,7 +304,7 @@ public class TINAController {
       img.fillBackground(0, 0, 0);
       palettePanel = new ImagePanel(img, 0, 0, paletteImgPanel.getWidth());
       paletteImgPanel.add(palettePanel, BorderLayout.CENTER);
-      paletteImgPanel.repaint();
+      paletteImgPanel.getParent().validate();
     }
     return palettePanel;
   }
@@ -483,7 +495,7 @@ public class TINAController {
         SimpleImage img = new RGBPaletteRenderer().renderHorizPalette(currFlame.getPalette(), width, height);
         imgPanel.setImage(img);
       }
-      palettePanel.repaint();
+      palettePanel.getParent().validate();
     }
   }
 
@@ -1009,19 +1021,6 @@ public class TINAController {
     }
   }
 
-  public void randomFlameButton_actionPerformed(ActionEvent e) {
-    ImagePanel imgPanel = getFlamePanel();
-    int width = imgPanel.getWidth();
-    int height = imgPanel.getHeight();
-    Flame flame = new RandomFlameGenerator().createFlame();
-    flame.setWidth(width);
-    flame.setHeight(height);
-    RGBPalette palette = new RandomRGBPaletteGenerator().generatePalette(Integer.parseInt(paletteRandomPointsREd.getText()));
-    flame.setPalette(palette);
-    currFlame = flame;
-    refreshUI();
-  }
-
   public XForm getCurrXForm() {
     XForm xForm = null;
     if (currFlame != null) {
@@ -1200,4 +1199,102 @@ public class TINAController {
     transformationTableClicked();
     refreshFlameImage();
   }
+
+  private List<Flame> randomBatch = new ArrayList<Flame>();
+
+  public void createRandomBatch(int pCount) {
+    if (randomBatchScrollPane != null) {
+      randomBatchPanel.remove(randomBatchScrollPane);
+      randomBatchScrollPane = null;
+    }
+    randomBatch.clear();
+    final int IMG_WIDTH = 60;
+    final int IMG_HEIGHT = 50;
+    final int BORDER_SIZE = 4;
+    final int IMG_COUNT = 16;
+    final int MAX_IMG_SAMPLES = 10;
+    final double MIN_COVERAGE = 0.33;
+    int panelWidth = (IMG_WIDTH + BORDER_SIZE) * IMG_COUNT;
+    int panelHeight = IMG_HEIGHT + 2 * BORDER_SIZE;
+    JPanel batchPanel = new JPanel();
+    batchPanel.setLayout(null);
+    batchPanel.setSize(panelWidth, panelHeight);
+    batchPanel.setPreferredSize(new Dimension(panelWidth, panelHeight));
+    for (int i = 0; i < (pCount > 0 ? pCount : IMG_COUNT); i++) {
+      SimpleImage img = new SimpleImage(IMG_WIDTH, IMG_HEIGHT);
+      Flame bestFlame = null;
+      double bestCoverage = 0.0;
+      for (int j = 0; j < MAX_IMG_SAMPLES; j++) {
+        // create flame
+        Flame flame = new RandomFlameGenerator().createFlame();
+        flame.setWidth(IMG_WIDTH);
+        flame.setHeight(IMG_HEIGHT);
+        flame.setPixelsPerUnit(10);
+        RGBPalette palette = new RandomRGBPaletteGenerator().generatePalette(Integer.parseInt(paletteRandomPointsREd.getText()));
+        flame.setPalette(palette);
+        // render it   
+        if (j > 0) {
+          img.fillBackground(0, 0, 0);
+        }
+        flame.setSampleDensity(50);
+        FlameRenderer renderer = new FlameRenderer();
+        renderer.renderFlame(flame, img);
+        if (j == MAX_IMG_SAMPLES - 1) {
+          randomBatch.add(bestFlame);
+          renderer.renderFlame(bestFlame, img);
+        }
+        else {
+          long maxCoverage = img.getImageWidth() * img.getImageHeight();
+          long coverage = 0;
+          Pixel pixel = new Pixel();
+          for (int k = 0; k < img.getImageHeight(); k++) {
+            for (int l = 0; l < img.getImageWidth(); l++) {
+              pixel.setARGBValue(img.getARGBValue(l, k));
+              if (pixel.r > 20 || pixel.g > 20 || pixel.b > 20) {
+                coverage++;
+              }
+            }
+          }
+          double fCoverage = (double) coverage / (double) maxCoverage;
+          if (fCoverage >= MIN_COVERAGE) {
+            randomBatch.add(flame);
+            break;
+          }
+          else {
+            if (bestFlame == null || fCoverage > bestCoverage) {
+              bestFlame = flame;
+              bestCoverage = fCoverage;
+            }
+          }
+        }
+      }
+      // add it to the main panel
+      ImagePanel imgPanel = new ImagePanel(img, 0, 0, img.getImageWidth());
+      imgPanel.setImage(img);
+      imgPanel.setLocation(i * IMG_WIDTH + (i + 1) * BORDER_SIZE, BORDER_SIZE);
+      final int idx = i;
+      imgPanel.addMouseListener(new java.awt.event.MouseAdapter() {
+        public void mouseClicked(java.awt.event.MouseEvent e) {
+          if (e.getClickCount() > 1) {
+            importFromRandomBatch(idx);
+          }
+        }
+      });
+      batchPanel.add(imgPanel);
+    }
+    randomBatchScrollPane = new JScrollPane(batchPanel);
+    randomBatchScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
+    randomBatchScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
+
+    randomBatchPanel.add(randomBatchScrollPane, BorderLayout.CENTER);
+    randomBatchPanel.validate();
+  }
+
+  public void importFromRandomBatch(int pIdx) {
+    if (pIdx >= 0 && pIdx < randomBatch.size()) {
+      currFlame = randomBatch.get(pIdx);
+      refreshUI();
+    }
+  }
+
 }

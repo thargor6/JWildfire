@@ -95,6 +95,12 @@ public class Desktop extends JApplet {
       Prefs prefs = new Prefs();
       TinaInternalFrame tinaFrame = (TinaInternalFrame) getTinaInternalFrame();
       tinaController = tinaFrame.createController(errorHandler, prefs);
+      try {
+        tinaController.createRandomBatch(1);
+      }
+      catch (Exception ex) {
+        ex.printStackTrace();
+      }
 
       renderController = new RenderController(errorHandler,
           mainDesktopPane, getRenderDialog(),
