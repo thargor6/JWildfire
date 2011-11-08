@@ -78,6 +78,7 @@ public class VariationFuncList {
     registerVariationFunc(Julia3DZFunc.class);
     registerVariationFunc(Fan2Func.class);
     registerVariationFunc(RadialBlurFunc.class);
+    registerVariationFunc(Spherical3DFunc.class);
   }
 
   private static void registerVariationFunc(Class<? extends VariationFunc> pVariationFunc) {
