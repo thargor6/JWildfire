@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class VariationFuncList {
+  public static final String DEFAULT_VARIATION = "linear3D";
   private static List<Class<? extends VariationFunc>> items = new ArrayList<Class<? extends VariationFunc>>();
   private static List<String> nameList = new ArrayList<String>();
 

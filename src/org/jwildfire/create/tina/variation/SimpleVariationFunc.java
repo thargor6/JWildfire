@@ -19,18 +19,33 @@ package org.jwildfire.create.tina.variation;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
-public class Linear3DFunc extends SimpleVariationFunc {
+public abstract class SimpleVariationFunc extends VariationFunc {
+
+  public void init(TransformationContext pContext, XForm pXForm) {
+
+  }
+
+  public int getPriority() {
+    return 0;
+  }
+
+  public abstract void transform(TransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount);
+
+  public abstract String getName();
 
   @Override
-  public void transform(TransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-    pVarTP.x += pAmount * pAffineTP.x;
-    pVarTP.y += pAmount * pAffineTP.y;
-    pVarTP.z += pAmount * pAffineTP.z;
+  public final String[] getParameterNames() {
+    return new String[0];
   }
 
   @Override
-  public String getName() {
-    return "linear3D";
+  public final Object[] getParameterValues() {
+    return new Object[0];
+  }
+
+  @Override
+  public final void setParameter(String pName, double pValue) {
+
   }
 
 }

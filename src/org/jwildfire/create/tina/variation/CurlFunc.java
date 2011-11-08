@@ -48,6 +48,11 @@ public class CurlFunc extends VariationFunc {
   }
 
   @Override
+  public Object[] getParameterValues() {
+    return new Object[] { c1, c2 };
+  }
+
+  @Override
   public void setParameter(String pName, double pValue) {
     if (PARAM_C1.equalsIgnoreCase(pName))
       c1 = pValue;

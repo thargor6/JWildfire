@@ -19,7 +19,7 @@ package org.jwildfire.create.tina.variation;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
-public class HorseshoeFunc extends VariationFunc {
+public class HorseshoeFunc extends SimpleVariationFunc {
 
   @Override
   public void transform(TransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {

@@ -52,6 +52,11 @@ public class Julia3DFunc extends VariationFunc {
   }
 
   @Override
+  public Object[] getParameterValues() {
+    return new Object[] { power };
+  }
+
+  @Override
   public void setParameter(String pName, double pValue) {
     if (PARAM_POWER.equalsIgnoreCase(pName))
       power = (int) Math.round(pValue);

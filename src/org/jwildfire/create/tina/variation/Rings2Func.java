@@ -43,6 +43,11 @@ public class Rings2Func extends VariationFunc {
   }
 
   @Override
+  public Object[] getParameterValues() {
+    return new Object[] { val };
+  }
+
+  @Override
   public void setParameter(String pName, double pValue) {
     if (PARAM_VAL.equalsIgnoreCase(pName))
       val = pValue;

@@ -53,6 +53,11 @@ public class RadialBlurFunc extends VariationFunc {
   }
 
   @Override
+  public Object[] getParameterValues() {
+    return new Object[] { angle };
+  }
+
+  @Override
   public void setParameter(String pName, double pValue) {
     if (PARAM_ANGLE.equalsIgnoreCase(pName))
       angle = pValue;

@@ -20,7 +20,7 @@ import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 import org.jwildfire.create.tina.random.RandomNumberGenerator;
 
-public class GaussianBlurFunc extends VariationFunc {
+public class GaussianBlurFunc extends SimpleVariationFunc {
 
   @Override
   public void transform(TransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {

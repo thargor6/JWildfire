@@ -22,9 +22,11 @@ import java.awt.event.ActionEvent;
 import java.io.File;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -50,6 +52,9 @@ import org.jwildfire.create.tina.palette.RandomRGBPaletteGenerator;
 import org.jwildfire.create.tina.render.FlameRenderer;
 import org.jwildfire.create.tina.transform.XFormTransformService;
 import org.jwildfire.create.tina.variation.Linear3DFunc;
+import org.jwildfire.create.tina.variation.Variation;
+import org.jwildfire.create.tina.variation.VariationFunc;
+import org.jwildfire.create.tina.variation.VariationFuncList;
 import org.jwildfire.image.Pixel;
 import org.jwildfire.image.SimpleImage;
 import org.jwildfire.io.ImageReader;
@@ -70,6 +75,77 @@ public class TINAController {
   private final Prefs prefs;
   private final ErrorHandler errorHandler;
   private boolean gridRefreshing = false;
+  private boolean cmbRefreshing = false;
+  boolean refreshing = false;
+
+  public static class NonlinearControlsRow {
+    private final JComboBox nonlinearVarCmb;
+    private final JComboBox nonlinearParamsCmb;
+    private final JTextField nonlinearVarREd;
+    private final JTextField nonlinearParamsREd;
+    private final JButton nonlinearVarLeftButton;
+    private final JButton nonlinearVarRightButton;
+    private final JButton nonlinearParamsLeftButton;
+    private final JButton nonlinearParamsRightButton;
+
+    public NonlinearControlsRow(JComboBox pNonlinearVarCmb, JComboBox pNonlinearParamsCmb, JTextField pNonlinearVarREd, JTextField pNonlinearParamsREd,
+        JButton pNonlinearVarLeftButton, JButton pNonlinearVarRightButton, JButton pNonlinearParamsLeftButton, JButton pNonlinearParamsRightButton) {
+      nonlinearVarCmb = pNonlinearVarCmb;
+      nonlinearParamsCmb = pNonlinearParamsCmb;
+      nonlinearVarREd = pNonlinearVarREd;
+      nonlinearParamsREd = pNonlinearParamsREd;
+      nonlinearVarLeftButton = pNonlinearVarLeftButton;
+      nonlinearVarRightButton = pNonlinearVarRightButton;
+      nonlinearParamsLeftButton = pNonlinearParamsLeftButton;
+      nonlinearParamsRightButton = pNonlinearParamsRightButton;
+    }
+
+    public void initControls() {
+      nonlinearVarCmb.removeAllItems();
+      List<String> nameList = new ArrayList<String>();
+      nameList.addAll(VariationFuncList.getNameList());
+      Collections.sort(nameList);
+      for (String name : nameList) {
+        nonlinearVarCmb.addItem(name);
+      }
+      nonlinearVarCmb.setSelectedIndex(-1);
+
+      nonlinearParamsCmb.removeAllItems();
+      nonlinearParamsCmb.setSelectedIndex(-1);
+    }
+
+    public JComboBox getNonlinearVarCmb() {
+      return nonlinearVarCmb;
+    }
+
+    public JComboBox getNonlinearParamsCmb() {
+      return nonlinearParamsCmb;
+    }
+
+    public JTextField getNonlinearVarREd() {
+      return nonlinearVarREd;
+    }
+
+    public JTextField getNonlinearParamsREd() {
+      return nonlinearParamsREd;
+    }
+
+    public JButton getNonlinearVarLeftButton() {
+      return nonlinearVarLeftButton;
+    }
+
+    public JButton getNonlinearVarRightButton() {
+      return nonlinearVarRightButton;
+    }
+
+    public JButton getNonlinearParamsLeftButton() {
+      return nonlinearParamsLeftButton;
+    }
+
+    public JButton getNonlinearParamsRightButton() {
+      return nonlinearParamsRightButton;
+    }
+  }
 
   // camera, coloring
   private final JTextField cameraRollREd;
@@ -163,6 +239,8 @@ public class TINAController {
   // Random batch
   private final JPanel randomBatchPanel;
   private JScrollPane randomBatchScrollPane = null;
+  // Nonlinear transformations
+  private final NonlinearControlsRow[] nonlinearControlsRows;
 
   // misc
   private Flame currFlame;
@@ -185,7 +263,7 @@ public class TINAController {
       JTextField pAffineRotateAmountREd, JTextField pAffineScaleAmountREd, JTextField pAffineMoveAmountREd, JButton pAffineRotateLeftButton,
       JButton pAffineRotateRightButton, JButton pAffineEnlargeButton, JButton pAffineShrinkButton, JButton pAffineMoveUpButton, JButton pAffineMoveLeftButton,
       JButton pAffineMoveRightButton, JButton pAffineMoveDownButton, JButton pAddTransformationButton, JButton pDuplicateTransformationButton,
-      JButton pDeleteTransformationButton, JButton pAddFinalTransformationButton, JPanel pRandomBatchPanel) {
+      JButton pDeleteTransformationButton, JButton pAddFinalTransformationButton, JPanel pRandomBatchPanel, NonlinearControlsRow[] pNonlinearControlsRows) {
     errorHandler = pErrorHandler;
     prefs = pPrefs;
     centerPanel = pCenterPanel;
@@ -278,6 +356,7 @@ public class TINAController {
     addFinalTransformationButton = pAddFinalTransformationButton;
 
     randomBatchPanel = pRandomBatchPanel;
+    nonlinearControlsRows = pNonlinearControlsRows;
 
     enableControls(null);
   }
@@ -1037,9 +1116,15 @@ public class TINAController {
 
   public void transformationTableClicked() {
     if (!gridRefreshing) {
-      XForm xForm = getCurrXForm();
-      refreshXFormUI(xForm);
-      enableControls(xForm);
+      cmbRefreshing = true;
+      try {
+        XForm xForm = getCurrXForm();
+        refreshXFormUI(xForm);
+        enableControls(xForm);
+      }
+      finally {
+        cmbRefreshing = false;
+      }
     }
   }
 
@@ -1057,6 +1142,18 @@ public class TINAController {
     duplicateTransformationButton.setEnabled(enabled);
     deleteTransformationButton.setEnabled(enabled);
     addFinalTransformationButton.setEnabled(currFlame != null && currFlame.getFinalXForm() == null);
+    for (NonlinearControlsRow rows : nonlinearControlsRows) {
+      rows.getNonlinearVarCmb().setEnabled(enabled);
+      rows.getNonlinearVarREd().setEnabled(enabled);
+      rows.getNonlinearVarLeftButton().setEnabled(enabled);
+      rows.getNonlinearVarRightButton().setEnabled(enabled);
+      rows.getNonlinearParamsCmb().setEnabled(enabled);
+      rows.getNonlinearParamsREd().setEnabled(enabled);
+      // refresh in refreshXFormUI()
+      // rows.getNonlinearParamsLeftButton().setEnabled(enabled);
+      // rows.getNonlinearParamsRightButton().setEnabled(enabled);
+    }
+
   }
 
   private void refreshXFormUI(XForm pXForm) {
@@ -1075,6 +1172,62 @@ public class TINAController {
       affineC11REd.setText(null);
       affineC20REd.setText(null);
       affineC21REd.setText(null);
+    }
+
+    refreshing = true;
+    try {
+      int idx = 0;
+      for (NonlinearControlsRow row : nonlinearControlsRows) {
+        if (pXForm == null || idx >= pXForm.getVariations().size()) {
+          refreshParamCmb(row, null, null);
+          row.getNonlinearParamsLeftButton().setEnabled(false);
+          row.getNonlinearParamsRightButton().setEnabled(false);
+        }
+        else {
+          Variation var = pXForm.getVariations().get(idx);
+          refreshParamCmb(row, pXForm, var);
+          String selected = (String) row.getNonlinearParamsCmb().getSelectedItem();
+          boolean enabled = selected != null && selected.length() > 0;
+          row.getNonlinearParamsLeftButton().setEnabled(enabled);
+          row.getNonlinearParamsRightButton().setEnabled(enabled);
+        }
+        idx++;
+      }
+    }
+    finally {
+      refreshing = false;
+    }
+  }
+
+  public void refreshParamCmb(NonlinearControlsRow pRow, XForm pXForm, Variation pVar) {
+    if (pXForm == null || pVar == null) {
+      pRow.getNonlinearVarCmb().setSelectedIndex(-1);
+      pRow.getNonlinearVarREd().setText(null);
+      pRow.getNonlinearParamsCmb().setSelectedIndex(-1);
+      pRow.getNonlinearParamsREd().setText(null);
+    }
+    else {
+      VariationFunc varFunc = pVar.getFunc();
+      pRow.getNonlinearVarCmb().setSelectedItem(varFunc.getName());
+      pRow.getNonlinearVarREd().setText(Tools.doubleToString(pVar.getAmount()));
+      pRow.getNonlinearParamsCmb().removeAllItems();
+      for (String name : varFunc.getParameterNames()) {
+        pRow.getNonlinearParamsCmb().addItem(name);
+      }
+      if (varFunc.getParameterNames().length > 0) {
+        pRow.getNonlinearParamsCmb().setSelectedIndex(0);
+        Object val = varFunc.getParameterValues()[0];
+        if (val instanceof Double) {
+          pRow.getNonlinearParamsREd().setText(Tools.doubleToString((Double) val));
+        }
+        else {
+          pRow.getNonlinearParamsREd().setText(val.toString());
+        }
+      }
+      else {
+        pRow.getNonlinearParamsCmb().setSelectedIndex(-1);
+        pRow.getNonlinearParamsREd().setText(null);
+      }
     }
   }
 
@@ -1297,4 +1450,148 @@ public class TINAController {
     }
   }
 
+  public void nonlinearVarCmbChanged(int pIdx) {
+    if (cmbRefreshing) {
+      return;
+    }
+    cmbRefreshing = true;
+    try {
+      XForm xForm = getCurrXForm();
+      if (xForm != null) {
+        Variation var;
+        if (pIdx < xForm.getVariations().size()) {
+          var = xForm.getVariations().get(pIdx);
+        }
+        else {
+          var = new Variation();
+          String varStr = nonlinearControlsRows[pIdx].getNonlinearVarREd().getText();
+          if (varStr == null || varStr.length() == 0) {
+            varStr = "0";
+          }
+          var.setAmount(Tools.stringToDouble(varStr));
+          xForm.getVariations().add(var);
+        }
+        String fName = (String) nonlinearControlsRows[pIdx].getNonlinearVarCmb().getSelectedItem();
+        if (fName == null || fName.length() == 0) {
+          var.setFunc(VariationFuncList.getVariationFuncInstance(VariationFuncList.DEFAULT_VARIATION));
+        }
+        else {
+          var.setFunc(VariationFuncList.getVariationFuncInstance(fName));
+        }
+        refreshParamCmb(nonlinearControlsRows[pIdx], xForm, var);
+        refreshXFormUI(xForm);
+        refreshFlameImage();
+      }
+    }
+    finally {
+      cmbRefreshing = false;
+    }
+  }
+
+  public void nonlinearVarREdChanged(int pIdx) {
+    if (cmbRefreshing) {
+      return;
+    }
+    cmbRefreshing = true;
+    try {
+      XForm xForm = getCurrXForm();
+      if (xForm != null) {
+        if (pIdx < xForm.getVariations().size()) {
+          Variation var = xForm.getVariations().get(pIdx);
+          String varStr = nonlinearControlsRows[pIdx].getNonlinearVarREd().getText();
+          if (varStr == null || varStr.length() == 0) {
+            varStr = "0";
+          }
+          var.setAmount(Tools.stringToDouble(varStr));
+          refreshFlameImage();
+        }
+      }
+    }
+    finally {
+      cmbRefreshing = false;
+    }
+  }
+
+  public void nonlinearParamsREdChanged(int pIdx) {
+    if (cmbRefreshing) {
+      return;
+    }
+    cmbRefreshing = true;
+    try {
+      String selected = (String) nonlinearControlsRows[pIdx].getNonlinearParamsCmb().getSelectedItem();
+      XForm xForm = getCurrXForm();
+      if (xForm != null && selected != null && selected.length() > 0) {
+        if (pIdx < xForm.getVariations().size()) {
+          Variation var = xForm.getVariations().get(pIdx);
+          String valStr = nonlinearControlsRows[pIdx].getNonlinearParamsREd().getText();
+          if (valStr == null || valStr.length() == 0) {
+            valStr = "0";
+          }
+          var.getFunc().setParameter(selected, Tools.stringToDouble(valStr));
+          refreshFlameImage();
+        }
+      }
+    }
+    finally {
+      cmbRefreshing = false;
+    }
+  }
+
+  public void nonlinearParamsCmbChanged(int pIdx) {
+    if (cmbRefreshing) {
+      return;
+    }
+    cmbRefreshing = true;
+    try {
+      String selected = (String) nonlinearControlsRows[pIdx].getNonlinearParamsCmb().getSelectedItem();
+      XForm xForm = getCurrXForm();
+      if (xForm != null && selected != null && selected.length() > 0) {
+        if (pIdx < xForm.getVariations().size()) {
+          Variation var = xForm.getVariations().get(pIdx);
+          int idx = -1;
+          for (int i = 0; i < var.getFunc().getParameterNames().length; i++) {
+            if (var.getFunc().getParameterNames()[i].equals(selected)) {
+              idx = i;
+              break;
+            }
+          }
+          if (idx >= 0) {
+            Object val = var.getFunc().getParameterValues()[idx];
+            if (val instanceof Double) {
+              nonlinearControlsRows[pIdx].getNonlinearParamsREd().setText(Tools.doubleToString((Double) val));
+            }
+            else {
+              nonlinearControlsRows[pIdx].getNonlinearParamsREd().setText(val.toString());
+            }
+          }
+          else {
+            nonlinearControlsRows[pIdx].getNonlinearParamsREd().setText(null);
+          }
+        }
+      }
+    }
+    finally {
+      cmbRefreshing = false;
+    }
+  }
+
+  public void nonlinearVarLeftButtonClicked(int pIdx) {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void nonlinearVarRightButtonClicked(int pIdx) {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void nonlinearParamsLeftButtonClicked(int pIdx) {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void nonlinearParamsRightButtonClicked(int pIdx) {
+    // TODO Auto-generated method stub
+
+  }
 }

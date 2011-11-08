@@ -50,6 +50,11 @@ public class JuliaNFunc extends VariationFunc {
   }
 
   @Override
+  public Object[] getParameterValues() {
+    return new Object[] { power, dist };
+  }
+
+  @Override
   public void setParameter(String pName, double pValue) {
     if (PARAM_POWER.equalsIgnoreCase(pName))
       power = (int) (pValue + 0.5);

@@ -20,7 +20,7 @@ import org.jwildfire.create.tina.base.Constants;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
-public class RingsFunc extends VariationFunc {
+public class RingsFunc extends SimpleVariationFunc {
 
   @Override
   public void transform(TransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {

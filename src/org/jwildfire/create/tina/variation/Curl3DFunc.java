@@ -60,6 +60,11 @@ public class Curl3DFunc extends VariationFunc {
   }
 
   @Override
+  public Object[] getParameterValues() {
+    return new Object[] { cx, cy, cz };
+  }
+
+  @Override
   public void setParameter(String pName, double pValue) {
     if (PARAM_CX.equalsIgnoreCase(pName))
       cx = pValue;
@@ -75,4 +80,5 @@ public class Curl3DFunc extends VariationFunc {
   public String getName() {
     return "curl3D";
   }
+
 }

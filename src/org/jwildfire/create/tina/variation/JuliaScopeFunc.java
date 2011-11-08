@@ -52,6 +52,11 @@ public class JuliaScopeFunc extends VariationFunc {
   }
 
   @Override
+  public Object[] getParameterValues() {
+    return new Object[] { power, dist };
+  }
+
+  @Override
   public void setParameter(String pName, double pValue) {
     if (PARAM_POWER.equalsIgnoreCase(pName))
       power = (int) Math.round(pValue);

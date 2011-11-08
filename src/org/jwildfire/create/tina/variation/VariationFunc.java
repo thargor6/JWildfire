@@ -33,12 +33,10 @@ public abstract class VariationFunc {
 
   public abstract String getName();
 
-  public String[] getParameterNames() {
-    return new String[0];
-  }
+  public abstract String[] getParameterNames();
 
-  public void setParameter(String pName, double pValue) {
+  public abstract Object[] getParameterValues();
 
-  }
+  public abstract void setParameter(String pName, double pValue);
 
 }

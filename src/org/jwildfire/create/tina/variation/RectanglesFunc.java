@@ -49,6 +49,11 @@ public class RectanglesFunc extends VariationFunc {
   }
 
   @Override
+  public Object[] getParameterValues() {
+    return new Object[] { x, y };
+  }
+
+  @Override
   public void setParameter(String pName, double pValue) {
     if (PARAM_X.equalsIgnoreCase(pName))
       x = pValue;

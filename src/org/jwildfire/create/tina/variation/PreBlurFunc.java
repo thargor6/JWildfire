@@ -20,7 +20,7 @@ import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 import org.jwildfire.create.tina.random.RandomNumberGenerator;
 
-public class PreBlurFunc extends VariationFunc {
+public class PreBlurFunc extends SimpleVariationFunc {
   private final double gauss_rnd[] = new double[4];
   private int gauss_N;
 

@@ -43,6 +43,11 @@ public class PDJFunc extends VariationFunc {
   }
 
   @Override
+  public Object[] getParameterValues() {
+    return new Object[] { a, b, c, d };
+  }
+
+  @Override
   public void setParameter(String pName, double pValue) {
     if (PARAM_A.equalsIgnoreCase(pName))
       a = pValue;
