@@ -49,7 +49,9 @@ public class RandomFlameGenerator {
       xForm.setColor(Math.random());
       xForm.addVariation(Math.random() * 0.8 + 0.2, new Linear3DFunc());
       if (Math.random() > 0.33) {
-        String[] fnc = { "blur3D", "bubble", "curl3D", "diamond", "disc", "julia3D", "fan2", "heart", "julia3D", "hemisphere", "horseshoe", "julia3D", "pdj", "popcorn", "rings2", "spherical3D", "spiral", "rectangles", "blur", "waves", "swirl" };
+        String[] fnc = { "blur3D", "bubble", "curl3D", "diamond", "disc", "julia3D", "fan2", "heart",
+                         "julia3D", "hemisphere", "horseshoe", "julia3D", "pdj", "popcorn", "rings2",
+                         "spherical3D", "spiral", "rectangles", "blur", "waves", "swirl" };
         int fncIdx = (int) (Math.random() * fnc.length);
         xForm.addVariation(Math.random() * 0.5, VariationFuncList.getVariationFuncInstance(fnc[fncIdx]));
       }

@@ -30,6 +30,7 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import org.jwildfire.base.Prefs;
+import org.jwildfire.create.tina.base.DrawMode;
 import org.jwildfire.swing.TINAController.NonlinearControlsRow;
 
 public class TinaInternalFrame extends JInternalFrame {
@@ -2929,15 +2930,21 @@ public class TinaInternalFrame extends JInternalFrame {
         getAffineC01REd(), getAffineC10REd(), getAffineC11REd(), getAffineC20REd(), getAffineC21REd(), getAffineRotateAmountREd(), getAffineScaleAmountREd(),
         getAffineMoveAmountREd(), getAffineRotateLeftButton(), getAffineRotateRightButton(), getAffineEnlargeButton(), getAffineShrinkButton(),
         getAffineMoveUpButton(), getAffineMoveLeftButton(), getAffineMoveRightButton(), getAffineMoveDownButton(), getTinaAddTransformationButton(),
-        getTinaDuplicateTransformationButton(), getTinaDeleteTransformationButton(), getTinaAddFinalTransformationButton(), getRandomBatchPanel(), nonlinearControlsRows);
-    tinaController.refreshing = true;
+        getTinaDuplicateTransformationButton(), getTinaDeleteTransformationButton(), getTinaAddFinalTransformationButton(), getRandomBatchPanel(),
+        nonlinearControlsRows, getXFormColorREd(), getXFormColorSlider(), getXFormSymmetryREd(), getXFormSymmetrySlider(), getXFormOpacityREd(),
+        getXFormOpacitySlider(), getXFormDrawModeCmb());
+    tinaController.refreshing = tinaController.cmbRefreshing = tinaController.gridRefreshing = true;
     try {
       for (NonlinearControlsRow row : nonlinearControlsRows) {
         row.initControls();
       }
+      getXFormDrawModeCmb().removeAllItems();
+      getXFormDrawModeCmb().addItem(DrawMode.NORMAL);
+      getXFormDrawModeCmb().addItem(DrawMode.OPAQUE);
+      getXFormDrawModeCmb().addItem(DrawMode.HIDDEN);
     }
     finally {
-      tinaController.refreshing = false;
+      tinaController.refreshing = tinaController.cmbRefreshing = tinaController.gridRefreshing = false;
     }
     return tinaController;
   }
@@ -4118,6 +4125,16 @@ public class TinaInternalFrame extends JInternalFrame {
       xFormColorREd.setSize(new Dimension(55, 22));
       xFormColorREd.setLocation(new Point(68, 4));
       xFormColorREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      xFormColorREd.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent e) {
+          tinaController.xFormColorREd_changed();
+        }
+      });
+      xFormColorREd.addFocusListener(new java.awt.event.FocusAdapter() {
+        public void focusLost(java.awt.event.FocusEvent e) {
+          tinaController.xFormColorREd_changed();
+        }
+      });
     }
     return xFormColorREd;
   }
@@ -4131,12 +4148,17 @@ public class TinaInternalFrame extends JInternalFrame {
     if (xFormColorSlider == null) {
       xFormColorSlider = new JSlider();
       xFormColorSlider.setPreferredSize(new Dimension(172, 22));
-      xFormColorSlider.setMaximum(255);
-      xFormColorSlider.setMinimum(-255);
+      xFormColorSlider.setMaximum(100);
+      xFormColorSlider.setMinimum(0);
       xFormColorSlider.setValue(0);
       xFormColorSlider.setSize(new Dimension(172, 22));
       xFormColorSlider.setLocation(new Point(123, 4));
       xFormColorSlider.setFont(new Font("Dialog", Font.BOLD, 10));
+      xFormColorSlider.addChangeListener(new javax.swing.event.ChangeListener() {
+        public void stateChanged(javax.swing.event.ChangeEvent e) {
+          tinaController.xFormColorSlider_changed();
+        }
+      });
     }
     return xFormColorSlider;
   }
@@ -4154,6 +4176,16 @@ public class TinaInternalFrame extends JInternalFrame {
       xFormSymmetryREd.setSize(new Dimension(55, 22));
       xFormSymmetryREd.setLocation(new Point(68, 30));
       xFormSymmetryREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      xFormSymmetryREd.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent e) {
+          tinaController.xFormSymmetryREd_changed();
+        }
+      });
+      xFormSymmetryREd.addFocusListener(new java.awt.event.FocusAdapter() {
+        public void focusLost(java.awt.event.FocusEvent e) {
+          tinaController.xFormSymmetryREd_changed();
+        }
+      });
     }
     return xFormSymmetryREd;
   }
@@ -4167,12 +4199,17 @@ public class TinaInternalFrame extends JInternalFrame {
     if (xFormSymmetrySlider == null) {
       xFormSymmetrySlider = new JSlider();
       xFormSymmetrySlider.setPreferredSize(new Dimension(172, 22));
-      xFormSymmetrySlider.setMaximum(255);
-      xFormSymmetrySlider.setMinimum(-255);
+      xFormSymmetrySlider.setMaximum(100);
+      xFormSymmetrySlider.setMinimum(0);
       xFormSymmetrySlider.setValue(0);
       xFormSymmetrySlider.setLocation(new Point(123, 30));
       xFormSymmetrySlider.setSize(new Dimension(172, 22));
       xFormSymmetrySlider.setFont(new Font("Dialog", Font.BOLD, 10));
+      xFormSymmetrySlider.addChangeListener(new javax.swing.event.ChangeListener() {
+        public void stateChanged(javax.swing.event.ChangeEvent e) {
+          tinaController.xFormSymmetrySlider_changed();
+        }
+      });
     }
     return xFormSymmetrySlider;
   }
@@ -4190,6 +4227,16 @@ public class TinaInternalFrame extends JInternalFrame {
       xFormOpacityREd.setSize(new Dimension(55, 22));
       xFormOpacityREd.setLocation(new Point(68, 56));
       xFormOpacityREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      xFormOpacityREd.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent e) {
+          tinaController.xFormOpacityREd_changed();
+        }
+      });
+      xFormOpacityREd.addFocusListener(new java.awt.event.FocusAdapter() {
+        public void focusLost(java.awt.event.FocusEvent e) {
+          tinaController.xFormOpacityREd_changed();
+        }
+      });
     }
     return xFormOpacityREd;
   }
@@ -4203,12 +4250,17 @@ public class TinaInternalFrame extends JInternalFrame {
     if (xFormOpacitySlider == null) {
       xFormOpacitySlider = new JSlider();
       xFormOpacitySlider.setPreferredSize(new Dimension(172, 22));
-      xFormOpacitySlider.setMaximum(255);
-      xFormOpacitySlider.setMinimum(-255);
+      xFormOpacitySlider.setMaximum(100);
+      xFormOpacitySlider.setMinimum(0);
       xFormOpacitySlider.setValue(0);
       xFormOpacitySlider.setSize(new Dimension(172, 22));
       xFormOpacitySlider.setLocation(new Point(123, 56));
       xFormOpacitySlider.setFont(new Font("Dialog", Font.BOLD, 10));
+      xFormOpacitySlider.addChangeListener(new javax.swing.event.ChangeListener() {
+        public void stateChanged(javax.swing.event.ChangeEvent e) {
+          tinaController.xFormOpacitySlider_changed();
+        }
+      });
     }
     return xFormOpacitySlider;
   }
@@ -4225,6 +4277,11 @@ public class TinaInternalFrame extends JInternalFrame {
       xFormDrawModeCmb.setSize(new Dimension(120, 22));
       xFormDrawModeCmb.setLocation(new Point(68, 82));
       xFormDrawModeCmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      xFormDrawModeCmb.addItemListener(new java.awt.event.ItemListener() {
+        public void itemStateChanged(java.awt.event.ItemEvent e) {
+          tinaController.xFormDrawModeCmb_changed();
+        }
+      });
     }
     return xFormDrawModeCmb;
   }

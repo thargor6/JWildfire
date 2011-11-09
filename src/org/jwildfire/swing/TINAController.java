@@ -40,6 +40,7 @@ import javax.swing.table.DefaultTableModel;
 
 import org.jwildfire.base.Prefs;
 import org.jwildfire.base.Tools;
+import org.jwildfire.create.tina.base.DrawMode;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.RandomFlameGenerator;
 import org.jwildfire.create.tina.base.XForm;
@@ -68,14 +69,15 @@ public class TINAController {
   private static final double SLIDER_SCALE_GAMMA = 100.0;
   private static final double SLIDER_SCALE_FILTER_RADIUS = 100.0;
   private static final double SLIDER_SCALE_GAMMA_TRESHOLD = 1000.0;
+  private static final double SLIDER_SCALE_COLOR = 100.0;
 
   private final JPanel centerPanel;
   private ImagePanel flamePanel;
 
   private final Prefs prefs;
   private final ErrorHandler errorHandler;
-  private boolean gridRefreshing = false;
-  private boolean cmbRefreshing = false;
+  boolean gridRefreshing = false;
+  boolean cmbRefreshing = false;
   boolean refreshing = false;
 
   public static class NonlinearControlsRow {
@@ -241,6 +243,14 @@ public class TINAController {
   private JScrollPane randomBatchScrollPane = null;
   // Nonlinear transformations
   private final NonlinearControlsRow[] nonlinearControlsRows;
+  // Color
+  private final JTextField xFormColorREd;
+  private final JSlider xFormColorSlider;
+  private final JTextField xFormSymmetryREd;
+  private final JSlider xFormSymmetrySlider;
+  private final JTextField xFormOpacityREd;
+  private final JSlider xFormOpacitySlider;
+  private final JComboBox xFormDrawModeCmb;
 
   // misc
   private Flame currFlame;
@@ -263,7 +273,9 @@ public class TINAController {
       JTextField pAffineRotateAmountREd, JTextField pAffineScaleAmountREd, JTextField pAffineMoveAmountREd, JButton pAffineRotateLeftButton,
       JButton pAffineRotateRightButton, JButton pAffineEnlargeButton, JButton pAffineShrinkButton, JButton pAffineMoveUpButton, JButton pAffineMoveLeftButton,
       JButton pAffineMoveRightButton, JButton pAffineMoveDownButton, JButton pAddTransformationButton, JButton pDuplicateTransformationButton,
-      JButton pDeleteTransformationButton, JButton pAddFinalTransformationButton, JPanel pRandomBatchPanel, NonlinearControlsRow[] pNonlinearControlsRows) {
+      JButton pDeleteTransformationButton, JButton pAddFinalTransformationButton, JPanel pRandomBatchPanel, NonlinearControlsRow[] pNonlinearControlsRows,
+      JTextField pXFormColorREd, JSlider pXFormColorSlider, JTextField pXFormSymmetryREd, JSlider pXFormSymmetrySlider, JTextField pXFormOpacityREd,
+      JSlider pXFormOpacitySlider, JComboBox pXFormDrawModeCmb) {
     errorHandler = pErrorHandler;
     prefs = pPrefs;
     centerPanel = pCenterPanel;
@@ -357,6 +369,14 @@ public class TINAController {
 
     randomBatchPanel = pRandomBatchPanel;
     nonlinearControlsRows = pNonlinearControlsRows;
+
+    xFormColorREd = pXFormColorREd;
+    xFormColorSlider = pXFormColorSlider;
+    xFormSymmetryREd = pXFormSymmetryREd;
+    xFormSymmetrySlider = pXFormSymmetrySlider;
+    xFormOpacityREd = pXFormOpacityREd;
+    xFormOpacitySlider = pXFormOpacitySlider;
+    xFormDrawModeCmb = pXFormDrawModeCmb;
 
     enableControls(null);
   }
@@ -655,6 +675,44 @@ public class TINAController {
     }
   }
 
+  private void xFormSliderChanged(JSlider pSlider, JTextField pTextField, String pProperty, double pSliderScale) {
+    if (noRefresh || currFlame == null) {
+      return;
+    }
+    XForm xForm = getCurrXForm();
+    if (xForm == null) {
+      return;
+    }
+    noRefresh = true;
+    try {
+      double propValue = pSlider.getValue() / pSliderScale;
+      pTextField.setText(Tools.doubleToString(propValue));
+      Class<?> cls = xForm.getClass();
+      Field field;
+      try {
+        field = cls.getDeclaredField(pProperty);
+        field.setAccessible(true);
+        Class<?> fieldCls = field.getType();
+        if (fieldCls == double.class || fieldCls == Double.class) {
+          field.setDouble(xForm, propValue);
+        }
+        else if (fieldCls == int.class || fieldCls == Integer.class) {
+          field.setInt(xForm, Tools.FTOI(propValue));
+        }
+        else {
+          throw new IllegalStateException();
+        }
+      }
+      catch (Throwable ex) {
+        ex.printStackTrace();
+      }
+      refreshFlameImage();
+    }
+    finally {
+      noRefresh = false;
+    }
+  }
+
   private void flameTextFieldChanged(JSlider pSlider, JTextField pTextField, String pProperty, double pSliderScale) {
     if (noRefresh || currFlame == null)
       return;
@@ -720,6 +778,45 @@ public class TINAController {
         ex.printStackTrace();
       }
       refreshPaletteImg();
+      refreshFlameImage();
+    }
+    finally {
+      noRefresh = false;
+    }
+  }
+
+  private void xFormTextFieldChanged(JSlider pSlider, JTextField pTextField, String pProperty, double pSliderScale) {
+    if (noRefresh || currFlame == null) {
+      return;
+    }
+    XForm xForm = getCurrXForm();
+    if (xForm == null) {
+      return;
+    }
+    noRefresh = true;
+    try {
+      double propValue = Tools.stringToDouble(pTextField.getText());
+      pSlider.setValue(Tools.FTOI(propValue * pSliderScale));
+
+      Class<?> cls = xForm.getClass();
+      Field field;
+      try {
+        field = cls.getDeclaredField(pProperty);
+        field.setAccessible(true);
+        Class<?> fieldCls = field.getType();
+        if (fieldCls == double.class || fieldCls == Double.class) {
+          field.setDouble(xForm, propValue);
+        }
+        else if (fieldCls == int.class || fieldCls == Integer.class) {
+          field.setInt(xForm, Tools.FTOI(propValue));
+        }
+        else {
+          throw new IllegalStateException();
+        }
+      }
+      catch (Throwable ex) {
+        ex.printStackTrace();
+      }
       refreshFlameImage();
     }
     finally {
@@ -1160,7 +1257,13 @@ public class TINAController {
       // rows.getNonlinearParamsLeftButton().setEnabled(enabled);
       // rows.getNonlinearParamsRightButton().setEnabled(enabled);
     }
-
+    xFormColorREd.setEnabled(enabled);
+    xFormColorSlider.setEnabled(enabled);
+    xFormSymmetryREd.setEnabled(enabled);
+    xFormSymmetrySlider.setEnabled(enabled);
+    xFormOpacityREd.setEnabled(enabled && xForm.getDrawMode() == DrawMode.OPAQUE);
+    xFormOpacitySlider.setEnabled(xFormOpacityREd.isEnabled());
+    xFormDrawModeCmb.setEnabled(enabled);
   }
 
   private void refreshXFormUI(XForm pXForm) {
@@ -1171,6 +1274,13 @@ public class TINAController {
       affineC11REd.setText(Tools.doubleToString(pXForm.getCoeff11()));
       affineC20REd.setText(Tools.doubleToString(pXForm.getCoeff20()));
       affineC21REd.setText(Tools.doubleToString(pXForm.getCoeff21()));
+      xFormColorREd.setText(Tools.doubleToString(pXForm.getColor()));
+      xFormColorSlider.setValue(Tools.FTOI(pXForm.getColor() * SLIDER_SCALE_COLOR));
+      xFormSymmetryREd.setText(Tools.doubleToString(pXForm.getColorSymmetry()));
+      xFormSymmetrySlider.setValue(Tools.FTOI(pXForm.getColorSymmetry() * SLIDER_SCALE_COLOR));
+      xFormOpacityREd.setText(Tools.doubleToString(pXForm.getOpacity()));
+      xFormOpacitySlider.setValue(Tools.FTOI(pXForm.getOpacity() * SLIDER_SCALE_COLOR));
+      xFormDrawModeCmb.setSelectedItem(pXForm.getDrawMode());
     }
     else {
       affineC00REd.setText(null);
@@ -1179,6 +1289,13 @@ public class TINAController {
       affineC11REd.setText(null);
       affineC20REd.setText(null);
       affineC21REd.setText(null);
+      xFormColorREd.setText(null);
+      xFormColorSlider.setValue(0);
+      xFormSymmetryREd.setText(null);
+      xFormSymmetrySlider.setValue(0);
+      xFormOpacityREd.setText(null);
+      xFormOpacitySlider.setValue(0);
+      xFormDrawModeCmb.setSelectedIndex(-1);
     }
 
     refreshing = true;
@@ -1611,13 +1728,39 @@ public class TINAController {
   public void nonlinearParamsRightButtonClicked(int pIdx) {
     nonlinearParamsREdChanged(pIdx, DELTA_PARAM);
   }
+
+  public void xFormSymmetrySlider_changed() {
+    xFormSliderChanged(xFormSymmetrySlider, xFormSymmetryREd, "colorSymmetry", SLIDER_SCALE_COLOR);
+  }
+
+  public void xFormOpacityREd_changed() {
+    xFormTextFieldChanged(xFormOpacitySlider, xFormOpacityREd, "opacity", SLIDER_SCALE_COLOR);
+  }
+
+  public void xFormOpacitySlider_changed() {
+    xFormSliderChanged(xFormOpacitySlider, xFormOpacityREd, "opacity", SLIDER_SCALE_COLOR);
+  }
+
+  public void xFormDrawModeCmb_changed() {
+    if (!cmbRefreshing) {
+      XForm xForm = getCurrXForm();
+      if (xForm != null && xFormDrawModeCmb.getSelectedItem() != null) {
+        xForm.setDrawMode((DrawMode) xFormDrawModeCmb.getSelectedItem());
+        refreshFlameImage();
+        enableControls(xForm);
+      }
+    }
+  }
+
+  public void xFormColorSlider_changed() {
+    xFormSliderChanged(xFormColorSlider, xFormColorREd, "color", SLIDER_SCALE_COLOR);
+  }
+
+  public void xFormSymmetryREd_changed() {
+    xFormTextFieldChanged(xFormSymmetrySlider, xFormSymmetryREd, "colorSymmetry", SLIDER_SCALE_COLOR);
+  }
+
+  public void xFormColorREd_changed() {
+    xFormTextFieldChanged(xFormColorSlider, xFormColorREd, "color", SLIDER_SCALE_COLOR);
+  }
 }
-/*
-xFormColorREd
-xFormColorSlider
-xFormSymmetryREd
-xFormSymmetrySlider
-xFormOpacityREd
-xFormOpacitySlider
-xFormDrawModeCmb
-*/
