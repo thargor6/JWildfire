@@ -26,9 +26,8 @@ import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.variation.Variation;
-import org.jwildfire.create.tina.variation.SimpleVariationFunc;
+import org.jwildfire.create.tina.variation.VariationFunc;
 import org.jwildfire.create.tina.variation.VariationFuncList;
-
 
 public class Flam3Reader implements FlameReader {
 
@@ -286,7 +285,7 @@ public class Flam3Reader implements FlameReader {
       while (it.hasNext()) {
         String name = it.next();
         if (variationNameList.indexOf(name) >= 0) {
-          SimpleVariationFunc varFunc = VariationFuncList.getVariationFuncInstance(name);
+          VariationFunc varFunc = VariationFuncList.getVariationFuncInstance(name);
           Variation variation = pXForm.addVariation(Double.parseDouble(atts.get(name)), varFunc);
           String paramNames[] = variation.getFunc().getParameterNames();
           for (String pName : paramNames) {

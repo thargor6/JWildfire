@@ -18,6 +18,7 @@ package org.jwildfire.create.tina.base;
 
 import org.jwildfire.create.tina.transform.XFormTransformService;
 import org.jwildfire.create.tina.variation.Linear3DFunc;
+import org.jwildfire.create.tina.variation.VariationFuncList;
 
 public class RandomFlameGenerator {
 
@@ -47,9 +48,14 @@ public class RandomFlameGenerator {
 
       xForm.setColor(Math.random());
       xForm.addVariation(Math.random() * 0.8 + 0.2, new Linear3DFunc());
+      if (Math.random() > 0.33) {
+        String[] fnc = { "blur3D", "bubble", "curl3D", "diamond", "disc", "julia3D", "fan2", "heart", "julia3D", "hemisphere", "horseshoe", "julia3D", "pdj", "popcorn", "rings2", "spherical3D", "spiral", "rectangles", "blur", "waves", "swirl" };
+        int fncIdx = (int) (Math.random() * fnc.length);
+        xForm.addVariation(Math.random() * 0.5, VariationFuncList.getVariationFuncInstance(fnc[fncIdx]));
+      }
+
       xForm.setWeight(Math.random() * 0.9 + 0.1);
     }
     return flame;
   }
-
 }

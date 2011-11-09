@@ -493,6 +493,7 @@ public class TINAController {
   private void refreshTransformationsTable() {
     final int COL_TRANSFORM = 0;
     final int COL_VARIATIONS = 1;
+    final int COL_WEIGHT = 2;
     transformationsTable.setModel(new DefaultTableModel() {
       private static final long serialVersionUID = 1L;
 
@@ -503,7 +504,7 @@ public class TINAController {
 
       @Override
       public int getColumnCount() {
-        return 2;
+        return 3;
       }
 
       @Override
@@ -513,6 +514,8 @@ public class TINAController {
             return "Transform";
           case COL_VARIATIONS:
             return "Variations";
+          case COL_WEIGHT:
+            return "Weight";
         }
         return null;
       }
@@ -533,14 +536,18 @@ public class TINAController {
               hs += xForm.getVariations().get(xForm.getVariations().size() - 1).getFunc().getName();
               return hs;
             }
+            case COL_WEIGHT:
+              return rowIndex < currFlame.getXForms().size() ? Tools.doubleToString(xForm.getWeight()) : "";
           }
         }
         return null;
       }
 
     });
-
-    transformationsTable.getColumnModel().getColumn(COL_TRANSFORM).setPreferredWidth(20);
+    transformationsTable.getTableHeader().setFont(transformationsTable.getFont());
+    transformationsTable.getColumnModel().getColumn(COL_TRANSFORM).setWidth(20);
+    transformationsTable.getColumnModel().getColumn(COL_VARIATIONS).setPreferredWidth(120);
+    transformationsTable.getColumnModel().getColumn(COL_WEIGHT).setWidth(16);
   }
 
   private void refreshPaletteUI(RGBPalette pPalette) {
@@ -1364,7 +1371,7 @@ public class TINAController {
     final int IMG_WIDTH = 60;
     final int IMG_HEIGHT = 50;
     final int BORDER_SIZE = 4;
-    final int IMG_COUNT = 16;
+    final int IMG_COUNT = 24;
     final int MAX_IMG_SAMPLES = 10;
     final double MIN_COVERAGE = 0.33;
     int panelWidth = (IMG_WIDTH + BORDER_SIZE) * IMG_COUNT;
@@ -1489,6 +1496,10 @@ public class TINAController {
   }
 
   public void nonlinearVarREdChanged(int pIdx) {
+    nonlinearVarREdChanged(pIdx, 0.0);
+  }
+
+  public void nonlinearVarREdChanged(int pIdx, double pDelta) {
     if (cmbRefreshing) {
       return;
     }
@@ -1502,7 +1513,8 @@ public class TINAController {
           if (varStr == null || varStr.length() == 0) {
             varStr = "0";
           }
-          var.setAmount(Tools.stringToDouble(varStr));
+          var.setAmount(Tools.stringToDouble(varStr) + pDelta);
+          nonlinearControlsRows[pIdx].getNonlinearVarREd().setText(Tools.doubleToString(var.getAmount()));
           refreshFlameImage();
         }
       }
@@ -1513,6 +1525,10 @@ public class TINAController {
   }
 
   public void nonlinearParamsREdChanged(int pIdx) {
+    nonlinearParamsREdChanged(pIdx, 0.0);
+  }
+
+  public void nonlinearParamsREdChanged(int pIdx, double pDelta) {
     if (cmbRefreshing) {
       return;
     }
@@ -1527,7 +1543,9 @@ public class TINAController {
           if (valStr == null || valStr.length() == 0) {
             valStr = "0";
           }
-          var.getFunc().setParameter(selected, Tools.stringToDouble(valStr));
+          double val = Tools.stringToDouble(valStr) + pDelta;
+          var.getFunc().setParameter(selected, val);
+          nonlinearControlsRows[pIdx].getNonlinearParamsREd().setText(Tools.doubleToString(val));
           refreshFlameImage();
         }
       }
@@ -1575,23 +1593,31 @@ public class TINAController {
     }
   }
 
-  public void nonlinearVarLeftButtonClicked(int pIdx) {
-    // TODO Auto-generated method stub
+  private final double DELTA_VAR = 0.05;
+  private final double DELTA_PARAM = 0.1;
 
+  public void nonlinearVarLeftButtonClicked(int pIdx) {
+    nonlinearVarREdChanged(pIdx, -DELTA_VAR);
   }
 
   public void nonlinearVarRightButtonClicked(int pIdx) {
-    // TODO Auto-generated method stub
-
+    nonlinearVarREdChanged(pIdx, DELTA_VAR);
   }
 
   public void nonlinearParamsLeftButtonClicked(int pIdx) {
-    // TODO Auto-generated method stub
-
+    nonlinearParamsREdChanged(pIdx, -DELTA_PARAM);
   }
 
   public void nonlinearParamsRightButtonClicked(int pIdx) {
-    // TODO Auto-generated method stub
-
+    nonlinearParamsREdChanged(pIdx, DELTA_PARAM);
   }
 }
+/*
+xFormColorREd
+xFormColorSlider
+xFormSymmetryREd
+xFormSymmetrySlider
+xFormOpacityREd
+xFormOpacitySlider
+xFormDrawModeCmb
+*/

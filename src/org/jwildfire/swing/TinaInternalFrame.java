@@ -355,6 +355,17 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton nonlinarVar3RightButton = null;
   private JButton nonlinearParams3LeftButton = null;
   private JButton nonlinarParams3RightButton = null;
+  private JLabel xFormColorLbl = null;
+  private JTextField xFormColorREd = null;
+  private JSlider xFormColorSlider = null;
+  private JLabel xFormSymmetryLbl = null;
+  private JTextField xFormSymmetryREd = null;
+  private JSlider xFormSymmetrySlider = null;
+  private JLabel xFormOpacityLbl = null;
+  private JTextField xFormOpacityREd = null;
+  private JSlider xFormOpacitySlider = null;
+  private JLabel xFormDrawModeLbl = null;
+  private JComboBox xFormDrawModeCmb = null;
 
   /**
    * This is the xxx default constructor
@@ -371,6 +382,7 @@ public class TinaInternalFrame extends JInternalFrame {
    */
   private void initialize() {
     this.setSize(988, 680);
+    this.setFont(new Font("Dialog", Font.PLAIN, 10));
     this.setLocation(new Point(0, 0));
     this.setClosable(true);
     this.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
@@ -390,6 +402,7 @@ public class TinaInternalFrame extends JInternalFrame {
     if (jContentPane == null) {
       jContentPane = new JPanel();
       jContentPane.setLayout(new BorderLayout());
+      jContentPane.setFont(new Font("Dialog", Font.PLAIN, 10));
       jContentPane.add(getTinaNorthPanel(), BorderLayout.NORTH);
       jContentPane.add(getTinaWestPanel(), BorderLayout.WEST);
       jContentPane.add(getTinaEastPanel(), BorderLayout.EAST);
@@ -443,6 +456,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaEastPanel = new JPanel();
       tinaEastPanel.setLayout(new BorderLayout());
       tinaEastPanel.setPreferredSize(new Dimension(310, 0));
+      tinaEastPanel.setFont(new Font("Dialog", Font.PLAIN, 10));
       tinaEastPanel.add(getTinaEastTabbedPane(), BorderLayout.CENTER);
     }
     return tinaEastPanel;
@@ -1876,6 +1890,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaTransformationsPanel = new JPanel();
       tinaTransformationsPanel.setLayout(new BorderLayout());
       tinaTransformationsPanel.setToolTipText("");
+      tinaTransformationsPanel.setFont(new Font("Dialog", Font.PLAIN, 10));
       tinaTransformationsPanel.add(getTransformationsSplitPane(), BorderLayout.CENTER);
     }
     return tinaTransformationsPanel;
@@ -1962,6 +1977,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JScrollPane getTinaTransformationsScrollPane() {
     if (tinaTransformationsScrollPane == null) {
       tinaTransformationsScrollPane = new JScrollPane();
+      tinaTransformationsScrollPane.setFont(new Font("Dialog", Font.PLAIN, 10));
       tinaTransformationsScrollPane.setViewportView(getTinaTransformationsTable());
     }
     return tinaTransformationsScrollPane;
@@ -2128,8 +2144,43 @@ public class TinaInternalFrame extends JInternalFrame {
    */
   private JPanel getTinaTransformationColorPanel() {
     if (tinaTransformationColorPanel == null) {
+      xFormDrawModeLbl = new JLabel();
+      xFormDrawModeLbl.setPreferredSize(new Dimension(64, 22));
+      xFormDrawModeLbl.setText("Draw mode");
+      xFormDrawModeLbl.setSize(new Dimension(64, 22));
+      xFormDrawModeLbl.setLocation(new Point(4, 82));
+      xFormDrawModeLbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      xFormOpacityLbl = new JLabel();
+      xFormOpacityLbl.setPreferredSize(new Dimension(64, 22));
+      xFormOpacityLbl.setText("Opacity");
+      xFormOpacityLbl.setSize(new Dimension(64, 22));
+      xFormOpacityLbl.setLocation(new Point(4, 56));
+      xFormOpacityLbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      xFormSymmetryLbl = new JLabel();
+      xFormSymmetryLbl.setPreferredSize(new Dimension(64, 22));
+      xFormSymmetryLbl.setText("Symmetry");
+      xFormSymmetryLbl.setSize(new Dimension(64, 22));
+      xFormSymmetryLbl.setLocation(new Point(4, 30));
+      xFormSymmetryLbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      xFormColorLbl = new JLabel();
+      xFormColorLbl.setPreferredSize(new Dimension(64, 22));
+      xFormColorLbl.setText("Color");
+      xFormColorLbl.setSize(new Dimension(64, 22));
+      xFormColorLbl.setLocation(new Point(4, 4));
+      xFormColorLbl.setFont(new Font("Dialog", Font.BOLD, 10));
       tinaTransformationColorPanel = new JPanel();
       tinaTransformationColorPanel.setLayout(null);
+      tinaTransformationColorPanel.add(xFormColorLbl, null);
+      tinaTransformationColorPanel.add(getXFormColorREd(), null);
+      tinaTransformationColorPanel.add(getXFormColorSlider(), null);
+      tinaTransformationColorPanel.add(xFormSymmetryLbl, null);
+      tinaTransformationColorPanel.add(getXFormSymmetryREd(), null);
+      tinaTransformationColorPanel.add(getXFormSymmetrySlider(), null);
+      tinaTransformationColorPanel.add(xFormOpacityLbl, null);
+      tinaTransformationColorPanel.add(getXFormOpacityREd(), null);
+      tinaTransformationColorPanel.add(getXFormOpacitySlider(), null);
+      tinaTransformationColorPanel.add(xFormDrawModeLbl, null);
+      tinaTransformationColorPanel.add(getXFormDrawModeCmb(), null);
     }
     return tinaTransformationColorPanel;
   }
@@ -3145,6 +3196,7 @@ public class TinaInternalFrame extends JInternalFrame {
     if (transformationsNorthPanel == null) {
       transformationsNorthPanel = new JPanel();
       transformationsNorthPanel.setLayout(new BorderLayout());
+      transformationsNorthPanel.setFont(new Font("Dialog", Font.PLAIN, 10));
       transformationsNorthPanel.add(getTrnsformationsEastPanel(), BorderLayout.EAST);
       transformationsNorthPanel.add(getTinaTransformationsScrollPane(), BorderLayout.CENTER);
     }
@@ -3161,6 +3213,7 @@ public class TinaInternalFrame extends JInternalFrame {
       FlowLayout flowLayout = new FlowLayout();
       flowLayout.setAlignment(FlowLayout.LEFT);
       trnsformationsEastPanel = new JPanel();
+      trnsformationsEastPanel.setFont(new Font("Dialog", Font.PLAIN, 10));
       trnsformationsEastPanel.setLayout(flowLayout);
       trnsformationsEastPanel.setPreferredSize(new Dimension(91, 0));
       trnsformationsEastPanel.add(getTinaAddTransformationButton(), null);
@@ -3180,6 +3233,7 @@ public class TinaInternalFrame extends JInternalFrame {
     if (transformationsSplitPane == null) {
       transformationsSplitPane = new JSplitPane();
       transformationsSplitPane.setDividerLocation(166);
+      transformationsSplitPane.setFont(new Font("Dialog", Font.PLAIN, 10));
       transformationsSplitPane.setTopComponent(getTransformationsNorthPanel());
       transformationsSplitPane.setBottomComponent(getTinaTransformationsTabbedPane());
       transformationsSplitPane.setOrientation(JSplitPane.VERTICAL_SPLIT);
@@ -4049,6 +4103,130 @@ public class TinaInternalFrame extends JInternalFrame {
       });
     }
     return nonlinarParams3RightButton;
+  }
+
+  /**
+   * This method initializes xFormColorREd	
+   * 	
+   * @return javax.swing.JTextField	
+   */
+  private JTextField getXFormColorREd() {
+    if (xFormColorREd == null) {
+      xFormColorREd = new JTextField();
+      xFormColorREd.setPreferredSize(new Dimension(55, 22));
+      xFormColorREd.setText("");
+      xFormColorREd.setSize(new Dimension(55, 22));
+      xFormColorREd.setLocation(new Point(68, 4));
+      xFormColorREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+    }
+    return xFormColorREd;
+  }
+
+  /**
+   * This method initializes xFormColorSlider	
+   * 	
+   * @return javax.swing.JSlider	
+   */
+  private JSlider getXFormColorSlider() {
+    if (xFormColorSlider == null) {
+      xFormColorSlider = new JSlider();
+      xFormColorSlider.setPreferredSize(new Dimension(172, 22));
+      xFormColorSlider.setMaximum(255);
+      xFormColorSlider.setMinimum(-255);
+      xFormColorSlider.setValue(0);
+      xFormColorSlider.setSize(new Dimension(172, 22));
+      xFormColorSlider.setLocation(new Point(123, 4));
+      xFormColorSlider.setFont(new Font("Dialog", Font.BOLD, 10));
+    }
+    return xFormColorSlider;
+  }
+
+  /**
+   * This method initializes xFormSymmetryREd	
+   * 	
+   * @return javax.swing.JTextField	
+   */
+  private JTextField getXFormSymmetryREd() {
+    if (xFormSymmetryREd == null) {
+      xFormSymmetryREd = new JTextField();
+      xFormSymmetryREd.setPreferredSize(new Dimension(55, 22));
+      xFormSymmetryREd.setText("");
+      xFormSymmetryREd.setSize(new Dimension(55, 22));
+      xFormSymmetryREd.setLocation(new Point(68, 30));
+      xFormSymmetryREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+    }
+    return xFormSymmetryREd;
+  }
+
+  /**
+   * This method initializes xFormSymmetrySlider	
+   * 	
+   * @return javax.swing.JSlider	
+   */
+  private JSlider getXFormSymmetrySlider() {
+    if (xFormSymmetrySlider == null) {
+      xFormSymmetrySlider = new JSlider();
+      xFormSymmetrySlider.setPreferredSize(new Dimension(172, 22));
+      xFormSymmetrySlider.setMaximum(255);
+      xFormSymmetrySlider.setMinimum(-255);
+      xFormSymmetrySlider.setValue(0);
+      xFormSymmetrySlider.setLocation(new Point(123, 30));
+      xFormSymmetrySlider.setSize(new Dimension(172, 22));
+      xFormSymmetrySlider.setFont(new Font("Dialog", Font.BOLD, 10));
+    }
+    return xFormSymmetrySlider;
+  }
+
+  /**
+   * This method initializes xFormOpacityREd	
+   * 	
+   * @return javax.swing.JTextField	
+   */
+  private JTextField getXFormOpacityREd() {
+    if (xFormOpacityREd == null) {
+      xFormOpacityREd = new JTextField();
+      xFormOpacityREd.setPreferredSize(new Dimension(55, 22));
+      xFormOpacityREd.setText("");
+      xFormOpacityREd.setSize(new Dimension(55, 22));
+      xFormOpacityREd.setLocation(new Point(68, 56));
+      xFormOpacityREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+    }
+    return xFormOpacityREd;
+  }
+
+  /**
+   * This method initializes xFormOpacitySlider	
+   * 	
+   * @return javax.swing.JSlider	
+   */
+  private JSlider getXFormOpacitySlider() {
+    if (xFormOpacitySlider == null) {
+      xFormOpacitySlider = new JSlider();
+      xFormOpacitySlider.setPreferredSize(new Dimension(172, 22));
+      xFormOpacitySlider.setMaximum(255);
+      xFormOpacitySlider.setMinimum(-255);
+      xFormOpacitySlider.setValue(0);
+      xFormOpacitySlider.setSize(new Dimension(172, 22));
+      xFormOpacitySlider.setLocation(new Point(123, 56));
+      xFormOpacitySlider.setFont(new Font("Dialog", Font.BOLD, 10));
+    }
+    return xFormOpacitySlider;
+  }
+
+  /**
+   * This method initializes xFormDrawModeCmb	
+   * 	
+   * @return javax.swing.JComboBox	
+   */
+  private JComboBox getXFormDrawModeCmb() {
+    if (xFormDrawModeCmb == null) {
+      xFormDrawModeCmb = new JComboBox();
+      xFormDrawModeCmb.setPreferredSize(new Dimension(120, 22));
+      xFormDrawModeCmb.setSize(new Dimension(120, 22));
+      xFormDrawModeCmb.setLocation(new Point(68, 82));
+      xFormDrawModeCmb.setFont(new Font("Dialog", Font.BOLD, 10));
+    }
+    return xFormDrawModeCmb;
   }
 
 } //  @jve:decl-index=0:visual-constraint="10,10"

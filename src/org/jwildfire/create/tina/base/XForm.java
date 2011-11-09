@@ -21,7 +21,7 @@ import java.util.List;
 
 import org.jwildfire.create.tina.variation.TransformationContext;
 import org.jwildfire.create.tina.variation.Variation;
-import org.jwildfire.create.tina.variation.SimpleVariationFunc;
+import org.jwildfire.create.tina.variation.VariationFunc;
 
 public class XForm {
   private double weight;
@@ -115,7 +115,7 @@ public class XForm {
     return variations;
   }
 
-  public Variation addVariation(double pAmount, SimpleVariationFunc pVariationFunc) {
+  public Variation addVariation(double pAmount, VariationFunc pVariationFunc) {
     Variation variation = new Variation();
     variation.setAmount(pAmount);
     variation.setFunc(pVariationFunc);
