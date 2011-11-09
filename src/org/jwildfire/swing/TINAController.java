@@ -238,6 +238,8 @@ public class TINAController {
   private final JButton duplicateTransformationButton;
   private final JButton deleteTransformationButton;
   private final JButton addFinalTransformationButton;
+  private final JButton transformationWeightLeftButton;
+  private final JButton transformationWeightRightButton;
   // Random batch
   private final JPanel randomBatchPanel;
   private JScrollPane randomBatchScrollPane = null;
@@ -251,6 +253,10 @@ public class TINAController {
   private final JTextField xFormOpacityREd;
   private final JSlider xFormOpacitySlider;
   private final JComboBox xFormDrawModeCmb;
+  // Relative weights
+  private final JTable relWeightsTable;
+  private final JButton relWeightsLeftButton;
+  private final JButton relWeightsRightButton;
 
   // misc
   private Flame currFlame;
@@ -275,7 +281,8 @@ public class TINAController {
       JButton pAffineMoveRightButton, JButton pAffineMoveDownButton, JButton pAddTransformationButton, JButton pDuplicateTransformationButton,
       JButton pDeleteTransformationButton, JButton pAddFinalTransformationButton, JPanel pRandomBatchPanel, NonlinearControlsRow[] pNonlinearControlsRows,
       JTextField pXFormColorREd, JSlider pXFormColorSlider, JTextField pXFormSymmetryREd, JSlider pXFormSymmetrySlider, JTextField pXFormOpacityREd,
-      JSlider pXFormOpacitySlider, JComboBox pXFormDrawModeCmb) {
+      JSlider pXFormOpacitySlider, JComboBox pXFormDrawModeCmb, JTable pRelWeightsTable, JButton pRelWeightsLeftButton, JButton pRelWeightsRightButton,
+      JButton pTransformationWeightLeftButton, JButton pTransformationWeightRightButton) {
     errorHandler = pErrorHandler;
     prefs = pPrefs;
     centerPanel = pCenterPanel;
@@ -378,6 +385,12 @@ public class TINAController {
     xFormOpacitySlider = pXFormOpacitySlider;
     xFormDrawModeCmb = pXFormDrawModeCmb;
 
+    relWeightsTable = pRelWeightsTable;
+    relWeightsLeftButton = pRelWeightsLeftButton;
+    relWeightsRightButton = pRelWeightsRightButton;
+
+    transformationWeightLeftButton = pTransformationWeightLeftButton;
+    transformationWeightRightButton = pTransformationWeightRightButton;
     enableControls(null);
   }
 
@@ -563,11 +576,98 @@ public class TINAController {
         return null;
       }
 
+      @Override
+      public boolean isCellEditable(int row, int column) {
+        return column == COL_WEIGHT;
+      }
+
+      @Override
+      public void setValueAt(Object aValue, int row, int column) {
+        if (currFlame != null && column == COL_WEIGHT && row < currFlame.getXForms().size()) {
+          XForm xForm = currFlame.getXForms().get(row);
+          String valStr = (String) aValue;
+          if (valStr == null || valStr.length() == 0) {
+            valStr = "0";
+          }
+          xForm.setWeight(Tools.stringToDouble(valStr));
+          refreshFlameImage();
+        }
+        super.setValueAt(aValue, row, column);
+      }
+
     });
     transformationsTable.getTableHeader().setFont(transformationsTable.getFont());
     transformationsTable.getColumnModel().getColumn(COL_TRANSFORM).setWidth(20);
     transformationsTable.getColumnModel().getColumn(COL_VARIATIONS).setPreferredWidth(120);
     transformationsTable.getColumnModel().getColumn(COL_WEIGHT).setWidth(16);
+  }
+
+  private void refreshRelWeightsTable() {
+    final int COL_TRANSFORM = 0;
+    final int COL_WEIGHT = 1;
+    relWeightsTable.setModel(new DefaultTableModel() {
+      private static final long serialVersionUID = 1L;
+
+      @Override
+      public int getRowCount() {
+        XForm xForm = getCurrXForm();
+        return xForm != null && xForm != currFlame.getFinalXForm() ? currFlame.getXForms().size() : 0;
+      }
+
+      @Override
+      public int getColumnCount() {
+        return 2;
+      }
+
+      @Override
+      public String getColumnName(int columnIndex) {
+        switch (columnIndex) {
+          case COL_TRANSFORM:
+            return "Transform";
+          case COL_WEIGHT:
+            return "Weight";
+        }
+        return null;
+      }
+
+      @Override
+      public Object getValueAt(int rowIndex, int columnIndex) {
+        if (currFlame != null) {
+          switch (columnIndex) {
+            case COL_TRANSFORM:
+              return String.valueOf(rowIndex + 1);
+            case COL_WEIGHT: {
+              XForm xForm = getCurrXForm();
+              return xForm != null ? Tools.doubleToString(xForm.getModifiedWeights()[rowIndex]) : null;
+            }
+          }
+        }
+        return null;
+      }
+
+      @Override
+      public boolean isCellEditable(int row, int column) {
+        return column == COL_WEIGHT;
+      }
+
+      @Override
+      public void setValueAt(Object aValue, int row, int column) {
+        XForm xForm = getCurrXForm();
+        if (currFlame != null && column == COL_WEIGHT && xForm != null) {
+          String valStr = (String) aValue;
+          if (valStr == null || valStr.length() == 0) {
+            valStr = "0";
+          }
+          xForm.getModifiedWeights()[row] = Tools.stringToDouble(valStr);
+          refreshFlameImage();
+        }
+        super.setValueAt(aValue, row, column);
+      }
+
+    });
+    relWeightsTable.getTableHeader().setFont(relWeightsTable.getFont());
+    relWeightsTable.getColumnModel().getColumn(COL_TRANSFORM).setWidth(20);
+    relWeightsTable.getColumnModel().getColumn(COL_WEIGHT).setWidth(16);
   }
 
   private void refreshPaletteUI(RGBPalette pPalette) {
@@ -1246,6 +1346,8 @@ public class TINAController {
     duplicateTransformationButton.setEnabled(enabled);
     deleteTransformationButton.setEnabled(enabled);
     addFinalTransformationButton.setEnabled(currFlame != null && currFlame.getFinalXForm() == null);
+    transformationWeightLeftButton.setEnabled(enabled);
+    transformationWeightRightButton.setEnabled(enabled);
     for (NonlinearControlsRow rows : nonlinearControlsRows) {
       rows.getNonlinearVarCmb().setEnabled(enabled);
       rows.getNonlinearVarREd().setEnabled(enabled);
@@ -1253,7 +1355,7 @@ public class TINAController {
       rows.getNonlinearVarRightButton().setEnabled(enabled);
       rows.getNonlinearParamsCmb().setEnabled(enabled);
       rows.getNonlinearParamsREd().setEnabled(enabled);
-      // refresh in refreshXFormUI()
+      // refreshed in refreshXFormUI():
       // rows.getNonlinearParamsLeftButton().setEnabled(enabled);
       // rows.getNonlinearParamsRightButton().setEnabled(enabled);
     }
@@ -1264,6 +1366,10 @@ public class TINAController {
     xFormOpacityREd.setEnabled(enabled && xForm.getDrawMode() == DrawMode.OPAQUE);
     xFormOpacitySlider.setEnabled(xFormOpacityREd.isEnabled());
     xFormDrawModeCmb.setEnabled(enabled);
+
+    relWeightsTable.setEnabled(enabled);
+    relWeightsLeftButton.setEnabled(enabled);
+    relWeightsRightButton.setEnabled(enabled);
   }
 
   private void refreshXFormUI(XForm pXForm) {
@@ -1320,6 +1426,14 @@ public class TINAController {
     }
     finally {
       refreshing = false;
+    }
+
+    gridRefreshing = true;
+    try {
+      refreshRelWeightsTable();
+    }
+    finally {
+      gridRefreshing = false;
     }
   }
 
@@ -1762,5 +1876,57 @@ public class TINAController {
 
   public void xFormColorREd_changed() {
     xFormTextFieldChanged(xFormColorSlider, xFormColorREd, "color", SLIDER_SCALE_COLOR);
+  }
+
+  private void relWeightsChanged(double pDelta) {
+    XForm xForm = getCurrXForm();
+    if (xForm != null && currFlame != null && xForm != currFlame.getFinalXForm()) {
+      int row = relWeightsTable.getSelectedRow();
+      if (row >= 0 && row < currFlame.getXForms().size()) {
+        xForm.getModifiedWeights()[row] += pDelta;
+        gridRefreshing = true;
+        try {
+          refreshRelWeightsTable();
+          relWeightsTable.getSelectionModel().setSelectionInterval(row, row);
+          refreshFlameImage();
+        }
+        finally {
+          gridRefreshing = false;
+        }
+      }
+    }
+  }
+
+  private void transformationWeightChanged(double pDelta) {
+    XForm xForm = getCurrXForm();
+    if (xForm != null && currFlame != null && xForm != currFlame.getFinalXForm()) {
+      xForm.setWeight(xForm.getWeight() + pDelta);
+      gridRefreshing = true;
+      try {
+        int row = transformationsTable.getSelectedRow();
+        refreshTransformationsTable();
+        transformationsTable.getSelectionModel().setSelectionInterval(row, row);
+        refreshFlameImage();
+      }
+      finally {
+        gridRefreshing = false;
+      }
+    }
+  }
+
+  public void relWeightsLeftButton_clicked() {
+    relWeightsChanged(-DELTA_PARAM);
+  }
+
+  public void relWeightsRightButton_clicked() {
+    relWeightsChanged(DELTA_PARAM);
+  }
+
+  public void transformationWeightRightButton_clicked() {
+    transformationWeightChanged(DELTA_PARAM);
+  }
+
+  public void transformationWeightLeftButton_clicked() {
+    transformationWeightChanged(-DELTA_PARAM);
   }
 }

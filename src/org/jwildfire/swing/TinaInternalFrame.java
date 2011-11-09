@@ -367,6 +367,14 @@ public class TinaInternalFrame extends JInternalFrame {
   private JSlider xFormOpacitySlider = null;
   private JLabel xFormDrawModeLbl = null;
   private JComboBox xFormDrawModeCmb = null;
+  private JPanel relWeightsEastPanel = null;
+  private JButton relWeightsLeftButton = null;
+  private JButton relWeightsRightButton = null;
+  private JScrollPane relWeightsScrollPane = null;
+  private JTable relWeightsTable = null;
+  private JPanel transformationWeightPanel = null;
+  private JButton transformationWeightLeftButton = null;
+  private JButton transformationWeightRightButton = null;
 
   /**
    * This is the xxx default constructor
@@ -972,7 +980,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaPreviewQualityREd = new JTextField();
       tinaPreviewQualityREd.setPreferredSize(new Dimension(56, 22));
       tinaPreviewQualityREd.setText("3");
-      tinaPreviewQualityREd.setLocation(new Point(690, 4));
+      tinaPreviewQualityREd.setLocation(new Point(727, 4));
       tinaPreviewQualityREd.setSize(new Dimension(56, 22));
       tinaPreviewQualityREd.setFont(new Font("Dialog", Font.PLAIN, 10));
       tinaPreviewQualityREd.addActionListener(new java.awt.event.ActionListener() {
@@ -998,7 +1006,7 @@ public class TinaInternalFrame extends JInternalFrame {
     if (tinaExportImageButton == null) {
       tinaExportImageButton = new JButton();
       tinaExportImageButton.setText("Export image");
-      tinaExportImageButton.setLocation(new Point(770, 32));
+      tinaExportImageButton.setLocation(new Point(790, 32));
       tinaExportImageButton.setSize(new Dimension(180, 24));
       tinaExportImageButton.setPreferredSize(new Dimension(180, 24));
       tinaExportImageButton.setFont(new Font("Dialog", Font.BOLD, 10));
@@ -1272,7 +1280,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaRenderQualityREd = new JTextField();
       tinaRenderQualityREd.setPreferredSize(new Dimension(56, 22));
       tinaRenderQualityREd.setText("100");
-      tinaRenderQualityREd.setLocation(new Point(690, 32));
+      tinaRenderQualityREd.setLocation(new Point(727, 32));
       tinaRenderQualityREd.setSize(new Dimension(56, 22));
       tinaRenderQualityREd.setFont(new Font("Dialog", Font.PLAIN, 10));
     }
@@ -1834,7 +1842,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaRenderSizeLbl = new JLabel();
       tinaRenderSizeLbl.setText("Export size");
       tinaRenderSizeLbl.setFont(new Font("Dialog", Font.BOLD, 10));
-      tinaRenderSizeLbl.setLocation(new Point(770, 4));
+      tinaRenderSizeLbl.setLocation(new Point(790, 4));
       tinaRenderSizeLbl.setSize(new Dimension(66, 22));
       tinaRenderSizeLbl.setPreferredSize(new Dimension(66, 22));
       tinaNorthMainPanel = new JPanel();
@@ -1842,13 +1850,13 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaCameraRenderQualityLbl = new JLabel();
       tinaCameraRenderQualityLbl.setText("Render Quality");
       tinaCameraRenderQualityLbl.setFont(new Font("Dialog", Font.BOLD, 10));
-      tinaCameraRenderQualityLbl.setLocation(new Point(594, 32));
+      tinaCameraRenderQualityLbl.setLocation(new Point(631, 32));
       tinaCameraRenderQualityLbl.setSize(new Dimension(94, 22));
       tinaCameraRenderQualityLbl.setPreferredSize(new Dimension(94, 22));
       tinaCameraPreviewQualityLbl = new JLabel();
       tinaCameraPreviewQualityLbl.setText("Preview Quality");
       tinaCameraPreviewQualityLbl.setFont(new Font("Dialog", Font.BOLD, 10));
-      tinaCameraPreviewQualityLbl.setLocation(new Point(594, 4));
+      tinaCameraPreviewQualityLbl.setLocation(new Point(631, 4));
       tinaCameraPreviewQualityLbl.setSize(new Dimension(94, 22));
       tinaCameraPreviewQualityLbl.setPreferredSize(new Dimension(94, 22));
       tinaNorthMainPanel.add(getTinaLoadFlameButton(), null);
@@ -2133,7 +2141,9 @@ public class TinaInternalFrame extends JInternalFrame {
   private JPanel getTinaModifiedWeightsPanel() {
     if (tinaModifiedWeightsPanel == null) {
       tinaModifiedWeightsPanel = new JPanel();
-      tinaModifiedWeightsPanel.setLayout(null);
+      tinaModifiedWeightsPanel.setLayout(new BorderLayout());
+      tinaModifiedWeightsPanel.add(getRelWeightsEastPanel(), BorderLayout.EAST);
+      tinaModifiedWeightsPanel.add(getRelWeightsScrollPane(), BorderLayout.CENTER);
     }
     return tinaModifiedWeightsPanel;
   }
@@ -2882,7 +2892,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaRenderWidthREd = new JTextField();
       tinaRenderWidthREd.setPreferredSize(new Dimension(56, 22));
       tinaRenderWidthREd.setText("800");
-      tinaRenderWidthREd.setLocation(new Point(838, 4));
+      tinaRenderWidthREd.setLocation(new Point(858, 4));
       tinaRenderWidthREd.setSize(new Dimension(56, 22));
       tinaRenderWidthREd.setFont(new Font("Dialog", Font.PLAIN, 10));
     }
@@ -2899,7 +2909,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaRenderHeightREd = new JTextField();
       tinaRenderHeightREd.setPreferredSize(new Dimension(56, 22));
       tinaRenderHeightREd.setText("600");
-      tinaRenderHeightREd.setLocation(new Point(894, 4));
+      tinaRenderHeightREd.setLocation(new Point(914, 4));
       tinaRenderHeightREd.setSize(new Dimension(56, 22));
       tinaRenderHeightREd.setFont(new Font("Dialog", Font.PLAIN, 10));
     }
@@ -2932,7 +2942,8 @@ public class TinaInternalFrame extends JInternalFrame {
         getAffineMoveUpButton(), getAffineMoveLeftButton(), getAffineMoveRightButton(), getAffineMoveDownButton(), getTinaAddTransformationButton(),
         getTinaDuplicateTransformationButton(), getTinaDeleteTransformationButton(), getTinaAddFinalTransformationButton(), getRandomBatchPanel(),
         nonlinearControlsRows, getXFormColorREd(), getXFormColorSlider(), getXFormSymmetryREd(), getXFormSymmetrySlider(), getXFormOpacityREd(),
-        getXFormOpacitySlider(), getXFormDrawModeCmb());
+        getXFormOpacitySlider(), getXFormDrawModeCmb(), getRelWeightsTable(), getRelWeightsLeftButton(), getRelWeightsRightButton(),
+        getTransformationWeightLeftButton(), getTransformationWeightRightButton());
     tinaController.refreshing = tinaController.cmbRefreshing = tinaController.gridRefreshing = true;
     try {
       for (NonlinearControlsRow row : nonlinearControlsRows) {
@@ -3223,6 +3234,7 @@ public class TinaInternalFrame extends JInternalFrame {
       trnsformationsEastPanel.setFont(new Font("Dialog", Font.PLAIN, 10));
       trnsformationsEastPanel.setLayout(flowLayout);
       trnsformationsEastPanel.setPreferredSize(new Dimension(91, 0));
+      trnsformationsEastPanel.add(getTransformationWeightPanel(), null);
       trnsformationsEastPanel.add(getTinaAddTransformationButton(), null);
       trnsformationsEastPanel.add(getTinaDuplicateTransformationButton(), null);
       trnsformationsEastPanel.add(getTinaDeleteTransformationButton(), null);
@@ -4284,6 +4296,157 @@ public class TinaInternalFrame extends JInternalFrame {
       });
     }
     return xFormDrawModeCmb;
+  }
+
+  /**
+   * This method initializes relWeightsEastPanel	
+   * 	
+   * @return javax.swing.JPanel	
+   */
+  private JPanel getRelWeightsEastPanel() {
+    if (relWeightsEastPanel == null) {
+      relWeightsEastPanel = new JPanel();
+      relWeightsEastPanel.setLayout(null);
+      relWeightsEastPanel.setPreferredSize(new Dimension(54, 0));
+      relWeightsEastPanel.add(getRelWeightsLeftButton(), null);
+      relWeightsEastPanel.add(getRelWeightsRightButton(), null);
+    }
+    return relWeightsEastPanel;
+  }
+
+  /**
+   * This method initializes relWeightsLeftButton	
+   * 	
+   * @return javax.swing.JButton	
+   */
+  private JButton getRelWeightsLeftButton() {
+    if (relWeightsLeftButton == null) {
+      relWeightsLeftButton = new JButton();
+      relWeightsLeftButton.setPreferredSize(new Dimension(22, 22));
+      relWeightsLeftButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/moveLeft.gif")));
+      relWeightsLeftButton.setText("");
+      relWeightsLeftButton.setSize(new Dimension(22, 22));
+      relWeightsLeftButton.setLocation(new Point(4, 4));
+      relWeightsLeftButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      relWeightsLeftButton.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent e) {
+          tinaController.relWeightsLeftButton_clicked();
+        }
+      });
+    }
+    return relWeightsLeftButton;
+  }
+
+  /**
+   * This method initializes relWeightsRightButton	
+   * 	
+   * @return javax.swing.JButton	
+   */
+  private JButton getRelWeightsRightButton() {
+    if (relWeightsRightButton == null) {
+      relWeightsRightButton = new JButton();
+      relWeightsRightButton.setPreferredSize(new Dimension(22, 22));
+      relWeightsRightButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/moveRight.gif")));
+      relWeightsRightButton.setText("");
+      relWeightsRightButton.setSize(new Dimension(22, 22));
+      relWeightsRightButton.setLocation(new Point(28, 4));
+      relWeightsRightButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      relWeightsRightButton.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent e) {
+          tinaController.relWeightsRightButton_clicked();
+        }
+      });
+    }
+    return relWeightsRightButton;
+  }
+
+  /**
+   * This method initializes relWeightsScrollPane	
+   * 	
+   * @return javax.swing.JScrollPane	
+   */
+  private JScrollPane getRelWeightsScrollPane() {
+    if (relWeightsScrollPane == null) {
+      relWeightsScrollPane = new JScrollPane();
+      relWeightsScrollPane.setViewportView(getRelWeightsTable());
+    }
+    return relWeightsScrollPane;
+  }
+
+  /**
+   * This method initializes relWeightsTable	
+   * 	
+   * @return javax.swing.JTable	
+   */
+  private JTable getRelWeightsTable() {
+    if (relWeightsTable == null) {
+      relWeightsTable = new JTable();
+      relWeightsTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+      relWeightsTable.setFont(new Font("Dialog", Font.PLAIN, 10));
+    }
+    return relWeightsTable;
+  }
+
+  /**
+   * This method initializes transformationWeightPanel	
+   * 	
+   * @return javax.swing.JPanel	
+   */
+  private JPanel getTransformationWeightPanel() {
+    if (transformationWeightPanel == null) {
+      transformationWeightPanel = new JPanel();
+      transformationWeightPanel.setLayout(null);
+      transformationWeightPanel.setPreferredSize(new Dimension(81, 22));
+      transformationWeightPanel.add(getTransformationWeightLeftButton(), null);
+      transformationWeightPanel.add(getTransformationWeightRightButton(), null);
+    }
+    return transformationWeightPanel;
+  }
+
+  /**
+   * This method initializes transformationWeightLeftButton	
+   * 	
+   * @return javax.swing.JButton	
+   */
+  private JButton getTransformationWeightLeftButton() {
+    if (transformationWeightLeftButton == null) {
+      transformationWeightLeftButton = new JButton();
+      transformationWeightLeftButton.setPreferredSize(new Dimension(40, 22));
+      transformationWeightLeftButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/moveLeft.gif")));
+      transformationWeightLeftButton.setText("");
+      transformationWeightLeftButton.setSize(new Dimension(40, 22));
+      transformationWeightLeftButton.setLocation(new Point(0, 0));
+      transformationWeightLeftButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      transformationWeightLeftButton.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent e) {
+          tinaController.transformationWeightLeftButton_clicked();
+        }
+      });
+    }
+    return transformationWeightLeftButton;
+  }
+
+  /**
+   * This method initializes transformationWeightRightButton	
+   * 	
+   * @return javax.swing.JButton	
+   */
+  private JButton getTransformationWeightRightButton() {
+    if (transformationWeightRightButton == null) {
+      transformationWeightRightButton = new JButton();
+      transformationWeightRightButton.setPreferredSize(new Dimension(40, 22));
+      transformationWeightRightButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/moveRight.gif")));
+      transformationWeightRightButton.setText("");
+      transformationWeightRightButton.setSize(new Dimension(40, 22));
+      transformationWeightRightButton.setLocation(new Point(41, 0));
+      transformationWeightRightButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      transformationWeightRightButton.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent e) {
+          tinaController.transformationWeightRightButton_clicked();
+        }
+      });
+    }
+    return transformationWeightRightButton;
   }
 
 } //  @jve:decl-index=0:visual-constraint="10,10"
