@@ -25,15 +25,19 @@ import org.jwildfire.create.tina.base.XYZPoint;
 import org.jwildfire.create.tina.palette.RenderColor;
 
 public class FlameRenderThread implements Runnable {
-  private FlameRenderer renderer;
-  private Flame flame;
-  private int samples;
+  private final FlameRenderer renderer;
+  private final Flame flame;
+  private final int samples;
+  private final RenderMode renderMode;
+  private final AffineZStyle affineZStyle;
   private boolean finished = true;
 
-  public FlameRenderThread(FlameRenderer pRenderer, Flame pFlame, int pSamples) {
+  public FlameRenderThread(FlameRenderer pRenderer, Flame pFlame, int pSamples, RenderMode pRenderMode, AffineZStyle pAffineZStyle) {
     renderer = pRenderer;
     flame = pFlame;
     samples = pSamples;
+    renderMode = pRenderMode;
+    affineZStyle = pAffineZStyle;
   }
 
   @Override
@@ -54,18 +58,24 @@ public class FlameRenderThread implements Runnable {
     XYZPoint q;
     p.x = 2.0 * renderer.random.random() - 1.0;
     p.y = 2.0 * renderer.random.random() - 1.0;
+    p.z = 2.0 * renderer.random.random() - 1.0;
     p.color = renderer.random.random();
 
     XForm xf = flame.getXForms().get(0);
-    xf.transformPoint(renderer, affineT, varT, p, p);
+    xf.transformPoint(renderer, affineT, varT, p, p, affineZStyle);
     for (int i = 0; i <= Constants.INITIAL_ITERATIONS; i++) {
       xf = xf.getNextAppliedXFormTable()[renderer.random.random(Constants.NEXT_APPLIED_XFORM_TABLE_SIZE)];
-      xf.transformPoint(renderer, affineT, varT, p, p);
+      if (xf == null) {
+        return;
+      }
     }
 
     for (int i = 0; i < samples; i++) {
       xf = xf.getNextAppliedXFormTable()[renderer.random.random(Constants.NEXT_APPLIED_XFORM_TABLE_SIZE)];
-      xf.transformPoint(renderer, affineT, varT, p, p);
+      if (xf == null) {
+        return;
+      }
+      xf.transformPoint(renderer, affineT, varT, p, p, affineZStyle);
 
       if (xf.getDrawMode() == DrawMode.HIDDEN)
         continue;
@@ -76,8 +86,10 @@ public class FlameRenderThread implements Runnable {
       double px, py;
       if (finalXForm != null) {
         q = new XYZPoint();
-        finalXForm.transformPoint(renderer, affineT, varT, p, q);
+        finalXForm.transformPoint(renderer, affineT, varT, p, q, affineZStyle);
+        // if (renderMode == RenderMode.NORMAL) {
         renderer.project(flame, q);
+        //        }
         px = q.x * renderer.cosa + q.y * renderer.sina + renderer.rcX;
         if ((px < 0) || (px > renderer.camW))
           continue;
@@ -88,7 +100,9 @@ public class FlameRenderThread implements Runnable {
       else {
         q = new XYZPoint();
         q.assign(p);
+        //      if (renderMode == RenderMode.NORMAL) {
         renderer.project(flame, q);
+        //    }
         px = q.x * renderer.cosa + q.y * renderer.sina + renderer.rcX;
         if ((px < 0) || (px > renderer.camW))
           continue;
@@ -99,6 +113,19 @@ public class FlameRenderThread implements Runnable {
 
       RasterPoint rp = renderer.raster[(int) (renderer.bhs * py + 0.5)][(int) (renderer.bws * px + 0.5)];
       RenderColor color = renderer.colorMap[(int) (p.color * renderer.paletteIdxScl + 0.5)];
+
+      switch (renderMode) {
+        case Z_MIN:
+          if (rp.count == 0 || q.z < rp.zMin) {
+            rp.zMin = q.z;
+          }
+          break;
+        case Z_MAX:
+          if (rp.count == 0 || q.z > rp.zMax) {
+            rp.zMax = q.z;
+          }
+          break;
+      }
 
       rp.red += color.red;
       rp.green += color.green;

@@ -134,6 +134,7 @@ public class LogDensityFilter {
     }
   }
 
+  // TODO interface (the same in FlameRenderer)
   private RasterPoint emptyRasterPoint = new RasterPoint();
 
   private RasterPoint getRasterPoint(int pX, int pY) {

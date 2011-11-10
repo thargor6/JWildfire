@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.RasterPoint;
 import org.jwildfire.create.tina.base.XForm;
@@ -31,7 +32,6 @@ import org.jwildfire.create.tina.variation.TransformationContext;
 import org.jwildfire.create.tina.variation.Variation;
 import org.jwildfire.create.tina.variation.VariationPriorityComparator;
 import org.jwildfire.image.SimpleImage;
-
 
 public class FlameRenderer implements TransformationContext {
   // constants
@@ -64,6 +64,9 @@ public class FlameRenderer implements TransformationContext {
   private double cameraZpos = 0;
   // init in init3D()
   private double cameraMatrix[][] = new double[3][3];
+  //
+  private RenderMode renderMode = RenderMode.NORMAL;
+  private AffineZStyle affineZStyle = AffineZStyle.FLAT;
 
   private void init3D(Flame pFlame) {
     double yaw = -pFlame.getCamYaw() * Math.PI / 180.0;
@@ -116,7 +119,27 @@ public class FlameRenderer implements TransformationContext {
     initView(pFlame);
     createModWeightTables(pFlame);
     iterate(pFlame);
-    renderImage(pFlame, pImage);
+    switch (renderMode) {
+      case NORMAL:
+        renderImage(pFlame, pImage);
+        break;
+      case Z_MIN:
+        renderZMinImage(pFlame, pImage);
+        break;
+      case Z_MAX:
+        renderZMaxImage(pFlame, pImage);
+        break;
+    }
+  }
+
+  // TODO interface (the same in LogDensityFilter)
+  private RasterPoint emptyRasterPoint = new RasterPoint();
+
+  private RasterPoint getRasterPoint(int pX, int pY) {
+    if (pX < 0 || pX >= rasterWidth || pY < 0 || pY >= rasterHeight)
+      return emptyRasterPoint;
+    else
+      return raster[pY][pX];
   }
 
   private void renderImage(Flame pFlame, SimpleImage pImage) {
@@ -139,7 +162,7 @@ public class FlameRenderer implements TransformationContext {
     int nThreads = 8;
     List<FlameRenderThread> threads = new ArrayList<FlameRenderThread>();
     for (int i = 0; i < nThreads; i++) {
-      FlameRenderThread t = new FlameRenderThread(this, pFlame, nSamples / nThreads);
+      FlameRenderThread t = new FlameRenderThread(this, pFlame, nSamples / nThreads, renderMode, affineZStyle);
       threads.add(t);
       new Thread(t).start();
     }
@@ -260,4 +283,77 @@ public class FlameRenderer implements TransformationContext {
   public RandomNumberGenerator getRandomNumberGenerator() {
     return random;
   }
+
+  public void setRenderMode(RenderMode renderMode) {
+    this.renderMode = renderMode;
+  }
+
+  private void renderZMinImage(Flame pFlame, SimpleImage pImage) {
+    RasterPoint p = getRasterPoint(0, 0);
+    double zMin = p.zMax;
+    double zMax = p.zMax;
+    for (int i = 0, by = 0; i < pImage.getImageHeight(); i++) {
+      for (int j = 0, bx = 0; j < pImage.getImageWidth(); j++) {
+        p = getRasterPoint(bx, by);
+        if (p.zMin < zMin) {
+          zMin = p.zMin;
+        }
+        else if (p.zMin > zMax) {
+          zMax = p.zMin;
+        }
+        bx += pFlame.getSpatialOversample();
+      }
+      by += pFlame.getSpatialOversample();
+    }
+    if ((zMax - zMin) < Tools.ZERO) {
+      zMax = Tools.ZERO;
+    }
+    double dz = zMax - zMin;
+    for (int i = 0, by = 0; i < pImage.getImageHeight(); i++) {
+      for (int j = 0, bx = 0; j < pImage.getImageWidth(); j++) {
+        p = getRasterPoint(bx, by);
+        int val = Tools.roundColor((p.zMin - zMin) * 255.0 / dz);
+        pImage.setRGB(j, i, val, val, val);
+        bx += pFlame.getSpatialOversample();
+      }
+      by += pFlame.getSpatialOversample();
+    }
+  }
+
+  private void renderZMaxImage(Flame pFlame, SimpleImage pImage) {
+    RasterPoint p = getRasterPoint(0, 0);
+    double zMin = p.zMax;
+    double zMax = p.zMax;
+    for (int i = 0, by = 0; i < pImage.getImageHeight(); i++) {
+      for (int j = 0, bx = 0; j < pImage.getImageWidth(); j++) {
+        p = getRasterPoint(bx, by);
+        if (p.zMax < zMin) {
+          zMin = p.zMax;
+        }
+        else if (p.zMax > zMax) {
+          zMax = p.zMax;
+        }
+        bx += pFlame.getSpatialOversample();
+      }
+      by += pFlame.getSpatialOversample();
+    }
+    if ((zMax - zMin) < Tools.ZERO) {
+      zMax = Tools.ZERO;
+    }
+    double dz = zMax - zMin;
+    for (int i = 0, by = 0; i < pImage.getImageHeight(); i++) {
+      for (int j = 0, bx = 0; j < pImage.getImageWidth(); j++) {
+        p = getRasterPoint(bx, by);
+        int val = Tools.roundColor((p.zMax - zMin) * 255.0 / dz);
+        pImage.setRGB(j, i, val, val, val);
+        bx += pFlame.getSpatialOversample();
+      }
+      by += pFlame.getSpatialOversample();
+    }
+  }
+
+  public void setAffineZStyle(AffineZStyle affineZStyle) {
+    this.affineZStyle = affineZStyle;
+  }
+
 }

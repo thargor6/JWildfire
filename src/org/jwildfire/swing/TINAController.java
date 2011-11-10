@@ -50,7 +50,9 @@ import org.jwildfire.create.tina.palette.RGBPalette;
 import org.jwildfire.create.tina.palette.RGBPaletteImporter;
 import org.jwildfire.create.tina.palette.RGBPaletteRenderer;
 import org.jwildfire.create.tina.palette.RandomRGBPaletteGenerator;
+import org.jwildfire.create.tina.render.AffineZStyle;
 import org.jwildfire.create.tina.render.FlameRenderer;
+import org.jwildfire.create.tina.render.RenderMode;
 import org.jwildfire.create.tina.transform.XFormTransformService;
 import org.jwildfire.create.tina.variation.Linear3DFunc;
 import org.jwildfire.create.tina.variation.Variation;
@@ -259,6 +261,8 @@ public class TINAController {
   private final JButton relWeightsRightButton;
 
   // misc
+  private final JComboBox renderModeCmb;
+  private final JComboBox zStyleCmb;
   private Flame currFlame;
   private boolean noRefresh;
 
@@ -282,7 +286,7 @@ public class TINAController {
       JButton pDeleteTransformationButton, JButton pAddFinalTransformationButton, JPanel pRandomBatchPanel, NonlinearControlsRow[] pNonlinearControlsRows,
       JTextField pXFormColorREd, JSlider pXFormColorSlider, JTextField pXFormSymmetryREd, JSlider pXFormSymmetrySlider, JTextField pXFormOpacityREd,
       JSlider pXFormOpacitySlider, JComboBox pXFormDrawModeCmb, JTable pRelWeightsTable, JButton pRelWeightsLeftButton, JButton pRelWeightsRightButton,
-      JButton pTransformationWeightLeftButton, JButton pTransformationWeightRightButton) {
+      JButton pTransformationWeightLeftButton, JButton pTransformationWeightRightButton, JComboBox pRenderModeCmb, JComboBox pZStyleCmb) {
     errorHandler = pErrorHandler;
     prefs = pPrefs;
     centerPanel = pCenterPanel;
@@ -391,6 +395,9 @@ public class TINAController {
 
     transformationWeightLeftButton = pTransformationWeightLeftButton;
     transformationWeightRightButton = pTransformationWeightRightButton;
+    renderModeCmb = pRenderModeCmb;
+    zStyleCmb = pZStyleCmb;
+
     enableControls(null);
   }
 
@@ -422,10 +429,10 @@ public class TINAController {
   }
 
   public void refreshFlameImage() {
-    refreshFlameImage(Integer.parseInt(previewQualityREd.getText()));
+    refreshFlameImage(Integer.parseInt(previewQualityREd.getText()), (RenderMode) renderModeCmb.getSelectedItem(), (AffineZStyle) zStyleCmb.getSelectedItem());
   }
 
-  public void refreshFlameImage(int pQuality) {
+  public void refreshFlameImage(int pQuality, RenderMode pRenderMode, AffineZStyle pAffineZStyle) {
     ImagePanel imgPanel = getFlamePanel();
     int width = imgPanel.getWidth();
     int height = imgPanel.getHeight();
@@ -439,8 +446,9 @@ public class TINAController {
         flame.setWidth(img.getImageWidth());
         flame.setHeight(img.getImageHeight());
         flame.setSampleDensity(pQuality);
-
         FlameRenderer renderer = new FlameRenderer();
+        renderer.setRenderMode(pRenderMode);
+        renderer.setAffineZStyle(pAffineZStyle);
         renderer.renderFlame(flame, img);
       }
       imgPanel.setImage(img);
@@ -957,7 +965,7 @@ public class TINAController {
   }
 
   public void renderFlameButton_actionPerformed(ActionEvent e) {
-    refreshFlameImage(Integer.parseInt(renderQualityREd.getText()));
+    refreshFlameImage(Integer.parseInt(renderQualityREd.getText()), (RenderMode) renderModeCmb.getSelectedItem(), (AffineZStyle) zStyleCmb.getSelectedItem());
   }
 
   public class FlameFileFilter extends FileFilter {
@@ -1246,6 +1254,49 @@ public class TINAController {
     paletteSliderChanged(paletteShiftSlider, paletteShiftREd, "modShift", 1.0);
   }
 
+  public void exportImageButton_actionPerformed2(ActionEvent e) {
+    if (currFlame != null) {
+      try {
+        double pitchMin = 0.0;
+        double pitchMax = 360.0;
+        double dPitch = 5;
+        int imgIdx = 1;
+        for (double pitch = pitchMin; pitch < pitchMax; pitch += dPitch) {
+          String imgPath = String.valueOf(imgIdx++);
+          while (imgPath.length() < 3) {
+            imgPath = "0" + imgPath;
+          }
+          imgPath = "C:\\TMP\\wf\\rotate1\\" + imgPath + ".png";
+
+          int width = Integer.parseInt(renderWidthREd.getText());
+          int height = Integer.parseInt(renderHeightREd.getText());
+          int quality = Integer.parseInt(renderQualityREd.getText());
+          SimpleImage img = new SimpleImage(width, height);
+          Flame flame = currFlame;
+          double wScl = (double) img.getImageWidth() / (double) flame.getWidth();
+          double hScl = (double) img.getImageHeight() / (double) flame.getHeight();
+          flame.setPixelsPerUnit((wScl + hScl) * 0.5 * flame.getPixelsPerUnit());
+          flame.setWidth(img.getImageWidth());
+          flame.setHeight(img.getImageHeight());
+          flame.setSampleDensity(quality);
+          flame.setCamRoll(86);
+          flame.setCamPitch(pitch);
+          flame.setCamYaw(-180);
+          flame.setCamPerspective(0.3);
+
+          FlameRenderer renderer = new FlameRenderer();
+          renderer.setRenderMode((RenderMode) renderModeCmb.getSelectedItem());
+          renderer.setAffineZStyle((AffineZStyle) zStyleCmb.getSelectedItem());
+          renderer.renderFlame(flame, img);
+          new ImageWriter().saveImage(img, imgPath);
+        }
+      }
+      catch (Throwable ex) {
+        errorHandler.handleError(ex);
+      }
+    }
+  }
+
   public void exportImageButton_actionPerformed(ActionEvent e) {
     if (currFlame != null) {
       try {
@@ -1259,7 +1310,6 @@ public class TINAController {
         if (chooser.showSaveDialog(centerPanel) == JFileChooser.APPROVE_OPTION) {
           File file = chooser.getSelectedFile();
           prefs.setLastOutputImageFile(file);
-
           int width = Integer.parseInt(renderWidthREd.getText());
           int height = Integer.parseInt(renderHeightREd.getText());
           int quality = Integer.parseInt(renderQualityREd.getText());
@@ -1272,6 +1322,8 @@ public class TINAController {
           flame.setHeight(img.getImageHeight());
           flame.setSampleDensity(quality);
           FlameRenderer renderer = new FlameRenderer();
+          renderer.setRenderMode((RenderMode) renderModeCmb.getSelectedItem());
+          renderer.setAffineZStyle((AffineZStyle) zStyleCmb.getSelectedItem());
           renderer.renderFlame(flame, img);
           new ImageWriter().saveImage(img, file.getAbsolutePath());
         }
@@ -1928,5 +1980,29 @@ public class TINAController {
 
   public void transformationWeightLeftButton_clicked() {
     transformationWeightChanged(-DELTA_PARAM);
+  }
+
+  public void newFlameButton_clicked() {
+    Flame flame = new Flame();
+    flame.setWidth(800);
+    flame.setHeight(600);
+    flame.setPixelsPerUnit(50);
+    RGBPalette palette = new RandomRGBPaletteGenerator().generatePalette(Integer.parseInt(paletteRandomPointsREd.getText()));
+    flame.setPalette(palette);
+
+    currFlame = flame;
+    refreshUI();
+  }
+
+  public void renderModeCmb_changed() {
+    if (!refreshing && !cmbRefreshing) {
+      refreshFlameImage();
+    }
+  }
+
+  public void zStyleCmb_changed() {
+    if (!refreshing && !cmbRefreshing) {
+      refreshFlameImage();
+    }
   }
 }

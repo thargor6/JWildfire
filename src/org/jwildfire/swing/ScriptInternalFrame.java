@@ -195,7 +195,7 @@ public class ScriptInternalFrame extends JInternalFrame {
     this.setMaximizable(true);
     this.setIconifiable(true);
     this.setClosable(true);
-    this.setVisible(true);
+    this.setVisible(false);
     this.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
     this.setSize(822, 584);
     this.setContentPane(getJContentPane());

@@ -21,4 +21,6 @@ public class RasterPoint {
   public double green;
   public double blue;
   public int count;
+  public double zMin;
+  public double zMax;
 }

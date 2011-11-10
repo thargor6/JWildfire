@@ -19,6 +19,7 @@ package org.jwildfire.create.tina.base;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.jwildfire.create.tina.render.AffineZStyle;
 import org.jwildfire.create.tina.variation.TransformationContext;
 import org.jwildfire.create.tina.variation.Variation;
 import org.jwildfire.create.tina.variation.VariationFunc;
@@ -142,14 +143,22 @@ public class XForm {
     c2 = color * (1 - colorSymmetry) * 0.5;
   }
 
-  public void transformPoint(TransformationContext pContext, XYZPoint pAffineT, XYZPoint pVarT, XYZPoint pSrcPoint, XYZPoint pDstPoint) {
+  public void transformPoint(TransformationContext pContext, XYZPoint pAffineT, XYZPoint pVarT, XYZPoint pSrcPoint, XYZPoint pDstPoint, AffineZStyle pZStyle) {
     pDstPoint.color = pSrcPoint.color * c1 + c2;
 
     pAffineT.clear();
     pAffineT.x = coeff00 * pSrcPoint.x + coeff10 * pSrcPoint.y + coeff20;
     pAffineT.y = coeff01 * pSrcPoint.x + coeff11 * pSrcPoint.y + coeff21;
-    pAffineT.z = pSrcPoint.z;
-
+    switch (pZStyle) {
+      case FLAT:
+        pAffineT.z = pSrcPoint.z;
+        break;
+      case Z1:
+        pAffineT.z = coeff11 * pSrcPoint.y + coeff00 * pSrcPoint.z + coeff20;
+        break;
+      default:
+        throw new IllegalStateException(pZStyle.toString());
+    }
     pVarT.clear();
     for (Variation variation : variations) {
       variation.transform(pContext, this, pAffineT, pVarT);

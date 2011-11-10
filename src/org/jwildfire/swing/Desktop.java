@@ -1490,7 +1490,7 @@ public class Desktop extends JApplet {
       jFrame = new JFrame();
       jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
       jFrame.setJMenuBar(getMainJMenuBar());
-      jFrame.setSize(1280, 728);
+      jFrame.setSize(1291, 782);
       jFrame.setContentPane(getJContentPane());
       jFrame.setTitle(Tools.APP_TITLE + " " + Tools.APP_VERSION);
     }
@@ -2059,7 +2059,4 @@ public class Desktop extends JApplet {
     enableControls();
   }
 
-  // TODO log window
-  // TODO prefs window
-  // TODO intro window
 }
