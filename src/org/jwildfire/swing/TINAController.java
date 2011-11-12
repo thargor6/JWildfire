@@ -1254,7 +1254,7 @@ public class TINAController {
     paletteSliderChanged(paletteShiftSlider, paletteShiftREd, "modShift", 1.0);
   }
 
-  public void exportImageButton_actionPerformed2(ActionEvent e) {
+  public void exportImageButton_actionPerformed(ActionEvent e) {
     if (currFlame != null) {
       try {
         double pitchMin = 0.0;
@@ -1278,10 +1278,13 @@ public class TINAController {
           flame.setPixelsPerUnit((wScl + hScl) * 0.5 * flame.getPixelsPerUnit());
           flame.setWidth(img.getImageWidth());
           flame.setHeight(img.getImageHeight());
+          //          flame.setSampleDensity((int) (0.05 * quality));
           flame.setSampleDensity(quality);
+          //          flame.setCamRoll(86 - 20 * Math.sin((imgIdx - 1) * 4.0 * Math.PI / 72.0));
           flame.setCamRoll(86);
           flame.setCamPitch(pitch);
-          flame.setCamYaw(-180);
+          //          flame.setCamYaw(-180 + 60 * Math.sin((imgIdx - 1) * 2.0 * Math.PI / 72.0));
+          flame.setCamYaw(-180 - pitch);
           flame.setCamPerspective(0.3);
 
           FlameRenderer renderer = new FlameRenderer();
@@ -1297,7 +1300,7 @@ public class TINAController {
     }
   }
 
-  public void exportImageButton_actionPerformed(ActionEvent e) {
+  public void exportImageButton_actionPerformed0(ActionEvent e) {
     if (currFlame != null) {
       try {
         JFileChooser chooser = getImageJFileChooser();
