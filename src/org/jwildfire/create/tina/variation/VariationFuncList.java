@@ -80,6 +80,8 @@ public class VariationFuncList {
     registerVariationFunc(Fan2Func.class);
     registerVariationFunc(RadialBlurFunc.class);
     registerVariationFunc(Spherical3DFunc.class);
+    registerVariationFunc(BlobFunc.class);
+    registerVariationFunc(Blob3DFunc.class);
   }
 
   private static void registerVariationFunc(Class<? extends VariationFunc> pVariationFunc) {
