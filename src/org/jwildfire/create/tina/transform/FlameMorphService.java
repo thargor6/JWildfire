@@ -19,24 +19,24 @@ public class FlameMorphService {
     Flame res = pFlame1.makeCopy();
     res.getXForms().clear();
     // morph XForms  
-    //    int size1 = pFlame1.getXForms().size();
-    //    int size2 = pFlame2.getXForms().size();
-    //    int maxSize = size1 > size2 ? size1 : size2;
-    //    for (int i = 0; i < maxSize; i++) {
-    //      XForm xForm1 = i < size1 ? pFlame1.getXForms().get(i) : null;
-    //      XForm xForm2 = i < size2 ? pFlame2.getXForms().get(i) : null;
-    //      XForm morphedXForm = morphXForms(xForm1, xForm2, fScl);
-    //      if (morphedXForm != null) {
-    //        res.getXForms().add(morphedXForm);
-    //      }
-    //    }
+    int size1 = pFlame1.getXForms().size();
+    int size2 = pFlame2.getXForms().size();
+    int maxSize = size1 > size2 ? size1 : size2;
+    for (int i = 0; i < maxSize; i++) {
+      XForm xForm1 = i < size1 ? pFlame1.getXForms().get(i) : null;
+      XForm xForm2 = i < size2 ? pFlame2.getXForms().get(i) : null;
+      XForm morphedXForm = morphXForms(xForm1, xForm2, fScl);
+      if (morphedXForm != null) {
+        res.getXForms().add(morphedXForm);
+      }
+    }
 
-    for (XForm xForm : pFlame1.getXForms()) {
-      res.getXForms().add(morphXForms(xForm, null, fScl));
-    }
-    for (XForm xForm : pFlame2.getXForms()) {
-      res.getXForms().add(morphXForms(null, xForm, fScl));
-    }
+    //    for (XForm xForm : pFlame1.getXForms()) {
+    //      res.getXForms().add(morphXForms(xForm, null, fScl));
+    //    }
+    //    for (XForm xForm : pFlame2.getXForms()) {
+    //      res.getXForms().add(morphXForms(null, xForm, fScl));
+    //    }
 
     // morph final XForms
     {

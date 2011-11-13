@@ -35,6 +35,7 @@ import org.jwildfire.base.Prefs;
 import org.jwildfire.create.tina.base.DrawMode;
 import org.jwildfire.create.tina.render.AffineZStyle;
 import org.jwildfire.create.tina.render.RenderMode;
+import org.jwildfire.create.tina.transform.AnimationService;
 import org.jwildfire.swing.TINAController.NonlinearControlsRow;
 
 public class TinaInternalFrame extends JInternalFrame {
@@ -395,6 +396,13 @@ public class TinaInternalFrame extends JInternalFrame {
   private JCheckBox morphCheckBox = null;
   private JSlider morphFrameSlider = null;
   private JButton importMorphedFlameButton = null;
+  private JButton animationGenerateButton = null;
+  private JTextField animateFramesREd = null;
+  private JLabel animateFramesLbl = null;
+  private JTextField animateOutputREd = null;
+  private JLabel animateOutputLbl = null;
+  private JLabel animateScriptLbl = null;
+  private JComboBox animateScriptCmb = null;
 
   /**
    * This is the xxx default constructor
@@ -2982,7 +2990,8 @@ public class TinaInternalFrame extends JInternalFrame {
         nonlinearControlsRows, getXFormColorREd(), getXFormColorSlider(), getXFormSymmetryREd(), getXFormSymmetrySlider(), getXFormOpacityREd(),
         getXFormOpacitySlider(), getXFormDrawModeCmb(), getRelWeightsTable(), getRelWeightsLeftButton(), getRelWeightsRightButton(),
         getTransformationWeightLeftButton(), getTransformationWeightRightButton(), getRenderModeCmb(), getZStyleCmb(), getSetMorphFlame1Button(),
-        getSetMorphFlame2Button(), getMorphFrameREd(), getMorphFramesREd(), getMorphCheckBox(), getMorphFrameSlider(), getImportMorphedFlameButton());
+        getSetMorphFlame2Button(), getMorphFrameREd(), getMorphFramesREd(), getMorphCheckBox(), getMorphFrameSlider(), getImportMorphedFlameButton(),
+        getAnimateOutputREd(), getAnimateFramesREd(), getAnimateScriptCmb(), getAnimationGenerateButton());
     tinaController.refreshing = tinaController.cmbRefreshing = tinaController.gridRefreshing = true;
     try {
       for (NonlinearControlsRow row : nonlinearControlsRows) {
@@ -3009,6 +3018,11 @@ public class TinaInternalFrame extends JInternalFrame {
 
       getMorphFrameSlider().setMaximum(Integer.parseInt(getMorphFramesREd().getText()));
       getMorphFrameSlider().setValue(Integer.parseInt(getMorphFrameREd().getText()));
+
+      getAnimateScriptCmb().removeAllItems();
+      getAnimateScriptCmb().addItem(AnimationService.Script.ROTATE_PITCH);
+      getAnimateScriptCmb().addItem(AnimationService.Script.ROTATE_PITCH_YAW);
+      getAnimateScriptCmb().setSelectedItem(AnimationService.Script.ROTATE_PITCH_YAW);
 
     }
     finally {
@@ -4579,8 +4593,33 @@ public class TinaInternalFrame extends JInternalFrame {
    */
   private JPanel getTinaAnimatePanel() {
     if (tinaAnimatePanel == null) {
+      animateScriptLbl = new JLabel();
+      animateScriptLbl.setPreferredSize(new Dimension(94, 22));
+      animateScriptLbl.setText("Script");
+      animateScriptLbl.setSize(new Dimension(94, 22));
+      animateScriptLbl.setLocation(new Point(156, 4));
+      animateScriptLbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      animateOutputLbl = new JLabel();
+      animateOutputLbl.setPreferredSize(new Dimension(94, 22));
+      animateOutputLbl.setText("Output");
+      animateOutputLbl.setSize(new Dimension(94, 22));
+      animateOutputLbl.setLocation(new Point(530, 4));
+      animateOutputLbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      animateFramesLbl = new JLabel();
+      animateFramesLbl.setPreferredSize(new Dimension(94, 22));
+      animateFramesLbl.setText("Frames");
+      animateFramesLbl.setSize(new Dimension(94, 22));
+      animateFramesLbl.setLocation(new Point(816, 4));
+      animateFramesLbl.setFont(new Font("Dialog", Font.BOLD, 10));
       tinaAnimatePanel = new JPanel();
-      tinaAnimatePanel.setLayout(new GridBagLayout());
+      tinaAnimatePanel.setLayout(null);
+      tinaAnimatePanel.add(getAnimationGenerateButton(), null);
+      tinaAnimatePanel.add(getAnimateFramesREd(), null);
+      tinaAnimatePanel.add(animateFramesLbl, null);
+      tinaAnimatePanel.add(getAnimateOutputREd(), null);
+      tinaAnimatePanel.add(animateOutputLbl, null);
+      tinaAnimatePanel.add(animateScriptLbl, null);
+      tinaAnimatePanel.add(getAnimateScriptCmb(), null);
     }
     return tinaAnimatePanel;
   }
@@ -4780,6 +4819,77 @@ public class TinaInternalFrame extends JInternalFrame {
       });
     }
     return importMorphedFlameButton;
+  }
+
+  /**
+   * This method initializes animationGenerateButton	
+   * 	
+   * @return javax.swing.JButton	
+   */
+  private JButton getAnimationGenerateButton() {
+    if (animationGenerateButton == null) {
+      animationGenerateButton = new JButton();
+      animationGenerateButton.setPreferredSize(new Dimension(125, 52));
+      animationGenerateButton.setText("Generate");
+      animationGenerateButton.setSize(new Dimension(125, 52));
+      animationGenerateButton.setLocation(new Point(4, 4));
+      animationGenerateButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      animationGenerateButton.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent e) {
+          tinaController.animationGenerateButton_clicked();
+        }
+      });
+    }
+    return animationGenerateButton;
+  }
+
+  /**
+   * This method initializes animateFramesREd	
+   * 	
+   * @return javax.swing.JTextField	
+   */
+  private JTextField getAnimateFramesREd() {
+    if (animateFramesREd == null) {
+      animateFramesREd = new JTextField();
+      animateFramesREd.setPreferredSize(new Dimension(56, 22));
+      animateFramesREd.setText("72");
+      animateFramesREd.setSize(new Dimension(56, 22));
+      animateFramesREd.setLocation(new Point(912, 4));
+      animateFramesREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+    }
+    return animateFramesREd;
+  }
+
+  /**
+   * This method initializes animateOutputREd	
+   * 	
+   * @return javax.swing.JTextField	
+   */
+  private JTextField getAnimateOutputREd() {
+    if (animateOutputREd == null) {
+      animateOutputREd = new JTextField();
+      animateOutputREd.setBounds(new Rectangle(626, 4, 185, 22));
+      animateOutputREd.setPreferredSize(new Dimension(56, 22));
+      animateOutputREd.setText("C:\\TMP\\wf\\rotate1\\Img");
+      animateOutputREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+    }
+    return animateOutputREd;
+  }
+
+  /**
+   * This method initializes animateScriptCmb	
+   * 	
+   * @return javax.swing.JComboBox	
+   */
+  private JComboBox getAnimateScriptCmb() {
+    if (animateScriptCmb == null) {
+      animateScriptCmb = new JComboBox();
+      animateScriptCmb.setPreferredSize(new Dimension(125, 22));
+      animateScriptCmb.setSize(new Dimension(275, 22));
+      animateScriptCmb.setLocation(new Point(253, 4));
+      animateScriptCmb.setFont(new Font("Dialog", Font.BOLD, 10));
+    }
+    return animateScriptCmb;
   }
 
 } //  @jve:decl-index=0:visual-constraint="10,10"

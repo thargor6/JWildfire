@@ -54,6 +54,8 @@ import org.jwildfire.create.tina.palette.RandomRGBPaletteGenerator;
 import org.jwildfire.create.tina.render.AffineZStyle;
 import org.jwildfire.create.tina.render.FlameRenderer;
 import org.jwildfire.create.tina.render.RenderMode;
+import org.jwildfire.create.tina.transform.AnimationService;
+import org.jwildfire.create.tina.transform.AnimationService.Script;
 import org.jwildfire.create.tina.transform.FlameMorphService;
 import org.jwildfire.create.tina.transform.XFormTransformService;
 import org.jwildfire.create.tina.variation.Linear3DFunc;
@@ -269,6 +271,11 @@ public class TINAController {
   private final JCheckBox morphCheckBox;
   private final JSlider morphFrameSlider;
   private final JButton importMorphedFlameButton;
+  // Animate
+  private final JTextField animateOutputREd;
+  private final JTextField animateFramesREd;
+  private final JComboBox animateScriptCmb;
+  private final JButton animationGenerateButton;
   // misc
   private final JComboBox renderModeCmb;
   private final JComboBox zStyleCmb;
@@ -298,7 +305,7 @@ public class TINAController {
       JSlider pXFormOpacitySlider, JComboBox pXFormDrawModeCmb, JTable pRelWeightsTable, JButton pRelWeightsLeftButton, JButton pRelWeightsRightButton,
       JButton pTransformationWeightLeftButton, JButton pTransformationWeightRightButton, JComboBox pRenderModeCmb, JComboBox pZStyleCmb, JButton pSetMorphFlame1Button,
       JButton pSetMorphFlame2Button, JTextField pMorphFrameREd, JTextField pMorphFramesREd, JCheckBox pMorphCheckBox, JSlider pMorphFrameSlider,
-      JButton pImportMorphedFlameButton) {
+      JButton pImportMorphedFlameButton, JTextField pAnimateOutputREd, JTextField pAnimateFramesREd, JComboBox pAnimateScriptCmb, JButton pAnimationGenerateButton) {
     errorHandler = pErrorHandler;
     prefs = pPrefs;
     centerPanel = pCenterPanel;
@@ -417,6 +424,12 @@ public class TINAController {
     morphCheckBox = pMorphCheckBox;
     morphFrameSlider = pMorphFrameSlider;
     importMorphedFlameButton = pImportMorphedFlameButton;
+
+    animateOutputREd = pAnimateOutputREd;
+    animateFramesREd = pAnimateFramesREd;
+    animateScriptCmb = pAnimateScriptCmb;
+    animationGenerateButton = pAnimationGenerateButton;
+
     enableControls();
     enableXFormControls(null);
   }
@@ -1313,53 +1326,6 @@ public class TINAController {
     paletteSliderChanged(paletteShiftSlider, paletteShiftREd, "modShift", 1.0);
   }
 
-  public void exportImageButton_actionPerformed0(ActionEvent e) {
-    Flame currFlame = getCurrFlame();
-    if (currFlame != null) {
-      try {
-        double pitchMin = 0.0;
-        double pitchMax = 360.0;
-        double dPitch = 5;
-        int imgIdx = 1;
-        for (double pitch = pitchMin; pitch < pitchMax; pitch += dPitch) {
-          String imgPath = String.valueOf(imgIdx++);
-          while (imgPath.length() < 3) {
-            imgPath = "0" + imgPath;
-          }
-          imgPath = "C:\\TMP\\wf\\rotate1\\" + imgPath + ".png";
-
-          int width = Integer.parseInt(renderWidthREd.getText());
-          int height = Integer.parseInt(renderHeightREd.getText());
-          int quality = Integer.parseInt(renderQualityREd.getText());
-          SimpleImage img = new SimpleImage(width, height);
-          Flame flame = getCurrFlame();
-          double wScl = (double) img.getImageWidth() / (double) flame.getWidth();
-          double hScl = (double) img.getImageHeight() / (double) flame.getHeight();
-          flame.setPixelsPerUnit((wScl + hScl) * 0.5 * flame.getPixelsPerUnit());
-          flame.setWidth(img.getImageWidth());
-          flame.setHeight(img.getImageHeight());
-          //          flame.setSampleDensity((int) (0.05 * quality));
-          flame.setSampleDensity(quality);
-          //          flame.setCamRoll(86 - 20 * Math.sin((imgIdx - 1) * 4.0 * Math.PI / 72.0));
-          flame.setCamRoll(86);
-          flame.setCamPitch(pitch);
-          //          flame.setCamYaw(-180 + 60 * Math.sin((imgIdx - 1) * 2.0 * Math.PI / 72.0));
-          flame.setCamYaw(-180 - pitch);
-          flame.setCamPerspective(0.3);
-
-          FlameRenderer renderer = new FlameRenderer();
-          renderer.setRenderMode((RenderMode) renderModeCmb.getSelectedItem());
-          renderer.setAffineZStyle((AffineZStyle) zStyleCmb.getSelectedItem());
-          renderer.renderFlame(flame, img);
-          new ImageWriter().saveImage(img, imgPath);
-        }
-      }
-      catch (Throwable ex) {
-        errorHandler.handleError(ex);
-      }
-    }
-  }
-
   public void exportImageButton_actionPerformed(ActionEvent e) {
     Flame currFlame = getCurrFlame();
     if (currFlame != null) {
@@ -1454,6 +1420,7 @@ public class TINAController {
     setMorphFlame1Button.setEnabled(true);
     setMorphFlame2Button.setEnabled(true);
     importMorphedFlameButton.setEnabled(true);
+    animationGenerateButton.setEnabled(true);
     morphCheckBox.setEnabled(morphFlame1 != null && morphFlame2 != null);
   }
 
@@ -2195,6 +2162,28 @@ public class TINAController {
         randomBatch.add(0, flame);
         updateThumbnails(null);
       }
+    }
+  }
+
+  public void animationGenerateButton_clicked() {
+    try {
+      int frames = Integer.parseInt(animateFramesREd.getText());
+      boolean doMorph = morphCheckBox.isSelected();
+      Flame flame1 = doMorph ? morphFlame1 : _currFlame;
+      Flame flame2 = doMorph ? morphFlame2 : null;
+      Script script = (Script) animateScriptCmb.getSelectedItem();
+      String imagePath = animateOutputREd.getText();
+      int width = Integer.parseInt(renderWidthREd.getText());
+      int height = Integer.parseInt(renderHeightREd.getText());
+      int quality = Integer.parseInt(renderQualityREd.getText());
+      RenderMode renderMode = (RenderMode) renderModeCmb.getSelectedItem();
+      AffineZStyle affineZStyle = (AffineZStyle) zStyleCmb.getSelectedItem();
+      for (int frame = 1; frame <= frames; frame++) {
+        AnimationService.renderFrame(frame, frames, flame1, flame2, doMorph, script, imagePath, width, height, quality, renderMode, affineZStyle);
+      }
+    }
+    catch (Throwable ex) {
+      errorHandler.handleError(ex);
     }
   }
 }
