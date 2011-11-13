@@ -82,6 +82,7 @@ public class VariationFuncList {
     registerVariationFunc(Spherical3DFunc.class);
     registerVariationFunc(BlobFunc.class);
     registerVariationFunc(Blob3DFunc.class);
+    registerVariationFunc(PerspectiveFunc.class);
   }
 
   private static void registerVariationFunc(Class<? extends VariationFunc> pVariationFunc) {

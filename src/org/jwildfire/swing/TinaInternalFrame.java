@@ -14,6 +14,7 @@ import java.awt.event.KeyEvent;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
@@ -383,6 +384,17 @@ public class TinaInternalFrame extends JInternalFrame {
   private JLabel renderModeLbl = null;
   private JLabel zStyleLbl = null;
   private JComboBox zStyleCmb = null;
+  private JPanel tinaAnimatePanel = null;
+  private JPanel tinaMorphPanel = null;
+  private JButton setMorphFlame1Button = null;
+  private JButton setMorphFlame2Button = null;
+  private JLabel morphFramesLbl = null;
+  private JTextField morphFramesREd = null;
+  private JLabel morphFrameLbl = null;
+  private JTextField morphFrameREd = null;
+  private JCheckBox morphCheckBox = null;
+  private JSlider morphFrameSlider = null;
+  private JButton importMorphedFlameButton = null;
 
   /**
    * This is the xxx default constructor
@@ -1836,6 +1848,8 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaNorthTabbedPane = new JTabbedPane();
       tinaNorthTabbedPane.setFont(new Font("Dialog", Font.BOLD, 10));
       tinaNorthTabbedPane.addTab("Main", null, getTinaNorthMainPanel(), null);
+      tinaNorthTabbedPane.addTab("Morph", null, getTinaMorphPanel(), null);
+      tinaNorthTabbedPane.addTab("Animate", null, getTinaAnimatePanel(), null);
     }
     return tinaNorthTabbedPane;
   }
@@ -2967,7 +2981,8 @@ public class TinaInternalFrame extends JInternalFrame {
         getTinaDuplicateTransformationButton(), getTinaDeleteTransformationButton(), getTinaAddFinalTransformationButton(), getRandomBatchPanel(),
         nonlinearControlsRows, getXFormColorREd(), getXFormColorSlider(), getXFormSymmetryREd(), getXFormSymmetrySlider(), getXFormOpacityREd(),
         getXFormOpacitySlider(), getXFormDrawModeCmb(), getRelWeightsTable(), getRelWeightsLeftButton(), getRelWeightsRightButton(),
-        getTransformationWeightLeftButton(), getTransformationWeightRightButton(), getRenderModeCmb(), getZStyleCmb());
+        getTransformationWeightLeftButton(), getTransformationWeightRightButton(), getRenderModeCmb(), getZStyleCmb(), getSetMorphFlame1Button(),
+        getSetMorphFlame2Button(), getMorphFrameREd(), getMorphFramesREd(), getMorphCheckBox(), getMorphFrameSlider(), getImportMorphedFlameButton());
     tinaController.refreshing = tinaController.cmbRefreshing = tinaController.gridRefreshing = true;
     try {
       for (NonlinearControlsRow row : nonlinearControlsRows) {
@@ -2986,6 +3001,15 @@ public class TinaInternalFrame extends JInternalFrame {
       getZStyleCmb().removeAllItems();
       getZStyleCmb().addItem(AffineZStyle.FLAT);
       getZStyleCmb().addItem(AffineZStyle.Z1);
+      getZStyleCmb().addItem(AffineZStyle.Z2);
+      getZStyleCmb().addItem(AffineZStyle.Z3);
+      getZStyleCmb().addItem(AffineZStyle.Z4);
+      getZStyleCmb().addItem(AffineZStyle.Z5);
+      getZStyleCmb().addItem(AffineZStyle.Z6);
+
+      getMorphFrameSlider().setMaximum(Integer.parseInt(getMorphFramesREd().getText()));
+      getMorphFrameSlider().setValue(Integer.parseInt(getMorphFrameREd().getText()));
+
     }
     finally {
       tinaController.refreshing = tinaController.cmbRefreshing = tinaController.gridRefreshing = false;
@@ -4546,6 +4570,216 @@ public class TinaInternalFrame extends JInternalFrame {
       });
     }
     return zStyleCmb;
+  }
+
+  /**
+   * This method initializes tinaAnimatePanel	
+   * 	
+   * @return javax.swing.JPanel	
+   */
+  private JPanel getTinaAnimatePanel() {
+    if (tinaAnimatePanel == null) {
+      tinaAnimatePanel = new JPanel();
+      tinaAnimatePanel.setLayout(new GridBagLayout());
+    }
+    return tinaAnimatePanel;
+  }
+
+  /**
+   * This method initializes tinaMorphPanel	
+   * 	
+   * @return javax.swing.JPanel	
+   */
+  private JPanel getTinaMorphPanel() {
+    if (tinaMorphPanel == null) {
+      morphFrameLbl = new JLabel();
+      morphFrameLbl.setPreferredSize(new Dimension(94, 22));
+      morphFrameLbl.setText("Frames");
+      morphFrameLbl.setSize(new Dimension(94, 22));
+      morphFrameLbl.setLocation(new Point(263, 4));
+      morphFrameLbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      morphFramesLbl = new JLabel();
+      morphFramesLbl.setPreferredSize(new Dimension(94, 22));
+      morphFramesLbl.setText("Frames");
+      morphFramesLbl.setSize(new Dimension(94, 22));
+      morphFramesLbl.setLocation(new Point(816, 4));
+      morphFramesLbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      tinaMorphPanel = new JPanel();
+      tinaMorphPanel.setLayout(null);
+      tinaMorphPanel.add(getSetMorphFlame1Button(), null);
+      tinaMorphPanel.add(getSetMorphFlame2Button(), null);
+      tinaMorphPanel.add(morphFramesLbl, null);
+      tinaMorphPanel.add(getMorphFramesREd(), null);
+      tinaMorphPanel.add(morphFrameLbl, null);
+      tinaMorphPanel.add(getMorphFrameREd(), null);
+      tinaMorphPanel.add(getMorphCheckBox(), null);
+      tinaMorphPanel.add(getMorphFrameSlider(), null);
+      tinaMorphPanel.add(getImportMorphedFlameButton(), null);
+    }
+    return tinaMorphPanel;
+  }
+
+  /**
+   * This method initializes setMorphFlame1Button	
+   * 	
+   * @return javax.swing.JButton	
+   */
+  private JButton getSetMorphFlame1Button() {
+    if (setMorphFlame1Button == null) {
+      setMorphFlame1Button = new JButton();
+      setMorphFlame1Button.setBounds(new Rectangle(4, 4, 125, 24));
+      setMorphFlame1Button.setPreferredSize(new Dimension(125, 24));
+      setMorphFlame1Button.setText("Set Flame 1");
+      setMorphFlame1Button.setFont(new Font("Dialog", Font.BOLD, 10));
+      setMorphFlame1Button.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent e) {
+          tinaController.setMorphFlame1();
+        }
+      });
+    }
+    return setMorphFlame1Button;
+  }
+
+  /**
+   * This method initializes setMorphFlame2Button	
+   * 	
+   * @return javax.swing.JButton	
+   */
+  private JButton getSetMorphFlame2Button() {
+    if (setMorphFlame2Button == null) {
+      setMorphFlame2Button = new JButton();
+      setMorphFlame2Button.setPreferredSize(new Dimension(125, 24));
+      setMorphFlame2Button.setText("Set Flame 2");
+      setMorphFlame2Button.setSize(new Dimension(125, 24));
+      setMorphFlame2Button.setLocation(new Point(4, 32));
+      setMorphFlame2Button.setFont(new Font("Dialog", Font.BOLD, 10));
+      setMorphFlame2Button.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent e) {
+          tinaController.setMorphFlame2();
+        }
+      });
+    }
+    return setMorphFlame2Button;
+  }
+
+  /**
+   * This method initializes morphFramesREd	
+   * 	
+   * @return javax.swing.JTextField	
+   */
+  private JTextField getMorphFramesREd() {
+    if (morphFramesREd == null) {
+      morphFramesREd = new JTextField();
+      morphFramesREd.setPreferredSize(new Dimension(56, 22));
+      morphFramesREd.setText("72");
+      morphFramesREd.setSize(new Dimension(56, 22));
+      morphFramesREd.setLocation(new Point(912, 4));
+      morphFramesREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      morphFramesREd.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent e) {
+          tinaController.morphFramesREd_changed();
+        }
+      });
+      morphFramesREd.addFocusListener(new java.awt.event.FocusAdapter() {
+        public void focusLost(java.awt.event.FocusEvent e) {
+          tinaController.morphFramesREd_changed();
+        }
+      });
+    }
+    return morphFramesREd;
+  }
+
+  /**
+   * This method initializes morphFrameREd	
+   * 	
+   * @return javax.swing.JTextField	
+   */
+  private JTextField getMorphFrameREd() {
+    if (morphFrameREd == null) {
+      morphFrameREd = new JTextField();
+      morphFrameREd.setPreferredSize(new Dimension(56, 22));
+      morphFrameREd.setText("33");
+      morphFrameREd.setSize(new Dimension(56, 22));
+      morphFrameREd.setLocation(new Point(359, 4));
+      morphFrameREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      morphFrameREd.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent e) {
+          tinaController.morphFrameREd_changed();
+        }
+      });
+      morphFrameREd.addFocusListener(new java.awt.event.FocusAdapter() {
+        public void focusLost(java.awt.event.FocusEvent e) {
+          tinaController.morphFrameREd_changed();
+        }
+      });
+    }
+    return morphFrameREd;
+  }
+
+  /**
+   * This method initializes morphCheckBox	
+   * 	
+   * @return javax.swing.JCheckBox	
+   */
+  private JCheckBox getMorphCheckBox() {
+    if (morphCheckBox == null) {
+      morphCheckBox = new JCheckBox();
+      morphCheckBox.setPreferredSize(new Dimension(150, 22));
+      morphCheckBox.setLocation(new Point(263, 32));
+      morphCheckBox.setSize(new Dimension(150, 22));
+      morphCheckBox.setText("Morphing enabled");
+      morphCheckBox.setFont(new Font("Dialog", Font.BOLD, 10));
+      morphCheckBox.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent e) {
+          tinaController.morphCheckBox_changed();
+        }
+      });
+    }
+    return morphCheckBox;
+  }
+
+  /**
+   * This method initializes morphFrameSlider	
+   * 	
+   * @return javax.swing.JSlider	
+   */
+  private JSlider getMorphFrameSlider() {
+    if (morphFrameSlider == null) {
+      morphFrameSlider = new JSlider();
+      morphFrameSlider.setMaximum(100);
+      morphFrameSlider.setMinimum(1);
+      morphFrameSlider.setValue(0);
+      morphFrameSlider.setSize(new Dimension(220, 19));
+      morphFrameSlider.setLocation(new Point(416, 4));
+      morphFrameSlider.setPreferredSize(new Dimension(220, 19));
+      morphFrameSlider.addChangeListener(new javax.swing.event.ChangeListener() {
+        public void stateChanged(javax.swing.event.ChangeEvent e) {
+          tinaController.morphFrameSlider_changed();
+        }
+      });
+    }
+    return morphFrameSlider;
+  }
+
+  /**
+   * This method initializes importMorphedFlameButton	
+   * 	
+   * @return javax.swing.JButton	
+   */
+  private JButton getImportMorphedFlameButton() {
+    if (importMorphedFlameButton == null) {
+      importMorphedFlameButton = new JButton();
+      importMorphedFlameButton.setBounds(new Rectangle(132, 4, 125, 24));
+      importMorphedFlameButton.setPreferredSize(new Dimension(125, 24));
+      importMorphedFlameButton.setText("Import morphed");
+      importMorphedFlameButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      importMorphedFlameButton.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent e) {
+          tinaController.importMorphedFlameButton_clicked();
+        }
+      });
+    }
+    return importMorphedFlameButton;
   }
 
 } //  @jve:decl-index=0:visual-constraint="10,10"

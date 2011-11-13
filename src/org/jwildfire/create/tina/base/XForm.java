@@ -156,6 +156,20 @@ public class XForm {
       case Z1:
         pAffineT.z = coeff11 * pSrcPoint.y + coeff00 * pSrcPoint.z + coeff20;
         break;
+      case Z2:
+        pAffineT.z = coeff00 * pSrcPoint.x + coeff11 * pSrcPoint.y + (coeff10 + coeff01) * pSrcPoint.z + (coeff20 + coeff21) * 0.5;
+        break;
+      case Z3:
+        pAffineT.z = coeff01 * pSrcPoint.x + coeff10 * pSrcPoint.y + (coeff00 + coeff11) * pSrcPoint.z + (coeff20 + coeff21) * 0.5;
+        break;
+      case Z4:
+        pAffineT.z = coeff01 * pSrcPoint.y + coeff00 * pSrcPoint.z + (coeff20 + coeff21) * 0.5;
+        break;
+      case Z5:
+        pAffineT.z = (coeff00 + coeff01) * pSrcPoint.x * 0.5 + (coeff10 + coeff11) * pSrcPoint.y * 0.5 + (coeff10 + coeff01) * pSrcPoint.z * 0.5 + (coeff20 + coeff21) * 0.5;
+      case Z6:
+        pAffineT.z = (coeff00 + coeff01) * pSrcPoint.x * 0.5 + (coeff10 + coeff11) * pSrcPoint.y * 0.5 + (coeff00 + coeff10 + coeff01 + coeff11) * pSrcPoint.z * 0.25 + (coeff20 + coeff21) * 0.5;
+        break;
       default:
         throw new IllegalStateException(pZStyle.toString());
     }
@@ -214,5 +228,11 @@ public class XForm {
     }
     opacity = pXForm.opacity;
     drawMode = pXForm.drawMode;
+  }
+
+  public XForm makeCopy() {
+    XForm res = new XForm();
+    res.assign(this);
+    return res;
   }
 }

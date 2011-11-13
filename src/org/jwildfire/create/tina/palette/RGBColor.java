@@ -54,4 +54,16 @@ public class RGBColor {
     this.blue = blue;
   }
 
+  public RGBColor makeCopy() {
+    RGBColor res = new RGBColor();
+    res.assign(this);
+    return res;
+  }
+
+  private void assign(RGBColor pRGBColor) {
+    red = pRGBColor.red;
+    green = pRGBColor.green;
+    blue = pRGBColor.blue;
+  }
+
 }

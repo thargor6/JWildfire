@@ -21,7 +21,6 @@ import java.util.List;
 
 import org.jwildfire.create.tina.palette.RGBPalette;
 
-
 public class Flame {
   private double centreX;
   private double centreY;
@@ -271,6 +270,47 @@ public class Flame {
     if (pPalette == null || pPalette.getSize() != RGBPalette.PALETTE_SIZE)
       throw new IllegalArgumentException(pPalette.toString());
     palette = pPalette;
+  }
+
+  public Flame makeCopy() {
+    Flame res = new Flame();
+    res.assign(this);
+    return res;
+  }
+
+  private void assign(Flame pFlame) {
+    centreX = pFlame.centreX;
+    centreY = pFlame.centreY;
+    width = pFlame.width;
+    height = pFlame.height;
+    camPitch = pFlame.camPitch;
+    camYaw = pFlame.camYaw;
+    camPerspective = pFlame.camPerspective;
+    camRoll = pFlame.camRoll;
+    camZoom = pFlame.camZoom;
+    spatialOversample = pFlame.spatialOversample;
+    spatialFilterRadius = pFlame.spatialFilterRadius;
+    sampleDensity = pFlame.sampleDensity;
+    bgColorRed = pFlame.bgColorRed;
+    bgColorGreen = pFlame.bgColorGreen;
+    bgColorBlue = pFlame.bgColorBlue;
+    gamma = pFlame.gamma;
+    gammaThreshold = pFlame.gammaThreshold;
+    pixelsPerUnit = pFlame.pixelsPerUnit;
+    whiteLevel = pFlame.whiteLevel;
+    brightness = pFlame.brightness;
+    contrast = pFlame.contrast;
+    vibrancy = pFlame.vibrancy;
+
+    palette = pFlame.palette.makeCopy();
+    xForms.clear();
+    for (XForm xForm : pFlame.getXForms()) {
+      xForms.add(xForm.makeCopy());
+    }
+    if (pFlame.finalXForm != null) {
+      finalXForm = pFlame.finalXForm.makeCopy();
+    }
+
   }
 
 }

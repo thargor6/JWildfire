@@ -24,7 +24,6 @@ import org.jwildfire.image.SimpleImage;
 import org.jwildfire.transform.BalancingTransformer;
 import org.jwildfire.transform.HSLTransformer;
 
-
 public class RGBPalette {
   public static final int PALETTE_SIZE = 256;
   static final RGBColor BLACK = new RGBColor(0, 0, 0);
@@ -255,5 +254,36 @@ public class RGBPalette {
   public Map<Integer, RGBColor> getTransformedColors() {
     transformColors();
     return transformedColors;
+  }
+
+  public RGBPalette makeCopy() {
+    RGBPalette res = new RGBPalette();
+    res.assign(this);
+    return res;
+  }
+
+  private void assign(RGBPalette pRGBPalette) {
+    highestIdx = pRGBPalette.highestIdx;
+    modified = pRGBPalette.modified;
+    modRed = pRGBPalette.modRed;
+    modGreen = pRGBPalette.modGreen;
+    modBlue = pRGBPalette.modBlue;
+    modShift = pRGBPalette.modShift;
+    modHue = pRGBPalette.modHue;
+    modContrast = pRGBPalette.modContrast;
+    modGamma = pRGBPalette.modGamma;
+    modBrightness = pRGBPalette.modBrightness;
+    modSaturation = pRGBPalette.modSaturation;
+
+    rawColors.clear();
+    for (Integer key : pRGBPalette.rawColors.keySet()) {
+      RGBColor newColor = pRGBPalette.rawColors.get(key).makeCopy();
+      rawColors.put(key, newColor);
+    }
+    transformedColors.clear();
+    for (Integer key : pRGBPalette.transformedColors.keySet()) {
+      RGBColor newColor = pRGBPalette.transformedColors.get(key).makeCopy();
+      transformedColors.put(key, newColor);
+    }
   }
 }

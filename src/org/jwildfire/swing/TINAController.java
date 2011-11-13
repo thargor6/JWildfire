@@ -26,6 +26,7 @@ import java.util.Collections;
 import java.util.List;
 
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JPanel;
@@ -53,6 +54,7 @@ import org.jwildfire.create.tina.palette.RandomRGBPaletteGenerator;
 import org.jwildfire.create.tina.render.AffineZStyle;
 import org.jwildfire.create.tina.render.FlameRenderer;
 import org.jwildfire.create.tina.render.RenderMode;
+import org.jwildfire.create.tina.transform.FlameMorphService;
 import org.jwildfire.create.tina.transform.XFormTransformService;
 import org.jwildfire.create.tina.variation.Linear3DFunc;
 import org.jwildfire.create.tina.variation.Variation;
@@ -259,11 +261,19 @@ public class TINAController {
   private final JTable relWeightsTable;
   private final JButton relWeightsLeftButton;
   private final JButton relWeightsRightButton;
-
+  // Morphing
+  private final JButton setMorphFlame1Button;
+  private final JButton setMorphFlame2Button;
+  private final JTextField morphFrameREd;
+  private final JTextField morphFramesREd;
+  private final JCheckBox morphCheckBox;
+  private final JSlider morphFrameSlider;
+  private final JButton importMorphedFlameButton;
   // misc
   private final JComboBox renderModeCmb;
   private final JComboBox zStyleCmb;
-  private Flame currFlame;
+  private Flame _currFlame;
+  private Flame morphFlame1, morphFlame2;
   private boolean noRefresh;
 
   public TINAController(ErrorHandler pErrorHandler, Prefs pPrefs, JPanel pCenterPanel, JTextField pCameraRollREd, JSlider pCameraRollSlider, JTextField pCameraPitchREd,
@@ -286,7 +296,9 @@ public class TINAController {
       JButton pDeleteTransformationButton, JButton pAddFinalTransformationButton, JPanel pRandomBatchPanel, NonlinearControlsRow[] pNonlinearControlsRows,
       JTextField pXFormColorREd, JSlider pXFormColorSlider, JTextField pXFormSymmetryREd, JSlider pXFormSymmetrySlider, JTextField pXFormOpacityREd,
       JSlider pXFormOpacitySlider, JComboBox pXFormDrawModeCmb, JTable pRelWeightsTable, JButton pRelWeightsLeftButton, JButton pRelWeightsRightButton,
-      JButton pTransformationWeightLeftButton, JButton pTransformationWeightRightButton, JComboBox pRenderModeCmb, JComboBox pZStyleCmb) {
+      JButton pTransformationWeightLeftButton, JButton pTransformationWeightRightButton, JComboBox pRenderModeCmb, JComboBox pZStyleCmb, JButton pSetMorphFlame1Button,
+      JButton pSetMorphFlame2Button, JTextField pMorphFrameREd, JTextField pMorphFramesREd, JCheckBox pMorphCheckBox, JSlider pMorphFrameSlider,
+      JButton pImportMorphedFlameButton) {
     errorHandler = pErrorHandler;
     prefs = pPrefs;
     centerPanel = pCenterPanel;
@@ -398,7 +410,15 @@ public class TINAController {
     renderModeCmb = pRenderModeCmb;
     zStyleCmb = pZStyleCmb;
 
-    enableControls(null);
+    setMorphFlame1Button = pSetMorphFlame1Button;
+    setMorphFlame2Button = pSetMorphFlame2Button;
+    morphFrameREd = pMorphFrameREd;
+    morphFramesREd = pMorphFramesREd;
+    morphCheckBox = pMorphCheckBox;
+    morphFrameSlider = pMorphFrameSlider;
+    importMorphedFlameButton = pImportMorphedFlameButton;
+    enableControls();
+    enableXFormControls(null);
   }
 
   private ImagePanel getFlamePanel() {
@@ -432,14 +452,31 @@ public class TINAController {
     refreshFlameImage(Integer.parseInt(previewQualityREd.getText()), (RenderMode) renderModeCmb.getSelectedItem(), (AffineZStyle) zStyleCmb.getSelectedItem());
   }
 
+  private Flame lastMorphedFlame = null;
+  private int lastMorphedFrame = -1;
+
+  private Flame getCurrFlame() {
+    if (morphFlame1 != null && morphFlame2 != null && morphCheckBox.isSelected()) {
+      int frame = Integer.parseInt(morphFrameREd.getText());
+      if (frame != lastMorphedFrame || lastMorphedFlame == null) {
+        lastMorphedFrame = frame;
+        lastMorphedFlame = FlameMorphService.morphFlames(morphFlame1, morphFlame2, frame, Integer.parseInt(morphFramesREd.getText()));
+      }
+      return lastMorphedFlame;
+    }
+    else {
+      return _currFlame;
+    }
+  }
+
   public void refreshFlameImage(int pQuality, RenderMode pRenderMode, AffineZStyle pAffineZStyle) {
     ImagePanel imgPanel = getFlamePanel();
     int width = imgPanel.getWidth();
     int height = imgPanel.getHeight();
     if (width >= 16 && height >= 16) {
       SimpleImage img = new SimpleImage(width, height);
-      if (currFlame != null) {
-        Flame flame = currFlame;
+      Flame flame = getCurrFlame();
+      if (flame != null) {
         double wScl = (double) img.getImageWidth() / (double) flame.getWidth();
         double hScl = (double) img.getImageHeight() / (double) flame.getHeight();
         flame.setPixelsPerUnit((wScl + hScl) * 0.5 * flame.getPixelsPerUnit());
@@ -459,6 +496,7 @@ public class TINAController {
   private void refreshUI() {
     noRefresh = true;
     try {
+      Flame currFlame = getCurrFlame();
       cameraRollREd.setText(Tools.doubleToString(currFlame.getCamRoll()));
       cameraRollSlider.setValue(Tools.FTOI(currFlame.getCamRoll()));
 
@@ -540,6 +578,7 @@ public class TINAController {
 
       @Override
       public int getRowCount() {
+        Flame currFlame = getCurrFlame();
         return currFlame != null ? currFlame.getXForms().size() + (currFlame.getFinalXForm() != null ? 1 : 0) : 0;
       }
 
@@ -563,6 +602,7 @@ public class TINAController {
 
       @Override
       public Object getValueAt(int rowIndex, int columnIndex) {
+        Flame currFlame = getCurrFlame();
         if (currFlame != null) {
           XForm xForm = rowIndex < currFlame.getXForms().size() ? currFlame.getXForms().get(rowIndex) : currFlame.getFinalXForm();
           switch (columnIndex) {
@@ -591,6 +631,7 @@ public class TINAController {
 
       @Override
       public void setValueAt(Object aValue, int row, int column) {
+        Flame currFlame = getCurrFlame();
         if (currFlame != null && column == COL_WEIGHT && row < currFlame.getXForms().size()) {
           XForm xForm = currFlame.getXForms().get(row);
           String valStr = (String) aValue;
@@ -618,6 +659,7 @@ public class TINAController {
 
       @Override
       public int getRowCount() {
+        Flame currFlame = getCurrFlame();
         XForm xForm = getCurrXForm();
         return xForm != null && xForm != currFlame.getFinalXForm() ? currFlame.getXForms().size() : 0;
       }
@@ -640,6 +682,7 @@ public class TINAController {
 
       @Override
       public Object getValueAt(int rowIndex, int columnIndex) {
+        Flame currFlame = getCurrFlame();
         if (currFlame != null) {
           switch (columnIndex) {
             case COL_TRANSFORM:
@@ -661,6 +704,7 @@ public class TINAController {
       @Override
       public void setValueAt(Object aValue, int row, int column) {
         XForm xForm = getCurrXForm();
+        Flame currFlame = getCurrFlame();
         if (currFlame != null && column == COL_WEIGHT && xForm != null) {
           String valStr = (String) aValue;
           if (valStr == null || valStr.length() == 0) {
@@ -701,6 +745,7 @@ public class TINAController {
   }
 
   private void refreshPaletteImg() {
+    Flame currFlame = getCurrFlame();
     if (currFlame != null) {
       ImagePanel imgPanel = getPalettePanel();
       int width = imgPanel.getWidth();
@@ -714,6 +759,7 @@ public class TINAController {
   }
 
   private void flameSliderChanged(JSlider pSlider, JTextField pTextField, String pProperty, double pSliderScale) {
+    Flame currFlame = getCurrFlame();
     if (noRefresh || currFlame == null)
       return;
     noRefresh = true;
@@ -747,6 +793,7 @@ public class TINAController {
   }
 
   private void paletteSliderChanged(JSlider pSlider, JTextField pTextField, String pProperty, double pSliderScale) {
+    Flame currFlame = getCurrFlame();
     if (noRefresh || currFlame == null)
       return;
     noRefresh = true;
@@ -784,7 +831,11 @@ public class TINAController {
   }
 
   private void xFormSliderChanged(JSlider pSlider, JTextField pTextField, String pProperty, double pSliderScale) {
-    if (noRefresh || currFlame == null) {
+    if (noRefresh) {
+      return;
+    }
+    Flame currFlame = getCurrFlame();
+    if (currFlame == null) {
       return;
     }
     XForm xForm = getCurrXForm();
@@ -822,8 +873,13 @@ public class TINAController {
   }
 
   private void flameTextFieldChanged(JSlider pSlider, JTextField pTextField, String pProperty, double pSliderScale) {
-    if (noRefresh || currFlame == null)
+    if (noRefresh) {
       return;
+    }
+    Flame currFlame = getCurrFlame();
+    if (currFlame == null) {
+      return;
+    }
     noRefresh = true;
     try {
       double propValue = Tools.stringToDouble(pTextField.getText());
@@ -856,6 +912,7 @@ public class TINAController {
   }
 
   private void paletteTextFieldChanged(JSlider pSlider, JTextField pTextField, String pProperty, double pSliderScale) {
+    Flame currFlame = getCurrFlame();
     if (noRefresh || currFlame == null)
       return;
     noRefresh = true;
@@ -894,7 +951,7 @@ public class TINAController {
   }
 
   private void xFormTextFieldChanged(JSlider pSlider, JTextField pTextField, String pProperty, double pSliderScale) {
-    if (noRefresh || currFlame == null) {
+    if (noRefresh) {
       return;
     }
     XForm xForm = getCurrXForm();
@@ -1015,7 +1072,7 @@ public class TINAController {
       List<Flame> flames = new Flam3Reader().readFlames(file.getAbsolutePath());
       Flame flame = flames.get(0);
       prefs.setLastInputFlameFile(file);
-      currFlame = flame;
+      _currFlame = flame;
       refreshUI();
     }
   }
@@ -1147,6 +1204,7 @@ public class TINAController {
   }
 
   public void randomPaletteButton_actionPerformed(ActionEvent e) {
+    Flame currFlame = getCurrFlame();
     if (currFlame != null) {
       RGBPalette palette = new RandomRGBPaletteGenerator().generatePalette(Integer.parseInt(paletteRandomPointsREd.getText()));
       currFlame.setPalette(palette);
@@ -1171,6 +1229,7 @@ public class TINAController {
         prefs.setLastInputImageFile(file);
         SimpleImage img = new ImageReader(centerPanel).loadImage(file.getAbsolutePath());
         RGBPalette palette = new RGBPaletteImporter().importFromImage(img);
+        Flame currFlame = getCurrFlame();
         currFlame.setPalette(palette);
         refreshPaletteUI(palette);
         refreshFlameImage();
@@ -1254,7 +1313,8 @@ public class TINAController {
     paletteSliderChanged(paletteShiftSlider, paletteShiftREd, "modShift", 1.0);
   }
 
-  public void exportImageButton_actionPerformed(ActionEvent e) {
+  public void exportImageButton_actionPerformed0(ActionEvent e) {
+    Flame currFlame = getCurrFlame();
     if (currFlame != null) {
       try {
         double pitchMin = 0.0;
@@ -1272,7 +1332,7 @@ public class TINAController {
           int height = Integer.parseInt(renderHeightREd.getText());
           int quality = Integer.parseInt(renderQualityREd.getText());
           SimpleImage img = new SimpleImage(width, height);
-          Flame flame = currFlame;
+          Flame flame = getCurrFlame();
           double wScl = (double) img.getImageWidth() / (double) flame.getWidth();
           double hScl = (double) img.getImageHeight() / (double) flame.getHeight();
           flame.setPixelsPerUnit((wScl + hScl) * 0.5 * flame.getPixelsPerUnit());
@@ -1300,7 +1360,8 @@ public class TINAController {
     }
   }
 
-  public void exportImageButton_actionPerformed0(ActionEvent e) {
+  public void exportImageButton_actionPerformed(ActionEvent e) {
+    Flame currFlame = getCurrFlame();
     if (currFlame != null) {
       try {
         JFileChooser chooser = getImageJFileChooser();
@@ -1317,7 +1378,7 @@ public class TINAController {
           int height = Integer.parseInt(renderHeightREd.getText());
           int quality = Integer.parseInt(renderQualityREd.getText());
           SimpleImage img = new SimpleImage(width, height);
-          Flame flame = currFlame;
+          Flame flame = getCurrFlame();
           double wScl = (double) img.getImageWidth() / (double) flame.getWidth();
           double hScl = (double) img.getImageHeight() / (double) flame.getHeight();
           flame.setPixelsPerUnit((wScl + hScl) * 0.5 * flame.getPixelsPerUnit());
@@ -1338,6 +1399,7 @@ public class TINAController {
   }
 
   public void saveFlameButton_actionPerformed(ActionEvent e) {
+    Flame currFlame = getCurrFlame();
     if (currFlame != null) {
       JFileChooser chooser = getFlameJFileChooser();
       try {
@@ -1361,6 +1423,7 @@ public class TINAController {
 
   public XForm getCurrXForm() {
     XForm xForm = null;
+    Flame currFlame = getCurrFlame();
     if (currFlame != null) {
       int row = transformationsTable.getSelectedRow();
       if (row >= 0 && row < currFlame.getXForms().size()) {
@@ -1379,7 +1442,7 @@ public class TINAController {
       try {
         XForm xForm = getCurrXForm();
         refreshXFormUI(xForm);
-        enableControls(xForm);
+        enableXFormControls(xForm);
       }
       finally {
         cmbRefreshing = false;
@@ -1387,7 +1450,15 @@ public class TINAController {
     }
   }
 
-  private void enableControls(XForm xForm) {
+  private void enableControls() {
+    setMorphFlame1Button.setEnabled(true);
+    setMorphFlame2Button.setEnabled(true);
+    importMorphedFlameButton.setEnabled(true);
+    morphCheckBox.setEnabled(morphFlame1 != null && morphFlame2 != null);
+  }
+
+  private void enableXFormControls(XForm xForm) {
+    Flame currFlame = getCurrFlame();
     boolean enabled = xForm != null;
     affineRotateLeftButton.setEnabled(enabled);
     affineRotateRightButton.setEnabled(enabled);
@@ -1527,6 +1598,7 @@ public class TINAController {
   public void addXForm() {
     XForm xForm = new XForm();
     xForm.addVariation(1.0, new Linear3DFunc());
+    Flame currFlame = getCurrFlame();
     currFlame.getXForms().add(xForm);
     gridRefreshing = true;
     try {
@@ -1543,6 +1615,7 @@ public class TINAController {
   public void duplicateXForm() {
     XForm xForm = new XForm();
     xForm.assign(getCurrXForm());
+    Flame currFlame = getCurrFlame();
     currFlame.getXForms().add(xForm);
     gridRefreshing = true;
     try {
@@ -1558,6 +1631,7 @@ public class TINAController {
 
   public void deleteXForm() {
     int row = transformationsTable.getSelectedRow();
+    Flame currFlame = getCurrFlame();
     if (currFlame.getFinalXForm() != null && row == currFlame.getXForms().size()) {
       currFlame.setFinalXForm(null);
     }
@@ -1577,6 +1651,7 @@ public class TINAController {
   public void addFinalXForm() {
     XForm xForm = new XForm();
     xForm.addVariation(1.0, new Linear3DFunc());
+    Flame currFlame = getCurrFlame();
     currFlame.setFinalXForm(xForm);
     gridRefreshing = true;
     try {
@@ -1648,71 +1723,35 @@ public class TINAController {
 
   private List<Flame> randomBatch = new ArrayList<Flame>();
 
-  public void createRandomBatch(int pCount) {
+  private final int IMG_WIDTH = 60;
+  private final int IMG_HEIGHT = 50;
+  private final int BORDER_SIZE = 4;
+
+  public void updateThumbnails(List<SimpleImage> pImages) {
     if (randomBatchScrollPane != null) {
       randomBatchPanel.remove(randomBatchScrollPane);
       randomBatchScrollPane = null;
     }
-    randomBatch.clear();
-    final int IMG_WIDTH = 60;
-    final int IMG_HEIGHT = 50;
-    final int BORDER_SIZE = 4;
-    final int IMG_COUNT = 24;
-    final int MAX_IMG_SAMPLES = 10;
-    final double MIN_COVERAGE = 0.33;
-    int panelWidth = (IMG_WIDTH + BORDER_SIZE) * IMG_COUNT;
+    int panelWidth = (IMG_WIDTH + BORDER_SIZE) * randomBatch.size();
     int panelHeight = IMG_HEIGHT + 2 * BORDER_SIZE;
     JPanel batchPanel = new JPanel();
     batchPanel.setLayout(null);
     batchPanel.setSize(panelWidth, panelHeight);
     batchPanel.setPreferredSize(new Dimension(panelWidth, panelHeight));
-    for (int i = 0; i < (pCount > 0 ? pCount : IMG_COUNT); i++) {
-      SimpleImage img = new SimpleImage(IMG_WIDTH, IMG_HEIGHT);
-      Flame bestFlame = null;
-      double bestCoverage = 0.0;
-      for (int j = 0; j < MAX_IMG_SAMPLES; j++) {
-        // create flame
-        Flame flame = new RandomFlameGenerator().createFlame();
+    for (int i = 0; i < randomBatch.size(); i++) {
+      SimpleImage img;
+      if (pImages != null) {
+        img = pImages.get(i);
+      }
+      else {
+        img = new SimpleImage(IMG_WIDTH, IMG_HEIGHT);
+        Flame flame = randomBatch.get(i);
+        flame.setSampleDensity(50);
         flame.setWidth(IMG_WIDTH);
         flame.setHeight(IMG_HEIGHT);
         flame.setPixelsPerUnit(10);
-        RGBPalette palette = new RandomRGBPaletteGenerator().generatePalette(Integer.parseInt(paletteRandomPointsREd.getText()));
-        flame.setPalette(palette);
-        // render it   
-        if (j > 0) {
-          img.fillBackground(0, 0, 0);
-        }
-        flame.setSampleDensity(50);
         FlameRenderer renderer = new FlameRenderer();
         renderer.renderFlame(flame, img);
-        if (j == MAX_IMG_SAMPLES - 1) {
-          randomBatch.add(bestFlame);
-          renderer.renderFlame(bestFlame, img);
-        }
-        else {
-          long maxCoverage = img.getImageWidth() * img.getImageHeight();
-          long coverage = 0;
-          Pixel pixel = new Pixel();
-          for (int k = 0; k < img.getImageHeight(); k++) {
-            for (int l = 0; l < img.getImageWidth(); l++) {
-              pixel.setARGBValue(img.getARGBValue(l, k));
-              if (pixel.r > 20 || pixel.g > 20 || pixel.b > 20) {
-                coverage++;
-              }
-            }
-          }
-          double fCoverage = (double) coverage / (double) maxCoverage;
-          if (fCoverage >= MIN_COVERAGE) {
-            randomBatch.add(flame);
-            break;
-          }
-          else {
-            if (bestFlame == null || fCoverage > bestCoverage) {
-              bestFlame = flame;
-              bestCoverage = fCoverage;
-            }
-          }
-        }
       }
       // add it to the main panel
       ImagePanel imgPanel = new ImagePanel(img, 0, 0, img.getImageWidth());
@@ -1736,9 +1775,81 @@ public class TINAController {
     randomBatchPanel.validate();
   }
 
+  public void createRandomBatch(int pCount) {
+    randomBatch.clear();
+    final int IMG_COUNT = 24;
+    final int MAX_IMG_SAMPLES = 10;
+    final double MIN_COVERAGE = 0.33;
+    List<SimpleImage> imgList = new ArrayList<SimpleImage>();
+    for (int i = 0; i < (pCount > 0 ? pCount : IMG_COUNT); i++) {
+      SimpleImage img = new SimpleImage(IMG_WIDTH, IMG_HEIGHT);
+      Flame bestFlame = null;
+      double bestCoverage = 0.0;
+      for (int j = 0; j < MAX_IMG_SAMPLES; j++) {
+        // create flame
+        Flame flame = new RandomFlameGenerator().createFlame();
+        flame.setWidth(IMG_WIDTH);
+        flame.setHeight(IMG_HEIGHT);
+        flame.setPixelsPerUnit(10);
+        RGBPalette palette = new RandomRGBPaletteGenerator().generatePalette(Integer.parseInt(paletteRandomPointsREd.getText()));
+        flame.setPalette(palette);
+        // render it   
+        if (j > 0) {
+          img.fillBackground(0, 0, 0);
+        }
+        flame.setSampleDensity(50);
+        FlameRenderer renderer = new FlameRenderer();
+        renderer.renderFlame(flame, img);
+        if (j == MAX_IMG_SAMPLES - 1) {
+          randomBatch.add(bestFlame);
+          renderer.renderFlame(bestFlame, img);
+          imgList.add(img);
+        }
+        else {
+          long maxCoverage = img.getImageWidth() * img.getImageHeight();
+          long coverage = 0;
+          Pixel pixel = new Pixel();
+          for (int k = 0; k < img.getImageHeight(); k++) {
+            for (int l = 0; l < img.getImageWidth(); l++) {
+              pixel.setARGBValue(img.getARGBValue(l, k));
+              if (pixel.r > 20 || pixel.g > 20 || pixel.b > 20) {
+                coverage++;
+              }
+            }
+          }
+          double fCoverage = (double) coverage / (double) maxCoverage;
+          if (fCoverage >= MIN_COVERAGE) {
+            randomBatch.add(flame);
+            imgList.add(img);
+            break;
+          }
+          else {
+            if (bestFlame == null || fCoverage > bestCoverage) {
+              bestFlame = flame;
+              bestCoverage = fCoverage;
+            }
+          }
+        }
+      }
+      // add it to the main panel
+      ImagePanel imgPanel = new ImagePanel(img, 0, 0, img.getImageWidth());
+      imgPanel.setImage(img);
+      imgPanel.setLocation(i * IMG_WIDTH + (i + 1) * BORDER_SIZE, BORDER_SIZE);
+      final int idx = i;
+      imgPanel.addMouseListener(new java.awt.event.MouseAdapter() {
+        public void mouseClicked(java.awt.event.MouseEvent e) {
+          if (e.getClickCount() > 1) {
+            importFromRandomBatch(idx);
+          }
+        }
+      });
+    }
+    updateThumbnails(imgList);
+  }
+
   public void importFromRandomBatch(int pIdx) {
     if (pIdx >= 0 && pIdx < randomBatch.size()) {
-      currFlame = randomBatch.get(pIdx);
+      _currFlame = randomBatch.get(pIdx);
       refreshUI();
     }
   }
@@ -1916,7 +2027,7 @@ public class TINAController {
       if (xForm != null && xFormDrawModeCmb.getSelectedItem() != null) {
         xForm.setDrawMode((DrawMode) xFormDrawModeCmb.getSelectedItem());
         refreshFlameImage();
-        enableControls(xForm);
+        enableXFormControls(xForm);
       }
     }
   }
@@ -1935,6 +2046,7 @@ public class TINAController {
 
   private void relWeightsChanged(double pDelta) {
     XForm xForm = getCurrXForm();
+    Flame currFlame = getCurrFlame();
     if (xForm != null && currFlame != null && xForm != currFlame.getFinalXForm()) {
       int row = relWeightsTable.getSelectedRow();
       if (row >= 0 && row < currFlame.getXForms().size()) {
@@ -1954,6 +2066,7 @@ public class TINAController {
 
   private void transformationWeightChanged(double pDelta) {
     XForm xForm = getCurrXForm();
+    Flame currFlame = getCurrFlame();
     if (xForm != null && currFlame != null && xForm != currFlame.getFinalXForm()) {
       xForm.setWeight(xForm.getWeight() + pDelta);
       gridRefreshing = true;
@@ -1992,8 +2105,7 @@ public class TINAController {
     flame.setPixelsPerUnit(50);
     RGBPalette palette = new RandomRGBPaletteGenerator().generatePalette(Integer.parseInt(paletteRandomPointsREd.getText()));
     flame.setPalette(palette);
-
-    currFlame = flame;
+    _currFlame = flame;
     refreshUI();
   }
 
@@ -2006,6 +2118,83 @@ public class TINAController {
   public void zStyleCmb_changed() {
     if (!refreshing && !cmbRefreshing) {
       refreshFlameImage();
+    }
+  }
+
+  public void setMorphFlame1() {
+    if (_currFlame != null) {
+      morphFlame1 = _currFlame.makeCopy();
+      lastMorphedFrame = -1;
+      enableControls();
+      refreshFlameImage();
+    }
+  }
+
+  public void setMorphFlame2() {
+    if (_currFlame != null) {
+      morphFlame2 = _currFlame.makeCopy();
+      lastMorphedFrame = -1;
+      enableControls();
+      refreshFlameImage();
+    }
+  }
+
+  public void morphFramesREd_changed() {
+    int frame = Integer.parseInt(morphFramesREd.getText());
+    if (!refreshing) {
+      refreshing = true;
+      try {
+        morphFrameSlider.setMaximum(frame);
+        lastMorphedFrame = -1;
+      }
+      finally {
+        refreshing = false;
+      }
+    }
+  }
+
+  public void morphFrameREd_changed() {
+    int frame = Integer.parseInt(morphFramesREd.getText());
+    if (!refreshing) {
+      refreshing = true;
+      try {
+        morphFrameSlider.setValue(frame);
+        lastMorphedFrame = -1;
+        refreshFlameImage();
+      }
+      finally {
+        refreshing = false;
+      }
+    }
+  }
+
+  public void morphCheckBox_changed() {
+    lastMorphedFrame = -1;
+    refreshFlameImage();
+  }
+
+  public void morphFrameSlider_changed() {
+    int frame = morphFrameSlider.getValue();
+    if (!refreshing) {
+      refreshing = true;
+      try {
+        morphFrameREd.setText(String.valueOf(frame));
+        lastMorphedFrame = -1;
+        refreshFlameImage();
+      }
+      finally {
+        refreshing = false;
+      }
+    }
+  }
+
+  public void importMorphedFlameButton_clicked() {
+    if (morphCheckBox.isSelected()) {
+      Flame flame = getCurrFlame();
+      if (flame != null) {
+        randomBatch.add(0, flame);
+        updateThumbnails(null);
+      }
     }
   }
 }
