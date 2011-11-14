@@ -55,7 +55,8 @@ import org.jwildfire.create.tina.render.AffineZStyle;
 import org.jwildfire.create.tina.render.FlameRenderer;
 import org.jwildfire.create.tina.render.RenderMode;
 import org.jwildfire.create.tina.transform.AnimationService;
-import org.jwildfire.create.tina.transform.AnimationService.Script;
+import org.jwildfire.create.tina.transform.AnimationService.GlobalScript;
+import org.jwildfire.create.tina.transform.AnimationService.XFormScript;
 import org.jwildfire.create.tina.transform.FlameMorphService;
 import org.jwildfire.create.tina.transform.XFormTransformService;
 import org.jwildfire.create.tina.variation.Linear3DFunc;
@@ -274,7 +275,8 @@ public class TINAController {
   // Animate
   private final JTextField animateOutputREd;
   private final JTextField animateFramesREd;
-  private final JComboBox animateScriptCmb;
+  private final JComboBox animateGlobalScriptCmb;
+  private final JComboBox animateXFormScriptCmb;
   private final JButton animationGenerateButton;
   // misc
   private final JComboBox renderModeCmb;
@@ -305,7 +307,8 @@ public class TINAController {
       JSlider pXFormOpacitySlider, JComboBox pXFormDrawModeCmb, JTable pRelWeightsTable, JButton pRelWeightsLeftButton, JButton pRelWeightsRightButton,
       JButton pTransformationWeightLeftButton, JButton pTransformationWeightRightButton, JComboBox pRenderModeCmb, JComboBox pZStyleCmb, JButton pSetMorphFlame1Button,
       JButton pSetMorphFlame2Button, JTextField pMorphFrameREd, JTextField pMorphFramesREd, JCheckBox pMorphCheckBox, JSlider pMorphFrameSlider,
-      JButton pImportMorphedFlameButton, JTextField pAnimateOutputREd, JTextField pAnimateFramesREd, JComboBox pAnimateScriptCmb, JButton pAnimationGenerateButton) {
+      JButton pImportMorphedFlameButton, JTextField pAnimateOutputREd, JTextField pAnimateFramesREd, JComboBox pAnimateGlobalScriptCmb, JButton pAnimationGenerateButton,
+      JComboBox pAnimateXFormScriptCmb) {
     errorHandler = pErrorHandler;
     prefs = pPrefs;
     centerPanel = pCenterPanel;
@@ -427,7 +430,8 @@ public class TINAController {
 
     animateOutputREd = pAnimateOutputREd;
     animateFramesREd = pAnimateFramesREd;
-    animateScriptCmb = pAnimateScriptCmb;
+    animateGlobalScriptCmb = pAnimateGlobalScriptCmb;
+    animateXFormScriptCmb = pAnimateXFormScriptCmb;
     animationGenerateButton = pAnimationGenerateButton;
 
     enableControls();
@@ -2169,9 +2173,8 @@ public class TINAController {
     try {
       int frames = Integer.parseInt(animateFramesREd.getText());
       boolean doMorph = morphCheckBox.isSelected();
-      Flame flame1 = doMorph ? morphFlame1 : _currFlame;
-      Flame flame2 = doMorph ? morphFlame2 : null;
-      Script script = (Script) animateScriptCmb.getSelectedItem();
+      GlobalScript globalScript = (GlobalScript) animateGlobalScriptCmb.getSelectedItem();
+      XFormScript xFormScript = (XFormScript) animateXFormScriptCmb.getSelectedItem();
       String imagePath = animateOutputREd.getText();
       int width = Integer.parseInt(renderWidthREd.getText());
       int height = Integer.parseInt(renderHeightREd.getText());
@@ -2179,7 +2182,9 @@ public class TINAController {
       RenderMode renderMode = (RenderMode) renderModeCmb.getSelectedItem();
       AffineZStyle affineZStyle = (AffineZStyle) zStyleCmb.getSelectedItem();
       for (int frame = 1; frame <= frames; frame++) {
-        AnimationService.renderFrame(frame, frames, flame1, flame2, doMorph, script, imagePath, width, height, quality, renderMode, affineZStyle);
+        Flame flame1 = doMorph ? morphFlame1.makeCopy() : _currFlame.makeCopy();
+        Flame flame2 = doMorph ? morphFlame2.makeCopy() : null;
+        AnimationService.renderFrame(frame, frames, flame1, flame2, doMorph, globalScript, xFormScript, imagePath, width, height, quality, renderMode, affineZStyle);
       }
     }
     catch (Throwable ex) {

@@ -401,8 +401,10 @@ public class TinaInternalFrame extends JInternalFrame {
   private JLabel animateFramesLbl = null;
   private JTextField animateOutputREd = null;
   private JLabel animateOutputLbl = null;
-  private JLabel animateScriptLbl = null;
+  private JLabel animateGlobalScriptLbl = null;
   private JComboBox animateScriptCmb = null;
+  private JLabel animateXFormScriptLbl = null;
+  private JComboBox animateXFormScriptCmb = null;
 
   /**
    * This is the xxx default constructor
@@ -2991,7 +2993,7 @@ public class TinaInternalFrame extends JInternalFrame {
         getXFormOpacitySlider(), getXFormDrawModeCmb(), getRelWeightsTable(), getRelWeightsLeftButton(), getRelWeightsRightButton(),
         getTransformationWeightLeftButton(), getTransformationWeightRightButton(), getRenderModeCmb(), getZStyleCmb(), getSetMorphFlame1Button(),
         getSetMorphFlame2Button(), getMorphFrameREd(), getMorphFramesREd(), getMorphCheckBox(), getMorphFrameSlider(), getImportMorphedFlameButton(),
-        getAnimateOutputREd(), getAnimateFramesREd(), getAnimateScriptCmb(), getAnimationGenerateButton());
+        getAnimateOutputREd(), getAnimateFramesREd(), getAnimateScriptCmb(), getAnimationGenerateButton(), getAnimateXFormScriptCmb());
     tinaController.refreshing = tinaController.cmbRefreshing = tinaController.gridRefreshing = true;
     try {
       for (NonlinearControlsRow row : nonlinearControlsRows) {
@@ -3020,10 +3022,16 @@ public class TinaInternalFrame extends JInternalFrame {
       getMorphFrameSlider().setValue(Integer.parseInt(getMorphFrameREd().getText()));
 
       getAnimateScriptCmb().removeAllItems();
-      getAnimateScriptCmb().addItem(AnimationService.Script.ROTATE_PITCH);
-      getAnimateScriptCmb().addItem(AnimationService.Script.ROTATE_PITCH_YAW);
-      getAnimateScriptCmb().setSelectedItem(AnimationService.Script.ROTATE_PITCH_YAW);
+      getAnimateScriptCmb().addItem(AnimationService.GlobalScript.NONE);
+      getAnimateScriptCmb().addItem(AnimationService.GlobalScript.ROTATE_PITCH);
+      getAnimateScriptCmb().addItem(AnimationService.GlobalScript.ROTATE_PITCH_YAW);
+      getAnimateScriptCmb().setSelectedItem(AnimationService.GlobalScript.ROTATE_PITCH_YAW);
 
+      getAnimateXFormScriptCmb().removeAllItems();
+      getAnimateXFormScriptCmb().addItem(AnimationService.XFormScript.NONE);
+      getAnimateXFormScriptCmb().addItem(AnimationService.XFormScript.ROTATE_FULL);
+      getAnimateXFormScriptCmb().addItem(AnimationService.XFormScript.ROTATE_SLIGHTLY);
+      getAnimateXFormScriptCmb().setSelectedItem(AnimationService.XFormScript.ROTATE_SLIGHTLY);
     }
     finally {
       tinaController.refreshing = tinaController.cmbRefreshing = tinaController.gridRefreshing = false;
@@ -4593,12 +4601,18 @@ public class TinaInternalFrame extends JInternalFrame {
    */
   private JPanel getTinaAnimatePanel() {
     if (tinaAnimatePanel == null) {
-      animateScriptLbl = new JLabel();
-      animateScriptLbl.setPreferredSize(new Dimension(94, 22));
-      animateScriptLbl.setText("Script");
-      animateScriptLbl.setSize(new Dimension(94, 22));
-      animateScriptLbl.setLocation(new Point(156, 4));
-      animateScriptLbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      animateXFormScriptLbl = new JLabel();
+      animateXFormScriptLbl.setPreferredSize(new Dimension(94, 22));
+      animateXFormScriptLbl.setText("XForm script");
+      animateXFormScriptLbl.setSize(new Dimension(94, 22));
+      animateXFormScriptLbl.setLocation(new Point(156, 32));
+      animateXFormScriptLbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      animateGlobalScriptLbl = new JLabel();
+      animateGlobalScriptLbl.setPreferredSize(new Dimension(94, 22));
+      animateGlobalScriptLbl.setText("Global script");
+      animateGlobalScriptLbl.setSize(new Dimension(94, 22));
+      animateGlobalScriptLbl.setLocation(new Point(156, 4));
+      animateGlobalScriptLbl.setFont(new Font("Dialog", Font.BOLD, 10));
       animateOutputLbl = new JLabel();
       animateOutputLbl.setPreferredSize(new Dimension(94, 22));
       animateOutputLbl.setText("Output");
@@ -4618,8 +4632,10 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaAnimatePanel.add(animateFramesLbl, null);
       tinaAnimatePanel.add(getAnimateOutputREd(), null);
       tinaAnimatePanel.add(animateOutputLbl, null);
-      tinaAnimatePanel.add(animateScriptLbl, null);
+      tinaAnimatePanel.add(animateGlobalScriptLbl, null);
       tinaAnimatePanel.add(getAnimateScriptCmb(), null);
+      tinaAnimatePanel.add(animateXFormScriptLbl, null);
+      tinaAnimatePanel.add(getAnimateXFormScriptCmb(), null);
     }
     return tinaAnimatePanel;
   }
@@ -4884,12 +4900,28 @@ public class TinaInternalFrame extends JInternalFrame {
   private JComboBox getAnimateScriptCmb() {
     if (animateScriptCmb == null) {
       animateScriptCmb = new JComboBox();
-      animateScriptCmb.setPreferredSize(new Dimension(125, 22));
+      animateScriptCmb.setPreferredSize(new Dimension(275, 22));
       animateScriptCmb.setSize(new Dimension(275, 22));
       animateScriptCmb.setLocation(new Point(253, 4));
       animateScriptCmb.setFont(new Font("Dialog", Font.BOLD, 10));
     }
     return animateScriptCmb;
+  }
+
+  /**
+   * This method initializes animateXFormScriptCmb	
+   * 	
+   * @return javax.swing.JComboBox	
+   */
+  private JComboBox getAnimateXFormScriptCmb() {
+    if (animateXFormScriptCmb == null) {
+      animateXFormScriptCmb = new JComboBox();
+      animateXFormScriptCmb.setPreferredSize(new Dimension(275, 22));
+      animateXFormScriptCmb.setSize(new Dimension(275, 22));
+      animateXFormScriptCmb.setLocation(new Point(253, 32));
+      animateXFormScriptCmb.setFont(new Font("Dialog", Font.BOLD, 10));
+    }
+    return animateXFormScriptCmb;
   }
 
 } //  @jve:decl-index=0:visual-constraint="10,10"
