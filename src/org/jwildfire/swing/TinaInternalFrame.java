@@ -405,6 +405,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JComboBox animateScriptCmb = null;
   private JLabel animateXFormScriptLbl = null;
   private JComboBox animateXFormScriptCmb = null;
+  private JLabel centreDescLabel = null;
 
   /**
    * This is the xxx default constructor
@@ -523,11 +524,15 @@ public class TinaInternalFrame extends JInternalFrame {
    */
   private JPanel getTinaCenterPanel() {
     if (tinaCenterPanel == null) {
+      centreDescLabel = new JLabel();
+      centreDescLabel.setText("(double-click on thumbnail to load it into this area, double-click at this area for full render) ");
+      centreDescLabel.setFont(new Font("Dialog", Font.BOLD, 10));
       tinaCenterPanel = new JPanel();
       tinaCenterPanel.setLayout(new BorderLayout());
       tinaCenterPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
       tinaCenterPanel.setBackground(SystemColor.controlDkShadow);
       tinaCenterPanel.add(getRandomBatchPanel(), BorderLayout.SOUTH);
+      tinaCenterPanel.add(centreDescLabel, BorderLayout.CENTER);
       tinaCenterPanel.addMouseListener(new java.awt.event.MouseAdapter() {
         public void mouseClicked(java.awt.event.MouseEvent e) {
           tinaController.renderFlameButton_actionPerformed(null);

@@ -445,6 +445,7 @@ public class TINAController {
       SimpleImage img = new SimpleImage(width, height);
       img.fillBackground(0, 0, 0);
       flamePanel = new ImagePanel(img, 0, 0, centerPanel.getWidth());
+      centerPanel.removeAll();
       centerPanel.add(flamePanel, BorderLayout.CENTER);
       centerPanel.getParent().validate();
       centerPanel.repaint();
