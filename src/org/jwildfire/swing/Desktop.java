@@ -55,6 +55,8 @@ import javax.swing.border.SoftBevelBorder;
 
 import org.jwildfire.base.Prefs;
 import org.jwildfire.base.Tools;
+import org.jwildfire.create.tina.swing.TinaController;
+import org.jwildfire.create.tina.swing.TinaInternalFrame;
 
 public class Desktop extends JApplet {
   private static final long serialVersionUID = 1L;
@@ -1657,7 +1659,7 @@ public class Desktop extends JApplet {
   private MainController mainController = null; // @jve:decl-index=0:
   private RenderController renderController = null; // @jve:decl-index=0:
   private FormulaExplorerController formulaExplorerController = null; // @jve:decl-index=0:
-  private TINAController tinaController = null; // @jve:decl-index=0:
+  private TinaController tinaController = null; // @jve:decl-index=0:
 
   private JMenuItem openFavourite1MenuItem = null;
 

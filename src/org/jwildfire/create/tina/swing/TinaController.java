@@ -14,7 +14,7 @@
   if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
   02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
-package org.jwildfire.swing;
+package org.jwildfire.create.tina.swing;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -67,8 +67,11 @@ import org.jwildfire.image.Pixel;
 import org.jwildfire.image.SimpleImage;
 import org.jwildfire.io.ImageReader;
 import org.jwildfire.io.ImageWriter;
+import org.jwildfire.swing.ErrorHandler;
+import org.jwildfire.swing.ImageFileFilter;
+import org.jwildfire.swing.ImagePanel;
 
-public class TINAController {
+public class TinaController implements FlameHolder {
   private static final double SLIDER_SCALE_PERSPECTIVE = 100.0;
   private static final double SLIDER_SCALE_CENTRE = 5.0;
   private static final double SLIDER_SCALE_ZOOM = 10.0;
@@ -79,7 +82,7 @@ public class TINAController {
   private static final double SLIDER_SCALE_COLOR = 100.0;
 
   private final JPanel centerPanel;
-  private ImagePanel flamePanel;
+  private FlamePanel flamePanel;
 
   private final Prefs prefs;
   private final ErrorHandler errorHandler;
@@ -285,7 +288,7 @@ public class TINAController {
   private Flame morphFlame1, morphFlame2;
   private boolean noRefresh;
 
-  public TINAController(ErrorHandler pErrorHandler, Prefs pPrefs, JPanel pCenterPanel, JTextField pCameraRollREd, JSlider pCameraRollSlider, JTextField pCameraPitchREd,
+  public TinaController(ErrorHandler pErrorHandler, Prefs pPrefs, JPanel pCenterPanel, JTextField pCameraRollREd, JSlider pCameraRollSlider, JTextField pCameraPitchREd,
       JSlider pCameraPitchSlider, JTextField pCameraYawREd, JSlider pCameraYawSlider, JTextField pCameraPerspectiveREd, JSlider pCameraPerspectiveSlider,
       JTextField pPreviewQualityREd, JTextField pRenderQualityREd, JTextField pCameraCentreXREd, JSlider pCameraCentreXSlider, JTextField pCameraCentreYREd,
       JSlider pCameraCentreYSlider, JTextField pCameraZoomREd, JSlider pCameraZoomSlider, JTextField pPixelsPerUnitREd, JSlider pPixelsPerUnitSlider,
@@ -444,7 +447,7 @@ public class TINAController {
       int height = centerPanel.getHeight();
       SimpleImage img = new SimpleImage(width, height);
       img.fillBackground(0, 0, 0);
-      flamePanel = new ImagePanel(img, 0, 0, centerPanel.getWidth());
+      flamePanel = new FlamePanel(img, 0, 0, centerPanel.getWidth(), this);
       centerPanel.removeAll();
       centerPanel.add(flamePanel, BorderLayout.CENTER);
       centerPanel.getParent().validate();
@@ -2191,5 +2194,10 @@ public class TINAController {
     catch (Throwable ex) {
       errorHandler.handleError(ex);
     }
+  }
+
+  @Override
+  public Flame getFlame() {
+    return getCurrFlame();
   }
 }

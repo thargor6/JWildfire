@@ -1,4 +1,4 @@
-package org.jwildfire.swing;
+package org.jwildfire.create.tina.swing;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -35,11 +35,12 @@ import org.jwildfire.base.Prefs;
 import org.jwildfire.create.tina.base.DrawMode;
 import org.jwildfire.create.tina.render.AffineZStyle;
 import org.jwildfire.create.tina.render.RenderMode;
+import org.jwildfire.create.tina.swing.TinaController.NonlinearControlsRow;
 import org.jwildfire.create.tina.transform.AnimationService;
-import org.jwildfire.swing.TINAController.NonlinearControlsRow;
+import org.jwildfire.swing.StandardErrorHandler;
 
 public class TinaInternalFrame extends JInternalFrame {
-  private TINAController tinaController; //  @jve:decl-index=0:
+  private TinaController tinaController; //  @jve:decl-index=0:
   private NonlinearControlsRow[] nonlinearControlsRows;//  @jve:decl-index=0:
   private static final long serialVersionUID = 1L;
   private JPanel jContentPane = null;
@@ -2969,7 +2970,7 @@ public class TinaInternalFrame extends JInternalFrame {
     return tinaRenderHeightREd;
   }
 
-  public TINAController createController(StandardErrorHandler pErrorHandler, Prefs pPrefs) {
+  public TinaController createController(StandardErrorHandler pErrorHandler, Prefs pPrefs) {
     nonlinearControlsRows = new NonlinearControlsRow[3];
     nonlinearControlsRows[0] = new NonlinearControlsRow(getNonlinearVar1Cmb(), getNonlinearParams1Cmb(), getNonlinearVar1REd(),
         getNonlinearParams1REd(), getNonlinearVar1LeftButton(), getNonlinarVar1RightButton(), getNonlinearParams1LeftButton(), getNonlinarParams1RightButton());
@@ -2977,7 +2978,7 @@ public class TinaInternalFrame extends JInternalFrame {
         getNonlinearParams2REd(), getNonlinearVar2LeftButton(), getNonlinarVar2RightButton(), getNonlinearParams2LeftButton(), getNonlinarParams2RightButton());
     nonlinearControlsRows[2] = new NonlinearControlsRow(getNonlinearVar3Cmb(), getNonlinearParams3Cmb(), getNonlinearVar3REd(),
         getNonlinearParams3REd(), getNonlinearVar3LeftButton(), getNonlinarVar3RightButton(), getNonlinearParams3LeftButton(), getNonlinarParams3RightButton());
-    tinaController = new TINAController(pErrorHandler, pPrefs, getTinaCenterPanel(), getTinaCameraRollREd(), getTinaCameraRollSlider(), getTinaCameraPitchREd(),
+    tinaController = new TinaController(pErrorHandler, pPrefs, getTinaCenterPanel(), getTinaCameraRollREd(), getTinaCameraRollSlider(), getTinaCameraPitchREd(),
         getTinaCameraPitchSlider(), getTinaCameraYawREd(), getTinaCameraYawSlider(), getTinaCameraPerspectiveREd(), getTinaCameraPerspectiveSlider(),
         getTinaPreviewQualityREd(), getTinaRenderQualityREd(), getTinaCameraCentreXREd(), getTinaCameraCentreXSlider(), getTinaCameraCentreYREd(),
         getTinaCameraCentreYSlider(), getTinaCameraZoomREd(), getTinaCameraZoomSlider(), getTinaPixelsPerUnitREd(), getTinaPixelsPerUnitSlider(),
