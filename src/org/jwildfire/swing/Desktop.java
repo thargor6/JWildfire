@@ -252,63 +252,6 @@ public class Desktop extends JApplet {
   }
 
   /**
-   * This method initializes openFavourite1MenuItem
-   * 
-   * @return javax.swing.JMenuItem
-   */
-  private JMenuItem getOpenFavourite1MenuItem() {
-    if (openFavourite1MenuItem == null) {
-      openFavourite1MenuItem = new JMenuItem();
-      openFavourite1MenuItem.setText("Favourite 1");
-      openFavourite1MenuItem
-          .addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent e) {
-              openFavourite1MenuItem_actionPerformed(e);
-            }
-          });
-    }
-    return openFavourite1MenuItem;
-  }
-
-  /**
-   * This method initializes openFavourite2MenuItem
-   * 
-   * @return javax.swing.JMenuItem
-   */
-  private JMenuItem getOpenFavourite2MenuItem() {
-    if (openFavourite2MenuItem == null) {
-      openFavourite2MenuItem = new JMenuItem();
-      openFavourite2MenuItem.setText("Favourite 2");
-      openFavourite2MenuItem
-          .addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent e) {
-              openFavourite2MenuItem_actionPerformed(e);
-            }
-          });
-    }
-    return openFavourite2MenuItem;
-  }
-
-  /**
-   * This method initializes openFavourite3MenuItem
-   * 
-   * @return javax.swing.JMenuItem
-   */
-  private JMenuItem getOpenFavourite3MenuItem() {
-    if (openFavourite3MenuItem == null) {
-      openFavourite3MenuItem = new JMenuItem();
-      openFavourite3MenuItem.setText("Favourite 3");
-      openFavourite3MenuItem
-          .addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent e) {
-              openFavourite3MenuItem_actionPerformed(e);
-            }
-          });
-    }
-    return openFavourite3MenuItem;
-  }
-
-  /**
    * This method initializes showMessageTopPnl
    * 
    * @return javax.swing.JPanel
@@ -689,83 +632,6 @@ public class Desktop extends JApplet {
           });
     }
     return showErrorCloseButton;
-  }
-
-  /**
-  /**
-   * This method initializes openFavourite4MenuItem
-   * 
-   * @return javax.swing.JMenuItem
-   */
-  private JMenuItem getOpenFavourite4MenuItem() {
-    if (openFavourite4MenuItem == null) {
-      openFavourite4MenuItem = new JMenuItem();
-      openFavourite4MenuItem.setText("Favourite 4");
-      openFavourite4MenuItem
-          .addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent e) {
-              openFavourite4MenuItem_actionPerformed(e);
-            }
-          });
-    }
-    return openFavourite4MenuItem;
-  }
-
-  /**
-   * This method initializes openFavourite5MenuItem
-   * 
-   * @return javax.swing.JMenuItem
-   */
-  private JMenuItem getOpenFavourite5MenuItem() {
-    if (openFavourite5MenuItem == null) {
-      openFavourite5MenuItem = new JMenuItem();
-      openFavourite5MenuItem.setText("Favourite 5");
-      openFavourite5MenuItem
-          .addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent e) {
-              openFavourite5MenuItem_actionPerformed(e);
-            }
-          });
-    }
-    return openFavourite5MenuItem;
-  }
-
-  /**
-   * This method initializes openFavourite6MenuItem
-   * 
-   * @return javax.swing.JMenuItem
-   */
-  private JMenuItem getOpenFavourite6MenuItem() {
-    if (openFavourite6MenuItem == null) {
-      openFavourite6MenuItem = new JMenuItem();
-      openFavourite6MenuItem.setText("Favourite 6");
-      openFavourite6MenuItem
-          .addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent e) {
-              openFavourite6MenuItem_actionPerformed(e);
-            }
-          });
-    }
-    return openFavourite6MenuItem;
-  }
-
-  /**
-   * This method initializes openFavourite7MenuItem
-   * 
-   * @return javax.swing.JMenuItem
-   */
-  private JMenuItem getOpenFavourite7MenuItem() {
-    if (openFavourite7MenuItem == null) {
-      openFavourite7MenuItem = new JMenuItem();
-      openFavourite7MenuItem.setText("Favourite 7");
-      openFavourite7MenuItem
-          .addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent e) {
-              openFavourite7MenuItem_actionPerformed(e);
-            }
-          });
-    }
-    return openFavourite7MenuItem;
   }
 
   /**
@@ -1539,13 +1405,6 @@ public class Desktop extends JApplet {
       fileMenu.setText("File");
       fileMenu.add(getOpenMenuItem());
       fileMenu.add(getSaveMenuItem());
-      fileMenu.add(getOpenFavourite1MenuItem());
-      fileMenu.add(getOpenFavourite2MenuItem());
-      fileMenu.add(getOpenFavourite3MenuItem());
-      fileMenu.add(getOpenFavourite4MenuItem());
-      fileMenu.add(getOpenFavourite5MenuItem());
-      fileMenu.add(getOpenFavourite6MenuItem());
-      fileMenu.add(getOpenFavourite7MenuItem());
       fileMenu.add(getCloseAllMenuItem());
       fileMenu.add(getExitMenuItem());
     }
@@ -1660,12 +1519,6 @@ public class Desktop extends JApplet {
   private RenderController renderController = null; // @jve:decl-index=0:
   private FormulaExplorerController formulaExplorerController = null; // @jve:decl-index=0:
   private TinaController tinaController = null; // @jve:decl-index=0:
-
-  private JMenuItem openFavourite1MenuItem = null;
-
-  private JMenuItem openFavourite2MenuItem = null;
-
-  private JMenuItem openFavourite3MenuItem = null;
 
   private JPanel showMessageTopPnl = null;
 
@@ -1900,14 +1753,6 @@ public class Desktop extends JApplet {
   }
 
   // type=Object -> hide from Visual Editor
-
-  private JMenuItem openFavourite4MenuItem = null;
-
-  private JMenuItem openFavourite5MenuItem = null;
-
-  private JMenuItem openFavourite6MenuItem = null;
-
-  private JMenuItem openFavourite7MenuItem = null;
 
   private JMenuItem closeAllMenuItem = null;
 

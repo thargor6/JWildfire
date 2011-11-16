@@ -86,12 +86,14 @@ public class FlamePanel extends ImagePanel {
         y[2] = 1.0;
         // transform the points (affine transform)
         for (int i = 0; i < x.length; i++) {
-          x[i] = x[i] * xForm.getCoeff00() + y[i] * xForm.getCoeff10() + xForm.getCoeff20();
-          y[i] = x[i] * xForm.getCoeff01() + y[i] * xForm.getCoeff11() + xForm.getCoeff21();
-          viewX[i] = Tools.FTOI(viewXScale * x[i] - viewXTrans);
-          viewY[i] = Tools.FTOI(viewYScale * y[i] - viewYTrans);
+          //          double tx = x[i] * xForm.getCoeff00() + y[i] * xForm.getCoeff10() + xForm.getCoeff20();
+          //          double ty = x[i] * xForm.getCoeff01() + y[i] * xForm.getCoeff11() + xForm.getCoeff21();
+          // use the same layout as Apophysis
+          double tx = x[i] * xForm.getCoeff00() + (-y[i] * xForm.getCoeff10()) + xForm.getCoeff20();
+          double ty = (-x[i] * xForm.getCoeff01()) + y[i] * xForm.getCoeff11() + (-xForm.getCoeff21());
+          viewX[i] = Tools.FTOI(viewXScale * tx - viewXTrans);
+          viewY[i] = Tools.FTOI(viewYScale * ty - viewYTrans);
         }
-
         g.drawPolygon(viewX, viewY, x.length);
       }
 

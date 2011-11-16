@@ -448,7 +448,7 @@ public class TinaController implements FlameHolder {
       SimpleImage img = new SimpleImage(width, height);
       img.fillBackground(0, 0, 0);
       flamePanel = new FlamePanel(img, 0, 0, centerPanel.getWidth(), this);
-      centerPanel.removeAll();
+      centerPanel.remove(1);
       centerPanel.add(flamePanel, BorderLayout.CENTER);
       centerPanel.getParent().validate();
       centerPanel.repaint();
@@ -1684,14 +1684,14 @@ public class TinaController implements FlameHolder {
 
   public void xForm_moveUp() {
     double amount = Tools.stringToDouble(affineMoveAmountREd.getText());
-    XFormTransformService.translate(getCurrXForm(), 0, amount);
+    XFormTransformService.translate(getCurrXForm(), 0, -amount);
     transformationTableClicked();
     refreshFlameImage();
   }
 
   public void xForm_moveDown() {
     double amount = Tools.stringToDouble(affineMoveAmountREd.getText());
-    XFormTransformService.translate(getCurrXForm(), 0, -amount);
+    XFormTransformService.translate(getCurrXForm(), 0, amount);
     transformationTableClicked();
     refreshFlameImage();
   }
