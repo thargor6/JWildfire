@@ -33,9 +33,12 @@ public class FlamePanel extends ImagePanel {
   private static final Color XFORM_COLOR = new Color(217, 219, 223);
   private static final Color BACKGROUND_COLOR = new Color(60, 60, 60);
   private static float LINE_WIDTH = 1.0f;
+  private static float LINE_WIDTH_FAT = 1.5f * LINE_WIDTH;
   private static float DASH1[] = { 6.0f };
   private static BasicStroke DASHED = new BasicStroke(LINE_WIDTH, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 10.0f, DASH1, 0.0f);
   private static BasicStroke SOLID = new BasicStroke(LINE_WIDTH);
+  private static BasicStroke SOLID_FAT = new BasicStroke(LINE_WIDTH_FAT);
+  private static BasicStroke DASHED_FAT = new BasicStroke(LINE_WIDTH_FAT, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 10.0f, DASH1, 0.0f);
 
   private static final long serialVersionUID = 1L;
   private final FlameHolder flameHolder;
@@ -140,21 +143,27 @@ public class FlamePanel extends ImagePanel {
       viewYTrans = viewYMin * viewYScale - areaBottom;
 
       for (XForm xForm : flame.getXForms()) {
-        Triangle triangle = new Triangle(xForm);
-        if (selectedXForm != null && selectedXForm == xForm) {
-          g.setStroke(SOLID);
-        }
-        else {
-          g.setStroke(DASHED);
-        }
-        g.drawPolygon(triangle.viewX, triangle.viewY, 3);
-
-        g.setStroke(SOLID);
-        int radius = 10;
-        g.drawOval(triangle.viewX[1] - radius / 2, triangle.viewY[1] - radius / 2, radius, radius);
+        drawXForm(g, xForm, false);
       }
-
+      if (flame.getFinalXForm() != null) {
+        drawXForm(g, flame.getFinalXForm(), true);
+      }
     }
+  }
+
+  private void drawXForm(Graphics2D g, XForm pXForm, boolean pIsFinal) {
+    Triangle triangle = new Triangle(pXForm);
+    if (selectedXForm != null && selectedXForm == pXForm) {
+      g.setStroke(pIsFinal ? SOLID_FAT : SOLID);
+    }
+    else {
+      g.setStroke(pIsFinal ? DASHED_FAT : DASHED);
+    }
+    g.drawPolygon(triangle.viewX, triangle.viewY, 3);
+
+    g.setStroke(SOLID);
+    int radius = 10;
+    g.drawOval(triangle.viewX[1] - radius / 2, triangle.viewY[1] - radius / 2, radius, radius);
   }
 
   private int xToView(double pX) {
@@ -214,13 +223,54 @@ public class FlamePanel extends ImagePanel {
     }
   }
 
-  public int mouseClicked(int x, int y) {
+  // Algorithm from http://www.blackpawn.com/texts/pointinpoly/default.html
+  private boolean insideTriange(Triangle pTriangle, int viewX, int viewY) {
+    // Compute vectors
+    //    v0 = C - A
+    //    v1 = B - A
+    //    v2 = P - A
+    // A: pTriangle,view[0]
+    // B: pTriangle,view[1]
+    // C: pTriangle,view[2]
+    double v0x = pTriangle.viewX[2] - pTriangle.viewX[0];
+    double v0y = pTriangle.viewY[2] - pTriangle.viewY[0];
+    double v1x = pTriangle.viewX[1] - pTriangle.viewX[0];
+    double v1y = pTriangle.viewY[1] - pTriangle.viewY[0];
+    double v2x = viewX - pTriangle.viewX[0];
+    double v2y = viewY - pTriangle.viewY[0];
+    // Compute dot products
+    double dot00 = v0x * v0x + v0y * v0y;
+    double dot01 = v0x * v1x + v0y * v1y;
+    double dot02 = v0x * v2x + v0y * v2y;
+    double dot11 = v1x * v1x + v1y * v1y;
+    double dot12 = v1x * v2x + v1y * v2y;
+
+    // Compute barycentric coordinates
+    double invDenom = 1 / (dot00 * dot11 - dot01 * dot01);
+    double u = (dot11 * dot02 - dot01 * dot12) * invDenom;
+    double v = (dot00 * dot12 - dot01 * dot02) * invDenom;
+
+    // Check if point is in triangle
+    return (u >= 0) && (v >= 0) && (u + v < 1);
+  }
+
+  public XForm mouseClicked(int x, int y) {
     // select flame
     Flame flame = flameHolder.getFlame();
     if (flame != null) {
       for (XForm xForm : flame.getXForms()) {
+        Triangle triangle = new Triangle(xForm);
+        if (insideTriange(triangle, x, y)) {
+          return xForm;
+        }
+      }
+      if (flame.getFinalXForm() != null) {
+        Triangle triangle = new Triangle(flame.getFinalXForm());
+        if (insideTriange(triangle, x, y)) {
+          return flame.getFinalXForm();
+        }
       }
     }
-    return -1;
+    return null;
   }
 }

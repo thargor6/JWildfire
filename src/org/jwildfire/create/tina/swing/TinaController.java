@@ -2244,8 +2244,24 @@ public class TinaController implements FlameHolder {
     if (e.getClickCount() == 2) {
       renderFlameButton_actionPerformed(null);
     }
-    else if (e.getClickCount() == 1 && flamePanel != null) {
-      flamePanel.mouseClicked(e.getX(), e.getY());
+    else if (e.getClickCount() == 1) {
+      Flame flame = getCurrFlame();
+      if (flame != null && flamePanel != null) {
+        XForm xForm = flamePanel.mouseClicked(e.getX(), e.getY());
+        if (xForm != null) {
+          for (int i = 0; i < flame.getXForms().size(); i++) {
+            if (xForm == flame.getXForms().get(i)) {
+              transformationsTable.getSelectionModel().setSelectionInterval(i, i);
+              return;
+            }
+          }
+          if (xForm == flame.getFinalXForm()) {
+            int row = flame.getXForms().size();
+            transformationsTable.getSelectionModel().setSelectionInterval(row, row);
+            return;
+          }
+        }
+      }
     }
   }
 
