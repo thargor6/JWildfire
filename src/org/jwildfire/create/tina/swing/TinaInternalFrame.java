@@ -407,6 +407,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JLabel animateXFormScriptLbl = null;
   private JComboBox animateXFormScriptCmb = null;
   private JLabel centreDescLabel = null;
+  private JPanel triangleOperationsPanel = null;
 
   /**
    * This is the xxx default constructor
@@ -534,11 +535,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaCenterPanel.setBackground(SystemColor.controlDkShadow);
       tinaCenterPanel.add(getRandomBatchPanel(), BorderLayout.SOUTH);
       tinaCenterPanel.add(centreDescLabel, BorderLayout.CENTER);
-      tinaCenterPanel.addMouseListener(new java.awt.event.MouseAdapter() {
-        public void mouseClicked(java.awt.event.MouseEvent e) {
-          tinaController.renderFlameButton_actionPerformed(null);
-        }
-      });
+      tinaCenterPanel.add(getTriangleOperationsPanel(), BorderLayout.EAST);
     }
     return tinaCenterPanel;
   }
@@ -3554,6 +3551,7 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearVar1Cmb.setPreferredSize(new Dimension(120, 22));
       nonlinearVar1Cmb.setSize(new Dimension(120, 22));
       nonlinearVar1Cmb.setLocation(new Point(66, 2));
+      nonlinearVar1Cmb.setMaximumRowCount(32);
       nonlinearVar1Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
       nonlinearVar1Cmb.addItemListener(new java.awt.event.ItemListener() {
         public void itemStateChanged(java.awt.event.ItemEvent e) {
@@ -3806,6 +3804,7 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearVar2Cmb.setLocation(new Point(66, 2));
       nonlinearVar2Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
       nonlinearVar2Cmb.setPreferredSize(new Dimension(120, 22));
+      nonlinearVar2Cmb.setMaximumRowCount(32);
       nonlinearVar2Cmb.setSize(new Dimension(120, 22));
       nonlinearVar2Cmb.addItemListener(new java.awt.event.ItemListener() {
         public void itemStateChanged(java.awt.event.ItemEvent e) {
@@ -4032,6 +4031,7 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearVar3Cmb.setLocation(new Point(66, 2));
       nonlinearVar3Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
       nonlinearVar3Cmb.setPreferredSize(new Dimension(120, 22));
+      nonlinearVar3Cmb.setMaximumRowCount(32);
       nonlinearVar3Cmb.setSize(new Dimension(120, 22));
       nonlinearVar3Cmb.addItemListener(new java.awt.event.ItemListener() {
         public void itemStateChanged(java.awt.event.ItemEvent e) {
@@ -4928,6 +4928,20 @@ public class TinaInternalFrame extends JInternalFrame {
       animateXFormScriptCmb.setFont(new Font("Dialog", Font.BOLD, 10));
     }
     return animateXFormScriptCmb;
+  }
+
+  /**
+   * This method initializes triangleOperationsPanel	
+   * 	
+   * @return javax.swing.JPanel	
+   */
+  private JPanel getTriangleOperationsPanel() {
+    if (triangleOperationsPanel == null) {
+      triangleOperationsPanel = new JPanel();
+      triangleOperationsPanel.setLayout(new GridBagLayout());
+      triangleOperationsPanel.setPreferredSize(new Dimension(52, 0));
+    }
+    return triangleOperationsPanel;
   }
 
 } //  @jve:decl-index=0:visual-constraint="10,10"

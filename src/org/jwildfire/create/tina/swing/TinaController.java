@@ -19,6 +19,7 @@ package org.jwildfire.create.tina.swing;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
+import java.awt.event.MouseEvent;
 import java.io.File;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -448,6 +449,24 @@ public class TinaController implements FlameHolder {
       SimpleImage img = new SimpleImage(width, height);
       img.fillBackground(0, 0, 0);
       flamePanel = new FlamePanel(img, 0, 0, centerPanel.getWidth(), this);
+      flamePanel.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+        @Override
+        public void mouseDragged(MouseEvent e) {
+          flamePanel_mouseDragged(e);
+        }
+      });
+      flamePanel.addMouseListener(new java.awt.event.MouseAdapter() {
+        @Override
+        public void mousePressed(MouseEvent e) {
+          flamePanel_mousePressed(e);
+        }
+
+        @Override
+        public void mouseClicked(java.awt.event.MouseEvent e) {
+          flamePanel_mouseClicked(e);
+        }
+      });
+      flamePanel.setSelectedXForm(getCurrXForm());
       centerPanel.remove(1);
       centerPanel.add(flamePanel, BorderLayout.CENTER);
       centerPanel.getParent().validate();
@@ -1415,8 +1434,12 @@ public class TinaController implements FlameHolder {
       cmbRefreshing = true;
       try {
         XForm xForm = getCurrXForm();
+        if (flamePanel != null) {
+          flamePanel.setSelectedXForm(xForm);
+        }
         refreshXFormUI(xForm);
         enableXFormControls(xForm);
+        refreshFlameImage();
       }
       finally {
         cmbRefreshing = false;
@@ -1573,6 +1596,7 @@ public class TinaController implements FlameHolder {
   public void addXForm() {
     XForm xForm = new XForm();
     xForm.addVariation(1.0, new Linear3DFunc());
+    xForm.setWeight(0.5);
     Flame currFlame = getCurrFlame();
     currFlame.getXForms().add(xForm);
     gridRefreshing = true;
@@ -2200,4 +2224,29 @@ public class TinaController implements FlameHolder {
   public Flame getFlame() {
     return getCurrFlame();
   }
+
+  private void flamePanel_mouseDragged(MouseEvent e) {
+    if (flamePanel != null) {
+      if (flamePanel.mouseDragged(e.getX(), e.getY())) {
+        transformationTableClicked();
+        refreshFlameImage();
+      }
+    }
+  }
+
+  private void flamePanel_mousePressed(MouseEvent e) {
+    if (flamePanel != null) {
+      flamePanel.mousePressed(e.getX(), e.getY());
+    }
+  }
+
+  private void flamePanel_mouseClicked(MouseEvent e) {
+    if (e.getClickCount() == 2) {
+      renderFlameButton_actionPerformed(null);
+    }
+    else if (e.getClickCount() == 1 && flamePanel != null) {
+      flamePanel.mouseClicked(e.getX(), e.getY());
+    }
+  }
+
 }
