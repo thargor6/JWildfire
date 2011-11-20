@@ -44,6 +44,8 @@ public class Tools {
   public static final int SPREC = 10;
   private static final Pixel toolPixel = new Pixel();
   public static final String FILEEXT_JFX = "jfx";
+  public static final String FILEEXT_PNG = "png";
+  public static final String FILEEXT_FLAME = "flame";
   public static final String FILE_ENCODING = "utf-8";
 
   public static final double fmod33(double arg) {

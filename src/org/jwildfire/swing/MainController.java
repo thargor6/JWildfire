@@ -100,7 +100,16 @@ public class MainController {
      * jImageFileChooser.setAcceptAllFileFilterUsed(false); } return
      * jImageFileChooser;
      */
-    JFileChooser fileChooser = new DefaultFileChooser();
+    JFileChooser fileChooser = new DefaultFileChooser() {
+
+      private static final long serialVersionUID = 1L;
+
+      @Override
+      protected String getDefaultExtension() {
+        return Tools.FILEEXT_PNG;
+      }
+
+    };
     fileChooser.addChoosableFileFilter(new ImageFileFilter());
     fileChooser.setAcceptAllFileFilterUsed(false);
     return fileChooser;
@@ -108,7 +117,15 @@ public class MainController {
 
   private JFileChooser getScriptJFileChooser() {
     if (jScriptFileChooser == null) {
-      jScriptFileChooser = new DefaultFileChooser();
+      jScriptFileChooser = new DefaultFileChooser() {
+        private static final long serialVersionUID = 1L;
+
+        @Override
+        protected String getDefaultExtension() {
+          return Tools.FILEEXT_JFX;
+        }
+
+      };
       jScriptFileChooser.addChoosableFileFilter(new ScriptFileFilter());
       jScriptFileChooser.setAcceptAllFileFilterUsed(false);
     }

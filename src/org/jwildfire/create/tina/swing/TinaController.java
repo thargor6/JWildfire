@@ -30,6 +30,7 @@ import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSlider;
@@ -1099,7 +1100,16 @@ public class TinaController implements FlameHolder {
   }
 
   private JFileChooser getFlameJFileChooser() {
-    JFileChooser fileChooser = new DefaultFileChooser();
+    JFileChooser fileChooser = new DefaultFileChooser() {
+
+      private static final long serialVersionUID = 1L;
+
+      @Override
+      protected String getDefaultExtension() {
+        return Tools.FILEEXT_FLAME;
+      }
+
+    };
     fileChooser.addChoosableFileFilter(new FlameFileFilter());
     fileChooser.setAcceptAllFileFilterUsed(false);
     return fileChooser;
@@ -1260,7 +1270,15 @@ public class TinaController implements FlameHolder {
   }
 
   private JFileChooser getImageJFileChooser() {
-    JFileChooser fileChooser = new DefaultFileChooser();
+    JFileChooser fileChooser = new DefaultFileChooser() {
+      private static final long serialVersionUID = 1L;
+
+      @Override
+      protected String getDefaultExtension() {
+        return Tools.FILEEXT_PNG;
+      }
+
+    };
     fileChooser.addChoosableFileFilter(new ImageFileFilter());
     fileChooser.setAcceptAllFileFilterUsed(false);
     return fileChooser;
@@ -1388,6 +1406,7 @@ public class TinaController implements FlameHolder {
           renderer.setAffineZStyle((AffineZStyle) zStyleCmb.getSelectedItem());
           renderer.renderFlame(flame, img);
           new ImageWriter().saveImage(img, file.getAbsolutePath());
+          JOptionPane.showMessageDialog(centerPanel, "Image was successfully saved", "Operation successful", JOptionPane.OK_OPTION);
         }
       }
       catch (Throwable ex) {
