@@ -19,7 +19,7 @@
       <delete dir="${build.dir}" />
   		<mkdir dir="${build.dir}" />
 	</target>
-
+<!--
 	<target name="compile" depends="init" 
 	        description="Compile main source tree java files">
 		<javac destdir="${build.dir}"
@@ -34,7 +34,21 @@
 			<classpath refid="build.classpath" />
 		</javac>
 	</target>
-
+-->
+  <target name="compile" depends="init" 
+          description="Compile main source tree java files">
+    <javac destdir="${build.dir}"
+           target="1.6"
+           source="1.6"
+           debug="false"
+           deprecation="false"
+           encoding="ISO-8859-1"
+           optimize="true"
+           failonerror="true">
+      <src path="${src.dir}" />
+      <classpath refid="build.classpath" />
+    </javac>
+  </target>
 	
 	<target name="packageJar" depends="compile" description="Package Jar">
 		<jar destfile="${jar.name}">
