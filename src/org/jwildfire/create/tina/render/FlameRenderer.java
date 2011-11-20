@@ -143,7 +143,7 @@ public class FlameRenderer implements TransformationContext {
 
   private void iterate(Flame pFlame) {
     int nSamples = (int) (pFlame.getSampleDensity() * 1 * rasterSize / (pFlame.getSpatialOversample() * pFlame.getSpatialOversample()) + 0.5);
-    int nThreads = 7;
+    int nThreads = 8;
     List<FlameRenderThread> threads = new ArrayList<FlameRenderThread>();
     for (int i = 0; i < nThreads; i++) {
       FlameRenderThread t = new FlameRenderThread(this, pFlame, nSamples / nThreads, affineZStyle);

@@ -25,6 +25,7 @@ import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.JToggleButton;
 import javax.swing.ListSelectionModel;
 import javax.swing.WindowConstants;
 import javax.swing.border.EtchedBorder;
@@ -405,6 +406,9 @@ public class TinaInternalFrame extends JInternalFrame {
   private JComboBox animateXFormScriptCmb = null;
   private JLabel centreDescLabel = null;
   private JPanel triangleOperationsPanel = null;
+  private JToggleButton mouseTransformMoveButton = null;
+  private JToggleButton mouseTransformRotateButton = null;
+  private JToggleButton mouseTransformScaleButton = null;
 
   /**
    * This is the xxx default constructor
@@ -2986,7 +2990,8 @@ public class TinaInternalFrame extends JInternalFrame {
         getXFormOpacitySlider(), getXFormDrawModeCmb(), getRelWeightsTable(), getRelWeightsLeftButton(), getRelWeightsRightButton(),
         getTransformationWeightLeftButton(), getTransformationWeightRightButton(), getZStyleCmb(), getSetMorphFlame1Button(),
         getSetMorphFlame2Button(), getMorphFrameREd(), getMorphFramesREd(), getMorphCheckBox(), getMorphFrameSlider(), getImportMorphedFlameButton(),
-        getAnimateOutputREd(), getAnimateFramesREd(), getAnimateScriptCmb(), getAnimationGenerateButton(), getAnimateXFormScriptCmb());
+        getAnimateOutputREd(), getAnimateFramesREd(), getAnimateScriptCmb(), getAnimationGenerateButton(), getAnimateXFormScriptCmb(), getMouseTransformMoveButton(),
+        getMouseTransformRotateButton(), getMouseTransformScaleButton());
     tinaController.refreshing = tinaController.cmbRefreshing = tinaController.gridRefreshing = true;
     try {
       for (NonlinearControlsRow row : nonlinearControlsRows) {
@@ -4902,10 +4907,71 @@ public class TinaInternalFrame extends JInternalFrame {
   private JPanel getTriangleOperationsPanel() {
     if (triangleOperationsPanel == null) {
       triangleOperationsPanel = new JPanel();
-      triangleOperationsPanel.setLayout(new GridBagLayout());
+      triangleOperationsPanel.setLayout(new FlowLayout());
       triangleOperationsPanel.setPreferredSize(new Dimension(52, 0));
+      triangleOperationsPanel.add(getMouseTransformMoveButton(), null);
+      triangleOperationsPanel.add(getMouseTransformRotateButton(), null);
+      triangleOperationsPanel.add(getMouseTransformScaleButton(), null);
     }
     return triangleOperationsPanel;
+  }
+
+  /**
+   * This method initializes mouseTransformMoveButton	
+   * 	
+   * @return javax.swing.JToggleButton	
+   */
+  private JToggleButton getMouseTransformMoveButton() {
+    if (mouseTransformMoveButton == null) {
+      mouseTransformMoveButton = new JToggleButton();
+      mouseTransformMoveButton.setPreferredSize(new Dimension(42, 24));
+      mouseTransformMoveButton.setSelected(true);
+      mouseTransformMoveButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/moveRight.gif")));
+      mouseTransformMoveButton.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent e) {
+          tinaController.mouseTransformMoveButton_clicked();
+        }
+      });
+    }
+    return mouseTransformMoveButton;
+  }
+
+  /**
+   * This method initializes mouseTransformRotateButton	
+   * 	
+   * @return javax.swing.JToggleButton	
+   */
+  private JToggleButton getMouseTransformRotateButton() {
+    if (mouseTransformRotateButton == null) {
+      mouseTransformRotateButton = new JToggleButton();
+      mouseTransformRotateButton.setPreferredSize(new Dimension(42, 24));
+      mouseTransformRotateButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/turnRight.gif")));
+      mouseTransformRotateButton.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent e) {
+          tinaController.mouseTransformRotateButton_clicked();
+        }
+      });
+    }
+    return mouseTransformRotateButton;
+  }
+
+  /**
+   * This method initializes mouseTransformScaleButton	
+   * 	
+   * @return javax.swing.JToggleButton	
+   */
+  private JToggleButton getMouseTransformScaleButton() {
+    if (mouseTransformScaleButton == null) {
+      mouseTransformScaleButton = new JToggleButton();
+      mouseTransformScaleButton.setPreferredSize(new Dimension(42, 24));
+      mouseTransformScaleButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/enlarge.gif")));
+      mouseTransformScaleButton.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent e) {
+          tinaController.mouseTransformScaleButton_clicked();
+        }
+      });
+    }
+    return mouseTransformScaleButton;
   }
 
 } //  @jve:decl-index=0:visual-constraint="10,10"

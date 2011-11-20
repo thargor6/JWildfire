@@ -50,6 +50,8 @@ public class FlamePanel extends ImagePanel {
 
   private double viewXScale, viewYScale;
   private double viewXTrans, viewYTrans;
+  private MouseDragOperation mouseDragOperation = MouseDragOperation.MOVE;
+  private int xBeginDrag, yBeginDrag;
 
   public FlamePanel(SimpleImage pSimpleImage, int pX, int pY, int pWidth, FlameHolder pFlameHolder) {
     super(pSimpleImage, pX, pY, pWidth);
@@ -196,7 +198,7 @@ public class FlamePanel extends ImagePanel {
   }
 
   public boolean mouseDragged(int pX, int pY) {
-    if (selectedXForm != null) {
+    if (selectedXForm != null && mouseDragOperation != MouseDragOperation.NONE) {
       int viewDX = pX - xBeginDrag;
       int viewDY = pY - yBeginDrag;
       if (viewDX != 0 || viewDY != 0) {
@@ -205,35 +207,38 @@ public class FlamePanel extends ImagePanel {
         xBeginDrag = pX;
         yBeginDrag = pY;
         if (Math.abs(dx) > Tools.ZERO || Math.abs(dy) > Tools.ZERO) {
-          // move
-          //            // move
-          //            selectedXForm.setCoeff20(selectedXForm.getCoeff20() + dx);
-          //            selectedXForm.setCoeff21(selectedXForm.getCoeff21() - dy);
-          //            return true;
-          // scale
-          //          Triangle triangle = new Triangle(selectedXForm);
-          //          double v1x = triangle.x[0] - triangle.x[1];
-          //          double v1y = triangle.y[0] - triangle.y[1];
-          //          double v2x = v1x + dx;
-          //          double v2y = v1y + dy;
-          //          double dr1 = Math.sqrt(v1x * v1x + v1y * v1y);
-          //          double dr2 = Math.sqrt(v2x * v2x + v2y * v2y);
-          //          double scale = dr2 / dr1;
-          //          selectedXForm.setCoeff00(selectedXForm.getCoeff00() * scale);
-          //          selectedXForm.setCoeff01(selectedXForm.getCoeff01() * scale);
-          //          selectedXForm.setCoeff10(selectedXForm.getCoeff10() * scale);
-          //          selectedXForm.setCoeff11(selectedXForm.getCoeff11() * scale);
-
-          // rotate
-          XFormTransformService.rotate(selectedXForm, dx * 30);
-          return true;
+          switch (mouseDragOperation) {
+            case MOVE: {
+              // move
+              selectedXForm.setCoeff20(selectedXForm.getCoeff20() + dx);
+              selectedXForm.setCoeff21(selectedXForm.getCoeff21() - dy);
+              return true;
+            }
+            case SCALE: {
+              Triangle triangle = new Triangle(selectedXForm);
+              double v1x = triangle.x[0] - triangle.x[1];
+              double v1y = triangle.y[0] - triangle.y[1];
+              double v2x = v1x + dx;
+              double v2y = v1y + dy;
+              double dr1 = Math.sqrt(v1x * v1x + v1y * v1y);
+              double dr2 = Math.sqrt(v2x * v2x + v2y * v2y);
+              double scale = dr2 / dr1;
+              selectedXForm.setCoeff00(selectedXForm.getCoeff00() * scale);
+              selectedXForm.setCoeff01(selectedXForm.getCoeff01() * scale);
+              selectedXForm.setCoeff10(selectedXForm.getCoeff10() * scale);
+              selectedXForm.setCoeff11(selectedXForm.getCoeff11() * scale);
+              return true;
+            }
+            case ROTATE: {
+              XFormTransformService.rotate(selectedXForm, dx * 30);
+              return true;
+            }
+          }
         }
       }
     }
     return false;
   }
-
-  int xBeginDrag, yBeginDrag;
 
   public void mousePressed(int x, int y) {
     if (selectedXForm != null) {
@@ -291,5 +296,9 @@ public class FlamePanel extends ImagePanel {
       }
     }
     return null;
+  }
+
+  public void setMouseDragOperation(MouseDragOperation mouseDragOperation) {
+    this.mouseDragOperation = mouseDragOperation;
   }
 }

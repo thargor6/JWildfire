@@ -35,6 +35,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JSlider;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.JToggleButton;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.event.ChangeEvent;
 import javax.swing.filechooser.FileFilter;
@@ -67,6 +68,7 @@ import org.jwildfire.image.Pixel;
 import org.jwildfire.image.SimpleImage;
 import org.jwildfire.io.ImageReader;
 import org.jwildfire.io.ImageWriter;
+import org.jwildfire.swing.DefaultFileChooser;
 import org.jwildfire.swing.ErrorHandler;
 import org.jwildfire.swing.ImageFileFilter;
 import org.jwildfire.swing.ImagePanel;
@@ -286,6 +288,10 @@ public class TinaController implements FlameHolder {
   private Flame _currFlame;
   private Flame morphFlame1, morphFlame2;
   private boolean noRefresh;
+  // mouse dragging
+  private final JToggleButton mouseTransformMoveButton;
+  private final JToggleButton mouseTransformRotateButton;
+  private final JToggleButton mouseTransformScaleButton;
 
   public TinaController(ErrorHandler pErrorHandler, Prefs pPrefs, JPanel pCenterPanel, JTextField pCameraRollREd, JSlider pCameraRollSlider, JTextField pCameraPitchREd,
       JSlider pCameraPitchSlider, JTextField pCameraYawREd, JSlider pCameraYawSlider, JTextField pCameraPerspectiveREd, JSlider pCameraPerspectiveSlider,
@@ -310,7 +316,7 @@ public class TinaController implements FlameHolder {
       JButton pTransformationWeightLeftButton, JButton pTransformationWeightRightButton, JComboBox pZStyleCmb, JButton pSetMorphFlame1Button,
       JButton pSetMorphFlame2Button, JTextField pMorphFrameREd, JTextField pMorphFramesREd, JCheckBox pMorphCheckBox, JSlider pMorphFrameSlider,
       JButton pImportMorphedFlameButton, JTextField pAnimateOutputREd, JTextField pAnimateFramesREd, JComboBox pAnimateGlobalScriptCmb, JButton pAnimationGenerateButton,
-      JComboBox pAnimateXFormScriptCmb) {
+      JComboBox pAnimateXFormScriptCmb, JToggleButton pMouseTransformMoveButton, JToggleButton pMouseTransformRotateButton, JToggleButton pMouseTransformScaleButton) {
     errorHandler = pErrorHandler;
     prefs = pPrefs;
     centerPanel = pCenterPanel;
@@ -434,6 +440,10 @@ public class TinaController implements FlameHolder {
     animateGlobalScriptCmb = pAnimateGlobalScriptCmb;
     animateXFormScriptCmb = pAnimateXFormScriptCmb;
     animationGenerateButton = pAnimationGenerateButton;
+
+    mouseTransformMoveButton = pMouseTransformMoveButton;
+    mouseTransformRotateButton = pMouseTransformRotateButton;
+    mouseTransformScaleButton = pMouseTransformScaleButton;
 
     enableControls();
     enableXFormControls(null);
@@ -1089,7 +1099,7 @@ public class TinaController implements FlameHolder {
   }
 
   private JFileChooser getFlameJFileChooser() {
-    JFileChooser fileChooser = new JFileChooser();
+    JFileChooser fileChooser = new DefaultFileChooser();
     fileChooser.addChoosableFileFilter(new FlameFileFilter());
     fileChooser.setAcceptAllFileFilterUsed(false);
     return fileChooser;
@@ -1250,7 +1260,7 @@ public class TinaController implements FlameHolder {
   }
 
   private JFileChooser getImageJFileChooser() {
-    JFileChooser fileChooser = new JFileChooser();
+    JFileChooser fileChooser = new DefaultFileChooser();
     fileChooser.addChoosableFileFilter(new ImageFileFilter());
     fileChooser.setAcceptAllFileFilterUsed(false);
     return fileChooser;
@@ -2255,6 +2265,54 @@ public class TinaController implements FlameHolder {
             return;
           }
         }
+      }
+    }
+  }
+
+  public void mouseTransformMoveButton_clicked() {
+    if (!refreshing) {
+      refreshing = true;
+      try {
+        mouseTransformRotateButton.setSelected(false);
+        mouseTransformScaleButton.setSelected(false);
+        if (flamePanel != null) {
+          flamePanel.setMouseDragOperation(mouseTransformMoveButton.isSelected() ? MouseDragOperation.MOVE : MouseDragOperation.NONE);
+        }
+      }
+      finally {
+        refreshing = false;
+      }
+    }
+  }
+
+  public void mouseTransformRotateButton_clicked() {
+    if (!refreshing) {
+      refreshing = true;
+      try {
+        mouseTransformMoveButton.setSelected(false);
+        mouseTransformScaleButton.setSelected(false);
+        if (flamePanel != null) {
+          flamePanel.setMouseDragOperation(mouseTransformRotateButton.isSelected() ? MouseDragOperation.ROTATE : MouseDragOperation.NONE);
+        }
+      }
+      finally {
+        refreshing = false;
+      }
+    }
+  }
+
+  public void mouseTransformScaleButton_clicked() {
+    if (!refreshing) {
+      refreshing = true;
+      try {
+        mouseTransformMoveButton.setSelected(false);
+        mouseTransformRotateButton.setSelected(false);
+        if (flamePanel != null) {
+          flamePanel.setMouseDragOperation(mouseTransformScaleButton.isSelected() ? MouseDragOperation.SCALE : MouseDragOperation.NONE);
+        }
+      }
+      finally {
+        refreshing = false;
       }
     }
   }
