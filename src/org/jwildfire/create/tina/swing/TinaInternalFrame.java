@@ -34,7 +34,6 @@ import javax.swing.event.ListSelectionListener;
 import org.jwildfire.base.Prefs;
 import org.jwildfire.create.tina.base.DrawMode;
 import org.jwildfire.create.tina.render.AffineZStyle;
-import org.jwildfire.create.tina.render.RenderMode;
 import org.jwildfire.create.tina.swing.TinaController.NonlinearControlsRow;
 import org.jwildfire.create.tina.transform.AnimationService;
 import org.jwildfire.swing.StandardErrorHandler;
@@ -382,8 +381,6 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton transformationWeightLeftButton = null;
   private JButton transformationWeightRightButton = null;
   private JButton newFlameButton = null;
-  private JComboBox renderModeCmb = null;
-  private JLabel renderModeLbl = null;
   private JLabel zStyleLbl = null;
   private JComboBox zStyleCmb = null;
   private JPanel tinaAnimatePanel = null;
@@ -1880,11 +1877,6 @@ public class TinaInternalFrame extends JInternalFrame {
       zStyleLbl.setSize(new Dimension(94, 22));
       zStyleLbl.setLocation(new Point(404, 32));
       zStyleLbl.setFont(new Font("Dialog", Font.BOLD, 10));
-      renderModeLbl = new JLabel();
-      renderModeLbl.setBounds(new Rectangle(404, 4, 94, 22));
-      renderModeLbl.setPreferredSize(new Dimension(94, 22));
-      renderModeLbl.setText("Render mode");
-      renderModeLbl.setFont(new Font("Dialog", Font.BOLD, 10));
       tinaRenderSizeLbl = new JLabel();
       tinaRenderSizeLbl.setText("Export size");
       tinaRenderSizeLbl.setFont(new Font("Dialog", Font.BOLD, 10));
@@ -1918,8 +1910,6 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaNorthMainPanel.add(getTinaRenderHeightREd(), null);
       tinaNorthMainPanel.add(getRandomBatchButton(), null);
       tinaNorthMainPanel.add(getNewFlameButton(), null);
-      tinaNorthMainPanel.add(getRenderModeCmb(), null);
-      tinaNorthMainPanel.add(renderModeLbl, null);
       tinaNorthMainPanel.add(zStyleLbl, null);
       tinaNorthMainPanel.add(getZStyleCmb(), null);
     }
@@ -2994,7 +2984,7 @@ public class TinaInternalFrame extends JInternalFrame {
         getTinaDuplicateTransformationButton(), getTinaDeleteTransformationButton(), getTinaAddFinalTransformationButton(), getRandomBatchPanel(),
         nonlinearControlsRows, getXFormColorREd(), getXFormColorSlider(), getXFormSymmetryREd(), getXFormSymmetrySlider(), getXFormOpacityREd(),
         getXFormOpacitySlider(), getXFormDrawModeCmb(), getRelWeightsTable(), getRelWeightsLeftButton(), getRelWeightsRightButton(),
-        getTransformationWeightLeftButton(), getTransformationWeightRightButton(), getRenderModeCmb(), getZStyleCmb(), getSetMorphFlame1Button(),
+        getTransformationWeightLeftButton(), getTransformationWeightRightButton(), getZStyleCmb(), getSetMorphFlame1Button(),
         getSetMorphFlame2Button(), getMorphFrameREd(), getMorphFramesREd(), getMorphCheckBox(), getMorphFrameSlider(), getImportMorphedFlameButton(),
         getAnimateOutputREd(), getAnimateFramesREd(), getAnimateScriptCmb(), getAnimationGenerateButton(), getAnimateXFormScriptCmb());
     tinaController.refreshing = tinaController.cmbRefreshing = tinaController.gridRefreshing = true;
@@ -3006,11 +2996,6 @@ public class TinaInternalFrame extends JInternalFrame {
       getXFormDrawModeCmb().addItem(DrawMode.NORMAL);
       getXFormDrawModeCmb().addItem(DrawMode.OPAQUE);
       getXFormDrawModeCmb().addItem(DrawMode.HIDDEN);
-
-      getRenderModeCmb().removeAllItems();
-      getRenderModeCmb().addItem(RenderMode.NORMAL);
-      getRenderModeCmb().addItem(RenderMode.Z_MIN);
-      getRenderModeCmb().addItem(RenderMode.Z_MAX);
 
       getZStyleCmb().removeAllItems();
       getZStyleCmb().addItem(AffineZStyle.FLAT);
@@ -4556,27 +4541,6 @@ public class TinaInternalFrame extends JInternalFrame {
       });
     }
     return newFlameButton;
-  }
-
-  /**
-   * This method initializes renderModeCmb	
-   * 	
-   * @return javax.swing.JComboBox	
-   */
-  private JComboBox getRenderModeCmb() {
-    if (renderModeCmb == null) {
-      renderModeCmb = new JComboBox();
-      renderModeCmb.setPreferredSize(new Dimension(125, 22));
-      renderModeCmb.setLocation(new Point(500, 4));
-      renderModeCmb.setSize(new Dimension(125, 22));
-      renderModeCmb.setFont(new Font("Dialog", Font.BOLD, 10));
-      renderModeCmb.addItemListener(new java.awt.event.ItemListener() {
-        public void itemStateChanged(java.awt.event.ItemEvent e) {
-          tinaController.renderModeCmb_changed();
-        }
-      });
-    }
-    return renderModeCmb;
   }
 
   /**

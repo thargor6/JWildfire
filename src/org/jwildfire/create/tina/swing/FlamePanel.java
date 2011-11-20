@@ -25,6 +25,7 @@ import java.awt.Rectangle;
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.XForm;
+import org.jwildfire.create.tina.transform.XFormTransformService;
 import org.jwildfire.image.SimpleImage;
 import org.jwildfire.swing.ImagePanel;
 
@@ -205,8 +206,26 @@ public class FlamePanel extends ImagePanel {
         yBeginDrag = pY;
         if (Math.abs(dx) > Tools.ZERO || Math.abs(dy) > Tools.ZERO) {
           // move
-          selectedXForm.setCoeff20(selectedXForm.getCoeff20() + dx);
-          selectedXForm.setCoeff21(selectedXForm.getCoeff21() - dy);
+          //            // move
+          //            selectedXForm.setCoeff20(selectedXForm.getCoeff20() + dx);
+          //            selectedXForm.setCoeff21(selectedXForm.getCoeff21() - dy);
+          //            return true;
+          // scale
+          //          Triangle triangle = new Triangle(selectedXForm);
+          //          double v1x = triangle.x[0] - triangle.x[1];
+          //          double v1y = triangle.y[0] - triangle.y[1];
+          //          double v2x = v1x + dx;
+          //          double v2y = v1y + dy;
+          //          double dr1 = Math.sqrt(v1x * v1x + v1y * v1y);
+          //          double dr2 = Math.sqrt(v2x * v2x + v2y * v2y);
+          //          double scale = dr2 / dr1;
+          //          selectedXForm.setCoeff00(selectedXForm.getCoeff00() * scale);
+          //          selectedXForm.setCoeff01(selectedXForm.getCoeff01() * scale);
+          //          selectedXForm.setCoeff10(selectedXForm.getCoeff10() * scale);
+          //          selectedXForm.setCoeff11(selectedXForm.getCoeff11() * scale);
+
+          // rotate
+          XFormTransformService.rotate(selectedXForm, dx * 30);
           return true;
         }
       }

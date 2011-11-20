@@ -28,15 +28,13 @@ public class FlameRenderThread implements Runnable {
   private final FlameRenderer renderer;
   private final Flame flame;
   private final int samples;
-  private final RenderMode renderMode;
   private final AffineZStyle affineZStyle;
   private boolean finished = true;
 
-  public FlameRenderThread(FlameRenderer pRenderer, Flame pFlame, int pSamples, RenderMode pRenderMode, AffineZStyle pAffineZStyle) {
+  public FlameRenderThread(FlameRenderer pRenderer, Flame pFlame, int pSamples, AffineZStyle pAffineZStyle) {
     renderer = pRenderer;
     flame = pFlame;
     samples = pSamples;
-    renderMode = pRenderMode;
     affineZStyle = pAffineZStyle;
   }
 
@@ -44,7 +42,13 @@ public class FlameRenderThread implements Runnable {
   public void run() {
     finished = false;
     try {
-      iterate();
+      try {
+        iterate();
+      }
+      catch (RuntimeException ex) {
+        ex.printStackTrace();
+        throw ex;
+      }
     }
     finally {
       finished = true;
@@ -87,9 +91,7 @@ public class FlameRenderThread implements Runnable {
       if (finalXForm != null) {
         q = new XYZPoint();
         finalXForm.transformPoint(renderer, affineT, varT, p, q, affineZStyle);
-        // if (renderMode == RenderMode.NORMAL) {
         renderer.project(flame, q);
-        //        }
         px = q.x * renderer.cosa + q.y * renderer.sina + renderer.rcX;
         if ((px < 0) || (px > renderer.camW))
           continue;
@@ -100,9 +102,7 @@ public class FlameRenderThread implements Runnable {
       else {
         q = new XYZPoint();
         q.assign(p);
-        //      if (renderMode == RenderMode.NORMAL) {
         renderer.project(flame, q);
-        //    }
         px = q.x * renderer.cosa + q.y * renderer.sina + renderer.rcX;
         if ((px < 0) || (px > renderer.camW))
           continue;
@@ -113,19 +113,6 @@ public class FlameRenderThread implements Runnable {
 
       RasterPoint rp = renderer.raster[(int) (renderer.bhs * py + 0.5)][(int) (renderer.bws * px + 0.5)];
       RenderColor color = renderer.colorMap[(int) (p.color * renderer.paletteIdxScl + 0.5)];
-
-      switch (renderMode) {
-        case Z_MIN:
-          if (rp.count == 0 || q.z < rp.zMin) {
-            rp.zMin = q.z;
-          }
-          break;
-        case Z_MAX:
-          if (rp.count == 0 || q.z > rp.zMax) {
-            rp.zMax = q.z;
-          }
-          break;
-      }
 
       rp.red += color.red;
       rp.green += color.green;

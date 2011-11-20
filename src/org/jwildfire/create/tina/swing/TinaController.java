@@ -54,7 +54,6 @@ import org.jwildfire.create.tina.palette.RGBPaletteRenderer;
 import org.jwildfire.create.tina.palette.RandomRGBPaletteGenerator;
 import org.jwildfire.create.tina.render.AffineZStyle;
 import org.jwildfire.create.tina.render.FlameRenderer;
-import org.jwildfire.create.tina.render.RenderMode;
 import org.jwildfire.create.tina.transform.AnimationService;
 import org.jwildfire.create.tina.transform.AnimationService.GlobalScript;
 import org.jwildfire.create.tina.transform.AnimationService.XFormScript;
@@ -283,7 +282,6 @@ public class TinaController implements FlameHolder {
   private final JComboBox animateXFormScriptCmb;
   private final JButton animationGenerateButton;
   // misc
-  private final JComboBox renderModeCmb;
   private final JComboBox zStyleCmb;
   private Flame _currFlame;
   private Flame morphFlame1, morphFlame2;
@@ -309,7 +307,7 @@ public class TinaController implements FlameHolder {
       JButton pDeleteTransformationButton, JButton pAddFinalTransformationButton, JPanel pRandomBatchPanel, NonlinearControlsRow[] pNonlinearControlsRows,
       JTextField pXFormColorREd, JSlider pXFormColorSlider, JTextField pXFormSymmetryREd, JSlider pXFormSymmetrySlider, JTextField pXFormOpacityREd,
       JSlider pXFormOpacitySlider, JComboBox pXFormDrawModeCmb, JTable pRelWeightsTable, JButton pRelWeightsLeftButton, JButton pRelWeightsRightButton,
-      JButton pTransformationWeightLeftButton, JButton pTransformationWeightRightButton, JComboBox pRenderModeCmb, JComboBox pZStyleCmb, JButton pSetMorphFlame1Button,
+      JButton pTransformationWeightLeftButton, JButton pTransformationWeightRightButton, JComboBox pZStyleCmb, JButton pSetMorphFlame1Button,
       JButton pSetMorphFlame2Button, JTextField pMorphFrameREd, JTextField pMorphFramesREd, JCheckBox pMorphCheckBox, JSlider pMorphFrameSlider,
       JButton pImportMorphedFlameButton, JTextField pAnimateOutputREd, JTextField pAnimateFramesREd, JComboBox pAnimateGlobalScriptCmb, JButton pAnimationGenerateButton,
       JComboBox pAnimateXFormScriptCmb) {
@@ -421,7 +419,6 @@ public class TinaController implements FlameHolder {
 
     transformationWeightLeftButton = pTransformationWeightLeftButton;
     transformationWeightRightButton = pTransformationWeightRightButton;
-    renderModeCmb = pRenderModeCmb;
     zStyleCmb = pZStyleCmb;
 
     setMorphFlame1Button = pSetMorphFlame1Button;
@@ -489,7 +486,7 @@ public class TinaController implements FlameHolder {
   }
 
   public void refreshFlameImage() {
-    refreshFlameImage(Integer.parseInt(previewQualityREd.getText()), (RenderMode) renderModeCmb.getSelectedItem(), (AffineZStyle) zStyleCmb.getSelectedItem());
+    refreshFlameImage(Integer.parseInt(previewQualityREd.getText()), (AffineZStyle) zStyleCmb.getSelectedItem());
   }
 
   private Flame lastMorphedFlame = null;
@@ -509,7 +506,7 @@ public class TinaController implements FlameHolder {
     }
   }
 
-  public void refreshFlameImage(int pQuality, RenderMode pRenderMode, AffineZStyle pAffineZStyle) {
+  public void refreshFlameImage(int pQuality, AffineZStyle pAffineZStyle) {
     ImagePanel imgPanel = getFlamePanel();
     int width = imgPanel.getWidth();
     int height = imgPanel.getHeight();
@@ -524,7 +521,6 @@ public class TinaController implements FlameHolder {
         flame.setHeight(img.getImageHeight());
         flame.setSampleDensity(pQuality);
         FlameRenderer renderer = new FlameRenderer();
-        renderer.setRenderMode(pRenderMode);
         renderer.setAffineZStyle(pAffineZStyle);
         renderer.renderFlame(flame, img);
       }
@@ -1062,7 +1058,7 @@ public class TinaController implements FlameHolder {
   }
 
   public void renderFlameButton_actionPerformed(ActionEvent e) {
-    refreshFlameImage(Integer.parseInt(renderQualityREd.getText()), (RenderMode) renderModeCmb.getSelectedItem(), (AffineZStyle) zStyleCmb.getSelectedItem());
+    refreshFlameImage(Integer.parseInt(renderQualityREd.getText()), (AffineZStyle) zStyleCmb.getSelectedItem());
   }
 
   public class FlameFileFilter extends FileFilter {
@@ -1379,7 +1375,6 @@ public class TinaController implements FlameHolder {
           flame.setHeight(img.getImageHeight());
           flame.setSampleDensity(quality);
           FlameRenderer renderer = new FlameRenderer();
-          renderer.setRenderMode((RenderMode) renderModeCmb.getSelectedItem());
           renderer.setAffineZStyle((AffineZStyle) zStyleCmb.getSelectedItem());
           renderer.renderFlame(flame, img);
           new ImageWriter().saveImage(img, file.getAbsolutePath());
@@ -2207,12 +2202,11 @@ public class TinaController implements FlameHolder {
       int width = Integer.parseInt(renderWidthREd.getText());
       int height = Integer.parseInt(renderHeightREd.getText());
       int quality = Integer.parseInt(renderQualityREd.getText());
-      RenderMode renderMode = (RenderMode) renderModeCmb.getSelectedItem();
       AffineZStyle affineZStyle = (AffineZStyle) zStyleCmb.getSelectedItem();
       for (int frame = 1; frame <= frames; frame++) {
         Flame flame1 = doMorph ? morphFlame1.makeCopy() : _currFlame.makeCopy();
         Flame flame2 = doMorph ? morphFlame2.makeCopy() : null;
-        AnimationService.renderFrame(frame, frames, flame1, flame2, doMorph, globalScript, xFormScript, imagePath, width, height, quality, renderMode, affineZStyle);
+        AnimationService.renderFrame(frame, frames, flame1, flame2, doMorph, globalScript, xFormScript, imagePath, width, height, quality, affineZStyle);
       }
     }
     catch (Throwable ex) {
