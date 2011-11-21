@@ -4926,7 +4926,7 @@ public class TinaInternalFrame extends JInternalFrame {
       mouseTransformMoveButton = new JToggleButton();
       mouseTransformMoveButton.setPreferredSize(new Dimension(42, 24));
       mouseTransformMoveButton.setSelected(true);
-      mouseTransformMoveButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/moveRight.gif")));
+      mouseTransformMoveButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/move.gif")));
       mouseTransformMoveButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
           tinaController.mouseTransformMoveButton_clicked();
@@ -4945,7 +4945,7 @@ public class TinaInternalFrame extends JInternalFrame {
     if (mouseTransformRotateButton == null) {
       mouseTransformRotateButton = new JToggleButton();
       mouseTransformRotateButton.setPreferredSize(new Dimension(42, 24));
-      mouseTransformRotateButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/turnRight.gif")));
+      mouseTransformRotateButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/rotate.gif")));
       mouseTransformRotateButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
           tinaController.mouseTransformRotateButton_clicked();
@@ -4964,7 +4964,7 @@ public class TinaInternalFrame extends JInternalFrame {
     if (mouseTransformScaleButton == null) {
       mouseTransformScaleButton = new JToggleButton();
       mouseTransformScaleButton.setPreferredSize(new Dimension(42, 24));
-      mouseTransformScaleButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/enlarge.gif")));
+      mouseTransformScaleButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/scale.gif")));
       mouseTransformScaleButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
           tinaController.mouseTransformScaleButton_clicked();

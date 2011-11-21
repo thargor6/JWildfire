@@ -145,6 +145,8 @@ public class Desktop extends JApplet {
           scriptFrame.getEnvelopeController(), renderController);
       renderController.setActionList(mainController.getActionList());
 
+      tinaController.setMainController(mainController);
+
       scriptFrame.setMainController(mainController);
       scriptFrame.setOperatorsFrame(operatorsFrame);
       operatorsFrame.setMainController(mainController);

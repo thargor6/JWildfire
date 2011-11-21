@@ -30,7 +30,6 @@ import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSlider;
@@ -73,6 +72,7 @@ import org.jwildfire.swing.DefaultFileChooser;
 import org.jwildfire.swing.ErrorHandler;
 import org.jwildfire.swing.ImageFileFilter;
 import org.jwildfire.swing.ImagePanel;
+import org.jwildfire.swing.MainController;
 
 public class TinaController implements FlameHolder {
   private static final double SLIDER_SCALE_PERSPECTIVE = 100.0;
@@ -162,6 +162,7 @@ public class TinaController implements FlameHolder {
     }
   }
 
+  private MainController mainController;
   // camera, coloring
   private final JTextField cameraRollREd;
   private final JSlider cameraRollSlider;
@@ -1406,7 +1407,8 @@ public class TinaController implements FlameHolder {
           renderer.setAffineZStyle((AffineZStyle) zStyleCmb.getSelectedItem());
           renderer.renderFlame(flame, img);
           new ImageWriter().saveImage(img, file.getAbsolutePath());
-          JOptionPane.showMessageDialog(centerPanel, "Image was successfully saved", "Operation successful", JOptionPane.OK_OPTION);
+          mainController.loadImage(file.getAbsolutePath(), false);
+          //          JOptionPane.showMessageDialog(centerPanel, "Image was successfully saved", "Operation successful", JOptionPane.OK_OPTION);
         }
       }
       catch (Throwable ex) {
@@ -2334,6 +2336,10 @@ public class TinaController implements FlameHolder {
         refreshing = false;
       }
     }
+  }
+
+  public void setMainController(MainController pMainController) {
+    mainController = pMainController;
   }
 
 }
