@@ -602,7 +602,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaCameraRollLbl.setText("Roll");
       tinaCameraRollLbl.setLocation(new Point(4, 4));
       tinaCameraRollLbl.setSize(new Dimension(94, 22));
-      tinaCameraRollLbl.setFont(new Font("Dialog", Font.BOLD, 8));
+      tinaCameraRollLbl.setFont(new Font("Dialog", Font.BOLD, 10));
       tinaCameraRollLbl.setPreferredSize(new Dimension(94, 22));
       tinaCameraPanel = new JPanel();
       tinaCameraPanel.setLayout(null);

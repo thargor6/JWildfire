@@ -18,32 +18,29 @@ package org.jwildfire.create.tina.variation;
 
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+import org.jwildfire.create.tina.random.RandomNumberGenerator;
 
-public class Julia3DFunc extends VariationFunc {
+public class PieFunc extends VariationFunc {
 
-  private static final String PARAM_POWER = "power";
-  private static final String[] paramNames = { PARAM_POWER };
+  private static final String PARAM_SLICES = "slices";
+  private static final String PARAM_ROTATION = "rotation";
+  private static final String PARAM_THICKNESS = "thickness";
+  private static final String[] paramNames = { PARAM_SLICES, PARAM_ROTATION, PARAM_THICKNESS };
 
-  private int power = 7;
+  private double slices = 6;
+  private double rotation = 0.0;
+  private double thickness = 0.5;
 
   @Override
   public void transform(TransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-    double absPower = Math.abs(power);
-    double cPower = (1.0 / power - 1.0) * 0.5;
-
-    double z = pAffineTP.z / absPower;
-    double r2d = pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y;
-    double r = pAmount * Math.pow(r2d + z * z, cPower);
-
-    double r2 = r * Math.sqrt(r2d);
-    int rnd = (int) (pContext.getRandomNumberGenerator().random() * absPower);
-    double angle = (Math.atan2(pAffineTP.y, pAffineTP.x) + 2 * Math.PI * rnd) / (double) power;
-    double sina = Math.sin(angle);
-    double cosa = Math.cos(angle);
-
-    pVarTP.x += r2 * cosa;
-    pVarTP.y += r2 * sina;
-    pVarTP.z += r * z;
+    RandomNumberGenerator randGen = pContext.getRandomNumberGenerator();
+    int sl = (int) (randGen.random() * slices + 0.5);
+    double a = rotation + 2.0 * Math.PI * (sl + randGen.random() * thickness) / slices;
+    double r = pAmount * randGen.random();
+    double sina = Math.sin(a);
+    double cosa = Math.cos(a);
+    pVarTP.x += r * cosa;
+    pVarTP.y += r * sina;
   }
 
   @Override
@@ -53,20 +50,24 @@ public class Julia3DFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { power };
+    return new Object[] { slices, rotation, thickness };
   }
 
   @Override
   public void setParameter(String pName, double pValue) {
-    if (PARAM_POWER.equalsIgnoreCase(pName))
-      power = (int) Math.round(pValue);
+    if (PARAM_SLICES.equalsIgnoreCase(pName))
+      slices = pValue;
+    else if (PARAM_ROTATION.equalsIgnoreCase(pName))
+      rotation = pValue;
+    else if (PARAM_THICKNESS.equalsIgnoreCase(pName))
+      thickness = pValue;
     else
       throw new IllegalArgumentException(pName);
   }
 
   @Override
   public String getName() {
-    return "julia3D";
+    return "pie";
   }
 
 }
