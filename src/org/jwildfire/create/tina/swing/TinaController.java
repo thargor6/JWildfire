@@ -466,7 +466,7 @@ public class TinaController implements FlameHolder {
         }
       });
       flamePanel.setSelectedXForm(getCurrXForm());
-      centerPanel.remove(1);
+      centerPanel.remove(0);
       centerPanel.add(flamePanel, BorderLayout.CENTER);
       centerPanel.getParent().validate();
       centerPanel.repaint();

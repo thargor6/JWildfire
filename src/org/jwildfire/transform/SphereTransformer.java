@@ -20,7 +20,6 @@ import org.jwildfire.base.Property;
 import org.jwildfire.base.PropertyMin;
 import org.jwildfire.image.SimpleImage;
 
-
 public class SphereTransformer extends Mesh3DTransformer {
 
   @Property(description = "Size of the sphere")
@@ -114,7 +113,9 @@ public class SphereTransformer extends Mesh3DTransformer {
       for (int i = 0; i < curr; i++) {
         int j = fInd[i];
         if (i != j) {
-          color[i] = color[j];
+          if (color != null) {
+            color[i] = color[j];
+          }
           p1[i] = p1[j];
           p2[i] = p2[j];
           p3[i] = p3[j];

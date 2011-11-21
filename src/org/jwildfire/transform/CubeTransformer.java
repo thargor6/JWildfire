@@ -23,7 +23,6 @@ import org.jwildfire.base.PropertyCategory;
 import org.jwildfire.base.PropertyMin;
 import org.jwildfire.image.SimpleImage;
 
-
 public class CubeTransformer extends Mesh3DTransformer {
   @Property(category = PropertyCategory.PRIMARY, description = "Size of the cube")
   @PropertyMin(1.0)
@@ -310,7 +309,7 @@ public class CubeTransformer extends Mesh3DTransformer {
     int newP1[] = new int[fCount];
     int newP2[] = new int[fCount];
     int newP3[] = new int[fCount];
-    int newColor[] = new int[fCount];
+    int newColor[] = color != null ? new int[fCount] : null;
     for (int i = 0; i < fCount; i++) {
       int dest1 = pointDestination.get(Integer.valueOf(p1[i]));
       int dest2 = pointDestination.get(Integer.valueOf(p2[i]));
@@ -322,7 +321,10 @@ public class CubeTransformer extends Mesh3DTransformer {
       newP1[newFCount] = p1[i];
       newP2[newFCount] = p2[i];
       newP3[newFCount] = p3[i];
-      newColor[newFCount++] = color[i];
+      if (newColor != null) {
+        newColor[newFCount] = color[i];
+      }
+      newFCount++;
     }
     pMesh3D.setFCount(newFCount);
     pMesh3D.setPP1(newP1);

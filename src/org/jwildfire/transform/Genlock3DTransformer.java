@@ -25,7 +25,6 @@ import org.jwildfire.image.SimpleImage;
 
 import com.l2fprod.common.beans.editor.ComboBoxPropertyEditor;
 
-
 public class Genlock3DTransformer extends Mesh3DTransformer {
 
   public enum Genlock {
@@ -47,6 +46,11 @@ public class Genlock3DTransformer extends Mesh3DTransformer {
       Pixel pixel = new Pixel();
       int fLst[] = new int[fCount];
       int color[] = pMesh3D.getColor();
+      double u[] = pMesh3D.getU();
+      double v[] = pMesh3D.getV();
+      int p1[] = pMesh3D.getPP1();
+      SimpleImage texture = pMesh3D.getTexture();
+
       int valid = 0;
       int r1 = this.colorA.getRed();
       int g1 = this.colorA.getGreen();
@@ -56,7 +60,14 @@ public class Genlock3DTransformer extends Mesh3DTransformer {
       int b2 = this.colorB.getBlue();
       if (this.genlock == Genlock.COLOR) {
         for (int i = 0; i < fCount; i++) {
-          pixel.setARGBValue(color[i]);
+          if (color != null) {
+            pixel.setARGBValue(color[i]);
+          }
+          else {
+            int px = (int) (u[p1[i]] * texture.getImageWidth() + 0.5);
+            int py = (int) (v[p1[i]] * texture.getImageHeight() + 0.5);
+            pixel.setARGBValue(texture.getARGBValueIgnoreBounds(px, py));
+          }
           if ((pixel.r != r1) || (pixel.g != g1) || (pixel.b != b1)) {
             fLst[i] = 1;
             valid++;
@@ -65,7 +76,14 @@ public class Genlock3DTransformer extends Mesh3DTransformer {
       }
       else if (this.genlock == Genlock.IN_RANGE) {
         for (int i = 0; i < fCount; i++) {
-          pixel.setARGBValue(color[i]);
+          if (color != null) {
+            pixel.setARGBValue(color[i]);
+          }
+          else {
+            int px = (int) (u[p1[i]] * texture.getImageWidth() + 0.5);
+            int py = (int) (v[p1[i]] * texture.getImageHeight() + 0.5);
+            pixel.setARGBValue(texture.getARGBValueIgnoreBounds(px, py));
+          }
           if ((((pixel.r >= r1) && (pixel.r <= r2)) || ((pixel.r >= r2) && (pixel.r <= r1)))
               || (((pixel.g >= g1) && (pixel.g <= g2)) || ((pixel.g >= g2) && (pixel.g <= g1)))
               || (((pixel.b >= b1) && (pixel.b <= b2)) || ((pixel.b >= b2) && (pixel.b <= b1)))) {
@@ -79,6 +97,14 @@ public class Genlock3DTransformer extends Mesh3DTransformer {
       }
       else if (this.genlock == Genlock.OUT_RANGE) {
         for (int i = 0; i < fCount; i++) {
+          if (color != null) {
+            pixel.setARGBValue(color[i]);
+          }
+          else {
+            int px = (int) (u[p1[i]] * texture.getImageWidth() + 0.5);
+            int py = (int) (v[p1[i]] * texture.getImageHeight() + 0.5);
+            pixel.setARGBValue(texture.getARGBValueIgnoreBounds(px, py));
+          }
           if ((((pixel.r >= r1) && (pixel.r <= r2)) || ((pixel.r >= r2) && (pixel.r <= r1)))
               || (((pixel.g >= g1) && (pixel.g <= g2)) || ((pixel.g >= g2) && (pixel.g <= g1)))
               || (((pixel.b >= b1) && (pixel.b <= b2)) || ((pixel.b >= b2) && (pixel.b <= b1)))) {
@@ -122,7 +148,7 @@ public class Genlock3DTransformer extends Mesh3DTransformer {
             pMesh3D.setPP3(pp);
           }
 
-          {
+          if (pMesh3D.getColor() != null) {
             int rr[] = new int[valid];
             int curr = 0;
             int rs[] = pMesh3D.getColor();

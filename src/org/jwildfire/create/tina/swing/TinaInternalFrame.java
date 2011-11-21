@@ -1,6 +1,7 @@
 package org.jwildfire.create.tina.swing;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
@@ -27,6 +28,7 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.JToggleButton;
 import javax.swing.ListSelectionModel;
+import javax.swing.SwingConstants;
 import javax.swing.WindowConstants;
 import javax.swing.border.EtchedBorder;
 import javax.swing.event.ListSelectionEvent;
@@ -392,11 +394,14 @@ public class TinaInternalFrame extends JInternalFrame {
   private JComboBox animateScriptCmb = null;
   private JLabel animateXFormScriptLbl = null;
   private JComboBox animateXFormScriptCmb = null;
-  private JLabel centreDescLabel = null;
   private JPanel triangleOperationsPanel = null;
   private JToggleButton mouseTransformMoveButton = null;
   private JToggleButton mouseTransformRotateButton = null;
   private JToggleButton mouseTransformScaleButton = null;
+  private JPanel centerNorthPanel = null;
+  private JPanel centerWestPanel = null;
+  private JPanel centerCenterPanel = null;
+  private JLabel centerDescLabel = null;
 
   /**
    * This is the xxx default constructor
@@ -468,6 +473,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaWestPanel = new JPanel();
       tinaWestPanel.setLayout(new BorderLayout());
       tinaWestPanel.setPreferredSize(new Dimension(200, 0));
+      tinaWestPanel.setVisible(true);
       tinaWestPanel.add(getTinaWestTabbedPane(), BorderLayout.CENTER);
     }
     return tinaWestPanel;
@@ -515,16 +521,15 @@ public class TinaInternalFrame extends JInternalFrame {
    */
   private JPanel getTinaCenterPanel() {
     if (tinaCenterPanel == null) {
-      centreDescLabel = new JLabel();
-      centreDescLabel.setText("(double-click on thumbnail to load it into this area, double-click at this area for full render) ");
-      centreDescLabel.setFont(new Font("Dialog", Font.BOLD, 10));
       tinaCenterPanel = new JPanel();
       tinaCenterPanel.setLayout(new BorderLayout());
-      tinaCenterPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
+      tinaCenterPanel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
       tinaCenterPanel.setBackground(SystemColor.controlDkShadow);
       tinaCenterPanel.add(getRandomBatchPanel(), BorderLayout.SOUTH);
-      tinaCenterPanel.add(centreDescLabel, BorderLayout.CENTER);
       tinaCenterPanel.add(getTriangleOperationsPanel(), BorderLayout.EAST);
+      tinaCenterPanel.add(getCenterNorthPanel(), BorderLayout.NORTH);
+      tinaCenterPanel.add(getCenterWestPanel(), BorderLayout.WEST);
+      tinaCenterPanel.add(getCenterCenterPanel(), BorderLayout.CENTER);
     }
     return tinaCenterPanel;
   }
@@ -959,12 +964,11 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton getTinaRenderFlameButton() {
     if (tinaRenderFlameButton == null) {
       tinaRenderFlameButton = new JButton();
-      tinaRenderFlameButton.setText("Render Flame");
+      tinaRenderFlameButton.setText("R");
       tinaRenderFlameButton.setMnemonic(KeyEvent.VK_R);
       tinaRenderFlameButton.setFont(new Font("Dialog", Font.BOLD, 10));
-      tinaRenderFlameButton.setLocation(new Point(258, 32));
-      tinaRenderFlameButton.setSize(new Dimension(125, 24));
-      tinaRenderFlameButton.setPreferredSize(new Dimension(125, 24));
+      tinaRenderFlameButton.setToolTipText("Render");
+      tinaRenderFlameButton.setPreferredSize(new Dimension(42, 24));
       tinaRenderFlameButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
           tinaController.renderFlameButton_actionPerformed(e);
@@ -1772,7 +1776,6 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaNorthMainPanel.add(getTinaLoadFlameButton(), null);
       tinaNorthMainPanel.add(getTinaSaveFlameButton(), null);
       tinaNorthMainPanel.add(getTinaExportImageButton(), null);
-      tinaNorthMainPanel.add(getTinaRenderFlameButton(), null);
       tinaNorthMainPanel.add(tinaCameraPreviewQualityLbl, null);
       tinaNorthMainPanel.add(getTinaPreviewQualityREd(), null);
       tinaNorthMainPanel.add(tinaCameraRenderQualityLbl, null);
@@ -2837,7 +2840,7 @@ public class TinaInternalFrame extends JInternalFrame {
         getNonlinearParams2REd(), getNonlinearVar2LeftButton(), getNonlinarVar2RightButton(), getNonlinearParams2LeftButton(), getNonlinarParams2RightButton());
     nonlinearControlsRows[2] = new NonlinearControlsRow(getNonlinearVar3Cmb(), getNonlinearParams3Cmb(), getNonlinearVar3REd(),
         getNonlinearParams3REd(), getNonlinearVar3LeftButton(), getNonlinarVar3RightButton(), getNonlinearParams3LeftButton(), getNonlinarParams3RightButton());
-    tinaController = new TinaController(pErrorHandler, pPrefs, getTinaCenterPanel(), getTinaCameraRollREd(), getTinaCameraRollSlider(), getTinaCameraPitchREd(),
+    tinaController = new TinaController(pErrorHandler, pPrefs, getCenterCenterPanel(), getTinaCameraRollREd(), getTinaCameraRollSlider(), getTinaCameraPitchREd(),
         getTinaCameraPitchSlider(), getTinaCameraYawREd(), getTinaCameraYawSlider(), getTinaCameraPerspectiveREd(), getTinaCameraPerspectiveSlider(),
         getTinaPreviewQualityREd(), getTinaRenderQualityREd(), getTinaCameraCentreXREd(), getTinaCameraCentreXSlider(), getTinaCameraCentreYREd(),
         getTinaCameraCentreYSlider(), getTinaCameraZoomREd(), getTinaCameraZoomSlider(), getTinaPixelsPerUnitREd(), getTinaPixelsPerUnitSlider(),
@@ -4779,6 +4782,7 @@ public class TinaInternalFrame extends JInternalFrame {
       triangleOperationsPanel.add(getMouseTransformMoveButton(), null);
       triangleOperationsPanel.add(getMouseTransformRotateButton(), null);
       triangleOperationsPanel.add(getMouseTransformScaleButton(), null);
+      triangleOperationsPanel.add(getTinaRenderFlameButton(), null);
     }
     return triangleOperationsPanel;
   }
@@ -4839,6 +4843,54 @@ public class TinaInternalFrame extends JInternalFrame {
       });
     }
     return mouseTransformScaleButton;
+  }
+
+  /**
+   * This method initializes centerNorthPanel	
+   * 	
+   * @return javax.swing.JPanel	
+   */
+  private JPanel getCenterNorthPanel() {
+    if (centerNorthPanel == null) {
+      centerNorthPanel = new JPanel();
+      centerNorthPanel.setLayout(new GridBagLayout());
+      centerNorthPanel.setPreferredSize(new Dimension(0, 10));
+    }
+    return centerNorthPanel;
+  }
+
+  /**
+   * This method initializes centerWestPanel	
+   * 	
+   * @return javax.swing.JPanel	
+   */
+  private JPanel getCenterWestPanel() {
+    if (centerWestPanel == null) {
+      centerWestPanel = new JPanel();
+      centerWestPanel.setLayout(new GridBagLayout());
+      centerWestPanel.setPreferredSize(new Dimension(10, 0));
+    }
+    return centerWestPanel;
+  }
+
+  /**
+   * This method initializes centerCenterPanel	
+   * 	
+   * @return javax.swing.JPanel	
+   */
+  private JPanel getCenterCenterPanel() {
+    if (centerCenterPanel == null) {
+      centerDescLabel = new JLabel();
+      centerDescLabel.setText("  (just double-click on thumbnail to load it into main area)");
+      centerDescLabel.setHorizontalAlignment(SwingConstants.CENTER);
+      centerDescLabel.setFont(new Font("Dialog", Font.BOLD, 10));
+      centerCenterPanel = new JPanel();
+      centerCenterPanel.setLayout(new BorderLayout());
+      centerCenterPanel.setBackground(Color.gray);
+      centerCenterPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
+      centerCenterPanel.add(centerDescLabel, BorderLayout.SOUTH);
+    }
+    return centerCenterPanel;
   }
 
 } //  @jve:decl-index=0:visual-constraint="10,10"
