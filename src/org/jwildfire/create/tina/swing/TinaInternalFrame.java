@@ -131,10 +131,6 @@ public class TinaInternalFrame extends JInternalFrame {
 
   private JLabel tinaOversampleLbl = null;
 
-  private JLabel tinaGammaThresholdLbl = null;
-
-  private JLabel tinaWhiteLevelLbl = null;
-
   private JLabel tinaPixelsPerUnitLbl = null;
 
   private JTextField tinaPixelsPerUnitREd = null;
@@ -169,10 +165,6 @@ public class TinaInternalFrame extends JInternalFrame {
 
   private JTextField tinaOversampleREd = null;
 
-  private JTextField tinaGammaThresholdREd = null;
-
-  private JTextField tinaWhiteLevelREd = null;
-
   private JSlider tinaContrastSlider = null;
 
   private JSlider tinaGammaSlider = null;
@@ -182,10 +174,6 @@ public class TinaInternalFrame extends JInternalFrame {
   private JSlider tinaFilterRadiusSlider = null;
 
   private JSlider tinaOversampleSlider = null;
-
-  private JSlider tinaGammaThresholdSlider = null;
-
-  private JSlider tinaWhiteLevelSlider = null;
 
   private JButton tinaAddTransformationButton = null;
 
@@ -514,7 +502,7 @@ public class TinaInternalFrame extends JInternalFrame {
     if (tinaSouthPanel == null) {
       tinaSouthPanel = new JPanel();
       tinaSouthPanel.setLayout(new BorderLayout());
-      tinaSouthPanel.setPreferredSize(new Dimension(0, 152));
+      tinaSouthPanel.setPreferredSize(new Dimension(0, 128));
       tinaSouthPanel.add(getTinaSouthTabbedPane(), BorderLayout.CENTER);
     }
     return tinaSouthPanel;
@@ -654,18 +642,6 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaBGColorLbl.setLocation(new Point(488, 76));
       tinaBGColorLbl.setSize(new Dimension(94, 22));
       tinaBGColorLbl.setPreferredSize(new Dimension(94, 22));
-      tinaWhiteLevelLbl = new JLabel();
-      tinaWhiteLevelLbl.setText("White level");
-      tinaWhiteLevelLbl.setFont(new Font("Dialog", Font.BOLD, 10));
-      tinaWhiteLevelLbl.setLocation(new Point(488, 52));
-      tinaWhiteLevelLbl.setSize(new Dimension(94, 22));
-      tinaWhiteLevelLbl.setPreferredSize(new Dimension(94, 22));
-      tinaGammaThresholdLbl = new JLabel();
-      tinaGammaThresholdLbl.setText("Gamma threshold");
-      tinaGammaThresholdLbl.setLocation(new Point(488, 28));
-      tinaGammaThresholdLbl.setSize(new Dimension(94, 22));
-      tinaGammaThresholdLbl.setFont(new Font("Dialog", Font.BOLD, 10));
-      tinaGammaThresholdLbl.setPreferredSize(new Dimension(94, 22));
       tinaOversampleLbl = new JLabel();
       tinaOversampleLbl.setText("Oversample");
       tinaOversampleLbl.setLocation(new Point(488, 4));
@@ -674,7 +650,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaOversampleLbl.setPreferredSize(new Dimension(94, 22));
       tinaFilterRadiusLbl = new JLabel();
       tinaFilterRadiusLbl.setText("Filter radius");
-      tinaFilterRadiusLbl.setLocation(new Point(4, 100));
+      tinaFilterRadiusLbl.setLocation(new Point(488, 28));
       tinaFilterRadiusLbl.setSize(new Dimension(94, 22));
       tinaFilterRadiusLbl.setFont(new Font("Dialog", Font.BOLD, 10));
       tinaFilterRadiusLbl.setPreferredSize(new Dimension(94, 22));
@@ -712,8 +688,6 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaColoringPanel.add(tinaVibrancyLbl, null);
       tinaColoringPanel.add(tinaFilterRadiusLbl, null);
       tinaColoringPanel.add(tinaOversampleLbl, null);
-      tinaColoringPanel.add(tinaGammaThresholdLbl, null);
-      tinaColoringPanel.add(tinaWhiteLevelLbl, null);
       tinaColoringPanel.add(tinaBGColorLbl, null);
       tinaColoringPanel.add(getTinaBGColorRedREd(), null);
       tinaColoringPanel.add(getTinaBGColorGreenREd(), null);
@@ -726,15 +700,11 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaColoringPanel.add(getTinaVibrancyREd(), null);
       tinaColoringPanel.add(getTinaFilterRadiusREd(), null);
       tinaColoringPanel.add(getTinaOversampleREd(), null);
-      tinaColoringPanel.add(getTinaGammaThresholdREd(), null);
-      tinaColoringPanel.add(getTinaWhiteLevelREd(), null);
       tinaColoringPanel.add(getTinaContrastSlider(), null);
       tinaColoringPanel.add(getTinaGammaSlider(), null);
       tinaColoringPanel.add(getTinaVibrancySlider(), null);
       tinaColoringPanel.add(getTinaFilterRadiusSlider(), null);
       tinaColoringPanel.add(getTinaOversampleSlider(), null);
-      tinaColoringPanel.add(getTinaGammaThresholdSlider(), null);
-      tinaColoringPanel.add(getTinaWhiteLevelSlider(), null);
     }
     return tinaColoringPanel;
   }
@@ -1565,7 +1535,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaFilterRadiusREd = new JTextField();
       tinaFilterRadiusREd.setPreferredSize(new Dimension(100, 22));
       tinaFilterRadiusREd.setText("");
-      tinaFilterRadiusREd.setLocation(new Point(100, 100));
+      tinaFilterRadiusREd.setLocation(new Point(584, 28));
       tinaFilterRadiusREd.setSize(new Dimension(100, 22));
       tinaFilterRadiusREd.setFont(new Font("Dialog", Font.PLAIN, 10));
       tinaFilterRadiusREd.addActionListener(new java.awt.event.ActionListener() {
@@ -1607,60 +1577,6 @@ public class TinaInternalFrame extends JInternalFrame {
       });
     }
     return tinaOversampleREd;
-  }
-
-  /**
-   * This method initializes tinaGammaThresholdREd  
-   *  
-   * @return javax.swing.JTextField 
-   */
-  private JTextField getTinaGammaThresholdREd() {
-    if (tinaGammaThresholdREd == null) {
-      tinaGammaThresholdREd = new JTextField();
-      tinaGammaThresholdREd.setPreferredSize(new Dimension(100, 22));
-      tinaGammaThresholdREd.setText("");
-      tinaGammaThresholdREd.setLocation(new Point(584, 28));
-      tinaGammaThresholdREd.setSize(new Dimension(100, 22));
-      tinaGammaThresholdREd.setFont(new Font("Dialog", Font.PLAIN, 10));
-      tinaGammaThresholdREd.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.gammaThresholdREd_changed();
-        }
-      });
-      tinaGammaThresholdREd.addFocusListener(new java.awt.event.FocusAdapter() {
-        public void focusLost(java.awt.event.FocusEvent e) {
-          tinaController.gammaThresholdREd_changed();
-        }
-      });
-    }
-    return tinaGammaThresholdREd;
-  }
-
-  /**
-   * This method initializes tinaWhiteLevelREd  
-   *  
-   * @return javax.swing.JTextField 
-   */
-  private JTextField getTinaWhiteLevelREd() {
-    if (tinaWhiteLevelREd == null) {
-      tinaWhiteLevelREd = new JTextField();
-      tinaWhiteLevelREd.setPreferredSize(new Dimension(100, 22));
-      tinaWhiteLevelREd.setText("");
-      tinaWhiteLevelREd.setLocation(new Point(584, 52));
-      tinaWhiteLevelREd.setSize(new Dimension(100, 22));
-      tinaWhiteLevelREd.setFont(new Font("Dialog", Font.PLAIN, 10));
-      tinaWhiteLevelREd.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.whiteLevelREd_changed();
-        }
-      });
-      tinaWhiteLevelREd.addFocusListener(new java.awt.event.FocusAdapter() {
-        public void focusLost(java.awt.event.FocusEvent e) {
-          tinaController.whiteLevelREd_changed();
-        }
-      });
-    }
-    return tinaWhiteLevelREd;
   }
 
   /**
@@ -1748,7 +1664,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaFilterRadiusSlider.setValue(0);
       tinaFilterRadiusSlider.setFont(new Font("Dialog", Font.BOLD, 10));
       tinaFilterRadiusSlider.setSize(new Dimension(220, 19));
-      tinaFilterRadiusSlider.setLocation(new Point(202, 100));
+      tinaFilterRadiusSlider.setLocation(new Point(686, 28));
       tinaFilterRadiusSlider.setPreferredSize(new Dimension(220, 19));
       tinaFilterRadiusSlider.addChangeListener(new javax.swing.event.ChangeListener() {
         public void stateChanged(javax.swing.event.ChangeEvent e) {
@@ -1782,54 +1698,6 @@ public class TinaInternalFrame extends JInternalFrame {
       });
     }
     return tinaOversampleSlider;
-  }
-
-  /**
-   * This method initializes tinaGammaThresholdSlider 
-   *  
-   * @return javax.swing.JSlider  
-   */
-  private JSlider getTinaGammaThresholdSlider() {
-    if (tinaGammaThresholdSlider == null) {
-      tinaGammaThresholdSlider = new JSlider();
-      tinaGammaThresholdSlider.setMaximum(500);
-      tinaGammaThresholdSlider.setMinimum(0);
-      tinaGammaThresholdSlider.setValue(0);
-      tinaGammaThresholdSlider.setFont(new Font("Dialog", Font.BOLD, 10));
-      tinaGammaThresholdSlider.setSize(new Dimension(220, 19));
-      tinaGammaThresholdSlider.setLocation(new Point(686, 28));
-      tinaGammaThresholdSlider.setPreferredSize(new Dimension(220, 19));
-      tinaGammaThresholdSlider.addChangeListener(new javax.swing.event.ChangeListener() {
-        public void stateChanged(javax.swing.event.ChangeEvent e) {
-          tinaController.gammaThresholdSlider_stateChanged(e);
-        }
-      });
-    }
-    return tinaGammaThresholdSlider;
-  }
-
-  /**
-   * This method initializes tinaWhiteLevelSlider 
-   *  
-   * @return javax.swing.JSlider  
-   */
-  private JSlider getTinaWhiteLevelSlider() {
-    if (tinaWhiteLevelSlider == null) {
-      tinaWhiteLevelSlider = new JSlider();
-      tinaWhiteLevelSlider.setMaximum(255);
-      tinaWhiteLevelSlider.setMinimum(0);
-      tinaWhiteLevelSlider.setValue(0);
-      tinaWhiteLevelSlider.setFont(new Font("Dialog", Font.BOLD, 10));
-      tinaWhiteLevelSlider.setSize(new Dimension(220, 19));
-      tinaWhiteLevelSlider.setLocation(new Point(686, 52));
-      tinaWhiteLevelSlider.setPreferredSize(new Dimension(220, 19));
-      tinaWhiteLevelSlider.addChangeListener(new javax.swing.event.ChangeListener() {
-        public void stateChanged(javax.swing.event.ChangeEvent e) {
-          tinaController.whiteLevelSlider_stateChanged(e);
-        }
-      });
-    }
-    return tinaWhiteLevelSlider;
   }
 
   /**
@@ -2975,8 +2843,7 @@ public class TinaInternalFrame extends JInternalFrame {
         getTinaCameraCentreYSlider(), getTinaCameraZoomREd(), getTinaCameraZoomSlider(), getTinaPixelsPerUnitREd(), getTinaPixelsPerUnitSlider(),
         getTinaBrightnessREd(), getTinaBrightnessSlider(), getTinaContrastREd(), getTinaContrastSlider(), getTinaGammaREd(), getTinaGammaSlider(),
         getTinaVibrancyREd(), getTinaVibrancySlider(), getTinaFilterRadiusREd(), getTinaFilterRadiusSlider(), getTinaOversampleREd(),
-        getTinaOversampleSlider(), getTinaGammaThresholdREd(), getTinaGammaThresholdSlider(), getTinaWhiteLevelREd(), getTinaWhiteLevelSlider(),
-        getTinaBGColorRedREd(), getTinaBGColorRedSlider(), getTinaBGColorGreenREd(), getTinaBGColorGreenSlider(), getTinaBGColorBlueREd(),
+        getTinaOversampleSlider(), getTinaBGColorRedREd(), getTinaBGColorRedSlider(), getTinaBGColorGreenREd(), getTinaBGColorGreenSlider(), getTinaBGColorBlueREd(),
         getTinaBGColorBlueSlider(), getTinaPaletteRandomPointsREd(), getTinaPaletteImgPanel(), getTinaPaletteShiftREd(), getTinaPaletteShiftSlider(),
         getTinaPaletteRedREd(), getTinaPaletteRedSlider(), getTinaPaletteGreenREd(), getTinaPaletteGreenSlider(), getTinaPaletteBlueREd(),
         getTinaPaletteBlueSlider(), getTinaPaletteHueREd(), getTinaPaletteHueSlider(), getTinaPaletteSaturationREd(), getTinaPaletteSaturationSlider(),
@@ -3501,7 +3368,7 @@ public class TinaInternalFrame extends JInternalFrame {
     if (randomBatchPanel == null) {
       randomBatchPanel = new JPanel();
       randomBatchPanel.setLayout(new BorderLayout());
-      randomBatchPanel.setPreferredSize(new Dimension(0, 80));
+      randomBatchPanel.setPreferredSize(new Dimension(0, 100));
     }
     return randomBatchPanel;
   }

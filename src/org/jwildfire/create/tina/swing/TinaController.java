@@ -81,7 +81,6 @@ public class TinaController implements FlameHolder {
   private static final double SLIDER_SCALE_BRIGHTNESS_CONTRAST_VIBRANCY = 100.0;
   private static final double SLIDER_SCALE_GAMMA = 100.0;
   private static final double SLIDER_SCALE_FILTER_RADIUS = 100.0;
-  private static final double SLIDER_SCALE_GAMMA_TRESHOLD = 1000.0;
   private static final double SLIDER_SCALE_COLOR = 100.0;
 
   private final JPanel centerPanel;
@@ -194,10 +193,6 @@ public class TinaController implements FlameHolder {
   private final JSlider filterRadiusSlider;
   private final JTextField oversampleREd;
   private final JSlider oversampleSlider;
-  private final JTextField gammaThresholdREd;
-  private final JSlider gammaThresholdSlider;
-  private final JTextField whiteLevelREd;
-  private final JSlider whiteLevelSlider;
   private final JTextField bgColorRedREd;
   private final JSlider bgColorRedSlider;
   private final JTextField bgColorGreenREd;
@@ -301,8 +296,7 @@ public class TinaController implements FlameHolder {
       JSlider pCameraCentreYSlider, JTextField pCameraZoomREd, JSlider pCameraZoomSlider, JTextField pPixelsPerUnitREd, JSlider pPixelsPerUnitSlider,
       JTextField pBrightnessREd, JSlider pBrightnessSlider, JTextField pContrastREd, JSlider pContrastSlider, JTextField pGammaREd, JSlider pGammaSlider,
       JTextField pVibrancyREd, JSlider pVibrancySlider, JTextField pFilterRadiusREd, JSlider pFilterRadiusSlider, JTextField pOversampleREd,
-      JSlider pOversampleSlider, JTextField pGammaThresholdREd, JSlider pGammaThresholdSlider, JTextField pWhiteLevelREd, JSlider pWhiteLevelSlider,
-      JTextField pBGColorRedREd, JSlider pBGColorRedSlider, JTextField pBGColorGreenREd, JSlider pBGColorGreenSlider, JTextField pBGColorBlueREd,
+      JSlider pOversampleSlider, JTextField pBGColorRedREd, JSlider pBGColorRedSlider, JTextField pBGColorGreenREd, JSlider pBGColorGreenSlider, JTextField pBGColorBlueREd,
       JSlider pBGColorBlueSlider, JTextField pPaletteRandomPointsREd, JPanel pPaletteImgPanel, JTextField pPaletteShiftREd, JSlider pPaletteShiftSlider,
       JTextField pPaletteRedREd, JSlider pPaletteRedSlider, JTextField pPaletteGreenREd, JSlider pPaletteGreenSlider, JTextField pPaletteBlueREd,
       JSlider pPaletteBlueSlider, JTextField pPaletteHueREd, JSlider pPaletteHueSlider, JTextField pPaletteSaturationREd, JSlider pPaletteSaturationSlider,
@@ -353,10 +347,6 @@ public class TinaController implements FlameHolder {
     filterRadiusSlider = pFilterRadiusSlider;
     oversampleREd = pOversampleREd;
     oversampleSlider = pOversampleSlider;
-    gammaThresholdREd = pGammaThresholdREd;
-    gammaThresholdSlider = pGammaThresholdSlider;
-    whiteLevelREd = pWhiteLevelREd;
-    whiteLevelSlider = pWhiteLevelSlider;
     bgColorRedREd = pBGColorRedREd;
     bgColorRedSlider = pBGColorRedSlider;
     bgColorGreenREd = pBGColorGreenREd;
@@ -587,14 +577,8 @@ public class TinaController implements FlameHolder {
       filterRadiusREd.setText(Tools.doubleToString(currFlame.getSpatialFilterRadius()));
       filterRadiusSlider.setValue(Tools.FTOI(currFlame.getSpatialFilterRadius() * SLIDER_SCALE_FILTER_RADIUS));
 
-      gammaThresholdREd.setText(Tools.doubleToString(currFlame.getGammaThreshold()));
-      gammaThresholdSlider.setValue(Tools.FTOI(currFlame.getGammaThreshold() * SLIDER_SCALE_GAMMA_TRESHOLD));
-
       oversampleREd.setText(String.valueOf(currFlame.getSpatialOversample()));
       oversampleSlider.setValue(currFlame.getSpatialOversample());
-
-      whiteLevelREd.setText(String.valueOf(currFlame.getWhiteLevel()));
-      whiteLevelSlider.setValue(currFlame.getWhiteLevel());
 
       bgColorRedREd.setText(String.valueOf(currFlame.getBGColorRed()));
       bgColorRedSlider.setValue(currFlame.getBGColorRed());
@@ -1180,10 +1164,6 @@ public class TinaController implements FlameHolder {
     flameTextFieldChanged(gammaSlider, gammaREd, "gamma", SLIDER_SCALE_GAMMA);
   }
 
-  public void gammaThresholdREd_changed() {
-    flameTextFieldChanged(gammaThresholdSlider, gammaThresholdREd, "gammaThreshold", SLIDER_SCALE_GAMMA_TRESHOLD);
-  }
-
   public void bgColorRedSlider_stateChanged(ChangeEvent e) {
     flameSliderChanged(bgColorRedSlider, bgColorRedREd, "bgColorRed", 1.0);
   }
@@ -1210,14 +1190,6 @@ public class TinaController implements FlameHolder {
 
   public void oversampleSlider_stateChanged(ChangeEvent e) {
     flameSliderChanged(oversampleSlider, oversampleREd, "spatialOversample", 1.0);
-  }
-
-  public void gammaThresholdSlider_stateChanged(ChangeEvent e) {
-    flameSliderChanged(gammaThresholdSlider, gammaThresholdREd, "gammaThreshold", SLIDER_SCALE_GAMMA_TRESHOLD);
-  }
-
-  public void whiteLevelSlider_stateChanged(ChangeEvent e) {
-    flameSliderChanged(whiteLevelSlider, whiteLevelREd, "whiteLevel", 1.0);
   }
 
   public void vibrancyREd_changed() {
@@ -1254,10 +1226,6 @@ public class TinaController implements FlameHolder {
 
   public void contrastSlider_stateChanged(ChangeEvent e) {
     flameSliderChanged(contrastSlider, contrastREd, "contrast", SLIDER_SCALE_BRIGHTNESS_CONTRAST_VIBRANCY);
-  }
-
-  public void whiteLevelREd_changed() {
-    flameTextFieldChanged(whiteLevelSlider, whiteLevelREd, "whiteLevel", 1.0);
   }
 
   public void randomPaletteButton_actionPerformed(ActionEvent e) {
@@ -1748,9 +1716,9 @@ public class TinaController implements FlameHolder {
 
   private List<Flame> randomBatch = new ArrayList<Flame>();
 
-  private final int IMG_WIDTH = 60;
-  private final int IMG_HEIGHT = 50;
-  private final int BORDER_SIZE = 4;
+  private final int IMG_WIDTH = 80;
+  private final int IMG_HEIGHT = 60;
+  private final int BORDER_SIZE = 10;
 
   public void updateThumbnails(List<SimpleImage> pImages) {
     if (randomBatchScrollPane != null) {
