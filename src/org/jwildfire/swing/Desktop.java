@@ -55,6 +55,7 @@ import javax.swing.border.SoftBevelBorder;
 
 import org.jwildfire.base.Prefs;
 import org.jwildfire.base.Tools;
+import org.jwildfire.create.tina.base.RandomFlameGeneratorStyle;
 import org.jwildfire.create.tina.swing.TinaController;
 import org.jwildfire.create.tina.swing.TinaInternalFrame;
 
@@ -75,6 +76,7 @@ public class Desktop extends JApplet {
   private JCheckBoxMenuItem tinaMenuItem = null;
   private JCheckBoxMenuItem sunFlowMenuItem = null;
   private JMenuItem openMenuItem = null;
+  private Prefs prefs = null;
 
   private StandardErrorHandler errorHandler = null;
 
@@ -91,14 +93,16 @@ public class Desktop extends JApplet {
       mainDesktopPane.add(getFormulaExplorerInternalFrame(), null);
       mainDesktopPane.add(getTinaInternalFrame(), null);
       mainDesktopPane.add(getSunFlowInternalFrame(), null);
+      mainDesktopPane.add(getPreferencesInternalFrame(), null);
       errorHandler = new StandardErrorHandler(mainDesktopPane, getShowErrorDlg(), getShowErrorDlgMessageTextArea(),
           getShowErrorDlgStacktraceTextArea());
 
-      Prefs prefs = new Prefs();
+      prefs = new Prefs();
+      prefs.loadFromFile();
       TinaInternalFrame tinaFrame = (TinaInternalFrame) getTinaInternalFrame();
       tinaController = tinaFrame.createController(errorHandler, prefs);
       try {
-        tinaController.createRandomBatch(1);
+        tinaController.createRandomBatch(1, RandomFlameGeneratorStyle.ALL);
       }
       catch (Exception ex) {
         ex.printStackTrace();
@@ -133,6 +137,10 @@ public class Desktop extends JApplet {
       ScriptInternalFrame scriptFrame = (ScriptInternalFrame) getScriptInternalFrame();
       scriptFrame.setDesktop(this);
       scriptFrame.setRenderController(renderController);
+
+      PreferencesInternalFrame preferencesFrame = (PreferencesInternalFrame) getPreferencesInternalFrame();
+      preferencesFrame.setDesktop(this);
+      preferencesFrame.setPrefs(prefs);
 
       SunflowInternalFrame sunflowFrame = (SunflowInternalFrame) getSunFlowInternalFrame();
       sunflowFrame.createController(errorHandler, prefs).newScene();
@@ -171,6 +179,7 @@ public class Desktop extends JApplet {
       windowMenu.add(getFormulaExplorerMenuItem());
       windowMenu.add(getTinaMenuItem());
       windowMenu.add(getSunFlowMenuItem());
+      windowMenu.add(getPreferencesMenuItem());
     }
     return windowMenu;
   }
@@ -680,6 +689,30 @@ public class Desktop extends JApplet {
   }
 
   /**
+   * This method initializes preferencesInternalFrame
+   * 
+   * @return javax.swing.JInternalFrame
+   */
+  private JInternalFrame getPreferencesInternalFrame() {
+    if (preferencesInternalFrame == null) {
+      preferencesInternalFrame = new PreferencesInternalFrame();
+      preferencesInternalFrame
+          .addInternalFrameListener(new javax.swing.event.InternalFrameAdapter() {
+            public void internalFrameDeactivated(
+                javax.swing.event.InternalFrameEvent e) {
+              preferencesInternalFrame_internalFrameDeactivated(e);
+            }
+
+            public void internalFrameClosed(
+                javax.swing.event.InternalFrameEvent e) {
+              preferencesInternalFrame_internalFrameClosed(e);
+            }
+          });
+    }
+    return preferencesInternalFrame;
+  }
+
+  /**
    * This method initializes scriptMenuItem
    * 
    * @return javax.swing.JMenuItem
@@ -697,6 +730,26 @@ public class Desktop extends JApplet {
           });
     }
     return scriptMenuItem;
+  }
+
+  /**
+   * This method initializes scriptMenuItem
+   * 
+   * @return javax.swing.JMenuItem
+   */
+  private JCheckBoxMenuItem getPreferencesMenuItem() {
+    if (preferencesMenuItem == null) {
+      preferencesMenuItem = new JCheckBoxMenuItem();
+      preferencesMenuItem.setText("Preferences");
+      preferencesMenuItem.setSelected(true);
+      preferencesMenuItem
+          .addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent e) {
+              preferencesMenuItem_actionPerformed(e);
+            }
+          });
+    }
+    return preferencesMenuItem;
   }
 
   /**
@@ -1629,6 +1682,10 @@ public class Desktop extends JApplet {
       scriptFrame.initApp();
     }
     {
+      PreferencesInternalFrame preferencesFrame = (PreferencesInternalFrame) getPreferencesInternalFrame();
+      preferencesFrame.initApp();
+    }
+    {
       OperatorsInternalFrame operatorsFrame = (OperatorsInternalFrame) getOperatorsInternalFrame();
       operatorsFrame.initApp();
     }
@@ -1660,88 +1717,6 @@ public class Desktop extends JApplet {
     enableControls();
   }
 
-  private void openFavourite1MenuItem_actionPerformed(
-      java.awt.event.ActionEvent e) {
-    try {
-      mainController.loadImage("C:\\TMP\\Eva_Mendez_8.jpg", true);
-    }
-    catch (Throwable ex) {
-      mainController.handleError(ex);
-    }
-    enableControls();
-  }
-
-  private void openFavourite2MenuItem_actionPerformed(
-      java.awt.event.ActionEvent e) {
-    try {
-      mainController.loadImage(
-          "C:\\Data\\Fotos\\2011-01-15\\DSC_0075B.JPG", true);
-    }
-    catch (Throwable ex) {
-      mainController.handleError(ex);
-    }
-    enableControls();
-  }
-
-  private void openFavourite3MenuItem_actionPerformed(
-      java.awt.event.ActionEvent e) {
-    try {
-      mainController.loadImage("C:\\TMP\\nastya-019.jpg", true);
-    }
-    catch (Throwable ex) {
-      mainController.handleError(ex);
-    }
-    enableControls();
-  }
-
-  private void openFavourite4MenuItem_actionPerformed(
-      java.awt.event.ActionEvent e) {
-    try {
-      mainController.loadImage(
-          "C:\\Data\\Hintergründe\\aktuell\\050403.jpg", true);
-    }
-    catch (Throwable ex) {
-      mainController.handleError(ex);
-    }
-    enableControls();
-  }
-
-  private void openFavourite5MenuItem_actionPerformed(
-      java.awt.event.ActionEvent e) {
-    try {
-      mainController.loadImage(
-          "C:\\Data\\Hintergründe\\aktuell\\051303.jpg", true);
-    }
-    catch (Throwable ex) {
-      mainController.handleError(ex);
-    }
-    enableControls();
-  }
-
-  private void openFavourite6MenuItem_actionPerformed(
-      java.awt.event.ActionEvent e) {
-    try {
-      mainController.loadImage(
-          "C:\\Data\\Hintergründe\\aktuell\\111002.jpg", true);
-    }
-    catch (Throwable ex) {
-      mainController.handleError(ex);
-    }
-    enableControls();
-  }
-
-  private void openFavourite7MenuItem_actionPerformed(
-      java.awt.event.ActionEvent e) {
-    try {
-      mainController.loadImage(
-          "C:\\Data\\Hintergründe\\KBF\\6281044.jpg", true);
-    }
-    catch (Throwable ex) {
-      mainController.handleError(ex);
-    }
-    enableControls();
-  }
-
   private void showMessageCloseButton_actionPerformed(
       java.awt.event.ActionEvent e) {
     mainController.closeShowMessageDlg();
@@ -1760,7 +1735,11 @@ public class Desktop extends JApplet {
 
   private JInternalFrame scriptInternalFrame = null;
 
+  private JInternalFrame preferencesInternalFrame = null;
+
   private JCheckBoxMenuItem scriptMenuItem = null;
+
+  private JCheckBoxMenuItem preferencesMenuItem = null;
 
   private JInternalFrame operatorsInternalFrame = null;
 
@@ -1845,12 +1824,17 @@ public class Desktop extends JApplet {
     tinaMenuItem.setSelected(tinaInternalFrame.isVisible());
     operatorsMenuItem.setSelected(operatorsInternalFrame.isVisible());
     scriptMenuItem.setSelected(scriptInternalFrame.isVisible());
+    preferencesMenuItem.setSelected(preferencesInternalFrame.isVisible());
     formulaExplorerMenuItem.setSelected(formulaExplorerInternalFrame
         .isVisible());
     closeAllMenuItem.setEnabled(mainController.getBufferList().size() > 0);
     {
       ScriptInternalFrame scriptFrame = (ScriptInternalFrame) getScriptInternalFrame();
       scriptFrame.enableControls();
+    }
+    {
+      PreferencesInternalFrame preferencesFrame = (PreferencesInternalFrame) getPreferencesInternalFrame();
+      preferencesFrame.enableControls();
     }
     {
       OperatorsInternalFrame operatorsFrame = (OperatorsInternalFrame) getOperatorsInternalFrame();
@@ -1884,6 +1868,31 @@ public class Desktop extends JApplet {
   }
 
   private void scriptInternalFrame_internalFrameDeactivated(
+      javax.swing.event.InternalFrameEvent e) {
+    enableControls();
+  }
+
+  private void preferencesMenuItem_actionPerformed(java.awt.event.ActionEvent e) {
+    if (preferencesMenuItem.isSelected()) {
+      preferencesInternalFrame.setVisible(true);
+      try {
+        preferencesInternalFrame.setSelected(true);
+      }
+      catch (PropertyVetoException ex) {
+        ex.printStackTrace();
+      }
+    }
+    else {
+      preferencesInternalFrame.setVisible(false);
+    }
+  }
+
+  private void preferencesInternalFrame_internalFrameClosed(
+      javax.swing.event.InternalFrameEvent e) {
+    enableControls();
+  }
+
+  private void preferencesInternalFrame_internalFrameDeactivated(
       javax.swing.event.InternalFrameEvent e) {
     enableControls();
   }

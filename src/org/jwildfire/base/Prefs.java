@@ -19,6 +19,7 @@ package org.jwildfire.base;
 import java.io.File;
 
 public class Prefs {
+  private final String PREFS_FILE = "j-wildfire.properties";
 
   private String lastScriptPath = null;
   private String scriptPath = "C:\\TMP\\wf\\";
@@ -101,6 +102,16 @@ public class Prefs {
 
   public void setLastOutputSceneFile(File pFile) {
     lastOutputScenePath = pFile.getParent();
+  }
+
+  public void loadFromFile() {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void saveToFromFile() {
+    // TODO Auto-generated method stub
+
   }
 
 }
