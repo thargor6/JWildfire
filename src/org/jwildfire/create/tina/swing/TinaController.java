@@ -46,6 +46,7 @@ import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.DrawMode;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.RandomFlameGenerator;
+import org.jwildfire.create.tina.base.RandomFlameGeneratorStyle;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.io.Flam3Reader;
 import org.jwildfire.create.tina.io.Flam3Writer;
@@ -1768,7 +1769,7 @@ public class TinaController implements FlameHolder {
     randomBatchPanel.validate();
   }
 
-  public void createRandomBatch(int pCount) {
+  public void createRandomBatch(int pCount, RandomFlameGeneratorStyle pStyle) {
     randomBatch.clear();
     final int IMG_COUNT = 24;
     final int MAX_IMG_SAMPLES = 10;
@@ -1780,7 +1781,7 @@ public class TinaController implements FlameHolder {
       double bestCoverage = 0.0;
       for (int j = 0; j < MAX_IMG_SAMPLES; j++) {
         // create flame
-        Flame flame = new RandomFlameGenerator().createFlame();
+        Flame flame = new RandomFlameGenerator().createFlame(pStyle);
         flame.setWidth(IMG_WIDTH);
         flame.setHeight(IMG_HEIGHT);
         flame.setPixelsPerUnit(10);

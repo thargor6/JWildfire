@@ -22,7 +22,27 @@ import org.jwildfire.create.tina.variation.VariationFuncList;
 
 public class RandomFlameGenerator {
 
-  public Flame createFlame() {
+  public Flame createFlame(RandomFlameGeneratorStyle pStyle) {
+    switch (pStyle) {
+      case V0:
+        return createFlame_V0();
+      case V1:
+        return createFlame_V1();
+      case ALL: {
+        double r = Math.random();
+        if (r < 0.5) {
+          return createFlame_V0();
+        }
+        else {
+          return createFlame_V1();
+        }
+      }
+      default:
+        throw new IllegalStateException();
+    }
+  }
+
+  private Flame createFlame_V0() {
     Flame flame = new Flame();
     flame.setCentreX(0.0);
     flame.setCentreY(0.0);
@@ -49,9 +69,45 @@ public class RandomFlameGenerator {
       xForm.setColor(Math.random());
       xForm.addVariation(Math.random() * 0.8 + 0.2, new Linear3DFunc());
       if (Math.random() > 0.33) {
-        //        String[] fnc = { "blur3D", "bubble", "curl3D", "diamond", "disc", "julia3D", "fan2", "heart",
-        //                         "julia3D", "hemisphere", "horseshoe", "blob3D", "julia3D", "pdj", "popcorn", "rings2",
-        //                         "spherical3D", "spiral", "rectangles", "blur", "waves", "swirl" };
+        String[] fnc = { "blur3D", "bubble", "curl3D", "diamond", "disc", "julia3D", "fan2", "heart",
+                                 "julia3D", "hemisphere", "horseshoe", "blob3D", "julia3D", "pdj", "popcorn", "rings2",
+                                 "spherical3D", "spiral", "rectangles", "blur", "waves", "swirl" };
+        int fncIdx = (int) (Math.random() * fnc.length);
+        xForm.addVariation(Math.random() * 0.5, VariationFuncList.getVariationFuncInstance(fnc[fncIdx]));
+      }
+
+      xForm.setWeight(Math.random() * 0.9 + 0.1);
+    }
+    return flame;
+  }
+
+  private Flame createFlame_V1() {
+    Flame flame = new Flame();
+    flame.setCentreX(0.0);
+    flame.setCentreY(0.0);
+    flame.setPixelsPerUnit(200);
+    flame.setSpatialFilterRadius(1.0);
+    flame.setFinalXForm(null);
+    flame.getXForms().clear();
+
+    int maxXForms = (int) (1.0 + Math.random() * 5.0);
+    double scl = 1.0;
+    for (int i = 0; i < maxXForms; i++) {
+      XForm xForm = new XForm();
+      flame.getXForms().add(xForm);
+      if (Math.random() < 0.5) {
+        XFormTransformService.rotate(xForm, 360.0 * Math.random());
+      }
+      else {
+        XFormTransformService.rotate(xForm, -360.0 * Math.random());
+      }
+      XFormTransformService.translate(xForm, Math.random() - 1.0, Math.random() - 1.0);
+      scl *= 0.75 + Math.random() / 4;
+      XFormTransformService.scale(xForm, scl);
+
+      xForm.setColor(Math.random());
+      xForm.addVariation(Math.random() * 0.8 + 0.2, new Linear3DFunc());
+      if (Math.random() > 0.33) {
         String[] fnc = { "blur3D", "bubble", "curl3D", "diamond", "disc", "julia3D", "fan2", "heart",
             "julia3D", "hemisphere", "horseshoe", "blob3D", "julia3D", "pie3D", "pdj", "popcorn", "rings2",
             "spherical3D", "spiral", "rectangles", "blur", "waves", "swirl" };
@@ -63,4 +119,5 @@ public class RandomFlameGenerator {
     }
     return flame;
   }
+
 }

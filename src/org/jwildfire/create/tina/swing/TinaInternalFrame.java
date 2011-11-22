@@ -36,6 +36,7 @@ import javax.swing.event.ListSelectionListener;
 
 import org.jwildfire.base.Prefs;
 import org.jwildfire.create.tina.base.DrawMode;
+import org.jwildfire.create.tina.base.RandomFlameGeneratorStyle;
 import org.jwildfire.create.tina.render.AffineZStyle;
 import org.jwildfire.create.tina.swing.TinaController.NonlinearControlsRow;
 import org.jwildfire.create.tina.transform.AnimationService;
@@ -402,6 +403,8 @@ public class TinaInternalFrame extends JInternalFrame {
   private JPanel centerWestPanel = null;
   private JPanel centerCenterPanel = null;
   private JLabel centerDescLabel = null;
+  private JComboBox randomStyleCmb = null;
+  private JLabel randomStyleLbl = null;
 
   /**
    * This is the xxx default constructor
@@ -921,7 +924,7 @@ public class TinaInternalFrame extends JInternalFrame {
     if (tinaLoadFlameButton == null) {
       tinaLoadFlameButton = new JButton();
       tinaLoadFlameButton.setText("Load Flame");
-      tinaLoadFlameButton.setLocation(new Point(131, 4));
+      tinaLoadFlameButton.setLocation(new Point(497, 4));
       tinaLoadFlameButton.setSize(new Dimension(125, 24));
       tinaLoadFlameButton.setPreferredSize(new Dimension(125, 24));
       tinaLoadFlameButton.setFont(new Font("Dialog", Font.BOLD, 10));
@@ -943,7 +946,7 @@ public class TinaInternalFrame extends JInternalFrame {
     if (tinaSaveFlameButton == null) {
       tinaSaveFlameButton = new JButton();
       tinaSaveFlameButton.setText("Save Flame");
-      tinaSaveFlameButton.setLocation(new Point(131, 32));
+      tinaSaveFlameButton.setLocation(new Point(497, 32));
       tinaSaveFlameButton.setSize(new Dimension(125, 24));
       tinaSaveFlameButton.setPreferredSize(new Dimension(125, 24));
       tinaSaveFlameButton.setFont(new Font("Dialog", Font.BOLD, 10));
@@ -1747,11 +1750,17 @@ public class TinaInternalFrame extends JInternalFrame {
    */
   private JPanel getTinaNorthMainPanel() {
     if (tinaNorthMainPanel == null) {
+      randomStyleLbl = new JLabel();
+      randomStyleLbl.setPreferredSize(new Dimension(94, 22));
+      randomStyleLbl.setText("Random style");
+      randomStyleLbl.setSize(new Dimension(94, 22));
+      randomStyleLbl.setLocation(new Point(134, 5));
+      randomStyleLbl.setFont(new Font("Dialog", Font.BOLD, 10));
       zStyleLbl = new JLabel();
       zStyleLbl.setPreferredSize(new Dimension(94, 22));
       zStyleLbl.setText("Z style");
       zStyleLbl.setSize(new Dimension(94, 22));
-      zStyleLbl.setLocation(new Point(404, 32));
+      zStyleLbl.setLocation(new Point(134, 33));
       zStyleLbl.setFont(new Font("Dialog", Font.BOLD, 10));
       tinaRenderSizeLbl = new JLabel();
       tinaRenderSizeLbl.setText("Export size");
@@ -1787,6 +1796,8 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaNorthMainPanel.add(getNewFlameButton(), null);
       tinaNorthMainPanel.add(zStyleLbl, null);
       tinaNorthMainPanel.add(getZStyleCmb(), null);
+      tinaNorthMainPanel.add(getRandomStyleCmb(), null);
+      tinaNorthMainPanel.add(randomStyleLbl, null);
     }
     return tinaNorthMainPanel;
   }
@@ -3387,12 +3398,12 @@ public class TinaInternalFrame extends JInternalFrame {
       randomBatchButton.setFont(new Font("Dialog", Font.BOLD, 10));
       randomBatchButton.setMnemonic(KeyEvent.VK_D);
       randomBatchButton.setText("Random flames");
-      randomBatchButton.setSize(new Dimension(125, 52));
+      randomBatchButton.setSize(new Dimension(124, 52));
       randomBatchButton.setLocation(new Point(4, 4));
       randomBatchButton.setPreferredSize(new Dimension(125, 52));
       randomBatchButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.createRandomBatch(-1);
+          tinaController.createRandomBatch(-1, (RandomFlameGeneratorStyle) randomStyleCmb.getSelectedItem());
           tinaController.importFromRandomBatch(0);
         }
       });
@@ -4402,12 +4413,12 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton getNewFlameButton() {
     if (newFlameButton == null) {
       newFlameButton = new JButton();
-      newFlameButton.setPreferredSize(new Dimension(125, 24));
+      newFlameButton.setPreferredSize(new Dimension(125, 52));
       newFlameButton.setMnemonic(KeyEvent.VK_N);
       newFlameButton.setText("New from scratch");
       newFlameButton.setActionCommand("New from scratch");
-      newFlameButton.setLocation(new Point(258, 4));
-      newFlameButton.setSize(new Dimension(125, 24));
+      newFlameButton.setLocation(new Point(362, 4));
+      newFlameButton.setSize(new Dimension(125, 52));
       newFlameButton.setFont(new Font("Dialog", Font.BOLD, 10));
       newFlameButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -4428,7 +4439,7 @@ public class TinaInternalFrame extends JInternalFrame {
       zStyleCmb = new JComboBox();
       zStyleCmb.setPreferredSize(new Dimension(125, 22));
       zStyleCmb.setSize(new Dimension(125, 22));
-      zStyleCmb.setLocation(new Point(500, 32));
+      zStyleCmb.setLocation(new Point(230, 33));
       zStyleCmb.setFont(new Font("Dialog", Font.BOLD, 10));
       zStyleCmb.addItemListener(new java.awt.event.ItemListener() {
         public void itemStateChanged(java.awt.event.ItemEvent e) {
@@ -4891,6 +4902,26 @@ public class TinaInternalFrame extends JInternalFrame {
       centerCenterPanel.add(centerDescLabel, BorderLayout.SOUTH);
     }
     return centerCenterPanel;
+  }
+
+  /**
+   * This method initializes randomStyleCmb	
+   * 	
+   * @return javax.swing.JComboBox	
+   */
+  private JComboBox getRandomStyleCmb() {
+    if (randomStyleCmb == null) {
+      randomStyleCmb = new JComboBox();
+      randomStyleCmb.setPreferredSize(new Dimension(125, 22));
+      randomStyleCmb.setSize(new Dimension(125, 22));
+      randomStyleCmb.setLocation(new Point(230, 5));
+      randomStyleCmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      randomStyleCmb.removeAllItems();
+      randomStyleCmb.addItem(RandomFlameGeneratorStyle.V0);
+      randomStyleCmb.addItem(RandomFlameGeneratorStyle.V1);
+      randomStyleCmb.addItem(RandomFlameGeneratorStyle.ALL);
+    }
+    return randomStyleCmb;
   }
 
 } //  @jve:decl-index=0:visual-constraint="10,10"
