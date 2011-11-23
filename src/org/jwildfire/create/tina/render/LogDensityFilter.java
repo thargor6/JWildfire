@@ -149,7 +149,6 @@ public class LogDensityFilter {
     pFilteredPnt.intensity = ls * point.count * flame.getWhiteLevel();
   }
 
-  // TODO interface (the same in FlameRenderer)
   private RasterPoint emptyRasterPoint = new RasterPoint();
 
   private RasterPoint getRasterPoint(int pX, int pY) {
