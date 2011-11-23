@@ -54,7 +54,7 @@ public class Flame {
   }
 
   private void init() {
-    spatialFilterRadius = 3;
+    spatialFilterRadius = 1.2;
     sampleDensity = 100;
     bgColorRed = bgColorGreen = bgColorBlue = 0;
     brightness = 4;

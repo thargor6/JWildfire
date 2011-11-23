@@ -123,7 +123,12 @@ public class FlameRenderer implements TransformationContext {
     initView(pFlame);
     createModWeightTables(pFlame);
     iterate(pFlame);
-    renderImage(pFlame, pImage);
+    if (pFlame.getSampleDensity() < 10) {
+      renderImageSimple(pFlame, pImage);
+    }
+    else {
+      renderImage(pFlame, pImage);
+    }
   }
 
   private void renderImage(Flame pFlame, SimpleImage pImage) {
@@ -134,6 +139,21 @@ public class FlameRenderer implements TransformationContext {
       for (int j = 0, bx = 0; j < pImage.getImageWidth(); j++) {
         logDensityFilter.transformPoint(logDensityPnt, bx, by);
         gammaCorrectionFilter.transformPoint(logDensityPnt, rbgPoint);
+        pImage.setRGB(j, i, rbgPoint.red, rbgPoint.green, rbgPoint.blue);
+        bx += pFlame.getSpatialOversample();
+      }
+      by += pFlame.getSpatialOversample();
+    }
+  }
+
+  private void renderImageSimple(Flame pFlame, SimpleImage pImage) {
+    LogDensityPoint logDensityPnt = new LogDensityPoint();
+    GammaCorrectedRGBPoint rbgPoint = new GammaCorrectedRGBPoint();
+    logDensityFilter.setRaster(raster, rasterWidth, rasterHeight, pImage);
+    for (int i = 0, by = 0; i < pImage.getImageHeight(); i++) {
+      for (int j = 0, bx = 0; j < pImage.getImageWidth(); j++) {
+        logDensityFilter.transformPointSimple(logDensityPnt, bx, by);
+        gammaCorrectionFilter.transformPointSimple(logDensityPnt, rbgPoint);
         pImage.setRGB(j, i, rbgPoint.red, rbgPoint.green, rbgPoint.blue);
         bx += pFlame.getSpatialOversample();
       }

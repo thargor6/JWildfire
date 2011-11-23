@@ -134,6 +134,21 @@ public class LogDensityFilter {
     }
   }
 
+  public void transformPointSimple(LogDensityPoint pFilteredPnt, int pX, int pY) {
+    RasterPoint point = getRasterPoint(pX, pY);
+    double ls;
+    if (point.count < precalcLogArray.length) {
+      ls = precalcLogArray[point.count] / FILTER_WHITE;
+    }
+    else {
+      ls = (k1 * Math.log10(1.0 + flame.getWhiteLevel() * point.count * k2)) / (flame.getWhiteLevel() * point.count) / FILTER_WHITE;
+    }
+    pFilteredPnt.red = ls * point.red;
+    pFilteredPnt.green = ls * point.green;
+    pFilteredPnt.blue = ls * point.blue;
+    pFilteredPnt.intensity = ls * point.count * flame.getWhiteLevel();
+  }
+
   // TODO interface (the same in FlameRenderer)
   private RasterPoint emptyRasterPoint = new RasterPoint();
 

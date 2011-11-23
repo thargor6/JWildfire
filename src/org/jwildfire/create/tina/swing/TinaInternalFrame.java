@@ -1754,13 +1754,12 @@ public class TinaInternalFrame extends JInternalFrame {
       randomStyleLbl.setPreferredSize(new Dimension(94, 22));
       randomStyleLbl.setText("Random style");
       randomStyleLbl.setSize(new Dimension(94, 22));
-      randomStyleLbl.setLocation(new Point(134, 5));
+      randomStyleLbl.setLocation(new Point(4, 4));
       randomStyleLbl.setFont(new Font("Dialog", Font.BOLD, 10));
       zStyleLbl = new JLabel();
       zStyleLbl.setPreferredSize(new Dimension(94, 22));
       zStyleLbl.setText("Z style");
-      zStyleLbl.setSize(new Dimension(94, 22));
-      zStyleLbl.setLocation(new Point(134, 33));
+      zStyleLbl.setBounds(new Rectangle(110, 5, 94, 22));
       zStyleLbl.setFont(new Font("Dialog", Font.BOLD, 10));
       tinaRenderSizeLbl = new JLabel();
       tinaRenderSizeLbl.setText("Export size");
@@ -1794,8 +1793,6 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaNorthMainPanel.add(getTinaRenderHeightREd(), null);
       tinaNorthMainPanel.add(getRandomBatchButton(), null);
       tinaNorthMainPanel.add(getNewFlameButton(), null);
-      tinaNorthMainPanel.add(zStyleLbl, null);
-      tinaNorthMainPanel.add(getZStyleCmb(), null);
       tinaNorthMainPanel.add(getRandomStyleCmb(), null);
       tinaNorthMainPanel.add(randomStyleLbl, null);
     }
@@ -3398,8 +3395,8 @@ public class TinaInternalFrame extends JInternalFrame {
       randomBatchButton.setFont(new Font("Dialog", Font.BOLD, 10));
       randomBatchButton.setMnemonic(KeyEvent.VK_D);
       randomBatchButton.setText("Random flames");
-      randomBatchButton.setSize(new Dimension(124, 52));
-      randomBatchButton.setLocation(new Point(4, 4));
+      randomBatchButton.setSize(new Dimension(221, 26));
+      randomBatchButton.setLocation(new Point(4, 30));
       randomBatchButton.setPreferredSize(new Dimension(125, 52));
       randomBatchButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -4417,7 +4414,7 @@ public class TinaInternalFrame extends JInternalFrame {
       newFlameButton.setMnemonic(KeyEvent.VK_N);
       newFlameButton.setText("New from scratch");
       newFlameButton.setActionCommand("New from scratch");
-      newFlameButton.setLocation(new Point(362, 4));
+      newFlameButton.setLocation(new Point(228, 4));
       newFlameButton.setSize(new Dimension(125, 52));
       newFlameButton.setFont(new Font("Dialog", Font.BOLD, 10));
       newFlameButton.addActionListener(new java.awt.event.ActionListener() {
@@ -4438,8 +4435,7 @@ public class TinaInternalFrame extends JInternalFrame {
     if (zStyleCmb == null) {
       zStyleCmb = new JComboBox();
       zStyleCmb.setPreferredSize(new Dimension(125, 22));
-      zStyleCmb.setSize(new Dimension(125, 22));
-      zStyleCmb.setLocation(new Point(230, 33));
+      zStyleCmb.setBounds(new Rectangle(206, 5, 125, 22));
       zStyleCmb.setFont(new Font("Dialog", Font.BOLD, 10));
       zStyleCmb.addItemListener(new java.awt.event.ItemListener() {
         public void itemStateChanged(java.awt.event.ItemEvent e) {
@@ -4864,8 +4860,10 @@ public class TinaInternalFrame extends JInternalFrame {
   private JPanel getCenterNorthPanel() {
     if (centerNorthPanel == null) {
       centerNorthPanel = new JPanel();
-      centerNorthPanel.setLayout(new GridBagLayout());
-      centerNorthPanel.setPreferredSize(new Dimension(0, 10));
+      centerNorthPanel.setLayout(null);
+      centerNorthPanel.setPreferredSize(new Dimension(0, 32));
+      centerNorthPanel.add(getZStyleCmb(), null);
+      centerNorthPanel.add(zStyleLbl, null);
     }
     return centerNorthPanel;
   }
@@ -4914,11 +4912,13 @@ public class TinaInternalFrame extends JInternalFrame {
       randomStyleCmb = new JComboBox();
       randomStyleCmb.setPreferredSize(new Dimension(125, 22));
       randomStyleCmb.setSize(new Dimension(125, 22));
-      randomStyleCmb.setLocation(new Point(230, 5));
+      randomStyleCmb.setLocation(new Point(100, 4));
       randomStyleCmb.setFont(new Font("Dialog", Font.BOLD, 10));
       randomStyleCmb.removeAllItems();
       randomStyleCmb.addItem(RandomFlameGeneratorStyle.V0);
       randomStyleCmb.addItem(RandomFlameGeneratorStyle.V1);
+      randomStyleCmb.addItem(RandomFlameGeneratorStyle.V0_SYMM);
+      randomStyleCmb.addItem(RandomFlameGeneratorStyle.V1_SYMM);
       randomStyleCmb.addItem(RandomFlameGeneratorStyle.ALL);
     }
     return randomStyleCmb;

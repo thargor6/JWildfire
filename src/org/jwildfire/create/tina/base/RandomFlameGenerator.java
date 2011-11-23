@@ -25,16 +25,26 @@ public class RandomFlameGenerator {
   public Flame createFlame(RandomFlameGeneratorStyle pStyle) {
     switch (pStyle) {
       case V0:
-        return createFlame_V0();
+        return createFlame_V0(false);
       case V1:
-        return createFlame_V1();
+        return createFlame_V1(false);
+      case V0_SYMM:
+        return createFlame_V0(true);
+      case V1_SYMM:
+        return createFlame_V1(true);
       case ALL: {
         double r = Math.random();
-        if (r < 0.5) {
-          return createFlame_V0();
+        if (r < 0.25) {
+          return createFlame_V0(false);
+        }
+        else if (r < 0.5) {
+          return createFlame_V1(false);
+        }
+        else if (r < 0.75) {
+          return createFlame_V0(true);
         }
         else {
-          return createFlame_V1();
+          return createFlame_V1(false);
         }
       }
       default:
@@ -42,7 +52,7 @@ public class RandomFlameGenerator {
     }
   }
 
-  private Flame createFlame_V0() {
+  private Flame createFlame_V0(boolean pWithSymmetry) {
     Flame flame = new Flame();
     flame.setCentreX(0.0);
     flame.setCentreY(0.0);
@@ -52,6 +62,9 @@ public class RandomFlameGenerator {
     flame.getXForms().clear();
 
     int maxXForms = (int) (1.0 + Math.random() * 5.0);
+    if (pWithSymmetry && maxXForms < 2) {
+      maxXForms = 2;
+    }
     double scl = 1.0;
     for (int i = 0; i < maxXForms; i++) {
       XForm xForm = new XForm();
@@ -78,10 +91,36 @@ public class RandomFlameGenerator {
 
       xForm.setWeight(Math.random() * 0.9 + 0.1);
     }
+    if (pWithSymmetry) {
+      addSymmetry(flame);
+    }
     return flame;
   }
 
-  private Flame createFlame_V1() {
+  private void addSymmetry(Flame pFlame) {
+    //    int symmetry = 2 + (int) (2 * Math.random() + 0.5);
+    int tCount = pFlame.getXForms().size();
+    int symmetry = tCount;
+    if (symmetry == 1) {
+      return;
+    }
+    int i = 0;
+    for (XForm xForm : pFlame.getXForms()) {
+      double alpha = 2 * Math.PI / symmetry;
+      xForm.setCoeff00(Math.cos(i * alpha));
+      xForm.setCoeff01(Math.sin(i * alpha));
+      xForm.setCoeff10(-xForm.getCoeff01());
+      xForm.setCoeff11(xForm.getCoeff00());
+      xForm.setCoeff20(0.0);
+      xForm.setCoeff21(0.0);
+      i++;
+      if (i >= 3) {
+        break;
+      }
+    }
+  }
+
+  private Flame createFlame_V1(boolean pWithSymmetry) {
     Flame flame = new Flame();
     flame.setCentreX(0.0);
     flame.setCentreY(0.0);
@@ -91,6 +130,9 @@ public class RandomFlameGenerator {
     flame.getXForms().clear();
 
     int maxXForms = (int) (1.0 + Math.random() * 5.0);
+    if (pWithSymmetry && maxXForms < 2) {
+      maxXForms = 2;
+    }
     double scl = 1.0;
     for (int i = 0; i < maxXForms; i++) {
       XForm xForm = new XForm();
@@ -116,6 +158,9 @@ public class RandomFlameGenerator {
       }
 
       xForm.setWeight(Math.random() * 0.9 + 0.1);
+    }
+    if (pWithSymmetry) {
+      addSymmetry(flame);
     }
     return flame;
   }
