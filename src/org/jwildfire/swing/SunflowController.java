@@ -132,7 +132,7 @@ public class SunflowController implements UserInterface {
   public void loadScene() {
     try {
       JFileChooser chooser = getSceneJFileChooser();
-      chooser.setCurrentDirectory(new File(prefs.getInputScenePath()));
+      chooser.setCurrentDirectory(new File(prefs.getInputSunflowScenePath()));
       if (chooser.showOpenDialog(editorTextArea) == JFileChooser.APPROVE_OPTION) {
         api = null;
         File file = chooser.getSelectedFile();
@@ -144,7 +144,7 @@ public class SunflowController implements UserInterface {
           sceneType = SceneType.SC;
         }
         editorTextArea.setText(Tools.readUTF8Textfile(filename));
-        prefs.setLastInputSceneFile(file);
+        prefs.setLastInputSunflowSceneFile(file);
         currentFile = filename;
         enableControls();
       }
@@ -282,7 +282,7 @@ public class SunflowController implements UserInterface {
   public void saveScene() {
     try {
       JFileChooser chooser = getSceneJFileChooser();
-      chooser.setCurrentDirectory(new File(prefs.getOutputScenePath()));
+      chooser.setCurrentDirectory(new File(prefs.getOutputSunflowScenePath()));
       if (currentFile != null) {
         chooser.setSelectedFile(new File(currentFile));
       }
@@ -304,7 +304,7 @@ public class SunflowController implements UserInterface {
             throw new IllegalStateException();
         }
         Tools.writeUTF8Textfile(filename, editorTextArea.getText());
-        prefs.setLastOutputSceneFile(file);
+        prefs.setLastOutputSunflowSceneFile(file);
       }
     }
     catch (Throwable ex) {

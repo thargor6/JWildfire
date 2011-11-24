@@ -553,14 +553,14 @@ public class MainController {
     if (actionList.size() > 0) {
       JFileChooser chooser = getScriptJFileChooser();
       try {
-        chooser.setCurrentDirectory(new File(prefs.getScriptPath()));
+        chooser.setCurrentDirectory(new File(prefs.getOutputScriptPath()));
       }
       catch (Exception ex) {
         ex.printStackTrace();
       }
       if (chooser.showSaveDialog(windowMenu) == JFileChooser.APPROVE_OPTION) {
         File file = chooser.getSelectedFile();
-        prefs.setLastScriptFile(file);
+        prefs.setLastOutputScriptFile(file);
         String filename = Tools.forceFileExt(file.getAbsolutePath(),
             Tools.FILEEXT_JFX);
         actionList.saveToFile(filename);
@@ -626,7 +626,7 @@ public class MainController {
             JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION)) {
       JFileChooser chooser = getScriptJFileChooser();
       try {
-        chooser.setCurrentDirectory(new File(prefs.getScriptPath()));
+        chooser.setCurrentDirectory(new File(prefs.getInputScriptPath()));
       }
       catch (Exception ex) {
         ex.printStackTrace();
@@ -634,7 +634,7 @@ public class MainController {
       if (chooser.showOpenDialog(windowMenu) == JFileChooser.APPROVE_OPTION) {
         File file = chooser.getSelectedFile();
         try {
-          prefs.setLastScriptFile(file);
+          prefs.setLastInputScriptFile(file);
           clearAllBuffers();
           actionList.clear();
           actionList.loadFromFile(file.getAbsolutePath());

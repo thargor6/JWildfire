@@ -98,7 +98,12 @@ public class Desktop extends JApplet {
           getShowErrorDlgStacktraceTextArea());
 
       prefs = new Prefs();
-      prefs.loadFromFile();
+      try {
+        prefs.loadFromFile();
+      }
+      catch (Exception ex) {
+        ex.printStackTrace();
+      }
       TinaInternalFrame tinaFrame = (TinaInternalFrame) getTinaInternalFrame();
       tinaController = tinaFrame.createController(errorHandler, prefs);
       try {
@@ -141,6 +146,7 @@ public class Desktop extends JApplet {
       PreferencesInternalFrame preferencesFrame = (PreferencesInternalFrame) getPreferencesInternalFrame();
       preferencesFrame.setDesktop(this);
       preferencesFrame.setPrefs(prefs);
+      preferencesFrame.setMainController(mainController);
 
       SunflowInternalFrame sunflowFrame = (SunflowInternalFrame) getSunFlowInternalFrame();
       sunflowFrame.createController(errorHandler, prefs).newScene();
@@ -1491,6 +1497,14 @@ public class Desktop extends JApplet {
       exitMenuItem.setText("Exit");
       exitMenuItem.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
+          try {
+            if (prefs != null) {
+              prefs.saveToFromFile();
+            }
+          }
+          catch (Exception ex) {
+            System.out.println(ex);
+          }
           System.exit(0);
         }
       });

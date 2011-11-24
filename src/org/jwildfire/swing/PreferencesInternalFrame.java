@@ -18,8 +18,10 @@ import javax.swing.WindowConstants;
 import org.jwildfire.base.Prefs;
 
 public class PreferencesInternalFrame extends JInternalFrame {
+  private static final long serialVersionUID = 1L;
   private Desktop desktop = null;// @jve:decl-index=0:
-  private Prefs prefs = null;
+  private MainController mainController = null; //  @jve:decl-index=0:
+  private Prefs prefs = null; //  @jve:decl-index=0:
   private JPanel jContentPane = null;
   private JPanel southPanel = null;
   private JButton savePrefsButton = null;
@@ -110,7 +112,12 @@ public class PreferencesInternalFrame extends JInternalFrame {
       savePrefsButton.setPreferredSize(new Dimension(125, 24));
       savePrefsButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
-          prefs.saveToFromFile();
+          try {
+            prefs.saveToFromFile();
+          }
+          catch (Exception ex) {
+            mainController.handleError(ex);
+          }
           setVisible(false);
           desktop.enableControls();
         }
@@ -227,6 +234,10 @@ public class PreferencesInternalFrame extends JInternalFrame {
       imagesPathBtn.setFont(new Font("Dialog", Font.BOLD, 10));
     }
     return imagesPathBtn;
+  }
+
+  void setMainController(MainController mainController) {
+    this.mainController = mainController;
   }
 
 } //  @jve:decl-index=0:visual-constraint="10,10"

@@ -19,99 +19,154 @@ package org.jwildfire.base;
 import java.io.File;
 
 public class Prefs {
-  private final String PREFS_FILE = "j-wildfire.properties";
+  static final String PREFS_FILE = "j-wildfire.properties";
+  static final String KEY_PATH_IMAGES = "path.images";
+  static final String KEY_PATH_SCRIPTS = "path.scripts";
+  static final String KEY_PATH_FLAMES = "path.flames";
+  static final String KEY_PATH_SUBFLOW_SCENES = "path.sunflow_scenes";
 
-  private String lastScriptPath = null;
-  private String scriptPath = "C:\\TMP\\wf\\";
+  private String scriptPath = null;
+  private String lastInputScriptPath = null;
+  private String lastOutputScriptPath = null;
+
+  private String imagePath = null;
   private String lastInputImagePath = null;
-  private String inputImagePath = "C:\\TMP\\wf\\Apophysis";
   private String lastOutputImagePath = null;
-  private String outputImagePath = "C:\\TMP\\wf\\";
-  private String inputFlamePath = "C:\\TMP\\wf\\Apophysis";
-  private String lastInputFlamePath = null;
-  private String outputFlamePath = "C:\\TMP\\wf\\Apophysis";
-  private String lastOutputFlamePath = null;
-  private String inputScenePath = "F:\\DEV\\sunflow";
-  private String lastInputScenePath = null;
-  private String outputScenePath = "C:\\DEV\\sunflow";
-  private String lastOutputScenePath = null;
 
-  public String getScriptPath() {
-    return lastScriptPath != null ? lastScriptPath : scriptPath;
+  private String flamePath = null;
+  private String lastInputFlamePath = null;
+  private String lastOutputFlamePath = null;
+
+  private String sunflowScenePath = null;
+  private String lastInputSunflowScenePath = null;
+  private String lastOutputSunflowScenePath = null;
+
+  public String getInputScriptPath() {
+    return lastInputScriptPath != null ? lastInputScriptPath : scriptPath;
   }
 
-  public void setScriptPath(String pScriptPath) {
+  public String getOutputScriptPath() {
+    return lastOutputScriptPath != null ? lastOutputScriptPath : scriptPath;
+  }
+
+  void setScriptPath(String pScriptPath) {
     this.scriptPath = pScriptPath;
   }
 
   public String getInputImagePath() {
-    return lastInputImagePath != null ? lastInputImagePath : inputImagePath;
-  }
-
-  public void setInputImagePath(String inputImagePath) {
-    this.inputImagePath = inputImagePath;
+    return lastInputImagePath != null ? lastInputImagePath : imagePath;
   }
 
   public String getOutputImagePath() {
-    return lastOutputImagePath != null ? lastOutputImagePath : outputImagePath;
+    return lastOutputImagePath != null ? lastOutputImagePath : imagePath;
   }
 
-  public void setOutputImagePath(String outputImagePath) {
-    this.outputImagePath = outputImagePath;
+  public void setLastInputScriptFile(File pFile) {
+    lastInputScriptPath = pFile.getParent();
+    if (imagePath == null || imagePath.length() == 0) {
+      imagePath = lastInputScriptPath;
+    }
   }
 
-  public void setLastScriptFile(File pFile) {
-    lastScriptPath = pFile.getParent();
+  public void setLastOutputScriptFile(File pFile) {
+    lastOutputScriptPath = pFile.getParent();
+    if (scriptPath == null || scriptPath.length() == 0) {
+      scriptPath = lastOutputScriptPath;
+    }
   }
 
   public void setLastInputImageFile(File pFile) {
     lastInputImagePath = pFile.getParent();
+    if (imagePath == null || imagePath.length() == 0) {
+      imagePath = lastInputImagePath;
+    }
   }
 
   public void setLastOutputImageFile(File pFile) {
     lastOutputImagePath = pFile.getParent();
+    if (imagePath == null || imagePath.length() == 0) {
+      imagePath = lastOutputImagePath;
+    }
   }
 
   public String getInputFlamePath() {
-    return lastInputFlamePath != null ? lastInputFlamePath : inputFlamePath;
+    return lastInputFlamePath != null ? lastInputFlamePath : flamePath;
   }
 
   public void setLastInputFlameFile(File pFile) {
     lastInputFlamePath = pFile.getParent();
+    if (flamePath == null || flamePath.length() == 0) {
+      flamePath = lastInputFlamePath;
+    }
   }
 
   public String getOutputFlamePath() {
-    return lastOutputFlamePath != null ? lastOutputFlamePath : outputFlamePath;
+    return lastOutputFlamePath != null ? lastOutputFlamePath : flamePath;
   }
 
   public void setLastOutputFlameFile(File pFile) {
     lastOutputFlamePath = pFile.getParent();
+    if (flamePath == null || flamePath.length() == 0) {
+      flamePath = lastOutputFlamePath;
+    }
   }
 
-  public String getInputScenePath() {
-    return lastInputScenePath != null ? lastInputScenePath : inputScenePath;
+  public String getInputSunflowScenePath() {
+    return lastInputSunflowScenePath != null ? lastInputSunflowScenePath : sunflowScenePath;
   }
 
-  public void setLastInputSceneFile(File pFile) {
-    lastInputScenePath = pFile.getParent();
+  public void setLastInputSunflowSceneFile(File pFile) {
+    lastInputSunflowScenePath = pFile.getParent();
+    if (sunflowScenePath == null || sunflowScenePath.length() == 0) {
+      sunflowScenePath = lastInputSunflowScenePath;
+    }
   }
 
-  public String getOutputScenePath() {
-    return lastOutputScenePath != null ? lastOutputScenePath : outputScenePath;
+  public String getOutputSunflowScenePath() {
+    return lastOutputSunflowScenePath != null ? lastOutputSunflowScenePath : sunflowScenePath;
   }
 
-  public void setLastOutputSceneFile(File pFile) {
-    lastOutputScenePath = pFile.getParent();
+  public void setLastOutputSunflowSceneFile(File pFile) {
+    lastOutputSunflowScenePath = pFile.getParent();
+    if (sunflowScenePath == null || sunflowScenePath.length() == 0) {
+      sunflowScenePath = lastOutputSunflowScenePath;
+    }
   }
 
-  public void loadFromFile() {
-    // TODO Auto-generated method stub
-
+  public void loadFromFile() throws Exception {
+    new PrefsReader().readPrefs(this);
   }
 
-  public void saveToFromFile() {
-    // TODO Auto-generated method stub
+  public void saveToFromFile() throws Exception {
+    new PrefsWriter().writePrefs(this);
+  }
 
+  public void setImagePath(String imagePath) {
+    this.imagePath = imagePath;
+  }
+
+  public void setFlamePath(String flamePath) {
+    this.flamePath = flamePath;
+  }
+
+  public void setSunflowScenePath(String sunflowScenePath) {
+    this.sunflowScenePath = sunflowScenePath;
+  }
+
+  String getImagePath() {
+    return imagePath;
+  }
+
+  String getFlamePath() {
+    return flamePath;
+  }
+
+  String getSunflowScenePath() {
+    return sunflowScenePath;
+  }
+
+  String getScriptPath() {
+    return scriptPath;
   }
 
 }
