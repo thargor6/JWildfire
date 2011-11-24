@@ -87,6 +87,9 @@ public class VariationFuncList {
     registerVariationFunc(Pie3DFunc.class);
     registerVariationFunc(ButterflyFunc.class);
     registerVariationFunc(Butterfly3DFunc.class);
+    registerVariationFunc(ArchFunc.class);
+    registerVariationFunc(SquareFunc.class);
+    registerVariationFunc(Square3DFunc.class);
   }
 
   private static void registerVariationFunc(Class<? extends VariationFunc> pVariationFunc) {
