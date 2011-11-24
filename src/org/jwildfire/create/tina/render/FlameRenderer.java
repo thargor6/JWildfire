@@ -117,6 +117,9 @@ public class FlameRenderer implements TransformationContext {
   public void renderFlame(Flame pFlame, SimpleImage pImage) {
     if (pFlame.getXForms().size() == 0)
       return;
+    if (pFlame.getSampleDensity() < 10) {
+      pFlame.setSpatialFilterRadius(1);
+    }
     initRaster(pFlame, pImage);
     init3D(pFlame);
     createColorMap(pFlame);

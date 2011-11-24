@@ -1590,7 +1590,7 @@ public class TinaController implements FlameHolder {
 
   public void addXForm() {
     XForm xForm = new XForm();
-    xForm.addVariation(1.0, new Linear3DFunc());
+    xForm.addVariation(0.5, new Linear3DFunc());
     xForm.setWeight(0.5);
     Flame currFlame = getCurrFlame();
     currFlame.getXForms().add(xForm);
@@ -1644,7 +1644,7 @@ public class TinaController implements FlameHolder {
 
   public void addFinalXForm() {
     XForm xForm = new XForm();
-    xForm.addVariation(1.0, new Linear3DFunc());
+    xForm.addVariation(0.5, new Linear3DFunc());
     Flame currFlame = getCurrFlame();
     currFlame.setFinalXForm(xForm);
     gridRefreshing = true;

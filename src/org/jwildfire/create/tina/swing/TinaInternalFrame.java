@@ -4917,8 +4917,10 @@ public class TinaInternalFrame extends JInternalFrame {
       randomStyleCmb.removeAllItems();
       randomStyleCmb.addItem(RandomFlameGeneratorStyle.V0);
       randomStyleCmb.addItem(RandomFlameGeneratorStyle.V1);
+      randomStyleCmb.addItem(RandomFlameGeneratorStyle.DDD);
       randomStyleCmb.addItem(RandomFlameGeneratorStyle.V0_SYMM);
       randomStyleCmb.addItem(RandomFlameGeneratorStyle.V1_SYMM);
+      randomStyleCmb.addItem(RandomFlameGeneratorStyle.DDD_SYMM);
       randomStyleCmb.addItem(RandomFlameGeneratorStyle.ALL);
       randomStyleCmb.setSelectedItem(RandomFlameGeneratorStyle.ALL);
     }

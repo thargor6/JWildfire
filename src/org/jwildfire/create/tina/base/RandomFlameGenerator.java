@@ -28,21 +28,35 @@ public class RandomFlameGenerator {
         return createFlame_V0(false);
       case V1:
         return createFlame_V1(false);
+      case DDD:
+        return createFlame_3D(false);
       case V0_SYMM:
         return createFlame_V0(true);
       case V1_SYMM:
         return createFlame_V1(true);
+      case DDD_SYMM:
+        return createFlame_3D(true);
       case ALL: {
         double r = Math.random();
-        if (r < 0.25) {
+        if (r < 0.1) {
           return createFlame_V0(false);
         }
-        else if (r < 0.5) {
-          return createFlame_V1(false);
-        }
-        else if (r < 0.75) {
+        else if (r < 0.2) {
           return createFlame_V0(true);
         }
+        else if (r < 0.3) {
+          return createFlame_V1(false);
+        }
+        else if (r < 0.4) {
+          return createFlame_V1(true);
+        }
+        else if (r < 0.5) {
+          return createFlame_3D(false);
+        }
+        else if (r < 0.6) {
+          return createFlame_3D(true);
+        }
+        // always good default
         else {
           return createFlame_V1(false);
         }
@@ -165,4 +179,45 @@ public class RandomFlameGenerator {
     return flame;
   }
 
+  private Flame createFlame_3D(boolean pWithSymmetry) {
+    Flame flame = new Flame();
+    flame.setCentreX(0.0);
+    flame.setCentreY(0.0);
+    flame.setPixelsPerUnit(200);
+    flame.setSpatialFilterRadius(1.0);
+    flame.setFinalXForm(null);
+    flame.getXForms().clear();
+
+    int maxXForms = (int) (2.0 + Math.random() * 5.0);
+    double scl = 1.0;
+    for (int i = 0; i < maxXForms; i++) {
+      XForm xForm = new XForm();
+      flame.getXForms().add(xForm);
+      if (Math.random() < 0.5) {
+        XFormTransformService.rotate(xForm, 360.0 * Math.random());
+      }
+      else {
+        XFormTransformService.rotate(xForm, -360.0 * Math.random());
+      }
+      XFormTransformService.translate(xForm, Math.random() - 1.0, Math.random() - 1.0);
+      scl *= 0.75 + Math.random() / 4;
+      XFormTransformService.scale(xForm, scl);
+
+      xForm.setColor(Math.random());
+      xForm.addVariation(Math.random() * 0.8 + 0.2, new Linear3DFunc());
+      if (Math.random() > 0.33) {
+        String[] fnc = { "blur3D", "julia3D", "curl3D", "butterfly3D", "julia3D",
+            "julia3D", "hemisphere", "blob3D", "square3D", "julia3D", "pie3D", "pdj",
+            "spherical3D", "blur", "julia3Dz" };
+        int fncIdx = (int) (Math.random() * fnc.length);
+        xForm.addVariation(Math.random() * 0.5, VariationFuncList.getVariationFuncInstance(fnc[fncIdx]));
+      }
+
+      xForm.setWeight(Math.random() * 0.9 + 0.1);
+    }
+    if (pWithSymmetry) {
+      addSymmetry(flame);
+    }
+    return flame;
+  }
 }
