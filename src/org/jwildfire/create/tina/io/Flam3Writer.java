@@ -25,7 +25,6 @@ import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.palette.RGBPalette;
 import org.jwildfire.create.tina.variation.Variation;
 
-
 public class Flam3Writer {
 
   public void writeFlame(Flame pFlame, String pFilename) throws Exception {
@@ -95,6 +94,9 @@ public class Flam3Writer {
     attrList.add(pXB.createAttr("color", pXForm.getColor()));
     attrList.add(pXB.createAttr("symmetry", pXForm.getColorSymmetry()));
     attrList.add(pXB.createAttr("coefs", pXForm.getCoeff00() + " " + pXForm.getCoeff01() + " " + pXForm.getCoeff10() + " " + pXForm.getCoeff11() + " " + pXForm.getCoeff20() + " " + pXForm.getCoeff21()));
+    if (pXForm.hasPostCoeffs()) {
+      attrList.add(pXB.createAttr("post", pXForm.getPostCoeff00() + " " + pXForm.getPostCoeff01() + " " + pXForm.getPostCoeff10() + " " + pXForm.getPostCoeff11() + " " + pXForm.getPostCoeff20() + " " + pXForm.getPostCoeff21()));
+    }
     {
       String hs = "";
       for (int i = 0; i < pFlame.getXForms().size() - 1; i++) {

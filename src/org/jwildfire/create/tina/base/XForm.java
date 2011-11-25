@@ -19,6 +19,7 @@ package org.jwildfire.create.tina.base;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.render.AffineZStyle;
 import org.jwildfire.create.tina.variation.TransformationContext;
 import org.jwildfire.create.tina.variation.Variation;
@@ -34,6 +35,12 @@ public class XForm {
   private double coeff11;
   private double coeff20;
   private double coeff21;
+  private double postCoeff00;
+  private double postCoeff01;
+  private double postCoeff10;
+  private double postCoeff11;
+  private double postCoeff20;
+  private double postCoeff21;
   private final List<Variation> variations = new ArrayList<Variation>();
   private final double modifiedWeights[] = new double[Constants.MAX_MOD_WEIGHT_COUNT]; // the same like "xaos" in Apophysis
   private double opacity = 0.0;
@@ -43,6 +50,9 @@ public class XForm {
   public XForm() {
     coeff00 = 1;
     coeff11 = 1;
+    postCoeff00 = 1;
+    postCoeff11 = 1;
+
     for (int i = 0; i < modifiedWeights.length; i++) {
       modifiedWeights[i] = 1.0;
     }
@@ -143,6 +153,11 @@ public class XForm {
     c2 = color * (1 - colorSymmetry) * 0.5;
   }
 
+  public boolean hasPostCoeffs() {
+    return (Math.abs(postCoeff00 - 1.0) > Tools.EPSILON || Math.abs(postCoeff01) > Tools.EPSILON || Math.abs(postCoeff10) > Tools.EPSILON
+        || Math.abs(postCoeff11 - 1.0) > Tools.EPSILON || Math.abs(postCoeff20) > Tools.EPSILON || Math.abs(postCoeff21) > Tools.EPSILON);
+  }
+
   public void transformPoint(TransformationContext pContext, XYZPoint pAffineT, XYZPoint pVarT, XYZPoint pSrcPoint, XYZPoint pDstPoint, AffineZStyle pZStyle) {
     pDstPoint.color = pSrcPoint.color * c1 + c2;
 
@@ -179,6 +194,38 @@ public class XForm {
       if (variation.getFunc().getPriority() < 0) {
         pAffineT.invalidate();
       }
+    }
+    if (hasPostCoeffs()) {
+      double px = postCoeff00 * pVarT.x + postCoeff10 * pVarT.y + postCoeff20;
+      double py = postCoeff01 * pVarT.x + postCoeff11 * pVarT.y + postCoeff21;
+      double pz;
+      switch (pZStyle) {
+        case FLAT:
+          pz = pVarT.z;
+          break;
+        case Z1:
+          pz = postCoeff11 * pVarT.y + postCoeff00 * pVarT.z + postCoeff20;
+          break;
+        case Z2:
+          pz = postCoeff00 * pVarT.x + postCoeff11 * pVarT.y + (postCoeff10 + postCoeff01) * pVarT.z + (postCoeff20 + postCoeff21) * 0.5;
+          break;
+        case Z3:
+          pz = postCoeff01 * pVarT.x + postCoeff10 * pVarT.y + (postCoeff00 + postCoeff11) * pVarT.z + (postCoeff20 + postCoeff21) * 0.5;
+          break;
+        case Z4:
+          pz = postCoeff01 * pVarT.y + postCoeff00 * pVarT.z + (postCoeff20 + postCoeff21) * 0.5;
+          break;
+        case Z5:
+          pz = (postCoeff00 + postCoeff01) * pVarT.x * 0.5 + (postCoeff10 + postCoeff11) * pVarT.y * 0.5 + (postCoeff10 + postCoeff01) * pVarT.z * 0.5 + (postCoeff20 + postCoeff21) * 0.5;
+        case Z6:
+          pz = (postCoeff00 + postCoeff01) * pVarT.x * 0.5 + (postCoeff10 + postCoeff11) * pVarT.y * 0.5 + (postCoeff00 + postCoeff10 + postCoeff01 + postCoeff11) * pVarT.z * 0.25 + (postCoeff20 + postCoeff21) * 0.5;
+          break;
+        default:
+          throw new IllegalStateException(pZStyle.toString());
+      }
+      pVarT.x = px;
+      pVarT.y = py;
+      pVarT.z = pz;
     }
 
     pDstPoint.x = pVarT.x;
@@ -220,6 +267,12 @@ public class XForm {
     coeff11 = pXForm.coeff11;
     coeff20 = pXForm.coeff20;
     coeff21 = pXForm.coeff21;
+    postCoeff00 = pXForm.postCoeff00;
+    postCoeff01 = pXForm.postCoeff01;
+    postCoeff10 = pXForm.postCoeff10;
+    postCoeff11 = pXForm.postCoeff11;
+    postCoeff20 = pXForm.postCoeff20;
+    postCoeff21 = pXForm.postCoeff21;
     variations.clear();
     for (Variation var : pXForm.variations) {
       Variation newVar = new Variation();
@@ -235,4 +288,53 @@ public class XForm {
     res.assign(this);
     return res;
   }
+
+  public double getPostCoeff00() {
+    return postCoeff00;
+  }
+
+  public void setPostCoeff00(double postCoeff00) {
+    this.postCoeff00 = postCoeff00;
+  }
+
+  public double getPostCoeff01() {
+    return postCoeff01;
+  }
+
+  public void setPostCoeff01(double postCoeff01) {
+    this.postCoeff01 = postCoeff01;
+  }
+
+  public double getPostCoeff10() {
+    return postCoeff10;
+  }
+
+  public void setPostCoeff10(double postCoeff10) {
+    this.postCoeff10 = postCoeff10;
+  }
+
+  public double getPostCoeff11() {
+    return postCoeff11;
+  }
+
+  public void setPostCoeff11(double postCoeff11) {
+    this.postCoeff11 = postCoeff11;
+  }
+
+  public double getPostCoeff20() {
+    return postCoeff20;
+  }
+
+  public void setPostCoeff20(double postCoeff20) {
+    this.postCoeff20 = postCoeff20;
+  }
+
+  public double getPostCoeff21() {
+    return postCoeff21;
+  }
+
+  public void setPostCoeff21(double postCoeff21) {
+    this.postCoeff21 = postCoeff21;
+  }
+
 }

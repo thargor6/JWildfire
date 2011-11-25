@@ -248,6 +248,7 @@ public class Flam3Reader implements FlameReader {
   private static final String ATTR_WEIGHT = "weight";
   private static final String ATTR_COLOR = "color";
   private static final String ATTR_COEFS = "coefs";
+  private static final String ATTR_POST = "post";
   private static final String ATTR_CHAOS = "chaos";
   private static final String ATTR_SYMMETRY = "symmetry";
 
@@ -271,6 +272,15 @@ public class Flam3Reader implements FlameReader {
       pXForm.setCoeff11(Double.parseDouble(s[3]));
       pXForm.setCoeff20(Double.parseDouble(s[4]));
       pXForm.setCoeff21(Double.parseDouble(s[5]));
+    }
+    if ((hs = atts.get(ATTR_POST)) != null) {
+      String s[] = hs.split(" ");
+      pXForm.setPostCoeff00(Double.parseDouble(s[0]));
+      pXForm.setPostCoeff01(Double.parseDouble(s[1]));
+      pXForm.setPostCoeff10(Double.parseDouble(s[2]));
+      pXForm.setPostCoeff11(Double.parseDouble(s[3]));
+      pXForm.setPostCoeff20(Double.parseDouble(s[4]));
+      pXForm.setPostCoeff21(Double.parseDouble(s[5]));
     }
     if ((hs = atts.get(ATTR_CHAOS)) != null) {
       String s[] = hs.split(" ");

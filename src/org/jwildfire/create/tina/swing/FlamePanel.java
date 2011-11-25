@@ -32,6 +32,7 @@ import org.jwildfire.swing.ImagePanel;
 public class FlamePanel extends ImagePanel {
   private final static int BORDER = 20;
   private static final Color XFORM_COLOR = new Color(217, 219, 223);
+  private static final Color XFORM_POST_COLOR = new Color(255, 219, 160);
   private static final Color BACKGROUND_COLOR = new Color(60, 60, 60);
   private static float LINE_WIDTH = 1.2f;
   private static float LINE_WIDTH_FAT = 1.7f * LINE_WIDTH;
@@ -52,6 +53,7 @@ public class FlamePanel extends ImagePanel {
   private double viewXTrans, viewYTrans;
   private MouseDragOperation mouseDragOperation = MouseDragOperation.MOVE;
   private int xBeginDrag, yBeginDrag;
+  private boolean editPostTransform = false;
 
   public FlamePanel(SimpleImage pSimpleImage, int pX, int pY, int pWidth, FlameHolder pFlameHolder) {
     super(pSimpleImage, pX, pY, pWidth);
@@ -107,16 +109,40 @@ public class FlamePanel extends ImagePanel {
       }
     }
 
+    public double getC00() {
+      return editPostTransform ? xForm.getPostCoeff00() : xForm.getCoeff00();
+    }
+
+    public double getC01() {
+      return editPostTransform ? xForm.getPostCoeff01() : xForm.getCoeff01();
+    }
+
+    public double getC10() {
+      return editPostTransform ? xForm.getPostCoeff10() : xForm.getCoeff10();
+    }
+
+    public double getC11() {
+      return editPostTransform ? xForm.getPostCoeff11() : xForm.getCoeff11();
+    }
+
+    public double getC20() {
+      return editPostTransform ? xForm.getPostCoeff20() : xForm.getCoeff20();
+    }
+
+    public double getC21() {
+      return editPostTransform ? xForm.getPostCoeff21() : xForm.getCoeff21();
+    }
+
     public double affineTransformedX(double pX, double pY) {
       //      return pX * xForm.getCoeff00() + pY * xForm.getCoeff10() + xForm.getCoeff20();
       // use the same layout as Apophysis
-      return pX * xForm.getCoeff00() + (-pY * xForm.getCoeff10()) + xForm.getCoeff20();
+      return pX * getC00() + (-pY * getC10()) + getC20();
     }
 
     public double affineTransformedY(double pX, double pY) {
       //      return pX * xForm.getCoeff01() + pY * xForm.getCoeff11() + xForm.getCoeff21();
       // use the same layout as Apophysis
-      return (-pX * xForm.getCoeff01()) + pY * xForm.getCoeff11() + (-xForm.getCoeff21());
+      return (-pX * getC01()) + pY * getC11() + (-getC21());
     }
   }
 
@@ -133,7 +159,7 @@ public class FlamePanel extends ImagePanel {
       //      int areaTop = BORDER;
       int areaBottom = height - 1 - BORDER;
 
-      g.setColor(XFORM_COLOR);
+      g.setColor(editPostTransform ? XFORM_POST_COLOR : XFORM_COLOR);
 
       double viewXMin = -2.0;
       double viewXMax = 2.0;
@@ -210,8 +236,14 @@ public class FlamePanel extends ImagePanel {
           switch (mouseDragOperation) {
             case MOVE: {
               // move
-              selectedXForm.setCoeff20(selectedXForm.getCoeff20() + dx);
-              selectedXForm.setCoeff21(selectedXForm.getCoeff21() - dy);
+              if (editPostTransform) {
+                selectedXForm.setPostCoeff20(selectedXForm.getPostCoeff20() + dx);
+                selectedXForm.setPostCoeff21(selectedXForm.getPostCoeff21() - dy);
+              }
+              else {
+                selectedXForm.setCoeff20(selectedXForm.getCoeff20() + dx);
+                selectedXForm.setCoeff21(selectedXForm.getCoeff21() - dy);
+              }
               return true;
             }
             case SCALE: {
@@ -223,14 +255,22 @@ public class FlamePanel extends ImagePanel {
               double dr1 = Math.sqrt(v1x * v1x + v1y * v1y);
               double dr2 = Math.sqrt(v2x * v2x + v2y * v2y);
               double scale = dr2 / dr1;
-              selectedXForm.setCoeff00(selectedXForm.getCoeff00() * scale);
-              selectedXForm.setCoeff01(selectedXForm.getCoeff01() * scale);
-              selectedXForm.setCoeff10(selectedXForm.getCoeff10() * scale);
-              selectedXForm.setCoeff11(selectedXForm.getCoeff11() * scale);
+              if (editPostTransform) {
+                selectedXForm.setPostCoeff00(selectedXForm.getPostCoeff00() * scale);
+                selectedXForm.setPostCoeff01(selectedXForm.getPostCoeff01() * scale);
+                selectedXForm.setPostCoeff10(selectedXForm.getPostCoeff10() * scale);
+                selectedXForm.setPostCoeff11(selectedXForm.getPostCoeff11() * scale);
+              }
+              else {
+                selectedXForm.setCoeff00(selectedXForm.getCoeff00() * scale);
+                selectedXForm.setCoeff01(selectedXForm.getCoeff01() * scale);
+                selectedXForm.setCoeff10(selectedXForm.getCoeff10() * scale);
+                selectedXForm.setCoeff11(selectedXForm.getCoeff11() * scale);
+              }
               return true;
             }
             case ROTATE: {
-              XFormTransformService.rotate(selectedXForm, dx * 30);
+              XFormTransformService.rotate(selectedXForm, dx * 30, editPostTransform);
               return true;
             }
           }
@@ -300,5 +340,9 @@ public class FlamePanel extends ImagePanel {
 
   public void setMouseDragOperation(MouseDragOperation mouseDragOperation) {
     this.mouseDragOperation = mouseDragOperation;
+  }
+
+  public void setEditPostTransform(boolean pEditPostTransform) {
+    editPostTransform = pEditPostTransform;
   }
 }

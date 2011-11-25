@@ -250,6 +250,7 @@ public class TinaController implements FlameHolder {
   private final JButton addFinalTransformationButton;
   private final JButton transformationWeightLeftButton;
   private final JButton transformationWeightRightButton;
+  private final JToggleButton affineEditPostTransformButton;
   // Random batch
   private final JPanel randomBatchPanel;
   private JScrollPane randomBatchScrollPane = null;
@@ -313,7 +314,8 @@ public class TinaController implements FlameHolder {
       JButton pTransformationWeightLeftButton, JButton pTransformationWeightRightButton, JComboBox pZStyleCmb, JButton pSetMorphFlame1Button,
       JButton pSetMorphFlame2Button, JTextField pMorphFrameREd, JTextField pMorphFramesREd, JCheckBox pMorphCheckBox, JSlider pMorphFrameSlider,
       JButton pImportMorphedFlameButton, JTextField pAnimateOutputREd, JTextField pAnimateFramesREd, JComboBox pAnimateGlobalScriptCmb, JButton pAnimationGenerateButton,
-      JComboBox pAnimateXFormScriptCmb, JToggleButton pMouseTransformMoveButton, JToggleButton pMouseTransformRotateButton, JToggleButton pMouseTransformScaleButton) {
+      JComboBox pAnimateXFormScriptCmb, JToggleButton pMouseTransformMoveButton, JToggleButton pMouseTransformRotateButton, JToggleButton pMouseTransformScaleButton,
+      JToggleButton pAffineEditPostTransformButton) {
     errorHandler = pErrorHandler;
     prefs = pPrefs;
     centerPanel = pCenterPanel;
@@ -400,6 +402,7 @@ public class TinaController implements FlameHolder {
     duplicateTransformationButton = pDuplicateTransformationButton;
     deleteTransformationButton = pDeleteTransformationButton;
     addFinalTransformationButton = pAddFinalTransformationButton;
+    affineEditPostTransformButton = pAffineEditPostTransformButton;
 
     randomBatchPanel = pRandomBatchPanel;
     nonlinearControlsRows = pNonlinearControlsRows;
@@ -1493,12 +1496,22 @@ public class TinaController implements FlameHolder {
 
   private void refreshXFormUI(XForm pXForm) {
     if (pXForm != null) {
-      affineC00REd.setText(Tools.doubleToString(pXForm.getCoeff00()));
-      affineC01REd.setText(Tools.doubleToString(pXForm.getCoeff01()));
-      affineC10REd.setText(Tools.doubleToString(pXForm.getCoeff10()));
-      affineC11REd.setText(Tools.doubleToString(pXForm.getCoeff11()));
-      affineC20REd.setText(Tools.doubleToString(pXForm.getCoeff20()));
-      affineC21REd.setText(Tools.doubleToString(pXForm.getCoeff21()));
+      if (affineEditPostTransformButton.isSelected()) {
+        affineC00REd.setText(Tools.doubleToString(pXForm.getPostCoeff00()));
+        affineC01REd.setText(Tools.doubleToString(pXForm.getPostCoeff01()));
+        affineC10REd.setText(Tools.doubleToString(pXForm.getPostCoeff10()));
+        affineC11REd.setText(Tools.doubleToString(pXForm.getPostCoeff11()));
+        affineC20REd.setText(Tools.doubleToString(pXForm.getPostCoeff20()));
+        affineC21REd.setText(Tools.doubleToString(pXForm.getPostCoeff21()));
+      }
+      else {
+        affineC00REd.setText(Tools.doubleToString(pXForm.getCoeff00()));
+        affineC01REd.setText(Tools.doubleToString(pXForm.getCoeff01()));
+        affineC10REd.setText(Tools.doubleToString(pXForm.getCoeff10()));
+        affineC11REd.setText(Tools.doubleToString(pXForm.getCoeff11()));
+        affineC20REd.setText(Tools.doubleToString(pXForm.getCoeff20()));
+        affineC21REd.setText(Tools.doubleToString(pXForm.getCoeff21()));
+      }
       xFormColorREd.setText(Tools.doubleToString(pXForm.getColor()));
       xFormColorSlider.setValue(Tools.FTOI(pXForm.getColor() * SLIDER_SCALE_COLOR));
       xFormSymmetryREd.setText(Tools.doubleToString(pXForm.getColorSymmetry()));
@@ -2309,6 +2322,15 @@ public class TinaController implements FlameHolder {
 
   public void setMainController(MainController pMainController) {
     mainController = pMainController;
+  }
+
+  public void affineEditPostTransformButton_clicked() {
+    XForm xForm = getCurrXForm();
+    if (flamePanel != null) {
+      flamePanel.setEditPostTransform(affineEditPostTransformButton.isSelected());
+    }
+    refreshXFormUI(xForm);
+    refreshFlameImage();
   }
 
 }

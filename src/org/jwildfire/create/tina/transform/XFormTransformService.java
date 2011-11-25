@@ -36,6 +36,10 @@ public class XFormTransformService {
   }
 
   public static void rotate(XForm pXForm, double pAngle) {
+    rotate(pXForm, pAngle, false);
+  }
+
+  public static void rotate(XForm pXForm, double pAngle, boolean pPostTransform) {
     if (Math.abs(pAngle) < Constants.EPSILON)
       return;
     double alpha = pAngle * Math.PI / 180.0;
@@ -45,19 +49,39 @@ public class XFormTransformService {
     m1.val[1][0] = Math.sin(alpha);
     m1.val[1][1] = Math.cos(alpha);
     Matrix3x3 m2 = new Identity3x3();
-    m2.val[0][0] = pXForm.getCoeff00();
-    m2.val[0][1] = pXForm.getCoeff01();
-    m2.val[1][0] = pXForm.getCoeff10();
-    m2.val[1][1] = pXForm.getCoeff11();
-    m2.val[0][2] = pXForm.getCoeff20();
-    m2.val[1][2] = pXForm.getCoeff21();
+    if (pPostTransform) {
+      m2.val[0][0] = pXForm.getPostCoeff00();
+      m2.val[0][1] = pXForm.getPostCoeff01();
+      m2.val[1][0] = pXForm.getPostCoeff10();
+      m2.val[1][1] = pXForm.getPostCoeff11();
+      m2.val[0][2] = pXForm.getPostCoeff20();
+      m2.val[1][2] = pXForm.getPostCoeff21();
+    }
+    else {
+      m2.val[0][0] = pXForm.getCoeff00();
+      m2.val[0][1] = pXForm.getCoeff01();
+      m2.val[1][0] = pXForm.getCoeff10();
+      m2.val[1][1] = pXForm.getCoeff11();
+      m2.val[0][2] = pXForm.getCoeff20();
+      m2.val[1][2] = pXForm.getCoeff21();
+    }
     m2 = multiply(m2, m1);
-    pXForm.setCoeff00(m2.val[0][0]);
-    pXForm.setCoeff01(m2.val[0][1]);
-    pXForm.setCoeff10(m2.val[1][0]);
-    pXForm.setCoeff11(m2.val[1][1]);
-    pXForm.setCoeff20(m2.val[0][2]);
-    pXForm.setCoeff21(m2.val[1][2]);
+    if (pPostTransform) {
+      pXForm.setPostCoeff00(m2.val[0][0]);
+      pXForm.setPostCoeff01(m2.val[0][1]);
+      pXForm.setPostCoeff10(m2.val[1][0]);
+      pXForm.setPostCoeff11(m2.val[1][1]);
+      pXForm.setPostCoeff20(m2.val[0][2]);
+      pXForm.setPostCoeff21(m2.val[1][2]);
+    }
+    else {
+      pXForm.setCoeff00(m2.val[0][0]);
+      pXForm.setCoeff01(m2.val[0][1]);
+      pXForm.setCoeff10(m2.val[1][0]);
+      pXForm.setCoeff11(m2.val[1][1]);
+      pXForm.setCoeff20(m2.val[0][2]);
+      pXForm.setCoeff21(m2.val[1][2]);
+    }
   }
 
   public static void translate(XForm pXForm, double pDeltaX, double pDeltaY) {

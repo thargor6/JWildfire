@@ -39,6 +39,7 @@ public class Tools {
   public static final String APP_TITLE = "JWildfire";
   public static final String APP_VERSION = "0.19 (21.11.2011)";
 
+  public static final double EPSILON = 0.00000001;
   public static final double ZERO = 0.0001;
   public static final int VPREC = 1024;
   public static final int SPREC = 10;

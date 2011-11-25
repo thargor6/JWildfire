@@ -27,11 +27,11 @@ import org.jwildfire.create.tina.palette.RenderColor;
 public class FlameRenderThread implements Runnable {
   private final FlameRenderer renderer;
   private final Flame flame;
-  private final int samples;
+  private final long samples;
   private final AffineZStyle affineZStyle;
   private boolean finished = true;
 
-  public FlameRenderThread(FlameRenderer pRenderer, Flame pFlame, int pSamples, AffineZStyle pAffineZStyle) {
+  public FlameRenderThread(FlameRenderer pRenderer, Flame pFlame, long pSamples, AffineZStyle pAffineZStyle) {
     renderer = pRenderer;
     flame = pFlame;
     samples = pSamples;
@@ -74,7 +74,7 @@ public class FlameRenderThread implements Runnable {
       }
     }
 
-    for (int i = 0; i < samples; i++) {
+    for (long i = 0; i < samples; i++) {
       xf = xf.getNextAppliedXFormTable()[renderer.random.random(Constants.NEXT_APPLIED_XFORM_TABLE_SIZE)];
       if (xf == null) {
         return;

@@ -405,6 +405,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JLabel centerDescLabel = null;
   private JComboBox randomStyleCmb = null;
   private JLabel randomStyleLbl = null;
+  private JToggleButton affineEditPostTransformButton = null;
 
   /**
    * This is the xxx default constructor
@@ -2025,6 +2026,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaAffineTransformationPanel.add(getAffineMoveLeftButton(), null);
       tinaAffineTransformationPanel.add(getAffineMoveRightButton(), null);
       tinaAffineTransformationPanel.add(getAffineMoveAmountREd(), null);
+      tinaAffineTransformationPanel.add(getAffineEditPostTransformButton(), null);
     }
     return tinaAffineTransformationPanel;
   }
@@ -2869,7 +2871,7 @@ public class TinaInternalFrame extends JInternalFrame {
         getTransformationWeightLeftButton(), getTransformationWeightRightButton(), getZStyleCmb(), getSetMorphFlame1Button(),
         getSetMorphFlame2Button(), getMorphFrameREd(), getMorphFramesREd(), getMorphCheckBox(), getMorphFrameSlider(), getImportMorphedFlameButton(),
         getAnimateOutputREd(), getAnimateFramesREd(), getAnimateScriptCmb(), getAnimationGenerateButton(), getAnimateXFormScriptCmb(), getMouseTransformMoveButton(),
-        getMouseTransformRotateButton(), getMouseTransformScaleButton());
+        getMouseTransformRotateButton(), getMouseTransformScaleButton(), getAffineEditPostTransformButton());
     tinaController.refreshing = tinaController.cmbRefreshing = tinaController.gridRefreshing = true;
     try {
       for (NonlinearControlsRow row : nonlinearControlsRows) {
@@ -4925,6 +4927,28 @@ public class TinaInternalFrame extends JInternalFrame {
       randomStyleCmb.setSelectedItem(RandomFlameGeneratorStyle.ALL);
     }
     return randomStyleCmb;
+  }
+
+  /**
+   * This method initializes affineEditPostTransformButton	
+   * 	
+   * @return javax.swing.JToggleButton	
+   */
+  private JToggleButton getAffineEditPostTransformButton() {
+    if (affineEditPostTransformButton == null) {
+      affineEditPostTransformButton = new JToggleButton();
+      affineEditPostTransformButton.setPreferredSize(new Dimension(125, 24));
+      affineEditPostTransformButton.setSize(new Dimension(171, 24));
+      affineEditPostTransformButton.setText("Edit Post  Transform");
+      affineEditPostTransformButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      affineEditPostTransformButton.setLocation(new Point(66, 150));
+      affineEditPostTransformButton.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent e) {
+          tinaController.affineEditPostTransformButton_clicked();
+        }
+      });
+    }
+    return affineEditPostTransformButton;
   }
 
 } //  @jve:decl-index=0:visual-constraint="10,10"
