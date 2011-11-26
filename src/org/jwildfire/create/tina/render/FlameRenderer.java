@@ -28,6 +28,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 import org.jwildfire.create.tina.palette.RenderColor;
 import org.jwildfire.create.tina.random.RandomNumberGenerator;
 import org.jwildfire.create.tina.random.SimpleRandomNumberGenerator;
+import org.jwildfire.create.tina.swing.ProgressUpdater;
 import org.jwildfire.create.tina.variation.TransformationContext;
 import org.jwildfire.create.tina.variation.Variation;
 import org.jwildfire.create.tina.variation.VariationPriorityComparator;
@@ -69,6 +70,7 @@ public class FlameRenderer implements TransformationContext {
   private double cameraMatrix[][] = new double[3][3];
   //
   private AffineZStyle affineZStyle = AffineZStyle.FLAT;
+  private ProgressUpdater progressUpdater;
 
   private void init3D(Flame pFlame) {
     double yaw = -pFlame.getCamYaw() * Math.PI / 180.0;
@@ -183,30 +185,47 @@ public class FlameRenderer implements TransformationContext {
   }
 
   private void iterate(Flame pFlame) {
-    long nSamples = (long) ((long) pFlame.getSampleDensity() * 1 * (long) rasterSize + 0.5);
-    //    System.err.println("SAMPLES: " + nSamples);
+    long nSamples = (long) ((long) pFlame.getSampleDensity() * (long) rasterSize + 0.5);
+    //    if (pFlame.getSampleDensity() > 50) {
+    //      System.err.println("SAMPLES: " + nSamples);
+    //    }
+    int PROGRESS_STEPS = 100;
+    if (progressUpdater != null) {
+      progressUpdater.initProgress(PROGRESS_STEPS);
+    }
+    long sampleProgressUpdateStep = nSamples / 100;
+    long nextProgressUpdate = sampleProgressUpdateStep;
     int nThreads = 8;
     List<FlameRenderThread> threads = new ArrayList<FlameRenderThread>();
     for (int i = 0; i < nThreads; i++) {
-      FlameRenderThread t = new FlameRenderThread(this, pFlame, nSamples / nThreads, affineZStyle);
+      FlameRenderThread t = new FlameRenderThread(this, pFlame, nSamples / (long) nThreads, affineZStyle);
       threads.add(t);
       new Thread(t).start();
     }
     boolean done = false;
     while (!done) {
       try {
-        Thread.sleep(3);
+        Thread.sleep(1);
       }
       catch (InterruptedException e) {
         e.printStackTrace();
       }
       done = true;
+      long currSamples = 0;
       for (FlameRenderThread t : threads) {
         if (!t.isFinished()) {
           done = false;
-          break;
+        }
+        currSamples += t.getCurrSample();
+      }
+      if (currSamples >= nextProgressUpdate) {
+        if (progressUpdater != null) {
+          int currProgress = (int) ((currSamples * PROGRESS_STEPS) / nSamples);
+          progressUpdater.updateProgress(currProgress);
+          nextProgressUpdate = (currProgress + 1) * sampleProgressUpdateStep;
         }
       }
+
     }
   }
 
@@ -312,6 +331,10 @@ public class FlameRenderer implements TransformationContext {
 
   public void setAffineZStyle(AffineZStyle affineZStyle) {
     this.affineZStyle = affineZStyle;
+  }
+
+  public void setProgressUpdater(ProgressUpdater pProgressUpdater) {
+    progressUpdater = pProgressUpdater;
   }
 
 }

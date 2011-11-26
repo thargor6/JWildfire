@@ -291,6 +291,7 @@ public class TinaController implements FlameHolder {
   private Flame _currFlame;
   private Flame morphFlame1, morphFlame2;
   private boolean noRefresh;
+  private final ProgressUpdater progressUpdater;
   // mouse dragging
   private final JToggleButton mouseTransformMoveButton;
   private final JToggleButton mouseTransformRotateButton;
@@ -320,7 +321,7 @@ public class TinaController implements FlameHolder {
       JButton pImportMorphedFlameButton, JTextField pAnimateOutputREd, JTextField pAnimateFramesREd, JComboBox pAnimateGlobalScriptCmb, JButton pAnimationGenerateButton,
       JComboBox pAnimateXFormScriptCmb, JToggleButton pMouseTransformMoveButton, JToggleButton pMouseTransformRotateButton, JToggleButton pMouseTransformScaleButton,
       JToggleButton pAffineEditPostTransformButton, JToggleButton pAffineEditPostTransformSmallButton, JButton pMouseEditZoomInButton, JButton pMouseEditZoomOutButton,
-      JToggleButton pToggleTrianglesButton) {
+      JToggleButton pToggleTrianglesButton, ProgressUpdater pProgressUpdater) {
     errorHandler = pErrorHandler;
     prefs = pPrefs;
     centerPanel = pCenterPanel;
@@ -449,6 +450,7 @@ public class TinaController implements FlameHolder {
     mouseTransformRotateButton = pMouseTransformRotateButton;
     mouseTransformScaleButton = pMouseTransformScaleButton;
     toggleTrianglesButton = pToggleTrianglesButton;
+    progressUpdater = pProgressUpdater;
 
     enableControls();
     enableXFormControls(null);
@@ -538,6 +540,9 @@ public class TinaController implements FlameHolder {
           flame.setHeight(img.getImageHeight());
           flame.setSampleDensity(pQuality);
           FlameRenderer renderer = new FlameRenderer();
+          if (pQuality >= 100) {
+            renderer.setProgressUpdater(progressUpdater);
+          }
           renderer.setAffineZStyle(pAffineZStyle);
           renderer.renderFlame(flame, img);
         }
@@ -1399,6 +1404,7 @@ public class TinaController implements FlameHolder {
           flame.setHeight(img.getImageHeight());
           flame.setSampleDensity(quality);
           FlameRenderer renderer = new FlameRenderer();
+          renderer.setProgressUpdater(progressUpdater);
           renderer.setAffineZStyle((AffineZStyle) zStyleCmb.getSelectedItem());
           renderer.renderFlame(flame, img);
           new ImageWriter().saveImage(img, file.getAbsolutePath());
@@ -1491,6 +1497,13 @@ public class TinaController implements FlameHolder {
     duplicateTransformationButton.setEnabled(enabled);
     deleteTransformationButton.setEnabled(enabled);
     addFinalTransformationButton.setEnabled(currFlame != null && currFlame.getFinalXForm() == null);
+
+    affineEditPostTransformButton.setEnabled(currFlame != null);
+    affineEditPostTransformSmallButton.setEnabled(currFlame != null);
+    mouseEditZoomInButton.setEnabled(currFlame != null);
+    mouseEditZoomOutButton.setEnabled(currFlame != null);
+    toggleTrianglesButton.setEnabled(currFlame != null);
+
     transformationWeightLeftButton.setEnabled(enabled);
     transformationWeightRightButton.setEnabled(enabled);
     for (NonlinearControlsRow rows : nonlinearControlsRows) {
@@ -1811,7 +1824,9 @@ public class TinaController implements FlameHolder {
     final int MAX_IMG_SAMPLES = 10;
     final double MIN_COVERAGE = 0.33;
     List<SimpleImage> imgList = new ArrayList<SimpleImage>();
-    for (int i = 0; i < (pCount > 0 ? pCount : IMG_COUNT); i++) {
+    int maxCount = (pCount > 0 ? pCount : IMG_COUNT);
+    progressUpdater.initProgress(maxCount);
+    for (int i = 0; i < maxCount; i++) {
       SimpleImage img = new SimpleImage(IMG_WIDTH, IMG_HEIGHT);
       Flame bestFlame = null;
       double bestCoverage = 0.0;
@@ -1873,6 +1888,7 @@ public class TinaController implements FlameHolder {
           }
         }
       });
+      progressUpdater.updateProgress(i + 1);
     }
     updateThumbnails(imgList);
   }

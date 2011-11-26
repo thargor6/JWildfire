@@ -101,7 +101,7 @@ public class LogDensityFilter {
           RasterPoint point = getRasterPoint(pX + j, pY + i);
           double logScale;
           if (point.count < precalcLogArray.length) {
-            logScale = precalcLogArray[point.count];
+            logScale = precalcLogArray[(int) point.count];
           }
           else {
             logScale = (k1 * Math.log10(1.0 + flame.getWhiteLevel() * point.count * k2)) / (flame.getWhiteLevel() * point.count);
@@ -122,7 +122,7 @@ public class LogDensityFilter {
       RasterPoint point = getRasterPoint(pX, pY);
       double ls;
       if (point.count < precalcLogArray.length) {
-        ls = precalcLogArray[point.count] / FILTER_WHITE;
+        ls = precalcLogArray[(int) point.count] / FILTER_WHITE;
       }
       else {
         ls = (k1 * Math.log10(1.0 + flame.getWhiteLevel() * point.count * k2)) / (flame.getWhiteLevel() * point.count) / FILTER_WHITE;
@@ -138,7 +138,7 @@ public class LogDensityFilter {
     RasterPoint point = getRasterPoint(pX, pY);
     double ls;
     if (point.count < precalcLogArray.length) {
-      ls = precalcLogArray[point.count] / FILTER_WHITE;
+      ls = precalcLogArray[(int) point.count] / FILTER_WHITE;
     }
     else {
       ls = (k1 * Math.log10(1.0 + flame.getWhiteLevel() * point.count * k2)) / (flame.getWhiteLevel() * point.count) / FILTER_WHITE;

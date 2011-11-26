@@ -28,6 +28,7 @@ public class FlameRenderThread implements Runnable {
   private final FlameRenderer renderer;
   private final Flame flame;
   private final long samples;
+  private volatile long currSample;
   private final AffineZStyle affineZStyle;
   private boolean finished = true;
 
@@ -75,6 +76,9 @@ public class FlameRenderThread implements Runnable {
     }
 
     for (long i = 0; i < samples; i++) {
+      if (i % 100 == 0) {
+        currSample = i;
+      }
       xf = xf.getNextAppliedXFormTable()[renderer.random.random(Constants.NEXT_APPLIED_XFORM_TABLE_SIZE)];
       if (xf == null) {
         return;
@@ -119,6 +123,10 @@ public class FlameRenderThread implements Runnable {
       rp.blue += color.blue;
       rp.count++;
     }
+  }
+
+  public long getCurrSample() {
+    return currSample;
   }
 
   public boolean isFinished() {

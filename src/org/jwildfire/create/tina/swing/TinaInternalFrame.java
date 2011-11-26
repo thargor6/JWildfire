@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.Graphics;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Point;
@@ -20,6 +21,7 @@ import javax.swing.JComboBox;
 import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
 import javax.swing.JSlider;
 import javax.swing.JSplitPane;
@@ -42,7 +44,7 @@ import org.jwildfire.create.tina.swing.TinaController.NonlinearControlsRow;
 import org.jwildfire.create.tina.transform.AnimationService;
 import org.jwildfire.swing.StandardErrorHandler;
 
-public class TinaInternalFrame extends JInternalFrame {
+public class TinaInternalFrame extends JInternalFrame implements ProgressUpdater {
   private TinaController tinaController; //  @jve:decl-index=0:
   private NonlinearControlsRow[] nonlinearControlsRows;//  @jve:decl-index=0:
   private static final long serialVersionUID = 1L;
@@ -414,6 +416,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JLabel editSpaceLbl3 = null;
   private JToggleButton toggleTrianglesButton = null;
   private JLabel editSpaceLbl4 = null;
+  private JProgressBar renderProgressBar = null;
 
   /**
    * This is the xxx default constructor
@@ -2880,7 +2883,7 @@ public class TinaInternalFrame extends JInternalFrame {
         getSetMorphFlame2Button(), getMorphFrameREd(), getMorphFramesREd(), getMorphCheckBox(), getMorphFrameSlider(), getImportMorphedFlameButton(),
         getAnimateOutputREd(), getAnimateFramesREd(), getAnimateScriptCmb(), getAnimationGenerateButton(), getAnimateXFormScriptCmb(), getMouseTransformMoveButton(),
         getMouseTransformRotateButton(), getMouseTransformScaleButton(), getAffineEditPostTransformButton(), getAffineEditPostTransformSmallButton(),
-        getMouseTransformZoomInButton(), getMouseTransformZoomOutButton(), getToggleTrianglesButton());
+        getMouseTransformZoomInButton(), getMouseTransformZoomOutButton(), getToggleTrianglesButton(), this);
     tinaController.refreshing = tinaController.cmbRefreshing = tinaController.gridRefreshing = true;
     try {
       for (NonlinearControlsRow row : nonlinearControlsRows) {
@@ -4899,6 +4902,7 @@ public class TinaInternalFrame extends JInternalFrame {
       centerNorthPanel.add(getZStyleCmb(), null);
       centerNorthPanel.add(zStyleLbl, null);
       centerNorthPanel.add(getAffineEditPostTransformSmallButton(), null);
+      centerNorthPanel.add(getRenderProgressBar(), null);
     }
     return centerNorthPanel;
   }
@@ -5069,6 +5073,41 @@ public class TinaInternalFrame extends JInternalFrame {
       });
     }
     return toggleTrianglesButton;
+  }
+
+  /**
+   * This method initializes renderProgressBar	
+   * 	
+   * @return javax.swing.JProgressBar	
+   */
+  private JProgressBar getRenderProgressBar() {
+    if (renderProgressBar == null) {
+      renderProgressBar = new JProgressBar();
+      renderProgressBar.setBounds(new Rectangle(236, 9, 172, 14));
+      renderProgressBar.setValue(0);
+      renderProgressBar.setStringPainted(true);
+    }
+    return renderProgressBar;
+  }
+
+  @Override
+  public void initProgress(int pMaxSteps) {
+    renderProgressBar.setValue(0);
+    renderProgressBar.setMinimum(0);
+    renderProgressBar.setMaximum(pMaxSteps);
+    Graphics g = renderProgressBar.getGraphics();
+    if (g != null) {
+      renderProgressBar.paint(g);
+    }
+  }
+
+  @Override
+  public void updateProgress(int pStep) {
+    renderProgressBar.setValue(pStep);
+    Graphics g = renderProgressBar.getGraphics();
+    if (g != null) {
+      renderProgressBar.paint(g);
+    }
   }
 
 } //  @jve:decl-index=0:visual-constraint="10,10"
