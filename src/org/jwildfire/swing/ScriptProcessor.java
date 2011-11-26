@@ -35,7 +35,6 @@ import org.jwildfire.transform.ScaleTransformer;
 import org.jwildfire.transform.Transformer;
 import org.jwildfire.transform.TransformersList;
 
-
 public class ScriptProcessor {
   private final JDesktopPane desktop;
   private final BufferList bufferList = new BufferList();

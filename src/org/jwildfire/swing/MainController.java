@@ -293,6 +293,7 @@ public class MainController {
           if (frame == buffer.getInternalFrame()) {
             bufferList.remove(buffer);
             actionList.removeBuffer(buffer, getBufferList());
+            buffer.flush();
             refreshWindowMenu();
             refreshActionTable();
             break;

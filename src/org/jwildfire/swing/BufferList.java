@@ -27,7 +27,6 @@ import org.jwildfire.image.SimpleImage;
 import org.jwildfire.swing.Buffer.BufferType;
 import org.jwildfire.transform.Mesh3D;
 
-
 public class BufferList implements Collection<Buffer> {
   private List<Buffer> buffers = new ArrayList<Buffer>();
   private boolean syncWithStaticBufferList = false;
@@ -147,8 +146,9 @@ public class BufferList implements Collection<Buffer> {
   @Override
   public boolean remove(Object pObject) {
     boolean res = buffers.remove(pObject);
-    if (syncWithStaticBufferList)
+    if (syncWithStaticBufferList) {
       StaticBufferList.remove(pObject);
+    }
     return res;
   }
 

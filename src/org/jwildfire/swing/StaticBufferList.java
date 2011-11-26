@@ -22,7 +22,6 @@ import java.util.List;
 
 import org.jwildfire.swing.Buffer.BufferType;
 
-
 public class StaticBufferList {
   private static List<Buffer> buffers = new ArrayList<Buffer>();
 
@@ -40,6 +39,10 @@ public class StaticBufferList {
 
   public static boolean remove(Object pObject) {
     return buffers.remove(pObject);
+  }
+
+  public static int size() {
+    return buffers.size();
   }
 
   public static boolean removeAll(Collection<?> pCollection) {

@@ -27,7 +27,6 @@ import java.io.FileNotFoundException;
 
 import org.jwildfire.image.SimpleImage;
 
-
 public class ImageReader {
   private Component owner;
 
@@ -39,7 +38,7 @@ public class ImageReader {
     File file = new File(pFilename);
     if (!file.exists())
       throw new FileNotFoundException(pFilename);
-    Image fileImg = Toolkit.getDefaultToolkit().getImage(pFilename);
+    Image fileImg = Toolkit.getDefaultToolkit().createImage(pFilename);
     MediaTracker tracker = new MediaTracker(owner);
     tracker.addImage(fileImg, 0);
     tracker.waitForID(0);

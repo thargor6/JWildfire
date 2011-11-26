@@ -27,7 +27,6 @@ import javax.swing.JInternalFrame;
 import org.jwildfire.image.SimpleImage;
 import org.jwildfire.transform.Mesh3D;
 
-
 public class Buffer {
   private BufferType bufferType;
 
@@ -206,5 +205,15 @@ public class Buffer {
 
   public Mesh3D getMesh3D() {
     return (bufferType == BufferType.MESH3D) ? mesh3D : null;
+  }
+
+  public void flush() {
+    if (img.getBufferedImg() != null) {
+      img.getBufferedImg().flush();
+    }
+    img.setBufferedImage(null, 0, 0);
+    mesh3D = null;
+    pnl = null;
+    internalFrame = null;
   }
 }
