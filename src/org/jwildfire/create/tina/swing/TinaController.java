@@ -529,15 +529,21 @@ public class TinaController implements FlameHolder {
       SimpleImage img = new SimpleImage(width, height);
       Flame flame = getCurrFlame();
       if (flame != null) {
-        double wScl = (double) img.getImageWidth() / (double) flame.getWidth();
-        double hScl = (double) img.getImageHeight() / (double) flame.getHeight();
-        flame.setPixelsPerUnit((wScl + hScl) * 0.5 * flame.getPixelsPerUnit());
-        flame.setWidth(img.getImageWidth());
-        flame.setHeight(img.getImageHeight());
-        flame.setSampleDensity(pQuality);
-        FlameRenderer renderer = new FlameRenderer();
-        renderer.setAffineZStyle(pAffineZStyle);
-        renderer.renderFlame(flame, img);
+        double oldFilterRadius = flame.getSpatialFilterRadius();
+        try {
+          double wScl = (double) img.getImageWidth() / (double) flame.getWidth();
+          double hScl = (double) img.getImageHeight() / (double) flame.getHeight();
+          flame.setPixelsPerUnit((wScl + hScl) * 0.5 * flame.getPixelsPerUnit());
+          flame.setWidth(img.getImageWidth());
+          flame.setHeight(img.getImageHeight());
+          flame.setSampleDensity(pQuality);
+          FlameRenderer renderer = new FlameRenderer();
+          renderer.setAffineZStyle(pAffineZStyle);
+          renderer.renderFlame(flame, img);
+        }
+        finally {
+          flame.setSpatialFilterRadius(oldFilterRadius);
+        }
       }
       imgPanel.setImage(img);
     }

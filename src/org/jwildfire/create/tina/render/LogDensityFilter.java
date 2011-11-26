@@ -39,9 +39,9 @@ public class LogDensityFilter {
   }
 
   private void initFilter(Flame pFlame) {
-    int fw = (int) (2.0 * FILTER_CUTOFF * pFlame.getSpatialOversample() * pFlame.getSpatialFilterRadius());
+    int fw = (int) (2.0 * FILTER_CUTOFF * pFlame.getSpatialFilterRadius());
     noiseFilterSize = fw + 1;
-    if (noiseFilterSize % 2 != pFlame.getSpatialOversample() % 2)
+    if (noiseFilterSize % 2 == 0)
       noiseFilterSize++;
     double adjust;
     if (fw > 0) {
@@ -85,7 +85,7 @@ public class LogDensityFilter {
     k1 = (flame.getContrast() * BRIGHTNESS_SCALE * flame.getBrightness() * FILTER_WHITE) / 256.0;
     double pixelsPerUnit = flame.getPixelsPerUnit() * flame.getCamZoom();
     double area = ((double) pImage.getImageWidth() * (double) pImage.getImageHeight()) / (pixelsPerUnit * pixelsPerUnit);
-    k2 = (flame.getSpatialOversample() * flame.getSpatialOversample()) / (flame.getContrast() * area * (double) flame.getWhiteLevel() * flame.getSampleDensity());
+    k2 = 1.0 / (flame.getContrast() * area * (double) flame.getWhiteLevel() * flame.getSampleDensity());
 
     precalcLogArray = new double[PRECALC_LOG_ARRAY_SIZE + 1];
     for (int i = 1; i <= PRECALC_LOG_ARRAY_SIZE; i++) {

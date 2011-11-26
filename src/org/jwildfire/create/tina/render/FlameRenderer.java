@@ -32,6 +32,8 @@ import org.jwildfire.create.tina.variation.TransformationContext;
 import org.jwildfire.create.tina.variation.Variation;
 import org.jwildfire.create.tina.variation.VariationPriorityComparator;
 import org.jwildfire.image.SimpleImage;
+import org.jwildfire.transform.ScaleAspect;
+import org.jwildfire.transform.ScaleTransformer;
 
 public class FlameRenderer implements TransformationContext {
   // constants
@@ -88,10 +90,10 @@ public class FlameRenderer implements TransformationContext {
     imageHeight = pImage.getImageHeight();
     logDensityFilter = new LogDensityFilter(pFlame);
     gammaCorrectionFilter = new GammaCorrectionFilter(pFlame);
-    maxBorderWidth = (MAX_FILTER_WIDTH - pFlame.getSpatialOversample()) / 2;
-    borderWidth = (logDensityFilter.getNoiseFilterSize() - pFlame.getSpatialOversample()) / 2;
-    rasterWidth = pFlame.getSpatialOversample() * imageWidth + 2 * maxBorderWidth;
-    rasterHeight = pFlame.getSpatialOversample() * imageHeight + 2 * maxBorderWidth;
+    maxBorderWidth = (MAX_FILTER_WIDTH - 1) / 2;
+    borderWidth = (logDensityFilter.getNoiseFilterSize() - 1) / 2;
+    rasterWidth = imageWidth + 2 * maxBorderWidth;
+    rasterHeight = imageHeight + 2 * maxBorderWidth;
     rasterSize = rasterWidth * rasterHeight;
     raster = new RasterPoint[rasterHeight][rasterWidth];
     for (int i = 0; i < rasterHeight; i++) {
@@ -117,20 +119,40 @@ public class FlameRenderer implements TransformationContext {
   public void renderFlame(Flame pFlame, SimpleImage pImage) {
     if (pFlame.getXForms().size() == 0)
       return;
-    if (pFlame.getSampleDensity() < 10) {
-      pFlame.setSpatialFilterRadius(1);
+    int oversample = pFlame.getSampleDensity() >= 100 ? pFlame.getSpatialOversample() : 1;
+    double origZoom = pFlame.getCamZoom();
+    try {
+      SimpleImage img;
+      if (oversample > 1) {
+        img = new SimpleImage(pImage.getImageWidth() * oversample, pImage.getImageHeight() * oversample);
+        pFlame.setCamZoom((double) oversample * pFlame.getCamZoom());
+      }
+      else {
+        img = pImage;
+      }
+      initRaster(pFlame, img);
+      init3D(pFlame);
+      createColorMap(pFlame);
+      initView(pFlame);
+      createModWeightTables(pFlame);
+      iterate(pFlame);
+      if (pFlame.getSampleDensity() <= 10) {
+        renderImageSimple(pFlame, img);
+      }
+      else {
+        renderImage(pFlame, img);
+      }
+      if (oversample > 1) {
+        ScaleTransformer scaleT = new ScaleTransformer();
+        scaleT.setScaleWidth(pImage.getImageWidth());
+        scaleT.setScaleHeight(pImage.getImageHeight());
+        scaleT.setAspect(ScaleAspect.IGNORE);
+        scaleT.transformImage(img);
+        pImage.setBufferedImage(img.getBufferedImg(), pImage.getImageWidth(), pImage.getImageHeight());
+      }
     }
-    initRaster(pFlame, pImage);
-    init3D(pFlame);
-    createColorMap(pFlame);
-    initView(pFlame);
-    createModWeightTables(pFlame);
-    iterate(pFlame);
-    if (pFlame.getSampleDensity() < 10) {
-      renderImageSimple(pFlame, pImage);
-    }
-    else {
-      renderImage(pFlame, pImage);
+    finally {
+      pFlame.setCamZoom(origZoom);
     }
   }
 
@@ -138,14 +160,12 @@ public class FlameRenderer implements TransformationContext {
     LogDensityPoint logDensityPnt = new LogDensityPoint();
     GammaCorrectedRGBPoint rbgPoint = new GammaCorrectedRGBPoint();
     logDensityFilter.setRaster(raster, rasterWidth, rasterHeight, pImage);
-    for (int i = 0, by = 0; i < pImage.getImageHeight(); i++) {
-      for (int j = 0, bx = 0; j < pImage.getImageWidth(); j++) {
-        logDensityFilter.transformPoint(logDensityPnt, bx, by);
+    for (int i = 0; i < pImage.getImageHeight(); i++) {
+      for (int j = 0; j < pImage.getImageWidth(); j++) {
+        logDensityFilter.transformPoint(logDensityPnt, j, i);
         gammaCorrectionFilter.transformPoint(logDensityPnt, rbgPoint);
         pImage.setRGB(j, i, rbgPoint.red, rbgPoint.green, rbgPoint.blue);
-        bx += pFlame.getSpatialOversample();
       }
-      by += pFlame.getSpatialOversample();
     }
   }
 
@@ -153,19 +173,17 @@ public class FlameRenderer implements TransformationContext {
     LogDensityPoint logDensityPnt = new LogDensityPoint();
     GammaCorrectedRGBPoint rbgPoint = new GammaCorrectedRGBPoint();
     logDensityFilter.setRaster(raster, rasterWidth, rasterHeight, pImage);
-    for (int i = 0, by = 0; i < pImage.getImageHeight(); i++) {
-      for (int j = 0, bx = 0; j < pImage.getImageWidth(); j++) {
-        logDensityFilter.transformPointSimple(logDensityPnt, bx, by);
+    for (int i = 0; i < pImage.getImageHeight(); i++) {
+      for (int j = 0; j < pImage.getImageWidth(); j++) {
+        logDensityFilter.transformPointSimple(logDensityPnt, j, i);
         gammaCorrectionFilter.transformPointSimple(logDensityPnt, rbgPoint);
         pImage.setRGB(j, i, rbgPoint.red, rbgPoint.green, rbgPoint.blue);
-        bx += pFlame.getSpatialOversample();
       }
-      by += pFlame.getSpatialOversample();
     }
   }
 
   private void iterate(Flame pFlame) {
-    long nSamples = (long) ((long) pFlame.getSampleDensity() * 1 * (long) rasterSize / ((long) (pFlame.getSpatialOversample() * pFlame.getSpatialOversample())) + 0.5);
+    long nSamples = (long) ((long) pFlame.getSampleDensity() * 1 * (long) rasterSize + 0.5);
     //    System.err.println("SAMPLES: " + nSamples);
     int nThreads = 8;
     List<FlameRenderThread> threads = new ArrayList<FlameRenderThread>();
@@ -196,10 +214,10 @@ public class FlameRenderer implements TransformationContext {
     double pixelsPerUnit = pFlame.getPixelsPerUnit() * pFlame.getCamZoom();
     double corner_x = pFlame.getCentreX() - (double) imageWidth / pixelsPerUnit / 2.0;
     double corner_y = pFlame.getCentreY() - (double) imageHeight / pixelsPerUnit / 2.0;
-    double t0 = borderWidth / (pFlame.getSpatialOversample() * pixelsPerUnit);
-    double t1 = borderWidth / (pFlame.getSpatialOversample() * pixelsPerUnit);
-    double t2 = (2 * maxBorderWidth - borderWidth) / (pFlame.getSpatialOversample() * pixelsPerUnit);
-    double t3 = (2 * maxBorderWidth - borderWidth) / (pFlame.getSpatialOversample() * pixelsPerUnit);
+    double t0 = borderWidth / pixelsPerUnit;
+    double t1 = borderWidth / pixelsPerUnit;
+    double t2 = (2 * maxBorderWidth - borderWidth) / pixelsPerUnit;
+    double t3 = (2 * maxBorderWidth - borderWidth) / pixelsPerUnit;
 
     double camX0 = corner_x - t0;
     double camY0 = corner_y - t1;
