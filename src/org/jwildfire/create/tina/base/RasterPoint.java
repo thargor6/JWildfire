@@ -20,5 +20,5 @@ public class RasterPoint {
   public double red;
   public double green;
   public double blue;
-  public int count;
+  public long count;
 }
