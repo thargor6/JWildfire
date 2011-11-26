@@ -54,6 +54,7 @@ public class FlamePanel extends ImagePanel {
   private MouseDragOperation mouseDragOperation = MouseDragOperation.MOVE;
   private int xBeginDrag, yBeginDrag;
   private boolean editPostTransform = false;
+  private double zoom = 1.0;
 
   public FlamePanel(SimpleImage pSimpleImage, int pX, int pY, int pWidth, FlameHolder pFlameHolder) {
     super(pSimpleImage, pX, pY, pWidth);
@@ -196,19 +197,19 @@ public class FlamePanel extends ImagePanel {
   }
 
   private int xToView(double pX) {
-    return Tools.FTOI(viewXScale * pX - viewXTrans);
+    return Tools.FTOI(viewXScale * zoom * pX - viewXTrans);
   }
 
   private int yToView(double pY) {
-    return Tools.FTOI(viewYScale * pY - viewYTrans);
+    return Tools.FTOI(viewYScale * zoom * pY - viewYTrans);
   }
 
   private double viewToX(int viewX) {
-    return ((double) viewX + viewXTrans) / viewXScale;
+    return ((double) viewX + viewXTrans) / (viewXScale * zoom);
   }
 
   private double viewToY(int viewY) {
-    return ((double) viewY + viewYTrans) / viewYScale;
+    return ((double) viewY + viewYTrans) / (viewYScale * zoom);
   }
 
   public void setDrawImage(boolean drawImage) {
@@ -344,5 +345,21 @@ public class FlamePanel extends ImagePanel {
 
   public void setEditPostTransform(boolean pEditPostTransform) {
     editPostTransform = pEditPostTransform;
+  }
+
+  public void zoomIn() {
+    if (zoom > 0.2) {
+      zoom -= 0.1;
+    }
+    else if (zoom > 0.05) {
+      zoom -= 0.01;
+    }
+    else {
+      zoom -= 0.001;
+    }
+  }
+
+  public void zoomOut() {
+    zoom += 0.1;
   }
 }

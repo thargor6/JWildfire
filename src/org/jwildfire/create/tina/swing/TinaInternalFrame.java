@@ -406,6 +406,14 @@ public class TinaInternalFrame extends JInternalFrame {
   private JComboBox randomStyleCmb = null;
   private JLabel randomStyleLbl = null;
   private JToggleButton affineEditPostTransformButton = null;
+  private JToggleButton affineEditPostTransformSmallButton = null;
+  private JLabel editSpaceLbl1 = null;
+  private JLabel editSpaceLbl2 = null;
+  private JButton mouseTransformZoomInButton = null;
+  private JButton mouseTransformZoomOutButton = null;
+  private JLabel editSpaceLbl3 = null;
+  private JToggleButton toggleTrianglesButton = null;
+  private JLabel editSpaceLbl4 = null;
 
   /**
    * This is the xxx default constructor
@@ -1760,7 +1768,7 @@ public class TinaInternalFrame extends JInternalFrame {
       zStyleLbl = new JLabel();
       zStyleLbl.setPreferredSize(new Dimension(94, 22));
       zStyleLbl.setText("Z style");
-      zStyleLbl.setBounds(new Rectangle(110, 5, 94, 22));
+      zStyleLbl.setBounds(new Rectangle(8, 5, 94, 22));
       zStyleLbl.setFont(new Font("Dialog", Font.BOLD, 10));
       tinaRenderSizeLbl = new JLabel();
       tinaRenderSizeLbl.setText("Export size");
@@ -2871,7 +2879,8 @@ public class TinaInternalFrame extends JInternalFrame {
         getTransformationWeightLeftButton(), getTransformationWeightRightButton(), getZStyleCmb(), getSetMorphFlame1Button(),
         getSetMorphFlame2Button(), getMorphFrameREd(), getMorphFramesREd(), getMorphCheckBox(), getMorphFrameSlider(), getImportMorphedFlameButton(),
         getAnimateOutputREd(), getAnimateFramesREd(), getAnimateScriptCmb(), getAnimationGenerateButton(), getAnimateXFormScriptCmb(), getMouseTransformMoveButton(),
-        getMouseTransformRotateButton(), getMouseTransformScaleButton(), getAffineEditPostTransformButton());
+        getMouseTransformRotateButton(), getMouseTransformScaleButton(), getAffineEditPostTransformButton(), getAffineEditPostTransformSmallButton(),
+        getMouseTransformZoomInButton(), getMouseTransformZoomOutButton(), getToggleTrianglesButton());
     tinaController.refreshing = tinaController.cmbRefreshing = tinaController.gridRefreshing = true;
     try {
       for (NonlinearControlsRow row : nonlinearControlsRows) {
@@ -4437,7 +4446,7 @@ public class TinaInternalFrame extends JInternalFrame {
     if (zStyleCmb == null) {
       zStyleCmb = new JComboBox();
       zStyleCmb.setPreferredSize(new Dimension(125, 22));
-      zStyleCmb.setBounds(new Rectangle(206, 5, 125, 22));
+      zStyleCmb.setBounds(new Rectangle(104, 5, 125, 22));
       zStyleCmb.setFont(new Font("Dialog", Font.BOLD, 10));
       zStyleCmb.addItemListener(new java.awt.event.ItemListener() {
         public void itemStateChanged(java.awt.event.ItemEvent e) {
@@ -4785,12 +4794,35 @@ public class TinaInternalFrame extends JInternalFrame {
    */
   private JPanel getTriangleOperationsPanel() {
     if (triangleOperationsPanel == null) {
+      editSpaceLbl4 = new JLabel();
+      editSpaceLbl4.setFont(new Font("Dialog", Font.BOLD, 10));
+      editSpaceLbl4.setText("");
+      editSpaceLbl4.setPreferredSize(new Dimension(42, 10));
+      editSpaceLbl3 = new JLabel();
+      editSpaceLbl3.setFont(new Font("Dialog", Font.BOLD, 10));
+      editSpaceLbl3.setText("");
+      editSpaceLbl3.setPreferredSize(new Dimension(42, 12));
+      editSpaceLbl2 = new JLabel();
+      editSpaceLbl2.setFont(new Font("Dialog", Font.BOLD, 10));
+      editSpaceLbl2.setText("");
+      editSpaceLbl2.setPreferredSize(new Dimension(42, 12));
+      editSpaceLbl1 = new JLabel();
+      editSpaceLbl1.setFont(new Font("Dialog", Font.BOLD, 10));
+      editSpaceLbl1.setText("");
+      editSpaceLbl1.setPreferredSize(new Dimension(42, 12));
       triangleOperationsPanel = new JPanel();
       triangleOperationsPanel.setLayout(new FlowLayout());
       triangleOperationsPanel.setPreferredSize(new Dimension(52, 0));
+      triangleOperationsPanel.add(editSpaceLbl4, null);
       triangleOperationsPanel.add(getMouseTransformMoveButton(), null);
       triangleOperationsPanel.add(getMouseTransformRotateButton(), null);
       triangleOperationsPanel.add(getMouseTransformScaleButton(), null);
+      triangleOperationsPanel.add(editSpaceLbl1, null);
+      triangleOperationsPanel.add(getMouseTransformZoomInButton(), null);
+      triangleOperationsPanel.add(getMouseTransformZoomOutButton(), null);
+      triangleOperationsPanel.add(editSpaceLbl3, null);
+      triangleOperationsPanel.add(getToggleTrianglesButton(), null);
+      triangleOperationsPanel.add(editSpaceLbl2, null);
       triangleOperationsPanel.add(getTinaRenderFlameButton(), null);
     }
     return triangleOperationsPanel;
@@ -4866,6 +4898,7 @@ public class TinaInternalFrame extends JInternalFrame {
       centerNorthPanel.setPreferredSize(new Dimension(0, 32));
       centerNorthPanel.add(getZStyleCmb(), null);
       centerNorthPanel.add(zStyleLbl, null);
+      centerNorthPanel.add(getAffineEditPostTransformSmallButton(), null);
     }
     return centerNorthPanel;
   }
@@ -4949,6 +4982,93 @@ public class TinaInternalFrame extends JInternalFrame {
       });
     }
     return affineEditPostTransformButton;
+  }
+
+  /**
+   * This method initializes affineEditPostTransformSmallButton	
+   * 	
+   * @return javax.swing.JToggleButton	
+   */
+  private JToggleButton getAffineEditPostTransformSmallButton() {
+    if (affineEditPostTransformSmallButton == null) {
+      affineEditPostTransformSmallButton = new JToggleButton();
+      affineEditPostTransformSmallButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      affineEditPostTransformSmallButton.setText("P");
+      affineEditPostTransformSmallButton.setToolTipText("Edit Post  Transform");
+      affineEditPostTransformSmallButton.setMnemonic(KeyEvent.VK_P);
+      affineEditPostTransformSmallButton.setBounds(new Rectangle(415, 3, 42, 24));
+      affineEditPostTransformSmallButton.setPreferredSize(new Dimension(42, 24));
+      affineEditPostTransformSmallButton.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent e) {
+          tinaController.affineEditPostTransformSmallButton_clicked();
+        }
+      });
+    }
+    return affineEditPostTransformSmallButton;
+  }
+
+  /**
+   * This method initializes mouseTransformZoomInButton	
+   * 	
+   * @return javax.swing.JButton	
+   */
+  private JButton getMouseTransformZoomInButton() {
+    if (mouseTransformZoomInButton == null) {
+      mouseTransformZoomInButton = new JButton();
+      mouseTransformZoomInButton.setFont(new Font("Dialog", Font.BOLD, 8));
+      mouseTransformZoomInButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/enlarge.gif")));
+      mouseTransformZoomInButton.setText("");
+      mouseTransformZoomInButton.setToolTipText("Zoom in");
+      mouseTransformZoomInButton.setPreferredSize(new Dimension(42, 24));
+      mouseTransformZoomInButton.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent e) {
+          tinaController.mouseTransformZoomInButton_clicked();
+        }
+      });
+    }
+    return mouseTransformZoomInButton;
+  }
+
+  /**
+   * This method initializes mouseTransformZoomOutButton	
+   * 	
+   * @return javax.swing.JButton	
+   */
+  private JButton getMouseTransformZoomOutButton() {
+    if (mouseTransformZoomOutButton == null) {
+      mouseTransformZoomOutButton = new JButton();
+      mouseTransformZoomOutButton.setFont(new Font("Dialog", Font.BOLD, 8));
+      mouseTransformZoomOutButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/shrink.gif")));
+      mouseTransformZoomOutButton.setText("");
+      mouseTransformZoomOutButton.setToolTipText("Zoom out");
+      mouseTransformZoomOutButton.setPreferredSize(new Dimension(42, 24));
+      mouseTransformZoomOutButton.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent e) {
+          tinaController.mouseTransformZoomOutButton_clicked();
+        }
+      });
+    }
+    return mouseTransformZoomOutButton;
+  }
+
+  /**
+   * This method initializes toggleTrianglesButton	
+   * 	
+   * @return javax.swing.JToggleButton	
+   */
+  private JToggleButton getToggleTrianglesButton() {
+    if (toggleTrianglesButton == null) {
+      toggleTrianglesButton = new JToggleButton();
+      toggleTrianglesButton.setPreferredSize(new Dimension(42, 24));
+      toggleTrianglesButton.setSelected(true);
+      toggleTrianglesButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/triangle.gif")));
+      toggleTrianglesButton.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent e) {
+          tinaController.toggleTrianglesButton_clicked();
+        }
+      });
+    }
+    return toggleTrianglesButton;
   }
 
 } //  @jve:decl-index=0:visual-constraint="10,10"

@@ -251,6 +251,10 @@ public class TinaController implements FlameHolder {
   private final JButton transformationWeightLeftButton;
   private final JButton transformationWeightRightButton;
   private final JToggleButton affineEditPostTransformButton;
+  private final JToggleButton affineEditPostTransformSmallButton;
+  private final JButton mouseEditZoomInButton;
+  private final JButton mouseEditZoomOutButton;
+  private final JToggleButton toggleTrianglesButton;
   // Random batch
   private final JPanel randomBatchPanel;
   private JScrollPane randomBatchScrollPane = null;
@@ -315,7 +319,8 @@ public class TinaController implements FlameHolder {
       JButton pSetMorphFlame2Button, JTextField pMorphFrameREd, JTextField pMorphFramesREd, JCheckBox pMorphCheckBox, JSlider pMorphFrameSlider,
       JButton pImportMorphedFlameButton, JTextField pAnimateOutputREd, JTextField pAnimateFramesREd, JComboBox pAnimateGlobalScriptCmb, JButton pAnimationGenerateButton,
       JComboBox pAnimateXFormScriptCmb, JToggleButton pMouseTransformMoveButton, JToggleButton pMouseTransformRotateButton, JToggleButton pMouseTransformScaleButton,
-      JToggleButton pAffineEditPostTransformButton) {
+      JToggleButton pAffineEditPostTransformButton, JToggleButton pAffineEditPostTransformSmallButton, JButton pMouseEditZoomInButton, JButton pMouseEditZoomOutButton,
+      JToggleButton pToggleTrianglesButton) {
     errorHandler = pErrorHandler;
     prefs = pPrefs;
     centerPanel = pCenterPanel;
@@ -403,6 +408,9 @@ public class TinaController implements FlameHolder {
     deleteTransformationButton = pDeleteTransformationButton;
     addFinalTransformationButton = pAddFinalTransformationButton;
     affineEditPostTransformButton = pAffineEditPostTransformButton;
+    affineEditPostTransformSmallButton = pAffineEditPostTransformSmallButton;
+    mouseEditZoomInButton = pMouseEditZoomInButton;
+    mouseEditZoomOutButton = pMouseEditZoomOutButton;
 
     randomBatchPanel = pRandomBatchPanel;
     nonlinearControlsRows = pNonlinearControlsRows;
@@ -440,12 +448,13 @@ public class TinaController implements FlameHolder {
     mouseTransformMoveButton = pMouseTransformMoveButton;
     mouseTransformRotateButton = pMouseTransformRotateButton;
     mouseTransformScaleButton = pMouseTransformScaleButton;
+    toggleTrianglesButton = pToggleTrianglesButton;
 
     enableControls();
     enableXFormControls(null);
   }
 
-  private ImagePanel getFlamePanel() {
+  private FlamePanel getFlamePanel() {
     if (flamePanel == null) {
       int width = centerPanel.getWidth();
       int height = centerPanel.getHeight();
@@ -513,7 +522,7 @@ public class TinaController implements FlameHolder {
   }
 
   public void refreshFlameImage(int pQuality, AffineZStyle pAffineZStyle) {
-    ImagePanel imgPanel = getFlamePanel();
+    FlamePanel imgPanel = getFlamePanel();
     int width = imgPanel.getWidth();
     int height = imgPanel.getHeight();
     if (width >= 16 && height >= 16) {
@@ -1058,6 +1067,14 @@ public class TinaController implements FlameHolder {
   }
 
   public void renderFlameButton_actionPerformed(ActionEvent e) {
+    refreshing = true;
+    try {
+      toggleTrianglesButton.setSelected(false);
+      flamePanel.setDrawFlame(false);
+    }
+    finally {
+      refreshing = false;
+    }
     refreshFlameImage(Integer.parseInt(renderQualityREd.getText()), (AffineZStyle) zStyleCmb.getSelectedItem());
   }
 
@@ -2325,12 +2342,57 @@ public class TinaController implements FlameHolder {
   }
 
   public void affineEditPostTransformButton_clicked() {
-    XForm xForm = getCurrXForm();
-    if (flamePanel != null) {
-      flamePanel.setEditPostTransform(affineEditPostTransformButton.isSelected());
+    if (refreshing) {
+      return;
     }
-    refreshXFormUI(xForm);
-    refreshFlameImage();
+    refreshing = true;
+    try {
+      XForm xForm = getCurrXForm();
+      if (flamePanel != null) {
+        flamePanel.setEditPostTransform(affineEditPostTransformButton.isSelected());
+      }
+      refreshXFormUI(xForm);
+      refreshFlameImage();
+      affineEditPostTransformSmallButton.setSelected(affineEditPostTransformButton.isSelected());
+    }
+    finally {
+      refreshing = false;
+    }
+  }
+
+  public void affineEditPostTransformSmallButton_clicked() {
+    refreshing = true;
+    try {
+      affineEditPostTransformButton.setSelected(affineEditPostTransformSmallButton.isSelected());
+    }
+    finally {
+      refreshing = false;
+    }
+    affineEditPostTransformButton_clicked();
+  }
+
+  public void mouseTransformZoomInButton_clicked() {
+    if (flamePanel != null) {
+      flamePanel.zoomIn();
+      refreshFlameImage();
+    }
+  }
+
+  public void mouseTransformZoomOutButton_clicked() {
+    if (flamePanel != null) {
+      flamePanel.zoomOut();
+      refreshFlameImage();
+    }
+  }
+
+  public void toggleTrianglesButton_clicked() {
+    if (refreshing) {
+      return;
+    }
+    if (flamePanel != null) {
+      flamePanel.setDrawFlame(toggleTrianglesButton.isSelected());
+      refreshFlameImage();
+    }
   }
 
 }
