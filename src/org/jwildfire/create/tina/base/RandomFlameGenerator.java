@@ -22,51 +22,41 @@ import org.jwildfire.create.tina.variation.VariationFuncList;
 
 public class RandomFlameGenerator {
 
-  public Flame createFlame(RandomFlameGeneratorStyle pStyle) {
+  public Flame createFlame(RandomFlameGeneratorStyle pStyle, boolean pWithSymmetry, boolean pWithPostTransforms) {
+    Flame flame;
     switch (pStyle) {
       case V0:
-        return createFlame_V0(false);
+        flame = createFlame_V0();
+        break;
       case V1:
-        return createFlame_V1(false);
+        flame = createFlame_V1();
+        break;
       case DDD:
-        return createFlame_3D(false);
-      case V0_SYMM:
-        return createFlame_V0(true);
-      case V1_SYMM:
-        return createFlame_V1(true);
-      case DDD_SYMM:
-        return createFlame_3D(true);
+        flame = createFlame_3D();
+        break;
       case ALL: {
         double r = Math.random();
-        if (r < 0.1) {
-          return createFlame_V0(false);
+        if (r < 0.33) {
+          flame = createFlame_V0();
         }
-        else if (r < 0.2) {
-          return createFlame_V0(true);
+        else if (r < 0.67) {
+          flame = createFlame_V1();
         }
-        else if (r < 0.3) {
-          return createFlame_V1(false);
-        }
-        else if (r < 0.4) {
-          return createFlame_V1(true);
-        }
-        else if (r < 0.5) {
-          return createFlame_3D(false);
-        }
-        else if (r < 0.6) {
-          return createFlame_3D(true);
-        }
-        // always good default
         else {
-          return createFlame_V1(false);
+          flame = createFlame_3D();
         }
+        break;
       }
       default:
         throw new IllegalStateException();
     }
+    if (pWithSymmetry) {
+      addSymmetry(flame);
+    }
+    return flame;
   }
 
-  private Flame createFlame_V0(boolean pWithSymmetry) {
+  private Flame createFlame_V0() {
     Flame flame = new Flame();
     flame.setCentreX(0.0);
     flame.setCentreY(0.0);
@@ -75,10 +65,7 @@ public class RandomFlameGenerator {
     flame.setFinalXForm(null);
     flame.getXForms().clear();
 
-    int maxXForms = (int) (1.0 + Math.random() * 5.0);
-    if (pWithSymmetry && maxXForms < 2) {
-      maxXForms = 2;
-    }
+    int maxXForms = (int) (2.0 + Math.random() * 5.0);
     double scl = 1.0;
     for (int i = 0; i < maxXForms; i++) {
       XForm xForm = new XForm();
@@ -104,9 +91,6 @@ public class RandomFlameGenerator {
       }
 
       xForm.setWeight(Math.random() * 0.9 + 0.1);
-    }
-    if (pWithSymmetry) {
-      addSymmetry(flame);
     }
     return flame;
   }
@@ -134,7 +118,7 @@ public class RandomFlameGenerator {
     }
   }
 
-  private Flame createFlame_V1(boolean pWithSymmetry) {
+  private Flame createFlame_V1() {
     Flame flame = new Flame();
     flame.setCentreX(0.0);
     flame.setCentreY(0.0);
@@ -144,9 +128,6 @@ public class RandomFlameGenerator {
     flame.getXForms().clear();
 
     int maxXForms = (int) (1.0 + Math.random() * 5.0);
-    if (pWithSymmetry && maxXForms < 2) {
-      maxXForms = 2;
-    }
     double scl = 1.0;
     for (int i = 0; i < maxXForms; i++) {
       XForm xForm = new XForm();
@@ -173,13 +154,10 @@ public class RandomFlameGenerator {
 
       xForm.setWeight(Math.random() * 0.9 + 0.1);
     }
-    if (pWithSymmetry) {
-      addSymmetry(flame);
-    }
     return flame;
   }
 
-  private Flame createFlame_3D(boolean pWithSymmetry) {
+  private Flame createFlame_3D() {
     Flame flame = new Flame();
     flame.setCentreX(0.0);
     flame.setCentreY(0.0);
@@ -214,9 +192,6 @@ public class RandomFlameGenerator {
       }
 
       xForm.setWeight(Math.random() * 0.9 + 0.1);
-    }
-    if (pWithSymmetry) {
-      addSymmetry(flame);
     }
     return flame;
   }

@@ -258,6 +258,8 @@ public class TinaController implements FlameHolder {
   // Random batch
   private final JPanel randomBatchPanel;
   private JScrollPane randomBatchScrollPane = null;
+  private final JCheckBox randomPostTransformCheckBox;
+  private final JCheckBox randomSymmetryCheckBox;
   // Nonlinear transformations
   private final NonlinearControlsRow[] nonlinearControlsRows;
   // Color
@@ -321,7 +323,7 @@ public class TinaController implements FlameHolder {
       JButton pImportMorphedFlameButton, JTextField pAnimateOutputREd, JTextField pAnimateFramesREd, JComboBox pAnimateGlobalScriptCmb, JButton pAnimationGenerateButton,
       JComboBox pAnimateXFormScriptCmb, JToggleButton pMouseTransformMoveButton, JToggleButton pMouseTransformRotateButton, JToggleButton pMouseTransformScaleButton,
       JToggleButton pAffineEditPostTransformButton, JToggleButton pAffineEditPostTransformSmallButton, JButton pMouseEditZoomInButton, JButton pMouseEditZoomOutButton,
-      JToggleButton pToggleTrianglesButton, ProgressUpdater pProgressUpdater) {
+      JToggleButton pToggleTrianglesButton, ProgressUpdater pProgressUpdater, JCheckBox pRandomPostTransformCheckBox, JCheckBox pRandomSymmetryCheckBox) {
     errorHandler = pErrorHandler;
     prefs = pPrefs;
     centerPanel = pCenterPanel;
@@ -451,6 +453,8 @@ public class TinaController implements FlameHolder {
     mouseTransformScaleButton = pMouseTransformScaleButton;
     toggleTrianglesButton = pToggleTrianglesButton;
     progressUpdater = pProgressUpdater;
+    randomPostTransformCheckBox = pRandomPostTransformCheckBox;
+    randomSymmetryCheckBox = pRandomSymmetryCheckBox;
 
     enableControls();
     enableXFormControls(null);
@@ -1832,7 +1836,7 @@ public class TinaController implements FlameHolder {
       double bestCoverage = 0.0;
       for (int j = 0; j < MAX_IMG_SAMPLES; j++) {
         // create flame
-        Flame flame = new RandomFlameGenerator().createFlame(pStyle);
+        Flame flame = new RandomFlameGenerator().createFlame(pStyle, randomSymmetryCheckBox.isSelected(), randomPostTransformCheckBox.isSelected());
         flame.setWidth(IMG_WIDTH);
         flame.setHeight(IMG_HEIGHT);
         flame.setPixelsPerUnit(10);

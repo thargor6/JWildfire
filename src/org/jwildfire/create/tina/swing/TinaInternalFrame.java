@@ -417,6 +417,8 @@ public class TinaInternalFrame extends JInternalFrame implements ProgressUpdater
   private JToggleButton toggleTrianglesButton = null;
   private JLabel editSpaceLbl4 = null;
   private JProgressBar renderProgressBar = null;
+  private JCheckBox randomSymmetryCheckBox = null;
+  private JCheckBox randomPostTransformCheckBox = null;
 
   /**
    * This is the xxx default constructor
@@ -1766,7 +1768,7 @@ public class TinaInternalFrame extends JInternalFrame implements ProgressUpdater
       randomStyleLbl.setPreferredSize(new Dimension(94, 22));
       randomStyleLbl.setText("Random style");
       randomStyleLbl.setSize(new Dimension(94, 22));
-      randomStyleLbl.setLocation(new Point(4, 4));
+      randomStyleLbl.setLocation(new Point(132, 4));
       randomStyleLbl.setFont(new Font("Dialog", Font.BOLD, 10));
       zStyleLbl = new JLabel();
       zStyleLbl.setPreferredSize(new Dimension(94, 22));
@@ -1807,6 +1809,8 @@ public class TinaInternalFrame extends JInternalFrame implements ProgressUpdater
       tinaNorthMainPanel.add(getNewFlameButton(), null);
       tinaNorthMainPanel.add(getRandomStyleCmb(), null);
       tinaNorthMainPanel.add(randomStyleLbl, null);
+      tinaNorthMainPanel.add(getRandomSymmetryCheckBox(), null);
+      tinaNorthMainPanel.add(getRandomPostTransformCheckBox(), null);
     }
     return tinaNorthMainPanel;
   }
@@ -2883,7 +2887,7 @@ public class TinaInternalFrame extends JInternalFrame implements ProgressUpdater
         getSetMorphFlame2Button(), getMorphFrameREd(), getMorphFramesREd(), getMorphCheckBox(), getMorphFrameSlider(), getImportMorphedFlameButton(),
         getAnimateOutputREd(), getAnimateFramesREd(), getAnimateScriptCmb(), getAnimationGenerateButton(), getAnimateXFormScriptCmb(), getMouseTransformMoveButton(),
         getMouseTransformRotateButton(), getMouseTransformScaleButton(), getAffineEditPostTransformButton(), getAffineEditPostTransformSmallButton(),
-        getMouseTransformZoomInButton(), getMouseTransformZoomOutButton(), getToggleTrianglesButton(), this);
+        getMouseTransformZoomInButton(), getMouseTransformZoomOutButton(), getToggleTrianglesButton(), this, getRandomPostTransformCheckBox(), getRandomSymmetryCheckBox());
     tinaController.refreshing = tinaController.cmbRefreshing = tinaController.gridRefreshing = true;
     try {
       for (NonlinearControlsRow row : nonlinearControlsRows) {
@@ -3409,8 +3413,8 @@ public class TinaInternalFrame extends JInternalFrame implements ProgressUpdater
       randomBatchButton.setFont(new Font("Dialog", Font.BOLD, 10));
       randomBatchButton.setMnemonic(KeyEvent.VK_D);
       randomBatchButton.setText("Random flames");
-      randomBatchButton.setSize(new Dimension(221, 26));
-      randomBatchButton.setLocation(new Point(4, 30));
+      randomBatchButton.setSize(new Dimension(125, 52));
+      randomBatchButton.setLocation(new Point(4, 4));
       randomBatchButton.setPreferredSize(new Dimension(125, 52));
       randomBatchButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -4428,7 +4432,7 @@ public class TinaInternalFrame extends JInternalFrame implements ProgressUpdater
       newFlameButton.setMnemonic(KeyEvent.VK_N);
       newFlameButton.setText("New from scratch");
       newFlameButton.setActionCommand("New from scratch");
-      newFlameButton.setLocation(new Point(228, 4));
+      newFlameButton.setLocation(new Point(362, 4));
       newFlameButton.setSize(new Dimension(125, 52));
       newFlameButton.setFont(new Font("Dialog", Font.BOLD, 10));
       newFlameButton.addActionListener(new java.awt.event.ActionListener() {
@@ -4951,15 +4955,12 @@ public class TinaInternalFrame extends JInternalFrame implements ProgressUpdater
       randomStyleCmb = new JComboBox();
       randomStyleCmb.setPreferredSize(new Dimension(125, 22));
       randomStyleCmb.setSize(new Dimension(125, 22));
-      randomStyleCmb.setLocation(new Point(100, 4));
+      randomStyleCmb.setLocation(new Point(228, 4));
       randomStyleCmb.setFont(new Font("Dialog", Font.BOLD, 10));
       randomStyleCmb.removeAllItems();
       randomStyleCmb.addItem(RandomFlameGeneratorStyle.V0);
       randomStyleCmb.addItem(RandomFlameGeneratorStyle.V1);
       randomStyleCmb.addItem(RandomFlameGeneratorStyle.DDD);
-      randomStyleCmb.addItem(RandomFlameGeneratorStyle.V0_SYMM);
-      randomStyleCmb.addItem(RandomFlameGeneratorStyle.V1_SYMM);
-      randomStyleCmb.addItem(RandomFlameGeneratorStyle.DDD_SYMM);
       randomStyleCmb.addItem(RandomFlameGeneratorStyle.ALL);
       randomStyleCmb.setSelectedItem(RandomFlameGeneratorStyle.ALL);
     }
@@ -5108,6 +5109,40 @@ public class TinaInternalFrame extends JInternalFrame implements ProgressUpdater
     if (g != null) {
       renderProgressBar.paint(g);
     }
+  }
+
+  /**
+   * This method initializes randomSymmetryCheckBox	
+   * 	
+   * @return javax.swing.JCheckBox	
+   */
+  private JCheckBox getRandomSymmetryCheckBox() {
+    if (randomSymmetryCheckBox == null) {
+      randomSymmetryCheckBox = new JCheckBox();
+      randomSymmetryCheckBox.setText("Symmetry");
+      randomSymmetryCheckBox.setLocation(new Point(132, 32));
+      randomSymmetryCheckBox.setSize(new Dimension(94, 22));
+      randomSymmetryCheckBox.setPreferredSize(new Dimension(94, 22));
+      randomSymmetryCheckBox.setFont(new Font("Dialog", Font.BOLD, 10));
+    }
+    return randomSymmetryCheckBox;
+  }
+
+  /**
+   * This method initializes randomPostTransformCheckBox	
+   * 	
+   * @return javax.swing.JCheckBox	
+   */
+  private JCheckBox getRandomPostTransformCheckBox() {
+    if (randomPostTransformCheckBox == null) {
+      randomPostTransformCheckBox = new JCheckBox();
+      randomPostTransformCheckBox.setPreferredSize(new Dimension(94, 22));
+      randomPostTransformCheckBox.setText("Post Transforms");
+      randomPostTransformCheckBox.setSize(new Dimension(124, 22));
+      randomPostTransformCheckBox.setLocation(new Point(228, 32));
+      randomPostTransformCheckBox.setFont(new Font("Dialog", Font.BOLD, 10));
+    }
+    return randomPostTransformCheckBox;
   }
 
 } //  @jve:decl-index=0:visual-constraint="10,10"
