@@ -92,6 +92,8 @@ public class VariationFuncList {
     registerVariationFunc(Square3DFunc.class);
     registerVariationFunc(TangentFunc.class);
     registerVariationFunc(Tangent3DFunc.class);
+    registerVariationFunc(BladeFunc.class);
+    registerVariationFunc(Blade3DFunc.class);
   }
 
   private static void registerVariationFunc(Class<? extends VariationFunc> pVariationFunc) {

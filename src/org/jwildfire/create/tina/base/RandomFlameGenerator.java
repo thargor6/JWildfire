@@ -162,7 +162,7 @@ public class RandomFlameGenerator {
       xForm.addVariation(Math.random() * 0.8 + 0.2, new Linear3DFunc());
       if (Math.random() > 0.33) {
         String[] fnc = { "blur3D", "bubble", "curl3D", "diamond", "disc", "butterfly3D", "julia3D", "fan2", "heart",
-            "julia3D", "hemisphere", "horseshoe", "tangent3D", "blob3D", "julia3D", "pie3D", "pdj", "popcorn", "rings2",
+            "julia3D", "blade3D", "hemisphere", "horseshoe", "tangent3D", "blob3D", "julia3D", "pie3D", "pdj", "popcorn", "rings2",
             "spherical3D", "spiral", "rectangles", "blur", "waves", "swirl" };
         int fncIdx = (int) (Math.random() * fnc.length);
         xForm.addVariation(Math.random() * 0.5, VariationFuncList.getVariationFuncInstance(fnc[fncIdx]));
@@ -201,7 +201,7 @@ public class RandomFlameGenerator {
       xForm.addVariation(Math.random() * 0.8 + 0.2, new Linear3DFunc());
       if (Math.random() > 0.33) {
         String[] fnc = { "blur3D", "julia3D", "curl3D", "butterfly3D", "julia3D",
-            "julia3D", "hemisphere", "blob3D", "tangent3D", "square3D", "julia3D", "pie3D", "pdj",
+            "julia3D", "blade3D", "hemisphere", "blob3D", "tangent3D", "square3D", "julia3D", "pie3D", "pdj",
             "spherical3D", "blur", "julia3Dz" };
         int fncIdx = (int) (Math.random() * fnc.length);
         xForm.addVariation(Math.random() * 0.5, VariationFuncList.getVariationFuncInstance(fnc[fncIdx]));
