@@ -85,47 +85,95 @@ public class XFormTransformService {
   }
 
   public static void translate(XForm pXForm, double pDeltaX, double pDeltaY) {
+    translate(pXForm, pDeltaX, pDeltaY, false);
+  }
+
+  public static void translate(XForm pXForm, double pDeltaX, double pDeltaY, boolean pPostTransform) {
     if (Math.abs(pDeltaX) < Constants.EPSILON && Math.abs(pDeltaY) < Constants.EPSILON)
       return;
     Matrix3x3 m1 = new Identity3x3();
     m1.val[0][2] = pDeltaX;
     m1.val[1][2] = pDeltaY;
     Matrix3x3 m2 = new Identity3x3();
-    m2.val[0][0] = pXForm.getCoeff00();
-    m2.val[0][1] = pXForm.getCoeff01();
-    m2.val[1][0] = pXForm.getCoeff10();
-    m2.val[1][1] = pXForm.getCoeff11();
-    m2.val[0][2] = pXForm.getCoeff20();
-    m2.val[1][2] = pXForm.getCoeff21();
+    if (pPostTransform) {
+      m2.val[0][0] = pXForm.getPostCoeff00();
+      m2.val[0][1] = pXForm.getPostCoeff01();
+      m2.val[1][0] = pXForm.getPostCoeff10();
+      m2.val[1][1] = pXForm.getPostCoeff11();
+      m2.val[0][2] = pXForm.getPostCoeff20();
+      m2.val[1][2] = pXForm.getPostCoeff21();
+    }
+    else {
+      m2.val[0][0] = pXForm.getCoeff00();
+      m2.val[0][1] = pXForm.getCoeff01();
+      m2.val[1][0] = pXForm.getCoeff10();
+      m2.val[1][1] = pXForm.getCoeff11();
+      m2.val[0][2] = pXForm.getCoeff20();
+      m2.val[1][2] = pXForm.getCoeff21();
+    }
     m2 = multiply(m2, m1);
-    pXForm.setCoeff00(m2.val[0][0]);
-    pXForm.setCoeff01(m2.val[0][1]);
-    pXForm.setCoeff10(m2.val[1][0]);
-    pXForm.setCoeff11(m2.val[1][1]);
-    pXForm.setCoeff20(m2.val[0][2]);
-    pXForm.setCoeff21(m2.val[1][2]);
+    if (pPostTransform) {
+      pXForm.setPostCoeff00(m2.val[0][0]);
+      pXForm.setPostCoeff01(m2.val[0][1]);
+      pXForm.setPostCoeff10(m2.val[1][0]);
+      pXForm.setPostCoeff11(m2.val[1][1]);
+      pXForm.setPostCoeff20(m2.val[0][2]);
+      pXForm.setPostCoeff21(m2.val[1][2]);
+    }
+    else {
+      pXForm.setCoeff00(m2.val[0][0]);
+      pXForm.setCoeff01(m2.val[0][1]);
+      pXForm.setCoeff10(m2.val[1][0]);
+      pXForm.setCoeff11(m2.val[1][1]);
+      pXForm.setCoeff20(m2.val[0][2]);
+      pXForm.setCoeff21(m2.val[1][2]);
+    }
   }
 
   public static void scale(XForm pXForm, double pScale) {
+    scale(pXForm, pScale, false);
+  }
+
+  public static void scale(XForm pXForm, double pScale, boolean pPostTransform) {
     if (Math.abs(pScale - 1.0) < Constants.EPSILON)
       return;
     Matrix3x3 m1 = new Identity3x3();
     m1.val[0][0] = pScale;
     m1.val[1][1] = pScale;
     Matrix3x3 m2 = new Identity3x3();
-    m2.val[0][0] = pXForm.getCoeff00();
-    m2.val[0][1] = pXForm.getCoeff01();
-    m2.val[1][0] = pXForm.getCoeff10();
-    m2.val[1][1] = pXForm.getCoeff11();
-    m2.val[0][2] = pXForm.getCoeff20();
-    m2.val[1][2] = pXForm.getCoeff21();
+    if (pPostTransform) {
+      m2.val[0][0] = pXForm.getPostCoeff00();
+      m2.val[0][1] = pXForm.getPostCoeff01();
+      m2.val[1][0] = pXForm.getPostCoeff10();
+      m2.val[1][1] = pXForm.getPostCoeff11();
+      m2.val[0][2] = pXForm.getPostCoeff20();
+      m2.val[1][2] = pXForm.getPostCoeff21();
+    }
+    else {
+      m2.val[0][0] = pXForm.getCoeff00();
+      m2.val[0][1] = pXForm.getCoeff01();
+      m2.val[1][0] = pXForm.getCoeff10();
+      m2.val[1][1] = pXForm.getCoeff11();
+      m2.val[0][2] = pXForm.getCoeff20();
+      m2.val[1][2] = pXForm.getCoeff21();
+    }
     m2 = multiply(m2, m1);
-    pXForm.setCoeff00(m2.val[0][0]);
-    pXForm.setCoeff01(m2.val[0][1]);
-    pXForm.setCoeff10(m2.val[1][0]);
-    pXForm.setCoeff11(m2.val[1][1]);
-    pXForm.setCoeff20(m2.val[0][2]);
-    pXForm.setCoeff21(m2.val[1][2]);
+    if (pPostTransform) {
+      pXForm.setPostCoeff00(m2.val[0][0]);
+      pXForm.setPostCoeff01(m2.val[0][1]);
+      pXForm.setPostCoeff10(m2.val[1][0]);
+      pXForm.setPostCoeff11(m2.val[1][1]);
+      pXForm.setPostCoeff20(m2.val[0][2]);
+      pXForm.setPostCoeff21(m2.val[1][2]);
+    }
+    else {
+      pXForm.setCoeff00(m2.val[0][0]);
+      pXForm.setCoeff01(m2.val[0][1]);
+      pXForm.setCoeff10(m2.val[1][0]);
+      pXForm.setCoeff11(m2.val[1][1]);
+      pXForm.setCoeff20(m2.val[0][2]);
+      pXForm.setCoeff21(m2.val[1][2]);
+    }
   }
 
 }
