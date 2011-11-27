@@ -230,6 +230,7 @@ public class Tools {
 
   private static NumberFormat dFmtNormal;
   private static NumberFormat dFmtSmall;
+  private static NumberFormat dFmtMicro;
   public static boolean USE_TEXTURES = true;
 
   static {
@@ -242,10 +243,15 @@ public class Tools {
     dFmtSmall.setGroupingUsed(false);
     dFmtSmall.setMaximumFractionDigits(5);
     dFmtSmall.setMinimumIntegerDigits(1);
+
+    dFmtMicro = DecimalFormat.getInstance(Locale.US);
+    dFmtMicro.setGroupingUsed(false);
+    dFmtMicro.setMaximumFractionDigits(5);
+    dFmtMicro.setMinimumIntegerDigits(1);
   }
 
   public static String doubleToString(double pValue) {
-    NumberFormat fmt = Math.abs(pValue) > 0.01 ? dFmtNormal : dFmtSmall;
+    NumberFormat fmt = Math.abs(pValue) > 1.0 ? dFmtNormal : Math.abs(pValue) > 0.01 ? dFmtSmall : dFmtMicro;
     return fmt.format(pValue);
   }
 

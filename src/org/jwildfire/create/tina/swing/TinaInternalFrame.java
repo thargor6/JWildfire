@@ -1104,12 +1104,12 @@ public class TinaInternalFrame extends JInternalFrame implements ProgressUpdater
   private JSlider getTinaCameraCentreXSlider() {
     if (tinaCameraCentreXSlider == null) {
       tinaCameraCentreXSlider = new JSlider();
-      tinaCameraCentreXSlider.setMinimum(-10);
+      tinaCameraCentreXSlider.setMinimum(-100);
       tinaCameraCentreXSlider.setLocation(new Point(686, 4));
       tinaCameraCentreXSlider.setSize(new Dimension(220, 19));
       tinaCameraCentreXSlider.setPreferredSize(new Dimension(220, 19));
       tinaCameraCentreXSlider.setValue(0);
-      tinaCameraCentreXSlider.setMaximum(10);
+      tinaCameraCentreXSlider.setMaximum(100);
       tinaCameraCentreXSlider.addChangeListener(new javax.swing.event.ChangeListener() {
         public void stateChanged(javax.swing.event.ChangeEvent e) {
           tinaController.cameraCentreXSlider_stateChanged(e);
@@ -1127,12 +1127,12 @@ public class TinaInternalFrame extends JInternalFrame implements ProgressUpdater
   private JSlider getTinaCameraCentreYSlider() {
     if (tinaCameraCentreYSlider == null) {
       tinaCameraCentreYSlider = new JSlider();
-      tinaCameraCentreYSlider.setMinimum(-10);
+      tinaCameraCentreYSlider.setMinimum(-100);
       tinaCameraCentreYSlider.setLocation(new Point(686, 28));
       tinaCameraCentreYSlider.setSize(new Dimension(220, 19));
       tinaCameraCentreYSlider.setPreferredSize(new Dimension(220, 19));
       tinaCameraCentreYSlider.setValue(0);
-      tinaCameraCentreYSlider.setMaximum(10);
+      tinaCameraCentreYSlider.setMaximum(100);
       tinaCameraCentreYSlider.addChangeListener(new javax.swing.event.ChangeListener() {
         public void stateChanged(javax.swing.event.ChangeEvent e) {
           tinaController.cameraCentreYSlider_stateChanged(e);
@@ -1177,7 +1177,7 @@ public class TinaInternalFrame extends JInternalFrame implements ProgressUpdater
   private JSlider getTinaCameraZoomSlider() {
     if (tinaCameraZoomSlider == null) {
       tinaCameraZoomSlider = new JSlider();
-      tinaCameraZoomSlider.setMinimum(0);
+      tinaCameraZoomSlider.setMinimum(1);
       tinaCameraZoomSlider.setLocation(new Point(686, 52));
       tinaCameraZoomSlider.setSize(new Dimension(220, 19));
       tinaCameraZoomSlider.setPreferredSize(new Dimension(220, 19));

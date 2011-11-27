@@ -77,7 +77,7 @@ import org.jwildfire.swing.MainController;
 
 public class TinaController implements FlameHolder {
   private static final double SLIDER_SCALE_PERSPECTIVE = 100.0;
-  private static final double SLIDER_SCALE_CENTRE = 5.0;
+  private static final double SLIDER_SCALE_CENTRE = 50.0;
   private static final double SLIDER_SCALE_ZOOM = 10.0;
   private static final double SLIDER_SCALE_BRIGHTNESS_CONTRAST_VIBRANCY = 100.0;
   private static final double SLIDER_SCALE_GAMMA = 100.0;
