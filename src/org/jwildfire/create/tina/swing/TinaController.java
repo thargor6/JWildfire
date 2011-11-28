@@ -227,6 +227,7 @@ public class TinaController implements FlameHolder {
   private final JSlider paletteBrightnessSlider;
   // Transformations
   private final JTable transformationsTable;
+  private final JButton affineResetTransformButton;
   private final JTextField affineC00REd;
   private final JTextField affineC01REd;
   private final JTextField affineC10REd;
@@ -323,7 +324,8 @@ public class TinaController implements FlameHolder {
       JButton pImportMorphedFlameButton, JTextField pAnimateOutputREd, JTextField pAnimateFramesREd, JComboBox pAnimateGlobalScriptCmb, JButton pAnimationGenerateButton,
       JComboBox pAnimateXFormScriptCmb, JToggleButton pMouseTransformMoveButton, JToggleButton pMouseTransformRotateButton, JToggleButton pMouseTransformScaleButton,
       JToggleButton pAffineEditPostTransformButton, JToggleButton pAffineEditPostTransformSmallButton, JButton pMouseEditZoomInButton, JButton pMouseEditZoomOutButton,
-      JToggleButton pToggleTrianglesButton, ProgressUpdater pProgressUpdater, JCheckBox pRandomPostTransformCheckBox, JCheckBox pRandomSymmetryCheckBox) {
+      JToggleButton pToggleTrianglesButton, ProgressUpdater pProgressUpdater, JCheckBox pRandomPostTransformCheckBox, JCheckBox pRandomSymmetryCheckBox,
+      JButton pAffineResetTransformButton) {
     errorHandler = pErrorHandler;
     prefs = pPrefs;
     centerPanel = pCenterPanel;
@@ -455,6 +457,7 @@ public class TinaController implements FlameHolder {
     progressUpdater = pProgressUpdater;
     randomPostTransformCheckBox = pRandomPostTransformCheckBox;
     randomSymmetryCheckBox = pRandomSymmetryCheckBox;
+    affineResetTransformButton = pAffineResetTransformButton;
 
     enableControls();
     enableXFormControls(null);
@@ -1510,6 +1513,7 @@ public class TinaController implements FlameHolder {
 
     affineC20REd.setEditable(enabled);
     affineC21REd.setEditable(enabled);
+    affineResetTransformButton.setEnabled(enabled);
 
     transformationWeightLeftButton.setEnabled(enabled);
     transformationWeightRightButton.setEnabled(enabled);
@@ -2449,6 +2453,16 @@ public class TinaController implements FlameHolder {
       else {
         xForm.setCoeff20(value);
       }
+      transformationTableClicked();
+      refreshFlameImage();
+    }
+  }
+
+  public void affineResetTransformButton_clicked() {
+    XForm xForm = getCurrXForm();
+    if (xForm != null) {
+      double value = Tools.stringToDouble(affineC20REd.getText());
+      XFormTransformService.reset(xForm, affineEditPostTransformButton.isSelected());
       transformationTableClicked();
       refreshFlameImage();
     }

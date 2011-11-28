@@ -419,6 +419,7 @@ public class TinaInternalFrame extends JInternalFrame implements ProgressUpdater
   private JProgressBar renderProgressBar = null;
   private JCheckBox randomSymmetryCheckBox = null;
   private JCheckBox randomPostTransformCheckBox = null;
+  private JButton affineResetTransformButton = null;
 
   /**
    * This is the xxx default constructor
@@ -2042,6 +2043,7 @@ public class TinaInternalFrame extends JInternalFrame implements ProgressUpdater
       tinaAffineTransformationPanel.add(getAffineMoveRightButton(), null);
       tinaAffineTransformationPanel.add(getAffineMoveAmountREd(), null);
       tinaAffineTransformationPanel.add(getAffineEditPostTransformButton(), null);
+      tinaAffineTransformationPanel.add(getAffineResetTransformButton(), null);
     }
     return tinaAffineTransformationPanel;
   }
@@ -2887,7 +2889,8 @@ public class TinaInternalFrame extends JInternalFrame implements ProgressUpdater
         getSetMorphFlame2Button(), getMorphFrameREd(), getMorphFramesREd(), getMorphCheckBox(), getMorphFrameSlider(), getImportMorphedFlameButton(),
         getAnimateOutputREd(), getAnimateFramesREd(), getAnimateScriptCmb(), getAnimationGenerateButton(), getAnimateXFormScriptCmb(), getMouseTransformMoveButton(),
         getMouseTransformRotateButton(), getMouseTransformScaleButton(), getAffineEditPostTransformButton(), getAffineEditPostTransformSmallButton(),
-        getMouseTransformZoomInButton(), getMouseTransformZoomOutButton(), getToggleTrianglesButton(), this, getRandomPostTransformCheckBox(), getRandomSymmetryCheckBox());
+        getMouseTransformZoomInButton(), getMouseTransformZoomOutButton(), getToggleTrianglesButton(), this, getRandomPostTransformCheckBox(),
+        getRandomSymmetryCheckBox(), getAffineResetTransformButton());
     tinaController.refreshing = tinaController.cmbRefreshing = tinaController.gridRefreshing = true;
     try {
       for (NonlinearControlsRow row : nonlinearControlsRows) {
@@ -4995,11 +4998,11 @@ public class TinaInternalFrame extends JInternalFrame implements ProgressUpdater
   private JToggleButton getAffineEditPostTransformButton() {
     if (affineEditPostTransformButton == null) {
       affineEditPostTransformButton = new JToggleButton();
-      affineEditPostTransformButton.setPreferredSize(new Dimension(125, 24));
-      affineEditPostTransformButton.setSize(new Dimension(171, 24));
+      affineEditPostTransformButton.setPreferredSize(new Dimension(136, 24));
+      affineEditPostTransformButton.setSize(new Dimension(136, 24));
       affineEditPostTransformButton.setText("Edit Post  Transform");
       affineEditPostTransformButton.setFont(new Font("Dialog", Font.BOLD, 10));
-      affineEditPostTransformButton.setLocation(new Point(66, 150));
+      affineEditPostTransformButton.setLocation(new Point(4, 152));
       affineEditPostTransformButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
           tinaController.affineEditPostTransformButton_clicked();
@@ -5163,6 +5166,28 @@ public class TinaInternalFrame extends JInternalFrame implements ProgressUpdater
       randomPostTransformCheckBox.setFont(new Font("Dialog", Font.BOLD, 10));
     }
     return randomPostTransformCheckBox;
+  }
+
+  /**
+   * This method initializes affineResetTransformButton	
+   * 	
+   * @return javax.swing.JButton	
+   */
+  private JButton getAffineResetTransformButton() {
+    if (affineResetTransformButton == null) {
+      affineResetTransformButton = new JButton();
+      affineResetTransformButton.setPreferredSize(new Dimension(136, 24));
+      affineResetTransformButton.setText("Reset");
+      affineResetTransformButton.setLocation(new Point(156, 152));
+      affineResetTransformButton.setSize(new Dimension(136, 24));
+      affineResetTransformButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      affineResetTransformButton.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent e) {
+          tinaController.affineResetTransformButton_clicked();
+        }
+      });
+    }
+    return affineResetTransformButton;
   }
 
 } //  @jve:decl-index=0:visual-constraint="10,10"

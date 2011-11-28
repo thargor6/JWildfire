@@ -176,4 +176,23 @@ public class XFormTransformService {
     }
   }
 
+  public static void reset(XForm pXForm, boolean pPostTransform) {
+    if (pPostTransform) {
+      pXForm.setPostCoeff00(1.0);
+      pXForm.setPostCoeff01(0.0);
+      pXForm.setPostCoeff10(0.0);
+      pXForm.setPostCoeff11(1.0);
+      pXForm.setPostCoeff20(0.0);
+      pXForm.setPostCoeff21(0.0);
+    }
+    else {
+      pXForm.setCoeff00(1.0);
+      pXForm.setCoeff01(0.0);
+      pXForm.setCoeff10(0.0);
+      pXForm.setCoeff11(1.0);
+      pXForm.setCoeff20(0.0);
+      pXForm.setCoeff21(0.0);
+    }
+  }
+
 }
