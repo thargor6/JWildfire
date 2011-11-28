@@ -84,11 +84,28 @@ public class XFormTransformService {
     }
   }
 
-  public static void translate(XForm pXForm, double pDeltaX, double pDeltaY) {
-    translate(pXForm, pDeltaX, pDeltaY, false);
+  public static void globalTranslate(XForm pXForm, double pDeltaX, double pDeltaY) {
+    globalTranslate(pXForm, pDeltaX, pDeltaY, false);
   }
 
-  public static void translate(XForm pXForm, double pDeltaX, double pDeltaY, boolean pPostTransform) {
+  public static void localTranslate(XForm pXForm, double pDeltaX, double pDeltaY) {
+    localTranslate(pXForm, pDeltaX, pDeltaY, false);
+  }
+
+  public static void globalTranslate(XForm pXForm, double pDeltaX, double pDeltaY, boolean pPostTransform) {
+    if (Math.abs(pDeltaX) < Constants.EPSILON && Math.abs(pDeltaY) < Constants.EPSILON)
+      return;
+    if (pPostTransform) {
+      pXForm.setPostCoeff20(pDeltaX + pXForm.getPostCoeff20());
+      pXForm.setPostCoeff21(pDeltaY + pXForm.getPostCoeff21());
+    }
+    else {
+      pXForm.setCoeff20(pDeltaX + pXForm.getCoeff20());
+      pXForm.setCoeff21(pDeltaY + pXForm.getCoeff21());
+    }
+  }
+
+  public static void localTranslate(XForm pXForm, double pDeltaX, double pDeltaY, boolean pPostTransform) {
     if (Math.abs(pDeltaX) < Constants.EPSILON && Math.abs(pDeltaY) < Constants.EPSILON)
       return;
     Matrix3x3 m1 = new Identity3x3();

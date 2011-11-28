@@ -1721,7 +1721,7 @@ public class TinaController implements FlameHolder {
 
   public void xForm_moveRight() {
     double amount = Tools.stringToDouble(affineMoveAmountREd.getText());
-    XFormTransformService.translate(getCurrXForm(), amount, 0);
+    XFormTransformService.globalTranslate(getCurrXForm(), amount, 0);
     transformationTableClicked();
     refreshFlameImage();
   }
@@ -1735,7 +1735,7 @@ public class TinaController implements FlameHolder {
 
   public void xForm_moveLeft() {
     double amount = Tools.stringToDouble(affineMoveAmountREd.getText());
-    XFormTransformService.translate(getCurrXForm(), -amount, 0);
+    XFormTransformService.globalTranslate(getCurrXForm(), -amount, 0);
     transformationTableClicked();
     refreshFlameImage();
   }
@@ -1763,14 +1763,14 @@ public class TinaController implements FlameHolder {
 
   public void xForm_moveUp() {
     double amount = Tools.stringToDouble(affineMoveAmountREd.getText());
-    XFormTransformService.translate(getCurrXForm(), 0, -amount);
+    XFormTransformService.globalTranslate(getCurrXForm(), 0, -amount);
     transformationTableClicked();
     refreshFlameImage();
   }
 
   public void xForm_moveDown() {
     double amount = Tools.stringToDouble(affineMoveAmountREd.getText());
-    XFormTransformService.translate(getCurrXForm(), 0, amount);
+    XFormTransformService.globalTranslate(getCurrXForm(), 0, amount);
     transformationTableClicked();
     refreshFlameImage();
   }
@@ -2461,7 +2461,6 @@ public class TinaController implements FlameHolder {
   public void affineResetTransformButton_clicked() {
     XForm xForm = getCurrXForm();
     if (xForm != null) {
-      double value = Tools.stringToDouble(affineC20REd.getText());
       XFormTransformService.reset(xForm, affineEditPostTransformButton.isSelected());
       transformationTableClicked();
       refreshFlameImage();

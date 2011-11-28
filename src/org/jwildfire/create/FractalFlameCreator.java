@@ -29,7 +29,6 @@ import org.jwildfire.create.tina.render.FlameRenderer;
 import org.jwildfire.create.tina.transform.XFormTransformService;
 import org.jwildfire.image.SimpleImage;
 
-
 public class FractalFlameCreator extends ImageCreator {
   @Property(description = "Filter radius (higher value results into less noise but more unsharp image)")
   @PropertyMin(0)
@@ -188,7 +187,7 @@ public class FractalFlameCreator extends ImageCreator {
       XFormTransformService.scale(flame.getXForms().get(0), xForm0Scale);
     }
     if ((Math.abs(xForm0TransX) > 0.0 || Math.abs(xForm0TransY) > 0.0) && flame.getXForms().size() > 0) {
-      XFormTransformService.translate(flame.getXForms().get(0), xForm0TransX, xForm0TransY);
+      XFormTransformService.localTranslate(flame.getXForms().get(0), xForm0TransX, xForm0TransY);
     }
 
     if (Math.abs(xForm1Rotate) > 0.0 && flame.getXForms().size() > 1) {
@@ -198,7 +197,7 @@ public class FractalFlameCreator extends ImageCreator {
       XFormTransformService.scale(flame.getXForms().get(1), xForm1Scale);
     }
     if ((Math.abs(xForm1TransX) > 0.0 || Math.abs(xForm1TransY) > 0.0) && flame.getXForms().size() > 1) {
-      XFormTransformService.translate(flame.getXForms().get(1), xForm1TransX, xForm1TransY);
+      XFormTransformService.localTranslate(flame.getXForms().get(1), xForm1TransX, xForm1TransY);
     }
 
     if (Math.abs(xForm2Rotate) > 0.0 && flame.getXForms().size() > 2) {
@@ -208,7 +207,7 @@ public class FractalFlameCreator extends ImageCreator {
       XFormTransformService.scale(flame.getXForms().get(2), xForm2Scale);
     }
     if ((Math.abs(xForm2TransX) > 0.0 || Math.abs(xForm2TransY) > 0.0) && flame.getXForms().size() > 2) {
-      XFormTransformService.translate(flame.getXForms().get(2), xForm2TransX, xForm2TransY);
+      XFormTransformService.localTranslate(flame.getXForms().get(2), xForm2TransX, xForm2TransY);
     }
 
     //    flame.setFinalXForm(null);

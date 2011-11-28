@@ -25,22 +25,30 @@ public class RandomFlameGenerator {
   public Flame createFlame(RandomFlameGeneratorStyle pStyle, boolean pWithSymmetry, boolean pWithPostTransforms) {
     Flame flame;
     switch (pStyle) {
-      case V0:
-        flame = createFlame_V0();
+      case ORIGINAL:
+        flame = createFlame_original();
         break;
-      case V1:
-        flame = createFlame_V1();
+      case EXPERIMENTAL:
+        flame = createFlame_experimental();
         break;
-      case DDD:
+      case ONLY3D:
         flame = createFlame_3D();
+        break;
+      case CHECKERBOARD:
+        flame = createFlame_checkerboard(pWithPostTransforms);
         break;
       case ALL: {
         double r = Math.random();
-        if (r < 0.33) {
-          flame = createFlame_V0();
+        if (r < 0.25) {
+          flame = createFlame_original();
         }
-        else if (r < 0.67) {
-          flame = createFlame_V1();
+        else if (r < 0.50) {
+          flame = createFlame_experimental();
+        }
+        else if (r < 0.50) {
+          flame = createFlame_checkerboard(pWithPostTransforms);
+          // symmetry makes no sense here
+          return flame;
         }
         else {
           flame = createFlame_3D();
@@ -62,7 +70,12 @@ public class RandomFlameGenerator {
     return flame;
   }
 
-  private Flame createFlame_V0() {
+  private Flame createFlame_checkerboard(boolean pWithPostTransforms) {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  private Flame createFlame_original() {
     Flame flame = new Flame();
     flame.setCentreX(0.0);
     flame.setCentreY(0.0);
@@ -82,7 +95,7 @@ public class RandomFlameGenerator {
       else {
         XFormTransformService.rotate(xForm, -360.0 * Math.random());
       }
-      XFormTransformService.translate(xForm, Math.random() - 1.0, Math.random() - 1.0);
+      XFormTransformService.localTranslate(xForm, Math.random() - 1.0, Math.random() - 1.0);
       scl *= 0.75 + Math.random() / 4;
       XFormTransformService.scale(xForm, scl);
 
@@ -134,7 +147,7 @@ public class RandomFlameGenerator {
     }
   }
 
-  private Flame createFlame_V1() {
+  private Flame createFlame_experimental() {
     Flame flame = new Flame();
     flame.setCentreX(0.0);
     flame.setCentreY(0.0);
@@ -154,7 +167,7 @@ public class RandomFlameGenerator {
       else {
         XFormTransformService.rotate(xForm, -360.0 * Math.random());
       }
-      XFormTransformService.translate(xForm, Math.random() - 1.0, Math.random() - 1.0);
+      XFormTransformService.localTranslate(xForm, Math.random() - 1.0, Math.random() - 1.0);
       scl *= 0.75 + Math.random() / 4;
       XFormTransformService.scale(xForm, scl);
 
@@ -193,7 +206,7 @@ public class RandomFlameGenerator {
       else {
         XFormTransformService.rotate(xForm, -360.0 * Math.random());
       }
-      XFormTransformService.translate(xForm, Math.random() - 1.0, Math.random() - 1.0);
+      XFormTransformService.localTranslate(xForm, Math.random() - 1.0, Math.random() - 1.0);
       scl *= 0.75 + Math.random() / 4;
       XFormTransformService.scale(xForm, scl);
 
@@ -221,7 +234,7 @@ public class RandomFlameGenerator {
       else {
         XFormTransformService.rotate(xForm, -360.0 * Math.random(), true);
       }
-      XFormTransformService.translate(xForm, Math.random() - 1.0, Math.random() - 1.0, true);
+      XFormTransformService.localTranslate(xForm, Math.random() - 1.0, Math.random() - 1.0, true);
       scl *= 0.75 + Math.random() / 4;
       XFormTransformService.scale(xForm, scl, true);
     }
