@@ -24,6 +24,7 @@ import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.palette.RGBPalette;
 import org.jwildfire.create.tina.variation.Variation;
+import org.jwildfire.create.tina.variation.VariationFunc;
 
 public class Flam3Writer {
 
@@ -108,7 +109,23 @@ public class Flam3Writer {
     }
 
     for (Variation v : pXForm.getVariations()) {
-      attrList.add(pXB.createAttr(v.getFunc().getName(), v.getAmount()));
+      VariationFunc func = v.getFunc();
+      attrList.add(pXB.createAttr(func.getName(), v.getAmount()));
+      String params[] = func.getParameterNames();
+      if (params != null) {
+        Object vals[] = func.getParameterValues();
+        for (int i = 0; i < params.length; i++) {
+          if (vals[i] instanceof Integer) {
+            attrList.add(pXB.createAttr(func.getCustomizedParamName(func.getName() + "_" + params[i]), (Integer) vals[i]));
+          }
+          else if (vals[i] instanceof Double) {
+            attrList.add(pXB.createAttr((func.getName() + "_" + params[i]), (Double) vals[i]));
+          }
+          else {
+            throw new IllegalStateException();
+          }
+        }
+      }
     }
     return attrList;
   }

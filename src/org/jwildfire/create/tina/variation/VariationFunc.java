@@ -39,4 +39,8 @@ public abstract class VariationFunc {
 
   public abstract void setParameter(String pName, double pValue);
 
+  public String getCustomizedParamName(String pName) {
+    return pName;
+  }
+
 }

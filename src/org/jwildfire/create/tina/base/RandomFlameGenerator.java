@@ -159,13 +159,13 @@ public class RandomFlameGenerator {
       XFormTransformService.scale(xForm, scl);
 
       xForm.setColor(Math.random());
-      xForm.addVariation(Math.random() * 0.8 + 0.2, new Linear3DFunc());
-      if (Math.random() > 0.33) {
+      xForm.addVariation(Math.random() * 0.3 + 0.2, new Linear3DFunc());
+      if (Math.random() > 0.1) {
         String[] fnc = { "blur3D", "bubble", "curl3D", "diamond", "disc", "butterfly3D", "julia3D", "fan2", "heart",
             "julia3D", "blade3D", "hemisphere", "horseshoe", "tangent3D", "blob3D", "julia3D", "pie3D", "pdj", "popcorn", "rings2",
-            "spherical3D", "spiral", "rectangles", "blur", "waves", "swirl" };
+            "spherical3D", "spiral", "rectangles", "waves", "swirl" };
         int fncIdx = (int) (Math.random() * fnc.length);
-        xForm.addVariation(Math.random() * 0.5, VariationFuncList.getVariationFuncInstance(fnc[fncIdx]));
+        xForm.addVariation(0.2 + Math.random() * 0.6, VariationFuncList.getVariationFuncInstance(fnc[fncIdx]));
       }
 
       xForm.setWeight(Math.random() * 0.9 + 0.1);
@@ -198,13 +198,13 @@ public class RandomFlameGenerator {
       XFormTransformService.scale(xForm, scl);
 
       xForm.setColor(Math.random());
-      xForm.addVariation(Math.random() * 0.8 + 0.2, new Linear3DFunc());
-      if (Math.random() > 0.33) {
+      xForm.addVariation(Math.random() * 0.3 + 0.2, new Linear3DFunc());
+      if (Math.random() > 0.1) {
         String[] fnc = { "blur3D", "julia3D", "curl3D", "butterfly3D", "julia3D",
             "julia3D", "blade3D", "hemisphere", "blob3D", "tangent3D", "square3D", "julia3D", "pie3D", "pdj",
-            "spherical3D", "blur", "julia3Dz" };
+            "spherical3D", "julia3Dz" };
         int fncIdx = (int) (Math.random() * fnc.length);
-        xForm.addVariation(Math.random() * 0.5, VariationFuncList.getVariationFuncInstance(fnc[fncIdx]));
+        xForm.addVariation(Math.random() * 0.4 + 0.1, VariationFuncList.getVariationFuncInstance(fnc[fncIdx]));
       }
 
       xForm.setWeight(Math.random() * 0.9 + 0.1);
