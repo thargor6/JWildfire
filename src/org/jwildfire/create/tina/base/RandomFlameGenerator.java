@@ -71,8 +71,27 @@ public class RandomFlameGenerator {
   }
 
   private Flame createFlame_checkerboard(boolean pWithPostTransforms) {
-    // TODO Auto-generated method stub
-    return null;
+    Flame flame = new Flame();
+    flame.setCentreX(0.0);
+    flame.setCentreY(0.0);
+    flame.setPixelsPerUnit(200);
+    flame.setSpatialFilterRadius(1.0);
+    flame.setFinalXForm(null);
+    flame.getXForms().clear();
+    int maxXFormsX = (int) (2.0 + Math.random() * 3.0);
+    int maxXFormsY = (int) (2.0 + Math.random() * 3.0);
+    double xMin = (double) maxXFormsX * 0.5;
+    double yMin = (double) maxXFormsY * 0.5;
+    for (int y = 0; y < maxXFormsY; y++) {
+      for (int x = 0; x < maxXFormsX; x++) {
+        XForm xForm = new XForm();
+        flame.getXForms().add(xForm);
+        XFormTransformService.globalTranslate(xForm, xMin + x, yMin + y, pWithPostTransforms);
+        xForm.addVariation(Math.random() * 0.8 + 0.2, new Linear3DFunc());
+      }
+    }
+
+    return flame;
   }
 
   private Flame createFlame_original() {
