@@ -1508,6 +1508,9 @@ public class TinaController implements FlameHolder {
     mouseEditZoomOutButton.setEnabled(currFlame != null);
     toggleTrianglesButton.setEnabled(currFlame != null);
 
+    affineC20REd.setEditable(enabled);
+    affineC21REd.setEditable(enabled);
+
     transformationWeightLeftButton.setEnabled(enabled);
     transformationWeightRightButton.setEnabled(enabled);
     for (NonlinearControlsRow rows : nonlinearControlsRows) {
@@ -2417,6 +2420,36 @@ public class TinaController implements FlameHolder {
     }
     if (flamePanel != null) {
       flamePanel.setDrawFlame(toggleTrianglesButton.isSelected());
+      refreshFlameImage();
+    }
+  }
+
+  public void affineC21REd_changed() {
+    XForm xForm = getCurrXForm();
+    if (xForm != null) {
+      double value = Tools.stringToDouble(affineC21REd.getText());
+      if (affineEditPostTransformButton.isSelected()) {
+        xForm.setPostCoeff21(value);
+      }
+      else {
+        xForm.setCoeff21(value);
+      }
+      transformationTableClicked();
+      refreshFlameImage();
+    }
+  }
+
+  public void affineC20REd_changed() {
+    XForm xForm = getCurrXForm();
+    if (xForm != null) {
+      double value = Tools.stringToDouble(affineC20REd.getText());
+      if (affineEditPostTransformButton.isSelected()) {
+        xForm.setPostCoeff20(value);
+      }
+      else {
+        xForm.setCoeff20(value);
+      }
+      transformationTableClicked();
       refreshFlameImage();
     }
   }

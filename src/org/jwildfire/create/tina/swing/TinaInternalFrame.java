@@ -3040,6 +3040,16 @@ public class TinaInternalFrame extends JInternalFrame implements ProgressUpdater
       affineC20REd.setEditable(false);
       affineC20REd.setHorizontalAlignment(JTextField.RIGHT);
       affineC20REd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      affineC20REd.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent e) {
+          tinaController.affineC20REd_changed();
+        }
+      });
+      affineC20REd.addFocusListener(new java.awt.event.FocusAdapter() {
+        public void focusLost(java.awt.event.FocusEvent e) {
+          tinaController.affineC20REd_changed();
+        }
+      });
     }
     return affineC20REd;
   }
@@ -3059,6 +3069,16 @@ public class TinaInternalFrame extends JInternalFrame implements ProgressUpdater
       affineC21REd.setEditable(false);
       affineC21REd.setHorizontalAlignment(JTextField.RIGHT);
       affineC21REd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      affineC21REd.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent e) {
+          tinaController.affineC21REd_changed();
+        }
+      });
+      affineC21REd.addFocusListener(new java.awt.event.FocusAdapter() {
+        public void focusLost(java.awt.event.FocusEvent e) {
+          tinaController.affineC21REd_changed();
+        }
+      });
     }
     return affineC21REd;
   }
