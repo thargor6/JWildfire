@@ -4998,7 +4998,7 @@ public class TinaInternalFrame extends JInternalFrame implements ProgressUpdater
       randomStyleCmb.addItem(RandomFlameGeneratorStyle.ORIGINAL);
       randomStyleCmb.addItem(RandomFlameGeneratorStyle.EXPERIMENTAL);
       randomStyleCmb.addItem(RandomFlameGeneratorStyle.ONLY3D);
-      randomStyleCmb.addItem(RandomFlameGeneratorStyle.CHECKERBOARD);
+      randomStyleCmb.addItem(RandomFlameGeneratorStyle.TENTACLE);
       randomStyleCmb.addItem(RandomFlameGeneratorStyle.ALL);
       randomStyleCmb.setSelectedItem(RandomFlameGeneratorStyle.ALL);
     }

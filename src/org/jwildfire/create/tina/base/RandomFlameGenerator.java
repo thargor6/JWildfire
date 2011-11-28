@@ -22,6 +22,18 @@ import org.jwildfire.create.tina.variation.VariationFuncList;
 
 public class RandomFlameGenerator {
 
+  private static final String FNCLST_ORIGINAL[] = { "blur3D", "bubble", "curl3D", "diamond", "disc", "julia3D", "fan2", "heart",
+      "julia3D", "hemisphere", "horseshoe", "blob3D", "julia3D", "pdj", "popcorn", "rings2",
+      "spherical3D", "spiral", "rectangles", "blur", "waves", "swirl" };
+
+  private static final String FNCLST_EXPERIMENTAL[] = { "blur3D", "bubble", "curl3D", "diamond", "disc", "butterfly3D", "julia3D", "fan2", "heart",
+      "julia3D", "blade3D", "hemisphere", "horseshoe", "tangent3D", "blob3D", "julia3D", "pie3D", "pdj", "popcorn", "rings2",
+      "spherical3D", "spiral", "rectangles", "waves", "swirl" };
+
+  private static final String FNCLST_3D[] = { "blur3D", "julia3D", "curl3D", "butterfly3D", "julia3D",
+      "julia3D", "blade3D", "hemisphere", "blob3D", "tangent3D", "square3D", "julia3D", "pie3D", "pdj",
+      "spherical3D", "julia3Dz" };
+
   public Flame createFlame(RandomFlameGeneratorStyle pStyle, boolean pWithSymmetry, boolean pWithPostTransforms) {
     Flame flame;
     switch (pStyle) {
@@ -34,8 +46,8 @@ public class RandomFlameGenerator {
       case ONLY3D:
         flame = createFlame_3D();
         break;
-      case CHECKERBOARD:
-        flame = createFlame_checkerboard(pWithPostTransforms);
+      case TENTACLE:
+        flame = createFlame_tentacle();
         break;
       case ALL: {
         double r = Math.random();
@@ -46,9 +58,7 @@ public class RandomFlameGenerator {
           flame = createFlame_experimental();
         }
         else if (r < 0.50) {
-          flame = createFlame_checkerboard(pWithPostTransforms);
-          // symmetry makes no sense here
-          return flame;
+          flame = createFlame_tentacle();
         }
         else {
           flame = createFlame_3D();
@@ -70,7 +80,7 @@ public class RandomFlameGenerator {
     return flame;
   }
 
-  private Flame createFlame_checkerboard(boolean pWithPostTransforms) {
+  private Flame createFlame_tentacle() {
     Flame flame = new Flame();
     flame.setCentreX(0.0);
     flame.setCentreY(0.0);
@@ -80,14 +90,30 @@ public class RandomFlameGenerator {
     flame.getXForms().clear();
     int maxXFormsX = (int) (2.0 + Math.random() * 3.0);
     int maxXFormsY = (int) (2.0 + Math.random() * 3.0);
-    double xMin = (double) maxXFormsX * 0.5;
-    double yMin = (double) maxXFormsY * 0.5;
+    double xMin = -(double) maxXFormsX * 0.5;
+    double yMin = -(double) maxXFormsY * 0.5 + 1;
+
+    String[] fnc = FNCLST_EXPERIMENTAL;
+
+    double scl = 1.0;
     for (int y = 0; y < maxXFormsY; y++) {
       for (int x = 0; x < maxXFormsX; x++) {
         XForm xForm = new XForm();
+        xForm.setWeight(1.0);
         flame.getXForms().add(xForm);
-        XFormTransformService.globalTranslate(xForm, xMin + x, yMin + y, pWithPostTransforms);
-        xForm.addVariation(Math.random() * 0.8 + 0.2, new Linear3DFunc());
+        XFormTransformService.globalTranslate(xForm, xMin + x, yMin + y, false);
+        if (Math.random() < 0.5) {
+          XFormTransformService.rotate(xForm, 360.0 * Math.random(), true);
+        }
+        else {
+          XFormTransformService.rotate(xForm, -360.0 * Math.random(), true);
+        }
+        XFormTransformService.localTranslate(xForm, Math.random() - 1.0, Math.random() - 1.0, true);
+        scl *= 0.75 + Math.random() / 4;
+        XFormTransformService.scale(xForm, scl, true);
+        int fncIdx = (int) (Math.random() * fnc.length);
+        xForm.addVariation(Math.random() * 0.9 + 0.1, VariationFuncList.getVariationFuncInstance(fnc[fncIdx]));
+        xForm.setColor(Math.random());
       }
     }
 
@@ -121,9 +147,7 @@ public class RandomFlameGenerator {
       xForm.setColor(Math.random());
       xForm.addVariation(Math.random() * 0.8 + 0.2, new Linear3DFunc());
       if (Math.random() > 0.33) {
-        String[] fnc = { "blur3D", "bubble", "curl3D", "diamond", "disc", "julia3D", "fan2", "heart",
-                                 "julia3D", "hemisphere", "horseshoe", "blob3D", "julia3D", "pdj", "popcorn", "rings2",
-                                 "spherical3D", "spiral", "rectangles", "blur", "waves", "swirl" };
+        String[] fnc = FNCLST_ORIGINAL;
         int fncIdx = (int) (Math.random() * fnc.length);
         xForm.addVariation(Math.random() * 0.5, VariationFuncList.getVariationFuncInstance(fnc[fncIdx]));
       }
@@ -193,9 +217,7 @@ public class RandomFlameGenerator {
       xForm.setColor(Math.random());
       xForm.addVariation(Math.random() * 0.3 + 0.2, new Linear3DFunc());
       if (Math.random() > 0.1) {
-        String[] fnc = { "blur3D", "bubble", "curl3D", "diamond", "disc", "butterfly3D", "julia3D", "fan2", "heart",
-            "julia3D", "blade3D", "hemisphere", "horseshoe", "tangent3D", "blob3D", "julia3D", "pie3D", "pdj", "popcorn", "rings2",
-            "spherical3D", "spiral", "rectangles", "waves", "swirl" };
+        String[] fnc = FNCLST_EXPERIMENTAL;
         int fncIdx = (int) (Math.random() * fnc.length);
         xForm.addVariation(0.2 + Math.random() * 0.6, VariationFuncList.getVariationFuncInstance(fnc[fncIdx]));
       }
@@ -232,9 +254,7 @@ public class RandomFlameGenerator {
       xForm.setColor(Math.random());
       xForm.addVariation(Math.random() * 0.3 + 0.2, new Linear3DFunc());
       if (Math.random() > 0.1) {
-        String[] fnc = { "blur3D", "julia3D", "curl3D", "butterfly3D", "julia3D",
-            "julia3D", "blade3D", "hemisphere", "blob3D", "tangent3D", "square3D", "julia3D", "pie3D", "pdj",
-            "spherical3D", "julia3Dz" };
+        String[] fnc = FNCLST_3D;
         int fncIdx = (int) (Math.random() * fnc.length);
         xForm.addVariation(Math.random() * 0.4 + 0.1, VariationFuncList.getVariationFuncInstance(fnc[fncIdx]));
       }
