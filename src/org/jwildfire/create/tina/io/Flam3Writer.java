@@ -40,6 +40,7 @@ public class Flam3Writer {
         //        xb.createAttr("rotate", -(pFlame.getCamRoll() * Math.PI) / 180.0),
         xb.createAttr("rotate", pFlame.getCamRoll()),
         xb.createAttr("oversample", pFlame.getSpatialOversample()),
+        xb.createAttr("color_oversample", pFlame.getColorOversample()),
         xb.createAttr("filter", pFlame.getSpatialFilterRadius()),
         xb.createAttr("quality", pFlame.getSampleDensity()),
         xb.createAttr("background", pFlame.getBGColorRed() + " " + pFlame.getBGColorGreen() + " " + pFlame.getBGColorBlue()),

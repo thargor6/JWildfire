@@ -192,8 +192,10 @@ public class TinaController implements FlameHolder {
   private final JSlider vibrancySlider;
   private final JTextField filterRadiusREd;
   private final JSlider filterRadiusSlider;
-  private final JTextField oversampleREd;
-  private final JSlider oversampleSlider;
+  private final JTextField spatialOversampleREd;
+  private final JSlider spatialOversampleSlider;
+  private final JTextField colorOversampleREd;
+  private final JSlider colorOversampleSlider;
   private final JTextField bgColorRedREd;
   private final JSlider bgColorRedSlider;
   private final JTextField bgColorGreenREd;
@@ -305,8 +307,8 @@ public class TinaController implements FlameHolder {
       JTextField pPreviewQualityREd, JTextField pRenderQualityREd, JTextField pCameraCentreXREd, JSlider pCameraCentreXSlider, JTextField pCameraCentreYREd,
       JSlider pCameraCentreYSlider, JTextField pCameraZoomREd, JSlider pCameraZoomSlider, JTextField pPixelsPerUnitREd, JSlider pPixelsPerUnitSlider,
       JTextField pBrightnessREd, JSlider pBrightnessSlider, JTextField pContrastREd, JSlider pContrastSlider, JTextField pGammaREd, JSlider pGammaSlider,
-      JTextField pVibrancyREd, JSlider pVibrancySlider, JTextField pFilterRadiusREd, JSlider pFilterRadiusSlider, JTextField pOversampleREd,
-      JSlider pOversampleSlider, JTextField pBGColorRedREd, JSlider pBGColorRedSlider, JTextField pBGColorGreenREd, JSlider pBGColorGreenSlider, JTextField pBGColorBlueREd,
+      JTextField pVibrancyREd, JSlider pVibrancySlider, JTextField pFilterRadiusREd, JSlider pFilterRadiusSlider, JTextField pSpatialOversampleREd,
+      JSlider pSpatialOversampleSlider, JTextField pBGColorRedREd, JSlider pBGColorRedSlider, JTextField pBGColorGreenREd, JSlider pBGColorGreenSlider, JTextField pBGColorBlueREd,
       JSlider pBGColorBlueSlider, JTextField pPaletteRandomPointsREd, JPanel pPaletteImgPanel, JTextField pPaletteShiftREd, JSlider pPaletteShiftSlider,
       JTextField pPaletteRedREd, JSlider pPaletteRedSlider, JTextField pPaletteGreenREd, JSlider pPaletteGreenSlider, JTextField pPaletteBlueREd,
       JSlider pPaletteBlueSlider, JTextField pPaletteHueREd, JSlider pPaletteHueSlider, JTextField pPaletteSaturationREd, JSlider pPaletteSaturationSlider,
@@ -325,7 +327,7 @@ public class TinaController implements FlameHolder {
       JComboBox pAnimateXFormScriptCmb, JToggleButton pMouseTransformMoveButton, JToggleButton pMouseTransformRotateButton, JToggleButton pMouseTransformScaleButton,
       JToggleButton pAffineEditPostTransformButton, JToggleButton pAffineEditPostTransformSmallButton, JButton pMouseEditZoomInButton, JButton pMouseEditZoomOutButton,
       JToggleButton pToggleTrianglesButton, ProgressUpdater pProgressUpdater, JCheckBox pRandomPostTransformCheckBox, JCheckBox pRandomSymmetryCheckBox,
-      JButton pAffineResetTransformButton) {
+      JButton pAffineResetTransformButton, JTextField pColorOversampleREd, JSlider pColorOversampleSlider) {
     errorHandler = pErrorHandler;
     prefs = pPrefs;
     centerPanel = pCenterPanel;
@@ -358,8 +360,10 @@ public class TinaController implements FlameHolder {
     vibrancySlider = pVibrancySlider;
     filterRadiusREd = pFilterRadiusREd;
     filterRadiusSlider = pFilterRadiusSlider;
-    oversampleREd = pOversampleREd;
-    oversampleSlider = pOversampleSlider;
+    spatialOversampleREd = pSpatialOversampleREd;
+    spatialOversampleSlider = pSpatialOversampleSlider;
+    colorOversampleREd = pColorOversampleREd;
+    colorOversampleSlider = pColorOversampleSlider;
     bgColorRedREd = pBGColorRedREd;
     bgColorRedSlider = pBGColorRedSlider;
     bgColorGreenREd = pBGColorGreenREd;
@@ -608,8 +612,11 @@ public class TinaController implements FlameHolder {
       filterRadiusREd.setText(Tools.doubleToString(currFlame.getSpatialFilterRadius()));
       filterRadiusSlider.setValue(Tools.FTOI(currFlame.getSpatialFilterRadius() * SLIDER_SCALE_FILTER_RADIUS));
 
-      oversampleREd.setText(String.valueOf(currFlame.getSpatialOversample()));
-      oversampleSlider.setValue(currFlame.getSpatialOversample());
+      spatialOversampleREd.setText(String.valueOf(currFlame.getSpatialOversample()));
+      spatialOversampleSlider.setValue(currFlame.getSpatialOversample());
+
+      colorOversampleREd.setText(String.valueOf(currFlame.getColorOversample()));
+      colorOversampleSlider.setValue(currFlame.getColorOversample());
 
       bgColorRedREd.setText(String.valueOf(currFlame.getBGColorRed()));
       bgColorRedSlider.setValue(currFlame.getBGColorRed());
@@ -1211,8 +1218,12 @@ public class TinaController implements FlameHolder {
     flameSliderChanged(bgColorBlueSlider, bgColorBlueREd, "bgColorBlue", 1.0);
   }
 
-  public void oversampleREd_changed() {
-    flameTextFieldChanged(oversampleSlider, oversampleREd, "spatialOversample", 1.0);
+  public void spatialOversampleREd_changed() {
+    flameTextFieldChanged(spatialOversampleSlider, spatialOversampleREd, "spatialOversample", 1.0);
+  }
+
+  public void colorOversampleREd_changed() {
+    flameTextFieldChanged(colorOversampleSlider, colorOversampleREd, "colorOversample", 1.0);
   }
 
   public void contrastREd_changed() {
@@ -1227,8 +1238,12 @@ public class TinaController implements FlameHolder {
     flameSliderChanged(filterRadiusSlider, filterRadiusREd, "spatialFilterRadius", SLIDER_SCALE_FILTER_RADIUS);
   }
 
-  public void oversampleSlider_stateChanged(ChangeEvent e) {
-    flameSliderChanged(oversampleSlider, oversampleREd, "spatialOversample", 1.0);
+  public void spatialOversampleSlider_stateChanged(ChangeEvent e) {
+    flameSliderChanged(spatialOversampleSlider, spatialOversampleREd, "spatialOversample", 1.0);
+  }
+
+  public void colorOversampleSlider_stateChanged(ChangeEvent e) {
+    flameSliderChanged(colorOversampleSlider, colorOversampleREd, "colorOversample", 1.0);
   }
 
   public void vibrancyREd_changed() {

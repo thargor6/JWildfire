@@ -32,6 +32,7 @@ public class Flame {
   private double camRoll;
   private double camZoom;
   private int spatialOversample;
+  private int colorOversample;
   private double spatialFilterRadius;
   private int sampleDensity;
   private int bgColorRed;
@@ -69,6 +70,7 @@ public class Flame {
     camPerspective = 0.0;
     camZoom = 1.0;
     spatialOversample = 1;
+    colorOversample = 1;
     gammaThreshold = 0.04;
     pixelsPerUnit = 50;
     whiteLevel = 200;
@@ -289,6 +291,7 @@ public class Flame {
     camRoll = pFlame.camRoll;
     camZoom = pFlame.camZoom;
     spatialOversample = pFlame.spatialOversample;
+    colorOversample = pFlame.colorOversample;
     spatialFilterRadius = pFlame.spatialFilterRadius;
     sampleDensity = pFlame.sampleDensity;
     bgColorRed = pFlame.bgColorRed;
@@ -311,6 +314,14 @@ public class Flame {
       finalXForm = pFlame.finalXForm.makeCopy();
     }
 
+  }
+
+  public int getColorOversample() {
+    return colorOversample;
+  }
+
+  public void setColorOversample(int colorOversample) {
+    this.colorOversample = colorOversample;
   }
 
 }

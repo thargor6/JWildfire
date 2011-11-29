@@ -174,6 +174,7 @@ public class Flam3Reader implements FlameReader {
   private static final String ATTR_SCALE = "scale";
   private static final String ATTR_ROTATE = "rotate";
   private static final String ATTR_OVERSAMPLE = "oversample";
+  private static final String ATTR_COLOR_OVERSAMPLE = "color_oversample";
   private static final String ATTR_FILTER = "filter";
   private static final String ATTR_QUALITY = "quality";
   private static final String ATTR_BACKGROUND = "background";
@@ -209,6 +210,9 @@ public class Flam3Reader implements FlameReader {
     }
     if ((hs = atts.get(ATTR_OVERSAMPLE)) != null) {
       pFlame.setSpatialOversample(Integer.parseInt(hs));
+    }
+    if ((hs = atts.get(ATTR_COLOR_OVERSAMPLE)) != null) {
+      pFlame.setColorOversample(Integer.parseInt(hs));
     }
     if ((hs = atts.get(ATTR_FILTER)) != null) {
       pFlame.setSpatialFilterRadius(Double.parseDouble(hs));

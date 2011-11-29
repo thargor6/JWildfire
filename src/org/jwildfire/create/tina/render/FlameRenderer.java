@@ -32,6 +32,7 @@ import org.jwildfire.create.tina.swing.ProgressUpdater;
 import org.jwildfire.create.tina.variation.TransformationContext;
 import org.jwildfire.create.tina.variation.Variation;
 import org.jwildfire.create.tina.variation.VariationPriorityComparator;
+import org.jwildfire.image.Pixel;
 import org.jwildfire.image.SimpleImage;
 import org.jwildfire.transform.ScaleAspect;
 import org.jwildfire.transform.ScaleTransformer;
@@ -121,30 +122,84 @@ public class FlameRenderer implements TransformationContext {
   public void renderFlame(Flame pFlame, SimpleImage pImage) {
     if (pFlame.getXForms().size() == 0)
       return;
-    int oversample = pFlame.getSampleDensity() >= 100 ? pFlame.getSpatialOversample() : 1;
+    int spatialOversample = pFlame.getSampleDensity() >= 100 ? pFlame.getSpatialOversample() : 1;
+    if (spatialOversample < 1 || spatialOversample > 6) {
+      throw new IllegalArgumentException(String.valueOf(spatialOversample));
+    }
+    int colorOversample = pFlame.getSampleDensity() >= 100 ? pFlame.getColorOversample() : 1;
+    if (colorOversample < 1 || colorOversample > 10) {
+      throw new IllegalArgumentException(String.valueOf(colorOversample));
+    }
+
     double origZoom = pFlame.getCamZoom();
     try {
+      SimpleImage images[] = new SimpleImage[colorOversample];
+      for (int i = 0; i < colorOversample; i++) {
+        SimpleImage img;
+        // spatial oversampling: create enlarged image
+        if (spatialOversample > 1) {
+          img = new SimpleImage(pImage.getImageWidth() * spatialOversample, pImage.getImageHeight() * spatialOversample);
+          if (i == 0) {
+            pFlame.setCamZoom((double) spatialOversample * pFlame.getCamZoom());
+          }
+        }
+        else {
+          if (colorOversample > 1) {
+            img = new SimpleImage(pImage.getImageWidth(), pImage.getImageHeight());
+          }
+          else {
+            img = pImage;
+          }
+        }
+        images[i] = img;
+        initRaster(pFlame, img);
+        init3D(pFlame);
+        createColorMap(pFlame);
+        initView(pFlame);
+        createModWeightTables(pFlame);
+        iterate(pFlame);
+        if (pFlame.getSampleDensity() <= 10) {
+          renderImageSimple(pFlame, img);
+        }
+        else {
+          renderImage(pFlame, img);
+        }
+      }
+
+      // color oversampling
       SimpleImage img;
-      if (oversample > 1) {
-        img = new SimpleImage(pImage.getImageWidth() * oversample, pImage.getImageHeight() * oversample);
-        pFlame.setCamZoom((double) oversample * pFlame.getCamZoom());
+      if (colorOversample == 1) {
+        img = images[0];
       }
       else {
-        img = pImage;
+        int width = images[0].getImageWidth();
+        int height = images[0].getImageHeight();
+        if (spatialOversample > 1) {
+          img = new SimpleImage(width, height);
+        }
+        else {
+          img = pImage;
+        }
+        Pixel toolPixel = new Pixel();
+        for (int i = 0; i < height; i++) {
+          for (int j = 0; j < width; j++) {
+            int r = 0, g = 0, b = 0;
+            for (int k = 0; k < colorOversample; k++) {
+              toolPixel.setARGBValue(images[k].getARGBValue(j, i));
+              r += toolPixel.r;
+              g += toolPixel.g;
+              b += toolPixel.b;
+            }
+            toolPixel.r = Tools.roundColor((double) r / (double) colorOversample);
+            toolPixel.g = Tools.roundColor((double) g / (double) colorOversample);
+            toolPixel.b = Tools.roundColor((double) b / (double) colorOversample);
+            img.setARGB(j, i, toolPixel.getARGBValue());
+          }
+        }
       }
-      initRaster(pFlame, img);
-      init3D(pFlame);
-      createColorMap(pFlame);
-      initView(pFlame);
-      createModWeightTables(pFlame);
-      iterate(pFlame);
-      if (pFlame.getSampleDensity() <= 10) {
-        renderImageSimple(pFlame, img);
-      }
-      else {
-        renderImage(pFlame, img);
-      }
-      if (oversample > 1) {
+
+      // spatial oversampling: scale down
+      if (spatialOversample > 1) {
         ScaleTransformer scaleT = new ScaleTransformer();
         scaleT.setScaleWidth(pImage.getImageWidth());
         scaleT.setScaleHeight(pImage.getImageHeight());

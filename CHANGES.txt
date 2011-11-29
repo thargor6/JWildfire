@@ -1,1 +1,17 @@
-V0.20 
+V0.21 (29.11.2011):
+ - Fractal flame editor: new "tentacle" style for random batches
+ - Fractal flame editor: one more (4th) row for nonlinear variation
+ - Fractal flame editor: translation (affine transformation) in the ui changed to using global coordinates
+ - Fractal flame editor: reset transform function in the UI
+ - Fractal flames editor: Coeeficients c20 and c21 of the affine (post) transformation may be edited manually now
+ - FIXED: Fractal flames editor: Flam3Writer: variation parameters where not saved
+ - Fractal flame editor: blade and blade3D variation
+ - Fractal flame editor: tangent and tangent3D variation
+ - Fractal flame editor: random flame generator: separated style and symmetry
+ - Fractal flame editor: smoother center scrollbars, increased precision of displayed numeric values
+ - Fractal flame editor: progress bar
+ - FIXED: Fractal flame editor: iteration overflow on large images (or very high quality settings)
+ - FIXED: Images are no longer cached
+ - Fractal flame editor: improved oversampling
+ - Fractal flame editor: some additions to the UI concerning "triangle editing"
+ 

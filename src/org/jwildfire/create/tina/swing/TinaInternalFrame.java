@@ -431,6 +431,9 @@ public class TinaInternalFrame extends JInternalFrame implements ProgressUpdater
   private JButton nonlinarVar4RightButton = null;
   private JButton nonlinearParams4LeftButton = null;
   private JButton nonlinarParams4RightButton = null;
+  private JLabel colorOversampleLbl = null;
+  private JTextField colorOversampleREd = null;
+  private JSlider colorOversampleSlider = null;
 
   /**
    * This is the xxx default constructor
@@ -670,6 +673,12 @@ public class TinaInternalFrame extends JInternalFrame implements ProgressUpdater
    */
   private JPanel getTinaColoringPanel() {
     if (tinaColoringPanel == null) {
+      colorOversampleLbl = new JLabel();
+      colorOversampleLbl.setPreferredSize(new Dimension(94, 22));
+      colorOversampleLbl.setText("Color oversample");
+      colorOversampleLbl.setSize(new Dimension(94, 22));
+      colorOversampleLbl.setLocation(new Point(488, 52));
+      colorOversampleLbl.setFont(new Font("Dialog", Font.BOLD, 10));
       tinaBGColorLbl = new JLabel();
       tinaBGColorLbl.setText("Background color");
       tinaBGColorLbl.setFont(new Font("Dialog", Font.BOLD, 10));
@@ -677,7 +686,7 @@ public class TinaInternalFrame extends JInternalFrame implements ProgressUpdater
       tinaBGColorLbl.setSize(new Dimension(94, 22));
       tinaBGColorLbl.setPreferredSize(new Dimension(94, 22));
       tinaOversampleLbl = new JLabel();
-      tinaOversampleLbl.setText("Oversample");
+      tinaOversampleLbl.setText("Spatial oversample");
       tinaOversampleLbl.setLocation(new Point(488, 4));
       tinaOversampleLbl.setSize(new Dimension(94, 22));
       tinaOversampleLbl.setFont(new Font("Dialog", Font.BOLD, 10));
@@ -739,6 +748,9 @@ public class TinaInternalFrame extends JInternalFrame implements ProgressUpdater
       tinaColoringPanel.add(getTinaVibrancySlider(), null);
       tinaColoringPanel.add(getTinaFilterRadiusSlider(), null);
       tinaColoringPanel.add(getTinaOversampleSlider(), null);
+      tinaColoringPanel.add(colorOversampleLbl, null);
+      tinaColoringPanel.add(getColorOversampleREd(), null);
+      tinaColoringPanel.add(getColorOversampleSlider(), null);
     }
     return tinaColoringPanel;
   }
@@ -1600,12 +1612,12 @@ public class TinaInternalFrame extends JInternalFrame implements ProgressUpdater
       tinaOversampleREd.setFont(new Font("Dialog", Font.PLAIN, 10));
       tinaOversampleREd.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.oversampleREd_changed();
+          tinaController.spatialOversampleREd_changed();
         }
       });
       tinaOversampleREd.addFocusListener(new java.awt.event.FocusAdapter() {
         public void focusLost(java.awt.event.FocusEvent e) {
-          tinaController.oversampleREd_changed();
+          tinaController.spatialOversampleREd_changed();
         }
       });
     }
@@ -1716,7 +1728,7 @@ public class TinaInternalFrame extends JInternalFrame implements ProgressUpdater
   private JSlider getTinaOversampleSlider() {
     if (tinaOversampleSlider == null) {
       tinaOversampleSlider = new JSlider();
-      tinaOversampleSlider.setMaximum(10);
+      tinaOversampleSlider.setMaximum(6);
       tinaOversampleSlider.setMinimum(0);
       tinaOversampleSlider.setValue(0);
       tinaOversampleSlider.setMajorTickSpacing(1);
@@ -1726,7 +1738,7 @@ public class TinaInternalFrame extends JInternalFrame implements ProgressUpdater
       tinaOversampleSlider.setPreferredSize(new Dimension(220, 19));
       tinaOversampleSlider.addChangeListener(new javax.swing.event.ChangeListener() {
         public void stateChanged(javax.swing.event.ChangeEvent e) {
-          tinaController.oversampleSlider_stateChanged(e);
+          tinaController.spatialOversampleSlider_stateChanged(e);
         }
       });
     }
@@ -2904,7 +2916,7 @@ public class TinaInternalFrame extends JInternalFrame implements ProgressUpdater
         getAnimateOutputREd(), getAnimateFramesREd(), getAnimateScriptCmb(), getAnimationGenerateButton(), getAnimateXFormScriptCmb(), getMouseTransformMoveButton(),
         getMouseTransformRotateButton(), getMouseTransformScaleButton(), getAffineEditPostTransformButton(), getAffineEditPostTransformSmallButton(),
         getMouseTransformZoomInButton(), getMouseTransformZoomOutButton(), getToggleTrianglesButton(), this, getRandomPostTransformCheckBox(),
-        getRandomSymmetryCheckBox(), getAffineResetTransformButton());
+        getRandomSymmetryCheckBox(), getAffineResetTransformButton(), getColorOversampleREd(), getColorOversampleSlider());
     tinaController.refreshing = tinaController.cmbRefreshing = tinaController.gridRefreshing = true;
     try {
       for (NonlinearControlsRow row : nonlinearControlsRows) {
@@ -5430,6 +5442,58 @@ public class TinaInternalFrame extends JInternalFrame implements ProgressUpdater
       });
     }
     return nonlinarParams4RightButton;
+  }
+
+  /**
+   * This method initializes colorOversampleREd	
+   * 	
+   * @return javax.swing.JTextField	
+   */
+  private JTextField getColorOversampleREd() {
+    if (colorOversampleREd == null) {
+      colorOversampleREd = new JTextField();
+      colorOversampleREd.setPreferredSize(new Dimension(100, 22));
+      colorOversampleREd.setText("");
+      colorOversampleREd.setSize(new Dimension(100, 22));
+      colorOversampleREd.setLocation(new Point(584, 52));
+      colorOversampleREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      colorOversampleREd.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent e) {
+          tinaController.colorOversampleREd_changed();
+        }
+      });
+      colorOversampleREd.addFocusListener(new java.awt.event.FocusAdapter() {
+        public void focusLost(java.awt.event.FocusEvent e) {
+          tinaController.colorOversampleREd_changed();
+        }
+      });
+    }
+    return colorOversampleREd;
+  }
+
+  /**
+   * This method initializes colorOversampleSlider	
+   * 	
+   * @return javax.swing.JSlider	
+   */
+  private JSlider getColorOversampleSlider() {
+    if (colorOversampleSlider == null) {
+      colorOversampleSlider = new JSlider();
+      colorOversampleSlider.setPreferredSize(new Dimension(220, 19));
+      colorOversampleSlider.setMajorTickSpacing(1);
+      colorOversampleSlider.setMaximum(6);
+      colorOversampleSlider.setMinimum(0);
+      colorOversampleSlider.setValue(0);
+      colorOversampleSlider.setSize(new Dimension(220, 19));
+      colorOversampleSlider.setLocation(new Point(686, 52));
+      colorOversampleSlider.setFont(new Font("Dialog", Font.BOLD, 10));
+      colorOversampleSlider.addChangeListener(new javax.swing.event.ChangeListener() {
+        public void stateChanged(javax.swing.event.ChangeEvent e) {
+          tinaController.colorOversampleSlider_stateChanged(e);
+        }
+      });
+    }
+    return colorOversampleSlider;
   }
 
 } //  @jve:decl-index=0:visual-constraint="10,10"
