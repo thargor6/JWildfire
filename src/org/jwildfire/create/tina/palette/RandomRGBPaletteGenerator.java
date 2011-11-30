@@ -21,25 +21,28 @@ import java.util.List;
 
 import org.jwildfire.base.Tools;
 
-
 public class RandomRGBPaletteGenerator {
 
-  public RGBPalette generatePalette(int pKeyFrames) {
+  public List<RGBColor> generateKeyFrames(int pKeyFrames) {
     if (pKeyFrames < 0 || pKeyFrames > RGBPalette.PALETTE_SIZE)
       throw new IllegalArgumentException(String.valueOf(pKeyFrames));
-    RGBPalette res = new RGBPalette();
     List<RGBColor> keyFrames = new ArrayList<RGBColor>();
     for (int i = 0; i < pKeyFrames; i++) {
       RGBColor col = new RGBColor(Tools.roundColor(256.0 * Math.random()), Tools.roundColor(256.0 * Math.random()), Tools.roundColor(256.0 * Math.random()));
       keyFrames.add(col);
     }
-    double idxScl = (double) (RGBPalette.PALETTE_SIZE) / (double) (keyFrames.size() - 1);
+    return keyFrames;
+  }
+
+  public RGBPalette generatePalette(List<RGBColor> pKeyFrames) {
+    RGBPalette res = new RGBPalette();
+    double idxScl = (double) (RGBPalette.PALETTE_SIZE) / (double) (pKeyFrames.size() - 1);
     for (int i = 0; i < RGBPalette.PALETTE_SIZE; i++) {
       double x = (double) i / idxScl;
       int lIdx = (int) x;
       double relX = x - (double) lIdx;
-      RGBColor lColor = keyFrames.get(lIdx);
-      RGBColor rColor = keyFrames.get(lIdx + 1);
+      RGBColor lColor = pKeyFrames.get(lIdx);
+      RGBColor rColor = pKeyFrames.get(lIdx + 1);
       int r = Tools.roundColor((double) lColor.getRed() + ((double) (rColor.getRed() - lColor.getRed())) * relX);
       int g = Tools.roundColor((double) lColor.getGreen() + ((double) (rColor.getGreen() - lColor.getGreen())) * relX);
       int b = Tools.roundColor((double) lColor.getBlue() + ((double) (rColor.getBlue() - lColor.getBlue())) * relX);
@@ -47,6 +50,11 @@ public class RandomRGBPaletteGenerator {
       //      System.out.println(i + ": " + r + " " + g + " " + b);
     }
     return res;
+  }
+
+  public RGBPalette generatePalette(int pKeyFrames) {
+    List<RGBColor> keyFrames = generateKeyFrames(pKeyFrames);
+    return generatePalette(keyFrames);
   }
 
 }

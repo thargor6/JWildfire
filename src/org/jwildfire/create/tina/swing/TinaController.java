@@ -17,6 +17,7 @@
 package org.jwildfire.create.tina.swing;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
@@ -39,6 +40,7 @@ import javax.swing.JToggleButton;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.event.ChangeEvent;
 import javax.swing.filechooser.FileFilter;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
 import org.jwildfire.base.Prefs;
@@ -50,6 +52,7 @@ import org.jwildfire.create.tina.base.RandomFlameGeneratorStyle;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.io.Flam3Reader;
 import org.jwildfire.create.tina.io.Flam3Writer;
+import org.jwildfire.create.tina.palette.RGBColor;
 import org.jwildfire.create.tina.palette.RGBPalette;
 import org.jwildfire.create.tina.palette.RGBPaletteImporter;
 import org.jwildfire.create.tina.palette.RGBPaletteRenderer;
@@ -297,6 +300,8 @@ public class TinaController implements FlameHolder {
   private Flame morphFlame1, morphFlame2;
   private boolean noRefresh;
   private final ProgressUpdater progressUpdater;
+  private final JTable createPaletteColorsTable;
+  private List<RGBColor> paletteKeyFrames;
   // mouse dragging
   private final JToggleButton mouseTransformMoveButton;
   private final JToggleButton mouseTransformRotateButton;
@@ -327,7 +332,7 @@ public class TinaController implements FlameHolder {
       JComboBox pAnimateXFormScriptCmb, JToggleButton pMouseTransformMoveButton, JToggleButton pMouseTransformRotateButton, JToggleButton pMouseTransformScaleButton,
       JToggleButton pAffineEditPostTransformButton, JToggleButton pAffineEditPostTransformSmallButton, JButton pMouseEditZoomInButton, JButton pMouseEditZoomOutButton,
       JToggleButton pToggleTrianglesButton, ProgressUpdater pProgressUpdater, JCheckBox pRandomPostTransformCheckBox, JCheckBox pRandomSymmetryCheckBox,
-      JButton pAffineResetTransformButton, JTextField pColorOversampleREd, JSlider pColorOversampleSlider) {
+      JButton pAffineResetTransformButton, JTextField pColorOversampleREd, JSlider pColorOversampleSlider, JTable pCreatePaletteColorsTable) {
     errorHandler = pErrorHandler;
     prefs = pPrefs;
     centerPanel = pCenterPanel;
@@ -462,6 +467,9 @@ public class TinaController implements FlameHolder {
     randomPostTransformCheckBox = pRandomPostTransformCheckBox;
     randomSymmetryCheckBox = pRandomSymmetryCheckBox;
     affineResetTransformButton = pAffineResetTransformButton;
+
+    createPaletteColorsTable = pCreatePaletteColorsTable;
+    refreshPaletteColorsTable();
 
     enableControls();
     enableXFormControls(null);
@@ -719,6 +727,113 @@ public class TinaController implements FlameHolder {
     transformationsTable.getColumnModel().getColumn(COL_TRANSFORM).setWidth(20);
     transformationsTable.getColumnModel().getColumn(COL_VARIATIONS).setPreferredWidth(120);
     transformationsTable.getColumnModel().getColumn(COL_WEIGHT).setWidth(16);
+  }
+
+  class PaletteTableCustomRenderer extends DefaultTableCellRenderer {
+    private static final long serialVersionUID = 1L;
+
+    public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+      Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+      if (paletteKeyFrames != null && paletteKeyFrames.size() > row) {
+        RGBColor color = paletteKeyFrames.get(row);
+        c.setBackground(new java.awt.Color(color.getRed(), color.getGreen(), color.getBlue()));
+      }
+      return c;
+    }
+  }
+
+  private void refreshPaletteColorsTable() {
+    final int COL_COLOR = 0;
+    final int COL_RED = 1;
+    final int COL_GREEN = 2;
+    final int COL_BLUE = 3;
+
+    createPaletteColorsTable.setDefaultRenderer(Object.class, new PaletteTableCustomRenderer());
+
+    createPaletteColorsTable.setModel(new DefaultTableModel() {
+      private static final long serialVersionUID = 1L;
+
+      @Override
+      public int getRowCount() {
+        return Integer.parseInt(paletteRandomPointsREd.getText());
+      }
+
+      @Override
+      public int getColumnCount() {
+        return 4;
+      }
+
+      @Override
+      public String getColumnName(int columnIndex) {
+        switch (columnIndex) {
+          case COL_COLOR:
+            return "Color";
+          case COL_RED:
+            return "Red";
+          case COL_GREEN:
+            return "Green";
+          case COL_BLUE:
+            return "Blue";
+        }
+        return null;
+      }
+
+      @Override
+      public Object getValueAt(int rowIndex, int columnIndex) {
+        if (paletteKeyFrames != null && paletteKeyFrames.size() > rowIndex) {
+          switch (columnIndex) {
+            case COL_COLOR:
+              return String.valueOf(rowIndex + 1);
+            case COL_RED:
+              return String.valueOf(paletteKeyFrames.get(rowIndex).getRed());
+            case COL_GREEN:
+              return String.valueOf(paletteKeyFrames.get(rowIndex).getGreen());
+            case COL_BLUE:
+              return String.valueOf(paletteKeyFrames.get(rowIndex).getBlue());
+          }
+        }
+        return null;
+      }
+
+      @Override
+      public boolean isCellEditable(int row, int column) {
+        return column == COL_RED || column == COL_GREEN || column == COL_BLUE;
+      }
+
+      @Override
+      public void setValueAt(Object aValue, int row, int column) {
+        Flame currFlame = getCurrFlame();
+        if (currFlame != null && paletteKeyFrames != null && paletteKeyFrames.size() > row) {
+          String valStr = (String) aValue;
+          if (valStr == null || valStr.length() == 0) {
+            valStr = "0";
+          }
+          switch (column) {
+            case COL_RED:
+              paletteKeyFrames.get(row).setRed(Tools.limitColor(Tools.stringToInt(valStr)));
+              break;
+            case COL_GREEN:
+              paletteKeyFrames.get(row).setGreen(Tools.limitColor(Tools.stringToInt(valStr)));
+              break;
+            case COL_BLUE:
+              paletteKeyFrames.get(row).setBlue(Tools.limitColor(Tools.stringToInt(valStr)));
+              break;
+          }
+          refreshPaletteColorsTable();
+          RGBPalette palette = new RandomRGBPaletteGenerator().generatePalette(paletteKeyFrames);
+          currFlame.setPalette(palette);
+          refreshPaletteUI(palette);
+          refreshFlameImage();
+        }
+        super.setValueAt(aValue, row, column);
+      }
+
+    });
+    createPaletteColorsTable.getTableHeader().setFont(transformationsTable.getFont());
+    createPaletteColorsTable.getColumnModel().getColumn(COL_COLOR).setWidth(20);
+    createPaletteColorsTable.getColumnModel().getColumn(COL_RED).setPreferredWidth(60);
+    createPaletteColorsTable.getColumnModel().getColumn(COL_GREEN).setPreferredWidth(60);
+    createPaletteColorsTable.getColumnModel().getColumn(COL_BLUE).setPreferredWidth(60);
   }
 
   private void refreshRelWeightsTable() {
@@ -1285,7 +1400,10 @@ public class TinaController implements FlameHolder {
   public void randomPaletteButton_actionPerformed(ActionEvent e) {
     Flame currFlame = getCurrFlame();
     if (currFlame != null) {
-      RGBPalette palette = new RandomRGBPaletteGenerator().generatePalette(Integer.parseInt(paletteRandomPointsREd.getText()));
+      RandomRGBPaletteGenerator generator = new RandomRGBPaletteGenerator();
+      paletteKeyFrames = generator.generateKeyFrames(Integer.parseInt(paletteRandomPointsREd.getText()));
+      refreshPaletteColorsTable();
+      RGBPalette palette = new RandomRGBPaletteGenerator().generatePalette(paletteKeyFrames);
       currFlame.setPalette(palette);
       refreshPaletteUI(palette);
       refreshFlameImage();
@@ -1317,6 +1435,8 @@ public class TinaController implements FlameHolder {
         SimpleImage img = new ImageReader(centerPanel).loadImage(file.getAbsolutePath());
         RGBPalette palette = new RGBPaletteImporter().importFromImage(img);
         Flame currFlame = getCurrFlame();
+        paletteKeyFrames = null;
+        refreshPaletteColorsTable();
         currFlame.setPalette(palette);
         refreshPaletteUI(palette);
         refreshFlameImage();

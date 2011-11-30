@@ -319,7 +319,7 @@ public class TinaInternalFrame extends JInternalFrame implements ProgressUpdater
   private JButton affineMoveRightButton = null;
   private JTextField affineMoveAmountREd = null;
   private JPanel createRandomPointsPanel = null;
-  private JPanel createGapPanel = null;
+  private JPanel createPaletteTablePanel = null;
   private JPanel randomBatchPanel = null;
   private JButton randomBatchButton = null;
   private JLabel nonlinearVar1Lbl = null;
@@ -434,6 +434,8 @@ public class TinaInternalFrame extends JInternalFrame implements ProgressUpdater
   private JLabel colorOversampleLbl = null;
   private JTextField colorOversampleREd = null;
   private JSlider colorOversampleSlider = null;
+  private JScrollPane createPaletteScrollPane = null;
+  private JTable createPaletteColorsTable = null;
 
   /**
    * This is the xxx default constructor
@@ -677,7 +679,7 @@ public class TinaInternalFrame extends JInternalFrame implements ProgressUpdater
       colorOversampleLbl.setPreferredSize(new Dimension(94, 22));
       colorOversampleLbl.setText("Color oversample");
       colorOversampleLbl.setSize(new Dimension(94, 22));
-      colorOversampleLbl.setLocation(new Point(488, 52));
+      colorOversampleLbl.setLocation(new Point(488, 28));
       colorOversampleLbl.setFont(new Font("Dialog", Font.BOLD, 10));
       tinaBGColorLbl = new JLabel();
       tinaBGColorLbl.setText("Background color");
@@ -693,7 +695,7 @@ public class TinaInternalFrame extends JInternalFrame implements ProgressUpdater
       tinaOversampleLbl.setPreferredSize(new Dimension(94, 22));
       tinaFilterRadiusLbl = new JLabel();
       tinaFilterRadiusLbl.setText("Filter radius");
-      tinaFilterRadiusLbl.setLocation(new Point(488, 28));
+      tinaFilterRadiusLbl.setLocation(new Point(488, 52));
       tinaFilterRadiusLbl.setSize(new Dimension(94, 22));
       tinaFilterRadiusLbl.setFont(new Font("Dialog", Font.BOLD, 10));
       tinaFilterRadiusLbl.setPreferredSize(new Dimension(94, 22));
@@ -1580,7 +1582,7 @@ public class TinaInternalFrame extends JInternalFrame implements ProgressUpdater
       tinaFilterRadiusREd = new JTextField();
       tinaFilterRadiusREd.setPreferredSize(new Dimension(100, 22));
       tinaFilterRadiusREd.setText("");
-      tinaFilterRadiusREd.setLocation(new Point(584, 28));
+      tinaFilterRadiusREd.setLocation(new Point(584, 52));
       tinaFilterRadiusREd.setSize(new Dimension(100, 22));
       tinaFilterRadiusREd.setFont(new Font("Dialog", Font.PLAIN, 10));
       tinaFilterRadiusREd.addActionListener(new java.awt.event.ActionListener() {
@@ -1709,7 +1711,7 @@ public class TinaInternalFrame extends JInternalFrame implements ProgressUpdater
       tinaFilterRadiusSlider.setValue(0);
       tinaFilterRadiusSlider.setFont(new Font("Dialog", Font.BOLD, 10));
       tinaFilterRadiusSlider.setSize(new Dimension(220, 19));
-      tinaFilterRadiusSlider.setLocation(new Point(686, 28));
+      tinaFilterRadiusSlider.setLocation(new Point(686, 52));
       tinaFilterRadiusSlider.setPreferredSize(new Dimension(220, 19));
       tinaFilterRadiusSlider.addChangeListener(new javax.swing.event.ChangeListener() {
         public void stateChanged(javax.swing.event.ChangeEvent e) {
@@ -1729,7 +1731,7 @@ public class TinaInternalFrame extends JInternalFrame implements ProgressUpdater
     if (tinaOversampleSlider == null) {
       tinaOversampleSlider = new JSlider();
       tinaOversampleSlider.setMaximum(6);
-      tinaOversampleSlider.setMinimum(0);
+      tinaOversampleSlider.setMinimum(1);
       tinaOversampleSlider.setValue(0);
       tinaOversampleSlider.setMajorTickSpacing(1);
       tinaOversampleSlider.setFont(new Font("Dialog", Font.BOLD, 10));
@@ -2290,7 +2292,7 @@ public class TinaInternalFrame extends JInternalFrame implements ProgressUpdater
       tinaPaletteCreatePanel.setLayout(flowLayout2);
       tinaPaletteCreatePanel.add(getTinaRandomPaletteButton(), null);
       tinaPaletteCreatePanel.add(getCreateRandomPointsPanel(), null);
-      tinaPaletteCreatePanel.add(getCreateGapPanel(), null);
+      tinaPaletteCreatePanel.add(getCreatePaletteTablePanel(), null);
       tinaPaletteCreatePanel.add(getTinaGrabPaletteFromImageButton(), null);
     }
     return tinaPaletteCreatePanel;
@@ -2916,7 +2918,7 @@ public class TinaInternalFrame extends JInternalFrame implements ProgressUpdater
         getAnimateOutputREd(), getAnimateFramesREd(), getAnimateScriptCmb(), getAnimationGenerateButton(), getAnimateXFormScriptCmb(), getMouseTransformMoveButton(),
         getMouseTransformRotateButton(), getMouseTransformScaleButton(), getAffineEditPostTransformButton(), getAffineEditPostTransformSmallButton(),
         getMouseTransformZoomInButton(), getMouseTransformZoomOutButton(), getToggleTrianglesButton(), this, getRandomPostTransformCheckBox(),
-        getRandomSymmetryCheckBox(), getAffineResetTransformButton(), getColorOversampleREd(), getColorOversampleSlider());
+        getRandomSymmetryCheckBox(), getAffineResetTransformButton(), getColorOversampleREd(), getColorOversampleSlider(), getCreatePaletteColorsTable());
     tinaController.refreshing = tinaController.cmbRefreshing = tinaController.gridRefreshing = true;
     try {
       for (NonlinearControlsRow row : nonlinearControlsRows) {
@@ -3424,17 +3426,18 @@ public class TinaInternalFrame extends JInternalFrame implements ProgressUpdater
   }
 
   /**
-   * This method initializes createGapPanel	
+   * This method initializes createPaletteTablePanel	
    * 	
    * @return javax.swing.JPanel	
    */
-  private JPanel getCreateGapPanel() {
-    if (createGapPanel == null) {
-      createGapPanel = new JPanel();
-      createGapPanel.setLayout(new GridBagLayout());
-      createGapPanel.setPreferredSize(new Dimension(180, 26));
+  private JPanel getCreatePaletteTablePanel() {
+    if (createPaletteTablePanel == null) {
+      createPaletteTablePanel = new JPanel();
+      createPaletteTablePanel.setLayout(new BorderLayout());
+      createPaletteTablePanel.setPreferredSize(new Dimension(180, 160));
+      createPaletteTablePanel.add(getCreatePaletteScrollPane(), BorderLayout.CENTER);
     }
-    return createGapPanel;
+    return createPaletteTablePanel;
   }
 
   /**
@@ -5455,7 +5458,7 @@ public class TinaInternalFrame extends JInternalFrame implements ProgressUpdater
       colorOversampleREd.setPreferredSize(new Dimension(100, 22));
       colorOversampleREd.setText("");
       colorOversampleREd.setSize(new Dimension(100, 22));
-      colorOversampleREd.setLocation(new Point(584, 52));
+      colorOversampleREd.setLocation(new Point(584, 28));
       colorOversampleREd.setFont(new Font("Dialog", Font.PLAIN, 10));
       colorOversampleREd.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -5480,12 +5483,12 @@ public class TinaInternalFrame extends JInternalFrame implements ProgressUpdater
     if (colorOversampleSlider == null) {
       colorOversampleSlider = new JSlider();
       colorOversampleSlider.setPreferredSize(new Dimension(220, 19));
-      colorOversampleSlider.setMajorTickSpacing(1);
+      colorOversampleSlider.setMajorTickSpacing(0);
       colorOversampleSlider.setMaximum(6);
-      colorOversampleSlider.setMinimum(0);
+      colorOversampleSlider.setMinimum(1);
       colorOversampleSlider.setValue(0);
       colorOversampleSlider.setSize(new Dimension(220, 19));
-      colorOversampleSlider.setLocation(new Point(686, 52));
+      colorOversampleSlider.setLocation(new Point(686, 28));
       colorOversampleSlider.setFont(new Font("Dialog", Font.BOLD, 10));
       colorOversampleSlider.addChangeListener(new javax.swing.event.ChangeListener() {
         public void stateChanged(javax.swing.event.ChangeEvent e) {
@@ -5494,6 +5497,32 @@ public class TinaInternalFrame extends JInternalFrame implements ProgressUpdater
       });
     }
     return colorOversampleSlider;
+  }
+
+  /**
+   * This method initializes createPaletteScrollPane	
+   * 	
+   * @return javax.swing.JScrollPane	
+   */
+  private JScrollPane getCreatePaletteScrollPane() {
+    if (createPaletteScrollPane == null) {
+      createPaletteScrollPane = new JScrollPane();
+      createPaletteScrollPane.setViewportView(getCreatePaletteColorsTable());
+    }
+    return createPaletteScrollPane;
+  }
+
+  /**
+   * This method initializes createPaletteColorsTable	
+   * 	
+   * @return javax.swing.JTable	
+   */
+  private JTable getCreatePaletteColorsTable() {
+    if (createPaletteColorsTable == null) {
+      createPaletteColorsTable = new JTable();
+      createPaletteColorsTable.setFont(new Font("Dialog", Font.PLAIN, 10));
+    }
+    return createPaletteColorsTable;
   }
 
 } //  @jve:decl-index=0:visual-constraint="10,10"
