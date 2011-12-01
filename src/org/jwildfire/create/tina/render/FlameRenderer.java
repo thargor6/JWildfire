@@ -157,7 +157,7 @@ public class FlameRenderer implements TransformationContext {
         createColorMap(pFlame);
         initView(pFlame);
         createModWeightTables(pFlame);
-        iterate(pFlame);
+        iterate(pFlame, i, colorOversample);
         if (pFlame.getSampleDensity() <= 10) {
           renderImageSimple(pFlame, img);
         }
@@ -239,14 +239,14 @@ public class FlameRenderer implements TransformationContext {
     }
   }
 
-  private void iterate(Flame pFlame) {
+  private void iterate(Flame pFlame, int pPart, int pParts) {
     long nSamples = (long) ((long) pFlame.getSampleDensity() * (long) rasterSize + 0.5);
     //    if (pFlame.getSampleDensity() > 50) {
     //      System.err.println("SAMPLES: " + nSamples);
     //    }
     int PROGRESS_STEPS = 100;
-    if (progressUpdater != null) {
-      progressUpdater.initProgress(PROGRESS_STEPS);
+    if (progressUpdater != null && pPart == 0) {
+      progressUpdater.initProgress(PROGRESS_STEPS * pParts);
     }
     long sampleProgressUpdateStep = nSamples / 100;
     long nextProgressUpdate = sampleProgressUpdateStep;
@@ -276,7 +276,7 @@ public class FlameRenderer implements TransformationContext {
       if (currSamples >= nextProgressUpdate) {
         if (progressUpdater != null) {
           int currProgress = (int) ((currSamples * PROGRESS_STEPS) / nSamples);
-          progressUpdater.updateProgress(currProgress);
+          progressUpdater.updateProgress(currProgress + pPart * PROGRESS_STEPS);
           nextProgressUpdate = (currProgress + 1) * sampleProgressUpdateStep;
         }
       }
