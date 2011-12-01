@@ -23,7 +23,7 @@ public class ZScaleFunc extends SimpleVariationFunc {
 
   @Override
   public void transform(TransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-    pVarTP.z += pAmount * pAffineTP.x;
+    pVarTP.z += pAmount * pAffineTP.z;
   }
 
   @Override
