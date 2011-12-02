@@ -14,17 +14,28 @@
   if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
   02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
-package org.jwildfire.create.tina.base;
+package org.jwildfire.create.tina.variation;
 
-public class Constants {
-  public final static double EPSILON = 1.0e-300;
-  public final static int MAX_MOD_WEIGHT_COUNT = 1000;
-  public final static int NEXT_APPLIED_XFORM_TABLE_SIZE = 1000;
-  public final static int INITIAL_ITERATIONS = 20;
+import org.jwildfire.create.tina.base.Constants;
+import org.jwildfire.create.tina.base.XForm;
+import org.jwildfire.create.tina.base.XYZPoint;
 
-  public final static double M_PI = Math.PI;
-  public final static double M_PI_2 = M_PI * 0.5;
-  public final static double M_1_PI = 1.0 / M_PI;
-  public final static double M_2_PI = 2.0 / M_PI;
+public class ScryFunc extends SimpleVariationFunc {
+
+  @Override
+  public void transform(TransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
+    /* scry from the apophysis plugin pack */
+
+    double t = pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y;
+    double r = 1.0 / (Math.sqrt(t) * (t + 1.0 / (pAmount + Constants.EPSILON)));
+
+    pVarTP.x += pAffineTP.x * r;
+    pVarTP.y += pAffineTP.y * r;
+  }
+
+  @Override
+  public String getName() {
+    return "scry";
+  }
 
 }

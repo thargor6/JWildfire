@@ -16,40 +16,46 @@
 */
 package org.jwildfire.create.tina.variation;
 
+import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Constants;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
-public class BipolarFunc extends VariationFunc {
+public class WedgeFunc extends VariationFunc {
 
-  private static final String PARAM_SHIFT = "shift";
-  private static final String[] paramNames = { PARAM_SHIFT };
+  private static final String PARAM_ANGLE = "angle";
+  private static final String PARAM_HOLE = "hole";
+  private static final String PARAM_COUNT = "count";
+  private static final String PARAM_SWIRL = "swirl";
+  private static final String[] paramNames = { PARAM_ANGLE, PARAM_HOLE, PARAM_COUNT, PARAM_SWIRL };
 
-  private double shift = 0.0;
-
-  private double fmod(double a, double b) {
-    return a % b;
-  }
+  private double angle = Constants.M_PI_2;
+  private double hole = 0.0;
+  private int count = 1;
+  private double swirl = 0.0;
 
   @Override
   public void transform(TransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-    /* Bipolar in the Apophysis Plugin Pack */
+    /* Wedge from apo plugins pack */
+    double precalc_sumsq = pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y;
+    double precalc_sqrt = Math.sqrt(precalc_sumsq);
+    double precalc_atanyx = Math.atan2(pAffineTP.y, pAffineTP.x);
 
-    double x2y2 = (pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y);
-    double t = x2y2 + 1.0;
-    double x2 = 2 * pAffineTP.x;
-    double ps = -Constants.M_PI_2 * shift;
-    double y = 0.5 * Math.atan2(2.0 * pAffineTP.y, x2y2 - 1.0) + ps;
+    double r = precalc_sqrt;
+    double a = precalc_atanyx + swirl * r;
+    double c = Math.floor((count * a + Constants.M_PI) * Constants.M_1_PI * 0.5);
 
-    if (y > Constants.M_PI_2) {
-      y = -Constants.M_PI_2 + fmod(y + Constants.M_PI_2, Constants.M_PI);
-    }
-    else if (y < -Constants.M_PI_2) {
-      y = Constants.M_PI_2 - fmod(Constants.M_PI_2 - y, Constants.M_PI);
-    }
+    double comp_fac = 1 - angle * count * Constants.M_1_PI * 0.5;
 
-    pVarTP.x += pAmount * 0.25 * Constants.M_2_PI * Math.log((t + x2) / (t - x2));
-    pVarTP.y += pAmount * Constants.M_2_PI * y;
+    a = a * comp_fac + c * angle;
+
+    double sa = Math.sin(a);
+    double ca = Math.cos(a);
+
+    r = pAmount * (r + hole);
+
+    pVarTP.x += r * ca;
+    pVarTP.y += r * sa;
   }
 
   @Override
@@ -59,20 +65,26 @@ public class BipolarFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { shift };
+    return new Object[] { angle, hole, count, swirl };
   }
 
   @Override
   public void setParameter(String pName, double pValue) {
-    if (PARAM_SHIFT.equalsIgnoreCase(pName))
-      shift = pValue;
+    if (PARAM_ANGLE.equalsIgnoreCase(pName))
+      angle = pValue;
+    else if (PARAM_HOLE.equalsIgnoreCase(pName))
+      hole = pValue;
+    else if (PARAM_COUNT.equalsIgnoreCase(pName))
+      count = Tools.FTOI(pValue);
+    else if (PARAM_SWIRL.equalsIgnoreCase(pName))
+      swirl = pValue;
     else
       throw new IllegalArgumentException(pName);
   }
 
   @Override
   public String getName() {
-    return "bipolar";
+    return "wedge";
   }
 
 }
