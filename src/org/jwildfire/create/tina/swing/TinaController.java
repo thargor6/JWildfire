@@ -123,6 +123,7 @@ public class TinaController implements FlameHolder {
       List<String> nameList = new ArrayList<String>();
       nameList.addAll(VariationFuncList.getNameList());
       Collections.sort(nameList);
+      nonlinearVarCmb.addItem(null);
       for (String name : nameList) {
         nonlinearVarCmb.addItem(name);
       }
@@ -2047,7 +2048,7 @@ public class TinaController implements FlameHolder {
   }
 
   public void nonlinearVarCmbChanged(int pIdx) {
-    if (cmbRefreshing) {
+    if (cmbRefreshing || refreshing) {
       return;
     }
     cmbRefreshing = true;
@@ -2069,7 +2070,12 @@ public class TinaController implements FlameHolder {
         }
         String fName = (String) nonlinearControlsRows[pIdx].getNonlinearVarCmb().getSelectedItem();
         if (fName == null || fName.length() == 0) {
-          var.setFunc(VariationFuncList.getVariationFuncInstance(VariationFuncList.DEFAULT_VARIATION));
+//          if (pIdx == 0) {
+//            var.setFunc(VariationFuncList.getVariationFuncInstance(VariationFuncList.DEFAULT_VARIATION));
+//          }
+//          else {
+            xForm.getVariations().remove(var);
+//          }
         }
         else {
           var.setFunc(VariationFuncList.getVariationFuncInstance(fName));

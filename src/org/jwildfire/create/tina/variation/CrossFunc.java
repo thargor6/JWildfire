@@ -16,55 +16,35 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import org.jwildfire.base.Tools;
+import org.jwildfire.create.tina.base.Constants;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
-public class Julia3DZFunc extends VariationFunc {
-
-  private static final String PARAM_POWER = "power";
-  private static final String[] paramNames = { PARAM_POWER };
-
-  private int power = 2;
+public class CrossFunc extends SimpleVariationFunc {
 
   @Override
   public void transform(TransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-    double absPower = Math.abs(power);
-    double cPower = 1.0 / power * 0.5;
+    /* Z+ variation Jan 07
+    procedure TXForm.Cross;
+    var
+      r: double;
+    begin
+      r := vars[36]*sqrt(1/(sqr(sqr(FTx)-sqr(FTy))+EPS));
+      FPx := FPx + FTx * r;
+      FPy := FPy + FTy * r;
+    end;
+    */
 
-    double r2d = pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y;
-    double r = pAmount * Math.pow(r2d, cPower);
+    double s = pAffineTP.x * pAffineTP.x - pAffineTP.y * pAffineTP.y;
+    double r = pAmount * Math.sqrt(1.0 / (s * s + Constants.EPSILON));
 
-    int rnd = (int) (pContext.getRandomNumberGenerator().random() * absPower);
-    double angle = (Math.atan2(pAffineTP.y, pAffineTP.x) + 2 * Math.PI * rnd) / power;
-    double sina = Math.sin(angle);
-    double cosa = Math.cos(angle);
-    pVarTP.x += r * cosa;
-    pVarTP.y += r * sina;
-    pVarTP.z += r * pAffineTP.z / (Math.sqrt(r2d) * absPower);
-  }
-
-  @Override
-  public String[] getParameterNames() {
-    return paramNames;
-  }
-
-  @Override
-  public Object[] getParameterValues() {
-    return new Object[] { power };
-  }
-
-  @Override
-  public void setParameter(String pName, double pValue) {
-    if (PARAM_POWER.equalsIgnoreCase(pName))
-      power = Tools.FTOI(pValue);
-    else
-      throw new IllegalArgumentException(pName);
+    pVarTP.x += pAffineTP.x * r;
+    pVarTP.y += pAffineTP.y * r;
   }
 
   @Override
   public String getName() {
-    return "julia3Dz";
+    return "cross";
   }
 
 }

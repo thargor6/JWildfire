@@ -16,6 +16,7 @@
 */
 package org.jwildfire.create.tina.variation;
 
+import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
@@ -59,7 +60,7 @@ public class Julia3DFunc extends VariationFunc {
   @Override
   public void setParameter(String pName, double pValue) {
     if (PARAM_POWER.equalsIgnoreCase(pName))
-      power = (int) Math.round(pValue);
+      power = Tools.FTOI(pValue);
     else
       throw new IllegalArgumentException(pName);
   }

@@ -16,33 +16,43 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
-public class JuliaNFunc extends VariationFunc {
+public class BipolarFunc extends VariationFunc {
 
-  private static final String PARAM_POWER = "power";
-  private static final String PARAM_DIST = "dist";
-  private static final String[] paramNames = { PARAM_POWER, PARAM_DIST };
+  private static final String PARAM_SHIFT = "shift";
+  private static final String[] paramNames = { PARAM_SHIFT };
 
-  private int power = 2;
-  private double dist = 1;
+  private double shift = 0.0;
 
-  private double sqr(double pVal) {
-    return pVal * pVal;
+  private static double M_PI = Math.PI;
+  private static double M_PI_2 = M_PI * 0.5;
+  private static double M_2_PI = 2.0 / M_PI;
+
+  private double fmod(double a, double b) {
+    return a % b;
   }
 
   @Override
   public void transform(TransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-    double rnd = pContext.getRandomNumberGenerator().random();
-    double angle = (Math.atan2(pAffineTP.y, pAffineTP.x) + 2 * Math.PI * ((int) (rnd * Math.abs(power)))) / (double) power;
-    double sina = Math.sin(angle);
-    double cosa = Math.cos(angle);
-    double d = dist / (power + power);
-    double r = pAmount * Math.pow(sqr(pAffineTP.x) + sqr(pAffineTP.y), d);
-    pVarTP.x += r * cosa;
-    pVarTP.y += r * sina;
+    /* Bipolar in the Apophysis Plugin Pack */
+
+    double x2y2 = (pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y);
+    double t = x2y2 + 1;
+    double x2 = 2 * pAffineTP.x;
+    double ps = -M_PI_2 * shift;
+    double y = 0.5 * Math.atan2(2.0 * pAffineTP.y, x2y2 - 1.0) + ps;
+
+    if (y > M_PI_2) {
+      y = -M_PI_2 + fmod(y + M_PI_2, M_PI);
+    }
+    else if (y < -M_PI_2) {
+      y = M_PI_2 - fmod(M_PI_2 - y, M_PI);
+    }
+
+    pVarTP.x += pAmount * 0.25 * M_2_PI * Math.log((t + x2) / (t - x2));
+    pVarTP.y += pAmount * M_2_PI * y;
   }
 
   @Override
@@ -52,22 +62,20 @@ public class JuliaNFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { power, dist };
+    return new Object[] { shift };
   }
 
   @Override
   public void setParameter(String pName, double pValue) {
-    if (PARAM_POWER.equalsIgnoreCase(pName))
-      power = Tools.FTOI(pValue);
-    else if (PARAM_DIST.equalsIgnoreCase(pName))
-      dist = pValue;
+    if (PARAM_SHIFT.equalsIgnoreCase(pName))
+      shift = pValue;
     else
       throw new IllegalArgumentException(pName);
   }
 
   @Override
   public String getName() {
-    return "julian";
+    return "bipolar";
   }
 
 }
