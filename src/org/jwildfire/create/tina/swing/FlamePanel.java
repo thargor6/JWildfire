@@ -56,6 +56,10 @@ public class FlamePanel extends ImagePanel {
   private boolean editPostTransform = false;
   private double zoom = 1.0;
 
+  private int renderWidth;
+  private int renderHeight;
+  private double renderAspect = 1.0;
+
   public FlamePanel(SimpleImage pSimpleImage, int pX, int pY, int pWidth, FlameHolder pFlameHolder) {
     super(pSimpleImage, pX, pY, pWidth);
     flameHolder = pFlameHolder;
@@ -75,8 +79,8 @@ public class FlamePanel extends ImagePanel {
   }
 
   private void fillBackground(Graphics g) {
-    g.setColor(BACKGROUND_COLOR);
     Rectangle bounds = this.getBounds();
+    g.setColor(BACKGROUND_COLOR);
     g.fillRect(0, 0, bounds.width, bounds.height);
   }
 
@@ -147,10 +151,26 @@ public class FlamePanel extends ImagePanel {
     }
   }
 
+  Rectangle getImageBounds() {
+    Rectangle bounds = this.getParent().getBounds();
+    double aspect = (double) bounds.width / (double) bounds.height;
+    int imageWidth, imageHeight;
+    if (aspect <= renderAspect) {
+      imageWidth = bounds.width;
+      imageHeight = Tools.FTOI((double) imageWidth / renderAspect);
+    }
+    else {
+      imageHeight = bounds.height;
+      imageWidth = Tools.FTOI((double) imageHeight * renderAspect);
+    }
+    //    System.out.println(bounds.width + "x" + bounds.height + "->" + imageWidth + "x" + imageHeight);
+    return new Rectangle(0, 0, imageWidth, imageHeight);
+  }
+
   private void paintFlame(Graphics2D g) {
     Flame flame = flameHolder.getFlame();
     if (flame != null) {
-      Rectangle bounds = this.getBounds();
+      Rectangle bounds = this.getImageBounds();
       int width = bounds.width;
       int height = bounds.height;
 
@@ -361,5 +381,21 @@ public class FlamePanel extends ImagePanel {
 
   public void zoomOut() {
     zoom += 0.1;
+  }
+
+  public void setRenderWidth(int pRenderWidth) {
+    renderWidth = pRenderWidth;
+    updateRenderAspect();
+  }
+
+  private void updateRenderAspect() {
+    if (renderHeight > 0) {
+      renderAspect = (double) renderWidth / (double) renderHeight;
+    }
+  }
+
+  void setRenderHeight(int pRenderHeight) {
+    renderHeight = pRenderHeight;
+    updateRenderAspect();
   }
 }

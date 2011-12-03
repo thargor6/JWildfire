@@ -2864,6 +2864,16 @@ public class TinaInternalFrame extends JInternalFrame implements ProgressUpdater
       tinaRenderWidthREd.setLocation(new Point(858, 4));
       tinaRenderWidthREd.setSize(new Dimension(56, 22));
       tinaRenderWidthREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      tinaRenderWidthREd.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent e) {
+          tinaController.renderWidthREd_changed();
+        }
+      });
+      tinaRenderWidthREd.addFocusListener(new java.awt.event.FocusAdapter() {
+        public void focusLost(java.awt.event.FocusEvent e) {
+          tinaController.renderWidthREd_changed();
+        }
+      });
     }
     return tinaRenderWidthREd;
   }
@@ -2881,6 +2891,16 @@ public class TinaInternalFrame extends JInternalFrame implements ProgressUpdater
       tinaRenderHeightREd.setLocation(new Point(914, 4));
       tinaRenderHeightREd.setSize(new Dimension(56, 22));
       tinaRenderHeightREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      tinaRenderHeightREd.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent e) {
+          tinaController.renderHeightREd_changed();
+        }
+      });
+      tinaRenderHeightREd.addFocusListener(new java.awt.event.FocusAdapter() {
+        public void focusLost(java.awt.event.FocusEvent e) {
+          tinaController.renderHeightREd_changed();
+        }
+      });
     }
     return tinaRenderHeightREd;
   }

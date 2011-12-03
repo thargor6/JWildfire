@@ -19,6 +19,7 @@ package org.jwildfire.create.tina.swing;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
 import java.io.File;
@@ -483,6 +484,8 @@ public class TinaController implements FlameHolder {
       SimpleImage img = new SimpleImage(width, height);
       img.fillBackground(0, 0, 0);
       flamePanel = new FlamePanel(img, 0, 0, centerPanel.getWidth(), this);
+      flamePanel.setRenderWidth(Tools.stringToInt(renderWidthREd.getText()));
+      flamePanel.setRenderHeight(Tools.stringToInt(renderHeightREd.getText()));
       flamePanel.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
         @Override
         public void mouseDragged(MouseEvent e) {
@@ -545,8 +548,9 @@ public class TinaController implements FlameHolder {
 
   public void refreshFlameImage(int pQuality, AffineZStyle pAffineZStyle) {
     FlamePanel imgPanel = getFlamePanel();
-    int width = imgPanel.getWidth();
-    int height = imgPanel.getHeight();
+    Rectangle bounds = imgPanel.getImageBounds();
+    int width = bounds.width;
+    int height = bounds.height;
     if (width >= 16 && height >= 16) {
       SimpleImage img = new SimpleImage(width, height);
       Flame flame = getCurrFlame();
@@ -2048,7 +2052,7 @@ public class TinaController implements FlameHolder {
   }
 
   public void nonlinearVarCmbChanged(int pIdx) {
-    if (cmbRefreshing || refreshing) {
+    if (cmbRefreshing) {
       return;
     }
     cmbRefreshing = true;
@@ -2070,18 +2074,17 @@ public class TinaController implements FlameHolder {
         }
         String fName = (String) nonlinearControlsRows[pIdx].getNonlinearVarCmb().getSelectedItem();
         if (fName == null || fName.length() == 0) {
-//          if (pIdx == 0) {
-//            var.setFunc(VariationFuncList.getVariationFuncInstance(VariationFuncList.DEFAULT_VARIATION));
-//          }
-//          else {
-            xForm.getVariations().remove(var);
-//          }
+          xForm.getVariations().remove(var);
         }
         else {
           var.setFunc(VariationFuncList.getVariationFuncInstance(fName));
         }
         refreshParamCmb(nonlinearControlsRows[pIdx], xForm, var);
-        refreshXFormUI(xForm);
+        //        refreshXFormUI(xForm);
+        String selected = (String) nonlinearControlsRows[pIdx].getNonlinearParamsCmb().getSelectedItem();
+        boolean enabled = selected != null && selected.length() > 0;
+        nonlinearControlsRows[pIdx].getNonlinearParamsLeftButton().setEnabled(enabled);
+        nonlinearControlsRows[pIdx].getNonlinearParamsRightButton().setEnabled(enabled);
         refreshFlameImage();
       }
     }
@@ -2155,6 +2158,7 @@ public class TinaController implements FlameHolder {
       return;
     }
     cmbRefreshing = true;
+    System.err.println("  SUB REFRESH" + pIdx);
     try {
       String selected = (String) nonlinearControlsRows[pIdx].getNonlinearParamsCmb().getSelectedItem();
       XForm xForm = getCurrXForm();
@@ -2604,6 +2608,20 @@ public class TinaController implements FlameHolder {
     if (xForm != null) {
       XFormTransformService.reset(xForm, affineEditPostTransformButton.isSelected());
       transformationTableClicked();
+      refreshFlameImage();
+    }
+  }
+
+  public void renderHeightREd_changed() {
+    if (flamePanel != null) {
+      flamePanel.setRenderHeight(Tools.stringToInt(renderHeightREd.getText()));
+      refreshFlameImage();
+    }
+  }
+
+  public void renderWidthREd_changed() {
+    if (flamePanel != null) {
+      flamePanel.setRenderWidth(Tools.stringToInt(renderWidthREd.getText()));
       refreshFlameImage();
     }
   }
