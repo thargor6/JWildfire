@@ -1,3 +1,16 @@
+V0.22 (03.12.2011):
+ - Fractal flame editor: waves2 variation
+ - Fractal flame editor: simplified interface, three basic sets of prefs: for preview, normal and high quality rendering
+ - Basic prefs window finished
+ - Fractal flame editor: preview image uses same aspect as rendered images
+ - Fractal flame editor: wedge and scry variation
+ - Fractal flame editor: cross and bipolar variation, some minor bug fixes
+ - FIXED: Fractal flame generator: progress bar is updated properly regarding to color oversampling
+ - FIXED: fractal flame editor: fixed a bug in the GammaCorrectionFilter causing sometimes an overflow on the blue color component
+ - FIXED: Fractal flame editor: ZScale variation was broken
+ - Fractal flame editor: color "key frames" can now be edited
+ - Fractal flame editor: optional color oversampling (experimental)
+
 V0.21 (29.11.2011):
  - Fractal flame editor: new "tentacle" style for random batches
  - Fractal flame editor: one more (4th) row for nonlinear variation
