@@ -17,5 +17,5 @@
 package org.jwildfire.base;
 
 public enum PropertyCategory {
-  PRIMARY, SECONDARY, RENDERING
+  PRIMARY, SECONDARY, RENDERING, GENERAL, TINA, SUNFLOW
 }

@@ -191,6 +191,7 @@ public class FlamePanel extends ImagePanel {
       viewYScale = (double) (height - 2 * BORDER) / (viewYMin - viewYMax);
       viewXTrans = viewXMin * viewXScale - areaLeft;
       viewYTrans = viewYMin * viewYScale - areaBottom;
+      viewXScale /= renderAspect;
 
       for (XForm xForm : flame.getXForms()) {
         drawXForm(g, xForm, false);

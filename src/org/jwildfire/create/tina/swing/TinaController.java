@@ -1268,11 +1268,13 @@ public class TinaController implements FlameHolder {
 
   public void loadFlameButton_actionPerformed(ActionEvent e) {
     JFileChooser chooser = getFlameJFileChooser();
-    try {
-      chooser.setCurrentDirectory(new File(prefs.getInputFlamePath()));
-    }
-    catch (Exception ex) {
-      ex.printStackTrace();
+    if (prefs.getInputFlamePath() != null) {
+      try {
+        chooser.setCurrentDirectory(new File(prefs.getInputFlamePath()));
+      }
+      catch (Exception ex) {
+        ex.printStackTrace();
+      }
     }
     if (chooser.showOpenDialog(centerPanel) == JFileChooser.APPROVE_OPTION) {
       File file = chooser.getSelectedFile();
@@ -1530,11 +1532,13 @@ public class TinaController implements FlameHolder {
     if (currFlame != null) {
       try {
         JFileChooser chooser = getImageJFileChooser();
-        try {
-          chooser.setCurrentDirectory(new File(prefs.getOutputImagePath()));
-        }
-        catch (Exception ex) {
-          ex.printStackTrace();
+        if (prefs.getOutputImagePath() != null) {
+          try {
+            chooser.setCurrentDirectory(new File(prefs.getOutputImagePath()));
+          }
+          catch (Exception ex) {
+            ex.printStackTrace();
+          }
         }
         if (chooser.showSaveDialog(centerPanel) == JFileChooser.APPROVE_OPTION) {
           File file = chooser.getSelectedFile();
@@ -1569,11 +1573,13 @@ public class TinaController implements FlameHolder {
     Flame currFlame = getCurrFlame();
     if (currFlame != null) {
       JFileChooser chooser = getFlameJFileChooser();
-      try {
-        chooser.setCurrentDirectory(new File(prefs.getOutputFlamePath()));
-      }
-      catch (Exception ex) {
-        ex.printStackTrace();
+      if (prefs.getOutputFlamePath() != null) {
+        try {
+          chooser.setCurrentDirectory(new File(prefs.getOutputFlamePath()));
+        }
+        catch (Exception ex) {
+          ex.printStackTrace();
+        }
       }
       if (chooser.showSaveDialog(centerPanel) == JFileChooser.APPROVE_OPTION) {
         try {

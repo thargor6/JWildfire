@@ -134,11 +134,9 @@ public class FractalFlameCreator extends ImageCreator {
 
   //////////////////////////////////////////////////
   @Property(description = "flame drawer")
-  @PropertyMin(0)
   private String flameDrawer = "C:\\TMP\\wf\\";
 
   @Property(description = "flame file (flam3 compatible format)")
-  @PropertyMin(0)
   private String flameFilename = "BALL3D.flame"; // 
 
   //////////////////////////////////////////////////

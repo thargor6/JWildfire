@@ -176,11 +176,13 @@ public class MainController {
 
   public Buffer loadImage(boolean pRecordAction) throws Exception {
     JFileChooser chooser = getImageJFileChooser();
-    try {
-      chooser.setCurrentDirectory(new File(prefs.getInputImagePath()));
-    }
-    catch (Exception ex) {
-      ex.printStackTrace();
+    if (prefs.getInputImagePath() != null) {
+      try {
+        chooser.setCurrentDirectory(new File(prefs.getInputImagePath()));
+      }
+      catch (Exception ex) {
+        ex.printStackTrace();
+      }
     }
     if (chooser.showOpenDialog(windowMenu) == JFileChooser.APPROVE_OPTION) {
       File file = chooser.getSelectedFile();
@@ -316,11 +318,13 @@ public class MainController {
     Buffer buffer = getActiveBuffer();
     if (buffer != null) {
       JFileChooser chooser = getImageJFileChooser();
-      try {
-        chooser.setCurrentDirectory(new File(prefs.getOutputImagePath()));
-      }
-      catch (Exception ex) {
-        ex.printStackTrace();
+      if (prefs.getOutputImagePath() != null) {
+        try {
+          chooser.setCurrentDirectory(new File(prefs.getOutputImagePath()));
+        }
+        catch (Exception ex) {
+          ex.printStackTrace();
+        }
       }
       if (chooser.showSaveDialog(windowMenu) == JFileChooser.APPROVE_OPTION) {
         File file = chooser.getSelectedFile();
@@ -553,11 +557,13 @@ public class MainController {
   public void saveScript() throws Exception {
     if (actionList.size() > 0) {
       JFileChooser chooser = getScriptJFileChooser();
-      try {
-        chooser.setCurrentDirectory(new File(prefs.getOutputScriptPath()));
-      }
-      catch (Exception ex) {
-        ex.printStackTrace();
+      if (prefs.getOutputScriptPath() != null) {
+        try {
+          chooser.setCurrentDirectory(new File(prefs.getOutputScriptPath()));
+        }
+        catch (Exception ex) {
+          ex.printStackTrace();
+        }
       }
       if (chooser.showSaveDialog(windowMenu) == JFileChooser.APPROVE_OPTION) {
         File file = chooser.getSelectedFile();
@@ -626,11 +632,13 @@ public class MainController {
         || (JOptionPane.showConfirmDialog(desktop, msg, title,
             JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION)) {
       JFileChooser chooser = getScriptJFileChooser();
-      try {
-        chooser.setCurrentDirectory(new File(prefs.getInputScriptPath()));
-      }
-      catch (Exception ex) {
-        ex.printStackTrace();
+      if (prefs.getInputScriptPath() != null) {
+        try {
+          chooser.setCurrentDirectory(new File(prefs.getInputScriptPath()));
+        }
+        catch (Exception ex) {
+          ex.printStackTrace();
+        }
       }
       if (chooser.showOpenDialog(windowMenu) == JFileChooser.APPROVE_OPTION) {
         File file = chooser.getSelectedFile();

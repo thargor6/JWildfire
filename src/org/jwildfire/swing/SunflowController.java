@@ -132,7 +132,9 @@ public class SunflowController implements UserInterface {
   public void loadScene() {
     try {
       JFileChooser chooser = getSceneJFileChooser();
-      chooser.setCurrentDirectory(new File(prefs.getInputSunflowScenePath()));
+      if (prefs.getInputSunflowScenePath() != null) {
+        chooser.setCurrentDirectory(new File(prefs.getInputSunflowScenePath()));
+      }
       if (chooser.showOpenDialog(editorTextArea) == JFileChooser.APPROVE_OPTION) {
         api = null;
         File file = chooser.getSelectedFile();

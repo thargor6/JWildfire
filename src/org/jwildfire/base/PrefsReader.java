@@ -23,8 +23,19 @@ import java.util.Properties;
 
 public class PrefsReader {
 
-  private String getProperty(Properties pProperties, String pKey) {
-    return pProperties.getProperty(pKey, "").trim();
+  private String getProperty(Properties pProperties, String pKey, String pDefaultValue) {
+    String res = pProperties.getProperty(pKey, "").trim();
+    return res.length() > 0 ? res : pDefaultValue;
+  }
+
+  private int getIntProperty(Properties pProperties, String pKey, int pDefaultValue) {
+    String val = pProperties.getProperty(pKey, "").trim();
+    return val.length() > 0 ? Tools.stringToInt(val) : pDefaultValue;
+  }
+
+  private double getDoubleProperty(Properties pProperties, String pKey, double pDefaultValue) {
+    String val = pProperties.getProperty(pKey, "").trim();
+    return val.length() > 0 ? Tools.stringToDouble(val) : pDefaultValue;
   }
 
   public void readPrefs(Prefs pPrefs) throws Exception {
@@ -34,15 +45,31 @@ public class PrefsReader {
       try {
         Properties props = new Properties();
         props.load(inputStream);
-        pPrefs.setImagePath(getProperty(props, Prefs.KEY_PATH_IMAGES));
-        pPrefs.setFlamePath(getProperty(props, Prefs.KEY_PATH_FLAMES));
-        pPrefs.setScriptPath(getProperty(props, Prefs.KEY_PATH_SCRIPTS));
-        pPrefs.setSunflowScenePath(getProperty(props, Prefs.KEY_PATH_SUBFLOW_SCENES));
+        pPrefs.setImagePath(getProperty(props, Prefs.KEY_GENERAL_PATH_IMAGES, pPrefs.getImagePath()));
+        pPrefs.setScriptPath(getProperty(props, Prefs.KEY_GENERAL_PATH_SCRIPTS, pPrefs.getScriptPath()));
+
+        pPrefs.setTinaFlamePath(getProperty(props, Prefs.KEY_TINA_PATH_FLAMES, pPrefs.getTinaFlamePath()));
+        pPrefs.setTinaRenderThreads(getIntProperty(props, Prefs.KEY_TINA_RENDER_THREADS, pPrefs.getTinaRenderThreads()));
+        pPrefs.setTinaRenderWidth(getIntProperty(props, Prefs.KEY_TINA_RENDER_WIDTH, pPrefs.getTinaRenderWidth()));
+        pPrefs.setTinaRenderHeight(getIntProperty(props, Prefs.KEY_TINA_RENDER_HEIGHT, pPrefs.getTinaRenderHeight()));
+        pPrefs.setTinaRenderPreviewSpatialOversample(getIntProperty(props, Prefs.KEY_TINA_RENDER_PREVIEW_SPATIAL_OVERSAMPLE, pPrefs.getTinaRenderPreviewSpatialOversample()));
+        pPrefs.setTinaRenderPreviewColorOversample(getIntProperty(props, Prefs.KEY_TINA_RENDER_PREVIEW_COLOR_OVERSAMPLE, pPrefs.getTinaRenderPreviewColorOversample()));
+        pPrefs.setTinaRenderPreviewFilterRadius(getDoubleProperty(props, Prefs.KEY_TINA_RENDER_PREVIEW_FILTER_RADIUS, pPrefs.getTinaRenderPreviewFilterRadius()));
+        pPrefs.setTinaRenderPreviewQuality(getIntProperty(props, Prefs.KEY_TINA_RENDER_PREVIEW_QUALITY, pPrefs.getTinaRenderPreviewQuality()));
+        pPrefs.setTinaRenderNormalSpatialOversample(getIntProperty(props, Prefs.KEY_TINA_RENDER_NORMAL_SPATIAL_OVERSAMPLE, pPrefs.getTinaRenderNormalSpatialOversample()));
+        pPrefs.setTinaRenderNormalColorOversample(getIntProperty(props, Prefs.KEY_TINA_RENDER_NORMAL_COLOR_OVERSAMPLE, pPrefs.getTinaRenderNormalColorOversample()));
+        pPrefs.setTinaRenderNormalFilterRadius(getDoubleProperty(props, Prefs.KEY_TINA_RENDER_NORMAL_FILTER_RADIUS, pPrefs.getTinaRenderNormalFilterRadius()));
+        pPrefs.setTinaRenderNormalQuality(getIntProperty(props, Prefs.KEY_TINA_RENDER_NORMAL_QUALITY, pPrefs.getTinaRenderNormalQuality()));
+        pPrefs.setTinaRenderHighSpatialOversample(getIntProperty(props, Prefs.KEY_TINA_RENDER_HIGH_SPATIAL_OVERSAMPLE, pPrefs.getTinaRenderHighSpatialOversample()));
+        pPrefs.setTinaRenderHighColorOversample(getIntProperty(props, Prefs.KEY_TINA_RENDER_HIGH_COLOR_OVERSAMPLE, pPrefs.getTinaRenderHighColorOversample()));
+        pPrefs.setTinaRenderHighFilterRadius(getDoubleProperty(props, Prefs.KEY_TINA_RENDER_HIGH_FILTER_RADIUS, pPrefs.getTinaRenderHighFilterRadius()));
+        pPrefs.setTinaRenderHighQuality(getIntProperty(props, Prefs.KEY_TINA_RENDER_HIGH_QUALITY, pPrefs.getTinaRenderHighQuality()));
+
+        pPrefs.setSunflowScenePath(getProperty(props, Prefs.KEY_SUNFLOW_PATH_SCENES, pPrefs.getSunflowScenePath()));
       }
       finally {
         inputStream.close();
       }
     }
   }
-
 }
