@@ -2197,7 +2197,6 @@ public class TinaController implements FlameHolder {
       return;
     }
     cmbRefreshing = true;
-    System.err.println("  SUB REFRESH" + pIdx);
     try {
       String selected = (String) nonlinearControlsRows[pIdx].getNonlinearParamsCmb().getSelectedItem();
       XForm xForm = getCurrXForm();
