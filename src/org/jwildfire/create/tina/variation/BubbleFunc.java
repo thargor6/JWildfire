@@ -23,9 +23,11 @@ public class BubbleFunc extends SimpleVariationFunc {
 
   @Override
   public void transform(TransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-    double r = pAmount / ((pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y) / 4.0 + 1.0);
-    pVarTP.x += r * pAffineTP.x;
-    pVarTP.y += r * pAffineTP.y;
+    double r = ((pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y) / 4.0 + 1.0);
+    double t = pAmount / r;
+    pVarTP.x += t * pAffineTP.x;
+    pVarTP.y += t * pAffineTP.y;
+    pVarTP.z += pAmount * (2.0 / r - 1);
   }
 
   @Override
