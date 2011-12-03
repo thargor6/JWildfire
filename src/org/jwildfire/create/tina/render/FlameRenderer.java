@@ -119,7 +119,7 @@ public class FlameRenderer implements TransformationContext {
     pPoint.y = y / zr;
   }
 
-  public void renderFlame(Flame pFlame, SimpleImage pImage) {
+  public void renderFlame(Flame pFlame, SimpleImage pImage, int pThreads) {
     if (pFlame.getXForms().size() == 0)
       return;
     int spatialOversample = pFlame.getSampleDensity() >= 100 ? pFlame.getSpatialOversample() : 1;
@@ -157,7 +157,7 @@ public class FlameRenderer implements TransformationContext {
         createColorMap(pFlame);
         initView(pFlame);
         createModWeightTables(pFlame);
-        iterate(pFlame, i, colorOversample);
+        iterate(pFlame, i, colorOversample, pThreads);
         if (pFlame.getSampleDensity() <= 10) {
           renderImageSimple(pFlame, img);
         }
@@ -239,7 +239,7 @@ public class FlameRenderer implements TransformationContext {
     }
   }
 
-  private void iterate(Flame pFlame, int pPart, int pParts) {
+  private void iterate(Flame pFlame, int pPart, int pParts, int pThreads) {
     long nSamples = (long) ((long) pFlame.getSampleDensity() * (long) rasterSize + 0.5);
     //    if (pFlame.getSampleDensity() > 50) {
     //      System.err.println("SAMPLES: " + nSamples);
@@ -250,10 +250,9 @@ public class FlameRenderer implements TransformationContext {
     }
     long sampleProgressUpdateStep = nSamples / 100;
     long nextProgressUpdate = sampleProgressUpdateStep;
-    int nThreads = 8;
     List<FlameRenderThread> threads = new ArrayList<FlameRenderThread>();
-    for (int i = 0; i < nThreads; i++) {
-      FlameRenderThread t = new FlameRenderThread(this, pFlame, nSamples / (long) nThreads, affineZStyle);
+    for (int i = 0; i < pThreads; i++) {
+      FlameRenderThread t = new FlameRenderThread(this, pFlame, nSamples / (long) pThreads, affineZStyle);
       threads.add(t);
       new Thread(t).start();
     }

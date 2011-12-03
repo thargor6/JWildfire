@@ -1,5 +1,6 @@
 package org.jwildfire.create.tina.transform;
 
+import org.jwildfire.base.Prefs;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.render.AffineZStyle;
@@ -21,7 +22,7 @@ public class AnimationService {
     ROTATE_SLIGHTLY,
   }
 
-  public static void renderFrame(int pFrame, int pFrames, Flame pFlame1, Flame pFlame2, boolean pDoMorph, GlobalScript pGlobalScript, XFormScript pXFormScript, String pImagePath, int pWidth, int pHeight, int pQuality, AffineZStyle pAffineZStyle) throws Exception {
+  public static void renderFrame(int pFrame, int pFrames, Flame pFlame1, Flame pFlame2, boolean pDoMorph, GlobalScript pGlobalScript, XFormScript pXFormScript, String pImagePath, int pWidth, int pHeight, int pQuality, AffineZStyle pAffineZStyle, Prefs pPrefs) throws Exception {
     String imgFilename = String.valueOf(pFrame);
     while (imgFilename.length() < 3) {
       imgFilename = "0" + imgFilename;
@@ -111,7 +112,7 @@ public class AnimationService {
 
     FlameRenderer renderer = new FlameRenderer();
     renderer.setAffineZStyle(pAffineZStyle);
-    renderer.renderFlame(flame, img);
+    renderer.renderFlame(flame, img, pPrefs.getTinaRenderThreads());
     new ImageWriter().saveImage(img, imgFilename);
   }
 }

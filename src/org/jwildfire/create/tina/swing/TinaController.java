@@ -178,7 +178,6 @@ public class TinaController implements FlameHolder {
   private final JTextField cameraPerspectiveREd;
   private final JSlider cameraPerspectiveSlider;
   private final JTextField previewQualityREd;
-  private final JTextField renderQualityREd;
   private final JTextField cameraCentreXREd;
   private final JSlider cameraCentreXSlider;
   private final JTextField cameraCentreYREd;
@@ -207,8 +206,6 @@ public class TinaController implements FlameHolder {
   private final JSlider bgColorGreenSlider;
   private final JTextField bgColorBlueREd;
   private final JSlider bgColorBlueSlider;
-  private final JTextField renderWidthREd;
-  private final JTextField renderHeightREd;
   // palette -> create
   private final JTextField paletteRandomPointsREd;
   private final JPanel paletteImgPanel;
@@ -311,7 +308,7 @@ public class TinaController implements FlameHolder {
 
   public TinaController(ErrorHandler pErrorHandler, Prefs pPrefs, JPanel pCenterPanel, JTextField pCameraRollREd, JSlider pCameraRollSlider, JTextField pCameraPitchREd,
       JSlider pCameraPitchSlider, JTextField pCameraYawREd, JSlider pCameraYawSlider, JTextField pCameraPerspectiveREd, JSlider pCameraPerspectiveSlider,
-      JTextField pPreviewQualityREd, JTextField pRenderQualityREd, JTextField pCameraCentreXREd, JSlider pCameraCentreXSlider, JTextField pCameraCentreYREd,
+      JTextField pPreviewQualityREd, JTextField pCameraCentreXREd, JSlider pCameraCentreXSlider, JTextField pCameraCentreYREd,
       JSlider pCameraCentreYSlider, JTextField pCameraZoomREd, JSlider pCameraZoomSlider, JTextField pPixelsPerUnitREd, JSlider pPixelsPerUnitSlider,
       JTextField pBrightnessREd, JSlider pBrightnessSlider, JTextField pContrastREd, JSlider pContrastSlider, JTextField pGammaREd, JSlider pGammaSlider,
       JTextField pVibrancyREd, JSlider pVibrancySlider, JTextField pFilterRadiusREd, JSlider pFilterRadiusSlider, JTextField pSpatialOversampleREd,
@@ -320,7 +317,7 @@ public class TinaController implements FlameHolder {
       JTextField pPaletteRedREd, JSlider pPaletteRedSlider, JTextField pPaletteGreenREd, JSlider pPaletteGreenSlider, JTextField pPaletteBlueREd,
       JSlider pPaletteBlueSlider, JTextField pPaletteHueREd, JSlider pPaletteHueSlider, JTextField pPaletteSaturationREd, JSlider pPaletteSaturationSlider,
       JTextField pPaletteContrastREd, JSlider pPaletteContrastSlider, JTextField pPaletteGammaREd, JSlider pPaletteGammaSlider, JTextField pPaletteBrightnessREd,
-      JSlider pPaletteBrightnessSlider, JTextField pRenderWidthREd, JTextField pRenderHeightREd, JTable pTransformationsTable, JTextField pAffineC00REd,
+      JSlider pPaletteBrightnessSlider, JTable pTransformationsTable, JTextField pAffineC00REd,
       JTextField pAffineC01REd, JTextField pAffineC10REd, JTextField pAffineC11REd, JTextField pAffineC20REd, JTextField pAffineC21REd,
       JTextField pAffineRotateAmountREd, JTextField pAffineScaleAmountREd, JTextField pAffineMoveAmountREd, JButton pAffineRotateLeftButton,
       JButton pAffineRotateRightButton, JButton pAffineEnlargeButton, JButton pAffineShrinkButton, JButton pAffineMoveUpButton, JButton pAffineMoveLeftButton,
@@ -348,7 +345,6 @@ public class TinaController implements FlameHolder {
     cameraPerspectiveREd = pCameraPerspectiveREd;
     cameraPerspectiveSlider = pCameraPerspectiveSlider;
     previewQualityREd = pPreviewQualityREd;
-    renderQualityREd = pRenderQualityREd;
     cameraCentreXREd = pCameraCentreXREd;
     cameraCentreXSlider = pCameraCentreXSlider;
     cameraCentreYREd = pCameraCentreYREd;
@@ -379,9 +375,6 @@ public class TinaController implements FlameHolder {
     bgColorBlueSlider = pBGColorBlueSlider;
     paletteRandomPointsREd = pPaletteRandomPointsREd;
     paletteImgPanel = pPaletteImgPanel;
-    renderWidthREd = pRenderWidthREd;
-    renderHeightREd = pRenderHeightREd;
-
     paletteShiftREd = pPaletteShiftREd;
     paletteShiftSlider = pPaletteShiftSlider;
     paletteRedREd = pPaletteRedREd;
@@ -484,8 +477,8 @@ public class TinaController implements FlameHolder {
       SimpleImage img = new SimpleImage(width, height);
       img.fillBackground(0, 0, 0);
       flamePanel = new FlamePanel(img, 0, 0, centerPanel.getWidth(), this);
-      flamePanel.setRenderWidth(Tools.stringToInt(renderWidthREd.getText()));
-      flamePanel.setRenderHeight(Tools.stringToInt(renderHeightREd.getText()));
+      flamePanel.setRenderWidth(prefs.getTinaRenderWidth());
+      flamePanel.setRenderHeight(prefs.getTinaRenderHeight());
       flamePanel.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
         @Override
         public void mouseDragged(MouseEvent e) {
@@ -526,7 +519,7 @@ public class TinaController implements FlameHolder {
   }
 
   public void refreshFlameImage() {
-    refreshFlameImage(Integer.parseInt(previewQualityREd.getText()), (AffineZStyle) zStyleCmb.getSelectedItem());
+    refreshFlameImage((AffineZStyle) zStyleCmb.getSelectedItem(), true);
   }
 
   private Flame lastMorphedFlame = null;
@@ -546,7 +539,7 @@ public class TinaController implements FlameHolder {
     }
   }
 
-  public void refreshFlameImage(int pQuality, AffineZStyle pAffineZStyle) {
+  public void refreshFlameImage(AffineZStyle pAffineZStyle, boolean pQuickRender) {
     FlamePanel imgPanel = getFlamePanel();
     Rectangle bounds = imgPanel.getImageBounds();
     int width = bounds.width;
@@ -555,23 +548,40 @@ public class TinaController implements FlameHolder {
       SimpleImage img = new SimpleImage(width, height);
       Flame flame = getCurrFlame();
       if (flame != null) {
-        double oldFilterRadius = flame.getSpatialFilterRadius();
+        double oldSpatialFilterRadius = flame.getSpatialFilterRadius();
+        int oldSpatialOversample = flame.getSpatialOversample();
+        int oldColorOversample = flame.getColorOversample();
+        int oldSampleDensity = flame.getSampleDensity();
         try {
           double wScl = (double) img.getImageWidth() / (double) flame.getWidth();
           double hScl = (double) img.getImageHeight() / (double) flame.getHeight();
           flame.setPixelsPerUnit((wScl + hScl) * 0.5 * flame.getPixelsPerUnit());
           flame.setWidth(img.getImageWidth());
           flame.setHeight(img.getImageHeight());
-          flame.setSampleDensity(pQuality);
+
           FlameRenderer renderer = new FlameRenderer();
-          if (pQuality >= 100) {
+          if (pQuickRender) {
+            renderer.setProgressUpdater(null);
+            flame.setSampleDensity(Integer.parseInt(previewQualityREd.getText()));
+            flame.setSpatialFilterRadius(0.0);
+            flame.setSpatialOversample(1);
+            flame.setColorOversample(1);
+          }
+          else {
             renderer.setProgressUpdater(progressUpdater);
+            flame.setSampleDensity(prefs.getTinaRenderPreviewQuality());
+            flame.setSpatialFilterRadius(prefs.getTinaRenderPreviewFilterRadius());
+            flame.setSpatialOversample(prefs.getTinaRenderPreviewSpatialOversample());
+            flame.setColorOversample(prefs.getTinaRenderPreviewColorOversample());
           }
           renderer.setAffineZStyle(pAffineZStyle);
-          renderer.renderFlame(flame, img);
+          renderer.renderFlame(flame, img, prefs.getTinaRenderThreads());
         }
         finally {
-          flame.setSpatialFilterRadius(oldFilterRadius);
+          flame.setSpatialFilterRadius(oldSpatialFilterRadius);
+          flame.setSpatialOversample(oldSpatialOversample);
+          flame.setColorOversample(oldColorOversample);
+          flame.setSampleDensity(oldSampleDensity);
         }
       }
       imgPanel.setImage(img);
@@ -1220,7 +1230,7 @@ public class TinaController implements FlameHolder {
     finally {
       refreshing = false;
     }
-    refreshFlameImage(Integer.parseInt(renderQualityREd.getText()), (AffineZStyle) zStyleCmb.getSelectedItem());
+    refreshFlameImage((AffineZStyle) zStyleCmb.getSelectedItem(), false);
   }
 
   public class FlameFileFilter extends FileFilter {
@@ -1527,7 +1537,7 @@ public class TinaController implements FlameHolder {
     paletteSliderChanged(paletteShiftSlider, paletteShiftREd, "modShift", 1.0);
   }
 
-  public void exportImageButton_actionPerformed(ActionEvent e) {
+  public void renderImageButton_actionPerformed(boolean pHighQuality) {
     Flame currFlame = getCurrFlame();
     if (currFlame != null) {
       try {
@@ -1543,9 +1553,8 @@ public class TinaController implements FlameHolder {
         if (chooser.showSaveDialog(centerPanel) == JFileChooser.APPROVE_OPTION) {
           File file = chooser.getSelectedFile();
           prefs.setLastOutputImageFile(file);
-          int width = Integer.parseInt(renderWidthREd.getText());
-          int height = Integer.parseInt(renderHeightREd.getText());
-          int quality = Integer.parseInt(renderQualityREd.getText());
+          int width = prefs.getTinaRenderWidth();
+          int height = prefs.getTinaRenderHeight();
           SimpleImage img = new SimpleImage(width, height);
           Flame flame = getCurrFlame();
           double wScl = (double) img.getImageWidth() / (double) flame.getWidth();
@@ -1553,12 +1562,36 @@ public class TinaController implements FlameHolder {
           flame.setPixelsPerUnit((wScl + hScl) * 0.5 * flame.getPixelsPerUnit());
           flame.setWidth(img.getImageWidth());
           flame.setHeight(img.getImageHeight());
-          flame.setSampleDensity(quality);
-          FlameRenderer renderer = new FlameRenderer();
-          renderer.setProgressUpdater(progressUpdater);
-          renderer.setAffineZStyle((AffineZStyle) zStyleCmb.getSelectedItem());
-          renderer.renderFlame(flame, img);
-          new ImageWriter().saveImage(img, file.getAbsolutePath());
+
+          int oldSampleDensity = flame.getSampleDensity();
+          int oldSpatialOversample = flame.getSpatialOversample();
+          int oldColorOversample = flame.getColorOversample();
+          double oldFilterRadius = flame.getSpatialFilterRadius();
+          try {
+            if (pHighQuality) {
+              flame.setSampleDensity(prefs.getTinaRenderHighQuality());
+              flame.setSpatialOversample(prefs.getTinaRenderHighSpatialOversample());
+              flame.setColorOversample(prefs.getTinaRenderHighColorOversample());
+              flame.setSpatialFilterRadius(prefs.getTinaRenderHighSpatialOversample());
+            }
+            else {
+              flame.setSampleDensity(prefs.getTinaRenderNormalQuality());
+              flame.setSpatialOversample(prefs.getTinaRenderNormalSpatialOversample());
+              flame.setColorOversample(prefs.getTinaRenderNormalColorOversample());
+              flame.setSpatialFilterRadius(prefs.getTinaRenderNormalSpatialOversample());
+            }
+            FlameRenderer renderer = new FlameRenderer();
+            renderer.setProgressUpdater(progressUpdater);
+            renderer.setAffineZStyle((AffineZStyle) zStyleCmb.getSelectedItem());
+            renderer.renderFlame(flame, img, prefs.getTinaRenderThreads());
+            new ImageWriter().saveImage(img, file.getAbsolutePath());
+          }
+          finally {
+            flame.setSampleDensity(oldSampleDensity);
+            flame.setSpatialOversample(oldSpatialOversample);
+            flame.setColorOversample(oldColorOversample);
+            flame.setSpatialFilterRadius(oldFilterRadius);
+          }
           mainController.loadImage(file.getAbsolutePath(), false);
           //          JOptionPane.showMessageDialog(centerPanel, "Image was successfully saved", "Operation successful", JOptionPane.OK_OPTION);
         }
@@ -1951,7 +1984,7 @@ public class TinaController implements FlameHolder {
         flame.setHeight(IMG_HEIGHT);
         flame.setPixelsPerUnit(10);
         FlameRenderer renderer = new FlameRenderer();
-        renderer.renderFlame(flame, img);
+        renderer.renderFlame(flame, img, prefs.getTinaRenderThreads());
       }
       // add it to the main panel
       ImagePanel imgPanel = new ImagePanel(img, 0, 0, img.getImageWidth());
@@ -2001,10 +2034,10 @@ public class TinaController implements FlameHolder {
         }
         flame.setSampleDensity(50);
         FlameRenderer renderer = new FlameRenderer();
-        renderer.renderFlame(flame, img);
+        renderer.renderFlame(flame, img, prefs.getTinaRenderThreads());
         if (j == MAX_IMG_SAMPLES - 1) {
           randomBatch.add(bestFlame);
-          renderer.renderFlame(bestFlame, img);
+          renderer.renderFlame(bestFlame, img, prefs.getTinaRenderThreads());
           imgList.add(img);
         }
         else {
@@ -2413,14 +2446,14 @@ public class TinaController implements FlameHolder {
       GlobalScript globalScript = (GlobalScript) animateGlobalScriptCmb.getSelectedItem();
       XFormScript xFormScript = (XFormScript) animateXFormScriptCmb.getSelectedItem();
       String imagePath = animateOutputREd.getText();
-      int width = Integer.parseInt(renderWidthREd.getText());
-      int height = Integer.parseInt(renderHeightREd.getText());
-      int quality = Integer.parseInt(renderQualityREd.getText());
+      int width = 640;
+      int height = 480;
+      int quality = 100;
       AffineZStyle affineZStyle = (AffineZStyle) zStyleCmb.getSelectedItem();
       for (int frame = 1; frame <= frames; frame++) {
         Flame flame1 = doMorph ? morphFlame1.makeCopy() : _currFlame.makeCopy();
         Flame flame2 = doMorph ? morphFlame2.makeCopy() : null;
-        AnimationService.renderFrame(frame, frames, flame1, flame2, doMorph, globalScript, xFormScript, imagePath, width, height, quality, affineZStyle);
+        AnimationService.renderFrame(frame, frames, flame1, flame2, doMorph, globalScript, xFormScript, imagePath, width, height, quality, affineZStyle, prefs);
       }
     }
     catch (Throwable ex) {
@@ -2614,20 +2647,6 @@ public class TinaController implements FlameHolder {
     if (xForm != null) {
       XFormTransformService.reset(xForm, affineEditPostTransformButton.isSelected());
       transformationTableClicked();
-      refreshFlameImage();
-    }
-  }
-
-  public void renderHeightREd_changed() {
-    if (flamePanel != null) {
-      flamePanel.setRenderHeight(Tools.stringToInt(renderHeightREd.getText()));
-      refreshFlameImage();
-    }
-  }
-
-  public void renderWidthREd_changed() {
-    if (flamePanel != null) {
-      flamePanel.setRenderWidth(Tools.stringToInt(renderWidthREd.getText()));
       refreshFlameImage();
     }
   }

@@ -79,7 +79,7 @@ public class Prefs extends ManagedObject {
   @Property(description = "Filter radius for preview rendering", category = PropertyCategory.TINA)
   private double tinaRenderPreviewFilterRadius = 0.0;
   @Property(description = "Quality for preview rendering", category = PropertyCategory.TINA)
-  private int tinaRenderPreviewQuality = 1;
+  private int tinaRenderPreviewQuality = 100;
 
   @Property(description = "Spatial oversample for normal rendering", category = PropertyCategory.TINA)
   private int tinaRenderNormalSpatialOversample = 1;
@@ -240,6 +240,22 @@ public class Prefs extends ManagedObject {
     sunflowScenePath = pSrc.sunflowScenePath;
     lastInputSunflowScenePath = pSrc.lastInputSunflowScenePath;
     lastOutputSunflowScenePath = pSrc.lastOutputSunflowScenePath;
+
+    tinaRenderWidth = pSrc.tinaRenderWidth;
+    tinaRenderHeight = pSrc.tinaRenderHeight;
+    tinaRenderThreads = pSrc.tinaRenderThreads;
+    tinaRenderPreviewSpatialOversample = pSrc.tinaRenderPreviewSpatialOversample;
+    tinaRenderPreviewColorOversample = pSrc.tinaRenderPreviewColorOversample;
+    tinaRenderPreviewFilterRadius = pSrc.tinaRenderPreviewFilterRadius;
+    tinaRenderPreviewQuality = pSrc.tinaRenderPreviewQuality;
+    tinaRenderNormalSpatialOversample = pSrc.tinaRenderNormalSpatialOversample;
+    tinaRenderNormalColorOversample = pSrc.tinaRenderNormalColorOversample;
+    tinaRenderNormalFilterRadius = pSrc.tinaRenderNormalFilterRadius;
+    tinaRenderNormalQuality = pSrc.tinaRenderNormalQuality;
+    tinaRenderHighSpatialOversample = pSrc.tinaRenderHighSpatialOversample;
+    tinaRenderHighColorOversample = pSrc.tinaRenderHighColorOversample;
+    tinaRenderHighFilterRadius = pSrc.tinaRenderHighFilterRadius;
+    tinaRenderHighQuality = pSrc.tinaRenderHighQuality;
   }
 
   public int getTinaRenderWidth() {

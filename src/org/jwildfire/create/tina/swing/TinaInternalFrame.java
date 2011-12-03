@@ -100,7 +100,7 @@ public class TinaInternalFrame extends JInternalFrame implements ProgressUpdater
 
   private JTextField tinaPreviewQualityREd = null;
 
-  private JButton tinaExportImageButton = null;
+  private JButton renderImageNormalButton = null;
 
   private JLabel tinaCameraCentreXLbl = null;
 
@@ -141,10 +141,6 @@ public class TinaInternalFrame extends JInternalFrame implements ProgressUpdater
   private JTextField tinaPixelsPerUnitREd = null;
 
   private JSlider tinaPixelsPerUnitSlider = null;
-
-  private JLabel tinaCameraRenderQualityLbl = null;
-
-  private JTextField tinaRenderQualityREd = null;
 
   private JLabel tinaBGColorLbl = null;
 
@@ -286,11 +282,6 @@ public class TinaInternalFrame extends JInternalFrame implements ProgressUpdater
 
   private JSlider tinaPaletteBrightnessSlider = null;
 
-  private JLabel tinaRenderSizeLbl = null;
-
-  private JTextField tinaRenderWidthREd = null;
-
-  private JTextField tinaRenderHeightREd = null;
   private JButton tinaAddFinalTransformationButton = null;
   private JLabel affineC00Lbl = null;
   private JTextField affineC00REd = null;
@@ -436,6 +427,7 @@ public class TinaInternalFrame extends JInternalFrame implements ProgressUpdater
   private JSlider colorOversampleSlider = null;
   private JScrollPane createPaletteScrollPane = null;
   private JTable createPaletteColorsTable = null;
+  private JButton renderImageHighButton = null;
 
   /**
    * This is the xxx default constructor
@@ -1049,25 +1041,25 @@ public class TinaInternalFrame extends JInternalFrame implements ProgressUpdater
   }
 
   /**
-   * This method initializes tinaExportImageButton  
+   * This method initializes renderImageNormalButton  
    *  
    * @return javax.swing.JButton  
    */
-  private JButton getTinaExportImageButton() {
-    if (tinaExportImageButton == null) {
-      tinaExportImageButton = new JButton();
-      tinaExportImageButton.setText("Export image");
-      tinaExportImageButton.setLocation(new Point(790, 32));
-      tinaExportImageButton.setSize(new Dimension(180, 24));
-      tinaExportImageButton.setPreferredSize(new Dimension(180, 24));
-      tinaExportImageButton.setFont(new Font("Dialog", Font.BOLD, 10));
-      tinaExportImageButton.addActionListener(new java.awt.event.ActionListener() {
+  private JButton getRenderImageNormalButton() {
+    if (renderImageNormalButton == null) {
+      renderImageNormalButton = new JButton();
+      renderImageNormalButton.setText("Render image (normal)");
+      renderImageNormalButton.setLocation(new Point(788, 4));
+      renderImageNormalButton.setSize(new Dimension(180, 24));
+      renderImageNormalButton.setPreferredSize(new Dimension(180, 24));
+      renderImageNormalButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      renderImageNormalButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.exportImageButton_actionPerformed(e);
+          tinaController.renderImageButton_actionPerformed(false);
         }
       });
     }
-    return tinaExportImageButton;
+    return renderImageNormalButton;
   }
 
   /**
@@ -1319,23 +1311,6 @@ public class TinaInternalFrame extends JInternalFrame implements ProgressUpdater
       });
     }
     return tinaPixelsPerUnitSlider;
-  }
-
-  /**
-   * This method initializes tinaRenderQualityREd 
-   *  
-   * @return javax.swing.JTextField 
-   */
-  private JTextField getTinaRenderQualityREd() {
-    if (tinaRenderQualityREd == null) {
-      tinaRenderQualityREd = new JTextField();
-      tinaRenderQualityREd.setPreferredSize(new Dimension(56, 22));
-      tinaRenderQualityREd.setText("100");
-      tinaRenderQualityREd.setLocation(new Point(727, 32));
-      tinaRenderQualityREd.setSize(new Dimension(56, 22));
-      tinaRenderQualityREd.setFont(new Font("Dialog", Font.PLAIN, 10));
-    }
-    return tinaRenderQualityREd;
   }
 
   /**
@@ -1801,20 +1776,8 @@ public class TinaInternalFrame extends JInternalFrame implements ProgressUpdater
       zStyleLbl.setText("Z style");
       zStyleLbl.setBounds(new Rectangle(8, 5, 94, 22));
       zStyleLbl.setFont(new Font("Dialog", Font.BOLD, 10));
-      tinaRenderSizeLbl = new JLabel();
-      tinaRenderSizeLbl.setText("Export size");
-      tinaRenderSizeLbl.setFont(new Font("Dialog", Font.BOLD, 10));
-      tinaRenderSizeLbl.setLocation(new Point(790, 4));
-      tinaRenderSizeLbl.setSize(new Dimension(66, 22));
-      tinaRenderSizeLbl.setPreferredSize(new Dimension(66, 22));
       tinaNorthMainPanel = new JPanel();
       tinaNorthMainPanel.setLayout(null);
-      tinaCameraRenderQualityLbl = new JLabel();
-      tinaCameraRenderQualityLbl.setText("Render Quality");
-      tinaCameraRenderQualityLbl.setFont(new Font("Dialog", Font.BOLD, 10));
-      tinaCameraRenderQualityLbl.setLocation(new Point(631, 32));
-      tinaCameraRenderQualityLbl.setSize(new Dimension(94, 22));
-      tinaCameraRenderQualityLbl.setPreferredSize(new Dimension(94, 22));
       tinaCameraPreviewQualityLbl = new JLabel();
       tinaCameraPreviewQualityLbl.setText("Preview Quality");
       tinaCameraPreviewQualityLbl.setFont(new Font("Dialog", Font.BOLD, 10));
@@ -1823,20 +1786,16 @@ public class TinaInternalFrame extends JInternalFrame implements ProgressUpdater
       tinaCameraPreviewQualityLbl.setPreferredSize(new Dimension(94, 22));
       tinaNorthMainPanel.add(getTinaLoadFlameButton(), null);
       tinaNorthMainPanel.add(getTinaSaveFlameButton(), null);
-      tinaNorthMainPanel.add(getTinaExportImageButton(), null);
+      tinaNorthMainPanel.add(getRenderImageNormalButton(), null);
       tinaNorthMainPanel.add(tinaCameraPreviewQualityLbl, null);
       tinaNorthMainPanel.add(getTinaPreviewQualityREd(), null);
-      tinaNorthMainPanel.add(tinaCameraRenderQualityLbl, null);
-      tinaNorthMainPanel.add(getTinaRenderQualityREd(), null);
-      tinaNorthMainPanel.add(tinaRenderSizeLbl, null);
-      tinaNorthMainPanel.add(getTinaRenderWidthREd(), null);
-      tinaNorthMainPanel.add(getTinaRenderHeightREd(), null);
       tinaNorthMainPanel.add(getRandomBatchButton(), null);
       tinaNorthMainPanel.add(getNewFlameButton(), null);
       tinaNorthMainPanel.add(getRandomStyleCmb(), null);
       tinaNorthMainPanel.add(randomStyleLbl, null);
       tinaNorthMainPanel.add(getRandomSymmetryCheckBox(), null);
       tinaNorthMainPanel.add(getRandomPostTransformCheckBox(), null);
+      tinaNorthMainPanel.add(getRenderImageHighButton(), null);
     }
     return tinaNorthMainPanel;
   }
@@ -2851,60 +2810,6 @@ public class TinaInternalFrame extends JInternalFrame implements ProgressUpdater
     return tinaPaletteBrightnessSlider;
   }
 
-  /**
-   * This method initializes tinaRenderWidthREd 
-   *  
-   * @return javax.swing.JTextField 
-   */
-  private JTextField getTinaRenderWidthREd() {
-    if (tinaRenderWidthREd == null) {
-      tinaRenderWidthREd = new JTextField();
-      tinaRenderWidthREd.setPreferredSize(new Dimension(56, 22));
-      tinaRenderWidthREd.setText("800");
-      tinaRenderWidthREd.setLocation(new Point(858, 4));
-      tinaRenderWidthREd.setSize(new Dimension(56, 22));
-      tinaRenderWidthREd.setFont(new Font("Dialog", Font.PLAIN, 10));
-      tinaRenderWidthREd.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.renderWidthREd_changed();
-        }
-      });
-      tinaRenderWidthREd.addFocusListener(new java.awt.event.FocusAdapter() {
-        public void focusLost(java.awt.event.FocusEvent e) {
-          tinaController.renderWidthREd_changed();
-        }
-      });
-    }
-    return tinaRenderWidthREd;
-  }
-
-  /**
-   * This method initializes tinaRenderHeightREd  
-   *  
-   * @return javax.swing.JTextField 
-   */
-  private JTextField getTinaRenderHeightREd() {
-    if (tinaRenderHeightREd == null) {
-      tinaRenderHeightREd = new JTextField();
-      tinaRenderHeightREd.setPreferredSize(new Dimension(56, 22));
-      tinaRenderHeightREd.setText("600");
-      tinaRenderHeightREd.setLocation(new Point(914, 4));
-      tinaRenderHeightREd.setSize(new Dimension(56, 22));
-      tinaRenderHeightREd.setFont(new Font("Dialog", Font.PLAIN, 10));
-      tinaRenderHeightREd.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.renderHeightREd_changed();
-        }
-      });
-      tinaRenderHeightREd.addFocusListener(new java.awt.event.FocusAdapter() {
-        public void focusLost(java.awt.event.FocusEvent e) {
-          tinaController.renderHeightREd_changed();
-        }
-      });
-    }
-    return tinaRenderHeightREd;
-  }
-
   public TinaController createController(StandardErrorHandler pErrorHandler, Prefs pPrefs) {
     nonlinearControlsRows = new NonlinearControlsRow[4];
     nonlinearControlsRows[0] = new NonlinearControlsRow(getNonlinearVar1Cmb(), getNonlinearParams1Cmb(), getNonlinearVar1REd(),
@@ -2917,7 +2822,7 @@ public class TinaInternalFrame extends JInternalFrame implements ProgressUpdater
         getNonlinearParams4REd(), getNonlinearVar4LeftButton(), getNonlinarVar4RightButton(), getNonlinearParams4LeftButton(), getNonlinarParams4RightButton());
     tinaController = new TinaController(pErrorHandler, pPrefs, getCenterCenterPanel(), getTinaCameraRollREd(), getTinaCameraRollSlider(), getTinaCameraPitchREd(),
         getTinaCameraPitchSlider(), getTinaCameraYawREd(), getTinaCameraYawSlider(), getTinaCameraPerspectiveREd(), getTinaCameraPerspectiveSlider(),
-        getTinaPreviewQualityREd(), getTinaRenderQualityREd(), getTinaCameraCentreXREd(), getTinaCameraCentreXSlider(), getTinaCameraCentreYREd(),
+        getTinaPreviewQualityREd(), getTinaCameraCentreXREd(), getTinaCameraCentreXSlider(), getTinaCameraCentreYREd(),
         getTinaCameraCentreYSlider(), getTinaCameraZoomREd(), getTinaCameraZoomSlider(), getTinaPixelsPerUnitREd(), getTinaPixelsPerUnitSlider(),
         getTinaBrightnessREd(), getTinaBrightnessSlider(), getTinaContrastREd(), getTinaContrastSlider(), getTinaGammaREd(), getTinaGammaSlider(),
         getTinaVibrancyREd(), getTinaVibrancySlider(), getTinaFilterRadiusREd(), getTinaFilterRadiusSlider(), getTinaOversampleREd(),
@@ -2926,7 +2831,7 @@ public class TinaInternalFrame extends JInternalFrame implements ProgressUpdater
         getTinaPaletteRedREd(), getTinaPaletteRedSlider(), getTinaPaletteGreenREd(), getTinaPaletteGreenSlider(), getTinaPaletteBlueREd(),
         getTinaPaletteBlueSlider(), getTinaPaletteHueREd(), getTinaPaletteHueSlider(), getTinaPaletteSaturationREd(), getTinaPaletteSaturationSlider(),
         getTinaPaletteContrastREd(), getTinaPaletteContrastSlider(), getTinaPaletteGammaREd(), getTinaPaletteGammaSlider(), getTinaPaletteBrightnessREd(),
-        getTinaPaletteBrightnessSlider(), getTinaRenderWidthREd(), getTinaRenderHeightREd(), getTinaTransformationsTable(), getAffineC00REd(),
+        getTinaPaletteBrightnessSlider(), getTinaTransformationsTable(), getAffineC00REd(),
         getAffineC01REd(), getAffineC10REd(), getAffineC11REd(), getAffineC20REd(), getAffineC21REd(), getAffineRotateAmountREd(), getAffineScaleAmountREd(),
         getAffineMoveAmountREd(), getAffineRotateLeftButton(), getAffineRotateRightButton(), getAffineEnlargeButton(), getAffineShrinkButton(),
         getAffineMoveUpButton(), getAffineMoveLeftButton(), getAffineMoveRightButton(), getAffineMoveDownButton(), getTinaAddTransformationButton(),
@@ -5543,6 +5448,29 @@ public class TinaInternalFrame extends JInternalFrame implements ProgressUpdater
       createPaletteColorsTable.setFont(new Font("Dialog", Font.PLAIN, 10));
     }
     return createPaletteColorsTable;
+  }
+
+  /**
+   * This method initializes renderImageHighButton	
+   * 	
+   * @return javax.swing.JButton	
+   */
+  private JButton getRenderImageHighButton() {
+    if (renderImageHighButton == null) {
+      renderImageHighButton = new JButton();
+      renderImageHighButton.setPreferredSize(new Dimension(180, 24));
+      renderImageHighButton.setText("Render image (high quality)");
+      renderImageHighButton.setSize(new Dimension(180, 24));
+      renderImageHighButton.setLocation(new Point(788, 32));
+      renderImageHighButton.setActionCommand("Render image (high quality)");
+      renderImageHighButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      renderImageHighButton.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent e) {
+          tinaController.renderImageButton_actionPerformed(true);
+        }
+      });
+    }
+    return renderImageHighButton;
   }
 
 } //  @jve:decl-index=0:visual-constraint="10,10"
