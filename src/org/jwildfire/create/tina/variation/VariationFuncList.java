@@ -103,6 +103,8 @@ public class VariationFuncList {
     registerVariationFunc(Popcorn2Func.class);
     registerVariationFunc(Secant2Func.class);
     registerVariationFunc(NgonFunc.class);
+    registerVariationFunc(TEpispiralFunc.class);
+    registerVariationFunc(TRoseFunc.class);
   }
 
   private static void registerVariationFunc(Class<? extends VariationFunc> pVariationFunc) {
