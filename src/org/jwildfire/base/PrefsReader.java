@@ -50,8 +50,11 @@ public class PrefsReader {
 
         pPrefs.setTinaFlamePath(getProperty(props, Prefs.KEY_TINA_PATH_FLAMES, pPrefs.getTinaFlamePath()));
         pPrefs.setTinaRenderThreads(getIntProperty(props, Prefs.KEY_TINA_RENDER_THREADS, pPrefs.getTinaRenderThreads()));
-        pPrefs.setTinaRenderWidth(getIntProperty(props, Prefs.KEY_TINA_RENDER_WIDTH, pPrefs.getTinaRenderWidth()));
-        pPrefs.setTinaRenderHeight(getIntProperty(props, Prefs.KEY_TINA_RENDER_HEIGHT, pPrefs.getTinaRenderHeight()));
+        pPrefs.setTinaRenderImageWidth(getIntProperty(props, Prefs.KEY_TINA_RENDER_IMAGE_WIDTH, pPrefs.getTinaRenderImageWidth()));
+        pPrefs.setTinaRenderImageHeight(getIntProperty(props, Prefs.KEY_TINA_RENDER_IMAGE_HEIGHT, pPrefs.getTinaRenderImageHeight()));
+        pPrefs.setTinaRenderMovieWidth(getIntProperty(props, Prefs.KEY_TINA_RENDER_MOVIE_WIDTH, pPrefs.getTinaRenderMovieWidth()));
+        pPrefs.setTinaRenderMovieHeight(getIntProperty(props, Prefs.KEY_TINA_RENDER_MOVIE_HEIGHT, pPrefs.getTinaRenderMovieHeight()));
+        pPrefs.setTinaRenderMovieFrames(getIntProperty(props, Prefs.KEY_TINA_RENDER_MOVIE_FRAMES, pPrefs.getTinaRenderMovieFrames()));
         pPrefs.setTinaRenderPreviewSpatialOversample(getIntProperty(props, Prefs.KEY_TINA_RENDER_PREVIEW_SPATIAL_OVERSAMPLE, pPrefs.getTinaRenderPreviewSpatialOversample()));
         pPrefs.setTinaRenderPreviewColorOversample(getIntProperty(props, Prefs.KEY_TINA_RENDER_PREVIEW_COLOR_OVERSAMPLE, pPrefs.getTinaRenderPreviewColorOversample()));
         pPrefs.setTinaRenderPreviewFilterRadius(getDoubleProperty(props, Prefs.KEY_TINA_RENDER_PREVIEW_FILTER_RADIUS, pPrefs.getTinaRenderPreviewFilterRadius()));
@@ -64,6 +67,10 @@ public class PrefsReader {
         pPrefs.setTinaRenderHighColorOversample(getIntProperty(props, Prefs.KEY_TINA_RENDER_HIGH_COLOR_OVERSAMPLE, pPrefs.getTinaRenderHighColorOversample()));
         pPrefs.setTinaRenderHighFilterRadius(getDoubleProperty(props, Prefs.KEY_TINA_RENDER_HIGH_FILTER_RADIUS, pPrefs.getTinaRenderHighFilterRadius()));
         pPrefs.setTinaRenderHighQuality(getIntProperty(props, Prefs.KEY_TINA_RENDER_HIGH_QUALITY, pPrefs.getTinaRenderHighQuality()));
+        pPrefs.setTinaRenderMovieSpatialOversample(getIntProperty(props, Prefs.KEY_TINA_RENDER_MOVIE_SPATIAL_OVERSAMPLE, pPrefs.getTinaRenderMovieSpatialOversample()));
+        pPrefs.setTinaRenderMovieColorOversample(getIntProperty(props, Prefs.KEY_TINA_RENDER_MOVIE_COLOR_OVERSAMPLE, pPrefs.getTinaRenderMovieColorOversample()));
+        pPrefs.setTinaRenderMovieFilterRadius(getDoubleProperty(props, Prefs.KEY_TINA_RENDER_MOVIE_FILTER_RADIUS, pPrefs.getTinaRenderMovieFilterRadius()));
+        pPrefs.setTinaRenderMovieQuality(getIntProperty(props, Prefs.KEY_TINA_RENDER_MOVIE_QUALITY, pPrefs.getTinaRenderMovieQuality()));
 
         pPrefs.setSunflowScenePath(getProperty(props, Prefs.KEY_SUNFLOW_PATH_SCENES, pPrefs.getSunflowScenePath()));
       }

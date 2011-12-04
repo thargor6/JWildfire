@@ -464,6 +464,9 @@ public class TinaController implements FlameHolder {
     affineResetTransformButton = pAffineResetTransformButton;
 
     createPaletteColorsTable = pCreatePaletteColorsTable;
+
+    animateFramesREd.setText(String.valueOf(prefs.getTinaRenderMovieFrames()));
+
     refreshPaletteColorsTable();
 
     enableControls();
@@ -477,8 +480,8 @@ public class TinaController implements FlameHolder {
       SimpleImage img = new SimpleImage(width, height);
       img.fillBackground(0, 0, 0);
       flamePanel = new FlamePanel(img, 0, 0, centerPanel.getWidth(), this);
-      flamePanel.setRenderWidth(prefs.getTinaRenderWidth());
-      flamePanel.setRenderHeight(prefs.getTinaRenderHeight());
+      flamePanel.setRenderWidth(prefs.getTinaRenderImageWidth());
+      flamePanel.setRenderHeight(prefs.getTinaRenderImageHeight());
       flamePanel.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
         @Override
         public void mouseDragged(MouseEvent e) {
@@ -1553,8 +1556,8 @@ public class TinaController implements FlameHolder {
         if (chooser.showSaveDialog(centerPanel) == JFileChooser.APPROVE_OPTION) {
           File file = chooser.getSelectedFile();
           prefs.setLastOutputImageFile(file);
-          int width = prefs.getTinaRenderWidth();
-          int height = prefs.getTinaRenderHeight();
+          int width = prefs.getTinaRenderImageWidth();
+          int height = prefs.getTinaRenderImageHeight();
           SimpleImage img = new SimpleImage(width, height);
           Flame flame = getCurrFlame();
           double wScl = (double) img.getImageWidth() / (double) flame.getWidth();
@@ -2445,13 +2448,16 @@ public class TinaController implements FlameHolder {
       GlobalScript globalScript = (GlobalScript) animateGlobalScriptCmb.getSelectedItem();
       XFormScript xFormScript = (XFormScript) animateXFormScriptCmb.getSelectedItem();
       String imagePath = animateOutputREd.getText();
-      int width = 640;
-      int height = 480;
-      int quality = 100;
+      int width = prefs.getTinaRenderMovieWidth();
+      int height = prefs.getTinaRenderMovieHeight();
+      int quality = prefs.getTinaRenderMovieQuality();
       AffineZStyle affineZStyle = (AffineZStyle) zStyleCmb.getSelectedItem();
       for (int frame = 1; frame <= frames; frame++) {
         Flame flame1 = doMorph ? morphFlame1.makeCopy() : _currFlame.makeCopy();
         Flame flame2 = doMorph ? morphFlame2.makeCopy() : null;
+        flame1.setSpatialOversample(prefs.getTinaRenderMovieSpatialOversample());
+        flame1.setColorOversample(prefs.getTinaRenderMovieColorOversample());
+        flame1.setSpatialFilterRadius(prefs.getTinaRenderMovieFilterRadius());
         AnimationService.renderFrame(frame, frames, flame1, flame2, doMorph, globalScript, xFormScript, imagePath, width, height, quality, affineZStyle, prefs);
       }
     }

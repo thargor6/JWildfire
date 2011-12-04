@@ -27,8 +27,11 @@ public class Prefs extends ManagedObject {
 
   static final String KEY_TINA_PATH_FLAMES = "tina.path.flames";
   static final String KEY_TINA_RENDER_THREADS = "tina.render.threads";
-  static final String KEY_TINA_RENDER_WIDTH = "tina.render.width";
-  static final String KEY_TINA_RENDER_HEIGHT = "tina.render.height";
+  static final String KEY_TINA_RENDER_IMAGE_WIDTH = "tina.render.image.width";
+  static final String KEY_TINA_RENDER_IMAGE_HEIGHT = "tina.render.image.height";
+  static final String KEY_TINA_RENDER_MOVIE_WIDTH = "tina.render.movie.width";
+  static final String KEY_TINA_RENDER_MOVIE_HEIGHT = "tina.render.movie.height";
+  static final String KEY_TINA_RENDER_MOVIE_FRAMES = "tina.render.movie.frames";
 
   static final String KEY_TINA_RENDER_PREVIEW_SPATIAL_OVERSAMPLE = "tina.render.preview.spatial_oversample";
   static final String KEY_TINA_RENDER_PREVIEW_COLOR_OVERSAMPLE = "tina.render.preview.color_oversample";
@@ -44,6 +47,11 @@ public class Prefs extends ManagedObject {
   static final String KEY_TINA_RENDER_HIGH_COLOR_OVERSAMPLE = "tina.render.high.color_oversample";
   static final String KEY_TINA_RENDER_HIGH_FILTER_RADIUS = "tina.render.high.filter_radius";
   static final String KEY_TINA_RENDER_HIGH_QUALITY = "tina.render.high.quality";
+
+  static final String KEY_TINA_RENDER_MOVIE_SPATIAL_OVERSAMPLE = "tina.render.movie.spatial_oversample";
+  static final String KEY_TINA_RENDER_MOVIE_COLOR_OVERSAMPLE = "tina.render.movie.color_oversample";
+  static final String KEY_TINA_RENDER_MOVIE_FILTER_RADIUS = "tina.render.movie.filter_radius";
+  static final String KEY_TINA_RENDER_MOVIE_QUALITY = "tina.render.movie.quality";
 
   @Property(description = "Script drawer", category = PropertyCategory.GENERAL)
   private String scriptPath = null;
@@ -65,10 +73,17 @@ public class Prefs extends ManagedObject {
   private String lastInputSunflowScenePath = null;
   private String lastOutputSunflowScenePath = null;
 
-  @Property(description = "Default render width", category = PropertyCategory.TINA)
-  private int tinaRenderWidth = 800;
-  @Property(description = "Default render height", category = PropertyCategory.TINA)
-  private int tinaRenderHeight = 600;
+  @Property(description = "Image render width", category = PropertyCategory.TINA)
+  private int tinaRenderImageWidth = 800;
+  @Property(description = "Image render height", category = PropertyCategory.TINA)
+  private int tinaRenderImageHeight = 600;
+  @Property(description = "Movie render width", category = PropertyCategory.TINA)
+  private int tinaRenderMovieWidth = 640;
+  @Property(description = "Movie render height", category = PropertyCategory.TINA)
+  private int tinaRenderMovieHeight = 480;
+  @Property(description = "Default number of frames for a movie", category = PropertyCategory.TINA)
+  private int tinaRenderMovieFrames = 90;
+
   @Property(description = "Maximum number of threads", category = PropertyCategory.TINA)
   private int tinaRenderThreads = 8;
 
@@ -99,6 +114,15 @@ public class Prefs extends ManagedObject {
   @Property(description = "Quality for high quality rendering", category = PropertyCategory.TINA)
   private int tinaRenderHighQuality = 500;
 
+  @Property(description = "Spatial oversample for movie rendering", category = PropertyCategory.TINA)
+  private int tinaRenderMovieSpatialOversample = 2;
+  @Property(description = "Color oversample for movie rendering", category = PropertyCategory.TINA)
+  private int tinaRenderMovieColorOversample = 2;
+  @Property(description = "Filter radius for movie rendering", category = PropertyCategory.TINA)
+  private double tinaRenderMovieFilterRadius = 1.25;
+  @Property(description = "Quality for movie rendering", category = PropertyCategory.TINA)
+  private int tinaRenderMovieQuality = 150;
+
   public String getInputScriptPath() {
     return lastInputScriptPath != null ? lastInputScriptPath : scriptPath;
   }
@@ -107,7 +131,7 @@ public class Prefs extends ManagedObject {
     return lastOutputScriptPath != null ? lastOutputScriptPath : scriptPath;
   }
 
-  void setScriptPath(String pScriptPath) {
+  public void setScriptPath(String pScriptPath) {
     this.scriptPath = pScriptPath;
   }
 
@@ -241,8 +265,11 @@ public class Prefs extends ManagedObject {
     lastInputSunflowScenePath = pSrc.lastInputSunflowScenePath;
     lastOutputSunflowScenePath = pSrc.lastOutputSunflowScenePath;
 
-    tinaRenderWidth = pSrc.tinaRenderWidth;
-    tinaRenderHeight = pSrc.tinaRenderHeight;
+    tinaRenderImageWidth = pSrc.tinaRenderImageWidth;
+    tinaRenderImageHeight = pSrc.tinaRenderImageHeight;
+    tinaRenderMovieWidth = pSrc.tinaRenderMovieWidth;
+    tinaRenderMovieHeight = pSrc.tinaRenderMovieHeight;
+    tinaRenderMovieFrames = pSrc.tinaRenderMovieFrames;
     tinaRenderThreads = pSrc.tinaRenderThreads;
     tinaRenderPreviewSpatialOversample = pSrc.tinaRenderPreviewSpatialOversample;
     tinaRenderPreviewColorOversample = pSrc.tinaRenderPreviewColorOversample;
@@ -256,22 +283,10 @@ public class Prefs extends ManagedObject {
     tinaRenderHighColorOversample = pSrc.tinaRenderHighColorOversample;
     tinaRenderHighFilterRadius = pSrc.tinaRenderHighFilterRadius;
     tinaRenderHighQuality = pSrc.tinaRenderHighQuality;
-  }
-
-  public int getTinaRenderWidth() {
-    return tinaRenderWidth;
-  }
-
-  public void setTinaRenderWidth(int tinaRenderWidth) {
-    this.tinaRenderWidth = tinaRenderWidth;
-  }
-
-  public int getTinaRenderHeight() {
-    return tinaRenderHeight;
-  }
-
-  public void setTinaRenderHeight(int tinaRenderHeight) {
-    this.tinaRenderHeight = tinaRenderHeight;
+    tinaRenderMovieSpatialOversample = pSrc.tinaRenderMovieSpatialOversample;
+    tinaRenderMovieColorOversample = pSrc.tinaRenderMovieColorOversample;
+    tinaRenderMovieFilterRadius = pSrc.tinaRenderMovieFilterRadius;
+    tinaRenderMovieQuality = pSrc.tinaRenderMovieQuality;
   }
 
   public int getTinaRenderThreads() {
@@ -377,4 +392,77 @@ public class Prefs extends ManagedObject {
   public void setTinaRenderHighQuality(int tinaRenderHighQuality) {
     this.tinaRenderHighQuality = tinaRenderHighQuality;
   }
+
+  public int getTinaRenderMovieSpatialOversample() {
+    return tinaRenderMovieSpatialOversample;
+  }
+
+  public void setTinaRenderMovieSpatialOversample(int tinaRenderMovieSpatialOversample) {
+    this.tinaRenderMovieSpatialOversample = tinaRenderMovieSpatialOversample;
+  }
+
+  public int getTinaRenderMovieColorOversample() {
+    return tinaRenderMovieColorOversample;
+  }
+
+  public void setTinaRenderMovieColorOversample(int tinaRenderMovieColorOversample) {
+    this.tinaRenderMovieColorOversample = tinaRenderMovieColorOversample;
+  }
+
+  public double getTinaRenderMovieFilterRadius() {
+    return tinaRenderMovieFilterRadius;
+  }
+
+  public void setTinaRenderMovieFilterRadius(double tinaRenderMovieFilterRadius) {
+    this.tinaRenderMovieFilterRadius = tinaRenderMovieFilterRadius;
+  }
+
+  public int getTinaRenderMovieQuality() {
+    return tinaRenderMovieQuality;
+  }
+
+  public void setTinaRenderMovieQuality(int tinaRenderMovieQuality) {
+    this.tinaRenderMovieQuality = tinaRenderMovieQuality;
+  }
+
+  public int getTinaRenderImageWidth() {
+    return tinaRenderImageWidth;
+  }
+
+  public void setTinaRenderImageWidth(int tinaRenderImageWidth) {
+    this.tinaRenderImageWidth = tinaRenderImageWidth;
+  }
+
+  public int getTinaRenderImageHeight() {
+    return tinaRenderImageHeight;
+  }
+
+  public void setTinaRenderImageHeight(int tinaRenderImageHeight) {
+    this.tinaRenderImageHeight = tinaRenderImageHeight;
+  }
+
+  public int getTinaRenderMovieWidth() {
+    return tinaRenderMovieWidth;
+  }
+
+  public void setTinaRenderMovieWidth(int tinaRenderMovieWidth) {
+    this.tinaRenderMovieWidth = tinaRenderMovieWidth;
+  }
+
+  public int getTinaRenderMovieHeight() {
+    return tinaRenderMovieHeight;
+  }
+
+  public void setTinaRenderMovieHeight(int tinaRenderMovieHeight) {
+    this.tinaRenderMovieHeight = tinaRenderMovieHeight;
+  }
+
+  public int getTinaRenderMovieFrames() {
+    return tinaRenderMovieFrames;
+  }
+
+  public void setTinaRenderMovieFrames(int tinaRenderMovieFrames) {
+    this.tinaRenderMovieFrames = tinaRenderMovieFrames;
+  }
+
 }

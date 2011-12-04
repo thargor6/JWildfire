@@ -27,8 +27,11 @@ public class PrefsWriter {
 
     addValue(sb, Prefs.KEY_TINA_PATH_FLAMES, pPrefs.getTinaFlamePath());
     addValue(sb, Prefs.KEY_TINA_RENDER_THREADS, pPrefs.getTinaRenderThreads());
-    addValue(sb, Prefs.KEY_TINA_RENDER_WIDTH, pPrefs.getTinaRenderWidth());
-    addValue(sb, Prefs.KEY_TINA_RENDER_HEIGHT, pPrefs.getTinaRenderHeight());
+    addValue(sb, Prefs.KEY_TINA_RENDER_IMAGE_WIDTH, pPrefs.getTinaRenderImageWidth());
+    addValue(sb, Prefs.KEY_TINA_RENDER_IMAGE_HEIGHT, pPrefs.getTinaRenderImageHeight());
+    addValue(sb, Prefs.KEY_TINA_RENDER_MOVIE_WIDTH, pPrefs.getTinaRenderMovieWidth());
+    addValue(sb, Prefs.KEY_TINA_RENDER_MOVIE_HEIGHT, pPrefs.getTinaRenderMovieHeight());
+    addValue(sb, Prefs.KEY_TINA_RENDER_MOVIE_FRAMES, pPrefs.getTinaRenderMovieFrames());
     addValue(sb, Prefs.KEY_TINA_RENDER_PREVIEW_SPATIAL_OVERSAMPLE, pPrefs.getTinaRenderPreviewSpatialOversample());
     addValue(sb, Prefs.KEY_TINA_RENDER_PREVIEW_COLOR_OVERSAMPLE, pPrefs.getTinaRenderPreviewColorOversample());
     addValue(sb, Prefs.KEY_TINA_RENDER_PREVIEW_FILTER_RADIUS, pPrefs.getTinaRenderPreviewFilterRadius());
@@ -41,6 +44,10 @@ public class PrefsWriter {
     addValue(sb, Prefs.KEY_TINA_RENDER_HIGH_COLOR_OVERSAMPLE, pPrefs.getTinaRenderHighColorOversample());
     addValue(sb, Prefs.KEY_TINA_RENDER_HIGH_FILTER_RADIUS, pPrefs.getTinaRenderHighFilterRadius());
     addValue(sb, Prefs.KEY_TINA_RENDER_HIGH_QUALITY, pPrefs.getTinaRenderHighQuality());
+    addValue(sb, Prefs.KEY_TINA_RENDER_MOVIE_SPATIAL_OVERSAMPLE, pPrefs.getTinaRenderMovieSpatialOversample());
+    addValue(sb, Prefs.KEY_TINA_RENDER_MOVIE_COLOR_OVERSAMPLE, pPrefs.getTinaRenderMovieColorOversample());
+    addValue(sb, Prefs.KEY_TINA_RENDER_MOVIE_FILTER_RADIUS, pPrefs.getTinaRenderMovieFilterRadius());
+    addValue(sb, Prefs.KEY_TINA_RENDER_MOVIE_QUALITY, pPrefs.getTinaRenderMovieQuality());
 
     addValue(sb, Prefs.KEY_SUNFLOW_PATH_SCENES, pPrefs.getSunflowScenePath());
     Tools.writeUTF8Textfile(System.getProperty("user.home") + File.separator + Prefs.PREFS_FILE, sb.toString());
