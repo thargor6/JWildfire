@@ -19,19 +19,19 @@ package org.jwildfire.create.tina.variation;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
-public class FisheyeFunc extends SimpleVariationFunc {
+public class Polar2Func extends SimpleVariationFunc {
 
   @Override
   public void transform(TransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-    double r = Math.sqrt(pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y);
-    r = 2.0 * r / (r + 1.0);
-    pVarTP.x += pAmount * r * pAffineTP.getPrecalcCosA();
-    pVarTP.y += pAmount * r * pAffineTP.getPrecalcSinA();
+    /* polar2 from the apophysis plugin pack */
+    double p2v = pAmount / Math.PI;
+    pVarTP.x += p2v * pAffineTP.getPrecalcAtan();
+    pVarTP.y += p2v / 2.0 * Math.log(pAffineTP.getPrecalcSumsq());
   }
 
   @Override
   public String getName() {
-    return "fisheye";
+    return "polar2";
   }
 
 }

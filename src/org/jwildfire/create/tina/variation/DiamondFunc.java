@@ -23,9 +23,9 @@ public class DiamondFunc extends SimpleVariationFunc {
 
   @Override
   public void transform(TransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-    double length = pAffineTP.getRadius();
-    double sinA = pAffineTP.getSinA();
-    double cosA = pAffineTP.getCosA();
+    double length = pAffineTP.getPrecalcSqrt();
+    double sinA = pAffineTP.getPrecalcSinA();
+    double cosA = pAffineTP.getPrecalcCosA();
     double sinr = Math.sin(length);
     double cosr = Math.cos(length);
     pVarTP.x += pAmount * sinA * cosr;

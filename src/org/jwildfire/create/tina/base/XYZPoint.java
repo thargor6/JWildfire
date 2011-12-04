@@ -16,17 +16,20 @@
 */
 package org.jwildfire.create.tina.base;
 
-
 public class XYZPoint {
   public double x;
   public double y;
   public double z;
   public double color;
   // often (but not always) used properties, calculation only if needed
-  protected double radius;
-  protected boolean validRadius;
-  protected double alpha;
-  protected boolean validAlpha;
+  protected double sumsq;
+  protected boolean validSumsq;
+  protected double sqrt;
+  protected boolean validSqrt;
+  protected double atan;
+  protected boolean validAtan;
+  protected double atanYX;
+  protected boolean validAtanYX;
   protected double sinA;
   protected boolean validSinA;
   protected double cosA;
@@ -37,10 +40,14 @@ public class XYZPoint {
     y = p.y;
     z = p.z;
     color = p.color;
-    radius = p.radius;
-    validRadius = p.validRadius;
-    alpha = p.alpha;
-    validAlpha = p.validAlpha;
+    sumsq = p.sumsq;
+    validSumsq = p.validSumsq;
+    sqrt = p.sqrt;
+    validSqrt = p.validSqrt;
+    atan = p.atan;
+    validAtan = p.validAtan;
+    atanYX = p.atanYX;
+    validAtanYX = p.validAtanYX;
     sinA = p.sinA;
     validSinA = p.validSinA;
     cosA = p.cosA;
@@ -48,42 +55,58 @@ public class XYZPoint {
   }
 
   public void invalidate() {
-    validRadius = validAlpha = validSinA = validCosA = false;
+    validSumsq = validSqrt = validAtan = validAtanYX = validSinA = validCosA = false;
   }
 
   public void clear() {
     x = y = z = color = 0.0;
-    radius = alpha = sinA = cosA = 0.0;
-    validRadius = validAlpha = validSinA = validCosA = false;
+    sumsq = sqrt = atan = atanYX = sinA = cosA = 0.0;
+    validSumsq = validSqrt = validAtan = validAtanYX = validSinA = validCosA = false;
   }
 
-  public double getRadius() {
-    if (!validRadius) {
-      radius = Math.sqrt(x * x + y * y) + Constants.EPSILON;
-      validRadius = true;
+  public double getPrecalcSumsq() {
+    if (!validSumsq) {
+      sumsq = x * x + y * y;
+      validSumsq = true;
     }
-    return radius;
+    return sumsq;
   }
 
-  public double getAlpha() {
-    if (!validAlpha) {
-      alpha = Math.atan2(x, y);
-      validAlpha = true;
+  public double getPrecalcSqrt() {
+    if (!validSqrt) {
+      sqrt = Math.sqrt(x * x + y * y) + Constants.EPSILON;
+      validSqrt = true;
     }
-    return alpha;
+    return sqrt;
   }
 
-  public double getSinA() {
+  public double getPrecalcAtan() {
+    if (!validAtan) {
+      atan = Math.atan2(x, y);
+      validAtan = true;
+    }
+    return atan;
+  }
+
+  public double getPrecalcAtanYX() {
+    if (!validAtanYX) {
+      atanYX = Math.atan2(y, x);
+      validAtanYX = true;
+    }
+    return atanYX;
+  }
+
+  public double getPrecalcSinA() {
     if (!validSinA) {
-      sinA = x / getRadius();
+      sinA = x / getPrecalcSqrt();
       validSinA = true;
     }
     return sinA;
   }
 
-  public double getCosA() {
+  public double getPrecalcCosA() {
     if (!validCosA) {
-      cosA = y / getRadius();
+      cosA = y / getPrecalcSqrt();
       validCosA = true;
     }
     return cosA;

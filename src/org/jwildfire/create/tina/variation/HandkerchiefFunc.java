@@ -23,7 +23,7 @@ public class HandkerchiefFunc extends SimpleVariationFunc {
 
   @Override
   public void transform(TransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-    double angle = pAffineTP.getAlpha();
+    double angle = pAffineTP.getPrecalcAtan();
     double r = Math.sqrt(pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y);
     pVarTP.x += pAmount * (Math.sin(angle + r) * r);
     pVarTP.y += pAmount * (Math.cos(angle - r) * r);

@@ -25,7 +25,7 @@ public class PolarFunc extends SimpleVariationFunc {
   public void transform(TransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     double rPI = 0.31830989;
     double ny = Math.sqrt(pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y) - 1.0;
-    pVarTP.x += pAmount * (pAffineTP.getAlpha() * rPI);
+    pVarTP.x += pAmount * (pAffineTP.getPrecalcAtan() * rPI);
     pVarTP.y += pAmount * ny;
   }
 
