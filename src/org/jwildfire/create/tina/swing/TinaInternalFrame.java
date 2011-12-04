@@ -428,6 +428,7 @@ public class TinaInternalFrame extends JInternalFrame implements ProgressUpdater
   private JScrollPane createPaletteScrollPane = null;
   private JTable createPaletteColorsTable = null;
   private JButton renderImageHighButton = null;
+  private JToggleButton frameModeToggleButton = null;
 
   /**
    * This is the xxx default constructor
@@ -1774,7 +1775,7 @@ public class TinaInternalFrame extends JInternalFrame implements ProgressUpdater
       zStyleLbl = new JLabel();
       zStyleLbl.setPreferredSize(new Dimension(94, 22));
       zStyleLbl.setText("Z style");
-      zStyleLbl.setBounds(new Rectangle(8, 5, 94, 22));
+      zStyleLbl.setBounds(new Rectangle(8, 5, 56, 22));
       zStyleLbl.setFont(new Font("Dialog", Font.BOLD, 10));
       tinaNorthMainPanel = new JPanel();
       tinaNorthMainPanel.setLayout(null);
@@ -2870,6 +2871,7 @@ public class TinaInternalFrame extends JInternalFrame implements ProgressUpdater
       getAnimateScriptCmb().addItem(AnimationService.GlobalScript.NONE);
       getAnimateScriptCmb().addItem(AnimationService.GlobalScript.ROTATE_PITCH);
       getAnimateScriptCmb().addItem(AnimationService.GlobalScript.ROTATE_PITCH_YAW);
+      getAnimateScriptCmb().addItem(AnimationService.GlobalScript.ROTATE_ROLL);
       getAnimateScriptCmb().setSelectedItem(AnimationService.GlobalScript.ROTATE_PITCH_YAW);
 
       getAnimateXFormScriptCmb().removeAllItems();
@@ -4430,7 +4432,7 @@ public class TinaInternalFrame extends JInternalFrame implements ProgressUpdater
     if (zStyleCmb == null) {
       zStyleCmb = new JComboBox();
       zStyleCmb.setPreferredSize(new Dimension(125, 22));
-      zStyleCmb.setBounds(new Rectangle(104, 5, 125, 22));
+      zStyleCmb.setBounds(new Rectangle(66, 5, 110, 22));
       zStyleCmb.setFont(new Font("Dialog", Font.BOLD, 10));
       zStyleCmb.addItemListener(new java.awt.event.ItemListener() {
         public void itemStateChanged(java.awt.event.ItemEvent e) {
@@ -4884,6 +4886,7 @@ public class TinaInternalFrame extends JInternalFrame implements ProgressUpdater
       centerNorthPanel.add(zStyleLbl, null);
       centerNorthPanel.add(getAffineEditPostTransformSmallButton(), null);
       centerNorthPanel.add(getRenderProgressBar(), null);
+      centerNorthPanel.add(getFrameModeToggleButton(), null);
     }
     return centerNorthPanel;
   }
@@ -5471,6 +5474,30 @@ public class TinaInternalFrame extends JInternalFrame implements ProgressUpdater
       });
     }
     return renderImageHighButton;
+  }
+
+  /**
+   * This method initializes frameModeToggleButton	
+   * 	
+   * @return javax.swing.JToggleButton	
+   */
+  private JToggleButton getFrameModeToggleButton() {
+    if (frameModeToggleButton == null) {
+      frameModeToggleButton = new JToggleButton();
+      frameModeToggleButton.setPreferredSize(new Dimension(42, 24));
+      frameModeToggleButton.setToolTipText("Switch image/movie mode");
+      frameModeToggleButton.setMnemonic(KeyEvent.VK_M);
+      frameModeToggleButton.setText("M");
+      frameModeToggleButton.setSize(new Dimension(51, 24));
+      frameModeToggleButton.setLocation(new Point(181, 3));
+      frameModeToggleButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      frameModeToggleButton.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent e) {
+          tinaController.switchFrameMode(frameModeToggleButton.isSelected());
+        }
+      });
+    }
+    return frameModeToggleButton;
   }
 
 } //  @jve:decl-index=0:visual-constraint="10,10"

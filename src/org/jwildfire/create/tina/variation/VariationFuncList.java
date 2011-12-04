@@ -100,6 +100,7 @@ public class VariationFuncList {
     registerVariationFunc(ScryFunc.class);
     registerVariationFunc(Waves2Func.class);
     registerVariationFunc(Polar2Func.class);
+    registerVariationFunc(Popcorn2Func.class);
   }
 
   private static void registerVariationFunc(Class<? extends VariationFunc> pVariationFunc) {

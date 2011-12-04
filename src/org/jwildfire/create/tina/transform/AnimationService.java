@@ -14,6 +14,7 @@ public class AnimationService {
     NONE,
     ROTATE_PITCH,
     ROTATE_PITCH_YAW,
+    ROTATE_ROLL,
   }
 
   public static enum XFormScript {
@@ -71,6 +72,16 @@ public class AnimationService {
         double camRoll = 86;
         double camPitch = 360.0 / (double) pFrames * (double) (pFrame - 1);
         double camYaw = -180 - camPitch;
+        flame.setCamRoll(camRoll);
+        flame.setCamPitch(camPitch);
+        flame.setCamYaw(camYaw);
+        flame.setCamPerspective(0.2);
+      }
+        break;
+      case ROTATE_ROLL: {
+        double camRoll = 360.0 / (double) pFrames * (double) (pFrame - 1);
+        double camPitch = 0;
+        double camYaw = 0;
         flame.setCamRoll(camRoll);
         flame.setCamPitch(camPitch);
         flame.setCamYaw(camYaw);
