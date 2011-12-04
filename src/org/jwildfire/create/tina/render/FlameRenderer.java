@@ -17,7 +17,6 @@
 package org.jwildfire.create.tina.render;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import org.jwildfire.base.Tools;
@@ -31,7 +30,6 @@ import org.jwildfire.create.tina.random.SimpleRandomNumberGenerator;
 import org.jwildfire.create.tina.swing.ProgressUpdater;
 import org.jwildfire.create.tina.variation.TransformationContext;
 import org.jwildfire.create.tina.variation.Variation;
-import org.jwildfire.create.tina.variation.VariationPriorityComparator;
 import org.jwildfire.image.Pixel;
 import org.jwildfire.image.SimpleImage;
 import org.jwildfire.transform.ScaleAspect;
@@ -322,16 +320,14 @@ public class FlameRenderer implements TransformationContext {
     int n = pFlame.getXForms().size();
     for (XForm xForm : pFlame.getXForms()) {
       xForm.initTransform();
-      Collections.sort(xForm.getVariations(), new VariationPriorityComparator());
-      for (Variation var : xForm.getVariations()) {
+      for (Variation var : xForm.getSortedVariations()) {
         var.getFunc().init(this, xForm);
       }
     }
     if (pFlame.getFinalXForm() != null) {
       XForm xForm = pFlame.getFinalXForm();
       xForm.initTransform();
-      Collections.sort(xForm.getVariations(), new VariationPriorityComparator());
-      for (Variation var : xForm.getVariations()) {
+      for (Variation var : xForm.getSortedVariations()) {
         var.getFunc().init(this, xForm);
       }
     }

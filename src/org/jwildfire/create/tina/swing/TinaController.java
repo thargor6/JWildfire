@@ -707,10 +707,12 @@ public class TinaController implements FlameHolder {
             case COL_VARIATIONS:
               {
               String hs = "";
-              for (int i = 0; i < xForm.getVariations().size() - 1; i++) {
-                hs += xForm.getVariations().get(i).getFunc().getName() + ", ";
+              if (xForm.getVariations().size() > 0) {
+                for (int i = 0; i < xForm.getVariations().size() - 1; i++) {
+                  hs += xForm.getVariations().get(i).getFunc().getName() + ", ";
+                }
+                hs += xForm.getVariations().get(xForm.getVariations().size() - 1).getFunc().getName();
               }
-              hs += xForm.getVariations().get(xForm.getVariations().size() - 1).getFunc().getName();
               return hs;
             }
             case COL_WEIGHT:
@@ -2122,11 +2124,11 @@ public class TinaController implements FlameHolder {
           var.setFunc(VariationFuncList.getVariationFuncInstance(fName));
         }
         refreshParamCmb(nonlinearControlsRows[pIdx], xForm, var);
-        //        refreshXFormUI(xForm);
-        String selected = (String) nonlinearControlsRows[pIdx].getNonlinearParamsCmb().getSelectedItem();
-        boolean enabled = selected != null && selected.length() > 0;
-        nonlinearControlsRows[pIdx].getNonlinearParamsLeftButton().setEnabled(enabled);
-        nonlinearControlsRows[pIdx].getNonlinearParamsRightButton().setEnabled(enabled);
+        refreshXFormUI(xForm);
+        //        String selected = (String) nonlinearControlsRows[pIdx].getNonlinearParamsCmb().getSelectedItem();
+        //        boolean enabled = selected != null && selected.length() > 0;
+        //        nonlinearControlsRows[pIdx].getNonlinearParamsLeftButton().setEnabled(enabled);
+        //        nonlinearControlsRows[pIdx].getNonlinearParamsRightButton().setEnabled(enabled);
         refreshFlameImage();
       }
     }
@@ -2654,6 +2656,18 @@ public class TinaController implements FlameHolder {
       transformationTableClicked();
       refreshFlameImage();
     }
+  }
+
+  public void switchFrameMode(boolean pMovieMode) {
+    if (pMovieMode) {
+      flamePanel.setRenderWidth(prefs.getTinaRenderMovieWidth());
+      flamePanel.setRenderHeight(prefs.getTinaRenderMovieHeight());
+    }
+    else {
+      flamePanel.setRenderWidth(prefs.getTinaRenderImageWidth());
+      flamePanel.setRenderHeight(prefs.getTinaRenderImageHeight());
+    }
+    refreshFlameImage();
   }
 
 }

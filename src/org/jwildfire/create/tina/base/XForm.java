@@ -17,6 +17,7 @@
 package org.jwildfire.create.tina.base;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.jwildfire.base.Tools;
@@ -24,6 +25,7 @@ import org.jwildfire.create.tina.render.AffineZStyle;
 import org.jwildfire.create.tina.variation.TransformationContext;
 import org.jwildfire.create.tina.variation.Variation;
 import org.jwildfire.create.tina.variation.VariationFunc;
+import org.jwildfire.create.tina.variation.VariationPriorityComparator;
 
 public class XForm {
   private double weight;
@@ -124,6 +126,13 @@ public class XForm {
 
   public List<Variation> getVariations() {
     return variations;
+  }
+
+  public List<Variation> getSortedVariations() {
+    List<Variation> res = new ArrayList<Variation>();
+    res.addAll(variations);
+    Collections.sort(res, new VariationPriorityComparator());
+    return res;
   }
 
   public Variation addVariation(double pAmount, VariationFunc pVariationFunc) {
