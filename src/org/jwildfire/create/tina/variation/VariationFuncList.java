@@ -113,6 +113,8 @@ public class VariationFuncList {
     registerVariationFunc(FlowerFunc.class);
     registerVariationFunc(ConicFunc.class);
     registerVariationFunc(ParabolaFunc.class);
+    registerVariationFunc(Bent2Func.class);
+    registerVariationFunc(BoardersFunc.class);
   }
 
   private static void registerVariationFunc(Class<? extends VariationFunc> pVariationFunc) {
