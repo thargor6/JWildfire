@@ -111,6 +111,8 @@ public class VariationFuncList {
     registerVariationFunc(Disc2Func.class);
     registerVariationFunc(SuperShapeFunc.class);
     registerVariationFunc(FlowerFunc.class);
+    registerVariationFunc(ConicFunc.class);
+    registerVariationFunc(ParabolaFunc.class);
   }
 
   private static void registerVariationFunc(Class<? extends VariationFunc> pVariationFunc) {
