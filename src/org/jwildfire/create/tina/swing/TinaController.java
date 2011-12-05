@@ -1470,6 +1470,31 @@ public class TinaController implements FlameHolder {
 
   }
 
+  public void grabPaletteFromFlameButton_actionPerformed(ActionEvent e) {
+    JFileChooser chooser = getFlameJFileChooser();
+    if (prefs.getInputFlamePath() != null) {
+      try {
+        chooser.setCurrentDirectory(new File(prefs.getInputFlamePath()));
+      }
+      catch (Exception ex) {
+        ex.printStackTrace();
+      }
+    }
+    if (chooser.showOpenDialog(centerPanel) == JFileChooser.APPROVE_OPTION) {
+      File file = chooser.getSelectedFile();
+      List<Flame> flames = new Flam3Reader().readFlames(file.getAbsolutePath());
+      Flame flame = flames.get(0);
+      prefs.setLastInputFlameFile(file);
+      RGBPalette palette = flame.getPalette();
+      paletteKeyFrames = null;
+      Flame currFlame = getCurrFlame();
+      currFlame.setPalette(palette);
+      refreshPaletteColorsTable();
+      refreshPaletteUI(palette);
+      refreshFlameImage();
+    }
+  }
+
   public void paletteRedREd_changed() {
     paletteTextFieldChanged(paletteRedSlider, paletteRedREd, "modRed", 1.0);
   }

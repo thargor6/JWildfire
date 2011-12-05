@@ -519,6 +519,7 @@ public class TinaInternalFrame extends JInternalFrame implements ProgressUpdater
   private JButton nonlinarVar12RightButton = null;
   private JButton nonlinearParams12LeftButton = null;
   private JButton nonlinarParams12RightButton = null;
+  private JButton tinaGrabPaletteFromFlameButton = null;
 
   /**
    * This is the xxx default constructor
@@ -2340,6 +2341,7 @@ public class TinaInternalFrame extends JInternalFrame implements ProgressUpdater
       tinaPaletteCreatePanel.add(getTinaRandomPaletteButton(), null);
       tinaPaletteCreatePanel.add(getCreateRandomPointsPanel(), null);
       tinaPaletteCreatePanel.add(getCreatePaletteTablePanel(), null);
+      tinaPaletteCreatePanel.add(getTinaGrabPaletteFromFlameButton(), null);
       tinaPaletteCreatePanel.add(getTinaGrabPaletteFromImageButton(), null);
     }
     return tinaPaletteCreatePanel;
@@ -7455,6 +7457,26 @@ public class TinaInternalFrame extends JInternalFrame implements ProgressUpdater
       });
     }
     return nonlinarParams12RightButton;
+  }
+
+  /**
+   * This method initializes tinaGrabPaletteFromFlameButton	
+   * 	
+   * @return javax.swing.JButton	
+   */
+  private JButton getTinaGrabPaletteFromFlameButton() {
+    if (tinaGrabPaletteFromFlameButton == null) {
+      tinaGrabPaletteFromFlameButton = new JButton();
+      tinaGrabPaletteFromFlameButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      tinaGrabPaletteFromFlameButton.setText("Grab from flame");
+      tinaGrabPaletteFromFlameButton.setPreferredSize(new Dimension(180, 24));
+      tinaGrabPaletteFromFlameButton.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent e) {
+          tinaController.grabPaletteFromFlameButton_actionPerformed(e);
+        }
+      });
+    }
+    return tinaGrabPaletteFromFlameButton;
   }
 
 } //  @jve:decl-index=0:visual-constraint="10,10"
