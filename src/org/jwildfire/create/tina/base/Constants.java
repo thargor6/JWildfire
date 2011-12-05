@@ -24,6 +24,7 @@ public class Constants {
 
   public final static double M_PI = Math.PI;
   public final static double M_PI_2 = M_PI * 0.5;
+  public final static double M_PI_4 = M_PI * 0.25;
   public final static double M_1_PI = 1.0 / M_PI;
   public final static double M_2_PI = 2.0 / M_PI;
 
