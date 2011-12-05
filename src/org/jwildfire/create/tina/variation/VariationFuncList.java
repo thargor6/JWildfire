@@ -105,6 +105,8 @@ public class VariationFuncList {
     registerVariationFunc(NgonFunc.class);
     registerVariationFunc(TEpispiralFunc.class);
     registerVariationFunc(TRoseFunc.class);
+    registerVariationFunc(RaysFunc.class);
+    registerVariationFunc(TwintrianFunc.class);
   }
 
   private static void registerVariationFunc(Class<? extends VariationFunc> pVariationFunc) {
