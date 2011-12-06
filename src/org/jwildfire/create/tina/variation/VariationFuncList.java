@@ -124,6 +124,8 @@ public class VariationFuncList {
     registerVariationFunc(LazySusanFunc.class);
     registerVariationFunc(ExpFunc.class);
     registerVariationFunc(LogFunc.class);
+    registerVariationFunc(SinFunc.class);
+    registerVariationFunc(CosFunc.class);
   }
 
   private static void registerVariationFunc(Class<? extends VariationFunc> pVariationFunc) {
