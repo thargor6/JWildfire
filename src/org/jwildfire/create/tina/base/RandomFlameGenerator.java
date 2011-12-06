@@ -27,12 +27,12 @@ public class RandomFlameGenerator {
       "spherical3D", "spiral", "rectangles", "blur", "waves", "swirl", "secant2" };
 
   private static final String FNCLST_EXPERIMENTAL[] = { "blur3D", "bubble", "escher", "rays", "t_epispiral", "curl3D", "diamond",
-      "disc", "sech", "loonie", "exp", "cosh", "split", "wedge_sph",
+      "disc", "sech", "loonie", "exp", "cosh", "split", "wedge_sph", "circlize",
       "butterfly3D", "cpow", "conic", "julia3D", "fan2", "cell", "stripes",
-      "flower", "heart", "julia3D", "disc2", "polar2", "foci", "scry",
+      "flower", "heart", "julia3D", "disc2", "polar2", "foci", "scry", "flux",
       "hemisphere", "popcorn2", "sec", "lazysusan", "sin", "separation",
       "t_rose", "edisc", "waves2", "twintrian", "coth", "super_shape", "auger",
-      "tanh", "bipolar", "cot", "horseshoe", "wedge", "sinh", "modulus",
+      "tanh", "bipolar", "cot", "horseshoe", "wedge", "sinh", "modulus", "mobius",
       "cross", "tangent3D", "csc", "curve", "csch", "bent2", "splits", "whorl",
       "tan", "blob3D", "julia3D", "log", "cos", "oscilloscope", "wedge_julia",
       "pdj", "popcorn", "parabola", "rings2", "spherical3D", "spiral", "rectangles", "elliptic", "waves", "swirl", "boarders", "secant2" };

@@ -147,6 +147,9 @@ public class VariationFuncList {
     registerVariationFunc(WedgeSphFunc.class);
     registerVariationFunc(WhorlFunc.class);
     registerVariationFunc(AugerFunc.class);
+    registerVariationFunc(FluxFunc.class);
+    registerVariationFunc(MobiusFunc.class);
+    registerVariationFunc(CirclizeFunc.class);
   }
 
   private static void registerVariationFunc(Class<? extends VariationFunc> pVariationFunc) {
