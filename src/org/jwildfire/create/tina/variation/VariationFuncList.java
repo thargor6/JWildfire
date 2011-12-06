@@ -122,7 +122,8 @@ public class VariationFuncList {
     registerVariationFunc(EllipticFunc.class);
     registerVariationFunc(EscherFunc.class);
     registerVariationFunc(LazySusanFunc.class);
-    registerVariationFunc(LoonieFunc.class);
+    registerVariationFunc(ExpFunc.class);
+    registerVariationFunc(LogFunc.class);
   }
 
   private static void registerVariationFunc(Class<? extends VariationFunc> pVariationFunc) {
