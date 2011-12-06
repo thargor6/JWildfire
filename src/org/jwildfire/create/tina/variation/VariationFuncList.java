@@ -134,6 +134,11 @@ public class VariationFuncList {
     registerVariationFunc(CoshFunc.class);
     registerVariationFunc(TanhFunc.class);
     registerVariationFunc(SechFunc.class);
+    registerVariationFunc(CschFunc.class);
+    registerVariationFunc(CothFunc.class);
+    registerVariationFunc(ModulusFunc.class);
+    registerVariationFunc(LoonieFunc.class);
+    registerVariationFunc(OscilloscopeFunc.class);
   }
 
   private static void registerVariationFunc(Class<? extends VariationFunc> pVariationFunc) {
@@ -161,6 +166,10 @@ public class VariationFuncList {
   }
 
   public static VariationFunc getVariationFuncInstance(String pName) {
+    return getVariationFuncInstance(pName, false);
+  }
+
+  public static VariationFunc getVariationFuncInstance(String pName, boolean pFatal) {
     int idx = getNameList().indexOf(pName);
     if (idx >= 0) {
       Class<? extends VariationFunc> funcCls = items.get(idx);
@@ -171,6 +180,9 @@ public class VariationFuncList {
       catch (Throwable e) {
         e.printStackTrace();
       }
+    }
+    if (pFatal) {
+      throw new IllegalArgumentException(pName);
     }
     return null;
   }

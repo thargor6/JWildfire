@@ -31,10 +31,10 @@ public class RandomFlameGenerator {
       "butterfly3D", "cpow", "conic", "julia3D", "fan2", "cell",
       "flower", "heart", "julia3D", "disc2", "polar2", "foci", "scry",
       "hemisphere", "popcorn2", "sec", "lazysusan", "sin",
-      "t_rose", "edisc", "waves2", "twintrian", "super_shape",
-      "tanh", "bipolar", "cot", "horseshoe", "wedge", "sinh",
-      "cross", "tangent3D", "csc", "curve", "bent2",
-      "tan", "blob3D", "julia3D", "log", "cos",
+      "t_rose", "edisc", "waves2", "twintrian", "coth", "super_shape",
+      "tanh", "bipolar", "cot", "horseshoe", "wedge", "sinh", "modulus",
+      "cross", "tangent3D", "csc", "curve", "csch", "bent2",
+      "tan", "blob3D", "julia3D", "log", "cos", "oscilloscope",
       "pdj", "popcorn", "parabola", "rings2", "spherical3D", "spiral", "rectangles", "elliptic", "waves", "swirl", "boarders", "secant2" };
 
   private static final String FNCLST_3D[] = { "blur3D", "julia3D", "curl3D", "butterfly3D", "julia3D",
@@ -119,7 +119,7 @@ public class RandomFlameGenerator {
         scl *= 0.75 + Math.random() / 4;
         XFormTransformService.scale(xForm, scl, true);
         int fncIdx = (int) (Math.random() * fnc.length);
-        xForm.addVariation(Math.random() * 0.9 + 0.1, VariationFuncList.getVariationFuncInstance(fnc[fncIdx]));
+        xForm.addVariation(Math.random() * 0.9 + 0.1, VariationFuncList.getVariationFuncInstance(fnc[fncIdx], true));
         xForm.setColor(Math.random());
       }
     }
@@ -156,7 +156,7 @@ public class RandomFlameGenerator {
       if (Math.random() > 0.33) {
         String[] fnc = FNCLST_ORIGINAL;
         int fncIdx = (int) (Math.random() * fnc.length);
-        xForm.addVariation(Math.random() * 0.5, VariationFuncList.getVariationFuncInstance(fnc[fncIdx]));
+        xForm.addVariation(Math.random() * 0.5, VariationFuncList.getVariationFuncInstance(fnc[fncIdx], true));
       }
 
       xForm.setWeight(Math.random() * 0.9 + 0.1);
@@ -226,7 +226,7 @@ public class RandomFlameGenerator {
       if (Math.random() > 0.1) {
         String[] fnc = FNCLST_EXPERIMENTAL;
         int fncIdx = (int) (Math.random() * fnc.length);
-        xForm.addVariation(0.2 + Math.random() * 0.6, VariationFuncList.getVariationFuncInstance(fnc[fncIdx]));
+        xForm.addVariation(0.2 + Math.random() * 0.6, VariationFuncList.getVariationFuncInstance(fnc[fncIdx], true));
       }
 
       xForm.setWeight(Math.random() * 0.9 + 0.1);
@@ -263,7 +263,7 @@ public class RandomFlameGenerator {
       if (Math.random() > 0.1) {
         String[] fnc = FNCLST_3D;
         int fncIdx = (int) (Math.random() * fnc.length);
-        xForm.addVariation(Math.random() * 0.4 + 0.1, VariationFuncList.getVariationFuncInstance(fnc[fncIdx]));
+        xForm.addVariation(Math.random() * 0.4 + 0.1, VariationFuncList.getVariationFuncInstance(fnc[fncIdx], true));
       }
 
       xForm.setWeight(Math.random() * 0.9 + 0.1);
