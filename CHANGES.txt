@@ -1,3 +1,32 @@
+V0.23 (06.12.2011):
+ - Fractal flame editor: circlize, flux and mobius variation
+ - Fractal flame editor: auger, wedge_julia, wedge_sph and whorl variation
+ - Fractal flame editor: separation, split, splits and stripes variation
+ - Fractal flame editor: coth, csch, modulus and oscilloscope variation
+ - Fractal flame editor: cosh, sech, sinh and tanh variation
+ - Fractal flame editor: cot, csc, sec and tan variation
+ - Fractal flame editor: sin and cos variation
+ - Fractal flame editor: exp and log variation
+ - Fractal flame editor: lazysusan and loonie variation
+ - Fractal flame editor: elliptic and escher variation
+ - Fractal flame editor: curve and edisc variation
+ - Fractal flame editor: cell and cpow variation
+ - Fractal flame editor: allow to import palettes from existing flames
+ - Fractal flame editor: bent2 and boarders variation
+ - Fractal flame editor: conic and parabola variation
+ - Fractal flame editor: supershape and flower variation
+ - Fractal flame editor: disc2 and foci variation
+ - Fractal flame editor: upto 12 nonlinear variations may be edited now
+ - Fractal flame editor: rays and twintrian variation
+ - Fractal flame editor: t_rose and t_epispiral variation
+ - Fractal flame editor: ngon and secant2 variation
+ - Fractal flame editor: some UI related bugs fixed
+ - Fractal flame editor: popcorn2 variation, movie/image display mode
+ - Fractal flame editor: polar2 variation, precalculation of properties clarified
+ - Fractal flame editor: prefs for movie rendering
+ - FIXED: Fractal flame editor: bubble variation was broken
+
+
 V0.22 (03.12.2011):
  - Fractal flame editor: waves2 variation
  - Fractal flame editor: simplified interface, three basic sets of prefs: for preview, normal and high quality rendering
