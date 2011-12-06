@@ -143,6 +143,10 @@ public class VariationFuncList {
     registerVariationFunc(SplitFunc.class);
     registerVariationFunc(SplitsFunc.class);
     registerVariationFunc(StripesFunc.class);
+    registerVariationFunc(WedgeJuliaFunc.class);
+    registerVariationFunc(WedgeSphFunc.class);
+    registerVariationFunc(WhorlFunc.class);
+    registerVariationFunc(AugerFunc.class);
   }
 
   private static void registerVariationFunc(Class<? extends VariationFunc> pVariationFunc) {
