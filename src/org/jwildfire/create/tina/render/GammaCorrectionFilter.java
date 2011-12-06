@@ -151,6 +151,8 @@ public class GammaCorrectionFilter {
     blue = blue + ((inverseAlphaInt * bgBlue) >> 8);
     if (blue < 0)
       blue = 0;
+    else if (blue > 255)
+      blue = 255;
 
     pRGBPoint.red = red;
     pRGBPoint.green = green;

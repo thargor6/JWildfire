@@ -115,6 +115,8 @@ public class VariationFuncList {
     registerVariationFunc(ParabolaFunc.class);
     registerVariationFunc(Bent2Func.class);
     registerVariationFunc(BoardersFunc.class);
+    registerVariationFunc(CellFunc.class);
+    registerVariationFunc(CPowFunc.class);
   }
 
   private static void registerVariationFunc(Class<? extends VariationFunc> pVariationFunc) {
