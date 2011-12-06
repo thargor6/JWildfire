@@ -139,6 +139,10 @@ public class VariationFuncList {
     registerVariationFunc(ModulusFunc.class);
     registerVariationFunc(LoonieFunc.class);
     registerVariationFunc(OscilloscopeFunc.class);
+    registerVariationFunc(SeparationFunc.class);
+    registerVariationFunc(SplitFunc.class);
+    registerVariationFunc(SplitsFunc.class);
+    registerVariationFunc(StripesFunc.class);
   }
 
   private static void registerVariationFunc(Class<? extends VariationFunc> pVariationFunc) {
