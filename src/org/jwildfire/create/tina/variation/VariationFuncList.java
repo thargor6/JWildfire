@@ -126,6 +126,10 @@ public class VariationFuncList {
     registerVariationFunc(LogFunc.class);
     registerVariationFunc(SinFunc.class);
     registerVariationFunc(CosFunc.class);
+    registerVariationFunc(TanFunc.class);
+    registerVariationFunc(SecFunc.class);
+    registerVariationFunc(CscFunc.class);
+    registerVariationFunc(CotFunc.class);
   }
 
   private static void registerVariationFunc(Class<? extends VariationFunc> pVariationFunc) {
