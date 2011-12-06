@@ -28,7 +28,7 @@ public class RandomFlameGenerator {
 
   private static final String FNCLST_EXPERIMENTAL[] = { "blur3D", "bubble", "rays", "t_epispiral", "curl3D", "diamond", "disc",
       "butterfly3D", "cpow", "conic", "julia3D", "fan2", "cell", "flower", "heart", "julia3D", "disc2", "polar2", "foci", "scry", "hemisphere", "popcorn2",
-      "t_rose", "waves2", "twintrian", "super_shape", "bipolar", "horseshoe", "wedge", "cross", "tangent3D", "bent2", "blob3D", "julia3D",
+      "t_rose", "edisc", "waves2", "twintrian", "super_shape", "bipolar", "horseshoe", "wedge", "cross", "tangent3D", "curve", "bent2", "blob3D", "julia3D",
       "pdj", "popcorn", "parabola", "rings2", "spherical3D", "spiral", "rectangles", "waves", "swirl", "boarders", "secant2" };
 
   private static final String FNCLST_3D[] = { "blur3D", "julia3D", "curl3D", "butterfly3D", "julia3D",

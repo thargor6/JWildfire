@@ -117,6 +117,8 @@ public class VariationFuncList {
     registerVariationFunc(BoardersFunc.class);
     registerVariationFunc(CellFunc.class);
     registerVariationFunc(CPowFunc.class);
+    registerVariationFunc(CurveFunc.class);
+    registerVariationFunc(EDiscFunc.class);
   }
 
   private static void registerVariationFunc(Class<? extends VariationFunc> pVariationFunc) {
