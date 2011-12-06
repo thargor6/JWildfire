@@ -1,0 +1,76 @@
+/*
+  JWildfire - an image and animation processor written in Java 
+  Copyright (C) 1995-2011 Andreas Maschke
+
+  This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
+  General Public License as published by the Free Software Foundation; either version 2.1 of the 
+  License, or (at your option) any later version.
+ 
+  This software is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without 
+  even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU 
+  Lesser General Public License for more details.
+
+  You should have received a copy of the GNU Lesser General Public License along with this software; 
+  if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+  02110-1301 USA, or see the FSF site: http://www.fsf.org.
+*/
+package org.jwildfire.create.tina.variation;
+
+import org.jwildfire.create.tina.base.XForm;
+import org.jwildfire.create.tina.base.XYZPoint;
+
+public class EscherFunc extends VariationFunc {
+
+  private static final String PARAM_BETA = "beta";
+
+  private static final String[] paramNames = { PARAM_BETA };
+
+  private double beta = 0.30;
+
+  @Override
+  public void transform(TransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
+    /* Escher in the Apophysis Plugin Pack */
+
+    double a = pAffineTP.getPrecalcAtanYX();
+    double lnr = 0.5 * Math.log(pAffineTP.getPrecalcSumsq());
+
+    double seb = Math.sin(beta);
+    double ceb = Math.cos(beta);
+
+    double vc = 0.5 * (1.0 + ceb);
+    double vd = 0.5 * seb;
+
+    double m = pAmount * Math.exp(vc * lnr - vd * a);
+    double n = vc * a + vd * lnr;
+
+    double sn = Math.sin(n);
+    double cn = Math.cos(n);
+
+    pVarTP.x += m * cn;
+    pVarTP.y += m * sn;
+  }
+
+  @Override
+  public String[] getParameterNames() {
+    return paramNames;
+  }
+
+  @Override
+  public Object[] getParameterValues() {
+    return new Object[] { beta };
+  }
+
+  @Override
+  public void setParameter(String pName, double pValue) {
+    if (PARAM_BETA.equalsIgnoreCase(pName))
+      beta = pValue;
+    else
+      throw new IllegalArgumentException(pName);
+  }
+
+  @Override
+  public String getName() {
+    return "escher";
+  }
+
+}

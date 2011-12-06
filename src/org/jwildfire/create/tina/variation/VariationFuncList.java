@@ -119,6 +119,8 @@ public class VariationFuncList {
     registerVariationFunc(CPowFunc.class);
     registerVariationFunc(CurveFunc.class);
     registerVariationFunc(EDiscFunc.class);
+    registerVariationFunc(EllipticFunc.class);
+    registerVariationFunc(EscherFunc.class);
   }
 
   private static void registerVariationFunc(Class<? extends VariationFunc> pVariationFunc) {
