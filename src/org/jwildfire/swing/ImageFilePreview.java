@@ -45,15 +45,17 @@ public class ImageFilePreview extends JComponent implements PropertyChangeListen
       currThumbnail = null;
       return;
     }
-    ImageIcon tmpIcon = new ImageIcon(currFile.getPath());
-    if (tmpIcon != null) {
-      if (tmpIcon.getIconWidth() > THUMBNAIL_WIDTH) {
-        currThumbnail = new ImageIcon(tmpIcon.getImage().
+    if (currFile.exists()) {
+      ImageIcon tmpIcon = new ImageIcon(currFile.getPath());
+      if (tmpIcon != null) {
+        if (tmpIcon.getIconWidth() > THUMBNAIL_WIDTH) {
+          currThumbnail = new ImageIcon(tmpIcon.getImage().
                                     getScaledInstance(THUMBNAIL_WIDTH, -1,
                                                 Image.SCALE_DEFAULT));
-      }
-      else {
-        currThumbnail = tmpIcon;
+        }
+        else {
+          currThumbnail = tmpIcon;
+        }
       }
     }
 

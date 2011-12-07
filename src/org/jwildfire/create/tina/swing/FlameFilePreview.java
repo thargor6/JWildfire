@@ -53,29 +53,30 @@ public class FlameFilePreview extends JComponent implements PropertyChangeListen
       return;
     }
     try {
-      List<Flame> flames = new Flam3Reader().readFlames(currFile.getAbsolutePath());
-      Flame flame = flames.get(0);
-      int imgWidth = this.getPreferredSize().width;
-      int imgHeight = this.getPreferredSize().height;
+      if (currFile.exists()) {
+        List<Flame> flames = new Flam3Reader().readFlames(currFile.getAbsolutePath());
+        Flame flame = flames.get(0);
+        int imgWidth = this.getPreferredSize().width;
+        int imgHeight = this.getPreferredSize().height;
 
-      double wScl = (double) imgWidth / (double) flame.getWidth();
-      double hScl = (double) imgHeight / (double) flame.getHeight();
-      flame.setPixelsPerUnit((wScl + hScl) * 0.5 * flame.getPixelsPerUnit());
-      flame.setWidth(imgWidth);
-      flame.setHeight(imgHeight);
+        double wScl = (double) imgWidth / (double) flame.getWidth();
+        double hScl = (double) imgHeight / (double) flame.getHeight();
+        flame.setPixelsPerUnit((wScl + hScl) * 0.5 * flame.getPixelsPerUnit());
+        flame.setWidth(imgWidth);
+        flame.setHeight(imgHeight);
 
-      FlameRenderer renderer = new FlameRenderer();
-      renderer.setProgressUpdater(null);
-      flame.setSampleDensity(50);
-      flame.setSpatialFilterRadius(0.0);
-      flame.setSpatialOversample(1);
-      flame.setColorOversample(2);
-      renderer.setAffineZStyle(AffineZStyle.FLAT);
-      SimpleImage img = new SimpleImage(imgWidth, imgHeight);
-      renderer.renderFlame(flame, img, prefs.getTinaRenderThreads());
+        FlameRenderer renderer = new FlameRenderer();
+        renderer.setProgressUpdater(null);
+        flame.setSampleDensity(50);
+        flame.setSpatialFilterRadius(0.0);
+        flame.setSpatialOversample(1);
+        flame.setColorOversample(2);
+        renderer.setAffineZStyle(AffineZStyle.FLAT);
+        SimpleImage img = new SimpleImage(imgWidth, imgHeight);
+        renderer.renderFlame(flame, img, prefs.getTinaRenderThreads());
 
-      currThumbnail = new ImageIcon(img.getBufferedImg());
-
+        currThumbnail = new ImageIcon(img.getBufferedImg());
+      }
     }
     catch (Exception ex) {
       currThumbnail = null;

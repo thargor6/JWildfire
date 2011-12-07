@@ -150,6 +150,7 @@ public class VariationFuncList {
     registerVariationFunc(FluxFunc.class);
     registerVariationFunc(MobiusFunc.class);
     registerVariationFunc(CirclizeFunc.class);
+    registerVariationFunc(TPostMirrorFunc.class);
   }
 
   private static void registerVariationFunc(Class<? extends VariationFunc> pVariationFunc) {
