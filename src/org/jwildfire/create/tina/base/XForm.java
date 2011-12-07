@@ -198,7 +198,7 @@ public class XForm {
         throw new IllegalStateException(pZStyle.toString());
     }
     pVarT.clear();
-    for (Variation variation : variations) {
+    for (Variation variation : getSortedVariations()) {
       variation.transform(pContext, this, pAffineT, pVarT);
       if (variation.getFunc().getPriority() < 0) {
         pAffineT.invalidate();
