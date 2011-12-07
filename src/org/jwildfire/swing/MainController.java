@@ -89,31 +89,7 @@ public class MainController {
     return actionList;
   }
 
-  // private JFileChooser jImageFileChooser = null;
   private JFileChooser jScriptFileChooser = null;
-
-  private JFileChooser getImageJFileChooser() {
-    /*
-     * if (jImageFileChooser == null) { jImageFileChooser = new
-     * JFileChooser(); jImageFileChooser.addChoosableFileFilter(new
-     * ImageFileFilter());
-     * jImageFileChooser.setAcceptAllFileFilterUsed(false); } return
-     * jImageFileChooser;
-     */
-    JFileChooser fileChooser = new DefaultFileChooser() {
-
-      private static final long serialVersionUID = 1L;
-
-      @Override
-      protected String getDefaultExtension() {
-        return Tools.FILEEXT_PNG;
-      }
-
-    };
-    fileChooser.addChoosableFileFilter(new ImageFileFilter());
-    fileChooser.setAcceptAllFileFilterUsed(false);
-    return fileChooser;
-  }
 
   private JFileChooser getScriptJFileChooser() {
     if (jScriptFileChooser == null) {
@@ -175,7 +151,7 @@ public class MainController {
   }
 
   public Buffer loadImage(boolean pRecordAction) throws Exception {
-    JFileChooser chooser = getImageJFileChooser();
+    JFileChooser chooser = new ImageFileChooser();
     if (prefs.getInputImagePath() != null) {
       try {
         chooser.setCurrentDirectory(new File(prefs.getInputImagePath()));
@@ -317,7 +293,7 @@ public class MainController {
   public void saveImage() throws Exception {
     Buffer buffer = getActiveBuffer();
     if (buffer != null) {
-      JFileChooser chooser = getImageJFileChooser();
+      JFileChooser chooser = new ImageFileChooser();
       if (prefs.getOutputImagePath() != null) {
         try {
           chooser.setCurrentDirectory(new File(prefs.getOutputImagePath()));

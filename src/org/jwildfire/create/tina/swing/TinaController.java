@@ -40,7 +40,6 @@ import javax.swing.JTextField;
 import javax.swing.JToggleButton;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.event.ChangeEvent;
-import javax.swing.filechooser.FileFilter;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
@@ -73,9 +72,8 @@ import org.jwildfire.image.Pixel;
 import org.jwildfire.image.SimpleImage;
 import org.jwildfire.io.ImageReader;
 import org.jwildfire.io.ImageWriter;
-import org.jwildfire.swing.DefaultFileChooser;
 import org.jwildfire.swing.ErrorHandler;
-import org.jwildfire.swing.ImageFileFilter;
+import org.jwildfire.swing.ImageFileChooser;
 import org.jwildfire.swing.ImagePanel;
 import org.jwildfire.swing.MainController;
 
@@ -1238,51 +1236,8 @@ public class TinaController implements FlameHolder {
     refreshFlameImage((AffineZStyle) zStyleCmb.getSelectedItem(), false);
   }
 
-  public class FlameFileFilter extends FileFilter {
-
-    @Override
-    public boolean accept(File pFile) {
-      if (pFile.isDirectory())
-        return true;
-      String extension = getExtension(pFile);
-      return (extension != null)
-          && (extension.equals("flame") || extension.equals("xml"));
-    }
-
-    @Override
-    public String getDescription() {
-      return "Supported flame files";
-    }
-
-    private String getExtension(File pFile) {
-      String name = pFile.getName();
-      int idx = name.lastIndexOf('.');
-      if (idx > 0 && idx < name.length() - 1) {
-        return name.substring(idx + 1).toLowerCase();
-      }
-      return null;
-    }
-
-  }
-
-  private JFileChooser getFlameJFileChooser() {
-    JFileChooser fileChooser = new DefaultFileChooser() {
-
-      private static final long serialVersionUID = 1L;
-
-      @Override
-      protected String getDefaultExtension() {
-        return Tools.FILEEXT_FLAME;
-      }
-
-    };
-    fileChooser.addChoosableFileFilter(new FlameFileFilter());
-    fileChooser.setAcceptAllFileFilterUsed(false);
-    return fileChooser;
-  }
-
   public void loadFlameButton_actionPerformed(ActionEvent e) {
-    JFileChooser chooser = getFlameJFileChooser();
+    JFileChooser chooser = new FlameFileChooser(prefs);
     if (prefs.getInputFlamePath() != null) {
       try {
         chooser.setCurrentDirectory(new File(prefs.getInputFlamePath()));
@@ -1432,24 +1387,9 @@ public class TinaController implements FlameHolder {
     }
   }
 
-  private JFileChooser getImageJFileChooser() {
-    JFileChooser fileChooser = new DefaultFileChooser() {
-      private static final long serialVersionUID = 1L;
-
-      @Override
-      protected String getDefaultExtension() {
-        return Tools.FILEEXT_PNG;
-      }
-
-    };
-    fileChooser.addChoosableFileFilter(new ImageFileFilter());
-    fileChooser.setAcceptAllFileFilterUsed(false);
-    return fileChooser;
-  }
-
   public void grabPaletteFromImageButton_actionPerformed(ActionEvent e) {
     try {
-      JFileChooser chooser = getImageJFileChooser();
+      JFileChooser chooser = new ImageFileChooser();
       chooser.setCurrentDirectory(new File(prefs.getInputImagePath()));
       if (chooser.showOpenDialog(centerPanel) == JFileChooser.APPROVE_OPTION) {
         File file = chooser.getSelectedFile();
@@ -1471,7 +1411,7 @@ public class TinaController implements FlameHolder {
   }
 
   public void grabPaletteFromFlameButton_actionPerformed(ActionEvent e) {
-    JFileChooser chooser = getFlameJFileChooser();
+    JFileChooser chooser = new FlameFileChooser(prefs);
     if (prefs.getInputFlamePath() != null) {
       try {
         chooser.setCurrentDirectory(new File(prefs.getInputFlamePath()));
@@ -1571,7 +1511,7 @@ public class TinaController implements FlameHolder {
     Flame currFlame = getCurrFlame();
     if (currFlame != null) {
       try {
-        JFileChooser chooser = getImageJFileChooser();
+        JFileChooser chooser = new ImageFileChooser();
         if (prefs.getOutputImagePath() != null) {
           try {
             chooser.setCurrentDirectory(new File(prefs.getOutputImagePath()));
@@ -1635,7 +1575,7 @@ public class TinaController implements FlameHolder {
   public void saveFlameButton_actionPerformed(ActionEvent e) {
     Flame currFlame = getCurrFlame();
     if (currFlame != null) {
-      JFileChooser chooser = getFlameJFileChooser();
+      JFileChooser chooser = new FlameFileChooser(prefs);
       if (prefs.getOutputFlamePath() != null) {
         try {
           chooser.setCurrentDirectory(new File(prefs.getOutputFlamePath()));
