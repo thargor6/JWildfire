@@ -1,3 +1,9 @@
+V0.24 (08.12.2011):
+  - Fractal flame editor: t-pre-wave3D variation
+  - Fractal flame editor: t_post_mirror variation
+  - FIXED: Fractal flame editor: order of variation execution was broken
+  - Preview for flame and image file chooser
+
 V0.23 (06.12.2011):
  - Fractal flame editor: circlize, flux and mobius variation
  - Fractal flame editor: auger, wedge_julia, wedge_sph and whorl variation
