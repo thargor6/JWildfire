@@ -151,6 +151,7 @@ public class VariationFuncList {
     registerVariationFunc(MobiusFunc.class);
     registerVariationFunc(CirclizeFunc.class);
     registerVariationFunc(TPostMirrorFunc.class);
+    registerVariationFunc(TPreWave3DFunc.class);
   }
 
   private static void registerVariationFunc(Class<? extends VariationFunc> pVariationFunc) {

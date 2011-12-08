@@ -32,7 +32,7 @@ public class Flam3Writer {
     SimpleXMLBuilder xb = new SimpleXMLBuilder();
     // Flame
     xb.beginElement("flame",
-        xb.createAttr("name", "T.I.N.A"),
+        xb.createAttr("name", "JWildfire"),
         xb.createAttr("version", Tools.APP_VERSION),
         xb.createAttr("size", pFlame.getWidth() + " " + pFlame.getHeight()),
         xb.createAttr("center", pFlame.getCentreX() + " " + pFlame.getCentreY()),

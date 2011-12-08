@@ -31,14 +31,14 @@ public class RandomFlameGenerator {
       "butterfly3D", "cpow", "conic", "julia3D", "fan2", "cell", "stripes", "t_post_mirror",
       "flower", "heart", "julia3D", "disc2", "polar2", "foci", "scry", "flux",
       "hemisphere", "popcorn2", "sec", "lazysusan", "sin", "separation", "t_post_mirror",
-      "t_rose", "edisc", "waves2", "twintrian", "coth", "super_shape", "auger",
+      "t_rose", "edisc", "waves2", "twintrian", "coth", "super_shape", "auger", "t_pre_wave3D",
       "tanh", "bipolar", "cot", "horseshoe", "wedge", "sinh", "modulus", "mobius",
       "cross", "tangent3D", "csc", "curve", "csch", "bent2", "splits", "whorl", "t_post_mirror",
       "tan", "blob3D", "julia3D", "log", "cos", "oscilloscope", "wedge_julia",
       "pdj", "popcorn", "parabola", "rings2", "spherical3D", "spiral", "rectangles", "elliptic", "waves", "swirl", "boarders", "secant2" };
 
   private static final String FNCLST_3D[] = { "blur3D", "julia3D", "curl3D", "butterfly3D", "julia3D",
-      "julia3D", "blade3D", "hemisphere", "blob3D", "tangent3D", "square3D", "julia3D", "pie3D", "pdj",
+      "julia3D", "blade3D", "hemisphere", "blob3D", "t_pre_wave3D", "tangent3D", "square3D", "julia3D", "pie3D", "pdj",
       "spherical3D", "julia3Dz" };
 
   public Flame createFlame(RandomFlameGeneratorStyle pStyle, boolean pWithSymmetry, boolean pWithPostTransforms) {
