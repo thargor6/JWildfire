@@ -214,19 +214,19 @@ public class HSLTransformer extends Mesh2DTransformer {
       min = max;
     */
     hslPixel.luminosity = (min + max) / 2.0;
-    if (Math.abs(hslPixel.luminosity) <= Tools.ZERO)
+    if (Math.abs(hslPixel.luminosity) <= Tools.EPSILON)
       return;
     hslPixel.saturation = max - min;
 
-    if (Math.abs(hslPixel.saturation) <= Tools.ZERO)
+    if (Math.abs(hslPixel.saturation) <= Tools.EPSILON)
       return;
 
     hslPixel.saturation /= ((hslPixel.luminosity) <= 0.5) ? (min + max) : (2.0 - max - min);
-    if (Math.abs(r - max) < Tools.ZERO) {
+    if (Math.abs(r - max) < Tools.EPSILON) {
       hslPixel.hue = ((g == min) ? 5.0 + (max - b) / (max - min) : 1.0 - (max - g) / (max - min));
     }
     else {
-      if (Math.abs(g - max) < Tools.ZERO) {
+      if (Math.abs(g - max) < Tools.EPSILON) {
         hslPixel.hue = ((b == min) ? 1.0 + (max - r) / (max - min) : 3.0 - (max - b) / (max - min));
       }
       else {

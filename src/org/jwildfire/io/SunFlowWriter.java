@@ -154,12 +154,12 @@ public class SunFlowWriter {
       sb.append("  " + Tools.doubleToString(x[i] * scl) + " " + Tools.doubleToString(y[i] * scl) + " " + Tools.doubleToString(-z[i] * scl) + "\n");
     }
     xSize = xMax - xMin;
-    if (xSize < Tools.ZERO) {
-      xSize = Tools.ZERO;
+    if (xSize < Tools.EPSILON) {
+      xSize = Tools.EPSILON;
     }
     ySize = yMax - yMin;
-    if (ySize < Tools.ZERO) {
-      ySize = Tools.ZERO;
+    if (ySize < Tools.EPSILON) {
+      ySize = Tools.EPSILON;
     }
 
     // triangles
@@ -195,7 +195,7 @@ public class SunFlowWriter {
       double nfy = vaz * vbx - vax * vbz;
       double nfz = vax * vby - vay * vbx;
       double rr = Math.sqrt(nfx * nfx + nfy * nfy + nfz * nfz);
-      if (Math.abs(rr) <= Tools.ZERO) {
+      if (Math.abs(rr) <= Tools.EPSILON) {
         nfx = nfy = 0.0;
         nfz = -1.0;
       }

@@ -40,7 +40,6 @@ public class Tools {
   public static final String APP_VERSION = "0.24 (08.12.2011)";
 
   public static final double EPSILON = 0.00000001;
-  public static final double ZERO = 0.0001;
   public static final int VPREC = 1024;
   public static final int SPREC = 10;
   private static final Pixel toolPixel = new Pixel();

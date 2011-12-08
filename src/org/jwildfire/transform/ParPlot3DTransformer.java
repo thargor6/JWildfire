@@ -100,7 +100,7 @@ public class ParPlot3DTransformer extends Mesh3DTransformer {
     double oriZSize = oriZMax - oriZMin;
     double oriZScale = oriZSize / Math.sqrt(width * width + height * height);
     for (int i = 0; i < pCount; i++) {
-      double zz = oriZSize > Tools.ZERO ? z[i] / oriZSize * oriZScale : 0.0;
+      double zz = oriZSize > Tools.EPSILON ? z[i] / oriZSize * oriZScale : 0.0;
       double uu = ((x[i] - objUMin) * du) / objUSize + uMin;
       double vv = ((y[i] - objVMin) * dv) / objVSize + vMin;
       parser.setVarValue("u", uu);
@@ -122,14 +122,14 @@ public class ParPlot3DTransformer extends Mesh3DTransformer {
         zMax = z[i];
     }
     double xSize = xMax - xMin;
-    if (xSize < Tools.ZERO)
-      xSize = Tools.ZERO;
+    if (xSize < Tools.EPSILON)
+      xSize = Tools.EPSILON;
     double ySize = yMax - yMin;
-    if (ySize < Tools.ZERO)
-      ySize = Tools.ZERO;
+    if (ySize < Tools.EPSILON)
+      ySize = Tools.EPSILON;
     double zSize = zMax - zMin;
-    if (zSize < Tools.ZERO)
-      zSize = Tools.ZERO;
+    if (zSize < Tools.EPSILON)
+      zSize = Tools.EPSILON;
 
     double xScl = (double) width / xSize;
     double yScl = (double) height / ySize;

@@ -234,9 +234,9 @@ public abstract class Mesh3DTransformer extends Transformer {
     int pCount = pMesh3D.getPCount();
     double zeroX = (double) centreX - (double) width / 2.0;
     double zeroY = (double) centreY - (double) height / 2.0;
-    if ((Math.abs(alpha) <= Tools.ZERO) && (Math.abs(beta) <= Tools.ZERO))
+    if ((Math.abs(alpha) <= Tools.EPSILON) && (Math.abs(beta) <= Tools.EPSILON))
       doRotate = Rotate.NONE;
-    boolean doZoom = Math.abs(zoom - 1.0) > Tools.ZERO;
+    boolean doZoom = Math.abs(zoom - 1.0) > Tools.EPSILON;
     double x[] = pMesh3D.getX();
     double y[] = pMesh3D.getY();
     double z[] = pMesh3D.getZ();
@@ -335,7 +335,7 @@ public abstract class Mesh3DTransformer extends Transformer {
       renderer = new Simple3DRenderer();
     else
       renderer = new Phong3DRenderer();
-    if (Math.abs(imgScale - 1.0) > Tools.ZERO) {
+    if (Math.abs(imgScale - 1.0) > Tools.EPSILON) {
       // scaled image
       int width = (int) ((double) pImg.getImageWidth() * imgScale + 0.5);
       int height = (int) ((double) pImg.getImageHeight() * imgScale + 0.5);

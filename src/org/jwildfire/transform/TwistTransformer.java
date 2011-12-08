@@ -57,7 +57,7 @@ public class TwistTransformer extends Mesh3DTransformer {
     double y[] = pMesh3D.getY();
     double z[] = pMesh3D.getZ();
 
-    if ((Math.abs(amount) <= Tools.ZERO) || (Math.abs(dist) <= Tools.ZERO))
+    if ((Math.abs(amount) <= Tools.EPSILON) || (Math.abs(dist) <= Tools.EPSILON))
       return;
     double originX = this.originX - (double) width / 2.0;
     double originY = this.originY - (double) height / 2.0;

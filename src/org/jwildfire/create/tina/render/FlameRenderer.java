@@ -63,7 +63,6 @@ public class FlameRenderer implements TransformationContext {
   double paletteIdxScl;
   RandomNumberGenerator random = new SimpleRandomNumberGenerator();
   // 3D stuff
-  private double cameraZpos = 0;
   private boolean doProject3D = false;
   // init in init3D()
   private double cameraMatrix[][] = new double[3][3];
@@ -83,7 +82,7 @@ public class FlameRenderer implements TransformationContext {
     cameraMatrix[0][2] = Math.sin(pitch) * Math.sin(yaw);
     cameraMatrix[1][2] = Math.sin(pitch) * Math.cos(yaw);
     cameraMatrix[2][2] = Math.cos(pitch);
-    doProject3D = Math.abs(pFlame.getCamYaw()) > Tools.ZERO || Math.abs(pFlame.getCamPitch()) > Tools.ZERO || Math.abs(pFlame.getCamPerspective()) > Tools.ZERO;
+    doProject3D = Math.abs(pFlame.getCamYaw()) > Tools.EPSILON || Math.abs(pFlame.getCamPitch()) > Tools.EPSILON || Math.abs(pFlame.getCamPerspective()) > Tools.EPSILON || Math.abs(pFlame.getCamDOF()) > Tools.EPSILON;
   }
 
   private void initRaster(Flame pFlame, SimpleImage pImage) {
@@ -108,13 +107,31 @@ public class FlameRenderer implements TransformationContext {
     if (!doProject3D) {
       return;
     }
-    double z = pPoint.z - cameraZpos;
-    double x = cameraMatrix[0][0] * pPoint.x + cameraMatrix[1][0] * pPoint.y;
-    double y = cameraMatrix[0][1] * pPoint.x + cameraMatrix[1][1] * pPoint.y + cameraMatrix[2][1] * z;
-    double zr = 1 - pFlame.getCamPerspective() *
-        (cameraMatrix[0][2] * pPoint.x + cameraMatrix[1][2] * pPoint.y + cameraMatrix[2][2] * z);
-    pPoint.x = x / zr;
-    pPoint.y = y / zr;
+    double z = pPoint.z;
+    double px = cameraMatrix[0][0] * pPoint.x + cameraMatrix[1][0] * pPoint.y;
+    double py = cameraMatrix[0][1] * pPoint.x + cameraMatrix[1][1] * pPoint.y;
+    double pz = cameraMatrix[0][2] * pPoint.x + cameraMatrix[1][2] * pPoint.y + cameraMatrix[2][2] * z;
+    double zr = 1 - pFlame.getCamPerspective() * pz;
+    if (Math.abs(pFlame.getCamDOF()) > Tools.EPSILON) {
+      double a = 2.0 * Math.PI * random.random();
+      double dsina = Math.sin(a);
+      double dcosa = Math.cos(a);
+      double zdist = (pFlame.getCamZ() - pz);
+      double dr;
+      if (zdist > 0.0) {
+        dr = random.random() * pFlame.getCamDOF() * 0.1 * zdist;
+      }
+      else {
+        dr = 0.0;
+      }
+      pPoint.x = (px + dr * dcosa) / zr;
+      pPoint.y = (py + dr * dsina) / zr;
+
+    }
+    else {
+      pPoint.x = px / zr;
+      pPoint.y = py / zr;
+    }
   }
 
   public void renderFlame(Flame pFlame, SimpleImage pImage, int pThreads) {

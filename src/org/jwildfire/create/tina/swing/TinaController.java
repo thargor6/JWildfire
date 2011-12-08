@@ -85,6 +85,8 @@ public class TinaController implements FlameHolder {
   private static final double SLIDER_SCALE_GAMMA = 100.0;
   private static final double SLIDER_SCALE_FILTER_RADIUS = 100.0;
   private static final double SLIDER_SCALE_COLOR = 100.0;
+  private static final double SLIDER_SCALE_ZPOS = 50.0;
+  private static final double SLIDER_SCALE_DOF = 100.0;
 
   private final JPanel centerPanel;
   private FlamePanel flamePanel;
@@ -182,6 +184,10 @@ public class TinaController implements FlameHolder {
   private final JSlider cameraCentreYSlider;
   private final JTextField cameraZoomREd;
   private final JSlider cameraZoomSlider;
+  private final JTextField cameraZPosREd;
+  private final JSlider cameraZPosSlider;
+  private final JTextField cameraDOFREd;
+  private final JSlider cameraDOFSlider;
   private final JTextField pixelsPerUnitREd;
   private final JSlider pixelsPerUnitSlider;
   private final JTextField brightnessREd;
@@ -307,7 +313,8 @@ public class TinaController implements FlameHolder {
   public TinaController(ErrorHandler pErrorHandler, Prefs pPrefs, JPanel pCenterPanel, JTextField pCameraRollREd, JSlider pCameraRollSlider, JTextField pCameraPitchREd,
       JSlider pCameraPitchSlider, JTextField pCameraYawREd, JSlider pCameraYawSlider, JTextField pCameraPerspectiveREd, JSlider pCameraPerspectiveSlider,
       JTextField pPreviewQualityREd, JTextField pCameraCentreXREd, JSlider pCameraCentreXSlider, JTextField pCameraCentreYREd,
-      JSlider pCameraCentreYSlider, JTextField pCameraZoomREd, JSlider pCameraZoomSlider, JTextField pPixelsPerUnitREd, JSlider pPixelsPerUnitSlider,
+      JSlider pCameraCentreYSlider, JTextField pCameraZoomREd, JSlider pCameraZoomSlider, JTextField pCameraZPosREd, JSlider pCameraZPosSlider,
+      JTextField pCameraDOFREd, JSlider pCameraDOFSlider, JTextField pPixelsPerUnitREd, JSlider pPixelsPerUnitSlider,
       JTextField pBrightnessREd, JSlider pBrightnessSlider, JTextField pContrastREd, JSlider pContrastSlider, JTextField pGammaREd, JSlider pGammaSlider,
       JTextField pVibrancyREd, JSlider pVibrancySlider, JTextField pFilterRadiusREd, JSlider pFilterRadiusSlider, JTextField pSpatialOversampleREd,
       JSlider pSpatialOversampleSlider, JTextField pBGColorRedREd, JSlider pBGColorRedSlider, JTextField pBGColorGreenREd, JSlider pBGColorGreenSlider, JTextField pBGColorBlueREd,
@@ -349,6 +356,10 @@ public class TinaController implements FlameHolder {
     cameraCentreYSlider = pCameraCentreYSlider;
     cameraZoomREd = pCameraZoomREd;
     cameraZoomSlider = pCameraZoomSlider;
+    cameraZPosREd = pCameraZPosREd;
+    cameraZPosSlider = pCameraZPosSlider;
+    cameraDOFREd = pCameraDOFREd;
+    cameraDOFSlider = pCameraDOFSlider;
     pixelsPerUnitREd = pPixelsPerUnitREd;
     pixelsPerUnitSlider = pPixelsPerUnitSlider;
     brightnessREd = pBrightnessREd;
@@ -615,8 +626,11 @@ public class TinaController implements FlameHolder {
       cameraZoomREd.setText(Tools.doubleToString(currFlame.getCamZoom()));
       cameraZoomSlider.setValue(Tools.FTOI(currFlame.getCamZoom() * SLIDER_SCALE_ZOOM));
 
-      cameraZoomREd.setText(Tools.doubleToString(currFlame.getCamZoom()));
-      cameraZoomSlider.setValue(Tools.FTOI(currFlame.getCamZoom() * SLIDER_SCALE_ZOOM));
+      cameraZPosREd.setText(Tools.doubleToString(currFlame.getCamZ()));
+      cameraZPosSlider.setValue(Tools.FTOI(currFlame.getCamZ() * SLIDER_SCALE_ZPOS));
+
+      cameraDOFREd.setText(Tools.doubleToString(currFlame.getCamDOF()));
+      cameraDOFSlider.setValue(Tools.FTOI(currFlame.getCamDOF() * SLIDER_SCALE_DOF));
 
       pixelsPerUnitREd.setText(Tools.doubleToString(currFlame.getPixelsPerUnit()));
       pixelsPerUnitSlider.setValue(Tools.FTOI(currFlame.getPixelsPerUnit()));
@@ -2633,6 +2647,22 @@ public class TinaController implements FlameHolder {
       flamePanel.setRenderHeight(prefs.getTinaRenderImageHeight());
     }
     refreshFlameImage();
+  }
+
+  public void cameraZPosSlider_stateChanged(ChangeEvent e) {
+    flameSliderChanged(cameraZPosSlider, cameraZPosREd, "camZ", SLIDER_SCALE_ZPOS);
+  }
+
+  public void cameraDOFSlider_stateChanged(ChangeEvent e) {
+    flameSliderChanged(cameraDOFSlider, cameraDOFREd, "camDOF", SLIDER_SCALE_DOF);
+  }
+
+  public void cameraZPosREd_changed() {
+    flameTextFieldChanged(cameraZPosSlider, cameraZPosREd, "camZ", SLIDER_SCALE_ZPOS);
+  }
+
+  public void cameraDOFREd_changed() {
+    flameTextFieldChanged(cameraDOFSlider, cameraDOFREd, "camDOF", SLIDER_SCALE_DOF);
   }
 
 }

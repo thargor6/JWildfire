@@ -391,7 +391,7 @@ public class Pixelize3DTransformer extends Mesh3DTransformer {
 
     protected void prepareTransformation(double pScale, double pScaleVariance, double pAlphaDeg, double pBetaDeg, double pAngleVarianceDeg) {
       scale = pScale;
-      if (Math.abs(pScaleVariance) > Tools.ZERO) {
+      if (Math.abs(pScaleVariance) > Tools.EPSILON) {
         if (Tools.drand() > 0.5) {
           scale += pScaleVariance * Tools.drand();
         }
@@ -401,7 +401,7 @@ public class Pixelize3DTransformer extends Mesh3DTransformer {
       }
 
       double alphaDeg = pAlphaDeg;
-      if (Math.abs(pAngleVarianceDeg) > Tools.ZERO) {
+      if (Math.abs(pAngleVarianceDeg) > Tools.EPSILON) {
         if (Tools.drand() > 0.5) {
           alphaDeg += pAngleVarianceDeg * Tools.drand();
         }
@@ -412,7 +412,7 @@ public class Pixelize3DTransformer extends Mesh3DTransformer {
       alpha = alphaDeg * Math.PI / 180.0;
 
       double betaDeg = pBetaDeg;
-      if (Math.abs(pAngleVarianceDeg) > Tools.ZERO) {
+      if (Math.abs(pAngleVarianceDeg) > Tools.EPSILON) {
         if (Tools.drand() > 0.5) {
           betaDeg += pAngleVarianceDeg * Tools.drand();
         }

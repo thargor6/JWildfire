@@ -48,7 +48,7 @@ public class TinaInternalFrame extends JInternalFrame implements ProgressUpdater
   private TinaController tinaController; //  @jve:decl-index=0:
   private NonlinearControlsRow[] nonlinearControlsRows;//  @jve:decl-index=0:
   private static final long serialVersionUID = 1L;
-  private JPanel jContentPane = null;
+  private JPanel jContentPane = null; //  @jve:decl-index=0:visual-constraint="10,10"
 
   private JPanel tinaNorthPanel = null;
 
@@ -520,6 +520,12 @@ public class TinaInternalFrame extends JInternalFrame implements ProgressUpdater
   private JButton nonlinearParams12LeftButton = null;
   private JButton nonlinarParams12RightButton = null;
   private JButton tinaGrabPaletteFromFlameButton = null;
+  private JLabel tinaCameraZPosLbl = null;
+  private JTextField tinaCameraZPosREd = null;
+  private JSlider tinaCameraZPosSlider = null;
+  private JSlider tinaCameraDOFSlider = null;
+  private JTextField tinaCameraDOFREd = null;
+  private JLabel tinaCameraDOFLbl = null;
 
   /**
    * This is the xxx default constructor
@@ -557,6 +563,7 @@ public class TinaInternalFrame extends JInternalFrame implements ProgressUpdater
       jContentPane = new JPanel();
       jContentPane.setLayout(new BorderLayout());
       jContentPane.setFont(new Font("Dialog", Font.PLAIN, 10));
+      jContentPane.setSize(new Dimension(1097, 617));
       jContentPane.add(getTinaNorthPanel(), BorderLayout.NORTH);
       jContentPane.add(getTinaWestPanel(), BorderLayout.WEST);
       jContentPane.add(getTinaEastPanel(), BorderLayout.EAST);
@@ -626,7 +633,7 @@ public class TinaInternalFrame extends JInternalFrame implements ProgressUpdater
     if (tinaSouthPanel == null) {
       tinaSouthPanel = new JPanel();
       tinaSouthPanel.setLayout(new BorderLayout());
-      tinaSouthPanel.setPreferredSize(new Dimension(0, 128));
+      tinaSouthPanel.setPreferredSize(new Dimension(0, 152));
       tinaSouthPanel.add(getTinaSouthTabbedPane(), BorderLayout.CENTER);
     }
     return tinaSouthPanel;
@@ -674,6 +681,18 @@ public class TinaInternalFrame extends JInternalFrame implements ProgressUpdater
    */
   private JPanel getTinaCameraPanel() {
     if (tinaCameraPanel == null) {
+      tinaCameraDOFLbl = new JLabel();
+      tinaCameraDOFLbl.setPreferredSize(new Dimension(94, 22));
+      tinaCameraDOFLbl.setText("Depth of field");
+      tinaCameraDOFLbl.setSize(new Dimension(94, 22));
+      tinaCameraDOFLbl.setLocation(new Point(488, 100));
+      tinaCameraDOFLbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      tinaCameraZPosLbl = new JLabel();
+      tinaCameraZPosLbl.setPreferredSize(new Dimension(94, 22));
+      tinaCameraZPosLbl.setText("Camera distance");
+      tinaCameraZPosLbl.setSize(new Dimension(94, 22));
+      tinaCameraZPosLbl.setLocation(new Point(4, 100));
+      tinaCameraZPosLbl.setFont(new Font("Dialog", Font.BOLD, 10));
       tinaPixelsPerUnitLbl = new JLabel();
       tinaPixelsPerUnitLbl.setText("Pixels per unit");
       tinaPixelsPerUnitLbl.setFont(new Font("Dialog", Font.BOLD, 10));
@@ -748,6 +767,12 @@ public class TinaInternalFrame extends JInternalFrame implements ProgressUpdater
       tinaCameraPanel.add(tinaPixelsPerUnitLbl, null);
       tinaCameraPanel.add(getTinaPixelsPerUnitREd(), null);
       tinaCameraPanel.add(getTinaPixelsPerUnitSlider(), null);
+      tinaCameraPanel.add(tinaCameraZPosLbl, null);
+      tinaCameraPanel.add(getTinaCameraZPosREd(), null);
+      tinaCameraPanel.add(getTinaCameraZPosSlider(), null);
+      tinaCameraPanel.add(getTinaCameraDOFSlider(), null);
+      tinaCameraPanel.add(getTinaCameraDOFREd(), null);
+      tinaCameraPanel.add(tinaCameraDOFLbl, null);
     }
     return tinaCameraPanel;
   }
@@ -2930,7 +2955,9 @@ public class TinaInternalFrame extends JInternalFrame implements ProgressUpdater
     tinaController = new TinaController(pErrorHandler, pPrefs, getCenterCenterPanel(), getTinaCameraRollREd(), getTinaCameraRollSlider(), getTinaCameraPitchREd(),
         getTinaCameraPitchSlider(), getTinaCameraYawREd(), getTinaCameraYawSlider(), getTinaCameraPerspectiveREd(), getTinaCameraPerspectiveSlider(),
         getTinaPreviewQualityREd(), getTinaCameraCentreXREd(), getTinaCameraCentreXSlider(), getTinaCameraCentreYREd(),
-        getTinaCameraCentreYSlider(), getTinaCameraZoomREd(), getTinaCameraZoomSlider(), getTinaPixelsPerUnitREd(), getTinaPixelsPerUnitSlider(),
+        getTinaCameraCentreYSlider(), getTinaCameraZoomREd(), getTinaCameraZoomSlider(),
+        getTinaCameraZPosREd(), getTinaCameraZPosSlider(), getTinaCameraDOFREd(), getTinaCameraDOFSlider(),
+        getTinaPixelsPerUnitREd(), getTinaPixelsPerUnitSlider(),
         getTinaBrightnessREd(), getTinaBrightnessSlider(), getTinaContrastREd(), getTinaContrastSlider(), getTinaGammaREd(), getTinaGammaSlider(),
         getTinaVibrancyREd(), getTinaVibrancySlider(), getTinaFilterRadiusREd(), getTinaFilterRadiusSlider(), getTinaOversampleREd(),
         getTinaOversampleSlider(), getTinaBGColorRedREd(), getTinaBGColorRedSlider(), getTinaBGColorGreenREd(), getTinaBGColorGreenSlider(), getTinaBGColorBlueREd(),
@@ -7477,6 +7504,106 @@ public class TinaInternalFrame extends JInternalFrame implements ProgressUpdater
       });
     }
     return tinaGrabPaletteFromFlameButton;
+  }
+
+  /**
+   * This method initializes tinaCameraZPosREd	
+   * 	
+   * @return javax.swing.JTextField	
+   */
+  private JTextField getTinaCameraZPosREd() {
+    if (tinaCameraZPosREd == null) {
+      tinaCameraZPosREd = new JTextField();
+      tinaCameraZPosREd.setPreferredSize(new Dimension(100, 22));
+      tinaCameraZPosREd.setText("");
+      tinaCameraZPosREd.setSize(new Dimension(100, 22));
+      tinaCameraZPosREd.setLocation(new Point(100, 100));
+      tinaCameraZPosREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      tinaCameraZPosREd.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent e) {
+          tinaController.cameraZPosREd_changed();
+        }
+      });
+      tinaCameraZPosREd.addFocusListener(new java.awt.event.FocusAdapter() {
+        public void focusLost(java.awt.event.FocusEvent e) {
+          tinaController.cameraZPosREd_changed();
+        }
+      });
+    }
+    return tinaCameraZPosREd;
+  }
+
+  /**
+   * This method initializes tinaCameraZPosSlider	
+   * 	
+   * @return javax.swing.JSlider	
+   */
+  private JSlider getTinaCameraZPosSlider() {
+    if (tinaCameraZPosSlider == null) {
+      tinaCameraZPosSlider = new JSlider();
+      tinaCameraZPosSlider.setMaximum(100);
+      tinaCameraZPosSlider.setMinimum(-100);
+      tinaCameraZPosSlider.setValue(0);
+      tinaCameraZPosSlider.setSize(new Dimension(220, 19));
+      tinaCameraZPosSlider.setLocation(new Point(202, 100));
+      tinaCameraZPosSlider.setPreferredSize(new Dimension(220, 19));
+      tinaCameraZPosSlider.addChangeListener(new javax.swing.event.ChangeListener() {
+        public void stateChanged(javax.swing.event.ChangeEvent e) {
+          tinaController.cameraZPosSlider_stateChanged(e);
+        }
+      });
+    }
+    return tinaCameraZPosSlider;
+  }
+
+  /**
+   * This method initializes tinaCameraDOFSlider	
+   * 	
+   * @return javax.swing.JSlider	
+   */
+  private JSlider getTinaCameraDOFSlider() {
+    if (tinaCameraDOFSlider == null) {
+      tinaCameraDOFSlider = new JSlider();
+      tinaCameraDOFSlider.setMaximum(100);
+      tinaCameraDOFSlider.setMinimum(0);
+      tinaCameraDOFSlider.setValue(0);
+      tinaCameraDOFSlider.setSize(new Dimension(220, 19));
+      tinaCameraDOFSlider.setLocation(new Point(686, 100));
+      tinaCameraDOFSlider.setPreferredSize(new Dimension(220, 19));
+      tinaCameraDOFSlider.addChangeListener(new javax.swing.event.ChangeListener() {
+        public void stateChanged(javax.swing.event.ChangeEvent e) {
+          tinaController.cameraDOFSlider_stateChanged(e);
+        }
+      });
+    }
+    return tinaCameraDOFSlider;
+  }
+
+  /**
+   * This method initializes tinaCameraDOFREd	
+   * 	
+   * @return javax.swing.JTextField	
+   */
+  private JTextField getTinaCameraDOFREd() {
+    if (tinaCameraDOFREd == null) {
+      tinaCameraDOFREd = new JTextField();
+      tinaCameraDOFREd.setPreferredSize(new Dimension(100, 22));
+      tinaCameraDOFREd.setText("");
+      tinaCameraDOFREd.setSize(new Dimension(100, 22));
+      tinaCameraDOFREd.setLocation(new Point(584, 100));
+      tinaCameraDOFREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      tinaCameraDOFREd.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent e) {
+          tinaController.cameraDOFREd_changed();
+        }
+      });
+      tinaCameraDOFREd.addFocusListener(new java.awt.event.FocusAdapter() {
+        public void focusLost(java.awt.event.FocusEvent e) {
+          tinaController.cameraDOFREd_changed();
+        }
+      });
+    }
+    return tinaCameraDOFREd;
   }
 
 } //  @jve:decl-index=0:visual-constraint="10,10"

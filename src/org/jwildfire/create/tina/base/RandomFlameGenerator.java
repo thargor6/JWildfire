@@ -22,13 +22,13 @@ import org.jwildfire.create.tina.variation.VariationFuncList;
 
 public class RandomFlameGenerator {
 
-  private static final String FNCLST_ORIGINAL[] = { "blur3D", "bubble", "curl3D", "diamond", "disc", "julia3D", "fan2", "heart",
+  private static final String FNCLST_ORIGINAL[] = { "blur3D", "bubble", "curl3D", "diamond", "disc", "julia3D", "heart",
       "julia3D", "hemisphere", "horseshoe", "blob3D", "julia3D", "pdj", "popcorn", "rings2", "t_rose",
       "spherical3D", "spiral", "rectangles", "blur", "waves", "swirl", "secant2" };
 
   private static final String FNCLST_EXPERIMENTAL[] = { "blur3D", "bubble", "escher", "rays", "t_epispiral", "curl3D", "diamond",
       "disc", "sech", "loonie", "exp", "cosh", "split", "wedge_sph", "circlize",
-      "butterfly3D", "cpow", "conic", "julia3D", "fan2", "cell", "stripes", "t_post_mirror",
+      "butterfly3D", "cpow", "conic", "julia3D", "cell", "stripes", "t_post_mirror",
       "flower", "heart", "julia3D", "disc2", "polar2", "foci", "scry", "flux",
       "hemisphere", "popcorn2", "sec", "lazysusan", "sin", "separation", "t_post_mirror",
       "t_rose", "edisc", "waves2", "twintrian", "coth", "super_shape", "auger", "t_pre_wave3D",

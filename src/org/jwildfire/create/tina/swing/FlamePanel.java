@@ -254,7 +254,7 @@ public class FlamePanel extends ImagePanel {
         double dy = viewToY(pY) - viewToY(yBeginDrag);
         xBeginDrag = pX;
         yBeginDrag = pY;
-        if (Math.abs(dx) > Tools.ZERO || Math.abs(dy) > Tools.ZERO) {
+        if (Math.abs(dx) > Tools.EPSILON || Math.abs(dy) > Tools.EPSILON) {
           switch (mouseDragOperation) {
             case MOVE: {
               // move

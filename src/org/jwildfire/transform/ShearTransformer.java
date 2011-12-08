@@ -59,13 +59,13 @@ public class ShearTransformer extends Mesh2DTransformer {
   @Override
   protected void performPixelTransformation(SimpleImage pImg) {
     if (axis == Axis.X) {
-      if (!damp || (Math.abs(damping) < Tools.ZERO))
+      if (!damp || (Math.abs(damping) < Tools.EPSILON))
         shearX(pImg);
       else
         shearX_Damp(pImg);
     }
     else if (axis == Axis.Y) {
-      if (!damp || (Math.abs(damping) < Tools.ZERO))
+      if (!damp || (Math.abs(damping) < Tools.EPSILON))
         shearY(pImg);
       else
         shearY_Damp(pImg);

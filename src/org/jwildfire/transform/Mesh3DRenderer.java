@@ -138,7 +138,7 @@ public abstract class Mesh3DRenderer {
 
     lightCount = MAXLIGHT;
     for (int i = MAXLIGHT - 1; i > 0; i--) {
-      if ((lightRed[i] < Tools.ZERO) && (lightGreen[i] < Tools.ZERO) && (lightBlue[i] < Tools.ZERO))
+      if ((lightRed[i] < Tools.EPSILON) && (lightGreen[i] < Tools.EPSILON) && (lightBlue[i] < Tools.EPSILON))
         lightCount--;
       else
         break;

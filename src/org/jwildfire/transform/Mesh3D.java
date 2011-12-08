@@ -321,7 +321,7 @@ public class Mesh3D {
 
   public Mesh3D clone(double pScale) {
     Mesh3D res = clone();
-    if (Math.abs(pScale - 1.0) > Tools.ZERO) {
+    if (Math.abs(pScale - 1.0) > Tools.EPSILON) {
       for (int i = 0; i < pCount; i++) {
         res.x[i] *= pScale;
         res.y[i] *= pScale;

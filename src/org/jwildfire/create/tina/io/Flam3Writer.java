@@ -54,7 +54,9 @@ public class Flam3Writer {
         xb.createAttr("cam_zoom", pFlame.getCamZoom()),
         xb.createAttr("cam_pitch", (pFlame.getCamPitch() * Math.PI) / 180.0),
         xb.createAttr("cam_yaw", (pFlame.getCamYaw() * Math.PI) / 180.0),
-        xb.createAttr("cam_perspective", pFlame.getCamPerspective())
+        xb.createAttr("cam_persp", pFlame.getCamPerspective()),
+        xb.createAttr("cam_zpos", pFlame.getCamZ()),
+        xb.createAttr("cam_dof", pFlame.getCamDOF())
         );
     // XForm
     for (XForm xForm : pFlame.getXForms()) {

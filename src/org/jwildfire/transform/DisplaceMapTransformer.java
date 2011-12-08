@@ -43,7 +43,7 @@ public class DisplaceMapTransformer extends Mesh2DTransformer {
 
   @Override
   protected void performPixelTransformation(SimpleImage pImg) {
-    if ((Math.abs(this.amount) < Tools.ZERO) || ((displaceXMap == null) && (displaceYMap == null)))
+    if ((Math.abs(this.amount) < Tools.EPSILON) || ((displaceXMap == null) && (displaceYMap == null)))
       return;
     double nAmount = this.amount / 127.5;
     double rZoom = 1.0 / this.zoom;

@@ -81,11 +81,11 @@ public class Transform3DTransformer extends Mesh3DTransformer {
     int height = pMesh3D.getImageHeight();
 
     boolean doRotate = (objRotate != Rotate.NONE);
-    boolean doTrans = (Math.abs(transX) > Tools.ZERO) || (Math.abs(transY) > Tools.ZERO)
-        || (Math.abs(transZ) > Tools.ZERO);
-    boolean doScale = (Math.abs(scaleX - 1.0) > Tools.ZERO)
-        || (Math.abs(scaleY - 1.0) > Tools.ZERO) || (Math.abs(scaleX - 1.0) > Tools.ZERO)
-        || (Math.abs(scaleZ - 1.0) > Tools.ZERO);
+    boolean doTrans = (Math.abs(transX) > Tools.EPSILON) || (Math.abs(transY) > Tools.EPSILON)
+        || (Math.abs(transZ) > Tools.EPSILON);
+    boolean doScale = (Math.abs(scaleX - 1.0) > Tools.EPSILON)
+        || (Math.abs(scaleY - 1.0) > Tools.EPSILON) || (Math.abs(scaleX - 1.0) > Tools.EPSILON)
+        || (Math.abs(scaleZ - 1.0) > Tools.EPSILON);
 
     double zeroX = (double) originX - (double) width / 2.0;
     double zeroY = (double) originY - (double) height / 2.0;

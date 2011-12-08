@@ -31,6 +31,8 @@ public class Flame {
   private double camPerspective;
   private double camRoll;
   private double camZoom;
+  private double camZ;
+  private double camDOF;
   private int spatialOversample;
   private int colorOversample;
   private double spatialFilterRadius;
@@ -69,6 +71,8 @@ public class Flame {
     camYaw = 0.0;
     camPerspective = 0.0;
     camZoom = 1.0;
+    camZ = 0.0;
+    camDOF = 0.0;
     spatialOversample = 1;
     colorOversample = 1;
     gammaThreshold = 0.04;
@@ -322,6 +326,22 @@ public class Flame {
 
   public void setColorOversample(int colorOversample) {
     this.colorOversample = colorOversample;
+  }
+
+  public double getCamZ() {
+    return camZ;
+  }
+
+  public void setCamZ(double camZ) {
+    this.camZ = camZ;
+  }
+
+  public double getCamDOF() {
+    return camDOF;
+  }
+
+  public void setCamDOF(double camDOF) {
+    this.camDOF = camDOF;
   }
 
 }
