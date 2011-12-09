@@ -1891,49 +1891,49 @@ public class TinaController implements FlameHolder {
 
   public void xForm_rotateRight() {
     double amount = Tools.stringToDouble(affineRotateAmountREd.getText());
-    XFormTransformService.rotate(getCurrXForm(), -amount);
+    XFormTransformService.rotate(getCurrXForm(), -amount, affineEditPostTransformButton.isSelected());
     transformationTableClicked();
     refreshFlameImage();
   }
 
   public void xForm_moveLeft() {
     double amount = Tools.stringToDouble(affineMoveAmountREd.getText());
-    XFormTransformService.globalTranslate(getCurrXForm(), -amount, 0);
+    XFormTransformService.globalTranslate(getCurrXForm(), -amount, 0, affineEditPostTransformButton.isSelected());
     transformationTableClicked();
     refreshFlameImage();
   }
 
   public void xForm_enlarge() {
     double amount = 1.0 + Tools.stringToDouble(affineScaleAmountREd.getText());
-    XFormTransformService.scale(getCurrXForm(), amount);
+    XFormTransformService.scale(getCurrXForm(), amount, affineEditPostTransformButton.isSelected());
     transformationTableClicked();
     refreshFlameImage();
   }
 
   public void xForm_shrink() {
     double amount = 1.0 - Tools.stringToDouble(affineScaleAmountREd.getText());
-    XFormTransformService.scale(getCurrXForm(), amount);
+    XFormTransformService.scale(getCurrXForm(), amount, affineEditPostTransformButton.isSelected());
     transformationTableClicked();
     refreshFlameImage();
   }
 
   public void xForm_rotateLeft() {
     double amount = Tools.stringToDouble(affineRotateAmountREd.getText());
-    XFormTransformService.rotate(getCurrXForm(), amount);
+    XFormTransformService.rotate(getCurrXForm(), amount, affineEditPostTransformButton.isSelected());
     transformationTableClicked();
     refreshFlameImage();
   }
 
   public void xForm_moveUp() {
     double amount = Tools.stringToDouble(affineMoveAmountREd.getText());
-    XFormTransformService.globalTranslate(getCurrXForm(), 0, -amount);
+    XFormTransformService.globalTranslate(getCurrXForm(), 0, -amount, affineEditPostTransformButton.isSelected());
     transformationTableClicked();
     refreshFlameImage();
   }
 
   public void xForm_moveDown() {
     double amount = Tools.stringToDouble(affineMoveAmountREd.getText());
-    XFormTransformService.globalTranslate(getCurrXForm(), 0, amount);
+    XFormTransformService.globalTranslate(getCurrXForm(), 0, amount, affineEditPostTransformButton.isSelected());
     transformationTableClicked();
     refreshFlameImage();
   }

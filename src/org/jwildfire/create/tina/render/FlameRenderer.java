@@ -109,7 +109,7 @@ public class FlameRenderer implements TransformationContext {
     }
     double z = pPoint.z;
     double px = cameraMatrix[0][0] * pPoint.x + cameraMatrix[1][0] * pPoint.y;
-    double py = cameraMatrix[0][1] * pPoint.x + cameraMatrix[1][1] * pPoint.y;
+    double py = cameraMatrix[0][1] * pPoint.x + cameraMatrix[1][1] * pPoint.y + cameraMatrix[2][1] * z;
     double pz = cameraMatrix[0][2] * pPoint.x + cameraMatrix[1][2] * pPoint.y + cameraMatrix[2][2] * z;
     double zr = 1 - pFlame.getCamPerspective() * pz;
     if (Math.abs(pFlame.getCamDOF()) > Tools.EPSILON) {
