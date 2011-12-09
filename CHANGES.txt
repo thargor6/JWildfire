@@ -1,8 +1,12 @@
+V0.25 (09.12.2011):
+ - FIXED: Fractal flame editor: moving/rotating/scaling by buttons did not work for the post transforms
+ - Fractal flame editor: simple DOF, some refactoring
+
 V0.24 (08.12.2011):
-  - Fractal flame editor: t-pre-wave3D variation
-  - Fractal flame editor: t_post_mirror variation
-  - FIXED: Fractal flame editor: order of variation execution was broken
-  - Preview for flame and image file chooser
+ - Fractal flame editor: t-pre-wave3D variation
+ - Fractal flame editor: t_post_mirror variation
+ - FIXED: Fractal flame editor: order of variation execution was broken
+ - Preview for flame and image file chooser
 
 V0.23 (06.12.2011):
  - Fractal flame editor: circlize, flux and mobius variation
