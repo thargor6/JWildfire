@@ -85,19 +85,19 @@ public class Pseudo3DShader {
 
   public void distributeInitialPoints(XYZPoint[] p) {
     if (p[0].x > 0) {
-      p[1].x = p[0].x + 0.00001;
+      p[1].x = p[0].x + 0.01;
     }
     else {
-      p[1].x = p[0].x - 0.00001;
+      p[1].x = p[0].x - 0.01;
     }
     p[1].y = p[0].y;
     p[1].z = p[0].z;
     p[2].x = p[0].x;
     if (p[0].y > 0) {
-      p[2].y = p[0].y + 0.00001;
+      p[2].y = p[0].y + 0.01;
     }
     else {
-      p[2].y = p[0].y - 0.00001;
+      p[2].y = p[0].y - 0.01;
     }
     p[2].z = p[0].z;
   }
@@ -125,13 +125,13 @@ public class Pseudo3DShader {
 
     reflectViewVector();
     double cosa = 0.0 - nfz;
-    if (cosa >= 0.0) {
-      nfx = 0.0 - nfx;
-      nfy = 0.0 - nfy;
-      nfz = 0.0 - nfz;
-      reflectViewVector();
-      cosa = 0.0 - nfz;
-    }
+    //    if (cosa >= 0.0) {
+    //      nfx = 0.0 - nfx;
+    //      nfy = 0.0 - nfy;
+    //      nfz = 0.0 - nfz;
+    //      reflectViewVector();
+    //      cosa = 0.0 - nfz;
+    //    }
 
     this.r = Tools.FTOI(pColor.red);
     this.g = Tools.FTOI(pColor.green);
@@ -187,13 +187,13 @@ public class Pseudo3DShader {
       }
       double cosa = nfx * lx + nfy * ly + nfz * lz;
 
-      if (cosa < 0.0) {
-        cosa = 0.0 - cosa;
-        nfx = 0.0 - nfx;
-        nfy = 0.0 - nfy;
-        nfz = 0.0 - nfz;
-        reflectViewVector();
-      }
+      //      if (cosa < 0.0) {
+      //        cosa = 0.0 - cosa;
+      //        nfx = 0.0 - nfx;
+      //        nfy = 0.0 - nfy;
+      //        nfz = 0.0 - nfz;
+      //        reflectViewVector();
+      //      }
       dint = diffuse * cosa;
 
       cosa = refx * lx + refy * ly + refz * lz;

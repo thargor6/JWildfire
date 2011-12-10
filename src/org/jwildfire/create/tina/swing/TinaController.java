@@ -23,6 +23,7 @@ import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
 import java.io.File;
+import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -49,6 +50,8 @@ import org.jwildfire.create.tina.base.DrawMode;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.RandomFlameGenerator;
 import org.jwildfire.create.tina.base.RandomFlameGeneratorStyle;
+import org.jwildfire.create.tina.base.Shading;
+import org.jwildfire.create.tina.base.ShadingInfo;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.io.Flam3Reader;
 import org.jwildfire.create.tina.io.Flam3Writer;
@@ -87,6 +90,9 @@ public class TinaController implements FlameHolder {
   private static final double SLIDER_SCALE_COLOR = 100.0;
   private static final double SLIDER_SCALE_ZPOS = 50.0;
   private static final double SLIDER_SCALE_DOF = 100.0;
+  private static final double SLIDER_SCALE_AMBIENT = 100.0;
+  private static final double SLIDER_SCALE_PHONGSIZE = 10.0;
+  private static final double SLIDER_SCALE_LIGHTPOS = 100.0;
 
   private final JPanel centerPanel;
   private FlamePanel flamePanel;
@@ -210,6 +216,29 @@ public class TinaController implements FlameHolder {
   private final JSlider bgColorGreenSlider;
   private final JTextField bgColorBlueREd;
   private final JSlider bgColorBlueSlider;
+  // shading
+  private final JComboBox shadingCmb;
+  private final JTextField shadingAmbientREd;
+  private final JSlider shadingAmbientSlider;
+  private final JTextField shadingDiffuseREd;
+  private final JSlider shadingDiffuseSlider;
+  private final JTextField shadingPhongREd;
+  private final JSlider shadingPhongSlider;
+  private final JTextField shadingPhongSizeREd;
+  private final JSlider shadingPhongSizeSlider;
+  private final JComboBox shadingLightCmb;
+  private final JTextField shadingLightXREd;
+  private final JSlider shadingLightXSlider;
+  private final JTextField shadingLightYREd;
+  private final JSlider shadingLightYSlider;
+  private final JTextField shadingLightZREd;
+  private final JSlider shadingLightZSlider;
+  private final JTextField shadingLightRedREd;
+  private final JSlider shadingLightRedSlider;
+  private final JTextField shadingLightGreenREd;
+  private final JSlider shadingLightGreenSlider;
+  private final JTextField shadingLightBlueREd;
+  private final JSlider shadingLightBlueSlider;
   // palette -> create
   private final JTextField paletteRandomPointsREd;
   private final JPanel paletteImgPanel;
@@ -336,7 +365,12 @@ public class TinaController implements FlameHolder {
       JComboBox pAnimateXFormScriptCmb, JToggleButton pMouseTransformMoveButton, JToggleButton pMouseTransformRotateButton, JToggleButton pMouseTransformScaleButton,
       JToggleButton pAffineEditPostTransformButton, JToggleButton pAffineEditPostTransformSmallButton, JButton pMouseEditZoomInButton, JButton pMouseEditZoomOutButton,
       JToggleButton pToggleTrianglesButton, ProgressUpdater pProgressUpdater, JCheckBox pRandomPostTransformCheckBox, JCheckBox pRandomSymmetryCheckBox,
-      JButton pAffineResetTransformButton, JTextField pColorOversampleREd, JSlider pColorOversampleSlider, JTable pCreatePaletteColorsTable) {
+      JButton pAffineResetTransformButton, JTextField pColorOversampleREd, JSlider pColorOversampleSlider, JTable pCreatePaletteColorsTable,
+      JComboBox pShadingCmb, JTextField pShadingAmbientREd, JSlider pShadingAmbientSlider, JTextField pShadingDiffuseREd, JSlider pShadingDiffuseSlider,
+      JTextField pShadingPhongREd, JSlider pShadingPhongSlider, JTextField pShadingPhongSizeREd, JSlider pShadingPhongSizeSlider,
+      JComboBox pShadingLightCmb, JTextField pShadingLightXREd, JSlider pShadingLightXSlider, JTextField pShadingLightYREd, JSlider pShadingLightYSlider,
+      JTextField pShadingLightZREd, JSlider pShadingLightZSlider, JTextField pShadingLightRedREd, JSlider pShadingLightRedSlider,
+      JTextField pShadingLightGreenREd, JSlider pShadingLightGreenSlider, JTextField pShadingLightBlueREd, JSlider pShadingLightBlueSlider) {
     errorHandler = pErrorHandler;
     prefs = pPrefs;
     centerPanel = pCenterPanel;
@@ -471,14 +505,36 @@ public class TinaController implements FlameHolder {
     randomPostTransformCheckBox = pRandomPostTransformCheckBox;
     randomSymmetryCheckBox = pRandomSymmetryCheckBox;
     affineResetTransformButton = pAffineResetTransformButton;
-
     createPaletteColorsTable = pCreatePaletteColorsTable;
+    shadingCmb = pShadingCmb;
+    shadingAmbientREd = pShadingAmbientREd;
+    shadingAmbientSlider = pShadingAmbientSlider;
+    shadingDiffuseREd = pShadingDiffuseREd;
+    shadingDiffuseSlider = pShadingDiffuseSlider;
+    shadingPhongREd = pShadingPhongREd;
+    shadingPhongSlider = pShadingPhongSlider;
+    shadingPhongSizeREd = pShadingPhongSizeREd;
+    shadingPhongSizeSlider = pShadingPhongSizeSlider;
+    shadingLightCmb = pShadingLightCmb;
+    shadingLightXREd = pShadingLightXREd;
+    shadingLightXSlider = pShadingLightXSlider;
+    shadingLightYREd = pShadingLightYREd;
+    shadingLightYSlider = pShadingLightYSlider;
+    shadingLightZREd = pShadingLightZREd;
+    shadingLightZSlider = pShadingLightZSlider;
+    shadingLightRedREd = pShadingLightRedREd;
+    shadingLightRedSlider = pShadingLightRedSlider;
+    shadingLightGreenREd = pShadingLightGreenREd;
+    shadingLightGreenSlider = pShadingLightGreenSlider;
+    shadingLightBlueREd = pShadingLightBlueREd;
+    shadingLightBlueSlider = pShadingLightBlueSlider;
 
     animateFramesREd.setText(String.valueOf(prefs.getTinaRenderMovieFrames()));
-
     refreshPaletteColorsTable();
 
     enableControls();
+    enableShadingUI();
+
     enableXFormControls(null);
   }
 
@@ -668,6 +724,10 @@ public class TinaController implements FlameHolder {
       refreshTransformationsTable();
       transformationTableClicked();
 
+      shadingLightCmb.setSelectedIndex(0);
+      refreshShadingUI();
+      enableShadingUI();
+
       refreshFlameImage();
 
       refreshPaletteUI(currFlame.getPalette());
@@ -675,6 +735,100 @@ public class TinaController implements FlameHolder {
     finally {
       noRefresh = false;
     }
+  }
+
+  private void refreshShadingUI() {
+    Flame currFlame = getCurrFlame();
+    ShadingInfo shadingInfo = currFlame != null ? currFlame.getShadingInfo() : null;
+    boolean enabled;
+    if (shadingInfo != null) {
+      shadingCmb.setSelectedItem(shadingInfo.getShading());
+      enabled = shadingInfo.getShading().equals(Shading.PSEUDO3D);
+    }
+    else {
+      shadingCmb.setSelectedIndex(0);
+      enabled = false;
+    }
+    if (enabled) {
+      shadingAmbientREd.setText(Tools.doubleToString(shadingInfo.getAmbient()));
+      shadingAmbientSlider.setValue(Tools.FTOI(shadingInfo.getAmbient() * SLIDER_SCALE_AMBIENT));
+      shadingDiffuseREd.setText(Tools.doubleToString(shadingInfo.getDiffuse()));
+      shadingDiffuseSlider.setValue(Tools.FTOI(shadingInfo.getDiffuse() * SLIDER_SCALE_AMBIENT));
+      shadingPhongREd.setText(Tools.doubleToString(shadingInfo.getPhong()));
+      shadingPhongSlider.setValue(Tools.FTOI(shadingInfo.getPhong() * SLIDER_SCALE_AMBIENT));
+      shadingPhongSizeREd.setText(Tools.doubleToString(shadingInfo.getPhongSize()));
+      shadingPhongSizeSlider.setValue(Tools.FTOI(shadingInfo.getPhongSize() * SLIDER_SCALE_PHONGSIZE));
+      int cIdx = shadingLightCmb.getSelectedIndex();
+      shadingLightXREd.setText(Tools.doubleToString(shadingInfo.getLightPosX()[cIdx]));
+      shadingLightXSlider.setValue(Tools.FTOI(shadingInfo.getLightPosX()[cIdx] * SLIDER_SCALE_LIGHTPOS));
+      shadingLightYREd.setText(Tools.doubleToString(shadingInfo.getLightPosY()[cIdx]));
+      shadingLightYSlider.setValue(Tools.FTOI(shadingInfo.getLightPosY()[cIdx] * SLIDER_SCALE_LIGHTPOS));
+      shadingLightZREd.setText(Tools.doubleToString(shadingInfo.getLightPosZ()[cIdx]));
+      shadingLightZSlider.setValue(Tools.FTOI(shadingInfo.getLightPosZ()[cIdx] * SLIDER_SCALE_LIGHTPOS));
+      shadingLightRedREd.setText(String.valueOf(shadingInfo.getLightRed()[cIdx]));
+      shadingLightRedSlider.setValue(shadingInfo.getLightRed()[cIdx]);
+      shadingLightGreenREd.setText(String.valueOf(shadingInfo.getLightGreen()[cIdx]));
+      shadingLightGreenSlider.setValue(shadingInfo.getLightGreen()[cIdx]);
+      shadingLightBlueREd.setText(String.valueOf(shadingInfo.getLightBlue()[cIdx]));
+      shadingLightBlueSlider.setValue(shadingInfo.getLightBlue()[cIdx]);
+    }
+    else {
+      shadingAmbientREd.setText("");
+      shadingAmbientSlider.setValue(0);
+      shadingDiffuseREd.setText("");
+      shadingDiffuseSlider.setValue(0);
+      shadingPhongREd.setText("");
+      shadingPhongSlider.setValue(0);
+      shadingPhongSizeREd.setText("");
+      shadingPhongSizeSlider.setValue(0);
+      shadingLightXREd.setText("");
+      shadingLightXSlider.setValue(0);
+      shadingLightYREd.setText("");
+      shadingLightYSlider.setValue(0);
+      shadingLightZREd.setText("");
+      shadingLightZSlider.setValue(0);
+      shadingLightRedREd.setText("");
+      shadingLightRedSlider.setValue(0);
+      shadingLightGreenREd.setText("");
+      shadingLightGreenSlider.setValue(0);
+      shadingLightBlueREd.setText("");
+      shadingLightBlueSlider.setValue(0);
+    }
+  }
+
+  private void enableShadingUI() {
+    Flame currFlame = getCurrFlame();
+    ShadingInfo shadingInfo = currFlame != null ? currFlame.getShadingInfo() : null;
+    boolean enabled;
+    if (shadingInfo != null) {
+      shadingCmb.setEnabled(true);
+      enabled = shadingInfo.getShading().equals(Shading.PSEUDO3D);
+    }
+    else {
+      shadingCmb.setEnabled(false);
+      enabled = false;
+    }
+    shadingAmbientREd.setEnabled(enabled);
+    shadingAmbientSlider.setEnabled(enabled);
+    shadingDiffuseREd.setEnabled(enabled);
+    shadingDiffuseSlider.setEnabled(enabled);
+    shadingPhongREd.setEnabled(enabled);
+    shadingPhongSlider.setEnabled(enabled);
+    shadingPhongSizeREd.setEnabled(enabled);
+    shadingPhongSizeSlider.setEnabled(enabled);
+    shadingLightCmb.setEnabled(enabled);
+    shadingLightXREd.setEnabled(enabled);
+    shadingLightXSlider.setEnabled(enabled);
+    shadingLightYREd.setEnabled(enabled);
+    shadingLightYSlider.setEnabled(enabled);
+    shadingLightZREd.setEnabled(enabled);
+    shadingLightZSlider.setEnabled(enabled);
+    shadingLightRedREd.setEnabled(enabled);
+    shadingLightRedSlider.setEnabled(enabled);
+    shadingLightGreenREd.setEnabled(enabled);
+    shadingLightGreenSlider.setEnabled(enabled);
+    shadingLightBlueREd.setEnabled(enabled);
+    shadingLightBlueSlider.setEnabled(enabled);
   }
 
   private void refreshTransformationsTable() {
@@ -1040,6 +1194,109 @@ public class TinaController implements FlameHolder {
         ex.printStackTrace();
       }
       refreshPaletteImg();
+      refreshFlameImage();
+    }
+    finally {
+      noRefresh = false;
+    }
+  }
+
+  private void shadingInfoTextFieldChanged(JSlider pSlider, JTextField pTextField, String pProperty, double pSliderScale, int pIdx) {
+    Flame currFlame = getCurrFlame();
+    if (noRefresh || currFlame == null)
+      return;
+    ShadingInfo shadingInfo = currFlame.getShadingInfo();
+    noRefresh = true;
+    try {
+      double propValue = Tools.stringToDouble(pTextField.getText());
+      pSlider.setValue(Tools.FTOI(propValue * pSliderScale));
+
+      Class<?> cls = shadingInfo.getClass();
+      Field field;
+      try {
+        field = cls.getDeclaredField(pProperty);
+        field.setAccessible(true);
+        Class<?> fieldCls = field.getType();
+        if (fieldCls == double.class || fieldCls == Double.class) {
+          field.setDouble(shadingInfo, propValue);
+        }
+        else if (fieldCls == double[].class) {
+          double[] arr = (double[]) field.get(shadingInfo);
+          Array.set(arr, pIdx, propValue);
+        }
+        else if (fieldCls == Double[].class) {
+          Double[] arr = (Double[]) field.get(shadingInfo);
+          Array.set(arr, pIdx, propValue);
+        }
+        else if (fieldCls == int.class || fieldCls == Integer.class) {
+          field.setInt(shadingInfo, Tools.FTOI(propValue));
+        }
+        else if (fieldCls == int[].class) {
+          int[] arr = (int[]) field.get(shadingInfo);
+          Array.set(arr, pIdx, Tools.FTOI(propValue));
+        }
+        else if (fieldCls == Integer[].class) {
+          Integer[] arr = (Integer[]) field.get(shadingInfo);
+          Array.set(arr, pIdx, Tools.FTOI(propValue));
+        }
+        else {
+          throw new IllegalStateException();
+        }
+      }
+      catch (Throwable ex) {
+        ex.printStackTrace();
+      }
+      refreshFlameImage();
+    }
+    finally {
+      noRefresh = false;
+    }
+  }
+
+  private void shadingInfoSliderChanged(JSlider pSlider, JTextField pTextField, String pProperty, double pSliderScale, int pIdx) {
+    Flame currFlame = getCurrFlame();
+    if (noRefresh || currFlame == null)
+      return;
+    ShadingInfo shadingInfo = currFlame.getShadingInfo();
+    noRefresh = true;
+    try {
+      double propValue = pSlider.getValue() / pSliderScale;
+      pTextField.setText(Tools.doubleToString(propValue));
+      Class<?> cls = shadingInfo.getClass();
+      Field field;
+      try {
+        field = cls.getDeclaredField(pProperty);
+        field.setAccessible(true);
+        Class<?> fieldCls = field.getType();
+        if (fieldCls == double.class || fieldCls == Double.class) {
+          field.setDouble(shadingInfo, propValue);
+        }
+        else if (fieldCls == double[].class) {
+          double[] arr = (double[]) field.get(shadingInfo);
+          Array.set(arr, pIdx, propValue);
+        }
+        else if (fieldCls == Double[].class) {
+          Double[] arr = (Double[]) field.get(shadingInfo);
+          Array.set(arr, pIdx, propValue);
+        }
+        else if (fieldCls == int.class || fieldCls == Integer.class) {
+          field.setInt(shadingInfo, Tools.FTOI(propValue));
+        }
+        else if (fieldCls == int[].class) {
+          int[] arr = (int[]) field.get(shadingInfo);
+          Array.set(arr, pIdx, Tools.FTOI(propValue));
+        }
+        else if (fieldCls == Integer[].class) {
+          Integer[] arr = (Integer[]) field.get(shadingInfo);
+          Array.set(arr, pIdx, Tools.FTOI(propValue));
+        }
+        else {
+          throw new IllegalStateException();
+        }
+      }
+      catch (Throwable ex) {
+        ex.printStackTrace();
+      }
       refreshFlameImage();
     }
     finally {
@@ -2663,6 +2920,131 @@ public class TinaController implements FlameHolder {
 
   public void cameraDOFREd_changed() {
     flameTextFieldChanged(cameraDOFSlider, cameraDOFREd, "camDOF", SLIDER_SCALE_DOF);
+  }
+
+  public void shadingAmbientREd_changed() {
+    shadingInfoTextFieldChanged(shadingAmbientSlider, shadingAmbientREd, "ambient", SLIDER_SCALE_AMBIENT, 0);
+  }
+
+  public void shadingDiffuseREd_changed() {
+    shadingInfoTextFieldChanged(shadingDiffuseSlider, shadingDiffuseREd, "diffuse", SLIDER_SCALE_AMBIENT, 0);
+  }
+
+  public void shadingPhongREd_changed() {
+    shadingInfoTextFieldChanged(shadingPhongSlider, shadingPhongREd, "phong", SLIDER_SCALE_AMBIENT, 0);
+  }
+
+  public void shadingPhongSizeREd_changed() {
+    shadingInfoTextFieldChanged(shadingPhongSizeSlider, shadingPhongSizeREd, "phongSize", SLIDER_SCALE_PHONGSIZE, 0);
+  }
+
+  public void shadingLightXREd_changed() {
+    int cIdx = shadingLightCmb.getSelectedIndex();
+    shadingInfoTextFieldChanged(shadingLightXSlider, shadingLightXREd, "lightPosX", SLIDER_SCALE_LIGHTPOS, cIdx);
+  }
+
+  public void shadingLightYREd_changed() {
+    int cIdx = shadingLightCmb.getSelectedIndex();
+    shadingInfoTextFieldChanged(shadingLightYSlider, shadingLightYREd, "lightPosY", SLIDER_SCALE_LIGHTPOS, cIdx);
+  }
+
+  public void shadingLightZREd_changed() {
+    int cIdx = shadingLightCmb.getSelectedIndex();
+    shadingInfoTextFieldChanged(shadingLightZSlider, shadingLightZREd, "lightPosZ", SLIDER_SCALE_LIGHTPOS, cIdx);
+  }
+
+  public void shadingLightRedREd_changed() {
+    int cIdx = shadingLightCmb.getSelectedIndex();
+    shadingInfoTextFieldChanged(shadingLightRedSlider, shadingLightRedREd, "lightRed", 1.0, cIdx);
+  }
+
+  public void shadingLightGreenREd_changed() {
+    int cIdx = shadingLightCmb.getSelectedIndex();
+    shadingInfoTextFieldChanged(shadingLightGreenSlider, shadingLightGreenREd, "lightGreen", 1.0, cIdx);
+  }
+
+  public void shadingLightBlueREd_changed() {
+    int cIdx = shadingLightCmb.getSelectedIndex();
+    shadingInfoTextFieldChanged(shadingLightBlueSlider, shadingLightBlueREd, "lightBlue", 1.0, cIdx);
+  }
+
+  public void shadingLightBlueSlider_changed() {
+    int cIdx = shadingLightCmb.getSelectedIndex();
+    shadingInfoSliderChanged(shadingLightBlueSlider, shadingLightBlueREd, "lightBlue", 1.0, cIdx);
+  }
+
+  public void shadingLightGreenSlider_changed() {
+    int cIdx = shadingLightCmb.getSelectedIndex();
+    shadingInfoSliderChanged(shadingLightGreenSlider, shadingLightGreenREd, "lightGreen", 1.0, cIdx);
+  }
+
+  public void shadingAmbientSlider_changed() {
+    shadingInfoSliderChanged(shadingAmbientSlider, shadingAmbientREd, "ambient", SLIDER_SCALE_AMBIENT, 0);
+  }
+
+  public void shadingDiffuseSlider_changed() {
+    shadingInfoSliderChanged(shadingDiffuseSlider, shadingDiffuseREd, "diffuse", SLIDER_SCALE_AMBIENT, 0);
+  }
+
+  public void shadingPhongSlider_changed() {
+    shadingInfoSliderChanged(shadingPhongSlider, shadingPhongREd, "phong", SLIDER_SCALE_AMBIENT, 0);
+  }
+
+  public void shadingCmb_changed() {
+    if (noRefresh) {
+      return;
+    }
+    Flame currFlame = getCurrFlame();
+    if (currFlame == null) {
+      return;
+    }
+    noRefresh = true;
+    try {
+      currFlame.getShadingInfo().setShading((Shading) shadingCmb.getSelectedItem());
+      refreshShadingUI();
+      enableShadingUI();
+      refreshFlameImage();
+    }
+    finally {
+      noRefresh = false;
+    }
+  }
+
+  public void shadingLightXSlider_changed() {
+    int cIdx = shadingLightCmb.getSelectedIndex();
+    shadingInfoSliderChanged(shadingLightXSlider, shadingLightXREd, "lightPosX", SLIDER_SCALE_LIGHTPOS, cIdx);
+  }
+
+  public void shadingLightYSlider_changed() {
+    int cIdx = shadingLightCmb.getSelectedIndex();
+    shadingInfoSliderChanged(shadingLightYSlider, shadingLightYREd, "lightPosY", SLIDER_SCALE_LIGHTPOS, cIdx);
+  }
+
+  public void shadingLightZSlider_changed() {
+    int cIdx = shadingLightCmb.getSelectedIndex();
+    shadingInfoSliderChanged(shadingLightZSlider, shadingLightZREd, "lightPosZ", SLIDER_SCALE_LIGHTPOS, cIdx);
+  }
+
+  public void shadingLightRedSlider_changed() {
+    int cIdx = shadingLightCmb.getSelectedIndex();
+    shadingInfoSliderChanged(shadingLightRedSlider, shadingLightRedREd, "lightRed", 1.0, cIdx);
+  }
+
+  public void shadingLightCmb_changed() {
+    if (noRefresh) {
+      return;
+    }
+    noRefresh = true;
+    try {
+      refreshShadingUI();
+    }
+    finally {
+      noRefresh = false;
+    }
+  }
+
+  public void shadingPhongSizeSlider_changed() {
+    shadingInfoSliderChanged(shadingPhongSizeSlider, shadingPhongSizeREd, "phongSize", SLIDER_SCALE_PHONGSIZE, 0);
   }
 
 }

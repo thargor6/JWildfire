@@ -40,7 +40,7 @@ public class ShadingInfo {
     lightCount = 2;
     lightPosX[0] = -0.2;
     lightPosY[0] = -0.2;
-    lightPosZ[0] = -1;
+    lightPosZ[0] = -4;
     lightPosX[1] = 0.2;
     lightPosY[1] = -0.2;
     lightPosZ[1] = -1;
@@ -53,15 +53,15 @@ public class ShadingInfo {
     lightRed[0] = 240;
     lightGreen[0] = 220;
     lightBlue[0] = 220;
-    lightRed[1] = 160;
-    lightGreen[1] = 155;
-    lightBlue[1] = 150;
-    lightRed[2] = 160;
-    lightGreen[2] = 155;
-    lightBlue[2] = 150;
-    lightRed[3] = 160;
-    lightGreen[3] = 155;
-    lightBlue[3] = 150;
+    lightRed[1] = 0;
+    lightGreen[1] = 0;
+    lightBlue[1] = 0;
+    lightRed[2] = 0;
+    lightGreen[2] = 0;
+    lightBlue[2] = 0;
+    lightRed[3] = 0;
+    lightGreen[3] = 0;
+    lightBlue[3] = 0;
   }
 
   public Shading getShading() {
@@ -158,5 +158,22 @@ public class ShadingInfo {
 
   public void setLightBlue(int[] lightBlue) {
     this.lightBlue = lightBlue;
+  }
+
+  public void assign(ShadingInfo pSrc) {
+    shading = pSrc.shading;
+    ambient = pSrc.ambient;
+    diffuse = pSrc.diffuse;
+    lightCount = pSrc.lightCount;
+    phong = pSrc.phong;
+    phongSize = pSrc.phongSize;
+    for (int i = 0; i < lightPosX.length; i++) {
+      lightPosX[i] = pSrc.lightPosX[i];
+      lightPosY[i] = pSrc.lightPosY[i];
+      lightPosZ[i] = pSrc.lightPosZ[i];
+      lightRed[i] = pSrc.lightRed[i];
+      lightGreen[i] = pSrc.lightGreen[i];
+      lightBlue[i] = pSrc.lightBlue[i];
+    }
   }
 }

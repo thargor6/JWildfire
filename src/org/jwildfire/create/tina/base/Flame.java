@@ -311,6 +311,8 @@ public class Flame {
     contrast = pFlame.contrast;
     vibrancy = pFlame.vibrancy;
 
+    shadingInfo.assign(pFlame.shadingInfo);
+
     palette = pFlame.palette.makeCopy();
     xForms.clear();
     for (XForm xForm : pFlame.getXForms()) {

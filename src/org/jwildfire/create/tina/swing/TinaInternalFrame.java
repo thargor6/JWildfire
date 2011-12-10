@@ -39,6 +39,7 @@ import javax.swing.event.ListSelectionListener;
 import org.jwildfire.base.Prefs;
 import org.jwildfire.create.tina.base.DrawMode;
 import org.jwildfire.create.tina.base.RandomFlameGeneratorStyle;
+import org.jwildfire.create.tina.base.Shading;
 import org.jwildfire.create.tina.render.AffineZStyle;
 import org.jwildfire.create.tina.swing.TinaController.NonlinearControlsRow;
 import org.jwildfire.create.tina.transform.AnimationService;
@@ -526,6 +527,41 @@ public class TinaInternalFrame extends JInternalFrame implements ProgressUpdater
   private JSlider tinaCameraDOFSlider = null;
   private JTextField tinaCameraDOFREd = null;
   private JLabel tinaCameraDOFLbl = null;
+  private JPanel shadingPanel = null;
+  private JLabel shadingLbl = null;
+  private JComboBox shadingCmb = null;
+  private JLabel shadingDiffuseLbl = null;
+  private JTextField shadingAmbientREd = null;
+  private JLabel shadingAmbientLbl = null;
+  private JTextField shadingDiffuseREd = null;
+  private JSlider shadingAmbientSlider = null;
+  private JSlider shadingDiffuseSlider = null;
+  private JLabel shadingPhongLbl = null;
+  private JTextField shadingPhongREd = null;
+  private JSlider shadingPhongSlider = null;
+  private JLabel shadingPhongSizeLbl = null;
+  private JTextField shadingPhongSizeREd = null;
+  private JSlider shadingPhongSizeSlider = null;
+  private JLabel shadingLightLbl = null;
+  private JComboBox shadingLightCmb = null;
+  private JLabel shadingLightXLbl = null;
+  private JTextField shadingLightXREd = null;
+  private JSlider shadingLightXSlider = null;
+  private JLabel shadingLightYLbl = null;
+  private JTextField shadingLightYREd = null;
+  private JSlider shadingLightYSlider = null;
+  private JLabel shadingLightZLbl = null;
+  private JTextField shadingLightZREd = null;
+  private JSlider shadingLightZSlider = null;
+  private JLabel shadingLightRedLbl = null;
+  private JTextField shadingLightRedREd = null;
+  private JSlider shadingLightRedSlider = null;
+  private JLabel shadingLightGreenLbl = null;
+  private JTextField shadingLightGreenREd = null;
+  private JSlider shadingLightGreenSlider = null;
+  private JLabel shadingLightBlueLbl = null;
+  private JTextField shadingLightBlueREd = null;
+  private JSlider shadingLightBlueSlider = null;
 
   /**
    * This is the xxx default constructor
@@ -670,6 +706,7 @@ public class TinaInternalFrame extends JInternalFrame implements ProgressUpdater
       tinaSouthTabbedPane.setFont(new Font("Dialog", Font.BOLD, 10));
       tinaSouthTabbedPane.addTab("Camera", null, getTinaCameraPanel(), null);
       tinaSouthTabbedPane.addTab("Coloring", null, getTinaColoringPanel(), null);
+      tinaSouthTabbedPane.addTab("Shading", null, getShadingPanel(), null);
     }
     return tinaSouthTabbedPane;
   }
@@ -2977,7 +3014,12 @@ public class TinaInternalFrame extends JInternalFrame implements ProgressUpdater
         getAnimateOutputREd(), getAnimateFramesREd(), getAnimateScriptCmb(), getAnimationGenerateButton(), getAnimateXFormScriptCmb(), getMouseTransformMoveButton(),
         getMouseTransformRotateButton(), getMouseTransformScaleButton(), getAffineEditPostTransformButton(), getAffineEditPostTransformSmallButton(),
         getMouseTransformZoomInButton(), getMouseTransformZoomOutButton(), getToggleTrianglesButton(), this, getRandomPostTransformCheckBox(),
-        getRandomSymmetryCheckBox(), getAffineResetTransformButton(), getColorOversampleREd(), getColorOversampleSlider(), getCreatePaletteColorsTable());
+        getRandomSymmetryCheckBox(), getAffineResetTransformButton(), getColorOversampleREd(), getColorOversampleSlider(), getCreatePaletteColorsTable(),
+        getShadingCmb(), getShadingAmbientREd(), getShadingAmbientSlider(), getShadingDiffuseREd(), getShadingDiffuseSlider(),
+        getShadingPhongREd(), getShadingPhongSlider(), getShadingPhongSizeREd(), getShadingPhongSizeSlider(), getShadingLightCmb(),
+        getShadingLightXREd(), getShadingLightXSlider(), getShadingLightYREd(), getShadingLightYSlider(), getShadingLightZREd(),
+        getShadingLightZSlider(), getShadingLightRedREd(), getShadingLightRedSlider(), getShadingLightGreenREd(), getShadingLightGreenSlider(),
+        getShadingLightBlueREd(), getShadingLightBlueSlider());
     tinaController.refreshing = tinaController.cmbRefreshing = tinaController.gridRefreshing = true;
     try {
       for (NonlinearControlsRow row : nonlinearControlsRows) {
@@ -2996,6 +3038,16 @@ public class TinaInternalFrame extends JInternalFrame implements ProgressUpdater
       getZStyleCmb().addItem(AffineZStyle.Z4);
       getZStyleCmb().addItem(AffineZStyle.Z5);
       getZStyleCmb().addItem(AffineZStyle.Z6);
+
+      getShadingCmb().removeAllItems();
+      getShadingCmb().addItem(Shading.FLAT);
+      getShadingCmb().addItem(Shading.PSEUDO3D);
+
+      getShadingLightCmb().removeAllItems();
+      getShadingLightCmb().addItem(String.valueOf("1"));
+      getShadingLightCmb().addItem(String.valueOf("2"));
+      getShadingLightCmb().addItem(String.valueOf("3"));
+      getShadingLightCmb().addItem(String.valueOf("4"));
 
       getMorphFrameSlider().setMaximum(Integer.parseInt(getMorphFramesREd().getText()));
       getMorphFrameSlider().setValue(Integer.parseInt(getMorphFrameREd().getText()));
@@ -7604,6 +7656,669 @@ public class TinaInternalFrame extends JInternalFrame implements ProgressUpdater
       });
     }
     return tinaCameraDOFREd;
+  }
+
+  /**
+   * This method initializes shadingPanel	
+   * 	
+   * @return javax.swing.JPanel	
+   */
+  private JPanel getShadingPanel() {
+    if (shadingPanel == null) {
+      shadingLightBlueLbl = new JLabel();
+      shadingLightBlueLbl.setPreferredSize(new Dimension(94, 22));
+      shadingLightBlueLbl.setText("Green");
+      shadingLightBlueLbl.setSize(new Dimension(94, 22));
+      shadingLightBlueLbl.setLocation(new Point(644, 76));
+      shadingLightBlueLbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      shadingLightGreenLbl = new JLabel();
+      shadingLightGreenLbl.setPreferredSize(new Dimension(94, 22));
+      shadingLightGreenLbl.setText("Green");
+      shadingLightGreenLbl.setSize(new Dimension(94, 22));
+      shadingLightGreenLbl.setLocation(new Point(644, 52));
+      shadingLightGreenLbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      shadingLightRedLbl = new JLabel();
+      shadingLightRedLbl.setPreferredSize(new Dimension(94, 22));
+      shadingLightRedLbl.setText("Red");
+      shadingLightRedLbl.setSize(new Dimension(94, 22));
+      shadingLightRedLbl.setLocation(new Point(644, 28));
+      shadingLightRedLbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      shadingLightZLbl = new JLabel();
+      shadingLightZLbl.setPreferredSize(new Dimension(94, 22));
+      shadingLightZLbl.setText("Z position");
+      shadingLightZLbl.setSize(new Dimension(94, 22));
+      shadingLightZLbl.setLocation(new Point(324, 76));
+      shadingLightZLbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      shadingLightYLbl = new JLabel();
+      shadingLightYLbl.setPreferredSize(new Dimension(94, 22));
+      shadingLightYLbl.setText("Y position");
+      shadingLightYLbl.setSize(new Dimension(94, 22));
+      shadingLightYLbl.setLocation(new Point(324, 52));
+      shadingLightYLbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      shadingLightXLbl = new JLabel();
+      shadingLightXLbl.setPreferredSize(new Dimension(94, 22));
+      shadingLightXLbl.setText("X position");
+      shadingLightXLbl.setSize(new Dimension(94, 22));
+      shadingLightXLbl.setLocation(new Point(324, 28));
+      shadingLightXLbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      shadingLightLbl = new JLabel();
+      shadingLightLbl.setPreferredSize(new Dimension(94, 22));
+      shadingLightLbl.setText("Light source");
+      shadingLightLbl.setSize(new Dimension(94, 22));
+      shadingLightLbl.setLocation(new Point(324, 4));
+      shadingLightLbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      shadingPhongSizeLbl = new JLabel();
+      shadingPhongSizeLbl.setPreferredSize(new Dimension(94, 22));
+      shadingPhongSizeLbl.setText("Phong size");
+      shadingPhongSizeLbl.setSize(new Dimension(94, 22));
+      shadingPhongSizeLbl.setLocation(new Point(4, 100));
+      shadingPhongSizeLbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      shadingPhongLbl = new JLabel();
+      shadingPhongLbl.setPreferredSize(new Dimension(94, 22));
+      shadingPhongLbl.setText("Phong");
+      shadingPhongLbl.setSize(new Dimension(94, 22));
+      shadingPhongLbl.setLocation(new Point(4, 76));
+      shadingPhongLbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      shadingAmbientLbl = new JLabel();
+      shadingAmbientLbl.setPreferredSize(new Dimension(94, 22));
+      shadingAmbientLbl.setText("Ambient");
+      shadingAmbientLbl.setSize(new Dimension(94, 22));
+      shadingAmbientLbl.setLocation(new Point(4, 28));
+      shadingAmbientLbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      shadingDiffuseLbl = new JLabel();
+      shadingDiffuseLbl.setPreferredSize(new Dimension(94, 22));
+      shadingDiffuseLbl.setText("Diffuse");
+      shadingDiffuseLbl.setSize(new Dimension(94, 22));
+      shadingDiffuseLbl.setLocation(new Point(4, 52));
+      shadingDiffuseLbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      shadingLbl = new JLabel();
+      shadingLbl.setPreferredSize(new Dimension(94, 22));
+      shadingLbl.setText("Shading");
+      shadingLbl.setSize(new Dimension(94, 22));
+      shadingLbl.setLocation(new Point(4, 4));
+      shadingLbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      shadingPanel = new JPanel();
+      shadingPanel.setLayout(null);
+      shadingPanel.add(shadingLbl, null);
+      shadingPanel.add(getShadingCmb(), null);
+      shadingPanel.add(shadingDiffuseLbl, null);
+      shadingPanel.add(getShadingAmbientREd(), null);
+      shadingPanel.add(shadingAmbientLbl, null);
+      shadingPanel.add(getShadingDiffuseREd(), null);
+      shadingPanel.add(getShadingAmbientSlider(), null);
+      shadingPanel.add(getShadingDiffuseSlider(), null);
+      shadingPanel.add(shadingPhongLbl, null);
+      shadingPanel.add(getShadingPhongREd(), null);
+      shadingPanel.add(getShadingPhongSlider(), null);
+      shadingPanel.add(shadingPhongSizeLbl, null);
+      shadingPanel.add(getShadingPhongSizeREd(), null);
+      shadingPanel.add(getShadingPhongSizeSlider(), null);
+      shadingPanel.add(shadingLightLbl, null);
+      shadingPanel.add(getShadingLightCmb(), null);
+      shadingPanel.add(shadingLightXLbl, null);
+      shadingPanel.add(getShadingLightXREd(), null);
+      shadingPanel.add(getShadingLightXSlider(), null);
+      shadingPanel.add(shadingLightYLbl, null);
+      shadingPanel.add(getShadingLightYREd(), null);
+      shadingPanel.add(getShadingLightYSlider(), null);
+      shadingPanel.add(shadingLightZLbl, null);
+      shadingPanel.add(getShadingLightZREd(), null);
+      shadingPanel.add(getShadingLightZSlider(), null);
+      shadingPanel.add(shadingLightRedLbl, null);
+      shadingPanel.add(getShadingLightRedREd(), null);
+      shadingPanel.add(getShadingLightRedSlider(), null);
+      shadingPanel.add(shadingLightGreenLbl, null);
+      shadingPanel.add(getShadingLightGreenREd(), null);
+      shadingPanel.add(getShadingLightGreenSlider(), null);
+      shadingPanel.add(shadingLightBlueLbl, null);
+      shadingPanel.add(getShadingLightBlueREd(), null);
+      shadingPanel.add(getShadingLightBlueSlider(), null);
+    }
+    return shadingPanel;
+  }
+
+  /**
+   * This method initializes shadingCmb	
+   * 	
+   * @return javax.swing.JComboBox	
+   */
+  private JComboBox getShadingCmb() {
+    if (shadingCmb == null) {
+      shadingCmb = new JComboBox();
+      shadingCmb.setPreferredSize(new Dimension(125, 22));
+      shadingCmb.setSelectedItem(RandomFlameGeneratorStyle.ALL);
+      shadingCmb.setSize(new Dimension(125, 22));
+      shadingCmb.setLocation(new Point(100, 4));
+      shadingCmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      shadingCmb.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent e) {
+          tinaController.shadingCmb_changed();
+        }
+      });
+    }
+    return shadingCmb;
+  }
+
+  /**
+   * This method initializes shadingAmbientREd	
+   * 	
+   * @return javax.swing.JTextField	
+   */
+  private JTextField getShadingAmbientREd() {
+    if (shadingAmbientREd == null) {
+      shadingAmbientREd = new JTextField();
+      shadingAmbientREd.setPreferredSize(new Dimension(100, 22));
+      shadingAmbientREd.setText("");
+      shadingAmbientREd.setSize(new Dimension(100, 22));
+      shadingAmbientREd.setLocation(new Point(100, 28));
+      shadingAmbientREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      shadingAmbientREd.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent e) {
+          tinaController.shadingAmbientREd_changed();
+        }
+      });
+      shadingAmbientREd.addFocusListener(new java.awt.event.FocusAdapter() {
+        public void focusLost(java.awt.event.FocusEvent e) {
+          tinaController.shadingAmbientREd_changed();
+        }
+      });
+    }
+    return shadingAmbientREd;
+  }
+
+  /**
+   * This method initializes shadingDiffuseREd	
+   * 	
+   * @return javax.swing.JTextField	
+   */
+  private JTextField getShadingDiffuseREd() {
+    if (shadingDiffuseREd == null) {
+      shadingDiffuseREd = new JTextField();
+      shadingDiffuseREd.setPreferredSize(new Dimension(100, 22));
+      shadingDiffuseREd.setText("");
+      shadingDiffuseREd.setSize(new Dimension(100, 22));
+      shadingDiffuseREd.setLocation(new Point(100, 52));
+      shadingDiffuseREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      shadingDiffuseREd.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent e) {
+          tinaController.shadingDiffuseREd_changed();
+        }
+      });
+      shadingDiffuseREd.addFocusListener(new java.awt.event.FocusAdapter() {
+        public void focusLost(java.awt.event.FocusEvent e) {
+          tinaController.shadingDiffuseREd_changed();
+        }
+      });
+    }
+    return shadingDiffuseREd;
+  }
+
+  /**
+   * This method initializes shadingAmbientSlider	
+   * 	
+   * @return javax.swing.JSlider	
+   */
+  private JSlider getShadingAmbientSlider() {
+    if (shadingAmbientSlider == null) {
+      shadingAmbientSlider = new JSlider();
+      shadingAmbientSlider.setMaximum(100);
+      shadingAmbientSlider.setMinimum(0);
+      shadingAmbientSlider.setValue(0);
+      shadingAmbientSlider.setLocation(new Point(202, 28));
+      shadingAmbientSlider.setSize(new Dimension(120, 19));
+      shadingAmbientSlider.setPreferredSize(new Dimension(120, 19));
+      shadingAmbientSlider.addChangeListener(new javax.swing.event.ChangeListener() {
+        public void stateChanged(javax.swing.event.ChangeEvent e) {
+          tinaController.shadingAmbientSlider_changed();
+        }
+      });
+    }
+    return shadingAmbientSlider;
+  }
+
+  /**
+   * This method initializes shadingDiffuseSlider	
+   * 	
+   * @return javax.swing.JSlider	
+   */
+  private JSlider getShadingDiffuseSlider() {
+    if (shadingDiffuseSlider == null) {
+      shadingDiffuseSlider = new JSlider();
+      shadingDiffuseSlider.setMaximum(100);
+      shadingDiffuseSlider.setMinimum(0);
+      shadingDiffuseSlider.setValue(0);
+      shadingDiffuseSlider.setSize(new Dimension(120, 19));
+      shadingDiffuseSlider.setLocation(new Point(202, 52));
+      shadingDiffuseSlider.setPreferredSize(new Dimension(120, 19));
+      shadingDiffuseSlider.addChangeListener(new javax.swing.event.ChangeListener() {
+        public void stateChanged(javax.swing.event.ChangeEvent e) {
+          tinaController.shadingDiffuseSlider_changed();
+        }
+      });
+    }
+    return shadingDiffuseSlider;
+  }
+
+  /**
+   * This method initializes shadingPhongREd	
+   * 	
+   * @return javax.swing.JTextField	
+   */
+  private JTextField getShadingPhongREd() {
+    if (shadingPhongREd == null) {
+      shadingPhongREd = new JTextField();
+      shadingPhongREd.setPreferredSize(new Dimension(100, 22));
+      shadingPhongREd.setText("");
+      shadingPhongREd.setSize(new Dimension(100, 22));
+      shadingPhongREd.setLocation(new Point(100, 76));
+      shadingPhongREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      shadingPhongREd.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent e) {
+          tinaController.shadingPhongREd_changed();
+        }
+      });
+      shadingPhongREd.addFocusListener(new java.awt.event.FocusAdapter() {
+        public void focusLost(java.awt.event.FocusEvent e) {
+          tinaController.shadingPhongREd_changed();
+        }
+      });
+    }
+    return shadingPhongREd;
+  }
+
+  /**
+   * This method initializes shadingPhongSlider	
+   * 	
+   * @return javax.swing.JSlider	
+   */
+  private JSlider getShadingPhongSlider() {
+    if (shadingPhongSlider == null) {
+      shadingPhongSlider = new JSlider();
+      shadingPhongSlider.setMaximum(100);
+      shadingPhongSlider.setMinimum(0);
+      shadingPhongSlider.setValue(0);
+      shadingPhongSlider.setSize(new Dimension(120, 19));
+      shadingPhongSlider.setLocation(new Point(202, 76));
+      shadingPhongSlider.setPreferredSize(new Dimension(120, 19));
+      shadingPhongSlider.addChangeListener(new javax.swing.event.ChangeListener() {
+        public void stateChanged(javax.swing.event.ChangeEvent e) {
+          tinaController.shadingPhongSlider_changed();
+        }
+      });
+    }
+    return shadingPhongSlider;
+  }
+
+  /**
+   * This method initializes shadingPhongSizeREd	
+   * 	
+   * @return javax.swing.JTextField	
+   */
+  private JTextField getShadingPhongSizeREd() {
+    if (shadingPhongSizeREd == null) {
+      shadingPhongSizeREd = new JTextField();
+      shadingPhongSizeREd.setPreferredSize(new Dimension(100, 22));
+      shadingPhongSizeREd.setText("");
+      shadingPhongSizeREd.setSize(new Dimension(100, 22));
+      shadingPhongSizeREd.setLocation(new Point(100, 100));
+      shadingPhongSizeREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      shadingPhongSizeREd.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent e) {
+          tinaController.shadingPhongSizeREd_changed();
+        }
+      });
+      shadingPhongSizeREd.addFocusListener(new java.awt.event.FocusAdapter() {
+        public void focusLost(java.awt.event.FocusEvent e) {
+          tinaController.shadingPhongSizeREd_changed();
+        }
+      });
+    }
+    return shadingPhongSizeREd;
+  }
+
+  /**
+   * This method initializes shadingPhongSizeSlider	
+   * 	
+   * @return javax.swing.JSlider	
+   */
+  private JSlider getShadingPhongSizeSlider() {
+    if (shadingPhongSizeSlider == null) {
+      shadingPhongSizeSlider = new JSlider();
+      shadingPhongSizeSlider.setMaximum(1000);
+      shadingPhongSizeSlider.setMinimum(0);
+      shadingPhongSizeSlider.setValue(0);
+      shadingPhongSizeSlider.setSize(new Dimension(120, 19));
+      shadingPhongSizeSlider.setLocation(new Point(202, 100));
+      shadingPhongSizeSlider.setPreferredSize(new Dimension(120, 19));
+      shadingPhongSizeSlider.addChangeListener(new javax.swing.event.ChangeListener() {
+        public void stateChanged(javax.swing.event.ChangeEvent e) {
+          tinaController.shadingPhongSizeSlider_changed();
+        }
+      });
+    }
+    return shadingPhongSizeSlider;
+  }
+
+  /**
+   * This method initializes shadingLightCmb	
+   * 	
+   * @return javax.swing.JComboBox	
+   */
+  private JComboBox getShadingLightCmb() {
+    if (shadingLightCmb == null) {
+      shadingLightCmb = new JComboBox();
+      shadingLightCmb.setPreferredSize(new Dimension(125, 22));
+      shadingLightCmb.setSelectedItem(RandomFlameGeneratorStyle.ALL);
+      shadingLightCmb.setSize(new Dimension(125, 22));
+      shadingLightCmb.setLocation(new Point(420, 4));
+      shadingLightCmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      shadingLightCmb.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent e) {
+          tinaController.shadingLightCmb_changed();
+        }
+      });
+    }
+    return shadingLightCmb;
+  }
+
+  /**
+   * This method initializes shadingLightXREd	
+   * 	
+   * @return javax.swing.JTextField	
+   */
+  private JTextField getShadingLightXREd() {
+    if (shadingLightXREd == null) {
+      shadingLightXREd = new JTextField();
+      shadingLightXREd.setPreferredSize(new Dimension(100, 22));
+      shadingLightXREd.setText("");
+      shadingLightXREd.setSize(new Dimension(100, 22));
+      shadingLightXREd.setLocation(new Point(420, 28));
+      shadingLightXREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      shadingLightXREd.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent e) {
+          tinaController.shadingLightXREd_changed();
+        }
+      });
+      shadingLightXREd.addFocusListener(new java.awt.event.FocusAdapter() {
+        public void focusLost(java.awt.event.FocusEvent e) {
+          tinaController.shadingLightXREd_changed();
+        }
+      });
+    }
+    return shadingLightXREd;
+  }
+
+  /**
+   * This method initializes shadingLightXSlider	
+   * 	
+   * @return javax.swing.JSlider	
+   */
+  private JSlider getShadingLightXSlider() {
+    if (shadingLightXSlider == null) {
+      shadingLightXSlider = new JSlider();
+      shadingLightXSlider.setMaximum(300);
+      shadingLightXSlider.setMinimum(-300);
+      shadingLightXSlider.setValue(0);
+      shadingLightXSlider.setSize(new Dimension(120, 19));
+      shadingLightXSlider.setLocation(new Point(522, 28));
+      shadingLightXSlider.setPreferredSize(new Dimension(120, 19));
+      shadingLightXSlider.addChangeListener(new javax.swing.event.ChangeListener() {
+        public void stateChanged(javax.swing.event.ChangeEvent e) {
+          tinaController.shadingLightXSlider_changed();
+        }
+      });
+    }
+    return shadingLightXSlider;
+  }
+
+  /**
+   * This method initializes shadingLightYREd	
+   * 	
+   * @return javax.swing.JTextField	
+   */
+  private JTextField getShadingLightYREd() {
+    if (shadingLightYREd == null) {
+      shadingLightYREd = new JTextField();
+      shadingLightYREd.setPreferredSize(new Dimension(100, 22));
+      shadingLightYREd.setText("");
+      shadingLightYREd.setSize(new Dimension(100, 22));
+      shadingLightYREd.setLocation(new Point(420, 52));
+      shadingLightYREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      shadingLightYREd.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent e) {
+          tinaController.shadingLightYREd_changed();
+        }
+      });
+      shadingLightYREd.addFocusListener(new java.awt.event.FocusAdapter() {
+        public void focusLost(java.awt.event.FocusEvent e) {
+          tinaController.shadingLightYREd_changed();
+        }
+      });
+    }
+    return shadingLightYREd;
+  }
+
+  /**
+   * This method initializes shadingLightYSlider	
+   * 	
+   * @return javax.swing.JSlider	
+   */
+  private JSlider getShadingLightYSlider() {
+    if (shadingLightYSlider == null) {
+      shadingLightYSlider = new JSlider();
+      shadingLightYSlider.setMaximum(300);
+      shadingLightYSlider.setMinimum(-300);
+      shadingLightYSlider.setValue(0);
+      shadingLightYSlider.setSize(new Dimension(120, 19));
+      shadingLightYSlider.setLocation(new Point(522, 52));
+      shadingLightYSlider.setPreferredSize(new Dimension(120, 19));
+      shadingLightYSlider.addChangeListener(new javax.swing.event.ChangeListener() {
+        public void stateChanged(javax.swing.event.ChangeEvent e) {
+          tinaController.shadingLightYSlider_changed();
+        }
+      });
+    }
+    return shadingLightYSlider;
+  }
+
+  /**
+   * This method initializes shadingLightZREd	
+   * 	
+   * @return javax.swing.JTextField	
+   */
+  private JTextField getShadingLightZREd() {
+    if (shadingLightZREd == null) {
+      shadingLightZREd = new JTextField();
+      shadingLightZREd.setPreferredSize(new Dimension(100, 22));
+      shadingLightZREd.setText("");
+      shadingLightZREd.setSize(new Dimension(100, 22));
+      shadingLightZREd.setLocation(new Point(420, 76));
+      shadingLightZREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      shadingLightZREd.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent e) {
+          tinaController.shadingLightZREd_changed();
+        }
+      });
+      shadingLightZREd.addFocusListener(new java.awt.event.FocusAdapter() {
+        public void focusLost(java.awt.event.FocusEvent e) {
+          tinaController.shadingLightZREd_changed();
+        }
+      });
+    }
+    return shadingLightZREd;
+  }
+
+  /**
+   * This method initializes shadingLightZSlider	
+   * 	
+   * @return javax.swing.JSlider	
+   */
+  private JSlider getShadingLightZSlider() {
+    if (shadingLightZSlider == null) {
+      shadingLightZSlider = new JSlider();
+      shadingLightZSlider.setMaximum(300);
+      shadingLightZSlider.setMinimum(-300);
+      shadingLightZSlider.setValue(0);
+      shadingLightZSlider.setSize(new Dimension(120, 19));
+      shadingLightZSlider.setLocation(new Point(522, 76));
+      shadingLightZSlider.setPreferredSize(new Dimension(120, 19));
+      shadingLightZSlider.addChangeListener(new javax.swing.event.ChangeListener() {
+        public void stateChanged(javax.swing.event.ChangeEvent e) {
+          tinaController.shadingLightZSlider_changed();
+        }
+      });
+    }
+    return shadingLightZSlider;
+  }
+
+  /**
+   * This method initializes shadingLightRedREd	
+   * 	
+   * @return javax.swing.JTextField	
+   */
+  private JTextField getShadingLightRedREd() {
+    if (shadingLightRedREd == null) {
+      shadingLightRedREd = new JTextField();
+      shadingLightRedREd.setPreferredSize(new Dimension(100, 22));
+      shadingLightRedREd.setText("");
+      shadingLightRedREd.setSize(new Dimension(100, 22));
+      shadingLightRedREd.setLocation(new Point(740, 28));
+      shadingLightRedREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      shadingLightRedREd.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent e) {
+          tinaController.shadingLightRedREd_changed();
+        }
+      });
+      shadingLightRedREd.addFocusListener(new java.awt.event.FocusAdapter() {
+        public void focusLost(java.awt.event.FocusEvent e) {
+          tinaController.shadingLightRedREd_changed();
+        }
+      });
+    }
+    return shadingLightRedREd;
+  }
+
+  /**
+   * This method initializes shadingLightRedSlider	
+   * 	
+   * @return javax.swing.JSlider	
+   */
+  private JSlider getShadingLightRedSlider() {
+    if (shadingLightRedSlider == null) {
+      shadingLightRedSlider = new JSlider();
+      shadingLightRedSlider.setMaximum(255);
+      shadingLightRedSlider.setMinimum(0);
+      shadingLightRedSlider.setValue(0);
+      shadingLightRedSlider.setLocation(new Point(842, 28));
+      shadingLightRedSlider.setSize(new Dimension(120, 19));
+      shadingLightRedSlider.setPreferredSize(new Dimension(120, 19));
+      shadingLightRedSlider.addChangeListener(new javax.swing.event.ChangeListener() {
+        public void stateChanged(javax.swing.event.ChangeEvent e) {
+          tinaController.shadingLightRedSlider_changed();
+        }
+      });
+    }
+    return shadingLightRedSlider;
+  }
+
+  /**
+   * This method initializes shadingLightGreenREd	
+   * 	
+   * @return javax.swing.JTextField	
+   */
+  private JTextField getShadingLightGreenREd() {
+    if (shadingLightGreenREd == null) {
+      shadingLightGreenREd = new JTextField();
+      shadingLightGreenREd.setPreferredSize(new Dimension(100, 22));
+      shadingLightGreenREd.setText("");
+      shadingLightGreenREd.setSize(new Dimension(100, 22));
+      shadingLightGreenREd.setLocation(new Point(740, 52));
+      shadingLightGreenREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      shadingLightGreenREd.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent e) {
+          tinaController.shadingLightGreenREd_changed();
+        }
+      });
+      shadingLightGreenREd.addFocusListener(new java.awt.event.FocusAdapter() {
+        public void focusLost(java.awt.event.FocusEvent e) {
+          tinaController.shadingLightGreenREd_changed();
+        }
+      });
+    }
+    return shadingLightGreenREd;
+  }
+
+  /**
+   * This method initializes shadingLightGreenSlider	
+   * 	
+   * @return javax.swing.JSlider	
+   */
+  private JSlider getShadingLightGreenSlider() {
+    if (shadingLightGreenSlider == null) {
+      shadingLightGreenSlider = new JSlider();
+      shadingLightGreenSlider.setMaximum(255);
+      shadingLightGreenSlider.setMinimum(0);
+      shadingLightGreenSlider.setValue(0);
+      shadingLightGreenSlider.setSize(new Dimension(120, 19));
+      shadingLightGreenSlider.setLocation(new Point(842, 52));
+      shadingLightGreenSlider.setPreferredSize(new Dimension(120, 19));
+      shadingLightGreenSlider.addChangeListener(new javax.swing.event.ChangeListener() {
+        public void stateChanged(javax.swing.event.ChangeEvent e) {
+          tinaController.shadingLightGreenSlider_changed();
+        }
+      });
+    }
+    return shadingLightGreenSlider;
+  }
+
+  /**
+   * This method initializes shadingLightBlueREd	
+   * 	
+   * @return javax.swing.JTextField	
+   */
+  private JTextField getShadingLightBlueREd() {
+    if (shadingLightBlueREd == null) {
+      shadingLightBlueREd = new JTextField();
+      shadingLightBlueREd.setPreferredSize(new Dimension(100, 22));
+      shadingLightBlueREd.setText("");
+      shadingLightBlueREd.setSize(new Dimension(100, 22));
+      shadingLightBlueREd.setLocation(new Point(740, 76));
+      shadingLightBlueREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      shadingLightBlueREd.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent e) {
+          tinaController.shadingLightBlueREd_changed();
+        }
+      });
+      shadingLightBlueREd.addFocusListener(new java.awt.event.FocusAdapter() {
+        public void focusLost(java.awt.event.FocusEvent e) {
+          tinaController.shadingLightBlueREd_changed();
+        }
+      });
+    }
+    return shadingLightBlueREd;
+  }
+
+  /**
+   * This method initializes shadingLightBlueSlider	
+   * 	
+   * @return javax.swing.JSlider	
+   */
+  private JSlider getShadingLightBlueSlider() {
+    if (shadingLightBlueSlider == null) {
+      shadingLightBlueSlider = new JSlider();
+      shadingLightBlueSlider.setMaximum(255);
+      shadingLightBlueSlider.setMinimum(0);
+      shadingLightBlueSlider.setValue(0);
+      shadingLightBlueSlider.setSize(new Dimension(120, 19));
+      shadingLightBlueSlider.setLocation(new Point(842, 76));
+      shadingLightBlueSlider.setPreferredSize(new Dimension(120, 19));
+      shadingLightBlueSlider.addChangeListener(new javax.swing.event.ChangeListener() {
+        public void stateChanged(javax.swing.event.ChangeEvent e) {
+          tinaController.shadingLightBlueSlider_changed();
+        }
+      });
+    }
+    return shadingLightBlueSlider;
   }
 
 } //  @jve:decl-index=0:visual-constraint="10,10"
