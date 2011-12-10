@@ -51,6 +51,7 @@ public class Flame {
   private RGBPalette palette = new RGBPalette();
   private final List<XForm> xForms = new ArrayList<XForm>();
   private XForm finalXForm = null;
+  private ShadingInfo shadingInfo = new ShadingInfo();
 
   public Flame() {
     init();
@@ -78,6 +79,7 @@ public class Flame {
     gammaThreshold = 0.04;
     pixelsPerUnit = 50;
     whiteLevel = 200;
+    shadingInfo.init();
   }
 
   public double getCentreX() {
@@ -342,6 +344,14 @@ public class Flame {
 
   public void setCamDOF(double camDOF) {
     this.camDOF = camDOF;
+  }
+
+  public ShadingInfo getShadingInfo() {
+    return shadingInfo;
+  }
+
+  public void setShadingInfo(ShadingInfo shadingInfo) {
+    this.shadingInfo = shadingInfo;
   }
 
 }

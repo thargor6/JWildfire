@@ -44,7 +44,16 @@ public class FlameRenderThread implements Runnable {
     finished = false;
     try {
       try {
-        iterate();
+        switch (flame.getShadingInfo().getShading()) {
+          case FLAT:
+            iterate_flat();
+            break;
+          case PSEUDO3D:
+            iterate_pseudo3D();
+            break;
+          default:
+            throw new IllegalArgumentException(flame.getShadingInfo().getShading().toString());
+        }
       }
       catch (RuntimeException ex) {
         ex.printStackTrace();
@@ -56,7 +65,7 @@ public class FlameRenderThread implements Runnable {
     }
   }
 
-  private void iterate() {
+  private void iterate_flat() {
     XYZPoint affineT = new XYZPoint(); // affine part of the transformation
     XYZPoint varT = new XYZPoint(); // complete transformation
     XYZPoint p = new XYZPoint();
@@ -122,6 +131,103 @@ public class FlameRenderThread implements Runnable {
       rp.green += color.green;
       rp.blue += color.blue;
       rp.count++;
+    }
+  }
+
+  private void iterate_pseudo3D() {
+    Pseudo3DShader shader = new Pseudo3DShader(flame.getShadingInfo());
+    shader.init();
+
+    XYZPoint[] affineT = new XYZPoint[3]; // affine part of the transformation
+    for (int i = 0; i < affineT.length; i++) {
+      affineT[i] = new XYZPoint();
+    }
+    XYZPoint[] varT = new XYZPoint[3]; // complete transformation
+    for (int i = 0; i < varT.length; i++) {
+      varT[i] = new XYZPoint();
+    }
+    XYZPoint[] p = new XYZPoint[3];
+    for (int i = 0; i < p.length; i++) {
+      p[i] = new XYZPoint();
+    }
+    p[0].x = 2.0 * renderer.random.random() - 1.0;
+    p[0].y = 2.0 * renderer.random.random() - 1.0;
+    p[0].z = 2.0 * renderer.random.random() - 1.0;
+    p[0].color = renderer.random.random();
+
+    shader.distributeInitialPoints(p);
+
+    XYZPoint[] q = new XYZPoint[3];
+    for (int i = 0; i < q.length; i++) {
+      q[i] = new XYZPoint();
+    }
+
+    XForm xf = flame.getXForms().get(0);
+    for (int pIdx = 0; pIdx < p.length; pIdx++) {
+      xf.transformPoint(renderer, affineT[pIdx], varT[pIdx], p[pIdx], p[pIdx], affineZStyle);
+    }
+    for (int i = 0; i <= Constants.INITIAL_ITERATIONS; i++) {
+      xf = xf.getNextAppliedXFormTable()[renderer.random.random(Constants.NEXT_APPLIED_XFORM_TABLE_SIZE)];
+      if (xf == null) {
+        return;
+      }
+    }
+
+    for (long i = 0; i < samples; i++) {
+      if (i % 100 == 0) {
+        currSample = i;
+      }
+      xf = xf.getNextAppliedXFormTable()[renderer.random.random(Constants.NEXT_APPLIED_XFORM_TABLE_SIZE)];
+      if (xf == null) {
+        return;
+      }
+      for (int pIdx = 0; pIdx < p.length; pIdx++) {
+        xf.transformPoint(renderer, affineT[pIdx], varT[pIdx], p[pIdx], p[pIdx], affineZStyle);
+      }
+      if (xf.getDrawMode() == DrawMode.HIDDEN)
+        continue;
+      else if ((xf.getDrawMode() == DrawMode.OPAQUE) && (renderer.random.random() > xf.getOpacity()))
+        continue;
+
+      XForm finalXForm = flame.getFinalXForm();
+      double px = 0.0, py = 0.0;
+      if (finalXForm != null) {
+        for (int pIdx = 0; pIdx < p.length; pIdx++) {
+          q[pIdx] = new XYZPoint();
+          finalXForm.transformPoint(renderer, affineT[pIdx], varT[pIdx], p[pIdx], q[pIdx], affineZStyle);
+          renderer.project(flame, q[pIdx]);
+          if (pIdx == 0) {
+            px = q[pIdx].x * renderer.cosa + q[pIdx].y * renderer.sina + renderer.rcX;
+            py = q[pIdx].y * renderer.cosa - q[pIdx].x * renderer.sina + renderer.rcY;
+          }
+        }
+      }
+      else {
+        for (int pIdx = 0; pIdx < p.length; pIdx++) {
+          q[pIdx] = new XYZPoint();
+          q[pIdx].assign(p[pIdx]);
+          renderer.project(flame, q[pIdx]);
+          if (pIdx == 0) {
+            px = q[pIdx].x * renderer.cosa + q[pIdx].y * renderer.sina + renderer.rcX;
+            py = q[pIdx].y * renderer.cosa - q[pIdx].x * renderer.sina + renderer.rcY;
+          }
+        }
+      }
+
+      if ((px < 0) || (px > renderer.camW))
+        continue;
+      if ((py < 0) || (py > renderer.camH))
+        continue;
+
+      RasterPoint rp = renderer.raster[(int) (renderer.bhs * py + 0.5)][(int) (renderer.bws * px + 0.5)];
+      RenderColor color = renderer.colorMap[(int) (p[0].color * renderer.paletteIdxScl + 0.5)];
+      RenderColor shadedColor = shader.calculateColor(p, color);
+
+      rp.red += shadedColor.red;
+      rp.green += shadedColor.green;
+      rp.blue += shadedColor.blue;
+      rp.count++;
+
     }
   }
 
