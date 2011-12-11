@@ -396,8 +396,6 @@ public class MainController {
       Buffer buffer = getBufferList().bufferByName(pName);
       if ((buffer != null)
           && (buffer.getBufferType() == BufferType.IMAGE)) {
-        System.out.println(transformer + ".initDefaultParams(" + pName
-            + ")");
         transformer.initDefaultParams(buffer.getImage());
         currTransformerPropertyPanel.writeToObject(transformer);
       }

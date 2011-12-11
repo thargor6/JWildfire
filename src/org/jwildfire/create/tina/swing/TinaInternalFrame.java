@@ -7667,7 +7667,7 @@ public class TinaInternalFrame extends JInternalFrame implements ProgressUpdater
     if (shadingPanel == null) {
       shadingLightBlueLbl = new JLabel();
       shadingLightBlueLbl.setPreferredSize(new Dimension(94, 22));
-      shadingLightBlueLbl.setText("Green");
+      shadingLightBlueLbl.setText("Blue");
       shadingLightBlueLbl.setSize(new Dimension(94, 22));
       shadingLightBlueLbl.setLocation(new Point(644, 76));
       shadingLightBlueLbl.setFont(new Font("Dialog", Font.BOLD, 10));
@@ -8056,8 +8056,8 @@ public class TinaInternalFrame extends JInternalFrame implements ProgressUpdater
   private JSlider getShadingLightXSlider() {
     if (shadingLightXSlider == null) {
       shadingLightXSlider = new JSlider();
-      shadingLightXSlider.setMaximum(300);
-      shadingLightXSlider.setMinimum(-300);
+      shadingLightXSlider.setMaximum(2000);
+      shadingLightXSlider.setMinimum(-2000);
       shadingLightXSlider.setValue(0);
       shadingLightXSlider.setSize(new Dimension(120, 19));
       shadingLightXSlider.setLocation(new Point(522, 28));
@@ -8106,8 +8106,8 @@ public class TinaInternalFrame extends JInternalFrame implements ProgressUpdater
   private JSlider getShadingLightYSlider() {
     if (shadingLightYSlider == null) {
       shadingLightYSlider = new JSlider();
-      shadingLightYSlider.setMaximum(300);
-      shadingLightYSlider.setMinimum(-300);
+      shadingLightYSlider.setMaximum(2000);
+      shadingLightYSlider.setMinimum(-2000);
       shadingLightYSlider.setValue(0);
       shadingLightYSlider.setSize(new Dimension(120, 19));
       shadingLightYSlider.setLocation(new Point(522, 52));
@@ -8156,8 +8156,8 @@ public class TinaInternalFrame extends JInternalFrame implements ProgressUpdater
   private JSlider getShadingLightZSlider() {
     if (shadingLightZSlider == null) {
       shadingLightZSlider = new JSlider();
-      shadingLightZSlider.setMaximum(300);
-      shadingLightZSlider.setMinimum(-300);
+      shadingLightZSlider.setMaximum(2000);
+      shadingLightZSlider.setMinimum(-2000);
       shadingLightZSlider.setValue(0);
       shadingLightZSlider.setSize(new Dimension(120, 19));
       shadingLightZSlider.setLocation(new Point(522, 76));

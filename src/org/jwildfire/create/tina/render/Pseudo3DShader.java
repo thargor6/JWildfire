@@ -125,13 +125,13 @@ public class Pseudo3DShader {
 
     reflectViewVector();
     double cosa = 0.0 - nfz;
-    //    if (cosa >= 0.0) {
-    //      nfx = 0.0 - nfx;
-    //      nfy = 0.0 - nfy;
-    //      nfz = 0.0 - nfz;
-    //      reflectViewVector();
-    //      cosa = 0.0 - nfz;
-    //    }
+    if (cosa >= 0.0) {
+      nfx = 0.0 - nfx;
+      nfy = 0.0 - nfy;
+      nfz = 0.0 - nfz;
+      reflectViewVector();
+      cosa = 0.0 - nfz;
+    }
 
     this.r = Tools.FTOI(pColor.red);
     this.g = Tools.FTOI(pColor.green);
