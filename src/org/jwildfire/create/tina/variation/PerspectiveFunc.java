@@ -32,7 +32,7 @@ public class PerspectiveFunc extends VariationFunc {
   private double vfcos;
 
   @Override
-  public void transform(TransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
+  public void transform(XFormTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     double t = 1.0 / (this.dist - pAffineTP.y * this.vsin);
     pVarTP.x += pAmount * this.dist * pAffineTP.x * t;
     pVarTP.y += pAmount * this.vfcos * pAffineTP.y * t;
@@ -64,7 +64,7 @@ public class PerspectiveFunc extends VariationFunc {
   }
 
   @Override
-  public void init(TransformationContext pContext, XForm pXForm) {
+  public void init(FlameTransformationContext pContext, XForm pXForm) {
     double ang = this.angle * Math.PI / 2.0;
     vsin = Math.sin(ang);
     vfcos = this.dist * Math.cos(ang);

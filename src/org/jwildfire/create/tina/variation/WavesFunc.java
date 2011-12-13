@@ -23,7 +23,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 public class WavesFunc extends SimpleVariationFunc {
 
   @Override
-  public void transform(TransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
+  public void transform(XFormTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     pVarTP.x += pAmount * (pAffineTP.x + pXForm.getCoeff10() * Math.sin(pAffineTP.y / (pXForm.getCoeff20() * pXForm.getCoeff20() + Constants.EPSILON)));
     pVarTP.y += pAmount * (pAffineTP.y + pXForm.getCoeff11() * Math.sin(pAffineTP.x / (pXForm.getCoeff21() * pXForm.getCoeff21() + Constants.EPSILON)));
   }

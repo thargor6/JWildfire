@@ -30,7 +30,7 @@ public class RadialBlurFunc extends VariationFunc {
   private double angle = 0.5;
 
   @Override
-  public void transform(TransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
+  public void transform(XFormTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     double rndG = (gauss_rnd[0] + gauss_rnd[1] + gauss_rnd[2] + gauss_rnd[3] - 2);
     gauss_rnd[gauss_N] = pContext.getRandomNumberGenerator().random();
     gauss_N = (gauss_N + 1) & 3;
@@ -71,7 +71,7 @@ public class RadialBlurFunc extends VariationFunc {
   }
 
   @Override
-  public void init(TransformationContext pContext, XForm pXForm) {
+  public void init(FlameTransformationContext pContext, XForm pXForm) {
     RandomNumberGenerator randGen = pContext.getRandomNumberGenerator();
     gauss_rnd[0] = randGen.random();
     gauss_rnd[1] = randGen.random();

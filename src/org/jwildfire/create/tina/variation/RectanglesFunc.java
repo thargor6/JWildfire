@@ -27,7 +27,7 @@ public class RectanglesFunc extends VariationFunc {
   private double x, y;
 
   @Override
-  public void transform(TransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
+  public void transform(XFormTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     final double EPSILON = 1.0e-10;
     if (Math.abs(x) < EPSILON) {
       pVarTP.x += pAmount * pAffineTP.x;

@@ -32,7 +32,7 @@ public class PDJFunc extends VariationFunc {
   private double d = 4;
 
   @Override
-  public void transform(TransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
+  public void transform(XFormTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     pVarTP.x += pAmount * (Math.sin(a * pAffineTP.y) - Math.cos(b * pAffineTP.x));
     pVarTP.y += pAmount * (Math.sin(c * pAffineTP.x) - Math.cos(d * pAffineTP.y));
   }

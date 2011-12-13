@@ -21,7 +21,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 public abstract class VariationFunc {
 
-  public void init(TransformationContext pContext, XForm pXForm) {
+  public void init(FlameTransformationContext pContext, XForm pXForm) {
 
   }
 
@@ -29,7 +29,7 @@ public abstract class VariationFunc {
     return 0;
   }
 
-  public abstract void transform(TransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount);
+  public abstract void transform(XFormTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount);
 
   public abstract String getName();
 

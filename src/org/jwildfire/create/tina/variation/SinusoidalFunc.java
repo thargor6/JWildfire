@@ -22,7 +22,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 public class SinusoidalFunc extends SimpleVariationFunc {
 
   @Override
-  public void transform(TransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
+  public void transform(XFormTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     pVarTP.x += pAmount * Math.sin(pAffineTP.x);
     pVarTP.y += pAmount * Math.sin(pAffineTP.y);
   }

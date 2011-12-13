@@ -35,7 +35,7 @@ public class WedgeFunc extends VariationFunc {
   private double swirl = 0.0;
 
   @Override
-  public void transform(TransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
+  public void transform(XFormTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     /* Wedge from apo plugins pack */
     double precalc_sumsq = pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y;
     double precalc_sqrt = Math.sqrt(precalc_sumsq);

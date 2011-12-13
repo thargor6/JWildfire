@@ -22,7 +22,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 public class ExFunc extends SimpleVariationFunc {
 
   @Override
-  public void transform(TransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
+  public void transform(XFormTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     double r = Math.sqrt(pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y);
     double n0 = Math.sin(pAffineTP.getPrecalcAtan() + r);
     double n1 = Math.cos(pAffineTP.getPrecalcAtan() - r);

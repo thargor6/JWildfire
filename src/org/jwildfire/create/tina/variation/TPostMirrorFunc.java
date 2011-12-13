@@ -33,7 +33,7 @@ public class TPostMirrorFunc extends VariationFunc {
   private int zAxis = 0;
 
   @Override
-  public void transform(TransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
+  public void transform(XFormTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     if (xAxis > 0 && pContext.getRandomNumberGenerator().random() < 0.5) {
       pVarTP.x = -pVarTP.x;
     }

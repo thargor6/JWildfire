@@ -22,7 +22,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 public class HyperbolicFunc extends SimpleVariationFunc {
 
   @Override
-  public void transform(TransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
+  public void transform(XFormTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     double r = pAffineTP.getPrecalcSqrt();
     pVarTP.x += pAmount * pAffineTP.getPrecalcSinA() / r;
     pVarTP.y += pAmount * pAffineTP.getPrecalcCosA() * r;

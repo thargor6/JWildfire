@@ -22,7 +22,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 public class SphericalFunc extends SimpleVariationFunc {
 
   @Override
-  public void transform(TransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
+  public void transform(XFormTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     double r = pAmount / (pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y);
     pVarTP.x += pAffineTP.x * r;
     pVarTP.y += pAffineTP.y * r;

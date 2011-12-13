@@ -63,7 +63,7 @@ public class BubbleWrapFunc extends VariationFunc {
   }
 
   @Override
-  public void transform(TransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
+  public void transform(XFormTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     prepare(); // call this every time for now
     // Bubble Wrap - WIP Plugin by slobo777
     // http://slobo777.deviantart.com/art/Bubble-Wrap-WIP-Plugin-112370125 

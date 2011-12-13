@@ -30,7 +30,7 @@ public class StripesFunc extends VariationFunc {
   private double warp = 0.60;
 
   @Override
-  public void transform(TransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
+  public void transform(XFormTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     /* Stripes from apo plugins pack */
     double roundx = Math.floor(pAffineTP.x + 0.5);
     double offsetx = pAffineTP.x - roundx;

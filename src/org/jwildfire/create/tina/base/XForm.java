@@ -22,10 +22,10 @@ import java.util.List;
 
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.render.AffineZStyle;
-import org.jwildfire.create.tina.variation.TransformationContext;
 import org.jwildfire.create.tina.variation.Variation;
 import org.jwildfire.create.tina.variation.VariationFunc;
 import org.jwildfire.create.tina.variation.VariationPriorityComparator;
+import org.jwildfire.create.tina.variation.XFormTransformationContext;
 
 public class XForm {
   private double weight;
@@ -167,9 +167,9 @@ public class XForm {
         || Math.abs(postCoeff11 - 1.0) > Tools.EPSILON || Math.abs(postCoeff20) > Tools.EPSILON || Math.abs(postCoeff21) > Tools.EPSILON);
   }
 
-  public void transformPoint(TransformationContext pContext, XYZPoint pAffineT, XYZPoint pVarT, XYZPoint pSrcPoint, XYZPoint pDstPoint, AffineZStyle pZStyle) {
+  public void transformPoint(XFormTransformationContext pContext, XYZPoint pAffineT, XYZPoint pVarT, XYZPoint pSrcPoint, XYZPoint pDstPoint, AffineZStyle pZStyle) {
     pDstPoint.color = pSrcPoint.color * c1 + c2;
-
+    pContext.setColor(color);
     pAffineT.clear();
     pAffineT.x = coeff00 * pSrcPoint.x + coeff10 * pSrcPoint.y + coeff20;
     pAffineT.y = coeff01 * pSrcPoint.x + coeff11 * pSrcPoint.y + coeff21;

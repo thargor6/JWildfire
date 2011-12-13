@@ -23,6 +23,7 @@ import org.jwildfire.create.tina.base.RasterPoint;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 import org.jwildfire.create.tina.palette.RenderColor;
+import org.jwildfire.create.tina.variation.XFormTransformationContextImpl;
 
 public class FlameRenderThread implements Runnable {
   private final FlameRenderer renderer;
@@ -55,9 +56,9 @@ public class FlameRenderThread implements Runnable {
             throw new IllegalArgumentException(flame.getShadingInfo().getShading().toString());
         }
       }
-      catch (RuntimeException ex) {
+      catch (Throwable ex) {
         ex.printStackTrace();
-        throw ex;
+        throw new RuntimeException(ex);
       }
     }
     finally {
@@ -66,6 +67,7 @@ public class FlameRenderThread implements Runnable {
   }
 
   private void iterate_flat() {
+    XFormTransformationContextImpl ctx = new XFormTransformationContextImpl(renderer);
     XYZPoint affineT = new XYZPoint(); // affine part of the transformation
     XYZPoint varT = new XYZPoint(); // complete transformation
     XYZPoint p = new XYZPoint();
@@ -76,7 +78,7 @@ public class FlameRenderThread implements Runnable {
     p.color = renderer.random.random();
 
     XForm xf = flame.getXForms().get(0);
-    xf.transformPoint(renderer, affineT, varT, p, p, affineZStyle);
+    xf.transformPoint(ctx, affineT, varT, p, p, affineZStyle);
     for (int i = 0; i <= Constants.INITIAL_ITERATIONS; i++) {
       xf = xf.getNextAppliedXFormTable()[renderer.random.random(Constants.NEXT_APPLIED_XFORM_TABLE_SIZE)];
       if (xf == null) {
@@ -92,7 +94,7 @@ public class FlameRenderThread implements Runnable {
       if (xf == null) {
         return;
       }
-      xf.transformPoint(renderer, affineT, varT, p, p, affineZStyle);
+      xf.transformPoint(ctx, affineT, varT, p, p, affineZStyle);
 
       if (xf.getDrawMode() == DrawMode.HIDDEN)
         continue;
@@ -103,7 +105,7 @@ public class FlameRenderThread implements Runnable {
       double px, py;
       if (finalXForm != null) {
         q = new XYZPoint();
-        finalXForm.transformPoint(renderer, affineT, varT, p, q, affineZStyle);
+        finalXForm.transformPoint(ctx, affineT, varT, p, q, affineZStyle);
         renderer.project(flame, q);
         px = q.x * renderer.cosa + q.y * renderer.sina + renderer.rcX;
         if ((px < 0) || (px > renderer.camW))
@@ -135,6 +137,7 @@ public class FlameRenderThread implements Runnable {
   }
 
   private void iterate_pseudo3D() {
+    XFormTransformationContextImpl ctx = new XFormTransformationContextImpl(renderer);
     Pseudo3DShader shader = new Pseudo3DShader(flame.getShadingInfo());
     shader.init();
 
@@ -164,7 +167,7 @@ public class FlameRenderThread implements Runnable {
 
     XForm xf = flame.getXForms().get(0);
     for (int pIdx = 0; pIdx < p.length; pIdx++) {
-      xf.transformPoint(renderer, affineT[pIdx], varT[pIdx], p[pIdx], p[pIdx], affineZStyle);
+      xf.transformPoint(ctx, affineT[pIdx], varT[pIdx], p[pIdx], p[pIdx], affineZStyle);
     }
     for (int i = 0; i <= Constants.INITIAL_ITERATIONS; i++) {
       xf = xf.getNextAppliedXFormTable()[renderer.random.random(Constants.NEXT_APPLIED_XFORM_TABLE_SIZE)];
@@ -182,7 +185,7 @@ public class FlameRenderThread implements Runnable {
         return;
       }
       for (int pIdx = 0; pIdx < p.length; pIdx++) {
-        xf.transformPoint(renderer, affineT[pIdx], varT[pIdx], p[pIdx], p[pIdx], affineZStyle);
+        xf.transformPoint(ctx, affineT[pIdx], varT[pIdx], p[pIdx], p[pIdx], affineZStyle);
       }
       if (xf.getDrawMode() == DrawMode.HIDDEN)
         continue;
@@ -194,7 +197,7 @@ public class FlameRenderThread implements Runnable {
       if (finalXForm != null) {
         for (int pIdx = 0; pIdx < p.length; pIdx++) {
           q[pIdx] = new XYZPoint();
-          finalXForm.transformPoint(renderer, affineT[pIdx], varT[pIdx], p[pIdx], q[pIdx], affineZStyle);
+          finalXForm.transformPoint(ctx, affineT[pIdx], varT[pIdx], p[pIdx], q[pIdx], affineZStyle);
           renderer.project(flame, q[pIdx]);
           if (pIdx == 0) {
             px = q[pIdx].x * renderer.cosa + q[pIdx].y * renderer.sina + renderer.rcX;

@@ -32,7 +32,7 @@ public class BipolarFunc extends VariationFunc {
   }
 
   @Override
-  public void transform(TransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
+  public void transform(XFormTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     /* Bipolar in the Apophysis Plugin Pack */
 
     double x2y2 = (pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y);

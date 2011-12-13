@@ -23,7 +23,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 public class ScryFunc extends SimpleVariationFunc {
 
   @Override
-  public void transform(TransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
+  public void transform(XFormTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     /* scry from the apophysis plugin pack */
 
     double t = pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y;

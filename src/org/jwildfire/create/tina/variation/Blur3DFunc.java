@@ -25,7 +25,7 @@ public class Blur3DFunc extends SimpleVariationFunc {
   private int gauss_N;
 
   @Override
-  public void transform(TransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
+  public void transform(XFormTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     RandomNumberGenerator randGen = pContext.getRandomNumberGenerator();
     double angle = randGen.random() * 2 * Math.PI;
     double sina = Math.sin(angle);
@@ -47,7 +47,7 @@ public class Blur3DFunc extends SimpleVariationFunc {
   }
 
   @Override
-  public void init(TransformationContext pContext, XForm pXForm) {
+  public void init(XFormTransformationContext pContext, XForm pXForm) {
     RandomNumberGenerator randGen = pContext.getRandomNumberGenerator();
     gauss_rnd[0] = randGen.random();
     gauss_rnd[1] = randGen.random();

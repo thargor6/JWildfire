@@ -22,7 +22,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 public class PreZScaleFunc extends SimpleVariationFunc {
 
   @Override
-  public void transform(TransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
+  public void transform(XFormTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     pAffineTP.z *= pAmount;
   }
 

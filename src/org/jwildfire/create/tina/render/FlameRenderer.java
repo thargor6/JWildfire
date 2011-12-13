@@ -28,14 +28,14 @@ import org.jwildfire.create.tina.palette.RenderColor;
 import org.jwildfire.create.tina.random.RandomNumberGenerator;
 import org.jwildfire.create.tina.random.SimpleRandomNumberGenerator;
 import org.jwildfire.create.tina.swing.ProgressUpdater;
-import org.jwildfire.create.tina.variation.TransformationContext;
+import org.jwildfire.create.tina.variation.FlameTransformationContext;
 import org.jwildfire.create.tina.variation.Variation;
 import org.jwildfire.image.Pixel;
 import org.jwildfire.image.SimpleImage;
 import org.jwildfire.transform.ScaleAspect;
 import org.jwildfire.transform.ScaleTransformer;
 
-public class FlameRenderer implements TransformationContext {
+public class FlameRenderer implements FlameTransformationContext {
   // constants
   private final static int MAX_FILTER_WIDTH = 25;
   // init in initRaster
@@ -111,7 +111,7 @@ public class FlameRenderer implements TransformationContext {
     double px = cameraMatrix[0][0] * pPoint.x + cameraMatrix[1][0] * pPoint.y;
     double py = cameraMatrix[0][1] * pPoint.x + cameraMatrix[1][1] * pPoint.y + cameraMatrix[2][1] * z;
     double pz = cameraMatrix[0][2] * pPoint.x + cameraMatrix[1][2] * pPoint.y + cameraMatrix[2][2] * z;
-    double zr = 1 - pFlame.getCamPerspective() * pz;
+    double zr = 1.0 - pFlame.getCamPerspective() * pz;
     if (Math.abs(pFlame.getCamDOF()) > Tools.EPSILON) {
       double a = 2.0 * Math.PI * random.random();
       double dsina = Math.sin(a);
@@ -335,6 +335,7 @@ public class FlameRenderer implements TransformationContext {
   private void createModWeightTables(Flame pFlame) {
     double tp[] = new double[100];
     int n = pFlame.getXForms().size();
+
     for (XForm xForm : pFlame.getXForms()) {
       xForm.initTransform();
       for (Variation var : xForm.getSortedVariations()) {

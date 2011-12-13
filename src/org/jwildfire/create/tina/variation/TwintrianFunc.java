@@ -23,7 +23,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 public class TwintrianFunc extends SimpleVariationFunc {
 
   @Override
-  public void transform(TransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
+  public void transform(XFormTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     /* Z+ variation Jan 07 */
     double r = pContext.getRandomNumberGenerator().random() * pAmount * pAffineTP.getPrecalcSqrt();
 

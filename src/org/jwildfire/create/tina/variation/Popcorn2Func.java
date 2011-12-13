@@ -31,7 +31,7 @@ public class Popcorn2Func extends VariationFunc {
   private double c = 1.5;
 
   @Override
-  public void transform(TransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
+  public void transform(XFormTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     /* popcorn2 from the apophysis plugin pack */
     pVarTP.x += pAmount * (pAffineTP.x + x * Math.sin(Math.tan(pAffineTP.y * c)));
     pVarTP.y += pAmount * (pAffineTP.y + y * Math.sin(Math.tan(pAffineTP.x * c)));

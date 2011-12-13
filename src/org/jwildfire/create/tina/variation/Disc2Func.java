@@ -53,7 +53,7 @@ public class Disc2Func extends VariationFunc {
   }
 
   @Override
-  public void transform(TransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
+  public void transform(XFormTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     /* Z+ variation Jan 07 */
     precalc();
     double t = timespi * (pAffineTP.x + pAffineTP.y);

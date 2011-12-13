@@ -32,7 +32,7 @@ public class PieFunc extends VariationFunc {
   private double thickness = 0.5;
 
   @Override
-  public void transform(TransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
+  public void transform(XFormTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     RandomNumberGenerator randGen = pContext.getRandomNumberGenerator();
     int sl = (int) (randGen.random() * slices + 0.5);
     double a = rotation + 2.0 * Math.PI * (sl + randGen.random() * thickness) / slices;

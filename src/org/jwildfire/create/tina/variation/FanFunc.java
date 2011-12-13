@@ -23,7 +23,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 public class FanFunc extends SimpleVariationFunc {
 
   @Override
-  public void transform(TransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
+  public void transform(XFormTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     double dx = Math.PI * pXForm.getCoeff20() * pXForm.getCoeff20() + Constants.EPSILON;
     double dx2 = dx / 2;
     double a;

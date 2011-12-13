@@ -34,7 +34,7 @@ public class SeparationFunc extends VariationFunc {
   private double yInside = 0.025;
 
   @Override
-  public void transform(TransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
+  public void transform(XFormTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     /* separation from the apophysis plugin pack */
     double sx2 = x * x;
     double sy2 = y * y;

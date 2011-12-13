@@ -30,7 +30,7 @@ public class ParabolaFunc extends VariationFunc {
   private double height = 0.5;
 
   @Override
-  public void transform(TransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
+  public void transform(XFormTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     /* cyberxaos, 4/2007 */
     double r = pAffineTP.getPrecalcSqrt();
     double sr = Math.sin(r);

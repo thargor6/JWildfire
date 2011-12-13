@@ -23,7 +23,7 @@ import org.jwildfire.create.tina.random.RandomNumberGenerator;
 public class NoiseFunc extends SimpleVariationFunc {
 
   @Override
-  public void transform(TransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
+  public void transform(XFormTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     RandomNumberGenerator randGen = pContext.getRandomNumberGenerator();
     double r = randGen.random() * 2.0 * Math.PI;
     double sinr = Math.sin(r);

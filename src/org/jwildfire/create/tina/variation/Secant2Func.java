@@ -22,7 +22,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 public class Secant2Func extends SimpleVariationFunc {
 
   @Override
-  public void transform(TransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
+  public void transform(XFormTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     /* Intended as a 'fixed' version of secant */
     double r = pAmount * pAffineTP.getPrecalcSqrt();
     double cr = Math.cos(r);

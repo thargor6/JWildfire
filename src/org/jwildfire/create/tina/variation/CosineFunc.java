@@ -22,7 +22,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 public class CosineFunc extends SimpleVariationFunc {
 
   @Override
-  public void transform(TransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
+  public void transform(XFormTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     double r = pAffineTP.x * Math.PI;
     double sinr = Math.sin(r);
     double cosr = Math.cos(r);

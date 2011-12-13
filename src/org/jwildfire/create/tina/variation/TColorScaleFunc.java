@@ -19,32 +19,33 @@ package org.jwildfire.create.tina.variation;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
-public class SplitsFunc extends VariationFunc {
+public class TColorScaleFunc extends VariationFunc {
 
-  private static final String PARAM_X = "x";
-  private static final String PARAM_Y = "y";
+  private static final String PARAM_SCALEX = "scale_x";
+  private static final String PARAM_SCALEY = "scale_y";
+  private static final String PARAM_SCALEZ = "scale_z";
+  private static final String PARAM_OFFSETZ = "offset_z";
+  private static final String PARAM_RESETZ = "reset_z";
 
-  private static final String[] paramNames = { PARAM_X, PARAM_Y };
+  private static final String[] paramNames = { PARAM_SCALEX, PARAM_SCALEY, PARAM_SCALEZ, PARAM_OFFSETZ, PARAM_RESETZ };
 
-  private double x = 0.40;
-  private double y = 0.60;
+  private double scaleX = 0.0;
+  private double scaleY = 0.0;
+  private double scaleZ = 0.5;
+  private double offsetZ = 0.0;
+  private double resetZ = 0.0;
 
   @Override
   public void transform(XFormTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-    /* Splits from apo plugins pack */
 
-    if (pAffineTP.x >= 0) {
-      pVarTP.x += pAmount * (pAffineTP.x + x);
+    pVarTP.x += pAmount * scaleX * pAffineTP.x;
+    pVarTP.y += pAmount * scaleY * pAffineTP.y;
+    double dz = pContext.getColor() * scaleZ * pAmount + offsetZ;
+    if (resetZ > 0) {
+      pVarTP.z = dz;
     }
     else {
-      pVarTP.x += pAmount * (pAffineTP.x - x);
-    }
-
-    if (pAffineTP.y >= 0) {
-      pVarTP.y += pAmount * (pAffineTP.y + y);
-    }
-    else {
-      pVarTP.y += pAmount * (pAffineTP.y - y);
+      pVarTP.z += dz;
     }
   }
 
@@ -55,22 +56,28 @@ public class SplitsFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { x, y };
+    return new Object[] { scaleX, scaleY, scaleZ, offsetZ, resetZ };
   }
 
   @Override
   public void setParameter(String pName, double pValue) {
-    if (PARAM_X.equalsIgnoreCase(pName))
-      x = pValue;
-    else if (PARAM_Y.equalsIgnoreCase(pName))
-      y = pValue;
+    if (PARAM_SCALEX.equalsIgnoreCase(pName))
+      scaleX = pValue;
+    else if (PARAM_SCALEY.equalsIgnoreCase(pName))
+      scaleY = pValue;
+    else if (PARAM_SCALEZ.equalsIgnoreCase(pName))
+      scaleZ = pValue;
+    else if (PARAM_OFFSETZ.equalsIgnoreCase(pName))
+      offsetZ = pValue;
+    else if (PARAM_RESETZ.equalsIgnoreCase(pName))
+      resetZ = pValue;
     else
       throw new IllegalArgumentException(pName);
   }
 
   @Override
   public String getName() {
-    return "splits";
+    return "t-colorscale";
   }
 
 }

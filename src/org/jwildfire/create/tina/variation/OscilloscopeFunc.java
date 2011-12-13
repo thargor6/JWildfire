@@ -35,7 +35,7 @@ public class OscilloscopeFunc extends VariationFunc {
   private double damping = 0.0;
 
   @Override
-  public void transform(TransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
+  public void transform(XFormTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     /* oscilloscope from the apophysis plugin pack */
     double tpf = 2 * Math.PI * frequency;
     double t;

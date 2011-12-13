@@ -29,7 +29,7 @@ public class JuliaScopeFunc extends VariationFunc {
   private double dist = 1;
 
   @Override
-  public void transform(TransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
+  public void transform(XFormTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     double cn = dist / (double) power * 0.5;
     int rnd = (int) (pContext.getRandomNumberGenerator().random() * Math.abs(power));
     double angle;

@@ -153,6 +153,7 @@ public class VariationFuncList {
     registerVariationFunc(TPostMirrorFunc.class);
     registerVariationFunc(TPreWave3DFunc.class);
     registerVariationFunc(BubbleWrapFunc.class);
+    registerVariationFunc(TColorScaleFunc.class);
   }
 
   private static void registerVariationFunc(Class<? extends VariationFunc> pVariationFunc) {

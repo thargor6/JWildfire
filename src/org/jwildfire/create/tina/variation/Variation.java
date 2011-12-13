@@ -39,7 +39,7 @@ public class Variation {
     this.func = func;
   }
 
-  public void transform(TransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP) {
+  public void transform(XFormTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP) {
     func.transform(pContext, pXForm, pAffineTP, pVarTP, amount);
   }
 

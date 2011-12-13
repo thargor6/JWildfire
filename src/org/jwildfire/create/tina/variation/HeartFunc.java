@@ -22,7 +22,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 public class HeartFunc extends SimpleVariationFunc {
 
   @Override
-  public void transform(TransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
+  public void transform(XFormTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     double r = Math.sqrt(pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y);
     double angle = pAffineTP.getPrecalcAtan();
     double sinr = Math.sin(r * angle);

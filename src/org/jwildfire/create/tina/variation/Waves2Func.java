@@ -33,7 +33,7 @@ public class Waves2Func extends VariationFunc {
   private double freqy = Math.PI / 4;
 
   @Override
-  public void transform(TransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
+  public void transform(XFormTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     /* waves2 from Joel F */
     pVarTP.x += pAmount * (pAffineTP.x + scalex * Math.sin(pAffineTP.y * freqx));
     pVarTP.y += pAmount * (pAffineTP.y + scaley * Math.sin(pAffineTP.x * freqy));
