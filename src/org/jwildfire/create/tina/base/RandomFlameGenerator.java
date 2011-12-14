@@ -27,15 +27,17 @@ public class RandomFlameGenerator {
       "spherical3D", "spiral", "rectangles", "blur", "waves", "swirl", "secant2" };
 
   private static final String FNCLST_EXPERIMENTAL[] = { "blur3D", "bubble", "escher", "rays", "t_epispiral", "curl3D", "diamond",
-      "disc", "sech", "loonie", "exp", "cosh", "split", "wedge_sph", "circlize",
+      "disc", "sech", "loonie", "exp", "cosh", "split", "wedge_sph", "circlize", "t_heart", "bwraps7",
       "butterfly3D", "cpow", "conic", "julia3D", "cell", "stripes", "t_post_mirror",
       "flower", "heart", "julia3D", "disc2", "polar2", "foci", "scry", "flux", "bwraps7",
-      "hemisphere", "popcorn2", "sec", "lazysusan", "sin", "separation", "t_post_mirror",
+      "hemisphere", "popcorn2", "sec", "lazysusan", "sin", "separation", "t_post_mirror", "t_heart",
       "t_rose", "edisc", "waves2", "twintrian", "coth", "super_shape", "auger", "t_pre_wave3D",
       "tanh", "bipolar", "cot", "horseshoe", "wedge", "sinh", "modulus", "mobius", "bwraps7",
       "cross", "tangent3D", "csc", "curve", "csch", "bent2", "splits", "whorl", "t_post_mirror",
-      "tan", "blob3D", "julia3D", "log", "cos", "oscilloscope", "wedge_julia", "bwraps7",
-      "pdj", "popcorn", "parabola", "rings2", "spherical3D", "spiral", "rectangles", "elliptic", "waves", "swirl", "boarders", "secant2" };
+      "tan", "blob3D", "julia3D", "log", "cos", "oscilloscope", "wedge_julia", "bwraps7", "t_heart",
+      "pdj", "popcorn", "parabola", "rings2", "spherical3D", "spiral", "rectangles", "elliptic", "waves", "swirl",
+      "bwraps7", "t_heart",
+      "boarders", "secant2" };
 
   private static final String FNCLST_3D[] = { "blur3D", "julia3D", "curl3D", "butterfly3D", "julia3D",
       "julia3D", "blade3D", "bwraps7", "hemisphere", "blob3D", "t_pre_wave3D", "tangent3D", "square3D", "julia3D", "pie3D", "pdj",

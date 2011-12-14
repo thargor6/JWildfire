@@ -28,6 +28,8 @@ public class TRoseFunc extends VariationFunc {
   private double amp = 0.5;
   private int waves = 4;
 
+  static int cnt = 0;
+
   @Override
   public void transform(XFormTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     double a = Math.atan2(pAffineTP.x, pAffineTP.y);

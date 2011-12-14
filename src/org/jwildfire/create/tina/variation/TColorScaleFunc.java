@@ -77,7 +77,7 @@ public class TColorScaleFunc extends VariationFunc {
 
   @Override
   public String getName() {
-    return "t-colorscale";
+    return "t_colorscale";
   }
 
 }

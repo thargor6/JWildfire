@@ -154,6 +154,7 @@ public class VariationFuncList {
     registerVariationFunc(TPreWave3DFunc.class);
     registerVariationFunc(BubbleWrapFunc.class);
     registerVariationFunc(TColorScaleFunc.class);
+    registerVariationFunc(THeartFunc.class);
   }
 
   private static void registerVariationFunc(Class<? extends VariationFunc> pVariationFunc) {
@@ -172,7 +173,6 @@ public class VariationFuncList {
           e.printStackTrace();
         }
         catch (IllegalAccessException e) {
-          // TODO Auto-generated catch block
           e.printStackTrace();
         }
       }
