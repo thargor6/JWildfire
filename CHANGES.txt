@@ -1,3 +1,11 @@
+V0.26 (15.12.2011):
+ - Fractal flame editor: xheart variation
+ - Fractal flame editor: t-heart variation
+ - Fractal flame editor: t-colorscale variation, minor changes to variation api
+ - Fractal flame editor: bwraps7 variation, some refactoring
+ - Fractal flame editor: UI of the pseudo 3d shader finished
+ - Fractal flame editor: pseudo 3d shader ("3d-hack 2")
+
 V0.25 (09.12.2011):
  - FIXED: Fractal flame editor: moving/rotating/scaling by buttons did not work for the post transforms
  - Fractal flame editor: simple DOF, some refactoring
