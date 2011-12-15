@@ -54,7 +54,6 @@ public class XForm {
     coeff11 = 1;
     postCoeff00 = 1;
     postCoeff11 = 1;
-
     for (int i = 0; i < modifiedWeights.length; i++) {
       modifiedWeights[i] = 1.0;
     }
@@ -73,6 +72,12 @@ public class XForm {
   }
 
   public void setColor(double color) {
+    if (color < -1.0) {
+      color = -1.0;
+    }
+    else if (color > 1.0) {
+      color = 1.0;
+    }
     this.color = color;
   }
 
@@ -148,6 +153,12 @@ public class XForm {
   }
 
   public void setColorSymmetry(double colorSymmetry) {
+    if (colorSymmetry < -1.0) {
+      colorSymmetry = -1.0;
+    }
+    else if (colorSymmetry > 1.0) {
+      colorSymmetry = 1.0;
+    }
     this.colorSymmetry = colorSymmetry;
   }
 
