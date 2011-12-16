@@ -49,6 +49,7 @@ public class FlamePanel extends ImagePanel {
 
   private boolean drawImage = true;
   private boolean drawFlame = true;
+  private boolean fineMovement = false;
   private XForm selectedXForm = null;
 
   private double viewXScale, viewYScale;
@@ -262,6 +263,10 @@ public class FlamePanel extends ImagePanel {
         if (Math.abs(dx) > Tools.EPSILON || Math.abs(dy) > Tools.EPSILON) {
           switch (mouseDragOperation) {
             case MOVE: {
+              if (fineMovement) {
+                dx *= 0.25;
+                dy *= 0.25;
+              }
               // move
               if (editPostTransform) {
                 selectedXForm.setPostCoeff20(selectedXForm.getPostCoeff20() + dx);
@@ -274,6 +279,10 @@ public class FlamePanel extends ImagePanel {
               return true;
             }
             case SCALE: {
+              if (fineMovement) {
+                dx *= 0.1;
+                dy *= 0.1;
+              }
               Triangle triangle = new Triangle(selectedXForm);
               double v1x = triangle.x[0] - triangle.x[1];
               double v1y = triangle.y[0] - triangle.y[1];
@@ -297,6 +306,9 @@ public class FlamePanel extends ImagePanel {
               return true;
             }
             case ROTATE: {
+              if (fineMovement) {
+                dx *= 0.1;
+              }
               XFormTransformService.rotate(selectedXForm, dx * 30, editPostTransform);
               return true;
             }
@@ -407,5 +419,9 @@ public class FlamePanel extends ImagePanel {
   void setRenderHeight(int pRenderHeight) {
     renderHeight = pRenderHeight;
     updateRenderAspect();
+  }
+
+  public void setFineMovement(boolean pFineMovement) {
+    fineMovement = pFineMovement;
   }
 }

@@ -338,6 +338,7 @@ public class TinaController implements FlameHolder {
   private final JToggleButton mouseTransformMoveButton;
   private final JToggleButton mouseTransformRotateButton;
   private final JToggleButton mouseTransformScaleButton;
+  private final JToggleButton mouseTransformSlowButton;
 
   public TinaController(ErrorHandler pErrorHandler, Prefs pPrefs, JPanel pCenterPanel, JTextField pCameraRollREd, JSlider pCameraRollSlider, JTextField pCameraPitchREd,
       JSlider pCameraPitchSlider, JTextField pCameraYawREd, JSlider pCameraYawSlider, JTextField pCameraPerspectiveREd, JSlider pCameraPerspectiveSlider,
@@ -370,7 +371,8 @@ public class TinaController implements FlameHolder {
       JTextField pShadingPhongREd, JSlider pShadingPhongSlider, JTextField pShadingPhongSizeREd, JSlider pShadingPhongSizeSlider,
       JComboBox pShadingLightCmb, JTextField pShadingLightXREd, JSlider pShadingLightXSlider, JTextField pShadingLightYREd, JSlider pShadingLightYSlider,
       JTextField pShadingLightZREd, JSlider pShadingLightZSlider, JTextField pShadingLightRedREd, JSlider pShadingLightRedSlider,
-      JTextField pShadingLightGreenREd, JSlider pShadingLightGreenSlider, JTextField pShadingLightBlueREd, JSlider pShadingLightBlueSlider) {
+      JTextField pShadingLightGreenREd, JSlider pShadingLightGreenSlider, JTextField pShadingLightBlueREd, JSlider pShadingLightBlueSlider,
+      JToggleButton pMouseTransformSlowButton) {
     errorHandler = pErrorHandler;
     prefs = pPrefs;
     centerPanel = pCenterPanel;
@@ -528,6 +530,8 @@ public class TinaController implements FlameHolder {
     shadingLightGreenSlider = pShadingLightGreenSlider;
     shadingLightBlueREd = pShadingLightBlueREd;
     shadingLightBlueSlider = pShadingLightBlueSlider;
+
+    mouseTransformSlowButton = pMouseTransformSlowButton;
 
     animateFramesREd.setText(String.valueOf(prefs.getTinaRenderMovieFrames()));
     refreshPaletteColorsTable();
@@ -3051,6 +3055,22 @@ public class TinaController implements FlameHolder {
 
   public void shadingPhongSizeSlider_changed() {
     shadingInfoSliderChanged(shadingPhongSizeSlider, shadingPhongSizeREd, "phongSize", SLIDER_SCALE_PHONGSIZE, 0);
+  }
+
+  public void loadFlameFromClipboard() {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void saveFlameToClipboard() {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void mouseTransformSlowButton_clicked() {
+    if (flamePanel != null) {
+      flamePanel.setFineMovement(mouseTransformSlowButton.isSelected());
+    }
   }
 
 }

@@ -562,6 +562,10 @@ public class TinaInternalFrame extends JInternalFrame implements ProgressUpdater
   private JLabel shadingLightBlueLbl = null;
   private JTextField shadingLightBlueREd = null;
   private JSlider shadingLightBlueSlider = null;
+  private JPanel settingsPanel = null;
+  private JButton loadFromClipboardFlameButton = null;
+  private JButton saveFlameToClipboardButton = null;
+  private JToggleButton mouseTransformSlowButton = null;
 
   /**
    * This is the xxx default constructor
@@ -1110,7 +1114,7 @@ public class TinaInternalFrame extends JInternalFrame implements ProgressUpdater
     if (tinaLoadFlameButton == null) {
       tinaLoadFlameButton = new JButton();
       tinaLoadFlameButton.setText("Load Flame");
-      tinaLoadFlameButton.setLocation(new Point(497, 4));
+      tinaLoadFlameButton.setLocation(new Point(516, 3));
       tinaLoadFlameButton.setSize(new Dimension(125, 24));
       tinaLoadFlameButton.setPreferredSize(new Dimension(125, 24));
       tinaLoadFlameButton.setFont(new Font("Dialog", Font.BOLD, 10));
@@ -1132,7 +1136,7 @@ public class TinaInternalFrame extends JInternalFrame implements ProgressUpdater
     if (tinaSaveFlameButton == null) {
       tinaSaveFlameButton = new JButton();
       tinaSaveFlameButton.setText("Save Flame");
-      tinaSaveFlameButton.setLocation(new Point(497, 32));
+      tinaSaveFlameButton.setLocation(new Point(516, 31));
       tinaSaveFlameButton.setSize(new Dimension(125, 24));
       tinaSaveFlameButton.setPreferredSize(new Dimension(125, 24));
       tinaSaveFlameButton.setFont(new Font("Dialog", Font.BOLD, 10));
@@ -1177,8 +1181,7 @@ public class TinaInternalFrame extends JInternalFrame implements ProgressUpdater
       tinaPreviewQualityREd = new JTextField();
       tinaPreviewQualityREd.setPreferredSize(new Dimension(56, 22));
       tinaPreviewQualityREd.setText("3");
-      tinaPreviewQualityREd.setLocation(new Point(727, 4));
-      tinaPreviewQualityREd.setSize(new Dimension(56, 22));
+      tinaPreviewQualityREd.setBounds(new Rectangle(279, 5, 56, 22));
       tinaPreviewQualityREd.setFont(new Font("Dialog", Font.PLAIN, 10));
       tinaPreviewQualityREd.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -1908,6 +1911,7 @@ public class TinaInternalFrame extends JInternalFrame implements ProgressUpdater
       tinaNorthTabbedPane.addTab("Main", null, getTinaNorthMainPanel(), null);
       tinaNorthTabbedPane.addTab("Morph", null, getTinaMorphPanel(), null);
       tinaNorthTabbedPane.addTab("Animate", null, getTinaAnimatePanel(), null);
+      tinaNorthTabbedPane.addTab("Settings", null, getSettingsPanel(), null);
     }
     return tinaNorthTabbedPane;
   }
@@ -1928,21 +1932,18 @@ public class TinaInternalFrame extends JInternalFrame implements ProgressUpdater
       zStyleLbl = new JLabel();
       zStyleLbl.setPreferredSize(new Dimension(94, 22));
       zStyleLbl.setText("Z style");
-      zStyleLbl.setBounds(new Rectangle(8, 5, 56, 22));
+      zStyleLbl.setBounds(new Rectangle(6, 6, 56, 22));
       zStyleLbl.setFont(new Font("Dialog", Font.BOLD, 10));
       tinaNorthMainPanel = new JPanel();
       tinaNorthMainPanel.setLayout(null);
       tinaCameraPreviewQualityLbl = new JLabel();
       tinaCameraPreviewQualityLbl.setText("Preview Quality");
       tinaCameraPreviewQualityLbl.setFont(new Font("Dialog", Font.BOLD, 10));
-      tinaCameraPreviewQualityLbl.setLocation(new Point(631, 4));
-      tinaCameraPreviewQualityLbl.setSize(new Dimension(94, 22));
+      tinaCameraPreviewQualityLbl.setBounds(new Rectangle(185, 5, 94, 22));
       tinaCameraPreviewQualityLbl.setPreferredSize(new Dimension(94, 22));
       tinaNorthMainPanel.add(getTinaLoadFlameButton(), null);
       tinaNorthMainPanel.add(getTinaSaveFlameButton(), null);
       tinaNorthMainPanel.add(getRenderImageNormalButton(), null);
-      tinaNorthMainPanel.add(tinaCameraPreviewQualityLbl, null);
-      tinaNorthMainPanel.add(getTinaPreviewQualityREd(), null);
       tinaNorthMainPanel.add(getRandomBatchButton(), null);
       tinaNorthMainPanel.add(getNewFlameButton(), null);
       tinaNorthMainPanel.add(getRandomStyleCmb(), null);
@@ -1950,6 +1951,8 @@ public class TinaInternalFrame extends JInternalFrame implements ProgressUpdater
       tinaNorthMainPanel.add(getRandomSymmetryCheckBox(), null);
       tinaNorthMainPanel.add(getRandomPostTransformCheckBox(), null);
       tinaNorthMainPanel.add(getRenderImageHighButton(), null);
+      tinaNorthMainPanel.add(getLoadFromClipboardFlameButton(), null);
+      tinaNorthMainPanel.add(getSaveFlameToClipboardButton(), null);
     }
     return tinaNorthMainPanel;
   }
@@ -3019,7 +3022,7 @@ public class TinaInternalFrame extends JInternalFrame implements ProgressUpdater
         getShadingPhongREd(), getShadingPhongSlider(), getShadingPhongSizeREd(), getShadingPhongSizeSlider(), getShadingLightCmb(),
         getShadingLightXREd(), getShadingLightXSlider(), getShadingLightYREd(), getShadingLightYSlider(), getShadingLightZREd(),
         getShadingLightZSlider(), getShadingLightRedREd(), getShadingLightRedSlider(), getShadingLightGreenREd(), getShadingLightGreenSlider(),
-        getShadingLightBlueREd(), getShadingLightBlueSlider());
+        getShadingLightBlueREd(), getShadingLightBlueSlider(), getMouseTransformSlowButton());
     tinaController.refreshing = tinaController.cmbRefreshing = tinaController.gridRefreshing = true;
     try {
       for (NonlinearControlsRow row : nonlinearControlsRows) {
@@ -4594,7 +4597,7 @@ public class TinaInternalFrame extends JInternalFrame implements ProgressUpdater
       newFlameButton.setMnemonic(KeyEvent.VK_N);
       newFlameButton.setText("New from scratch");
       newFlameButton.setActionCommand("New from scratch");
-      newFlameButton.setLocation(new Point(362, 4));
+      newFlameButton.setLocation(new Point(372, 3));
       newFlameButton.setSize(new Dimension(125, 52));
       newFlameButton.setFont(new Font("Dialog", Font.BOLD, 10));
       newFlameButton.addActionListener(new java.awt.event.ActionListener() {
@@ -4615,7 +4618,7 @@ public class TinaInternalFrame extends JInternalFrame implements ProgressUpdater
     if (zStyleCmb == null) {
       zStyleCmb = new JComboBox();
       zStyleCmb.setPreferredSize(new Dimension(125, 22));
-      zStyleCmb.setBounds(new Rectangle(66, 5, 110, 22));
+      zStyleCmb.setBounds(new Rectangle(64, 6, 110, 22));
       zStyleCmb.setFont(new Font("Dialog", Font.BOLD, 10));
       zStyleCmb.addItemListener(new java.awt.event.ItemListener() {
         public void itemStateChanged(java.awt.event.ItemEvent e) {
@@ -5065,11 +5068,9 @@ public class TinaInternalFrame extends JInternalFrame implements ProgressUpdater
       centerNorthPanel = new JPanel();
       centerNorthPanel.setLayout(null);
       centerNorthPanel.setPreferredSize(new Dimension(0, 32));
-      centerNorthPanel.add(getZStyleCmb(), null);
-      centerNorthPanel.add(zStyleLbl, null);
       centerNorthPanel.add(getAffineEditPostTransformSmallButton(), null);
       centerNorthPanel.add(getRenderProgressBar(), null);
-      centerNorthPanel.add(getFrameModeToggleButton(), null);
+      centerNorthPanel.add(getMouseTransformSlowButton(), null);
     }
     return centerNorthPanel;
   }
@@ -5249,7 +5250,7 @@ public class TinaInternalFrame extends JInternalFrame implements ProgressUpdater
   private JProgressBar getRenderProgressBar() {
     if (renderProgressBar == null) {
       renderProgressBar = new JProgressBar();
-      renderProgressBar.setBounds(new Rectangle(236, 9, 172, 14));
+      renderProgressBar.setBounds(new Rectangle(112, 9, 221, 14));
       renderProgressBar.setValue(0);
       renderProgressBar.setStringPainted(true);
     }
@@ -5670,9 +5671,8 @@ public class TinaInternalFrame extends JInternalFrame implements ProgressUpdater
       frameModeToggleButton.setPreferredSize(new Dimension(42, 24));
       frameModeToggleButton.setToolTipText("Switch image/movie mode");
       frameModeToggleButton.setMnemonic(KeyEvent.VK_M);
-      frameModeToggleButton.setText("M");
-      frameModeToggleButton.setSize(new Dimension(51, 24));
-      frameModeToggleButton.setLocation(new Point(181, 3));
+      frameModeToggleButton.setText("Movie mode");
+      frameModeToggleButton.setBounds(new Rectangle(344, 6, 144, 24));
       frameModeToggleButton.setFont(new Font("Dialog", Font.BOLD, 10));
       frameModeToggleButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -8320,6 +8320,91 @@ public class TinaInternalFrame extends JInternalFrame implements ProgressUpdater
       });
     }
     return shadingLightBlueSlider;
+  }
+
+  /**
+   * This method initializes settingsPanel	
+   * 	
+   * @return javax.swing.JPanel	
+   */
+  private JPanel getSettingsPanel() {
+    if (settingsPanel == null) {
+      settingsPanel = new JPanel();
+      settingsPanel.setLayout(null);
+      settingsPanel.add(getZStyleCmb(), null);
+      settingsPanel.add(zStyleLbl, null);
+      settingsPanel.add(tinaCameraPreviewQualityLbl, null);
+      settingsPanel.add(getTinaPreviewQualityREd(), null);
+      settingsPanel.add(getFrameModeToggleButton(), null);
+    }
+    return settingsPanel;
+  }
+
+  /**
+   * This method initializes loadFromClipboardFlameButton	
+   * 	
+   * @return javax.swing.JButton	
+   */
+  private JButton getLoadFromClipboardFlameButton() {
+    if (loadFromClipboardFlameButton == null) {
+      loadFromClipboardFlameButton = new JButton();
+      loadFromClipboardFlameButton.setPreferredSize(new Dimension(125, 24));
+      loadFromClipboardFlameButton.setText("From Clipboard");
+      loadFromClipboardFlameButton.setSize(new Dimension(125, 24));
+      loadFromClipboardFlameButton.setLocation(new Point(645, 3));
+      loadFromClipboardFlameButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      loadFromClipboardFlameButton.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent e) {
+          tinaController.loadFlameFromClipboard();
+        }
+      });
+    }
+    return loadFromClipboardFlameButton;
+  }
+
+  /**
+   * This method initializes saveFlameToClipboardButton	
+   * 	
+   * @return javax.swing.JButton	
+   */
+  private JButton getSaveFlameToClipboardButton() {
+    if (saveFlameToClipboardButton == null) {
+      saveFlameToClipboardButton = new JButton();
+      saveFlameToClipboardButton.setPreferredSize(new Dimension(125, 24));
+      saveFlameToClipboardButton.setText("To Clipboard");
+      saveFlameToClipboardButton.setSize(new Dimension(125, 24));
+      saveFlameToClipboardButton.setLocation(new Point(645, 31));
+      saveFlameToClipboardButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      saveFlameToClipboardButton.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent e) {
+          tinaController.saveFlameToClipboard();
+        }
+      });
+    }
+    return saveFlameToClipboardButton;
+  }
+
+  /**
+   * This method initializes mouseTransformSlowButton	
+   * 	
+   * @return javax.swing.JToggleButton	
+   */
+  private JToggleButton getMouseTransformSlowButton() {
+    if (mouseTransformSlowButton == null) {
+      mouseTransformSlowButton = new JToggleButton();
+      mouseTransformSlowButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/move.gif")));
+      mouseTransformSlowButton.setSelected(false);
+      mouseTransformSlowButton.setText("Fine");
+      mouseTransformSlowButton.setSize(new Dimension(95, 24));
+      mouseTransformSlowButton.setLocation(new Point(4, 4));
+      mouseTransformSlowButton.setPreferredSize(new Dimension(42, 24));
+      mouseTransformSlowButton.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent e) {
+          tinaController.mouseTransformSlowButton_clicked();
+        }
+      });
+    }
+    return mouseTransformSlowButton;
   }
 
 } //  @jve:decl-index=0:visual-constraint="10,10"
