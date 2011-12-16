@@ -22,6 +22,8 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 
+import javax.swing.JToggleButton;
+
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.XForm;
@@ -60,9 +62,12 @@ public class FlamePanel extends ImagePanel {
   private int renderHeight;
   private double renderAspect = 1.0;
 
-  public FlamePanel(SimpleImage pSimpleImage, int pX, int pY, int pWidth, FlameHolder pFlameHolder) {
+  private final JToggleButton toggleTrianglesButton;
+
+  public FlamePanel(SimpleImage pSimpleImage, int pX, int pY, int pWidth, FlameHolder pFlameHolder, JToggleButton pToggleTrianglesButton) {
     super(pSimpleImage, pX, pY, pWidth);
     flameHolder = pFlameHolder;
+    toggleTrianglesButton = pToggleTrianglesButton;
   }
 
   @Override
@@ -306,6 +311,10 @@ public class FlamePanel extends ImagePanel {
     if (selectedXForm != null) {
       xBeginDrag = x;
       yBeginDrag = y;
+      if (!drawFlame) {
+        drawFlame = true;
+        toggleTrianglesButton.setSelected(true);
+      }
     }
   }
 

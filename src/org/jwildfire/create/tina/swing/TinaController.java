@@ -544,7 +544,7 @@ public class TinaController implements FlameHolder {
       int height = centerPanel.getHeight();
       SimpleImage img = new SimpleImage(width, height);
       img.fillBackground(0, 0, 0);
-      flamePanel = new FlamePanel(img, 0, 0, centerPanel.getWidth(), this);
+      flamePanel = new FlamePanel(img, 0, 0, centerPanel.getWidth(), this, toggleTrianglesButton);
       flamePanel.setRenderWidth(prefs.getTinaRenderImageWidth());
       flamePanel.setRenderHeight(prefs.getTinaRenderImageHeight());
       flamePanel.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
