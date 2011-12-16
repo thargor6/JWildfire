@@ -452,7 +452,6 @@ public class RandomFlameGenerator {
         case 2:
           xForm.addVariation(Math.random() * 0.1, VariationFuncList.getVariationFuncInstance("radial_blur", true));
           JuliaNFunc juliaN = (JuliaNFunc) VariationFuncList.getVariationFuncInstance("julian", true);
-          // TODO modify
           juliaN.setParameter("power", 50 - Math.random() * 100);
           juliaN.setParameter("dist", Math.random() * 10 - 2);
           xForm.addVariation(Math.random() * 0.06 + 0.1, juliaN);

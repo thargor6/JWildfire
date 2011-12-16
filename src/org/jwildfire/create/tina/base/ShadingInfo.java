@@ -116,48 +116,48 @@ public class ShadingInfo {
     return lightPosX;
   }
 
-  public void setLightPosX(double[] lightPosX) {
-    this.lightPosX = lightPosX;
+  public void setLightPosX(int pIdx, double pLightPosX) {
+    this.lightPosX[pIdx] = pLightPosX;
   }
 
   public double[] getLightPosY() {
     return lightPosY;
   }
 
-  public void setLightPosY(double[] lightPosY) {
-    this.lightPosY = lightPosY;
+  public void setLightPosY(int pIdx, double pLightPosY) {
+    this.lightPosY[pIdx] = pLightPosY;
   }
 
   public double[] getLightPosZ() {
     return lightPosZ;
   }
 
-  public void setLightPosZ(double[] lightPosZ) {
-    this.lightPosZ = lightPosZ;
+  public void setLightPosZ(int pIdx, double pLightPosZ) {
+    this.lightPosZ[pIdx] = pLightPosZ;
   }
 
   public int[] getLightRed() {
     return lightRed;
   }
 
-  public void setLightRed(int[] lightRed) {
-    this.lightRed = lightRed;
+  public void setLightRed(int pIdx, int pLightRed) {
+    this.lightRed[pIdx] = pLightRed;
   }
 
   public int[] getLightGreen() {
     return lightGreen;
   }
 
-  public void setLightGreen(int[] lightGreen) {
-    this.lightGreen = lightGreen;
+  public void setLightGreen(int pIdx, int pLightGreen) {
+    this.lightGreen[pIdx] = pLightGreen;
   }
 
   public int[] getLightBlue() {
     return lightBlue;
   }
 
-  public void setLightBlue(int[] lightBlue) {
-    this.lightBlue = lightBlue;
+  public void setLightBlue(int pIdx, int pLightBlue) {
+    this.lightBlue[pIdx] = pLightBlue;
   }
 
   public void assign(ShadingInfo pSrc) {

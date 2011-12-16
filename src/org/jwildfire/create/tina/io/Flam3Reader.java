@@ -24,6 +24,7 @@ import java.util.Map;
 
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Flame;
+import org.jwildfire.create.tina.base.Shading;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.variation.Variation;
 import org.jwildfire.create.tina.variation.VariationFunc;
@@ -189,6 +190,18 @@ public class Flam3Reader implements FlameReader {
   private static final String ATTR_CAM_ZPOS = "cam_zpos";
   private static final String ATTR_CAM_DOF = "cam_dof";
   private static final String ATTR_CAM_ZOOM = "cam_zoom";
+  private static final String ATTR_SHADING_SHADING = "shading_shading";
+  private static final String ATTR_SHADING_AMBIENT = "shading_ambient";
+  private static final String ATTR_SHADING_DIFFUSE = "shading_diffuse";
+  private static final String ATTR_SHADING_PHONG = "shading_phong";
+  private static final String ATTR_SHADING_PHONGSIZE = "shading_phongSize";
+  private static final String ATTR_SHADING_LIGHTCOUNT = "shading_lightCount";
+  private static final String ATTR_SHADING_LIGHTPOSX_ = "shading_lightPosX_";
+  private static final String ATTR_SHADING_LIGHTPOSY_ = "shading_lightPosY_";
+  private static final String ATTR_SHADING_LIGHTPOSZ_ = "shading_lightPosZ_";
+  private static final String ATTR_SHADING_LIGHTRED_ = "shading_lightRed_";
+  private static final String ATTR_SHADING_LIGHTGREEN_ = "shading_lightGreen_";
+  private static final String ATTR_SHADING_LIGHTBLUE_ = "shading_lightBlue_";
 
   private void parseFlameAttributes(Flame pFlame, String pXML) {
     Map<String, String> atts = parseAttributes(pXML);
@@ -224,9 +237,9 @@ public class Flam3Reader implements FlameReader {
     }
     if ((hs = atts.get(ATTR_BACKGROUND)) != null) {
       String s[] = hs.split(" ");
-      pFlame.setBGColorRed(Integer.parseInt(s[0]));
-      pFlame.setBGColorGreen(Integer.parseInt(s[1]));
-      pFlame.setBGColorBlue(Integer.parseInt(s[2]));
+      pFlame.setBGColorRed(Tools.roundColor(255.0 * Double.parseDouble(s[0])));
+      pFlame.setBGColorGreen(Tools.roundColor(255.0 * Double.parseDouble(s[1])));
+      pFlame.setBGColorBlue(Tools.roundColor(255.0 * Double.parseDouble(s[2])));
     }
     if ((hs = atts.get(ATTR_BRIGHTNESS)) != null) {
       pFlame.setBrightness(Double.parseDouble(hs));
@@ -254,6 +267,45 @@ public class Flam3Reader implements FlameReader {
     }
     if ((hs = atts.get(ATTR_CAM_ZOOM)) != null) {
       pFlame.setCamZoom(Double.parseDouble(hs));
+    }
+    // Shading    
+    if ((hs = atts.get(ATTR_SHADING_SHADING)) != null) {
+      pFlame.getShadingInfo().setShading(hs.equalsIgnoreCase(Shading.PSEUDO3D.toString()) ? Shading.PSEUDO3D : Shading.FLAT);
+    }
+    if ((hs = atts.get(ATTR_SHADING_AMBIENT)) != null) {
+      pFlame.getShadingInfo().setAmbient(Double.parseDouble(hs));
+    }
+    if ((hs = atts.get(ATTR_SHADING_DIFFUSE)) != null) {
+      pFlame.getShadingInfo().setDiffuse(Double.parseDouble(hs));
+    }
+    if ((hs = atts.get(ATTR_SHADING_PHONG)) != null) {
+      pFlame.getShadingInfo().setPhong(Double.parseDouble(hs));
+    }
+    if ((hs = atts.get(ATTR_SHADING_PHONGSIZE)) != null) {
+      pFlame.getShadingInfo().setPhongSize(Double.parseDouble(hs));
+    }
+    if ((hs = atts.get(ATTR_SHADING_LIGHTCOUNT)) != null) {
+      pFlame.getShadingInfo().setLightCount(Integer.parseInt(hs));
+    }
+    for (int i = 0; i < pFlame.getShadingInfo().getLightCount(); i++) {
+      if ((hs = atts.get(ATTR_SHADING_LIGHTPOSX_ + i)) != null) {
+        pFlame.getShadingInfo().setLightPosX(i, Double.parseDouble(hs));
+      }
+      if ((hs = atts.get(ATTR_SHADING_LIGHTPOSY_ + i)) != null) {
+        pFlame.getShadingInfo().setLightPosY(i, Double.parseDouble(hs));
+      }
+      if ((hs = atts.get(ATTR_SHADING_LIGHTPOSZ_ + i)) != null) {
+        pFlame.getShadingInfo().setLightPosZ(i, Double.parseDouble(hs));
+      }
+      if ((hs = atts.get(ATTR_SHADING_LIGHTRED_ + i)) != null) {
+        pFlame.getShadingInfo().setLightRed(i, Integer.parseInt(hs));
+      }
+      if ((hs = atts.get(ATTR_SHADING_LIGHTGREEN_ + i)) != null) {
+        pFlame.getShadingInfo().setLightGreen(i, Integer.parseInt(hs));
+      }
+      if ((hs = atts.get(ATTR_SHADING_LIGHTBLUE_ + i)) != null) {
+        pFlame.getShadingInfo().setLightBlue(i, Integer.parseInt(hs));
+      }
     }
   }
 

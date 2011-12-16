@@ -21,6 +21,8 @@ import java.util.List;
 
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Flame;
+import org.jwildfire.create.tina.base.Shading;
+import org.jwildfire.create.tina.base.ShadingInfo;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.palette.RGBPalette;
 import org.jwildfire.create.tina.variation.Variation;
@@ -31,33 +33,49 @@ public class Flam3Writer {
   public void writeFlame(Flame pFlame, String pFilename) throws Exception {
     SimpleXMLBuilder xb = new SimpleXMLBuilder();
     // Flame
-    xb.beginElement("flame",
-        xb.createAttr("name", "JWildfire"),
-        xb.createAttr("version", Tools.APP_VERSION),
-        xb.createAttr("size", pFlame.getWidth() + " " + pFlame.getHeight()),
-        xb.createAttr("center", pFlame.getCentreX() + " " + pFlame.getCentreY()),
-        xb.createAttr("scale", pFlame.getPixelsPerUnit()),
-        //        xb.createAttr("rotate", -(pFlame.getCamRoll() * Math.PI) / 180.0),
-        xb.createAttr("rotate", pFlame.getCamRoll()),
-        xb.createAttr("oversample", pFlame.getSpatialOversample()),
-        xb.createAttr("color_oversample", pFlame.getColorOversample()),
-        xb.createAttr("filter", pFlame.getSpatialFilterRadius()),
-        xb.createAttr("quality", pFlame.getSampleDensity()),
-        xb.createAttr("background", pFlame.getBGColorRed() + " " + pFlame.getBGColorGreen() + " " + pFlame.getBGColorBlue()),
-        xb.createAttr("brightness", pFlame.getBrightness()),
-        xb.createAttr("gamma", pFlame.getGamma()),
-        xb.createAttr("gamma_threshold", pFlame.getGammaThreshold()),
-        xb.createAttr("estimator_radius", 9),
-        xb.createAttr("estimator_minimum", 0),
-        xb.createAttr("estimator_curve", 0.4),
-        xb.createAttr("temporal_samples", 1.0),
-        xb.createAttr("cam_zoom", pFlame.getCamZoom()),
-        xb.createAttr("cam_pitch", (pFlame.getCamPitch() * Math.PI) / 180.0),
-        xb.createAttr("cam_yaw", (pFlame.getCamYaw() * Math.PI) / 180.0),
-        xb.createAttr("cam_persp", pFlame.getCamPerspective()),
-        xb.createAttr("cam_zpos", pFlame.getCamZ()),
-        xb.createAttr("cam_dof", pFlame.getCamDOF())
-        );
+    List<SimpleXMLBuilder.Attribute<?>> attrList = new ArrayList<SimpleXMLBuilder.Attribute<?>>();
+    attrList.add(xb.createAttr("name", "JWildfire"));
+    attrList.add(xb.createAttr("version", Tools.APP_VERSION));
+    attrList.add(xb.createAttr("size", pFlame.getWidth() + " " + pFlame.getHeight()));
+    attrList.add(xb.createAttr("center", pFlame.getCentreX() + " " + pFlame.getCentreY()));
+    attrList.add(xb.createAttr("scale", pFlame.getPixelsPerUnit()));
+    attrList.add(xb.createAttr("rotate", pFlame.getCamRoll()));
+    attrList.add(xb.createAttr("oversample", pFlame.getSpatialOversample()));
+    attrList.add(xb.createAttr("color_oversample", pFlame.getColorOversample()));
+    attrList.add(xb.createAttr("filter", pFlame.getSpatialFilterRadius()));
+    attrList.add(xb.createAttr("quality", pFlame.getSampleDensity()));
+    attrList.add(xb.createAttr("background", (double) pFlame.getBGColorRed() / 255.0 + " " + (double) pFlame.getBGColorGreen() / 255.0 + " " + (double) pFlame.getBGColorBlue() / 255.0));
+    attrList.add(xb.createAttr("brightness", pFlame.getBrightness()));
+    attrList.add(xb.createAttr("gamma", pFlame.getGamma()));
+    attrList.add(xb.createAttr("gamma_threshold", pFlame.getGammaThreshold()));
+    attrList.add(xb.createAttr("estimator_radius", 9));
+    attrList.add(xb.createAttr("estimator_minimum", 0));
+    attrList.add(xb.createAttr("estimator_curve", 0.4));
+    attrList.add(xb.createAttr("temporal_samples", 1.0));
+    attrList.add(xb.createAttr("cam_zoom", pFlame.getCamZoom()));
+    attrList.add(xb.createAttr("cam_pitch", (pFlame.getCamPitch() * Math.PI) / 180.0));
+    attrList.add(xb.createAttr("cam_yaw", (pFlame.getCamYaw() * Math.PI) / 180.0));
+    attrList.add(xb.createAttr("cam_persp", pFlame.getCamPerspective()));
+    attrList.add(xb.createAttr("cam_zpos", pFlame.getCamZ()));
+    attrList.add(xb.createAttr("cam_dof", pFlame.getCamDOF()));
+    ShadingInfo shadingInfo = pFlame.getShadingInfo();
+    attrList.add(xb.createAttr("shading_shading", shadingInfo.getShading().toString()));
+    if (shadingInfo.getShading() == Shading.PSEUDO3D) {
+      attrList.add(xb.createAttr("shading_ambient", shadingInfo.getAmbient()));
+      attrList.add(xb.createAttr("shading_diffuse", shadingInfo.getDiffuse()));
+      attrList.add(xb.createAttr("shading_phong", shadingInfo.getPhong()));
+      attrList.add(xb.createAttr("shading_phongSize", shadingInfo.getPhongSize()));
+      attrList.add(xb.createAttr("shading_lightCount", shadingInfo.getLightCount()));
+      for (int i = 0; i < shadingInfo.getLightCount(); i++) {
+        attrList.add(xb.createAttr("shading_lightPosX_" + i, shadingInfo.getLightPosX()[i]));
+        attrList.add(xb.createAttr("shading_lightPosY_" + i, shadingInfo.getLightPosY()[i]));
+        attrList.add(xb.createAttr("shading_lightPosZ_" + i, shadingInfo.getLightPosZ()[i]));
+        attrList.add(xb.createAttr("shading_lightRed_" + i, shadingInfo.getLightRed()[i]));
+        attrList.add(xb.createAttr("shading_lightGreen_" + i, shadingInfo.getLightGreen()[i]));
+        attrList.add(xb.createAttr("shading_lightBlue_" + i, shadingInfo.getLightBlue()[i]));
+      }
+    }
+    xb.beginElement("flame", attrList);
     // XForm
     for (XForm xForm : pFlame.getXForms()) {
       xb.emptyElement("xform", createXFormAttrList(xb, pFlame, xForm));

@@ -35,6 +35,15 @@ public class SimpleXMLBuilder {
     return new Attribute<Double>(pName, pValue);
   }
 
+  public void beginElement(String pElement, List<Attribute<?>> attrList) {
+    Attribute<?>[] attrArray = new Attribute<?>[attrList.size()];
+    int idx = 0;
+    for (Attribute<?> attr : attrList) {
+      attrArray[idx++] = attr;
+    }
+    beginElement(pElement, attrArray);
+  }
+
   public void beginElement(String pElement, Attribute<?>... attr) {
     doIdent();
     if (attr != null && attr.length > 0) {
