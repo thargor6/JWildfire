@@ -25,23 +25,31 @@ public class TPostMirrorFunc extends VariationFunc {
   private static final String PARAM_XAXIS = "xaxis";
   private static final String PARAM_YAXIS = "yaxis";
   private static final String PARAM_ZAXIS = "zaxis";
+  private static final String PARAM_XSHIFT = "xshift";
+  private static final String PARAM_YSHIFT = "yshift";
+  private static final String PARAM_ZSHIFT = "zshift";
 
-  private static final String[] paramNames = { PARAM_XAXIS, PARAM_YAXIS, PARAM_ZAXIS };
+  private static final String[] paramNames = { PARAM_XAXIS, PARAM_YAXIS, PARAM_ZAXIS, PARAM_XSHIFT, PARAM_YSHIFT, PARAM_ZSHIFT };
 
   private int xAxis = 1;
   private int yAxis = 0;
   private int zAxis = 0;
+  private double xShift = 0.0;
+  private double yShift = 0.0;
+  private double zShift = 0.0;
 
   @Override
   public void transform(XFormTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     if (xAxis > 0 && pContext.getRandomNumberGenerator().random() < 0.5) {
-      pVarTP.x = -pVarTP.x;
+      pVarTP.x = -pVarTP.x - xShift;
     }
+
     if (yAxis > 0 && pContext.getRandomNumberGenerator().random() < 0.5) {
-      pVarTP.y = -pVarTP.y;
+      pVarTP.y = -pVarTP.y - yShift;
     }
+
     if (zAxis > 0 && pContext.getRandomNumberGenerator().random() < 0.5) {
-      pVarTP.z = -pVarTP.z;
+      pVarTP.z = -pVarTP.z - zShift;
     }
   }
 
@@ -52,7 +60,7 @@ public class TPostMirrorFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { xAxis, yAxis, zAxis };
+    return new Object[] { xAxis, yAxis, zAxis, xShift, yShift, zShift };
   }
 
   @Override
@@ -63,6 +71,12 @@ public class TPostMirrorFunc extends VariationFunc {
       yAxis = Tools.FTOI(pValue);
     else if (PARAM_ZAXIS.equalsIgnoreCase(pName))
       zAxis = Tools.FTOI(pValue);
+    else if (PARAM_XSHIFT.equalsIgnoreCase(pName))
+      xShift = pValue;
+    else if (PARAM_YSHIFT.equalsIgnoreCase(pName))
+      yShift = pValue;
+    else if (PARAM_ZSHIFT.equalsIgnoreCase(pName))
+      zShift = pValue;
     else
       throw new IllegalArgumentException(pName);
   }

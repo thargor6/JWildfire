@@ -1523,6 +1523,12 @@ public class TinaController implements FlameHolder {
       Flame flame = flames.get(0);
       prefs.setLastInputFlameFile(file);
       _currFlame = flame;
+
+      for (int i = flames.size() - 1; i >= 0; i--) {
+        randomBatch.add(0, flames.get(i));
+      }
+      updateThumbnails(null);
+
       refreshUI();
     }
   }

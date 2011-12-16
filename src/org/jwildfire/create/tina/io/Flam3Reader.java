@@ -284,10 +284,14 @@ public class Flam3Reader implements FlameReader {
     if ((hs = atts.get(ATTR_SHADING_PHONGSIZE)) != null) {
       pFlame.getShadingInfo().setPhongSize(Double.parseDouble(hs));
     }
+    int lightCount;
     if ((hs = atts.get(ATTR_SHADING_LIGHTCOUNT)) != null) {
-      pFlame.getShadingInfo().setLightCount(Integer.parseInt(hs));
+      lightCount = Integer.parseInt(hs);
     }
-    for (int i = 0; i < pFlame.getShadingInfo().getLightCount(); i++) {
+    else {
+      lightCount = 0;
+    }
+    for (int i = 0; i < lightCount; i++) {
       if ((hs = atts.get(ATTR_SHADING_LIGHTPOSX_ + i)) != null) {
         pFlame.getShadingInfo().setLightPosX(i, Double.parseDouble(hs));
       }

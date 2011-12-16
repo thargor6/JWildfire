@@ -21,7 +21,6 @@ public class ShadingInfo {
   private Shading shading;
   private double ambient;
   private double diffuse;
-  private int lightCount;
   private double phong;
   private double phongSize;
   protected double lightPosX[] = new double[MAXLIGHTS];
@@ -37,7 +36,6 @@ public class ShadingInfo {
     diffuse = 0.94;
     phong = 0.9;
     phongSize = 30;
-    lightCount = 2;
     lightPosX[0] = -0.2;
     lightPosY[0] = -0.2;
     lightPosZ[0] = -4;
@@ -89,11 +87,16 @@ public class ShadingInfo {
   }
 
   public int getLightCount() {
-    return lightCount;
-  }
-
-  public void setLightCount(int lightCount) {
-    this.lightCount = lightCount;
+    int res = 0;
+    for (int i = 0; i < lightRed.length; i++) {
+      if (lightRed[i] > 0 || lightGreen[i] > 0 || lightBlue[i] > 0) {
+        res++;
+      }
+      else {
+        break;
+      }
+    }
+    return res;
   }
 
   public double getPhong() {
@@ -164,7 +167,6 @@ public class ShadingInfo {
     shading = pSrc.shading;
     ambient = pSrc.ambient;
     diffuse = pSrc.diffuse;
-    lightCount = pSrc.lightCount;
     phong = pSrc.phong;
     phongSize = pSrc.phongSize;
     for (int i = 0; i < lightPosX.length; i++) {
