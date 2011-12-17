@@ -35,118 +35,8 @@ public class Flam3Reader implements FlameReader {
   @Override
   public List<Flame> readFlames(String pFilename) {
     try {
-      List<Flame> res = new ArrayList<Flame>();
       String flamesXML = Tools.readUTF8Textfile(pFilename);
-      int pFlames = 0;
-      while (true) {
-        String flameXML;
-        {
-          int ps = flamesXML.indexOf("<flame ", pFlames);
-          if (ps < 0)
-            break;
-          int pe = flamesXML.indexOf("</flame>", ps + 1);
-          if (pe < 0)
-            break;
-          pFlames = pe + 8;
-          flameXML = flamesXML.substring(ps, pFlames);
-        }
-
-        Flame flame = new Flame();
-        res.add(flame);
-        // Flame attributes
-        {
-          int ps = flameXML.indexOf("<flame ");
-          int pe = flameXML.indexOf(">", ps + 1);
-          String hs = flameXML.substring(ps + 7, pe);
-          parseFlameAttributes(flame, hs);
-        }
-        // XForms
-        {
-          int p = 0;
-          while (true) {
-            int ps = flameXML.indexOf("<xform ", p + 1);
-            if (ps < 0)
-              break;
-            int pe = flameXML.indexOf("/>", ps + 1);
-            String hs = flameXML.substring(ps + 7, pe);
-            XForm xForm = new XForm();
-            parseXFormAttributes(xForm, hs);
-            flame.getXForms().add(xForm);
-            p = pe + 2;
-          }
-        }
-        // FinalXForm
-        {
-          int p = 0;
-          while (true) {
-            int ps = flameXML.indexOf("<finalxform ", p + 1);
-            if (ps < 0)
-              break;
-            int pe = flameXML.indexOf("/>", ps + 1);
-            String hs = flameXML.substring(ps + 12, pe);
-            XForm xForm = new XForm();
-            parseXFormAttributes(xForm, hs);
-            flame.setFinalXForm(xForm);
-            p = pe + 2;
-          }
-        }
-
-        // Colors
-        {
-          int p = 0;
-          while (true) {
-            int ps = flameXML.indexOf("<color ", p + 1);
-            if (ps < 0)
-              break;
-            int pe = flameXML.indexOf("/>", ps + 1);
-            String hs = flameXML.substring(ps + 7, pe);
-            {
-              int index = 0;
-              int r = 0, g = 0, b = 0;
-              Map<String, String> atts = parseAttributes(hs);
-              String attr;
-              if ((attr = atts.get(ATTR_INDEX)) != null) {
-                index = Integer.parseInt(attr);
-              }
-              if ((attr = atts.get(ATTR_RGB)) != null) {
-                String s[] = attr.split(" ");
-                r = Integer.parseInt(s[0]);
-                g = Integer.parseInt(s[1]);
-                b = Integer.parseInt(s[2]);
-              }
-              flame.getPalette().setColor(index, r, g, b);
-            }
-            p = pe + 2;
-          }
-        }
-        // Palette
-        {
-          int ps = flameXML.indexOf("<palette ");
-          if (ps >= 0) {
-            ps = flameXML.indexOf(">", ps + 1);
-            int pe = flameXML.indexOf("</palette>", ps + 1);
-            String hs = flameXML.substring(ps + 1, pe);
-            StringBuilder sb = new StringBuilder();
-            for (int i = 0; i < hs.length(); i++) {
-              char c = hs.charAt(i);
-              if ((c >= 'A' && c <= 'Z') || (c >= '0' && c <= '9')) {
-                sb.append(c);
-              }
-            }
-            hs = sb.toString();
-            if ((hs.length() % 6) != 0)
-              throw new Exception("Invalid/unknown palette");
-            int index = 0;
-            for (int i = 0; i < hs.length(); i += 6) {
-              int r = Integer.parseInt(hs.substring(i, i + 2), 16);
-              int g = Integer.parseInt(hs.substring(i + 2, i + 4), 16);
-              int b = Integer.parseInt(hs.substring(i + 4, i + 6), 16);
-              flame.getPalette().setColor(index++, r, g, b);
-            }
-          }
-        }
-      }
-      return res;
+      return readFlamesfromXML(flamesXML);
     }
     catch (Exception ex) {
       throw new RuntimeException(ex);
@@ -376,4 +266,119 @@ public class Flam3Reader implements FlameReader {
       }
     }
   }
+
+  public List<Flame> readFlamesfromXML(String pXML) {
+    List<Flame> res = new ArrayList<Flame>();
+    int pFlames = 0;
+    while (true) {
+      String flameXML;
+      {
+        int ps = pXML.indexOf("<flame ", pFlames);
+        if (ps < 0)
+          break;
+        int pe = pXML.indexOf("</flame>", ps + 1);
+        if (pe < 0)
+          break;
+        pFlames = pe + 8;
+        flameXML = pXML.substring(ps, pFlames);
+      }
+
+      Flame flame = new Flame();
+      res.add(flame);
+      // Flame attributes
+      {
+        int ps = flameXML.indexOf("<flame ");
+        int pe = flameXML.indexOf(">", ps + 1);
+        String hs = flameXML.substring(ps + 7, pe);
+        parseFlameAttributes(flame, hs);
+      }
+      // XForms
+      {
+        int p = 0;
+        while (true) {
+          int ps = flameXML.indexOf("<xform ", p + 1);
+          if (ps < 0)
+            break;
+          int pe = flameXML.indexOf("/>", ps + 1);
+          String hs = flameXML.substring(ps + 7, pe);
+          XForm xForm = new XForm();
+          parseXFormAttributes(xForm, hs);
+          flame.getXForms().add(xForm);
+          p = pe + 2;
+        }
+      }
+      // FinalXForm
+      {
+        int p = 0;
+        while (true) {
+          int ps = flameXML.indexOf("<finalxform ", p + 1);
+          if (ps < 0)
+            break;
+          int pe = flameXML.indexOf("/>", ps + 1);
+          String hs = flameXML.substring(ps + 12, pe);
+          XForm xForm = new XForm();
+          parseXFormAttributes(xForm, hs);
+          flame.setFinalXForm(xForm);
+          p = pe + 2;
+        }
+      }
+
+      // Colors
+      {
+        int p = 0;
+        while (true) {
+          int ps = flameXML.indexOf("<color ", p + 1);
+          if (ps < 0)
+            break;
+          int pe = flameXML.indexOf("/>", ps + 1);
+          String hs = flameXML.substring(ps + 7, pe);
+          {
+            int index = 0;
+            int r = 0, g = 0, b = 0;
+            Map<String, String> atts = parseAttributes(hs);
+            String attr;
+            if ((attr = atts.get(ATTR_INDEX)) != null) {
+              index = Integer.parseInt(attr);
+            }
+            if ((attr = atts.get(ATTR_RGB)) != null) {
+              String s[] = attr.split(" ");
+              r = Integer.parseInt(s[0]);
+              g = Integer.parseInt(s[1]);
+              b = Integer.parseInt(s[2]);
+            }
+            flame.getPalette().setColor(index, r, g, b);
+          }
+          p = pe + 2;
+        }
+      }
+      // Palette
+      {
+        int ps = flameXML.indexOf("<palette ");
+        if (ps >= 0) {
+          ps = flameXML.indexOf(">", ps + 1);
+          int pe = flameXML.indexOf("</palette>", ps + 1);
+          String hs = flameXML.substring(ps + 1, pe);
+          StringBuilder sb = new StringBuilder();
+          for (int i = 0; i < hs.length(); i++) {
+            char c = hs.charAt(i);
+            if ((c >= 'A' && c <= 'Z') || (c >= '0' && c <= '9')) {
+              sb.append(c);
+            }
+          }
+          hs = sb.toString();
+          if ((hs.length() % 6) != 0)
+            throw new RuntimeException("Invalid/unknown palette");
+          int index = 0;
+          for (int i = 0; i < hs.length(); i += 6) {
+            int r = Integer.parseInt(hs.substring(i, i + 2), 16);
+            int g = Integer.parseInt(hs.substring(i + 2, i + 4), 16);
+            int b = Integer.parseInt(hs.substring(i + 4, i + 6), 16);
+            flame.getPalette().setColor(index++, r, g, b);
+          }
+        }
+      }
+    }
+    return res;
+  }
+
 }

@@ -31,6 +31,50 @@ import org.jwildfire.create.tina.variation.VariationFunc;
 public class Flam3Writer {
 
   public void writeFlame(Flame pFlame, String pFilename) throws Exception {
+    Tools.writeUTF8Textfile(pFilename, getFlameXML(pFlame));
+  }
+
+  private List<SimpleXMLBuilder.Attribute<?>> createXFormAttrList(SimpleXMLBuilder pXB, Flame pFlame, XForm pXForm) {
+    List<SimpleXMLBuilder.Attribute<?>> attrList = new ArrayList<SimpleXMLBuilder.Attribute<?>>();
+    attrList.add(pXB.createAttr("weight", pXForm.getWeight()));
+    attrList.add(pXB.createAttr("color", pXForm.getColor()));
+    attrList.add(pXB.createAttr("symmetry", pXForm.getColorSymmetry()));
+    attrList.add(pXB.createAttr("coefs", pXForm.getCoeff00() + " " + pXForm.getCoeff01() + " " + pXForm.getCoeff10() + " " + pXForm.getCoeff11() + " " + pXForm.getCoeff20() + " " + pXForm.getCoeff21()));
+    if (pXForm.hasPostCoeffs()) {
+      attrList.add(pXB.createAttr("post", pXForm.getPostCoeff00() + " " + pXForm.getPostCoeff01() + " " + pXForm.getPostCoeff10() + " " + pXForm.getPostCoeff11() + " " + pXForm.getPostCoeff20() + " " + pXForm.getPostCoeff21()));
+    }
+    {
+      String hs = "";
+      for (int i = 0; i < pFlame.getXForms().size() - 1; i++) {
+        hs += pXForm.getModifiedWeights()[i] + " ";
+      }
+      hs += pXForm.getModifiedWeights()[pFlame.getXForms().size() - 1];
+      attrList.add(pXB.createAttr("chaos", hs));
+    }
+
+    for (Variation v : pXForm.getVariations()) {
+      VariationFunc func = v.getFunc();
+      attrList.add(pXB.createAttr(func.getName(), v.getAmount()));
+      String params[] = func.getParameterNames();
+      if (params != null) {
+        Object vals[] = func.getParameterValues();
+        for (int i = 0; i < params.length; i++) {
+          if (vals[i] instanceof Integer) {
+            attrList.add(pXB.createAttr(func.getCustomizedParamName(func.getName() + "_" + params[i]), (Integer) vals[i]));
+          }
+          else if (vals[i] instanceof Double) {
+            attrList.add(pXB.createAttr((func.getName() + "_" + params[i]), (Double) vals[i]));
+          }
+          else {
+            throw new IllegalStateException();
+          }
+        }
+      }
+    }
+    return attrList;
+  }
+
+  public String getFlameXML(Flame pFlame) {
     SimpleXMLBuilder xb = new SimpleXMLBuilder();
     // Flame
     List<SimpleXMLBuilder.Attribute<?>> attrList = new ArrayList<SimpleXMLBuilder.Attribute<?>>();
@@ -107,47 +151,6 @@ public class Flam3Writer {
       xb.endElement("palette");
     }
     xb.endElement("flame");
-    String xml = xb.buildXML();
-    Tools.writeUTF8Textfile(pFilename, xml);
-  }
-
-  private List<SimpleXMLBuilder.Attribute<?>> createXFormAttrList(SimpleXMLBuilder pXB, Flame pFlame, XForm pXForm) {
-    List<SimpleXMLBuilder.Attribute<?>> attrList = new ArrayList<SimpleXMLBuilder.Attribute<?>>();
-    attrList.add(pXB.createAttr("weight", pXForm.getWeight()));
-    attrList.add(pXB.createAttr("color", pXForm.getColor()));
-    attrList.add(pXB.createAttr("symmetry", pXForm.getColorSymmetry()));
-    attrList.add(pXB.createAttr("coefs", pXForm.getCoeff00() + " " + pXForm.getCoeff01() + " " + pXForm.getCoeff10() + " " + pXForm.getCoeff11() + " " + pXForm.getCoeff20() + " " + pXForm.getCoeff21()));
-    if (pXForm.hasPostCoeffs()) {
-      attrList.add(pXB.createAttr("post", pXForm.getPostCoeff00() + " " + pXForm.getPostCoeff01() + " " + pXForm.getPostCoeff10() + " " + pXForm.getPostCoeff11() + " " + pXForm.getPostCoeff20() + " " + pXForm.getPostCoeff21()));
-    }
-    {
-      String hs = "";
-      for (int i = 0; i < pFlame.getXForms().size() - 1; i++) {
-        hs += pXForm.getModifiedWeights()[i] + " ";
-      }
-      hs += pXForm.getModifiedWeights()[pFlame.getXForms().size() - 1];
-      attrList.add(pXB.createAttr("chaos", hs));
-    }
-
-    for (Variation v : pXForm.getVariations()) {
-      VariationFunc func = v.getFunc();
-      attrList.add(pXB.createAttr(func.getName(), v.getAmount()));
-      String params[] = func.getParameterNames();
-      if (params != null) {
-        Object vals[] = func.getParameterValues();
-        for (int i = 0; i < params.length; i++) {
-          if (vals[i] instanceof Integer) {
-            attrList.add(pXB.createAttr(func.getCustomizedParamName(func.getName() + "_" + params[i]), (Integer) vals[i]));
-          }
-          else if (vals[i] instanceof Double) {
-            attrList.add(pXB.createAttr((func.getName() + "_" + params[i]), (Double) vals[i]));
-          }
-          else {
-            throw new IllegalStateException();
-          }
-        }
-      }
-    }
-    return attrList;
+    return xb.buildXML();
   }
 }

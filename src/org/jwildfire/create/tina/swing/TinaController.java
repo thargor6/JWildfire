@@ -20,6 +20,11 @@ import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Rectangle;
+import java.awt.Toolkit;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.StringSelection;
+import java.awt.datatransfer.Transferable;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
 import java.io.File;
@@ -1512,28 +1517,33 @@ public class TinaController implements FlameHolder {
   }
 
   public void loadFlameButton_actionPerformed(ActionEvent e) {
-    JFileChooser chooser = new FlameFileChooser(prefs);
-    if (prefs.getInputFlamePath() != null) {
-      try {
-        chooser.setCurrentDirectory(new File(prefs.getInputFlamePath()));
+    try {
+      JFileChooser chooser = new FlameFileChooser(prefs);
+      if (prefs.getInputFlamePath() != null) {
+        try {
+          chooser.setCurrentDirectory(new File(prefs.getInputFlamePath()));
+        }
+        catch (Exception ex) {
+          ex.printStackTrace();
+        }
       }
-      catch (Exception ex) {
-        ex.printStackTrace();
+      if (chooser.showOpenDialog(centerPanel) == JFileChooser.APPROVE_OPTION) {
+        File file = chooser.getSelectedFile();
+        List<Flame> flames = new Flam3Reader().readFlames(file.getAbsolutePath());
+        Flame flame = flames.get(0);
+        prefs.setLastInputFlameFile(file);
+        _currFlame = flame;
+
+        for (int i = flames.size() - 1; i >= 0; i--) {
+          randomBatch.add(0, flames.get(i));
+        }
+        updateThumbnails(null);
+
+        refreshUI();
       }
     }
-    if (chooser.showOpenDialog(centerPanel) == JFileChooser.APPROVE_OPTION) {
-      File file = chooser.getSelectedFile();
-      List<Flame> flames = new Flam3Reader().readFlames(file.getAbsolutePath());
-      Flame flame = flames.get(0);
-      prefs.setLastInputFlameFile(file);
-      _currFlame = flame;
-
-      for (int i = flames.size() - 1; i >= 0; i--) {
-        randomBatch.add(0, flames.get(i));
-      }
-      updateThumbnails(null);
-
-      refreshUI();
+    catch (Throwable ex) {
+      errorHandler.handleError(ex);
     }
   }
 
@@ -1854,27 +1864,27 @@ public class TinaController implements FlameHolder {
   }
 
   public void saveFlameButton_actionPerformed(ActionEvent e) {
-    Flame currFlame = getCurrFlame();
-    if (currFlame != null) {
-      JFileChooser chooser = new FlameFileChooser(prefs);
-      if (prefs.getOutputFlamePath() != null) {
-        try {
-          chooser.setCurrentDirectory(new File(prefs.getOutputFlamePath()));
+    try {
+      Flame currFlame = getCurrFlame();
+      if (currFlame != null) {
+        JFileChooser chooser = new FlameFileChooser(prefs);
+        if (prefs.getOutputFlamePath() != null) {
+          try {
+            chooser.setCurrentDirectory(new File(prefs.getOutputFlamePath()));
+          }
+          catch (Exception ex) {
+            ex.printStackTrace();
+          }
         }
-        catch (Exception ex) {
-          ex.printStackTrace();
-        }
-      }
-      if (chooser.showSaveDialog(centerPanel) == JFileChooser.APPROVE_OPTION) {
-        try {
+        if (chooser.showSaveDialog(centerPanel) == JFileChooser.APPROVE_OPTION) {
           File file = chooser.getSelectedFile();
           new Flam3Writer().writeFlame(currFlame, file.getAbsolutePath());
           prefs.setLastOutputFlameFile(file);
         }
-        catch (Throwable ex) {
-          errorHandler.handleError(ex);
-        }
       }
+    }
+    catch (Throwable ex) {
+      errorHandler.handleError(ex);
     }
   }
 
@@ -3058,13 +3068,42 @@ public class TinaController implements FlameHolder {
   }
 
   public void loadFlameFromClipboard() {
-    // TODO Auto-generated method stub
-
+    try {
+      Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+      Transferable clipData = clipboard.getContents(clipboard);
+      if (clipData != null) {
+        if (clipData.isDataFlavorSupported(DataFlavor.stringFlavor)) {
+          String xml = (String) (clipData.getTransferData(
+              DataFlavor.stringFlavor));
+          List<Flame> flames = new Flam3Reader().readFlamesfromXML(xml);
+          Flame flame = flames.get(0);
+          _currFlame = flame;
+          for (int i = flames.size() - 1; i >= 0; i--) {
+            randomBatch.add(0, flames.get(i));
+          }
+          updateThumbnails(null);
+          refreshUI();
+        }
+      }
+    }
+    catch (Throwable ex) {
+      errorHandler.handleError(ex);
+    }
   }
 
   public void saveFlameToClipboard() {
-    // TODO Auto-generated method stub
-
+    try {
+      Flame currFlame = getCurrFlame();
+      if (currFlame != null) {
+        Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+        String xml = new Flam3Writer().getFlameXML(currFlame);
+        StringSelection data = new StringSelection(xml);
+        clipboard.setContents(data, data);
+      }
+    }
+    catch (Throwable ex) {
+      errorHandler.handleError(ex);
+    }
   }
 
   public void mouseTransformSlowButton_clicked() {
