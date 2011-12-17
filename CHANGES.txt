@@ -1,3 +1,11 @@
+V0.27 (17.12.2011):
+ - Fractal flame editor: store/load flames from/to cliboard
+ - Fractal flame editor: "fine" triangle moving/rotating/scaling mode (e. g. for editing gnarls ;-))
+ - Fractal flame editor: automatically activate "triangle mode" when the user clicks or moves a trinagle in the preview window
+ - Fractal flame editor: load all flames in a flam3-file (instead only the 1st) and append them to the thumbnail ribbon
+ - Fractal flame editor: saving/loading shading attributes in flam3 files
+ - Fractal flame editor: new "gnarl" style for the random flame generator
+
 V0.26 (15.12.2011):
  - Fractal flame editor: xheart variation
  - Fractal flame editor: t-heart variation

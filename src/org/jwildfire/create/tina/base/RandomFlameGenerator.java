@@ -68,17 +68,17 @@ public class RandomFlameGenerator {
         if (r < 0.20) {
           flame = createFlame_original();
         }
-        else if (r < 0.40) {
-          flame = createFlame_experimental();
-        }
-        else if (r < 0.60) {
-          flame = createFlame_tentacle();
-        }
-        else if (r < 0.80) {
+        else if (r < 0.30) {
           flame = createFlame_gnarl();
         }
-        else {
+        else if (r > 0.70) {
+          flame = createFlame_tentacle();
+        }
+        else if (r > 0.80) {
           flame = createFlame_3D();
+        }
+        else {
+          flame = createFlame_experimental();
         }
         break;
       }
