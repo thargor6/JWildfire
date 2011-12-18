@@ -51,6 +51,17 @@ public class Variation {
   public void assign(Variation var) {
     amount = var.amount;
     func = VariationFuncList.getVariationFuncInstance(var.func.getName());
+    for (int i = 0; i < var.func.getParameterNames().length; i++) {
+      Object val = var.func.getParameterValues()[i];
+      if (val instanceof Double) {
+        func.setParameter(var.func.getParameterNames()[i], (Double) val);
+      }
+      else if (val instanceof Integer) {
+        func.setParameter(var.func.getParameterNames()[i], Double.valueOf(((Integer) val)));
+      }
+      else {
+        throw new IllegalStateException();
+      }
+    }
   }
-
 }
