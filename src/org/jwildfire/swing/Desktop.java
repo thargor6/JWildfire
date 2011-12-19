@@ -55,7 +55,7 @@ import javax.swing.border.SoftBevelBorder;
 
 import org.jwildfire.base.Prefs;
 import org.jwildfire.base.Tools;
-import org.jwildfire.create.tina.base.RandomFlameGeneratorStyle;
+import org.jwildfire.create.tina.randomflame.RandomFlameGeneratorList;
 import org.jwildfire.create.tina.swing.TinaController;
 import org.jwildfire.create.tina.swing.TinaInternalFrame;
 
@@ -107,7 +107,7 @@ public class Desktop extends JApplet {
       TinaInternalFrame tinaFrame = (TinaInternalFrame) getTinaInternalFrame();
       tinaController = tinaFrame.createController(errorHandler, prefs);
       try {
-        tinaController.createRandomBatch(1, RandomFlameGeneratorStyle.ALL);
+        tinaController.createRandomBatch(1, RandomFlameGeneratorList.DEFAULT_GENERATOR_NAME);
       }
       catch (Exception ex) {
         ex.printStackTrace();

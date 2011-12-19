@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.jwildfire.base.Tools;
+import org.jwildfire.create.tina.base.DrawMode;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.Shading;
 import org.jwildfire.create.tina.base.XForm;
@@ -205,6 +206,7 @@ public class Flam3Reader implements FlameReader {
 
   private static final String ATTR_WEIGHT = "weight";
   private static final String ATTR_COLOR = "color";
+  private static final String ATTR_OPACITY = "opacity";
   private static final String ATTR_COEFS = "coefs";
   private static final String ATTR_POST = "post";
   private static final String ATTR_CHAOS = "chaos";
@@ -218,6 +220,19 @@ public class Flam3Reader implements FlameReader {
     }
     if ((hs = atts.get(ATTR_COLOR)) != null) {
       pXForm.setColor(Double.parseDouble(hs));
+    }
+    if ((hs = atts.get(ATTR_OPACITY)) != null) {
+      double opacity = Double.parseDouble(hs);
+      pXForm.setOpacity(opacity);
+      if (Math.abs(opacity) <= Tools.EPSILON) {
+        pXForm.setDrawMode(DrawMode.HIDDEN);
+      }
+      else if (Math.abs(opacity - 1.0) > Tools.EPSILON) {
+        pXForm.setDrawMode(DrawMode.OPAQUE);
+      }
+      else {
+        pXForm.setDrawMode(DrawMode.NORMAL);
+      }
     }
     if ((hs = atts.get(ATTR_SYMMETRY)) != null) {
       pXForm.setColorSymmetry(Double.parseDouble(hs));

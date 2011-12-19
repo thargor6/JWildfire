@@ -31,6 +31,7 @@ import java.io.File;
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
 
@@ -53,8 +54,6 @@ import org.jwildfire.base.Prefs;
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.DrawMode;
 import org.jwildfire.create.tina.base.Flame;
-import org.jwildfire.create.tina.base.RandomFlameGenerator;
-import org.jwildfire.create.tina.base.RandomFlameGeneratorStyle;
 import org.jwildfire.create.tina.base.Shading;
 import org.jwildfire.create.tina.base.ShadingInfo;
 import org.jwildfire.create.tina.base.XForm;
@@ -65,6 +64,8 @@ import org.jwildfire.create.tina.palette.RGBPalette;
 import org.jwildfire.create.tina.palette.RGBPaletteImporter;
 import org.jwildfire.create.tina.palette.RGBPaletteRenderer;
 import org.jwildfire.create.tina.palette.RandomRGBPaletteGenerator;
+import org.jwildfire.create.tina.randomflame.RandomFlameGenerator;
+import org.jwildfire.create.tina.randomflame.RandomFlameGeneratorList;
 import org.jwildfire.create.tina.render.AffineZStyle;
 import org.jwildfire.create.tina.render.FlameRenderer;
 import org.jwildfire.create.tina.transform.AnimationService;
@@ -1841,10 +1842,13 @@ public class TinaController implements FlameHolder {
               flame.setColorOversample(prefs.getTinaRenderNormalColorOversample());
               flame.setSpatialFilterRadius(prefs.getTinaRenderNormalSpatialOversample());
             }
+            long t0 = Calendar.getInstance().getTimeInMillis();
             FlameRenderer renderer = new FlameRenderer();
             renderer.setProgressUpdater(progressUpdater);
             renderer.setAffineZStyle((AffineZStyle) zStyleCmb.getSelectedItem());
             renderer.renderFlame(flame, img, prefs.getTinaRenderThreads());
+            long t1 = Calendar.getInstance().getTimeInMillis();
+            System.err.println("RENDER TIME: " + ((double) (t1 - t0) / 1000.0) + "s");
             new ImageWriter().saveImage(img, file.getAbsolutePath());
           }
           finally {
@@ -2091,7 +2095,7 @@ public class TinaController implements FlameHolder {
   public void addXForm() {
     XForm xForm = new XForm();
     xForm.addVariation(1.0, new Linear3DFunc());
-    xForm.setWeight(1.0);
+    xForm.setWeight(0.5);
     Flame currFlame = getCurrFlame();
     currFlame.getXForms().add(xForm);
     gridRefreshing = true;
@@ -2269,7 +2273,7 @@ public class TinaController implements FlameHolder {
     randomBatchPanel.validate();
   }
 
-  public void createRandomBatch(int pCount, RandomFlameGeneratorStyle pStyle) {
+  public void createRandomBatch(int pCount, String pGeneratorname) {
     randomBatch.clear();
     final int IMG_COUNT = 24;
     final int MAX_IMG_SAMPLES = 10;
@@ -2283,7 +2287,8 @@ public class TinaController implements FlameHolder {
       double bestCoverage = 0.0;
       for (int j = 0; j < MAX_IMG_SAMPLES; j++) {
         // create flame
-        Flame flame = new RandomFlameGenerator().createFlame(pStyle, randomSymmetryCheckBox.isSelected(), randomPostTransformCheckBox.isSelected());
+        RandomFlameGenerator randGen = RandomFlameGeneratorList.getRandomFlameGeneratorInstance(pGeneratorname, true);
+        Flame flame = randGen.createFlame(randomSymmetryCheckBox.isSelected(), randomPostTransformCheckBox.isSelected());
         flame.setWidth(IMG_WIDTH);
         flame.setHeight(IMG_HEIGHT);
         flame.setPixelsPerUnit(10);

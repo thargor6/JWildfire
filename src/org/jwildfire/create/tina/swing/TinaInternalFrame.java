@@ -38,8 +38,8 @@ import javax.swing.event.ListSelectionListener;
 
 import org.jwildfire.base.Prefs;
 import org.jwildfire.create.tina.base.DrawMode;
-import org.jwildfire.create.tina.base.RandomFlameGeneratorStyle;
 import org.jwildfire.create.tina.base.Shading;
+import org.jwildfire.create.tina.randomflame.RandomFlameGeneratorList;
 import org.jwildfire.create.tina.render.AffineZStyle;
 import org.jwildfire.create.tina.swing.TinaController.NonlinearControlsRow;
 import org.jwildfire.create.tina.transform.AnimationService;
@@ -1925,7 +1925,7 @@ public class TinaInternalFrame extends JInternalFrame implements ProgressUpdater
     if (tinaNorthMainPanel == null) {
       randomStyleLbl = new JLabel();
       randomStyleLbl.setPreferredSize(new Dimension(94, 22));
-      randomStyleLbl.setText("Random style");
+      randomStyleLbl.setText("Random generator");
       randomStyleLbl.setSize(new Dimension(94, 22));
       randomStyleLbl.setLocation(new Point(132, 4));
       randomStyleLbl.setFont(new Font("Dialog", Font.BOLD, 10));
@@ -3585,7 +3585,7 @@ public class TinaInternalFrame extends JInternalFrame implements ProgressUpdater
       randomBatchButton.setPreferredSize(new Dimension(125, 52));
       randomBatchButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.createRandomBatch(-1, (RandomFlameGeneratorStyle) randomStyleCmb.getSelectedItem());
+          tinaController.createRandomBatch(-1, (String) randomStyleCmb.getSelectedItem());
           tinaController.importFromRandomBatch(0);
         }
       });
@@ -5122,13 +5122,10 @@ public class TinaInternalFrame extends JInternalFrame implements ProgressUpdater
       randomStyleCmb.setLocation(new Point(228, 4));
       randomStyleCmb.setFont(new Font("Dialog", Font.BOLD, 10));
       randomStyleCmb.removeAllItems();
-      randomStyleCmb.addItem(RandomFlameGeneratorStyle.ORIGINAL);
-      randomStyleCmb.addItem(RandomFlameGeneratorStyle.EXPERIMENTAL);
-      randomStyleCmb.addItem(RandomFlameGeneratorStyle.ONLY3D);
-      randomStyleCmb.addItem(RandomFlameGeneratorStyle.TENTACLE);
-      randomStyleCmb.addItem(RandomFlameGeneratorStyle.GNARL);
-      randomStyleCmb.addItem(RandomFlameGeneratorStyle.ALL);
-      randomStyleCmb.setSelectedItem(RandomFlameGeneratorStyle.ALL);
+      for (String name : RandomFlameGeneratorList.getNameList()) {
+        randomStyleCmb.addItem(name);
+      }
+      randomStyleCmb.setSelectedItem(RandomFlameGeneratorList.DEFAULT_GENERATOR_NAME);
     }
     return randomStyleCmb;
   }
@@ -7787,7 +7784,7 @@ public class TinaInternalFrame extends JInternalFrame implements ProgressUpdater
     if (shadingCmb == null) {
       shadingCmb = new JComboBox();
       shadingCmb.setPreferredSize(new Dimension(125, 22));
-      shadingCmb.setSelectedItem(RandomFlameGeneratorStyle.ALL);
+      shadingCmb.setSelectedItem(Shading.FLAT);
       shadingCmb.setSize(new Dimension(125, 22));
       shadingCmb.setLocation(new Point(100, 4));
       shadingCmb.setFont(new Font("Dialog", Font.BOLD, 10));
@@ -8009,7 +8006,7 @@ public class TinaInternalFrame extends JInternalFrame implements ProgressUpdater
     if (shadingLightCmb == null) {
       shadingLightCmb = new JComboBox();
       shadingLightCmb.setPreferredSize(new Dimension(125, 22));
-      shadingLightCmb.setSelectedItem(RandomFlameGeneratorStyle.ALL);
+      shadingLightCmb.setSelectedItem("1");
       shadingLightCmb.setSize(new Dimension(125, 22));
       shadingLightCmb.setLocation(new Point(420, 4));
       shadingLightCmb.setFont(new Font("Dialog", Font.BOLD, 10));
