@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.jwildfire.base.Tools;
+import org.jwildfire.create.tina.base.DrawMode;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.Shading;
 import org.jwildfire.create.tina.base.ShadingInfo;
@@ -38,6 +39,12 @@ public class Flam3Writer {
     List<SimpleXMLBuilder.Attribute<?>> attrList = new ArrayList<SimpleXMLBuilder.Attribute<?>>();
     attrList.add(pXB.createAttr("weight", pXForm.getWeight()));
     attrList.add(pXB.createAttr("color", pXForm.getColor()));
+    if (pXForm.getDrawMode().equals(DrawMode.OPAQUE)) {
+      attrList.add(pXB.createAttr("opacity", pXForm.getOpacity()));
+    }
+    else if (pXForm.getDrawMode().equals(DrawMode.HIDDEN)) {
+      attrList.add(pXB.createAttr("opacity", 0.0));
+    }
     attrList.add(pXB.createAttr("symmetry", pXForm.getColorSymmetry()));
     attrList.add(pXB.createAttr("coefs", pXForm.getCoeff00() + " " + pXForm.getCoeff01() + " " + pXForm.getCoeff10() + " " + pXForm.getCoeff11() + " " + pXForm.getCoeff20() + " " + pXForm.getCoeff21()));
     if (pXForm.hasPostCoeffs()) {
