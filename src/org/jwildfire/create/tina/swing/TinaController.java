@@ -2182,13 +2182,21 @@ public class TinaController implements FlameHolder {
   }
 
   public void xForm_moveRight() {
+    if (!toggleTrianglesButton.isSelected()) {
+      flamePanel.setDrawFlame(true);
+      toggleTrianglesButton.setSelected(true);
+    }
     double amount = Tools.stringToDouble(affineMoveAmountREd.getText());
-    XFormTransformService.globalTranslate(getCurrXForm(), amount, 0);
+    XFormTransformService.globalTranslate(getCurrXForm(), amount, 0, affineEditPostTransformButton.isSelected());
     transformationTableClicked();
     refreshFlameImage();
   }
 
   public void xForm_rotateRight() {
+    if (!toggleTrianglesButton.isSelected()) {
+      flamePanel.setDrawFlame(true);
+      toggleTrianglesButton.setSelected(true);
+    }
     double amount = Tools.stringToDouble(affineRotateAmountREd.getText());
     XFormTransformService.rotate(getCurrXForm(), -amount, affineEditPostTransformButton.isSelected());
     transformationTableClicked();
@@ -2196,6 +2204,10 @@ public class TinaController implements FlameHolder {
   }
 
   public void xForm_moveLeft() {
+    if (!toggleTrianglesButton.isSelected()) {
+      flamePanel.setDrawFlame(true);
+      toggleTrianglesButton.setSelected(true);
+    }
     double amount = Tools.stringToDouble(affineMoveAmountREd.getText());
     XFormTransformService.globalTranslate(getCurrXForm(), -amount, 0, affineEditPostTransformButton.isSelected());
     transformationTableClicked();
@@ -2203,6 +2215,10 @@ public class TinaController implements FlameHolder {
   }
 
   public void xForm_enlarge() {
+    if (!toggleTrianglesButton.isSelected()) {
+      flamePanel.setDrawFlame(true);
+      toggleTrianglesButton.setSelected(true);
+    }
     double amount = 1.0 + Tools.stringToDouble(affineScaleAmountREd.getText());
     XFormTransformService.scale(getCurrXForm(), amount, affineEditPostTransformButton.isSelected());
     transformationTableClicked();
@@ -2210,6 +2226,10 @@ public class TinaController implements FlameHolder {
   }
 
   public void xForm_shrink() {
+    if (!toggleTrianglesButton.isSelected()) {
+      flamePanel.setDrawFlame(true);
+      toggleTrianglesButton.setSelected(true);
+    }
     double amount = 1.0 - Tools.stringToDouble(affineScaleAmountREd.getText());
     XFormTransformService.scale(getCurrXForm(), amount, affineEditPostTransformButton.isSelected());
     transformationTableClicked();
@@ -2217,6 +2237,10 @@ public class TinaController implements FlameHolder {
   }
 
   public void xForm_rotateLeft() {
+    if (!toggleTrianglesButton.isSelected()) {
+      flamePanel.setDrawFlame(true);
+      toggleTrianglesButton.setSelected(true);
+    }
     double amount = Tools.stringToDouble(affineRotateAmountREd.getText());
     XFormTransformService.rotate(getCurrXForm(), amount, affineEditPostTransformButton.isSelected());
     transformationTableClicked();
@@ -2224,6 +2248,10 @@ public class TinaController implements FlameHolder {
   }
 
   public void xForm_moveUp() {
+    if (!toggleTrianglesButton.isSelected()) {
+      flamePanel.setDrawFlame(true);
+      toggleTrianglesButton.setSelected(true);
+    }
     double amount = Tools.stringToDouble(affineMoveAmountREd.getText());
     XFormTransformService.globalTranslate(getCurrXForm(), 0, -amount, affineEditPostTransformButton.isSelected());
     transformationTableClicked();
@@ -2231,6 +2259,10 @@ public class TinaController implements FlameHolder {
   }
 
   public void xForm_moveDown() {
+    if (!toggleTrianglesButton.isSelected()) {
+      flamePanel.setDrawFlame(true);
+      toggleTrianglesButton.setSelected(true);
+    }
     double amount = Tools.stringToDouble(affineMoveAmountREd.getText());
     XFormTransformService.globalTranslate(getCurrXForm(), 0, amount, affineEditPostTransformButton.isSelected());
     transformationTableClicked();
@@ -2850,6 +2882,10 @@ public class TinaController implements FlameHolder {
     }
     refreshing = true;
     try {
+      if (!toggleTrianglesButton.isSelected()) {
+        flamePanel.setDrawFlame(true);
+        toggleTrianglesButton.setSelected(true);
+      }
       XForm xForm = getCurrXForm();
       if (flamePanel != null) {
         flamePanel.setEditPostTransform(affineEditPostTransformButton.isSelected());
