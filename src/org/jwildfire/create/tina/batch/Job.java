@@ -19,7 +19,7 @@ package org.jwildfire.create.tina.batch;
 public class Job {
   private String flameFilename;
   private boolean finished;
-  private double elapsedMilliseconds;
+  private double elapsedSeconds;
   private String imageFilename;
   private Throwable lastError;
 
@@ -30,9 +30,9 @@ public class Job {
   public void setFlameFilename(String pFlameFilename) {
     flameFilename = pFlameFilename;
     imageFilename = pFlameFilename + ".png";
-    int p = flameFilename.lastIndexOf(".");
+    int p = pFlameFilename.lastIndexOf(".");
     if (p > 0) {
-      String ext = imageFilename.substring(p, imageFilename.length());
+      String ext = pFlameFilename.substring(p, pFlameFilename.length());
       if (ext.equalsIgnoreCase(".FLAME")) {
         imageFilename = pFlameFilename.substring(0, p) + ".png";
       }
@@ -43,8 +43,8 @@ public class Job {
     return finished;
   }
 
-  public double getElapsedMilliseconds() {
-    return elapsedMilliseconds;
+  public double getElapsedSeconds() {
+    return elapsedSeconds;
   }
 
   public String getImageFilename() {
@@ -64,6 +64,14 @@ public class Job {
       return lastError.toString();
     }
     return "";
+  }
+
+  public void setFinished(boolean finished) {
+    this.finished = finished;
+  }
+
+  public void setElapsedSeconds(double elapsedSeconds) {
+    this.elapsedSeconds = elapsedSeconds;
   }
 
 }

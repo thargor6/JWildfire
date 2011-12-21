@@ -572,6 +572,10 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton batchRenderFilesMoveDownButton = null;
   private JProgressBar batchRenderJobProgressBar = null;
   private JProgressBar batchRenderTotalProgressBar = null;
+  private JButton batchRenderFilesRemoveButton = null;
+  private JButton batchRenderFilesRemoveAllButton = null;
+  private JLabel batchRenderJobProgressLbl = null;
+  private JLabel batchRenderTotalProgressLbl = null;
   private JButton batchRenderStartButton = null;
 
   /**
@@ -3002,7 +3006,11 @@ public class TinaInternalFrame extends JInternalFrame {
         getShadingLightXREd(), getShadingLightXSlider(), getShadingLightYREd(), getShadingLightYSlider(), getShadingLightZREd(),
         getShadingLightZSlider(), getShadingLightRedREd(), getShadingLightRedSlider(), getShadingLightGreenREd(), getShadingLightGreenSlider(),
         getShadingLightBlueREd(), getShadingLightBlueSlider(), getMouseTransformSlowButton(), getRenderBatchJobsTable(),
-        getBatchRenderJobProgressBar(), getBatchRenderTotalProgressBar(), new JobProgressUpdater(this));
+        getBatchRenderJobProgressBar(), getBatchRenderTotalProgressBar(), new JobProgressUpdater(this),
+        getBatchRenderAddFilesButton(), getBatchRenderFilesMoveDownButton(), getBatchRenderFilesMoveUpButton(),
+        getBatchRenderFilesRemoveButton(), getBatchRenderFilesRemoveAllButton(), getBatchRenderStartButton(),
+        getRootTabbedPane()
+        );
     tinaController.refreshing = tinaController.cmbRefreshing = tinaController.gridRefreshing = true;
     try {
       for (NonlinearControlsRow row : nonlinearControlsRows) {
@@ -8376,6 +8384,18 @@ public class TinaInternalFrame extends JInternalFrame {
    */
   private JPanel getBatchRenderPanel() {
     if (batchRenderPanel == null) {
+      batchRenderTotalProgressLbl = new JLabel();
+      batchRenderTotalProgressLbl.setPreferredSize(new Dimension(94, 22));
+      batchRenderTotalProgressLbl.setText("Total progress");
+      batchRenderTotalProgressLbl.setSize(new Dimension(94, 22));
+      batchRenderTotalProgressLbl.setLocation(new Point(8, 442));
+      batchRenderTotalProgressLbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      batchRenderJobProgressLbl = new JLabel();
+      batchRenderJobProgressLbl.setPreferredSize(new Dimension(94, 22));
+      batchRenderJobProgressLbl.setText("Job progress");
+      batchRenderJobProgressLbl.setSize(new Dimension(94, 22));
+      batchRenderJobProgressLbl.setLocation(new Point(8, 415));
+      batchRenderJobProgressLbl.setFont(new Font("Dialog", Font.BOLD, 10));
       batchRenderPanel = new JPanel();
       batchRenderPanel.setLayout(null);
       batchRenderPanel.add(getRenderBatchJobsScrollPane(), null);
@@ -8384,6 +8404,10 @@ public class TinaInternalFrame extends JInternalFrame {
       batchRenderPanel.add(getBatchRenderFilesMoveDownButton(), null);
       batchRenderPanel.add(getBatchRenderJobProgressBar(), null);
       batchRenderPanel.add(getBatchRenderTotalProgressBar(), null);
+      batchRenderPanel.add(getBatchRenderFilesRemoveButton(), null);
+      batchRenderPanel.add(getBatchRenderFilesRemoveAllButton(), null);
+      batchRenderPanel.add(batchRenderJobProgressLbl, null);
+      batchRenderPanel.add(batchRenderTotalProgressLbl, null);
       batchRenderPanel.add(getBatchRenderStartButton(), null);
     }
     return batchRenderPanel;
@@ -8398,11 +8422,12 @@ public class TinaInternalFrame extends JInternalFrame {
     if (rootTabbedPane == null) {
       rootTabbedPane = new JTabbedPane();
       rootTabbedPane.setFont(new Font("Dialog", Font.BOLD, 10));
+      rootTabbedPane.setEnabled(true);
       rootTabbedPane.addTab("Main", null, getRootPanel(), null);
       rootTabbedPane.addTab("Morph", null, getTinaMorphPanel(), null);
       rootTabbedPane.addTab("Animate", null, getTinaAnimatePanel(), null);
       rootTabbedPane.addTab("Settings", null, getSettingsPanel(), null);
-      rootTabbedPane.addTab("Batch render (work in progress)", null, getBatchRenderPanel(), null);
+      rootTabbedPane.addTab("Batch render", null, getBatchRenderPanel(), null);
     }
     return rootTabbedPane;
   }
@@ -8415,7 +8440,8 @@ public class TinaInternalFrame extends JInternalFrame {
   private JScrollPane getRenderBatchJobsScrollPane() {
     if (renderBatchJobsScrollPane == null) {
       renderBatchJobsScrollPane = new JScrollPane();
-      renderBatchJobsScrollPane.setBounds(new Rectangle(13, 14, 364, 399));
+      renderBatchJobsScrollPane.setSize(new Dimension(667, 399));
+      renderBatchJobsScrollPane.setLocation(new Point(8, 8));
       renderBatchJobsScrollPane.setViewportView(getRenderBatchJobsTable());
     }
     return renderBatchJobsScrollPane;
@@ -8441,14 +8467,14 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton getBatchRenderAddFilesButton() {
     if (batchRenderAddFilesButton == null) {
       batchRenderAddFilesButton = new JButton();
-      batchRenderAddFilesButton.setBounds(new Rectangle(386, 15, 125, 24));
       batchRenderAddFilesButton.setPreferredSize(new Dimension(125, 24));
       batchRenderAddFilesButton.setText("Add files");
+      batchRenderAddFilesButton.setSize(new Dimension(125, 24));
+      batchRenderAddFilesButton.setLocation(new Point(680, 8));
       batchRenderAddFilesButton.setFont(new Font("Dialog", Font.BOLD, 10));
       batchRenderAddFilesButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
           tinaController.batchRenderAddFilesButton_clicked();
-          System.out.println("actionPerformed()"); // TODO Auto-generated Event stub actionPerformed()
         }
       });
     }
@@ -8463,9 +8489,10 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton getBatchRenderFilesMoveUpButton() {
     if (batchRenderFilesMoveUpButton == null) {
       batchRenderFilesMoveUpButton = new JButton();
-      batchRenderFilesMoveUpButton.setBounds(new Rectangle(385, 171, 125, 24));
       batchRenderFilesMoveUpButton.setPreferredSize(new Dimension(125, 24));
       batchRenderFilesMoveUpButton.setText("Move up");
+      batchRenderFilesMoveUpButton.setSize(new Dimension(125, 24));
+      batchRenderFilesMoveUpButton.setLocation(new Point(680, 208));
       batchRenderFilesMoveUpButton.setFont(new Font("Dialog", Font.BOLD, 10));
       batchRenderFilesMoveUpButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -8484,7 +8511,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton getBatchRenderFilesMoveDownButton() {
     if (batchRenderFilesMoveDownButton == null) {
       batchRenderFilesMoveDownButton = new JButton();
-      batchRenderFilesMoveDownButton.setBounds(new Rectangle(384, 202, 125, 24));
+      batchRenderFilesMoveDownButton.setBounds(new Rectangle(680, 179, 125, 24));
       batchRenderFilesMoveDownButton.setPreferredSize(new Dimension(125, 24));
       batchRenderFilesMoveDownButton.setText("Move down");
       batchRenderFilesMoveDownButton.setFont(new Font("Dialog", Font.BOLD, 10));
@@ -8505,8 +8532,9 @@ public class TinaInternalFrame extends JInternalFrame {
   JProgressBar getBatchRenderJobProgressBar() {
     if (batchRenderJobProgressBar == null) {
       batchRenderJobProgressBar = new JProgressBar();
-      batchRenderJobProgressBar.setBounds(new Rectangle(589, 133, 294, 21));
+      batchRenderJobProgressBar.setBounds(new Rectangle(105, 416, 568, 21));
       batchRenderJobProgressBar.setValue(0);
+      batchRenderJobProgressBar.setPreferredSize(new Dimension(568, 21));
       batchRenderJobProgressBar.setStringPainted(true);
     }
     return batchRenderJobProgressBar;
@@ -8520,11 +8548,57 @@ public class TinaInternalFrame extends JInternalFrame {
   private JProgressBar getBatchRenderTotalProgressBar() {
     if (batchRenderTotalProgressBar == null) {
       batchRenderTotalProgressBar = new JProgressBar();
-      batchRenderTotalProgressBar.setBounds(new Rectangle(589, 184, 289, 21));
       batchRenderTotalProgressBar.setValue(0);
+      batchRenderTotalProgressBar.setSize(new Dimension(568, 21));
+      batchRenderTotalProgressBar.setLocation(new Point(105, 443));
+      batchRenderTotalProgressBar.setPreferredSize(new Dimension(568, 21));
       batchRenderTotalProgressBar.setStringPainted(true);
     }
     return batchRenderTotalProgressBar;
+  }
+
+  /**
+   * This method initializes batchRenderFilesRemoveButton	
+   * 	
+   * @return javax.swing.JButton	
+   */
+  private JButton getBatchRenderFilesRemoveButton() {
+    if (batchRenderFilesRemoveButton == null) {
+      batchRenderFilesRemoveButton = new JButton();
+      batchRenderFilesRemoveButton.setPreferredSize(new Dimension(125, 24));
+      batchRenderFilesRemoveButton.setText("Remove");
+      batchRenderFilesRemoveButton.setSize(new Dimension(125, 24));
+      batchRenderFilesRemoveButton.setLocation(new Point(680, 350));
+      batchRenderFilesRemoveButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      batchRenderFilesRemoveButton.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent e) {
+          tinaController.batchRenderFilesRemoveButton_clicked();
+        }
+      });
+    }
+    return batchRenderFilesRemoveButton;
+  }
+
+  /**
+   * This method initializes batchRenderFilesRemoveAllButton	
+   * 	
+   * @return javax.swing.JButton	
+   */
+  private JButton getBatchRenderFilesRemoveAllButton() {
+    if (batchRenderFilesRemoveAllButton == null) {
+      batchRenderFilesRemoveAllButton = new JButton();
+      batchRenderFilesRemoveAllButton.setPreferredSize(new Dimension(125, 24));
+      batchRenderFilesRemoveAllButton.setText("Remove All");
+      batchRenderFilesRemoveAllButton.setSize(new Dimension(125, 24));
+      batchRenderFilesRemoveAllButton.setLocation(new Point(680, 381));
+      batchRenderFilesRemoveAllButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      batchRenderFilesRemoveAllButton.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent e) {
+          tinaController.batchRenderFilesRemoveAllButton_clicked();
+        }
+      });
+    }
+    return batchRenderFilesRemoveAllButton;
   }
 
   /**
@@ -8537,7 +8611,7 @@ public class TinaInternalFrame extends JInternalFrame {
       batchRenderStartButton = new JButton();
       batchRenderStartButton.setPreferredSize(new Dimension(125, 52));
       batchRenderStartButton.setText("Render");
-      batchRenderStartButton.setLocation(new Point(383, 358));
+      batchRenderStartButton.setLocation(new Point(680, 414));
       batchRenderStartButton.setSize(new Dimension(125, 52));
       batchRenderStartButton.setFont(new Font("Dialog", Font.BOLD, 10));
       batchRenderStartButton.addActionListener(new java.awt.event.ActionListener() {
