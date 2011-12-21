@@ -248,7 +248,7 @@ public class Tools {
 
     dFmtMicro = DecimalFormat.getInstance(Locale.US);
     dFmtMicro.setGroupingUsed(false);
-    dFmtMicro.setMaximumFractionDigits(5);
+    dFmtMicro.setMaximumFractionDigits(8);
     dFmtMicro.setMinimumIntegerDigits(1);
   }
 
