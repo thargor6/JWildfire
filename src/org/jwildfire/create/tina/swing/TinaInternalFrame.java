@@ -5,7 +5,6 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
-import java.awt.Graphics;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Point;
@@ -45,11 +44,13 @@ import org.jwildfire.create.tina.swing.TinaController.NonlinearControlsRow;
 import org.jwildfire.create.tina.transform.AnimationService;
 import org.jwildfire.swing.StandardErrorHandler;
 
-public class TinaInternalFrame extends JInternalFrame implements ProgressUpdater {
+public class TinaInternalFrame extends JInternalFrame {
   private TinaController tinaController; //  @jve:decl-index=0:
   private NonlinearControlsRow[] nonlinearControlsRows;//  @jve:decl-index=0:
   private static final long serialVersionUID = 1L;
   private JPanel jContentPane = null; //  @jve:decl-index=0:visual-constraint="10,10"
+
+  private JPanel rootPanel = null;
 
   private JPanel tinaNorthPanel = null;
 
@@ -178,10 +179,6 @@ public class TinaInternalFrame extends JInternalFrame implements ProgressUpdater
   private JSlider tinaOversampleSlider = null;
 
   private JButton tinaAddTransformationButton = null;
-
-  private JTabbedPane tinaNorthTabbedPane = null;
-
-  private JPanel tinaNorthMainPanel = null;
 
   private JTabbedPane tinaEastTabbedPane = null;
 
@@ -566,6 +563,16 @@ public class TinaInternalFrame extends JInternalFrame implements ProgressUpdater
   private JButton loadFromClipboardFlameButton = null;
   private JButton saveFlameToClipboardButton = null;
   private JToggleButton mouseTransformSlowButton = null;
+  private JPanel batchRenderPanel = null;
+  private JTabbedPane rootTabbedPane = null;
+  private JScrollPane renderBatchJobsScrollPane = null;
+  private JTable renderBatchJobsTable = null;
+  private JButton batchRenderAddFilesButton = null;
+  private JButton batchRenderFilesMoveUpButton = null;
+  private JButton batchRenderFilesMoveDownButton = null;
+  private JProgressBar batchRenderJobProgressBar = null;
+  private JProgressBar batchRenderTotalProgressBar = null;
+  private JButton batchRenderStartButton = null;
 
   /**
    * This is the xxx default constructor
@@ -604,13 +611,28 @@ public class TinaInternalFrame extends JInternalFrame implements ProgressUpdater
       jContentPane.setLayout(new BorderLayout());
       jContentPane.setFont(new Font("Dialog", Font.PLAIN, 10));
       jContentPane.setSize(new Dimension(1097, 617));
-      jContentPane.add(getTinaNorthPanel(), BorderLayout.NORTH);
-      jContentPane.add(getTinaWestPanel(), BorderLayout.WEST);
-      jContentPane.add(getTinaEastPanel(), BorderLayout.EAST);
-      jContentPane.add(getTinaSouthPanel(), BorderLayout.SOUTH);
-      jContentPane.add(getTinaCenterPanel(), BorderLayout.CENTER);
+      jContentPane.add(getRootTabbedPane(), BorderLayout.CENTER);
     }
     return jContentPane;
+  }
+
+  /**
+   * This method initializes jContentPane
+   * 
+   * @return javax.swing.JPanel
+   */
+  private JPanel getRootPanel() {
+    if (rootPanel == null) {
+      rootPanel = new JPanel();
+      rootPanel.setLayout(new BorderLayout());
+      rootPanel.setFont(new Font("Dialog", Font.PLAIN, 10));
+      rootPanel.add(getTinaNorthPanel(), BorderLayout.NORTH);
+      rootPanel.add(getTinaWestPanel(), BorderLayout.WEST);
+      rootPanel.add(getTinaEastPanel(), BorderLayout.EAST);
+      rootPanel.add(getTinaSouthPanel(), BorderLayout.SOUTH);
+      rootPanel.add(getTinaCenterPanel(), BorderLayout.CENTER);
+    }
+    return rootPanel;
   }
 
   /**
@@ -621,9 +643,27 @@ public class TinaInternalFrame extends JInternalFrame implements ProgressUpdater
   private JPanel getTinaNorthPanel() {
     if (tinaNorthPanel == null) {
       tinaNorthPanel = new JPanel();
-      tinaNorthPanel.setLayout(new BorderLayout());
-      tinaNorthPanel.setPreferredSize(new Dimension(0, 86));
-      tinaNorthPanel.add(getTinaNorthTabbedPane(), BorderLayout.CENTER);
+      tinaNorthPanel.setLayout(null);
+      tinaNorthPanel.setPreferredSize(new Dimension(0, 66));
+
+      randomStyleLbl = new JLabel();
+      randomStyleLbl.setPreferredSize(new Dimension(94, 22));
+      randomStyleLbl.setText("Random generator");
+      randomStyleLbl.setBounds(new Rectangle(135, 7, 94, 22));
+      randomStyleLbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      tinaNorthPanel.add(getRandomBatchButton(), null);
+      tinaNorthPanel.add(randomStyleLbl, null);
+      tinaNorthPanel.add(getRandomSymmetryCheckBox(), null);
+      tinaNorthPanel.add(getRandomPostTransformCheckBox(), null);
+      tinaNorthPanel.add(getRandomStyleCmb(), null);
+      tinaNorthPanel.add(getNewFlameButton(), null);
+      tinaNorthPanel.add(getLoadFromClipboardFlameButton(), null);
+      tinaNorthPanel.add(getTinaLoadFlameButton(), null);
+      tinaNorthPanel.add(getTinaSaveFlameButton(), null);
+      tinaNorthPanel.add(getSaveFlameToClipboardButton(), null);
+      tinaNorthPanel.add(getRenderImageNormalButton(), null);
+      tinaNorthPanel.add(getRenderImageHighButton(), null);
+
     }
     return tinaNorthPanel;
   }
@@ -1114,9 +1154,8 @@ public class TinaInternalFrame extends JInternalFrame implements ProgressUpdater
     if (tinaLoadFlameButton == null) {
       tinaLoadFlameButton = new JButton();
       tinaLoadFlameButton.setText("Load Flame");
-      tinaLoadFlameButton.setLocation(new Point(516, 3));
-      tinaLoadFlameButton.setSize(new Dimension(125, 24));
       tinaLoadFlameButton.setPreferredSize(new Dimension(125, 24));
+      tinaLoadFlameButton.setBounds(new Rectangle(508, 6, 125, 24));
       tinaLoadFlameButton.setFont(new Font("Dialog", Font.BOLD, 10));
       tinaLoadFlameButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -1136,9 +1175,8 @@ public class TinaInternalFrame extends JInternalFrame implements ProgressUpdater
     if (tinaSaveFlameButton == null) {
       tinaSaveFlameButton = new JButton();
       tinaSaveFlameButton.setText("Save Flame");
-      tinaSaveFlameButton.setLocation(new Point(516, 31));
-      tinaSaveFlameButton.setSize(new Dimension(125, 24));
       tinaSaveFlameButton.setPreferredSize(new Dimension(125, 24));
+      tinaSaveFlameButton.setBounds(new Rectangle(508, 34, 125, 24));
       tinaSaveFlameButton.setFont(new Font("Dialog", Font.BOLD, 10));
       tinaSaveFlameButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -1206,9 +1244,8 @@ public class TinaInternalFrame extends JInternalFrame implements ProgressUpdater
     if (renderImageNormalButton == null) {
       renderImageNormalButton = new JButton();
       renderImageNormalButton.setText("Render image (normal)");
-      renderImageNormalButton.setLocation(new Point(788, 4));
-      renderImageNormalButton.setSize(new Dimension(180, 24));
       renderImageNormalButton.setPreferredSize(new Dimension(180, 24));
+      renderImageNormalButton.setBounds(new Rectangle(780, 7, 180, 24));
       renderImageNormalButton.setFont(new Font("Dialog", Font.BOLD, 10));
       renderImageNormalButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -1897,64 +1934,6 @@ public class TinaInternalFrame extends JInternalFrame implements ProgressUpdater
       });
     }
     return tinaAddTransformationButton;
-  }
-
-  /**
-   * This method initializes tinaNorthTabbedPane  
-   *  
-   * @return javax.swing.JTabbedPane  
-   */
-  private JTabbedPane getTinaNorthTabbedPane() {
-    if (tinaNorthTabbedPane == null) {
-      tinaNorthTabbedPane = new JTabbedPane();
-      tinaNorthTabbedPane.setFont(new Font("Dialog", Font.BOLD, 10));
-      tinaNorthTabbedPane.addTab("Main", null, getTinaNorthMainPanel(), null);
-      tinaNorthTabbedPane.addTab("Morph", null, getTinaMorphPanel(), null);
-      tinaNorthTabbedPane.addTab("Animate", null, getTinaAnimatePanel(), null);
-      tinaNorthTabbedPane.addTab("Settings", null, getSettingsPanel(), null);
-    }
-    return tinaNorthTabbedPane;
-  }
-
-  /**
-   * This method initializes tinaNorthMainPanel 
-   *  
-   * @return javax.swing.JPanel 
-   */
-  private JPanel getTinaNorthMainPanel() {
-    if (tinaNorthMainPanel == null) {
-      randomStyleLbl = new JLabel();
-      randomStyleLbl.setPreferredSize(new Dimension(94, 22));
-      randomStyleLbl.setText("Random generator");
-      randomStyleLbl.setSize(new Dimension(94, 22));
-      randomStyleLbl.setLocation(new Point(132, 4));
-      randomStyleLbl.setFont(new Font("Dialog", Font.BOLD, 10));
-      zStyleLbl = new JLabel();
-      zStyleLbl.setPreferredSize(new Dimension(94, 22));
-      zStyleLbl.setText("Z style");
-      zStyleLbl.setBounds(new Rectangle(6, 6, 56, 22));
-      zStyleLbl.setFont(new Font("Dialog", Font.BOLD, 10));
-      tinaNorthMainPanel = new JPanel();
-      tinaNorthMainPanel.setLayout(null);
-      tinaCameraPreviewQualityLbl = new JLabel();
-      tinaCameraPreviewQualityLbl.setText("Preview Quality");
-      tinaCameraPreviewQualityLbl.setFont(new Font("Dialog", Font.BOLD, 10));
-      tinaCameraPreviewQualityLbl.setBounds(new Rectangle(185, 5, 94, 22));
-      tinaCameraPreviewQualityLbl.setPreferredSize(new Dimension(94, 22));
-      tinaNorthMainPanel.add(getTinaLoadFlameButton(), null);
-      tinaNorthMainPanel.add(getTinaSaveFlameButton(), null);
-      tinaNorthMainPanel.add(getRenderImageNormalButton(), null);
-      tinaNorthMainPanel.add(getRandomBatchButton(), null);
-      tinaNorthMainPanel.add(getNewFlameButton(), null);
-      tinaNorthMainPanel.add(getRandomStyleCmb(), null);
-      tinaNorthMainPanel.add(randomStyleLbl, null);
-      tinaNorthMainPanel.add(getRandomSymmetryCheckBox(), null);
-      tinaNorthMainPanel.add(getRandomPostTransformCheckBox(), null);
-      tinaNorthMainPanel.add(getRenderImageHighButton(), null);
-      tinaNorthMainPanel.add(getLoadFromClipboardFlameButton(), null);
-      tinaNorthMainPanel.add(getSaveFlameToClipboardButton(), null);
-    }
-    return tinaNorthMainPanel;
   }
 
   /**
@@ -3016,13 +2995,14 @@ public class TinaInternalFrame extends JInternalFrame implements ProgressUpdater
         getSetMorphFlame2Button(), getMorphFrameREd(), getMorphFramesREd(), getMorphCheckBox(), getMorphFrameSlider(), getImportMorphedFlameButton(),
         getAnimateOutputREd(), getAnimateFramesREd(), getAnimateScriptCmb(), getAnimationGenerateButton(), getAnimateXFormScriptCmb(), getMouseTransformMoveButton(),
         getMouseTransformRotateButton(), getMouseTransformScaleButton(), getAffineEditPostTransformButton(), getAffineEditPostTransformSmallButton(),
-        getMouseTransformZoomInButton(), getMouseTransformZoomOutButton(), getToggleTrianglesButton(), this, getRandomPostTransformCheckBox(),
+        getMouseTransformZoomInButton(), getMouseTransformZoomOutButton(), getToggleTrianglesButton(), new MainProgressUpdater(this), getRandomPostTransformCheckBox(),
         getRandomSymmetryCheckBox(), getAffineResetTransformButton(), getColorOversampleREd(), getColorOversampleSlider(), getCreatePaletteColorsTable(),
         getShadingCmb(), getShadingAmbientREd(), getShadingAmbientSlider(), getShadingDiffuseREd(), getShadingDiffuseSlider(),
         getShadingPhongREd(), getShadingPhongSlider(), getShadingPhongSizeREd(), getShadingPhongSizeSlider(), getShadingLightCmb(),
         getShadingLightXREd(), getShadingLightXSlider(), getShadingLightYREd(), getShadingLightYSlider(), getShadingLightZREd(),
         getShadingLightZSlider(), getShadingLightRedREd(), getShadingLightRedSlider(), getShadingLightGreenREd(), getShadingLightGreenSlider(),
-        getShadingLightBlueREd(), getShadingLightBlueSlider(), getMouseTransformSlowButton());
+        getShadingLightBlueREd(), getShadingLightBlueSlider(), getMouseTransformSlowButton(), getRenderBatchJobsTable(),
+        getBatchRenderJobProgressBar(), getBatchRenderTotalProgressBar(), new JobProgressUpdater(this));
     tinaController.refreshing = tinaController.cmbRefreshing = tinaController.gridRefreshing = true;
     try {
       for (NonlinearControlsRow row : nonlinearControlsRows) {
@@ -3580,8 +3560,7 @@ public class TinaInternalFrame extends JInternalFrame implements ProgressUpdater
       randomBatchButton.setFont(new Font("Dialog", Font.BOLD, 10));
       randomBatchButton.setMnemonic(KeyEvent.VK_D);
       randomBatchButton.setText("Random flames");
-      randomBatchButton.setSize(new Dimension(125, 52));
-      randomBatchButton.setLocation(new Point(4, 4));
+      randomBatchButton.setBounds(new Rectangle(7, 7, 125, 52));
       randomBatchButton.setPreferredSize(new Dimension(125, 52));
       randomBatchButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -4597,8 +4576,7 @@ public class TinaInternalFrame extends JInternalFrame implements ProgressUpdater
       newFlameButton.setMnemonic(KeyEvent.VK_N);
       newFlameButton.setText("New from scratch");
       newFlameButton.setActionCommand("New from scratch");
-      newFlameButton.setLocation(new Point(372, 3));
-      newFlameButton.setSize(new Dimension(125, 52));
+      newFlameButton.setBounds(new Rectangle(367, 7, 125, 52));
       newFlameButton.setFont(new Font("Dialog", Font.BOLD, 10));
       newFlameButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -4969,11 +4947,11 @@ public class TinaInternalFrame extends JInternalFrame implements ProgressUpdater
       editSpaceLbl4 = new JLabel();
       editSpaceLbl4.setFont(new Font("Dialog", Font.BOLD, 10));
       editSpaceLbl4.setText("");
-      editSpaceLbl4.setPreferredSize(new Dimension(42, 10));
+      editSpaceLbl4.setPreferredSize(new Dimension(42, 8));
       editSpaceLbl3 = new JLabel();
       editSpaceLbl3.setFont(new Font("Dialog", Font.BOLD, 10));
       editSpaceLbl3.setText("");
-      editSpaceLbl3.setPreferredSize(new Dimension(42, 12));
+      editSpaceLbl3.setPreferredSize(new Dimension(42, 10));
       editSpaceLbl2 = new JLabel();
       editSpaceLbl2.setFont(new Font("Dialog", Font.BOLD, 10));
       editSpaceLbl2.setText("");
@@ -4981,7 +4959,7 @@ public class TinaInternalFrame extends JInternalFrame implements ProgressUpdater
       editSpaceLbl1 = new JLabel();
       editSpaceLbl1.setFont(new Font("Dialog", Font.BOLD, 10));
       editSpaceLbl1.setText("");
-      editSpaceLbl1.setPreferredSize(new Dimension(42, 12));
+      editSpaceLbl1.setPreferredSize(new Dimension(42, 10));
       triangleOperationsPanel = new JPanel();
       triangleOperationsPanel.setLayout(new FlowLayout());
       triangleOperationsPanel.setPreferredSize(new Dimension(52, 0));
@@ -5118,9 +5096,8 @@ public class TinaInternalFrame extends JInternalFrame implements ProgressUpdater
     if (randomStyleCmb == null) {
       randomStyleCmb = new JComboBox();
       randomStyleCmb.setPreferredSize(new Dimension(125, 22));
-      randomStyleCmb.setSize(new Dimension(125, 22));
-      randomStyleCmb.setLocation(new Point(228, 4));
       randomStyleCmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      randomStyleCmb.setBounds(new Rectangle(231, 7, 125, 22));
       randomStyleCmb.removeAllItems();
       for (String name : RandomFlameGeneratorList.getNameList()) {
         randomStyleCmb.addItem(name);
@@ -5164,7 +5141,8 @@ public class TinaInternalFrame extends JInternalFrame implements ProgressUpdater
       affineEditPostTransformSmallButton.setText("P");
       affineEditPostTransformSmallButton.setToolTipText("Edit Post  Transform");
       affineEditPostTransformSmallButton.setMnemonic(KeyEvent.VK_P);
-      affineEditPostTransformSmallButton.setBounds(new Rectangle(415, 3, 42, 24));
+      affineEditPostTransformSmallButton.setSize(new Dimension(42, 24));
+      affineEditPostTransformSmallButton.setLocation(new Point(412, 3));
       affineEditPostTransformSmallButton.setPreferredSize(new Dimension(42, 24));
       affineEditPostTransformSmallButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -5244,7 +5222,7 @@ public class TinaInternalFrame extends JInternalFrame implements ProgressUpdater
    * 	
    * @return javax.swing.JProgressBar	
    */
-  private JProgressBar getRenderProgressBar() {
+  JProgressBar getRenderProgressBar() {
     if (renderProgressBar == null) {
       renderProgressBar = new JProgressBar();
       renderProgressBar.setBounds(new Rectangle(112, 9, 221, 14));
@@ -5252,26 +5230,6 @@ public class TinaInternalFrame extends JInternalFrame implements ProgressUpdater
       renderProgressBar.setStringPainted(true);
     }
     return renderProgressBar;
-  }
-
-  @Override
-  public void initProgress(int pMaxSteps) {
-    renderProgressBar.setValue(0);
-    renderProgressBar.setMinimum(0);
-    renderProgressBar.setMaximum(pMaxSteps);
-    Graphics g = renderProgressBar.getGraphics();
-    if (g != null) {
-      renderProgressBar.paint(g);
-    }
-  }
-
-  @Override
-  public void updateProgress(int pStep) {
-    renderProgressBar.setValue(pStep);
-    Graphics g = renderProgressBar.getGraphics();
-    if (g != null) {
-      renderProgressBar.paint(g);
-    }
   }
 
   /**
@@ -5283,9 +5241,8 @@ public class TinaInternalFrame extends JInternalFrame implements ProgressUpdater
     if (randomSymmetryCheckBox == null) {
       randomSymmetryCheckBox = new JCheckBox();
       randomSymmetryCheckBox.setText("Symmetry");
-      randomSymmetryCheckBox.setLocation(new Point(132, 32));
-      randomSymmetryCheckBox.setSize(new Dimension(94, 22));
       randomSymmetryCheckBox.setPreferredSize(new Dimension(94, 22));
+      randomSymmetryCheckBox.setBounds(new Rectangle(135, 35, 94, 22));
       randomSymmetryCheckBox.setFont(new Font("Dialog", Font.BOLD, 10));
     }
     return randomSymmetryCheckBox;
@@ -5301,8 +5258,7 @@ public class TinaInternalFrame extends JInternalFrame implements ProgressUpdater
       randomPostTransformCheckBox = new JCheckBox();
       randomPostTransformCheckBox.setPreferredSize(new Dimension(94, 22));
       randomPostTransformCheckBox.setText("Post Transforms");
-      randomPostTransformCheckBox.setSize(new Dimension(124, 22));
-      randomPostTransformCheckBox.setLocation(new Point(228, 32));
+      randomPostTransformCheckBox.setBounds(new Rectangle(231, 35, 124, 22));
       randomPostTransformCheckBox.setFont(new Font("Dialog", Font.BOLD, 10));
     }
     return randomPostTransformCheckBox;
@@ -5644,9 +5600,8 @@ public class TinaInternalFrame extends JInternalFrame implements ProgressUpdater
       renderImageHighButton = new JButton();
       renderImageHighButton.setPreferredSize(new Dimension(180, 24));
       renderImageHighButton.setText("Render image (high quality)");
-      renderImageHighButton.setSize(new Dimension(180, 24));
-      renderImageHighButton.setLocation(new Point(788, 32));
       renderImageHighButton.setActionCommand("Render image (high quality)");
+      renderImageHighButton.setBounds(new Rectangle(780, 35, 180, 24));
       renderImageHighButton.setFont(new Font("Dialog", Font.BOLD, 10));
       renderImageHighButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -8328,6 +8283,18 @@ public class TinaInternalFrame extends JInternalFrame implements ProgressUpdater
     if (settingsPanel == null) {
       settingsPanel = new JPanel();
       settingsPanel.setLayout(null);
+
+      zStyleLbl = new JLabel();
+      zStyleLbl.setPreferredSize(new Dimension(94, 22));
+      zStyleLbl.setText("Z style");
+      zStyleLbl.setBounds(new Rectangle(6, 6, 56, 22));
+      zStyleLbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      tinaCameraPreviewQualityLbl = new JLabel();
+      tinaCameraPreviewQualityLbl.setText("Preview Quality");
+      tinaCameraPreviewQualityLbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      tinaCameraPreviewQualityLbl.setBounds(new Rectangle(185, 5, 94, 22));
+      tinaCameraPreviewQualityLbl.setPreferredSize(new Dimension(94, 22));
+
       settingsPanel.add(getZStyleCmb(), null);
       settingsPanel.add(zStyleLbl, null);
       settingsPanel.add(tinaCameraPreviewQualityLbl, null);
@@ -8347,8 +8314,7 @@ public class TinaInternalFrame extends JInternalFrame implements ProgressUpdater
       loadFromClipboardFlameButton = new JButton();
       loadFromClipboardFlameButton.setPreferredSize(new Dimension(125, 24));
       loadFromClipboardFlameButton.setText("From Clipboard");
-      loadFromClipboardFlameButton.setSize(new Dimension(125, 24));
-      loadFromClipboardFlameButton.setLocation(new Point(645, 3));
+      loadFromClipboardFlameButton.setBounds(new Rectangle(637, 6, 125, 24));
       loadFromClipboardFlameButton.setFont(new Font("Dialog", Font.BOLD, 10));
       loadFromClipboardFlameButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -8369,8 +8335,7 @@ public class TinaInternalFrame extends JInternalFrame implements ProgressUpdater
       saveFlameToClipboardButton = new JButton();
       saveFlameToClipboardButton.setPreferredSize(new Dimension(125, 24));
       saveFlameToClipboardButton.setText("To Clipboard");
-      saveFlameToClipboardButton.setSize(new Dimension(125, 24));
-      saveFlameToClipboardButton.setLocation(new Point(645, 31));
+      saveFlameToClipboardButton.setBounds(new Rectangle(637, 34, 125, 24));
       saveFlameToClipboardButton.setFont(new Font("Dialog", Font.BOLD, 10));
       saveFlameToClipboardButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -8402,6 +8367,186 @@ public class TinaInternalFrame extends JInternalFrame implements ProgressUpdater
       });
     }
     return mouseTransformSlowButton;
+  }
+
+  /**
+   * This method initializes batchRenderPanel	
+   * 	
+   * @return javax.swing.JPanel	
+   */
+  private JPanel getBatchRenderPanel() {
+    if (batchRenderPanel == null) {
+      batchRenderPanel = new JPanel();
+      batchRenderPanel.setLayout(null);
+      batchRenderPanel.add(getRenderBatchJobsScrollPane(), null);
+      batchRenderPanel.add(getBatchRenderAddFilesButton(), null);
+      batchRenderPanel.add(getBatchRenderFilesMoveUpButton(), null);
+      batchRenderPanel.add(getBatchRenderFilesMoveDownButton(), null);
+      batchRenderPanel.add(getBatchRenderJobProgressBar(), null);
+      batchRenderPanel.add(getBatchRenderTotalProgressBar(), null);
+      batchRenderPanel.add(getBatchRenderStartButton(), null);
+    }
+    return batchRenderPanel;
+  }
+
+  /**
+   * This method initializes rootTabbedPane	
+   * 	
+   * @return javax.swing.JTabbedPane	
+   */
+  private JTabbedPane getRootTabbedPane() {
+    if (rootTabbedPane == null) {
+      rootTabbedPane = new JTabbedPane();
+      rootTabbedPane.setFont(new Font("Dialog", Font.BOLD, 10));
+      rootTabbedPane.addTab("Main", null, getRootPanel(), null);
+      rootTabbedPane.addTab("Morph", null, getTinaMorphPanel(), null);
+      rootTabbedPane.addTab("Animate", null, getTinaAnimatePanel(), null);
+      rootTabbedPane.addTab("Settings", null, getSettingsPanel(), null);
+      rootTabbedPane.addTab("Batch render (work in progress)", null, getBatchRenderPanel(), null);
+    }
+    return rootTabbedPane;
+  }
+
+  /**
+   * This method initializes renderBatchJobsScrollPane	
+   * 	
+   * @return javax.swing.JScrollPane	
+   */
+  private JScrollPane getRenderBatchJobsScrollPane() {
+    if (renderBatchJobsScrollPane == null) {
+      renderBatchJobsScrollPane = new JScrollPane();
+      renderBatchJobsScrollPane.setBounds(new Rectangle(13, 14, 364, 399));
+      renderBatchJobsScrollPane.setViewportView(getRenderBatchJobsTable());
+    }
+    return renderBatchJobsScrollPane;
+  }
+
+  /**
+   * This method initializes renderBatchJobsTable	
+   * 	
+   * @return javax.swing.JTable	
+   */
+  private JTable getRenderBatchJobsTable() {
+    if (renderBatchJobsTable == null) {
+      renderBatchJobsTable = new JTable();
+    }
+    return renderBatchJobsTable;
+  }
+
+  /**
+   * This method initializes batchRenderAddFilesButton	
+   * 	
+   * @return javax.swing.JButton	
+   */
+  private JButton getBatchRenderAddFilesButton() {
+    if (batchRenderAddFilesButton == null) {
+      batchRenderAddFilesButton = new JButton();
+      batchRenderAddFilesButton.setBounds(new Rectangle(386, 15, 125, 24));
+      batchRenderAddFilesButton.setPreferredSize(new Dimension(125, 24));
+      batchRenderAddFilesButton.setText("Add files");
+      batchRenderAddFilesButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      batchRenderAddFilesButton.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent e) {
+          tinaController.batchRenderAddFilesButton_clicked();
+          System.out.println("actionPerformed()"); // TODO Auto-generated Event stub actionPerformed()
+        }
+      });
+    }
+    return batchRenderAddFilesButton;
+  }
+
+  /**
+   * This method initializes batchRenderFilesMoveUpButton	
+   * 	
+   * @return javax.swing.JButton	
+   */
+  private JButton getBatchRenderFilesMoveUpButton() {
+    if (batchRenderFilesMoveUpButton == null) {
+      batchRenderFilesMoveUpButton = new JButton();
+      batchRenderFilesMoveUpButton.setBounds(new Rectangle(385, 171, 125, 24));
+      batchRenderFilesMoveUpButton.setPreferredSize(new Dimension(125, 24));
+      batchRenderFilesMoveUpButton.setText("Move up");
+      batchRenderFilesMoveUpButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      batchRenderFilesMoveUpButton.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent e) {
+          tinaController.batchRenderFilesMoveUpButton_clicked();
+        }
+      });
+    }
+    return batchRenderFilesMoveUpButton;
+  }
+
+  /**
+   * This method initializes batchRenderFilesMoveDownButton	
+   * 	
+   * @return javax.swing.JButton	
+   */
+  private JButton getBatchRenderFilesMoveDownButton() {
+    if (batchRenderFilesMoveDownButton == null) {
+      batchRenderFilesMoveDownButton = new JButton();
+      batchRenderFilesMoveDownButton.setBounds(new Rectangle(384, 202, 125, 24));
+      batchRenderFilesMoveDownButton.setPreferredSize(new Dimension(125, 24));
+      batchRenderFilesMoveDownButton.setText("Move down");
+      batchRenderFilesMoveDownButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      batchRenderFilesMoveDownButton.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent e) {
+          tinaController.batchRenderFilesMoveDownButton_clicked();
+        }
+      });
+    }
+    return batchRenderFilesMoveDownButton;
+  }
+
+  /**
+   * This method initializes batchRenderJobProgressBar	
+   * 	
+   * @return javax.swing.JProgressBar	
+   */
+  JProgressBar getBatchRenderJobProgressBar() {
+    if (batchRenderJobProgressBar == null) {
+      batchRenderJobProgressBar = new JProgressBar();
+      batchRenderJobProgressBar.setBounds(new Rectangle(589, 133, 294, 21));
+      batchRenderJobProgressBar.setValue(0);
+      batchRenderJobProgressBar.setStringPainted(true);
+    }
+    return batchRenderJobProgressBar;
+  }
+
+  /**
+   * This method initializes batchRenderTotalProgressBar	
+   * 	
+   * @return javax.swing.JProgressBar	
+   */
+  private JProgressBar getBatchRenderTotalProgressBar() {
+    if (batchRenderTotalProgressBar == null) {
+      batchRenderTotalProgressBar = new JProgressBar();
+      batchRenderTotalProgressBar.setBounds(new Rectangle(589, 184, 289, 21));
+      batchRenderTotalProgressBar.setValue(0);
+      batchRenderTotalProgressBar.setStringPainted(true);
+    }
+    return batchRenderTotalProgressBar;
+  }
+
+  /**
+   * This method initializes batchRenderStartButton	
+   * 	
+   * @return javax.swing.JButton	
+   */
+  private JButton getBatchRenderStartButton() {
+    if (batchRenderStartButton == null) {
+      batchRenderStartButton = new JButton();
+      batchRenderStartButton.setPreferredSize(new Dimension(125, 52));
+      batchRenderStartButton.setText("Render");
+      batchRenderStartButton.setLocation(new Point(383, 358));
+      batchRenderStartButton.setSize(new Dimension(125, 52));
+      batchRenderStartButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      batchRenderStartButton.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent e) {
+          tinaController.batchRenderStartButton_clicked();
+        }
+      });
+    }
+    return batchRenderStartButton;
   }
 
 } //  @jve:decl-index=0:visual-constraint="10,10"

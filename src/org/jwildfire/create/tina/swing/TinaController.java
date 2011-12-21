@@ -19,6 +19,7 @@ package org.jwildfire.create.tina.swing;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
@@ -40,6 +41,7 @@ import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JPanel;
+import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
 import javax.swing.JSlider;
 import javax.swing.JTable;
@@ -57,6 +59,7 @@ import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.Shading;
 import org.jwildfire.create.tina.base.ShadingInfo;
 import org.jwildfire.create.tina.base.XForm;
+import org.jwildfire.create.tina.batch.Job;
 import org.jwildfire.create.tina.io.Flam3Reader;
 import org.jwildfire.create.tina.io.Flam3Writer;
 import org.jwildfire.create.tina.palette.RGBColor;
@@ -108,6 +111,8 @@ public class TinaController implements FlameHolder {
   boolean gridRefreshing = false;
   boolean cmbRefreshing = false;
   boolean refreshing = false;
+
+  private final List<Job> batchRenderList = new ArrayList<Job>();
 
   public static class NonlinearControlsRow {
     private final JComboBox nonlinearVarCmb;
@@ -268,6 +273,11 @@ public class TinaController implements FlameHolder {
   private final JSlider paletteGammaSlider;
   private final JTextField paletteBrightnessREd;
   private final JSlider paletteBrightnessSlider;
+  // Batch render
+  private final JTable renderBatchJobsTable;
+  private final JProgressBar batchRenderJobProgressBar;
+  private final JProgressBar batchRenderTotalProgressBar;
+
   // Transformations
   private final JTable transformationsTable;
   private final JButton affineResetTransformButton;
@@ -337,7 +347,8 @@ public class TinaController implements FlameHolder {
   private Flame _currFlame;
   private Flame morphFlame1, morphFlame2;
   private boolean noRefresh;
-  private final ProgressUpdater progressUpdater;
+  private final ProgressUpdater mainProgressUpdater;
+  private final ProgressUpdater jobProgressUpdater;
   private final JTable createPaletteColorsTable;
   private List<RGBColor> paletteKeyFrames;
   // mouse dragging
@@ -371,14 +382,15 @@ public class TinaController implements FlameHolder {
       JButton pImportMorphedFlameButton, JTextField pAnimateOutputREd, JTextField pAnimateFramesREd, JComboBox pAnimateGlobalScriptCmb, JButton pAnimationGenerateButton,
       JComboBox pAnimateXFormScriptCmb, JToggleButton pMouseTransformMoveButton, JToggleButton pMouseTransformRotateButton, JToggleButton pMouseTransformScaleButton,
       JToggleButton pAffineEditPostTransformButton, JToggleButton pAffineEditPostTransformSmallButton, JButton pMouseEditZoomInButton, JButton pMouseEditZoomOutButton,
-      JToggleButton pToggleTrianglesButton, ProgressUpdater pProgressUpdater, JCheckBox pRandomPostTransformCheckBox, JCheckBox pRandomSymmetryCheckBox,
+      JToggleButton pToggleTrianglesButton, ProgressUpdater pMainProgressUpdater, JCheckBox pRandomPostTransformCheckBox, JCheckBox pRandomSymmetryCheckBox,
       JButton pAffineResetTransformButton, JTextField pColorOversampleREd, JSlider pColorOversampleSlider, JTable pCreatePaletteColorsTable,
       JComboBox pShadingCmb, JTextField pShadingAmbientREd, JSlider pShadingAmbientSlider, JTextField pShadingDiffuseREd, JSlider pShadingDiffuseSlider,
       JTextField pShadingPhongREd, JSlider pShadingPhongSlider, JTextField pShadingPhongSizeREd, JSlider pShadingPhongSizeSlider,
       JComboBox pShadingLightCmb, JTextField pShadingLightXREd, JSlider pShadingLightXSlider, JTextField pShadingLightYREd, JSlider pShadingLightYSlider,
       JTextField pShadingLightZREd, JSlider pShadingLightZSlider, JTextField pShadingLightRedREd, JSlider pShadingLightRedSlider,
       JTextField pShadingLightGreenREd, JSlider pShadingLightGreenSlider, JTextField pShadingLightBlueREd, JSlider pShadingLightBlueSlider,
-      JToggleButton pMouseTransformSlowButton) {
+      JToggleButton pMouseTransformSlowButton, JTable pRenderBatchJobsTable, JProgressBar pBatchRenderJobProgressBar,
+      JProgressBar pBatchRenderTotalProgressBar, ProgressUpdater pJobProgressUpdater) {
     errorHandler = pErrorHandler;
     prefs = pPrefs;
     centerPanel = pCenterPanel;
@@ -509,7 +521,8 @@ public class TinaController implements FlameHolder {
     mouseTransformRotateButton = pMouseTransformRotateButton;
     mouseTransformScaleButton = pMouseTransformScaleButton;
     toggleTrianglesButton = pToggleTrianglesButton;
-    progressUpdater = pProgressUpdater;
+    mainProgressUpdater = pMainProgressUpdater;
+    jobProgressUpdater = pJobProgressUpdater;
     randomPostTransformCheckBox = pRandomPostTransformCheckBox;
     randomSymmetryCheckBox = pRandomSymmetryCheckBox;
     affineResetTransformButton = pAffineResetTransformButton;
@@ -539,8 +552,13 @@ public class TinaController implements FlameHolder {
 
     mouseTransformSlowButton = pMouseTransformSlowButton;
 
+    renderBatchJobsTable = pRenderBatchJobsTable;
+    batchRenderJobProgressBar = pBatchRenderJobProgressBar;
+    batchRenderTotalProgressBar = pBatchRenderTotalProgressBar;
+
     animateFramesREd.setText(String.valueOf(prefs.getTinaRenderMovieFrames()));
     refreshPaletteColorsTable();
+    refreshRenderBatchJobsTable();
 
     enableControls();
     enableShadingUI();
@@ -646,7 +664,7 @@ public class TinaController implements FlameHolder {
             flame.setColorOversample(1);
           }
           else {
-            renderer.setProgressUpdater(progressUpdater);
+            renderer.setProgressUpdater(mainProgressUpdater);
             flame.setSampleDensity(prefs.getTinaRenderPreviewQuality());
             flame.setSpatialFilterRadius(prefs.getTinaRenderPreviewFilterRadius());
             flame.setSpatialOversample(prefs.getTinaRenderPreviewSpatialOversample());
@@ -1844,7 +1862,7 @@ public class TinaController implements FlameHolder {
             }
             long t0 = Calendar.getInstance().getTimeInMillis();
             FlameRenderer renderer = new FlameRenderer();
-            renderer.setProgressUpdater(progressUpdater);
+            renderer.setProgressUpdater(mainProgressUpdater);
             renderer.setAffineZStyle((AffineZStyle) zStyleCmb.getSelectedItem());
             renderer.renderFlame(flame, img, prefs.getTinaRenderThreads());
             long t1 = Calendar.getInstance().getTimeInMillis();
@@ -2280,7 +2298,7 @@ public class TinaController implements FlameHolder {
     final double MIN_COVERAGE = 0.33;
     List<SimpleImage> imgList = new ArrayList<SimpleImage>();
     int maxCount = (pCount > 0 ? pCount : IMG_COUNT);
-    progressUpdater.initProgress(maxCount);
+    mainProgressUpdater.initProgress(maxCount);
     for (int i = 0; i < maxCount; i++) {
       SimpleImage img = new SimpleImage(IMG_WIDTH, IMG_HEIGHT);
       Flame bestFlame = null;
@@ -2344,7 +2362,7 @@ public class TinaController implements FlameHolder {
           }
         }
       });
-      progressUpdater.updateProgress(i + 1);
+      mainProgressUpdater.updateProgress(i + 1);
     }
     updateThumbnails(imgList);
   }
@@ -3115,6 +3133,189 @@ public class TinaController implements FlameHolder {
     if (flamePanel != null) {
       flamePanel.setFineMovement(mouseTransformSlowButton.isSelected());
     }
+  }
+
+  private void refreshRenderBatchJobsTable() {
+    final int COL_FLAME_FILE = 0;
+    final int COL_FINISHED = 1;
+    final int COL_ELAPSED = 2;
+    final int COL_LAST_ERROR = 3;
+    renderBatchJobsTable.setModel(new DefaultTableModel() {
+      private static final long serialVersionUID = 1L;
+
+      @Override
+      public int getRowCount() {
+        return batchRenderList.size();
+      }
+
+      @Override
+      public int getColumnCount() {
+        return 4;
+      }
+
+      @Override
+      public String getColumnName(int columnIndex) {
+        switch (columnIndex) {
+          case COL_FLAME_FILE:
+            return "Flame file";
+          case COL_FINISHED:
+            return "Finished";
+          case COL_ELAPSED:
+            return "Elapsed time (ms)";
+          case COL_LAST_ERROR:
+            return "Last error";
+        }
+        return null;
+      }
+
+      @Override
+      public Object getValueAt(int rowIndex, int columnIndex) {
+        Job job = rowIndex < batchRenderList.size() ? batchRenderList.get(rowIndex) : null;
+        if (job != null) {
+          switch (columnIndex) {
+            case COL_FLAME_FILE:
+              return new File(job.getFlameFilename()).getName();
+            case COL_FINISHED:
+              return job.isFinished() ? String.valueOf(job.isFinished()) : "";
+            case COL_ELAPSED:
+              return job.isFinished() ? Tools.doubleToString(job.getElapsedMilliseconds()) : "";
+            case COL_LAST_ERROR:
+              return job.getLastErrorMsg();
+          }
+        }
+        return null;
+      }
+
+      @Override
+      public boolean isCellEditable(int row, int column) {
+        return false;
+      }
+    });
+    renderBatchJobsTable.getTableHeader().setFont(transformationsTable.getFont());
+    renderBatchJobsTable.getColumnModel().getColumn(COL_FLAME_FILE).setWidth(120);
+    renderBatchJobsTable.getColumnModel().getColumn(COL_FINISHED).setPreferredWidth(10);
+    renderBatchJobsTable.getColumnModel().getColumn(COL_ELAPSED).setWidth(10);
+    renderBatchJobsTable.getColumnModel().getColumn(COL_LAST_ERROR).setWidth(120);
+  }
+
+  public void batchRenderAddFilesButton_clicked() {
+    try {
+      JFileChooser chooser = new FlameFileChooser(prefs);
+      if (prefs.getInputFlamePath() != null) {
+        try {
+          chooser.setCurrentDirectory(new File(prefs.getInputFlamePath()));
+        }
+        catch (Exception ex) {
+          ex.printStackTrace();
+        }
+      }
+      int jobCount = batchRenderList.size();
+      chooser.setMultiSelectionEnabled(true);
+      if (chooser.showOpenDialog(centerPanel) == JFileChooser.APPROVE_OPTION) {
+        for (File file : chooser.getSelectedFiles()) {
+          String filename = file.getPath();
+          boolean hasFile = false;
+          for (Job job : batchRenderList) {
+            if (job.getFlameFilename().equals(filename)) {
+              hasFile = true;
+              break;
+            }
+          }
+          if (!hasFile) {
+            Job job = new Job();
+            job.setFlameFilename(filename);
+            batchRenderList.add(job);
+          }
+        }
+      }
+      if (jobCount != batchRenderList.size()) {
+        refreshRenderBatchJobsTable();
+      }
+    }
+    catch (Throwable ex) {
+      errorHandler.handleError(ex);
+    }
+
+  }
+
+  public void batchRenderFilesMoveUpButton_clicked() {
+    int row = renderBatchJobsTable.getSelectedRow();
+    if (row > 0 && row < batchRenderList.size()) {
+      Job t = batchRenderList.get(row - 1);
+      batchRenderList.set(row - 1, batchRenderList.get(row));
+      batchRenderList.set(row, t);
+      refreshRenderBatchJobsTable();
+    }
+  }
+
+  public void batchRenderFilesMoveDownButton_clicked() {
+    int row = renderBatchJobsTable.getSelectedRow();
+    if (row >= 0 && row < batchRenderList.size() - 1) {
+      Job t = batchRenderList.get(row + 1);
+      batchRenderList.set(row + 1, batchRenderList.get(row));
+      batchRenderList.set(row, t);
+      refreshRenderBatchJobsTable();
+    }
+  }
+
+  public void batchRenderStartButton_clicked() {
+    batchRenderTotalProgressBar.setMinimum(0);
+    batchRenderTotalProgressBar.setValue(0);
+    List<Job> activeJobList = new ArrayList<Job>();
+    for (Job job : batchRenderList) {
+      if (!job.isFinished()) {
+        activeJobList.add(job);
+      }
+    }
+    batchRenderTotalProgressBar.setMaximum(activeJobList.size() - 1);
+    for (Job job : activeJobList) {
+      try {
+        int width = prefs.getTinaRenderImageWidth();
+        int height = prefs.getTinaRenderImageHeight();
+        SimpleImage img = new SimpleImage(width, height);
+        List<Flame> flames = new Flam3Reader().readFlames(job.getFlameFilename());
+        Flame flame = flames.get(0);
+        double wScl = (double) img.getImageWidth() / (double) flame.getWidth();
+        double hScl = (double) img.getImageHeight() / (double) flame.getHeight();
+        flame.setPixelsPerUnit((wScl + hScl) * 0.5 * flame.getPixelsPerUnit());
+        flame.setWidth(img.getImageWidth());
+        flame.setHeight(img.getImageHeight());
+
+        int oldSampleDensity = flame.getSampleDensity();
+        int oldSpatialOversample = flame.getSpatialOversample();
+        int oldColorOversample = flame.getColorOversample();
+        double oldFilterRadius = flame.getSpatialFilterRadius();
+        try {
+          flame.setSampleDensity(prefs.getTinaRenderHighQuality());
+          flame.setSpatialOversample(prefs.getTinaRenderHighSpatialOversample());
+          flame.setColorOversample(prefs.getTinaRenderHighColorOversample());
+          flame.setSpatialFilterRadius(prefs.getTinaRenderHighSpatialOversample());
+          long t0 = Calendar.getInstance().getTimeInMillis();
+          FlameRenderer renderer = new FlameRenderer();
+          renderer.setProgressUpdater(jobProgressUpdater);
+          renderer.setAffineZStyle((AffineZStyle) zStyleCmb.getSelectedItem());
+          renderer.renderFlame(flame, img, prefs.getTinaRenderThreads());
+          long t1 = Calendar.getInstance().getTimeInMillis();
+          System.err.println("RENDER TIME: " + ((double) (t1 - t0) / 1000.0) + "s");
+          new ImageWriter().saveImage(img, job.getImageFilename());
+        }
+        finally {
+          flame.setSampleDensity(oldSampleDensity);
+          flame.setSpatialOversample(oldSpatialOversample);
+          flame.setColorOversample(oldColorOversample);
+          flame.setSpatialFilterRadius(oldFilterRadius);
+        }
+      }
+      catch (Throwable ex) {
+        job.setLastError(ex);
+      }
+      batchRenderTotalProgressBar.setValue(batchRenderTotalProgressBar.getValue() + 1);
+      Graphics g = batchRenderTotalProgressBar.getGraphics();
+      if (g != null) {
+        batchRenderTotalProgressBar.paint(g);
+      }
+    }
+
   }
 
 }
