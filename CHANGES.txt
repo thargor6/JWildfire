@@ -1,3 +1,11 @@
+V0.28 (22.12.2011):
+ - Fractal flame editor: batch renderer (for keeping your CPU's working overnight :-))
+ - Fractal flame editor: display numeric values with higher precision, some minor bugfixes
+ - Fractal flame editor: automatically activate "triangle mode" if a transformation button was clicked
+ - Fractal flame editor: "Experimental gnarl" random generator
+ - Random flame editor: new and much more clear model for random flame generators
+ - FIXED: Fractal fame editor: also copy custom parameters while duplicating a XForm
+
 V0.27 (17.12.2011):
  - Fractal flame editor: store/load flames from/to cliboard
  - Fractal flame editor: "fine" triangle moving/rotating/scaling mode (e. g. for editing gnarls ;-))

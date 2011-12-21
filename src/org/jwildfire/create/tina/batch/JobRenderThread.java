@@ -70,14 +70,6 @@ public class JobRenderThread implements Runnable {
               flame.setSpatialOversample(controller.getPrefs().getTinaRenderHighSpatialOversample());
               flame.setColorOversample(controller.getPrefs().getTinaRenderHighColorOversample());
               flame.setSpatialFilterRadius(controller.getPrefs().getTinaRenderHighSpatialOversample());
-
-              // TODO 
-              flame.setSampleDensity(3);
-              flame.setSpatialOversample(1);
-              flame.setColorOversample(1);
-              flame.setSpatialFilterRadius(0.0);
-              // TODO
-
               long t0 = Calendar.getInstance().getTimeInMillis();
               FlameRenderer renderer = new FlameRenderer();
               renderer.setProgressUpdater(controller.getJobProgressUpdater());
