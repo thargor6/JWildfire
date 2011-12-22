@@ -46,18 +46,6 @@ public class Flam3Writer {
       attrList.add(pXB.createAttr("opacity", 0.0));
     }
     attrList.add(pXB.createAttr("symmetry", pXForm.getColorSymmetry()));
-    attrList.add(pXB.createAttr("coefs", pXForm.getCoeff00() + " " + pXForm.getCoeff01() + " " + pXForm.getCoeff10() + " " + pXForm.getCoeff11() + " " + pXForm.getCoeff20() + " " + pXForm.getCoeff21()));
-    if (pXForm.hasPostCoeffs()) {
-      attrList.add(pXB.createAttr("post", pXForm.getPostCoeff00() + " " + pXForm.getPostCoeff01() + " " + pXForm.getPostCoeff10() + " " + pXForm.getPostCoeff11() + " " + pXForm.getPostCoeff20() + " " + pXForm.getPostCoeff21()));
-    }
-    {
-      String hs = "";
-      for (int i = 0; i < pFlame.getXForms().size() - 1; i++) {
-        hs += pXForm.getModifiedWeights()[i] + " ";
-      }
-      hs += pXForm.getModifiedWeights()[pFlame.getXForms().size() - 1];
-      attrList.add(pXB.createAttr("chaos", hs));
-    }
 
     for (Variation v : pXForm.getVariations()) {
       VariationFunc func = v.getFunc();
@@ -78,6 +66,20 @@ public class Flam3Writer {
         }
       }
     }
+
+    attrList.add(pXB.createAttr("coefs", pXForm.getCoeff00() + " " + pXForm.getCoeff01() + " " + pXForm.getCoeff10() + " " + pXForm.getCoeff11() + " " + pXForm.getCoeff20() + " " + pXForm.getCoeff21()));
+    if (pXForm.hasPostCoeffs()) {
+      attrList.add(pXB.createAttr("post", pXForm.getPostCoeff00() + " " + pXForm.getPostCoeff01() + " " + pXForm.getPostCoeff10() + " " + pXForm.getPostCoeff11() + " " + pXForm.getPostCoeff20() + " " + pXForm.getPostCoeff21()));
+    }
+    {
+      String hs = "";
+      for (int i = 0; i < pFlame.getXForms().size() - 1; i++) {
+        hs += pXForm.getModifiedWeights()[i] + " ";
+      }
+      hs += pXForm.getModifiedWeights()[pFlame.getXForms().size() - 1];
+      attrList.add(pXB.createAttr("chaos", hs));
+    }
+
     return attrList;
   }
 
