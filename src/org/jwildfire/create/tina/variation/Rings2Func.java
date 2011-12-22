@@ -16,6 +16,7 @@
 */
 package org.jwildfire.create.tina.variation;
 
+import org.jwildfire.create.tina.base.Constants;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
@@ -27,14 +28,13 @@ public class Rings2Func extends VariationFunc {
 
   @Override
   public void transform(XFormTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-    final double EPSILON = 1.0e-10;
-    double l = Math.sqrt(pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y);
-    double dx = val * val;
-    if (Math.abs(dx) < EPSILON)
-      dx = EPSILON;
-    double r = l + dx - (int) ((l + dx) / (2 * dx)) * 2 * dx - dx + l * (1 - dx);
-    pVarTP.x += r * pAffineTP.x;
-    pVarTP.y += r * pAffineTP.y;
+    double r = pAffineTP.getPrecalcSqrt();
+    double dx = val * val + Constants.EPSILON;
+
+    r += -2.0 * dx * (int) ((r + dx) / (2.0 * dx)) + r * (1.0 - dx);
+
+    pVarTP.x += pAmount * pAffineTP.getPrecalcSinA() * r;
+    pVarTP.y += pAmount * pAffineTP.getPrecalcCosA() * r;
   }
 
   @Override
