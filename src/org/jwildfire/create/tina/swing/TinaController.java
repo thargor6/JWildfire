@@ -2280,7 +2280,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController {
       flamePanel.setDrawFlame(true);
       toggleTrianglesButton.setSelected(true);
     }
-    double amount = 1.0 + Tools.stringToDouble(affineScaleAmountREd.getText());
+    double amount = Tools.stringToDouble(affineScaleAmountREd.getText()) / 100.0;
     XFormTransformService.scale(getCurrXForm(), amount, affineEditPostTransformButton.isSelected());
     transformationTableClicked();
     refreshFlameImage();
@@ -2291,7 +2291,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController {
       flamePanel.setDrawFlame(true);
       toggleTrianglesButton.setSelected(true);
     }
-    double amount = 1.0 - Tools.stringToDouble(affineScaleAmountREd.getText());
+    double amount = 100.0 / Tools.stringToDouble(affineScaleAmountREd.getText());
     XFormTransformService.scale(getCurrXForm(), amount, affineEditPostTransformButton.isSelected());
     transformationTableClicked();
     refreshFlameImage();
