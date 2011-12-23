@@ -212,4 +212,26 @@ public class XFormTransformService {
     }
   }
 
+  public static void flipVertical(XForm pXForm, boolean pPostTransform) {
+    if (pPostTransform) {
+      pXForm.setPostCoeff01(-pXForm.getPostCoeff01());
+      pXForm.setPostCoeff11(-pXForm.getPostCoeff11());
+    }
+    else {
+      pXForm.setCoeff01(-pXForm.getCoeff01());
+      pXForm.setCoeff11(-pXForm.getCoeff11());
+    }
+  }
+
+  public static void flipHorizontal(XForm pXForm, boolean pPostTransform) {
+    if (pPostTransform) {
+      pXForm.setPostCoeff00(-pXForm.getPostCoeff00());
+      pXForm.setPostCoeff10(-pXForm.getPostCoeff10());
+    }
+    else {
+      pXForm.setCoeff00(-pXForm.getCoeff00());
+      pXForm.setCoeff10(-pXForm.getCoeff10());
+    }
+  }
+
 }

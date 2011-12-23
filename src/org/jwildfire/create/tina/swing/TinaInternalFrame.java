@@ -577,6 +577,8 @@ public class TinaInternalFrame extends JInternalFrame {
   private JLabel batchRenderJobProgressLbl = null;
   private JLabel batchRenderTotalProgressLbl = null;
   private JButton batchRenderStartButton = null;
+  private JButton affineFlipHorizontalButton = null;
+  private JButton affineFlipVerticalButton = null;
 
   /**
    * This is the xxx default constructor
@@ -2168,6 +2170,8 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaAffineTransformationPanel.add(getAffineMoveAmountREd(), null);
       tinaAffineTransformationPanel.add(getAffineEditPostTransformButton(), null);
       tinaAffineTransformationPanel.add(getAffineResetTransformButton(), null);
+      tinaAffineTransformationPanel.add(getAffineFlipHorizontalButton(), null);
+      tinaAffineTransformationPanel.add(getAffineFlipVerticalButton(), null);
     }
     return tinaAffineTransformationPanel;
   }
@@ -3009,7 +3013,7 @@ public class TinaInternalFrame extends JInternalFrame {
         getBatchRenderJobProgressBar(), getBatchRenderTotalProgressBar(), new JobProgressUpdater(this),
         getBatchRenderAddFilesButton(), getBatchRenderFilesMoveDownButton(), getBatchRenderFilesMoveUpButton(),
         getBatchRenderFilesRemoveButton(), getBatchRenderFilesRemoveAllButton(), getBatchRenderStartButton(),
-        getRootTabbedPane()
+        getRootTabbedPane(), getAffineFlipHorizontalButton(), getAffineFlipVerticalButton()
         );
     tinaController.refreshing = tinaController.cmbRefreshing = tinaController.gridRefreshing = true;
     try {
@@ -3228,7 +3232,7 @@ public class TinaInternalFrame extends JInternalFrame {
       affineRotateLeftButton.setFont(new Font("Dialog", Font.BOLD, 10));
       affineRotateLeftButton.setPreferredSize(new Dimension(55, 24));
       affineRotateLeftButton.setSize(new Dimension(55, 24));
-      affineRotateLeftButton.setLocation(new Point(4, 56));
+      affineRotateLeftButton.setLocation(new Point(4, 54));
       affineRotateLeftButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/turnLeft.gif")));
       affineRotateLeftButton.setText("");
       affineRotateLeftButton.addActionListener(new java.awt.event.ActionListener() {
@@ -3250,7 +3254,7 @@ public class TinaInternalFrame extends JInternalFrame {
       affineRotateRightButton = new JButton();
       affineRotateRightButton.setFont(new Font("Dialog", Font.BOLD, 10));
       affineRotateRightButton.setPreferredSize(new Dimension(55, 24));
-      affineRotateRightButton.setLocation(new Point(4, 105));
+      affineRotateRightButton.setLocation(new Point(4, 103));
       affineRotateRightButton.setSize(new Dimension(55, 24));
       affineRotateRightButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/turnRight.gif")));
       affineRotateRightButton.setText("");
@@ -3273,7 +3277,7 @@ public class TinaInternalFrame extends JInternalFrame {
       affineEnlargeButton = new JButton();
       affineEnlargeButton.setFont(new Font("Dialog", Font.BOLD, 8));
       affineEnlargeButton.setPreferredSize(new Dimension(55, 24));
-      affineEnlargeButton.setLocation(new Point(66, 56));
+      affineEnlargeButton.setLocation(new Point(66, 54));
       affineEnlargeButton.setSize(new Dimension(55, 24));
       affineEnlargeButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/enlarge.gif")));
       affineEnlargeButton.setText("");
@@ -3296,7 +3300,7 @@ public class TinaInternalFrame extends JInternalFrame {
       affineShrinkButton = new JButton();
       affineShrinkButton.setFont(new Font("Dialog", Font.BOLD, 8));
       affineShrinkButton.setPreferredSize(new Dimension(55, 24));
-      affineShrinkButton.setLocation(new Point(66, 105));
+      affineShrinkButton.setLocation(new Point(66, 103));
       affineShrinkButton.setSize(new Dimension(55, 24));
       affineShrinkButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/shrink.gif")));
       affineShrinkButton.setText("");
@@ -3321,7 +3325,7 @@ public class TinaInternalFrame extends JInternalFrame {
       affineRotateAmountREd.setText("5");
       affineRotateAmountREd.setHorizontalAlignment(JTextField.RIGHT);
       affineRotateAmountREd.setSize(new Dimension(56, 22));
-      affineRotateAmountREd.setLocation(new Point(4, 83));
+      affineRotateAmountREd.setLocation(new Point(4, 81));
       affineRotateAmountREd.setFont(new Font("Dialog", Font.PLAIN, 10));
     }
     return affineRotateAmountREd;
@@ -3394,7 +3398,7 @@ public class TinaInternalFrame extends JInternalFrame {
       affineScaleAmountREd.setText("0.05");
       affineScaleAmountREd.setHorizontalAlignment(JTextField.RIGHT);
       affineScaleAmountREd.setSize(new Dimension(56, 22));
-      affineScaleAmountREd.setLocation(new Point(66, 83));
+      affineScaleAmountREd.setLocation(new Point(66, 81));
       affineScaleAmountREd.setFont(new Font("Dialog", Font.PLAIN, 10));
     }
     return affineScaleAmountREd;
@@ -3410,7 +3414,7 @@ public class TinaInternalFrame extends JInternalFrame {
       affineMoveUpButton = new JButton();
       affineMoveUpButton.setFont(new Font("Dialog", Font.BOLD, 10));
       affineMoveUpButton.setPreferredSize(new Dimension(55, 24));
-      affineMoveUpButton.setLocation(new Point(182, 56));
+      affineMoveUpButton.setLocation(new Point(182, 54));
       affineMoveUpButton.setSize(new Dimension(55, 24));
       affineMoveUpButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/moveUp.gif")));
       affineMoveUpButton.setText("");
@@ -3433,7 +3437,7 @@ public class TinaInternalFrame extends JInternalFrame {
       affineMoveDownButton = new JButton();
       affineMoveDownButton.setFont(new Font("Dialog", Font.BOLD, 10));
       affineMoveDownButton.setPreferredSize(new Dimension(55, 24));
-      affineMoveDownButton.setLocation(new Point(182, 105));
+      affineMoveDownButton.setLocation(new Point(182, 103));
       affineMoveDownButton.setSize(new Dimension(55, 24));
       affineMoveDownButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/moveDown.gif")));
       affineMoveDownButton.setText("");
@@ -3456,7 +3460,7 @@ public class TinaInternalFrame extends JInternalFrame {
       affineMoveLeftButton = new JButton();
       affineMoveLeftButton.setText("");
       affineMoveLeftButton.setPreferredSize(new Dimension(55, 24));
-      affineMoveLeftButton.setLocation(new Point(126, 83));
+      affineMoveLeftButton.setLocation(new Point(126, 81));
       affineMoveLeftButton.setSize(new Dimension(55, 24));
       affineMoveLeftButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/moveLeft.gif")));
       affineMoveLeftButton.setFont(new Font("Dialog", Font.BOLD, 10));
@@ -3478,7 +3482,7 @@ public class TinaInternalFrame extends JInternalFrame {
     if (affineMoveRightButton == null) {
       affineMoveRightButton = new JButton();
       affineMoveRightButton.setText("");
-      affineMoveRightButton.setLocation(new Point(238, 83));
+      affineMoveRightButton.setLocation(new Point(238, 81));
       affineMoveRightButton.setSize(new Dimension(55, 24));
       affineMoveRightButton.setPreferredSize(new Dimension(55, 24));
       affineMoveRightButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/moveRight.gif")));
@@ -3504,7 +3508,7 @@ public class TinaInternalFrame extends JInternalFrame {
       affineMoveAmountREd.setText("0.1");
       affineMoveAmountREd.setHorizontalAlignment(JTextField.RIGHT);
       affineMoveAmountREd.setSize(new Dimension(56, 22));
-      affineMoveAmountREd.setLocation(new Point(182, 83));
+      affineMoveAmountREd.setLocation(new Point(182, 81));
       affineMoveAmountREd.setFont(new Font("Dialog", Font.PLAIN, 10));
     }
     return affineMoveAmountREd;
@@ -5124,10 +5128,10 @@ public class TinaInternalFrame extends JInternalFrame {
     if (affineEditPostTransformButton == null) {
       affineEditPostTransformButton = new JToggleButton();
       affineEditPostTransformButton.setPreferredSize(new Dimension(136, 24));
-      affineEditPostTransformButton.setSize(new Dimension(136, 24));
+      affineEditPostTransformButton.setSize(new Dimension(138, 24));
       affineEditPostTransformButton.setText("Edit Post  Transform");
       affineEditPostTransformButton.setFont(new Font("Dialog", Font.BOLD, 10));
-      affineEditPostTransformButton.setLocation(new Point(4, 152));
+      affineEditPostTransformButton.setLocation(new Point(3, 159));
       affineEditPostTransformButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
           tinaController.affineEditPostTransformButton_clicked();
@@ -5170,7 +5174,7 @@ public class TinaInternalFrame extends JInternalFrame {
     if (mouseTransformZoomInButton == null) {
       mouseTransformZoomInButton = new JButton();
       mouseTransformZoomInButton.setFont(new Font("Dialog", Font.BOLD, 8));
-      mouseTransformZoomInButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/enlarge.gif")));
+      mouseTransformZoomInButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/triangleShrink.gif")));
       mouseTransformZoomInButton.setText("");
       mouseTransformZoomInButton.setToolTipText("Zoom in");
       mouseTransformZoomInButton.setPreferredSize(new Dimension(42, 24));
@@ -5192,7 +5196,7 @@ public class TinaInternalFrame extends JInternalFrame {
     if (mouseTransformZoomOutButton == null) {
       mouseTransformZoomOutButton = new JButton();
       mouseTransformZoomOutButton.setFont(new Font("Dialog", Font.BOLD, 8));
-      mouseTransformZoomOutButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/shrink.gif")));
+      mouseTransformZoomOutButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/triangleEnlarge.gif")));
       mouseTransformZoomOutButton.setText("");
       mouseTransformZoomOutButton.setToolTipText("Zoom out");
       mouseTransformZoomOutButton.setPreferredSize(new Dimension(42, 24));
@@ -5282,8 +5286,8 @@ public class TinaInternalFrame extends JInternalFrame {
       affineResetTransformButton = new JButton();
       affineResetTransformButton.setPreferredSize(new Dimension(136, 24));
       affineResetTransformButton.setText("Reset");
-      affineResetTransformButton.setLocation(new Point(156, 152));
-      affineResetTransformButton.setSize(new Dimension(136, 24));
+      affineResetTransformButton.setLocation(new Point(146, 159));
+      affineResetTransformButton.setSize(new Dimension(130, 24));
       affineResetTransformButton.setFont(new Font("Dialog", Font.BOLD, 10));
       affineResetTransformButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -8621,6 +8625,54 @@ public class TinaInternalFrame extends JInternalFrame {
       });
     }
     return batchRenderStartButton;
+  }
+
+  /**
+   * This method initializes affineFlipHorizontalButton	
+   * 	
+   * @return javax.swing.JButton	
+   */
+  private JButton getAffineFlipHorizontalButton() {
+    if (affineFlipHorizontalButton == null) {
+      affineFlipHorizontalButton = new JButton();
+      affineFlipHorizontalButton.setPreferredSize(new Dimension(55, 24));
+      affineFlipHorizontalButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/flipX.gif")));
+      affineFlipHorizontalButton.setText("");
+      affineFlipHorizontalButton.setToolTipText("Horizontal flip");
+      affineFlipHorizontalButton.setSize(new Dimension(55, 24));
+      affineFlipHorizontalButton.setLocation(new Point(146, 132));
+      affineFlipHorizontalButton.setFont(new Font("Dialog", Font.BOLD, 8));
+      affineFlipHorizontalButton.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent e) {
+          tinaController.xForm_flipHorizontal();
+        }
+      });
+    }
+    return affineFlipHorizontalButton;
+  }
+
+  /**
+   * This method initializes affineFlipVerticalButton	
+   * 	
+   * @return javax.swing.JButton	
+   */
+  private JButton getAffineFlipVerticalButton() {
+    if (affineFlipVerticalButton == null) {
+      affineFlipVerticalButton = new JButton();
+      affineFlipVerticalButton.setPreferredSize(new Dimension(55, 24));
+      affineFlipVerticalButton.setToolTipText("Vertical flip");
+      affineFlipVerticalButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/flipY.gif")));
+      affineFlipVerticalButton.setText("");
+      affineFlipVerticalButton.setSize(new Dimension(55, 24));
+      affineFlipVerticalButton.setLocation(new Point(220, 132));
+      affineFlipVerticalButton.setFont(new Font("Dialog", Font.BOLD, 8));
+      affineFlipVerticalButton.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent e) {
+          tinaController.xForm_flipVertical();
+        }
+      });
+    }
+    return affineFlipVerticalButton;
   }
 
 } //  @jve:decl-index=0:visual-constraint="10,10"

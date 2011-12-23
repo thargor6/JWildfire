@@ -301,6 +301,8 @@ public class TinaController implements FlameHolder, JobRenderThreadController {
   private final JButton affineMoveLeftButton;
   private final JButton affineMoveRightButton;
   private final JButton affineMoveDownButton;
+  private final JButton affineFlipHorizontalButton;
+  private final JButton affineFlipVerticalButton;
   private final JButton addTransformationButton;
   private final JButton duplicateTransformationButton;
   private final JButton deleteTransformationButton;
@@ -402,7 +404,8 @@ public class TinaController implements FlameHolder, JobRenderThreadController {
       JToggleButton pMouseTransformSlowButton, JTable pRenderBatchJobsTable, JProgressBar pBatchRenderJobProgressBar,
       JProgressBar pBatchRenderTotalProgressBar, ProgressUpdater pJobProgressUpdater, JButton pBatchRenderAddFilesButton,
       JButton pBatchRenderFilesMoveDownButton, JButton pBatchRenderFilesMoveUpButton, JButton pBatchRenderFilesRemoveButton,
-      JButton pBatchRenderFilesRemoveAllButton, JButton pBatchRenderStartButton, JTabbedPane pRootTabbedPane) {
+      JButton pBatchRenderFilesRemoveAllButton, JButton pBatchRenderStartButton, JTabbedPane pRootTabbedPane, JButton pAffineFlipHorizontalButton,
+      JButton pAffineFlipVerticalButton) {
     errorHandler = pErrorHandler;
     prefs = pPrefs;
     centerPanel = pCenterPanel;
@@ -487,6 +490,8 @@ public class TinaController implements FlameHolder, JobRenderThreadController {
     affineMoveLeftButton = pAffineMoveLeftButton;
     affineMoveRightButton = pAffineMoveRightButton;
     affineMoveDownButton = pAffineMoveDownButton;
+    affineFlipHorizontalButton = pAffineFlipHorizontalButton;
+    affineFlipVerticalButton = pAffineFlipVerticalButton;
     addTransformationButton = pAddTransformationButton;
     duplicateTransformationButton = pDuplicateTransformationButton;
     deleteTransformationButton = pDeleteTransformationButton;
@@ -1995,6 +2000,9 @@ public class TinaController implements FlameHolder, JobRenderThreadController {
     affineMoveLeftButton.setEnabled(enabled);
     affineMoveRightButton.setEnabled(enabled);
     affineMoveDownButton.setEnabled(enabled);
+    affineFlipHorizontalButton.setEnabled(enabled);
+    affineFlipVerticalButton.setEnabled(enabled);
+
     addTransformationButton.setEnabled(currFlame != null);
     duplicateTransformationButton.setEnabled(enabled);
     deleteTransformationButton.setEnabled(enabled);
@@ -2243,6 +2251,26 @@ public class TinaController implements FlameHolder, JobRenderThreadController {
     }
     double amount = Tools.stringToDouble(affineMoveAmountREd.getText());
     XFormTransformService.globalTranslate(getCurrXForm(), -amount, 0, affineEditPostTransformButton.isSelected());
+    transformationTableClicked();
+    refreshFlameImage();
+  }
+
+  public void xForm_flipHorizontal() {
+    if (!toggleTrianglesButton.isSelected()) {
+      flamePanel.setDrawFlame(true);
+      toggleTrianglesButton.setSelected(true);
+    }
+    XFormTransformService.flipHorizontal(getCurrXForm(), affineEditPostTransformButton.isSelected());
+    transformationTableClicked();
+    refreshFlameImage();
+  }
+
+  public void xForm_flipVertical() {
+    if (!toggleTrianglesButton.isSelected()) {
+      flamePanel.setDrawFlame(true);
+      toggleTrianglesButton.setSelected(true);
+    }
+    XFormTransformService.flipVertical(getCurrXForm(), affineEditPostTransformButton.isSelected());
     transformationTableClicked();
     refreshFlameImage();
   }
