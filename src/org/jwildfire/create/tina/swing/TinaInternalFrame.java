@@ -1204,7 +1204,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaRenderFlameButton.setText("R");
       tinaRenderFlameButton.setMnemonic(KeyEvent.VK_R);
       tinaRenderFlameButton.setFont(new Font("Dialog", Font.BOLD, 10));
-      tinaRenderFlameButton.setToolTipText("Render");
+      tinaRenderFlameButton.setToolTipText("Render image");
       tinaRenderFlameButton.setPreferredSize(new Dimension(42, 24));
       tinaRenderFlameButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -1224,7 +1224,7 @@ public class TinaInternalFrame extends JInternalFrame {
     if (tinaPreviewQualityREd == null) {
       tinaPreviewQualityREd = new JTextField();
       tinaPreviewQualityREd.setPreferredSize(new Dimension(56, 22));
-      tinaPreviewQualityREd.setText("3");
+      tinaPreviewQualityREd.setText("1");
       tinaPreviewQualityREd.setBounds(new Rectangle(279, 5, 56, 22));
       tinaPreviewQualityREd.setFont(new Font("Dialog", Font.PLAIN, 10));
       tinaPreviewQualityREd.addActionListener(new java.awt.event.ActionListener() {
@@ -1932,6 +1932,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaAddTransformationButton = new JButton();
       tinaAddTransformationButton.setText("Add");
       tinaAddTransformationButton.setPreferredSize(new Dimension(81, 24));
+      tinaAddTransformationButton.setToolTipText("Add new triangle");
       tinaAddTransformationButton.setFont(new Font("Dialog", Font.BOLD, 10));
       tinaAddTransformationButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -2015,6 +2016,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaDeleteTransformationButton = new JButton();
       tinaDeleteTransformationButton.setText("Delete");
       tinaDeleteTransformationButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      tinaDeleteTransformationButton.setToolTipText("Delete triangle");
       tinaDeleteTransformationButton.setPreferredSize(new Dimension(81, 24));
       tinaDeleteTransformationButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -2035,6 +2037,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaDuplicateTransformationButton = new JButton();
       tinaDuplicateTransformationButton.setText("Duplicate");
       tinaDuplicateTransformationButton.setPreferredSize(new Dimension(81, 24));
+      tinaDuplicateTransformationButton.setToolTipText("Duplicate triangle");
       tinaDuplicateTransformationButton.setFont(new Font("Dialog", Font.BOLD, 10));
       tinaDuplicateTransformationButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -3077,6 +3080,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaAddFinalTransformationButton.setActionCommand("Add Final");
       tinaAddFinalTransformationButton.setFont(new Font("Dialog", Font.BOLD, 10));
       tinaAddFinalTransformationButton.setPreferredSize(new Dimension(81, 24));
+      tinaAddFinalTransformationButton.setToolTipText("Add final transformation");
       tinaAddFinalTransformationButton.setText("Add Final");
       tinaAddFinalTransformationButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -3234,6 +3238,7 @@ public class TinaInternalFrame extends JInternalFrame {
       affineRotateLeftButton.setSize(new Dimension(55, 24));
       affineRotateLeftButton.setLocation(new Point(4, 54));
       affineRotateLeftButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/turnLeft.gif")));
+      affineRotateLeftButton.setToolTipText("Rotate triangle left");
       affineRotateLeftButton.setText("");
       affineRotateLeftButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -3257,6 +3262,7 @@ public class TinaInternalFrame extends JInternalFrame {
       affineRotateRightButton.setLocation(new Point(4, 103));
       affineRotateRightButton.setSize(new Dimension(55, 24));
       affineRotateRightButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/turnRight.gif")));
+      affineRotateRightButton.setToolTipText("Rotate triangle right");
       affineRotateRightButton.setText("");
       affineRotateRightButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -3280,6 +3286,7 @@ public class TinaInternalFrame extends JInternalFrame {
       affineEnlargeButton.setLocation(new Point(66, 54));
       affineEnlargeButton.setSize(new Dimension(55, 24));
       affineEnlargeButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/enlarge.gif")));
+      affineEnlargeButton.setToolTipText("Enlarge triangle");
       affineEnlargeButton.setText("");
       affineEnlargeButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -3303,6 +3310,7 @@ public class TinaInternalFrame extends JInternalFrame {
       affineShrinkButton.setLocation(new Point(66, 103));
       affineShrinkButton.setSize(new Dimension(55, 24));
       affineShrinkButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/shrink.gif")));
+      affineShrinkButton.setToolTipText("Shrink triangle");
       affineShrinkButton.setText("");
       affineShrinkButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -3395,7 +3403,7 @@ public class TinaInternalFrame extends JInternalFrame {
     if (affineScaleAmountREd == null) {
       affineScaleAmountREd = new JTextField();
       affineScaleAmountREd.setPreferredSize(new Dimension(56, 22));
-      affineScaleAmountREd.setText("0.05");
+      affineScaleAmountREd.setText("105");
       affineScaleAmountREd.setHorizontalAlignment(JTextField.RIGHT);
       affineScaleAmountREd.setSize(new Dimension(56, 22));
       affineScaleAmountREd.setLocation(new Point(66, 81));
@@ -3417,6 +3425,7 @@ public class TinaInternalFrame extends JInternalFrame {
       affineMoveUpButton.setLocation(new Point(182, 54));
       affineMoveUpButton.setSize(new Dimension(55, 24));
       affineMoveUpButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/moveUp.gif")));
+      affineMoveUpButton.setToolTipText("Move triangle up");
       affineMoveUpButton.setText("");
       affineMoveUpButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -3440,6 +3449,7 @@ public class TinaInternalFrame extends JInternalFrame {
       affineMoveDownButton.setLocation(new Point(182, 103));
       affineMoveDownButton.setSize(new Dimension(55, 24));
       affineMoveDownButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/moveDown.gif")));
+      affineMoveDownButton.setToolTipText("Move triangle down");
       affineMoveDownButton.setText("");
       affineMoveDownButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -3463,6 +3473,7 @@ public class TinaInternalFrame extends JInternalFrame {
       affineMoveLeftButton.setLocation(new Point(126, 81));
       affineMoveLeftButton.setSize(new Dimension(55, 24));
       affineMoveLeftButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/moveLeft.gif")));
+      affineMoveLeftButton.setToolTipText("Move triangle left");
       affineMoveLeftButton.setFont(new Font("Dialog", Font.BOLD, 10));
       affineMoveLeftButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -3486,6 +3497,7 @@ public class TinaInternalFrame extends JInternalFrame {
       affineMoveRightButton.setSize(new Dimension(55, 24));
       affineMoveRightButton.setPreferredSize(new Dimension(55, 24));
       affineMoveRightButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/moveRight.gif")));
+      affineMoveRightButton.setToolTipText("Move triangle right");
       affineMoveRightButton.setFont(new Font("Dialog", Font.BOLD, 10));
       affineMoveRightButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -5000,6 +5012,7 @@ public class TinaInternalFrame extends JInternalFrame {
       mouseTransformMoveButton = new JToggleButton();
       mouseTransformMoveButton.setPreferredSize(new Dimension(42, 24));
       mouseTransformMoveButton.setSelected(true);
+      mouseTransformMoveButton.setToolTipText("Enable triangel dragging mode");
       mouseTransformMoveButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/move.gif")));
       mouseTransformMoveButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -5019,6 +5032,7 @@ public class TinaInternalFrame extends JInternalFrame {
     if (mouseTransformRotateButton == null) {
       mouseTransformRotateButton = new JToggleButton();
       mouseTransformRotateButton.setPreferredSize(new Dimension(42, 24));
+      mouseTransformRotateButton.setToolTipText("Enable triangel rotating mode");
       mouseTransformRotateButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/rotate.gif")));
       mouseTransformRotateButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -5038,6 +5052,7 @@ public class TinaInternalFrame extends JInternalFrame {
     if (mouseTransformScaleButton == null) {
       mouseTransformScaleButton = new JToggleButton();
       mouseTransformScaleButton.setPreferredSize(new Dimension(42, 24));
+      mouseTransformScaleButton.setToolTipText("Enable triangel scale mode");
       mouseTransformScaleButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/scale.gif")));
       mouseTransformScaleButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -5151,7 +5166,7 @@ public class TinaInternalFrame extends JInternalFrame {
       affineEditPostTransformSmallButton = new JToggleButton();
       affineEditPostTransformSmallButton.setFont(new Font("Dialog", Font.BOLD, 10));
       affineEditPostTransformSmallButton.setText("P");
-      affineEditPostTransformSmallButton.setToolTipText("Edit Post  Transform");
+      affineEditPostTransformSmallButton.setToolTipText("Toggle post transform mode");
       affineEditPostTransformSmallButton.setMnemonic(KeyEvent.VK_P);
       affineEditPostTransformSmallButton.setSize(new Dimension(42, 24));
       affineEditPostTransformSmallButton.setLocation(new Point(412, 3));
@@ -5219,6 +5234,7 @@ public class TinaInternalFrame extends JInternalFrame {
       toggleTrianglesButton = new JToggleButton();
       toggleTrianglesButton.setPreferredSize(new Dimension(42, 24));
       toggleTrianglesButton.setSelected(true);
+      toggleTrianglesButton.setToolTipText("Display/hide triangles");
       toggleTrianglesButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/triangle.gif")));
       toggleTrianglesButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -5288,6 +5304,7 @@ public class TinaInternalFrame extends JInternalFrame {
       affineResetTransformButton.setText("Reset");
       affineResetTransformButton.setLocation(new Point(146, 159));
       affineResetTransformButton.setSize(new Dimension(130, 24));
+      affineResetTransformButton.setToolTipText("Reset triangle to defaults");
       affineResetTransformButton.setFont(new Font("Dialog", Font.BOLD, 10));
       affineResetTransformButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -8371,6 +8388,7 @@ public class TinaInternalFrame extends JInternalFrame {
       mouseTransformSlowButton.setText("Fine");
       mouseTransformSlowButton.setSize(new Dimension(95, 24));
       mouseTransformSlowButton.setLocation(new Point(4, 4));
+      mouseTransformSlowButton.setToolTipText("Toggle fine triangle adjustment mode");
       mouseTransformSlowButton.setPreferredSize(new Dimension(42, 24));
       mouseTransformSlowButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
