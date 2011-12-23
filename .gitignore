@@ -1,5 +1,6 @@
 *.class
 j-wildfire.jar
+j-wildfire.zip
 history.txt
 trash
 *l2fprod*
@@ -9,3 +10,4 @@ lib/*
 gitlog.sh
 .classpath
 bin/*
+build/dist/*

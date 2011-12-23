@@ -1,11 +1,13 @@
 <?xml version="1.0"?>
 
-<project name="JWildfire" basedir="." default="packageJar">
+<project name="JWildfire" basedir="." default="packageDist">
 
+  <property name="dist.dir" location="build/dist" />
 	<property name="build.dir" location="build/classes" />
 	<property name="lib.dir" location="lib" />
 	<property name="src.dir" location="src/" />
 	<property name="jar.name" value="build/j-wildfire.jar" />
+  <property name="dist.name" value="build/j-wildfire.zip" />
 	
 	<path id="build.classpath">
 		<fileset dir="${lib.dir}">
@@ -18,6 +20,8 @@
 	<target name="init">
       <delete dir="${build.dir}" />
   		<mkdir dir="${build.dir}" />
+    <delete dir="${dist.dir}" />
+    <mkdir dir="${dist.dir}" />
 	</target>
 <!--
 	<target name="compile" depends="init" 
@@ -50,7 +54,7 @@
     </javac>
   </target>
 	
-	<target name="packageJar" depends="compile" description="Package Jar">
+	<target name="packageJar" depends="compile" description="Package the jar file">
 		<jar destfile="${jar.name}">
 			<fileset dir="${build.dir}" includes="org/jwildfire/"/>
       <fileset dir="${src.dir}" includes="com/**/*.properties"/>
@@ -66,6 +70,19 @@
 		</jar>
 	</target>
 
-
+  <target name="packageDist" depends="packageJar" description="Package the distrubutable zip file">
+    <copy todir="${dist.dir}/lib">
+       <fileset file="${jar.name}"/>
+     </copy>  	
+    <copy todir="${dist.dir}/">
+       <fileset dir="build/appstart" includes="start.jar start.sh start.bat appstart.properties"/>
+     </copy>    
+    <copy todir="${dist.dir}/">
+       <fileset file="CHANGES.txt" />
+     </copy>    
+    <jar destfile="${dist.name}">
+      <fileset dir="${dist.dir}/"/>
+    </jar>
+  </target>
 
 </project>
