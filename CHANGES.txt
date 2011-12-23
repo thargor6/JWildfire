@@ -1,3 +1,12 @@
+V0.29 (23.12.2011):
+ - Fractal flame editor: some minor performance improvement
+ - Fractal flame editor: some more tooltips in the UI, two new icons
+ - Fractal flame editor: triangle scaling more similar to Apo (e. g. specify 105% instead 0.5)
+ - Main: using appstart from http://code.google.com/p/appstart/ as launcher for JWildfire
+ - Fractal flame editor: new vertical and horizontal flip function for transforming triangles
+ - Fractal flame editor: parameter order in flam3 files is more similar to Apo than before
+ - FIXED: Fractal flame editor: rings2 variation was broken
+
 V0.28 (22.12.2011):
  - Fractal flame editor: batch renderer (for keeping your CPU's working overnight :-))
  - Fractal flame editor: display numeric values with higher precision, some minor bugfixes
