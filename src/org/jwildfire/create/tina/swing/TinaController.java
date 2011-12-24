@@ -75,6 +75,7 @@ import org.jwildfire.create.tina.render.AffineZStyle;
 import org.jwildfire.create.tina.render.FlameRenderer;
 import org.jwildfire.create.tina.transform.AnimationService;
 import org.jwildfire.create.tina.transform.AnimationService.GlobalScript;
+import org.jwildfire.create.tina.transform.AnimationService.LightScript;
 import org.jwildfire.create.tina.transform.AnimationService.XFormScript;
 import org.jwildfire.create.tina.transform.FlameMorphService;
 import org.jwildfire.create.tina.transform.XFormTransformService;
@@ -346,6 +347,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController {
   private final JTextField animateFramesREd;
   private final JComboBox animateGlobalScriptCmb;
   private final JComboBox animateXFormScriptCmb;
+  private final JComboBox animateLightScriptCmb;
   private final JButton animationGenerateButton;
   // misc
   private final JComboBox zStyleCmb;
@@ -405,7 +407,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController {
       JProgressBar pBatchRenderTotalProgressBar, ProgressUpdater pJobProgressUpdater, JButton pBatchRenderAddFilesButton,
       JButton pBatchRenderFilesMoveDownButton, JButton pBatchRenderFilesMoveUpButton, JButton pBatchRenderFilesRemoveButton,
       JButton pBatchRenderFilesRemoveAllButton, JButton pBatchRenderStartButton, JTabbedPane pRootTabbedPane, JButton pAffineFlipHorizontalButton,
-      JButton pAffineFlipVerticalButton) {
+      JButton pAffineFlipVerticalButton, JComboBox pAnimateLightScriptCmb) {
     errorHandler = pErrorHandler;
     prefs = pPrefs;
     centerPanel = pCenterPanel;
@@ -532,6 +534,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController {
     animateFramesREd = pAnimateFramesREd;
     animateGlobalScriptCmb = pAnimateGlobalScriptCmb;
     animateXFormScriptCmb = pAnimateXFormScriptCmb;
+    animateLightScriptCmb = pAnimateLightScriptCmb;
     animationGenerateButton = pAnimationGenerateButton;
 
     mouseTransformMoveButton = pMouseTransformMoveButton;
@@ -671,7 +674,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController {
         double oldSpatialFilterRadius = flame.getSpatialFilterRadius();
         int oldSpatialOversample = flame.getSpatialOversample();
         int oldColorOversample = flame.getColorOversample();
-        int oldSampleDensity = flame.getSampleDensity();
+        double oldSampleDensity = flame.getSampleDensity();
         try {
           double wScl = (double) img.getImageWidth() / (double) flame.getWidth();
           double hScl = (double) img.getImageHeight() / (double) flame.getHeight();
@@ -1867,7 +1870,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController {
           flame.setWidth(img.getImageWidth());
           flame.setHeight(img.getImageHeight());
 
-          int oldSampleDensity = flame.getSampleDensity();
+          double oldSampleDensity = flame.getSampleDensity();
           int oldSpatialOversample = flame.getSpatialOversample();
           int oldColorOversample = flame.getColorOversample();
           double oldFilterRadius = flame.getSpatialFilterRadius();
@@ -2821,6 +2824,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController {
       boolean doMorph = morphCheckBox.isSelected();
       GlobalScript globalScript = (GlobalScript) animateGlobalScriptCmb.getSelectedItem();
       XFormScript xFormScript = (XFormScript) animateXFormScriptCmb.getSelectedItem();
+      LightScript lightScript = (LightScript) animateLightScriptCmb.getSelectedItem();
       String imagePath = animateOutputREd.getText();
       int width = prefs.getTinaRenderMovieWidth();
       int height = prefs.getTinaRenderMovieHeight();
@@ -2832,7 +2836,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController {
         flame1.setSpatialOversample(prefs.getTinaRenderMovieSpatialOversample());
         flame1.setColorOversample(prefs.getTinaRenderMovieColorOversample());
         flame1.setSpatialFilterRadius(prefs.getTinaRenderMovieFilterRadius());
-        AnimationService.renderFrame(frame, frames, flame1, flame2, doMorph, globalScript, xFormScript, imagePath, width, height, quality, affineZStyle, prefs);
+        AnimationService.renderFrame(frame, frames, flame1, flame2, doMorph, globalScript, xFormScript, lightScript, imagePath, width, height, quality, affineZStyle, prefs);
       }
     }
     catch (Throwable ex) {

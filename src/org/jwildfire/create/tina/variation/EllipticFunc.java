@@ -34,27 +34,28 @@ public class EllipticFunc extends SimpleVariationFunc {
     double ssx = xmax - 1.0;
     double w = pAmount / Constants.M_PI_2;
 
-    if (b < 0) {
-      b = 0;
+    if (b < 0.0) {
+      b = 0.0;
     }
     else {
       b = Math.sqrt(b);
     }
 
-    if (ssx < 0) {
-      ssx = 0;
+    if (ssx < 0.0) {
+      ssx = 0.0;
     }
     else {
       ssx = Math.sqrt(ssx);
     }
 
-    pVarTP.x += w * Math.atan2(a, b);
-
-    if (pAffineTP.y > 0) {
+    //    pVarTP.x += w * Math.atan2(a, b);
+    if (pAffineTP.y > 0.0) {
       pVarTP.y += w * Math.log(xmax + ssx);
+      pVarTP.x -= w * Math.atan2(a, b);
     }
     else {
       pVarTP.y -= w * Math.log(xmax + ssx);
+      pVarTP.x += w * Math.atan2(a, b);
     }
   }
 

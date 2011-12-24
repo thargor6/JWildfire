@@ -137,11 +137,11 @@ public class FlameRenderer implements FlameTransformationContext {
   public void renderFlame(Flame pFlame, SimpleImage pImage, int pThreads) {
     if (pFlame.getXForms().size() == 0)
       return;
-    int spatialOversample = pFlame.getSampleDensity() >= 100 ? pFlame.getSpatialOversample() : 1;
+    int spatialOversample = pFlame.getSampleDensity() >= 100.0 ? pFlame.getSpatialOversample() : 1;
     if (spatialOversample < 1 || spatialOversample > 6) {
       throw new IllegalArgumentException(String.valueOf(spatialOversample));
     }
-    int colorOversample = pFlame.getSampleDensity() >= 100 ? pFlame.getColorOversample() : 1;
+    int colorOversample = pFlame.getSampleDensity() >= 100.0 ? pFlame.getColorOversample() : 1;
     if (colorOversample < 1 || colorOversample > 10) {
       throw new IllegalArgumentException(String.valueOf(colorOversample));
     }
@@ -173,7 +173,7 @@ public class FlameRenderer implements FlameTransformationContext {
         initView(pFlame);
         createModWeightTables(pFlame);
         iterate(pFlame, i, colorOversample, pThreads);
-        if (pFlame.getSampleDensity() <= 10) {
+        if (pFlame.getSampleDensity() <= 10.0) {
           renderImageSimple(pFlame, img);
         }
         else {
@@ -255,7 +255,7 @@ public class FlameRenderer implements FlameTransformationContext {
   }
 
   private void iterate(Flame pFlame, int pPart, int pParts, int pThreads) {
-    long nSamples = (long) ((long) pFlame.getSampleDensity() * (long) rasterSize + 0.5);
+    long nSamples = (long) ((pFlame.getSampleDensity() * (double) rasterSize + 0.5));
     //    if (pFlame.getSampleDensity() > 50) {
     //      System.err.println("SAMPLES: " + nSamples);
     //    }

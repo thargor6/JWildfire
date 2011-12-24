@@ -36,7 +36,7 @@ public class Flame {
   private int spatialOversample;
   private int colorOversample;
   private double spatialFilterRadius;
-  private int sampleDensity;
+  private double sampleDensity;
   private int bgColorRed;
   private int bgColorGreen;
   private int bgColorBlue;
@@ -59,7 +59,7 @@ public class Flame {
 
   private void init() {
     spatialFilterRadius = 1.2;
-    sampleDensity = 100;
+    sampleDensity = 100.0;
     bgColorRed = bgColorGreen = bgColorBlue = 0;
     brightness = 4;
     contrast = 1;
@@ -146,11 +146,11 @@ public class Flame {
     this.spatialFilterRadius = spatialFilterRadius;
   }
 
-  public int getSampleDensity() {
+  public double getSampleDensity() {
     return sampleDensity;
   }
 
-  public void setSampleDensity(int sampleDensity) {
+  public void setSampleDensity(double sampleDensity) {
     this.sampleDensity = sampleDensity;
   }
 
@@ -296,6 +296,8 @@ public class Flame {
     camPerspective = pFlame.camPerspective;
     camRoll = pFlame.camRoll;
     camZoom = pFlame.camZoom;
+    camZ = pFlame.camZ;
+    camDOF = pFlame.camDOF;
     spatialOversample = pFlame.spatialOversample;
     colorOversample = pFlame.colorOversample;
     spatialFilterRadius = pFlame.spatialFilterRadius;

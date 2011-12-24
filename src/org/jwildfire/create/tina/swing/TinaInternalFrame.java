@@ -579,6 +579,8 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton batchRenderStartButton = null;
   private JButton affineFlipHorizontalButton = null;
   private JButton affineFlipVerticalButton = null;
+  private JLabel animateLightScriptLbl = null;
+  private JComboBox animateLightScriptCmb = null;
 
   /**
    * This is the xxx default constructor
@@ -3016,7 +3018,7 @@ public class TinaInternalFrame extends JInternalFrame {
         getBatchRenderJobProgressBar(), getBatchRenderTotalProgressBar(), new JobProgressUpdater(this),
         getBatchRenderAddFilesButton(), getBatchRenderFilesMoveDownButton(), getBatchRenderFilesMoveUpButton(),
         getBatchRenderFilesRemoveButton(), getBatchRenderFilesRemoveAllButton(), getBatchRenderStartButton(),
-        getRootTabbedPane(), getAffineFlipHorizontalButton(), getAffineFlipVerticalButton()
+        getRootTabbedPane(), getAffineFlipHorizontalButton(), getAffineFlipVerticalButton(), getAnimateLightScriptCmb()
         );
     tinaController.refreshing = tinaController.cmbRefreshing = tinaController.gridRefreshing = true;
     try {
@@ -3053,15 +3055,22 @@ public class TinaInternalFrame extends JInternalFrame {
       getAnimateScriptCmb().removeAllItems();
       getAnimateScriptCmb().addItem(AnimationService.GlobalScript.NONE);
       getAnimateScriptCmb().addItem(AnimationService.GlobalScript.ROTATE_PITCH);
-      getAnimateScriptCmb().addItem(AnimationService.GlobalScript.ROTATE_PITCH_YAW);
       getAnimateScriptCmb().addItem(AnimationService.GlobalScript.ROTATE_ROLL);
+      getAnimateScriptCmb().addItem(AnimationService.GlobalScript.ROTATE_YAW);
+      getAnimateScriptCmb().addItem(AnimationService.GlobalScript.ROTATE_PITCH_YAW);
       getAnimateScriptCmb().setSelectedItem(AnimationService.GlobalScript.ROTATE_PITCH_YAW);
 
       getAnimateXFormScriptCmb().removeAllItems();
       getAnimateXFormScriptCmb().addItem(AnimationService.XFormScript.NONE);
       getAnimateXFormScriptCmb().addItem(AnimationService.XFormScript.ROTATE_FULL);
       getAnimateXFormScriptCmb().addItem(AnimationService.XFormScript.ROTATE_SLIGHTLY);
+      getAnimateXFormScriptCmb().addItem(AnimationService.XFormScript.ROTATE_LAST_XFORM);
       getAnimateXFormScriptCmb().setSelectedItem(AnimationService.XFormScript.ROTATE_SLIGHTLY);
+
+      getAnimateLightScriptCmb().removeAllItems();
+      getAnimateLightScriptCmb().addItem(AnimationService.LightScript.NONE);
+      getAnimateLightScriptCmb().addItem(AnimationService.LightScript.ROTATE_XY_PLANE);
+      getAnimateLightScriptCmb().setSelectedItem(AnimationService.LightScript.NONE);
     }
     finally {
       tinaController.refreshing = tinaController.cmbRefreshing = tinaController.gridRefreshing = false;
@@ -4638,6 +4647,11 @@ public class TinaInternalFrame extends JInternalFrame {
    */
   private JPanel getTinaAnimatePanel() {
     if (tinaAnimatePanel == null) {
+      animateLightScriptLbl = new JLabel();
+      animateLightScriptLbl.setBounds(new Rectangle(156, 59, 94, 22));
+      animateLightScriptLbl.setPreferredSize(new Dimension(94, 22));
+      animateLightScriptLbl.setText("Light script");
+      animateLightScriptLbl.setFont(new Font("Dialog", Font.BOLD, 10));
       animateXFormScriptLbl = new JLabel();
       animateXFormScriptLbl.setPreferredSize(new Dimension(94, 22));
       animateXFormScriptLbl.setText("XForm script");
@@ -4673,6 +4687,8 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaAnimatePanel.add(getAnimateScriptCmb(), null);
       tinaAnimatePanel.add(animateXFormScriptLbl, null);
       tinaAnimatePanel.add(getAnimateXFormScriptCmb(), null);
+      tinaAnimatePanel.add(animateLightScriptLbl, null);
+      tinaAnimatePanel.add(getAnimateLightScriptCmb(), null);
     }
     return tinaAnimatePanel;
   }
@@ -8691,6 +8707,21 @@ public class TinaInternalFrame extends JInternalFrame {
       });
     }
     return affineFlipVerticalButton;
+  }
+
+  /**
+   * This method initializes animateLightScriptCmb	
+   * 	
+   * @return javax.swing.JComboBox	
+   */
+  private JComboBox getAnimateLightScriptCmb() {
+    if (animateLightScriptCmb == null) {
+      animateLightScriptCmb = new JComboBox();
+      animateLightScriptCmb.setBounds(new Rectangle(254, 59, 275, 22));
+      animateLightScriptCmb.setPreferredSize(new Dimension(275, 22));
+      animateLightScriptCmb.setFont(new Font("Dialog", Font.BOLD, 10));
+    }
+    return animateLightScriptCmb;
   }
 
 } //  @jve:decl-index=0:visual-constraint="10,10"

@@ -61,7 +61,7 @@ public class JobRenderThread implements Runnable {
             flame.setWidth(img.getImageWidth());
             flame.setHeight(img.getImageHeight());
 
-            int oldSampleDensity = flame.getSampleDensity();
+            double oldSampleDensity = flame.getSampleDensity();
             int oldSpatialOversample = flame.getSpatialOversample();
             int oldColorOversample = flame.getColorOversample();
             double oldFilterRadius = flame.getSpatialFilterRadius();

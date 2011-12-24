@@ -124,7 +124,7 @@ public class Flam3Reader implements FlameReader {
       pFlame.setSpatialFilterRadius(Double.parseDouble(hs));
     }
     if ((hs = atts.get(ATTR_QUALITY)) != null) {
-      pFlame.setSampleDensity(Integer.parseInt(hs));
+      pFlame.setSampleDensity(Double.parseDouble(hs));
     }
     if ((hs = atts.get(ATTR_BACKGROUND)) != null) {
       String s[] = hs.split(" ");
