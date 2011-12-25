@@ -135,8 +135,10 @@ public class FlameRenderer implements FlameTransformationContext {
   }
 
   public void renderFlame(Flame pFlame, SimpleImage pImage, int pThreads) {
-    if (pFlame.getXForms().size() == 0)
+    if (pFlame.getXForms().size() == 0) {
+      pImage.fillBackground(pFlame.getBGColorRed(), pFlame.getBGColorGreen(), pFlame.getBGColorBlue());
       return;
+    }
     int spatialOversample = pFlame.getSampleDensity() >= 100.0 ? pFlame.getSpatialOversample() : 1;
     if (spatialOversample < 1 || spatialOversample > 6) {
       throw new IllegalArgumentException(String.valueOf(spatialOversample));

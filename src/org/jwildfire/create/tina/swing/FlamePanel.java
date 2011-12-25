@@ -188,10 +188,10 @@ public class FlamePanel extends ImagePanel {
       int areaBottom = height - 1 - BORDER;
       g.setColor(editPostTransform ? (darkTriangles ? XFORM_POST_COLOR_DARK : XFORM_POST_COLOR) : (darkTriangles ? XFORM_COLOR_DARK : XFORM_COLOR));
 
-      double viewXMin = -1;
-      double viewXMax = 1;
-      double viewYMin = -1;
-      double viewYMax = 1;
+      double viewXMin = -1.25;
+      double viewXMax = 1.25;
+      double viewYMin = -1.25;
+      double viewYMax = 1.25;
 
       viewXScale = (double) (width - 2 * BORDER) / (viewXMax - viewXMin);
       viewYScale = (double) (height - 2 * BORDER) / (viewYMin - viewYMax);
