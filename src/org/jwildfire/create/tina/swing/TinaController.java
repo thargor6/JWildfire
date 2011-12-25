@@ -315,6 +315,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController {
   private final JButton mouseEditZoomInButton;
   private final JButton mouseEditZoomOutButton;
   private final JToggleButton toggleTrianglesButton;
+  private final JToggleButton toggleDarkTrianglesButton;
   // Random batch
   private final JPanel randomBatchPanel;
   private JScrollPane randomBatchScrollPane = null;
@@ -407,7 +408,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController {
       JProgressBar pBatchRenderTotalProgressBar, ProgressUpdater pJobProgressUpdater, JButton pBatchRenderAddFilesButton,
       JButton pBatchRenderFilesMoveDownButton, JButton pBatchRenderFilesMoveUpButton, JButton pBatchRenderFilesRemoveButton,
       JButton pBatchRenderFilesRemoveAllButton, JButton pBatchRenderStartButton, JTabbedPane pRootTabbedPane, JButton pAffineFlipHorizontalButton,
-      JButton pAffineFlipVerticalButton, JComboBox pAnimateLightScriptCmb) {
+      JButton pAffineFlipVerticalButton, JComboBox pAnimateLightScriptCmb, JToggleButton pToggleDarkTrianglesButton) {
     errorHandler = pErrorHandler;
     prefs = pPrefs;
     centerPanel = pCenterPanel;
@@ -541,6 +542,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController {
     mouseTransformRotateButton = pMouseTransformRotateButton;
     mouseTransformScaleButton = pMouseTransformScaleButton;
     toggleTrianglesButton = pToggleTrianglesButton;
+    toggleDarkTrianglesButton = pToggleDarkTrianglesButton;
     mainProgressUpdater = pMainProgressUpdater;
     jobProgressUpdater = pJobProgressUpdater;
     randomPostTransformCheckBox = pRandomPostTransformCheckBox;
@@ -3459,5 +3461,15 @@ public class TinaController implements FlameHolder, JobRenderThreadController {
   @Override
   public JTable getRenderBatchJobsTable() {
     return renderBatchJobsTable;
+  }
+
+  public void toggleDarkTriangles() {
+    if (refreshing) {
+      return;
+    }
+    if (flamePanel != null) {
+      flamePanel.setDarkTriangles(toggleDarkTrianglesButton.isSelected());
+      refreshFlameImage();
+    }
   }
 }

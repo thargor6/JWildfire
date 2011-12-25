@@ -581,6 +581,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton affineFlipVerticalButton = null;
   private JLabel animateLightScriptLbl = null;
   private JComboBox animateLightScriptCmb = null;
+  private JToggleButton darkTrianglesToggleButton = null;
 
   /**
    * This is the xxx default constructor
@@ -3018,7 +3019,8 @@ public class TinaInternalFrame extends JInternalFrame {
         getBatchRenderJobProgressBar(), getBatchRenderTotalProgressBar(), new JobProgressUpdater(this),
         getBatchRenderAddFilesButton(), getBatchRenderFilesMoveDownButton(), getBatchRenderFilesMoveUpButton(),
         getBatchRenderFilesRemoveButton(), getBatchRenderFilesRemoveAllButton(), getBatchRenderStartButton(),
-        getRootTabbedPane(), getAffineFlipHorizontalButton(), getAffineFlipVerticalButton(), getAnimateLightScriptCmb()
+        getRootTabbedPane(), getAffineFlipHorizontalButton(), getAffineFlipVerticalButton(), getAnimateLightScriptCmb(),
+        getDarkTrianglesToggleButton()
         );
     tinaController.refreshing = tinaController.cmbRefreshing = tinaController.gridRefreshing = true;
     try {
@@ -5092,6 +5094,7 @@ public class TinaInternalFrame extends JInternalFrame {
       centerNorthPanel.add(getAffineEditPostTransformSmallButton(), null);
       centerNorthPanel.add(getRenderProgressBar(), null);
       centerNorthPanel.add(getMouseTransformSlowButton(), null);
+      centerNorthPanel.add(getDarkTrianglesToggleButton(), null);
     }
     return centerNorthPanel;
   }
@@ -5185,7 +5188,7 @@ public class TinaInternalFrame extends JInternalFrame {
       affineEditPostTransformSmallButton.setToolTipText("Toggle post transform mode");
       affineEditPostTransformSmallButton.setMnemonic(KeyEvent.VK_P);
       affineEditPostTransformSmallButton.setSize(new Dimension(42, 24));
-      affineEditPostTransformSmallButton.setLocation(new Point(412, 3));
+      affineEditPostTransformSmallButton.setLocation(new Point(412, 4));
       affineEditPostTransformSmallButton.setPreferredSize(new Dimension(42, 24));
       affineEditPostTransformSmallButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -5271,6 +5274,8 @@ public class TinaInternalFrame extends JInternalFrame {
       renderProgressBar = new JProgressBar();
       renderProgressBar.setBounds(new Rectangle(112, 9, 221, 14));
       renderProgressBar.setValue(0);
+      renderProgressBar.setSize(new Dimension(209, 14));
+      renderProgressBar.setLocation(new Point(104, 9));
       renderProgressBar.setStringPainted(true);
     }
     return renderProgressBar;
@@ -8722,6 +8727,29 @@ public class TinaInternalFrame extends JInternalFrame {
       animateLightScriptCmb.setFont(new Font("Dialog", Font.BOLD, 10));
     }
     return animateLightScriptCmb;
+  }
+
+  /**
+   * This method initializes darkTrianglesToggleButton	
+   * 	
+   * @return javax.swing.JToggleButton	
+   */
+  private JToggleButton getDarkTrianglesToggleButton() {
+    if (darkTrianglesToggleButton == null) {
+      darkTrianglesToggleButton = new JToggleButton();
+      darkTrianglesToggleButton.setBounds(new Rectangle(320, 4, 89, 24));
+      darkTrianglesToggleButton.setToolTipText("Toggle dark triangle colors");
+      darkTrianglesToggleButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/triangle.gif")));
+      darkTrianglesToggleButton.setSelected(false);
+      darkTrianglesToggleButton.setText("Dark");
+      darkTrianglesToggleButton.setPreferredSize(new Dimension(42, 24));
+      darkTrianglesToggleButton.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent e) {
+          tinaController.toggleDarkTriangles();
+        }
+      });
+    }
+    return darkTrianglesToggleButton;
   }
 
 } //  @jve:decl-index=0:visual-constraint="10,10"

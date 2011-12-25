@@ -35,6 +35,8 @@ public class FlamePanel extends ImagePanel {
   private final static int BORDER = 20;
   private static final Color XFORM_COLOR = new Color(217, 219, 223);
   private static final Color XFORM_POST_COLOR = new Color(255, 219, 160);
+  private static final Color XFORM_COLOR_DARK = new Color(17, 19, 23);
+  private static final Color XFORM_POST_COLOR_DARK = new Color(55, 19, 60);
   private static final Color BACKGROUND_COLOR = new Color(60, 60, 60);
   private static float LINE_WIDTH = 1.6f;
   private static float LINE_WIDTH_FAT = 1.8f * LINE_WIDTH;
@@ -47,6 +49,7 @@ public class FlamePanel extends ImagePanel {
   private static final long serialVersionUID = 1L;
   private final FlameHolder flameHolder;
 
+  private boolean darkTriangles = false;
   private boolean drawImage = true;
   private boolean drawFlame = true;
   private boolean fineMovement = false;
@@ -183,8 +186,7 @@ public class FlamePanel extends ImagePanel {
       //      int areaRight = width - 1 - BORDER;
       //      int areaTop = BORDER;
       int areaBottom = height - 1 - BORDER;
-
-      g.setColor(editPostTransform ? XFORM_POST_COLOR : XFORM_COLOR);
+      g.setColor(editPostTransform ? (darkTriangles ? XFORM_POST_COLOR_DARK : XFORM_POST_COLOR) : (darkTriangles ? XFORM_COLOR_DARK : XFORM_COLOR));
 
       double viewXMin = -1;
       double viewXMax = 1;
@@ -421,5 +423,9 @@ public class FlamePanel extends ImagePanel {
 
   public void setFineMovement(boolean pFineMovement) {
     fineMovement = pFineMovement;
+  }
+
+  public void setDarkTriangles(boolean darkTriangles) {
+    this.darkTriangles = darkTriangles;
   }
 }
