@@ -156,6 +156,8 @@ public class VariationFuncList {
     registerVariationFunc(TColorScaleFunc.class);
     registerVariationFunc(THeartFunc.class);
     registerVariationFunc(XHeartFunc.class);
+    registerVariationFunc(TEllipticFunc.class);
+    registerVariationFunc(TXYWavesFunc.class);
   }
 
   private static void registerVariationFunc(Class<? extends VariationFunc> pVariationFunc) {

@@ -47,7 +47,8 @@ public class Flam3Writer {
     }
     attrList.add(pXB.createAttr("symmetry", pXForm.getColorSymmetry()));
 
-    for (Variation v : pXForm.getVariations()) {
+    for (int vIdx = 0; vIdx < pXForm.getVariationCount(); vIdx++) {
+      Variation v = pXForm.getVariation(vIdx);
       VariationFunc func = v.getFunc();
       attrList.add(pXB.createAttr(func.getName(), v.getAmount()));
       String params[] = func.getParameterNames();

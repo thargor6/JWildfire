@@ -78,12 +78,13 @@ public class FlameMorphService {
       for (int i = 0; i < pXForm1.getModifiedWeights().length; i++) {
         res.getModifiedWeights()[i] = morphValue(pXForm1.getModifiedWeights()[i], 1.0, pFScl);
       }
-      res.getVariations().clear();
-      for (Variation var : pXForm1.getVariations()) {
+      res.clearVariations();
+      for (int vIdx = 0; vIdx < pXForm1.getVariationCount(); vIdx++) {
+        Variation var = pXForm1.getVariation(vIdx);
         Variation newVar = new Variation();
         newVar.setAmount(morphValue(var.getAmount(), 0.0, pFScl));
         newVar.setFunc(var.getFunc());
-        res.getVariations().add(newVar);
+        res.addVariation(newVar);
       }
       return res;
     }
@@ -103,12 +104,13 @@ public class FlameMorphService {
       for (int i = 0; i < pXForm2.getModifiedWeights().length; i++) {
         res.getModifiedWeights()[i] = morphValue(1.0, pXForm2.getModifiedWeights()[i], pFScl);
       }
-      res.getVariations().clear();
-      for (Variation var : pXForm2.getVariations()) {
+      res.clearVariations();
+      for (int vIdx = 0; vIdx < pXForm2.getVariationCount(); vIdx++) {
+        Variation var = pXForm2.getVariation(vIdx);
         Variation newVar = new Variation();
         newVar.setAmount(morphValue(0.0, var.getAmount(), pFScl));
         newVar.setFunc(var.getFunc());
-        res.getVariations().add(newVar);
+        res.addVariation(newVar);
       }
       return res;
     }
@@ -128,14 +130,15 @@ public class FlameMorphService {
       for (int i = 0; i < pXForm1.getModifiedWeights().length; i++) {
         res.getModifiedWeights()[i] = morphValue(pXForm1.getModifiedWeights()[i], pXForm2.getModifiedWeights()[i], pFScl);
       }
-      res.getVariations().clear();
+      res.clearVariations();
       List<Integer> dstProcessed = new ArrayList<Integer>();
-      for (Variation var1 : pXForm1.getVariations()) {
+      for (int vIdx = 0; vIdx < pXForm1.getVariationCount(); vIdx++) {
+        Variation var1 = pXForm1.getVariation(vIdx);
         Variation newVar = new Variation();
         Variation var2 = null;
-        for (int idx = 0; idx < pXForm2.getVariations().size(); idx++) {
-          if (dstProcessed.indexOf(idx) < 0 || pXForm2.getVariations().get(idx).getFunc().getName().equals(var1.getFunc().getName())) {
-            var2 = pXForm2.getVariations().get(idx);
+        for (int idx = 0; idx < pXForm2.getVariationCount(); idx++) {
+          if (dstProcessed.indexOf(idx) < 0 || pXForm2.getVariation(idx).getFunc().getName().equals(var1.getFunc().getName())) {
+            var2 = pXForm2.getVariation(idx);
             dstProcessed.add(idx);
             break;
           }
@@ -147,15 +150,15 @@ public class FlameMorphService {
         else {
           newVar.setAmount(morphValue(var1.getAmount(), var2.getAmount(), pFScl));
         }
-        res.getVariations().add(newVar);
+        res.addVariation(newVar);
       }
-      for (int idx = 0; idx < pXForm2.getVariations().size(); idx++) {
+      for (int idx = 0; idx < pXForm2.getVariationCount(); idx++) {
         if (dstProcessed.indexOf(idx) < 0) {
-          Variation var2 = pXForm2.getVariations().get(idx);
+          Variation var2 = pXForm2.getVariation(idx);
           Variation newVar = new Variation();
           newVar.setFunc(var2.getFunc());
           newVar.setAmount(morphValue(0.0, var2.getAmount(), pFScl));
-          res.getVariations().add(newVar);
+          res.addVariation(newVar);
         }
       }
       return res;

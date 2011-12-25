@@ -131,15 +131,21 @@ public class XForm {
     this.coeff21 = coeff21;
   }
 
-  public List<Variation> getVariations() {
-    return variations;
+  public int getVariationCount() {
+    return variations.size();
+  }
+
+  public Variation getVariation(int pIdx) {
+    return variations.get(pIdx);
   }
 
   private void updateSortedVariations() {
     sortedVariations.clear();
     if (variations.size() > 0) {
       sortedVariations.addAll(variations);
-      Collections.sort(sortedVariations, new VariationPriorityComparator());
+      if (variations.size() > 1) {
+        Collections.sort(sortedVariations, new VariationPriorityComparator());
+      }
     }
   }
 
@@ -154,6 +160,21 @@ public class XForm {
     variations.add(variation);
     updateSortedVariations();
     return variation;
+  }
+
+  public void addVariation(Variation pVariation) {
+    variations.add(pVariation);
+    updateSortedVariations();
+  }
+
+  public void removeVariation(Variation pVariation) {
+    variations.remove(pVariation);
+    updateSortedVariations();
+  }
+
+  public void clearVariations() {
+    variations.clear();
+    updateSortedVariations();
   }
 
   public double getColorSymmetry() {

@@ -930,11 +930,11 @@ public class TinaController implements FlameHolder, JobRenderThreadController {
             case COL_VARIATIONS:
               {
               String hs = "";
-              if (xForm.getVariations().size() > 0) {
-                for (int i = 0; i < xForm.getVariations().size() - 1; i++) {
-                  hs += xForm.getVariations().get(i).getFunc().getName() + ", ";
+              if (xForm.getVariationCount() > 0) {
+                for (int i = 0; i < xForm.getVariationCount() - 1; i++) {
+                  hs += xForm.getVariation(i).getFunc().getName() + ", ";
                 }
-                hs += xForm.getVariations().get(xForm.getVariations().size() - 1).getFunc().getName();
+                hs += xForm.getVariation(xForm.getVariationCount() - 1).getFunc().getName();
               }
               return hs;
             }
@@ -2095,13 +2095,13 @@ public class TinaController implements FlameHolder, JobRenderThreadController {
     try {
       int idx = 0;
       for (NonlinearControlsRow row : nonlinearControlsRows) {
-        if (pXForm == null || idx >= pXForm.getVariations().size()) {
+        if (pXForm == null || idx >= pXForm.getVariationCount()) {
           refreshParamCmb(row, null, null);
           row.getNonlinearParamsLeftButton().setEnabled(false);
           row.getNonlinearParamsRightButton().setEnabled(false);
         }
         else {
-          Variation var = pXForm.getVariations().get(idx);
+          Variation var = pXForm.getVariation(idx);
           refreshParamCmb(row, pXForm, var);
           String selected = (String) row.getNonlinearParamsCmb().getSelectedItem();
           boolean enabled = selected != null && selected.length() > 0;
@@ -2480,9 +2480,16 @@ public class TinaController implements FlameHolder, JobRenderThreadController {
     try {
       XForm xForm = getCurrXForm();
       if (xForm != null) {
+        String fName = (String) nonlinearControlsRows[pIdx].getNonlinearVarCmb().getSelectedItem();
         Variation var;
-        if (pIdx < xForm.getVariations().size()) {
-          var = xForm.getVariations().get(pIdx);
+        if (pIdx < xForm.getVariationCount()) {
+          var = xForm.getVariation(pIdx);
+          if (fName == null || fName.length() == 0) {
+            xForm.removeVariation(var);
+          }
+          else {
+            var.setFunc(VariationFuncList.getVariationFuncInstance(fName));
+          }
         }
         else {
           var = new Variation();
@@ -2490,15 +2497,9 @@ public class TinaController implements FlameHolder, JobRenderThreadController {
           if (varStr == null || varStr.length() == 0) {
             varStr = "0";
           }
-          var.setAmount(Tools.stringToDouble(varStr));
-          xForm.getVariations().add(var);
-        }
-        String fName = (String) nonlinearControlsRows[pIdx].getNonlinearVarCmb().getSelectedItem();
-        if (fName == null || fName.length() == 0) {
-          xForm.getVariations().remove(var);
-        }
-        else {
           var.setFunc(VariationFuncList.getVariationFuncInstance(fName));
+          var.setAmount(Tools.stringToDouble(varStr));
+          xForm.addVariation(var);
         }
         refreshParamCmb(nonlinearControlsRows[pIdx], xForm, var);
         refreshXFormUI(xForm);
@@ -2526,8 +2527,8 @@ public class TinaController implements FlameHolder, JobRenderThreadController {
     try {
       XForm xForm = getCurrXForm();
       if (xForm != null) {
-        if (pIdx < xForm.getVariations().size()) {
-          Variation var = xForm.getVariations().get(pIdx);
+        if (pIdx < xForm.getVariationCount()) {
+          Variation var = xForm.getVariation(pIdx);
           String varStr = nonlinearControlsRows[pIdx].getNonlinearVarREd().getText();
           if (varStr == null || varStr.length() == 0) {
             varStr = "0";
@@ -2556,8 +2557,8 @@ public class TinaController implements FlameHolder, JobRenderThreadController {
       String selected = (String) nonlinearControlsRows[pIdx].getNonlinearParamsCmb().getSelectedItem();
       XForm xForm = getCurrXForm();
       if (xForm != null && selected != null && selected.length() > 0) {
-        if (pIdx < xForm.getVariations().size()) {
-          Variation var = xForm.getVariations().get(pIdx);
+        if (pIdx < xForm.getVariationCount()) {
+          Variation var = xForm.getVariation(pIdx);
           String valStr = nonlinearControlsRows[pIdx].getNonlinearParamsREd().getText();
           if (valStr == null || valStr.length() == 0) {
             valStr = "0";
@@ -2583,8 +2584,8 @@ public class TinaController implements FlameHolder, JobRenderThreadController {
       String selected = (String) nonlinearControlsRows[pIdx].getNonlinearParamsCmb().getSelectedItem();
       XForm xForm = getCurrXForm();
       if (xForm != null && selected != null && selected.length() > 0) {
-        if (pIdx < xForm.getVariations().size()) {
-          Variation var = xForm.getVariations().get(pIdx);
+        if (pIdx < xForm.getVariationCount()) {
+          Variation var = xForm.getVariation(pIdx);
           int idx = -1;
           for (int i = 0; i < var.getFunc().getParameterNames().length; i++) {
             if (var.getFunc().getParameterNames()[i].equals(selected)) {

@@ -31,7 +31,7 @@ public class FlameRenderThread implements Runnable {
   private final long samples;
   private volatile long currSample;
   private final AffineZStyle affineZStyle;
-  private boolean finished = true;
+  private boolean finished;
 
   public FlameRenderThread(FlameRenderer pRenderer, Flame pFlame, long pSamples, AffineZStyle pAffineZStyle) {
     renderer = pRenderer;
@@ -126,13 +126,76 @@ public class FlameRenderThread implements Runnable {
           continue;
       }
 
-      RasterPoint rp = renderer.raster[(int) (renderer.bhs * py + 0.5)][(int) (renderer.bws * px + 0.5)];
-      RenderColor color = renderer.colorMap[(int) (p.color * renderer.paletteIdxScl + 0.5)];
+      int xIdx = (int) (renderer.bws * px + 0.5);
+      int yIdx = (int) (renderer.bhs * py + 0.5);
+      int colorIdx = (int) (p.color * renderer.paletteIdxScl + 0.5);
+      RasterPoint rp = renderer.raster[yIdx][xIdx];
+      RenderColor color = renderer.colorMap[colorIdx];
 
       rp.red += color.red;
       rp.green += color.green;
       rp.blue += color.blue;
       rp.count++;
+
+      //      if (i < samples / 3) {
+      //        if (xIdx > 1) {
+      //          rp = renderer.raster[yIdx][xIdx - 1];
+      //          rp.red += color.red / 2;
+      //          rp.green += color.green / 2;
+      //          rp.blue += color.blue / 2;
+      //          rp.count++;
+      //        }
+      //        if (xIdx < renderer.rasterWidth - 1) {
+      //          rp = renderer.raster[yIdx][xIdx + 1];
+      //          rp.red += color.red / 2;
+      //          rp.green += color.green / 2;
+      //          rp.blue += color.blue / 2;
+      //          rp.count++;
+      //        }
+      //        if (yIdx > 1) {
+      //          rp = renderer.raster[yIdx - 1][xIdx];
+      //          rp.red += color.red / 2;
+      //          rp.green += color.green / 2;
+      //          rp.blue += color.blue / 2;
+      //          rp.count++;
+      //        }
+      //        if (yIdx < renderer.rasterHeight - 1) {
+      //          rp = renderer.raster[yIdx + 1][xIdx];
+      //          rp.red += color.red / 2;
+      //          rp.green += color.green / 2;
+      //          rp.blue += color.blue / 2;
+      //          rp.count++;
+      //        }
+      //
+      //        if (xIdx > 1 && yIdx > 1) {
+      //          rp = renderer.raster[yIdx - 1][xIdx - 1];
+      //          rp.red += color.red / 4;
+      //          rp.green += color.green / 4;
+      //          rp.blue += color.blue / 4;
+      //          rp.count++;
+      //        }
+      //        if (xIdx > 1 && yIdx < renderer.rasterHeight - 1) {
+      //          rp = renderer.raster[yIdx + 1][xIdx - 1];
+      //          rp.red += color.red / 4;
+      //          rp.green += color.green / 4;
+      //          rp.blue += color.blue / 4;
+      //          rp.count++;
+      //        }
+      //        if (xIdx < renderer.rasterWidth - 1 && yIdx > 1) {
+      //          rp = renderer.raster[yIdx - 1][xIdx + 1];
+      //          rp.red += color.red / 4;
+      //          rp.green += color.green / 4;
+      //          rp.blue += color.blue / 4;
+      //          rp.count++;
+      //        }
+      //        if (xIdx < renderer.rasterWidth - 1 && yIdx < renderer.rasterHeight - 1) {
+      //          rp = renderer.raster[yIdx + 1][xIdx + 1];
+      //          rp.red += color.red / 4;
+      //          rp.green += color.green / 4;
+      //          rp.blue += color.blue / 4;
+      //          rp.count++;
+      //        }
+      //      }
     }
   }
 

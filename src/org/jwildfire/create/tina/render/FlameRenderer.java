@@ -41,8 +41,8 @@ public class FlameRenderer implements FlameTransformationContext {
   // init in initRaster
   private int imageWidth;
   private int imageHeight;
-  private int rasterWidth;
-  private int rasterHeight;
+  int rasterWidth;
+  int rasterHeight;
   private int rasterSize;
   private int borderWidth;
   private int maxBorderWidth;
