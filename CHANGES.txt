@@ -1,3 +1,16 @@
+V0.30 (25.12.2011):
+ - FIXED: Fractal flame editor: rendering sometimes finished too early if the system was under heavy load
+ - Fractal flame editor: experimental gnarl random generator uses t_xy_waves instead of waves2
+ - Fractal flame editor: new t_xy_waves variation
+ - Fractal flame editor: also create an image (in the background color) if there are no transformations present
+ - Fractal flame editor: new button to draw triangles in dark (for fractal with bright background)
+ - FIXED: Fractal flame editor: sometimes not the complete preview area was refreshed correctly
+ - Fractal flame editor: various enhancements to the shading hack
+ - Fractal flame editor: significant render speed improvement (41.37s -> 32.45s for reference image)
+ - Fractal flame editor: changed to elliptic variation which sometimes produces images with missing portions
+ - Fractal flame editor: some new options to the animation system, render density is now a floating point value
+ - Main: updated the build file to create a distribution package
+
 V0.29 (23.12.2011):
  - Fractal flame editor: some minor performance improvement
  - Fractal flame editor: some more tooltips in the UI, two new icons

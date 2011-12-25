@@ -119,7 +119,6 @@ public class VariationFuncList {
     registerVariationFunc(CPowFunc.class);
     registerVariationFunc(CurveFunc.class);
     registerVariationFunc(EDiscFunc.class);
-    registerVariationFunc(EllipticFunc.class);
     registerVariationFunc(EscherFunc.class);
     registerVariationFunc(LazySusanFunc.class);
     registerVariationFunc(ExpFunc.class);
@@ -156,7 +155,7 @@ public class VariationFuncList {
     registerVariationFunc(TColorScaleFunc.class);
     registerVariationFunc(THeartFunc.class);
     registerVariationFunc(XHeartFunc.class);
-    registerVariationFunc(TEllipticFunc.class);
+    registerVariationFunc(EllipticFunc.class);
     registerVariationFunc(TXYWavesFunc.class);
   }
 

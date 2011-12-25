@@ -41,4 +41,19 @@ public class XFormTransformationContextImpl implements XFormTransformationContex
     return color;
   }
 
+  //  public double getRasterIntensity(double pX,double pY);
+  //    
+  //  }
+  //  
+  //{
+  //  int xIdx = (int) (renderer.bws * p.x + 0.5);
+  //  int yIdx = (int) (renderer.bhs * p.y + 0.5);
+  //  RasterPoint rp = renderer.raster[yIdx][xIdx];
+  //
+  //  rp.red;
+  //  rp.green;
+  //  rp.blue;
+  //  rp.count++;
+  //}
+
 }
