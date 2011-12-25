@@ -31,6 +31,7 @@ public class FlameRenderThread implements Runnable {
   private final long samples;
   private volatile long currSample;
   private final AffineZStyle affineZStyle;
+
   private boolean finished;
 
   public FlameRenderThread(FlameRenderer pRenderer, Flame pFlame, long pSamples, AffineZStyle pAffineZStyle) {
