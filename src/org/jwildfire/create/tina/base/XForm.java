@@ -44,6 +44,7 @@ public class XForm {
   private double postCoeff20;
   private double postCoeff21;
   private final List<Variation> variations = new ArrayList<Variation>();
+  private final List<Variation> sortedVariations = new ArrayList<Variation>();
   private final double modifiedWeights[] = new double[Constants.MAX_MOD_WEIGHT_COUNT]; // the same like "xaos" in Apophysis
   private double opacity = 0.0;
   private final XForm[] nextAppliedXFormTable = new XForm[Constants.NEXT_APPLIED_XFORM_TABLE_SIZE];
@@ -133,11 +134,16 @@ public class XForm {
     return variations;
   }
 
+  private void updateSortedVariations() {
+    sortedVariations.clear();
+    if (variations.size() > 0) {
+      sortedVariations.addAll(variations);
+      Collections.sort(sortedVariations, new VariationPriorityComparator());
+    }
+  }
+
   public List<Variation> getSortedVariations() {
-    List<Variation> res = new ArrayList<Variation>();
-    res.addAll(variations);
-    Collections.sort(res, new VariationPriorityComparator());
-    return res;
+    return sortedVariations;
   }
 
   public Variation addVariation(double pAmount, VariationFunc pVariationFunc) {
@@ -145,6 +151,7 @@ public class XForm {
     variation.setAmount(pAmount);
     variation.setFunc(pVariationFunc);
     variations.add(variation);
+    updateSortedVariations();
     return variation;
   }
 
@@ -253,6 +260,83 @@ public class XForm {
     pDstPoint.z = pVarT.z;
   }
 
+  public void transformPoints(XFormTransformationContext pContext, XYZPoint[] pAffineT, XYZPoint[] pVarT, XYZPoint[] pSrcPoint, XYZPoint[] pDstPoint, AffineZStyle pZStyle) {
+    for (int i = 0; i < 3; i++) {
+      pDstPoint[i].color = pSrcPoint[i].color * c1 + c2;
+      pContext.setColor(color);
+      pAffineT[i].clear();
+      pAffineT[i].x = coeff00 * pSrcPoint[i].x + coeff10 * pSrcPoint[i].y + coeff20;
+      pAffineT[i].y = coeff01 * pSrcPoint[i].x + coeff11 * pSrcPoint[i].y + coeff21;
+      switch (pZStyle) {
+        case FLAT:
+          pAffineT[i].z = pSrcPoint[i].z;
+          break;
+        case Z1:
+          pAffineT[i].z = coeff11 * pSrcPoint[i].y + coeff00 * pSrcPoint[i].z + coeff20;
+          break;
+        case Z2:
+          pAffineT[i].z = coeff00 * pSrcPoint[i].x + coeff11 * pSrcPoint[i].y + (coeff10 + coeff01) * pSrcPoint[i].z + (coeff20 + coeff21) * 0.5;
+          break;
+        case Z3:
+          pAffineT[i].z = coeff01 * pSrcPoint[i].x + coeff10 * pSrcPoint[i].y + (coeff00 + coeff11) * pSrcPoint[i].z + (coeff20 + coeff21) * 0.5;
+          break;
+        case Z4:
+          pAffineT[i].z = coeff01 * pSrcPoint[i].y + coeff00 * pSrcPoint[i].z + (coeff20 + coeff21) * 0.5;
+          break;
+        case Z5:
+          pAffineT[i].z = (coeff00 + coeff01) * pSrcPoint[i].x * 0.5 + (coeff10 + coeff11) * pSrcPoint[i].y * 0.5 + (coeff10 + coeff01) * pSrcPoint[i].z * 0.5 + (coeff20 + coeff21) * 0.5;
+        case Z6:
+          pAffineT[i].z = (coeff00 + coeff01) * pSrcPoint[i].x * 0.5 + (coeff10 + coeff11) * pSrcPoint[i].y * 0.5 + (coeff00 + coeff10 + coeff01 + coeff11) * pSrcPoint[i].z * 0.25 + (coeff20 + coeff21) * 0.5;
+          break;
+        default:
+          throw new IllegalStateException(pZStyle.toString());
+      }
+      pVarT[i].clear();
+      for (Variation variation : getSortedVariations()) {
+        variation.transform(pContext, this, pAffineT[i], pVarT[i]);
+        if (variation.getFunc().getPriority() < 0) {
+          pAffineT[i].invalidate();
+        }
+      }
+      if (hasPostCoeffs()) {
+        double px = postCoeff00 * pVarT[i].x + postCoeff10 * pVarT[i].y + postCoeff20;
+        double py = postCoeff01 * pVarT[i].x + postCoeff11 * pVarT[i].y + postCoeff21;
+        double pz;
+        switch (pZStyle) {
+          case FLAT:
+            pz = pVarT[i].z;
+            break;
+          case Z1:
+            pz = postCoeff11 * pVarT[i].y + postCoeff00 * pVarT[i].z + postCoeff20;
+            break;
+          case Z2:
+            pz = postCoeff00 * pVarT[i].x + postCoeff11 * pVarT[i].y + (postCoeff10 + postCoeff01) * pVarT[i].z + (postCoeff20 + postCoeff21) * 0.5;
+            break;
+          case Z3:
+            pz = postCoeff01 * pVarT[i].x + postCoeff10 * pVarT[i].y + (postCoeff00 + postCoeff11) * pVarT[i].z + (postCoeff20 + postCoeff21) * 0.5;
+            break;
+          case Z4:
+            pz = postCoeff01 * pVarT[i].y + postCoeff00 * pVarT[i].z + (postCoeff20 + postCoeff21) * 0.5;
+            break;
+          case Z5:
+            pz = (postCoeff00 + postCoeff01) * pVarT[i].x * 0.5 + (postCoeff10 + postCoeff11) * pVarT[i].y * 0.5 + (postCoeff10 + postCoeff01) * pVarT[i].z * 0.5 + (postCoeff20 + postCoeff21) * 0.5;
+          case Z6:
+            pz = (postCoeff00 + postCoeff01) * pVarT[i].x * 0.5 + (postCoeff10 + postCoeff11) * pVarT[i].y * 0.5 + (postCoeff00 + postCoeff10 + postCoeff01 + postCoeff11) * pVarT[i].z * 0.25 + (postCoeff20 + postCoeff21) * 0.5;
+            break;
+          default:
+            throw new IllegalStateException(pZStyle.toString());
+        }
+        pVarT[i].x = px;
+        pVarT[i].y = py;
+        pVarT[i].z = pz;
+      }
+
+      pDstPoint[i].x = pVarT[i].x;
+      pDstPoint[i].y = pVarT[i].y;
+      pDstPoint[i].z = pVarT[i].z;
+    }
+  }
+
   public double getOpacity() {
     return opacity;
   }
@@ -299,6 +383,7 @@ public class XForm {
       newVar.assign(var);
       variations.add(newVar);
     }
+    updateSortedVariations();
     opacity = pXForm.opacity;
     drawMode = pXForm.drawMode;
   }
