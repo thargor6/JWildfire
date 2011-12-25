@@ -32,9 +32,9 @@ public class ShadingInfo {
 
   protected void init() {
     shading = Shading.FLAT;
-    ambient = 0.06;
-    diffuse = 0.94;
-    phong = 0.5;
+    ambient = 0.18;
+    diffuse = 0.82;
+    phong = 0.75;
     phongSize = 30;
     lightPosX[0] = -0.2;
     lightPosY[0] = -0.2;

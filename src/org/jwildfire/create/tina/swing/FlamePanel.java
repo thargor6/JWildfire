@@ -73,11 +73,9 @@ public class FlamePanel extends ImagePanel {
 
   @Override
   public void paintComponent(Graphics g) {
+    fillBackground(g);
     if (drawImage) {
       super.paintComponent(g);
-    }
-    else {
-      fillBackground(g);
     }
     if (drawFlame) {
       paintFlame((Graphics2D) g);
