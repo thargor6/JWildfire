@@ -27,7 +27,7 @@ public class BubbleFunc extends SimpleVariationFunc {
     double t = pAmount / r;
     pVarTP.x += t * pAffineTP.x;
     pVarTP.y += t * pAffineTP.y;
-    pVarTP.z += pAmount * (2.0 / r - 1);
+    pVarTP.z += pAmount * (2.0 / r - 1.0);
   }
 
   @Override

@@ -48,15 +48,28 @@ public class EllipticFunc extends SimpleVariationFunc {
       ssx = Math.sqrt(ssx);
     }
 
+    // This way sometimes a whole quarter of the image is blank 
     //    pVarTP.x += w * Math.atan2(a, b);
-    if (pAffineTP.y > 0.0) {
-      pVarTP.y += w * Math.log(xmax + ssx);
+    //    if (pAffineTP.y > 0.0) {
+    //      pVarTP.y += w * Math.log(xmax + ssx);
+    //    }
+    //    else {
+    //      pVarTP.y -= w * Math.log(xmax + ssx);
+    //    }
+
+    if (pContext.getRandomNumberGenerator().random() < 0.5) {
+      pVarTP.x += w * Math.atan2(a, b);
+    }
+    else {
       pVarTP.x -= w * Math.atan2(a, b);
+    }
+    if (pContext.getRandomNumberGenerator().random() < 0.5) {
+      pVarTP.y += w * Math.log(xmax + ssx);
     }
     else {
       pVarTP.y -= w * Math.log(xmax + ssx);
-      pVarTP.x += w * Math.atan2(a, b);
     }
+
   }
 
   @Override
