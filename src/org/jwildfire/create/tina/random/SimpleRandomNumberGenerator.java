@@ -17,7 +17,10 @@
 package org.jwildfire.create.tina.random;
 
 public class SimpleRandomNumberGenerator extends RandomNumberGenerator {
+  private RandGenStatus status = RandGenStatus.DEFAULT;
   private static int a = 1;
+  private double buffer[] = new double[4096];
+  private int bufferIdx;
 
   private static final int RAND_MAX123 = 0x7fffffff;
 
@@ -30,8 +33,34 @@ public class SimpleRandomNumberGenerator extends RandomNumberGenerator {
 
   @Override
   public double random() {
-    a = (a * 1103515245 + 12345) % RAND_MAX123;
-    double res = (double) (a * rrmax);
-    return (res < 0) ? 0.0 - res : res;
+    switch (status) {
+      case DEFAULT: {
+        a = (a * 1103515245 + 12345) % RAND_MAX123;
+        double res = (double) (a * rrmax);
+        if (res < 0) {
+          res = 0.0 - res;
+        }
+        return res;
+      }
+      case RECORDING: {
+        a = (a * 1103515245 + 12345) % RAND_MAX123;
+        double res = (double) (a * rrmax);
+        if (res < 0) {
+          res = 0.0 - res;
+        }
+        buffer[bufferIdx++] = res;
+        return res;
+      }
+      case REPLAY:
+        return buffer[bufferIdx++];
+      default:
+        throw new IllegalStateException();
+    }
+  }
+
+  @Override
+  public void setStatus(RandGenStatus pRandGenStatus) {
+    bufferIdx = 0;
+    status = pRandGenStatus;
   }
 }

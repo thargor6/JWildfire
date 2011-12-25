@@ -24,4 +24,11 @@ public abstract class RandomNumberGenerator {
   public int random(int pMax) {
     return (int) (random() * pMax);
   }
+
+  public enum RandGenStatus {
+    DEFAULT, RECORDING, REPLAY
+  }
+
+  public abstract void setStatus(RandGenStatus pRandGenStatus);
+
 }

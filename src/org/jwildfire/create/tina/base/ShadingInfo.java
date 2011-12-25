@@ -34,7 +34,7 @@ public class ShadingInfo {
     shading = Shading.FLAT;
     ambient = 0.06;
     diffuse = 0.94;
-    phong = 0.9;
+    phong = 0.5;
     phongSize = 30;
     lightPosX[0] = -0.2;
     lightPosY[0] = -0.2;

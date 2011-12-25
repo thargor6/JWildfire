@@ -153,22 +153,21 @@ public class FlameRenderThread implements Runnable {
     for (int i = 0; i < p.length; i++) {
       p[i] = new XYZPoint();
     }
+    XYZPoint r = new XYZPoint();
+
     p[0].x = 2.0 * renderer.random.random() - 1.0;
     p[0].y = 2.0 * renderer.random.random() - 1.0;
     p[0].z = 2.0 * renderer.random.random() - 1.0;
     p[0].color = renderer.random.random();
 
     shader.distributeInitialPoints(p);
-
     XYZPoint[] q = new XYZPoint[3];
     for (int i = 0; i < q.length; i++) {
       q[i] = new XYZPoint();
     }
 
     XForm xf = flame.getXForms().get(0);
-    for (int pIdx = 0; pIdx < p.length; pIdx++) {
-      xf.transformPoint(ctx, affineT[pIdx], varT[pIdx], p[pIdx], p[pIdx], affineZStyle);
-    }
+    xf.transformPoints(ctx, affineT, varT, p, p, affineZStyle);
     for (int i = 0; i <= Constants.INITIAL_ITERATIONS; i++) {
       xf = xf.getNextAppliedXFormTable()[renderer.random.random(Constants.NEXT_APPLIED_XFORM_TABLE_SIZE)];
       if (xf == null) {
@@ -184,9 +183,7 @@ public class FlameRenderThread implements Runnable {
       if (xf == null) {
         return;
       }
-      for (int pIdx = 0; pIdx < p.length; pIdx++) {
-        xf.transformPoint(ctx, affineT[pIdx], varT[pIdx], p[pIdx], p[pIdx], affineZStyle);
-      }
+      xf.transformPoints(ctx, affineT, varT, p, p, affineZStyle);
       if (xf.getDrawMode() == DrawMode.HIDDEN)
         continue;
       else if ((xf.getDrawMode() == DrawMode.OPAQUE) && (renderer.random.random() > xf.getOpacity()))
@@ -197,24 +194,22 @@ public class FlameRenderThread implements Runnable {
       if (finalXForm != null) {
         for (int pIdx = 0; pIdx < p.length; pIdx++) {
           q[pIdx] = new XYZPoint();
-          finalXForm.transformPoint(ctx, affineT[pIdx], varT[pIdx], p[pIdx], q[pIdx], affineZStyle);
-          renderer.project(flame, q[pIdx]);
-          if (pIdx == 0) {
-            px = q[pIdx].x * renderer.cosa + q[pIdx].y * renderer.sina + renderer.rcX;
-            py = q[pIdx].y * renderer.cosa - q[pIdx].x * renderer.sina + renderer.rcY;
-          }
         }
+        finalXForm.transformPoints(ctx, affineT, varT, p, q, affineZStyle);
+        r.assign(q[0]);
+        renderer.project(flame, r);
+        px = r.x * renderer.cosa + r.y * renderer.sina + renderer.rcX;
+        py = r.y * renderer.cosa - r.x * renderer.sina + renderer.rcY;
       }
       else {
         for (int pIdx = 0; pIdx < p.length; pIdx++) {
           q[pIdx] = new XYZPoint();
           q[pIdx].assign(p[pIdx]);
-          renderer.project(flame, q[pIdx]);
-          if (pIdx == 0) {
-            px = q[pIdx].x * renderer.cosa + q[pIdx].y * renderer.sina + renderer.rcX;
-            py = q[pIdx].y * renderer.cosa - q[pIdx].x * renderer.sina + renderer.rcY;
-          }
         }
+        r.assign(q[0]);
+        renderer.project(flame, r);
+        px = r.x * renderer.cosa + r.y * renderer.sina + renderer.rcX;
+        py = r.y * renderer.cosa - r.x * renderer.sina + renderer.rcY;
       }
 
       if ((px < 0) || (px > renderer.camW))
@@ -224,7 +219,8 @@ public class FlameRenderThread implements Runnable {
 
       RasterPoint rp = renderer.raster[(int) (renderer.bhs * py + 0.5)][(int) (renderer.bws * px + 0.5)];
       RenderColor color = renderer.colorMap[(int) (p[0].color * renderer.paletteIdxScl + 0.5)];
-      RenderColor shadedColor = shader.calculateColor(p, color);
+
+      RenderColor shadedColor = shader.calculateColor(q, color);
 
       rp.red += shadedColor.red;
       rp.green += shadedColor.green;
