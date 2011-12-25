@@ -20,8 +20,8 @@ import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.transform.XFormTransformService;
 import org.jwildfire.create.tina.variation.JuliaNFunc;
+import org.jwildfire.create.tina.variation.TXYWavesFunc;
 import org.jwildfire.create.tina.variation.VariationFuncList;
-import org.jwildfire.create.tina.variation.Waves2Func;
 
 public class ExperimentalGnarlRandomFlameGenerator extends RandomFlameGenerator {
 
@@ -70,7 +70,26 @@ public class ExperimentalGnarlRandomFlameGenerator extends RandomFlameGenerator 
       XForm xForm = new XForm();
       flame.getXForms().add(xForm);
       xForm.setWeight(wavesWeight);
-      Waves2Func w2 = (Waves2Func) VariationFuncList.getVariationFuncInstance("waves2", true);
+      //      Waves2Func w2 = (Waves2Func) VariationFuncList.getVariationFuncInstance("waves2", true);
+      TXYWavesFunc w2 = (TXYWavesFunc) VariationFuncList.getVariationFuncInstance("t_xy_waves", true);
+      if (Math.random() < 0.5) {
+        w2.setParameter("use_cos_x", 1);
+      }
+      else {
+        w2.setParameter("use_cos_x", 0);
+      }
+      if (Math.random() < 0.5) {
+        w2.setParameter("use_cos_y", 1);
+      }
+      else {
+        w2.setParameter("use_cos_y", 0);
+      }
+      if (Math.random() < 0.5) {
+        w2.setParameter("dampx", -(0.01 + Math.random() * 0.19));
+      }
+      if (Math.random() < 0.5) {
+        w2.setParameter("dampy", -(0.01 + Math.random() * 0.19));
+      }
       w2.setParameter("freqx", freqX);
       w2.setParameter("scalex", scaleX);
       w2.setParameter("freqy", freqY);
