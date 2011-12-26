@@ -684,7 +684,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController {
           flame.setWidth(img.getImageWidth());
           flame.setHeight(img.getImageHeight());
 
-          FlameRenderer renderer = new FlameRenderer();
+          FlameRenderer renderer = new FlameRenderer(flame);
           if (pQuickRender) {
             renderer.setProgressUpdater(null);
             flame.setSampleDensity(Integer.parseInt(previewQualityREd.getText()));
@@ -700,7 +700,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController {
             flame.setColorOversample(prefs.getTinaRenderPreviewColorOversample());
           }
           renderer.setAffineZStyle(pAffineZStyle);
-          renderer.renderFlame(flame, img, prefs.getTinaRenderThreads());
+          renderer.renderFlame(img, prefs.getTinaRenderThreads());
         }
         finally {
           flame.setSpatialFilterRadius(oldSpatialFilterRadius);
@@ -1890,10 +1890,10 @@ public class TinaController implements FlameHolder, JobRenderThreadController {
               flame.setSpatialFilterRadius(prefs.getTinaRenderNormalSpatialOversample());
             }
             long t0 = Calendar.getInstance().getTimeInMillis();
-            FlameRenderer renderer = new FlameRenderer();
+            FlameRenderer renderer = new FlameRenderer(flame);
             renderer.setProgressUpdater(mainProgressUpdater);
             renderer.setAffineZStyle((AffineZStyle) zStyleCmb.getSelectedItem());
-            renderer.renderFlame(flame, img, prefs.getTinaRenderThreads());
+            renderer.renderFlame(img, prefs.getTinaRenderThreads());
             long t1 = Calendar.getInstance().getTimeInMillis();
             System.err.println("RENDER TIME: " + ((double) (t1 - t0) / 1000.0) + "s");
             new ImageWriter().saveImage(img, file.getAbsolutePath());
@@ -2364,8 +2364,8 @@ public class TinaController implements FlameHolder, JobRenderThreadController {
         flame.setWidth(IMG_WIDTH);
         flame.setHeight(IMG_HEIGHT);
         flame.setPixelsPerUnit(10);
-        FlameRenderer renderer = new FlameRenderer();
-        renderer.renderFlame(flame, img, prefs.getTinaRenderThreads());
+        FlameRenderer renderer = new FlameRenderer(flame);
+        renderer.renderFlame(img, prefs.getTinaRenderThreads());
       }
       // add it to the main panel
       ImagePanel imgPanel = new ImagePanel(img, 0, 0, img.getImageWidth());
@@ -2415,11 +2415,11 @@ public class TinaController implements FlameHolder, JobRenderThreadController {
           img.fillBackground(0, 0, 0);
         }
         flame.setSampleDensity(50);
-        FlameRenderer renderer = new FlameRenderer();
-        renderer.renderFlame(flame, img, prefs.getTinaRenderThreads());
+        FlameRenderer renderer = new FlameRenderer(flame);
+        renderer.renderFlame(img, prefs.getTinaRenderThreads());
         if (j == MAX_IMG_SAMPLES - 1) {
           randomBatch.add(bestFlame);
-          renderer.renderFlame(bestFlame, img, prefs.getTinaRenderThreads());
+          new FlameRenderer(bestFlame).renderFlame(img, prefs.getTinaRenderThreads());
           imgList.add(img);
         }
         else {

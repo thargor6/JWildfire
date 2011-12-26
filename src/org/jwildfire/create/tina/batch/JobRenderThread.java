@@ -71,10 +71,10 @@ public class JobRenderThread implements Runnable {
               flame.setColorOversample(controller.getPrefs().getTinaRenderHighColorOversample());
               flame.setSpatialFilterRadius(controller.getPrefs().getTinaRenderHighSpatialOversample());
               long t0 = Calendar.getInstance().getTimeInMillis();
-              FlameRenderer renderer = new FlameRenderer();
+              FlameRenderer renderer = new FlameRenderer(flame);
               renderer.setProgressUpdater(controller.getJobProgressUpdater());
               renderer.setAffineZStyle(controller.getZStyle());
-              renderer.renderFlame(flame, img, controller.getPrefs().getTinaRenderThreads());
+              renderer.renderFlame(img, controller.getPrefs().getTinaRenderThreads());
               long t1 = Calendar.getInstance().getTimeInMillis();
               job.setFinished(true);
               job.setElapsedSeconds(((double) (t1 - t0) / 1000.0));

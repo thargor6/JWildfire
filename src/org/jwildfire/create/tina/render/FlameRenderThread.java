@@ -31,14 +31,16 @@ public class FlameRenderThread implements Runnable {
   private final long samples;
   private volatile long currSample;
   private final AffineZStyle affineZStyle;
+  private final RenderPass renderPass;
 
   private boolean finished;
 
-  public FlameRenderThread(FlameRenderer pRenderer, Flame pFlame, long pSamples, AffineZStyle pAffineZStyle) {
+  public FlameRenderThread(RenderPass pRenderPass, FlameRenderer pRenderer, Flame pFlame, long pSamples, AffineZStyle pAffineZStyle) {
     renderer = pRenderer;
     flame = pFlame;
     samples = pSamples;
     affineZStyle = pAffineZStyle;
+    renderPass = pRenderPass;
   }
 
   @Override
@@ -68,7 +70,7 @@ public class FlameRenderThread implements Runnable {
   }
 
   private void iterate_flat() {
-    XFormTransformationContextImpl ctx = new XFormTransformationContextImpl(renderer);
+    XFormTransformationContextImpl ctx = new XFormTransformationContextImpl(renderer, renderer);
     XYZPoint affineT = new XYZPoint(); // affine part of the transformation
     XYZPoint varT = new XYZPoint(); // complete transformation
     XYZPoint p = new XYZPoint();
@@ -107,7 +109,7 @@ public class FlameRenderThread implements Runnable {
       if (finalXForm != null) {
         q = new XYZPoint();
         finalXForm.transformPoint(ctx, affineT, varT, p, q, affineZStyle);
-        renderer.project(flame, q);
+        renderer.project(renderPass, q);
         px = q.x * renderer.cosa + q.y * renderer.sina + renderer.rcX;
         if ((px < 0) || (px > renderer.camW))
           continue;
@@ -118,7 +120,7 @@ public class FlameRenderThread implements Runnable {
       else {
         q = new XYZPoint();
         q.assign(p);
-        renderer.project(flame, q);
+        renderer.project(renderPass, q);
         px = q.x * renderer.cosa + q.y * renderer.sina + renderer.rcX;
         if ((px < 0) || (px > renderer.camW))
           continue;
@@ -201,7 +203,7 @@ public class FlameRenderThread implements Runnable {
   }
 
   private void iterate_pseudo3D() {
-    XFormTransformationContextImpl ctx = new XFormTransformationContextImpl(renderer);
+    XFormTransformationContextImpl ctx = new XFormTransformationContextImpl(renderer, renderer);
     Pseudo3DShader shader = new Pseudo3DShader(flame.getShadingInfo());
     shader.init();
 
@@ -261,7 +263,7 @@ public class FlameRenderThread implements Runnable {
         }
         finalXForm.transformPoints(ctx, affineT, varT, p, q, affineZStyle);
         r.assign(q[0]);
-        renderer.project(flame, r);
+        renderer.project(renderPass, r);
         px = r.x * renderer.cosa + r.y * renderer.sina + renderer.rcX;
         py = r.y * renderer.cosa - r.x * renderer.sina + renderer.rcY;
       }
@@ -271,7 +273,7 @@ public class FlameRenderThread implements Runnable {
           q[pIdx].assign(p[pIdx]);
         }
         r.assign(q[0]);
-        renderer.project(flame, r);
+        renderer.project(renderPass, r);
         px = r.x * renderer.cosa + r.y * renderer.sina + renderer.rcX;
         py = r.y * renderer.cosa - r.x * renderer.sina + renderer.rcY;
       }

@@ -223,9 +223,9 @@ public class FractalFlameCreator extends ImageCreator {
     //      xForm.setWeight(Math.random());
     //    }
 
-    FlameRenderer renderer = new FlameRenderer();
+    FlameRenderer renderer = new FlameRenderer(flame);
     // TODO pPrefs.getTinaRenderThreads()
-    renderer.renderFlame(flame, res, 8);
+    renderer.renderFlame(res, 8);
   }
 
   public String getFlameFilename() {

@@ -151,9 +151,9 @@ public class AnimationService {
     //          flame.setCamRoll(86 - 20 * Math.sin((imgIdx - 1) * 4.0 * Math.PI / 72.0));
     //          flame.setCamYaw(-180 + 60 * Math.sin((imgIdx - 1) * 2.0 * Math.PI / 72.0));
 
-    FlameRenderer renderer = new FlameRenderer();
+    FlameRenderer renderer = new FlameRenderer(flame);
     renderer.setAffineZStyle(pAffineZStyle);
-    renderer.renderFlame(flame, img, pPrefs.getTinaRenderThreads());
+    renderer.renderFlame(img, pPrefs.getTinaRenderThreads());
     new ImageWriter().saveImage(img, imgFilename);
   }
 }

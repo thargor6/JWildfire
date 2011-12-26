@@ -49,6 +49,7 @@ public class FlameRenderer implements FlameTransformationContext {
   LogDensityFilter logDensityFilter;
   GammaCorrectionFilter gammaCorrectionFilter;
   RasterPoint[][] raster;
+  RasterPoint[][] pass1Raster;
   // init in initView
   double cosa;
   double sina;
@@ -70,9 +71,15 @@ public class FlameRenderer implements FlameTransformationContext {
   private AffineZStyle affineZStyle = AffineZStyle.FLAT;
   private ProgressUpdater progressUpdater;
 
-  private void init3D(Flame pFlame) {
-    double yaw = -pFlame.getCamYaw() * Math.PI / 180.0;
-    double pitch = pFlame.getCamPitch() * Math.PI / 180.0;
+  private final Flame flame;
+
+  public FlameRenderer(Flame pFlame) {
+    flame = pFlame;
+  }
+
+  private void init3D() {
+    double yaw = -flame.getCamYaw() * Math.PI / 180.0;
+    double pitch = flame.getCamPitch() * Math.PI / 180.0;
     cameraMatrix[0][0] = Math.cos(yaw);
     cameraMatrix[1][0] = -Math.sin(yaw);
     cameraMatrix[2][0] = 0;
@@ -82,14 +89,14 @@ public class FlameRenderer implements FlameTransformationContext {
     cameraMatrix[0][2] = Math.sin(pitch) * Math.sin(yaw);
     cameraMatrix[1][2] = Math.sin(pitch) * Math.cos(yaw);
     cameraMatrix[2][2] = Math.cos(pitch);
-    doProject3D = Math.abs(pFlame.getCamYaw()) > Tools.EPSILON || Math.abs(pFlame.getCamPitch()) > Tools.EPSILON || Math.abs(pFlame.getCamPerspective()) > Tools.EPSILON || Math.abs(pFlame.getCamDOF()) > Tools.EPSILON;
+    doProject3D = Math.abs(flame.getCamYaw()) > Tools.EPSILON || Math.abs(flame.getCamPitch()) > Tools.EPSILON || Math.abs(flame.getCamPerspective()) > Tools.EPSILON || Math.abs(flame.getCamDOF()) > Tools.EPSILON;
   }
 
-  private void initRaster(Flame pFlame, SimpleImage pImage) {
+  private void initRaster(SimpleImage pImage) {
     imageWidth = pImage.getImageWidth();
     imageHeight = pImage.getImageHeight();
-    logDensityFilter = new LogDensityFilter(pFlame);
-    gammaCorrectionFilter = new GammaCorrectionFilter(pFlame);
+    logDensityFilter = new LogDensityFilter(flame);
+    gammaCorrectionFilter = new GammaCorrectionFilter(flame);
     maxBorderWidth = (MAX_FILTER_WIDTH - 1) / 2;
     borderWidth = (logDensityFilter.getNoiseFilterSize() - 1) / 2;
     rasterWidth = imageWidth + 2 * maxBorderWidth;
@@ -103,23 +110,33 @@ public class FlameRenderer implements FlameTransformationContext {
     }
   }
 
-  void project(Flame pFlame, XYZPoint pPoint) {
-    if (!doProject3D) {
+  private void createPass2Raster() {
+    pass1Raster = raster;
+    raster = new RasterPoint[rasterHeight][rasterWidth];
+    for (int i = 0; i < rasterHeight; i++) {
+      for (int j = 0; j < rasterWidth; j++) {
+        raster[i][j] = new RasterPoint();
+      }
+    }
+  }
+
+  public void project(RenderPass pRenderPass, XYZPoint pPoint) {
+    if (!doProject3D || !pRenderPass.equals(RenderPass.FINAL)) {
       return;
     }
     double z = pPoint.z;
     double px = cameraMatrix[0][0] * pPoint.x + cameraMatrix[1][0] * pPoint.y;
     double py = cameraMatrix[0][1] * pPoint.x + cameraMatrix[1][1] * pPoint.y + cameraMatrix[2][1] * z;
     double pz = cameraMatrix[0][2] * pPoint.x + cameraMatrix[1][2] * pPoint.y + cameraMatrix[2][2] * z;
-    double zr = 1.0 - pFlame.getCamPerspective() * pz;
-    if (Math.abs(pFlame.getCamDOF()) > Tools.EPSILON) {
+    double zr = 1.0 - flame.getCamPerspective() * pz;
+    if (Math.abs(flame.getCamDOF()) > Tools.EPSILON) {
       double a = 2.0 * Math.PI * random.random();
       double dsina = Math.sin(a);
       double dcosa = Math.cos(a);
-      double zdist = (pFlame.getCamZ() - pz);
+      double zdist = (flame.getCamZ() - pz);
       double dr;
       if (zdist > 0.0) {
-        dr = random.random() * pFlame.getCamDOF() * 0.1 * zdist;
+        dr = random.random() * flame.getCamDOF() * 0.1 * zdist;
       }
       else {
         dr = 0.0;
@@ -134,21 +151,21 @@ public class FlameRenderer implements FlameTransformationContext {
     }
   }
 
-  public void renderFlame(Flame pFlame, SimpleImage pImage, int pThreads) {
-    if (pFlame.getXForms().size() == 0) {
-      pImage.fillBackground(pFlame.getBGColorRed(), pFlame.getBGColorGreen(), pFlame.getBGColorBlue());
+  public void renderFlame(SimpleImage pImage, int pThreads) {
+    if (flame.getXForms().size() == 0) {
+      pImage.fillBackground(flame.getBGColorRed(), flame.getBGColorGreen(), flame.getBGColorBlue());
       return;
     }
-    int spatialOversample = pFlame.getSampleDensity() >= 100.0 ? pFlame.getSpatialOversample() : 1;
+    int spatialOversample = flame.getSampleDensity() >= 100.0 ? flame.getSpatialOversample() : 1;
     if (spatialOversample < 1 || spatialOversample > 6) {
       throw new IllegalArgumentException(String.valueOf(spatialOversample));
     }
-    int colorOversample = pFlame.getSampleDensity() >= 100.0 ? pFlame.getColorOversample() : 1;
+    int colorOversample = flame.getSampleDensity() >= 100.0 ? flame.getColorOversample() : 1;
     if (colorOversample < 1 || colorOversample > 10) {
       throw new IllegalArgumentException(String.valueOf(colorOversample));
     }
 
-    double origZoom = pFlame.getCamZoom();
+    double origZoom = flame.getCamZoom();
     try {
       SimpleImage images[] = new SimpleImage[colorOversample];
       for (int i = 0; i < colorOversample; i++) {
@@ -157,7 +174,7 @@ public class FlameRenderer implements FlameTransformationContext {
         if (spatialOversample > 1) {
           img = new SimpleImage(pImage.getImageWidth() * spatialOversample, pImage.getImageHeight() * spatialOversample);
           if (i == 0) {
-            pFlame.setCamZoom((double) spatialOversample * pFlame.getCamZoom());
+            flame.setCamZoom((double) spatialOversample * flame.getCamZoom());
           }
         }
         else {
@@ -169,17 +186,43 @@ public class FlameRenderer implements FlameTransformationContext {
           }
         }
         images[i] = img;
-        initRaster(pFlame, img);
-        init3D(pFlame);
-        createColorMap(pFlame);
-        initView(pFlame);
-        createModWeightTables(pFlame);
-        iterate(pFlame, i, colorOversample, pThreads);
-        if (pFlame.getSampleDensity() <= 10.0) {
-          renderImageSimple(pFlame, img);
+        initRaster(img);
+        init3D();
+        createColorMap();
+        initView();
+        createModWeightTables();
+
+        boolean twoPasses = false;
+        for (XForm xForm : flame.getXForms()) {
+          for (Variation var : xForm.getSortedVariations()) {
+            if (var.getFunc().requiresTwoPasses()) {
+              twoPasses = true;
+              break;
+            }
+          }
+        }
+        if (!twoPasses && flame.getFinalXForm() != null) {
+          for (Variation var : flame.getFinalXForm().getSortedVariations()) {
+            if (var.getFunc().requiresTwoPasses()) {
+              twoPasses = true;
+              break;
+            }
+          }
+        }
+
+        if (twoPasses) {
+          iterate(RenderPass.FLAT, i, colorOversample * 2, pThreads);
+          createPass2Raster();
+          iterate(RenderPass.FINAL, i + 1, colorOversample * 2, pThreads);
         }
         else {
-          renderImage(pFlame, img);
+          iterate(RenderPass.FINAL, i, colorOversample, pThreads);
+        }
+        if (flame.getSampleDensity() <= 10.0) {
+          renderImageSimple(img);
+        }
+        else {
+          renderImage(img);
         }
       }
 
@@ -226,11 +269,11 @@ public class FlameRenderer implements FlameTransformationContext {
       }
     }
     finally {
-      pFlame.setCamZoom(origZoom);
+      flame.setCamZoom(origZoom);
     }
   }
 
-  private void renderImage(Flame pFlame, SimpleImage pImage) {
+  private void renderImage(SimpleImage pImage) {
     LogDensityPoint logDensityPnt = new LogDensityPoint();
     GammaCorrectedRGBPoint rbgPoint = new GammaCorrectedRGBPoint();
     logDensityFilter.setRaster(raster, rasterWidth, rasterHeight, pImage);
@@ -243,7 +286,7 @@ public class FlameRenderer implements FlameTransformationContext {
     }
   }
 
-  private void renderImageSimple(Flame pFlame, SimpleImage pImage) {
+  private void renderImageSimple(SimpleImage pImage) {
     LogDensityPoint logDensityPnt = new LogDensityPoint();
     GammaCorrectedRGBPoint rbgPoint = new GammaCorrectedRGBPoint();
     logDensityFilter.setRaster(raster, rasterWidth, rasterHeight, pImage);
@@ -256,9 +299,9 @@ public class FlameRenderer implements FlameTransformationContext {
     }
   }
 
-  private void iterate(Flame pFlame, int pPart, int pParts, int pThreads) {
-    long nSamples = (long) ((pFlame.getSampleDensity() * (double) rasterSize + 0.5));
-    //    if (pFlame.getSampleDensity() > 50) {
+  private void iterate(RenderPass pRenderPass, int pPart, int pParts, int pThreads) {
+    long nSamples = (long) ((flame.getSampleDensity() * (double) rasterSize + 0.5));
+    //    if (flame.getSampleDensity() > 50) {
     //      System.err.println("SAMPLES: " + nSamples);
     //    }
     int PROGRESS_STEPS = 100;
@@ -269,7 +312,7 @@ public class FlameRenderer implements FlameTransformationContext {
     long nextProgressUpdate = sampleProgressUpdateStep;
     List<FlameRenderThread> threads = new ArrayList<FlameRenderThread>();
     for (int i = 0; i < pThreads; i++) {
-      FlameRenderThread t = new FlameRenderThread(this, pFlame, nSamples / (long) pThreads, affineZStyle);
+      FlameRenderThread t = new FlameRenderThread(pRenderPass, this, flame, nSamples / (long) pThreads, affineZStyle);
       threads.add(t);
       new Thread(t).start();
     }
@@ -300,10 +343,10 @@ public class FlameRenderer implements FlameTransformationContext {
     }
   }
 
-  private void initView(Flame pFlame) {
-    double pixelsPerUnit = pFlame.getPixelsPerUnit() * pFlame.getCamZoom();
-    double corner_x = pFlame.getCentreX() - (double) imageWidth / pixelsPerUnit / 2.0;
-    double corner_y = pFlame.getCentreY() - (double) imageHeight / pixelsPerUnit / 2.0;
+  private void initView() {
+    double pixelsPerUnit = flame.getPixelsPerUnit() * flame.getCamZoom();
+    double corner_x = flame.getCentreX() - (double) imageWidth / pixelsPerUnit / 2.0;
+    double corner_y = flame.getCentreY() - (double) imageHeight / pixelsPerUnit / 2.0;
     double t0 = borderWidth / pixelsPerUnit;
     double t1 = borderWidth / pixelsPerUnit;
     double t2 = (2 * maxBorderWidth - borderWidth) / pixelsPerUnit;
@@ -328,24 +371,24 @@ public class FlameRenderer implements FlameTransformationContext {
     bws = (rasterWidth - 0.5) * Xsize;
     bhs = (rasterHeight - 0.5) * Ysize;
 
-    cosa = Math.cos(-Math.PI * (pFlame.getCamRoll()) / 180.0);
-    sina = Math.sin(-Math.PI * (pFlame.getCamRoll()) / 180.0);
-    rcX = pFlame.getCentreX() * (1 - cosa) - pFlame.getCentreY() * sina - camX0;
-    rcY = pFlame.getCentreY() * (1 - cosa) + pFlame.getCentreX() * sina - camY0;
+    cosa = Math.cos(-Math.PI * (flame.getCamRoll()) / 180.0);
+    sina = Math.sin(-Math.PI * (flame.getCamRoll()) / 180.0);
+    rcX = flame.getCentreX() * (1 - cosa) - flame.getCentreY() * sina - camX0;
+    rcY = flame.getCentreY() * (1 - cosa) + flame.getCentreX() * sina - camY0;
   }
 
-  private void createModWeightTables(Flame pFlame) {
+  private void createModWeightTables() {
     double tp[] = new double[100];
-    int n = pFlame.getXForms().size();
+    int n = flame.getXForms().size();
 
-    for (XForm xForm : pFlame.getXForms()) {
+    for (XForm xForm : flame.getXForms()) {
       xForm.initTransform();
       for (Variation var : xForm.getSortedVariations()) {
         var.getFunc().init(this, xForm);
       }
     }
-    if (pFlame.getFinalXForm() != null) {
-      XForm xForm = pFlame.getFinalXForm();
+    if (flame.getFinalXForm() != null) {
+      XForm xForm = flame.getFinalXForm();
       xForm.initTransform();
       for (Variation var : xForm.getSortedVariations()) {
         var.getFunc().init(this, xForm);
@@ -354,12 +397,12 @@ public class FlameRenderer implements FlameTransformationContext {
     //
     for (int k = 0; k < n; k++) {
       double totValue = 0;
-      XForm xform = pFlame.getXForms().get(k);
+      XForm xform = flame.getXForms().get(k);
       for (int l = 0; l < xform.getNextAppliedXFormTable().length; l++) {
         xform.getNextAppliedXFormTable()[l] = new XForm();
       }
       for (int i = 0; i < n; i++) {
-        tp[i] = pFlame.getXForms().get(i).getWeight() * pFlame.getXForms().get(k).getModifiedWeights()[i];
+        tp[i] = flame.getXForms().get(i).getWeight() * flame.getXForms().get(k).getModifiedWeights()[i];
         totValue = totValue + tp[i];
       }
 
@@ -373,7 +416,7 @@ public class FlameRenderer implements FlameTransformationContext {
             totalProb = totalProb + tp[j];
           }
           while (!((totalProb > loopValue) || (j == n - 1)));
-          xform.getNextAppliedXFormTable()[i] = pFlame.getXForms().get(j);
+          xform.getNextAppliedXFormTable()[i] = flame.getXForms().get(j);
           loopValue = loopValue + totValue / (double) xform.getNextAppliedXFormTable().length;
         }
       }
@@ -385,8 +428,8 @@ public class FlameRenderer implements FlameTransformationContext {
     }
   }
 
-  private void createColorMap(Flame pFlame) {
-    colorMap = pFlame.getPalette().createRenderPalette(pFlame.getWhiteLevel());
+  private void createColorMap() {
+    colorMap = flame.getPalette().createRenderPalette(flame.getWhiteLevel());
     paletteIdxScl = colorMap.length - 1;
   }
 
@@ -407,4 +450,31 @@ public class FlameRenderer implements FlameTransformationContext {
     progressUpdater = pProgressUpdater;
   }
 
+  public RasterPoint getRasterPoint(double pX, double pY) {
+    int xIdx = (int) (bws * pX + 0.5);
+    int yIdx = (int) (bhs * pY + 0.5);
+    if (xIdx >= 0 && xIdx < rasterWidth && yIdx >= 0 && yIdx < rasterHeight) {
+      return raster[yIdx][xIdx];
+    }
+    else {
+      return null;
+    }
+  }
+
+  @Override
+  public RasterPoint getPass1RasterPoint(double pQX, double pQY) {
+    if (pass1Raster == null) {
+      return null;
+    }
+    double px = pQX * cosa + pQY * sina + rcX;
+    if ((px < 0) || (px > camW))
+      return null;
+    double py = pQY * cosa - pQX * sina + rcY;
+    if ((py < 0) || (py > camH))
+      return null;
+
+    int xIdx = (int) (bws * px + 0.5);
+    int yIdx = (int) (bhs * py + 0.5);
+    return pass1Raster[yIdx][xIdx];
+  }
 }

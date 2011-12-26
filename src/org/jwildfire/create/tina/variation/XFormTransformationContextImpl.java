@@ -16,14 +16,18 @@
 */
 package org.jwildfire.create.tina.variation;
 
+import org.jwildfire.create.tina.base.RasterPoint;
 import org.jwildfire.create.tina.random.RandomNumberGenerator;
+import org.jwildfire.create.tina.render.FlameRenderer;
 
 public class XFormTransformationContextImpl implements XFormTransformationContext {
   private final FlameTransformationContext parentContext;
+  private final FlameRenderer flameRenderer;
   private double color;
 
-  public XFormTransformationContextImpl(FlameTransformationContext pParentContext) {
+  public XFormTransformationContextImpl(FlameTransformationContext pParentContext, FlameRenderer pFlameRenderer) {
     parentContext = pParentContext;
+    flameRenderer = pFlameRenderer;
   }
 
   @Override
@@ -41,19 +45,11 @@ public class XFormTransformationContextImpl implements XFormTransformationContex
     return color;
   }
 
-  //  public double getRasterIntensity(double pX,double pY);
-  //    
-  //  }
-  //  
-  //{
-  //  int xIdx = (int) (renderer.bws * p.x + 0.5);
-  //  int yIdx = (int) (renderer.bhs * p.y + 0.5);
-  //  RasterPoint rp = renderer.raster[yIdx][xIdx];
-  //
-  //  rp.red;
-  //  rp.green;
-  //  rp.blue;
-  //  rp.count++;
-  //}
+  static int cnt = 0;
+
+  @Override
+  public RasterPoint getPass1RasterPoint(double pX, double pY) {
+    return flameRenderer.getPass1RasterPoint(pX, pY);
+  }
 
 }

@@ -16,8 +16,12 @@
 */
 package org.jwildfire.create.tina.variation;
 
+import org.jwildfire.create.tina.base.RasterPoint;
 import org.jwildfire.create.tina.random.RandomNumberGenerator;
 
 public interface FlameTransformationContext {
   public abstract RandomNumberGenerator getRandomNumberGenerator();
+
+  public abstract RasterPoint getPass1RasterPoint(double pX, double pY);
+
 }

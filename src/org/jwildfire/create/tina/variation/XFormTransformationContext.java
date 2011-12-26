@@ -18,10 +18,11 @@ package org.jwildfire.create.tina.variation;
 
 import org.jwildfire.create.tina.random.RandomNumberGenerator;
 
-public interface XFormTransformationContext {
+public interface XFormTransformationContext extends FlameTransformationContext {
   public abstract RandomNumberGenerator getRandomNumberGenerator();
 
   public abstract void setColor(double pColor);
 
   public abstract double getColor();
+
 }
