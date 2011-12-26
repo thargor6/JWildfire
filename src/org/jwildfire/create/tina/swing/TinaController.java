@@ -2359,11 +2359,12 @@ public class TinaController implements FlameHolder, JobRenderThreadController {
       }
       else {
         img = new SimpleImage(IMG_WIDTH, IMG_HEIGHT);
-        Flame flame = randomBatch.get(i);
-        flame.setSampleDensity(50);
+        Flame flame = randomBatch.get(i).makeCopy();
+        double wScl = (double) img.getImageWidth() / (double) flame.getWidth();
+        double hScl = (double) img.getImageHeight() / (double) flame.getHeight();
+        flame.setPixelsPerUnit((wScl + hScl) * 0.5 * flame.getPixelsPerUnit());
         flame.setWidth(IMG_WIDTH);
         flame.setHeight(IMG_HEIGHT);
-        flame.setPixelsPerUnit(10);
         FlameRenderer renderer = new FlameRenderer(flame);
         renderer.renderFlame(img, prefs.getTinaRenderThreads());
       }

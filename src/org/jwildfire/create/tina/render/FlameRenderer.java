@@ -467,9 +467,21 @@ public class FlameRenderer implements FlameTransformationContext {
       return null;
     }
     double px = pQX * cosa + pQY * sina + rcX;
+    if (px < 0) {
+      px += camW;
+    }
+    if (px > camW) {
+      px = 2 * camW - px;
+    }
     if ((px < 0) || (px > camW))
       return null;
     double py = pQY * cosa - pQX * sina + rcY;
+    if (py < 0) {
+      py += camH;
+    }
+    if (py > camH) {
+      py = 2 * camH - py;
+    }
     if ((py < 0) || (py > camH))
       return null;
 
