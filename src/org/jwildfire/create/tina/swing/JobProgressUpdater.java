@@ -11,25 +11,35 @@ public class JobProgressUpdater implements ProgressUpdater {
 
   @Override
   public void initProgress(int pMaxSteps) {
-    parent.getBatchRenderJobProgressBar().setValue(0);
-    parent.getBatchRenderJobProgressBar().setMinimum(0);
-    parent.getBatchRenderJobProgressBar().setMaximum(pMaxSteps);
-    parent.getBatchRenderJobProgressBar().invalidate();
-    parent.getBatchRenderJobProgressBar().validate();
-    Graphics g = parent.getBatchRenderJobProgressBar().getGraphics();
-    if (g != null) {
-      parent.getBatchRenderJobProgressBar().paint(g);
+    try {
+      parent.getBatchRenderJobProgressBar().setValue(0);
+      parent.getBatchRenderJobProgressBar().setMinimum(0);
+      parent.getBatchRenderJobProgressBar().setMaximum(pMaxSteps);
+      parent.getBatchRenderJobProgressBar().invalidate();
+      parent.getBatchRenderJobProgressBar().validate();
+      Graphics g = parent.getBatchRenderJobProgressBar().getGraphics();
+      if (g != null) {
+        parent.getBatchRenderJobProgressBar().paint(g);
+      }
+    }
+    catch (Throwable ex) {
+      //      ex.printStackTrace();
     }
   }
 
   @Override
   public void updateProgress(int pStep) {
-    parent.getBatchRenderJobProgressBar().setValue(pStep);
-    parent.getBatchRenderJobProgressBar().invalidate();
-    parent.getBatchRenderJobProgressBar().validate();
-    Graphics g = parent.getBatchRenderJobProgressBar().getGraphics();
-    if (g != null) {
-      parent.getBatchRenderJobProgressBar().paint(g);
+    try {
+      parent.getBatchRenderJobProgressBar().setValue(pStep);
+      parent.getBatchRenderJobProgressBar().invalidate();
+      parent.getBatchRenderJobProgressBar().validate();
+      Graphics g = parent.getBatchRenderJobProgressBar().getGraphics();
+      if (g != null) {
+        parent.getBatchRenderJobProgressBar().paint(g);
+      }
+    }
+    catch (Throwable ex) {
+      //      ex.printStackTrace();
     }
   }
 

@@ -81,16 +81,27 @@ public class JobRenderThread implements Runnable {
               System.err.println("RENDER TIME: " + job.getElapsedSeconds() + "s");
               new ImageWriter().saveImage(img, job.getImageFilename());
               try {
-                controller.refreshRenderBatchJobsTable();
-                controller.getRenderBatchJobsTable().invalidate();
-                controller.getRenderBatchJobsTable().validate();
-                Graphics g = controller.getRenderBatchJobsTable().getParent().getGraphics();
-                if (g != null) {
-                  controller.getRenderBatchJobsTable().getParent().paint(g);
+                {
+                  controller.refreshRenderBatchJobsTable();
+                  controller.getRenderBatchJobsTable().invalidate();
+                  controller.getRenderBatchJobsTable().validate();
+                  Graphics g = controller.getRenderBatchJobsTable().getParent().getGraphics();
+                  if (g != null) {
+                    controller.getRenderBatchJobsTable().getParent().paint(g);
+                  }
+                }
+                {
+                  controller.getTotalProgressBar().setValue(controller.getTotalProgressBar().getValue() + 1);
+                  controller.getTotalProgressBar().invalidate();
+                  controller.getTotalProgressBar().validate();
+                  Graphics g = controller.getTotalProgressBar().getGraphics();
+                  if (g != null) {
+                    controller.getTotalProgressBar().paint(g);
+                  }
                 }
               }
               catch (Throwable ex) {
-                ex.printStackTrace();
+                //                ex.printStackTrace();
               }
             }
             finally {
@@ -102,18 +113,16 @@ public class JobRenderThread implements Runnable {
           }
           catch (Throwable ex) {
             job.setLastError(ex);
-          }
-          controller.getTotalProgressBar().setValue(controller.getTotalProgressBar().getValue() + 1);
-          controller.getTotalProgressBar().invalidate();
-          controller.getTotalProgressBar().validate();
-          Graphics g = controller.getTotalProgressBar().getGraphics();
-          if (g != null) {
-            controller.getTotalProgressBar().paint(g);
+            //            ex.printStackTrace();
           }
         }
-        controller.getTotalProgressBar().setValue(controller.getTotalProgressBar().getMaximum());
-        controller.getJobProgressBar().setValue(0);
-
+        try {
+          controller.getTotalProgressBar().setValue(controller.getTotalProgressBar().getMaximum());
+          controller.getJobProgressBar().setValue(0);
+        }
+        catch (Throwable ex) {
+          //          ex.printStackTrace();
+        }
       }
       catch (Throwable ex) {
         throw new RuntimeException(ex);
