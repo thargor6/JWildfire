@@ -93,6 +93,9 @@ public class Flam3Reader implements FlameReader {
   private static final String ATTR_SHADING_LIGHTRED_ = "shading_lightRed_";
   private static final String ATTR_SHADING_LIGHTGREEN_ = "shading_lightGreen_";
   private static final String ATTR_SHADING_LIGHTBLUE_ = "shading_lightBlue_";
+  private static final String ATTR_SHADING_BLUR_RADIUS = "shading_blurRadius";
+  private static final String ATTR_SHADING_BLUR_FADE = "shading_blurFade";
+  private static final String ATTR_SHADING_BLUR_FALLOFF = "shading_blurFallOff";
 
   private void parseFlameAttributes(Flame pFlame, String pXML) {
     Map<String, String> atts = parseAttributes(pXML);
@@ -161,7 +164,15 @@ public class Flam3Reader implements FlameReader {
     }
     // Shading    
     if ((hs = atts.get(ATTR_SHADING_SHADING)) != null) {
-      pFlame.getShadingInfo().setShading(hs.equalsIgnoreCase(Shading.PSEUDO3D.toString()) ? Shading.PSEUDO3D : Shading.FLAT);
+      if (hs.equalsIgnoreCase(Shading.PSEUDO3D.toString())) {
+        pFlame.getShadingInfo().setShading(Shading.PSEUDO3D);
+      }
+      else if (hs.equalsIgnoreCase(Shading.BLUR.toString())) {
+        pFlame.getShadingInfo().setShading(Shading.BLUR);
+      }
+      else if (hs.equalsIgnoreCase(Shading.FLAT.toString())) {
+        pFlame.getShadingInfo().setShading(Shading.FLAT);
+      }
     }
     if ((hs = atts.get(ATTR_SHADING_AMBIENT)) != null) {
       pFlame.getShadingInfo().setAmbient(Double.parseDouble(hs));
@@ -201,6 +212,15 @@ public class Flam3Reader implements FlameReader {
       if ((hs = atts.get(ATTR_SHADING_LIGHTBLUE_ + i)) != null) {
         pFlame.getShadingInfo().setLightBlue(i, Integer.parseInt(hs));
       }
+    }
+    if ((hs = atts.get(ATTR_SHADING_BLUR_RADIUS)) != null) {
+      pFlame.getShadingInfo().setBlurRadius(Integer.parseInt(hs));
+    }
+    if ((hs = atts.get(ATTR_SHADING_BLUR_FADE)) != null) {
+      pFlame.getShadingInfo().setBlurFade(Double.parseDouble(hs));
+    }
+    if ((hs = atts.get(ATTR_SHADING_BLUR_FALLOFF)) != null) {
+      pFlame.getShadingInfo().setBlurFallOff(Double.parseDouble(hs));
     }
   }
 

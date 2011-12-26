@@ -105,6 +105,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController {
   private static final double SLIDER_SCALE_AMBIENT = 100.0;
   private static final double SLIDER_SCALE_PHONGSIZE = 10.0;
   private static final double SLIDER_SCALE_LIGHTPOS = 100.0;
+  private static final double SLIDER_SCALE_BLUR_FALLOFF = 10.0;
 
   private final JPanel centerPanel;
   private FlamePanel flamePanel;
@@ -254,6 +255,14 @@ public class TinaController implements FlameHolder, JobRenderThreadController {
   private final JSlider shadingLightGreenSlider;
   private final JTextField shadingLightBlueREd;
   private final JSlider shadingLightBlueSlider;
+
+  private final JTextField shadingBlurRadiusREd;
+  private final JSlider shadingBlurRadiusSlider;
+  private final JTextField shadingBlurFadeREd;
+  private final JSlider shadingBlurFadeSlider;
+  private final JTextField shadingBlurFallOffREd;
+  private final JSlider shadingBlurFallOffSlider;
+
   // palette -> create
   private final JTextField paletteRandomPointsREd;
   private final JPanel paletteImgPanel;
@@ -408,7 +417,9 @@ public class TinaController implements FlameHolder, JobRenderThreadController {
       JProgressBar pBatchRenderTotalProgressBar, ProgressUpdater pJobProgressUpdater, JButton pBatchRenderAddFilesButton,
       JButton pBatchRenderFilesMoveDownButton, JButton pBatchRenderFilesMoveUpButton, JButton pBatchRenderFilesRemoveButton,
       JButton pBatchRenderFilesRemoveAllButton, JButton pBatchRenderStartButton, JTabbedPane pRootTabbedPane, JButton pAffineFlipHorizontalButton,
-      JButton pAffineFlipVerticalButton, JComboBox pAnimateLightScriptCmb, JToggleButton pToggleDarkTrianglesButton) {
+      JButton pAffineFlipVerticalButton, JComboBox pAnimateLightScriptCmb, JToggleButton pToggleDarkTrianglesButton,
+      JTextField pShadingBlurRadiusREd, JSlider pShadingBlurRadiusSlider, JTextField pShadingBlurFadeREd, JSlider pShadingBlurFadeSlider,
+      JTextField pShadingBlurFallOffREd, JSlider pShadingBlurFallOffSlider) {
     errorHandler = pErrorHandler;
     prefs = pPrefs;
     centerPanel = pCenterPanel;
@@ -571,6 +582,13 @@ public class TinaController implements FlameHolder, JobRenderThreadController {
     shadingLightGreenSlider = pShadingLightGreenSlider;
     shadingLightBlueREd = pShadingLightBlueREd;
     shadingLightBlueSlider = pShadingLightBlueSlider;
+
+    shadingBlurRadiusREd = pShadingBlurRadiusREd;
+    shadingBlurRadiusSlider = pShadingBlurRadiusSlider;
+    shadingBlurFadeREd = pShadingBlurFadeREd;
+    shadingBlurFadeSlider = pShadingBlurFadeSlider;
+    shadingBlurFallOffREd = pShadingBlurFallOffREd;
+    shadingBlurFallOffSlider = pShadingBlurFallOffSlider;
 
     mouseTransformSlowButton = pMouseTransformSlowButton;
 
@@ -797,16 +815,19 @@ public class TinaController implements FlameHolder, JobRenderThreadController {
   private void refreshShadingUI() {
     Flame currFlame = getCurrFlame();
     ShadingInfo shadingInfo = currFlame != null ? currFlame.getShadingInfo() : null;
-    boolean enabled;
+    boolean pseudo3DEnabled;
+    boolean blurEnabled;
     if (shadingInfo != null) {
       shadingCmb.setSelectedItem(shadingInfo.getShading());
-      enabled = shadingInfo.getShading().equals(Shading.PSEUDO3D);
+      pseudo3DEnabled = shadingInfo.getShading().equals(Shading.PSEUDO3D);
+      blurEnabled = shadingInfo.getShading().equals(Shading.BLUR);
     }
     else {
       shadingCmb.setSelectedIndex(0);
-      enabled = false;
+      pseudo3DEnabled = false;
+      blurEnabled = false;
     }
-    if (enabled) {
+    if (pseudo3DEnabled) {
       shadingAmbientREd.setText(Tools.doubleToString(shadingInfo.getAmbient()));
       shadingAmbientSlider.setValue(Tools.FTOI(shadingInfo.getAmbient() * SLIDER_SCALE_AMBIENT));
       shadingDiffuseREd.setText(Tools.doubleToString(shadingInfo.getDiffuse()));
@@ -851,41 +872,68 @@ public class TinaController implements FlameHolder, JobRenderThreadController {
       shadingLightBlueREd.setText("");
       shadingLightBlueSlider.setValue(0);
     }
+    if (blurEnabled) {
+      shadingBlurRadiusREd.setText(Tools.doubleToString(shadingInfo.getBlurRadius()));
+      shadingBlurRadiusSlider.setValue(shadingInfo.getBlurRadius());
+      shadingBlurFadeREd.setText(Tools.doubleToString(shadingInfo.getBlurFade()));
+      shadingBlurFadeSlider.setValue(Tools.FTOI(shadingInfo.getBlurFade() * SLIDER_SCALE_AMBIENT));
+      shadingBlurFallOffREd.setText(Tools.doubleToString(shadingInfo.getBlurFallOff()));
+      shadingBlurFallOffSlider.setValue(Tools.FTOI(shadingInfo.getBlurFallOff() * SLIDER_SCALE_BLUR_FALLOFF));
+    }
+    else {
+      shadingBlurRadiusREd.setText("");
+      shadingBlurRadiusSlider.setValue(0);
+      shadingBlurFadeREd.setText("");
+      shadingBlurFadeSlider.setValue(0);
+      shadingBlurFallOffREd.setText("");
+      shadingBlurFallOffSlider.setValue(0);
+    }
   }
 
   private void enableShadingUI() {
     Flame currFlame = getCurrFlame();
     ShadingInfo shadingInfo = currFlame != null ? currFlame.getShadingInfo() : null;
-    boolean enabled;
+    boolean pseudo3DEnabled;
+    boolean blurEnabled;
     if (shadingInfo != null) {
       shadingCmb.setEnabled(true);
-      enabled = shadingInfo.getShading().equals(Shading.PSEUDO3D);
+      pseudo3DEnabled = shadingInfo.getShading().equals(Shading.PSEUDO3D);
+      blurEnabled = shadingInfo.getShading().equals(Shading.BLUR);
     }
     else {
       shadingCmb.setEnabled(false);
-      enabled = false;
+      pseudo3DEnabled = false;
+      blurEnabled = false;
     }
-    shadingAmbientREd.setEnabled(enabled);
-    shadingAmbientSlider.setEnabled(enabled);
-    shadingDiffuseREd.setEnabled(enabled);
-    shadingDiffuseSlider.setEnabled(enabled);
-    shadingPhongREd.setEnabled(enabled);
-    shadingPhongSlider.setEnabled(enabled);
-    shadingPhongSizeREd.setEnabled(enabled);
-    shadingPhongSizeSlider.setEnabled(enabled);
-    shadingLightCmb.setEnabled(enabled);
-    shadingLightXREd.setEnabled(enabled);
-    shadingLightXSlider.setEnabled(enabled);
-    shadingLightYREd.setEnabled(enabled);
-    shadingLightYSlider.setEnabled(enabled);
-    shadingLightZREd.setEnabled(enabled);
-    shadingLightZSlider.setEnabled(enabled);
-    shadingLightRedREd.setEnabled(enabled);
-    shadingLightRedSlider.setEnabled(enabled);
-    shadingLightGreenREd.setEnabled(enabled);
-    shadingLightGreenSlider.setEnabled(enabled);
-    shadingLightBlueREd.setEnabled(enabled);
-    shadingLightBlueSlider.setEnabled(enabled);
+    // pseudo3d
+    shadingAmbientREd.setEnabled(pseudo3DEnabled);
+    shadingAmbientSlider.setEnabled(pseudo3DEnabled);
+    shadingDiffuseREd.setEnabled(pseudo3DEnabled);
+    shadingDiffuseSlider.setEnabled(pseudo3DEnabled);
+    shadingPhongREd.setEnabled(pseudo3DEnabled);
+    shadingPhongSlider.setEnabled(pseudo3DEnabled);
+    shadingPhongSizeREd.setEnabled(pseudo3DEnabled);
+    shadingPhongSizeSlider.setEnabled(pseudo3DEnabled);
+    shadingLightCmb.setEnabled(pseudo3DEnabled);
+    shadingLightXREd.setEnabled(pseudo3DEnabled);
+    shadingLightXSlider.setEnabled(pseudo3DEnabled);
+    shadingLightYREd.setEnabled(pseudo3DEnabled);
+    shadingLightYSlider.setEnabled(pseudo3DEnabled);
+    shadingLightZREd.setEnabled(pseudo3DEnabled);
+    shadingLightZSlider.setEnabled(pseudo3DEnabled);
+    shadingLightRedREd.setEnabled(pseudo3DEnabled);
+    shadingLightRedSlider.setEnabled(pseudo3DEnabled);
+    shadingLightGreenREd.setEnabled(pseudo3DEnabled);
+    shadingLightGreenSlider.setEnabled(pseudo3DEnabled);
+    shadingLightBlueREd.setEnabled(pseudo3DEnabled);
+    shadingLightBlueSlider.setEnabled(pseudo3DEnabled);
+    // blur
+    shadingBlurRadiusREd.setEnabled(blurEnabled);
+    shadingBlurRadiusSlider.setEnabled(blurEnabled);
+    shadingBlurFadeREd.setEnabled(blurEnabled);
+    shadingBlurFadeSlider.setEnabled(blurEnabled);
+    shadingBlurFallOffREd.setEnabled(blurEnabled);
+    shadingBlurFallOffSlider.setEnabled(blurEnabled);
   }
 
   private void refreshTransformationsTable() {
@@ -3473,5 +3521,29 @@ public class TinaController implements FlameHolder, JobRenderThreadController {
       flamePanel.setDarkTriangles(toggleDarkTrianglesButton.isSelected());
       refreshFlameImage();
     }
+  }
+
+  public void shadingBlurFadeREd_changed() {
+    shadingInfoTextFieldChanged(shadingBlurFadeSlider, shadingBlurFadeREd, "blurFade", SLIDER_SCALE_AMBIENT, 0);
+  }
+
+  public void shadingBlurFallOffREd_changed() {
+    shadingInfoTextFieldChanged(shadingBlurFallOffSlider, shadingBlurFallOffREd, "blurFallOff", SLIDER_SCALE_BLUR_FALLOFF, 0);
+  }
+
+  public void shadingBlurRadiusREd_changed() {
+    shadingInfoTextFieldChanged(shadingBlurRadiusSlider, shadingBlurRadiusREd, "blurRadius", 1.0, 0);
+  }
+
+  public void shadingBlurFallOffSlider_changed() {
+    shadingInfoSliderChanged(shadingBlurFallOffSlider, shadingBlurFallOffREd, "blurFallOff", SLIDER_SCALE_BLUR_FALLOFF, 0);
+  }
+
+  public void shadingBlurFadeSlider_changed() {
+    shadingInfoSliderChanged(shadingBlurFadeSlider, shadingBlurFadeREd, "blurFade", SLIDER_SCALE_AMBIENT, 0);
+  }
+
+  public void shadingBlurRadiusSlider_changed() {
+    shadingInfoSliderChanged(shadingBlurRadiusSlider, shadingBlurRadiusREd, "blurRadius", 1.0, 0);
   }
 }

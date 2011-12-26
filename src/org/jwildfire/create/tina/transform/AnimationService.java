@@ -127,7 +127,7 @@ public class AnimationService {
         break;
     }
 
-    if (flame.getShadingInfo().getShading() != Shading.FLAT) {
+    if (flame.getShadingInfo().getShading() == Shading.PSEUDO3D) {
       switch (pLightScript) {
         case ROTATE_XY_PLANE: {
           double radius = 0.4;

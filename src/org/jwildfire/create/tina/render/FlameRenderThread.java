@@ -52,6 +52,9 @@ public class FlameRenderThread implements Runnable {
           case FLAT:
             iterate_flat();
             break;
+          case BLUR:
+            iterate_blur();
+            break;
           case PSEUDO3D:
             iterate_pseudo3D();
             break;
@@ -139,66 +142,111 @@ public class FlameRenderThread implements Runnable {
       rp.green += color.green;
       rp.blue += color.blue;
       rp.count++;
+    }
+  }
 
-      //      if (i < samples / 3) {
-      //        if (xIdx > 1) {
-      //          rp = renderer.raster[yIdx][xIdx - 1];
-      //          rp.red += color.red / 2;
-      //          rp.green += color.green / 2;
-      //          rp.blue += color.blue / 2;
-      //          rp.count++;
-      //        }
-      //        if (xIdx < renderer.rasterWidth - 1) {
-      //          rp = renderer.raster[yIdx][xIdx + 1];
-      //          rp.red += color.red / 2;
-      //          rp.green += color.green / 2;
-      //          rp.blue += color.blue / 2;
-      //          rp.count++;
-      //        }
-      //        if (yIdx > 1) {
-      //          rp = renderer.raster[yIdx - 1][xIdx];
-      //          rp.red += color.red / 2;
-      //          rp.green += color.green / 2;
-      //          rp.blue += color.blue / 2;
-      //          rp.count++;
-      //        }
-      //        if (yIdx < renderer.rasterHeight - 1) {
-      //          rp = renderer.raster[yIdx + 1][xIdx];
-      //          rp.red += color.red / 2;
-      //          rp.green += color.green / 2;
-      //          rp.blue += color.blue / 2;
-      //          rp.count++;
-      //        }
-      //
-      //        if (xIdx > 1 && yIdx > 1) {
-      //          rp = renderer.raster[yIdx - 1][xIdx - 1];
-      //          rp.red += color.red / 4;
-      //          rp.green += color.green / 4;
-      //          rp.blue += color.blue / 4;
-      //          rp.count++;
-      //        }
-      //        if (xIdx > 1 && yIdx < renderer.rasterHeight - 1) {
-      //          rp = renderer.raster[yIdx + 1][xIdx - 1];
-      //          rp.red += color.red / 4;
-      //          rp.green += color.green / 4;
-      //          rp.blue += color.blue / 4;
-      //          rp.count++;
-      //        }
-      //        if (xIdx < renderer.rasterWidth - 1 && yIdx > 1) {
-      //          rp = renderer.raster[yIdx - 1][xIdx + 1];
-      //          rp.red += color.red / 4;
-      //          rp.green += color.green / 4;
-      //          rp.blue += color.blue / 4;
-      //          rp.count++;
-      //        }
-      //        if (xIdx < renderer.rasterWidth - 1 && yIdx < renderer.rasterHeight - 1) {
-      //          rp = renderer.raster[yIdx + 1][xIdx + 1];
-      //          rp.red += color.red / 4;
-      //          rp.green += color.green / 4;
-      //          rp.blue += color.blue / 4;
-      //          rp.count++;
-      //        }
-      //      }
+  private void iterate_blur() {
+    XFormTransformationContextImpl ctx = new XFormTransformationContextImpl(renderer, renderer);
+    XYZPoint affineT = new XYZPoint(); // affine part of the transformation
+    XYZPoint varT = new XYZPoint(); // complete transformation
+    XYZPoint p = new XYZPoint();
+    XYZPoint q;
+    p.x = 2.0 * renderer.random.random() - 1.0;
+    p.y = 2.0 * renderer.random.random() - 1.0;
+    p.z = 2.0 * renderer.random.random() - 1.0;
+    p.color = renderer.random.random();
+
+    XForm xf = flame.getXForms().get(0);
+    xf.transformPoint(ctx, affineT, varT, p, p, affineZStyle);
+    for (int i = 0; i <= Constants.INITIAL_ITERATIONS; i++) {
+      xf = xf.getNextAppliedXFormTable()[renderer.random.random(Constants.NEXT_APPLIED_XFORM_TABLE_SIZE)];
+      if (xf == null) {
+        return;
+      }
+    }
+
+    double blurKernel[][] = flame.getShadingInfo().createBlurKernel();
+    int blurRadius = flame.getShadingInfo().getBlurRadius();
+    double fade = flame.getShadingInfo().getBlurFade();
+    if (fade < 0.0) {
+      fade = 0.0;
+    }
+    else if (fade > 1.0) {
+      fade = 1.0;
+    }
+    long blurMax = (long) ((1 - fade) * samples);
+    int rasterWidth = renderer.rasterWidth;
+    int rasterHeight = renderer.rasterHeight;
+
+    for (long i = 0; i < samples; i++) {
+      if (i % 100 == 0) {
+        currSample = i;
+      }
+      xf = xf.getNextAppliedXFormTable()[renderer.random.random(Constants.NEXT_APPLIED_XFORM_TABLE_SIZE)];
+      if (xf == null) {
+        return;
+      }
+      xf.transformPoint(ctx, affineT, varT, p, p, affineZStyle);
+
+      if (xf.getDrawMode() == DrawMode.HIDDEN)
+        continue;
+      else if ((xf.getDrawMode() == DrawMode.OPAQUE) && (renderer.random.random() > xf.getOpacity()))
+        continue;
+
+      XForm finalXForm = flame.getFinalXForm();
+      double px, py;
+      if (finalXForm != null) {
+        q = new XYZPoint();
+        finalXForm.transformPoint(ctx, affineT, varT, p, q, affineZStyle);
+        renderer.project(renderPass, q);
+        px = q.x * renderer.cosa + q.y * renderer.sina + renderer.rcX;
+        if ((px < 0) || (px > renderer.camW))
+          continue;
+        py = q.y * renderer.cosa - q.x * renderer.sina + renderer.rcY;
+        if ((py < 0) || (py > renderer.camH))
+          continue;
+      }
+      else {
+        q = new XYZPoint();
+        q.assign(p);
+        renderer.project(renderPass, q);
+        px = q.x * renderer.cosa + q.y * renderer.sina + renderer.rcX;
+        if ((px < 0) || (px > renderer.camW))
+          continue;
+        py = q.y * renderer.cosa - q.x * renderer.sina + renderer.rcY;
+        if ((py < 0) || (py > renderer.camH))
+          continue;
+      }
+
+      int xIdx = (int) (renderer.bws * px + 0.5);
+      int yIdx = (int) (renderer.bhs * py + 0.5);
+      int colorIdx = (int) (p.color * renderer.paletteIdxScl + 0.5);
+      RenderColor color = renderer.colorMap[colorIdx];
+
+      if (i < blurMax) {
+        for (int k = yIdx - blurRadius, yk = 0; k <= yIdx + blurRadius; k++, yk++) {
+          if (k >= 0 && k < rasterHeight) {
+            for (int l = xIdx - blurRadius, xk = 0; l <= xIdx + blurRadius; l++, xk++) {
+              if (l >= 0 && l < rasterWidth) {
+                // y, x
+                RasterPoint rp = renderer.raster[k][l];
+                double scl = blurKernel[yk][xk];
+                rp.red += color.red * scl;
+                rp.green += color.green * scl;
+                rp.blue += color.blue * scl;
+                rp.count++;
+              }
+            }
+          }
+        }
+      }
+      else {
+        RasterPoint rp = renderer.raster[yIdx][xIdx];
+        rp.red += color.red;
+        rp.green += color.green;
+        rp.blue += color.blue;
+        rp.count++;
+      }
     }
   }
 

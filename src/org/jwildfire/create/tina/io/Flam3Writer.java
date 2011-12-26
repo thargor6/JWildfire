@@ -129,6 +129,11 @@ public class Flam3Writer {
         attrList.add(xb.createAttr("shading_lightBlue_" + i, shadingInfo.getLightBlue()[i]));
       }
     }
+    else if (shadingInfo.getShading() == Shading.BLUR) {
+      attrList.add(xb.createAttr("shading_blurRadius", shadingInfo.getBlurRadius()));
+      attrList.add(xb.createAttr("shading_blurFade", shadingInfo.getBlurFade()));
+      attrList.add(xb.createAttr("shading_blurFallOff", shadingInfo.getBlurFallOff()));
+    }
     xb.beginElement("flame", attrList);
     // XForm
     for (XForm xForm : pFlame.getXForms()) {

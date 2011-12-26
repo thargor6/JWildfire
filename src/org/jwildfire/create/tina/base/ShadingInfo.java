@@ -17,6 +17,7 @@
 package org.jwildfire.create.tina.base;
 
 public class ShadingInfo {
+  // pseudo3D
   private static final int MAXLIGHTS = 4;
   private Shading shading;
   private double ambient;
@@ -29,9 +30,14 @@ public class ShadingInfo {
   protected int lightRed[] = new int[MAXLIGHTS];
   protected int lightGreen[] = new int[MAXLIGHTS];
   protected int lightBlue[] = new int[MAXLIGHTS];
+  // blur
+  private int blurRadius;
+  private double blurFade;
+  private double blurFallOff;
 
   protected void init() {
     shading = Shading.FLAT;
+    // pseudo3d
     ambient = 0.18;
     diffuse = 0.82;
     phong = 0.75;
@@ -60,6 +66,10 @@ public class ShadingInfo {
     lightRed[3] = 0;
     lightGreen[3] = 0;
     lightBlue[3] = 0;
+    // blur
+    blurRadius = 2;
+    blurFade = 0.95;
+    blurFallOff = 2.0;
   }
 
   public Shading getShading() {
@@ -177,5 +187,52 @@ public class ShadingInfo {
       lightGreen[i] = pSrc.lightGreen[i];
       lightBlue[i] = pSrc.lightBlue[i];
     }
+    blurRadius = pSrc.blurRadius;
+    blurFade = pSrc.blurFade;
+    blurFallOff = pSrc.blurFallOff;
+  }
+
+  public double[][] createBlurKernel() {
+    double kernel[][];
+    if (blurRadius <= 0) {
+      kernel = new double[1][1];
+      kernel[0][0] = 1.0;
+    }
+    else {
+      kernel = new double[2 * blurRadius + 1][2 * blurRadius + 1];
+      kernel[0][0] = 1.0;
+      for (int y = -blurRadius, i = 0; y <= blurRadius; y++, i++) {
+        for (int x = -blurRadius, j = 0; x <= blurRadius; x++, j++) {
+          double r = Math.sqrt(x * x + y * y) / (double) (blurRadius);
+          kernel[i][j] = Math.pow(2, -r * blurFallOff);
+          //          System.out.println(i + " " + j + " " + " r=" + r + ", k=" + kernel[i][j]);
+        }
+      }
+    }
+    return kernel;
+  }
+
+  public int getBlurRadius() {
+    return blurRadius;
+  }
+
+  public void setBlurRadius(int blurRadius) {
+    this.blurRadius = blurRadius;
+  }
+
+  public double getBlurFade() {
+    return blurFade;
+  }
+
+  public void setBlurFade(double blurFade) {
+    this.blurFade = blurFade;
+  }
+
+  public double getBlurFallOff() {
+    return blurFallOff;
+  }
+
+  public void setBlurFallOff(double blurFallOff) {
+    this.blurFallOff = blurFallOff;
   }
 }
