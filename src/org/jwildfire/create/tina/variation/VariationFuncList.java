@@ -157,7 +157,7 @@ public class VariationFuncList {
     registerVariationFunc(XHeartFunc.class);
     registerVariationFunc(EllipticFunc.class);
     registerVariationFunc(TXYWavesFunc.class);
-    registerVariationFunc(TBumpMapFunc.class);
+    registerVariationFunc(TPostBumpMapFunc.class);
   }
 
   private static void registerVariationFunc(Class<? extends VariationFunc> pVariationFunc) {
