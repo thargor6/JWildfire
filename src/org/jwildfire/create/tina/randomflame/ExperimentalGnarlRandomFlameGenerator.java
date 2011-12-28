@@ -64,7 +64,7 @@ public class ExperimentalGnarlRandomFlameGenerator extends RandomFlameGenerator 
     double _2ndWeight = 0.5;
     double _3rdWeight = 0.5;
     double symmetry = 0.9 + Math.random() * 0.2 - Math.random() * 0.4;
-    int sides = (int) (Math.random() * 8.0 + 3.0);
+    int sides = (int) (Math.random() * 11.0 + 2.0);
     // 1st XForm
     {
       XForm xForm = new XForm();
@@ -96,7 +96,7 @@ public class ExperimentalGnarlRandomFlameGenerator extends RandomFlameGenerator 
       w2.setParameter("scaley", scaleY);
       xForm.addVariation(1, w2);
 
-      switch ((int) (Math.random() * 12.0)) {
+      switch ((int) (Math.random() * 24.0)) {
         case 0:
           xForm.addVariation(blurAmount, VariationFuncList.getVariationFuncInstance("blur", true));
           break;
@@ -134,18 +134,24 @@ public class ExperimentalGnarlRandomFlameGenerator extends RandomFlameGenerator 
           xForm.addVariation(blurAmount, VariationFuncList.getVariationFuncInstance("bubble", true));
           break;
         case 12:
-          xForm.addVariation(nonBlurAmount, VariationFuncList.getVariationFuncInstance("t_colorscale", true));
-          break;
-        default:
-          throw new IllegalStateException();
+        default: {
+          int l = ExperimentalSimpleRandomFlameGenerator.FNCLST_EXPERIMENTAL.length;
+          String fName = ExperimentalSimpleRandomFlameGenerator.FNCLST_EXPERIMENTAL[(int) (Math.random() * l)];
+          xForm.addVariation(blurAmount, VariationFuncList.getVariationFuncInstance(fName, true));
+        }
       }
 
       xForm.setColorSymmetry(symmetry);
       if (Math.random() > 0.5) {
-        XFormTransformService.scale(xForm, 0.995);
+        XFormTransformService.scale(xForm, 0.9 + Math.random() * 0.09);
       }
       double angle, tx, ty;
       switch (sides) {
+        case 2:
+          angle = -180;
+          tx = Math.random() * 8 - 4;
+          ty = Math.random() * 8 - 4;
+          break;
         case 3:
           angle = -120;
           tx = Math.random() * 8 - 4;
@@ -186,6 +192,16 @@ public class ExperimentalGnarlRandomFlameGenerator extends RandomFlameGenerator 
           tx = Math.random() * 4 - 2;
           ty = Math.random() * 4 - 2;
           break;
+        case 11:
+          angle = -32.73;
+          tx = Math.random() * 4.2 - 3;
+          ty = Math.random() * 4.2 - 3;
+          break;
+        case 12:
+          angle = -30;
+          tx = Math.random() * 4.2 - 3;
+          ty = Math.random() * 4.2 - 3;
+          break;
         default:
           throw new IllegalStateException();
       }
@@ -193,8 +209,9 @@ public class ExperimentalGnarlRandomFlameGenerator extends RandomFlameGenerator 
       XFormTransformService.localTranslate(xForm, tx, ty);
     }
     // 2nd XForm
+    XForm secondXForm;
     {
-      XForm xForm = new XForm();
+      XForm xForm = secondXForm = new XForm();
       flame.getXForms().add(xForm);
       xForm.setWeight(_2ndWeight);
       int f = (int) (Math.random() * 4);
@@ -221,6 +238,9 @@ public class ExperimentalGnarlRandomFlameGenerator extends RandomFlameGenerator 
     }
     // 3rd XForm
     if (Math.random() > 0.5) {
+      if (Math.random() > 0.5) {
+        secondXForm.setWeight(5 + Math.random() * 20.0);
+      }
       XForm xForm = new XForm();
       flame.getXForms().add(xForm);
       xForm.setWeight(_3rdWeight);
