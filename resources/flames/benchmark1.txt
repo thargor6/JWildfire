@@ -1,0 +1,4 @@
+Apophysis 2.09: 12.76s
+JWildfire 0.27: 41.37s
+JWildfire 0.30: 32.45s
+JWildfire 0.31: 21.80s
