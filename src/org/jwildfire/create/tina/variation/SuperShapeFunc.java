@@ -45,8 +45,8 @@ public class SuperShapeFunc extends VariationFunc {
 
     double theta = pm_4 * pAffineTP.getPrecalcAtanYX() + Constants.M_PI_4;
 
-    double st = Math.sin(theta);
-    double ct = Math.cos(theta);
+    double st = pContext.sin(theta);
+    double ct = pContext.cos(theta);
 
     double t1 = Math.abs(ct);
     t1 = Math.pow(t1, n2);
@@ -56,7 +56,7 @@ public class SuperShapeFunc extends VariationFunc {
 
     double myrnd = rnd;
 
-    double r = pAmount * ((myrnd * pContext.getRandomNumberGenerator().random() + (1.0 - myrnd) * pAffineTP.getPrecalcSqrt()) - holes)
+    double r = pAmount * ((myrnd * pContext.random() + (1.0 - myrnd) * pAffineTP.getPrecalcSqrt()) - holes)
         * Math.pow(t1 + t2, pneg1_n1) / pAffineTP.getPrecalcSqrt();
 
     pVarTP.x += r * pAffineTP.x;

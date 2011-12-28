@@ -18,17 +18,15 @@ package org.jwildfire.create.tina.variation;
 
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
-import org.jwildfire.create.tina.random.RandomNumberGenerator;
 
 public class GaussianBlurFunc extends SimpleVariationFunc {
 
   @Override
   public void transform(XFormTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-    RandomNumberGenerator randGen = pContext.getRandomNumberGenerator();
-    double r = randGen.random() * 2 * Math.PI;
-    double sina = Math.sin(r);
-    double cosa = Math.cos(r);
-    r = pAmount * (randGen.random() + randGen.random() + randGen.random() + randGen.random() - 2.0);
+    double r = pContext.random() * 2 * Math.PI;
+    double sina = pContext.sin(r);
+    double cosa = pContext.cos(r);
+    r = pAmount * (pContext.random() + pContext.random() + pContext.random() + pContext.random() - 2.0);
     pVarTP.x += r * cosa;
     pVarTP.y += r * sina;
   }

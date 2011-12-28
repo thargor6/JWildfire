@@ -23,8 +23,8 @@ public class SinusoidalFunc extends SimpleVariationFunc {
 
   @Override
   public void transform(XFormTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-    pVarTP.x += pAmount * Math.sin(pAffineTP.x);
-    pVarTP.y += pAmount * Math.sin(pAffineTP.y);
+    pVarTP.x += pAmount * pContext.sin(pAffineTP.x);
+    pVarTP.y += pAmount * pContext.sin(pAffineTP.y);
   }
 
   @Override

@@ -45,16 +45,16 @@ public class THeartFunc extends VariationFunc {
       if (t > T_MAX) {
         t = T_MAX;
       }
-      nx = -0.001 * (-t * t + 40 * t + 1200) * Math.sin(Math.PI * t / 180.0) * r;
+      nx = -0.001 * (-t * t + 40 * t + 1200) * pContext.sin(Math.PI * t / 180.0) * r;
     }
     else {
       t = a / Math.PI * T_MAX * scaleTRight - shiftT;
       if (t > T_MAX) {
         t = T_MAX;
       }
-      nx = 0.001 * (-t * t + 40 * t + 1200) * Math.sin(Math.PI * t / 180.0) * r;
+      nx = 0.001 * (-t * t + 40 * t + 1200) * pContext.sin(Math.PI * t / 180.0) * r;
     }
-    double ny = -0.001 * (-t * t + 40 * t + 400) * Math.cos(Math.PI * t / 180.0) * r;
+    double ny = -0.001 * (-t * t + 40 * t + 400) * pContext.cos(Math.PI * t / 180.0) * r;
     nx *= scaleX;
     pVarTP.x += pAmount * nx;
     pVarTP.y += pAmount * ny;

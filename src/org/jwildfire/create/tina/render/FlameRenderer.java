@@ -29,13 +29,14 @@ import org.jwildfire.create.tina.random.RandomNumberGenerator;
 import org.jwildfire.create.tina.random.SimpleRandomNumberGenerator;
 import org.jwildfire.create.tina.swing.ProgressUpdater;
 import org.jwildfire.create.tina.variation.FlameTransformationContext;
+import org.jwildfire.create.tina.variation.FlameTransformationContextImpl;
 import org.jwildfire.create.tina.variation.Variation;
 import org.jwildfire.image.Pixel;
 import org.jwildfire.image.SimpleImage;
 import org.jwildfire.transform.ScaleAspect;
 import org.jwildfire.transform.ScaleTransformer;
 
-public class FlameRenderer implements FlameTransformationContext {
+public class FlameRenderer {
   // constants
   private final static int MAX_FILTER_WIDTH = 25;
   // init in initRaster
@@ -70,6 +71,8 @@ public class FlameRenderer implements FlameTransformationContext {
   //
   private AffineZStyle affineZStyle = AffineZStyle.FLAT;
   private ProgressUpdater progressUpdater;
+  // 
+  private FlameTransformationContext flameTransformationContext = new FlameTransformationContextImpl(this);
 
   private final Flame flame;
 
@@ -384,14 +387,14 @@ public class FlameRenderer implements FlameTransformationContext {
     for (XForm xForm : flame.getXForms()) {
       xForm.initTransform();
       for (Variation var : xForm.getSortedVariations()) {
-        var.getFunc().init(this, xForm);
+        var.getFunc().init(flameTransformationContext, xForm);
       }
     }
     if (flame.getFinalXForm() != null) {
       XForm xForm = flame.getFinalXForm();
       xForm.initTransform();
       for (Variation var : xForm.getSortedVariations()) {
-        var.getFunc().init(this, xForm);
+        var.getFunc().init(flameTransformationContext, xForm);
       }
     }
     //
@@ -437,11 +440,6 @@ public class FlameRenderer implements FlameTransformationContext {
     this.random = random;
   }
 
-  @Override
-  public RandomNumberGenerator getRandomNumberGenerator() {
-    return random;
-  }
-
   public void setAffineZStyle(AffineZStyle affineZStyle) {
     this.affineZStyle = affineZStyle;
   }
@@ -461,7 +459,6 @@ public class FlameRenderer implements FlameTransformationContext {
     }
   }
 
-  @Override
   public RasterPoint getPass1RasterPoint(double pQX, double pQY) {
     if (pass1Raster == null) {
       return null;
@@ -489,4 +486,13 @@ public class FlameRenderer implements FlameTransformationContext {
     int yIdx = (int) (bhs * py + 0.5);
     return pass1Raster[yIdx][xIdx];
   }
+
+  public RandomNumberGenerator getRandomNumberGenerator() {
+    return random;
+  }
+
+  protected FlameTransformationContext getFlameTransformationContext() {
+    return flameTransformationContext;
+  }
+
 }

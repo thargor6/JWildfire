@@ -39,11 +39,11 @@ public class CPowFunc extends VariationFunc {
     double va = 2.0 * Math.PI / power;
     double vc = r / power;
     double vd = i / power;
-    double ang = vc * a + vd * lnr + va * Math.floor(power * pContext.getRandomNumberGenerator().random());
+    double ang = vc * a + vd * lnr + va * Math.floor(power * pContext.random());
 
-    double m = pAmount * Math.exp(vc * lnr - vd * a);
-    double sa = Math.sin(ang);
-    double ca = Math.cos(ang);
+    double m = pAmount * pContext.exp(vc * lnr - vd * a);
+    double sa = pContext.sin(ang);
+    double ca = pContext.cos(ang);
 
     pVarTP.x += m * ca;
     pVarTP.y += m * sa;

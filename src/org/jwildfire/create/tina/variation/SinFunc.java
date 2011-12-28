@@ -26,8 +26,8 @@ public class SinFunc extends SimpleVariationFunc {
     /* complex vars by cothe */
     /* exp log sin cos tan sec csc cot sinh cosh tanh sech csch coth */
     //Sine SIN
-    double sinsin = Math.sin(pAffineTP.x);
-    double sincos = Math.cos(pAffineTP.x);
+    double sinsin = pContext.sin(pAffineTP.x);
+    double sincos = pContext.cos(pAffineTP.x);
     double sinsinh = Math.sinh(pAffineTP.y);
     double sincosh = Math.cosh(pAffineTP.y);
     pVarTP.x += pAmount * sinsin * sincosh;

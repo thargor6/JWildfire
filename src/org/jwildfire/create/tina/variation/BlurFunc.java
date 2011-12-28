@@ -23,10 +23,10 @@ public class BlurFunc extends SimpleVariationFunc {
 
   @Override
   public void transform(XFormTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-    double r = pContext.getRandomNumberGenerator().random() * (Math.PI + Math.PI);
-    double sina = Math.sin(r);
-    double cosa = Math.cos(r);
-    double r2 = pAmount * pContext.getRandomNumberGenerator().random();
+    double r = pContext.random() * (Math.PI + Math.PI);
+    double sina = pContext.sin(r);
+    double cosa = pContext.cos(r);
+    double r2 = pAmount * pContext.random();
     pVarTP.x += r2 * cosa;
     pVarTP.y += r2 * sina;
   }

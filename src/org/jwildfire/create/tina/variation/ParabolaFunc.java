@@ -33,10 +33,10 @@ public class ParabolaFunc extends VariationFunc {
   public void transform(XFormTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     /* cyberxaos, 4/2007 */
     double r = pAffineTP.getPrecalcSqrt();
-    double sr = Math.sin(r);
-    double cr = Math.cos(r);
-    pVarTP.x += height * pAmount * sr * sr * pContext.getRandomNumberGenerator().random();
-    pVarTP.y += width * pAmount * cr * pContext.getRandomNumberGenerator().random();
+    double sr = pContext.sin(r);
+    double cr = pContext.cos(r);
+    pVarTP.x += height * pAmount * sr * sr * pContext.random();
+    pVarTP.y += width * pAmount * cr * pContext.random();
   }
 
   @Override

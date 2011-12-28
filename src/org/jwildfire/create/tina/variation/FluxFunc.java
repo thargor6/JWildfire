@@ -35,8 +35,8 @@ public class FluxFunc extends VariationFunc {
     double avgr = pAmount * (2 + spread) * Math.sqrt(Math.sqrt(pAffineTP.y * pAffineTP.y + xpw * xpw) / Math.sqrt(pAffineTP.y * pAffineTP.y + xmw * xmw));
     double avga = (Math.atan2(pAffineTP.y, xmw) - Math.atan2(pAffineTP.y, xpw)) * 0.5;
 
-    pVarTP.x += avgr * Math.cos(avga);
-    pVarTP.y += avgr * Math.sin(avga);
+    pVarTP.x += avgr * pContext.cos(avga);
+    pVarTP.y += avgr * pContext.sin(avga);
   }
 
   @Override

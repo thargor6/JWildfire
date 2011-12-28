@@ -39,8 +39,8 @@ public class WhorlFunc extends VariationFunc {
     else
       a = pAffineTP.getPrecalcAtanYX() + outside / (pAmount - r);
 
-    double sa = Math.sin(a);
-    double ca = Math.cos(a);
+    double sa = pContext.sin(a);
+    double ca = pContext.cos(a);
 
     pVarTP.x += pAmount * r * ca;
     pVarTP.y += pAmount * r * sa;

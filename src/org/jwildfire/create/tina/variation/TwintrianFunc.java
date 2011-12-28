@@ -25,10 +25,10 @@ public class TwintrianFunc extends SimpleVariationFunc {
   @Override
   public void transform(XFormTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     /* Z+ variation Jan 07 */
-    double r = pContext.getRandomNumberGenerator().random() * pAmount * pAffineTP.getPrecalcSqrt();
+    double r = pContext.random() * pAmount * pAffineTP.getPrecalcSqrt();
 
-    double sinr = Math.sin(r);
-    double cosr = Math.cos(r);
+    double sinr = pContext.sin(r);
+    double cosr = pContext.cos(r);
     double diff = Math.log10(sinr * sinr) + cosr;
 
     if (Math.abs(diff) < Constants.EPSILON) {

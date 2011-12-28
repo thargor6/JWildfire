@@ -16,23 +16,11 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import org.jwildfire.create.tina.base.RasterPoint;
-import org.jwildfire.create.tina.random.RandomNumberGenerator;
-import org.jwildfire.create.tina.render.FlameRenderer;
-
-public class XFormTransformationContextImpl implements XFormTransformationContext {
-  private final FlameTransformationContext parentContext;
-  private final FlameRenderer flameRenderer;
+public class XFormTransformationContextImpl extends FlameTransformationContextImpl implements XFormTransformationContext {
   private double color;
 
-  public XFormTransformationContextImpl(FlameTransformationContext pParentContext, FlameRenderer pFlameRenderer) {
-    parentContext = pParentContext;
-    flameRenderer = pFlameRenderer;
-  }
-
-  @Override
-  public RandomNumberGenerator getRandomNumberGenerator() {
-    return parentContext.getRandomNumberGenerator();
+  public XFormTransformationContextImpl(FlameTransformationContext pParentContext) {
+    super(pParentContext.getFlameRenderer());
   }
 
   @Override
@@ -43,13 +31,6 @@ public class XFormTransformationContextImpl implements XFormTransformationContex
   @Override
   public double getColor() {
     return color;
-  }
-
-  static int cnt = 0;
-
-  @Override
-  public RasterPoint getPass1RasterPoint(double pX, double pY) {
-    return flameRenderer.getPass1RasterPoint(pX, pY);
   }
 
 }

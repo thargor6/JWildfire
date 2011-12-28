@@ -23,8 +23,8 @@ public class PostRotateYFunc extends SimpleVariationFunc {
 
   @Override
   public void transform(XFormTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-    double sina = Math.sin(pAmount * Math.PI * 0.5);
-    double cosa = Math.cos(pAmount * Math.PI * 0.5);
+    double sina = pContext.sin(pAmount * Math.PI * 0.5);
+    double cosa = pContext.cos(pAmount * Math.PI * 0.5);
     double x = cosa * pVarTP.x - sina * pVarTP.z;
     pVarTP.z = sina * pVarTP.x + cosa * pVarTP.z;
     pVarTP.x = x;

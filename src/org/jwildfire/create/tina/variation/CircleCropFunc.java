@@ -52,13 +52,13 @@ public class CircleCropFunc extends VariationFunc {
 
     double rad = Math.sqrt(pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y);
     double ang = Math.atan2(pAffineTP.y, pAffineTP.x);
-    double rdc = cr + (pContext.getRandomNumberGenerator().random() * 0.5 * ca);
+    double rdc = cr + (pContext.random() * 0.5 * ca);
 
     boolean esc = rad > cr;
     boolean cr0 = zero == 1;
 
-    double s = Math.sin(ang);
-    double c = Math.cos(ang);
+    double s = pContext.sin(ang);
+    double c = pContext.cos(ang);
 
     if (cr0 && esc) {
       pVarTP.x = pVarTP.y = 0;

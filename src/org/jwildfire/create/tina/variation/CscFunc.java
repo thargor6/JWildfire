@@ -26,11 +26,11 @@ public class CscFunc extends SimpleVariationFunc {
     /* complex vars by cothe */
     /* exp log sin cos tan sec csc cot sinh cosh tanh sech csch coth */
     //Cosecant CSC
-    double cscsin = Math.sin(pAffineTP.x);
-    double csccos = Math.cos(pAffineTP.x);
+    double cscsin = pContext.sin(pAffineTP.x);
+    double csccos = pContext.cos(pAffineTP.x);
     double cscsinh = Math.sinh(pAffineTP.y);
     double csccosh = Math.cosh(pAffineTP.y);
-    double cscden = 2.0 / (Math.cosh(2.0 * pAffineTP.y) - Math.cos(2.0 * pAffineTP.x));
+    double cscden = 2.0 / (Math.cosh(2.0 * pAffineTP.y) - pContext.cos(2.0 * pAffineTP.x));
     pVarTP.x += pAmount * cscden * cscsin * csccosh;
     pVarTP.y -= pAmount * cscden * csccos * cscsinh;
   }

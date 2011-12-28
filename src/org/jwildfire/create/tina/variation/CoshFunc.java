@@ -26,8 +26,8 @@ public class CoshFunc extends SimpleVariationFunc {
     /* complex vars by cothe */
     /* exp log sin cos tan sec csc cot sinh cosh tanh sech csch coth */
     //Hyperbolic Cosine COSH
-    double coshsin = Math.sin(pAffineTP.y);
-    double coshcos = Math.cos(pAffineTP.y);
+    double coshsin = pContext.sin(pAffineTP.y);
+    double coshcos = pContext.cos(pAffineTP.y);
     double coshsinh = Math.sinh(pAffineTP.x);
     double coshcosh = Math.cosh(pAffineTP.x);
     pVarTP.x += pAmount * coshcosh * coshcos;

@@ -24,8 +24,8 @@ public class CosineFunc extends SimpleVariationFunc {
   @Override
   public void transform(XFormTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     double r = pAffineTP.x * Math.PI;
-    double sinr = Math.sin(r);
-    double cosr = Math.cos(r);
+    double sinr = pContext.sin(r);
+    double cosr = pContext.cos(r);
     pVarTP.x += pAmount * cosr * Math.cosh(pAffineTP.y);
     pVarTP.y -= pAmount * sinr * Math.sinh(pAffineTP.y);
   }

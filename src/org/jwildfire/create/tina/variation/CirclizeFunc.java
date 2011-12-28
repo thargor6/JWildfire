@@ -57,8 +57,8 @@ public class CirclizeFunc extends VariationFunc {
     // tsk tsk... hole is not scaled by vvar.
     double r = var4_PI * side + hole;
     double a = Constants.M_PI_4 * perimeter / side - Constants.M_PI_4;
-    double sina = Math.sin(a);
-    double cosa = Math.cos(a);
+    double sina = pContext.sin(a);
+    double cosa = pContext.cos(a);
 
     pVarTP.x += r * cosa;
     pVarTP.y += r * sina;

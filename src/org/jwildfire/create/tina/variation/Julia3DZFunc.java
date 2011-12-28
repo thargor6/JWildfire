@@ -35,10 +35,10 @@ public class Julia3DZFunc extends VariationFunc {
     double r2d = pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y;
     double r = pAmount * Math.pow(r2d, cPower);
 
-    int rnd = (int) (pContext.getRandomNumberGenerator().random() * absPower);
+    int rnd = (int) (pContext.random() * absPower);
     double angle = (Math.atan2(pAffineTP.y, pAffineTP.x) + 2 * Math.PI * rnd) / power;
-    double sina = Math.sin(angle);
-    double cosa = Math.cos(angle);
+    double sina = pContext.sin(angle);
+    double cosa = pContext.cos(angle);
     pVarTP.x += r * cosa;
     pVarTP.y += r * sina;
     pVarTP.z += r * pAffineTP.z / (Math.sqrt(r2d) * absPower);

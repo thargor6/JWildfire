@@ -36,7 +36,7 @@ public class PreCropFunc extends VariationFunc {
   private double scatter_area = 0.0;
 
   private double distribute(XFormTransformationContext pContext, double a, double min, double max) {
-    double distance = pContext.getRandomNumberGenerator().random() * 0.5 * A;
+    double distance = pContext.random() * 0.5 * A;
     return a < min ? min + distance * (max - min) :
                      max - distance * (max - min);
   }

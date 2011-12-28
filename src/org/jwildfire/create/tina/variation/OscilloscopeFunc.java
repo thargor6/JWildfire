@@ -40,10 +40,10 @@ public class OscilloscopeFunc extends VariationFunc {
     double tpf = 2 * Math.PI * frequency;
     double t;
     if (Math.abs(damping) <= Tools.EPSILON) {
-      t = amplitude * Math.cos(tpf * pAffineTP.x) + separation;
+      t = amplitude * pContext.cos(tpf * pAffineTP.x) + separation;
     }
     else {
-      t = amplitude * Math.exp(-Math.abs(pAffineTP.x) * damping) * Math.cos(tpf * pAffineTP.x) + separation;
+      t = amplitude * pContext.exp(-Math.abs(pAffineTP.x) * damping) * pContext.cos(tpf * pAffineTP.x) + separation;
     }
 
     if (Math.abs(pAffineTP.y) <= t) {

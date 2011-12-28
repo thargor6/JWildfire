@@ -34,8 +34,8 @@ public class EDiscFunc extends SimpleVariationFunc {
     double a2 = -Math.acos(pAffineTP.x / xmax);
     double w = pAmount / 11.57034632;
 
-    double snv = Math.sin(a1);
-    double csv = Math.cos(a1);
+    double snv = pContext.sin(a1);
+    double csv = pContext.cos(a1);
     double snhu = Math.sinh(a2);
     double cshu = Math.cosh(a2);
 

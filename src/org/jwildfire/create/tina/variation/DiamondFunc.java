@@ -26,8 +26,8 @@ public class DiamondFunc extends SimpleVariationFunc {
     double length = pAffineTP.getPrecalcSqrt();
     double sinA = pAffineTP.getPrecalcSinA();
     double cosA = pAffineTP.getPrecalcCosA();
-    double sinr = Math.sin(length);
-    double cosr = Math.cos(length);
+    double sinr = pContext.sin(length);
+    double cosr = pContext.cos(length);
     pVarTP.x += pAmount * sinA * cosr;
     pVarTP.y += pAmount * cosA * sinr;
   }

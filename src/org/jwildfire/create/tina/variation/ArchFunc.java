@@ -23,9 +23,9 @@ public class ArchFunc extends SimpleVariationFunc {
 
   @Override
   public void transform(XFormTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-    double ang = pContext.getRandomNumberGenerator().random() * pAmount * Math.PI;
-    double sinr = Math.sin(ang);
-    double cosr = Math.cos(ang);
+    double ang = pContext.random() * pAmount * Math.PI;
+    double sinr = pContext.sin(ang);
+    double cosr = pContext.cos(ang);
     pVarTP.x += pAmount * sinr;
     pVarTP.y += pAmount * (sinr * sinr) / cosr;
   }

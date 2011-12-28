@@ -26,8 +26,8 @@ public class SpiralFunc extends SimpleVariationFunc {
     double sinA = pAffineTP.getPrecalcSinA();
     double cosA = pAffineTP.getPrecalcCosA();
     double r = pAffineTP.getPrecalcSqrt();
-    double sinr = Math.sin(r);
-    double cosr = Math.cos(r);
+    double sinr = pContext.sin(r);
+    double cosr = pContext.cos(r);
     r = pAmount / r;
     pVarTP.x += (cosA + sinr) * r;
     pVarTP.y += (sinA - cosr) * r;

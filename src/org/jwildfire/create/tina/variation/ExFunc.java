@@ -24,8 +24,8 @@ public class ExFunc extends SimpleVariationFunc {
   @Override
   public void transform(XFormTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     double r = Math.sqrt(pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y);
-    double n0 = Math.sin(pAffineTP.getPrecalcAtan() + r);
-    double n1 = Math.cos(pAffineTP.getPrecalcAtan() - r);
+    double n0 = pContext.sin(pAffineTP.getPrecalcAtan() + r);
+    double n1 = pContext.cos(pAffineTP.getPrecalcAtan() - r);
     double m0 = n0 * n0 * n0;
     double m1 = n1 * n1 * n1;
     r = r * pAmount;

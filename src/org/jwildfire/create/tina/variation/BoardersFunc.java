@@ -30,7 +30,7 @@ public class BoardersFunc extends SimpleVariationFunc {
     double offsetX = pAffineTP.x - roundX;
     double offsetY = pAffineTP.y - roundY;
 
-    if (pContext.getRandomNumberGenerator().random() >= 0.75) {
+    if (pContext.random() >= 0.75) {
       pVarTP.x += pAmount * (offsetX * 0.5 + roundX);
       pVarTP.y += pAmount * (offsetY * 0.5 + roundY);
     }

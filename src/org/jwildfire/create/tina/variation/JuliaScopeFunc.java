@@ -31,7 +31,7 @@ public class JuliaScopeFunc extends VariationFunc {
   @Override
   public void transform(XFormTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     double cn = dist / (double) power * 0.5;
-    int rnd = (int) (pContext.getRandomNumberGenerator().random() * Math.abs(power));
+    int rnd = (int) (pContext.random() * Math.abs(power));
     double angle;
     if ((rnd & 1) == 0) {
       angle = (2 * Math.PI * rnd + Math.atan2(pAffineTP.y, pAffineTP.x)) / power;
@@ -39,8 +39,8 @@ public class JuliaScopeFunc extends VariationFunc {
     else {
       angle = (2 * Math.PI * rnd - Math.atan2(pAffineTP.y, pAffineTP.x)) / power;
     }
-    double sina = Math.sin(angle);
-    double cosa = Math.cos(angle);
+    double sina = pContext.sin(angle);
+    double cosa = pContext.cos(angle);
     double r = pAmount * Math.pow(pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y, cn);
     pVarTP.x += r * cosa;
     pVarTP.y += r * sina;

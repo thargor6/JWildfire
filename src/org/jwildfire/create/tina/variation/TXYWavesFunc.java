@@ -44,19 +44,19 @@ public class TXYWavesFunc extends VariationFunc {
   @Override
   public void transform(XFormTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     /* Modified version of waves2 from Joel F */
-    double dampingX = Math.abs(dampX) < Tools.EPSILON ? 1.0 : Math.exp(dampX);
-    double dampingY = Math.abs(dampY) < Tools.EPSILON ? 1.0 : Math.exp(dampY);
+    double dampingX = Math.abs(dampX) < Tools.EPSILON ? 1.0 : pContext.exp(dampX);
+    double dampingY = Math.abs(dampY) < Tools.EPSILON ? 1.0 : pContext.exp(dampY);
     if (useCosX == 1) {
-      pVarTP.x += pAmount * (pAffineTP.x + dampingX * scalex * Math.cos(pAffineTP.y * freqx));
+      pVarTP.x += pAmount * (pAffineTP.x + dampingX * scalex * pContext.cos(pAffineTP.y * freqx));
     }
     else {
-      pVarTP.x += pAmount * (pAffineTP.x + dampingX * scalex * Math.sin(pAffineTP.y * freqx));
+      pVarTP.x += pAmount * (pAffineTP.x + dampingX * scalex * pContext.sin(pAffineTP.y * freqx));
     }
     if (useCosY == 1) {
-      pVarTP.y += pAmount * (pAffineTP.y + dampingY * scaley * Math.cos(pAffineTP.x * freqy));
+      pVarTP.y += pAmount * (pAffineTP.y + dampingY * scaley * pContext.cos(pAffineTP.x * freqy));
     }
     else {
-      pVarTP.y += pAmount * (pAffineTP.y + dampingY * scaley * Math.sin(pAffineTP.x * freqy));
+      pVarTP.y += pAmount * (pAffineTP.y + dampingY * scaley * pContext.sin(pAffineTP.x * freqy));
     }
   }
 

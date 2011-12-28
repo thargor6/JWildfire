@@ -40,15 +40,15 @@ public class TPostMirrorFunc extends VariationFunc {
 
   @Override
   public void transform(XFormTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-    if (xAxis > 0 && pContext.getRandomNumberGenerator().random() < 0.5) {
+    if (xAxis > 0 && pContext.random() < 0.5) {
       pVarTP.x = -pVarTP.x - xShift;
     }
 
-    if (yAxis > 0 && pContext.getRandomNumberGenerator().random() < 0.5) {
+    if (yAxis > 0 && pContext.random() < 0.5) {
       pVarTP.y = -pVarTP.y - yShift;
     }
 
-    if (zAxis > 0 && pContext.getRandomNumberGenerator().random() < 0.5) {
+    if (zAxis > 0 && pContext.random() < 0.5) {
       pVarTP.z = -pVarTP.z - zShift;
     }
   }

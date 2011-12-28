@@ -18,7 +18,6 @@ package org.jwildfire.create.tina.variation;
 
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
-import org.jwildfire.create.tina.random.RandomNumberGenerator;
 
 public class Pie3DFunc extends VariationFunc {
 
@@ -33,15 +32,14 @@ public class Pie3DFunc extends VariationFunc {
 
   @Override
   public void transform(XFormTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-    RandomNumberGenerator randGen = pContext.getRandomNumberGenerator();
-    int sl = (int) (randGen.random() * slices + 0.5);
-    double a = rotation + 2.0 * Math.PI * (sl + randGen.random() * thickness) / slices;
-    double r = pAmount * randGen.random();
-    double sina = Math.sin(a);
-    double cosa = Math.cos(a);
+    int sl = (int) (pContext.random() * slices + 0.5);
+    double a = rotation + 2.0 * Math.PI * (sl + pContext.random() * thickness) / slices;
+    double r = pAmount * pContext.random();
+    double sina = pContext.sin(a);
+    double cosa = pContext.cos(a);
     pVarTP.x += r * cosa;
     pVarTP.y += r * sina;
-    pVarTP.z += r * Math.sin(r);
+    pVarTP.z += r * pContext.sin(r);
   }
 
   @Override

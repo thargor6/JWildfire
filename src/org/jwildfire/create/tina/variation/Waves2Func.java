@@ -35,8 +35,8 @@ public class Waves2Func extends VariationFunc {
   @Override
   public void transform(XFormTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     /* waves2 from Joel F */
-    pVarTP.x += pAmount * (pAffineTP.x + scalex * Math.sin(pAffineTP.y * freqx));
-    pVarTP.y += pAmount * (pAffineTP.y + scaley * Math.sin(pAffineTP.x * freqy));
+    pVarTP.x += pAmount * (pAffineTP.x + scalex * pContext.sin(pAffineTP.y * freqx));
+    pVarTP.y += pAmount * (pAffineTP.y + scaley * pContext.sin(pAffineTP.x * freqy));
   }
 
   @Override

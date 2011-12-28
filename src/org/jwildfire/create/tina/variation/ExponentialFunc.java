@@ -24,9 +24,9 @@ public class ExponentialFunc extends SimpleVariationFunc {
   @Override
   public void transform(XFormTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     double r = Math.PI * pAffineTP.y;
-    double sinr = Math.sin(r);
-    double cosr = Math.cos(r);
-    double d = pAmount * Math.exp(pAffineTP.x - 1);
+    double sinr = pContext.sin(r);
+    double cosr = pContext.cos(r);
+    double d = pAmount * pContext.exp(pAffineTP.x - 1);
     pVarTP.x += cosr * d;
     pVarTP.y += sinr * d;
   }

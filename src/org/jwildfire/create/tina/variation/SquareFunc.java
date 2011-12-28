@@ -23,8 +23,8 @@ public class SquareFunc extends SimpleVariationFunc {
 
   @Override
   public void transform(XFormTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-    pVarTP.x += pAmount * (pContext.getRandomNumberGenerator().random() - 0.5);
-    pVarTP.y += pAmount * (pContext.getRandomNumberGenerator().random() - 0.5);
+    pVarTP.x += pAmount * (pContext.random() - 0.5);
+    pVarTP.y += pAmount * (pContext.random() - 0.5);
   }
 
   @Override

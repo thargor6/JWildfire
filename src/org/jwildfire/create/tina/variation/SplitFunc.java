@@ -32,14 +32,14 @@ public class SplitFunc extends VariationFunc {
   @Override
   public void transform(XFormTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     /* Split from apo plugins pack */
-    if (Math.cos(pAffineTP.x * xSize * Math.PI) >= 0) {
+    if (pContext.cos(pAffineTP.x * xSize * Math.PI) >= 0) {
       pVarTP.y += pAmount * pAffineTP.y;
     }
     else {
       pVarTP.y -= pAmount * pAffineTP.y;
     }
 
-    if (Math.cos(pAffineTP.y * ySize * Math.PI) >= 0) {
+    if (pContext.cos(pAffineTP.y * ySize * Math.PI) >= 0) {
       pVarTP.x += pAmount * pAffineTP.x;
     }
     else {

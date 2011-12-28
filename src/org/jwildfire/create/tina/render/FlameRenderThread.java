@@ -73,7 +73,7 @@ public class FlameRenderThread implements Runnable {
   }
 
   private void iterate_flat() {
-    XFormTransformationContextImpl ctx = new XFormTransformationContextImpl(renderer, renderer);
+    XFormTransformationContextImpl ctx = new XFormTransformationContextImpl(renderer.getFlameTransformationContext());
     XYZPoint affineT = new XYZPoint(); // affine part of the transformation
     XYZPoint varT = new XYZPoint(); // complete transformation
     XYZPoint p = new XYZPoint();
@@ -146,7 +146,7 @@ public class FlameRenderThread implements Runnable {
   }
 
   private void iterate_blur() {
-    XFormTransformationContextImpl ctx = new XFormTransformationContextImpl(renderer, renderer);
+    XFormTransformationContextImpl ctx = new XFormTransformationContextImpl(renderer.getFlameTransformationContext());
     XYZPoint affineT = new XYZPoint(); // affine part of the transformation
     XYZPoint varT = new XYZPoint(); // complete transformation
     XYZPoint p = new XYZPoint();
@@ -251,7 +251,7 @@ public class FlameRenderThread implements Runnable {
   }
 
   private void iterate_pseudo3D() {
-    XFormTransformationContextImpl ctx = new XFormTransformationContextImpl(renderer, renderer);
+    XFormTransformationContextImpl ctx = new XFormTransformationContextImpl(renderer.getFlameTransformationContext());
     Pseudo3DShader shader = new Pseudo3DShader(flame.getShadingInfo());
     shader.init();
 

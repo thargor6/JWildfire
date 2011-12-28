@@ -53,8 +53,8 @@ public class Fan2Func extends VariationFunc {
       a = angle + dx2;
     }
 
-    pVarTP.x += pAmount * r * Math.sin(a);
-    pVarTP.y += pAmount * r * Math.cos(a);
+    pVarTP.x += pAmount * r * pContext.sin(a);
+    pVarTP.y += pAmount * r * pContext.cos(a);
   }
 
   @Override

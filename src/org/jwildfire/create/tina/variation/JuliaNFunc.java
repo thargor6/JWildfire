@@ -29,18 +29,14 @@ public class JuliaNFunc extends VariationFunc {
   private int power = 2;
   private double dist = 1;
 
-  private double sqr(double pVal) {
-    return pVal * pVal;
-  }
-
   @Override
   public void transform(XFormTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-    double rnd = pContext.getRandomNumberGenerator().random();
+    double rnd = pContext.random();
     double angle = (Math.atan2(pAffineTP.y, pAffineTP.x) + 2 * Math.PI * ((int) (rnd * Math.abs(power)))) / (double) power;
-    double sina = Math.sin(angle);
-    double cosa = Math.cos(angle);
+    double sina = pContext.sin(angle);
+    double cosa = pContext.cos(angle);
     double d = dist / (power + power);
-    double r = pAmount * Math.pow(sqr(pAffineTP.x) + sqr(pAffineTP.y), d);
+    double r = pAmount * Math.pow(pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y, d);
     pVarTP.x += r * cosa;
     pVarTP.y += r * sina;
   }

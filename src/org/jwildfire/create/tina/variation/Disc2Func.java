@@ -33,32 +33,12 @@ public class Disc2Func extends VariationFunc {
   private double sinadd = 0.0;
   private double cosadd = 0.0;
 
-  private void precalc() {
-    double add = twist;
-    timespi = rot * Math.PI;
-    sinadd = Math.sin(add);
-    cosadd = Math.cos(add);
-    cosadd -= 1;
-    double k;
-    if (add > 2.0 * Math.PI) {
-      k = (1 + add - 2.0 * Math.PI);
-      cosadd *= k;
-      sinadd *= k;
-    }
-    if (add < -2.0 * Math.PI) {
-      k = (1 + add + 2.0 * Math.PI);
-      cosadd *= k;
-      sinadd *= k;
-    }
-  }
-
   @Override
   public void transform(XFormTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     /* Z+ variation Jan 07 */
-    precalc();
     double t = timespi * (pAffineTP.x + pAffineTP.y);
-    double sinr = Math.sin(t);
-    double cosr = Math.cos(t);
+    double sinr = pContext.sin(t);
+    double cosr = pContext.cos(t);
     double r = pAmount * pAffineTP.getPrecalcAtan() / Math.PI;
 
     pVarTP.x += (sinr + cosadd) * r;
@@ -88,6 +68,26 @@ public class Disc2Func extends VariationFunc {
   @Override
   public String getName() {
     return "disc2";
+  }
+
+  @Override
+  public void init(FlameTransformationContext pContext, XForm pXForm) {
+    double add = twist;
+    timespi = rot * Math.PI;
+    sinadd = pContext.sin(add);
+    cosadd = pContext.cos(add);
+    cosadd -= 1;
+    double k;
+    if (add > 2.0 * Math.PI) {
+      k = (1 + add - 2.0 * Math.PI);
+      cosadd *= k;
+      sinadd *= k;
+    }
+    if (add < -2.0 * Math.PI) {
+      k = (1 + add + 2.0 * Math.PI);
+      cosadd *= k;
+      sinadd *= k;
+    }
   }
 
 }

@@ -26,11 +26,11 @@ public class SecFunc extends SimpleVariationFunc {
     /* complex vars by cothe */
     /* exp log sin cos tan sec csc cot sinh cosh tanh sech csch coth */
     //Secant SEC
-    double secsin = Math.sin(pAffineTP.x);
-    double seccos = Math.cos(pAffineTP.x);
+    double secsin = pContext.sin(pAffineTP.x);
+    double seccos = pContext.cos(pAffineTP.x);
     double secsinh = Math.sinh(pAffineTP.y);
     double seccosh = Math.cosh(pAffineTP.y);
-    double secden = 2.0 / (Math.cos(2.0 * pAffineTP.x) + Math.cosh(2.0 * pAffineTP.y));
+    double secden = 2.0 / (pContext.cos(2.0 * pAffineTP.x) + Math.cosh(2.0 * pAffineTP.y));
     pVarTP.x += pAmount * secden * seccos * seccosh;
     pVarTP.y += pAmount * secden * secsin * secsinh;
   }

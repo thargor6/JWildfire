@@ -42,13 +42,13 @@ public class WedgeJuliaFunc extends VariationFunc {
     /* wedge_julia from apo plugin pack */
 
     double r = pAmount * Math.pow(pAffineTP.getPrecalcSumsq(), wedgeJulia_cn);
-    int t_rnd = (int) ((wedgeJulia_rN) * pContext.getRandomNumberGenerator().random());
+    int t_rnd = (int) ((wedgeJulia_rN) * pContext.random());
     double a = (pAffineTP.getPrecalcAtanYX() + 2.0 * Math.PI * t_rnd) / power;
     double c = Math.floor((count * a + Math.PI) * Constants.M_1_PI * 0.5);
 
     a = a * wedgeJulia_cf + c * angle;
-    double sa = Math.sin(a);
-    double ca = Math.cos(sa);
+    double sa = pContext.sin(a);
+    double ca = pContext.cos(sa);
 
     pVarTP.x += r * ca;
     pVarTP.y += r * sa;

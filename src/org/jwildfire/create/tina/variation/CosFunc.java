@@ -26,8 +26,8 @@ public class CosFunc extends SimpleVariationFunc {
     /* complex vars by cothe */
     /* exp log sin cos tan sec csc cot sinh cosh tanh sech csch coth */
     //Cosine COS
-    double cossin = Math.sin(pAffineTP.x);
-    double coscos = Math.cos(pAffineTP.x);
+    double cossin = pContext.sin(pAffineTP.x);
+    double coscos = pContext.cos(pAffineTP.x);
     double cossinh = Math.sinh(pAffineTP.y);
     double coscosh = Math.cosh(pAffineTP.y);
     pVarTP.x += pAmount * coscos * coscosh;

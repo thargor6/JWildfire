@@ -24,8 +24,8 @@ public class DiscFunc extends SimpleVariationFunc {
   @Override
   public void transform(XFormTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     double rPI = Math.PI * Math.sqrt(pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y);
-    double sinr = Math.sin(rPI);
-    double cosr = Math.cos(rPI);
+    double sinr = pContext.sin(rPI);
+    double cosr = pContext.cos(rPI);
     double r = pAmount * pAffineTP.getPrecalcAtan() / Math.PI;
     pVarTP.x += sinr * r;
     pVarTP.y += cosr * r;

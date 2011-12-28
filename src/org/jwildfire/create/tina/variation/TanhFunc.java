@@ -26,8 +26,8 @@ public class TanhFunc extends SimpleVariationFunc {
     /* complex vars by cothe */
     /* exp log sin cos tan sec csc cot sinh cosh tanh sech csch coth */
     //Hyperbolic Tangent TANH
-    double tanhsin = Math.sin(2.0 * pAffineTP.y);
-    double tanhcos = Math.cos(2.0 * pAffineTP.y);
+    double tanhsin = pContext.sin(2.0 * pAffineTP.y);
+    double tanhcos = pContext.cos(2.0 * pAffineTP.y);
     double tanhsinh = Math.sinh(2.0 * pAffineTP.x);
     double tanhcosh = Math.cosh(2.0 * pAffineTP.x);
     double tanhden = 1.0 / (tanhcos + tanhcosh);

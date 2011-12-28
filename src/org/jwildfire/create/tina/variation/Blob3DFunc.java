@@ -33,10 +33,10 @@ public class Blob3DFunc extends VariationFunc {
   public void transform(XFormTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     double a = Math.atan2(pAffineTP.x, pAffineTP.y);
     double r = Math.sqrt(pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y);
-    r = r * (low + (high - low) * (0.5 + 0.5 * Math.sin(waves * a)));
-    double nx = Math.sin(a) * r;
-    double ny = Math.cos(a) * r;
-    double nz = Math.sin(waves * a) * r;
+    r = r * (low + (high - low) * (0.5 + 0.5 * pContext.sin(waves * a)));
+    double nx = pContext.sin(a) * r;
+    double ny = pContext.cos(a) * r;
+    double nz = pContext.sin(waves * a) * r;
 
     pVarTP.x += pAmount * nx;
     pVarTP.y += pAmount * ny;

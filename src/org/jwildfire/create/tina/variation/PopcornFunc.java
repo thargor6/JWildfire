@@ -23,14 +23,14 @@ public class PopcornFunc extends SimpleVariationFunc {
 
   @Override
   public void transform(XFormTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-    double dx = Math.tan(3 * pAffineTP.y);
+    double dx = pContext.tan(3 * pAffineTP.y);
     if (dx != dx)
       dx = 0.0;
-    double dy = Math.tan(3 * pAffineTP.x);
+    double dy = pContext.tan(3 * pAffineTP.x);
     if (dy != dy)
       dy = 0.0;
-    double nx = pAffineTP.x + pXForm.getCoeff20() * Math.sin(dx);
-    double ny = pAffineTP.y + pXForm.getCoeff21() * Math.sin(dy);
+    double nx = pAffineTP.x + pXForm.getCoeff20() * pContext.sin(dx);
+    double ny = pAffineTP.y + pXForm.getCoeff21() * pContext.sin(dy);
     pVarTP.x += pAmount * nx;
     pVarTP.y += pAmount * ny;
   }

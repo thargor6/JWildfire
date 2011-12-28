@@ -23,8 +23,8 @@ public class PreRotateXFunc extends SimpleVariationFunc {
 
   @Override
   public void transform(XFormTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-    double sina = Math.sin(pAmount * Math.PI * 0.5);
-    double cosa = Math.cos(pAmount * Math.PI * 0.5);
+    double sina = pContext.sin(pAmount * Math.PI * 0.5);
+    double cosa = pContext.cos(pAmount * Math.PI * 0.5);
     double z = cosa * pAffineTP.z - sina * pAffineTP.y;
     pAffineTP.y = sina * pAffineTP.z + cosa * pAffineTP.y;
     pAffineTP.z = z;

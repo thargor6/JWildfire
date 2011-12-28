@@ -25,12 +25,12 @@ public class RaysFunc extends SimpleVariationFunc {
   @Override
   public void transform(XFormTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     /* Z+ variation Jan 07 */
-    double ang = pAmount * pContext.getRandomNumberGenerator().random() * Math.PI;
+    double ang = pAmount * pContext.random() * Math.PI;
     double r = pAmount / (pAffineTP.getPrecalcSumsq() + Constants.EPSILON);
-    double tanr = pAmount * Math.tan(ang) * r;
+    double tanr = pAmount * pContext.tan(ang) * r;
 
-    pVarTP.x += tanr * Math.cos(pAffineTP.x);
-    pVarTP.y += tanr * Math.sin(pAffineTP.y);
+    pVarTP.x += tanr * pContext.cos(pAffineTP.x);
+    pVarTP.y += tanr * pContext.sin(pAffineTP.y);
   }
 
   @Override

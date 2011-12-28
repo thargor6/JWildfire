@@ -36,8 +36,8 @@ public class AugerFunc extends VariationFunc {
   @Override
   public void transform(XFormTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     // Auger, by Xyrus01
-    double s = Math.sin(freq * pAffineTP.x);
-    double t = Math.sin(freq * pAffineTP.y);
+    double s = pContext.sin(freq * pAffineTP.x);
+    double t = pContext.sin(freq * pAffineTP.y);
     double dy = pAffineTP.y + weight * (scale * s / 2.0 + Math.abs(pAffineTP.y) * s);
     double dx = pAffineTP.x + weight * (scale * t / 2.0 + Math.abs(pAffineTP.x) * t);
 

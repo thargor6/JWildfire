@@ -47,13 +47,13 @@ public class EllipticFunc extends SimpleVariationFunc {
     else {
       ssx = Math.sqrt(ssx);
     }
-    if (pContext.getRandomNumberGenerator().random() < 0.5) {
+    if (pContext.random() < 0.5) {
       pVarTP.x += w * Math.atan2(a, b);
     }
     else {
       pVarTP.x -= w * Math.atan2(a, b);
     }
-    if (pContext.getRandomNumberGenerator().random() < 0.5) {
+    if (pContext.random() < 0.5) {
       pVarTP.y += w * Math.log(xmax + ssx);
     }
     else {

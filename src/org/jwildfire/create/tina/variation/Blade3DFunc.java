@@ -35,9 +35,9 @@ public class Blade3DFunc extends SimpleVariationFunc {
     end;
     */
 
-    double r = pContext.getRandomNumberGenerator().random() * pAmount * Math.sqrt(pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y);
-    double sinr = Math.sin(r);
-    double cosr = Math.cos(r);
+    double r = pContext.random() * pAmount * Math.sqrt(pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y);
+    double sinr = pContext.sin(r);
+    double cosr = pContext.cos(r);
     pVarTP.x += pAmount * pAffineTP.x * (cosr + sinr);
     pVarTP.y += pAmount * pAffineTP.x * (cosr - sinr);
     pVarTP.z += pAmount * pAffineTP.y * (sinr - cosr);

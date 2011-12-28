@@ -45,8 +45,8 @@ public class CurveFunc extends VariationFunc {
     if (pc_ylen < 1E-20)
       pc_ylen = 1E-20;
 
-    pVarTP.x += pAmount * (pAffineTP.x + xAmp * Math.exp(-pAffineTP.y * pAffineTP.y / pc_xlen));
-    pVarTP.y += pAmount * (pAffineTP.y + yAmp * Math.exp(-pAffineTP.x * pAffineTP.x / pc_ylen));
+    pVarTP.x += pAmount * (pAffineTP.x + xAmp * pContext.exp(-pAffineTP.y * pAffineTP.y / pc_xlen));
+    pVarTP.y += pAmount * (pAffineTP.y + yAmp * pContext.exp(-pAffineTP.x * pAffineTP.x / pc_ylen));
   }
 
   @Override

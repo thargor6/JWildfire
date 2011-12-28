@@ -30,16 +30,8 @@ public class XHeartFunc extends VariationFunc {
   // derived variables
   private double rat, cosa, sina;
 
-  private void prepare() {
-    double ang = Constants.M_PI_4 + (0.5 * Constants.M_PI_4 * angle);
-    sina = Math.sin(ang);
-    cosa = Math.cos(ang);
-    rat = 6 + 2 * ratio;
-  }
-
   @Override
   public void transform(XFormTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-    prepare();
     // xheart by xyrus02, http://xyrus02.deviantart.com/art/XHeart-Plugin-139866412
     double r2_4 = pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y + 4;
     if (r2_4 == 0)
@@ -81,5 +73,13 @@ public class XHeartFunc extends VariationFunc {
   @Override
   public String getName() {
     return "xheart";
+  }
+
+  @Override
+  public void init(FlameTransformationContext pContext, XForm pXForm) {
+    double ang = Constants.M_PI_4 + (0.5 * Constants.M_PI_4 * angle);
+    sina = pContext.sin(ang);
+    cosa = pContext.cos(ang);
+    rat = 6 + 2 * ratio;
   }
 }

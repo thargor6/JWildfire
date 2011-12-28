@@ -25,8 +25,8 @@ public class HeartFunc extends SimpleVariationFunc {
   public void transform(XFormTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     double r = Math.sqrt(pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y);
     double angle = pAffineTP.getPrecalcAtan();
-    double sinr = Math.sin(r * angle);
-    double cosr = Math.cos(r * angle);
+    double sinr = pContext.sin(r * angle);
+    double cosr = pContext.cos(r * angle);
     r *= pAmount;
     pVarTP.x += r * sinr;
     pVarTP.y -= r * cosr;

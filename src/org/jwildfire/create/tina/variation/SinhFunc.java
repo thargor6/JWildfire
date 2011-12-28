@@ -26,8 +26,8 @@ public class SinhFunc extends SimpleVariationFunc {
     /* complex vars by cothe */
     /* exp log sin cos tan sec csc cot sinh cosh tanh sech csch coth */
     //Hyperbolic Sine SINH
-    double sinhsin = Math.sin(pAffineTP.y);
-    double sinhcos = Math.cos(pAffineTP.y);
+    double sinhsin = pContext.sin(pAffineTP.y);
+    double sinhcos = pContext.cos(pAffineTP.y);
     double sinhsinh = Math.sinh(pAffineTP.x);
     double sinhcosh = Math.cosh(pAffineTP.x);
     pVarTP.x += pAmount * sinhsinh * sinhcos;

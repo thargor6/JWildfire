@@ -25,11 +25,11 @@ public class FociFunc extends SimpleVariationFunc {
   public void transform(XFormTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     /* Foci in the Apophysis Plugin Pack */
 
-    double expx = Math.exp(pAffineTP.x) * 0.5;
+    double expx = pContext.exp(pAffineTP.x) * 0.5;
     double expnx = 0.25 / expx;
 
-    double sn = Math.sin(pAffineTP.y);
-    double cn = Math.cos(pAffineTP.y);
+    double sn = pContext.sin(pAffineTP.y);
+    double cn = pContext.cos(pAffineTP.y);
     double tmp = pAmount / (expx + expnx - cn);
 
     pVarTP.x += tmp * (expx - expnx);

@@ -107,8 +107,8 @@ public class BubbleWrapFunc extends VariationFunc {
     // Spin around the centre:
     r = (Lx * Lx + Ly * Ly) / r2; // r should be 0.0 - 1.0
     theta = inner_twist * (1.0 - r) + outer_twist * r;
-    s = Math.sin(theta);
-    c = Math.cos(theta);
+    s = pContext.sin(theta);
+    c = pContext.cos(theta);
 
     // Add rotated local vectors direct to centre (avoids use of temp storage)
     Vx = Cx + c * Lx + s * Ly;

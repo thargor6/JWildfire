@@ -34,9 +34,9 @@ public class TRoseFunc extends VariationFunc {
   public void transform(XFormTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     double a = Math.atan2(pAffineTP.x, pAffineTP.y);
     double r = Math.sqrt(pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y);
-    r = amp * Math.cos(waves * a);
-    double nx = Math.sin(a) * r;
-    double ny = Math.cos(a) * r;
+    r = amp * pContext.cos(waves * a);
+    double nx = pContext.sin(a) * r;
+    double ny = pContext.cos(a) * r;
 
     pVarTP.x += pAmount * nx;
     pVarTP.y += pAmount * ny;

@@ -26,8 +26,8 @@ public class TanFunc extends SimpleVariationFunc {
     /* complex vars by cothe */
     /* exp log sin cos tan sec csc cot sinh cosh tanh sech csch coth */
     //Tangent TAN
-    double tansin = Math.sin(2.0 * pAffineTP.x);
-    double tancos = Math.cos(2.0 * pAffineTP.x);
+    double tansin = pContext.sin(2.0 * pAffineTP.x);
+    double tancos = pContext.cos(2.0 * pAffineTP.x);
     double tansinh = Math.sinh(2.0 * pAffineTP.y);
     double tancosh = Math.cosh(2.0 * pAffineTP.y);
     double tanden = 1.0 / (tancos + tancosh);

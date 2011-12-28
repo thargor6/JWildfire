@@ -18,7 +18,6 @@ package org.jwildfire.create.tina.variation;
 
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
-import org.jwildfire.create.tina.random.RandomNumberGenerator;
 
 public class RadialBlurFunc extends VariationFunc {
   private final double gauss_rnd[] = new double[4];
@@ -32,16 +31,16 @@ public class RadialBlurFunc extends VariationFunc {
   @Override
   public void transform(XFormTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     double rndG = (gauss_rnd[0] + gauss_rnd[1] + gauss_rnd[2] + gauss_rnd[3] - 2);
-    gauss_rnd[gauss_N] = pContext.getRandomNumberGenerator().random();
+    gauss_rnd[gauss_N] = pContext.random();
     gauss_N = (gauss_N + 1) & 3;
 
-    double spin = pAmount * Math.sin(angle * Math.PI * 0.5);
-    double zoom = pAmount * Math.cos(angle * Math.PI * 0.5);
+    double spin = pAmount * pContext.sin(angle * Math.PI * 0.5);
+    double zoom = pAmount * pContext.cos(angle * Math.PI * 0.5);
 
     double ra = Math.sqrt(pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y);
     double alpha = Math.atan2(pAffineTP.y, pAffineTP.x) + spin * rndG;
-    double sina = Math.sin(alpha);
-    double cosa = Math.cos(alpha);
+    double sina = pContext.sin(alpha);
+    double cosa = pContext.cos(alpha);
     double rz = zoom * rndG - 1;
     pVarTP.x += ra * cosa + rz * pAffineTP.x;
     pVarTP.y += ra * sina + rz * pAffineTP.y;
@@ -72,11 +71,10 @@ public class RadialBlurFunc extends VariationFunc {
 
   @Override
   public void init(FlameTransformationContext pContext, XForm pXForm) {
-    RandomNumberGenerator randGen = pContext.getRandomNumberGenerator();
-    gauss_rnd[0] = randGen.random();
-    gauss_rnd[1] = randGen.random();
-    gauss_rnd[2] = randGen.random();
-    gauss_rnd[3] = randGen.random();
+    gauss_rnd[0] = pContext.random();
+    gauss_rnd[1] = pContext.random();
+    gauss_rnd[2] = pContext.random();
+    gauss_rnd[3] = pContext.random();
     gauss_N = 0;
   }
 

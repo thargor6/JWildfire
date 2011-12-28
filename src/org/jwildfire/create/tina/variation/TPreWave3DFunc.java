@@ -37,9 +37,9 @@ public class TPreWave3DFunc extends VariationFunc {
     double amplitude = pAmount;
     if (Math.abs(damping) > Constants.EPSILON) {
       double dmp = -dl * damping;
-      amplitude *= Math.exp(dmp);
+      amplitude *= pContext.exp(dmp);
     }
-    pAffineTP.z += amplitude * (double) Math.sin(2.0 * Math.PI * dl + phase);
+    pAffineTP.z += amplitude * (double) pContext.sin(2.0 * Math.PI * dl + phase);
   }
 
   @Override

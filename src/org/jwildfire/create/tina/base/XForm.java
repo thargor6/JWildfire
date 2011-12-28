@@ -287,10 +287,10 @@ public class XForm {
       for (int i = 0; i < 3; i++) {
         switch (i) {
           case 0:
-            pContext.getRandomNumberGenerator().setStatus(RandGenStatus.RECORDING);
+            pContext.setRandGenStatus(RandGenStatus.RECORDING);
             break;
           default:
-            pContext.getRandomNumberGenerator().setStatus(RandGenStatus.REPLAY);
+            pContext.setRandGenStatus(RandGenStatus.REPLAY);
             break;
         }
         pDstPoint[i].color = pSrcPoint[i].color * c1 + c2;
@@ -368,7 +368,7 @@ public class XForm {
       }
     }
     finally {
-      pContext.getRandomNumberGenerator().setStatus(RandGenStatus.DEFAULT);
+      pContext.setRandGenStatus(RandGenStatus.DEFAULT);
     }
   }
 

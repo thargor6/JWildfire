@@ -45,8 +45,8 @@ public class LazySusanFunc extends VariationFunc {
 
     if (r < pAmount) {
       double a = Math.atan2(y, x) + spin + twist * (pAmount - r);
-      double sina = Math.sin(a);
-      double cosa = Math.cos(a);
+      double sina = pContext.sin(a);
+      double cosa = pContext.cos(a);
       r = pAmount * r;
 
       pVarTP.x += r * cosa + this.x;

@@ -26,8 +26,8 @@ public class CothFunc extends SimpleVariationFunc {
     /* complex vars by cothe */
     /* exp log sin cos tan sec csc cot sinh cosh tanh sech csch coth */
     //Hyperbolic Cotangent COTH
-    double cothsin = Math.sin(2.0 * pAffineTP.y);
-    double cothcos = Math.cos(2.0 * pAffineTP.y);
+    double cothsin = pContext.sin(2.0 * pAffineTP.y);
+    double cothcos = pContext.cos(2.0 * pAffineTP.y);
     double cothsinh = Math.sinh(2.0 * pAffineTP.x);
     double cothcosh = Math.cosh(2.0 * pAffineTP.x);
     double cothden = 1.0 / (cothcosh - cothcos);

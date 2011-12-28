@@ -46,8 +46,8 @@ public class WedgeSphFunc extends VariationFunc {
 
     a = a * comp_fac + c * angle;
 
-    double sa = Math.sin(a);
-    double ca = Math.cos(a);
+    double sa = pContext.sin(a);
+    double ca = pContext.cos(a);
     r = pAmount * (r + hole);
 
     pVarTP.x += r * ca;

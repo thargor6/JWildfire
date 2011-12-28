@@ -23,7 +23,7 @@ public class CylinderFunc extends SimpleVariationFunc {
 
   @Override
   public void transform(XFormTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-    pVarTP.x += pAmount * Math.sin(pAffineTP.x);
+    pVarTP.x += pAmount * pContext.sin(pAffineTP.x);
     pVarTP.y += pAmount * pAffineTP.y;
   }
 

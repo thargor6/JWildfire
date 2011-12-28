@@ -31,8 +31,8 @@ public class FanFunc extends SimpleVariationFunc {
       a = pAffineTP.getPrecalcAtan() - dx2;
     else
       a = pAffineTP.getPrecalcAtan() + dx2;
-    double sinr = Math.sin(a);
-    double cosr = Math.cos(a);
+    double sinr = pContext.sin(a);
+    double cosr = pContext.cos(a);
     double r = pAmount * Math.sqrt(pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y);
     pVarTP.x += r * cosr;
     pVarTP.y += r * sinr;

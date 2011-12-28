@@ -48,7 +48,7 @@ public class NgonFunc extends VariationFunc {
     if (phi > b / 2)
       phi -= b;
 
-    amp = corners * (1.0 / (Math.cos(phi) + Constants.EPSILON) - 1.0) + circle;
+    amp = corners * (1.0 / (pContext.cos(phi) + Constants.EPSILON) - 1.0) + circle;
     amp /= (r_factor + Constants.EPSILON);
 
     pVarTP.x += pAmount * pAffineTP.x * amp;

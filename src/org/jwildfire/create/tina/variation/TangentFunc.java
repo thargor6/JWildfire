@@ -30,8 +30,8 @@ public class TangentFunc extends SimpleVariationFunc {
       FPy := FPy + vars[30] * (sin(FTy)/cos(FTy));
     end;
     */
-    pVarTP.x += pAmount * Math.sin(pAffineTP.x) / Math.cos(pAffineTP.y);
-    pVarTP.y += pAmount * Math.tan(pAffineTP.y);
+    pVarTP.x += pAmount * pContext.sin(pAffineTP.x) / pContext.cos(pAffineTP.y);
+    pVarTP.y += pAmount * pContext.tan(pAffineTP.y);
   }
 
   @Override

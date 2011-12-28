@@ -26,11 +26,11 @@ public class CschFunc extends SimpleVariationFunc {
     /* complex vars by cothe */
     /* exp log sin cos tan sec csc cot sinh cosh tanh sech csch coth */
     //Hyperbolic Cosecant CSCH
-    double cschsin = Math.sin(pAffineTP.y);
-    double cschcos = Math.cos(pAffineTP.y);
+    double cschsin = pContext.sin(pAffineTP.y);
+    double cschcos = pContext.cos(pAffineTP.y);
     double cschsinh = Math.sinh(pAffineTP.x);
     double cschcosh = Math.cosh(pAffineTP.x);
-    double cschden = 2.0 / (Math.cosh(2.0 * pAffineTP.x) - Math.cos(2.0 * pAffineTP.y));
+    double cschden = 2.0 / (Math.cosh(2.0 * pAffineTP.x) - pContext.cos(2.0 * pAffineTP.y));
     pVarTP.x += pAmount * cschden * cschsinh * cschcos;
     pVarTP.y -= pAmount * cschden * cschcosh * cschsin;
   }

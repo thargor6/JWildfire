@@ -26,8 +26,8 @@ public class CotFunc extends SimpleVariationFunc {
     /* complex vars by cothe */
     /* exp log sin cos tan sec csc cot sinh cosh tanh sech csch coth */
     //Cotangent COT
-    double cotsin = Math.sin(2.0 * pAffineTP.x);
-    double cotcos = Math.cos(2.0 * pAffineTP.x);
+    double cotsin = pContext.sin(2.0 * pAffineTP.x);
+    double cotcos = pContext.cos(2.0 * pAffineTP.x);
     double cotsinh = Math.sinh(2.0 * pAffineTP.y);
     double cotcosh = Math.cosh(2.0 * pAffineTP.y);
     double cotden = 1.0 / (cotcosh - cotcos);

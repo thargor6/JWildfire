@@ -34,17 +34,17 @@ public class EscherFunc extends VariationFunc {
     double a = pAffineTP.getPrecalcAtanYX();
     double lnr = 0.5 * Math.log(pAffineTP.getPrecalcSumsq());
 
-    double seb = Math.sin(beta);
-    double ceb = Math.cos(beta);
+    double seb = pContext.sin(beta);
+    double ceb = pContext.cos(beta);
 
     double vc = 0.5 * (1.0 + ceb);
     double vd = 0.5 * seb;
 
-    double m = pAmount * Math.exp(vc * lnr - vd * a);
+    double m = pAmount * pContext.exp(vc * lnr - vd * a);
     double n = vc * a + vd * lnr;
 
-    double sn = Math.sin(n);
-    double cn = Math.cos(n);
+    double sn = pContext.sin(n);
+    double cn = pContext.cos(n);
 
     pVarTP.x += m * cn;
     pVarTP.y += m * sn;
