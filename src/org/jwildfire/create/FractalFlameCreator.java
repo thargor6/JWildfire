@@ -20,6 +20,7 @@ import java.awt.Color;
 import java.io.File;
 import java.util.List;
 
+import org.jwildfire.base.Prefs;
 import org.jwildfire.base.Property;
 import org.jwildfire.base.PropertyMax;
 import org.jwildfire.base.PropertyMin;
@@ -223,9 +224,15 @@ public class FractalFlameCreator extends ImageCreator {
     //      xForm.setWeight(Math.random());
     //    }
 
-    FlameRenderer renderer = new FlameRenderer(flame);
-    // TODO pPrefs.getTinaRenderThreads()
-    renderer.renderFlame(res, 8);
+    Prefs prefs = new Prefs();
+    try {
+      prefs.loadFromFile();
+    }
+    catch (Exception ex) {
+      ex.printStackTrace();
+    }
+    FlameRenderer renderer = new FlameRenderer(flame, prefs);
+    renderer.renderFlame(res);
   }
 
   public String getFlameFilename() {

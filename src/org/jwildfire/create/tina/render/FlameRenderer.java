@@ -17,22 +17,27 @@
 package org.jwildfire.create.tina.render;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
+import org.jwildfire.base.Prefs;
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.RasterPoint;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+import org.jwildfire.create.tina.io.Flam3Reader;
 import org.jwildfire.create.tina.palette.RenderColor;
 import org.jwildfire.create.tina.random.RandomNumberGenerator;
 import org.jwildfire.create.tina.random.SimpleRandomNumberGenerator;
 import org.jwildfire.create.tina.swing.ProgressUpdater;
+import org.jwildfire.create.tina.variation.DefaultFlameTransformationContextImpl;
+import org.jwildfire.create.tina.variation.FastFlameTransformationContextImpl;
 import org.jwildfire.create.tina.variation.FlameTransformationContext;
-import org.jwildfire.create.tina.variation.FlameTransformationContextImpl;
 import org.jwildfire.create.tina.variation.Variation;
 import org.jwildfire.image.Pixel;
 import org.jwildfire.image.SimpleImage;
+import org.jwildfire.io.ImageWriter;
 import org.jwildfire.transform.ScaleAspect;
 import org.jwildfire.transform.ScaleTransformer;
 
@@ -72,12 +77,15 @@ public class FlameRenderer {
   private AffineZStyle affineZStyle = AffineZStyle.FLAT;
   private ProgressUpdater progressUpdater;
   // 
-  private FlameTransformationContext flameTransformationContext = new FlameTransformationContextImpl(this);
+  private final FlameTransformationContext flameTransformationContext;
 
   private final Flame flame;
+  private final Prefs prefs;
 
-  public FlameRenderer(Flame pFlame) {
+  public FlameRenderer(Flame pFlame, Prefs pPrefs) {
     flame = pFlame;
+    prefs = pPrefs;
+    flameTransformationContext = prefs.getTinaRenderFastMath() > 0 ? new FastFlameTransformationContextImpl(this) : new DefaultFlameTransformationContextImpl(this);
   }
 
   private void init3D() {
@@ -154,7 +162,7 @@ public class FlameRenderer {
     }
   }
 
-  public void renderFlame(SimpleImage pImage, int pThreads) {
+  public void renderFlame(SimpleImage pImage) {
     if (flame.getXForms().size() == 0) {
       pImage.fillBackground(flame.getBGColorRed(), flame.getBGColorGreen(), flame.getBGColorBlue());
       return;
@@ -214,12 +222,12 @@ public class FlameRenderer {
         }
 
         if (twoPasses) {
-          iterate(RenderPass.FLAT, i, colorOversample * 2, pThreads);
+          iterate(RenderPass.FLAT, i, colorOversample * 2, prefs);
           createPass2Raster();
-          iterate(RenderPass.FINAL, i + 1, colorOversample * 2, pThreads);
+          iterate(RenderPass.FINAL, i + 1, colorOversample * 2, prefs);
         }
         else {
-          iterate(RenderPass.FINAL, i, colorOversample, pThreads);
+          iterate(RenderPass.FINAL, i, colorOversample, prefs);
         }
         if (flame.getSampleDensity() <= 10.0) {
           renderImageSimple(img);
@@ -302,47 +310,53 @@ public class FlameRenderer {
     }
   }
 
-  private void iterate(RenderPass pRenderPass, int pPart, int pParts, int pThreads) {
+  private void iterate(RenderPass pRenderPass, int pPart, int pParts, Prefs prefs) {
     long nSamples = (long) ((flame.getSampleDensity() * (double) rasterSize + 0.5));
     //    if (flame.getSampleDensity() > 50) {
     //      System.err.println("SAMPLES: " + nSamples);
     //    }
-    int PROGRESS_STEPS = 100;
+    int PROGRESS_STEPS = 25;
     if (progressUpdater != null && pPart == 0) {
-      progressUpdater.initProgress(PROGRESS_STEPS * pParts);
+      progressUpdater.initProgress((PROGRESS_STEPS - 1) * pParts);
     }
     long sampleProgressUpdateStep = nSamples / 100;
     long nextProgressUpdate = sampleProgressUpdateStep;
     List<FlameRenderThread> threads = new ArrayList<FlameRenderThread>();
-    for (int i = 0; i < pThreads; i++) {
-      FlameRenderThread t = new FlameRenderThread(pRenderPass, this, flame, nSamples / (long) pThreads, affineZStyle);
-      threads.add(t);
-      new Thread(t).start();
+    int nThreads = prefs.getTinaRenderThreads();
+    if (nThreads <= 1) {
+      FlameRenderThread t = new FlameRenderThread(pRenderPass, this, flame, nSamples / (long) nThreads, affineZStyle, prefs);
+      t.run();
     }
-    boolean done = false;
-    while (!done) {
-      try {
-        Thread.sleep(1);
+    else {
+      for (int i = 0; i < nThreads; i++) {
+        FlameRenderThread t = new FlameRenderThread(pRenderPass, this, flame, nSamples / (long) nThreads, affineZStyle, prefs);
+        threads.add(t);
+        new Thread(t).start();
       }
-      catch (InterruptedException e) {
-        e.printStackTrace();
-      }
-      done = true;
-      long currSamples = 0;
-      for (FlameRenderThread t : threads) {
-        if (!t.isFinished()) {
-          done = false;
+      boolean done = false;
+      while (!done) {
+        try {
+          Thread.sleep(1);
         }
-        currSamples += t.getCurrSample();
-      }
-      if (currSamples >= nextProgressUpdate) {
-        if (progressUpdater != null) {
-          int currProgress = (int) ((currSamples * PROGRESS_STEPS) / nSamples);
-          progressUpdater.updateProgress(currProgress + pPart * PROGRESS_STEPS);
-          nextProgressUpdate = (currProgress + 1) * sampleProgressUpdateStep;
+        catch (InterruptedException e) {
+          e.printStackTrace();
+        }
+        done = true;
+        long currSamples = 0;
+        for (FlameRenderThread t : threads) {
+          if (!t.isFinished()) {
+            done = false;
+          }
+          currSamples += t.getCurrSample();
+        }
+        if (currSamples >= nextProgressUpdate) {
+          if (progressUpdater != null) {
+            int currProgress = (int) ((currSamples * PROGRESS_STEPS) / nSamples);
+            progressUpdater.updateProgress(currProgress + pPart * PROGRESS_STEPS);
+            nextProgressUpdate = (currProgress + 1) * sampleProgressUpdateStep;
+          }
         }
       }
-
     }
   }
 
@@ -493,6 +507,37 @@ public class FlameRenderer {
 
   protected FlameTransformationContext getFlameTransformationContext() {
     return flameTransformationContext;
+  }
+
+  // For quick benchmarking, should be removed later, can't get TPTP get to run on the whole app
+  public static void main(String args[]) {
+    try {
+      Prefs prefs = new Prefs();
+      prefs.loadFromFile();
+      List<Flame> flames = new Flam3Reader().readFlames("C:\\TMP\\wf\\Apophysis\\benchmark1.flame");
+      Flame flame = flames.get(0);
+      FlameRenderer renderer = new FlameRenderer(flame, prefs);
+
+      SimpleImage img = new SimpleImage(1920, 1080);
+      double wScl = (double) img.getImageWidth() / (double) flame.getWidth();
+      double hScl = (double) img.getImageHeight() / (double) flame.getHeight();
+      flame.setPixelsPerUnit((wScl + hScl) * 0.5 * flame.getPixelsPerUnit());
+      flame.setWidth(img.getImageWidth());
+      flame.setHeight(img.getImageHeight());
+      flame.setSampleDensity(100);
+      flame.setSpatialOversample(1);
+      flame.setColorOversample(1);
+      flame.setSpatialFilterRadius(0);
+      prefs.setTinaRenderThreads(1);
+      long t0 = Calendar.getInstance().getTimeInMillis();
+      renderer.renderFlame(img);
+      long t1 = Calendar.getInstance().getTimeInMillis();
+      System.err.println("RENDER TIME: " + ((double) (t1 - t0) / 1000.0) + "s");
+      new ImageWriter().saveImage(img, "C:\\TMP\\wf\\Apophysis\\benchmark1.png");
+    }
+    catch (Exception ex) {
+      ex.printStackTrace();
+    }
   }
 
 }

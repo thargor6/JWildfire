@@ -19,6 +19,7 @@ package org.jwildfire.base;
 import java.io.File;
 
 public class Prefs extends ManagedObject {
+  // DON'T forget to update the assign() method after adding new properties!!!
   static final String PREFS_FILE = "j-wildfire.properties";
 
   static final String KEY_GENERAL_PATH_IMAGES = "general.path.images";
@@ -27,6 +28,7 @@ public class Prefs extends ManagedObject {
 
   static final String KEY_TINA_PATH_FLAMES = "tina.path.flames";
   static final String KEY_TINA_RENDER_THREADS = "tina.render.threads";
+  static final String KEY_TINA_RENDER_FAST_MATH = "tina.render.fast_math";
   static final String KEY_TINA_RENDER_IMAGE_WIDTH = "tina.render.image.width";
   static final String KEY_TINA_RENDER_IMAGE_HEIGHT = "tina.render.image.height";
   static final String KEY_TINA_RENDER_MOVIE_WIDTH = "tina.render.movie.width";
@@ -86,6 +88,8 @@ public class Prefs extends ManagedObject {
 
   @Property(description = "Maximum number of threads", category = PropertyCategory.TINA)
   private int tinaRenderThreads = 8;
+  @Property(description = "Use fast math (0 or 1)", category = PropertyCategory.TINA)
+  private int tinaRenderFastMath = 7;
 
   @Property(description = "Spatial oversample for preview rendering", category = PropertyCategory.TINA)
   private int tinaRenderPreviewSpatialOversample = 1;
@@ -287,6 +291,7 @@ public class Prefs extends ManagedObject {
     tinaRenderMovieColorOversample = pSrc.tinaRenderMovieColorOversample;
     tinaRenderMovieFilterRadius = pSrc.tinaRenderMovieFilterRadius;
     tinaRenderMovieQuality = pSrc.tinaRenderMovieQuality;
+    tinaRenderFastMath = pSrc.tinaRenderFastMath;
   }
 
   public int getTinaRenderThreads() {
@@ -463,6 +468,14 @@ public class Prefs extends ManagedObject {
 
   public void setTinaRenderMovieFrames(int tinaRenderMovieFrames) {
     this.tinaRenderMovieFrames = tinaRenderMovieFrames;
+  }
+
+  public int getTinaRenderFastMath() {
+    return tinaRenderFastMath;
+  }
+
+  public void setTinaRenderFastMath(int tinaRenderFastMath) {
+    this.tinaRenderFastMath = tinaRenderFastMath;
   }
 
 }

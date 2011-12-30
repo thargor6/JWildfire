@@ -21,51 +21,51 @@ import org.jwildfire.create.tina.random.RandomNumberGenerator;
 import org.jwildfire.create.tina.random.RandomNumberGenerator.RandGenStatus;
 import org.jwildfire.create.tina.render.FlameRenderer;
 
-public class FlameTransformationContextImpl implements FlameTransformationContext {
+public class FastFlameTransformationContextImpl implements FlameTransformationContext {
   private final RandomNumberGenerator randGen;
   private final FlameRenderer flameRenderer;
 
-  public FlameTransformationContextImpl(FlameRenderer pFlameRenderer) {
+  public FastFlameTransformationContextImpl(FlameRenderer pFlameRenderer) {
     randGen = pFlameRenderer.getRandomNumberGenerator();
     flameRenderer = pFlameRenderer;
   }
 
   @Override
-  public double random() {
+  public final double random() {
     return randGen.random();
   }
 
   @Override
-  public int random(int pMax) {
+  public final int random(int pMax) {
     return randGen.random(pMax);
   }
 
   @Override
-  public void setRandGenStatus(RandGenStatus pRandGenStatus) {
+  public final void setRandGenStatus(RandGenStatus pRandGenStatus) {
     randGen.setStatus(pRandGenStatus);
   }
 
   @Override
-  public RasterPoint getPass1RasterPoint(double pX, double pY) {
+  public final RasterPoint getPass1RasterPoint(double pX, double pY) {
     return flameRenderer.getPass1RasterPoint(pX, pY);
   }
 
   @Override
-  public double sin(double a) {
+  public final double sin(double a) {
     //    return Math.sin(a);
-    return fast_sin(a);
+    return sin[(int) (a * radToIndex) & TRIG_PRECALC_MASK];
   }
 
   @Override
-  public double cos(double a) {
+  public final double cos(double a) {
     //    return Math.cos(a);
-    return fast_cos(a);
+    return cos[(int) (a * radToIndex) & TRIG_PRECALC_MASK];
   }
 
   @Override
-  public double tan(double a) {
-    //    return Math.sin(a);
-    return fast_tan(a);
+  public final double tan(double a) {
+    //    return Math.tan(a);
+    return tan[(int) (a * radToIndex) & TRIG_PRECALC_MASK];
   }
 
   @Override
@@ -73,33 +73,31 @@ public class FlameTransformationContextImpl implements FlameTransformationContex
     return flameRenderer;
   }
 
-  static long expCount = 0;
-
   @Override
-  public double exp(double a) {
-    return fast_exp(a);
-    //return Math.exp(a);
+  public final double exp(double a) {
+    if (a > EXP_MIN && a < EXP_MAX) {
+      int idx = (int) ((a - EXP_MIN) * EXP_SCL);
+      return exp[idx];
+    }
+    else {
+      return Math.exp(a);
+    }
+    //    return Math.exp(a);
   }
 
   @Override
-  public double sqrt(double a) {
-    return fast_sqrt(a);
-    //return Math.sqrt(a);
+  public final double sqrt(double a) {
+    if (a > 0.0 & a < SQRT_MAX) {
+      int idx = (int) (a * SQRT_SCL);
+      return sqrt[idx];
+    }
+    else {
+      return Math.sqrt(a);
+    }
+    //    return Math.sqrt(a);
   }
 
   // Fast sin/cos approx following http://www.java-gaming.org/index.php?topic=24191.0
-  private static final double fast_sin(double rad) {
-    return sin[(int) (rad * radToIndex) & TRIG_PRECALC_MASK];
-  }
-
-  private static final double fast_cos(double rad) {
-    return cos[(int) (rad * radToIndex) & TRIG_PRECALC_MASK];
-  }
-
-  private static final double fast_tan(double rad) {
-    return tan[(int) (rad * radToIndex) & TRIG_PRECALC_MASK];
-  }
-
   private static final int TRIG_PRECALC_BITS, TRIG_PRECALC_MASK, TRIG_PRECALC_COUNT;
   private static final double radFull, radToIndex;
   private static final double degFull, degToIndex;
@@ -139,7 +137,7 @@ public class FlameTransformationContextImpl implements FlameTransformationContex
       tan[(int) (i * degToIndex) & TRIG_PRECALC_MASK] = (double) Math.tan(i * Math.PI / 180.0);
     }
     // exp
-    int EXP_PRECALC_BITS = 19;
+    int EXP_PRECALC_BITS = 17;
     int EXP_PRECALC_MASK = ~(-1 << EXP_PRECALC_BITS);
     EXP_PRECALC_COUNT = EXP_PRECALC_MASK + 1;
     EXP_MIN = -2.0;
@@ -147,39 +145,20 @@ public class FlameTransformationContextImpl implements FlameTransformationContex
     exp = new double[EXP_PRECALC_COUNT + 1];
     EXP_SCL = (double) EXP_PRECALC_COUNT / (EXP_MAX - EXP_MIN);
     for (int i = 0; i <= EXP_PRECALC_COUNT; i++) {
-      double x = EXP_MIN + (double) i / EXP_SCL;
+      double x = EXP_MIN + (double) (i + 0.5) / EXP_SCL;
       exp[i] = Math.exp(x);
     }
     // sqrt
-    int SQRT_PRECALC_BITS = 20;
+    int SQRT_PRECALC_BITS = 18;
     int SQRT_PRECALC_MASK = ~(-1 << SQRT_PRECALC_BITS);
     SQRT_PRECALC_COUNT = SQRT_PRECALC_MASK + 1;
     SQRT_MAX = 6.0;
     sqrt = new double[SQRT_PRECALC_COUNT + 1];
     SQRT_SCL = (double) SQRT_PRECALC_COUNT / SQRT_MAX;
     for (int i = 0; i <= SQRT_PRECALC_COUNT; i++) {
-      double x = (double) (i) / SQRT_SCL;
+      double x = (double) (i + 0.5) / SQRT_SCL;
       sqrt[i] = Math.sqrt(x);
     }
   }
 
-  private static final double fast_exp(double a) {
-    if (a > EXP_MIN && a < EXP_MAX) {
-      int idx = (int) ((a - EXP_MIN) * EXP_SCL + 0.5);
-      return exp[idx];
-    }
-    else {
-      return Math.exp(a);
-    }
-  }
-
-  private static final double fast_sqrt(double a) {
-    if (a > 0.0 & a < SQRT_MAX) {
-      int idx = (int) (a * SQRT_SCL + 0.5);
-      return sqrt[idx];
-    }
-    else {
-      return Math.sqrt(a);
-    }
-  }
 }

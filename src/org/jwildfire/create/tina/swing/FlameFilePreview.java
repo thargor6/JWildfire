@@ -65,7 +65,7 @@ public class FlameFilePreview extends JComponent implements PropertyChangeListen
         flame.setWidth(imgWidth);
         flame.setHeight(imgHeight);
 
-        FlameRenderer renderer = new FlameRenderer(flame);
+        FlameRenderer renderer = new FlameRenderer(flame, prefs);
         renderer.setProgressUpdater(null);
         flame.setSampleDensity(50);
         flame.setSpatialFilterRadius(0.0);
@@ -73,7 +73,7 @@ public class FlameFilePreview extends JComponent implements PropertyChangeListen
         flame.setColorOversample(2);
         renderer.setAffineZStyle(AffineZStyle.FLAT);
         SimpleImage img = new SimpleImage(imgWidth, imgHeight);
-        renderer.renderFlame(img, prefs.getTinaRenderThreads());
+        renderer.renderFlame(img);
 
         currThumbnail = new ImageIcon(img.getBufferedImg());
       }

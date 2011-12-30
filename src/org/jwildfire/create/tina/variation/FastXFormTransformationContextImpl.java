@@ -16,10 +16,10 @@
 */
 package org.jwildfire.create.tina.variation;
 
-public class XFormTransformationContextImpl extends FlameTransformationContextImpl implements XFormTransformationContext {
+public class FastXFormTransformationContextImpl extends FastFlameTransformationContextImpl implements XFormTransformationContext {
   private double color;
 
-  public XFormTransformationContextImpl(FlameTransformationContext pParentContext) {
+  public FastXFormTransformationContextImpl(FlameTransformationContext pParentContext) {
     super(pParentContext.getFlameRenderer());
   }
 
