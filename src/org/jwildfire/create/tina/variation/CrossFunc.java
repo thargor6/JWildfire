@@ -36,7 +36,7 @@ public class CrossFunc extends SimpleVariationFunc {
     */
 
     double s = pAffineTP.x * pAffineTP.x - pAffineTP.y * pAffineTP.y;
-    double r = pAmount * Math.sqrt(1.0 / (s * s + Constants.EPSILON));
+    double r = pAmount * pContext.sqrt(1.0 / (s * s + Constants.EPSILON));
 
     pVarTP.x += pAffineTP.x * r;
     pVarTP.y += pAffineTP.y * r;

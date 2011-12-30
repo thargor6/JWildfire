@@ -23,9 +23,9 @@ public class SpiralFunc extends SimpleVariationFunc {
 
   @Override
   public void transform(XFormTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-    double sinA = pAffineTP.getPrecalcSinA();
-    double cosA = pAffineTP.getPrecalcCosA();
-    double r = pAffineTP.getPrecalcSqrt();
+    double sinA = pAffineTP.getPrecalcSinA(pContext);
+    double cosA = pAffineTP.getPrecalcCosA(pContext);
+    double r = pAffineTP.getPrecalcSqrt(pContext);
     double sinr = pContext.sin(r);
     double cosr = pContext.cos(r);
     r = pAmount / r;

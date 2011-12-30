@@ -23,10 +23,10 @@ public class FisheyeFunc extends SimpleVariationFunc {
 
   @Override
   public void transform(XFormTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-    double r = Math.sqrt(pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y);
+    double r = pContext.sqrt(pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y);
     r = 2.0 * r / (r + 1.0);
-    pVarTP.x += pAmount * r * pAffineTP.getPrecalcCosA();
-    pVarTP.y += pAmount * r * pAffineTP.getPrecalcSinA();
+    pVarTP.x += pAmount * r * pAffineTP.getPrecalcCosA(pContext);
+    pVarTP.y += pAmount * r * pAffineTP.getPrecalcSinA(pContext);
   }
 
   @Override

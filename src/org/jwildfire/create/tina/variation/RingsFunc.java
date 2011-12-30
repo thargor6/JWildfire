@@ -25,10 +25,10 @@ public class RingsFunc extends SimpleVariationFunc {
   @Override
   public void transform(XFormTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     double dx = pXForm.getCoeff20() * pXForm.getCoeff20() + Constants.EPSILON;
-    double r = pAffineTP.getPrecalcSqrt();
+    double r = pAffineTP.getPrecalcSqrt(pContext);
     r = r + dx - ((int) ((r + dx) / (2 * dx))) * 2 * dx - dx + r * (1 - dx);
-    pVarTP.x += r * pAffineTP.getPrecalcCosA();
-    pVarTP.y += r * pAffineTP.getPrecalcSinA();
+    pVarTP.x += r * pAffineTP.getPrecalcCosA(pContext);
+    pVarTP.y += r * pAffineTP.getPrecalcSinA(pContext);
   }
 
   @Override

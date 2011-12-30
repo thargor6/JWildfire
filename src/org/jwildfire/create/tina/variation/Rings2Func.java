@@ -28,13 +28,13 @@ public class Rings2Func extends VariationFunc {
 
   @Override
   public void transform(XFormTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-    double r = pAffineTP.getPrecalcSqrt();
+    double r = pAffineTP.getPrecalcSqrt(pContext);
     double dx = val * val + Constants.EPSILON;
 
     r += -2.0 * dx * (int) ((r + dx) / (2.0 * dx)) + r * (1.0 - dx);
 
-    pVarTP.x += pAmount * pAffineTP.getPrecalcSinA() * r;
-    pVarTP.y += pAmount * pAffineTP.getPrecalcCosA() * r;
+    pVarTP.x += pAmount * pAffineTP.getPrecalcSinA(pContext) * r;
+    pVarTP.y += pAmount * pAffineTP.getPrecalcCosA(pContext) * r;
   }
 
   @Override

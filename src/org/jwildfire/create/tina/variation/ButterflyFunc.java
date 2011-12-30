@@ -28,7 +28,7 @@ public class ButterflyFunc extends SimpleVariationFunc {
     double wx = pAmount * 1.3029400317411197908970256609023;
 
     double y2 = pAffineTP.y * 2.0;
-    double r = wx * Math.sqrt(Math.abs(pAffineTP.y * pAffineTP.x) / (Constants.EPSILON + pAffineTP.x * pAffineTP.x + y2 * y2));
+    double r = wx * pContext.sqrt(Math.abs(pAffineTP.y * pAffineTP.x) / (Constants.EPSILON + pAffineTP.x * pAffineTP.x + y2 * y2));
 
     pVarTP.x += r * pAffineTP.x;
     pVarTP.y += r * y2;

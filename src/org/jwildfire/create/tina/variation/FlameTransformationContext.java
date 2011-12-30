@@ -37,6 +37,8 @@ public interface FlameTransformationContext {
 
   public abstract double exp(double a);
 
+  public abstract double sqrt(double a);
+
   abstract FlameRenderer getFlameRenderer();
 
 }

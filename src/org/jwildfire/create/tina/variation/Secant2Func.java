@@ -24,7 +24,7 @@ public class Secant2Func extends SimpleVariationFunc {
   @Override
   public void transform(XFormTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     /* Intended as a 'fixed' version of secant */
-    double r = pAmount * pAffineTP.getPrecalcSqrt();
+    double r = pAmount * pAffineTP.getPrecalcSqrt(pContext);
     double cr = pContext.cos(r);
     double icr = 1.0 / cr;
     pVarTP.x += pAmount * pAffineTP.x;

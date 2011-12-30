@@ -41,7 +41,7 @@ public class LazySusanFunc extends VariationFunc {
 
     double x = pAffineTP.x - this.x;
     double y = pAffineTP.y + this.y;
-    double r = Math.sqrt(x * x + y * y);
+    double r = pContext.sqrt(x * x + y * y);
 
     if (r < pAmount) {
       double a = Math.atan2(y, x) + spin + twist * (pAmount - r);

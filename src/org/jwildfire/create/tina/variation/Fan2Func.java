@@ -31,7 +31,7 @@ public class Fan2Func extends VariationFunc {
   @Override
   public void transform(XFormTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     double EPSILON = 1.0e-10;
-    double r = Math.sqrt(pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y);
+    double r = pContext.sqrt(pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y);
     double angle;
     if ((pAffineTP.x < -EPSILON) || (pAffineTP.x > EPSILON) || (pAffineTP.y < -EPSILON) || (pAffineTP.y > EPSILON)) {
       angle = Math.atan2(pAffineTP.x, pAffineTP.y);

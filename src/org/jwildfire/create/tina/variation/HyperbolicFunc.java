@@ -23,9 +23,9 @@ public class HyperbolicFunc extends SimpleVariationFunc {
 
   @Override
   public void transform(XFormTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-    double r = pAffineTP.getPrecalcSqrt();
-    pVarTP.x += pAmount * pAffineTP.getPrecalcSinA() / r;
-    pVarTP.y += pAmount * pAffineTP.getPrecalcCosA() * r;
+    double r = pAffineTP.getPrecalcSqrt(pContext);
+    pVarTP.x += pAmount * pAffineTP.getPrecalcSinA(pContext) / r;
+    pVarTP.y += pAmount * pAffineTP.getPrecalcCosA(pContext) * r;
   }
 
   @Override

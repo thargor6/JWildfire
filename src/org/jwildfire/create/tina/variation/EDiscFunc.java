@@ -27,10 +27,10 @@ public class EDiscFunc extends SimpleVariationFunc {
 
     double tmp = pAffineTP.getPrecalcSumsq() + 1.0;
     double tmp2 = 2.0 * pAffineTP.x;
-    double r1 = Math.sqrt(tmp + tmp2);
-    double r2 = Math.sqrt(tmp - tmp2);
+    double r1 = pContext.sqrt(tmp + tmp2);
+    double r2 = pContext.sqrt(tmp - tmp2);
     double xmax = (r1 + r2) * 0.5;
-    double a1 = Math.log(xmax + Math.sqrt(xmax - 1.0));
+    double a1 = Math.log(xmax + pContext.sqrt(xmax - 1.0));
     double a2 = -Math.acos(pAffineTP.x / xmax);
     double w = pAmount / 11.57034632;
 

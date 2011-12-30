@@ -31,7 +31,7 @@ public class EscherFunc extends VariationFunc {
   public void transform(XFormTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     /* Escher in the Apophysis Plugin Pack */
 
-    double a = pAffineTP.getPrecalcAtanYX();
+    double a = pAffineTP.getPrecalcAtanYX(pContext);
     double lnr = 0.5 * Math.log(pAffineTP.getPrecalcSumsq());
 
     double seb = pContext.sin(beta);

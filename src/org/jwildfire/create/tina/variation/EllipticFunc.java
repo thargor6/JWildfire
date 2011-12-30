@@ -28,7 +28,7 @@ public class EllipticFunc extends SimpleVariationFunc {
 
     double tmp = pAffineTP.getPrecalcSumsq() + 1.0;
     double x2 = 2.0 * pAffineTP.x;
-    double xmax = 0.5 * (Math.sqrt(tmp + x2) + Math.sqrt(tmp - x2));
+    double xmax = 0.5 * (pContext.sqrt(tmp + x2) + pContext.sqrt(tmp - x2));
     double a = pAffineTP.x / xmax;
     double b = 1.0 - a * a;
     double ssx = xmax - 1.0;
@@ -38,14 +38,14 @@ public class EllipticFunc extends SimpleVariationFunc {
       b = 0.0;
     }
     else {
-      b = Math.sqrt(b);
+      b = pContext.sqrt(b);
     }
 
     if (ssx < 0.0) {
       ssx = 0.0;
     }
     else {
-      ssx = Math.sqrt(ssx);
+      ssx = pContext.sqrt(ssx);
     }
     if (pContext.random() < 0.5) {
       pVarTP.x += w * Math.atan2(a, b);

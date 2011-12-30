@@ -32,12 +32,12 @@ public class WhorlFunc extends VariationFunc {
   @Override
   public void transform(XFormTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     /* whorl from apo plugins pack */
-    double r = pAffineTP.getPrecalcSqrt();
+    double r = pAffineTP.getPrecalcSqrt(pContext);
     double a;
     if (r < pAmount)
-      a = pAffineTP.getPrecalcAtanYX() + inside / (pAmount - r);
+      a = pAffineTP.getPrecalcAtanYX(pContext) + inside / (pAmount - r);
     else
-      a = pAffineTP.getPrecalcAtanYX() + outside / (pAmount - r);
+      a = pAffineTP.getPrecalcAtanYX(pContext) + outside / (pAmount - r);
 
     double sa = pContext.sin(a);
     double ca = pContext.cos(a);

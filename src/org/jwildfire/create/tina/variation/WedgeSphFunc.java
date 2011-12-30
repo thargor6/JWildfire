@@ -38,8 +38,8 @@ public class WedgeSphFunc extends VariationFunc {
   public void transform(XFormTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     /* Wedge_sph from apo plugins pack */
 
-    double r = 1.0 / (pAffineTP.getPrecalcSqrt() + Constants.EPSILON);
-    double a = pAffineTP.getPrecalcAtanYX() + swirl * r;
+    double r = 1.0 / (pAffineTP.getPrecalcSqrt(pContext) + Constants.EPSILON);
+    double a = pAffineTP.getPrecalcAtanYX(pContext) + swirl * r;
     double c = Math.floor((count * a + Math.PI) * Constants.M_1_PI * 0.5);
 
     double comp_fac = 1 - angle * count * Constants.M_1_PI * 0.5;

@@ -50,7 +50,7 @@ public class PreCircleCropFunc extends VariationFunc {
 
     pAffineTP.z += vv * pAffineTP.z;
 
-    double rad = Math.sqrt(pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y);
+    double rad = pContext.sqrt(pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y);
     double ang = Math.atan2(pAffineTP.y, pAffineTP.x);
     double rdc = cr + (pContext.random() * 0.5 * ca);
 

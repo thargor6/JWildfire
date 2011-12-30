@@ -27,7 +27,7 @@ public class ScryFunc extends SimpleVariationFunc {
     /* scry from the apophysis plugin pack */
 
     double t = pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y;
-    double r = 1.0 / (Math.sqrt(t) * (t + 1.0 / (pAmount + Constants.EPSILON)));
+    double r = 1.0 / (pContext.sqrt(t) * (t + 1.0 / (pAmount + Constants.EPSILON)));
 
     pVarTP.x += pAffineTP.x * r;
     pVarTP.y += pAffineTP.y * r;

@@ -41,7 +41,7 @@ public class Julia3DZFunc extends VariationFunc {
     double cosa = pContext.cos(angle);
     pVarTP.x += r * cosa;
     pVarTP.y += r * sina;
-    pVarTP.z += r * pAffineTP.z / (Math.sqrt(r2d) * absPower);
+    pVarTP.z += r * pAffineTP.z / (pContext.sqrt(r2d) * absPower);
   }
 
   @Override

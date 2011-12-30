@@ -37,7 +37,7 @@ public class RadialBlurFunc extends VariationFunc {
     double spin = pAmount * pContext.sin(angle * Math.PI * 0.5);
     double zoom = pAmount * pContext.cos(angle * Math.PI * 0.5);
 
-    double ra = Math.sqrt(pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y);
+    double ra = pContext.sqrt(pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y);
     double alpha = Math.atan2(pAffineTP.y, pAffineTP.x) + spin * rndG;
     double sina = pContext.sin(alpha);
     double cosa = pContext.cos(alpha);

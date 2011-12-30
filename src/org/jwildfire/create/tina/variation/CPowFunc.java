@@ -34,7 +34,7 @@ public class CPowFunc extends VariationFunc {
   @Override
   public void transform(XFormTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     /* Cpow in the Apophysis Plugin Pack */
-    double a = pAffineTP.getPrecalcAtanYX();
+    double a = pAffineTP.getPrecalcAtanYX(pContext);
     double lnr = 0.5 * Math.log(pAffineTP.getPrecalcSumsq());
     double va = 2.0 * Math.PI / power;
     double vc = r / power;

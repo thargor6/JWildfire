@@ -36,7 +36,7 @@ public class Julia3DFunc extends VariationFunc {
     double r2d = pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y;
     double r = pAmount * Math.pow(r2d + z * z, cPower);
 
-    double r2 = r * Math.sqrt(r2d);
+    double r2 = r * pContext.sqrt(r2d);
     int rnd = (int) (pContext.random() * absPower);
     double angle = (Math.atan2(pAffineTP.y, pAffineTP.x) + 2 * Math.PI * rnd) / (double) power;
     double sina = pContext.sin(angle);

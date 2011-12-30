@@ -32,7 +32,7 @@ public class TPreWave3DFunc extends VariationFunc {
 
   @Override
   public void transform(XFormTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-    double r = Math.sqrt(pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y);
+    double r = pContext.sqrt(pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y);
     double dl = r / wavelen;
     double amplitude = pAmount;
     if (Math.abs(damping) > Constants.EPSILON) {

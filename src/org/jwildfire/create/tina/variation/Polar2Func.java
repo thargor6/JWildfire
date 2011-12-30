@@ -25,7 +25,7 @@ public class Polar2Func extends SimpleVariationFunc {
   public void transform(XFormTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     /* polar2 from the apophysis plugin pack */
     double p2v = pAmount / Math.PI;
-    pVarTP.x += p2v * pAffineTP.getPrecalcAtan();
+    pVarTP.x += p2v * pAffineTP.getPrecalcAtan(pContext);
     pVarTP.y += p2v / 2.0 * Math.log(pAffineTP.getPrecalcSumsq());
   }
 

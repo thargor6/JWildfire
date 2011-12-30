@@ -23,10 +23,10 @@ public class JuliaFunc extends SimpleVariationFunc {
 
   @Override
   public void transform(XFormTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-    double a = pAffineTP.getPrecalcAtan() * 0.5 + Math.PI * (int) (2.0 * pContext.random());
+    double a = pAffineTP.getPrecalcAtan(pContext) * 0.5 + Math.PI * (int) (2.0 * pContext.random());
     double sina = pContext.sin(a);
     double cosa = pContext.cos(a);
-    double r = pAmount * Math.sqrt(Math.sqrt(pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y));
+    double r = pAmount * pContext.sqrt(pContext.sqrt(pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y));
     pVarTP.x += r * cosa;
     pVarTP.y += r * sina;
   }

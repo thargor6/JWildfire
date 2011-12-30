@@ -23,7 +23,7 @@ public class HemisphereFunc extends SimpleVariationFunc {
 
   @Override
   public void transform(XFormTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-    double r = pAmount / Math.sqrt(pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y + 1);
+    double r = pAmount / pContext.sqrt(pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y + 1);
     pVarTP.x += pAffineTP.x * r;
     pVarTP.y += pAffineTP.y * r;
     pVarTP.z += r;

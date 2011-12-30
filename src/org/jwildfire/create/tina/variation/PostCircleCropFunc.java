@@ -50,7 +50,7 @@ public class PostCircleCropFunc extends VariationFunc {
 
     pVarTP.z += vv * pVarTP.z;
 
-    double rad = Math.sqrt(pVarTP.x * pVarTP.x + pVarTP.y * pVarTP.y);
+    double rad = pContext.sqrt(pVarTP.x * pVarTP.x + pVarTP.y * pVarTP.y);
     double ang = Math.atan2(pVarTP.y, pVarTP.x);
     double rdc = cr + (pContext.random() * 0.5 * ca);
 
@@ -105,7 +105,7 @@ public class PostCircleCropFunc extends VariationFunc {
 
   @Override
   public String getName() {
-    return "circlecrop";
+    return "post_circlecrop";
   }
 
   private double cA;

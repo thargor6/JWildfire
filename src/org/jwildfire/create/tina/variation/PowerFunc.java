@@ -23,9 +23,9 @@ public class PowerFunc extends SimpleVariationFunc {
 
   @Override
   public void transform(XFormTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-    double r = pAmount * Math.pow(pAffineTP.getPrecalcSqrt(), pAffineTP.getPrecalcSinA());
-    pVarTP.x += r * pAffineTP.getPrecalcCosA();
-    pVarTP.y += r * pAffineTP.getPrecalcSinA();
+    double r = pAmount * Math.pow(pAffineTP.getPrecalcSqrt(pContext), pAffineTP.getPrecalcSinA(pContext));
+    pVarTP.x += r * pAffineTP.getPrecalcCosA(pContext);
+    pVarTP.y += r * pAffineTP.getPrecalcSinA(pContext);
   }
 
   @Override
