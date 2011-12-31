@@ -82,7 +82,7 @@ public class FlameRenderThread implements Runnable {
     XYZPoint affineT = new XYZPoint(); // affine part of the transformation
     XYZPoint varT = new XYZPoint(); // complete transformation
     XYZPoint p = new XYZPoint();
-    XYZPoint q;
+    XYZPoint q = new XYZPoint();
     p.x = 2.0 * renderer.random.random() - 1.0;
     p.y = 2.0 * renderer.random.random() - 1.0;
     p.z = 2.0 * renderer.random.random() - 1.0;
@@ -115,7 +115,7 @@ public class FlameRenderThread implements Runnable {
       XForm finalXForm = flame.getFinalXForm();
       double px, py;
       if (finalXForm != null) {
-        q = new XYZPoint();
+        //        q = new XYZPoint();
         finalXForm.transformPoint(ctx, affineT, varT, p, q, affineZStyle);
         renderer.project(renderPass, q);
         px = q.x * renderer.cosa + q.y * renderer.sina + renderer.rcX;
@@ -126,7 +126,7 @@ public class FlameRenderThread implements Runnable {
           continue;
       }
       else {
-        q = new XYZPoint();
+        //        q = new XYZPoint();
         q.assign(p);
         renderer.project(renderPass, q);
         px = q.x * renderer.cosa + q.y * renderer.sina + renderer.rcX;
@@ -159,7 +159,7 @@ public class FlameRenderThread implements Runnable {
     XYZPoint affineT = new XYZPoint(); // affine part of the transformation
     XYZPoint varT = new XYZPoint(); // complete transformation
     XYZPoint p = new XYZPoint();
-    XYZPoint q;
+    XYZPoint q = new XYZPoint();
     p.x = 2.0 * renderer.random.random() - 1.0;
     p.y = 2.0 * renderer.random.random() - 1.0;
     p.z = 2.0 * renderer.random.random() - 1.0;
@@ -205,7 +205,7 @@ public class FlameRenderThread implements Runnable {
       XForm finalXForm = flame.getFinalXForm();
       double px, py;
       if (finalXForm != null) {
-        q = new XYZPoint();
+        //        q = new XYZPoint();
         finalXForm.transformPoint(ctx, affineT, varT, p, q, affineZStyle);
         renderer.project(renderPass, q);
         px = q.x * renderer.cosa + q.y * renderer.sina + renderer.rcX;
@@ -216,7 +216,7 @@ public class FlameRenderThread implements Runnable {
           continue;
       }
       else {
-        q = new XYZPoint();
+        //        q = new XYZPoint();
         q.assign(p);
         renderer.project(renderPass, q);
         px = q.x * renderer.cosa + q.y * renderer.sina + renderer.rcX;

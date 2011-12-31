@@ -201,7 +201,12 @@ public class FlameRenderer {
         init3D();
         createColorMap();
         initView();
-        createModWeightTables();
+        List<Flame> renderFlames = new ArrayList<Flame>();
+        for (int t = 0; t < prefs.getTinaRenderThreads(); t++) {
+          Flame renderFlame = flame.makeCopy();
+          renderFlames.add(renderFlame);
+          createModWeightTables(renderFlame);
+        }
 
         boolean twoPasses = false;
         for (XForm xForm : flame.getXForms()) {
@@ -222,12 +227,12 @@ public class FlameRenderer {
         }
 
         if (twoPasses) {
-          iterate(RenderPass.FLAT, i, colorOversample * 2, prefs);
+          iterate(RenderPass.FLAT, i, colorOversample * 2, renderFlames);
           createPass2Raster();
-          iterate(RenderPass.FINAL, i + 1, colorOversample * 2, prefs);
+          iterate(RenderPass.FINAL, i + 1, colorOversample * 2, renderFlames);
         }
         else {
-          iterate(RenderPass.FINAL, i, colorOversample, prefs);
+          iterate(RenderPass.FINAL, i, colorOversample, renderFlames);
         }
         if (flame.getSampleDensity() <= 10.0) {
           renderImageSimple(img);
@@ -310,7 +315,7 @@ public class FlameRenderer {
     }
   }
 
-  private void iterate(RenderPass pRenderPass, int pPart, int pParts, Prefs prefs) {
+  private void iterate(RenderPass pRenderPass, int pPart, int pParts, List<Flame> pFlames) {
     long nSamples = (long) ((flame.getSampleDensity() * (double) rasterSize + 0.5));
     //    if (flame.getSampleDensity() > 50) {
     //      System.err.println("SAMPLES: " + nSamples);
@@ -322,14 +327,14 @@ public class FlameRenderer {
     long sampleProgressUpdateStep = nSamples / 100;
     long nextProgressUpdate = sampleProgressUpdateStep;
     List<FlameRenderThread> threads = new ArrayList<FlameRenderThread>();
-    int nThreads = prefs.getTinaRenderThreads();
+    int nThreads = pFlames.size();
     if (nThreads <= 1) {
-      FlameRenderThread t = new FlameRenderThread(pRenderPass, this, flame, nSamples / (long) nThreads, affineZStyle, prefs);
+      FlameRenderThread t = new FlameRenderThread(pRenderPass, this, pFlames.get(0), nSamples / (long) nThreads, affineZStyle, prefs);
       t.run();
     }
     else {
       for (int i = 0; i < nThreads; i++) {
-        FlameRenderThread t = new FlameRenderThread(pRenderPass, this, flame, nSamples / (long) nThreads, affineZStyle, prefs);
+        FlameRenderThread t = new FlameRenderThread(pRenderPass, this, pFlames.get(i), nSamples / (long) nThreads, affineZStyle, prefs);
         threads.add(t);
         new Thread(t).start();
       }
@@ -394,18 +399,18 @@ public class FlameRenderer {
     rcY = flame.getCentreY() * (1 - cosa) + flame.getCentreX() * sina - camY0;
   }
 
-  private void createModWeightTables() {
+  private void createModWeightTables(Flame pFlame) {
     double tp[] = new double[100];
-    int n = flame.getXForms().size();
+    int n = pFlame.getXForms().size();
 
-    for (XForm xForm : flame.getXForms()) {
+    for (XForm xForm : pFlame.getXForms()) {
       xForm.initTransform();
       for (Variation var : xForm.getSortedVariations()) {
         var.getFunc().init(flameTransformationContext, xForm);
       }
     }
-    if (flame.getFinalXForm() != null) {
-      XForm xForm = flame.getFinalXForm();
+    if (pFlame.getFinalXForm() != null) {
+      XForm xForm = pFlame.getFinalXForm();
       xForm.initTransform();
       for (Variation var : xForm.getSortedVariations()) {
         var.getFunc().init(flameTransformationContext, xForm);
@@ -414,12 +419,12 @@ public class FlameRenderer {
     //
     for (int k = 0; k < n; k++) {
       double totValue = 0;
-      XForm xform = flame.getXForms().get(k);
+      XForm xform = pFlame.getXForms().get(k);
       for (int l = 0; l < xform.getNextAppliedXFormTable().length; l++) {
         xform.getNextAppliedXFormTable()[l] = new XForm();
       }
       for (int i = 0; i < n; i++) {
-        tp[i] = flame.getXForms().get(i).getWeight() * flame.getXForms().get(k).getModifiedWeights()[i];
+        tp[i] = pFlame.getXForms().get(i).getWeight() * pFlame.getXForms().get(k).getModifiedWeights()[i];
         totValue = totValue + tp[i];
       }
 
@@ -433,7 +438,7 @@ public class FlameRenderer {
             totalProb = totalProb + tp[j];
           }
           while (!((totalProb > loopValue) || (j == n - 1)));
-          xform.getNextAppliedXFormTable()[i] = flame.getXForms().get(j);
+          xform.getNextAppliedXFormTable()[i] = pFlame.getXForms().get(j);
           loopValue = loopValue + totValue / (double) xform.getNextAppliedXFormTable().length;
         }
       }
