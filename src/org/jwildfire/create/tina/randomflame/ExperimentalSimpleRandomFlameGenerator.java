@@ -26,13 +26,13 @@ public class ExperimentalSimpleRandomFlameGenerator extends RandomFlameGenerator
 
   protected static final String FNCLST_EXPERIMENTAL[] = { "blur3D", "bubble", "escher", "rays", "t_epispiral", "curl3D", "diamond",
       "disc", "sech", "loonie", "exp", "cosh", "split", "wedge_sph", "circlize", "t_heart", "bwraps7", "t_colorscale",
-      "butterfly3D", "cpow", "conic", "julia3D", "cell", "stripes", "t_post_mirror", "t_colorscale",
+      "butterfly3D", "cpow", "conic", "julia3D", "cell", "stripes", "t_post_mirror", "t_colorscale", "crackle",
       "flower", "heart", "julia3D", "disc2", "polar2", "foci", "scry", "flux", "bwraps7", "t_colorscale",
       "hemisphere", "popcorn2", "sec", "lazysusan", "sin", "separation", "t_post_mirror", "t_heart",
-      "t_rose", "edisc", "waves2", "twintrian", "coth", "super_shape", "auger", "t_pre_wave3D",
+      "t_rose", "edisc", "waves2", "twintrian", "coth", "super_shape", "auger", "t_pre_wave3D", "hexes",
       "tanh", "bipolar", "cot", "horseshoe", "wedge", "sinh", "modulus", "mobius", "bwraps7", "t_colorscale",
       "cross", "tangent3D", "csc", "curve", "csch", "bent2", "splits", "whorl", "t_post_mirror",
-      "tan", "blob3D", "julia3D", "log", "cos", "oscilloscope", "wedge_julia", "bwraps7", "t_heart",
+      "tan", "blob3D", "julia3D", "log", "cos", "oscilloscope", "wedge_julia", "bwraps7", "t_heart", "hexes",
       "pdj", "popcorn", "parabola", "rings2", "spherical3D", "spiral", "rectangles", "elliptic", "waves", "swirl",
       "bwraps7", "t_heart", "t_colorscale",
       "boarders", "secant2" };

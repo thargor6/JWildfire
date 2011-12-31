@@ -163,6 +163,8 @@ public class VariationFuncList {
     registerVariationFunc(CircleCropFunc.class);
     registerVariationFunc(PreCircleCropFunc.class);
     registerVariationFunc(PostCircleCropFunc.class);
+    registerVariationFunc(HexesFunc.class);
+    registerVariationFunc(CrackleFunc.class);
     //    registerVariationFunc(TPostBumpMapFunc.class);
   }
 
