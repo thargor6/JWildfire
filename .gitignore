@@ -11,3 +11,4 @@ gitlog.sh
 .classpath
 bin/*
 build/dist/*
+tptpParseError.log

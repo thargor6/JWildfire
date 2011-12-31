@@ -412,6 +412,7 @@ public class XForm {
     postCoeff11 = pXForm.postCoeff11;
     postCoeff20 = pXForm.postCoeff20;
     postCoeff21 = pXForm.postCoeff21;
+    System.arraycopy(pXForm.modifiedWeights, 0, modifiedWeights, 0, modifiedWeights.length);
     variations.clear();
     for (Variation var : pXForm.variations) {
       Variation newVar = new Variation();

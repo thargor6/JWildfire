@@ -14,6 +14,7 @@
   if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
   02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
+
 package org.jwildfire.create.tina.variation;
 
 import java.util.ArrayList;
@@ -165,6 +166,7 @@ public class VariationFuncList {
     registerVariationFunc(PostCircleCropFunc.class);
     registerVariationFunc(HexesFunc.class);
     registerVariationFunc(CrackleFunc.class);
+    registerVariationFunc(MandelbrotFunc.class);
     //    registerVariationFunc(TPostBumpMapFunc.class);
   }
 
