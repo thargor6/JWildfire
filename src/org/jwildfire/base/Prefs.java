@@ -35,6 +35,8 @@ public class Prefs extends ManagedObject {
   static final String KEY_TINA_RENDER_MOVIE_HEIGHT = "tina.render.movie.height";
   static final String KEY_TINA_RENDER_MOVIE_FRAMES = "tina.render.movie.frames";
 
+  static final String KEY_TINA_RENDER_REALTIME_QUALITY = "tina.render.realtime.quality";
+
   static final String KEY_TINA_RENDER_PREVIEW_SPATIAL_OVERSAMPLE = "tina.render.preview.spatial_oversample";
   static final String KEY_TINA_RENDER_PREVIEW_COLOR_OVERSAMPLE = "tina.render.preview.color_oversample";
   static final String KEY_TINA_RENDER_PREVIEW_FILTER_RADIUS = "tina.render.preview.filter_radius";
@@ -90,6 +92,9 @@ public class Prefs extends ManagedObject {
   private int tinaRenderThreads = 8;
   @Property(description = "Use fast math (0 or 1)", category = PropertyCategory.TINA)
   private int tinaRenderFastMath = 7;
+
+  @Property(description = "Quality for realtime rendering (please restart app after changing this)", category = PropertyCategory.TINA)
+  private int tinaRenderRealtimeQuality = 1;
 
   @Property(description = "Spatial oversample for preview rendering", category = PropertyCategory.TINA)
   private int tinaRenderPreviewSpatialOversample = 1;
@@ -292,6 +297,7 @@ public class Prefs extends ManagedObject {
     tinaRenderMovieFilterRadius = pSrc.tinaRenderMovieFilterRadius;
     tinaRenderMovieQuality = pSrc.tinaRenderMovieQuality;
     tinaRenderFastMath = pSrc.tinaRenderFastMath;
+    tinaRenderRealtimeQuality = pSrc.tinaRenderRealtimeQuality;
   }
 
   public int getTinaRenderThreads() {
@@ -476,6 +482,14 @@ public class Prefs extends ManagedObject {
 
   public void setTinaRenderFastMath(int tinaRenderFastMath) {
     this.tinaRenderFastMath = tinaRenderFastMath;
+  }
+
+  public int getTinaRenderRealtimeQuality() {
+    return tinaRenderRealtimeQuality;
+  }
+
+  public void setTinaRenderRealtimeQuality(int tinaRenderRealtimeQuality) {
+    this.tinaRenderRealtimeQuality = tinaRenderRealtimeQuality;
   }
 
 }

@@ -611,6 +611,8 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     scriptTextArea = pScriptTextArea;
 
     animateFramesREd.setText(String.valueOf(prefs.getTinaRenderMovieFrames()));
+    previewQualityREd.setText(String.valueOf(prefs.getTinaRenderRealtimeQuality()));
+
     refreshPaletteColorsTable();
     refreshRenderBatchJobsTable();
 
