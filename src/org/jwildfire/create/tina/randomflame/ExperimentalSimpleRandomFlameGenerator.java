@@ -29,7 +29,7 @@ public class ExperimentalSimpleRandomFlameGenerator extends RandomFlameGenerator
       "butterfly3D", "cpow", "conic", "julia3D", "cell", "stripes", "t_post_mirror", "t_colorscale", "crackle",
       "flower", "heart", "julia3D", "disc2", "polar2", "foci", "scry", "flux", "bwraps7", "t_colorscale",
       "hemisphere", "popcorn2", "sec", "lazysusan", "sin", "separation", "t_post_mirror", "t_heart", "mandelbrot",
-      "t_rose", "edisc", "waves2", "twintrian", "coth", "super_shape", "auger", "t_pre_wave3D", "hexes",
+      "t_rose", "edisc", "waves2", "twintrian", "coth", "super_shape", "auger", "t_pre_wave3D", "hexes", "spirograph",
       "tanh", "bipolar", "cot", "horseshoe", "wedge", "sinh", "modulus", "mobius", "bwraps7", "t_colorscale",
       "cross", "tangent3D", "csc", "curve", "csch", "bent2", "splits", "whorl", "t_post_mirror", "mandelbrot",
       "tan", "blob3D", "julia3D", "log", "cos", "oscilloscope", "wedge_julia", "bwraps7", "t_heart", "hexes",
