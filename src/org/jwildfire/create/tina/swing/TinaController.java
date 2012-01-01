@@ -45,6 +45,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JSlider;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.JToggleButton;
 import javax.swing.ScrollPaneConstants;
@@ -73,6 +74,8 @@ import org.jwildfire.create.tina.randomflame.RandomFlameGenerator;
 import org.jwildfire.create.tina.randomflame.RandomFlameGeneratorList;
 import org.jwildfire.create.tina.render.AffineZStyle;
 import org.jwildfire.create.tina.render.FlameRenderer;
+import org.jwildfire.create.tina.script.ScriptRunner;
+import org.jwildfire.create.tina.script.ScriptRunnerEnvironment;
 import org.jwildfire.create.tina.transform.AnimationService;
 import org.jwildfire.create.tina.transform.AnimationService.GlobalScript;
 import org.jwildfire.create.tina.transform.AnimationService.LightScript;
@@ -92,7 +95,7 @@ import org.jwildfire.swing.ImageFileChooser;
 import org.jwildfire.swing.ImagePanel;
 import org.jwildfire.swing.MainController;
 
-public class TinaController implements FlameHolder, JobRenderThreadController {
+public class TinaController implements FlameHolder, JobRenderThreadController, ScriptRunnerEnvironment {
   private static final double SLIDER_SCALE_PERSPECTIVE = 100.0;
   private static final double SLIDER_SCALE_CENTRE = 50.0;
   private static final double SLIDER_SCALE_ZOOM = 10.0;
@@ -190,6 +193,8 @@ public class TinaController implements FlameHolder, JobRenderThreadController {
 
   private MainController mainController;
   private final JTabbedPane rootTabbedPane;
+  // script
+  private final JTextArea scriptTextArea;
   // camera, coloring
   private final JTextField cameraRollREd;
   private final JSlider cameraRollSlider;
@@ -419,7 +424,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController {
       JButton pBatchRenderFilesRemoveAllButton, JButton pBatchRenderStartButton, JTabbedPane pRootTabbedPane, JButton pAffineFlipHorizontalButton,
       JButton pAffineFlipVerticalButton, JComboBox pAnimateLightScriptCmb, JToggleButton pToggleDarkTrianglesButton,
       JTextField pShadingBlurRadiusREd, JSlider pShadingBlurRadiusSlider, JTextField pShadingBlurFadeREd, JSlider pShadingBlurFadeSlider,
-      JTextField pShadingBlurFallOffREd, JSlider pShadingBlurFallOffSlider) {
+      JTextField pShadingBlurFallOffREd, JSlider pShadingBlurFallOffSlider, JTextArea pScriptTextArea) {
     errorHandler = pErrorHandler;
     prefs = pPrefs;
     centerPanel = pCenterPanel;
@@ -603,14 +608,48 @@ public class TinaController implements FlameHolder, JobRenderThreadController {
     batchRenderStartButton = pBatchRenderStartButton;
     rootTabbedPane = pRootTabbedPane;
 
+    scriptTextArea = pScriptTextArea;
+
     animateFramesREd.setText(String.valueOf(prefs.getTinaRenderMovieFrames()));
     refreshPaletteColorsTable();
     refreshRenderBatchJobsTable();
+
+    initDefaultScript();
 
     enableControls();
     enableShadingUI();
 
     enableXFormControls(null);
+  }
+
+  private void initDefaultScript() {
+    scriptTextArea.setText(
+        "import org.jwildfire.create.tina.base.XForm;\n" +
+            "import org.jwildfire.create.tina.variation.LinearFunc;\n" +
+            "import org.jwildfire.create.tina.variation.SplitsFunc;\n" +
+            "import org.jwildfire.create.tina.variation.EllipticFunc;\n" +
+            "import org.jwildfire.create.tina.base.Flame;\n" +
+            "import org.jwildfire.create.tina.script.ScriptRunnerEnvironment;\n" +
+            "\n" +
+            "public void run(ScriptRunnerEnvironment pEnv) throws Exception {\n" +
+            "  Flame currFlame = pEnv.getCurrFlame();\n" +
+            "  if(currFlame==null) {\n" +
+            "    throw new Exception(\"Please select a flame at first\");\n" +
+            "  }\n" +
+            "  XForm xForm = new XForm();\n" +
+            "  xForm.addVariation(1.0, new EllipticFunc());\n" +
+            "  xForm.setWeight(0.5);\n" +
+            "  currFlame.getXForms().add(xForm);\n" +
+            "\n" +
+            "  xForm = new XForm();\n" +
+            "  xForm.addVariation(1.0, new LinearFunc());\n" +
+            "  xForm.addVariation(1.0, new SplitsFunc());\n" +
+            "  xForm.setWeight(0.5);\n" +
+            "  currFlame.getXForms().add(xForm);\n" +
+            "\n" +
+            "  pEnv.refreshXFormsTable();\n" +
+            "  pEnv.refreshFlameImage();\n" +
+            "}\n");
   }
 
   private FlamePanel getFlamePanel() {
@@ -668,7 +707,8 @@ public class TinaController implements FlameHolder, JobRenderThreadController {
   private Flame lastMorphedFlame = null;
   private int lastMorphedFrame = -1;
 
-  private Flame getCurrFlame() {
+  @Override
+  public Flame getCurrFlame() {
     if (morphFlame1 != null && morphFlame2 != null && morphCheckBox.isSelected()) {
       int frame = Integer.parseInt(morphFrameREd.getText());
       if (frame != lastMorphedFrame || lastMorphedFlame == null) {
@@ -3545,5 +3585,45 @@ public class TinaController implements FlameHolder, JobRenderThreadController {
 
   public void shadingBlurRadiusSlider_changed() {
     shadingInfoSliderChanged(shadingBlurRadiusSlider, shadingBlurRadiusREd, "blurRadius", 1.0, 0);
+  }
+
+  private ScriptRunner compileScript() throws Exception {
+    return ScriptRunner.compile(scriptTextArea.getText());
+  }
+
+  public void runScriptButton_clicked() {
+    try {
+      ScriptRunner script = compileScript();
+      script.run(this);
+    }
+    catch (Throwable ex) {
+      errorHandler.handleError(ex);
+    }
+  }
+
+  public void compileScriptButton_clicked() {
+    try {
+      compileScript();
+    }
+    catch (Throwable ex) {
+      errorHandler.handleError(ex);
+    }
+  }
+
+  @Override
+  public void refreshXFormsTable() {
+    gridRefreshing = true;
+    try {
+      refreshTransformationsTable();
+    }
+    finally {
+      gridRefreshing = false;
+    }
+    if (getCurrFlame() != null) {
+      int row = getCurrFlame().getXForms().size() - 1;
+      if (row >= 0) {
+        transformationsTable.getSelectionModel().setSelectionInterval(row, row);
+      }
+    }
   }
 }

@@ -1419,7 +1419,7 @@ public class Desktop extends JApplet {
       jFrame = new JFrame();
       jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
       jFrame.setJMenuBar(getMainJMenuBar());
-      jFrame.setSize(1291, 782);
+      jFrame.setSize(1024, 768);
       jFrame.setContentPane(getJContentPane());
       jFrame.setTitle(Tools.APP_TITLE + " " + Tools.APP_VERSION);
     }

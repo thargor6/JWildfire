@@ -26,6 +26,7 @@ import javax.swing.JSlider;
 import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.JToggleButton;
 import javax.swing.ListSelectionModel;
@@ -593,6 +594,11 @@ public class TinaInternalFrame extends JInternalFrame {
   private JLabel shadingBlurFallOffLbl = null;
   private JTextField shadingBlurFallOffREd = null;
   private JSlider shadingBlurFallOffSlider = null;
+  private JPanel scriptPanel = null;
+  private JScrollPane scriptScrollPane = null;
+  private JTextArea scriptTextArea = null;
+  private JButton compileScriptButton = null;
+  private JButton runScriptButton = null;
 
   /**
    * This is the xxx default constructor
@@ -1969,6 +1975,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaEastTabbedPane = new JTabbedPane();
       tinaEastTabbedPane.setFont(new Font("Dialog", Font.BOLD, 10));
       tinaEastTabbedPane.addTab("Transformations", null, getTinaTransformationsPanel(), null);
+      tinaEastTabbedPane.addTab("Script", null, getScriptPanel(), null);
     }
     return tinaEastTabbedPane;
   }
@@ -3034,7 +3041,7 @@ public class TinaInternalFrame extends JInternalFrame {
         getBatchRenderFilesRemoveButton(), getBatchRenderFilesRemoveAllButton(), getBatchRenderStartButton(),
         getRootTabbedPane(), getAffineFlipHorizontalButton(), getAffineFlipVerticalButton(), getAnimateLightScriptCmb(),
         getDarkTrianglesToggleButton(), getShadingBlurRadiusREd(), getShadingBlurRadiusSlider(), getShadingBlurFadeREd(),
-        getShadingBlurFadeSlider(), getShadingBlurFallOffREd(), getShadingBlurFallOffSlider());
+        getShadingBlurFadeSlider(), getShadingBlurFallOffREd(), getShadingBlurFallOffSlider(), getScriptTextArea());
     tinaController.refreshing = tinaController.cmbRefreshing = tinaController.gridRefreshing = true;
     try {
       for (NonlinearControlsRow row : nonlinearControlsRows) {
@@ -8967,6 +8974,94 @@ public class TinaInternalFrame extends JInternalFrame {
       });
     }
     return shadingBlurFallOffSlider;
+  }
+
+  /**
+   * This method initializes scriptPanel	
+   * 	
+   * @return javax.swing.JPanel	
+   */
+  private JPanel getScriptPanel() {
+    if (scriptPanel == null) {
+      scriptPanel = new JPanel();
+      scriptPanel.setLayout(null);
+      scriptPanel.add(getScriptScrollPane(), null);
+      scriptPanel.add(getCompileScriptButton(), null);
+      scriptPanel.add(getRunScriptButton(), null);
+    }
+    return scriptPanel;
+  }
+
+  /**
+   * This method initializes scriptScrollPane	
+   * 	
+   * @return javax.swing.JScrollPane	
+   */
+  private JScrollPane getScriptScrollPane() {
+    if (scriptScrollPane == null) {
+      scriptScrollPane = new JScrollPane();
+      scriptScrollPane.setBounds(new Rectangle(9, 13, 308, 263));
+      scriptScrollPane.setViewportView(getScriptTextArea());
+    }
+    return scriptScrollPane;
+  }
+
+  /**
+   * This method initializes scriptTextArea	
+   * 	
+   * @return javax.swing.JTextArea	
+   */
+  private JTextArea getScriptTextArea() {
+    if (scriptTextArea == null) {
+      scriptTextArea = new JTextArea();
+      scriptTextArea.setText("");
+    }
+    return scriptTextArea;
+  }
+
+  /**
+   * This method initializes compileScriptButton	
+   * 	
+   * @return javax.swing.JButton	
+   */
+  private JButton getCompileScriptButton() {
+    if (compileScriptButton == null) {
+      compileScriptButton = new JButton();
+      compileScriptButton.setBounds(new Rectangle(9, 280, 81, 24));
+      compileScriptButton.setPreferredSize(new Dimension(81, 24));
+      compileScriptButton.setToolTipText("Compile the script");
+      compileScriptButton.setText("Compile");
+      compileScriptButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      compileScriptButton.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent e) {
+          tinaController.compileScriptButton_clicked();
+        }
+      });
+    }
+    return compileScriptButton;
+  }
+
+  /**
+   * This method initializes runScriptButton	
+   * 	
+   * @return javax.swing.JButton	
+   */
+  private JButton getRunScriptButton() {
+    if (runScriptButton == null) {
+      runScriptButton = new JButton();
+      runScriptButton.setPreferredSize(new Dimension(81, 24));
+      runScriptButton.setToolTipText("Compile and run the script");
+      runScriptButton.setText("Run");
+      runScriptButton.setSize(new Dimension(81, 24));
+      runScriptButton.setLocation(new Point(97, 280));
+      runScriptButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      runScriptButton.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent e) {
+          tinaController.runScriptButton_clicked();
+        }
+      });
+    }
+    return runScriptButton;
   }
 
 } //  @jve:decl-index=0:visual-constraint="10,10"
