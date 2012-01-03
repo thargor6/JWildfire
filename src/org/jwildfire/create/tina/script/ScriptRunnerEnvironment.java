@@ -22,7 +22,5 @@ public interface ScriptRunnerEnvironment {
 
   public Flame getCurrFlame();
 
-  public void refreshXFormsTable();
-
-  public void refreshFlameImage();
+  public void refreshUI();
 }

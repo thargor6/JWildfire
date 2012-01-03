@@ -49,6 +49,7 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.JToggleButton;
 import javax.swing.ScrollPaneConstants;
+import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
@@ -625,33 +626,82 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
   }
 
   private void initDefaultScript() {
-    scriptTextArea.setText(
-        "import org.jwildfire.create.tina.base.XForm;\n" +
-            "import org.jwildfire.create.tina.variation.LinearFunc;\n" +
-            "import org.jwildfire.create.tina.variation.SplitsFunc;\n" +
-            "import org.jwildfire.create.tina.variation.EllipticFunc;\n" +
-            "import org.jwildfire.create.tina.base.Flame;\n" +
-            "import org.jwildfire.create.tina.script.ScriptRunnerEnvironment;\n" +
-            "\n" +
-            "public void run(ScriptRunnerEnvironment pEnv) throws Exception {\n" +
-            "  Flame currFlame = pEnv.getCurrFlame();\n" +
-            "  if(currFlame==null) {\n" +
-            "    throw new Exception(\"Please select a flame at first\");\n" +
-            "  }\n" +
-            "  XForm xForm = new XForm();\n" +
-            "  xForm.addVariation(1.0, new EllipticFunc());\n" +
-            "  xForm.setWeight(0.5);\n" +
-            "  currFlame.getXForms().add(xForm);\n" +
-            "\n" +
-            "  xForm = new XForm();\n" +
-            "  xForm.addVariation(1.0, new LinearFunc());\n" +
-            "  xForm.addVariation(1.0, new SplitsFunc());\n" +
-            "  xForm.setWeight(0.5);\n" +
-            "  currFlame.getXForms().add(xForm);\n" +
-            "\n" +
-            "  pEnv.refreshXFormsTable();\n" +
-            "  pEnv.refreshFlameImage();\n" +
-            "}\n");
+    scriptTextArea.setText("import org.jwildfire.create.tina.base.Flame;\r\n" +
+        "import org.jwildfire.create.tina.base.XForm;\r\n" +
+        "import org.jwildfire.create.tina.variation.VariationFunc;\r\n" +
+        "import org.jwildfire.create.tina.script.ScriptRunnerEnvironment;\r\n" +
+        "\r\n" +
+        "import org.jwildfire.create.tina.variation.BubbleFunc;\r\n" +
+        "import org.jwildfire.create.tina.variation.HemisphereFunc;\r\n" +
+        "import org.jwildfire.create.tina.variation.Julia3DFunc;\r\n" +
+        "import org.jwildfire.create.tina.variation.LinearFunc;\r\n" +
+        "import org.jwildfire.create.tina.variation.PreBlurFunc;\r\n" +
+        "import org.jwildfire.create.tina.variation.SpirographFunc;\r\n" +
+        "import org.jwildfire.create.tina.variation.SplitsFunc;\r\n" +
+        "import org.jwildfire.create.tina.variation.ZTranslateFunc;\r\n" +
+        "\r\n" +
+        "// Bases on the Soft Julian Script by AsaLegault\r\n" +
+        "//  http://asalegault.deviantart.com/art/Cloud-Julian-Script-84635709\r\n" +
+        "public void run(ScriptRunnerEnvironment pEnv) throws Exception {\r\n" +
+        "  Flame currFlame = pEnv.getCurrFlame();\r\n" +
+        "  if(currFlame==null) {\r\n" +
+        "    throw new Exception(\"Please select a flame at first\");\r\n" +
+        "  }\r\n" +
+        "  // First transform\r\n" +
+        "  {\r\n" +
+        "    VariationFunc varFunc = new Julia3DFunc();\r\n" +
+        "    varFunc.setParameter(\"power\", -2);\r\n" +
+        "    XForm xForm = new XForm();\r\n" +
+        "    xForm.addVariation(1.0, varFunc);\r\n" +
+        "    xForm.setWeight(2.0);\r\n" +
+        "    xForm.setColor(0.0);\r\n" +
+        "    xForm.setColorSymmetry(0.01);\r\n" +
+        "    xForm.setCoeff20(0.3); //o0    \r\n" +
+        "    currFlame.getXForms().add(xForm);\r\n" +
+        "  }\r\n" +
+        "  // Second transform\r\n" +
+        "  {\r\n" +
+        "    XForm xForm = new XForm();\r\n" +
+        "    xForm.addVariation(0.1, new BubbleFunc());\r\n" +
+        "    xForm.addVariation(1.0, new PreBlurFunc());\r\n" +
+        "    VariationFunc varFunc=new SpirographFunc();\r\n" +
+        "    varFunc.setParameter(\"a\", 7.0);\r\n" +
+        "    varFunc.setParameter(\"b\", 5.0);\r\n" +
+        "    varFunc.setParameter(\"d\", 0.0);\r\n" +
+        "    varFunc.setParameter(\"c1\", 5.0);\r\n" +
+        "    varFunc.setParameter(\"c2\", -5.0);\r\n" +
+        "    varFunc.setParameter(\"tmin\", 1.0);\r\n" +
+        "    varFunc.setParameter(\"tmax\", 50.0);\r\n" +
+        "    varFunc.setParameter(\"ymin\", -1.0);\r\n" +
+        "    varFunc.setParameter(\"ymax\", 0.1);\r\n" +
+        "    xForm.addVariation(0.03, varFunc);\r\n" +
+        "    xForm.setWeight(1.0);\r\n" +
+        "    xForm.setColor(0.844);\r\n" +
+        "    currFlame.getXForms().add(xForm);    \r\n" +
+        "  }\r\n" +
+        "  // Third transform\r\n" +
+        "  {\r\n" +
+        "    XForm xForm = new XForm();\r\n" +
+        "    xForm.addVariation(0.18, new HemisphereFunc());\r\n" +
+        "    xForm.addVariation(1.0, new PreBlurFunc());\r\n" +
+        "    xForm.addVariation(-0.025, new ZTranslateFunc());\r\n" +
+        "    xForm.setWeight(0.5);\r\n" +
+        "    xForm.setColor(0.0);\r\n" +
+        "    currFlame.getXForms().add(xForm);    \r\n" +
+        "  }\r\n" +
+        "  //A fourth transform can be very useful when trying\r\n" +
+        "  //to fill in the bubbles....But i'll let you figure\r\n" +
+        "  //that out.//\r\n" +
+        "  // ...\r\n" +
+        "  // Final settings   \r\n" +
+        "  currFlame.setCamRoll(2.0);\r\n" +
+        "  currFlame.setCamPitch(46.0);\r\n" +
+        "  currFlame.setCamYaw(0.0);\r\n" +
+        "  currFlame.setCamPerspective(0.30);\r\n" +
+        "  currFlame.setPixelsPerUnit(96);\r\n" +
+        "  // Refresh the UI\r\n" +
+        "  pEnv.refreshUI();\r\n" +
+        "}\r\n");
   }
 
   private FlamePanel getFlamePanel() {
@@ -774,7 +824,8 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     centerPanel.repaint();
   }
 
-  private void refreshUI() {
+  @Override
+  public void refreshUI() {
     noRefresh = true;
     try {
       Flame currFlame = getCurrFlame();
@@ -2122,7 +2173,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       rows.getNonlinearVarRightButton().setEnabled(enabled);
       rows.getNonlinearParamsCmb().setEnabled(enabled);
       rows.getNonlinearParamsREd().setEnabled(enabled);
-      // refreshed in refreshXFormUI():
+      // refreshing occurs in refreshXFormUI():
       // rows.getNonlinearParamsLeftButton().setEnabled(enabled);
       // rows.getNonlinearParamsRightButton().setEnabled(enabled);
     }
@@ -2193,10 +2244,6 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
         else {
           Variation var = pXForm.getVariation(idx);
           refreshParamCmb(row, pXForm, var);
-          String selected = (String) row.getNonlinearParamsCmb().getSelectedItem();
-          boolean enabled = selected != null && selected.length() > 0;
-          row.getNonlinearParamsLeftButton().setEnabled(enabled);
-          row.getNonlinearParamsRightButton().setEnabled(enabled);
         }
         idx++;
       }
@@ -2226,10 +2273,28 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       pRow.getNonlinearVarCmb().setSelectedItem(varFunc.getName());
       pRow.getNonlinearVarREd().setText(Tools.doubleToString(pVar.getAmount()));
       pRow.getNonlinearParamsCmb().removeAllItems();
-      for (String name : varFunc.getParameterNames()) {
-        pRow.getNonlinearParamsCmb().addItem(name);
+      // ressources
+      int resCount = 0;
+      String[] resNames = varFunc.getRessourceNames();
+      if (resNames != null) {
+        for (String name : resNames) {
+          pRow.getNonlinearParamsCmb().addItem(name);
+          resCount++;
+        }
       }
-      if (varFunc.getParameterNames().length > 0) {
+      // params      
+      String[] paramNames = varFunc.getParameterNames();
+      if (paramNames != null) {
+        for (String name : paramNames) {
+          pRow.getNonlinearParamsCmb().addItem(name);
+        }
+      }
+      // preselection
+      if (resCount > 0) {
+        pRow.getNonlinearParamsCmb().setSelectedIndex(0);
+        enableNonlinearControls(pRow, true);
+      }
+      else if (varFunc.getParameterNames().length > 0) {
         pRow.getNonlinearParamsCmb().setSelectedIndex(0);
         Object val = varFunc.getParameterValues()[0];
         if (val instanceof Double) {
@@ -2238,6 +2303,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
         else {
           pRow.getNonlinearParamsREd().setText(val.toString());
         }
+        enableNonlinearControls(pRow, false);
       }
       else {
         pRow.getNonlinearParamsCmb().setSelectedIndex(-1);
@@ -2650,13 +2716,35 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       if (xForm != null && selected != null && selected.length() > 0) {
         if (pIdx < xForm.getVariationCount()) {
           Variation var = xForm.getVariation(pIdx);
-          String valStr = nonlinearControlsRows[pIdx].getNonlinearParamsREd().getText();
-          if (valStr == null || valStr.length() == 0) {
-            valStr = "0";
+          int idx;
+          if ((idx = var.getFunc().getParameterIndex(selected)) >= 0) {
+            String valStr = nonlinearControlsRows[pIdx].getNonlinearParamsREd().getText();
+            if (valStr == null || valStr.length() == 0) {
+              valStr = "0";
+            }
+            double val = Tools.stringToDouble(valStr) + pDelta;
+            var.getFunc().setParameter(selected, val);
+            nonlinearControlsRows[pIdx].getNonlinearParamsREd().setText(Tools.doubleToString(val));
           }
-          double val = Tools.stringToDouble(valStr) + pDelta;
-          var.getFunc().setParameter(selected, val);
-          nonlinearControlsRows[pIdx].getNonlinearParamsREd().setText(Tools.doubleToString(val));
+          else if ((idx = var.getFunc().getRessourceIndex(selected)) >= 0) {
+            RessourceDialog dlg = new RessourceDialog(SwingUtilities.getWindowAncestor(centerPanel));
+            String rName = var.getFunc().getRessourceNames()[idx];
+            dlg.setRessourceName(rName);
+            Object val = var.getFunc().getRessourceValues()[idx];
+            if (val != null && val instanceof String) {
+              dlg.setRessourceValue((String) val);
+            }
+            dlg.setModal(true);
+            dlg.setVisible(true);
+            if (dlg.isConfirmed()) {
+              try {
+                var.getFunc().setRessource(rName, dlg.getRessourceValue());
+              }
+              catch (Throwable ex) {
+                errorHandler.handleError(ex);
+              }
+            }
+          }
           refreshFlameImage();
         }
       }
@@ -2677,14 +2765,10 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       if (xForm != null && selected != null && selected.length() > 0) {
         if (pIdx < xForm.getVariationCount()) {
           Variation var = xForm.getVariation(pIdx);
-          int idx = -1;
-          for (int i = 0; i < var.getFunc().getParameterNames().length; i++) {
-            if (var.getFunc().getParameterNames()[i].equals(selected)) {
-              idx = i;
-              break;
-            }
-          }
-          if (idx >= 0) {
+          // params
+          int idx;
+          if ((idx = var.getFunc().getParameterIndex(selected)) >= 0) {
+            enableNonlinearControls(nonlinearControlsRows[pIdx], false);
             Object val = var.getFunc().getParameterValues()[idx];
             if (val instanceof Double) {
               nonlinearControlsRows[pIdx].getNonlinearParamsREd().setText(Tools.doubleToString((Double) val));
@@ -2693,6 +2777,12 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
               nonlinearControlsRows[pIdx].getNonlinearParamsREd().setText(val.toString());
             }
           }
+          // ressources
+          else if ((idx = var.getFunc().getRessourceIndex(selected)) >= 0) {
+            enableNonlinearControls(nonlinearControlsRows[pIdx], true);
+            nonlinearControlsRows[pIdx].getNonlinearParamsREd().setText(null);
+          }
+          // empty
           else {
             nonlinearControlsRows[pIdx].getNonlinearParamsREd().setText(null);
           }
@@ -2702,6 +2792,14 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     finally {
       cmbRefreshing = false;
     }
+  }
+
+  private void enableNonlinearControls(NonlinearControlsRow pRow, boolean pRessource) {
+    String selected = (String) pRow.getNonlinearParamsCmb().getSelectedItem();
+    boolean enabled = selected != null && selected.length() > 0;
+    pRow.getNonlinearParamsLeftButton().setEnabled(enabled);
+    pRow.getNonlinearParamsRightButton().setEnabled(enabled && !pRessource);
+    pRow.getNonlinearParamsREd().setEnabled(!pRessource);
   }
 
   private final double DELTA_VAR = 0.05;
@@ -3612,20 +3710,4 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     }
   }
 
-  @Override
-  public void refreshXFormsTable() {
-    gridRefreshing = true;
-    try {
-      refreshTransformationsTable();
-    }
-    finally {
-      gridRefreshing = false;
-    }
-    if (getCurrFlame() != null) {
-      int row = getCurrFlame().getXForms().size() - 1;
-      if (row >= 0) {
-        transformationsTable.getSelectionModel().setSelectionInterval(row, row);
-      }
-    }
-  }
 }

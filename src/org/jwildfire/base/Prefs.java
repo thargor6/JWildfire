@@ -91,7 +91,7 @@ public class Prefs extends ManagedObject {
   @Property(description = "Maximum number of threads", category = PropertyCategory.TINA)
   private int tinaRenderThreads = 8;
   @Property(description = "Use fast math (0 or 1)", category = PropertyCategory.TINA)
-  private int tinaRenderFastMath = 7;
+  private int tinaRenderFastMath = 1;
 
   @Property(description = "Quality for realtime rendering (please restart app after changing this)", category = PropertyCategory.TINA)
   private int tinaRenderRealtimeQuality = 1;

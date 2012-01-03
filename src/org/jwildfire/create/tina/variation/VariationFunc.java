@@ -47,4 +47,38 @@ public abstract class VariationFunc {
     return false;
   }
 
+  public String[] getRessourceNames() {
+    return null;
+  }
+
+  public Object[] getRessourceValues() {
+    return null;
+  }
+
+  public void setRessource(String pName, Object pValue) {
+  }
+
+  public int getParameterIndex(String pName) {
+    String paramNames[] = getParameterNames();
+    if (paramNames != null) {
+      for (int i = 0; i < paramNames.length; i++) {
+        if (paramNames[i].equals(pName)) {
+          return i;
+        }
+      }
+    }
+    return -1;
+  }
+
+  public int getRessourceIndex(String pName) {
+    String ressourceNames[] = getRessourceNames();
+    if (ressourceNames != null) {
+      for (int i = 0; i < ressourceNames.length; i++) {
+        if (ressourceNames[i].equals(pName)) {
+          return i;
+        }
+      }
+    }
+    return -1;
+  }
 }

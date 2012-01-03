@@ -169,6 +169,7 @@ public class VariationFuncList {
     registerVariationFunc(MandelbrotFunc.class);
     registerVariationFunc(TBubbleFunc.class);
     registerVariationFunc(SpirographFunc.class);
+    registerVariationFunc(CustomWFFunc.class);
     //    registerVariationFunc(TPostBumpMapFunc.class);
   }
 

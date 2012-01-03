@@ -51,17 +51,34 @@ public class Variation {
   public void assign(Variation var) {
     amount = var.amount;
     func = VariationFuncList.getVariationFuncInstance(var.func.getName());
-    for (int i = 0; i < var.func.getParameterNames().length; i++) {
-      Object val = var.func.getParameterValues()[i];
-      if (val instanceof Double) {
-        func.setParameter(var.func.getParameterNames()[i], (Double) val);
-      }
-      else if (val instanceof Integer) {
-        func.setParameter(var.func.getParameterNames()[i], Double.valueOf(((Integer) val)));
-      }
-      else {
-        throw new IllegalStateException();
+    // params
+    {
+      String[] paramNames = var.func.getParameterNames();
+      if (paramNames != null) {
+        for (int i = 0; i < paramNames.length; i++) {
+          Object val = var.func.getParameterValues()[i];
+          if (val instanceof Double) {
+            func.setParameter(paramNames[i], (Double) val);
+          }
+          else if (val instanceof Integer) {
+            func.setParameter(paramNames[i], Double.valueOf(((Integer) val)));
+          }
+          else {
+            throw new IllegalStateException();
+          }
+        }
       }
     }
+    // ressources
+    {
+      String[] ressNames = var.func.getRessourceNames();
+      if (ressNames != null) {
+        for (int i = 0; i < ressNames.length; i++) {
+          Object val = var.func.getRessourceValues()[i];
+          func.setRessource(ressNames[i], val);
+        }
+      }
+    }
+
   }
 }

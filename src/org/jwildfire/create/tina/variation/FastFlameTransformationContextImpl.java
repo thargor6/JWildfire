@@ -87,14 +87,15 @@ public class FastFlameTransformationContextImpl implements FlameTransformationCo
 
   @Override
   public final double sqrt(double a) {
-    if (a > 0.0 & a < SQRT_MAX) {
-      int idx = (int) (a * SQRT_SCL);
-      return sqrt[idx];
-    }
-    else {
-      return Math.sqrt(a);
-    }
     //    return Math.sqrt(a);
+    //    if (a > 0.0 & a < SQRT_MAX) {
+    //      int idx = (int) (a * SQRT_SCL);
+    //      return sqrt[idx];
+    //    }
+    //    else {
+    //      return Math.sqrt(a);
+    //    }
+    return Math.sqrt(a);
   }
 
   // Fast sin/cos approx following http://www.java-gaming.org/index.php?topic=24191.0
@@ -107,9 +108,9 @@ public class FastFlameTransformationContextImpl implements FlameTransformationCo
   private static final double EXP_MIN, EXP_MAX, EXP_SCL;
   private static final double[] exp;
 
-  private static final int SQRT_PRECALC_COUNT;
-  private static final double SQRT_MAX, SQRT_SCL;
-  private static final double[] sqrt;
+  //  private static final int SQRT_PRECALC_COUNT;
+  //  private static final double SQRT_MAX, SQRT_SCL;
+  //  private static final double[] sqrt;
 
   static {
     // sin, cos, tan
@@ -149,16 +150,16 @@ public class FastFlameTransformationContextImpl implements FlameTransformationCo
       exp[i] = Math.exp(x);
     }
     // sqrt
-    int SQRT_PRECALC_BITS = 18;
-    int SQRT_PRECALC_MASK = ~(-1 << SQRT_PRECALC_BITS);
-    SQRT_PRECALC_COUNT = SQRT_PRECALC_MASK + 1;
-    SQRT_MAX = 6.0;
-    sqrt = new double[SQRT_PRECALC_COUNT + 1];
-    SQRT_SCL = (double) SQRT_PRECALC_COUNT / SQRT_MAX;
-    for (int i = 0; i <= SQRT_PRECALC_COUNT; i++) {
-      double x = (double) (i + 0.5) / SQRT_SCL;
-      sqrt[i] = Math.sqrt(x);
-    }
+    //    int SQRT_PRECALC_BITS = 18;
+    //    int SQRT_PRECALC_MASK = ~(-1 << SQRT_PRECALC_BITS);
+    //    SQRT_PRECALC_COUNT = SQRT_PRECALC_MASK + 1;
+    //    SQRT_MAX = 6.0;
+    //    sqrt = new double[SQRT_PRECALC_COUNT + 1];
+    //    SQRT_SCL = (double) SQRT_PRECALC_COUNT / SQRT_MAX;
+    //    for (int i = 0; i <= SQRT_PRECALC_COUNT; i++) {
+    //      double x = (double) (i + 0.5) / SQRT_SCL;
+    //      sqrt[i] = Math.sqrt(x);
+    //    }
   }
 
 }

@@ -47,12 +47,7 @@ public class EllipticFunc extends SimpleVariationFunc {
     else {
       ssx = pContext.sqrt(ssx);
     }
-    if (pContext.random() < 0.5) {
-      pVarTP.x += w * Math.atan2(a, b);
-    }
-    else {
-      pVarTP.x -= w * Math.atan2(a, b);
-    }
+    pVarTP.x += w * Math.atan2(a, b);
     if (pContext.random() < 0.5) {
       pVarTP.y += w * Math.log(xmax + ssx);
     }
