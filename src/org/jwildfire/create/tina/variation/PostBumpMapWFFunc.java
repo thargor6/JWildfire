@@ -25,7 +25,7 @@ import org.jwildfire.image.Pixel;
 import org.jwildfire.image.SimpleImage;
 import org.jwildfire.io.ImageReader;
 
-public class TPostBumpMapFunc extends VariationFunc {
+public class PostBumpMapWFFunc extends VariationFunc {
 
   private static final String PARAM_SCALEX = "scale_x";
   private static final String PARAM_SCALEY = "scale_y";
@@ -124,7 +124,7 @@ public class TPostBumpMapFunc extends VariationFunc {
 
   @Override
   public String getName() {
-    return "t_post_bump_map";
+    return "post_bumpmap_wf";
   }
 
   @Override

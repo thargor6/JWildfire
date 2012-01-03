@@ -20,8 +20,8 @@ import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.transform.XFormTransformService;
 import org.jwildfire.create.tina.variation.JuliaNFunc;
-import org.jwildfire.create.tina.variation.TXYWavesFunc;
 import org.jwildfire.create.tina.variation.VariationFuncList;
+import org.jwildfire.create.tina.variation.Waves2WFFunc;
 
 public class ExperimentalGnarlRandomFlameGenerator extends RandomFlameGenerator {
 
@@ -71,7 +71,7 @@ public class ExperimentalGnarlRandomFlameGenerator extends RandomFlameGenerator 
       flame.getXForms().add(xForm);
       xForm.setWeight(wavesWeight);
       //      Waves2Func w2 = (Waves2Func) VariationFuncList.getVariationFuncInstance("waves2", true);
-      TXYWavesFunc w2 = (TXYWavesFunc) VariationFuncList.getVariationFuncInstance("t_xy_waves", true);
+      Waves2WFFunc w2 = (Waves2WFFunc) VariationFuncList.getVariationFuncInstance("waves2_wf", true);
       if (Math.random() < 0.5) {
         w2.setParameter("use_cos_x", 1);
       }
@@ -122,7 +122,7 @@ public class ExperimentalGnarlRandomFlameGenerator extends RandomFlameGenerator 
           xForm.addVariation(nonBlurAmount, VariationFuncList.getVariationFuncInstance("sinh", true));
           break;
         case 8:
-          xForm.addVariation(nonBlurAmount, VariationFuncList.getVariationFuncInstance("t_epispiral", true));
+          xForm.addVariation(nonBlurAmount, VariationFuncList.getVariationFuncInstance("epispiral_wf", true));
           break;
         case 9:
           xForm.addVariation(nonBlurAmount, VariationFuncList.getVariationFuncInstance("tanh", true));

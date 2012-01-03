@@ -25,9 +25,9 @@ import org.jwildfire.create.tina.variation.VariationFuncList;
 public class ThreeDOnlyRandomFlameGenerator extends RandomFlameGenerator {
 
   private static final String FNCLST_3D[] = {
-      "blur3D", "julia3D", "curl3D", "butterfly3D", "julia3D", "t_colorscale", "julia3D", "blade3D", "bwraps7",
-      "hemisphere", "blob3D", "t_colorscale", "t_bubble", "t_pre_wave3D", "tangent3D", "square3D", "julia3D", "pie3D",
-      "pdj", "t_colorscale", "spherical3D", "julia3Dz" };
+      "blur3D", "julia3D", "curl3D", "butterfly3D", "julia3D", "colorscale_wf", "julia3D", "blade3D", "bwraps7",
+      "hemisphere", "blob3D", "colorscale_wf", "bubble_wf", "pre_wave3D_wf", "tangent3D", "square3D", "julia3D", "pie3D",
+      "pdj", "colorscale_wf", "spherical3D", "julia3Dz" };
 
   @Override
   protected Flame createFlame() {

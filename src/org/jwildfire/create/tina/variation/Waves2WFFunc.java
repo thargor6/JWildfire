@@ -20,7 +20,7 @@ import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
-public class TXYWavesFunc extends VariationFunc {
+public class Waves2WFFunc extends VariationFunc {
 
   private static final String PARAM_SCALEX = "scalex";
   private static final String PARAM_SCALEY = "scaley";
@@ -94,7 +94,7 @@ public class TXYWavesFunc extends VariationFunc {
 
   @Override
   public String getName() {
-    return "t_xy_waves";
+    return "waves2_wf";
   }
 
 }

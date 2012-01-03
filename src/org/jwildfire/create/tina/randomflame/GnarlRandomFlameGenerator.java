@@ -102,7 +102,7 @@ public class GnarlRandomFlameGenerator extends RandomFlameGenerator {
           xForm.addVariation(blurAmount, VariationFuncList.getVariationFuncInstance("sinh", true));
           break;
         case 8:
-          xForm.addVariation(blurAmount, VariationFuncList.getVariationFuncInstance("t_epispiral", true));
+          xForm.addVariation(blurAmount, VariationFuncList.getVariationFuncInstance("epispiral_wf", true));
           break;
         case 9:
           xForm.addVariation(blurAmount, VariationFuncList.getVariationFuncInstance("tanh", true));

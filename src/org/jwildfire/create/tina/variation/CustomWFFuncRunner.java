@@ -23,9 +23,9 @@ import org.codehaus.janino.Scanner;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
-public class TCustomFuncRunner {
-  public static TCustomFuncRunner compile(String pScript) throws Exception {
-    TCustomFuncRunner res = (TCustomFuncRunner) ClassBodyEvaluator.createFastClassBodyEvaluator(new Scanner(null, new StringReader(pScript)), TCustomFuncRunner.class, (ClassLoader) null);
+public class CustomWFFuncRunner {
+  public static CustomWFFuncRunner compile(String pScript) throws Exception {
+    CustomWFFuncRunner res = (CustomWFFuncRunner) ClassBodyEvaluator.createFastClassBodyEvaluator(new Scanner(null, new StringReader(pScript)), CustomWFFuncRunner.class, (ClassLoader) null);
     return res;
   }
 

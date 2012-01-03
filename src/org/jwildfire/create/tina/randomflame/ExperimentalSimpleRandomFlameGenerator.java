@@ -24,18 +24,17 @@ import org.jwildfire.create.tina.variation.VariationFuncList;
 
 public class ExperimentalSimpleRandomFlameGenerator extends RandomFlameGenerator {
 
-  protected static final String FNCLST_EXPERIMENTAL[] = { "blur3D", "bubble", "escher", "rays", "t_epispiral", "curl3D", "diamond",
-      "disc", "sech", "loonie", "exp", "cosh", "split", "wedge_sph", "circlize", "t_heart", "bwraps7", "t_colorscale", "mandelbrot",
-      "butterfly3D", "cpow", "conic", "julia3D", "cell", "stripes", "t_post_mirror", "t_colorscale", "crackle",
-      "flower", "heart", "julia3D", "disc2", "polar2", "foci", "scry", "flux", "bwraps7", "t_colorscale",
-      "hemisphere", "popcorn2", "sec", "lazysusan", "sin", "separation", "t_post_mirror", "t_heart", "mandelbrot",
-      "t_rose", "edisc", "waves2", "twintrian", "coth", "super_shape", "auger", "t_pre_wave3D", "hexes", "spirograph",
-      "tanh", "bipolar", "cot", "horseshoe", "wedge", "sinh", "modulus", "mobius", "bwraps7", "t_colorscale",
-      "cross", "tangent3D", "csc", "curve", "csch", "bent2", "splits", "whorl", "t_post_mirror", "mandelbrot",
-      "tan", "blob3D", "julia3D", "log", "cos", "oscilloscope", "wedge_julia", "bwraps7", "t_heart", "hexes",
+  protected static final String FNCLST_EXPERIMENTAL[] = { "blur3D", "bubble", "escher", "rays", "epispiral_wf", "curl3D", "diamond",
+      "disc", "sech", "loonie", "exp", "cosh", "split", "wedge_sph", "circlize", "heart_wf", "bwraps7", "colorscale_wf", "mandelbrot",
+      "butterfly3D", "cpow", "conic", "julia3D", "cell", "stripes", "post_mirror_wf", "colorscale_wf", "crackle",
+      "flower", "heart", "julia3D", "disc2", "polar2", "foci", "scry", "flux", "bwraps7", "colorscale_wf",
+      "hemisphere", "popcorn2", "sec", "lazysusan", "sin", "separation", "post_mirror_wf", "heart_wf", "mandelbrot",
+      "rose_wf", "edisc", "waves2", "twintrian", "coth", "super_shape", "auger", "pre_wave3D_wf", "hexes", "spirograph",
+      "tanh", "bipolar", "cot", "horseshoe", "wedge", "sinh", "modulus", "mobius", "bwraps7", "colorscale_wf",
+      "cross", "tangent3D", "csc", "curve", "csch", "bent2", "splits", "whorl", "post_mirror_wf", "mandelbrot",
+      "tan", "blob3D", "julia3D", "log", "cos", "oscilloscope", "wedge_julia", "bwraps7", "heart_wf", "hexes",
       "pdj", "popcorn", "parabola", "rings2", "spherical3D", "spiral", "rectangles", "elliptic", "waves", "swirl",
-      "bwraps7", "t_heart", "t_colorscale",
-      "boarders", "secant2" };
+      "bwraps7", "heart_wf", "colorscale_wf", "boarders", "secant2" };
 
   @Override
   protected Flame createFlame() {

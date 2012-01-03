@@ -59,7 +59,7 @@ public class CustomWFFunc extends VariationFunc {
       "    pVarTP.z += pAmount * pAffineTP.z;\r\n" +
       "  }\r\n" +
       "";
-  private TCustomFuncRunner customFuncRunner = null;
+  private CustomWFFuncRunner customFuncRunner = null;
 
   @Override
   public void transform(XFormTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
@@ -139,7 +139,7 @@ public class CustomWFFunc extends VariationFunc {
 
   private void compile() {
     try {
-      customFuncRunner = TCustomFuncRunner.compile(code);
+      customFuncRunner = CustomWFFuncRunner.compile(code);
     }
     catch (Throwable ex) {
       throw new RuntimeException(ex);

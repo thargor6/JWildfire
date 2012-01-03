@@ -19,7 +19,7 @@ package org.jwildfire.create.tina.variation;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
-public class THeartFunc extends VariationFunc {
+public class HeartWFFunc extends VariationFunc {
   private static final String PARAM_SCALEX = "scale_x";
   private static final String PARAM_SCALET = "scale_t";
   private static final String PARAM_SHIFTT = "shift_t";
@@ -88,6 +88,6 @@ public class THeartFunc extends VariationFunc {
 
   @Override
   public String getName() {
-    return "t_heart";
+    return "heart_wf";
   }
 }

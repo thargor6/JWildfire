@@ -20,7 +20,7 @@ import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
-public class TRoseFunc extends VariationFunc {
+public class RoseWFFunc extends VariationFunc {
   private static final String PARAM_AMP = "amp";
   private static final String PARAM_WAVES = "waves";
   private static final String[] paramNames = { PARAM_AMP, PARAM_WAVES };
@@ -64,6 +64,6 @@ public class TRoseFunc extends VariationFunc {
 
   @Override
   public String getName() {
-    return "t_rose";
+    return "rose_wf";
   }
 }

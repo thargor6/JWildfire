@@ -16,30 +16,37 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import org.jwildfire.create.tina.base.Constants;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
-public class TPreWave3DFunc extends VariationFunc {
-  private static final String PARAM_WAVELEN = "wavelen";
-  private static final String PARAM_PHASE = "phase";
-  private static final String PARAM_DAMPING = "damping";
-  private static final String[] paramNames = { PARAM_WAVELEN, PARAM_PHASE, PARAM_DAMPING };
+public class ColorScaleWFFunc extends VariationFunc {
 
-  private double wavelen = 0.5;
-  private double phase = 0.0;
-  private double damping = 0.01;
+  private static final String PARAM_SCALEX = "scale_x";
+  private static final String PARAM_SCALEY = "scale_y";
+  private static final String PARAM_SCALEZ = "scale_z";
+  private static final String PARAM_OFFSETZ = "offset_z";
+  private static final String PARAM_RESETZ = "reset_z";
+
+  private static final String[] paramNames = { PARAM_SCALEX, PARAM_SCALEY, PARAM_SCALEZ, PARAM_OFFSETZ, PARAM_RESETZ };
+
+  private double scaleX = 0.0;
+  private double scaleY = 0.0;
+  private double scaleZ = 0.5;
+  private double offsetZ = 0.0;
+  private double resetZ = 0.0;
 
   @Override
   public void transform(XFormTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-    double r = pContext.sqrt(pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y);
-    double dl = r / wavelen;
-    double amplitude = pAmount;
-    if (Math.abs(damping) > Constants.EPSILON) {
-      double dmp = -dl * damping;
-      amplitude *= pContext.exp(dmp);
+
+    pVarTP.x += pAmount * scaleX * pAffineTP.x;
+    pVarTP.y += pAmount * scaleY * pAffineTP.y;
+    double dz = pContext.getColor() * scaleZ * pAmount + offsetZ;
+    if (resetZ > 0) {
+      pVarTP.z = dz;
     }
-    pAffineTP.z += amplitude * (double) pContext.sin(2.0 * Math.PI * dl + phase);
+    else {
+      pVarTP.z += dz;
+    }
   }
 
   @Override
@@ -49,28 +56,28 @@ public class TPreWave3DFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { wavelen, phase, damping };
+    return new Object[] { scaleX, scaleY, scaleZ, offsetZ, resetZ };
   }
 
   @Override
   public void setParameter(String pName, double pValue) {
-    if (PARAM_WAVELEN.equalsIgnoreCase(pName))
-      wavelen = pValue;
-    else if (PARAM_PHASE.equalsIgnoreCase(pName))
-      phase = pValue;
-    else if (PARAM_DAMPING.equalsIgnoreCase(pName))
-      damping = pValue;
+    if (PARAM_SCALEX.equalsIgnoreCase(pName))
+      scaleX = pValue;
+    else if (PARAM_SCALEY.equalsIgnoreCase(pName))
+      scaleY = pValue;
+    else if (PARAM_SCALEZ.equalsIgnoreCase(pName))
+      scaleZ = pValue;
+    else if (PARAM_OFFSETZ.equalsIgnoreCase(pName))
+      offsetZ = pValue;
+    else if (PARAM_RESETZ.equalsIgnoreCase(pName))
+      resetZ = pValue;
     else
       throw new IllegalArgumentException(pName);
   }
 
   @Override
   public String getName() {
-    return "t_pre_wave3D";
+    return "colorscale_wf";
   }
 
-  @Override
-  public int getPriority() {
-    return -1;
-  }
 }

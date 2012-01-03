@@ -80,7 +80,12 @@ public class FlameFilePreview extends JComponent implements PropertyChangeListen
     }
     catch (Exception ex) {
       currThumbnail = null;
-      ex.printStackTrace();
+      if (ex.getCause() != null) {
+        ex.getCause().printStackTrace();
+      }
+      else {
+        ex.printStackTrace();
+      }
     }
   }
 

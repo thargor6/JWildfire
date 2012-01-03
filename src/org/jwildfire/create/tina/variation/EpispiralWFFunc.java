@@ -16,28 +16,52 @@
 */
 package org.jwildfire.create.tina.variation;
 
+import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
-public class TBubbleFunc extends SimpleVariationFunc {
+public class EpispiralWFFunc extends VariationFunc {
+  private static final String PARAM_AMP = "amp";
+  private static final String PARAM_WAVES = "waves";
+  private static final String[] paramNames = { PARAM_AMP, PARAM_WAVES };
+
+  private double amp = 0.5;
+  private int waves = 4;
 
   @Override
   public void transform(XFormTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-    double r = ((pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y) / 4.0 + 1.0);
-    double t = pAmount / r;
-    pVarTP.x += t * pAffineTP.x;
-    pVarTP.y += t * pAffineTP.y;
-    if (pContext.random() < 0.5) {
-      pVarTP.z -= pAmount * (2 / r - 1);
-    }
-    else {
-      pVarTP.z += pAmount * (2 / r - 1);
-    }
+    double a = Math.atan2(pAffineTP.x, pAffineTP.y);
+    double r = pContext.sqrt(pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y);
+    r = 0.5 / pContext.cos(waves * a);
+    double nx = pContext.sin(a) * r;
+    double ny = pContext.cos(a) * r;
+
+    pVarTP.x += pAmount * nx;
+    pVarTP.y += pAmount * ny;
+  }
+
+  @Override
+  public String[] getParameterNames() {
+    return paramNames;
+  }
+
+  @Override
+  public Object[] getParameterValues() {
+    return new Object[] { amp, waves };
+  }
+
+  @Override
+  public void setParameter(String pName, double pValue) {
+    if (PARAM_AMP.equalsIgnoreCase(pName))
+      amp = pValue;
+    else if (PARAM_WAVES.equalsIgnoreCase(pName))
+      waves = Tools.FTOI(pValue);
+    else
+      throw new IllegalArgumentException(pName);
   }
 
   @Override
   public String getName() {
-    return "t_bubble";
+    return "epispiral_wf";
   }
-
 }

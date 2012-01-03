@@ -20,7 +20,7 @@ import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
-public class TPostMirrorFunc extends VariationFunc {
+public class PostMirrorWFFunc extends VariationFunc {
 
   private static final String PARAM_XAXIS = "xaxis";
   private static final String PARAM_YAXIS = "yaxis";
@@ -83,7 +83,7 @@ public class TPostMirrorFunc extends VariationFunc {
 
   @Override
   public String getName() {
-    return "t_post_mirror";
+    return "post_mirror_wf";
   }
 
 }
