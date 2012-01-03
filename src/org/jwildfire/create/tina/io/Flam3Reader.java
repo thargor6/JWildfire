@@ -284,11 +284,14 @@ public class Flam3Reader implements FlameReader {
     // variations
     {
       List<String> variationNameList = VariationFuncList.getNameList();
+      Map<String, String> aliasMap = VariationFuncList.getAliasMap();
       Iterator<String> it = atts.keySet().iterator();
       while (it.hasNext()) {
         String name = it.next();
-        if (variationNameList.indexOf(name) >= 0) {
-          VariationFunc varFunc = VariationFuncList.getVariationFuncInstance(name);
+        String aliasName = aliasMap.get(name);
+        String varName = aliasName != null ? aliasName : name;
+        if (variationNameList.indexOf(varName) >= 0) {
+          VariationFunc varFunc = VariationFuncList.getVariationFuncInstance(varName);
           Variation variation = pXForm.addVariation(Double.parseDouble(atts.get(name)), varFunc);
           String paramNames[] = variation.getFunc().getParameterNames();
           for (String pName : paramNames) {

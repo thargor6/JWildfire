@@ -18,14 +18,33 @@
 package org.jwildfire.create.tina.variation;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class VariationFuncList {
   public static final String DEFAULT_VARIATION = "linear3D";
   private static List<Class<? extends VariationFunc>> items = new ArrayList<Class<? extends VariationFunc>>();
-  private static List<String> nameList = new ArrayList<String>();
+  private static List<String> nameList = null;
+  private static Map<Class<? extends VariationFunc>, String> aliasMap = new HashMap<Class<? extends VariationFunc>, String>();
+  private static Map<String, String> resolvedAliasMap = null;
 
   static {
+    // define alias for renamed variations to allow loading of old flame files
+    aliasMap.put(MandelbrotFunc.class, "mandelbrot");
+    aliasMap.put(SpirographFunc.class, "spirograph");
+    aliasMap.put(CustomWFFunc.class, "t_custom");
+    aliasMap.put(EpispiralWFFunc.class, "t_epispiral");
+    aliasMap.put(ColorScaleWFFunc.class, "t_colorscale");
+    aliasMap.put(HeartWFFunc.class, "t_heart");
+    aliasMap.put(Waves2WFFunc.class, "t_xy_waves");
+    aliasMap.put(BubbleWFFunc.class, "t_bubble");
+    aliasMap.put(PostBumpMapWFFunc.class, "t_post_bump_map");
+    aliasMap.put(PostMirrorWFFunc.class, "t_post_mirror");
+    aliasMap.put(PreWave3DWFFunc.class, "t_pre_wave3D");
+    aliasMap.put(RoseWFFunc.class, "t_rose");
+
+    //
     registerVariationFunc(LinearFunc.class);
     registerVariationFunc(SphericalFunc.class);
     registerVariationFunc(WavesFunc.class);
@@ -104,8 +123,8 @@ public class VariationFuncList {
     registerVariationFunc(Popcorn2Func.class);
     registerVariationFunc(Secant2Func.class);
     registerVariationFunc(NgonFunc.class);
-    registerVariationFunc(TEpispiralFunc.class);
-    registerVariationFunc(TRoseFunc.class);
+    registerVariationFunc(EpispiralWFFunc.class);
+    registerVariationFunc(RoseWFFunc.class);
     registerVariationFunc(RaysFunc.class);
     registerVariationFunc(TwintrianFunc.class);
     registerVariationFunc(FociFunc.class);
@@ -150,14 +169,14 @@ public class VariationFuncList {
     registerVariationFunc(FluxFunc.class);
     registerVariationFunc(MobiusFunc.class);
     registerVariationFunc(CirclizeFunc.class);
-    registerVariationFunc(TPostMirrorFunc.class);
-    registerVariationFunc(TPreWave3DFunc.class);
+    registerVariationFunc(PostMirrorWFFunc.class);
+    registerVariationFunc(PreWave3DWFFunc.class);
     registerVariationFunc(BubbleWrapFunc.class);
-    registerVariationFunc(TColorScaleFunc.class);
-    registerVariationFunc(THeartFunc.class);
+    registerVariationFunc(ColorScaleWFFunc.class);
+    registerVariationFunc(HeartWFFunc.class);
     registerVariationFunc(XHeartFunc.class);
     registerVariationFunc(EllipticFunc.class);
-    registerVariationFunc(TXYWavesFunc.class);
+    registerVariationFunc(Waves2WFFunc.class);
     registerVariationFunc(CropFunc.class);
     registerVariationFunc(PostCropFunc.class);
     registerVariationFunc(PreCropFunc.class);
@@ -167,7 +186,7 @@ public class VariationFuncList {
     registerVariationFunc(HexesFunc.class);
     registerVariationFunc(CrackleFunc.class);
     registerVariationFunc(MandelbrotFunc.class);
-    registerVariationFunc(TBubbleFunc.class);
+    registerVariationFunc(BubbleWFFunc.class);
     registerVariationFunc(SpirographFunc.class);
     registerVariationFunc(CustomWFFunc.class);
     //    registerVariationFunc(TPostBumpMapFunc.class);
@@ -178,22 +197,53 @@ public class VariationFuncList {
     nameList = null;
   }
 
+  private static String getVariationName(Class<? extends VariationFunc> pFuncCls, boolean pFatal) {
+    try {
+      return pFuncCls.newInstance().getName();
+    }
+    catch (InstantiationException ex) {
+      if (pFatal) {
+        throw new RuntimeException(ex);
+      }
+      else {
+        ex.printStackTrace();
+      }
+    }
+    catch (IllegalAccessException ex) {
+      if (pFatal) {
+        throw new RuntimeException(ex);
+      }
+      else {
+        ex.printStackTrace();
+      }
+    }
+    return null;
+  }
+
   public static List<String> getNameList() {
     if (nameList == null) {
       nameList = new ArrayList<String>();
       for (Class<? extends VariationFunc> funcCls : items) {
-        try {
-          nameList.add(funcCls.newInstance().getName());
-        }
-        catch (InstantiationException e) {
-          e.printStackTrace();
-        }
-        catch (IllegalAccessException e) {
-          e.printStackTrace();
+        String vName = getVariationName(funcCls, false);
+        if (vName != null) {
+          nameList.add(vName);
         }
       }
     }
     return nameList;
+  }
+
+  public static Map<String, String> getAliasMap() {
+    if (resolvedAliasMap == null) {
+      resolvedAliasMap = new HashMap<String, String>();
+      for (Class<? extends VariationFunc> funcCls : aliasMap.keySet()) {
+        String vName = getVariationName(funcCls, false);
+        if (vName != null) {
+          resolvedAliasMap.put(aliasMap.get(funcCls), vName);
+        }
+      }
+    }
+    return resolvedAliasMap;
   }
 
   public static VariationFunc getVariationFuncInstance(String pName) {
