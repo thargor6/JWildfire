@@ -127,6 +127,13 @@ public class CustomWFFunc extends VariationFunc {
     if (customFuncRunner == null) {
       compile();
     }
+    customFuncRunner.setA(a);
+    customFuncRunner.setB(b);
+    customFuncRunner.setC(c);
+    customFuncRunner.setD(d);
+    customFuncRunner.setE(e);
+    customFuncRunner.setF(f);
+    customFuncRunner.setG(g);
     customFuncRunner.init(pContext, pXForm);
   }
 

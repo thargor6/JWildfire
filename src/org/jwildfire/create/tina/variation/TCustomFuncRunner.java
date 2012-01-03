@@ -29,6 +29,14 @@ public class TCustomFuncRunner {
     return res;
   }
 
+  protected double a = 0.0;
+  protected double b = 0.0;
+  protected double c = 0.0;
+  protected double d = 0.0;
+  protected double e = 0.0;
+  protected double f = 0.0;
+  protected double g = 0.0;
+
   public void init(FlameTransformationContext pContext, XForm pXForm) {
 
   }
@@ -38,6 +46,34 @@ public class TCustomFuncRunner {
     pVarTP.x += pAmount * pAffineTP.x;
     pVarTP.y += pAmount * pAffineTP.y;
     pVarTP.z += pAmount * pAffineTP.z;
+  }
+
+  public void setA(double a) {
+    this.a = a;
+  }
+
+  public void setC(double c) {
+    this.c = c;
+  }
+
+  public void setD(double d) {
+    this.d = d;
+  }
+
+  public void setE(double e) {
+    this.e = e;
+  }
+
+  public void setF(double f) {
+    this.f = f;
+  }
+
+  public void setG(double g) {
+    this.g = g;
+  }
+
+  public void setB(double b) {
+    this.b = b;
   }
 
 }
