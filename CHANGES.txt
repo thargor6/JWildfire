@@ -1,3 +1,13 @@
+V0.33 (04.01.2012):
+ - Main: special (but slow) build for jdk1.5
+ - Fractal flame editor: "linear" random flame generator
+ - Fractal flame editor: much faster preview rendering
+ - Fractfal flame editor: renamed all "t_*"-variations into "*_wf", e. g. "t_rose" -> "rose_wf" (parameters from old flame files are recognized)
+ - Fractal flame editor: flame name alias system (allowing toread outdated flame files after variations have been renamed)
+ - Fractal flame editor: 7 default parameters for the custom_wf variation
+ - Fractal flame editor: customWF variation with integrated compiler which allows it to create your own variations on the fly!
+ - Fractal flame editor: spirograph variation by Jed Kelsey
+
 V0.32 (01.01.2012):
  - Fractal flame editor: New prefs option for realtime render quality (defaults to 1)
  - Fractal flame editor: basic scripting features which allows to create Java programs to create/modify flames
