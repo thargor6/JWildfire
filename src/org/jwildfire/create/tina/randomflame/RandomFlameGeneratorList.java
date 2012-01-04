@@ -31,6 +31,7 @@ public class RandomFlameGeneratorList {
     registerRandomFlameGenerator(TentacleRandomFlameGenerator.class);
     registerRandomFlameGenerator(GnarlRandomFlameGenerator.class);
     registerRandomFlameGenerator(ExperimentalGnarlRandomFlameGenerator.class);
+    registerRandomFlameGenerator(LinearRandomFlameGenerator.class);
     registerRandomFlameGenerator(AllRandomFlameGenerator.class);
   }
 

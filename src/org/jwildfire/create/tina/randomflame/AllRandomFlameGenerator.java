@@ -23,7 +23,10 @@ public class AllRandomFlameGenerator extends RandomFlameGenerator {
   @Override
   protected Flame createFlame() {
     double r = Math.random();
-    if (r < 0.20) {
+    if (r < 0.10) {
+      return new LinearRandomFlameGenerator().createFlame();
+    }
+    else if (r < 0.20) {
       return new SimpleRandomFlameGenerator().createFlame();
     }
     else if (r < 0.30) {
