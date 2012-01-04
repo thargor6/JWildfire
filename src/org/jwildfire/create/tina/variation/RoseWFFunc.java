@@ -32,9 +32,19 @@ public class RoseWFFunc extends VariationFunc {
 
   @Override
   public void transform(XFormTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-    double a = Math.atan2(pAffineTP.x, pAffineTP.y);
-    double r = pContext.sqrt(pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y);
+    double a = pAffineTP.getPrecalcAtan(pContext);
+    double r = pAffineTP.getPrecalcSqrt(pContext);
+
     r = amp * pContext.cos(waves * a);
+    // clover leafs
+    //    r = amp * (pContext.sin(2 * a) + 0.25 * pContext.sin(6 * a));
+
+    // cannabis curve (http://mathworld.wolfram.com/CannabisCurve.html)
+    //    r = amp * (1 + 9.0 / 10.0 * pContext.cos(8.0 * a)) * (1 + 1.0 / 10.0 * pContext.cos(24.0 * a)) * (9.0 / 10.0 + 1.0 / 10.0 * pContext.cos(200.0 * a)) * (1.0 + pContext.sin(a));
+    //    a += Math.PI / 2.0;
+
+    r = amp * pContext.cos(waves * a);
+
     double nx = pContext.sin(a) * r;
     double ny = pContext.cos(a) * r;
 

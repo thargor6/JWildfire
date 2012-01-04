@@ -46,6 +46,9 @@ public class FlamePanel extends ImagePanel {
   private static BasicStroke SOLID_FAT = new BasicStroke(LINE_WIDTH_FAT);
   private static BasicStroke DASHED_FAT = new BasicStroke(LINE_WIDTH_FAT, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 10.0f, DASH1, 0.0f);
 
+  private static BasicStroke SELECTED_LINE = new BasicStroke(1.6f);
+  private static BasicStroke NORMAL_LINE = new BasicStroke(1.0f);
+
   private static final long serialVersionUID = 1L;
   private final FlameHolder flameHolder;
 
@@ -208,19 +211,33 @@ public class FlamePanel extends ImagePanel {
     }
   }
 
+  //
+  //  private void drawXForm(Graphics2D g, XForm pXForm, boolean pIsFinal) {
+  //    Triangle triangle = new Triangle(pXForm);
+  //    if (selectedXForm != null && selectedXForm == pXForm) {
+  //      g.setStroke(pIsFinal ? SOLID_FAT : SOLID);
+  //    }
+  //    else {
+  //      g.setStroke(pIsFinal ? DASHED_FAT : DASHED);
+  //    }
+  //    g.drawPolygon(triangle.viewX, triangle.viewY, 3);
+  //
+  //    g.setStroke(SOLID);
+  //    int radius = 10;
+  //    g.drawOval(triangle.viewX[1] - radius / 2, triangle.viewY[1] - radius / 2, radius, radius);
+  //  }
+
+  // Is much faster
   private void drawXForm(Graphics2D g, XForm pXForm, boolean pIsFinal) {
     Triangle triangle = new Triangle(pXForm);
-    if (selectedXForm != null && selectedXForm == pXForm) {
-      g.setStroke(pIsFinal ? SOLID_FAT : SOLID);
-    }
-    else {
-      g.setStroke(pIsFinal ? DASHED_FAT : DASHED);
-    }
+    boolean isSelected = (selectedXForm != null && selectedXForm == pXForm);
+    g.setStroke(isSelected ? SELECTED_LINE : NORMAL_LINE);
     g.drawPolygon(triangle.viewX, triangle.viewY, 3);
-
-    g.setStroke(SOLID);
-    int radius = 10;
-    g.drawOval(triangle.viewX[1] - radius / 2, triangle.viewY[1] - radius / 2, radius, radius);
+    if (isSelected) {
+      int radius = 10;
+      g.setStroke(NORMAL_LINE);
+      g.drawOval(triangle.viewX[1] - radius / 2, triangle.viewY[1] - radius / 2, radius, radius);
+    }
   }
 
   private int xToView(double pX) {

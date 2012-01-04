@@ -3044,7 +3044,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
   private void flamePanel_mouseDragged(MouseEvent e) {
     if (flamePanel != null) {
       if (flamePanel.mouseDragged(e.getX(), e.getY())) {
-        transformationTableClicked();
+        refreshXFormUI(getCurrXForm());
         refreshFlameImage();
       }
     }
