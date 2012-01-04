@@ -79,10 +79,16 @@ public class SunflowInternalFrame extends JInternalFrame {
   private JPanel getJContentPane() {
     if (jContentPane == null) {
       jContentPane = new JPanel();
-      jContentPane.setLayout(new BorderLayout());
-      jContentPane.add(getNorthPanel(), BorderLayout.NORTH);
-      jContentPane.add(getSouthPanel(), BorderLayout.SOUTH);
-      jContentPane.add(getHSplitPane(), BorderLayout.CENTER);
+      try {
+        jContentPane.setLayout(new BorderLayout());
+        jContentPane.add(getNorthPanel(), BorderLayout.NORTH);
+        jContentPane.add(getSouthPanel(), BorderLayout.SOUTH);
+        jContentPane.add(getHSplitPane(), BorderLayout.CENTER);
+      }
+      catch (Throwable ex) {
+        // TODO
+        //ex.printStackTrace();
+      }
     }
     return jContentPane;
   }

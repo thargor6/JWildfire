@@ -1569,8 +1569,14 @@ public class Desktop extends JApplet {
       UIManager
           .setLookAndFeel("com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel");
     }
-    catch (Exception ex) {
-      ex.printStackTrace();
+    catch (Throwable ex) {
+      try {
+        UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
+      }
+      catch (Throwable e) {
+        //        e.printStackTrace();
+      }
+      // ex.printStackTrace();
     }
   }
 
