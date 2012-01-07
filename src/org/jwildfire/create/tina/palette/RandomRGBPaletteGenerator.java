@@ -36,18 +36,26 @@ public class RandomRGBPaletteGenerator {
 
   public RGBPalette generatePalette(List<RGBColor> pKeyFrames) {
     RGBPalette res = new RGBPalette();
-    double idxScl = (double) (RGBPalette.PALETTE_SIZE) / (double) (pKeyFrames.size() - 1);
-    for (int i = 0; i < RGBPalette.PALETTE_SIZE; i++) {
-      double x = (double) i / idxScl;
-      int lIdx = (int) x;
-      double relX = x - (double) lIdx;
-      RGBColor lColor = pKeyFrames.get(lIdx);
-      RGBColor rColor = pKeyFrames.get(lIdx + 1);
-      int r = Tools.roundColor((double) lColor.getRed() + ((double) (rColor.getRed() - lColor.getRed())) * relX);
-      int g = Tools.roundColor((double) lColor.getGreen() + ((double) (rColor.getGreen() - lColor.getGreen())) * relX);
-      int b = Tools.roundColor((double) lColor.getBlue() + ((double) (rColor.getBlue() - lColor.getBlue())) * relX);
-      res.addColor(r, g, b);
-      //      System.out.println(i + ": " + r + " " + g + " " + b);
+    if (pKeyFrames.size() == 1) {
+      RGBColor c = pKeyFrames.get(0);
+      for (int i = 0; i < RGBPalette.PALETTE_SIZE; i++) {
+        res.addColor(c.getRed(), c.getGreen(), c.getBlue());
+      }
+    }
+    else {
+      double idxScl = (double) (RGBPalette.PALETTE_SIZE) / (double) (pKeyFrames.size() - 1);
+      for (int i = 0; i < RGBPalette.PALETTE_SIZE; i++) {
+        double x = (double) i / idxScl;
+        int lIdx = (int) x;
+        double relX = x - (double) lIdx;
+        RGBColor lColor = pKeyFrames.get(lIdx);
+        RGBColor rColor = pKeyFrames.get(lIdx + 1);
+        int r = Tools.roundColor((double) lColor.getRed() + ((double) (rColor.getRed() - lColor.getRed())) * relX);
+        int g = Tools.roundColor((double) lColor.getGreen() + ((double) (rColor.getGreen() - lColor.getGreen())) * relX);
+        int b = Tools.roundColor((double) lColor.getBlue() + ((double) (rColor.getBlue() - lColor.getBlue())) * relX);
+        res.addColor(r, g, b);
+        //      System.out.println(i + ": " + r + " " + g + " " + b);
+      }
     }
     return res;
   }
