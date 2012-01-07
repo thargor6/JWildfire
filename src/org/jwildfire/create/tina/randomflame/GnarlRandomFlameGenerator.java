@@ -115,7 +115,7 @@ public class GnarlRandomFlameGenerator extends RandomFlameGenerator {
       }
       xForm.setColorSymmetry(symmetry);
       if (Math.random() > 0.5) {
-        XFormTransformService.scale(xForm, 0.995);
+        XFormTransformService.scale(xForm, 0.995, true, true);
       }
       double angle, tx, ty;
       switch (sides) {

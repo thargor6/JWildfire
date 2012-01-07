@@ -51,7 +51,7 @@ public class SimpleRandomFlameGenerator extends RandomFlameGenerator {
       }
       XFormTransformService.localTranslate(xForm, Math.random() - 1.0, Math.random() - 1.0);
       scl *= 0.75 + Math.random() / 4;
-      XFormTransformService.scale(xForm, scl);
+      XFormTransformService.scale(xForm, scl, true, true);
 
       xForm.setColor(Math.random());
       xForm.addVariation(Math.random() * 0.8 + 0.2, new Linear3DFunc());

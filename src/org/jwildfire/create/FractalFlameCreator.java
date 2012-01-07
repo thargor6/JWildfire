@@ -183,7 +183,7 @@ public class FractalFlameCreator extends ImageCreator {
       XFormTransformService.rotate(flame.getXForms().get(0), xForm0Rotate);
     }
     if (Math.abs(xForm0Scale) > 0.0 && flame.getXForms().size() > 0) {
-      XFormTransformService.scale(flame.getXForms().get(0), xForm0Scale);
+      XFormTransformService.scale(flame.getXForms().get(0), xForm0Scale, true, true);
     }
     if ((Math.abs(xForm0TransX) > 0.0 || Math.abs(xForm0TransY) > 0.0) && flame.getXForms().size() > 0) {
       XFormTransformService.localTranslate(flame.getXForms().get(0), xForm0TransX, xForm0TransY);
@@ -193,7 +193,7 @@ public class FractalFlameCreator extends ImageCreator {
       XFormTransformService.rotate(flame.getXForms().get(1), xForm1Rotate);
     }
     if (Math.abs(xForm1Scale) > 0.0 && flame.getXForms().size() > 1) {
-      XFormTransformService.scale(flame.getXForms().get(1), xForm1Scale);
+      XFormTransformService.scale(flame.getXForms().get(1), xForm1Scale, true, true);
     }
     if ((Math.abs(xForm1TransX) > 0.0 || Math.abs(xForm1TransY) > 0.0) && flame.getXForms().size() > 1) {
       XFormTransformService.localTranslate(flame.getXForms().get(1), xForm1TransX, xForm1TransY);
@@ -203,7 +203,7 @@ public class FractalFlameCreator extends ImageCreator {
       XFormTransformService.rotate(flame.getXForms().get(2), xForm2Rotate);
     }
     if (Math.abs(xForm2Scale) > 0.0 && flame.getXForms().size() > 2) {
-      XFormTransformService.scale(flame.getXForms().get(2), xForm2Scale);
+      XFormTransformService.scale(flame.getXForms().get(2), xForm2Scale, true, true);
     }
     if ((Math.abs(xForm2TransX) > 0.0 || Math.abs(xForm2TransY) > 0.0) && flame.getXForms().size() > 2) {
       XFormTransformService.localTranslate(flame.getXForms().get(2), xForm2TransX, xForm2TransY);

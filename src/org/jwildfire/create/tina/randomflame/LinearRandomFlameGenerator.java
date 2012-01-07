@@ -59,7 +59,7 @@ public class LinearRandomFlameGenerator extends RandomFlameGenerator {
       scl *= 0.8 + Math.random() * 0.1;
       tscl *= 0.8 + Math.random() * 0.1;
 
-      XFormTransformService.scale(xForm, scl);
+      XFormTransformService.scale(xForm, scl, true, true);
 
       xForm.setColor(Math.random());
       xForm.addVariation(Math.random() * 0.5 + 0.5, new Linear3DFunc());

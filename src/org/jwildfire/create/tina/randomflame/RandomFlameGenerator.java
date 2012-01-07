@@ -84,7 +84,7 @@ public abstract class RandomFlameGenerator {
       }
       XFormTransformService.localTranslate(xForm, Math.random() - 1.0, Math.random() - 1.0, true);
       scl *= 0.75 + Math.random() / 4;
-      XFormTransformService.scale(xForm, scl, true);
+      XFormTransformService.scale(xForm, scl, true, true, true);
     }
   }
 

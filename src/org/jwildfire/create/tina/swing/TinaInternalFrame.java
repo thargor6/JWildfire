@@ -599,6 +599,8 @@ public class TinaInternalFrame extends JInternalFrame {
   private JTextArea scriptTextArea = null;
   private JButton compileScriptButton = null;
   private JButton runScriptButton = null;
+  private JToggleButton affineScaleXButton = null;
+  private JToggleButton affineScaleYButton = null;
 
   /**
    * This is the xxx default constructor
@@ -2198,6 +2200,8 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaAffineTransformationPanel.add(getAffineResetTransformButton(), null);
       tinaAffineTransformationPanel.add(getAffineFlipHorizontalButton(), null);
       tinaAffineTransformationPanel.add(getAffineFlipVerticalButton(), null);
+      tinaAffineTransformationPanel.add(getAffineScaleXButton(), null);
+      tinaAffineTransformationPanel.add(getAffineScaleYButton(), null);
     }
     return tinaAffineTransformationPanel;
   }
@@ -3041,7 +3045,8 @@ public class TinaInternalFrame extends JInternalFrame {
         getBatchRenderFilesRemoveButton(), getBatchRenderFilesRemoveAllButton(), getBatchRenderStartButton(),
         getRootTabbedPane(), getAffineFlipHorizontalButton(), getAffineFlipVerticalButton(), getAnimateLightScriptCmb(),
         getDarkTrianglesToggleButton(), getShadingBlurRadiusREd(), getShadingBlurRadiusSlider(), getShadingBlurFadeREd(),
-        getShadingBlurFadeSlider(), getShadingBlurFallOffREd(), getShadingBlurFallOffSlider(), getScriptTextArea());
+        getShadingBlurFadeSlider(), getShadingBlurFallOffREd(), getShadingBlurFallOffSlider(), getScriptTextArea(),
+        getAffineScaleXButton(), getAffineScaleYButton());
     tinaController.refreshing = tinaController.cmbRefreshing = tinaController.gridRefreshing = true;
     try {
       for (NonlinearControlsRow row : nonlinearControlsRows) {
@@ -5051,7 +5056,7 @@ public class TinaInternalFrame extends JInternalFrame {
       mouseTransformMoveButton = new JToggleButton();
       mouseTransformMoveButton.setPreferredSize(new Dimension(42, 24));
       mouseTransformMoveButton.setSelected(true);
-      mouseTransformMoveButton.setToolTipText("Enable triangel dragging mode");
+      mouseTransformMoveButton.setToolTipText("Enable triangle dragging mode");
       mouseTransformMoveButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/move.gif")));
       mouseTransformMoveButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -5071,7 +5076,7 @@ public class TinaInternalFrame extends JInternalFrame {
     if (mouseTransformRotateButton == null) {
       mouseTransformRotateButton = new JToggleButton();
       mouseTransformRotateButton.setPreferredSize(new Dimension(42, 24));
-      mouseTransformRotateButton.setToolTipText("Enable triangel rotating mode");
+      mouseTransformRotateButton.setToolTipText("Enable triangle rotating mode");
       mouseTransformRotateButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/rotate.gif")));
       mouseTransformRotateButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -5091,7 +5096,7 @@ public class TinaInternalFrame extends JInternalFrame {
     if (mouseTransformScaleButton == null) {
       mouseTransformScaleButton = new JToggleButton();
       mouseTransformScaleButton.setPreferredSize(new Dimension(42, 24));
-      mouseTransformScaleButton.setToolTipText("Enable triangel scale mode");
+      mouseTransformScaleButton.setToolTipText("Enable triangle scale mode");
       mouseTransformScaleButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/scale.gif")));
       mouseTransformScaleButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -5231,7 +5236,7 @@ public class TinaInternalFrame extends JInternalFrame {
       mouseTransformZoomInButton.setFont(new Font("Dialog", Font.BOLD, 8));
       mouseTransformZoomInButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/triangleShrink.gif")));
       mouseTransformZoomInButton.setText("");
-      mouseTransformZoomInButton.setToolTipText("Zoom in");
+      mouseTransformZoomInButton.setToolTipText("Zoom in (triangles only)");
       mouseTransformZoomInButton.setPreferredSize(new Dimension(42, 24));
       mouseTransformZoomInButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -5253,7 +5258,7 @@ public class TinaInternalFrame extends JInternalFrame {
       mouseTransformZoomOutButton.setFont(new Font("Dialog", Font.BOLD, 8));
       mouseTransformZoomOutButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/triangleEnlarge.gif")));
       mouseTransformZoomOutButton.setText("");
-      mouseTransformZoomOutButton.setToolTipText("Zoom out");
+      mouseTransformZoomOutButton.setToolTipText("Zoom out (triangles only)");
       mouseTransformZoomOutButton.setPreferredSize(new Dimension(42, 24));
       mouseTransformZoomOutButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -9062,6 +9067,58 @@ public class TinaInternalFrame extends JInternalFrame {
       });
     }
     return runScriptButton;
+  }
+
+  /**
+   * This method initializes affineScaleXButton	
+   * 	
+   * @return javax.swing.JToggleButton	
+   */
+  private JToggleButton getAffineScaleXButton() {
+    if (affineScaleXButton == null) {
+      affineScaleXButton = new JToggleButton();
+      affineScaleXButton.setPreferredSize(new Dimension(26, 24));
+      affineScaleXButton.setToolTipText("Allow scaling in x-direction");
+      affineScaleXButton.setMnemonic(KeyEvent.VK_P);
+      affineScaleXButton.setText("");
+      affineScaleXButton.setLocation(new Point(66, 132));
+      affineScaleXButton.setSize(new Dimension(26, 24));
+      affineScaleXButton.setSelected(true);
+      affineScaleXButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/allowScaleX.gif")));
+      affineScaleXButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      affineScaleXButton.addChangeListener(new javax.swing.event.ChangeListener() {
+        public void stateChanged(javax.swing.event.ChangeEvent e) {
+          tinaController.affineScaleXButton_stateChanged();
+        }
+      });
+    }
+    return affineScaleXButton;
+  }
+
+  /**
+   * This method initializes affineScaleYButton	
+   * 	
+   * @return javax.swing.JToggleButton	
+   */
+  private JToggleButton getAffineScaleYButton() {
+    if (affineScaleYButton == null) {
+      affineScaleYButton = new JToggleButton();
+      affineScaleYButton.setPreferredSize(new Dimension(26, 24));
+      affineScaleYButton.setToolTipText("Allow scaling in y-direction");
+      affineScaleYButton.setMnemonic(KeyEvent.VK_P);
+      affineScaleYButton.setSelected(true);
+      affineScaleYButton.setText("");
+      affineScaleYButton.setSize(new Dimension(26, 24));
+      affineScaleYButton.setLocation(new Point(94, 132));
+      affineScaleYButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/allowScaleY.gif")));
+      affineScaleYButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      affineScaleYButton.addChangeListener(new javax.swing.event.ChangeListener() {
+        public void stateChanged(javax.swing.event.ChangeEvent e) {
+          tinaController.affineScaleYButton_stateChanged();
+        }
+      });
+    }
+    return affineScaleYButton;
   }
 
 } //  @jve:decl-index=0:visual-constraint="10,10"

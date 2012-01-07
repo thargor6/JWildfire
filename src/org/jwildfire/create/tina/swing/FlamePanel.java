@@ -57,6 +57,8 @@ public class FlamePanel extends ImagePanel {
   private boolean drawFlame = true;
   private boolean fineMovement = false;
   private XForm selectedXForm = null;
+  private boolean allowScaleX = true;
+  private boolean allowScaleY = true;
 
   private double viewXScale, viewYScale;
   private double viewXTrans, viewYTrans;
@@ -309,16 +311,24 @@ public class FlamePanel extends ImagePanel {
               double dr2 = Math.sqrt(v2x * v2x + v2y * v2y);
               double scale = dr2 / dr1;
               if (editPostTransform) {
-                selectedXForm.setPostCoeff00(selectedXForm.getPostCoeff00() * scale);
-                selectedXForm.setPostCoeff01(selectedXForm.getPostCoeff01() * scale);
-                selectedXForm.setPostCoeff10(selectedXForm.getPostCoeff10() * scale);
-                selectedXForm.setPostCoeff11(selectedXForm.getPostCoeff11() * scale);
+                if (allowScaleX) {
+                  selectedXForm.setPostCoeff00(selectedXForm.getPostCoeff00() * scale);
+                  selectedXForm.setPostCoeff01(selectedXForm.getPostCoeff01() * scale);
+                }
+                if (allowScaleY) {
+                  selectedXForm.setPostCoeff10(selectedXForm.getPostCoeff10() * scale);
+                  selectedXForm.setPostCoeff11(selectedXForm.getPostCoeff11() * scale);
+                }
               }
               else {
-                selectedXForm.setCoeff00(selectedXForm.getCoeff00() * scale);
-                selectedXForm.setCoeff01(selectedXForm.getCoeff01() * scale);
-                selectedXForm.setCoeff10(selectedXForm.getCoeff10() * scale);
-                selectedXForm.setCoeff11(selectedXForm.getCoeff11() * scale);
+                if (allowScaleX) {
+                  selectedXForm.setCoeff00(selectedXForm.getCoeff00() * scale);
+                  selectedXForm.setCoeff01(selectedXForm.getCoeff01() * scale);
+                }
+                if (allowScaleY) {
+                  selectedXForm.setCoeff10(selectedXForm.getCoeff10() * scale);
+                  selectedXForm.setCoeff11(selectedXForm.getCoeff11() * scale);
+                }
               }
               return true;
             }
@@ -444,5 +454,13 @@ public class FlamePanel extends ImagePanel {
 
   public void setDarkTriangles(boolean darkTriangles) {
     this.darkTriangles = darkTriangles;
+  }
+
+  public void setAllowScaleX(boolean allowScaleX) {
+    this.allowScaleX = allowScaleX;
+  }
+
+  public void setAllowScaleY(boolean allowScaleY) {
+    this.allowScaleY = allowScaleY;
   }
 }

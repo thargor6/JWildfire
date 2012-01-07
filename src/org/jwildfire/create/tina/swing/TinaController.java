@@ -298,6 +298,8 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
   private final JProgressBar batchRenderTotalProgressBar;
 
   // Transformations
+  private final JToggleButton affineScaleXButton;
+  private final JToggleButton affineScaleYButton;
   private final JTable transformationsTable;
   private final JButton affineResetTransformButton;
   private final JTextField affineC00REd;
@@ -425,7 +427,8 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       JButton pBatchRenderFilesRemoveAllButton, JButton pBatchRenderStartButton, JTabbedPane pRootTabbedPane, JButton pAffineFlipHorizontalButton,
       JButton pAffineFlipVerticalButton, JComboBox pAnimateLightScriptCmb, JToggleButton pToggleDarkTrianglesButton,
       JTextField pShadingBlurRadiusREd, JSlider pShadingBlurRadiusSlider, JTextField pShadingBlurFadeREd, JSlider pShadingBlurFadeSlider,
-      JTextField pShadingBlurFallOffREd, JSlider pShadingBlurFallOffSlider, JTextArea pScriptTextArea) {
+      JTextField pShadingBlurFallOffREd, JSlider pShadingBlurFallOffSlider, JTextArea pScriptTextArea, JToggleButton pAffineScaleXButton,
+      JToggleButton pAffineScaleYButton) {
     errorHandler = pErrorHandler;
     prefs = pPrefs;
     centerPanel = pCenterPanel;
@@ -518,6 +521,8 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     addFinalTransformationButton = pAddFinalTransformationButton;
     affineEditPostTransformButton = pAffineEditPostTransformButton;
     affineEditPostTransformSmallButton = pAffineEditPostTransformSmallButton;
+    affineScaleXButton = pAffineScaleXButton;
+    affineScaleYButton = pAffineScaleYButton;
     mouseEditZoomInButton = pMouseEditZoomInButton;
     mouseEditZoomOutButton = pMouseEditZoomOutButton;
 
@@ -2442,7 +2447,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       toggleTrianglesButton.setSelected(true);
     }
     double amount = Tools.stringToDouble(affineScaleAmountREd.getText()) / 100.0;
-    XFormTransformService.scale(getCurrXForm(), amount, affineEditPostTransformButton.isSelected());
+    XFormTransformService.scale(getCurrXForm(), amount, affineScaleXButton.isSelected(), affineScaleYButton.isSelected(), affineEditPostTransformButton.isSelected());
     transformationTableClicked();
     refreshFlameImage();
   }
@@ -2453,7 +2458,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       toggleTrianglesButton.setSelected(true);
     }
     double amount = 100.0 / Tools.stringToDouble(affineScaleAmountREd.getText());
-    XFormTransformService.scale(getCurrXForm(), amount, affineEditPostTransformButton.isSelected());
+    XFormTransformService.scale(getCurrXForm(), amount, affineScaleXButton.isSelected(), affineScaleYButton.isSelected(), affineEditPostTransformButton.isSelected());
     transformationTableClicked();
     refreshFlameImage();
   }
@@ -3722,6 +3727,18 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     }
     catch (Throwable ex) {
       errorHandler.handleError(ex);
+    }
+  }
+
+  public void affineScaleXButton_stateChanged() {
+    if (flamePanel != null) {
+      flamePanel.setAllowScaleX(affineScaleXButton.isSelected());
+    }
+  }
+
+  public void affineScaleYButton_stateChanged() {
+    if (flamePanel != null) {
+      flamePanel.setAllowScaleY(affineScaleYButton.isSelected());
     }
   }
 

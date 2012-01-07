@@ -54,7 +54,7 @@ public class TentacleRandomFlameGenerator extends RandomFlameGenerator {
         }
         XFormTransformService.localTranslate(xForm, Math.random() - 1.0, Math.random() - 1.0, true);
         scl *= 0.75 + Math.random() / 4;
-        XFormTransformService.scale(xForm, scl, true);
+        XFormTransformService.scale(xForm, scl, true, true, true);
         int fncIdx = (int) (Math.random() * fnc.length);
         xForm.addVariation(Math.random() * 0.9 + 0.1, VariationFuncList.getVariationFuncInstance(fnc[fncIdx], true));
         xForm.setColor(Math.random());
