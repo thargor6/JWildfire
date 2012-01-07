@@ -74,7 +74,7 @@ public class Variation {
       String[] ressNames = var.func.getRessourceNames();
       if (ressNames != null) {
         for (int i = 0; i < ressNames.length; i++) {
-          Object val = var.func.getRessourceValues()[i];
+          byte[] val = var.func.getRessourceValues()[i];
           func.setRessource(ressNames[i], val);
         }
       }

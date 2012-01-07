@@ -299,13 +299,31 @@ public class Flam3Reader implements FlameReader {
         if (variationNameList.indexOf(varName) >= 0) {
           VariationFunc varFunc = VariationFuncList.getVariationFuncInstance(varName);
           Variation variation = pXForm.addVariation(Double.parseDouble(atts.get(name)), varFunc);
-          String paramNames[] = variation.getFunc().getParameterNames();
-          for (String pName : paramNames) {
-            String pHs;
-            if ((pHs = atts.get(name + "_" + pName)) != null) {
-              variation.getFunc().setParameter(pName, Double.parseDouble(pHs));
+          // params
+          {
+            String paramNames[] = variation.getFunc().getParameterNames();
+            if (paramNames != null) {
+              for (String pName : paramNames) {
+                String pHs;
+                if ((pHs = atts.get(name + "_" + pName)) != null) {
+                  variation.getFunc().setParameter(pName, Double.parseDouble(pHs));
+                }
+              }
             }
           }
+          // ressources 
+          {
+            String ressNames[] = variation.getFunc().getRessourceNames();
+            if (ressNames != null) {
+              for (String pName : ressNames) {
+                String pHs;
+                if ((pHs = atts.get(name + "_" + pName)) != null) {
+                  variation.getFunc().setRessource(pName, Tools.hexStringToByteArray(pHs));
+                }
+              }
+            }
+          }
+          //
         }
       }
     }

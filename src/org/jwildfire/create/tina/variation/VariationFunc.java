@@ -39,10 +39,6 @@ public abstract class VariationFunc {
 
   public abstract void setParameter(String pName, double pValue);
 
-  public String getCustomizedParamName(String pName) {
-    return pName;
-  }
-
   public boolean requiresTwoPasses() {
     return false;
   }
@@ -51,11 +47,11 @@ public abstract class VariationFunc {
     return null;
   }
 
-  public Object[] getRessourceValues() {
+  public byte[][] getRessourceValues() {
     return null;
   }
 
-  public void setRessource(String pName, Object pValue) {
+  public void setRessource(String pName, byte[] pValue) {
   }
 
   public int getParameterIndex(String pName) {

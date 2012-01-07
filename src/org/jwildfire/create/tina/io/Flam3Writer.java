@@ -51,18 +51,32 @@ public class Flam3Writer {
       Variation v = pXForm.getVariation(vIdx);
       VariationFunc func = v.getFunc();
       attrList.add(pXB.createAttr(func.getName(), v.getAmount()));
-      String params[] = func.getParameterNames();
-      if (params != null) {
-        Object vals[] = func.getParameterValues();
-        for (int i = 0; i < params.length; i++) {
-          if (vals[i] instanceof Integer) {
-            attrList.add(pXB.createAttr(func.getCustomizedParamName(func.getName() + "_" + params[i]), (Integer) vals[i]));
+      // params
+      {
+        String params[] = func.getParameterNames();
+        if (params != null) {
+          Object vals[] = func.getParameterValues();
+          for (int i = 0; i < params.length; i++) {
+            if (vals[i] instanceof Integer) {
+              attrList.add(pXB.createAttr((func.getName() + "_" + params[i]), (Integer) vals[i]));
+            }
+            else if (vals[i] instanceof Double) {
+              attrList.add(pXB.createAttr((func.getName() + "_" + params[i]), (Double) vals[i]));
+            }
+            else {
+              throw new IllegalStateException();
+            }
           }
-          else if (vals[i] instanceof Double) {
-            attrList.add(pXB.createAttr((func.getName() + "_" + params[i]), (Double) vals[i]));
-          }
-          else {
-            throw new IllegalStateException();
+        }
+      }
+      // ressources
+      {
+        String ressNames[] = func.getRessourceNames();
+        if (ressNames != null) {
+          byte vals[][] = func.getRessourceValues();
+          for (int i = 0; i < ressNames.length; i++) {
+            String hexStr = vals[i] != null ? Tools.byteArrayToHexString(vals[i]) : "";
+            attrList.add(pXB.createAttr((func.getName() + "_" + ressNames[i]), hexStr));
           }
         }
       }

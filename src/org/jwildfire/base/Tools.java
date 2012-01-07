@@ -291,4 +291,99 @@ public class Tools {
       return 0;
   }
 
+  private static final byte hexChars[] = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F' };
+
+  public static String byteArrayToHexString(byte[] pByteArray) {
+    if (pByteArray != null && pByteArray.length > 0) {
+      byte[] b = new byte[2 * pByteArray.length];
+      int k = 0;
+      for (int i = 0; i < pByteArray.length; i++) {
+        int j = pByteArray[i];
+        if (j < 0) {
+          j += 256;
+        }
+        b[k++] = hexChars[j >> 4];
+        b[k++] = hexChars[j % 16];
+      }
+      return new String(b);
+    }
+    return null;
+  }
+
+  public static byte[] hexStringToByteArray(String pHexStr) {
+    if (pHexStr.length() > 0) {
+      if ((pHexStr.length() % 2) != 0) {
+        throw new IllegalArgumentException(pHexStr);
+      }
+      byte[] b = new byte[pHexStr.length() / 2];
+      int k = 0;
+      for (int i = 0; i < pHexStr.length(); i++) {
+        char c = pHexStr.charAt(i);
+        int v;
+        switch (c) {
+          case '0':
+            v = 0;
+            break;
+          case '1':
+            v = 1;
+            break;
+          case '2':
+            v = 2;
+            break;
+          case '3':
+            v = 3;
+            break;
+          case '4':
+            v = 4;
+            break;
+          case '5':
+            v = 5;
+            break;
+          case '6':
+            v = 6;
+            break;
+          case '7':
+            v = 7;
+            break;
+          case '8':
+            v = 8;
+            break;
+          case '9':
+            v = 9;
+            break;
+          case 'A':
+            v = 10;
+            break;
+          case 'B':
+            v = 11;
+            break;
+          case 'C':
+            v = 12;
+            break;
+          case 'D':
+            v = 13;
+            break;
+          case 'E':
+            v = 14;
+            break;
+          case 'F':
+            v = 15;
+            break;
+          default:
+            throw new IllegalStateException("'" + c + "'");
+        }
+        if ((i % 2) != 0) {
+          b[i / 2] = (byte) (k + v);
+        }
+        else {
+          k = v * 16;
+        }
+      }
+      return b;
+    }
+    else {
+      return null;
+    }
+  }
+
 }

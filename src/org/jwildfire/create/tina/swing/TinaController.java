@@ -2730,15 +2730,17 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
             RessourceDialog dlg = new RessourceDialog(SwingUtilities.getWindowAncestor(centerPanel));
             String rName = var.getFunc().getRessourceNames()[idx];
             dlg.setRessourceName(rName);
-            Object val = var.getFunc().getRessourceValues()[idx];
-            if (val != null && val instanceof String) {
-              dlg.setRessourceValue((String) val);
+            byte val[] = var.getFunc().getRessourceValues()[idx];
+            if (val != null) {
+              dlg.setRessourceValue(new String(val));
             }
             dlg.setModal(true);
             dlg.setVisible(true);
             if (dlg.isConfirmed()) {
               try {
-                var.getFunc().setRessource(rName, dlg.getRessourceValue());
+                String valStr = dlg.getRessourceValue();
+                byte[] valByteArray = valStr != null ? valStr.getBytes() : null;
+                var.getFunc().setRessource(rName, valByteArray);
               }
               catch (Throwable ex) {
                 errorHandler.handleError(ex);

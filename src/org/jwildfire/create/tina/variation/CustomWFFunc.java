@@ -102,14 +102,14 @@ public class CustomWFFunc extends VariationFunc {
   }
 
   @Override
-  public Object[] getRessourceValues() {
-    return new Object[] { code };
+  public byte[][] getRessourceValues() {
+    return new byte[][] { (code != null ? code.getBytes() : null) };
   }
 
   @Override
-  public void setRessource(String pName, Object pValue) {
+  public void setRessource(String pName, byte[] pValue) {
     if (RESSOURCE_CODE.equalsIgnoreCase(pName)) {
-      code = (String) pValue;
+      code = pValue != null ? new String(pValue) : "";
       // For validation
       compile();
     }
