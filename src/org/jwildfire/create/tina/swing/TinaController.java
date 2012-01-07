@@ -2722,6 +2722,19 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
             if (valStr == null || valStr.length() == 0) {
               valStr = "0";
             }
+            // round the delta to whole numbers if the parameter is of type integer
+            {
+              Object val = var.getFunc().getParameterValues()[idx];
+              if (val != null && val instanceof Integer) {
+                if (Math.abs(pDelta) < 1.0) {
+                  pDelta = pDelta < 0 ? -1 : 1;
+                }
+                else {
+                  pDelta = Math.round(pDelta);
+                }
+              }
+            }
+
             double val = Tools.stringToDouble(valStr) + pDelta;
             var.getFunc().setParameter(selected, val);
             nonlinearControlsRows[pIdx].getNonlinearParamsREd().setText(Tools.doubleToString(val));
