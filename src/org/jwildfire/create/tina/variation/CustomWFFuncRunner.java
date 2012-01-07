@@ -37,6 +37,14 @@ public class CustomWFFuncRunner {
   protected double f = 0.0;
   protected double g = 0.0;
 
+  public boolean isPostTransform() {
+    return false;
+  }
+
+  public boolean isPreTransform() {
+    return false;
+  }
+
   public void init(FlameTransformationContext pContext, XForm pXForm) {
 
   }
@@ -75,5 +83,4 @@ public class CustomWFFuncRunner {
   public void setB(double b) {
     this.b = b;
   }
-
 }

@@ -47,6 +47,14 @@ public class CustomWFFunc extends VariationFunc {
       "import org.jwildfire.create.tina.variation.FlameTransformationContext;\r\n" +
       "\r\n" +
       "\r\n" +
+      "  public boolean isPostTransform() {\r\n" +
+      "    return false;\r\n" +
+      "  }\r\n" +
+      "\r\n" +
+      "  public boolean isPreTransform() {\r\n" +
+      "    return false;\r\n" +
+      "  }\r\n" +
+      "\r\n" +
       "  public void init(FlameTransformationContext pContext, XForm pXForm) {\r\n" +
       "\r\n" +
       "  }\r\n" +
@@ -180,4 +188,11 @@ public class CustomWFFunc extends VariationFunc {
     }
   }
 
+  @Override
+  public int getPriority() {
+    if (customFuncRunner == null) {
+      compile();
+    }
+    return customFuncRunner.isPreTransform() ? -1 : customFuncRunner.isPostTransform() ? 1 : 0;
+  }
 }
