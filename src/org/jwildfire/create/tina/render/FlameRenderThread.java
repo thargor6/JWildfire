@@ -16,7 +16,6 @@
 */
 package org.jwildfire.create.tina.render;
 
-import org.jwildfire.base.Prefs;
 import org.jwildfire.create.tina.base.Constants;
 import org.jwildfire.create.tina.base.DrawMode;
 import org.jwildfire.create.tina.base.Flame;
@@ -24,9 +23,7 @@ import org.jwildfire.create.tina.base.RasterPoint;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 import org.jwildfire.create.tina.palette.RenderColor;
-import org.jwildfire.create.tina.variation.DefaultXFormTransformationContextImpl;
-import org.jwildfire.create.tina.variation.FastXFormTransformationContextImpl;
-import org.jwildfire.create.tina.variation.XFormTransformationContext;
+import org.jwildfire.create.tina.variation.FlameTransformationContext;
 
 public class FlameRenderThread implements Runnable {
   private final FlameRenderer renderer;
@@ -35,17 +32,15 @@ public class FlameRenderThread implements Runnable {
   private volatile long currSample;
   private final AffineZStyle affineZStyle;
   private final RenderPass renderPass;
-  private final Prefs prefs;
 
   private boolean finished;
 
-  public FlameRenderThread(RenderPass pRenderPass, FlameRenderer pRenderer, Flame pFlame, long pSamples, AffineZStyle pAffineZStyle, Prefs pPrefs) {
+  public FlameRenderThread(RenderPass pRenderPass, FlameRenderer pRenderer, Flame pFlame, long pSamples, AffineZStyle pAffineZStyle) {
     renderer = pRenderer;
     flame = pFlame;
     samples = pSamples;
     affineZStyle = pAffineZStyle;
     renderPass = pRenderPass;
-    prefs = pPrefs;
   }
 
   @Override
@@ -78,7 +73,7 @@ public class FlameRenderThread implements Runnable {
   }
 
   private void iterate_flat() {
-    XFormTransformationContext ctx = createXFormTransformationContext();
+    FlameTransformationContext ctx = renderer.getFlameTransformationContext();
     XYZPoint affineT = new XYZPoint(); // affine part of the transformation
     XYZPoint varT = new XYZPoint(); // complete transformation
     XYZPoint p = new XYZPoint();
@@ -150,12 +145,8 @@ public class FlameRenderThread implements Runnable {
     }
   }
 
-  private XFormTransformationContext createXFormTransformationContext() {
-    return prefs.getTinaRenderFastMath() > 0 ? new FastXFormTransformationContextImpl(renderer.getFlameTransformationContext()) : new DefaultXFormTransformationContextImpl(renderer.getFlameTransformationContext());
-  }
-
   private void iterate_blur() {
-    XFormTransformationContext ctx = createXFormTransformationContext();
+    FlameTransformationContext ctx = renderer.getFlameTransformationContext();
     XYZPoint affineT = new XYZPoint(); // affine part of the transformation
     XYZPoint varT = new XYZPoint(); // complete transformation
     XYZPoint p = new XYZPoint();
@@ -260,7 +251,7 @@ public class FlameRenderThread implements Runnable {
   }
 
   private void iterate_pseudo3D() {
-    XFormTransformationContext ctx = createXFormTransformationContext();
+    FlameTransformationContext ctx = renderer.getFlameTransformationContext();
     Pseudo3DShader shader = new Pseudo3DShader(flame.getShadingInfo());
     shader.init();
 

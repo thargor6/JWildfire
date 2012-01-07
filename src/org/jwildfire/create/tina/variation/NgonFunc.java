@@ -35,7 +35,7 @@ public class NgonFunc extends VariationFunc {
   private double sides = 5;
 
   @Override
-  public void transform(XFormTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
+  public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     /* ngon by Joel Faber (09/06) */
     double r_factor, theta, phi, b, amp;
 

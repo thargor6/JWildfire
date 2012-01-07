@@ -31,7 +31,7 @@ public class RoseWFFunc extends VariationFunc {
   static int cnt = 0;
 
   @Override
-  public void transform(XFormTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
+  public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     double a = pAffineTP.getPrecalcAtan(pContext);
     double r = pAffineTP.getPrecalcSqrt(pContext);
 

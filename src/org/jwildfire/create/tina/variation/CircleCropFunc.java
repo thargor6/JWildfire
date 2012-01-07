@@ -37,7 +37,7 @@ public class CircleCropFunc extends VariationFunc {
   private int zero = 1;
 
   @Override
-  public void transform(XFormTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
+  public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     // circlecrop by Xirus02, http://xyrus02.deviantart.com/art/CircleCrop-Plugins-185353309
     double x0 = x;
     double y0 = y;

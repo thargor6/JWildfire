@@ -29,7 +29,7 @@ public class EpispiralWFFunc extends VariationFunc {
   private int waves = 4;
 
   @Override
-  public void transform(XFormTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
+  public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     double a = Math.atan2(pAffineTP.x, pAffineTP.y);
     double r = pContext.sqrt(pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y);
     r = 0.5 / pContext.cos(waves * a);

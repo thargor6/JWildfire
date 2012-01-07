@@ -16,7 +16,7 @@
 */
 package org.jwildfire.create.tina.base;
 
-import org.jwildfire.create.tina.variation.XFormTransformationContext;
+import org.jwildfire.create.tina.variation.FlameTransformationContext;
 
 public class XYZPoint {
   public double x;
@@ -74,7 +74,7 @@ public class XYZPoint {
     return sumsq;
   }
 
-  public double getPrecalcSqrt(XFormTransformationContext pContext) {
+  public double getPrecalcSqrt(FlameTransformationContext pContext) {
     if (!validSqrt) {
       sqrt = pContext.sqrt(x * x + y * y) + Constants.EPSILON;
       validSqrt = true;
@@ -82,7 +82,7 @@ public class XYZPoint {
     return sqrt;
   }
 
-  public double getPrecalcAtan(XFormTransformationContext pContext) {
+  public double getPrecalcAtan(FlameTransformationContext pContext) {
     if (!validAtan) {
       atan = Math.atan2(x, y);
       validAtan = true;
@@ -90,7 +90,7 @@ public class XYZPoint {
     return atan;
   }
 
-  public double getPrecalcAtanYX(XFormTransformationContext pContext) {
+  public double getPrecalcAtanYX(FlameTransformationContext pContext) {
     if (!validAtanYX) {
       atanYX = Math.atan2(y, x);
       validAtanYX = true;
@@ -98,7 +98,7 @@ public class XYZPoint {
     return atanYX;
   }
 
-  public double getPrecalcSinA(XFormTransformationContext pContext) {
+  public double getPrecalcSinA(FlameTransformationContext pContext) {
     if (!validSinA) {
       sinA = x / getPrecalcSqrt(pContext);
       validSinA = true;
@@ -106,7 +106,7 @@ public class XYZPoint {
     return sinA;
   }
 
-  public double getPrecalcCosA(XFormTransformationContext pContext) {
+  public double getPrecalcCosA(FlameTransformationContext pContext) {
     if (!validCosA) {
       cosA = y / getPrecalcSqrt(pContext);
       validCosA = true;

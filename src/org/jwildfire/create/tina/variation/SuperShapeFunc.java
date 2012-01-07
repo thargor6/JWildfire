@@ -39,7 +39,7 @@ public class SuperShapeFunc extends VariationFunc {
   private double holes = 0.0;
 
   @Override
-  public void transform(XFormTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
+  public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     double pm_4 = m / 4.0;
     double pneg1_n1 = -1.0 / n1;
 

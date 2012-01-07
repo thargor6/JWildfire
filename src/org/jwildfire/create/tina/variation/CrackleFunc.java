@@ -52,7 +52,7 @@ public class CrackleFunc extends VariationFunc {
   private double z = 0.0;
 
   @Override
-  public void transform(XFormTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
+  public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     double DXo, DYo, L, R, s, trgL;
     double U[] = new double[2];
     int XCv, YCv;

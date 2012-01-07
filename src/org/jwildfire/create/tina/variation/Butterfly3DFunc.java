@@ -23,7 +23,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 public class Butterfly3DFunc extends SimpleVariationFunc {
 
   @Override
-  public void transform(XFormTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
+  public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     /* wx is weight*4/sqrt(3*pi) */
     double wx = pAmount * 1.3029400317411197908970256609023;
 

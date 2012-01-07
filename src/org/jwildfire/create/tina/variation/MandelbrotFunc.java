@@ -47,7 +47,7 @@ public class MandelbrotFunc extends VariationFunc {
   private double cy = 0.0;
 
   @Override
-  public void transform(XFormTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
+  public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     double x1 = x0;
     double x = x0;
     double y1 = y0;

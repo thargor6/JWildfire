@@ -22,7 +22,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 public class FociFunc extends SimpleVariationFunc {
 
   @Override
-  public void transform(XFormTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
+  public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     /* Foci in the Apophysis Plugin Pack */
 
     double expx = pContext.exp(pAffineTP.x) * 0.5;

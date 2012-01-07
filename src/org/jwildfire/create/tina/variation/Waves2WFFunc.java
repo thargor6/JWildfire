@@ -42,7 +42,7 @@ public class Waves2WFFunc extends VariationFunc {
   private double dampY = 0.0;
 
   @Override
-  public void transform(XFormTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
+  public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     /* Modified version of waves2 from Joel F */
     double dampingX = Math.abs(dampX) < Tools.EPSILON ? 1.0 : pContext.exp(dampX);
     double dampingY = Math.abs(dampY) < Tools.EPSILON ? 1.0 : pContext.exp(dampY);

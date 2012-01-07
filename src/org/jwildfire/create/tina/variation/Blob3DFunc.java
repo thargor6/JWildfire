@@ -30,7 +30,7 @@ public class Blob3DFunc extends VariationFunc {
   private double waves = 6;
 
   @Override
-  public void transform(XFormTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
+  public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     double a = Math.atan2(pAffineTP.x, pAffineTP.y);
     double r = pContext.sqrt(pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y);
     r = r * (low + (high - low) * (0.5 + 0.5 * pContext.sin(waves * a)));

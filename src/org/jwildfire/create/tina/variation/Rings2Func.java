@@ -27,7 +27,7 @@ public class Rings2Func extends VariationFunc {
   private double val;
 
   @Override
-  public void transform(XFormTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
+  public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     double r = pAffineTP.getPrecalcSqrt(pContext);
     double dx = val * val + Constants.EPSILON;
 

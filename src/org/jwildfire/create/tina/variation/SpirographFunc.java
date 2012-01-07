@@ -46,7 +46,7 @@ public class SpirographFunc extends VariationFunc {
   private double yMax = 1.0;
 
   @Override
-  public void transform(XFormTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
+  public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     double t = (tMax - tMin) * pContext.random() + tMin;
     double y = (yMax - yMin) * pContext.random() + yMin;
     double x1 = (a + b) * pContext.cos(t) - c1 * pContext.cos((a + b) / b * t);

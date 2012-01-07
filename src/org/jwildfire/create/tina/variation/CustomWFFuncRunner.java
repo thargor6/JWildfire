@@ -41,7 +41,7 @@ public class CustomWFFuncRunner {
 
   }
 
-  public void transform(XFormTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
+  public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     // defaults to linear3D transformation
     pVarTP.x += pAmount * pAffineTP.x;
     pVarTP.y += pAmount * pAffineTP.y;

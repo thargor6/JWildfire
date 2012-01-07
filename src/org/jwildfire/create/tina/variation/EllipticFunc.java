@@ -23,7 +23,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 public class EllipticFunc extends SimpleVariationFunc {
 
   @Override
-  public void transform(XFormTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
+  public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     /* Modified version of Elliptic from the Apophysis Plugin Pack */
 
     double tmp = pAffineTP.getPrecalcSumsq() + 1.0;

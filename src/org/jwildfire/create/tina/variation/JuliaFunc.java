@@ -22,7 +22,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 public class JuliaFunc extends SimpleVariationFunc {
 
   @Override
-  public void transform(XFormTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
+  public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     double a = pAffineTP.getPrecalcAtan(pContext) * 0.5 + Math.PI * (int) (2.0 * pContext.random());
     double sina = pContext.sin(a);
     double cosa = pContext.cos(a);

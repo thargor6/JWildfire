@@ -29,7 +29,7 @@ public abstract class VariationFunc {
     return 0;
   }
 
-  public abstract void transform(XFormTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount);
+  public abstract void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount);
 
   public abstract String getName();
 

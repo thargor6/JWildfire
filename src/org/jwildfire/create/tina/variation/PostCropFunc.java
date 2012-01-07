@@ -35,14 +35,14 @@ public class PostCropFunc extends VariationFunc {
   private double bottom = 1.0;
   private double scatter_area = 0.0;
 
-  private double distribute(XFormTransformationContext pContext, double a, double min, double max) {
+  private double distribute(FlameTransformationContext pContext, double a, double min, double max) {
     double distance = pContext.random() * 0.5 * A;
     return a < min ? min + distance * (max - min) :
                      max - distance * (max - min);
   }
 
   @Override
-  public void transform(XFormTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
+  public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     // post_crop by Xirus02, http://xyrus02.deviantart.com/art/Crop-Plugin-Updated-169958881
     pVarTP.x += pAmount * ((pVarTP.x >= xmin) && (pVarTP.x <= xmax) ? pVarTP.x : distribute(pContext, pVarTP.x, xmin, xmax));
     pVarTP.y += pAmount * ((pVarTP.y >= ymin) && (pVarTP.y <= ymax) ? pVarTP.y : distribute(pContext, pVarTP.y, ymin, ymax));

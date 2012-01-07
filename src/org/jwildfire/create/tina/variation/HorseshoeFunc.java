@@ -22,7 +22,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 public class HorseshoeFunc extends SimpleVariationFunc {
 
   @Override
-  public void transform(XFormTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
+  public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     double sinA = pAffineTP.getPrecalcSinA(pContext);
     double cosA = pAffineTP.getPrecalcCosA(pContext);
     pVarTP.x += pAmount * (sinA * pAffineTP.x - cosA * pAffineTP.y);

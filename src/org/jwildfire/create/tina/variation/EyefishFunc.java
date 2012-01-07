@@ -22,7 +22,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 public class EyefishFunc extends SimpleVariationFunc {
 
   @Override
-  public void transform(XFormTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
+  public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     double r = 2 * pAmount / (pContext.sqrt(pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y) + 1.0);
     pVarTP.x += r * pAffineTP.x;
     pVarTP.y += r * pAffineTP.y;

@@ -36,11 +36,10 @@ public class ColorScaleWFFunc extends VariationFunc {
   private double resetZ = 0.0;
 
   @Override
-  public void transform(XFormTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-
+  public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     pVarTP.x += pAmount * scaleX * pAffineTP.x;
     pVarTP.y += pAmount * scaleY * pAffineTP.y;
-    double dz = pContext.getColor() * scaleZ * pAmount + offsetZ;
+    double dz = pAffineTP.color * scaleZ * pAmount + offsetZ;
     if (resetZ > 0) {
       pVarTP.z = dz;
     }

@@ -22,7 +22,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 public class PopcornFunc extends SimpleVariationFunc {
 
   @Override
-  public void transform(XFormTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
+  public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     double dx = pContext.tan(3 * pAffineTP.y);
     if (dx != dx)
       dx = 0.0;

@@ -44,7 +44,7 @@ public class TruchetFunc extends VariationFunc {
   private double seed = 50.0;
 
   @Override
-  public void transform(XFormTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
+  public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     //APO VARIABLES
     int extended = this.extended;
     double n = this.exponent;

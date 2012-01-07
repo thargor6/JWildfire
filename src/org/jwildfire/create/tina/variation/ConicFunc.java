@@ -30,7 +30,7 @@ public class ConicFunc extends VariationFunc {
   private double holes = 0.0;
 
   @Override
-  public void transform(XFormTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
+  public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     /* cyberxaos, 4/2007 */
     double ct = pAffineTP.x / pAffineTP.getPrecalcSqrt(pContext);
     double r = pAmount * (pContext.random() - holes) * eccentricity / (1 + eccentricity * ct) / pAffineTP.getPrecalcSqrt(pContext);

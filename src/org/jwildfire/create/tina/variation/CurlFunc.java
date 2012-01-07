@@ -32,7 +32,7 @@ public class CurlFunc extends VariationFunc {
   }
 
   @Override
-  public void transform(XFormTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
+  public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     double re = 1 + c1 * pAffineTP.x + c2 * (sqr(pAffineTP.x) - sqr(pAffineTP.y));
     double im = c1 * pAffineTP.y + c2 * 2 * pAffineTP.x * pAffineTP.y;
 

@@ -31,7 +31,7 @@ public class XHeartFunc extends VariationFunc {
   private double rat, cosa, sina;
 
   @Override
-  public void transform(XFormTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
+  public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     // xheart by xyrus02, http://xyrus02.deviantart.com/art/XHeart-Plugin-139866412
     double r2_4 = pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y + 4;
     if (r2_4 == 0)

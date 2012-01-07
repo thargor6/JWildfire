@@ -22,7 +22,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 public class DiscFunc extends SimpleVariationFunc {
 
   @Override
-  public void transform(XFormTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
+  public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     double rPI = Math.PI * pContext.sqrt(pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y);
     double sinr = pContext.sin(rPI);
     double cosr = pContext.cos(rPI);

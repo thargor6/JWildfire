@@ -34,7 +34,7 @@ public class CurveFunc extends VariationFunc {
   private double yLength = 1.0;
 
   @Override
-  public void transform(XFormTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
+  public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     /* Curve in the Apophysis Plugin Pack */
     double pc_xlen = xLength * xLength;
     double pc_ylen = yLength * yLength;

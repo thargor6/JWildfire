@@ -30,7 +30,7 @@ public class ModulusFunc extends VariationFunc {
   private double y = 0.50;
 
   @Override
-  public void transform(XFormTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
+  public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     /* Modulus in the Apophysis Plugin Pack */
     double xr = 2.0 * x;
     double yr = 2.0 * y;

@@ -29,7 +29,7 @@ public class CirclizeFunc extends VariationFunc {
   private double hole = 0.40;
 
   @Override
-  public void transform(XFormTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
+  public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     double var4_PI = pAmount / Constants.M_PI_4;
 
     double absx = Math.abs(pAffineTP.x);

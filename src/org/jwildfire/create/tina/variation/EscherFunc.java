@@ -28,7 +28,7 @@ public class EscherFunc extends VariationFunc {
   private double beta = 0.30;
 
   @Override
-  public void transform(XFormTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
+  public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     /* Escher in the Apophysis Plugin Pack */
 
     double a = pAffineTP.getPrecalcAtanYX(pContext);

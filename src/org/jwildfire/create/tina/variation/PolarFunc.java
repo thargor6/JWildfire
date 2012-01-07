@@ -22,7 +22,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 public class PolarFunc extends SimpleVariationFunc {
 
   @Override
-  public void transform(XFormTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
+  public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     double rPI = 0.31830989;
     double ny = pContext.sqrt(pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y) - 1.0;
     pVarTP.x += pAmount * (pAffineTP.getPrecalcAtan(pContext) * rPI);

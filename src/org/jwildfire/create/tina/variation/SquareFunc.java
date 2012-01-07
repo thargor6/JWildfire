@@ -22,7 +22,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 public class SquareFunc extends SimpleVariationFunc {
 
   @Override
-  public void transform(XFormTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
+  public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     pVarTP.x += pAmount * (pContext.random() - 0.5);
     pVarTP.y += pAmount * (pContext.random() - 0.5);
   }

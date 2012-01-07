@@ -23,10 +23,10 @@ import java.util.List;
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.random.RandomNumberGenerator.RandGenStatus;
 import org.jwildfire.create.tina.render.AffineZStyle;
+import org.jwildfire.create.tina.variation.FlameTransformationContext;
 import org.jwildfire.create.tina.variation.Variation;
 import org.jwildfire.create.tina.variation.VariationFunc;
 import org.jwildfire.create.tina.variation.VariationPriorityComparator;
-import org.jwildfire.create.tina.variation.XFormTransformationContext;
 
 public class XForm {
   private double weight;
@@ -207,10 +207,9 @@ public class XForm {
         || Math.abs(postCoeff11 - 1.0) > Tools.EPSILON || Math.abs(postCoeff20) > Tools.EPSILON || Math.abs(postCoeff21) > Tools.EPSILON);
   }
 
-  public void transformPoint(XFormTransformationContext pContext, XYZPoint pAffineT, XYZPoint pVarT, XYZPoint pSrcPoint, XYZPoint pDstPoint, AffineZStyle pZStyle) {
-    pDstPoint.color = pSrcPoint.color * c1 + c2;
-    pContext.setColor(color);
+  public void transformPoint(FlameTransformationContext pContext, XYZPoint pAffineT, XYZPoint pVarT, XYZPoint pSrcPoint, XYZPoint pDstPoint, AffineZStyle pZStyle) {
     pAffineT.clear();
+    pAffineT.color = pSrcPoint.color * c1 + c2;
     pAffineT.x = coeff00 * pSrcPoint.x + coeff10 * pSrcPoint.y + coeff20;
     pAffineT.y = coeff01 * pSrcPoint.x + coeff11 * pSrcPoint.y + coeff21;
     switch (pZStyle) {
@@ -238,12 +237,14 @@ public class XForm {
         throw new IllegalStateException(pZStyle.toString());
     }
     pVarT.clear();
+    pVarT.color = pAffineT.color;
     for (Variation variation : getSortedVariations()) {
       variation.transform(pContext, this, pAffineT, pVarT);
       if (variation.getFunc().getPriority() < 0) {
         pAffineT.invalidate();
       }
     }
+    pDstPoint.color = pVarT.color;
     if (hasPostCoeffs()) {
       double px = postCoeff00 * pVarT.x + postCoeff10 * pVarT.y + postCoeff20;
       double py = postCoeff01 * pVarT.x + postCoeff11 * pVarT.y + postCoeff21;
@@ -282,7 +283,7 @@ public class XForm {
     pDstPoint.z = pVarT.z;
   }
 
-  public void transformPoints(XFormTransformationContext pContext, XYZPoint[] pAffineT, XYZPoint[] pVarT, XYZPoint[] pSrcPoint, XYZPoint[] pDstPoint, AffineZStyle pZStyle) {
+  public void transformPoints(FlameTransformationContext pContext, XYZPoint[] pAffineT, XYZPoint[] pVarT, XYZPoint[] pSrcPoint, XYZPoint[] pDstPoint, AffineZStyle pZStyle) {
     try {
       for (int i = 0; i < 3; i++) {
         switch (i) {
@@ -293,9 +294,8 @@ public class XForm {
             pContext.setRandGenStatus(RandGenStatus.REPLAY);
             break;
         }
-        pDstPoint[i].color = pSrcPoint[i].color * c1 + c2;
-        pContext.setColor(color);
         pAffineT[i].clear();
+        pAffineT[i].color = pSrcPoint[i].color * c1 + c2;
         pAffineT[i].x = coeff00 * pSrcPoint[i].x + coeff10 * pSrcPoint[i].y + coeff20;
         pAffineT[i].y = coeff01 * pSrcPoint[i].x + coeff11 * pSrcPoint[i].y + coeff21;
         switch (pZStyle) {
@@ -323,12 +323,14 @@ public class XForm {
             throw new IllegalStateException(pZStyle.toString());
         }
         pVarT[i].clear();
+        pVarT[i].color = pAffineT[i].color;
         for (Variation variation : getSortedVariations()) {
           variation.transform(pContext, this, pAffineT[i], pVarT[i]);
           if (variation.getFunc().getPriority() < 0) {
             pAffineT[i].invalidate();
           }
         }
+        pDstPoint[i].color = pVarT[i].color;
         if (hasPostCoeffs()) {
           double px = postCoeff00 * pVarT[i].x + postCoeff10 * pVarT[i].y + postCoeff20;
           double py = postCoeff01 * pVarT[i].x + postCoeff11 * pVarT[i].y + postCoeff21;

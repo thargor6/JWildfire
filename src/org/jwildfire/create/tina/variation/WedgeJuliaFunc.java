@@ -35,7 +35,7 @@ public class WedgeJuliaFunc extends VariationFunc {
   private double angle = 0.30;
 
   @Override
-  public void transform(XFormTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
+  public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     double wedgeJulia_cf = 1.0 - angle * count * Constants.M_1_PI * 0.5;
     double wedgeJulia_rN = Math.abs(power);
     double wedgeJulia_cn = dist / power / 2.0;

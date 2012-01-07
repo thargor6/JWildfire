@@ -22,7 +22,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 public class LoonieFunc extends SimpleVariationFunc {
 
   @Override
-  public void transform(XFormTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
+  public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     /* Loonie in the Apophysis Plugin Pack */
     double r2 = pAffineTP.getPrecalcSumsq();
     double w2 = pAmount * pAmount;

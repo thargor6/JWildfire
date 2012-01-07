@@ -22,7 +22,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 public class NoiseFunc extends SimpleVariationFunc {
 
   @Override
-  public void transform(XFormTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
+  public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     double r = pContext.random() * 2.0 * Math.PI;
     double sinr = pContext.sin(r);
     double cosr = pContext.cos(r);

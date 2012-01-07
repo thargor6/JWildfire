@@ -39,7 +39,7 @@ public class PostMirrorWFFunc extends VariationFunc {
   private double zShift = 0.0;
 
   @Override
-  public void transform(XFormTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
+  public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     if (xAxis > 0 && pContext.random() < 0.5) {
       pVarTP.x = -pVarTP.x - xShift;
     }

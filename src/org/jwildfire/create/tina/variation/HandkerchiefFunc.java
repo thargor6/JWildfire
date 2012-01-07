@@ -22,7 +22,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 public class HandkerchiefFunc extends SimpleVariationFunc {
 
   @Override
-  public void transform(XFormTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
+  public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     double angle = pAffineTP.getPrecalcAtan(pContext);
     double r = pContext.sqrt(pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y);
     pVarTP.x += pAmount * (pContext.sin(angle + r) * r);

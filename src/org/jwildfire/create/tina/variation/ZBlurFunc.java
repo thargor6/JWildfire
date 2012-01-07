@@ -24,7 +24,7 @@ public class ZBlurFunc extends SimpleVariationFunc {
   private int gauss_N;
 
   @Override
-  public void transform(XFormTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
+  public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     pVarTP.z += pAmount * (gauss_rnd[0] + gauss_rnd[1] + gauss_rnd[2] + gauss_rnd[3] - 2);
     gauss_rnd[gauss_N] = pContext.random();
     gauss_N = (gauss_N + 1) & 3;
@@ -36,7 +36,7 @@ public class ZBlurFunc extends SimpleVariationFunc {
   }
 
   @Override
-  public void init(XFormTransformationContext pContext, XForm pXForm) {
+  public void init(FlameTransformationContext pContext, XForm pXForm) {
     gauss_rnd[0] = pContext.random();
     gauss_rnd[1] = pContext.random();
     gauss_rnd[2] = pContext.random();

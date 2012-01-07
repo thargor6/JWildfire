@@ -30,7 +30,7 @@ public class Bent2Func extends VariationFunc {
   private double y = 1.0;
 
   @Override
-  public void transform(XFormTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
+  public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     /* Bent2 in the Apophysis Plugin Pack */
     double nx = pAffineTP.x;
     double ny = pAffineTP.y;

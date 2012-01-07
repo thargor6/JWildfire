@@ -34,7 +34,7 @@ public class Disc2Func extends VariationFunc {
   private double cosadd = 0.0;
 
   @Override
-  public void transform(XFormTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
+  public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     /* Z+ variation Jan 07 */
     double t = timespi * (pAffineTP.x + pAffineTP.y);
     double sinr = pContext.sin(t);

@@ -31,7 +31,7 @@ public class Pie3DFunc extends VariationFunc {
   private double thickness = 0.5;
 
   @Override
-  public void transform(XFormTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
+  public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     int sl = (int) (pContext.random() * slices + 0.5);
     double a = rotation + 2.0 * Math.PI * (sl + pContext.random() * thickness) / slices;
     double r = pAmount * pContext.random();

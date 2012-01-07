@@ -36,7 +36,7 @@ public class LazySusanFunc extends VariationFunc {
   private double y = 0.20;
 
   @Override
-  public void transform(XFormTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
+  public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     /* Lazysusan in the Apophysis Plugin Pack */
 
     double x = pAffineTP.x - this.x;

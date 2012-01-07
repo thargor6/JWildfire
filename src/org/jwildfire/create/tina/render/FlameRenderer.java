@@ -329,12 +329,12 @@ public class FlameRenderer {
     List<FlameRenderThread> threads = new ArrayList<FlameRenderThread>();
     int nThreads = pFlames.size();
     if (nThreads <= 1) {
-      FlameRenderThread t = new FlameRenderThread(pRenderPass, this, pFlames.get(0), nSamples / (long) nThreads, affineZStyle, prefs);
+      FlameRenderThread t = new FlameRenderThread(pRenderPass, this, pFlames.get(0), nSamples / (long) nThreads, affineZStyle);
       t.run();
     }
     else {
       for (int i = 0; i < nThreads; i++) {
-        FlameRenderThread t = new FlameRenderThread(pRenderPass, this, pFlames.get(i), nSamples / (long) nThreads, affineZStyle, prefs);
+        FlameRenderThread t = new FlameRenderThread(pRenderPass, this, pFlames.get(i), nSamples / (long) nThreads, affineZStyle);
         threads.add(t);
         new Thread(t).start();
       }

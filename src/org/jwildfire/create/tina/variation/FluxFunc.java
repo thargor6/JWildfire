@@ -28,7 +28,7 @@ public class FluxFunc extends VariationFunc {
   private double spread = 0.30;
 
   @Override
-  public void transform(XFormTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
+  public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     // Flux, by meckie
     double xpw = pAffineTP.x + pAmount;
     double xmw = pAffineTP.x - pAmount;

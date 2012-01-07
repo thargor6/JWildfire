@@ -22,7 +22,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 public class PostRotateXFunc extends SimpleVariationFunc {
 
   @Override
-  public void transform(XFormTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
+  public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     double sina = pContext.sin(pAmount * Math.PI * 0.5);
     double cosa = pContext.cos(pAmount * Math.PI * 0.5);
     double z = cosa * pVarTP.z - sina * pVarTP.y;

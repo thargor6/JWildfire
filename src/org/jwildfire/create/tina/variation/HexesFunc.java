@@ -89,7 +89,7 @@ public class HexesFunc extends VariationFunc {
   }
 
   @Override
-  public void transform(XFormTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
+  public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     double P[][] = new double[VORONOI_MAXPOINTS][2];
     double DXo, DYo, L, L1, L2, R, s, trgL, Vx, Vy;
     double U[] = new double[2];

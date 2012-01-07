@@ -28,7 +28,7 @@ public class CellFunc extends VariationFunc {
   private double size = 0.60;
 
   @Override
-  public void transform(XFormTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
+  public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     /* Cell in the Apophysis Plugin Pack */
 
     double inv_cell_size = 1.0 / size;

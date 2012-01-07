@@ -22,7 +22,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 public class ArchFunc extends SimpleVariationFunc {
 
   @Override
-  public void transform(XFormTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
+  public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     double ang = pContext.random() * pAmount * Math.PI;
     double sinr = pContext.sin(ang);
     double cosr = pContext.cos(ang);

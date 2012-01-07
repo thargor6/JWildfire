@@ -30,7 +30,7 @@ public class JuliaNFunc extends VariationFunc {
   private double dist = 1;
 
   @Override
-  public void transform(XFormTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
+  public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     double rnd = pContext.random();
     double angle = (Math.atan2(pAffineTP.y, pAffineTP.x) + 2 * Math.PI * ((int) (rnd * Math.abs(power)))) / (double) power;
     double sina = pContext.sin(angle);

@@ -30,7 +30,7 @@ public class WhorlFunc extends VariationFunc {
   private double outside = 0.20;
 
   @Override
-  public void transform(XFormTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
+  public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     /* whorl from apo plugins pack */
     double r = pAffineTP.getPrecalcSqrt(pContext);
     double a;

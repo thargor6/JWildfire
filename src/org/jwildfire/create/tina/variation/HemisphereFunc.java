@@ -22,7 +22,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 public class HemisphereFunc extends SimpleVariationFunc {
 
   @Override
-  public void transform(XFormTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
+  public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     double r = pAmount / pContext.sqrt(pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y + 1);
     pVarTP.x += pAffineTP.x * r;
     pVarTP.y += pAffineTP.y * r;

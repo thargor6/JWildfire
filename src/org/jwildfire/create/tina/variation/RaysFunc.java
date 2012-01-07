@@ -23,7 +23,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 public class RaysFunc extends SimpleVariationFunc {
 
   @Override
-  public void transform(XFormTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
+  public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     /* Z+ variation Jan 07 */
     double ang = pAmount * pContext.random() * Math.PI;
     double r = pAmount / (pAffineTP.getPrecalcSumsq() + Constants.EPSILON);

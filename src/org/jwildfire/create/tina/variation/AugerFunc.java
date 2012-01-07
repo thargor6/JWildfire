@@ -34,7 +34,7 @@ public class AugerFunc extends VariationFunc {
   private double scale = 0.9;
 
   @Override
-  public void transform(XFormTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
+  public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     // Auger, by Xyrus01
     double s = pContext.sin(freq * pAffineTP.x);
     double t = pContext.sin(freq * pAffineTP.y);

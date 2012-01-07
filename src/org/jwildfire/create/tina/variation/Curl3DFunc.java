@@ -34,7 +34,7 @@ public class Curl3DFunc extends VariationFunc {
   }
 
   @Override
-  public void transform(XFormTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
+  public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     // TODO precalc?  
     double c2x = 2 * cx;
     double c2y = 2 * cy;

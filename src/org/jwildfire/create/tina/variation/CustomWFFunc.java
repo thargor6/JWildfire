@@ -44,7 +44,6 @@ public class CustomWFFunc extends VariationFunc {
 
   private String code = "import org.jwildfire.create.tina.base.XForm;\r\n" +
       "import org.jwildfire.create.tina.base.XYZPoint;\r\n" +
-      "import org.jwildfire.create.tina.variation.XFormTransformationContext;\r\n" +
       "import org.jwildfire.create.tina.variation.FlameTransformationContext;\r\n" +
       "\r\n" +
       "\r\n" +
@@ -52,17 +51,49 @@ public class CustomWFFunc extends VariationFunc {
       "\r\n" +
       "  }\r\n" +
       "\r\n" +
-      "  public void transform(XFormTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {\r\n" +
-      "    // defaults to linear3D transformation\r\n" +
-      "    pVarTP.x += pAmount * pAffineTP.x;\r\n" +
-      "    pVarTP.y += pAmount * pAffineTP.y;\r\n" +
-      "    pVarTP.z += pAmount * pAffineTP.z;\r\n" +
+      "  public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {\r\n" +
+      "    // Some examples:\r\n" +
+      "    // \"hemisphere\" variation\r\n" +
+      "    //   double r = pAmount / pContext.sqrt(pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y + 1);\r\n" +
+      "    //   pVarTP.x += pAffineTP.x * r;\r\n" +
+      "    //   pVarTP.y += pAffineTP.y * r;\r\n" +
+      "    //   pVarTP.z += r;\r\n" +
+      "    // ----------------------------------\r\n" +
+      "    // change the color dynamically\r\n" +
+      "    //   if(pAffineTP.x<0) {\r\n" +
+      "    //     pVarTP.color = 0;\r\n" +
+      "    //   }\r\n" +
+      "    //   else {\r\n" +
+      "    //     pVarTP.color = 0.75;\r\n" +
+      "    //   }\r\n" +
+      "    // ----------------------------------\r\n" +
+      "    // \"bubble\" variation\r\n" +
+      "    //   double r = ((pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y) / 4.0 + 1.0);\r\n" +
+      "    //   double t = pAmount / r;\r\n" +
+      "    //   pVarTP.x += t * pAffineTP.x;\r\n" +
+      "    //   pVarTP.y += t * pAffineTP.y;\r\n" +
+      "    //   pVarTP.z += pAmount * (2.0 / r - 1.0);\r\n" +
+      "    // ----------------------------------\r\n" +
+      "    // \"rose_wf\" variation\r\n" +
+      "    //   final double amp=0.5;\r\n" +
+      "    //   final double waves=4;\r\n" +
+      "    //   double a0 = pAffineTP.getPrecalcAtan(pContext);\r\n" +
+      "    //   double r0 = pAffineTP.getPrecalcSqrt(pContext);\r\n" +
+      "    //\r\n" +
+      "    //   double r = amp * pContext.cos(waves * a0);\r\n" +
+      "    //\r\n" +
+      "    //   double nx = pContext.sin(a0) * r;\r\n" +
+      "    //   double ny = pContext.cos(a0) * r;\r\n" +
+      "    //   pVarTP.x += pAmount * nx;\r\n" +
+      "    //   pVarTP.y += pAmount * ny;\r\n" +
+      "    // ----------------------------------\r\n" +
+      "    // ...\r\n" +
       "  }\r\n" +
       "";
   private CustomWFFuncRunner customFuncRunner = null;
 
   @Override
-  public void transform(XFormTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
+  public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     customFuncRunner.transform(pContext, pXForm, pAffineTP, pVarTP, pAmount);
   }
 
@@ -142,6 +173,9 @@ public class CustomWFFunc extends VariationFunc {
       customFuncRunner = CustomWFFuncRunner.compile(code);
     }
     catch (Throwable ex) {
+      System.out.println("##############################################################");
+      System.out.println(code);
+      System.out.println("##############################################################");
       throw new RuntimeException(ex);
     }
   }

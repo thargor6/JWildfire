@@ -35,14 +35,14 @@ public class PreCropFunc extends VariationFunc {
   private double bottom = 1.0;
   private double scatter_area = 0.0;
 
-  private double distribute(XFormTransformationContext pContext, double a, double min, double max) {
+  private double distribute(FlameTransformationContext pContext, double a, double min, double max) {
     double distance = pContext.random() * 0.5 * A;
     return a < min ? min + distance * (max - min) :
                      max - distance * (max - min);
   }
 
   @Override
-  public void transform(XFormTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
+  public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     // pre_crop by Xirus02, http://xyrus02.deviantart.com/art/Crop-Plugin-Updated-169958881
     pAffineTP.x += pAmount * ((pAffineTP.x >= xmin) && (pAffineTP.x <= xmax) ? pAffineTP.x : distribute(pContext, pAffineTP.x, xmin, xmax));
     pAffineTP.y += pAmount * ((pAffineTP.y >= ymin) && (pAffineTP.y <= ymax) ? pAffineTP.y : distribute(pContext, pAffineTP.y, ymin, ymax));

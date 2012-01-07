@@ -22,7 +22,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 public class SwirlFunc extends SimpleVariationFunc {
 
   @Override
-  public void transform(XFormTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
+  public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     double r2 = pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y;
     double c1 = pContext.sin(r2);
     double c2 = pContext.cos(r2);

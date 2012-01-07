@@ -28,7 +28,7 @@ public class Julia3DZFunc extends VariationFunc {
   private int power = 2;
 
   @Override
-  public void transform(XFormTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
+  public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     double absPower = Math.abs(power);
     double cPower = 1.0 / power * 0.5;
 
