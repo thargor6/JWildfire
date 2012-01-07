@@ -162,4 +162,9 @@ public class FastFlameTransformationContextImpl implements FlameTransformationCo
     //    }
   }
 
+  @Override
+  public double fmod(double a, double b) {
+    return a % b;
+  }
+
 }

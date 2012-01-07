@@ -80,4 +80,9 @@ public class DefaultFlameTransformationContextImpl implements FlameTransformatio
     return Math.sqrt(a);
   }
 
+  @Override
+  public double fmod(double a, double b) {
+    return a % b;
+  }
+
 }

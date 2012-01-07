@@ -53,8 +53,14 @@ public class Flam3Reader implements FlameReader {
         break;
       int pe = pXML.indexOf("\"", ps + 2);
       String name = pXML.substring(p, ps).trim();
-      String value = pXML.substring(ps + 2, pe);
-      //      System.out.println("#" + name + "#" + value + "#");
+      String value;
+      try {
+        value = pXML.substring(ps + 2, pe);
+        //      System.out.println("#" + name + "#" + value + "#");
+      }
+      catch (Throwable ex) {
+        throw new RuntimeException("Error parsing attribute \"" + name + "\" (" + pXML + ")", ex);
+      }
       res.put(name, value);
       p = pe + 2;
     }
@@ -326,7 +332,17 @@ public class Flam3Reader implements FlameReader {
       // Flame attributes
       {
         int ps = flameXML.indexOf("<flame ");
-        int pe = flameXML.indexOf(">", ps + 1);
+        int pe = -1;
+        boolean qt = false;
+        for (int i = ps + 1; i < flameXML.length(); i++) {
+          if (flameXML.charAt(i) == '\"') {
+            qt = !qt;
+          }
+          else if (!qt && flameXML.charAt(i) == '>') {
+            pe = i;
+            break;
+          }
+        }
         String hs = flameXML.substring(ps + 7, pe);
         parseFlameAttributes(flame, hs);
       }

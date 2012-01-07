@@ -31,8 +31,10 @@ public class VariationFuncList {
 
   static {
     // define alias for renamed variations to allow loading of old flame files
-    aliasMap.put(MandelbrotFunc.class, "mandelbrot");
-    aliasMap.put(SpirographFunc.class, "spirograph");
+    aliasMap.put(MandelbrotFunc.class, "Mandelbrot");
+    aliasMap.put(SpirographFunc.class, "Spirograph");
+    aliasMap.put(TruchetFunc.class, "Truchet");
+
     aliasMap.put(CustomWFFunc.class, "t_custom");
     aliasMap.put(EpispiralWFFunc.class, "t_epispiral");
     aliasMap.put(ColorScaleWFFunc.class, "t_colorscale");
@@ -189,6 +191,7 @@ public class VariationFuncList {
     registerVariationFunc(BubbleWFFunc.class);
     registerVariationFunc(SpirographFunc.class);
     registerVariationFunc(CustomWFFunc.class);
+    registerVariationFunc(TruchetFunc.class);
     //    registerVariationFunc(TPostBumpMapFunc.class);
   }
 

@@ -27,10 +27,6 @@ public class BipolarFunc extends VariationFunc {
 
   private double shift = 0.0;
 
-  private double fmod(double a, double b) {
-    return a % b;
-  }
-
   @Override
   public void transform(XFormTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     /* Bipolar in the Apophysis Plugin Pack */
@@ -42,10 +38,10 @@ public class BipolarFunc extends VariationFunc {
     double y = 0.5 * Math.atan2(2.0 * pAffineTP.y, x2y2 - 1.0) + ps;
 
     if (y > Constants.M_PI_2) {
-      y = -Constants.M_PI_2 + fmod(y + Constants.M_PI_2, Constants.M_PI);
+      y = -Constants.M_PI_2 + pContext.fmod(y + Constants.M_PI_2, Constants.M_PI);
     }
     else if (y < -Constants.M_PI_2) {
-      y = Constants.M_PI_2 - fmod(Constants.M_PI_2 - y, Constants.M_PI);
+      y = Constants.M_PI_2 - pContext.fmod(Constants.M_PI_2 - y, Constants.M_PI);
     }
 
     pVarTP.x += pAmount * 0.25 * Constants.M_2_PI * Math.log((t + x2) / (t - x2));
