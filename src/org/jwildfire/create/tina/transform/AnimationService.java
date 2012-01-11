@@ -153,7 +153,7 @@ public class AnimationService {
 
     FlameRenderer renderer = new FlameRenderer(flame, pPrefs);
     renderer.setAffineZStyle(pAffineZStyle);
-    renderer.renderFlame(img);
+    renderer.renderFlame(img, null);
     new ImageWriter().saveImage(img, imgFilename);
   }
 }

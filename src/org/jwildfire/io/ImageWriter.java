@@ -16,8 +16,10 @@
 */
 package org.jwildfire.io;
 
+import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 
@@ -25,8 +27,8 @@ import javax.imageio.ImageIO;
 
 import org.jwildfire.base.Tools;
 import org.jwildfire.image.Pixel;
+import org.jwildfire.image.SimpleHDRImage;
 import org.jwildfire.image.SimpleImage;
-
 
 public class ImageWriter {
 
@@ -48,8 +50,22 @@ public class ImageWriter {
       saveAsJPEG(pImg, pFilename);
     else if (p[p.length - 1].equalsIgnoreCase("png"))
       saveAsPNG(pImg, pFilename);
+    else if (p[p.length - 1].equalsIgnoreCase("hdr"))
+      saveAsHDR(pImg, pFilename);
     else if (p[p.length - 1].equalsIgnoreCase("txt"))
       savePalette(pImg, pFilename);
+    else
+      throw new IllegalArgumentException(pFilename);
+  }
+
+  public void saveImage(SimpleHDRImage pImg, String pFilename) throws Exception {
+    String filename = new File(pFilename).getName();
+    System.out.println("file: " + filename);
+    String[] p = filename.split("\\.");
+    if (p.length == 1)
+      saveAsHDR(pImg, pFilename + ".jpg");
+    else if (p[p.length - 1].equalsIgnoreCase("hdr"))
+      saveAsHDR(pImg, pFilename);
     else
       throw new IllegalArgumentException(pFilename);
   }
@@ -84,6 +100,39 @@ public class ImageWriter {
     finally {
       out.close();
     }
+  }
 
+  public void saveAsHDR(SimpleImage pImg, String pFilename) throws Exception {
+    OutputStream f = new BufferedOutputStream(new FileOutputStream(pFilename));
+    f.write("#?RGBE\n".getBytes());
+    f.write("FORMAT=32-bit_rle_rgbe\n\n".getBytes());
+    f.write(("-Y " + pImg.getImageHeight() + " +X " + pImg.getImageWidth() + "\n").getBytes());
+    for (int i = 0; i < pImg.getImageHeight(); i++) {
+      for (int j = 0; j < pImg.getImageWidth(); j++) {
+        int rgbe = pImg.getRGBEValue(j, i);
+        f.write(rgbe >> 24);
+        f.write(rgbe >> 16);
+        f.write(rgbe >> 8);
+        f.write(rgbe);
+      }
+    }
+    f.close();
+  }
+
+  public void saveAsHDR(SimpleHDRImage pImg, String pFilename) throws Exception {
+    OutputStream f = new BufferedOutputStream(new FileOutputStream(pFilename));
+    f.write("#?RGBE\n".getBytes());
+    f.write("FORMAT=32-bit_rle_rgbe\n\n".getBytes());
+    f.write(("-Y " + pImg.getImageHeight() + " +X " + pImg.getImageWidth() + "\n").getBytes());
+    for (int i = 0; i < pImg.getImageHeight(); i++) {
+      for (int j = 0; j < pImg.getImageWidth(); j++) {
+        int rgbe = pImg.getRGBEValue(j, i);
+        f.write(rgbe >> 24);
+        f.write(rgbe >> 16);
+        f.write(rgbe >> 8);
+        f.write(rgbe);
+      }
+    }
+    f.close();
   }
 }

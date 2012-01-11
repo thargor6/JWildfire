@@ -73,7 +73,7 @@ public class FlameFilePreview extends JComponent implements PropertyChangeListen
         flame.setColorOversample(2);
         renderer.setAffineZStyle(AffineZStyle.FLAT);
         SimpleImage img = new SimpleImage(imgWidth, imgHeight);
-        renderer.renderFlame(img);
+        renderer.renderFlame(img, null);
 
         currThumbnail = new ImageIcon(img.getBufferedImg());
       }

@@ -113,6 +113,21 @@ public class SimpleImage {
     }
   }
 
+  public int getRGBEValue(int pX, int pY) {
+    try {
+      toolPixel.setARGBValue(getBufferedImg().getRGB(pX, pY));
+      return convertRGBToRGBE(toolPixel.r, toolPixel.g, toolPixel.b);
+    }
+    catch (Exception ex) {
+      throw new RuntimeException("(" + pX + ", " + pY + ") is out of bounds (0.."
+          + (imageWidth - 1) + ", 0.." + (imageHeight - 1) + ")", ex);
+    }
+  }
+
+  private int convertRGBToRGBE(int pR, int pG, int pB) {
+    return SimpleHDRImage.convertRGBToRGBE((float) pR / 255.0f, (float) pG / 255.0f, (float) pB / 255.0f);
+  }
+
   public int getARGBValueIgnoreBounds(int pX, int pY) {
     if ((pX < 0) || (pX >= imageWidth) || (pY < 0) || (pY >= imageHeight))
       return 0;

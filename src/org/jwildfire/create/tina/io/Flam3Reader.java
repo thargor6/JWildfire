@@ -371,7 +371,10 @@ public class Flam3Reader implements FlameReader {
           int ps = flameXML.indexOf("<xform ", p + 1);
           if (ps < 0)
             break;
-          int pe = flameXML.indexOf("/>", ps + 1);
+          int pe = flameXML.indexOf("</xform>", ps + 1);
+          if (pe < 0) {
+            pe = flameXML.indexOf("/>", ps + 1);
+          }
           String hs = flameXML.substring(ps + 7, pe);
           XForm xForm = new XForm();
           parseXFormAttributes(xForm, hs);

@@ -22,9 +22,12 @@ public class GammaCorrectionFilter {
   private final Flame flame;
   private int vibInt;
   private int inverseVibInt;
+  private double vibDouble;
+  private double inverseVibDouble;
   private double gamma;
   private double sclGamma;
   private int bgRed, bgGreen, bgBlue;
+  private double bgRedDouble, bgGreenDouble, bgBlueDouble;
 
   public GammaCorrectionFilter(Flame pFlame) {
     flame = pFlame;
@@ -35,7 +38,21 @@ public class GammaCorrectionFilter {
     gamma = (flame.getGamma() == 0.0) ? flame.getGamma() : 1.0 / flame.getGamma();
 
     vibInt = (int) (flame.getVibrancy() * 256.0 + 0.5);
+    if (vibInt < 0) {
+      vibInt = 0;
+    }
+    else if (vibInt > 256) {
+      vibInt = 256;
+    }
     inverseVibInt = 256 - vibInt;
+
+    vibDouble = flame.getVibrancy();
+    if (vibDouble < 0.0) {
+      vibDouble = 0.0;
+    }
+    else if (vibDouble > 1.0) {
+      vibDouble = 1.0;
+    }
 
     sclGamma = 0.0;
     if (flame.getGammaThreshold() != 0) {
@@ -45,6 +62,10 @@ public class GammaCorrectionFilter {
     bgRed = flame.getBGColorRed();
     bgGreen = flame.getBGColorGreen();
     bgBlue = flame.getBGColorBlue();
+
+    bgRedDouble = (double) bgRed / 255.0;
+    bgGreenDouble = (double) bgGreen / 255.0;
+    bgBlueDouble = (double) bgBlue / 255.0;
   }
 
   public void transformPoint(LogDensityPoint logDensityPnt, GammaCorrectedRGBPoint pRGBPoint) {
@@ -108,6 +129,74 @@ public class GammaCorrectionFilter {
     pRGBPoint.red = red;
     pRGBPoint.green = green;
     pRGBPoint.blue = blue;
+  }
+
+  public void transformPoint(LogDensityPoint logDensityPnt, GammaCorrectedHDRPoint pHDRPoint) {
+    double logScl;
+    double inverseAlpha;
+    if (logDensityPnt.intensity > 0.0) {
+      // gamma linearization
+      double alpha;
+      if (logDensityPnt.intensity <= flame.getGammaThreshold()) {
+        double frac = logDensityPnt.intensity / flame.getGammaThreshold();
+        alpha = (1.0 - frac) * logDensityPnt.intensity * sclGamma + frac * Math.pow(logDensityPnt.intensity, gamma);
+      }
+      else {
+        alpha = Math.pow(logDensityPnt.intensity, gamma);
+      }
+      logScl = vibDouble * alpha / logDensityPnt.intensity;
+      if (alpha < 0.0)
+        alpha = 0.0;
+      else if (alpha > 1.0)
+        alpha = 1.0;
+      inverseAlpha = 1.0 - alpha;
+    }
+    else {
+      pHDRPoint.red = (float) bgRedDouble;
+      pHDRPoint.green = (float) bgGreenDouble;
+      pHDRPoint.blue = (float) bgBlueDouble;
+      return;
+    }
+
+    double red, green, blue;
+    if (inverseVibDouble > 0.0) {
+      red = logScl * logDensityPnt.red + inverseVibDouble * Math.pow(logDensityPnt.red, gamma);
+      green = logScl * logDensityPnt.green + inverseVibDouble * Math.pow(logDensityPnt.green, gamma);
+      blue = logScl * logDensityPnt.blue + inverseVibDouble * Math.pow(logDensityPnt.blue, gamma);
+    }
+    else {
+      red = logScl * logDensityPnt.red;
+      green = logScl * logDensityPnt.green;
+      blue = logScl * logDensityPnt.blue;
+    }
+
+    red = red + inverseAlpha * bgRedDouble;
+    if (red < 0.0) {
+      red = 0.0;
+    }
+    else if (red > 1.0) {
+      red = 1.0;
+    }
+
+    green = green + inverseAlpha * bgGreenDouble;
+    if (green < 0.0) {
+      green = 0.0;
+    }
+    else if (green > 1.0) {
+      green = 1.0;
+    }
+
+    blue = blue + inverseAlpha * bgBlueDouble;
+    if (blue < 0.0) {
+      blue = 0.0;
+    }
+    else if (blue > 1.0) {
+      blue = 1.0;
+    }
+
+    pHDRPoint.red = (float) red;
+    pHDRPoint.green = (float) green;
+    pHDRPoint.blue = (float) blue;
   }
 
   public void transformPointSimple(LogDensityPoint logDensityPnt, GammaCorrectedRGBPoint pRGBPoint) {

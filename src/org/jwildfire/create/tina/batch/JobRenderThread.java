@@ -74,7 +74,7 @@ public class JobRenderThread implements Runnable {
               FlameRenderer renderer = new FlameRenderer(flame, controller.getPrefs());
               renderer.setProgressUpdater(controller.getJobProgressUpdater());
               renderer.setAffineZStyle(controller.getZStyle());
-              renderer.renderFlame(img);
+              renderer.renderFlame(img, null);
               long t1 = Calendar.getInstance().getTimeInMillis();
               job.setFinished(true);
               job.setElapsedSeconds(((double) (t1 - t0) / 1000.0));

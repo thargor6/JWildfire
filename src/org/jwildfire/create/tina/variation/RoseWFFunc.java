@@ -43,8 +43,6 @@ public class RoseWFFunc extends VariationFunc {
     //    r = amp * (1 + 9.0 / 10.0 * pContext.cos(8.0 * a)) * (1 + 1.0 / 10.0 * pContext.cos(24.0 * a)) * (9.0 / 10.0 + 1.0 / 10.0 * pContext.cos(200.0 * a)) * (1.0 + pContext.sin(a));
     //    a += Math.PI / 2.0;
 
-    r = amp * pContext.cos(waves * a);
-
     double nx = pContext.sin(a) * r;
     double ny = pContext.cos(a) * r;
 

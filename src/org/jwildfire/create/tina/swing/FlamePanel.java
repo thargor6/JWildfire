@@ -463,4 +463,8 @@ public class FlamePanel extends ImagePanel {
   public void setAllowScaleY(boolean allowScaleY) {
     this.allowScaleY = allowScaleY;
   }
+
+  public XForm getSelectedXForm() {
+    return selectedXForm;
+  }
 }

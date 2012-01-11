@@ -193,6 +193,8 @@ public class VariationFuncList {
     registerVariationFunc(CustomWFFunc.class);
     registerVariationFunc(TruchetFunc.class);
     registerVariationFunc(PostColorScaleWFFunc.class);
+    registerVariationFunc(PostCustomWFFunc.class);
+    registerVariationFunc(PreCustomWFFunc.class);
     //    registerVariationFunc(TPostBumpMapFunc.class);
   }
 

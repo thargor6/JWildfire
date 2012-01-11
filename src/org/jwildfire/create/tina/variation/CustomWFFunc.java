@@ -188,11 +188,4 @@ public class CustomWFFunc extends VariationFunc {
     }
   }
 
-  @Override
-  public int getPriority() {
-    if (customFuncRunner == null) {
-      compile();
-    }
-    return customFuncRunner.isPreTransform() ? -1 : customFuncRunner.isPostTransform() ? 1 : 0;
-  }
 }

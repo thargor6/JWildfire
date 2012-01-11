@@ -18,7 +18,6 @@ package org.jwildfire.create.tina.render;
 
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.RasterPoint;
-import org.jwildfire.image.SimpleImage;
 
 public class LogDensityFilter {
   private final Flame flame;
@@ -78,13 +77,13 @@ public class LogDensityFilter {
     return noiseFilterSize;
   }
 
-  public void setRaster(RasterPoint[][] pRaster, int pRasterWidth, int pRasterHeight, SimpleImage pImage) {
+  public void setRaster(RasterPoint[][] pRaster, int pRasterWidth, int pRasterHeight, int pImageWidth, int pImageHeight) {
     raster = pRaster;
     rasterWidth = pRasterWidth;
     rasterHeight = pRasterHeight;
     k1 = (flame.getContrast() * BRIGHTNESS_SCALE * flame.getBrightness() * FILTER_WHITE) / 256.0;
     double pixelsPerUnit = flame.getPixelsPerUnit() * flame.getCamZoom();
-    double area = ((double) pImage.getImageWidth() * (double) pImage.getImageHeight()) / (pixelsPerUnit * pixelsPerUnit);
+    double area = ((double) pImageWidth * (double) pImageHeight) / (pixelsPerUnit * pixelsPerUnit);
     k2 = 1.0 / (flame.getContrast() * area * (double) flame.getWhiteLevel() * flame.getSampleDensity());
 
     precalcLogArray = new double[PRECALC_LOG_ARRAY_SIZE + 1];

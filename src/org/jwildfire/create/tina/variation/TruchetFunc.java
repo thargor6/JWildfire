@@ -191,4 +191,31 @@ public class TruchetFunc extends VariationFunc {
     return "truchet";
   }
 
+  @Override
+  public void init(FlameTransformationContext pContext, XForm pXForm) {
+    if (extended < 0) {
+      extended = 0;
+    }
+    else if (extended > 1) {
+      extended = 1;
+    }
+    if (exponent < 0.001) {
+      exponent = 0.001;
+    }
+    else if (exponent > 2.0) {
+      exponent = 2.0;
+    }
+    if (arc_width < 0.001) {
+      arc_width = 0.001;
+    }
+    else if (arc_width > 1.0) {
+      arc_width = 1.0;
+    }
+    if (size < 0.001) {
+      size = 0.001;
+    }
+    else if (size > 10.0) {
+      size = 10.0;
+    }
+  }
 }

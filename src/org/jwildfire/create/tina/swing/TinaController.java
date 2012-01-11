@@ -88,6 +88,7 @@ import org.jwildfire.create.tina.variation.Variation;
 import org.jwildfire.create.tina.variation.VariationFunc;
 import org.jwildfire.create.tina.variation.VariationFuncList;
 import org.jwildfire.image.Pixel;
+import org.jwildfire.image.SimpleHDRImage;
 import org.jwildfire.image.SimpleImage;
 import org.jwildfire.io.ImageReader;
 import org.jwildfire.io.ImageWriter;
@@ -757,8 +758,11 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     return palettePanel;
   }
 
+  private static int refrshCnt = 0;
+
   public void refreshFlameImage() {
     refreshFlameImage((AffineZStyle) zStyleCmb.getSelectedItem(), true);
+    System.out.println("REFRSH " + refrshCnt++);
   }
 
   private Flame lastMorphedFlame = null;
@@ -815,7 +819,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
             flame.setColorOversample(prefs.getTinaRenderPreviewColorOversample());
           }
           renderer.setAffineZStyle(pAffineZStyle);
-          renderer.renderFlame(img);
+          renderer.renderFlame(img, null);
         }
         finally {
           flame.setSpatialFilterRadius(oldSpatialFilterRadius);
@@ -894,14 +898,20 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       bgColorBlueREd.setText(String.valueOf(currFlame.getBGColorBlue()));
       bgColorBlueSlider.setValue(currFlame.getBGColorBlue());
 
-      refreshTransformationsTable();
+      gridRefreshing = true;
+      try {
+        refreshTransformationsTable();
+      }
+      finally {
+        gridRefreshing = false;
+      }
       transformationTableClicked();
 
       shadingLightCmb.setSelectedIndex(0);
       refreshShadingUI();
       enableShadingUI();
 
-      refreshFlameImage();
+      //      refreshFlameImage();
 
       refreshPaletteUI(currFlame.getPalette());
     }
@@ -2011,6 +2021,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
           int width = prefs.getTinaRenderImageWidth();
           int height = prefs.getTinaRenderImageHeight();
           SimpleImage img = new SimpleImage(width, height);
+          SimpleHDRImage hdrImg = new SimpleHDRImage(width, height);
           Flame flame = getCurrFlame();
           double wScl = (double) img.getImageWidth() / (double) flame.getWidth();
           double hScl = (double) img.getImageHeight() / (double) flame.getHeight();
@@ -2039,10 +2050,11 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
             FlameRenderer renderer = new FlameRenderer(flame, prefs);
             renderer.setProgressUpdater(mainProgressUpdater);
             renderer.setAffineZStyle((AffineZStyle) zStyleCmb.getSelectedItem());
-            renderer.renderFlame(img);
+            renderer.renderFlame(img, hdrImg);
             long t1 = Calendar.getInstance().getTimeInMillis();
             System.err.println("RENDER TIME: " + ((double) (t1 - t0) / 1000.0) + "s");
             new ImageWriter().saveImage(img, file.getAbsolutePath());
+            new ImageWriter().saveImage(hdrImg, file.getAbsolutePath() + ".hdr");
           }
           finally {
             flame.setSampleDensity(oldSampleDensity);
@@ -2102,7 +2114,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
 
   public void transformationTableClicked() {
     if (!gridRefreshing) {
-      cmbRefreshing = true;
+      gridRefreshing = cmbRefreshing = true;
       try {
         XForm xForm = getCurrXForm();
         if (flamePanel != null) {
@@ -2113,7 +2125,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
         refreshFlameImage();
       }
       finally {
-        cmbRefreshing = false;
+        cmbRefreshing = gridRefreshing = false;
       }
     }
   }
@@ -2396,7 +2408,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     double amount = Tools.stringToDouble(affineMoveAmountREd.getText());
     XFormTransformService.globalTranslate(getCurrXForm(), amount, 0, affineEditPostTransformButton.isSelected());
     transformationTableClicked();
-    refreshFlameImage();
+    //    refreshFlameImage();
   }
 
   public void xForm_rotateRight() {
@@ -2407,7 +2419,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     double amount = Tools.stringToDouble(affineRotateAmountREd.getText());
     XFormTransformService.rotate(getCurrXForm(), -amount, affineEditPostTransformButton.isSelected());
     transformationTableClicked();
-    refreshFlameImage();
+    //    refreshFlameImage();
   }
 
   public void xForm_moveLeft() {
@@ -2418,7 +2430,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     double amount = Tools.stringToDouble(affineMoveAmountREd.getText());
     XFormTransformService.globalTranslate(getCurrXForm(), -amount, 0, affineEditPostTransformButton.isSelected());
     transformationTableClicked();
-    refreshFlameImage();
+    //    refreshFlameImage();
   }
 
   public void xForm_flipHorizontal() {
@@ -2428,7 +2440,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     }
     XFormTransformService.flipHorizontal(getCurrXForm(), affineEditPostTransformButton.isSelected());
     transformationTableClicked();
-    refreshFlameImage();
+    //    refreshFlameImage();
   }
 
   public void xForm_flipVertical() {
@@ -2438,7 +2450,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     }
     XFormTransformService.flipVertical(getCurrXForm(), affineEditPostTransformButton.isSelected());
     transformationTableClicked();
-    refreshFlameImage();
+    //    refreshFlameImage();
   }
 
   public void xForm_enlarge() {
@@ -2449,7 +2461,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     double amount = Tools.stringToDouble(affineScaleAmountREd.getText()) / 100.0;
     XFormTransformService.scale(getCurrXForm(), amount, affineScaleXButton.isSelected(), affineScaleYButton.isSelected(), affineEditPostTransformButton.isSelected());
     transformationTableClicked();
-    refreshFlameImage();
+    //    refreshFlameImage();
   }
 
   public void xForm_shrink() {
@@ -2460,7 +2472,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     double amount = 100.0 / Tools.stringToDouble(affineScaleAmountREd.getText());
     XFormTransformService.scale(getCurrXForm(), amount, affineScaleXButton.isSelected(), affineScaleYButton.isSelected(), affineEditPostTransformButton.isSelected());
     transformationTableClicked();
-    refreshFlameImage();
+    //    refreshFlameImage();
   }
 
   public void xForm_rotateLeft() {
@@ -2471,7 +2483,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     double amount = Tools.stringToDouble(affineRotateAmountREd.getText());
     XFormTransformService.rotate(getCurrXForm(), amount, affineEditPostTransformButton.isSelected());
     transformationTableClicked();
-    refreshFlameImage();
+    //    refreshFlameImage();
   }
 
   public void xForm_moveUp() {
@@ -2482,7 +2494,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     double amount = Tools.stringToDouble(affineMoveAmountREd.getText());
     XFormTransformService.globalTranslate(getCurrXForm(), 0, -amount, affineEditPostTransformButton.isSelected());
     transformationTableClicked();
-    refreshFlameImage();
+    //    refreshFlameImage();
   }
 
   public void xForm_moveDown() {
@@ -2493,7 +2505,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     double amount = Tools.stringToDouble(affineMoveAmountREd.getText());
     XFormTransformService.globalTranslate(getCurrXForm(), 0, amount, affineEditPostTransformButton.isSelected());
     transformationTableClicked();
-    refreshFlameImage();
+    //    refreshFlameImage();
   }
 
   private List<Flame> randomBatch = new ArrayList<Flame>();
@@ -2527,7 +2539,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
         flame.setWidth(IMG_WIDTH);
         flame.setHeight(IMG_HEIGHT);
         FlameRenderer renderer = new FlameRenderer(flame, prefs);
-        renderer.renderFlame(img);
+        renderer.renderFlame(img, null);
       }
       // add it to the main panel
       ImagePanel imgPanel = new ImagePanel(img, 0, 0, img.getImageWidth());
@@ -2578,10 +2590,10 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
         }
         flame.setSampleDensity(50);
         FlameRenderer renderer = new FlameRenderer(flame, prefs);
-        renderer.renderFlame(img);
+        renderer.renderFlame(img, null);
         if (j == MAX_IMG_SAMPLES - 1) {
           randomBatch.add(bestFlame);
-          new FlameRenderer(bestFlame, prefs).renderFlame(img);
+          new FlameRenderer(bestFlame, prefs).renderFlame(img, null);
           imgList.add(img);
         }
         else {
@@ -2728,7 +2740,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
               valStr = "0";
             }
             // round the delta to whole numbers if the parameter is of type integer
-            {
+            if (Math.abs(pDelta) > Tools.EPSILON) {
               Object val = var.getFunc().getParameterValues()[idx];
               if (val != null && val instanceof Integer) {
                 if (Math.abs(pDelta) < 1.0) {
@@ -3222,7 +3234,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
         xForm.setCoeff21(value);
       }
       transformationTableClicked();
-      refreshFlameImage();
+      //      refreshFlameImage();
     }
   }
 
@@ -3237,7 +3249,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
         xForm.setCoeff20(value);
       }
       transformationTableClicked();
-      refreshFlameImage();
+      //      refreshFlameImage();
     }
   }
 
@@ -3246,7 +3258,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     if (xForm != null) {
       XFormTransformService.reset(xForm, affineEditPostTransformButton.isSelected());
       transformationTableClicked();
-      refreshFlameImage();
+      //      refreshFlameImage();
     }
   }
 

@@ -232,7 +232,7 @@ public class FractalFlameCreator extends ImageCreator {
       ex.printStackTrace();
     }
     FlameRenderer renderer = new FlameRenderer(flame, prefs);
-    renderer.renderFlame(res);
+    renderer.renderFlame(res, null);
   }
 
   public String getFlameFilename() {
