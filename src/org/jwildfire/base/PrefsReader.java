@@ -33,6 +33,11 @@ public class PrefsReader {
     return val.length() > 0 ? Tools.stringToInt(val) : pDefaultValue;
   }
 
+  private boolean getBooleanProperty(Properties pProperties, String pKey, boolean pDefaultValue) {
+    String val = pProperties.getProperty(pKey, "").trim();
+    return val.length() > 0 ? val.equalsIgnoreCase("true") : pDefaultValue;
+  }
+
   private double getDoubleProperty(Properties pProperties, String pKey, double pDefaultValue) {
     String val = pProperties.getProperty(pKey, "").trim();
     return val.length() > 0 ? Tools.stringToDouble(val) : pDefaultValue;
@@ -64,10 +69,12 @@ public class PrefsReader {
         pPrefs.setTinaRenderNormalColorOversample(getIntProperty(props, Prefs.KEY_TINA_RENDER_NORMAL_COLOR_OVERSAMPLE, pPrefs.getTinaRenderNormalColorOversample()));
         pPrefs.setTinaRenderNormalFilterRadius(getDoubleProperty(props, Prefs.KEY_TINA_RENDER_NORMAL_FILTER_RADIUS, pPrefs.getTinaRenderNormalFilterRadius()));
         pPrefs.setTinaRenderNormalQuality(getIntProperty(props, Prefs.KEY_TINA_RENDER_NORMAL_QUALITY, pPrefs.getTinaRenderNormalQuality()));
+        pPrefs.setTinaRenderNormalHDR(getBooleanProperty(props, Prefs.KEY_TINA_RENDER_NORMAL_HDR, pPrefs.isTinaRenderNormalHDR()));
         pPrefs.setTinaRenderHighSpatialOversample(getIntProperty(props, Prefs.KEY_TINA_RENDER_HIGH_SPATIAL_OVERSAMPLE, pPrefs.getTinaRenderHighSpatialOversample()));
         pPrefs.setTinaRenderHighColorOversample(getIntProperty(props, Prefs.KEY_TINA_RENDER_HIGH_COLOR_OVERSAMPLE, pPrefs.getTinaRenderHighColorOversample()));
         pPrefs.setTinaRenderHighFilterRadius(getDoubleProperty(props, Prefs.KEY_TINA_RENDER_HIGH_FILTER_RADIUS, pPrefs.getTinaRenderHighFilterRadius()));
         pPrefs.setTinaRenderHighQuality(getIntProperty(props, Prefs.KEY_TINA_RENDER_HIGH_QUALITY, pPrefs.getTinaRenderHighQuality()));
+        pPrefs.setTinaRenderHighHDR(getBooleanProperty(props, Prefs.KEY_TINA_RENDER_HIGH_HDR, pPrefs.isTinaRenderHighHDR()));
         pPrefs.setTinaRenderMovieSpatialOversample(getIntProperty(props, Prefs.KEY_TINA_RENDER_MOVIE_SPATIAL_OVERSAMPLE, pPrefs.getTinaRenderMovieSpatialOversample()));
         pPrefs.setTinaRenderMovieColorOversample(getIntProperty(props, Prefs.KEY_TINA_RENDER_MOVIE_COLOR_OVERSAMPLE, pPrefs.getTinaRenderMovieColorOversample()));
         pPrefs.setTinaRenderMovieFilterRadius(getDoubleProperty(props, Prefs.KEY_TINA_RENDER_MOVIE_FILTER_RADIUS, pPrefs.getTinaRenderMovieFilterRadius()));

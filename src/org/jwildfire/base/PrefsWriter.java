@@ -40,10 +40,12 @@ public class PrefsWriter {
     addValue(sb, Prefs.KEY_TINA_RENDER_NORMAL_COLOR_OVERSAMPLE, pPrefs.getTinaRenderNormalColorOversample());
     addValue(sb, Prefs.KEY_TINA_RENDER_NORMAL_FILTER_RADIUS, pPrefs.getTinaRenderNormalFilterRadius());
     addValue(sb, Prefs.KEY_TINA_RENDER_NORMAL_QUALITY, pPrefs.getTinaRenderNormalQuality());
+    addValue(sb, Prefs.KEY_TINA_RENDER_NORMAL_HDR, pPrefs.isTinaRenderNormalHDR());
     addValue(sb, Prefs.KEY_TINA_RENDER_HIGH_SPATIAL_OVERSAMPLE, pPrefs.getTinaRenderHighSpatialOversample());
     addValue(sb, Prefs.KEY_TINA_RENDER_HIGH_COLOR_OVERSAMPLE, pPrefs.getTinaRenderHighColorOversample());
     addValue(sb, Prefs.KEY_TINA_RENDER_HIGH_FILTER_RADIUS, pPrefs.getTinaRenderHighFilterRadius());
     addValue(sb, Prefs.KEY_TINA_RENDER_HIGH_QUALITY, pPrefs.getTinaRenderHighQuality());
+    addValue(sb, Prefs.KEY_TINA_RENDER_HIGH_HDR, pPrefs.isTinaRenderHighHDR());
     addValue(sb, Prefs.KEY_TINA_RENDER_MOVIE_SPATIAL_OVERSAMPLE, pPrefs.getTinaRenderMovieSpatialOversample());
     addValue(sb, Prefs.KEY_TINA_RENDER_MOVIE_COLOR_OVERSAMPLE, pPrefs.getTinaRenderMovieColorOversample());
     addValue(sb, Prefs.KEY_TINA_RENDER_MOVIE_FILTER_RADIUS, pPrefs.getTinaRenderMovieFilterRadius());
@@ -59,6 +61,10 @@ public class PrefsWriter {
   }
 
   private void addValue(StringBuilder pSB, String pKey, int pValue) {
+    pSB.append(pKey + "=" + String.valueOf(pValue) + "\n");
+  }
+
+  private void addValue(StringBuilder pSB, String pKey, boolean pValue) {
     pSB.append(pKey + "=" + String.valueOf(pValue) + "\n");
   }
 

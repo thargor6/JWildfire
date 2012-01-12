@@ -73,33 +73,31 @@ public class SimpleHDRImage {
     }
   }
 
-  // bases on code from the HDRBitmapWriter class of Sunflow, just for testing now
-  // TODO
   protected static int convertRGBToRGBE(float pR, float pG, float pB) {
-    float v = max(pR, pG, pB);
-    if (v < Tools.EPSILON)
+    float mVal = max(pR, pG, pB);
+    if (mVal < Tools.EPSILON) {
       return 0;
-    // get mantissa and exponent
-    float m = v;
-    int e = 0;
-    if (v > 1.0f) {
-      while (m > 1.0f) {
-        m *= 0.5f;
-        e++;
+    }
+    float mantissa = mVal;
+    int exponent = 0;
+    if (mVal > 1.0f) {
+      while (mantissa > 1.0f) {
+        mantissa *= 0.5f;
+        exponent++;
       }
     }
-    else if (v <= 0.5f) {
-      while (m <= 0.5f) {
-        m *= 2.0f;
-        e--;
+    else if (mVal <= 0.5f) {
+      while (mantissa <= 0.5f) {
+        mantissa *= 2.0f;
+        exponent--;
       }
     }
-    v = (m * 255.0f) / v;
-    int c = (e + 128);
-    c |= ((int) (pR * v) << 24);
-    c |= ((int) (pG * v) << 16);
-    c |= ((int) (pB * v) << 8);
-    return c;
+    mVal = (mantissa * 255.0f) / mVal;
+    int res = (exponent + 128);
+    res |= ((int) (pR * mVal) << 24);
+    res |= ((int) (pG * mVal) << 16);
+    res |= ((int) (pB * mVal) << 8);
+    return res;
   }
 
   private static float max(float pA, float pB, float pC) {

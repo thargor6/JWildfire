@@ -22,6 +22,7 @@ import java.util.List;
 
 import org.jwildfire.base.Prefs;
 import org.jwildfire.base.Tools;
+import org.jwildfire.create.tina.base.Constants;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.RasterPoint;
 import org.jwildfire.create.tina.base.XForm;
@@ -503,7 +504,7 @@ public class FlameRenderer {
   }
 
   private void createModWeightTables(Flame pFlame) {
-    double tp[] = new double[100];
+    double tp[] = new double[Constants.MAX_MOD_WEIGHT_COUNT];
     int n = pFlame.getXForms().size();
 
     for (XForm xForm : pFlame.getXForms()) {

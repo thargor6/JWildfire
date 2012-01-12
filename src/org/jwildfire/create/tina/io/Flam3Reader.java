@@ -84,6 +84,7 @@ public class Flam3Reader implements FlameReader {
   private static final String ATTR_CAM_PITCH = "cam_pitch";
   private static final String ATTR_CAM_YAW = "cam_yaw";
   private static final String ATTR_CAM_PERSP = "cam_persp";
+  private static final String ATTR_CAM_PERSPECTIVE = "cam_perspective"; // old version
   private static final String ATTR_CAM_ZPOS = "cam_zpos";
   private static final String ATTR_CAM_DOF = "cam_dof";
   private static final String ATTR_CAM_ZOOM = "cam_zoom";
@@ -151,6 +152,9 @@ public class Flam3Reader implements FlameReader {
       pFlame.setGammaThreshold(Double.parseDouble(hs));
     }
     if ((hs = atts.get(ATTR_CAM_PERSP)) != null) {
+      pFlame.setCamPerspective(Double.parseDouble(hs));
+    }
+    if ((hs = atts.get(ATTR_CAM_PERSPECTIVE)) != null) {
       pFlame.setCamPerspective(Double.parseDouble(hs));
     }
     if ((hs = atts.get(ATTR_CAM_ZPOS)) != null) {

@@ -46,11 +46,13 @@ public class Prefs extends ManagedObject {
   static final String KEY_TINA_RENDER_NORMAL_COLOR_OVERSAMPLE = "tina.render.normal.color_oversample";
   static final String KEY_TINA_RENDER_NORMAL_FILTER_RADIUS = "tina.render.normal.filter_radius";
   static final String KEY_TINA_RENDER_NORMAL_QUALITY = "tina.render.normal.quality";
+  static final String KEY_TINA_RENDER_NORMAL_HDR = "tina.render.normal.hdr";
 
   static final String KEY_TINA_RENDER_HIGH_SPATIAL_OVERSAMPLE = "tina.render.high.spatial_oversample";
   static final String KEY_TINA_RENDER_HIGH_COLOR_OVERSAMPLE = "tina.render.high.color_oversample";
   static final String KEY_TINA_RENDER_HIGH_FILTER_RADIUS = "tina.render.high.filter_radius";
   static final String KEY_TINA_RENDER_HIGH_QUALITY = "tina.render.high.quality";
+  static final String KEY_TINA_RENDER_HIGH_HDR = "tina.render.high.hdr";
 
   static final String KEY_TINA_RENDER_MOVIE_SPATIAL_OVERSAMPLE = "tina.render.movie.spatial_oversample";
   static final String KEY_TINA_RENDER_MOVIE_COLOR_OVERSAMPLE = "tina.render.movie.color_oversample";
@@ -113,6 +115,8 @@ public class Prefs extends ManagedObject {
   private double tinaRenderNormalFilterRadius = 1.25;
   @Property(description = "Quality for normal rendering", category = PropertyCategory.TINA)
   private int tinaRenderNormalQuality = 150;
+  @Property(description = "Render an additional hdr image for further processing while normal rendering", category = PropertyCategory.TINA)
+  private boolean tinaRenderNormalHDR = false;
 
   @Property(description = "Spatial oversample for high quality rendering", category = PropertyCategory.TINA)
   private int tinaRenderHighSpatialOversample = 2;
@@ -122,6 +126,8 @@ public class Prefs extends ManagedObject {
   private double tinaRenderHighFilterRadius = 1.25;
   @Property(description = "Quality for high quality rendering", category = PropertyCategory.TINA)
   private int tinaRenderHighQuality = 500;
+  @Property(description = "Render an additional hdr image for further processing while high quality rendering", category = PropertyCategory.TINA)
+  private boolean tinaRenderHighHDR = true;
 
   @Property(description = "Spatial oversample for movie rendering", category = PropertyCategory.TINA)
   private int tinaRenderMovieSpatialOversample = 2;
@@ -288,10 +294,12 @@ public class Prefs extends ManagedObject {
     tinaRenderNormalColorOversample = pSrc.tinaRenderNormalColorOversample;
     tinaRenderNormalFilterRadius = pSrc.tinaRenderNormalFilterRadius;
     tinaRenderNormalQuality = pSrc.tinaRenderNormalQuality;
+    tinaRenderNormalHDR = pSrc.tinaRenderNormalHDR;
     tinaRenderHighSpatialOversample = pSrc.tinaRenderHighSpatialOversample;
     tinaRenderHighColorOversample = pSrc.tinaRenderHighColorOversample;
     tinaRenderHighFilterRadius = pSrc.tinaRenderHighFilterRadius;
     tinaRenderHighQuality = pSrc.tinaRenderHighQuality;
+    tinaRenderHighHDR = pSrc.tinaRenderHighHDR;
     tinaRenderMovieSpatialOversample = pSrc.tinaRenderMovieSpatialOversample;
     tinaRenderMovieColorOversample = pSrc.tinaRenderMovieColorOversample;
     tinaRenderMovieFilterRadius = pSrc.tinaRenderMovieFilterRadius;
@@ -490,6 +498,22 @@ public class Prefs extends ManagedObject {
 
   public void setTinaRenderRealtimeQuality(int tinaRenderRealtimeQuality) {
     this.tinaRenderRealtimeQuality = tinaRenderRealtimeQuality;
+  }
+
+  public boolean isTinaRenderHighHDR() {
+    return tinaRenderHighHDR;
+  }
+
+  public void setTinaRenderHighHDR(boolean tinaRenderHighHDR) {
+    this.tinaRenderHighHDR = tinaRenderHighHDR;
+  }
+
+  public boolean isTinaRenderNormalHDR() {
+    return tinaRenderNormalHDR;
+  }
+
+  public void setTinaRenderNormalHDR(boolean tinaRenderNormalHDR) {
+    this.tinaRenderNormalHDR = tinaRenderNormalHDR;
   }
 
 }

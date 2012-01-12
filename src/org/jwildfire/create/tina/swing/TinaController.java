@@ -2021,14 +2021,14 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
           int width = prefs.getTinaRenderImageWidth();
           int height = prefs.getTinaRenderImageHeight();
           SimpleImage img = new SimpleImage(width, height);
-          SimpleHDRImage hdrImg = new SimpleHDRImage(width, height);
           Flame flame = getCurrFlame();
           double wScl = (double) img.getImageWidth() / (double) flame.getWidth();
           double hScl = (double) img.getImageHeight() / (double) flame.getHeight();
           flame.setPixelsPerUnit((wScl + hScl) * 0.5 * flame.getPixelsPerUnit());
           flame.setWidth(img.getImageWidth());
           flame.setHeight(img.getImageHeight());
-
+          boolean renderHDR = pHighQuality ? prefs.isTinaRenderHighHDR() : prefs.isTinaRenderNormalHDR();
+          SimpleHDRImage hdrImg = renderHDR ? new SimpleHDRImage(width, height) : null;
           double oldSampleDensity = flame.getSampleDensity();
           int oldSpatialOversample = flame.getSpatialOversample();
           int oldColorOversample = flame.getColorOversample();
@@ -2054,7 +2054,9 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
             long t1 = Calendar.getInstance().getTimeInMillis();
             System.err.println("RENDER TIME: " + ((double) (t1 - t0) / 1000.0) + "s");
             new ImageWriter().saveImage(img, file.getAbsolutePath());
-            new ImageWriter().saveImage(hdrImg, file.getAbsolutePath() + ".hdr");
+            if (renderHDR) {
+              new ImageWriter().saveImage(hdrImg, file.getAbsolutePath() + ".hdr");
+            }
           }
           finally {
             flame.setSampleDensity(oldSampleDensity);
