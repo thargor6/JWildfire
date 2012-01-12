@@ -347,15 +347,20 @@ public class FlameRenderer {
         }
       }
 
-      // spatial oversampling: scale down
-      // TODO
+      // spatial oversampling: scale down      
       if (spatialOversample > 1) {
-        ScaleTransformer scaleT = new ScaleTransformer();
-        scaleT.setScaleWidth(pImage.getImageWidth());
-        scaleT.setScaleHeight(pImage.getImageHeight());
-        scaleT.setAspect(ScaleAspect.IGNORE);
-        scaleT.transformImage(img);
-        pImage.setBufferedImage(img.getBufferedImg(), pImage.getImageWidth(), pImage.getImageHeight());
+        if (renderNormal) {
+          ScaleTransformer scaleT = new ScaleTransformer();
+          scaleT.setScaleWidth(pImage.getImageWidth());
+          scaleT.setScaleHeight(pImage.getImageHeight());
+          scaleT.setAspect(ScaleAspect.IGNORE);
+          scaleT.transformImage(img);
+          pImage.setBufferedImage(img.getBufferedImg(), pImage.getImageWidth(), pImage.getImageHeight());
+        }
+        if (renderHDR) {
+          hdrImg.sampleDown(spatialOversample);
+          pHDRImage.assignImage(hdrImg);
+        }
       }
     }
     finally {

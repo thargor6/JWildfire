@@ -147,4 +147,52 @@ public class SimpleHDRImage {
     return bBuffer[getOffset(pX, pY)];
   }
 
+  public void sampleDown(int pOversample) {
+    if (pOversample == 1) {
+      return;
+    }
+    if (pOversample < 1 || (pOversample > 1 && (imageWidth % pOversample != 0 || imageHeight % pOversample != 0))) {
+      throw new IllegalArgumentException("oversample " + pOversample);
+    }
+    int newWidth = imageWidth / pOversample;
+    int newHeight = imageHeight / pOversample;
+    int newSize = newWidth * newHeight;
+    double div = pOversample * pOversample;
+    float rNew[] = new float[newSize];
+    float gNew[] = new float[newSize];
+    float bNew[] = new float[newSize];
+    for (int rowOld = 0, rowNew = 0; rowOld < imageHeight; rowOld += pOversample, rowNew++) {
+      for (int colOld = 0, colNew = 0; colOld < imageWidth; colOld += pOversample, colNew++) {
+        double r = 0.0, g = 0.0, b = 0.0;
+        for (int i = rowOld; i < rowOld + pOversample; i++) {
+          for (int j = colOld; j < colOld + pOversample; j++) {
+            int off = getOffset(j, i);
+            r += rBuffer[off];
+            g += gBuffer[off];
+            b += bBuffer[off];
+          }
+        }
+        int off = rowNew * newWidth + colNew;
+        rNew[off] = (float) (r / div);
+        gNew[off] = (float) (g / div);
+        bNew[off] = (float) (b / div);
+      }
+    }
+    imageWidth = newWidth;
+    imageHeight = newHeight;
+    rBuffer = null;
+    rBuffer = rNew;
+    gBuffer = null;
+    gBuffer = gNew;
+    bBuffer = null;
+    bBuffer = bNew;
+  }
+
+  public void assignImage(SimpleHDRImage pHDRImg) {
+    imageWidth = pHDRImg.imageWidth;
+    imageHeight = pHDRImg.imageHeight;
+    rBuffer = pHDRImg.rBuffer;
+    gBuffer = pHDRImg.gBuffer;
+    bBuffer = pHDRImg.bBuffer;
+  }
 }
