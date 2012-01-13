@@ -1,3 +1,16 @@
+V0.34 (14.01.2012):
+ - Fractal flame editor: options for hdr rendering in the prefs, hdr rendering improved
+ - Fractal flame editor: spatial oversampling also for HDR renders
+ - Fractal flame editor: experimental HDR rendering
+ - Fractal flame editor: some minor enhancements for custom_wf variation
+ - Fractal flame editor: new post_colorscale_wf variation
+ - Fractal flame editor: fixed bug in the colorscale_wf variation and simplified the FlameTransformationContext interface
+ - Fractal flame editor: allow to scale triangle in x- and y-direction independently
+ - Fractal flame editor: increase/decrease variation parameters of type integer by whole numbers using the arrow buttons
+ - Fractal flame editor: simple implementation of loading/saving of variation ressources
+ - Fractal flame editor: allow to create monochrome gradients
+ - Fractal flame editor: Truchet variaton by TyrantWave
+
 V0.33 (04.01.2012):
  - Main: special (but slow) build for jdk1.5
  - Fractal flame editor: "linear" random flame generator

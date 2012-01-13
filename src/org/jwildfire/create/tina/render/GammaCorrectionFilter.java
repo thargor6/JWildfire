@@ -131,7 +131,7 @@ public class GammaCorrectionFilter {
     pRGBPoint.blue = blue;
   }
 
-  public void transformPoint(LogDensityPoint logDensityPnt, GammaCorrectedHDRPoint pHDRPoint) {
+  public void transformPointHDR(LogDensityPoint logDensityPnt, GammaCorrectedHDRPoint pHDRPoint) {
     double logScl;
     double inverseAlpha;
     if (logDensityPnt.intensity > 0.0) {

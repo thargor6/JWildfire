@@ -397,8 +397,8 @@ public class FlameRenderer {
       GammaCorrectedHDRPoint rbgPoint = new GammaCorrectedHDRPoint();
       for (int i = 0; i < pImage.getImageHeight(); i++) {
         for (int j = 0; j < pImage.getImageWidth(); j++) {
-          logDensityFilter.transformPoint(logDensityPnt, j, i);
-          gammaCorrectionFilter.transformPoint(logDensityPnt, rbgPoint);
+          logDensityFilter.transformPointHDR(logDensityPnt, j, i);
+          gammaCorrectionFilter.transformPointHDR(logDensityPnt, rbgPoint);
           pHDRImage.setRGB(j, i, rbgPoint.red, rbgPoint.green, rbgPoint.blue);
         }
       }

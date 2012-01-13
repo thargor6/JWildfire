@@ -133,6 +133,33 @@ public class LogDensityFilter {
     }
   }
 
+  public void transformPointHDR(LogDensityPoint pFilteredPnt, int pX, int pY) {
+    if (noiseFilterSize > 1) {
+      pFilteredPnt.clear();
+      for (int i = 0; i < noiseFilterSize; i++) {
+        for (int j = 0; j < noiseFilterSize; j++) {
+          RasterPoint point = getRasterPoint(pX + j, pY + i);
+          pFilteredPnt.red += filter[i][j] * point.red;
+          pFilteredPnt.green += filter[i][j] * point.green;
+          pFilteredPnt.blue += filter[i][j] * point.blue;
+          pFilteredPnt.intensity += filter[i][j] * point.count;
+        }
+      }
+
+      pFilteredPnt.red /= FILTER_WHITE;
+      pFilteredPnt.green /= FILTER_WHITE;
+      pFilteredPnt.blue /= FILTER_WHITE;
+      pFilteredPnt.intensity = flame.getWhiteLevel() * pFilteredPnt.intensity / FILTER_WHITE;
+    }
+    else {
+      RasterPoint point = getRasterPoint(pX, pY);
+      pFilteredPnt.red = point.red;
+      pFilteredPnt.green = point.green;
+      pFilteredPnt.blue = point.blue;
+      pFilteredPnt.intensity = point.count * flame.getWhiteLevel();
+    }
+  }
+
   public void transformPointSimple(LogDensityPoint pFilteredPnt, int pX, int pY) {
     RasterPoint point = getRasterPoint(pX, pY);
     double ls;

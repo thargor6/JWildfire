@@ -23,6 +23,7 @@ import java.util.List;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.io.Flam3Reader;
 import org.jwildfire.create.tina.render.FlameRenderer;
+import org.jwildfire.image.SimpleHDRImage;
 import org.jwildfire.image.SimpleImage;
 import org.jwildfire.io.ImageWriter;
 
@@ -53,6 +54,8 @@ public class JobRenderThread implements Runnable {
             int width = controller.getPrefs().getTinaRenderImageWidth();
             int height = controller.getPrefs().getTinaRenderImageHeight();
             SimpleImage img = new SimpleImage(width, height);
+            boolean renderHDR = controller.getPrefs().isTinaRenderHighHDR();
+            SimpleHDRImage hdrImg = renderHDR ? new SimpleHDRImage(width, height) : null;
             List<Flame> flames = new Flam3Reader().readFlames(job.getFlameFilename());
             Flame flame = flames.get(0);
             double wScl = (double) img.getImageWidth() / (double) flame.getWidth();
@@ -60,7 +63,6 @@ public class JobRenderThread implements Runnable {
             flame.setPixelsPerUnit((wScl + hScl) * 0.5 * flame.getPixelsPerUnit());
             flame.setWidth(img.getImageWidth());
             flame.setHeight(img.getImageHeight());
-
             double oldSampleDensity = flame.getSampleDensity();
             int oldSpatialOversample = flame.getSpatialOversample();
             int oldColorOversample = flame.getColorOversample();
@@ -74,12 +76,15 @@ public class JobRenderThread implements Runnable {
               FlameRenderer renderer = new FlameRenderer(flame, controller.getPrefs());
               renderer.setProgressUpdater(controller.getJobProgressUpdater());
               renderer.setAffineZStyle(controller.getZStyle());
-              renderer.renderFlame(img, null);
+              renderer.renderFlame(img, hdrImg);
               long t1 = Calendar.getInstance().getTimeInMillis();
               job.setFinished(true);
               job.setElapsedSeconds(((double) (t1 - t0) / 1000.0));
               System.err.println("RENDER TIME: " + job.getElapsedSeconds() + "s");
               new ImageWriter().saveImage(img, job.getImageFilename());
+              if (renderHDR) {
+                new ImageWriter().saveImage(hdrImg, job.getImageFilename() + ".hdr");
+              }
               try {
                 {
                   controller.refreshRenderBatchJobsTable();

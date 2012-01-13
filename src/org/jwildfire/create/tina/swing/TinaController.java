@@ -762,7 +762,8 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
 
   public void refreshFlameImage() {
     refreshFlameImage((AffineZStyle) zStyleCmb.getSelectedItem(), true);
-    System.out.println("REFRSH " + refrshCnt++);
+    // TODO
+    //System.out.println("REFRSH " + refrshCnt++);
   }
 
   private Flame lastMorphedFlame = null;
@@ -3673,7 +3674,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
   @Override
   public void onJobFinished() {
     jobRenderThread = null;
-    System.err.println("JOB FINSHED");
+    System.err.println("JOB FINISHED");
     enableJobRenderControls();
   }
 
