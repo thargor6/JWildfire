@@ -23,12 +23,12 @@ import org.jwildfire.create.tina.base.XYZPoint;
 public class RoseWFFunc extends VariationFunc {
   private static final String PARAM_AMP = "amp";
   private static final String PARAM_WAVES = "waves";
-  private static final String[] paramNames = { PARAM_AMP, PARAM_WAVES };
+  private static final String PARAM_FILLED = "filled";
+  private static final String[] paramNames = { PARAM_AMP, PARAM_WAVES, PARAM_FILLED };
 
   private double amp = 0.5;
   private int waves = 4;
-
-  static int cnt = 0;
+  private int filled = 0;
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
@@ -37,11 +37,15 @@ public class RoseWFFunc extends VariationFunc {
 
     r = amp * pContext.cos(waves * a);
     // clover leafs
-    //    r = amp * (pContext.sin(2 * a) + 0.25 * pContext.sin(6 * a));
+    //r = amp * (pContext.sin(2 * a) + 0.25 * pContext.sin(6 * a));
 
     // cannabis curve (http://mathworld.wolfram.com/CannabisCurve.html)
     //    r = amp * (1 + 9.0 / 10.0 * pContext.cos(8.0 * a)) * (1 + 1.0 / 10.0 * pContext.cos(24.0 * a)) * (9.0 / 10.0 + 1.0 / 10.0 * pContext.cos(200.0 * a)) * (1.0 + pContext.sin(a));
     //    a += Math.PI / 2.0;
+
+    if (filled == 1) {
+      r *= pContext.random();
+    }
 
     double nx = pContext.sin(a) * r;
     double ny = pContext.cos(a) * r;
@@ -57,7 +61,7 @@ public class RoseWFFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { amp, waves };
+    return new Object[] { amp, waves, filled };
   }
 
   @Override
@@ -66,6 +70,8 @@ public class RoseWFFunc extends VariationFunc {
       amp = pValue;
     else if (PARAM_WAVES.equalsIgnoreCase(pName))
       waves = Tools.FTOI(pValue);
+    else if (PARAM_FILLED.equalsIgnoreCase(pName))
+      filled = Tools.FTOI(pValue);
     else
       throw new IllegalArgumentException(pName);
   }

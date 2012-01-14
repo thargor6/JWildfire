@@ -758,11 +758,8 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     return palettePanel;
   }
 
-  private static int refrshCnt = 0;
-
   public void refreshFlameImage() {
     refreshFlameImage((AffineZStyle) zStyleCmb.getSelectedItem(), true);
-    System.out.println("REFRSH " + refrshCnt++);
   }
 
   private Flame lastMorphedFlame = null;
@@ -2125,7 +2122,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
           flamePanel.setSelectedXForm(xForm);
         }
         refreshXFormUI(xForm);
-        //enableXFormControls(xForm);
+        enableXFormControls(xForm);
         refreshFlameImage();
       }
       finally {
