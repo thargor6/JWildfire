@@ -2125,7 +2125,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
           flamePanel.setSelectedXForm(xForm);
         }
         refreshXFormUI(xForm);
-        enableXFormControls(xForm);
+        //enableXFormControls(xForm);
         refreshFlameImage();
       }
       finally {
@@ -2212,73 +2212,77 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
   }
 
   private void refreshXFormUI(XForm pXForm) {
-    if (pXForm != null) {
-      if (affineEditPostTransformButton.isSelected()) {
-        affineC00REd.setText(Tools.doubleToString(pXForm.getPostCoeff00()));
-        affineC01REd.setText(Tools.doubleToString(pXForm.getPostCoeff01()));
-        affineC10REd.setText(Tools.doubleToString(pXForm.getPostCoeff10()));
-        affineC11REd.setText(Tools.doubleToString(pXForm.getPostCoeff11()));
-        affineC20REd.setText(Tools.doubleToString(pXForm.getPostCoeff20()));
-        affineC21REd.setText(Tools.doubleToString(pXForm.getPostCoeff21()));
-      }
-      else {
-        affineC00REd.setText(Tools.doubleToString(pXForm.getCoeff00()));
-        affineC01REd.setText(Tools.doubleToString(pXForm.getCoeff01()));
-        affineC10REd.setText(Tools.doubleToString(pXForm.getCoeff10()));
-        affineC11REd.setText(Tools.doubleToString(pXForm.getCoeff11()));
-        affineC20REd.setText(Tools.doubleToString(pXForm.getCoeff20()));
-        affineC21REd.setText(Tools.doubleToString(pXForm.getCoeff21()));
-      }
-      xFormColorREd.setText(Tools.doubleToString(pXForm.getColor()));
-      xFormColorSlider.setValue(Tools.FTOI(pXForm.getColor() * SLIDER_SCALE_COLOR));
-      xFormSymmetryREd.setText(Tools.doubleToString(pXForm.getColorSymmetry()));
-      xFormSymmetrySlider.setValue(Tools.FTOI(pXForm.getColorSymmetry() * SLIDER_SCALE_COLOR));
-      xFormOpacityREd.setText(Tools.doubleToString(pXForm.getOpacity()));
-      xFormOpacitySlider.setValue(Tools.FTOI(pXForm.getOpacity() * SLIDER_SCALE_COLOR));
-      xFormDrawModeCmb.setSelectedItem(pXForm.getDrawMode());
-    }
-    else {
-      affineC00REd.setText(null);
-      affineC01REd.setText(null);
-      affineC10REd.setText(null);
-      affineC11REd.setText(null);
-      affineC20REd.setText(null);
-      affineC21REd.setText(null);
-      xFormColorREd.setText(null);
-      xFormColorSlider.setValue(0);
-      xFormSymmetryREd.setText(null);
-      xFormSymmetrySlider.setValue(0);
-      xFormOpacityREd.setText(null);
-      xFormOpacitySlider.setValue(0);
-      xFormDrawModeCmb.setSelectedIndex(-1);
-    }
-
-    refreshing = true;
+    boolean oldRefreshing = refreshing;
+    boolean oldGridRefreshing = gridRefreshing;
+    boolean oldCmbRefreshing = cmbRefreshing;
+    boolean oldNoRefresh = noRefresh;
+    gridRefreshing = cmbRefreshing = refreshing = noRefresh = true;
     try {
-      int idx = 0;
-      for (NonlinearControlsRow row : nonlinearControlsRows) {
-        if (pXForm == null || idx >= pXForm.getVariationCount()) {
-          refreshParamCmb(row, null, null);
-          row.getNonlinearParamsLeftButton().setEnabled(false);
-          row.getNonlinearParamsRightButton().setEnabled(false);
+
+      if (pXForm != null) {
+        if (affineEditPostTransformButton.isSelected()) {
+          affineC00REd.setText(Tools.doubleToString(pXForm.getPostCoeff00()));
+          affineC01REd.setText(Tools.doubleToString(pXForm.getPostCoeff01()));
+          affineC10REd.setText(Tools.doubleToString(pXForm.getPostCoeff10()));
+          affineC11REd.setText(Tools.doubleToString(pXForm.getPostCoeff11()));
+          affineC20REd.setText(Tools.doubleToString(pXForm.getPostCoeff20()));
+          affineC21REd.setText(Tools.doubleToString(pXForm.getPostCoeff21()));
         }
         else {
-          Variation var = pXForm.getVariation(idx);
-          refreshParamCmb(row, pXForm, var);
+          affineC00REd.setText(Tools.doubleToString(pXForm.getCoeff00()));
+          affineC01REd.setText(Tools.doubleToString(pXForm.getCoeff01()));
+          affineC10REd.setText(Tools.doubleToString(pXForm.getCoeff10()));
+          affineC11REd.setText(Tools.doubleToString(pXForm.getCoeff11()));
+          affineC20REd.setText(Tools.doubleToString(pXForm.getCoeff20()));
+          affineC21REd.setText(Tools.doubleToString(pXForm.getCoeff21()));
         }
-        idx++;
+        xFormColorREd.setText(Tools.doubleToString(pXForm.getColor()));
+        xFormColorSlider.setValue(Tools.FTOI(pXForm.getColor() * SLIDER_SCALE_COLOR));
+        xFormSymmetryREd.setText(Tools.doubleToString(pXForm.getColorSymmetry()));
+        xFormSymmetrySlider.setValue(Tools.FTOI(pXForm.getColorSymmetry() * SLIDER_SCALE_COLOR));
+        xFormOpacityREd.setText(Tools.doubleToString(pXForm.getOpacity()));
+        xFormOpacitySlider.setValue(Tools.FTOI(pXForm.getOpacity() * SLIDER_SCALE_COLOR));
+        xFormDrawModeCmb.setSelectedItem(pXForm.getDrawMode());
       }
-    }
-    finally {
-      refreshing = false;
-    }
+      else {
+        affineC00REd.setText(null);
+        affineC01REd.setText(null);
+        affineC10REd.setText(null);
+        affineC11REd.setText(null);
+        affineC20REd.setText(null);
+        affineC21REd.setText(null);
+        xFormColorREd.setText(null);
+        xFormColorSlider.setValue(0);
+        xFormSymmetryREd.setText(null);
+        xFormSymmetrySlider.setValue(0);
+        xFormOpacityREd.setText(null);
+        xFormOpacitySlider.setValue(0);
+        xFormDrawModeCmb.setSelectedIndex(-1);
+      }
 
-    gridRefreshing = true;
-    try {
+      {
+        int idx = 0;
+        for (NonlinearControlsRow row : nonlinearControlsRows) {
+          if (pXForm == null || idx >= pXForm.getVariationCount()) {
+            refreshParamCmb(row, null, null);
+            row.getNonlinearParamsLeftButton().setEnabled(false);
+            row.getNonlinearParamsRightButton().setEnabled(false);
+          }
+          else {
+            Variation var = pXForm.getVariation(idx);
+            refreshParamCmb(row, pXForm, var);
+          }
+          idx++;
+        }
+      }
+
       refreshRelWeightsTable();
     }
     finally {
-      gridRefreshing = false;
+      gridRefreshing = oldGridRefreshing;
+      refreshing = oldRefreshing;
+      cmbRefreshing = oldCmbRefreshing;
+      noRefresh = oldNoRefresh;
     }
   }
 

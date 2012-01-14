@@ -2101,7 +2101,9 @@ public class TinaInternalFrame extends JInternalFrame {
 
         @Override
         public void valueChanged(ListSelectionEvent e) {
-          tinaController.transformationTableClicked();
+          if (!e.getValueIsAdjusting()) {
+            tinaController.transformationTableClicked();
+          }
         }
 
       });

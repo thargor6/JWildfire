@@ -38,13 +38,6 @@ public class FlamePanel extends ImagePanel {
   private static final Color XFORM_COLOR_DARK = new Color(17, 19, 23);
   private static final Color XFORM_POST_COLOR_DARK = new Color(55, 19, 60);
   private static final Color BACKGROUND_COLOR = new Color(60, 60, 60);
-  private static float LINE_WIDTH = 1.6f;
-  private static float LINE_WIDTH_FAT = 1.8f * LINE_WIDTH;
-  private static float DASH1[] = { 6.0f };
-  private static BasicStroke DASHED = new BasicStroke(LINE_WIDTH, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 10.0f, DASH1, 0.0f);
-  private static BasicStroke SOLID = new BasicStroke(LINE_WIDTH);
-  private static BasicStroke SOLID_FAT = new BasicStroke(LINE_WIDTH_FAT);
-  private static BasicStroke DASHED_FAT = new BasicStroke(LINE_WIDTH_FAT, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 10.0f, DASH1, 0.0f);
 
   private static BasicStroke SELECTED_LINE = new BasicStroke(1.6f);
   private static BasicStroke NORMAL_LINE = new BasicStroke(1.0f);
