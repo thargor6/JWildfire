@@ -20,22 +20,18 @@ import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
-public class RoseWFFunc extends VariationFunc {
-  private static final String PARAM_AMP = "amp";
-  private static final String PARAM_WAVES = "waves";
+public class CloverLeafWFFunc extends VariationFunc {
   private static final String PARAM_FILLED = "filled";
-  private static final String[] paramNames = { PARAM_AMP, PARAM_WAVES, PARAM_FILLED };
+  private static final String[] paramNames = { PARAM_FILLED };
 
-  private double amp = 0.5;
-  private int waves = 4;
-  private int filled = 0;
+  private int filled = 1;
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     double a = pAffineTP.getPrecalcAtan(pContext);
     double r = pAffineTP.getPrecalcSqrt(pContext);
 
-    r = amp * pContext.cos(waves * a);
+    r = (pContext.sin(2 * a) + 0.25 * pContext.sin(6 * a));
 
     if (filled == 1) {
       r *= pContext.random();
@@ -55,16 +51,12 @@ public class RoseWFFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { amp, waves, filled };
+    return new Object[] { filled };
   }
 
   @Override
   public void setParameter(String pName, double pValue) {
-    if (PARAM_AMP.equalsIgnoreCase(pName))
-      amp = pValue;
-    else if (PARAM_WAVES.equalsIgnoreCase(pName))
-      waves = Tools.FTOI(pValue);
-    else if (PARAM_FILLED.equalsIgnoreCase(pName))
+    if (PARAM_FILLED.equalsIgnoreCase(pName))
       filled = Tools.FTOI(pValue);
     else
       throw new IllegalArgumentException(pName);
@@ -72,6 +64,6 @@ public class RoseWFFunc extends VariationFunc {
 
   @Override
   public String getName() {
-    return "rose_wf";
+    return "cloverleaf_wf";
   }
 }
