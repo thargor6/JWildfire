@@ -67,6 +67,7 @@ public class FlameRenderer {
   double rcY;
   double bws;
   double bhs;
+  private int renderScale = 1;
   // init in createColorMap
   RenderColor[] colorMap;
   double paletteIdxScl;
@@ -370,7 +371,9 @@ public class FlameRenderer {
   }
 
   private void renderImage(SimpleImage pImage, SimpleHDRImage pHDRImage) {
-
+    if (renderScale > 1) {
+      throw new IllegalArgumentException("renderScale != 1");
+    }
     LogDensityPoint logDensityPnt = new LogDensityPoint();
     if (pImage != null) {
       logDensityFilter.setRaster(raster, rasterWidth, rasterHeight, pImage.getImageWidth(), pImage.getImageHeight());
@@ -410,12 +413,36 @@ public class FlameRenderer {
     LogDensityPoint logDensityPnt = new LogDensityPoint();
     GammaCorrectedRGBPoint rbgPoint = new GammaCorrectedRGBPoint();
     logDensityFilter.setRaster(raster, rasterWidth, rasterHeight, pImage.getImageWidth(), pImage.getImageHeight());
-    for (int i = 0; i < pImage.getImageHeight(); i++) {
-      for (int j = 0; j < pImage.getImageWidth(); j++) {
-        logDensityFilter.transformPointSimple(logDensityPnt, j, i);
-        gammaCorrectionFilter.transformPointSimple(logDensityPnt, rbgPoint);
-        pImage.setRGB(j, i, rbgPoint.red, rbgPoint.green, rbgPoint.blue);
+    if (renderScale == 2) {
+      SimpleImage newImg = new SimpleImage(pImage.getImageWidth() * renderScale, pImage.getImageHeight() * renderScale);
+
+      for (int i = 0; i < pImage.getImageHeight(); i++) {
+        for (int j = 0; j < pImage.getImageWidth(); j++) {
+          logDensityFilter.transformPointSimple(logDensityPnt, j, i);
+          gammaCorrectionFilter.transformPointSimple(logDensityPnt, rbgPoint);
+          int x = j * renderScale;
+          int y = i * renderScale;
+
+          newImg.setRGB(x, y, rbgPoint.red, rbgPoint.green, rbgPoint.blue);
+          newImg.setRGB(x + 1, y, rbgPoint.red, rbgPoint.green, rbgPoint.blue);
+          newImg.setRGB(x, y + 1, rbgPoint.red, rbgPoint.green, rbgPoint.blue);
+          newImg.setRGB(x + 1, y + 1, rbgPoint.red, rbgPoint.green, rbgPoint.blue);
+
+        }
       }
+      pImage.setBufferedImage(newImg.getBufferedImg(), newImg.getImageWidth(), newImg.getImageHeight());
+    }
+    else if (renderScale == 1) {
+      for (int i = 0; i < pImage.getImageHeight(); i++) {
+        for (int j = 0; j < pImage.getImageWidth(); j++) {
+          logDensityFilter.transformPointSimple(logDensityPnt, j, i);
+          gammaCorrectionFilter.transformPointSimple(logDensityPnt, rbgPoint);
+          pImage.setRGB(j, i, rbgPoint.red, rbgPoint.green, rbgPoint.blue);
+        }
+      }
+    }
+    else {
+      throw new IllegalArgumentException("renderScale " + renderScale);
     }
   }
 
@@ -647,6 +674,10 @@ public class FlameRenderer {
     catch (Exception ex) {
       ex.printStackTrace();
     }
+  }
+
+  public void setRenderScale(int pRenderScale) {
+    renderScale = pRenderScale;
   }
 
 }

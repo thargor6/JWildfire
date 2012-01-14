@@ -762,8 +762,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
 
   public void refreshFlameImage() {
     refreshFlameImage((AffineZStyle) zStyleCmb.getSelectedItem(), true);
-    // TODO
-    //System.out.println("REFRSH " + refrshCnt++);
+    System.out.println("REFRSH " + refrshCnt++);
   }
 
   private Flame lastMorphedFlame = null;
@@ -787,8 +786,9 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
   public void refreshFlameImage(AffineZStyle pAffineZStyle, boolean pQuickRender) {
     FlamePanel imgPanel = getFlamePanel();
     Rectangle bounds = imgPanel.getImageBounds();
-    int width = bounds.width;
-    int height = bounds.height;
+    int renderScale = pQuickRender ? 2 : 1;
+    int width = bounds.width / renderScale;
+    int height = bounds.height / renderScale;
     if (width >= 16 && height >= 16) {
       SimpleImage img = new SimpleImage(width, height);
       Flame flame = getCurrFlame();
@@ -820,6 +820,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
             flame.setColorOversample(prefs.getTinaRenderPreviewColorOversample());
           }
           renderer.setAffineZStyle(pAffineZStyle);
+          renderer.setRenderScale(renderScale);
           renderer.renderFlame(img, null);
         }
         finally {

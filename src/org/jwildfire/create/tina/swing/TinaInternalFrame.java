@@ -616,7 +616,7 @@ public class TinaInternalFrame extends JInternalFrame {
    * @return void
    */
   private void initialize() {
-    this.setSize(1007, 680);
+    this.setSize(1188, 740);
     this.setFont(new Font("Dialog", Font.PLAIN, 10));
     this.setLocation(new Point(0, 0));
     this.setClosable(true);
