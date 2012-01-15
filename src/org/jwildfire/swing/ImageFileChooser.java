@@ -18,6 +18,8 @@ package org.jwildfire.swing;
 
 import java.awt.Dimension;
 
+import javax.swing.filechooser.FileFilter;
+
 import org.jwildfire.base.Tools;
 
 public class ImageFileChooser extends DefaultFileChooser {
@@ -30,7 +32,9 @@ public class ImageFileChooser extends DefaultFileChooser {
 
   public ImageFileChooser() {
     setPreferredSize(new Dimension(960, 600));
-    addChoosableFileFilter(new ImageFileFilter());
+    FileFilter filter = new ImageFileFilter();
+    addChoosableFileFilter(filter);
+    setFileFilter(filter);
     setAcceptAllFileFilterUsed(false);
     setAccessory(new ImageFilePreview(this));
   }

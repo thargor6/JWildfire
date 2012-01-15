@@ -18,6 +18,8 @@ package org.jwildfire.create.tina.swing;
 
 import java.awt.Dimension;
 
+import javax.swing.filechooser.FileFilter;
+
 import org.jwildfire.base.Prefs;
 import org.jwildfire.base.Tools;
 import org.jwildfire.swing.DefaultFileChooser;
@@ -33,7 +35,9 @@ public class FlameFileChooser extends DefaultFileChooser {
 
   public FlameFileChooser(Prefs pPrefs) {
     setPreferredSize(new Dimension(960, 600));
-    addChoosableFileFilter(new FlameFileFilter());
+    FileFilter filter = new FlameFileFilter();
+    addChoosableFileFilter(filter);
+    setFileFilter(filter);
     setAcceptAllFileFilterUsed(false);
     setAccessory(new FlameFilePreview(this, pPrefs));
   }

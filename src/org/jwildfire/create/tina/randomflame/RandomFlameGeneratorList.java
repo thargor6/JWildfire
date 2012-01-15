@@ -25,16 +25,15 @@ public class RandomFlameGeneratorList {
   private static List<String> nameList = new ArrayList<String>();
 
   static {
-    registerRandomFlameGenerator(SimpleRandomFlameGenerator.class);
-    registerRandomFlameGenerator(ExperimentalSimpleRandomFlameGenerator.class);
-    registerRandomFlameGenerator(GnarlRandomFlameGenerator.class);
-    registerRandomFlameGenerator(ThreeDOnlyRandomFlameGenerator.class);
-    registerRandomFlameGenerator(TentacleRandomFlameGenerator.class);
+    registerRandomFlameGenerator(AllRandomFlameGenerator.class);
     registerRandomFlameGenerator(BubblesRandomFlameGenerator.class);
     registerRandomFlameGenerator(GnarlRandomFlameGenerator.class);
     registerRandomFlameGenerator(ExperimentalGnarlRandomFlameGenerator.class);
+    registerRandomFlameGenerator(SimpleRandomFlameGenerator.class);
+    registerRandomFlameGenerator(ExperimentalSimpleRandomFlameGenerator.class);
     registerRandomFlameGenerator(LinearRandomFlameGenerator.class);
-    registerRandomFlameGenerator(AllRandomFlameGenerator.class);
+    registerRandomFlameGenerator(TentacleRandomFlameGenerator.class);
+    registerRandomFlameGenerator(ThreeDOnlyRandomFlameGenerator.class);
   }
 
   private static void registerRandomFlameGenerator(Class<? extends RandomFlameGenerator> pRandomFlameGenerator) {

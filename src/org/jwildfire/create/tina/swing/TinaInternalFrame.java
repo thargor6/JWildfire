@@ -7721,43 +7721,43 @@ public class TinaInternalFrame extends JInternalFrame {
       shadingLightBlueLbl.setPreferredSize(new Dimension(94, 22));
       shadingLightBlueLbl.setText("Blue");
       shadingLightBlueLbl.setSize(new Dimension(94, 22));
-      shadingLightBlueLbl.setLocation(new Point(644, 76));
+      shadingLightBlueLbl.setLocation(new Point(739, 75));
       shadingLightBlueLbl.setFont(new Font("Dialog", Font.BOLD, 10));
       shadingLightGreenLbl = new JLabel();
       shadingLightGreenLbl.setPreferredSize(new Dimension(94, 22));
       shadingLightGreenLbl.setText("Green");
       shadingLightGreenLbl.setSize(new Dimension(94, 22));
-      shadingLightGreenLbl.setLocation(new Point(644, 52));
+      shadingLightGreenLbl.setLocation(new Point(739, 51));
       shadingLightGreenLbl.setFont(new Font("Dialog", Font.BOLD, 10));
       shadingLightRedLbl = new JLabel();
       shadingLightRedLbl.setPreferredSize(new Dimension(94, 22));
       shadingLightRedLbl.setText("Red");
       shadingLightRedLbl.setSize(new Dimension(94, 22));
-      shadingLightRedLbl.setLocation(new Point(644, 28));
+      shadingLightRedLbl.setLocation(new Point(739, 27));
       shadingLightRedLbl.setFont(new Font("Dialog", Font.BOLD, 10));
       shadingLightZLbl = new JLabel();
       shadingLightZLbl.setPreferredSize(new Dimension(94, 22));
       shadingLightZLbl.setText("Z position");
       shadingLightZLbl.setSize(new Dimension(94, 22));
-      shadingLightZLbl.setLocation(new Point(324, 76));
+      shadingLightZLbl.setLocation(new Point(369, 76));
       shadingLightZLbl.setFont(new Font("Dialog", Font.BOLD, 10));
       shadingLightYLbl = new JLabel();
       shadingLightYLbl.setPreferredSize(new Dimension(94, 22));
       shadingLightYLbl.setText("Y position");
       shadingLightYLbl.setSize(new Dimension(94, 22));
-      shadingLightYLbl.setLocation(new Point(324, 52));
+      shadingLightYLbl.setLocation(new Point(369, 52));
       shadingLightYLbl.setFont(new Font("Dialog", Font.BOLD, 10));
       shadingLightXLbl = new JLabel();
       shadingLightXLbl.setPreferredSize(new Dimension(94, 22));
       shadingLightXLbl.setText("X position");
       shadingLightXLbl.setSize(new Dimension(94, 22));
-      shadingLightXLbl.setLocation(new Point(324, 28));
+      shadingLightXLbl.setLocation(new Point(369, 28));
       shadingLightXLbl.setFont(new Font("Dialog", Font.BOLD, 10));
       shadingLightLbl = new JLabel();
       shadingLightLbl.setPreferredSize(new Dimension(94, 22));
       shadingLightLbl.setText("Light source");
       shadingLightLbl.setSize(new Dimension(94, 22));
-      shadingLightLbl.setLocation(new Point(324, 4));
+      shadingLightLbl.setLocation(new Point(369, 4));
       shadingLightLbl.setFont(new Font("Dialog", Font.BOLD, 10));
       shadingPhongSizeLbl = new JLabel();
       shadingPhongSizeLbl.setPreferredSize(new Dimension(94, 22));
@@ -8032,7 +8032,7 @@ public class TinaInternalFrame extends JInternalFrame {
       shadingLightCmb.setPreferredSize(new Dimension(125, 22));
       shadingLightCmb.setSelectedItem("1");
       shadingLightCmb.setSize(new Dimension(125, 22));
-      shadingLightCmb.setLocation(new Point(420, 4));
+      shadingLightCmb.setLocation(new Point(465, 4));
       shadingLightCmb.setFont(new Font("Dialog", Font.BOLD, 10));
       shadingLightCmb.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -8054,7 +8054,7 @@ public class TinaInternalFrame extends JInternalFrame {
       shadingLightXREd.setPreferredSize(new Dimension(100, 22));
       shadingLightXREd.setText("");
       shadingLightXREd.setSize(new Dimension(100, 22));
-      shadingLightXREd.setLocation(new Point(420, 28));
+      shadingLightXREd.setLocation(new Point(465, 28));
       shadingLightXREd.setFont(new Font("Dialog", Font.PLAIN, 10));
       shadingLightXREd.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -8082,7 +8082,7 @@ public class TinaInternalFrame extends JInternalFrame {
       shadingLightXSlider.setMinimum(-2000);
       shadingLightXSlider.setValue(0);
       shadingLightXSlider.setSize(new Dimension(120, 19));
-      shadingLightXSlider.setLocation(new Point(522, 28));
+      shadingLightXSlider.setLocation(new Point(567, 28));
       shadingLightXSlider.setPreferredSize(new Dimension(120, 19));
       shadingLightXSlider.addChangeListener(new javax.swing.event.ChangeListener() {
         public void stateChanged(javax.swing.event.ChangeEvent e) {
@@ -8104,7 +8104,7 @@ public class TinaInternalFrame extends JInternalFrame {
       shadingLightYREd.setPreferredSize(new Dimension(100, 22));
       shadingLightYREd.setText("");
       shadingLightYREd.setSize(new Dimension(100, 22));
-      shadingLightYREd.setLocation(new Point(420, 52));
+      shadingLightYREd.setLocation(new Point(465, 52));
       shadingLightYREd.setFont(new Font("Dialog", Font.PLAIN, 10));
       shadingLightYREd.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -8132,7 +8132,7 @@ public class TinaInternalFrame extends JInternalFrame {
       shadingLightYSlider.setMinimum(-2000);
       shadingLightYSlider.setValue(0);
       shadingLightYSlider.setSize(new Dimension(120, 19));
-      shadingLightYSlider.setLocation(new Point(522, 52));
+      shadingLightYSlider.setLocation(new Point(567, 52));
       shadingLightYSlider.setPreferredSize(new Dimension(120, 19));
       shadingLightYSlider.addChangeListener(new javax.swing.event.ChangeListener() {
         public void stateChanged(javax.swing.event.ChangeEvent e) {
@@ -8154,7 +8154,7 @@ public class TinaInternalFrame extends JInternalFrame {
       shadingLightZREd.setPreferredSize(new Dimension(100, 22));
       shadingLightZREd.setText("");
       shadingLightZREd.setSize(new Dimension(100, 22));
-      shadingLightZREd.setLocation(new Point(420, 76));
+      shadingLightZREd.setLocation(new Point(465, 76));
       shadingLightZREd.setFont(new Font("Dialog", Font.PLAIN, 10));
       shadingLightZREd.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -8182,7 +8182,7 @@ public class TinaInternalFrame extends JInternalFrame {
       shadingLightZSlider.setMinimum(-2000);
       shadingLightZSlider.setValue(0);
       shadingLightZSlider.setSize(new Dimension(120, 19));
-      shadingLightZSlider.setLocation(new Point(522, 76));
+      shadingLightZSlider.setLocation(new Point(567, 76));
       shadingLightZSlider.setPreferredSize(new Dimension(120, 19));
       shadingLightZSlider.addChangeListener(new javax.swing.event.ChangeListener() {
         public void stateChanged(javax.swing.event.ChangeEvent e) {
@@ -8204,7 +8204,7 @@ public class TinaInternalFrame extends JInternalFrame {
       shadingLightRedREd.setPreferredSize(new Dimension(100, 22));
       shadingLightRedREd.setText("");
       shadingLightRedREd.setSize(new Dimension(100, 22));
-      shadingLightRedREd.setLocation(new Point(740, 28));
+      shadingLightRedREd.setLocation(new Point(835, 27));
       shadingLightRedREd.setFont(new Font("Dialog", Font.PLAIN, 10));
       shadingLightRedREd.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -8231,7 +8231,7 @@ public class TinaInternalFrame extends JInternalFrame {
       shadingLightRedSlider.setMaximum(255);
       shadingLightRedSlider.setMinimum(0);
       shadingLightRedSlider.setValue(0);
-      shadingLightRedSlider.setLocation(new Point(842, 28));
+      shadingLightRedSlider.setLocation(new Point(937, 27));
       shadingLightRedSlider.setSize(new Dimension(120, 19));
       shadingLightRedSlider.setPreferredSize(new Dimension(120, 19));
       shadingLightRedSlider.addChangeListener(new javax.swing.event.ChangeListener() {
@@ -8254,7 +8254,7 @@ public class TinaInternalFrame extends JInternalFrame {
       shadingLightGreenREd.setPreferredSize(new Dimension(100, 22));
       shadingLightGreenREd.setText("");
       shadingLightGreenREd.setSize(new Dimension(100, 22));
-      shadingLightGreenREd.setLocation(new Point(740, 52));
+      shadingLightGreenREd.setLocation(new Point(835, 51));
       shadingLightGreenREd.setFont(new Font("Dialog", Font.PLAIN, 10));
       shadingLightGreenREd.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -8282,7 +8282,7 @@ public class TinaInternalFrame extends JInternalFrame {
       shadingLightGreenSlider.setMinimum(0);
       shadingLightGreenSlider.setValue(0);
       shadingLightGreenSlider.setSize(new Dimension(120, 19));
-      shadingLightGreenSlider.setLocation(new Point(842, 52));
+      shadingLightGreenSlider.setLocation(new Point(937, 51));
       shadingLightGreenSlider.setPreferredSize(new Dimension(120, 19));
       shadingLightGreenSlider.addChangeListener(new javax.swing.event.ChangeListener() {
         public void stateChanged(javax.swing.event.ChangeEvent e) {
@@ -8304,7 +8304,7 @@ public class TinaInternalFrame extends JInternalFrame {
       shadingLightBlueREd.setPreferredSize(new Dimension(100, 22));
       shadingLightBlueREd.setText("");
       shadingLightBlueREd.setSize(new Dimension(100, 22));
-      shadingLightBlueREd.setLocation(new Point(740, 76));
+      shadingLightBlueREd.setLocation(new Point(835, 75));
       shadingLightBlueREd.setFont(new Font("Dialog", Font.PLAIN, 10));
       shadingLightBlueREd.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -8332,7 +8332,7 @@ public class TinaInternalFrame extends JInternalFrame {
       shadingLightBlueSlider.setMinimum(0);
       shadingLightBlueSlider.setValue(0);
       shadingLightBlueSlider.setSize(new Dimension(120, 19));
-      shadingLightBlueSlider.setLocation(new Point(842, 76));
+      shadingLightBlueSlider.setLocation(new Point(937, 75));
       shadingLightBlueSlider.setPreferredSize(new Dimension(120, 19));
       shadingLightBlueSlider.addChangeListener(new javax.swing.event.ChangeListener() {
         public void stateChanged(javax.swing.event.ChangeEvent e) {
