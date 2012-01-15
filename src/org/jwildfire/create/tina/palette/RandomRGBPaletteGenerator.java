@@ -28,7 +28,27 @@ public class RandomRGBPaletteGenerator {
       throw new IllegalArgumentException(String.valueOf(pKeyFrames));
     List<RGBColor> keyFrames = new ArrayList<RGBColor>();
     for (int i = 0; i < pKeyFrames; i++) {
-      RGBColor col = new RGBColor(Tools.roundColor(256.0 * Math.random()), Tools.roundColor(256.0 * Math.random()), Tools.roundColor(256.0 * Math.random()));
+      int r = Tools.roundColor(256.0 * Math.random());
+      int g = Tools.roundColor(256.0 * Math.random());
+      int b = Tools.roundColor(256.0 * Math.random());
+      double rnd = Math.random();
+      if (rnd < 0.1) {
+        b = g;
+      }
+      else if (r < 0.2) {
+        g = r;
+      }
+      else if (r < 0.3) {
+        r = b;
+      }
+      else if (r < 0.4) {
+        b = g = r;
+      }
+      else if (Math.random() < 0.5) {
+        g /= 3;
+        b /= 2;
+      }
+      RGBColor col = new RGBColor(r, g, b);
       keyFrames.add(col);
     }
     return keyFrames;
