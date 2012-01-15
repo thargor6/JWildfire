@@ -1,3 +1,20 @@
+V0.35 (15.01.2012):
+ - Fractal flame editor: don't automatically deactivate triangle mode after rendering the preview image in normal quality
+ - Fractal flame editor: automatically select 1st transform after activation a flame from the thumbnail ribbon
+ - Fractal flame editor: faster and larger preview in the flame file dialog
+ - Fractal flame editor: fixed a problem with file dialogs and java 7
+ - Fractal flame editor: tuned the random gradient generator to produce more "interesting" colors
+ - Fractal flame editor: removed background color in HDR renderer
+ - Fractal flame editor: new "Swap RGB" transform option for gradients
+ - Fractal flame editor: use reduced resolution while dragging flames with the mouse
+ - Fractal flame editor: new "distribute colors" and "randomize colors" functions
+ - Fractal flame editor: removed the never finished "grab palette" function
+ - Fractal flame editor: new "bubbles" random flame generator
+ - Fractal flame editor: new cloverleaf_wf and cannabiscurve_wf variations
+ - Fractal flame editor: additional filled parameter for the rose_wf variation
+ - Fractal flame editor: removed some unnecessary refreshs
+ - Fractal flame editor: larger and faster realtime preview
+
 V0.34 (14.01.2012):
  - Fractal flame editor: options for hdr rendering in the prefs, hdr rendering improved
  - Fractal flame editor: spatial oversampling also for HDR renders
