@@ -23,7 +23,6 @@ import org.jwildfire.base.Preset;
 import org.jwildfire.image.SimpleImage;
 import org.jwildfire.swing.Buffer.BufferType;
 
-
 public abstract class Transformer extends ManagedObject {
   protected boolean storeMesh3D;
 
@@ -65,11 +64,11 @@ public abstract class Transformer extends ManagedObject {
   }
 
   public void transformImage(SimpleImage pImg) {
-    long t0 = initTime();
+    //    long t0 = initTime();
     initTransformation(pImg);
     try {
       performImageTransformation(pImg);
-      showElapsedTime(t0);
+      //      showElapsedTime(t0);
     }
     finally {
       cleanupTransformation(pImg);

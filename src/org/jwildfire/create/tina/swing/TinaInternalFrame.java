@@ -603,6 +603,9 @@ public class TinaInternalFrame extends JInternalFrame {
   private JToggleButton affineScaleYButton = null;
   private JLabel editSpaceLbl41 = null;
   private JButton randomizeColorsButton = null;
+  private JLabel tinaPaletteSwapRGBLbl = null;
+  private JTextField tinaPaletteSwapRGBREd = null;
+  private JSlider tinaPaletteSwapRGBSlider = null;
 
   /**
    * This is the xxx default constructor
@@ -2447,6 +2450,12 @@ public class TinaInternalFrame extends JInternalFrame {
    */
   private JPanel getTinaPaletteBalancingPanel() {
     if (tinaPaletteBalancingPanel == null) {
+      tinaPaletteSwapRGBLbl = new JLabel();
+      tinaPaletteSwapRGBLbl.setPreferredSize(new Dimension(64, 22));
+      tinaPaletteSwapRGBLbl.setText("Swap RGB");
+      tinaPaletteSwapRGBLbl.setSize(new Dimension(64, 22));
+      tinaPaletteSwapRGBLbl.setLocation(new Point(4, 238));
+      tinaPaletteSwapRGBLbl.setFont(new Font("Dialog", Font.BOLD, 10));
       tinaPaletteBrightnessLbl = new JLabel();
       tinaPaletteBrightnessLbl.setText("Brightness");
       tinaPaletteBrightnessLbl.setSize(new Dimension(64, 22));
@@ -2530,6 +2539,9 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaPaletteBalancingPanel.add(getTinaPaletteContrastSlider(), null);
       tinaPaletteBalancingPanel.add(getTinaPaletteGammaSlider(), null);
       tinaPaletteBalancingPanel.add(getTinaPaletteBrightnessSlider(), null);
+      tinaPaletteBalancingPanel.add(tinaPaletteSwapRGBLbl, null);
+      tinaPaletteBalancingPanel.add(getTinaPaletteSwapRGBREd(), null);
+      tinaPaletteBalancingPanel.add(getTinaPaletteSwapRGBSlider(), null);
     }
     return tinaPaletteBalancingPanel;
   }
@@ -3033,7 +3045,7 @@ public class TinaInternalFrame extends JInternalFrame {
         getTinaPaletteRedREd(), getTinaPaletteRedSlider(), getTinaPaletteGreenREd(), getTinaPaletteGreenSlider(), getTinaPaletteBlueREd(),
         getTinaPaletteBlueSlider(), getTinaPaletteHueREd(), getTinaPaletteHueSlider(), getTinaPaletteSaturationREd(), getTinaPaletteSaturationSlider(),
         getTinaPaletteContrastREd(), getTinaPaletteContrastSlider(), getTinaPaletteGammaREd(), getTinaPaletteGammaSlider(), getTinaPaletteBrightnessREd(),
-        getTinaPaletteBrightnessSlider(), getTinaTransformationsTable(), getAffineC00REd(),
+        getTinaPaletteBrightnessSlider(), getTinaPaletteSwapRGBREd(), getTinaPaletteSwapRGBSlider(), getTinaTransformationsTable(), getAffineC00REd(),
         getAffineC01REd(), getAffineC10REd(), getAffineC11REd(), getAffineC20REd(), getAffineC21REd(), getAffineRotateAmountREd(), getAffineScaleAmountREd(),
         getAffineMoveAmountREd(), getAffineRotateLeftButton(), getAffineRotateRightButton(), getAffineEnlargeButton(), getAffineShrinkButton(),
         getAffineMoveUpButton(), getAffineMoveLeftButton(), getAffineMoveRightButton(), getAffineMoveDownButton(), getTinaAddTransformationButton(),
@@ -9150,6 +9162,57 @@ public class TinaInternalFrame extends JInternalFrame {
       });
     }
     return randomizeColorsButton;
+  }
+
+  /**
+   * This method initializes tinaPaletteSwapRGBREd	
+   * 	
+   * @return javax.swing.JTextField	
+   */
+  private JTextField getTinaPaletteSwapRGBREd() {
+    if (tinaPaletteSwapRGBREd == null) {
+      tinaPaletteSwapRGBREd = new JTextField();
+      tinaPaletteSwapRGBREd.setPreferredSize(new Dimension(36, 22));
+      tinaPaletteSwapRGBREd.setText("0");
+      tinaPaletteSwapRGBREd.setSize(new Dimension(36, 22));
+      tinaPaletteSwapRGBREd.setLocation(new Point(68, 238));
+      tinaPaletteSwapRGBREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      tinaPaletteSwapRGBREd.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent e) {
+          tinaController.paletteSwapRGBREd_changed();
+        }
+      });
+      tinaPaletteSwapRGBREd.addFocusListener(new java.awt.event.FocusAdapter() {
+        public void focusLost(java.awt.event.FocusEvent e) {
+          tinaController.paletteSwapRGBREd_changed();
+        }
+      });
+    }
+    return tinaPaletteSwapRGBREd;
+  }
+
+  /**
+   * This method initializes tinaPaletteSwapRGBSlider	
+   * 	
+   * @return javax.swing.JSlider	
+   */
+  private JSlider getTinaPaletteSwapRGBSlider() {
+    if (tinaPaletteSwapRGBSlider == null) {
+      tinaPaletteSwapRGBSlider = new JSlider();
+      tinaPaletteSwapRGBSlider.setPreferredSize(new Dimension(86, 22));
+      tinaPaletteSwapRGBSlider.setMaximum(255);
+      tinaPaletteSwapRGBSlider.setMinimum(-255);
+      tinaPaletteSwapRGBSlider.setValue(0);
+      tinaPaletteSwapRGBSlider.setSize(new Dimension(86, 22));
+      tinaPaletteSwapRGBSlider.setLocation(new Point(104, 238));
+      tinaPaletteSwapRGBSlider.setFont(new Font("Dialog", Font.BOLD, 10));
+      tinaPaletteSwapRGBSlider.addChangeListener(new javax.swing.event.ChangeListener() {
+        public void stateChanged(javax.swing.event.ChangeEvent e) {
+          tinaController.paletteSwapRGBSlider_stateChanged(e);
+        }
+      });
+    }
+    return tinaPaletteSwapRGBSlider;
   }
 
 } //  @jve:decl-index=0:visual-constraint="10,10"

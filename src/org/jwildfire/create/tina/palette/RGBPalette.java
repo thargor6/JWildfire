@@ -23,6 +23,8 @@ import org.jwildfire.image.Pixel;
 import org.jwildfire.image.SimpleImage;
 import org.jwildfire.transform.BalancingTransformer;
 import org.jwildfire.transform.HSLTransformer;
+import org.jwildfire.transform.SwapRGBTransformer;
+import org.jwildfire.transform.SwapRGBTransformer.Mode;
 
 public class RGBPalette {
   public static final int PALETTE_SIZE = 256;
@@ -38,6 +40,7 @@ public class RGBPalette {
   private int modGamma;
   private int modBrightness;
   private int modSaturation;
+  private int modSwapRGB;
 
   private final Map<Integer, RGBColor> rawColors = new HashMap<Integer, RGBColor>();
   private final Map<Integer, RGBColor> transformedColors = new HashMap<Integer, RGBColor>();
@@ -199,6 +202,15 @@ public class RGBPalette {
     modified = true;
   }
 
+  public int getModSwapRGB() {
+    return modSwapRGB;
+  }
+
+  public void setModSwapRGB(int modSwapRGB) {
+    this.modSwapRGB = modSwapRGB;
+    modified = true;
+  }
+
   public int getModSaturation() {
     return modSaturation;
   }
@@ -239,6 +251,13 @@ public class RGBPalette {
         hT.setHue(modHue);
         hT.transformImage(img);
       }
+      if (modSwapRGB != 0) {
+        SwapRGBTransformer sT = new SwapRGBTransformer();
+        int maxValues = Mode.values().length;
+        int idx = (int) ((double) Math.abs(modSwapRGB) / (double) 255.0 * (double) (maxValues - 1));
+        sT.setMode(Mode.values()[idx]);
+        sT.transformImage(img);
+      }
       Pixel pixel = new Pixel();
       for (int i = 0; i < PALETTE_SIZE; i++) {
         RGBColor color = transformedColors.get(i);
@@ -247,6 +266,7 @@ public class RGBPalette {
         color.setGreen(pixel.g);
         color.setBlue(pixel.b);
       }
+
       modified = false;
     }
   }
@@ -274,6 +294,7 @@ public class RGBPalette {
     modGamma = pRGBPalette.modGamma;
     modBrightness = pRGBPalette.modBrightness;
     modSaturation = pRGBPalette.modSaturation;
+    modSwapRGB = pRGBPalette.modSwapRGB;
 
     rawColors.clear();
     for (Integer key : pRGBPalette.rawColors.keySet()) {

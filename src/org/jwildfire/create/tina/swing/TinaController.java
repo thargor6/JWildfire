@@ -291,6 +291,8 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
   private final JSlider paletteGammaSlider;
   private final JTextField paletteBrightnessREd;
   private final JSlider paletteBrightnessSlider;
+  private final JTextField paletteSwapRGBREd;
+  private final JSlider paletteSwapRGBSlider;
   // Batch render
   private final JTable renderBatchJobsTable;
   private final JProgressBar batchRenderJobProgressBar;
@@ -400,7 +402,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       JTextField pPaletteRedREd, JSlider pPaletteRedSlider, JTextField pPaletteGreenREd, JSlider pPaletteGreenSlider, JTextField pPaletteBlueREd,
       JSlider pPaletteBlueSlider, JTextField pPaletteHueREd, JSlider pPaletteHueSlider, JTextField pPaletteSaturationREd, JSlider pPaletteSaturationSlider,
       JTextField pPaletteContrastREd, JSlider pPaletteContrastSlider, JTextField pPaletteGammaREd, JSlider pPaletteGammaSlider, JTextField pPaletteBrightnessREd,
-      JSlider pPaletteBrightnessSlider, JTable pTransformationsTable, JTextField pAffineC00REd,
+      JSlider pPaletteBrightnessSlider, JTextField pPaletteSwapRGBREd, JSlider pPaletteSwapRGBSlider, JTable pTransformationsTable, JTextField pAffineC00REd,
       JTextField pAffineC01REd, JTextField pAffineC10REd, JTextField pAffineC11REd, JTextField pAffineC20REd, JTextField pAffineC21REd,
       JTextField pAffineRotateAmountREd, JTextField pAffineScaleAmountREd, JTextField pAffineMoveAmountREd, JButton pAffineRotateLeftButton,
       JButton pAffineRotateRightButton, JButton pAffineEnlargeButton, JButton pAffineShrinkButton, JButton pAffineMoveUpButton, JButton pAffineMoveLeftButton,
@@ -493,6 +495,8 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     paletteGammaSlider = pPaletteGammaSlider;
     paletteBrightnessREd = pPaletteBrightnessREd;
     paletteBrightnessSlider = pPaletteBrightnessSlider;
+    paletteSwapRGBREd = pPaletteSwapRGBREd;
+    paletteSwapRGBSlider = pPaletteSwapRGBSlider;
 
     transformationsTable = pTransformationsTable;
     affineC00REd = pAffineC00REd;
@@ -1322,6 +1326,8 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     paletteHueSlider.setValue(pPalette.getModHue());
     paletteBrightnessREd.setText(String.valueOf(pPalette.getModBrightness()));
     paletteBrightnessSlider.setValue(pPalette.getModBrightness());
+    paletteSwapRGBREd.setText(String.valueOf(pPalette.getModSwapRGB()));
+    paletteSwapRGBSlider.setValue(pPalette.getModSwapRGB());
     paletteGammaREd.setText(String.valueOf(pPalette.getModGamma()));
     paletteGammaSlider.setValue(pPalette.getModGamma());
     paletteShiftREd.setText(String.valueOf(pPalette.getModShift()));
@@ -3754,6 +3760,14 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       flame.randomizeColors();
       transformationTableClicked();
     }
+  }
+
+  public void paletteSwapRGBREd_changed() {
+    paletteTextFieldChanged(paletteSwapRGBSlider, paletteSwapRGBREd, "modSwapRGB", 1.0);
+  }
+
+  public void paletteSwapRGBSlider_stateChanged(ChangeEvent e) {
+    paletteSliderChanged(paletteSwapRGBSlider, paletteSwapRGBREd, "modSwapRGB", 1.0);
   }
 
 }
