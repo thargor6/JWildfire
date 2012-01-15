@@ -712,6 +712,8 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
         "}\r\n");
   }
 
+  private static boolean dragging = false;
+
   private FlamePanel getFlamePanel() {
     if (flamePanel == null) {
       int width = centerPanel.getWidth();
@@ -725,6 +727,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
         @Override
         public void mouseDragged(MouseEvent e) {
           flamePanel_mouseDragged(e);
+          dragging = true;
         }
       });
       flamePanel.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -740,7 +743,10 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
 
         @Override
         public void mouseReleased(MouseEvent e) {
-          refreshFlameImage(false);
+          if (dragging) {
+            refreshFlameImage(false);
+          }
+          dragging = false;
         }
 
       });
@@ -1716,14 +1722,14 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
   }
 
   public void renderFlameButton_actionPerformed(ActionEvent e) {
-    refreshing = true;
-    try {
-      toggleTrianglesButton.setSelected(false);
-      flamePanel.setDrawFlame(false);
-    }
-    finally {
-      refreshing = false;
-    }
+    //    refreshing = true;
+    //    try {
+    //      toggleTrianglesButton.setSelected(false);
+    //      flamePanel.setDrawFlame(false);
+    //    }
+    //    finally {
+    //      refreshing = false;
+    //    }
     refreshFlameImage((AffineZStyle) zStyleCmb.getSelectedItem(), false, false);
   }
 
