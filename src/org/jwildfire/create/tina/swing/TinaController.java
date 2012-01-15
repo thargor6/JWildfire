@@ -1879,10 +1879,6 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     }
   }
 
-  public void grabPaletteFromImageButton_actionPerformed(ActionEvent e) {
-
-  }
-
   public void grabPaletteFromFlameButton_actionPerformed(ActionEvent e) {
     JFileChooser chooser = new FlameFileChooser(prefs);
     if (prefs.getInputFlamePath() != null) {
@@ -3735,6 +3731,22 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
   public void affineScaleYButton_stateChanged() {
     if (flamePanel != null) {
       flamePanel.setAllowScaleY(affineScaleYButton.isSelected());
+    }
+  }
+
+  public void distributeColorsBtn_clicked() {
+    Flame flame = getCurrFlame();
+    if (flame != null) {
+      flame.distributeColors();
+      transformationTableClicked();
+    }
+  }
+
+  public void randomizeColorsBtn_clicked() {
+    Flame flame = getCurrFlame();
+    if (flame != null) {
+      flame.randomizeColors();
+      transformationTableClicked();
     }
   }
 

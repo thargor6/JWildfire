@@ -213,7 +213,7 @@ public class TinaInternalFrame extends JInternalFrame {
 
   private JButton tinaRandomPaletteButton = null;
 
-  private JButton tinaGrabPaletteFromImageButton = null;
+  private JButton distributeColorsButton = null;
 
   private JPanel tinaPaletteImgPanel = null;
 
@@ -601,6 +601,8 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton runScriptButton = null;
   private JToggleButton affineScaleXButton = null;
   private JToggleButton affineScaleYButton = null;
+  private JLabel editSpaceLbl41 = null;
+  private JButton randomizeColorsButton = null;
 
   /**
    * This is the xxx default constructor
@@ -2007,7 +2009,7 @@ public class TinaInternalFrame extends JInternalFrame {
     if (tinaWestTabbedPane == null) {
       tinaWestTabbedPane = new JTabbedPane();
       tinaWestTabbedPane.setFont(new Font("Dialog", Font.BOLD, 10));
-      tinaWestTabbedPane.addTab("Palette", null, getTinaPalettePanel(), null);
+      tinaWestTabbedPane.addTab("Gradient", null, getTinaPalettePanel(), null);
     }
     return tinaWestTabbedPane;
   }
@@ -2320,8 +2322,9 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton getTinaRandomPaletteButton() {
     if (tinaRandomPaletteButton == null) {
       tinaRandomPaletteButton = new JButton();
-      tinaRandomPaletteButton.setText("Random Palette");
+      tinaRandomPaletteButton.setText("Random Gradient");
       tinaRandomPaletteButton.setPreferredSize(new Dimension(180, 24));
+      tinaRandomPaletteButton.setActionCommand("Random Gradient");
       tinaRandomPaletteButton.setFont(new Font("Dialog", Font.BOLD, 10));
       tinaRandomPaletteButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -2333,23 +2336,23 @@ public class TinaInternalFrame extends JInternalFrame {
   }
 
   /**
-   * This method initializes tinaGrabPaletteFromImageButton 
+   * This method initializes distributeColorsButton 
    *  
    * @return javax.swing.JButton  
    */
-  private JButton getTinaGrabPaletteFromImageButton() {
-    if (tinaGrabPaletteFromImageButton == null) {
-      tinaGrabPaletteFromImageButton = new JButton();
-      tinaGrabPaletteFromImageButton.setText("Grab from image");
-      tinaGrabPaletteFromImageButton.setFont(new Font("Dialog", Font.BOLD, 10));
-      tinaGrabPaletteFromImageButton.setPreferredSize(new Dimension(180, 24));
-      tinaGrabPaletteFromImageButton.addActionListener(new java.awt.event.ActionListener() {
+  private JButton getDistributeColorsButton() {
+    if (distributeColorsButton == null) {
+      distributeColorsButton = new JButton();
+      distributeColorsButton.setText("Distribute colors");
+      distributeColorsButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      distributeColorsButton.setPreferredSize(new Dimension(180, 24));
+      distributeColorsButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.grabPaletteFromImageButton_actionPerformed(e);
+          tinaController.distributeColorsBtn_clicked();
         }
       });
     }
-    return tinaGrabPaletteFromImageButton;
+    return distributeColorsButton;
   }
 
   /**
@@ -2418,6 +2421,10 @@ public class TinaInternalFrame extends JInternalFrame {
    */
   private JPanel getTinaPaletteCreatePanel() {
     if (tinaPaletteCreatePanel == null) {
+      editSpaceLbl41 = new JLabel();
+      editSpaceLbl41.setFont(new Font("Dialog", Font.BOLD, 10));
+      editSpaceLbl41.setText("");
+      editSpaceLbl41.setPreferredSize(new Dimension(42, 8));
       FlowLayout flowLayout2 = new FlowLayout();
       flowLayout2.setAlignment(FlowLayout.LEFT);
       tinaPaletteCreatePanel = new JPanel();
@@ -2426,7 +2433,9 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaPaletteCreatePanel.add(getCreateRandomPointsPanel(), null);
       tinaPaletteCreatePanel.add(getCreatePaletteTablePanel(), null);
       tinaPaletteCreatePanel.add(getTinaGrabPaletteFromFlameButton(), null);
-      tinaPaletteCreatePanel.add(getTinaGrabPaletteFromImageButton(), null);
+      tinaPaletteCreatePanel.add(editSpaceLbl41, null);
+      tinaPaletteCreatePanel.add(getDistributeColorsButton(), null);
+      tinaPaletteCreatePanel.add(getRandomizeColorsButton(), null);
     }
     return tinaPaletteCreatePanel;
   }
@@ -5033,6 +5042,7 @@ public class TinaInternalFrame extends JInternalFrame {
       triangleOperationsPanel = new JPanel();
       triangleOperationsPanel.setLayout(new FlowLayout());
       triangleOperationsPanel.setPreferredSize(new Dimension(52, 0));
+      triangleOperationsPanel.add(getAffineEditPostTransformSmallButton(), null);
       triangleOperationsPanel.add(editSpaceLbl4, null);
       triangleOperationsPanel.add(getMouseTransformMoveButton(), null);
       triangleOperationsPanel.add(getMouseTransformRotateButton(), null);
@@ -5119,7 +5129,6 @@ public class TinaInternalFrame extends JInternalFrame {
       centerNorthPanel = new JPanel();
       centerNorthPanel.setLayout(null);
       centerNorthPanel.setPreferredSize(new Dimension(0, 32));
-      centerNorthPanel.add(getAffineEditPostTransformSmallButton(), null);
       centerNorthPanel.add(getRenderProgressBar(), null);
       centerNorthPanel.add(getMouseTransformSlowButton(), null);
       centerNorthPanel.add(getDarkTrianglesToggleButton(), null);
@@ -5215,8 +5224,6 @@ public class TinaInternalFrame extends JInternalFrame {
       affineEditPostTransformSmallButton.setText("P");
       affineEditPostTransformSmallButton.setToolTipText("Toggle post transform mode");
       affineEditPostTransformSmallButton.setMnemonic(KeyEvent.VK_P);
-      affineEditPostTransformSmallButton.setSize(new Dimension(42, 24));
-      affineEditPostTransformSmallButton.setLocation(new Point(412, 4));
       affineEditPostTransformSmallButton.setPreferredSize(new Dimension(42, 24));
       affineEditPostTransformSmallButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -5300,7 +5307,7 @@ public class TinaInternalFrame extends JInternalFrame {
   JProgressBar getRenderProgressBar() {
     if (renderProgressBar == null) {
       renderProgressBar = new JProgressBar();
-      renderProgressBar.setBounds(new Rectangle(112, 9, 221, 14));
+      renderProgressBar.setBounds(new Rectangle(112, 9, 430, 14));
       renderProgressBar.setValue(0);
       renderProgressBar.setSize(new Dimension(209, 14));
       renderProgressBar.setLocation(new Point(104, 9));
@@ -8735,7 +8742,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JToggleButton getDarkTrianglesToggleButton() {
     if (darkTrianglesToggleButton == null) {
       darkTrianglesToggleButton = new JToggleButton();
-      darkTrianglesToggleButton.setBounds(new Rectangle(320, 4, 89, 24));
+      darkTrianglesToggleButton.setBounds(new Rectangle(547, 3, 89, 24));
       darkTrianglesToggleButton.setToolTipText("Toggle dark triangle colors");
       darkTrianglesToggleButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/triangle.gif")));
       darkTrianglesToggleButton.setSelected(false);
@@ -9121,6 +9128,26 @@ public class TinaInternalFrame extends JInternalFrame {
       });
     }
     return affineScaleYButton;
+  }
+
+  /**
+   * This method initializes randomizeColorsButton	
+   * 	
+   * @return javax.swing.JButton	
+   */
+  private JButton getRandomizeColorsButton() {
+    if (randomizeColorsButton == null) {
+      randomizeColorsButton = new JButton();
+      randomizeColorsButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      randomizeColorsButton.setText("Randomize colors");
+      randomizeColorsButton.setPreferredSize(new Dimension(180, 24));
+      randomizeColorsButton.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent e) {
+          tinaController.randomizeColorsBtn_clicked();
+        }
+      });
+    }
+    return randomizeColorsButton;
   }
 
 } //  @jve:decl-index=0:visual-constraint="10,10"
