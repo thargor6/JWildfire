@@ -758,8 +758,8 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     return palettePanel;
   }
 
-  public void refreshFlameImage() {
-    refreshFlameImage((AffineZStyle) zStyleCmb.getSelectedItem(), true);
+  public void refreshFlameImage(boolean pMouseDown) {
+    refreshFlameImage((AffineZStyle) zStyleCmb.getSelectedItem(), true, pMouseDown);
   }
 
   private Flame lastMorphedFlame = null;
@@ -780,10 +780,10 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     }
   }
 
-  public void refreshFlameImage(AffineZStyle pAffineZStyle, boolean pQuickRender) {
+  public void refreshFlameImage(AffineZStyle pAffineZStyle, boolean pQuickRender, boolean pMouseDown) {
     FlamePanel imgPanel = getFlamePanel();
     Rectangle bounds = imgPanel.getImageBounds();
-    int renderScale = pQuickRender ? 2 : 1;
+    int renderScale = pQuickRender && pMouseDown ? 2 : 1;
     int width = bounds.width / renderScale;
     int height = bounds.height / renderScale;
     if (width >= 16 && height >= 16) {
@@ -1115,7 +1115,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
             valStr = "0";
           }
           xForm.setWeight(Tools.stringToDouble(valStr));
-          refreshFlameImage();
+          refreshFlameImage(false);
         }
         super.setValueAt(aValue, row, column);
       }
@@ -1221,7 +1221,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
           RGBPalette palette = new RandomRGBPaletteGenerator().generatePalette(paletteKeyFrames);
           currFlame.setPalette(palette);
           refreshPaletteUI(palette);
-          refreshFlameImage();
+          refreshFlameImage(false);
         }
         super.setValueAt(aValue, row, column);
       }
@@ -1294,7 +1294,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
             valStr = "0";
           }
           xForm.getModifiedWeights()[row] = Tools.stringToDouble(valStr);
-          refreshFlameImage();
+          refreshFlameImage(false);
         }
         super.setValueAt(aValue, row, column);
       }
@@ -1368,7 +1368,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       catch (Throwable ex) {
         ex.printStackTrace();
       }
-      refreshFlameImage();
+      refreshFlameImage(true);
     }
     finally {
       noRefresh = false;
@@ -1406,7 +1406,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
         ex.printStackTrace();
       }
       refreshPaletteImg();
-      refreshFlameImage();
+      refreshFlameImage(true);
     }
     finally {
       noRefresh = false;
@@ -1458,7 +1458,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       catch (Throwable ex) {
         ex.printStackTrace();
       }
-      refreshFlameImage();
+      refreshFlameImage(false);
     }
     finally {
       noRefresh = false;
@@ -1509,7 +1509,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       catch (Throwable ex) {
         ex.printStackTrace();
       }
-      refreshFlameImage();
+      refreshFlameImage(true);
     }
     finally {
       noRefresh = false;
@@ -1551,7 +1551,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       catch (Throwable ex) {
         ex.printStackTrace();
       }
-      refreshFlameImage();
+      refreshFlameImage(true);
     }
     finally {
       noRefresh = false;
@@ -1590,7 +1590,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       catch (Throwable ex) {
         ex.printStackTrace();
       }
-      refreshFlameImage();
+      refreshFlameImage(false);
     }
     finally {
       noRefresh = false;
@@ -1629,7 +1629,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
         ex.printStackTrace();
       }
       refreshPaletteImg();
-      refreshFlameImage();
+      refreshFlameImage(false);
     }
     finally {
       noRefresh = false;
@@ -1668,7 +1668,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       catch (Throwable ex) {
         ex.printStackTrace();
       }
-      refreshFlameImage();
+      refreshFlameImage(false);
     }
     finally {
       noRefresh = false;
@@ -1716,7 +1716,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     finally {
       refreshing = false;
     }
-    refreshFlameImage((AffineZStyle) zStyleCmb.getSelectedItem(), false);
+    refreshFlameImage((AffineZStyle) zStyleCmb.getSelectedItem(), false, false);
   }
 
   public void loadFlameButton_actionPerformed(ActionEvent e) {
@@ -1753,7 +1753,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
   public void previewQualityREd_changed() {
     if (noRefresh)
       return;
-    refreshFlameImage();
+    refreshFlameImage(false);
   }
 
   public void cameraCentreYSlider_stateChanged(ChangeEvent e) {
@@ -1877,7 +1877,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       RGBPalette palette = new RandomRGBPaletteGenerator().generatePalette(paletteKeyFrames);
       currFlame.setPalette(palette);
       refreshPaletteUI(palette);
-      refreshFlameImage();
+      refreshFlameImage(false);
     }
   }
 
@@ -1895,7 +1895,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
         refreshPaletteColorsTable();
         currFlame.setPalette(palette);
         refreshPaletteUI(palette);
-        refreshFlameImage();
+        refreshFlameImage(false);
       }
     }
     catch (Throwable ex) {
@@ -1925,7 +1925,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       currFlame.setPalette(palette);
       refreshPaletteColorsTable();
       refreshPaletteUI(palette);
-      refreshFlameImage();
+      refreshFlameImage(false);
     }
   }
 
@@ -2123,7 +2123,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
         }
         refreshXFormUI(xForm);
         enableXFormControls(xForm);
-        refreshFlameImage();
+        refreshFlameImage(false);
       }
       finally {
         cmbRefreshing = gridRefreshing = false;
@@ -2349,7 +2349,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     }
     int row = currFlame.getXForms().size() - 1;
     transformationsTable.getSelectionModel().setSelectionInterval(row, row);
-    refreshFlameImage();
+    refreshFlameImage(false);
   }
 
   public void duplicateXForm() {
@@ -2366,7 +2366,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     }
     int row = currFlame.getXForms().size() - 1;
     transformationsTable.getSelectionModel().setSelectionInterval(row, row);
-    refreshFlameImage();
+    refreshFlameImage(false);
   }
 
   public void deleteXForm() {
@@ -2385,7 +2385,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     finally {
       gridRefreshing = false;
     }
-    refreshFlameImage();
+    refreshFlameImage(false);
   }
 
   public void addFinalXForm() {
@@ -2402,7 +2402,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     }
     int row = currFlame.getXForms().size();
     transformationsTable.getSelectionModel().setSelectionInterval(row, row);
-    refreshFlameImage();
+    refreshFlameImage(false);
   }
 
   public void xForm_moveRight() {
@@ -2686,7 +2686,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
         //        boolean enabled = selected != null && selected.length() > 0;
         //        nonlinearControlsRows[pIdx].getNonlinearParamsLeftButton().setEnabled(enabled);
         //        nonlinearControlsRows[pIdx].getNonlinearParamsRightButton().setEnabled(enabled);
-        refreshFlameImage();
+        refreshFlameImage(false);
       }
     }
     finally {
@@ -2714,7 +2714,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
           }
           var.setAmount(Tools.stringToDouble(varStr) + pDelta);
           nonlinearControlsRows[pIdx].getNonlinearVarREd().setText(Tools.doubleToString(var.getAmount()));
-          refreshFlameImage();
+          refreshFlameImage(false);
         }
       }
     }
@@ -2782,7 +2782,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
               }
             }
           }
-          refreshFlameImage();
+          refreshFlameImage(false);
         }
       }
     }
@@ -2875,7 +2875,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       XForm xForm = getCurrXForm();
       if (xForm != null && xFormDrawModeCmb.getSelectedItem() != null) {
         xForm.setDrawMode((DrawMode) xFormDrawModeCmb.getSelectedItem());
-        refreshFlameImage();
+        refreshFlameImage(false);
         enableXFormControls(xForm);
       }
     }
@@ -2904,7 +2904,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
         try {
           refreshRelWeightsTable();
           relWeightsTable.getSelectionModel().setSelectionInterval(row, row);
-          refreshFlameImage();
+          refreshFlameImage(false);
         }
         finally {
           gridRefreshing = false;
@@ -2923,7 +2923,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
         int row = transformationsTable.getSelectedRow();
         refreshTransformationsTable();
         transformationsTable.getSelectionModel().setSelectionInterval(row, row);
-        refreshFlameImage();
+        refreshFlameImage(false);
       }
       finally {
         gridRefreshing = false;
@@ -2960,13 +2960,13 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
 
   public void renderModeCmb_changed() {
     if (!refreshing && !cmbRefreshing) {
-      refreshFlameImage();
+      refreshFlameImage(false);
     }
   }
 
   public void zStyleCmb_changed() {
     if (!refreshing && !cmbRefreshing) {
-      refreshFlameImage();
+      refreshFlameImage(false);
     }
   }
 
@@ -2975,7 +2975,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       morphFlame1 = _currFlame.makeCopy();
       lastMorphedFrame = -1;
       enableControls();
-      refreshFlameImage();
+      refreshFlameImage(false);
     }
   }
 
@@ -2984,7 +2984,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       morphFlame2 = _currFlame.makeCopy();
       lastMorphedFrame = -1;
       enableControls();
-      refreshFlameImage();
+      refreshFlameImage(false);
     }
   }
 
@@ -3009,7 +3009,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       try {
         morphFrameSlider.setValue(frame);
         lastMorphedFrame = -1;
-        refreshFlameImage();
+        refreshFlameImage(false);
       }
       finally {
         refreshing = false;
@@ -3019,7 +3019,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
 
   public void morphCheckBox_changed() {
     lastMorphedFrame = -1;
-    refreshFlameImage();
+    refreshFlameImage(false);
   }
 
   public void morphFrameSlider_changed() {
@@ -3029,7 +3029,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       try {
         morphFrameREd.setText(String.valueOf(frame));
         lastMorphedFrame = -1;
-        refreshFlameImage();
+        refreshFlameImage(false);
       }
       finally {
         refreshing = false;
@@ -3082,7 +3082,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     if (flamePanel != null) {
       if (flamePanel.mouseDragged(e.getX(), e.getY())) {
         refreshXFormUI(getCurrXForm());
-        refreshFlameImage();
+        refreshFlameImage(true);
       }
     }
   }
@@ -3185,7 +3185,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
         flamePanel.setEditPostTransform(affineEditPostTransformButton.isSelected());
       }
       refreshXFormUI(xForm);
-      refreshFlameImage();
+      refreshFlameImage(false);
       affineEditPostTransformSmallButton.setSelected(affineEditPostTransformButton.isSelected());
     }
     finally {
@@ -3207,14 +3207,14 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
   public void mouseTransformZoomInButton_clicked() {
     if (flamePanel != null) {
       flamePanel.zoomIn();
-      refreshFlameImage();
+      refreshFlameImage(false);
     }
   }
 
   public void mouseTransformZoomOutButton_clicked() {
     if (flamePanel != null) {
       flamePanel.zoomOut();
-      refreshFlameImage();
+      refreshFlameImage(false);
     }
   }
 
@@ -3224,7 +3224,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     }
     if (flamePanel != null) {
       flamePanel.setDrawFlame(toggleTrianglesButton.isSelected());
-      refreshFlameImage();
+      refreshFlameImage(false);
     }
   }
 
@@ -3276,7 +3276,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       flamePanel.setRenderWidth(prefs.getTinaRenderImageWidth());
       flamePanel.setRenderHeight(prefs.getTinaRenderImageHeight());
     }
-    refreshFlameImage();
+    refreshFlameImage(false);
   }
 
   public void cameraZPosSlider_stateChanged(ChangeEvent e) {
@@ -3376,7 +3376,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       currFlame.getShadingInfo().setShading((Shading) shadingCmb.getSelectedItem());
       refreshShadingUI();
       enableShadingUI();
-      refreshFlameImage();
+      refreshFlameImage(false);
     }
     finally {
       noRefresh = false;
@@ -3696,7 +3696,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     }
     if (flamePanel != null) {
       flamePanel.setDarkTriangles(toggleDarkTrianglesButton.isSelected());
-      refreshFlameImage();
+      refreshFlameImage(false);
     }
   }
 

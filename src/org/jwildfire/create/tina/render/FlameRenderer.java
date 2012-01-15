@@ -171,6 +171,9 @@ public class FlameRenderer {
 
     if (flame.getXForms().size() == 0) {
       if (renderNormal) {
+        if (renderScale > 0) {
+          pImage.resetImage(pImage.getImageWidth() * renderScale, pImage.getImageHeight() * renderScale);
+        }
         pImage.fillBackground(flame.getBGColorRed(), flame.getBGColorGreen(), flame.getBGColorBlue());
       }
       if (renderHDR) {

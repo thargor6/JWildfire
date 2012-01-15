@@ -358,4 +358,14 @@ public class Flame {
     this.shadingInfo = shadingInfo;
   }
 
+  public void distributeColors() {
+    int cnt = getXForms().size();
+    if (cnt > 1) {
+      for (int i = 0; i < getXForms().size(); i++) {
+        XForm xForm = getXForms().get(i);
+        xForm.setColor((double) i / (double) (cnt - 1));
+      }
+    }
+
+  }
 }

@@ -24,15 +24,15 @@ import org.jwildfire.create.tina.variation.VariationFuncList;
 
 public class ExperimentalSimpleRandomFlameGenerator extends RandomFlameGenerator {
 
-  protected static final String FNCLST_EXPERIMENTAL[] = { "blur3D", "bubble", "escher", "rays", "epispiral_wf", "curl3D", "diamond",
-      "disc", "sech", "loonie", "exp", "cosh", "split", "wedge_sph", "circlize", "heart_wf", "bwraps7", "colorscale_wf", "mandelbrot",
-      "butterfly3D", "cpow", "conic", "julia3D", "cell", "stripes", "post_mirror_wf", "colorscale_wf", "crackle", "truchet",
-      "flower", "heart", "julia3D", "disc2", "polar2", "foci", "scry", "flux", "bwraps7", "colorscale_wf",
-      "hemisphere", "popcorn2", "sec", "lazysusan", "sin", "separation", "post_mirror_wf", "heart_wf", "mandelbrot",
-      "rose_wf", "edisc", "waves2", "twintrian", "coth", "super_shape", "auger", "pre_wave3D_wf", "hexes", "spirograph",
+  protected static final String FNCLST_EXPERIMENTAL[] = { "blur3D", "bubble", "escher", "rays", "epispiral_wf", "curl3D", "diamond", "cloverleaf_wf",
+      "disc", "sech", "loonie", "exp", "cosh", "split", "wedge_sph", "circlize", "heart_wf", "bwraps7", "colorscale_wf", "mandelbrot", "spirograph",
+      "butterfly3D", "cpow", "conic", "julia3D", "cell", "stripes", "post_mirror_wf", "colorscale_wf", "crackle", "truchet", "cannabiscurve_wf",
+      "flower", "heart", "julia3D", "disc2", "polar2", "foci", "scry", "flux", "bwraps7", "colorscale_wf", "cloverleaf_wf",
+      "hemisphere", "popcorn2", "sec", "lazysusan", "sin", "separation", "post_mirror_wf", "heart_wf", "mandelbrot", "cannabiscurve_wf",
+      "rose_wf", "edisc", "waves2", "twintrian", "coth", "super_shape", "auger", "pre_wave3D_wf", "hexes", "spirograph", "truchet",
       "tanh", "bipolar", "cot", "horseshoe", "wedge", "sinh", "modulus", "mobius", "bwraps7", "colorscale_wf", "truchet",
-      "cross", "tangent3D", "csc", "curve", "csch", "bent2", "splits", "whorl", "post_mirror_wf", "mandelbrot",
-      "tan", "blob3D", "julia3D", "log", "cos", "oscilloscope", "wedge_julia", "bwraps7", "heart_wf", "hexes", "truchet",
+      "cross", "tangent3D", "csc", "curve", "csch", "bent2", "splits", "whorl", "post_mirror_wf", "mandelbrot", "cloverleaf_wf", "cannabiscurve_wf",
+      "tan", "blob3D", "julia3D", "log", "cos", "oscilloscope", "wedge_julia", "bwraps7", "heart_wf", "hexes", "truchet", "spirograph",
       "pdj", "popcorn", "parabola", "rings2", "spherical3D", "spiral", "rectangles", "elliptic", "waves", "swirl",
       "bwraps7", "heart_wf", "colorscale_wf", "boarders", "secant2" };
 

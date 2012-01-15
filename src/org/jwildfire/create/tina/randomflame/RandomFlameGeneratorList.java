@@ -27,8 +27,10 @@ public class RandomFlameGeneratorList {
   static {
     registerRandomFlameGenerator(SimpleRandomFlameGenerator.class);
     registerRandomFlameGenerator(ExperimentalSimpleRandomFlameGenerator.class);
+    registerRandomFlameGenerator(GnarlRandomFlameGenerator.class);
     registerRandomFlameGenerator(ThreeDOnlyRandomFlameGenerator.class);
     registerRandomFlameGenerator(TentacleRandomFlameGenerator.class);
+    registerRandomFlameGenerator(BubblesRandomFlameGenerator.class);
     registerRandomFlameGenerator(GnarlRandomFlameGenerator.class);
     registerRandomFlameGenerator(ExperimentalGnarlRandomFlameGenerator.class);
     registerRandomFlameGenerator(LinearRandomFlameGenerator.class);

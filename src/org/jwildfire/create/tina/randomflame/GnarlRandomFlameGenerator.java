@@ -199,6 +199,7 @@ public class GnarlRandomFlameGenerator extends RandomFlameGenerator {
       XFormTransformService.localTranslate(xForm, 1.0 - 2.0 * Math.random(), 1.0 - 2.0 * Math.random());
       xForm.setColorSymmetry(-1);
     }
+    flame.distributeColors();
     return flame;
   }
 
