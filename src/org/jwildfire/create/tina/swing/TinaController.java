@@ -1378,7 +1378,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       catch (Throwable ex) {
         ex.printStackTrace();
       }
-      refreshFlameImage(true);
+      refreshFlameImage(false);
     }
     finally {
       noRefresh = false;
@@ -1416,7 +1416,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
         ex.printStackTrace();
       }
       refreshPaletteImg();
-      refreshFlameImage(true);
+      refreshFlameImage(false);
     }
     finally {
       noRefresh = false;
@@ -1519,7 +1519,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       catch (Throwable ex) {
         ex.printStackTrace();
       }
-      refreshFlameImage(true);
+      refreshFlameImage(false);
     }
     finally {
       noRefresh = false;
@@ -1561,7 +1561,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       catch (Throwable ex) {
         ex.printStackTrace();
       }
-      refreshFlameImage(true);
+      refreshFlameImage(false);
     }
     finally {
       noRefresh = false;

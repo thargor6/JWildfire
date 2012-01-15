@@ -27,7 +27,6 @@ public class GammaCorrectionFilter {
   private double gamma;
   private double sclGamma;
   private int bgRed, bgGreen, bgBlue;
-  private double bgRedDouble, bgGreenDouble, bgBlueDouble;
 
   public GammaCorrectionFilter(Flame pFlame) {
     flame = pFlame;
@@ -62,10 +61,6 @@ public class GammaCorrectionFilter {
     bgRed = flame.getBGColorRed();
     bgGreen = flame.getBGColorGreen();
     bgBlue = flame.getBGColorBlue();
-
-    bgRedDouble = (double) bgRed / 255.0;
-    bgGreenDouble = (double) bgGreen / 255.0;
-    bgBlueDouble = (double) bgBlue / 255.0;
   }
 
   public void transformPoint(LogDensityPoint logDensityPnt, GammaCorrectedRGBPoint pRGBPoint) {
@@ -133,7 +128,6 @@ public class GammaCorrectionFilter {
 
   public void transformPointHDR(LogDensityPoint logDensityPnt, GammaCorrectedHDRPoint pHDRPoint) {
     double logScl;
-    double inverseAlpha;
     if (logDensityPnt.intensity > 0.0) {
       // gamma linearization
       double alpha;
@@ -145,16 +139,8 @@ public class GammaCorrectionFilter {
         alpha = Math.pow(logDensityPnt.intensity, gamma);
       }
       logScl = vibDouble * alpha / logDensityPnt.intensity;
-      if (alpha < 0.0)
-        alpha = 0.0;
-      else if (alpha > 1.0)
-        alpha = 1.0;
-      inverseAlpha = 1.0 - alpha;
     }
     else {
-      pHDRPoint.red = (float) bgRedDouble;
-      pHDRPoint.green = (float) bgGreenDouble;
-      pHDRPoint.blue = (float) bgBlueDouble;
       return;
     }
 
@@ -169,10 +155,6 @@ public class GammaCorrectionFilter {
       green = logScl * logDensityPnt.green;
       blue = logScl * logDensityPnt.blue;
     }
-
-    red = red + inverseAlpha * bgRedDouble;
-    green = green + inverseAlpha * bgGreenDouble;
-    blue = blue + inverseAlpha * bgBlueDouble;
 
     pHDRPoint.red = (float) red;
     pHDRPoint.green = (float) green;
