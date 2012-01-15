@@ -68,7 +68,6 @@ import org.jwildfire.create.tina.io.Flam3Reader;
 import org.jwildfire.create.tina.io.Flam3Writer;
 import org.jwildfire.create.tina.palette.RGBColor;
 import org.jwildfire.create.tina.palette.RGBPalette;
-import org.jwildfire.create.tina.palette.RGBPaletteImporter;
 import org.jwildfire.create.tina.palette.RGBPaletteRenderer;
 import org.jwildfire.create.tina.palette.RandomRGBPaletteGenerator;
 import org.jwildfire.create.tina.randomflame.RandomFlameGenerator;
@@ -90,7 +89,6 @@ import org.jwildfire.create.tina.variation.VariationFuncList;
 import org.jwildfire.image.Pixel;
 import org.jwildfire.image.SimpleHDRImage;
 import org.jwildfire.image.SimpleImage;
-import org.jwildfire.io.ImageReader;
 import org.jwildfire.io.ImageWriter;
 import org.jwildfire.swing.ErrorHandler;
 import org.jwildfire.swing.ImageFileChooser;
@@ -1882,25 +1880,6 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
   }
 
   public void grabPaletteFromImageButton_actionPerformed(ActionEvent e) {
-    try {
-      JFileChooser chooser = new ImageFileChooser();
-      chooser.setCurrentDirectory(new File(prefs.getInputImagePath()));
-      if (chooser.showOpenDialog(centerPanel) == JFileChooser.APPROVE_OPTION) {
-        File file = chooser.getSelectedFile();
-        prefs.setLastInputImageFile(file);
-        SimpleImage img = new ImageReader(centerPanel).loadImage(file.getAbsolutePath());
-        RGBPalette palette = new RGBPaletteImporter().importFromImage(img);
-        Flame currFlame = getCurrFlame();
-        paletteKeyFrames = null;
-        refreshPaletteColorsTable();
-        currFlame.setPalette(palette);
-        refreshPaletteUI(palette);
-        refreshFlameImage(false);
-      }
-    }
-    catch (Throwable ex) {
-      errorHandler.handleError(ex);
-    }
 
   }
 

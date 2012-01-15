@@ -366,6 +366,13 @@ public class Flame {
         xForm.setColor((double) i / (double) (cnt - 1));
       }
     }
-
   }
+
+  public void randomizeColors() {
+    for (int i = 0; i < getXForms().size(); i++) {
+      XForm xForm = getXForms().get(i);
+      xForm.setColor(Math.random());
+    }
+  }
+
 }

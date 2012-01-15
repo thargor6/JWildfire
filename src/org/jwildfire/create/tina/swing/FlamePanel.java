@@ -206,23 +206,6 @@ public class FlamePanel extends ImagePanel {
     }
   }
 
-  //
-  //  private void drawXForm(Graphics2D g, XForm pXForm, boolean pIsFinal) {
-  //    Triangle triangle = new Triangle(pXForm);
-  //    if (selectedXForm != null && selectedXForm == pXForm) {
-  //      g.setStroke(pIsFinal ? SOLID_FAT : SOLID);
-  //    }
-  //    else {
-  //      g.setStroke(pIsFinal ? DASHED_FAT : DASHED);
-  //    }
-  //    g.drawPolygon(triangle.viewX, triangle.viewY, 3);
-  //
-  //    g.setStroke(SOLID);
-  //    int radius = 10;
-  //    g.drawOval(triangle.viewX[1] - radius / 2, triangle.viewY[1] - radius / 2, radius, radius);
-  //  }
-
-  // Is much faster
   private void drawXForm(Graphics2D g, XForm pXForm, boolean pIsFinal) {
     Triangle triangle = new Triangle(pXForm);
     boolean isSelected = (selectedXForm != null && selectedXForm == pXForm);
