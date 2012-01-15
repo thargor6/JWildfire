@@ -5181,6 +5181,7 @@ public class TinaInternalFrame extends JInternalFrame {
       randomStyleCmb.setPreferredSize(new Dimension(125, 22));
       randomStyleCmb.setFont(new Font("Dialog", Font.BOLD, 10));
       randomStyleCmb.setBounds(new Rectangle(231, 7, 125, 22));
+      randomStyleCmb.setMaximumRowCount(32);
       randomStyleCmb.removeAllItems();
       for (String name : RandomFlameGeneratorList.getNameList()) {
         randomStyleCmb.addItem(name);
@@ -5307,10 +5308,11 @@ public class TinaInternalFrame extends JInternalFrame {
   JProgressBar getRenderProgressBar() {
     if (renderProgressBar == null) {
       renderProgressBar = new JProgressBar();
-      renderProgressBar.setBounds(new Rectangle(112, 9, 430, 14));
       renderProgressBar.setValue(0);
-      renderProgressBar.setSize(new Dimension(209, 14));
+      renderProgressBar.setBounds(new Rectangle(112, 9, 430, 14));
+      renderProgressBar.setSize(new Dimension(430, 14));
       renderProgressBar.setLocation(new Point(104, 9));
+      renderProgressBar.setPreferredSize(new Dimension(430, 14));
       renderProgressBar.setStringPainted(true);
     }
     return renderProgressBar;

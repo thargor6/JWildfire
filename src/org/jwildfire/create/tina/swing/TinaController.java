@@ -733,6 +733,12 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
         public void mouseClicked(java.awt.event.MouseEvent e) {
           flamePanel_mouseClicked(e);
         }
+
+        @Override
+        public void mouseReleased(MouseEvent e) {
+          refreshFlameImage(false);
+        }
+
       });
       flamePanel.setSelectedXForm(getCurrXForm());
       centerPanel.remove(0);
