@@ -5321,10 +5321,9 @@ public class TinaInternalFrame extends JInternalFrame {
     if (renderProgressBar == null) {
       renderProgressBar = new JProgressBar();
       renderProgressBar.setValue(0);
-      renderProgressBar.setBounds(new Rectangle(112, 9, 430, 14));
-      renderProgressBar.setSize(new Dimension(430, 14));
-      renderProgressBar.setLocation(new Point(104, 9));
-      renderProgressBar.setPreferredSize(new Dimension(430, 14));
+      renderProgressBar.setSize(new Dimension(179, 14));
+      renderProgressBar.setLocation(new Point(229, 9));
+      renderProgressBar.setPreferredSize(new Dimension(179, 14));
       renderProgressBar.setStringPainted(true);
     }
     return renderProgressBar;

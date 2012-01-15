@@ -917,9 +917,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       shadingLightCmb.setSelectedIndex(0);
       refreshShadingUI();
       enableShadingUI();
-
       //      refreshFlameImage();
-
       refreshPaletteUI(currFlame.getPalette());
     }
     finally {
@@ -2635,6 +2633,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     if (pIdx >= 0 && pIdx < randomBatch.size()) {
       _currFlame = randomBatch.get(pIdx);
       refreshUI();
+      transformationsTable.getSelectionModel().setSelectionInterval(0, 0);
     }
   }
 
