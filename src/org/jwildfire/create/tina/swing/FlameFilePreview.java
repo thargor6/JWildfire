@@ -42,7 +42,9 @@ public class FlameFilePreview extends JComponent implements PropertyChangeListen
   private File currFile = null;
 
   public FlameFilePreview(JFileChooser pFileChooser, Prefs pPrefs) {
-    setPreferredSize(new Dimension(160, 100));
+    Dimension size = new Dimension(192, 120);
+    setPreferredSize(size);
+    setSize(size);
     pFileChooser.addPropertyChangeListener(this);
     prefs = pPrefs;
   }
@@ -70,7 +72,7 @@ public class FlameFilePreview extends JComponent implements PropertyChangeListen
         flame.setSampleDensity(50);
         flame.setSpatialFilterRadius(0.0);
         flame.setSpatialOversample(1);
-        flame.setColorOversample(2);
+        flame.setColorOversample(1);
         renderer.setAffineZStyle(AffineZStyle.FLAT);
         SimpleImage img = new SimpleImage(imgWidth, imgHeight);
         renderer.renderFlame(img, null);
