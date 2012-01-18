@@ -20,7 +20,7 @@ public class Constants {
   public final static double EPSILON = 1.0e-300;
   public final static int MAX_MOD_WEIGHT_COUNT = 1000;
   public final static int NEXT_APPLIED_XFORM_TABLE_SIZE = 1000;
-  public final static int INITIAL_ITERATIONS = 20;
+  public final static int INITIAL_ITERATIONS = 42;
 
   public final static double M_PI = Math.PI;
   public final static double M_PI_2 = M_PI * 0.5;

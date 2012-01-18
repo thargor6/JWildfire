@@ -22,10 +22,8 @@ import java.util.List;
 
 import org.jwildfire.base.Prefs;
 import org.jwildfire.base.Tools;
-import org.jwildfire.create.tina.base.Constants;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.RasterPoint;
-import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 import org.jwildfire.create.tina.io.Flam3Reader;
 import org.jwildfire.create.tina.palette.RenderColor;
@@ -35,7 +33,6 @@ import org.jwildfire.create.tina.swing.ProgressUpdater;
 import org.jwildfire.create.tina.variation.DefaultFlameTransformationContextImpl;
 import org.jwildfire.create.tina.variation.FastFlameTransformationContextImpl;
 import org.jwildfire.create.tina.variation.FlameTransformationContext;
-import org.jwildfire.create.tina.variation.Variation;
 import org.jwildfire.image.Pixel;
 import org.jwildfire.image.SimpleHDRImage;
 import org.jwildfire.image.SimpleImage;
@@ -251,35 +248,10 @@ public class FlameRenderer {
         for (int t = 0; t < prefs.getTinaRenderThreads(); t++) {
           Flame renderFlame = flame.makeCopy();
           renderFlames.add(renderFlame);
-          createModWeightTables(renderFlame);
+          renderFlame.refreshModWeightTables(flameTransformationContext);
         }
 
-        boolean twoPasses = false;
-        for (XForm xForm : flame.getXForms()) {
-          for (Variation var : xForm.getSortedVariations()) {
-            if (var.getFunc().requiresTwoPasses()) {
-              twoPasses = true;
-              break;
-            }
-          }
-        }
-        if (!twoPasses && flame.getFinalXForm() != null) {
-          for (Variation var : flame.getFinalXForm().getSortedVariations()) {
-            if (var.getFunc().requiresTwoPasses()) {
-              twoPasses = true;
-              break;
-            }
-          }
-        }
-
-        if (twoPasses) {
-          iterate(RenderPass.FLAT, i, colorOversample * 2, renderFlames);
-          createPass2Raster();
-          iterate(RenderPass.FINAL, i + 1, colorOversample * 2, renderFlames);
-        }
-        else {
-          iterate(RenderPass.FINAL, i, colorOversample, renderFlames);
-        }
+        iterate(RenderPass.FINAL, i, colorOversample, renderFlames);
         if (flame.getSampleDensity() <= 10.0) {
           renderImageSimple(img);
         }
@@ -531,57 +503,6 @@ public class FlameRenderer {
     sina = Math.sin(-Math.PI * (flame.getCamRoll()) / 180.0);
     rcX = flame.getCentreX() * (1 - cosa) - flame.getCentreY() * sina - camX0;
     rcY = flame.getCentreY() * (1 - cosa) + flame.getCentreX() * sina - camY0;
-  }
-
-  private void createModWeightTables(Flame pFlame) {
-    double tp[] = new double[Constants.MAX_MOD_WEIGHT_COUNT];
-    int n = pFlame.getXForms().size();
-
-    for (XForm xForm : pFlame.getXForms()) {
-      xForm.initTransform();
-      for (Variation var : xForm.getSortedVariations()) {
-        var.getFunc().init(flameTransformationContext, xForm);
-      }
-    }
-    if (pFlame.getFinalXForm() != null) {
-      XForm xForm = pFlame.getFinalXForm();
-      xForm.initTransform();
-      for (Variation var : xForm.getSortedVariations()) {
-        var.getFunc().init(flameTransformationContext, xForm);
-      }
-    }
-    //
-    for (int k = 0; k < n; k++) {
-      double totValue = 0;
-      XForm xform = pFlame.getXForms().get(k);
-      for (int l = 0; l < xform.getNextAppliedXFormTable().length; l++) {
-        xform.getNextAppliedXFormTable()[l] = new XForm();
-      }
-      for (int i = 0; i < n; i++) {
-        tp[i] = pFlame.getXForms().get(i).getWeight() * pFlame.getXForms().get(k).getModifiedWeights()[i];
-        totValue = totValue + tp[i];
-      }
-
-      if (totValue > 0) {
-        double loopValue = 0;
-        for (int i = 0; i < xform.getNextAppliedXFormTable().length; i++) {
-          double totalProb = 0;
-          int j = -1;
-          do {
-            j++;
-            totalProb = totalProb + tp[j];
-          }
-          while (!((totalProb > loopValue) || (j == n - 1)));
-          xform.getNextAppliedXFormTable()[i] = pFlame.getXForms().get(j);
-          loopValue = loopValue + totValue / (double) xform.getNextAppliedXFormTable().length;
-        }
-      }
-      else {
-        for (int i = 0; i < xform.getNextAppliedXFormTable().length - 1; i++) {
-          xform.getNextAppliedXFormTable()[i] = null;
-        }
-      }
-    }
   }
 
   private void createColorMap() {

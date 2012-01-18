@@ -20,6 +20,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.jwildfire.create.tina.palette.RGBPalette;
+import org.jwildfire.create.tina.variation.FlameTransformationContext;
+import org.jwildfire.create.tina.variation.Variation;
 
 public class Flame {
   private double centreX;
@@ -54,10 +56,6 @@ public class Flame {
   private ShadingInfo shadingInfo = new ShadingInfo();
 
   public Flame() {
-    init();
-  }
-
-  private void init() {
     spatialFilterRadius = 1.2;
     sampleDensity = 100.0;
     bgColorRed = bgColorGreen = bgColorBlue = 0;
@@ -372,6 +370,57 @@ public class Flame {
     for (int i = 0; i < getXForms().size(); i++) {
       XForm xForm = getXForms().get(i);
       xForm.setColor(Math.random());
+    }
+  }
+
+  public void refreshModWeightTables(FlameTransformationContext pFlameTransformationContext) {
+    double tp[] = new double[Constants.MAX_MOD_WEIGHT_COUNT];
+    int n = getXForms().size();
+
+    for (XForm xForm : this.getXForms()) {
+      xForm.initTransform();
+      for (Variation var : xForm.getSortedVariations()) {
+        var.getFunc().init(pFlameTransformationContext, xForm);
+      }
+    }
+    if (getFinalXForm() != null) {
+      XForm xForm = getFinalXForm();
+      xForm.initTransform();
+      for (Variation var : xForm.getSortedVariations()) {
+        var.getFunc().init(pFlameTransformationContext, xForm);
+      }
+    }
+    //
+    for (int k = 0; k < n; k++) {
+      double totValue = 0;
+      XForm xform = getXForms().get(k);
+      for (int l = 0; l < xform.getNextAppliedXFormTable().length; l++) {
+        xform.getNextAppliedXFormTable()[l] = new XForm();
+      }
+      for (int i = 0; i < n; i++) {
+        tp[i] = getXForms().get(i).getWeight() * getXForms().get(k).getModifiedWeights()[i];
+        totValue = totValue + tp[i];
+      }
+
+      if (totValue > 0) {
+        double loopValue = 0;
+        for (int i = 0; i < xform.getNextAppliedXFormTable().length; i++) {
+          double totalProb = 0;
+          int j = -1;
+          do {
+            j++;
+            totalProb = totalProb + tp[j];
+          }
+          while (!((totalProb > loopValue) || (j == n - 1)));
+          xform.getNextAppliedXFormTable()[i] = getXForms().get(j);
+          loopValue = loopValue + totValue / (double) xform.getNextAppliedXFormTable().length;
+        }
+      }
+      else {
+        for (int i = 0; i < xform.getNextAppliedXFormTable().length - 1; i++) {
+          xform.getNextAppliedXFormTable()[i] = null;
+        }
+      }
     }
   }
 

@@ -39,10 +39,6 @@ public abstract class VariationFunc {
 
   public abstract void setParameter(String pName, double pValue);
 
-  public boolean requiresTwoPasses() {
-    return false;
-  }
-
   public String[] getRessourceNames() {
     return null;
   }
