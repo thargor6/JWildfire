@@ -197,6 +197,7 @@ public class VariationFuncList {
     registerVariationFunc(PreCustomWFFunc.class);
     registerVariationFunc(CloverLeafWFFunc.class);
     registerVariationFunc(CannabisCurveWFFunc.class);
+    registerVariationFunc(SubFlameWFFunc.class);
     //    registerVariationFunc(TPostBumpMapFunc.class);
   }
 
