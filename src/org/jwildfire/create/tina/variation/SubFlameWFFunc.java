@@ -19,6 +19,7 @@ package org.jwildfire.create.tina.variation;
 import java.util.List;
 
 import org.jwildfire.create.tina.base.Constants;
+import org.jwildfire.create.tina.base.DrawMode;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
@@ -40,6 +41,7 @@ public class SubFlameWFFunc extends VariationFunc {
   private Flame flame;
   private XForm xf;
   private XYZPoint p;
+  private XYZPoint q = new XYZPoint();
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
@@ -48,7 +50,23 @@ public class SubFlameWFFunc extends VariationFunc {
       if (xf == null) {
         return;
       }
+      double parentColor = pAffineTP.color;
       xf.transformPoint(pContext, pAffineTP, pVarTP, p, p, AffineZStyle.FLAT);
+      if (xf.getDrawMode() == DrawMode.HIDDEN)
+        return;
+      else if ((xf.getDrawMode() == DrawMode.OPAQUE) && (pContext.random() > xf.getOpacity()))
+        return;
+
+      XForm finalXForm = flame.getFinalXForm();
+      if (finalXForm != null) {
+        finalXForm.transformPoint(pContext, pAffineTP, pVarTP, p, q, AffineZStyle.FLAT);
+      }
+
+      pVarTP.color += parentColor;
+      while (pVarTP.color < 0.0)
+        pVarTP.color += 1.0;
+      while (pVarTP.color > 1.0)
+        pVarTP.color -= 1.0;
     }
   }
 
