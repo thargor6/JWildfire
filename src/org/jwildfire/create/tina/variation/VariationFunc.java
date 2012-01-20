@@ -35,6 +35,11 @@ public abstract class VariationFunc {
 
   public abstract String[] getParameterNames();
 
+  // For few variations like mobius which use a different naming scheme 
+  public String[] getParameterAlternativeNames() {
+    return null;
+  }
+
   public abstract Object[] getParameterValues();
 
   public abstract void setParameter(String pName, double pValue);

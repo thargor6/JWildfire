@@ -306,10 +306,18 @@ public class Flam3Reader implements FlameReader {
           // params
           {
             String paramNames[] = variation.getFunc().getParameterNames();
+            String paramAltNames[] = variation.getFunc().getParameterAlternativeNames();
             if (paramNames != null) {
-              for (String pName : paramNames) {
+              if (paramAltNames != null && paramAltNames.length != paramNames.length) {
+                paramAltNames = null;
+              }
+              for (int i = 0; i < paramNames.length; i++) {
+                String pName = paramNames[i];
                 String pHs;
                 if ((pHs = atts.get(name + "_" + pName)) != null) {
+                  variation.getFunc().setParameter(pName, Double.parseDouble(pHs));
+                }
+                else if (paramAltNames != null && ((pHs = atts.get(paramAltNames[i])) != null)) {
                   variation.getFunc().setParameter(pName, Double.parseDouble(pHs));
                 }
               }

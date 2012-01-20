@@ -66,6 +66,11 @@ public class MobiusFunc extends VariationFunc {
   }
 
   @Override
+  public String[] getParameterAlternativeNames() {
+    return new String[] { "Re_A", "Re_B", "Re_C", "Re_D", "Im_A", "Im_B", "Im_C", "Im_D" };
+  }
+
+  @Override
   public void setParameter(String pName, double pValue) {
     if (PARAM_RE_A.equalsIgnoreCase(pName))
       re_a = pValue;
