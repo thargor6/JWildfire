@@ -86,7 +86,8 @@ public class SubFlameRandomFlameGenerator extends RandomFlameGenerator {
             subFlame = new ExperimentalSimpleRandomFlameGenerator().createFlame();
           }
           else {
-            subFlame = new SubFlameRandomFlameGenerator().createFlame();
+            // TODO 
+            subFlame = new ExperimentalGnarlRandomFlameGenerator().createFlame();
           }
 
           final int IMG_WIDTH = 160;

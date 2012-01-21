@@ -35,6 +35,7 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -2831,6 +2832,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     boolean enabled = selected != null && selected.length() > 0;
     pRow.getNonlinearParamsLeftButton().setEnabled(enabled);
     pRow.getNonlinearParamsRightButton().setEnabled(enabled && !pRessource);
+    pRow.getNonlinearParamsLeftButton().setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/" + (pRessource ? "details.gif" : "moveLeft.gif"))));
     pRow.getNonlinearParamsREd().setEnabled(!pRessource);
   }
 

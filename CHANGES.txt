@@ -1,3 +1,13 @@
+V0.36 (22.01.2012):
+ - Fractal flame editor: new offset paramters for the subflame_wf variations
+ - Fractal flame editor: new pre_subflame_wf variation
+ - FIXED: Fractal flame editor: after removing a certain variation other variations of the same transform were resetted
+ - Fractal flame editor: allow to define name aliases for variations (e. g. useful for the mobius variation)
+ - Fractal flame editor: new "SubFlame" random flame generator
+ - Fractal flame editor: subflame_wf variation also supports final transforms now
+ - Fractal flame editor: experimental subflame_wf variation
+ - Fractal flame editor: some refactoring
+
 V0.35 (15.01.2012):
  - Fractal flame editor: don't automatically deactivate triangle mode after rendering the preview image in normal quality
  - Fractal flame editor: automatically select 1st transform after activation a flame from the thumbnail ribbon
