@@ -70,20 +70,23 @@ public class SubFlameRandomFlameGenerator extends RandomFlameGenerator {
         Flame subFlame;
         while (true) {
           double r = Math.random();
-          if (r < 0.20) {
+          if (r < 0.15) {
             subFlame = new LinearRandomFlameGenerator().createFlame();
           }
-          else if (r < 0.40) {
+          else if (r < 0.30) {
             subFlame = new GnarlRandomFlameGenerator().createFlame();
           }
-          else if (r < 0.60) {
+          else if (r < 0.45) {
             subFlame = new ExperimentalGnarlRandomFlameGenerator().createFlame();
           }
-          else if (r < 0.80) {
+          else if (r < 0.60) {
             subFlame = new BubblesRandomFlameGenerator().createFlame();
           }
-          else {
+          else if (r < 0.75) {
             subFlame = new ExperimentalSimpleRandomFlameGenerator().createFlame();
+          }
+          else {
+            subFlame = new SubFlameRandomFlameGenerator().createFlame();
           }
 
           final int IMG_WIDTH = 160;

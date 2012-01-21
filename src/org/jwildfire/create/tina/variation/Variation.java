@@ -51,6 +51,7 @@ public class Variation {
   public void assign(Variation var) {
     amount = var.amount;
     func = VariationFuncList.getVariationFuncInstance(var.func.getName());
+
     // params
     {
       String[] paramNames = var.func.getParameterNames();

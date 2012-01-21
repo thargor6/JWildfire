@@ -2647,6 +2647,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     if (cmbRefreshing) {
       return;
     }
+    boolean oldCmbRefreshing = cmbRefreshing;
     cmbRefreshing = true;
     try {
       XForm xForm = getCurrXForm();
@@ -2659,7 +2660,9 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
             xForm.removeVariation(var);
           }
           else {
-            var.setFunc(VariationFuncList.getVariationFuncInstance(fName));
+            if (var.getFunc() == null || !var.getFunc().getName().equals(fName)) {
+              var.setFunc(VariationFuncList.getVariationFuncInstance(fName));
+            }
           }
         }
         else {
@@ -2682,7 +2685,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       }
     }
     finally {
-      cmbRefreshing = false;
+      cmbRefreshing = oldCmbRefreshing;
     }
   }
 
