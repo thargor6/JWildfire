@@ -28,15 +28,15 @@ import org.jwildfire.create.tina.render.AffineZStyle;
 
 public class SubFlameWFFunc extends VariationFunc {
   private static final String RESSOURCE_FLAME = "flame";
-  private static final String PARAM_A = "a";
-  private static final String PARAM_B = "b";
-  private static final String PARAM_C = "c";
-  private static final String[] paramNames = { PARAM_A, PARAM_B, PARAM_C };
+  private static final String PARAM_OFFSETX = "offset_x";
+  private static final String PARAM_OFFSETY = "offset_y";
+  private static final String PARAM_OFFSETZ = "offset_z";
+  private static final String[] paramNames = { PARAM_OFFSETX, PARAM_OFFSETY, PARAM_OFFSETZ };
   private static final String[] ressourceNames = { RESSOURCE_FLAME };
 
-  private double a = 0.0;
-  private double b = 0.0;
-  private double c = 0.0;
+  private double offset_x = 0.0;
+  private double offset_y = 0.0;
+  private double offset_z = 0.0;
 
   private Flame flame;
   private XForm xf;
@@ -68,6 +68,10 @@ public class SubFlameWFFunc extends VariationFunc {
       while (pVarTP.color > 1.0)
         pVarTP.color -= 1.0;
     }
+
+    pVarTP.x += offset_x;
+    pVarTP.y += offset_y;
+    pVarTP.z += offset_z;
   }
 
   @Override
@@ -77,17 +81,17 @@ public class SubFlameWFFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { a, b, c };
+    return new Object[] { offset_x, offset_y, offset_z };
   }
 
   @Override
   public void setParameter(String pName, double pValue) {
-    if (PARAM_A.equalsIgnoreCase(pName))
-      a = pValue;
-    else if (PARAM_B.equalsIgnoreCase(pName))
-      b = pValue;
-    else if (PARAM_C.equalsIgnoreCase(pName))
-      c = pValue;
+    if (PARAM_OFFSETX.equalsIgnoreCase(pName))
+      offset_x = pValue;
+    else if (PARAM_OFFSETY.equalsIgnoreCase(pName))
+      offset_y = pValue;
+    else if (PARAM_OFFSETZ.equalsIgnoreCase(pName))
+      offset_z = pValue;
     else
       throw new IllegalArgumentException(pName);
   }
