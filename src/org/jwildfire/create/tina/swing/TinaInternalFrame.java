@@ -995,11 +995,6 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaCameraRollREd.setLocation(new Point(100, 4));
       tinaCameraRollREd.setSize(new Dimension(100, 22));
       tinaCameraRollREd.setFont(new Font("Dialog", Font.PLAIN, 10));
-      tinaCameraRollREd.addFocusListener(new java.awt.event.FocusAdapter() {
-        public void focusLost(java.awt.event.FocusEvent e) {
-          tinaController.cameraRollREd_changed();
-        }
-      });
       tinaCameraRollREd.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
           tinaController.cameraRollREd_changed();
@@ -1027,11 +1022,6 @@ public class TinaInternalFrame extends JInternalFrame {
           tinaController.cameraPitchREd_changed();
         }
       });
-      tinaCameraPitchREd.addFocusListener(new java.awt.event.FocusAdapter() {
-        public void focusLost(java.awt.event.FocusEvent e) {
-          tinaController.cameraPitchREd_changed();
-        }
-      });
     }
     return tinaCameraPitchREd;
   }
@@ -1054,11 +1044,6 @@ public class TinaInternalFrame extends JInternalFrame {
           tinaController.cameraYawREd_changed();
         }
       });
-      tinaCameraYawREd.addFocusListener(new java.awt.event.FocusAdapter() {
-        public void focusLost(java.awt.event.FocusEvent e) {
-          tinaController.cameraYawREd_changed();
-        }
-      });
     }
     return tinaCameraYawREd;
   }
@@ -1078,11 +1063,6 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaCameraPerspectiveREd.setFont(new Font("Dialog", Font.PLAIN, 10));
       tinaCameraPerspectiveREd.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.cameraPerspectiveREd_changed();
-        }
-      });
-      tinaCameraPerspectiveREd.addFocusListener(new java.awt.event.FocusAdapter() {
-        public void focusLost(java.awt.event.FocusEvent e) {
           tinaController.cameraPerspectiveREd_changed();
         }
       });
@@ -1261,11 +1241,6 @@ public class TinaInternalFrame extends JInternalFrame {
           tinaController.previewQualityREd_changed();
         }
       });
-      tinaPreviewQualityREd.addFocusListener(new java.awt.event.FocusAdapter() {
-        public void focusLost(java.awt.event.FocusEvent e) {
-          tinaController.previewQualityREd_changed();
-        }
-      });
     }
     return tinaPreviewQualityREd;
   }
@@ -1309,11 +1284,6 @@ public class TinaInternalFrame extends JInternalFrame {
           tinaController.cameraCentreXREd_changed();
         }
       });
-      tinaCameraCentreXREd.addFocusListener(new java.awt.event.FocusAdapter() {
-        public void focusLost(java.awt.event.FocusEvent e) {
-          tinaController.cameraCentreXREd_changed();
-        }
-      });
     }
     return tinaCameraCentreXREd;
   }
@@ -1333,11 +1303,6 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaCameraCentreYREd.setFont(new Font("Dialog", Font.PLAIN, 10));
       tinaCameraCentreYREd.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.cameraCentreYREd_changed();
-        }
-      });
-      tinaCameraCentreYREd.addFocusListener(new java.awt.event.FocusAdapter() {
-        public void focusLost(java.awt.event.FocusEvent e) {
           tinaController.cameraCentreYREd_changed();
         }
       });
@@ -1409,11 +1374,6 @@ public class TinaInternalFrame extends JInternalFrame {
           tinaController.cameraZoomREd_changed();
         }
       });
-      tinaCameraZoomREd.addFocusListener(new java.awt.event.FocusAdapter() {
-        public void focusLost(java.awt.event.FocusEvent e) {
-          tinaController.cameraZoomREd_changed();
-        }
-      });
     }
     return tinaCameraZoomREd;
   }
@@ -1456,11 +1416,6 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaBrightnessREd.setFont(new Font("Dialog", Font.PLAIN, 10));
       tinaBrightnessREd.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.brightnessREd_changed();
-        }
-      });
-      tinaBrightnessREd.addFocusListener(new java.awt.event.FocusAdapter() {
-        public void focusLost(java.awt.event.FocusEvent e) {
           tinaController.brightnessREd_changed();
         }
       });
@@ -1510,11 +1465,6 @@ public class TinaInternalFrame extends JInternalFrame {
           tinaController.pixelsPerUnitREd_changed();
         }
       });
-      tinaPixelsPerUnitREd.addFocusListener(new java.awt.event.FocusAdapter() {
-        public void focusLost(java.awt.event.FocusEvent e) {
-          tinaController.pixelsPerUnitREd_changed();
-        }
-      });
     }
     return tinaPixelsPerUnitREd;
   }
@@ -1560,11 +1510,6 @@ public class TinaInternalFrame extends JInternalFrame {
           tinaController.bgColorRedREd_changed();
         }
       });
-      tinaBGColorRedREd.addFocusListener(new java.awt.event.FocusAdapter() {
-        public void focusLost(java.awt.event.FocusEvent e) {
-          tinaController.bgColorRedREd_changed();
-        }
-      });
     }
     return tinaBGColorRedREd;
   }
@@ -1587,11 +1532,6 @@ public class TinaInternalFrame extends JInternalFrame {
           tinaController.bgColorGreenREd_changed();
         }
       });
-      tinaBGColorGreenREd.addFocusListener(new java.awt.event.FocusAdapter() {
-        public void focusLost(java.awt.event.FocusEvent e) {
-          tinaController.bgColorGreenREd_changed();
-        }
-      });
     }
     return tinaBGColorGreenREd;
   }
@@ -1611,11 +1551,6 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaBGColorBlueREd.setFont(new Font("Dialog", Font.PLAIN, 10));
       tinaBGColorBlueREd.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.bgBGColorBlueREd_changed();
-        }
-      });
-      tinaBGColorBlueREd.addFocusListener(new java.awt.event.FocusAdapter() {
-        public void focusLost(java.awt.event.FocusEvent e) {
           tinaController.bgBGColorBlueREd_changed();
         }
       });
@@ -1713,11 +1648,6 @@ public class TinaInternalFrame extends JInternalFrame {
           tinaController.contrastREd_changed();
         }
       });
-      tinaContrastREd.addFocusListener(new java.awt.event.FocusAdapter() {
-        public void focusLost(java.awt.event.FocusEvent e) {
-          tinaController.contrastREd_changed();
-        }
-      });
     }
     return tinaContrastREd;
   }
@@ -1737,11 +1667,6 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaGammaREd.setFont(new Font("Dialog", Font.PLAIN, 10));
       tinaGammaREd.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.gammaREd_changed();
-        }
-      });
-      tinaGammaREd.addFocusListener(new java.awt.event.FocusAdapter() {
-        public void focusLost(java.awt.event.FocusEvent e) {
           tinaController.gammaREd_changed();
         }
       });
@@ -1767,11 +1692,6 @@ public class TinaInternalFrame extends JInternalFrame {
           tinaController.vibrancyREd_changed();
         }
       });
-      tinaVibrancyREd.addFocusListener(new java.awt.event.FocusAdapter() {
-        public void focusLost(java.awt.event.FocusEvent e) {
-          tinaController.vibrancyREd_changed();
-        }
-      });
     }
     return tinaVibrancyREd;
   }
@@ -1794,11 +1714,6 @@ public class TinaInternalFrame extends JInternalFrame {
           tinaController.filterRadiusREd_changed();
         }
       });
-      tinaFilterRadiusREd.addFocusListener(new java.awt.event.FocusAdapter() {
-        public void focusLost(java.awt.event.FocusEvent e) {
-          tinaController.filterRadiusREd_changed();
-        }
-      });
     }
     return tinaFilterRadiusREd;
   }
@@ -1818,11 +1733,6 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaOversampleREd.setFont(new Font("Dialog", Font.PLAIN, 10));
       tinaOversampleREd.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.spatialOversampleREd_changed();
-        }
-      });
-      tinaOversampleREd.addFocusListener(new java.awt.event.FocusAdapter() {
-        public void focusLost(java.awt.event.FocusEvent e) {
           tinaController.spatialOversampleREd_changed();
         }
       });
@@ -2564,11 +2474,6 @@ public class TinaInternalFrame extends JInternalFrame {
           tinaController.paletteShiftREd_changed();
         }
       });
-      tinaPaletteShiftREd.addFocusListener(new java.awt.event.FocusAdapter() {
-        public void focusLost(java.awt.event.FocusEvent e) {
-          tinaController.paletteShiftREd_changed();
-        }
-      });
     }
     return tinaPaletteShiftREd;
   }
@@ -2588,11 +2493,6 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaPaletteRedREd.setFont(new Font("Dialog", Font.PLAIN, 10));
       tinaPaletteRedREd.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.paletteRedREd_changed();
-        }
-      });
-      tinaPaletteRedREd.addFocusListener(new java.awt.event.FocusAdapter() {
-        public void focusLost(java.awt.event.FocusEvent e) {
           tinaController.paletteRedREd_changed();
         }
       });
@@ -2618,11 +2518,6 @@ public class TinaInternalFrame extends JInternalFrame {
           tinaController.paletteGreenREd_changed();
         }
       });
-      tinaPaletteGreenREd.addFocusListener(new java.awt.event.FocusAdapter() {
-        public void focusLost(java.awt.event.FocusEvent e) {
-          tinaController.paletteGreenREd_changed();
-        }
-      });
     }
     return tinaPaletteGreenREd;
   }
@@ -2642,11 +2537,6 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaPaletteBlueREd.setFont(new Font("Dialog", Font.PLAIN, 10));
       tinaPaletteBlueREd.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.paletteBlueREd_changed();
-        }
-      });
-      tinaPaletteBlueREd.addFocusListener(new java.awt.event.FocusAdapter() {
-        public void focusLost(java.awt.event.FocusEvent e) {
           tinaController.paletteBlueREd_changed();
         }
       });
@@ -2672,11 +2562,6 @@ public class TinaInternalFrame extends JInternalFrame {
           tinaController.paletteHueREd_changed();
         }
       });
-      tinaPaletteHueREd.addFocusListener(new java.awt.event.FocusAdapter() {
-        public void focusLost(java.awt.event.FocusEvent e) {
-          tinaController.paletteHueREd_changed();
-        }
-      });
     }
     return tinaPaletteHueREd;
   }
@@ -2696,11 +2581,6 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaPaletteSaturationREd.setFont(new Font("Dialog", Font.PLAIN, 10));
       tinaPaletteSaturationREd.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.paletteSaturationREd_changed();
-        }
-      });
-      tinaPaletteSaturationREd.addFocusListener(new java.awt.event.FocusAdapter() {
-        public void focusLost(java.awt.event.FocusEvent e) {
           tinaController.paletteSaturationREd_changed();
         }
       });
@@ -2726,11 +2606,6 @@ public class TinaInternalFrame extends JInternalFrame {
           tinaController.paletteContrastREd_changed();
         }
       });
-      tinaPaletteContrastREd.addFocusListener(new java.awt.event.FocusAdapter() {
-        public void focusLost(java.awt.event.FocusEvent e) {
-          tinaController.paletteContrastREd_changed();
-        }
-      });
     }
     return tinaPaletteContrastREd;
   }
@@ -2753,11 +2628,6 @@ public class TinaInternalFrame extends JInternalFrame {
           tinaController.paletteGammaREd_changed();
         }
       });
-      tinaPaletteGammaREd.addFocusListener(new java.awt.event.FocusAdapter() {
-        public void focusLost(java.awt.event.FocusEvent e) {
-          tinaController.paletteGammaREd_changed();
-        }
-      });
     }
     return tinaPaletteGammaREd;
   }
@@ -2777,11 +2647,6 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaPaletteBrightnessREd.setFont(new Font("Dialog", Font.PLAIN, 10));
       tinaPaletteBrightnessREd.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.paletteBrightnessREd_changed();
-        }
-      });
-      tinaPaletteBrightnessREd.addFocusListener(new java.awt.event.FocusAdapter() {
-        public void focusLost(java.awt.event.FocusEvent e) {
           tinaController.paletteBrightnessREd_changed();
         }
       });
@@ -3247,11 +3112,6 @@ public class TinaInternalFrame extends JInternalFrame {
           tinaController.affineC20REd_changed();
         }
       });
-      affineC20REd.addFocusListener(new java.awt.event.FocusAdapter() {
-        public void focusLost(java.awt.event.FocusEvent e) {
-          tinaController.affineC20REd_changed();
-        }
-      });
     }
     return affineC20REd;
   }
@@ -3273,11 +3133,6 @@ public class TinaInternalFrame extends JInternalFrame {
       affineC21REd.setFont(new Font("Dialog", Font.PLAIN, 10));
       affineC21REd.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.affineC21REd_changed();
-        }
-      });
-      affineC21REd.addFocusListener(new java.awt.event.FocusAdapter() {
-        public void focusLost(java.awt.event.FocusEvent e) {
           tinaController.affineC21REd_changed();
         }
       });
@@ -3696,11 +3551,6 @@ public class TinaInternalFrame extends JInternalFrame {
           tinaController.nonlinearVarREdChanged(0);
         }
       });
-      nonlinearVar1REd.addFocusListener(new java.awt.event.FocusAdapter() {
-        public void focusLost(java.awt.event.FocusEvent e) {
-          tinaController.nonlinearVarREdChanged(0);
-        }
-      });
     }
     return nonlinearVar1REd;
   }
@@ -3741,11 +3591,6 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearParams1REd.setFont(new Font("Dialog", Font.PLAIN, 10));
       nonlinearParams1REd.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.nonlinearParamsREdChanged(0);
-        }
-      });
-      nonlinearParams1REd.addFocusListener(new java.awt.event.FocusAdapter() {
-        public void focusLost(java.awt.event.FocusEvent e) {
           tinaController.nonlinearParamsREdChanged(0);
         }
       });
@@ -3947,11 +3792,6 @@ public class TinaInternalFrame extends JInternalFrame {
           tinaController.nonlinearVarREdChanged(1);
         }
       });
-      nonlinearVar2REd.addFocusListener(new java.awt.event.FocusAdapter() {
-        public void focusLost(java.awt.event.FocusEvent e) {
-          tinaController.nonlinearVarREdChanged(1);
-        }
-      });
     }
     return nonlinearVar2REd;
   }
@@ -3992,11 +3832,6 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearParams2REd.setSize(new Dimension(55, 22));
       nonlinearParams2REd.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.nonlinearParamsREdChanged(1);
-        }
-      });
-      nonlinearParams2REd.addFocusListener(new java.awt.event.FocusAdapter() {
-        public void focusLost(java.awt.event.FocusEvent e) {
           tinaController.nonlinearParamsREdChanged(1);
         }
       });
@@ -4174,11 +4009,6 @@ public class TinaInternalFrame extends JInternalFrame {
           tinaController.nonlinearVarREdChanged(2);
         }
       });
-      nonlinearVar3REd.addFocusListener(new java.awt.event.FocusAdapter() {
-        public void focusLost(java.awt.event.FocusEvent e) {
-          tinaController.nonlinearVarREdChanged(2);
-        }
-      });
     }
     return nonlinearVar3REd;
   }
@@ -4219,11 +4049,6 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearParams3REd.setSize(new Dimension(55, 22));
       nonlinearParams3REd.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.nonlinearParamsREdChanged(2);
-        }
-      });
-      nonlinearParams3REd.addFocusListener(new java.awt.event.FocusAdapter() {
-        public void focusLost(java.awt.event.FocusEvent e) {
           tinaController.nonlinearParamsREdChanged(2);
         }
       });
@@ -4341,11 +4166,6 @@ public class TinaInternalFrame extends JInternalFrame {
           tinaController.xFormColorREd_changed();
         }
       });
-      xFormColorREd.addFocusListener(new java.awt.event.FocusAdapter() {
-        public void focusLost(java.awt.event.FocusEvent e) {
-          tinaController.xFormColorREd_changed();
-        }
-      });
     }
     return xFormColorREd;
   }
@@ -4392,11 +4212,6 @@ public class TinaInternalFrame extends JInternalFrame {
           tinaController.xFormSymmetryREd_changed();
         }
       });
-      xFormSymmetryREd.addFocusListener(new java.awt.event.FocusAdapter() {
-        public void focusLost(java.awt.event.FocusEvent e) {
-          tinaController.xFormSymmetryREd_changed();
-        }
-      });
     }
     return xFormSymmetryREd;
   }
@@ -4440,11 +4255,6 @@ public class TinaInternalFrame extends JInternalFrame {
       xFormOpacityREd.setFont(new Font("Dialog", Font.PLAIN, 10));
       xFormOpacityREd.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.xFormOpacityREd_changed();
-        }
-      });
-      xFormOpacityREd.addFocusListener(new java.awt.event.FocusAdapter() {
-        public void focusLost(java.awt.event.FocusEvent e) {
           tinaController.xFormOpacityREd_changed();
         }
       });
@@ -4839,11 +4649,6 @@ public class TinaInternalFrame extends JInternalFrame {
           tinaController.morphFramesREd_changed();
         }
       });
-      morphFramesREd.addFocusListener(new java.awt.event.FocusAdapter() {
-        public void focusLost(java.awt.event.FocusEvent e) {
-          tinaController.morphFramesREd_changed();
-        }
-      });
     }
     return morphFramesREd;
   }
@@ -4863,11 +4668,6 @@ public class TinaInternalFrame extends JInternalFrame {
       morphFrameREd.setFont(new Font("Dialog", Font.PLAIN, 10));
       morphFrameREd.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.morphFrameREd_changed();
-        }
-      });
-      morphFrameREd.addFocusListener(new java.awt.event.FocusAdapter() {
-        public void focusLost(java.awt.event.FocusEvent e) {
           tinaController.morphFrameREd_changed();
         }
       });
@@ -5461,11 +5261,6 @@ public class TinaInternalFrame extends JInternalFrame {
           tinaController.nonlinearVarREdChanged(3);
         }
       });
-      nonlinearVar4REd.addFocusListener(new java.awt.event.FocusAdapter() {
-        public void focusLost(java.awt.event.FocusEvent e) {
-          tinaController.nonlinearVarREdChanged(3);
-        }
-      });
     }
     return nonlinearVar4REd;
   }
@@ -5506,11 +5301,6 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearParams4REd.setSize(new Dimension(55, 22));
       nonlinearParams4REd.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.nonlinearParamsREdChanged(3);
-        }
-      });
-      nonlinearParams4REd.addFocusListener(new java.awt.event.FocusAdapter() {
-        public void focusLost(java.awt.event.FocusEvent e) {
           tinaController.nonlinearParamsREdChanged(3);
         }
       });
@@ -5625,11 +5415,6 @@ public class TinaInternalFrame extends JInternalFrame {
       colorOversampleREd.setFont(new Font("Dialog", Font.PLAIN, 10));
       colorOversampleREd.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.colorOversampleREd_changed();
-        }
-      });
-      colorOversampleREd.addFocusListener(new java.awt.event.FocusAdapter() {
-        public void focusLost(java.awt.event.FocusEvent e) {
           tinaController.colorOversampleREd_changed();
         }
       });
@@ -5857,11 +5642,6 @@ public class TinaInternalFrame extends JInternalFrame {
           tinaController.nonlinearVarREdChanged(4);
         }
       });
-      nonlinearVar5REd.addFocusListener(new java.awt.event.FocusAdapter() {
-        public void focusLost(java.awt.event.FocusEvent e) {
-          tinaController.nonlinearVarREdChanged(4);
-        }
-      });
     }
     return nonlinearVar5REd;
   }
@@ -5902,11 +5682,6 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearParams5REd.setSize(new Dimension(55, 22));
       nonlinearParams5REd.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.nonlinearParamsREdChanged(4);
-        }
-      });
-      nonlinearParams5REd.addFocusListener(new java.awt.event.FocusAdapter() {
-        public void focusLost(java.awt.event.FocusEvent e) {
           tinaController.nonlinearParamsREdChanged(4);
         }
       });
@@ -6084,11 +5859,6 @@ public class TinaInternalFrame extends JInternalFrame {
           tinaController.nonlinearVarREdChanged(5);
         }
       });
-      nonlinearVar6REd.addFocusListener(new java.awt.event.FocusAdapter() {
-        public void focusLost(java.awt.event.FocusEvent e) {
-          tinaController.nonlinearVarREdChanged(5);
-        }
-      });
     }
     return nonlinearVar6REd;
   }
@@ -6129,11 +5899,6 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearParams6REd.setSize(new Dimension(55, 22));
       nonlinearParams6REd.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.nonlinearParamsREdChanged(5);
-        }
-      });
-      nonlinearParams6REd.addFocusListener(new java.awt.event.FocusAdapter() {
-        public void focusLost(java.awt.event.FocusEvent e) {
           tinaController.nonlinearParamsREdChanged(5);
         }
       });
@@ -6310,11 +6075,6 @@ public class TinaInternalFrame extends JInternalFrame {
           tinaController.nonlinearVarREdChanged(6);
         }
       });
-      nonlinearVar7REd.addFocusListener(new java.awt.event.FocusAdapter() {
-        public void focusLost(java.awt.event.FocusEvent e) {
-          tinaController.nonlinearVarREdChanged(6);
-        }
-      });
     }
     return nonlinearVar7REd;
   }
@@ -6355,11 +6115,6 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearParams7REd.setSize(new Dimension(55, 22));
       nonlinearParams7REd.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.nonlinearParamsREdChanged(6);
-        }
-      });
-      nonlinearParams7REd.addFocusListener(new java.awt.event.FocusAdapter() {
-        public void focusLost(java.awt.event.FocusEvent e) {
           tinaController.nonlinearParamsREdChanged(6);
         }
       });
@@ -6536,11 +6291,6 @@ public class TinaInternalFrame extends JInternalFrame {
           tinaController.nonlinearVarREdChanged(7);
         }
       });
-      nonlinearVar8REd.addFocusListener(new java.awt.event.FocusAdapter() {
-        public void focusLost(java.awt.event.FocusEvent e) {
-          tinaController.nonlinearVarREdChanged(7);
-        }
-      });
     }
     return nonlinearVar8REd;
   }
@@ -6581,11 +6331,6 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearParams8REd.setSize(new Dimension(55, 22));
       nonlinearParams8REd.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.nonlinearParamsREdChanged(7);
-        }
-      });
-      nonlinearParams8REd.addFocusListener(new java.awt.event.FocusAdapter() {
-        public void focusLost(java.awt.event.FocusEvent e) {
           tinaController.nonlinearParamsREdChanged(7);
         }
       });
@@ -6762,11 +6507,6 @@ public class TinaInternalFrame extends JInternalFrame {
           tinaController.nonlinearVarREdChanged(8);
         }
       });
-      nonlinearVar9REd.addFocusListener(new java.awt.event.FocusAdapter() {
-        public void focusLost(java.awt.event.FocusEvent e) {
-          tinaController.nonlinearVarREdChanged(8);
-        }
-      });
     }
     return nonlinearVar9REd;
   }
@@ -6807,11 +6547,6 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearParams9REd.setSize(new Dimension(55, 22));
       nonlinearParams9REd.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.nonlinearParamsREdChanged(8);
-        }
-      });
-      nonlinearParams9REd.addFocusListener(new java.awt.event.FocusAdapter() {
-        public void focusLost(java.awt.event.FocusEvent e) {
           tinaController.nonlinearParamsREdChanged(8);
         }
       });
@@ -6988,11 +6723,6 @@ public class TinaInternalFrame extends JInternalFrame {
           tinaController.nonlinearVarREdChanged(9);
         }
       });
-      nonlinearVar10REd.addFocusListener(new java.awt.event.FocusAdapter() {
-        public void focusLost(java.awt.event.FocusEvent e) {
-          tinaController.nonlinearVarREdChanged(9);
-        }
-      });
     }
     return nonlinearVar10REd;
   }
@@ -7033,11 +6763,6 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearParams10REd.setSize(new Dimension(55, 22));
       nonlinearParams10REd.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.nonlinearParamsREdChanged(9);
-        }
-      });
-      nonlinearParams10REd.addFocusListener(new java.awt.event.FocusAdapter() {
-        public void focusLost(java.awt.event.FocusEvent e) {
           tinaController.nonlinearParamsREdChanged(9);
         }
       });
@@ -7214,11 +6939,6 @@ public class TinaInternalFrame extends JInternalFrame {
           tinaController.nonlinearVarREdChanged(10);
         }
       });
-      nonlinearVar11REd.addFocusListener(new java.awt.event.FocusAdapter() {
-        public void focusLost(java.awt.event.FocusEvent e) {
-          tinaController.nonlinearVarREdChanged(10);
-        }
-      });
     }
     return nonlinearVar11REd;
   }
@@ -7259,11 +6979,6 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearParams11REd.setSize(new Dimension(55, 22));
       nonlinearParams11REd.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.nonlinearParamsREdChanged(10);
-        }
-      });
-      nonlinearParams11REd.addFocusListener(new java.awt.event.FocusAdapter() {
-        public void focusLost(java.awt.event.FocusEvent e) {
           tinaController.nonlinearParamsREdChanged(10);
         }
       });
@@ -7440,11 +7155,6 @@ public class TinaInternalFrame extends JInternalFrame {
           tinaController.nonlinearVarREdChanged(11);
         }
       });
-      nonlinearVar12REd.addFocusListener(new java.awt.event.FocusAdapter() {
-        public void focusLost(java.awt.event.FocusEvent e) {
-          tinaController.nonlinearVarREdChanged(11);
-        }
-      });
     }
     return nonlinearVar12REd;
   }
@@ -7485,11 +7195,6 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearParams12REd.setSize(new Dimension(55, 22));
       nonlinearParams12REd.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.nonlinearParamsREdChanged(11);
-        }
-      });
-      nonlinearParams12REd.addFocusListener(new java.awt.event.FocusAdapter() {
-        public void focusLost(java.awt.event.FocusEvent e) {
           tinaController.nonlinearParamsREdChanged(11);
         }
       });
@@ -7627,11 +7332,6 @@ public class TinaInternalFrame extends JInternalFrame {
           tinaController.cameraZPosREd_changed();
         }
       });
-      tinaCameraZPosREd.addFocusListener(new java.awt.event.FocusAdapter() {
-        public void focusLost(java.awt.event.FocusEvent e) {
-          tinaController.cameraZPosREd_changed();
-        }
-      });
     }
     return tinaCameraZPosREd;
   }
@@ -7697,11 +7397,6 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaCameraDOFREd.setFont(new Font("Dialog", Font.PLAIN, 10));
       tinaCameraDOFREd.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.cameraDOFREd_changed();
-        }
-      });
-      tinaCameraDOFREd.addFocusListener(new java.awt.event.FocusAdapter() {
-        public void focusLost(java.awt.event.FocusEvent e) {
           tinaController.cameraDOFREd_changed();
         }
       });
@@ -7838,11 +7533,6 @@ public class TinaInternalFrame extends JInternalFrame {
           tinaController.shadingAmbientREd_changed();
         }
       });
-      shadingAmbientREd.addFocusListener(new java.awt.event.FocusAdapter() {
-        public void focusLost(java.awt.event.FocusEvent e) {
-          tinaController.shadingAmbientREd_changed();
-        }
-      });
     }
     return shadingAmbientREd;
   }
@@ -7862,11 +7552,6 @@ public class TinaInternalFrame extends JInternalFrame {
       shadingDiffuseREd.setFont(new Font("Dialog", Font.PLAIN, 10));
       shadingDiffuseREd.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.shadingDiffuseREd_changed();
-        }
-      });
-      shadingDiffuseREd.addFocusListener(new java.awt.event.FocusAdapter() {
-        public void focusLost(java.awt.event.FocusEvent e) {
           tinaController.shadingDiffuseREd_changed();
         }
       });
@@ -7938,11 +7623,6 @@ public class TinaInternalFrame extends JInternalFrame {
           tinaController.shadingPhongREd_changed();
         }
       });
-      shadingPhongREd.addFocusListener(new java.awt.event.FocusAdapter() {
-        public void focusLost(java.awt.event.FocusEvent e) {
-          tinaController.shadingPhongREd_changed();
-        }
-      });
     }
     return shadingPhongREd;
   }
@@ -7985,11 +7665,6 @@ public class TinaInternalFrame extends JInternalFrame {
       shadingPhongSizeREd.setFont(new Font("Dialog", Font.PLAIN, 10));
       shadingPhongSizeREd.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.shadingPhongSizeREd_changed();
-        }
-      });
-      shadingPhongSizeREd.addFocusListener(new java.awt.event.FocusAdapter() {
-        public void focusLost(java.awt.event.FocusEvent e) {
           tinaController.shadingPhongSizeREd_changed();
         }
       });

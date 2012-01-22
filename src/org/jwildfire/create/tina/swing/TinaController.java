@@ -2107,6 +2107,8 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
 
   public void transformationTableClicked() {
     if (!gridRefreshing) {
+      boolean oldGridRefreshing = gridRefreshing;
+      boolean oldCmbRefreshing = cmbRefreshing;
       gridRefreshing = cmbRefreshing = true;
       try {
         XForm xForm = getCurrXForm();
@@ -2118,7 +2120,8 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
         refreshFlameImage(false);
       }
       finally {
-        cmbRefreshing = gridRefreshing = false;
+        cmbRefreshing = oldCmbRefreshing;
+        gridRefreshing = oldGridRefreshing;
       }
     }
   }
@@ -3226,6 +3229,9 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
   }
 
   public void affineC21REd_changed() {
+    if (gridRefreshing || cmbRefreshing) {
+      return;
+    }
     XForm xForm = getCurrXForm();
     if (xForm != null) {
       double value = Tools.stringToDouble(affineC21REd.getText());
@@ -3241,6 +3247,9 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
   }
 
   public void affineC20REd_changed() {
+    if (gridRefreshing || cmbRefreshing) {
+      return;
+    }
     XForm xForm = getCurrXForm();
     if (xForm != null) {
       double value = Tools.stringToDouble(affineC20REd.getText());
