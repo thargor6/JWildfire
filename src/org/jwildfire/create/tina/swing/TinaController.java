@@ -28,6 +28,7 @@ import java.awt.datatransfer.Transferable;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
 import java.io.File;
+import java.io.InputStream;
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -65,8 +66,10 @@ import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.batch.Job;
 import org.jwildfire.create.tina.batch.JobRenderThread;
 import org.jwildfire.create.tina.batch.JobRenderThreadController;
+import org.jwildfire.create.tina.io.Flam3PaletteReader;
 import org.jwildfire.create.tina.io.Flam3Reader;
 import org.jwildfire.create.tina.io.Flam3Writer;
+import org.jwildfire.create.tina.io.RGBPaletteReader;
 import org.jwildfire.create.tina.palette.RGBColor;
 import org.jwildfire.create.tina.palette.RGBPalette;
 import org.jwildfire.create.tina.palette.RGBPaletteRenderer;
@@ -3800,10 +3803,21 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
   private final int GRADIENT_THUMB_BORDER = 2;
 
   private void initGradientLibrary() {
-    for (int i = 0; i < 20; i++) {
-      RGBPalette palette = new RandomRGBPaletteGenerator().generatePalette(7);
-      gradientLibraryList.add(palette);
+    try {
+      RGBPaletteReader reader = new Flam3PaletteReader();
+      InputStream is = reader.getClass().getResourceAsStream("flam3-palettes.xml");
+      gradientLibraryList.addAll(reader.readPalettes(is));
     }
+    catch (Exception ex) {
+      ex.printStackTrace();
+    }
+    if (gradientLibraryList.size() == 0) {
+      for (int i = 0; i < 20; i++) {
+        RGBPalette palette = new RandomRGBPaletteGenerator().generatePalette(7);
+        gradientLibraryList.add(palette);
+      }
+    }
+
     List<SimpleImage> thumbnailsList = new ArrayList<SimpleImage>();
     for (RGBPalette palette : gradientLibraryList) {
       thumbnailsList.add(new RGBPaletteRenderer().renderHorizPalette(palette, RGBPalette.PALETTE_SIZE, GRADIENT_THUMB_HEIGHT));

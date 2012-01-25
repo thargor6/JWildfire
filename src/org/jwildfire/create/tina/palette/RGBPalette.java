@@ -41,6 +41,8 @@ public class RGBPalette {
   private int modBrightness;
   private int modSaturation;
   private int modSwapRGB;
+  private String flam3Number; // imported from flam3, just for display
+  private String flam3Name; // imported from flam3, just for display
 
   private final Map<Integer, RGBColor> rawColors = new HashMap<Integer, RGBColor>();
   private final Map<Integer, RGBColor> transformedColors = new HashMap<Integer, RGBColor>();
@@ -307,4 +309,21 @@ public class RGBPalette {
       transformedColors.put(key, newColor);
     }
   }
+
+  public String getFlam3Number() {
+    return flam3Number;
+  }
+
+  public void setFlam3Number(String flam3Number) {
+    this.flam3Number = flam3Number;
+  }
+
+  public String getFlam3Name() {
+    return flam3Name;
+  }
+
+  public void setFlam3Name(String flam3Name) {
+    this.flam3Name = flam3Name;
+  }
+
 }
