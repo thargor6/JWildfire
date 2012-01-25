@@ -335,6 +335,9 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
   private final JButton mouseEditZoomOutButton;
   private final JToggleButton toggleTrianglesButton;
   private final JToggleButton toggleDarkTrianglesButton;
+  // Gradient
+  private final JPanel gradientLibraryPanel;
+  private JScrollPane gradientLibraryScrollPane = null;
   // Random batch
   private final JPanel randomBatchPanel;
   private JScrollPane randomBatchScrollPane = null;
@@ -430,7 +433,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       JButton pAffineFlipVerticalButton, JComboBox pAnimateLightScriptCmb, JToggleButton pToggleDarkTrianglesButton,
       JTextField pShadingBlurRadiusREd, JSlider pShadingBlurRadiusSlider, JTextField pShadingBlurFadeREd, JSlider pShadingBlurFadeSlider,
       JTextField pShadingBlurFallOffREd, JSlider pShadingBlurFallOffSlider, JTextArea pScriptTextArea, JToggleButton pAffineScaleXButton,
-      JToggleButton pAffineScaleYButton) {
+      JToggleButton pAffineScaleYButton, JPanel pGradientLibraryPanel) {
     errorHandler = pErrorHandler;
     prefs = pPrefs;
     centerPanel = pCenterPanel;
@@ -532,6 +535,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
 
     randomBatchPanel = pRandomBatchPanel;
     nonlinearControlsRows = pNonlinearControlsRows;
+    gradientLibraryPanel = pGradientLibraryPanel;
 
     xFormColorREd = pXFormColorREd;
     xFormColorSlider = pXFormColorSlider;
@@ -627,6 +631,8 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     refreshRenderBatchJobsTable();
 
     initDefaultScript();
+
+    initGradientLibrary();
 
     enableControls();
     enableShadingUI();
@@ -3787,6 +3793,66 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
 
   public void paletteSwapRGBSlider_stateChanged(ChangeEvent e) {
     paletteSliderChanged(paletteSwapRGBSlider, paletteSwapRGBREd, "modSwapRGB", 1.0);
+  }
+
+  private List<RGBPalette> gradientLibraryList = new ArrayList<RGBPalette>();
+  private final int GRADIENT_THUMB_HEIGHT = 20;
+  private final int GRADIENT_THUMB_BORDER = 2;
+
+  private void initGradientLibrary() {
+    for (int i = 0; i < 20; i++) {
+      RGBPalette palette = new RandomRGBPaletteGenerator().generatePalette(7);
+      gradientLibraryList.add(palette);
+    }
+    List<SimpleImage> thumbnailsList = new ArrayList<SimpleImage>();
+    for (RGBPalette palette : gradientLibraryList) {
+      thumbnailsList.add(new RGBPaletteRenderer().renderHorizPalette(palette, RGBPalette.PALETTE_SIZE, GRADIENT_THUMB_HEIGHT));
+    }
+    updateGradientThumbnails(thumbnailsList);
+  }
+
+  public void updateGradientThumbnails(List<SimpleImage> pImages) {
+    if (gradientLibraryScrollPane != null) {
+      gradientLibraryPanel.remove(gradientLibraryScrollPane);
+      gradientLibraryScrollPane = null;
+    }
+    int panelWidth = gradientLibraryPanel.getBounds().width - 2 * GRADIENT_THUMB_BORDER;
+    int panelHeight = (GRADIENT_THUMB_HEIGHT + GRADIENT_THUMB_BORDER) * pImages.size();
+    JPanel gradientsPanel = new JPanel();
+    gradientsPanel.setLayout(null);
+    gradientsPanel.setSize(panelWidth, panelHeight);
+    gradientsPanel.setPreferredSize(new Dimension(panelWidth, panelHeight));
+    for (int i = 0; i < pImages.size(); i++) {
+      SimpleImage img = pImages.get(i);
+      ImagePanel imgPanel = new ImagePanel(img, 0, 0, img.getImageWidth());
+      imgPanel.setImage(img);
+      imgPanel.setLocation(GRADIENT_THUMB_BORDER, i * GRADIENT_THUMB_HEIGHT + (i + 1) * GRADIENT_THUMB_BORDER);
+      final int idx = i;
+      imgPanel.addMouseListener(new java.awt.event.MouseAdapter() {
+        public void mouseClicked(java.awt.event.MouseEvent e) {
+          if (e.getClickCount() > 1 || (e.getClickCount() == 1 && e.getButton() == MouseEvent.BUTTON3)) {
+            importFromGradientLibrary(idx);
+          }
+        }
+      });
+      gradientsPanel.add(imgPanel);
+    }
+    gradientLibraryScrollPane = new JScrollPane(gradientsPanel);
+    gradientLibraryScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+    gradientLibraryScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+
+    gradientLibraryPanel.add(gradientLibraryScrollPane, BorderLayout.CENTER);
+    gradientLibraryPanel.validate();
+  }
+
+  private void importFromGradientLibrary(int idx) {
+    Flame currFlame = getCurrFlame();
+    if (currFlame != null && idx >= 0 && idx < gradientLibraryList.size()) {
+      RGBPalette palette = gradientLibraryList.get(idx).makeCopy();
+      currFlame.setPalette(palette);
+      refreshPaletteUI(palette);
+      refreshFlameImage(false);
+    }
   }
 
 }

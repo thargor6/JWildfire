@@ -606,6 +606,9 @@ public class TinaInternalFrame extends JInternalFrame {
   private JLabel tinaPaletteSwapRGBLbl = null;
   private JTextField tinaPaletteSwapRGBREd = null;
   private JSlider tinaPaletteSwapRGBSlider = null;
+  private JPanel gradientLibraryPanel = null;
+  private JPanel gradientLibrarySouthPanel = null;
+  private JPanel gradientLibraryCenterPanel = null;
 
   /**
    * This is the xxx default constructor
@@ -2322,6 +2325,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaPaletteSubTabbedPane.setToolTipText("");
       tinaPaletteSubTabbedPane.setFont(new Font("Dialog", Font.BOLD, 10));
       tinaPaletteSubTabbedPane.addTab("Create", null, getTinaPaletteCreatePanel(), null);
+      tinaPaletteSubTabbedPane.addTab("Library", null, getGradientLibraryPanel(), null);
       tinaPaletteSubTabbedPane.addTab("Transform", null, getTinaPaletteBalancingPanel(), null);
     }
     return tinaPaletteSubTabbedPane;
@@ -2934,7 +2938,7 @@ public class TinaInternalFrame extends JInternalFrame {
         getRootTabbedPane(), getAffineFlipHorizontalButton(), getAffineFlipVerticalButton(), getAnimateLightScriptCmb(),
         getDarkTrianglesToggleButton(), getShadingBlurRadiusREd(), getShadingBlurRadiusSlider(), getShadingBlurFadeREd(),
         getShadingBlurFadeSlider(), getShadingBlurFallOffREd(), getShadingBlurFallOffSlider(), getScriptTextArea(),
-        getAffineScaleXButton(), getAffineScaleYButton());
+        getAffineScaleXButton(), getAffineScaleYButton(), getGradientLibraryCenterPanel());
     tinaController.refreshing = tinaController.cmbRefreshing = tinaController.gridRefreshing = true;
     try {
       for (NonlinearControlsRow row : nonlinearControlsRows) {
@@ -5121,7 +5125,7 @@ public class TinaInternalFrame extends JInternalFrame {
     if (renderProgressBar == null) {
       renderProgressBar = new JProgressBar();
       renderProgressBar.setValue(0);
-      renderProgressBar.setSize(new Dimension(179, 14));
+      renderProgressBar.setSize(new Dimension(210, 14));
       renderProgressBar.setLocation(new Point(229, 9));
       renderProgressBar.setPreferredSize(new Dimension(179, 14));
       renderProgressBar.setStringPainted(true);
@@ -8887,6 +8891,48 @@ public class TinaInternalFrame extends JInternalFrame {
       });
     }
     return tinaPaletteSwapRGBSlider;
+  }
+
+  /**
+   * This method initializes gradientLibraryPanel	
+   * 	
+   * @return javax.swing.JPanel	
+   */
+  private JPanel getGradientLibraryPanel() {
+    if (gradientLibraryPanel == null) {
+      gradientLibraryPanel = new JPanel();
+      gradientLibraryPanel.setLayout(new BorderLayout());
+      gradientLibraryPanel.add(getGradientLibrarySouthPanel(), BorderLayout.SOUTH);
+      gradientLibraryPanel.add(getGradientLibraryCenterPanel(), BorderLayout.CENTER);
+    }
+    return gradientLibraryPanel;
+  }
+
+  /**
+   * This method initializes gradientLibrarySouthPanel	
+   * 	
+   * @return javax.swing.JPanel	
+   */
+  private JPanel getGradientLibrarySouthPanel() {
+    if (gradientLibrarySouthPanel == null) {
+      gradientLibrarySouthPanel = new JPanel();
+      gradientLibrarySouthPanel.setLayout(new GridBagLayout());
+      gradientLibrarySouthPanel.setPreferredSize(new Dimension(0, 50));
+    }
+    return gradientLibrarySouthPanel;
+  }
+
+  /**
+   * This method initializes gradientLibraryCenterPanel	
+   * 	
+   * @return javax.swing.JPanel	
+   */
+  private JPanel getGradientLibraryCenterPanel() {
+    if (gradientLibraryCenterPanel == null) {
+      gradientLibraryCenterPanel = new JPanel();
+      gradientLibraryCenterPanel.setLayout(new BorderLayout());
+    }
+    return gradientLibraryCenterPanel;
   }
 
 } //  @jve:decl-index=0:visual-constraint="10,10"
