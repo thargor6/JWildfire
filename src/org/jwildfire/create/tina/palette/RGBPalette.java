@@ -326,4 +326,22 @@ public class RGBPalette {
     this.flam3Name = flam3Name;
   }
 
+  @Override
+  public String toString() {
+    if (flam3Number != null && flam3Number.length() > 0) {
+      if (flam3Name != null && flam3Name.length() > 0) {
+        return flam3Number + " - " + flam3Name;
+      }
+      else {
+        return flam3Name;
+      }
+    }
+    else if (flam3Name != null && flam3Name.length() > 0) {
+      return flam3Name;
+    }
+    else {
+      return super.toString();
+    }
+  }
+
 }

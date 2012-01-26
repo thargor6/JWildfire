@@ -609,6 +609,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JPanel gradientLibraryPanel = null;
   private JPanel gradientLibrarySouthPanel = null;
   private JPanel gradientLibraryCenterPanel = null;
+  private JComboBox gradientLibraryGradientCmb = null;
 
   /**
    * This is the xxx default constructor
@@ -2938,7 +2939,7 @@ public class TinaInternalFrame extends JInternalFrame {
         getRootTabbedPane(), getAffineFlipHorizontalButton(), getAffineFlipVerticalButton(), getAnimateLightScriptCmb(),
         getDarkTrianglesToggleButton(), getShadingBlurRadiusREd(), getShadingBlurRadiusSlider(), getShadingBlurFadeREd(),
         getShadingBlurFadeSlider(), getShadingBlurFallOffREd(), getShadingBlurFallOffSlider(), getScriptTextArea(),
-        getAffineScaleXButton(), getAffineScaleYButton(), getGradientLibraryCenterPanel());
+        getAffineScaleXButton(), getAffineScaleYButton(), getGradientLibraryCenterPanel(), getGradientLibraryGradientCmb());
     tinaController.refreshing = tinaController.cmbRefreshing = tinaController.gridRefreshing = true;
     try {
       for (NonlinearControlsRow row : nonlinearControlsRows) {
@@ -8916,8 +8917,9 @@ public class TinaInternalFrame extends JInternalFrame {
   private JPanel getGradientLibrarySouthPanel() {
     if (gradientLibrarySouthPanel == null) {
       gradientLibrarySouthPanel = new JPanel();
-      gradientLibrarySouthPanel.setLayout(new GridBagLayout());
-      gradientLibrarySouthPanel.setPreferredSize(new Dimension(0, 50));
+      gradientLibrarySouthPanel.setLayout(null);
+      gradientLibrarySouthPanel.setPreferredSize(new Dimension(0, 30));
+      gradientLibrarySouthPanel.add(getGradientLibraryGradientCmb(), null);
     }
     return gradientLibrarySouthPanel;
   }
@@ -8933,6 +8935,30 @@ public class TinaInternalFrame extends JInternalFrame {
       gradientLibraryCenterPanel.setLayout(new BorderLayout());
     }
     return gradientLibraryCenterPanel;
+  }
+
+  /**
+   * This method initializes gradientLibraryGradientCmb	
+   * 	
+   * @return javax.swing.JComboBox	
+   */
+  private JComboBox getGradientLibraryGradientCmb() {
+    if (gradientLibraryGradientCmb == null) {
+      gradientLibraryGradientCmb = new JComboBox();
+      gradientLibraryGradientCmb.setPreferredSize(new Dimension(126, 22));
+      gradientLibraryGradientCmb.setMaximumRowCount(32);
+      gradientLibraryGradientCmb.setSize(new Dimension(182, 22));
+      gradientLibraryGradientCmb.setLocation(new Point(4, 4));
+      gradientLibraryGradientCmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      gradientLibraryGradientCmb.addItemListener(new java.awt.event.ItemListener() {
+        public void itemStateChanged(java.awt.event.ItemEvent e) {
+          if (tinaController != null) {
+            tinaController.gradientLibraryGradientChanged();
+          }
+        }
+      });
+    }
+    return gradientLibraryGradientCmb;
   }
 
 } //  @jve:decl-index=0:visual-constraint="10,10"

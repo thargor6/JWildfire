@@ -341,6 +341,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
   // Gradient
   private final JPanel gradientLibraryPanel;
   private JScrollPane gradientLibraryScrollPane = null;
+  private final JComboBox gradientLibraryGradientCmb;
   // Random batch
   private final JPanel randomBatchPanel;
   private JScrollPane randomBatchScrollPane = null;
@@ -436,7 +437,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       JButton pAffineFlipVerticalButton, JComboBox pAnimateLightScriptCmb, JToggleButton pToggleDarkTrianglesButton,
       JTextField pShadingBlurRadiusREd, JSlider pShadingBlurRadiusSlider, JTextField pShadingBlurFadeREd, JSlider pShadingBlurFadeSlider,
       JTextField pShadingBlurFallOffREd, JSlider pShadingBlurFallOffSlider, JTextArea pScriptTextArea, JToggleButton pAffineScaleXButton,
-      JToggleButton pAffineScaleYButton, JPanel pGradientLibraryPanel) {
+      JToggleButton pAffineScaleYButton, JPanel pGradientLibraryPanel, JComboBox pGradientLibraryGradientCmb) {
     errorHandler = pErrorHandler;
     prefs = pPrefs;
     centerPanel = pCenterPanel;
@@ -539,6 +540,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     randomBatchPanel = pRandomBatchPanel;
     nonlinearControlsRows = pNonlinearControlsRows;
     gradientLibraryPanel = pGradientLibraryPanel;
+    gradientLibraryGradientCmb = pGradientLibraryGradientCmb;
 
     xFormColorREd = pXFormColorREd;
     xFormColorSlider = pXFormColorSlider;
@@ -3803,26 +3805,36 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
   private final int GRADIENT_THUMB_BORDER = 2;
 
   private void initGradientLibrary() {
+    boolean oldCmbRefreshing = cmbRefreshing;
+    cmbRefreshing = true;
     try {
-      RGBPaletteReader reader = new Flam3PaletteReader();
-      InputStream is = reader.getClass().getResourceAsStream("flam3-palettes.xml");
-      gradientLibraryList.addAll(reader.readPalettes(is));
-    }
-    catch (Exception ex) {
-      ex.printStackTrace();
-    }
-    if (gradientLibraryList.size() == 0) {
-      for (int i = 0; i < 20; i++) {
-        RGBPalette palette = new RandomRGBPaletteGenerator().generatePalette(7);
-        gradientLibraryList.add(palette);
+      try {
+        RGBPaletteReader reader = new Flam3PaletteReader();
+        InputStream is = reader.getClass().getResourceAsStream("flam3-palettes.xml");
+        gradientLibraryList.addAll(reader.readPalettes(is));
       }
-    }
+      catch (Exception ex) {
+        ex.printStackTrace();
+      }
+      if (gradientLibraryList.size() == 0) {
+        for (int i = 0; i < 20; i++) {
+          RGBPalette palette = new RandomRGBPaletteGenerator().generatePalette(7);
+          gradientLibraryList.add(palette);
+        }
+      }
 
-    List<SimpleImage> thumbnailsList = new ArrayList<SimpleImage>();
-    for (RGBPalette palette : gradientLibraryList) {
-      thumbnailsList.add(new RGBPaletteRenderer().renderHorizPalette(palette, RGBPalette.PALETTE_SIZE, GRADIENT_THUMB_HEIGHT));
+      gradientLibraryGradientCmb.removeAllItems();
+      List<SimpleImage> thumbnailsList = new ArrayList<SimpleImage>();
+      for (RGBPalette palette : gradientLibraryList) {
+        thumbnailsList.add(new RGBPaletteRenderer().renderHorizPalette(palette, RGBPalette.PALETTE_SIZE, GRADIENT_THUMB_HEIGHT));
+        gradientLibraryGradientCmb.addItem(palette);
+      }
+      gradientLibraryGradientCmb.setSelectedIndex(-1);
+      updateGradientThumbnails(thumbnailsList);
     }
-    updateGradientThumbnails(thumbnailsList);
+    finally {
+      cmbRefreshing = oldCmbRefreshing;
+    }
   }
 
   public void updateGradientThumbnails(List<SimpleImage> pImages) {
@@ -3860,12 +3872,20 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
   }
 
   private void importFromGradientLibrary(int idx) {
-    Flame currFlame = getCurrFlame();
-    if (currFlame != null && idx >= 0 && idx < gradientLibraryList.size()) {
-      RGBPalette palette = gradientLibraryList.get(idx).makeCopy();
-      currFlame.setPalette(palette);
-      refreshPaletteUI(palette);
-      refreshFlameImage(false);
+    if (idx >= 0 && idx < gradientLibraryList.size()) {
+      gradientLibraryGradientCmb.setSelectedItem(gradientLibraryList.get(idx));
+    }
+  }
+
+  public void gradientLibraryGradientChanged() {
+    if (!cmbRefreshing) {
+      Flame currFlame = getCurrFlame();
+      if (currFlame != null && gradientLibraryGradientCmb.getSelectedIndex() >= 0 && gradientLibraryGradientCmb.getSelectedIndex() < gradientLibraryList.size()) {
+        RGBPalette palette = gradientLibraryList.get(gradientLibraryGradientCmb.getSelectedIndex()).makeCopy();
+        currFlame.setPalette(palette);
+        refreshPaletteUI(palette);
+        refreshFlameImage(false);
+      }
     }
   }
 
