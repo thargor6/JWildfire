@@ -40,7 +40,6 @@ import org.jwildfire.base.Prefs;
 import org.jwildfire.create.tina.base.DrawMode;
 import org.jwildfire.create.tina.base.Shading;
 import org.jwildfire.create.tina.randomflame.RandomFlameGeneratorList;
-import org.jwildfire.create.tina.render.AffineZStyle;
 import org.jwildfire.create.tina.swing.TinaController.NonlinearControlsRow;
 import org.jwildfire.create.tina.transform.AnimationService;
 import org.jwildfire.swing.StandardErrorHandler;
@@ -219,6 +218,8 @@ public class TinaInternalFrame extends JInternalFrame {
 
   private JPanel tinaPaletteSubNorthPanel = null;
 
+  private JPanel tinaPaletteSubSouthPanel = null;
+
   private JPanel tinaPaletteSubCenterPanel = null;
 
   private JTabbedPane tinaPaletteSubTabbedPane = null;
@@ -366,7 +367,6 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton transformationWeightRightButton = null;
   private JButton newFlameButton = null;
   private JLabel zStyleLbl = null;
-  private JComboBox zStyleCmb = null;
   private JPanel tinaAnimatePanel = null;
   private JPanel tinaMorphPanel = null;
   private JButton setMorphFlame1Button = null;
@@ -601,7 +601,6 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton runScriptButton = null;
   private JToggleButton affineScaleXButton = null;
   private JToggleButton affineScaleYButton = null;
-  private JLabel editSpaceLbl41 = null;
   private JButton randomizeColorsButton = null;
   private JLabel tinaPaletteSwapRGBLbl = null;
   private JTextField tinaPaletteSwapRGBREd = null;
@@ -1946,6 +1945,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaPalettePanel.setLayout(new BorderLayout());
       tinaPalettePanel.add(getTinaPaletteSubNorthPanel(), BorderLayout.NORTH);
       tinaPalettePanel.add(getTinaPaletteSubCenterPanel(), BorderLayout.CENTER);
+      tinaPalettePanel.add(getTinaPaletteSubSouthPanel(), BorderLayout.SOUTH);
     }
     return tinaPalettePanel;
   }
@@ -2302,6 +2302,23 @@ public class TinaInternalFrame extends JInternalFrame {
   }
 
   /**
+   * This method initializes tinaPaletteSubSouthPanel 
+   *  
+   * @return javax.swing.JPanel 
+   */
+  private JPanel getTinaPaletteSubSouthPanel() {
+    if (tinaPaletteSubSouthPanel == null) {
+      tinaPaletteSubSouthPanel = new JPanel();
+      tinaPaletteSubSouthPanel.setLayout(new FlowLayout());
+      tinaPaletteSubSouthPanel.setPreferredSize(new Dimension(0, 66));
+      tinaPaletteSubSouthPanel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.RAISED));
+      tinaPaletteSubSouthPanel.add(getRandomizeColorsButton(), null);
+      tinaPaletteSubSouthPanel.add(getDistributeColorsButton(), null);
+    }
+    return tinaPaletteSubSouthPanel;
+  }
+
+  /**
    * This method initializes tinaPaletteSubCenterPanel  
    *  
    * @return javax.swing.JPanel 
@@ -2339,10 +2356,6 @@ public class TinaInternalFrame extends JInternalFrame {
    */
   private JPanel getTinaPaletteCreatePanel() {
     if (tinaPaletteCreatePanel == null) {
-      editSpaceLbl41 = new JLabel();
-      editSpaceLbl41.setFont(new Font("Dialog", Font.BOLD, 10));
-      editSpaceLbl41.setText("");
-      editSpaceLbl41.setPreferredSize(new Dimension(42, 8));
       FlowLayout flowLayout2 = new FlowLayout();
       flowLayout2.setAlignment(FlowLayout.LEFT);
       tinaPaletteCreatePanel = new JPanel();
@@ -2351,9 +2364,6 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaPaletteCreatePanel.add(getCreateRandomPointsPanel(), null);
       tinaPaletteCreatePanel.add(getCreatePaletteTablePanel(), null);
       tinaPaletteCreatePanel.add(getTinaGrabPaletteFromFlameButton(), null);
-      tinaPaletteCreatePanel.add(editSpaceLbl41, null);
-      tinaPaletteCreatePanel.add(getDistributeColorsButton(), null);
-      tinaPaletteCreatePanel.add(getRandomizeColorsButton(), null);
     }
     return tinaPaletteCreatePanel;
   }
@@ -2922,7 +2932,7 @@ public class TinaInternalFrame extends JInternalFrame {
         getTinaDuplicateTransformationButton(), getTinaDeleteTransformationButton(), getTinaAddFinalTransformationButton(), getRandomBatchPanel(),
         nonlinearControlsRows, getXFormColorREd(), getXFormColorSlider(), getXFormSymmetryREd(), getXFormSymmetrySlider(), getXFormOpacityREd(),
         getXFormOpacitySlider(), getXFormDrawModeCmb(), getRelWeightsTable(), getRelWeightsLeftButton(), getRelWeightsRightButton(),
-        getTransformationWeightLeftButton(), getTransformationWeightRightButton(), getZStyleCmb(), getSetMorphFlame1Button(),
+        getTransformationWeightLeftButton(), getTransformationWeightRightButton(), getSetMorphFlame1Button(),
         getSetMorphFlame2Button(), getMorphFrameREd(), getMorphFramesREd(), getMorphCheckBox(), getMorphFrameSlider(), getImportMorphedFlameButton(),
         getAnimateOutputREd(), getAnimateFramesREd(), getAnimateScriptCmb(), getAnimationGenerateButton(), getAnimateXFormScriptCmb(), getMouseTransformMoveButton(),
         getMouseTransformRotateButton(), getMouseTransformScaleButton(), getAffineEditPostTransformButton(), getAffineEditPostTransformSmallButton(),
@@ -2949,15 +2959,6 @@ public class TinaInternalFrame extends JInternalFrame {
       getXFormDrawModeCmb().addItem(DrawMode.NORMAL);
       getXFormDrawModeCmb().addItem(DrawMode.OPAQUE);
       getXFormDrawModeCmb().addItem(DrawMode.HIDDEN);
-
-      getZStyleCmb().removeAllItems();
-      getZStyleCmb().addItem(AffineZStyle.FLAT);
-      getZStyleCmb().addItem(AffineZStyle.Z1);
-      getZStyleCmb().addItem(AffineZStyle.Z2);
-      getZStyleCmb().addItem(AffineZStyle.Z3);
-      getZStyleCmb().addItem(AffineZStyle.Z4);
-      getZStyleCmb().addItem(AffineZStyle.Z5);
-      getZStyleCmb().addItem(AffineZStyle.Z6);
 
       getShadingCmb().removeAllItems();
       getShadingCmb().addItem(Shading.FLAT);
@@ -3473,7 +3474,7 @@ public class TinaInternalFrame extends JInternalFrame {
     if (createPaletteTablePanel == null) {
       createPaletteTablePanel = new JPanel();
       createPaletteTablePanel.setLayout(new BorderLayout());
-      createPaletteTablePanel.setPreferredSize(new Dimension(180, 160));
+      createPaletteTablePanel.setPreferredSize(new Dimension(180, 198));
       createPaletteTablePanel.add(getCreatePaletteScrollPane(), BorderLayout.CENTER);
     }
     return createPaletteTablePanel;
@@ -4487,26 +4488,6 @@ public class TinaInternalFrame extends JInternalFrame {
   }
 
   /**
-   * This method initializes zStyleCmb	
-   * 	
-   * @return javax.swing.JComboBox	
-   */
-  private JComboBox getZStyleCmb() {
-    if (zStyleCmb == null) {
-      zStyleCmb = new JComboBox();
-      zStyleCmb.setPreferredSize(new Dimension(125, 22));
-      zStyleCmb.setBounds(new Rectangle(64, 6, 110, 22));
-      zStyleCmb.setFont(new Font("Dialog", Font.BOLD, 10));
-      zStyleCmb.addItemListener(new java.awt.event.ItemListener() {
-        public void itemStateChanged(java.awt.event.ItemEvent e) {
-          tinaController.zStyleCmb_changed();
-        }
-      });
-    }
-    return zStyleCmb;
-  }
-
-  /**
    * This method initializes tinaAnimatePanel	
    * 	
    * @return javax.swing.JPanel	
@@ -5460,6 +5441,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JScrollPane getCreatePaletteScrollPane() {
     if (createPaletteScrollPane == null) {
       createPaletteScrollPane = new JScrollPane();
+      createPaletteScrollPane.setPreferredSize(new Dimension(453, 419));
       createPaletteScrollPane.setViewportView(getCreatePaletteColorsTable());
     }
     return createPaletteScrollPane;
@@ -5474,6 +5456,7 @@ public class TinaInternalFrame extends JInternalFrame {
     if (createPaletteColorsTable == null) {
       createPaletteColorsTable = new JTable();
       createPaletteColorsTable.setFont(new Font("Dialog", Font.PLAIN, 10));
+      createPaletteColorsTable.setSize(new Dimension(177, 80));
     }
     return createPaletteColorsTable;
   }
@@ -8043,7 +8026,6 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaCameraPreviewQualityLbl.setBounds(new Rectangle(185, 5, 94, 22));
       tinaCameraPreviewQualityLbl.setPreferredSize(new Dimension(94, 22));
 
-      settingsPanel.add(getZStyleCmb(), null);
       settingsPanel.add(zStyleLbl, null);
       settingsPanel.add(tinaCameraPreviewQualityLbl, null);
       settingsPanel.add(getTinaPreviewQualityREd(), null);

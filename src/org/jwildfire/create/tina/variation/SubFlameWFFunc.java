@@ -24,7 +24,6 @@ import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 import org.jwildfire.create.tina.io.Flam3Reader;
-import org.jwildfire.create.tina.render.AffineZStyle;
 
 public class SubFlameWFFunc extends VariationFunc {
   private static final String RESSOURCE_FLAME = "flame";
@@ -51,7 +50,7 @@ public class SubFlameWFFunc extends VariationFunc {
         return;
       }
       double parentColor = pAffineTP.color;
-      xf.transformPoint(pContext, pAffineTP, pVarTP, p, p, AffineZStyle.FLAT);
+      xf.transformPoint(pContext, pAffineTP, pVarTP, p, p);
       if (xf.getDrawMode() == DrawMode.HIDDEN)
         return;
       else if ((xf.getDrawMode() == DrawMode.OPAQUE) && (pContext.random() > xf.getOpacity()))
@@ -59,7 +58,7 @@ public class SubFlameWFFunc extends VariationFunc {
 
       XForm finalXForm = flame.getFinalXForm();
       if (finalXForm != null) {
-        finalXForm.transformPoint(pContext, pAffineTP, pVarTP, p, q, AffineZStyle.FLAT);
+        finalXForm.transformPoint(pContext, pAffineTP, pVarTP, p, q);
       }
 
       pVarTP.color += parentColor;

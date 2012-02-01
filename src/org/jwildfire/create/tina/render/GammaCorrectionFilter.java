@@ -133,7 +133,7 @@ public class GammaCorrectionFilter {
 
   public void transformPointHDR(LogDensityPoint logDensityPnt, GammaCorrectedHDRPoint pHDRPoint) {
     double logScl;
-    double inverseAlpha;
+    //    double inverseAlpha;
     if (logDensityPnt.intensity > 0.0) {
       // gamma linearization
       double alpha;
@@ -150,7 +150,7 @@ public class GammaCorrectionFilter {
         alpha = 0;
       else if (alpha > 1.0)
         alpha = 1.0;
-      inverseAlpha = (1.0 - alpha) / logDensityPnt.intensity;
+      //      inverseAlpha = (1.0 - alpha) / logDensityPnt.intensity;
     }
     else {
       pHDRPoint.red = bgRedDouble;

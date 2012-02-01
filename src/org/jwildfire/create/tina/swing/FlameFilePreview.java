@@ -30,7 +30,6 @@ import javax.swing.JFileChooser;
 import org.jwildfire.base.Prefs;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.io.Flam3Reader;
-import org.jwildfire.create.tina.render.AffineZStyle;
 import org.jwildfire.create.tina.render.FlameRenderer;
 import org.jwildfire.image.SimpleImage;
 
@@ -73,7 +72,6 @@ public class FlameFilePreview extends JComponent implements PropertyChangeListen
         flame.setSpatialFilterRadius(0.0);
         flame.setSpatialOversample(1);
         flame.setColorOversample(1);
-        renderer.setAffineZStyle(AffineZStyle.FLAT);
         SimpleImage img = new SimpleImage(imgWidth, imgHeight);
         renderer.renderFlame(img, null);
 

@@ -37,7 +37,7 @@ public class BubblesRandomFlameGenerator extends RandomFlameGenerator {
     {
       XForm xForm = new XForm();
       flame.getXForms().add(xForm);
-      xForm.setWeight(4.0 + Math.random() * 4);
+      xForm.setWeight(12.0 + Math.random() * 40);
       xForm.addVariation(2 + Math.random() * 4, VariationFuncList.getVariationFuncInstance("spherical", true));
 
       String fName;
@@ -49,9 +49,9 @@ public class BubblesRandomFlameGenerator extends RandomFlameGenerator {
       }
       xForm.addVariation(0.05 + Math.random() * 0.5, VariationFuncList.getVariationFuncInstance(fName, true));
       xForm.setColorSymmetry(0.991 + Math.random() * 0.08);
-      XFormTransformService.scale(xForm, 0.5 - Math.random() * 0.5, true, true);
-      XFormTransformService.rotate(xForm, 30 - Math.random() * 60.0, true);
-      XFormTransformService.localTranslate(xForm, 1.0 - 2.0 * Math.random(), 1.0 - 2.0 * Math.random(), true);
+      XFormTransformService.scale(xForm, 0.5 - Math.random() * 0.5, true, true, false);
+      XFormTransformService.rotate(xForm, 180 - Math.random() * 360.0, false);
+      XFormTransformService.localTranslate(xForm, 1.5 - 3.0 * Math.random(), 1.5 - 3.0 * Math.random(), false);
     }
     // 2nd xForm
     {
@@ -61,9 +61,9 @@ public class BubblesRandomFlameGenerator extends RandomFlameGenerator {
       xForm.addVariation(0.3 + Math.random() * 0.3, VariationFuncList.getVariationFuncInstance("bubble", true));
       xForm.addVariation(4 + Math.random() * 2, VariationFuncList.getVariationFuncInstance("pre_blur", true));
       xForm.setColorSymmetry(-0.5);
-      XFormTransformService.scale(xForm, 1.1 + Math.random() * 1.9, true, true);
-      XFormTransformService.localTranslate(xForm, 0.75 - 1.50 * Math.random(), 0.75 - 1.50 * Math.random(), true);
-      XFormTransformService.rotate(xForm, 30 - Math.random() * 60.0, true);
+      XFormTransformService.scale(xForm, 1.1 + Math.random() * 1.9, true, true, false);
+      XFormTransformService.localTranslate(xForm, 0.75 - 1.50 * Math.random(), 0.75 - 1.50 * Math.random(), false);
+      XFormTransformService.rotate(xForm, 30 - Math.random() * 60.0, false);
     }
 
     // 3rd xForm
@@ -80,8 +80,8 @@ public class BubblesRandomFlameGenerator extends RandomFlameGenerator {
       }
       xForm.addVariation(0.5, VariationFuncList.getVariationFuncInstance(fName, true));
       xForm.setColorSymmetry(-0.5);
-      XFormTransformService.rotate(xForm, 30.0 - Math.random() * 60.0, true);
-      XFormTransformService.localTranslate(xForm, 0.250 - 0.50 * Math.random(), 0.25 - 0.50 * Math.random(), true);
+      XFormTransformService.rotate(xForm, 30.0 - Math.random() * 60.0, false);
+      //      XFormTransformService.localTranslate(xForm, 0.250 - 0.50 * Math.random(), 0.25 - 0.50 * Math.random(), false);
     }
     flame.distributeColors();
     return flame;

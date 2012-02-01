@@ -16,7 +16,6 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import org.jwildfire.create.tina.base.RasterPoint;
 import org.jwildfire.create.tina.random.RandomNumberGenerator;
 import org.jwildfire.create.tina.random.RandomNumberGenerator.RandGenStatus;
 import org.jwildfire.create.tina.render.FlameRenderer;
@@ -43,11 +42,6 @@ public class FastFlameTransformationContextImpl implements FlameTransformationCo
   @Override
   public final void setRandGenStatus(RandGenStatus pRandGenStatus) {
     randGen.setStatus(pRandGenStatus);
-  }
-
-  @Override
-  public final RasterPoint getPass1RasterPoint(double pX, double pY) {
-    return flameRenderer.getPass1RasterPoint(pX, pY);
   }
 
   @Override

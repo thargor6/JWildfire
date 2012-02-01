@@ -104,7 +104,6 @@ public class SubFlameRandomFlameGenerator extends RandomFlameGenerator {
           FlameRenderer renderer = new FlameRenderer(subFlame, prefs);
           SimpleImage img = new SimpleImage(IMG_WIDTH, IMG_HEIGHT);
           renderer.renderFlame(img, null);
-          renderer.renderFlame(img, null);
           long maxCoverage = img.getImageWidth() * img.getImageHeight();
           long coverage = 0;
           Pixel pixel = new Pixel();

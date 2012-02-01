@@ -20,7 +20,6 @@ import javax.swing.JProgressBar;
 import javax.swing.JTable;
 
 import org.jwildfire.base.Prefs;
-import org.jwildfire.create.tina.render.AffineZStyle;
 import org.jwildfire.create.tina.swing.ProgressUpdater;
 
 public interface JobRenderThreadController {
@@ -33,8 +32,6 @@ public interface JobRenderThreadController {
   public ProgressUpdater getJobProgressUpdater();
 
   public void onJobFinished();
-
-  public AffineZStyle getZStyle();
 
   public void refreshRenderBatchJobsTable();
 

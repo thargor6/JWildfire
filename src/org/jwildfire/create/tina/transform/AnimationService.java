@@ -4,7 +4,6 @@ import org.jwildfire.base.Prefs;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.Shading;
 import org.jwildfire.create.tina.base.XForm;
-import org.jwildfire.create.tina.render.AffineZStyle;
 import org.jwildfire.create.tina.render.FlameRenderer;
 import org.jwildfire.image.SimpleImage;
 import org.jwildfire.io.ImageWriter;
@@ -31,7 +30,7 @@ public class AnimationService {
     ROTATE_XY_PLANE,
   }
 
-  public static void renderFrame(int pFrame, int pFrames, Flame pFlame1, Flame pFlame2, boolean pDoMorph, GlobalScript pGlobalScript, XFormScript pXFormScript, LightScript pLightScript, String pImagePath, int pWidth, int pHeight, int pQuality, AffineZStyle pAffineZStyle, Prefs pPrefs) throws Exception {
+  public static void renderFrame(int pFrame, int pFrames, Flame pFlame1, Flame pFlame2, boolean pDoMorph, GlobalScript pGlobalScript, XFormScript pXFormScript, LightScript pLightScript, String pImagePath, int pWidth, int pHeight, int pQuality, Prefs pPrefs) throws Exception {
     String imgFilename = String.valueOf(pFrame);
     while (imgFilename.length() < 3) {
       imgFilename = "0" + imgFilename;
@@ -152,7 +151,6 @@ public class AnimationService {
     //          flame.setCamYaw(-180 + 60 * Math.sin((imgIdx - 1) * 2.0 * Math.PI / 72.0));
 
     FlameRenderer renderer = new FlameRenderer(flame, pPrefs);
-    renderer.setAffineZStyle(pAffineZStyle);
     renderer.renderFlame(img, null);
     new ImageWriter().saveImage(img, imgFilename);
   }

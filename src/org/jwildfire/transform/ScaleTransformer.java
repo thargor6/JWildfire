@@ -21,11 +21,10 @@ import org.jwildfire.base.PropertyMin;
 import org.jwildfire.base.Tools;
 import org.jwildfire.image.Pixel;
 import org.jwildfire.image.SimpleImage;
-import org.jwildfire.swing.ScaleAspectEditor;
 import org.jwildfire.swing.Buffer.BufferType;
+import org.jwildfire.swing.ScaleAspectEditor;
 
 import com.l2fprod.common.beans.editor.ComboBoxPropertyEditor;
-
 
 public class ScaleTransformer extends Transformer {
   public enum Unit {

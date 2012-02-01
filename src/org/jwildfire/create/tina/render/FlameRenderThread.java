@@ -30,17 +30,13 @@ public class FlameRenderThread implements Runnable {
   private final Flame flame;
   private final long samples;
   private volatile long currSample;
-  private final AffineZStyle affineZStyle;
-  private final RenderPass renderPass;
 
   private boolean finished;
 
-  public FlameRenderThread(RenderPass pRenderPass, FlameRenderer pRenderer, Flame pFlame, long pSamples, AffineZStyle pAffineZStyle) {
+  public FlameRenderThread(FlameRenderer pRenderer, Flame pFlame, long pSamples) {
     renderer = pRenderer;
     flame = pFlame;
     samples = pSamples;
-    affineZStyle = pAffineZStyle;
-    renderPass = pRenderPass;
   }
 
   @Override
@@ -84,7 +80,7 @@ public class FlameRenderThread implements Runnable {
     p.color = renderer.random.random();
 
     XForm xf = flame.getXForms().get(0);
-    xf.transformPoint(ctx, affineT, varT, p, p, affineZStyle);
+    xf.transformPoint(ctx, affineT, varT, p, p);
     for (int i = 0; i <= Constants.INITIAL_ITERATIONS; i++) {
       xf = xf.getNextAppliedXFormTable()[renderer.random.random(Constants.NEXT_APPLIED_XFORM_TABLE_SIZE)];
       if (xf == null) {
@@ -100,7 +96,7 @@ public class FlameRenderThread implements Runnable {
       if (xf == null) {
         return;
       }
-      xf.transformPoint(ctx, affineT, varT, p, p, affineZStyle);
+      xf.transformPoint(ctx, affineT, varT, p, p);
 
       if (xf.getDrawMode() == DrawMode.HIDDEN)
         continue;
@@ -110,8 +106,8 @@ public class FlameRenderThread implements Runnable {
       XForm finalXForm = flame.getFinalXForm();
       double px, py;
       if (finalXForm != null) {
-        finalXForm.transformPoint(ctx, affineT, varT, p, q, affineZStyle);
-        renderer.project(renderPass, q);
+        finalXForm.transformPoint(ctx, affineT, varT, p, q);
+        renderer.project(q);
         px = q.x * renderer.cosa + q.y * renderer.sina + renderer.rcX;
         if ((px < 0) || (px > renderer.camW))
           continue;
@@ -121,7 +117,7 @@ public class FlameRenderThread implements Runnable {
       }
       else {
         q.assign(p);
-        renderer.project(renderPass, q);
+        renderer.project(q);
         px = q.x * renderer.cosa + q.y * renderer.sina + renderer.rcX;
         if ((px < 0) || (px > renderer.camW))
           continue;
@@ -155,7 +151,7 @@ public class FlameRenderThread implements Runnable {
     p.color = renderer.random.random();
 
     XForm xf = flame.getXForms().get(0);
-    xf.transformPoint(ctx, affineT, varT, p, p, affineZStyle);
+    xf.transformPoint(ctx, affineT, varT, p, p);
     for (int i = 0; i <= Constants.INITIAL_ITERATIONS; i++) {
       xf = xf.getNextAppliedXFormTable()[renderer.random.random(Constants.NEXT_APPLIED_XFORM_TABLE_SIZE)];
       if (xf == null) {
@@ -184,7 +180,7 @@ public class FlameRenderThread implements Runnable {
       if (xf == null) {
         return;
       }
-      xf.transformPoint(ctx, affineT, varT, p, p, affineZStyle);
+      xf.transformPoint(ctx, affineT, varT, p, p);
 
       if (xf.getDrawMode() == DrawMode.HIDDEN)
         continue;
@@ -195,8 +191,8 @@ public class FlameRenderThread implements Runnable {
       double px, py;
       if (finalXForm != null) {
         //        q = new XYZPoint();
-        finalXForm.transformPoint(ctx, affineT, varT, p, q, affineZStyle);
-        renderer.project(renderPass, q);
+        finalXForm.transformPoint(ctx, affineT, varT, p, q);
+        renderer.project(q);
         px = q.x * renderer.cosa + q.y * renderer.sina + renderer.rcX;
         if ((px < 0) || (px > renderer.camW))
           continue;
@@ -207,7 +203,7 @@ public class FlameRenderThread implements Runnable {
       else {
         //        q = new XYZPoint();
         q.assign(p);
-        renderer.project(renderPass, q);
+        renderer.project(q);
         px = q.x * renderer.cosa + q.y * renderer.sina + renderer.rcX;
         if ((px < 0) || (px > renderer.camW))
           continue;
@@ -279,7 +275,7 @@ public class FlameRenderThread implements Runnable {
     }
 
     XForm xf = flame.getXForms().get(0);
-    xf.transformPoints(ctx, affineT, varT, p, p, affineZStyle);
+    xf.transformPoints(ctx, affineT, varT, p, p);
     for (int i = 0; i <= Constants.INITIAL_ITERATIONS; i++) {
       xf = xf.getNextAppliedXFormTable()[renderer.random.random(Constants.NEXT_APPLIED_XFORM_TABLE_SIZE)];
       if (xf == null) {
@@ -295,7 +291,7 @@ public class FlameRenderThread implements Runnable {
       if (xf == null) {
         return;
       }
-      xf.transformPoints(ctx, affineT, varT, p, p, affineZStyle);
+      xf.transformPoints(ctx, affineT, varT, p, p);
       if (xf.getDrawMode() == DrawMode.HIDDEN)
         continue;
       else if ((xf.getDrawMode() == DrawMode.OPAQUE) && (renderer.random.random() > xf.getOpacity()))
@@ -307,9 +303,9 @@ public class FlameRenderThread implements Runnable {
         for (int pIdx = 0; pIdx < p.length; pIdx++) {
           q[pIdx] = new XYZPoint();
         }
-        finalXForm.transformPoints(ctx, affineT, varT, p, q, affineZStyle);
+        finalXForm.transformPoints(ctx, affineT, varT, p, q);
         r.assign(q[0]);
-        renderer.project(renderPass, r);
+        renderer.project(r);
         px = r.x * renderer.cosa + r.y * renderer.sina + renderer.rcX;
         py = r.y * renderer.cosa - r.x * renderer.sina + renderer.rcY;
       }
@@ -319,7 +315,7 @@ public class FlameRenderThread implements Runnable {
           q[pIdx].assign(p[pIdx]);
         }
         r.assign(q[0]);
-        renderer.project(renderPass, r);
+        renderer.project(r);
         px = r.x * renderer.cosa + r.y * renderer.sina + renderer.rcX;
         py = r.y * renderer.cosa - r.x * renderer.sina + renderer.rcY;
       }

@@ -76,7 +76,6 @@ import org.jwildfire.create.tina.palette.RGBPaletteRenderer;
 import org.jwildfire.create.tina.palette.RandomRGBPaletteGenerator;
 import org.jwildfire.create.tina.randomflame.RandomFlameGenerator;
 import org.jwildfire.create.tina.randomflame.RandomFlameGeneratorList;
-import org.jwildfire.create.tina.render.AffineZStyle;
 import org.jwildfire.create.tina.render.FlameRenderer;
 import org.jwildfire.create.tina.script.ScriptRunner;
 import org.jwildfire.create.tina.script.ScriptRunnerEnvironment;
@@ -377,7 +376,6 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
   private final JComboBox animateLightScriptCmb;
   private final JButton animationGenerateButton;
   // misc
-  private final JComboBox zStyleCmb;
   private Flame _currFlame;
   private Flame morphFlame1, morphFlame2;
   private boolean noRefresh;
@@ -418,7 +416,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       JButton pDeleteTransformationButton, JButton pAddFinalTransformationButton, JPanel pRandomBatchPanel, NonlinearControlsRow[] pNonlinearControlsRows,
       JTextField pXFormColorREd, JSlider pXFormColorSlider, JTextField pXFormSymmetryREd, JSlider pXFormSymmetrySlider, JTextField pXFormOpacityREd,
       JSlider pXFormOpacitySlider, JComboBox pXFormDrawModeCmb, JTable pRelWeightsTable, JButton pRelWeightsLeftButton, JButton pRelWeightsRightButton,
-      JButton pTransformationWeightLeftButton, JButton pTransformationWeightRightButton, JComboBox pZStyleCmb, JButton pSetMorphFlame1Button,
+      JButton pTransformationWeightLeftButton, JButton pTransformationWeightRightButton, JButton pSetMorphFlame1Button,
       JButton pSetMorphFlame2Button, JTextField pMorphFrameREd, JTextField pMorphFramesREd, JCheckBox pMorphCheckBox, JSlider pMorphFrameSlider,
       JButton pImportMorphedFlameButton, JTextField pAnimateOutputREd, JTextField pAnimateFramesREd, JComboBox pAnimateGlobalScriptCmb, JButton pAnimationGenerateButton,
       JComboBox pAnimateXFormScriptCmb, JToggleButton pMouseTransformMoveButton, JToggleButton pMouseTransformRotateButton, JToggleButton pMouseTransformScaleButton,
@@ -556,7 +554,6 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
 
     transformationWeightLeftButton = pTransformationWeightLeftButton;
     transformationWeightRightButton = pTransformationWeightRightButton;
-    zStyleCmb = pZStyleCmb;
 
     setMorphFlame1Button = pSetMorphFlame1Button;
     setMorphFlame2Button = pSetMorphFlame2Button;
@@ -785,7 +782,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
   }
 
   public void refreshFlameImage(boolean pMouseDown) {
-    refreshFlameImage((AffineZStyle) zStyleCmb.getSelectedItem(), true, pMouseDown);
+    refreshFlameImage(true, pMouseDown);
   }
 
   private Flame lastMorphedFlame = null;
@@ -806,7 +803,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     }
   }
 
-  public void refreshFlameImage(AffineZStyle pAffineZStyle, boolean pQuickRender, boolean pMouseDown) {
+  public void refreshFlameImage(boolean pQuickRender, boolean pMouseDown) {
     FlamePanel imgPanel = getFlamePanel();
     Rectangle bounds = imgPanel.getImageBounds();
     int renderScale = pQuickRender && pMouseDown ? 2 : 1;
@@ -842,7 +839,6 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
             flame.setSpatialOversample(prefs.getTinaRenderPreviewSpatialOversample());
             flame.setColorOversample(prefs.getTinaRenderPreviewColorOversample());
           }
-          renderer.setAffineZStyle(pAffineZStyle);
           renderer.setRenderScale(renderScale);
           renderer.renderFlame(img, null);
         }
@@ -1107,7 +1103,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
             case COL_TRANSFORM:
               return rowIndex < currFlame.getXForms().size() ? String.valueOf(rowIndex + 1) : "Final";
             case COL_VARIATIONS:
-              {
+            {
               String hs = "";
               if (xForm.getVariationCount() > 0) {
                 for (int i = 0; i < xForm.getVariationCount() - 1; i++) {
@@ -1742,7 +1738,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     //    finally {
     //      refreshing = false;
     //    }
-    refreshFlameImage((AffineZStyle) zStyleCmb.getSelectedItem(), false, false);
+    refreshFlameImage(false, false);
   }
 
   public void loadFlameButton_actionPerformed(ActionEvent e) {
@@ -2051,7 +2047,6 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
             long t0 = Calendar.getInstance().getTimeInMillis();
             FlameRenderer renderer = new FlameRenderer(flame, prefs);
             renderer.setProgressUpdater(mainProgressUpdater);
-            renderer.setAffineZStyle((AffineZStyle) zStyleCmb.getSelectedItem());
             renderer.renderFlame(img, hdrImg);
             long t1 = Calendar.getInstance().getTimeInMillis();
             System.err.println("RENDER TIME: " + ((double) (t1 - t0) / 1000.0) + "s");
@@ -2975,12 +2970,6 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     }
   }
 
-  public void zStyleCmb_changed() {
-    if (!refreshing && !cmbRefreshing) {
-      refreshFlameImage(false);
-    }
-  }
-
   public void setMorphFlame1() {
     if (_currFlame != null) {
       morphFlame1 = _currFlame.makeCopy();
@@ -3069,14 +3058,13 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       int width = prefs.getTinaRenderMovieWidth();
       int height = prefs.getTinaRenderMovieHeight();
       int quality = prefs.getTinaRenderMovieQuality();
-      AffineZStyle affineZStyle = (AffineZStyle) zStyleCmb.getSelectedItem();
       for (int frame = 1; frame <= frames; frame++) {
         Flame flame1 = doMorph ? morphFlame1.makeCopy() : _currFlame.makeCopy();
         Flame flame2 = doMorph ? morphFlame2.makeCopy() : null;
         flame1.setSpatialOversample(prefs.getTinaRenderMovieSpatialOversample());
         flame1.setColorOversample(prefs.getTinaRenderMovieColorOversample());
         flame1.setSpatialFilterRadius(prefs.getTinaRenderMovieFilterRadius());
-        AnimationService.renderFrame(frame, frames, flame1, flame2, doMorph, globalScript, xFormScript, lightScript, imagePath, width, height, quality, affineZStyle, prefs);
+        AnimationService.renderFrame(frame, frames, flame1, flame2, doMorph, globalScript, xFormScript, lightScript, imagePath, width, height, quality, prefs);
       }
     }
     catch (Throwable ex) {
@@ -3695,11 +3683,6 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     jobRenderThread = null;
     System.err.println("JOB FINISHED");
     enableJobRenderControls();
-  }
-
-  @Override
-  public AffineZStyle getZStyle() {
-    return (AffineZStyle) zStyleCmb.getSelectedItem();
   }
 
   @Override

@@ -54,7 +54,6 @@ public class FlameRenderer {
   LogDensityFilter logDensityFilter;
   GammaCorrectionFilter gammaCorrectionFilter;
   RasterPoint[][] raster;
-  RasterPoint[][] pass1Raster;
   // init in initView
   double cosa;
   double sina;
@@ -74,7 +73,6 @@ public class FlameRenderer {
   // init in init3D()
   private double cameraMatrix[][] = new double[3][3];
   //
-  private AffineZStyle affineZStyle = AffineZStyle.FLAT;
   private ProgressUpdater progressUpdater;
   // 
   private final FlameTransformationContext flameTransformationContext;
@@ -121,18 +119,8 @@ public class FlameRenderer {
     }
   }
 
-  private void createPass2Raster() {
-    pass1Raster = raster;
-    raster = new RasterPoint[rasterHeight][rasterWidth];
-    for (int i = 0; i < rasterHeight; i++) {
-      for (int j = 0; j < rasterWidth; j++) {
-        raster[i][j] = new RasterPoint();
-      }
-    }
-  }
-
-  public void project(RenderPass pRenderPass, XYZPoint pPoint) {
-    if (!doProject3D || !pRenderPass.equals(RenderPass.FINAL)) {
+  public void project(XYZPoint pPoint) {
+    if (!doProject3D) {
       return;
     }
     double z = pPoint.z;
@@ -251,7 +239,7 @@ public class FlameRenderer {
           renderFlame.refreshModWeightTables(flameTransformationContext);
         }
 
-        iterate(RenderPass.FINAL, i, colorOversample, renderFlames);
+        iterate(i, colorOversample, renderFlames);
         if (flame.getSampleDensity() <= 10.0) {
           renderImageSimple(img);
         }
@@ -421,7 +409,7 @@ public class FlameRenderer {
     }
   }
 
-  private void iterate(RenderPass pRenderPass, int pPart, int pParts, List<Flame> pFlames) {
+  private void iterate(int pPart, int pParts, List<Flame> pFlames) {
     long nSamples = (long) ((flame.getSampleDensity() * (double) rasterSize + 0.5));
     //    if (flame.getSampleDensity() > 50) {
     //      System.err.println("SAMPLES: " + nSamples);
@@ -435,12 +423,12 @@ public class FlameRenderer {
     List<FlameRenderThread> threads = new ArrayList<FlameRenderThread>();
     int nThreads = pFlames.size();
     if (nThreads <= 1) {
-      FlameRenderThread t = new FlameRenderThread(pRenderPass, this, pFlames.get(0), nSamples / (long) nThreads, affineZStyle);
+      FlameRenderThread t = new FlameRenderThread(this, pFlames.get(0), nSamples / (long) nThreads);
       t.run();
     }
     else {
       for (int i = 0; i < nThreads; i++) {
-        FlameRenderThread t = new FlameRenderThread(pRenderPass, this, pFlames.get(i), nSamples / (long) nThreads, affineZStyle);
+        FlameRenderThread t = new FlameRenderThread(this, pFlames.get(i), nSamples / (long) nThreads);
         threads.add(t);
         new Thread(t).start();
       }
@@ -514,10 +502,6 @@ public class FlameRenderer {
     this.random = random;
   }
 
-  public void setAffineZStyle(AffineZStyle affineZStyle) {
-    this.affineZStyle = affineZStyle;
-  }
-
   public void setProgressUpdater(ProgressUpdater pProgressUpdater) {
     progressUpdater = pProgressUpdater;
   }
@@ -531,34 +515,6 @@ public class FlameRenderer {
     else {
       return null;
     }
-  }
-
-  public RasterPoint getPass1RasterPoint(double pQX, double pQY) {
-    if (pass1Raster == null) {
-      return null;
-    }
-    double px = pQX * cosa + pQY * sina + rcX;
-    if (px < 0) {
-      px += camW;
-    }
-    if (px > camW) {
-      px = 2 * camW - px;
-    }
-    if ((px < 0) || (px > camW))
-      return null;
-    double py = pQY * cosa - pQX * sina + rcY;
-    if (py < 0) {
-      py += camH;
-    }
-    if (py > camH) {
-      py = 2 * camH - py;
-    }
-    if ((py < 0) || (py > camH))
-      return null;
-
-    int xIdx = (int) (bws * px + 0.5);
-    int yIdx = (int) (bhs * py + 0.5);
-    return pass1Raster[yIdx][xIdx];
   }
 
   public RandomNumberGenerator getRandomNumberGenerator() {
