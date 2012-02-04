@@ -214,7 +214,7 @@ public class XForm {
     pAffineT.z = pSrcPoint.z;
     pVarT.clear();
     pVarT.color = pAffineT.color;
-    for (Variation variation : getSortedVariations()) {
+    for (Variation variation : sortedVariations) {
       variation.transform(pContext, this, pAffineT, pVarT);
       if (variation.getFunc().getPriority() < 0) {
         pAffineT.invalidate();
@@ -253,7 +253,7 @@ public class XForm {
         pAffineT[i].z = pSrcPoint[i].z;
         pVarT[i].clear();
         pVarT[i].color = pAffineT[i].color;
-        for (Variation variation : getSortedVariations()) {
+        for (Variation variation : sortedVariations) {
           variation.transform(pContext, this, pAffineT[i], pVarT[i]);
           if (variation.getFunc().getPriority() < 0) {
             pAffineT[i].invalidate();
