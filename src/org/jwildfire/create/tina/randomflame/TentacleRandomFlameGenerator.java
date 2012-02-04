@@ -43,7 +43,7 @@ public class TentacleRandomFlameGenerator extends RandomFlameGenerator {
     for (int y = 0; y < maxXFormsY; y++) {
       for (int x = 0; x < maxXFormsX; x++) {
         XForm xForm = new XForm();
-        xForm.setWeight(1.0);
+        xForm.setWeight(0.5 + Math.random() * 99.5);
         flame.getXForms().add(xForm);
         XFormTransformService.globalTranslate(xForm, xMin + x, yMin + y, false);
         if (Math.random() < 0.5) {
@@ -52,15 +52,14 @@ public class TentacleRandomFlameGenerator extends RandomFlameGenerator {
         else {
           XFormTransformService.rotate(xForm, -360.0 * Math.random(), true);
         }
-        XFormTransformService.localTranslate(xForm, Math.random() - 1.0, Math.random() - 1.0, true);
+        XFormTransformService.localTranslate(xForm, -1.0 + 2.0 * Math.random(), -1.0 + 2.0 * Math.random(), true);
         scl *= 0.75 + Math.random() / 4;
         XFormTransformService.scale(xForm, scl, true, true, true);
         int fncIdx = (int) (Math.random() * fnc.length);
-        xForm.addVariation(Math.random() * 0.9 + 0.1, VariationFuncList.getVariationFuncInstance(fnc[fncIdx], true));
+        xForm.addVariation(Math.random() * 0.9 + 0.1, VariationFuncList.getVariationFuncInstance(Math.random() > 0.25 ? fnc[fncIdx] : "linear3D", true));
         xForm.setColor(Math.random());
       }
     }
-
     return flame;
   }
 

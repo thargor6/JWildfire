@@ -31,6 +31,7 @@ public class VariationFuncList {
 
   static {
     // define alias for renamed variations to allow loading of old flame files
+    aliasMap.put(KaleidoscopeFunc.class, "kaleidoscope");
     aliasMap.put(MandelbrotFunc.class, "Mandelbrot");
     aliasMap.put(SpirographFunc.class, "Spirograph");
     aliasMap.put(TruchetFunc.class, "Truchet");

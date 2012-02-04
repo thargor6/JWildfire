@@ -76,7 +76,7 @@ public class KaleidoscopeFunc extends VariationFunc {
 
   @Override
   public String getName() {
-    return "Kaleidoscope";
+    return "kaleidoscope";
   }
 
   double q, w, e, r, t, i;
