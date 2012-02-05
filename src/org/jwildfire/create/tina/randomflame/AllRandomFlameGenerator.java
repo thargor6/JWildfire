@@ -23,29 +23,35 @@ public class AllRandomFlameGenerator extends RandomFlameGenerator {
   @Override
   protected Flame createFlame() {
     double r = Math.random();
-    if (r < 0.10) {
+    if (r < 0.08) {
       return new LinearRandomFlameGenerator().createFlame();
     }
-    else if (r < 0.20) {
+    else if (r < 0.16) {
       return new SimpleRandomFlameGenerator().createFlame();
     }
-    else if (r < 0.30) {
+    else if (r < 0.24) {
       return new GnarlRandomFlameGenerator().createFlame();
     }
-    else if (r < 0.40) {
+    else if (r < 0.32) {
       return new ExperimentalGnarlRandomFlameGenerator().createFlame();
     }
     else if (r < 0.40) {
       return new SubFlameRandomFlameGenerator().createFlame();
     }
-    else if (r < 0.60) {
+    else if (r < 0.48) {
       return new BubblesRandomFlameGenerator().createFlame();
     }
-    else if (r > 0.70) {
+    else if (r > 0.56) {
       return new TentacleRandomFlameGenerator().createFlame();
     }
-    else if (r > 0.80) {
+    else if (r > 0.64) {
       return new ThreeDOnlyRandomFlameGenerator().createFlame();
+    }
+    else if (r < 0.72) {
+      return new Flowers3DRandomFlameGenerator().createFlame();
+    }
+    else if (r < 0.80) {
+      return new ExperimentalFlowers3DRandomFlameGenerator().createFlame();
     }
     else {
       return new ExperimentalSimpleRandomFlameGenerator().createFlame();
