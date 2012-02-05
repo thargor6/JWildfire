@@ -1,3 +1,12 @@
+V0.37 (04.02.2012):
+ - Fractal flame editor: minor improvements to the Tentacle random flame generator
+ - Fractal flame editor: Kaleidoscope plugin by Will Evans
+ - Fractal flame editor: removed internal zZtyle and renderPass types to optimize performance
+ - Fractal flame editor: additonal combobox to choose gradients from the library
+ - Fractal flame editor: parser for flam3 palettes, integrated the standard flam3 palettes in the library
+ - Fractal flame editor: gradient library panel
+ - Fractal flame editor: changes are now only accepted after pressing the <Enter> key (before also the loss of the focus caused a refresh which may cause some strange problems)
+
 V0.36 (22.01.2012):
  - Fractal flame editor: new offset paramters for the subflame_wf variations
  - Fractal flame editor: new pre_subflame_wf variation
