@@ -23,6 +23,7 @@ import javax.swing.JDesktopPane;
 
 import org.jwildfire.create.CreatorsList;
 import org.jwildfire.create.ImageCreator;
+import org.jwildfire.image.SimpleHDRImage;
 import org.jwildfire.image.SimpleImage;
 import org.jwildfire.io.ImageReader;
 import org.jwildfire.io.ImageWriter;
@@ -66,11 +67,27 @@ public class ScriptProcessor {
   public Buffer loadImage(String pFilename) throws Exception {
     if (!new File(pFilename).exists())
       throw new FileNotFoundException(pFilename);
-    SimpleImage img = new ImageReader(desktop).loadImage(pFilename);
-    File file = new File(pFilename);
-    Buffer buffer = bufferList.addImageBuffer(addBuffersToDesktop ? desktop : null, file.getName(),
-        img);
-    return buffer;
+    String fileExt = null;
+    {
+      int p = pFilename.lastIndexOf(".");
+      if (p >= 0 && p < pFilename.length() - 2) {
+        fileExt = pFilename.substring(p + 1, pFilename.length());
+      }
+    }
+    if ("hdr".equalsIgnoreCase(fileExt)) {
+      SimpleHDRImage img = new ImageReader(desktop).loadHDRImage(pFilename);
+      File file = new File(pFilename);
+      Buffer buffer = bufferList.addHDRImageBuffer(addBuffersToDesktop ? desktop : null, file.getName(),
+          img);
+      return buffer;
+    }
+    else {
+      SimpleImage img = new ImageReader(desktop).loadImage(pFilename);
+      File file = new File(pFilename);
+      Buffer buffer = bufferList.addImageBuffer(addBuffersToDesktop ? desktop : null, file.getName(),
+          img);
+      return buffer;
+    }
   }
 
   public void selectTransformer(String pName) {

@@ -23,6 +23,7 @@ import java.util.List;
 
 import javax.swing.JDesktopPane;
 
+import org.jwildfire.image.SimpleHDRImage;
 import org.jwildfire.image.SimpleImage;
 import org.jwildfire.swing.Buffer.BufferType;
 import org.jwildfire.transform.Mesh3D;
@@ -53,6 +54,14 @@ public class BufferList implements Collection<Buffer> {
 
   public Buffer addImageBuffer(JDesktopPane pDesktop, String pName, SimpleImage pSimpleImage) {
     Buffer buffer = new Buffer(pDesktop, getUniqueBuffername(pName), pSimpleImage);
+    buffers.add(buffer);
+    if (syncWithStaticBufferList)
+      StaticBufferList.add(buffer);
+    return buffer;
+  }
+
+  public Buffer addHDRImageBuffer(JDesktopPane pDesktop, String pName, SimpleHDRImage pSimpleHDRImage) {
+    Buffer buffer = new Buffer(pDesktop, getUniqueBuffername(pName + " (HDR)"), pSimpleHDRImage);
     buffers.add(buffer);
     if (syncWithStaticBufferList)
       StaticBufferList.add(buffer);

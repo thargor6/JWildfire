@@ -24,6 +24,8 @@ import java.awt.event.ComponentListener;
 import javax.swing.JDesktopPane;
 import javax.swing.JInternalFrame;
 
+import org.jwildfire.image.FastHDRTonemapper;
+import org.jwildfire.image.SimpleHDRImage;
 import org.jwildfire.image.SimpleImage;
 import org.jwildfire.transform.Mesh3D;
 
@@ -47,6 +49,7 @@ public class Buffer {
     return getName();
   }
 
+  private SimpleHDRImage hdrImg;
   private SimpleImage img;
   private Mesh3D mesh3D;
   private ImagePanel pnl;
@@ -59,7 +62,7 @@ public class Buffer {
   private String name;
 
   public enum BufferType {
-    IMAGE, MESH3D, RENDERED_FRAME
+    IMAGE, MESH3D, HDR_IMAGE, RENDERED_FRAME
   };
 
   private static String getFrameName(int pFrame) {
@@ -76,6 +79,12 @@ public class Buffer {
 
   public Buffer(JDesktopPane pDesktop, String pName, SimpleImage pSimpleImage) {
     img = pSimpleImage;
+    bufferType = BufferType.IMAGE;
+    name = pName;
+    addImageBuffer(pDesktop);
+  }
+
+  private void addImageBuffer(JDesktopPane pDesktop) {
     final int TRANSFORMERS_WIDTH = 300;
     final int X_BORDER = 5 + 5 + TRANSFORMERS_WIDTH; // left + right border
     final int Y_BORDER = 30 + 5; // top + bottom border
@@ -106,9 +115,6 @@ public class Buffer {
       double scl = (sclWidth < sclHeight) ? sclWidth : sclHeight;
       panelWidth = (int) (scl * (double) imageWidth + 0.5);
     }
-
-    bufferType = BufferType.IMAGE;
-    name = pName;
 
     if (pDesktop != null) {
       pnl = new ImagePanel(img, 0, 0, panelWidth);
@@ -161,6 +167,14 @@ public class Buffer {
       internalFrame.toFront();
       pDesktop.repaint();
     }
+  }
+
+  public Buffer(JDesktopPane pDesktop, String pName, SimpleHDRImage pSimpleHDRImage) {
+    hdrImg = pSimpleHDRImage;
+    img = new FastHDRTonemapper().renderImage(pSimpleHDRImage);
+    bufferType = BufferType.HDR_IMAGE;
+    name = pName;
+    addImageBuffer(pDesktop);
   }
 
   private String getTitle(int pPanelWidth) {
