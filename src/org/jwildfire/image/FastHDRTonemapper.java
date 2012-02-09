@@ -43,8 +43,21 @@ public class FastHDRTonemapper {
         for (int j = 0; j < pHDRImg.getImageWidth(); j++) {
           pHDRImg.getRGBValues(rgb, j, i);
           float lum = 0.299f * rgb[0] + 0.588f * rgb[1] + 0.113f * rgb[2];
-          int nLum = Tools.roundColor((lum - minLum) / lumRange * 256.0);
-          res.setRGB(j, i, nLum, nLum, nLum);
+          double normedLum = ((lum - minLum) / lumRange);
+          double transformedLum = 1.0 - Math.exp(-37.0 * normedLum);
+          float maxComp = rgb[0];
+          if (rgb[1] > maxComp) {
+            maxComp = rgb[1];
+          }
+          if (rgb[2] > maxComp) {
+            maxComp = rgb[2];
+          }
+          int r = Tools.roundColor(rgb[0] / maxComp * transformedLum * 256.0);
+          int g = Tools.roundColor(rgb[1] / maxComp * transformedLum * 256.0);
+          int b = Tools.roundColor(rgb[2] / maxComp * transformedLum * 256.0);
+          res.setRGB(j, i, r, g, b);
+          //          int nLum = Tools.roundColor(transformedLum * 256.0);
+          //          res.setRGB(j, i, nLum, nLum, nLum);
         }
       }
     }
