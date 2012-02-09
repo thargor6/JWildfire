@@ -29,7 +29,7 @@ public class ImageFileFilter extends FileFilter {
     String extension = getExtension(pFile);
     return (extension != null)
         && (extension.equals("gif") || extension.equals("jpg") || extension.equals("jpeg") || extension
-            .equals("png"));
+            .equals("png") || extension.equals("hdr"));
   }
 
   @Override

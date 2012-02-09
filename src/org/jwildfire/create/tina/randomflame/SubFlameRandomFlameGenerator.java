@@ -62,8 +62,6 @@ public class SubFlameRandomFlameGenerator extends RandomFlameGenerator {
         XFormTransformService.rotate(xForm, -90.0 * Math.random(), true);
       }
       XFormTransformService.localTranslate(xForm, 3.0 * (2.0 * Math.random() - 1.0), 3.0 * (2.0 * Math.random() - 1.0), true);
-      //      xForm.setColor(Math.random());
-      //      xForm.setColorSymmetry(Math.random());
       {
         SubFlameWFFunc var = new SubFlameWFFunc();
         Flame subFlame;

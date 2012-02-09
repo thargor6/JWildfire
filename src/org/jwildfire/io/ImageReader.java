@@ -22,9 +22,15 @@ import java.awt.Image;
 import java.awt.MediaTracker;
 import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
+import java.io.BufferedInputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.InputStream;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
+import org.jwildfire.image.SimpleHDRImage;
 import org.jwildfire.image.SimpleImage;
 
 public class ImageReader {
@@ -51,4 +57,54 @@ public class ImageReader {
     return new SimpleImage(bImg, width, height);
   }
 
+  private String readNextLine(InputStream is) throws Exception {
+    int b, idx = 0;
+    byte line[] = new byte[256];
+    while ((b = is.read()) != -1) {
+      if (b == '\n') {
+        break;
+      }
+      line[idx++] = (byte) b;
+    }
+    return idx > 0 ? new String(line, 0, idx) : "";
+  }
+
+  public SimpleHDRImage loadHDRImage(String pFilename) throws Exception {
+    File file = new File(pFilename);
+    if (!file.exists())
+      throw new FileNotFoundException(pFilename);
+    InputStream f = new BufferedInputStream(new FileInputStream(pFilename));
+    // header
+    String header = readNextLine(f);
+    if (!"#?RGBE".equals(header)) {
+      throw new IllegalArgumentException("Invalid header <" + header + ">");
+    }
+    // format
+    String format = readNextLine(f);
+    if (!"FORMAT=32-bit_rle_rgbe".equals(format)) {
+      throw new IllegalArgumentException("Invalid format <" + format + ">");
+    }
+    // skip empty line
+    readNextLine(f);
+    // image size
+    String dimension = readNextLine(f);
+    Pattern pattern = Pattern.compile("\\-Y ([0-9]+) \\+X ([0-9]+)");
+    Matcher matcher = pattern.matcher(dimension);
+    if (!matcher.find()) {
+      throw new IllegalArgumentException("Invalid dimension identifier<" + dimension + ">");
+    }
+    int width = Integer.parseInt(matcher.group(2));
+    int height = Integer.parseInt(matcher.group(1));
+    SimpleHDRImage res = new SimpleHDRImage(width, height);
+    for (int i = 0; i < height; i++) {
+      for (int j = 0; j < width; j++) {
+        int r = f.read();
+        int g = f.read();
+        int b = f.read();
+        int e = f.read();
+        res.setRGBEValue(j, i, r, g, b, e);
+      }
+    }
+    return res;
+  }
 }

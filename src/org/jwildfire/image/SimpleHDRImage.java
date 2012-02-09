@@ -133,15 +133,22 @@ public class SimpleHDRImage {
     bBuffer[offset] = pB;
   }
 
-  public double getRValue(int pX, int pY) {
+  public void getRGBValues(float pRGB[], int pX, int pY) {
+    int off = getOffset(pX, pY);
+    pRGB[0] = rBuffer[off];
+    pRGB[1] = gBuffer[off];
+    pRGB[2] = bBuffer[off];
+  }
+
+  public float getRValue(int pX, int pY) {
     return rBuffer[getOffset(pX, pY)];
   }
 
-  public double getGValue(int pX, int pY) {
+  public float getGValue(int pX, int pY) {
     return gBuffer[getOffset(pX, pY)];
   }
 
-  public double getBValue(int pX, int pY) {
+  public float getBValue(int pX, int pY) {
     return bBuffer[getOffset(pX, pY)];
   }
 
@@ -192,5 +199,30 @@ public class SimpleHDRImage {
     rBuffer = pHDRImg.rBuffer;
     gBuffer = pHDRImg.gBuffer;
     bBuffer = pHDRImg.bBuffer;
+  }
+
+  private static final float[] EXPONENT = new float[256];
+
+  static {
+    EXPONENT[0] = 0;
+    for (int i = 1; i < 256; i++) {
+      float f = 1.0f;
+      int e = i - (128 + 8);
+      if (e > 0)
+        for (int j = 0; j < e; j++)
+          f *= 2.0f;
+      else
+        for (int j = 0; j < -e; j++)
+          f *= 0.5f;
+      EXPONENT[i] = f;
+    }
+  }
+
+  public void setRGBEValue(int pX, int pY, int pR, int pG, int pB, int pE) {
+    float e = EXPONENT[pE];
+    int off = getOffset(pX, pY);
+    rBuffer[off] = e * (pR + 0.5f);
+    gBuffer[off] = e * (pG + 0.5f);
+    bBuffer[off] = e * (pB + 0.5f);
   }
 }
