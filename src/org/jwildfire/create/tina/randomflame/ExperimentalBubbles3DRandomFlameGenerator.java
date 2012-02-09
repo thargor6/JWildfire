@@ -18,29 +18,26 @@ package org.jwildfire.create.tina.randomflame;
 
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.XForm;
-import org.jwildfire.create.tina.variation.VariationFuncList;
+import org.jwildfire.create.tina.transform.XFormTransformService;
 
-public class ExperimentalFlowers3DRandomFlameGenerator extends Flowers3DRandomFlameGenerator {
-
-  private static final String[] fncList = { "hemisphere", "fisheye", "flux", "foci", "ngon", "power", "truchet", "xheart", "wedge_sph", "spherical", "spherical3D", "spiral", "tan", "tanh" };
+public class ExperimentalBubbles3DRandomFlameGenerator extends Bubbles3DRandomFlameGenerator {
 
   @Override
   protected Flame createFlame() {
     Flame flame = super.createFlame();
-    // modify final xForm
+    // modify last xForm
     {
-      XForm xForm = flame.getFinalXForm();
-      xForm.addVariation(1.5 - 3.0 * Math.random(), VariationFuncList.getVariationFuncInstance(fncList[(int) (Math.random() * fncList.length)], true));
-      if (Math.random() > 0.5) {
-        xForm.addVariation(1.0 - 2.0 * Math.random(), VariationFuncList.getVariationFuncInstance("zcone", true));
-      }
+      XForm xForm = flame.getXForms().get(flame.getXForms().size() - 1);
+      XFormTransformService.scale(xForm, 1.0 + 3.0 * Math.random(), true, true, false);
+      XFormTransformService.rotate(xForm, 180.0 - Math.random() * 360.0, false);
+      XFormTransformService.localTranslate(xForm, 3.0 - 6.0 * Math.random(), 3.0 - 6.0 * Math.random(), false);
     }
     return flame;
   }
 
   @Override
   public String getName() {
-    return "Flowers3D (experimental)";
+    return "Bubbles3D (experimental)";
   }
 
 }

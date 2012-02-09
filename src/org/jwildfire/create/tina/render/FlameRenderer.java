@@ -327,6 +327,54 @@ public class FlameRenderer {
           pHDRImage.assignImage(hdrImg);
         }
       }
+      //      if (renderHDR && (flame.getBGColorRed() > 0 || flame.getBGColorGreen() > 0 || flame.getBGColorBlue() > 0)) {
+      //        double bgRed = flame.getBGColorRed() / 255.0;
+      //        double bgGreen = flame.getBGColorGreen() / 255.0;
+      //        double bgBlue = flame.getBGColorBlue() / 255.0;
+      //        double bgLum = 0.299 * bgRed + 0.588 * bgGreen + 0.113 * bgBlue;
+      //        double lumMin = Double.MAX_VALUE;
+      //        double lumMax = 0.0;
+      //        double avgLum = 0.0;
+      //        for (int i = 0; i < hdrImg.getImageHeight(); i++) {
+      //          for (int j = 0; j < hdrImg.getImageWidth(); j++) {
+      //            double r = hdrImg.getRValue(j, i);
+      //            double g = hdrImg.getGValue(j, i);
+      //            double b = hdrImg.getBValue(j, i);
+      //            double lum = 0.299 * r + 0.588 * g + 0.113 * b;
+      //            if (lum < lumMin) {
+      //              lumMin = lum;
+      //            }
+      //            if (lum > lumMax) {
+      //              lumMax = lum;
+      //            }
+      //            avgLum += lum;
+      //          }
+      //        }
+      //        avgLum /= (double) hdrImg.getImageWidth() * (double) hdrImg.getImageHeight();
+      //
+      //        for (int i = 0; i < hdrImg.getImageHeight(); i++) {
+      //          for (int j = 0; j < hdrImg.getImageWidth(); j++) {
+      //            double r = hdrImg.getRValue(j, i);
+      //            double g = hdrImg.getGValue(j, i);
+      //            double b = hdrImg.getBValue(j, i);
+      //            double lum = 0.299 * r + 0.588 * g + 0.113 * b;
+      //            //double alpha = (lum - lumMin) / (lumMax - lumMin);
+      //            double alpha = lum / avgLum;
+      //            if (alpha > 1.0) {
+      //              alpha = 1.0;
+      //            }
+      //            double invAlpha = 1.0 - alpha;
+      //            if (i >= 510 && i <= 520 && j >= 760 && j <= 780) {
+      //
+      //              System.out.println("LUM: " + lum + " AVG: " + avgLum);
+      //              System.out.println("A: " + alpha + " " + invAlpha);
+      //            }
+      //            r = g = b = 0;
+      //            hdrImg.setRGB(j, i, (float) (r * alpha + bgRed * invAlpha), (float) (g * alpha + bgGreen * invAlpha), (float) (b * alpha + bgBlue * invAlpha));
+      //          }
+      //        }
+      //      }
+
     }
     finally {
       flame.setCamZoom(origZoom);

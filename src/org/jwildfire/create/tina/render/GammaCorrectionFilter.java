@@ -150,12 +150,15 @@ public class GammaCorrectionFilter {
         alpha = 0;
       else if (alpha > 1.0)
         alpha = 1.0;
-      //      inverseAlpha = (1.0 - alpha) / logDensityPnt.intensity;
+      //      inverseAlpha = (1.0 - alpha);
     }
     else {
-      pHDRPoint.red = bgRedDouble;
-      pHDRPoint.green = bgGreenDouble;
-      pHDRPoint.blue = bgBlueDouble;
+      //      pHDRPoint.red = bgRedDouble;
+      //      pHDRPoint.green = bgGreenDouble;
+      //      pHDRPoint.blue = bgBlueDouble;
+      pHDRPoint.red = 0;
+      pHDRPoint.green = 0;
+      pHDRPoint.blue = 0;
       return;
     }
 
