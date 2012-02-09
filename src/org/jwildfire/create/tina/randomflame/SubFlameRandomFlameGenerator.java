@@ -24,7 +24,6 @@ import org.jwildfire.create.tina.palette.RGBPalette;
 import org.jwildfire.create.tina.palette.RandomRGBPaletteGenerator;
 import org.jwildfire.create.tina.render.FlameRenderer;
 import org.jwildfire.create.tina.transform.XFormTransformService;
-import org.jwildfire.create.tina.variation.Linear3DFunc;
 import org.jwildfire.create.tina.variation.SubFlameWFFunc;
 import org.jwildfire.image.Pixel;
 import org.jwildfire.image.SimpleImage;
@@ -44,50 +43,45 @@ public class SubFlameRandomFlameGenerator extends RandomFlameGenerator {
     Flame flame = new Flame();
     flame.setCentreX(0.0);
     flame.setCentreY(0.0);
+    flame.setCamPitch(49.0);
+    flame.setCamPerspective(0.16);
     flame.setPixelsPerUnit(200);
     flame.setSpatialFilterRadius(1.0);
     flame.setFinalXForm(null);
     flame.getXForms().clear();
 
-    int maxXForms = (int) (2.0 + Math.random() * 5.0);
-    double scl = 1.0;
+    int maxXForms = (int) (3.0 + Math.random() * 7.0);
+    double shape = Math.random();
     for (int i = 0; i < maxXForms; i++) {
       XForm xForm = new XForm();
       flame.getXForms().add(xForm);
       if (Math.random() < 0.5) {
-        XFormTransformService.rotate(xForm, 90.0 * Math.random());
+        XFormTransformService.rotate(xForm, 90.0 * Math.random(), true);
       }
       else {
-        XFormTransformService.rotate(xForm, -90.0 * Math.random());
+        XFormTransformService.rotate(xForm, -90.0 * Math.random(), true);
       }
-      XFormTransformService.localTranslate(xForm, 2.0 * Math.random() - 1.0, 2.0 * Math.random() - 1.0);
-      scl *= 0.75 + Math.random() / 4;
-      XFormTransformService.scale(xForm, scl, true, true);
-
-      xForm.setColor(Math.random());
-      if (Math.random() < 0.7) {
+      XFormTransformService.localTranslate(xForm, 3.0 * (2.0 * Math.random() - 1.0), 3.0 * (2.0 * Math.random() - 1.0), true);
+      //      xForm.setColor(Math.random());
+      //      xForm.setColorSymmetry(Math.random());
+      {
         SubFlameWFFunc var = new SubFlameWFFunc();
         Flame subFlame;
         while (true) {
-          double r = Math.random();
-          if (r < 0.15) {
-            subFlame = new LinearRandomFlameGenerator().createFlame();
+          if (shape < 0.20) {
+            subFlame = new Flowers3DRandomFlameGenerator().createFlame();
           }
-          else if (r < 0.30) {
-            subFlame = new GnarlRandomFlameGenerator().createFlame();
-          }
-          else if (r < 0.45) {
-            subFlame = new ExperimentalGnarlRandomFlameGenerator().createFlame();
-          }
-          else if (r < 0.60) {
+          else if (shape < 0.4) {
             subFlame = new BubblesRandomFlameGenerator().createFlame();
           }
-          else if (r < 0.75) {
-            subFlame = new ExperimentalSimpleRandomFlameGenerator().createFlame();
+          else if (shape < 0.6) {
+            subFlame = new Bubbles3DRandomFlameGenerator().createFlame();
+          }
+          else if (shape < 0.8) {
+            subFlame = new ExperimentalBubbles3DRandomFlameGenerator().createFlame();
           }
           else {
-            // TODO 
-            subFlame = new ExperimentalGnarlRandomFlameGenerator().createFlame();
+            subFlame = new ExperimentalFlowers3DRandomFlameGenerator().createFlame();
           }
 
           final int IMG_WIDTH = 160;
@@ -123,12 +117,8 @@ public class SubFlameRandomFlameGenerator extends RandomFlameGenerator {
 
         String flameXML = new Flam3Writer().getFlameXML(subFlame);
         var.setRessource("flame", flameXML.getBytes());
-        xForm.addVariation(Math.random() * 0.8 + 0.2, var);
+        xForm.addVariation(1, var);
       }
-      else {
-        xForm.addVariation(Math.random() * 0.8 + 0.2, new Linear3DFunc());
-      }
-
       xForm.setWeight(0.5);
     }
     return flame;
