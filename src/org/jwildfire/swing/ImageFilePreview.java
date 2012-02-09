@@ -27,10 +27,18 @@ import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 
+import org.jwildfire.image.FastHDRTonemapper;
+import org.jwildfire.image.SimpleHDRImage;
+import org.jwildfire.image.SimpleImage;
+import org.jwildfire.io.ImageReader;
+import org.jwildfire.transform.ScaleAspect;
+import org.jwildfire.transform.ScaleTransformer;
+import org.jwildfire.transform.ScaleTransformer.Unit;
+
 public class ImageFilePreview extends JComponent implements PropertyChangeListener {
   private static final long serialVersionUID = 1L;
-  private static final int THUMBNAIL_WIDTH = 160;
-  private static final int THUMBNAIL_HEIGHT = 100;
+  private static final int THUMBNAIL_WIDTH = 192;
+  private static final int THUMBNAIL_HEIGHT = 120;
 
   private ImageIcon currThumbnail = null;
   private File currFile = null;
@@ -45,20 +53,44 @@ public class ImageFilePreview extends JComponent implements PropertyChangeListen
       currThumbnail = null;
       return;
     }
-    if (currFile.exists()) {
-      ImageIcon tmpIcon = new ImageIcon(currFile.getPath());
-      if (tmpIcon != null) {
-        if (tmpIcon.getIconWidth() > THUMBNAIL_WIDTH) {
-          currThumbnail = new ImageIcon(tmpIcon.getImage().
-                                    getScaledInstance(THUMBNAIL_WIDTH, -1,
-                                                Image.SCALE_DEFAULT));
+    try {
+      if (currFile.exists()) {
+        String fileExt = null;
+        {
+          String filename = currFile.getName();
+          int p = filename.lastIndexOf(".");
+          if (p >= 0 && p < filename.length() - 2) {
+            fileExt = filename.substring(p + 1, filename.length());
+          }
+        }
+        if ("hdr".equalsIgnoreCase(fileExt)) {
+          SimpleHDRImage hdrImg = new ImageReader(this).loadHDRImage(currFile.getAbsolutePath());
+          SimpleImage img = new FastHDRTonemapper().renderImage(hdrImg);
+          ScaleTransformer scaleT = new ScaleTransformer();
+          scaleT.setScaleWidth(THUMBNAIL_WIDTH);
+          scaleT.setAspect(ScaleAspect.KEEP_WIDTH);
+          scaleT.setUnit(Unit.PIXELS);
+          scaleT.transformImage(img);
+          currThumbnail = new ImageIcon(img.getBufferedImg(), currFile.getName());
         }
         else {
-          currThumbnail = tmpIcon;
+          ImageIcon tmpIcon = new ImageIcon(currFile.getPath());
+          if (tmpIcon != null) {
+            if (tmpIcon.getIconWidth() > THUMBNAIL_WIDTH) {
+              currThumbnail = new ImageIcon(tmpIcon.getImage().
+                  getScaledInstance(THUMBNAIL_WIDTH, -1,
+                      Image.SCALE_DEFAULT));
+            }
+            else {
+              currThumbnail = tmpIcon;
+            }
+          }
         }
       }
     }
-
+    catch (Throwable ex) {
+      ex.printStackTrace();
+    }
   }
 
   public void propertyChange(PropertyChangeEvent e) {
