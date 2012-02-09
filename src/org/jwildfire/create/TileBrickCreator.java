@@ -22,7 +22,7 @@ import org.jwildfire.base.PropertyMin;
 import org.jwildfire.base.Tools;
 import org.jwildfire.image.SimpleImage;
 import org.jwildfire.swing.Buffer;
-import org.jwildfire.swing.BufferComboBoxEditor;
+import org.jwildfire.swing.NonHDRImageBufferComboBoxEditor;
 import org.jwildfire.transform.BalancingTransformer;
 import org.jwildfire.transform.ComposeTransformer;
 import org.jwildfire.transform.ScaleAspect;
@@ -37,7 +37,7 @@ public class TileBrickCreator extends ImageCreator {
   @Property(description = "Horizontal brick shift")
   private int brickShift = 30;
 
-  @Property(description = "Image building the bricks", editorClass = BufferComboBoxEditor.class)
+  @Property(description = "Image building the bricks", editorClass = NonHDRImageBufferComboBoxEditor.class)
   private Buffer brickImage;
 
   @Property(description = "Image variance probability")

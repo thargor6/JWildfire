@@ -20,7 +20,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
-public class SimpleImage {
+public class SimpleImage implements WFImage {
   private Pixel toolPixel = new Pixel();
   private int imageWidth = -1;
   private int imageHeight = -1;
@@ -45,10 +45,12 @@ public class SimpleImage {
     imageHeight = pHeight;
   }
 
+  @Override
   public int getImageWidth() {
     return imageWidth;
   }
 
+  @Override
   public int getImageHeight() {
     return imageHeight;
   }
@@ -57,6 +59,7 @@ public class SimpleImage {
     return bufferedImg;
   }
 
+  @Override
   public double getAspect() {
     return imageHeight != 0 ? (double) imageWidth / (double) imageHeight : 0.0;
   }

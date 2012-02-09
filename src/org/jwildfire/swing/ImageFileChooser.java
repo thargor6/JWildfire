@@ -34,6 +34,7 @@ public class ImageFileChooser extends DefaultFileChooser {
     setPreferredSize(new Dimension(960, 600));
     FileFilter filter = new ImageFileFilter();
     addChoosableFileFilter(filter);
+    addChoosableFileFilter(new HDRImageFileFilter());
     setFileFilter(filter);
     setAcceptAllFileFilterUsed(false);
     setAccessory(new ImageFilePreview(this));

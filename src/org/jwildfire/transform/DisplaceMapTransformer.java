@@ -24,13 +24,13 @@ import org.jwildfire.base.Tools;
 import org.jwildfire.image.Pixel;
 import org.jwildfire.image.SimpleImage;
 import org.jwildfire.swing.Buffer;
-import org.jwildfire.swing.BufferComboBoxEditor;
+import org.jwildfire.swing.NonHDRImageBufferComboBoxEditor;
 
 
 public class DisplaceMapTransformer extends Mesh2DTransformer {
-  @Property(description = "Image which holds the displacement information for the x-axis (red channel)", editorClass = BufferComboBoxEditor.class)
+  @Property(description = "Image which holds the displacement information for the x-axis (red channel)", editorClass = NonHDRImageBufferComboBoxEditor.class)
   private Buffer displaceXMap;
-  @Property(description = "Image which holds the displacement information for the y-axis (green channel)", editorClass = BufferComboBoxEditor.class)
+  @Property(description = "Image which holds the displacement information for the y-axis (green channel)", editorClass = NonHDRImageBufferComboBoxEditor.class)
   private Buffer displaceYMap;
 
   @Property(category = PropertyCategory.SECONDARY, description = "Global zoom factor for the whole image")

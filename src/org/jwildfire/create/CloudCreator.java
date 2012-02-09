@@ -29,7 +29,7 @@ import org.jwildfire.base.Tools;
 import org.jwildfire.image.Pixel;
 import org.jwildfire.image.SimpleImage;
 import org.jwildfire.swing.Buffer;
-import org.jwildfire.swing.BufferComboBoxEditor;
+import org.jwildfire.swing.NonHDRImageBufferComboBoxEditor;
 
 import com.l2fprod.common.beans.editor.ComboBoxPropertyEditor;
 
@@ -83,7 +83,7 @@ public class CloudCreator extends ImageCreator {
   @Property(description = "Mode", editorClass = ModeEditor.class)
   private Mode mode = Mode.CLOUDS;
 
-  @Property(description = "Background image (mode==CLOUDS)", editorClass = BufferComboBoxEditor.class)
+  @Property(description = "Background image (mode==CLOUDS)", editorClass = NonHDRImageBufferComboBoxEditor.class)
   private Buffer backgroundImg;
 
   @Property(description = "Background mode (mode==CLOUDS)", editorClass = BGModeEditor.class)

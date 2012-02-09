@@ -22,27 +22,20 @@ public class FastHDRTonemapper {
 
   public SimpleImage renderImage(SimpleHDRImage pHDRImg) {
     SimpleImage res = new SimpleImage(pHDRImg.getImageWidth(), pHDRImg.getImageHeight());
-    float minLum = Float.MAX_VALUE;
-    float maxLum = 0.0f;
-    float rgb[] = new float[3];
-    for (int i = 0; i < pHDRImg.getImageHeight(); i++) {
-      for (int j = 0; j < pHDRImg.getImageWidth(); j++) {
-        pHDRImg.getRGBValues(rgb, j, i);
-        float lum = 0.299f * rgb[0] + 0.588f * rgb[1] + 0.113f * rgb[2];
-        if (lum < minLum) {
-          minLum = lum;
-        }
-        if (lum > maxLum) {
-          maxLum = lum;
-        }
-      }
+    float minLum, maxLum;
+    {
+      float lum[] = new float[2];
+      pHDRImg.getMinMaxLum(lum);
+      minLum = lum[0];
+      maxLum = lum[1];
     }
     double lumRange = maxLum - minLum;
+    float rgb[] = new float[3];
     if (lumRange > Tools.EPSILON) {
       for (int i = 0; i < pHDRImg.getImageHeight(); i++) {
         for (int j = 0; j < pHDRImg.getImageWidth(); j++) {
           pHDRImg.getRGBValues(rgb, j, i);
-          float lum = 0.299f * rgb[0] + 0.588f * rgb[1] + 0.113f * rgb[2];
+          float lum = pHDRImg.getLum(j, i);
           double normedLum = ((lum - minLum) / lumRange);
           double transformedLum = 1.0 - Math.exp(-37.0 * normedLum);
           float maxComp = rgb[0];

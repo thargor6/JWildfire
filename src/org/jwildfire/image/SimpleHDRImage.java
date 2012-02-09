@@ -18,7 +18,7 @@ package org.jwildfire.image;
 
 import org.jwildfire.base.Tools;
 
-public class SimpleHDRImage {
+public class SimpleHDRImage implements WFImage {
   private int imageWidth = -1;
   private int imageHeight = -1;
   private float rBuffer[], gBuffer[], bBuffer[];
@@ -37,14 +37,17 @@ public class SimpleHDRImage {
   public SimpleHDRImage() {
   }
 
+  @Override
   public int getImageWidth() {
     return imageWidth;
   }
 
+  @Override
   public int getImageHeight() {
     return imageHeight;
   }
 
+  @Override
   public double getAspect() {
     return imageHeight != 0 ? (double) imageWidth / (double) imageHeight : 0.0;
   }
@@ -134,10 +137,15 @@ public class SimpleHDRImage {
   }
 
   public void getRGBValues(float pRGB[], int pX, int pY) {
-    int off = getOffset(pX, pY);
-    pRGB[0] = rBuffer[off];
-    pRGB[1] = gBuffer[off];
-    pRGB[2] = bBuffer[off];
+    int offset = getOffset(pX, pY);
+    pRGB[0] = rBuffer[offset];
+    pRGB[1] = gBuffer[offset];
+    pRGB[2] = bBuffer[offset];
+  }
+
+  public float getLum(int pX, int pY) {
+    int offset = getOffset(pX, pY);
+    return 0.299f * rBuffer[offset] + 0.588f * gBuffer[offset] + 0.113f * bBuffer[offset];
   }
 
   public float getRValue(int pX, int pY) {
@@ -225,4 +233,32 @@ public class SimpleHDRImage {
     gBuffer[off] = e * (pG + 0.5f);
     bBuffer[off] = e * (pB + 0.5f);
   }
+
+  public void getMinMaxLum(float[] pLum) {
+    float minLum = Float.MAX_VALUE;
+    float maxLum = 0.0f;
+    for (int i = 0; i < imageHeight; i++) {
+      for (int j = 0; j < imageWidth; j++) {
+        float lum = getLum(j, i);
+        if (lum < minLum) {
+          minLum = lum;
+        }
+        if (lum > maxLum) {
+          maxLum = lum;
+        }
+      }
+    }
+    pLum[0] = minLum;
+    pLum[1] = maxLum;
+  }
+
+  public double getLumIgnoreBounds(int pX, int pY) {
+    if (pX >= 0 && pX < imageWidth && pY >= 0 && pY < imageHeight) {
+      return getLum(pX, pY);
+    }
+    else {
+      return 0;
+    }
+  }
+
 }

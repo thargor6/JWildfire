@@ -21,11 +21,11 @@ import org.jwildfire.base.PropertyCategory;
 import org.jwildfire.image.Pixel;
 import org.jwildfire.image.SimpleImage;
 import org.jwildfire.swing.Buffer;
-import org.jwildfire.swing.BufferComboBoxEditor;
+import org.jwildfire.swing.NonHDRImageBufferComboBoxEditor;
 
 
 public class BumpTransformer extends Mesh2DTransformer {
-  @Property(category = PropertyCategory.PRIMARY, description = "Image which holds the height information", editorClass = BufferComboBoxEditor.class)
+  @Property(category = PropertyCategory.PRIMARY, description = "Image which holds the height information", editorClass = NonHDRImageBufferComboBoxEditor.class)
   private Buffer heightMap;
   @Property(category = PropertyCategory.SECONDARY, description = "Left offset of the height map")
   private int left;

@@ -187,6 +187,10 @@ public class Buffer {
     return (bufferType == BufferType.IMAGE) ? img : null;
   }
 
+  public SimpleHDRImage getHDRImage() {
+    return (bufferType == BufferType.HDR_IMAGE) ? hdrImg : null;
+  }
+
   public Buffer(JDesktopPane pDesktop, String pName, Mesh3D pMesh3D, SimpleImage pPreviewImage) {
     img = pPreviewImage;
     mesh3D = pMesh3D;

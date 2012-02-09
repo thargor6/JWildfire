@@ -23,7 +23,7 @@ import org.jwildfire.base.mathparser.JEPWrapper;
 import org.jwildfire.image.Pixel;
 import org.jwildfire.image.SimpleImage;
 import org.jwildfire.swing.Buffer;
-import org.jwildfire.swing.BufferComboBoxEditor;
+import org.jwildfire.swing.NonHDRImageBufferComboBoxEditor;
 import org.nfunk.jep.Node;
 
 import com.l2fprod.common.beans.editor.ComboBoxPropertyEditor;
@@ -39,7 +39,7 @@ public class FormulaComposeTransformer extends Mesh2DTransformer {
     OFF, CENTRE, TOP, BOTTOM
   }
 
-  @Property(category = PropertyCategory.PRIMARY, description = "Image to put in foreground", editorClass = BufferComboBoxEditor.class)
+  @Property(category = PropertyCategory.PRIMARY, description = "Image to put in foreground", editorClass = NonHDRImageBufferComboBoxEditor.class)
   private Buffer foreground;
   private SimpleImage foregroundImage; // Alternative way to specify the foreground image directly
   @Property(category = PropertyCategory.SECONDARY, description = "Left offset of the foreground image")

@@ -22,7 +22,7 @@ import org.jwildfire.base.Tools;
 import org.jwildfire.image.Pixel;
 import org.jwildfire.image.SimpleImage;
 import org.jwildfire.swing.Buffer;
-import org.jwildfire.swing.BufferComboBoxEditor;
+import org.jwildfire.swing.NonHDRImageBufferComboBoxEditor;
 
 import com.l2fprod.common.beans.editor.ComboBoxPropertyEditor;
 
@@ -34,7 +34,7 @@ public class AddTransformer extends Mesh2DTransformer {
 
   @Property(description = "Add or subtract the pixel values of the foreground image", editorClass = ModeEditor.class)
   private Mode mode = Mode.ADD;
-  @Property(category = PropertyCategory.PRIMARY, description = "Image to add/subtract", editorClass = BufferComboBoxEditor.class)
+  @Property(category = PropertyCategory.PRIMARY, description = "Image to add/subtract", editorClass = NonHDRImageBufferComboBoxEditor.class)
   private Buffer foreground;
   private SimpleImage foregroundImage; // Alternative way to specify the foreground image directly
   @Property(category = PropertyCategory.SECONDARY, description = "Exposure exponent (mode=EXPOSURE)")

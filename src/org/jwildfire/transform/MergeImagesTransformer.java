@@ -19,7 +19,7 @@ package org.jwildfire.transform;
 import org.jwildfire.base.Property;
 import org.jwildfire.image.SimpleImage;
 import org.jwildfire.swing.Buffer;
-import org.jwildfire.swing.BufferComboBoxEditor;
+import org.jwildfire.swing.NonHDRImageBufferComboBoxEditor;
 import org.jwildfire.swing.Buffer.BufferType;
 
 import com.l2fprod.common.beans.editor.ComboBoxPropertyEditor;
@@ -30,7 +30,7 @@ public class MergeImagesTransformer extends Transformer {
     HORIZONTAL, VERTICAL
   }
 
-  @Property(description = "2nd image", editorClass = BufferComboBoxEditor.class)
+  @Property(description = "2nd image", editorClass = NonHDRImageBufferComboBoxEditor.class)
   private Buffer image2;
 
   @Property(description = "Merge mode", editorClass = ModeEditor.class)

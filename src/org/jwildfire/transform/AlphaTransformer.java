@@ -22,11 +22,11 @@ import org.jwildfire.base.Tools;
 import org.jwildfire.image.Pixel;
 import org.jwildfire.image.SimpleImage;
 import org.jwildfire.swing.Buffer;
-import org.jwildfire.swing.BufferComboBoxEditor;
+import org.jwildfire.swing.NonHDRImageBufferComboBoxEditor;
 
 
 public class AlphaTransformer extends Mesh2DTransformer {
-  @Property(category = PropertyCategory.PRIMARY, description = "Image which holds the alpha channel information", editorClass = BufferComboBoxEditor.class)
+  @Property(category = PropertyCategory.PRIMARY, description = "Image which holds the alpha channel information", editorClass = NonHDRImageBufferComboBoxEditor.class)
   private Buffer alphaChannel;
   @Property(category = PropertyCategory.SECONDARY, description = "Left offset of the height map")
   private int left = 0;

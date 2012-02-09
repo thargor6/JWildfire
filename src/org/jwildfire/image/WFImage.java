@@ -14,36 +14,14 @@
   if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
   02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
-package org.jwildfire.swing;
+package org.jwildfire.image;
 
-import java.io.File;
+public interface WFImage {
 
-import javax.swing.filechooser.FileFilter;
+  public int getImageWidth();
 
-public class ImageFileFilter extends FileFilter {
+  public int getImageHeight();
 
-  @Override
-  public boolean accept(File pFile) {
-    if (pFile.isDirectory())
-      return true;
-    String extension = getExtension(pFile);
-    return (extension != null)
-        && (extension.equals("gif") || extension.equals("jpg") || extension.equals("jpeg") || extension
-            .equals("png") || extension.equals("hdr"));
-  }
-
-  @Override
-  public String getDescription() {
-    return "All supported image files";
-  }
-
-  private String getExtension(File pFile) {
-    String name = pFile.getName();
-    int idx = name.lastIndexOf('.');
-    if (idx > 0 && idx < name.length() - 1) {
-      return name.substring(idx + 1).toLowerCase();
-    }
-    return null;
-  }
+  public double getAspect();
 
 }

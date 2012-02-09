@@ -16,34 +16,17 @@
 */
 package org.jwildfire.swing;
 
-import java.io.File;
+import java.util.List;
 
-import javax.swing.filechooser.FileFilter;
+import org.jwildfire.swing.Buffer.BufferType;
 
-public class ImageFileFilter extends FileFilter {
+import com.l2fprod.common.beans.editor.ComboBoxPropertyEditor;
 
-  @Override
-  public boolean accept(File pFile) {
-    if (pFile.isDirectory())
-      return true;
-    String extension = getExtension(pFile);
-    return (extension != null)
-        && (extension.equals("gif") || extension.equals("jpg") || extension.equals("jpeg") || extension
-            .equals("png") || extension.equals("hdr"));
+public class ImageBufferComboBoxEditor extends ComboBoxPropertyEditor {
+  public ImageBufferComboBoxEditor() {
+    super();
+    List<Buffer> buffers = StaticBufferList.getBufferList(BufferType.IMAGE);
+    buffers.addAll(StaticBufferList.getBufferList(BufferType.HDR_IMAGE));
+    setAvailableValues(buffers.toArray());
   }
-
-  @Override
-  public String getDescription() {
-    return "All supported image files";
-  }
-
-  private String getExtension(File pFile) {
-    String name = pFile.getName();
-    int idx = name.lastIndexOf('.');
-    if (idx > 0 && idx < name.length() - 1) {
-      return name.substring(idx + 1).toLowerCase();
-    }
-    return null;
-  }
-
 }

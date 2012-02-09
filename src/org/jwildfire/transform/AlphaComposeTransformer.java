@@ -23,7 +23,7 @@ import org.jwildfire.base.PropertyCategory;
 import org.jwildfire.image.Pixel;
 import org.jwildfire.image.SimpleImage;
 import org.jwildfire.swing.Buffer;
-import org.jwildfire.swing.BufferComboBoxEditor;
+import org.jwildfire.swing.NonHDRImageBufferComboBoxEditor;
 
 import com.l2fprod.common.beans.editor.ComboBoxPropertyEditor;
 
@@ -40,10 +40,10 @@ public class AlphaComposeTransformer extends Mesh2DTransformer {
     NONE, COLOR, IN_RANGE, OUT_RANGE
   }
 
-  @Property(category = PropertyCategory.PRIMARY, description = "Image to put in foreground (background image is received from the input channel)", editorClass = BufferComboBoxEditor.class)
+  @Property(category = PropertyCategory.PRIMARY, description = "Image to put in foreground (background image is received from the input channel)", editorClass = NonHDRImageBufferComboBoxEditor.class)
   private Buffer foreground;
   private SimpleImage foregroundImage; // Alternative way to specify the foreground image directly
-  @Property(category = PropertyCategory.PRIMARY, description = "Image which holds the alpha channel information", editorClass = BufferComboBoxEditor.class)
+  @Property(category = PropertyCategory.PRIMARY, description = "Image which holds the alpha channel information", editorClass = NonHDRImageBufferComboBoxEditor.class)
   private Buffer alphaChannel;
   private SimpleImage alphaChannelImage; // Alternative way to specify the foreground image directly
   @Property(category = PropertyCategory.SECONDARY, description = "Left offset of the foreground image")

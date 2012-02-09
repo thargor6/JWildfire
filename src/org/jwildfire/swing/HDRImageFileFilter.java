@@ -16,14 +16,32 @@
 */
 package org.jwildfire.swing;
 
-import org.jwildfire.swing.Buffer.BufferType;
+import java.io.File;
 
-import com.l2fprod.common.beans.editor.ComboBoxPropertyEditor;
+import javax.swing.filechooser.FileFilter;
 
+public class HDRImageFileFilter extends FileFilter {
 
-public class BufferComboBoxEditor extends ComboBoxPropertyEditor {
-  public BufferComboBoxEditor() {
-    super();
-    setAvailableValues(StaticBufferList.getBufferList(BufferType.IMAGE).toArray());
+  @Override
+  public boolean accept(File pFile) {
+    if (pFile.isDirectory())
+      return true;
+    String extension = getExtension(pFile);
+    return (extension != null) && (extension.equals("hdr"));
   }
+
+  @Override
+  public String getDescription() {
+    return "Supported HDR image files";
+  }
+
+  private String getExtension(File pFile) {
+    String name = pFile.getName();
+    int idx = name.lastIndexOf('.');
+    if (idx > 0 && idx < name.length() - 1) {
+      return name.substring(idx + 1).toLowerCase();
+    }
+    return null;
+  }
+
 }

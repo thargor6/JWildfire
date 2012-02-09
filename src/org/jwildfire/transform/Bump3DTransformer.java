@@ -18,20 +18,21 @@ package org.jwildfire.transform;
 
 import org.jwildfire.base.Property;
 import org.jwildfire.base.PropertyCategory;
+import org.jwildfire.image.SimpleHDRImage;
 import org.jwildfire.image.SimpleImage;
+import org.jwildfire.image.WFImage;
 import org.jwildfire.swing.Buffer;
-import org.jwildfire.swing.BufferComboBoxEditor;
+import org.jwildfire.swing.ImageBufferComboBoxEditor;
 import org.jwildfire.swing.ScaleAspectEditor;
 
 import com.l2fprod.common.beans.editor.ComboBoxPropertyEditor;
-
 
 public class Bump3DTransformer extends Mesh3DTransformer {
   public enum SmoothingMatrix {
     MATRIX_3x3, MATRIX_5x5,
   }
 
-  @Property(category = PropertyCategory.PRIMARY, description = "Image which holds the height information", editorClass = BufferComboBoxEditor.class)
+  @Property(category = PropertyCategory.PRIMARY, description = "Image which holds the height information", editorClass = ImageBufferComboBoxEditor.class)
   private Buffer heightMap;
   @Property(category = PropertyCategory.PRIMARY, description = "Maximum displacement amount")
   private double amount = 10.0;
@@ -52,9 +53,10 @@ public class Bump3DTransformer extends Mesh3DTransformer {
   @Property(category = PropertyCategory.SECONDARY, description = "Centre the height map")
   private boolean hCentre = true;
 
+  private double lumMin, lumMax, lumRange;
+
   @Override
   protected void transformMesh(Mesh3D pMesh3D, int pImageWidth, int pImageHeight) {
-    SimpleImage heightMap = this.heightMap.getImage();
     int pCount = pMesh3D.getPCount();
     int width = pImageWidth;
     int height = pImageHeight;
@@ -62,17 +64,32 @@ public class Bump3DTransformer extends Mesh3DTransformer {
     double y[] = pMesh3D.getY();
     double z[] = pMesh3D.getZ();
 
-    {
+    WFImage heightMap = this.heightMap.getHDRImage();
+    if (heightMap != null) {
       int hwidth = heightMap.getImageWidth();
       int hheight = heightMap.getImageHeight();
       if ((hwidth != this.hWidth) || (hheight != this.hHeight)) {
-        heightMap = heightMap.clone();
+        throw new IllegalArgumentException("Heightmap has the wrong size (scaling of HDR images currently not supported)");
+      }
+      float lum[] = new float[2];
+      ((SimpleHDRImage) heightMap).getMinMaxLum(lum);
+      lumMin = lum[0];
+      lumMax = lum[1];
+      lumRange = lumMax - lumMin;
+    }
+    else {
+      heightMap = this.heightMap.getImage();
+      int hwidth = heightMap.getImageWidth();
+      int hheight = heightMap.getImageHeight();
+      if ((hwidth != this.hWidth) || (hheight != this.hHeight)) {
+        SimpleImage scaledHeightMap = ((SimpleImage) heightMap).clone();
         ScaleTransformer scaleT = new ScaleTransformer();
         scaleT.setAspect(this.aspect);
         scaleT.setUnit(ScaleTransformer.Unit.PIXELS);
         scaleT.setScaleWidth(this.hWidth);
         scaleT.setScaleHeight(this.hHeight);
-        scaleT.performImageTransformation(heightMap);
+        scaleT.performImageTransformation(scaledHeightMap);
+        heightMap = scaledHeightMap;
       }
     }
 
@@ -131,13 +148,18 @@ public class Bump3DTransformer extends Mesh3DTransformer {
     return res;
   }
 
-  private void readPixels(SimpleImage pHeightMap, int pX, int pY, double[][] pIntArray) {
+  private void readPixels(WFImage pHeightMap, int pX, int pY, double[][] pIntArray) {
     int size = pIntArray.length;
     for (int i = 0; i < size; i++) {
       int y = pY - size / 2 + i;
       for (int j = 0; j < size; j++) {
         int x = pX - size / 2 + j;
-        pIntArray[i][j] = (double) (pHeightMap.getRValueIgnoreBounds(x, y)) / 255.0;
+        if (pHeightMap instanceof SimpleHDRImage) {
+          pIntArray[i][j] = ((((SimpleHDRImage) pHeightMap).getLumIgnoreBounds(x, y)) - lumMin) / lumRange;
+        }
+        else {
+          pIntArray[i][j] = (double) (((SimpleImage) pHeightMap).getRValueIgnoreBounds(x, y)) / 255.0;
+        }
       }
     }
   }
