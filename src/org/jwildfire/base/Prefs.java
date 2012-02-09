@@ -59,6 +59,11 @@ public class Prefs extends ManagedObject {
   static final String KEY_TINA_RENDER_MOVIE_FILTER_RADIUS = "tina.render.movie.filter_radius";
   static final String KEY_TINA_RENDER_MOVIE_QUALITY = "tina.render.movie.quality";
 
+  static final String KEY_TINA_RANDOMBATCH_SIZE = "tina.random_batch.size";
+  static final String KEY_TINA_RANDOMBATCH_BGCOLOR_RED = "tina.random_batch.bg_color.red";
+  static final String KEY_TINA_RANDOMBATCH_BGCOLOR_GREEN = "tina.random_batch.bg_color.green";
+  static final String KEY_TINA_RANDOMBATCH_BGCOLOR_BLUE = "tina.random_batch.bg_color.blue";
+
   @Property(description = "Script drawer", category = PropertyCategory.GENERAL)
   private String scriptPath = null;
   private String lastInputScriptPath = null;
@@ -137,6 +142,15 @@ public class Prefs extends ManagedObject {
   private double tinaRenderMovieFilterRadius = 1.25;
   @Property(description = "Quality for movie rendering", category = PropertyCategory.TINA)
   private int tinaRenderMovieQuality = 150;
+
+  @Property(description = "Number of generated flames by invoking the \"Random flames\" function", category = PropertyCategory.TINA)
+  private int tinaRandomBatchSize = 24;
+  @Property(description = "Red component of the background color of randomly generated flames", category = PropertyCategory.TINA)
+  private int tinaRandomBatchBGColorRed = 0;
+  @Property(description = "Red component of the background color of randomly generated flames", category = PropertyCategory.TINA)
+  private int tinaRandomBatchBGColorGreen = 0;
+  @Property(description = "Red component of the background color of randomly generated flames", category = PropertyCategory.TINA)
+  private int tinaRandomBatchBGColorBlue = 0;
 
   public String getInputScriptPath() {
     return lastInputScriptPath != null ? lastInputScriptPath : scriptPath;
@@ -306,6 +320,10 @@ public class Prefs extends ManagedObject {
     tinaRenderMovieQuality = pSrc.tinaRenderMovieQuality;
     tinaRenderFastMath = pSrc.tinaRenderFastMath;
     tinaRenderRealtimeQuality = pSrc.tinaRenderRealtimeQuality;
+    tinaRandomBatchSize = pSrc.tinaRandomBatchSize;
+    tinaRandomBatchBGColorRed = pSrc.tinaRandomBatchBGColorRed;
+    tinaRandomBatchBGColorGreen = pSrc.tinaRandomBatchBGColorGreen;
+    tinaRandomBatchBGColorBlue = pSrc.tinaRandomBatchBGColorBlue;
   }
 
   public int getTinaRenderThreads() {
@@ -514,6 +532,38 @@ public class Prefs extends ManagedObject {
 
   public void setTinaRenderNormalHDR(boolean tinaRenderNormalHDR) {
     this.tinaRenderNormalHDR = tinaRenderNormalHDR;
+  }
+
+  public int getTinaRandomBatchSize() {
+    return tinaRandomBatchSize;
+  }
+
+  public void setTinaRandomBatchSize(int tinaRandomBatchSize) {
+    this.tinaRandomBatchSize = tinaRandomBatchSize;
+  }
+
+  public int getTinaRandomBatchBGColorRed() {
+    return tinaRandomBatchBGColorRed;
+  }
+
+  public void setTinaRandomBatchBGColorRed(int tinaRandomBatchBGColorRed) {
+    this.tinaRandomBatchBGColorRed = tinaRandomBatchBGColorRed;
+  }
+
+  public int getTinaRandomBatchBGColorGreen() {
+    return tinaRandomBatchBGColorGreen;
+  }
+
+  public void setTinaRandomBatchBGColorGreen(int tinaRandomBatchBGColorGreen) {
+    this.tinaRandomBatchBGColorGreen = tinaRandomBatchBGColorGreen;
+  }
+
+  public int getTinaRandomBatchBGColorBlue() {
+    return tinaRandomBatchBGColorBlue;
+  }
+
+  public void setTinaRandomBatchBGColorBlue(int tinaRandomBatchBGColorBlue) {
+    this.tinaRandomBatchBGColorBlue = tinaRandomBatchBGColorBlue;
   }
 
 }

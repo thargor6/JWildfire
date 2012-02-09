@@ -2571,11 +2571,11 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
 
   public void createRandomBatch(int pCount, String pGeneratorname) {
     randomBatch.clear();
-    final int IMG_COUNT = 24;
+    int imgCount = prefs.getTinaRandomBatchSize();
     final int MAX_IMG_SAMPLES = 10;
     final double MIN_COVERAGE = 0.33;
     List<SimpleImage> imgList = new ArrayList<SimpleImage>();
-    int maxCount = (pCount > 0 ? pCount : IMG_COUNT);
+    int maxCount = (pCount > 0 ? pCount : imgCount);
     mainProgressUpdater.initProgress(maxCount);
     for (int i = 0; i < maxCount; i++) {
       SimpleImage img = new SimpleImage(IMG_WIDTH, IMG_HEIGHT);
@@ -2584,7 +2584,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       for (int j = 0; j < MAX_IMG_SAMPLES; j++) {
         // create flame
         RandomFlameGenerator randGen = RandomFlameGeneratorList.getRandomFlameGeneratorInstance(pGeneratorname, true);
-        Flame flame = randGen.createFlame(randomSymmetryCheckBox.isSelected(), randomPostTransformCheckBox.isSelected());
+        Flame flame = randGen.createFlame(prefs, randomSymmetryCheckBox.isSelected(), randomPostTransformCheckBox.isSelected());
         flame.setWidth(IMG_WIDTH);
         flame.setHeight(IMG_HEIGHT);
         flame.setPixelsPerUnit(10);

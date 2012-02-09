@@ -16,6 +16,7 @@
 */
 package org.jwildfire.create.tina.randomflame;
 
+import org.jwildfire.base.Prefs;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.transform.XFormTransformService;
@@ -26,8 +27,11 @@ public abstract class RandomFlameGenerator {
 
   public abstract String getName();
 
-  public Flame createFlame(boolean pWithSymmetry, boolean pWithPostTransforms) {
+  public Flame createFlame(Prefs pPrefs, boolean pWithSymmetry, boolean pWithPostTransforms) {
     Flame flame = createFlame();
+    flame.setBGColorRed(pPrefs.getTinaRandomBatchBGColorRed());
+    flame.setBGColorGreen(pPrefs.getTinaRandomBatchBGColorGreen());
+    flame.setBGColorBlue(pPrefs.getTinaRandomBatchBGColorBlue());
     if (pWithSymmetry && !pWithPostTransforms) {
       addSymmetry(flame, false);
     }
