@@ -20,8 +20,8 @@ import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.transform.XFormTransformService;
 import org.jwildfire.create.tina.variation.JuliaNFunc;
+import org.jwildfire.create.tina.variation.VariationFunc;
 import org.jwildfire.create.tina.variation.VariationFuncList;
-import org.jwildfire.create.tina.variation.Waves2WFFunc;
 
 public class ExperimentalGnarlRandomFlameGenerator extends RandomFlameGenerator {
 
@@ -49,18 +49,18 @@ public class ExperimentalGnarlRandomFlameGenerator extends RandomFlameGenerator 
       scaleY = scaleX;
     }
 
-    double freqX = Math.random() * 3.0 + 3.0;
+    double freqX = Math.random() * 2.0 + 7.0;
     double freqY;
     if (Math.random() < 0.25) {
       freqY = freqX;
     }
     else {
-      freqY = Math.random() * 3.0 + 3.0;
+      freqY = Math.random() * 2.0 + 7.0;
     }
 
     double blurAmount = 0.0025 * Math.random();
     double nonBlurAmount = 0.25 * Math.random();
-    double wavesWeight = Math.random() * 20 + 35;
+    double wavesWeight = Math.random() * 10 + 75;
     double _2ndWeight = 0.5;
     double _3rdWeight = 0.5;
     double symmetry = 0.9 + Math.random() * 0.2 - Math.random() * 0.4;
@@ -70,8 +70,18 @@ public class ExperimentalGnarlRandomFlameGenerator extends RandomFlameGenerator 
       XForm xForm = new XForm();
       flame.getXForms().add(xForm);
       xForm.setWeight(wavesWeight);
-      //      Waves2Func w2 = (Waves2Func) VariationFuncList.getVariationFuncInstance("waves2", true);
-      Waves2WFFunc w2 = (Waves2WFFunc) VariationFuncList.getVariationFuncInstance("waves2_wf", true);
+      double varRnd = Math.random();
+      String varName;
+      if (varRnd < 0.33) {
+        varName = "waves2_wf";
+      }
+      else if (varRnd < 0.66) {
+        varName = "waves3_wf";
+      }
+      else {
+        varName = "waves4_wf";
+      }
+      VariationFunc w2 = VariationFuncList.getVariationFuncInstance(varName, true);
       if (Math.random() < 0.5) {
         w2.setParameter("use_cos_x", 1);
       }
@@ -85,10 +95,10 @@ public class ExperimentalGnarlRandomFlameGenerator extends RandomFlameGenerator 
         w2.setParameter("use_cos_y", 0);
       }
       if (Math.random() < 0.5) {
-        w2.setParameter("dampx", -(0.01 + Math.random() * 0.19));
+        w2.setParameter("dampx", -(0.01 + Math.random() * 0.39));
       }
       if (Math.random() < 0.5) {
-        w2.setParameter("dampy", -(0.01 + Math.random() * 0.19));
+        w2.setParameter("dampy", -(0.01 + Math.random() * 0.39));
       }
       w2.setParameter("freqx", freqX);
       w2.setParameter("scalex", scaleX);

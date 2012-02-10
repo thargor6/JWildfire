@@ -2580,6 +2580,9 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     for (int i = 0; i < maxCount; i++) {
       SimpleImage img = new SimpleImage(IMG_WIDTH, IMG_HEIGHT);
       Flame bestFlame = null;
+      int bgRed = prefs.getTinaRandomBatchBGColorRed();
+      int bgGreen = prefs.getTinaRandomBatchBGColorGreen();
+      int bgBlue = prefs.getTinaRandomBatchBGColorBlue();
       double bestCoverage = 0.0;
       for (int j = 0; j < MAX_IMG_SAMPLES; j++) {
         // create flame
@@ -2606,11 +2609,23 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
           long maxCoverage = img.getImageWidth() * img.getImageHeight();
           long coverage = 0;
           Pixel pixel = new Pixel();
-          for (int k = 0; k < img.getImageHeight(); k++) {
-            for (int l = 0; l < img.getImageWidth(); l++) {
-              pixel.setARGBValue(img.getARGBValue(l, k));
-              if (pixel.r > 20 || pixel.g > 20 || pixel.b > 20) {
-                coverage++;
+          if (bgRed == 0 && bgGreen == 0 && bgBlue == 0) {
+            for (int k = 0; k < img.getImageHeight(); k++) {
+              for (int l = 0; l < img.getImageWidth(); l++) {
+                pixel.setARGBValue(img.getARGBValue(l, k));
+                if (pixel.r > 20 || pixel.g > 20 || pixel.b > 20) {
+                  coverage++;
+                }
+              }
+            }
+          }
+          else {
+            for (int k = 0; k < img.getImageHeight(); k++) {
+              for (int l = 0; l < img.getImageWidth(); l++) {
+                pixel.setARGBValue(img.getARGBValue(l, k));
+                if (Math.abs(pixel.r - bgRed) > 20.0 && Math.abs(pixel.g - bgGreen) > 20.0 && Math.abs(pixel.b - bgBlue) > 20.0) {
+                  coverage++;
+                }
               }
             }
           }

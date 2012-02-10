@@ -20,7 +20,7 @@ import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
-public class Waves2WFFunc extends VariationFunc {
+public class Waves4WFFunc extends VariationFunc {
 
   private static final String PARAM_SCALEX = "scalex";
   private static final String PARAM_SCALEY = "scaley";
@@ -47,16 +47,16 @@ public class Waves2WFFunc extends VariationFunc {
     double dampingX = Math.abs(dampX) < Tools.EPSILON ? 1.0 : pContext.exp(dampX);
     double dampingY = Math.abs(dampY) < Tools.EPSILON ? 1.0 : pContext.exp(dampY);
     if (useCosX == 1) {
-      pVarTP.x += pAmount * (pAffineTP.x + dampingX * scalex * pContext.cos(pAffineTP.y * freqx)) * dampingX;
+      pVarTP.x += pAmount * (pAffineTP.x + dampingX * scalex * pContext.cos(pAffineTP.y * freqx) * pContext.sin(pAffineTP.y * freqx) * pContext.cos(pAffineTP.y * freqx)) * dampingX;
     }
     else {
-      pVarTP.x += pAmount * (pAffineTP.x + dampingX * scalex * pContext.sin(pAffineTP.y * freqx)) * dampingX;
+      pVarTP.x += pAmount * (pAffineTP.x + dampingX * scalex * pContext.sin(pAffineTP.y * freqx) * pContext.cos(pAffineTP.y * freqx) * pContext.sin(pAffineTP.y * freqx)) * dampingX;
     }
     if (useCosY == 1) {
-      pVarTP.y += pAmount * (pAffineTP.y + dampingY * scaley * pContext.cos(pAffineTP.x * freqy)) * dampingY;
+      pVarTP.y += pAmount * (pAffineTP.y + dampingY * scaley * pContext.cos(pAffineTP.x * freqy) * pContext.sin(pAffineTP.x * freqy) * pContext.cos(pAffineTP.x * freqy)) * dampingY;
     }
     else {
-      pVarTP.y += pAmount * (pAffineTP.y + dampingY * scaley * pContext.sin(pAffineTP.x * freqy)) * dampingY;
+      pVarTP.y += pAmount * (pAffineTP.y + dampingY * scaley * pContext.sin(pAffineTP.x * freqy) * pContext.cos(pAffineTP.x * freqy) * pContext.sin(pAffineTP.x * freqy)) * dampingY;
     }
   }
 
@@ -94,7 +94,7 @@ public class Waves2WFFunc extends VariationFunc {
 
   @Override
   public String getName() {
-    return "waves2_wf";
+    return "waves4_wf";
   }
 
 }

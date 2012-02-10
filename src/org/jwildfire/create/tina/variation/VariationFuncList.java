@@ -201,6 +201,8 @@ public class VariationFuncList {
     registerVariationFunc(SubFlameWFFunc.class);
     registerVariationFunc(PreSubFlameWFFunc.class);
     registerVariationFunc(KaleidoscopeFunc.class);
+    registerVariationFunc(Waves3WFFunc.class);
+    registerVariationFunc(Waves4WFFunc.class);
 
     //    registerVariationFunc(TPostBumpMapFunc.class);
   }
