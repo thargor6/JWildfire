@@ -27,7 +27,8 @@ public class GammaCorrectionFilter {
   private double gamma;
   private double sclGamma;
   private int bgRed, bgGreen, bgBlue;
-  private float bgRedDouble, bgGreenDouble, bgBlueDouble;
+
+  //  private float bgRedDouble, bgGreenDouble, bgBlueDouble;
 
   public GammaCorrectionFilter(Flame pFlame) {
     flame = pFlame;
@@ -63,9 +64,9 @@ public class GammaCorrectionFilter {
     bgGreen = flame.getBGColorGreen();
     bgBlue = flame.getBGColorBlue();
 
-    bgRedDouble = bgRed / 255.0f;
-    bgGreenDouble = bgGreen / 255.0f;
-    bgBlueDouble = bgBlue / 255.0f;
+    //    bgRedDouble = bgRed / 255.0f;
+    //    bgGreenDouble = bgGreen / 255.0f;
+    //    bgBlueDouble = bgBlue / 255.0f;
   }
 
   public void transformPoint(LogDensityPoint logDensityPnt, GammaCorrectedRGBPoint pRGBPoint) {

@@ -5,7 +5,8 @@ import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.Shading;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.render.FlameRenderer;
-import org.jwildfire.image.SimpleImage;
+import org.jwildfire.create.tina.render.RenderInfo;
+import org.jwildfire.create.tina.render.RenderedFlame;
 import org.jwildfire.io.ImageWriter;
 
 public class AnimationService {
@@ -36,7 +37,7 @@ public class AnimationService {
       imgFilename = "0" + imgFilename;
     }
     imgFilename = pImagePath + imgFilename + ".png";
-    SimpleImage img = new SimpleImage(pWidth, pHeight);
+    RenderInfo info = new RenderInfo(pWidth, pHeight);
     Flame flame;
     if (pDoMorph) {
       int morphFrames = pFrames / 2;
@@ -58,11 +59,11 @@ public class AnimationService {
     else {
       flame = pFlame1;
     }
-    double wScl = (double) img.getImageWidth() / (double) flame.getWidth();
-    double hScl = (double) img.getImageHeight() / (double) flame.getHeight();
+    double wScl = (double) info.getImageWidth() / (double) flame.getWidth();
+    double hScl = (double) info.getImageHeight() / (double) flame.getHeight();
     flame.setPixelsPerUnit((wScl + hScl) * 0.5 * flame.getPixelsPerUnit());
-    flame.setWidth(img.getImageWidth());
-    flame.setHeight(img.getImageHeight());
+    flame.setWidth(info.getImageWidth());
+    flame.setHeight(info.getImageHeight());
     flame.setSampleDensity(pQuality);
     switch (pGlobalScript) {
       case ROTATE_PITCH: {
@@ -151,7 +152,7 @@ public class AnimationService {
     //          flame.setCamYaw(-180 + 60 * Math.sin((imgIdx - 1) * 2.0 * Math.PI / 72.0));
 
     FlameRenderer renderer = new FlameRenderer(flame, pPrefs);
-    renderer.renderFlame(img, null);
-    new ImageWriter().saveImage(img, imgFilename);
+    RenderedFlame res = renderer.renderFlame(info);
+    new ImageWriter().saveImage(res.getImage(), imgFilename);
   }
 }

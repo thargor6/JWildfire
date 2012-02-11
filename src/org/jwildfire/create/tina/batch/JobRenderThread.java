@@ -23,8 +23,8 @@ import java.util.List;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.io.Flam3Reader;
 import org.jwildfire.create.tina.render.FlameRenderer;
-import org.jwildfire.image.SimpleHDRImage;
-import org.jwildfire.image.SimpleImage;
+import org.jwildfire.create.tina.render.RenderInfo;
+import org.jwildfire.create.tina.render.RenderedFlame;
 import org.jwildfire.io.ImageWriter;
 
 public class JobRenderThread implements Runnable {
@@ -53,16 +53,16 @@ public class JobRenderThread implements Runnable {
           try {
             int width = controller.getPrefs().getTinaRenderImageWidth();
             int height = controller.getPrefs().getTinaRenderImageHeight();
-            SimpleImage img = new SimpleImage(width, height);
-            boolean renderHDR = controller.getPrefs().isTinaRenderHighHDR();
-            SimpleHDRImage hdrImg = renderHDR ? new SimpleHDRImage(width, height) : null;
+            RenderInfo info = new RenderInfo(width, height);
+            info.setRenderHDR(controller.getPrefs().isTinaRenderHighHDR());
+            info.setRenderHDRIntensityMap(controller.getPrefs().isTinaRenderHighHDR());
             List<Flame> flames = new Flam3Reader().readFlames(job.getFlameFilename());
             Flame flame = flames.get(0);
-            double wScl = (double) img.getImageWidth() / (double) flame.getWidth();
-            double hScl = (double) img.getImageHeight() / (double) flame.getHeight();
+            double wScl = (double) info.getImageWidth() / (double) flame.getWidth();
+            double hScl = (double) info.getImageHeight() / (double) flame.getHeight();
             flame.setPixelsPerUnit((wScl + hScl) * 0.5 * flame.getPixelsPerUnit());
-            flame.setWidth(img.getImageWidth());
-            flame.setHeight(img.getImageHeight());
+            flame.setWidth(info.getImageWidth());
+            flame.setHeight(info.getImageHeight());
             double oldSampleDensity = flame.getSampleDensity();
             int oldSpatialOversample = flame.getSpatialOversample();
             int oldColorOversample = flame.getColorOversample();
@@ -75,14 +75,17 @@ public class JobRenderThread implements Runnable {
               long t0 = Calendar.getInstance().getTimeInMillis();
               FlameRenderer renderer = new FlameRenderer(flame, controller.getPrefs());
               renderer.setProgressUpdater(controller.getJobProgressUpdater());
-              renderer.renderFlame(img, hdrImg);
+              RenderedFlame res = renderer.renderFlame(info);
               long t1 = Calendar.getInstance().getTimeInMillis();
               job.setFinished(true);
               job.setElapsedSeconds(((double) (t1 - t0) / 1000.0));
               System.err.println("RENDER TIME: " + job.getElapsedSeconds() + "s");
-              new ImageWriter().saveImage(img, job.getImageFilename());
-              if (renderHDR) {
-                new ImageWriter().saveImage(hdrImg, job.getImageFilename() + ".hdr");
+              new ImageWriter().saveImage(res.getHDRImage(), job.getImageFilename());
+              if (res.getHDRImage() != null) {
+                new ImageWriter().saveImage(res.getHDRImage(), job.getImageFilename() + ".hdr");
+              }
+              if (res.getHDRIntensityMap() != null) {
+                new ImageWriter().saveImage(res.getHDRIntensityMap(), job.getImageFilename() + ".intensity.hdr");
               }
               try {
                 {

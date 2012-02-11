@@ -31,7 +31,8 @@ import org.jwildfire.base.Prefs;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.io.Flam3Reader;
 import org.jwildfire.create.tina.render.FlameRenderer;
-import org.jwildfire.image.SimpleImage;
+import org.jwildfire.create.tina.render.RenderInfo;
+import org.jwildfire.create.tina.render.RenderedFlame;
 
 public class FlameFilePreview extends JComponent implements PropertyChangeListener {
   private static final long serialVersionUID = 1L;
@@ -72,10 +73,9 @@ public class FlameFilePreview extends JComponent implements PropertyChangeListen
         flame.setSpatialFilterRadius(0.0);
         flame.setSpatialOversample(1);
         flame.setColorOversample(1);
-        SimpleImage img = new SimpleImage(imgWidth, imgHeight);
-        renderer.renderFlame(img, null);
-
-        currThumbnail = new ImageIcon(img.getBufferedImg());
+        RenderInfo info = new RenderInfo(imgWidth, imgHeight);
+        RenderedFlame res = renderer.renderFlame(info);
+        currThumbnail = new ImageIcon(res.getImage().getBufferedImg());
       }
     }
     catch (Exception ex) {

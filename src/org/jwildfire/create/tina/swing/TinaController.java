@@ -77,6 +77,8 @@ import org.jwildfire.create.tina.palette.RandomRGBPaletteGenerator;
 import org.jwildfire.create.tina.randomflame.RandomFlameGenerator;
 import org.jwildfire.create.tina.randomflame.RandomFlameGeneratorList;
 import org.jwildfire.create.tina.render.FlameRenderer;
+import org.jwildfire.create.tina.render.RenderInfo;
+import org.jwildfire.create.tina.render.RenderedFlame;
 import org.jwildfire.create.tina.script.ScriptRunner;
 import org.jwildfire.create.tina.script.ScriptRunnerEnvironment;
 import org.jwildfire.create.tina.transform.AnimationService;
@@ -90,7 +92,6 @@ import org.jwildfire.create.tina.variation.Variation;
 import org.jwildfire.create.tina.variation.VariationFunc;
 import org.jwildfire.create.tina.variation.VariationFuncList;
 import org.jwildfire.image.Pixel;
-import org.jwildfire.image.SimpleHDRImage;
 import org.jwildfire.image.SimpleImage;
 import org.jwildfire.io.ImageWriter;
 import org.jwildfire.swing.ErrorHandler;
@@ -810,7 +811,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     int width = bounds.width / renderScale;
     int height = bounds.height / renderScale;
     if (width >= 16 && height >= 16) {
-      SimpleImage img = new SimpleImage(width, height);
+      RenderInfo info = new RenderInfo(width, height);
       Flame flame = getCurrFlame();
       if (flame != null) {
         double oldSpatialFilterRadius = flame.getSpatialFilterRadius();
@@ -818,11 +819,11 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
         int oldColorOversample = flame.getColorOversample();
         double oldSampleDensity = flame.getSampleDensity();
         try {
-          double wScl = (double) img.getImageWidth() / (double) flame.getWidth();
-          double hScl = (double) img.getImageHeight() / (double) flame.getHeight();
+          double wScl = (double) info.getImageWidth() / (double) flame.getWidth();
+          double hScl = (double) info.getImageHeight() / (double) flame.getHeight();
           flame.setPixelsPerUnit((wScl + hScl) * 0.5 * flame.getPixelsPerUnit());
-          flame.setWidth(img.getImageWidth());
-          flame.setHeight(img.getImageHeight());
+          flame.setWidth(info.getImageWidth());
+          flame.setHeight(info.getImageHeight());
 
           FlameRenderer renderer = new FlameRenderer(flame, prefs);
           if (pQuickRender) {
@@ -840,7 +841,8 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
             flame.setColorOversample(prefs.getTinaRenderPreviewColorOversample());
           }
           renderer.setRenderScale(renderScale);
-          renderer.renderFlame(img, null);
+          RenderedFlame res = renderer.renderFlame(info);
+          imgPanel.setImage(res.getImage());
         }
         finally {
           flame.setSpatialFilterRadius(oldSpatialFilterRadius);
@@ -849,7 +851,6 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
           flame.setSampleDensity(oldSampleDensity);
         }
       }
-      imgPanel.setImage(img);
     }
     centerPanel.repaint();
   }
@@ -2018,15 +2019,16 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
           prefs.setLastOutputImageFile(file);
           int width = prefs.getTinaRenderImageWidth();
           int height = prefs.getTinaRenderImageHeight();
-          SimpleImage img = new SimpleImage(width, height);
+          RenderInfo info = new RenderInfo(width, height);
           Flame flame = getCurrFlame();
-          double wScl = (double) img.getImageWidth() / (double) flame.getWidth();
-          double hScl = (double) img.getImageHeight() / (double) flame.getHeight();
+          double wScl = (double) info.getImageWidth() / (double) flame.getWidth();
+          double hScl = (double) info.getImageHeight() / (double) flame.getHeight();
           flame.setPixelsPerUnit((wScl + hScl) * 0.5 * flame.getPixelsPerUnit());
-          flame.setWidth(img.getImageWidth());
-          flame.setHeight(img.getImageHeight());
+          flame.setWidth(info.getImageWidth());
+          flame.setHeight(info.getImageHeight());
           boolean renderHDR = pHighQuality ? prefs.isTinaRenderHighHDR() : prefs.isTinaRenderNormalHDR();
-          SimpleHDRImage hdrImg = renderHDR ? new SimpleHDRImage(width, height) : null;
+          info.setRenderHDR(renderHDR);
+          info.setRenderHDRIntensityMap(renderHDR);
           double oldSampleDensity = flame.getSampleDensity();
           int oldSpatialOversample = flame.getSpatialOversample();
           int oldColorOversample = flame.getColorOversample();
@@ -2047,12 +2049,15 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
             long t0 = Calendar.getInstance().getTimeInMillis();
             FlameRenderer renderer = new FlameRenderer(flame, prefs);
             renderer.setProgressUpdater(mainProgressUpdater);
-            renderer.renderFlame(img, hdrImg);
+            RenderedFlame res = renderer.renderFlame(info);
             long t1 = Calendar.getInstance().getTimeInMillis();
             System.err.println("RENDER TIME: " + ((double) (t1 - t0) / 1000.0) + "s");
-            new ImageWriter().saveImage(img, file.getAbsolutePath());
-            if (renderHDR) {
-              new ImageWriter().saveImage(hdrImg, file.getAbsolutePath() + ".hdr");
+            new ImageWriter().saveImage(res.getImage(), file.getAbsolutePath());
+            if (res.getHDRImage() != null) {
+              new ImageWriter().saveImage(res.getHDRImage(), file.getAbsolutePath() + ".hdr");
+            }
+            if (res.getHDRIntensityMap() != null) {
+              new ImageWriter().saveImage(res.getHDRIntensityMap(), file.getAbsolutePath() + ".intensity.hdr");
             }
           }
           finally {
@@ -2537,15 +2542,16 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
         img = pImages.get(i);
       }
       else {
-        img = new SimpleImage(IMG_WIDTH, IMG_HEIGHT);
+        RenderInfo info = new RenderInfo(IMG_WIDTH, IMG_HEIGHT);
         Flame flame = randomBatch.get(i).makeCopy();
-        double wScl = (double) img.getImageWidth() / (double) flame.getWidth();
-        double hScl = (double) img.getImageHeight() / (double) flame.getHeight();
+        double wScl = (double) info.getImageWidth() / (double) flame.getWidth();
+        double hScl = (double) info.getImageHeight() / (double) flame.getHeight();
         flame.setPixelsPerUnit((wScl + hScl) * 0.5 * flame.getPixelsPerUnit());
         flame.setWidth(IMG_WIDTH);
         flame.setHeight(IMG_HEIGHT);
         FlameRenderer renderer = new FlameRenderer(flame, prefs);
-        renderer.renderFlame(img, null);
+        RenderedFlame res = renderer.renderFlame(info);
+        img = res.getImage();
       }
       // add it to the main panel
       ImagePanel imgPanel = new ImagePanel(img, 0, 0, img.getImageWidth());
@@ -2578,7 +2584,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     int maxCount = (pCount > 0 ? pCount : imgCount);
     mainProgressUpdater.initProgress(maxCount);
     for (int i = 0; i < maxCount; i++) {
-      SimpleImage img = new SimpleImage(IMG_WIDTH, IMG_HEIGHT);
+      RenderInfo info = new RenderInfo(IMG_WIDTH, IMG_HEIGHT);
       Flame bestFlame = null;
       int bgRed = prefs.getTinaRandomBatchBGColorRed();
       int bgGreen = prefs.getTinaRandomBatchBGColorGreen();
@@ -2594,25 +2600,22 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
         RGBPalette palette = new RandomRGBPaletteGenerator().generatePalette(Integer.parseInt(paletteRandomPointsREd.getText()));
         flame.setPalette(palette);
         // render it   
-        if (j > 0) {
-          img.fillBackground(0, 0, 0);
-        }
         flame.setSampleDensity(50);
         FlameRenderer renderer = new FlameRenderer(flame, prefs);
-        renderer.renderFlame(img, null);
+        RenderedFlame res = renderer.renderFlame(info);
         if (j == MAX_IMG_SAMPLES - 1) {
           randomBatch.add(bestFlame);
-          new FlameRenderer(bestFlame, prefs).renderFlame(img, null);
-          imgList.add(img);
+          res = new FlameRenderer(bestFlame, prefs).renderFlame(info);
+          imgList.add(res.getImage());
         }
         else {
-          long maxCoverage = img.getImageWidth() * img.getImageHeight();
+          long maxCoverage = info.getImageWidth() * info.getImageHeight();
           long coverage = 0;
           Pixel pixel = new Pixel();
           if (bgRed == 0 && bgGreen == 0 && bgBlue == 0) {
-            for (int k = 0; k < img.getImageHeight(); k++) {
-              for (int l = 0; l < img.getImageWidth(); l++) {
-                pixel.setARGBValue(img.getARGBValue(l, k));
+            for (int k = 0; k < info.getImageHeight(); k++) {
+              for (int l = 0; l < info.getImageWidth(); l++) {
+                pixel.setARGBValue(res.getImage().getARGBValue(l, k));
                 if (pixel.r > 20 || pixel.g > 20 || pixel.b > 20) {
                   coverage++;
                 }
@@ -2620,9 +2623,9 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
             }
           }
           else {
-            for (int k = 0; k < img.getImageHeight(); k++) {
-              for (int l = 0; l < img.getImageWidth(); l++) {
-                pixel.setARGBValue(img.getARGBValue(l, k));
+            for (int k = 0; k < info.getImageHeight(); k++) {
+              for (int l = 0; l < info.getImageWidth(); l++) {
+                pixel.setARGBValue(res.getImage().getARGBValue(l, k));
                 if (Math.abs(pixel.r - bgRed) > 20.0 && Math.abs(pixel.g - bgGreen) > 20.0 && Math.abs(pixel.b - bgBlue) > 20.0) {
                   coverage++;
                 }
@@ -2632,7 +2635,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
           double fCoverage = (double) coverage / (double) maxCoverage;
           if (fCoverage >= MIN_COVERAGE) {
             randomBatch.add(flame);
-            imgList.add(img);
+            imgList.add(res.getImage());
             break;
           }
           else {
@@ -2644,6 +2647,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
         }
       }
       // add it to the main panel
+      SimpleImage img = imgList.get(imgList.size() - 1);
       ImagePanel imgPanel = new ImagePanel(img, 0, 0, img.getImageWidth());
       imgPanel.setImage(img);
       imgPanel.setLocation(i * IMG_WIDTH + (i + 1) * BORDER_SIZE, BORDER_SIZE);

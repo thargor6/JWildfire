@@ -150,21 +150,25 @@ public class FlameRenderer {
     }
   }
 
-  public void renderFlame(SimpleImage pImage, SimpleHDRImage pHDRImage) {
-    boolean renderNormal = pImage != null;
-    boolean renderHDR = pHDRImage != null;
+  public RenderedFlame renderFlame(RenderInfo pRenderInfo) {
+    RenderedFlame res = new RenderedFlame();
+    res.init(pRenderInfo);
+
+    boolean renderNormal = true;
+    boolean renderHDR = pRenderInfo.isRenderHDR();
+    boolean renderHDRIntensityMap = pRenderInfo.isRenderHDRIntensityMap();
 
     if (flame.getXForms().size() == 0) {
       if (renderNormal) {
         if (renderScale > 0) {
-          pImage.resetImage(pImage.getImageWidth() * renderScale, pImage.getImageHeight() * renderScale);
+          res.getImage().resetImage(res.getImage().getImageWidth() * renderScale, res.getImage().getImageHeight() * renderScale);
         }
-        pImage.fillBackground(flame.getBGColorRed(), flame.getBGColorGreen(), flame.getBGColorBlue());
+        res.getImage().fillBackground(flame.getBGColorRed(), flame.getBGColorGreen(), flame.getBGColorBlue());
       }
       if (renderHDR) {
-        pHDRImage.fillBackground(flame.getBGColorRed(), flame.getBGColorGreen(), flame.getBGColorBlue());
+        res.getHDRImage().fillBackground(flame.getBGColorRed(), flame.getBGColorGreen(), flame.getBGColorBlue());
       }
-      return;
+      return res;
     }
     int spatialOversample = flame.getSampleDensity() >= 100.0 ? flame.getSpatialOversample() : 1;
     if (spatialOversample < 1 || spatialOversample > 6) {
@@ -179,16 +183,22 @@ public class FlameRenderer {
     try {
       SimpleImage images[] = renderNormal ? new SimpleImage[colorOversample] : null;
       SimpleHDRImage hdrImages[] = renderHDR ? new SimpleHDRImage[colorOversample] : null;
+      SimpleHDRImage hdrIntensityMapImages[] = renderHDRIntensityMap ? new SimpleHDRImage[colorOversample] : null;
       for (int i = 0; i < colorOversample; i++) {
         SimpleImage img = null;
         SimpleHDRImage hdrImg = null;
+        SimpleHDRImage hdrIntensityMapImg = null;
         // spatial oversampling: create enlarged image
         if (spatialOversample > 1) {
           if (renderNormal) {
-            img = new SimpleImage(pImage.getImageWidth() * spatialOversample, pImage.getImageHeight() * spatialOversample);
+            img = new SimpleImage(res.getImage().getImageWidth() * spatialOversample, res.getImage().getImageHeight() * spatialOversample);
           }
           if (renderHDR) {
-            hdrImg = new SimpleHDRImage(pHDRImage.getImageWidth() * spatialOversample, pHDRImage.getImageHeight() * spatialOversample);
+            hdrImg = new SimpleHDRImage(res.getHDRImage().getImageWidth() * spatialOversample, res.getHDRImage().getImageHeight() * spatialOversample);
+          }
+          //
+          if (renderHDRIntensityMap) {
+            hdrIntensityMapImg = new SimpleHDRImage(res.getHDRIntensityMap().getImageWidth() * spatialOversample, res.getHDRIntensityMap().getImageHeight() * spatialOversample);
           }
           if (i == 0) {
             flame.setCamZoom((double) spatialOversample * flame.getCamZoom());
@@ -197,18 +207,24 @@ public class FlameRenderer {
         else {
           if (colorOversample > 1) {
             if (renderNormal) {
-              img = new SimpleImage(pImage.getImageWidth(), pImage.getImageHeight());
+              img = new SimpleImage(res.getImage().getImageWidth(), res.getImage().getImageHeight());
             }
             if (renderHDR) {
-              hdrImg = new SimpleHDRImage(pHDRImage.getImageWidth(), pHDRImage.getImageHeight());
+              hdrImg = new SimpleHDRImage(res.getHDRImage().getImageWidth(), res.getHDRImage().getImageHeight());
+            }
+            if (renderHDRIntensityMap) {
+              hdrIntensityMapImg = new SimpleHDRImage(res.getHDRIntensityMap().getImageWidth(), res.getHDRIntensityMap().getImageHeight());
             }
           }
           else {
             if (renderNormal) {
-              img = pImage;
+              img = res.getImage();
             }
             if (renderHDR) {
-              hdrImg = pHDRImage;
+              hdrImg = res.getHDRImage();
+            }
+            if (renderHDR) {
+              hdrIntensityMapImg = res.getHDRIntensityMap();
             }
           }
         }
@@ -218,12 +234,18 @@ public class FlameRenderer {
         if (renderHDR) {
           hdrImages[i] = hdrImg;
         }
+        if (renderHDRIntensityMap) {
+          hdrIntensityMapImages[i] = hdrIntensityMapImg;
+        }
 
         if (renderNormal) {
           initRaster(img.getImageWidth(), img.getImageHeight());
         }
         else if (renderHDR) {
           initRaster(hdrImg.getImageWidth(), hdrImg.getImageHeight());
+        }
+        else if (renderHDRIntensityMap) {
+          initRaster(hdrIntensityMapImg.getImageWidth(), hdrIntensityMapImg.getImageHeight());
         }
         else {
           throw new IllegalStateException();
@@ -244,19 +266,23 @@ public class FlameRenderer {
           renderImageSimple(img);
         }
         else {
-          renderImage(img, hdrImg);
+          renderImage(img, hdrImg, hdrIntensityMapImg);
         }
       }
 
       // color oversampling
       SimpleImage img = null;
       SimpleHDRImage hdrImg = null;
+      SimpleHDRImage hdrIntensityMapImg = null;
       if (colorOversample == 1) {
         if (renderNormal) {
           img = images[0];
         }
         if (renderHDR) {
           hdrImg = hdrImages[0];
+        }
+        if (renderHDRIntensityMap) {
+          hdrIntensityMapImg = hdrIntensityMapImages[0];
         }
       }
       else {
@@ -267,7 +293,7 @@ public class FlameRenderer {
             img = new SimpleImage(width, height);
           }
           else {
-            img = pImage;
+            img = res.getImage();
           }
           Pixel toolPixel = new Pixel();
           for (int i = 0; i < height; i++) {
@@ -293,7 +319,7 @@ public class FlameRenderer {
             hdrImg = new SimpleHDRImage(width, height);
           }
           else {
-            hdrImg = pHDRImage;
+            hdrImg = res.getHDRImage();
           }
           for (int i = 0; i < height; i++) {
             for (int j = 0; j < width; j++) {
@@ -310,78 +336,60 @@ public class FlameRenderer {
             }
           }
         }
+        if (renderHDRIntensityMap) {
+          int width = hdrIntensityMapImages[0].getImageWidth();
+          int height = hdrIntensityMapImages[0].getImageHeight();
+          if (spatialOversample > 1) {
+            hdrIntensityMapImg = new SimpleHDRImage(width, height);
+          }
+          else {
+            hdrIntensityMapImg = res.getHDRIntensityMap();
+          }
+          for (int i = 0; i < height; i++) {
+            for (int j = 0; j < width; j++) {
+              double r = 0, g = 0, b = 0;
+              for (int k = 0; k < colorOversample; k++) {
+                r += hdrIntensityMapImages[k].getRValue(j, i);
+                g += hdrIntensityMapImages[k].getGValue(j, i);
+                b += hdrIntensityMapImages[k].getBValue(j, i);
+              }
+              r /= (double) colorOversample;
+              g /= (double) colorOversample;
+              b /= (double) colorOversample;
+              hdrIntensityMapImg.setRGB(j, i, (float) r, (float) g, (float) b);
+            }
+          }
+        }
+
       }
 
       // spatial oversampling: scale down      
       if (spatialOversample > 1) {
         if (renderNormal) {
           ScaleTransformer scaleT = new ScaleTransformer();
-          scaleT.setScaleWidth(pImage.getImageWidth());
-          scaleT.setScaleHeight(pImage.getImageHeight());
+          scaleT.setScaleWidth(res.getImage().getImageWidth());
+          scaleT.setScaleHeight(res.getImage().getImageHeight());
           scaleT.setAspect(ScaleAspect.IGNORE);
           scaleT.transformImage(img);
-          pImage.setBufferedImage(img.getBufferedImg(), pImage.getImageWidth(), pImage.getImageHeight());
+          res.getImage().setBufferedImage(img.getBufferedImg(), res.getImage().getImageWidth(), res.getImage().getImageHeight());
         }
         if (renderHDR) {
           hdrImg.sampleDown(spatialOversample);
-          pHDRImage.assignImage(hdrImg);
+          res.getHDRImage().assignImage(hdrImg);
+        }
+        if (renderHDRIntensityMap) {
+          hdrIntensityMapImg.sampleDown(spatialOversample);
+          res.getHDRIntensityMap().assignImage(hdrIntensityMapImg);
         }
       }
-      //      if (renderHDR && (flame.getBGColorRed() > 0 || flame.getBGColorGreen() > 0 || flame.getBGColorBlue() > 0)) {
-      //        double bgRed = flame.getBGColorRed() / 255.0;
-      //        double bgGreen = flame.getBGColorGreen() / 255.0;
-      //        double bgBlue = flame.getBGColorBlue() / 255.0;
-      //        double bgLum = 0.299 * bgRed + 0.588 * bgGreen + 0.113 * bgBlue;
-      //        double lumMin = Double.MAX_VALUE;
-      //        double lumMax = 0.0;
-      //        double avgLum = 0.0;
-      //        for (int i = 0; i < hdrImg.getImageHeight(); i++) {
-      //          for (int j = 0; j < hdrImg.getImageWidth(); j++) {
-      //            double r = hdrImg.getRValue(j, i);
-      //            double g = hdrImg.getGValue(j, i);
-      //            double b = hdrImg.getBValue(j, i);
-      //            double lum = 0.299 * r + 0.588 * g + 0.113 * b;
-      //            if (lum < lumMin) {
-      //              lumMin = lum;
-      //            }
-      //            if (lum > lumMax) {
-      //              lumMax = lum;
-      //            }
-      //            avgLum += lum;
-      //          }
-      //        }
-      //        avgLum /= (double) hdrImg.getImageWidth() * (double) hdrImg.getImageHeight();
-      //
-      //        for (int i = 0; i < hdrImg.getImageHeight(); i++) {
-      //          for (int j = 0; j < hdrImg.getImageWidth(); j++) {
-      //            double r = hdrImg.getRValue(j, i);
-      //            double g = hdrImg.getGValue(j, i);
-      //            double b = hdrImg.getBValue(j, i);
-      //            double lum = 0.299 * r + 0.588 * g + 0.113 * b;
-      //            //double alpha = (lum - lumMin) / (lumMax - lumMin);
-      //            double alpha = lum / avgLum;
-      //            if (alpha > 1.0) {
-      //              alpha = 1.0;
-      //            }
-      //            double invAlpha = 1.0 - alpha;
-      //            if (i >= 510 && i <= 520 && j >= 760 && j <= 780) {
-      //
-      //              System.out.println("LUM: " + lum + " AVG: " + avgLum);
-      //              System.out.println("A: " + alpha + " " + invAlpha);
-      //            }
-      //            r = g = b = 0;
-      //            hdrImg.setRGB(j, i, (float) (r * alpha + bgRed * invAlpha), (float) (g * alpha + bgGreen * invAlpha), (float) (b * alpha + bgBlue * invAlpha));
-      //          }
-      //        }
-      //      }
-
     }
     finally {
       flame.setCamZoom(origZoom);
     }
+    return res;
   }
 
-  private void renderImage(SimpleImage pImage, SimpleHDRImage pHDRImage) {
+  private void renderImage(SimpleImage pImage, SimpleHDRImage pHDRImage, SimpleHDRImage pHDRIntensityMap) {
     if (renderScale > 1) {
       throw new IllegalArgumentException("renderScale != 1");
     }
@@ -391,6 +399,9 @@ public class FlameRenderer {
     }
     else if (pHDRImage != null) {
       logDensityFilter.setRaster(raster, rasterWidth, rasterHeight, pHDRImage.getImageWidth(), pHDRImage.getImageHeight());
+    }
+    else if (pHDRIntensityMap != null) {
+      logDensityFilter.setRaster(raster, rasterWidth, rasterHeight, pHDRIntensityMap.getImageWidth(), pHDRIntensityMap.getImageHeight());
     }
     else {
       throw new IllegalStateException();
@@ -409,8 +420,8 @@ public class FlameRenderer {
 
     if (pHDRImage != null) {
       GammaCorrectedHDRPoint rbgPoint = new GammaCorrectedHDRPoint();
-      for (int i = 0; i < pImage.getImageHeight(); i++) {
-        for (int j = 0; j < pImage.getImageWidth(); j++) {
+      for (int i = 0; i < pHDRImage.getImageHeight(); i++) {
+        for (int j = 0; j < pHDRImage.getImageWidth(); j++) {
           logDensityFilter.transformPointHDR(logDensityPnt, j, i);
           gammaCorrectionFilter.transformPointHDR(logDensityPnt, rbgPoint);
           pHDRImage.setRGB(j, i, rbgPoint.red, rbgPoint.green, rbgPoint.blue);
@@ -418,6 +429,14 @@ public class FlameRenderer {
       }
     }
 
+    if (pHDRIntensityMap != null) {
+      for (int i = 0; i < pHDRIntensityMap.getImageHeight(); i++) {
+        for (int j = 0; j < pHDRIntensityMap.getImageWidth(); j++) {
+          logDensityFilter.transformPointHDR(logDensityPnt, j, i);
+          pHDRIntensityMap.setRGB(j, i, (float) logDensityPnt.intensity, (float) logDensityPnt.intensity, (float) logDensityPnt.intensity);
+        }
+      }
+    }
   }
 
   private void renderImageSimple(SimpleImage pImage) {
@@ -582,22 +601,23 @@ public class FlameRenderer {
       Flame flame = flames.get(0);
       FlameRenderer renderer = new FlameRenderer(flame, prefs);
 
-      SimpleImage img = new SimpleImage(1920, 1080);
-      double wScl = (double) img.getImageWidth() / (double) flame.getWidth();
-      double hScl = (double) img.getImageHeight() / (double) flame.getHeight();
+      RenderInfo info = new RenderInfo(1920, 1080);
+
+      double wScl = (double) info.getImageWidth() / (double) flame.getWidth();
+      double hScl = (double) info.getImageHeight() / (double) flame.getHeight();
       flame.setPixelsPerUnit((wScl + hScl) * 0.5 * flame.getPixelsPerUnit());
-      flame.setWidth(img.getImageWidth());
-      flame.setHeight(img.getImageHeight());
+      flame.setWidth(info.getImageWidth());
+      flame.setHeight(info.getImageHeight());
       flame.setSampleDensity(100);
       flame.setSpatialOversample(1);
       flame.setColorOversample(1);
       flame.setSpatialFilterRadius(0);
       prefs.setTinaRenderThreads(1);
       long t0 = Calendar.getInstance().getTimeInMillis();
-      renderer.renderFlame(img, null);
+      RenderedFlame renderRes = renderer.renderFlame(info);
       long t1 = Calendar.getInstance().getTimeInMillis();
       System.err.println("RENDER TIME: " + ((double) (t1 - t0) / 1000.0) + "s");
-      new ImageWriter().saveImage(img, "C:\\TMP\\wf\\Apophysis\\benchmark1.png");
+      new ImageWriter().saveImage(renderRes.getImage(), "C:\\TMP\\wf\\Apophysis\\benchmark1.png");
     }
     catch (Exception ex) {
       ex.printStackTrace();
