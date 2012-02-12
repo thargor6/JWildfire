@@ -47,12 +47,14 @@ public class Prefs extends ManagedObject {
   static final String KEY_TINA_RENDER_NORMAL_FILTER_RADIUS = "tina.render.normal.filter_radius";
   static final String KEY_TINA_RENDER_NORMAL_QUALITY = "tina.render.normal.quality";
   static final String KEY_TINA_RENDER_NORMAL_HDR = "tina.render.normal.hdr";
+  static final String KEY_TINA_RENDER_NORMAL_HDR_INTENSITY_MAP = "tina.render.normal.hdr.intensity_map";
 
   static final String KEY_TINA_RENDER_HIGH_SPATIAL_OVERSAMPLE = "tina.render.high.spatial_oversample";
   static final String KEY_TINA_RENDER_HIGH_COLOR_OVERSAMPLE = "tina.render.high.color_oversample";
   static final String KEY_TINA_RENDER_HIGH_FILTER_RADIUS = "tina.render.high.filter_radius";
   static final String KEY_TINA_RENDER_HIGH_QUALITY = "tina.render.high.quality";
   static final String KEY_TINA_RENDER_HIGH_HDR = "tina.render.high.hdr";
+  static final String KEY_TINA_RENDER_HIGH_HDR_INTENSITY_MAP = "tina.render.high.hdr.intensity_map";
 
   static final String KEY_TINA_RENDER_MOVIE_SPATIAL_OVERSAMPLE = "tina.render.movie.spatial_oversample";
   static final String KEY_TINA_RENDER_MOVIE_COLOR_OVERSAMPLE = "tina.render.movie.color_oversample";
@@ -122,6 +124,8 @@ public class Prefs extends ManagedObject {
   private int tinaRenderNormalQuality = 150;
   @Property(description = "Render an additional hdr image for further processing while normal rendering", category = PropertyCategory.TINA)
   private boolean tinaRenderNormalHDR = false;
+  @Property(description = "Render an additional hdr intensity image for further processing while normal rendering", category = PropertyCategory.TINA)
+  private boolean tinaRenderNormalHDRIntensityMap = false;
 
   @Property(description = "Spatial oversample for high quality rendering", category = PropertyCategory.TINA)
   private int tinaRenderHighSpatialOversample = 2;
@@ -133,6 +137,8 @@ public class Prefs extends ManagedObject {
   private int tinaRenderHighQuality = 500;
   @Property(description = "Render an additional hdr image for further processing while high quality rendering", category = PropertyCategory.TINA)
   private boolean tinaRenderHighHDR = true;
+  @Property(description = "Render an additional hdr intensity image for further processing while high quality rendering", category = PropertyCategory.TINA)
+  private boolean tinaRenderHighHDRIntensityMap = true;
 
   @Property(description = "Spatial oversample for movie rendering", category = PropertyCategory.TINA)
   private int tinaRenderMovieSpatialOversample = 2;
@@ -309,11 +315,13 @@ public class Prefs extends ManagedObject {
     tinaRenderNormalFilterRadius = pSrc.tinaRenderNormalFilterRadius;
     tinaRenderNormalQuality = pSrc.tinaRenderNormalQuality;
     tinaRenderNormalHDR = pSrc.tinaRenderNormalHDR;
+    tinaRenderNormalHDRIntensityMap = pSrc.tinaRenderNormalHDRIntensityMap;
     tinaRenderHighSpatialOversample = pSrc.tinaRenderHighSpatialOversample;
     tinaRenderHighColorOversample = pSrc.tinaRenderHighColorOversample;
     tinaRenderHighFilterRadius = pSrc.tinaRenderHighFilterRadius;
     tinaRenderHighQuality = pSrc.tinaRenderHighQuality;
     tinaRenderHighHDR = pSrc.tinaRenderHighHDR;
+    tinaRenderHighHDRIntensityMap = pSrc.tinaRenderHighHDRIntensityMap;
     tinaRenderMovieSpatialOversample = pSrc.tinaRenderMovieSpatialOversample;
     tinaRenderMovieColorOversample = pSrc.tinaRenderMovieColorOversample;
     tinaRenderMovieFilterRadius = pSrc.tinaRenderMovieFilterRadius;
@@ -564,6 +572,22 @@ public class Prefs extends ManagedObject {
 
   public void setTinaRandomBatchBGColorBlue(int tinaRandomBatchBGColorBlue) {
     this.tinaRandomBatchBGColorBlue = tinaRandomBatchBGColorBlue;
+  }
+
+  public boolean isTinaRenderNormalHDRIntensityMap() {
+    return tinaRenderNormalHDRIntensityMap;
+  }
+
+  public void setTinaRenderNormalHDRIntensityMap(boolean tinaRenderNormalHDRIntensityMap) {
+    this.tinaRenderNormalHDRIntensityMap = tinaRenderNormalHDRIntensityMap;
+  }
+
+  public boolean isTinaRenderHighHDRIntensityMap() {
+    return tinaRenderHighHDRIntensityMap;
+  }
+
+  public void setTinaRenderHighHDRIntensityMap(boolean tinaRenderHighHDRIntensityMap) {
+    this.tinaRenderHighHDRIntensityMap = tinaRenderHighHDRIntensityMap;
   }
 
 }

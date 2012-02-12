@@ -2028,7 +2028,8 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
           flame.setHeight(info.getImageHeight());
           boolean renderHDR = pHighQuality ? prefs.isTinaRenderHighHDR() : prefs.isTinaRenderNormalHDR();
           info.setRenderHDR(renderHDR);
-          info.setRenderHDRIntensityMap(renderHDR);
+          boolean renderHDRIntensityMap = pHighQuality ? prefs.isTinaRenderHighHDRIntensityMap() : prefs.isTinaRenderNormalHDRIntensityMap();
+          info.setRenderHDRIntensityMap(renderHDRIntensityMap);
           double oldSampleDensity = flame.getSampleDensity();
           int oldSpatialOversample = flame.getSpatialOversample();
           int oldColorOversample = flame.getColorOversample();

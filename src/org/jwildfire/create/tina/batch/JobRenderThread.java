@@ -55,7 +55,7 @@ public class JobRenderThread implements Runnable {
             int height = controller.getPrefs().getTinaRenderImageHeight();
             RenderInfo info = new RenderInfo(width, height);
             info.setRenderHDR(controller.getPrefs().isTinaRenderHighHDR());
-            info.setRenderHDRIntensityMap(controller.getPrefs().isTinaRenderHighHDR());
+            info.setRenderHDRIntensityMap(controller.getPrefs().isTinaRenderHighHDRIntensityMap());
             List<Flame> flames = new Flam3Reader().readFlames(job.getFlameFilename());
             Flame flame = flames.get(0);
             double wScl = (double) info.getImageWidth() / (double) flame.getWidth();
