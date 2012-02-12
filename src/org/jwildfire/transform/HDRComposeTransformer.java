@@ -27,43 +27,10 @@ import org.jwildfire.swing.HDRImageBufferComboBoxEditor;
 
 import com.l2fprod.common.beans.editor.ComboBoxPropertyEditor;
 
-public class HDRMergeTransformer extends Transformer {
+public class HDRComposeTransformer extends Transformer {
   public enum MergeMode {
-    ADD, BLUE, DARKEN, GREEN, LIGHTEN, MULTIPLY, NORMAL, RED, SUBTRACT
+    ADD, BLUE, DARKEN, GREEN, HSL_ADD, LIGHTEN, MULTIPLY, NORMAL, RED, SUBTRACT
   }
-
-  /*  
-
-  Screen  
-  Multiplies the inverse of the layer with the inverse of the underlying layers, and inverts that again. The result is always a lighter color, thus brightening the underlying layers. Screen is the inverse of Multiply.
-
-  Overlay 
-  Multiplies or screens the colors, depending on the color in the underlying layers. Creates color blending effects between the layer and the underlying layers.
-
-  Hard Light  
-  Multiplies or screens the colors, depending on the color in the layer. Emphasizes the dark and light regions in the layer, while the areas with medium brightness become transparent. Useful if the layer contains shadows or embossing effects.
-
-  Soft Light  
-  Darkens or lightens the colors, depending on the color in the layer. Creates an effect similar to Hard Light, but with less emphasis on the dark and light areas in the layer.
-
-  Difference  
-  Returns the difference between the layer and the underlying layers. Often creates unusual and unexpected color transitions.
-
-  Hue 
-  Returns the hue of the layer, and the saturation and luminance of the underlying layers. Colors the underlying layers with the hue of the layer.
-
-  Saturation  
-  Returns the saturation of the layer, and the hue and luminance of the underlying layers. Changes the saturation of the underlying layers depending on the layer.
-
-  Color 
-  Returns the hue and saturation of the layer, and the luminance of the underlying layers. Colors the underlying layers with the layer. The underlying layers control the brightness of the resulting image.
-
-  Luminance 
-  Returns the luminance of the layer, and the hue and saturation of the underlying layers. The layer controls the brightness of the underlying layers. Luminance is the inverse of Color.
-
-  HSL Addition  
-  Adds the layer to the underlying layers using the HSL color model. Creates unusual effects.
-    */
 
   @Property(description = "Merge mode", editorClass = MergeModeEditor.class)
   private MergeMode mergeMode = MergeMode.NORMAL;
@@ -98,6 +65,9 @@ public class HDRMergeTransformer extends Transformer {
     float fgRed, fgGreen, fgBlue;
     float bgRed, bgGreen, bgBlue;
     float mergedRed, mergedGreen, mergedBlue;
+    HSLTransformer fgHSL = new HSLTransformer();
+    HSLTransformer bgHSL = new HSLTransformer();
+    HSLTransformer mergedHSL = new HSLTransformer();
 
     float lum[] = new float[2];
     fgImg.getMinMaxLum(lum);
@@ -193,6 +163,14 @@ public class HDRMergeTransformer extends Transformer {
             }
           }
             break;
+          case HSL_ADD:
+            fgHSL.setRGB(fgRed, fgGreen, fgBlue);
+            bgHSL.setRGB(bgRed, bgGreen, bgBlue);
+            mergedHSL.setHSL(fgHSL.getHue() + bgHSL.getHue(), fgHSL.getSaturation() + bgHSL.getSaturation(), fgHSL.getLuminosity() + bgHSL.getLuminosity(), fgHSL.getAmp());
+            mergedRed = mergedHSL.getRed();
+            mergedGreen = mergedHSL.getGreen();
+            mergedBlue = mergedHSL.getBlue();
+            break;
           default:
             mergedRed = fgRed;
             mergedGreen = fgGreen;
@@ -261,10 +239,168 @@ public class HDRMergeTransformer extends Transformer {
     this.intensity = intensity;
   }
 
+  public class HSLTransformer {
+    private float red, green, blue, amp;
+    private float hue, saturation, luminosity;
+    private static final float EPSILON = 0.000001f;
+
+    private float _max(float x, float y) {
+      return (((x) > (y)) ? (x) : (y));
+    }
+
+    private float _min(float x, float y) {
+      return (((x) < (y)) ? (x) : (y));
+    }
+
+    public void setRGB(float pRed, float pGreen, float pBlue) {
+      this.red = pRed;
+      this.green = pGreen;
+      this.blue = pBlue;
+      this.hue = 1.0f;
+      this.saturation = 0.0f;
+      this.luminosity = 0.0f;
+      this.amp = _max(_max(pRed, pGreen), pBlue);
+      if (amp < 0.00001f) {
+        return;
+      }
+      float r = pRed / amp;
+      float g = pGreen / amp;
+      float b = pBlue / amp;
+      float max = _max(r, _max(g, b));
+      float min = _min(r, _min(g, b));
+      this.luminosity = (min + max) / 2.0f;
+      if (Math.abs(this.luminosity) <= EPSILON) {
+        return;
+      }
+      this.saturation = max - min;
+      if (Math.abs(this.saturation) <= EPSILON) {
+        return;
+      }
+
+      this.saturation /= ((this.luminosity) <= 0.5f) ? (min + max) : (2.0f - max - min);
+      if (Math.abs(r - max) < EPSILON) {
+        this.hue = ((g == min) ? 5.0f + (max - b) / (max - min) : 1.0f - (max - g) / (max - min));
+      }
+      else {
+        if (Math.abs(g - max) < EPSILON) {
+          this.hue = ((b == min) ? 1.0f + (max - r) / (max - min) : 3.0f - (max - b) / (max - min));
+        }
+        else {
+          this.hue = ((r == min) ? 3.0f + (max - g) / (max - min) : 5.0f - (max - r) / (max - min));
+        }
+      }
+      this.hue /= 6.0f;
+    }
+
+    private float limit_int(float pVal) {
+      if (pVal < 0.0f) {
+        return 0.0f;
+      }
+      else if (pVal > 1.0f) {
+        return 1.0f;
+      }
+      else {
+        return pVal;
+      }
+    }
+
+    public void setHSL(float pHue, float pSaturation, float pLuminosity, float amp) {
+      this.luminosity = limit_int(pLuminosity);
+      this.saturation = limit_int(pSaturation);
+      this.hue = limit_int(pHue);
+      this.amp = amp;
+      float v = (luminosity <= 0.5f) ? (luminosity * (1.0f + saturation))
+          : (luminosity + saturation - luminosity * saturation);
+      if (v <= 0) {
+        this.red = 0.0f;
+        this.green = 0.0f;
+        this.blue = 0.0f;
+        this.amp = 0.0f;
+        return;
+      }
+      this.hue *= 6.0f;
+      if (this.hue < 0.0f)
+        this.hue = 0.0f;
+      else if (this.hue > 6.0f)
+        this.hue = 6.0f;
+      float y = this.luminosity + this.luminosity - v;
+      float x = y + (v - y) * (this.hue - (int) this.hue);
+      float z = v - (v - y) * (this.hue - (int) this.hue);
+      float r, g, b;
+      switch ((int) hue) {
+        case 0:
+          r = v;
+          g = x;
+          b = y;
+          break;
+        case 1:
+          r = z;
+          g = v;
+          b = y;
+          break;
+        case 2:
+          r = y;
+          g = v;
+          b = x;
+          break;
+        case 3:
+          r = y;
+          g = z;
+          b = v;
+          break;
+        case 4:
+          r = x;
+          g = y;
+          b = v;
+          break;
+        case 5:
+          r = v;
+          g = y;
+          b = z;
+          break;
+        default:
+          r = v;
+          g = y;
+          b = z;
+      }
+      this.red = r * this.amp;
+      this.green = g * this.amp;
+      this.blue = b * this.amp;
+    }
+
+    public float getRed() {
+      return red;
+    }
+
+    public float getGreen() {
+      return green;
+    }
+
+    public float getBlue() {
+      return blue;
+    }
+
+    public float getHue() {
+      return hue;
+    }
+
+    public float getSaturation() {
+      return saturation;
+    }
+
+    public float getLuminosity() {
+      return luminosity;
+    }
+
+    public float getAmp() {
+      return amp;
+    }
+  }
+
   public static class MergeModeEditor extends ComboBoxPropertyEditor {
     public MergeModeEditor() {
       super();
-      setAvailableValues(new MergeMode[] { MergeMode.ADD, MergeMode.BLUE, MergeMode.DARKEN, MergeMode.GREEN, MergeMode.LIGHTEN, MergeMode.MULTIPLY, MergeMode.NORMAL, MergeMode.RED, MergeMode.SUBTRACT });
+      setAvailableValues(new MergeMode[] { MergeMode.ADD, MergeMode.BLUE, MergeMode.DARKEN, MergeMode.GREEN, MergeMode.HSL_ADD, MergeMode.LIGHTEN, MergeMode.MULTIPLY, MergeMode.NORMAL, MergeMode.RED, MergeMode.SUBTRACT });
     }
   }
 

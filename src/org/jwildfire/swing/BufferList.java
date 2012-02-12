@@ -61,7 +61,7 @@ public class BufferList implements Collection<Buffer> {
   }
 
   public Buffer addHDRImageBuffer(JDesktopPane pDesktop, String pName, SimpleHDRImage pSimpleHDRImage) {
-    Buffer buffer = new Buffer(pDesktop, getUniqueBuffername(pName + " (HDR)"), pSimpleHDRImage);
+    Buffer buffer = new Buffer(pDesktop, getUniqueBuffername(pName), pSimpleHDRImage);
     buffers.add(buffer);
     if (syncWithStaticBufferList)
       StaticBufferList.add(buffer);
