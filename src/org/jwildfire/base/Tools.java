@@ -37,7 +37,7 @@ import org.jwildfire.image.Pixel;
 
 public class Tools {
   public static final String APP_TITLE = "JWildfire";
-  public static final String APP_VERSION = "0.37 (04.02.2012)";
+  public static final String APP_VERSION = "0.38 (12.02.2012)";
 
   public static final double EPSILON = 0.00000001;
   public static final int VPREC = 1024;

@@ -1,3 +1,21 @@
+V0.38 (12.02.2012):
+ - Fractal flame editor: new Prefs options for rendering intensity maps
+ - Fractal flame editor: glynnSim1, glynnSim2 and glynnSim3 varaition by eralex
+ - New HDRCompose transformer
+ - Lots of internal refactorings regarding to processing of hdr images
+ - Fractal flame editor: additional output of an intensity map in hdr render mode
+ - Fractal flame generator: new waves3_wf and waves4_wf variations
+ - Fractal flame editor: prefs for random batch size and background color
+ - Bump3D transformer: support for hdr images as height map
+ - Simple HDR tonemapper
+ - Enlarged image preview in the select file dialog, image preview also for hdr images
+ - New type of buffer: HDR image
+ - Simple HDR image loader
+ - Fractal flame editor: improved the SubFlame random flame generator
+ - Fractal flame editor: new Bubbles3D and Experimental Bubbles3D random flame generator
+ - Fractal flame editor: new Experimental Flowers3D random flame generator
+ - Fractal flame editor: new Flowers3D random flame generator
+
 V0.37 (04.02.2012):
  - Fractal flame editor: minor improvements to the Tentacle random flame generator
  - Fractal flame editor: Kaleidoscope plugin by Will Evans
