@@ -78,4 +78,17 @@ public abstract class VariationFunc {
     }
     return -1;
   }
+
+  protected double limitVal(double pValue, double pMin, double pMax) {
+    if (pValue < pMin) {
+      return pMin;
+    }
+    else if (pValue > pMax) {
+      return pMax;
+    }
+    else {
+      return pValue;
+    }
+  }
+
 }

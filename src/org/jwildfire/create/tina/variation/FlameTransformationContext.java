@@ -40,4 +40,6 @@ public interface FlameTransformationContext {
 
   abstract FlameRenderer getFlameRenderer();
 
+  public abstract double sqr(double a);
+
 }

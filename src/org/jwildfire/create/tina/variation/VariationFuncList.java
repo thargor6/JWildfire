@@ -35,6 +35,9 @@ public class VariationFuncList {
     aliasMap.put(MandelbrotFunc.class, "Mandelbrot");
     aliasMap.put(SpirographFunc.class, "Spirograph");
     aliasMap.put(TruchetFunc.class, "Truchet");
+    aliasMap.put(GlynnSim1Func.class, "GlynnSim1");
+    aliasMap.put(GlynnSim2Func.class, "GlynnSim2");
+    aliasMap.put(GlynnSim3Func.class, "GlynnSim3");
 
     aliasMap.put(CustomWFFunc.class, "t_custom");
     aliasMap.put(EpispiralWFFunc.class, "t_epispiral");
@@ -203,7 +206,9 @@ public class VariationFuncList {
     registerVariationFunc(KaleidoscopeFunc.class);
     registerVariationFunc(Waves3WFFunc.class);
     registerVariationFunc(Waves4WFFunc.class);
-
+    registerVariationFunc(GlynnSim1Func.class);
+    registerVariationFunc(GlynnSim2Func.class);
+    registerVariationFunc(GlynnSim3Func.class);
     //    registerVariationFunc(TPostBumpMapFunc.class);
   }
 

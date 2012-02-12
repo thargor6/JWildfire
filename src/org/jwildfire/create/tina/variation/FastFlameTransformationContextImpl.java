@@ -161,4 +161,9 @@ public class FastFlameTransformationContextImpl implements FlameTransformationCo
     return a % b;
   }
 
+  @Override
+  public double sqr(double a) {
+    return a * a;
+  }
+
 }

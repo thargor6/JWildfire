@@ -79,4 +79,9 @@ public class DefaultFlameTransformationContextImpl implements FlameTransformatio
     return a % b;
   }
 
+  @Override
+  public double sqr(double a) {
+    return a * a;
+  }
+
 }
