@@ -37,7 +37,7 @@ public class FastHDRTonemapper {
           pHDRImg.getRGBValues(rgb, j, i);
           float lum = pHDRImg.getLum(j, i);
           double normedLum = ((lum - minLum) / lumRange);
-          double transformedLum = 1.0 - Math.exp(-37.0 * normedLum);
+          double transformedLum = 1.0 - Math.exp(-25.0 * normedLum);
           float maxComp = rgb[0];
           if (rgb[1] > maxComp) {
             maxComp = rgb[1];

@@ -20,6 +20,7 @@ import org.jwildfire.base.Property;
 import org.jwildfire.base.Tools;
 import org.jwildfire.image.Pixel;
 import org.jwildfire.image.SimpleImage;
+import org.jwildfire.image.WFImage;
 
 import com.l2fprod.common.beans.editor.ComboBoxPropertyEditor;
 
@@ -63,7 +64,8 @@ public class BalancingGradientTransformer extends Mesh2DTransformer {
   private int baseRadius;
 
   @Override
-  protected void performPixelTransformation(SimpleImage pImg) {
+  protected void performPixelTransformation(WFImage pImg) {
+    SimpleImage img = (SimpleImage) pImg;
     int width = pImg.getImageWidth();
     int height = pImg.getImageHeight();
 
@@ -104,13 +106,13 @@ public class BalancingGradientTransformer extends Mesh2DTransformer {
                 prj = 1.0;
               int ival = v1 + (int) (dv * prj + 0.5);
               int tt = (int) ((double) ival / (double) brMAX * (double) 255.0 + 0.5);
-              pixel.setARGBValue(pImg.getARGBValue(j, i));
+              pixel.setARGBValue(img.getARGBValue(j, i));
               pixel.r += tt;
               if (pixel.r < 0)
                 pixel.r = 0;
               else if (pixel.r > 255)
                 pixel.r = 255;
-              pImg.setRGB(j, i, pixel);
+              img.setRGB(j, i, pixel);
             }
           }
         }
@@ -126,13 +128,13 @@ public class BalancingGradientTransformer extends Mesh2DTransformer {
                 prj = 1.0;
               int ival = v1 + (int) (dv * prj + 0.5);
               int tt = (int) ((double) ival / (double) brMAX * (double) 255.0 + 0.5);
-              pixel.setARGBValue(pImg.getARGBValue(j, i));
+              pixel.setARGBValue(img.getARGBValue(j, i));
               pixel.r += tt;
               if (pixel.r < 0)
                 pixel.r = 0;
               else if (pixel.r > 255)
                 pixel.r = 255;
-              pImg.setRGB(j, i, pixel);
+              img.setRGB(j, i, pixel);
             }
           }
         }
@@ -151,13 +153,13 @@ public class BalancingGradientTransformer extends Mesh2DTransformer {
               int ival = v1 + (int) (dv * prj + 0.5);
 
               int tt = (int) ((double) ival / (double) brMAX * (double) 255.0 + 0.5);
-              pixel.setARGBValue(pImg.getARGBValue(j, i));
+              pixel.setARGBValue(img.getARGBValue(j, i));
               pixel.g += tt;
               if (pixel.g < 0)
                 pixel.g = 0;
               else if (pixel.g > 255)
                 pixel.g = 255;
-              pImg.setRGB(j, i, pixel);
+              img.setRGB(j, i, pixel);
             }
           }
         }
@@ -174,13 +176,13 @@ public class BalancingGradientTransformer extends Mesh2DTransformer {
               int ival = v1 + (int) (dv * prj + 0.5);
 
               int tt = (int) ((double) ival / (double) brMAX * (double) 255.0 + 0.5);
-              pixel.setARGBValue(pImg.getARGBValue(j, i));
+              pixel.setARGBValue(img.getARGBValue(j, i));
               pixel.g += tt;
               if (pixel.g < 0)
                 pixel.g = 0;
               else if (pixel.g > 255)
                 pixel.g = 255;
-              pImg.setRGB(j, i, pixel);
+              img.setRGB(j, i, pixel);
             }
           }
         }
@@ -199,13 +201,13 @@ public class BalancingGradientTransformer extends Mesh2DTransformer {
               int ival = v1 + (int) (dv * prj + 0.5);
 
               int tt = (int) ((double) ival / (double) brMAX * (double) 255.0 + 0.5);
-              pixel.setARGBValue(pImg.getARGBValue(j, i));
+              pixel.setARGBValue(img.getARGBValue(j, i));
               pixel.b += tt;
               if (pixel.b < 0)
                 pixel.b = 0;
               else if (pixel.b > 255)
                 pixel.b = 255;
-              pImg.setRGB(j, i, pixel);
+              img.setRGB(j, i, pixel);
             }
           }
         }
@@ -222,13 +224,13 @@ public class BalancingGradientTransformer extends Mesh2DTransformer {
               int ival = v1 + (int) (dv * prj + 0.5);
 
               int tt = (int) ((double) ival / (double) brMAX * (double) 255.0 + 0.5);
-              pixel.setARGBValue(pImg.getARGBValue(j, i));
+              pixel.setARGBValue(img.getARGBValue(j, i));
               pixel.b += tt;
               if (pixel.b < 0)
                 pixel.b = 0;
               else if (pixel.b > 255)
                 pixel.b = 255;
-              pImg.setRGB(j, i, pixel);
+              img.setRGB(j, i, pixel);
             }
           }
         }
@@ -247,7 +249,7 @@ public class BalancingGradientTransformer extends Mesh2DTransformer {
               int ival = v1 + (int) (dv * prj + 0.5);
 
               int tt = (int) ((double) ival / (double) brMAX * (double) 255.0 + 0.5);
-              pixel.setARGBValue(pImg.getARGBValue(j, i));
+              pixel.setARGBValue(img.getARGBValue(j, i));
               pixel.r += tt;
               if (pixel.r < 0)
                 pixel.r = 0;
@@ -263,7 +265,7 @@ public class BalancingGradientTransformer extends Mesh2DTransformer {
                 pixel.b = 0;
               else if (pixel.b > 255)
                 pixel.b = 255;
-              pImg.setRGB(j, i, pixel);
+              img.setRGB(j, i, pixel);
             }
           }
         }
@@ -279,7 +281,7 @@ public class BalancingGradientTransformer extends Mesh2DTransformer {
                 prj = 1.0;
               int ival = v1 + (int) (dv * prj + 0.5);
               int tt = (int) ((double) ival / (double) brMAX * (double) 255.0 + 0.5);
-              pixel.setARGBValue(pImg.getARGBValue(j, i));
+              pixel.setARGBValue(img.getARGBValue(j, i));
               pixel.r += tt;
               if (pixel.r < 0)
                 pixel.r = 0;
@@ -295,7 +297,7 @@ public class BalancingGradientTransformer extends Mesh2DTransformer {
                 pixel.b = 0;
               else if (pixel.b > 255)
                 pixel.b = 255;
-              pImg.setRGB(j, i, pixel);
+              img.setRGB(j, i, pixel);
             }
           }
         }
@@ -316,7 +318,7 @@ public class BalancingGradientTransformer extends Mesh2DTransformer {
               double scale = (double) (ival) / brMAX;
               int sc = (int) (scale * (double) Tools.VPREC + 0.5);
               int dc;
-              pixel.setARGBValue(pImg.getARGBValue(j, i));
+              pixel.setARGBValue(img.getARGBValue(j, i));
               if (ival > 0) {
                 dc = (int) (((int) (pixel.r - (int) 127) * sc) >> Tools.SPREC);
                 if (dc < (-255))
@@ -400,7 +402,7 @@ public class BalancingGradientTransformer extends Mesh2DTransformer {
                 }
                 pixel.b = val;
               }
-              pImg.setRGB(j, i, pixel);
+              img.setRGB(j, i, pixel);
             }
           }
         }
@@ -418,7 +420,7 @@ public class BalancingGradientTransformer extends Mesh2DTransformer {
               double scale = (double) (ival) / brMAX;
               int sc = (int) (scale * (double) Tools.VPREC + 0.5);
               int dc;
-              pixel.setARGBValue(pImg.getARGBValue(j, i));
+              pixel.setARGBValue(img.getARGBValue(j, i));
               if (ival > 0) {
                 dc = (int) (((int) (pixel.r - (int) 127) * sc) >> Tools.SPREC);
                 if (dc < (-255))
@@ -502,7 +504,7 @@ public class BalancingGradientTransformer extends Mesh2DTransformer {
                 }
                 pixel.b = val;
               }
-              pImg.setRGB(j, i, pixel);
+              img.setRGB(j, i, pixel);
             }
           }
         }
@@ -523,7 +525,7 @@ public class BalancingGradientTransformer extends Mesh2DTransformer {
 
               double g = (double) 512.0 / (512.0 + (double) ival);
 
-              pixel.setARGBValue(pImg.getARGBValue(j, i));
+              pixel.setARGBValue(img.getARGBValue(j, i));
               int val;
               val = pixel.r;
               if (val == 0)
@@ -544,7 +546,7 @@ public class BalancingGradientTransformer extends Mesh2DTransformer {
                 val = (int) (max * Math.pow((double) val / 255.0, g) + 0.5);
               pixel.b = val;
 
-              pImg.setRGB(j, i, pixel);
+              img.setRGB(j, i, pixel);
             }
           }
         }
@@ -561,7 +563,7 @@ public class BalancingGradientTransformer extends Mesh2DTransformer {
               int ival = v1 + (int) (dv * prj + 0.5);
               double g = (double) 512.0 / (512.0 + (double) ival);
 
-              pixel.setARGBValue(pImg.getARGBValue(j, i));
+              pixel.setARGBValue(img.getARGBValue(j, i));
               int val;
               val = pixel.r;
               if (val == 0)
@@ -581,7 +583,7 @@ public class BalancingGradientTransformer extends Mesh2DTransformer {
               else
                 val = (int) (max * Math.pow((double) val / 255.0, g) + 0.5);
               pixel.b = val;
-              pImg.setRGB(j, i, pixel);
+              img.setRGB(j, i, pixel);
             }
           }
         }
@@ -607,7 +609,7 @@ public class BalancingGradientTransformer extends Mesh2DTransformer {
               int ival = v1 + (int) (dv * prj + 0.5);
 
               int scl = (int) ((double) ival / 255.0 * 1024.0 + 0.5);
-              pixel.setARGBValue(pImg.getARGBValue(j, i));
+              pixel.setARGBValue(img.getARGBValue(j, i));
               int rv = pixel.r;
               int gv = pixel.g;
               int bv = pixel.b;
@@ -630,7 +632,7 @@ public class BalancingGradientTransformer extends Mesh2DTransformer {
               else if (bv > 255)
                 bv = 255;
               pixel.b = bv;
-              pImg.setRGB(j, i, pixel);
+              img.setRGB(j, i, pixel);
             }
           }
         }
@@ -646,7 +648,7 @@ public class BalancingGradientTransformer extends Mesh2DTransformer {
                 prj = 1.0;
               int ival = v1 + (int) (dv * prj + 0.5);
               int scl = (int) ((double) ival / 255.0 * 1024.0 + 0.5);
-              pixel.setARGBValue(pImg.getARGBValue(j, i));
+              pixel.setARGBValue(img.getARGBValue(j, i));
               int rv = pixel.r;
               int gv = pixel.g;
               int bv = pixel.b;
@@ -669,7 +671,7 @@ public class BalancingGradientTransformer extends Mesh2DTransformer {
               else if (bv > 255)
                 bv = 255;
               pixel.b = bv;
-              pImg.setRGB(j, i, pixel);
+              img.setRGB(j, i, pixel);
             }
           }
         }
@@ -679,7 +681,7 @@ public class BalancingGradientTransformer extends Mesh2DTransformer {
   }
 
   @Override
-  public void initDefaultParams(SimpleImage pImg) {
+  public void initDefaultParams(WFImage pImg) {
     int width = pImg.getImageWidth();
     int height = pImg.getImageHeight();
     double rr = Math.sqrt(width * width + height * height);

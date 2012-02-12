@@ -22,9 +22,9 @@ import org.jwildfire.base.PropertyMin;
 import org.jwildfire.base.Tools;
 import org.jwildfire.image.Pixel;
 import org.jwildfire.image.SimpleImage;
+import org.jwildfire.image.WFImage;
 
 import com.l2fprod.common.beans.editor.ComboBoxPropertyEditor;
-
 
 public class WindTransformer extends Mesh2DTransformer {
   public enum Direction {
@@ -47,7 +47,8 @@ public class WindTransformer extends Mesh2DTransformer {
   private Direction direction = Direction.RIGHT;
 
   @Override
-  protected void performPixelTransformation(SimpleImage pImg) {
+  protected void performPixelTransformation(WFImage pImg) {
+    SimpleImage img = (SimpleImage) pImg;
     int width = pImg.getImageWidth();
     int height = pImg.getImageHeight();
     int contrast = 0;
@@ -69,7 +70,7 @@ public class WindTransformer extends Mesh2DTransformer {
       ft.setAxis(FlipTransformer.Axis.X);
       ft.transformImage(srcImg);
       ft.setAxis(FlipTransformer.Axis.X);
-      ft.transformImage(pImg);
+      ft.transformImage(img);
     }
 
     /** 1st line **/
@@ -187,7 +188,7 @@ public class WindTransformer extends Mesh2DTransformer {
               int rv = ((int) ((int) p1.r * m1) + (int) p0.r * m2) / (int) 100;
               int gv = ((int) ((int) p1.g * m1) + (int) p0.g * m2) / (int) 100;
               int bv = ((int) ((int) p1.b * m1) + (int) p0.b * m2) / (int) 100;
-              pImg.setRGB(j + k, i, rv, gv, bv);
+              img.setRGB(j + k, i, rv, gv, bv);
             }
           }
         }
@@ -198,12 +199,12 @@ public class WindTransformer extends Mesh2DTransformer {
     if (direction == Direction.LEFT) {
       FlipTransformer ft = new FlipTransformer();
       ft.setAxis(FlipTransformer.Axis.X);
-      ft.transformImage(pImg);
+      ft.transformImage(img);
     }
   }
 
   @Override
-  public void initDefaultParams(SimpleImage pImg) {
+  public void initDefaultParams(WFImage pImg) {
     direction = Direction.RIGHT;
     intensity = 40;
     probability = 20;

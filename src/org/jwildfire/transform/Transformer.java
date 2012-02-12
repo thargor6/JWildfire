@@ -16,11 +16,10 @@
 */
 package org.jwildfire.transform;
 
-import java.util.Calendar;
-
 import org.jwildfire.base.ManagedObject;
 import org.jwildfire.base.Preset;
 import org.jwildfire.image.SimpleImage;
+import org.jwildfire.image.WFImage;
 import org.jwildfire.swing.Buffer.BufferType;
 
 public abstract class Transformer extends ManagedObject {
@@ -36,9 +35,9 @@ public abstract class Transformer extends ManagedObject {
 
   }
 
-  protected abstract void performImageTransformation(SimpleImage pImg);
+  protected abstract void performImageTransformation(WFImage pImg);
 
-  public abstract void initDefaultParams(SimpleImage pImg);
+  public abstract void initDefaultParams(WFImage pImg);
 
   public abstract boolean acceptsInputBufferType(BufferType pBufferType);
 
@@ -51,35 +50,21 @@ public abstract class Transformer extends ManagedObject {
     return res;
   }
 
-  private long initTime() {
-    return Calendar.getInstance().getTimeInMillis();
-  }
-
-  private void showElapsedTime(long t0) {
-    if (allowShowStats()) {
-      long t1 = Calendar.getInstance().getTimeInMillis();
-      String name = this.getClass().getSimpleName();
-      System.out.println(name + ": " + ((double) (t1 - t0) / 1000.0) + "s");
-    }
-  }
-
-  public void transformImage(SimpleImage pImg) {
-    //    long t0 = initTime();
+  public void transformImage(WFImage pImg) {
     initTransformation(pImg);
     try {
       performImageTransformation(pImg);
-      //      showElapsedTime(t0);
     }
     finally {
       cleanupTransformation(pImg);
     }
   }
 
-  protected void initTransformation(SimpleImage pImg) {
+  protected void initTransformation(WFImage pImg) {
 
   }
 
-  protected void cleanupTransformation(SimpleImage pImg) {
+  protected void cleanupTransformation(WFImage pImg) {
 
   }
 
@@ -101,5 +86,9 @@ public abstract class Transformer extends ManagedObject {
 
   protected boolean allowShowStats() {
     return true;
+  }
+
+  public BufferType getBufferType() {
+    return BufferType.IMAGE;
   }
 }

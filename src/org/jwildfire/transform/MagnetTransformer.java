@@ -23,7 +23,7 @@ import org.jwildfire.base.PropertyMin;
 import org.jwildfire.base.Tools;
 import org.jwildfire.image.Pixel;
 import org.jwildfire.image.SimpleImage;
-
+import org.jwildfire.image.WFImage;
 
 public class MagnetTransformer extends Mesh2DTransformer {
   @Property(category = PropertyCategory.PRIMARY, description = "How many pixels are translated at the centre")
@@ -44,7 +44,8 @@ public class MagnetTransformer extends Mesh2DTransformer {
   private int centreY = 400;
 
   @Override
-  protected void performPixelTransformation(SimpleImage pImg) {
+  protected void performPixelTransformation(WFImage pImg) {
+    SimpleImage img = (SimpleImage) pImg;
     double cx = centreX - 0.5;
     double cy = centreY - 0.5;
     double zoom = 1.0 / this.zoom;
@@ -61,7 +62,7 @@ public class MagnetTransformer extends Mesh2DTransformer {
       double y0 = dyq * zoom;
       dyq *= dyq;
       for (int j = 0; j < width; j++) {
-        pPixel.setARGBValue(pImg.getARGBValue(j, i));
+        pPixel.setARGBValue(img.getARGBValue(j, i));
 
         /* transform the point */
         double x0 = (double) j - cx;
@@ -91,13 +92,13 @@ public class MagnetTransformer extends Mesh2DTransformer {
           pPixel.b = roundColor(((1.0 - yi) * ((1.0 - xi) * (srcP.b) + xi * (srcQ.b)) + yi
               * ((1.0 - xi) * (srcR.b) + xi * (srcS.b))));
         }
-        pImg.setRGB(j, i, pPixel.r, pPixel.g, pPixel.b);
+        img.setRGB(j, i, pPixel.r, pPixel.g, pPixel.b);
       }
     }
   }
 
   @Override
-  public void initDefaultParams(SimpleImage pImg) {
+  public void initDefaultParams(WFImage pImg) {
     int width = pImg.getImageWidth();
     int height = pImg.getImageHeight();
     zoom = 1.0;

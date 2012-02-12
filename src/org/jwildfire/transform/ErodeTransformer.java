@@ -24,9 +24,9 @@ import org.jwildfire.base.PropertyMin;
 import org.jwildfire.base.Tools;
 import org.jwildfire.image.Pixel;
 import org.jwildfire.image.SimpleImage;
+import org.jwildfire.image.WFImage;
 
 import com.l2fprod.common.beans.editor.ComboBoxPropertyEditor;
-
 
 public class ErodeTransformer extends Mesh2DTransformer {
   public enum Mode {
@@ -51,9 +51,10 @@ public class ErodeTransformer extends Mesh2DTransformer {
   private int seed;
 
   @Override
-  protected void performPixelTransformation(SimpleImage pImg) {
+  protected void performPixelTransformation(WFImage pImg) {
     if (this.size <= 1)
       return;
+    SimpleImage img = (SimpleImage) pImg;
     Tools.srand123(this.seed);
     int width = pImg.getImageWidth();
     int height = pImg.getImageHeight();
@@ -106,7 +107,7 @@ public class ErodeTransformer extends Mesh2DTransformer {
                 }
               }
             }
-            pImg.setARGB(j, i, srcImg.getARGBValue(xLumMin, yLumMin));
+            img.setARGB(j, i, srcImg.getARGBValue(xLumMin, yLumMin));
           }
         }
         break;
@@ -128,7 +129,7 @@ public class ErodeTransformer extends Mesh2DTransformer {
                 }
               }
             }
-            pImg.setARGB(j, i, srcImg.getARGBValue(xLumMax, yLumMax));
+            img.setARGB(j, i, srcImg.getARGBValue(xLumMax, yLumMax));
           }
         }
         break;
@@ -161,7 +162,7 @@ public class ErodeTransformer extends Mesh2DTransformer {
             currPixel.g = (srcPixel.g * m1 + currPixel.g * m2) / 100;
             currPixel.b = (srcPixel.b * m1 + currPixel.b * m2) / 100;
             if (Math.abs(lum0 - lumMax) > 50)
-              pImg.setRGB(j, i, 0, 128, 0);
+              img.setRGB(j, i, 0, 128, 0);
             //pImg.setARGB(j, i, srcImg.getARGBValue(xLumMax, yLumMax));
           }
         }
@@ -201,7 +202,7 @@ public class ErodeTransformer extends Mesh2DTransformer {
                 color = colorValues[t];
               }
             }
-            pImg.setARGB(j, i, color);
+            img.setARGB(j, i, color);
           }
         }
         break;
@@ -209,7 +210,7 @@ public class ErodeTransformer extends Mesh2DTransformer {
   }
 
   @Override
-  public void initDefaultParams(SimpleImage pImg) {
+  public void initDefaultParams(WFImage pImg) {
     mode = Mode.ERODE;
     shape = Shape.DISK;
     size = 5;

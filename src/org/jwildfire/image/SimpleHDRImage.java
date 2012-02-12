@@ -143,9 +143,13 @@ public class SimpleHDRImage implements WFImage {
     pRGB[2] = bBuffer[offset];
   }
 
+  public static float calcLum(float pR, float pG, float pB) {
+    return 0.299f * pR + 0.588f * pG + 0.113f * pB;
+  }
+
   public float getLum(int pX, int pY) {
     int offset = getOffset(pX, pY);
-    return 0.299f * rBuffer[offset] + 0.588f * gBuffer[offset] + 0.113f * bBuffer[offset];
+    return calcLum(rBuffer[offset], gBuffer[offset], bBuffer[offset]);
   }
 
   public float getRValue(int pX, int pY) {

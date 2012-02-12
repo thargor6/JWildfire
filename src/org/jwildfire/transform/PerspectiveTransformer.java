@@ -16,7 +16,7 @@
 */
 package org.jwildfire.transform;
 
-import org.jwildfire.image.SimpleImage;
+import org.jwildfire.image.WFImage;
 
 public class PerspectiveTransformer extends Mesh3DTransformer {
 
@@ -26,7 +26,7 @@ public class PerspectiveTransformer extends Mesh3DTransformer {
   }
 
   @Override
-  public void initDefaultParams(SimpleImage pImg) {
+  public void initDefaultParams(WFImage pImg) {
     super.initDefaultParams(pImg);
     setLight(Light.OFF);
     setAlpha(12.0);

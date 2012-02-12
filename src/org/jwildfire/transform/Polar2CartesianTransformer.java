@@ -23,7 +23,7 @@ import org.jwildfire.base.PropertyMin;
 import org.jwildfire.base.Tools;
 import org.jwildfire.image.Pixel;
 import org.jwildfire.image.SimpleImage;
-
+import org.jwildfire.image.WFImage;
 
 public class Polar2CartesianTransformer extends Mesh2DTransformer {
 
@@ -42,7 +42,8 @@ public class Polar2CartesianTransformer extends Mesh2DTransformer {
   private double phi0 = 12.0;
 
   @Override
-  protected void performPixelTransformation(SimpleImage pImg) {
+  protected void performPixelTransformation(WFImage pImg) {
+    SimpleImage img = (SimpleImage) pImg;
     double zoom;
     if (this.zoom != 0.0)
       zoom = 1.0 / this.zoom;
@@ -101,13 +102,13 @@ public class Polar2CartesianTransformer extends Mesh2DTransformer {
           pPixel.b = roundColor(((1.0 - yi) * ((1.0 - xi) * (srcP.b) + xi * (srcQ.b)) + yi
               * ((1.0 - xi) * (srcR.b) + xi * (srcS.b))));
         }
-        pImg.setRGB(j, height - i - 1, pPixel.r, pPixel.g, pPixel.b);
+        img.setRGB(j, height - i - 1, pPixel.r, pPixel.g, pPixel.b);
       }
     }
   }
 
   @Override
-  public void initDefaultParams(SimpleImage pImg) {
+  public void initDefaultParams(WFImage pImg) {
     zoom = 0.80;
     wrap = true;
     r0 = -60.0;

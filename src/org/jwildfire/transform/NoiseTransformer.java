@@ -20,8 +20,7 @@ import org.jwildfire.base.Property;
 import org.jwildfire.base.PropertyMax;
 import org.jwildfire.base.PropertyMin;
 import org.jwildfire.image.Pixel;
-import org.jwildfire.image.SimpleImage;
-
+import org.jwildfire.image.WFImage;
 
 public class NoiseTransformer extends PixelTransformer {
 
@@ -40,7 +39,7 @@ public class NoiseTransformer extends PixelTransformer {
   private int seed = 0;
 
   @Override
-  protected void initTransformation(SimpleImage pImg) {
+  protected void initTransformation(WFImage pImg) {
     super.initTransformation(pImg);
     srand123(seed);
   }
@@ -137,7 +136,7 @@ public class NoiseTransformer extends PixelTransformer {
   }
 
   @Override
-  public void initDefaultParams(SimpleImage pImg) {
+  public void initDefaultParams(WFImage pImg) {
     intensity = 20;
     probability = 60;
     seed = 0;

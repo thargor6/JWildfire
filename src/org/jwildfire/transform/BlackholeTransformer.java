@@ -23,7 +23,7 @@ import org.jwildfire.base.PropertyMin;
 import org.jwildfire.base.Tools;
 import org.jwildfire.image.Pixel;
 import org.jwildfire.image.SimpleImage;
-
+import org.jwildfire.image.WFImage;
 
 public class BlackholeTransformer extends Mesh2DTransformer {
 
@@ -42,7 +42,8 @@ public class BlackholeTransformer extends Mesh2DTransformer {
   private int centreY = 400;
 
   @Override
-  protected void performPixelTransformation(SimpleImage pImg) {
+  protected void performPixelTransformation(WFImage pImg) {
+    SimpleImage img = (SimpleImage) pImg;
     double cx = centreX - 0.5;
     double cy = centreY - 0.5;
     double rZoom = 1.0 / zoom;
@@ -85,13 +86,13 @@ public class BlackholeTransformer extends Mesh2DTransformer {
           pPixel.b = roundColor(((1.0 - yi) * ((1.0 - xi) * (srcP.b) + xi * (srcQ.b)) + yi
               * ((1.0 - xi) * (srcR.b) + xi * (srcS.b))));
         }
-        pImg.setRGB(pX, pY, pPixel.r, pPixel.g, pPixel.b);
+        img.setRGB(pX, pY, pPixel.r, pPixel.g, pPixel.b);
       }
     }
   }
 
   @Override
-  public void initDefaultParams(SimpleImage pImg) {
+  public void initDefaultParams(WFImage pImg) {
     int width = pImg.getImageWidth();
     int height = pImg.getImageHeight();
     zoom = 1.4;

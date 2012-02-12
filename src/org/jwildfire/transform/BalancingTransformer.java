@@ -22,7 +22,7 @@ import org.jwildfire.base.PropertyMin;
 import org.jwildfire.base.Tools;
 import org.jwildfire.image.Pixel;
 import org.jwildfire.image.SimpleImage;
-
+import org.jwildfire.image.WFImage;
 
 public class BalancingTransformer extends Mesh2DTransformer {
 
@@ -62,7 +62,8 @@ public class BalancingTransformer extends Mesh2DTransformer {
   private int saturation = 0;
 
   @Override
-  protected void performPixelTransformation(SimpleImage pImg) {
+  protected void performPixelTransformation(WFImage pImg) {
+    SimpleImage img = (SimpleImage) pImg;
     int width = pImg.getImageWidth();
     int height = pImg.getImageHeight();
     final double brMAX = 256.0;
@@ -78,7 +79,7 @@ public class BalancingTransformer extends Mesh2DTransformer {
       int scl = (int) ((double) this.saturation / 255.0 * 1024.0 + 0.5);
       for (int i = 0; i < height; i++) {
         for (int j = 0; j < width; j++) {
-          pixel.setARGBValue(pImg.getARGBValue(j, i));
+          pixel.setARGBValue(img.getARGBValue(j, i));
           int avg = (rs * pixel.r + gs * pixel.g + bs * pixel.b) >> Tools.SPREC;
           pixel.r += ((pixel.r - avg) * scl) >> Tools.SPREC;
           if (pixel.r < 0)
@@ -95,7 +96,7 @@ public class BalancingTransformer extends Mesh2DTransformer {
             pixel.b = 0;
           else if (pixel.b > 255)
             pixel.b = 255;
-          pImg.setRGB(j, i, pixel);
+          img.setRGB(j, i, pixel);
         }
       }
     }
@@ -114,11 +115,11 @@ public class BalancingTransformer extends Mesh2DTransformer {
       }
       for (int i = 0; i < height; i++) {
         for (int j = 0; j < width; j++) {
-          pixel.setARGBValue(pImg.getARGBValue(j, i));
+          pixel.setARGBValue(img.getARGBValue(j, i));
           pixel.r = gamma[pixel.r];
           pixel.g = gamma[pixel.g];
           pixel.b = gamma[pixel.b];
-          pImg.setRGB(j, i, pixel);
+          img.setRGB(j, i, pixel);
         }
       }
     }
@@ -127,13 +128,13 @@ public class BalancingTransformer extends Mesh2DTransformer {
       int tt = (int) ((double) this.red / (double) brMAX * (double) 255.0 + 0.5);
       for (int i = 0; i < height; i++) {
         for (int j = 0; j < width; j++) {
-          pixel.setARGBValue(pImg.getARGBValue(j, i));
+          pixel.setARGBValue(img.getARGBValue(j, i));
           pixel.r += tt;
           if (pixel.r < 0)
             pixel.r = 0;
           else if (pixel.r > 255)
             pixel.r = 255;
-          pImg.setRGB(j, i, pixel);
+          img.setRGB(j, i, pixel);
         }
       }
     }
@@ -142,13 +143,13 @@ public class BalancingTransformer extends Mesh2DTransformer {
       int tt = (int) ((double) this.green / (double) brMAX * (double) 255.0 + 0.5);
       for (int i = 0; i < height; i++) {
         for (int j = 0; j < width; j++) {
-          pixel.setARGBValue(pImg.getARGBValue(j, i));
+          pixel.setARGBValue(img.getARGBValue(j, i));
           pixel.g += tt;
           if (pixel.g < 0)
             pixel.g = 0;
           else if (pixel.g > 255)
             pixel.g = 255;
-          pImg.setRGB(j, i, pixel);
+          img.setRGB(j, i, pixel);
         }
       }
     }
@@ -157,13 +158,13 @@ public class BalancingTransformer extends Mesh2DTransformer {
       int tt = (int) ((double) this.blue / (double) brMAX * (double) 255.0 + 0.5);
       for (int i = 0; i < height; i++) {
         for (int j = 0; j < width; j++) {
-          pixel.setARGBValue(pImg.getARGBValue(j, i));
+          pixel.setARGBValue(img.getARGBValue(j, i));
           pixel.b += tt;
           if (pixel.b < 0)
             pixel.b = 0;
           else if (pixel.b > 255)
             pixel.b = 255;
-          pImg.setRGB(j, i, pixel);
+          img.setRGB(j, i, pixel);
         }
       }
     }
@@ -172,7 +173,7 @@ public class BalancingTransformer extends Mesh2DTransformer {
       int tt = (int) ((double) this.brightness / (double) brMAX * (double) 255.0 + 0.5);
       for (int i = 0; i < height; i++) {
         for (int j = 0; j < width; j++) {
-          pixel.setARGBValue(pImg.getARGBValue(j, i));
+          pixel.setARGBValue(img.getARGBValue(j, i));
           pixel.r += tt;
           if (pixel.r < 0)
             pixel.r = 0;
@@ -188,7 +189,7 @@ public class BalancingTransformer extends Mesh2DTransformer {
             pixel.b = 0;
           else if (pixel.b > 255)
             pixel.b = 255;
-          pImg.setRGB(j, i, pixel);
+          img.setRGB(j, i, pixel);
         }
       }
 
@@ -201,7 +202,7 @@ public class BalancingTransformer extends Mesh2DTransformer {
       if (this.contrast > 0) {
         for (int i = 0; i < height; i++) {
           for (int j = 0; j < width; j++) {
-            pixel.setARGBValue(pImg.getARGBValue(j, i));
+            pixel.setARGBValue(img.getARGBValue(j, i));
             dc = (int) (((int) (pixel.r - (int) 127) * sc) >> Tools.SPREC);
             if (dc < (-255))
               dc = (-255);
@@ -232,7 +233,7 @@ public class BalancingTransformer extends Mesh2DTransformer {
               pixel.b = 0;
             else if (pixel.b > 255)
               pixel.b = 255;
-            pImg.setRGB(j, i, pixel);
+            img.setRGB(j, i, pixel);
           }
         }
       }
@@ -240,7 +241,7 @@ public class BalancingTransformer extends Mesh2DTransformer {
         int val;
         for (int i = 0; i < height; i++) {
           for (int j = 0; j < width; j++) {
-            pixel.setARGBValue(pImg.getARGBValue(j, i));
+            pixel.setARGBValue(img.getARGBValue(j, i));
             dc = (int) (((int) ((int) pixel.r - (int) 127) * sc) >> Tools.SPREC);
             if (dc < (-255))
               dc = (-255);
@@ -289,7 +290,7 @@ public class BalancingTransformer extends Mesh2DTransformer {
             }
             pixel.b = val;
 
-            pImg.setRGB(j, i, pixel);
+            img.setRGB(j, i, pixel);
           }
         }
       }
@@ -353,7 +354,7 @@ public class BalancingTransformer extends Mesh2DTransformer {
   }
 
   @Override
-  public void initDefaultParams(SimpleImage pImg) {
+  public void initDefaultParams(WFImage pImg) {
     red = green = blue = brightness = contrast = gamma = saturation = 0;
   }
 

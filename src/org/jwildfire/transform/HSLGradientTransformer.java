@@ -19,9 +19,9 @@ package org.jwildfire.transform;
 import org.jwildfire.base.Property;
 import org.jwildfire.image.Pixel;
 import org.jwildfire.image.SimpleImage;
+import org.jwildfire.image.WFImage;
 
 import com.l2fprod.common.beans.editor.ComboBoxPropertyEditor;
-
 
 public class HSLGradientTransformer extends Mesh2DTransformer {
   public enum Mode {
@@ -63,7 +63,8 @@ public class HSLGradientTransformer extends Mesh2DTransformer {
   private int baseRadius;
 
   @Override
-  protected void performPixelTransformation(SimpleImage pImg) {
+  protected void performPixelTransformation(WFImage pImg) {
+    SimpleImage img = (SimpleImage) pImg;
     int width = pImg.getImageWidth();
     int height = pImg.getImageHeight();
 
@@ -105,7 +106,7 @@ public class HSLGradientTransformer extends Mesh2DTransformer {
                 phue = -1;
               else if (phue > 1.0)
                 phue = 1.0;
-              rgbPixel.setARGBValue(pImg.getARGBValue(j, i));
+              rgbPixel.setARGBValue(img.getARGBValue(j, i));
               HSLTransformer.rgb2hsl(rgbPixel, hslPixel);
               if (hslPixel.hue != (-1.0)) {
                 hslPixel.hue += phue;
@@ -115,7 +116,7 @@ public class HSLGradientTransformer extends Mesh2DTransformer {
                   hslPixel.hue -= 1.0;
               }
               HSLTransformer.hsl2rgb(hslPixel, rgbPixel);
-              pImg.setRGB(j, i, rgbPixel);
+              img.setRGB(j, i, rgbPixel);
             }
           }
         }
@@ -134,7 +135,7 @@ public class HSLGradientTransformer extends Mesh2DTransformer {
                 phue = -1;
               else if (phue > 1.0)
                 phue = 1.0;
-              rgbPixel.setARGBValue(pImg.getARGBValue(j, i));
+              rgbPixel.setARGBValue(img.getARGBValue(j, i));
               HSLTransformer.rgb2hsl(rgbPixel, hslPixel);
               if (hslPixel.hue != (-1.0)) {
                 hslPixel.hue += phue;
@@ -144,7 +145,7 @@ public class HSLGradientTransformer extends Mesh2DTransformer {
                   hslPixel.hue -= 1.0;
               }
               HSLTransformer.hsl2rgb(hslPixel, rgbPixel);
-              pImg.setRGB(j, i, rgbPixel);
+              img.setRGB(j, i, rgbPixel);
             }
           }
         }
@@ -165,7 +166,7 @@ public class HSLGradientTransformer extends Mesh2DTransformer {
                 psaturation = -1.0;
               else if (psaturation > 1.0)
                 psaturation = 1.0;
-              rgbPixel.setARGBValue(pImg.getARGBValue(j, i));
+              rgbPixel.setARGBValue(img.getARGBValue(j, i));
               HSLTransformer.rgb2hsl(rgbPixel, hslPixel);
               hslPixel.saturation += psaturation;
               if (hslPixel.saturation < 0.0)
@@ -173,7 +174,7 @@ public class HSLGradientTransformer extends Mesh2DTransformer {
               else if (hslPixel.saturation > 1.0)
                 hslPixel.saturation = 1.0;
               HSLTransformer.hsl2rgb(hslPixel, rgbPixel);
-              pImg.setRGB(j, i, rgbPixel);
+              img.setRGB(j, i, rgbPixel);
             }
           }
         }
@@ -192,7 +193,7 @@ public class HSLGradientTransformer extends Mesh2DTransformer {
                 psaturation = -1.0;
               else if (psaturation > 1.0)
                 psaturation = 1.0;
-              rgbPixel.setARGBValue(pImg.getARGBValue(j, i));
+              rgbPixel.setARGBValue(img.getARGBValue(j, i));
               HSLTransformer.rgb2hsl(rgbPixel, hslPixel);
               hslPixel.saturation += psaturation;
               if (hslPixel.saturation < 0.0)
@@ -200,7 +201,7 @@ public class HSLGradientTransformer extends Mesh2DTransformer {
               else if (hslPixel.saturation > 1.0)
                 hslPixel.saturation = 1.0;
               HSLTransformer.hsl2rgb(hslPixel, rgbPixel);
-              pImg.setRGB(j, i, rgbPixel);
+              img.setRGB(j, i, rgbPixel);
             }
           }
         }
@@ -221,7 +222,7 @@ public class HSLGradientTransformer extends Mesh2DTransformer {
                 pluminosity = -1;
               else if (pluminosity > 1.0)
                 pluminosity = 1.0;
-              rgbPixel.setARGBValue(pImg.getARGBValue(j, i));
+              rgbPixel.setARGBValue(img.getARGBValue(j, i));
               HSLTransformer.rgb2hsl(rgbPixel, hslPixel);
               hslPixel.luminosity += pluminosity;
               if (hslPixel.luminosity < 0.0)
@@ -229,7 +230,7 @@ public class HSLGradientTransformer extends Mesh2DTransformer {
               else if (hslPixel.luminosity > 1.0)
                 hslPixel.luminosity = 1.0;
               HSLTransformer.hsl2rgb(hslPixel, rgbPixel);
-              pImg.setRGB(j, i, rgbPixel);
+              img.setRGB(j, i, rgbPixel);
             }
           }
         }
@@ -248,7 +249,7 @@ public class HSLGradientTransformer extends Mesh2DTransformer {
                 pluminosity = -1;
               else if (pluminosity > 1.0)
                 pluminosity = 1.0;
-              rgbPixel.setARGBValue(pImg.getARGBValue(j, i));
+              rgbPixel.setARGBValue(img.getARGBValue(j, i));
               HSLTransformer.rgb2hsl(rgbPixel, hslPixel);
               hslPixel.luminosity += pluminosity;
               if (hslPixel.luminosity < 0.0)
@@ -256,7 +257,7 @@ public class HSLGradientTransformer extends Mesh2DTransformer {
               else if (hslPixel.luminosity > 1.0)
                 hslPixel.luminosity = 1.0;
               HSLTransformer.hsl2rgb(hslPixel, rgbPixel);
-              pImg.setRGB(j, i, rgbPixel);
+              img.setRGB(j, i, rgbPixel);
             }
           }
         }
@@ -265,7 +266,7 @@ public class HSLGradientTransformer extends Mesh2DTransformer {
   }
 
   @Override
-  public void initDefaultParams(SimpleImage pImg) {
+  public void initDefaultParams(WFImage pImg) {
     int width = pImg.getImageWidth();
     int height = pImg.getImageHeight();
     double rr = Math.sqrt(width * width + height * height);

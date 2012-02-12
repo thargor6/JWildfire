@@ -21,9 +21,9 @@ import org.jwildfire.base.Property;
 import org.jwildfire.base.PropertyMax;
 import org.jwildfire.base.PropertyMin;
 import org.jwildfire.image.SimpleImage;
+import org.jwildfire.image.WFImage;
 
 import com.l2fprod.common.beans.editor.ComboBoxPropertyEditor;
-
 
 public class LineArtTransformer extends Mesh2DTransformer {
 
@@ -40,7 +40,8 @@ public class LineArtTransformer extends Mesh2DTransformer {
   private int contrast = 0;
 
   @Override
-  protected void performPixelTransformation(SimpleImage pImg) {
+  protected void performPixelTransformation(WFImage pImg) {
+    SimpleImage img = (SimpleImage) pImg;
     int cvAdd;
     if ((mode == Mode.GRAY) || (mode == Mode.COLOR))
       cvAdd = 255;
@@ -70,13 +71,13 @@ public class LineArtTransformer extends Mesh2DTransformer {
       bT.transformImage(srcImg);
     }
     if ((mode == Mode.GRAY) || (mode == Mode.INVERSE_GREY))
-      ConvolveTools.convolve_3x3_grey(srcImg, pImg, matrix9, cvAdd);
+      ConvolveTools.convolve_3x3_grey(srcImg, img, matrix9, cvAdd);
     else
-      ConvolveTools.convolve_3x3_color(srcImg, pImg, matrix9, cvAdd);
+      ConvolveTools.convolve_3x3_color(srcImg, img, matrix9, cvAdd);
   }
 
   @Override
-  public void initDefaultParams(SimpleImage pImg) {
+  public void initDefaultParams(WFImage pImg) {
     mode = Mode.INVERSE_COLOR;
     contrast = 160;
   }

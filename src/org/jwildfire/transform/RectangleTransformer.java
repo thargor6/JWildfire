@@ -21,7 +21,7 @@ import java.awt.Graphics;
 
 import org.jwildfire.base.Property;
 import org.jwildfire.image.SimpleImage;
-
+import org.jwildfire.image.WFImage;
 
 public class RectangleTransformer extends Mesh2DTransformer {
 
@@ -44,8 +44,9 @@ public class RectangleTransformer extends Mesh2DTransformer {
   private Color color = new Color(255, 255, 255);
 
   @Override
-  protected void performPixelTransformation(SimpleImage pImg) {
-    Graphics g = pImg.getGraphics();
+  protected void performPixelTransformation(WFImage pImg) {
+    SimpleImage img = (SimpleImage) pImg;
+    Graphics g = img.getGraphics();
     g.setColor(color);
     if (thickness == 1) {
       g.drawRect(left, top, width, height);
@@ -79,7 +80,7 @@ public class RectangleTransformer extends Mesh2DTransformer {
   }
 
   @Override
-  public void initDefaultParams(SimpleImage pImg) {
+  public void initDefaultParams(WFImage pImg) {
     left = 60;
     top = 48;
     width = pImg.getImageWidth() - 120;

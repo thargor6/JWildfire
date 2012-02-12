@@ -20,8 +20,7 @@ import org.jwildfire.base.Property;
 import org.jwildfire.base.PropertyMax;
 import org.jwildfire.base.PropertyMin;
 import org.jwildfire.image.Pixel;
-import org.jwildfire.image.SimpleImage;
-
+import org.jwildfire.image.WFImage;
 
 public class PosteriseTransformer extends PixelTransformer {
 
@@ -33,7 +32,7 @@ public class PosteriseTransformer extends PixelTransformer {
   private int dd, mm;
 
   @Override
-  protected void initTransformation(SimpleImage pImg) {
+  protected void initTransformation(WFImage pImg) {
     dd = 256 / (1 << bits);
     if (bits == 1) {
       mm = 255 / ((1 << bits) - 1);
@@ -51,7 +50,7 @@ public class PosteriseTransformer extends PixelTransformer {
   }
 
   @Override
-  public void initDefaultParams(SimpleImage pImg) {
+  public void initDefaultParams(WFImage pImg) {
     bits = 2;
   }
 

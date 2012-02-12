@@ -21,6 +21,7 @@ import org.jwildfire.base.PropertyMin;
 import org.jwildfire.base.Tools;
 import org.jwildfire.image.Pixel;
 import org.jwildfire.image.SimpleImage;
+import org.jwildfire.image.WFImage;
 import org.jwildfire.swing.Buffer.BufferType;
 import org.jwildfire.swing.ScaleAspectEditor;
 
@@ -90,7 +91,8 @@ public class ScaleTransformer extends Transformer {
   }
 
   @Override
-  protected void performImageTransformation(SimpleImage pImg) {
+  protected void performImageTransformation(WFImage pImg) {
+    SimpleImage img = (SimpleImage) pImg;
     int srcWidth = pImg.getImageWidth();
     int srcHeight = pImg.getImageHeight();
     double width, height;
@@ -116,17 +118,17 @@ public class ScaleTransformer extends Transformer {
     int dstHeight = (int) (height + 0.5);
     if (dstHeight < 1)
       dstHeight = 1;
-    SimpleImage srcImg = pImg.clone();
-    pImg.resetImage(dstWidth, dstHeight);
+    SimpleImage srcImg = img.clone();
+    img.resetImage(dstWidth, dstHeight);
 
     if ((dstWidth >= srcWidth) && (dstHeight >= srcHeight))
-      scale_up_up(srcImg, pImg);
+      scale_up_up(srcImg, img);
     else if ((dstWidth < srcWidth) && (dstHeight >= srcHeight))
-      scale_down_up(srcImg, pImg);
+      scale_down_up(srcImg, img);
     else if ((dstWidth >= srcWidth) && (dstHeight < srcHeight))
-      scale_up_down(srcImg, pImg);
+      scale_up_down(srcImg, img);
     else if ((dstWidth < srcWidth) && (dstHeight < srcHeight))
-      scale_down_down(srcImg, pImg);
+      scale_down_down(srcImg, img);
   }
 
   private void scale_up_up(SimpleImage srcImg, SimpleImage dstImg) {
@@ -408,7 +410,7 @@ public class ScaleTransformer extends Transformer {
   }
 
   @Override
-  public void initDefaultParams(SimpleImage pImg) {
+  public void initDefaultParams(WFImage pImg) {
     unit = Unit.PIXELS;
     aspect = ScaleAspect.KEEP_WIDTH;
     scaleWidth = 320;

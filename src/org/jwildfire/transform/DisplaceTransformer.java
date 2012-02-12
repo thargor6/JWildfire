@@ -21,7 +21,7 @@ import org.jwildfire.base.PropertyMax;
 import org.jwildfire.base.PropertyMin;
 import org.jwildfire.image.Pixel;
 import org.jwildfire.image.SimpleImage;
-
+import org.jwildfire.image.WFImage;
 
 public class DisplaceTransformer extends Mesh2DTransformer {
 
@@ -39,7 +39,8 @@ public class DisplaceTransformer extends Mesh2DTransformer {
   private int seed = 0;
 
   @Override
-  protected void performPixelTransformation(SimpleImage pImg) {
+  protected void performPixelTransformation(WFImage pImg) {
+    SimpleImage img = (SimpleImage) pImg;
     int width = pImg.getImageWidth();
     int height = pImg.getImageHeight();
     int probability = this.probability;
@@ -49,7 +50,7 @@ public class DisplaceTransformer extends Mesh2DTransformer {
     if (probability == 100) {
       for (int i = 0; i < height; i++) {
         for (int j = 0; j < width; j++) {
-          sPixel.setARGBValue(pImg.getARGBValue(j, i));
+          sPixel.setARGBValue(img.getARGBValue(j, i));
           int sr = sPixel.r;
           int sg = sPixel.g;
           int sb = sPixel.b;
@@ -65,12 +66,12 @@ public class DisplaceTransformer extends Mesh2DTransformer {
             py = 0;
           else if (py >= height)
             py = height - 1;
-          sPixel.setARGBValue(pImg.getARGBValue(px, py));
+          sPixel.setARGBValue(img.getARGBValue(px, py));
           int rp = sPixel.r;
           int gp = sPixel.g;
           int bp = sPixel.b;
-          pImg.setRGB(j, i, rp, gp, bp);
-          pImg.setRGB(px, py, sr, sg, sb);
+          img.setRGB(j, i, rp, gp, bp);
+          img.setRGB(px, py, sr, sg, sb);
         }
       }
     }
@@ -78,7 +79,7 @@ public class DisplaceTransformer extends Mesh2DTransformer {
       double rprob = (double) ((double) 1.0 - (double) probability / (double) 100.0);
       for (int i = 0; i < height; i++) {
         for (int j = 0; j < width; j++) {
-          sPixel.setARGBValue(pImg.getARGBValue(j, i));
+          sPixel.setARGBValue(img.getARGBValue(j, i));
           int sr = sPixel.r;
           int sg = sPixel.g;
           int sb = sPixel.b;
@@ -95,12 +96,12 @@ public class DisplaceTransformer extends Mesh2DTransformer {
               py = 0;
             else if (py >= height)
               py = height - 1;
-            sPixel.setARGBValue(pImg.getARGBValue(px, py));
+            sPixel.setARGBValue(img.getARGBValue(px, py));
             int rp = sPixel.r;
             int gp = sPixel.g;
             int bp = sPixel.b;
-            pImg.setRGB(j, i, rp, gp, bp);
-            pImg.setRGB(px, py, sr, sg, sb);
+            img.setRGB(j, i, rp, gp, bp);
+            img.setRGB(px, py, sr, sg, sb);
           }
         }
       }
@@ -108,7 +109,7 @@ public class DisplaceTransformer extends Mesh2DTransformer {
   }
 
   @Override
-  public void initDefaultParams(SimpleImage pImg) {
+  public void initDefaultParams(WFImage pImg) {
     radius = 20;
     probability = 100;
     seed = 0;

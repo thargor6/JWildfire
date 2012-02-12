@@ -20,7 +20,7 @@ import org.jwildfire.base.Property;
 import org.jwildfire.base.Tools;
 import org.jwildfire.image.Pixel;
 import org.jwildfire.image.SimpleImage;
-
+import org.jwildfire.image.WFImage;
 
 public class MotionBlurTransformer extends Mesh2DTransformer {
 
@@ -31,8 +31,8 @@ public class MotionBlurTransformer extends Mesh2DTransformer {
   private int deltaY = 1;
 
   @Override
-  protected void performPixelTransformation(SimpleImage pImg) {
-    SimpleImage bgImg = pImg;
+  protected void performPixelTransformation(WFImage pImg) {
+    SimpleImage bgImg = (SimpleImage) pImg;
     SimpleImage fgImg = srcImg;
 
     int bgWidth = bgImg.getImageWidth();
@@ -150,7 +150,7 @@ public class MotionBlurTransformer extends Mesh2DTransformer {
   }
 
   @Override
-  public void initDefaultParams(SimpleImage pImg) {
+  public void initDefaultParams(WFImage pImg) {
     deltaX = -30;
     deltaY = 12;
   }

@@ -18,10 +18,9 @@ package org.jwildfire.transform;
 
 import org.jwildfire.base.Property;
 import org.jwildfire.image.Pixel;
-import org.jwildfire.image.SimpleImage;
+import org.jwildfire.image.WFImage;
 
 import com.l2fprod.common.beans.editor.ComboBoxPropertyEditor;
-
 
 public class SwapRGBTransformer extends PixelTransformer {
 
@@ -67,7 +66,7 @@ public class SwapRGBTransformer extends PixelTransformer {
   }
 
   @Override
-  public void initDefaultParams(SimpleImage pImg) {
+  public void initDefaultParams(WFImage pImg) {
     mode = Mode.GBR;
   }
 

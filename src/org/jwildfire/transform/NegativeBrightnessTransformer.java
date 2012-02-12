@@ -18,8 +18,7 @@ package org.jwildfire.transform;
 
 import org.jwildfire.base.Tools;
 import org.jwildfire.image.Pixel;
-import org.jwildfire.image.SimpleImage;
-
+import org.jwildfire.image.WFImage;
 
 public class NegativeBrightnessTransformer extends PixelTransformer {
   private final int rs = (3333 * Tools.VPREC) / 10000;
@@ -38,7 +37,7 @@ public class NegativeBrightnessTransformer extends PixelTransformer {
   }
 
   @Override
-  public void initDefaultParams(SimpleImage pImg) {
+  public void initDefaultParams(WFImage pImg) {
     // empty    
   }
 

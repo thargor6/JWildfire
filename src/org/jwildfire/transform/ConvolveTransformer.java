@@ -22,9 +22,9 @@ import org.jwildfire.base.PropertyMin;
 import org.jwildfire.base.Tools;
 import org.jwildfire.image.Pixel;
 import org.jwildfire.image.SimpleImage;
+import org.jwildfire.image.WFImage;
 
 import com.l2fprod.common.beans.editor.ComboBoxPropertyEditor;
-
 
 public class ConvolveTransformer extends Mesh2DTransformer {
   public enum EdgeMode {
@@ -67,7 +67,8 @@ public class ConvolveTransformer extends Mesh2DTransformer {
   private KernelDirection kernelDirection;
 
   @Override
-  protected void performPixelTransformation(SimpleImage pImg) {
+  protected void performPixelTransformation(WFImage pImg) {
+    SimpleImage img = (SimpleImage) pImg;
     int kernel[][] = getKernel();
     int width = srcImg.getImageWidth();
     int height = srcImg.getImageHeight();
@@ -149,12 +150,12 @@ public class ConvolveTransformer extends Mesh2DTransformer {
           }
           intSumR = Tools.limitColor((intSumR / kernelSum) + this.bias);
           if (this.transparency == 0) {
-            pImg.setRGB(j, i, intSumR, intSumR, intSumR);
+            img.setRGB(j, i, intSumR, intSumR, intSumR);
           }
           else {
             pixel.setARGBValue(srcImg.getARGBValue(j, i));
             int rval = Tools.limitColor(((pixel.r * m1 + intSumR * m2) / 100));
-            pImg.setRGB(j, i, rval, rval, rval);
+            img.setRGB(j, i, rval, rval, rval);
           }
         }
       }
@@ -228,14 +229,14 @@ public class ConvolveTransformer extends Mesh2DTransformer {
           intSumB = Tools.limitColor((intSumB / kernelSum) + this.bias);
 
           if (this.transparency == 0) {
-            pImg.setRGB(j, i, intSumR, intSumG, intSumB);
+            img.setRGB(j, i, intSumR, intSumG, intSumB);
           }
           else {
             pixel.setARGBValue(srcImg.getARGBValue(j, i));
             int rval = Tools.limitColor(((pixel.r * m1 + intSumR * m2) / 100));
             int gval = Tools.limitColor(((pixel.g * m1 + intSumG * m2) / 100));
             int bval = Tools.limitColor(((pixel.b * m1 + intSumB * m2) / 100));
-            pImg.setRGB(j, i, rval, gval, bval);
+            img.setRGB(j, i, rval, gval, bval);
           }
         }
       }
@@ -243,7 +244,7 @@ public class ConvolveTransformer extends Mesh2DTransformer {
   }
 
   @Override
-  public void initDefaultParams(SimpleImage pImg) {
+  public void initDefaultParams(WFImage pImg) {
     edgeMode = EdgeMode.MIRROR;
     colorMode = ColorMode.COLOR;
     transparency = 0;

@@ -20,7 +20,7 @@ import org.jwildfire.base.Property;
 import org.jwildfire.base.Tools;
 import org.jwildfire.image.Pixel;
 import org.jwildfire.image.SimpleImage;
-
+import org.jwildfire.image.WFImage;
 
 public class RefractTransformer extends Mesh2DTransformer {
 
@@ -37,7 +37,8 @@ public class RefractTransformer extends Mesh2DTransformer {
   private Pixel toolPixel = new Pixel();
 
   @Override
-  protected void performPixelTransformation(SimpleImage pImg) {
+  protected void performPixelTransformation(WFImage pImg) {
+    SimpleImage img = (SimpleImage) pImg;
     int width = pImg.getImageWidth();
     int height = pImg.getImageHeight();
 
@@ -50,7 +51,7 @@ public class RefractTransformer extends Mesh2DTransformer {
     Pixel pPixel = new Pixel();
     for (int pY = 0; pY < height; pY++) {
       for (int pX = 0; pX < width; pX++) {
-        pPixel.setARGBValue(pImg.getARGBValue(pX, pY));
+        pPixel.setARGBValue(img.getARGBValue(pX, pY));
         int argb = srcImg.getARGBValue(pX, pY);
         toolPixel.setARGBValue(argb);
         double gint = (double) (toolPixel.r - avg);
@@ -82,13 +83,14 @@ public class RefractTransformer extends Mesh2DTransformer {
           pPixel.b = roundColor(((1.0 - yi) * ((1.0 - xi) * (srcP.b) + xi * (srcQ.b)) + yi
               * ((1.0 - xi) * (srcR.b) + xi * (srcS.b))));
         }
-        pImg.setRGB(pX, pY, pPixel.r, pPixel.g, pPixel.b);
+        img.setRGB(pX, pY, pPixel.r, pPixel.g, pPixel.b);
       }
     }
   }
 
   @Override
-  protected void initTransformation(SimpleImage pImg) {
+  protected void initTransformation(WFImage pImg) {
+    SimpleImage img = (SimpleImage) pImg;
     super.initTransformation(pImg);
     /* compute the average of the gray map */
     int width = pImg.getImageWidth();
@@ -96,20 +98,20 @@ public class RefractTransformer extends Mesh2DTransformer {
     long sum = 0;
     for (int i = 0; i < height; i++) {
       for (int j = 0; j < width; j++) {
-        sum += pImg.getRValue(j, i);
+        sum += img.getRValue(j, i);
       }
     }
     avg = (double) sum / (double) (width * height);
   }
 
   @Override
-  protected void cleanupTransformation(SimpleImage pImg) {
+  protected void cleanupTransformation(WFImage pImg) {
     super.cleanupTransformation(pImg);
-    applySmoothing(pImg, 1);
+    applySmoothing((SimpleImage) pImg, 1);
   }
 
   @Override
-  public void initDefaultParams(SimpleImage pImg) {
+  public void initDefaultParams(WFImage pImg) {
     scaleX = 0.3;
     scaleY = 0.25;
     wrap = true;

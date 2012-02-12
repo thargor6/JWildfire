@@ -23,9 +23,9 @@ import org.jwildfire.base.PropertyMin;
 import org.jwildfire.base.Tools;
 import org.jwildfire.image.Pixel;
 import org.jwildfire.image.SimpleImage;
+import org.jwildfire.image.WFImage;
 
 import com.l2fprod.common.beans.editor.ComboBoxPropertyEditor;
-
 
 public class TwirlTransformer extends Mesh2DTransformer {
 
@@ -62,7 +62,8 @@ public class TwirlTransformer extends Mesh2DTransformer {
   private FallOff fallOff = FallOff.OUT;
 
   @Override
-  protected void performPixelTransformation(SimpleImage pImg) {
+  protected void performPixelTransformation(WFImage pImg) {
+    SimpleImage img = (SimpleImage) pImg;
     double w1 = (double) pImg.getImageWidth() - 1.0;
     double h1 = (double) pImg.getImageHeight() - 1.0;
     double alpha = (0.0 - (double) (this.amount) * Math.PI) / (double) 180.0;
@@ -76,7 +77,7 @@ public class TwirlTransformer extends Mesh2DTransformer {
     Pixel pPixel = new Pixel();
     for (int pY = 0; pY < pImg.getImageHeight(); pY++) {
       for (int pX = 0; pX < pImg.getImageWidth(); pX++) {
-        pPixel.setARGBValue(pImg.getARGBValue(pX, pY));
+        pPixel.setARGBValue(img.getARGBValue(pX, pY));
 
         double dyq = (double) pY - cy;
         double y0 = dyq * zoom;
@@ -113,14 +114,14 @@ public class TwirlTransformer extends Mesh2DTransformer {
           pPixel.g = srcP.g;
           pPixel.b = srcP.b;
         }
-        pImg.setRGB(pX, pY, pPixel.r, pPixel.g, pPixel.b);
+        img.setRGB(pX, pY, pPixel.r, pPixel.g, pPixel.b);
       }
     }
-    applySmoothing(pImg, 1);
+    applySmoothing(img, 1);
   }
 
   @Override
-  public void initDefaultParams(SimpleImage pImg) {
+  public void initDefaultParams(WFImage pImg) {
     int width = pImg.getImageWidth();
     int height = pImg.getImageHeight();
     double rr = Math.sqrt(width * width + height * height);

@@ -30,7 +30,6 @@ import org.jwildfire.swing.Buffer;
 import org.jwildfire.swing.BufferList;
 import org.jwildfire.transform.Transformer;
 
-
 public class ActionList extends ArrayList<Action> {
   private static final long serialVersionUID = 1L;
   private static final String TOKEN_COMMENT = "//";
@@ -115,13 +114,14 @@ public class ActionList extends ArrayList<Action> {
   }
 
   public Action addExecuteTransformerAction(Transformer pTransformer, Buffer pInBuffer,
-      Buffer pOutBuffer, Buffer pOutBuffer3D) {
+      Buffer pOutBuffer, Buffer pOutHDRBuffer, Buffer pOutBuffer3D) {
     Action res = addAction();
     res.setActionType(ActionType.EXECUTE_TRANSFORMER);
     res.setParameter(pTransformer.getName());
     res.importProperties(pTransformer);
     res.setInputBuffer(pInBuffer);
     res.setOutputBuffer(pOutBuffer);
+    res.setOutputHDRBuffer(pOutHDRBuffer);
     res.setOutputBuffer3D(pOutBuffer3D);
     return res;
   }

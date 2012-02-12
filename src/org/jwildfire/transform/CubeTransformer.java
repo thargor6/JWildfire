@@ -21,7 +21,7 @@ import java.util.HashMap;
 import org.jwildfire.base.Property;
 import org.jwildfire.base.PropertyCategory;
 import org.jwildfire.base.PropertyMin;
-import org.jwildfire.image.SimpleImage;
+import org.jwildfire.image.WFImage;
 
 public class CubeTransformer extends Mesh3DTransformer {
   @Property(category = PropertyCategory.PRIMARY, description = "Size of the cube")
@@ -334,7 +334,7 @@ public class CubeTransformer extends Mesh3DTransformer {
   }
 
   @Override
-  public void initDefaultParams(SimpleImage pImg) {
+  public void initDefaultParams(WFImage pImg) {
     super.initDefaultParams(pImg);
     int width = pImg.getImageWidth();
     int height = pImg.getImageHeight();

@@ -24,9 +24,9 @@ import org.jwildfire.base.PropertyMin;
 import org.jwildfire.base.Tools;
 import org.jwildfire.image.Pixel;
 import org.jwildfire.image.SimpleImage;
+import org.jwildfire.image.WFImage;
 
 import com.l2fprod.common.beans.editor.ComboBoxPropertyEditor;
-
 
 public class PixelizeTransformer extends Mesh2DTransformer {
   public enum Grid {
@@ -75,8 +75,9 @@ public class PixelizeTransformer extends Mesh2DTransformer {
   private double gridFallOffBottom = 0.3;
 
   @Override
-  protected void performPixelTransformation(SimpleImage pImg) {
+  protected void performPixelTransformation(WFImage pImg) {
     // Init
+    SimpleImage img = (SimpleImage) pImg;
     int width = pImg.getImageWidth();
     int height = pImg.getImageHeight();
     int gridSize = this.gridSize;
@@ -215,7 +216,7 @@ public class PixelizeTransformer extends Mesh2DTransformer {
             for (int l = 0; l < pw; l++) {
               int x = leftOffset + l;
               int y = topOffset + k;
-              pImg.setRGB(x, y, pixel);
+              img.setRGB(x, y, pixel);
             }
           }
           leftOffset += pw;
@@ -280,7 +281,7 @@ public class PixelizeTransformer extends Mesh2DTransformer {
           g = this.gridColor.getGreen();
           b = this.gridColor.getBlue();
           for (int j = 0; j < width; j++) {
-            pImg.setRGB(j, topOffset, r, g, b);
+            img.setRGB(j, topOffset, r, g, b);
           }
           // up 
           for (int kk = 1; kk <= n; kk++) {
@@ -290,7 +291,7 @@ public class PixelizeTransformer extends Mesh2DTransformer {
             for (int j = 0; j < width; j++) {
               int y = topOffset - kk;
               if (y >= 0)
-                pImg.setRGB(j, y, r, g, b);
+                img.setRGB(j, y, r, g, b);
             }
           }
           // down
@@ -301,7 +302,7 @@ public class PixelizeTransformer extends Mesh2DTransformer {
             for (int j = 0; j < width; j++) {
               int y = topOffset + kk;
               if (y < height)
-                pImg.setRGB(j, y, r, g, b);
+                img.setRGB(j, y, r, g, b);
             }
           }
         }
@@ -318,7 +319,7 @@ public class PixelizeTransformer extends Mesh2DTransformer {
           g = this.gridColor.getGreen();
           b = this.gridColor.getBlue();
           for (int j = 0; j < height; j++) {
-            pImg.setRGB(leftOffset, j, r, g, b);
+            img.setRGB(leftOffset, j, r, g, b);
           }
           // left 
           for (int kk = 1; kk <= n; kk++) {
@@ -328,7 +329,7 @@ public class PixelizeTransformer extends Mesh2DTransformer {
             for (int j = 0; j < height; j++) {
               int x = leftOffset - kk;
               if (x >= 0)
-                pImg.setRGB(x, j, r, g, b);
+                img.setRGB(x, j, r, g, b);
             }
           }
 
@@ -340,7 +341,7 @@ public class PixelizeTransformer extends Mesh2DTransformer {
             for (int j = 0; j < height; j++) {
               int x = leftOffset + kk;
               if (x < width)
-                pImg.setRGB(x, j, r, g, b);
+                img.setRGB(x, j, r, g, b);
             }
           }
 
@@ -366,7 +367,7 @@ public class PixelizeTransformer extends Mesh2DTransformer {
               int x = leftOffset + kk;
               int y = topOffset;
               if ((x >= 0) && (x < width) && (y >= 0) && (y < height))
-                pImg.setRGB(x, y, r, g, b);
+                img.setRGB(x, y, r, g, b);
             }
             // up
             for (int kk = 1; kk <= n; kk++) {
@@ -377,10 +378,10 @@ public class PixelizeTransformer extends Mesh2DTransformer {
                 int x = leftOffset - ll;
                 int y = topOffset - kk;
                 if ((x >= 0) && (x < width) && (y >= 0) && (y < height))
-                  pImg.setRGB(x, y, r, g, b);
+                  img.setRGB(x, y, r, g, b);
                 x = leftOffset + ll;
                 if ((x >= 0) && (x < width) && (y >= 0) && (y < height))
-                  pImg.setRGB(x, y, r, g, b);
+                  img.setRGB(x, y, r, g, b);
               }
             }
             // down
@@ -392,10 +393,10 @@ public class PixelizeTransformer extends Mesh2DTransformer {
                 int x = leftOffset - ll;
                 int y = topOffset + kk;
                 if ((x >= 0) && (x < width) && (y >= 0) && (y < height))
-                  pImg.setRGB(x, y, r, g, b);
+                  img.setRGB(x, y, r, g, b);
                 x = leftOffset + ll;
                 if ((x >= 0) && (x < width) && (y >= 0) && (y < height))
-                  pImg.setRGB(x, y, r, g, b);
+                  img.setRGB(x, y, r, g, b);
               }
             }
           }
@@ -433,7 +434,7 @@ public class PixelizeTransformer extends Mesh2DTransformer {
   }
 
   @Override
-  public void initDefaultParams(SimpleImage pImg) {
+  public void initDefaultParams(WFImage pImg) {
     centre = true;
     width = pImg.getImageWidth() / 50;
     height = pImg.getImageHeight() / 50;

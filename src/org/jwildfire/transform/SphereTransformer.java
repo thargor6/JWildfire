@@ -18,7 +18,7 @@ package org.jwildfire.transform;
 
 import org.jwildfire.base.Property;
 import org.jwildfire.base.PropertyMin;
-import org.jwildfire.image.SimpleImage;
+import org.jwildfire.image.WFImage;
 
 public class SphereTransformer extends Mesh3DTransformer {
 
@@ -99,11 +99,10 @@ public class SphereTransformer extends Mesh3DTransformer {
       int p2[] = pMesh3D.getPP2();
       int p3[] = pMesh3D.getPP3();
       int color[] = pMesh3D.getColor();
-      int ic = 0;
       int curr = 0;
       for (int i = 0; i < fc; i++) {
         if ((illPnt[p1[i]] != 0) || (illPnt[p2[i]] != 0) || (illPnt[p3[i]] != 0)) {
-          ic++;
+          // currently nothing to do
         }
         else {
           fInd[curr++] = i;
@@ -126,7 +125,7 @@ public class SphereTransformer extends Mesh3DTransformer {
   }
 
   @Override
-  public void initDefaultParams(SimpleImage pImg) {
+  public void initDefaultParams(WFImage pImg) {
     super.initDefaultParams(pImg);
     int width = pImg.getImageWidth();
     int height = pImg.getImageHeight();

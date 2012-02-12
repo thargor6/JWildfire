@@ -185,12 +185,14 @@ public class MainController {
               pOutput3DName, pRecordAction);
       if (buffers.getOutBuffer() != null)
         addEvents(buffers.getOutBuffer());
+      if (buffers.getOutHDRBuffer() != null)
+        addEvents(buffers.getOutHDRBuffer());
       if (buffers.getOutBuffer3D() != null)
         addEvents(buffers.getOutBuffer3D());
       if (pRecordAction)
         actionList.addExecuteTransformerAction(
             scriptProcessor.getTransformer(),
-            buffers.getInBuffer(), buffers.getOutBuffer(),
+            buffers.getInBuffer(), buffers.getOutBuffer(), buffers.getOutHDRBuffer(),
             buffers.getOutBuffer3D());
       refreshActionTable();
       refreshWindowMenu();
@@ -307,6 +309,10 @@ public class MainController {
         prefs.setLastOutputImageFile(file);
         if (buffer.getBufferType() == BufferType.IMAGE) {
           new ImageWriter().saveImage(buffer.getImage(),
+              file.getAbsolutePath());
+        }
+        else if (buffer.getBufferType() == BufferType.HDR_IMAGE) {
+          new ImageWriter().saveImage(buffer.getHDRImage(),
               file.getAbsolutePath());
         }
         else if (buffer.getBufferType() == BufferType.MESH3D) {

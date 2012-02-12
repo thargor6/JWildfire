@@ -18,7 +18,7 @@ package org.jwildfire.transform;
 
 import org.jwildfire.base.Property;
 import org.jwildfire.image.SimpleImage;
-
+import org.jwildfire.image.WFImage;
 
 public class RollTransformer extends Mesh2DTransformer {
 
@@ -32,14 +32,15 @@ public class RollTransformer extends Mesh2DTransformer {
   private boolean wrap = true;
 
   @Override
-  protected void performPixelTransformation(SimpleImage pImg) {
+  protected void performPixelTransformation(WFImage pImg) {
     if ((this.deltaX == 0) && (this.deltaY == 0))
       return;
+    SimpleImage img = (SimpleImage) pImg;
     int width = pImg.getImageWidth();
     int height = pImg.getImageHeight();
 
     if (!this.wrap) {
-      pImg.fillBackground(0, 0, 0);
+      img.fillBackground(0, 0, 0);
       if ((this.deltaX <= -width) || (this.deltaX >= width) || (this.deltaY < -height)
           || (this.deltaY > height))
       {
@@ -52,7 +53,7 @@ public class RollTransformer extends Mesh2DTransformer {
         cT.setLeft(this.deltaX);
         cT.setTop(this.deltaY);
         cT.setForegroundImage(srcImg);
-        cT.transformImage(pImg);
+        cT.transformImage(img);
       }
     }
     else {
@@ -73,24 +74,24 @@ public class RollTransformer extends Mesh2DTransformer {
 
       cT.setLeft(left);
       cT.setTop(top);
-      cT.transformImage(pImg);
+      cT.transformImage(img);
 
       cT.setLeft(left - width);
       cT.setTop(top);
-      cT.transformImage(pImg);
+      cT.transformImage(img);
 
       cT.setLeft(left);
       cT.setTop(top - height);
-      cT.transformImage(pImg);
+      cT.transformImage(img);
 
       cT.setLeft(left - width);
       cT.setTop(top - height);
-      cT.transformImage(pImg);
+      cT.transformImage(img);
     }
   }
 
   @Override
-  public void initDefaultParams(SimpleImage pImg) {
+  public void initDefaultParams(WFImage pImg) {
     deltaX = pImg.getImageWidth() / 7;
     deltaY = 0;
     wrap = true;

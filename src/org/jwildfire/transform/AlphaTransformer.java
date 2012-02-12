@@ -21,9 +21,9 @@ import org.jwildfire.base.PropertyCategory;
 import org.jwildfire.base.Tools;
 import org.jwildfire.image.Pixel;
 import org.jwildfire.image.SimpleImage;
+import org.jwildfire.image.WFImage;
 import org.jwildfire.swing.Buffer;
 import org.jwildfire.swing.NonHDRImageBufferComboBoxEditor;
-
 
 public class AlphaTransformer extends Mesh2DTransformer {
   @Property(category = PropertyCategory.PRIMARY, description = "Image which holds the alpha channel information", editorClass = NonHDRImageBufferComboBoxEditor.class)
@@ -34,7 +34,8 @@ public class AlphaTransformer extends Mesh2DTransformer {
   private int top = 0;
 
   @Override
-  protected void performPixelTransformation(SimpleImage pImg) {
+  protected void performPixelTransformation(WFImage pImg) {
+    SimpleImage img = (SimpleImage) pImg;
     /* generate the op-table (op[value][alpha]*/
     int optable[][] = new int[256][256];
     for (int i = 0; i < 256; i++) {
@@ -123,7 +124,7 @@ public class AlphaTransformer extends Mesh2DTransformer {
       aleft = 0 - left;
     }
 
-    pImg.fillBackground(0, 0, 0);
+    img.fillBackground(0, 0, 0);
     Pixel pixel = new Pixel();
     for (int i = 0; i < vsize; i++) {
       for (int j = 0; j < hsize; j++) {
@@ -134,14 +135,14 @@ public class AlphaTransformer extends Mesh2DTransformer {
         pixel.r = optable[pixel.r][a];
         pixel.g = optable[pixel.g][a];
         pixel.b = optable[pixel.b][a];
-        pImg.setRGB(x, y, pixel);
+        img.setRGB(x, y, pixel);
       }
     }
 
   }
 
   @Override
-  public void initDefaultParams(SimpleImage pImg) {
+  public void initDefaultParams(WFImage pImg) {
     left = 0;
     top = 0;
   }

@@ -18,8 +18,7 @@ package org.jwildfire.transform;
 
 import org.jwildfire.base.Tools;
 import org.jwildfire.image.Pixel;
-import org.jwildfire.image.SimpleImage;
-
+import org.jwildfire.image.WFImage;
 
 public class AntiqueTransformer extends PixelTransformer {
   private final double BR_MAX = 51.0;
@@ -103,7 +102,7 @@ public class AntiqueTransformer extends PixelTransformer {
   }
 
   @Override
-  public void initDefaultParams(SimpleImage pImg) {
+  public void initDefaultParams(WFImage pImg) {
     // empty    
   }
 

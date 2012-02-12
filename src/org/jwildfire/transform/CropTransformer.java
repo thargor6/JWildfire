@@ -19,7 +19,7 @@ package org.jwildfire.transform;
 import org.jwildfire.base.Property;
 import org.jwildfire.base.PropertyMin;
 import org.jwildfire.image.SimpleImage;
-
+import org.jwildfire.image.WFImage;
 
 public class CropTransformer extends Mesh2DTransformer {
 
@@ -38,7 +38,8 @@ public class CropTransformer extends Mesh2DTransformer {
   private int height = 200;
 
   @Override
-  protected void performPixelTransformation(SimpleImage pImg) {
+  protected void performPixelTransformation(WFImage pImg) {
+    SimpleImage img = (SimpleImage) pImg;
     int imgWidth = pImg.getImageWidth();
     int imgHeight = pImg.getImageHeight();
     int left = this.left;
@@ -63,16 +64,16 @@ public class CropTransformer extends Mesh2DTransformer {
       height = imgHeight - top;
     if ((width == imgWidth) && (height == imgHeight))
       return;
-    pImg.resetImage(width, height);
+    img.resetImage(width, height);
     for (int i = 0; i < height; i++) {
       for (int j = 0; j < width; j++) {
-        pImg.setARGB(j, i, srcImg.getARGBValue(j + left, i + top));
+        img.setARGB(j, i, srcImg.getARGBValue(j + left, i + top));
       }
     }
   }
 
   @Override
-  public void initDefaultParams(SimpleImage pImg) {
+  public void initDefaultParams(WFImage pImg) {
     int width = pImg.getImageWidth();
     int height = pImg.getImageHeight();
     this.left = width / 7;

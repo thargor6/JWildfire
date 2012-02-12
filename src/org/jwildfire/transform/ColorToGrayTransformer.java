@@ -22,10 +22,9 @@ import org.jwildfire.base.PropertyMax;
 import org.jwildfire.base.PropertyMin;
 import org.jwildfire.base.Tools;
 import org.jwildfire.image.Pixel;
-import org.jwildfire.image.SimpleImage;
+import org.jwildfire.image.WFImage;
 
 import com.l2fprod.common.beans.editor.ComboBoxPropertyEditor;
-
 
 public class ColorToGrayTransformer extends PixelTransformer {
   public enum Weights {
@@ -63,7 +62,7 @@ public class ColorToGrayTransformer extends PixelTransformer {
   }
 
   @Override
-  protected void initTransformation(SimpleImage pImg) {
+  protected void initTransformation(WFImage pImg) {
     switch (weights) {
       case AVERAGE:
         rs = 3333;
@@ -87,7 +86,7 @@ public class ColorToGrayTransformer extends PixelTransformer {
   }
 
   @Override
-  public void initDefaultParams(SimpleImage pImg) {
+  public void initDefaultParams(WFImage pImg) {
     weights = Weights.LUMINANCE;
     redWeight = 2990;
     greenWeight = 5880;

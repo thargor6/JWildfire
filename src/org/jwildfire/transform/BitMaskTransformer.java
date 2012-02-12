@@ -21,10 +21,9 @@ import org.jwildfire.base.PropertyCategory;
 import org.jwildfire.base.PropertyMax;
 import org.jwildfire.base.PropertyMin;
 import org.jwildfire.image.Pixel;
-import org.jwildfire.image.SimpleImage;
+import org.jwildfire.image.WFImage;
 
 import com.l2fprod.common.beans.editor.ComboBoxPropertyEditor;
-
 
 public class BitMaskTransformer extends PixelTransformer {
   public enum Mode {
@@ -62,7 +61,7 @@ public class BitMaskTransformer extends PixelTransformer {
   }
 
   @Override
-  public void initDefaultParams(SimpleImage pImg) {
+  public void initDefaultParams(WFImage pImg) {
     mask = 128;
     mode = Mode.OR;
   }

@@ -20,9 +20,9 @@ import org.jwildfire.base.Property;
 import org.jwildfire.base.PropertyCategory;
 import org.jwildfire.image.Pixel;
 import org.jwildfire.image.SimpleImage;
+import org.jwildfire.image.WFImage;
 import org.jwildfire.swing.Buffer;
 import org.jwildfire.swing.NonHDRImageBufferComboBoxEditor;
-
 
 public class BumpTransformer extends Mesh2DTransformer {
   @Property(category = PropertyCategory.PRIMARY, description = "Image which holds the height information", editorClass = NonHDRImageBufferComboBoxEditor.class)
@@ -43,7 +43,8 @@ public class BumpTransformer extends Mesh2DTransformer {
   private double intensity;
 
   @Override
-  protected void performPixelTransformation(SimpleImage pImg) {
+  protected void performPixelTransformation(WFImage pImg) {
+    SimpleImage img = (SimpleImage) pImg;
     int intensity = (int) (this.intensity * (double) VPREC + 0.5);
     int amount = (int) (this.amount * (double) VPREC + 0.5);
 
@@ -306,7 +307,7 @@ public class BumpTransformer extends Mesh2DTransformer {
           lCosA = 0;
         int lc4 = lCosA;
 
-        sPixel.setARGBValue(pImg.getARGBValue(j, i));
+        sPixel.setARGBValue(img.getARGBValue(j, i));
         int rv4, rv3, rv2, rv1;
         rv4 = rv3 = rv2 = rv1 = sPixel.r;
         int gv4, gv3, gv2, gv1;
@@ -336,7 +337,7 @@ public class BumpTransformer extends Mesh2DTransformer {
         if (bv > 255)
           bv = 255;
 
-        pImg.setRGB(j, i, rv, gv, bv);
+        img.setRGB(j, i, rv, gv, bv);
       }
     }
 
@@ -366,7 +367,7 @@ public class BumpTransformer extends Mesh2DTransformer {
   }
 
   @Override
-  public void initDefaultParams(SimpleImage pImg) {
+  public void initDefaultParams(WFImage pImg) {
     left = 0;
     top = 0;
     amount = 10.0;

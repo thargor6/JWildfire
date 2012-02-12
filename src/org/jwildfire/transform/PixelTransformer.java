@@ -20,8 +20,8 @@ import java.awt.image.BufferedImage;
 
 import org.jwildfire.image.Pixel;
 import org.jwildfire.image.SimpleImage;
+import org.jwildfire.image.WFImage;
 import org.jwildfire.swing.Buffer.BufferType;
-
 
 public abstract class PixelTransformer extends Transformer {
 
@@ -33,11 +33,12 @@ public abstract class PixelTransformer extends Transformer {
     return pBufferType == BufferType.IMAGE;
   }
 
-  protected void performImageTransformation(SimpleImage pImg) {
+  protected void performImageTransformation(WFImage pImg) {
+    SimpleImage img = (SimpleImage) pImg;
     final int BLOCK_SIZE = 64;
     final int imageWidth = pImg.getImageWidth();
     final int imageHeight = pImg.getImageHeight();
-    final BufferedImage bufferedImg = pImg.getBufferedImg();
+    final BufferedImage bufferedImg = img.getBufferedImg();
     final int[] pixels = new int[imageWidth * BLOCK_SIZE];
     final Pixel p = new Pixel();
     for (int b = 0; b < imageHeight; b += BLOCK_SIZE) {

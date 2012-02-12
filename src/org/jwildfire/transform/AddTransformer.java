@@ -21,11 +21,11 @@ import org.jwildfire.base.PropertyCategory;
 import org.jwildfire.base.Tools;
 import org.jwildfire.image.Pixel;
 import org.jwildfire.image.SimpleImage;
+import org.jwildfire.image.WFImage;
 import org.jwildfire.swing.Buffer;
 import org.jwildfire.swing.NonHDRImageBufferComboBoxEditor;
 
 import com.l2fprod.common.beans.editor.ComboBoxPropertyEditor;
-
 
 public class AddTransformer extends Mesh2DTransformer {
   public enum Mode {
@@ -43,7 +43,8 @@ public class AddTransformer extends Mesh2DTransformer {
   private double exposureBias;
 
   @Override
-  protected void performPixelTransformation(SimpleImage pImg) {
+  protected void performPixelTransformation(WFImage pImg) {
+    SimpleImage img = (SimpleImage) pImg;
     SimpleImage fImg = (foregroundImage != null) ? foregroundImage : foreground.getImage();
     int width = pImg.getImageWidth();
     int height = pImg.getImageHeight();
@@ -53,7 +54,7 @@ public class AddTransformer extends Mesh2DTransformer {
       for (int i = 0; i < height; i++) {
         for (int j = 0; j < width; j++) {
           srcPixel.setARGBValue(fImg.getARGBValueIgnoreBounds(j, i));
-          dstPixel.setARGBValue(pImg.getARGBValue(j, i));
+          dstPixel.setARGBValue(img.getARGBValue(j, i));
           dstPixel.r += srcPixel.r;
           if (dstPixel.r > 255)
             dstPixel.r = 255;
@@ -63,7 +64,7 @@ public class AddTransformer extends Mesh2DTransformer {
           dstPixel.b += srcPixel.b;
           if (dstPixel.b > 255)
             dstPixel.b = 255;
-          pImg.setRGB(j, i, dstPixel);
+          img.setRGB(j, i, dstPixel);
         }
       }
     }
@@ -71,7 +72,7 @@ public class AddTransformer extends Mesh2DTransformer {
       for (int i = 0; i < height; i++) {
         for (int j = 0; j < width; j++) {
           srcPixel.setARGBValue(fImg.getARGBValueIgnoreBounds(j, i));
-          dstPixel.setARGBValue(pImg.getARGBValue(j, i));
+          dstPixel.setARGBValue(img.getARGBValue(j, i));
           dstPixel.r -= srcPixel.r;
           if (dstPixel.r < 0)
             dstPixel.r = 0;
@@ -81,7 +82,7 @@ public class AddTransformer extends Mesh2DTransformer {
           dstPixel.b -= srcPixel.b;
           if (dstPixel.b < 0)
             dstPixel.b = 0;
-          pImg.setRGB(j, i, dstPixel);
+          img.setRGB(j, i, dstPixel);
         }
       }
     }
@@ -89,18 +90,18 @@ public class AddTransformer extends Mesh2DTransformer {
       for (int i = 0; i < height; i++) {
         for (int j = 0; j < width; j++) {
           srcPixel.setARGBValue(fImg.getARGBValueIgnoreBounds(j, i));
-          dstPixel.setARGBValue(pImg.getARGBValue(j, i));
+          dstPixel.setARGBValue(img.getARGBValue(j, i));
           dstPixel.r = expose(dstPixel.r + 2 * srcPixel.r);
           dstPixel.g = expose(dstPixel.g + 2 * srcPixel.g);
           dstPixel.b = expose(dstPixel.b + 2 * srcPixel.b);
-          pImg.setRGB(j, i, dstPixel);
+          img.setRGB(j, i, dstPixel);
         }
       }
     }
   }
 
   @Override
-  public void initDefaultParams(SimpleImage pImg) {
+  public void initDefaultParams(WFImage pImg) {
     mode = Mode.ADD;
     exposureExp = -0.0032;
     exposureBias = 66.0;

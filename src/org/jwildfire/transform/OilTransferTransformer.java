@@ -21,7 +21,7 @@ import org.jwildfire.base.PropertyMax;
 import org.jwildfire.base.PropertyMin;
 import org.jwildfire.image.Pixel;
 import org.jwildfire.image.SimpleImage;
-
+import org.jwildfire.image.WFImage;
 
 public class OilTransferTransformer extends PixelTransformer {
   protected SimpleImage srcImg;
@@ -79,17 +79,17 @@ public class OilTransferTransformer extends PixelTransformer {
   }
 
   @Override
-  protected void initTransformation(SimpleImage pImg) {
-    srcImg = pImg.clone();
+  protected void initTransformation(WFImage pImg) {
+    srcImg = ((SimpleImage) pImg).clone();
   }
 
   @Override
-  protected void cleanupTransformation(SimpleImage pImg) {
+  protected void cleanupTransformation(WFImage pImg) {
     srcImg = null;
   }
 
   @Override
-  public void initDefaultParams(SimpleImage pImg) {
+  public void initDefaultParams(WFImage pImg) {
     rect = 6;
   }
 

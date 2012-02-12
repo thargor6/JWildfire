@@ -19,7 +19,7 @@ package org.jwildfire.transform;
 import org.jwildfire.base.Property;
 import org.jwildfire.base.PropertyMin;
 import org.jwildfire.image.SimpleImage;
-
+import org.jwildfire.image.WFImage;
 
 public class RotateBlurTransformer extends Mesh2DTransformer {
 
@@ -37,9 +37,10 @@ public class RotateBlurTransformer extends Mesh2DTransformer {
   private int amount = 3;
 
   @Override
-  protected void performPixelTransformation(SimpleImage pImg) {
+  protected void performPixelTransformation(WFImage pImg) {
     if (this.radius < 1)
       return;
+    SimpleImage img = (SimpleImage) pImg;
     int amount = this.amount;
     if (amount < 0)
       amount = 0 - amount;
@@ -48,7 +49,7 @@ public class RotateBlurTransformer extends Mesh2DTransformer {
     for (int i = 1; i <= amount; i++) {
       SimpleImage tmpImg;
       for (int pass = 0; pass <= 1; pass++) {
-        tmpImg = pImg.clone();
+        tmpImg = img.clone();
         {
           RotateTransformer rT = new RotateTransformer();
           rT.setZoom(1.0);
@@ -64,13 +65,13 @@ public class RotateBlurTransformer extends Mesh2DTransformer {
           cT.setTransparency(25);
           cT.setGenlock(ComposeTransformer.Genlock.NONE);
           cT.setForegroundImage(tmpImg);
-          cT.transformImage(pImg);
+          cT.transformImage(img);
         }
       }
     }
   }
 
-  public void initDefaultParams(SimpleImage pImg) {
+  public void initDefaultParams(WFImage pImg) {
     int width = pImg.getImageWidth();
     int height = pImg.getImageHeight();
     double rr = Math.sqrt(width * width + height * height);

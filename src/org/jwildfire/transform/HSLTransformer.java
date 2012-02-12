@@ -22,7 +22,7 @@ import org.jwildfire.base.PropertyMin;
 import org.jwildfire.base.Tools;
 import org.jwildfire.image.Pixel;
 import org.jwildfire.image.SimpleImage;
-
+import org.jwildfire.image.WFImage;
 
 public class HSLTransformer extends Mesh2DTransformer {
 
@@ -42,7 +42,8 @@ public class HSLTransformer extends Mesh2DTransformer {
   private int luminosity = 0;
 
   @Override
-  protected void performPixelTransformation(SimpleImage pImg) {
+  protected void performPixelTransformation(WFImage pImg) {
+    SimpleImage img = (SimpleImage) pImg;
     int width = pImg.getImageWidth();
     int height = pImg.getImageHeight();
     Pixel rgbPixel = new Pixel();
@@ -65,7 +66,7 @@ public class HSLTransformer extends Mesh2DTransformer {
       pluminosity = 1.0;
     for (int i = 0; i < height; i++) {
       for (int j = 0; j < width; j++) {
-        rgbPixel.setARGBValue(pImg.getARGBValue(j, i));
+        rgbPixel.setARGBValue(img.getARGBValue(j, i));
         rgb2hsl(rgbPixel, hslPixel);
         hslPixel.luminosity += pluminosity;
         if (hslPixel.luminosity < 0.0)
@@ -85,7 +86,7 @@ public class HSLTransformer extends Mesh2DTransformer {
             hslPixel.hue -= 1.0;
         }
         hsl2rgb(hslPixel, rgbPixel);
-        pImg.setRGB(j, i, rgbPixel);
+        img.setRGB(j, i, rgbPixel);
       }
     }
   }
@@ -237,7 +238,7 @@ public class HSLTransformer extends Mesh2DTransformer {
   }
 
   @Override
-  public void initDefaultParams(SimpleImage pImg) {
+  public void initDefaultParams(WFImage pImg) {
     hue = saturation = luminosity = 0;
   }
 

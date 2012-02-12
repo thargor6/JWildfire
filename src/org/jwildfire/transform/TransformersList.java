@@ -96,6 +96,7 @@ public class TransformersList {
     registerCreator(FormulaColorTransformer.class);
     registerCreator(FormulaComposeTransformer.class);
     registerCreator(Pixelize3DTransformer.class);
+    registerCreator(HDRMergeTransformer.class);
   }
 
   public static Vector<String> getItemVector() {

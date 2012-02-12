@@ -165,7 +165,7 @@ public class Bump3DTransformer extends Mesh3DTransformer {
   }
 
   @Override
-  public void initDefaultParams(SimpleImage pImg) {
+  public void initDefaultParams(WFImage pImg) {
     super.initDefaultParams(pImg);
     int width = pImg.getImageWidth();
     int height = pImg.getImageHeight();

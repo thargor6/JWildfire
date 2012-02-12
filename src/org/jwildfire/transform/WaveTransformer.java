@@ -23,9 +23,9 @@ import org.jwildfire.base.PropertyMin;
 import org.jwildfire.base.Tools;
 import org.jwildfire.image.Pixel;
 import org.jwildfire.image.SimpleImage;
+import org.jwildfire.image.WFImage;
 
 import com.l2fprod.common.beans.editor.ComboBoxPropertyEditor;
-
 
 public class WaveTransformer extends Mesh2DTransformer {
 
@@ -80,18 +80,19 @@ public class WaveTransformer extends Mesh2DTransformer {
   private boolean wrap = true;
 
   @Override
-  protected void performPixelTransformation(SimpleImage pImg) {
+  protected void performPixelTransformation(WFImage pImg) {
+    SimpleImage img = (SimpleImage) pImg;
     if (!damp) {
       if (axis == Axis.X)
-        waveX(pImg);
+        waveX(img);
       else
-        waveY(pImg);
+        waveY(img);
     }
     else {
       if (axis == Axis.X)
-        waveX_damp(pImg);
+        waveX_damp(img);
       else
-        waveY_damp(pImg);
+        waveY_damp(img);
     }
   }
 
@@ -353,13 +354,13 @@ public class WaveTransformer extends Mesh2DTransformer {
   }
 
   @Override
-  protected void cleanupTransformation(SimpleImage pImg) {
+  protected void cleanupTransformation(WFImage pImg) {
     super.cleanupTransformation(pImg);
-    applySmoothing(pImg, 1);
+    applySmoothing((SimpleImage) pImg, 1);
   }
 
   @Override
-  public void initDefaultParams(SimpleImage pImg) {
+  public void initDefaultParams(WFImage pImg) {
     int width = pImg.getImageWidth();
     int height = pImg.getImageHeight();
     double rr = Math.sqrt(width * width + height * height);

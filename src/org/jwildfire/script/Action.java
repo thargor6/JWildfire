@@ -31,12 +31,12 @@ import org.jwildfire.envelope.Envelope;
 import org.jwildfire.swing.Buffer;
 import org.jwildfire.swing.BufferList;
 
-
 public class Action {
   private static final String TOKEN_INDENT = "  ";
   private static final String TOKEN_INPUT = "input";
   private static final String TOKEN_OUTPUT = "output";
-  private static final String TOKEN_OUTPUT3D = "output3d";
+  private static final String TOKEN_OUTPUT_HDR = "outputHDR";
+  private static final String TOKEN_OUTPUT_3D = "output3d";
   private static final String TOKEN_PARAM = "param";
   private static final Object TOKEN_DIMENSION = "dimension";
   private static final String TOKEN_ENVELOPE = "envelope";
@@ -50,6 +50,7 @@ public class Action {
   private String parameter;
   private String inputBuffer;
   private String outputBuffer;
+  private String outputHDRBuffer;
   private String outputBuffer3D;
   private int width;
   private int height;
@@ -61,6 +62,7 @@ public class Action {
     res.parameter = parameter;
     res.inputBuffer = inputBuffer;
     res.outputBuffer = outputBuffer;
+    res.outputHDRBuffer = outputHDRBuffer;
     res.outputBuffer3D = outputBuffer3D;
     res.width = width;
     res.height = height;
@@ -237,12 +239,24 @@ public class Action {
     return outputBuffer;
   }
 
+  public String getOutputHDRBuffer() {
+    return outputHDRBuffer;
+  }
+
   public void setOutputBuffer(Buffer pOutputBuffer) {
     outputBuffer = (pOutputBuffer != null) ? pOutputBuffer.getName() : null;
   }
 
+  public void setOutputHDRBuffer(Buffer pOutputHDRBuffer) {
+    outputHDRBuffer = (pOutputHDRBuffer != null) ? pOutputHDRBuffer.getName() : null;
+  }
+
   public void setOutputBuffer(String pOutputBuffer) {
     outputBuffer = pOutputBuffer;
+  }
+
+  public void setOutputHDRBuffer(String pOutputHDRBuffer) {
+    outputHDRBuffer = pOutputHDRBuffer;
   }
 
   public String getOutputBuffer3D() {
@@ -283,7 +297,9 @@ public class Action {
           + "(\\s+)([\\w\\-_ \\(\\)\\.]+)");
       Pattern outputPattern = Pattern.compile("(\\s+)" + TOKEN_OUTPUT
           + "(\\s+)([\\w\\-_ \\(\\)\\.]+)");
-      Pattern output3dPattern = Pattern.compile("(\\s+)" + TOKEN_OUTPUT3D
+      Pattern outputHDRPattern = Pattern.compile("(\\s+)" + TOKEN_OUTPUT_HDR
+          + "(\\s+)([\\w\\-_ \\(\\)\\.]+)");
+      Pattern output3dPattern = Pattern.compile("(\\s+)" + TOKEN_OUTPUT_3D
           + "(\\s+)([\\w\\-_ \\(\\)\\.]+)");
       Pattern dimensionPattern = Pattern.compile("(\\s+)" + TOKEN_DIMENSION
           + "(\\s+)([0-9\\-]+)(\\s+)([0-9\\-]+)");
@@ -319,6 +335,14 @@ public class Action {
           if (matcher.find()) {
             String output = matcher.group(3);
             res.setOutputBuffer(output);
+            continue;
+          }
+        }
+        {
+          Matcher matcher = outputHDRPattern.matcher(currLines.get(i));
+          if (matcher.find()) {
+            String outputHDR = matcher.group(3);
+            res.setOutputHDRBuffer(outputHDR);
             continue;
           }
         }
@@ -493,10 +517,18 @@ public class Action {
       pBuffer.append(outputBuffer);
       pBuffer.append(pLineSeparator);
     }
+    // outputHDR <buffer>
+    if ((outputHDRBuffer != null) && (outputHDRBuffer.length() > 0)) {
+      pBuffer.append(TOKEN_INDENT);
+      pBuffer.append(TOKEN_OUTPUT_HDR);
+      pBuffer.append(" ");
+      pBuffer.append(outputHDRBuffer);
+      pBuffer.append(pLineSeparator);
+    }
     // output3d <buffer>
     if ((outputBuffer3D != null) && (outputBuffer3D.length() > 0)) {
       pBuffer.append(TOKEN_INDENT);
-      pBuffer.append(TOKEN_OUTPUT3D);
+      pBuffer.append(TOKEN_OUTPUT_3D);
       pBuffer.append(" ");
       pBuffer.append(outputBuffer3D);
       pBuffer.append(pLineSeparator);

@@ -20,10 +20,9 @@ import org.jwildfire.base.Property;
 import org.jwildfire.base.PropertyMax;
 import org.jwildfire.base.PropertyMin;
 import org.jwildfire.image.Pixel;
-import org.jwildfire.image.SimpleImage;
+import org.jwildfire.image.WFImage;
 
 import com.l2fprod.common.beans.editor.ComboBoxPropertyEditor;
-
 
 public class ThresholdTransformer extends PixelTransformer {
 
@@ -56,7 +55,7 @@ public class ThresholdTransformer extends PixelTransformer {
   }
 
   @Override
-  public void initDefaultParams(SimpleImage pImg) {
+  public void initDefaultParams(WFImage pImg) {
     level = 127;
     whitePixelMode = WhitePixelMode.WHITE;
   }

@@ -24,6 +24,7 @@ import org.jwildfire.base.PropertyMax;
 import org.jwildfire.base.PropertyMin;
 import org.jwildfire.image.Pixel;
 import org.jwildfire.image.SimpleImage;
+import org.jwildfire.image.WFImage;
 import org.jwildfire.swing.Buffer;
 import org.jwildfire.swing.NonHDRImageBufferComboBoxEditor;
 
@@ -65,8 +66,8 @@ public class ComposeTransformer extends Mesh2DTransformer {
   protected Color colorB = new Color(0, 0, 0);
 
   @Override
-  protected void performPixelTransformation(SimpleImage pImg) {
-    SimpleImage bImg = pImg;
+  protected void performPixelTransformation(WFImage pImg) {
+    SimpleImage bImg = (SimpleImage) pImg;
     SimpleImage fImg = (foregroundImage != null) ? foregroundImage : foreground.getImage();
     if (fImg == bImg)
       fImg = fImg.clone();
@@ -309,7 +310,7 @@ public class ComposeTransformer extends Mesh2DTransformer {
   }
 
   @Override
-  public void initDefaultParams(SimpleImage pImg) {
+  public void initDefaultParams(WFImage pImg) {
     left = 0;
     top = 0;
     transparency = 0;

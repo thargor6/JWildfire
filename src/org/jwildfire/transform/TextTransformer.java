@@ -33,9 +33,9 @@ import org.jwildfire.base.PropertyCategory;
 import org.jwildfire.base.PropertyMin;
 import org.jwildfire.base.Tools;
 import org.jwildfire.image.SimpleImage;
+import org.jwildfire.image.WFImage;
 
 import com.l2fprod.common.beans.editor.ComboBoxPropertyEditor;
-
 
 public class TextTransformer extends Mesh2DTransformer {
   public enum FontStyle {
@@ -104,7 +104,8 @@ public class TextTransformer extends Mesh2DTransformer {
   private boolean antialiasing;
 
   @Override
-  protected void performPixelTransformation(SimpleImage pImg) {
+  protected void performPixelTransformation(WFImage pImg) {
+    SimpleImage img = (SimpleImage) pImg;
     List<TextRow> rows = getRows();
     if ((rows == null) || (rows.size() < 1))
       return;
@@ -112,7 +113,7 @@ public class TextTransformer extends Mesh2DTransformer {
     Font font;
     int maxWidth = 0, maxHeight = 0, maxRow = 0, yOffset;
     {
-      Graphics g = pImg.getGraphics();
+      Graphics g = img.getGraphics();
       {
         int fontStyle;
         switch (this.fontStyle) {
@@ -188,7 +189,7 @@ public class TextTransformer extends Mesh2DTransformer {
     }
     switch (this.mode) {
       case NORMAL: {
-        Graphics g = pImg.getGraphics();
+        Graphics g = img.getGraphics();
         g.setFont(font);
         g.setColor(this.color);
         Graphics2D g2d = (Graphics2D) g;
@@ -234,7 +235,7 @@ public class TextTransformer extends Mesh2DTransformer {
           SimpleImage alphaImg = dilateImg.clone();
           new ColorToGrayTransformer().transformImage(alphaImg);
           cT.setAlphaChannelImage(alphaImg);
-          cT.transformImage(pImg);
+          cT.transformImage(img);
         }
       }
         break;
@@ -280,7 +281,7 @@ public class TextTransformer extends Mesh2DTransformer {
   }
 
   @Override
-  public void initDefaultParams(SimpleImage pImg) {
+  public void initDefaultParams(WFImage pImg) {
     text1 = Tools.APP_TITLE;
     text2 = "is";
     text3 = "cool :-)";

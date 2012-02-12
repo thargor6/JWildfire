@@ -21,10 +21,9 @@ import org.jwildfire.base.PropertyCategory;
 import org.jwildfire.base.PropertyMax;
 import org.jwildfire.base.PropertyMin;
 import org.jwildfire.base.Tools;
-import org.jwildfire.image.SimpleImage;
+import org.jwildfire.image.WFImage;
 
 import com.l2fprod.common.beans.editor.ComboBoxPropertyEditor;
-
 
 public class Transform3DTransformer extends Mesh3DTransformer {
   public enum Rotate {
@@ -149,7 +148,7 @@ public class Transform3DTransformer extends Mesh3DTransformer {
   }
 
   @Override
-  public void initDefaultParams(SimpleImage pImg) {
+  public void initDefaultParams(WFImage pImg) {
     super.initDefaultParams(pImg);
     int width = pImg.getImageWidth();
     int height = pImg.getImageHeight();

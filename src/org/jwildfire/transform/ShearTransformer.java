@@ -23,9 +23,9 @@ import org.jwildfire.base.PropertyMin;
 import org.jwildfire.base.Tools;
 import org.jwildfire.image.Pixel;
 import org.jwildfire.image.SimpleImage;
+import org.jwildfire.image.WFImage;
 
 import com.l2fprod.common.beans.editor.ComboBoxPropertyEditor;
-
 
 public class ShearTransformer extends Mesh2DTransformer {
 
@@ -57,20 +57,21 @@ public class ShearTransformer extends Mesh2DTransformer {
   private boolean damp = true;
 
   @Override
-  protected void performPixelTransformation(SimpleImage pImg) {
+  protected void performPixelTransformation(WFImage pImg) {
+    SimpleImage img = (SimpleImage) pImg;
     if (axis == Axis.X) {
       if (!damp || (Math.abs(damping) < Tools.EPSILON))
-        shearX(pImg);
+        shearX(img);
       else
-        shearX_Damp(pImg);
+        shearX_Damp(img);
     }
     else if (axis == Axis.Y) {
       if (!damp || (Math.abs(damping) < Tools.EPSILON))
-        shearY(pImg);
+        shearY(img);
       else
-        shearY_Damp(pImg);
+        shearY_Damp(img);
     }
-    applySmoothing(pImg, 1);
+    applySmoothing(img, 1);
   }
 
   private void shearX(SimpleImage pImg) {
@@ -259,7 +260,8 @@ public class ShearTransformer extends Mesh2DTransformer {
     }
   }
 
-  public void initDefaultParams(SimpleImage pImg) {
+  @Override
+  public void initDefaultParams(WFImage pImg) {
     int width = pImg.getImageWidth();
     int height = pImg.getImageHeight();
     double rr = Math.sqrt(width * width + height * height);

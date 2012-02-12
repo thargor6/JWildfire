@@ -19,9 +19,9 @@ package org.jwildfire.transform;
 import org.jwildfire.base.Property;
 import org.jwildfire.image.Pixel;
 import org.jwildfire.image.SimpleImage;
+import org.jwildfire.image.WFImage;
 
 import com.l2fprod.common.beans.editor.ComboBoxPropertyEditor;
-
 
 public class TurnTransformer extends Mesh2DTransformer {
 
@@ -39,11 +39,12 @@ public class TurnTransformer extends Mesh2DTransformer {
   private Direction direction = Direction.LEFT;
 
   @Override
-  protected void performPixelTransformation(SimpleImage pImg) {
+  protected void performPixelTransformation(WFImage pImg) {
+    SimpleImage img = (SimpleImage) pImg;
     int width = pImg.getImageWidth();
     int height = pImg.getImageHeight();
     if ((this.angle == Angle._90) || (this.angle == Angle._270))
-      pImg.resetImage(height, width);
+      img.resetImage(height, width);
     Pixel pixel = new Pixel();
     if (((this.angle == Angle._90) && (this.direction == Direction.LEFT))
         || ((this.angle == Angle._270) && (this.direction == Direction.RIGHT)))
@@ -52,7 +53,7 @@ public class TurnTransformer extends Mesh2DTransformer {
       for (int i = 0; i < height; i++) {
         for (int j = 0; j < width; j++) {
           pixel.setARGBValue(srcImg.getARGBValue(j, i));
-          pImg.setRGB(i, width - j - 1, pixel);
+          img.setRGB(i, width - j - 1, pixel);
         }
       }
     }
@@ -60,7 +61,7 @@ public class TurnTransformer extends Mesh2DTransformer {
       for (int i = 0; i < height; i++) {
         for (int j = 0; j < width; j++) {
           pixel.setARGBValue(srcImg.getARGBValue(j, i));
-          pImg.setRGB(width - j - 1, height - i - 1, pixel);
+          img.setRGB(width - j - 1, height - i - 1, pixel);
         }
       }
     }
@@ -70,14 +71,14 @@ public class TurnTransformer extends Mesh2DTransformer {
       for (int i = 0; i < height; i++) {
         for (int j = 0; j < width; j++) {
           pixel.setARGBValue(srcImg.getARGBValue(j, i));
-          pImg.setRGB(height - i - 1, j, pixel);
+          img.setRGB(height - i - 1, j, pixel);
         }
       }
     }
   }
 
   @Override
-  public void initDefaultParams(SimpleImage pImg) {
+  public void initDefaultParams(WFImage pImg) {
     angle = Angle._90;
     direction = Direction.LEFT;
   }

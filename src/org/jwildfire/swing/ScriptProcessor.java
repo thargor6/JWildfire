@@ -123,11 +123,13 @@ public class ScriptProcessor {
   public class TransformResult {
     private final Buffer inBuffer;
     private final Buffer outBuffer;
+    private final Buffer outHDRBuffer;
     private final Buffer outBuffer3D;
 
-    public TransformResult(Buffer pInBuffer, Buffer pOutBuffer, Buffer pOutBuffer3D) {
+    public TransformResult(Buffer pInBuffer, Buffer pOutBuffer, Buffer pOutHDRBuffer, Buffer pOutBuffer3D) {
       inBuffer = pInBuffer;
       outBuffer = pOutBuffer;
+      outHDRBuffer = pOutHDRBuffer;
       outBuffer3D = pOutBuffer3D;
     }
 
@@ -142,6 +144,10 @@ public class ScriptProcessor {
     public Buffer getOutBuffer3D() {
       return outBuffer3D;
     }
+
+    public Buffer getOutHDRBuffer() {
+      return outHDRBuffer;
+    }
   }
 
   public TransformResult executeTransformer(String pInputName, boolean pStoreMesh3D,
@@ -152,10 +158,16 @@ public class ScriptProcessor {
       throw new RuntimeException("Input buffer <" + pInputName + "> not found");
     }
     SimpleImage newImg = null;
+    SimpleHDRImage newHDRImg = null;
     if (inBuffer.getBufferType() == BufferType.IMAGE) {
       transformer.setStoreMesh3D(pStoreMesh3D);
       newImg = inBuffer.getImage().clone();
       transformer.transformImage(newImg);
+    }
+    else if (inBuffer.getBufferType() == BufferType.HDR_IMAGE) {
+      transformer.setStoreMesh3D(pStoreMesh3D);
+      newHDRImg = inBuffer.getHDRImage().clone();
+      transformer.transformImage(newHDRImg);
     }
     else if (inBuffer.getBufferType() == BufferType.MESH3D) {
       transformer.setStoreMesh3D(pStoreMesh3D);
@@ -171,6 +183,13 @@ public class ScriptProcessor {
       if ((pOutputName != null) && (pOutputName.length() > 0))
         outBuffer.setName(pOutputName);
     }
+    Buffer outHDRBuffer = null;
+    if (newHDRImg != null) {
+      outHDRBuffer = bufferList.addHDRImageBuffer(addBuffersToDesktop ? desktop : null,
+          transformer.getName(), newHDRImg);
+      if ((pOutputName != null) && (pOutputName.length() > 0))
+        outHDRBuffer.setName(pOutputName);
+    }
     Buffer outBuffer3D = null;
     if (pStoreMesh3D) {
       ScaleTransformer scaleT = new ScaleTransformer();
@@ -184,7 +203,7 @@ public class ScriptProcessor {
       if ((pOutput3DName != null) && (pOutput3DName.length() > 0))
         outBuffer3D.setName(pOutput3DName);
     }
-    return new TransformResult(inBuffer, outBuffer, outBuffer3D);
+    return new TransformResult(inBuffer, outBuffer, outHDRBuffer, outBuffer3D);
   }
 
   private void dumpBuffers() {

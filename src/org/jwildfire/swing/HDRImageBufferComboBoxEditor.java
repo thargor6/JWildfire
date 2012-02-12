@@ -14,23 +14,15 @@
   if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
   02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
-package org.jwildfire.transform;
+package org.jwildfire.swing;
 
-import org.jwildfire.image.Pixel;
-import org.jwildfire.image.WFImage;
+import org.jwildfire.swing.Buffer.BufferType;
 
-public class NegativeTransformer extends PixelTransformer {
+import com.l2fprod.common.beans.editor.ComboBoxPropertyEditor;
 
-  @Override
-  public void transformPixel(Pixel pPixel, int pX, int pY, int pImageWidth, int pImageHeight) {
-    pPixel.r = 255 - pPixel.r;
-    pPixel.g = 255 - pPixel.g;
-    pPixel.b = 255 - pPixel.b;
+public class HDRImageBufferComboBoxEditor extends ComboBoxPropertyEditor {
+  public HDRImageBufferComboBoxEditor() {
+    super();
+    setAvailableValues(StaticBufferList.getBufferList(BufferType.HDR_IMAGE).toArray());
   }
-
-  @Override
-  public void initDefaultParams(WFImage pImg) {
-    // empty    
-  }
-
 }

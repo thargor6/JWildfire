@@ -21,9 +21,9 @@ import org.jwildfire.base.PropertyMax;
 import org.jwildfire.base.PropertyMin;
 import org.jwildfire.base.Tools;
 import org.jwildfire.image.SimpleImage;
+import org.jwildfire.image.WFImage;
 
 import com.l2fprod.common.beans.editor.ComboBoxPropertyEditor;
-
 
 public class ShiftLinesTransformer extends Mesh2DTransformer {
   public enum Jitter {
@@ -56,7 +56,8 @@ public class ShiftLinesTransformer extends Mesh2DTransformer {
   private Axis axis = Axis.X;
 
   @Override
-  protected void performPixelTransformation(SimpleImage pImg) {
+  protected void performPixelTransformation(WFImage pImg) {
+    SimpleImage img = (SimpleImage) pImg;
     int dx = this.shiftAmount;
     Tools.srand123(this.seed);
     double rprob = (double) ((double) 1.0 - (double) (this.probability) / (double) 100.0);
@@ -70,7 +71,7 @@ public class ShiftLinesTransformer extends Mesh2DTransformer {
       tT.transformImage(srcImg);
       tT.setAngle(TurnTransformer.Angle._90);
       tT.setDirection(TurnTransformer.Direction.RIGHT);
-      tT.transformImage(pImg);
+      tT.transformImage(img);
     }
 
     shiftLines: {
@@ -85,7 +86,7 @@ public class ShiftLinesTransformer extends Mesh2DTransformer {
         if (adx2 < 0)
           adx2 = 0 - adx2;
         if (adx2 >= width) {
-          pImg.fillBackground(0, 0, 0);
+          img.fillBackground(0, 0, 0);
           break shiftLines;
         }
         int dx2 = dx;
@@ -99,7 +100,7 @@ public class ShiftLinesTransformer extends Mesh2DTransformer {
           else {
             copyLine(line, 0, srcImg.getLine(i), adx2, sx);
           }
-          pImg.setLine(i, line);
+          img.setLine(i, line);
           dx2 = 0 - dx2;
         }
       }
@@ -141,7 +142,7 @@ public class ShiftLinesTransformer extends Mesh2DTransformer {
                 copyLine(line, 0, srcImg.getLine(i), adx2, sx);
               }
             }
-            pImg.setLine(i, line);
+            img.setLine(i, line);
           }
         }
       }
@@ -150,7 +151,7 @@ public class ShiftLinesTransformer extends Mesh2DTransformer {
       TurnTransformer tT = new TurnTransformer();
       tT.setAngle(TurnTransformer.Angle._90);
       tT.setDirection(TurnTransformer.Direction.LEFT);
-      tT.transformImage(pImg);
+      tT.transformImage(img);
     }
   }
 
@@ -166,7 +167,7 @@ public class ShiftLinesTransformer extends Mesh2DTransformer {
   }
 
   @Override
-  public void initDefaultParams(SimpleImage pImg) {
+  public void initDefaultParams(WFImage pImg) {
     probability = 100;
     seed = 123;
     shiftAmount = 24;

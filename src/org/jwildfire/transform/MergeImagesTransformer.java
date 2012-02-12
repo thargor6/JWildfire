@@ -18,12 +18,12 @@ package org.jwildfire.transform;
 
 import org.jwildfire.base.Property;
 import org.jwildfire.image.SimpleImage;
+import org.jwildfire.image.WFImage;
 import org.jwildfire.swing.Buffer;
-import org.jwildfire.swing.NonHDRImageBufferComboBoxEditor;
 import org.jwildfire.swing.Buffer.BufferType;
+import org.jwildfire.swing.NonHDRImageBufferComboBoxEditor;
 
 import com.l2fprod.common.beans.editor.ComboBoxPropertyEditor;
-
 
 public class MergeImagesTransformer extends Transformer {
   public enum Mode {
@@ -37,7 +37,8 @@ public class MergeImagesTransformer extends Transformer {
   private Mode mode = Mode.HORIZONTAL;
 
   @Override
-  protected void performImageTransformation(SimpleImage pImg) {
+  protected void performImageTransformation(WFImage pImg) {
+    SimpleImage img = (SimpleImage) pImg;
     int width1 = pImg.getImageWidth();
     int height1 = pImg.getImageHeight();
     int width2 = image2.getImage().getImageWidth();
@@ -56,7 +57,7 @@ public class MergeImagesTransformer extends Transformer {
     if (this.mode == Mode.HORIZONTAL) {
       {
         ComposeTransformer cT = new ComposeTransformer();
-        cT.setForegroundImage(pImg);
+        cT.setForegroundImage(img);
         cT.setHAlign(ComposeTransformer.HAlignment.OFF);
         cT.setLeft(0);
         cT.setVAlign(ComposeTransformer.VAlignment.CENTRE);
@@ -74,7 +75,7 @@ public class MergeImagesTransformer extends Transformer {
     else {
       {
         ComposeTransformer cT = new ComposeTransformer();
-        cT.setForegroundImage(pImg);
+        cT.setForegroundImage(img);
         cT.setHAlign(ComposeTransformer.HAlignment.CENTRE);
         cT.setVAlign(ComposeTransformer.VAlignment.OFF);
         cT.setTop(0);
@@ -89,7 +90,7 @@ public class MergeImagesTransformer extends Transformer {
         cT.transformImage(bgImg);
       }
     }
-    pImg.setBufferedImage(bgImg.getBufferedImg(), bgWidth, bgHeight);
+    img.setBufferedImage(bgImg.getBufferedImg(), bgWidth, bgHeight);
   }
 
   @Override
@@ -98,7 +99,7 @@ public class MergeImagesTransformer extends Transformer {
   }
 
   @Override
-  public void initDefaultParams(SimpleImage pImg) {
+  public void initDefaultParams(WFImage pImg) {
     mode = Mode.HORIZONTAL;
   }
 

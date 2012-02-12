@@ -22,6 +22,7 @@ import org.jwildfire.base.Property;
 import org.jwildfire.base.PropertyCategory;
 import org.jwildfire.image.Pixel;
 import org.jwildfire.image.SimpleImage;
+import org.jwildfire.image.WFImage;
 
 import com.l2fprod.common.beans.editor.ComboBoxPropertyEditor;
 
@@ -171,7 +172,7 @@ public class Genlock3DTransformer extends Mesh3DTransformer {
   }
 
   @Override
-  public void initDefaultParams(SimpleImage pImg) {
+  public void initDefaultParams(WFImage pImg) {
     super.initDefaultParams(pImg);
     genlock = Genlock.COLOR;
     colorA = new Color(0, 0, 0);

@@ -24,10 +24,10 @@ import org.jwildfire.base.PropertyMin;
 import org.jwildfire.base.Tools;
 import org.jwildfire.image.Pixel;
 import org.jwildfire.image.SimpleImage;
+import org.jwildfire.image.WFImage;
 import org.jwildfire.swing.Buffer.BufferType;
 
 import com.l2fprod.common.beans.editor.ComboBoxPropertyEditor;
-
 
 public class Pixelize3DTransformer extends Mesh3DTransformer {
   public enum Genlock {
@@ -94,7 +94,7 @@ public class Pixelize3DTransformer extends Mesh3DTransformer {
   }
 
   @Override
-  public void initDefaultParams(SimpleImage pImg) {
+  public void initDefaultParams(WFImage pImg) {
     super.initDefaultParams(pImg);
     centre = true;
     blockType = BlockType.SIMPLE;

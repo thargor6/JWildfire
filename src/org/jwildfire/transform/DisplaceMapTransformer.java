@@ -23,9 +23,9 @@ import org.jwildfire.base.PropertyMin;
 import org.jwildfire.base.Tools;
 import org.jwildfire.image.Pixel;
 import org.jwildfire.image.SimpleImage;
+import org.jwildfire.image.WFImage;
 import org.jwildfire.swing.Buffer;
 import org.jwildfire.swing.NonHDRImageBufferComboBoxEditor;
-
 
 public class DisplaceMapTransformer extends Mesh2DTransformer {
   @Property(description = "Image which holds the displacement information for the x-axis (red channel)", editorClass = NonHDRImageBufferComboBoxEditor.class)
@@ -42,9 +42,10 @@ public class DisplaceMapTransformer extends Mesh2DTransformer {
   private double amount;
 
   @Override
-  protected void performPixelTransformation(SimpleImage pImg) {
+  protected void performPixelTransformation(WFImage pImg) {
     if ((Math.abs(this.amount) < Tools.EPSILON) || ((displaceXMap == null) && (displaceYMap == null)))
       return;
+    SimpleImage img = (SimpleImage) pImg;
     double nAmount = this.amount / 127.5;
     double rZoom = 1.0 / this.zoom;
     int width = pImg.getImageWidth();
@@ -90,14 +91,14 @@ public class DisplaceMapTransformer extends Mesh2DTransformer {
           pPixel.b = roundColor(((1.0 - yi) * ((1.0 - xi) * (srcP.b) + xi * (srcQ.b)) + yi
               * ((1.0 - xi) * (srcR.b) + xi * (srcS.b))));
         }
-        pImg.setRGB(pX, pY, pPixel.r, pPixel.g, pPixel.b);
+        img.setRGB(pX, pY, pPixel.r, pPixel.g, pPixel.b);
       }
     }
-    applySmoothing(pImg, 3);
+    applySmoothing(img, 3);
   }
 
   @Override
-  public void initDefaultParams(SimpleImage pImg) {
+  public void initDefaultParams(WFImage pImg) {
     zoom = 1.0;
     amount = 50.0;
   }

@@ -80,7 +80,7 @@ public class JobRenderThread implements Runnable {
               job.setFinished(true);
               job.setElapsedSeconds(((double) (t1 - t0) / 1000.0));
               System.err.println("RENDER TIME: " + job.getElapsedSeconds() + "s");
-              new ImageWriter().saveImage(res.getHDRImage(), job.getImageFilename());
+              new ImageWriter().saveImage(res.getImage(), job.getImageFilename());
               if (res.getHDRImage() != null) {
                 new ImageWriter().saveImage(res.getHDRImage(), job.getImageFilename() + ".hdr");
               }

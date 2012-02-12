@@ -19,11 +19,10 @@ package org.jwildfire.transform;
 import org.jwildfire.base.Property;
 import org.jwildfire.base.PropertyCategory;
 import org.jwildfire.base.mathparser.JEPWrapper;
-import org.jwildfire.image.SimpleImage;
+import org.jwildfire.image.WFImage;
 import org.nfunk.jep.Node;
 
 import com.l2fprod.common.beans.editor.ComboBoxPropertyEditor;
-
 
 public class ZPlot2DTransformer extends Mesh3DTransformer {
 
@@ -209,7 +208,7 @@ public class ZPlot2DTransformer extends Mesh3DTransformer {
   }
 
   @Override
-  public void initDefaultParams(SimpleImage pImg) {
+  public void initDefaultParams(WFImage pImg) {
     super.initDefaultParams(pImg);
     damping = -0.5;
     damp = true;

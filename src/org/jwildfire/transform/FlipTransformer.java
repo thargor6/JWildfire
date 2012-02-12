@@ -19,9 +19,9 @@ package org.jwildfire.transform;
 import org.jwildfire.base.Property;
 import org.jwildfire.image.Pixel;
 import org.jwildfire.image.SimpleImage;
+import org.jwildfire.image.WFImage;
 
 import com.l2fprod.common.beans.editor.ComboBoxPropertyEditor;
-
 
 public class FlipTransformer extends Mesh2DTransformer {
   public enum Axis {
@@ -39,7 +39,8 @@ public class FlipTransformer extends Mesh2DTransformer {
   }
 
   @Override
-  protected void performPixelTransformation(SimpleImage pImg) {
+  protected void performPixelTransformation(WFImage pImg) {
+    SimpleImage img = (SimpleImage) pImg;
     int width = pImg.getImageWidth();
     int height = pImg.getImageHeight();
     Pixel pixel = new Pixel();
@@ -47,7 +48,7 @@ public class FlipTransformer extends Mesh2DTransformer {
       for (int i = 0; i < height; i++) {
         for (int j = 0; j < width; j++) {
           pixel.setARGBValue(srcImg.getARGBValue(width - j - 1, i));
-          pImg.setRGB(j, i, pixel);
+          img.setRGB(j, i, pixel);
         }
       }
     }
@@ -55,7 +56,7 @@ public class FlipTransformer extends Mesh2DTransformer {
       for (int i = 0; i < height; i++) {
         for (int j = 0; j < width; j++) {
           pixel.setARGBValue(srcImg.getARGBValue(j, height - i - 1));
-          pImg.setRGB(j, i, pixel);
+          img.setRGB(j, i, pixel);
         }
       }
     }
@@ -63,14 +64,14 @@ public class FlipTransformer extends Mesh2DTransformer {
       for (int i = 0; i < height; i++) {
         for (int j = 0; j < width; j++) {
           pixel.setARGBValue(srcImg.getARGBValue(width - j - 1, height - i - 1));
-          pImg.setRGB(j, i, pixel);
+          img.setRGB(j, i, pixel);
         }
       }
     }
   }
 
   @Override
-  public void initDefaultParams(SimpleImage pImg) {
+  public void initDefaultParams(WFImage pImg) {
     axis = Axis.X;
   }
 

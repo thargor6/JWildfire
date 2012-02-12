@@ -19,9 +19,9 @@ package org.jwildfire.transform;
 import org.jwildfire.base.ConvolveTools;
 import org.jwildfire.base.Property;
 import org.jwildfire.image.SimpleImage;
+import org.jwildfire.image.WFImage;
 
 import com.l2fprod.common.beans.editor.ComboBoxPropertyEditor;
-
 
 public class EmbossTransformer extends Mesh2DTransformer {
   public enum Direction {
@@ -32,7 +32,8 @@ public class EmbossTransformer extends Mesh2DTransformer {
   private Direction direction = Direction.NORTHWEST;
 
   @Override
-  protected void performPixelTransformation(SimpleImage pImg) {
+  protected void performPixelTransformation(WFImage pImg) {
+    SimpleImage img = (SimpleImage) pImg;
     int cvAdd = 128;
     int matrix9[][] = new int[3][3];
     switch (direction) {
@@ -88,11 +89,11 @@ public class EmbossTransformer extends Mesh2DTransformer {
       cT.setWeights(ColorToGrayTransformer.Weights.LUMINANCE);
       cT.transformImage(greyMap);
     }
-    ConvolveTools.convolve_3x3_grey(greyMap, pImg, matrix9, cvAdd);
+    ConvolveTools.convolve_3x3_grey(greyMap, img, matrix9, cvAdd);
   }
 
   @Override
-  public void initDefaultParams(SimpleImage pImg) {
+  public void initDefaultParams(WFImage pImg) {
     direction = Direction.NORTHWEST;
   }
 

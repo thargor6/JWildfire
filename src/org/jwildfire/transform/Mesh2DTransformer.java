@@ -18,6 +18,7 @@ package org.jwildfire.transform;
 
 import org.jwildfire.image.Pixel;
 import org.jwildfire.image.SimpleImage;
+import org.jwildfire.image.WFImage;
 import org.jwildfire.swing.Buffer.BufferType;
 
 public abstract class Mesh2DTransformer extends Transformer {
@@ -27,7 +28,7 @@ public abstract class Mesh2DTransformer extends Transformer {
   protected Pixel srcR = new Pixel();
   protected Pixel srcS = new Pixel();
 
-  protected abstract void performPixelTransformation(SimpleImage pImg);
+  protected abstract void performPixelTransformation(WFImage pImg);
 
   @Override
   public boolean acceptsInputBufferType(BufferType pBufferType) {
@@ -66,19 +67,19 @@ public abstract class Mesh2DTransformer extends Transformer {
   }
 
   @Override
-  protected void initTransformation(SimpleImage pImg) {
+  protected void initTransformation(WFImage pImg) {
     super.initTransformation(pImg);
-    srcImg = pImg.clone();
+    srcImg = ((SimpleImage) pImg).clone();
   }
 
   @Override
-  protected void cleanupTransformation(SimpleImage pImg) {
+  protected void cleanupTransformation(WFImage pImg) {
     srcImg = null;
     super.cleanupTransformation(pImg);
   }
 
   @Override
-  protected void performImageTransformation(SimpleImage pImg) {
+  protected void performImageTransformation(WFImage pImg) {
     performPixelTransformation(pImg);
   }
 

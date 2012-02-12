@@ -22,6 +22,7 @@ import org.jwildfire.base.Property;
 import org.jwildfire.base.PropertyCategory;
 import org.jwildfire.image.Pixel;
 import org.jwildfire.image.SimpleImage;
+import org.jwildfire.image.WFImage;
 import org.jwildfire.swing.Buffer;
 import org.jwildfire.swing.NonHDRImageBufferComboBoxEditor;
 
@@ -69,8 +70,9 @@ public class AlphaComposeTransformer extends Mesh2DTransformer {
   @Property(category = PropertyCategory.SECONDARY, description = "Genlock color B")
   protected Color colorB = new Color(0, 0, 0);
 
-  protected void performPixelTransformation(SimpleImage pImg) {
-    SimpleImage bImg = pImg;
+  @Override
+  protected void performPixelTransformation(WFImage pImg) {
+    SimpleImage bImg = (SimpleImage) pImg;
     SimpleImage fImg = (foregroundImage != null) ? foregroundImage : foreground.getImage();
     if (fImg == bImg)
       fImg = fImg.clone();
@@ -321,7 +323,7 @@ public class AlphaComposeTransformer extends Mesh2DTransformer {
   }
 
   @Override
-  public void initDefaultParams(SimpleImage pImg) {
+  public void initDefaultParams(WFImage pImg) {
     fgLeft = 0;
     fgTop = 0;
     fgHAlign = HAlignment.CENTRE;

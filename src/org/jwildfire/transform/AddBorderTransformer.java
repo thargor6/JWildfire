@@ -22,8 +22,8 @@ import org.jwildfire.base.Property;
 import org.jwildfire.base.PropertyMin;
 import org.jwildfire.create.PlainImageCreator;
 import org.jwildfire.image.SimpleImage;
+import org.jwildfire.image.WFImage;
 import org.jwildfire.swing.Buffer.BufferType;
-
 
 public class AddBorderTransformer extends Transformer {
   @Property(description = "Size of the left border")
@@ -51,26 +51,27 @@ public class AddBorderTransformer extends Transformer {
   }
 
   @Override
-  protected void performImageTransformation(SimpleImage pImg) {
+  protected void performImageTransformation(WFImage pImg) {
+    SimpleImage img = (SimpleImage) pImg;
     if ((leftSize > 0) || (topSize > 0) || (rightSize > 0) || (bottomSize > 0)) {
       PlainImageCreator creator = new PlainImageCreator();
       creator.setBgColor(color);
       SimpleImage bgImg = creator.createImage(pImg.getImageWidth() + leftSize + rightSize,
           pImg.getImageHeight() + topSize + bottomSize);
       ComposeTransformer cT = new ComposeTransformer();
-      cT.setForegroundImage(pImg);
+      cT.setForegroundImage(img);
       cT.setLeft(leftSize);
       cT.setTop(topSize);
       cT.setGenlock(ComposeTransformer.Genlock.NONE);
       cT.setHAlign(ComposeTransformer.HAlignment.OFF);
       cT.setVAlign(ComposeTransformer.VAlignment.OFF);
       cT.transformImage(bgImg);
-      pImg.setBufferedImage(bgImg.getBufferedImg(), bgImg.getImageWidth(), bgImg.getImageHeight());
+      img.setBufferedImage(bgImg.getBufferedImg(), bgImg.getImageWidth(), bgImg.getImageHeight());
     }
   }
 
   @Override
-  public void initDefaultParams(SimpleImage pImg) {
+  public void initDefaultParams(WFImage pImg) {
     leftSize = 24;
     topSize = 24;
     rightSize = 24;

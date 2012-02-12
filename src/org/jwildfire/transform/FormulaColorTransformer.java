@@ -21,8 +21,8 @@ import org.jwildfire.base.Tools;
 import org.jwildfire.base.mathparser.JEPWrapper;
 import org.jwildfire.image.Pixel;
 import org.jwildfire.image.SimpleImage;
+import org.jwildfire.image.WFImage;
 import org.nfunk.jep.Node;
-
 
 public class FormulaColorTransformer extends Mesh2DTransformer {
 
@@ -39,7 +39,8 @@ public class FormulaColorTransformer extends Mesh2DTransformer {
   private boolean useOriginalRGBValues;
 
   @Override
-  protected void performPixelTransformation(SimpleImage pImg) {
+  protected void performPixelTransformation(WFImage pImg) {
+    SimpleImage img = (SimpleImage) pImg;
     int width = pImg.getImageWidth();
     int height = pImg.getImageHeight();
 
@@ -77,13 +78,13 @@ public class FormulaColorTransformer extends Mesh2DTransformer {
           pixel.g = Tools.roundColor((Double) parser.evaluate(greenNode) * 255.0);
           pixel.b = Tools.roundColor((Double) parser.evaluate(blueNode) * 255.0);
         }
-        pImg.setRGB(j, i, pixel);
+        img.setRGB(j, i, pixel);
       }
     }
   }
 
   @Override
-  public void initDefaultParams(SimpleImage pImg) {
+  public void initDefaultParams(WFImage pImg) {
     formula1Red = "0.13*exp(2*r)";
     formula2Green = "0.05*exp(3*g)";
     formula3Blue = "0.02*exp(4*b)";

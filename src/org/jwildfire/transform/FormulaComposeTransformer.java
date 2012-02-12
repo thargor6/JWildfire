@@ -22,12 +22,12 @@ import org.jwildfire.base.Tools;
 import org.jwildfire.base.mathparser.JEPWrapper;
 import org.jwildfire.image.Pixel;
 import org.jwildfire.image.SimpleImage;
+import org.jwildfire.image.WFImage;
 import org.jwildfire.swing.Buffer;
 import org.jwildfire.swing.NonHDRImageBufferComboBoxEditor;
 import org.nfunk.jep.Node;
 
 import com.l2fprod.common.beans.editor.ComboBoxPropertyEditor;
-
 
 public class FormulaComposeTransformer extends Mesh2DTransformer {
 
@@ -58,8 +58,8 @@ public class FormulaComposeTransformer extends Mesh2DTransformer {
   private String formula3Blue;
 
   @Override
-  protected void performPixelTransformation(SimpleImage pImg) {
-    SimpleImage bgImg = pImg;
+  protected void performPixelTransformation(WFImage pImg) {
+    SimpleImage bgImg = (SimpleImage) pImg;
     SimpleImage fgImg = (foregroundImage != null) ? foregroundImage : foreground.getImage();
     if (fgImg == bgImg)
       fgImg = fgImg.clone();
@@ -148,7 +148,7 @@ public class FormulaComposeTransformer extends Mesh2DTransformer {
   }
 
   @Override
-  public void initDefaultParams(SimpleImage pImg) {
+  public void initDefaultParams(WFImage pImg) {
     left = 0;
     top = 0;
     hAlign = HAlignment.CENTRE;

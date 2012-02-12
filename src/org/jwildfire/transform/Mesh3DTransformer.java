@@ -26,10 +26,10 @@ import org.jwildfire.base.PropertyMin;
 import org.jwildfire.base.Tools;
 import org.jwildfire.image.Pixel;
 import org.jwildfire.image.SimpleImage;
+import org.jwildfire.image.WFImage;
 import org.jwildfire.swing.Buffer.BufferType;
 
 import com.l2fprod.common.beans.editor.ComboBoxPropertyEditor;
-
 
 public abstract class Mesh3DTransformer extends Transformer {
 
@@ -188,26 +188,17 @@ public abstract class Mesh3DTransformer extends Transformer {
     return res;
   }
 
-  @Override
-  protected void initTransformation(SimpleImage pImg) {
-    super.initTransformation(pImg);
-  }
-
-  @Override
-  protected void cleanupTransformation(SimpleImage pImg) {
-    super.cleanupTransformation(pImg);
-  }
-
   protected void createMeshFromImage(Mesh3D pMesh3D, SimpleImage pImg, double pQuant3D) {
     pMesh3D.readPixels(pImg, pQuant3D);
   }
 
   @Override
-  protected void performImageTransformation(SimpleImage pImg) {
+  protected void performImageTransformation(WFImage pImg) {
     Mesh3D lInputMesh3D;
+    SimpleImage img = (SimpleImage) pImg;
     if (inputMesh3D == null) {
       lInputMesh3D = new Mesh3D();
-      createMeshFromImage(lInputMesh3D, pImg, quant3D);
+      createMeshFromImage(lInputMesh3D, img, quant3D);
     }
     else {
       lInputMesh3D = inputMesh3D.clone();
@@ -220,9 +211,9 @@ public abstract class Mesh3DTransformer extends Transformer {
       this.outputMesh3D.setLastTransformation(this);
     }
     transform3D(lInputMesh3D, width, height);
-    pImg.fillBackground(0, 0, 0);
-    render3D(lInputMesh3D, pImg);
-    applySmoothing(pImg, smoothing);
+    img.fillBackground(0, 0, 0);
+    render3D(lInputMesh3D, img);
+    applySmoothing(img, smoothing);
     lInputMesh3D = null;
     inputMesh3D = null;
   }
@@ -490,7 +481,7 @@ public abstract class Mesh3DTransformer extends Transformer {
   }
 
   @Override
-  public void initDefaultParams(SimpleImage pImg) {
+  public void initDefaultParams(WFImage pImg) {
     int width = pImg.getImageWidth();
     int height = pImg.getImageHeight();
     double rr = Math.sqrt(width * width + height * height);
