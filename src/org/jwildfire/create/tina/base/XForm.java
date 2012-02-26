@@ -214,6 +214,11 @@ public class XForm {
     pAffineT.z = pSrcPoint.z;
     pVarT.clear();
     pVarT.color = pAffineT.color;
+    pVarT.rgbColor = pAffineT.rgbColor;
+    pVarT.redColor = pAffineT.redColor;
+    pVarT.greenColor = pAffineT.greenColor;
+    pVarT.blueColor = pAffineT.blueColor;
+
     for (Variation variation : sortedVariations) {
       variation.transform(pContext, this, pAffineT, pVarT);
       if (variation.getFunc().getPriority() < 0) {
@@ -221,6 +226,10 @@ public class XForm {
       }
     }
     pDstPoint.color = pVarT.color;
+    pDstPoint.rgbColor = pVarT.rgbColor;
+    pDstPoint.redColor = pVarT.redColor;
+    pDstPoint.greenColor = pVarT.greenColor;
+    pDstPoint.blueColor = pVarT.blueColor;
     if (hasPostCoeffs()) {
       double px = postCoeff00 * pVarT.x + postCoeff10 * pVarT.y + postCoeff20;
       double py = postCoeff01 * pVarT.x + postCoeff11 * pVarT.y + postCoeff21;
@@ -233,6 +242,7 @@ public class XForm {
     pDstPoint.x = pVarT.x;
     pDstPoint.y = pVarT.y;
     pDstPoint.z = pVarT.z;
+
   }
 
   public void transformPoints(FlameTransformationContext pContext, XYZPoint[] pAffineT, XYZPoint[] pVarT, XYZPoint[] pSrcPoint, XYZPoint[] pDstPoint) {

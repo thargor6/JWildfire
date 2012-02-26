@@ -23,6 +23,12 @@ public class XYZPoint {
   public double y;
   public double z;
   public double color;
+  // custom RGB colors
+  public boolean rgbColor = false;
+  public double redColor;
+  public double greenColor;
+  public double blueColor;
+
   // often (but not always) used properties, calculation only if needed
   protected double sumsq;
   protected boolean validSumsq;
@@ -54,6 +60,10 @@ public class XYZPoint {
     validSinA = p.validSinA;
     cosA = p.cosA;
     validCosA = p.validCosA;
+    rgbColor = p.rgbColor;
+    redColor = p.redColor;
+    greenColor = p.greenColor;
+    blueColor = p.blueColor;
   }
 
   public void invalidate() {
@@ -61,6 +71,8 @@ public class XYZPoint {
   }
 
   public void clear() {
+    rgbColor = false;
+    redColor = greenColor = blueColor = 0.0;
     x = y = z = color = 0.0;
     sumsq = sqrt = atan = atanYX = sinA = cosA = 0.0;
     validSumsq = validSqrt = validAtan = validAtanYX = validSinA = validCosA = false;

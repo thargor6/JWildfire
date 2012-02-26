@@ -628,4 +628,8 @@ public class FlameRenderer {
     renderScale = pRenderScale;
   }
 
+  public RenderColor[] getColorMap() {
+    return colorMap;
+  }
+
 }

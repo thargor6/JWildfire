@@ -128,13 +128,20 @@ public class FlameRenderThread implements Runnable {
 
       int xIdx = (int) (renderer.bws * px + 0.5);
       int yIdx = (int) (renderer.bhs * py + 0.5);
-      int colorIdx = (int) (p.color * renderer.paletteIdxScl + 0.5);
       RasterPoint rp = renderer.raster[yIdx][xIdx];
-      RenderColor color = renderer.colorMap[colorIdx];
 
-      rp.red += color.red;
-      rp.green += color.green;
-      rp.blue += color.blue;
+      if (p.rgbColor) {
+        rp.red += p.redColor;
+        rp.green += p.greenColor;
+        rp.blue += p.blueColor;
+      }
+      else {
+        int colorIdx = (int) (p.color * renderer.paletteIdxScl + 0.5);
+        RenderColor color = renderer.colorMap[colorIdx];
+        rp.red += color.red;
+        rp.green += color.green;
+        rp.blue += color.blue;
+      }
       rp.count++;
     }
   }
@@ -214,8 +221,17 @@ public class FlameRenderThread implements Runnable {
 
       int xIdx = (int) (renderer.bws * px + 0.5);
       int yIdx = (int) (renderer.bhs * py + 0.5);
-      int colorIdx = (int) (p.color * renderer.paletteIdxScl + 0.5);
-      RenderColor color = renderer.colorMap[colorIdx];
+      RenderColor color;
+      if (p.rgbColor) {
+        color = new RenderColor();
+        color.red = p.redColor;
+        color.green = p.greenColor;
+        color.blue = p.blueColor;
+      }
+      else {
+        int colorIdx = (int) (p.color * renderer.paletteIdxScl + 0.5);
+        color = renderer.colorMap[colorIdx];
+      }
 
       if (i < blurMax) {
         for (int k = yIdx - blurRadius, yk = 0; k <= yIdx + blurRadius; k++, yk++) {
@@ -326,15 +342,22 @@ public class FlameRenderThread implements Runnable {
         continue;
 
       RasterPoint rp = renderer.raster[(int) (renderer.bhs * py + 0.5)][(int) (renderer.bws * px + 0.5)];
-      RenderColor color = renderer.colorMap[(int) (p[0].color * renderer.paletteIdxScl + 0.5)];
-
+      RenderColor color;
+      if (p[0].rgbColor) {
+        color = new RenderColor();
+        color.red = p[0].redColor;
+        color.green = p[0].greenColor;
+        color.blue = p[0].blueColor;
+      }
+      else {
+        color = renderer.colorMap[(int) (p[0].color * renderer.paletteIdxScl + 0.5)];
+      }
       RenderColor shadedColor = shader.calculateColor(q, color);
 
       rp.red += shadedColor.red;
       rp.green += shadedColor.green;
       rp.blue += shadedColor.blue;
       rp.count++;
-
     }
   }
 
