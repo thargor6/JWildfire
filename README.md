@@ -8,7 +8,7 @@ but this time implemented in Java and with a more sophisticated user interface a
 ## Key Features
  - stunning 3D effects (such as wave3D, water, twirl3d, ...)
  - 3D effect superimposition (e. g. wave3D interference)
- - Fractal flame generator
+ - powerful Fractal flame generator
  - image generators (perlin noise, cloud generator, plasma, ...)
  - many "common" image processing effects in 2D (such as twirl, erode, convolve, ...)
  - simple but powerful user interface which allows it to animate nearly any parameter by just a few mouse clicks

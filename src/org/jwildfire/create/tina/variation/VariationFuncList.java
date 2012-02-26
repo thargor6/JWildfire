@@ -47,7 +47,7 @@ public class VariationFuncList {
 		aliasMap.put(HeartWFFunc.class, "t_heart");
 		aliasMap.put(Waves2WFFunc.class, "t_xy_waves");
 		aliasMap.put(BubbleWFFunc.class, "t_bubble");
-		aliasMap.put(BumpMapWFFunc.class, "t_post_bump_map");
+		aliasMap.put(PostBumpMapWFFunc.class, "t_post_bump_map");
 		aliasMap.put(PostMirrorWFFunc.class, "t_post_mirror");
 		aliasMap.put(PreWave3DWFFunc.class, "t_pre_wave3D");
 		aliasMap.put(RoseWFFunc.class, "t_rose");
@@ -212,7 +212,7 @@ public class VariationFuncList {
 		registerVariationFunc(GlynnSim2Func.class);
 		registerVariationFunc(GlynnSim3Func.class);
 		registerVariationFunc(PostColorMapWFFunc.class);
-		registerVariationFunc(BumpMapWFFunc.class);
+		registerVariationFunc(PostBumpMapWFFunc.class);
 		registerVariationFunc(EclipseFunc.class);
 	}
 

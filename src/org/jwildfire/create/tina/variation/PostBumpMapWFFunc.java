@@ -16,14 +16,13 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import javax.swing.JLabel;
-
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 import org.jwildfire.image.Pixel;
+import org.jwildfire.image.SimpleHDRImage;
 import org.jwildfire.image.SimpleImage;
-import org.jwildfire.io.ImageReader;
+import org.jwildfire.image.WFImage;
 
 public class PostBumpMapWFFunc extends VariationFunc {
 
@@ -34,9 +33,11 @@ public class PostBumpMapWFFunc extends VariationFunc {
   private static final String PARAM_OFFSETY = "offset_y";
   private static final String PARAM_OFFSETZ = "offset_z";
   private static final String PARAM_RESETZ = "reset_z";
-  private static final String PARAM_FILENAME = "filename";
 
-  private static final String[] paramNames = { PARAM_SCALEX, PARAM_SCALEY, PARAM_SCALEZ, PARAM_OFFSETX, PARAM_OFFSETY, PARAM_OFFSETZ, PARAM_RESETZ, PARAM_FILENAME };
+  private static final String RESSOURCE_IMAGE_FILENAME = "image_filename";
+
+  private static final String[] paramNames = { PARAM_SCALEX, PARAM_SCALEY, PARAM_SCALEZ, PARAM_OFFSETX, PARAM_OFFSETY, PARAM_OFFSETZ, PARAM_RESETZ };
+  private static final String[] ressourceNames = { RESSOURCE_IMAGE_FILENAME };
 
   private double scaleX = 1.0;
   private double scaleY = 1.0;
@@ -44,46 +45,46 @@ public class PostBumpMapWFFunc extends VariationFunc {
   private double offsetX = 0.0;
   private double offsetY = 0.0;
   private double offsetZ = 0.0;
-  private double resetZ = 0.0;
-  private String filename = "C:\\TMP\\wf\\male_body-1440x900.jpg";
+  private int resetZ = 0;
+
+  private String imageFilename = null;
+
   // derived params
-  private SimpleImage bumpMap;
-  private boolean clearZ;
-  private double imgXScale, imgYScale;
-  private double imgXOffset, imgYOffset;
   private int imgWidth, imgHeight;
   private Pixel toolPixel = new Pixel();
-
-  static int cnt = 0;
+  private float[] rgbArray = new float[3];
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-    double x = pAffineTP.x;
-    double y = pAffineTP.y;
-
-    x = (x + imgXOffset + offsetX) * imgXScale * scaleX;
-    y = (y + imgYOffset + offsetY) * imgYScale * scaleY;
-
+    double x = (pAffineTP.x - offsetX + 1.0) / scaleX * 0.5 * (double) (imgWidth - 1);
+    double y = (pAffineTP.y - offsetY + 1.0) / scaleY * 0.5 * (double) (imgHeight - 1);
     double dz = offsetZ;
     int ix = Tools.FTOI(x);
     int iy = Tools.FTOI(y);
     if (ix >= 0 && ix < imgWidth && iy >= 0 && iy < imgHeight) {
-      toolPixel.setARGBValue(bumpMap.getARGBValue(ix, iy));
-      double intensity = (0.299 * (double) toolPixel.r + 0.588 * (double) toolPixel.g + 0.113 * (double) toolPixel.b) / 255.0;
+      double intensity;
+      if (bumpMap instanceof SimpleImage) {
+        toolPixel.setARGBValue(((SimpleImage) bumpMap).getARGBValue(ix, iy));
+        double r = toolPixel.r;
+        double g = toolPixel.g;
+        double b = toolPixel.b;
+        intensity = (0.299 * r + 0.588 * g + 0.113 * b) / 255.0;
+      }
+      else {
+        ((SimpleHDRImage) bumpMap).getRGBValues(rgbArray, ix, iy);
+        double r = rgbArray[0];
+        double g = rgbArray[0];
+        double b = rgbArray[0];
+        intensity = (0.299 * r + 0.588 * g + 0.113 * b);
+      }
       dz += scaleZ * intensity;
+      if (resetZ != 0) {
+        pVarTP.z = dz;
+      }
+      else {
+        pVarTP.z += dz;
+      }
     }
-    if (clearZ) {
-      pVarTP.z = dz;
-    }
-    else {
-      pVarTP.z += dz;
-    }
-
-    if (cnt++ < 1000) {
-      System.out.println("xy=" + pAffineTP.x + "/" + pAffineTP.y + "->" + x + "/" + y);
-      System.out.println("  int xy=" + ix + "/" + ix + " " + dz);
-    }
-
   }
 
   @Override
@@ -93,9 +94,7 @@ public class PostBumpMapWFFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    // TODO
-    //    return new Object[] { scaleX, scaleY, scaleZ, offsetX, offsetY, offsetZ, resetZ, filename };
-    return new Object[] { scaleX, scaleY, scaleZ, offsetX, offsetY, offsetZ, resetZ, 0.0 };
+    return new Object[] { scaleX, scaleY, scaleZ, offsetX, offsetY, offsetZ, resetZ };
   }
 
   @Override
@@ -113,11 +112,7 @@ public class PostBumpMapWFFunc extends VariationFunc {
     else if (PARAM_OFFSETZ.equalsIgnoreCase(pName))
       offsetZ = pValue;
     else if (PARAM_RESETZ.equalsIgnoreCase(pName))
-      resetZ = pValue;
-    else if (PARAM_FILENAME.equalsIgnoreCase(pName))
-      ;
-    // TODO
-    //filename = "";
+      resetZ = Tools.FTOI(pValue);
     else
       throw new IllegalArgumentException(pName);
   }
@@ -127,31 +122,44 @@ public class PostBumpMapWFFunc extends VariationFunc {
     return "post_bumpmap_wf";
   }
 
-  @Override
-  public int getPriority() {
-    return 1;
-  }
+  private WFImage bumpMap;
 
   @Override
   public void init(FlameTransformationContext pContext, XForm pXForm) {
     bumpMap = null;
-    if (filename != null && filename.length() > 0) {
+    if (imageFilename != null && imageFilename.length() > 0) {
       try {
-        bumpMap = new ImageReader(new JLabel()).loadImage(filename);
+        bumpMap = RessourceManager.getImage(imageFilename);
       }
       catch (Exception e) {
         e.printStackTrace();
       }
     }
-    if (filename == null) {
+    if (bumpMap == null) {
       bumpMap = new SimpleImage(320, 256);
     }
-    clearZ = Tools.FTOI(resetZ) == 1;
-    imgXOffset = 1.0;
     imgWidth = bumpMap.getImageWidth();
     imgHeight = bumpMap.getImageHeight();
-    imgXScale = (double) imgWidth / 2.0;
-    imgYOffset = 1.0;
-    imgYScale = (double) imgHeight / 2.0;
   }
+
+  @Override
+  public String[] getRessourceNames() {
+    return ressourceNames;
+  }
+
+  @Override
+  public byte[][] getRessourceValues() {
+    return new byte[][] { (imageFilename != null ? imageFilename.getBytes() : null) };
+  }
+
+  @Override
+  public void setRessource(String pName, byte[] pValue) {
+    if (RESSOURCE_IMAGE_FILENAME.equalsIgnoreCase(pName)) {
+      imageFilename = pValue != null ? new String(pValue) : "";
+      bumpMap = null;
+    }
+    else
+      throw new IllegalArgumentException(pName);
+  }
+
 }
