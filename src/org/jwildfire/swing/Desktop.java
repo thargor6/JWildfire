@@ -49,7 +49,6 @@ import javax.swing.JTextField;
 import javax.swing.KeyStroke;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
-import javax.swing.UIManager;
 import javax.swing.WindowConstants;
 import javax.swing.border.SoftBevelBorder;
 
@@ -1401,7 +1400,7 @@ public class Desktop extends JApplet {
 
     SwingUtilities.invokeLater(new Runnable() {
       public void run() {
-        setLookAndFeel();
+        LookAndFeel.setLookAndFeel();
         Desktop application = new Desktop();
         application.getJFrame().setVisible(true);
         application.initApp();
@@ -1552,32 +1551,11 @@ public class Desktop extends JApplet {
 
   @Override
   public void start() {
-    setLookAndFeel();
+    LookAndFeel.setLookAndFeel();
     appletApplication = new Desktop();
     appletApplication.getJFrame().setVisible(true);
     appletApplication.initApp();
     super.start();
-  }
-
-  private static void setLookAndFeel() {
-    try {
-      // UIManager.setLookAndFeel("com.sun.java.swing.plaf.motif.MotifLookAndFeel");
-
-      // UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
-      // MetalLookAndFeel.setCurrentTheme(new DefaultMetalTheme());
-      // MetalLookAndFeel.setCurrentTheme(new OceanTheme());
-      UIManager
-          .setLookAndFeel("com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel");
-    }
-    catch (Throwable ex) {
-      try {
-        UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
-      }
-      catch (Throwable e) {
-        //        e.printStackTrace();
-      }
-      // ex.printStackTrace();
-    }
   }
 
   @Override

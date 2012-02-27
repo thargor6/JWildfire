@@ -22,6 +22,8 @@ public class PrefsWriter {
 
   public void writePrefs(Prefs pPrefs) throws Exception {
     StringBuilder sb = new StringBuilder();
+    addValue(sb, Prefs.KEY_GENERAL_PLAF_STYLE, pPrefs.getPlafStyle());
+    addValue(sb, Prefs.KEY_GENERAL_PLAF_THEME, pPrefs.getPlafTheme());
     addValue(sb, Prefs.KEY_GENERAL_PATH_IMAGES, pPrefs.getImagePath());
     addValue(sb, Prefs.KEY_GENERAL_PATH_SCRIPTS, pPrefs.getScriptPath());
     addValue(sb, Prefs.KEY_TINA_RENDER_FAST_MATH, pPrefs.getTinaRenderFastMath());

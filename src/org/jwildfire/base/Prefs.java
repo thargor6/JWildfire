@@ -18,10 +18,16 @@ package org.jwildfire.base;
 
 import java.io.File;
 
+import org.jwildfire.swing.LookAndFeel;
+
+import com.l2fprod.common.beans.editor.ComboBoxPropertyEditor;
+
 public class Prefs extends ManagedObject {
   // DON'T forget to update the assign() method after adding new properties!!!
   static final String PREFS_FILE = "j-wildfire.properties";
 
+  static final String KEY_GENERAL_PLAF_STYLE = "general.plaf.style";
+  static final String KEY_GENERAL_PLAF_THEME = "general.plaf.theme";
   static final String KEY_GENERAL_PATH_IMAGES = "general.path.images";
   static final String KEY_GENERAL_PATH_SCRIPTS = "general.path.scripts";
   static final String KEY_SUNFLOW_PATH_SCENES = "sunflow.path.scenes";
@@ -85,6 +91,19 @@ public class Prefs extends ManagedObject {
   private String sunflowScenePath = null;
   private String lastInputSunflowScenePath = null;
   private String lastOutputSunflowScenePath = null;
+
+  public static class PLAFStyleEditor extends ComboBoxPropertyEditor {
+    public PLAFStyleEditor() {
+      super();
+      setAvailableValues(new String[] { LookAndFeel.PLAF_AERO, LookAndFeel.PLAF_ALUMINIUM, LookAndFeel.PLAF_BERNSTEIN, LookAndFeel.PLAF_FAST, LookAndFeel.PLAF_GRAPHITE, LookAndFeel.PLAF_HIFI, LookAndFeel.PLAF_MCWIN, LookAndFeel.PLAF_MINT,
+          LookAndFeel.PLAF_NIMBUS, LookAndFeel.PLAF_NOIRE, LookAndFeel.PLAF_LUNA, LookAndFeel.PLAF_SMART });
+    }
+  }
+
+  @Property(description = "Look and feel (major UI style) - changes are applied only after restarting the main program", category = PropertyCategory.TINA, editorClass = PLAFStyleEditor.class)
+  private String plafStyle = LookAndFeel.PLAF_ACRYL;
+  @Property(description = "Look and feel theme (UI sub style) - changes are applied only after restarting the main program", category = PropertyCategory.TINA)
+  private String plafTheme = LookAndFeel.THEME_DEFAULT;
 
   @Property(description = "Image render width", category = PropertyCategory.TINA)
   private int tinaRenderImageWidth = 800;
@@ -299,6 +318,8 @@ public class Prefs extends ManagedObject {
     sunflowScenePath = pSrc.sunflowScenePath;
     lastInputSunflowScenePath = pSrc.lastInputSunflowScenePath;
     lastOutputSunflowScenePath = pSrc.lastOutputSunflowScenePath;
+    plafStyle = pSrc.plafStyle;
+    plafTheme = pSrc.plafTheme;
 
     tinaRenderImageWidth = pSrc.tinaRenderImageWidth;
     tinaRenderImageHeight = pSrc.tinaRenderImageHeight;
@@ -588,6 +609,22 @@ public class Prefs extends ManagedObject {
 
   public void setTinaRenderHighHDRIntensityMap(boolean tinaRenderHighHDRIntensityMap) {
     this.tinaRenderHighHDRIntensityMap = tinaRenderHighHDRIntensityMap;
+  }
+
+  public String getPlafStyle() {
+    return plafStyle;
+  }
+
+  public void setPlafStyle(String plafStyle) {
+    this.plafStyle = plafStyle;
+  }
+
+  public String getPlafTheme() {
+    return plafTheme;
+  }
+
+  public void setPlafTheme(String plafTheme) {
+    this.plafTheme = plafTheme;
   }
 
 }

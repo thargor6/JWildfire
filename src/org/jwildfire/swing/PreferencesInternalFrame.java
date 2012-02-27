@@ -165,7 +165,7 @@ public class PreferencesInternalFrame extends JInternalFrame {
     prefsPropertyPanel = new PropertyPanel(editPrefs);
 
     mainPanel.add((JPanel) prefsPropertyPanel,
-          BorderLayout.CENTER);
+        BorderLayout.CENTER);
     mainPanel.invalidate();
     mainPanel.validate();
   }
