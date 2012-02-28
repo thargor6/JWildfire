@@ -1217,7 +1217,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaRenderFlameButton.setMnemonic(KeyEvent.VK_R);
       tinaRenderFlameButton.setFont(new Font("Dialog", Font.BOLD, 10));
       tinaRenderFlameButton.setToolTipText("Render image");
-      tinaRenderFlameButton.setPreferredSize(new Dimension(42, 24));
+      tinaRenderFlameButton.setPreferredSize(new Dimension(42, 36));
       tinaRenderFlameButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
           tinaController.renderFlameButton_actionPerformed(e);
@@ -4824,7 +4824,7 @@ public class TinaInternalFrame extends JInternalFrame {
       editSpaceLbl4 = new JLabel();
       editSpaceLbl4.setFont(new Font("Dialog", Font.BOLD, 10));
       editSpaceLbl4.setText("");
-      editSpaceLbl4.setPreferredSize(new Dimension(42, 8));
+      editSpaceLbl4.setPreferredSize(new Dimension(42, 2));
       editSpaceLbl3 = new JLabel();
       editSpaceLbl3.setFont(new Font("Dialog", Font.BOLD, 10));
       editSpaceLbl3.setText("");
@@ -4832,11 +4832,11 @@ public class TinaInternalFrame extends JInternalFrame {
       editSpaceLbl2 = new JLabel();
       editSpaceLbl2.setFont(new Font("Dialog", Font.BOLD, 10));
       editSpaceLbl2.setText("");
-      editSpaceLbl2.setPreferredSize(new Dimension(42, 12));
+      editSpaceLbl2.setPreferredSize(new Dimension(42, 2));
       editSpaceLbl1 = new JLabel();
       editSpaceLbl1.setFont(new Font("Dialog", Font.BOLD, 10));
       editSpaceLbl1.setText("");
-      editSpaceLbl1.setPreferredSize(new Dimension(42, 10));
+      editSpaceLbl1.setPreferredSize(new Dimension(42, 2));
       triangleOperationsPanel = new JPanel();
       triangleOperationsPanel.setLayout(new FlowLayout());
       triangleOperationsPanel.setPreferredSize(new Dimension(52, 0));
@@ -4846,8 +4846,6 @@ public class TinaInternalFrame extends JInternalFrame {
       triangleOperationsPanel.add(getMouseTransformRotateButton(), null);
       triangleOperationsPanel.add(getMouseTransformScaleButton(), null);
       triangleOperationsPanel.add(editSpaceLbl1, null);
-      triangleOperationsPanel.add(getMouseTransformZoomInButton(), null);
-      triangleOperationsPanel.add(getMouseTransformZoomOutButton(), null);
       triangleOperationsPanel.add(editSpaceLbl3, null);
       triangleOperationsPanel.add(getToggleTrianglesButton(), null);
       triangleOperationsPanel.add(editSpaceLbl2, null);
@@ -4864,7 +4862,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JToggleButton getMouseTransformMoveButton() {
     if (mouseTransformMoveButton == null) {
       mouseTransformMoveButton = new JToggleButton();
-      mouseTransformMoveButton.setPreferredSize(new Dimension(42, 24));
+      mouseTransformMoveButton.setPreferredSize(new Dimension(42, 36));
       mouseTransformMoveButton.setSelected(true);
       mouseTransformMoveButton.setToolTipText("Enable triangle dragging mode");
       mouseTransformMoveButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/move.gif")));
@@ -4885,7 +4883,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JToggleButton getMouseTransformRotateButton() {
     if (mouseTransformRotateButton == null) {
       mouseTransformRotateButton = new JToggleButton();
-      mouseTransformRotateButton.setPreferredSize(new Dimension(42, 24));
+      mouseTransformRotateButton.setPreferredSize(new Dimension(42, 36));
       mouseTransformRotateButton.setToolTipText("Enable triangle rotating mode");
       mouseTransformRotateButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/rotate.gif")));
       mouseTransformRotateButton.addActionListener(new java.awt.event.ActionListener() {
@@ -4905,7 +4903,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JToggleButton getMouseTransformScaleButton() {
     if (mouseTransformScaleButton == null) {
       mouseTransformScaleButton = new JToggleButton();
-      mouseTransformScaleButton.setPreferredSize(new Dimension(42, 24));
+      mouseTransformScaleButton.setPreferredSize(new Dimension(42, 36));
       mouseTransformScaleButton.setToolTipText("Enable triangle scale mode");
       mouseTransformScaleButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/scale.gif")));
       mouseTransformScaleButton.addActionListener(new java.awt.event.ActionListener() {
@@ -4930,6 +4928,8 @@ public class TinaInternalFrame extends JInternalFrame {
       centerNorthPanel.add(getRenderProgressBar(), null);
       centerNorthPanel.add(getMouseTransformSlowButton(), null);
       centerNorthPanel.add(getDarkTrianglesToggleButton(), null);
+      centerNorthPanel.add(getMouseTransformZoomInButton());
+      centerNorthPanel.add(getMouseTransformZoomOutButton());
     }
     return centerNorthPanel;
   }
@@ -5001,7 +5001,7 @@ public class TinaInternalFrame extends JInternalFrame {
       affineEditPostTransformButton.setSize(new Dimension(138, 24));
       affineEditPostTransformButton.setText("Edit Post  Transform");
       affineEditPostTransformButton.setFont(new Font("Dialog", Font.BOLD, 10));
-      affineEditPostTransformButton.setLocation(new Point(3, 159));
+      affineEditPostTransformButton.setLocation(new Point(4, 181));
       affineEditPostTransformButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
           tinaController.affineEditPostTransformButton_clicked();
@@ -5023,7 +5023,7 @@ public class TinaInternalFrame extends JInternalFrame {
       affineEditPostTransformSmallButton.setText("P");
       affineEditPostTransformSmallButton.setToolTipText("Toggle post transform mode");
       affineEditPostTransformSmallButton.setMnemonic(KeyEvent.VK_P);
-      affineEditPostTransformSmallButton.setPreferredSize(new Dimension(42, 24));
+      affineEditPostTransformSmallButton.setPreferredSize(new Dimension(42, 36));
       affineEditPostTransformSmallButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
           tinaController.affineEditPostTransformSmallButton_clicked();
@@ -5041,6 +5041,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton getMouseTransformZoomInButton() {
     if (mouseTransformZoomInButton == null) {
       mouseTransformZoomInButton = new JButton();
+      mouseTransformZoomInButton.setBounds(462, 4, 42, 24);
       mouseTransformZoomInButton.setFont(new Font("Dialog", Font.BOLD, 8));
       mouseTransformZoomInButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/triangleShrink.gif")));
       mouseTransformZoomInButton.setText("");
@@ -5063,6 +5064,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton getMouseTransformZoomOutButton() {
     if (mouseTransformZoomOutButton == null) {
       mouseTransformZoomOutButton = new JButton();
+      mouseTransformZoomOutButton.setBounds(504, 4, 42, 24);
       mouseTransformZoomOutButton.setFont(new Font("Dialog", Font.BOLD, 8));
       mouseTransformZoomOutButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/triangleEnlarge.gif")));
       mouseTransformZoomOutButton.setText("");
@@ -5085,7 +5087,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JToggleButton getToggleTrianglesButton() {
     if (toggleTrianglesButton == null) {
       toggleTrianglesButton = new JToggleButton();
-      toggleTrianglesButton.setPreferredSize(new Dimension(42, 24));
+      toggleTrianglesButton.setPreferredSize(new Dimension(42, 36));
       toggleTrianglesButton.setSelected(true);
       toggleTrianglesButton.setToolTipText("Display/hide triangles");
       toggleTrianglesButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/triangle.gif")));
@@ -5157,7 +5159,7 @@ public class TinaInternalFrame extends JInternalFrame {
       affineResetTransformButton = new JButton();
       affineResetTransformButton.setPreferredSize(new Dimension(136, 24));
       affineResetTransformButton.setText("Reset");
-      affineResetTransformButton.setLocation(new Point(146, 159));
+      affineResetTransformButton.setLocation(new Point(146, 181));
       affineResetTransformButton.setSize(new Dimension(130, 24));
       affineResetTransformButton.setToolTipText("Reset triangle to defaults");
       affineResetTransformButton.setFont(new Font("Dialog", Font.BOLD, 10));
@@ -8417,7 +8419,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JToggleButton getDarkTrianglesToggleButton() {
     if (darkTrianglesToggleButton == null) {
       darkTrianglesToggleButton = new JToggleButton();
-      darkTrianglesToggleButton.setBounds(new Rectangle(547, 3, 89, 24));
+      darkTrianglesToggleButton.setBounds(new Rectangle(547, 4, 89, 24));
       darkTrianglesToggleButton.setToolTipText("Toggle dark triangle colors");
       darkTrianglesToggleButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/triangle.gif")));
       darkTrianglesToggleButton.setSelected(false);
@@ -8766,7 +8768,7 @@ public class TinaInternalFrame extends JInternalFrame {
       affineScaleXButton.setMnemonic(KeyEvent.VK_P);
       affineScaleXButton.setText("");
       affineScaleXButton.setLocation(new Point(66, 132));
-      affineScaleXButton.setSize(new Dimension(26, 24));
+      affineScaleXButton.setSize(new Dimension(26, 36));
       affineScaleXButton.setSelected(true);
       affineScaleXButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/allowScaleX.gif")));
       affineScaleXButton.setFont(new Font("Dialog", Font.BOLD, 10));
@@ -8792,7 +8794,7 @@ public class TinaInternalFrame extends JInternalFrame {
       affineScaleYButton.setMnemonic(KeyEvent.VK_P);
       affineScaleYButton.setSelected(true);
       affineScaleYButton.setText("");
-      affineScaleYButton.setSize(new Dimension(26, 24));
+      affineScaleYButton.setSize(new Dimension(26, 36));
       affineScaleYButton.setLocation(new Point(94, 132));
       affineScaleYButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/allowScaleY.gif")));
       affineScaleYButton.setFont(new Font("Dialog", Font.BOLD, 10));
