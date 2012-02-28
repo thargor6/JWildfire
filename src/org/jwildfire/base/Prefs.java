@@ -101,7 +101,7 @@ public class Prefs extends ManagedObject {
   }
 
   @Property(description = "Look and feel (major UI style) - changes are applied only after restarting the main program", category = PropertyCategory.TINA, editorClass = PLAFStyleEditor.class)
-  private String plafStyle = LookAndFeel.PLAF_ACRYL;
+  private String plafStyle = LookAndFeel.PLAF_NOIRE;
   @Property(description = "Look and feel theme (UI sub style) - changes are applied only after restarting the main program", category = PropertyCategory.TINA)
   private String plafTheme = LookAndFeel.THEME_DEFAULT;
 
