@@ -498,8 +498,8 @@ public class SunflowInternalFrame extends JInternalFrame {
     return consoleTextArea1;
   }
 
-  public SunflowController createController(ErrorHandler pErrorHandler, Prefs pPrefs) {
-    sunflowController = new SunflowController(pErrorHandler, pPrefs, getEditorTextArea(), getConsoleTextArea(),
+  public SunflowController createController(MainController pMainController, ErrorHandler pErrorHandler, Prefs pPrefs) {
+    sunflowController = new SunflowController(pMainController, pErrorHandler, pPrefs, getEditorTextArea(), getConsoleTextArea(),
         getImagePanel(), getRenderButton(), getIprButton(), getLoadSceneButton(), getCancelRenderButton(),
         getBuildSceneButton(), getSaveSceneButton(), getClearConsoleButton(), getNewSceneButton());
     return sunflowController;

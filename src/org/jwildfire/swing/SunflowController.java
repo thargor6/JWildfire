@@ -17,6 +17,9 @@
 package org.jwildfire.swing;
 
 import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -27,6 +30,9 @@ import javax.swing.filechooser.FileFilter;
 
 import org.jwildfire.base.Prefs;
 import org.jwildfire.base.Tools;
+import org.jwildfire.create.eden.io.SunflowWriter;
+import org.jwildfire.create.eden.primitive.Sphere;
+import org.jwildfire.create.eden.scene.Scene;
 import org.sunflow.SunflowAPI;
 import org.sunflow.system.ImagePanel;
 import org.sunflow.system.Timer;
@@ -51,6 +57,7 @@ public class SunflowController implements UserInterface {
   private String currentFile;
   private SunflowAPI api;
   private final Prefs prefs;
+  private final MainController mainController;
   private final ErrorHandler errorHandler;
   private final JTextArea editorTextArea;
   private final JTextArea consoleTextArea;
@@ -67,9 +74,10 @@ public class SunflowController implements UserInterface {
   private SceneType sceneType = null;
   private Status status = Status.IDLE;
 
-  public SunflowController(ErrorHandler pErrorHandler, Prefs pPrefs, JTextArea pEditorTextArea, JTextArea pConsoleTextArea, ImagePanel pImagePanel,
+  public SunflowController(MainController pMainController, ErrorHandler pErrorHandler, Prefs pPrefs, JTextArea pEditorTextArea, JTextArea pConsoleTextArea, ImagePanel pImagePanel,
       JButton pRenderButton, JButton pIprButton, JButton pLoadSceneButton, JButton pCancelRenderButton, JButton pBuildSceneButton, JButton pSaveSceneButton,
       JButton pClearConsoleButton, JButton pNewSceneButton) {
+    mainController = pMainController;
     errorHandler = pErrorHandler;
     prefs = pPrefs;
     editorTextArea = pEditorTextArea;
@@ -89,11 +97,16 @@ public class SunflowController implements UserInterface {
   public void newScene() {
     currentFile = null;
     api = null;
+    sceneType = SceneType.SC;
+    currentFile = "new" + genNewFileId() + ".sc";
     // TODO
-    String template = "";
-
+    String template = edenCreateSunflowScene();
     editorTextArea.setText(template);
     enableControls();
+  }
+
+  private String genNewFileId() {
+    return new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss").format(new Date());
   }
 
   public class SceneFileFilter extends FileFilter {
@@ -236,11 +249,14 @@ public class SunflowController implements UserInterface {
     doRender(Sampler.BUCKET);
   }
 
+  private boolean renderCancelled;
+
   public void doRender(final Sampler pSampler) {
     if (status == Status.RENDERING) {
       return;
     }
     buildScene();
+    renderCancelled = false;
     new Thread() {
       @Override
       public void run() {
@@ -251,8 +267,31 @@ public class SunflowController implements UserInterface {
           api.parameter("sampler", pSampler == Sampler.BUCKET ? "bucket" : "ipr");
           api.options(SunflowAPI.DEFAULT_OPTIONS);
           api.render(SunflowAPI.DEFAULT_OPTIONS, imagePanel);
+
         }
         finally {
+          if (!renderCancelled) {
+            File file;
+            try {
+              file = File.createTempFile("JWF", "png");
+            }
+            catch (IOException e) {
+              e.printStackTrace();
+              throw new RuntimeException(e);
+            }
+            try {
+              imagePanel.save(file.getAbsolutePath());
+              try {
+                mainController.loadImage(file.getAbsolutePath(), false);
+              }
+              catch (Exception e) {
+                e.printStackTrace();
+              }
+            }
+            finally {
+              file.delete();
+            }
+          }
           status = Status.IDLE;
           enableControls();
         }
@@ -275,6 +314,7 @@ public class SunflowController implements UserInterface {
 
   public void cancelRendering() {
     UI.taskCancel();
+    renderCancelled = true;
   }
 
   public void iprScene() {
@@ -314,4 +354,15 @@ public class SunflowController implements UserInterface {
     }
   }
 
+  private String edenCreateSunflowScene() {
+    Scene scene = new Scene();
+    for (int i = 0; i < 3300; i++) {
+      Sphere sphere = new Sphere();
+      sphere.setCentre((-50.0 + Math.random() * 94.0) * 2.5, 1.0 + Math.random() * 128.0, (-3.0 + Math.random() * 920.0));
+      sphere.setRadius(3.6 + Math.random() * 11.4);
+      scene.addObject(sphere);
+    }
+
+    return new SunflowWriter().createSunflowScene(scene);
+  }
 }

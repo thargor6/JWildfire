@@ -1,3 +1,12 @@
+V0.39 (28.02.2012):
+ - Main: using the Noire-theme from JTattoo as default UI theme
+ - Main: choose one of 12 available ui themes from within the Prefs windows
+ - Fractal flames editor: minor changes to the UI
+ - Main: support for the JTattoo LookAndFeel library
+ - Fractal flame editor: post_bumpmap_wf variation
+ - Fractal flame editor: post_colormap_wf variation
+ - Fractal flame editor: eclipse variation by Michael Faber
+
 V0.38 (12.02.2012):
  - Fractal flame editor: new Prefs options for rendering intensity maps
  - Fractal flame editor: glynnSim1, glynnSim2 and glynnSim3 varaition by eralex
