@@ -23,41 +23,44 @@ public class AllRandomFlameGenerator extends RandomFlameGenerator {
   @Override
   protected Flame createFlame() {
     double r = Math.random();
-    if (r < 0.08) {
+    if (r < 0.06) {
       return new LinearRandomFlameGenerator().createFlame();
     }
-    else if (r < 0.16) {
+    else if (r < 0.12) {
       return new SimpleRandomFlameGenerator().createFlame();
     }
-    else if (r < 0.24) {
+    else if (r < 0.18) {
       return new GnarlRandomFlameGenerator().createFlame();
     }
-    else if (r < 0.32) {
+    else if (r < 0.24) {
       return new ExperimentalGnarlRandomFlameGenerator().createFlame();
     }
-    else if (r < 0.40) {
+    else if (r < 0.30) {
       return new SubFlameRandomFlameGenerator().createFlame();
     }
-    else if (r < 0.48) {
+    else if (r < 0.36) {
       return new BubblesRandomFlameGenerator().createFlame();
     }
-    else if (r > 0.56) {
+    else if (r > 0.42) {
       return new TentacleRandomFlameGenerator().createFlame();
     }
-    else if (r > 0.64) {
+    else if (r > 0.48) {
       return new ThreeDOnlyRandomFlameGenerator().createFlame();
     }
-    else if (r < 0.70) {
+    else if (r < 0.54) {
       return new Flowers3DRandomFlameGenerator().createFlame();
     }
-    else if (r < 0.76) {
+    else if (r < 0.60) {
       return new ExperimentalFlowers3DRandomFlameGenerator().createFlame();
     }
-    else if (r < 0.84) {
+    else if (r < 0.66) {
       return new Bubbles3DRandomFlameGenerator().createFlame();
     }
-    else if (r < 0.90) {
+    else if (r < 0.72) {
       return new ExperimentalBubbles3DRandomFlameGenerator().createFlame();
+    }
+    else if (r < 0.78) {
+      return new Spherical3DRandomFlameGenerator().createFlame();
     }
     else {
       return new ExperimentalSimpleRandomFlameGenerator().createFlame();

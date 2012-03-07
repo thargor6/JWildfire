@@ -147,9 +147,6 @@ public class Desktop extends JApplet {
       preferencesFrame.setPrefs(prefs);
       preferencesFrame.setMainController(mainController);
 
-      SunflowInternalFrame sunflowFrame = (SunflowInternalFrame) getSunFlowInternalFrame();
-      sunflowFrame.createController(errorHandler, prefs).newScene();
-
       mainController = new MainController(prefs, errorHandler, mainDesktopPane,
           getWindowMenu(), operatorsFrame.getTransformerInputCmb(), operatorsFrame.getTransformerPresetCmb(), operatorsFrame.getCreatorPresetCmb(),
           getShowMessageDlg(), getShowMessageDlgTextArea(), scriptFrame.getScriptTable(),
@@ -157,6 +154,9 @@ public class Desktop extends JApplet {
           scriptFrame.getScriptFramesREd(), scriptFrame.getScriptFrameREd(),
           scriptFrame.getEnvelopeController(), renderController);
       renderController.setActionList(mainController.getActionList());
+
+      SunflowInternalFrame sunflowFrame = (SunflowInternalFrame) getSunFlowInternalFrame();
+      sunflowFrame.createController(mainController, errorHandler, prefs).newScene();
 
       tinaController.setMainController(mainController);
 

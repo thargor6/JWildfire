@@ -2668,6 +2668,15 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
   public void importFromRandomBatch(int pIdx) {
     if (pIdx >= 0 && pIdx < randomBatch.size()) {
       _currFlame = randomBatch.get(pIdx);
+      {
+        FlamePanel imgPanel = getFlamePanel();
+        Rectangle bounds = imgPanel.getImageBounds();
+        double wScl = (double) bounds.width / (double) _currFlame.getWidth();
+        double hScl = (double) bounds.height / (double) _currFlame.getHeight();
+        _currFlame.setWidth(bounds.width);
+        _currFlame.setHeight(bounds.height);
+        _currFlame.setPixelsPerUnit((wScl + hScl) * 0.5 * _currFlame.getPixelsPerUnit());
+      }
       refreshUI();
       transformationsTable.getSelectionModel().setSelectionInterval(0, 0);
     }
