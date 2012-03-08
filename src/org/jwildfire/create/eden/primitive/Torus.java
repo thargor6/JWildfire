@@ -16,14 +16,19 @@
 */
 package org.jwildfire.create.eden.primitive;
 
-import org.jwildfire.create.eden.group.GroupMember;
+public class Torus extends BasePrimitive implements Primitive {
+  private double innerRadius = 0.7;
 
-public interface Primitive extends GroupMember {
+  public Torus() {
+    getSize().setValue(DFLT_SIZE);
+  }
 
-  public Point getPosition();
+  public void setInnerRadius(double pInnerRadius) {
+    innerRadius = pInnerRadius;
+  }
 
-  public Point getRotate();
-
-  public Point getSize();
+  public double getInnerRadius() {
+    return innerRadius;
+  }
 
 }

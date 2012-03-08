@@ -17,7 +17,56 @@
 package org.jwildfire.create.eden.primitive;
 
 public class Point {
-  public double x;
-  public double y;
-  public double z;
+  private double x;
+  private double y;
+  private double z;
+
+  public Point() {
+  }
+
+  public Point(double pX, double pY, double pZ) {
+    x = pX;
+    y = pY;
+    z = pZ;
+  }
+
+  public double getX() {
+    return x;
+  }
+
+  public void setX(double pX) {
+    x = pX;
+  }
+
+  public double getY() {
+    return y;
+  }
+
+  public void setY(double pY) {
+    y = pY;
+  }
+
+  public double getZ() {
+    return z;
+  }
+
+  public void setZ(double pZ) {
+    z = pZ;
+  }
+
+  public void setValue(double pX, double pY, double pZ) {
+    x = pX;
+    y = pY;
+    z = pZ;
+  }
+
+  public void setValue(double pValue) {
+    x = y = z = pValue;
+  }
+
+  public void assign(Point pSrc) {
+    x = pSrc.getX();
+    y = pSrc.getY();
+    z = pSrc.getZ();
+  }
 }

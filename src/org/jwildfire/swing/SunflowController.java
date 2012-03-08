@@ -31,7 +31,8 @@ import javax.swing.filechooser.FileFilter;
 import org.jwildfire.base.Prefs;
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.eden.io.SunflowWriter;
-import org.jwildfire.create.eden.primitive.Sphere;
+import org.jwildfire.create.eden.primitive.Box;
+import org.jwildfire.create.eden.primitive.Point;
 import org.jwildfire.create.eden.scene.Scene;
 import org.sunflow.SunflowAPI;
 import org.sunflow.system.ImagePanel;
@@ -354,13 +355,85 @@ public class SunflowController implements UserInterface {
     }
   }
 
+  public static class Worker {
+    private final Scene scene;
+    private final Point position = new Point(0.0, 0.0, 0.0);
+    private final Point size = new Point(1.0, 1.0, 1.0);
+    private final Point rotate = new Point(0.0, 0.0, 0.0);
+
+    private final Point deltaSize = new Point(0.12, 0.06, 0.18);
+    private final Point deltaPosition = new Point(0.25, 0.25, 0.0);
+    private final Point deltaRotate = new Point(16, 8, 0.0);
+
+    public Worker(Scene pScene, double pX, double pY, double pZ) {
+      scene = pScene;
+      position.setValue(pX, pY, pZ);
+    }
+
+    public void performStep() {
+      position.setX(position.getX() + deltaPosition.getX());
+      position.setY(position.getY() + deltaPosition.getY());
+      position.setZ(position.getZ() + deltaPosition.getZ());
+
+      //      rotate.setX(rotate.getX() + deltaRotate.getX());
+      //      rotate.setY(rotate.getY() + deltaRotate.getY());
+      //      rotate.setZ(rotate.getZ() + deltaRotate.getZ());
+
+      size.setX(size.getX() + deltaSize.getX());
+      size.setY(size.getY() + deltaSize.getY());
+      size.setZ(size.getZ() + deltaSize.getZ());
+
+      Box box = new Box();
+      box.getPosition().assign(position);
+      box.getSize().assign(size);
+      box.getRotate().assign(rotate);
+      scene.addObject(box);
+
+    }
+  }
+
   private String edenCreateSunflowScene() {
     Scene scene = new Scene();
-    for (int i = 0; i < 3300; i++) {
-      Sphere sphere = new Sphere();
-      sphere.setCentre((-50.0 + Math.random() * 94.0) * 2.5, 1.0 + Math.random() * 128.0, (-3.0 + Math.random() * 920.0));
-      sphere.setRadius(3.6 + Math.random() * 11.4);
-      scene.addObject(sphere);
+    //    for (int i = 0; i < 3300; i++) {
+    //      Sphere sphere = new Sphere();
+    //      sphere.setCentre((-50.0 + Math.random() * 94.0) * 2.5, 1.0 + Math.random() * 128.0, (-3.0 + Math.random() * 920.0));
+    //      sphere.setRadius(3.6 + Math.random() * 11.4);
+    //      scene.addObject(sphere);
+    //    }
+
+    //    for (int i = 0; i < 6666; i++) {
+    //      double shape = Math.random();
+    //      if (shape < 0.25) {
+    //        Sphere sphere = new Sphere();
+    //        sphere.getPosition().setValue((-50.0 + Math.random() * 94.0) * 2, 1.0 + Math.random() * 128.0, (-3.0 + Math.random() * 92.0));
+    //        sphere.getSize().setValue((8 + Math.random() * 11.4) * 10);
+    //        scene.addObject(sphere);
+    //      }
+    //      else if (shape < 0.5) {
+    //        Box box = new Box();
+    //        box.getPosition().setValue((-50.0 + Math.random() * 94.0) * 2, 1.0 + Math.random() * 128.0, (-3.0 + Math.random() * 92.0));
+    //        box.getSize().setValue((8 + Math.random() * 11.4) * 10);
+    //        box.getRotate().setValue(Math.random() * 90.0, Math.random() * 90.0, Math.random() * 90.0);
+    //        scene.addObject(box);
+    //      }
+    //      else if (shape < 0.75) {
+    //        Torus torus = new Torus();
+    //        torus.getPosition().setValue((-50.0 + Math.random() * 94.0) * 2, 1.0 + Math.random() * 128.0, (-3.0 + Math.random() * 92.0));
+    //        torus.getSize().setValue((8 + Math.random() * 11.4) * 10);
+    //        torus.getRotate().setValue(Math.random() * 90.0, Math.random() * 90.0, Math.random() * 90.0);
+    //        scene.addObject(torus);
+    //      }
+    //      else {
+    //        Cylinder cylinder = new Cylinder();
+    //        cylinder.getPosition().setValue((-50.0 + Math.random() * 94.0) * 2, 1.0 + Math.random() * 128.0, (-3.0 + Math.random() * 92.0));
+    //        cylinder.getSize().setValue((8 + Math.random() * 11.4) * 10);
+    //        cylinder.getRotate().setValue(Math.random() * 90.0, Math.random() * 90.0, Math.random() * 90.0);
+    //        scene.addObject(cylinder);
+    //      }
+
+    Worker worker1 = new Worker(scene, 0, 0, 0);
+    for (int i = 0; i < 100; i++) {
+      worker1.performStep();
     }
 
     return new SunflowWriter().createSunflowScene(scene);

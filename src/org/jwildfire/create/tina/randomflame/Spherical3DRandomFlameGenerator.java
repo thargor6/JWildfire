@@ -75,12 +75,11 @@ public class Spherical3DRandomFlameGenerator extends RandomFlameGenerator {
       xForm.setColorSymmetry(0.9 + Math.random() * 0.1);
     }
     // 3rd xForm
-    XForm xForm3;
     String fncList[] = { "bipolar", "blade", "blur", "blur3D", "cannabiscurve_wf", "crackle", "cylinder", "edisc", "flower", "glynnSim2",
         "julia3D", "mandelbrot", "modulus", "noise", "parabola", "pie", "pie3D", "pre_subflame_wf", "radial_blur", "rays",
         "rings", "rose_wf", "secant2", "sinusoidal", "spiral", "spirograph", "splits", "square", "twintrian", "wedge_julia" };
     {
-      XForm xForm = xForm3 = new XForm();
+      XForm xForm = new XForm();
       flame.getXForms().add(xForm);
       xForm.setWeight(0.5);
       xForm.addVariation(0.25 + 0.25 * Math.random(), VariationFuncList.getVariationFuncInstance("pre_blur", true));
@@ -93,9 +92,8 @@ public class Spherical3DRandomFlameGenerator extends RandomFlameGenerator {
     }
 
     // 4th xForm
-    XForm xForm4;
     {
-      XForm xForm = xForm4 = new XForm();
+      XForm xForm = new XForm();
       flame.getXForms().add(xForm);
       xForm.setWeight(0.5);
       xForm.addVariation(0.025 + 0.025 * Math.random(), VariationFuncList.getVariationFuncInstance("pre_blur", true));
@@ -108,9 +106,8 @@ public class Spherical3DRandomFlameGenerator extends RandomFlameGenerator {
     }
 
     // 5th xForm
-    XForm xForm5;
     {
-      XForm xForm = xForm5 = new XForm();
+      XForm xForm = new XForm();
       flame.getXForms().add(xForm);
       xForm.setWeight(0.1);
       xForm.addVariation(0.005 + Math.random() * 0.005, VariationFuncList.getVariationFuncInstance("gaussian_blur", true));
@@ -140,7 +137,10 @@ public class Spherical3DRandomFlameGenerator extends RandomFlameGenerator {
           }
           break;
         default:
-          varFunc = VariationFuncList.getVariationFuncInstance("spherical3D", true);
+          varFunc = VariationFuncList.getVariationFuncInstance("spherical3D_wf", true);
+          if (Math.random() < 0.5) {
+            varFunc.setParameter("invert", 1);
+          }
       }
       xForm.addVariation(0.25 + Math.random() * 0.75, varFunc);
 

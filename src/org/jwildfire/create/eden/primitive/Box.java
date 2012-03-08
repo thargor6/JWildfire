@@ -16,14 +16,10 @@
 */
 package org.jwildfire.create.eden.primitive;
 
-import org.jwildfire.create.eden.group.GroupMember;
+public class Box extends BasePrimitive implements Primitive {
 
-public interface Primitive extends GroupMember {
-
-  public Point getPosition();
-
-  public Point getRotate();
-
-  public Point getSize();
+  public Box() {
+    getSize().setValue(DFLT_SIZE);
+  }
 
 }

@@ -16,33 +16,10 @@
 */
 package org.jwildfire.create.eden.primitive;
 
-public class Sphere implements Primitive {
-  private final Point centre = new Point();
-  private double radius = 1.0;
+public class Sphere extends BasePrimitive implements Primitive {
 
-  public double getRadius() {
-    return radius;
+  public Sphere() {
+    getSize().setValue(DFLT_SIZE);
   }
-
-  public void setRadius(double radius) {
-    this.radius = radius;
-  }
-
-  public Point getCentre() {
-    return centre;
-  }
-
-  public void setCentre(double pX, double pY, double pZ) {
-    centre.x = pX;
-    centre.y = pY;
-    centre.z = pZ;
-  }
-
-  //  object {
-  //    shader Mirror
-  //    type sphere
-  //    c -45 -25 21
-  //    r 20
-  //  }
 
 }

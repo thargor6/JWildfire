@@ -16,14 +16,10 @@
 */
 package org.jwildfire.create.eden.primitive;
 
-import org.jwildfire.create.eden.group.GroupMember;
+public class Cylinder extends BasePrimitive implements Primitive {
 
-public interface Primitive extends GroupMember {
-
-  public Point getPosition();
-
-  public Point getRotate();
-
-  public Point getSize();
+  public Cylinder() {
+    getSize().setValue(DFLT_SIZE);
+  }
 
 }

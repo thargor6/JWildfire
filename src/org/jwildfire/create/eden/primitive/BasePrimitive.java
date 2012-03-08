@@ -16,14 +16,26 @@
 */
 package org.jwildfire.create.eden.primitive;
 
-import org.jwildfire.create.eden.group.GroupMember;
+public class BasePrimitive implements Primitive {
+  protected final static double DFLT_SIZE = 10;
 
-public interface Primitive extends GroupMember {
+  private final Point position = new Point();
+  private final Point rotate = new Point();
+  private final Point size = new Point(1.0, 1.0, 1.0);
 
-  public Point getPosition();
+  @Override
+  public Point getPosition() {
+    return position;
+  }
 
-  public Point getRotate();
+  @Override
+  public Point getRotate() {
+    return rotate;
+  }
 
-  public Point getSize();
+  @Override
+  public Point getSize() {
+    return size;
+  }
 
 }
