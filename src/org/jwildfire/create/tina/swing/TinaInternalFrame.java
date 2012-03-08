@@ -10,6 +10,8 @@ import java.awt.GridBagLayout;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.SystemColor;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 
 import javax.swing.BorderFactory;
@@ -2056,37 +2058,37 @@ public class TinaInternalFrame extends JInternalFrame {
   private JPanel getTinaAffineTransformationPanel() {
     if (tinaAffineTransformationPanel == null) {
       affineC21Lbl = new JLabel();
-      affineC21Lbl.setText("c21");
+      affineC21Lbl.setText("O2");
       affineC21Lbl.setLocation(new Point(188, 28));
       affineC21Lbl.setSize(new Dimension(24, 22));
       affineC21Lbl.setFont(new Font("Dialog", Font.BOLD, 10));
       affineC21Lbl.setPreferredSize(new Dimension(24, 22));
       affineC20Lbl = new JLabel();
-      affineC20Lbl.setText("c20");
+      affineC20Lbl.setText("O1");
       affineC20Lbl.setLocation(new Point(188, 4));
       affineC20Lbl.setSize(new Dimension(24, 22));
       affineC20Lbl.setFont(new Font("Dialog", Font.BOLD, 10));
       affineC20Lbl.setPreferredSize(new Dimension(24, 22));
       affineC11Lbl = new JLabel();
-      affineC11Lbl.setText("c11");
+      affineC11Lbl.setText("Y2");
       affineC11Lbl.setLocation(new Point(96, 28));
       affineC11Lbl.setSize(new Dimension(24, 22));
       affineC11Lbl.setFont(new Font("Dialog", Font.BOLD, 10));
       affineC11Lbl.setPreferredSize(new Dimension(24, 22));
       affineC10Lbl = new JLabel();
-      affineC10Lbl.setText("c10");
+      affineC10Lbl.setText("Y1");
       affineC10Lbl.setLocation(new Point(96, 4));
       affineC10Lbl.setSize(new Dimension(24, 22));
       affineC10Lbl.setFont(new Font("Dialog", Font.BOLD, 10));
       affineC10Lbl.setPreferredSize(new Dimension(24, 22));
       affineC01Lbl = new JLabel();
-      affineC01Lbl.setText("c01");
+      affineC01Lbl.setText("X2");
       affineC01Lbl.setFont(new Font("Dialog", Font.BOLD, 10));
       affineC01Lbl.setLocation(new Point(4, 28));
       affineC01Lbl.setSize(new Dimension(24, 22));
       affineC01Lbl.setPreferredSize(new Dimension(24, 22));
       affineC00Lbl = new JLabel();
-      affineC00Lbl.setText("c00");
+      affineC00Lbl.setText("X1");
       affineC00Lbl.setLocation(new Point(4, 4));
       affineC00Lbl.setSize(new Dimension(24, 22));
       affineC00Lbl.setFont(new Font("Dialog", Font.BOLD, 10));
@@ -3030,6 +3032,11 @@ public class TinaInternalFrame extends JInternalFrame {
   private JTextField getAffineC00REd() {
     if (affineC00REd == null) {
       affineC00REd = new JTextField();
+      affineC00REd.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.affineC00REd_changed();
+        }
+      });
       affineC00REd.setPreferredSize(new Dimension(56, 22));
       affineC00REd.setText("");
       affineC00REd.setLocation(new Point(30, 4));
@@ -3049,6 +3056,11 @@ public class TinaInternalFrame extends JInternalFrame {
   private JTextField getAffineC01REd() {
     if (affineC01REd == null) {
       affineC01REd = new JTextField();
+      affineC01REd.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.affineC01REd_changed();
+        }
+      });
       affineC01REd.setPreferredSize(new Dimension(56, 22));
       affineC01REd.setText("");
       affineC01REd.setLocation(new Point(30, 28));
@@ -3068,6 +3080,11 @@ public class TinaInternalFrame extends JInternalFrame {
   private JTextField getAffineC10REd() {
     if (affineC10REd == null) {
       affineC10REd = new JTextField();
+      affineC10REd.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.affineC10REd_changed();
+        }
+      });
       affineC10REd.setPreferredSize(new Dimension(56, 22));
       affineC10REd.setText("");
       affineC10REd.setLocation(new Point(122, 4));
@@ -3087,6 +3104,11 @@ public class TinaInternalFrame extends JInternalFrame {
   private JTextField getAffineC11REd() {
     if (affineC11REd == null) {
       affineC11REd = new JTextField();
+      affineC11REd.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.affineC11REd_changed();
+        }
+      });
       affineC11REd.setPreferredSize(new Dimension(56, 22));
       affineC11REd.setText("");
       affineC11REd.setLocation(new Point(122, 28));
