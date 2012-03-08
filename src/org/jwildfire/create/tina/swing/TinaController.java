@@ -2185,6 +2185,10 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     mouseEditZoomOutButton.setEnabled(currFlame != null);
     toggleTrianglesButton.setEnabled(currFlame != null);
 
+    affineC00REd.setEditable(enabled);
+    affineC01REd.setEditable(enabled);
+    affineC10REd.setEditable(enabled);
+    affineC11REd.setEditable(enabled);
     affineC20REd.setEditable(enabled);
     affineC21REd.setEditable(enabled);
     affineResetTransformButton.setEnabled(enabled);
@@ -3288,7 +3292,6 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
         xForm.setCoeff20(value);
       }
       transformationTableClicked();
-      //      refreshFlameImage();
     }
   }
 
@@ -3898,6 +3901,74 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
         refreshPaletteUI(palette);
         refreshFlameImage(false);
       }
+    }
+  }
+
+  public void affineC01REd_changed() {
+    if (gridRefreshing || cmbRefreshing) {
+      return;
+    }
+    XForm xForm = getCurrXForm();
+    if (xForm != null) {
+      double value = Tools.stringToDouble(affineC01REd.getText());
+      if (affineEditPostTransformButton.isSelected()) {
+        xForm.setPostCoeff01(value);
+      }
+      else {
+        xForm.setCoeff01(value);
+      }
+      transformationTableClicked();
+    }
+  }
+
+  public void affineC11REd_changed() {
+    if (gridRefreshing || cmbRefreshing) {
+      return;
+    }
+    XForm xForm = getCurrXForm();
+    if (xForm != null) {
+      double value = Tools.stringToDouble(affineC11REd.getText());
+      if (affineEditPostTransformButton.isSelected()) {
+        xForm.setPostCoeff11(value);
+      }
+      else {
+        xForm.setCoeff11(value);
+      }
+      transformationTableClicked();
+    }
+  }
+
+  public void affineC00REd_changed() {
+    if (gridRefreshing || cmbRefreshing) {
+      return;
+    }
+    XForm xForm = getCurrXForm();
+    if (xForm != null) {
+      double value = Tools.stringToDouble(affineC00REd.getText());
+      if (affineEditPostTransformButton.isSelected()) {
+        xForm.setPostCoeff00(value);
+      }
+      else {
+        xForm.setCoeff00(value);
+      }
+      transformationTableClicked();
+    }
+  }
+
+  public void affineC10REd_changed() {
+    if (gridRefreshing || cmbRefreshing) {
+      return;
+    }
+    XForm xForm = getCurrXForm();
+    if (xForm != null) {
+      double value = Tools.stringToDouble(affineC10REd.getText());
+      if (affineEditPostTransformButton.isSelected()) {
+        xForm.setPostCoeff10(value);
+      }
+      else {
+        xForm.setCoeff10(value);
+      }
+      transformationTableClicked();
     }
   }
 
