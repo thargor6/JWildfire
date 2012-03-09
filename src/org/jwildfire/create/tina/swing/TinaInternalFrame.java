@@ -3372,7 +3372,7 @@ public class TinaInternalFrame extends JInternalFrame {
       affineMoveUpButton.setText("");
       affineMoveUpButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.xForm_moveUp();
+          tinaController.xForm_moveUp(1.0);
         }
       });
     }
@@ -3396,7 +3396,7 @@ public class TinaInternalFrame extends JInternalFrame {
       affineMoveDownButton.setText("");
       affineMoveDownButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.xForm_moveDown();
+          tinaController.xForm_moveDown(1.0);
         }
       });
     }
@@ -3420,7 +3420,7 @@ public class TinaInternalFrame extends JInternalFrame {
       affineMoveLeftButton.setFont(new Font("Dialog", Font.BOLD, 10));
       affineMoveLeftButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.xForm_moveLeft();
+          tinaController.xForm_moveLeft(1.0);
         }
       });
     }
@@ -3444,7 +3444,7 @@ public class TinaInternalFrame extends JInternalFrame {
       affineMoveRightButton.setFont(new Font("Dialog", Font.BOLD, 10));
       affineMoveRightButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.xForm_moveRight();
+          tinaController.xForm_moveRight(1.0);
         }
       });
     }

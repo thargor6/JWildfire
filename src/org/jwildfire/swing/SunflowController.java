@@ -31,8 +31,8 @@ import javax.swing.filechooser.FileFilter;
 import org.jwildfire.base.Prefs;
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.eden.io.SunflowWriter;
-import org.jwildfire.create.eden.primitive.Box;
 import org.jwildfire.create.eden.primitive.Point;
+import org.jwildfire.create.eden.primitive.Torus;
 import org.jwildfire.create.eden.scene.Scene;
 import org.sunflow.SunflowAPI;
 import org.sunflow.system.ImagePanel;
@@ -357,38 +357,43 @@ public class SunflowController implements UserInterface {
 
   public static class Worker {
     private final Scene scene;
-    private final Point position = new Point(0.0, 0.0, 0.0);
-    private final Point size = new Point(1.0, 1.0, 1.0);
-    private final Point rotate = new Point(0.0, 0.0, 0.0);
+    private final Point deltaSize = new Point(0.02, 0.02, 0.02);
+    private final Point deltaRotate = new Point(6, 0, 18);
 
-    private final Point deltaSize = new Point(0.12, 0.06, 0.18);
-    private final Point deltaPosition = new Point(0.25, 0.25, 0.0);
-    private final Point deltaRotate = new Point(16, 8, 0.0);
+    private final Point position = new Point(-150.0, 50.0, 0.0);
+    private final Point direction = new Point(16.0, 0, 0);
+    private final Point rotate = new Point(0.0, 0.0, 0.0);
+    private final Point size = new Point(3.0, 3.0, 3.0);
 
     public Worker(Scene pScene, double pX, double pY, double pZ) {
       scene = pScene;
-      position.setValue(pX, pY, pZ);
+      //      position.setValue(pX, pY, pZ);
     }
 
     public void performStep() {
-      position.setX(position.getX() + deltaPosition.getX());
-      position.setY(position.getY() + deltaPosition.getY());
-      position.setZ(position.getZ() + deltaPosition.getZ());
+      position.setX(position.getX() + direction.getX());
+      position.setY(position.getY() + direction.getY());
+      position.setZ(position.getZ() + direction.getZ());
+      //      System.out.println("POS " + position.getX() + " " + position.getY() + " " + position.getZ());
+      direction.rotate(deltaRotate.getX(), deltaRotate.getY(), deltaRotate.getZ());
+      rotate.setX(rotate.getX() + deltaRotate.getX());
+      rotate.setY(rotate.getY() + deltaRotate.getY());
+      rotate.setZ(rotate.getZ() + deltaRotate.getZ());
 
-      //      rotate.setX(rotate.getX() + deltaRotate.getX());
-      //      rotate.setY(rotate.getY() + deltaRotate.getY());
-      //      rotate.setZ(rotate.getZ() + deltaRotate.getZ());
+      //      System.out.println("  ROT " + rotate.getX() + " " + rotate.getY() + " " + rotate.getZ());
 
       size.setX(size.getX() + deltaSize.getX());
       size.setY(size.getY() + deltaSize.getY());
       size.setZ(size.getZ() + deltaSize.getZ());
+      //      System.out.println("  SIZE " + size.getX() + " " + size.getY() + " " + size.getZ());
 
-      Box box = new Box();
+      Torus box = new Torus();
       box.getPosition().assign(position);
       box.getSize().assign(size);
       box.getRotate().assign(rotate);
       scene.addObject(box);
 
+      deltaRotate.setZ(deltaRotate.getZ() - 0.1 * (0.5 + Math.random()));
     }
   }
 
@@ -432,7 +437,7 @@ public class SunflowController implements UserInterface {
     //      }
 
     Worker worker1 = new Worker(scene, 0, 0, 0);
-    for (int i = 0; i < 100; i++) {
+    for (int i = 0; i < 3; i++) {
       worker1.performStep();
     }
 

@@ -26,6 +26,8 @@ import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.Transferable;
 import java.awt.event.ActionEvent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.InputStream;
@@ -722,7 +724,8 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
         "}\r\n");
   }
 
-  private static boolean dragging = false;
+  private boolean dragging = false;
+  private boolean keypressing = false;
 
   private FlamePanel getFlamePanel() {
     if (flamePanel == null) {
@@ -733,6 +736,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       flamePanel = new FlamePanel(img, 0, 0, centerPanel.getWidth(), this, toggleTrianglesButton);
       flamePanel.setRenderWidth(prefs.getTinaRenderImageWidth());
       flamePanel.setRenderHeight(prefs.getTinaRenderImageHeight());
+      flamePanel.setFocusable(true);
       flamePanel.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
         @Override
         public void mouseDragged(MouseEvent e) {
@@ -749,6 +753,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
         @Override
         public void mouseClicked(java.awt.event.MouseEvent e) {
           flamePanel_mouseClicked(e);
+          flamePanel.requestFocusInWindow();
         }
 
         @Override
@@ -760,11 +765,95 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
         }
 
       });
+      flamePanel.addKeyListener(new KeyAdapter() {
+
+        @Override
+        public void keyReleased(KeyEvent e) {
+          if (keypressing) {
+            return;
+          }
+          keypressing = true;
+          try {
+            boolean altPressed = e.isAltDown(); // || e.isAltGraphDown());
+            boolean shiftPressed = e.isShiftDown();
+            boolean ctrlPressed = e.isControlDown();
+            switch (e.getKeyCode()) {
+            // left
+              case 37:
+                if (altPressed) {
+                  xForm_rotateLeft();
+                }
+                else if (ctrlPressed) {
+                  xForm_moveLeft(0.1);
+                }
+                else if (shiftPressed) {
+                  xForm_moveLeft(10.0);
+                }
+                else {
+                  xForm_moveLeft(1.0);
+                }
+                break;
+              // right
+              case 39:
+                if (altPressed) {
+                  xForm_rotateRight();
+                }
+                else if (ctrlPressed) {
+                  xForm_moveRight(0.1);
+                }
+                else if (shiftPressed) {
+                  xForm_moveRight(10.0);
+                }
+                else {
+                  xForm_moveRight(1.0);
+                }
+                break;
+              // up
+              case 38:
+                if (altPressed) {
+                  xForm_enlarge();
+                }
+                else if (ctrlPressed) {
+                  xForm_moveUp(0.1);
+                }
+                else if (shiftPressed) {
+                  xForm_moveUp(10.0);
+                }
+                else {
+                  xForm_moveUp(1.0);
+                }
+                break;
+              // down
+              case 40:
+                if (altPressed) {
+                  xForm_shrink();
+                }
+                else if (ctrlPressed) {
+                  xForm_moveDown(0.1);
+                }
+                else if (shiftPressed) {
+                  xForm_moveDown(10.0);
+                }
+                else {
+                  xForm_moveDown(1.0);
+                }
+                break;
+            }
+          }
+          finally {
+            flamePanel.requestFocus();
+            keypressing = false;
+          }
+        }
+
+      });
+
       flamePanel.setSelectedXForm(getCurrXForm());
       centerPanel.remove(0);
       centerPanel.add(flamePanel, BorderLayout.CENTER);
       centerPanel.getParent().validate();
       centerPanel.repaint();
+      flamePanel.requestFocusInWindow();
     }
     return flamePanel;
   }
@@ -2416,12 +2505,12 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     refreshFlameImage(false);
   }
 
-  public void xForm_moveRight() {
+  public void xForm_moveRight(double pScale) {
     if (!toggleTrianglesButton.isSelected()) {
       flamePanel.setDrawFlame(true);
       toggleTrianglesButton.setSelected(true);
     }
-    double amount = Tools.stringToDouble(affineMoveAmountREd.getText());
+    double amount = Tools.stringToDouble(affineMoveAmountREd.getText()) * pScale;
     XFormTransformService.globalTranslate(getCurrXForm(), amount, 0, affineEditPostTransformButton.isSelected());
     transformationTableClicked();
     //    refreshFlameImage();
@@ -2438,12 +2527,12 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     //    refreshFlameImage();
   }
 
-  public void xForm_moveLeft() {
+  public void xForm_moveLeft(double pScale) {
     if (!toggleTrianglesButton.isSelected()) {
       flamePanel.setDrawFlame(true);
       toggleTrianglesButton.setSelected(true);
     }
-    double amount = Tools.stringToDouble(affineMoveAmountREd.getText());
+    double amount = Tools.stringToDouble(affineMoveAmountREd.getText()) * pScale;
     XFormTransformService.globalTranslate(getCurrXForm(), -amount, 0, affineEditPostTransformButton.isSelected());
     transformationTableClicked();
     //    refreshFlameImage();
@@ -2502,23 +2591,23 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     //    refreshFlameImage();
   }
 
-  public void xForm_moveUp() {
+  public void xForm_moveUp(double pScale) {
     if (!toggleTrianglesButton.isSelected()) {
       flamePanel.setDrawFlame(true);
       toggleTrianglesButton.setSelected(true);
     }
-    double amount = Tools.stringToDouble(affineMoveAmountREd.getText());
+    double amount = Tools.stringToDouble(affineMoveAmountREd.getText()) * pScale;
     XFormTransformService.globalTranslate(getCurrXForm(), 0, -amount, affineEditPostTransformButton.isSelected());
     transformationTableClicked();
     //    refreshFlameImage();
   }
 
-  public void xForm_moveDown() {
+  public void xForm_moveDown(double pScale) {
     if (!toggleTrianglesButton.isSelected()) {
       flamePanel.setDrawFlame(true);
       toggleTrianglesButton.setSelected(true);
     }
-    double amount = Tools.stringToDouble(affineMoveAmountREd.getText());
+    double amount = Tools.stringToDouble(affineMoveAmountREd.getText()) * pScale;
     XFormTransformService.globalTranslate(getCurrXForm(), 0, amount, affineEditPostTransformButton.isSelected());
     transformationTableClicked();
     //    refreshFlameImage();

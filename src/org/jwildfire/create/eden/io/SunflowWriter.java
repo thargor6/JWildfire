@@ -20,7 +20,8 @@ public class SunflowWriter {
   public String createSunflowScene(Scene pScene) {
     StringBuffer sb = new StringBuffer();
     sb.append("   image {\r\n" +
-        "      resolution 1920 1080\r\n" +
+        //        "      resolution 1920 1080\r\n" +
+        "      resolution 960 540\r\n" +
         "      aa 1 1\r\n" +
         "      samples 8\r\n" +
         "      filter gaussian\r\n" +
@@ -112,20 +113,20 @@ public class SunflowWriter {
         Math.abs(rotate.getX()) > Tools.EPSILON || Math.abs(rotate.getY()) > Tools.EPSILON || Math.abs(rotate.getZ()) > Tools.EPSILON ||
         Math.abs(size.getX() - 1.0) > Tools.EPSILON || Math.abs(size.getY() - 1.0) > Tools.EPSILON || Math.abs(size.getZ() - 1.0) > Tools.EPSILON) {
       pSB.append("  transform {\n");
-      if (Math.abs(position.getX()) > Tools.EPSILON || Math.abs(position.getY()) > Tools.EPSILON || Math.abs(position.getZ()) > Tools.EPSILON) {
-        pSB.append("    translate " + pPrimitive.getPosition().getX() + " " + pPrimitive.getPosition().getZ() + " " + pPrimitive.getPosition().getY() + "\n");
-      }
       if (Math.abs(rotate.getX()) > Tools.EPSILON) {
         pSB.append("    rotatex " + pPrimitive.getRotate().getX() + "\n");
       }
       if (Math.abs(rotate.getY()) > Tools.EPSILON) {
-        pSB.append("    rotatey " + pPrimitive.getRotate().getY() + "\n");
+        pSB.append("    rotatez " + (-pPrimitive.getRotate().getY()) + "\n");
       }
-      if (Math.abs(position.getZ()) > Tools.EPSILON) {
-        pSB.append("    rotatez " + pPrimitive.getRotate().getZ() + "\n");
+      if (Math.abs(rotate.getZ()) > Tools.EPSILON) {
+        pSB.append("    rotatey " + (-pPrimitive.getRotate().getZ()) + "\n");
       }
       if (Math.abs(size.getX() - 1.0) > Tools.EPSILON || Math.abs(size.getY() - 1.0) > Tools.EPSILON || Math.abs(size.getZ() - 1.0) > Tools.EPSILON) {
         pSB.append("    scale " + pPrimitive.getSize().getX() + " " + pPrimitive.getSize().getZ() + " " + pPrimitive.getSize().getY() + "\n");
+      }
+      if (Math.abs(position.getX()) > Tools.EPSILON || Math.abs(position.getY()) > Tools.EPSILON || Math.abs(position.getZ()) > Tools.EPSILON) {
+        pSB.append("    translate " + pPrimitive.getPosition().getX() + " " + pPrimitive.getPosition().getZ() + " " + pPrimitive.getPosition().getY() + "\n");
       }
       pSB.append("  }\n");
     }

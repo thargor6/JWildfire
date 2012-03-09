@@ -16,6 +16,8 @@
 */
 package org.jwildfire.create.eden.primitive;
 
+import org.jwildfire.base.Tools;
+
 public class Point {
   private double x;
   private double y;
@@ -35,7 +37,7 @@ public class Point {
   }
 
   public void setX(double pX) {
-    x = pX;
+    x = limitDegress(pX);
   }
 
   public double getY() {
@@ -43,7 +45,7 @@ public class Point {
   }
 
   public void setY(double pY) {
-    y = pY;
+    y = limitDegress(pY);
   }
 
   public double getZ() {
@@ -51,7 +53,18 @@ public class Point {
   }
 
   public void setZ(double pZ) {
-    z = pZ;
+    z = limitDegress(pZ);
+  }
+
+  private double limitDegress(double pZ) {
+    double deg = pZ;
+    while (deg > 360.0) {
+      deg -= 360.0;
+    }
+    while (deg < -360.0) {
+      deg += 360.0;
+    }
+    return deg;
   }
 
   public void setValue(double pX, double pY, double pZ) {
@@ -68,5 +81,48 @@ public class Point {
     x = pSrc.getX();
     y = pSrc.getY();
     z = pSrc.getZ();
+  }
+
+  public void translate(double pX, double pY, double pZ) {
+    x += pX;
+    y += pY;
+    z += pZ;
+  }
+
+  public void scale(double pX, double pY, double pZ) {
+    x *= pX;
+    y *= pZ;
+    z *= pZ;
+  }
+
+  public void rotate(double pX, double pY, double pZ) {
+    if (Math.abs(pX) > Tools.EPSILON) {
+      double a = Math.toRadians(pX);
+      double sinX = Math.sin(a);
+      double cosX = Math.cos(a);
+      double yr = cosX * y - sinX * z;
+      double zr = sinX * y + cosX * z;
+      y = yr;
+      z = zr;
+    }
+    if (Math.abs(pY) > Tools.EPSILON) {
+      double a = Math.toRadians(pY);
+      double sinY = Math.sin(a);
+      double cosY = Math.cos(a);
+      double xr = cosY * x + sinY * z;
+      double zr = -sinY * x + cosY * z;
+      x = xr;
+      z = zr;
+    }
+    if (Math.abs(pZ) > Tools.EPSILON) {
+      double a = Math.toRadians(pZ);
+      double sinZ = Math.sin(a);
+      double cosZ = Math.cos(a);
+      double xr = cosZ * x - sinZ * y;
+      double yr = sinZ * x + cosZ * y;
+      x = xr;
+      y = yr;
+    }
+
   }
 }
