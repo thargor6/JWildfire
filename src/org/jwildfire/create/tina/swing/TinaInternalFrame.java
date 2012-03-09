@@ -30,6 +30,7 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.JTextPane;
 import javax.swing.JToggleButton;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
@@ -2951,7 +2952,7 @@ public class TinaInternalFrame extends JInternalFrame {
         getRootTabbedPane(), getAffineFlipHorizontalButton(), getAffineFlipVerticalButton(), getAnimateLightScriptCmb(),
         getDarkTrianglesToggleButton(), getShadingBlurRadiusREd(), getShadingBlurRadiusSlider(), getShadingBlurFadeREd(),
         getShadingBlurFadeSlider(), getShadingBlurFallOffREd(), getShadingBlurFallOffSlider(), getScriptTextArea(),
-        getAffineScaleXButton(), getAffineScaleYButton(), getGradientLibraryCenterPanel(), getGradientLibraryGradientCmb());
+        getAffineScaleXButton(), getAffineScaleYButton(), getGradientLibraryCenterPanel(), getGradientLibraryGradientCmb(), getHelpPane());
     tinaController.refreshing = tinaController.cmbRefreshing = tinaController.gridRefreshing = true;
     try {
       for (NonlinearControlsRow row : nonlinearControlsRows) {
@@ -8175,8 +8176,25 @@ public class TinaInternalFrame extends JInternalFrame {
       rootTabbedPane.addTab("Animate", null, getTinaAnimatePanel(), null);
       rootTabbedPane.addTab("Settings", null, getSettingsPanel(), null);
       rootTabbedPane.addTab("Batch render", null, getBatchRenderPanel(), null);
+
+      JPanel helpPanel = new JPanel();
+      rootTabbedPane.addTab("Help/About", null, helpPanel, null);
+      helpPanel.setLayout(new BorderLayout(0, 0));
+
+      helpPanel.add(getHelpPane(), BorderLayout.CENTER);
     }
     return rootTabbedPane;
+  }
+
+  private JTextPane helpPane = null;
+
+  private JTextPane getHelpPane() {
+    if (helpPane == null) {
+      helpPane = new JTextPane();
+      helpPane.setEditable(false);
+      return helpPane;
+    }
+    return helpPane;
   }
 
   /**
@@ -8966,5 +8984,4 @@ public class TinaInternalFrame extends JInternalFrame {
     }
     return gradientLibraryGradientCmb;
   }
-
 } //  @jve:decl-index=0:visual-constraint="10,10"

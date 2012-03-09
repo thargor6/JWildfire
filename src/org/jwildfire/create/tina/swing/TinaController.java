@@ -29,8 +29,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -51,6 +54,7 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.JTextPane;
 import javax.swing.JToggleButton;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingUtilities;
@@ -398,6 +402,8 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
   private final JButton batchRenderFilesRemoveButton;
   private final JButton batchRenderFilesRemoveAllButton;
   private final JButton batchRenderStartButton;
+  //
+  private final JTextPane helpPane;
 
   public TinaController(ErrorHandler pErrorHandler, Prefs pPrefs, JPanel pCenterPanel, JTextField pCameraRollREd, JSlider pCameraRollSlider, JTextField pCameraPitchREd,
       JSlider pCameraPitchSlider, JTextField pCameraYawREd, JSlider pCameraYawSlider, JTextField pCameraPerspectiveREd, JSlider pCameraPerspectiveSlider,
@@ -438,7 +444,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       JButton pAffineFlipVerticalButton, JComboBox pAnimateLightScriptCmb, JToggleButton pToggleDarkTrianglesButton,
       JTextField pShadingBlurRadiusREd, JSlider pShadingBlurRadiusSlider, JTextField pShadingBlurFadeREd, JSlider pShadingBlurFadeSlider,
       JTextField pShadingBlurFallOffREd, JSlider pShadingBlurFallOffSlider, JTextArea pScriptTextArea, JToggleButton pAffineScaleXButton,
-      JToggleButton pAffineScaleYButton, JPanel pGradientLibraryPanel, JComboBox pGradientLibraryGradientCmb) {
+      JToggleButton pAffineScaleYButton, JPanel pGradientLibraryPanel, JComboBox pGradientLibraryGradientCmb, JTextPane pHelpPane) {
     errorHandler = pErrorHandler;
     prefs = pPrefs;
     centerPanel = pCenterPanel;
@@ -626,6 +632,26 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     batchRenderFilesRemoveAllButton = pBatchRenderFilesRemoveAllButton;
     batchRenderStartButton = pBatchRenderStartButton;
     rootTabbedPane = pRootTabbedPane;
+    helpPane = pHelpPane;
+    helpPane.setContentType("text/html");
+    try {
+      InputStream is = this.getClass().getResourceAsStream("TINA.html");
+      StringBuffer content = new StringBuffer();
+      String lineFeed = System.getProperty("line.separator");
+      String line;
+      Reader r = new InputStreamReader(is, "utf-8");
+      BufferedReader in = new BufferedReader(r);
+      while ((line = in.readLine()) != null) {
+        content.append(line).append(lineFeed);
+      }
+      in.close();
+
+      helpPane.setText(content.toString());
+
+    }
+    catch (Exception ex) {
+      ex.printStackTrace();
+    }
 
     scriptTextArea = pScriptTextArea;
 
