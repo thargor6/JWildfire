@@ -54,6 +54,7 @@ import javax.swing.border.SoftBevelBorder;
 
 import org.jwildfire.base.Prefs;
 import org.jwildfire.base.Tools;
+import org.jwildfire.create.eden.swing.EDENInternalFrame;
 import org.jwildfire.create.tina.randomflame.RandomFlameGeneratorList;
 import org.jwildfire.create.tina.swing.TinaController;
 import org.jwildfire.create.tina.swing.TinaInternalFrame;
@@ -73,7 +74,7 @@ public class Desktop extends JApplet {
   private JMenu windowMenu = null;
   private JCheckBoxMenuItem operatorsMenuItem = null;
   private JCheckBoxMenuItem tinaMenuItem = null;
-  private JCheckBoxMenuItem sunFlowMenuItem = null;
+  private JCheckBoxMenuItem edenMenuItem = null;
   private JMenuItem openMenuItem = null;
   private Prefs prefs = null;
 
@@ -91,7 +92,7 @@ public class Desktop extends JApplet {
       mainDesktopPane.add(getOperatorsInternalFrame(), null);
       mainDesktopPane.add(getFormulaExplorerInternalFrame(), null);
       mainDesktopPane.add(getTinaInternalFrame(), null);
-      mainDesktopPane.add(getSunFlowInternalFrame(), null);
+      mainDesktopPane.add(getEDENInternalFrame(), null);
       mainDesktopPane.add(getPreferencesInternalFrame(), null);
       errorHandler = new StandardErrorHandler(mainDesktopPane, getShowErrorDlg(), getShowErrorDlgMessageTextArea(),
           getShowErrorDlgStacktraceTextArea());
@@ -155,8 +156,8 @@ public class Desktop extends JApplet {
           scriptFrame.getEnvelopeController(), renderController);
       renderController.setActionList(mainController.getActionList());
 
-      SunflowInternalFrame sunflowFrame = (SunflowInternalFrame) getSunFlowInternalFrame();
-      sunflowFrame.createController(mainController, errorHandler, prefs).newScene();
+      EDENInternalFrame edenFrame = (EDENInternalFrame) getEDENInternalFrame();
+      edenFrame.createController(mainController, errorHandler, prefs).newScene();
 
       tinaController.setMainController(mainController);
 
@@ -183,7 +184,7 @@ public class Desktop extends JApplet {
       windowMenu.add(getScriptMenuItem());
       windowMenu.add(getFormulaExplorerMenuItem());
       windowMenu.add(getTinaMenuItem());
-      windowMenu.add(getSunFlowMenuItem());
+      windowMenu.add(getEDENMenuItem());
       windowMenu.add(getPreferencesMenuItem());
     }
     return windowMenu;
@@ -233,18 +234,18 @@ public class Desktop extends JApplet {
    * 
    * @return javax.swing.JCheckBoxMenuItem
    */
-  private JCheckBoxMenuItem getSunFlowMenuItem() {
-    if (sunFlowMenuItem == null) {
-      sunFlowMenuItem = new JCheckBoxMenuItem();
-      sunFlowMenuItem.setText("SunFlow");
-      sunFlowMenuItem.setEnabled(true);
-      sunFlowMenuItem.addActionListener(new java.awt.event.ActionListener() {
+  private JCheckBoxMenuItem getEDENMenuItem() {
+    if (edenMenuItem == null) {
+      edenMenuItem = new JCheckBoxMenuItem();
+      edenMenuItem.setText("Structure Syntesizer");
+      edenMenuItem.setEnabled(true);
+      edenMenuItem.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
-          sunFlowMenuItem_actionPerformed(e);
+          edenMenuItem_actionPerformed(e);
         }
       });
     }
-    return sunFlowMenuItem;
+    return edenMenuItem;
   }
 
   /**
@@ -1370,14 +1371,14 @@ public class Desktop extends JApplet {
   }
 
   /**
-   * This method initializes sunFlowInternalFrame	
+   * This method initializes edenInternalFrame	
    * 	
    * @return javax.swing.JInternalFrame	
    */
-  private JInternalFrame getSunFlowInternalFrame() {
-    if (sunFlowInternalFrame == null) {
-      sunFlowInternalFrame = new SunflowInternalFrame();
-      sunFlowInternalFrame
+  private JInternalFrame getEDENInternalFrame() {
+    if (edenInternalFrame == null) {
+      edenInternalFrame = new EDENInternalFrame();
+      edenInternalFrame
           .addInternalFrameListener(new javax.swing.event.InternalFrameAdapter() {
             public void internalFrameDeactivated(
                 javax.swing.event.InternalFrameEvent e) {
@@ -1390,7 +1391,7 @@ public class Desktop extends JApplet {
             }
           });
     }
-    return sunFlowInternalFrame;
+    return edenInternalFrame;
   }
 
   /**
@@ -1649,18 +1650,18 @@ public class Desktop extends JApplet {
     }
   }
 
-  private void sunFlowMenuItem_actionPerformed(java.awt.event.ActionEvent e) {
-    if (sunFlowMenuItem.isSelected()) {
-      sunFlowInternalFrame.setVisible(true);
+  private void edenMenuItem_actionPerformed(java.awt.event.ActionEvent e) {
+    if (edenMenuItem.isSelected()) {
+      edenInternalFrame.setVisible(true);
       try {
-        sunFlowInternalFrame.setSelected(true);
+        edenInternalFrame.setSelected(true);
       }
       catch (PropertyVetoException ex) {
         ex.printStackTrace();
       }
     }
     else {
-      sunFlowInternalFrame.setVisible(false);
+      edenInternalFrame.setVisible(false);
     }
   }
 
@@ -1815,10 +1816,10 @@ public class Desktop extends JApplet {
 
   private JInternalFrame tinaInternalFrame = null;
 
-  private JInternalFrame sunFlowInternalFrame = null;
+  private JInternalFrame edenInternalFrame = null;
 
   void enableControls() {
-    sunFlowMenuItem.setSelected(sunFlowInternalFrame.isVisible());
+    edenMenuItem.setSelected(edenInternalFrame.isVisible());
     tinaMenuItem.setSelected(tinaInternalFrame.isVisible());
     operatorsMenuItem.setSelected(operatorsInternalFrame.isVisible());
     scriptMenuItem.setSelected(scriptInternalFrame.isVisible());

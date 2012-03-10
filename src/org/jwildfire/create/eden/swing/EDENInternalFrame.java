@@ -14,7 +14,7 @@
   if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
   02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
-package org.jwildfire.swing;
+package org.jwildfire.create.eden.swing;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -32,11 +32,13 @@ import javax.swing.JTextArea;
 import javax.swing.WindowConstants;
 
 import org.jwildfire.base.Prefs;
+import org.jwildfire.swing.ErrorHandler;
+import org.jwildfire.swing.MainController;
 import org.sunflow.system.ImagePanel;
 
-public class SunflowInternalFrame extends JInternalFrame {
+public class EDENInternalFrame extends JInternalFrame {
   private static final long serialVersionUID = 1L;
-  private SunflowController sunflowController;
+  private EDENController sunflowController;
   private JPanel jContentPane = null;
   private JPanel northPanel = null;
   private JPanel southPanel = null;
@@ -50,7 +52,7 @@ public class SunflowInternalFrame extends JInternalFrame {
   /**
    * This is the xxx default constructor
    */
-  public SunflowInternalFrame() {
+  public EDENInternalFrame() {
     super();
     initialize();
   }
@@ -61,11 +63,11 @@ public class SunflowInternalFrame extends JInternalFrame {
    * @return void
    */
   private void initialize() {
-    this.setSize(1030, 627);
+    this.setSize(1188, 740);
     this.setClosable(true);
     this.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
     this.setIconifiable(true);
-    this.setTitle("SunFlow");
+    this.setTitle("Structure Synthesizer");
     this.setVisible(false);
     this.setResizable(true);
     this.setContentPane(getJContentPane());
@@ -134,11 +136,11 @@ public class SunflowInternalFrame extends JInternalFrame {
   private JSplitPane getHSplitPane() {
     if (hSplitPane == null) {
       hSplitPane = new JSplitPane();
-      hSplitPane.setDividerSize(16);
+      hSplitPane.setDividerSize(8);
       hSplitPane.setOneTouchExpandable(true);
       hSplitPane.setLeftComponent(getLeftSplitPanel());
       hSplitPane.setRightComponent(getRightSplitPanel());
-      hSplitPane.setDividerLocation(500);
+      hSplitPane.setDividerLocation(700);
     }
     return hSplitPane;
   }
@@ -359,7 +361,7 @@ public class SunflowInternalFrame extends JInternalFrame {
     return renderButton;
   }
 
-  public void setSunflowController(SunflowController sunflowController) {
+  public void setSunflowController(EDENController sunflowController) {
     this.sunflowController = sunflowController;
   }
 
@@ -498,8 +500,8 @@ public class SunflowInternalFrame extends JInternalFrame {
     return consoleTextArea1;
   }
 
-  public SunflowController createController(MainController pMainController, ErrorHandler pErrorHandler, Prefs pPrefs) {
-    sunflowController = new SunflowController(pMainController, pErrorHandler, pPrefs, getEditorTextArea(), getConsoleTextArea(),
+  public EDENController createController(MainController pMainController, ErrorHandler pErrorHandler, Prefs pPrefs) {
+    sunflowController = new EDENController(pMainController, pErrorHandler, pPrefs, getEditorTextArea(), getConsoleTextArea(),
         getImagePanel(), getRenderButton(), getIprButton(), getLoadSceneButton(), getCancelRenderButton(),
         getBuildSceneButton(), getSaveSceneButton(), getClearConsoleButton(), getNewSceneButton());
     return sunflowController;

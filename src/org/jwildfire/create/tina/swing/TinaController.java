@@ -794,7 +794,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       flamePanel.addKeyListener(new KeyAdapter() {
 
         @Override
-        public void keyReleased(KeyEvent e) {
+        public void keyPressed(KeyEvent e) {
           if (keypressing) {
             return;
           }

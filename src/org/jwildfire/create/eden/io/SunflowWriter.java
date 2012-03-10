@@ -21,7 +21,8 @@ public class SunflowWriter {
     StringBuffer sb = new StringBuffer();
     sb.append("   image {\r\n" +
         //        "      resolution 1920 1080\r\n" +
-        "      resolution 960 540\r\n" +
+        //        "      resolution 960 540\r\n" +
+        "      resolution 720 405\r\n" +
         "      aa 1 1\r\n" +
         "      samples 8\r\n" +
         "      filter gaussian\r\n" +

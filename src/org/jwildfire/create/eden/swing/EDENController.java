@@ -14,7 +14,7 @@
   if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
   02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
-package org.jwildfire.swing;
+package org.jwildfire.create.eden.swing;
 
 import java.io.File;
 import java.io.IOException;
@@ -34,6 +34,8 @@ import org.jwildfire.create.eden.io.SunflowWriter;
 import org.jwildfire.create.eden.primitive.Point;
 import org.jwildfire.create.eden.primitive.Torus;
 import org.jwildfire.create.eden.scene.Scene;
+import org.jwildfire.swing.ErrorHandler;
+import org.jwildfire.swing.MainController;
 import org.sunflow.SunflowAPI;
 import org.sunflow.system.ImagePanel;
 import org.sunflow.system.Timer;
@@ -42,7 +44,7 @@ import org.sunflow.system.UI.Module;
 import org.sunflow.system.UI.PrintLevel;
 import org.sunflow.system.UserInterface;
 
-public class SunflowController implements UserInterface {
+public class EDENController implements UserInterface {
   private enum SceneType {
     JAVA, SC
   };
@@ -75,7 +77,7 @@ public class SunflowController implements UserInterface {
   private SceneType sceneType = null;
   private Status status = Status.IDLE;
 
-  public SunflowController(MainController pMainController, ErrorHandler pErrorHandler, Prefs pPrefs, JTextArea pEditorTextArea, JTextArea pConsoleTextArea, ImagePanel pImagePanel,
+  public EDENController(MainController pMainController, ErrorHandler pErrorHandler, Prefs pPrefs, JTextArea pEditorTextArea, JTextArea pConsoleTextArea, ImagePanel pImagePanel,
       JButton pRenderButton, JButton pIprButton, JButton pLoadSceneButton, JButton pCancelRenderButton, JButton pBuildSceneButton, JButton pSaveSceneButton,
       JButton pClearConsoleButton, JButton pNewSceneButton) {
     mainController = pMainController;
@@ -437,7 +439,7 @@ public class SunflowController implements UserInterface {
     //      }
 
     Worker worker1 = new Worker(scene, 0, 0, 0);
-    for (int i = 0; i < 3; i++) {
+    for (int i = 0; i < 100; i++) {
       worker1.performStep();
     }
 
