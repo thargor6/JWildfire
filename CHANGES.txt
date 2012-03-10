@@ -1,3 +1,14 @@
+V0.40 (10.03.2012):
+ - Main: renamed the "Sunflow..." classes and visual elements into "EDEN..." or "Structure Synthsizer..."
+ - Fractal flame editor: basic help page
+ - Fractal flame editor: navigate triangles using the keyboard
+ - Structure Synthesizer: sphere, box, cylinder and torus primitive
+ - Fractal flame editor: parameters X1...O2 may be edited manually now
+ - Fractal flame editor: renamed c00...c21 parameters into X1...O2
+ - Base framework for the new structure synthesizer sub project called EDEN
+ - Fractal flame editor: new spherical3D_wf variation which is also used from within the "Spherical3D" random flame generator
+ - Fractal flame editor: new "Spherical3D" random flame generator
+
 V0.39 (28.02.2012):
  - Main: using the Noire-theme from JTattoo as default UI theme
  - Main: choose one of 12 available ui themes from within the Prefs windows

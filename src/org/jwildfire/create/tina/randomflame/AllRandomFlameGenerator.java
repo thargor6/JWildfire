@@ -23,44 +23,44 @@ public class AllRandomFlameGenerator extends RandomFlameGenerator {
   @Override
   protected Flame createFlame() {
     double r = Math.random();
-    if (r < 0.06) {
+    if (r < 0.10) {
       return new LinearRandomFlameGenerator().createFlame();
     }
-    else if (r < 0.12) {
+    else if (r < 0.16) {
       return new SimpleRandomFlameGenerator().createFlame();
     }
-    else if (r < 0.18) {
+    else if (r < 0.22) {
       return new GnarlRandomFlameGenerator().createFlame();
     }
-    else if (r < 0.24) {
+    else if (r < 0.28) {
       return new ExperimentalGnarlRandomFlameGenerator().createFlame();
     }
-    else if (r < 0.30) {
-      return new SubFlameRandomFlameGenerator().createFlame();
-    }
-    else if (r < 0.36) {
+    else if (r < 0.34) {
       return new BubblesRandomFlameGenerator().createFlame();
     }
-    else if (r > 0.42) {
+    else if (r < 0.40) {
+      return new Spherical3DRandomFlameGenerator().createFlame();
+    }
+    else if (r > 0.46) {
       return new TentacleRandomFlameGenerator().createFlame();
     }
-    else if (r > 0.48) {
-      return new ThreeDOnlyRandomFlameGenerator().createFlame();
-    }
-    else if (r < 0.54) {
-      return new Flowers3DRandomFlameGenerator().createFlame();
-    }
-    else if (r < 0.60) {
-      return new ExperimentalFlowers3DRandomFlameGenerator().createFlame();
-    }
-    else if (r < 0.66) {
+    else if (r > 0.52) {
       return new Bubbles3DRandomFlameGenerator().createFlame();
     }
-    else if (r < 0.72) {
+    else if (r < 0.58) {
+      return new Flowers3DRandomFlameGenerator().createFlame();
+    }
+    else if (r < 0.64) {
+      return new ExperimentalFlowers3DRandomFlameGenerator().createFlame();
+    }
+    else if (r < 0.70) {
+      return new ThreeDOnlyRandomFlameGenerator().createFlame();
+    }
+    else if (r < 0.76) {
       return new ExperimentalBubbles3DRandomFlameGenerator().createFlame();
     }
-    else if (r < 0.78) {
-      return new Spherical3DRandomFlameGenerator().createFlame();
+    else if (r < 0.82) {
+      return new SubFlameRandomFlameGenerator().createFlame();
     }
     else {
       return new ExperimentalSimpleRandomFlameGenerator().createFlame();
