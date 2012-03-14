@@ -157,7 +157,7 @@ public class Desktop extends JApplet {
       renderController.setActionList(mainController.getActionList());
 
       EDENInternalFrame edenFrame = (EDENInternalFrame) getEDENInternalFrame();
-      edenFrame.createController(mainController, errorHandler, prefs).newScene();
+      edenFrame.createController(mainController, errorHandler, prefs).newEmptyScene();
 
       tinaController.setMainController(mainController);
 

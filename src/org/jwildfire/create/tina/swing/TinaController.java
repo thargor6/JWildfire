@@ -2533,7 +2533,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
 
   public void xForm_moveRight(double pScale) {
     if (!toggleTrianglesButton.isSelected()) {
-      flamePanel.setDrawFlame(true);
+      flamePanel.setDrawTriangles(true);
       toggleTrianglesButton.setSelected(true);
     }
     double amount = Tools.stringToDouble(affineMoveAmountREd.getText()) * pScale;
@@ -2544,7 +2544,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
 
   public void xForm_rotateRight() {
     if (!toggleTrianglesButton.isSelected()) {
-      flamePanel.setDrawFlame(true);
+      flamePanel.setDrawTriangles(true);
       toggleTrianglesButton.setSelected(true);
     }
     double amount = Tools.stringToDouble(affineRotateAmountREd.getText());
@@ -2555,7 +2555,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
 
   public void xForm_moveLeft(double pScale) {
     if (!toggleTrianglesButton.isSelected()) {
-      flamePanel.setDrawFlame(true);
+      flamePanel.setDrawTriangles(true);
       toggleTrianglesButton.setSelected(true);
     }
     double amount = Tools.stringToDouble(affineMoveAmountREd.getText()) * pScale;
@@ -2566,7 +2566,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
 
   public void xForm_flipHorizontal() {
     if (!toggleTrianglesButton.isSelected()) {
-      flamePanel.setDrawFlame(true);
+      flamePanel.setDrawTriangles(true);
       toggleTrianglesButton.setSelected(true);
     }
     XFormTransformService.flipHorizontal(getCurrXForm(), affineEditPostTransformButton.isSelected());
@@ -2576,7 +2576,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
 
   public void xForm_flipVertical() {
     if (!toggleTrianglesButton.isSelected()) {
-      flamePanel.setDrawFlame(true);
+      flamePanel.setDrawTriangles(true);
       toggleTrianglesButton.setSelected(true);
     }
     XFormTransformService.flipVertical(getCurrXForm(), affineEditPostTransformButton.isSelected());
@@ -2586,7 +2586,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
 
   public void xForm_enlarge() {
     if (!toggleTrianglesButton.isSelected()) {
-      flamePanel.setDrawFlame(true);
+      flamePanel.setDrawTriangles(true);
       toggleTrianglesButton.setSelected(true);
     }
     double amount = Tools.stringToDouble(affineScaleAmountREd.getText()) / 100.0;
@@ -2597,7 +2597,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
 
   public void xForm_shrink() {
     if (!toggleTrianglesButton.isSelected()) {
-      flamePanel.setDrawFlame(true);
+      flamePanel.setDrawTriangles(true);
       toggleTrianglesButton.setSelected(true);
     }
     double amount = 100.0 / Tools.stringToDouble(affineScaleAmountREd.getText());
@@ -2608,7 +2608,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
 
   public void xForm_rotateLeft() {
     if (!toggleTrianglesButton.isSelected()) {
-      flamePanel.setDrawFlame(true);
+      flamePanel.setDrawTriangles(true);
       toggleTrianglesButton.setSelected(true);
     }
     double amount = Tools.stringToDouble(affineRotateAmountREd.getText());
@@ -2619,7 +2619,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
 
   public void xForm_moveUp(double pScale) {
     if (!toggleTrianglesButton.isSelected()) {
-      flamePanel.setDrawFlame(true);
+      flamePanel.setDrawTriangles(true);
       toggleTrianglesButton.setSelected(true);
     }
     double amount = Tools.stringToDouble(affineMoveAmountREd.getText()) * pScale;
@@ -2630,7 +2630,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
 
   public void xForm_moveDown(double pScale) {
     if (!toggleTrianglesButton.isSelected()) {
-      flamePanel.setDrawFlame(true);
+      flamePanel.setDrawTriangles(true);
       toggleTrianglesButton.setSelected(true);
     }
     double amount = Tools.stringToDouble(affineMoveAmountREd.getText()) * pScale;
@@ -3324,7 +3324,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     refreshing = true;
     try {
       if (!toggleTrianglesButton.isSelected()) {
-        flamePanel.setDrawFlame(true);
+        flamePanel.setDrawTriangles(true);
         toggleTrianglesButton.setSelected(true);
       }
       XForm xForm = getCurrXForm();
@@ -3370,7 +3370,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       return;
     }
     if (flamePanel != null) {
-      flamePanel.setDrawFlame(toggleTrianglesButton.isSelected());
+      flamePanel.setDrawTriangles(toggleTrianglesButton.isSelected());
       refreshFlameImage(false);
     }
   }

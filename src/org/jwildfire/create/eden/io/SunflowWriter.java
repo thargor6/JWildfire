@@ -157,14 +157,14 @@ public class SunflowWriter {
     writeTransform(pSB, pBox);
     pSB.append("  type box\n" +
         "  points 2\n" +
-        "  -0.5 -0.5 -0.5\n" +
-        "  0.5 0.5 0.5\n" +
+        "  -1 -1 -1\n" +
+        "  1 1 1\n" +
         "}\n\n");
   }
 
   private void writeTorus(StringBuffer pSB, Torus pTorus) {
     pSB.append("object {\n" +
-        (Math.random() <= 0.83 ? "  shader Glass\n" : "  shader Mirror\n"));
+        (Math.random() <= 0.75 ? "  shader Glass\n" : "  shader Mirror\n"));
     writeTransform(pSB, pTorus);
     pSB.append("  type torus\n" +
         "  r " + pTorus.getInnerRadius() + " 1.0\n" +

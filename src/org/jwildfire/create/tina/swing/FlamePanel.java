@@ -24,9 +24,12 @@ import java.awt.Rectangle;
 
 import javax.swing.JToggleButton;
 
+import org.jwildfire.base.Prefs;
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.XForm;
+import org.jwildfire.create.tina.base.XYZPoint;
+import org.jwildfire.create.tina.render.FlameRenderer;
 import org.jwildfire.create.tina.transform.XFormTransformService;
 import org.jwildfire.image.SimpleImage;
 import org.jwildfire.swing.ImagePanel;
@@ -38,6 +41,7 @@ public class FlamePanel extends ImagePanel {
   private static final Color XFORM_COLOR_DARK = new Color(17, 19, 23);
   private static final Color XFORM_POST_COLOR_DARK = new Color(55, 19, 60);
   private static final Color BACKGROUND_COLOR = new Color(60, 60, 60);
+  private static final Color VARIATION_COLOR = new Color(187, 189, 193);
 
   private static BasicStroke SELECTED_LINE = new BasicStroke(1.6f);
   private static BasicStroke NORMAL_LINE = new BasicStroke(1.0f);
@@ -47,7 +51,8 @@ public class FlamePanel extends ImagePanel {
 
   private boolean darkTriangles = false;
   private boolean drawImage = true;
-  private boolean drawFlame = true;
+  private boolean drawTriangles = true;
+  private boolean drawVariations = true;
   private boolean fineMovement = false;
   private XForm selectedXForm = null;
   private boolean allowScaleX = true;
@@ -75,11 +80,15 @@ public class FlamePanel extends ImagePanel {
   @Override
   public void paintComponent(Graphics g) {
     fillBackground(g);
+    initView();
     if (drawImage) {
       super.paintComponent(g);
     }
-    if (drawFlame) {
-      paintFlame((Graphics2D) g);
+    if (drawTriangles && drawVariations) {
+      paintVariations((Graphics2D) g);
+    }
+    if (drawTriangles) {
+      paintTriangles((Graphics2D) g);
     }
   }
 
@@ -156,7 +165,7 @@ public class FlamePanel extends ImagePanel {
     }
   }
 
-  Rectangle getImageBounds() {
+  public Rectangle getImageBounds() {
     Rectangle bounds = this.getParent().getBounds();
     double aspect = (double) bounds.width / (double) bounds.height;
     int imageWidth, imageHeight;
@@ -172,37 +181,103 @@ public class FlamePanel extends ImagePanel {
     return new Rectangle(0, 0, imageWidth, imageHeight);
   }
 
-  private void paintFlame(Graphics2D g) {
+  private boolean initViewFlag = false;
+
+  private void initView() {
+    if (initViewFlag) {
+      return;
+    }
+    else {
+      initViewFlag = true;
+    }
+    double viewXMin = -2.5;
+    double viewXMax = 1.75;
+    double viewYMin = -1.75;
+    double viewYMax = 2.5;
+
+    Rectangle bounds = this.getImageBounds();
+    int width = bounds.width;
+    int height = bounds.height;
+
+    int areaLeft = BORDER;
+    // unused:
+    //      int areaRight = width - 1 - BORDER;
+    //      int areaTop = BORDER;
+    int areaBottom = height - 1 - BORDER;
+
+    viewXScale = (double) (width - 2 * BORDER) / (viewXMax - viewXMin);
+    viewYScale = (double) (height - 2 * BORDER) / (viewYMin - viewYMax);
+    viewXTrans = viewXMin * viewXScale - areaLeft;
+    viewYTrans = viewYMin * viewYScale - areaBottom;
+    viewXScale /= renderAspect;
+  }
+
+  private void paintTriangles(Graphics2D g) {
     Flame flame = flameHolder.getFlame();
     if (flame != null) {
-      Rectangle bounds = this.getImageBounds();
-      int width = bounds.width;
-      int height = bounds.height;
-
-      int areaLeft = BORDER;
-      // unused:
-      //      int areaRight = width - 1 - BORDER;
-      //      int areaTop = BORDER;
-      int areaBottom = height - 1 - BORDER;
       g.setColor(editPostTransform ? (darkTriangles ? XFORM_POST_COLOR_DARK : XFORM_POST_COLOR) : (darkTriangles ? XFORM_COLOR_DARK : XFORM_COLOR));
-
-      double viewXMin = -2.5;
-      double viewXMax = 1.75;
-      double viewYMin = -1.75;
-      double viewYMax = 2.5;
-
-      viewXScale = (double) (width - 2 * BORDER) / (viewXMax - viewXMin);
-      viewYScale = (double) (height - 2 * BORDER) / (viewYMin - viewYMax);
-      viewXTrans = viewXMin * viewXScale - areaLeft;
-      viewYTrans = viewYMin * viewYScale - areaBottom;
-      viewXScale /= renderAspect;
-
       for (XForm xForm : flame.getXForms()) {
         drawXForm(g, xForm, false);
       }
       if (flame.getFinalXForm() != null) {
         drawXForm(g, flame.getFinalXForm(), true);
       }
+    }
+  }
+
+  private void paintVariations(Graphics2D g) {
+    if (selectedXForm != null && selectedXForm.getVariationCount() > 0) {
+      // TODO
+
+      double xMin = -1.0;
+      double xMax = 1.0;
+      int xSteps = 25;
+      double yMin = -1.0;
+      double yMax = 1.0;
+      int ySteps = 25;
+      //
+
+      double xs = (xMax - xMin) / (double) (xSteps - 1.0);
+      double ys = (yMax - yMin) / (double) (ySteps - 1.0);
+      int xx[][] = new int[ySteps][xSteps];
+      int yy[][] = new int[ySteps][xSteps];
+      {
+        double y = yMin;
+        XYZPoint affineT = new XYZPoint(); // affine part of the transformation
+        XYZPoint varT = new XYZPoint(); // complete transformation
+        XYZPoint p = new XYZPoint();
+        for (int i = 0; i < ySteps; i++) {
+          double x = xMin;
+          for (int j = 0; j < xSteps; j++) {
+            p.x = x;
+            p.y = y;
+
+            p.z = 0.0;
+            selectedXForm.transformPoint(getFlameRenderer().getFlameTransformationContext(), affineT, varT, p, p);
+            xx[i][j] = xToView(p.x);
+            yy[i][j] = yToView(-p.y);
+            x += xs;
+          }
+          y += ys;
+        }
+      }
+
+      g.setColor(VARIATION_COLOR);
+      g.setStroke(NORMAL_LINE);
+
+      for (int y = 0; y < ySteps - 1; y++) {
+        for (int x = 0; x < xSteps - 1; x++) {
+          g.drawLine(xx[y][x], yy[y][x], xx[y][x + 1], yy[y][x + 1]);
+          g.drawLine(xx[y][x], yy[y][x], xx[y + 1][x], yy[y + 1][x]);
+          if (x == xSteps - 2) {
+            g.drawLine(xx[y][x + 1], yy[y][x + 1], xx[y + 1][x + 1], yy[y + 1][x + 1]);
+          }
+          if (y == ySteps - 2) {
+            g.drawLine(xx[y + 1][x], yy[y + 1][x], xx[y + 1][x + 1], yy[y + 1][x + 1]);
+          }
+        }
+      }
+
     }
   }
 
@@ -238,8 +313,8 @@ public class FlamePanel extends ImagePanel {
     this.drawImage = drawImage;
   }
 
-  public void setDrawFlame(boolean drawFlame) {
-    this.drawFlame = drawFlame;
+  public void setDrawTriangles(boolean drawTriangles) {
+    this.drawTriangles = drawTriangles;
   }
 
   public void setSelectedXForm(XForm selectedXForm) {
@@ -326,8 +401,8 @@ public class FlamePanel extends ImagePanel {
     if (selectedXForm != null) {
       xBeginDrag = x;
       yBeginDrag = y;
-      if (!drawFlame) {
-        drawFlame = true;
+      if (!drawTriangles) {
+        drawTriangles = true;
         toggleTrianglesButton.setSelected(true);
       }
     }
@@ -443,4 +518,29 @@ public class FlamePanel extends ImagePanel {
   public XForm getSelectedXForm() {
     return selectedXForm;
   }
+
+  public void setDrawVariations(boolean drawVariations) {
+    this.drawVariations = drawVariations;
+  }
+
+  private FlameRenderer flameRenderer = null;
+
+  private FlameRenderer getFlameRenderer() {
+    if (flameRenderer == null) {
+      Flame flame = flameHolder.getFlame();
+      if (flame == null) {
+        throw new IllegalStateException();
+      }
+      Prefs prefs = new Prefs();
+      try {
+        prefs.loadFromFile();
+      }
+      catch (Exception ex) {
+        ex.printStackTrace();
+      }
+      flameRenderer = new FlameRenderer(flame, prefs);
+    }
+    return flameRenderer;
+  }
+
 }

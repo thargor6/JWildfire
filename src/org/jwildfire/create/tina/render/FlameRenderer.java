@@ -588,7 +588,7 @@ public class FlameRenderer {
     return random;
   }
 
-  protected FlameTransformationContext getFlameTransformationContext() {
+  public FlameTransformationContext getFlameTransformationContext() {
     return flameTransformationContext;
   }
 

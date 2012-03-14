@@ -97,6 +97,15 @@ public class EDENController implements UserInterface {
     UI.set(this);
   }
 
+  public void newEmptyScene() {
+    currentFile = null;
+    api = null;
+    sceneType = SceneType.SC;
+    currentFile = "new" + genNewFileId() + ".sc";
+    editorTextArea.setText("");
+    enableControls();
+  }
+
   public void newScene() {
     currentFile = null;
     api = null;
@@ -401,13 +410,14 @@ public class EDENController implements UserInterface {
 
   private String edenCreateSunflowScene() {
     Scene scene = new Scene();
+    // A
     //    for (int i = 0; i < 3300; i++) {
     //      Sphere sphere = new Sphere();
     //      sphere.setCentre((-50.0 + Math.random() * 94.0) * 2.5, 1.0 + Math.random() * 128.0, (-3.0 + Math.random() * 920.0));
     //      sphere.setRadius(3.6 + Math.random() * 11.4);
     //      scene.addObject(sphere);
     //    }
-
+    // B
     //    for (int i = 0; i < 6666; i++) {
     //      double shape = Math.random();
     //      if (shape < 0.25) {
@@ -437,12 +447,118 @@ public class EDENController implements UserInterface {
     //        cylinder.getRotate().setValue(Math.random() * 90.0, Math.random() * 90.0, Math.random() * 90.0);
     //        scene.addObject(cylinder);
     //      }
+    // C
+    //    Worker worker1 = new Worker(scene, 0, 0, 0);
+    //    for (int i = 0; i < 100; i++) {
+    //      worker1.performStep();
+    //    }
+    // D
+    fillDLAScene(scene);
+    return new SunflowWriter().createSunflowScene(scene);
+  }
 
-    Worker worker1 = new Worker(scene, 0, 0, 0);
-    for (int i = 0; i < 100; i++) {
-      worker1.performStep();
+  private void fillDLAScene(Scene pScene) {
+    int width = 100;
+    int height = 100;
+    int maxIter = 20000;
+    int seed = 123;
+    double gridSize = 4.0;
+    double maxSize = 10.0;
+    double minSize = 1.0;
+    double xOffset = 0;
+    double yOffset = 0.0;
+    double zOffset = 33.0;
+
+    short q[][] = new short[width][height];
+    iterateDLA(q, width, height, maxIter, seed);
+    double maxR = Math.sqrt(width * width + height * height) * 0.5;
+    for (int i = 0; i < width; i++) {
+      for (int j = 0; j < height; j++) {
+        if (q[i][j] != 0) {
+          double dx = i - (width - 1) * 0.5;
+          double dy = j - (height - 1) * 0.5;
+          double r = Math.sqrt(dx * dx + dy * dy) / maxR + Tools.EPSILON;
+          double size = minSize + (maxSize - minSize) * r;
+          Torus sphere = new Torus();
+          sphere.getPosition().setValue(dx * gridSize + xOffset, dy * gridSize + yOffset, zOffset);
+          sphere.getSize().setValue(size);
+          sphere.getRotate().setValue(90 + Math.random() * 12.0 - 6.0, Math.random() * 12.0 - 6.0, Math.random() * 12.0 - 6.0);
+          pScene.addObject(sphere);
+        }
+      }
     }
 
-    return new SunflowWriter().createSunflowScene(scene);
+  }
+
+  private void iterateDLA(short pQ[][], int pWidth, int pHeight, int pMaxIter, int pSeed) {
+    int cx = pWidth / 2;
+    int cy = pHeight / 2;
+    double pi2 = 2.0 * Math.PI;
+    int w2 = pWidth - 2;
+    int h2 = pHeight - 2;
+    Tools.srand123(pSeed);
+    /* create the cluster */
+    pQ[cy][cx] = 1;
+    double r1 = 3.0;
+    double r2 = 3.0 * r1;
+    for (int i = 0; i < pMaxIter; i++) {
+      double phi = pi2 * Tools.drand();
+      double ri = r1 * Math.cos(phi);
+      double rj = r1 * Math.sin(phi);
+      int ci = cy + (int) (ri + 0.5);
+      int cj = cx + (int) (rj + 0.5);
+      short qt = 0;
+      while (qt == 0) {
+        double rr = Tools.drand();
+        rr += rr;
+        rr += rr;
+        int rd = (int) rr;
+        switch (rd) {
+          case 0:
+            ci++;
+            break;
+          case 1:
+            cj--;
+            break;
+          case 2:
+            ci--;
+            break;
+          default:
+            cj++;
+        }
+        if ((ci < 1) || (ci > h2) || (cj < 1) || (cj > w2)) {
+          qt = 1;
+          i--;
+        }
+        else {
+          int sum = pQ[ci - 1][cj] + pQ[ci + 1][cj] + pQ[ci][cj - 1] + pQ[ci][cj + 1];
+          if (sum != 0) {
+            pQ[ci][cj] = qt = 1;
+            double r3 = (double) (ci - cy);
+            double r4 = (double) (cj - cx);
+            r3 *= r3;
+            r4 *= r4;
+            r3 += r4;
+            r3 = Math.sqrt(r3);
+            if (r3 > r1) {
+              r1 = r3;
+              r2 = 2.1 * r1;
+            }
+          }
+          else {
+            double r3 = (double) (ci - cy);
+            double r4 = (double) (cj - cx);
+            r3 *= r3;
+            r4 *= r4;
+            r3 += r4;
+            r3 = Math.sqrt(r3);
+            if (r3 > r2) {
+              qt = 1;
+              i--;
+            }
+          }
+        }
+      }
+    }
   }
 }

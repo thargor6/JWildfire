@@ -36,11 +36,42 @@ public class Spherical3DWFFunc extends VariationFunc {
       pVarTP.y += pAffineTP.y * r;
       pVarTP.z += pAffineTP.z * r;
     }
-    else {
+    else if (invert == 1) {
       double r = pAmount / (pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y + pAffineTP.z * pAffineTP.z + Constants.EPSILON);
       pVarTP.x -= pAffineTP.x * r;
       pVarTP.y -= pAffineTP.y * r;
       pVarTP.z -= pAffineTP.z * r;
+    }
+    else if (invert == 2) {
+      double r = pAmount / Math.pow(Math.sqrt(pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y + pAffineTP.z * pAffineTP.z + Constants.EPSILON), 2.5);
+      double r2 = pAmount / (pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y + pAffineTP.z * pAffineTP.z + Constants.EPSILON);
+      pVarTP.x = pAffineTP.x * r;
+      pVarTP.y = pAffineTP.y * r;
+      pVarTP.z = pAffineTP.z * r;
+    }
+    else {
+      double circle = 1;
+      double corners = 2;
+      double power = 2;
+      double sides = 5;
+      double r_factor, theta, phi, b, amp;
+
+      r_factor = Math.pow(pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y + pAffineTP.z * pAffineTP.z, power / 2.0);
+
+      theta = pAffineTP.getPrecalcAtanYX(pContext);
+      b = 2 * Math.PI / sides;
+
+      phi = theta - (b * Math.floor(theta / b));
+      if (phi > b / 2)
+        phi -= b;
+
+      amp = corners * (1.0 / (pContext.cos(phi) + Constants.EPSILON) - 1.0) + circle;
+      amp /= (r_factor + Constants.EPSILON);
+
+      pVarTP.x += pAmount * pAffineTP.x * amp;
+      pVarTP.y += pAmount * pAffineTP.y * amp;
+      pVarTP.z += pAmount * pAffineTP.z * amp;
+
     }
   }
 
