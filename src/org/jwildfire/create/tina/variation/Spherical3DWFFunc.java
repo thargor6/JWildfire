@@ -23,55 +23,31 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 public class Spherical3DWFFunc extends VariationFunc {
   private static final String PARAM_INVERT = "invert";
+  private static final String PARAM_EXPONENT = "exponent";
 
-  private static final String[] paramNames = { PARAM_INVERT };
+  private static final String[] paramNames = { PARAM_INVERT, PARAM_EXPONENT };
 
   private int invert = 0;
+  private double exponent = 2.0;
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
+    double r;
+    if (Math.abs(exponent - 2.0) < Tools.EPSILON) {
+      r = pAmount / (pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y + pAffineTP.z * pAffineTP.z + Constants.EPSILON);
+    }
+    else {
+      r = pAmount / Math.pow(pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y + pAffineTP.z * pAffineTP.z + Constants.EPSILON, exponent / 2.0);
+    }
     if (invert == 0) {
-      double r = pAmount / (pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y + pAffineTP.z * pAffineTP.z + Constants.EPSILON);
       pVarTP.x += pAffineTP.x * r;
       pVarTP.y += pAffineTP.y * r;
       pVarTP.z += pAffineTP.z * r;
     }
-    else if (invert == 1) {
-      double r = pAmount / (pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y + pAffineTP.z * pAffineTP.z + Constants.EPSILON);
+    else /*if (invert == 1)*/{
       pVarTP.x -= pAffineTP.x * r;
       pVarTP.y -= pAffineTP.y * r;
       pVarTP.z -= pAffineTP.z * r;
-    }
-    else if (invert == 2) {
-      double r = pAmount / Math.pow(Math.sqrt(pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y + pAffineTP.z * pAffineTP.z + Constants.EPSILON), 2.5);
-      double r2 = pAmount / (pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y + pAffineTP.z * pAffineTP.z + Constants.EPSILON);
-      pVarTP.x = pAffineTP.x * r;
-      pVarTP.y = pAffineTP.y * r;
-      pVarTP.z = pAffineTP.z * r;
-    }
-    else {
-      double circle = 1;
-      double corners = 2;
-      double power = 2;
-      double sides = 5;
-      double r_factor, theta, phi, b, amp;
-
-      r_factor = Math.pow(pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y + pAffineTP.z * pAffineTP.z, power / 2.0);
-
-      theta = pAffineTP.getPrecalcAtanYX(pContext);
-      b = 2 * Math.PI / sides;
-
-      phi = theta - (b * Math.floor(theta / b));
-      if (phi > b / 2)
-        phi -= b;
-
-      amp = corners * (1.0 / (pContext.cos(phi) + Constants.EPSILON) - 1.0) + circle;
-      amp /= (r_factor + Constants.EPSILON);
-
-      pVarTP.x += pAmount * pAffineTP.x * amp;
-      pVarTP.y += pAmount * pAffineTP.y * amp;
-      pVarTP.z += pAmount * pAffineTP.z * amp;
-
     }
   }
 
@@ -87,13 +63,15 @@ public class Spherical3DWFFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { invert };
+    return new Object[] { invert, exponent };
   }
 
   @Override
   public void setParameter(String pName, double pValue) {
     if (PARAM_INVERT.equalsIgnoreCase(pName))
       invert = Tools.FTOI(pValue);
+    else if (PARAM_EXPONENT.equalsIgnoreCase(pName))
+      exponent = pValue;
     else
       throw new IllegalArgumentException(pName);
   }
