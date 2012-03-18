@@ -408,6 +408,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton mouseTransformZoomOutButton = null;
   private JLabel editSpaceLbl3 = null;
   private JToggleButton toggleTrianglesButton = null;
+  private JToggleButton toggleVariationsButton = null;
   private JLabel editSpaceLbl4 = null;
   private JProgressBar renderProgressBar = null;
   private JCheckBox randomSymmetryCheckBox = null;
@@ -2952,7 +2953,8 @@ public class TinaInternalFrame extends JInternalFrame {
         getRootTabbedPane(), getAffineFlipHorizontalButton(), getAffineFlipVerticalButton(), getAnimateLightScriptCmb(),
         getDarkTrianglesToggleButton(), getShadingBlurRadiusREd(), getShadingBlurRadiusSlider(), getShadingBlurFadeREd(),
         getShadingBlurFadeSlider(), getShadingBlurFallOffREd(), getShadingBlurFallOffSlider(), getScriptTextArea(),
-        getAffineScaleXButton(), getAffineScaleYButton(), getGradientLibraryCenterPanel(), getGradientLibraryGradientCmb(), getHelpPane());
+        getAffineScaleXButton(), getAffineScaleYButton(), getGradientLibraryCenterPanel(), getGradientLibraryGradientCmb(), getHelpPane(),
+        getToggleVariationsButton());
     tinaController.refreshing = tinaController.cmbRefreshing = tinaController.gridRefreshing = true;
     try {
       for (NonlinearControlsRow row : nonlinearControlsRows) {
@@ -4953,8 +4955,28 @@ public class TinaInternalFrame extends JInternalFrame {
       centerNorthPanel.add(getDarkTrianglesToggleButton(), null);
       centerNorthPanel.add(getMouseTransformZoomInButton());
       centerNorthPanel.add(getMouseTransformZoomOutButton());
+      centerNorthPanel.add(getToggleVariationsButton());
     }
     return centerNorthPanel;
+  }
+
+  private JToggleButton getToggleVariationsButton() {
+    if (toggleVariationsButton == null) {
+      toggleVariationsButton = new JToggleButton();
+      toggleVariationsButton.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.toggleVariationsButton_clicked();
+        }
+      });
+      toggleVariationsButton.setToolTipText("Display/hide variation effect");
+      toggleVariationsButton.setSize(new Dimension(95, 24));
+      toggleVariationsButton.setSelected(false);
+      toggleVariationsButton.setPreferredSize(new Dimension(42, 24));
+      toggleVariationsButton.setLocation(new Point(4, 4));
+      toggleVariationsButton.setBounds(108, 4, 42, 24);
+      toggleVariationsButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/variation.gif")));
+    }
+    return toggleVariationsButton;
   }
 
   /**
@@ -4978,15 +5000,15 @@ public class TinaInternalFrame extends JInternalFrame {
    */
   private JPanel getCenterCenterPanel() {
     if (centerCenterPanel == null) {
-      centerDescLabel = new JLabel();
-      centerDescLabel.setText("  (just double-click on thumbnail to load it into main area)");
-      centerDescLabel.setHorizontalAlignment(SwingConstants.CENTER);
-      centerDescLabel.setFont(new Font("Dialog", Font.BOLD, 10));
       centerCenterPanel = new JPanel();
       centerCenterPanel.setLayout(new BorderLayout());
       centerCenterPanel.setBackground(Color.gray);
       centerCenterPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
+      centerDescLabel = new JLabel();
       centerCenterPanel.add(centerDescLabel, BorderLayout.SOUTH);
+      centerDescLabel.setText("  (just double-click on thumbnail to load it into main area)");
+      centerDescLabel.setHorizontalAlignment(SwingConstants.CENTER);
+      centerDescLabel.setFont(new Font("Dialog", Font.BOLD, 10));
     }
     return centerCenterPanel;
   }

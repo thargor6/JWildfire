@@ -344,6 +344,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
   private final JButton mouseEditZoomOutButton;
   private final JToggleButton toggleTrianglesButton;
   private final JToggleButton toggleDarkTrianglesButton;
+  private final JToggleButton toggleVariationsButton;
   // Gradient
   private final JPanel gradientLibraryPanel;
   private JScrollPane gradientLibraryScrollPane = null;
@@ -444,7 +445,8 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       JButton pAffineFlipVerticalButton, JComboBox pAnimateLightScriptCmb, JToggleButton pToggleDarkTrianglesButton,
       JTextField pShadingBlurRadiusREd, JSlider pShadingBlurRadiusSlider, JTextField pShadingBlurFadeREd, JSlider pShadingBlurFadeSlider,
       JTextField pShadingBlurFallOffREd, JSlider pShadingBlurFallOffSlider, JTextArea pScriptTextArea, JToggleButton pAffineScaleXButton,
-      JToggleButton pAffineScaleYButton, JPanel pGradientLibraryPanel, JComboBox pGradientLibraryGradientCmb, JTextPane pHelpPane) {
+      JToggleButton pAffineScaleYButton, JPanel pGradientLibraryPanel, JComboBox pGradientLibraryGradientCmb, JTextPane pHelpPane,
+      JToggleButton pToggleVariationsButton) {
     errorHandler = pErrorHandler;
     prefs = pPrefs;
     centerPanel = pCenterPanel;
@@ -583,6 +585,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     mouseTransformRotateButton = pMouseTransformRotateButton;
     mouseTransformScaleButton = pMouseTransformScaleButton;
     toggleTrianglesButton = pToggleTrianglesButton;
+    toggleVariationsButton = pToggleVariationsButton;
     toggleDarkTrianglesButton = pToggleDarkTrianglesButton;
     mainProgressUpdater = pMainProgressUpdater;
     jobProgressUpdater = pJobProgressUpdater;
@@ -759,7 +762,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       int height = centerPanel.getHeight();
       SimpleImage img = new SimpleImage(width, height);
       img.fillBackground(0, 0, 0);
-      flamePanel = new FlamePanel(img, 0, 0, centerPanel.getWidth(), this, toggleTrianglesButton);
+      flamePanel = new FlamePanel(img, 0, 0, centerPanel.getWidth(), this, toggleTrianglesButton, toggleVariationsButton);
       flamePanel.setRenderWidth(prefs.getTinaRenderImageWidth());
       flamePanel.setRenderHeight(prefs.getTinaRenderImageHeight());
       flamePanel.setFocusable(true);
@@ -2299,6 +2302,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     mouseEditZoomInButton.setEnabled(currFlame != null);
     mouseEditZoomOutButton.setEnabled(currFlame != null);
     toggleTrianglesButton.setEnabled(currFlame != null);
+    toggleVariationsButton.setEnabled(currFlame != null);
 
     affineC00REd.setEditable(enabled);
     affineC01REd.setEditable(enabled);
@@ -4084,6 +4088,16 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
         xForm.setCoeff10(value);
       }
       transformationTableClicked();
+    }
+  }
+
+  public void toggleVariationsButton_clicked() {
+    if (refreshing) {
+      return;
+    }
+    if (flamePanel != null) {
+      flamePanel.setDrawVariations(toggleVariationsButton.isSelected());
+      refreshFlameImage(false);
     }
   }
 

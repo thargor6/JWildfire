@@ -52,7 +52,7 @@ public class FlamePanel extends ImagePanel {
   private boolean darkTriangles = false;
   private boolean drawImage = true;
   private boolean drawTriangles = true;
-  private boolean drawVariations = true;
+  private boolean drawVariations = false;
   private boolean fineMovement = false;
   private XForm selectedXForm = null;
   private boolean allowScaleX = true;
@@ -70,11 +70,13 @@ public class FlamePanel extends ImagePanel {
   private double renderAspect = 1.0;
 
   private final JToggleButton toggleTrianglesButton;
+  private final JToggleButton toggleVariationsButton;
 
-  public FlamePanel(SimpleImage pSimpleImage, int pX, int pY, int pWidth, FlameHolder pFlameHolder, JToggleButton pToggleTrianglesButton) {
+  public FlamePanel(SimpleImage pSimpleImage, int pX, int pY, int pWidth, FlameHolder pFlameHolder, JToggleButton pToggleTrianglesButton, JToggleButton pToggleVariationsButton) {
     super(pSimpleImage, pX, pY, pWidth);
     flameHolder = pFlameHolder;
     toggleTrianglesButton = pToggleTrianglesButton;
+    toggleVariationsButton = pToggleVariationsButton;
   }
 
   @Override
@@ -84,7 +86,7 @@ public class FlamePanel extends ImagePanel {
     if (drawImage) {
       super.paintComponent(g);
     }
-    if (drawTriangles && drawVariations) {
+    if (drawVariations) {
       paintVariations((Graphics2D) g);
     }
     if (drawTriangles) {
@@ -228,15 +230,13 @@ public class FlamePanel extends ImagePanel {
   private void paintVariations(Graphics2D g) {
     if (selectedXForm != null && selectedXForm.getVariationCount() > 0) {
       // TODO
-
       double xMin = -1.0;
       double xMax = 1.0;
-      int xSteps = 25;
+      int xSteps = 32;
       double yMin = -1.0;
       double yMax = 1.0;
-      int ySteps = 25;
+      int ySteps = 32;
       //
-
       double xs = (xMax - xMin) / (double) (xSteps - 1.0);
       double ys = (yMax - yMin) / (double) (ySteps - 1.0);
       int xx[][] = new int[ySteps][xSteps];
