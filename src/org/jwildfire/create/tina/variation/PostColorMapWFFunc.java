@@ -58,6 +58,9 @@ public class PostColorMapWFFunc extends VariationFunc {
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
+
+    //    if (pContext != null)
+    //      return;
     double x = (pVarTP.x - offsetX + 1.0) / scaleX * 0.5 * (double) (imgWidth - 1);
     double y = (pVarTP.y - offsetY + 1.0) / scaleY * 0.5 * (double) (imgHeight - 1);
     int ix = Tools.FTOI(x);

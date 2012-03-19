@@ -31,6 +31,7 @@ import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 import org.jwildfire.create.tina.render.FlameRenderer;
 import org.jwildfire.create.tina.transform.XFormTransformService;
+import org.jwildfire.create.tina.variation.Variation;
 import org.jwildfire.image.SimpleImage;
 import org.jwildfire.swing.ImagePanel;
 
@@ -229,55 +230,65 @@ public class FlamePanel extends ImagePanel {
 
   private void paintVariations(Graphics2D g) {
     if (selectedXForm != null && selectedXForm.getVariationCount() > 0) {
-      // TODO
-      double xMin = -1.0;
-      double xMax = 1.0;
-      int xSteps = 32;
-      double yMin = -1.0;
-      double yMax = 1.0;
-      int ySteps = 32;
-      //
-      double xs = (xMax - xMin) / (double) (xSteps - 1.0);
-      double ys = (yMax - yMin) / (double) (ySteps - 1.0);
-      int xx[][] = new int[ySteps][xSteps];
-      int yy[][] = new int[ySteps][xSteps];
-      {
-        double y = yMin;
-        XYZPoint affineT = new XYZPoint(); // affine part of the transformation
-        XYZPoint varT = new XYZPoint(); // complete transformation
-        XYZPoint p = new XYZPoint();
-        for (int i = 0; i < ySteps; i++) {
-          double x = xMin;
-          for (int j = 0; j < xSteps; j++) {
-            p.x = x;
-            p.y = y;
-
-            p.z = 0.0;
-            selectedXForm.transformPoint(getFlameRenderer().getFlameTransformationContext(), affineT, varT, p, p);
-            xx[i][j] = xToView(p.x);
-            yy[i][j] = yToView(-p.y);
-            x += xs;
-          }
-          y += ys;
+      try {
+        selectedXForm.initTransform();
+        for (Variation var : selectedXForm.getSortedVariations()) {
+          var.getFunc().init(getFlameRenderer().getFlameTransformationContext(), selectedXForm);
         }
-      }
 
-      g.setColor(VARIATION_COLOR);
-      g.setStroke(NORMAL_LINE);
+        // TODO
+        double xMin = -1.0;
+        double xMax = 1.0;
+        int xSteps = 32;
+        double yMin = -1.0;
+        double yMax = 1.0;
+        int ySteps = 32;
+        //
+        double xs = (xMax - xMin) / (double) (xSteps - 1.0);
+        double ys = (yMax - yMin) / (double) (ySteps - 1.0);
+        int xx[][] = new int[ySteps][xSteps];
+        int yy[][] = new int[ySteps][xSteps];
+        {
+          double y = yMin;
+          XYZPoint affineT = new XYZPoint(); // affine part of the transformation
+          XYZPoint varT = new XYZPoint(); // complete transformation
+          XYZPoint p = new XYZPoint();
+          for (int i = 0; i < ySteps; i++) {
+            double x = xMin;
+            for (int j = 0; j < xSteps; j++) {
+              p.x = x;
+              p.y = y;
 
-      for (int y = 0; y < ySteps - 1; y++) {
-        for (int x = 0; x < xSteps - 1; x++) {
-          g.drawLine(xx[y][x], yy[y][x], xx[y][x + 1], yy[y][x + 1]);
-          g.drawLine(xx[y][x], yy[y][x], xx[y + 1][x], yy[y + 1][x]);
-          if (x == xSteps - 2) {
-            g.drawLine(xx[y][x + 1], yy[y][x + 1], xx[y + 1][x + 1], yy[y + 1][x + 1]);
-          }
-          if (y == ySteps - 2) {
-            g.drawLine(xx[y + 1][x], yy[y + 1][x], xx[y + 1][x + 1], yy[y + 1][x + 1]);
+              p.z = 0.0;
+              selectedXForm.transformPoint(getFlameRenderer().getFlameTransformationContext(), affineT, varT, p, p);
+              xx[i][j] = xToView(p.x);
+              yy[i][j] = yToView(-p.y);
+              x += xs;
+            }
+            y += ys;
           }
         }
-      }
 
+        g.setColor(VARIATION_COLOR);
+        g.setStroke(NORMAL_LINE);
+
+        for (int y = 0; y < ySteps - 1; y++) {
+          for (int x = 0; x < xSteps - 1; x++) {
+            g.drawLine(xx[y][x], yy[y][x], xx[y][x + 1], yy[y][x + 1]);
+            g.drawLine(xx[y][x], yy[y][x], xx[y + 1][x], yy[y + 1][x]);
+            if (x == xSteps - 2) {
+              g.drawLine(xx[y][x + 1], yy[y][x + 1], xx[y + 1][x + 1], yy[y + 1][x + 1]);
+            }
+            if (y == ySteps - 2) {
+              g.drawLine(xx[y + 1][x], yy[y + 1][x], xx[y + 1][x + 1], yy[y + 1][x + 1]);
+            }
+          }
+        }
+
+      }
+      catch (Exception ex) {
+        ex.printStackTrace();
+      }
     }
   }
 
@@ -539,6 +550,7 @@ public class FlamePanel extends ImagePanel {
         ex.printStackTrace();
       }
       flameRenderer = new FlameRenderer(flame, prefs);
+      flameRenderer.createColorMap();
     }
     return flameRenderer;
   }

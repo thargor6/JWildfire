@@ -215,6 +215,8 @@ public class VariationFuncList {
     registerVariationFunc(PostBumpMapWFFunc.class);
     registerVariationFunc(EclipseFunc.class);
     registerVariationFunc(Spherical3DWFFunc.class);
+    registerVariationFunc(PostZTranslateWFFunc.class);
+    registerVariationFunc(PostZScaleWFFunc.class);
   }
 
   private static void registerVariationFunc(

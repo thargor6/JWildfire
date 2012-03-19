@@ -560,7 +560,7 @@ public class FlameRenderer {
     rcY = flame.getCentreY() * (1 - cosa) + flame.getCentreX() * sina - camY0;
   }
 
-  private void createColorMap() {
+  public void createColorMap() {
     colorMap = flame.getPalette().createRenderPalette(flame.getWhiteLevel());
     paletteIdxScl = colorMap.length - 1;
   }
