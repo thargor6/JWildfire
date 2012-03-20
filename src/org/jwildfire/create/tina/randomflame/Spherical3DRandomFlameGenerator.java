@@ -125,10 +125,7 @@ public class Spherical3DRandomFlameGenerator extends RandomFlameGenerator {
       int style = (int) (3 * Math.random());
       switch (style) {
         case 0:
-          varFunc = VariationFuncList.getVariationFuncInstance("xheart", true);
-          break;
         case 1:
-        case 2:
           varFunc = VariationFuncList.getVariationFuncInstance(style == 1 ? "julia3D" : "julia3Dz", true);
           power = -4 + (int) (Math.random() * 9.0);
           varFunc.setParameter("power", power != 0 ? power : 0);
