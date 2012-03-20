@@ -61,11 +61,11 @@ public class SubFlameWFFunc extends VariationFunc {
         finalXForm.transformPoint(pContext, pAffineTP, pVarTP, p, q);
       }
 
-      pVarTP.color += parentColor;
-      while (pVarTP.color < 0.0)
-        pVarTP.color += 1.0;
-      while (pVarTP.color > 1.0)
-        pVarTP.color -= 1.0;
+      //      pVarTP.color += parentColor;
+      //      while (pVarTP.color < 0.0)
+      //        pVarTP.color += 1.0;
+      //      while (pVarTP.color > 1.0)
+      //        pVarTP.color -= 1.0;
     }
 
     pVarTP.x += offset_x;
