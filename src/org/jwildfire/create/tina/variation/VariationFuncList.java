@@ -218,6 +218,8 @@ public class VariationFuncList {
     registerVariationFunc(PostZTranslateWFFunc.class);
     registerVariationFunc(PostZScaleWFFunc.class);
     registerVariationFunc(NBlurFunc.class);
+    registerVariationFunc(LinearTFunc.class);
+    registerVariationFunc(LinearT3DFunc.class);
   }
 
   private static void registerVariationFunc(
