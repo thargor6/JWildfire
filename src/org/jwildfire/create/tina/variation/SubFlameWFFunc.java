@@ -49,7 +49,7 @@ public class SubFlameWFFunc extends VariationFunc {
       if (xf == null) {
         return;
       }
-      double parentColor = pAffineTP.color;
+      //      double parentColor = pAffineTP.color;
       xf.transformPoint(pContext, pAffineTP, pVarTP, p, p);
       if (xf.getDrawMode() == DrawMode.HIDDEN)
         return;

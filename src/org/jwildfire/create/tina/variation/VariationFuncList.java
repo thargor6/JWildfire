@@ -217,6 +217,7 @@ public class VariationFuncList {
     registerVariationFunc(Spherical3DWFFunc.class);
     registerVariationFunc(PostZTranslateWFFunc.class);
     registerVariationFunc(PostZScaleWFFunc.class);
+    registerVariationFunc(NBlurFunc.class);
   }
 
   private static void registerVariationFunc(

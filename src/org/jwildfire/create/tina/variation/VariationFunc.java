@@ -91,4 +91,15 @@ public abstract class VariationFunc {
     }
   }
 
+  protected int limitIntVal(int pValue, int pMin, int pMax) {
+    if (pValue < pMin) {
+      return pMin;
+    }
+    else if (pValue > pMax) {
+      return pMax;
+    }
+    else {
+      return pValue;
+    }
+  }
 }
