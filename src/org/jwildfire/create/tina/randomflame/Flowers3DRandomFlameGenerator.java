@@ -50,7 +50,17 @@ public class Flowers3DRandomFlameGenerator extends RandomFlameGenerator {
       XForm xForm = new XForm();
       flame.getXForms().add(xForm);
       xForm.setWeight(3.0 + Math.random() * 10.0);
-      xForm.addVariation(1.0, VariationFuncList.getVariationFuncInstance("linear3D", true));
+      if (Math.random() < 0.33) {
+        xForm.addVariation(1.0, VariationFuncList.getVariationFuncInstance("linear3D", true));
+      }
+      else {
+        VariationFunc f = VariationFuncList.getVariationFuncInstance("linearT3D", true);
+        double x = 2.0 * Math.random() - 0.5;
+        f.setParameter("powX", x);
+        f.setParameter("powY", x);
+        f.setParameter("powZ", 2.0 * Math.random() - 0.5);
+        xForm.addVariation(1.0, f);
+      }
       xForm.addVariation(0.1 + Math.random() * 0.3, VariationFuncList.getVariationFuncInstance("spherical", true));
       xForm.addVariation(0.2 + Math.random() * 0.9, VariationFuncList.getVariationFuncInstance("zcone", true));
       xForm.addVariation(0.01 + 0.045 * Math.random(), VariationFuncList.getVariationFuncInstance("cross", true));
