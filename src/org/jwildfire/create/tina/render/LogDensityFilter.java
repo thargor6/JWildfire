@@ -16,6 +16,9 @@
 */
 package org.jwildfire.create.tina.render;
 
+import static org.jwildfire.base.MathLib.exp;
+import static org.jwildfire.base.MathLib.log10;
+
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.RasterPoint;
 
@@ -54,7 +57,7 @@ public class LogDensityFilter {
       for (int j = 0; j < noiseFilterSize; j++) {
         double ii = ((2.0 * i + 1.0) / noiseFilterSize - 1.0) * adjust;
         double jj = ((2.0 * j + 1.0) / noiseFilterSize - 1.0) * adjust;
-        filter[i][j] = Math.exp(-2.0 * (ii * ii + jj * jj));
+        filter[i][j] = exp(-2.0 * (ii * ii + jj * jj));
       }
     }
     // normalize
@@ -88,7 +91,7 @@ public class LogDensityFilter {
 
     precalcLogArray = new double[PRECALC_LOG_ARRAY_SIZE + 1];
     for (int i = 1; i <= PRECALC_LOG_ARRAY_SIZE; i++) {
-      precalcLogArray[i] = (k1 * Math.log10(1 + flame.getWhiteLevel() * i * k2)) / (flame.getWhiteLevel() * i);
+      precalcLogArray[i] = (k1 * log10(1 + flame.getWhiteLevel() * i * k2)) / (flame.getWhiteLevel() * i);
     }
   }
 
@@ -103,7 +106,7 @@ public class LogDensityFilter {
             logScale = precalcLogArray[(int) point.count];
           }
           else {
-            logScale = (k1 * Math.log10(1.0 + flame.getWhiteLevel() * point.count * k2)) / (flame.getWhiteLevel() * point.count);
+            logScale = (k1 * log10(1.0 + flame.getWhiteLevel() * point.count * k2)) / (flame.getWhiteLevel() * point.count);
           }
           pFilteredPnt.red += filter[i][j] * logScale * point.red;
           pFilteredPnt.green += filter[i][j] * logScale * point.green;
@@ -124,7 +127,7 @@ public class LogDensityFilter {
         ls = precalcLogArray[(int) point.count] / FILTER_WHITE;
       }
       else {
-        ls = (k1 * Math.log10(1.0 + flame.getWhiteLevel() * point.count * k2)) / (flame.getWhiteLevel() * point.count) / FILTER_WHITE;
+        ls = (k1 * log10(1.0 + flame.getWhiteLevel() * point.count * k2)) / (flame.getWhiteLevel() * point.count) / FILTER_WHITE;
       }
       pFilteredPnt.red = ls * point.red;
       pFilteredPnt.green = ls * point.green;
@@ -167,7 +170,7 @@ public class LogDensityFilter {
       ls = precalcLogArray[(int) point.count] / FILTER_WHITE;
     }
     else {
-      ls = (k1 * Math.log10(1.0 + flame.getWhiteLevel() * point.count * k2)) / (flame.getWhiteLevel() * point.count) / FILTER_WHITE;
+      ls = (k1 * log10(1.0 + flame.getWhiteLevel() * point.count * k2)) / (flame.getWhiteLevel() * point.count) / FILTER_WHITE;
     }
     pFilteredPnt.red = ls * point.red;
     pFilteredPnt.green = ls * point.green;

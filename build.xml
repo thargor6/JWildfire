@@ -63,6 +63,7 @@
       <fileset dir="${src.dir}" includes="org/jwildfire/**/*.html"/>
       <fileset dir="${src.dir}" includes="org/jwildfire/swing/icons/*.gif"/>
       <fileset dir="${build.dir}" includes="com/"/>
+      <fileset dir="${build.dir}" includes="odk/"/>
       <zipfileset src="lib/jep-2.4.1.jar"/>
       <zipfileset src="lib/sunflow.jar"/>
       <zipfileset src="lib/janino.jar"/>

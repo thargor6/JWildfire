@@ -12,3 +12,4 @@ gitlog.sh
 bin/*
 build/dist/*
 tptpParseError.log
+src/odk/*

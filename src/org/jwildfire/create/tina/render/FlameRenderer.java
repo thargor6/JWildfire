@@ -16,6 +16,11 @@
 */
 package org.jwildfire.create.tina.render;
 
+import static org.jwildfire.base.MathLib.M_PI;
+import static org.jwildfire.base.MathLib.cos;
+import static org.jwildfire.base.MathLib.fabs;
+import static org.jwildfire.base.MathLib.sin;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -31,8 +36,6 @@ import org.jwildfire.create.tina.palette.RenderColor;
 import org.jwildfire.create.tina.random.RandomNumberGenerator;
 import org.jwildfire.create.tina.random.SimpleRandomNumberGenerator;
 import org.jwildfire.create.tina.swing.ProgressUpdater;
-import org.jwildfire.create.tina.variation.DefaultFlameTransformationContextImpl;
-import org.jwildfire.create.tina.variation.FastFlameTransformationContextImpl;
 import org.jwildfire.create.tina.variation.FlameTransformationContext;
 import org.jwildfire.image.Pixel;
 import org.jwildfire.image.SimpleHDRImage;
@@ -84,22 +87,22 @@ public class FlameRenderer {
   public FlameRenderer(Flame pFlame, Prefs pPrefs) {
     flame = pFlame;
     prefs = pPrefs;
-    flameTransformationContext = prefs.getTinaRenderFastMath() > 0 ? new FastFlameTransformationContextImpl(this) : new DefaultFlameTransformationContextImpl(this);
+    flameTransformationContext = new FlameTransformationContext(this);
   }
 
   private void init3D() {
-    double yaw = -flame.getCamYaw() * Math.PI / 180.0;
-    double pitch = flame.getCamPitch() * Math.PI / 180.0;
-    cameraMatrix[0][0] = Math.cos(yaw);
-    cameraMatrix[1][0] = -Math.sin(yaw);
+    double yaw = -flame.getCamYaw() * M_PI / 180.0;
+    double pitch = flame.getCamPitch() * M_PI / 180.0;
+    cameraMatrix[0][0] = cos(yaw);
+    cameraMatrix[1][0] = -sin(yaw);
     cameraMatrix[2][0] = 0;
-    cameraMatrix[0][1] = Math.cos(pitch) * Math.sin(yaw);
-    cameraMatrix[1][1] = Math.cos(pitch) * Math.cos(yaw);
-    cameraMatrix[2][1] = -Math.sin(pitch);
-    cameraMatrix[0][2] = Math.sin(pitch) * Math.sin(yaw);
-    cameraMatrix[1][2] = Math.sin(pitch) * Math.cos(yaw);
-    cameraMatrix[2][2] = Math.cos(pitch);
-    doProject3D = Math.abs(flame.getCamYaw()) > MathLib.EPSILON || Math.abs(flame.getCamPitch()) > MathLib.EPSILON || Math.abs(flame.getCamPerspective()) > MathLib.EPSILON || Math.abs(flame.getCamDOF()) > MathLib.EPSILON;
+    cameraMatrix[0][1] = cos(pitch) * sin(yaw);
+    cameraMatrix[1][1] = cos(pitch) * cos(yaw);
+    cameraMatrix[2][1] = -sin(pitch);
+    cameraMatrix[0][2] = sin(pitch) * sin(yaw);
+    cameraMatrix[1][2] = sin(pitch) * cos(yaw);
+    cameraMatrix[2][2] = cos(pitch);
+    doProject3D = fabs(flame.getCamYaw()) > MathLib.EPSILON || fabs(flame.getCamPitch()) > MathLib.EPSILON || fabs(flame.getCamPerspective()) > MathLib.EPSILON || fabs(flame.getCamDOF()) > MathLib.EPSILON;
   }
 
   private void initRaster(int pImageWidth, int pImageHeight) {
@@ -129,10 +132,10 @@ public class FlameRenderer {
     double py = cameraMatrix[0][1] * pPoint.x + cameraMatrix[1][1] * pPoint.y + cameraMatrix[2][1] * z;
     double pz = cameraMatrix[0][2] * pPoint.x + cameraMatrix[1][2] * pPoint.y + cameraMatrix[2][2] * z;
     double zr = 1.0 - flame.getCamPerspective() * pz;
-    if (Math.abs(flame.getCamDOF()) > MathLib.EPSILON) {
-      double a = 2.0 * Math.PI * random.random();
-      double dsina = Math.sin(a);
-      double dcosa = Math.cos(a);
+    if (fabs(flame.getCamDOF()) > MathLib.EPSILON) {
+      double a = 2.0 * M_PI * random.random();
+      double dsina = sin(a);
+      double dcosa = cos(a);
       double zdist = (flame.getCamZ() - pz);
       double dr;
       if (zdist > 0.0) {
@@ -543,20 +546,20 @@ public class FlameRenderer {
 
     camW = camX1 - camX0;
     double Xsize, Ysize;
-    if (Math.abs(camW) > 0.01)
+    if (fabs(camW) > 0.01)
       Xsize = 1.0 / camW;
     else
       Xsize = 1.0;
     camH = camY1 - camY0;
-    if (Math.abs(camH) > 0.01)
+    if (fabs(camH) > 0.01)
       Ysize = 1.0 / camH;
     else
       Ysize = 1;
     bws = (rasterWidth - 0.5) * Xsize;
     bhs = (rasterHeight - 0.5) * Ysize;
 
-    cosa = Math.cos(-Math.PI * (flame.getCamRoll()) / 180.0);
-    sina = Math.sin(-Math.PI * (flame.getCamRoll()) / 180.0);
+    cosa = cos(-M_PI * (flame.getCamRoll()) / 180.0);
+    sina = sin(-M_PI * (flame.getCamRoll()) / 180.0);
     rcX = flame.getCentreX() * (1 - cosa) - flame.getCentreY() * sina - camX0;
     rcY = flame.getCentreY() * (1 - cosa) + flame.getCentreX() * sina - camY0;
   }

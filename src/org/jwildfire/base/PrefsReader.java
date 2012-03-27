@@ -55,7 +55,6 @@ public class PrefsReader {
         pPrefs.setImagePath(getProperty(props, Prefs.KEY_GENERAL_PATH_IMAGES, pPrefs.getImagePath()));
         pPrefs.setScriptPath(getProperty(props, Prefs.KEY_GENERAL_PATH_SCRIPTS, pPrefs.getScriptPath()));
 
-        pPrefs.setTinaRenderFastMath(getIntProperty(props, Prefs.KEY_TINA_RENDER_FAST_MATH, pPrefs.getTinaRenderFastMath()));
         pPrefs.setTinaFlamePath(getProperty(props, Prefs.KEY_TINA_PATH_FLAMES, pPrefs.getTinaFlamePath()));
         pPrefs.setTinaRenderThreads(getIntProperty(props, Prefs.KEY_TINA_RENDER_THREADS, pPrefs.getTinaRenderThreads()));
         pPrefs.setTinaRenderImageWidth(getIntProperty(props, Prefs.KEY_TINA_RENDER_IMAGE_WIDTH, pPrefs.getTinaRenderImageWidth()));

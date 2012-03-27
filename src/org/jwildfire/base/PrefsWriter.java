@@ -26,7 +26,6 @@ public class PrefsWriter {
     addValue(sb, Prefs.KEY_GENERAL_PLAF_THEME, pPrefs.getPlafTheme());
     addValue(sb, Prefs.KEY_GENERAL_PATH_IMAGES, pPrefs.getImagePath());
     addValue(sb, Prefs.KEY_GENERAL_PATH_SCRIPTS, pPrefs.getScriptPath());
-    addValue(sb, Prefs.KEY_TINA_RENDER_FAST_MATH, pPrefs.getTinaRenderFastMath());
     addValue(sb, Prefs.KEY_TINA_PATH_FLAMES, pPrefs.getTinaFlamePath());
     addValue(sb, Prefs.KEY_TINA_RENDER_THREADS, pPrefs.getTinaRenderThreads());
     addValue(sb, Prefs.KEY_TINA_RENDER_IMAGE_WIDTH, pPrefs.getTinaRenderImageWidth());

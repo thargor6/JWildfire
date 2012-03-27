@@ -34,7 +34,6 @@ public class Prefs extends ManagedObject {
 
   static final String KEY_TINA_PATH_FLAMES = "tina.path.flames";
   static final String KEY_TINA_RENDER_THREADS = "tina.render.threads";
-  static final String KEY_TINA_RENDER_FAST_MATH = "tina.render.fast_math";
   static final String KEY_TINA_RENDER_IMAGE_WIDTH = "tina.render.image.width";
   static final String KEY_TINA_RENDER_IMAGE_HEIGHT = "tina.render.image.height";
   static final String KEY_TINA_RENDER_MOVIE_WIDTH = "tina.render.movie.width";
@@ -118,8 +117,6 @@ public class Prefs extends ManagedObject {
 
   @Property(description = "Maximum number of threads", category = PropertyCategory.TINA)
   private int tinaRenderThreads = 8;
-  @Property(description = "Use fast math (0 or 1)", category = PropertyCategory.TINA)
-  private int tinaRenderFastMath = 1;
 
   @Property(description = "Quality for realtime rendering (please restart app after changing this)", category = PropertyCategory.TINA)
   private int tinaRenderRealtimeQuality = 1;
@@ -347,7 +344,6 @@ public class Prefs extends ManagedObject {
     tinaRenderMovieColorOversample = pSrc.tinaRenderMovieColorOversample;
     tinaRenderMovieFilterRadius = pSrc.tinaRenderMovieFilterRadius;
     tinaRenderMovieQuality = pSrc.tinaRenderMovieQuality;
-    tinaRenderFastMath = pSrc.tinaRenderFastMath;
     tinaRenderRealtimeQuality = pSrc.tinaRenderRealtimeQuality;
     tinaRandomBatchSize = pSrc.tinaRandomBatchSize;
     tinaRandomBatchBGColorRed = pSrc.tinaRandomBatchBGColorRed;
@@ -529,14 +525,6 @@ public class Prefs extends ManagedObject {
 
   public void setTinaRenderMovieFrames(int tinaRenderMovieFrames) {
     this.tinaRenderMovieFrames = tinaRenderMovieFrames;
-  }
-
-  public int getTinaRenderFastMath() {
-    return tinaRenderFastMath;
-  }
-
-  public void setTinaRenderFastMath(int tinaRenderFastMath) {
-    this.tinaRenderFastMath = tinaRenderFastMath;
   }
 
   public int getTinaRenderRealtimeQuality() {

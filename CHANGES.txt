@@ -1,3 +1,14 @@
+V0.41 (24.03.2012):
+ - Fractal flame editor: minor improvements to the Flower3D random generator
+ - Fractal flame editor: linearT and linearT3D varaition by FractalDesire
+ - Fractal flame editor: nBlur variation by FractalDesire
+ - Fractal flame editor: improved the SubFlame random flame generator
+ - Fractal flame editor: optimized the coloring of the subflame_wf variation
+ - Fractal flame editor: post_zscale_wf and post_ztranslate_wf variations
+ - Fractal flame editor: new exponent parameter for the spherical3d_wf variation
+ - Fractal flame editor: new button to show/hide the display of the variation effect
+ - Fractal flame editor: variation preview
+
 V0.40 (10.03.2012):
  - Main: renamed the "Sunflow..." classes and visual elements into "EDEN..." or "Structure Synthsizer..."
  - Fractal flame editor: basic help page

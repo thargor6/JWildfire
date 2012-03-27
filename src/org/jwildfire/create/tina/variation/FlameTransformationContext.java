@@ -16,30 +16,33 @@
 */
 package org.jwildfire.create.tina.variation;
 
+import org.jwildfire.create.tina.random.RandomNumberGenerator;
 import org.jwildfire.create.tina.random.RandomNumberGenerator.RandGenStatus;
 import org.jwildfire.create.tina.render.FlameRenderer;
 
-public interface FlameTransformationContext {
-  public abstract double random();
+public class FlameTransformationContext {
+  private final RandomNumberGenerator randGen;
+  private final FlameRenderer flameRenderer;
 
-  public abstract int random(int pMax);
+  public FlameTransformationContext(FlameRenderer pFlameRenderer) {
+    randGen = pFlameRenderer.getRandomNumberGenerator();
+    flameRenderer = pFlameRenderer;
+  }
 
-  public abstract void setRandGenStatus(RandGenStatus pRandGenStatus);
+  public double random() {
+    return randGen.random();
+  }
 
-  public abstract double sin(double a);
+  public int random(int pMax) {
+    return randGen.random(pMax);
+  }
 
-  public abstract double cos(double a);
+  public void setRandGenStatus(RandGenStatus pRandGenStatus) {
+    randGen.setStatus(pRandGenStatus);
+  }
 
-  public abstract double tan(double a);
-
-  public abstract double exp(double a);
-
-  public abstract double sqrt(double a);
-
-  public abstract double fmod(double a, double b);
-
-  abstract FlameRenderer getFlameRenderer();
-
-  public abstract double sqr(double a);
+  public FlameRenderer getFlameRenderer() {
+    return flameRenderer;
+  }
 
 }

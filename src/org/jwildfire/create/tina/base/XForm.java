@@ -16,6 +16,8 @@
 */
 package org.jwildfire.create.tina.base;
 
+import static org.jwildfire.base.MathLib.fabs;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -43,8 +45,10 @@ public class XForm {
   private double postCoeff11;
   private double postCoeff20;
   private double postCoeff21;
+  private boolean hasPostCoeffs;
   private final List<Variation> variations = new ArrayList<Variation>();
   private final List<Variation> sortedVariations = new ArrayList<Variation>();
+  private Variation[] sortedVariationsArray = null;
   private final double modifiedWeights[] = new double[Constants.MAX_MOD_WEIGHT_COUNT]; // the same like "xaos" in Apophysis
   private double opacity = 0.0;
   private final XForm[] nextAppliedXFormTable = new XForm[Constants.NEXT_APPLIED_XFORM_TABLE_SIZE];
@@ -140,10 +144,17 @@ public class XForm {
 
   private void updateSortedVariations() {
     sortedVariations.clear();
+    sortedVariationsArray = null;
     if (variations.size() > 0) {
       sortedVariations.addAll(variations);
       if (variations.size() > 1) {
         Collections.sort(sortedVariations, new VariationPriorityComparator());
+      }
+      // for faster access
+      sortedVariationsArray = new Variation[variations.size()];
+      int i = 0;
+      for (Variation var : sortedVariations) {
+        sortedVariationsArray[i++] = var;
       }
     }
   }
@@ -199,11 +210,16 @@ public class XForm {
     //   pDstPoint.color = pSrcPoint.color * c1 + c2;
     c1 = (1 + colorSymmetry) * 0.5;
     c2 = color * (1 - colorSymmetry) * 0.5;
+    updateHasPostCoeffs();
   }
 
-  public boolean hasPostCoeffs() {
-    return (Math.abs(postCoeff00 - 1.0) > MathLib.EPSILON || Math.abs(postCoeff01) > MathLib.EPSILON || Math.abs(postCoeff10) > MathLib.EPSILON
-        || Math.abs(postCoeff11 - 1.0) > MathLib.EPSILON || Math.abs(postCoeff20) > MathLib.EPSILON || Math.abs(postCoeff21) > MathLib.EPSILON);
+  private void updateHasPostCoeffs() {
+    hasPostCoeffs = fabs(postCoeff00 - 1.0) > MathLib.EPSILON || fabs(postCoeff01) > MathLib.EPSILON || fabs(postCoeff10) > MathLib.EPSILON
+        || fabs(postCoeff11 - 1.0) > MathLib.EPSILON || fabs(postCoeff20) > MathLib.EPSILON || fabs(postCoeff21) > MathLib.EPSILON;
+  }
+
+  public boolean isHasPostCoeffs() {
+    return hasPostCoeffs;
   }
 
   public void transformPoint(FlameTransformationContext pContext, XYZPoint pAffineT, XYZPoint pVarT, XYZPoint pSrcPoint, XYZPoint pDstPoint) {
@@ -219,7 +235,8 @@ public class XForm {
     pVarT.greenColor = pAffineT.greenColor;
     pVarT.blueColor = pAffineT.blueColor;
 
-    for (Variation variation : sortedVariations) {
+    for (int i = 0; i < sortedVariationsArray.length; i++) {
+      Variation variation = sortedVariationsArray[i];
       variation.transform(pContext, this, pAffineT, pVarT);
       if (variation.getFunc().getPriority() < 0) {
         pAffineT.invalidate();
@@ -230,7 +247,7 @@ public class XForm {
     pDstPoint.redColor = pVarT.redColor;
     pDstPoint.greenColor = pVarT.greenColor;
     pDstPoint.blueColor = pVarT.blueColor;
-    if (hasPostCoeffs()) {
+    if (isHasPostCoeffs()) {
       double px = postCoeff00 * pVarT.x + postCoeff10 * pVarT.y + postCoeff20;
       double py = postCoeff01 * pVarT.x + postCoeff11 * pVarT.y + postCoeff21;
       double pz = pVarT.z;
@@ -238,11 +255,9 @@ public class XForm {
       pVarT.y = py;
       pVarT.z = pz;
     }
-
     pDstPoint.x = pVarT.x;
     pDstPoint.y = pVarT.y;
     pDstPoint.z = pVarT.z;
-
   }
 
   public void transformPoints(FlameTransformationContext pContext, XYZPoint[] pAffineT, XYZPoint[] pVarT, XYZPoint[] pSrcPoint, XYZPoint[] pDstPoint) {
@@ -263,14 +278,15 @@ public class XForm {
         pAffineT[i].z = pSrcPoint[i].z;
         pVarT[i].clear();
         pVarT[i].color = pAffineT[i].color;
-        for (Variation variation : sortedVariations) {
+        for (int j = 0; j < sortedVariationsArray.length; j++) {
+          Variation variation = sortedVariationsArray[j];
           variation.transform(pContext, this, pAffineT[i], pVarT[i]);
           if (variation.getFunc().getPriority() < 0) {
             pAffineT[i].invalidate();
           }
         }
         pDstPoint[i].color = pVarT[i].color;
-        if (hasPostCoeffs()) {
+        if (isHasPostCoeffs()) {
           double px = postCoeff00 * pVarT[i].x + postCoeff10 * pVarT[i].y + postCoeff20;
           double py = postCoeff01 * pVarT[i].x + postCoeff11 * pVarT[i].y + postCoeff21;
           double pz = pVarT[i].z;
@@ -329,6 +345,7 @@ public class XForm {
     postCoeff11 = pXForm.postCoeff11;
     postCoeff20 = pXForm.postCoeff20;
     postCoeff21 = pXForm.postCoeff21;
+    hasPostCoeffs = pXForm.hasPostCoeffs;
     System.arraycopy(pXForm.modifiedWeights, 0, modifiedWeights, 0, modifiedWeights.length);
     variations.clear();
     for (Variation var : pXForm.variations) {
@@ -353,6 +370,7 @@ public class XForm {
 
   public void setPostCoeff00(double postCoeff00) {
     this.postCoeff00 = postCoeff00;
+    updateHasPostCoeffs();
   }
 
   public double getPostCoeff01() {
@@ -361,6 +379,7 @@ public class XForm {
 
   public void setPostCoeff01(double postCoeff01) {
     this.postCoeff01 = postCoeff01;
+    updateHasPostCoeffs();
   }
 
   public double getPostCoeff10() {
@@ -369,6 +388,7 @@ public class XForm {
 
   public void setPostCoeff10(double postCoeff10) {
     this.postCoeff10 = postCoeff10;
+    updateHasPostCoeffs();
   }
 
   public double getPostCoeff11() {
@@ -377,6 +397,7 @@ public class XForm {
 
   public void setPostCoeff11(double postCoeff11) {
     this.postCoeff11 = postCoeff11;
+    updateHasPostCoeffs();
   }
 
   public double getPostCoeff20() {
@@ -385,6 +406,7 @@ public class XForm {
 
   public void setPostCoeff20(double postCoeff20) {
     this.postCoeff20 = postCoeff20;
+    updateHasPostCoeffs();
   }
 
   public double getPostCoeff21() {
@@ -393,6 +415,7 @@ public class XForm {
 
   public void setPostCoeff21(double postCoeff21) {
     this.postCoeff21 = postCoeff21;
+    updateHasPostCoeffs();
   }
 
 }

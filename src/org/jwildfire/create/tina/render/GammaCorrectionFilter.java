@@ -16,6 +16,8 @@
 */
 package org.jwildfire.create.tina.render;
 
+import static org.jwildfire.base.MathLib.pow;
+
 import org.jwildfire.create.tina.base.Flame;
 
 public class GammaCorrectionFilter {
@@ -57,7 +59,7 @@ public class GammaCorrectionFilter {
 
     sclGamma = 0.0;
     if (flame.getGammaThreshold() != 0) {
-      sclGamma = Math.pow(flame.getGammaThreshold(), gamma - 1);
+      sclGamma = pow(flame.getGammaThreshold(), gamma - 1);
     }
 
     bgRed = flame.getBGColorRed();
@@ -77,10 +79,10 @@ public class GammaCorrectionFilter {
       double alpha;
       if (logDensityPnt.intensity <= flame.getGammaThreshold()) {
         double frac = logDensityPnt.intensity / flame.getGammaThreshold();
-        alpha = (1.0 - frac) * logDensityPnt.intensity * sclGamma + frac * Math.pow(logDensityPnt.intensity, gamma);
+        alpha = (1.0 - frac) * logDensityPnt.intensity * sclGamma + frac * pow(logDensityPnt.intensity, gamma);
       }
       else {
-        alpha = Math.pow(logDensityPnt.intensity, gamma);
+        alpha = pow(logDensityPnt.intensity, gamma);
       }
       logScl = vibInt * alpha / logDensityPnt.intensity;
       int alphaInt = (int) (alpha * 256 + 0.5);
@@ -99,9 +101,9 @@ public class GammaCorrectionFilter {
 
     int red, green, blue;
     if (inverseVibInt > 0) {
-      red = (int) (logScl * logDensityPnt.red + inverseVibInt * Math.pow(logDensityPnt.red, gamma) + 0.5);
-      green = (int) (logScl * logDensityPnt.green + inverseVibInt * Math.pow(logDensityPnt.green, gamma) + 0.5);
-      blue = (int) (logScl * logDensityPnt.blue + inverseVibInt * Math.pow(logDensityPnt.blue, gamma) + 0.5);
+      red = (int) (logScl * logDensityPnt.red + inverseVibInt * pow(logDensityPnt.red, gamma) + 0.5);
+      green = (int) (logScl * logDensityPnt.green + inverseVibInt * pow(logDensityPnt.green, gamma) + 0.5);
+      blue = (int) (logScl * logDensityPnt.blue + inverseVibInt * pow(logDensityPnt.blue, gamma) + 0.5);
     }
     else {
       red = (int) (logScl * logDensityPnt.red + 0.5);
@@ -140,10 +142,10 @@ public class GammaCorrectionFilter {
       double alpha;
       if (logDensityPnt.intensity <= flame.getGammaThreshold()) {
         double frac = logDensityPnt.intensity / flame.getGammaThreshold();
-        alpha = (1.0 - frac) * logDensityPnt.intensity * sclGamma + frac * Math.pow(logDensityPnt.intensity, gamma);
+        alpha = (1.0 - frac) * logDensityPnt.intensity * sclGamma + frac * pow(logDensityPnt.intensity, gamma);
       }
       else {
-        alpha = Math.pow(logDensityPnt.intensity, gamma);
+        alpha = pow(logDensityPnt.intensity, gamma);
       }
       logScl = vibDouble * alpha / logDensityPnt.intensity;
 
@@ -165,9 +167,9 @@ public class GammaCorrectionFilter {
 
     double red, green, blue;
     if (inverseVibDouble > 0.0) {
-      red = logScl * logDensityPnt.red + inverseVibDouble * Math.pow(logDensityPnt.red, gamma);
-      green = logScl * logDensityPnt.green + inverseVibDouble * Math.pow(logDensityPnt.green, gamma);
-      blue = logScl * logDensityPnt.blue + inverseVibDouble * Math.pow(logDensityPnt.blue, gamma);
+      red = logScl * logDensityPnt.red + inverseVibDouble * pow(logDensityPnt.red, gamma);
+      green = logScl * logDensityPnt.green + inverseVibDouble * pow(logDensityPnt.green, gamma);
+      blue = logScl * logDensityPnt.blue + inverseVibDouble * pow(logDensityPnt.blue, gamma);
     }
     else {
       red = logScl * logDensityPnt.red;
@@ -188,7 +190,7 @@ public class GammaCorrectionFilter {
     int inverseAlphaInt;
     if (logDensityPnt.intensity > 0.0) {
       // gamma linearization
-      double alpha = Math.pow(logDensityPnt.intensity, gamma);
+      double alpha = pow(logDensityPnt.intensity, gamma);
       logScl = vibInt * alpha / logDensityPnt.intensity;
       int alphaInt = (int) (alpha * 256 + 0.5);
       if (alphaInt < 0)
