@@ -16,6 +16,10 @@
 */
 package org.jwildfire.create.tina.variation;
 
+import static org.jwildfire.base.MathLib.M_PI;
+import static org.jwildfire.base.MathLib.cos;
+import static org.jwildfire.base.MathLib.sin;
+
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
@@ -23,9 +27,9 @@ public class NoiseFunc extends SimpleVariationFunc {
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-    double r = pContext.random() * 2.0 * Math.PI;
-    double sinr = pContext.sin(r);
-    double cosr = pContext.cos(r);
+    double r = pContext.random() * 2.0 * M_PI;
+    double sinr = sin(r);
+    double cosr = cos(r);
     r = pAmount * pContext.random();
     pVarTP.x += pAffineTP.x * r * cosr;
     pVarTP.y += pAffineTP.y * r * sinr;

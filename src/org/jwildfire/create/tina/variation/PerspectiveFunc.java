@@ -16,6 +16,10 @@
 */
 package org.jwildfire.create.tina.variation;
 
+import static org.jwildfire.base.MathLib.M_PI;
+import static org.jwildfire.base.MathLib.cos;
+import static org.jwildfire.base.MathLib.sin;
+
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
@@ -65,8 +69,8 @@ public class PerspectiveFunc extends VariationFunc {
 
   @Override
   public void init(FlameTransformationContext pContext, XForm pXForm) {
-    double ang = this.angle * Math.PI / 2.0;
-    vsin = pContext.sin(ang);
-    vfcos = this.dist * pContext.cos(ang);
+    double ang = this.angle * M_PI / 2.0;
+    vsin = sin(ang);
+    vfcos = this.dist * cos(ang);
   }
 }

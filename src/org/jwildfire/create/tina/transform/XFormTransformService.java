@@ -16,7 +16,7 @@
 */
 package org.jwildfire.create.tina.transform;
 
-import org.jwildfire.create.tina.base.Constants;
+import org.jwildfire.base.MathLib;
 import org.jwildfire.create.tina.base.XForm;
 
 public class XFormTransformService {
@@ -40,7 +40,7 @@ public class XFormTransformService {
   }
 
   public static void rotate(XForm pXForm, double pAngle, boolean pPostTransform) {
-    if (Math.abs(pAngle) < Constants.EPSILON)
+    if (Math.abs(pAngle) < MathLib.SMALL_EPSILON)
       return;
     double alpha = pAngle * Math.PI / 180.0;
     Matrix3x3 m1 = new Identity3x3();
@@ -93,7 +93,7 @@ public class XFormTransformService {
   }
 
   public static void globalTranslate(XForm pXForm, double pDeltaX, double pDeltaY, boolean pPostTransform) {
-    if (Math.abs(pDeltaX) < Constants.EPSILON && Math.abs(pDeltaY) < Constants.EPSILON)
+    if (Math.abs(pDeltaX) < MathLib.SMALL_EPSILON && Math.abs(pDeltaY) < MathLib.SMALL_EPSILON)
       return;
     if (pPostTransform) {
       pXForm.setPostCoeff20(pDeltaX + pXForm.getPostCoeff20());
@@ -106,7 +106,7 @@ public class XFormTransformService {
   }
 
   public static void localTranslate(XForm pXForm, double pDeltaX, double pDeltaY, boolean pPostTransform) {
-    if (Math.abs(pDeltaX) < Constants.EPSILON && Math.abs(pDeltaY) < Constants.EPSILON)
+    if (Math.abs(pDeltaX) < MathLib.SMALL_EPSILON && Math.abs(pDeltaY) < MathLib.SMALL_EPSILON)
       return;
     Matrix3x3 m1 = new Identity3x3();
     m1.val[0][2] = pDeltaX;
@@ -152,7 +152,7 @@ public class XFormTransformService {
   }
 
   public static void scale(XForm pXForm, double pScale, boolean pXScale, boolean pYScale, boolean pPostTransform) {
-    if (Math.abs(pScale - 1.0) < Constants.EPSILON) {
+    if (Math.abs(pScale - 1.0) < MathLib.SMALL_EPSILON) {
       return;
     }
     if (pXScale) {

@@ -16,6 +16,8 @@
 */
 package org.jwildfire.create.tina.variation;
 
+import static org.jwildfire.base.MathLib.M_PI;
+
 import org.jwildfire.create.tina.random.RandomNumberGenerator;
 import org.jwildfire.create.tina.random.RandomNumberGenerator.RandGenStatus;
 import org.jwildfire.create.tina.render.FlameRenderer;
@@ -46,19 +48,19 @@ public class FastFlameTransformationContextImpl implements FlameTransformationCo
 
   @Override
   public final double sin(double a) {
-    //    return Math.sin(a);
+    //    return sin(a);
     return sin[(int) (a * radToIndex) & TRIG_PRECALC_MASK];
   }
 
   @Override
   public final double cos(double a) {
-    //    return Math.cos(a);
+    //    return cos(a);
     return cos[(int) (a * radToIndex) & TRIG_PRECALC_MASK];
   }
 
   @Override
   public final double tan(double a) {
-    //    return Math.tan(a);
+    //    return tan(a);
     return tan[(int) (a * radToIndex) & TRIG_PRECALC_MASK];
   }
 
@@ -81,15 +83,15 @@ public class FastFlameTransformationContextImpl implements FlameTransformationCo
 
   @Override
   public final double sqrt(double a) {
-    //    return Math.sqrt(a);
+    //    return sqrt(a);
     //    if (a > 0.0 & a < SQRT_MAX) {
     //      int idx = (int) (a * SQRT_SCL);
     //      return sqrt[idx];
     //    }
     //    else {
-    //      return Math.sqrt(a);
+    //      return sqrt(a);
     //    }
-    return Math.sqrt(a);
+    return sqrt(a);
   }
 
   // Fast sin/cos approx following http://www.java-gaming.org/index.php?topic=24191.0
@@ -112,7 +114,7 @@ public class FastFlameTransformationContextImpl implements FlameTransformationCo
     TRIG_PRECALC_MASK = ~(-1 << TRIG_PRECALC_BITS);
     TRIG_PRECALC_COUNT = TRIG_PRECALC_MASK + 1;
 
-    radFull = (Math.PI * 2.0);
+    radFull = (M_PI * 2.0);
     degFull = (360.0);
     radToIndex = TRIG_PRECALC_COUNT / radFull;
     degToIndex = TRIG_PRECALC_COUNT / degFull;
@@ -127,9 +129,9 @@ public class FastFlameTransformationContextImpl implements FlameTransformationCo
       tan[i] = Math.tan((i + 0.5) / TRIG_PRECALC_COUNT * radFull);
     }
     for (int i = 0; i < 360; i += 90) {
-      sin[(int) (i * degToIndex) & TRIG_PRECALC_MASK] = (double) Math.sin(i * Math.PI / 180.0);
-      cos[(int) (i * degToIndex) & TRIG_PRECALC_MASK] = (double) Math.cos(i * Math.PI / 180.0);
-      tan[(int) (i * degToIndex) & TRIG_PRECALC_MASK] = (double) Math.tan(i * Math.PI / 180.0);
+      sin[(int) (i * degToIndex) & TRIG_PRECALC_MASK] = (double) Math.sin(i * M_PI / 180.0);
+      cos[(int) (i * degToIndex) & TRIG_PRECALC_MASK] = (double) Math.cos(i * M_PI / 180.0);
+      tan[(int) (i * degToIndex) & TRIG_PRECALC_MASK] = (double) Math.tan(i * M_PI / 180.0);
     }
     // exp
     int EXP_PRECALC_BITS = 17;
@@ -152,7 +154,7 @@ public class FastFlameTransformationContextImpl implements FlameTransformationCo
     //    SQRT_SCL = (double) SQRT_PRECALC_COUNT / SQRT_MAX;
     //    for (int i = 0; i <= SQRT_PRECALC_COUNT; i++) {
     //      double x = (double) (i + 0.5) / SQRT_SCL;
-    //      sqrt[i] = Math.sqrt(x);
+    //      sqrt[i] = sqrt(x);
     //    }
   }
 

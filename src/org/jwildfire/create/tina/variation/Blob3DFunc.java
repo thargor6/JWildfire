@@ -16,6 +16,11 @@
 */
 package org.jwildfire.create.tina.variation;
 
+import static org.jwildfire.base.MathLib.atan2;
+import static org.jwildfire.base.MathLib.cos;
+import static org.jwildfire.base.MathLib.sin;
+import static org.jwildfire.base.MathLib.sqrt;
+
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
@@ -31,12 +36,12 @@ public class Blob3DFunc extends VariationFunc {
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-    double a = Math.atan2(pAffineTP.x, pAffineTP.y);
-    double r = pContext.sqrt(pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y);
-    r = r * (low + (high - low) * (0.5 + 0.5 * pContext.sin(waves * a)));
-    double nx = pContext.sin(a) * r;
-    double ny = pContext.cos(a) * r;
-    double nz = pContext.sin(waves * a) * r;
+    double a = atan2(pAffineTP.x, pAffineTP.y);
+    double r = sqrt(pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y);
+    r = r * (low + (high - low) * (0.5 + 0.5 * sin(waves * a)));
+    double nx = sin(a) * r;
+    double ny = cos(a) * r;
+    double nz = sin(waves * a) * r;
 
     pVarTP.x += pAmount * nx;
     pVarTP.y += pAmount * ny;

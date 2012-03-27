@@ -16,6 +16,9 @@
 */
 package org.jwildfire.create.tina.variation;
 
+import static org.jwildfire.base.MathLib.cos;
+import static org.jwildfire.base.MathLib.sin;
+
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
@@ -33,8 +36,8 @@ public class PDJFunc extends VariationFunc {
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-    pVarTP.x += pAmount * (pContext.sin(a * pAffineTP.y) - pContext.cos(b * pAffineTP.x));
-    pVarTP.y += pAmount * (pContext.sin(c * pAffineTP.x) - pContext.cos(d * pAffineTP.y));
+    pVarTP.x += pAmount * (sin(a * pAffineTP.y) - cos(b * pAffineTP.x));
+    pVarTP.y += pAmount * (sin(c * pAffineTP.x) - cos(d * pAffineTP.y));
   }
 
   @Override

@@ -16,67 +16,74 @@
  */
 package org.jwildfire.create.tina.variation;
 
+import static org.jwildfire.base.MathLib.fabs;
+import static org.jwildfire.base.MathLib.sqr;
+import static org.jwildfire.base.MathLib.sqrt;
+
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
 public class EclipseFunc extends VariationFunc {
 
-	private static final String PARAM_SHIFT = "shift";
+  private static final String PARAM_SHIFT = "shift";
 
-	private static final String[] paramNames = { PARAM_SHIFT };
+  private static final String[] paramNames = { PARAM_SHIFT };
 
-	private double shift = 0.0;
+  private double shift = 0.0;
 
-	@Override
-	public void transform(FlameTransformationContext pContext, XForm pXForm,
-			XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-		/*
-		 * eclipse by Michael Faber,
-		 * http://michaelfaber.deviantart.com/art/Eclipse-268362046
-		 */
+  @Override
+  public void transform(FlameTransformationContext pContext, XForm pXForm,
+      XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
+    /*
+     * eclipse by Michael Faber,
+     * http://michaelfaber.deviantart.com/art/Eclipse-268362046
+     */
 
-		if (Math.abs(pAffineTP.y) <= pAmount) {
-			double c_2 = Math.sqrt(pContext.sqr(pAmount)
-					- pContext.sqr(pAffineTP.y));
+    if (fabs(pAffineTP.y) <= pAmount) {
+      double c_2 = sqrt(sqr(pAmount)
+          - sqr(pAffineTP.y));
 
-			if (Math.abs(pAffineTP.x) <= c_2) {
-				double x = pAffineTP.x + this.shift * pAmount;
-				if (Math.abs(x) >= c_2) {
-					pVarTP.x -= pAmount * pAffineTP.x;
-				} else {
-					pVarTP.x += pAmount * x;
-				}
-			} else {
-				pVarTP.x += pAmount * pAffineTP.x;
-			}
-			pVarTP.y += pAmount * pAffineTP.y;
-		} else {
-			pVarTP.x += pAmount * pAffineTP.x;
-			pVarTP.y += pAmount * pAffineTP.y;
-		}
-	}
+      if (fabs(pAffineTP.x) <= c_2) {
+        double x = pAffineTP.x + this.shift * pAmount;
+        if (fabs(x) >= c_2) {
+          pVarTP.x -= pAmount * pAffineTP.x;
+        }
+        else {
+          pVarTP.x += pAmount * x;
+        }
+      }
+      else {
+        pVarTP.x += pAmount * pAffineTP.x;
+      }
+      pVarTP.y += pAmount * pAffineTP.y;
+    }
+    else {
+      pVarTP.x += pAmount * pAffineTP.x;
+      pVarTP.y += pAmount * pAffineTP.y;
+    }
+  }
 
-	@Override
-	public String[] getParameterNames() {
-		return paramNames;
-	}
+  @Override
+  public String[] getParameterNames() {
+    return paramNames;
+  }
 
-	@Override
-	public Object[] getParameterValues() {
-		return new Object[] { shift };
-	}
+  @Override
+  public Object[] getParameterValues() {
+    return new Object[] { shift };
+  }
 
-	@Override
-	public void setParameter(String pName, double pValue) {
-		if (PARAM_SHIFT.equalsIgnoreCase(pName))
-			shift = limitVal(pValue, -2.0, 2.0);
-		else
-			throw new IllegalArgumentException(pName);
-	}
+  @Override
+  public void setParameter(String pName, double pValue) {
+    if (PARAM_SHIFT.equalsIgnoreCase(pName))
+      shift = limitVal(pValue, -2.0, 2.0);
+    else
+      throw new IllegalArgumentException(pName);
+  }
 
-	@Override
-	public String getName() {
-		return "eclipse";
-	}
+  @Override
+  public String getName() {
+    return "eclipse";
+  }
 
 }

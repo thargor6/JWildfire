@@ -16,6 +16,11 @@
 */
 package org.jwildfire.create.tina.variation;
 
+import static org.jwildfire.base.MathLib.cos;
+import static org.jwildfire.base.MathLib.cosh;
+import static org.jwildfire.base.MathLib.sin;
+import static org.jwildfire.base.MathLib.sinh;
+
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
@@ -26,10 +31,10 @@ public class TanhFunc extends SimpleVariationFunc {
     /* complex vars by cothe */
     /* exp log sin cos tan sec csc cot sinh cosh tanh sech csch coth */
     //Hyperbolic Tangent TANH
-    double tanhsin = pContext.sin(2.0 * pAffineTP.y);
-    double tanhcos = pContext.cos(2.0 * pAffineTP.y);
-    double tanhsinh = Math.sinh(2.0 * pAffineTP.x);
-    double tanhcosh = Math.cosh(2.0 * pAffineTP.x);
+    double tanhsin = sin(2.0 * pAffineTP.y);
+    double tanhcos = cos(2.0 * pAffineTP.y);
+    double tanhsinh = sinh(2.0 * pAffineTP.x);
+    double tanhcosh = cosh(2.0 * pAffineTP.x);
     double tanhden = 1.0 / (tanhcos + tanhcosh);
     pVarTP.x += pAmount * tanhden * tanhsinh;
     pVarTP.y += pAmount * tanhden * tanhsin;

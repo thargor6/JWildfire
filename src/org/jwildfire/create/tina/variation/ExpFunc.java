@@ -16,6 +16,10 @@
 */
 package org.jwildfire.create.tina.variation;
 
+import static org.jwildfire.base.MathLib.cos;
+import static org.jwildfire.base.MathLib.exp;
+import static org.jwildfire.base.MathLib.sin;
+
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
@@ -26,9 +30,9 @@ public class ExpFunc extends SimpleVariationFunc {
     /* complex vars by cothe */
     /* exp log sin cos tan sec csc cot sinh cosh tanh sech csch coth */
     //Exponential EXP
-    double expe = pContext.exp(pAffineTP.x);
-    double expsin = pContext.sin(pAffineTP.y);
-    double expcos = pContext.cos(pAffineTP.y);
+    double expe = exp(pAffineTP.x);
+    double expsin = sin(pAffineTP.y);
+    double expcos = cos(pAffineTP.y);
     pVarTP.x += pAmount * expe * expcos;
     pVarTP.y += pAmount * expe * expsin;
   }

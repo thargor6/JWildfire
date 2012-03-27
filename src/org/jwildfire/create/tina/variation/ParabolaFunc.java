@@ -16,6 +16,9 @@
 */
 package org.jwildfire.create.tina.variation;
 
+import static org.jwildfire.base.MathLib.cos;
+import static org.jwildfire.base.MathLib.sin;
+
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
@@ -33,8 +36,8 @@ public class ParabolaFunc extends VariationFunc {
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     /* cyberxaos, 4/2007 */
     double r = pAffineTP.getPrecalcSqrt(pContext);
-    double sr = pContext.sin(r);
-    double cr = pContext.cos(r);
+    double sr = sin(r);
+    double cr = cos(r);
     pVarTP.x += height * pAmount * sr * sr * pContext.random();
     pVarTP.y += width * pAmount * cr * pContext.random();
   }

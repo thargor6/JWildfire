@@ -16,6 +16,13 @@
 */
 package org.jwildfire.create.tina.variation;
 
+import static org.jwildfire.base.MathLib.M_PI;
+import static org.jwildfire.base.MathLib.cos;
+import static org.jwildfire.base.MathLib.fabs;
+import static org.jwildfire.base.MathLib.pow;
+import static org.jwildfire.base.MathLib.sin;
+import static org.jwildfire.base.MathLib.sqrt;
+
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
@@ -44,8 +51,8 @@ public class GlynnSim2Func extends VariationFunc {
   private void circle(FlameTransformationContext pContext, Point p) {
     double r = this.radius + this.thickness - this.Gamma * pContext.random();
     double Phi = this.Phi10 + this.Delta * pContext.random();
-    double sinPhi = pContext.sin(Phi);
-    double cosPhi = pContext.cos(Phi);
+    double sinPhi = sin(Phi);
+    double cosPhi = cos(Phi);
     p.x = r * cosPhi;
     p.y = r * sinPhi;
   }
@@ -53,7 +60,7 @@ public class GlynnSim2Func extends VariationFunc {
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     /* GlynnSim2 by eralex61, http://eralex61.deviantart.com/art/GlynnSim-plugin-112621621 */
-    double r = Math.sqrt(pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y);
+    double r = sqrt(pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y);
     double Alpha = this.radius / r;
     if (r < this.radius) {
       circle(pContext, toolPoint);
@@ -61,7 +68,7 @@ public class GlynnSim2Func extends VariationFunc {
       pVarTP.y += pAmount * toolPoint.y;
     }
     else {
-      if (pContext.random() > this.contrast * Math.pow(Alpha, this.absPow)) {
+      if (pContext.random() > this.contrast * pow(Alpha, this.absPow)) {
         pVarTP.x += pAmount * pAffineTP.x;
         pVarTP.y += pAmount * pAffineTP.y;
       }
@@ -111,10 +118,10 @@ public class GlynnSim2Func extends VariationFunc {
 
   @Override
   public void init(FlameTransformationContext pContext, XForm pXForm) {
-    this.Phi10 = Math.PI * this.phi1 / 180.0;
-    this.Phi20 = Math.PI * this.phi2 / 180.0;
+    this.Phi10 = M_PI * this.phi1 / 180.0;
+    this.Phi20 = M_PI * this.phi2 / 180.0;
     this.Gamma = this.thickness * (2.0 * this.radius + this.thickness) / (this.radius + this.thickness);
     this.Delta = this.Phi20 - this.Phi10;
-    this.absPow = Math.abs(this.pow);
+    this.absPow = fabs(this.pow);
   }
 }

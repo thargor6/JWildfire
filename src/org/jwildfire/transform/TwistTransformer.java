@@ -18,8 +18,8 @@ package org.jwildfire.transform;
 
 import java.awt.Color;
 
+import org.jwildfire.base.MathLib;
 import org.jwildfire.base.Property;
-import org.jwildfire.base.Tools;
 import org.jwildfire.image.WFImage;
 
 import com.l2fprod.common.beans.editor.ComboBoxPropertyEditor;
@@ -56,7 +56,7 @@ public class TwistTransformer extends Mesh3DTransformer {
     double y[] = pMesh3D.getY();
     double z[] = pMesh3D.getZ();
 
-    if ((Math.abs(amount) <= Tools.EPSILON) || (Math.abs(dist) <= Tools.EPSILON))
+    if ((Math.abs(amount) <= MathLib.EPSILON) || (Math.abs(dist) <= MathLib.EPSILON))
       return;
     double originX = this.originX - (double) width / 2.0;
     double originY = this.originY - (double) height / 2.0;

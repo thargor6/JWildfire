@@ -16,6 +16,8 @@
 */
 package org.jwildfire.create.tina.variation;
 
+import static org.jwildfire.base.MathLib.cos;
+
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
@@ -34,7 +36,7 @@ public class FlowerFunc extends VariationFunc {
     /* cyberxaos, 4/2007 */
     double theta = pAffineTP.getPrecalcAtanYX(pContext);
     double r = pAmount * (pContext.random() - holes) *
-                    pContext.cos(petals * theta) / pAffineTP.getPrecalcSqrt(pContext);
+        cos(petals * theta) / pAffineTP.getPrecalcSqrt(pContext);
     pVarTP.x += r * pAffineTP.x;
     pVarTP.y += r * pAffineTP.y;
   }

@@ -16,7 +16,8 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import org.jwildfire.create.tina.base.Constants;
+import static org.jwildfire.base.MathLib.SMALL_EPSILON;
+
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
@@ -24,7 +25,7 @@ public class RingsFunc extends SimpleVariationFunc {
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-    double dx = pXForm.getCoeff20() * pXForm.getCoeff20() + Constants.EPSILON;
+    double dx = pXForm.getCoeff20() * pXForm.getCoeff20() + SMALL_EPSILON;
     double r = pAffineTP.getPrecalcSqrt(pContext);
     r = r + dx - ((int) ((r + dx) / (2 * dx))) * 2 * dx - dx + r * (1 - dx);
     pVarTP.x += r * pAffineTP.getPrecalcCosA(pContext);

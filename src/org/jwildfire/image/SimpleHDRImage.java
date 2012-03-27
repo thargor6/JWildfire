@@ -16,7 +16,7 @@
 */
 package org.jwildfire.image;
 
-import org.jwildfire.base.Tools;
+import org.jwildfire.base.MathLib;
 
 public class SimpleHDRImage implements WFImage {
   private int imageWidth = -1;
@@ -78,7 +78,7 @@ public class SimpleHDRImage implements WFImage {
 
   protected static int convertRGBToRGBE(float pR, float pG, float pB) {
     float mVal = max(pR, pG, pB);
-    if (mVal < Tools.EPSILON) {
+    if (mVal < MathLib.EPSILON) {
       return 0;
     }
     float mantissa = mVal;

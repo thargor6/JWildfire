@@ -16,7 +16,12 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import org.jwildfire.create.tina.base.Constants;
+import static org.jwildfire.base.MathLib.M_PI;
+import static org.jwildfire.base.MathLib.SMALL_EPSILON;
+import static org.jwildfire.base.MathLib.cos;
+import static org.jwildfire.base.MathLib.sin;
+import static org.jwildfire.base.MathLib.tan;
+
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
@@ -25,12 +30,12 @@ public class RaysFunc extends SimpleVariationFunc {
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     /* Z+ variation Jan 07 */
-    double ang = pAmount * pContext.random() * Math.PI;
-    double r = pAmount / (pAffineTP.getPrecalcSumsq() + Constants.EPSILON);
-    double tanr = pAmount * pContext.tan(ang) * r;
+    double ang = pAmount * pContext.random() * M_PI;
+    double r = pAmount / (pAffineTP.getPrecalcSumsq() + SMALL_EPSILON);
+    double tanr = pAmount * tan(ang) * r;
 
-    pVarTP.x += tanr * pContext.cos(pAffineTP.x);
-    pVarTP.y += tanr * pContext.sin(pAffineTP.y);
+    pVarTP.x += tanr * cos(pAffineTP.x);
+    pVarTP.y += tanr * sin(pAffineTP.y);
   }
 
   @Override

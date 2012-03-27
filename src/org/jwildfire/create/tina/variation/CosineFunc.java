@@ -16,6 +16,12 @@
 */
 package org.jwildfire.create.tina.variation;
 
+import static org.jwildfire.base.MathLib.M_PI;
+import static org.jwildfire.base.MathLib.cos;
+import static org.jwildfire.base.MathLib.cosh;
+import static org.jwildfire.base.MathLib.sin;
+import static org.jwildfire.base.MathLib.sinh;
+
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
@@ -23,11 +29,11 @@ public class CosineFunc extends SimpleVariationFunc {
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-    double r = pAffineTP.x * Math.PI;
-    double sinr = pContext.sin(r);
-    double cosr = pContext.cos(r);
-    pVarTP.x += pAmount * cosr * Math.cosh(pAffineTP.y);
-    pVarTP.y -= pAmount * sinr * Math.sinh(pAffineTP.y);
+    double r = pAffineTP.x * M_PI;
+    double sinr = sin(r);
+    double cosr = cos(r);
+    pVarTP.x += pAmount * cosr * cosh(pAffineTP.y);
+    pVarTP.y -= pAmount * sinr * sinh(pAffineTP.y);
   }
 
   @Override

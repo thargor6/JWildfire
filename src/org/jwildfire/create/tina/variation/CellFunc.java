@@ -16,6 +16,8 @@
 */
 package org.jwildfire.create.tina.variation;
 
+import static org.jwildfire.base.MathLib.floor;
+
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
@@ -34,8 +36,8 @@ public class CellFunc extends VariationFunc {
     double inv_cell_size = 1.0 / size;
 
     /* calculate input cell */
-    int x = (int) Math.floor(pAffineTP.x * inv_cell_size);
-    int y = (int) Math.floor(pAffineTP.y * inv_cell_size);
+    int x = (int) floor(pAffineTP.x * inv_cell_size);
+    int y = (int) floor(pAffineTP.y * inv_cell_size);
 
     /* Offset from cell origin */
     double dx = pAffineTP.x - x * size;

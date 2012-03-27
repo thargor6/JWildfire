@@ -16,6 +16,7 @@
 */
 package org.jwildfire.create.tina.render;
 
+import org.jwildfire.base.MathLib;
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.ShadingInfo;
 import org.jwildfire.create.tina.base.XYZPoint;
@@ -103,13 +104,13 @@ public class Pseudo3DShader {
     nfy = vaz * vbx - vax * vbz;
     nfz = vax * vby - vay * vbx;
     double rr = Math.sqrt(nfx * nfx + nfy * nfy + nfz * nfz);
-    if (Math.abs(rr) < Tools.EPSILON) {
+    if (Math.abs(rr) < MathLib.EPSILON) {
       nfx = pP[0].x;
       nfy = pP[0].y;
       nfz = pP[0].z;
       rr = Math.sqrt(nfx * nfx + nfy * nfy + nfz * nfz);
     }
-    if (Math.abs(rr) < Tools.EPSILON) {
+    if (Math.abs(rr) < MathLib.EPSILON) {
       nfx = nfy = 0.0;
       nfz = -1.0;
     }
@@ -151,7 +152,7 @@ public class Pseudo3DShader {
     refy = reff * nfy;
     refz = reff * nfz - VIEWZ;
     double rr = Math.sqrt(refx * refx + refy * refy + refz * refz);
-    if (Math.abs(rr) < Tools.EPSILON) {
+    if (Math.abs(rr) < MathLib.EPSILON) {
       refx = refy = refz = 0;
     }
     else {
@@ -174,7 +175,7 @@ public class Pseudo3DShader {
       double ly = py - lightY[q];
       double lz = pz - lightZ[q];
       double rr = Math.sqrt(lx * lx + ly * ly + lz * lz);
-      if (Math.abs(rr) <= Tools.EPSILON) {
+      if (Math.abs(rr) <= MathLib.EPSILON) {
         lx = ly = 0.0;
         lz = -1.0;
       }

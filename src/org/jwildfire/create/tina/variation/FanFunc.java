@@ -16,7 +16,12 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import org.jwildfire.create.tina.base.Constants;
+import static org.jwildfire.base.MathLib.M_PI;
+import static org.jwildfire.base.MathLib.SMALL_EPSILON;
+import static org.jwildfire.base.MathLib.cos;
+import static org.jwildfire.base.MathLib.sin;
+import static org.jwildfire.base.MathLib.sqrt;
+
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
@@ -24,16 +29,16 @@ public class FanFunc extends SimpleVariationFunc {
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-    double dx = Math.PI * pXForm.getCoeff20() * pXForm.getCoeff20() + Constants.EPSILON;
+    double dx = M_PI * pXForm.getCoeff20() * pXForm.getCoeff20() + SMALL_EPSILON;
     double dx2 = dx / 2;
     double a;
     if ((pAffineTP.getPrecalcAtan(pContext) + pXForm.getCoeff21() - ((int) ((pAffineTP.getPrecalcAtan(pContext) + pXForm.getCoeff21()) / dx)) * dx) > dx2)
       a = pAffineTP.getPrecalcAtan(pContext) - dx2;
     else
       a = pAffineTP.getPrecalcAtan(pContext) + dx2;
-    double sinr = pContext.sin(a);
-    double cosr = pContext.cos(a);
-    double r = pAmount * pContext.sqrt(pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y);
+    double sinr = sin(a);
+    double cosr = cos(a);
+    double r = pAmount * sqrt(pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y);
     pVarTP.x += r * cosr;
     pVarTP.y += r * sinr;
   }

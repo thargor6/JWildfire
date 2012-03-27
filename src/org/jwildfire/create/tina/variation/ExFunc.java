@@ -16,6 +16,10 @@
 */
 package org.jwildfire.create.tina.variation;
 
+import static org.jwildfire.base.MathLib.cos;
+import static org.jwildfire.base.MathLib.sin;
+import static org.jwildfire.base.MathLib.sqrt;
+
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
@@ -23,9 +27,9 @@ public class ExFunc extends SimpleVariationFunc {
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-    double r = pContext.sqrt(pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y);
-    double n0 = pContext.sin(pAffineTP.getPrecalcAtan(pContext) + r);
-    double n1 = pContext.cos(pAffineTP.getPrecalcAtan(pContext) - r);
+    double r = sqrt(pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y);
+    double n0 = sin(pAffineTP.getPrecalcAtan(pContext) + r);
+    double n1 = cos(pAffineTP.getPrecalcAtan(pContext) - r);
     double m0 = n0 * n0 * n0;
     double m1 = n1 * n1 * n1;
     r = r * pAmount;

@@ -16,8 +16,16 @@
 */
 package org.jwildfire.create.tina.variation;
 
+import static org.jwildfire.base.MathLib.M_1_PI;
+import static org.jwildfire.base.MathLib.M_PI;
+import static org.jwildfire.base.MathLib.M_PI_2;
+import static org.jwildfire.base.MathLib.atan2;
+import static org.jwildfire.base.MathLib.cos;
+import static org.jwildfire.base.MathLib.floor;
+import static org.jwildfire.base.MathLib.sin;
+import static org.jwildfire.base.MathLib.sqrt;
+
 import org.jwildfire.base.Tools;
-import org.jwildfire.create.tina.base.Constants;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
@@ -29,7 +37,7 @@ public class WedgeFunc extends VariationFunc {
   private static final String PARAM_SWIRL = "swirl";
   private static final String[] paramNames = { PARAM_ANGLE, PARAM_HOLE, PARAM_COUNT, PARAM_SWIRL };
 
-  private double angle = Constants.M_PI_2;
+  private double angle = M_PI_2;
   private double hole = 0.0;
   private int count = 1;
   private double swirl = 0.0;
@@ -38,19 +46,19 @@ public class WedgeFunc extends VariationFunc {
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     /* Wedge from apo plugins pack */
     double precalc_sumsq = pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y;
-    double precalc_sqrt = pContext.sqrt(precalc_sumsq);
-    double precalc_atanyx = Math.atan2(pAffineTP.y, pAffineTP.x);
+    double precalc_sqrt = sqrt(precalc_sumsq);
+    double precalc_atanyx = atan2(pAffineTP.y, pAffineTP.x);
 
     double r = precalc_sqrt;
     double a = precalc_atanyx + swirl * r;
-    double c = Math.floor((count * a + Constants.M_PI) * Constants.M_1_PI * 0.5);
+    double c = floor((count * a + M_PI) * M_1_PI * 0.5);
 
-    double comp_fac = 1 - angle * count * Constants.M_1_PI * 0.5;
+    double comp_fac = 1 - angle * count * M_1_PI * 0.5;
 
     a = a * comp_fac + c * angle;
 
-    double sa = pContext.sin(a);
-    double ca = pContext.cos(a);
+    double sa = sin(a);
+    double ca = cos(a);
 
     r = pAmount * (r + hole);
 

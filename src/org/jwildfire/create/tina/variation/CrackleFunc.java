@@ -23,6 +23,12 @@
 
 package org.jwildfire.create.tina.variation;
 
+import static org.jwildfire.base.MathLib.M_PI;
+import static org.jwildfire.base.MathLib.cos;
+import static org.jwildfire.base.MathLib.fabs;
+import static org.jwildfire.base.MathLib.floor;
+import static org.jwildfire.base.MathLib.pow;
+import static org.jwildfire.base.MathLib.sin;
 import static org.jwildfire.create.tina.variation.NoiseTools.simplexNoise3D;
 import static org.jwildfire.create.tina.variation.VoronoiTools.VORONOI_MAXPOINTS;
 import static org.jwildfire.create.tina.variation.VoronoiTools._x_;
@@ -31,7 +37,6 @@ import static org.jwildfire.create.tina.variation.VoronoiTools._z_;
 import static org.jwildfire.create.tina.variation.VoronoiTools.closest;
 import static org.jwildfire.create.tina.variation.VoronoiTools.voronoi;
 
-import org.jwildfire.create.tina.base.Constants;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
@@ -69,14 +74,14 @@ public class CrackleFunc extends VariationFunc {
     // (as opposed to reading the values from FTx and FTy)
     double blurr = (pContext.random() + pContext.random()) / 2.0 + (pContext.random() - 0.5) / 4.0;
 
-    double theta = 2 * Constants.M_PI * pContext.random();
+    double theta = 2 * M_PI * pContext.random();
 
-    U[_x_] = blurr * pContext.sin(theta);
-    U[_y_] = blurr * pContext.cos(theta);
+    U[_x_] = blurr * sin(theta);
+    U[_y_] = blurr * cos(theta);
 
     // Use integer values as Voronoi grid co-ordinates
-    XCv = (int) Math.floor(U[_x_] / s);
-    YCv = (int) Math.floor(U[_y_] / s);
+    XCv = (int) floor(U[_x_] / s);
+    YCv = (int) floor(U[_y_] / s);
 
     // Get a set of 9 square centre points, based around the one above
     int di, dj;
@@ -91,8 +96,8 @@ public class CrackleFunc extends VariationFunc {
     int q = closest(P, 9, U);
 
     int offset[][] = new int[][] { { -1, -1 }, { -1, 0 }, { -1, 1 },
-               { 0, -1 }, { 0, 0 }, { 0, 1 },
-               { 1, -1 }, { 1, 0 }, { 1, 1 } };
+        { 0, -1 }, { 0, 0 }, { 0, 1 },
+        { 1, -1 }, { 1, 0 }, { 1, 1 } };
 
     // Remake list starting from chosen square, ensure it is completely surrounded (total 9 points)
 
@@ -119,7 +124,7 @@ public class CrackleFunc extends VariationFunc {
     // Apply "interesting bit" to cell's DXo and DYo co-ordinates
 
     // trgL is the new value of L
-    trgL = Math.pow(L + 1e-100, power) * scale; // ( 0.9 )
+    trgL = pow(L + 1e-100, power) * scale; // ( 0.9 )
 
     R = trgL / (L + 1e-100);
 
@@ -199,7 +204,7 @@ public class CrackleFunc extends VariationFunc {
 
   //cached_position gives centre co-ordinates either from cache, or calculated from scratch if needed
   private void cached_position(double Cache[][][], int x, int y, double z, double s, double d, double V[]) {
-    if (Math.abs(x) <= CACHE_NUM && Math.abs(y) <= CACHE_NUM) {
+    if (fabs(x) <= CACHE_NUM && fabs(y) <= CACHE_NUM) {
       V[_x_] = Cache[x + CACHE_NUM][y + CACHE_NUM][_x_];
       V[_y_] = Cache[x + CACHE_NUM][y + CACHE_NUM][_y_];
     }

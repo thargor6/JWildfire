@@ -19,11 +19,11 @@ package org.jwildfire.transform;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 
+import org.jwildfire.base.MathLib;
 import org.jwildfire.base.Property;
 import org.jwildfire.base.PropertyCategory;
 import org.jwildfire.base.PropertyMax;
 import org.jwildfire.base.PropertyMin;
-import org.jwildfire.base.Tools;
 import org.jwildfire.image.Pixel;
 import org.jwildfire.image.SimpleImage;
 import org.jwildfire.image.WFImage;
@@ -225,9 +225,9 @@ public abstract class Mesh3DTransformer extends Transformer {
     int pCount = pMesh3D.getPCount();
     double zeroX = (double) centreX - (double) width / 2.0;
     double zeroY = (double) centreY - (double) height / 2.0;
-    if ((Math.abs(alpha) <= Tools.EPSILON) && (Math.abs(beta) <= Tools.EPSILON))
+    if ((Math.abs(alpha) <= MathLib.EPSILON) && (Math.abs(beta) <= MathLib.EPSILON))
       doRotate = Rotate.NONE;
-    boolean doZoom = Math.abs(zoom - 1.0) > Tools.EPSILON;
+    boolean doZoom = Math.abs(zoom - 1.0) > MathLib.EPSILON;
     double x[] = pMesh3D.getX();
     double y[] = pMesh3D.getY();
     double z[] = pMesh3D.getZ();
@@ -326,7 +326,7 @@ public abstract class Mesh3DTransformer extends Transformer {
       renderer = new Simple3DRenderer();
     else
       renderer = new Phong3DRenderer();
-    if (Math.abs(imgScale - 1.0) > Tools.EPSILON) {
+    if (Math.abs(imgScale - 1.0) > MathLib.EPSILON) {
       // scaled image
       int width = (int) ((double) pImg.getImageWidth() * imgScale + 0.5);
       int height = (int) ((double) pImg.getImageHeight() * imgScale + 0.5);

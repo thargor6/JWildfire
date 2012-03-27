@@ -16,6 +16,9 @@
 */
 package org.jwildfire.create.tina.variation;
 
+import static org.jwildfire.base.MathLib.M_PI;
+import static org.jwildfire.base.MathLib.sin;
+
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
@@ -29,14 +32,14 @@ public class Waves2Func extends VariationFunc {
 
   private double scalex = 0.25;
   private double scaley = 0.5;
-  private double freqx = Math.PI / 2;
-  private double freqy = Math.PI / 4;
+  private double freqx = M_PI / 2;
+  private double freqy = M_PI / 4;
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     /* waves2 from Joel F */
-    pVarTP.x += pAmount * (pAffineTP.x + scalex * pContext.sin(pAffineTP.y * freqx));
-    pVarTP.y += pAmount * (pAffineTP.y + scaley * pContext.sin(pAffineTP.x * freqy));
+    pVarTP.x += pAmount * (pAffineTP.x + scalex * sin(pAffineTP.y * freqx));
+    pVarTP.y += pAmount * (pAffineTP.y + scaley * sin(pAffineTP.x * freqy));
   }
 
   @Override

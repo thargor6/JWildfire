@@ -16,6 +16,9 @@
 */
 package org.jwildfire.create.tina.variation;
 
+import static org.jwildfire.base.MathLib.max;
+import static org.jwildfire.base.MathLib.min;
+
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
@@ -38,7 +41,7 @@ public class CropFunc extends VariationFunc {
   private double distribute(FlameTransformationContext pContext, double a, double min, double max) {
     double distance = pContext.random() * 0.5 * A;
     return a < min ? min + distance * (max - min) :
-                     max - distance * (max - min);
+        max - distance * (max - min);
   }
 
   @Override
@@ -84,11 +87,11 @@ public class CropFunc extends VariationFunc {
 
   @Override
   public void init(FlameTransformationContext pContext, XForm pXForm) {
-    xmin = Math.min(left, right);
-    ymin = Math.min(top, bottom);
-    xmax = Math.max(left, right);
-    ymax = Math.max(top, bottom);
-    A = Math.max(-1.0, Math.min(scatter_area, 1.0));
+    xmin = min(left, right);
+    ymin = min(top, bottom);
+    xmax = max(left, right);
+    ymax = max(top, bottom);
+    A = max(-1.0, min(scatter_area, 1.0));
   }
 
 }

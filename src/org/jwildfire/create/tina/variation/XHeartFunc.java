@@ -16,7 +16,10 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import org.jwildfire.create.tina.base.Constants;
+import static org.jwildfire.base.MathLib.M_PI_4;
+import static org.jwildfire.base.MathLib.cos;
+import static org.jwildfire.base.MathLib.sin;
+
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
@@ -77,9 +80,9 @@ public class XHeartFunc extends VariationFunc {
 
   @Override
   public void init(FlameTransformationContext pContext, XForm pXForm) {
-    double ang = Constants.M_PI_4 + (0.5 * Constants.M_PI_4 * angle);
-    sina = pContext.sin(ang);
-    cosa = pContext.cos(ang);
+    double ang = M_PI_4 + (0.5 * M_PI_4 * angle);
+    sina = sin(ang);
+    cosa = cos(ang);
     rat = 6 + 2 * ratio;
   }
 }

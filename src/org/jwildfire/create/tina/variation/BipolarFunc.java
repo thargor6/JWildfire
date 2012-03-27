@@ -16,7 +16,13 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import org.jwildfire.create.tina.base.Constants;
+import static org.jwildfire.base.MathLib.M_2_PI;
+import static org.jwildfire.base.MathLib.M_PI;
+import static org.jwildfire.base.MathLib.M_PI_2;
+import static org.jwildfire.base.MathLib.atan2;
+import static org.jwildfire.base.MathLib.fmod;
+import static org.jwildfire.base.MathLib.log;
+
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
@@ -34,18 +40,18 @@ public class BipolarFunc extends VariationFunc {
     double x2y2 = (pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y);
     double t = x2y2 + 1.0;
     double x2 = 2 * pAffineTP.x;
-    double ps = -Constants.M_PI_2 * shift;
-    double y = 0.5 * Math.atan2(2.0 * pAffineTP.y, x2y2 - 1.0) + ps;
+    double ps = -M_PI_2 * shift;
+    double y = 0.5 * atan2(2.0 * pAffineTP.y, x2y2 - 1.0) + ps;
 
-    if (y > Constants.M_PI_2) {
-      y = -Constants.M_PI_2 + pContext.fmod(y + Constants.M_PI_2, Constants.M_PI);
+    if (y > M_PI_2) {
+      y = -M_PI_2 + fmod(y + M_PI_2, M_PI);
     }
-    else if (y < -Constants.M_PI_2) {
-      y = Constants.M_PI_2 - pContext.fmod(Constants.M_PI_2 - y, Constants.M_PI);
+    else if (y < -M_PI_2) {
+      y = M_PI_2 - fmod(M_PI_2 - y, M_PI);
     }
 
-    pVarTP.x += pAmount * 0.25 * Constants.M_2_PI * Math.log((t + x2) / (t - x2));
-    pVarTP.y += pAmount * Constants.M_2_PI * y;
+    pVarTP.x += pAmount * 0.25 * M_2_PI * log((t + x2) / (t - x2));
+    pVarTP.y += pAmount * M_2_PI * y;
   }
 
   @Override

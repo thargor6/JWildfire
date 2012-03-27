@@ -16,6 +16,13 @@
 */
 package org.jwildfire.create.tina.variation;
 
+import static org.jwildfire.base.MathLib.M_PI;
+import static org.jwildfire.base.MathLib.cos;
+import static org.jwildfire.base.MathLib.exp;
+import static org.jwildfire.base.MathLib.floor;
+import static org.jwildfire.base.MathLib.log;
+import static org.jwildfire.base.MathLib.sin;
+
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
@@ -35,15 +42,15 @@ public class CPowFunc extends VariationFunc {
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     /* Cpow in the Apophysis Plugin Pack */
     double a = pAffineTP.getPrecalcAtanYX(pContext);
-    double lnr = 0.5 * Math.log(pAffineTP.getPrecalcSumsq());
-    double va = 2.0 * Math.PI / power;
+    double lnr = 0.5 * log(pAffineTP.getPrecalcSumsq());
+    double va = 2.0 * M_PI / power;
     double vc = r / power;
     double vd = i / power;
-    double ang = vc * a + vd * lnr + va * Math.floor(power * pContext.random());
+    double ang = vc * a + vd * lnr + va * floor(power * pContext.random());
 
-    double m = pAmount * pContext.exp(vc * lnr - vd * a);
-    double sa = pContext.sin(ang);
-    double ca = pContext.cos(ang);
+    double m = pAmount * exp(vc * lnr - vd * a);
+    double sa = sin(ang);
+    double ca = cos(ang);
 
     pVarTP.x += m * ca;
     pVarTP.y += m * sa;

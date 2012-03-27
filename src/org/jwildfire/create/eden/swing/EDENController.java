@@ -28,6 +28,7 @@ import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
 import javax.swing.filechooser.FileFilter;
 
+import org.jwildfire.base.MathLib;
 import org.jwildfire.base.Prefs;
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.eden.io.SunflowWriter;
@@ -477,7 +478,7 @@ public class EDENController implements UserInterface {
         if (q[i][j] != 0) {
           double dx = i - (width - 1) * 0.5;
           double dy = j - (height - 1) * 0.5;
-          double r = Math.sqrt(dx * dx + dy * dy) / maxR + Tools.EPSILON;
+          double r = Math.sqrt(dx * dx + dy * dy) / maxR + MathLib.EPSILON;
           double size = minSize + (maxSize - minSize) * r;
           Torus sphere = new Torus();
           sphere.getPosition().setValue(dx * gridSize + xOffset, dy * gridSize + yOffset, zOffset);

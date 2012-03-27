@@ -16,6 +16,10 @@
 */
 package org.jwildfire.create.tina.variation;
 
+import static org.jwildfire.base.MathLib.cos;
+import static org.jwildfire.base.MathLib.sin;
+import static org.jwildfire.base.MathLib.sqrt;
+
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
@@ -23,10 +27,10 @@ public class HeartFunc extends SimpleVariationFunc {
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-    double r = pContext.sqrt(pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y);
+    double r = sqrt(pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y);
     double angle = pAffineTP.getPrecalcAtan(pContext);
-    double sinr = pContext.sin(r * angle);
-    double cosr = pContext.cos(r * angle);
+    double sinr = sin(r * angle);
+    double cosr = cos(r * angle);
     r *= pAmount;
     pVarTP.x += r * sinr;
     pVarTP.y -= r * cosr;

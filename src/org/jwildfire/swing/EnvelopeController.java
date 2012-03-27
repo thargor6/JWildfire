@@ -25,6 +25,7 @@ import javax.swing.JComboBox;
 import javax.swing.JTextField;
 import javax.swing.RootPaneContainer;
 
+import org.jwildfire.base.MathLib;
 import org.jwildfire.base.Tools;
 import org.jwildfire.envelope.Envelope;
 import org.jwildfire.envelope.EnvelopePanel;
@@ -427,7 +428,7 @@ public class EnvelopeController {
           / envelopeView.getEnvelopeYScale();
       {
         for (int i = 0; i < currEnvelope.size(); i++) {
-          if (Tools.FABS(x - currEnvelope.getX()[i]) < 0.01)
+          if (MathLib.fabs(x - currEnvelope.getX()[i]) < 0.01)
             return;
         }
       }

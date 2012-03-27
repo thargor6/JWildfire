@@ -16,6 +16,11 @@
 */
 package org.jwildfire.create.tina.variation;
 
+import static org.jwildfire.base.MathLib.cos;
+import static org.jwildfire.base.MathLib.cosh;
+import static org.jwildfire.base.MathLib.sin;
+import static org.jwildfire.base.MathLib.sinh;
+
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
@@ -26,11 +31,11 @@ public class SechFunc extends SimpleVariationFunc {
     /* complex vars by cothe */
     /* exp log sin cos tan sec csc cot sinh cosh tanh sech csch coth */
     //Hyperbolic Secant SECH
-    double sechsin = pContext.sin(pAffineTP.y);
-    double sechcos = pContext.cos(pAffineTP.y);
-    double sechsinh = Math.sinh(pAffineTP.x);
-    double sechcosh = Math.cosh(pAffineTP.x);
-    double sechden = 2.0 / (pContext.cos(2.0 * pAffineTP.y) + Math.cosh(2.0 * pAffineTP.x));
+    double sechsin = sin(pAffineTP.y);
+    double sechcos = cos(pAffineTP.y);
+    double sechsinh = sinh(pAffineTP.x);
+    double sechcosh = cosh(pAffineTP.x);
+    double sechden = 2.0 / (cos(2.0 * pAffineTP.y) + cosh(2.0 * pAffineTP.x));
     pVarTP.x += pAmount * sechden * sechcos * sechcosh;
     pVarTP.y -= pAmount * sechden * sechsin * sechsinh;
   }

@@ -16,6 +16,8 @@
 */
 package org.jwildfire.create.tina.variation;
 
+import static org.jwildfire.base.MathLib.cos;
+
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
@@ -25,7 +27,7 @@ public class Secant2Func extends SimpleVariationFunc {
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     /* Intended as a 'fixed' version of secant */
     double r = pAmount * pAffineTP.getPrecalcSqrt(pContext);
-    double cr = pContext.cos(r);
+    double cr = cos(r);
     double icr = 1.0 / cr;
     pVarTP.x += pAmount * pAffineTP.x;
     if (cr < 0) {

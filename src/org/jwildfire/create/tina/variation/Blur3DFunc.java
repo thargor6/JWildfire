@@ -16,6 +16,10 @@
 */
 package org.jwildfire.create.tina.variation;
 
+import static org.jwildfire.base.MathLib.M_PI;
+import static org.jwildfire.base.MathLib.cos;
+import static org.jwildfire.base.MathLib.sin;
+
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
@@ -25,15 +29,15 @@ public class Blur3DFunc extends SimpleVariationFunc {
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-    double angle = pContext.random() * 2 * Math.PI;
-    double sina = pContext.sin(angle);
-    double cosa = pContext.cos(angle);
+    double angle = pContext.random() * 2 * M_PI;
+    double sina = sin(angle);
+    double cosa = cos(angle);
     double r = pAmount * (gauss_rnd[0] + gauss_rnd[1] + gauss_rnd[2] + gauss_rnd[3] - 2);
     gauss_rnd[gauss_N] = pContext.random();
     gauss_N = (gauss_N + 1) & 3;
-    angle = pContext.random() * Math.PI;
-    double sinb = pContext.sin(angle);
-    double cosb = pContext.cos(angle);
+    angle = pContext.random() * M_PI;
+    double sinb = sin(angle);
+    double cosb = cos(angle);
     pVarTP.x += r * sinb * cosa;
     pVarTP.y += r * sinb * sina;
     pVarTP.z += r * cosb;

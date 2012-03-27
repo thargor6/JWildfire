@@ -20,8 +20,17 @@
  */
 package org.jwildfire.create.tina.variation;
 
+import static org.jwildfire.base.MathLib.SMALL_EPSILON;
+import static org.jwildfire.base.MathLib.cos;
+import static org.jwildfire.base.MathLib.fabs;
+import static org.jwildfire.base.MathLib.floor;
+import static org.jwildfire.base.MathLib.fmod;
+import static org.jwildfire.base.MathLib.pow;
+import static org.jwildfire.base.MathLib.round;
+import static org.jwildfire.base.MathLib.sin;
+import static org.jwildfire.base.MathLib.sqrt;
+
 import org.jwildfire.base.Tools;
-import org.jwildfire.create.tina.base.Constants;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
@@ -52,8 +61,8 @@ public class TruchetFunc extends VariationFunc {
     double tdeg = this.rotation;
     double width = this.arc_width;
     double size = this.size;
-    double seed = Math.abs(this.seed);
-    double seed2 = pContext.sqrt(seed + (seed / 2) + Constants.EPSILON) / ((seed * 0.5) + Constants.EPSILON) * 0.25;
+    double seed = fabs(this.seed);
+    double seed2 = sqrt(seed + (seed / 2) + SMALL_EPSILON) / ((seed * 0.5) + SMALL_EPSILON) * 0.25;
     //VARIABLES   
     double x, y;
     int intx = 0;
@@ -61,8 +70,8 @@ public class TruchetFunc extends VariationFunc {
     double r = -tdeg;
     double r0 = 0.0;
     double r1 = 0.0;
-    double rmax = 0.5 * (Math.pow(2.0, 1.0 / n) - 1.0) * width;
-    double scale = (pContext.cos(r) - pContext.sin(r)) / pAmount;
+    double rmax = 0.5 * (pow(2.0, 1.0 / n) - 1.0) * width;
+    double scale = (cos(r) - sin(r)) / pAmount;
     double tiletype = 0.0;
     double randint = 0.0;
     double modbase = 65535.0;
@@ -73,8 +82,8 @@ public class TruchetFunc extends VariationFunc {
     //INITIALISATION   
     x = pAffineTP.x * scale;
     y = pAffineTP.y * scale;
-    intx = (int) Math.round(x);
-    inty = (int) Math.round(y);
+    intx = (int) round(x);
+    inty = (int) round(y);
 
     r = x - intx;
     if (r < 0.0) {
@@ -100,60 +109,60 @@ public class TruchetFunc extends VariationFunc {
     }
     else {
       if (extended == 0) {
-        double xrand = Math.round(pAffineTP.x);
-        double yrand = Math.round(pAffineTP.y);
+        double xrand = round(pAffineTP.x);
+        double yrand = round(pAffineTP.y);
         xrand = xrand * seed2;
         yrand = yrand * seed2;
         niter = xrand + yrand + xrand * yrand;
         randint = (niter + seed) * seed2 / 2.0;
-        randint = pContext.fmod((randint * multiplier + offset), modbase);
+        randint = fmod((randint * multiplier + offset), modbase);
       }
       else {
-        seed = Math.floor(seed);
-        int xrand = (int) Math.round(pAffineTP.x);
-        int yrand = (int) Math.round(pAffineTP.y);
-        niter = Math.abs(xrand + yrand + xrand * yrand);
+        seed = floor(seed);
+        int xrand = (int) round(pAffineTP.x);
+        int yrand = (int) round(pAffineTP.y);
+        niter = fabs(xrand + yrand + xrand * yrand);
         randint = seed + niter;
         randiter = 0;
         while (randiter < niter) {
           randiter += 1;
-          randint = pContext.fmod((randint * multiplier + offset), modbase);
+          randint = fmod((randint * multiplier + offset), modbase);
         }
       }
-      tiletype = pContext.fmod(randint, 2.0);//randint%2;
+      tiletype = fmod(randint, 2.0);//randint%2;
     }
     //DRAWING THE POINTS
     if (extended == 0) { //Fast drawmode
       if (tiletype < 1.0) {
-        r0 = Math.pow((Math.pow(Math.abs(x), n) + Math.pow(Math.abs(y), n)), onen);
-        r1 = Math.pow((Math.pow(Math.abs(x - 1.0), n) + Math.pow(Math.abs(y - 1.0), n)), onen);
+        r0 = pow((pow(fabs(x), n) + pow(fabs(y), n)), onen);
+        r1 = pow((pow(fabs(x - 1.0), n) + pow(fabs(y - 1.0), n)), onen);
       }
       else {
-        r0 = Math.pow((Math.pow(Math.abs(x - 1.0), n) + Math.pow(Math.abs(y), n)), onen);
-        r1 = Math.pow((Math.pow(Math.abs(x), n) + Math.pow(Math.abs(y - 1.0), n)), onen);
+        r0 = pow((pow(fabs(x - 1.0), n) + pow(fabs(y), n)), onen);
+        r1 = pow((pow(fabs(x), n) + pow(fabs(y - 1.0), n)), onen);
       }
     }
     else {
       if (tiletype == 1.0) { //Slow drawmode 
-        r0 = Math.pow((Math.pow(Math.abs(x), n) + Math.pow(Math.abs(y), n)), onen);
-        r1 = Math.pow((Math.pow(Math.abs(x - 1.0), n) + Math.pow(Math.abs(y - 1.0), n)), onen);
+        r0 = pow((pow(fabs(x), n) + pow(fabs(y), n)), onen);
+        r1 = pow((pow(fabs(x - 1.0), n) + pow(fabs(y - 1.0), n)), onen);
       }
       else {
-        r0 = Math.pow((Math.pow(Math.abs(x - 1.0), n) + Math.pow(Math.abs(y), n)), onen);
-        r1 = Math.pow((Math.pow(Math.abs(x), n) + Math.pow(Math.abs(y - 1.0), n)), onen);
+        r0 = pow((pow(fabs(x - 1.0), n) + pow(fabs(y), n)), onen);
+        r1 = pow((pow(fabs(x), n) + pow(fabs(y - 1.0), n)), onen);
       }
     }
 
-    r = Math.abs(r0 - 0.5) / rmax;
+    r = fabs(r0 - 0.5) / rmax;
     if (r < 1.0) {
-      pVarTP.x += size * (x + Math.floor(pAffineTP.x));
-      pVarTP.y += size * (y + Math.floor(pAffineTP.y));
+      pVarTP.x += size * (x + floor(pAffineTP.x));
+      pVarTP.y += size * (y + floor(pAffineTP.y));
     }
 
-    r = Math.abs(r1 - 0.5) / rmax;
+    r = fabs(r1 - 0.5) / rmax;
     if (r < 1.0) {
-      pVarTP.x += size * (x + Math.floor(pAffineTP.x));
-      pVarTP.y += size * (y + Math.floor(pAffineTP.y));
+      pVarTP.x += size * (x + floor(pAffineTP.x));
+      pVarTP.y += size * (y + floor(pAffineTP.y));
     }
 
   }

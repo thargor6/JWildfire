@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import org.jwildfire.base.MathLib;
 import org.jwildfire.base.Prefs;
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Flame;
@@ -98,7 +99,7 @@ public class FlameRenderer {
     cameraMatrix[0][2] = Math.sin(pitch) * Math.sin(yaw);
     cameraMatrix[1][2] = Math.sin(pitch) * Math.cos(yaw);
     cameraMatrix[2][2] = Math.cos(pitch);
-    doProject3D = Math.abs(flame.getCamYaw()) > Tools.EPSILON || Math.abs(flame.getCamPitch()) > Tools.EPSILON || Math.abs(flame.getCamPerspective()) > Tools.EPSILON || Math.abs(flame.getCamDOF()) > Tools.EPSILON;
+    doProject3D = Math.abs(flame.getCamYaw()) > MathLib.EPSILON || Math.abs(flame.getCamPitch()) > MathLib.EPSILON || Math.abs(flame.getCamPerspective()) > MathLib.EPSILON || Math.abs(flame.getCamDOF()) > MathLib.EPSILON;
   }
 
   private void initRaster(int pImageWidth, int pImageHeight) {
@@ -128,7 +129,7 @@ public class FlameRenderer {
     double py = cameraMatrix[0][1] * pPoint.x + cameraMatrix[1][1] * pPoint.y + cameraMatrix[2][1] * z;
     double pz = cameraMatrix[0][2] * pPoint.x + cameraMatrix[1][2] * pPoint.y + cameraMatrix[2][2] * z;
     double zr = 1.0 - flame.getCamPerspective() * pz;
-    if (Math.abs(flame.getCamDOF()) > Tools.EPSILON) {
+    if (Math.abs(flame.getCamDOF()) > MathLib.EPSILON) {
       double a = 2.0 * Math.PI * random.random();
       double dsina = Math.sin(a);
       double dcosa = Math.cos(a);

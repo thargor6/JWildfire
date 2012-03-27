@@ -16,6 +16,10 @@
 */
 package org.jwildfire.create.tina.variation;
 
+import static org.jwildfire.base.MathLib.cos;
+import static org.jwildfire.base.MathLib.sin;
+import static org.jwildfire.base.MathLib.sqrt;
+
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
@@ -24,9 +28,9 @@ public class HandkerchiefFunc extends SimpleVariationFunc {
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     double angle = pAffineTP.getPrecalcAtan(pContext);
-    double r = pContext.sqrt(pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y);
-    pVarTP.x += pAmount * (pContext.sin(angle + r) * r);
-    pVarTP.y += pAmount * (pContext.cos(angle - r) * r);
+    double r = sqrt(pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y);
+    pVarTP.x += pAmount * (sin(angle + r) * r);
+    pVarTP.y += pAmount * (cos(angle - r) * r);
   }
 
   @Override

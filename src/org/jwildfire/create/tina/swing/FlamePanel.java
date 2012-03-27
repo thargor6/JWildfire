@@ -24,6 +24,7 @@ import java.awt.Rectangle;
 
 import javax.swing.JToggleButton;
 
+import org.jwildfire.base.MathLib;
 import org.jwildfire.base.Prefs;
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Flame;
@@ -341,7 +342,7 @@ public class FlamePanel extends ImagePanel {
         double dy = viewToY(pY) - viewToY(yBeginDrag);
         xBeginDrag = pX;
         yBeginDrag = pY;
-        if (Math.abs(dx) > Tools.EPSILON || Math.abs(dy) > Tools.EPSILON) {
+        if (Math.abs(dx) > MathLib.EPSILON || Math.abs(dy) > MathLib.EPSILON) {
           switch (mouseDragOperation) {
             case MOVE: {
               if (fineMovement) {

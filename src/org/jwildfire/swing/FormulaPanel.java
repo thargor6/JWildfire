@@ -22,6 +22,7 @@ import java.awt.Rectangle;
 
 import javax.swing.JPanel;
 
+import org.jwildfire.base.MathLib;
 import org.jwildfire.base.Tools;
 
 
@@ -95,11 +96,11 @@ public class FormulaPanel extends JPanel {
         }
       }
     }
-    if ((xMax - xMin) < Tools.EPSILON) {
-      xMax = xMin + Tools.EPSILON;
+    if ((xMax - xMin) < MathLib.EPSILON) {
+      xMax = xMin + MathLib.EPSILON;
     }
-    if ((yMax - yMin) < Tools.EPSILON) {
-      yMax = yMin + Tools.EPSILON;
+    if ((yMax - yMin) < MathLib.EPSILON) {
+      yMax = yMin + MathLib.EPSILON;
     }
     // visual area
     double visXMin = xMin - (xMax - xMin) * 0.1;
@@ -134,7 +135,7 @@ public class FormulaPanel extends JPanel {
       double tickXMax = calcTickMinMax(visXMax, xStep) + xStep;
       // System.out.println(tickXMin + " " + tickXMax + " " + xStep);
       double xt = tickXMin;
-      while (xt + xStep < tickXMax + Tools.EPSILON) {
+      while (xt + xStep < tickXMax + MathLib.EPSILON) {
         int xti = (int) (xt * xScale + 0.5) - dxi;
         g.drawLine(xti, 0, xti, TICK_LENGTH);
         g.drawLine(xti, height - 1, xti, height - 1 - TICK_LENGTH);
@@ -153,7 +154,7 @@ public class FormulaPanel extends JPanel {
       // System.out.println(tickYMin + " " + tickYMax + " "
       // + yStep);
       double yt = tickYMin;
-      while (yt + yStep < tickYMax + Tools.EPSILON) {
+      while (yt + yStep < tickYMax + MathLib.EPSILON) {
         int yti = height - ((int) (yt * yScale + 0.5) - dyi);
         g.drawLine(0, yti, TICK_LENGTH, yti);
         g.drawLine(width - 1, yti, width - 1 - TICK_LENGTH, yti);

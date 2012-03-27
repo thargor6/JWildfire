@@ -16,6 +16,9 @@
 */
 package org.jwildfire.create.tina.variation;
 
+import static org.jwildfire.base.MathLib.sin;
+import static org.jwildfire.base.MathLib.tan;
+
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
@@ -23,14 +26,14 @@ public class PopcornFunc extends SimpleVariationFunc {
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-    double dx = pContext.tan(3 * pAffineTP.y);
+    double dx = tan(3 * pAffineTP.y);
     if (dx != dx)
       dx = 0.0;
-    double dy = pContext.tan(3 * pAffineTP.x);
+    double dy = tan(3 * pAffineTP.x);
     if (dy != dy)
       dy = 0.0;
-    double nx = pAffineTP.x + pXForm.getCoeff20() * pContext.sin(dx);
-    double ny = pAffineTP.y + pXForm.getCoeff21() * pContext.sin(dy);
+    double nx = pAffineTP.x + pXForm.getCoeff20() * sin(dx);
+    double ny = pAffineTP.y + pXForm.getCoeff21() * sin(dy);
     pVarTP.x += pAmount * nx;
     pVarTP.y += pAmount * ny;
   }

@@ -16,7 +16,9 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import org.jwildfire.create.tina.base.Constants;
+import static org.jwildfire.base.MathLib.SMALL_EPSILON;
+import static org.jwildfire.base.MathLib.sqrt;
+
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
@@ -27,7 +29,7 @@ public class ScryFunc extends SimpleVariationFunc {
     /* scry from the apophysis plugin pack */
 
     double t = pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y;
-    double r = 1.0 / (pContext.sqrt(t) * (t + 1.0 / (pAmount + Constants.EPSILON)));
+    double r = 1.0 / (sqrt(t) * (t + 1.0 / (pAmount + SMALL_EPSILON)));
 
     pVarTP.x += pAffineTP.x * r;
     pVarTP.y += pAffineTP.y * r;

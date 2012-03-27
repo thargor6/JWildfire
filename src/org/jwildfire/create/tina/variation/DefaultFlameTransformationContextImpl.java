@@ -46,17 +46,17 @@ public class DefaultFlameTransformationContextImpl implements FlameTransformatio
 
   @Override
   public double sin(double a) {
-    return Math.sin(a);
+    return sin(a);
   }
 
   @Override
   public double cos(double a) {
-    return Math.cos(a);
+    return cos(a);
   }
 
   @Override
   public double tan(double a) {
-    return Math.tan(a);
+    return tan(a);
   }
 
   @Override
@@ -71,7 +71,7 @@ public class DefaultFlameTransformationContextImpl implements FlameTransformatio
 
   @Override
   public double sqrt(double a) {
-    return Math.sqrt(a);
+    return sqrt(a);
   }
 
   @Override

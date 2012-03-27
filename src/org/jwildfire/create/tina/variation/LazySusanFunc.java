@@ -16,6 +16,11 @@
 */
 package org.jwildfire.create.tina.variation;
 
+import static org.jwildfire.base.MathLib.atan2;
+import static org.jwildfire.base.MathLib.cos;
+import static org.jwildfire.base.MathLib.sin;
+import static org.jwildfire.base.MathLib.sqrt;
+
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
@@ -41,12 +46,12 @@ public class LazySusanFunc extends VariationFunc {
 
     double x = pAffineTP.x - this.x;
     double y = pAffineTP.y + this.y;
-    double r = pContext.sqrt(x * x + y * y);
+    double r = sqrt(x * x + y * y);
 
     if (r < pAmount) {
-      double a = Math.atan2(y, x) + spin + twist * (pAmount - r);
-      double sina = pContext.sin(a);
-      double cosa = pContext.cos(a);
+      double a = atan2(y, x) + spin + twist * (pAmount - r);
+      double sina = sin(a);
+      double cosa = cos(a);
       r = pAmount * r;
 
       pVarTP.x += r * cosa + this.x;

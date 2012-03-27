@@ -16,11 +16,14 @@
 */
 package org.jwildfire.create.tina.variation;
 
+import static org.jwildfire.base.MathLib.cos;
+import static org.jwildfire.base.MathLib.sin;
+
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
-
 //Variation Plugin DLL for Apophysis
 //Jed Kelsey, 20 June 2007
+
 public class SpirographFunc extends VariationFunc {
 
   private static final String PARAM_A = "a";
@@ -49,10 +52,10 @@ public class SpirographFunc extends VariationFunc {
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     double t = (tMax - tMin) * pContext.random() + tMin;
     double y = (yMax - yMin) * pContext.random() + yMin;
-    double x1 = (a + b) * pContext.cos(t) - c1 * pContext.cos((a + b) / b * t);
-    double y1 = (a + b) * pContext.sin(t) - c2 * pContext.sin((a + b) / b * t);
-    pVarTP.x += pAmount * (x1 + d * pContext.cos(t) + y);
-    pVarTP.y += pAmount * (y1 + d * pContext.sin(t) + y);
+    double x1 = (a + b) * cos(t) - c1 * cos((a + b) / b * t);
+    double y1 = (a + b) * sin(t) - c2 * sin((a + b) / b * t);
+    pVarTP.x += pAmount * (x1 + d * cos(t) + y);
+    pVarTP.y += pAmount * (y1 + d * sin(t) + y);
   }
 
   @Override

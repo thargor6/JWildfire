@@ -23,13 +23,17 @@
 
 package org.jwildfire.create.tina.variation;
 
+import static org.jwildfire.base.MathLib.cos;
+import static org.jwildfire.base.MathLib.floor;
+import static org.jwildfire.base.MathLib.pow;
+import static org.jwildfire.base.MathLib.sin;
 import static org.jwildfire.create.tina.variation.VoronoiTools.VORONOI_MAXPOINTS;
 import static org.jwildfire.create.tina.variation.VoronoiTools._x_;
 import static org.jwildfire.create.tina.variation.VoronoiTools._y_;
 import static org.jwildfire.create.tina.variation.VoronoiTools.closest;
 import static org.jwildfire.create.tina.variation.VoronoiTools.voronoi;
 
-import org.jwildfire.create.tina.base.Constants;
+import org.jwildfire.base.MathLib;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
@@ -107,8 +111,8 @@ public class HexesFunc extends VariationFunc {
     U[_x_] = pAffineTP.x;
     U[_y_] = pAffineTP.y;
 
-    Hx = (int) Math.floor((a_hex * U[_x_] + b_hex * U[_y_]) / s);
-    Hy = (int) Math.floor((c_hex * U[_x_] + d_hex * U[_y_]) / s);
+    Hx = (int) floor((a_hex * U[_x_] + b_hex * U[_y_]) / s);
+    Hy = (int) floor((c_hex * U[_x_] + d_hex * U[_y_]) / s);
 
     // Get a set of 9 hex centre points, based around the one above
     int i = 0;
@@ -149,7 +153,7 @@ public class HexesFunc extends VariationFunc {
     // Apply "interesting bit" to cell's DXo and DYo co-ordinates
 
     // trgL is the defined value of l, independent of any rotation
-    trgL = Math.pow(L1 + 1e-100, power) * scale;
+    trgL = pow(L1 + 1e-100, power) * scale;
 
     // Rotate
     Vx = DXo * rotCos + DYo * rotSin;
@@ -232,8 +236,8 @@ public class HexesFunc extends VariationFunc {
 
   @Override
   public void init(FlameTransformationContext pContext, XForm pXForm) {
-    rotSin = pContext.sin(rotate * 2.0 * Constants.M_PI);
-    rotCos = pContext.cos(rotate * 2.0 * Constants.M_PI);
+    rotSin = sin(rotate * 2.0 * MathLib.M_PI);
+    rotCos = cos(rotate * 2.0 * MathLib.M_PI);
   }
 
 }

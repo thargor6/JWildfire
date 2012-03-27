@@ -16,7 +16,13 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import org.jwildfire.create.tina.base.Constants;
+import static org.jwildfire.base.MathLib.M_PI;
+import static org.jwildfire.base.MathLib.SMALL_EPSILON;
+import static org.jwildfire.base.MathLib.exp;
+import static org.jwildfire.base.MathLib.fabs;
+import static org.jwildfire.base.MathLib.sin;
+import static org.jwildfire.base.MathLib.sqrt;
+
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
@@ -32,14 +38,14 @@ public class PreWave3DWFFunc extends VariationFunc {
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-    double r = pContext.sqrt(pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y);
+    double r = sqrt(pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y);
     double dl = r / wavelen;
     double amplitude = pAmount;
-    if (Math.abs(damping) > Constants.EPSILON) {
+    if (fabs(damping) > SMALL_EPSILON) {
       double dmp = -dl * damping;
-      amplitude *= pContext.exp(dmp);
+      amplitude *= exp(dmp);
     }
-    pAffineTP.z += amplitude * (double) pContext.sin(2.0 * Math.PI * dl + phase);
+    pAffineTP.z += amplitude * (double) sin(2.0 * M_PI * dl + phase);
   }
 
   @Override

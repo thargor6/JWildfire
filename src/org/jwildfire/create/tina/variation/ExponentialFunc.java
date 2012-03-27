@@ -16,6 +16,11 @@
 */
 package org.jwildfire.create.tina.variation;
 
+import static org.jwildfire.base.MathLib.M_PI;
+import static org.jwildfire.base.MathLib.cos;
+import static org.jwildfire.base.MathLib.exp;
+import static org.jwildfire.base.MathLib.sin;
+
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
@@ -23,10 +28,10 @@ public class ExponentialFunc extends SimpleVariationFunc {
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-    double r = Math.PI * pAffineTP.y;
-    double sinr = pContext.sin(r);
-    double cosr = pContext.cos(r);
-    double d = pAmount * pContext.exp(pAffineTP.x - 1);
+    double r = M_PI * pAffineTP.y;
+    double sinr = sin(r);
+    double cosr = cos(r);
+    double d = pAmount * exp(pAffineTP.x - 1);
     pVarTP.x += cosr * d;
     pVarTP.y += sinr * d;
   }

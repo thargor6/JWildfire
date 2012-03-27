@@ -16,6 +16,10 @@
  */
 package org.jwildfire.create.tina.variation;
 
+import static org.jwildfire.base.MathLib.EPSILON;
+import static org.jwildfire.base.MathLib.fabs;
+import static org.jwildfire.base.MathLib.sqrt;
+
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
@@ -105,7 +109,7 @@ public class PostColorMapWFFunc extends VariationFunc {
       pVarTP.blueColor = 0;
     }
     double dz = this.offsetZ;
-    if (Math.abs(scaleZ) > Tools.EPSILON) {
+    if (fabs(scaleZ) > EPSILON) {
       double intensity = (0.299 * pVarTP.redColor + 0.588 * pVarTP.greenColor + 0.113 * pVarTP.blueColor) / 255.0;
       dz += scaleZ * intensity;
     }
@@ -165,13 +169,13 @@ public class PostColorMapWFFunc extends VariationFunc {
     dr = (color.red - pR);
     dg = (color.green - pG);
     db = (color.blue - pB);
-    double nearestDist = Math.sqrt(dr * dr + dg * dg + db * db);
+    double nearestDist = sqrt(dr * dr + dg * dg + db * db);
     for (int i = 1; i < renderColors.length; i++) {
       color = renderColors[i];
       dr = (color.red - pR);
       dg = (color.green - pG);
       db = (color.blue - pB);
-      double dist = Math.sqrt(dr * dr + dg * dg + db * db);
+      double dist = sqrt(dr * dr + dg * dg + db * db);
       if (dist < nearestDist) {
         nearestDist = dist;
         nearestIdx = i;

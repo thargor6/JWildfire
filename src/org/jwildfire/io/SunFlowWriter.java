@@ -20,6 +20,7 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.jwildfire.base.MathLib;
 import org.jwildfire.base.Tools;
 import org.jwildfire.transform.Mesh3D;
 import org.jwildfire.transform.Mesh3DTransformer.Rotate;
@@ -154,12 +155,12 @@ public class SunFlowWriter {
       sb.append("  " + Tools.doubleToString(x[i] * scl) + " " + Tools.doubleToString(y[i] * scl) + " " + Tools.doubleToString(-z[i] * scl) + "\n");
     }
     xSize = xMax - xMin;
-    if (xSize < Tools.EPSILON) {
-      xSize = Tools.EPSILON;
+    if (xSize < MathLib.EPSILON) {
+      xSize = MathLib.EPSILON;
     }
     ySize = yMax - yMin;
-    if (ySize < Tools.EPSILON) {
-      ySize = Tools.EPSILON;
+    if (ySize < MathLib.EPSILON) {
+      ySize = MathLib.EPSILON;
     }
 
     // triangles
@@ -195,7 +196,7 @@ public class SunFlowWriter {
       double nfy = vaz * vbx - vax * vbz;
       double nfz = vax * vby - vay * vbx;
       double rr = Math.sqrt(nfx * nfx + nfy * nfy + nfz * nfz);
-      if (Math.abs(rr) <= Tools.EPSILON) {
+      if (Math.abs(rr) <= MathLib.EPSILON) {
         nfx = nfy = 0.0;
         nfz = -1.0;
       }

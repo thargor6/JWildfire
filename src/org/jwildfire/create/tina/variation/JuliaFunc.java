@@ -16,6 +16,11 @@
 */
 package org.jwildfire.create.tina.variation;
 
+import static org.jwildfire.base.MathLib.M_PI;
+import static org.jwildfire.base.MathLib.cos;
+import static org.jwildfire.base.MathLib.sin;
+import static org.jwildfire.base.MathLib.sqrt;
+
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
@@ -23,10 +28,10 @@ public class JuliaFunc extends SimpleVariationFunc {
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-    double a = pAffineTP.getPrecalcAtan(pContext) * 0.5 + Math.PI * (int) (2.0 * pContext.random());
-    double sina = pContext.sin(a);
-    double cosa = pContext.cos(a);
-    double r = pAmount * pContext.sqrt(pContext.sqrt(pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y));
+    double a = pAffineTP.getPrecalcAtan(pContext) * 0.5 + M_PI * (int) (2.0 * pContext.random());
+    double sina = sin(a);
+    double cosa = cos(a);
+    double r = pAmount * sqrt(sqrt(pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y));
     pVarTP.x += r * cosa;
     pVarTP.y += r * sina;
   }

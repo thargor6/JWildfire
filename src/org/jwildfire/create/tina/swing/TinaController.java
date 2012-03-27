@@ -62,6 +62,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
+import org.jwildfire.base.MathLib;
 import org.jwildfire.base.Prefs;
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.DrawMode;
@@ -2902,7 +2903,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
               valStr = "0";
             }
             // round the delta to whole numbers if the parameter is of type integer
-            if (Math.abs(pDelta) > Tools.EPSILON) {
+            if (Math.abs(pDelta) > MathLib.EPSILON) {
               Object val = var.getFunc().getParameterValues()[idx];
               if (val != null && val instanceof Integer) {
                 if (Math.abs(pDelta) < 1.0) {

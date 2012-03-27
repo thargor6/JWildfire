@@ -16,6 +16,14 @@
 */
 package org.jwildfire.create.tina.variation;
 
+import static org.jwildfire.base.MathLib.acos;
+import static org.jwildfire.base.MathLib.cos;
+import static org.jwildfire.base.MathLib.cosh;
+import static org.jwildfire.base.MathLib.log;
+import static org.jwildfire.base.MathLib.sin;
+import static org.jwildfire.base.MathLib.sinh;
+import static org.jwildfire.base.MathLib.sqrt;
+
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
@@ -27,17 +35,17 @@ public class EDiscFunc extends SimpleVariationFunc {
 
     double tmp = pAffineTP.getPrecalcSumsq() + 1.0;
     double tmp2 = 2.0 * pAffineTP.x;
-    double r1 = pContext.sqrt(tmp + tmp2);
-    double r2 = pContext.sqrt(tmp - tmp2);
+    double r1 = sqrt(tmp + tmp2);
+    double r2 = sqrt(tmp - tmp2);
     double xmax = (r1 + r2) * 0.5;
-    double a1 = Math.log(xmax + pContext.sqrt(xmax - 1.0));
-    double a2 = -Math.acos(pAffineTP.x / xmax);
+    double a1 = log(xmax + sqrt(xmax - 1.0));
+    double a2 = -acos(pAffineTP.x / xmax);
     double w = pAmount / 11.57034632;
 
-    double snv = pContext.sin(a1);
-    double csv = pContext.cos(a1);
-    double snhu = Math.sinh(a2);
-    double cshu = Math.cosh(a2);
+    double snv = sin(a1);
+    double csv = cos(a1);
+    double snhu = sinh(a2);
+    double cshu = cosh(a2);
 
     if (pAffineTP.y > 0.0) {
       snv = -snv;

@@ -16,7 +16,7 @@
 */
 package org.jwildfire.transform;
 
-import org.jwildfire.base.Tools;
+import org.jwildfire.base.MathLib;
 import org.jwildfire.image.Pixel;
 import org.jwildfire.image.SimpleImage;
 import org.jwildfire.transform.Mesh3DTransformer.Faces;
@@ -138,7 +138,7 @@ public abstract class Mesh3DRenderer {
 
     lightCount = MAXLIGHT;
     for (int i = MAXLIGHT - 1; i > 0; i--) {
-      if ((lightRed[i] < Tools.EPSILON) && (lightGreen[i] < Tools.EPSILON) && (lightBlue[i] < Tools.EPSILON))
+      if ((lightRed[i] < MathLib.EPSILON) && (lightGreen[i] < MathLib.EPSILON) && (lightBlue[i] < MathLib.EPSILON))
         lightCount--;
       else
         break;

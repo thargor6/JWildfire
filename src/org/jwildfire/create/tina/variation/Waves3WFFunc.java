@@ -16,6 +16,13 @@
 */
 package org.jwildfire.create.tina.variation;
 
+import static org.jwildfire.base.MathLib.EPSILON;
+import static org.jwildfire.base.MathLib.M_PI;
+import static org.jwildfire.base.MathLib.cos;
+import static org.jwildfire.base.MathLib.exp;
+import static org.jwildfire.base.MathLib.fabs;
+import static org.jwildfire.base.MathLib.sin;
+
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
@@ -34,8 +41,8 @@ public class Waves3WFFunc extends VariationFunc {
 
   private double scalex = 0.25;
   private double scaley = 0.5;
-  private double freqx = Math.PI / 2;
-  private double freqy = Math.PI / 4;
+  private double freqx = M_PI / 2;
+  private double freqy = M_PI / 4;
   private int useCosX = 1;
   private int useCosY = 0;
   private double dampX = 0.0;
@@ -44,19 +51,19 @@ public class Waves3WFFunc extends VariationFunc {
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     /* Modified version of waves2 from Joel F */
-    double dampingX = Math.abs(dampX) < Tools.EPSILON ? 1.0 : pContext.exp(dampX);
-    double dampingY = Math.abs(dampY) < Tools.EPSILON ? 1.0 : pContext.exp(dampY);
+    double dampingX = fabs(dampX) < EPSILON ? 1.0 : exp(dampX);
+    double dampingY = fabs(dampY) < EPSILON ? 1.0 : exp(dampY);
     if (useCosX == 1) {
-      pVarTP.x += pAmount * (pAffineTP.x + dampingX * scalex * pContext.cos(pAffineTP.y * freqx) * pContext.cos(pAffineTP.y * freqx)) * dampingX;
+      pVarTP.x += pAmount * (pAffineTP.x + dampingX * scalex * cos(pAffineTP.y * freqx) * cos(pAffineTP.y * freqx)) * dampingX;
     }
     else {
-      pVarTP.x += pAmount * (pAffineTP.x + dampingX * scalex * pContext.sin(pAffineTP.y * freqx) * pContext.sin(pAffineTP.y * freqx)) * dampingX;
+      pVarTP.x += pAmount * (pAffineTP.x + dampingX * scalex * sin(pAffineTP.y * freqx) * sin(pAffineTP.y * freqx)) * dampingX;
     }
     if (useCosY == 1) {
-      pVarTP.y += pAmount * (pAffineTP.y + dampingY * scaley * pContext.cos(pAffineTP.x * freqy) * pContext.cos(pAffineTP.x * freqy)) * dampingY;
+      pVarTP.y += pAmount * (pAffineTP.y + dampingY * scaley * cos(pAffineTP.x * freqy) * cos(pAffineTP.x * freqy)) * dampingY;
     }
     else {
-      pVarTP.y += pAmount * (pAffineTP.y + dampingY * scaley * pContext.sin(pAffineTP.x * freqy) * pContext.sin(pAffineTP.x * freqy)) * dampingY;
+      pVarTP.y += pAmount * (pAffineTP.y + dampingY * scaley * sin(pAffineTP.x * freqy) * sin(pAffineTP.x * freqy)) * dampingY;
     }
   }
 

@@ -16,8 +16,12 @@
 */
 package org.jwildfire.create.tina.variation;
 
+import static org.jwildfire.base.MathLib.EPSILON;
+import static org.jwildfire.base.MathLib.SMALL_EPSILON;
+import static org.jwildfire.base.MathLib.fabs;
+import static org.jwildfire.base.MathLib.pow;
+
 import org.jwildfire.base.Tools;
-import org.jwildfire.create.tina.base.Constants;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
@@ -33,11 +37,11 @@ public class Spherical3DWFFunc extends VariationFunc {
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     double r;
-    if (Math.abs(exponent - 2.0) < Tools.EPSILON) {
-      r = pAmount / (pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y + pAffineTP.z * pAffineTP.z + Constants.EPSILON);
+    if (fabs(exponent - 2.0) < EPSILON) {
+      r = pAmount / (pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y + pAffineTP.z * pAffineTP.z + SMALL_EPSILON);
     }
     else {
-      r = pAmount / Math.pow(pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y + pAffineTP.z * pAffineTP.z + Constants.EPSILON, exponent / 2.0);
+      r = pAmount / pow(pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y + pAffineTP.z * pAffineTP.z + SMALL_EPSILON, exponent / 2.0);
     }
     if (invert == 0) {
       pVarTP.x += pAffineTP.x * r;

@@ -16,6 +16,9 @@
 */
 package org.jwildfire.create.tina.variation;
 
+import static org.jwildfire.base.MathLib.sin;
+import static org.jwildfire.base.MathLib.tan;
+
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
@@ -33,8 +36,8 @@ public class Popcorn2Func extends VariationFunc {
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     /* popcorn2 from the apophysis plugin pack */
-    pVarTP.x += pAmount * (pAffineTP.x + x * pContext.sin(pContext.tan(pAffineTP.y * c)));
-    pVarTP.y += pAmount * (pAffineTP.y + y * pContext.sin(pContext.tan(pAffineTP.x * c)));
+    pVarTP.x += pAmount * (pAffineTP.x + x * sin(tan(pAffineTP.y * c)));
+    pVarTP.y += pAmount * (pAffineTP.y + y * sin(tan(pAffineTP.x * c)));
   }
 
   @Override

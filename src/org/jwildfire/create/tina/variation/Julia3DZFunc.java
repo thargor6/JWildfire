@@ -16,6 +16,14 @@
 */
 package org.jwildfire.create.tina.variation;
 
+import static org.jwildfire.base.MathLib.M_PI;
+import static org.jwildfire.base.MathLib.atan2;
+import static org.jwildfire.base.MathLib.cos;
+import static org.jwildfire.base.MathLib.fabs;
+import static org.jwildfire.base.MathLib.pow;
+import static org.jwildfire.base.MathLib.sin;
+import static org.jwildfire.base.MathLib.sqrt;
+
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
@@ -29,19 +37,19 @@ public class Julia3DZFunc extends VariationFunc {
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-    double absPower = Math.abs(power);
+    double absPower = fabs(power);
     double cPower = 1.0 / power * 0.5;
 
     double r2d = pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y;
-    double r = pAmount * Math.pow(r2d, cPower);
+    double r = pAmount * pow(r2d, cPower);
 
     int rnd = (int) (pContext.random() * absPower);
-    double angle = (Math.atan2(pAffineTP.y, pAffineTP.x) + 2 * Math.PI * rnd) / power;
-    double sina = pContext.sin(angle);
-    double cosa = pContext.cos(angle);
+    double angle = (atan2(pAffineTP.y, pAffineTP.x) + 2 * M_PI * rnd) / power;
+    double sina = sin(angle);
+    double cosa = cos(angle);
     pVarTP.x += r * cosa;
     pVarTP.y += r * sina;
-    pVarTP.z += r * pAffineTP.z / (pContext.sqrt(r2d) * absPower);
+    pVarTP.z += r * pAffineTP.z / (sqrt(r2d) * absPower);
   }
 
   @Override

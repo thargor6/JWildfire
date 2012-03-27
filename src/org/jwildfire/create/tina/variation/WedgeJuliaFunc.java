@@ -16,7 +16,14 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import org.jwildfire.create.tina.base.Constants;
+import static org.jwildfire.base.MathLib.M_1_PI;
+import static org.jwildfire.base.MathLib.M_PI;
+import static org.jwildfire.base.MathLib.cos;
+import static org.jwildfire.base.MathLib.fabs;
+import static org.jwildfire.base.MathLib.floor;
+import static org.jwildfire.base.MathLib.pow;
+import static org.jwildfire.base.MathLib.sin;
+
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
@@ -36,19 +43,19 @@ public class WedgeJuliaFunc extends VariationFunc {
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-    double wedgeJulia_cf = 1.0 - angle * count * Constants.M_1_PI * 0.5;
-    double wedgeJulia_rN = Math.abs(power);
+    double wedgeJulia_cf = 1.0 - angle * count * M_1_PI * 0.5;
+    double wedgeJulia_rN = fabs(power);
     double wedgeJulia_cn = dist / power / 2.0;
     /* wedge_julia from apo plugin pack */
 
-    double r = pAmount * Math.pow(pAffineTP.getPrecalcSumsq(), wedgeJulia_cn);
+    double r = pAmount * pow(pAffineTP.getPrecalcSumsq(), wedgeJulia_cn);
     int t_rnd = (int) ((wedgeJulia_rN) * pContext.random());
-    double a = (pAffineTP.getPrecalcAtanYX(pContext) + 2.0 * Math.PI * t_rnd) / power;
-    double c = Math.floor((count * a + Math.PI) * Constants.M_1_PI * 0.5);
+    double a = (pAffineTP.getPrecalcAtanYX(pContext) + 2.0 * M_PI * t_rnd) / power;
+    double c = floor((count * a + M_PI) * M_1_PI * 0.5);
 
     a = a * wedgeJulia_cf + c * angle;
-    double sa = pContext.sin(a);
-    double ca = pContext.cos(sa);
+    double sa = sin(a);
+    double ca = cos(sa);
 
     pVarTP.x += r * ca;
     pVarTP.y += r * sa;

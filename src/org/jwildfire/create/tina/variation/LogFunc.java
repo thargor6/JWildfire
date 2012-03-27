@@ -16,6 +16,8 @@
 */
 package org.jwildfire.create.tina.variation;
 
+import static org.jwildfire.base.MathLib.log;
+
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
@@ -27,7 +29,7 @@ public class LogFunc extends SimpleVariationFunc {
     /* exp log sin cos tan sec csc cot sinh cosh tanh sech csch coth */
     //Natural Logarithm LOG
     // needs precalc_atanyx and precalc_sumsq
-    pVarTP.x += pAmount * 0.5 * Math.log(pAffineTP.getPrecalcSumsq());
+    pVarTP.x += pAmount * 0.5 * log(pAffineTP.getPrecalcSumsq());
     pVarTP.y += pAmount * pAffineTP.getPrecalcAtanYX(pContext);
   }
 

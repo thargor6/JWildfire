@@ -16,6 +16,9 @@
 */
 package org.jwildfire.create.tina.variation;
 
+import static org.jwildfire.base.MathLib.cos;
+import static org.jwildfire.base.MathLib.sin;
+
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
@@ -38,13 +41,13 @@ public class KaleidoscopeFunc extends VariationFunc {
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     /* Kaleidoscope by Will Evans, http://eevans1.deviantart.com/art/kaleidoscope-plugin-122185469  */
-    pVarTP.x += ((w * pAffineTP.x) * pContext.cos(45.0) - pAffineTP.y * pContext.sin(45.0) + e) + r;
+    pVarTP.x += ((w * pAffineTP.x) * cos(45.0) - pAffineTP.y * sin(45.0) + e) + r;
     // the if function splits the plugin in two.
     if (pAffineTP.y > 0) {
-      pVarTP.y += ((w * pAffineTP.y) * pContext.cos(45.0) + pAffineTP.x * pContext.sin(45.0) + q + e) + t;
+      pVarTP.y += ((w * pAffineTP.y) * cos(45.0) + pAffineTP.x * sin(45.0) + q + e) + t;
     }
     else {
-      pVarTP.y += (w * pAffineTP.y) * pContext.cos(45.0) + pAffineTP.x * pContext.sin(45.0) - q - e;
+      pVarTP.y += (w * pAffineTP.y) * cos(45.0) + pAffineTP.x * sin(45.0) - q - e;
     }
   }
 

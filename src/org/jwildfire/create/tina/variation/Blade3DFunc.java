@@ -16,6 +16,10 @@
 */
 package org.jwildfire.create.tina.variation;
 
+import static org.jwildfire.base.MathLib.cos;
+import static org.jwildfire.base.MathLib.sin;
+import static org.jwildfire.base.MathLib.sqrt;
+
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
@@ -35,9 +39,9 @@ public class Blade3DFunc extends SimpleVariationFunc {
     end;
     */
 
-    double r = pContext.random() * pAmount * pContext.sqrt(pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y);
-    double sinr = pContext.sin(r);
-    double cosr = pContext.cos(r);
+    double r = pContext.random() * pAmount * sqrt(pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y);
+    double sinr = sin(r);
+    double cosr = cos(r);
     pVarTP.x += pAmount * pAffineTP.x * (cosr + sinr);
     pVarTP.y += pAmount * pAffineTP.x * (cosr - sinr);
     pVarTP.z += pAmount * pAffineTP.y * (sinr - cosr);

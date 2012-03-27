@@ -16,7 +16,12 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import org.jwildfire.create.tina.base.Constants;
+import static org.jwildfire.base.MathLib.M_PI_4;
+import static org.jwildfire.base.MathLib.cos;
+import static org.jwildfire.base.MathLib.fabs;
+import static org.jwildfire.base.MathLib.pow;
+import static org.jwildfire.base.MathLib.sin;
+
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
@@ -43,21 +48,21 @@ public class SuperShapeFunc extends VariationFunc {
     double pm_4 = m / 4.0;
     double pneg1_n1 = -1.0 / n1;
 
-    double theta = pm_4 * pAffineTP.getPrecalcAtanYX(pContext) + Constants.M_PI_4;
+    double theta = pm_4 * pAffineTP.getPrecalcAtanYX(pContext) + M_PI_4;
 
-    double st = pContext.sin(theta);
-    double ct = pContext.cos(theta);
+    double st = sin(theta);
+    double ct = cos(theta);
 
-    double t1 = Math.abs(ct);
-    t1 = Math.pow(t1, n2);
+    double t1 = fabs(ct);
+    t1 = pow(t1, n2);
 
-    double t2 = Math.abs(st);
-    t2 = Math.pow(t2, n3);
+    double t2 = fabs(st);
+    t2 = pow(t2, n3);
 
     double myrnd = rnd;
 
     double r = pAmount * ((myrnd * pContext.random() + (1.0 - myrnd) * pAffineTP.getPrecalcSqrt(pContext)) - holes)
-        * Math.pow(t1 + t2, pneg1_n1) / pAffineTP.getPrecalcSqrt(pContext);
+        * pow(t1 + t2, pneg1_n1) / pAffineTP.getPrecalcSqrt(pContext);
 
     pVarTP.x += r * pAffineTP.x;
     pVarTP.y += r * pAffineTP.y;

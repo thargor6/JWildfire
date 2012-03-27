@@ -16,6 +16,11 @@
 */
 package org.jwildfire.create.tina.variation;
 
+import static org.jwildfire.base.MathLib.cos;
+import static org.jwildfire.base.MathLib.cosh;
+import static org.jwildfire.base.MathLib.sin;
+import static org.jwildfire.base.MathLib.sinh;
+
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
@@ -26,10 +31,10 @@ public class CothFunc extends SimpleVariationFunc {
     /* complex vars by cothe */
     /* exp log sin cos tan sec csc cot sinh cosh tanh sech csch coth */
     //Hyperbolic Cotangent COTH
-    double cothsin = pContext.sin(2.0 * pAffineTP.y);
-    double cothcos = pContext.cos(2.0 * pAffineTP.y);
-    double cothsinh = Math.sinh(2.0 * pAffineTP.x);
-    double cothcosh = Math.cosh(2.0 * pAffineTP.x);
+    double cothsin = sin(2.0 * pAffineTP.y);
+    double cothcos = cos(2.0 * pAffineTP.y);
+    double cothsinh = sinh(2.0 * pAffineTP.x);
+    double cothcosh = cosh(2.0 * pAffineTP.x);
     double cothden = 1.0 / (cothcosh - cothcos);
     pVarTP.x += pAmount * cothden * cothsinh;
     pVarTP.y += pAmount * cothden * cothsin;

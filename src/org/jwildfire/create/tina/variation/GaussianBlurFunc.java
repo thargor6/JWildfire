@@ -16,6 +16,10 @@
 */
 package org.jwildfire.create.tina.variation;
 
+import static org.jwildfire.base.MathLib.M_PI;
+import static org.jwildfire.base.MathLib.cos;
+import static org.jwildfire.base.MathLib.sin;
+
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
@@ -23,9 +27,9 @@ public class GaussianBlurFunc extends SimpleVariationFunc {
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-    double r = pContext.random() * 2 * Math.PI;
-    double sina = pContext.sin(r);
-    double cosa = pContext.cos(r);
+    double r = pContext.random() * 2 * M_PI;
+    double sina = sin(r);
+    double cosa = cos(r);
     r = pAmount * (pContext.random() + pContext.random() + pContext.random() + pContext.random() - 2.0);
     pVarTP.x += r * cosa;
     pVarTP.y += r * sina;

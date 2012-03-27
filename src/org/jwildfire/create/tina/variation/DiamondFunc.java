@@ -16,6 +16,9 @@
 */
 package org.jwildfire.create.tina.variation;
 
+import static org.jwildfire.base.MathLib.cos;
+import static org.jwildfire.base.MathLib.sin;
+
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
@@ -26,8 +29,8 @@ public class DiamondFunc extends SimpleVariationFunc {
     double length = pAffineTP.getPrecalcSqrt(pContext);
     double sinA = pAffineTP.getPrecalcSinA(pContext);
     double cosA = pAffineTP.getPrecalcCosA(pContext);
-    double sinr = pContext.sin(length);
-    double cosr = pContext.cos(length);
+    double sinr = sin(length);
+    double cosr = cos(length);
     pVarTP.x += pAmount * sinA * cosr;
     pVarTP.y += pAmount * cosA * sinr;
   }

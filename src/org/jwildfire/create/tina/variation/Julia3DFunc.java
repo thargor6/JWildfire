@@ -16,6 +16,14 @@
 */
 package org.jwildfire.create.tina.variation;
 
+import static org.jwildfire.base.MathLib.M_PI;
+import static org.jwildfire.base.MathLib.atan2;
+import static org.jwildfire.base.MathLib.cos;
+import static org.jwildfire.base.MathLib.fabs;
+import static org.jwildfire.base.MathLib.pow;
+import static org.jwildfire.base.MathLib.sin;
+import static org.jwildfire.base.MathLib.sqrt;
+
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
@@ -29,18 +37,18 @@ public class Julia3DFunc extends VariationFunc {
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-    double absPower = Math.abs(power);
+    double absPower = fabs(power);
     double cPower = (1.0 / power - 1.0) * 0.5;
 
     double z = pAffineTP.z / absPower;
     double r2d = pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y;
-    double r = pAmount * Math.pow(r2d + z * z, cPower);
+    double r = pAmount * pow(r2d + z * z, cPower);
 
-    double r2 = r * pContext.sqrt(r2d);
+    double r2 = r * sqrt(r2d);
     int rnd = (int) (pContext.random() * absPower);
-    double angle = (Math.atan2(pAffineTP.y, pAffineTP.x) + 2 * Math.PI * rnd) / (double) power;
-    double sina = pContext.sin(angle);
-    double cosa = pContext.cos(angle);
+    double angle = (atan2(pAffineTP.y, pAffineTP.x) + 2 * M_PI * rnd) / (double) power;
+    double sina = sin(angle);
+    double cosa = cos(angle);
 
     pVarTP.x += r2 * cosa;
     pVarTP.y += r2 * sina;

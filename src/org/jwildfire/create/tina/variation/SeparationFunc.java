@@ -16,6 +16,8 @@
 */
 package org.jwildfire.create.tina.variation;
 
+import static org.jwildfire.base.MathLib.sqrt;
+
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
@@ -40,17 +42,17 @@ public class SeparationFunc extends VariationFunc {
     double sy2 = y * y;
 
     if (pAffineTP.x > 0.0) {
-      pVarTP.x += pAmount * (pContext.sqrt(pAffineTP.x * pAffineTP.x + sx2) - pAffineTP.x * xInside);
+      pVarTP.x += pAmount * (sqrt(pAffineTP.x * pAffineTP.x + sx2) - pAffineTP.x * xInside);
     }
     else {
-      pVarTP.x -= pAmount * (pContext.sqrt(pAffineTP.x * pAffineTP.x + sx2) + pAffineTP.x * xInside);
+      pVarTP.x -= pAmount * (sqrt(pAffineTP.x * pAffineTP.x + sx2) + pAffineTP.x * xInside);
     }
 
     if (pAffineTP.y > 0.0) {
-      pVarTP.y += pAmount * (pContext.sqrt(pAffineTP.y * pAffineTP.y + sy2) - pAffineTP.y * yInside);
+      pVarTP.y += pAmount * (sqrt(pAffineTP.y * pAffineTP.y + sy2) - pAffineTP.y * yInside);
     }
     else {
-      pVarTP.y -= pAmount * (pContext.sqrt(pAffineTP.y * pAffineTP.y + sy2) + pAffineTP.y * yInside);
+      pVarTP.y -= pAmount * (sqrt(pAffineTP.y * pAffineTP.y + sy2) + pAffineTP.y * yInside);
     }
   }
 

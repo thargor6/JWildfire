@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.jwildfire.base.Tools;
+import org.jwildfire.base.MathLib;
 import org.jwildfire.create.tina.random.RandomNumberGenerator.RandGenStatus;
 import org.jwildfire.create.tina.variation.FlameTransformationContext;
 import org.jwildfire.create.tina.variation.Variation;
@@ -202,8 +202,8 @@ public class XForm {
   }
 
   public boolean hasPostCoeffs() {
-    return (Math.abs(postCoeff00 - 1.0) > Tools.EPSILON || Math.abs(postCoeff01) > Tools.EPSILON || Math.abs(postCoeff10) > Tools.EPSILON
-        || Math.abs(postCoeff11 - 1.0) > Tools.EPSILON || Math.abs(postCoeff20) > Tools.EPSILON || Math.abs(postCoeff21) > Tools.EPSILON);
+    return (Math.abs(postCoeff00 - 1.0) > MathLib.EPSILON || Math.abs(postCoeff01) > MathLib.EPSILON || Math.abs(postCoeff10) > MathLib.EPSILON
+        || Math.abs(postCoeff11 - 1.0) > MathLib.EPSILON || Math.abs(postCoeff20) > MathLib.EPSILON || Math.abs(postCoeff21) > MathLib.EPSILON);
   }
 
   public void transformPoint(FlameTransformationContext pContext, XYZPoint pAffineT, XYZPoint pVarT, XYZPoint pSrcPoint, XYZPoint pDstPoint) {

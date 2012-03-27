@@ -16,6 +16,11 @@
 */
 package org.jwildfire.create.tina.variation;
 
+import static org.jwildfire.base.MathLib.M_PI;
+import static org.jwildfire.base.MathLib.cos;
+import static org.jwildfire.base.MathLib.sin;
+import static org.jwildfire.base.MathLib.sqrt;
+
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
@@ -23,10 +28,10 @@ public class DiscFunc extends SimpleVariationFunc {
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-    double rPI = Math.PI * pContext.sqrt(pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y);
-    double sinr = pContext.sin(rPI);
-    double cosr = pContext.cos(rPI);
-    double r = pAmount * pAffineTP.getPrecalcAtan(pContext) / Math.PI;
+    double rPI = M_PI * sqrt(pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y);
+    double sinr = sin(rPI);
+    double cosr = cos(rPI);
+    double r = pAmount * pAffineTP.getPrecalcAtan(pContext) / M_PI;
     pVarTP.x += sinr * r;
     pVarTP.y += cosr * r;
   }

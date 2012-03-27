@@ -16,6 +16,11 @@
 */
 package org.jwildfire.create.tina.variation;
 
+import static org.jwildfire.base.MathLib.cos;
+import static org.jwildfire.base.MathLib.exp;
+import static org.jwildfire.base.MathLib.log;
+import static org.jwildfire.base.MathLib.sin;
+
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
@@ -32,19 +37,19 @@ public class EscherFunc extends VariationFunc {
     /* Escher in the Apophysis Plugin Pack */
 
     double a = pAffineTP.getPrecalcAtanYX(pContext);
-    double lnr = 0.5 * Math.log(pAffineTP.getPrecalcSumsq());
+    double lnr = 0.5 * log(pAffineTP.getPrecalcSumsq());
 
-    double seb = pContext.sin(beta);
-    double ceb = pContext.cos(beta);
+    double seb = sin(beta);
+    double ceb = cos(beta);
 
     double vc = 0.5 * (1.0 + ceb);
     double vd = 0.5 * seb;
 
-    double m = pAmount * pContext.exp(vc * lnr - vd * a);
+    double m = pAmount * exp(vc * lnr - vd * a);
     double n = vc * a + vd * lnr;
 
-    double sn = pContext.sin(n);
-    double cn = pContext.cos(n);
+    double sn = sin(n);
+    double cn = cos(n);
 
     pVarTP.x += m * cn;
     pVarTP.y += m * sn;

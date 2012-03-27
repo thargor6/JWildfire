@@ -16,6 +16,11 @@
 */
 package org.jwildfire.create.tina.variation;
 
+import static org.jwildfire.base.MathLib.cos;
+import static org.jwildfire.base.MathLib.cosh;
+import static org.jwildfire.base.MathLib.sin;
+import static org.jwildfire.base.MathLib.sinh;
+
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
@@ -26,11 +31,11 @@ public class CscFunc extends SimpleVariationFunc {
     /* complex vars by cothe */
     /* exp log sin cos tan sec csc cot sinh cosh tanh sech csch coth */
     //Cosecant CSC
-    double cscsin = pContext.sin(pAffineTP.x);
-    double csccos = pContext.cos(pAffineTP.x);
-    double cscsinh = Math.sinh(pAffineTP.y);
-    double csccosh = Math.cosh(pAffineTP.y);
-    double cscden = 2.0 / (Math.cosh(2.0 * pAffineTP.y) - pContext.cos(2.0 * pAffineTP.x));
+    double cscsin = sin(pAffineTP.x);
+    double csccos = cos(pAffineTP.x);
+    double cscsinh = sinh(pAffineTP.y);
+    double csccosh = cosh(pAffineTP.y);
+    double cscden = 2.0 / (cosh(2.0 * pAffineTP.y) - cos(2.0 * pAffineTP.x));
     pVarTP.x += pAmount * cscden * cscsin * csccosh;
     pVarTP.y -= pAmount * cscden * csccos * cscsinh;
   }

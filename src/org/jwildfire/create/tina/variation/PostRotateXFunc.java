@@ -16,6 +16,10 @@
 */
 package org.jwildfire.create.tina.variation;
 
+import static org.jwildfire.base.MathLib.M_PI;
+import static org.jwildfire.base.MathLib.cos;
+import static org.jwildfire.base.MathLib.sin;
+
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
@@ -23,8 +27,8 @@ public class PostRotateXFunc extends SimpleVariationFunc {
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-    double sina = pContext.sin(pAmount * Math.PI * 0.5);
-    double cosa = pContext.cos(pAmount * Math.PI * 0.5);
+    double sina = sin(pAmount * M_PI * 0.5);
+    double cosa = cos(pAmount * M_PI * 0.5);
     double z = cosa * pVarTP.z - sina * pVarTP.y;
     pVarTP.y = sina * pVarTP.z + cosa * pVarTP.y;
     pVarTP.z = z;

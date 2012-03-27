@@ -16,6 +16,12 @@
 */
 package org.jwildfire.create.tina.variation;
 
+import static org.jwildfire.base.MathLib.M_PI;
+import static org.jwildfire.base.MathLib.atan2;
+import static org.jwildfire.base.MathLib.cos;
+import static org.jwildfire.base.MathLib.sin;
+import static org.jwildfire.base.MathLib.sqrt;
+
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
@@ -34,13 +40,13 @@ public class RadialBlurFunc extends VariationFunc {
     gauss_rnd[gauss_N] = pContext.random();
     gauss_N = (gauss_N + 1) & 3;
 
-    double spin = pAmount * pContext.sin(angle * Math.PI * 0.5);
-    double zoom = pAmount * pContext.cos(angle * Math.PI * 0.5);
+    double spin = pAmount * sin(angle * M_PI * 0.5);
+    double zoom = pAmount * cos(angle * M_PI * 0.5);
 
-    double ra = pContext.sqrt(pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y);
-    double alpha = Math.atan2(pAffineTP.y, pAffineTP.x) + spin * rndG;
-    double sina = pContext.sin(alpha);
-    double cosa = pContext.cos(alpha);
+    double ra = sqrt(pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y);
+    double alpha = atan2(pAffineTP.y, pAffineTP.x) + spin * rndG;
+    double sina = sin(alpha);
+    double cosa = cos(alpha);
     double rz = zoom * rndG - 1;
     pVarTP.x += ra * cosa + rz * pAffineTP.x;
     pVarTP.y += ra * sina + rz * pAffineTP.y;

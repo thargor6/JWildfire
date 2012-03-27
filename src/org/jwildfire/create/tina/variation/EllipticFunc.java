@@ -16,7 +16,11 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import org.jwildfire.create.tina.base.Constants;
+import static org.jwildfire.base.MathLib.atan2;
+import static org.jwildfire.base.MathLib.log;
+import static org.jwildfire.base.MathLib.sqrt;
+
+import org.jwildfire.base.MathLib;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
@@ -28,31 +32,31 @@ public class EllipticFunc extends SimpleVariationFunc {
 
     double tmp = pAffineTP.getPrecalcSumsq() + 1.0;
     double x2 = 2.0 * pAffineTP.x;
-    double xmax = 0.5 * (pContext.sqrt(tmp + x2) + pContext.sqrt(tmp - x2));
+    double xmax = 0.5 * (sqrt(tmp + x2) + sqrt(tmp - x2));
     double a = pAffineTP.x / xmax;
     double b = 1.0 - a * a;
     double ssx = xmax - 1.0;
-    double w = pAmount / Constants.M_PI_2;
+    double w = pAmount / MathLib.M_PI_2;
 
     if (b < 0.0) {
       b = 0.0;
     }
     else {
-      b = pContext.sqrt(b);
+      b = sqrt(b);
     }
 
     if (ssx < 0.0) {
       ssx = 0.0;
     }
     else {
-      ssx = pContext.sqrt(ssx);
+      ssx = sqrt(ssx);
     }
-    pVarTP.x += w * Math.atan2(a, b);
+    pVarTP.x += w * atan2(a, b);
     if (pContext.random() < 0.5) {
-      pVarTP.y += w * Math.log(xmax + ssx);
+      pVarTP.y += w * log(xmax + ssx);
     }
     else {
-      pVarTP.y -= w * Math.log(xmax + ssx);
+      pVarTP.y -= w * log(xmax + ssx);
     }
   }
 

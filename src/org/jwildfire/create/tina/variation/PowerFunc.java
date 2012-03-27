@@ -16,6 +16,8 @@
 */
 package org.jwildfire.create.tina.variation;
 
+import static org.jwildfire.base.MathLib.pow;
+
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
@@ -23,7 +25,7 @@ public class PowerFunc extends SimpleVariationFunc {
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-    double r = pAmount * Math.pow(pAffineTP.getPrecalcSqrt(pContext), pAffineTP.getPrecalcSinA(pContext));
+    double r = pAmount * pow(pAffineTP.getPrecalcSqrt(pContext), pAffineTP.getPrecalcSinA(pContext));
     pVarTP.x += r * pAffineTP.getPrecalcCosA(pContext);
     pVarTP.y += r * pAffineTP.getPrecalcSinA(pContext);
   }

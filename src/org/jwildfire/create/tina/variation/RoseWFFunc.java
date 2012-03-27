@@ -16,6 +16,9 @@
 */
 package org.jwildfire.create.tina.variation;
 
+import static org.jwildfire.base.MathLib.cos;
+import static org.jwildfire.base.MathLib.sin;
+
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
@@ -35,14 +38,14 @@ public class RoseWFFunc extends VariationFunc {
     double a = pAffineTP.getPrecalcAtan(pContext);
     double r = pAffineTP.getPrecalcSqrt(pContext);
 
-    r = amp * pContext.cos(waves * a);
+    r = amp * cos(waves * a);
 
     if (filled == 1) {
       r *= pContext.random();
     }
 
-    double nx = pContext.sin(a) * r;
-    double ny = pContext.cos(a) * r;
+    double nx = sin(a) * r;
+    double ny = cos(a) * r;
 
     pVarTP.x += pAmount * nx;
     pVarTP.y += pAmount * ny;

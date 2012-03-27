@@ -16,6 +16,7 @@
 */
 package org.jwildfire.image;
 
+import org.jwildfire.base.MathLib;
 import org.jwildfire.base.Tools;
 
 public class FastHDRTonemapper {
@@ -31,7 +32,7 @@ public class FastHDRTonemapper {
     }
     double lumRange = maxLum - minLum;
     float rgb[] = new float[3];
-    if (lumRange > Tools.EPSILON) {
+    if (lumRange > MathLib.EPSILON) {
       for (int i = 0; i < pHDRImg.getImageHeight(); i++) {
         for (int j = 0; j < pHDRImg.getImageWidth(); j++) {
           pHDRImg.getRGBValues(rgb, j, i);

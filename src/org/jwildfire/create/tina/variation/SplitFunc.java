@@ -16,6 +16,9 @@
 */
 package org.jwildfire.create.tina.variation;
 
+import static org.jwildfire.base.MathLib.M_PI;
+import static org.jwildfire.base.MathLib.cos;
+
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
@@ -32,14 +35,14 @@ public class SplitFunc extends VariationFunc {
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     /* Split from apo plugins pack */
-    if (pContext.cos(pAffineTP.x * xSize * Math.PI) >= 0) {
+    if (cos(pAffineTP.x * xSize * M_PI) >= 0) {
       pVarTP.y += pAmount * pAffineTP.y;
     }
     else {
       pVarTP.y -= pAmount * pAffineTP.y;
     }
 
-    if (pContext.cos(pAffineTP.y * ySize * Math.PI) >= 0) {
+    if (cos(pAffineTP.y * ySize * M_PI) >= 0) {
       pVarTP.x += pAmount * pAffineTP.x;
     }
     else {

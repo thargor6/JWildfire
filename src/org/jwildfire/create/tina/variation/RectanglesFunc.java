@@ -16,6 +16,9 @@
 */
 package org.jwildfire.create.tina.variation;
 
+import static org.jwildfire.base.MathLib.fabs;
+import static org.jwildfire.base.MathLib.floor;
+
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
@@ -29,17 +32,17 @@ public class RectanglesFunc extends VariationFunc {
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     final double EPSILON = 1.0e-10;
-    if (Math.abs(x) < EPSILON) {
+    if (fabs(x) < EPSILON) {
       pVarTP.x += pAmount * pAffineTP.x;
     }
     else {
-      pVarTP.x += pAmount * ((2 * Math.floor(pAffineTP.x / x) + 1) * x - pAffineTP.x);
+      pVarTP.x += pAmount * ((2 * floor(pAffineTP.x / x) + 1) * x - pAffineTP.x);
     }
-    if (Math.abs(y) < EPSILON) {
+    if (fabs(y) < EPSILON) {
       pVarTP.y += pAmount * pAffineTP.y;
     }
     else {
-      pVarTP.y += pAmount * ((2 * Math.floor(pAffineTP.y / y) + 1) * y - pAffineTP.y);
+      pVarTP.y += pAmount * ((2 * floor(pAffineTP.y / y) + 1) * y - pAffineTP.y);
     }
   }
 

@@ -16,6 +16,10 @@
 */
 package org.jwildfire.create.tina.variation;
 
+import static org.jwildfire.base.MathLib.M_PI;
+import static org.jwildfire.base.MathLib.cos;
+import static org.jwildfire.base.MathLib.sin;
+
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
@@ -32,15 +36,15 @@ public class CannabisCurveWFFunc extends VariationFunc {
     double r = pAffineTP.getPrecalcSqrt(pContext);
 
     // cannabis curve (http://mathworld.wolfram.com/CannabisCurve.html)
-    r = (1 + 9.0 / 10.0 * pContext.cos(8.0 * a)) * (1 + 1.0 / 10.0 * pContext.cos(24.0 * a)) * (9.0 / 10.0 + 1.0 / 10.0 * pContext.cos(200.0 * a)) * (1.0 + pContext.sin(a));
-    a += Math.PI / 2.0;
+    r = (1 + 9.0 / 10.0 * cos(8.0 * a)) * (1 + 1.0 / 10.0 * cos(24.0 * a)) * (9.0 / 10.0 + 1.0 / 10.0 * cos(200.0 * a)) * (1.0 + sin(a));
+    a += M_PI / 2.0;
 
     if (filled == 1) {
       r *= pContext.random();
     }
 
-    double nx = pContext.sin(a) * r;
-    double ny = pContext.cos(a) * r;
+    double nx = sin(a) * r;
+    double ny = cos(a) * r;
 
     pVarTP.x += pAmount * nx;
     pVarTP.y += pAmount * ny;

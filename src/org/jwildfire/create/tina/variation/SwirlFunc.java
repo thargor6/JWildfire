@@ -16,6 +16,9 @@
 */
 package org.jwildfire.create.tina.variation;
 
+import static org.jwildfire.base.MathLib.cos;
+import static org.jwildfire.base.MathLib.sin;
+
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
@@ -24,8 +27,8 @@ public class SwirlFunc extends SimpleVariationFunc {
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     double r2 = pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y;
-    double c1 = pContext.sin(r2);
-    double c2 = pContext.cos(r2);
+    double c1 = sin(r2);
+    double c2 = cos(r2);
     pVarTP.x += pAmount * (c1 * pAffineTP.x - c2 * pAffineTP.y);
     pVarTP.y += pAmount * (c2 * pAffineTP.x + c1 * pAffineTP.y);
   }

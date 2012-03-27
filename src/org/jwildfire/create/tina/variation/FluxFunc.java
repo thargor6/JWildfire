@@ -16,6 +16,11 @@
 */
 package org.jwildfire.create.tina.variation;
 
+import static org.jwildfire.base.MathLib.atan2;
+import static org.jwildfire.base.MathLib.cos;
+import static org.jwildfire.base.MathLib.sin;
+import static org.jwildfire.base.MathLib.sqrt;
+
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
@@ -32,11 +37,11 @@ public class FluxFunc extends VariationFunc {
     // Flux, by meckie
     double xpw = pAffineTP.x + pAmount;
     double xmw = pAffineTP.x - pAmount;
-    double avgr = pAmount * (2 + spread) * pContext.sqrt(pContext.sqrt(pAffineTP.y * pAffineTP.y + xpw * xpw) / pContext.sqrt(pAffineTP.y * pAffineTP.y + xmw * xmw));
-    double avga = (Math.atan2(pAffineTP.y, xmw) - Math.atan2(pAffineTP.y, xpw)) * 0.5;
+    double avgr = pAmount * (2 + spread) * sqrt(sqrt(pAffineTP.y * pAffineTP.y + xpw * xpw) / sqrt(pAffineTP.y * pAffineTP.y + xmw * xmw));
+    double avga = (atan2(pAffineTP.y, xmw) - atan2(pAffineTP.y, xpw)) * 0.5;
 
-    pVarTP.x += avgr * pContext.cos(avga);
-    pVarTP.y += avgr * pContext.sin(avga);
+    pVarTP.x += avgr * cos(avga);
+    pVarTP.y += avgr * sin(avga);
   }
 
   @Override

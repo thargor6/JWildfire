@@ -17,19 +17,8 @@
 package org.jwildfire.create.tina.base;
 
 public class Constants {
-  public final static double EPSILON = 1.0e-300;
   public final static int MAX_MOD_WEIGHT_COUNT = 1000;
   public final static int NEXT_APPLIED_XFORM_TABLE_SIZE = 1000;
-  public final static int INITIAL_ITERATIONS = 42;
-
-  public final static int TRUE = 1;
-  public final static int FALSE = 0;
-
-  public final static double M_PI = Math.PI;
-  public final static double M_PI_2 = M_PI * 0.5;
-  public final static double M_PI_4 = M_PI * 0.25;
-  public final static double M_1_PI = 1.0 / M_PI;
-  public final static double M_2_PI = 2.0 / M_PI;
-  public static final double M_2PI = 2.0 * M_PI;;
+  public final static int INITIAL_ITERATIONS = 42;;
 
 }

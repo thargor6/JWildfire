@@ -16,6 +16,8 @@
 */
 package org.jwildfire.create.tina.variation;
 
+import static org.jwildfire.base.MathLib.sqrt;
+
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
@@ -23,7 +25,7 @@ public class HemisphereFunc extends SimpleVariationFunc {
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-    double r = pAmount / pContext.sqrt(pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y + 1);
+    double r = pAmount / sqrt(pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y + 1);
     pVarTP.x += pAffineTP.x * r;
     pVarTP.y += pAffineTP.y * r;
     pVarTP.z += r;

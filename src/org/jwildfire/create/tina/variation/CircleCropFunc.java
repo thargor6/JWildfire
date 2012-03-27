@@ -16,6 +16,13 @@
 */
 package org.jwildfire.create.tina.variation;
 
+import static org.jwildfire.base.MathLib.atan2;
+import static org.jwildfire.base.MathLib.cos;
+import static org.jwildfire.base.MathLib.max;
+import static org.jwildfire.base.MathLib.min;
+import static org.jwildfire.base.MathLib.sin;
+import static org.jwildfire.base.MathLib.sqrt;
+
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
@@ -50,15 +57,15 @@ public class CircleCropFunc extends VariationFunc {
 
     pVarTP.z += vv * pAffineTP.z;
 
-    double rad = pContext.sqrt(pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y);
-    double ang = Math.atan2(pAffineTP.y, pAffineTP.x);
+    double rad = sqrt(pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y);
+    double ang = atan2(pAffineTP.y, pAffineTP.x);
     double rdc = cr + (pContext.random() * 0.5 * ca);
 
     boolean esc = rad > cr;
     boolean cr0 = zero == 1;
 
-    double s = pContext.sin(ang);
-    double c = pContext.cos(ang);
+    double s = sin(ang);
+    double c = cos(ang);
 
     if (cr0 && esc) {
       pVarTP.x = pVarTP.y = 0;
@@ -112,7 +119,7 @@ public class CircleCropFunc extends VariationFunc {
 
   @Override
   public void init(FlameTransformationContext pContext, XForm pXForm) {
-    cA = Math.max(-1.0, Math.min(scatter_area, 1.0));
+    cA = max(-1.0, min(scatter_area, 1.0));
   }
 
 }

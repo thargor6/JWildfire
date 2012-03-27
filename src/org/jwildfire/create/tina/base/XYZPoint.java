@@ -16,6 +16,10 @@
 */
 package org.jwildfire.create.tina.base;
 
+import static org.jwildfire.base.MathLib.SMALL_EPSILON;
+import static org.jwildfire.base.MathLib.atan2;
+import static org.jwildfire.base.MathLib.sqrt;
+
 import org.jwildfire.create.tina.variation.FlameTransformationContext;
 
 public class XYZPoint {
@@ -88,7 +92,7 @@ public class XYZPoint {
 
   public double getPrecalcSqrt(FlameTransformationContext pContext) {
     if (!validSqrt) {
-      sqrt = pContext.sqrt(x * x + y * y) + Constants.EPSILON;
+      sqrt = sqrt(x * x + y * y) + SMALL_EPSILON;
       validSqrt = true;
     }
     return sqrt;
@@ -96,7 +100,7 @@ public class XYZPoint {
 
   public double getPrecalcAtan(FlameTransformationContext pContext) {
     if (!validAtan) {
-      atan = Math.atan2(x, y);
+      atan = atan2(x, y);
       validAtan = true;
     }
     return atan;
@@ -104,7 +108,7 @@ public class XYZPoint {
 
   public double getPrecalcAtanYX(FlameTransformationContext pContext) {
     if (!validAtanYX) {
-      atanYX = Math.atan2(y, x);
+      atanYX = atan2(y, x);
       validAtanYX = true;
     }
     return atanYX;

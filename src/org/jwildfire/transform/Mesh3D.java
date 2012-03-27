@@ -16,6 +16,7 @@
 */
 package org.jwildfire.transform;
 
+import org.jwildfire.base.MathLib;
 import org.jwildfire.base.Tools;
 import org.jwildfire.image.SimpleImage;
 
@@ -321,7 +322,7 @@ public class Mesh3D {
 
   public Mesh3D clone(double pScale) {
     Mesh3D res = clone();
-    if (Math.abs(pScale - 1.0) > Tools.EPSILON) {
+    if (Math.abs(pScale - 1.0) > MathLib.EPSILON) {
       for (int i = 0; i < pCount; i++) {
         res.x[i] *= pScale;
         res.y[i] *= pScale;

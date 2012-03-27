@@ -16,7 +16,12 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import org.jwildfire.base.Tools;
+import static org.jwildfire.base.MathLib.EPSILON;
+import static org.jwildfire.base.MathLib.M_PI;
+import static org.jwildfire.base.MathLib.cos;
+import static org.jwildfire.base.MathLib.exp;
+import static org.jwildfire.base.MathLib.fabs;
+
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
@@ -30,23 +35,23 @@ public class OscilloscopeFunc extends VariationFunc {
   private static final String[] paramNames = { PARAM_SEPARATION, PARAM_FREQUENCY, PARAM_AMPLITUDE, PARAM_DAMPING };
 
   private double separation = 1.00;
-  private double frequency = Math.PI;
+  private double frequency = M_PI;
   private double amplitude = 1.0;
   private double damping = 0.0;
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     /* oscilloscope from the apophysis plugin pack */
-    double tpf = 2 * Math.PI * frequency;
+    double tpf = 2 * M_PI * frequency;
     double t;
-    if (Math.abs(damping) <= Tools.EPSILON) {
-      t = amplitude * pContext.cos(tpf * pAffineTP.x) + separation;
+    if (fabs(damping) <= EPSILON) {
+      t = amplitude * cos(tpf * pAffineTP.x) + separation;
     }
     else {
-      t = amplitude * pContext.exp(-Math.abs(pAffineTP.x) * damping) * pContext.cos(tpf * pAffineTP.x) + separation;
+      t = amplitude * exp(-fabs(pAffineTP.x) * damping) * cos(tpf * pAffineTP.x) + separation;
     }
 
-    if (Math.abs(pAffineTP.y) <= t) {
+    if (fabs(pAffineTP.y) <= t) {
       pVarTP.x += pAmount * pAffineTP.x;
       pVarTP.y -= pAmount * pAffineTP.y;
     }

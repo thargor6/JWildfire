@@ -39,7 +39,6 @@ public class Tools {
   public static final String APP_TITLE = "JWildfire";
   public static final String APP_VERSION = "0.41 (24.03.2012)";
 
-  public static final double EPSILON = 0.00000001;
   public static final int VPREC = 1024;
   public static final int SPREC = 10;
   private static final Pixel toolPixel = new Pixel();
@@ -265,32 +264,6 @@ public class Tools {
     return String.valueOf(pValue);
   }
 
-  public static int SIGNUM(double val) {
-    if (val > 0.0)
-      return 1;
-    else if (val < 0.0)
-      return -1;
-    else
-      return 0;
-  }
-
-  public static double FABS(double var) {
-    if (var < 0.0)
-      return 0.0 - var;
-    else
-      return var;
-  }
-
-  public static int FTOI(double val) {
-    int sig = SIGNUM(val);
-    if (sig > 0)
-      return (int) (val + 0.5);
-    else if (sig < 0)
-      return (int) (0.0 - (FABS(val) + 0.5));
-    else
-      return 0;
-  }
-
   private static final byte hexChars[] = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F' };
 
   public static String byteArrayToHexString(byte[] pByteArray) {
@@ -384,6 +357,17 @@ public class Tools {
     else {
       return null;
     }
+  }
+
+  // legacy code
+  public static final int FTOI(double val) {
+    int sig = MathLib.sign(val);
+    if (sig > 0)
+      return (int) (val + 0.5);
+    else if (sig < 0)
+      return (int) (0.0 - (MathLib.fabs(val) + 0.5));
+    else
+      return 0;
   }
 
 }

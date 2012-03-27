@@ -16,6 +16,9 @@
 */
 package org.jwildfire.create.tina.variation;
 
+import static org.jwildfire.base.MathLib.cos;
+import static org.jwildfire.base.MathLib.sin;
+
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
@@ -26,8 +29,8 @@ public class SpiralFunc extends SimpleVariationFunc {
     double sinA = pAffineTP.getPrecalcSinA(pContext);
     double cosA = pAffineTP.getPrecalcCosA(pContext);
     double r = pAffineTP.getPrecalcSqrt(pContext);
-    double sinr = pContext.sin(r);
-    double cosr = pContext.cos(r);
+    double sinr = sin(r);
+    double cosr = cos(r);
     r = pAmount / r;
     pVarTP.x += (cosA + sinr) * r;
     pVarTP.y += (sinA - cosr) * r;

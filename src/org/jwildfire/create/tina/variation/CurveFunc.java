@@ -16,6 +16,8 @@
 */
 package org.jwildfire.create.tina.variation;
 
+import static org.jwildfire.base.MathLib.exp;
+
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
@@ -45,8 +47,8 @@ public class CurveFunc extends VariationFunc {
     if (pc_ylen < 1E-20)
       pc_ylen = 1E-20;
 
-    pVarTP.x += pAmount * (pAffineTP.x + xAmp * pContext.exp(-pAffineTP.y * pAffineTP.y / pc_xlen));
-    pVarTP.y += pAmount * (pAffineTP.y + yAmp * pContext.exp(-pAffineTP.x * pAffineTP.x / pc_ylen));
+    pVarTP.x += pAmount * (pAffineTP.x + xAmp * exp(-pAffineTP.y * pAffineTP.y / pc_xlen));
+    pVarTP.y += pAmount * (pAffineTP.y + yAmp * exp(-pAffineTP.x * pAffineTP.x / pc_ylen));
   }
 
   @Override

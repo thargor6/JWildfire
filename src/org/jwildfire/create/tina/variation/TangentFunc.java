@@ -16,6 +16,10 @@
 */
 package org.jwildfire.create.tina.variation;
 
+import static org.jwildfire.base.MathLib.cos;
+import static org.jwildfire.base.MathLib.sin;
+import static org.jwildfire.base.MathLib.tan;
+
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
@@ -30,8 +34,8 @@ public class TangentFunc extends SimpleVariationFunc {
       FPy := FPy + vars[30] * (sin(FTy)/cos(FTy));
     end;
     */
-    pVarTP.x += pAmount * pContext.sin(pAffineTP.x) / pContext.cos(pAffineTP.y);
-    pVarTP.y += pAmount * pContext.tan(pAffineTP.y);
+    pVarTP.x += pAmount * sin(pAffineTP.x) / cos(pAffineTP.y);
+    pVarTP.y += pAmount * tan(pAffineTP.y);
   }
 
   @Override

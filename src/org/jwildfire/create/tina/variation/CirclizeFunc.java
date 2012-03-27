@@ -16,7 +16,11 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import org.jwildfire.create.tina.base.Constants;
+import static org.jwildfire.base.MathLib.M_PI_4;
+import static org.jwildfire.base.MathLib.cos;
+import static org.jwildfire.base.MathLib.fabs;
+import static org.jwildfire.base.MathLib.sin;
+
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
@@ -30,10 +34,10 @@ public class CirclizeFunc extends VariationFunc {
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-    double var4_PI = pAmount / Constants.M_PI_4;
+    double var4_PI = pAmount / M_PI_4;
 
-    double absx = Math.abs(pAffineTP.x);
-    double absy = Math.abs(pAffineTP.y);
+    double absx = fabs(pAffineTP.x);
+    double absy = fabs(pAffineTP.y);
     double perimeter, side;
     if (absx >= absy) {
       if (pAffineTP.x >= absy) {
@@ -56,9 +60,9 @@ public class CirclizeFunc extends VariationFunc {
 
     // tsk tsk... hole is not scaled by vvar.
     double r = var4_PI * side + hole;
-    double a = Constants.M_PI_4 * perimeter / side - Constants.M_PI_4;
-    double sina = pContext.sin(a);
-    double cosa = pContext.cos(a);
+    double a = M_PI_4 * perimeter / side - M_PI_4;
+    double sina = sin(a);
+    double cosa = cos(a);
 
     pVarTP.x += r * cosa;
     pVarTP.y += r * sina;

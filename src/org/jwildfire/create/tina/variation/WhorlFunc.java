@@ -16,6 +16,9 @@
 */
 package org.jwildfire.create.tina.variation;
 
+import static org.jwildfire.base.MathLib.cos;
+import static org.jwildfire.base.MathLib.sin;
+
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
@@ -39,8 +42,8 @@ public class WhorlFunc extends VariationFunc {
     else
       a = pAffineTP.getPrecalcAtanYX(pContext) + outside / (pAmount - r);
 
-    double sa = pContext.sin(a);
-    double ca = pContext.cos(a);
+    double sa = sin(a);
+    double ca = cos(a);
 
     pVarTP.x += pAmount * r * ca;
     pVarTP.y += pAmount * r * sa;

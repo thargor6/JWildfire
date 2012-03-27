@@ -45,15 +45,7 @@ public class CustomWFFunc extends VariationFunc {
   private String code = "import org.jwildfire.create.tina.base.XForm;\r\n" +
       "import org.jwildfire.create.tina.base.XYZPoint;\r\n" +
       "import org.jwildfire.create.tina.variation.FlameTransformationContext;\r\n" +
-      "\r\n" +
-      "\r\n" +
-      "  public boolean isPostTransform() {\r\n" +
-      "    return false;\r\n" +
-      "  }\r\n" +
-      "\r\n" +
-      "  public boolean isPreTransform() {\r\n" +
-      "    return false;\r\n" +
-      "  }\r\n" +
+      "import static org.jwildfire.base.MathLib.*;\r\n" +
       "\r\n" +
       "  public void init(FlameTransformationContext pContext, XForm pXForm) {\r\n" +
       "\r\n" +
@@ -62,7 +54,7 @@ public class CustomWFFunc extends VariationFunc {
       "  public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {\r\n" +
       "    // Some examples:\r\n" +
       "    // \"hemisphere\" variation\r\n" +
-      "    //   double r = pAmount / pContext.sqrt(pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y + 1);\r\n" +
+      "    //   double r = pAmount / sqrt(pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y + 1);\r\n" +
       "    //   pVarTP.x += pAffineTP.x * r;\r\n" +
       "    //   pVarTP.y += pAffineTP.y * r;\r\n" +
       "    //   pVarTP.z += r;\r\n" +
@@ -88,10 +80,10 @@ public class CustomWFFunc extends VariationFunc {
       "    //   double a0 = pAffineTP.getPrecalcAtan(pContext);\r\n" +
       "    //   double r0 = pAffineTP.getPrecalcSqrt(pContext);\r\n" +
       "    //\r\n" +
-      "    //   double r = amp * pContext.cos(waves * a0);\r\n" +
+      "    //   double r = amp * cos(waves * a0);\r\n" +
       "    //\r\n" +
-      "    //   double nx = pContext.sin(a0) * r;\r\n" +
-      "    //   double ny = pContext.cos(a0) * r;\r\n" +
+      "    //   double nx = sin(a0) * r;\r\n" +
+      "    //   double ny = cos(a0) * r;\r\n" +
       "    //   pVarTP.x += pAmount * nx;\r\n" +
       "    //   pVarTP.y += pAmount * ny;\r\n" +
       "    // ----------------------------------\r\n" +

@@ -16,6 +16,7 @@
 */
 package org.jwildfire.transform;
 
+import org.jwildfire.base.MathLib;
 import org.jwildfire.base.Property;
 import org.jwildfire.base.PropertyCategory;
 import org.jwildfire.base.PropertyMax;
@@ -60,13 +61,13 @@ public class ShearTransformer extends Mesh2DTransformer {
   protected void performPixelTransformation(WFImage pImg) {
     SimpleImage img = (SimpleImage) pImg;
     if (axis == Axis.X) {
-      if (!damp || (Math.abs(damping) < Tools.EPSILON))
+      if (!damp || (Math.abs(damping) < MathLib.EPSILON))
         shearX(img);
       else
         shearX_Damp(img);
     }
     else if (axis == Axis.Y) {
-      if (!damp || (Math.abs(damping) < Tools.EPSILON))
+      if (!damp || (Math.abs(damping) < MathLib.EPSILON))
         shearY(img);
       else
         shearY_Damp(img);

@@ -16,6 +16,10 @@
 */
 package org.jwildfire.create.tina.variation;
 
+import static org.jwildfire.base.MathLib.M_PI;
+import static org.jwildfire.base.MathLib.cos;
+import static org.jwildfire.base.MathLib.sin;
+
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
@@ -33,10 +37,10 @@ public class PieFunc extends VariationFunc {
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     int sl = (int) (pContext.random() * slices + 0.5);
-    double a = rotation + 2.0 * Math.PI * (sl + pContext.random() * thickness) / slices;
+    double a = rotation + 2.0 * M_PI * (sl + pContext.random() * thickness) / slices;
     double r = pAmount * pContext.random();
-    double sina = pContext.sin(a);
-    double cosa = pContext.cos(a);
+    double sina = sin(a);
+    double cosa = cos(a);
     pVarTP.x += r * cosa;
     pVarTP.y += r * sina;
   }

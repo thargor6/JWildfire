@@ -16,7 +16,13 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import org.jwildfire.create.tina.base.Constants;
+import static org.jwildfire.base.MathLib.M_PI;
+import static org.jwildfire.base.MathLib.SMALL_EPSILON;
+import static org.jwildfire.base.MathLib.cos;
+import static org.jwildfire.base.MathLib.fabs;
+import static org.jwildfire.base.MathLib.log10;
+import static org.jwildfire.base.MathLib.sin;
+
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
@@ -27,16 +33,16 @@ public class TwintrianFunc extends SimpleVariationFunc {
     /* Z+ variation Jan 07 */
     double r = pContext.random() * pAmount * pAffineTP.getPrecalcSqrt(pContext);
 
-    double sinr = pContext.sin(r);
-    double cosr = pContext.cos(r);
-    double diff = Math.log10(sinr * sinr) + cosr;
+    double sinr = sin(r);
+    double cosr = cos(r);
+    double diff = log10(sinr * sinr) + cosr;
 
-    if (Math.abs(diff) < Constants.EPSILON) {
+    if (fabs(diff) < SMALL_EPSILON) {
       diff = -30.0;
     }
 
     pVarTP.x += pAmount * pAffineTP.x * diff;
-    pVarTP.y += pAmount * pAffineTP.x * (diff - sinr * Math.PI);
+    pVarTP.y += pAmount * pAffineTP.x * (diff - sinr * M_PI);
   }
 
   @Override

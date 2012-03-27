@@ -16,7 +16,9 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import org.jwildfire.create.tina.base.Constants;
+import static org.jwildfire.base.MathLib.SMALL_EPSILON;
+import static org.jwildfire.base.MathLib.sqrt;
+
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
@@ -36,7 +38,7 @@ public class CrossFunc extends SimpleVariationFunc {
     */
 
     double s = pAffineTP.x * pAffineTP.x - pAffineTP.y * pAffineTP.y;
-    double r = pAmount * pContext.sqrt(1.0 / (s * s + Constants.EPSILON));
+    double r = pAmount * sqrt(1.0 / (s * s + SMALL_EPSILON));
 
     pVarTP.x += pAffineTP.x * r;
     pVarTP.y += pAffineTP.y * r;

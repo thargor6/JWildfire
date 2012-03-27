@@ -16,6 +16,10 @@
 */
 package org.jwildfire.create.tina.variation;
 
+import static org.jwildfire.base.MathLib.M_PI;
+import static org.jwildfire.base.MathLib.cos;
+import static org.jwildfire.base.MathLib.sin;
+
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
@@ -37,9 +41,9 @@ public class Disc2Func extends VariationFunc {
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     /* Z+ variation Jan 07 */
     double t = timespi * (pAffineTP.x + pAffineTP.y);
-    double sinr = pContext.sin(t);
-    double cosr = pContext.cos(t);
-    double r = pAmount * pAffineTP.getPrecalcAtan(pContext) / Math.PI;
+    double sinr = sin(t);
+    double cosr = cos(t);
+    double r = pAmount * pAffineTP.getPrecalcAtan(pContext) / M_PI;
 
     pVarTP.x += (sinr + cosadd) * r;
     pVarTP.y += (cosr + sinadd) * r;
@@ -73,18 +77,18 @@ public class Disc2Func extends VariationFunc {
   @Override
   public void init(FlameTransformationContext pContext, XForm pXForm) {
     double add = twist;
-    timespi = rot * Math.PI;
-    sinadd = pContext.sin(add);
-    cosadd = pContext.cos(add);
+    timespi = rot * M_PI;
+    sinadd = sin(add);
+    cosadd = cos(add);
     cosadd -= 1;
     double k;
-    if (add > 2.0 * Math.PI) {
-      k = (1 + add - 2.0 * Math.PI);
+    if (add > 2.0 * M_PI) {
+      k = (1 + add - 2.0 * M_PI);
       cosadd *= k;
       sinadd *= k;
     }
-    if (add < -2.0 * Math.PI) {
-      k = (1 + add + 2.0 * Math.PI);
+    if (add < -2.0 * M_PI) {
+      k = (1 + add + 2.0 * M_PI);
       cosadd *= k;
       sinadd *= k;
     }

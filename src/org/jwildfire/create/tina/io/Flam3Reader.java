@@ -22,6 +22,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.jwildfire.base.MathLib;
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.DrawMode;
 import org.jwildfire.create.tina.base.Flame;
@@ -254,10 +255,10 @@ public class Flam3Reader implements FlameReader {
     if ((hs = atts.get(ATTR_OPACITY)) != null) {
       double opacity = Double.parseDouble(hs);
       pXForm.setOpacity(opacity);
-      if (Math.abs(opacity) <= Tools.EPSILON) {
+      if (Math.abs(opacity) <= MathLib.EPSILON) {
         pXForm.setDrawMode(DrawMode.HIDDEN);
       }
-      else if (Math.abs(opacity - 1.0) > Tools.EPSILON) {
+      else if (Math.abs(opacity - 1.0) > MathLib.EPSILON) {
         pXForm.setDrawMode(DrawMode.OPAQUE);
       }
       else {

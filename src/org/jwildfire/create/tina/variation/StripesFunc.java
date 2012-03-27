@@ -16,6 +16,8 @@
 */
 package org.jwildfire.create.tina.variation;
 
+import static org.jwildfire.base.MathLib.floor;
+
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
@@ -32,7 +34,7 @@ public class StripesFunc extends VariationFunc {
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     /* Stripes from apo plugins pack */
-    double roundx = Math.floor(pAffineTP.x + 0.5);
+    double roundx = floor(pAffineTP.x + 0.5);
     double offsetx = pAffineTP.x - roundx;
 
     pVarTP.x += pAmount * (offsetx * (1.0 - space) + roundx);

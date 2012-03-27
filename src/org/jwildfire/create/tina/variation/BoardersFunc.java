@@ -16,6 +16,9 @@
 */
 package org.jwildfire.create.tina.variation;
 
+import static org.jwildfire.base.MathLib.fabs;
+import static org.jwildfire.base.MathLib.rint;
+
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
@@ -25,8 +28,8 @@ public class BoardersFunc extends SimpleVariationFunc {
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     /* Boarders in the Apophysis Plugin Pack */
 
-    double roundX = Math.rint(pAffineTP.x);
-    double roundY = Math.rint(pAffineTP.y);
+    double roundX = rint(pAffineTP.x);
+    double roundY = rint(pAffineTP.y);
     double offsetX = pAffineTP.x - roundX;
     double offsetY = pAffineTP.y - roundY;
 
@@ -36,7 +39,7 @@ public class BoardersFunc extends SimpleVariationFunc {
     }
     else {
 
-      if (Math.abs(offsetX) >= Math.abs(offsetY)) {
+      if (fabs(offsetX) >= fabs(offsetY)) {
 
         if (offsetX >= 0.0) {
           pVarTP.x += pAmount * (offsetX * 0.5 + roundX + 0.25);

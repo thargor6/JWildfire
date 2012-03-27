@@ -16,6 +16,14 @@
 */
 package org.jwildfire.create.tina.variation;
 
+import static org.jwildfire.base.MathLib.M_PI;
+import static org.jwildfire.base.MathLib.atan2;
+import static org.jwildfire.base.MathLib.cos;
+import static org.jwildfire.base.MathLib.fabs;
+import static org.jwildfire.base.MathLib.pow;
+import static org.jwildfire.base.MathLib.round;
+import static org.jwildfire.base.MathLib.sin;
+
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
@@ -31,17 +39,17 @@ public class JuliaScopeFunc extends VariationFunc {
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     double cn = dist / (double) power * 0.5;
-    int rnd = (int) (pContext.random() * Math.abs(power));
+    int rnd = (int) (pContext.random() * fabs(power));
     double angle;
     if ((rnd & 1) == 0) {
-      angle = (2 * Math.PI * rnd + Math.atan2(pAffineTP.y, pAffineTP.x)) / power;
+      angle = (2 * M_PI * rnd + atan2(pAffineTP.y, pAffineTP.x)) / power;
     }
     else {
-      angle = (2 * Math.PI * rnd - Math.atan2(pAffineTP.y, pAffineTP.x)) / power;
+      angle = (2 * M_PI * rnd - atan2(pAffineTP.y, pAffineTP.x)) / power;
     }
-    double sina = pContext.sin(angle);
-    double cosa = pContext.cos(angle);
-    double r = pAmount * Math.pow(pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y, cn);
+    double sina = sin(angle);
+    double cosa = cos(angle);
+    double r = pAmount * pow(pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y, cn);
     pVarTP.x += r * cosa;
     pVarTP.y += r * sina;
   }
@@ -59,7 +67,7 @@ public class JuliaScopeFunc extends VariationFunc {
   @Override
   public void setParameter(String pName, double pValue) {
     if (PARAM_POWER.equalsIgnoreCase(pName))
-      power = (int) Math.round(pValue);
+      power = (int) round(pValue);
     else if (PARAM_DIST.equalsIgnoreCase(pName))
       dist = pValue;
     else

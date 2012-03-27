@@ -16,7 +16,7 @@
 */
 package org.jwildfire.create.eden.primitive;
 
-import org.jwildfire.base.Tools;
+import org.jwildfire.base.MathLib;
 
 public class Point {
   private double x;
@@ -96,7 +96,7 @@ public class Point {
   }
 
   public void rotate(double pX, double pY, double pZ) {
-    if (Math.abs(pX) > Tools.EPSILON) {
+    if (Math.abs(pX) > MathLib.EPSILON) {
       double a = Math.toRadians(pX);
       double sinX = Math.sin(a);
       double cosX = Math.cos(a);
@@ -105,7 +105,7 @@ public class Point {
       y = yr;
       z = zr;
     }
-    if (Math.abs(pY) > Tools.EPSILON) {
+    if (Math.abs(pY) > MathLib.EPSILON) {
       double a = Math.toRadians(pY);
       double sinY = Math.sin(a);
       double cosY = Math.cos(a);
@@ -114,7 +114,7 @@ public class Point {
       x = xr;
       z = zr;
     }
-    if (Math.abs(pZ) > Tools.EPSILON) {
+    if (Math.abs(pZ) > MathLib.EPSILON) {
       double a = Math.toRadians(pZ);
       double sinZ = Math.sin(a);
       double cosZ = Math.cos(a);

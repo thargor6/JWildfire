@@ -16,7 +16,13 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import org.jwildfire.create.tina.base.Constants;
+import static org.jwildfire.base.MathLib.EPSILON;
+import static org.jwildfire.base.MathLib.M_1_PI;
+import static org.jwildfire.base.MathLib.M_PI;
+import static org.jwildfire.base.MathLib.cos;
+import static org.jwildfire.base.MathLib.floor;
+import static org.jwildfire.base.MathLib.sin;
+
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
@@ -38,16 +44,16 @@ public class WedgeSphFunc extends VariationFunc {
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     /* Wedge_sph from apo plugins pack */
 
-    double r = 1.0 / (pAffineTP.getPrecalcSqrt(pContext) + Constants.EPSILON);
+    double r = 1.0 / (pAffineTP.getPrecalcSqrt(pContext) + EPSILON);
     double a = pAffineTP.getPrecalcAtanYX(pContext) + swirl * r;
-    double c = Math.floor((count * a + Math.PI) * Constants.M_1_PI * 0.5);
+    double c = floor((count * a + M_PI) * M_1_PI * 0.5);
 
-    double comp_fac = 1 - angle * count * Constants.M_1_PI * 0.5;
+    double comp_fac = 1 - angle * count * M_1_PI * 0.5;
 
     a = a * comp_fac + c * angle;
 
-    double sa = pContext.sin(a);
-    double ca = pContext.cos(a);
+    double sa = sin(a);
+    double ca = cos(a);
     r = pAmount * (r + hole);
 
     pVarTP.x += r * ca;

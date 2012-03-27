@@ -16,6 +16,12 @@
 */
 package org.jwildfire.create.tina.variation;
 
+import static org.jwildfire.base.MathLib.M_PI;
+import static org.jwildfire.base.MathLib.atan2;
+import static org.jwildfire.base.MathLib.cos;
+import static org.jwildfire.base.MathLib.sin;
+import static org.jwildfire.base.MathLib.sqrt;
+
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
@@ -37,24 +43,24 @@ public class HeartWFFunc extends VariationFunc {
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-    double a = Math.atan2(pAffineTP.x, pAffineTP.y);
-    double r = pContext.sqrt(pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y);
+    double a = atan2(pAffineTP.x, pAffineTP.y);
+    double r = sqrt(pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y);
     double nx, t;
     if (a < 0) {
-      t = -a / Math.PI * T_MAX * scaleTLeft - shiftT;
+      t = -a / M_PI * T_MAX * scaleTLeft - shiftT;
       if (t > T_MAX) {
         t = T_MAX;
       }
-      nx = -0.001 * (-t * t + 40 * t + 1200) * pContext.sin(Math.PI * t / 180.0) * r;
+      nx = -0.001 * (-t * t + 40 * t + 1200) * sin(M_PI * t / 180.0) * r;
     }
     else {
-      t = a / Math.PI * T_MAX * scaleTRight - shiftT;
+      t = a / M_PI * T_MAX * scaleTRight - shiftT;
       if (t > T_MAX) {
         t = T_MAX;
       }
-      nx = 0.001 * (-t * t + 40 * t + 1200) * pContext.sin(Math.PI * t / 180.0) * r;
+      nx = 0.001 * (-t * t + 40 * t + 1200) * sin(M_PI * t / 180.0) * r;
     }
-    double ny = -0.001 * (-t * t + 40 * t + 400) * pContext.cos(Math.PI * t / 180.0) * r;
+    double ny = -0.001 * (-t * t + 40 * t + 400) * cos(M_PI * t / 180.0) * r;
     nx *= scaleX;
     pVarTP.x += pAmount * nx;
     pVarTP.y += pAmount * ny;

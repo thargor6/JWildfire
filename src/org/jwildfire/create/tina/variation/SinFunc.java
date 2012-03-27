@@ -16,6 +16,11 @@
 */
 package org.jwildfire.create.tina.variation;
 
+import static org.jwildfire.base.MathLib.cos;
+import static org.jwildfire.base.MathLib.cosh;
+import static org.jwildfire.base.MathLib.sin;
+import static org.jwildfire.base.MathLib.sinh;
+
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
@@ -26,10 +31,10 @@ public class SinFunc extends SimpleVariationFunc {
     /* complex vars by cothe */
     /* exp log sin cos tan sec csc cot sinh cosh tanh sech csch coth */
     //Sine SIN
-    double sinsin = pContext.sin(pAffineTP.x);
-    double sincos = pContext.cos(pAffineTP.x);
-    double sinsinh = Math.sinh(pAffineTP.y);
-    double sincosh = Math.cosh(pAffineTP.y);
+    double sinsin = sin(pAffineTP.x);
+    double sincos = cos(pAffineTP.x);
+    double sinsinh = sinh(pAffineTP.y);
+    double sincosh = cosh(pAffineTP.y);
     pVarTP.x += pAmount * sinsin * sincosh;
     pVarTP.y += pAmount * sincos * sinsinh;
   }

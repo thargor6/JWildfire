@@ -15,6 +15,14 @@
 */
 package org.jwildfire.create.tina.variation;
 
+import static org.jwildfire.base.MathLib.M_PI;
+import static org.jwildfire.base.MathLib.cos;
+import static org.jwildfire.base.MathLib.fabs;
+import static org.jwildfire.base.MathLib.pow;
+import static org.jwildfire.base.MathLib.sin;
+import static org.jwildfire.base.MathLib.sqr;
+import static org.jwildfire.base.MathLib.sqrt;
+
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
@@ -40,9 +48,9 @@ public class GlynnSim3Func extends VariationFunc {
 
   private void circle2(FlameTransformationContext pContext, Point p) {
     //    double r = this.radius + this.thickness - this.Gamma * pContext.random();
-    double Phi = 2.0 * Math.PI * pContext.random();
-    double sinPhi = pContext.sin(Phi);
-    double cosPhi = pContext.cos(Phi);
+    double Phi = 2.0 * M_PI * pContext.random();
+    double sinPhi = sin(Phi);
+    double cosPhi = cos(Phi);
     double r;
     if (pContext.random() < this.Gamma) {
       r = this.radius1;
@@ -57,7 +65,7 @@ public class GlynnSim3Func extends VariationFunc {
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     /* GlynnSim3 by eralex61, http://eralex61.deviantart.com/art/GlynnSim-plugin-112621621 */
-    double r = Math.sqrt(pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y);
+    double r = sqrt(pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y);
     double Alpha = this.radius / r;
     if (r < this.radius1) {
       circle2(pContext, toolPoint);
@@ -65,7 +73,7 @@ public class GlynnSim3Func extends VariationFunc {
       pVarTP.y += pAmount * toolPoint.y;
     }
     else {
-      if (pContext.random() > this.contrast * Math.pow(Alpha, this.absPow)) {
+      if (pContext.random() > this.contrast * pow(Alpha, this.absPow)) {
 
         pVarTP.x += pAmount * pAffineTP.x;
         pVarTP.y += pAmount * pAffineTP.y;
@@ -114,8 +122,8 @@ public class GlynnSim3Func extends VariationFunc {
   @Override
   public void init(FlameTransformationContext pContext, XForm pXForm) {
     this.radius1 = this.radius + this.thickness;
-    this.radius2 = pContext.sqr(this.radius) / this.radius1;
+    this.radius2 = sqr(this.radius) / this.radius1;
     this.Gamma = this.radius1 / (this.radius1 + this.radius2);
-    this.absPow = Math.abs(this.pow);
+    this.absPow = fabs(this.pow);
   }
 }

@@ -16,6 +16,8 @@
 */
 package org.jwildfire.create.tina.variation;
 
+import static org.jwildfire.base.MathLib.fmod;
+
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
@@ -54,10 +56,6 @@ public class ModulusFunc extends VariationFunc {
     else {
       pVarTP.y += pAmount * pAffineTP.y;
     }
-  }
-
-  private double fmod(double a, double b) {
-    return a % b;
   }
 
   @Override

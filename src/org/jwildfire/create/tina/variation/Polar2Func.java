@@ -16,6 +16,9 @@
 */
 package org.jwildfire.create.tina.variation;
 
+import static org.jwildfire.base.MathLib.M_PI;
+import static org.jwildfire.base.MathLib.log;
+
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
@@ -24,9 +27,9 @@ public class Polar2Func extends SimpleVariationFunc {
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     /* polar2 from the apophysis plugin pack */
-    double p2v = pAmount / Math.PI;
+    double p2v = pAmount / M_PI;
     pVarTP.x += p2v * pAffineTP.getPrecalcAtan(pContext);
-    pVarTP.y += p2v / 2.0 * Math.log(pAffineTP.getPrecalcSumsq());
+    pVarTP.y += p2v / 2.0 * log(pAffineTP.getPrecalcSumsq());
   }
 
   @Override

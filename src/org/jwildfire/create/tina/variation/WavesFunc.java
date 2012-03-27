@@ -16,7 +16,9 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import org.jwildfire.create.tina.base.Constants;
+import static org.jwildfire.base.MathLib.EPSILON;
+import static org.jwildfire.base.MathLib.sin;
+
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
@@ -24,8 +26,8 @@ public class WavesFunc extends SimpleVariationFunc {
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-    pVarTP.x += pAmount * (pAffineTP.x + pXForm.getCoeff10() * pContext.sin(pAffineTP.y / (pXForm.getCoeff20() * pXForm.getCoeff20() + Constants.EPSILON)));
-    pVarTP.y += pAmount * (pAffineTP.y + pXForm.getCoeff11() * pContext.sin(pAffineTP.x / (pXForm.getCoeff21() * pXForm.getCoeff21() + Constants.EPSILON)));
+    pVarTP.x += pAmount * (pAffineTP.x + pXForm.getCoeff10() * sin(pAffineTP.y / (pXForm.getCoeff20() * pXForm.getCoeff20() + EPSILON)));
+    pVarTP.y += pAmount * (pAffineTP.y + pXForm.getCoeff11() * sin(pAffineTP.x / (pXForm.getCoeff21() * pXForm.getCoeff21() + EPSILON)));
   }
 
   @Override

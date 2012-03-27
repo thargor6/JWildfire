@@ -16,7 +16,12 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import org.jwildfire.create.tina.base.Constants;
+import static org.jwildfire.base.MathLib.M_PI;
+import static org.jwildfire.base.MathLib.SMALL_EPSILON;
+import static org.jwildfire.base.MathLib.cos;
+import static org.jwildfire.base.MathLib.floor;
+import static org.jwildfire.base.MathLib.pow;
+
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
@@ -39,17 +44,17 @@ public class NgonFunc extends VariationFunc {
     /* ngon by Joel Faber (09/06) */
     double r_factor, theta, phi, b, amp;
 
-    r_factor = Math.pow(pAffineTP.getPrecalcSumsq(), power / 2.0);
+    r_factor = pow(pAffineTP.getPrecalcSumsq(), power / 2.0);
 
     theta = pAffineTP.getPrecalcAtanYX(pContext);
-    b = 2 * Math.PI / sides;
+    b = 2 * M_PI / sides;
 
-    phi = theta - (b * Math.floor(theta / b));
+    phi = theta - (b * floor(theta / b));
     if (phi > b / 2)
       phi -= b;
 
-    amp = corners * (1.0 / (pContext.cos(phi) + Constants.EPSILON) - 1.0) + circle;
-    amp /= (r_factor + Constants.EPSILON);
+    amp = corners * (1.0 / (cos(phi) + SMALL_EPSILON) - 1.0) + circle;
+    amp /= (r_factor + SMALL_EPSILON);
 
     pVarTP.x += pAmount * pAffineTP.x * amp;
     pVarTP.y += pAmount * pAffineTP.y * amp;

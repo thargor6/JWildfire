@@ -16,6 +16,7 @@
 */
 package org.jwildfire.transform;
 
+import org.jwildfire.base.MathLib;
 import org.jwildfire.base.Property;
 import org.jwildfire.base.PropertyCategory;
 import org.jwildfire.base.PropertyMax;
@@ -43,7 +44,7 @@ public class DisplaceMapTransformer extends Mesh2DTransformer {
 
   @Override
   protected void performPixelTransformation(WFImage pImg) {
-    if ((Math.abs(this.amount) < Tools.EPSILON) || ((displaceXMap == null) && (displaceYMap == null)))
+    if ((Math.abs(this.amount) < MathLib.EPSILON) || ((displaceXMap == null) && (displaceYMap == null)))
       return;
     SimpleImage img = (SimpleImage) pImg;
     double nAmount = this.amount / 127.5;

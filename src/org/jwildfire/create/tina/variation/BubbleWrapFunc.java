@@ -16,7 +16,12 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import org.jwildfire.create.tina.base.Constants;
+import static org.jwildfire.base.MathLib.SMALL_EPSILON;
+import static org.jwildfire.base.MathLib.cos;
+import static org.jwildfire.base.MathLib.fabs;
+import static org.jwildfire.base.MathLib.floor;
+import static org.jwildfire.base.MathLib.sin;
+
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
@@ -75,15 +80,15 @@ public class BubbleWrapFunc extends VariationFunc {
     Vx = pAffineTP.x;
     Vy = pAffineTP.y;
 
-    if (Math.abs(cellsize) < Constants.EPSILON) {
+    if (fabs(cellsize) < SMALL_EPSILON) {
       // Linear if cells are too small
       pVarTP.x += pAmount * Vx;
       pVarTP.y += pAmount * Vy;
       return;
     }
 
-    Cx = (Math.floor(Vx / cellsize) + 0.5) * cellsize;
-    Cy = (Math.floor(Vy / cellsize) + 0.5) * cellsize;
+    Cx = (floor(Vx / cellsize) + 0.5) * cellsize;
+    Cy = (floor(Vy / cellsize) + 0.5) * cellsize;
 
     Lx = Vx - Cx;
     Ly = Vy - Cy;
@@ -107,8 +112,8 @@ public class BubbleWrapFunc extends VariationFunc {
     // Spin around the centre:
     r = (Lx * Lx + Ly * Ly) / r2; // r should be 0.0 - 1.0
     theta = inner_twist * (1.0 - r) + outer_twist * r;
-    s = pContext.sin(theta);
-    c = pContext.cos(theta);
+    s = sin(theta);
+    c = cos(theta);
 
     // Add rotated local vectors direct to centre (avoids use of temp storage)
     Vx = Cx + c * Lx + s * Ly;

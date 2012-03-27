@@ -16,8 +16,21 @@
 */
 package org.jwildfire.create.tina.variation;
 
+import static org.jwildfire.base.MathLib.FALSE;
+import static org.jwildfire.base.MathLib.M_2PI;
+import static org.jwildfire.base.MathLib.M_PI_2;
+import static org.jwildfire.base.MathLib.SMALL_EPSILON;
+import static org.jwildfire.base.MathLib.TRUE;
+import static org.jwildfire.base.MathLib.atan;
+import static org.jwildfire.base.MathLib.cos;
+import static org.jwildfire.base.MathLib.fabs;
+import static org.jwildfire.base.MathLib.floor;
+import static org.jwildfire.base.MathLib.pow;
+import static org.jwildfire.base.MathLib.sin;
+import static org.jwildfire.base.MathLib.sqrt;
+import static org.jwildfire.base.MathLib.tan;
+
 import org.jwildfire.base.Tools;
-import org.jwildfire.create.tina.base.Constants;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
@@ -50,25 +63,25 @@ public class NBlurFunc extends VariationFunc {
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     // nBlur by FractalDesire, http://fractaldesire.deviantart.com/art/nBlur-plugin-190401515
     //*********Adjustment of width of shape*********
-    if (this.adjustToLinear == Constants.TRUE) {
+    if (this.adjustToLinear == TRUE) {
       if ((this.numEdges) % 4 == 0) {
-        pAmount /= Math.sqrt(2.0 - 2.0 * Math.cos(this.midAngle * ((double) this.numEdges / 2.0 - 1.0))) / 2.0;
+        pAmount /= sqrt(2.0 - 2.0 * cos(this.midAngle * ((double) this.numEdges / 2.0 - 1.0))) / 2.0;
       }
       else
       {
-        pAmount /= Math.sqrt(2.0 - 2.0 * Math.cos(this.midAngle * Math.floor(((double) this.numEdges / 2.0)))) / 2.0;
+        pAmount /= sqrt(2.0 - 2.0 * cos(this.midAngle * floor(((double) this.numEdges / 2.0)))) / 2.0;
       }
     }
     //
     randXY(pContext, randXYData);
 
     //********Exact calculation slower - interpolated calculation faster********
-    if ((this.exactCalc == Constants.TRUE) && (this.circumCircle == Constants.FALSE))
+    if ((this.exactCalc == TRUE) && (this.circumCircle == FALSE))
     {
       while ((randXYData.lenXY < randXYData.lenInnerEdges) || (randXYData.lenXY > randXYData.lenOuterEdges))
         randXY(pContext, randXYData);
     }
-    if ((this.exactCalc == Constants.TRUE) && (this.circumCircle == Constants.TRUE))
+    if ((this.exactCalc == TRUE) && (this.circumCircle == TRUE))
     {
       while (randXYData.lenXY < randXYData.lenInnerEdges)
         randXY(pContext, randXYData);
@@ -102,16 +115,16 @@ public class NBlurFunc extends VariationFunc {
     double ratioTmp, ratioTmpNum, ratioTmpDen;
     double speedCalcTmp;
     int count;
-    if (this.exactCalc == Constants.TRUE)
+    if (this.exactCalc == TRUE)
     {
-      angXY = pContext.random() * Constants.M_2PI;
+      angXY = pContext.random() * M_2PI;
     }
     else
     {
-      angXY = (Math.atan(this.arc_tan1 * (pContext.random() - 0.5)) / this.arc_tan2 + 0.5 + (double) (rand(pContext) % this.numEdges)) * this.midAngle;
+      angXY = (atan(this.arc_tan1 * (pContext.random() - 0.5)) / this.arc_tan2 + 0.5 + (double) (rand(pContext) % this.numEdges)) * this.midAngle;
     }
-    x = Math.sin(angXY);
-    y = Math.cos(angXY);
+    x = sin(angXY);
+    y = cos(angXY);
     angMem = angXY;
 
     while (angXY > this.midAngle)
@@ -120,7 +133,7 @@ public class NBlurFunc extends VariationFunc {
     }
 
     //********Begin of xy-calculation of radial stripes******** 
-    if (this.hasStripes == Constants.TRUE)
+    if (this.hasStripes == TRUE)
     {
       angTmp = this.angStart;
       count = 0;
@@ -136,7 +149,7 @@ public class NBlurFunc extends VariationFunc {
       if (angTmp != this.midAngle)
         angTmp -= this.angStart;
 
-      if (this.negStripes == Constants.FALSE)
+      if (this.negStripes == FALSE)
       {
         if ((count % 2) == 1)
         {
@@ -144,8 +157,8 @@ public class NBlurFunc extends VariationFunc {
           {
             angXY = angXY + this.angStart;
             angMem = angMem + this.angStart;
-            x = Math.sin(angMem);
-            y = Math.cos(angMem);
+            x = sin(angMem);
+            y = cos(angMem);
             angTmp += this.angStripes;
             count++;
           }
@@ -153,8 +166,8 @@ public class NBlurFunc extends VariationFunc {
           {
             angXY = angXY - this.angStart;
             angMem = angMem - this.angStart;
-            x = Math.sin(angMem);
-            y = Math.cos(angMem);
+            x = sin(angMem);
+            y = cos(angMem);
             angTmp -= this.angStripes;
             count--;
           }
@@ -165,20 +178,20 @@ public class NBlurFunc extends VariationFunc {
           {
             angMem = angMem - angXY + angTmp + (angXY - angTmp) / this.angStart * this.ratioStripes * this.angStart;
             angXY = angTmp + (angXY - angTmp) / this.angStart * this.ratioStripes * this.angStart;
-            x = Math.sin(angMem);
-            y = Math.cos(angMem);
+            x = sin(angMem);
+            y = cos(angMem);
           }
           else
           {
             angMem = angMem - angXY + angTmp - (angTmp - angXY) / this.angStart * this.ratioStripes * this.angStart;
             angXY = angTmp + (angXY - angTmp) / this.angStart * this.ratioStripes * this.angStart;
-            x = Math.sin(angMem);
-            y = Math.cos(angMem);
+            x = sin(angMem);
+            y = cos(angMem);
           }
         }
         if (((count % 2) == 0) && (this.ratioStripes < 1.0))
         {
-          if ((Math.abs(angXY - angTmp) > this.speedCalc2) && (count != (this.maxStripes)))
+          if ((fabs(angXY - angTmp) > this.speedCalc2) && (count != (this.maxStripes)))
           {
             if ((angXY - angTmp) > this.speedCalc2)
             {
@@ -186,8 +199,8 @@ public class NBlurFunc extends VariationFunc {
               ratioTmpDen = this.angStart - this.speedCalc2;
               ratioTmp = ratioTmpNum / ratioTmpDen;
               double a = (angMem - angXY + angTmp + ratioTmp);
-              x = Math.sin(a);
-              y = Math.cos(a);
+              x = sin(a);
+              y = cos(a);
               angXY = angTmp + ratioTmp;
             }
             if ((angTmp - angXY) > this.speedCalc2)
@@ -196,8 +209,8 @@ public class NBlurFunc extends VariationFunc {
               ratioTmpDen = this.angStart - this.speedCalc2;
               ratioTmp = ratioTmpNum / ratioTmpDen;
               double a = (angMem - angXY + angTmp - ratioTmp);
-              x = Math.sin(a);
-              y = Math.cos(a);
+              x = sin(a);
+              y = cos(a);
               angXY = angTmp - ratioTmp;
             }
           }
@@ -209,8 +222,8 @@ public class NBlurFunc extends VariationFunc {
               ratioTmpDen = this.angStart - this.speedCalc2;
               ratioTmp = ratioTmpNum / ratioTmpDen;
               double a = (angMem - angXY + angTmp - ratioTmp);
-              x = Math.sin(a);
-              y = Math.cos(a);
+              x = sin(a);
+              y = cos(a);
               angXY = angTmp - ratioTmp;
             }
           }
@@ -232,8 +245,8 @@ public class NBlurFunc extends VariationFunc {
           {
             angXY = angXY + this.angStart;
             angMem = angMem + this.angStart;
-            x = Math.sin(angMem);
-            y = Math.cos(angMem);
+            x = sin(angMem);
+            y = cos(angMem);
             angTmp += this.angStripes;
             count++;
           }
@@ -241,8 +254,8 @@ public class NBlurFunc extends VariationFunc {
           {
             angXY = angXY - this.angStart;
             angMem = angMem - this.angStart;
-            x = Math.sin(angMem);
-            y = Math.cos(angMem);
+            x = sin(angMem);
+            y = cos(angMem);
             angTmp -= this.angStripes;
             count--;
           }
@@ -253,20 +266,20 @@ public class NBlurFunc extends VariationFunc {
           {
             angMem = angMem - angXY + angTmp + (angXY - angTmp) / this.angStart * this.ratioStripes * this.angStart;
             angXY = angTmp + (angXY - angTmp) / this.angStart * this.ratioStripes * this.angStart;
-            x = Math.sin(angMem);
-            y = Math.cos(angMem);
+            x = sin(angMem);
+            y = cos(angMem);
           }
           else
           {
             angMem = angMem - angXY + angTmp - (angTmp - angXY) / this.angStart * this.ratioStripes * this.angStart;
             angXY = angTmp + (angXY - angTmp) / this.angStart * this.ratioStripes * this.angStart;
-            x = Math.sin(angMem);
-            y = Math.cos(angMem);
+            x = sin(angMem);
+            y = cos(angMem);
           }
         }
         if (((count % 2) == 1) && (this.ratioStripes < 1.0))
         {
-          if ((Math.abs(angXY - angTmp) > this.speedCalc2) && (count != this.maxStripes))
+          if ((fabs(angXY - angTmp) > this.speedCalc2) && (count != this.maxStripes))
           {
             if ((angXY - angTmp) > this.speedCalc2)
             {
@@ -274,8 +287,8 @@ public class NBlurFunc extends VariationFunc {
               ratioTmpDen = this.angStart - this.speedCalc2;
               ratioTmp = ratioTmpNum / ratioTmpDen;
               double a = (angMem - angXY + angTmp + ratioTmp);
-              x = Math.sin(a);
-              y = Math.cos(a);
+              x = sin(a);
+              y = cos(a);
               angXY = angTmp + ratioTmp;
             }
             if ((angTmp - angXY) > this.speedCalc2)
@@ -284,8 +297,8 @@ public class NBlurFunc extends VariationFunc {
               ratioTmpDen = this.angStart - this.speedCalc2;
               ratioTmp = ratioTmpNum / ratioTmpDen;
               double a = (angMem - angXY + angTmp - ratioTmp);
-              x = Math.sin(a);
-              y = Math.cos(a);
+              x = sin(a);
+              y = cos(a);
               angXY = angTmp - ratioTmp;
             }
           }
@@ -298,8 +311,8 @@ public class NBlurFunc extends VariationFunc {
               ratioTmpDen = this.angStart - this.speedCalc2;
               ratioTmp = ratioTmpNum / ratioTmpDen;
               double a = (angMem - angXY + angTmp - ratioTmp);
-              x = Math.sin(a);
-              y = Math.cos(a);
+              x = sin(a);
+              y = cos(a);
               angXY = angTmp - ratioTmp;
             }
           }
@@ -317,53 +330,53 @@ public class NBlurFunc extends VariationFunc {
     //********End of xy-calculation of radial stripes********
 
     //********Begin of calculation of edge limits********
-    xTmp = this.tan90_m_2 / (this.tan90_m_2 - Math.tan(angXY));
-    yTmp = xTmp * Math.tan(angXY);
-    lenOuterEdges = Math.sqrt(xTmp * xTmp + yTmp * yTmp);
+    xTmp = this.tan90_m_2 / (this.tan90_m_2 - tan(angXY));
+    yTmp = xTmp * tan(angXY);
+    lenOuterEdges = sqrt(xTmp * xTmp + yTmp * yTmp);
     //*********End of calculation of edge limits********
 
     //********Begin of radius-calculation (optionally hole)********
-    if (this.exactCalc == Constants.TRUE)
+    if (this.exactCalc == TRUE)
     {
-      if (this.equalBlur == Constants.TRUE)
-        ranTmp = Math.sqrt(pContext.random());
+      if (this.equalBlur == TRUE)
+        ranTmp = sqrt(pContext.random());
       else
         ranTmp = pContext.random();
     }
     else
     {
-      if (this.circumCircle == Constants.TRUE)
+      if (this.circumCircle == TRUE)
       {
-        if (this.equalBlur == Constants.TRUE)
-          ranTmp = Math.sqrt(pContext.random());
+        if (this.equalBlur == TRUE)
+          ranTmp = sqrt(pContext.random());
         else
           ranTmp = pContext.random();
       }
       else
       {
-        if (this.equalBlur == Constants.TRUE)
-          ranTmp = Math.sqrt(pContext.random()) * lenOuterEdges;
+        if (this.equalBlur == TRUE)
+          ranTmp = sqrt(pContext.random()) * lenOuterEdges;
         else
           ranTmp = pContext.random() * lenOuterEdges;
       }
     }
     lenInnerEdges = this.ratioHole * lenOuterEdges;
 
-    if (this.exactCalc == Constants.FALSE)
+    if (this.exactCalc == FALSE)
     {
       if (ranTmp < lenInnerEdges)
       {
-        if (this.circumCircle == Constants.TRUE)
+        if (this.circumCircle == TRUE)
         {
-          if (this.equalBlur == Constants.TRUE)
-            ranTmp = lenInnerEdges + Math.sqrt(pContext.random()) * (1.0 - lenInnerEdges + Constants.EPSILON);
+          if (this.equalBlur == TRUE)
+            ranTmp = lenInnerEdges + sqrt(pContext.random()) * (1.0 - lenInnerEdges + SMALL_EPSILON);
           else
-            ranTmp = lenInnerEdges + pContext.random() * (1.0 - lenInnerEdges + Constants.EPSILON);
+            ranTmp = lenInnerEdges + pContext.random() * (1.0 - lenInnerEdges + SMALL_EPSILON);
         }
         else
         {
-          if (this.equalBlur == Constants.TRUE)
-            ranTmp = lenInnerEdges + Math.sqrt(pContext.random()) * (lenOuterEdges - lenInnerEdges);
+          if (this.equalBlur == TRUE)
+            ranTmp = lenInnerEdges + sqrt(pContext.random()) * (lenOuterEdges - lenInnerEdges);
           else
             ranTmp = lenInnerEdges + pContext.random() * (lenOuterEdges - lenInnerEdges);
         }
@@ -373,7 +386,7 @@ public class NBlurFunc extends VariationFunc {
     //if(VAR(hasStripes)==TRUE) ranTmp = pow(ranTmp,0.75);
     x *= ranTmp;
     y *= ranTmp;
-    lenXY = Math.sqrt(x * x + y * y);
+    lenXY = sqrt(x * x + y * y);
     //*********End of radius-calculation (optionally hole)*********
     data.x = x;
     data.y = y;
@@ -448,48 +461,48 @@ public class NBlurFunc extends VariationFunc {
 
     //*********Prepare stripes related stuff*********
     if (this.numStripes != 0) {
-      this.hasStripes = Constants.TRUE;
+      this.hasStripes = TRUE;
       if (this.numStripes < 0) {
-        this.negStripes = Constants.TRUE;
+        this.negStripes = TRUE;
         this.numStripes *= -1;
       }
       else
       {
-        this.negStripes = Constants.FALSE;
+        this.negStripes = FALSE;
       }
     }
     else
     {
-      this.hasStripes = Constants.FALSE;
-      this.negStripes = Constants.FALSE;
+      this.hasStripes = FALSE;
+      this.negStripes = FALSE;
     }
 
     //**********Prepare angle related stuff**********
-    this.midAngle = Constants.M_2PI / (double) this.numEdges;
-    if (this.hasStripes == Constants.TRUE) {
+    this.midAngle = M_2PI / (double) this.numEdges;
+    if (this.hasStripes == TRUE) {
       this.angStripes = this.midAngle / (double) (2 * this.numStripes);
       this.angStart = this.angStripes / 2.0;
       this.nb_ratioComplement = 2.0 - this.ratioStripes;
     }
 
     //**********Prepare hole related stuff***********
-    if ((this.ratioHole > 0.95) && (this.exactCalc == Constants.TRUE) && (this.circumCircle == Constants.FALSE))
+    if ((this.ratioHole > 0.95) && (this.exactCalc == TRUE) && (this.circumCircle == FALSE))
       this.ratioHole = 0.95;
 
     //*********Prepare edge calculation related stuff*********
-    this.tan90_m_2 = Math.tan(Constants.M_PI_2 + this.midAngle / 2.0);
+    this.tan90_m_2 = tan(M_PI_2 + this.midAngle / 2.0);
     double angle = this.midAngle / 2.0;
-    this.sina = Math.sin(angle);
-    this.cosa = Math.cos(angle);
+    this.sina = sin(angle);
+    this.cosa = cos(angle);
 
     //*********Prepare factor of adjustment of interpolated calculation*********
     if (this.highlightEdges <= 0.1)
       this.highlightEdges = 0.1;
 
     //*********Prepare circumCircle-calculation*********
-    if (this.circumCircle == Constants.TRUE)
+    if (this.circumCircle == TRUE)
     {
-      this.exactCalc = Constants.FALSE;
+      this.exactCalc = FALSE;
       this.highlightEdges = 0.1;
     }
 
@@ -497,15 +510,15 @@ public class NBlurFunc extends VariationFunc {
     this.speedCalc1 = this.nb_ratioComplement * this.angStart;
     this.speedCalc2 = this.ratioStripes * this.angStart;
     this.maxStripes = 2 * this.numStripes;
-    if (this.negStripes == Constants.FALSE)
+    if (this.negStripes == FALSE)
     {
-      this.arc_tan1 = (13.0 / Math.pow(this.numEdges, 1.3)) * this.highlightEdges;
-      this.arc_tan2 = (2.0 * Math.atan(this.arc_tan1 / (-2.0)));
+      this.arc_tan1 = (13.0 / pow(this.numEdges, 1.3)) * this.highlightEdges;
+      this.arc_tan2 = (2.0 * atan(this.arc_tan1 / (-2.0)));
     }
     else
     {
-      this.arc_tan1 = (7.5 / Math.pow(this.numEdges, 1.3)) * this.highlightEdges;
-      this.arc_tan2 = (2.0 * Math.atan(this.arc_tan1 / (-2.0)));
+      this.arc_tan1 = (7.5 / pow(this.numEdges, 1.3)) * this.highlightEdges;
+      this.arc_tan2 = (2.0 * atan(this.arc_tan1 / (-2.0)));
     }
   }
 }

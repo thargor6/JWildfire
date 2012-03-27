@@ -16,9 +16,9 @@
 */
 package org.jwildfire.transform;
 
+import org.jwildfire.base.MathLib;
 import org.jwildfire.base.Property;
 import org.jwildfire.base.PropertyCategory;
-import org.jwildfire.base.Tools;
 import org.jwildfire.image.SimpleHDRImage;
 import org.jwildfire.image.WFImage;
 import org.jwildfire.swing.Buffer;
@@ -73,14 +73,14 @@ public class HDRComposeTransformer extends Transformer {
     fgImg.getMinMaxLum(lum);
     float fgLumMin = lum[0];
     float fgLumMax = lum[1];
-    if ((fgLumMax - fgLumMin) < Tools.EPSILON) {
-      fgLumMax = fgLumMin + (float) Tools.EPSILON;
+    if ((fgLumMax - fgLumMin) < MathLib.EPSILON) {
+      fgLumMax = fgLumMin + (float) MathLib.EPSILON;
     }
     bgImg.getMinMaxLum(lum);
     float bgLumMin = lum[0];
     float bgLumMax = lum[1];
-    if ((bgLumMax - bgLumMin) < Tools.EPSILON) {
-      bgLumMax = bgLumMin + (float) Tools.EPSILON;
+    if ((bgLumMax - bgLumMin) < MathLib.EPSILON) {
+      bgLumMax = bgLumMin + (float) MathLib.EPSILON;
     }
     bgScale *= (fgLumMax - fgLumMin) / (bgLumMax - bgLumMin);
     for (int i = 0; i < fgImg.getImageHeight(); i++) {

@@ -16,6 +16,9 @@
 */
 package org.jwildfire.create.tina.variation;
 
+import static org.jwildfire.base.MathLib.fabs;
+import static org.jwildfire.base.MathLib.pow;
+
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
@@ -40,8 +43,8 @@ public class LinearTFunc extends VariationFunc {
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     // linearT by FractalDesire, http://fractaldesire.deviantart.com/journal/linearT-plugin-219864320
-    pVarTP.x += sgn(pAffineTP.x) * Math.pow(Math.abs(pAffineTP.x), this.powX) * pAmount;
-    pVarTP.y += sgn(pAffineTP.y) * Math.pow(Math.abs(pAffineTP.y), this.powY) * pAmount;
+    pVarTP.x += sgn(pAffineTP.x) * pow(fabs(pAffineTP.x), this.powX) * pAmount;
+    pVarTP.y += sgn(pAffineTP.y) * pow(fabs(pAffineTP.y), this.powY) * pAmount;
   }
 
   @Override

@@ -1,5 +1,6 @@
 package org.jwildfire.create.eden.io;
 
+import org.jwildfire.base.MathLib;
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.eden.group.Group;
 import org.jwildfire.create.eden.group.GroupMember;
@@ -110,23 +111,23 @@ public class SunflowWriter {
     Point position = pPrimitive.getPosition();
     Point rotate = pPrimitive.getRotate();
     Point size = pPrimitive.getSize();
-    if (Math.abs(position.getX()) > Tools.EPSILON || Math.abs(position.getY()) > Tools.EPSILON || Math.abs(position.getZ()) > Tools.EPSILON ||
-        Math.abs(rotate.getX()) > Tools.EPSILON || Math.abs(rotate.getY()) > Tools.EPSILON || Math.abs(rotate.getZ()) > Tools.EPSILON ||
-        Math.abs(size.getX() - 1.0) > Tools.EPSILON || Math.abs(size.getY() - 1.0) > Tools.EPSILON || Math.abs(size.getZ() - 1.0) > Tools.EPSILON) {
+    if (Math.abs(position.getX()) > MathLib.EPSILON || Math.abs(position.getY()) > MathLib.EPSILON || Math.abs(position.getZ()) > MathLib.EPSILON ||
+        Math.abs(rotate.getX()) > MathLib.EPSILON || Math.abs(rotate.getY()) > MathLib.EPSILON || Math.abs(rotate.getZ()) > MathLib.EPSILON ||
+        Math.abs(size.getX() - 1.0) > MathLib.EPSILON || Math.abs(size.getY() - 1.0) > MathLib.EPSILON || Math.abs(size.getZ() - 1.0) > MathLib.EPSILON) {
       pSB.append("  transform {\n");
-      if (Math.abs(rotate.getX()) > Tools.EPSILON) {
+      if (Math.abs(rotate.getX()) > MathLib.EPSILON) {
         pSB.append("    rotatex " + pPrimitive.getRotate().getX() + "\n");
       }
-      if (Math.abs(rotate.getY()) > Tools.EPSILON) {
+      if (Math.abs(rotate.getY()) > MathLib.EPSILON) {
         pSB.append("    rotatez " + (-pPrimitive.getRotate().getY()) + "\n");
       }
-      if (Math.abs(rotate.getZ()) > Tools.EPSILON) {
+      if (Math.abs(rotate.getZ()) > MathLib.EPSILON) {
         pSB.append("    rotatey " + (-pPrimitive.getRotate().getZ()) + "\n");
       }
-      if (Math.abs(size.getX() - 1.0) > Tools.EPSILON || Math.abs(size.getY() - 1.0) > Tools.EPSILON || Math.abs(size.getZ() - 1.0) > Tools.EPSILON) {
+      if (Math.abs(size.getX() - 1.0) > MathLib.EPSILON || Math.abs(size.getY() - 1.0) > MathLib.EPSILON || Math.abs(size.getZ() - 1.0) > MathLib.EPSILON) {
         pSB.append("    scale " + pPrimitive.getSize().getX() + " " + pPrimitive.getSize().getZ() + " " + pPrimitive.getSize().getY() + "\n");
       }
-      if (Math.abs(position.getX()) > Tools.EPSILON || Math.abs(position.getY()) > Tools.EPSILON || Math.abs(position.getZ()) > Tools.EPSILON) {
+      if (Math.abs(position.getX()) > MathLib.EPSILON || Math.abs(position.getY()) > MathLib.EPSILON || Math.abs(position.getZ()) > MathLib.EPSILON) {
         pSB.append("    translate " + pPrimitive.getPosition().getX() + " " + pPrimitive.getPosition().getZ() + " " + pPrimitive.getPosition().getY() + "\n");
       }
       pSB.append("  }\n");

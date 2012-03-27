@@ -16,6 +16,14 @@
 */
 package org.jwildfire.create.tina.variation;
 
+import static org.jwildfire.base.MathLib.M_PI;
+import static org.jwildfire.base.MathLib.cos;
+import static org.jwildfire.base.MathLib.fabs;
+import static org.jwildfire.base.MathLib.pow;
+import static org.jwildfire.base.MathLib.sin;
+import static org.jwildfire.base.MathLib.sqr;
+import static org.jwildfire.base.MathLib.sqrt;
+
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
@@ -43,9 +51,9 @@ public class GlynnSim1Func extends VariationFunc {
 
   private void circle(FlameTransformationContext pContext, Point p) {
     double r = this.radius1 * (this.thickness + (1.0 - this.thickness) * pContext.random());
-    double Phi = 2.0 * Math.PI * pContext.random();
-    double sinPhi = pContext.sin(Phi);
-    double cosPhi = pContext.cos(Phi);
+    double Phi = 2.0 * M_PI * pContext.random();
+    double sinPhi = sin(Phi);
+    double cosPhi = cos(Phi);
     p.x = r * cosPhi + this.x1;
     p.y = r * sinPhi + this.y1;
   }
@@ -53,7 +61,7 @@ public class GlynnSim1Func extends VariationFunc {
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     /* GlynnSim1 by eralex61, http://eralex61.deviantart.com/art/GlynnSim-plugin-112621621 */
-    double r = Math.sqrt(pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y);
+    double r = sqrt(pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y);
     double Alpha = this.radius / r;
     if (r < this.radius) { //object generation
       circle(pContext, toolPoint);
@@ -61,7 +69,7 @@ public class GlynnSim1Func extends VariationFunc {
       pVarTP.y += pAmount * toolPoint.y;
     }
     else {
-      if (pContext.random() > this.contrast * Math.pow(Alpha, this.absPow)) {
+      if (pContext.random() > this.contrast * pow(Alpha, this.absPow)) {
         toolPoint.x = pAffineTP.x;
         toolPoint.y = pAffineTP.y;
       }
@@ -69,7 +77,7 @@ public class GlynnSim1Func extends VariationFunc {
         toolPoint.x = Alpha * Alpha * pAffineTP.x;
         toolPoint.y = Alpha * Alpha * pAffineTP.y;
       }
-      double Z = pContext.sqr(toolPoint.x - this.x1) + pContext.sqr(toolPoint.y - this.y1);
+      double Z = sqr(toolPoint.x - this.x1) + sqr(toolPoint.y - this.y1);
       if (Z < this.radius1 * this.radius1) { //object generation
         circle(pContext, toolPoint);
         pVarTP.x += pAmount * toolPoint.x;
@@ -120,11 +128,11 @@ public class GlynnSim1Func extends VariationFunc {
 
   @Override
   public void init(FlameTransformationContext pContext, XForm pXForm) {
-    double a = Math.PI * phi1 / 180.0;
-    double sinPhi1 = pContext.sin(a);
-    double cosPhi1 = pContext.cos(a);
+    double a = M_PI * phi1 / 180.0;
+    double sinPhi1 = sin(a);
+    double cosPhi1 = cos(a);
     this.x1 = this.radius * cosPhi1;
     this.y1 = this.radius * sinPhi1;
-    this.absPow = Math.abs(this.pow);
+    this.absPow = fabs(this.pow);
   }
 }

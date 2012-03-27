@@ -16,6 +16,10 @@
 */
 package org.jwildfire.create.tina.variation;
 
+import static org.jwildfire.base.MathLib.M_PI;
+import static org.jwildfire.base.MathLib.cos;
+import static org.jwildfire.base.MathLib.sin;
+
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
@@ -23,9 +27,9 @@ public class ArchFunc extends SimpleVariationFunc {
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-    double ang = pContext.random() * pAmount * Math.PI;
-    double sinr = pContext.sin(ang);
-    double cosr = pContext.cos(ang);
+    double ang = pContext.random() * pAmount * M_PI;
+    double sinr = sin(ang);
+    double cosr = cos(ang);
     pVarTP.x += pAmount * sinr;
     pVarTP.y += pAmount * (sinr * sinr) / cosr;
   }

@@ -16,7 +16,10 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import org.jwildfire.create.tina.base.Constants;
+import static org.jwildfire.base.MathLib.SMALL_EPSILON;
+import static org.jwildfire.base.MathLib.fabs;
+import static org.jwildfire.base.MathLib.sqrt;
+
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
@@ -28,7 +31,7 @@ public class ButterflyFunc extends SimpleVariationFunc {
     double wx = pAmount * 1.3029400317411197908970256609023;
 
     double y2 = pAffineTP.y * 2.0;
-    double r = wx * pContext.sqrt(Math.abs(pAffineTP.y * pAffineTP.x) / (Constants.EPSILON + pAffineTP.x * pAffineTP.x + y2 * y2));
+    double r = wx * sqrt(fabs(pAffineTP.y * pAffineTP.x) / (SMALL_EPSILON + pAffineTP.x * pAffineTP.x + y2 * y2));
 
     pVarTP.x += r * pAffineTP.x;
     pVarTP.y += r * y2;

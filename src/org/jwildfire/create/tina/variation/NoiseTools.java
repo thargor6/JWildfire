@@ -19,6 +19,8 @@
 // All credits for this wonderful plugin to him!
 package org.jwildfire.create.tina.variation;
 
+import static org.jwildfire.base.MathLib.floor;
+
 public class NoiseTools {
   //This is an implementation of "Simplex Noise" and "Perlin Noise" as invented by Ken Perlin,
   //and described by Stefan Gustavson.
@@ -435,9 +437,9 @@ public class NoiseTools {
     // Convert input co-ordinates ( x, y, z ) to
     // integer-based simplex grid ( i, j, k )
     double skewIn = (V[_x_] + V[_y_] + V[_z_]) * skewF3;
-    int i = (int) Math.floor(V[_x_] + skewIn);
-    int j = (int) Math.floor(V[_y_] + skewIn);
-    int k = (int) Math.floor(V[_z_] + skewIn);
+    int i = (int) floor(V[_x_] + skewIn);
+    int j = (int) floor(V[_y_] + skewIn);
+    int k = (int) floor(V[_z_] + skewIn);
     t = (double) (i + j + k) * skewG3;
 
     // Cell origin co-ordinates in input space (x,y,z)
