@@ -34,7 +34,6 @@ import org.jwildfire.create.tina.base.XYZPoint;
 import org.jwildfire.create.tina.io.Flam3Reader;
 import org.jwildfire.create.tina.palette.RenderColor;
 import org.jwildfire.create.tina.random.RandomNumberGenerator;
-import org.jwildfire.create.tina.random.SimpleRandomNumberGenerator;
 import org.jwildfire.create.tina.swing.ProgressUpdater;
 import org.jwildfire.create.tina.variation.FlameTransformationContext;
 import org.jwildfire.image.Pixel;
@@ -44,7 +43,7 @@ import org.jwildfire.io.ImageWriter;
 import org.jwildfire.transform.ScaleAspect;
 import org.jwildfire.transform.ScaleTransformer;
 
-public class FlameRenderer {
+public final class FlameRenderer {
   // constants
   private final static int MAX_FILTER_WIDTH = 25;
   // init in initRaster
@@ -71,7 +70,7 @@ public class FlameRenderer {
   // init in createColorMap
   RenderColor[] colorMap;
   double paletteIdxScl;
-  RandomNumberGenerator random = new SimpleRandomNumberGenerator();
+  RandomNumberGenerator random = new RandomNumberGenerator();
   // 3D stuff
   private boolean doProject3D = false;
   // init in init3D()
@@ -485,7 +484,7 @@ public class FlameRenderer {
     //    if (flame.getSampleDensity() > 50) {
     //      System.err.println("SAMPLES: " + nSamples);
     //    }
-    int PROGRESS_STEPS = 100;
+    int PROGRESS_STEPS = 50;
     if (progressUpdater != null && pPart == 0) {
       progressUpdater.initProgress((PROGRESS_STEPS - 1) * pParts);
     }
@@ -506,7 +505,7 @@ public class FlameRenderer {
       boolean done = false;
       while (!done) {
         try {
-          Thread.sleep(1);
+          Thread.sleep(10);
         }
         catch (InterruptedException e) {
           e.printStackTrace();

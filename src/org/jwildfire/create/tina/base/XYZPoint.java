@@ -22,7 +22,7 @@ import static org.jwildfire.base.MathLib.sqrt;
 
 import org.jwildfire.create.tina.variation.FlameTransformationContext;
 
-public class XYZPoint {
+public final class XYZPoint {
   public double x;
   public double y;
   public double z;

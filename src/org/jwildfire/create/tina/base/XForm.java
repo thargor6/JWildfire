@@ -29,7 +29,7 @@ import org.jwildfire.create.tina.variation.Variation;
 import org.jwildfire.create.tina.variation.VariationFunc;
 import org.jwildfire.create.tina.variation.VariationPriorityComparator;
 
-public class XForm {
+public final class XForm {
   private double weight;
   private double color;
   private double colorSymmetry;
@@ -46,6 +46,7 @@ public class XForm {
   private double postCoeff20;
   private double postCoeff21;
   private boolean hasPostCoeffs;
+  private boolean hasCoeffs;
   private final List<Variation> variations = new ArrayList<Variation>();
   private final List<Variation> sortedVariations = new ArrayList<Variation>();
   private Variation[] sortedVariationsArray = null;
@@ -92,6 +93,7 @@ public class XForm {
 
   public void setCoeff00(double coeff00) {
     this.coeff00 = coeff00;
+    updateHasCoeffs();
   }
 
   public double getCoeff01() {
@@ -100,6 +102,7 @@ public class XForm {
 
   public void setCoeff01(double coeff01) {
     this.coeff01 = coeff01;
+    updateHasCoeffs();
   }
 
   public double getCoeff10() {
@@ -108,6 +111,7 @@ public class XForm {
 
   public void setCoeff10(double coeff10) {
     this.coeff10 = coeff10;
+    updateHasCoeffs();
   }
 
   public double getCoeff11() {
@@ -116,6 +120,7 @@ public class XForm {
 
   public void setCoeff11(double coeff11) {
     this.coeff11 = coeff11;
+    updateHasCoeffs();
   }
 
   public double getCoeff20() {
@@ -124,6 +129,7 @@ public class XForm {
 
   public void setCoeff20(double coeff20) {
     this.coeff20 = coeff20;
+    updateHasCoeffs();
   }
 
   public double getCoeff21() {
@@ -132,6 +138,7 @@ public class XForm {
 
   public void setCoeff21(double coeff21) {
     this.coeff21 = coeff21;
+    updateHasCoeffs();
   }
 
   public int getVariationCount() {
@@ -210,6 +217,7 @@ public class XForm {
     //   pDstPoint.color = pSrcPoint.color * c1 + c2;
     c1 = (1 + colorSymmetry) * 0.5;
     c2 = color * (1 - colorSymmetry) * 0.5;
+    updateHasCoeffs();
     updateHasPostCoeffs();
   }
 
@@ -218,17 +226,36 @@ public class XForm {
         || fabs(postCoeff11 - 1.0) > MathLib.EPSILON || fabs(postCoeff20) > MathLib.EPSILON || fabs(postCoeff21) > MathLib.EPSILON;
   }
 
+  private void updateHasCoeffs() {
+    hasCoeffs = fabs(coeff00 - 1.0) > MathLib.EPSILON || fabs(coeff01) > MathLib.EPSILON || fabs(coeff10) > MathLib.EPSILON
+        || fabs(coeff11 - 1.0) > MathLib.EPSILON || fabs(coeff20) > MathLib.EPSILON || fabs(coeff21) > MathLib.EPSILON;
+  }
+
   public boolean isHasPostCoeffs() {
     return hasPostCoeffs;
+  }
+
+  public boolean isHasCoeffs() {
+    return hasCoeffs;
   }
 
   public void transformPoint(FlameTransformationContext pContext, XYZPoint pAffineT, XYZPoint pVarT, XYZPoint pSrcPoint, XYZPoint pDstPoint) {
     pAffineT.clear();
     pAffineT.color = pSrcPoint.color * c1 + c2;
-    pAffineT.x = coeff00 * pSrcPoint.x + coeff10 * pSrcPoint.y + coeff20;
-    pAffineT.y = coeff01 * pSrcPoint.x + coeff11 * pSrcPoint.y + coeff21;
+    if (isHasCoeffs()) {
+      pAffineT.x = coeff00 * pSrcPoint.x + coeff10 * pSrcPoint.y + coeff20;
+      pAffineT.y = coeff01 * pSrcPoint.x + coeff11 * pSrcPoint.y + coeff21;
+    }
+    else {
+      pAffineT.x = pSrcPoint.x;
+      pAffineT.y = pSrcPoint.y;
+    }
     pAffineT.z = pSrcPoint.z;
-    pVarT.clear();
+    //pVarT.clear();
+
+    pVarT.invalidate();
+    pVarT.x = pVarT.y = pVarT.z = pVarT.color = 0.0;
+
     pVarT.color = pAffineT.color;
     pVarT.rgbColor = pAffineT.rgbColor;
     pVarT.redColor = pAffineT.redColor;
@@ -346,6 +373,7 @@ public class XForm {
     postCoeff20 = pXForm.postCoeff20;
     postCoeff21 = pXForm.postCoeff21;
     hasPostCoeffs = pXForm.hasPostCoeffs;
+    hasCoeffs = pXForm.hasCoeffs;
     System.arraycopy(pXForm.modifiedWeights, 0, modifiedWeights, 0, modifiedWeights.length);
     variations.clear();
     for (Variation var : pXForm.variations) {

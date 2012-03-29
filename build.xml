@@ -45,7 +45,7 @@
            target="1.6"
            source="1.6"
            debug="false"
-           deprecation="false"
+           deprecation="false"    	
            encoding="ISO-8859-1"
            optimize="true"
            failonerror="true">

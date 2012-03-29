@@ -16,35 +16,41 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.MathLib.fabs;
-import static org.jwildfire.base.MathLib.pow;
-
+import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
-public class LinearTFunc extends VariationFunc {
+public class CheckerboardWFFunc extends VariationFunc {
 
-  private static final String PARAM_POWX = "powX";
-  private static final String PARAM_POWY = "powY";
+  private static final String PARAM_SIZE = "size";
+  private static final String PARAM_PETALS = "petals";
 
-  private static final String[] paramNames = { PARAM_POWX, PARAM_POWY };
+  private static final String[] paramNames = { PARAM_SIZE, PARAM_PETALS };
 
-  private double powX = 1.2;
-  private double powY = 1.2;
-
-  private double sgn(double arg)
-  {
-    if (arg > 0)
-      return 1.0;
-    else
-      return -1.0;
-  }
+  private int size = 8;
+  private double petals = 7.0;
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-    // linearT by FractalDesire, http://fractaldesire.deviantart.com/journal/linearT-plugin-219864320
-    pVarTP.x += sgn(pAffineTP.x) * pow(fabs(pAffineTP.x), this.powX) * pAmount;
-    pVarTP.y += sgn(pAffineTP.y) * pow(fabs(pAffineTP.y), this.powY) * pAmount;
+    //    pVarTP.x += pAmount * (pContext.random() - 0.5);
+    //    pVarTP.y += pAmount * (pContext.random() - 0.5);
+    //    pVarTP.z += pAmount * (pContext.random() - 0.5);
+
+    double lx = (pContext.random() - 0.5);
+    double ly = (pContext.random() - 0.5);
+
+    int field = pContext.random(size * size / 2) * 2;
+    int x = field % size;
+    int y = field / size;
+    if (y % 2 == 0) {
+      x++;
+    }
+
+    double fieldsize = pAmount / (double) size;
+
+    pVarTP.x += x * fieldsize + lx;
+    pVarTP.y += y * fieldsize + ly;
+
   }
 
   @Override
@@ -54,27 +60,22 @@ public class LinearTFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { powX, powY };
-  }
-
-  @Override
-  public String[] getParameterAlternativeNames() {
-    return new String[] { "lT_powX", "lT_powY" };
+    return new Object[] { size, petals };
   }
 
   @Override
   public void setParameter(String pName, double pValue) {
-    if (PARAM_POWX.equalsIgnoreCase(pName))
-      powX = pValue;
-    else if (PARAM_POWY.equalsIgnoreCase(pName))
-      powY = pValue;
+    if (PARAM_SIZE.equalsIgnoreCase(pName))
+      size = Tools.FTOI(pValue);
+    else if (PARAM_PETALS.equalsIgnoreCase(pName))
+      petals = pValue;
     else
       throw new IllegalArgumentException(pName);
   }
 
   @Override
   public String getName() {
-    return "linearT";
+    return "checkerboard_wf";
   }
 
 }

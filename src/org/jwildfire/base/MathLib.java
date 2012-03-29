@@ -18,7 +18,7 @@ package org.jwildfire.base;
 
 import odk.lang.FastMath;
 
-public class MathLib {
+public final class MathLib {
 
   public final static double SMALL_EPSILON = 1.0e-300;
   public static final double EPSILON = 0.00000001;
@@ -32,10 +32,10 @@ public class MathLib {
   public static final double M_2PI = 2.0 * M_PI;
 
   public static final double fabs(double var) {
-    if (var < 0.0)
-      return 0.0 - var;
-    else
+    if (var >= 0.0)
       return var;
+    else
+      return 0.0 - var;
   }
 
   public static final int sign(double val) {

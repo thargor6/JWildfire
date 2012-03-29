@@ -17,8 +17,8 @@
 package org.jwildfire.create.tina.base;
 
 public class Constants {
-  public final static int MAX_MOD_WEIGHT_COUNT = 1000;
-  public final static int NEXT_APPLIED_XFORM_TABLE_SIZE = 1000;
-  public final static int INITIAL_ITERATIONS = 42;;
+  public final static int MAX_MOD_WEIGHT_COUNT = 100;
+  public final static int NEXT_APPLIED_XFORM_TABLE_SIZE = 100;
+  public final static int INITIAL_ITERATIONS = 42;
 
 }

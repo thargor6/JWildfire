@@ -36,10 +36,10 @@ public class LinearT3DFunc extends VariationFunc {
 
   private double sgn(double arg)
   {
-    if (arg < 0)
-      return -1.0;
-    else
+    if (arg > 0)
       return 1.0;
+    else
+      return -1.0;
   }
 
   @Override

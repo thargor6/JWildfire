@@ -45,31 +45,8 @@ public class BubbleWrapFunc extends VariationFunc {
   private double r2;
   private double rfactor;
 
-  private void prepare() {
-    double radius = 0.5 * (cellsize / (1.0 + space * space));
-
-    // g2 is multiplier for radius
-    g2 = gain * gain + 1.0e-6;
-
-    // Start max_bubble as maximum x or y value before applying bubble
-    double max_bubble = g2 * radius;
-
-    if (max_bubble > 2.0) {
-      // Values greater than 2.0 "recurve" round the back of the bubble
-      max_bubble = 1.0;
-    }
-    else {
-      // Expand smaller bubble to fill the space
-      max_bubble *= 1.0 / ((max_bubble * max_bubble) / 4.0 + 1.0);
-    }
-
-    r2 = radius * radius;
-    rfactor = radius / max_bubble;
-  }
-
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-    prepare(); // call this every time for now
     // Bubble Wrap - WIP Plugin by slobo777
     // http://slobo777.deviantart.com/art/Bubble-Wrap-WIP-Plugin-112370125 
     double Vx, Vy; // V is "global" vector,
@@ -153,6 +130,29 @@ public class BubbleWrapFunc extends VariationFunc {
   @Override
   public String getName() {
     return "bwraps7";
+  }
+
+  @Override
+  public void init(FlameTransformationContext pContext, XForm pXForm) {
+    double radius = 0.5 * (cellsize / (1.0 + space * space));
+
+    // g2 is multiplier for radius
+    g2 = gain * gain + 1.0e-6;
+
+    // Start max_bubble as maximum x or y value before applying bubble
+    double max_bubble = g2 * radius;
+
+    if (max_bubble > 2.0) {
+      // Values greater than 2.0 "recurve" round the back of the bubble
+      max_bubble = 1.0;
+    }
+    else {
+      // Expand smaller bubble to fill the space
+      max_bubble *= 1.0 / ((max_bubble * max_bubble) / 4.0 + 1.0);
+    }
+
+    r2 = radius * radius;
+    rfactor = radius / max_bubble;
   }
 
 }

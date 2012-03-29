@@ -25,7 +25,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 import org.jwildfire.create.tina.palette.RenderColor;
 import org.jwildfire.create.tina.variation.FlameTransformationContext;
 
-public class FlameRenderThread implements Runnable {
+public final class FlameRenderThread implements Runnable {
   private final FlameRenderer renderer;
   private final Flame flame;
   private final long samples;
@@ -88,6 +88,9 @@ public class FlameRenderThread implements Runnable {
       }
     }
 
+    final double cosa = renderer.cosa;
+    final double sina = renderer.sina;
+
     for (long i = 0; i < samples; i++) {
       if (i % 100 == 0) {
         currSample = i;
@@ -108,20 +111,20 @@ public class FlameRenderThread implements Runnable {
       if (finalXForm != null) {
         finalXForm.transformPoint(ctx, affineT, varT, p, q);
         renderer.project(q);
-        px = q.x * renderer.cosa + q.y * renderer.sina + renderer.rcX;
+        px = q.x * cosa + q.y * sina + renderer.rcX;
         if ((px < 0) || (px > renderer.camW))
           continue;
-        py = q.y * renderer.cosa - q.x * renderer.sina + renderer.rcY;
+        py = q.y * cosa - q.x * sina + renderer.rcY;
         if ((py < 0) || (py > renderer.camH))
           continue;
       }
       else {
         q.assign(p);
         renderer.project(q);
-        px = q.x * renderer.cosa + q.y * renderer.sina + renderer.rcX;
+        px = q.x * cosa + q.y * sina + renderer.rcX;
         if ((px < 0) || (px > renderer.camW))
           continue;
-        py = q.y * renderer.cosa - q.x * renderer.sina + renderer.rcY;
+        py = q.y * cosa - q.x * sina + renderer.rcY;
         if ((py < 0) || (py > renderer.camH))
           continue;
       }
