@@ -1,3 +1,12 @@
+V0.42 (31.03.2012):
+ - Fractal flame editor: npolar variation by Xyrus02
+ - Fractal flame editor: new JulianDisc random flame generator
+ - Fractal flame editor: creating 3 random flames at startup
+ - Fractal flame editor: automatically detect the number of processors/cores
+ - Fractal flame editor: lots of internal optimizations and refactoring
+ - Fractal flame editor: removed the "fastmath" prefs option, internal refactoring
+ - Fractal flame editor: optimized calculation of mathematical functions by utilization of the Jafama Library by oma
+
 V0.41 (24.03.2012):
  - Fractal flame editor: minor improvements to the Flower3D random generator
  - Fractal flame editor: linearT and linearT3D varaition by FractalDesire
