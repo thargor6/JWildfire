@@ -21,7 +21,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 public abstract class SimpleVariationFunc extends VariationFunc {
 
-  public void init(FlameTransformationContext pContext, XForm pXForm) {
+  public void init(FlameTransformationContext pContext, XForm pXForm, double pAmount) {
 
   }
 

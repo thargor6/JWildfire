@@ -120,7 +120,7 @@ public class GlynnSim3Func extends VariationFunc {
   private double radius1, radius2, Gamma, absPow;
 
   @Override
-  public void init(FlameTransformationContext pContext, XForm pXForm) {
+  public void init(FlameTransformationContext pContext, XForm pXForm, double pAmount) {
     this.radius1 = this.radius + this.thickness;
     this.radius2 = sqr(this.radius) / this.radius1;
     this.Gamma = this.radius1 / (this.radius1 + this.radius2);

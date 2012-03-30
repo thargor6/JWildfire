@@ -75,7 +75,7 @@ public class Disc2Func extends VariationFunc {
   }
 
   @Override
-  public void init(FlameTransformationContext pContext, XForm pXForm) {
+  public void init(FlameTransformationContext pContext, XForm pXForm, double pAmount) {
     double add = twist;
     timespi = rot * M_PI;
     sinadd = sin(add);

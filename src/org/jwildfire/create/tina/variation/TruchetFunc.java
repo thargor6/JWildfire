@@ -201,7 +201,7 @@ public class TruchetFunc extends VariationFunc {
   }
 
   @Override
-  public void init(FlameTransformationContext pContext, XForm pXForm) {
+  public void init(FlameTransformationContext pContext, XForm pXForm, double pAmount) {
     if (extended < 0) {
       extended = 0;
     }

@@ -154,7 +154,7 @@ public class CustomWFFunc extends VariationFunc {
   }
 
   @Override
-  public void init(FlameTransformationContext pContext, XForm pXForm) {
+  public void init(FlameTransformationContext pContext, XForm pXForm, double pAmount) {
     if (customFuncRunner == null) {
       compile();
     }

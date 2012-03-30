@@ -137,7 +137,7 @@ public class MandelbrotFunc extends VariationFunc {
   private double x0, y0;
 
   @Override
-  public void init(FlameTransformationContext pContext, XForm pXForm) {
+  public void init(FlameTransformationContext pContext, XForm pXForm, double pAmount) {
     x0 = y0 = 0.0;
   }
 

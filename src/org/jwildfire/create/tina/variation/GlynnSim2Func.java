@@ -117,7 +117,7 @@ public class GlynnSim2Func extends VariationFunc {
   private double Phi10, Phi20, Gamma, Delta, absPow;
 
   @Override
-  public void init(FlameTransformationContext pContext, XForm pXForm) {
+  public void init(FlameTransformationContext pContext, XForm pXForm, double pAmount) {
     this.Phi10 = M_PI * this.phi1 / 180.0;
     this.Phi20 = M_PI * this.phi2 / 180.0;
     this.Gamma = this.thickness * (2.0 * this.radius + this.thickness) / (this.radius + this.thickness);

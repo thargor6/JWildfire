@@ -85,7 +85,7 @@ public class KaleidoscopeFunc extends VariationFunc {
   double q, w, e, r, t, i;
 
   @Override
-  public void init(FlameTransformationContext pContext, XForm pXForm) {
+  public void init(FlameTransformationContext pContext, XForm pXForm, double pAmount) {
     q = pull; // pulls apart the 2 sections of the plugin
     w = rotate; // rotates both halves of the plugin
     e = line_up;

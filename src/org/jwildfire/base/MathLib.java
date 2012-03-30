@@ -31,6 +31,13 @@ public final class MathLib {
   public final static double M_2_PI = 2.0 / M_PI;
   public static final double M_2PI = 2.0 * M_PI;
 
+  public static final int abs(int var) {
+    if (var >= 0)
+      return var;
+    else
+      return 0 - var;
+  }
+
   public static final double fabs(double var) {
     if (var >= 0.0)
       return var;

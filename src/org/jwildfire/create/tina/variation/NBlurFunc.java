@@ -455,7 +455,7 @@ public class NBlurFunc extends VariationFunc {
   private double nb_ratioComplement;
 
   @Override
-  public void init(FlameTransformationContext pContext, XForm pXForm) {
+  public void init(FlameTransformationContext pContext, XForm pXForm, double pAmount) {
     if (this.numEdges < 3)
       this.numEdges = 3;
 

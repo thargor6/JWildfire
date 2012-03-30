@@ -68,7 +68,7 @@ public class PerspectiveFunc extends VariationFunc {
   }
 
   @Override
-  public void init(FlameTransformationContext pContext, XForm pXForm) {
+  public void init(FlameTransformationContext pContext, XForm pXForm, double pAmount) {
     double ang = this.angle * M_PI / 2.0;
     vsin = sin(ang);
     vfcos = this.dist * cos(ang);

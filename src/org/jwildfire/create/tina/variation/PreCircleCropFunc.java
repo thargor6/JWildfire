@@ -118,7 +118,7 @@ public class PreCircleCropFunc extends VariationFunc {
   private double cA;
 
   @Override
-  public void init(FlameTransformationContext pContext, XForm pXForm) {
+  public void init(FlameTransformationContext pContext, XForm pXForm, double pAmount) {
     cA = max(-1.0, min(scatter_area, 1.0));
   }
 

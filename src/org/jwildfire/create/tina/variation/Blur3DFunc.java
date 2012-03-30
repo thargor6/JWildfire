@@ -49,7 +49,7 @@ public class Blur3DFunc extends SimpleVariationFunc {
   }
 
   @Override
-  public void init(FlameTransformationContext pContext, XForm pXForm) {
+  public void init(FlameTransformationContext pContext, XForm pXForm, double pAmount) {
     gauss_rnd[0] = pContext.random();
     gauss_rnd[1] = pContext.random();
     gauss_rnd[2] = pContext.random();

@@ -133,7 +133,7 @@ public class BubbleWrapFunc extends VariationFunc {
   }
 
   @Override
-  public void init(FlameTransformationContext pContext, XForm pXForm) {
+  public void init(FlameTransformationContext pContext, XForm pXForm, double pAmount) {
     double radius = 0.5 * (cellsize / (1.0 + space * space));
 
     // g2 is multiplier for radius

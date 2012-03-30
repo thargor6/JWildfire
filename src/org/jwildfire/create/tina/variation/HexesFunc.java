@@ -235,7 +235,7 @@ public class HexesFunc extends VariationFunc {
   private double rotSin, rotCos;
 
   @Override
-  public void init(FlameTransformationContext pContext, XForm pXForm) {
+  public void init(FlameTransformationContext pContext, XForm pXForm, double pAmount) {
     rotSin = sin(rotate * 2.0 * MathLib.M_PI);
     rotCos = cos(rotate * 2.0 * MathLib.M_PI);
   }

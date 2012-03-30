@@ -185,7 +185,7 @@ public class PostColorMapWFFunc extends VariationFunc {
   }
 
   @Override
-  public void init(FlameTransformationContext pContext, XForm pXForm) {
+  public void init(FlameTransformationContext pContext, XForm pXForm, double pAmount) {
     colorMap = null;
     renderColors = pContext.getFlameRenderer().getColorMap();
     if (imageFilename != null && imageFilename.length() > 0) {

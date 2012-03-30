@@ -79,7 +79,7 @@ public class XHeartFunc extends VariationFunc {
   }
 
   @Override
-  public void init(FlameTransformationContext pContext, XForm pXForm) {
+  public void init(FlameTransformationContext pContext, XForm pXForm, double pAmount) {
     double ang = M_PI_4 + (0.5 * M_PI_4 * angle);
     sina = sin(ang);
     cosa = cos(ang);

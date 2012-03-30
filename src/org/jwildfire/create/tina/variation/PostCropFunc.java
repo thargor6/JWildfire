@@ -86,7 +86,7 @@ public class PostCropFunc extends VariationFunc {
   private double xmin, xmax, ymin, ymax, A;
 
   @Override
-  public void init(FlameTransformationContext pContext, XForm pXForm) {
+  public void init(FlameTransformationContext pContext, XForm pXForm, double pAmount) {
     xmin = min(left, right);
     ymin = min(top, bottom);
     xmax = max(left, right);

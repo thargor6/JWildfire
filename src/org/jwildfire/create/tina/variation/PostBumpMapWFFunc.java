@@ -125,7 +125,7 @@ public class PostBumpMapWFFunc extends VariationFunc {
   private WFImage bumpMap;
 
   @Override
-  public void init(FlameTransformationContext pContext, XForm pXForm) {
+  public void init(FlameTransformationContext pContext, XForm pXForm, double pAmount) {
     bumpMap = null;
     if (imageFilename != null && imageFilename.length() > 0) {
       try {

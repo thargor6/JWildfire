@@ -380,14 +380,14 @@ public class Flame {
     for (XForm xForm : this.getXForms()) {
       xForm.initTransform();
       for (Variation var : xForm.getSortedVariations()) {
-        var.getFunc().init(pFlameTransformationContext, xForm);
+        var.getFunc().init(pFlameTransformationContext, xForm, var.getAmount());
       }
     }
     if (getFinalXForm() != null) {
       XForm xForm = getFinalXForm();
       xForm.initTransform();
       for (Variation var : xForm.getSortedVariations()) {
-        var.getFunc().init(pFlameTransformationContext, xForm);
+        var.getFunc().init(pFlameTransformationContext, xForm, var.getAmount());
       }
     }
     //
