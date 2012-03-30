@@ -220,7 +220,7 @@ public class VariationFuncList {
     registerVariationFunc(NBlurFunc.class);
     registerVariationFunc(LinearTFunc.class);
     registerVariationFunc(LinearT3DFunc.class);
-    registerVariationFunc(CheckerboardWFFunc.class);
+    //    registerVariationFunc(CheckerboardWFFunc.class);
   }
 
   private static void registerVariationFunc(

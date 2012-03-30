@@ -33,7 +33,6 @@ public class Prefs extends ManagedObject {
   static final String KEY_SUNFLOW_PATH_SCENES = "sunflow.path.scenes";
 
   static final String KEY_TINA_PATH_FLAMES = "tina.path.flames";
-  static final String KEY_TINA_RENDER_THREADS = "tina.render.threads";
   static final String KEY_TINA_RENDER_IMAGE_WIDTH = "tina.render.image.width";
   static final String KEY_TINA_RENDER_IMAGE_HEIGHT = "tina.render.image.height";
   static final String KEY_TINA_RENDER_MOVIE_WIDTH = "tina.render.movie.width";
@@ -115,8 +114,7 @@ public class Prefs extends ManagedObject {
   @Property(description = "Default number of frames for a movie", category = PropertyCategory.TINA)
   private int tinaRenderMovieFrames = 90;
 
-  @Property(description = "Maximum number of threads", category = PropertyCategory.TINA)
-  private int tinaRenderThreads = 8;
+  private static int tinaRenderThreads;
 
   @Property(description = "Quality for realtime rendering (please restart app after changing this)", category = PropertyCategory.TINA)
   private int tinaRenderRealtimeQuality = 1;
@@ -323,7 +321,6 @@ public class Prefs extends ManagedObject {
     tinaRenderMovieWidth = pSrc.tinaRenderMovieWidth;
     tinaRenderMovieHeight = pSrc.tinaRenderMovieHeight;
     tinaRenderMovieFrames = pSrc.tinaRenderMovieFrames;
-    tinaRenderThreads = pSrc.tinaRenderThreads;
     tinaRenderPreviewSpatialOversample = pSrc.tinaRenderPreviewSpatialOversample;
     tinaRenderPreviewColorOversample = pSrc.tinaRenderPreviewColorOversample;
     tinaRenderPreviewFilterRadius = pSrc.tinaRenderPreviewFilterRadius;
@@ -353,10 +350,6 @@ public class Prefs extends ManagedObject {
 
   public int getTinaRenderThreads() {
     return tinaRenderThreads;
-  }
-
-  public void setTinaRenderThreads(int tinaRenderThreads) {
-    this.tinaRenderThreads = tinaRenderThreads;
   }
 
   public int getTinaRenderPreviewSpatialOversample() {
@@ -615,4 +608,10 @@ public class Prefs extends ManagedObject {
     this.plafTheme = plafTheme;
   }
 
+  static {
+    tinaRenderThreads = Runtime.getRuntime().availableProcessors();
+    if (tinaRenderThreads < 1) {
+      tinaRenderThreads = 1;
+    }
+  }
 }

@@ -151,14 +151,13 @@ public final class XForm {
 
   private void updateSortedVariations() {
     sortedVariations.clear();
-    sortedVariationsArray = null;
+    sortedVariationsArray = new Variation[variations.size()];
     if (variations.size() > 0) {
       sortedVariations.addAll(variations);
       if (variations.size() > 1) {
         Collections.sort(sortedVariations, new VariationPriorityComparator());
       }
       // for faster access
-      sortedVariationsArray = new Variation[variations.size()];
       int i = 0;
       for (Variation var : sortedVariations) {
         sortedVariationsArray[i++] = var;

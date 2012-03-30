@@ -18,6 +18,7 @@ package org.jwildfire.create.tina.randomflame;
 
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.XForm;
+import org.jwildfire.create.tina.transform.XFormTransformService;
 import org.jwildfire.create.tina.variation.VariationFunc;
 import org.jwildfire.create.tina.variation.VariationFuncList;
 
@@ -84,6 +85,10 @@ public class Bubbles3DRandomFlameGenerator extends RandomFlameGenerator {
       xForm.addVariation(1.0, varFunc);
       xForm.setColor(0.0);
       xForm.setColorSymmetry(0.0);
+      XFormTransformService.globalTranslate(xForm, -1.0 + 2.0 * Math.random(), -1.0 + 2.0 * Math.random(), false);
+      XFormTransformService.globalTranslate(xForm, -0.1 + 0.2 * Math.random(), -0.1 + 0.2 * Math.random(), true);
+      XFormTransformService.rotate(xForm, Math.random() * 360.0, false);
+      XFormTransformService.scale(xForm, 0.8 + Math.random() * 0.4, true, true);
     }
 
     flame.randomizeColors();

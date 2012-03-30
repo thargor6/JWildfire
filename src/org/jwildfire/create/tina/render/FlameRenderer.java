@@ -22,7 +22,6 @@ import static org.jwildfire.base.MathLib.fabs;
 import static org.jwildfire.base.MathLib.sin;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 import org.jwildfire.base.MathLib;
@@ -31,7 +30,6 @@ import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.RasterPoint;
 import org.jwildfire.create.tina.base.XYZPoint;
-import org.jwildfire.create.tina.io.Flam3Reader;
 import org.jwildfire.create.tina.palette.RenderColor;
 import org.jwildfire.create.tina.random.RandomNumberGenerator;
 import org.jwildfire.create.tina.swing.ProgressUpdater;
@@ -39,7 +37,6 @@ import org.jwildfire.create.tina.variation.FlameTransformationContext;
 import org.jwildfire.image.Pixel;
 import org.jwildfire.image.SimpleHDRImage;
 import org.jwildfire.image.SimpleImage;
-import org.jwildfire.io.ImageWriter;
 import org.jwildfire.transform.ScaleAspect;
 import org.jwildfire.transform.ScaleTransformer;
 
@@ -593,38 +590,6 @@ public final class FlameRenderer {
 
   public FlameTransformationContext getFlameTransformationContext() {
     return flameTransformationContext;
-  }
-
-  // For quick benchmarking, should be removed later, can't get TPTP get to run on the whole app
-  public static void main(String args[]) {
-    try {
-      Prefs prefs = new Prefs();
-      prefs.loadFromFile();
-      List<Flame> flames = new Flam3Reader().readFlames("C:\\TMP\\wf\\Apophysis\\benchmark1.flame");
-      Flame flame = flames.get(0);
-      FlameRenderer renderer = new FlameRenderer(flame, prefs);
-
-      RenderInfo info = new RenderInfo(1920, 1080);
-
-      double wScl = (double) info.getImageWidth() / (double) flame.getWidth();
-      double hScl = (double) info.getImageHeight() / (double) flame.getHeight();
-      flame.setPixelsPerUnit((wScl + hScl) * 0.5 * flame.getPixelsPerUnit());
-      flame.setWidth(info.getImageWidth());
-      flame.setHeight(info.getImageHeight());
-      flame.setSampleDensity(100);
-      flame.setSpatialOversample(1);
-      flame.setColorOversample(1);
-      flame.setSpatialFilterRadius(0);
-      prefs.setTinaRenderThreads(1);
-      long t0 = Calendar.getInstance().getTimeInMillis();
-      RenderedFlame renderRes = renderer.renderFlame(info);
-      long t1 = Calendar.getInstance().getTimeInMillis();
-      System.err.println("RENDER TIME: " + ((double) (t1 - t0) / 1000.0) + "s");
-      new ImageWriter().saveImage(renderRes.getImage(), "C:\\TMP\\wf\\Apophysis\\benchmark1.png");
-    }
-    catch (Exception ex) {
-      ex.printStackTrace();
-    }
   }
 
   public void setRenderScale(int pRenderScale) {

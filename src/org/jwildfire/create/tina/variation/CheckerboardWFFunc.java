@@ -32,25 +32,6 @@ public class CheckerboardWFFunc extends VariationFunc {
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-    //    pVarTP.x += pAmount * (pContext.random() - 0.5);
-    //    pVarTP.y += pAmount * (pContext.random() - 0.5);
-    //    pVarTP.z += pAmount * (pContext.random() - 0.5);
-
-    double lx = (pContext.random() - 0.5);
-    double ly = (pContext.random() - 0.5);
-
-    int field = pContext.random(size * size / 2) * 2;
-    int x = field % size;
-    int y = field / size;
-    if (y % 2 == 0) {
-      x++;
-    }
-
-    double fieldsize = pAmount / (double) size;
-
-    pVarTP.x += x * fieldsize + lx;
-    pVarTP.y += y * fieldsize + ly;
-
   }
 
   @Override
