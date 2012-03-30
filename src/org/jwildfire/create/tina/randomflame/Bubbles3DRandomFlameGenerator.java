@@ -74,7 +74,7 @@ public class Bubbles3DRandomFlameGenerator extends RandomFlameGenerator {
       xForm.setColor(0.0);
       xForm.setColorSymmetry(0.0);
     }
-    // 3rd xForm
+    // 3rd xForm    
     {
       XForm xForm = new XForm();
       flame.getXForms().add(xForm);

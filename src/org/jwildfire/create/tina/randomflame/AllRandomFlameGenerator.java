@@ -62,6 +62,9 @@ public class AllRandomFlameGenerator extends RandomFlameGenerator {
     else if (r < 0.82) {
       return new SubFlameRandomFlameGenerator().createFlame();
     }
+    else if (r < 0.88) {
+      return new JulianDiscRandomFlameGenerator().createFlame();
+    }
     else {
       return new ExperimentalSimpleRandomFlameGenerator().createFlame();
     }
