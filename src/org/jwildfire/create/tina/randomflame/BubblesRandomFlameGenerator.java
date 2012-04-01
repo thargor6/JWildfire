@@ -59,13 +59,16 @@ public class BubblesRandomFlameGenerator extends RandomFlameGenerator {
       XForm xForm = new XForm();
       flame.getXForms().add(xForm);
       xForm.setWeight(0.5 + Math.random() * 0.8);
-      xForm.addVariation(0.25 + Math.random() * 0.3, VariationFuncList.getVariationFuncInstance("bubble", true));
-      if (Math.random() < 0.5) {
+      if (Math.random() < 0.25) {
+        xForm.addVariation(0.01 + Math.random() * 0.4, VariationFuncList.getVariationFuncInstance("bubble", true));
         VariationFunc checks = VariationFuncList.getVariationFuncInstance("checks", true);
         checks.setParameter("size", 5.0);
-        checks.setParameter("x", 5.0);
-        checks.setParameter("y", 5.0);
-        xForm.addVariation(0.05 + Math.random() * 0.25, checks);
+        checks.setParameter("x", 3.0);
+        checks.setParameter("y", 3.0);
+        xForm.addVariation(0.01 + Math.random() * 0.4, checks);
+      }
+      else {
+        xForm.addVariation(0.1 + Math.random() * 0.5, VariationFuncList.getVariationFuncInstance("bubble", true));
       }
       xForm.addVariation(4 + Math.random() * 2, VariationFuncList.getVariationFuncInstance("pre_blur", true));
       xForm.setColorSymmetry(-0.5);
