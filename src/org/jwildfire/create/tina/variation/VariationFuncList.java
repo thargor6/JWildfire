@@ -221,6 +221,8 @@ public class VariationFuncList {
     registerVariationFunc(LinearTFunc.class);
     registerVariationFunc(LinearT3DFunc.class);
     registerVariationFunc(NPolarFunc.class);
+    registerVariationFunc(LissajousFunc.class);
+
     //    registerVariationFunc(CheckerboardWFFunc.class);
   }
 
