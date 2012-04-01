@@ -44,7 +44,7 @@ public class LissajousFunc extends VariationFunc {
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-    // Lissajous by Jed Kelsey, http://lu-kout.deviantart.com/art/Apophysis-Plugin-Pack-1-v0-4-59907275
+    // Lissajous plugin by Jed Kelsey, http://lu-kout.deviantart.com/art/Apophysis-Plugin-Pack-1-v0-4-59907275
     double t = (tmax - tmin) * pContext.random() + tmin;
     double y = pContext.random() - 0.5;
     double x1 = sin(a * t + d);
