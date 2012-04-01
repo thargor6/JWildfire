@@ -223,6 +223,7 @@ public class VariationFuncList {
     registerVariationFunc(NPolarFunc.class);
     registerVariationFunc(LissajousFunc.class);
     registerVariationFunc(WaffleFunc.class);
+    registerVariationFunc(UnpolarFunc.class);
 
     //    registerVariationFunc(CheckerboardWFFunc.class);
   }
