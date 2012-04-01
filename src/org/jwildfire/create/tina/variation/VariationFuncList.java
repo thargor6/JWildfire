@@ -224,8 +224,7 @@ public class VariationFuncList {
     registerVariationFunc(LissajousFunc.class);
     registerVariationFunc(WaffleFunc.class);
     registerVariationFunc(UnpolarFunc.class);
-
-    //    registerVariationFunc(CheckerboardWFFunc.class);
+    registerVariationFunc(ChecksFunc.class);
   }
 
   private static void registerVariationFunc(

@@ -76,7 +76,7 @@ public class Spherical3DRandomFlameGenerator extends RandomFlameGenerator {
     }
     // 3rd xForm
     String fncList[] = { "bipolar", "blade", "blur", "blur3D", "cannabiscurve_wf", "crackle", "cylinder", "edisc", "flower", "glynnSim2",
-        "julia3D", "mandelbrot", "modulus", "noise", "parabola", "pie", "pie3D", "pre_subflame_wf", "radial_blur", "rays",
+        "julia3D", "mandelbrot", "modulus", "noise", "parabola", "pie", "pie3D", "checks", "pre_subflame_wf", "radial_blur", "rays",
         "rings", "rose_wf", "secant2", "sinusoidal", "spiral", "spirograph", "splits", "square", "twintrian", "wedge_julia" };
     {
       XForm xForm = new XForm();
