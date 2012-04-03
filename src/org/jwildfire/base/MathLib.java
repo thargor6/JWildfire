@@ -62,9 +62,11 @@ public final class MathLib {
 
   public static final double sin(double a) {
     return sin[(int) (a * radToIndex) & TRIG_PRECALC_MASK];
+    //    return FastMath.sin(a);
   }
 
   public static final double cos(double a) {
+    //    return FastMath.cos(a);
 
     return cos[(int) (a * radToIndex) & TRIG_PRECALC_MASK];
   }
