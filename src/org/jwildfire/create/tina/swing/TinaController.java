@@ -83,6 +83,8 @@ import org.jwildfire.create.tina.palette.RGBPaletteRenderer;
 import org.jwildfire.create.tina.palette.RandomRGBPaletteGenerator;
 import org.jwildfire.create.tina.randomflame.RandomFlameGenerator;
 import org.jwildfire.create.tina.randomflame.RandomFlameGeneratorList;
+import org.jwildfire.create.tina.randomflame.RandomFlameGeneratorSample;
+import org.jwildfire.create.tina.randomflame.RandomFlameGeneratorSampler;
 import org.jwildfire.create.tina.render.FlameRenderer;
 import org.jwildfire.create.tina.render.RenderInfo;
 import org.jwildfire.create.tina.render.RenderedFlame;
@@ -98,7 +100,6 @@ import org.jwildfire.create.tina.variation.Linear3DFunc;
 import org.jwildfire.create.tina.variation.Variation;
 import org.jwildfire.create.tina.variation.VariationFunc;
 import org.jwildfire.create.tina.variation.VariationFuncList;
-import org.jwildfire.image.Pixel;
 import org.jwildfire.image.SimpleImage;
 import org.jwildfire.io.ImageWriter;
 import org.jwildfire.swing.ErrorHandler;
@@ -120,6 +121,8 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
   private static final double SLIDER_SCALE_PHONGSIZE = 10.0;
   private static final double SLIDER_SCALE_LIGHTPOS = 100.0;
   private static final double SLIDER_SCALE_BLUR_FALLOFF = 10.0;
+
+  TinaInteractiveRendererController interactiveRendererCtrl;
 
   private final JPanel centerPanel;
   private FlamePanel flamePanel;
@@ -215,7 +218,6 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
   private final JSlider cameraYawSlider;
   private final JTextField cameraPerspectiveREd;
   private final JSlider cameraPerspectiveSlider;
-  private final JTextField previewQualityREd;
   private final JTextField cameraCentreXREd;
   private final JSlider cameraCentreXSlider;
   private final JTextField cameraCentreYREd;
@@ -409,7 +411,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
 
   public TinaController(ErrorHandler pErrorHandler, Prefs pPrefs, JPanel pCenterPanel, JTextField pCameraRollREd, JSlider pCameraRollSlider, JTextField pCameraPitchREd,
       JSlider pCameraPitchSlider, JTextField pCameraYawREd, JSlider pCameraYawSlider, JTextField pCameraPerspectiveREd, JSlider pCameraPerspectiveSlider,
-      JTextField pPreviewQualityREd, JTextField pCameraCentreXREd, JSlider pCameraCentreXSlider, JTextField pCameraCentreYREd,
+      JTextField pCameraCentreXREd, JSlider pCameraCentreXSlider, JTextField pCameraCentreYREd,
       JSlider pCameraCentreYSlider, JTextField pCameraZoomREd, JSlider pCameraZoomSlider, JTextField pCameraZPosREd, JSlider pCameraZPosSlider,
       JTextField pCameraDOFREd, JSlider pCameraDOFSlider, JTextField pPixelsPerUnitREd, JSlider pPixelsPerUnitSlider,
       JTextField pBrightnessREd, JSlider pBrightnessSlider, JTextField pContrastREd, JSlider pContrastSlider, JTextField pGammaREd, JSlider pGammaSlider,
@@ -460,7 +462,6 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     cameraYawSlider = pCameraYawSlider;
     cameraPerspectiveREd = pCameraPerspectiveREd;
     cameraPerspectiveSlider = pCameraPerspectiveSlider;
-    previewQualityREd = pPreviewQualityREd;
     cameraCentreXREd = pCameraCentreXREd;
     cameraCentreXSlider = pCameraCentreXSlider;
     cameraCentreYREd = pCameraCentreYREd;
@@ -660,7 +661,6 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     scriptTextArea = pScriptTextArea;
 
     animateFramesREd.setText(String.valueOf(prefs.getTinaRenderMovieFrames()));
-    previewQualityREd.setText(String.valueOf(prefs.getTinaRenderRealtimeQuality()));
 
     refreshPaletteColorsTable();
     refreshRenderBatchJobsTable();
@@ -947,7 +947,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
           FlameRenderer renderer = new FlameRenderer(flame, prefs);
           if (pQuickRender) {
             renderer.setProgressUpdater(null);
-            flame.setSampleDensity(Integer.parseInt(previewQualityREd.getText()));
+            flame.setSampleDensity(prefs.getTinaRenderRealtimeQuality());
             flame.setSpatialFilterRadius(0.0);
             flame.setSpatialOversample(1);
             flame.setColorOversample(1);
@@ -1892,12 +1892,6 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     }
   }
 
-  public void previewQualityREd_changed() {
-    if (noRefresh)
-      return;
-    refreshFlameImage(false);
-  }
-
   public void cameraCentreYSlider_stateChanged(ChangeEvent e) {
     flameSliderChanged(cameraCentreYSlider, cameraCentreYREd, "centreY", SLIDER_SCALE_CENTRE);
   }
@@ -2703,74 +2697,15 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
   public void createRandomBatch(int pCount, String pGeneratorname) {
     randomBatch.clear();
     int imgCount = prefs.getTinaRandomBatchSize();
-    final int MAX_IMG_SAMPLES = 10;
-    final double MIN_COVERAGE = 0.33;
     List<SimpleImage> imgList = new ArrayList<SimpleImage>();
     int maxCount = (pCount > 0 ? pCount : imgCount);
     mainProgressUpdater.initProgress(maxCount);
+    RandomFlameGenerator randGen = RandomFlameGeneratorList.getRandomFlameGeneratorInstance(pGeneratorname, true);
+    RandomFlameGeneratorSampler sampler = new RandomFlameGeneratorSampler(IMG_WIDTH, IMG_HEIGHT, prefs, randGen, randomSymmetryCheckBox.isSelected(), randomPostTransformCheckBox.isSelected(), Integer.parseInt(paletteRandomPointsREd.getText()));
     for (int i = 0; i < maxCount; i++) {
-      RenderInfo info = new RenderInfo(IMG_WIDTH, IMG_HEIGHT);
-      Flame bestFlame = null;
-      int bgRed = prefs.getTinaRandomBatchBGColorRed();
-      int bgGreen = prefs.getTinaRandomBatchBGColorGreen();
-      int bgBlue = prefs.getTinaRandomBatchBGColorBlue();
-      double bestCoverage = 0.0;
-      for (int j = 0; j < MAX_IMG_SAMPLES; j++) {
-        // create flame
-        RandomFlameGenerator randGen = RandomFlameGeneratorList.getRandomFlameGeneratorInstance(pGeneratorname, true);
-        Flame flame = randGen.createFlame(prefs, randomSymmetryCheckBox.isSelected(), randomPostTransformCheckBox.isSelected());
-        flame.setWidth(IMG_WIDTH);
-        flame.setHeight(IMG_HEIGHT);
-        flame.setPixelsPerUnit(10);
-        RGBPalette palette = new RandomRGBPaletteGenerator().generatePalette(Integer.parseInt(paletteRandomPointsREd.getText()));
-        flame.setPalette(palette);
-        // render it   
-        flame.setSampleDensity(50);
-        FlameRenderer renderer = new FlameRenderer(flame, prefs);
-        RenderedFlame res = renderer.renderFlame(info);
-        if (j == MAX_IMG_SAMPLES - 1) {
-          randomBatch.add(bestFlame);
-          res = new FlameRenderer(bestFlame, prefs).renderFlame(info);
-          imgList.add(res.getImage());
-        }
-        else {
-          long maxCoverage = info.getImageWidth() * info.getImageHeight();
-          long coverage = 0;
-          Pixel pixel = new Pixel();
-          if (bgRed == 0 && bgGreen == 0 && bgBlue == 0) {
-            for (int k = 0; k < info.getImageHeight(); k++) {
-              for (int l = 0; l < info.getImageWidth(); l++) {
-                pixel.setARGBValue(res.getImage().getARGBValue(l, k));
-                if (pixel.r > 20 || pixel.g > 20 || pixel.b > 20) {
-                  coverage++;
-                }
-              }
-            }
-          }
-          else {
-            for (int k = 0; k < info.getImageHeight(); k++) {
-              for (int l = 0; l < info.getImageWidth(); l++) {
-                pixel.setARGBValue(res.getImage().getARGBValue(l, k));
-                if (Math.abs(pixel.r - bgRed) > 20.0 && Math.abs(pixel.g - bgGreen) > 20.0 && Math.abs(pixel.b - bgBlue) > 20.0) {
-                  coverage++;
-                }
-              }
-            }
-          }
-          double fCoverage = (double) coverage / (double) maxCoverage;
-          if (fCoverage >= MIN_COVERAGE) {
-            randomBatch.add(flame);
-            imgList.add(res.getImage());
-            break;
-          }
-          else {
-            if (bestFlame == null || fCoverage > bestCoverage) {
-              bestFlame = flame;
-              bestCoverage = fCoverage;
-            }
-          }
-        }
-      }
+      RandomFlameGeneratorSample sample = sampler.createSample();
+      randomBatch.add(sample.getFlame());
+      imgList.add(sample.getImage());
       // add it to the main panel
       SimpleImage img = imgList.get(imgList.size() - 1);
       ImagePanel imgPanel = new ImagePanel(img, 0, 0, img.getImageWidth());
@@ -4100,6 +4035,14 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       flamePanel.setDrawVariations(toggleVariationsButton.isSelected());
       refreshFlameImage(false);
     }
+  }
+
+  public TinaInteractiveRendererController getInteractiveRendererCtrl() {
+    return interactiveRendererCtrl;
+  }
+
+  public void setInteractiveRendererCtrl(TinaInteractiveRendererController interactiveRendererCtrl) {
+    this.interactiveRendererCtrl = interactiveRendererCtrl;
   }
 
 }

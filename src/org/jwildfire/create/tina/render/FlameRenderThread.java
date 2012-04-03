@@ -16,6 +16,8 @@
 */
 package org.jwildfire.create.tina.render;
 
+import java.util.List;
+
 import org.jwildfire.create.tina.base.Constants;
 import org.jwildfire.create.tina.base.DrawMode;
 import org.jwildfire.create.tina.base.Flame;
@@ -69,6 +71,7 @@ public final class FlameRenderThread implements Runnable {
   }
 
   private void iterate_flat() {
+    List<IterationObserver> observers = renderer.getIterationObservers();
     FlameTransformationContext ctx = renderer.getFlameTransformationContext();
     XYZPoint affineT = new XYZPoint(); // affine part of the transformation
     XYZPoint varT = new XYZPoint(); // complete transformation
@@ -91,7 +94,7 @@ public final class FlameRenderThread implements Runnable {
     final double cosa = renderer.cosa;
     final double sina = renderer.sina;
 
-    for (long i = 0; i < samples; i++) {
+    for (long i = 0; samples < 0 || i < samples; i++) {
       if (i % 100 == 0) {
         currSample = i;
       }
@@ -146,10 +149,17 @@ public final class FlameRenderThread implements Runnable {
         rp.blue += color.blue;
       }
       rp.count++;
+      if (observers != null && observers.size() > 0) {
+        IterationInfo info = new IterationInfo(xIdx, yIdx, rp);
+        for (IterationObserver observer : observers) {
+          observer.notifyIterationFinished(info);
+        }
+      }
     }
   }
 
   private void iterate_blur() {
+    List<IterationObserver> observers = renderer.getIterationObservers();
     FlameTransformationContext ctx = renderer.getFlameTransformationContext();
     XYZPoint affineT = new XYZPoint(); // affine part of the transformation
     XYZPoint varT = new XYZPoint(); // complete transformation
@@ -182,7 +192,7 @@ public final class FlameRenderThread implements Runnable {
     int rasterWidth = renderer.rasterWidth;
     int rasterHeight = renderer.rasterHeight;
 
-    for (long i = 0; i < samples; i++) {
+    for (long i = 0; samples < 0 || i < samples; i++) {
       if (i % 100 == 0) {
         currSample = i;
       }
@@ -248,6 +258,12 @@ public final class FlameRenderThread implements Runnable {
                 rp.green += color.green * scl;
                 rp.blue += color.blue * scl;
                 rp.count++;
+                if (observers != null && observers.size() > 0) {
+                  IterationInfo info = new IterationInfo(k, l, rp);
+                  for (IterationObserver observer : observers) {
+                    observer.notifyIterationFinished(info);
+                  }
+                }
               }
             }
           }
@@ -259,11 +275,18 @@ public final class FlameRenderThread implements Runnable {
         rp.green += color.green;
         rp.blue += color.blue;
         rp.count++;
+        if (observers != null && observers.size() > 0) {
+          IterationInfo info = new IterationInfo(xIdx, yIdx, rp);
+          for (IterationObserver observer : observers) {
+            observer.notifyIterationFinished(info);
+          }
+        }
       }
     }
   }
 
   private void iterate_pseudo3D() {
+    List<IterationObserver> observers = renderer.getIterationObservers();
     FlameTransformationContext ctx = renderer.getFlameTransformationContext();
     Pseudo3DShader shader = new Pseudo3DShader(flame.getShadingInfo());
     shader.init();
@@ -302,7 +325,7 @@ public final class FlameRenderThread implements Runnable {
       }
     }
 
-    for (long i = 0; i < samples; i++) {
+    for (long i = 0; samples < 0 || i < samples; i++) {
       if (i % 100 == 0) {
         currSample = i;
       }
@@ -344,7 +367,9 @@ public final class FlameRenderThread implements Runnable {
       if ((py < 0) || (py > renderer.camH))
         continue;
 
-      RasterPoint rp = renderer.raster[(int) (renderer.bhs * py + 0.5)][(int) (renderer.bws * px + 0.5)];
+      int xIdx = (int) (renderer.bhs * py + 0.5);
+      int yIdx = (int) (renderer.bws * px + 0.5);
+      RasterPoint rp = renderer.raster[xIdx][yIdx];
       RenderColor color;
       if (p[0].rgbColor) {
         color = new RenderColor();
@@ -361,6 +386,12 @@ public final class FlameRenderThread implements Runnable {
       rp.green += shadedColor.green;
       rp.blue += shadedColor.blue;
       rp.count++;
+      if (observers != null && observers.size() > 0) {
+        IterationInfo info = new IterationInfo(xIdx, yIdx, rp);
+        for (IterationObserver observer : observers) {
+          observer.notifyIterationFinished(info);
+        }
+      }
     }
   }
 

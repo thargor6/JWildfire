@@ -80,6 +80,18 @@ public final class FlameRenderer {
   private final Flame flame;
   private final Prefs prefs;
 
+  private List<IterationObserver> iterationObservers;
+
+  public void registerIterationObserver(IterationObserver pObserver) {
+    if (iterationObservers == null) {
+      iterationObservers = new ArrayList<IterationObserver>();
+    }
+    else if (iterationObservers.indexOf(pObserver) >= 0) {
+      return;
+    }
+    iterationObservers.add(pObserver);
+  }
+
   public FlameRenderer(Flame pFlame, Prefs pPrefs) {
     flame = pFlame;
     prefs = pPrefs;
@@ -148,6 +160,20 @@ public final class FlameRenderer {
       pPoint.x = px / zr;
       pPoint.y = py / zr;
     }
+  }
+
+  public List<FlameRenderThread> startRenderFlame(RenderInfo pRenderInfo) {
+    initRaster(pRenderInfo.getImageWidth(), pRenderInfo.getImageHeight());
+    init3D();
+    createColorMap();
+    initView();
+    List<Flame> renderFlames = new ArrayList<Flame>();
+    for (int t = 0; t < prefs.getTinaRenderThreads(); t++) {
+      Flame renderFlame = flame.makeCopy();
+      renderFlames.add(renderFlame);
+      renderFlame.refreshModWeightTables(flameTransformationContext);
+    }
+    return startIterate(renderFlames);
   }
 
   public RenderedFlame renderFlame(RenderInfo pRenderInfo) {
@@ -445,7 +471,6 @@ public final class FlameRenderer {
     logDensityFilter.setRaster(raster, rasterWidth, rasterHeight, pImage.getImageWidth(), pImage.getImageHeight());
     if (renderScale == 2) {
       SimpleImage newImg = new SimpleImage(pImage.getImageWidth() * renderScale, pImage.getImageHeight() * renderScale);
-
       for (int i = 0; i < pImage.getImageHeight(); i++) {
         for (int j = 0; j < pImage.getImageWidth(); j++) {
           logDensityFilter.transformPointSimple(logDensityPnt, j, i);
@@ -457,7 +482,6 @@ public final class FlameRenderer {
           newImg.setRGB(x + 1, y, rbgPoint.red, rbgPoint.green, rbgPoint.blue);
           newImg.setRGB(x, y + 1, rbgPoint.red, rbgPoint.green, rbgPoint.blue);
           newImg.setRGB(x + 1, y + 1, rbgPoint.red, rbgPoint.green, rbgPoint.blue);
-
         }
       }
       pImage.setBufferedImage(newImg.getBufferedImg(), newImg.getImageWidth(), newImg.getImageHeight());
@@ -524,6 +548,17 @@ public final class FlameRenderer {
         }
       }
     }
+  }
+
+  private List<FlameRenderThread> startIterate(List<Flame> pFlames) {
+    List<FlameRenderThread> threads = new ArrayList<FlameRenderThread>();
+    int nThreads = pFlames.size();
+    for (int i = 0; i < nThreads; i++) {
+      FlameRenderThread t = new FlameRenderThread(this, pFlames.get(i), -1);
+      threads.add(t);
+      new Thread(t).start();
+    }
+    return threads;
   }
 
   private void initView() {
@@ -598,6 +633,10 @@ public final class FlameRenderer {
 
   public RenderColor[] getColorMap() {
     return colorMap;
+  }
+
+  protected List<IterationObserver> getIterationObservers() {
+    return iterationObservers;
   }
 
 }
