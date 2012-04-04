@@ -555,6 +555,7 @@ public final class FlameRenderer {
     int nThreads = pFlames.size();
     for (int i = 0; i < nThreads; i++) {
       FlameRenderThread t = new FlameRenderThread(this, pFlames.get(i), -1);
+      t.setTonemapper(new SampleTonemapper(flame, raster, rasterWidth, rasterHeight, imageWidth, imageHeight));
       threads.add(t);
       new Thread(t).start();
     }

@@ -32,6 +32,7 @@ public final class FlameRenderThread implements Runnable {
   private final Flame flame;
   private final long samples;
   private volatile long currSample;
+  private SampleTonemapper tonemapper;
 
   private boolean finished;
 
@@ -150,9 +151,8 @@ public final class FlameRenderThread implements Runnable {
       }
       rp.count++;
       if (observers != null && observers.size() > 0) {
-        IterationInfo info = new IterationInfo(xIdx, yIdx, rp);
         for (IterationObserver observer : observers) {
-          observer.notifyIterationFinished(info);
+          observer.notifyIterationFinished(this, xIdx, yIdx);
         }
       }
     }
@@ -259,9 +259,8 @@ public final class FlameRenderThread implements Runnable {
                 rp.blue += color.blue * scl;
                 rp.count++;
                 if (observers != null && observers.size() > 0) {
-                  IterationInfo info = new IterationInfo(k, l, rp);
                   for (IterationObserver observer : observers) {
-                    observer.notifyIterationFinished(info);
+                    observer.notifyIterationFinished(this, k, l);
                   }
                 }
               }
@@ -276,9 +275,8 @@ public final class FlameRenderThread implements Runnable {
         rp.blue += color.blue;
         rp.count++;
         if (observers != null && observers.size() > 0) {
-          IterationInfo info = new IterationInfo(xIdx, yIdx, rp);
           for (IterationObserver observer : observers) {
-            observer.notifyIterationFinished(info);
+            observer.notifyIterationFinished(this, xIdx, yIdx);
           }
         }
       }
@@ -387,9 +385,8 @@ public final class FlameRenderThread implements Runnable {
       rp.blue += shadedColor.blue;
       rp.count++;
       if (observers != null && observers.size() > 0) {
-        IterationInfo info = new IterationInfo(xIdx, yIdx, rp);
         for (IterationObserver observer : observers) {
-          observer.notifyIterationFinished(info);
+          observer.notifyIterationFinished(this, xIdx, yIdx);
         }
       }
     }
@@ -401,6 +398,14 @@ public final class FlameRenderThread implements Runnable {
 
   public boolean isFinished() {
     return finished;
+  }
+
+  public SampleTonemapper getTonemapper() {
+    return tonemapper;
+  }
+
+  protected void setTonemapper(SampleTonemapper tonemapper) {
+    this.tonemapper = tonemapper;
   }
 
 }

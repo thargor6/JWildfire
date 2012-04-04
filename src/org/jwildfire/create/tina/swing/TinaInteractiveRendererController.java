@@ -31,10 +31,8 @@ import org.jwildfire.create.tina.randomflame.AllRandomFlameGenerator;
 import org.jwildfire.create.tina.randomflame.RandomFlameGeneratorSampler;
 import org.jwildfire.create.tina.render.FlameRenderThread;
 import org.jwildfire.create.tina.render.FlameRenderer;
-import org.jwildfire.create.tina.render.IterationInfo;
 import org.jwildfire.create.tina.render.IterationObserver;
 import org.jwildfire.create.tina.render.RenderInfo;
-import org.jwildfire.image.Pixel;
 import org.jwildfire.image.SimpleImage;
 import org.jwildfire.swing.ErrorHandler;
 import org.jwildfire.swing.ImagePanel;
@@ -87,8 +85,8 @@ public class TinaInteractiveRendererController implements IterationObserver {
       imageScrollPane = null;
     }
 
-    int width = prefs.getTinaRenderImageWidth();
-    int height = prefs.getTinaRenderImageHeight();
+    int width = prefs.getTinaRenderImageWidth() / 2;
+    int height = prefs.getTinaRenderImageHeight() / 2;
     image = new SimpleImage(width, height);
     image.fillBackground(0, 0, 0);
     ImagePanel imagePanel = new ImagePanel(image, 0, 0, image.getImageWidth());
@@ -133,8 +131,8 @@ public class TinaInteractiveRendererController implements IterationObserver {
   }
 
   public void renderButton_clicked() {
-    int width = prefs.getTinaRenderImageWidth();
-    int height = prefs.getTinaRenderImageHeight();
+    int width = prefs.getTinaRenderImageWidth() / 2;
+    int height = prefs.getTinaRenderImageHeight() / 2;
     RenderInfo info = new RenderInfo(width, height);
     Flame flame = getCurrFlame();
     double wScl = (double) info.getImageWidth() / (double) flame.getWidth();
@@ -189,18 +187,18 @@ public class TinaInteractiveRendererController implements IterationObserver {
     return currFlame;
   }
 
+  private long smpl = 0;
+
   @Override
-  public void notifyIterationFinished(IterationInfo pIterationInfo) {
-    int x = pIterationInfo.getX();
-    int y = pIterationInfo.getY();
+  public void notifyIterationFinished(FlameRenderThread pEventSource, int pX, int pY) {
+    int x = pX;
+    int y = pY;
     if (x >= 0 && x < image.getImageWidth() && y >= 0 && y < image.getImageHeight()) {
-      Pixel toolPixel = new Pixel();
-      toolPixel.r = 255;
-      toolPixel.g = 155;
-      toolPixel.b = 55;
-      image.setARGB(x, y, toolPixel.getARGBValue());
-      imageRootPanel.validate();
-      imageRootPanel.repaint();
+      image.setARGB(x, y, pEventSource.getTonemapper().tonemapSample(pX, pY));
+      if (smpl++ % 1000 == 0) {
+        imageRootPanel.validate();
+        imageRootPanel.repaint();
+      }
     }
   }
 

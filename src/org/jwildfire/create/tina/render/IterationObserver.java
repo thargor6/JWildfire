@@ -17,6 +17,6 @@
 package org.jwildfire.create.tina.render;
 
 public interface IterationObserver {
-  public void notifyIterationFinished(IterationInfo pIterationInfo);
+  public void notifyIterationFinished(FlameRenderThread pEventSource, int pX, int pY);
 
 }
