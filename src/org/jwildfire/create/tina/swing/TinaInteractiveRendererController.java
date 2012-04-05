@@ -17,9 +17,17 @@
 package org.jwildfire.create.tina.swing;
 
 import java.awt.BorderLayout;
+import java.awt.Toolkit;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.StringSelection;
+import java.awt.datatransfer.Transferable;
+import java.io.File;
 import java.util.List;
 
 import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -27,6 +35,8 @@ import javax.swing.ScrollPaneConstants;
 
 import org.jwildfire.base.Prefs;
 import org.jwildfire.create.tina.base.Flame;
+import org.jwildfire.create.tina.io.Flam3Reader;
+import org.jwildfire.create.tina.io.Flam3Writer;
 import org.jwildfire.create.tina.randomflame.AllRandomFlameGenerator;
 import org.jwildfire.create.tina.randomflame.RandomFlameGeneratorSampler;
 import org.jwildfire.create.tina.render.FlameRenderThread;
@@ -45,38 +55,48 @@ public class TinaInteractiveRendererController implements IterationObserver {
   private final TinaController parentCtrl;
   private final Prefs prefs;
   private final ErrorHandler errorHandler;
-  private final JButton randomButton;
-  private final JButton fromClipboardButton;
   private final JButton loadFlameButton;
-  private final JButton renderButton;
+  private final JButton fromClipboardButton;
+  private final JButton clearScreenButton;
+  private final JButton nextButton;
   private final JButton stopButton;
-  private final JButton refreshButton;
+  private final JButton toClipboardButton;
   private final JButton saveImageButton;
+  private final JButton saveFlameButton;
+  private final JComboBox randomStyleCmb;
+
   private final JPanel imageRootPanel;
   private JScrollPane imageScrollPane;
   private final JTextArea statsTextArea;
   private SimpleImage image;
   private Flame currFlame;
+  List<FlameRenderThread> threads;
   private State state = State.IDLE;
 
   public TinaInteractiveRendererController(TinaController pParentCtrl, ErrorHandler pErrorHandler, Prefs pPrefs,
-      JButton pRandomButton, JButton pFromClipboardButton, JButton pLoadFlameButton, JButton pRenderButton,
-      JButton pStopButton, JButton pRefreshButton, JButton pSaveImageButton, JPanel pImagePanel,
-      JTextArea pStatsTextArea) {
+      JButton pLoadFlameButton, JButton pFromClipboardButton, JButton pClearScreenButton, JButton pNextButton,
+      JButton pStopButton, JButton pToClipboardButton, JButton pSaveImageButton, JButton pSaveFlameButton,
+      JComboBox pRandomStyleCmb, JPanel pImagePanel, JTextArea pStatsTextArea) {
     parentCtrl = pParentCtrl;
     prefs = pPrefs;
     errorHandler = pErrorHandler;
-    randomButton = pRandomButton;
-    fromClipboardButton = pFromClipboardButton;
+
     loadFlameButton = pLoadFlameButton;
-    renderButton = pRenderButton;
+    fromClipboardButton = pFromClipboardButton;
+    clearScreenButton = pClearScreenButton;
+    nextButton = pNextButton;
     stopButton = pStopButton;
-    refreshButton = pRefreshButton;
+    toClipboardButton = pToClipboardButton;
     saveImageButton = pSaveImageButton;
+    saveFlameButton = pSaveFlameButton;
+    randomStyleCmb = pRandomStyleCmb;
+
     imageRootPanel = pImagePanel;
     refreshImagePanel();
     statsTextArea = pStatsTextArea;
     state = State.IDLE;
+    genRandomFlame();
+    enableControls();
   }
 
   private void refreshImagePanel() {
@@ -88,7 +108,7 @@ public class TinaInteractiveRendererController implements IterationObserver {
     int width = prefs.getTinaRenderImageWidth() / 2;
     int height = prefs.getTinaRenderImageHeight() / 2;
     image = new SimpleImage(width, height);
-    image.fillBackground(0, 0, 0);
+    image.fillBackground(prefs.getTinaRandomBatchBGColorRed(), prefs.getTinaRandomBatchBGColorGreen(), prefs.getTinaRandomBatchBGColorBlue());
     ImagePanel imagePanel = new ImagePanel(image, 0, 0, image.getImageWidth());
     imagePanel.setSize(image.getImageWidth(), image.getImageHeight());
 
@@ -102,32 +122,74 @@ public class TinaInteractiveRendererController implements IterationObserver {
   }
 
   public void enableControls() {
-    randomButton.setEnabled(state == State.IDLE);
-    fromClipboardButton.setEnabled(state == State.IDLE);
-    loadFlameButton.setEnabled(state == State.IDLE);
-    renderButton.setEnabled(state == State.IDLE && currFlame != null);
+    saveImageButton.setEnabled(image != null);
     stopButton.setEnabled(state == State.RENDER);
-    refreshButton.setEnabled(state == State.RENDER);
-    saveImageButton.setEnabled(state == State.IDLE && image != null);
   }
 
-  public void randomButton_clicked() {
+  public void genRandomFlame() {
     final int IMG_WIDTH = 80;
     final int IMG_HEIGHT = 60;
     final int PALETTE_SIZE = 11;
     RandomFlameGeneratorSampler sampler = new RandomFlameGeneratorSampler(IMG_WIDTH, IMG_HEIGHT, prefs, new AllRandomFlameGenerator(), false, false, PALETTE_SIZE);
     currFlame = sampler.createSample().getFlame();
-    enableControls();
   }
 
   public void fromClipboardButton_clicked() {
-    // TODO Auto-generated method stub
+    Flame newFlame = null;
+    try {
+      Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+      Transferable clipData = clipboard.getContents(clipboard);
+      if (clipData != null) {
+        if (clipData.isDataFlavorSupported(DataFlavor.stringFlavor)) {
+          String xml = (String) (clipData.getTransferData(
+              DataFlavor.stringFlavor));
+          List<Flame> flames = new Flam3Reader().readFlamesfromXML(xml);
+          if (flames.size() > 0) {
+            newFlame = flames.get(0);
+          }
+        }
+      }
+      if (newFlame == null) {
+        throw new Exception("There is currently no valid flame in the clipboard");
+      }
+      else {
+        currFlame = newFlame;
+        cancelRender();
+        renderButton_clicked();
+        enableControls();
+      }
+    }
+    catch (Throwable ex) {
+      errorHandler.handleError(ex);
+    }
 
   }
 
   public void loadFlameButton_clicked() {
-    // TODO Auto-generated method stub
-
+    try {
+      JFileChooser chooser = new FlameFileChooser(prefs);
+      if (prefs.getInputFlamePath() != null) {
+        try {
+          chooser.setCurrentDirectory(new File(prefs.getInputFlamePath()));
+        }
+        catch (Exception ex) {
+          ex.printStackTrace();
+        }
+      }
+      if (chooser.showOpenDialog(imageRootPanel) == JFileChooser.APPROVE_OPTION) {
+        File file = chooser.getSelectedFile();
+        List<Flame> flames = new Flam3Reader().readFlames(file.getAbsolutePath());
+        Flame newFlame = flames.get(0);
+        prefs.setLastInputFlameFile(file);
+        currFlame = newFlame;
+        cancelRender();
+        renderButton_clicked();
+        enableControls();
+      }
+    }
+    catch (Throwable ex) {
+      errorHandler.handleError(ex);
+    }
   }
 
   public void renderButton_clicked() {
@@ -149,7 +211,7 @@ public class TinaInteractiveRendererController implements IterationObserver {
       flame.setSpatialFilterRadius(prefs.getTinaRenderNormalSpatialOversample());
       FlameRenderer renderer = new FlameRenderer(flame, prefs);
       renderer.registerIterationObserver(this);
-      List<FlameRenderThread> threads = renderer.startRenderFlame(info);
+      threads = renderer.startRenderFlame(info);
 
       //      RenderedFlame res = renderer.renderFlame(info);
       //      new ImageWriter().saveImage(res.getImage(), file.getAbsolutePath());
@@ -169,13 +231,33 @@ public class TinaInteractiveRendererController implements IterationObserver {
   }
 
   public void stopButton_clicked() {
-    // TODO Auto-generated method stub
-
+    cancelRender();
+    enableControls();
   }
 
-  public void refreshButton_clicked() {
-    // TODO Auto-generated method stub
-
+  private void cancelRender() {
+    if (state == State.RENDER) {
+      while (true) {
+        boolean done = true;
+        for (FlameRenderThread thread : threads) {
+          if (!thread.isFinished()) {
+            done = false;
+            thread.cancel();
+            try {
+              Thread.sleep(1);
+            }
+            catch (InterruptedException e) {
+              e.printStackTrace();
+            }
+            break;
+          }
+        }
+        if (done) {
+          break;
+        }
+      }
+      state = State.IDLE;
+    }
   }
 
   public void saveImageButton_clicked() {
@@ -187,6 +269,7 @@ public class TinaInteractiveRendererController implements IterationObserver {
     return currFlame;
   }
 
+  // TODO stats
   private long smpl = 0;
 
   @Override
@@ -196,9 +279,60 @@ public class TinaInteractiveRendererController implements IterationObserver {
     if (x >= 0 && x < image.getImageWidth() && y >= 0 && y < image.getImageHeight()) {
       image.setARGB(x, y, pEventSource.getTonemapper().tonemapSample(pX, pY));
       if (smpl++ % 1000 == 0) {
-        imageRootPanel.validate();
         imageRootPanel.repaint();
       }
+    }
+  }
+
+  public void nextButton_clicked() {
+    cancelRender();
+    genRandomFlame();
+    renderButton_clicked();
+    enableControls();
+  }
+
+  public void clearScreenButton_clicked() {
+    image.fillBackground(prefs.getTinaRandomBatchBGColorRed(), prefs.getTinaRandomBatchBGColorGreen(), prefs.getTinaRandomBatchBGColorBlue());
+    imageRootPanel.repaint();
+  }
+
+  public void saveFlameButton_clicked() {
+    try {
+      Flame currFlame = getCurrFlame();
+      if (currFlame != null) {
+        JFileChooser chooser = new FlameFileChooser(prefs);
+        if (prefs.getOutputFlamePath() != null) {
+          try {
+            chooser.setCurrentDirectory(new File(prefs.getOutputFlamePath()));
+          }
+          catch (Exception ex) {
+            ex.printStackTrace();
+          }
+        }
+        if (chooser.showSaveDialog(imageRootPanel) == JFileChooser.APPROVE_OPTION) {
+          File file = chooser.getSelectedFile();
+          new Flam3Writer().writeFlame(currFlame, file.getAbsolutePath());
+          prefs.setLastOutputFlameFile(file);
+        }
+      }
+    }
+    catch (Throwable ex) {
+      errorHandler.handleError(ex);
+    }
+  }
+
+  public void toClipboardButton_clicked() {
+    try {
+      Flame currFlame = getCurrFlame();
+      if (currFlame != null) {
+        Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+        String xml = new Flam3Writer().getFlameXML(currFlame);
+        StringSelection data = new StringSelection(xml);
+        clipboard.setContents(data, data);
+      }
+    }
+    catch (Throwable ex) {
+      errorHandler.handleError(ex);
     }
   }
 

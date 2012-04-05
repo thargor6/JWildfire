@@ -33,7 +33,7 @@ public final class FlameRenderThread implements Runnable {
   private final long samples;
   private volatile long currSample;
   private SampleTonemapper tonemapper;
-
+  private boolean forceAbort;
   private boolean finished;
 
   public FlameRenderThread(FlameRenderer pRenderer, Flame pFlame, long pSamples) {
@@ -44,7 +44,7 @@ public final class FlameRenderThread implements Runnable {
 
   @Override
   public void run() {
-    finished = false;
+    finished = forceAbort = false;
     try {
       try {
         switch (flame.getShadingInfo().getShading()) {
@@ -95,7 +95,7 @@ public final class FlameRenderThread implements Runnable {
     final double cosa = renderer.cosa;
     final double sina = renderer.sina;
 
-    for (long i = 0; samples < 0 || i < samples; i++) {
+    for (long i = 0; !forceAbort && (samples < 0 || i < samples); i++) {
       if (i % 100 == 0) {
         currSample = i;
       }
@@ -192,7 +192,7 @@ public final class FlameRenderThread implements Runnable {
     int rasterWidth = renderer.rasterWidth;
     int rasterHeight = renderer.rasterHeight;
 
-    for (long i = 0; samples < 0 || i < samples; i++) {
+    for (long i = 0; !forceAbort && (samples < 0 || i < samples); i++) {
       if (i % 100 == 0) {
         currSample = i;
       }
@@ -323,7 +323,7 @@ public final class FlameRenderThread implements Runnable {
       }
     }
 
-    for (long i = 0; samples < 0 || i < samples; i++) {
+    for (long i = 0; !forceAbort && (samples < 0 || i < samples); i++) {
       if (i % 100 == 0) {
         currSample = i;
       }
@@ -406,6 +406,10 @@ public final class FlameRenderThread implements Runnable {
 
   protected void setTonemapper(SampleTonemapper tonemapper) {
     this.tonemapper = tonemapper;
+  }
+
+  public void cancel() {
+    forceAbort = true;
   }
 
 }
