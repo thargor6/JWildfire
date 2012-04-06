@@ -225,7 +225,8 @@ public class VariationFuncList {
     registerVariationFunc(WaffleFunc.class);
     registerVariationFunc(UnpolarFunc.class);
     registerVariationFunc(ChecksFunc.class);
-    registerVariationFunc(BilinearFunc.class);
+    registerVariationFunc(BiLinearFunc.class);
+    registerVariationFunc(FarBlurFunc.class);
   }
 
   private static void registerVariationFunc(
