@@ -2152,13 +2152,13 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
               flame.setSampleDensity(prefs.getTinaRenderHighQuality());
               flame.setSpatialOversample(prefs.getTinaRenderHighSpatialOversample());
               flame.setColorOversample(prefs.getTinaRenderHighColorOversample());
-              flame.setSpatialFilterRadius(prefs.getTinaRenderHighSpatialOversample());
+              flame.setSpatialFilterRadius(prefs.getTinaRenderHighFilterRadius());
             }
             else {
               flame.setSampleDensity(prefs.getTinaRenderNormalQuality());
               flame.setSpatialOversample(prefs.getTinaRenderNormalSpatialOversample());
               flame.setColorOversample(prefs.getTinaRenderNormalColorOversample());
-              flame.setSpatialFilterRadius(prefs.getTinaRenderNormalSpatialOversample());
+              flame.setSpatialFilterRadius(prefs.getTinaRenderNormalFilterRadius());
             }
             long t0 = Calendar.getInstance().getTimeInMillis();
             FlameRenderer renderer = new FlameRenderer(flame, prefs);
