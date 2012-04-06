@@ -1,3 +1,15 @@
+V0.43 (06.04.2012):
+ - Fractal flame editor: First working version of the interactive renderer
+ - Fractal flame editor: FIXED: filter radius was always set to high in rendering
+ - Fractal flame editor: refactoring of the random flame generators
+ - Fractal flame editor: minor enhancements to the bubbles random flame generator
+ - Fractal flame editor: bi_linear variation  by Shortgreenpigg
+ - Fractal flames editor: checks plugin by by Keeps and Xyrus02
+ - Fractal flame editor: unpolar plugin by Michael Faber
+ - Fractal flame editor: waffle variation by Jed Kelsey
+ - Fractal flame editor: Lissajous variation by Jed Kelsey
+ - Fractal flame editor: maximize button for the UI as suggested by neoshamballa
+
 V0.42 (31.03.2012):
  - Fractal flame editor: npolar variation by Xyrus02
  - Fractal flame editor: new JulianDisc random flame generator
