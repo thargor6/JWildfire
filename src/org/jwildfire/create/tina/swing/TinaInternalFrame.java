@@ -2989,7 +2989,8 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaController.setInteractiveRendererCtrl(new TinaInteractiveRendererController(tinaController, pErrorHandler, pPrefs,
           getInteractiveLoadFlameButton(), getInteractiveLoadFlameFromClipboardButton(), getInteractiveClearScreenButton(),
           getInteractiveNextButton(), getInteractiveStopButton(), getInteractiveFlameToClipboardButton(), getInteractiveSaveImageButton(),
-          getInteractiveSaveFlameButton(), getInteractiveRandomStyleCmb(), getInteractiveCenterTopPanel(), getInteractiveStatsTextArea()));
+          getInteractiveSaveFlameButton(), getInteractiveRandomStyleCmb(), getInteractiveCenterTopPanel(), getInteractiveStatsTextArea(),
+          getInteractiveHalveSizeButton()));
       tinaController.getInteractiveRendererCtrl().enableControls();
     }
     finally {
@@ -8186,6 +8187,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JTextArea interactiveStatsTextArea;
   private JComboBox interactiveRandomStyleCmb;
   private JButton interactiveClearScreenButton;
+  private JToggleButton interactiveHalveSizeButton;
 
   private JTextPane getHelpPane() {
     if (helpPane == null) {
@@ -9032,8 +9034,22 @@ public class TinaInternalFrame extends JInternalFrame {
       interactiveClearScreenButton.setPreferredSize(new Dimension(125, 32));
       interactiveClearScreenButton.setFont(new Font("Dialog", Font.BOLD, 10));
       interactiveClearScreenButton.setBounds(new Rectangle(8, 8, 125, 24));
-      interactiveClearScreenButton.setBounds(137, 32, 125, 24);
+      interactiveClearScreenButton.setBounds(348, 32, 125, 24);
       interactiveNorthPanel.add(interactiveClearScreenButton);
+
+      interactiveHalveSizeButton = new JToggleButton();
+      interactiveHalveSizeButton.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getInteractiveRendererCtrl().halveSizeButton_clicked();
+        }
+      });
+      interactiveHalveSizeButton.setToolTipText("Switch to halve render resolution (to get rid of scroll bars in exploration mode)");
+      interactiveHalveSizeButton.setText("Halve size");
+      interactiveHalveSizeButton.setPreferredSize(new Dimension(42, 24));
+      interactiveHalveSizeButton.setMnemonic(KeyEvent.VK_M);
+      interactiveHalveSizeButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      interactiveHalveSizeButton.setBounds(208, 32, 130, 24);
+      interactiveNorthPanel.add(interactiveHalveSizeButton);
     }
     return interactiveNorthPanel;
   }
@@ -9132,7 +9148,7 @@ public class TinaInternalFrame extends JInternalFrame {
       interactiveFlameToClipboardButton.setPreferredSize(new Dimension(125, 24));
       interactiveFlameToClipboardButton.setMnemonic(KeyEvent.VK_D);
       interactiveFlameToClipboardButton.setFont(new Font("Dialog", Font.BOLD, 10));
-      interactiveFlameToClipboardButton.setBounds(new Rectangle(905, 8, 125, 24));
+      interactiveFlameToClipboardButton.setBounds(new Rectangle(806, 8, 125, 24));
     }
     return interactiveFlameToClipboardButton;
   }
@@ -9166,7 +9182,7 @@ public class TinaInternalFrame extends JInternalFrame {
       interactiveSaveFlameButton.setPreferredSize(new Dimension(125, 24));
       interactiveSaveFlameButton.setMnemonic(KeyEvent.VK_D);
       interactiveSaveFlameButton.setFont(new Font("Dialog", Font.BOLD, 10));
-      interactiveSaveFlameButton.setBounds(new Rectangle(905, 32, 125, 24));
+      interactiveSaveFlameButton.setBounds(new Rectangle(806, 32, 125, 24));
     }
     return interactiveSaveFlameButton;
   }
@@ -9192,9 +9208,9 @@ public class TinaInternalFrame extends JInternalFrame {
     if (interactiveCenterSplitPane == null) {
       interactiveCenterSplitPane = new JSplitPane();
       interactiveCenterSplitPane.setDividerSize(6);
-      interactiveCenterSplitPane.setLeftComponent(getInteractiveCenterTopPanel());
-      interactiveCenterSplitPane.setRightComponent(getInteractiveCenterSouthPanel());
-      interactiveCenterSplitPane.setDividerLocation(900);
+      interactiveCenterSplitPane.setLeftComponent(getInteractiveCenterSouthPanel());
+      interactiveCenterSplitPane.setRightComponent(getInteractiveCenterTopPanel());
+      interactiveCenterSplitPane.setDividerLocation(200);
     }
     return interactiveCenterSplitPane;
   }
@@ -9238,5 +9254,9 @@ public class TinaInternalFrame extends JInternalFrame {
 
   public JButton getInteractiveClearScreenButton() {
     return interactiveClearScreenButton;
+  }
+
+  public JToggleButton getInteractiveHalveSizeButton() {
+    return interactiveHalveSizeButton;
   }
 } //  @jve:decl-index=0:visual-constraint="10,10"

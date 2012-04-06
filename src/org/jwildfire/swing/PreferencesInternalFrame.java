@@ -39,8 +39,8 @@ public class PreferencesInternalFrame extends JInternalFrame {
    * @return void
    */
   private void initialize() {
-    this.setSize(600, 440);
-    this.setLocation(300, 100);
+    this.setSize(800, 600);
+    this.setLocation(200, 80);
     this.setTitle("Preferences");
     this.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
     this.setContentPane(getJContentPane());

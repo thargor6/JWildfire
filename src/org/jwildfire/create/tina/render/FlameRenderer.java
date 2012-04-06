@@ -76,6 +76,7 @@ public final class FlameRenderer {
   private ProgressUpdater progressUpdater;
   // 
   private final FlameTransformationContext flameTransformationContext;
+  private RenderInfo renderInfo;
 
   private final Flame flame;
   private final Prefs prefs;
@@ -163,6 +164,7 @@ public final class FlameRenderer {
   }
 
   public List<FlameRenderThread> startRenderFlame(RenderInfo pRenderInfo) {
+    renderInfo = pRenderInfo;
     initRaster(pRenderInfo.getImageWidth(), pRenderInfo.getImageHeight());
     init3D();
     createColorMap();
@@ -174,6 +176,16 @@ public final class FlameRenderer {
       renderFlame.refreshModWeightTables(flameTransformationContext);
     }
     return startIterate(renderFlames);
+  }
+
+  public RenderedFlame finishRenderFlame() {
+    if (renderInfo == null) {
+      throw new IllegalStateException();
+    }
+    RenderedFlame res = new RenderedFlame();
+    res.init(renderInfo);
+    renderImage(res.getImage(), res.getHDRImage(), res.getHDRIntensityMap());
+    return res;
   }
 
   public RenderedFlame renderFlame(RenderInfo pRenderInfo) {

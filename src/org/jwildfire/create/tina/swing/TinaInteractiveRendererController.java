@@ -17,6 +17,7 @@
 package org.jwildfire.create.tina.swing;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.DataFlavor;
@@ -31,20 +32,25 @@ import javax.swing.JFileChooser;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.JToggleButton;
 import javax.swing.ScrollPaneConstants;
 
 import org.jwildfire.base.Prefs;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.io.Flam3Reader;
 import org.jwildfire.create.tina.io.Flam3Writer;
-import org.jwildfire.create.tina.randomflame.AllRandomFlameGenerator;
+import org.jwildfire.create.tina.randomflame.RandomFlameGenerator;
+import org.jwildfire.create.tina.randomflame.RandomFlameGeneratorList;
 import org.jwildfire.create.tina.randomflame.RandomFlameGeneratorSampler;
 import org.jwildfire.create.tina.render.FlameRenderThread;
 import org.jwildfire.create.tina.render.FlameRenderer;
 import org.jwildfire.create.tina.render.IterationObserver;
 import org.jwildfire.create.tina.render.RenderInfo;
+import org.jwildfire.create.tina.render.RenderedFlame;
 import org.jwildfire.image.SimpleImage;
+import org.jwildfire.io.ImageWriter;
 import org.jwildfire.swing.ErrorHandler;
+import org.jwildfire.swing.ImageFileChooser;
 import org.jwildfire.swing.ImagePanel;
 
 public class TinaInteractiveRendererController implements IterationObserver {
@@ -64,19 +70,21 @@ public class TinaInteractiveRendererController implements IterationObserver {
   private final JButton saveImageButton;
   private final JButton saveFlameButton;
   private final JComboBox randomStyleCmb;
+  private final JToggleButton halveSizeButton;
 
   private final JPanel imageRootPanel;
   private JScrollPane imageScrollPane;
   private final JTextArea statsTextArea;
   private SimpleImage image;
   private Flame currFlame;
-  List<FlameRenderThread> threads;
+  private List<FlameRenderThread> threads;
+  private FlameRenderer renderer;
   private State state = State.IDLE;
 
   public TinaInteractiveRendererController(TinaController pParentCtrl, ErrorHandler pErrorHandler, Prefs pPrefs,
       JButton pLoadFlameButton, JButton pFromClipboardButton, JButton pClearScreenButton, JButton pNextButton,
       JButton pStopButton, JButton pToClipboardButton, JButton pSaveImageButton, JButton pSaveFlameButton,
-      JComboBox pRandomStyleCmb, JPanel pImagePanel, JTextArea pStatsTextArea) {
+      JComboBox pRandomStyleCmb, JPanel pImagePanel, JTextArea pStatsTextArea, JToggleButton pHalveSizeButton) {
     parentCtrl = pParentCtrl;
     prefs = pPrefs;
     errorHandler = pErrorHandler;
@@ -90,6 +98,7 @@ public class TinaInteractiveRendererController implements IterationObserver {
     saveImageButton = pSaveImageButton;
     saveFlameButton = pSaveFlameButton;
     randomStyleCmb = pRandomStyleCmb;
+    halveSizeButton = pHalveSizeButton;
 
     imageRootPanel = pImagePanel;
     refreshImagePanel();
@@ -104,13 +113,17 @@ public class TinaInteractiveRendererController implements IterationObserver {
       imageRootPanel.remove(imageScrollPane);
       imageScrollPane = null;
     }
-
-    int width = prefs.getTinaRenderImageWidth() / 2;
-    int height = prefs.getTinaRenderImageHeight() / 2;
+    int width = prefs.getTinaRenderImageWidth();
+    int height = prefs.getTinaRenderImageHeight();
+    if (halveSizeButton.isSelected()) {
+      width /= 2;
+      height /= 2;
+    }
     image = new SimpleImage(width, height);
     image.fillBackground(prefs.getTinaRandomBatchBGColorRed(), prefs.getTinaRandomBatchBGColorGreen(), prefs.getTinaRandomBatchBGColorBlue());
     ImagePanel imagePanel = new ImagePanel(image, 0, 0, image.getImageWidth());
     imagePanel.setSize(image.getImageWidth(), image.getImageHeight());
+    imagePanel.setPreferredSize(new Dimension(image.getImageWidth(), image.getImageHeight()));
 
     imageScrollPane = new JScrollPane(imagePanel);
     imageScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
@@ -118,7 +131,7 @@ public class TinaInteractiveRendererController implements IterationObserver {
 
     imageRootPanel.add(imageScrollPane, BorderLayout.CENTER);
 
-    //    imageRootPanel.getParent().validate();
+    imageRootPanel.getParent().validate();
   }
 
   public void enableControls() {
@@ -130,7 +143,9 @@ public class TinaInteractiveRendererController implements IterationObserver {
     final int IMG_WIDTH = 80;
     final int IMG_HEIGHT = 60;
     final int PALETTE_SIZE = 11;
-    RandomFlameGeneratorSampler sampler = new RandomFlameGeneratorSampler(IMG_WIDTH, IMG_HEIGHT, prefs, new AllRandomFlameGenerator(), false, false, PALETTE_SIZE);
+
+    RandomFlameGenerator randGen = RandomFlameGeneratorList.getRandomFlameGeneratorInstance((String) randomStyleCmb.getSelectedItem(), true);
+    RandomFlameGeneratorSampler sampler = new RandomFlameGeneratorSampler(IMG_WIDTH, IMG_HEIGHT, prefs, randGen, false, false, PALETTE_SIZE);
     currFlame = sampler.createSample().getFlame();
   }
 
@@ -193,8 +208,12 @@ public class TinaInteractiveRendererController implements IterationObserver {
   }
 
   public void renderButton_clicked() {
-    int width = prefs.getTinaRenderImageWidth() / 2;
-    int height = prefs.getTinaRenderImageHeight() / 2;
+    int width = prefs.getTinaRenderImageWidth();
+    int height = prefs.getTinaRenderImageHeight();
+    if (halveSizeButton.isSelected()) {
+      width /= 2;
+      height /= 2;
+    }
     RenderInfo info = new RenderInfo(width, height);
     Flame flame = getCurrFlame();
     double wScl = (double) info.getImageWidth() / (double) flame.getWidth();
@@ -202,29 +221,17 @@ public class TinaInteractiveRendererController implements IterationObserver {
     flame.setPixelsPerUnit((wScl + hScl) * 0.5 * flame.getPixelsPerUnit());
     flame.setWidth(info.getImageWidth());
     flame.setHeight(info.getImageHeight());
-    boolean renderHDR = prefs.isTinaRenderNormalHDR();
+    // TODO
+    boolean renderHDR = prefs.isTinaRenderHighHDR();
     info.setRenderHDR(renderHDR);
-    boolean renderHDRIntensityMap = prefs.isTinaRenderNormalHDRIntensityMap();
+    // TODO
+    boolean renderHDRIntensityMap = prefs.isTinaRenderHighHDRIntensityMap();
     info.setRenderHDRIntensityMap(renderHDRIntensityMap);
-    double oldFilterRadius = flame.getSpatialFilterRadius();
-    try {
-      flame.setSpatialFilterRadius(prefs.getTinaRenderNormalSpatialOversample());
-      FlameRenderer renderer = new FlameRenderer(flame, prefs);
-      renderer.registerIterationObserver(this);
-      threads = renderer.startRenderFlame(info);
-
-      //      RenderedFlame res = renderer.renderFlame(info);
-      //      new ImageWriter().saveImage(res.getImage(), file.getAbsolutePath());
-      //      if (res.getHDRImage() != null) {
-      //        new ImageWriter().saveImage(res.getHDRImage(), file.getAbsolutePath() + ".hdr");
-      //      }
-      //      if (res.getHDRIntensityMap() != null) {
-      //        new ImageWriter().saveImage(res.getHDRIntensityMap(), file.getAbsolutePath() + ".intensity.hdr");
-      //      }
-    }
-    finally {
-      flame.setSpatialFilterRadius(oldFilterRadius);
-    }
+    // TODO
+    flame.setSpatialFilterRadius(prefs.getTinaRenderHighFilterRadius());
+    renderer = new FlameRenderer(flame, prefs);
+    renderer.registerIterationObserver(this);
+    threads = renderer.startRenderFlame(info);
 
     state = State.RENDER;
     enableControls();
@@ -261,7 +268,32 @@ public class TinaInteractiveRendererController implements IterationObserver {
   }
 
   public void saveImageButton_clicked() {
-    // TODO Auto-generated method stub
+    try {
+      JFileChooser chooser = new ImageFileChooser();
+      if (prefs.getOutputImagePath() != null) {
+        try {
+          chooser.setCurrentDirectory(new File(prefs.getOutputImagePath()));
+        }
+        catch (Exception ex) {
+          ex.printStackTrace();
+        }
+      }
+      if (chooser.showSaveDialog(imageRootPanel) == JFileChooser.APPROVE_OPTION) {
+        File file = chooser.getSelectedFile();
+        prefs.setLastOutputImageFile(file);
+        RenderedFlame res = renderer.finishRenderFlame();
+        new ImageWriter().saveImage(res.getImage(), file.getAbsolutePath());
+        if (res.getHDRImage() != null) {
+          new ImageWriter().saveImage(res.getHDRImage(), file.getAbsolutePath() + ".hdr");
+        }
+        if (res.getHDRIntensityMap() != null) {
+          new ImageWriter().saveImage(res.getHDRIntensityMap(), file.getAbsolutePath() + ".intensity.hdr");
+        }
+      }
+    }
+    catch (Throwable ex) {
+      errorHandler.handleError(ex);
+    }
 
   }
 
@@ -333,6 +365,18 @@ public class TinaInteractiveRendererController implements IterationObserver {
     }
     catch (Throwable ex) {
       errorHandler.handleError(ex);
+    }
+  }
+
+  public void halveSizeButton_clicked() {
+    boolean rendering = state == State.RENDER;
+    if (rendering) {
+      stopButton_clicked();
+    }
+    refreshImagePanel();
+    enableControls();
+    if (rendering) {
+      renderButton_clicked();
     }
   }
 
