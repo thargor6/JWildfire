@@ -16,40 +16,29 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.MathLib.cos;
-import static org.jwildfire.base.MathLib.exp;
-import static org.jwildfire.base.MathLib.sin;
-
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
-public class FociFunc extends SimpleVariationFunc {
+public class PostFalloff2Func extends Falloff2Func {
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-    /* Foci in the Apophysis Plugin Pack */
-
-    double expx = exp(pAffineTP.x) * 0.5;
-    double expnx = 0.25 / expx;
-    double siny = sin(pAffineTP.y);
-    double cosy = cos(pAffineTP.y);
-
-    double tmp = (expx + expnx - cosy);
-    if (tmp == 0)
-      tmp = 1e-6;
-    tmp = pAmount / tmp;
-
-    pVarTP.x += (expx - expnx) * tmp;
-    pVarTP.y += siny * tmp;
-
-    if (pContext.isPreserveZCoordinate()) {
-      pVarTP.z += pAmount * pAffineTP.z;
+    /* falloff2 by Xyrus02 */
+    switch (type) {
+      case 1:
+        calcFunctionRadial(pContext, pXForm, pVarTP.x, pVarTP.y, pVarTP.z, pAffineTP, pVarTP, pAmount);
+        break;
+      case 2:
+        calcFunctionGaussian(pContext, pXForm, pVarTP.x, pVarTP.y, pVarTP.z, pAffineTP, pVarTP, pAmount);
+        break;
+      default:
+        calcFunction(pContext, pXForm, pVarTP.x, pVarTP.y, pVarTP.z, pAffineTP, pVarTP, pAmount);
     }
   }
 
   @Override
   public String getName() {
-    return "foci";
+    return "post_falloff2";
   }
 
 }

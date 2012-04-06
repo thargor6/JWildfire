@@ -18,10 +18,10 @@ package org.jwildfire.create.tina.variation;
 
 import static org.jwildfire.base.MathLib.M_2PI;
 import static org.jwildfire.base.MathLib.M_PI;
-import static org.jwildfire.base.MathLib.abs;
 import static org.jwildfire.base.MathLib.atan2;
 import static org.jwildfire.base.MathLib.cos;
 import static org.jwildfire.base.MathLib.fabs;
+import static org.jwildfire.base.MathLib.iabs;
 import static org.jwildfire.base.MathLib.log;
 import static org.jwildfire.base.MathLib.pow;
 import static org.jwildfire.base.MathLib.sin;
@@ -99,7 +99,7 @@ public class NPolarFunc extends VariationFunc {
     this.vvar_2 = this.vvar * 0.5;
     this.absn = fabs(this.nnz);
     this.cn = 1.0 / this.nnz / 2.0;
-    this.isodd = abs(parity) % 2;
+    this.isodd = iabs(parity) % 2;
   }
 
 }

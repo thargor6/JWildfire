@@ -31,7 +31,7 @@ public final class MathLib {
   public final static double M_2_PI = 2.0 / M_PI;
   public static final double M_2PI = 2.0 * M_PI;
 
-  public static final int abs(int var) {
+  public static final int iabs(int var) {
     if (var >= 0)
       return var;
     else
@@ -178,4 +178,11 @@ public final class MathLib {
     return Math.rint(value);
   }
 
+  public static final double trunc(double value) {
+    return (value < 0) ? Math.ceil(value) : Math.floor(value);
+  }
+
+  public static final double frac(double value) {
+    return value - trunc(value);
+  }
 }

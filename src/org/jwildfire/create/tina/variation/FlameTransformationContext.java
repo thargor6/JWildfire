@@ -23,6 +23,7 @@ import org.jwildfire.create.tina.render.FlameRenderer;
 public class FlameTransformationContext {
   private final RandomNumberGenerator randGen;
   private final FlameRenderer flameRenderer;
+  private boolean preserveZCoordinate = true;
 
   public FlameTransformationContext(FlameRenderer pFlameRenderer) {
     randGen = pFlameRenderer.getRandomNumberGenerator();
@@ -43,6 +44,14 @@ public class FlameTransformationContext {
 
   public FlameRenderer getFlameRenderer() {
     return flameRenderer;
+  }
+
+  public boolean isPreserveZCoordinate() {
+    return preserveZCoordinate;
+  }
+
+  public void setPreserveZCoordinate(boolean pPreserveZCoordinate) {
+    preserveZCoordinate = pPreserveZCoordinate;
   }
 
 }

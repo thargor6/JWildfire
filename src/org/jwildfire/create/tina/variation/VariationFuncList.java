@@ -227,6 +227,8 @@ public class VariationFuncList {
     registerVariationFunc(ChecksFunc.class);
     registerVariationFunc(BiLinearFunc.class);
     registerVariationFunc(FarBlurFunc.class);
+    registerVariationFunc(Falloff2Func.class);
+    registerVariationFunc(PostFalloff2Func.class);
   }
 
   private static void registerVariationFunc(
