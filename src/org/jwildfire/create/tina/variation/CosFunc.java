@@ -37,6 +37,10 @@ public class CosFunc extends SimpleVariationFunc {
     double coscosh = cosh(pAffineTP.y);
     pVarTP.x += pAmount * coscos * coscosh;
     pVarTP.y -= pAmount * cossin * cossinh;
+    if (pContext.isPreserveZCoordinate()) {
+      pVarTP.z += pVarTP.z + pAmount * pAffineTP.z;
+    }
+
   }
 
   @Override

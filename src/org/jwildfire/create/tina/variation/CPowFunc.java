@@ -54,6 +54,10 @@ public class CPowFunc extends VariationFunc {
 
     pVarTP.x += m * ca;
     pVarTP.y += m * sa;
+    if (pContext.isPreserveZCoordinate()) {
+      pVarTP.z += pVarTP.z + pAmount * pAffineTP.z;
+    }
+
   }
 
   @Override

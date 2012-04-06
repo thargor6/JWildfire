@@ -28,6 +28,9 @@ public class EyefishFunc extends SimpleVariationFunc {
     double r = 2 * pAmount / (sqrt(pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y) + 1.0);
     pVarTP.x += r * pAffineTP.x;
     pVarTP.y += r * pAffineTP.y;
+    if (pContext.isPreserveZCoordinate()) {
+      pVarTP.z += pVarTP.z + pAmount * pAffineTP.z;
+    }
   }
 
   @Override

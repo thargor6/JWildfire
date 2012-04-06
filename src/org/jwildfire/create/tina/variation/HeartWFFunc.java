@@ -64,6 +64,10 @@ public class HeartWFFunc extends VariationFunc {
     nx *= scaleX;
     pVarTP.x += pAmount * nx;
     pVarTP.y += pAmount * ny;
+    if (pContext.isPreserveZCoordinate()) {
+      pVarTP.z += pVarTP.z + pAmount * pAffineTP.z;
+    }
+
   }
 
   @Override

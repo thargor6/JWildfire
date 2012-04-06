@@ -23,7 +23,7 @@ import org.jwildfire.create.tina.render.FlameRenderer;
 public class FlameTransformationContext {
   private final RandomNumberGenerator randGen;
   private final FlameRenderer flameRenderer;
-  private boolean preserveZCoordinate = true;
+  private boolean preserveZCoordinate = false;
 
   public FlameTransformationContext(FlameRenderer pFlameRenderer) {
     randGen = pFlameRenderer.getRandomNumberGenerator();

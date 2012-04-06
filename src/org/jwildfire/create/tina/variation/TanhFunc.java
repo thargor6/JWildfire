@@ -38,6 +38,9 @@ public class TanhFunc extends SimpleVariationFunc {
     double tanhden = 1.0 / (tanhcos + tanhcosh);
     pVarTP.x += pAmount * tanhden * tanhsinh;
     pVarTP.y += pAmount * tanhden * tanhsin;
+    if (pContext.isPreserveZCoordinate()) {
+      pVarTP.z += pVarTP.z + pAmount * pAffineTP.z;
+    }
   }
 
   @Override

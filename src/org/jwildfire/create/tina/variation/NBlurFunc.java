@@ -98,6 +98,9 @@ public class NBlurFunc extends VariationFunc {
 
     pVarTP.x += pAmount * x;
     pVarTP.y += pAmount * y;
+    if (pContext.isPreserveZCoordinate()) {
+      pVarTP.z += pVarTP.z + pAmount * pAffineTP.z;
+    }
 
   }
 

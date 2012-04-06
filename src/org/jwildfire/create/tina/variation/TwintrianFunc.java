@@ -43,6 +43,9 @@ public class TwintrianFunc extends SimpleVariationFunc {
 
     pVarTP.x += pAmount * pAffineTP.x * diff;
     pVarTP.y += pAmount * pAffineTP.x * (diff - sinr * M_PI);
+    if (pContext.isPreserveZCoordinate()) {
+      pVarTP.z += pVarTP.z + pAmount * pAffineTP.z;
+    }
   }
 
   @Override

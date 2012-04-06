@@ -41,6 +41,9 @@ public class FanFunc extends SimpleVariationFunc {
     double r = pAmount * sqrt(pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y);
     pVarTP.x += r * cosr;
     pVarTP.y += r * sinr;
+    if (pContext.isPreserveZCoordinate()) {
+      pVarTP.z += pVarTP.z + pAmount * pAffineTP.z;
+    }
   }
 
   @Override

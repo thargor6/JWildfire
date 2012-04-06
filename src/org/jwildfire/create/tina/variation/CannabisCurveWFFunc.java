@@ -48,6 +48,10 @@ public class CannabisCurveWFFunc extends VariationFunc {
 
     pVarTP.x += pAmount * nx;
     pVarTP.y += pAmount * ny;
+    if (pContext.isPreserveZCoordinate()) {
+      pVarTP.z += pVarTP.z + pAmount * pAffineTP.z;
+    }
+
   }
 
   @Override

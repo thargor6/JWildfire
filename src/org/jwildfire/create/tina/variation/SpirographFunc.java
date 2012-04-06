@@ -21,8 +21,6 @@ import static org.jwildfire.base.MathLib.sin;
 
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
-//Variation Plugin DLL for Apophysis
-//Jed Kelsey, 20 June 2007
 
 public class SpirographFunc extends VariationFunc {
 
@@ -56,6 +54,9 @@ public class SpirographFunc extends VariationFunc {
     double y1 = (a + b) * sin(t) - c2 * sin((a + b) / b * t);
     pVarTP.x += pAmount * (x1 + d * cos(t) + y);
     pVarTP.y += pAmount * (y1 + d * sin(t) + y);
+    if (pContext.isPreserveZCoordinate()) {
+      pVarTP.z += pVarTP.z + pAmount * pAffineTP.z;
+    }
   }
 
   @Override

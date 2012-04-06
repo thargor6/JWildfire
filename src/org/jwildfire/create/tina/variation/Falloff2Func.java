@@ -34,10 +34,10 @@ public class Falloff2Func extends VariationFunc {
 
   private static final String PARAM_SCATTER = "scatter";
   private static final String PARAM_MINDIST = "mindist";
-  private static final String PARAM_MUL_X = "x";
-  private static final String PARAM_MUL_Y = "y";
-  private static final String PARAM_MUL_Z = "z";
-  private static final String PARAM_MUL_C = "c";
+  private static final String PARAM_MUL_X = "mul_x";
+  private static final String PARAM_MUL_Y = "mul_y";
+  private static final String PARAM_MUL_Z = "mul_z";
+  private static final String PARAM_MUL_C = "mul_c";
   private static final String PARAM_X0 = "x0";
   private static final String PARAM_Y0 = "y0";
   private static final String PARAM_Z0 = "z0";

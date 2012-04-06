@@ -47,6 +47,9 @@ public class WhorlFunc extends VariationFunc {
 
     pVarTP.x += pAmount * r * ca;
     pVarTP.y += pAmount * r * sa;
+    if (pContext.isPreserveZCoordinate()) {
+      pVarTP.z += pVarTP.z + pAmount * pAffineTP.z;
+    }
   }
 
   @Override

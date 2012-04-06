@@ -38,6 +38,10 @@ public class CothFunc extends SimpleVariationFunc {
     double cothden = 1.0 / (cothcosh - cothcos);
     pVarTP.x += pAmount * cothden * cothsinh;
     pVarTP.y += pAmount * cothden * cothsin;
+    if (pContext.isPreserveZCoordinate()) {
+      pVarTP.z += pVarTP.z + pAmount * pAffineTP.z;
+    }
+
   }
 
   @Override

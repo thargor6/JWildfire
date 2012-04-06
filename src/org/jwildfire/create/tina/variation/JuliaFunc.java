@@ -34,6 +34,10 @@ public class JuliaFunc extends SimpleVariationFunc {
     double r = pAmount * sqrt(sqrt(pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y));
     pVarTP.x += r * cosa;
     pVarTP.y += r * sina;
+    if (pContext.isPreserveZCoordinate()) {
+      pVarTP.z += pVarTP.z + pAmount * pAffineTP.z;
+    }
+
   }
 
   @Override

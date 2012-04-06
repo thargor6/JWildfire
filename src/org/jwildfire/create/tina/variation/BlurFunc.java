@@ -33,6 +33,9 @@ public class BlurFunc extends SimpleVariationFunc {
     double r2 = pAmount * pContext.random();
     pVarTP.x += r2 * cosa;
     pVarTP.y += r2 * sina;
+    if (pContext.isPreserveZCoordinate()) {
+      pVarTP.z += pVarTP.z + pAmount * pAffineTP.z;
+    }
   }
 
   @Override

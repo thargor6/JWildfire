@@ -65,6 +65,9 @@ public class WaffleFunc extends VariationFunc {
     }
     pVarTP.x += (vcosr * a + vsinr * r); // note that post-transforms make this redundant!
     pVarTP.y += (-vsinr * a + vcosr * r);
+    if (pContext.isPreserveZCoordinate()) {
+      pVarTP.z += pVarTP.z + pAmount * pAffineTP.z;
+    }
   }
 
   @Override

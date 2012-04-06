@@ -38,6 +38,9 @@ public class SechFunc extends SimpleVariationFunc {
     double sechden = 2.0 / (cos(2.0 * pAffineTP.y) + cosh(2.0 * pAffineTP.x));
     pVarTP.x += pAmount * sechden * sechcos * sechcosh;
     pVarTP.y -= pAmount * sechden * sechsin * sechsinh;
+    if (pContext.isPreserveZCoordinate()) {
+      pVarTP.z += pVarTP.z + pAmount * pAffineTP.z;
+    }
   }
 
   @Override

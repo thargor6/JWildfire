@@ -65,6 +65,9 @@ public class Waves2WFFunc extends VariationFunc {
     else {
       pVarTP.y += pAmount * (pAffineTP.y + dampingY * scaley * sin(pAffineTP.x * freqy)) * dampingY;
     }
+    if (pContext.isPreserveZCoordinate()) {
+      pVarTP.z += pVarTP.z + pAmount * pAffineTP.z;
+    }
   }
 
   @Override

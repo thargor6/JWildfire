@@ -59,6 +59,10 @@ public class OscilloscopeFunc extends VariationFunc {
       pVarTP.x += pAmount * pAffineTP.x;
       pVarTP.y += pAmount * pAffineTP.y;
     }
+    if (pContext.isPreserveZCoordinate()) {
+      pVarTP.z += pVarTP.z + pAmount * pAffineTP.z;
+    }
+
   }
 
   @Override

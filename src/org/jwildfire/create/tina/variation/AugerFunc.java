@@ -46,6 +46,9 @@ public class AugerFunc extends VariationFunc {
 
     pVarTP.x += pAmount * (pAffineTP.x + sym * (dx - pAffineTP.x));
     pVarTP.y += pAmount * dy;
+    if (pContext.isPreserveZCoordinate()) {
+      pVarTP.z += pVarTP.z + pAmount * pAffineTP.z;
+    }
   }
 
   @Override

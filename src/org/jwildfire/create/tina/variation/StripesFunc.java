@@ -39,6 +39,9 @@ public class StripesFunc extends VariationFunc {
 
     pVarTP.x += pAmount * (offsetx * (1.0 - space) + roundx);
     pVarTP.y += pAmount * (pAffineTP.y + offsetx * offsetx * warp);
+    if (pContext.isPreserveZCoordinate()) {
+      pVarTP.z += pVarTP.z + pAmount * pAffineTP.z;
+    }
   }
 
   @Override

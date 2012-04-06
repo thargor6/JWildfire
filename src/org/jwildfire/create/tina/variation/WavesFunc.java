@@ -28,6 +28,9 @@ public class WavesFunc extends SimpleVariationFunc {
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     pVarTP.x += pAmount * (pAffineTP.x + pXForm.getCoeff10() * sin(pAffineTP.y / (pXForm.getCoeff20() * pXForm.getCoeff20() + EPSILON)));
     pVarTP.y += pAmount * (pAffineTP.y + pXForm.getCoeff11() * sin(pAffineTP.x / (pXForm.getCoeff21() * pXForm.getCoeff21() + EPSILON)));
+    if (pContext.isPreserveZCoordinate()) {
+      pVarTP.z += pVarTP.z + pAmount * pAffineTP.z;
+    }
   }
 
   @Override

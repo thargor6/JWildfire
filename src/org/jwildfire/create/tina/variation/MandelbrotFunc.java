@@ -63,7 +63,7 @@ public class MandelbrotFunc extends VariationFunc {
     }
     while ((inverted && (iter < maxIter)) ||
         ((!inverted) && ((iter >= maxIter) ||
-                ((skin < 1) && (iter < 0.1 * maxIter * (1 - skin)))))) {
+        ((skin < 1) && (iter < 0.1 * maxIter * (1 - skin)))))) {
       if ((x0 == 0) && (y0 == 0)) {
         // Choose a point at random
         x0 = (xmax - xmin) * pContext.random() + xmin;
@@ -93,6 +93,10 @@ public class MandelbrotFunc extends VariationFunc {
     }
     pVarTP.x += pAmount * (x1 + cx * x); // + FTx^;
     pVarTP.y += pAmount * (y1 + cy * y); // + FTy^;
+    if (pContext.isPreserveZCoordinate()) {
+      pVarTP.z += pVarTP.z + pAmount * pAffineTP.z;
+    }
+
   }
 
   @Override

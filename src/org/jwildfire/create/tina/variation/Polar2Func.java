@@ -30,6 +30,10 @@ public class Polar2Func extends SimpleVariationFunc {
     double p2v = pAmount / M_PI;
     pVarTP.x += p2v * pAffineTP.getPrecalcAtan(pContext);
     pVarTP.y += p2v / 2.0 * log(pAffineTP.getPrecalcSumsq());
+    if (pContext.isPreserveZCoordinate()) {
+      pVarTP.z += pVarTP.z + pAmount * pAffineTP.z;
+    }
+
   }
 
   @Override

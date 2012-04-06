@@ -40,6 +40,10 @@ public class PerspectiveFunc extends VariationFunc {
     double t = 1.0 / (this.dist - pAffineTP.y * this.vsin);
     pVarTP.x += pAmount * this.dist * pAffineTP.x * t;
     pVarTP.y += pAmount * this.vfcos * pAffineTP.y * t;
+    if (pContext.isPreserveZCoordinate()) {
+      pVarTP.z += pVarTP.z + pAmount * pAffineTP.z;
+    }
+
   }
 
   @Override

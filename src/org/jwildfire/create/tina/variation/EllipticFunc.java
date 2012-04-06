@@ -58,6 +58,9 @@ public class EllipticFunc extends SimpleVariationFunc {
     else {
       pVarTP.y -= w * log(xmax + ssx);
     }
+    if (pContext.isPreserveZCoordinate()) {
+      pVarTP.z += pVarTP.z + pAmount * pAffineTP.z;
+    }
   }
 
   @Override

@@ -56,6 +56,10 @@ public class ModulusFunc extends VariationFunc {
     else {
       pVarTP.y += pAmount * pAffineTP.y;
     }
+    if (pContext.isPreserveZCoordinate()) {
+      pVarTP.z += pVarTP.z + pAmount * pAffineTP.z;
+    }
+
   }
 
   @Override

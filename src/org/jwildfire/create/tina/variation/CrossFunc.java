@@ -42,6 +42,9 @@ public class CrossFunc extends SimpleVariationFunc {
 
     pVarTP.x += pAffineTP.x * r;
     pVarTP.y += pAffineTP.y * r;
+    if (pContext.isPreserveZCoordinate()) {
+      pVarTP.z += pVarTP.z + pAmount * pAffineTP.z;
+    }
   }
 
   @Override

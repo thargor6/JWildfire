@@ -33,6 +33,10 @@ public class NoiseFunc extends SimpleVariationFunc {
     r = pAmount * pContext.random();
     pVarTP.x += pAffineTP.x * r * cosr;
     pVarTP.y += pAffineTP.y * r * sinr;
+    if (pContext.isPreserveZCoordinate()) {
+      pVarTP.z += pVarTP.z + pAmount * pAffineTP.z;
+    }
+
   }
 
   @Override

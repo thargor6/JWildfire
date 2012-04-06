@@ -66,6 +66,9 @@ public class SuperShapeFunc extends VariationFunc {
 
     pVarTP.x += r * pAffineTP.x;
     pVarTP.y += r * pAffineTP.y;
+    if (pContext.isPreserveZCoordinate()) {
+      pVarTP.z += pVarTP.z + pAmount * pAffineTP.z;
+    }
   }
 
   @Override

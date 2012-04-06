@@ -63,6 +63,9 @@ public class BoardersFunc extends SimpleVariationFunc {
         }
       }
     }
+    if (pContext.isPreserveZCoordinate()) {
+      pVarTP.z += pVarTP.z + pAmount * pAffineTP.z;
+    }
   }
 
   @Override

@@ -38,6 +38,10 @@ public class PDJFunc extends VariationFunc {
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     pVarTP.x += pAmount * (sin(a * pAffineTP.y) - cos(b * pAffineTP.x));
     pVarTP.y += pAmount * (sin(c * pAffineTP.x) - cos(d * pAffineTP.y));
+    if (pContext.isPreserveZCoordinate()) {
+      pVarTP.z += pVarTP.z + pAmount * pAffineTP.z;
+    }
+
   }
 
   @Override

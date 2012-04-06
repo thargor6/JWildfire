@@ -37,6 +37,9 @@ public class SinFunc extends SimpleVariationFunc {
     double sincosh = cosh(pAffineTP.y);
     pVarTP.x += pAmount * sinsin * sincosh;
     pVarTP.y += pAmount * sincos * sinsinh;
+    if (pContext.isPreserveZCoordinate()) {
+      pVarTP.z += pVarTP.z + pAmount * pAffineTP.z;
+    }
   }
 
   @Override
