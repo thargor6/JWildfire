@@ -45,7 +45,7 @@ public class Bubbles3DRandomFlameGenerator extends RandomFlameGenerator {
       xForm.addVariation(1.5 + 1.5 * Math.random(), VariationFuncList.getVariationFuncInstance("pre_blur", true));
       final String[] fncList = { "fan2", "blade", "blade3D", "blob", "blob3D", "bwraps7", "cell", "cannabiscurve_wf",
           "cloverleaf_wf", "cos", "cot", "coth", "cross", "csch", "diamond", "disc", "edisc", "epispiral_wf", "fan", "fisheye",
-          "eyefish", "flux", "heart", "julia", "julian", "juliascope", "log", "parabola", "power",
+          "eyefish", "flux", "heart", "julia", "julian", "juliascope", "log", "parabola", "power", "epispiral",
           "pre_subflame_wf", "rectangles", "rose_wf", "sech", "separation", "split", "truchet", "wedge", "zcone" };
 
       VariationFunc varFunc = VariationFuncList.getVariationFuncInstance(fncList[(int) (fncList.length * Math.random())], true);

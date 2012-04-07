@@ -343,6 +343,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
   private final JButton transformationWeightRightButton;
   private final JToggleButton affineEditPostTransformButton;
   private final JToggleButton affineEditPostTransformSmallButton;
+  private final JToggleButton affinePreserveZButton;
   private final JButton mouseEditZoomInButton;
   private final JButton mouseEditZoomOutButton;
   private final JToggleButton toggleTrianglesButton;
@@ -449,7 +450,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       JTextField pShadingBlurRadiusREd, JSlider pShadingBlurRadiusSlider, JTextField pShadingBlurFadeREd, JSlider pShadingBlurFadeSlider,
       JTextField pShadingBlurFallOffREd, JSlider pShadingBlurFallOffSlider, JTextArea pScriptTextArea, JToggleButton pAffineScaleXButton,
       JToggleButton pAffineScaleYButton, JPanel pGradientLibraryPanel, JComboBox pGradientLibraryGradientCmb, JTextPane pHelpPane,
-      JToggleButton pToggleVariationsButton) {
+      JToggleButton pToggleVariationsButton, JToggleButton pAffinePreserveZButton) {
     errorHandler = pErrorHandler;
     prefs = pPrefs;
     centerPanel = pCenterPanel;
@@ -543,6 +544,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     addFinalTransformationButton = pAddFinalTransformationButton;
     affineEditPostTransformButton = pAffineEditPostTransformButton;
     affineEditPostTransformSmallButton = pAffineEditPostTransformSmallButton;
+    affinePreserveZButton = pAffinePreserveZButton;
     affineScaleXButton = pAffineScaleXButton;
     affineScaleYButton = pAffineScaleYButton;
     mouseEditZoomInButton = pMouseEditZoomInButton;
@@ -1038,6 +1040,8 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
 
       bgColorBlueREd.setText(String.valueOf(currFlame.getBGColorBlue()));
       bgColorBlueSlider.setValue(currFlame.getBGColorBlue());
+
+      affinePreserveZButton.setSelected(currFlame.isPreserveZ());
 
       gridRefreshing = true;
       try {
@@ -4043,6 +4047,17 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
 
   public void setInteractiveRendererCtrl(TinaInteractiveRendererController interactiveRendererCtrl) {
     this.interactiveRendererCtrl = interactiveRendererCtrl;
+  }
+
+  public void affinePreserveZButton_clicked() {
+    if (gridRefreshing || cmbRefreshing) {
+      return;
+    }
+    Flame currFlame = getCurrFlame();
+    if (currFlame != null) {
+      currFlame.setPreserveZ(affinePreserveZButton.isSelected());
+      refreshFlameImage(false);
+    }
   }
 
 }

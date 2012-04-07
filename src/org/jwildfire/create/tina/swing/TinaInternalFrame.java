@@ -2113,6 +2113,21 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaAffineTransformationPanel.add(getAffineFlipVerticalButton(), null);
       tinaAffineTransformationPanel.add(getAffineScaleXButton(), null);
       tinaAffineTransformationPanel.add(getAffineScaleYButton(), null);
+
+      affinePreserveZButton = new JToggleButton();
+      affinePreserveZButton.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.affinePreserveZButton_clicked();
+        }
+      });
+      affinePreserveZButton.setToolTipText("Preserve the Z-coordinate (applies only if 2D- and 3D-variations are mixed)");
+      affinePreserveZButton.setText("Preserve Z-coordinate");
+      affinePreserveZButton.setSize(new Dimension(138, 24));
+      affinePreserveZButton.setPreferredSize(new Dimension(136, 24));
+      affinePreserveZButton.setLocation(new Point(4, 181));
+      affinePreserveZButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      affinePreserveZButton.setBounds(4, 214, 138, 24);
+      tinaAffineTransformationPanel.add(affinePreserveZButton);
     }
     return tinaAffineTransformationPanel;
   }
@@ -2940,7 +2955,7 @@ public class TinaInternalFrame extends JInternalFrame {
         getDarkTrianglesToggleButton(), getShadingBlurRadiusREd(), getShadingBlurRadiusSlider(), getShadingBlurFadeREd(),
         getShadingBlurFadeSlider(), getShadingBlurFallOffREd(), getShadingBlurFallOffSlider(), getScriptTextArea(),
         getAffineScaleXButton(), getAffineScaleYButton(), getGradientLibraryCenterPanel(), getGradientLibraryGradientCmb(), getHelpPane(),
-        getToggleVariationsButton());
+        getToggleVariationsButton(), getAffinePreserveZButton());
 
     tinaController.refreshing = tinaController.cmbRefreshing = tinaController.gridRefreshing = true;
     try {
@@ -8188,6 +8203,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JComboBox interactiveRandomStyleCmb;
   private JButton interactiveClearScreenButton;
   private JToggleButton interactiveHalveSizeButton;
+  private JToggleButton affinePreserveZButton;
 
   private JTextPane getHelpPane() {
     if (helpPane == null) {
@@ -9258,5 +9274,9 @@ public class TinaInternalFrame extends JInternalFrame {
 
   public JToggleButton getInteractiveHalveSizeButton() {
     return interactiveHalveSizeButton;
+  }
+
+  public JToggleButton getAffinePreserveZButton() {
+    return affinePreserveZButton;
   }
 } //  @jve:decl-index=0:visual-constraint="10,10"

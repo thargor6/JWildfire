@@ -104,6 +104,7 @@ public class Flam3Reader implements FlameReader {
   private static final String ATTR_SHADING_BLUR_RADIUS = "shading_blurRadius";
   private static final String ATTR_SHADING_BLUR_FADE = "shading_blurFade";
   private static final String ATTR_SHADING_BLUR_FALLOFF = "shading_blurFallOff";
+  private static final String ATTR_PRESERVE_Z = "preserve_z";
 
   private void parseFlameAttributes(Flame pFlame, String pXML) {
     Map<String, String> atts = parseAttributes(pXML);
@@ -172,6 +173,10 @@ public class Flam3Reader implements FlameReader {
     }
     if ((hs = atts.get(ATTR_CAM_ZOOM)) != null) {
       pFlame.setCamZoom(Double.parseDouble(hs));
+    }
+    // preserve-z
+    if ((hs = atts.get(ATTR_PRESERVE_Z)) != null) {
+      pFlame.setPreserveZ("1".equals(hs));
     }
     // Shading    
     if ((hs = atts.get(ATTR_SHADING_SHADING)) != null) {

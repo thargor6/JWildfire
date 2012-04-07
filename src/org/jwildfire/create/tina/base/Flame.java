@@ -49,6 +49,7 @@ public class Flame {
   private double brightness;
   private double contrast;
   private double vibrancy;
+  private boolean preserveZ;
 
   private RGBPalette palette = new RGBPalette();
   private final List<XForm> xForms = new ArrayList<XForm>();
@@ -422,6 +423,14 @@ public class Flame {
         }
       }
     }
+  }
+
+  public boolean isPreserveZ() {
+    return preserveZ;
+  }
+
+  public void setPreserveZ(boolean preserveZ) {
+    this.preserveZ = preserveZ;
   }
 
 }

@@ -126,6 +126,9 @@ public class Flam3Writer {
     attrList.add(xb.createAttr("cam_persp", pFlame.getCamPerspective()));
     attrList.add(xb.createAttr("cam_zpos", pFlame.getCamZ()));
     attrList.add(xb.createAttr("cam_dof", pFlame.getCamDOF()));
+    if (pFlame.isPreserveZ()) {
+      attrList.add(xb.createAttr("preserve_z", "1"));
+    }
     ShadingInfo shadingInfo = pFlame.getShadingInfo();
     attrList.add(xb.createAttr("shading_shading", shadingInfo.getShading().toString()));
     if (shadingInfo.getShading() == Shading.PSEUDO3D) {

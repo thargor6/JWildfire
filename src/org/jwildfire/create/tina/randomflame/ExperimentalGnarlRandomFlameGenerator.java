@@ -143,6 +143,9 @@ public class ExperimentalGnarlRandomFlameGenerator extends RandomFlameGenerator 
         case 11:
           xForm.addVariation(blurAmount, VariationFuncList.getVariationFuncInstance("bubble", true));
           break;
+        case 12:
+          xForm.addVariation(nonBlurAmount, VariationFuncList.getVariationFuncInstance("epispiral", true));
+          break;
         default: {
           int l = ExperimentalSimpleRandomFlameGenerator.FNCLST_EXPERIMENTAL.length;
           String fName = ExperimentalSimpleRandomFlameGenerator.FNCLST_EXPERIMENTAL[(int) (Math.random() * l)];

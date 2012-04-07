@@ -97,6 +97,7 @@ public final class FlameRenderer {
     flame = pFlame;
     prefs = pPrefs;
     flameTransformationContext = new FlameTransformationContext(this);
+    flameTransformationContext.setPreserveZCoordinate(pFlame.isPreserveZ());
   }
 
   private void init3D() {

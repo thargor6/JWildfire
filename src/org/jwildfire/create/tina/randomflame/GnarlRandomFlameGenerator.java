@@ -110,6 +110,9 @@ public class GnarlRandomFlameGenerator extends RandomFlameGenerator {
         case 10:
           xForm.addVariation(blurAmount, VariationFuncList.getVariationFuncInstance("twintrian", true));
           break;
+        case 11:
+          xForm.addVariation(blurAmount, VariationFuncList.getVariationFuncInstance("epispiral", true));
+          break;
         default:
           throw new IllegalStateException();
       }
