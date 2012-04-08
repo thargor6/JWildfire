@@ -17,6 +17,8 @@
 package org.jwildfire.base;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.jwildfire.swing.LookAndFeel;
 
@@ -31,6 +33,20 @@ public class Prefs extends ManagedObject {
   static final String KEY_GENERAL_PATH_IMAGES = "general.path.images";
   static final String KEY_GENERAL_PATH_SCRIPTS = "general.path.scripts";
   static final String KEY_SUNFLOW_PATH_SCENES = "sunflow.path.scenes";
+
+  static final String KEY_TINA_PROFILE_RESOLUTION_COUNT = "tina.profile.resolution.count";
+  static final String KEY_TINA_PROFILE_RESOLUTION_WIDTH = "tina.profile.resolution.width";
+  static final String KEY_TINA_PROFILE_RESOLUTION_HEIGHT = "tina.profile.resolution.height";
+  static final String KEY_TINA_PROFILE_RESOLUTION_DEFAULT_PROFILE = "tina.profile.resolution.default_profile";
+
+  static final String KEY_TINA_PROFILE_QUALITY_COUNT = "tina.profile.quality.count";
+  static final String KEY_TINA_PROFILE_QUALITY_SPATIAL_OVERSAMPLE = "tina.profile.quality.spatial_oversample";
+  static final String KEY_TINA_PROFILE_QUALITY_COLOR_OVERSAMPLE = "tina.profile.quality.color_oversample";
+  static final String KEY_TINA_PROFILE_QUALITY_QUALITY = "tina.profile.quality.quality";
+  static final String KEY_TINA_PROFILE_QUALITY_WITH_HDR = "tina.profile.quality.with_hdr";
+  static final String KEY_TINA_PROFILE_QUALITY_WITH_HDR_INTENSITY_MAP = "tina.profile.quality.with_hdr_intensity_map";
+  static final String KEY_TINA_PROFILE_QUALITY_CAPTION = "tina.profile.quality.caption";
+  static final String KEY_TINA_PROFILE_QUALITY_DEFAULT_PROFILE = "tina.profile.quality.default_profile";
 
   static final String KEY_TINA_PATH_FLAMES = "tina.path.flames";
   static final String KEY_TINA_RENDER_IMAGE_WIDTH = "tina.render.image.width";
@@ -89,6 +105,9 @@ public class Prefs extends ManagedObject {
   private String sunflowScenePath = null;
   private String lastInputSunflowScenePath = null;
   private String lastOutputSunflowScenePath = null;
+
+  private final List<QualityProfile> qualityProfiles = new ArrayList<QualityProfile>();
+  private final List<ResolutionProfile> resolutionProfiles = new ArrayList<ResolutionProfile>();
 
   public static class PLAFStyleEditor extends ComboBoxPropertyEditor {
     public PLAFStyleEditor() {
@@ -346,6 +365,26 @@ public class Prefs extends ManagedObject {
     tinaRandomBatchBGColorRed = pSrc.tinaRandomBatchBGColorRed;
     tinaRandomBatchBGColorGreen = pSrc.tinaRandomBatchBGColorGreen;
     tinaRandomBatchBGColorBlue = pSrc.tinaRandomBatchBGColorBlue;
+
+    resolutionProfiles.clear();
+    for (ResolutionProfile profile : pSrc.resolutionProfiles) {
+      try {
+        resolutionProfiles.add((ResolutionProfile) profile.clone());
+      }
+      catch (CloneNotSupportedException e) {
+        e.printStackTrace();
+      }
+    }
+
+    qualityProfiles.clear();
+    for (QualityProfile profile : pSrc.qualityProfiles) {
+      try {
+        qualityProfiles.add((QualityProfile) profile.clone());
+      }
+      catch (CloneNotSupportedException e) {
+        e.printStackTrace();
+      }
+    }
   }
 
   public int getTinaRenderThreads() {
@@ -613,5 +652,13 @@ public class Prefs extends ManagedObject {
     if (tinaRenderThreads < 1) {
       tinaRenderThreads = 1;
     }
+  }
+
+  public List<QualityProfile> getQualityProfiles() {
+    return qualityProfiles;
+  }
+
+  public List<ResolutionProfile> getResolutionProfiles() {
+    return resolutionProfiles;
   }
 }

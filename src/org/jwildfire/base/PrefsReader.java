@@ -86,12 +86,57 @@ public class PrefsReader {
         pPrefs.setTinaRandomBatchBGColorRed(getIntProperty(props, Prefs.KEY_TINA_RANDOMBATCH_BGCOLOR_RED, pPrefs.getTinaRandomBatchBGColorRed()));
         pPrefs.setTinaRandomBatchBGColorGreen(getIntProperty(props, Prefs.KEY_TINA_RANDOMBATCH_BGCOLOR_GREEN, pPrefs.getTinaRandomBatchBGColorGreen()));
         pPrefs.setTinaRandomBatchBGColorBlue(getIntProperty(props, Prefs.KEY_TINA_RANDOMBATCH_BGCOLOR_BLUE, pPrefs.getTinaRandomBatchBGColorBlue()));
-
+        // resolution profiles
+        {
+          int count = getIntProperty(props, Prefs.KEY_TINA_PROFILE_RESOLUTION_COUNT, 0);
+          for (int i = 0; i < count; i++) {
+            ResolutionProfile profile = new ResolutionProfile();
+            pPrefs.getResolutionProfiles().add(profile);
+            profile.setDefaultProfile(getBooleanProperty(props, Prefs.KEY_TINA_PROFILE_RESOLUTION_DEFAULT_PROFILE + "." + i, false));
+            profile.setWidth(getIntProperty(props, Prefs.KEY_TINA_PROFILE_RESOLUTION_WIDTH + "." + i, 0));
+            profile.setHeight(getIntProperty(props, Prefs.KEY_TINA_PROFILE_RESOLUTION_HEIGHT + "." + i, 0));
+          }
+        }
+        // quality profiles
+        {
+          int count = getIntProperty(props, Prefs.KEY_TINA_PROFILE_QUALITY_COUNT, 0);
+          for (int i = 0; i < count; i++) {
+            QualityProfile profile = new QualityProfile();
+            pPrefs.getQualityProfiles().add(profile);
+            profile.setDefaultProfile(getBooleanProperty(props, Prefs.KEY_TINA_PROFILE_QUALITY_DEFAULT_PROFILE + "." + i, false));
+            profile.setSpatialOversample(getIntProperty(props, Prefs.KEY_TINA_PROFILE_QUALITY_SPATIAL_OVERSAMPLE + "." + i, 1));
+            profile.setColorOversample(getIntProperty(props, Prefs.KEY_TINA_PROFILE_QUALITY_COLOR_OVERSAMPLE + "." + i, 1));
+            profile.setQuality(getIntProperty(props, Prefs.KEY_TINA_PROFILE_QUALITY_QUALITY + "." + i, 1));
+            profile.setWithHDR(getBooleanProperty(props, Prefs.KEY_TINA_PROFILE_QUALITY_WITH_HDR + "." + i, false));
+            profile.setWithHDRIntensityMap(getBooleanProperty(props, Prefs.KEY_TINA_PROFILE_QUALITY_WITH_HDR_INTENSITY_MAP + "." + i, false));
+            profile.setCaption(getProperty(props, Prefs.KEY_TINA_PROFILE_QUALITY_CAPTION + "." + i, ""));
+          }
+        }
+        //
         pPrefs.setSunflowScenePath(getProperty(props, Prefs.KEY_SUNFLOW_PATH_SCENES, pPrefs.getSunflowScenePath()));
+        //
+        setupDefaultProfiles(pPrefs);
       }
       finally {
         inputStream.close();
       }
     }
   }
+
+  private void setupDefaultProfiles(Prefs pPrefs) {
+    if (pPrefs.getResolutionProfiles().size() == 0) {
+      pPrefs.getResolutionProfiles().add(new ResolutionProfile(false, 640, 480));
+      pPrefs.getResolutionProfiles().add(new ResolutionProfile(true, 800, 600));
+      pPrefs.getResolutionProfiles().add(new ResolutionProfile(false, 1024, 768));
+      pPrefs.getResolutionProfiles().add(new ResolutionProfile(false, 1680, 1050));
+      pPrefs.getResolutionProfiles().add(new ResolutionProfile(false, 1920, 1080));
+    }
+    if (pPrefs.getQualityProfiles().size() == 0) {
+      pPrefs.getQualityProfiles().add(new QualityProfile(true, "Fast", 1, 2, 400, false, false));
+      pPrefs.getQualityProfiles().add(new QualityProfile(true, "High", 1, 3, 600, false, false));
+      pPrefs.getQualityProfiles().add(new QualityProfile(false, "High with HDR", 1, 3, 500, true, false));
+      pPrefs.getQualityProfiles().add(new QualityProfile(false, "Very high with HDR", 2, 3, 800, true, true));
+    }
+  }
+
 }
