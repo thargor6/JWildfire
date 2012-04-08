@@ -66,7 +66,7 @@ public class Waves3WFFunc extends VariationFunc {
       pVarTP.y += pAmount * (pAffineTP.y + dampingY * scaley * sin(pAffineTP.x * freqy) * sin(pAffineTP.x * freqy)) * dampingY;
     }
     if (pContext.isPreserveZCoordinate()) {
-      pVarTP.z += pVarTP.z + pAmount * pAffineTP.z;
+      pVarTP.z += pAmount * pAffineTP.z;
     }
   }
 

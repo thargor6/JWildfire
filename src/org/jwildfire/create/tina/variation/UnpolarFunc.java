@@ -34,7 +34,7 @@ public class UnpolarFunc extends SimpleVariationFunc {
     pVarTP.y += vvar_2 * r * c;
     pVarTP.x += vvar_2 * r * s;
     if (pContext.isPreserveZCoordinate()) {
-      pVarTP.z += pVarTP.z + pAmount * pAffineTP.z;
+      pVarTP.z += pAmount * pAffineTP.z;
     }
   }
 

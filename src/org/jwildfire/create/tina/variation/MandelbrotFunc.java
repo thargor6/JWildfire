@@ -94,7 +94,7 @@ public class MandelbrotFunc extends VariationFunc {
     pVarTP.x += pAmount * (x1 + cx * x); // + FTx^;
     pVarTP.y += pAmount * (y1 + cy * y); // + FTy^;
     if (pContext.isPreserveZCoordinate()) {
-      pVarTP.z += pVarTP.z + pAmount * pAffineTP.z;
+      pVarTP.z += pAmount * pAffineTP.z;
     }
 
   }

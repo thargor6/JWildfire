@@ -53,7 +53,7 @@ public class LissajousFunc extends VariationFunc {
     pVarTP.x += pAmount * (x1 + c * t + e * y);
     pVarTP.y += pAmount * (y1 + c * t + e * y);
     if (pContext.isPreserveZCoordinate()) {
-      pVarTP.z += pVarTP.z + pAmount * pAffineTP.z;
+      pVarTP.z += pAmount * pAffineTP.z;
     }
 
   }

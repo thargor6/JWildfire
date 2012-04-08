@@ -42,7 +42,7 @@ public class FanFunc extends SimpleVariationFunc {
     pVarTP.x += r * cosr;
     pVarTP.y += r * sinr;
     if (pContext.isPreserveZCoordinate()) {
-      pVarTP.z += pVarTP.z + pAmount * pAffineTP.z;
+      pVarTP.z += pAmount * pAffineTP.z;
     }
   }
 

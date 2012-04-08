@@ -41,7 +41,7 @@ public class PerspectiveFunc extends VariationFunc {
     pVarTP.x += pAmount * this.dist * pAffineTP.x * t;
     pVarTP.y += pAmount * this.vfcos * pAffineTP.y * t;
     if (pContext.isPreserveZCoordinate()) {
-      pVarTP.z += pVarTP.z + pAmount * pAffineTP.z;
+      pVarTP.z += pAmount * pAffineTP.z;
     }
 
   }

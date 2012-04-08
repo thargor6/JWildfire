@@ -30,7 +30,7 @@ public class PolarFunc extends SimpleVariationFunc {
     pVarTP.x += pAmount * (pAffineTP.getPrecalcAtan(pContext) * rPI);
     pVarTP.y += pAmount * ny;
     if (pContext.isPreserveZCoordinate()) {
-      pVarTP.z += pVarTP.z + pAmount * pAffineTP.z;
+      pVarTP.z += pAmount * pAffineTP.z;
     }
 
   }

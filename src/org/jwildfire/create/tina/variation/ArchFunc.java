@@ -33,7 +33,7 @@ public class ArchFunc extends SimpleVariationFunc {
     pVarTP.x += pAmount * sinr;
     pVarTP.y += pAmount * (sinr * sinr) / cosr;
     if (pContext.isPreserveZCoordinate()) {
-      pVarTP.z += pVarTP.z + pAmount * pAffineTP.z;
+      pVarTP.z += pAmount * pAffineTP.z;
     }
   }
 

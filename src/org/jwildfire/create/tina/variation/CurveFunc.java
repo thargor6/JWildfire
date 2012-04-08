@@ -50,7 +50,7 @@ public class CurveFunc extends VariationFunc {
     pVarTP.x += pAmount * (pAffineTP.x + xAmp * exp(-pAffineTP.y * pAffineTP.y / pc_xlen));
     pVarTP.y += pAmount * (pAffineTP.y + yAmp * exp(-pAffineTP.x * pAffineTP.x / pc_ylen));
     if (pContext.isPreserveZCoordinate()) {
-      pVarTP.z += pVarTP.z + pAmount * pAffineTP.z;
+      pVarTP.z += pAmount * pAffineTP.z;
     }
   }
 

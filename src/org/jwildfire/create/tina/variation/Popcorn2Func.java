@@ -39,7 +39,7 @@ public class Popcorn2Func extends VariationFunc {
     pVarTP.x += pAmount * (pAffineTP.x + x * sin(tan(pAffineTP.y * c)));
     pVarTP.y += pAmount * (pAffineTP.y + y * sin(tan(pAffineTP.x * c)));
     if (pContext.isPreserveZCoordinate()) {
-      pVarTP.z += pVarTP.z + pAmount * pAffineTP.z;
+      pVarTP.z += pAmount * pAffineTP.z;
     }
 
   }

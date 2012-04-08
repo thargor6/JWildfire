@@ -139,7 +139,7 @@ public class CrackleFunc extends VariationFunc {
     pVarTP.x += pAmount * DXo;
     pVarTP.y += pAmount * DYo;
     if (pContext.isPreserveZCoordinate()) {
-      pVarTP.z += pVarTP.z + pAmount * pAffineTP.z;
+      pVarTP.z += pAmount * pAffineTP.z;
     }
 
   }

@@ -42,7 +42,7 @@ public class EpispiralWFFunc extends VariationFunc {
     pVarTP.x += pAmount * nx;
     pVarTP.y += pAmount * ny;
     if (pContext.isPreserveZCoordinate()) {
-      pVarTP.z += pVarTP.z + pAmount * pAffineTP.z;
+      pVarTP.z += pAmount * pAffineTP.z;
     }
   }
 

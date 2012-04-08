@@ -60,7 +60,7 @@ public class WedgeJuliaFunc extends VariationFunc {
     pVarTP.x += r * ca;
     pVarTP.y += r * sa;
     if (pContext.isPreserveZCoordinate()) {
-      pVarTP.z += pVarTP.z + pAmount * pAffineTP.z;
+      pVarTP.z += pAmount * pAffineTP.z;
     }
   }
 

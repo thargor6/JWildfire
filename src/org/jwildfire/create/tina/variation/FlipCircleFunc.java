@@ -32,7 +32,7 @@ public class FlipCircleFunc extends SimpleVariationFunc {
       pVarTP.y -= pAmount * pAffineTP.y;
     pVarTP.x += pAmount * pAffineTP.x;
     if (pContext.isPreserveZCoordinate()) {
-      pVarTP.z += pVarTP.z + pAmount * pAffineTP.z;
+      pVarTP.z += pAmount * pAffineTP.z;
     }
   }
 

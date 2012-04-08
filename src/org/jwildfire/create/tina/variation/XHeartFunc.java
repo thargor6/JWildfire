@@ -52,7 +52,7 @@ public class XHeartFunc extends VariationFunc {
       pVarTP.y += -pAmount * y;
     }
     if (pContext.isPreserveZCoordinate()) {
-      pVarTP.z += pVarTP.z + pAmount * pAffineTP.z;
+      pVarTP.z += pAmount * pAffineTP.z;
     }
   }
 

@@ -32,7 +32,7 @@ public class SwirlFunc extends SimpleVariationFunc {
     pVarTP.x += pAmount * (c1 * pAffineTP.x - c2 * pAffineTP.y);
     pVarTP.y += pAmount * (c2 * pAffineTP.x + c1 * pAffineTP.y);
     if (pContext.isPreserveZCoordinate()) {
-      pVarTP.z += pVarTP.z + pAmount * pAffineTP.z;
+      pVarTP.z += pAmount * pAffineTP.z;
     }
   }
 

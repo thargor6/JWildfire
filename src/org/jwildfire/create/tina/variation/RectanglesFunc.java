@@ -45,7 +45,7 @@ public class RectanglesFunc extends VariationFunc {
       pVarTP.y += pAmount * ((2 * floor(pAffineTP.y / y) + 1) * y - pAffineTP.y);
     }
     if (pContext.isPreserveZCoordinate()) {
-      pVarTP.z += pVarTP.z + pAmount * pAffineTP.z;
+      pVarTP.z += pAmount * pAffineTP.z;
     }
   }
 

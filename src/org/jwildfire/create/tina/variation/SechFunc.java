@@ -39,7 +39,7 @@ public class SechFunc extends SimpleVariationFunc {
     pVarTP.x += pAmount * sechden * sechcos * sechcosh;
     pVarTP.y -= pAmount * sechden * sechsin * sechsinh;
     if (pContext.isPreserveZCoordinate()) {
-      pVarTP.z += pVarTP.z + pAmount * pAffineTP.z;
+      pVarTP.z += pAmount * pAffineTP.z;
     }
   }
 

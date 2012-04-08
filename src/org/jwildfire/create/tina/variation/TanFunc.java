@@ -39,7 +39,7 @@ public class TanFunc extends SimpleVariationFunc {
     pVarTP.x += pAmount * tanden * tansin;
     pVarTP.y += pAmount * tanden * tansinh;
     if (pContext.isPreserveZCoordinate()) {
-      pVarTP.z += pVarTP.z + pAmount * pAffineTP.z;
+      pVarTP.z += pAmount * pAffineTP.z;
     }
   }
 

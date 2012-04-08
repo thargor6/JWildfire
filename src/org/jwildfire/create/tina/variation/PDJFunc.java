@@ -39,7 +39,7 @@ public class PDJFunc extends VariationFunc {
     pVarTP.x += pAmount * (sin(a * pAffineTP.y) - cos(b * pAffineTP.x));
     pVarTP.y += pAmount * (sin(c * pAffineTP.x) - cos(d * pAffineTP.y));
     if (pContext.isPreserveZCoordinate()) {
-      pVarTP.z += pVarTP.z + pAmount * pAffineTP.z;
+      pVarTP.z += pAmount * pAffineTP.z;
     }
 
   }

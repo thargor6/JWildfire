@@ -49,7 +49,7 @@ public class SplitFunc extends VariationFunc {
       pVarTP.x -= pAmount * pAffineTP.x;
     }
     if (pContext.isPreserveZCoordinate()) {
-      pVarTP.z += pVarTP.z + pAmount * pAffineTP.z;
+      pVarTP.z += pAmount * pAffineTP.z;
     }
   }
 

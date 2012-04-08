@@ -40,7 +40,6 @@ public class RandomFlameGeneratorList {
     registerRandomFlameGenerator(Spherical3DRandomFlameGenerator.class);
     registerRandomFlameGenerator(SubFlameRandomFlameGenerator.class);
     registerRandomFlameGenerator(TentacleRandomFlameGenerator.class);
-    registerRandomFlameGenerator(ThreeDOnlyRandomFlameGenerator.class);
   }
 
   private static void registerRandomFlameGenerator(Class<? extends RandomFlameGenerator> pRandomFlameGenerator) {

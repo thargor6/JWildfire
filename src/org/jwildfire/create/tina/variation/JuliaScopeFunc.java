@@ -53,7 +53,7 @@ public class JuliaScopeFunc extends VariationFunc {
     pVarTP.x += r * cosa;
     pVarTP.y += r * sina;
     if (pContext.isPreserveZCoordinate()) {
-      pVarTP.z += pVarTP.z + pAmount * pAffineTP.z;
+      pVarTP.z += pAmount * pAffineTP.z;
     }
 
   }

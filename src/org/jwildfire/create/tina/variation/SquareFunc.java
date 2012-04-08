@@ -26,7 +26,7 @@ public class SquareFunc extends SimpleVariationFunc {
     pVarTP.x += pAmount * (pContext.random() - 0.5);
     pVarTP.y += pAmount * (pContext.random() - 0.5);
     if (pContext.isPreserveZCoordinate()) {
-      pVarTP.z += pVarTP.z + pAmount * pAffineTP.z;
+      pVarTP.z += pAmount * pAffineTP.z;
     }
   }
 

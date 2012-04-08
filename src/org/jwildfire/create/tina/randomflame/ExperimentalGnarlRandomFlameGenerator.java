@@ -154,6 +154,7 @@ public class ExperimentalGnarlRandomFlameGenerator extends RandomFlameGenerator 
       }
 
       xForm.setColorSymmetry(symmetry);
+      xForm.setColor(Math.random());
       if (Math.random() > 0.5) {
         XFormTransformService.scale(xForm, 0.9 + Math.random() * 0.09, true, true);
       }

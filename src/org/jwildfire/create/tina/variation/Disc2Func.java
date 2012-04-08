@@ -48,7 +48,7 @@ public class Disc2Func extends VariationFunc {
     pVarTP.x += (sinr + cosadd) * r;
     pVarTP.y += (cosr + sinadd) * r;
     if (pContext.isPreserveZCoordinate()) {
-      pVarTP.z += pVarTP.z + pAmount * pAffineTP.z;
+      pVarTP.z += pAmount * pAffineTP.z;
     }
   }
 

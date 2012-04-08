@@ -37,6 +37,7 @@ public class Spherical3DRandomFlameGenerator extends RandomFlameGenerator {
     flame.setSpatialFilterRadius(0.4);
     flame.setFinalXForm(null);
     flame.getXForms().clear();
+    flame.setPreserveZ(Math.random() < 0.5);
 
     boolean invert = Math.random() > 0.5;
     VariationFunc varFunc;

@@ -83,7 +83,7 @@ public class CircleCropFunc extends VariationFunc {
       pVarTP.y += vv * pAffineTP.y + y0;
     }
     if (pContext.isPreserveZCoordinate()) {
-      pVarTP.z += pVarTP.z + pAmount * pAffineTP.z;
+      pVarTP.z += pAmount * pAffineTP.z;
     }
 
   }

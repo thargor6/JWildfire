@@ -51,7 +51,7 @@ public class RadialBlurFunc extends VariationFunc {
     pVarTP.x += ra * cosa + rz * pAffineTP.x;
     pVarTP.y += ra * sina + rz * pAffineTP.y;
     if (pContext.isPreserveZCoordinate()) {
-      pVarTP.z += pVarTP.z + pAmount * pAffineTP.z;
+      pVarTP.z += pAmount * pAffineTP.z;
     }
   }
 

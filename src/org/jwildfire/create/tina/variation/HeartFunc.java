@@ -35,7 +35,7 @@ public class HeartFunc extends SimpleVariationFunc {
     pVarTP.x += r * sinr;
     pVarTP.y -= r * cosr;
     if (pContext.isPreserveZCoordinate()) {
-      pVarTP.z += pVarTP.z + pAmount * pAffineTP.z;
+      pVarTP.z += pAmount * pAffineTP.z;
     }
 
   }

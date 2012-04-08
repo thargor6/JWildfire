@@ -54,7 +54,7 @@ public class EDiscFunc extends SimpleVariationFunc {
     pVarTP.x += w * cshu * csv;
     pVarTP.y += w * snhu * snv;
     if (pContext.isPreserveZCoordinate()) {
-      pVarTP.z += pVarTP.z + pAmount * pAffineTP.z;
+      pVarTP.z += pAmount * pAffineTP.z;
     }
   }
 

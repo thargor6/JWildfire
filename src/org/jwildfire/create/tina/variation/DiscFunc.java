@@ -35,7 +35,7 @@ public class DiscFunc extends SimpleVariationFunc {
     pVarTP.x += sinr * r;
     pVarTP.y += cosr * r;
     if (pContext.isPreserveZCoordinate()) {
-      pVarTP.z += pVarTP.z + pAmount * pAffineTP.z;
+      pVarTP.z += pAmount * pAffineTP.z;
     }
   }
 

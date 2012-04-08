@@ -35,7 +35,7 @@ public class ExponentialFunc extends SimpleVariationFunc {
     pVarTP.x += cosr * d;
     pVarTP.y += sinr * d;
     if (pContext.isPreserveZCoordinate()) {
-      pVarTP.z += pVarTP.z + pAmount * pAffineTP.z;
+      pVarTP.z += pAmount * pAffineTP.z;
     }
   }
 

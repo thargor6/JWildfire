@@ -62,7 +62,7 @@ public class BubbleWrapFunc extends VariationFunc {
       pVarTP.x += pAmount * Vx;
       pVarTP.y += pAmount * Vy;
       if (pContext.isPreserveZCoordinate()) {
-        pVarTP.z += pVarTP.z + pAmount * pAffineTP.z;
+        pVarTP.z += pAmount * pAffineTP.z;
       }
       return;
     }
@@ -78,7 +78,7 @@ public class BubbleWrapFunc extends VariationFunc {
       pVarTP.x += pAmount * Vx;
       pVarTP.y += pAmount * Vy;
       if (pContext.isPreserveZCoordinate()) {
-        pVarTP.z += pVarTP.z + pAmount * pAffineTP.z;
+        pVarTP.z += pAmount * pAffineTP.z;
       }
       return;
     }
@@ -106,7 +106,7 @@ public class BubbleWrapFunc extends VariationFunc {
     pVarTP.x += pAmount * Vx;
     pVarTP.y += pAmount * Vy;
     if (pContext.isPreserveZCoordinate()) {
-      pVarTP.z += pVarTP.z + pAmount * pAffineTP.z;
+      pVarTP.z += pAmount * pAffineTP.z;
     }
   }
 

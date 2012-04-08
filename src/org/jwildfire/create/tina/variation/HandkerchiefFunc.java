@@ -32,7 +32,7 @@ public class HandkerchiefFunc extends SimpleVariationFunc {
     pVarTP.x += pAmount * (sin(angle + r) * r);
     pVarTP.y += pAmount * (cos(angle - r) * r);
     if (pContext.isPreserveZCoordinate()) {
-      pVarTP.z += pVarTP.z + pAmount * pAffineTP.z;
+      pVarTP.z += pAmount * pAffineTP.z;
     }
 
   }

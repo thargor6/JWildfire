@@ -56,7 +56,7 @@ public class NPolarFunc extends VariationFunc {
     pVarTP.x += x;
     pVarTP.y += y;
     if (pContext.isPreserveZCoordinate()) {
-      pVarTP.z += pVarTP.z + pAmount * pAffineTP.z;
+      pVarTP.z += pAmount * pAffineTP.z;
     }
 
   }

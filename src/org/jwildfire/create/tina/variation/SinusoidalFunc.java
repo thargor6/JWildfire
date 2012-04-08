@@ -28,7 +28,7 @@ public class SinusoidalFunc extends SimpleVariationFunc {
     pVarTP.x += pAmount * sin(pAffineTP.x);
     pVarTP.y += pAmount * sin(pAffineTP.y);
     if (pContext.isPreserveZCoordinate()) {
-      pVarTP.z += pVarTP.z + pAmount * pAffineTP.z;
+      pVarTP.z += pAmount * pAffineTP.z;
     }
   }
 

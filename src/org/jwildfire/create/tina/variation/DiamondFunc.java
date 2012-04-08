@@ -34,7 +34,7 @@ public class DiamondFunc extends SimpleVariationFunc {
     pVarTP.x += pAmount * sinA * cosr;
     pVarTP.y += pAmount * cosA * sinr;
     if (pContext.isPreserveZCoordinate()) {
-      pVarTP.z += pVarTP.z + pAmount * pAffineTP.z;
+      pVarTP.z += pAmount * pAffineTP.z;
     }
   }
 
