@@ -3028,8 +3028,8 @@ public class TinaInternalFrame extends JInternalFrame {
       getAnimateLightScriptCmb().setSelectedItem(AnimationService.LightScript.NONE);
 
       tinaController.setInteractiveRendererCtrl(new TinaInteractiveRendererController(tinaController, pErrorHandler, pPrefs,
-          getInteractiveLoadFlameButton(), getInteractiveLoadFlameFromClipboardButton(), getInteractiveClearScreenButton(),
-          getInteractiveNextButton(), getInteractiveStopButton(), getInteractiveFlameToClipboardButton(), getInteractiveSaveImageButton(),
+          getInteractiveLoadFlameButton(), getInteractiveLoadFlameFromClipboardButton(), getInteractiveNextButton(), getInteractiveStopButton(),
+          getInteractiveFlameToClipboardButton(), getInteractiveSaveImageButton(),
           getInteractiveSaveFlameButton(), getInteractiveRandomStyleCmb(), getInteractiveCenterTopPanel(), getInteractiveStatsTextArea(),
           getInteractiveHalveSizeButton(), getInteractiveResolutionProfileCmb()));
       tinaController.getInteractiveRendererCtrl().enableControls();
@@ -8242,14 +8242,12 @@ public class TinaInternalFrame extends JInternalFrame {
   private JScrollPane interactiveStatsScrollPane;
   private JTextArea interactiveStatsTextArea;
   private JComboBox interactiveRandomStyleCmb;
-  private JButton interactiveClearScreenButton;
   private JToggleButton interactiveHalveSizeButton;
   private JToggleButton affinePreserveZButton;
   private JToggleButton cancelRenderBtn;
   private JButton qualityProfileBtn;
   private JButton resolutionProfileBtn;
   private JComboBox interactiveResolutionProfileCmb;
-  private JButton interactiveResolutionProfileBtn;
   private JComboBox qualityProfileCmb;
   private JComboBox resolutionProfileCmb;
 
@@ -9069,7 +9067,7 @@ public class TinaInternalFrame extends JInternalFrame {
       label.setPreferredSize(new Dimension(94, 22));
       label.setFont(new Font("Dialog", Font.BOLD, 10));
       label.setBounds(new Rectangle(135, 7, 94, 22));
-      label.setBounds(248, 8, 94, 22);
+      label.setBounds(349, 8, 94, 22);
       interactiveNorthPanel.add(label);
 
       interactiveRandomStyleCmb = new JComboBox();
@@ -9077,7 +9075,7 @@ public class TinaInternalFrame extends JInternalFrame {
       interactiveRandomStyleCmb.setMaximumRowCount(32);
       interactiveRandomStyleCmb.setFont(new Font("Dialog", Font.BOLD, 10));
       interactiveRandomStyleCmb.setBounds(new Rectangle(231, 7, 125, 22));
-      interactiveRandomStyleCmb.setBounds(348, 8, 125, 22);
+      interactiveRandomStyleCmb.setBounds(349, 32, 125, 22);
       interactiveRandomStyleCmb.setMaximumRowCount(32);
       interactiveRandomStyleCmb.removeAllItems();
       for (String name : RandomFlameGeneratorList.getNameList()) {
@@ -9086,20 +9084,6 @@ public class TinaInternalFrame extends JInternalFrame {
       interactiveRandomStyleCmb.setSelectedItem(RandomFlameGeneratorList.DEFAULT_GENERATOR_NAME);
 
       interactiveNorthPanel.add(interactiveRandomStyleCmb);
-
-      interactiveClearScreenButton = new JButton();
-      interactiveClearScreenButton.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-          tinaController.getInteractiveRendererCtrl().clearScreenButton_clicked();
-        }
-      });
-      interactiveClearScreenButton.setToolTipText("");
-      interactiveClearScreenButton.setText("Clear screen");
-      interactiveClearScreenButton.setPreferredSize(new Dimension(125, 32));
-      interactiveClearScreenButton.setFont(new Font("Dialog", Font.BOLD, 10));
-      interactiveClearScreenButton.setBounds(new Rectangle(8, 8, 125, 24));
-      interactiveClearScreenButton.setBounds(707, 20, 125, 24);
-      interactiveNorthPanel.add(interactiveClearScreenButton);
 
       interactiveHalveSizeButton = new JToggleButton();
       interactiveHalveSizeButton.addActionListener(new ActionListener() {
@@ -9112,10 +9096,9 @@ public class TinaInternalFrame extends JInternalFrame {
       interactiveHalveSizeButton.setPreferredSize(new Dimension(42, 24));
       interactiveHalveSizeButton.setMnemonic(KeyEvent.VK_M);
       interactiveHalveSizeButton.setFont(new Font("Dialog", Font.BOLD, 10));
-      interactiveHalveSizeButton.setBounds(343, 32, 130, 24);
+      interactiveHalveSizeButton.setBounds(182, 8, 125, 24);
       interactiveNorthPanel.add(interactiveHalveSizeButton);
       interactiveNorthPanel.add(getInteractiveResolutionProfileCmb());
-      interactiveNorthPanel.add(getInteractiveResolutionProfileBtn());
     }
     return interactiveNorthPanel;
   }
@@ -9318,10 +9301,6 @@ public class TinaInternalFrame extends JInternalFrame {
     return interactiveRandomStyleCmb;
   }
 
-  public JButton getInteractiveClearScreenButton() {
-    return interactiveClearScreenButton;
-  }
-
   public JToggleButton getInteractiveHalveSizeButton() {
     return interactiveHalveSizeButton;
   }
@@ -9384,27 +9363,9 @@ public class TinaInternalFrame extends JInternalFrame {
       interactiveResolutionProfileCmb.setMaximumRowCount(32);
       interactiveResolutionProfileCmb.setFont(new Font("Dialog", Font.BOLD, 10));
       interactiveResolutionProfileCmb.setBounds(new Rectangle(231, 7, 125, 22));
-      interactiveResolutionProfileCmb.setBounds(166, 34, 125, 22);
+      interactiveResolutionProfileCmb.setBounds(182, 32, 125, 22);
     }
     return interactiveResolutionProfileCmb;
-  }
-
-  private JButton getInteractiveResolutionProfileBtn() {
-    if (interactiveResolutionProfileBtn == null) {
-      interactiveResolutionProfileBtn = new JButton();
-      interactiveResolutionProfileBtn.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-          // TODO
-        }
-      });
-      interactiveResolutionProfileBtn.setToolTipText("Edit resolution profiles");
-      interactiveResolutionProfileBtn.setText("...");
-      interactiveResolutionProfileBtn.setPreferredSize(new Dimension(125, 24));
-      interactiveResolutionProfileBtn.setFont(new Font("Dialog", Font.BOLD, 10));
-      interactiveResolutionProfileBtn.setBounds(new Rectangle(508, 6, 125, 24));
-      interactiveResolutionProfileBtn.setBounds(291, 32, 40, 24);
-    }
-    return interactiveResolutionProfileBtn;
   }
 
   public JComboBox getQualityProfileCmb() {
