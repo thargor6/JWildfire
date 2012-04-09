@@ -38,6 +38,7 @@ import javax.swing.ScrollPaneConstants;
 import org.jwildfire.base.Prefs;
 import org.jwildfire.base.QualityProfile;
 import org.jwildfire.base.ResolutionProfile;
+import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.io.Flam3Reader;
 import org.jwildfire.create.tina.io.Flam3Writer;
@@ -359,15 +360,26 @@ public class TinaInteractiveRendererController implements IterationObserver {
     sampleCount++;
   }
 
+  private synchronized void updateImage() {
+    imageRootPanel.repaint();
+  }
+
+  private synchronized void updateStats(FlameRenderThread pEventSource) {
+    double quality = pEventSource.getTonemapper().calcDensity(sampleCount);
+    statsTextArea.setText("Current quality: " + Tools.doubleToString(quality));
+    statsTextArea.validate();
+  }
+
   @Override
   public void notifyIterationFinished(FlameRenderThread pEventSource, int pX, int pY) {
     incSampleCount();
     if (pX >= 0 && pX < image.getImageWidth() && pY >= 0 && pY < image.getImageHeight()) {
       image.setARGB(pX, pY, pEventSource.getTonemapper().tonemapSample(pX, pY));
-
-      if (sampleCount % 30000 == 0) {
-        System.out.println(pEventSource.getTonemapper().calcDensity(sampleCount));
-        imageRootPanel.repaint();
+      if (sampleCount % 1000 == 0) {
+        updateImage();
+      }
+      if (sampleCount % 1000000 == 0) {
+        updateStats(pEventSource);
       }
     }
   }
@@ -468,6 +480,13 @@ public class TinaInteractiveRendererController implements IterationObserver {
     }
     catch (Throwable ex) {
       errorHandler.handleError(ex);
+    }
+  }
+
+  public void qualityProfile_changed() {
+    if (!parentCtrl.cmbRefreshing) {
+      // Nothing special here
+      halveSizeButton_clicked();
     }
   }
 

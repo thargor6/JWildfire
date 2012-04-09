@@ -1,3 +1,29 @@
+V0.44 (09.04.2012):
+ - Fracal flame editor: the interactive renderer also now respects the quality setting (from the render profile) and does not "overrender" as quickly as before
+ - Fracal flame editor: rudimentary statistics display in the interactive renderer
+ - Fracal flame editor: increased the responsebility of various sliders
+ - Fractal flame editor: removed oversample controls from the coloring tab, added gamma threshold controls, reactivated filter radius control
+ - Fractal flame editor: From Editor/To Editor buttons to quick exchanging from fractals between the editor and the renderer
+ - Main: removed most of the TINA-related settings from the Preferences windows
+ - Fractal flame editor: use resolution profiles in the Editor, Interactive Renderer and Batch renderer
+ - Fractal flame editor: use quality profiles in the Editor, Interactive Renderer and Batch renderer
+ - Fractal flame editor: removed the movie mode button and the movie related settings from the preferences window
+ - Fractal flame editor: use gradients of random size in the random flame generators
+ - Fractal flame editor: randomize color keyframe position in the random gradient generator
+ - Fractal flame editor: resolution combobox in the interactive renderer
+ - Fractal flame editor: automatically clear the screen in the interactive renderer
+ - Fractal flame editor: make use of more color in the gnarl random fractal generators
+ - Fractal flame editor: resolution profiles for the interactive renderer
+ - Fractal flame editor: resolution and quality profiles in the preferences
+ - Fractal flames editor: removed the "3d only" random flames generator which produces only simple shapes
+ - Fractal flame editor: new per-flame-option to preserve the z-coordinate when mixing 2D and 3D variations
+ - Fractal flame editor: optionally preserve the z coordinate in variations (like the new Apophysis version this does)
+ - Fractal flame editor: Epispiral variation by cyberxaos
+ - Fractal flame editor: flipy and flipcircle variation by Michal Faber
+ - Fractal flame editor: FIXED: the foci variation was broken (caused msot flames to "vanish")
+ - Fractal flame editor: falloff2 and post_falloff2 variation by Xyrus02
+ - Fractal flame editor: farblur variation by zephyrtronium
+
 V0.43 (06.04.2012):
  - Fractal flame editor: First working version of the interactive renderer
  - Fractal flame editor: FIXED: filter radius was always set to high in rendering
