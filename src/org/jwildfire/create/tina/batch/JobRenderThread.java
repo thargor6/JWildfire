@@ -20,6 +20,8 @@ import java.awt.Graphics;
 import java.util.Calendar;
 import java.util.List;
 
+import org.jwildfire.base.QualityProfile;
+import org.jwildfire.base.ResolutionProfile;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.io.Flam3Reader;
 import org.jwildfire.create.tina.render.FlameRenderer;
@@ -30,11 +32,15 @@ import org.jwildfire.io.ImageWriter;
 public class JobRenderThread implements Runnable {
   private final List<Job> activeJobList;
   private final JobRenderThreadController controller;
+  private final QualityProfile qualityProfile;
+  private final ResolutionProfile resolutionProfile;
   private boolean cancelSignalled;
 
-  public JobRenderThread(JobRenderThreadController pController, List<Job> pActiveJobList) {
+  public JobRenderThread(JobRenderThreadController pController, List<Job> pActiveJobList, ResolutionProfile pResolutionProfile, QualityProfile pQualityProfile) {
     controller = pController;
     activeJobList = pActiveJobList;
+    resolutionProfile = pResolutionProfile;
+    qualityProfile = pQualityProfile;
   }
 
   @Override
@@ -54,8 +60,8 @@ public class JobRenderThread implements Runnable {
             int width = controller.getPrefs().getTinaRenderImageWidth();
             int height = controller.getPrefs().getTinaRenderImageHeight();
             RenderInfo info = new RenderInfo(width, height);
-            info.setRenderHDR(controller.getPrefs().isTinaRenderHighHDR());
-            info.setRenderHDRIntensityMap(controller.getPrefs().isTinaRenderHighHDRIntensityMap());
+            info.setRenderHDR(qualityProfile.isWithHDR());
+            info.setRenderHDRIntensityMap(qualityProfile.isWithHDRIntensityMap());
             List<Flame> flames = new Flam3Reader().readFlames(job.getFlameFilename());
             Flame flame = flames.get(0);
             double wScl = (double) info.getImageWidth() / (double) flame.getWidth();
@@ -68,10 +74,9 @@ public class JobRenderThread implements Runnable {
             int oldColorOversample = flame.getColorOversample();
             double oldFilterRadius = flame.getSpatialFilterRadius();
             try {
-              flame.setSampleDensity(controller.getPrefs().getTinaRenderHighQuality());
-              flame.setSpatialOversample(controller.getPrefs().getTinaRenderHighSpatialOversample());
-              flame.setColorOversample(controller.getPrefs().getTinaRenderHighColorOversample());
-              flame.setSpatialFilterRadius(controller.getPrefs().getTinaRenderHighSpatialOversample());
+              flame.setSampleDensity(qualityProfile.getQuality());
+              flame.setSpatialOversample(qualityProfile.getSpatialOversample());
+              flame.setColorOversample(qualityProfile.getColorOversample());
               long t0 = Calendar.getInstance().getTimeInMillis();
               FlameRenderer renderer = new FlameRenderer(flame, controller.getPrefs());
               renderer.setProgressUpdater(controller.getJobProgressUpdater());

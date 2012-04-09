@@ -54,25 +54,7 @@ public class Prefs extends ManagedObject {
   static final String KEY_TINA_RENDER_MOVIE_FRAMES = "tina.render.movie.frames";
 
   static final String KEY_TINA_RENDER_REALTIME_QUALITY = "tina.render.realtime.quality";
-
-  static final String KEY_TINA_RENDER_PREVIEW_SPATIAL_OVERSAMPLE = "tina.render.preview.spatial_oversample";
-  static final String KEY_TINA_RENDER_PREVIEW_COLOR_OVERSAMPLE = "tina.render.preview.color_oversample";
-  static final String KEY_TINA_RENDER_PREVIEW_FILTER_RADIUS = "tina.render.preview.filter_radius";
   static final String KEY_TINA_RENDER_PREVIEW_QUALITY = "tina.render.preview.quality";
-
-  static final String KEY_TINA_RENDER_NORMAL_SPATIAL_OVERSAMPLE = "tina.render.normal.spatial_oversample";
-  static final String KEY_TINA_RENDER_NORMAL_COLOR_OVERSAMPLE = "tina.render.normal.color_oversample";
-  static final String KEY_TINA_RENDER_NORMAL_FILTER_RADIUS = "tina.render.normal.filter_radius";
-  static final String KEY_TINA_RENDER_NORMAL_QUALITY = "tina.render.normal.quality";
-  static final String KEY_TINA_RENDER_NORMAL_HDR = "tina.render.normal.hdr";
-  static final String KEY_TINA_RENDER_NORMAL_HDR_INTENSITY_MAP = "tina.render.normal.hdr.intensity_map";
-
-  static final String KEY_TINA_RENDER_HIGH_SPATIAL_OVERSAMPLE = "tina.render.high.spatial_oversample";
-  static final String KEY_TINA_RENDER_HIGH_COLOR_OVERSAMPLE = "tina.render.high.color_oversample";
-  static final String KEY_TINA_RENDER_HIGH_FILTER_RADIUS = "tina.render.high.filter_radius";
-  static final String KEY_TINA_RENDER_HIGH_QUALITY = "tina.render.high.quality";
-  static final String KEY_TINA_RENDER_HIGH_HDR = "tina.render.high.hdr";
-  static final String KEY_TINA_RENDER_HIGH_HDR_INTENSITY_MAP = "tina.render.high.hdr.intensity_map";
 
   static final String KEY_TINA_RANDOMBATCH_SIZE = "tina.random_batch.size";
   static final String KEY_TINA_RANDOMBATCH_BGCOLOR_RED = "tina.random_batch.bg_color.red";
@@ -127,40 +109,8 @@ public class Prefs extends ManagedObject {
   @Property(description = "Quality for realtime rendering (please restart app after changing this)", category = PropertyCategory.TINA)
   private int tinaRenderRealtimeQuality = 1;
 
-  @Property(description = "Spatial oversample for preview rendering", category = PropertyCategory.TINA)
-  private int tinaRenderPreviewSpatialOversample = 1;
-  @Property(description = "Color oversample for preview rendering", category = PropertyCategory.TINA)
-  private int tinaRenderPreviewColorOversample = 1;
-  @Property(description = "Filter radius for preview rendering", category = PropertyCategory.TINA)
-  private double tinaRenderPreviewFilterRadius = 0.0;
   @Property(description = "Quality for preview rendering", category = PropertyCategory.TINA)
   private int tinaRenderPreviewQuality = 100;
-
-  @Property(description = "Spatial oversample for normal rendering", category = PropertyCategory.TINA)
-  private int tinaRenderNormalSpatialOversample = 1;
-  @Property(description = "Color oversample for normal rendering", category = PropertyCategory.TINA)
-  private int tinaRenderNormalColorOversample = 1;
-  @Property(description = "Filter radius for normal rendering", category = PropertyCategory.TINA)
-  private double tinaRenderNormalFilterRadius = 1.25;
-  @Property(description = "Quality for normal rendering", category = PropertyCategory.TINA)
-  private int tinaRenderNormalQuality = 150;
-  @Property(description = "Render an additional hdr image for further processing while normal rendering", category = PropertyCategory.TINA)
-  private boolean tinaRenderNormalHDR = false;
-  @Property(description = "Render an additional hdr intensity image for further processing while normal rendering", category = PropertyCategory.TINA)
-  private boolean tinaRenderNormalHDRIntensityMap = false;
-
-  @Property(description = "Spatial oversample for high quality rendering", category = PropertyCategory.TINA)
-  private int tinaRenderHighSpatialOversample = 2;
-  @Property(description = "Color oversample for high quality rendering", category = PropertyCategory.TINA)
-  private int tinaRenderHighColorOversample = 3;
-  @Property(description = "Filter radius for high quality rendering", category = PropertyCategory.TINA)
-  private double tinaRenderHighFilterRadius = 1.25;
-  @Property(description = "Quality for high quality rendering", category = PropertyCategory.TINA)
-  private int tinaRenderHighQuality = 500;
-  @Property(description = "Render an additional hdr image for further processing while high quality rendering", category = PropertyCategory.TINA)
-  private boolean tinaRenderHighHDR = true;
-  @Property(description = "Render an additional hdr intensity image for further processing while high quality rendering", category = PropertyCategory.TINA)
-  private boolean tinaRenderHighHDRIntensityMap = true;
 
   @Property(description = "Number of generated flames by invoking the \"Random flames\" function", category = PropertyCategory.TINA)
   private int tinaRandomBatchSize = 24;
@@ -318,22 +268,7 @@ public class Prefs extends ManagedObject {
     tinaRenderImageWidth = pSrc.tinaRenderImageWidth;
     tinaRenderImageHeight = pSrc.tinaRenderImageHeight;
     tinaRenderMovieFrames = pSrc.tinaRenderMovieFrames;
-    tinaRenderPreviewSpatialOversample = pSrc.tinaRenderPreviewSpatialOversample;
-    tinaRenderPreviewColorOversample = pSrc.tinaRenderPreviewColorOversample;
-    tinaRenderPreviewFilterRadius = pSrc.tinaRenderPreviewFilterRadius;
     tinaRenderPreviewQuality = pSrc.tinaRenderPreviewQuality;
-    tinaRenderNormalSpatialOversample = pSrc.tinaRenderNormalSpatialOversample;
-    tinaRenderNormalColorOversample = pSrc.tinaRenderNormalColorOversample;
-    tinaRenderNormalFilterRadius = pSrc.tinaRenderNormalFilterRadius;
-    tinaRenderNormalQuality = pSrc.tinaRenderNormalQuality;
-    tinaRenderNormalHDR = pSrc.tinaRenderNormalHDR;
-    tinaRenderNormalHDRIntensityMap = pSrc.tinaRenderNormalHDRIntensityMap;
-    tinaRenderHighSpatialOversample = pSrc.tinaRenderHighSpatialOversample;
-    tinaRenderHighColorOversample = pSrc.tinaRenderHighColorOversample;
-    tinaRenderHighFilterRadius = pSrc.tinaRenderHighFilterRadius;
-    tinaRenderHighQuality = pSrc.tinaRenderHighQuality;
-    tinaRenderHighHDR = pSrc.tinaRenderHighHDR;
-    tinaRenderHighHDRIntensityMap = pSrc.tinaRenderHighHDRIntensityMap;
     tinaRenderRealtimeQuality = pSrc.tinaRenderRealtimeQuality;
     tinaRandomBatchSize = pSrc.tinaRandomBatchSize;
     tinaRandomBatchBGColorRed = pSrc.tinaRandomBatchBGColorRed;
@@ -365,100 +300,12 @@ public class Prefs extends ManagedObject {
     return tinaRenderThreads;
   }
 
-  public int getTinaRenderPreviewSpatialOversample() {
-    return tinaRenderPreviewSpatialOversample;
-  }
-
-  public void setTinaRenderPreviewSpatialOversample(int tinaRenderPreviewSpatialOversample) {
-    this.tinaRenderPreviewSpatialOversample = tinaRenderPreviewSpatialOversample;
-  }
-
-  public int getTinaRenderPreviewColorOversample() {
-    return tinaRenderPreviewColorOversample;
-  }
-
-  public void setTinaRenderPreviewColorOversample(int tinaRenderPreviewColorOversample) {
-    this.tinaRenderPreviewColorOversample = tinaRenderPreviewColorOversample;
-  }
-
-  public double getTinaRenderPreviewFilterRadius() {
-    return tinaRenderPreviewFilterRadius;
-  }
-
-  public void setTinaRenderPreviewFilterRadius(double tinaRenderPreviewFilterRadius) {
-    this.tinaRenderPreviewFilterRadius = tinaRenderPreviewFilterRadius;
-  }
-
   public int getTinaRenderPreviewQuality() {
     return tinaRenderPreviewQuality;
   }
 
   public void setTinaRenderPreviewQuality(int tinaRenderPreviewQuality) {
     this.tinaRenderPreviewQuality = tinaRenderPreviewQuality;
-  }
-
-  public int getTinaRenderNormalSpatialOversample() {
-    return tinaRenderNormalSpatialOversample;
-  }
-
-  public void setTinaRenderNormalSpatialOversample(int tinaRenderNormalSpatialOversample) {
-    this.tinaRenderNormalSpatialOversample = tinaRenderNormalSpatialOversample;
-  }
-
-  public int getTinaRenderNormalColorOversample() {
-    return tinaRenderNormalColorOversample;
-  }
-
-  public void setTinaRenderNormalColorOversample(int tinaRenderNormalColorOversample) {
-    this.tinaRenderNormalColorOversample = tinaRenderNormalColorOversample;
-  }
-
-  public double getTinaRenderNormalFilterRadius() {
-    return tinaRenderNormalFilterRadius;
-  }
-
-  public void setTinaRenderNormalFilterRadius(double tinaRenderNormalFilterRadius) {
-    this.tinaRenderNormalFilterRadius = tinaRenderNormalFilterRadius;
-  }
-
-  public int getTinaRenderNormalQuality() {
-    return tinaRenderNormalQuality;
-  }
-
-  public void setTinaRenderNormalQuality(int tinaRenderNormalQuality) {
-    this.tinaRenderNormalQuality = tinaRenderNormalQuality;
-  }
-
-  public int getTinaRenderHighSpatialOversample() {
-    return tinaRenderHighSpatialOversample;
-  }
-
-  public void setTinaRenderHighSpatialOversample(int tinaRenderHighSpatialOversample) {
-    this.tinaRenderHighSpatialOversample = tinaRenderHighSpatialOversample;
-  }
-
-  public int getTinaRenderHighColorOversample() {
-    return tinaRenderHighColorOversample;
-  }
-
-  public void setTinaRenderHighColorOversample(int tinaRenderHighColorOversample) {
-    this.tinaRenderHighColorOversample = tinaRenderHighColorOversample;
-  }
-
-  public double getTinaRenderHighFilterRadius() {
-    return tinaRenderHighFilterRadius;
-  }
-
-  public void setTinaRenderHighFilterRadius(double tinaRenderHighFilterRadius) {
-    this.tinaRenderHighFilterRadius = tinaRenderHighFilterRadius;
-  }
-
-  public int getTinaRenderHighQuality() {
-    return tinaRenderHighQuality;
-  }
-
-  public void setTinaRenderHighQuality(int tinaRenderHighQuality) {
-    this.tinaRenderHighQuality = tinaRenderHighQuality;
   }
 
   public int getTinaRenderImageWidth() {
@@ -493,22 +340,6 @@ public class Prefs extends ManagedObject {
     this.tinaRenderRealtimeQuality = tinaRenderRealtimeQuality;
   }
 
-  public boolean isTinaRenderHighHDR() {
-    return tinaRenderHighHDR;
-  }
-
-  public void setTinaRenderHighHDR(boolean tinaRenderHighHDR) {
-    this.tinaRenderHighHDR = tinaRenderHighHDR;
-  }
-
-  public boolean isTinaRenderNormalHDR() {
-    return tinaRenderNormalHDR;
-  }
-
-  public void setTinaRenderNormalHDR(boolean tinaRenderNormalHDR) {
-    this.tinaRenderNormalHDR = tinaRenderNormalHDR;
-  }
-
   public int getTinaRandomBatchSize() {
     return tinaRandomBatchSize;
   }
@@ -539,22 +370,6 @@ public class Prefs extends ManagedObject {
 
   public void setTinaRandomBatchBGColorBlue(int tinaRandomBatchBGColorBlue) {
     this.tinaRandomBatchBGColorBlue = tinaRandomBatchBGColorBlue;
-  }
-
-  public boolean isTinaRenderNormalHDRIntensityMap() {
-    return tinaRenderNormalHDRIntensityMap;
-  }
-
-  public void setTinaRenderNormalHDRIntensityMap(boolean tinaRenderNormalHDRIntensityMap) {
-    this.tinaRenderNormalHDRIntensityMap = tinaRenderNormalHDRIntensityMap;
-  }
-
-  public boolean isTinaRenderHighHDRIntensityMap() {
-    return tinaRenderHighHDRIntensityMap;
-  }
-
-  public void setTinaRenderHighHDRIntensityMap(boolean tinaRenderHighHDRIntensityMap) {
-    this.tinaRenderHighHDRIntensityMap = tinaRenderHighHDRIntensityMap;
   }
 
   public String getPlafStyle() {

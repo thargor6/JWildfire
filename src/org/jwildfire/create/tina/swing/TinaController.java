@@ -212,6 +212,9 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
   private final JTabbedPane rootTabbedPane;
   private final JComboBox qualityProfileCmb;
   private final JComboBox resolutionProfileCmb;
+  private final JComboBox batchQualityProfileCmb;
+  private final JComboBox batchResolutionProfileCmb;
+  private final JComboBox interactiveQualityProfileCmb;
   private final JComboBox interactiveResolutionProfileCmb;
   // script
   private final JTextArea scriptTextArea;
@@ -457,7 +460,8 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       JTextField pShadingBlurFallOffREd, JSlider pShadingBlurFallOffSlider, JTextArea pScriptTextArea, JToggleButton pAffineScaleXButton,
       JToggleButton pAffineScaleYButton, JPanel pGradientLibraryPanel, JComboBox pGradientLibraryGradientCmb, JTextPane pHelpPane,
       JToggleButton pToggleVariationsButton, JToggleButton pAffinePreserveZButton,
-      JComboBox pQualityProfileCmb, JComboBox pResolutionProfileCmb, JComboBox pInteractiveResolutionProfileCmb) {
+      JComboBox pQualityProfileCmb, JComboBox pResolutionProfileCmb, JComboBox pBatchQualityProfileCmb, JComboBox pBatchResolutionProfileCmb,
+      JComboBox pInteractiveQualityProfileCmb, JComboBox pInteractiveResolutionProfileCmb) {
     errorHandler = pErrorHandler;
     prefs = pPrefs;
     centerPanel = pCenterPanel;
@@ -527,6 +531,9 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
 
     qualityProfileCmb = pQualityProfileCmb;
     resolutionProfileCmb = pResolutionProfileCmb;
+    batchQualityProfileCmb = pBatchQualityProfileCmb;
+    batchResolutionProfileCmb = pBatchResolutionProfileCmb;
+    interactiveQualityProfileCmb = pInteractiveQualityProfileCmb;
     interactiveResolutionProfileCmb = pInteractiveResolutionProfileCmb;
 
     transformationsTable = pTransformationsTable;
@@ -673,7 +680,10 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
 
     refreshResolutionProfileCmb(resolutionProfileCmb, null);
     refreshResolutionProfileCmb(interactiveResolutionProfileCmb, null);
+    refreshResolutionProfileCmb(batchResolutionProfileCmb, null);
     refreshQualityProfileCmb(qualityProfileCmb, null);
+    refreshQualityProfileCmb(interactiveQualityProfileCmb, null);
+    refreshQualityProfileCmb(batchQualityProfileCmb, null);
     scriptTextArea = pScriptTextArea;
 
     animateFramesREd.setText(String.valueOf(prefs.getTinaRenderMovieFrames()));
@@ -1043,9 +1053,9 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
           else {
             renderer.setProgressUpdater(mainProgressUpdater);
             flame.setSampleDensity(prefs.getTinaRenderPreviewQuality());
-            flame.setSpatialFilterRadius(prefs.getTinaRenderPreviewFilterRadius());
-            flame.setSpatialOversample(prefs.getTinaRenderPreviewSpatialOversample());
-            flame.setColorOversample(prefs.getTinaRenderPreviewColorOversample());
+            flame.setSpatialFilterRadius(0.0);
+            flame.setSpatialOversample(1);
+            flame.setColorOversample(1);
           }
           renderer.setRenderScale(renderScale);
           RenderedFlame res = renderer.renderFlame(info);
@@ -2204,7 +2214,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     paletteSliderChanged(paletteShiftSlider, paletteShiftREd, "modShift", 1.0);
   }
 
-  public void renderImageButton_actionPerformed(boolean pHighQuality) {
+  public void renderImageButton_actionPerformed() {
     Flame currFlame = getCurrFlame();
     if (currFlame != null) {
       try {
@@ -2218,6 +2228,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
           }
         }
         if (chooser.showSaveDialog(centerPanel) == JFileChooser.APPROVE_OPTION) {
+          QualityProfile qualProfile = getQualityProfile();
           File file = chooser.getSelectedFile();
           prefs.setLastOutputImageFile(file);
           int width = prefs.getTinaRenderImageWidth();
@@ -2229,27 +2240,18 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
           flame.setPixelsPerUnit((wScl + hScl) * 0.5 * flame.getPixelsPerUnit());
           flame.setWidth(info.getImageWidth());
           flame.setHeight(info.getImageHeight());
-          boolean renderHDR = pHighQuality ? prefs.isTinaRenderHighHDR() : prefs.isTinaRenderNormalHDR();
+          boolean renderHDR = qualProfile.isWithHDR();
           info.setRenderHDR(renderHDR);
-          boolean renderHDRIntensityMap = pHighQuality ? prefs.isTinaRenderHighHDRIntensityMap() : prefs.isTinaRenderNormalHDRIntensityMap();
+          boolean renderHDRIntensityMap = qualProfile.isWithHDRIntensityMap();
           info.setRenderHDRIntensityMap(renderHDRIntensityMap);
           double oldSampleDensity = flame.getSampleDensity();
           int oldSpatialOversample = flame.getSpatialOversample();
           int oldColorOversample = flame.getColorOversample();
           double oldFilterRadius = flame.getSpatialFilterRadius();
           try {
-            if (pHighQuality) {
-              flame.setSampleDensity(prefs.getTinaRenderHighQuality());
-              flame.setSpatialOversample(prefs.getTinaRenderHighSpatialOversample());
-              flame.setColorOversample(prefs.getTinaRenderHighColorOversample());
-              flame.setSpatialFilterRadius(prefs.getTinaRenderHighFilterRadius());
-            }
-            else {
-              flame.setSampleDensity(prefs.getTinaRenderNormalQuality());
-              flame.setSpatialOversample(prefs.getTinaRenderNormalSpatialOversample());
-              flame.setColorOversample(prefs.getTinaRenderNormalColorOversample());
-              flame.setSpatialFilterRadius(prefs.getTinaRenderNormalFilterRadius());
-            }
+            flame.setSampleDensity(qualProfile.getQuality());
+            flame.setSpatialOversample(qualProfile.getSpatialOversample());
+            flame.setColorOversample(qualProfile.getColorOversample());
             long t0 = Calendar.getInstance().getTimeInMillis();
             FlameRenderer renderer = new FlameRenderer(flame, prefs);
             renderer.setProgressUpdater(mainProgressUpdater);
@@ -3849,7 +3851,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       }
     }
     if (activeJobList.size() > 0) {
-      jobRenderThread = new JobRenderThread(this, activeJobList);
+      jobRenderThread = new JobRenderThread(this, activeJobList, (ResolutionProfile) batchResolutionProfileCmb.getSelectedItem(), (QualityProfile) batchQualityProfileCmb.getSelectedItem());
       new Thread(jobRenderThread).start();
     }
     enableJobRenderControls();
