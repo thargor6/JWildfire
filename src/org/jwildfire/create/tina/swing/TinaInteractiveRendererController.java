@@ -282,8 +282,8 @@ public class TinaInteractiveRendererController implements IterationObserver {
     info.setRenderHDRIntensityMap(qualProfile.isWithHDRIntensityMap());
     renderer = new FlameRenderer(flame, prefs);
     renderer.registerIterationObserver(this);
+    smpl = 0;
     threads = renderer.startRenderFlame(info);
-
     state = State.RENDER;
     enableControls();
   }
@@ -352,7 +352,6 @@ public class TinaInteractiveRendererController implements IterationObserver {
     return currFlame;
   }
 
-  // TODO stats
   private long smpl = 0;
 
   @Override
@@ -360,8 +359,9 @@ public class TinaInteractiveRendererController implements IterationObserver {
     int x = pX;
     int y = pY;
     if (x >= 0 && x < image.getImageWidth() && y >= 0 && y < image.getImageHeight()) {
+      smpl++;
       image.setARGB(x, y, pEventSource.getTonemapper().tonemapSample(pX, pY));
-      if (smpl++ % 1000 == 0) {
+      if (smpl % 1000 == 0) {
         imageRootPanel.repaint();
       }
     }

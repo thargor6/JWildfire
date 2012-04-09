@@ -116,6 +116,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
   private static final double SLIDER_SCALE_BRIGHTNESS_CONTRAST_VIBRANCY = 100.0;
   private static final double SLIDER_SCALE_GAMMA = 100.0;
   private static final double SLIDER_SCALE_FILTER_RADIUS = 100.0;
+  private static final double SLIDER_SCALE_GAMMA_THRESHOLD = 5000.0;
   private static final double SLIDER_SCALE_COLOR = 100.0;
   private static final double SLIDER_SCALE_ZPOS = 50.0;
   private static final double SLIDER_SCALE_DOF = 100.0;
@@ -249,10 +250,8 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
   private final JSlider vibrancySlider;
   private final JTextField filterRadiusREd;
   private final JSlider filterRadiusSlider;
-  private final JTextField spatialOversampleREd;
-  private final JSlider spatialOversampleSlider;
-  private final JTextField colorOversampleREd;
-  private final JSlider colorOversampleSlider;
+  private final JTextField gammaThresholdREd;
+  private final JSlider gammaThresholdSlider;
   private final JTextField bgColorRedREd;
   private final JSlider bgColorRedSlider;
   private final JTextField bgColorGreenREd;
@@ -425,8 +424,8 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       JSlider pCameraCentreYSlider, JTextField pCameraZoomREd, JSlider pCameraZoomSlider, JTextField pCameraZPosREd, JSlider pCameraZPosSlider,
       JTextField pCameraDOFREd, JSlider pCameraDOFSlider, JTextField pPixelsPerUnitREd, JSlider pPixelsPerUnitSlider,
       JTextField pBrightnessREd, JSlider pBrightnessSlider, JTextField pContrastREd, JSlider pContrastSlider, JTextField pGammaREd, JSlider pGammaSlider,
-      JTextField pVibrancyREd, JSlider pVibrancySlider, JTextField pFilterRadiusREd, JSlider pFilterRadiusSlider, JTextField pSpatialOversampleREd,
-      JSlider pSpatialOversampleSlider, JTextField pBGColorRedREd, JSlider pBGColorRedSlider, JTextField pBGColorGreenREd, JSlider pBGColorGreenSlider, JTextField pBGColorBlueREd,
+      JTextField pVibrancyREd, JSlider pVibrancySlider, JTextField pFilterRadiusREd, JSlider pFilterRadiusSlider, JTextField pGammaThresholdREd,
+      JSlider pGammaThresholdSlider, JTextField pBGColorRedREd, JSlider pBGColorRedSlider, JTextField pBGColorGreenREd, JSlider pBGColorGreenSlider, JTextField pBGColorBlueREd,
       JSlider pBGColorBlueSlider, JTextField pPaletteRandomPointsREd, JPanel pPaletteImgPanel, JTextField pPaletteShiftREd, JSlider pPaletteShiftSlider,
       JTextField pPaletteRedREd, JSlider pPaletteRedSlider, JTextField pPaletteGreenREd, JSlider pPaletteGreenSlider, JTextField pPaletteBlueREd,
       JSlider pPaletteBlueSlider, JTextField pPaletteHueREd, JSlider pPaletteHueSlider, JTextField pPaletteSaturationREd, JSlider pPaletteSaturationSlider,
@@ -445,7 +444,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       JComboBox pAnimateXFormScriptCmb, JToggleButton pMouseTransformMoveButton, JToggleButton pMouseTransformRotateButton, JToggleButton pMouseTransformScaleButton,
       JToggleButton pAffineEditPostTransformButton, JToggleButton pAffineEditPostTransformSmallButton, JButton pMouseEditZoomInButton, JButton pMouseEditZoomOutButton,
       JToggleButton pToggleTrianglesButton, ProgressUpdater pMainProgressUpdater, JCheckBox pRandomPostTransformCheckBox, JCheckBox pRandomSymmetryCheckBox,
-      JButton pAffineResetTransformButton, JTextField pColorOversampleREd, JSlider pColorOversampleSlider, JTable pCreatePaletteColorsTable,
+      JButton pAffineResetTransformButton, JTable pCreatePaletteColorsTable,
       JComboBox pShadingCmb, JTextField pShadingAmbientREd, JSlider pShadingAmbientSlider, JTextField pShadingDiffuseREd, JSlider pShadingDiffuseSlider,
       JTextField pShadingPhongREd, JSlider pShadingPhongSlider, JTextField pShadingPhongSizeREd, JSlider pShadingPhongSizeSlider,
       JComboBox pShadingLightCmb, JTextField pShadingLightXREd, JSlider pShadingLightXSlider, JTextField pShadingLightYREd, JSlider pShadingLightYSlider,
@@ -496,10 +495,8 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     vibrancySlider = pVibrancySlider;
     filterRadiusREd = pFilterRadiusREd;
     filterRadiusSlider = pFilterRadiusSlider;
-    spatialOversampleREd = pSpatialOversampleREd;
-    spatialOversampleSlider = pSpatialOversampleSlider;
-    colorOversampleREd = pColorOversampleREd;
-    colorOversampleSlider = pColorOversampleSlider;
+    gammaThresholdREd = pGammaThresholdREd;
+    gammaThresholdSlider = pGammaThresholdSlider;
     bgColorRedREd = pBGColorRedREd;
     bgColorRedSlider = pBGColorRedSlider;
     bgColorGreenREd = pBGColorGreenREd;
@@ -1123,11 +1120,8 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       filterRadiusREd.setText(Tools.doubleToString(currFlame.getSpatialFilterRadius()));
       filterRadiusSlider.setValue(Tools.FTOI(currFlame.getSpatialFilterRadius() * SLIDER_SCALE_FILTER_RADIUS));
 
-      spatialOversampleREd.setText(String.valueOf(currFlame.getSpatialOversample()));
-      spatialOversampleSlider.setValue(currFlame.getSpatialOversample());
-
-      colorOversampleREd.setText(String.valueOf(currFlame.getColorOversample()));
-      colorOversampleSlider.setValue(currFlame.getColorOversample());
+      gammaThresholdREd.setText(String.valueOf(currFlame.getGammaThreshold()));
+      gammaThresholdSlider.setValue(Tools.FTOI(currFlame.getGammaThreshold() * SLIDER_SCALE_GAMMA_THRESHOLD));
 
       bgColorRedREd.setText(String.valueOf(currFlame.getBGColorRed()));
       bgColorRedSlider.setValue(currFlame.getBGColorRed());
@@ -1984,7 +1978,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
           randomBatch.add(0, flames.get(i));
         }
         updateThumbnails(null);
-
+        setupProfiles(_currFlame);
         refreshUI();
       }
     }
@@ -2041,12 +2035,8 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     flameSliderChanged(bgColorBlueSlider, bgColorBlueREd, "bgColorBlue", 1.0);
   }
 
-  public void spatialOversampleREd_changed() {
-    flameTextFieldChanged(spatialOversampleSlider, spatialOversampleREd, "spatialOversample", 1.0);
-  }
-
-  public void colorOversampleREd_changed() {
-    flameTextFieldChanged(colorOversampleSlider, colorOversampleREd, "colorOversample", 1.0);
+  public void gammaThresholdREd_changed() {
+    flameTextFieldChanged(gammaThresholdSlider, gammaThresholdREd, "gammaThreshold", SLIDER_SCALE_GAMMA_THRESHOLD);
   }
 
   public void contrastREd_changed() {
@@ -2061,12 +2051,8 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     flameSliderChanged(filterRadiusSlider, filterRadiusREd, "spatialFilterRadius", SLIDER_SCALE_FILTER_RADIUS);
   }
 
-  public void spatialOversampleSlider_stateChanged(ChangeEvent e) {
-    flameSliderChanged(spatialOversampleSlider, spatialOversampleREd, "spatialOversample", 1.0);
-  }
-
-  public void colorOversampleSlider_stateChanged(ChangeEvent e) {
-    flameSliderChanged(colorOversampleSlider, colorOversampleREd, "colorOversample", 1.0);
+  public void gammaThresholdSlider_stateChanged(ChangeEvent e) {
+    flameSliderChanged(gammaThresholdSlider, gammaThresholdREd, "gammaThreshold", SLIDER_SCALE_GAMMA_THRESHOLD);
   }
 
   public void vibrancyREd_changed() {
@@ -3666,6 +3652,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
           for (int i = flames.size() - 1; i >= 0; i--) {
             randomBatch.add(0, flames.get(i));
           }
+          setupProfiles(_currFlame);
           updateThumbnails(null);
           refreshUI();
         }
@@ -3678,6 +3665,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
 
   protected void importFlame(Flame pFlame) {
     _currFlame = pFlame.makeCopy();
+    setupProfiles(_currFlame);
     updateThumbnails(null);
     refreshUI();
   }
@@ -4209,6 +4197,36 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     if (currFlame != null) {
       currFlame.setPreserveZ(affinePreserveZButton.isSelected());
       refreshFlameImage(false);
+    }
+  }
+
+  private void setupProfiles(Flame pFlame) {
+    if (pFlame.getResolutionProfile() != null) {
+      ResolutionProfile profile = null;
+      for (int i = 0; i < resolutionProfileCmb.getItemCount(); i++) {
+        profile = (ResolutionProfile) resolutionProfileCmb.getItemAt(i);
+        if (pFlame.getResolutionProfile().equals(profile.toString()))
+          break;
+        else
+          profile = null;
+      }
+      if (profile != null) {
+        resolutionProfileCmb.setSelectedItem(profile);
+      }
+    }
+
+    if (pFlame.getQualityProfile() != null) {
+      QualityProfile profile = null;
+      for (int i = 0; i < qualityProfileCmb.getItemCount(); i++) {
+        profile = (QualityProfile) qualityProfileCmb.getItemAt(i);
+        if (pFlame.getQualityProfile().equals(profile.toString()))
+          break;
+        else
+          profile = null;
+      }
+      if (profile != null) {
+        qualityProfileCmb.setSelectedItem(profile);
+      }
     }
   }
 

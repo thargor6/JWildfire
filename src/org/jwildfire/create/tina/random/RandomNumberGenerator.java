@@ -19,7 +19,7 @@ package org.jwildfire.create.tina.random;
 public class RandomNumberGenerator {
   private RandGenStatus status = RandGenStatus.DEFAULT;
   private static int a = 1;
-  private double buffer[] = new double[4096];
+  private double buffer[] = new double[40960];
   private int bufferIdx;
 
   private static final int RAND_MAX123 = 0x7fffffff;
