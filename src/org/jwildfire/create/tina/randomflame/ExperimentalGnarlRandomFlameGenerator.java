@@ -63,7 +63,7 @@ public class ExperimentalGnarlRandomFlameGenerator extends RandomFlameGenerator 
     double wavesWeight = Math.random() * 10 + 75;
     double _2ndWeight = 0.5;
     double _3rdWeight = 0.5;
-    double symmetry = 0.9 + Math.random() * 0.2 - Math.random() * 0.4;
+    double symmetry = 0.6 + Math.random() * 0.4;
     int sides = (int) (Math.random() * 11.0 + 2.0);
     // 1st XForm
     {
@@ -154,7 +154,7 @@ public class ExperimentalGnarlRandomFlameGenerator extends RandomFlameGenerator 
       }
 
       xForm.setColorSymmetry(symmetry);
-      xForm.setColor(Math.random());
+      xForm.setColor(0.1 + 0.9 * Math.random());
       if (Math.random() > 0.5) {
         XFormTransformService.scale(xForm, 0.9 + Math.random() * 0.09, true, true);
       }
