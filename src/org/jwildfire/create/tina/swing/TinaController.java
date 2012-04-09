@@ -852,8 +852,9 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       SimpleImage img = new SimpleImage(width, height);
       img.fillBackground(0, 0, 0);
       flamePanel = new FlamePanel(img, 0, 0, centerPanel.getWidth(), this, toggleTrianglesButton, toggleVariationsButton);
-      flamePanel.setRenderWidth(prefs.getTinaRenderImageWidth());
-      flamePanel.setRenderHeight(prefs.getTinaRenderImageHeight());
+      ResolutionProfile resProfile = getResolutionProfile();
+      flamePanel.setRenderWidth(resProfile.getWidth());
+      flamePanel.setRenderHeight(resProfile.getHeight());
       flamePanel.setFocusable(true);
       flamePanel.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
         @Override
@@ -2229,10 +2230,11 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
         }
         if (chooser.showSaveDialog(centerPanel) == JFileChooser.APPROVE_OPTION) {
           QualityProfile qualProfile = getQualityProfile();
+          ResolutionProfile resProfile = getResolutionProfile();
           File file = chooser.getSelectedFile();
           prefs.setLastOutputImageFile(file);
-          int width = prefs.getTinaRenderImageWidth();
-          int height = prefs.getTinaRenderImageHeight();
+          int width = resProfile.getWidth();
+          int height = resProfile.getHeight();
           RenderInfo info = new RenderInfo(width, height);
           Flame flame = getCurrFlame();
           double wScl = (double) info.getImageWidth() / (double) flame.getWidth();

@@ -57,8 +57,8 @@ public class JobRenderThread implements Runnable {
             break;
           }
           try {
-            int width = controller.getPrefs().getTinaRenderImageWidth();
-            int height = controller.getPrefs().getTinaRenderImageHeight();
+            int width = resolutionProfile.getWidth();
+            int height = resolutionProfile.getHeight();
             RenderInfo info = new RenderInfo(width, height);
             info.setRenderHDR(qualityProfile.isWithHDR());
             info.setRenderHDRIntensityMap(qualityProfile.isWithHDRIntensityMap());
