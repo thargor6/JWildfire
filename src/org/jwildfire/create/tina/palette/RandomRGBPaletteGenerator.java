@@ -50,6 +50,13 @@ public class RandomRGBPaletteGenerator {
       }
       RGBColor col = new RGBColor(r, g, b);
       keyFrames.add(col);
+      if (Math.random() < 0.1) {
+        int skip = 1 + (int) (Math.random() * pKeyFrames * 0.33);
+        int j = 0;
+        while (j++ < skip && (++i < pKeyFrames)) {
+          keyFrames.add(col);
+        }
+      }
     }
     return keyFrames;
   }
