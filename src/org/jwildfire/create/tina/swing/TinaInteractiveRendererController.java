@@ -64,7 +64,6 @@ public class TinaInteractiveRendererController implements IterationObserver {
   private final ErrorHandler errorHandler;
   private final JButton loadFlameButton;
   private final JButton fromClipboardButton;
-  private final JButton clearScreenButton;
   private final JButton nextButton;
   private final JButton stopButton;
   private final JButton toClipboardButton;
@@ -84,7 +83,7 @@ public class TinaInteractiveRendererController implements IterationObserver {
   private State state = State.IDLE;
 
   public TinaInteractiveRendererController(TinaController pParentCtrl, ErrorHandler pErrorHandler, Prefs pPrefs,
-      JButton pLoadFlameButton, JButton pFromClipboardButton, JButton pClearScreenButton, JButton pNextButton,
+      JButton pLoadFlameButton, JButton pFromClipboardButton, JButton pNextButton,
       JButton pStopButton, JButton pToClipboardButton, JButton pSaveImageButton, JButton pSaveFlameButton,
       JComboBox pRandomStyleCmb, JPanel pImagePanel, JTextArea pStatsTextArea, JToggleButton pHalveSizeButton,
       JComboBox pInteractiveResolutionProfileCmb) {
@@ -94,7 +93,6 @@ public class TinaInteractiveRendererController implements IterationObserver {
 
     loadFlameButton = pLoadFlameButton;
     fromClipboardButton = pFromClipboardButton;
-    clearScreenButton = pClearScreenButton;
     nextButton = pNextButton;
     stopButton = pStopButton;
     toClipboardButton = pToClipboardButton;
@@ -332,12 +330,13 @@ public class TinaInteractiveRendererController implements IterationObserver {
 
   public void nextButton_clicked() {
     cancelRender();
+    clearScreen();
     genRandomFlame();
     renderButton_clicked();
     enableControls();
   }
 
-  public void clearScreenButton_clicked() {
+  private void clearScreen() {
     image.fillBackground(prefs.getTinaRandomBatchBGColorRed(), prefs.getTinaRandomBatchBGColorGreen(), prefs.getTinaRandomBatchBGColorBlue());
     imageRootPanel.repaint();
   }
