@@ -9038,6 +9038,13 @@ public class TinaInternalFrame extends JInternalFrame {
       interactiveNorthPanel.add(getInteractiveResolutionProfileCmb());
 
       interactiveQualityProfileCmb = new JComboBox();
+      interactiveQualityProfileCmb.addItemListener(new ItemListener() {
+        public void itemStateChanged(ItemEvent e) {
+          if (tinaController != null) {
+            tinaController.getInteractiveRendererCtrl().qualityProfile_changed();
+          }
+        }
+      });
       interactiveQualityProfileCmb.setPreferredSize(new Dimension(125, 22));
       interactiveQualityProfileCmb.setMaximumRowCount(32);
       interactiveQualityProfileCmb.setFont(new Font("Dialog", Font.BOLD, 10));
@@ -9292,6 +9299,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton getQualityProfileBtn() {
     if (qualityProfileBtn == null) {
       qualityProfileBtn = new JButton();
+      qualityProfileBtn.setEnabled(false);
       qualityProfileBtn.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
           // TODO
@@ -9310,6 +9318,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton getResolutionProfileBtn() {
     if (resolutionProfileBtn == null) {
       resolutionProfileBtn = new JButton();
+      resolutionProfileBtn.setEnabled(false);
       resolutionProfileBtn.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
           // TODO
