@@ -25,7 +25,7 @@ import org.jwildfire.create.tina.base.RasterPoint;
 public class LogDensityFilter {
   private final Flame flame;
   private RasterPoint[][] raster;
-  private int rasterWidth, rasterHeight;
+  private int rasterWidth, rasterHeight, rasterSize;
   private final static double FILTER_CUTOFF = 1.8;
   private final int FILTER_WHITE = (1 << 26);
   private final double BRIGHTNESS_SCALE = 2.3 * 268.0;
@@ -84,6 +84,7 @@ public class LogDensityFilter {
     raster = pRaster;
     rasterWidth = pRasterWidth;
     rasterHeight = pRasterHeight;
+    rasterSize = rasterWidth * rasterHeight;
     k1 = (flame.getContrast() * BRIGHTNESS_SCALE * flame.getBrightness() * FILTER_WHITE) / 256.0;
     double pixelsPerUnit = flame.getPixelsPerUnit() * flame.getCamZoom();
     double area = ((double) pImageWidth * (double) pImageHeight) / (pixelsPerUnit * pixelsPerUnit);
@@ -187,4 +188,7 @@ public class LogDensityFilter {
       return raster[pY][pX];
   }
 
+  public double calcDensity(long pSampleCount) {
+    return (double) pSampleCount / (double) rasterSize;
+  }
 }

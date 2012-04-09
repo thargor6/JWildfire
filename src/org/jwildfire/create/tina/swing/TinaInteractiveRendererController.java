@@ -278,11 +278,12 @@ public class TinaInteractiveRendererController implements IterationObserver {
     flame.setPixelsPerUnit((wScl + hScl) * 0.5 * flame.getPixelsPerUnit());
     flame.setWidth(info.getImageWidth());
     flame.setHeight(info.getImageHeight());
+    flame.setSampleDensity(qualProfile.getQuality());
     info.setRenderHDR(qualProfile.isWithHDR());
     info.setRenderHDRIntensityMap(qualProfile.isWithHDRIntensityMap());
     renderer = new FlameRenderer(flame, prefs);
     renderer.registerIterationObserver(this);
-    smpl = 0;
+    sampleCount = 0;
     threads = renderer.startRenderFlame(info);
     state = State.RENDER;
     enableControls();
@@ -352,16 +353,20 @@ public class TinaInteractiveRendererController implements IterationObserver {
     return currFlame;
   }
 
-  private long smpl = 0;
+  private long sampleCount = 0;
+
+  private synchronized void incSampleCount() {
+    sampleCount++;
+  }
 
   @Override
   public void notifyIterationFinished(FlameRenderThread pEventSource, int pX, int pY) {
-    int x = pX;
-    int y = pY;
-    if (x >= 0 && x < image.getImageWidth() && y >= 0 && y < image.getImageHeight()) {
-      smpl++;
-      image.setARGB(x, y, pEventSource.getTonemapper().tonemapSample(pX, pY));
-      if (smpl % 1000 == 0) {
+    incSampleCount();
+    if (pX >= 0 && pX < image.getImageWidth() && pY >= 0 && pY < image.getImageHeight()) {
+      image.setARGB(pX, pY, pEventSource.getTonemapper().tonemapSample(pX, pY));
+
+      if (sampleCount % 30000 == 0) {
+        System.out.println(pEventSource.getTonemapper().calcDensity(sampleCount));
         imageRootPanel.repaint();
       }
     }

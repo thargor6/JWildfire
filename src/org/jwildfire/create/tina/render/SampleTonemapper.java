@@ -45,4 +45,8 @@ public class SampleTonemapper {
     return toolPixel.getARGBValue();
   }
 
+  public double calcDensity(long pSampleCount) {
+    return logDensityFilter.calcDensity(pSampleCount);
+  }
+
 }

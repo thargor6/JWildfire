@@ -111,8 +111,8 @@ import org.jwildfire.swing.MainController;
 
 public class TinaController implements FlameHolder, JobRenderThreadController, ScriptRunnerEnvironment {
   private static final double SLIDER_SCALE_PERSPECTIVE = 100.0;
-  private static final double SLIDER_SCALE_CENTRE = 50.0;
-  private static final double SLIDER_SCALE_ZOOM = 10.0;
+  private static final double SLIDER_SCALE_CENTRE = 5000.0;
+  private static final double SLIDER_SCALE_ZOOM = 1000.0;
   private static final double SLIDER_SCALE_BRIGHTNESS_CONTRAST_VIBRANCY = 100.0;
   private static final double SLIDER_SCALE_GAMMA = 100.0;
   private static final double SLIDER_SCALE_FILTER_RADIUS = 100.0;
