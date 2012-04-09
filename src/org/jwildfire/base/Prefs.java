@@ -49,8 +49,6 @@ public class Prefs extends ManagedObject {
   static final String KEY_TINA_PROFILE_QUALITY_DEFAULT_PROFILE = "tina.profile.quality.default_profile";
 
   static final String KEY_TINA_PATH_FLAMES = "tina.path.flames";
-  static final String KEY_TINA_RENDER_IMAGE_WIDTH = "tina.render.image.width";
-  static final String KEY_TINA_RENDER_IMAGE_HEIGHT = "tina.render.image.height";
   static final String KEY_TINA_RENDER_MOVIE_FRAMES = "tina.render.movie.frames";
 
   static final String KEY_TINA_RENDER_REALTIME_QUALITY = "tina.render.realtime.quality";
@@ -97,10 +95,6 @@ public class Prefs extends ManagedObject {
   @Property(description = "Look and feel theme (UI sub style) - changes are applied only after restarting the main program", category = PropertyCategory.TINA)
   private String plafTheme = LookAndFeel.THEME_DEFAULT;
 
-  @Property(description = "Image render width", category = PropertyCategory.TINA)
-  private int tinaRenderImageWidth = 800;
-  @Property(description = "Image render height", category = PropertyCategory.TINA)
-  private int tinaRenderImageHeight = 600;
   @Property(description = "Default number of frames for a movie", category = PropertyCategory.TINA)
   private int tinaRenderMovieFrames = 90;
 
@@ -265,8 +259,6 @@ public class Prefs extends ManagedObject {
     plafStyle = pSrc.plafStyle;
     plafTheme = pSrc.plafTheme;
 
-    tinaRenderImageWidth = pSrc.tinaRenderImageWidth;
-    tinaRenderImageHeight = pSrc.tinaRenderImageHeight;
     tinaRenderMovieFrames = pSrc.tinaRenderMovieFrames;
     tinaRenderPreviewQuality = pSrc.tinaRenderPreviewQuality;
     tinaRenderRealtimeQuality = pSrc.tinaRenderRealtimeQuality;
@@ -306,22 +298,6 @@ public class Prefs extends ManagedObject {
 
   public void setTinaRenderPreviewQuality(int tinaRenderPreviewQuality) {
     this.tinaRenderPreviewQuality = tinaRenderPreviewQuality;
-  }
-
-  public int getTinaRenderImageWidth() {
-    return tinaRenderImageWidth;
-  }
-
-  public void setTinaRenderImageWidth(int tinaRenderImageWidth) {
-    this.tinaRenderImageWidth = tinaRenderImageWidth;
-  }
-
-  public int getTinaRenderImageHeight() {
-    return tinaRenderImageHeight;
-  }
-
-  public void setTinaRenderImageHeight(int tinaRenderImageHeight) {
-    this.tinaRenderImageHeight = tinaRenderImageHeight;
   }
 
   public int getTinaRenderMovieFrames() {
