@@ -129,6 +129,9 @@ public class Flam3Writer {
     if (pFlame.isPreserveZ()) {
       attrList.add(xb.createAttr("preserve_z", "1"));
     }
+    attrList.add(xb.createAttr("resolution_profile", pFlame.getResolutionProfile()));
+    attrList.add(xb.createAttr("quality_profile", pFlame.getQualityProfile()));
+
     ShadingInfo shadingInfo = pFlame.getShadingInfo();
     attrList.add(xb.createAttr("shading_shading", shadingInfo.getShading().toString()));
     if (shadingInfo.getShading() == Shading.PSEUDO3D) {

@@ -19,6 +19,8 @@ package org.jwildfire.create.tina.base;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.jwildfire.base.QualityProfile;
+import org.jwildfire.base.ResolutionProfile;
 import org.jwildfire.create.tina.palette.RGBPalette;
 import org.jwildfire.create.tina.variation.FlameTransformationContext;
 import org.jwildfire.create.tina.variation.Variation;
@@ -50,6 +52,8 @@ public class Flame {
   private double contrast;
   private double vibrancy;
   private boolean preserveZ;
+  private String resolutionProfile;
+  private String qualityProfile;
 
   private RGBPalette palette = new RGBPalette();
   private final List<XForm> xForms = new ArrayList<XForm>();
@@ -311,9 +315,10 @@ public class Flame {
     brightness = pFlame.brightness;
     contrast = pFlame.contrast;
     vibrancy = pFlame.vibrancy;
-
+    preserveZ = pFlame.preserveZ;
+    resolutionProfile = pFlame.resolutionProfile;
+    qualityProfile = pFlame.qualityProfile;
     shadingInfo.assign(pFlame.shadingInfo);
-
     palette = pFlame.palette.makeCopy();
     xForms.clear();
     for (XForm xForm : pFlame.getXForms()) {
@@ -433,4 +438,27 @@ public class Flame {
     this.preserveZ = preserveZ;
   }
 
+  public String getResolutionProfile() {
+    return resolutionProfile;
+  }
+
+  public void setResolutionProfile(ResolutionProfile pResolutionProfile) {
+    resolutionProfile = pResolutionProfile.toString();
+  }
+
+  public void setResolutionProfile(String pResolutionProfile) {
+    resolutionProfile = pResolutionProfile;
+  }
+
+  public String getQualityProfile() {
+    return qualityProfile;
+  }
+
+  public void setQualityProfile(QualityProfile pQualityProfile) {
+    qualityProfile = pQualityProfile.toString();
+  }
+
+  public void setQualityProfile(String pQualityProfile) {
+    qualityProfile = pQualityProfile;
+  }
 }

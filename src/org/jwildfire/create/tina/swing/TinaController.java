@@ -127,6 +127,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
   TinaInteractiveRendererController interactiveRendererCtrl;
 
   private final JPanel centerPanel;
+  private boolean firstFlamePanel = true;
   private FlamePanel flamePanel;
 
   private final Prefs prefs;
@@ -956,13 +957,23 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       });
 
       flamePanel.setSelectedXForm(getCurrXForm());
-      centerPanel.remove(0);
+      if (firstFlamePanel) {
+        centerPanel.remove(0);
+        firstFlamePanel = false;
+      }
       centerPanel.add(flamePanel, BorderLayout.CENTER);
       centerPanel.getParent().validate();
       centerPanel.repaint();
       flamePanel.requestFocusInWindow();
     }
     return flamePanel;
+  }
+
+  private void removeFlamePanel() {
+    if (flamePanel != null) {
+      centerPanel.remove(flamePanel);
+      flamePanel = null;
+    }
   }
 
   private ImagePanel getPalettePanel() {
@@ -3224,15 +3235,16 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       XFormScript xFormScript = (XFormScript) animateXFormScriptCmb.getSelectedItem();
       LightScript lightScript = (LightScript) animateLightScriptCmb.getSelectedItem();
       String imagePath = animateOutputREd.getText();
-      int width = prefs.getTinaRenderMovieWidth();
-      int height = prefs.getTinaRenderMovieHeight();
-      int quality = prefs.getTinaRenderMovieQuality();
+      ResolutionProfile resProfile = getResolutionProfile();
+      QualityProfile qualProfile = getQualityProfile();
+      int width = resProfile.getWidth();
+      int height = resProfile.getHeight();
+      int quality = qualProfile.getQuality();
       for (int frame = 1; frame <= frames; frame++) {
         Flame flame1 = doMorph ? morphFlame1.makeCopy() : _currFlame.makeCopy();
         Flame flame2 = doMorph ? morphFlame2.makeCopy() : null;
-        flame1.setSpatialOversample(prefs.getTinaRenderMovieSpatialOversample());
-        flame1.setColorOversample(prefs.getTinaRenderMovieColorOversample());
-        flame1.setSpatialFilterRadius(prefs.getTinaRenderMovieFilterRadius());
+        flame1.setSpatialOversample(qualProfile.getSpatialOversample());
+        flame1.setColorOversample(qualProfile.getColorOversample());
         AnimationService.renderFrame(frame, frames, flame1, flame2, doMorph, globalScript, xFormScript, lightScript, imagePath, width, height, quality, prefs);
       }
     }
@@ -3440,18 +3452,6 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     }
   }
 
-  public void switchFrameMode(boolean pMovieMode) {
-    if (pMovieMode) {
-      flamePanel.setRenderWidth(prefs.getTinaRenderMovieWidth());
-      flamePanel.setRenderHeight(prefs.getTinaRenderMovieHeight());
-    }
-    else {
-      flamePanel.setRenderWidth(prefs.getTinaRenderImageWidth());
-      flamePanel.setRenderHeight(prefs.getTinaRenderImageHeight());
-    }
-    refreshFlameImage(false);
-  }
-
   public void cameraZPosSlider_stateChanged(ChangeEvent e) {
     flameSliderChanged(cameraZPosSlider, cameraZPosREd, "camZ", SLIDER_SCALE_ZPOS);
   }
@@ -3552,7 +3552,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     return res;
   }
 
-  public void resolutionCmb_changed() {
+  public void qualityProfileCmb_changed() {
     if (noRefresh) {
       return;
     }
@@ -3562,9 +3562,27 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     }
     noRefresh = true;
     try {
-      currFlame.getShadingInfo().setShading((Shading) shadingCmb.getSelectedItem());
-      refreshShadingUI();
-      enableShadingUI();
+      QualityProfile profile = getQualityProfile();
+      currFlame.setQualityProfile(profile);
+    }
+    finally {
+      noRefresh = false;
+    }
+  }
+
+  public void resolutionProfileCmb_changed() {
+    if (noRefresh) {
+      return;
+    }
+    Flame currFlame = getCurrFlame();
+    if (currFlame == null) {
+      return;
+    }
+    noRefresh = true;
+    try {
+      ResolutionProfile profile = getResolutionProfile();
+      currFlame.setResolutionProfile(profile);
+      removeFlamePanel();
       refreshFlameImage(false);
     }
     finally {

@@ -219,6 +219,7 @@ public class TinaInteractiveRendererController implements IterationObserver {
   }
 
   public void renderButton_clicked() {
+    clearScreen();
     ResolutionProfile profile = getResolutionProfile();
     int width = profile.getWidth();
     int height = profile.getHeight();
@@ -330,7 +331,6 @@ public class TinaInteractiveRendererController implements IterationObserver {
 
   public void nextButton_clicked() {
     cancelRender();
-    clearScreen();
     genRandomFlame();
     renderButton_clicked();
     enableControls();

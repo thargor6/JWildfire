@@ -58,8 +58,6 @@ public class PrefsReader {
         pPrefs.setTinaFlamePath(getProperty(props, Prefs.KEY_TINA_PATH_FLAMES, pPrefs.getTinaFlamePath()));
         pPrefs.setTinaRenderImageWidth(getIntProperty(props, Prefs.KEY_TINA_RENDER_IMAGE_WIDTH, pPrefs.getTinaRenderImageWidth()));
         pPrefs.setTinaRenderImageHeight(getIntProperty(props, Prefs.KEY_TINA_RENDER_IMAGE_HEIGHT, pPrefs.getTinaRenderImageHeight()));
-        pPrefs.setTinaRenderMovieWidth(getIntProperty(props, Prefs.KEY_TINA_RENDER_MOVIE_WIDTH, pPrefs.getTinaRenderMovieWidth()));
-        pPrefs.setTinaRenderMovieHeight(getIntProperty(props, Prefs.KEY_TINA_RENDER_MOVIE_HEIGHT, pPrefs.getTinaRenderMovieHeight()));
         pPrefs.setTinaRenderMovieFrames(getIntProperty(props, Prefs.KEY_TINA_RENDER_MOVIE_FRAMES, pPrefs.getTinaRenderMovieFrames()));
         pPrefs.setTinaRenderPreviewSpatialOversample(getIntProperty(props, Prefs.KEY_TINA_RENDER_PREVIEW_SPATIAL_OVERSAMPLE, pPrefs.getTinaRenderPreviewSpatialOversample()));
         pPrefs.setTinaRenderPreviewColorOversample(getIntProperty(props, Prefs.KEY_TINA_RENDER_PREVIEW_COLOR_OVERSAMPLE, pPrefs.getTinaRenderPreviewColorOversample()));
@@ -77,10 +75,6 @@ public class PrefsReader {
         pPrefs.setTinaRenderHighQuality(getIntProperty(props, Prefs.KEY_TINA_RENDER_HIGH_QUALITY, pPrefs.getTinaRenderHighQuality()));
         pPrefs.setTinaRenderHighHDR(getBooleanProperty(props, Prefs.KEY_TINA_RENDER_HIGH_HDR, pPrefs.isTinaRenderHighHDR()));
         pPrefs.setTinaRenderHighHDRIntensityMap(getBooleanProperty(props, Prefs.KEY_TINA_RENDER_HIGH_HDR_INTENSITY_MAP, pPrefs.isTinaRenderHighHDRIntensityMap()));
-        pPrefs.setTinaRenderMovieSpatialOversample(getIntProperty(props, Prefs.KEY_TINA_RENDER_MOVIE_SPATIAL_OVERSAMPLE, pPrefs.getTinaRenderMovieSpatialOversample()));
-        pPrefs.setTinaRenderMovieColorOversample(getIntProperty(props, Prefs.KEY_TINA_RENDER_MOVIE_COLOR_OVERSAMPLE, pPrefs.getTinaRenderMovieColorOversample()));
-        pPrefs.setTinaRenderMovieFilterRadius(getDoubleProperty(props, Prefs.KEY_TINA_RENDER_MOVIE_FILTER_RADIUS, pPrefs.getTinaRenderMovieFilterRadius()));
-        pPrefs.setTinaRenderMovieQuality(getIntProperty(props, Prefs.KEY_TINA_RENDER_MOVIE_QUALITY, pPrefs.getTinaRenderMovieQuality()));
         pPrefs.setTinaRenderRealtimeQuality(getIntProperty(props, Prefs.KEY_TINA_RENDER_REALTIME_QUALITY, pPrefs.getTinaRenderRealtimeQuality()));
         pPrefs.setTinaRandomBatchSize(getIntProperty(props, Prefs.KEY_TINA_RANDOMBATCH_SIZE, pPrefs.getTinaRandomBatchSize()));
         pPrefs.setTinaRandomBatchBGColorRed(getIntProperty(props, Prefs.KEY_TINA_RANDOMBATCH_BGCOLOR_RED, pPrefs.getTinaRandomBatchBGColorRed()));
@@ -132,10 +126,11 @@ public class PrefsReader {
       pPrefs.getResolutionProfiles().add(new ResolutionProfile(false, 1920, 1080));
     }
     if (pPrefs.getQualityProfiles().size() == 0) {
-      pPrefs.getQualityProfiles().add(new QualityProfile(true, "Fast", 1, 2, 400, false, false));
-      pPrefs.getQualityProfiles().add(new QualityProfile(true, "High", 1, 3, 600, false, false));
-      pPrefs.getQualityProfiles().add(new QualityProfile(false, "High with HDR", 1, 3, 500, true, false));
-      pPrefs.getQualityProfiles().add(new QualityProfile(false, "Very high with HDR", 2, 3, 800, true, true));
+      pPrefs.getQualityProfiles().add(new QualityProfile(false, "Very low quality", 1, 1, 200, false, false));
+      pPrefs.getQualityProfiles().add(new QualityProfile(true, "Low quality", 1, 2, 300, false, false));
+      pPrefs.getQualityProfiles().add(new QualityProfile(false, "Medium quality", 1, 3, 500, false, false));
+      pPrefs.getQualityProfiles().add(new QualityProfile(false, "High quality", 1, 3, 800, true, false));
+      pPrefs.getQualityProfiles().add(new QualityProfile(false, "Very high quality", 2, 4, 1000, true, true));
     }
   }
 
