@@ -36,6 +36,7 @@ import javax.swing.JToggleButton;
 import javax.swing.ScrollPaneConstants;
 
 import org.jwildfire.base.Prefs;
+import org.jwildfire.base.ResolutionProfile;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.io.Flam3Reader;
 import org.jwildfire.create.tina.io.Flam3Writer;
@@ -71,6 +72,7 @@ public class TinaInteractiveRendererController implements IterationObserver {
   private final JButton saveFlameButton;
   private final JComboBox randomStyleCmb;
   private final JToggleButton halveSizeButton;
+  private final JComboBox interactiveResolutionProfileCmb;
 
   private final JPanel imageRootPanel;
   private JScrollPane imageScrollPane;
@@ -84,7 +86,8 @@ public class TinaInteractiveRendererController implements IterationObserver {
   public TinaInteractiveRendererController(TinaController pParentCtrl, ErrorHandler pErrorHandler, Prefs pPrefs,
       JButton pLoadFlameButton, JButton pFromClipboardButton, JButton pClearScreenButton, JButton pNextButton,
       JButton pStopButton, JButton pToClipboardButton, JButton pSaveImageButton, JButton pSaveFlameButton,
-      JComboBox pRandomStyleCmb, JPanel pImagePanel, JTextArea pStatsTextArea, JToggleButton pHalveSizeButton) {
+      JComboBox pRandomStyleCmb, JPanel pImagePanel, JTextArea pStatsTextArea, JToggleButton pHalveSizeButton,
+      JComboBox pInteractiveResolutionProfileCmb) {
     parentCtrl = pParentCtrl;
     prefs = pPrefs;
     errorHandler = pErrorHandler;
@@ -99,8 +102,9 @@ public class TinaInteractiveRendererController implements IterationObserver {
     saveFlameButton = pSaveFlameButton;
     randomStyleCmb = pRandomStyleCmb;
     halveSizeButton = pHalveSizeButton;
-
+    interactiveResolutionProfileCmb = pInteractiveResolutionProfileCmb;
     imageRootPanel = pImagePanel;
+    // interactiveResolutionProfileCmb must be already filled here!
     refreshImagePanel();
     statsTextArea = pStatsTextArea;
     state = State.IDLE;
@@ -108,13 +112,22 @@ public class TinaInteractiveRendererController implements IterationObserver {
     enableControls();
   }
 
+  private ResolutionProfile getResolutionProfile() {
+    ResolutionProfile res = (ResolutionProfile) interactiveResolutionProfileCmb.getSelectedItem();
+    if (res == null) {
+      res = new ResolutionProfile(false, 800, 600);
+    }
+    return res;
+  }
+
   private void refreshImagePanel() {
     if (imageScrollPane != null) {
       imageRootPanel.remove(imageScrollPane);
       imageScrollPane = null;
     }
-    int width = prefs.getTinaRenderImageWidth();
-    int height = prefs.getTinaRenderImageHeight();
+    ResolutionProfile profile = getResolutionProfile();
+    int width = profile.getWidth();
+    int height = profile.getHeight();
     if (halveSizeButton.isSelected()) {
       width /= 2;
       height /= 2;
@@ -208,8 +221,9 @@ public class TinaInteractiveRendererController implements IterationObserver {
   }
 
   public void renderButton_clicked() {
-    int width = prefs.getTinaRenderImageWidth();
-    int height = prefs.getTinaRenderImageHeight();
+    ResolutionProfile profile = getResolutionProfile();
+    int width = profile.getWidth();
+    int height = profile.getHeight();
     if (halveSizeButton.isSelected()) {
       width /= 2;
       height /= 2;
@@ -377,6 +391,13 @@ public class TinaInteractiveRendererController implements IterationObserver {
     enableControls();
     if (rendering) {
       renderButton_clicked();
+    }
+  }
+
+  public void resolutionProfile_changed() {
+    if (!parentCtrl.cmbRefreshing) {
+      // Nothing special here
+      halveSizeButton_clicked();
     }
   }
 

@@ -12,6 +12,8 @@ import java.awt.Rectangle;
 import java.awt.SystemColor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
 
 import javax.swing.BorderFactory;
@@ -703,13 +705,36 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaNorthPanel.add(getRenderImageHighButton(), null);
 
       JToggleButton toggleButton = new JToggleButton();
-      toggleButton.setBounds(972, 7, 130, 24);
+      toggleButton.setBounds(264, 21, 130, 24);
       tinaNorthPanel.add(toggleButton);
       toggleButton.setToolTipText("Switch image/movie mode");
       toggleButton.setText("Movie mode");
       toggleButton.setPreferredSize(new Dimension(42, 24));
       toggleButton.setMnemonic(KeyEvent.VK_M);
       toggleButton.setFont(new Font("Dialog", Font.BOLD, 10));
+
+      resolutionProfileCmb = new JComboBox();
+      resolutionProfileCmb.addItemListener(new ItemListener() {
+        public void itemStateChanged(ItemEvent e) {
+          // TODO
+        }
+      });
+      resolutionProfileCmb.setPreferredSize(new Dimension(125, 22));
+      resolutionProfileCmb.setMaximumRowCount(32);
+      resolutionProfileCmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      resolutionProfileCmb.setBounds(new Rectangle(231, 7, 125, 22));
+      resolutionProfileCmb.setBounds(970, 35, 125, 22);
+      tinaNorthPanel.add(resolutionProfileCmb);
+
+      qualityProfileCmb = new JComboBox();
+      qualityProfileCmb.setPreferredSize(new Dimension(125, 22));
+      qualityProfileCmb.setMaximumRowCount(32);
+      qualityProfileCmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      qualityProfileCmb.setBounds(new Rectangle(231, 7, 125, 22));
+      qualityProfileCmb.setBounds(970, 7, 125, 22);
+      tinaNorthPanel.add(qualityProfileCmb);
+      tinaNorthPanel.add(getQualityProfileBtn());
+      tinaNorthPanel.add(getResolutionProfileBtn());
 
     }
     return tinaNorthPanel;
@@ -2955,7 +2980,8 @@ public class TinaInternalFrame extends JInternalFrame {
         getDarkTrianglesToggleButton(), getShadingBlurRadiusREd(), getShadingBlurRadiusSlider(), getShadingBlurFadeREd(),
         getShadingBlurFadeSlider(), getShadingBlurFallOffREd(), getShadingBlurFallOffSlider(), getScriptTextArea(),
         getAffineScaleXButton(), getAffineScaleYButton(), getGradientLibraryCenterPanel(), getGradientLibraryGradientCmb(), getHelpPane(),
-        getToggleVariationsButton(), getAffinePreserveZButton());
+        getToggleVariationsButton(), getAffinePreserveZButton(),
+        getQualityProfileCmb(), getResolutionProfileCmb(), getInteractiveResolutionProfileCmb());
 
     tinaController.refreshing = tinaController.cmbRefreshing = tinaController.gridRefreshing = true;
     try {
@@ -3005,7 +3031,7 @@ public class TinaInternalFrame extends JInternalFrame {
           getInteractiveLoadFlameButton(), getInteractiveLoadFlameFromClipboardButton(), getInteractiveClearScreenButton(),
           getInteractiveNextButton(), getInteractiveStopButton(), getInteractiveFlameToClipboardButton(), getInteractiveSaveImageButton(),
           getInteractiveSaveFlameButton(), getInteractiveRandomStyleCmb(), getInteractiveCenterTopPanel(), getInteractiveStatsTextArea(),
-          getInteractiveHalveSizeButton()));
+          getInteractiveHalveSizeButton(), getInteractiveResolutionProfileCmb()));
       tinaController.getInteractiveRendererCtrl().enableControls();
     }
     finally {
@@ -4966,6 +4992,21 @@ public class TinaInternalFrame extends JInternalFrame {
       centerNorthPanel.add(getMouseTransformZoomInButton());
       centerNorthPanel.add(getMouseTransformZoomOutButton());
       centerNorthPanel.add(getToggleVariationsButton());
+
+      cancelRenderBtn = new JToggleButton();
+      cancelRenderBtn.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          // TODO
+        }
+      });
+      cancelRenderBtn.setToolTipText("Cancel rendering");
+      cancelRenderBtn.setText("Cancel");
+      cancelRenderBtn.setSize(new Dimension(82, 24));
+      cancelRenderBtn.setSelected(false);
+      cancelRenderBtn.setPreferredSize(new Dimension(42, 24));
+      cancelRenderBtn.setLocation(new Point(4, 4));
+      cancelRenderBtn.setBounds(368, 4, 82, 24);
+      centerNorthPanel.add(cancelRenderBtn);
     }
     return centerNorthPanel;
   }
@@ -5165,7 +5206,7 @@ public class TinaInternalFrame extends JInternalFrame {
       renderProgressBar = new JProgressBar();
       renderProgressBar.setValue(0);
       renderProgressBar.setSize(new Dimension(210, 14));
-      renderProgressBar.setLocation(new Point(195, 9));
+      renderProgressBar.setLocation(new Point(156, 9));
       renderProgressBar.setPreferredSize(new Dimension(179, 14));
       renderProgressBar.setStringPainted(true);
     }
@@ -8204,6 +8245,13 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton interactiveClearScreenButton;
   private JToggleButton interactiveHalveSizeButton;
   private JToggleButton affinePreserveZButton;
+  private JToggleButton cancelRenderBtn;
+  private JButton qualityProfileBtn;
+  private JButton resolutionProfileBtn;
+  private JComboBox interactiveResolutionProfileCmb;
+  private JButton interactiveResolutionProfileBtn;
+  private JComboBox qualityProfileCmb;
+  private JComboBox resolutionProfileCmb;
 
   private JTextPane getHelpPane() {
     if (helpPane == null) {
@@ -8476,7 +8524,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JToggleButton getDarkTrianglesToggleButton() {
     if (darkTrianglesToggleButton == null) {
       darkTrianglesToggleButton = new JToggleButton();
-      darkTrianglesToggleButton.setBounds(new Rectangle(547, 4, 89, 24));
+      darkTrianglesToggleButton.setBounds(new Rectangle(547, 4, 82, 24));
       darkTrianglesToggleButton.setToolTipText("Toggle dark triangle colors");
       darkTrianglesToggleButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/triangle.gif")));
       darkTrianglesToggleButton.setSelected(false);
@@ -9021,7 +9069,7 @@ public class TinaInternalFrame extends JInternalFrame {
       label.setPreferredSize(new Dimension(94, 22));
       label.setFont(new Font("Dialog", Font.BOLD, 10));
       label.setBounds(new Rectangle(135, 7, 94, 22));
-      label.setBounds(254, 8, 94, 22);
+      label.setBounds(248, 8, 94, 22);
       interactiveNorthPanel.add(label);
 
       interactiveRandomStyleCmb = new JComboBox();
@@ -9050,7 +9098,7 @@ public class TinaInternalFrame extends JInternalFrame {
       interactiveClearScreenButton.setPreferredSize(new Dimension(125, 32));
       interactiveClearScreenButton.setFont(new Font("Dialog", Font.BOLD, 10));
       interactiveClearScreenButton.setBounds(new Rectangle(8, 8, 125, 24));
-      interactiveClearScreenButton.setBounds(348, 32, 125, 24);
+      interactiveClearScreenButton.setBounds(707, 20, 125, 24);
       interactiveNorthPanel.add(interactiveClearScreenButton);
 
       interactiveHalveSizeButton = new JToggleButton();
@@ -9064,8 +9112,10 @@ public class TinaInternalFrame extends JInternalFrame {
       interactiveHalveSizeButton.setPreferredSize(new Dimension(42, 24));
       interactiveHalveSizeButton.setMnemonic(KeyEvent.VK_M);
       interactiveHalveSizeButton.setFont(new Font("Dialog", Font.BOLD, 10));
-      interactiveHalveSizeButton.setBounds(208, 32, 130, 24);
+      interactiveHalveSizeButton.setBounds(343, 32, 130, 24);
       interactiveNorthPanel.add(interactiveHalveSizeButton);
+      interactiveNorthPanel.add(getInteractiveResolutionProfileCmb());
+      interactiveNorthPanel.add(getInteractiveResolutionProfileBtn());
     }
     return interactiveNorthPanel;
   }
@@ -9278,5 +9328,90 @@ public class TinaInternalFrame extends JInternalFrame {
 
   public JToggleButton getAffinePreserveZButton() {
     return affinePreserveZButton;
+  }
+
+  public JToggleButton getCancelRenderBtn() {
+    return cancelRenderBtn;
+  }
+
+  private JButton getQualityProfileBtn() {
+    if (qualityProfileBtn == null) {
+      qualityProfileBtn = new JButton();
+      qualityProfileBtn.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          // TODO
+        }
+      });
+      qualityProfileBtn.setToolTipText("Edit quality profiles");
+      qualityProfileBtn.setText("...");
+      qualityProfileBtn.setPreferredSize(new Dimension(125, 24));
+      qualityProfileBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      qualityProfileBtn.setBounds(new Rectangle(508, 6, 125, 24));
+      qualityProfileBtn.setBounds(1103, 7, 40, 24);
+    }
+    return qualityProfileBtn;
+  }
+
+  private JButton getResolutionProfileBtn() {
+    if (resolutionProfileBtn == null) {
+      resolutionProfileBtn = new JButton();
+      resolutionProfileBtn.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          // TODO
+        }
+      });
+      resolutionProfileBtn.setToolTipText("Edit resolution profiles");
+      resolutionProfileBtn.setText("...");
+      resolutionProfileBtn.setPreferredSize(new Dimension(125, 24));
+      resolutionProfileBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      resolutionProfileBtn.setBounds(new Rectangle(508, 6, 125, 24));
+      resolutionProfileBtn.setBounds(1103, 35, 40, 24);
+    }
+    return resolutionProfileBtn;
+  }
+
+  private JComboBox getInteractiveResolutionProfileCmb() {
+    if (interactiveResolutionProfileCmb == null) {
+      interactiveResolutionProfileCmb = new JComboBox();
+      interactiveResolutionProfileCmb.addItemListener(new ItemListener() {
+        public void itemStateChanged(ItemEvent e) {
+          if (tinaController != null && tinaController.getInteractiveRendererCtrl() != null) {
+            tinaController.getInteractiveRendererCtrl().resolutionProfile_changed();
+          }
+        }
+      });
+      interactiveResolutionProfileCmb.setPreferredSize(new Dimension(125, 22));
+      interactiveResolutionProfileCmb.setMaximumRowCount(32);
+      interactiveResolutionProfileCmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      interactiveResolutionProfileCmb.setBounds(new Rectangle(231, 7, 125, 22));
+      interactiveResolutionProfileCmb.setBounds(166, 34, 125, 22);
+    }
+    return interactiveResolutionProfileCmb;
+  }
+
+  private JButton getInteractiveResolutionProfileBtn() {
+    if (interactiveResolutionProfileBtn == null) {
+      interactiveResolutionProfileBtn = new JButton();
+      interactiveResolutionProfileBtn.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          // TODO
+        }
+      });
+      interactiveResolutionProfileBtn.setToolTipText("Edit resolution profiles");
+      interactiveResolutionProfileBtn.setText("...");
+      interactiveResolutionProfileBtn.setPreferredSize(new Dimension(125, 24));
+      interactiveResolutionProfileBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      interactiveResolutionProfileBtn.setBounds(new Rectangle(508, 6, 125, 24));
+      interactiveResolutionProfileBtn.setBounds(291, 32, 40, 24);
+    }
+    return interactiveResolutionProfileBtn;
+  }
+
+  public JComboBox getQualityProfileCmb() {
+    return qualityProfileCmb;
+  }
+
+  public JComboBox getResolutionProfileCmb() {
+    return resolutionProfileCmb;
   }
 } //  @jve:decl-index=0:visual-constraint="10,10"

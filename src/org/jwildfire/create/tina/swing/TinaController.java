@@ -64,6 +64,8 @@ import javax.swing.table.DefaultTableModel;
 
 import org.jwildfire.base.MathLib;
 import org.jwildfire.base.Prefs;
+import org.jwildfire.base.QualityProfile;
+import org.jwildfire.base.ResolutionProfile;
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.DrawMode;
 import org.jwildfire.create.tina.base.Flame;
@@ -207,9 +209,12 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
 
   private MainController mainController;
   private final JTabbedPane rootTabbedPane;
+  private final JComboBox qualityProfileCmb;
+  private final JComboBox resolutionProfileCmb;
+  private final JComboBox interactiveResolutionProfileCmb;
   // script
   private final JTextArea scriptTextArea;
-  // camera, coloring
+  // camera, coloring  
   private final JTextField cameraRollREd;
   private final JSlider cameraRollSlider;
   private final JTextField cameraPitchREd;
@@ -450,7 +455,8 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       JTextField pShadingBlurRadiusREd, JSlider pShadingBlurRadiusSlider, JTextField pShadingBlurFadeREd, JSlider pShadingBlurFadeSlider,
       JTextField pShadingBlurFallOffREd, JSlider pShadingBlurFallOffSlider, JTextArea pScriptTextArea, JToggleButton pAffineScaleXButton,
       JToggleButton pAffineScaleYButton, JPanel pGradientLibraryPanel, JComboBox pGradientLibraryGradientCmb, JTextPane pHelpPane,
-      JToggleButton pToggleVariationsButton, JToggleButton pAffinePreserveZButton) {
+      JToggleButton pToggleVariationsButton, JToggleButton pAffinePreserveZButton,
+      JComboBox pQualityProfileCmb, JComboBox pResolutionProfileCmb, JComboBox pInteractiveResolutionProfileCmb) {
     errorHandler = pErrorHandler;
     prefs = pPrefs;
     centerPanel = pCenterPanel;
@@ -517,6 +523,10 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     paletteBrightnessSlider = pPaletteBrightnessSlider;
     paletteSwapRGBREd = pPaletteSwapRGBREd;
     paletteSwapRGBSlider = pPaletteSwapRGBSlider;
+
+    qualityProfileCmb = pQualityProfileCmb;
+    resolutionProfileCmb = pResolutionProfileCmb;
+    interactiveResolutionProfileCmb = pInteractiveResolutionProfileCmb;
 
     transformationsTable = pTransformationsTable;
     affineC00REd = pAffineC00REd;
@@ -660,6 +670,9 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       ex.printStackTrace();
     }
 
+    refreshResolutionProfileCmb(resolutionProfileCmb, null);
+    refreshResolutionProfileCmb(interactiveResolutionProfileCmb, null);
+    refreshQualityProfileCmb(qualityProfileCmb, null);
     scriptTextArea = pScriptTextArea;
 
     animateFramesREd.setText(String.valueOf(prefs.getTinaRenderMovieFrames()));
@@ -675,6 +688,68 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     enableShadingUI();
 
     enableXFormControls(null);
+  }
+
+  private void refreshResolutionProfileCmb(JComboBox pCmb, ResolutionProfile pSelectedProfile) {
+    boolean oldCmbRefreshing = cmbRefreshing;
+    cmbRefreshing = true;
+    try {
+      ResolutionProfile selected = pSelectedProfile;
+      ResolutionProfile defaultProfile = null;
+      pCmb.removeAllItems();
+      for (ResolutionProfile profile : prefs.getResolutionProfiles()) {
+        if (selected == null && profile.isDefaultProfile()) {
+          selected = profile;
+        }
+        if (defaultProfile == null && profile.isDefaultProfile()) {
+          defaultProfile = profile;
+        }
+        pCmb.addItem(profile);
+      }
+      if (selected != null) {
+        pCmb.setSelectedItem(selected);
+      }
+      if (pCmb.getSelectedIndex() < 0 && defaultProfile != null) {
+        pCmb.setSelectedItem(defaultProfile);
+      }
+      if (pCmb.getSelectedIndex() < 0 && prefs.getResolutionProfiles().size() > 0) {
+        pCmb.setSelectedIndex(0);
+      }
+    }
+    finally {
+      cmbRefreshing = oldCmbRefreshing;
+    }
+  }
+
+  private void refreshQualityProfileCmb(JComboBox pCmb, QualityProfile pSelectedProfile) {
+    boolean oldCmbRefreshing = cmbRefreshing;
+    cmbRefreshing = true;
+    try {
+      QualityProfile selected = pSelectedProfile;
+      QualityProfile defaultProfile = null;
+      pCmb.removeAllItems();
+      for (QualityProfile profile : prefs.getQualityProfiles()) {
+        if (selected == null && profile.isDefaultProfile()) {
+          selected = profile;
+        }
+        if (defaultProfile == null && profile.isDefaultProfile()) {
+          defaultProfile = profile;
+        }
+        pCmb.addItem(profile);
+      }
+      if (selected != null) {
+        pCmb.setSelectedItem(selected);
+      }
+      if (pCmb.getSelectedIndex() < 0 && defaultProfile != null) {
+        pCmb.setSelectedItem(defaultProfile);
+      }
+      if (pCmb.getSelectedIndex() < 0 && prefs.getQualityProfiles().size() > 0) {
+        pCmb.setSelectedIndex(0);
+      }
+    }
+    finally {
+      cmbRefreshing = oldCmbRefreshing;
+    }
   }
 
   private void initDefaultScript() {
