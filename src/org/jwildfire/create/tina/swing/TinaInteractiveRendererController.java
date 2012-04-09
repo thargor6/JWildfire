@@ -192,6 +192,7 @@ public class TinaInteractiveRendererController implements IterationObserver {
       else {
         currFlame = newFlame;
         cancelRender();
+        setupProfiles(currFlame);
         renderButton_clicked();
         enableControls();
       }
@@ -200,6 +201,36 @@ public class TinaInteractiveRendererController implements IterationObserver {
       errorHandler.handleError(ex);
     }
 
+  }
+
+  private void setupProfiles(Flame pFlame) {
+    if (pFlame.getResolutionProfile() != null) {
+      ResolutionProfile profile = null;
+      for (int i = 0; i < interactiveResolutionProfileCmb.getItemCount(); i++) {
+        profile = (ResolutionProfile) interactiveResolutionProfileCmb.getItemAt(i);
+        if (pFlame.getResolutionProfile().equals(profile.toString()))
+          break;
+        else
+          profile = null;
+      }
+      if (profile != null) {
+        interactiveResolutionProfileCmb.setSelectedItem(profile);
+      }
+    }
+
+    if (pFlame.getQualityProfile() != null) {
+      QualityProfile profile = null;
+      for (int i = 0; i < interactiveQualityProfileCmb.getItemCount(); i++) {
+        profile = (QualityProfile) interactiveQualityProfileCmb.getItemAt(i);
+        if (pFlame.getQualityProfile().equals(profile.toString()))
+          break;
+        else
+          profile = null;
+      }
+      if (profile != null) {
+        interactiveQualityProfileCmb.setSelectedItem(profile);
+      }
+    }
   }
 
   public void loadFlameButton_clicked() {
@@ -220,6 +251,7 @@ public class TinaInteractiveRendererController implements IterationObserver {
         prefs.setLastInputFlameFile(file);
         currFlame = newFlame;
         cancelRender();
+        setupProfiles(currFlame);
         renderButton_clicked();
         enableControls();
       }
@@ -403,6 +435,34 @@ public class TinaInteractiveRendererController implements IterationObserver {
     if (!parentCtrl.cmbRefreshing) {
       // Nothing special here
       halveSizeButton_clicked();
+    }
+  }
+
+  public void fromEditorButton_clicked() {
+    try {
+      Flame newFlame = parentCtrl.exportFlame();
+      if (newFlame != null) {
+        currFlame = newFlame;
+        cancelRender();
+        setupProfiles(currFlame);
+        renderButton_clicked();
+        enableControls();
+      }
+    }
+    catch (Throwable ex) {
+      errorHandler.handleError(ex);
+    }
+  }
+
+  public void toEditorButton_clicked() {
+    try {
+      Flame currFlame = getCurrFlame();
+      if (currFlame != null) {
+        parentCtrl.importFlame(currFlame);
+      }
+    }
+    catch (Throwable ex) {
+      errorHandler.handleError(ex);
     }
   }
 

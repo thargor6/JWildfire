@@ -3588,6 +3588,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       currFlame.setResolutionProfile(profile);
       removeFlamePanel();
       refreshFlameImage(false);
+      resolutionProfileCmb.requestFocus();
     }
     finally {
       noRefresh = false;
@@ -3672,6 +3673,22 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     }
     catch (Throwable ex) {
       errorHandler.handleError(ex);
+    }
+  }
+
+  protected void importFlame(Flame pFlame) {
+    _currFlame = pFlame.makeCopy();
+    updateThumbnails(null);
+    refreshUI();
+  }
+
+  protected Flame exportFlame() {
+    Flame currFlame = getCurrFlame();
+    if (currFlame != null) {
+      return currFlame.makeCopy();
+    }
+    else {
+      return null;
     }
   }
 

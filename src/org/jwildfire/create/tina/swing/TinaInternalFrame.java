@@ -9103,6 +9103,11 @@ public class TinaInternalFrame extends JInternalFrame {
       interactiveNorthPanel.add(interactiveQualityProfileCmb);
 
       interactiveLoadFlameFromMainButton = new JButton();
+      interactiveLoadFlameFromMainButton.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getInteractiveRendererCtrl().fromEditorButton_clicked();
+        }
+      });
       interactiveLoadFlameFromMainButton.setToolTipText("Load flame from Editor and render");
       interactiveLoadFlameFromMainButton.setText("From Editor");
       interactiveLoadFlameFromMainButton.setPreferredSize(new Dimension(125, 24));
@@ -9112,6 +9117,11 @@ public class TinaInternalFrame extends JInternalFrame {
       interactiveNorthPanel.add(interactiveLoadFlameFromMainButton);
 
       interactiveFlameToEditorButton = new JButton();
+      interactiveFlameToEditorButton.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getInteractiveRendererCtrl().toEditorButton_clicked();
+        }
+      });
       interactiveFlameToEditorButton.setToolTipText("Copy the current fractal into the Editor");
       interactiveFlameToEditorButton.setText("To Editor");
       interactiveFlameToEditorButton.setPreferredSize(new Dimension(125, 24));
