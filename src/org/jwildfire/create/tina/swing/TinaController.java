@@ -2780,7 +2780,9 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     int maxCount = (pCount > 0 ? pCount : imgCount);
     mainProgressUpdater.initProgress(maxCount);
     RandomFlameGenerator randGen = RandomFlameGeneratorList.getRandomFlameGeneratorInstance(pGeneratorname, true);
-    RandomFlameGeneratorSampler sampler = new RandomFlameGeneratorSampler(IMG_WIDTH, IMG_HEIGHT, prefs, randGen, randomSymmetryCheckBox.isSelected(), randomPostTransformCheckBox.isSelected(), Integer.parseInt(paletteRandomPointsREd.getText()));
+    //int palettePoints = Integer.parseInt(paletteRandomPointsREd.getText());
+    int palettePoints = 3 + (int) (Math.random() * 68.0);
+    RandomFlameGeneratorSampler sampler = new RandomFlameGeneratorSampler(IMG_WIDTH, IMG_HEIGHT, prefs, randGen, randomSymmetryCheckBox.isSelected(), randomPostTransformCheckBox.isSelected(), palettePoints);
     for (int i = 0; i < maxCount; i++) {
       RandomFlameGeneratorSample sample = sampler.createSample();
       randomBatch.add(sample.getFlame());
@@ -3532,6 +3534,42 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
 
   public void shadingPhongSlider_changed() {
     shadingInfoSliderChanged(shadingPhongSlider, shadingPhongREd, "phong", SLIDER_SCALE_AMBIENT, 0);
+  }
+
+  private ResolutionProfile getResolutionProfile() {
+    ResolutionProfile res = (ResolutionProfile) resolutionProfileCmb.getSelectedItem();
+    if (res == null) {
+      res = new ResolutionProfile(false, 800, 600);
+    }
+    return res;
+  }
+
+  private QualityProfile getQualityProfile() {
+    QualityProfile res = (QualityProfile) qualityProfileCmb.getSelectedItem();
+    if (res == null) {
+      res = new QualityProfile(false, "Default", 1, 1, 500, false, false);
+    }
+    return res;
+  }
+
+  public void resolutionCmb_changed() {
+    if (noRefresh) {
+      return;
+    }
+    Flame currFlame = getCurrFlame();
+    if (currFlame == null) {
+      return;
+    }
+    noRefresh = true;
+    try {
+      currFlame.getShadingInfo().setShading((Shading) shadingCmb.getSelectedItem());
+      refreshShadingUI();
+      enableShadingUI();
+      refreshFlameImage(false);
+    }
+    finally {
+      noRefresh = false;
+    }
   }
 
   public void shadingCmb_changed() {
