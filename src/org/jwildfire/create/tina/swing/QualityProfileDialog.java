@@ -38,19 +38,17 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
-import org.jwildfire.base.ResolutionProfile;
-import org.jwildfire.base.ResolutionProfileComparator;
+import org.jwildfire.base.QualityProfile;
+import org.jwildfire.base.QualityProfileComparator;
 
-public class ResolutionProfileDialog extends JDialog {
+public class QualityProfileDialog extends JDialog {
   private static final long serialVersionUID = 1L;
   private final JPanel contentPanel = new JPanel();
   private boolean confirmed = false;
   private boolean configChanged = false;
-  private JTextField widthREd;
-  private JTextField heightREd;
+  private JTextField captionREd;
   private EditStatus editStatus = EditStatus.CLOSE;
   private boolean refreshing = false;
   private JComboBox profileCmb;
@@ -60,34 +58,42 @@ public class ResolutionProfileDialog extends JDialog {
   private JButton deleteBtn;
   private JButton saveButton;
   private JLabel statusLbl;
+  private JTextField qualityREd;
+  private JLabel lblQuality;
+  private JTextField spatialOversamplingREd;
+  private JLabel lblSpatialOversampling;
+  private JTextField colorOversamplingREd;
+  private JLabel lblColorOversampling;
+  private JCheckBox withHDRCBx;
+  private JCheckBox withHdrIntensityMapCBx;
 
   /**
    * Create the dialog.
    */
-  public ResolutionProfileDialog(Window owner) {
+  public QualityProfileDialog(Window owner) {
     super(owner);
-    setTitle("Edit resolution profiles");
-    setBounds(100, 100, 450, 209);
+    setTitle("Edit quality profiles");
+    setBounds(100, 100, 487, 338);
     getContentPane().setLayout(new BorderLayout());
     contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
     getContentPane().add(contentPanel, BorderLayout.CENTER);
     contentPanel.setLayout(null);
 
-    widthREd = new JTextField();
-    widthREd.setText("");
-    widthREd.setSize(new Dimension(100, 22));
-    widthREd.setPreferredSize(new Dimension(100, 22));
-    widthREd.setLocation(new Point(100, 4));
-    widthREd.setFont(new Font("Dialog", Font.PLAIN, 10));
-    widthREd.setBounds(100, 35, 100, 22);
-    contentPanel.add(widthREd);
+    captionREd = new JTextField();
+    captionREd.setText("");
+    captionREd.setSize(new Dimension(100, 22));
+    captionREd.setPreferredSize(new Dimension(100, 22));
+    captionREd.setLocation(new Point(100, 4));
+    captionREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+    captionREd.setBounds(125, 35, 223, 22);
+    contentPanel.add(captionREd);
 
     JLabel lblProfile = new JLabel();
     lblProfile.setText("Profile");
     lblProfile.setPreferredSize(new Dimension(94, 22));
     lblProfile.setFont(new Font("Dialog", Font.BOLD, 10));
     lblProfile.setBounds(new Rectangle(135, 7, 94, 22));
-    lblProfile.setBounds(6, 6, 94, 22);
+    lblProfile.setBounds(6, 6, 118, 22);
     contentPanel.add(lblProfile);
 
     profileCmb = new JComboBox();
@@ -102,37 +108,19 @@ public class ResolutionProfileDialog extends JDialog {
     profileCmb.setMaximumRowCount(32);
     profileCmb.setFont(new Font("Dialog", Font.BOLD, 10));
     profileCmb.setBounds(new Rectangle(231, 7, 125, 22));
-    profileCmb.setBounds(100, 6, 223, 22);
+    profileCmb.setBounds(125, 6, 223, 22);
     contentPanel.add(profileCmb);
 
     JLabel lblSize = new JLabel();
-    lblSize.setText("Resolution");
+    lblSize.setText("Caption");
     lblSize.setPreferredSize(new Dimension(94, 22));
     lblSize.setFont(new Font("Dialog", Font.BOLD, 10));
     lblSize.setBounds(new Rectangle(135, 7, 94, 22));
-    lblSize.setBounds(6, 35, 94, 22);
+    lblSize.setBounds(6, 35, 118, 22);
     contentPanel.add(lblSize);
 
-    heightREd = new JTextField();
-    heightREd.setText("");
-    heightREd.setSize(new Dimension(100, 22));
-    heightREd.setPreferredSize(new Dimension(100, 22));
-    heightREd.setLocation(new Point(100, 4));
-    heightREd.setFont(new Font("Dialog", Font.PLAIN, 10));
-    heightREd.setBounds(223, 35, 100, 22);
-    contentPanel.add(heightREd);
-
-    JLabel xLabel = new JLabel();
-    xLabel.setHorizontalAlignment(SwingConstants.CENTER);
-    xLabel.setText("x");
-    xLabel.setPreferredSize(new Dimension(94, 22));
-    xLabel.setFont(new Font("Dialog", Font.BOLD, 10));
-    xLabel.setBounds(new Rectangle(135, 7, 94, 22));
-    xLabel.setBounds(200, 35, 22, 22);
-    contentPanel.add(xLabel);
-
     defaultCBx = new JCheckBox("Default profile");
-    defaultCBx.setBounds(100, 69, 223, 18);
+    defaultCBx.setBounds(125, 212, 223, 18);
     contentPanel.add(defaultCBx);
 
     newBtn = new JButton();
@@ -147,7 +135,7 @@ public class ResolutionProfileDialog extends JDialog {
     newBtn.setText("New");
     newBtn.setPreferredSize(new Dimension(81, 24));
     newBtn.setFont(new Font("Dialog", Font.BOLD, 10));
-    newBtn.setBounds(347, 4, 81, 24);
+    newBtn.setBounds(372, 4, 81, 24);
     contentPanel.add(newBtn);
 
     editBtn = new JButton();
@@ -161,7 +149,7 @@ public class ResolutionProfileDialog extends JDialog {
     editBtn.setText("Edit");
     editBtn.setPreferredSize(new Dimension(81, 24));
     editBtn.setFont(new Font("Dialog", Font.BOLD, 10));
-    editBtn.setBounds(347, 32, 81, 24);
+    editBtn.setBounds(372, 32, 81, 24);
     contentPanel.add(editBtn);
 
     deleteBtn = new JButton();
@@ -182,7 +170,7 @@ public class ResolutionProfileDialog extends JDialog {
     deleteBtn.setText("Delete");
     deleteBtn.setPreferredSize(new Dimension(81, 24));
     deleteBtn.setFont(new Font("Dialog", Font.BOLD, 10));
-    deleteBtn.setBounds(347, 60, 81, 24);
+    deleteBtn.setBounds(372, 60, 81, 24);
     contentPanel.add(deleteBtn);
 
     saveButton = new JButton();
@@ -196,15 +184,79 @@ public class ResolutionProfileDialog extends JDialog {
     saveButton.setPreferredSize(new Dimension(81, 24));
     saveButton.setFont(new Font("Dialog", Font.BOLD, 10));
     saveButton.setEnabled(false);
-    saveButton.setBounds(347, 88, 81, 24);
+    saveButton.setBounds(372, 88, 81, 24);
     contentPanel.add(saveButton);
 
     statusLbl = new JLabel();
     statusLbl.setPreferredSize(new Dimension(94, 22));
     statusLbl.setFont(new Font("Dialog", Font.PLAIN, 10));
     statusLbl.setBounds(new Rectangle(135, 7, 94, 22));
-    statusLbl.setBounds(6, 114, 422, 22);
+    statusLbl.setBounds(6, 242, 422, 22);
     contentPanel.add(statusLbl);
+
+    qualityREd = new JTextField();
+    qualityREd.setText("");
+    qualityREd.setSize(new Dimension(100, 22));
+    qualityREd.setPreferredSize(new Dimension(100, 22));
+    qualityREd.setLocation(new Point(100, 4));
+    qualityREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+    qualityREd.setEnabled(false);
+    qualityREd.setBounds(125, 60, 100, 22);
+    contentPanel.add(qualityREd);
+
+    lblQuality = new JLabel();
+    lblQuality.setText("Quality");
+    lblQuality.setPreferredSize(new Dimension(94, 22));
+    lblQuality.setFont(new Font("Dialog", Font.BOLD, 10));
+    lblQuality.setBounds(new Rectangle(135, 7, 94, 22));
+    lblQuality.setBounds(6, 60, 118, 22);
+    contentPanel.add(lblQuality);
+
+    spatialOversamplingREd = new JTextField();
+    spatialOversamplingREd.setText("");
+    spatialOversamplingREd.setSize(new Dimension(100, 22));
+    spatialOversamplingREd.setPreferredSize(new Dimension(100, 22));
+    spatialOversamplingREd.setLocation(new Point(100, 4));
+    spatialOversamplingREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+    spatialOversamplingREd.setEnabled(false);
+    spatialOversamplingREd.setBounds(125, 88, 100, 22);
+    contentPanel.add(spatialOversamplingREd);
+
+    lblSpatialOversampling = new JLabel();
+    lblSpatialOversampling.setText("Spatial oversampling");
+    lblSpatialOversampling.setPreferredSize(new Dimension(94, 22));
+    lblSpatialOversampling.setFont(new Font("Dialog", Font.BOLD, 10));
+    lblSpatialOversampling.setBounds(new Rectangle(135, 7, 94, 22));
+    lblSpatialOversampling.setBounds(6, 88, 118, 22);
+    contentPanel.add(lblSpatialOversampling);
+
+    colorOversamplingREd = new JTextField();
+    colorOversamplingREd.setText("");
+    colorOversamplingREd.setSize(new Dimension(100, 22));
+    colorOversamplingREd.setPreferredSize(new Dimension(100, 22));
+    colorOversamplingREd.setLocation(new Point(100, 4));
+    colorOversamplingREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+    colorOversamplingREd.setEnabled(false);
+    colorOversamplingREd.setBounds(125, 118, 100, 22);
+    contentPanel.add(colorOversamplingREd);
+
+    lblColorOversampling = new JLabel();
+    lblColorOversampling.setText("Color oversampling");
+    lblColorOversampling.setPreferredSize(new Dimension(94, 22));
+    lblColorOversampling.setFont(new Font("Dialog", Font.BOLD, 10));
+    lblColorOversampling.setBounds(new Rectangle(135, 7, 94, 22));
+    lblColorOversampling.setBounds(6, 118, 118, 22);
+    contentPanel.add(lblColorOversampling);
+
+    withHDRCBx = new JCheckBox("with HDR");
+    withHDRCBx.setEnabled(false);
+    withHDRCBx.setBounds(125, 152, 223, 18);
+    contentPanel.add(withHDRCBx);
+
+    withHdrIntensityMapCBx = new JCheckBox("with HDR intensity map");
+    withHdrIntensityMapCBx.setEnabled(false);
+    withHdrIntensityMapCBx.setBounds(125, 182, 223, 18);
+    contentPanel.add(withHdrIntensityMapCBx);
     {
       JPanel buttonPane = new JPanel();
       buttonPane.setLayout(new FlowLayout(FlowLayout.CENTER));
@@ -249,16 +301,16 @@ public class ResolutionProfileDialog extends JDialog {
     configChanged = false;
   }
 
-  public List<ResolutionProfile> getProfiles() {
-    List<ResolutionProfile> res = new ArrayList<ResolutionProfile>();
+  public List<QualityProfile> getProfiles() {
+    List<QualityProfile> res = new ArrayList<QualityProfile>();
     for (int i = 0; i < getProfileCmb().getItemCount(); i++) {
-      res.add((ResolutionProfile) getProfileCmb().getItemAt(i));
+      res.add((QualityProfile) getProfileCmb().getItemAt(i));
     }
-    Collections.sort(res, new ResolutionProfileComparator());
+    Collections.sort(res, new QualityProfileComparator());
     return res;
   }
 
-  public void setProfile(ResolutionProfile pProfile) {
+  public void setProfile(QualityProfile pProfile) {
     refreshing = true;
     try {
       if (pProfile == null) {
@@ -267,7 +319,7 @@ public class ResolutionProfileDialog extends JDialog {
       else {
         boolean found = false;
         for (int i = 0; i < getProfileCmb().getItemCount(); i++) {
-          ResolutionProfile profile = (ResolutionProfile) getProfileCmb().getItemAt(i);
+          QualityProfile profile = (QualityProfile) getProfileCmb().getItemAt(i);
           if (profile.toString().equals(pProfile.toString())) {
             getProfileCmb().setSelectedIndex(i);
             found = true;
@@ -287,14 +339,14 @@ public class ResolutionProfileDialog extends JDialog {
     }
   }
 
-  public void setProfiles(List<ResolutionProfile> pProfiles) {
+  public void setProfiles(List<QualityProfile> pProfiles) {
     refreshing = true;
     try {
       getProfileCmb().removeAllItems();
       if (pProfiles != null) {
-        for (ResolutionProfile profile : pProfiles) {
+        for (QualityProfile profile : pProfiles) {
           try {
-            ResolutionProfile clonedProfile = (ResolutionProfile) profile.clone();
+            QualityProfile clonedProfile = (QualityProfile) profile.clone();
             getProfileCmb().addItem(clonedProfile);
           }
           catch (CloneNotSupportedException e) {
@@ -316,14 +368,6 @@ public class ResolutionProfileDialog extends JDialog {
 
   public JComboBox getProfileCmb() {
     return profileCmb;
-  }
-
-  public JTextField getWidthREd() {
-    return widthREd;
-  }
-
-  public JTextField getHeightREd() {
-    return heightREd;
   }
 
   public JCheckBox getDefaultCBx() {
@@ -349,51 +393,79 @@ public class ResolutionProfileDialog extends JDialog {
     getEditBtn().setEnabled(editStatus == EditStatus.BROWSE);
     getDeleteBtn().setEnabled(editStatus == EditStatus.BROWSE);
     getSaveButton().setEnabled(edit);
-    getWidthREd().setEnabled(edit);
-    getHeightREd().setEnabled(edit);
+    getCaptionREd().setEnabled(edit);
+    getQualityREd().setEnabled(edit);
+    getSpatialOversamplingREd().setEnabled(edit);
+    getColorOversamplingREd().setEnabled(edit);
+    getWithHDRCBx().setEnabled(edit);
+    getWithHdrIntensityMapCBx().setEnabled(edit);
     getDefaultCBx().setEnabled(edit);
   }
 
   private void refreshProfileView() {
-    ResolutionProfile profile;
+    QualityProfile profile;
     if (editStatus == EditStatus.NEW) {
       profile = null;
     }
     else {
-      profile = (ResolutionProfile) getProfileCmb().getSelectedItem();
+      profile = (QualityProfile) getProfileCmb().getSelectedItem();
     }
     if (profile == null) {
-      getWidthREd().setText("");
-      getHeightREd().setText("");
+      getCaptionREd().setText("");
+      getQualityREd().setText("");
+      getSpatialOversamplingREd().setText("");
+      getColorOversamplingREd().setText("");
+      getWithHDRCBx().setSelected(false);
+      getWithHdrIntensityMapCBx().setSelected(false);
       getDefaultCBx().setSelected(false);
     }
     else {
-      getWidthREd().setText(String.valueOf(profile.getWidth()));
-      getHeightREd().setText(String.valueOf(profile.getHeight()));
+      getCaptionREd().setText(profile.getCaption());
+      getQualityREd().setText(String.valueOf(profile.getQuality()));
+      getSpatialOversamplingREd().setText(String.valueOf(profile.getSpatialOversample()));
+      getColorOversamplingREd().setText(String.valueOf(profile.getColorOversample()));
+      getWithHDRCBx().setSelected(profile.isWithHDR());
+      getWithHdrIntensityMapCBx().setSelected(profile.isWithHDRIntensityMap());
       getDefaultCBx().setSelected(profile.isDefaultProfile());
     }
   }
 
   private boolean applyChanges() {
     try {
-      final int MIN_SIZE = 16;
-      int width = Integer.parseInt(getWidthREd().getText());
-      if (width < MIN_SIZE) {
-        throw new Exception("Width must be at least " + MIN_SIZE + " pixels");
+      final int MIN_QUALITY = 30;
+      String caption = getCaptionREd().getText();
+      if (caption == null || caption.trim().length() == 0) {
+        throw new Exception("Caption must not be empty");
       }
-      int height = Integer.parseInt(getHeightREd().getText());
-      if (height < MIN_SIZE) {
-        throw new Exception("Height must be at least " + MIN_SIZE + " pixels");
+      int quality = Integer.parseInt(getQualityREd().getText());
+      if (quality < MIN_QUALITY) {
+        throw new Exception("Quality must be at least " + MIN_QUALITY);
       }
-      ResolutionProfile profile;
+      final int MIN_OVERSAMPLE = 1;
+      final int MAX_SPATIAL_OVERSAMPLE = 6;
+      final int MAX_COLOR_OVERSAMPLE = 30;
+      int spatialOversample = Integer.parseInt(getSpatialOversamplingREd().getText());
+      if (spatialOversample < MIN_OVERSAMPLE || spatialOversample > MAX_SPATIAL_OVERSAMPLE) {
+        throw new Exception("Spatial oversample msut be in the range " + MIN_OVERSAMPLE + "..." + MAX_SPATIAL_OVERSAMPLE);
+      }
+      int colorOversample = Integer.parseInt(getColorOversamplingREd().getText());
+      if (colorOversample < MIN_OVERSAMPLE || colorOversample > MAX_COLOR_OVERSAMPLE) {
+        throw new Exception("Color oversample msut be in the range " + MIN_OVERSAMPLE + "..." + MAX_COLOR_OVERSAMPLE);
+      }
+
+      QualityProfile profile;
       if (editStatus == EditStatus.NEW) {
-        profile = new ResolutionProfile();
+        profile = new QualityProfile();
       }
       else {
-        profile = (ResolutionProfile) getProfileCmb().getSelectedItem();
+        profile = (QualityProfile) getProfileCmb().getSelectedItem();
       }
-      profile.setWidth(width);
-      profile.setHeight(height);
+      profile.setCaption(caption);
+      profile.setQuality(quality);
+      profile.setSpatialOversample(spatialOversample);
+      profile.setColorOversample(colorOversample);
+      profile.setWithHDR(getWithHDRCBx().isSelected());
+      profile.setWithHDRIntensityMap(getWithHdrIntensityMapCBx().isSelected());
       profile.setDefaultProfile(getDefaultCBx().isSelected());
       if (editStatus == EditStatus.NEW) {
         refreshing = true;
@@ -407,7 +479,7 @@ public class ResolutionProfileDialog extends JDialog {
       }
       if (profile.isDefaultProfile()) {
         for (int i = 0; i < getProfileCmb().getItemCount(); i++) {
-          ResolutionProfile lProfile = (ResolutionProfile) getProfileCmb().getItemAt(i);
+          QualityProfile lProfile = (QualityProfile) getProfileCmb().getItemAt(i);
           if (lProfile != profile) {
             lProfile.setDefaultProfile(false);
           }
@@ -436,5 +508,29 @@ public class ResolutionProfileDialog extends JDialog {
 
   public boolean isConfigChanged() {
     return configChanged;
+  }
+
+  public JTextField getQualityREd() {
+    return qualityREd;
+  }
+
+  public JTextField getSpatialOversamplingREd() {
+    return spatialOversamplingREd;
+  }
+
+  public JTextField getColorOversamplingREd() {
+    return colorOversamplingREd;
+  }
+
+  public JCheckBox getWithHDRCBx() {
+    return withHDRCBx;
+  }
+
+  public JCheckBox getWithHdrIntensityMapCBx() {
+    return withHdrIntensityMapCBx;
+  }
+
+  public JTextField getCaptionREd() {
+    return captionREd;
   }
 }
