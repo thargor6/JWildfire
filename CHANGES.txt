@@ -1,7 +1,7 @@
 V0.44 (09.04.2012):
- - Fracal flame editor: the interactive renderer also now respects the quality setting (from the render profile) and does not "overrender" as quickly as before
- - Fracal flame editor: rudimentary statistics display in the interactive renderer
- - Fracal flame editor: increased the responsebility of various sliders
+ - Fractal flame editor: the interactive renderer also now respects the quality setting (from the render profile) and does not "overrender" as quickly as before
+ - Fractal flame editor: rudimentary statistics display in the interactive renderer
+ - Fractal flame editor: increased the responsebility of various sliders
  - Fractal flame editor: removed oversample controls from the coloring tab, added gamma threshold controls, reactivated filter radius control
  - Fractal flame editor: From Editor/To Editor buttons to quick exchanging from fractals between the editor and the renderer
  - Main: removed most of the TINA-related settings from the Preferences windows

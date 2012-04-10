@@ -16,53 +16,21 @@
 */
 package org.jwildfire.base;
 
-public class ResolutionProfile implements Cloneable {
-  private int width;
-  private int height;
-  private boolean defaultProfile;
+import java.util.Comparator;
 
-  public ResolutionProfile() {
-
-  }
-
-  public ResolutionProfile(boolean pDefaultProfile, int pWidth, int pHeight) {
-    width = pWidth;
-    height = pHeight;
-    defaultProfile = pDefaultProfile;
-  }
-
-  public int getWidth() {
-    return width;
-  }
-
-  public void setWidth(int width) {
-    this.width = width;
-  }
-
-  public int getHeight() {
-    return height;
-  }
-
-  public void setHeight(int height) {
-    this.height = height;
-  }
+public class QualityProfileComparator implements Comparator<QualityProfile> {
 
   @Override
-  public String toString() {
-    return width + "x" + height;
-  }
-
-  @Override
-  public Object clone() throws CloneNotSupportedException {
-    return super.clone();
-  }
-
-  public boolean isDefaultProfile() {
-    return defaultProfile;
-  }
-
-  public void setDefaultProfile(boolean defaultProfile) {
-    this.defaultProfile = defaultProfile;
+  public int compare(QualityProfile o1, QualityProfile o2) {
+    if (o1.getQualityIndex() > o2.getQualityIndex()) {
+      return 1;
+    }
+    else if (o1.getQualityIndex() < o2.getQualityIndex()) {
+      return -1;
+    }
+    else {
+      return 0;
+    }
   }
 
 }

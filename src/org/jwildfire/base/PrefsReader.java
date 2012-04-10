@@ -19,6 +19,7 @@ package org.jwildfire.base;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.util.Collections;
 import java.util.Properties;
 
 public class PrefsReader {
@@ -73,6 +74,7 @@ public class PrefsReader {
             profile.setWidth(getIntProperty(props, Prefs.KEY_TINA_PROFILE_RESOLUTION_WIDTH + "." + i, 0));
             profile.setHeight(getIntProperty(props, Prefs.KEY_TINA_PROFILE_RESOLUTION_HEIGHT + "." + i, 0));
           }
+          Collections.sort(pPrefs.getResolutionProfiles(), new ResolutionProfileComparator());
         }
         // quality profiles
         {
@@ -87,6 +89,7 @@ public class PrefsReader {
             profile.setWithHDR(getBooleanProperty(props, Prefs.KEY_TINA_PROFILE_QUALITY_WITH_HDR + "." + i, false));
             profile.setWithHDRIntensityMap(getBooleanProperty(props, Prefs.KEY_TINA_PROFILE_QUALITY_WITH_HDR_INTENSITY_MAP + "." + i, false));
             profile.setCaption(getProperty(props, Prefs.KEY_TINA_PROFILE_QUALITY_CAPTION + "." + i, ""));
+            Collections.sort(pPrefs.getQualityProfiles(), new QualityProfileComparator());
           }
         }
         //

@@ -105,4 +105,8 @@ public class QualityProfile implements Cloneable {
     this.defaultProfile = defaultProfile;
   }
 
+  public int getQualityIndex() {
+    return spatialOversample * colorOversample * quality;
+  }
+
 }

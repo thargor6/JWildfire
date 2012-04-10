@@ -1194,7 +1194,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaLoadFlameButton = new JButton();
       tinaLoadFlameButton.setText("Load Flame");
       tinaLoadFlameButton.setPreferredSize(new Dimension(125, 24));
-      tinaLoadFlameButton.setBounds(new Rectangle(508, 7, 125, 24));
+      tinaLoadFlameButton.setBounds(new Rectangle(504, 35, 125, 24));
       tinaLoadFlameButton.setFont(new Font("Dialog", Font.BOLD, 10));
       tinaLoadFlameButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -1215,7 +1215,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaSaveFlameButton = new JButton();
       tinaSaveFlameButton.setText("Save Flame");
       tinaSaveFlameButton.setPreferredSize(new Dimension(125, 24));
-      tinaSaveFlameButton.setBounds(new Rectangle(508, 34, 125, 24));
+      tinaSaveFlameButton.setBounds(new Rectangle(643, 35, 125, 24));
       tinaSaveFlameButton.setFont(new Font("Dialog", Font.BOLD, 10));
       tinaSaveFlameButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -4977,21 +4977,7 @@ public class TinaInternalFrame extends JInternalFrame {
       centerNorthPanel.add(getMouseTransformZoomInButton());
       centerNorthPanel.add(getMouseTransformZoomOutButton());
       centerNorthPanel.add(getToggleVariationsButton());
-
-      cancelRenderBtn = new JToggleButton();
-      cancelRenderBtn.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-          // TODO
-        }
-      });
-      cancelRenderBtn.setToolTipText("Cancel rendering");
-      cancelRenderBtn.setText("Cancel");
-      cancelRenderBtn.setSize(new Dimension(82, 24));
-      cancelRenderBtn.setSelected(false);
-      cancelRenderBtn.setPreferredSize(new Dimension(42, 24));
-      cancelRenderBtn.setLocation(new Point(4, 4));
-      cancelRenderBtn.setBounds(368, 4, 82, 24);
-      centerNorthPanel.add(cancelRenderBtn);
+      centerNorthPanel.add(getCancelRenderButton());
     }
     return centerNorthPanel;
   }
@@ -8023,7 +8009,7 @@ public class TinaInternalFrame extends JInternalFrame {
       loadFromClipboardFlameButton = new JButton();
       loadFromClipboardFlameButton.setPreferredSize(new Dimension(125, 24));
       loadFromClipboardFlameButton.setText("From Clipboard");
-      loadFromClipboardFlameButton.setBounds(new Rectangle(637, 7, 125, 24));
+      loadFromClipboardFlameButton.setBounds(new Rectangle(504, 7, 125, 24));
       loadFromClipboardFlameButton.setFont(new Font("Dialog", Font.BOLD, 10));
       loadFromClipboardFlameButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -8044,7 +8030,7 @@ public class TinaInternalFrame extends JInternalFrame {
       saveFlameToClipboardButton = new JButton();
       saveFlameToClipboardButton.setPreferredSize(new Dimension(125, 24));
       saveFlameToClipboardButton.setText("To Clipboard");
-      saveFlameToClipboardButton.setBounds(new Rectangle(637, 34, 125, 24));
+      saveFlameToClipboardButton.setBounds(new Rectangle(643, 7, 125, 24));
       saveFlameToClipboardButton.setFont(new Font("Dialog", Font.BOLD, 10));
       saveFlameToClipboardButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -8176,7 +8162,6 @@ public class TinaInternalFrame extends JInternalFrame {
   private JComboBox interactiveRandomStyleCmb;
   private JToggleButton interactiveHalveSizeButton;
   private JToggleButton affinePreserveZButton;
-  private JToggleButton cancelRenderBtn;
   private JButton qualityProfileBtn;
   private JButton resolutionProfileBtn;
   private JComboBox interactiveResolutionProfileCmb;
@@ -8187,6 +8172,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton interactiveFlameToEditorButton;
   private JButton interactiveLoadFlameFromMainButton;
   private JComboBox interactiveQualityProfileCmb;
+  private JButton cancelRenderButton;
 
   private JTextPane getHelpPane() {
     if (helpPane == null) {
@@ -9292,17 +9278,12 @@ public class TinaInternalFrame extends JInternalFrame {
     return affinePreserveZButton;
   }
 
-  public JToggleButton getCancelRenderBtn() {
-    return cancelRenderBtn;
-  }
-
   private JButton getQualityProfileBtn() {
     if (qualityProfileBtn == null) {
       qualityProfileBtn = new JButton();
-      qualityProfileBtn.setEnabled(false);
       qualityProfileBtn.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
-          // TODO
+          tinaController.editQualityProfiles();
         }
       });
       qualityProfileBtn.setToolTipText("Edit quality profiles");
@@ -9318,10 +9299,9 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton getResolutionProfileBtn() {
     if (resolutionProfileBtn == null) {
       resolutionProfileBtn = new JButton();
-      resolutionProfileBtn.setEnabled(false);
       resolutionProfileBtn.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
-          // TODO
+          tinaController.editResolutionProfiles();
         }
       });
       resolutionProfileBtn.setToolTipText("Edit resolution profiles");
@@ -9379,5 +9359,18 @@ public class TinaInternalFrame extends JInternalFrame {
 
   public JComboBox getInteractiveQualityProfileCmb() {
     return interactiveQualityProfileCmb;
+  }
+
+  private JButton getCancelRenderButton() {
+    if (cancelRenderButton == null) {
+      cancelRenderButton = new JButton();
+      cancelRenderButton.setVisible(false);
+      cancelRenderButton.setToolTipText("");
+      cancelRenderButton.setText("Cancel");
+      cancelRenderButton.setPreferredSize(new Dimension(81, 24));
+      cancelRenderButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      cancelRenderButton.setBounds(369, 4, 81, 24);
+    }
+    return cancelRenderButton;
   }
 } //  @jve:decl-index=0:visual-constraint="10,10"

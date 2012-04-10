@@ -4230,4 +4230,31 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     }
   }
 
+  public void editQualityProfiles() {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void editResolutionProfiles() {
+    ResolutionProfileDialog dlg = new ResolutionProfileDialog(SwingUtilities.getWindowAncestor(centerPanel));
+    dlg.setProfiles(prefs.getResolutionProfiles());
+    dlg.setProfile(getResolutionProfile());
+    dlg.setModal(true);
+    dlg.setVisible(true);
+    if (dlg.isConfirmed() && dlg.isConfigChanged()) {
+      try {
+        ResolutionProfile profile = getResolutionProfile();
+        prefs.getResolutionProfiles().clear();
+        prefs.getResolutionProfiles().addAll(dlg.getProfiles());
+        prefs.saveToFromFile();
+        refreshResolutionProfileCmb(resolutionProfileCmb, profile);
+        refreshResolutionProfileCmb(interactiveResolutionProfileCmb, profile);
+        refreshResolutionProfileCmb(batchResolutionProfileCmb, profile);
+        resolutionProfileCmb_changed();
+      }
+      catch (Throwable ex) {
+        errorHandler.handleError(ex);
+      }
+    }
+  }
 }
