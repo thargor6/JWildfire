@@ -366,7 +366,8 @@ public class TinaInteractiveRendererController implements IterationObserver {
 
   private synchronized void updateStats(FlameRenderThread pEventSource) {
     double quality = pEventSource.getTonemapper().calcDensity(sampleCount);
-    statsTextArea.setText("Current quality: " + Tools.doubleToString(quality));
+    statsTextArea.setText("current quality: " + Tools.doubleToString(quality) + "\n" +
+        "samples so far: " + sampleCount);
     statsTextArea.validate();
   }
 

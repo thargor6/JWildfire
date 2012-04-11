@@ -64,6 +64,17 @@ public class Flowers3DRandomFlameGenerator extends RandomFlameGenerator {
       xForm.addVariation(0.1 + Math.random() * 0.3, VariationFuncList.getVariationFuncInstance("spherical", true));
       xForm.addVariation(0.2 + Math.random() * 0.9, VariationFuncList.getVariationFuncInstance("zcone", true));
       xForm.addVariation(0.01 + 0.045 * Math.random(), VariationFuncList.getVariationFuncInstance("cross", true));
+      if (Math.random() < 0.33) {
+        VariationFunc ef = VariationFuncList.getVariationFuncInstance("epispiral_wf", true);
+        ef.setParameter("waves", 3 + (int) (Math.random() * 10.0));
+        xForm.addVariation(0.02 + 0.29 * Math.random(), ef);
+        if (Math.random() < 0.33) {
+          VariationFunc ef2 = VariationFuncList.getVariationFuncInstance("epispiral", true);
+          ef2.setParameter("thickness", 0.05 + Math.random() * 0.15);
+          ef2.setParameter("n", 3.0 + Math.random() * 10.0);
+          xForm.addVariation(0.01 + 0.14 * Math.random(), ef2);
+        }
+      }
       xForm.setColor(Math.random());
       xForm.setColorSymmetry(Math.random());
       XFormTransformService.scale(xForm, 1.0 + (0.1 - Math.random() * 0.2), true, true, false);
