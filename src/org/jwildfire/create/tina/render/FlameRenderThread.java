@@ -365,9 +365,10 @@ public final class FlameRenderThread implements Runnable {
       if ((py < 0) || (py > renderer.camH))
         continue;
 
-      int xIdx = (int) (renderer.bhs * py + 0.5);
-      int yIdx = (int) (renderer.bws * px + 0.5);
-      RasterPoint rp = renderer.raster[xIdx][yIdx];
+      int xIdx = (int) (renderer.bws * px + 0.5);
+      int yIdx = (int) (renderer.bhs * py + 0.5);
+
+      RasterPoint rp = renderer.raster[yIdx][xIdx];
       RenderColor color;
       if (p[0].rgbColor) {
         color = new RenderColor();
