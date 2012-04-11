@@ -334,7 +334,7 @@ public class TinaInteractiveRendererController implements IterationObserver {
       if (chooser.showSaveDialog(imageRootPanel) == JFileChooser.APPROVE_OPTION) {
         File file = chooser.getSelectedFile();
         prefs.setLastOutputImageFile(file);
-        RenderedFlame res = renderer.finishRenderFlame();
+        RenderedFlame res = renderer.finishRenderFlame(sampleCount);
         new ImageWriter().saveImage(res.getImage(), file.getAbsolutePath());
         if (res.getHDRImage() != null) {
           new ImageWriter().saveImage(res.getHDRImage(), file.getAbsolutePath() + ".hdr");
@@ -366,7 +366,7 @@ public class TinaInteractiveRendererController implements IterationObserver {
 
   private synchronized void updateStats(FlameRenderThread pEventSource) {
     double quality = pEventSource.getTonemapper().calcDensity(sampleCount);
-    statsTextArea.setText("current quality: " + Tools.doubleToString(quality) + "\n" +
+    statsTextArea.setText("Current quality: " + Tools.doubleToString(quality) + "\n" +
         "samples so far: " + sampleCount);
     statsTextArea.validate();
   }

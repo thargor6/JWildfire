@@ -179,14 +179,22 @@ public final class FlameRenderer {
     return startIterate(renderFlames);
   }
 
-  public RenderedFlame finishRenderFlame() {
+  public RenderedFlame finishRenderFlame(long pSampleCount) {
     if (renderInfo == null) {
       throw new IllegalStateException();
     }
-    RenderedFlame res = new RenderedFlame();
-    res.init(renderInfo);
-    renderImage(res.getImage(), res.getHDRImage(), res.getHDRIntensityMap());
-    return res;
+    double oldDensity = flame.getSampleDensity();
+    try {
+      double quality = logDensityFilter.calcDensity(pSampleCount, rasterSize);
+      flame.setSampleDensity(quality);
+      RenderedFlame res = new RenderedFlame();
+      res.init(renderInfo);
+      renderImage(res.getImage(), res.getHDRImage(), res.getHDRIntensityMap());
+      return res;
+    }
+    finally {
+      flame.setSampleDensity(oldDensity);
+    }
   }
 
   public RenderedFlame renderFlame(RenderInfo pRenderInfo) {
