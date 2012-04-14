@@ -2,6 +2,7 @@ package org.jwildfire.create.tina.swing;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
@@ -15,6 +16,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
@@ -27,6 +29,7 @@ import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
 import javax.swing.JSlider;
+import javax.swing.JSpinner;
 import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
@@ -35,6 +38,7 @@ import javax.swing.JTextField;
 import javax.swing.JTextPane;
 import javax.swing.JToggleButton;
 import javax.swing.ListSelectionModel;
+import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingConstants;
 import javax.swing.WindowConstants;
 import javax.swing.border.EtchedBorder;
@@ -369,25 +373,16 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton transformationWeightRightButton = null;
   private JButton newFlameButton = null;
   private JPanel tinaAnimatePanel = null;
-  private JPanel tinaMorphPanel = null;
-  private JButton setMorphFlame1Button = null;
-  private JButton setMorphFlame2Button = null;
   private JLabel morphFramesLbl = null;
-  private JTextField morphFramesREd = null;
   private JLabel morphFrameLbl = null;
-  private JTextField morphFrameREd = null;
-  private JCheckBox morphCheckBox = null;
-  private JSlider morphFrameSlider = null;
-  private JButton importMorphedFlameButton = null;
   private JButton animationGenerateButton = null;
   private JTextField animateFramesREd = null;
   private JLabel animateFramesLbl = null;
-  private JTextField animateOutputREd = null;
   private JLabel animateOutputLbl = null;
   private JLabel animateGlobalScriptLbl = null;
-  private JComboBox animateScriptCmb = null;
+  private JComboBox animatorScriptCmb = null;
   private JLabel animateXFormScriptLbl = null;
-  private JComboBox animateXFormScriptCmb = null;
+  private JComboBox animatorXFormScriptCmb = null;
   private JPanel triangleOperationsPanel = null;
   private JToggleButton mouseTransformMoveButton = null;
   private JToggleButton mouseTransformRotateButton = null;
@@ -577,7 +572,6 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton affineFlipHorizontalButton = null;
   private JButton affineFlipVerticalButton = null;
   private JLabel animateLightScriptLbl = null;
-  private JComboBox animateLightScriptCmb = null;
   private JToggleButton darkTrianglesToggleButton = null;
   private JPanel shadingPanel = null;
   private JLabel shadingLbl = null;
@@ -922,6 +916,35 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaCameraPanel.add(getTinaCameraDOFSlider(), null);
       tinaCameraPanel.add(getTinaCameraDOFREd(), null);
       tinaCameraPanel.add(tinaCameraDOFLbl, null);
+
+      JSpinner spinner = new JSpinner();
+      spinner.setVisible(false);
+      spinner.setModel(new SpinnerNumberModel(new Double(0), null, null, new Double(0.5)));
+      spinner.setFont(new Font("Dialog", Font.PLAIN, 10));
+      spinner.setBounds(939, 25, 169, 28);
+      ((JSpinner.DefaultEditor) spinner.getEditor()).getTextField().addMouseListener(
+          new java.awt.event.MouseAdapter() {
+            public void mouseClicked(final MouseEvent e) {
+              System.out.println("CLICK");
+            }
+          });
+      ((JSpinner.DefaultEditor) spinner.getEditor()).getTextField().addMouseMotionListener(
+          new java.awt.event.MouseMotionAdapter() {
+
+            @Override
+            public void mouseDragged(MouseEvent e) {
+              System.out.println("DRAG");
+            }
+
+            @Override
+            public void mouseMoved(MouseEvent e) {
+              System.out.println("MOVE");
+            }
+
+          });
+
+      spinner.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+      tinaCameraPanel.add(spinner);
     }
     return tinaCameraPanel;
   }
@@ -2949,7 +2972,7 @@ public class TinaInternalFrame extends JInternalFrame {
         getXFormOpacitySlider(), getXFormDrawModeCmb(), getRelWeightsTable(), getRelWeightsLeftButton(), getRelWeightsRightButton(),
         getTransformationWeightLeftButton(), getTransformationWeightRightButton(), getSetMorphFlame1Button(),
         getSetMorphFlame2Button(), getMorphFrameREd(), getMorphFramesREd(), getMorphCheckBox(), getMorphFrameSlider(), getImportMorphedFlameButton(),
-        getAnimateOutputREd(), getAnimateFramesREd(), getAnimateScriptCmb(), getAnimationGenerateButton(), getAnimateXFormScriptCmb(), getMouseTransformMoveButton(),
+        getAnimateFramesREd(), getAnimatorScriptCmb(), getAnimationGenerateButton(), getAnimatorXFormScriptCmb(), getMouseTransformMoveButton(),
         getMouseTransformRotateButton(), getMouseTransformScaleButton(), getAffineEditPostTransformButton(), getAffineEditPostTransformSmallButton(),
         getMouseTransformZoomInButton(), getMouseTransformZoomOutButton(), getToggleTrianglesButton(), new MainProgressUpdater(this), getRandomPostTransformCheckBox(),
         getRandomSymmetryCheckBox(), getAffineResetTransformButton(), getCreatePaletteColorsTable(),
@@ -2992,20 +3015,20 @@ public class TinaInternalFrame extends JInternalFrame {
       getMorphFrameSlider().setMaximum(Integer.parseInt(getMorphFramesREd().getText()));
       getMorphFrameSlider().setValue(Integer.parseInt(getMorphFrameREd().getText()));
 
-      getAnimateScriptCmb().removeAllItems();
-      getAnimateScriptCmb().addItem(AnimationService.GlobalScript.NONE);
-      getAnimateScriptCmb().addItem(AnimationService.GlobalScript.ROTATE_PITCH);
-      getAnimateScriptCmb().addItem(AnimationService.GlobalScript.ROTATE_ROLL);
-      getAnimateScriptCmb().addItem(AnimationService.GlobalScript.ROTATE_YAW);
-      getAnimateScriptCmb().addItem(AnimationService.GlobalScript.ROTATE_PITCH_YAW);
-      getAnimateScriptCmb().setSelectedItem(AnimationService.GlobalScript.ROTATE_PITCH_YAW);
+      getAnimatorScriptCmb().removeAllItems();
+      getAnimatorScriptCmb().addItem(AnimationService.GlobalScript.NONE);
+      getAnimatorScriptCmb().addItem(AnimationService.GlobalScript.ROTATE_PITCH);
+      getAnimatorScriptCmb().addItem(AnimationService.GlobalScript.ROTATE_ROLL);
+      getAnimatorScriptCmb().addItem(AnimationService.GlobalScript.ROTATE_YAW);
+      getAnimatorScriptCmb().addItem(AnimationService.GlobalScript.ROTATE_PITCH_YAW);
+      getAnimatorScriptCmb().setSelectedItem(AnimationService.GlobalScript.ROTATE_PITCH_YAW);
 
-      getAnimateXFormScriptCmb().removeAllItems();
-      getAnimateXFormScriptCmb().addItem(AnimationService.XFormScript.NONE);
-      getAnimateXFormScriptCmb().addItem(AnimationService.XFormScript.ROTATE_FULL);
-      getAnimateXFormScriptCmb().addItem(AnimationService.XFormScript.ROTATE_SLIGHTLY);
-      getAnimateXFormScriptCmb().addItem(AnimationService.XFormScript.ROTATE_LAST_XFORM);
-      getAnimateXFormScriptCmb().setSelectedItem(AnimationService.XFormScript.ROTATE_SLIGHTLY);
+      getAnimatorXFormScriptCmb().removeAllItems();
+      getAnimatorXFormScriptCmb().addItem(AnimationService.XFormScript.NONE);
+      getAnimatorXFormScriptCmb().addItem(AnimationService.XFormScript.ROTATE_FULL);
+      getAnimatorXFormScriptCmb().addItem(AnimationService.XFormScript.ROTATE_SLIGHTLY);
+      getAnimatorXFormScriptCmb().addItem(AnimationService.XFormScript.ROTATE_LAST_XFORM);
+      getAnimatorXFormScriptCmb().setSelectedItem(AnimationService.XFormScript.ROTATE_SLIGHTLY);
 
       getAnimateLightScriptCmb().removeAllItems();
       getAnimateLightScriptCmb().addItem(AnimationService.LightScript.NONE);
@@ -4540,237 +4563,89 @@ public class TinaInternalFrame extends JInternalFrame {
    */
   private JPanel getTinaAnimatePanel() {
     if (tinaAnimatePanel == null) {
-      animateLightScriptLbl = new JLabel();
-      animateLightScriptLbl.setBounds(new Rectangle(156, 59, 94, 22));
-      animateLightScriptLbl.setPreferredSize(new Dimension(94, 22));
-      animateLightScriptLbl.setText("Light script");
-      animateLightScriptLbl.setFont(new Font("Dialog", Font.BOLD, 10));
       animateXFormScriptLbl = new JLabel();
       animateXFormScriptLbl.setPreferredSize(new Dimension(94, 22));
       animateXFormScriptLbl.setText("XForm script");
       animateXFormScriptLbl.setSize(new Dimension(94, 22));
-      animateXFormScriptLbl.setLocation(new Point(156, 32));
+      animateXFormScriptLbl.setLocation(new Point(23, 34));
       animateXFormScriptLbl.setFont(new Font("Dialog", Font.BOLD, 10));
       animateGlobalScriptLbl = new JLabel();
       animateGlobalScriptLbl.setPreferredSize(new Dimension(94, 22));
       animateGlobalScriptLbl.setText("Global script");
       animateGlobalScriptLbl.setSize(new Dimension(94, 22));
-      animateGlobalScriptLbl.setLocation(new Point(156, 4));
+      animateGlobalScriptLbl.setLocation(new Point(23, 6));
       animateGlobalScriptLbl.setFont(new Font("Dialog", Font.BOLD, 10));
-      animateOutputLbl = new JLabel();
-      animateOutputLbl.setPreferredSize(new Dimension(94, 22));
-      animateOutputLbl.setText("Output");
-      animateOutputLbl.setSize(new Dimension(94, 22));
-      animateOutputLbl.setLocation(new Point(530, 4));
-      animateOutputLbl.setFont(new Font("Dialog", Font.BOLD, 10));
       animateFramesLbl = new JLabel();
       animateFramesLbl.setPreferredSize(new Dimension(94, 22));
       animateFramesLbl.setText("Frames");
-      animateFramesLbl.setSize(new Dimension(94, 22));
-      animateFramesLbl.setLocation(new Point(816, 4));
+      animateFramesLbl.setSize(new Dimension(125, 22));
+      animateFramesLbl.setLocation(new Point(407, 6));
       animateFramesLbl.setFont(new Font("Dialog", Font.BOLD, 10));
       tinaAnimatePanel = new JPanel();
       tinaAnimatePanel.setLayout(null);
       tinaAnimatePanel.add(getAnimationGenerateButton(), null);
       tinaAnimatePanel.add(getAnimateFramesREd(), null);
       tinaAnimatePanel.add(animateFramesLbl, null);
-      tinaAnimatePanel.add(getAnimateOutputREd(), null);
-      tinaAnimatePanel.add(animateOutputLbl, null);
       tinaAnimatePanel.add(animateGlobalScriptLbl, null);
-      tinaAnimatePanel.add(getAnimateScriptCmb(), null);
+      tinaAnimatePanel.add(getAnimatorScriptCmb(), null);
       tinaAnimatePanel.add(animateXFormScriptLbl, null);
-      tinaAnimatePanel.add(getAnimateXFormScriptCmb(), null);
-      tinaAnimatePanel.add(animateLightScriptLbl, null);
-      tinaAnimatePanel.add(getAnimateLightScriptCmb(), null);
+      tinaAnimatePanel.add(getAnimatorXFormScriptCmb(), null);
+
+      JLabel lblFramesPerSecond = new JLabel();
+      lblFramesPerSecond.setText("Frames per second");
+      lblFramesPerSecond.setSize(new Dimension(94, 22));
+      lblFramesPerSecond.setPreferredSize(new Dimension(94, 22));
+      lblFramesPerSecond.setLocation(new Point(407, 6));
+      lblFramesPerSecond.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblFramesPerSecond.setBounds(593, 6, 125, 22);
+      tinaAnimatePanel.add(lblFramesPerSecond);
+
+      animateFramesPerSecondREd = new JTextField();
+      animateFramesPerSecondREd.setText("12");
+      animateFramesPerSecondREd.setSize(new Dimension(56, 22));
+      animateFramesPerSecondREd.setPreferredSize(new Dimension(56, 22));
+      animateFramesPerSecondREd.setLocation(new Point(503, 6));
+      animateFramesPerSecondREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      animateFramesPerSecondREd.setBounds(718, 6, 56, 22);
+      tinaAnimatePanel.add(animateFramesPerSecondREd);
+
+      JScrollPane scrollPane = new JScrollPane();
+      scrollPane.setBounds(new Rectangle(9, 13, 308, 263));
+      scrollPane.setBounds(112, 112, 308, 263);
+      tinaAnimatePanel.add(scrollPane);
+
+      animateScriptArea = new JTextArea();
+      animateScriptArea.setText("");
+      scrollPane.setViewportView(animateScriptArea);
+
+      animateCompileScript = new JButton();
+      animateCompileScript.setToolTipText("Compile the script");
+      animateCompileScript.setText("Compile");
+      animateCompileScript.setPreferredSize(new Dimension(81, 24));
+      animateCompileScript.setFont(new Font("Dialog", Font.BOLD, 10));
+      animateCompileScript.setBounds(new Rectangle(9, 280, 81, 24));
+      animateCompileScript.setBounds(464, 233, 81, 24);
+      tinaAnimatePanel.add(animateCompileScript);
+
+      JComboBox animateResolutionProfileCmb = new JComboBox();
+      animateResolutionProfileCmb.setPreferredSize(new Dimension(125, 22));
+      animateResolutionProfileCmb.setMaximumRowCount(32);
+      animateResolutionProfileCmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      animateResolutionProfileCmb.setBounds(new Rectangle(231, 7, 125, 22));
+      animateResolutionProfileCmb.setBounds(475, 146, 125, 22);
+      tinaAnimatePanel.add(animateResolutionProfileCmb);
+
+      JComboBox animateQualityProfileCmb = new JComboBox();
+      animateQualityProfileCmb.setPreferredSize(new Dimension(125, 22));
+      animateQualityProfileCmb.setMaximumRowCount(32);
+      animateQualityProfileCmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      animateQualityProfileCmb.setBounds(new Rectangle(231, 7, 125, 22));
+      animateQualityProfileCmb.setBounds(475, 174, 125, 22);
+      tinaAnimatePanel.add(animateQualityProfileCmb);
+      tinaAnimatePanel.add(getLblResolution());
+      tinaAnimatePanel.add(getLblQuality());
     }
     return tinaAnimatePanel;
-  }
-
-  /**
-   * This method initializes tinaMorphPanel	
-   * 	
-   * @return javax.swing.JPanel	
-   */
-  private JPanel getTinaMorphPanel() {
-    if (tinaMorphPanel == null) {
-      morphFrameLbl = new JLabel();
-      morphFrameLbl.setPreferredSize(new Dimension(94, 22));
-      morphFrameLbl.setText("Frames");
-      morphFrameLbl.setSize(new Dimension(94, 22));
-      morphFrameLbl.setLocation(new Point(263, 4));
-      morphFrameLbl.setFont(new Font("Dialog", Font.BOLD, 10));
-      morphFramesLbl = new JLabel();
-      morphFramesLbl.setPreferredSize(new Dimension(94, 22));
-      morphFramesLbl.setText("Frames");
-      morphFramesLbl.setSize(new Dimension(94, 22));
-      morphFramesLbl.setLocation(new Point(816, 4));
-      morphFramesLbl.setFont(new Font("Dialog", Font.BOLD, 10));
-      tinaMorphPanel = new JPanel();
-      tinaMorphPanel.setLayout(null);
-      tinaMorphPanel.add(getSetMorphFlame1Button(), null);
-      tinaMorphPanel.add(getSetMorphFlame2Button(), null);
-      tinaMorphPanel.add(morphFramesLbl, null);
-      tinaMorphPanel.add(getMorphFramesREd(), null);
-      tinaMorphPanel.add(morphFrameLbl, null);
-      tinaMorphPanel.add(getMorphFrameREd(), null);
-      tinaMorphPanel.add(getMorphCheckBox(), null);
-      tinaMorphPanel.add(getMorphFrameSlider(), null);
-      tinaMorphPanel.add(getImportMorphedFlameButton(), null);
-    }
-    return tinaMorphPanel;
-  }
-
-  /**
-   * This method initializes setMorphFlame1Button	
-   * 	
-   * @return javax.swing.JButton	
-   */
-  private JButton getSetMorphFlame1Button() {
-    if (setMorphFlame1Button == null) {
-      setMorphFlame1Button = new JButton();
-      setMorphFlame1Button.setBounds(new Rectangle(4, 4, 125, 24));
-      setMorphFlame1Button.setPreferredSize(new Dimension(125, 24));
-      setMorphFlame1Button.setText("Set Flame 1");
-      setMorphFlame1Button.setFont(new Font("Dialog", Font.BOLD, 10));
-      setMorphFlame1Button.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.setMorphFlame1();
-        }
-      });
-    }
-    return setMorphFlame1Button;
-  }
-
-  /**
-   * This method initializes setMorphFlame2Button	
-   * 	
-   * @return javax.swing.JButton	
-   */
-  private JButton getSetMorphFlame2Button() {
-    if (setMorphFlame2Button == null) {
-      setMorphFlame2Button = new JButton();
-      setMorphFlame2Button.setPreferredSize(new Dimension(125, 24));
-      setMorphFlame2Button.setText("Set Flame 2");
-      setMorphFlame2Button.setSize(new Dimension(125, 24));
-      setMorphFlame2Button.setLocation(new Point(4, 32));
-      setMorphFlame2Button.setFont(new Font("Dialog", Font.BOLD, 10));
-      setMorphFlame2Button.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.setMorphFlame2();
-        }
-      });
-    }
-    return setMorphFlame2Button;
-  }
-
-  /**
-   * This method initializes morphFramesREd	
-   * 	
-   * @return javax.swing.JTextField	
-   */
-  private JTextField getMorphFramesREd() {
-    if (morphFramesREd == null) {
-      morphFramesREd = new JTextField();
-      morphFramesREd.setPreferredSize(new Dimension(56, 22));
-      morphFramesREd.setText("72");
-      morphFramesREd.setSize(new Dimension(56, 22));
-      morphFramesREd.setLocation(new Point(912, 4));
-      morphFramesREd.setFont(new Font("Dialog", Font.PLAIN, 10));
-      morphFramesREd.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.morphFramesREd_changed();
-        }
-      });
-    }
-    return morphFramesREd;
-  }
-
-  /**
-   * This method initializes morphFrameREd	
-   * 	
-   * @return javax.swing.JTextField	
-   */
-  private JTextField getMorphFrameREd() {
-    if (morphFrameREd == null) {
-      morphFrameREd = new JTextField();
-      morphFrameREd.setPreferredSize(new Dimension(56, 22));
-      morphFrameREd.setText("33");
-      morphFrameREd.setSize(new Dimension(56, 22));
-      morphFrameREd.setLocation(new Point(359, 4));
-      morphFrameREd.setFont(new Font("Dialog", Font.PLAIN, 10));
-      morphFrameREd.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.morphFrameREd_changed();
-        }
-      });
-    }
-    return morphFrameREd;
-  }
-
-  /**
-   * This method initializes morphCheckBox	
-   * 	
-   * @return javax.swing.JCheckBox	
-   */
-  private JCheckBox getMorphCheckBox() {
-    if (morphCheckBox == null) {
-      morphCheckBox = new JCheckBox();
-      morphCheckBox.setPreferredSize(new Dimension(150, 22));
-      morphCheckBox.setLocation(new Point(263, 32));
-      morphCheckBox.setSize(new Dimension(150, 22));
-      morphCheckBox.setText("Morphing enabled");
-      morphCheckBox.setFont(new Font("Dialog", Font.BOLD, 10));
-      morphCheckBox.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.morphCheckBox_changed();
-        }
-      });
-    }
-    return morphCheckBox;
-  }
-
-  /**
-   * This method initializes morphFrameSlider	
-   * 	
-   * @return javax.swing.JSlider	
-   */
-  private JSlider getMorphFrameSlider() {
-    if (morphFrameSlider == null) {
-      morphFrameSlider = new JSlider();
-      morphFrameSlider.setMaximum(100);
-      morphFrameSlider.setMinimum(1);
-      morphFrameSlider.setValue(0);
-      morphFrameSlider.setSize(new Dimension(220, 19));
-      morphFrameSlider.setLocation(new Point(416, 4));
-      morphFrameSlider.setPreferredSize(new Dimension(220, 19));
-      morphFrameSlider.addChangeListener(new javax.swing.event.ChangeListener() {
-        public void stateChanged(javax.swing.event.ChangeEvent e) {
-          tinaController.morphFrameSlider_changed();
-        }
-      });
-    }
-    return morphFrameSlider;
-  }
-
-  /**
-   * This method initializes importMorphedFlameButton	
-   * 	
-   * @return javax.swing.JButton	
-   */
-  private JButton getImportMorphedFlameButton() {
-    if (importMorphedFlameButton == null) {
-      importMorphedFlameButton = new JButton();
-      importMorphedFlameButton.setBounds(new Rectangle(132, 4, 125, 24));
-      importMorphedFlameButton.setPreferredSize(new Dimension(125, 24));
-      importMorphedFlameButton.setText("Import morphed");
-      importMorphedFlameButton.setFont(new Font("Dialog", Font.BOLD, 10));
-      importMorphedFlameButton.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.importMorphedFlameButton_clicked();
-        }
-      });
-    }
-    return importMorphedFlameButton;
   }
 
   /**
@@ -4784,7 +4659,7 @@ public class TinaInternalFrame extends JInternalFrame {
       animationGenerateButton.setPreferredSize(new Dimension(125, 52));
       animationGenerateButton.setText("Generate");
       animationGenerateButton.setSize(new Dimension(125, 52));
-      animationGenerateButton.setLocation(new Point(4, 4));
+      animationGenerateButton.setLocation(new Point(510, 40));
       animationGenerateButton.setFont(new Font("Dialog", Font.BOLD, 10));
       animationGenerateButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -4806,26 +4681,10 @@ public class TinaInternalFrame extends JInternalFrame {
       animateFramesREd.setPreferredSize(new Dimension(56, 22));
       animateFramesREd.setText("72");
       animateFramesREd.setSize(new Dimension(56, 22));
-      animateFramesREd.setLocation(new Point(912, 4));
+      animateFramesREd.setLocation(new Point(532, 6));
       animateFramesREd.setFont(new Font("Dialog", Font.PLAIN, 10));
     }
     return animateFramesREd;
-  }
-
-  /**
-   * This method initializes animateOutputREd	
-   * 	
-   * @return javax.swing.JTextField	
-   */
-  private JTextField getAnimateOutputREd() {
-    if (animateOutputREd == null) {
-      animateOutputREd = new JTextField();
-      animateOutputREd.setBounds(new Rectangle(626, 4, 185, 22));
-      animateOutputREd.setPreferredSize(new Dimension(56, 22));
-      animateOutputREd.setText("C:\\TMP\\wf\\rotate1\\Img");
-      animateOutputREd.setFont(new Font("Dialog", Font.PLAIN, 10));
-    }
-    return animateOutputREd;
   }
 
   /**
@@ -4833,15 +4692,15 @@ public class TinaInternalFrame extends JInternalFrame {
    * 	
    * @return javax.swing.JComboBox	
    */
-  private JComboBox getAnimateScriptCmb() {
-    if (animateScriptCmb == null) {
-      animateScriptCmb = new JComboBox();
-      animateScriptCmb.setPreferredSize(new Dimension(275, 22));
-      animateScriptCmb.setSize(new Dimension(275, 22));
-      animateScriptCmb.setLocation(new Point(253, 4));
-      animateScriptCmb.setFont(new Font("Dialog", Font.BOLD, 10));
+  private JComboBox getAnimatorScriptCmb() {
+    if (animatorScriptCmb == null) {
+      animatorScriptCmb = new JComboBox();
+      animatorScriptCmb.setPreferredSize(new Dimension(275, 22));
+      animatorScriptCmb.setSize(new Dimension(275, 22));
+      animatorScriptCmb.setLocation(new Point(120, 6));
+      animatorScriptCmb.setFont(new Font("Dialog", Font.BOLD, 10));
     }
-    return animateScriptCmb;
+    return animatorScriptCmb;
   }
 
   /**
@@ -4849,15 +4708,15 @@ public class TinaInternalFrame extends JInternalFrame {
    * 	
    * @return javax.swing.JComboBox	
    */
-  private JComboBox getAnimateXFormScriptCmb() {
-    if (animateXFormScriptCmb == null) {
-      animateXFormScriptCmb = new JComboBox();
-      animateXFormScriptCmb.setPreferredSize(new Dimension(275, 22));
-      animateXFormScriptCmb.setSize(new Dimension(275, 22));
-      animateXFormScriptCmb.setLocation(new Point(253, 32));
-      animateXFormScriptCmb.setFont(new Font("Dialog", Font.BOLD, 10));
+  private JComboBox getAnimatorXFormScriptCmb() {
+    if (animatorXFormScriptCmb == null) {
+      animatorXFormScriptCmb = new JComboBox();
+      animatorXFormScriptCmb.setPreferredSize(new Dimension(275, 22));
+      animatorXFormScriptCmb.setSize(new Dimension(275, 22));
+      animatorXFormScriptCmb.setLocation(new Point(120, 34));
+      animatorXFormScriptCmb.setFont(new Font("Dialog", Font.BOLD, 10));
     }
-    return animateXFormScriptCmb;
+    return animatorXFormScriptCmb;
   }
 
   /**
@@ -8128,9 +7987,8 @@ public class TinaInternalFrame extends JInternalFrame {
       rootTabbedPane.setFont(new Font("Dialog", Font.BOLD, 10));
       rootTabbedPane.setEnabled(true);
       rootTabbedPane.addTab("Editor", null, getRootPanel(), null);
-      rootTabbedPane.addTab("Interactive render", null, getInteractiveRenderPanel(), null);
-      rootTabbedPane.addTab("Morph", null, getTinaMorphPanel(), null);
-      rootTabbedPane.addTab("Animate", null, getTinaAnimatePanel(), null);
+      rootTabbedPane.addTab("Interactive renderer", null, getInteractiveRenderPanel(), null);
+      rootTabbedPane.addTab("SFW Animator", null, getTinaAnimatePanel(), null);
       rootTabbedPane.addTab("Batch render", null, getBatchRenderPanel(), null);
 
       JPanel helpPanel = new JPanel();
@@ -8173,6 +8031,11 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton interactiveLoadFlameFromMainButton;
   private JComboBox interactiveQualityProfileCmb;
   private JButton cancelRenderButton;
+  private JTextField animateFramesPerSecondREd;
+  private JTextArea animateScriptArea;
+  private JButton animateCompileScript;
+  private JLabel lblResolution;
+  private JLabel lblQuality;
 
   private JTextPane getHelpPane() {
     if (helpPane == null) {
@@ -8420,21 +8283,6 @@ public class TinaInternalFrame extends JInternalFrame {
       });
     }
     return affineFlipVerticalButton;
-  }
-
-  /**
-   * This method initializes animateLightScriptCmb	
-   * 	
-   * @return javax.swing.JComboBox	
-   */
-  private JComboBox getAnimateLightScriptCmb() {
-    if (animateLightScriptCmb == null) {
-      animateLightScriptCmb = new JComboBox();
-      animateLightScriptCmb.setBounds(new Rectangle(254, 59, 275, 22));
-      animateLightScriptCmb.setPreferredSize(new Dimension(275, 22));
-      animateLightScriptCmb.setFont(new Font("Dialog", Font.BOLD, 10));
-    }
-    return animateLightScriptCmb;
   }
 
   /**
@@ -9372,5 +9220,43 @@ public class TinaInternalFrame extends JInternalFrame {
       cancelRenderButton.setBounds(369, 4, 81, 24);
     }
     return cancelRenderButton;
+  }
+
+  public JTextField getAnimateFramesPerSecondREd() {
+    return animateFramesPerSecondREd;
+  }
+
+  public JTextArea getAnimateScriptArea() {
+    return animateScriptArea;
+  }
+
+  public JButton getAnimateCompileScript() {
+    return animateCompileScript;
+  }
+
+  private JLabel getLblResolution() {
+    if (lblResolution == null) {
+      lblResolution = new JLabel();
+      lblResolution.setText("Resolution");
+      lblResolution.setSize(new Dimension(125, 22));
+      lblResolution.setPreferredSize(new Dimension(94, 22));
+      lblResolution.setLocation(new Point(407, 6));
+      lblResolution.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblResolution.setBounds(463, 121, 125, 22);
+    }
+    return lblResolution;
+  }
+
+  private JLabel getLblQuality() {
+    if (lblQuality == null) {
+      lblQuality = new JLabel();
+      lblQuality.setText("Quality");
+      lblQuality.setSize(new Dimension(125, 22));
+      lblQuality.setPreferredSize(new Dimension(94, 22));
+      lblQuality.setLocation(new Point(407, 6));
+      lblQuality.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblQuality.setBounds(569, 220, 125, 22);
+    }
+    return lblQuality;
   }
 } //  @jve:decl-index=0:visual-constraint="10,10"
