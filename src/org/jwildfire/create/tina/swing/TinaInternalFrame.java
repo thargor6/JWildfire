@@ -42,15 +42,16 @@ import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingConstants;
 import javax.swing.WindowConstants;
 import javax.swing.border.EtchedBorder;
+import javax.swing.border.TitledBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import org.jwildfire.base.Prefs;
+import org.jwildfire.create.tina.animate.AnimationService;
 import org.jwildfire.create.tina.base.DrawMode;
 import org.jwildfire.create.tina.base.Shading;
 import org.jwildfire.create.tina.randomflame.RandomFlameGeneratorList;
 import org.jwildfire.create.tina.swing.TinaController.NonlinearControlsRow;
-import org.jwildfire.create.tina.transform.AnimationService;
 import org.jwildfire.swing.StandardErrorHandler;
 
 public class TinaInternalFrame extends JInternalFrame {
@@ -372,17 +373,14 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton transformationWeightLeftButton = null;
   private JButton transformationWeightRightButton = null;
   private JButton newFlameButton = null;
-  private JPanel tinaAnimatePanel = null;
-  private JLabel morphFramesLbl = null;
-  private JLabel morphFrameLbl = null;
-  private JButton animationGenerateButton = null;
-  private JTextField animateFramesREd = null;
+  private JPanel tinaSWFAnimatorPanel = null;
+  private JButton swfAnimatorGenerateButton = null;
+  private JTextField swfAnimatorFramesREd = null;
   private JLabel animateFramesLbl = null;
-  private JLabel animateOutputLbl = null;
   private JLabel animateGlobalScriptLbl = null;
-  private JComboBox animatorScriptCmb = null;
+  private JComboBox swfAnimatorScriptCmb = null;
   private JLabel animateXFormScriptLbl = null;
-  private JComboBox animatorXFormScriptCmb = null;
+  private JComboBox swfAnimatorXFormScriptCmb = null;
   private JPanel triangleOperationsPanel = null;
   private JToggleButton mouseTransformMoveButton = null;
   private JToggleButton mouseTransformRotateButton = null;
@@ -2970,9 +2968,7 @@ public class TinaInternalFrame extends JInternalFrame {
         getTinaDuplicateTransformationButton(), getTinaDeleteTransformationButton(), getTinaAddFinalTransformationButton(), getRandomBatchPanel(),
         nonlinearControlsRows, getXFormColorREd(), getXFormColorSlider(), getXFormSymmetryREd(), getXFormSymmetrySlider(), getXFormOpacityREd(),
         getXFormOpacitySlider(), getXFormDrawModeCmb(), getRelWeightsTable(), getRelWeightsLeftButton(), getRelWeightsRightButton(),
-        getTransformationWeightLeftButton(), getTransformationWeightRightButton(), getSetMorphFlame1Button(),
-        getSetMorphFlame2Button(), getMorphFrameREd(), getMorphFramesREd(), getMorphCheckBox(), getMorphFrameSlider(), getImportMorphedFlameButton(),
-        getAnimateFramesREd(), getAnimatorScriptCmb(), getAnimationGenerateButton(), getAnimatorXFormScriptCmb(), getMouseTransformMoveButton(),
+        getTransformationWeightLeftButton(), getTransformationWeightRightButton(), getMouseTransformMoveButton(),
         getMouseTransformRotateButton(), getMouseTransformScaleButton(), getAffineEditPostTransformButton(), getAffineEditPostTransformSmallButton(),
         getMouseTransformZoomInButton(), getMouseTransformZoomOutButton(), getToggleTrianglesButton(), new MainProgressUpdater(this), getRandomPostTransformCheckBox(),
         getRandomSymmetryCheckBox(), getAffineResetTransformButton(), getCreatePaletteColorsTable(),
@@ -2984,12 +2980,12 @@ public class TinaInternalFrame extends JInternalFrame {
         getBatchRenderJobProgressBar(), getBatchRenderTotalProgressBar(), new JobProgressUpdater(this),
         getBatchRenderAddFilesButton(), getBatchRenderFilesMoveDownButton(), getBatchRenderFilesMoveUpButton(),
         getBatchRenderFilesRemoveButton(), getBatchRenderFilesRemoveAllButton(), getBatchRenderStartButton(),
-        getRootTabbedPane(), getAffineFlipHorizontalButton(), getAffineFlipVerticalButton(), getAnimateLightScriptCmb(),
-        getDarkTrianglesToggleButton(), getShadingBlurRadiusREd(), getShadingBlurRadiusSlider(), getShadingBlurFadeREd(),
+        getRootTabbedPane(), getAffineFlipHorizontalButton(), getAffineFlipVerticalButton(), getDarkTrianglesToggleButton(), getShadingBlurRadiusREd(), getShadingBlurRadiusSlider(), getShadingBlurFadeREd(),
         getShadingBlurFadeSlider(), getShadingBlurFallOffREd(), getShadingBlurFallOffSlider(), getScriptTextArea(),
         getAffineScaleXButton(), getAffineScaleYButton(), getGradientLibraryCenterPanel(), getGradientLibraryGradientCmb(), getHelpPane(),
         getToggleVariationsButton(), getAffinePreserveZButton(), getQualityProfileCmb(), getResolutionProfileCmb(),
-        getBatchQualityProfileCmb(), getBatchResolutionProfileCmb(), getInteractiveQualityProfileCmb(), getInteractiveResolutionProfileCmb());
+        getBatchQualityProfileCmb(), getBatchResolutionProfileCmb(), getInteractiveQualityProfileCmb(), getInteractiveResolutionProfileCmb(),
+        getSwfAnimatorQualityProfileCmb(), getSwfAnimatorResolutionProfileCmb());
 
     tinaController.refreshing = tinaController.cmbRefreshing = tinaController.gridRefreshing = true;
     try {
@@ -3012,28 +3008,20 @@ public class TinaInternalFrame extends JInternalFrame {
       getShadingLightCmb().addItem(String.valueOf("3"));
       getShadingLightCmb().addItem(String.valueOf("4"));
 
-      getMorphFrameSlider().setMaximum(Integer.parseInt(getMorphFramesREd().getText()));
-      getMorphFrameSlider().setValue(Integer.parseInt(getMorphFrameREd().getText()));
+      getSwfAnimatorScriptCmb().removeAllItems();
+      getSwfAnimatorScriptCmb().addItem(AnimationService.GlobalScript.NONE);
+      getSwfAnimatorScriptCmb().addItem(AnimationService.GlobalScript.ROTATE_PITCH);
+      getSwfAnimatorScriptCmb().addItem(AnimationService.GlobalScript.ROTATE_ROLL);
+      getSwfAnimatorScriptCmb().addItem(AnimationService.GlobalScript.ROTATE_YAW);
+      getSwfAnimatorScriptCmb().addItem(AnimationService.GlobalScript.ROTATE_PITCH_YAW);
+      getSwfAnimatorScriptCmb().setSelectedItem(AnimationService.GlobalScript.ROTATE_PITCH_YAW);
 
-      getAnimatorScriptCmb().removeAllItems();
-      getAnimatorScriptCmb().addItem(AnimationService.GlobalScript.NONE);
-      getAnimatorScriptCmb().addItem(AnimationService.GlobalScript.ROTATE_PITCH);
-      getAnimatorScriptCmb().addItem(AnimationService.GlobalScript.ROTATE_ROLL);
-      getAnimatorScriptCmb().addItem(AnimationService.GlobalScript.ROTATE_YAW);
-      getAnimatorScriptCmb().addItem(AnimationService.GlobalScript.ROTATE_PITCH_YAW);
-      getAnimatorScriptCmb().setSelectedItem(AnimationService.GlobalScript.ROTATE_PITCH_YAW);
-
-      getAnimatorXFormScriptCmb().removeAllItems();
-      getAnimatorXFormScriptCmb().addItem(AnimationService.XFormScript.NONE);
-      getAnimatorXFormScriptCmb().addItem(AnimationService.XFormScript.ROTATE_FULL);
-      getAnimatorXFormScriptCmb().addItem(AnimationService.XFormScript.ROTATE_SLIGHTLY);
-      getAnimatorXFormScriptCmb().addItem(AnimationService.XFormScript.ROTATE_LAST_XFORM);
-      getAnimatorXFormScriptCmb().setSelectedItem(AnimationService.XFormScript.ROTATE_SLIGHTLY);
-
-      getAnimateLightScriptCmb().removeAllItems();
-      getAnimateLightScriptCmb().addItem(AnimationService.LightScript.NONE);
-      getAnimateLightScriptCmb().addItem(AnimationService.LightScript.ROTATE_XY_PLANE);
-      getAnimateLightScriptCmb().setSelectedItem(AnimationService.LightScript.NONE);
+      getSwfAnimatorXFormScriptCmb().removeAllItems();
+      getSwfAnimatorXFormScriptCmb().addItem(AnimationService.XFormScript.NONE);
+      getSwfAnimatorXFormScriptCmb().addItem(AnimationService.XFormScript.ROTATE_FULL);
+      getSwfAnimatorXFormScriptCmb().addItem(AnimationService.XFormScript.ROTATE_SLIGHTLY);
+      getSwfAnimatorXFormScriptCmb().addItem(AnimationService.XFormScript.ROTATE_LAST_XFORM);
+      getSwfAnimatorXFormScriptCmb().setSelectedItem(AnimationService.XFormScript.ROTATE_SLIGHTLY);
 
       tinaController.setInteractiveRendererCtrl(new TinaInteractiveRendererController(tinaController, pErrorHandler, pPrefs,
           getInteractiveLoadFlameButton(), getInteractiveLoadFlameFromClipboardButton(), getInteractiveNextButton(), getInteractiveStopButton(),
@@ -3041,6 +3029,16 @@ public class TinaInternalFrame extends JInternalFrame {
           getInteractiveSaveFlameButton(), getInteractiveRandomStyleCmb(), getInteractiveCenterTopPanel(), getInteractiveStatsTextArea(),
           getInteractiveHalveSizeButton(), getInteractiveResolutionProfileCmb(), getInteractiveQualityProfileCmb()));
       tinaController.getInteractiveRendererCtrl().enableControls();
+
+      tinaController.setSwfAnimatorCtrl(new TinaSWFAnimatorController(tinaController, pErrorHandler, pPrefs,
+          getSwfAnimatorScriptCmb(), getSwfAnimatorXFormScriptCmb(), getSwfAnimatorFramesREd(), getSwfAnimatorFramesPerSecondREd(),
+          getSwfAnimatorGenerateButton(), getSwfAnimatatorScriptArea(), getSwfAnimatorResolutionProfileCmb(),
+          getSwfAnimatorQualityProfileCmb(), getSwfAnimatorCompileScript(), getSwfAnimatorLoadFlameFromMainButton(),
+          getSwfAnimatorLoadFlameFromClipboardButton(), getSwfAnimatorLoadFlameButton(), getSwfAnimatorCustomScriptBtn(),
+          getSwfAnimatorHalveSizeButton(), getSwfAnimatorProgressBar(), getSwfAnimatorCancelButton(),
+          getSwfAnimatorLoadSoundButton(), getSwfAnimatorClearSoundButton()));
+      tinaController.getSwfAnimatorCtrl().enableControls();
+
     }
     finally {
       tinaController.refreshing = tinaController.cmbRefreshing = tinaController.gridRefreshing = false;
@@ -4561,91 +4559,34 @@ public class TinaInternalFrame extends JInternalFrame {
    * 	
    * @return javax.swing.JPanel	
    */
-  private JPanel getTinaAnimatePanel() {
-    if (tinaAnimatePanel == null) {
-      animateXFormScriptLbl = new JLabel();
-      animateXFormScriptLbl.setPreferredSize(new Dimension(94, 22));
-      animateXFormScriptLbl.setText("XForm script");
-      animateXFormScriptLbl.setSize(new Dimension(94, 22));
-      animateXFormScriptLbl.setLocation(new Point(23, 34));
-      animateXFormScriptLbl.setFont(new Font("Dialog", Font.BOLD, 10));
-      animateGlobalScriptLbl = new JLabel();
-      animateGlobalScriptLbl.setPreferredSize(new Dimension(94, 22));
-      animateGlobalScriptLbl.setText("Global script");
-      animateGlobalScriptLbl.setSize(new Dimension(94, 22));
-      animateGlobalScriptLbl.setLocation(new Point(23, 6));
-      animateGlobalScriptLbl.setFont(new Font("Dialog", Font.BOLD, 10));
-      animateFramesLbl = new JLabel();
-      animateFramesLbl.setPreferredSize(new Dimension(94, 22));
-      animateFramesLbl.setText("Frames");
-      animateFramesLbl.setSize(new Dimension(125, 22));
-      animateFramesLbl.setLocation(new Point(407, 6));
-      animateFramesLbl.setFont(new Font("Dialog", Font.BOLD, 10));
-      tinaAnimatePanel = new JPanel();
-      tinaAnimatePanel.setLayout(null);
-      tinaAnimatePanel.add(getAnimationGenerateButton(), null);
-      tinaAnimatePanel.add(getAnimateFramesREd(), null);
-      tinaAnimatePanel.add(animateFramesLbl, null);
-      tinaAnimatePanel.add(animateGlobalScriptLbl, null);
-      tinaAnimatePanel.add(getAnimatorScriptCmb(), null);
-      tinaAnimatePanel.add(animateXFormScriptLbl, null);
-      tinaAnimatePanel.add(getAnimatorXFormScriptCmb(), null);
+  private JPanel getTinaSWFAnimatorPanel() {
+    if (tinaSWFAnimatorPanel == null) {
+      tinaSWFAnimatorPanel = new JPanel();
+      tinaSWFAnimatorPanel.setLayout(new BorderLayout(0, 0));
 
-      JLabel lblFramesPerSecond = new JLabel();
-      lblFramesPerSecond.setText("Frames per second");
-      lblFramesPerSecond.setSize(new Dimension(94, 22));
-      lblFramesPerSecond.setPreferredSize(new Dimension(94, 22));
-      lblFramesPerSecond.setLocation(new Point(407, 6));
-      lblFramesPerSecond.setFont(new Font("Dialog", Font.BOLD, 10));
-      lblFramesPerSecond.setBounds(593, 6, 125, 22);
-      tinaAnimatePanel.add(lblFramesPerSecond);
-
-      animateFramesPerSecondREd = new JTextField();
-      animateFramesPerSecondREd.setText("12");
-      animateFramesPerSecondREd.setSize(new Dimension(56, 22));
-      animateFramesPerSecondREd.setPreferredSize(new Dimension(56, 22));
-      animateFramesPerSecondREd.setLocation(new Point(503, 6));
-      animateFramesPerSecondREd.setFont(new Font("Dialog", Font.PLAIN, 10));
-      animateFramesPerSecondREd.setBounds(718, 6, 56, 22);
-      tinaAnimatePanel.add(animateFramesPerSecondREd);
+      JPanel panel_1 = new JPanel();
+      panel_1.setBorder(new TitledBorder(null, "Script", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+      tinaSWFAnimatorPanel.add(panel_1);
+      panel_1.setLayout(new BorderLayout(0, 0));
+      panel_1.add(getPanel_4(), BorderLayout.NORTH);
+      panel_1.add(getPanel_5(), BorderLayout.SOUTH);
 
       JScrollPane scrollPane = new JScrollPane();
-      scrollPane.setBounds(new Rectangle(9, 13, 308, 263));
-      scrollPane.setBounds(112, 112, 308, 263);
-      tinaAnimatePanel.add(scrollPane);
+      panel_1.add(scrollPane, BorderLayout.CENTER);
 
-      animateScriptArea = new JTextArea();
-      animateScriptArea.setText("");
-      scrollPane.setViewportView(animateScriptArea);
+      swfAnimatorScriptArea = new JTextArea();
+      swfAnimatorScriptArea.setText("");
+      scrollPane.setViewportView(swfAnimatorScriptArea);
 
-      animateCompileScript = new JButton();
-      animateCompileScript.setToolTipText("Compile the script");
-      animateCompileScript.setText("Compile");
-      animateCompileScript.setPreferredSize(new Dimension(81, 24));
-      animateCompileScript.setFont(new Font("Dialog", Font.BOLD, 10));
-      animateCompileScript.setBounds(new Rectangle(9, 280, 81, 24));
-      animateCompileScript.setBounds(464, 233, 81, 24);
-      tinaAnimatePanel.add(animateCompileScript);
-
-      JComboBox animateResolutionProfileCmb = new JComboBox();
-      animateResolutionProfileCmb.setPreferredSize(new Dimension(125, 22));
-      animateResolutionProfileCmb.setMaximumRowCount(32);
-      animateResolutionProfileCmb.setFont(new Font("Dialog", Font.BOLD, 10));
-      animateResolutionProfileCmb.setBounds(new Rectangle(231, 7, 125, 22));
-      animateResolutionProfileCmb.setBounds(475, 146, 125, 22);
-      tinaAnimatePanel.add(animateResolutionProfileCmb);
-
-      JComboBox animateQualityProfileCmb = new JComboBox();
-      animateQualityProfileCmb.setPreferredSize(new Dimension(125, 22));
-      animateQualityProfileCmb.setMaximumRowCount(32);
-      animateQualityProfileCmb.setFont(new Font("Dialog", Font.BOLD, 10));
-      animateQualityProfileCmb.setBounds(new Rectangle(231, 7, 125, 22));
-      animateQualityProfileCmb.setBounds(475, 174, 125, 22);
-      tinaAnimatePanel.add(animateQualityProfileCmb);
-      tinaAnimatePanel.add(getLblResolution());
-      tinaAnimatePanel.add(getLblQuality());
+      JPanel panel = new JPanel();
+      tinaSWFAnimatorPanel.add(panel, BorderLayout.NORTH);
+      panel.setPreferredSize(new Dimension(10, 104));
+      panel.setLayout(new BorderLayout(0, 0));
+      panel.add(getPanel_6(), BorderLayout.CENTER);
+      panel.add(getPanel_7(), BorderLayout.EAST);
+      tinaSWFAnimatorPanel.add(getPanel_3(), BorderLayout.SOUTH);
     }
-    return tinaAnimatePanel;
+    return tinaSWFAnimatorPanel;
   }
 
   /**
@@ -4653,21 +4594,20 @@ public class TinaInternalFrame extends JInternalFrame {
    * 	
    * @return javax.swing.JButton	
    */
-  private JButton getAnimationGenerateButton() {
-    if (animationGenerateButton == null) {
-      animationGenerateButton = new JButton();
-      animationGenerateButton.setPreferredSize(new Dimension(125, 52));
-      animationGenerateButton.setText("Generate");
-      animationGenerateButton.setSize(new Dimension(125, 52));
-      animationGenerateButton.setLocation(new Point(510, 40));
-      animationGenerateButton.setFont(new Font("Dialog", Font.BOLD, 10));
-      animationGenerateButton.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.animationGenerateButton_clicked();
+  private JButton getSwfAnimatorGenerateButton() {
+    if (swfAnimatorGenerateButton == null) {
+      swfAnimatorGenerateButton = new JButton();
+      swfAnimatorGenerateButton.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getSwfAnimatorCtrl().generateButton_clicked();
         }
       });
+      swfAnimatorGenerateButton.setBounds(905, 23, 125, 52);
+      swfAnimatorGenerateButton.setPreferredSize(new Dimension(125, 52));
+      swfAnimatorGenerateButton.setText("Generate");
+      swfAnimatorGenerateButton.setFont(new Font("Dialog", Font.BOLD, 10));
     }
-    return animationGenerateButton;
+    return swfAnimatorGenerateButton;
   }
 
   /**
@@ -4675,16 +4615,15 @@ public class TinaInternalFrame extends JInternalFrame {
    * 	
    * @return javax.swing.JTextField	
    */
-  private JTextField getAnimateFramesREd() {
-    if (animateFramesREd == null) {
-      animateFramesREd = new JTextField();
-      animateFramesREd.setPreferredSize(new Dimension(56, 22));
-      animateFramesREd.setText("72");
-      animateFramesREd.setSize(new Dimension(56, 22));
-      animateFramesREd.setLocation(new Point(532, 6));
-      animateFramesREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+  private JTextField getSwfAnimatorFramesREd() {
+    if (swfAnimatorFramesREd == null) {
+      swfAnimatorFramesREd = new JTextField();
+      swfAnimatorFramesREd.setBounds(434, 23, 56, 22);
+      swfAnimatorFramesREd.setPreferredSize(new Dimension(56, 22));
+      swfAnimatorFramesREd.setText("72");
+      swfAnimatorFramesREd.setFont(new Font("Dialog", Font.PLAIN, 10));
     }
-    return animateFramesREd;
+    return swfAnimatorFramesREd;
   }
 
   /**
@@ -4692,15 +4631,14 @@ public class TinaInternalFrame extends JInternalFrame {
    * 	
    * @return javax.swing.JComboBox	
    */
-  private JComboBox getAnimatorScriptCmb() {
-    if (animatorScriptCmb == null) {
-      animatorScriptCmb = new JComboBox();
-      animatorScriptCmb.setPreferredSize(new Dimension(275, 22));
-      animatorScriptCmb.setSize(new Dimension(275, 22));
-      animatorScriptCmb.setLocation(new Point(120, 6));
-      animatorScriptCmb.setFont(new Font("Dialog", Font.BOLD, 10));
+  private JComboBox getSwfAnimatorScriptCmb() {
+    if (swfAnimatorScriptCmb == null) {
+      swfAnimatorScriptCmb = new JComboBox();
+      swfAnimatorScriptCmb.setBounds(103, 6, 275, 22);
+      swfAnimatorScriptCmb.setPreferredSize(new Dimension(275, 22));
+      swfAnimatorScriptCmb.setFont(new Font("Dialog", Font.BOLD, 10));
     }
-    return animatorScriptCmb;
+    return swfAnimatorScriptCmb;
   }
 
   /**
@@ -4708,15 +4646,14 @@ public class TinaInternalFrame extends JInternalFrame {
    * 	
    * @return javax.swing.JComboBox	
    */
-  private JComboBox getAnimatorXFormScriptCmb() {
-    if (animatorXFormScriptCmb == null) {
-      animatorXFormScriptCmb = new JComboBox();
-      animatorXFormScriptCmb.setPreferredSize(new Dimension(275, 22));
-      animatorXFormScriptCmb.setSize(new Dimension(275, 22));
-      animatorXFormScriptCmb.setLocation(new Point(120, 34));
-      animatorXFormScriptCmb.setFont(new Font("Dialog", Font.BOLD, 10));
+  private JComboBox getSwfAnimatorXFormScriptCmb() {
+    if (swfAnimatorXFormScriptCmb == null) {
+      swfAnimatorXFormScriptCmb = new JComboBox();
+      swfAnimatorXFormScriptCmb.setBounds(103, 34, 275, 22);
+      swfAnimatorXFormScriptCmb.setPreferredSize(new Dimension(275, 22));
+      swfAnimatorXFormScriptCmb.setFont(new Font("Dialog", Font.BOLD, 10));
     }
-    return animatorXFormScriptCmb;
+    return swfAnimatorXFormScriptCmb;
   }
 
   /**
@@ -7988,7 +7925,7 @@ public class TinaInternalFrame extends JInternalFrame {
       rootTabbedPane.setEnabled(true);
       rootTabbedPane.addTab("Editor", null, getRootPanel(), null);
       rootTabbedPane.addTab("Interactive renderer", null, getInteractiveRenderPanel(), null);
-      rootTabbedPane.addTab("SFW Animator", null, getTinaAnimatePanel(), null);
+      rootTabbedPane.addTab("SFW Animator", null, getTinaSWFAnimatorPanel(), null);
       rootTabbedPane.addTab("Batch render", null, getBatchRenderPanel(), null);
 
       JPanel helpPanel = new JPanel();
@@ -8031,11 +7968,29 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton interactiveLoadFlameFromMainButton;
   private JComboBox interactiveQualityProfileCmb;
   private JButton cancelRenderButton;
-  private JTextField animateFramesPerSecondREd;
-  private JTextArea animateScriptArea;
-  private JButton animateCompileScript;
-  private JLabel lblResolution;
-  private JLabel lblQuality;
+  private JTextField swfAnimatorFramesPerSecondREd;
+  private JTextArea swfAnimatorScriptArea;
+  private JButton swfAnimatorCompileScriptButton;
+  private JPanel panel_3;
+  private JPanel panel_4;
+  private JPanel panel_5;
+  private JPanel panel_6;
+  private JPanel panel_7;
+  private JButton swfAnimatorLoadFlameFromMainButton;
+  private JButton swfAnimatorLoadFlameFromClipboardButton;
+  private JButton swfAnimatorLoadFlameButton;
+  private JLabel label_1;
+  private JLabel label_2;
+  private JToggleButton swfAnimatorHalveSizeButton;
+  private JComboBox swfAnimatorResolutionProfileCmb;
+  private JLabel label_3;
+  private JLabel label_4;
+  private JComboBox swfAnimatorQualityProfileCmb;
+  private JProgressBar swfAnimatorProgressBar;
+  private JButton swfAnimatorCancelButton;
+  private JToggleButton swfAnimatorCustomScriptBtn;
+  private JButton swfAnimatorLoadSoundButton;
+  private JButton swfAnimatorClearSoundButton;
 
   private JTextPane getHelpPane() {
     if (helpPane == null) {
@@ -8914,6 +8869,8 @@ public class TinaInternalFrame extends JInternalFrame {
       interactiveFlameToEditorButton.setBounds(new Rectangle(806, 32, 125, 24));
       interactiveFlameToEditorButton.setBounds(933, 7, 125, 24);
       interactiveNorthPanel.add(interactiveFlameToEditorButton);
+      interactiveNorthPanel.add(getLabel_1());
+      interactiveNorthPanel.add(getLabel_2());
     }
     return interactiveNorthPanel;
   }
@@ -9222,41 +9179,343 @@ public class TinaInternalFrame extends JInternalFrame {
     return cancelRenderButton;
   }
 
-  public JTextField getAnimateFramesPerSecondREd() {
-    return animateFramesPerSecondREd;
+  public JTextField getSwfAnimatorFramesPerSecondREd() {
+    return swfAnimatorFramesPerSecondREd;
   }
 
-  public JTextArea getAnimateScriptArea() {
-    return animateScriptArea;
+  public JTextArea getSwfAnimatatorScriptArea() {
+    return swfAnimatorScriptArea;
   }
 
-  public JButton getAnimateCompileScript() {
-    return animateCompileScript;
+  public JButton getSwfAnimatorCompileScript() {
+    return swfAnimatorCompileScriptButton;
   }
 
-  private JLabel getLblResolution() {
-    if (lblResolution == null) {
-      lblResolution = new JLabel();
-      lblResolution.setText("Resolution");
-      lblResolution.setSize(new Dimension(125, 22));
-      lblResolution.setPreferredSize(new Dimension(94, 22));
-      lblResolution.setLocation(new Point(407, 6));
-      lblResolution.setFont(new Font("Dialog", Font.BOLD, 10));
-      lblResolution.setBounds(463, 121, 125, 22);
+  private JPanel getPanel_3() {
+    if (panel_3 == null) {
+      panel_3 = new JPanel();
+      panel_3.setPreferredSize(new Dimension(10, 100));
+      panel_3.setBorder(new TitledBorder(null, "Animation", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+      panel_3.setLayout(null);
+      panel_3.add(getSwfAnimatorGenerateButton());
+      panel_3.add(getSwfAnimatorFramesREd());
+      animateFramesLbl = new JLabel();
+      animateFramesLbl.setBounds(310, 23, 125, 22);
+      panel_3.add(animateFramesLbl);
+      animateFramesLbl.setPreferredSize(new Dimension(94, 22));
+      animateFramesLbl.setText("Frames");
+      animateFramesLbl.setFont(new Font("Dialog", Font.BOLD, 10));
+
+      swfAnimatorFramesPerSecondREd = new JTextField();
+      swfAnimatorFramesPerSecondREd.setBounds(434, 53, 56, 22);
+      panel_3.add(swfAnimatorFramesPerSecondREd);
+      swfAnimatorFramesPerSecondREd.setText("12");
+      swfAnimatorFramesPerSecondREd.setPreferredSize(new Dimension(56, 22));
+      swfAnimatorFramesPerSecondREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+
+      JLabel lblFramesPerSecond = new JLabel();
+      lblFramesPerSecond.setBounds(310, 53, 125, 22);
+      panel_3.add(lblFramesPerSecond);
+      lblFramesPerSecond.setText("Frames per second");
+      lblFramesPerSecond.setPreferredSize(new Dimension(94, 22));
+      lblFramesPerSecond.setFont(new Font("Dialog", Font.BOLD, 10));
+      panel_3.add(getSwfAnimatorHalveSizeButton());
+      panel_3.add(getSwfAnimatorResolutionProfileCmb());
+      panel_3.add(getLabel_3());
+      panel_3.add(getLabel_4());
+      panel_3.add(getSwfAnimatorQualityProfileCmb());
+
+      swfAnimatorProgressBar = new JProgressBar();
+      swfAnimatorProgressBar.setValue(0);
+      swfAnimatorProgressBar.setStringPainted(true);
+      swfAnimatorProgressBar.setPreferredSize(new Dimension(568, 21));
+      swfAnimatorProgressBar.setBounds(new Rectangle(105, 416, 568, 21));
+      swfAnimatorProgressBar.setBounds(502, 23, 391, 21);
+      panel_3.add(swfAnimatorProgressBar);
+
+      swfAnimatorCancelButton = new JButton();
+      swfAnimatorCancelButton.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getSwfAnimatorCtrl().cancelButton_clicked();
+        }
+      });
+      swfAnimatorCancelButton.setText("Cancel");
+      swfAnimatorCancelButton.setPreferredSize(new Dimension(125, 24));
+      swfAnimatorCancelButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      swfAnimatorCancelButton.setBounds(649, 52, 125, 24);
+      panel_3.add(swfAnimatorCancelButton);
     }
-    return lblResolution;
+    return panel_3;
   }
 
-  private JLabel getLblQuality() {
-    if (lblQuality == null) {
-      lblQuality = new JLabel();
-      lblQuality.setText("Quality");
-      lblQuality.setSize(new Dimension(125, 22));
-      lblQuality.setPreferredSize(new Dimension(94, 22));
-      lblQuality.setLocation(new Point(407, 6));
-      lblQuality.setFont(new Font("Dialog", Font.BOLD, 10));
-      lblQuality.setBounds(569, 220, 125, 22);
+  private JPanel getPanel_4() {
+    if (panel_4 == null) {
+      panel_4 = new JPanel();
+      panel_4.setPreferredSize(new Dimension(10, 62));
+      panel_4.setMinimumSize(new Dimension(10, 50));
+      panel_4.setLayout(null);
+      panel_4.add(getSwfAnimatorScriptCmb());
+      animateGlobalScriptLbl = new JLabel();
+      animateGlobalScriptLbl.setBounds(6, 6, 94, 22);
+      panel_4.add(animateGlobalScriptLbl);
+      animateGlobalScriptLbl.setPreferredSize(new Dimension(94, 22));
+      animateGlobalScriptLbl.setText("Global script");
+      animateGlobalScriptLbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      animateXFormScriptLbl = new JLabel();
+      animateXFormScriptLbl.setBounds(6, 34, 94, 22);
+      panel_4.add(animateXFormScriptLbl);
+      animateXFormScriptLbl.setPreferredSize(new Dimension(94, 22));
+      animateXFormScriptLbl.setText("XForm script");
+      animateXFormScriptLbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      panel_4.add(getSwfAnimatorXFormScriptCmb());
+
+      swfAnimatorCustomScriptBtn = new JToggleButton();
+      swfAnimatorCustomScriptBtn.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getSwfAnimatorCtrl().customScriptButton_clicked();
+        }
+      });
+      swfAnimatorCustomScriptBtn.setToolTipText("");
+      swfAnimatorCustomScriptBtn.setText("Custom script");
+      swfAnimatorCustomScriptBtn.setSize(new Dimension(138, 52));
+      swfAnimatorCustomScriptBtn.setPreferredSize(new Dimension(136, 52));
+      swfAnimatorCustomScriptBtn.setLocation(new Point(4, 181));
+      swfAnimatorCustomScriptBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      swfAnimatorCustomScriptBtn.setBounds(390, 4, 138, 52);
+      panel_4.add(swfAnimatorCustomScriptBtn);
     }
-    return lblQuality;
+    return panel_4;
+  }
+
+  private JPanel getPanel_5() {
+    if (panel_5 == null) {
+      panel_5 = new JPanel();
+      panel_5.setPreferredSize(new Dimension(10, 32));
+      panel_5.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+
+      swfAnimatorCompileScriptButton = new JButton();
+      swfAnimatorCompileScriptButton.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getSwfAnimatorCtrl().compileScriptButton_clicked();
+        }
+      });
+      panel_5.add(swfAnimatorCompileScriptButton);
+      swfAnimatorCompileScriptButton.setToolTipText("Compile the script");
+      swfAnimatorCompileScriptButton.setText("Compile");
+      swfAnimatorCompileScriptButton.setPreferredSize(new Dimension(125, 24));
+      swfAnimatorCompileScriptButton.setFont(new Font("Dialog", Font.BOLD, 10));
+    }
+    return panel_5;
+  }
+
+  private JPanel getPanel_6() {
+    if (panel_6 == null) {
+      panel_6 = new JPanel();
+      panel_6.setBorder(new TitledBorder(null, "Flames", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+      panel_6.setPreferredSize(new Dimension(400, 10));
+      panel_6.setLayout(null);
+      panel_6.add(getSwfAnimatorLoadFlameFromMainButton());
+      panel_6.add(getSwfAnimatorLoadFlameFromClipboardButton());
+      panel_6.add(getSwfAnimatorLoadFlameButton());
+    }
+    return panel_6;
+  }
+
+  private JPanel getPanel_7() {
+    if (panel_7 == null) {
+      panel_7 = new JPanel();
+      panel_7.setBorder(new TitledBorder(null, "Sound", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+      panel_7.setPreferredSize(new Dimension(400, 10));
+      panel_7.setLayout(null);
+      panel_7.add(getSwfAnimatorLoadSoundButton());
+
+      swfAnimatorClearSoundButton = new JButton();
+      swfAnimatorClearSoundButton.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getSwfAnimatorCtrl().clearSoundButton_clicked();
+        }
+      });
+      swfAnimatorClearSoundButton.setToolTipText("");
+      swfAnimatorClearSoundButton.setText("Clear sound");
+      swfAnimatorClearSoundButton.setPreferredSize(new Dimension(125, 24));
+      swfAnimatorClearSoundButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      swfAnimatorClearSoundButton.setBounds(new Rectangle(21, 23, 125, 24));
+      swfAnimatorClearSoundButton.setBounds(257, 23, 125, 24);
+      panel_7.add(swfAnimatorClearSoundButton);
+    }
+    return panel_7;
+  }
+
+  private JButton getSwfAnimatorLoadFlameFromMainButton() {
+    if (swfAnimatorLoadFlameFromMainButton == null) {
+      swfAnimatorLoadFlameFromMainButton = new JButton();
+      swfAnimatorLoadFlameFromMainButton.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getSwfAnimatorCtrl().loadFlameFromMainButton_clicked();
+        }
+      });
+      swfAnimatorLoadFlameFromMainButton.setToolTipText("Load flame from Editor and render");
+      swfAnimatorLoadFlameFromMainButton.setText("From Editor");
+      swfAnimatorLoadFlameFromMainButton.setPreferredSize(new Dimension(125, 24));
+      swfAnimatorLoadFlameFromMainButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      swfAnimatorLoadFlameFromMainButton.setBounds(new Rectangle(8, 32, 125, 24));
+      swfAnimatorLoadFlameFromMainButton.setBounds(85, 12, 125, 24);
+    }
+    return swfAnimatorLoadFlameFromMainButton;
+  }
+
+  private JButton getSwfAnimatorLoadFlameFromClipboardButton() {
+    if (swfAnimatorLoadFlameFromClipboardButton == null) {
+      swfAnimatorLoadFlameFromClipboardButton = new JButton();
+      swfAnimatorLoadFlameFromClipboardButton.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getSwfAnimatorCtrl().loadFlameFromClipboardButton_clicked();
+        }
+      });
+      swfAnimatorLoadFlameFromClipboardButton.setToolTipText("Load flame from clipboard and render");
+      swfAnimatorLoadFlameFromClipboardButton.setText("From Clipboard");
+      swfAnimatorLoadFlameFromClipboardButton.setPreferredSize(new Dimension(125, 24));
+      swfAnimatorLoadFlameFromClipboardButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      swfAnimatorLoadFlameFromClipboardButton.setBounds(new Rectangle(8, 32, 125, 24));
+      swfAnimatorLoadFlameFromClipboardButton.setBounds(85, 40, 125, 24);
+    }
+    return swfAnimatorLoadFlameFromClipboardButton;
+  }
+
+  private JButton getSwfAnimatorLoadFlameButton() {
+    if (swfAnimatorLoadFlameButton == null) {
+      swfAnimatorLoadFlameButton = new JButton();
+      swfAnimatorLoadFlameButton.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getSwfAnimatorCtrl().loadFlameButton_clicked();
+        }
+      });
+      swfAnimatorLoadFlameButton.setToolTipText("Load flame from file and render");
+      swfAnimatorLoadFlameButton.setText("Load Flame");
+      swfAnimatorLoadFlameButton.setPreferredSize(new Dimension(125, 24));
+      swfAnimatorLoadFlameButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      swfAnimatorLoadFlameButton.setBounds(new Rectangle(8, 56, 125, 24));
+      swfAnimatorLoadFlameButton.setBounds(85, 66, 125, 24);
+    }
+    return swfAnimatorLoadFlameButton;
+  }
+
+  private JLabel getLabel_1() {
+    if (label_1 == null) {
+      label_1 = new JLabel();
+      label_1.setText("Resolution");
+      label_1.setPreferredSize(new Dimension(94, 22));
+      label_1.setFont(new Font("Dialog", Font.BOLD, 10));
+      label_1.setBounds(162, 32, 71, 22);
+    }
+    return label_1;
+  }
+
+  private JLabel getLabel_2() {
+    if (label_2 == null) {
+      label_2 = new JLabel();
+      label_2.setText("Quality");
+      label_2.setPreferredSize(new Dimension(94, 22));
+      label_2.setFont(new Font("Dialog", Font.BOLD, 10));
+      label_2.setBounds(162, 58, 71, 22);
+    }
+    return label_2;
+  }
+
+  private JToggleButton getSwfAnimatorHalveSizeButton() {
+    if (swfAnimatorHalveSizeButton == null) {
+      swfAnimatorHalveSizeButton = new JToggleButton();
+      swfAnimatorHalveSizeButton.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getSwfAnimatorCtrl().halveSizeButton_clicked();
+        }
+      });
+      swfAnimatorHalveSizeButton.setToolTipText("Switch to halve render resolution (to get rid of scroll bars in exploration mode)");
+      swfAnimatorHalveSizeButton.setText("Halve size");
+      swfAnimatorHalveSizeButton.setPreferredSize(new Dimension(42, 24));
+      swfAnimatorHalveSizeButton.setMnemonic(KeyEvent.VK_M);
+      swfAnimatorHalveSizeButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      swfAnimatorHalveSizeButton.setBounds(81, 13, 125, 24);
+    }
+    return swfAnimatorHalveSizeButton;
+  }
+
+  private JComboBox getSwfAnimatorResolutionProfileCmb() {
+    if (swfAnimatorResolutionProfileCmb == null) {
+      swfAnimatorResolutionProfileCmb = new JComboBox();
+      swfAnimatorResolutionProfileCmb.setPreferredSize(new Dimension(125, 22));
+      swfAnimatorResolutionProfileCmb.setMaximumRowCount(32);
+      swfAnimatorResolutionProfileCmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      swfAnimatorResolutionProfileCmb.setBounds(new Rectangle(231, 7, 125, 22));
+      swfAnimatorResolutionProfileCmb.setBounds(81, 39, 125, 22);
+    }
+    return swfAnimatorResolutionProfileCmb;
+  }
+
+  private JLabel getLabel_3() {
+    if (label_3 == null) {
+      label_3 = new JLabel();
+      label_3.setText("Resolution");
+      label_3.setPreferredSize(new Dimension(94, 22));
+      label_3.setFont(new Font("Dialog", Font.BOLD, 10));
+      label_3.setBounds(13, 38, 71, 22);
+    }
+    return label_3;
+  }
+
+  private JLabel getLabel_4() {
+    if (label_4 == null) {
+      label_4 = new JLabel();
+      label_4.setText("Quality");
+      label_4.setPreferredSize(new Dimension(94, 22));
+      label_4.setFont(new Font("Dialog", Font.BOLD, 10));
+      label_4.setBounds(13, 64, 71, 22);
+    }
+    return label_4;
+  }
+
+  private JComboBox getSwfAnimatorQualityProfileCmb() {
+    if (swfAnimatorQualityProfileCmb == null) {
+      swfAnimatorQualityProfileCmb = new JComboBox();
+      swfAnimatorQualityProfileCmb.setPreferredSize(new Dimension(125, 22));
+      swfAnimatorQualityProfileCmb.setMaximumRowCount(32);
+      swfAnimatorQualityProfileCmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      swfAnimatorQualityProfileCmb.setBounds(new Rectangle(231, 7, 125, 22));
+      swfAnimatorQualityProfileCmb.setBounds(81, 64, 125, 22);
+    }
+    return swfAnimatorQualityProfileCmb;
+  }
+
+  public JProgressBar getSwfAnimatorProgressBar() {
+    return swfAnimatorProgressBar;
+  }
+
+  public JButton getSwfAnimatorCancelButton() {
+    return swfAnimatorCancelButton;
+  }
+
+  public JToggleButton getSwfAnimatorCustomScriptBtn() {
+    return swfAnimatorCustomScriptBtn;
+  }
+
+  private JButton getSwfAnimatorLoadSoundButton() {
+    if (swfAnimatorLoadSoundButton == null) {
+      swfAnimatorLoadSoundButton = new JButton();
+      swfAnimatorLoadSoundButton.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getSwfAnimatorCtrl().loadSoundButton_clicked();
+        }
+      });
+      swfAnimatorLoadSoundButton.setToolTipText("Load a *.wav or *.mp3 file");
+      swfAnimatorLoadSoundButton.setText("Load sound");
+      swfAnimatorLoadSoundButton.setPreferredSize(new Dimension(125, 24));
+      swfAnimatorLoadSoundButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      swfAnimatorLoadSoundButton.setBounds(new Rectangle(21, 23, 125, 24));
+    }
+    return swfAnimatorLoadSoundButton;
+  }
+
+  public JButton getSwfAnimatorClearSoundButton() {
+    return swfAnimatorClearSoundButton;
   }
 } //  @jve:decl-index=0:visual-constraint="10,10"

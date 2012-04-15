@@ -92,11 +92,6 @@ import org.jwildfire.create.tina.render.RenderInfo;
 import org.jwildfire.create.tina.render.RenderedFlame;
 import org.jwildfire.create.tina.script.ScriptRunner;
 import org.jwildfire.create.tina.script.ScriptRunnerEnvironment;
-import org.jwildfire.create.tina.transform.AnimationService;
-import org.jwildfire.create.tina.transform.AnimationService.GlobalScript;
-import org.jwildfire.create.tina.transform.AnimationService.LightScript;
-import org.jwildfire.create.tina.transform.AnimationService.XFormScript;
-import org.jwildfire.create.tina.transform.FlameMorphService;
 import org.jwildfire.create.tina.transform.XFormTransformService;
 import org.jwildfire.create.tina.variation.Linear3DFunc;
 import org.jwildfire.create.tina.variation.Variation;
@@ -125,7 +120,8 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
   private static final double SLIDER_SCALE_LIGHTPOS = 100.0;
   private static final double SLIDER_SCALE_BLUR_FALLOFF = 10.0;
 
-  TinaInteractiveRendererController interactiveRendererCtrl;
+  private TinaInteractiveRendererController interactiveRendererCtrl;
+  private TinaSWFAnimatorController swfAnimatorCtrl;
 
   private final JPanel centerPanel;
   private boolean firstFlamePanel = true;
@@ -217,6 +213,8 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
   private final JComboBox batchResolutionProfileCmb;
   private final JComboBox interactiveQualityProfileCmb;
   private final JComboBox interactiveResolutionProfileCmb;
+  private final JComboBox swfAnimatorQualityProfileCmb;
+  private final JComboBox swfAnimatorResolutionProfileCmb;
   // script
   private final JTextArea scriptTextArea;
   // camera, coloring  
@@ -380,24 +378,8 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
   private final JTable relWeightsTable;
   private final JButton relWeightsLeftButton;
   private final JButton relWeightsRightButton;
-  // Morphing
-  private final JButton setMorphFlame1Button;
-  private final JButton setMorphFlame2Button;
-  private final JTextField morphFrameREd;
-  private final JTextField morphFramesREd;
-  private final JCheckBox morphCheckBox;
-  private final JSlider morphFrameSlider;
-  private final JButton importMorphedFlameButton;
-  // Animate
-  private final JTextField animateOutputREd;
-  private final JTextField animateFramesREd;
-  private final JComboBox animateGlobalScriptCmb;
-  private final JComboBox animateXFormScriptCmb;
-  private final JComboBox animateLightScriptCmb;
-  private final JButton animationGenerateButton;
   // misc
-  private Flame _currFlame;
-  private Flame morphFlame1, morphFlame2;
+  private Flame currFlame;
   private boolean noRefresh;
   private final ProgressUpdater mainProgressUpdater;
   private final ProgressUpdater jobProgressUpdater;
@@ -438,10 +420,8 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       JButton pDeleteTransformationButton, JButton pAddFinalTransformationButton, JPanel pRandomBatchPanel, NonlinearControlsRow[] pNonlinearControlsRows,
       JTextField pXFormColorREd, JSlider pXFormColorSlider, JTextField pXFormSymmetryREd, JSlider pXFormSymmetrySlider, JTextField pXFormOpacityREd,
       JSlider pXFormOpacitySlider, JComboBox pXFormDrawModeCmb, JTable pRelWeightsTable, JButton pRelWeightsLeftButton, JButton pRelWeightsRightButton,
-      JButton pTransformationWeightLeftButton, JButton pTransformationWeightRightButton, JButton pSetMorphFlame1Button,
-      JButton pSetMorphFlame2Button, JTextField pMorphFrameREd, JTextField pMorphFramesREd, JCheckBox pMorphCheckBox, JSlider pMorphFrameSlider,
-      JButton pImportMorphedFlameButton, JTextField pAnimateOutputREd, JTextField pAnimateFramesREd, JComboBox pAnimateGlobalScriptCmb, JButton pAnimationGenerateButton,
-      JComboBox pAnimateXFormScriptCmb, JToggleButton pMouseTransformMoveButton, JToggleButton pMouseTransformRotateButton, JToggleButton pMouseTransformScaleButton,
+      JButton pTransformationWeightLeftButton, JButton pTransformationWeightRightButton,
+      JToggleButton pMouseTransformMoveButton, JToggleButton pMouseTransformRotateButton, JToggleButton pMouseTransformScaleButton,
       JToggleButton pAffineEditPostTransformButton, JToggleButton pAffineEditPostTransformSmallButton, JButton pMouseEditZoomInButton, JButton pMouseEditZoomOutButton,
       JToggleButton pToggleTrianglesButton, ProgressUpdater pMainProgressUpdater, JCheckBox pRandomPostTransformCheckBox, JCheckBox pRandomSymmetryCheckBox,
       JButton pAffineResetTransformButton, JTable pCreatePaletteColorsTable,
@@ -454,13 +434,14 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       JProgressBar pBatchRenderTotalProgressBar, ProgressUpdater pJobProgressUpdater, JButton pBatchRenderAddFilesButton,
       JButton pBatchRenderFilesMoveDownButton, JButton pBatchRenderFilesMoveUpButton, JButton pBatchRenderFilesRemoveButton,
       JButton pBatchRenderFilesRemoveAllButton, JButton pBatchRenderStartButton, JTabbedPane pRootTabbedPane, JButton pAffineFlipHorizontalButton,
-      JButton pAffineFlipVerticalButton, JComboBox pAnimateLightScriptCmb, JToggleButton pToggleDarkTrianglesButton,
+      JButton pAffineFlipVerticalButton, JToggleButton pToggleDarkTrianglesButton,
       JTextField pShadingBlurRadiusREd, JSlider pShadingBlurRadiusSlider, JTextField pShadingBlurFadeREd, JSlider pShadingBlurFadeSlider,
       JTextField pShadingBlurFallOffREd, JSlider pShadingBlurFallOffSlider, JTextArea pScriptTextArea, JToggleButton pAffineScaleXButton,
       JToggleButton pAffineScaleYButton, JPanel pGradientLibraryPanel, JComboBox pGradientLibraryGradientCmb, JTextPane pHelpPane,
       JToggleButton pToggleVariationsButton, JToggleButton pAffinePreserveZButton,
       JComboBox pQualityProfileCmb, JComboBox pResolutionProfileCmb, JComboBox pBatchQualityProfileCmb, JComboBox pBatchResolutionProfileCmb,
-      JComboBox pInteractiveQualityProfileCmb, JComboBox pInteractiveResolutionProfileCmb) {
+      JComboBox pInteractiveQualityProfileCmb, JComboBox pInteractiveResolutionProfileCmb, JComboBox pSWFAnimatorQualityProfileCmb,
+      JComboBox pSWFAnimatorResolutionProfileCmb) {
     errorHandler = pErrorHandler;
     prefs = pPrefs;
     centerPanel = pCenterPanel;
@@ -532,6 +513,8 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     batchResolutionProfileCmb = pBatchResolutionProfileCmb;
     interactiveQualityProfileCmb = pInteractiveQualityProfileCmb;
     interactiveResolutionProfileCmb = pInteractiveResolutionProfileCmb;
+    swfAnimatorQualityProfileCmb = pSWFAnimatorQualityProfileCmb;
+    swfAnimatorResolutionProfileCmb = pSWFAnimatorResolutionProfileCmb;
 
     transformationsTable = pTransformationsTable;
     affineC00REd = pAffineC00REd;
@@ -584,21 +567,6 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
 
     transformationWeightLeftButton = pTransformationWeightLeftButton;
     transformationWeightRightButton = pTransformationWeightRightButton;
-
-    setMorphFlame1Button = pSetMorphFlame1Button;
-    setMorphFlame2Button = pSetMorphFlame2Button;
-    morphFrameREd = pMorphFrameREd;
-    morphFramesREd = pMorphFramesREd;
-    morphCheckBox = pMorphCheckBox;
-    morphFrameSlider = pMorphFrameSlider;
-    importMorphedFlameButton = pImportMorphedFlameButton;
-
-    animateOutputREd = pAnimateOutputREd;
-    animateFramesREd = pAnimateFramesREd;
-    animateGlobalScriptCmb = pAnimateGlobalScriptCmb;
-    animateXFormScriptCmb = pAnimateXFormScriptCmb;
-    animateLightScriptCmb = pAnimateLightScriptCmb;
-    animationGenerateButton = pAnimationGenerateButton;
 
     mouseTransformMoveButton = pMouseTransformMoveButton;
     mouseTransformRotateButton = pMouseTransformRotateButton;
@@ -678,12 +646,12 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     refreshResolutionProfileCmb(resolutionProfileCmb, null);
     refreshResolutionProfileCmb(interactiveResolutionProfileCmb, null);
     refreshResolutionProfileCmb(batchResolutionProfileCmb, null);
+    refreshResolutionProfileCmb(swfAnimatorResolutionProfileCmb, null);
     refreshQualityProfileCmb(qualityProfileCmb, null);
     refreshQualityProfileCmb(interactiveQualityProfileCmb, null);
     refreshQualityProfileCmb(batchQualityProfileCmb, null);
+    refreshQualityProfileCmb(swfAnimatorQualityProfileCmb, null);
     scriptTextArea = pScriptTextArea;
-
-    animateFramesREd.setText(String.valueOf(prefs.getTinaRenderMovieFrames()));
 
     refreshPaletteColorsTable();
     refreshRenderBatchJobsTable();
@@ -1001,22 +969,9 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     refreshFlameImage(true, pMouseDown);
   }
 
-  private Flame lastMorphedFlame = null;
-  private int lastMorphedFrame = -1;
-
   @Override
   public Flame getCurrFlame() {
-    if (morphFlame1 != null && morphFlame2 != null && morphCheckBox.isSelected()) {
-      int frame = Integer.parseInt(morphFrameREd.getText());
-      if (frame != lastMorphedFrame || lastMorphedFlame == null) {
-        lastMorphedFrame = frame;
-        lastMorphedFlame = FlameMorphService.morphFlames(morphFlame1, morphFlame2, frame, Integer.parseInt(morphFramesREd.getText()));
-      }
-      return lastMorphedFlame;
-    }
-    else {
-      return _currFlame;
-    }
+    return currFlame;
   }
 
   public void refreshFlameImage(boolean pQuickRender, boolean pMouseDown) {
@@ -1972,13 +1927,13 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
         List<Flame> flames = new Flam3Reader().readFlames(file.getAbsolutePath());
         Flame flame = flames.get(0);
         prefs.setLastInputFlameFile(file);
-        _currFlame = flame;
+        currFlame = flame;
 
         for (int i = flames.size() - 1; i >= 0; i--) {
           randomBatch.add(0, flames.get(i));
         }
         updateThumbnails(null);
-        setupProfiles(_currFlame);
+        setupProfiles(currFlame);
         refreshUI();
       }
     }
@@ -2333,11 +2288,6 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
 
   private void enableControls() {
     enableJobRenderControls();
-    setMorphFlame1Button.setEnabled(true);
-    setMorphFlame2Button.setEnabled(true);
-    importMorphedFlameButton.setEnabled(true);
-    animationGenerateButton.setEnabled(true);
-    morphCheckBox.setEnabled(morphFlame1 != null && morphFlame2 != null);
   }
 
   private void enableJobRenderControls() {
@@ -2808,15 +2758,15 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
 
   public void importFromRandomBatch(int pIdx) {
     if (pIdx >= 0 && pIdx < randomBatch.size()) {
-      _currFlame = randomBatch.get(pIdx);
+      currFlame = randomBatch.get(pIdx);
       {
         FlamePanel imgPanel = getFlamePanel();
         Rectangle bounds = imgPanel.getImageBounds();
-        double wScl = (double) bounds.width / (double) _currFlame.getWidth();
-        double hScl = (double) bounds.height / (double) _currFlame.getHeight();
-        _currFlame.setWidth(bounds.width);
-        _currFlame.setHeight(bounds.height);
-        _currFlame.setPixelsPerUnit((wScl + hScl) * 0.5 * _currFlame.getPixelsPerUnit());
+        double wScl = (double) bounds.width / (double) currFlame.getWidth();
+        double hScl = (double) bounds.height / (double) currFlame.getHeight();
+        currFlame.setWidth(bounds.width);
+        currFlame.setHeight(bounds.height);
+        currFlame.setPixelsPerUnit((wScl + hScl) * 0.5 * currFlame.getPixelsPerUnit());
       }
       refreshUI();
       transformationsTable.getSelectionModel().setSelectionInterval(0, 0);
@@ -3130,116 +3080,13 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     flame.setPixelsPerUnit(50);
     RGBPalette palette = new RandomRGBPaletteGenerator().generatePalette(Integer.parseInt(paletteRandomPointsREd.getText()));
     flame.setPalette(palette);
-    _currFlame = flame;
+    currFlame = flame;
     refreshUI();
   }
 
   public void renderModeCmb_changed() {
     if (!refreshing && !cmbRefreshing) {
       refreshFlameImage(false);
-    }
-  }
-
-  public void setMorphFlame1() {
-    if (_currFlame != null) {
-      morphFlame1 = _currFlame.makeCopy();
-      lastMorphedFrame = -1;
-      enableControls();
-      refreshFlameImage(false);
-    }
-  }
-
-  public void setMorphFlame2() {
-    if (_currFlame != null) {
-      morphFlame2 = _currFlame.makeCopy();
-      lastMorphedFrame = -1;
-      enableControls();
-      refreshFlameImage(false);
-    }
-  }
-
-  public void morphFramesREd_changed() {
-    int frame = Integer.parseInt(morphFramesREd.getText());
-    if (!refreshing) {
-      refreshing = true;
-      try {
-        morphFrameSlider.setMaximum(frame);
-        lastMorphedFrame = -1;
-      }
-      finally {
-        refreshing = false;
-      }
-    }
-  }
-
-  public void morphFrameREd_changed() {
-    int frame = Integer.parseInt(morphFramesREd.getText());
-    if (!refreshing) {
-      refreshing = true;
-      try {
-        morphFrameSlider.setValue(frame);
-        lastMorphedFrame = -1;
-        refreshFlameImage(false);
-      }
-      finally {
-        refreshing = false;
-      }
-    }
-  }
-
-  public void morphCheckBox_changed() {
-    lastMorphedFrame = -1;
-    refreshFlameImage(false);
-  }
-
-  public void morphFrameSlider_changed() {
-    int frame = morphFrameSlider.getValue();
-    if (!refreshing) {
-      refreshing = true;
-      try {
-        morphFrameREd.setText(String.valueOf(frame));
-        lastMorphedFrame = -1;
-        refreshFlameImage(false);
-      }
-      finally {
-        refreshing = false;
-      }
-    }
-  }
-
-  public void importMorphedFlameButton_clicked() {
-    if (morphCheckBox.isSelected()) {
-      Flame flame = getCurrFlame();
-      if (flame != null) {
-        randomBatch.add(0, flame);
-        updateThumbnails(null);
-      }
-    }
-  }
-
-  public void animationGenerateButton_clicked() {
-    try {
-      int frames = Integer.parseInt(animateFramesREd.getText());
-      boolean doMorph = morphCheckBox.isSelected();
-      GlobalScript globalScript = (GlobalScript) animateGlobalScriptCmb.getSelectedItem();
-      XFormScript xFormScript = (XFormScript) animateXFormScriptCmb.getSelectedItem();
-      LightScript lightScript = (LightScript) animateLightScriptCmb.getSelectedItem();
-      String imagePath = animateOutputREd.getText();
-      ResolutionProfile resProfile = getResolutionProfile();
-      QualityProfile qualProfile = getQualityProfile();
-      int width = resProfile.getWidth();
-      int height = resProfile.getHeight();
-      int quality = qualProfile.getQuality();
-      for (int frame = 1; frame <= frames; frame++) {
-        Flame flame1 = doMorph ? morphFlame1.makeCopy() : _currFlame.makeCopy();
-        Flame flame2 = doMorph ? morphFlame2.makeCopy() : null;
-        flame1.setSpatialOversample(qualProfile.getSpatialOversample());
-        flame1.setColorOversample(qualProfile.getColorOversample());
-        AnimationService.renderFrame(frame, frames, flame1, flame2, doMorph, globalScript, xFormScript, lightScript, imagePath, width, height, quality, prefs);
-      }
-    }
-    catch (Throwable ex) {
-      errorHandler.handleError(ex);
     }
   }
 
@@ -3648,11 +3495,11 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
               DataFlavor.stringFlavor));
           List<Flame> flames = new Flam3Reader().readFlamesfromXML(xml);
           Flame flame = flames.get(0);
-          _currFlame = flame;
+          currFlame = flame;
           for (int i = flames.size() - 1; i >= 0; i--) {
             randomBatch.add(0, flames.get(i));
           }
-          setupProfiles(_currFlame);
+          setupProfiles(currFlame);
           updateThumbnails(null);
           refreshUI();
         }
@@ -3664,8 +3511,8 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
   }
 
   protected void importFlame(Flame pFlame) {
-    _currFlame = pFlame.makeCopy();
-    setupProfiles(_currFlame);
+    currFlame = pFlame.makeCopy();
+    setupProfiles(currFlame);
     updateThumbnails(null);
     refreshUI();
   }
@@ -4245,6 +4092,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
 
         refreshQualityProfileCmb(qualityProfileCmb, profile);
         refreshQualityProfileCmb(interactiveQualityProfileCmb, profile);
+        refreshQualityProfileCmb(swfAnimatorQualityProfileCmb, profile);
         refreshQualityProfileCmb(batchQualityProfileCmb, profile);
         qualityProfileCmb_changed();
       }
@@ -4252,6 +4100,14 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
         errorHandler.handleError(ex);
       }
     }
+  }
+
+  public TinaSWFAnimatorController getSwfAnimatorCtrl() {
+    return swfAnimatorCtrl;
+  }
+
+  public void setSwfAnimatorCtrl(TinaSWFAnimatorController pSWFAnimatorCtrl) {
+    swfAnimatorCtrl = pSWFAnimatorCtrl;
   }
 
   public void editResolutionProfiles() {
@@ -4268,6 +4124,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
         prefs.saveToFromFile();
         refreshResolutionProfileCmb(resolutionProfileCmb, profile);
         refreshResolutionProfileCmb(interactiveResolutionProfileCmb, profile);
+        refreshResolutionProfileCmb(swfAnimatorResolutionProfileCmb, profile);
         refreshResolutionProfileCmb(batchResolutionProfileCmb, profile);
         resolutionProfileCmb_changed();
       }
@@ -4276,4 +4133,5 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       }
     }
   }
+
 }
