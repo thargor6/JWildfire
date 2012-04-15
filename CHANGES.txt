@@ -1,4 +1,9 @@
-V0.44 (09.04.2012):
+V0.44 (12.04.2012):
+ - Fractal flame editor: take into account the real density while tonemapping an image in the interactive renderer for saving
+ - Fractal flames editor: Added some "wilderness" to the flowers-random-flame-generator
+ - Fractal flame editor: FIXED mapping bug in the interactive renderer regarding pseudo3d shading
+ - Fractal flame editor: quality profile editor
+ - Fractal flame editor: resolution profile editor
  - Fractal flame editor: the interactive renderer also now respects the quality setting (from the render profile) and does not "overrender" as quickly as before
  - Fractal flame editor: rudimentary statistics display in the interactive renderer
  - Fractal flame editor: increased the responsebility of various sliders

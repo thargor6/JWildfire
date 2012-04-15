@@ -32,6 +32,8 @@ public class Prefs extends ManagedObject {
   static final String KEY_GENERAL_PLAF_THEME = "general.plaf.theme";
   static final String KEY_GENERAL_PATH_IMAGES = "general.path.images";
   static final String KEY_GENERAL_PATH_SCRIPTS = "general.path.scripts";
+  static final String KEY_GENERAL_PATH_SOUND_FILES = "sunflow.path.sound_files";
+  static final String KEY_GENERAL_PATH_SWF = "sunflow.path.swf";
   static final String KEY_SUNFLOW_PATH_SCENES = "sunflow.path.scenes";
 
   static final String KEY_TINA_PROFILE_RESOLUTION_COUNT = "tina.profile.resolution.count";
@@ -68,6 +70,14 @@ public class Prefs extends ManagedObject {
   private String imagePath = null;
   private String lastInputImagePath = null;
   private String lastOutputImagePath = null;
+
+  @Property(description = "Sound file drawer", category = PropertyCategory.GENERAL)
+  private String soundFilePath = null;
+  private String lastInputSoundFilePath = null;
+
+  @Property(description = "SWF file drawer", category = PropertyCategory.GENERAL)
+  private String swfPath = null;
+  private String lastOutputSWFPath = null;
 
   @Property(description = "Flame file drawer", category = PropertyCategory.TINA)
   private String tinaFlamePath = null;
@@ -119,8 +129,16 @@ public class Prefs extends ManagedObject {
     return lastInputScriptPath != null ? lastInputScriptPath : scriptPath;
   }
 
+  public String getInputSoundFilePath() {
+    return lastInputSoundFilePath != null ? lastInputSoundFilePath : soundFilePath;
+  }
+
   public String getOutputScriptPath() {
     return lastOutputScriptPath != null ? lastOutputScriptPath : scriptPath;
+  }
+
+  public String getOutputSWFPath() {
+    return lastOutputSWFPath != null ? lastOutputSWFPath : swfPath;
   }
 
   public void setScriptPath(String pScriptPath) {
@@ -142,10 +160,24 @@ public class Prefs extends ManagedObject {
     }
   }
 
+  public void setLastInputSoundFile(File pFile) {
+    lastInputSoundFilePath = pFile.getParent();
+    if (soundFilePath == null || soundFilePath.length() == 0) {
+      soundFilePath = lastInputSoundFilePath;
+    }
+  }
+
   public void setLastOutputScriptFile(File pFile) {
     lastOutputScriptPath = pFile.getParent();
     if (scriptPath == null || scriptPath.length() == 0) {
       scriptPath = lastOutputScriptPath;
+    }
+  }
+
+  public void setLastOutputSwfFile(File pFile) {
+    lastOutputSWFPath = pFile.getParent();
+    if (swfPath == null || swfPath.length() == 0) {
+      swfPath = lastOutputSWFPath;
     }
   }
 
@@ -256,6 +288,10 @@ public class Prefs extends ManagedObject {
     sunflowScenePath = pSrc.sunflowScenePath;
     lastInputSunflowScenePath = pSrc.lastInputSunflowScenePath;
     lastOutputSunflowScenePath = pSrc.lastOutputSunflowScenePath;
+    soundFilePath = pSrc.soundFilePath;
+    lastInputSoundFilePath = pSrc.lastInputSoundFilePath;
+    swfPath = pSrc.swfPath;
+    lastOutputSWFPath = pSrc.lastOutputSWFPath;
     plafStyle = pSrc.plafStyle;
     plafTheme = pSrc.plafTheme;
 
@@ -377,5 +413,21 @@ public class Prefs extends ManagedObject {
 
   public List<ResolutionProfile> getResolutionProfiles() {
     return resolutionProfiles;
+  }
+
+  public String getSoundFilePath() {
+    return soundFilePath;
+  }
+
+  public void setSoundFilePath(String soundFilePath) {
+    this.soundFilePath = soundFilePath;
+  }
+
+  public String getSwfPath() {
+    return swfPath;
+  }
+
+  public void setSwfPath(String swfPath) {
+    this.swfPath = swfPath;
   }
 }

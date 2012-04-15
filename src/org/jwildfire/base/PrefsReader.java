@@ -55,6 +55,8 @@ public class PrefsReader {
         pPrefs.setPlafTheme(getProperty(props, Prefs.KEY_GENERAL_PLAF_THEME, pPrefs.getPlafTheme()));
         pPrefs.setImagePath(getProperty(props, Prefs.KEY_GENERAL_PATH_IMAGES, pPrefs.getImagePath()));
         pPrefs.setScriptPath(getProperty(props, Prefs.KEY_GENERAL_PATH_SCRIPTS, pPrefs.getScriptPath()));
+        pPrefs.setSwfPath(getProperty(props, Prefs.KEY_GENERAL_PATH_SWF, pPrefs.getSwfPath()));
+        pPrefs.setSoundFilePath(getProperty(props, Prefs.KEY_GENERAL_PATH_SOUND_FILES, pPrefs.getSoundFilePath()));
 
         pPrefs.setTinaFlamePath(getProperty(props, Prefs.KEY_TINA_PATH_FLAMES, pPrefs.getTinaFlamePath()));
         pPrefs.setTinaRenderMovieFrames(getIntProperty(props, Prefs.KEY_TINA_RENDER_MOVIE_FRAMES, pPrefs.getTinaRenderMovieFrames()));
