@@ -4048,31 +4048,33 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
   }
 
   private void setupProfiles(Flame pFlame) {
-    if (pFlame.getResolutionProfile() != null) {
-      ResolutionProfile profile = null;
-      for (int i = 0; i < resolutionProfileCmb.getItemCount(); i++) {
-        profile = (ResolutionProfile) resolutionProfileCmb.getItemAt(i);
-        if (pFlame.getResolutionProfile().equals(profile.toString()))
-          break;
-        else
-          profile = null;
+    if (prefs.isTinaAssociateProfilesWithFlames()) {
+      if (pFlame.getResolutionProfile() != null) {
+        ResolutionProfile profile = null;
+        for (int i = 0; i < resolutionProfileCmb.getItemCount(); i++) {
+          profile = (ResolutionProfile) resolutionProfileCmb.getItemAt(i);
+          if (pFlame.getResolutionProfile().equals(profile.toString()))
+            break;
+          else
+            profile = null;
+        }
+        if (profile != null) {
+          resolutionProfileCmb.setSelectedItem(profile);
+        }
       }
-      if (profile != null) {
-        resolutionProfileCmb.setSelectedItem(profile);
-      }
-    }
 
-    if (pFlame.getQualityProfile() != null) {
-      QualityProfile profile = null;
-      for (int i = 0; i < qualityProfileCmb.getItemCount(); i++) {
-        profile = (QualityProfile) qualityProfileCmb.getItemAt(i);
-        if (pFlame.getQualityProfile().equals(profile.toString()))
-          break;
-        else
-          profile = null;
-      }
-      if (profile != null) {
-        qualityProfileCmb.setSelectedItem(profile);
+      if (pFlame.getQualityProfile() != null) {
+        QualityProfile profile = null;
+        for (int i = 0; i < qualityProfileCmb.getItemCount(); i++) {
+          profile = (QualityProfile) qualityProfileCmb.getItemAt(i);
+          if (pFlame.getQualityProfile().equals(profile.toString()))
+            break;
+          else
+            profile = null;
+        }
+        if (profile != null) {
+          qualityProfileCmb.setSelectedItem(profile);
+        }
       }
     }
   }

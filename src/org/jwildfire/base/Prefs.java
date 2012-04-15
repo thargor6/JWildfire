@@ -55,6 +55,7 @@ public class Prefs extends ManagedObject {
 
   static final String KEY_TINA_RENDER_REALTIME_QUALITY = "tina.render.realtime.quality";
   static final String KEY_TINA_RENDER_PREVIEW_QUALITY = "tina.render.preview.quality";
+  static final String KEY_TINA_PROFILE_ASSOCIATE_WITH_FLAMES = "tina.profile.associate_with_flames";
 
   static final String KEY_TINA_RANDOMBATCH_SIZE = "tina.random_batch.size";
   static final String KEY_TINA_RANDOMBATCH_BGCOLOR_RED = "tina.random_batch.bg_color.red";
@@ -83,6 +84,9 @@ public class Prefs extends ManagedObject {
   private String tinaFlamePath = null;
   private String lastInputFlamePath = null;
   private String lastOutputFlamePath = null;
+
+  @Property(description = "Associate profile information with flame files", category = PropertyCategory.TINA)
+  private boolean tinaAssociateProfilesWithFlames = false;
 
   @Property(description = "Sunflow scene file drawer", category = PropertyCategory.SUNFLOW)
   private String sunflowScenePath = null;
@@ -302,6 +306,7 @@ public class Prefs extends ManagedObject {
     tinaRandomBatchBGColorRed = pSrc.tinaRandomBatchBGColorRed;
     tinaRandomBatchBGColorGreen = pSrc.tinaRandomBatchBGColorGreen;
     tinaRandomBatchBGColorBlue = pSrc.tinaRandomBatchBGColorBlue;
+    tinaAssociateProfilesWithFlames = pSrc.tinaAssociateProfilesWithFlames;
 
     resolutionProfiles.clear();
     for (ResolutionProfile profile : pSrc.resolutionProfiles) {
@@ -429,5 +434,13 @@ public class Prefs extends ManagedObject {
 
   public void setSwfPath(String swfPath) {
     this.swfPath = swfPath;
+  }
+
+  public boolean isTinaAssociateProfilesWithFlames() {
+    return tinaAssociateProfilesWithFlames;
+  }
+
+  public void setTinaAssociateProfilesWithFlames(boolean tinaAssociateProfilesWithFlames) {
+    this.tinaAssociateProfilesWithFlames = tinaAssociateProfilesWithFlames;
   }
 }
