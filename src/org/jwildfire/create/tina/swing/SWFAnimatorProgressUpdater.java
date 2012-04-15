@@ -18,24 +18,24 @@ package org.jwildfire.create.tina.swing;
 
 import java.awt.Graphics;
 
-public class JobProgressUpdater implements ProgressUpdater {
+public class SWFAnimatorProgressUpdater implements ProgressUpdater {
   private final TinaInternalFrame parent;
 
-  public JobProgressUpdater(TinaInternalFrame pParent) {
+  public SWFAnimatorProgressUpdater(TinaInternalFrame pParent) {
     parent = pParent;
   }
 
   @Override
   public void initProgress(int pMaxSteps) {
     try {
-      parent.getBatchRenderJobProgressBar().setValue(0);
-      parent.getBatchRenderJobProgressBar().setMinimum(0);
-      parent.getBatchRenderJobProgressBar().setMaximum(pMaxSteps);
-      parent.getBatchRenderJobProgressBar().invalidate();
-      parent.getBatchRenderJobProgressBar().validate();
-      Graphics g = parent.getBatchRenderJobProgressBar().getGraphics();
+      parent.getSwfAnimatorProgressBar().setValue(0);
+      parent.getSwfAnimatorProgressBar().setMinimum(0);
+      parent.getSwfAnimatorProgressBar().setMaximum(pMaxSteps);
+      parent.getSwfAnimatorProgressBar().invalidate();
+      parent.getSwfAnimatorProgressBar().validate();
+      Graphics g = parent.getSwfAnimatorProgressBar().getGraphics();
       if (g != null) {
-        parent.getBatchRenderJobProgressBar().paint(g);
+        parent.getSwfAnimatorProgressBar().paint(g);
       }
     }
     catch (Throwable ex) {
@@ -46,12 +46,12 @@ public class JobProgressUpdater implements ProgressUpdater {
   @Override
   public void updateProgress(int pStep) {
     try {
-      parent.getBatchRenderJobProgressBar().setValue(pStep);
-      parent.getBatchRenderJobProgressBar().invalidate();
-      parent.getBatchRenderJobProgressBar().validate();
-      Graphics g = parent.getBatchRenderJobProgressBar().getGraphics();
+      parent.getSwfAnimatorProgressBar().setValue(pStep);
+      parent.getSwfAnimatorProgressBar().invalidate();
+      parent.getSwfAnimatorProgressBar().validate();
+      Graphics g = parent.getSwfAnimatorProgressBar().getGraphics();
       if (g != null) {
-        parent.getBatchRenderJobProgressBar().paint(g);
+        parent.getSwfAnimatorProgressBar().paint(g);
       }
     }
     catch (Throwable ex) {

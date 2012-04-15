@@ -16,8 +16,10 @@
 */
 package org.jwildfire.base;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStreamReader;
@@ -46,6 +48,7 @@ public class Tools {
   public static final String FILEEXT_PNG = "png";
   public static final String FILEEXT_WAV = "wav";
   public static final String FILEEXT_MP3 = "mp3";
+  public static final String FILEEXT_SWF = "swf";
   public static final String FILEEXT_FLAME = "flame";
   public static final String FILE_ENCODING = "utf-8";
 
@@ -370,6 +373,26 @@ public class Tools {
       return (int) (0.0 - (MathLib.fabs(val) + 0.5));
     else
       return 0;
+  }
+
+  public static final byte[] readFile(String pFilename) throws Exception {
+    BufferedInputStream in = new BufferedInputStream(new FileInputStream(pFilename));
+    ByteArrayOutputStream os = new ByteArrayOutputStream();
+    final int BUFFER_SIZE = 40960;
+    byte[] buffer = new byte[BUFFER_SIZE];
+    try {
+      int n;
+      while ((n = in.read(buffer, 0, BUFFER_SIZE)) >= 0) {
+        os.write(buffer, 0, n);
+      }
+      os.flush();
+      os.close();
+      return os.toByteArray();
+    }
+    finally {
+      in.close();
+    }
+
   }
 
 }

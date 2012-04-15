@@ -18,13 +18,12 @@ package org.jwildfire.create.tina.animate;
 
 import org.jwildfire.base.Prefs;
 import org.jwildfire.create.tina.base.Flame;
-import org.jwildfire.create.tina.base.Shading;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.render.FlameRenderer;
 import org.jwildfire.create.tina.render.RenderInfo;
 import org.jwildfire.create.tina.render.RenderedFlame;
 import org.jwildfire.create.tina.transform.XFormTransformService;
-import org.jwildfire.io.ImageWriter;
+import org.jwildfire.image.SimpleImage;
 
 public class AnimationService {
 
@@ -43,17 +42,7 @@ public class AnimationService {
     ROTATE_LAST_XFORM,
   }
 
-  public static enum LightScript {
-    NONE,
-    ROTATE_XY_PLANE,
-  }
-
-  public static void renderFrame(int pFrame, int pFrames, Flame pFlame1, Flame pFlame2, boolean pDoMorph, GlobalScript pGlobalScript, XFormScript pXFormScript, LightScript pLightScript, String pImagePath, int pWidth, int pHeight, int pQuality, Prefs pPrefs) throws Exception {
-    String imgFilename = String.valueOf(pFrame);
-    while (imgFilename.length() < 3) {
-      imgFilename = "0" + imgFilename;
-    }
-    imgFilename = pImagePath + imgFilename + ".png";
+  public static SimpleImage renderFrame(int pFrame, int pFrames, Flame pFlame1, Flame pFlame2, boolean pDoMorph, GlobalScript pGlobalScript, XFormScript pXFormScript, int pWidth, int pHeight, Prefs pPrefs) throws Exception {
     RenderInfo info = new RenderInfo(pWidth, pHeight);
     Flame flame;
     if (pDoMorph) {
@@ -81,7 +70,6 @@ public class AnimationService {
     flame.setPixelsPerUnit((wScl + hScl) * 0.5 * flame.getPixelsPerUnit());
     flame.setWidth(info.getImageWidth());
     flame.setHeight(info.getImageHeight());
-    flame.setSampleDensity(pQuality);
     switch (pGlobalScript) {
       case ROTATE_PITCH: {
         double camPitch = 360.0 / (double) pFrames * (double) (pFrame - 1);
@@ -144,32 +132,11 @@ public class AnimationService {
         break;
     }
 
-    if (flame.getShadingInfo().getShading() == Shading.PSEUDO3D) {
-      switch (pLightScript) {
-        case ROTATE_XY_PLANE: {
-          double radius = 0.4;
-          for (int i = 0; i < flame.getShadingInfo().getLightCount(); i++) {
-            double angle = 360.0 / (double) pFrames * (double) (pFrame - 1);
-            radius *= 0.75;
-            if (i % 2 == 0) {
-              flame.getShadingInfo().getLightPosX()[i] -= radius * Math.sin(angle);
-              flame.getShadingInfo().getLightPosY()[i] -= radius * Math.cos(angle);
-            }
-            else {
-              flame.getShadingInfo().getLightPosX()[i] += radius * Math.sin(angle);
-              flame.getShadingInfo().getLightPosY()[i] += radius * Math.cos(angle);
-            }
-          }
-        }
-          break;
-      }
-    }
-
     //          flame.setCamRoll(86 - 20 * Math.sin((imgIdx - 1) * 4.0 * Math.PI / 72.0));
     //          flame.setCamYaw(-180 + 60 * Math.sin((imgIdx - 1) * 2.0 * Math.PI / 72.0));
 
     FlameRenderer renderer = new FlameRenderer(flame, pPrefs);
     RenderedFlame res = renderer.renderFlame(info);
-    new ImageWriter().saveImage(res.getImage(), imgFilename);
+    return res.getImage();
   }
 }

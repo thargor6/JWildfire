@@ -86,4 +86,9 @@ public class PostMirrorWFFunc extends VariationFunc {
     return "post_mirror_wf";
   }
 
+  @Override
+  public int getPriority() {
+    return 1;
+  }
+
 }

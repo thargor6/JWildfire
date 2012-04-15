@@ -1,0 +1,197 @@
+/*
+  JWildfire - an image and animation processor written in Java 
+  Copyright (C) 1995-2012 Andreas Maschke
+
+  This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
+  General Public License as published by the Free Software Foundation; either version 2.1 of the 
+  License, or (at your option) any later version.
+ 
+  This software is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without 
+  even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU 
+  Lesser General Public License for more details.
+
+  You should have received a copy of the GNU Lesser General Public License along with this software; 
+  if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+  02110-1301 USA, or see the FSF site: http://www.fsf.org.
+*/
+package org.jwildfire.create.tina.animate;
+
+import java.io.File;
+
+import org.jwildfire.create.tina.base.Flame;
+import org.jwildfire.image.SimpleImage;
+import org.jwildfire.io.ImageWriter;
+
+import com.flagstone.transform.Background;
+import com.flagstone.transform.Movie;
+import com.flagstone.transform.MovieHeader;
+import com.flagstone.transform.MovieTag;
+import com.flagstone.transform.Place2;
+import com.flagstone.transform.ShowFrame;
+import com.flagstone.transform.datatype.Color;
+import com.flagstone.transform.datatype.WebPalette;
+import com.flagstone.transform.image.ImageTag;
+import com.flagstone.transform.linestyle.LineStyle1;
+import com.flagstone.transform.shape.ShapeTag;
+import com.flagstone.transform.util.image.ImageFactory;
+import com.flagstone.transform.util.image.ImageShape;
+import com.flagstone.transform.util.sound.SoundFactory;
+
+public class SWFAnimationRenderThread implements Runnable {
+  private final SWFAnimationRenderThreadController controller;
+  private final String outputFilename;
+  private final int frameCount;
+  private final int frameWidth;
+  private final int frameHeight;
+  private final double framesPerSecond;
+  private boolean cancelSignalled;
+  private SWFAnimationData animationData;
+  private SoundFactory soundFactory;
+  private Movie movie;
+  private int uid;
+  private Throwable lastError;
+
+  public SWFAnimationRenderThread(SWFAnimationRenderThreadController pController, int pFrameCount, int pFrameWidth, int pFrameHeight, double pFramesPerSecond, SWFAnimationData pAnimationData, String pOutputFilename) {
+    controller = pController;
+    frameCount = pFrameCount;
+    frameWidth = pFrameWidth;
+    frameHeight = pFrameHeight;
+    framesPerSecond = pFramesPerSecond;
+    animationData = pAnimationData;
+    outputFilename = pOutputFilename;
+  }
+
+  @Override
+  public void run() {
+    try {
+      try {
+        cancelSignalled = false;
+        lastError = null;
+        controller.getProgressUpdater().initProgress(frameCount);
+        initMovie();
+        for (int i = 1; i <= frameCount; i++) {
+          if (cancelSignalled) {
+            break;
+          }
+          SimpleImage image = renderImage(i);
+          addImageToMovie(image, i);
+          controller.getProgressUpdater().updateProgress(i);
+        }
+        finishMovie();
+      }
+      catch (Throwable ex) {
+        lastError = ex;
+        throw new RuntimeException(ex);
+      }
+    }
+    finally {
+      controller.onRenderFinished();
+    }
+  }
+
+  private void prepareFlame(Flame pFlame) {
+    pFlame.setSpatialFilterRadius(1.0);
+    pFlame.setSpatialOversample(animationData.getQualityProfile().getSpatialOversample());
+    pFlame.setColorOversample(animationData.getQualityProfile().getColorOversample());
+    pFlame.setSampleDensity(animationData.getQualityProfile().getQuality());
+
+  }
+
+  private SimpleImage renderImage(int pFrame) throws Exception {
+    boolean doMorph = animationData.getFlame2() != null;
+    Flame flame1 = animationData.getFlame1().makeCopy();
+    Flame flame2 = doMorph ? animationData.getFlame2().makeCopy() : null;
+    prepareFlame(flame1);
+    if (flame2 != null) {
+      prepareFlame(flame2);
+    }
+    return AnimationService.renderFrame(pFrame, frameCount, flame1, flame2, doMorph, animationData.getGlobalScript(), animationData.getxFormScript(), frameWidth, frameHeight, controller.getPrefs());
+  }
+
+  private void addImageToMovie(SimpleImage pImage, int pFrame) throws Exception {
+    final ImageFactory factory = createImageFactory(pImage);
+    final ImageTag image = factory.defineImage(uid++);
+    final int xOrigin = -image.getWidth() / 2;
+    final int yOrigin = -image.getHeight() / 2;
+    final int width = 20;
+    final Color color = WebPalette.BLACK.color();
+    final ShapeTag shape = new ImageShape().defineShape(uid++, image,
+        xOrigin, yOrigin, new LineStyle1(width, color));
+    movie.add(image);
+    movie.add(shape);
+    movie.add(Place2.show(shape.getIdentifier(), 1, 0, 0));
+    if (soundFactory != null) {
+      MovieTag block = soundFactory.streamSound();
+      if (block != null) {
+        movie.add(block);
+      }
+    }
+    movie.add(ShowFrame.getInstance());
+  }
+
+  private void finishMovie() throws Exception {
+    movie.encodeToFile(new File(outputFilename));
+  }
+
+  private ImageFactory createImageFactory(SimpleImage pImage) throws Exception {
+    File tmpFile = File.createTempFile("jwf", "");
+    String tmpFilename = tmpFile.getAbsolutePath() + ".jpg";
+    try {
+      new ImageWriter().saveImage(pImage, tmpFilename);
+      final ImageFactory factory = new ImageFactory();
+      factory.read(new File(tmpFilename));
+      return factory;
+    }
+    finally {
+      //      tmpFile.delete();
+      //      new File(tmpFilename).delete();
+    }
+  }
+
+  private void initMovie() throws Exception {
+    uid = 1;
+    movie = new Movie();
+    /*
+     * Generate the shape that actually displays the image. The origin is
+     * in the centre of the shape so the registration point for the image
+     * is -width/2 -height/2 so the centre of the image and the shape
+     * coincide.
+     */
+    final int xOrigin = -frameWidth / 2;
+    final int yOrigin = -frameHeight / 2;
+    MovieHeader header = new MovieHeader();
+    header.setFrameRate(12f);
+    final int width = 20;
+    final Color color = WebPalette.BLACK.color();
+    final ImageFactory factory = createImageFactory(new SimpleImage(frameWidth, frameHeight));
+    final ImageTag image = factory.defineImage(uid++);
+    ShapeTag shape = new ImageShape().defineShape(uid++, image,
+        xOrigin, yOrigin, new LineStyle1(width, color));
+    header.setFrameSize(shape.getBounds());
+    movie.add(header);
+    movie.add(new Background(WebPalette.LIGHT_BLUE.color()));
+    uid = 1;
+    // Add sound
+    if (animationData.getSoundFilename() != null) {
+      soundFactory = new SoundFactory();
+      soundFactory.read(new File(animationData.getSoundFilename()));
+      movie.add(soundFactory.streamHeader((float) framesPerSecond));
+      //      MovieTag block;
+      //      while ((block = soundFactory.streamSound()) != null) {
+      //        movie.add(block);
+      //        movie.add(ShowFrame.getInstance());
+      //      }
+    }
+    else {
+      soundFactory = null;
+    }
+  }
+
+  public void setCancelSignalled(boolean cancelSignalled) {
+    this.cancelSignalled = cancelSignalled;
+  }
+
+  public Throwable getLastError() {
+    return lastError;
+  }
+}

@@ -432,7 +432,7 @@ public class QualityProfileDialog extends JDialog {
 
   private boolean applyChanges() {
     try {
-      final int MIN_QUALITY = 30;
+      final int MIN_QUALITY = 1;
       String caption = getCaptionREd().getText();
       if (caption == null || caption.trim().length() == 0) {
         throw new Exception("Caption must not be empty");

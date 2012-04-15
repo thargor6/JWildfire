@@ -14,45 +14,37 @@
   if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
   02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
-package org.jwildfire.create.tina.animate;
+package org.jwildfire.swing;
 
-import org.jwildfire.create.tina.base.Flame;
+import java.io.File;
 
-public class SWFAnimation {
-  private int frames = 60;
-  private double framesPerSecond = 12;
-  private boolean halveSize;
-  private Flame flames;
+import javax.swing.filechooser.FileFilter;
 
-  public int getFrames() {
-    return frames;
+import org.jwildfire.base.Tools;
+
+public class SWFFileFilter extends FileFilter {
+
+  @Override
+  public boolean accept(File pFile) {
+    if (pFile.isDirectory())
+      return true;
+    String extension = getExtension(pFile);
+    return (extension != null)
+        && (extension.equals(Tools.FILEEXT_SWF));
   }
 
-  public void setFrames(int frames) {
-    this.frames = frames;
+  @Override
+  public String getDescription() {
+    return "SWF files";
   }
 
-  public double getFramesPerSecond() {
-    return framesPerSecond;
+  private String getExtension(File pFile) {
+    String name = pFile.getName();
+    int idx = name.lastIndexOf('.');
+    if (idx > 0 && idx < name.length() - 1) {
+      return name.substring(idx + 1).toLowerCase();
+    }
+    return null;
   }
 
-  public void setFramesPerSecond(double framesPerSecond) {
-    this.framesPerSecond = framesPerSecond;
-  }
-
-  public boolean isHalveSize() {
-    return halveSize;
-  }
-
-  public void setHalveSize(boolean halveSize) {
-    this.halveSize = halveSize;
-  }
-
-  public Flame getFlames() {
-    return flames;
-  }
-
-  public void setFlames(Flame flames) {
-    this.flames = flames;
-  }
 }

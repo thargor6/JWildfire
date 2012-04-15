@@ -378,7 +378,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JTextField swfAnimatorFramesREd = null;
   private JLabel animateFramesLbl = null;
   private JLabel animateGlobalScriptLbl = null;
-  private JComboBox swfAnimatorScriptCmb = null;
+  private JComboBox swfAnimatorGlobalScriptCmb = null;
   private JLabel animateXFormScriptLbl = null;
   private JComboBox swfAnimatorXFormScriptCmb = null;
   private JPanel triangleOperationsPanel = null;
@@ -3008,13 +3008,13 @@ public class TinaInternalFrame extends JInternalFrame {
       getShadingLightCmb().addItem(String.valueOf("3"));
       getShadingLightCmb().addItem(String.valueOf("4"));
 
-      getSwfAnimatorScriptCmb().removeAllItems();
-      getSwfAnimatorScriptCmb().addItem(AnimationService.GlobalScript.NONE);
-      getSwfAnimatorScriptCmb().addItem(AnimationService.GlobalScript.ROTATE_PITCH);
-      getSwfAnimatorScriptCmb().addItem(AnimationService.GlobalScript.ROTATE_ROLL);
-      getSwfAnimatorScriptCmb().addItem(AnimationService.GlobalScript.ROTATE_YAW);
-      getSwfAnimatorScriptCmb().addItem(AnimationService.GlobalScript.ROTATE_PITCH_YAW);
-      getSwfAnimatorScriptCmb().setSelectedItem(AnimationService.GlobalScript.ROTATE_PITCH_YAW);
+      getSwfAnimatorGlobalScriptCmb().removeAllItems();
+      getSwfAnimatorGlobalScriptCmb().addItem(AnimationService.GlobalScript.NONE);
+      getSwfAnimatorGlobalScriptCmb().addItem(AnimationService.GlobalScript.ROTATE_PITCH);
+      getSwfAnimatorGlobalScriptCmb().addItem(AnimationService.GlobalScript.ROTATE_ROLL);
+      getSwfAnimatorGlobalScriptCmb().addItem(AnimationService.GlobalScript.ROTATE_YAW);
+      getSwfAnimatorGlobalScriptCmb().addItem(AnimationService.GlobalScript.ROTATE_PITCH_YAW);
+      getSwfAnimatorGlobalScriptCmb().setSelectedItem(AnimationService.GlobalScript.ROTATE_PITCH_YAW);
 
       getSwfAnimatorXFormScriptCmb().removeAllItems();
       getSwfAnimatorXFormScriptCmb().addItem(AnimationService.XFormScript.NONE);
@@ -3031,12 +3031,13 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaController.getInteractiveRendererCtrl().enableControls();
 
       tinaController.setSwfAnimatorCtrl(new TinaSWFAnimatorController(tinaController, pErrorHandler, pPrefs,
-          getSwfAnimatorScriptCmb(), getSwfAnimatorXFormScriptCmb(), getSwfAnimatorFramesREd(), getSwfAnimatorFramesPerSecondREd(),
+          getSwfAnimatorGlobalScriptCmb(), getSwfAnimatorXFormScriptCmb(), getSwfAnimatorFramesREd(), getSwfAnimatorFramesPerSecondREd(),
           getSwfAnimatorGenerateButton(), getSwfAnimatatorScriptArea(), getSwfAnimatorResolutionProfileCmb(),
           getSwfAnimatorQualityProfileCmb(), getSwfAnimatorCompileScript(), getSwfAnimatorLoadFlameFromMainButton(),
           getSwfAnimatorLoadFlameFromClipboardButton(), getSwfAnimatorLoadFlameButton(), getSwfAnimatorCustomScriptBtn(),
           getSwfAnimatorHalveSizeButton(), getSwfAnimatorProgressBar(), getSwfAnimatorCancelButton(),
-          getSwfAnimatorLoadSoundButton(), getSwfAnimatorClearSoundButton()));
+          getSwfAnimatorLoadSoundButton(), getSwfAnimatorClearSoundButton(),
+          new SWFAnimatorProgressUpdater(this)));
       tinaController.getSwfAnimatorCtrl().enableControls();
 
     }
@@ -4620,7 +4621,7 @@ public class TinaInternalFrame extends JInternalFrame {
       swfAnimatorFramesREd = new JTextField();
       swfAnimatorFramesREd.setBounds(434, 23, 56, 22);
       swfAnimatorFramesREd.setPreferredSize(new Dimension(56, 22));
-      swfAnimatorFramesREd.setText("72");
+      swfAnimatorFramesREd.setText("60");
       swfAnimatorFramesREd.setFont(new Font("Dialog", Font.PLAIN, 10));
     }
     return swfAnimatorFramesREd;
@@ -4631,14 +4632,14 @@ public class TinaInternalFrame extends JInternalFrame {
    * 	
    * @return javax.swing.JComboBox	
    */
-  private JComboBox getSwfAnimatorScriptCmb() {
-    if (swfAnimatorScriptCmb == null) {
-      swfAnimatorScriptCmb = new JComboBox();
-      swfAnimatorScriptCmb.setBounds(103, 6, 275, 22);
-      swfAnimatorScriptCmb.setPreferredSize(new Dimension(275, 22));
-      swfAnimatorScriptCmb.setFont(new Font("Dialog", Font.BOLD, 10));
+  private JComboBox getSwfAnimatorGlobalScriptCmb() {
+    if (swfAnimatorGlobalScriptCmb == null) {
+      swfAnimatorGlobalScriptCmb = new JComboBox();
+      swfAnimatorGlobalScriptCmb.setBounds(103, 6, 275, 22);
+      swfAnimatorGlobalScriptCmb.setPreferredSize(new Dimension(275, 22));
+      swfAnimatorGlobalScriptCmb.setFont(new Font("Dialog", Font.BOLD, 10));
     }
-    return swfAnimatorScriptCmb;
+    return swfAnimatorGlobalScriptCmb;
   }
 
   /**
@@ -9254,7 +9255,7 @@ public class TinaInternalFrame extends JInternalFrame {
       panel_4.setPreferredSize(new Dimension(10, 62));
       panel_4.setMinimumSize(new Dimension(10, 50));
       panel_4.setLayout(null);
-      panel_4.add(getSwfAnimatorScriptCmb());
+      panel_4.add(getSwfAnimatorGlobalScriptCmb());
       animateGlobalScriptLbl = new JLabel();
       animateGlobalScriptLbl.setBounds(6, 6, 94, 22);
       panel_4.add(animateGlobalScriptLbl);
@@ -9425,11 +9426,6 @@ public class TinaInternalFrame extends JInternalFrame {
   private JToggleButton getSwfAnimatorHalveSizeButton() {
     if (swfAnimatorHalveSizeButton == null) {
       swfAnimatorHalveSizeButton = new JToggleButton();
-      swfAnimatorHalveSizeButton.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-          tinaController.getSwfAnimatorCtrl().halveSizeButton_clicked();
-        }
-      });
       swfAnimatorHalveSizeButton.setToolTipText("Switch to halve render resolution (to get rid of scroll bars in exploration mode)");
       swfAnimatorHalveSizeButton.setText("Halve size");
       swfAnimatorHalveSizeButton.setPreferredSize(new Dimension(42, 24));
