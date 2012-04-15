@@ -61,7 +61,7 @@ public class Flame {
   private ShadingInfo shadingInfo = new ShadingInfo();
 
   public Flame() {
-    spatialFilterRadius = 1.2;
+    spatialFilterRadius = 0.0;
     sampleDensity = 100.0;
     bgColorRed = bgColorGreen = bgColorBlue = 0;
     brightness = 4;

@@ -56,7 +56,6 @@ public class ExperimentalSimpleRandomFlameGenerator extends
     flame.setCentreX(0.0);
     flame.setCentreY(0.0);
     flame.setPixelsPerUnit(200);
-    flame.setSpatialFilterRadius(1.0);
     flame.setFinalXForm(null);
     flame.getXForms().clear();
 

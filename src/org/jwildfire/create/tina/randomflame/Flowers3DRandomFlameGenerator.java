@@ -32,7 +32,6 @@ public class Flowers3DRandomFlameGenerator extends RandomFlameGenerator {
     flame.setCamPitch(49.0);
     flame.setCamYaw(12.0);
     flame.setPixelsPerUnit(200);
-    flame.setSpatialFilterRadius(0.4);
     flame.setFinalXForm(null);
     flame.getXForms().clear();
     //    int fncCount = ExperimentalSimpleRandomFlameGenerator.FNCLST_EXPERIMENTAL.length;

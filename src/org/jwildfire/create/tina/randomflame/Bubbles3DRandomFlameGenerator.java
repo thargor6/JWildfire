@@ -33,7 +33,6 @@ public class Bubbles3DRandomFlameGenerator extends RandomFlameGenerator {
     flame.setCamYaw(12.0);
     flame.setCamPerspective(0.12);
     flame.setPixelsPerUnit(200);
-    flame.setSpatialFilterRadius(0.4);
     flame.setFinalXForm(null);
     flame.getXForms().clear();
     // 1st xForm

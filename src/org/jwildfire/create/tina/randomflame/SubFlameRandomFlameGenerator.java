@@ -49,7 +49,6 @@ public class SubFlameRandomFlameGenerator extends RandomFlameGenerator {
     flame.setCamPitch(49.0);
     flame.setCamPerspective(0.16);
     flame.setPixelsPerUnit(200);
-    flame.setSpatialFilterRadius(1.0);
     flame.setFinalXForm(null);
     flame.getXForms().clear();
 
