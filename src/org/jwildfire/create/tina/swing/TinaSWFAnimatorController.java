@@ -104,7 +104,24 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
 
   protected void enableControls() {
     // TODO Auto-generated method stub
-
+    boolean rendering = renderThread != null;
+    swfAnimatorXFormScriptCmb.setEnabled(!rendering);
+    swfAnimatorXFormScriptCmb.setEnabled(!rendering);
+    swfAnimatorFramesREd.setEnabled(!rendering);
+    swfAnimatorFramesPerSecondREd.setEnabled(!rendering);
+    swfAnimatorGenerateButton.setEnabled(!rendering && currAnimationData.getFlame1() != null);
+    swfAnimatorScriptArea.setEnabled(!rendering && swfAnimatorCustomScriptBtn.isSelected());
+    swfAnimatorResolutionProfileCmb.setEnabled(!rendering);
+    swfAnimatorQualityProfileCmb.setEnabled(!rendering);
+    swfAnimatorCompileScriptButton.setEnabled(!rendering && swfAnimatorCustomScriptBtn.isSelected());
+    swfAnimatorLoadFlameFromMainButton.setEnabled(!rendering);
+    swfAnimatorLoadFlameFromClipboardButton.setEnabled(!rendering);
+    swfAnimatorLoadFlameButton.setEnabled(!rendering);
+    swfAnimatorCustomScriptBtn.setEnabled(!rendering);
+    swfAnimatorHalveSizeButton.setEnabled(!rendering);
+    swfAnimatorCancelButton.setEnabled(rendering && !renderThread.isCancelSignalled());
+    swfAnimatorLoadSoundButton.setEnabled(!rendering);
+    swfAnimatorClearSoundButton.setEnabled(!rendering && currAnimationData.getSoundFilename() != null);
   }
 
   public void loadFlameFromMainButton_clicked() {
@@ -185,6 +202,7 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
   public void cancelButton_clicked() {
     if (renderThread != null) {
       renderThread.setCancelSignalled(true);
+      enableControls();
     }
   }
 
@@ -265,8 +283,12 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
 
   @Override
   public void onRenderFinished() {
+    if (renderThread != null && renderThread.getLastError() != null) {
+      errorHandler.handleError(renderThread.getLastError());
+    }
     renderThread = null;
     enableControls();
+
   }
 
   @Override

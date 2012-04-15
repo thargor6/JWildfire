@@ -18,6 +18,8 @@ package org.jwildfire.create.tina.animate;
 
 import java.io.File;
 
+import javax.imageio.ImageIO;
+
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.image.SimpleImage;
 import org.jwildfire.io.ImageWriter;
@@ -50,6 +52,7 @@ public class SWFAnimationRenderThread implements Runnable {
   private Movie movie;
   private int uid;
   private Throwable lastError;
+  private String tmpBasefilename;
 
   public SWFAnimationRenderThread(SWFAnimationRenderThreadController pController, int pFrameCount, int pFrameWidth, int pFrameHeight, double pFramesPerSecond, SWFAnimationData pAnimationData, String pOutputFilename) {
     controller = pController;
@@ -119,7 +122,12 @@ public class SWFAnimationRenderThread implements Runnable {
         xOrigin, yOrigin, new LineStyle1(width, color));
     movie.add(image);
     movie.add(shape);
-    movie.add(Place2.show(shape.getIdentifier(), 1, 0, 0));
+    if (pFrame == 1) {
+      movie.add(Place2.show(shape.getIdentifier(), 1, 0, 0));
+    }
+    else {
+      movie.add(Place2.replace(shape.getIdentifier(), 1, 0, 0));
+    }
     if (soundFactory != null) {
       MovieTag block = soundFactory.streamSound();
       if (block != null) {
@@ -133,34 +141,68 @@ public class SWFAnimationRenderThread implements Runnable {
     movie.encodeToFile(new File(outputFilename));
   }
 
+  /*
+   I had to patch the factory.read() method as follows (otherwise the tmp files can not get deleted):
+   
+    public void read(final File file) throws IOException, DataFormatException {
+      ImageInfo info = new ImageInfo();
+      RandomAccessFile rf = new RandomAccessFile(file, "r");
+      try {
+        info.setInput(rf);
+        if (!info.check()) {
+          throw new DataFormatException("Unsupported format");
+        }
+        decoder = ImageRegistry.getImageProvider(info.getImageFormat().getMimeType());
+      }
+      finally {
+        rf.close();
+      }
+      info = null;
+      InputStream is = new FileInputStream(file);
+      try {
+        decoder.read(is);
+      }
+      finally {
+        is.close();
+      }
+    }  
+    
+   */
+
   private ImageFactory createImageFactory(SimpleImage pImage) throws Exception {
-    File tmpFile = File.createTempFile("jwf", "");
-    String tmpFilename = tmpFile.getAbsolutePath() + ".jpg";
+    String id = String.valueOf(uid);
+    while (id.length() < 6) {
+      id = "0" + id;
+    }
+    String tmpFilename = tmpBasefilename + "." + id + ".jpg";
+    ImageIO.setUseCache(false);
+    new ImageWriter().saveImage(pImage, tmpFilename);
+    final ImageFactory factory = new ImageFactory();
+    File f = new File(tmpFilename);
     try {
-      new ImageWriter().saveImage(pImage, tmpFilename);
-      final ImageFactory factory = new ImageFactory();
-      factory.read(new File(tmpFilename));
-      return factory;
+      factory.read(f);
     }
     finally {
-      //      tmpFile.delete();
-      //      new File(tmpFilename).delete();
+      if (!f.delete()) {
+        f.deleteOnExit();
+      }
     }
+    return factory;
   }
 
   private void initMovie() throws Exception {
+    {
+      File tmpFile = File.createTempFile("jwf", "");
+      tmpBasefilename = tmpFile.getAbsolutePath();
+      tmpFile.delete();
+    }
+
     uid = 1;
     movie = new Movie();
-    /*
-     * Generate the shape that actually displays the image. The origin is
-     * in the centre of the shape so the registration point for the image
-     * is -width/2 -height/2 so the centre of the image and the shape
-     * coincide.
-     */
     final int xOrigin = -frameWidth / 2;
     final int yOrigin = -frameHeight / 2;
     MovieHeader header = new MovieHeader();
-    header.setFrameRate(12f);
+    header.setFrameRate((float) framesPerSecond);
     final int width = 20;
     final Color color = WebPalette.BLACK.color();
     final ImageFactory factory = createImageFactory(new SimpleImage(frameWidth, frameHeight));
@@ -176,11 +218,6 @@ public class SWFAnimationRenderThread implements Runnable {
       soundFactory = new SoundFactory();
       soundFactory.read(new File(animationData.getSoundFilename()));
       movie.add(soundFactory.streamHeader((float) framesPerSecond));
-      //      MovieTag block;
-      //      while ((block = soundFactory.streamSound()) != null) {
-      //        movie.add(block);
-      //        movie.add(ShowFrame.getInstance());
-      //      }
     }
     else {
       soundFactory = null;
@@ -193,5 +230,9 @@ public class SWFAnimationRenderThread implements Runnable {
 
   public Throwable getLastError() {
     return lastError;
+  }
+
+  public boolean isCancelSignalled() {
+    return cancelSignalled;
   }
 }

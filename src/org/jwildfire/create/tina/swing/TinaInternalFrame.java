@@ -3014,14 +3014,15 @@ public class TinaInternalFrame extends JInternalFrame {
       getSwfAnimatorGlobalScriptCmb().addItem(AnimationService.GlobalScript.ROTATE_ROLL);
       getSwfAnimatorGlobalScriptCmb().addItem(AnimationService.GlobalScript.ROTATE_YAW);
       getSwfAnimatorGlobalScriptCmb().addItem(AnimationService.GlobalScript.ROTATE_PITCH_YAW);
-      getSwfAnimatorGlobalScriptCmb().setSelectedItem(AnimationService.GlobalScript.ROTATE_PITCH_YAW);
+      getSwfAnimatorGlobalScriptCmb().setSelectedItem(AnimationService.GlobalScript.NONE);
 
       getSwfAnimatorXFormScriptCmb().removeAllItems();
       getSwfAnimatorXFormScriptCmb().addItem(AnimationService.XFormScript.NONE);
       getSwfAnimatorXFormScriptCmb().addItem(AnimationService.XFormScript.ROTATE_FULL);
       getSwfAnimatorXFormScriptCmb().addItem(AnimationService.XFormScript.ROTATE_SLIGHTLY);
+      getSwfAnimatorXFormScriptCmb().addItem(AnimationService.XFormScript.ROTATE_FIRST_XFORM);
       getSwfAnimatorXFormScriptCmb().addItem(AnimationService.XFormScript.ROTATE_LAST_XFORM);
-      getSwfAnimatorXFormScriptCmb().setSelectedItem(AnimationService.XFormScript.ROTATE_SLIGHTLY);
+      getSwfAnimatorXFormScriptCmb().setSelectedItem(AnimationService.XFormScript.ROTATE_FIRST_XFORM);
 
       tinaController.setInteractiveRendererCtrl(new TinaInteractiveRendererController(tinaController, pErrorHandler, pPrefs,
           getInteractiveLoadFlameButton(), getInteractiveLoadFlameFromClipboardButton(), getInteractiveNextButton(), getInteractiveStopButton(),
@@ -4576,7 +4577,7 @@ public class TinaInternalFrame extends JInternalFrame {
       panel_1.add(scrollPane, BorderLayout.CENTER);
 
       swfAnimatorScriptArea = new JTextArea();
-      swfAnimatorScriptArea.setText("");
+      swfAnimatorScriptArea.setText("(CUSTOM SCRIPT NOT IMPLEMENTED)");
       scrollPane.setViewportView(swfAnimatorScriptArea);
 
       JPanel panel = new JPanel();
@@ -9231,7 +9232,7 @@ public class TinaInternalFrame extends JInternalFrame {
       swfAnimatorProgressBar.setStringPainted(true);
       swfAnimatorProgressBar.setPreferredSize(new Dimension(568, 21));
       swfAnimatorProgressBar.setBounds(new Rectangle(105, 416, 568, 21));
-      swfAnimatorProgressBar.setBounds(502, 23, 391, 21);
+      swfAnimatorProgressBar.setBounds(502, 38, 391, 21);
       panel_3.add(swfAnimatorProgressBar);
 
       swfAnimatorCancelButton = new JButton();
@@ -9243,7 +9244,7 @@ public class TinaInternalFrame extends JInternalFrame {
       swfAnimatorCancelButton.setText("Cancel");
       swfAnimatorCancelButton.setPreferredSize(new Dimension(125, 24));
       swfAnimatorCancelButton.setFont(new Font("Dialog", Font.BOLD, 10));
-      swfAnimatorCancelButton.setBounds(649, 52, 125, 24);
+      swfAnimatorCancelButton.setBounds(1042, 23, 125, 52);
       panel_3.add(swfAnimatorCancelButton);
     }
     return panel_3;
@@ -9426,6 +9427,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JToggleButton getSwfAnimatorHalveSizeButton() {
     if (swfAnimatorHalveSizeButton == null) {
       swfAnimatorHalveSizeButton = new JToggleButton();
+      swfAnimatorHalveSizeButton.setSelected(true);
       swfAnimatorHalveSizeButton.setToolTipText("Switch to halve render resolution (to get rid of scroll bars in exploration mode)");
       swfAnimatorHalveSizeButton.setText("Halve size");
       swfAnimatorHalveSizeButton.setPreferredSize(new Dimension(42, 24));

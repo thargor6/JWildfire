@@ -16,7 +16,6 @@
 */
 package org.jwildfire.create.tina.swing;
 
-import java.awt.Graphics;
 
 public class JobProgressUpdater implements ProgressUpdater {
   private final TinaInternalFrame parent;
@@ -33,13 +32,9 @@ public class JobProgressUpdater implements ProgressUpdater {
       parent.getBatchRenderJobProgressBar().setMaximum(pMaxSteps);
       parent.getBatchRenderJobProgressBar().invalidate();
       parent.getBatchRenderJobProgressBar().validate();
-      Graphics g = parent.getBatchRenderJobProgressBar().getGraphics();
-      if (g != null) {
-        parent.getBatchRenderJobProgressBar().paint(g);
-      }
     }
     catch (Throwable ex) {
-      //      ex.printStackTrace();
+      ex.printStackTrace();
     }
   }
 
@@ -49,13 +44,9 @@ public class JobProgressUpdater implements ProgressUpdater {
       parent.getBatchRenderJobProgressBar().setValue(pStep);
       parent.getBatchRenderJobProgressBar().invalidate();
       parent.getBatchRenderJobProgressBar().validate();
-      Graphics g = parent.getBatchRenderJobProgressBar().getGraphics();
-      if (g != null) {
-        parent.getBatchRenderJobProgressBar().paint(g);
-      }
     }
     catch (Throwable ex) {
-      //      ex.printStackTrace();
+      ex.printStackTrace();
     }
   }
 

@@ -40,6 +40,7 @@ public class AnimationService {
     ROTATE_FULL,
     ROTATE_SLIGHTLY,
     ROTATE_LAST_XFORM,
+    ROTATE_FIRST_XFORM
   }
 
   public static SimpleImage renderFrame(int pFrame, int pFrames, Flame pFlame1, Flame pFlame2, boolean pDoMorph, GlobalScript pGlobalScript, XFormScript pXFormScript, int pWidth, int pHeight, Prefs pPrefs) throws Exception {
@@ -63,7 +64,7 @@ public class AnimationService {
       flame = FlameMorphService.morphFlames(pFlame1, pFlame2, morphFrame, morphFrames);
     }
     else {
-      flame = pFlame1;
+      flame = pFlame1.makeCopy();
     }
     double wScl = (double) info.getImageWidth() / (double) flame.getWidth();
     double hScl = (double) info.getImageHeight() / (double) flame.getHeight();
@@ -126,6 +127,12 @@ public class AnimationService {
         break;
       case ROTATE_LAST_XFORM: {
         XForm xForm = flame.getXForms().get(flame.getXForms().size() - 1);
+        double angle = 360.0 / (double) pFrames * (double) (pFrame - 1);
+        XFormTransformService.rotate(xForm, angle);
+      }
+        break;
+      case ROTATE_FIRST_XFORM: {
+        XForm xForm = flame.getXForms().get(0);
         double angle = 360.0 / (double) pFrames * (double) (pFrame - 1);
         XFormTransformService.rotate(xForm, angle);
       }

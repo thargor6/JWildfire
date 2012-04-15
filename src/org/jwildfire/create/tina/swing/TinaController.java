@@ -647,10 +647,16 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     refreshResolutionProfileCmb(interactiveResolutionProfileCmb, null);
     refreshResolutionProfileCmb(batchResolutionProfileCmb, null);
     refreshResolutionProfileCmb(swfAnimatorResolutionProfileCmb, null);
+    if (swfAnimatorResolutionProfileCmb.getItemCount() > 0) {
+      swfAnimatorResolutionProfileCmb.setSelectedIndex(0);
+    }
     refreshQualityProfileCmb(qualityProfileCmb, null);
     refreshQualityProfileCmb(interactiveQualityProfileCmb, null);
     refreshQualityProfileCmb(batchQualityProfileCmb, null);
     refreshQualityProfileCmb(swfAnimatorQualityProfileCmb, null);
+    if (swfAnimatorQualityProfileCmb.getItemCount() > 0) {
+      swfAnimatorQualityProfileCmb.setSelectedIndex(0);
+    }
     scriptTextArea = pScriptTextArea;
 
     refreshPaletteColorsTable();
