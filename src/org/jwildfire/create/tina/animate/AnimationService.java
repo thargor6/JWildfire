@@ -43,8 +43,7 @@ public class AnimationService {
     ROTATE_FIRST_XFORM
   }
 
-  public static SimpleImage renderFrame(int pFrame, int pFrames, Flame pFlame1, Flame pFlame2, boolean pDoMorph, GlobalScript pGlobalScript, XFormScript pXFormScript, int pWidth, int pHeight, Prefs pPrefs) throws Exception {
-    RenderInfo info = new RenderInfo(pWidth, pHeight);
+  public static Flame createFlame(int pFrame, int pFrames, Flame pFlame1, Flame pFlame2, boolean pDoMorph, GlobalScript pGlobalScript, XFormScript pXFormScript, Prefs pPrefs) throws Exception {
     Flame flame;
     if (pDoMorph) {
       int morphFrames = pFrames / 2;
@@ -66,11 +65,6 @@ public class AnimationService {
     else {
       flame = pFlame1.makeCopy();
     }
-    double wScl = (double) info.getImageWidth() / (double) flame.getWidth();
-    double hScl = (double) info.getImageHeight() / (double) flame.getHeight();
-    flame.setPixelsPerUnit((wScl + hScl) * 0.5 * flame.getPixelsPerUnit());
-    flame.setWidth(info.getImageWidth());
-    flame.setHeight(info.getImageHeight());
     switch (pGlobalScript) {
       case ROTATE_PITCH: {
         double camPitch = 360.0 / (double) pFrames * (double) (pFrame - 1);
@@ -138,10 +132,20 @@ public class AnimationService {
       }
         break;
     }
-
+    return flame;
     //          flame.setCamRoll(86 - 20 * Math.sin((imgIdx - 1) * 4.0 * Math.PI / 72.0));
     //          flame.setCamYaw(-180 + 60 * Math.sin((imgIdx - 1) * 2.0 * Math.PI / 72.0));
 
+  }
+
+  public static SimpleImage renderFrame(int pFrame, int pFrames, Flame pFlame1, Flame pFlame2, boolean pDoMorph, GlobalScript pGlobalScript, XFormScript pXFormScript, int pWidth, int pHeight, Prefs pPrefs) throws Exception {
+    Flame flame = createFlame(pFrame, pFrames, pFlame1, pFlame2, pDoMorph, pGlobalScript, pXFormScript, pPrefs);
+    RenderInfo info = new RenderInfo(pWidth, pHeight);
+    double wScl = (double) info.getImageWidth() / (double) flame.getWidth();
+    double hScl = (double) info.getImageHeight() / (double) flame.getHeight();
+    flame.setPixelsPerUnit((wScl + hScl) * 0.5 * flame.getPixelsPerUnit());
+    flame.setWidth(info.getImageWidth());
+    flame.setHeight(info.getImageHeight());
     FlameRenderer renderer = new FlameRenderer(flame, pPrefs);
     RenderedFlame res = renderer.renderFlame(info);
     return res.getImage();

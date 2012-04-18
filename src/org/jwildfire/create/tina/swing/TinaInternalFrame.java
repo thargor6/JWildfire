@@ -3038,10 +3038,10 @@ public class TinaInternalFrame extends JInternalFrame {
           getSwfAnimatorGenerateButton(), getSwfAnimatorResolutionProfileCmb(),
           getSwfAnimatorQualityProfileCmb(), getSwfAnimatorLoadFlameFromMainButton(),
           getSwfAnimatorLoadFlameFromClipboardButton(), getSwfAnimatorLoadFlameButton(),
-          getSwfAnimatorHalveSizeButton(), getSwfAnimatorProgressBar(), getSwfAnimatorCancelButton(),
+          getSwfAnimatorHalfSizeButton(), getSwfAnimatorProgressBar(), getSwfAnimatorCancelButton(),
           getSwfAnimatorLoadSoundButton(), getSwfAnimatorClearSoundButton(),
           new SWFAnimatorProgressUpdater(this), getSwfAnimatorPreviewRootPanel(), getSwfAnimatorSoundCaptionLbl(),
-          getSwfAnimatorFrameSlider()));
+          getSwfAnimatorFrameSlider(), getSwfAnimatorFrameREd()));
       tinaController.getSwfAnimatorCtrl().enableControls();
 
     }
@@ -4587,7 +4587,7 @@ public class TinaInternalFrame extends JInternalFrame {
       panel_2.add(panel_8, BorderLayout.NORTH);
 
       JPanel panel_9 = new JPanel();
-      panel_9.setPreferredSize(new Dimension(10, 60));
+      panel_9.setPreferredSize(new Dimension(10, 50));
       panel_2.add(panel_9, BorderLayout.SOUTH);
       panel_9.setLayout(null);
 
@@ -4595,8 +4595,6 @@ public class TinaInternalFrame extends JInternalFrame {
       swfAnimatorFrameSlider.setMinorTickSpacing(5);
       swfAnimatorFrameSlider.setMinimum(1);
       swfAnimatorFrameSlider.setMajorTickSpacing(10);
-      swfAnimatorFrameSlider.setPaintTicks(true);
-      swfAnimatorFrameSlider.setPaintLabels(true);
       swfAnimatorFrameSlider.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           if (tinaController != null && tinaController.getSwfAnimatorCtrl() != null) {
@@ -4609,8 +4607,30 @@ public class TinaInternalFrame extends JInternalFrame {
       swfAnimatorFrameSlider.setPreferredSize(new Dimension(220, 19));
       swfAnimatorFrameSlider.setMaximum(60);
       swfAnimatorFrameSlider.setLocation(new Point(202, 4));
-      swfAnimatorFrameSlider.setBounds(6, 0, 436, 51);
+      swfAnimatorFrameSlider.setBounds(6, 0, 436, 19);
       panel_9.add(swfAnimatorFrameSlider);
+
+      swfAnimatorFrameREd = new JTextField();
+      swfAnimatorFrameREd.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          if (tinaController != null && tinaController.getSwfAnimatorCtrl() != null) {
+            tinaController.getSwfAnimatorCtrl().swfAnimatorFrameREd_changed();
+          }
+        }
+      });
+      swfAnimatorFrameREd.setText("60");
+      swfAnimatorFrameREd.setPreferredSize(new Dimension(56, 22));
+      swfAnimatorFrameREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      swfAnimatorFrameREd.setBounds(220, 22, 56, 22);
+      panel_9.add(swfAnimatorFrameREd);
+
+      JLabel lblFrame = new JLabel();
+      lblFrame.setHorizontalAlignment(SwingConstants.RIGHT);
+      lblFrame.setText("Frame");
+      lblFrame.setPreferredSize(new Dimension(94, 22));
+      lblFrame.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblFrame.setBounds(93, 22, 125, 22);
+      panel_9.add(lblFrame);
 
       swfAnimatorPreviewRootPanel = new JPanel();
       panel_2.add(swfAnimatorPreviewRootPanel, BorderLayout.CENTER);
@@ -4656,6 +4676,13 @@ public class TinaInternalFrame extends JInternalFrame {
   private JTextField getSwfAnimatorFramesREd() {
     if (swfAnimatorFramesREd == null) {
       swfAnimatorFramesREd = new JTextField();
+      swfAnimatorFramesREd.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          if (tinaController != null && tinaController.getSwfAnimatorCtrl() != null) {
+            tinaController.getSwfAnimatorCtrl().swfAnimatorFramesREd_changed();
+          }
+        }
+      });
       swfAnimatorFramesREd.setBounds(434, 23, 56, 22);
       swfAnimatorFramesREd.setPreferredSize(new Dimension(56, 22));
       swfAnimatorFramesREd.setText("60");
@@ -7963,7 +7990,7 @@ public class TinaInternalFrame extends JInternalFrame {
       rootTabbedPane.setEnabled(true);
       rootTabbedPane.addTab("Editor", null, getRootPanel(), null);
       rootTabbedPane.addTab("Interactive renderer", null, getInteractiveRenderPanel(), null);
-      rootTabbedPane.addTab("SFW Animator", null, getTinaSWFAnimatorPanel(), null);
+      rootTabbedPane.addTab("SWF Animator", null, getTinaSWFAnimatorPanel(), null);
       rootTabbedPane.addTab("Batch render", null, getBatchRenderPanel(), null);
 
       JPanel helpPanel = new JPanel();
@@ -7993,7 +8020,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JScrollPane interactiveStatsScrollPane;
   private JTextArea interactiveStatsTextArea;
   private JComboBox interactiveRandomStyleCmb;
-  private JToggleButton interactiveHalveSizeButton;
+  private JToggleButton interactiveHalfSizeButton;
   private JToggleButton affinePreserveZButton;
   private JButton qualityProfileBtn;
   private JButton resolutionProfileBtn;
@@ -8017,7 +8044,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton swfAnimatorLoadFlameButton;
   private JLabel label_1;
   private JLabel label_2;
-  private JToggleButton swfAnimatorHalveSizeButton;
+  private JToggleButton swfAnimatorHalfSizeButton;
   private JComboBox swfAnimatorResolutionProfileCmb;
   private JLabel label_3;
   private JLabel label_4;
@@ -8029,6 +8056,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JPanel swfAnimatorPreviewRootPanel;
   private JSlider swfAnimatorFrameSlider;
   private JLabel swfAnimatorSoundCaptionLbl;
+  private JTextField swfAnimatorFrameREd;
 
   private JTextPane getHelpPane() {
     if (helpPane == null) {
@@ -8849,19 +8877,19 @@ public class TinaInternalFrame extends JInternalFrame {
 
       interactiveNorthPanel.add(interactiveRandomStyleCmb);
 
-      interactiveHalveSizeButton = new JToggleButton();
-      interactiveHalveSizeButton.addActionListener(new ActionListener() {
+      interactiveHalfSizeButton = new JToggleButton();
+      interactiveHalfSizeButton.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
           tinaController.getInteractiveRendererCtrl().halveSizeButton_clicked();
         }
       });
-      interactiveHalveSizeButton.setToolTipText("Switch to halve render resolution (to get rid of scroll bars in exploration mode)");
-      interactiveHalveSizeButton.setText("Halve size");
-      interactiveHalveSizeButton.setPreferredSize(new Dimension(42, 24));
-      interactiveHalveSizeButton.setMnemonic(KeyEvent.VK_M);
-      interactiveHalveSizeButton.setFont(new Font("Dialog", Font.BOLD, 10));
-      interactiveHalveSizeButton.setBounds(230, 7, 125, 24);
-      interactiveNorthPanel.add(interactiveHalveSizeButton);
+      interactiveHalfSizeButton.setToolTipText("Switch to half render resolution (to get rid of scroll bars in exploration mode)");
+      interactiveHalfSizeButton.setText("Half size");
+      interactiveHalfSizeButton.setPreferredSize(new Dimension(42, 24));
+      interactiveHalfSizeButton.setMnemonic(KeyEvent.VK_M);
+      interactiveHalfSizeButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      interactiveHalfSizeButton.setBounds(230, 7, 125, 24);
+      interactiveNorthPanel.add(interactiveHalfSizeButton);
       interactiveNorthPanel.add(getInteractiveResolutionProfileCmb());
 
       interactiveQualityProfileCmb = new JComboBox();
@@ -9114,7 +9142,7 @@ public class TinaInternalFrame extends JInternalFrame {
   }
 
   public JToggleButton getInteractiveHalveSizeButton() {
-    return interactiveHalveSizeButton;
+    return interactiveHalfSizeButton;
   }
 
   public JToggleButton getAffinePreserveZButton() {
@@ -9249,7 +9277,7 @@ public class TinaInternalFrame extends JInternalFrame {
       lblFramesPerSecond.setText("Frames per second");
       lblFramesPerSecond.setPreferredSize(new Dimension(94, 22));
       lblFramesPerSecond.setFont(new Font("Dialog", Font.BOLD, 10));
-      panel_3.add(getSwfAnimatorHalveSizeButton());
+      panel_3.add(getSwfAnimatorHalfSizeButton());
       panel_3.add(getSwfAnimatorResolutionProfileCmb());
       panel_3.add(getLabel_3());
       panel_3.add(getLabel_4());
@@ -9433,18 +9461,18 @@ public class TinaInternalFrame extends JInternalFrame {
     return label_2;
   }
 
-  private JToggleButton getSwfAnimatorHalveSizeButton() {
-    if (swfAnimatorHalveSizeButton == null) {
-      swfAnimatorHalveSizeButton = new JToggleButton();
-      swfAnimatorHalveSizeButton.setSelected(true);
-      swfAnimatorHalveSizeButton.setToolTipText("Switch to halve render resolution (to get rid of scroll bars in exploration mode)");
-      swfAnimatorHalveSizeButton.setText("Halve size");
-      swfAnimatorHalveSizeButton.setPreferredSize(new Dimension(42, 24));
-      swfAnimatorHalveSizeButton.setMnemonic(KeyEvent.VK_M);
-      swfAnimatorHalveSizeButton.setFont(new Font("Dialog", Font.BOLD, 10));
-      swfAnimatorHalveSizeButton.setBounds(81, 13, 125, 24);
+  private JToggleButton getSwfAnimatorHalfSizeButton() {
+    if (swfAnimatorHalfSizeButton == null) {
+      swfAnimatorHalfSizeButton = new JToggleButton();
+      swfAnimatorHalfSizeButton.setSelected(true);
+      swfAnimatorHalfSizeButton.setToolTipText("Switch to half render resolution (to get rid of scroll bars in exploration mode)");
+      swfAnimatorHalfSizeButton.setText("Half size");
+      swfAnimatorHalfSizeButton.setPreferredSize(new Dimension(42, 24));
+      swfAnimatorHalfSizeButton.setMnemonic(KeyEvent.VK_M);
+      swfAnimatorHalfSizeButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      swfAnimatorHalfSizeButton.setBounds(81, 13, 125, 24);
     }
-    return swfAnimatorHalveSizeButton;
+    return swfAnimatorHalfSizeButton;
   }
 
   private JComboBox getSwfAnimatorResolutionProfileCmb() {
@@ -9532,5 +9560,9 @@ public class TinaInternalFrame extends JInternalFrame {
 
   public JLabel getSwfAnimatorSoundCaptionLbl() {
     return swfAnimatorSoundCaptionLbl;
+  }
+
+  public JTextField getSwfAnimatorFrameREd() {
+    return swfAnimatorFrameREd;
   }
 } //  @jve:decl-index=0:visual-constraint="10,10"

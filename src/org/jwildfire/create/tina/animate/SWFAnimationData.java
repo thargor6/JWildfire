@@ -16,6 +16,9 @@
 */
 package org.jwildfire.create.tina.animate;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.jwildfire.base.QualityProfile;
 import org.jwildfire.create.tina.animate.AnimationService.GlobalScript;
 import org.jwildfire.create.tina.animate.AnimationService.XFormScript;
@@ -28,6 +31,7 @@ public class SWFAnimationData {
   private GlobalScript globalScript;
   private XFormScript xFormScript;
   private QualityProfile qualityProfile;
+  private final List<Motion> motions = new ArrayList<Motion>();
 
   public Flame getFlame1() {
     return flame1;
@@ -75,6 +79,10 @@ public class SWFAnimationData {
 
   public void setSoundFilename(String soundFilename) {
     this.soundFilename = soundFilename;
+  }
+
+  public List<Motion> getMotions() {
+    return motions;
   }
 
 }

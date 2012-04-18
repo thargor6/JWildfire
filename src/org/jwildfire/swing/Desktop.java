@@ -94,6 +94,10 @@ public class Desktop extends JApplet {
       mainDesktopPane.add(getTinaInternalFrame(), null);
       mainDesktopPane.add(getEDENInternalFrame(), null);
       mainDesktopPane.add(getPreferencesInternalFrame(), null);
+      mainDesktopPane.add(getWelcomeInternalFrame(), null);
+      if (!welcomeInternalFrame.isVisible()) {
+        welcomeInternalFrame.setVisible(true);
+      }
       errorHandler = new StandardErrorHandler(mainDesktopPane, getShowErrorDlg(), getShowErrorDlgMessageTextArea(),
           getShowErrorDlgStacktraceTextArea());
 
@@ -1405,6 +1409,12 @@ public class Desktop extends JApplet {
         Desktop application = new Desktop();
         application.getJFrame().setVisible(true);
         application.initApp();
+        try {
+          application.getWelcomeInternalFrame().setSelected(true);
+        }
+        catch (Exception ex) {
+          ex.printStackTrace();
+        }
       }
     });
   }
@@ -1521,6 +1531,19 @@ public class Desktop extends JApplet {
     if (aboutMenuItem == null) {
       aboutMenuItem = new JMenuItem();
       aboutMenuItem.setText("About");
+      aboutMenuItem.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent e) {
+          if (!welcomeInternalFrame.isVisible()) {
+            welcomeInternalFrame.setVisible(true);
+          }
+          try {
+            welcomeInternalFrame.setSelected(true);
+          }
+          catch (PropertyVetoException ex) {
+            ex.printStackTrace();
+          }
+        }
+      });
     }
     return aboutMenuItem;
   }
@@ -1556,6 +1579,12 @@ public class Desktop extends JApplet {
     appletApplication = new Desktop();
     appletApplication.getJFrame().setVisible(true);
     appletApplication.initApp();
+    try {
+      appletApplication.getWelcomeInternalFrame().setSelected(true);
+    }
+    catch (Exception ex) {
+      ex.printStackTrace();
+    }
     super.start();
   }
 
@@ -1817,6 +1846,7 @@ public class Desktop extends JApplet {
   private JInternalFrame tinaInternalFrame = null;
 
   private JInternalFrame edenInternalFrame = null;
+  private JInternalFrame welcomeInternalFrame = null;
 
   void enableControls() {
     edenMenuItem.setSelected(edenInternalFrame.isVisible());
@@ -1914,6 +1944,13 @@ public class Desktop extends JApplet {
   private void tinaInternalFrame_internalFrameDeactivated(
       javax.swing.event.InternalFrameEvent e) {
     enableControls();
+  }
+
+  private JInternalFrame getWelcomeInternalFrame() {
+    if (welcomeInternalFrame == null) {
+      welcomeInternalFrame = new WelcomeInternalFrame();
+    }
+    return welcomeInternalFrame;
   }
 
 }

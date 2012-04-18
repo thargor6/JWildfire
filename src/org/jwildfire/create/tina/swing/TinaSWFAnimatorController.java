@@ -38,6 +38,7 @@ import javax.swing.JToggleButton;
 import org.jwildfire.base.Prefs;
 import org.jwildfire.base.QualityProfile;
 import org.jwildfire.base.ResolutionProfile;
+import org.jwildfire.create.tina.animate.AnimationService;
 import org.jwildfire.create.tina.animate.AnimationService.GlobalScript;
 import org.jwildfire.create.tina.animate.AnimationService.XFormScript;
 import org.jwildfire.create.tina.animate.SWFAnimationData;
@@ -61,6 +62,7 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
   private final JComboBox swfAnimatorGlobalScriptCmb;
   private final JComboBox swfAnimatorXFormScriptCmb;
   private final JTextField swfAnimatorFramesREd;
+  private final JTextField swfAnimatorFrameREd;
   private final JTextField swfAnimatorFramesPerSecondREd;
   private final JButton swfAnimatorGenerateButton;
   private final JComboBox swfAnimatorResolutionProfileCmb;
@@ -88,7 +90,8 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
       JButton pSWFAnimatorLoadFlameFromClipboardButton, JButton pSWFAnimatorLoadFlameButton,
       JToggleButton pSWFAnimatorHalveSizeButton, JProgressBar pSWFAnimatorProgressBar, JButton pSWFAnimatorCancelButton,
       JButton pSWFAnimatorLoadSoundButton, JButton pSWFAnimatorClearSoundButton, ProgressUpdater pRenderProgressUpdater,
-      JPanel pSWFAnimatorPreviewRootPanel, JLabel pSWFAnimatorSoundCaptionLbl, JSlider pSWFAnimatorFrameSlider) {
+      JPanel pSWFAnimatorPreviewRootPanel, JLabel pSWFAnimatorSoundCaptionLbl, JSlider pSWFAnimatorFrameSlider,
+      JTextField pSWFAnimatorFrameREd) {
     noRefresh = true;
     try {
       parentCtrl = pParentCtrl;
@@ -97,6 +100,7 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
       swfAnimatorGlobalScriptCmb = pSWFAnimatorGlobalScriptCmb;
       swfAnimatorXFormScriptCmb = pSWFAnimatorXFormScriptCmb;
       swfAnimatorFramesREd = pSWFAnimatorFramesREd;
+      swfAnimatorFrameREd = pSWFAnimatorFrameREd;
       swfAnimatorFramesPerSecondREd = pSWFAnimatorFramesPerSecondREd;
       swfAnimatorGenerateButton = pSWFAnimatorGenerateButton;
       swfAnimatorResolutionProfileCmb = pSWFAnimatorResolutionProfileCmb;
@@ -118,6 +122,7 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
       swfAnimatorFrameSlider.setMinimum(1);
       swfAnimatorFrameSlider.setMaximum(frameCount);
       swfAnimatorFramesREd.setText(String.valueOf(frameCount));
+      swfAnimatorFrameREd.setText(String.valueOf(1));
       enableControls();
     }
     finally {
@@ -130,6 +135,7 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
     boolean rendering = renderThread != null;
     swfAnimatorXFormScriptCmb.setEnabled(!rendering);
     swfAnimatorXFormScriptCmb.setEnabled(!rendering);
+    swfAnimatorFrameREd.setEnabled(!rendering);
     swfAnimatorFramesREd.setEnabled(!rendering);
     swfAnimatorFramesPerSecondREd.setEnabled(!rendering);
     swfAnimatorGenerateButton.setEnabled(!rendering && currAnimationData.getFlame1() != null);
@@ -419,8 +425,41 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
     }
   }
 
+  private void prepareFlame(Flame pFlame) {
+    pFlame.setSpatialFilterRadius(0.0);
+    pFlame.setSpatialOversample(1);
+    pFlame.setColorOversample(1);
+    pFlame.setSampleDensity(prefs.getTinaRenderRealtimeQuality());
+  }
+
   private Flame getCurrFlame() {
-    return currAnimationData.getFlame1();
+    boolean doMorph = currAnimationData.getFlame2() != null;
+    Flame flame1 = currAnimationData.getFlame1().makeCopy();
+    Flame flame2 = doMorph ? currAnimationData.getFlame2().makeCopy() : null;
+    prepareFlame(flame1);
+    if (flame2 != null) {
+      prepareFlame(flame2);
+    }
+    int frame = swfAnimatorFrameSlider.getValue();
+    boolean oldNoRefresh = noRefresh;
+    noRefresh = true;
+    try {
+      swfAnimatorFrameREd.setText(String.valueOf(frame));
+    }
+    finally {
+      noRefresh = oldNoRefresh;
+    }
+
+    int frameCount = Integer.parseInt(swfAnimatorFramesREd.getText());
+    GlobalScript globalScript = (GlobalScript) swfAnimatorGlobalScriptCmb.getSelectedItem();
+    XFormScript xFormScript = (XFormScript) swfAnimatorXFormScriptCmb.getSelectedItem();
+    try {
+      return AnimationService.createFlame(frame, frameCount, flame1, flame2, doMorph, globalScript, xFormScript, prefs);
+    }
+    catch (Throwable ex) {
+      ex.printStackTrace();
+      return null;
+    }
   }
 
   public void resolutionProfileCmb_changed() {
@@ -432,6 +471,36 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
     currFlame.setResolutionProfile(profile);
     removeFlamePanel();
     refreshFlameImage();
+  }
+
+  public void swfAnimatorFramesREd_changed() {
+    if (noRefresh)
+      return;
+    int frame = swfAnimatorFrameSlider.getValue();
+    int frameCount = Integer.parseInt(swfAnimatorFramesREd.getText());
+    swfAnimatorFrameSlider.setMaximum(frameCount);
+    if (frame > frameCount) {
+      frame = frameCount;
+      swfAnimatorFrameSlider.setValue(frameCount);
+    }
+  }
+
+  public void swfAnimatorFrameREd_changed() {
+    if (noRefresh)
+      return;
+    int frame = Integer.parseInt(swfAnimatorFrameREd.getText());
+    int frameCount = Integer.parseInt(swfAnimatorFramesREd.getText());
+    if (frame < 1) {
+      swfAnimatorFrameSlider.setValue(1);
+      swfAnimatorFrameREd.setText(String.valueOf(1));
+    }
+    else if (frame > frameCount) {
+      swfAnimatorFrameSlider.setValue(frameCount);
+      swfAnimatorFrameREd.setText(String.valueOf(frameCount));
+    }
+    else {
+      swfAnimatorFrameSlider.setValue(frame);
+    }
   }
 
 }

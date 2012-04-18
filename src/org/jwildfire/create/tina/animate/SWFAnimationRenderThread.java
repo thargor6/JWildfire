@@ -180,7 +180,21 @@ public class SWFAnimationRenderThread implements Runnable {
     final ImageFactory factory = new ImageFactory();
     File f = new File(tmpFilename);
     try {
-      factory.read(f);
+      int times = 0;
+      while (true) {
+        try {
+          factory.read(f);
+          break;
+        }
+        catch (Exception ex) {
+          if (++times > 3) {
+            throw ex;
+          }
+          ex.printStackTrace();
+          Thread.sleep(500);
+          System.out.println("RETRY...");
+        }
+      }
     }
     finally {
       if (!f.delete()) {
