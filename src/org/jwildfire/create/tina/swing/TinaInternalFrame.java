@@ -19,6 +19,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 
 import javax.swing.BorderFactory;
+import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -38,6 +39,7 @@ import javax.swing.JTextField;
 import javax.swing.JTextPane;
 import javax.swing.JToggleButton;
 import javax.swing.ListSelectionModel;
+import javax.swing.ScrollPaneConstants;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingConstants;
 import javax.swing.WindowConstants;
@@ -3041,7 +3043,7 @@ public class TinaInternalFrame extends JInternalFrame {
           getSwfAnimatorHalfSizeButton(), getSwfAnimatorProgressBar(), getSwfAnimatorCancelButton(),
           getSwfAnimatorLoadSoundButton(), getSwfAnimatorClearSoundButton(),
           new SWFAnimatorProgressUpdater(this), getSwfAnimatorPreviewRootPanel(), getSwfAnimatorSoundCaptionLbl(),
-          getSwfAnimatorFrameSlider(), getSwfAnimatorFrameREd()));
+          getSwfAnimatorFrameSlider(), getSwfAnimatorFrameREd(), getSwfAnimatorFlamesPanel(), getSwfAnimatorFlamesButtonGroup()));
       tinaController.getSwfAnimatorCtrl().enableControls();
 
     }
@@ -8057,6 +8059,8 @@ public class TinaInternalFrame extends JInternalFrame {
   private JSlider swfAnimatorFrameSlider;
   private JLabel swfAnimatorSoundCaptionLbl;
   private JTextField swfAnimatorFrameREd;
+  private JPanel swfAnimatorFlamesPanel;
+  private ButtonGroup swfAnimatorFlamesButtonGroup;
 
   private JTextPane getHelpPane() {
     if (helpPane == null) {
@@ -9327,8 +9331,24 @@ public class TinaInternalFrame extends JInternalFrame {
       animateXFormScriptLbl.setText("XForm script");
       animateXFormScriptLbl.setFont(new Font("Dialog", Font.BOLD, 10));
       panel_4.add(getSwfAnimatorXFormScriptCmb());
+
+      JScrollPane swfAnimatorFlamesScrollPane = new JScrollPane();
+      swfAnimatorFlamesScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
+      swfAnimatorFlamesScrollPane.setBounds(23, 116, 566, 178);
+      panel_4.add(swfAnimatorFlamesScrollPane);
+
+      swfAnimatorFlamesPanel = new JPanel();
+      swfAnimatorFlamesScrollPane.setViewportView(swfAnimatorFlamesPanel);
+      swfAnimatorFlamesPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 5));
     }
     return panel_4;
+  }
+
+  private ButtonGroup getSwfAnimatorFlamesButtonGroup() {
+    if (swfAnimatorFlamesButtonGroup == null) {
+      swfAnimatorFlamesButtonGroup = new ButtonGroup();
+    }
+    return swfAnimatorFlamesButtonGroup;
   }
 
   private JPanel getPanel_5() {
@@ -9564,5 +9584,9 @@ public class TinaInternalFrame extends JInternalFrame {
 
   public JTextField getSwfAnimatorFrameREd() {
     return swfAnimatorFrameREd;
+  }
+
+  public JPanel getSwfAnimatorFlamesPanel() {
+    return swfAnimatorFlamesPanel;
   }
 } //  @jve:decl-index=0:visual-constraint="10,10"

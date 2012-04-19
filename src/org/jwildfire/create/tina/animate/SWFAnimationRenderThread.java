@@ -47,14 +47,14 @@ public class SWFAnimationRenderThread implements Runnable {
   private final int frameHeight;
   private final double framesPerSecond;
   private boolean cancelSignalled;
-  private SWFAnimationData animationData;
+  private FlameAnimation animationData;
   private SoundFactory soundFactory;
   private Movie movie;
   private int uid;
   private Throwable lastError;
   private String tmpBasefilename;
 
-  public SWFAnimationRenderThread(SWFAnimationRenderThreadController pController, int pFrameCount, int pFrameWidth, int pFrameHeight, double pFramesPerSecond, SWFAnimationData pAnimationData, String pOutputFilename) {
+  public SWFAnimationRenderThread(SWFAnimationRenderThreadController pController, int pFrameCount, int pFrameWidth, int pFrameHeight, double pFramesPerSecond, FlameAnimation pAnimationData, String pOutputFilename) {
     controller = pController;
     frameCount = pFrameCount;
     frameWidth = pFrameWidth;
@@ -101,14 +101,9 @@ public class SWFAnimationRenderThread implements Runnable {
   }
 
   private SimpleImage renderImage(int pFrame) throws Exception {
-    boolean doMorph = animationData.getFlame2() != null;
-    Flame flame1 = animationData.getFlame1().makeCopy();
-    Flame flame2 = doMorph ? animationData.getFlame2().makeCopy() : null;
+    Flame flame1 = animationData.getFlame(pFrame);
     prepareFlame(flame1);
-    if (flame2 != null) {
-      prepareFlame(flame2);
-    }
-    return AnimationService.renderFrame(pFrame, frameCount, flame1, flame2, doMorph, animationData.getGlobalScript(), animationData.getxFormScript(), frameWidth, frameHeight, controller.getPrefs());
+    return AnimationService.renderFrame(pFrame, frameCount, flame1, null, false, animationData.getGlobalScript(), animationData.getxFormScript(), frameWidth, frameHeight, controller.getPrefs());
   }
 
   private void addImageToMovie(SimpleImage pImage, int pFrame) throws Exception {

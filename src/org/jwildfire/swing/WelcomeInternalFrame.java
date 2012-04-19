@@ -31,7 +31,8 @@ public class WelcomeInternalFrame extends JInternalFrame {
     panel_1.setPreferredSize(new Dimension(10, 100));
     getContentPane().add(panel_1, BorderLayout.SOUTH);
     setTitle("Welcome to JWildfire! :-)");
-    setBounds(100, 100, 660, 490);
+    //    setBounds(100, 100, 660, 490);
+    setBounds(1, 1, 6, 9);
 
     try {
       String imageFilename = imageFilenames[(int) (Math.random() * imageFilenames.length)];

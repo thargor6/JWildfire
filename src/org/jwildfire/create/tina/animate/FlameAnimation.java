@@ -24,30 +24,13 @@ import org.jwildfire.create.tina.animate.AnimationService.GlobalScript;
 import org.jwildfire.create.tina.animate.AnimationService.XFormScript;
 import org.jwildfire.create.tina.base.Flame;
 
-public class SWFAnimationData {
-  private Flame flame1;
-  private Flame flame2;
+public class FlameAnimation {
   private String soundFilename;
   private GlobalScript globalScript;
   private XFormScript xFormScript;
   private QualityProfile qualityProfile;
   private final List<Motion> motions = new ArrayList<Motion>();
-
-  public Flame getFlame1() {
-    return flame1;
-  }
-
-  public void setFlame1(Flame flame1) {
-    this.flame1 = flame1;
-  }
-
-  public Flame getFlame2() {
-    return flame2;
-  }
-
-  public void setFlame2(Flame flame2) {
-    this.flame2 = flame2;
-  }
+  private final List<FlameAnimationPart> parts = new ArrayList<FlameAnimationPart>();
 
   public GlobalScript getGlobalScript() {
     return globalScript;
@@ -85,4 +68,29 @@ public class SWFAnimationData {
     return motions;
   }
 
+  public int getFrameCount() {
+    int res = 0;
+    for (FlameAnimationPart part : parts) {
+      if (part.getFrameCount() > 0) {
+        res += part.getFrameCount();
+      }
+    }
+    return res;
+  }
+
+  public void addPart(FlameAnimationPart pPart) {
+    parts.add(pPart);
+  }
+
+  public Flame getFlame(int pFrame) {
+    int currFrame = 0;
+    for (int i = 0; i < parts.size(); i++) {
+      FlameAnimationPart part = parts.get(i);
+      currFrame += part.getFrameCount();
+      if (currFrame >= pFrame) {
+        return part.getFlame().makeCopy();
+      }
+    }
+    return null;
+  }
 }

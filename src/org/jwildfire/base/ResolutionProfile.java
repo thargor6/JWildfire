@@ -65,4 +65,7 @@ public class ResolutionProfile implements Cloneable {
     this.defaultProfile = defaultProfile;
   }
 
+  public double getAspect() {
+    return (double) width / (double) height;
+  }
 }
