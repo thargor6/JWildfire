@@ -37,7 +37,9 @@ public class WelcomeInternalFrame extends JInternalFrame {
     try {
       String imageFilename = imageFilenames[(int) (Math.random() * imageFilenames.length)];
       SimpleImage img = getImage(imageFilename);
-      ImagePanel imgPanel = new ImagePanel(img, 0, 0, img.getImageWidth());
+      int parentWidth = getContentPane().getWidth();
+      System.out.println("WW: " + parentWidth + " " + img.getImageWidth());
+      ImagePanel imgPanel = new ImagePanel(img, (parentWidth - img.getImageWidth()) / 2, 0, img.getImageWidth());
       getContentPane().add(imgPanel, BorderLayout.CENTER);
 
     }

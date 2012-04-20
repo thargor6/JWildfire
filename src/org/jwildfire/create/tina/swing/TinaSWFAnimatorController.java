@@ -46,6 +46,7 @@ import org.jwildfire.create.tina.animate.AnimationService.GlobalScript;
 import org.jwildfire.create.tina.animate.AnimationService.XFormScript;
 import org.jwildfire.create.tina.animate.FlameAnimation;
 import org.jwildfire.create.tina.animate.FlameAnimationPart;
+import org.jwildfire.create.tina.animate.OutputFormat;
 import org.jwildfire.create.tina.animate.SWFAnimationRenderThread;
 import org.jwildfire.create.tina.animate.SWFAnimationRenderThreadController;
 import org.jwildfire.create.tina.base.Flame;
@@ -86,6 +87,7 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
   private final JSlider swfAnimatorFrameSlider;
   private final JPanel swfAnimatorFlamesPanel;
   private final ButtonGroup swfAnimatorFlamesButtonGroup;
+  private final JComboBox swfAnimatorOutputCmb;
   private FlamePanel flamePanel;
 
   private boolean noRefresh;
@@ -98,7 +100,8 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
       JToggleButton pSWFAnimatorHalveSizeButton, JProgressBar pSWFAnimatorProgressBar, JButton pSWFAnimatorCancelButton,
       JButton pSWFAnimatorLoadSoundButton, JButton pSWFAnimatorClearSoundButton, ProgressUpdater pRenderProgressUpdater,
       JPanel pSWFAnimatorPreviewRootPanel, JLabel pSWFAnimatorSoundCaptionLbl, JSlider pSWFAnimatorFrameSlider,
-      JTextField pSWFAnimatorFrameREd, JPanel pSWFAnimatorFlamesPanel, ButtonGroup pSWFAnimatorFlamesButtonGroup) {
+      JTextField pSWFAnimatorFrameREd, JPanel pSWFAnimatorFlamesPanel, ButtonGroup pSWFAnimatorFlamesButtonGroup,
+      JComboBox pSWFAnimatorOutputCmb) {
     noRefresh = true;
     try {
       parentCtrl = pParentCtrl;
@@ -126,6 +129,13 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
       swfAnimatorFrameSlider = pSWFAnimatorFrameSlider;
       swfAnimatorFlamesPanel = pSWFAnimatorFlamesPanel;
       swfAnimatorFlamesButtonGroup = pSWFAnimatorFlamesButtonGroup;
+      swfAnimatorOutputCmb = pSWFAnimatorOutputCmb;
+
+      swfAnimatorOutputCmb.addItem(OutputFormat.PNG);
+      swfAnimatorOutputCmb.addItem(OutputFormat.SWF);
+      swfAnimatorOutputCmb.addItem(OutputFormat.SWF_AND_PNG);
+      swfAnimatorOutputCmb.setSelectedItem(OutputFormat.SWF_AND_PNG);
+
       int frameCount = prefs.getTinaRenderMovieFrames();
       swfAnimatorFrameSlider.setValue(1);
       swfAnimatorFrameSlider.setMinimum(1);
@@ -182,7 +192,7 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
     part.setFlame(pFlame);
     part.setFrameCount(120);
     part.setFrameMorphCount(0);
-    addFlameToFlamePanel(pFlame);
+    addFlameToFlamePanel(part);
     currAnimation.addPart(part);
     noRefresh = true;
     try {
@@ -196,7 +206,7 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
     refreshFlameImage();
   }
 
-  private void addFlameToFlamePanel(Flame pFlame) {
+  private void addFlameToFlamePanel(FlameAnimationPart pPart) {
     final int PANEL_HEIGHT = 240;
     final int LABEL_WIDTH = 100;
     final int FIELD_WIDTH = 50;
@@ -226,7 +236,7 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
       SimpleImage img;
       {
         RenderInfo info = new RenderInfo(imageWidth, imageHeight);
-        Flame flame = pFlame.makeCopy();
+        Flame flame = pPart.getFlame().makeCopy();
         double wScl = (double) info.getImageWidth() / (double) flame.getWidth();
         double hScl = (double) info.getImageHeight() / (double) flame.getHeight();
         flame.setPixelsPerUnit((wScl + hScl) * 0.5 * flame.getPixelsPerUnit());
@@ -248,6 +258,7 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
       framesLbl.setBounds(xOff + BORDER_SIZE, yOff, LABEL_WIDTH, LABEL_HEIGHT);
       panel.add(framesLbl);
       JTextField framesField = new JTextField();
+      framesField.setText(String.valueOf(pPart.getFrameCount()));
       framesField.setBounds(xOff + BORDER_SIZE + LABEL_WIDTH, yOff, FIELD_WIDTH, FIELD_HEIGHT);
       panel.add(framesField);
     }
@@ -257,6 +268,7 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
       framesMorphLbl.setBounds(xOff + BORDER_SIZE, yOff, LABEL_WIDTH, LABEL_HEIGHT);
       panel.add(framesMorphLbl);
       JTextField framesMorphField = new JTextField();
+      framesMorphField.setText(String.valueOf(pPart.getFrameMorphCount()));
       framesMorphField.setBounds(xOff + BORDER_SIZE + LABEL_WIDTH, yOff, FIELD_WIDTH, FIELD_HEIGHT);
       panel.add(framesMorphField);
     }
@@ -565,18 +577,6 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
     currFlame.setResolutionProfile(profile);
     removeFlamePanel();
     refreshFlameImage();
-  }
-
-  public void swfAnimatorFramesREd_changed() {
-    if (noRefresh)
-      return;
-    int frame = swfAnimatorFrameSlider.getValue();
-    int frameCount = Integer.parseInt(swfAnimatorFramesREd.getText());
-    swfAnimatorFrameSlider.setMaximum(frameCount);
-    if (frame > frameCount) {
-      frame = frameCount;
-      swfAnimatorFrameSlider.setValue(frameCount);
-    }
   }
 
   public void swfAnimatorFrameREd_changed() {
