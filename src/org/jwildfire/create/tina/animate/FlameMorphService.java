@@ -74,6 +74,28 @@ public class FlameMorphService {
       int blue = Tools.roundColor(color1.getBlue() + (color2.getBlue() - color1.getBlue()) * fScl);
       res.getPalette().setColor(i, red, green, blue);
     }
+    // morph camera settings etc.
+    res.setCamDOF(morphValue(pFlame1.getCamDOF(), pFlame2.getCamDOF(), fScl));
+    res.setCamPerspective(morphValue(pFlame1.getCamPerspective(), pFlame2.getCamPerspective(), fScl));
+    res.setCamPitch(morphValue(pFlame1.getCamPitch(), pFlame2.getCamPitch(), fScl));
+    res.setCamYaw(morphValue(pFlame1.getCamYaw(), pFlame2.getCamYaw(), fScl));
+    res.setCamRoll(morphValue(pFlame1.getCamRoll(), pFlame2.getCamRoll(), fScl));
+    res.setCamZ(morphValue(pFlame1.getCamZ(), pFlame2.getCamZ(), fScl));
+    res.setCamZoom(morphValue(pFlame1.getCamZoom(), pFlame2.getCamZoom(), fScl));
+    res.setBGColorRed(morphColorValue(pFlame1.getBGColorRed(), pFlame2.getBGColorRed(), fScl));
+    res.setBGColorGreen(morphColorValue(pFlame1.getBGColorGreen(), pFlame2.getBGColorGreen(), fScl));
+    res.setBGColorBlue(morphColorValue(pFlame1.getBGColorBlue(), pFlame2.getBGColorBlue(), fScl));
+    res.setBrightness(morphValue(pFlame1.getBrightness(), pFlame2.getBrightness(), fScl));
+    res.setCentreX(morphValue(pFlame1.getCentreX(), pFlame2.getCentreX(), fScl));
+    res.setCentreY(morphValue(pFlame1.getCentreY(), pFlame2.getCentreY(), fScl));
+    res.setContrast(morphValue(pFlame1.getContrast(), pFlame2.getContrast(), fScl));
+    res.setGamma(morphValue(pFlame1.getGamma(), pFlame2.getGamma(), fScl));
+    res.setGammaThreshold(morphValue(pFlame1.getGammaThreshold(), pFlame2.getGammaThreshold(), fScl));
+    res.setPixelsPerUnit(morphValue(pFlame1.getPixelsPerUnit(), pFlame2.getPixelsPerUnit(), fScl));
+    res.setPreserveZ(morphValue(pFlame1.isPreserveZ(), pFlame2.isPreserveZ(), fScl));
+    res.setSpatialFilterRadius(morphValue(pFlame1.getSpatialFilterRadius(), pFlame2.getSpatialFilterRadius(), fScl));
+    res.setVibrancy(morphValue(pFlame1.getVibrancy(), pFlame2.getVibrancy(), fScl));
+    res.setWhiteLevel(morphValue(pFlame1.getWhiteLevel(), pFlame2.getWhiteLevel(), fScl));
     return res;
   }
 
@@ -192,5 +214,29 @@ public class FlameMorphService {
       pFScl = 1.0;
     }
     return pValue1 + (pValue2 - pValue1) * pFScl;
+  }
+
+  private static int morphValue(int pValue1, int pValue2, double pFScl) {
+    if (pFScl < 0.0) {
+      pFScl = 0.0;
+    }
+    else if (pFScl > 1.0) {
+      pFScl = 1.0;
+    }
+    return Tools.FTOI(pValue1 + (double) (pValue2 - pValue1) * pFScl);
+  }
+
+  private static boolean morphValue(boolean pValue1, boolean pValue2, double pFScl) {
+    return pFScl >= 0.5 ? pValue2 : pValue1;
+  }
+
+  private static int morphColorValue(int pValue1, int pValue2, double pFScl) {
+    if (pFScl < 0.0) {
+      pFScl = 0.0;
+    }
+    else if (pFScl > 1.0) {
+      pFScl = 1.0;
+    }
+    return Tools.roundColor((double) pValue1 + (double) (pValue2 - pValue1) * pFScl);
   }
 }

@@ -62,6 +62,8 @@
       <fileset dir="${src.dir}" includes="org/jwildfire/**/*.xml"/>
       <fileset dir="${src.dir}" includes="org/jwildfire/**/*.html"/>
       <fileset dir="${src.dir}" includes="org/jwildfire/swing/icons/*.gif"/>
+      <fileset dir="${src.dir}" includes="org/jwildfire/swing/welcomescreen/*.png"/>
+      <fileset dir="${src.dir}" includes="org/jwildfire/swing/welcomescreen/*.jpg"/>
       <fileset dir="${build.dir}" includes="com/"/>
       <fileset dir="${build.dir}" includes="odk/"/>
       <zipfileset src="lib/jep-2.4.1.jar"/>

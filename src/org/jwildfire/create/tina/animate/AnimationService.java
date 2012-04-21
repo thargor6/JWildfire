@@ -43,28 +43,8 @@ public class AnimationService {
     ROTATE_FIRST_XFORM
   }
 
-  public static Flame createFlame(int pFrame, int pFrames, Flame pFlame1, Flame pFlame2, boolean pDoMorph, GlobalScript pGlobalScript, XFormScript pXFormScript, Prefs pPrefs) throws Exception {
-    Flame flame;
-    if (pDoMorph) {
-      int morphFrames = pFrames / 2;
-      int morphFrame;
-      if (pFrame <= morphFrames) {
-        morphFrame = pFrame;
-      }
-      else {
-        morphFrame = morphFrames - (pFrame - morphFrames);
-        if (morphFrame < 1) {
-          morphFrame = 1;
-        }
-        else if (morphFrame > morphFrames) {
-          morphFrame = morphFrames;
-        }
-      }
-      flame = FlameMorphService.morphFlames(pFlame1, pFlame2, morphFrame, morphFrames);
-    }
-    else {
-      flame = pFlame1.makeCopy();
-    }
+  public static Flame createFlame(int pFrame, int pFrames, Flame pFlame, GlobalScript pGlobalScript, XFormScript pXFormScript, Prefs pPrefs) throws Exception {
+    Flame flame = pFlame.makeCopy();
     switch (pGlobalScript) {
       case ROTATE_PITCH: {
         double camPitch = 360.0 / (double) pFrames * (double) (pFrame - 1);
@@ -138,8 +118,8 @@ public class AnimationService {
 
   }
 
-  public static SimpleImage renderFrame(int pFrame, int pFrames, Flame pFlame1, Flame pFlame2, boolean pDoMorph, GlobalScript pGlobalScript, XFormScript pXFormScript, int pWidth, int pHeight, Prefs pPrefs) throws Exception {
-    Flame flame = createFlame(pFrame, pFrames, pFlame1, pFlame2, pDoMorph, pGlobalScript, pXFormScript, pPrefs);
+  public static SimpleImage renderFrame(int pFrame, int pFrames, Flame pFlame, GlobalScript pGlobalScript, XFormScript pXFormScript, int pWidth, int pHeight, Prefs pPrefs) throws Exception {
+    Flame flame = createFlame(pFrame, pFrames, pFlame, pGlobalScript, pXFormScript, pPrefs);
     RenderInfo info = new RenderInfo(pWidth, pHeight);
     double wScl = (double) info.getImageWidth() / (double) flame.getWidth();
     double hScl = (double) info.getImageHeight() / (double) flame.getHeight();

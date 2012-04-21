@@ -88,6 +88,14 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
   private final JPanel swfAnimatorFlamesPanel;
   private final ButtonGroup swfAnimatorFlamesButtonGroup;
   private final JComboBox swfAnimatorOutputCmb;
+  private final JButton swfAnimatorMoveUpButton;
+  private final JButton swfAnimatorMoveDownButton;
+  private final JButton swfAnimatorRemoveFlameButton;
+  private final JButton swfAnimatorRemoveAllFlamesButton;
+  private final JButton swfAnimatorMovieFromClipboardButton;
+  private final JButton swfAnimatorMovieFromDiskButton;
+  private final JButton swfAnimatorMovieToClipboardButton;
+  private final JButton swfAnimatorMovieToDiskButton;
   private FlamePanel flamePanel;
 
   private boolean noRefresh;
@@ -101,7 +109,9 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
       JButton pSWFAnimatorLoadSoundButton, JButton pSWFAnimatorClearSoundButton, ProgressUpdater pRenderProgressUpdater,
       JPanel pSWFAnimatorPreviewRootPanel, JLabel pSWFAnimatorSoundCaptionLbl, JSlider pSWFAnimatorFrameSlider,
       JTextField pSWFAnimatorFrameREd, JPanel pSWFAnimatorFlamesPanel, ButtonGroup pSWFAnimatorFlamesButtonGroup,
-      JComboBox pSWFAnimatorOutputCmb) {
+      JComboBox pSWFAnimatorOutputCmb, JButton pSWFAnimatorMoveUpButton, JButton pSWFAnimatorMoveDownButton,
+      JButton pSWFAnimatorRemoveFlameButton, JButton pSWFAnimatorRemoveAllFlamesButton, JButton pSWFAnimatorMovieFromClipboardButton,
+      JButton pSWFAnimatorMovieFromDiskButton, JButton pSWFAnimatorMovieToClipboardButton, JButton pSWFAnimatorMovieToDiskButton) {
     noRefresh = true;
     try {
       parentCtrl = pParentCtrl;
@@ -130,6 +140,14 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
       swfAnimatorFlamesPanel = pSWFAnimatorFlamesPanel;
       swfAnimatorFlamesButtonGroup = pSWFAnimatorFlamesButtonGroup;
       swfAnimatorOutputCmb = pSWFAnimatorOutputCmb;
+      swfAnimatorMoveUpButton = pSWFAnimatorMoveUpButton;
+      swfAnimatorMoveDownButton = pSWFAnimatorMoveDownButton;
+      swfAnimatorRemoveFlameButton = pSWFAnimatorRemoveFlameButton;
+      swfAnimatorRemoveAllFlamesButton = pSWFAnimatorRemoveAllFlamesButton;
+      swfAnimatorMovieFromClipboardButton = pSWFAnimatorMovieFromClipboardButton;
+      swfAnimatorMovieFromDiskButton = pSWFAnimatorMovieFromDiskButton;
+      swfAnimatorMovieToClipboardButton = pSWFAnimatorMovieToClipboardButton;
+      swfAnimatorMovieToDiskButton = pSWFAnimatorMovieToDiskButton;
 
       swfAnimatorOutputCmb.addItem(OutputFormat.PNG);
       swfAnimatorOutputCmb.addItem(OutputFormat.SWF);
@@ -296,6 +314,11 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
     {
       JRadioButton selectButton = new JRadioButton("");
       selectButton.setBounds(BORDER_SIZE + LABEL_WIDTH, yOff, FIELD_WIDTH + 1, FIELD_HEIGHT);
+      selectButton.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent e) {
+          enableControls();
+        }
+      });
       panel.add(selectButton);
       swfAnimatorFlamesButtonGroup.add(selectButton);
     }
@@ -576,7 +599,7 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
     GlobalScript globalScript = (GlobalScript) swfAnimatorGlobalScriptCmb.getSelectedItem();
     XFormScript xFormScript = (XFormScript) swfAnimatorXFormScriptCmb.getSelectedItem();
     try {
-      return AnimationService.createFlame(frame, frameCount, flame, null, false, globalScript, xFormScript, prefs);
+      return AnimationService.createFlame(frame, frameCount, flame, globalScript, xFormScript, prefs);
     }
     catch (Throwable ex) {
       ex.printStackTrace();
@@ -644,5 +667,45 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
     catch (Throwable ex) {
       errorHandler.handleError(ex);
     }
+  }
+
+  public void flameMoveUpButton_clicked() {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void flameMoveDownButton_clicked() {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void removeFlameButton_clicked() {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void clearAllFlamesButton_clicked() {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void movieFromClipboardButton_clicked() {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void movieFromDiskButton_clicked() {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void movieToClipboardButton_clicked() {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void movieToDiskButton_clicked() {
+    // TODO Auto-generated method stub
+
   }
 }
