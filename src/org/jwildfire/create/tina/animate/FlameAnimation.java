@@ -88,7 +88,17 @@ public class FlameAnimation {
       FlameAnimationPart part = parts.get(i);
       currFrame += part.getFrameCount();
       if (currFrame >= pFrame) {
-        return part.getFlame().makeCopy();
+        Flame flame1 = part.getFlame().makeCopy();
+        int morphFrames = part.getFrameMorphCount();
+        if (morphFrames == 0 || pFrame < (currFrame - morphFrames) || i == (parts.size() - 1)) {
+          return flame1;
+        }
+        else {
+          Flame flame2 = parts.get(i + 1).getFlame().makeCopy();
+          int morphFrame = pFrame - (currFrame - morphFrames);
+          System.out.println(pFrame + ": " + morphFrame);
+          return FlameMorphService.morphFlames(flame1, flame2, morphFrame, morphFrames);
+        }
       }
     }
     return null;

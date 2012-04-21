@@ -194,19 +194,29 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
     part.setFrameMorphCount(0);
     addFlameToFlamePanel(part);
     currAnimation.addPart(part);
+    refreshFrameCount();
+    refreshFlameImage();
+  }
+
+  private void refreshFrameCount() {
     noRefresh = true;
     try {
+      int value = swfAnimatorFrameSlider.getValue();
       int frameCount = currAnimation.getFrameCount();
       swfAnimatorFrameSlider.setMaximum(frameCount);
       swfAnimatorFramesREd.setText(String.valueOf(frameCount));
+      if (value > frameCount) {
+        swfAnimatorFrameSlider.setValue(frameCount);
+        swfAnimatorFrameREd.setText(String.valueOf(frameCount));
+        refreshFlameImage();
+      }
     }
     finally {
       noRefresh = false;
     }
-    refreshFlameImage();
   }
 
-  private void addFlameToFlamePanel(FlameAnimationPart pPart) {
+  private void addFlameToFlamePanel(final FlameAnimationPart pPart) {
     final int PANEL_HEIGHT = 240;
     final int LABEL_WIDTH = 100;
     final int FIELD_WIDTH = 50;
@@ -257,9 +267,14 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
       JLabel framesLbl = new JLabel("Duration (frames)");
       framesLbl.setBounds(xOff + BORDER_SIZE, yOff, LABEL_WIDTH, LABEL_HEIGHT);
       panel.add(framesLbl);
-      JTextField framesField = new JTextField();
+      final JTextField framesField = new JTextField();
       framesField.setText(String.valueOf(pPart.getFrameCount()));
       framesField.setBounds(xOff + BORDER_SIZE + LABEL_WIDTH, yOff, FIELD_WIDTH, FIELD_HEIGHT);
+      framesField.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent e) {
+          framesFieldChanged(framesField, pPart);
+        }
+      });
       panel.add(framesField);
     }
     yOff += FIELD_HEIGHT;
@@ -267,9 +282,14 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
       JLabel framesMorphLbl = new JLabel("Morph (frames)");
       framesMorphLbl.setBounds(xOff + BORDER_SIZE, yOff, LABEL_WIDTH, LABEL_HEIGHT);
       panel.add(framesMorphLbl);
-      JTextField framesMorphField = new JTextField();
+      final JTextField framesMorphField = new JTextField();
       framesMorphField.setText(String.valueOf(pPart.getFrameMorphCount()));
       framesMorphField.setBounds(xOff + BORDER_SIZE + LABEL_WIDTH, yOff, FIELD_WIDTH, FIELD_HEIGHT);
+      framesMorphField.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent e) {
+          framesMorphFieldChanged(framesMorphField, pPart);
+        }
+      });
       panel.add(framesMorphField);
     }
     yOff += FIELD_HEIGHT;
@@ -334,10 +354,6 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
     catch (Throwable ex) {
       errorHandler.handleError(ex);
     }
-  }
-
-  public void customScriptButton_clicked() {
-    enableControls();
   }
 
   public void cancelButton_clicked() {
@@ -452,7 +468,7 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
   private QualityProfile getQualityProfile() {
     QualityProfile res = (QualityProfile) swfAnimatorQualityProfileCmb.getSelectedItem();
     if (res == null) {
-      res = new QualityProfile(false, "default", 1, 1, 0, true, false);
+      res = new QualityProfile(false, "default", 1, 1, 200, true, false);
     }
     return res;
   }
@@ -597,4 +613,36 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
     }
   }
 
+  private void framesFieldChanged(JTextField pFramesField, FlameAnimationPart pPart) {
+    try {
+      int frameCount = Integer.parseInt(pFramesField.getText());
+      if (frameCount < 0) {
+        frameCount = 0;
+        pFramesField.setText(String.valueOf(frameCount));
+      }
+      pPart.setFrameCount(frameCount);
+      refreshFrameCount();
+    }
+    catch (Throwable ex) {
+      errorHandler.handleError(ex);
+    }
+  }
+
+  private void framesMorphFieldChanged(JTextField pMorphFramesField, FlameAnimationPart pPart) {
+    try {
+      int framesMorphCount = Integer.parseInt(pMorphFramesField.getText());
+      if (framesMorphCount < 0) {
+        framesMorphCount = 0;
+        pMorphFramesField.setText(String.valueOf(framesMorphCount));
+      }
+      else if (framesMorphCount > pPart.getFrameCount()) {
+        framesMorphCount = pPart.getFrameCount();
+        pMorphFramesField.setText(String.valueOf(framesMorphCount));
+      }
+      pPart.setFrameMorphCount(framesMorphCount);
+    }
+    catch (Throwable ex) {
+      errorHandler.handleError(ex);
+    }
+  }
 }
