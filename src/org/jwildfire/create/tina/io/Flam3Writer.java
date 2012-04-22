@@ -102,7 +102,7 @@ public class Flam3Writer {
     SimpleXMLBuilder xb = new SimpleXMLBuilder();
     // Flame
     List<SimpleXMLBuilder.Attribute<?>> attrList = new ArrayList<SimpleXMLBuilder.Attribute<?>>();
-    attrList.add(xb.createAttr("name", "JWildfire"));
+    attrList.add(xb.createAttr("name", Tools.APP_TITLE));
     attrList.add(xb.createAttr("version", Tools.APP_VERSION));
     attrList.add(xb.createAttr("size", pFlame.getWidth() + " " + pFlame.getHeight()));
     attrList.add(xb.createAttr("center", pFlame.getCentreX() + " " + pFlame.getCentreY()));

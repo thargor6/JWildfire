@@ -105,8 +105,12 @@ public class QualityProfile implements Cloneable {
     this.defaultProfile = defaultProfile;
   }
 
+  public static final int calculateQualityIndex(int pSpatialOversample, int pColorOversample, int pQuality) {
+    return pSpatialOversample * pColorOversample * pQuality;
+  }
+
   public int getQualityIndex() {
-    return spatialOversample * colorOversample * quality;
+    return calculateQualityIndex(spatialOversample, colorOversample, quality);
   }
 
 }

@@ -42,25 +42,17 @@ import com.flagstone.transform.util.sound.SoundFactory;
 public class SWFAnimationRenderThread implements Runnable {
   private final SWFAnimationRenderThreadController controller;
   private final String outputFilename;
-  private final int frameCount;
-  private final int frameWidth;
-  private final int frameHeight;
-  private final double framesPerSecond;
   private boolean cancelSignalled;
-  private FlameAnimation animationData;
+  private FlameMovie flameMovie;
   private SoundFactory soundFactory;
   private Movie movie;
   private int uid;
   private Throwable lastError;
   private String tmpBasefilename;
 
-  public SWFAnimationRenderThread(SWFAnimationRenderThreadController pController, int pFrameCount, int pFrameWidth, int pFrameHeight, double pFramesPerSecond, FlameAnimation pAnimationData, String pOutputFilename) {
+  public SWFAnimationRenderThread(SWFAnimationRenderThreadController pController, FlameMovie pAnimation, String pOutputFilename) {
     controller = pController;
-    frameCount = pFrameCount;
-    frameWidth = pFrameWidth;
-    frameHeight = pFrameHeight;
-    framesPerSecond = pFramesPerSecond;
-    animationData = pAnimationData;
+    flameMovie = pAnimation;
     outputFilename = pOutputFilename;
   }
 
@@ -70,17 +62,42 @@ public class SWFAnimationRenderThread implements Runnable {
       try {
         cancelSignalled = false;
         lastError = null;
-        controller.getProgressUpdater().initProgress(frameCount);
-        initMovie();
-        for (int i = 1; i <= frameCount; i++) {
+        controller.getProgressUpdater().initProgress(flameMovie.getFrameCount());
+        // Init SWF
+        switch (flameMovie.getOutputFormat()) {
+          case SWF:
+          case SWF_AND_PNG:
+            initMovie();
+            break;
+        }
+        // Create frames
+        for (int i = 1; i <= flameMovie.getFrameCount(); i++) {
           if (cancelSignalled) {
             break;
           }
           SimpleImage image = renderImage(i);
-          addImageToMovie(image, i);
+
+          switch (flameMovie.getOutputFormat()) {
+            case SWF:
+              addImageToMovie(image, i);
+              break;
+            case SWF_AND_PNG:
+              addImageToMovie(image, i);
+              saveFrame(image, i);
+              break;
+            case PNG:
+              saveFrame(image, i);
+              break;
+          }
           controller.getProgressUpdater().updateProgress(i);
         }
-        finishMovie();
+        // Finalize SWF  
+        switch (flameMovie.getOutputFormat()) {
+          case SWF:
+          case SWF_AND_PNG:
+            finishMovie();
+            break;
+        }
       }
       catch (Throwable ex) {
         lastError = ex;
@@ -94,16 +111,39 @@ public class SWFAnimationRenderThread implements Runnable {
 
   private void prepareFlame(Flame pFlame) {
     pFlame.setSpatialFilterRadius(1.0);
-    pFlame.setSpatialOversample(animationData.getQualityProfile().getSpatialOversample());
-    pFlame.setColorOversample(animationData.getQualityProfile().getColorOversample());
-    pFlame.setSampleDensity(animationData.getQualityProfile().getQuality());
+    pFlame.setSpatialOversample(flameMovie.getSpatialOversampling());
+    pFlame.setColorOversample(flameMovie.getColorOversampling());
+    pFlame.setSampleDensity(flameMovie.getQuality());
 
   }
 
   private SimpleImage renderImage(int pFrame) throws Exception {
-    Flame flame1 = animationData.getFlame(pFrame);
+    Flame flame1 = flameMovie.getFlame(pFrame);
     prepareFlame(flame1);
-    return AnimationService.renderFrame(pFrame, frameCount, flame1, animationData.getGlobalScript(), animationData.getxFormScript(), frameWidth, frameHeight, controller.getPrefs());
+    return AnimationService.renderFrame(pFrame, flameMovie.getFrameCount(), flame1, flameMovie.getGlobalScript(), flameMovie.getxFormScript(), flameMovie.getFrameWidth(), flameMovie.getFrameHeight(), controller.getPrefs());
+  }
+
+  private void saveFrame(SimpleImage pImage, int pFrame) throws Exception {
+    String filename = outputFilename;
+    {
+      int pSlash = filename.lastIndexOf("/");
+      int pSlash2 = filename.lastIndexOf("\\");
+      if (pSlash2 > pSlash) {
+        pSlash = pSlash2;
+      }
+      int pDot = filename.lastIndexOf(".");
+      if (pDot > pSlash) {
+        filename = filename.substring(0, pDot);
+      }
+    }
+    String hs = String.valueOf(pFrame);
+    int length = flameMovie.getFrameCount() > 9999 ? 5 : 4;
+    while (hs.length() < length) {
+      hs = "0" + hs;
+    }
+    filename += hs + ".png";
+    ImageIO.setUseCache(false);
+    new ImageWriter().saveImage(pImage, filename);
   }
 
   private void addImageToMovie(SimpleImage pImage, int pFrame) throws Exception {
@@ -208,13 +248,13 @@ public class SWFAnimationRenderThread implements Runnable {
 
     uid = 1;
     movie = new Movie();
-    final int xOrigin = -frameWidth / 2;
-    final int yOrigin = -frameHeight / 2;
+    final int xOrigin = -flameMovie.getFrameWidth() / 2;
+    final int yOrigin = -flameMovie.getFrameHeight() / 2;
     MovieHeader header = new MovieHeader();
-    header.setFrameRate((float) framesPerSecond);
+    header.setFrameRate((float) flameMovie.getFramesPerSecond());
     final int width = 20;
     final Color color = WebPalette.BLACK.color();
-    final ImageFactory factory = createImageFactory(new SimpleImage(frameWidth, frameHeight));
+    final ImageFactory factory = createImageFactory(new SimpleImage(flameMovie.getFrameWidth(), flameMovie.getFrameHeight()));
     final ImageTag image = factory.defineImage(uid++);
     ShapeTag shape = new ImageShape().defineShape(uid++, image,
         xOrigin, yOrigin, new LineStyle1(width, color));
@@ -223,10 +263,10 @@ public class SWFAnimationRenderThread implements Runnable {
     movie.add(new Background(WebPalette.LIGHT_BLUE.color()));
     uid = 1;
     // Add sound
-    if (animationData.getSoundFilename() != null) {
+    if (flameMovie.getSoundFilename() != null) {
       soundFactory = new SoundFactory();
-      soundFactory.read(new File(animationData.getSoundFilename()));
-      movie.add(soundFactory.streamHeader((float) framesPerSecond));
+      soundFactory.read(new File(flameMovie.getSoundFilename()));
+      movie.add(soundFactory.streamHeader((float) flameMovie.getFramesPerSecond()));
     }
     else {
       soundFactory = null;

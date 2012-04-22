@@ -22,10 +22,13 @@ import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.Transferable;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.AbstractButton;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -41,16 +44,19 @@ import javax.swing.JToggleButton;
 import org.jwildfire.base.Prefs;
 import org.jwildfire.base.QualityProfile;
 import org.jwildfire.base.ResolutionProfile;
+import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.animate.AnimationService;
 import org.jwildfire.create.tina.animate.AnimationService.GlobalScript;
 import org.jwildfire.create.tina.animate.AnimationService.XFormScript;
-import org.jwildfire.create.tina.animate.FlameAnimation;
-import org.jwildfire.create.tina.animate.FlameAnimationPart;
+import org.jwildfire.create.tina.animate.FlameMovie;
+import org.jwildfire.create.tina.animate.FlameMoviePart;
 import org.jwildfire.create.tina.animate.OutputFormat;
 import org.jwildfire.create.tina.animate.SWFAnimationRenderThread;
 import org.jwildfire.create.tina.animate.SWFAnimationRenderThreadController;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.io.Flam3Reader;
+import org.jwildfire.create.tina.io.JWFMovieReader;
+import org.jwildfire.create.tina.io.JWFMovieWriter;
 import org.jwildfire.create.tina.render.FlameRenderer;
 import org.jwildfire.create.tina.render.RenderInfo;
 import org.jwildfire.create.tina.render.RenderedFlame;
@@ -61,7 +67,7 @@ import org.jwildfire.swing.SWFFileChooser;
 
 public class TinaSWFAnimatorController implements SWFAnimationRenderThreadController, FlameHolder {
   private SWFAnimationRenderThread renderThread = null;
-  private final FlameAnimation currAnimation = new FlameAnimation();
+  private FlameMovie currMovie = new FlameMovie();
   private final TinaController parentCtrl;
   private final Prefs prefs;
   private final ErrorHandler errorHandler;
@@ -97,6 +103,8 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
   private final JButton swfAnimatorMovieToClipboardButton;
   private final JButton swfAnimatorMovieToDiskButton;
   private FlamePanel flamePanel;
+  private final List<JPanel> flamePartPanelList = new ArrayList<JPanel>();
+  private final List<JRadioButton> flamePartRadioButtonList = new ArrayList<JRadioButton>();
 
   private boolean noRefresh;
 
@@ -174,7 +182,7 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
     swfAnimatorFrameREd.setEnabled(!rendering);
     swfAnimatorFramesREd.setEnabled(!rendering);
     swfAnimatorFramesPerSecondREd.setEnabled(!rendering);
-    swfAnimatorGenerateButton.setEnabled(!rendering && currAnimation.getFrameCount() > 0);
+    swfAnimatorGenerateButton.setEnabled(!rendering && currMovie.getFrameCount() > 0);
     swfAnimatorResolutionProfileCmb.setEnabled(!rendering);
     swfAnimatorQualityProfileCmb.setEnabled(!rendering);
     swfAnimatorLoadFlameFromMainButton.setEnabled(!rendering);
@@ -183,13 +191,27 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
     swfAnimatorHalveSizeButton.setEnabled(!rendering);
     swfAnimatorCancelButton.setEnabled(rendering && !renderThread.isCancelSignalled());
     swfAnimatorLoadSoundButton.setEnabled(!rendering);
-    swfAnimatorClearSoundButton.setEnabled(!rendering && currAnimation.getSoundFilename() != null);
-    if (currAnimation.getSoundFilename() == null) {
+    swfAnimatorClearSoundButton.setEnabled(!rendering && currMovie.getSoundFilename() != null);
+    if (currMovie.getSoundFilename() == null) {
       swfAnimatorSoundCaptionLbl.setText("(no sound file loaded)");
     }
     else {
-      swfAnimatorSoundCaptionLbl.setText(new File(currAnimation.getSoundFilename()).getName());
+      swfAnimatorSoundCaptionLbl.setText(new File(currMovie.getSoundFilename()).getName());
     }
+    int selected = getSelectedFlameRadioButtonIndex();
+    int flameCount = getFlameCount();
+    swfAnimatorMoveUpButton.setEnabled(!rendering && selected > 0);
+    swfAnimatorMoveDownButton.setEnabled(!rendering && selected >= 0 && selected < flameCount - 1);
+    swfAnimatorRemoveFlameButton.setEnabled(!rendering && selected >= 0);
+    swfAnimatorRemoveAllFlamesButton.setEnabled(!rendering && flameCount > 0);
+    swfAnimatorMovieFromClipboardButton.setEnabled(!rendering);
+    swfAnimatorMovieFromDiskButton.setEnabled(!rendering);
+    swfAnimatorMovieToClipboardButton.setEnabled(flameCount > 0);
+    swfAnimatorMovieToDiskButton.setEnabled(flameCount > 0);
+    // TODO
+    swfAnimatorMovieFromClipboardButton.setVisible(false);
+    swfAnimatorMovieFromDiskButton.setVisible(false);
+    swfAnimatorMovieToDiskButton.setVisible(false);
   }
 
   public void loadFlameFromMainButton_clicked() {
@@ -206,12 +228,12 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
   }
 
   private void addFlame(Flame pFlame) {
-    FlameAnimationPart part = new FlameAnimationPart();
+    FlameMoviePart part = new FlameMoviePart();
     part.setFlame(pFlame);
     part.setFrameCount(120);
     part.setFrameMorphCount(0);
     addFlameToFlamePanel(part);
-    currAnimation.addPart(part);
+    currMovie.addPart(part);
     refreshFrameCount();
     refreshFlameImage();
   }
@@ -220,7 +242,7 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
     noRefresh = true;
     try {
       int value = swfAnimatorFrameSlider.getValue();
-      int frameCount = currAnimation.getFrameCount();
+      int frameCount = currMovie.getFrameCount();
       swfAnimatorFrameSlider.setMaximum(frameCount);
       swfAnimatorFramesREd.setText(String.valueOf(frameCount));
       if (value > frameCount) {
@@ -234,7 +256,7 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
     }
   }
 
-  private void addFlameToFlamePanel(final FlameAnimationPart pPart) {
+  private void addFlameToFlamePanel(final FlameMoviePart pPart) {
     final int PANEL_HEIGHT = 240;
     final int LABEL_WIDTH = 100;
     final int FIELD_WIDTH = 50;
@@ -311,18 +333,24 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
       panel.add(framesMorphField);
     }
     yOff += FIELD_HEIGHT;
+    JRadioButton selectButton;
     {
-      JRadioButton selectButton = new JRadioButton("");
+      selectButton = new JRadioButton("");
       selectButton.setBounds(BORDER_SIZE + LABEL_WIDTH, yOff, FIELD_WIDTH + 1, FIELD_HEIGHT);
       selectButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
           enableControls();
         }
       });
+      selectButton.setSelected(flamePartRadioButtonList.size() == 0);
       panel.add(selectButton);
       swfAnimatorFlamesButtonGroup.add(selectButton);
     }
     swfAnimatorFlamesPanel.add(panel);
+
+    flamePartPanelList.add(panel);
+    flamePartRadioButtonList.add(selectButton);
+
     swfAnimatorFlamesPanel.getParent().validate();
   }
 
@@ -386,6 +414,34 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
     }
   }
 
+  private void updateMovieFields() {
+    double framesPerSecond = Double.parseDouble(swfAnimatorFramesPerSecondREd.getText());
+    ResolutionProfile resProfile = getResolutionProfile();
+    QualityProfile qualityProfile = getQualityProfile();
+    int frameWidth = resProfile.getWidth();
+    int frameHeight = resProfile.getHeight();
+    if (swfAnimatorHalveSizeButton.isSelected()) {
+      frameWidth /= 2;
+      frameHeight /= 2;
+    }
+    GlobalScript globalScript = (GlobalScript) swfAnimatorGlobalScriptCmb.getSelectedItem();
+    XFormScript xFormScript = (XFormScript) swfAnimatorXFormScriptCmb.getSelectedItem();
+
+    OutputFormat outputFormat = (OutputFormat) swfAnimatorOutputCmb.getSelectedItem();
+    if (outputFormat == null) {
+      outputFormat = OutputFormat.SWF;
+    }
+    currMovie.setGlobalScript(globalScript);
+    currMovie.setxFormScript(xFormScript);
+    currMovie.setSpatialOversampling(qualityProfile.getSpatialOversample());
+    currMovie.setColorOversampling(qualityProfile.getColorOversample());
+    currMovie.setQuality(qualityProfile.getQuality());
+    currMovie.setOutputFormat(outputFormat);
+    currMovie.setFrameWidth(frameWidth);
+    currMovie.setFrameHeight(frameHeight);
+    currMovie.setFramesPerSecond(framesPerSecond);
+  }
+
   public void generateButton_clicked() {
     try {
       JFileChooser chooser = new SWFFileChooser();
@@ -400,23 +456,8 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
       if (chooser.showSaveDialog(swfAnimatorPreviewRootPanel) == JFileChooser.APPROVE_OPTION) {
         File file = chooser.getSelectedFile();
         prefs.setLastOutputSwfFile(file);
-        int frameCount = Integer.parseInt(swfAnimatorFramesREd.getText());
-        double framesPerSecond = Double.parseDouble(swfAnimatorFramesPerSecondREd.getText());
-        ResolutionProfile resProfile = getResolutionProfile();
-        QualityProfile qualityProfile = getQualityProfile();
-        int frameWidth = resProfile.getWidth();
-        int frameHeight = resProfile.getHeight();
-        if (swfAnimatorHalveSizeButton.isSelected()) {
-          frameWidth /= 2;
-          frameHeight /= 2;
-        }
-        GlobalScript globalScript = (GlobalScript) swfAnimatorGlobalScriptCmb.getSelectedItem();
-        XFormScript xFormScript = (XFormScript) swfAnimatorXFormScriptCmb.getSelectedItem();
-        currAnimation.setGlobalScript(globalScript);
-        currAnimation.setxFormScript(xFormScript);
-        currAnimation.setQualityProfile(qualityProfile);
-
-        renderThread = new SWFAnimationRenderThread(this, frameCount, frameWidth, frameHeight, framesPerSecond, currAnimation, file.getAbsolutePath());
+        updateMovieFields();
+        renderThread = new SWFAnimationRenderThread(this, currMovie, file.getAbsolutePath());
         try {
           enableControls();
           new Thread(renderThread).start();
@@ -447,7 +488,7 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
       if (chooser.showOpenDialog(swfAnimatorPreviewRootPanel) == JFileChooser.APPROVE_OPTION) {
         File file = chooser.getSelectedFile();
         prefs.setLastInputSoundFile(file);
-        currAnimation.setSoundFilename(file.getAbsolutePath());
+        currMovie.setSoundFilename(file.getAbsolutePath());
         enableControls();
       }
     }
@@ -457,7 +498,7 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
   }
 
   public void clearSoundButton_clicked() {
-    currAnimation.setSoundFilename(null);
+    currMovie.setSoundFilename(null);
     enableControls();
   }
 
@@ -536,9 +577,8 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
     if (!noRefresh) {
       FlamePanel imgPanel = getFlamePanel();
       Rectangle bounds = imgPanel.getImageBounds();
-      int renderScale = 1;
-      int width = bounds.width / renderScale;
-      int height = bounds.height / renderScale;
+      int width = bounds.width;
+      int height = bounds.height;
       if (width >= 16 && height >= 16) {
         RenderInfo info = new RenderInfo(width, height);
         Flame flame = getCurrFlame();
@@ -571,6 +611,9 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
           }
         }
       }
+      else {
+        imgPanel.setImage(new SimpleImage(width, height));
+      }
       swfAnimatorPreviewRootPanel.repaint();
     }
   }
@@ -584,25 +627,30 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
 
   private Flame getCurrFlame() {
     int frame = swfAnimatorFrameSlider.getValue();
-    Flame flame = currAnimation.getFlame(frame);
-    prepareFlame(flame);
-    boolean oldNoRefresh = noRefresh;
-    noRefresh = true;
-    try {
-      swfAnimatorFrameREd.setText(String.valueOf(frame));
-    }
-    finally {
-      noRefresh = oldNoRefresh;
-    }
+    Flame flame = currMovie.getFlame(frame);
+    if (flame != null) {
+      prepareFlame(flame);
+      boolean oldNoRefresh = noRefresh;
+      noRefresh = true;
+      try {
+        swfAnimatorFrameREd.setText(String.valueOf(frame));
+      }
+      finally {
+        noRefresh = oldNoRefresh;
+      }
 
-    int frameCount = Integer.parseInt(swfAnimatorFramesREd.getText());
-    GlobalScript globalScript = (GlobalScript) swfAnimatorGlobalScriptCmb.getSelectedItem();
-    XFormScript xFormScript = (XFormScript) swfAnimatorXFormScriptCmb.getSelectedItem();
-    try {
-      return AnimationService.createFlame(frame, frameCount, flame, globalScript, xFormScript, prefs);
+      int frameCount = Integer.parseInt(swfAnimatorFramesREd.getText());
+      GlobalScript globalScript = (GlobalScript) swfAnimatorGlobalScriptCmb.getSelectedItem();
+      XFormScript xFormScript = (XFormScript) swfAnimatorXFormScriptCmb.getSelectedItem();
+      try {
+        return AnimationService.createFlame(frame, frameCount, flame, globalScript, xFormScript, prefs);
+      }
+      catch (Throwable ex) {
+        ex.printStackTrace();
+        return null;
+      }
     }
-    catch (Throwable ex) {
-      ex.printStackTrace();
+    else {
       return null;
     }
   }
@@ -636,7 +684,7 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
     }
   }
 
-  private void framesFieldChanged(JTextField pFramesField, FlameAnimationPart pPart) {
+  private void framesFieldChanged(JTextField pFramesField, FlameMoviePart pPart) {
     try {
       int frameCount = Integer.parseInt(pFramesField.getText());
       if (frameCount < 0) {
@@ -651,7 +699,7 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
     }
   }
 
-  private void framesMorphFieldChanged(JTextField pMorphFramesField, FlameAnimationPart pPart) {
+  private void framesMorphFieldChanged(JTextField pMorphFramesField, FlameMoviePart pPart) {
     try {
       int framesMorphCount = Integer.parseInt(pMorphFramesField.getText());
       if (framesMorphCount < 0) {
@@ -670,28 +718,184 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
   }
 
   public void flameMoveUpButton_clicked() {
-    // TODO Auto-generated method stub
+    int selected = getSelectedFlameRadioButtonIndex();
+    if (selected > 0) {
+      swapFlameMoviePart(selected, selected - 1);
+      enableControls();
+    }
+  }
 
+  private int getFlameCount() {
+    return flamePartRadioButtonList.size();
+  }
+
+  private int getSelectedFlameRadioButtonIndex() {
+    for (int i = 0; i < flamePartRadioButtonList.size(); i++) {
+      if (flamePartRadioButtonList.get(i).isSelected())
+        return i;
+    }
+    return -1;
+  }
+
+  private void swapFlameMoviePart(int pFrom, int pTo) {
+    FlameMoviePart part1 = currMovie.getParts().get(pFrom);
+    FlameMoviePart part2 = currMovie.getParts().get(pTo);
+    JPanel panel1 = flamePartPanelList.get(pFrom);
+    JPanel panel2 = flamePartPanelList.get(pTo);
+    JRadioButton radio1Btn = flamePartRadioButtonList.get(pFrom);
+    JRadioButton radio2Btn = flamePartRadioButtonList.get(pTo);
+    for (JPanel panel : flamePartPanelList) {
+      swfAnimatorFlamesPanel.remove(panel);
+    }
+    currMovie.getParts().set(pFrom, part2);
+    currMovie.getParts().set(pTo, part1);
+    flamePartPanelList.set(pFrom, panel2);
+    flamePartPanelList.set(pTo, panel1);
+    flamePartRadioButtonList.set(pFrom, radio2Btn);
+    flamePartRadioButtonList.set(pTo, radio1Btn);
+    for (JPanel panel : flamePartPanelList) {
+      swfAnimatorFlamesPanel.add(panel);
+    }
+    swfAnimatorFlamesPanel.getParent().validate();
   }
 
   public void flameMoveDownButton_clicked() {
-    // TODO Auto-generated method stub
-
+    int selected = getSelectedFlameRadioButtonIndex();
+    if (selected >= 0 && selected < getFlameCount() - 1) {
+      swapFlameMoviePart(selected, selected + 1);
+      enableControls();
+    }
   }
 
   public void removeFlameButton_clicked() {
-    // TODO Auto-generated method stub
-
+    int selected = getSelectedFlameRadioButtonIndex();
+    if (selected >= 0 && selected < getFlameCount()) {
+      swfAnimatorFlamesPanel.remove(flamePartPanelList.get(selected));
+      currMovie.getParts().remove(selected);
+      flamePartPanelList.remove(selected);
+      swfAnimatorFlamesButtonGroup.remove(flamePartRadioButtonList.get(selected));
+      flamePartRadioButtonList.remove(selected);
+      if (flamePartRadioButtonList.size() > 0) {
+        flamePartRadioButtonList.get(0).setSelected(true);
+      }
+      swfAnimatorFlamesPanel.getParent().validate();
+      refreshFlameImage();
+      enableControls();
+    }
   }
 
   public void clearAllFlamesButton_clicked() {
-    // TODO Auto-generated method stub
-
+    for (JPanel panel : flamePartPanelList) {
+      swfAnimatorFlamesPanel.remove(panel);
+    }
+    currMovie.getParts().clear();
+    for (AbstractButton btn : flamePartRadioButtonList) {
+      swfAnimatorFlamesButtonGroup.remove(btn);
+    }
+    flamePartPanelList.clear();
+    flamePartRadioButtonList.clear();
+    swfAnimatorFlamesPanel.getParent().validate();
+    refreshFlameImage();
+    enableControls();
   }
 
   public void movieFromClipboardButton_clicked() {
-    // TODO Auto-generated method stub
+    try {
+      Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+      Transferable clipData = clipboard.getContents(clipboard);
+      if (clipData != null) {
+        if (clipData.isDataFlavorSupported(DataFlavor.stringFlavor)) {
+          String xml = (String) (clipData.getTransferData(
+              DataFlavor.stringFlavor));
+          FlameMovie movie = new JWFMovieReader().readMovieFromXML(xml);
+          if (movie != null) {
+            currMovie = movie;
+          }
+          refreshUI();
+        }
+      }
+    }
+    catch (Throwable ex) {
+      errorHandler.handleError(ex);
+    }
+  }
 
+  private void refreshUI() {
+    noRefresh = true;
+    try {
+      swfAnimatorFramesPerSecondREd.setText(Tools.doubleToString(currMovie.getFramesPerSecond()));
+      swfAnimatorGlobalScriptCmb.setSelectedItem(currMovie.getGlobalScript());
+      swfAnimatorXFormScriptCmb.setSelectedItem(currMovie.getxFormScript());
+      swfAnimatorOutputCmb.setSelectedItem(currMovie.getOutputFormat());
+      {
+        ResolutionProfile fittingProfile = null;
+        ResolutionProfile doubleProfile = null;
+        for (int i = 0; i < swfAnimatorResolutionProfileCmb.getItemCount(); i++) {
+          ResolutionProfile profile = (ResolutionProfile) swfAnimatorResolutionProfileCmb.getItemAt(i);
+          if (profile.getWidth() == currMovie.getFrameWidth() && profile.getHeight() == currMovie.getFrameHeight()) {
+            fittingProfile = profile;
+            break;
+          }
+          else if ((profile.getWidth() / 2) == currMovie.getFrameWidth() && (profile.getHeight() / 2) == currMovie.getFrameHeight()) {
+            doubleProfile = profile;
+          }
+        }
+        if (fittingProfile != null) {
+          swfAnimatorResolutionProfileCmb.setSelectedItem(fittingProfile);
+          swfAnimatorHalveSizeButton.setSelected(false);
+        }
+        else if (doubleProfile != null) {
+          swfAnimatorResolutionProfileCmb.setSelectedItem(doubleProfile);
+          swfAnimatorHalveSizeButton.setSelected(true);
+        }
+      }
+      {
+        QualityProfile fittingProfile = null;
+        QualityProfile nearestProfile = null;
+        int qualityIndex = QualityProfile.calculateQualityIndex(currMovie.getSpatialOversampling(), currMovie.getColorOversampling(), currMovie.getQuality());
+        for (int i = 0; i < swfAnimatorQualityProfileCmb.getItemCount(); i++) {
+          QualityProfile profile = (QualityProfile) swfAnimatorQualityProfileCmb.getItemAt(i);
+          if (profile.getColorOversample() == currMovie.getColorOversampling() && profile.getSpatialOversample() == currMovie.getSpatialOversampling() && profile.getQuality() == currMovie.getQuality()) {
+            fittingProfile = profile;
+            break;
+          }
+          else if (nearestProfile == null || (Math.abs(profile.getQualityIndex() - qualityIndex) < Math.abs(nearestProfile.getQualityIndex() - qualityIndex))) {
+            nearestProfile = profile;
+          }
+        }
+        if (fittingProfile != null) {
+          swfAnimatorQualityProfileCmb.setSelectedItem(fittingProfile);
+        }
+        else if (nearestProfile != null) {
+          swfAnimatorQualityProfileCmb.setSelectedItem(nearestProfile);
+        }
+      }
+
+      for (JPanel panel : flamePartPanelList) {
+        swfAnimatorFlamesPanel.remove(panel);
+      }
+      flamePartPanelList.clear();
+      for (AbstractButton btn : flamePartRadioButtonList) {
+        swfAnimatorFlamesButtonGroup.remove(btn);
+      }
+      flamePartRadioButtonList.clear();
+      swfAnimatorFlamesPanel.getParent().validate();
+
+      swfAnimatorFrameSlider.setValue(1);
+      swfAnimatorFrameSlider.setMaximum(currMovie.getFrameCount());
+      swfAnimatorFramesREd.setText(String.valueOf(currMovie.getFrameCount()));
+      swfAnimatorFrameREd.setText(String.valueOf(1));
+
+      for (FlameMoviePart part : currMovie.getParts()) {
+        addFlameToFlamePanel(part);
+      }
+
+      refreshFlameImage();
+      enableControls();
+    }
+    finally {
+      noRefresh = false;
+    }
   }
 
   public void movieFromDiskButton_clicked() {
@@ -700,11 +904,21 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
   }
 
   public void movieToClipboardButton_clicked() {
-    // TODO Auto-generated method stub
+    try {
+      updateMovieFields();
+      Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+      String xml = new JWFMovieWriter().getMovieXML(currMovie);
+      StringSelection data = new StringSelection(xml);
+      clipboard.setContents(data, data);
+    }
+    catch (Throwable ex) {
+      errorHandler.handleError(ex);
+    }
 
   }
 
   public void movieToDiskButton_clicked() {
+    updateMovieFields();
     // TODO Auto-generated method stub
 
   }

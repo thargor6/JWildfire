@@ -8078,10 +8078,10 @@ public class TinaInternalFrame extends JInternalFrame {
       rootTabbedPane = new JTabbedPane();
       rootTabbedPane.setFont(new Font("Dialog", Font.BOLD, 10));
       rootTabbedPane.setEnabled(true);
-      rootTabbedPane.addTab("Editor", null, getRootPanel(), null);
-      rootTabbedPane.addTab("Interactive renderer", null, getInteractiveRenderPanel(), null);
-      rootTabbedPane.addTab("SWF Animator", null, getTinaSWFAnimatorPanel(), null);
-      rootTabbedPane.addTab("Batch render", null, getBatchRenderPanel(), null);
+      rootTabbedPane.addTab("Flame Editor", null, getRootPanel(), null);
+      rootTabbedPane.addTab("Interactive Renderer", null, getInteractiveRenderPanel(), null);
+      rootTabbedPane.addTab("SWF Movie Maker", null, getTinaSWFAnimatorPanel(), null);
+      rootTabbedPane.addTab("Batch Flame Renderer", null, getBatchRenderPanel(), null);
 
       JPanel helpPanel = new JPanel();
       rootTabbedPane.addTab("Help/About", null, helpPanel, null);
@@ -9732,7 +9732,7 @@ public class TinaInternalFrame extends JInternalFrame {
           tinaController.getSwfAnimatorCtrl().movieToDiskButton_clicked();
         }
       });
-      swfAnimatorMovieToDiskButton.setText("Save Flame");
+      swfAnimatorMovieToDiskButton.setText("Save Movie");
       swfAnimatorMovieToDiskButton.setPreferredSize(new Dimension(125, 24));
       swfAnimatorMovieToDiskButton.setFont(new Font("Dialog", Font.BOLD, 10));
       swfAnimatorMovieToDiskButton.setBounds(new Rectangle(643, 35, 125, 24));

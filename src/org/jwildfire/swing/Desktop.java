@@ -68,7 +68,7 @@ public class Desktop extends JApplet {
   private JMenu fileMenu = null;
   private JMenu helpMenu = null;
   private JMenuItem exitMenuItem = null;
-  private JMenuItem aboutMenuItem = null;
+  private JMenuItem welcomeMenuItem = null;
   private JMenuItem saveMenuItem = null;
   private JDesktopPane mainDesktopPane = null;
   private JMenu windowMenu = null;
@@ -1528,10 +1528,10 @@ public class Desktop extends JApplet {
    * @return javax.swing.JMenuItem
    */
   private JMenuItem getAboutMenuItem() {
-    if (aboutMenuItem == null) {
-      aboutMenuItem = new JMenuItem();
-      aboutMenuItem.setText("About");
-      aboutMenuItem.addActionListener(new java.awt.event.ActionListener() {
+    if (welcomeMenuItem == null) {
+      welcomeMenuItem = new JMenuItem();
+      welcomeMenuItem.setText("Welcome to " + Tools.APP_TITLE);
+      welcomeMenuItem.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
           if (!welcomeInternalFrame.isVisible()) {
             welcomeInternalFrame.setVisible(true);
@@ -1545,7 +1545,7 @@ public class Desktop extends JApplet {
         }
       });
     }
-    return aboutMenuItem;
+    return welcomeMenuItem;
   }
 
   /**

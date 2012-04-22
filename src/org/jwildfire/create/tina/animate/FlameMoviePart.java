@@ -18,7 +18,7 @@ package org.jwildfire.create.tina.animate;
 
 import org.jwildfire.create.tina.base.Flame;
 
-public class FlameAnimationPart {
+public class FlameMoviePart {
   private Flame flame;
   private int frameCount;
   private int frameMorphCount;

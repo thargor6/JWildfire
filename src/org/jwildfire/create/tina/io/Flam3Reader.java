@@ -17,7 +17,6 @@
 package org.jwildfire.create.tina.io;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -43,29 +42,6 @@ public class Flam3Reader implements FlameReader {
     catch (Exception ex) {
       throw new RuntimeException(ex);
     }
-  }
-
-  private Map<String, String> parseAttributes(String pXML) {
-    Map<String, String> res = new HashMap<String, String>();
-    int p = 0;
-    while (true) {
-      int ps = pXML.indexOf("=\"", p + 1);
-      if (ps < 0)
-        break;
-      int pe = pXML.indexOf("\"", ps + 2);
-      String name = pXML.substring(p, ps).trim();
-      String value;
-      try {
-        value = pXML.substring(ps + 2, pe);
-        //      System.out.println("#" + name + "#" + value + "#");
-      }
-      catch (Throwable ex) {
-        throw new RuntimeException("Error parsing attribute \"" + name + "\" (" + pXML + ")", ex);
-      }
-      res.put(name, value);
-      p = pe + 2;
-    }
-    return res;
   }
 
   private static final String ATTR_SIZE = "size";
@@ -109,7 +85,7 @@ public class Flam3Reader implements FlameReader {
   private static final String ATTR_QUALITY_PROFILE = "quality_profile";
 
   private void parseFlameAttributes(Flame pFlame, String pXML) {
-    Map<String, String> atts = parseAttributes(pXML);
+    Map<String, String> atts = Tools.parseAttributes(pXML);
     String hs;
     if ((hs = atts.get(ATTR_SIZE)) != null) {
       String s[] = hs.split(" ");
@@ -258,7 +234,7 @@ public class Flam3Reader implements FlameReader {
   private static final String ATTR_SYMMETRY = "symmetry";
 
   private void parseXFormAttributes(XForm pXForm, String pXML) {
-    Map<String, String> atts = parseAttributes(pXML);
+    Map<String, String> atts = Tools.parseAttributes(pXML);
     String hs;
     if ((hs = atts.get(ATTR_WEIGHT)) != null) {
       pXForm.setWeight(Double.parseDouble(hs));
@@ -437,7 +413,7 @@ public class Flam3Reader implements FlameReader {
           {
             int index = 0;
             int r = 0, g = 0, b = 0;
-            Map<String, String> atts = parseAttributes(hs);
+            Map<String, String> atts = Tools.parseAttributes(hs);
             String attr;
             if ((attr = atts.get(ATTR_INDEX)) != null) {
               index = Integer.parseInt(attr);

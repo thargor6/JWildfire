@@ -33,13 +33,15 @@ import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 import org.jwildfire.image.Pixel;
 
 public class Tools {
   public static final String APP_TITLE = "JWildfire";
-  public static final String APP_VERSION = "0.45 BETA (21.04.2012)";
+  public static final String APP_VERSION = "0.45 ALPHA2 (21.04.2012)";
 
   public static final int VPREC = 1024;
   public static final int SPREC = 10;
@@ -393,6 +395,29 @@ public class Tools {
       in.close();
     }
 
+  }
+
+  public static Map<String, String> parseAttributes(String pXML) {
+    Map<String, String> res = new HashMap<String, String>();
+    int p = 0;
+    while (true) {
+      int ps = pXML.indexOf("=\"", p + 1);
+      if (ps < 0)
+        break;
+      int pe = pXML.indexOf("\"", ps + 2);
+      String name = pXML.substring(p, ps).trim();
+      String value;
+      try {
+        value = pXML.substring(ps + 2, pe);
+        //      System.out.println("#" + name + "#" + value + "#");
+      }
+      catch (Throwable ex) {
+        throw new RuntimeException("Error parsing attribute \"" + name + "\" (" + pXML + ")", ex);
+      }
+      res.put(name, value);
+      p = pe + 2;
+    }
+    return res;
   }
 
 }

@@ -19,18 +19,23 @@ package org.jwildfire.create.tina.animate;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.jwildfire.base.QualityProfile;
 import org.jwildfire.create.tina.animate.AnimationService.GlobalScript;
 import org.jwildfire.create.tina.animate.AnimationService.XFormScript;
 import org.jwildfire.create.tina.base.Flame;
 
-public class FlameAnimation {
+public class FlameMovie {
   private String soundFilename;
   private GlobalScript globalScript;
   private XFormScript xFormScript;
-  private QualityProfile qualityProfile;
+  private int colorOversampling;
+  private int spatialOversampling;
+  private int quality;
+  private OutputFormat outputFormat;
   private final List<Motion> motions = new ArrayList<Motion>();
-  private final List<FlameAnimationPart> parts = new ArrayList<FlameAnimationPart>();
+  private final List<FlameMoviePart> parts = new ArrayList<FlameMoviePart>();
+  private int frameWidth;
+  private int frameHeight;
+  private double framesPerSecond;
 
   public GlobalScript getGlobalScript() {
     return globalScript;
@@ -48,14 +53,6 @@ public class FlameAnimation {
     this.xFormScript = xFormScript;
   }
 
-  public QualityProfile getQualityProfile() {
-    return qualityProfile;
-  }
-
-  public void setQualityProfile(QualityProfile qualityProfile) {
-    this.qualityProfile = qualityProfile;
-  }
-
   public String getSoundFilename() {
     return soundFilename;
   }
@@ -70,7 +67,7 @@ public class FlameAnimation {
 
   public int getFrameCount() {
     int res = 0;
-    for (FlameAnimationPart part : parts) {
+    for (FlameMoviePart part : parts) {
       if (part.getFrameCount() > 0) {
         res += part.getFrameCount();
       }
@@ -78,14 +75,14 @@ public class FlameAnimation {
     return res;
   }
 
-  public void addPart(FlameAnimationPart pPart) {
+  public void addPart(FlameMoviePart pPart) {
     parts.add(pPart);
   }
 
   public Flame getFlame(int pFrame) {
     int currFrame = 0;
     for (int i = 0; i < parts.size(); i++) {
-      FlameAnimationPart part = parts.get(i);
+      FlameMoviePart part = parts.get(i);
       currFrame += part.getFrameCount();
       if (currFrame >= pFrame) {
         Flame flame1 = part.getFlame().makeCopy();
@@ -103,4 +100,65 @@ public class FlameAnimation {
     }
     return null;
   }
+
+  public int getFrameWidth() {
+    return frameWidth;
+  }
+
+  public void setFrameWidth(int frameWidth) {
+    this.frameWidth = frameWidth;
+  }
+
+  public int getFrameHeight() {
+    return frameHeight;
+  }
+
+  public void setFrameHeight(int frameHeight) {
+    this.frameHeight = frameHeight;
+  }
+
+  public double getFramesPerSecond() {
+    return framesPerSecond;
+  }
+
+  public void setFramesPerSecond(double framesPerSecond) {
+    this.framesPerSecond = framesPerSecond;
+  }
+
+  public OutputFormat getOutputFormat() {
+    return outputFormat;
+  }
+
+  public void setOutputFormat(OutputFormat outputFormat) {
+    this.outputFormat = outputFormat;
+  }
+
+  public List<FlameMoviePart> getParts() {
+    return parts;
+  }
+
+  public int getColorOversampling() {
+    return colorOversampling;
+  }
+
+  public void setColorOversampling(int colorOversampling) {
+    this.colorOversampling = colorOversampling;
+  }
+
+  public int getSpatialOversampling() {
+    return spatialOversampling;
+  }
+
+  public void setSpatialOversampling(int spatialOversampling) {
+    this.spatialOversampling = spatialOversampling;
+  }
+
+  public int getQuality() {
+    return quality;
+  }
+
+  public void setQuality(int quality) {
+    this.quality = quality;
+  }
+
 }
