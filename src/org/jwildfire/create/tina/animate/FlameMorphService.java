@@ -17,21 +17,31 @@
 package org.jwildfire.create.tina.animate;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
+import org.jwildfire.base.MathLib;
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.palette.RGBColor;
 import org.jwildfire.create.tina.palette.RGBPalette;
 import org.jwildfire.create.tina.variation.Variation;
+import org.jwildfire.create.tina.variation.VariationFuncList;
 
 public class FlameMorphService {
 
   public static Flame morphFlames(Flame pFlame1, Flame pFlame2, int pFrame, int pFrames) {
     if (pFrame < 1 || pFrames < 2)
-      throw new IllegalStateException();
+      return pFlame1;
     double fScl = (double) (pFrame - 1) / (pFrames - 1);
+    if (fScl <= MathLib.EPSILON) {
+      return pFlame1;
+    }
+    else if (fScl >= 1.0 - MathLib.EPSILON) {
+      return pFlame2;
+    }
+    //    System.out.println("MMMMMMMMM: " + fScl);
     Flame res = pFlame1.makeCopy();
     res.getXForms().clear();
     // morph XForms  
@@ -40,28 +50,38 @@ public class FlameMorphService {
     int maxSize = size1 > size2 ? size1 : size2;
     for (int i = 0; i < maxSize; i++) {
       XForm xForm1 = i < size1 ? pFlame1.getXForms().get(i) : null;
+      if (xForm1 == null) {
+        xForm1 = new XForm();
+        xForm1.addVariation(0.0, VariationFuncList.getVariationFuncInstance("linear3D", true));
+        xForm1.setWeight(0.0);
+      }
+
       XForm xForm2 = i < size2 ? pFlame2.getXForms().get(i) : null;
-      XForm morphedXForm = morphXForms(xForm1, xForm2, fScl);
-      if (morphedXForm != null) {
-        res.getXForms().add(morphedXForm);
+      if (xForm2 == null) {
+        xForm2 = new XForm();
+        xForm2.addVariation(0.0, VariationFuncList.getVariationFuncInstance("linear3D", true));
+        xForm2.setWeight(0.0);
       }
+
+      XForm morphedXForm = morphXForms(xForm1, xForm2, fScl);
+      res.getXForms().add(morphedXForm);
     }
-
-    //    for (XForm xForm : pFlame1.getXForms()) {
-    //      res.getXForms().add(morphXForms(xForm, null, fScl));
-    //    }
-    //    for (XForm xForm : pFlame2.getXForms()) {
-    //      res.getXForms().add(morphXForms(null, xForm, fScl));
-    //    }
-
     // morph final XForms
-    {
+    if (pFlame1.getFinalXForm() != null || pFlame2.getFinalXForm() != null) {
       XForm xForm1 = pFlame1.getFinalXForm();
-      XForm xForm2 = pFlame2.getFinalXForm();
-      XForm morphedXForm = morphXForms(xForm1, xForm2, fScl);
-      if (morphedXForm != null) {
-        res.setFinalXForm(morphedXForm);
+      if (xForm1 == null) {
+        xForm1 = new XForm();
+        xForm1.addVariation(1.0, VariationFuncList.getVariationFuncInstance("linear3D", true));
       }
+
+      XForm xForm2 = pFlame2.getFinalXForm();
+      if (xForm2 == null) {
+        xForm2 = new XForm();
+        xForm2.addVariation(1.0, VariationFuncList.getVariationFuncInstance("linear3D", true));
+      }
+
+      XForm morphedXForm = morphXForms(xForm1, xForm2, fScl);
+      res.setFinalXForm(morphedXForm);
     }
     // morph colors
     RGBPalette palette1 = pFlame1.getPalette();
@@ -100,110 +120,97 @@ public class FlameMorphService {
   }
 
   private static XForm morphXForms(XForm pXForm1, XForm pXForm2, double pFScl) {
-    if (pXForm1 != null && pXForm2 == null) {
-      XForm res = new XForm();
-      res.setWeight(morphValue(pXForm1.getWeight(), 0.0, pFScl));
-      res.setColor(morphValue(pXForm1.getColor(), 0.0, pFScl));
-      res.setColorSymmetry(morphValue(pXForm1.getColorSymmetry(), 0.0, pFScl));
-      res.setCoeff00(morphValue(pXForm1.getCoeff00(), 1.0, pFScl));
-      res.setCoeff01(morphValue(pXForm1.getCoeff01(), 0.0, pFScl));
-      res.setCoeff10(morphValue(pXForm1.getCoeff10(), 0.0, pFScl));
-      res.setCoeff11(morphValue(pXForm1.getCoeff11(), 1.0, pFScl));
-      res.setCoeff20(morphValue(pXForm1.getCoeff20(), 0.0, pFScl));
-      res.setCoeff21(morphValue(pXForm1.getCoeff21(), 0.0, pFScl));
-      res.setOpacity(morphValue(pXForm1.getOpacity(), 0.0, pFScl));
-      res.setDrawMode(pXForm1.getDrawMode());
-      for (int i = 0; i < pXForm1.getModifiedWeights().length; i++) {
-        res.getModifiedWeights()[i] = morphValue(pXForm1.getModifiedWeights()[i], 1.0, pFScl);
-      }
-      res.clearVariations();
-      for (int vIdx = 0; vIdx < pXForm1.getVariationCount(); vIdx++) {
-        Variation var = pXForm1.getVariation(vIdx);
-        Variation newVar = new Variation();
-        newVar.setAmount(morphValue(var.getAmount(), 0.0, pFScl));
-        newVar.setFunc(var.getFunc());
-        res.addVariation(newVar);
-      }
-      return res;
+    XForm res = new XForm();
+    res.setWeight(morphValue(pXForm1.getWeight(), pXForm2.getWeight(), pFScl));
+    res.setColor(morphValue(pXForm1.getColor(), pXForm2.getColor(), pFScl));
+    res.setColorSymmetry(morphValue(pXForm1.getColorSymmetry(), pXForm2.getColorSymmetry(), pFScl));
+    res.setCoeff00(morphValue(pXForm1.getCoeff00(), pXForm2.getCoeff00(), pFScl));
+    res.setCoeff01(morphValue(pXForm1.getCoeff01(), pXForm2.getCoeff01(), pFScl));
+    res.setCoeff10(morphValue(pXForm1.getCoeff10(), pXForm2.getCoeff10(), pFScl));
+    res.setCoeff11(morphValue(pXForm1.getCoeff11(), pXForm2.getCoeff11(), pFScl));
+    res.setCoeff20(morphValue(pXForm1.getCoeff20(), pXForm2.getCoeff20(), pFScl));
+    res.setCoeff21(morphValue(pXForm1.getCoeff21(), pXForm2.getCoeff21(), pFScl));
+    res.setOpacity(morphValue(pXForm1.getOpacity(), pXForm2.getOpacity(), pFScl));
+    res.setPostCoeff00(morphValue(pXForm1.getPostCoeff00(), pXForm2.getPostCoeff00(), pFScl));
+    res.setPostCoeff01(morphValue(pXForm1.getPostCoeff01(), pXForm2.getPostCoeff01(), pFScl));
+    res.setPostCoeff10(morphValue(pXForm1.getPostCoeff10(), pXForm2.getPostCoeff10(), pFScl));
+    res.setPostCoeff11(morphValue(pXForm1.getPostCoeff11(), pXForm2.getPostCoeff11(), pFScl));
+    res.setPostCoeff20(morphValue(pXForm1.getPostCoeff20(), pXForm2.getPostCoeff20(), pFScl));
+    res.setPostCoeff21(morphValue(pXForm1.getPostCoeff21(), pXForm2.getPostCoeff21(), pFScl));
+    res.setOpacity(morphValue(pXForm1.getOpacity(), pXForm2.getOpacity(), pFScl));
+    res.setDrawMode(pFScl >= 0.5 ? pXForm2.getDrawMode() : pXForm1.getDrawMode());
+    for (int i = 0; i < pXForm1.getModifiedWeights().length; i++) {
+      res.getModifiedWeights()[i] = morphValue(pXForm1.getModifiedWeights()[i], pXForm2.getModifiedWeights()[i], pFScl);
     }
-    else if (pXForm1 == null && pXForm2 != null) {
-      XForm res = new XForm();
-      res.setWeight(morphValue(0.0, pXForm2.getWeight(), pFScl));
-      res.setColor(morphValue(0.0, pXForm2.getColor(), pFScl));
-      res.setColorSymmetry(morphValue(0.0, pXForm2.getColorSymmetry(), pFScl));
-      res.setCoeff00(morphValue(1.0, pXForm2.getCoeff00(), pFScl));
-      res.setCoeff01(morphValue(0.0, pXForm2.getCoeff01(), pFScl));
-      res.setCoeff10(morphValue(0.0, pXForm2.getCoeff10(), pFScl));
-      res.setCoeff11(morphValue(1.0, pXForm2.getCoeff11(), pFScl));
-      res.setCoeff20(morphValue(0.0, pXForm2.getCoeff20(), pFScl));
-      res.setCoeff21(morphValue(0.0, pXForm2.getCoeff21(), pFScl));
-      res.setOpacity(morphValue(0.0, pXForm2.getOpacity(), pFScl));
-      res.setDrawMode(pXForm2.getDrawMode());
-      for (int i = 0; i < pXForm2.getModifiedWeights().length; i++) {
-        res.getModifiedWeights()[i] = morphValue(1.0, pXForm2.getModifiedWeights()[i], pFScl);
-      }
-      res.clearVariations();
-      for (int vIdx = 0; vIdx < pXForm2.getVariationCount(); vIdx++) {
-        Variation var = pXForm2.getVariation(vIdx);
-        Variation newVar = new Variation();
-        newVar.setAmount(morphValue(0.0, var.getAmount(), pFScl));
-        newVar.setFunc(var.getFunc());
-        res.addVariation(newVar);
-      }
-      return res;
-    }
-    else if (pXForm1 != null && pXForm2 != null) {
-      XForm res = new XForm();
-      res.setWeight(morphValue(pXForm1.getWeight(), pXForm2.getWeight(), pFScl));
-      res.setColor(morphValue(pXForm1.getColor(), pXForm2.getColor(), pFScl));
-      res.setColorSymmetry(morphValue(pXForm1.getColorSymmetry(), pXForm2.getColorSymmetry(), pFScl));
-      res.setCoeff00(morphValue(pXForm1.getCoeff00(), pXForm2.getCoeff00(), pFScl));
-      res.setCoeff01(morphValue(pXForm1.getCoeff01(), pXForm2.getCoeff01(), pFScl));
-      res.setCoeff10(morphValue(pXForm1.getCoeff10(), pXForm2.getCoeff10(), pFScl));
-      res.setCoeff11(morphValue(pXForm1.getCoeff11(), pXForm2.getCoeff11(), pFScl));
-      res.setCoeff20(morphValue(pXForm1.getCoeff20(), pXForm2.getCoeff20(), pFScl));
-      res.setCoeff21(morphValue(pXForm1.getCoeff21(), pXForm2.getCoeff21(), pFScl));
-      res.setOpacity(morphValue(pXForm1.getOpacity(), pXForm2.getOpacity(), pFScl));
-      res.setDrawMode(pXForm1.getDrawMode());
-      for (int i = 0; i < pXForm1.getModifiedWeights().length; i++) {
-        res.getModifiedWeights()[i] = morphValue(pXForm1.getModifiedWeights()[i], pXForm2.getModifiedWeights()[i], pFScl);
-      }
-      res.clearVariations();
-      List<Integer> dstProcessed = new ArrayList<Integer>();
-      for (int vIdx = 0; vIdx < pXForm1.getVariationCount(); vIdx++) {
-        Variation var1 = pXForm1.getVariation(vIdx);
-        Variation newVar = new Variation();
-        Variation var2 = null;
-        for (int idx = 0; idx < pXForm2.getVariationCount(); idx++) {
-          if (dstProcessed.indexOf(idx) < 0 || pXForm2.getVariation(idx).getFunc().getName().equals(var1.getFunc().getName())) {
-            var2 = pXForm2.getVariation(idx);
-            dstProcessed.add(idx);
-            break;
-          }
-        }
-        newVar.setFunc(var1.getFunc());
-        if (var2 == null) {
-          newVar.setAmount(morphValue(var1.getAmount(), 0.0, pFScl));
+    res.clearVariations();
+    List<Variation> vars1 = new ArrayList<Variation>();
+    List<Variation> vars2 = new ArrayList<Variation>();
+    HashMap<String, String> processed = new HashMap<String, String>();
+    for (int i = 0; i < pXForm1.getVariationCount(); i++) {
+      Variation var1 = pXForm1.getVariation(i);
+      String fncName = var1.getFunc().getName();
+      processed.put(fncName, fncName);
+      vars1.add(var1);
+      // search the same func in xForm2
+      Variation var2 = null;
+      for (int j = 0; j < pXForm2.getVariationCount(); j++) {
+        var2 = pXForm2.getVariation(j);
+        if (var2.getFunc().getName().equals(fncName)) {
+          break;
         }
         else {
-          newVar.setAmount(morphValue(var1.getAmount(), var2.getAmount(), pFScl));
-        }
-        res.addVariation(newVar);
-      }
-      for (int idx = 0; idx < pXForm2.getVariationCount(); idx++) {
-        if (dstProcessed.indexOf(idx) < 0) {
-          Variation var2 = pXForm2.getVariation(idx);
-          Variation newVar = new Variation();
-          newVar.setFunc(var2.getFunc());
-          newVar.setAmount(morphValue(0.0, var2.getAmount(), pFScl));
-          res.addVariation(newVar);
+          var2 = null;
         }
       }
-      return res;
+      if (var2 != null) {
+        vars2.add(var2);
+      }
+      else {
+        vars2.add(new Variation(0.0, VariationFuncList.getVariationFuncInstance(var1.getFunc().getName(), true)));
+      }
     }
-    else {
-      return null;
+    for (int i = 0; i < pXForm2.getVariationCount(); i++) {
+      Variation var2 = pXForm2.getVariation(i);
+      String fncName = var2.getFunc().getName();
+      if (processed.get(fncName) == null) {
+        vars2.add(var2);
+        vars1.add(new Variation(0.0, VariationFuncList.getVariationFuncInstance(var2.getFunc().getName(), true)));
+      }
     }
+    if (vars1.size() != vars2.size()) {
+      throw new IllegalStateException();
+    }
+    for (int i = 0; i < vars1.size(); i++) {
+      Variation var1 = vars1.get(i);
+      Variation var2 = vars2.get(i);
+      if (!var1.getFunc().getName().equals(var2.getFunc().getName())) {
+        throw new IllegalStateException();
+      }
+      //      System.out.println(i + ": " + var1.getFunc().getName() + " " + var1.getAmount() + " " + var2.getAmount());
+      double amount = morphValue(var1.getAmount(), var2.getAmount(), pFScl);
+      Variation var = res.addVariation(amount, var1.getFunc());
+      Object val[] = var.getFunc().getParameterValues();
+      Object val1[] = var1.getFunc().getParameterValues();
+      Object val2[] = var2.getFunc().getParameterValues();
+      for (int j = 0; j < var.getFunc().getParameterNames().length; j++) {
+        String name = var.getFunc().getParameterNames()[j];
+        if (val[j] instanceof Integer) {
+          //          int mVal = morphValue((Integer) val1[j], (Integer) val2[j], pFScl);
+          int mVal = pFScl >= 0.5 ? (Integer) val2[j] : (Integer) val1[j];
+          //          System.out.println("  " + name + " " + mVal + " (" + val1[j] + " " + val2[j] + ")");
+          var.getFunc().setParameter(name, mVal);
+        }
+        else if (val[j] instanceof Double) {
+          double mVal = morphValue((Double) val1[j], (Double) val2[j], pFScl);
+          //          System.out.println("  " + name + " " + mVal + " (" + val1[j] + " " + val2[j] + ")");
+          var.getFunc().setParameter(name, mVal);
+        }
+        else {
+          throw new IllegalStateException();
+        }
+      }
+    }
+    return res;
   }
 
   private static double morphValue(double pValue1, double pValue2, double pFScl) {

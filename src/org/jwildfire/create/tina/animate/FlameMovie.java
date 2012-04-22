@@ -93,7 +93,7 @@ public class FlameMovie {
         else {
           Flame flame2 = parts.get(i + 1).getFlame().makeCopy();
           int morphFrame = pFrame - (currFrame - morphFrames);
-          System.out.println(pFrame + ": " + morphFrame);
+          //          System.out.println(pFrame + ": " + morphFrame);
           return FlameMorphService.morphFlames(flame1, flame2, morphFrame, morphFrames);
         }
       }

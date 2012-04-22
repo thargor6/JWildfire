@@ -573,7 +573,6 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton batchRenderStartButton = null;
   private JButton affineFlipHorizontalButton = null;
   private JButton affineFlipVerticalButton = null;
-  private JLabel animateLightScriptLbl = null;
   private JToggleButton darkTrianglesToggleButton = null;
   private JPanel shadingPanel = null;
   private JLabel shadingLbl = null;
@@ -2989,7 +2988,7 @@ public class TinaInternalFrame extends JInternalFrame {
         getAffineScaleXButton(), getAffineScaleYButton(), getGradientLibraryCenterPanel(), getGradientLibraryGradientCmb(), getHelpPane(),
         getToggleVariationsButton(), getAffinePreserveZButton(), getQualityProfileCmb(), getResolutionProfileCmb(),
         getBatchQualityProfileCmb(), getBatchResolutionProfileCmb(), getInteractiveQualityProfileCmb(), getInteractiveResolutionProfileCmb(),
-        getSwfAnimatorQualityProfileCmb(), getSwfAnimatorResolutionProfileCmb());
+        getSwfAnimatorQualityProfileCmb(), getSwfAnimatorResolutionProfileCmb(), getTinaRenderFlameButton(), getTinaAppendToMovieButton());
 
     tinaController.refreshing = tinaController.cmbRefreshing = tinaController.gridRefreshing = true;
     try {
@@ -3046,7 +3045,7 @@ public class TinaInternalFrame extends JInternalFrame {
           getSwfAnimatorFrameSlider(), getSwfAnimatorFrameREd(), getSwfAnimatorFlamesPanel(), getSwfAnimatorFlamesButtonGroup(),
           getSwfAnimatorOutputCmb(), getSwfAnimatorMoveUpButton(), getSwfAnimatorMoveDownButton(), getSwfAnimatorRemoveFlameButton(),
           getSwfAnimatorRemoveAllFlamesButton(), getSwfAnimatorMovieFromClipboardButton(), getSwfAnimatorMovieFromDiskButton(),
-          getSwfAnimatorMovieToClipboardButton(), getSwfAnimatorMovieToDiskButton()));
+          getSwfAnimatorMovieToClipboardButton(), getSwfAnimatorMovieToDiskButton(), getSwfAnimatorFrameToEditorBtn()));
       tinaController.getSwfAnimatorCtrl().enableControls();
 
     }
@@ -4627,7 +4626,7 @@ public class TinaInternalFrame extends JInternalFrame {
       panel_12.setLayout(null);
 
       swfAnimatorFrameSlider = new JSlider();
-      swfAnimatorFrameSlider.setBounds(100, 5, 246, 19);
+      swfAnimatorFrameSlider.setBounds(100, 5, 199, 19);
       panel_12.add(swfAnimatorFrameSlider);
       swfAnimatorFrameSlider.setMinorTickSpacing(5);
       swfAnimatorFrameSlider.setMinimum(1);
@@ -4664,6 +4663,20 @@ public class TinaInternalFrame extends JInternalFrame {
       lblFrame.setText("Frame");
       lblFrame.setPreferredSize(new Dimension(94, 22));
       lblFrame.setFont(new Font("Dialog", Font.BOLD, 10));
+
+      swfAnimatorFrameToEditorBtn = new JButton();
+      swfAnimatorFrameToEditorBtn.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getSwfAnimatorCtrl().swfAnimatorFrameToEditorBtn_clicked();
+        }
+      });
+      swfAnimatorFrameToEditorBtn.setToolTipText("Copy current flame into Editor");
+      swfAnimatorFrameToEditorBtn.setText("E");
+      swfAnimatorFrameToEditorBtn.setPreferredSize(new Dimension(42, 24));
+      swfAnimatorFrameToEditorBtn.setMnemonic(KeyEvent.VK_E);
+      swfAnimatorFrameToEditorBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      swfAnimatorFrameToEditorBtn.setBounds(306, 0, 42, 28);
+      panel_12.add(swfAnimatorFrameToEditorBtn);
 
       swfAnimatorPreviewRootPanel = new JPanel();
       swfAnimatorPanel_1.add(swfAnimatorPreviewRootPanel, BorderLayout.CENTER);
@@ -4846,6 +4859,7 @@ public class TinaInternalFrame extends JInternalFrame {
       triangleOperationsPanel.add(editSpaceLbl3, null);
       triangleOperationsPanel.add(getToggleTrianglesButton(), null);
       triangleOperationsPanel.add(editSpaceLbl2, null);
+      triangleOperationsPanel.add(getTinaAppendToMovieButton());
       triangleOperationsPanel.add(getTinaRenderFlameButton(), null);
     }
     return triangleOperationsPanel;
@@ -8080,7 +8094,7 @@ public class TinaInternalFrame extends JInternalFrame {
       rootTabbedPane.setEnabled(true);
       rootTabbedPane.addTab("Flame Editor", null, getRootPanel(), null);
       rootTabbedPane.addTab("Interactive Renderer", null, getInteractiveRenderPanel(), null);
-      rootTabbedPane.addTab("SWF Movie Maker", null, getTinaSWFAnimatorPanel(), null);
+      rootTabbedPane.addTab("JWFMovie Maker", null, getTinaSWFAnimatorPanel(), null);
       rootTabbedPane.addTab("Batch Flame Renderer", null, getBatchRenderPanel(), null);
 
       JPanel helpPanel = new JPanel();
@@ -8157,6 +8171,8 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton swfAnimatorMovieFromDiskButton;
   private JButton swfAnimatorMovieToClipboardButton;
   private JButton swfAnimatorMovieToDiskButton;
+  private JButton tinaAppendToMovieButton;
+  private JButton swfAnimatorFrameToEditorBtn;
 
   private JTextPane getHelpPane() {
     if (helpPane == null) {
@@ -9739,5 +9755,26 @@ public class TinaInternalFrame extends JInternalFrame {
       swfAnimatorMovieToDiskButton.setBounds(482, 49, 125, 24);
     }
     return swfAnimatorMovieToDiskButton;
+  }
+
+  private JButton getTinaAppendToMovieButton() {
+    if (tinaAppendToMovieButton == null) {
+      tinaAppendToMovieButton = new JButton();
+      tinaAppendToMovieButton.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.appendToMovieButton_actionPerformed(e);
+        }
+      });
+      tinaAppendToMovieButton.setToolTipText("Append to movie");
+      tinaAppendToMovieButton.setText("M");
+      tinaAppendToMovieButton.setPreferredSize(new Dimension(42, 36));
+      tinaAppendToMovieButton.setMnemonic(KeyEvent.VK_M);
+      tinaAppendToMovieButton.setFont(new Font("Dialog", Font.BOLD, 10));
+    }
+    return tinaAppendToMovieButton;
+  }
+
+  public JButton getSwfAnimatorFrameToEditorBtn() {
+    return swfAnimatorFrameToEditorBtn;
   }
 } //  @jve:decl-index=0:visual-constraint="10,10"

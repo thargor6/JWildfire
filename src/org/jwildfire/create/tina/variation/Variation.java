@@ -23,6 +23,15 @@ public class Variation {
   private double amount;
   private VariationFunc func;
 
+  public Variation() {
+
+  }
+
+  public Variation(double pAmount, VariationFunc pFunc) {
+    amount = pAmount;
+    func = pFunc;
+  }
+
   public double getAmount() {
     return amount;
   }

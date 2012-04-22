@@ -66,6 +66,7 @@ import org.jwildfire.swing.ImagePanel;
 import org.jwildfire.swing.SWFFileChooser;
 
 public class TinaSWFAnimatorController implements SWFAnimationRenderThreadController, FlameHolder {
+  public static final int PAGE_INDEX = 2;
   private SWFAnimationRenderThread renderThread = null;
   private FlameMovie currMovie = new FlameMovie();
   private final TinaController parentCtrl;
@@ -102,6 +103,7 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
   private final JButton swfAnimatorMovieFromDiskButton;
   private final JButton swfAnimatorMovieToClipboardButton;
   private final JButton swfAnimatorMovieToDiskButton;
+  private final JButton swfAnimatorFrameToEditorBtn;
   private FlamePanel flamePanel;
   private final List<JPanel> flamePartPanelList = new ArrayList<JPanel>();
   private final List<JRadioButton> flamePartRadioButtonList = new ArrayList<JRadioButton>();
@@ -119,7 +121,8 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
       JTextField pSWFAnimatorFrameREd, JPanel pSWFAnimatorFlamesPanel, ButtonGroup pSWFAnimatorFlamesButtonGroup,
       JComboBox pSWFAnimatorOutputCmb, JButton pSWFAnimatorMoveUpButton, JButton pSWFAnimatorMoveDownButton,
       JButton pSWFAnimatorRemoveFlameButton, JButton pSWFAnimatorRemoveAllFlamesButton, JButton pSWFAnimatorMovieFromClipboardButton,
-      JButton pSWFAnimatorMovieFromDiskButton, JButton pSWFAnimatorMovieToClipboardButton, JButton pSWFAnimatorMovieToDiskButton) {
+      JButton pSWFAnimatorMovieFromDiskButton, JButton pSWFAnimatorMovieToClipboardButton, JButton pSWFAnimatorMovieToDiskButton,
+      JButton pSWFAnimatorFrameToEditorBtn) {
     noRefresh = true;
     try {
       parentCtrl = pParentCtrl;
@@ -156,6 +159,7 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
       swfAnimatorMovieFromDiskButton = pSWFAnimatorMovieFromDiskButton;
       swfAnimatorMovieToClipboardButton = pSWFAnimatorMovieToClipboardButton;
       swfAnimatorMovieToDiskButton = pSWFAnimatorMovieToDiskButton;
+      swfAnimatorFrameToEditorBtn = pSWFAnimatorFrameToEditorBtn;
 
       swfAnimatorOutputCmb.addItem(OutputFormat.PNG);
       swfAnimatorOutputCmb.addItem(OutputFormat.SWF);
@@ -208,6 +212,8 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
     swfAnimatorMovieFromDiskButton.setEnabled(!rendering);
     swfAnimatorMovieToClipboardButton.setEnabled(flameCount > 0);
     swfAnimatorMovieToDiskButton.setEnabled(flameCount > 0);
+    swfAnimatorFrameSlider.setEnabled(flameCount > 0);
+    swfAnimatorFrameToEditorBtn.setEnabled(flameCount > 0);
   }
 
   public void loadFlameFromMainButton_clicked() {
@@ -227,7 +233,7 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
     FlameMoviePart part = new FlameMoviePart();
     part.setFlame(pFlame);
     part.setFrameCount(120);
-    part.setFrameMorphCount(0);
+    part.setFrameMorphCount(120);
     addFlameToFlamePanel(part);
     currMovie.addPart(part);
     refreshFrameCount();
@@ -953,6 +959,20 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
     }
     catch (Throwable ex) {
       errorHandler.handleError(ex);
+    }
+
+  }
+
+  public void importFlameFromEditor(Flame pFlame) {
+    addFlame(pFlame);
+    enableControls();
+  }
+
+  public void swfAnimatorFrameToEditorBtn_clicked() {
+    Flame flame = getCurrFlame();
+    if (flame != null) {
+      parentCtrl.importFlame(flame);
+      parentCtrl.getRootTabbedPane().setSelectedIndex(0);
     }
 
   }

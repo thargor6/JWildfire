@@ -385,6 +385,9 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
   private final ProgressUpdater jobProgressUpdater;
   private final JTable createPaletteColorsTable;
   private List<RGBColor> paletteKeyFrames;
+  private final JButton renderFlameButton;
+  private final JButton appendToMovieButton;
+
   // mouse dragging
   private final JToggleButton mouseTransformMoveButton;
   private final JToggleButton mouseTransformRotateButton;
@@ -441,7 +444,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       JToggleButton pToggleVariationsButton, JToggleButton pAffinePreserveZButton,
       JComboBox pQualityProfileCmb, JComboBox pResolutionProfileCmb, JComboBox pBatchQualityProfileCmb, JComboBox pBatchResolutionProfileCmb,
       JComboBox pInteractiveQualityProfileCmb, JComboBox pInteractiveResolutionProfileCmb, JComboBox pSWFAnimatorQualityProfileCmb,
-      JComboBox pSWFAnimatorResolutionProfileCmb) {
+      JComboBox pSWFAnimatorResolutionProfileCmb, JButton pRenderFlameButton, JButton pAppendToMovieButton) {
     errorHandler = pErrorHandler;
     prefs = pPrefs;
     centerPanel = pCenterPanel;
@@ -552,6 +555,8 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     nonlinearControlsRows = pNonlinearControlsRows;
     gradientLibraryPanel = pGradientLibraryPanel;
     gradientLibraryGradientCmb = pGradientLibraryGradientCmb;
+    renderFlameButton = pRenderFlameButton;
+    appendToMovieButton = pAppendToMovieButton;
 
     xFormColorREd = pXFormColorREd;
     xFormColorSlider = pXFormColorSlider;
@@ -4140,6 +4145,18 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
         errorHandler.handleError(ex);
       }
     }
+  }
+
+  public void appendToMovieButton_actionPerformed(ActionEvent e) {
+    Flame currFlame = getCurrFlame();
+    if (currFlame != null) {
+      getSwfAnimatorCtrl().importFlameFromEditor(currFlame);
+      rootTabbedPane.setSelectedIndex(TinaSWFAnimatorController.PAGE_INDEX);
+    }
+  }
+
+  protected JTabbedPane getRootTabbedPane() {
+    return rootTabbedPane;
   }
 
 }

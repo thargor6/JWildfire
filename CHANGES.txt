@@ -1,7 +1,3 @@
-TODO:
-  morphing
-  load/save
-
 V0.44 (12.04.2012):
  - Fractal flame editor: take into account the real density while tonemapping an image in the interactive renderer for saving
  - Fractal flames editor: Added some "wilderness" to the flowers-random-flame-generator
