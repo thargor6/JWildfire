@@ -51,6 +51,7 @@ public class Prefs extends ManagedObject {
   static final String KEY_TINA_PROFILE_QUALITY_DEFAULT_PROFILE = "tina.profile.quality.default_profile";
 
   static final String KEY_TINA_PATH_FLAMES = "tina.path.flames";
+  static final String KEY_TINA_PATH_JWFMOVIES = "tina.path.jwfmovies";
   static final String KEY_TINA_RENDER_MOVIE_FRAMES = "tina.render.movie.frames";
 
   static final String KEY_TINA_RENDER_REALTIME_QUALITY = "tina.render.realtime.quality";
@@ -84,6 +85,11 @@ public class Prefs extends ManagedObject {
   private String tinaFlamePath = null;
   private String lastInputFlamePath = null;
   private String lastOutputFlamePath = null;
+
+  @Property(description = "JWFMovie file drawer", category = PropertyCategory.TINA)
+  private String tinaJWFMoviePath = null;
+  private String lastInputJWFMoviePath = null;
+  private String lastOutputJWFMoviePath = null;
 
   @Property(description = "Associate profile information with flame files", category = PropertyCategory.TINA)
   private boolean tinaAssociateProfilesWithFlames = false;
@@ -221,6 +227,28 @@ public class Prefs extends ManagedObject {
     }
   }
 
+  public String getInputJWFMoviePath() {
+    return lastInputJWFMoviePath != null ? lastInputJWFMoviePath : tinaJWFMoviePath;
+  }
+
+  public void setLastInputJWFMovieFile(File pFile) {
+    lastInputJWFMoviePath = pFile.getParent();
+    if (tinaJWFMoviePath == null || tinaJWFMoviePath.length() == 0) {
+      tinaJWFMoviePath = lastInputJWFMoviePath;
+    }
+  }
+
+  public String getOutputJWFMoviePath() {
+    return lastOutputJWFMoviePath != null ? lastOutputJWFMoviePath : tinaJWFMoviePath;
+  }
+
+  public void setLastOutputJWFMovieFile(File pFile) {
+    lastOutputJWFMoviePath = pFile.getParent();
+    if (tinaJWFMoviePath == null || tinaJWFMoviePath.length() == 0) {
+      tinaJWFMoviePath = lastOutputJWFMoviePath;
+    }
+  }
+
   public String getInputSunflowScenePath() {
     return lastInputSunflowScenePath != null ? lastInputSunflowScenePath : sunflowScenePath;
   }
@@ -259,6 +287,10 @@ public class Prefs extends ManagedObject {
     this.tinaFlamePath = flamePath;
   }
 
+  public void setTinaJWFMoviePath(String jwfMoviePath) {
+    this.tinaJWFMoviePath = jwfMoviePath;
+  }
+
   public void setSunflowScenePath(String sunflowScenePath) {
     this.sunflowScenePath = sunflowScenePath;
   }
@@ -269,6 +301,10 @@ public class Prefs extends ManagedObject {
 
   public String getTinaFlamePath() {
     return tinaFlamePath;
+  }
+
+  public String getTinaJWFMoviePath() {
+    return tinaJWFMoviePath;
   }
 
   public String getSunflowScenePath() {
@@ -289,6 +325,9 @@ public class Prefs extends ManagedObject {
     tinaFlamePath = pSrc.tinaFlamePath;
     lastInputFlamePath = pSrc.lastInputFlamePath;
     lastOutputFlamePath = pSrc.lastOutputFlamePath;
+    tinaJWFMoviePath = pSrc.tinaJWFMoviePath;
+    lastInputJWFMoviePath = pSrc.lastInputJWFMoviePath;
+    lastOutputJWFMoviePath = pSrc.lastOutputJWFMoviePath;
     sunflowScenePath = pSrc.sunflowScenePath;
     lastInputSunflowScenePath = pSrc.lastInputSunflowScenePath;
     lastOutputSunflowScenePath = pSrc.lastOutputSunflowScenePath;

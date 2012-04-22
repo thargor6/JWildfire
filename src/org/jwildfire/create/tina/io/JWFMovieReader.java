@@ -16,8 +16,30 @@
 */
 package org.jwildfire.create.tina.io;
 
+import static org.jwildfire.create.tina.io.JWFMovieWriter.ATTR_COLOR_OVERSAMPLING;
+import static org.jwildfire.create.tina.io.JWFMovieWriter.ATTR_FPS;
+import static org.jwildfire.create.tina.io.JWFMovieWriter.ATTR_FRAME_COUNT;
+import static org.jwildfire.create.tina.io.JWFMovieWriter.ATTR_FRAME_HEIGHT;
+import static org.jwildfire.create.tina.io.JWFMovieWriter.ATTR_FRAME_MORPH_COUNT;
+import static org.jwildfire.create.tina.io.JWFMovieWriter.ATTR_FRAME_WIDTH;
+import static org.jwildfire.create.tina.io.JWFMovieWriter.ATTR_OUTPUT_FORMAT;
+import static org.jwildfire.create.tina.io.JWFMovieWriter.ATTR_QUALITY;
+import static org.jwildfire.create.tina.io.JWFMovieWriter.ATTR_SCRIPT_GLOBAL;
+import static org.jwildfire.create.tina.io.JWFMovieWriter.ATTR_SCRIPT_XFORM;
+import static org.jwildfire.create.tina.io.JWFMovieWriter.ATTR_SOUND_FILENAME;
+import static org.jwildfire.create.tina.io.JWFMovieWriter.ATTR_SPATIAL_OVERSAMPLING;
+import static org.jwildfire.create.tina.io.JWFMovieWriter.TAG_JWF_MOVIE;
+import static org.jwildfire.create.tina.io.JWFMovieWriter.TAG_JWF_MOVIE_PART;
+
+import java.util.Map;
+
 import org.jwildfire.base.Tools;
+import org.jwildfire.create.tina.animate.AnimationService.GlobalScript;
+import org.jwildfire.create.tina.animate.AnimationService.XFormScript;
 import org.jwildfire.create.tina.animate.FlameMovie;
+import org.jwildfire.create.tina.animate.FlameMoviePart;
+import org.jwildfire.create.tina.animate.OutputFormat;
+import org.jwildfire.create.tina.base.Flame;
 
 public class JWFMovieReader {
 
@@ -32,18 +54,109 @@ public class JWFMovieReader {
   }
 
   public FlameMovie readMovieFromXML(String pXML) {
+    // extract movie xml
     String movieXML;
     {
-      int ps = pXML.indexOf("<" + JWFMovieWriter.TAG_JWF_MOVIE + " ");
+      int ps = pXML.indexOf("<" + TAG_JWF_MOVIE + " ");
       if (ps < 0)
         return null;
-      int pe = pXML.indexOf("</" + JWFMovieWriter.TAG_JWF_MOVIE + ">", ps + 1);
+      int pe = pXML.indexOf("</" + TAG_JWF_MOVIE + ">", ps + 1);
       if (pe < 0)
         return null;
       movieXML = pXML.substring(ps, pe);
     }
-    FlameMovie res = new FlameMovie();
+    FlameMovie movie = new FlameMovie();
+    // Movie attributes
+    {
+      int ps = movieXML.indexOf("<" + TAG_JWF_MOVIE + " ");
+      int pe = -1;
+      boolean qt = false;
+      for (int i = ps + 1; i < movieXML.length(); i++) {
+        if (movieXML.charAt(i) == '\"') {
+          qt = !qt;
+        }
+        else if (!qt && movieXML.charAt(i) == '>') {
+          pe = i;
+          break;
+        }
+      }
+      String hs = movieXML.substring(ps + 7, pe);
+      parseMovieAttributes(movie, hs);
+    }
+    // parts
+    {
+      int p = 0;
+      while (true) {
+        int ps = movieXML.indexOf("<" + TAG_JWF_MOVIE_PART + " ", p + 1);
+        if (ps < 0)
+          break;
+        int pe = movieXML.indexOf("</" + TAG_JWF_MOVIE_PART + ">", ps + 1);
+        if (pe < 0) {
+          pe = movieXML.indexOf("/>", ps + 1);
+        }
+        String hs = movieXML.substring(ps + TAG_JWF_MOVIE_PART.length() + 1, pe);
+        FlameMoviePart part = new FlameMoviePart();
+        movie.addPart(part);
+        int psFlame = hs.indexOf("<flame ");
+        if (psFlame > 0) {
+          int peFlame = hs.indexOf("</flame>", psFlame + 1);
+          String flameXML = hs.substring(psFlame, peFlame + 8);
+          Flame flame = new Flam3Reader().readFlamesfromXML(flameXML).get(0);
+          part.setFlame(flame);
+          //System.out.println(flameXML);
+          hs = hs.substring(0, psFlame);
+        }
+        parseMoviePartAttributes(part, hs);
+        p = pe + 2;
+      }
+    }
 
-    return res;
+    return movie;
+  }
+
+  private void parseMoviePartAttributes(FlameMoviePart pPart, String pXML) {
+    Map<String, String> atts = Tools.parseAttributes(pXML);
+    String hs;
+    if ((hs = atts.get(ATTR_FRAME_COUNT)) != null) {
+      pPart.setFrameCount(Integer.parseInt(hs));
+    }
+    if ((hs = atts.get(ATTR_FRAME_MORPH_COUNT)) != null) {
+      pPart.setFrameMorphCount(Integer.parseInt(hs));
+    }
+  }
+
+  private void parseMovieAttributes(FlameMovie pMovie, String pXML) {
+    Map<String, String> atts = Tools.parseAttributes(pXML);
+    String hs;
+    if ((hs = atts.get(ATTR_SOUND_FILENAME)) != null) {
+      pMovie.setSoundFilename(hs);
+    }
+    if ((hs = atts.get(ATTR_SCRIPT_GLOBAL)) != null) {
+      pMovie.setGlobalScript(GlobalScript.valueOf(hs));
+    }
+    if ((hs = atts.get(ATTR_SCRIPT_XFORM)) != null) {
+      pMovie.setxFormScript(XFormScript.valueOf(hs));
+    }
+    if ((hs = atts.get(ATTR_FRAME_WIDTH)) != null) {
+      pMovie.setFrameWidth(Integer.parseInt(hs));
+    }
+    if ((hs = atts.get(ATTR_FRAME_HEIGHT)) != null) {
+      pMovie.setFrameHeight(Integer.parseInt(hs));
+    }
+    if ((hs = atts.get(ATTR_FPS)) != null) {
+      pMovie.setFramesPerSecond(Double.parseDouble(hs));
+    }
+    if ((hs = atts.get(ATTR_OUTPUT_FORMAT)) != null) {
+      pMovie.setOutputFormat(OutputFormat.valueOf(hs));
+    }
+    if ((hs = atts.get(ATTR_COLOR_OVERSAMPLING)) != null) {
+      pMovie.setColorOversampling(Integer.parseInt(hs));
+    }
+    if ((hs = atts.get(ATTR_SPATIAL_OVERSAMPLING)) != null) {
+      pMovie.setSpatialOversampling(Integer.parseInt(hs));
+    }
+    if ((hs = atts.get(ATTR_QUALITY)) != null) {
+      pMovie.setQuality(Integer.parseInt(hs));
+    }
   }
 }

@@ -208,10 +208,6 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
     swfAnimatorMovieFromDiskButton.setEnabled(!rendering);
     swfAnimatorMovieToClipboardButton.setEnabled(flameCount > 0);
     swfAnimatorMovieToDiskButton.setEnabled(flameCount > 0);
-    // TODO
-    swfAnimatorMovieFromClipboardButton.setVisible(false);
-    swfAnimatorMovieFromDiskButton.setVisible(false);
-    swfAnimatorMovieToDiskButton.setVisible(false);
   }
 
   public void loadFlameFromMainButton_clicked() {
@@ -282,7 +278,7 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
     panel.setLayout(null);
     panel.setLocation(0, 0);
 
-    if (imageWidth > 16 && imageHeight > 16) {
+    if (imageWidth > 16 && imageHeight > 16 && pPart.getFlame() != null) {
       SimpleImage img;
       {
         RenderInfo info = new RenderInfo(imageWidth, imageHeight);
@@ -899,8 +895,28 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
   }
 
   public void movieFromDiskButton_clicked() {
-    // TODO Auto-generated method stub
-
+    try {
+      JFileChooser chooser = new JWFMovieFileChooser(prefs);
+      if (prefs.getInputJWFMoviePath() != null) {
+        try {
+          chooser.setCurrentDirectory(new File(prefs.getInputJWFMoviePath()));
+        }
+        catch (Exception ex) {
+          ex.printStackTrace();
+        }
+      }
+      if (chooser.showOpenDialog(swfAnimatorFlamesPanel) == JFileChooser.APPROVE_OPTION) {
+        File file = chooser.getSelectedFile();
+        FlameMovie movie = new JWFMovieReader().readMovie(file.getAbsolutePath());
+        if (movie != null) {
+          currMovie = movie;
+        }
+        refreshUI();
+      }
+    }
+    catch (Throwable ex) {
+      errorHandler.handleError(ex);
+    }
   }
 
   public void movieToClipboardButton_clicked() {
@@ -919,7 +935,25 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
 
   public void movieToDiskButton_clicked() {
     updateMovieFields();
-    // TODO Auto-generated method stub
+    try {
+      JFileChooser chooser = new JWFMovieFileChooser(prefs);
+      if (prefs.getOutputFlamePath() != null) {
+        try {
+          chooser.setCurrentDirectory(new File(prefs.getOutputJWFMoviePath()));
+        }
+        catch (Exception ex) {
+          ex.printStackTrace();
+        }
+      }
+      if (chooser.showSaveDialog(swfAnimatorFlamesPanel) == JFileChooser.APPROVE_OPTION) {
+        File file = chooser.getSelectedFile();
+        new JWFMovieWriter().writeFlame(currMovie, file.getAbsolutePath());
+        prefs.setLastOutputJWFMovieFile(file);
+      }
+    }
+    catch (Throwable ex) {
+      errorHandler.handleError(ex);
+    }
 
   }
 }

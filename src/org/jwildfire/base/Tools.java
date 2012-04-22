@@ -53,6 +53,7 @@ public class Tools {
   public static final String FILEEXT_SWF = "swf";
   public static final String FILEEXT_FLAME = "flame";
   public static final String FILE_ENCODING = "utf-8";
+  public static final String FILEEXT_JWFMOVIE = "jwfmovie";
 
   public static final double fmod33(double arg) {
     return (arg - (double) ((int) arg));
