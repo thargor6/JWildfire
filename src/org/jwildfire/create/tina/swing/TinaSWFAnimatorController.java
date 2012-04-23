@@ -18,6 +18,7 @@ package org.jwildfire.create.tina.swing;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
@@ -233,7 +234,7 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
     FlameMoviePart part = new FlameMoviePart();
     part.setFlame(pFlame);
     part.setFrameCount(120);
-    part.setFrameMorphCount(120);
+    part.setFrameMorphCount(60);
     addFlameToFlamePanel(part);
     currMovie.addPart(part);
     refreshFrameCount();
@@ -264,6 +265,7 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
     final int FIELD_WIDTH = 50;
     final int FIELD_HEIGHT = 24;
     final int LABEL_HEIGHT = 24;
+    final int BUTTON_WIDTH = 48;
     final int BORDER_SIZE = 8;
     int imageHeight = PANEL_HEIGHT - (4 * FIELD_HEIGHT + 5 * BORDER_SIZE);
     ResolutionProfile resProfile = getResolutionProfile();
@@ -335,10 +337,35 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
       panel.add(framesMorphField);
     }
     yOff += FIELD_HEIGHT;
+    {
+      JButton editButton = new JButton("E");
+      editButton.setBounds(BORDER_SIZE, yOff, BUTTON_WIDTH, FIELD_HEIGHT);
+      editButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      editButton.setToolTipText("Edit flame");
+      editButton.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent e) {
+          editPartBtn_clicked(pPart);
+        }
+      });
+      panel.add(editButton);
+    }
+    {
+      JButton delButton = new JButton("D");
+      delButton.setBounds(BORDER_SIZE + BUTTON_WIDTH + 1, yOff, BUTTON_WIDTH, FIELD_HEIGHT);
+      delButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      delButton.setToolTipText("Remove flame from movie");
+      delButton.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent e) {
+          deletePartBtn_clicked(pPart);
+        }
+      });
+      panel.add(delButton);
+    }
+
     JRadioButton selectButton;
     {
       selectButton = new JRadioButton("");
-      selectButton.setBounds(BORDER_SIZE + LABEL_WIDTH, yOff, FIELD_WIDTH + 1, FIELD_HEIGHT);
+      selectButton.setBounds(BORDER_SIZE + 2 * BUTTON_WIDTH + 2, yOff, FIELD_WIDTH + 1, FIELD_HEIGHT);
       selectButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
           enableControls();
@@ -354,6 +381,11 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
     flamePartRadioButtonList.add(selectButton);
 
     swfAnimatorFlamesPanel.getParent().validate();
+  }
+
+  protected void editPartBtn_clicked(FlameMoviePart pPart) {
+    parentCtrl.importFlame(pPart.getFlame());
+    parentCtrl.getRootTabbedPane().setSelectedIndex(0);
   }
 
   public void loadFlameFromClipboardButton_clicked() {
@@ -769,23 +801,6 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
     }
   }
 
-  public void removeFlameButton_clicked() {
-    int selected = getSelectedFlameRadioButtonIndex();
-    if (selected >= 0 && selected < getFlameCount()) {
-      swfAnimatorFlamesPanel.remove(flamePartPanelList.get(selected));
-      currMovie.getParts().remove(selected);
-      flamePartPanelList.remove(selected);
-      swfAnimatorFlamesButtonGroup.remove(flamePartRadioButtonList.get(selected));
-      flamePartRadioButtonList.remove(selected);
-      if (flamePartRadioButtonList.size() > 0) {
-        flamePartRadioButtonList.get(0).setSelected(true);
-      }
-      swfAnimatorFlamesPanel.getParent().validate();
-      refreshFlameImage();
-      enableControls();
-    }
-  }
-
   public void clearAllFlamesButton_clicked() {
     for (JPanel panel : flamePartPanelList) {
       swfAnimatorFlamesPanel.remove(panel);
@@ -974,6 +989,36 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
       parentCtrl.importFlame(flame);
       parentCtrl.getRootTabbedPane().setSelectedIndex(0);
     }
-
   }
+
+  private void deletePartBtn_clicked(FlameMoviePart pPart) {
+    for (int i = 0; i < currMovie.getParts().size(); i++) {
+      if (currMovie.getParts().get(i).equals(pPart)) {
+        removeFlame(i);
+        break;
+      }
+    }
+  }
+
+  public void removeFlameButton_clicked() {
+    int selected = getSelectedFlameRadioButtonIndex();
+    removeFlame(selected);
+  }
+
+  public void removeFlame(int pSelected) {
+    if (pSelected >= 0 && pSelected < getFlameCount()) {
+      swfAnimatorFlamesPanel.remove(flamePartPanelList.get(pSelected));
+      currMovie.getParts().remove(pSelected);
+      flamePartPanelList.remove(pSelected);
+      swfAnimatorFlamesButtonGroup.remove(flamePartRadioButtonList.get(pSelected));
+      flamePartRadioButtonList.remove(pSelected);
+      if (flamePartRadioButtonList.size() > 0) {
+        flamePartRadioButtonList.get(0).setSelected(true);
+      }
+      swfAnimatorFlamesPanel.getParent().validate();
+      refreshFlameImage();
+      enableControls();
+    }
+  }
+
 }

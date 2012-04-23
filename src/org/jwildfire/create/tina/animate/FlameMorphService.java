@@ -195,8 +195,11 @@ public class FlameMorphService {
       for (int j = 0; j < var.getFunc().getParameterNames().length; j++) {
         String name = var.getFunc().getParameterNames()[j];
         if (val[j] instanceof Integer) {
-          //          int mVal = morphValue((Integer) val1[j], (Integer) val2[j], pFScl);
-          int mVal = pFScl >= 0.5 ? (Integer) val2[j] : (Integer) val1[j];
+          int mVal = morphValue((Integer) val1[j], (Integer) val2[j], pFScl);
+          if (mVal == 0 && name.toLowerCase().indexOf("julia") >= 0) {
+            mVal = 1;
+          }
+          //    int mVal = pFScl >= 0.5 ? (Integer) val2[j] : (Integer) val1[j];
           //          System.out.println("  " + name + " " + mVal + " (" + val1[j] + " " + val2[j] + ")");
           var.getFunc().setParameter(name, mVal);
         }

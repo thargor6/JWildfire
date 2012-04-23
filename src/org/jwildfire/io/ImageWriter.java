@@ -41,8 +41,14 @@ public class ImageWriter {
   }
 
   public void saveImage(SimpleImage pImg, String pFilename) throws Exception {
+    saveImage(pImg, pFilename, false);
+  }
+
+  public void saveImage(SimpleImage pImg, String pFilename, boolean pQuiet) throws Exception {
     String filename = new File(pFilename).getName();
-    System.out.println("file: " + filename);
+    if (!pQuiet) {
+      System.out.println("file: " + filename);
+    }
     String[] p = filename.split("\\.");
     if (p.length == 1)
       saveAsJPEG(pImg, pFilename + ".jpg");

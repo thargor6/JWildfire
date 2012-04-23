@@ -143,7 +143,7 @@ public class SWFAnimationRenderThread implements Runnable {
     }
     filename += hs + ".png";
     ImageIO.setUseCache(false);
-    new ImageWriter().saveImage(pImage, filename);
+    new ImageWriter().saveImage(pImage, filename, true);
   }
 
   private void addImageToMovie(SimpleImage pImage, int pFrame) throws Exception {
@@ -209,27 +209,13 @@ public class SWFAnimationRenderThread implements Runnable {
     while (id.length() < 6) {
       id = "0" + id;
     }
-    String tmpFilename = tmpBasefilename + "." + id + ".jpg";
+    String tmpFilename = tmpBasefilename + "." + id + ".png";
     ImageIO.setUseCache(false);
-    new ImageWriter().saveImage(pImage, tmpFilename);
+    new ImageWriter().saveImage(pImage, tmpFilename, true);
     final ImageFactory factory = new ImageFactory();
     File f = new File(tmpFilename);
     try {
-      int times = 0;
-      while (true) {
-        try {
-          factory.read(f);
-          break;
-        }
-        catch (Exception ex) {
-          if (++times > 3) {
-            throw ex;
-          }
-          ex.printStackTrace();
-          Thread.sleep(500);
-          System.out.println("RETRY...");
-        }
-      }
+      factory.read(f);
     }
     finally {
       if (!f.delete()) {
@@ -254,7 +240,7 @@ public class SWFAnimationRenderThread implements Runnable {
     header.setFrameRate((float) flameMovie.getFramesPerSecond());
     final int width = 20;
     final Color color = WebPalette.BLACK.color();
-    final ImageFactory factory = createImageFactory(new SimpleImage(flameMovie.getFrameWidth(), flameMovie.getFrameHeight()));
+    final ImageFactory factory = createImageFactory(new SimpleImage(flameMovie.getFrameWidth() - 1, flameMovie.getFrameHeight() - 1));
     final ImageTag image = factory.defineImage(uid++);
     ShapeTag shape = new ImageShape().defineShape(uid++, image,
         xOrigin, yOrigin, new LineStyle1(width, color));
