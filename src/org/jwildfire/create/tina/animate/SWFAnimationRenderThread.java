@@ -35,7 +35,6 @@ import com.flagstone.transform.datatype.WebPalette;
 import com.flagstone.transform.image.ImageTag;
 import com.flagstone.transform.linestyle.LineStyle1;
 import com.flagstone.transform.shape.ShapeTag;
-import com.flagstone.transform.util.image.ImageFactory;
 import com.flagstone.transform.util.image.ImageShape;
 import com.flagstone.transform.util.sound.SoundFactory;
 
@@ -147,7 +146,7 @@ public class SWFAnimationRenderThread implements Runnable {
   }
 
   private void addImageToMovie(SimpleImage pImage, int pFrame) throws Exception {
-    final ImageFactory factory = createImageFactory(pImage);
+    final JWFImageFactory factory = createImageFactory(pImage);
     final ImageTag image = factory.defineImage(uid++);
     final int xOrigin = -image.getWidth() / 2;
     final int yOrigin = -image.getHeight() / 2;
@@ -204,24 +203,9 @@ public class SWFAnimationRenderThread implements Runnable {
     
    */
 
-  private ImageFactory createImageFactory(SimpleImage pImage) throws Exception {
-    String id = String.valueOf(uid);
-    while (id.length() < 6) {
-      id = "0" + id;
-    }
-    String tmpFilename = tmpBasefilename + "." + id + ".png";
-    ImageIO.setUseCache(false);
-    new ImageWriter().saveImage(pImage, tmpFilename, true);
-    final ImageFactory factory = new ImageFactory();
-    File f = new File(tmpFilename);
-    try {
-      factory.read(f);
-    }
-    finally {
-      if (!f.delete()) {
-        f.deleteOnExit();
-      }
-    }
+  private JWFImageFactory createImageFactory(SimpleImage pImage) throws Exception {
+    final JWFImageFactory factory = new JWFImageFactory();
+    factory.read(pImage);
     return factory;
   }
 
@@ -240,7 +224,7 @@ public class SWFAnimationRenderThread implements Runnable {
     header.setFrameRate((float) flameMovie.getFramesPerSecond());
     final int width = 20;
     final Color color = WebPalette.BLACK.color();
-    final ImageFactory factory = createImageFactory(new SimpleImage(flameMovie.getFrameWidth() - 1, flameMovie.getFrameHeight() - 1));
+    final JWFImageFactory factory = createImageFactory(new SimpleImage(flameMovie.getFrameWidth() - 1, flameMovie.getFrameHeight() - 1));
     final ImageTag image = factory.defineImage(uid++);
     ShapeTag shape = new ImageShape().defineShape(uid++, image,
         xOrigin, yOrigin, new LineStyle1(width, color));
