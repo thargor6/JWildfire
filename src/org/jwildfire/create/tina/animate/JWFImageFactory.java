@@ -33,7 +33,9 @@ import com.flagstone.transform.util.image.ImageFactory;
 import com.flagstone.transform.util.image.ImageProvider;
 
 // This class enhances the standard ImageFactory by a feature to accept an image which is already in memory.
-// (This was at least necessary because both the PNG anf JPG reader seam to crash in some cases.)  
+// (This was at least necessary because both the PNG anf JPG reader seam to crash in some cases.)
+// NOTE: It's neccessary to remove the "final" from the ancestor class and make the property "decoder" of the ancestor
+// class protected, otherwise it will not compile 
 public class JWFImageFactory extends ImageFactory {
 
   public void read(SimpleImage pImage) {
@@ -85,9 +87,9 @@ public class JWFImageFactory extends ImageFactory {
           byte g = (byte) ((rgb >> 8) & 0xff);
           byte b = (byte) ((rgb) & 0xff);
           res[idx++] = (byte) 255;
-          res[idx++] = b;
-          res[idx++] = g;
           res[idx++] = r;
+          res[idx++] = g;
+          res[idx++] = b;
         }
       }
       return res;

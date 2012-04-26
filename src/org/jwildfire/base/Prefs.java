@@ -483,3 +483,9 @@ public class Prefs extends ManagedObject {
     this.tinaAssociateProfilesWithFlames = tinaAssociateProfilesWithFlames;
   }
 }
+
+/*
+1920x1080 = 1080p
+1280x720 = 720p
+640x360 = 360p
+*/

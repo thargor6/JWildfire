@@ -175,34 +175,6 @@ public class SWFAnimationRenderThread implements Runnable {
     movie.encodeToFile(new File(outputFilename));
   }
 
-  /*
-   I had to patch the factory.read() method as follows (otherwise the tmp files can not get deleted):
-   
-    public void read(final File file) throws IOException, DataFormatException {
-      ImageInfo info = new ImageInfo();
-      RandomAccessFile rf = new RandomAccessFile(file, "r");
-      try {
-        info.setInput(rf);
-        if (!info.check()) {
-          throw new DataFormatException("Unsupported format");
-        }
-        decoder = ImageRegistry.getImageProvider(info.getImageFormat().getMimeType());
-      }
-      finally {
-        rf.close();
-      }
-      info = null;
-      InputStream is = new FileInputStream(file);
-      try {
-        decoder.read(is);
-      }
-      finally {
-        is.close();
-      }
-    }  
-    
-   */
-
   private JWFImageFactory createImageFactory(SimpleImage pImage) throws Exception {
     final JWFImageFactory factory = new JWFImageFactory();
     factory.read(pImage);

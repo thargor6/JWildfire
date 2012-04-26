@@ -1,3 +1,23 @@
+V0.45 (12.04.2012):
+ - Fractal flame editor: fixed some SWF releated problems
+ - Fractal flame editor: some improvements to the Animator UI
+ - Fractal flame editor: new morphing algorithm
+ - Fractal flame editor: loading and saving of JWFMovie files
+ - Fractal flame editor: movie file writer
+ - Fractal editor: enhancements to the SWF Animator
+ - Main: WelcomeScreen finished
+ - Fractal flame editor: optimized layout for the SWF Animator
+ - Fractal flame editor: multiple flame support in the SWF Animator
+ - Main: started to create a welcome screen
+ - Fractal flame editor: started to create a preview for the SWF animator
+ - Fractal flames editor: first working version of the SWF animator
+ - Fractal flame editor: simple SWF animation generator
+ - Fractal flame editor: option to enable/disable the association of profile information with flame files
+ - Fractal flame editor: set the default filter radius to 0.0 in all random flame generators
+ - General: Path settings for sound and SWF files in the Preferences window
+ - Fractal flame editor: new "SWF Animator" panel for simple swf animations
+ - Fractal flame editor: removed the Morph and Animate tabs
+
 V0.44 (12.04.2012):
  - Fractal flame editor: take into account the real density while tonemapping an image in the interactive renderer for saving
  - Fractal flames editor: Added some "wilderness" to the flowers-random-flame-generator

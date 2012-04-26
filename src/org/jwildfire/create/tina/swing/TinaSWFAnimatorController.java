@@ -105,6 +105,7 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
   private final JButton swfAnimatorMovieToClipboardButton;
   private final JButton swfAnimatorMovieToDiskButton;
   private final JButton swfAnimatorFrameToEditorBtn;
+  private final JButton swfAnimatorPlayButton;
   private FlamePanel flamePanel;
   private final List<JPanel> flamePartPanelList = new ArrayList<JPanel>();
   private final List<JRadioButton> flamePartRadioButtonList = new ArrayList<JRadioButton>();
@@ -123,7 +124,7 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
       JComboBox pSWFAnimatorOutputCmb, JButton pSWFAnimatorMoveUpButton, JButton pSWFAnimatorMoveDownButton,
       JButton pSWFAnimatorRemoveFlameButton, JButton pSWFAnimatorRemoveAllFlamesButton, JButton pSWFAnimatorMovieFromClipboardButton,
       JButton pSWFAnimatorMovieFromDiskButton, JButton pSWFAnimatorMovieToClipboardButton, JButton pSWFAnimatorMovieToDiskButton,
-      JButton pSWFAnimatorFrameToEditorBtn) {
+      JButton pSWFAnimatorFrameToEditorBtn, JButton pSWFAnimatorPlayButton) {
     noRefresh = true;
     try {
       parentCtrl = pParentCtrl;
@@ -161,6 +162,7 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
       swfAnimatorMovieToClipboardButton = pSWFAnimatorMovieToClipboardButton;
       swfAnimatorMovieToDiskButton = pSWFAnimatorMovieToDiskButton;
       swfAnimatorFrameToEditorBtn = pSWFAnimatorFrameToEditorBtn;
+      swfAnimatorPlayButton = pSWFAnimatorPlayButton;
 
       swfAnimatorOutputCmb.addItem(OutputFormat.PNG);
       swfAnimatorOutputCmb.addItem(OutputFormat.SWF);
@@ -188,6 +190,7 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
     swfAnimatorFramesREd.setEnabled(!rendering);
     swfAnimatorFramesPerSecondREd.setEnabled(!rendering);
     swfAnimatorGenerateButton.setEnabled(!rendering && currMovie.getFrameCount() > 0);
+    swfAnimatorPlayButton.setEnabled(swfAnimatorGenerateButton.isEnabled());
     swfAnimatorResolutionProfileCmb.setEnabled(!rendering);
     swfAnimatorQualityProfileCmb.setEnabled(!rendering);
     swfAnimatorLoadFlameFromMainButton.setEnabled(!rendering);
@@ -1007,7 +1010,7 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
 
   public void removeFlame(int pSelected) {
     if (pSelected >= 0 && pSelected < getFlameCount()) {
-      swfAnimatorFlamesPanel.remove(flamePartPanelList.get(pSelected));
+      swfAnimatorFlamesPanel.remove(pSelected);
       currMovie.getParts().remove(pSelected);
       flamePartPanelList.remove(pSelected);
       swfAnimatorFlamesButtonGroup.remove(flamePartRadioButtonList.get(pSelected));
@@ -1015,9 +1018,35 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
       if (flamePartRadioButtonList.size() > 0) {
         flamePartRadioButtonList.get(0).setSelected(true);
       }
+
+      swfAnimatorFlamesPanel.invalidate();
+      swfAnimatorFlamesPanel.repaint();
+      swfAnimatorFlamesPanel.getParent().invalidate();
       swfAnimatorFlamesPanel.getParent().validate();
-      refreshFlameImage();
+
+      refreshFrameCount();
       enableControls();
+    }
+  }
+
+  public void playButton_clicked() {
+    try {
+      updateMovieFields();
+      int oldFrame = swfAnimatorFrameSlider.getValue();
+      try {
+        for (int i = 1; i < currMovie.getFrameCount(); i++) {
+          swfAnimatorFrameSlider.setValue(i);
+          getFlamePanel().getParent().paint(getFlamePanel().getParent().getGraphics());
+          swfAnimatorFrameSlider.paint(swfAnimatorFrameSlider.getGraphics());
+        }
+      }
+      finally {
+        swfAnimatorFrameSlider.setValue(oldFrame);
+        refreshFlameImage();
+      }
+    }
+    catch (Throwable ex) {
+      errorHandler.handleError(ex);
     }
   }
 
