@@ -59,6 +59,7 @@ import org.jwildfire.create.tina.io.Flam3Reader;
 import org.jwildfire.create.tina.io.JWFMovieReader;
 import org.jwildfire.create.tina.io.JWFMovieWriter;
 import org.jwildfire.create.tina.render.FlameRenderer;
+import org.jwildfire.create.tina.render.ProgressUpdater;
 import org.jwildfire.create.tina.render.RenderInfo;
 import org.jwildfire.create.tina.render.RenderedFlame;
 import org.jwildfire.image.SimpleImage;

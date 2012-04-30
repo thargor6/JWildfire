@@ -32,7 +32,6 @@ import org.jwildfire.create.tina.base.RasterPoint;
 import org.jwildfire.create.tina.base.XYZPoint;
 import org.jwildfire.create.tina.palette.RenderColor;
 import org.jwildfire.create.tina.random.RandomNumberGenerator;
-import org.jwildfire.create.tina.swing.ProgressUpdater;
 import org.jwildfire.create.tina.variation.FlameTransformationContext;
 import org.jwildfire.image.Pixel;
 import org.jwildfire.image.SimpleHDRImage;

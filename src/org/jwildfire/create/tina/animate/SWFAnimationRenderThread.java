@@ -47,7 +47,6 @@ public class SWFAnimationRenderThread implements Runnable {
   private Movie movie;
   private int uid;
   private Throwable lastError;
-  private String tmpBasefilename;
 
   public SWFAnimationRenderThread(SWFAnimationRenderThreadController pController, FlameMovie pAnimation, String pOutputFilename) {
     controller = pController;
@@ -182,12 +181,6 @@ public class SWFAnimationRenderThread implements Runnable {
   }
 
   private void initMovie() throws Exception {
-    {
-      File tmpFile = File.createTempFile("jwf", "");
-      tmpBasefilename = tmpFile.getAbsolutePath();
-      tmpFile.delete();
-    }
-
     uid = 1;
     movie = new Movie();
     final int xOrigin = -flameMovie.getFrameWidth() / 2;

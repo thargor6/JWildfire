@@ -18,6 +18,8 @@ package org.jwildfire.create.tina.swing;
 
 import java.awt.Graphics;
 
+import org.jwildfire.create.tina.render.ProgressUpdater;
+
 public class MainProgressUpdater implements ProgressUpdater {
   private final TinaInternalFrame parent;
 

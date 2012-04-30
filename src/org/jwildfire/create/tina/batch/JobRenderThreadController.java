@@ -20,7 +20,7 @@ import javax.swing.JProgressBar;
 import javax.swing.JTable;
 
 import org.jwildfire.base.Prefs;
-import org.jwildfire.create.tina.swing.ProgressUpdater;
+import org.jwildfire.create.tina.render.ProgressUpdater;
 
 public interface JobRenderThreadController {
   public Prefs getPrefs();

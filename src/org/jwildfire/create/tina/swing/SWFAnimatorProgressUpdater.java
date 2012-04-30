@@ -16,6 +16,8 @@
 */
 package org.jwildfire.create.tina.swing;
 
+import org.jwildfire.create.tina.render.ProgressUpdater;
+
 public class SWFAnimatorProgressUpdater implements ProgressUpdater {
   private final TinaInternalFrame parent;
 
