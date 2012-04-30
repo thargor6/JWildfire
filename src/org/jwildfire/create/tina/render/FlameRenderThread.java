@@ -80,7 +80,6 @@ public final class FlameRenderThread implements Runnable {
     XYZPoint q = new XYZPoint();
     p.x = 2.0 * renderer.random.random() - 1.0;
     p.y = 2.0 * renderer.random.random() - 1.0;
-    //    p.z = 0.0;
     p.z = 2.0 * renderer.random.random() - 1.0;
     p.color = renderer.random.random();
 
@@ -211,7 +210,6 @@ public final class FlameRenderThread implements Runnable {
       XForm finalXForm = flame.getFinalXForm();
       double px, py;
       if (finalXForm != null) {
-        //        q = new XYZPoint();
         finalXForm.transformPoint(ctx, affineT, varT, p, q);
         renderer.project(q);
         px = q.x * renderer.cosa + q.y * renderer.sina + renderer.rcX;
@@ -222,7 +220,6 @@ public final class FlameRenderThread implements Runnable {
           continue;
       }
       else {
-        //        q = new XYZPoint();
         q.assign(p);
         renderer.project(q);
         px = q.x * renderer.cosa + q.y * renderer.sina + renderer.rcX;
