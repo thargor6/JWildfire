@@ -25,8 +25,8 @@ import org.jwildfire.create.tina.palette.RandomRGBPaletteGenerator;
 import org.jwildfire.create.tina.render.FlameRenderer;
 import org.jwildfire.create.tina.render.RenderInfo;
 import org.jwildfire.create.tina.render.RenderedFlame;
-import org.jwildfire.create.tina.transform.XFormTransformService;
 import org.jwildfire.create.tina.variation.SubFlameWFFunc;
+import org.jwildfire.create.tina.variation.VariationFunc;
 import org.jwildfire.create.tina.variation.VariationFuncList;
 import org.jwildfire.image.Pixel;
 import org.jwildfire.image.SimpleImage;
@@ -44,90 +44,102 @@ public class SubFlameRandomFlameGenerator extends RandomFlameGenerator {
     }
 
     Flame flame = new Flame();
-    flame.setCentreX(0.0);
-    flame.setCentreY(0.0);
-    flame.setCamPitch(49.0);
-    flame.setCamPerspective(0.16);
+    flame.setCentreX(2);
+    flame.setCentreY(1);
+    flame.setCamPitch(0);
+    flame.setCamRoll(-2);
+    flame.setCamYaw(0);
     flame.setPixelsPerUnit(200);
     flame.setFinalXForm(null);
     flame.getXForms().clear();
-
-    int maxXForms = (int) (3.0 + Math.random() * 7.0);
-    double shape = Math.random();
-    double scale = 1.0;
-    for (int i = 0; i < maxXForms; i++) {
+    // 1st xForm
+    {
       XForm xForm = new XForm();
       flame.getXForms().add(xForm);
-      if (Math.random() < 0.5) {
-        XFormTransformService.rotate(xForm, 90.0 * Math.random(), true);
-      }
-      else {
-        XFormTransformService.rotate(xForm, -90.0 * Math.random(), true);
-      }
-      XFormTransformService.localTranslate(xForm, 3.0 * (2.0 * Math.random() - 1.0), 3.0 * (2.0 * Math.random() - 1.0), true);
-      scale *= 0.9;
-      XFormTransformService.scale(xForm, scale, true, true);
+      xForm.setWeight(0.5);
       {
-        SubFlameWFFunc var = new SubFlameWFFunc();
-        Flame subFlame;
-        while (true) {
-          if (shape < 0.16) {
-            subFlame = new Flowers3DRandomFlameGenerator().createFlame();
-          }
-          else if (shape < 0.32) {
-            subFlame = new BubblesRandomFlameGenerator().createFlame();
-          }
-          else if (shape < 0.48) {
-            subFlame = new Bubbles3DRandomFlameGenerator().createFlame();
-          }
-          else if (shape < 0.60) {
-            subFlame = new ExperimentalBubbles3DRandomFlameGenerator().createFlame();
-          }
-          else if (shape < 0.72) {
-            subFlame = new ExperimentalBubbles3DRandomFlameGenerator().createFlame();
-          }
-          else {
-            subFlame = new Spherical3DRandomFlameGenerator().createFlame();
-          }
+        VariationFunc varFunc;
 
-          final int IMG_WIDTH = 160;
-          final int IMG_HEIGHT = 100;
-          final double MIN_COVERAGE = 0.25;
+        {
+          SubFlameWFFunc var = new SubFlameWFFunc();
+          Flame subFlame;
+          while (true) {
+            subFlame = new AllRandomFlameGenerator().createFlame();
+            final int IMG_WIDTH = 160;
+            final int IMG_HEIGHT = 100;
+            final double MIN_COVERAGE = 0.25;
 
-          subFlame.setWidth(IMG_WIDTH);
-          subFlame.setHeight(IMG_HEIGHT);
-          //          subFlame.setPixelsPerUnit(10);
-          // render it   
-          subFlame.setSampleDensity(50);
-          RGBPalette palette = new RandomRGBPaletteGenerator().generatePalette(11);
-          subFlame.setPalette(palette);
-          FlameRenderer renderer = new FlameRenderer(subFlame, prefs);
-          RenderInfo info = new RenderInfo(IMG_WIDTH, IMG_HEIGHT);
-          RenderedFlame res = renderer.renderFlame(info);
-          SimpleImage img = res.getImage();
-          long maxCoverage = img.getImageWidth() * img.getImageHeight();
-          long coverage = 0;
-          Pixel pixel = new Pixel();
-          for (int k = 0; k < img.getImageHeight(); k++) {
-            for (int l = 0; l < img.getImageWidth(); l++) {
-              pixel.setARGBValue(img.getARGBValue(l, k));
-              if (pixel.r > 20 || pixel.g > 20 || pixel.b > 20) {
-                coverage++;
+            subFlame.setWidth(IMG_WIDTH);
+            subFlame.setHeight(IMG_HEIGHT);
+            //          subFlame.setPixelsPerUnit(10);
+            // render it   
+            subFlame.setSampleDensity(50);
+            RGBPalette palette = new RandomRGBPaletteGenerator().generatePalette(11);
+            subFlame.setPalette(palette);
+            FlameRenderer renderer = new FlameRenderer(subFlame, prefs);
+            RenderInfo info = new RenderInfo(IMG_WIDTH, IMG_HEIGHT);
+            RenderedFlame res = renderer.renderFlame(info);
+            SimpleImage img = res.getImage();
+            long maxCoverage = img.getImageWidth() * img.getImageHeight();
+            long coverage = 0;
+            Pixel pixel = new Pixel();
+            for (int k = 0; k < img.getImageHeight(); k++) {
+              for (int l = 0; l < img.getImageWidth(); l++) {
+                pixel.setARGBValue(img.getARGBValue(l, k));
+                if (pixel.r > 20 || pixel.g > 20 || pixel.b > 20) {
+                  coverage++;
+                }
               }
             }
+            double fCoverage = (double) coverage / (double) maxCoverage;
+            if (fCoverage >= MIN_COVERAGE) {
+              break;
+            }
           }
-          double fCoverage = (double) coverage / (double) maxCoverage;
-          if (fCoverage >= MIN_COVERAGE) {
-            break;
-          }
-        }
 
-        String flameXML = new Flam3Writer().getFlameXML(subFlame);
-        var.setRessource("flame", flameXML.getBytes());
-        xForm.addVariation(1, var);
-        xForm.addVariation(scale, VariationFuncList.getVariationFuncInstance("post_zscale_wf"));
+          String flameXML = new Flam3Writer().getFlameXML(subFlame);
+          var.setRessource("flame", flameXML.getBytes());
+          xForm.addVariation(1, var);
+        }
       }
+      xForm.setColor(0);
+      xForm.setColorSymmetry(-0.22);
+    }
+    // 2nd xForm
+    {
+      XForm xForm = new XForm();
+      flame.getXForms().add(xForm);
       xForm.setWeight(0.5);
+      xForm.setCoeff00(0.17254603006834707);
+      xForm.setCoeff01(0.6439505508593787);
+      xForm.setCoeff10(-0.6439505508593787);
+      xForm.setCoeff11(0.17254603006834707);
+      xForm.setCoeff20(2 + Math.random() * 2.0);
+      xForm.setCoeff21(-0.25 - Math.random() * 0.25);
+      xForm.addVariation(1, VariationFuncList.getVariationFuncInstance("linear3D", true));
+      xForm.setColor(Math.random());
+      xForm.setColorSymmetry(-0.62);
+    }
+    // 3rd xForm
+    {
+      XForm xForm = new XForm();
+      flame.getXForms().add(xForm);
+      xForm.setWeight(0.5);
+      xForm.setCoeff00(0.17254603006834707);
+      xForm.setCoeff01(0.6439505508593787);
+      xForm.setCoeff10(-0.6439505508593787);
+      xForm.setCoeff11(0.17254603006834707);
+      xForm.setCoeff20(-3.0);
+      xForm.setCoeff21(0.3);
+      {
+        VariationFunc varFunc;
+        varFunc = VariationFuncList.getVariationFuncInstance("curl", true);
+        varFunc.setParameter("c1", -0.2);
+        varFunc.setParameter("c2", 0);
+        xForm.addVariation(1, varFunc);
+      }
+      xForm.setColor(Math.random());
+      xForm.setColorSymmetry(0);
     }
     return flame;
   }
