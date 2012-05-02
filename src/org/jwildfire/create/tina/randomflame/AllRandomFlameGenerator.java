@@ -51,7 +51,7 @@ public class AllRandomFlameGenerator extends RandomFlameGenerator {
       return new Flowers3DRandomFlameGenerator().createFlame();
     }
     else if (r < 0.64) {
-      return new ExperimentalFlowers3DRandomFlameGenerator().createFlame();
+      return new FilledFlowers3DRandomFlameGenerator().createFlame();
     }
     else if (r < 0.76) {
       return new ExperimentalBubbles3DRandomFlameGenerator().createFlame();
