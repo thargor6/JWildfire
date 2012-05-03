@@ -33,71 +33,22 @@ import org.jwildfire.image.SimpleImage;
 
 public class SubFlameRandomFlameGenerator extends RandomFlameGenerator {
 
-  @Override
-  protected Flame createFlame() {
-    Prefs prefs = new Prefs();
-    try {
-      prefs.loadFromFile();
-    }
-    catch (Exception e) {
-      e.printStackTrace();
-    }
-
+  public Flame embedFlame(Flame pSubFlame) {
     Flame flame = new Flame();
-    flame.setCentreX(2);
-    flame.setCentreY(1);
-    flame.setCamPitch(0);
-    flame.setCamRoll(-2);
-    flame.setCamYaw(0);
-    flame.setPixelsPerUnit(200);
+    flame.assign(pSubFlame);
+
     flame.setFinalXForm(null);
     flame.getXForms().clear();
+    flame.setPalette(pSubFlame.getPalette().makeCopy());
     // 1st xForm
     {
       XForm xForm = new XForm();
       flame.getXForms().add(xForm);
       xForm.setWeight(0.5);
       {
-        VariationFunc varFunc;
-
         {
           SubFlameWFFunc var = new SubFlameWFFunc();
-          Flame subFlame;
-          while (true) {
-            subFlame = new AllRandomFlameGenerator().createFlame();
-            final int IMG_WIDTH = 160;
-            final int IMG_HEIGHT = 100;
-            final double MIN_COVERAGE = 0.25;
-
-            subFlame.setWidth(IMG_WIDTH);
-            subFlame.setHeight(IMG_HEIGHT);
-            //          subFlame.setPixelsPerUnit(10);
-            // render it   
-            subFlame.setSampleDensity(50);
-            RGBPalette palette = new RandomRGBPaletteGenerator().generatePalette(11);
-            subFlame.setPalette(palette);
-            FlameRenderer renderer = new FlameRenderer(subFlame, prefs);
-            RenderInfo info = new RenderInfo(IMG_WIDTH, IMG_HEIGHT);
-            RenderedFlame res = renderer.renderFlame(info);
-            SimpleImage img = res.getImage();
-            long maxCoverage = img.getImageWidth() * img.getImageHeight();
-            long coverage = 0;
-            Pixel pixel = new Pixel();
-            for (int k = 0; k < img.getImageHeight(); k++) {
-              for (int l = 0; l < img.getImageWidth(); l++) {
-                pixel.setARGBValue(img.getARGBValue(l, k));
-                if (pixel.r > 20 || pixel.g > 20 || pixel.b > 20) {
-                  coverage++;
-                }
-              }
-            }
-            double fCoverage = (double) coverage / (double) maxCoverage;
-            if (fCoverage >= MIN_COVERAGE) {
-              break;
-            }
-          }
-
-          String flameXML = new Flam3Writer().getFlameXML(subFlame);
+          String flameXML = new Flam3Writer().getFlameXML(pSubFlame);
           var.setRessource("flame", flameXML.getBytes());
           xForm.addVariation(1, var);
         }
@@ -133,15 +84,70 @@ public class SubFlameRandomFlameGenerator extends RandomFlameGenerator {
       xForm.setCoeff21(0.3);
       {
         VariationFunc varFunc;
-        varFunc = VariationFuncList.getVariationFuncInstance("curl", true);
-        varFunc.setParameter("c1", -0.2);
-        varFunc.setParameter("c2", 0);
+        varFunc = VariationFuncList.getVariationFuncInstance("curl3D", true);
+        varFunc.setParameter("cx", -0.2);
+        varFunc.setParameter("cy", 0);
+        varFunc.setParameter("cz", 0);
         xForm.addVariation(1, varFunc);
       }
       xForm.setColor(Math.random());
       xForm.setColorSymmetry(0);
     }
     return flame;
+  }
+
+  @Override
+  protected Flame createFlame() {
+    Prefs prefs = new Prefs();
+    try {
+      prefs.loadFromFile();
+    }
+    catch (Exception e) {
+      e.printStackTrace();
+    }
+    Flame subFlame;
+    while (true) {
+      subFlame = new AllRandomFlameGenerator().createFlame();
+      final int IMG_WIDTH = 160;
+      final int IMG_HEIGHT = 100;
+      final double MIN_COVERAGE = 0.25;
+
+      subFlame.setWidth(IMG_WIDTH);
+      subFlame.setHeight(IMG_HEIGHT);
+      //          subFlame.setPixelsPerUnit(10);
+      // render it   
+      subFlame.setSampleDensity(50);
+      RGBPalette palette = new RandomRGBPaletteGenerator().generatePalette(11);
+      subFlame.setPalette(palette);
+      FlameRenderer renderer = new FlameRenderer(subFlame, prefs);
+      RenderInfo info = new RenderInfo(IMG_WIDTH, IMG_HEIGHT);
+      RenderedFlame res = renderer.renderFlame(info);
+      SimpleImage img = res.getImage();
+      long maxCoverage = img.getImageWidth() * img.getImageHeight();
+      long coverage = 0;
+      Pixel pixel = new Pixel();
+      for (int k = 0; k < img.getImageHeight(); k++) {
+        for (int l = 0; l < img.getImageWidth(); l++) {
+          pixel.setARGBValue(img.getARGBValue(l, k));
+          if (pixel.r > 20 || pixel.g > 20 || pixel.b > 20) {
+            coverage++;
+          }
+        }
+      }
+      double fCoverage = (double) coverage / (double) maxCoverage;
+      if (fCoverage >= MIN_COVERAGE) {
+        break;
+      }
+    }
+    Flame flame = embedFlame(subFlame);
+    flame.setCentreX(2);
+    flame.setCentreY(1);
+    flame.setCamPitch(0);
+    flame.setCamRoll(-2);
+    flame.setCamYaw(0);
+    flame.setPixelsPerUnit(200);
+    return flame;
+
   }
 
   @Override

@@ -87,6 +87,7 @@ import org.jwildfire.create.tina.randomflame.RandomFlameGenerator;
 import org.jwildfire.create.tina.randomflame.RandomFlameGeneratorList;
 import org.jwildfire.create.tina.randomflame.RandomFlameGeneratorSample;
 import org.jwildfire.create.tina.randomflame.RandomFlameGeneratorSampler;
+import org.jwildfire.create.tina.randomflame.SubFlameRandomFlameGenerator;
 import org.jwildfire.create.tina.render.FlameRenderer;
 import org.jwildfire.create.tina.render.ProgressUpdater;
 import org.jwildfire.create.tina.render.RenderInfo;
@@ -4165,6 +4166,14 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
 
   protected JTabbedPane getRootTabbedPane() {
     return rootTabbedPane;
+  }
+
+  public void tinaWrapIntoSubFlameButton_clicked() {
+    if (currFlame != null) {
+      currFlame = new SubFlameRandomFlameGenerator().embedFlame(currFlame);
+      updateThumbnails(null);
+      refreshUI();
+    }
   }
 
 }

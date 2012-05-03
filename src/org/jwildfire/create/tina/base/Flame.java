@@ -289,7 +289,7 @@ public class Flame {
     return res;
   }
 
-  private void assign(Flame pFlame) {
+  public void assign(Flame pFlame) {
     centreX = pFlame.centreX;
     centreY = pFlame.centreY;
     width = pFlame.width;
