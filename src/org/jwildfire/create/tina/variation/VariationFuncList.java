@@ -233,6 +233,7 @@ public class VariationFuncList {
     registerVariationFunc(FlipYFunc.class);
     registerVariationFunc(FlipCircleFunc.class);
     registerVariationFunc(EpispiralFunc.class);
+    registerVariationFunc(DCCubeFunc.class);
   }
 
   private static void registerVariationFunc(
