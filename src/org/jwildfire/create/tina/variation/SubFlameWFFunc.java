@@ -26,7 +26,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 import org.jwildfire.create.tina.io.Flam3Reader;
 
 public class SubFlameWFFunc extends VariationFunc {
-  private static final String RESSOURCE_FLAME = "flame";
+  public static final String RESSOURCE_FLAME = "flame";
   private static final String PARAM_OFFSETX = "offset_x";
   private static final String PARAM_OFFSETY = "offset_y";
   private static final String PARAM_OFFSETZ = "offset_z";

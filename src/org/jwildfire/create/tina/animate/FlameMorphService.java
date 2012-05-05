@@ -24,8 +24,11 @@ import org.jwildfire.base.MathLib;
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.XForm;
+import org.jwildfire.create.tina.io.Flam3Reader;
+import org.jwildfire.create.tina.io.Flam3Writer;
 import org.jwildfire.create.tina.palette.RGBColor;
 import org.jwildfire.create.tina.palette.RGBPalette;
+import org.jwildfire.create.tina.variation.SubFlameWFFunc;
 import org.jwildfire.create.tina.variation.Variation;
 import org.jwildfire.create.tina.variation.VariationFuncList;
 
@@ -63,7 +66,7 @@ public class FlameMorphService {
         xForm2.setWeight(0.0);
       }
 
-      XForm morphedXForm = morphXForms(xForm1, xForm2, fScl);
+      XForm morphedXForm = morphXForms(xForm1, xForm2, fScl, pFrame, pFrames);
       res.getXForms().add(morphedXForm);
     }
     // morph final XForms
@@ -80,7 +83,7 @@ public class FlameMorphService {
         xForm2.addVariation(1.0, VariationFuncList.getVariationFuncInstance("linear3D", true));
       }
 
-      XForm morphedXForm = morphXForms(xForm1, xForm2, fScl);
+      XForm morphedXForm = morphXForms(xForm1, xForm2, fScl, pFrame, pFrames);
       res.setFinalXForm(morphedXForm);
     }
     // morph colors
@@ -119,7 +122,7 @@ public class FlameMorphService {
     return res;
   }
 
-  private static XForm morphXForms(XForm pXForm1, XForm pXForm2, double pFScl) {
+  private static XForm morphXForms(XForm pXForm1, XForm pXForm2, double pFScl, int pFrame, int pFrames) {
     XForm res = new XForm();
     res.setWeight(morphValue(pXForm1.getWeight(), pXForm2.getWeight(), pFScl));
     res.setColor(morphValue(pXForm1.getColor(), pXForm2.getColor(), pFScl));
@@ -189,27 +192,54 @@ public class FlameMorphService {
       //      System.out.println(i + ": " + var1.getFunc().getName() + " " + var1.getAmount() + " " + var2.getAmount());
       double amount = morphValue(var1.getAmount(), var2.getAmount(), pFScl);
       Variation var = res.addVariation(amount, var1.getFunc());
-      Object val[] = var.getFunc().getParameterValues();
-      Object val1[] = var1.getFunc().getParameterValues();
-      Object val2[] = var2.getFunc().getParameterValues();
-      for (int j = 0; j < var.getFunc().getParameterNames().length; j++) {
-        String name = var.getFunc().getParameterNames()[j];
-        if (val[j] instanceof Integer) {
-          int mVal = morphValue((Integer) val1[j], (Integer) val2[j], pFScl);
-          if (mVal == 0 && name.equals("power")) {
-            mVal = 1;
+      //  params
+      if (var.getFunc().getParameterNames() != null && var.getFunc().getParameterNames().length > 0) {
+        Object val[] = var.getFunc().getParameterValues();
+        Object val1[] = var1.getFunc().getParameterValues();
+        Object val2[] = var2.getFunc().getParameterValues();
+        for (int j = 0; j < var.getFunc().getParameterNames().length; j++) {
+          String name = var.getFunc().getParameterNames()[j];
+          if (val[j] instanceof Integer) {
+            int mVal = morphValue((Integer) val1[j], (Integer) val2[j], pFScl);
+            if (mVal == 0 && name.equals("power")) {
+              mVal = 1;
+            }
+            //    int mVal = pFScl >= 0.5 ? (Integer) val2[j] : (Integer) val1[j];
+            //          System.out.println("  " + name + " " + mVal + " (" + val1[j] + " " + val2[j] + ")");
+            var.getFunc().setParameter(name, mVal);
           }
-          //    int mVal = pFScl >= 0.5 ? (Integer) val2[j] : (Integer) val1[j];
-          //          System.out.println("  " + name + " " + mVal + " (" + val1[j] + " " + val2[j] + ")");
-          var.getFunc().setParameter(name, mVal);
+          else if (val[j] instanceof Double) {
+            double mVal = morphValue((Double) val1[j], (Double) val2[j], pFScl);
+            //          System.out.println("  " + name + " " + mVal + " (" + val1[j] + " " + val2[j] + ")");
+            var.getFunc().setParameter(name, mVal);
+          }
+          else {
+            throw new IllegalStateException();
+          }
         }
-        else if (val[j] instanceof Double) {
-          double mVal = morphValue((Double) val1[j], (Double) val2[j], pFScl);
-          //          System.out.println("  " + name + " " + mVal + " (" + val1[j] + " " + val2[j] + ")");
-          var.getFunc().setParameter(name, mVal);
-        }
-        else {
-          throw new IllegalStateException();
+      }
+      // ressources
+      if (var.getFunc().getRessourceNames() != null && var.getFunc().getRessourceNames().length > 0) {
+        Object ress1[] = var1.getFunc().getRessourceValues();
+        Object ress2[] = var2.getFunc().getRessourceValues();
+        for (int j = 0; j < var.getFunc().getRessourceNames().length; j++) {
+          String name = var.getFunc().getRessourceNames()[j];
+          if (name.equalsIgnoreCase(SubFlameWFFunc.RESSOURCE_FLAME) && var.getFunc().getName().indexOf("subflame_wf") >= 0) {
+            String flame1XML = new String((byte[]) ress1[j]);
+            String flame2XML = new String((byte[]) ress2[j]);
+            try {
+              Flame flame1 = new Flam3Reader().readFlamesfromXML(flame1XML).get(0);
+              Flame flame2 = new Flam3Reader().readFlamesfromXML(flame2XML).get(0);
+              Flame morphedFlame = morphFlames(flame1, flame2, pFrame, pFrames);
+              String morphedFlameXML = new Flam3Writer().getFlameXML(morphedFlame);
+              var.getFunc().setRessource(SubFlameWFFunc.RESSOURCE_FLAME, morphedFlameXML.getBytes());
+            }
+            catch (Exception ex) {
+              ex.printStackTrace();
+            }
+
+          }
+
         }
       }
     }
