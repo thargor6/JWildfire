@@ -16,58 +16,44 @@
 */
 package org.jwildfire.create.tina.randomflame;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.jwildfire.create.tina.base.Flame;
 
 public class AllRandomFlameGenerator extends RandomFlameGenerator {
+  private static List<RandomFlameGenerator> generators;
+
+  static {
+    generators = new ArrayList<RandomFlameGenerator>();
+    generators.add(new LinearRandomFlameGenerator());
+    generators.add(new FilledFlowers3DRandomFlameGenerator());
+    generators.add(new SimpleRandomFlameGenerator());
+    generators.add(new Spherical3DRandomFlameGenerator());
+    generators.add(new BrokatRandomFlameGenerator());
+    generators.add(new GnarlRandomFlameGenerator());
+    generators.add(new ExperimentalGnarlRandomFlameGenerator());
+    generators.add(new BubblesRandomFlameGenerator());
+    generators.add(new Spherical3DRandomFlameGenerator());
+    generators.add(new BrokatRandomFlameGenerator());
+    generators.add(new SubFlameRandomFlameGenerator());
+    generators.add(new Bubbles3DRandomFlameGenerator());
+    generators.add(new GnarlRandomFlameGenerator());
+    generators.add(new Flowers3DRandomFlameGenerator());
+    generators.add(new FilledFlowers3DRandomFlameGenerator());
+    generators.add(new ExperimentalBubbles3DRandomFlameGenerator());
+    generators.add(new Spherical3DRandomFlameGenerator());
+    generators.add(new SubFlameRandomFlameGenerator());
+    generators.add(new JulianDiscRandomFlameGenerator());
+    generators.add(new BrokatRandomFlameGenerator());
+    generators.add(new FilledFlowers3DRandomFlameGenerator());
+    generators.add(new ExperimentalSimpleRandomFlameGenerator());
+    generators.add(new TentacleRandomFlameGenerator());
+  }
 
   @Override
   protected Flame createFlame() {
-    double r = Math.random();
-    if (r < 0.10) {
-      return new LinearRandomFlameGenerator().createFlame();
-    }
-    else if (r < 0.16) {
-      return new SimpleRandomFlameGenerator().createFlame();
-    }
-    else if (r < 0.22) {
-      return new GnarlRandomFlameGenerator().createFlame();
-    }
-    else if (r < 0.28) {
-      return new ExperimentalGnarlRandomFlameGenerator().createFlame();
-    }
-    else if (r < 0.34) {
-      return new BubblesRandomFlameGenerator().createFlame();
-    }
-    else if (r < 0.40) {
-      return new Spherical3DRandomFlameGenerator().createFlame();
-    }
-    else if (r > 0.46) {
-      return new TentacleRandomFlameGenerator().createFlame();
-    }
-    else if (r > 0.52) {
-      return new Bubbles3DRandomFlameGenerator().createFlame();
-    }
-    else if (r < 0.58) {
-      return new Flowers3DRandomFlameGenerator().createFlame();
-    }
-    else if (r < 0.64) {
-      return new FilledFlowers3DRandomFlameGenerator().createFlame();
-    }
-    else if (r < 0.76) {
-      return new ExperimentalBubbles3DRandomFlameGenerator().createFlame();
-    }
-    else if (r < 0.82) {
-      return new SubFlameRandomFlameGenerator().createFlame();
-    }
-    else if (r < 0.88) {
-      return new JulianDiscRandomFlameGenerator().createFlame();
-    }
-    else if (r < 0.94) {
-      return new BrokatRandomFlameGenerator().createFlame();
-    }
-    else {
-      return new ExperimentalSimpleRandomFlameGenerator().createFlame();
-    }
+    return generators.get((int) (Math.random() * generators.size())).createFlame();
   }
 
   @Override
