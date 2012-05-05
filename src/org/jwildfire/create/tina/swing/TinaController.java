@@ -92,7 +92,6 @@ import org.jwildfire.create.tina.render.FlameRenderer;
 import org.jwildfire.create.tina.render.ProgressUpdater;
 import org.jwildfire.create.tina.render.RenderInfo;
 import org.jwildfire.create.tina.render.RenderedFlame;
-import org.jwildfire.create.tina.script.ScriptGenerator;
 import org.jwildfire.create.tina.script.ScriptRunner;
 import org.jwildfire.create.tina.script.ScriptRunnerEnvironment;
 import org.jwildfire.create.tina.transform.XFormTransformService;
@@ -3549,12 +3548,12 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
         String xml = new Flam3Writer().getFlameXML(currFlame);
         StringSelection data = new StringSelection(xml);
         clipboard.setContents(data, data);
-        try {
-          System.out.println(new ScriptGenerator(currFlame).generateScript());
-        }
-        catch (Throwable ex) {
-          ex.printStackTrace();
-        }
+        //        try {
+        //          System.out.println(new ScriptGenerator(currFlame).generateScript());
+        //        }
+        //        catch (Throwable ex) {
+        //          ex.printStackTrace();
+        //        }
       }
     }
     catch (Throwable ex) {

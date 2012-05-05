@@ -1,3 +1,15 @@
+V0.46 (06.05.2012):
+ - Fractal flame editir: changed the distribution of random flame generators in side the "All" random flame generator
+ - Fractal flame editor: support for morphing the flames inside the "subflame_wf" variations while morphing flames
+ - Fractal flame editor: dc_cube variation by Xyrus02
+ - Fractal flame editor: new "wrap to sub flame" button
+ - Fractal flame editor: created a new toolbar in the left preview area
+ - Fractal flame editor: reimplemented the "Subflame" random flame generator
+ - Fractal flame editor: create new "Flowers3D (filled)" random flame generator
+ - Fractal flame editor: removed the "Flower3D (experimental)" random flame generator
+ - Fractal flame editor: new "Brokat" random flame generator
+ - Fractal flame editor: some refactoring
+
 V0.45 (12.04.2012):
  - Fractal flame editor: fixed some SWF releated problems
  - Fractal flame editor: some improvements to the Animator UI
