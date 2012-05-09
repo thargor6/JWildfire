@@ -420,9 +420,9 @@ public class Flam3Reader implements FlameReader {
             }
             if ((attr = atts.get(ATTR_RGB)) != null) {
               String s[] = attr.split(" ");
-              r = Integer.parseInt(s[0]);
-              g = Integer.parseInt(s[1]);
-              b = Integer.parseInt(s[2]);
+              r = Tools.FTOI(Double.parseDouble(s[0]));
+              g = Tools.FTOI(Double.parseDouble(s[1]));
+              b = Tools.FTOI(Double.parseDouble(s[2]));
             }
             flame.getPalette().setColor(index, r, g, b);
           }
