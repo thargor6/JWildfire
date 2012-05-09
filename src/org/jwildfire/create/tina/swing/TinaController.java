@@ -4158,7 +4158,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
   public void appendToMovieButton_actionPerformed(ActionEvent e) {
     Flame currFlame = getCurrFlame();
     if (currFlame != null) {
-      getSwfAnimatorCtrl().importFlameFromEditor(currFlame);
+      getSwfAnimatorCtrl().importFlameFromEditor(currFlame.makeCopy());
       rootTabbedPane.setSelectedIndex(TinaSWFAnimatorController.PAGE_INDEX);
     }
   }
