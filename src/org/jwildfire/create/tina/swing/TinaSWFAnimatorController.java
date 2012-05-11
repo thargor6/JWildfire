@@ -107,6 +107,8 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
   private final JButton swfAnimatorMovieToDiskButton;
   private final JButton swfAnimatorFrameToEditorBtn;
   private final JButton swfAnimatorPlayButton;
+  private final JTextField swfAnimatorFromFrameREd;
+  private final JTextField swfAnimatorToFrameREd;
   private FlamePanel flamePanel;
   private final List<JPanel> flamePartPanelList = new ArrayList<JPanel>();
   private final List<JRadioButton> flamePartRadioButtonList = new ArrayList<JRadioButton>();
@@ -125,7 +127,8 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
       JComboBox pSWFAnimatorOutputCmb, JButton pSWFAnimatorMoveUpButton, JButton pSWFAnimatorMoveDownButton,
       JButton pSWFAnimatorRemoveFlameButton, JButton pSWFAnimatorRemoveAllFlamesButton, JButton pSWFAnimatorMovieFromClipboardButton,
       JButton pSWFAnimatorMovieFromDiskButton, JButton pSWFAnimatorMovieToClipboardButton, JButton pSWFAnimatorMovieToDiskButton,
-      JButton pSWFAnimatorFrameToEditorBtn, JButton pSWFAnimatorPlayButton) {
+      JButton pSWFAnimatorFrameToEditorBtn, JButton pSWFAnimatorPlayButton, JTextField pSWFAnimatorFromFrameREd,
+      JTextField pSWFAnimatorToFrameREd) {
     noRefresh = true;
     try {
       parentCtrl = pParentCtrl;
@@ -164,6 +167,8 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
       swfAnimatorMovieToDiskButton = pSWFAnimatorMovieToDiskButton;
       swfAnimatorFrameToEditorBtn = pSWFAnimatorFrameToEditorBtn;
       swfAnimatorPlayButton = pSWFAnimatorPlayButton;
+      swfAnimatorFromFrameREd = pSWFAnimatorFromFrameREd;
+      swfAnimatorToFrameREd = pSWFAnimatorToFrameREd;
 
       swfAnimatorOutputCmb.addItem(OutputFormat.PNG);
       swfAnimatorOutputCmb.addItem(OutputFormat.SWF);
@@ -176,6 +181,9 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
       swfAnimatorFrameSlider.setMaximum(frameCount);
       swfAnimatorFramesREd.setText(String.valueOf(frameCount));
       swfAnimatorFrameREd.setText(String.valueOf(1));
+      swfAnimatorFromFrameREd.setText(String.valueOf(1));
+      swfAnimatorToFrameREd.setText(String.valueOf(frameCount));
+
       enableControls();
     }
     finally {
@@ -189,8 +197,11 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
     swfAnimatorXFormScriptCmb.setEnabled(!rendering);
     swfAnimatorFrameREd.setEnabled(!rendering);
     swfAnimatorFramesREd.setEnabled(!rendering);
+    swfAnimatorFromFrameREd.setEnabled(!rendering);
+    swfAnimatorToFrameREd.setEnabled(!rendering);
     swfAnimatorFramesPerSecondREd.setEnabled(!rendering);
     swfAnimatorGenerateButton.setEnabled(!rendering && currMovie.getFrameCount() > 0);
+    swfAnimatorGenerateButton.setVisible(!rendering);
     swfAnimatorPlayButton.setEnabled(swfAnimatorGenerateButton.isEnabled());
     swfAnimatorResolutionProfileCmb.setEnabled(!rendering);
     swfAnimatorQualityProfileCmb.setEnabled(!rendering);
@@ -199,6 +210,7 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
     swfAnimatorLoadFlameButton.setEnabled(!rendering);
     swfAnimatorHalveSizeButton.setEnabled(!rendering);
     swfAnimatorCancelButton.setEnabled(rendering && !renderThread.isCancelSignalled());
+    swfAnimatorCancelButton.setVisible(rendering);
     swfAnimatorLoadSoundButton.setEnabled(!rendering);
     swfAnimatorClearSoundButton.setEnabled(!rendering && currMovie.getSoundFilename() != null);
     if (currMovie.getSoundFilename() == null) {
@@ -251,6 +263,26 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
       int value = swfAnimatorFrameSlider.getValue();
       int frameCount = currMovie.getFrameCount();
       swfAnimatorFrameSlider.setMaximum(frameCount);
+      int oldFrameCount = 0;
+      try {
+        oldFrameCount = Integer.parseInt(swfAnimatorFramesREd.getText());
+      }
+      catch (Exception ex) {
+        oldFrameCount = frameCount;
+      }
+      if (frameCount != oldFrameCount) {
+        swfAnimatorToFrameREd.setText(String.valueOf(frameCount));
+      }
+      try {
+        int from = Integer.parseInt(swfAnimatorFromFrameREd.getText());
+        if (from > frameCount) {
+          swfAnimatorFromFrameREd.setText(String.valueOf(frameCount));
+        }
+      }
+      catch (Exception ex) {
+
+      }
+
       swfAnimatorFramesREd.setText(String.valueOf(frameCount));
       if (value > frameCount) {
         swfAnimatorFrameSlider.setValue(frameCount);
@@ -495,7 +527,9 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
         File file = chooser.getSelectedFile();
         prefs.setLastOutputSwfFile(file);
         updateMovieFields();
-        renderThread = new SWFAnimationRenderThread(this, currMovie, file.getAbsolutePath());
+        int from = Integer.parseInt(swfAnimatorFromFrameREd.getText());
+        int to = Integer.parseInt(swfAnimatorToFrameREd.getText());
+        renderThread = new SWFAnimationRenderThread(this, currMovie, file.getAbsolutePath(), from, to);
         try {
           enableControls();
           new Thread(renderThread).start();
@@ -904,8 +938,11 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
 
       swfAnimatorFrameSlider.setValue(1);
       swfAnimatorFrameSlider.setMaximum(currMovie.getFrameCount());
-      swfAnimatorFramesREd.setText(String.valueOf(currMovie.getFrameCount()));
+      int frameCount = currMovie.getFrameCount();
+      swfAnimatorFramesREd.setText(String.valueOf(frameCount));
       swfAnimatorFrameREd.setText(String.valueOf(1));
+      swfAnimatorFromFrameREd.setText(String.valueOf(1));
+      swfAnimatorToFrameREd.setText(String.valueOf(frameCount));
 
       for (FlameMoviePart part : currMovie.getParts()) {
         addFlameToFlamePanel(part);

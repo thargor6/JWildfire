@@ -3062,7 +3062,7 @@ public class TinaInternalFrame extends JInternalFrame {
           getSwfAnimatorOutputCmb(), getSwfAnimatorMoveUpButton(), getSwfAnimatorMoveDownButton(), getSwfAnimatorRemoveFlameButton(),
           getSwfAnimatorRemoveAllFlamesButton(), getSwfAnimatorMovieFromClipboardButton(), getSwfAnimatorMovieFromDiskButton(),
           getSwfAnimatorMovieToClipboardButton(), getSwfAnimatorMovieToDiskButton(), getSwfAnimatorFrameToEditorBtn(),
-          getSwfAnimatorPlayButton()));
+          getSwfAnimatorPlayButton(), getSwfAnimatorFromFrameREd(), getSwfAnimatorToFrameREd()));
       tinaController.getSwfAnimatorCtrl().enableControls();
 
     }
@@ -4781,7 +4781,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton getSwfAnimatorGenerateButton() {
     if (swfAnimatorGenerateButton == null) {
       swfAnimatorGenerateButton = new JButton();
-      swfAnimatorGenerateButton.setBounds(902, 36, 125, 52);
+      swfAnimatorGenerateButton.setBounds(1039, 12, 125, 52);
       swfAnimatorGenerateButton.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
           tinaController.getSwfAnimatorCtrl().generateButton_clicked();
@@ -8193,6 +8193,8 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton swfAnimatorFrameToEditorBtn;
   private JButton swfAnimatorPlayButton;
   private JButton tinaWrapIntoSubFlameButton;
+  private JTextField swfAnimatorFromFrameREd;
+  private JTextField swfAnimatorToFrameREd;
 
   private JTextPane getHelpPane() {
     if (helpPane == null) {
@@ -9400,7 +9402,7 @@ public class TinaInternalFrame extends JInternalFrame {
       panel_5.setLayout(null);
 
       swfAnimatorProgressBar = new JProgressBar();
-      swfAnimatorProgressBar.setBounds(655, 51, 240, 21);
+      swfAnimatorProgressBar.setBounds(830, 68, 331, 21);
       panel_5.add(swfAnimatorProgressBar);
       swfAnimatorProgressBar.setValue(0);
       swfAnimatorProgressBar.setStringPainted(true);
@@ -9408,7 +9410,7 @@ public class TinaInternalFrame extends JInternalFrame {
       panel_5.add(getSwfAnimatorGenerateButton());
 
       swfAnimatorCancelButton = new JButton();
-      swfAnimatorCancelButton.setBounds(1029, 36, 125, 52);
+      swfAnimatorCancelButton.setBounds(1039, 12, 125, 52);
       panel_5.add(swfAnimatorCancelButton);
       swfAnimatorCancelButton.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
@@ -9453,6 +9455,25 @@ public class TinaInternalFrame extends JInternalFrame {
       swfAnimatorPlayButton.setFont(new Font("Dialog", Font.BOLD, 10));
       swfAnimatorPlayButton.setBounds(518, 36, 125, 52);
       panel_5.add(swfAnimatorPlayButton);
+
+      swfAnimatorFromFrameREd = new JTextField();
+      swfAnimatorFromFrameREd.setPreferredSize(new Dimension(56, 22));
+      swfAnimatorFromFrameREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      swfAnimatorFromFrameREd.setBounds(908, 39, 56, 22);
+      panel_5.add(swfAnimatorFromFrameREd);
+
+      JLabel lblRange = new JLabel();
+      lblRange.setText("Range");
+      lblRange.setPreferredSize(new Dimension(94, 22));
+      lblRange.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblRange.setBounds(834, 38, 71, 22);
+      panel_5.add(lblRange);
+
+      swfAnimatorToFrameREd = new JTextField();
+      swfAnimatorToFrameREd.setPreferredSize(new Dimension(56, 22));
+      swfAnimatorToFrameREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      swfAnimatorToFrameREd.setBounds(967, 38, 56, 22);
+      panel_5.add(swfAnimatorToFrameREd);
     }
     return panel_5;
   }
@@ -9829,5 +9850,13 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaWrapIntoSubFlameButton.setFont(new Font("Dialog", Font.BOLD, 10));
     }
     return tinaWrapIntoSubFlameButton;
+  }
+
+  public JTextField getSwfAnimatorToFrameREd() {
+    return swfAnimatorToFrameREd;
+  }
+
+  public JTextField getSwfAnimatorFromFrameREd() {
+    return swfAnimatorFromFrameREd;
   }
 } //  @jve:decl-index=0:visual-constraint="10,10"

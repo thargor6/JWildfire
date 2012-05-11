@@ -42,16 +42,19 @@ public class SWFAnimationRenderThread implements Runnable {
   private final SWFAnimationRenderThreadController controller;
   private final String outputFilename;
   private boolean cancelSignalled;
+  private final int fromFrame, toFrame;
   private FlameMovie flameMovie;
   private SoundFactory soundFactory;
   private Movie movie;
   private int uid;
   private Throwable lastError;
 
-  public SWFAnimationRenderThread(SWFAnimationRenderThreadController pController, FlameMovie pAnimation, String pOutputFilename) {
+  public SWFAnimationRenderThread(SWFAnimationRenderThreadController pController, FlameMovie pAnimation, String pOutputFilename, int pFromFrame, int pToFrame) {
     controller = pController;
     flameMovie = pAnimation;
     outputFilename = pOutputFilename;
+    fromFrame = pFromFrame;
+    toFrame = pToFrame;
   }
 
   @Override
@@ -69,7 +72,15 @@ public class SWFAnimationRenderThread implements Runnable {
             break;
         }
         // Create frames
-        for (int i = 1; i <= flameMovie.getFrameCount(); i++) {
+        int startFrame = this.fromFrame;
+        if (startFrame < 1)
+          startFrame = 1;
+        int endFrame = this.toFrame;
+        int frameCount = flameMovie.getFrameCount();
+        if (endFrame < 1 || endFrame > frameCount)
+          endFrame = frameCount;
+
+        for (int i = startFrame; i <= endFrame; i++) {
           if (cancelSignalled) {
             break;
           }
