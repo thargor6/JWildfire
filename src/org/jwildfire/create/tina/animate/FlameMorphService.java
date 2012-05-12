@@ -28,6 +28,8 @@ import org.jwildfire.create.tina.io.Flam3Reader;
 import org.jwildfire.create.tina.io.Flam3Writer;
 import org.jwildfire.create.tina.palette.RGBColor;
 import org.jwildfire.create.tina.palette.RGBPalette;
+import org.jwildfire.create.tina.variation.PostMirrorWFFunc;
+import org.jwildfire.create.tina.variation.Spherical3DWFFunc;
 import org.jwildfire.create.tina.variation.SubFlameWFFunc;
 import org.jwildfire.create.tina.variation.Variation;
 import org.jwildfire.create.tina.variation.VariationFuncList;
@@ -115,14 +117,21 @@ public class FlameMorphService {
     res.setGamma(morphValue(pFlame1.getGamma(), pFlame2.getGamma(), fScl));
     res.setGammaThreshold(morphValue(pFlame1.getGammaThreshold(), pFlame2.getGammaThreshold(), fScl));
     res.setPixelsPerUnit(morphValue(pFlame1.getPixelsPerUnit(), pFlame2.getPixelsPerUnit(), fScl));
+    res.setWidth(morphValue(pFlame1.getWidth(), pFlame2.getWidth(), fScl));
+    res.setHeight(morphValue(pFlame1.getHeight(), pFlame2.getHeight(), fScl));
     res.setPreserveZ(morphValue(pFlame1.isPreserveZ(), pFlame2.isPreserveZ(), fScl));
     res.setSpatialFilterRadius(morphValue(pFlame1.getSpatialFilterRadius(), pFlame2.getSpatialFilterRadius(), fScl));
     res.setVibrancy(morphValue(pFlame1.getVibrancy(), pFlame2.getVibrancy(), fScl));
     res.setWhiteLevel(morphValue(pFlame1.getWhiteLevel(), pFlame2.getWhiteLevel(), fScl));
+
     return res;
   }
 
   private static XForm morphXForms(XForm pXForm1, XForm pXForm2, double pFScl, int pFrame, int pFrames) {
+    pXForm1 = pXForm1.makeCopy();
+    pXForm2 = pXForm2.makeCopy();
+    prepareMorphXForm(pXForm1);
+    prepareMorphXForm(pXForm2);
     XForm res = new XForm();
     res.setWeight(morphValue(pXForm1.getWeight(), pXForm2.getWeight(), pFScl));
     res.setColor(morphValue(pXForm1.getColor(), pXForm2.getColor(), pFScl));
@@ -148,6 +157,7 @@ public class FlameMorphService {
     res.clearVariations();
     List<Variation> vars1 = new ArrayList<Variation>();
     List<Variation> vars2 = new ArrayList<Variation>();
+
     HashMap<String, String> processed = new HashMap<String, String>();
     for (int i = 0; i < pXForm1.getVariationCount(); i++) {
       Variation var1 = pXForm1.getVariation(i);
@@ -244,6 +254,25 @@ public class FlameMorphService {
       }
     }
     return res;
+  }
+
+  private static void prepareMorphXForm(XForm pXForm) {
+    int i = 0;
+    while (i < pXForm.getVariationCount()) {
+      Variation var = pXForm.getVariation(i);
+      if (var.getFunc() instanceof Spherical3DWFFunc) {
+        Object invert = var.getFunc().getParameter(Spherical3DWFFunc.PARAM_INVERT);
+        if (invert != null && ((Integer) invert) == 1) {
+          var.getFunc().setParameter(Spherical3DWFFunc.PARAM_INVERT, 0);
+          var.setAmount(-var.getAmount());
+        }
+      }
+      else if (var.getFunc() instanceof PostMirrorWFFunc) {
+        pXForm.removeVariation(var);
+        i--;
+      }
+      i++;
+    }
   }
 
   private static double morphValue(double pValue1, double pValue2, double pFScl) {

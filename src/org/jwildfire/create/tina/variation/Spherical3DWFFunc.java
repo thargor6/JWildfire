@@ -26,7 +26,7 @@ import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
 public class Spherical3DWFFunc extends VariationFunc {
-  private static final String PARAM_INVERT = "invert";
+  public static final String PARAM_INVERT = "invert";
   private static final String PARAM_EXPONENT = "exponent";
 
   private static final String[] paramNames = { PARAM_INVERT, PARAM_EXPONENT };

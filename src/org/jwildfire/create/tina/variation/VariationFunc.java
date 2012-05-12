@@ -55,6 +55,11 @@ public abstract class VariationFunc {
   public void setRessource(String pName, byte[] pValue) {
   }
 
+  public Object getParameter(String pName) {
+    int idx = getParameterIndex(pName);
+    return idx >= 0 ? getParameterValues()[idx] : null;
+  }
+
   public int getParameterIndex(String pName) {
     String paramNames[] = getParameterNames();
     if (paramNames != null) {
