@@ -27,7 +27,6 @@ import org.jwildfire.script.Action;
 import org.jwildfire.script.ActionList;
 import org.jwildfire.script.Parameter;
 
-
 public class RenderThread implements Runnable {
   public enum Mode {
     SINGLE_FRAME, BATCH
