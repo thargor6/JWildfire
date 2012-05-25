@@ -1,0 +1,118 @@
+/*
+  JWildfire - an image and animation processor written in Java 
+  Copyright (C) 1995-2011 Andreas Maschke
+
+  This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
+  General Public License as published by the Free Software Foundation; either version 2.1 of the 
+  License, or (at your option) any later version.
+ 
+  This software is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without 
+  even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU 
+  Lesser General Public License for more details.
+
+  You should have received a copy of the GNU Lesser General Public License along with this software; 
+  if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+  02110-1301 USA, or see the FSF site: http://www.fsf.org.
+*/
+package org.jwildfire.create.tina.randomflame;
+
+import org.jwildfire.create.tina.base.Flame;
+import org.jwildfire.create.tina.base.XForm;
+import org.jwildfire.create.tina.transform.XFormTransformService;
+import org.jwildfire.create.tina.variation.VariationFunc;
+import org.jwildfire.create.tina.variation.VariationFuncList;
+
+public class SphericalRandomFlameGenerator extends RandomFlameGenerator {
+
+  @Override
+  protected Flame createFlame() {
+    Flame flame = new Flame();
+    flame.setCentreX(0.0);
+    flame.setCentreY(0.0);
+    flame.setCamPitch(0.0);
+    flame.setCamRoll(90.0);
+    flame.setCamYaw(0.0);
+    flame.setCamZoom(2.4);
+    flame.setCamPerspective(0.32);
+    flame.setPixelsPerUnit(200);
+    flame.setFinalXForm(null);
+    flame.getXForms().clear();
+
+    VariationFunc varFunc;
+    // 1st xForm
+    XForm xForm1;
+    {
+      XForm xForm = xForm1 = new XForm();
+      flame.getXForms().add(xForm);
+      xForm.setWeight(4.0 + 4.0 * Math.random());
+      varFunc = VariationFuncList.getVariationFuncInstance("spherical3D", true);
+      xForm.addVariation(1.0, varFunc);
+      XFormTransformService.rotate(xForm, Math.random() < 0.5 ? 90.0 : -90.0, false);
+      XFormTransformService.globalTranslate(xForm, 1.0, 0.0, false);
+
+      xForm.setColor(1.0);
+      xForm.setColorSymmetry(0.9 + Math.random() * 0.2);
+    }
+    // 2nd xForm
+    XForm xForm2;
+    {
+      XForm xForm = xForm2 = new XForm();
+      flame.getXForms().add(xForm);
+      xForm.setWeight(4.0 + 4.0 * Math.random());
+      varFunc = VariationFuncList.getVariationFuncInstance("spherical3D", true);
+      xForm.addVariation(1.0, varFunc);
+      XFormTransformService.rotate(xForm, 90.0, false);
+      xForm.setColor(0.5);
+      xForm.setColorSymmetry(0.9 + Math.random() * 0.2);
+    }
+    // 3rd xForm
+    XForm xForm3;
+    {
+      XForm xForm = xForm3 = new XForm();
+      flame.getXForms().add(xForm);
+      xForm.setWeight(0.3 + 0.2 * Math.random());
+      varFunc = VariationFuncList.getVariationFuncInstance("linear3D", true);
+      xForm.addVariation(1.0, varFunc);
+      XFormTransformService.rotate(xForm, 90.0, false);
+      XFormTransformService.globalTranslate(xForm, (int) (2.0 + Math.random() * 2.0), 0.0, false);
+      xForm.setColor(Math.random());
+      xForm.setColorSymmetry(0);
+    }
+    XForm xForm4;
+    {
+      XForm xForm = xForm4 = new XForm();
+      flame.getXForms().add(xForm);
+      xForm.setWeight(0.2 + 0.15 * Math.random());
+      varFunc = VariationFuncList.getVariationFuncInstance("linear3D", true);
+      xForm.addVariation(1.0, varFunc);
+      XFormTransformService.rotate(xForm, 90.0, false);
+      XFormTransformService.globalTranslate(xForm, -(int) (2.0 + Math.random() * 2.0), 0.0, false);
+      xForm.setColor(Math.random());
+      xForm.setColorSymmetry(0);
+    }
+
+    int max = (int) (Math.random() * 4.0 + 0.5);
+    for (int i = 0; i < max; i++) {
+      XForm xForm = new XForm();
+      flame.getXForms().add(xForm);
+      xForm.setWeight(0.5 + 0.3 * Math.random());
+      String fncName = ExperimentalSimpleRandomFlameGenerator.FNCLST_EXPERIMENTAL[(int) (ExperimentalSimpleRandomFlameGenerator.FNCLST_EXPERIMENTAL.length * Math.random())];
+
+      varFunc = VariationFuncList.getVariationFuncInstance(fncName, true);
+      xForm.addVariation(1.0, varFunc);
+      XFormTransformService.rotate(xForm, 90.0 - Math.random() * 180.0, false);
+      XFormTransformService.scale(xForm, 0.2 + 0.2 * Math.random(), true, true);
+      xForm.setColor(Math.random());
+      xForm.setColorSymmetry(0);
+    }
+    flame.randomizeColors();
+
+    return flame;
+  }
+
+  @Override
+  public String getName() {
+    return "Spherical";
+  }
+
+}
