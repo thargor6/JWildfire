@@ -934,29 +934,44 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaCameraPanel.add(getTinaCameraDOFREd(), null);
       tinaCameraPanel.add(tinaCameraDOFLbl, null);
 
-      JSpinner spinner = new JSpinner();
-      spinner.setVisible(false);
+      final JSpinner spinner = new JSpinner();
       spinner.setModel(new SpinnerNumberModel(new Double(0), null, null, new Double(0.5)));
       spinner.setFont(new Font("Dialog", Font.PLAIN, 10));
       spinner.setBounds(939, 25, 169, 28);
+
+      ((JSpinner.DefaultEditor) spinner.getEditor()).getTextField().setCursor(Cursor.getPredefinedCursor(Cursor.W_RESIZE_CURSOR));
+
       ((JSpinner.DefaultEditor) spinner.getEditor()).getTextField().addMouseListener(
           new java.awt.event.MouseAdapter() {
             public void mouseClicked(final MouseEvent e) {
-              System.out.println("CLICK");
+
+              System.out.println("CLICK " + e.getX());
             }
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+              System.out.println("DOWN " + e.getX());
+            }
+
           });
+
       ((JSpinner.DefaultEditor) spinner.getEditor()).getTextField().addMouseMotionListener(
           new java.awt.event.MouseMotionAdapter() {
 
             @Override
             public void mouseDragged(MouseEvent e) {
-              System.out.println("DRAG");
+              System.out.println("DRAG " + (e.getX()));
+              double THRESHOLD = 10.0;
+              double dx = e.getX() / THRESHOLD;
+              //e.getWhen();
+              spinner.setValue(((Double) spinner.getValue()) + dx * 0.5);
+
             }
 
-            @Override
-            public void mouseMoved(MouseEvent e) {
-              System.out.println("MOVE");
-            }
+            //            @Override
+            //            public void mouseMoved(MouseEvent e) {
+            //              System.out.println("MOVE");
+            //            }
 
           });
 
