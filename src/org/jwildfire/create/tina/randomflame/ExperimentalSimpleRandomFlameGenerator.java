@@ -40,7 +40,7 @@ public class ExperimentalSimpleRandomFlameGenerator extends
       "rose_wf", "edisc", "waves2", "twintrian", "coth", "super_shape",
       "auger", "pre_wave3D_wf", "hexes", "spirograph", "truchet", "epispiral",
       "glynnSim2", "tanh", "bipolar", "cot", "horseshoe", "wedge", "unpolar",
-      "modulus", "mobius", "bwraps7", "colorscale_wf", "truchet",
+      "modulus", "mobius", "bwraps7", "colorscale_wf", "truchet", "collideoscope",
       "kaleidoscope", "glynnSim2", "cross", "tangent3D", "csc", "curve",
       "csch", "bent2", "splits", "whorl", "post_mirror_wf", "mandelbrot",
       "cloverleaf_wf", "cannabiscurve_wf", "tan", "blob3D", "julia3D",

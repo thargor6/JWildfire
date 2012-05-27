@@ -19,6 +19,7 @@ package org.jwildfire.create.tina.variation;
 import static org.jwildfire.base.MathLib.max;
 import static org.jwildfire.base.MathLib.min;
 
+import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
@@ -29,27 +30,37 @@ public class PreCropFunc extends VariationFunc {
   private static final String PARAM_TOP = "top";
   private static final String PARAM_BOTTOM = "bottom";
   private static final String PARAM_SCATTER_AREA = "scatter_area";
+  private static final String PARAM_ZERO = "zero";
 
-  private static final String[] paramNames = { PARAM_LEFT, PARAM_RIGHT, PARAM_TOP, PARAM_BOTTOM, PARAM_SCATTER_AREA };
+  private static final String[] paramNames = { PARAM_LEFT, PARAM_RIGHT, PARAM_TOP, PARAM_BOTTOM, PARAM_SCATTER_AREA, PARAM_ZERO };
 
   private double left = -1.0;
   private double top = 1.0;
   private double right = 1.0;
   private double bottom = 1.0;
   private double scatter_area = 0.0;
-
-  private double distribute(FlameTransformationContext pContext, double a, double min, double max) {
-    double distance = pContext.random() * 0.5 * A;
-    return a < min ? min + distance * (max - min) :
-        max - distance * (max - min);
-  }
+  private int zero = 0;
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-    // pre_crop by Xirus02, http://xyrus02.deviantart.com/art/Crop-Plugin-Updated-169958881
-    pAffineTP.x += pAmount * ((pAffineTP.x >= xmin) && (pAffineTP.x <= xmax) ? pAffineTP.x : distribute(pContext, pAffineTP.x, xmin, xmax));
-    pAffineTP.y += pAmount * ((pAffineTP.y >= ymin) && (pAffineTP.y <= ymax) ? pAffineTP.y : distribute(pContext, pAffineTP.y, ymin, ymax));
-    pAffineTP.z += pAmount * pAffineTP.z;
+    // pre_crop by Xyrus02, http://xyrus02.deviantart.com/art/Crop-Plugin-Updated-169958881
+    double x = pAffineTP.x;
+    double y = pAffineTP.y;
+    if (((x < xmin) || (x > xmax) || (y < ymin) || (y > ymax)) && (zero != 0)) {
+      x = y = 0;
+    }
+    else {
+      if (x < xmin)
+        x = xmin + pContext.random() * w;
+      else if (x > xmax)
+        x = xmax - pContext.random() * w;
+      if (y < ymin)
+        y = ymin + pContext.random() * h;
+      else if (y > ymax)
+        y = ymax - pContext.random() * h;
+    }
+    pAffineTP.x = pAmount * x;
+    pAffineTP.y = pAmount * y;
   }
 
   @Override
@@ -59,7 +70,7 @@ public class PreCropFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { left, right, top, bottom, scatter_area };
+    return new Object[] { left, right, top, bottom, scatter_area, zero };
   }
 
   @Override
@@ -73,7 +84,9 @@ public class PreCropFunc extends VariationFunc {
     else if (PARAM_BOTTOM.equalsIgnoreCase(pName))
       bottom = pValue;
     else if (PARAM_SCATTER_AREA.equalsIgnoreCase(pName))
-      scatter_area = pValue;
+      scatter_area = limitVal(pValue, -1.0, 1.0);
+    else if (PARAM_ZERO.equalsIgnoreCase(pName))
+      zero = limitIntVal(Tools.FTOI(pValue), 0, 1);
     else
       throw new IllegalArgumentException(pName);
   }
@@ -83,7 +96,7 @@ public class PreCropFunc extends VariationFunc {
     return "pre_crop";
   }
 
-  private double xmin, xmax, ymin, ymax, A;
+  private double xmin, xmax, ymin, ymax, w, h;
 
   @Override
   public void init(FlameTransformationContext pContext, XForm pXForm, double pAmount) {
@@ -91,7 +104,8 @@ public class PreCropFunc extends VariationFunc {
     ymin = min(top, bottom);
     xmax = max(left, right);
     ymax = max(top, bottom);
-    A = max(-1.0, min(scatter_area, 1.0));
+    w = (xmax - xmin) * 0.5 * scatter_area;
+    h = (ymax - ymin) * 0.5 * scatter_area;
   }
 
   @Override

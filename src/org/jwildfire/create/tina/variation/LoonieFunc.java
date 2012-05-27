@@ -29,7 +29,7 @@ public class LoonieFunc extends SimpleVariationFunc {
     double r2 = pAffineTP.getPrecalcSumsq();
     double w2 = pAmount * pAmount;
 
-    if (r2 < w2) {
+    if (r2 < w2 && r2 != 0) {
       double r = pAmount * sqrt(w2 / r2 - 1.0);
       pVarTP.x += r * pAffineTP.x;
       pVarTP.y += r * pAffineTP.y;

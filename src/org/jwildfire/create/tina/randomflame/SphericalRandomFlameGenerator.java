@@ -44,10 +44,11 @@ public class SphericalRandomFlameGenerator extends RandomFlameGenerator {
     {
       XForm xForm = xForm1 = new XForm();
       flame.getXForms().add(xForm);
-      xForm.setWeight(4.0 + 4.0 * Math.random());
+      xForm.setWeight(4.0 + 12.0 * Math.random());
       varFunc = VariationFuncList.getVariationFuncInstance("spherical3D", true);
       xForm.addVariation(1.0, varFunc);
-      XFormTransformService.rotate(xForm, Math.random() < 0.5 ? 90.0 : -90.0, false);
+      //      XFormTransformService.rotate(xForm, Math.random() < 0.5 ? 90.0 : -90.0, false);
+      XFormTransformService.rotate(xForm, Math.random() < 0.5 ? Math.random() < 0.5 ? 180.0 : 90 : -90.0, false);
       XFormTransformService.globalTranslate(xForm, 1.0, 0.0, false);
 
       xForm.setColor(1.0);
@@ -58,10 +59,12 @@ public class SphericalRandomFlameGenerator extends RandomFlameGenerator {
     {
       XForm xForm = xForm2 = new XForm();
       flame.getXForms().add(xForm);
-      xForm.setWeight(4.0 + 4.0 * Math.random());
+      xForm.setWeight(3.0 + 11.0 * Math.random());
       varFunc = VariationFuncList.getVariationFuncInstance("spherical3D", true);
       xForm.addVariation(1.0, varFunc);
-      XFormTransformService.rotate(xForm, 90.0, false);
+      //      XFormTransformService.rotate(xForm, 90.0, false);
+      XFormTransformService.rotate(xForm, Math.random() < 0.5 ? Math.random() < 0.5 ? 180.0 : 90 : -90.0, false);
+
       xForm.setColor(0.5);
       xForm.setColorSymmetry(0.9 + Math.random() * 0.2);
     }
@@ -91,7 +94,7 @@ public class SphericalRandomFlameGenerator extends RandomFlameGenerator {
       xForm.setColorSymmetry(0);
     }
 
-    int max = (int) (Math.random() * 4.0 + 0.5);
+    int max = (int) (Math.random() * 4.0);
     for (int i = 0; i < max; i++) {
       XForm xForm = new XForm();
       flame.getXForms().add(xForm);
@@ -102,6 +105,7 @@ public class SphericalRandomFlameGenerator extends RandomFlameGenerator {
       xForm.addVariation(1.0, varFunc);
       XFormTransformService.rotate(xForm, 90.0 - Math.random() * 180.0, false);
       XFormTransformService.scale(xForm, 0.2 + 0.2 * Math.random(), true, true);
+      XFormTransformService.globalTranslate(xForm, 0.25 - Math.random() * 0.5, 0.25 - Math.random() * 0.5, false);
       xForm.setColor(Math.random());
       xForm.setColorSymmetry(0);
     }

@@ -41,8 +41,8 @@ public class AugerFunc extends VariationFunc {
     // Auger, by Xyrus01
     double s = sin(freq * pAffineTP.x);
     double t = sin(freq * pAffineTP.y);
-    double dy = pAffineTP.y + weight * (scale * s / 2.0 + fabs(pAffineTP.y) * s);
-    double dx = pAffineTP.x + weight * (scale * t / 2.0 + fabs(pAffineTP.x) * t);
+    double dy = pAffineTP.y + weight * (scale * s * 0.5 + fabs(pAffineTP.y) * s);
+    double dx = pAffineTP.x + weight * (scale * t * 0.5 + fabs(pAffineTP.x) * t);
 
     pVarTP.x += pAmount * (pAffineTP.x + sym * (dx - pAffineTP.x));
     pVarTP.y += pAmount * dy;
