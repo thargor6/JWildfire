@@ -51,20 +51,20 @@ public class BubblesRandomFlameGenerator extends RandomFlameGenerator {
       xForm.setColorSymmetry(0.991 + Math.random() * 0.08);
       XFormTransformService.scale(xForm, 0.5 - Math.random() * 0.5, true, true, false);
       XFormTransformService.rotate(xForm, 180 - Math.random() * 360.0, false);
-      XFormTransformService.localTranslate(xForm, 1.5 - 3.0 * Math.random(), 1.5 - 3.0 * Math.random(), false);
+      XFormTransformService.localTranslate(xForm, 2 - 4.0 * Math.random(), 2 - 4.0 * Math.random(), false);
     }
     // 2nd xForm
     {
       XForm xForm = new XForm();
       flame.getXForms().add(xForm);
       xForm.setWeight(0.5 + Math.random() * 0.8);
-      if (Math.random() < 0.25) {
+      if (Math.random() < 0.125) {
         xForm.addVariation(0.01 + Math.random() * 0.4, VariationFuncList.getVariationFuncInstance("bubble", true));
         VariationFunc checks = VariationFuncList.getVariationFuncInstance("checks", true);
         checks.setParameter("size", 5.0);
         checks.setParameter("x", 3.0);
         checks.setParameter("y", 3.0);
-        xForm.addVariation(0.01 + Math.random() * 0.4, checks);
+        xForm.addVariation(0.01 + Math.random() * 0.04, checks);
       }
       else {
         xForm.addVariation(0.1 + Math.random() * 0.5, VariationFuncList.getVariationFuncInstance("bubble", true));
