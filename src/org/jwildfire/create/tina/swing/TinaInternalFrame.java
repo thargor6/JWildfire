@@ -2,7 +2,6 @@ package org.jwildfire.create.tina.swing;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
@@ -15,7 +14,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
-import java.awt.event.MouseEvent;
 
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
@@ -29,7 +27,6 @@ import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
 import javax.swing.JSlider;
-import javax.swing.JSpinner;
 import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
@@ -39,7 +36,6 @@ import javax.swing.JTextPane;
 import javax.swing.JToggleButton;
 import javax.swing.ListSelectionModel;
 import javax.swing.ScrollPaneConstants;
-import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingConstants;
 import javax.swing.WindowConstants;
 import javax.swing.border.EtchedBorder;
@@ -294,17 +290,17 @@ public class TinaInternalFrame extends JInternalFrame {
 
   private JButton tinaAddFinalTransformationButton = null;
   private JLabel affineC00Lbl = null;
-  private JTextField affineC00REd = null;
+  private JWFNumberField affineC00REd = null;
   private JLabel affineC01Lbl = null;
-  private JTextField affineC01REd = null;
+  private JWFNumberField affineC01REd = null;
   private JLabel affineC10Lbl = null;
   private JLabel affineC11Lbl = null;
-  private JTextField affineC10REd = null;
-  private JTextField affineC11REd = null;
+  private JWFNumberField affineC10REd = null;
+  private JWFNumberField affineC11REd = null;
   private JLabel affineC20Lbl = null;
   private JLabel affineC21Lbl = null;
-  private JTextField affineC20REd = null;
-  private JTextField affineC21REd = null;
+  private JWFNumberField affineC20REd = null;
+  private JWFNumberField affineC21REd = null;
   private JButton affineRotateLeftButton = null;
   private JButton affineRotateRightButton = null;
   private JButton affineEnlargeButton = null;
@@ -933,51 +929,6 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaCameraPanel.add(getTinaCameraDOFSlider(), null);
       tinaCameraPanel.add(getTinaCameraDOFREd(), null);
       tinaCameraPanel.add(tinaCameraDOFLbl, null);
-
-      final JSpinner spinner = new JSpinner();
-      spinner.setVisible(false);
-      spinner.setModel(new SpinnerNumberModel(new Double(0), null, null, new Double(0.5)));
-      spinner.setFont(new Font("Dialog", Font.PLAIN, 10));
-      spinner.setBounds(939, 25, 169, 28);
-
-      ((JSpinner.DefaultEditor) spinner.getEditor()).getTextField().setCursor(Cursor.getPredefinedCursor(Cursor.W_RESIZE_CURSOR));
-
-      ((JSpinner.DefaultEditor) spinner.getEditor()).getTextField().addMouseListener(
-          new java.awt.event.MouseAdapter() {
-            public void mouseClicked(final MouseEvent e) {
-
-              System.out.println("CLICK " + e.getX());
-            }
-
-            @Override
-            public void mousePressed(MouseEvent e) {
-              System.out.println("DOWN " + e.getX());
-            }
-
-          });
-
-      ((JSpinner.DefaultEditor) spinner.getEditor()).getTextField().addMouseMotionListener(
-          new java.awt.event.MouseMotionAdapter() {
-
-            @Override
-            public void mouseDragged(MouseEvent e) {
-              System.out.println("DRAG " + (e.getX()));
-              double THRESHOLD = 10.0;
-              double dx = e.getX() / THRESHOLD;
-              //e.getWhen();
-              spinner.setValue(((Double) spinner.getValue()) + dx * 0.5);
-
-            }
-
-            //            @Override
-            //            public void mouseMoved(MouseEvent e) {
-            //              System.out.println("MOVE");
-            //            }
-
-          });
-
-      spinner.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
-      tinaCameraPanel.add(spinner);
     }
     return tinaCameraPanel;
   }
@@ -2119,39 +2070,45 @@ public class TinaInternalFrame extends JInternalFrame {
   private JPanel getTinaAffineTransformationPanel() {
     if (tinaAffineTransformationPanel == null) {
       affineC21Lbl = new JLabel();
+      affineC21Lbl.setHorizontalAlignment(SwingConstants.RIGHT);
       affineC21Lbl.setText("O2");
-      affineC21Lbl.setLocation(new Point(188, 28));
-      affineC21Lbl.setSize(new Dimension(24, 22));
+      affineC21Lbl.setLocation(new Point(212, 30));
+      affineC21Lbl.setSize(new Dimension(20, 22));
       affineC21Lbl.setFont(new Font("Dialog", Font.BOLD, 10));
       affineC21Lbl.setPreferredSize(new Dimension(24, 22));
       affineC20Lbl = new JLabel();
+      affineC20Lbl.setHorizontalAlignment(SwingConstants.RIGHT);
       affineC20Lbl.setText("O1");
-      affineC20Lbl.setLocation(new Point(188, 4));
-      affineC20Lbl.setSize(new Dimension(24, 22));
+      affineC20Lbl.setLocation(new Point(212, 6));
+      affineC20Lbl.setSize(new Dimension(20, 22));
       affineC20Lbl.setFont(new Font("Dialog", Font.BOLD, 10));
       affineC20Lbl.setPreferredSize(new Dimension(24, 22));
       affineC11Lbl = new JLabel();
+      affineC11Lbl.setHorizontalAlignment(SwingConstants.RIGHT);
       affineC11Lbl.setText("Y2");
-      affineC11Lbl.setLocation(new Point(96, 28));
-      affineC11Lbl.setSize(new Dimension(24, 22));
+      affineC11Lbl.setLocation(new Point(105, 30));
+      affineC11Lbl.setSize(new Dimension(20, 22));
       affineC11Lbl.setFont(new Font("Dialog", Font.BOLD, 10));
       affineC11Lbl.setPreferredSize(new Dimension(24, 22));
       affineC10Lbl = new JLabel();
+      affineC10Lbl.setHorizontalAlignment(SwingConstants.RIGHT);
       affineC10Lbl.setText("Y1");
-      affineC10Lbl.setLocation(new Point(96, 4));
-      affineC10Lbl.setSize(new Dimension(24, 22));
+      affineC10Lbl.setLocation(new Point(104, 6));
+      affineC10Lbl.setSize(new Dimension(20, 22));
       affineC10Lbl.setFont(new Font("Dialog", Font.BOLD, 10));
       affineC10Lbl.setPreferredSize(new Dimension(24, 22));
       affineC01Lbl = new JLabel();
+      affineC01Lbl.setHorizontalAlignment(SwingConstants.RIGHT);
       affineC01Lbl.setText("X2");
       affineC01Lbl.setFont(new Font("Dialog", Font.BOLD, 10));
-      affineC01Lbl.setLocation(new Point(4, 28));
-      affineC01Lbl.setSize(new Dimension(24, 22));
+      affineC01Lbl.setLocation(new Point(6, 30));
+      affineC01Lbl.setSize(new Dimension(20, 22));
       affineC01Lbl.setPreferredSize(new Dimension(24, 22));
       affineC00Lbl = new JLabel();
+      affineC00Lbl.setHorizontalAlignment(SwingConstants.RIGHT);
       affineC00Lbl.setText("X1");
-      affineC00Lbl.setLocation(new Point(4, 4));
-      affineC00Lbl.setSize(new Dimension(24, 22));
+      affineC00Lbl.setLocation(new Point(6, 6));
+      affineC00Lbl.setSize(new Dimension(20, 22));
       affineC00Lbl.setFont(new Font("Dialog", Font.BOLD, 10));
       affineC00Lbl.setPreferredSize(new Dimension(24, 22));
       tinaAffineTransformationPanel = new JPanel();
@@ -3123,20 +3080,18 @@ public class TinaInternalFrame extends JInternalFrame {
    * 	
    * @return javax.swing.JTextField	
    */
-  private JTextField getAffineC00REd() {
+  private JWFNumberField getAffineC00REd() {
     if (affineC00REd == null) {
-      affineC00REd = new JTextField();
-      affineC00REd.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
+      affineC00REd = new JWFNumberField();
+      affineC00REd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
           tinaController.affineC00REd_changed();
         }
       });
       affineC00REd.setPreferredSize(new Dimension(56, 22));
       affineC00REd.setText("");
-      affineC00REd.setLocation(new Point(30, 4));
-      affineC00REd.setSize(new Dimension(56, 22));
-      affineC00REd.setEditable(false);
-      affineC00REd.setHorizontalAlignment(JTextField.RIGHT);
+      affineC00REd.setLocation(new Point(32, 6));
+      affineC00REd.setSize(new Dimension(76, 22));
       affineC00REd.setFont(new Font("Dialog", Font.PLAIN, 10));
     }
     return affineC00REd;
@@ -3147,20 +3102,18 @@ public class TinaInternalFrame extends JInternalFrame {
    * 	
    * @return javax.swing.JTextField	
    */
-  private JTextField getAffineC01REd() {
+  private JWFNumberField getAffineC01REd() {
     if (affineC01REd == null) {
-      affineC01REd = new JTextField();
-      affineC01REd.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
+      affineC01REd = new JWFNumberField();
+      affineC01REd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
           tinaController.affineC01REd_changed();
         }
       });
       affineC01REd.setPreferredSize(new Dimension(56, 22));
       affineC01REd.setText("");
-      affineC01REd.setLocation(new Point(30, 28));
-      affineC01REd.setSize(new Dimension(56, 22));
-      affineC01REd.setEditable(false);
-      affineC01REd.setHorizontalAlignment(JTextField.RIGHT);
+      affineC01REd.setLocation(new Point(32, 30));
+      affineC01REd.setSize(new Dimension(76, 22));
       affineC01REd.setFont(new Font("Dialog", Font.PLAIN, 10));
     }
     return affineC01REd;
@@ -3171,20 +3124,18 @@ public class TinaInternalFrame extends JInternalFrame {
    * 	
    * @return javax.swing.JTextField	
    */
-  private JTextField getAffineC10REd() {
+  private JWFNumberField getAffineC10REd() {
     if (affineC10REd == null) {
-      affineC10REd = new JTextField();
-      affineC10REd.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
+      affineC10REd = new JWFNumberField();
+      affineC10REd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
           tinaController.affineC10REd_changed();
         }
       });
       affineC10REd.setPreferredSize(new Dimension(56, 22));
       affineC10REd.setText("");
-      affineC10REd.setLocation(new Point(122, 4));
-      affineC10REd.setSize(new Dimension(56, 22));
-      affineC10REd.setEditable(false);
-      affineC10REd.setHorizontalAlignment(JTextField.RIGHT);
+      affineC10REd.setLocation(new Point(131, 6));
+      affineC10REd.setSize(new Dimension(76, 22));
       affineC10REd.setFont(new Font("Dialog", Font.PLAIN, 10));
     }
     return affineC10REd;
@@ -3195,20 +3146,18 @@ public class TinaInternalFrame extends JInternalFrame {
    * 	
    * @return javax.swing.JTextField	
    */
-  private JTextField getAffineC11REd() {
+  private JWFNumberField getAffineC11REd() {
     if (affineC11REd == null) {
-      affineC11REd = new JTextField();
-      affineC11REd.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
+      affineC11REd = new JWFNumberField();
+      affineC11REd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
           tinaController.affineC11REd_changed();
         }
       });
       affineC11REd.setPreferredSize(new Dimension(56, 22));
       affineC11REd.setText("");
-      affineC11REd.setLocation(new Point(122, 28));
-      affineC11REd.setSize(new Dimension(56, 22));
-      affineC11REd.setEditable(false);
-      affineC11REd.setHorizontalAlignment(JTextField.RIGHT);
+      affineC11REd.setLocation(new Point(131, 30));
+      affineC11REd.setSize(new Dimension(76, 22));
       affineC11REd.setFont(new Font("Dialog", Font.PLAIN, 10));
     }
     return affineC11REd;
@@ -3219,21 +3168,19 @@ public class TinaInternalFrame extends JInternalFrame {
    * 	
    * @return javax.swing.JTextField	
    */
-  private JTextField getAffineC20REd() {
+  private JWFNumberField getAffineC20REd() {
     if (affineC20REd == null) {
-      affineC20REd = new JTextField();
-      affineC20REd.setPreferredSize(new Dimension(56, 22));
-      affineC20REd.setText("");
-      affineC20REd.setLocation(new Point(214, 4));
-      affineC20REd.setSize(new Dimension(56, 22));
-      affineC20REd.setEditable(false);
-      affineC20REd.setHorizontalAlignment(JTextField.RIGHT);
-      affineC20REd.setFont(new Font("Dialog", Font.PLAIN, 10));
-      affineC20REd.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent e) {
+      affineC20REd = new JWFNumberField();
+      affineC20REd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
           tinaController.affineC20REd_changed();
         }
       });
+      affineC20REd.setPreferredSize(new Dimension(56, 22));
+      affineC20REd.setText("");
+      affineC20REd.setLocation(new Point(238, 6));
+      affineC20REd.setSize(new Dimension(76, 22));
+      affineC20REd.setFont(new Font("Dialog", Font.PLAIN, 10));
     }
     return affineC20REd;
   }
@@ -3243,21 +3190,19 @@ public class TinaInternalFrame extends JInternalFrame {
    * 	
    * @return javax.swing.JTextField	
    */
-  private JTextField getAffineC21REd() {
+  private JWFNumberField getAffineC21REd() {
     if (affineC21REd == null) {
-      affineC21REd = new JTextField();
-      affineC21REd.setPreferredSize(new Dimension(56, 22));
-      affineC21REd.setText("");
-      affineC21REd.setLocation(new Point(214, 28));
-      affineC21REd.setSize(new Dimension(56, 22));
-      affineC21REd.setEditable(false);
-      affineC21REd.setHorizontalAlignment(JTextField.RIGHT);
-      affineC21REd.setFont(new Font("Dialog", Font.PLAIN, 10));
-      affineC21REd.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent e) {
+      affineC21REd = new JWFNumberField();
+      affineC21REd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
           tinaController.affineC21REd_changed();
         }
       });
+      affineC21REd.setPreferredSize(new Dimension(56, 22));
+      affineC21REd.setText("");
+      affineC21REd.setLocation(new Point(238, 30));
+      affineC21REd.setSize(new Dimension(76, 22));
+      affineC21REd.setFont(new Font("Dialog", Font.PLAIN, 10));
     }
     return affineC21REd;
   }

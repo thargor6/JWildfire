@@ -324,12 +324,12 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
   private final JToggleButton affineScaleYButton;
   private final JTable transformationsTable;
   private final JButton affineResetTransformButton;
-  private final JTextField affineC00REd;
-  private final JTextField affineC01REd;
-  private final JTextField affineC10REd;
-  private final JTextField affineC11REd;
-  private final JTextField affineC20REd;
-  private final JTextField affineC21REd;
+  private final JWFNumberField affineC00REd;
+  private final JWFNumberField affineC01REd;
+  private final JWFNumberField affineC10REd;
+  private final JWFNumberField affineC11REd;
+  private final JWFNumberField affineC20REd;
+  private final JWFNumberField affineC21REd;
   private final JTextField affineRotateAmountREd;
   private final JTextField affineScaleAmountREd;
   private final JTextField affineMoveAmountREd;
@@ -417,8 +417,8 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       JTextField pPaletteRedREd, JSlider pPaletteRedSlider, JTextField pPaletteGreenREd, JSlider pPaletteGreenSlider, JTextField pPaletteBlueREd,
       JSlider pPaletteBlueSlider, JTextField pPaletteHueREd, JSlider pPaletteHueSlider, JTextField pPaletteSaturationREd, JSlider pPaletteSaturationSlider,
       JTextField pPaletteContrastREd, JSlider pPaletteContrastSlider, JTextField pPaletteGammaREd, JSlider pPaletteGammaSlider, JTextField pPaletteBrightnessREd,
-      JSlider pPaletteBrightnessSlider, JTextField pPaletteSwapRGBREd, JSlider pPaletteSwapRGBSlider, JTable pTransformationsTable, JTextField pAffineC00REd,
-      JTextField pAffineC01REd, JTextField pAffineC10REd, JTextField pAffineC11REd, JTextField pAffineC20REd, JTextField pAffineC21REd,
+      JSlider pPaletteBrightnessSlider, JTextField pPaletteSwapRGBREd, JSlider pPaletteSwapRGBSlider, JTable pTransformationsTable, JWFNumberField pAffineC00REd,
+      JWFNumberField pAffineC01REd, JWFNumberField pAffineC10REd, JWFNumberField pAffineC11REd, JWFNumberField pAffineC20REd, JWFNumberField pAffineC21REd,
       JTextField pAffineRotateAmountREd, JTextField pAffineScaleAmountREd, JTextField pAffineMoveAmountREd, JButton pAffineRotateLeftButton,
       JButton pAffineRotateRightButton, JButton pAffineEnlargeButton, JButton pAffineShrinkButton, JButton pAffineMoveUpButton, JButton pAffineMoveLeftButton,
       JButton pAffineMoveRightButton, JButton pAffineMoveDownButton, JButton pAddTransformationButton, JButton pDuplicateTransformationButton,

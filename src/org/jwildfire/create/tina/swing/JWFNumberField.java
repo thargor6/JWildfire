@@ -148,4 +148,8 @@ public class JWFNumberField extends JSpinner {
     this.maxValue = maxValue;
     spinnerModel.setMaximum(hasMaxValue ? maxValue : null);
   }
+
+  public void setEditable(boolean enabled) {
+    setEnabled(enabled);
+  }
 }
