@@ -220,25 +220,25 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
   // script
   private final JTextArea scriptTextArea;
   // camera, coloring  
-  private final JTextField cameraRollREd;
+  private final JWFNumberField cameraRollREd;
   private final JSlider cameraRollSlider;
-  private final JTextField cameraPitchREd;
+  private final JWFNumberField cameraPitchREd;
   private final JSlider cameraPitchSlider;
-  private final JTextField cameraYawREd;
+  private final JWFNumberField cameraYawREd;
   private final JSlider cameraYawSlider;
-  private final JTextField cameraPerspectiveREd;
+  private final JWFNumberField cameraPerspectiveREd;
   private final JSlider cameraPerspectiveSlider;
-  private final JTextField cameraCentreXREd;
+  private final JWFNumberField cameraCentreXREd;
   private final JSlider cameraCentreXSlider;
-  private final JTextField cameraCentreYREd;
+  private final JWFNumberField cameraCentreYREd;
   private final JSlider cameraCentreYSlider;
-  private final JTextField cameraZoomREd;
+  private final JWFNumberField cameraZoomREd;
   private final JSlider cameraZoomSlider;
-  private final JTextField cameraZPosREd;
+  private final JWFNumberField cameraZPosREd;
   private final JSlider cameraZPosSlider;
-  private final JTextField cameraDOFREd;
+  private final JWFNumberField cameraDOFREd;
   private final JSlider cameraDOFSlider;
-  private final JTextField pixelsPerUnitREd;
+  private final JWFNumberField pixelsPerUnitREd;
   private final JSlider pixelsPerUnitSlider;
   private final JTextField brightnessREd;
   private final JSlider brightnessSlider;
@@ -405,11 +405,11 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
   //
   private final JTextPane helpPane;
 
-  public TinaController(ErrorHandler pErrorHandler, Prefs pPrefs, JPanel pCenterPanel, JTextField pCameraRollREd, JSlider pCameraRollSlider, JTextField pCameraPitchREd,
-      JSlider pCameraPitchSlider, JTextField pCameraYawREd, JSlider pCameraYawSlider, JTextField pCameraPerspectiveREd, JSlider pCameraPerspectiveSlider,
-      JTextField pCameraCentreXREd, JSlider pCameraCentreXSlider, JTextField pCameraCentreYREd,
-      JSlider pCameraCentreYSlider, JTextField pCameraZoomREd, JSlider pCameraZoomSlider, JTextField pCameraZPosREd, JSlider pCameraZPosSlider,
-      JTextField pCameraDOFREd, JSlider pCameraDOFSlider, JTextField pPixelsPerUnitREd, JSlider pPixelsPerUnitSlider,
+  public TinaController(ErrorHandler pErrorHandler, Prefs pPrefs, JPanel pCenterPanel, JWFNumberField pCameraRollREd, JSlider pCameraRollSlider, JWFNumberField pCameraPitchREd,
+      JSlider pCameraPitchSlider, JWFNumberField pCameraYawREd, JSlider pCameraYawSlider, JWFNumberField pCameraPerspectiveREd, JSlider pCameraPerspectiveSlider,
+      JWFNumberField pCameraCentreXREd, JSlider pCameraCentreXSlider, JWFNumberField pCameraCentreYREd,
+      JSlider pCameraCentreYSlider, JWFNumberField pCameraZoomREd, JSlider pCameraZoomSlider, JWFNumberField pCameraZPosREd, JSlider pCameraZPosSlider,
+      JWFNumberField pCameraDOFREd, JSlider pCameraDOFSlider, JWFNumberField pPixelsPerUnitREd, JSlider pPixelsPerUnitSlider,
       JTextField pBrightnessREd, JSlider pBrightnessSlider, JTextField pContrastREd, JSlider pContrastSlider, JTextField pGammaREd, JSlider pGammaSlider,
       JTextField pVibrancyREd, JSlider pVibrancySlider, JTextField pFilterRadiusREd, JSlider pFilterRadiusSlider, JTextField pGammaThresholdREd,
       JSlider pGammaThresholdSlider, JTextField pBGColorRedREd, JSlider pBGColorRedSlider, JTextField pBGColorGreenREd, JSlider pBGColorGreenSlider, JTextField pBGColorBlueREd,
@@ -1580,6 +1580,40 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     }
   }
 
+  private void flameSliderChanged(JSlider pSlider, JWFNumberField pTextField, String pProperty, double pSliderScale) {
+    Flame currFlame = getCurrFlame();
+    if (noRefresh || currFlame == null)
+      return;
+    noRefresh = true;
+    try {
+      double propValue = pSlider.getValue() / pSliderScale;
+      pTextField.setText(Tools.doubleToString(propValue));
+      Class<?> cls = currFlame.getClass();
+      Field field;
+      try {
+        field = cls.getDeclaredField(pProperty);
+        field.setAccessible(true);
+        Class<?> fieldCls = field.getType();
+        if (fieldCls == double.class || fieldCls == Double.class) {
+          field.setDouble(currFlame, propValue);
+        }
+        else if (fieldCls == int.class || fieldCls == Integer.class) {
+          field.setInt(currFlame, Tools.FTOI(propValue));
+        }
+        else {
+          throw new IllegalStateException();
+        }
+      }
+      catch (Throwable ex) {
+        ex.printStackTrace();
+      }
+      refreshFlameImage(false);
+    }
+    finally {
+      noRefresh = false;
+    }
+  }
+
   private void paletteSliderChanged(JSlider pSlider, JTextField pTextField, String pProperty, double pSliderScale) {
     Flame currFlame = getCurrFlame();
     if (noRefresh || currFlame == null)
@@ -1764,6 +1798,45 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
   }
 
   private void flameTextFieldChanged(JSlider pSlider, JTextField pTextField, String pProperty, double pSliderScale) {
+    if (noRefresh) {
+      return;
+    }
+    Flame currFlame = getCurrFlame();
+    if (currFlame == null) {
+      return;
+    }
+    noRefresh = true;
+    try {
+      double propValue = Tools.stringToDouble(pTextField.getText());
+      pSlider.setValue(Tools.FTOI(propValue * pSliderScale));
+
+      Class<?> cls = currFlame.getClass();
+      Field field;
+      try {
+        field = cls.getDeclaredField(pProperty);
+        field.setAccessible(true);
+        Class<?> fieldCls = field.getType();
+        if (fieldCls == double.class || fieldCls == Double.class) {
+          field.setDouble(currFlame, propValue);
+        }
+        else if (fieldCls == int.class || fieldCls == Integer.class) {
+          field.setInt(currFlame, Tools.FTOI(propValue));
+        }
+        else {
+          throw new IllegalStateException();
+        }
+      }
+      catch (Throwable ex) {
+        ex.printStackTrace();
+      }
+      refreshFlameImage(false);
+    }
+    finally {
+      noRefresh = false;
+    }
+  }
+
+  private void flameTextFieldChanged(JSlider pSlider, JWFNumberField pTextField, String pProperty, double pSliderScale) {
     if (noRefresh) {
       return;
     }

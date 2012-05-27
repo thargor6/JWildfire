@@ -83,19 +83,19 @@ public class TinaInternalFrame extends JInternalFrame {
 
   private JLabel tinaCameraRollLbl = null;
 
-  private JTextField tinaCameraRollREd = null;
+  private JWFNumberField tinaCameraRollREd = null;
 
   private JLabel tinaCameraPitchLbl = null;
 
-  private JTextField tinaCameraPitchREd = null;
+  private JWFNumberField tinaCameraPitchREd = null;
 
   private JLabel tinaCameraYawLbl = null;
 
-  private JTextField tinaCameraYawREd = null;
+  private JWFNumberField tinaCameraYawREd = null;
 
   private JLabel tinaCameraPerspectiveLbl = null;
 
-  private JTextField tinaCameraPerspectiveREd = null;
+  private JWFNumberField tinaCameraPerspectiveREd = null;
 
   private JSlider tinaCameraRollSlider = null;
 
@@ -115,11 +115,11 @@ public class TinaInternalFrame extends JInternalFrame {
 
   private JLabel tinaCameraCentreXLbl = null;
 
-  private JTextField tinaCameraCentreXREd = null;
+  private JWFNumberField tinaCameraCentreXREd = null;
 
   private JLabel tinaCameraCentreYLbl = null;
 
-  private JTextField tinaCameraCentreYREd = null;
+  private JWFNumberField tinaCameraCentreYREd = null;
 
   private JSlider tinaCameraCentreXSlider = null;
 
@@ -127,7 +127,7 @@ public class TinaInternalFrame extends JInternalFrame {
 
   private JLabel tinaCameraZoomLbl = null;
 
-  private JTextField tinaCameraZoomREd = null;
+  private JWFNumberField tinaCameraZoomREd = null;
 
   private JSlider tinaCameraZoomSlider = null;
 
@@ -150,7 +150,7 @@ public class TinaInternalFrame extends JInternalFrame {
 
   private JLabel tinaPixelsPerUnitLbl = null;
 
-  private JTextField tinaPixelsPerUnitREd = null;
+  private JWFNumberField tinaPixelsPerUnitREd = null;
 
   private JSlider tinaPixelsPerUnitSlider = null;
 
@@ -514,10 +514,10 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton nonlinarParams12RightButton = null;
   private JButton tinaGrabPaletteFromFlameButton = null;
   private JLabel tinaCameraZPosLbl = null;
-  private JTextField tinaCameraZPosREd = null;
+  private JWFNumberField tinaCameraZPosREd = null;
   private JSlider tinaCameraZPosSlider = null;
   private JSlider tinaCameraDOFSlider = null;
-  private JTextField tinaCameraDOFREd = null;
+  private JWFNumberField tinaCameraDOFREd = null;
   private JLabel tinaCameraDOFLbl = null;
   private JPanel pseudo3DShadingPanel = null;
   private JLabel shadingDiffuseLbl = null;
@@ -935,6 +935,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaCameraPanel.add(tinaCameraDOFLbl, null);
 
       final JSpinner spinner = new JSpinner();
+      spinner.setVisible(false);
       spinner.setModel(new SpinnerNumberModel(new Double(0), null, null, new Double(0.5)));
       spinner.setFont(new Font("Dialog", Font.PLAIN, 10));
       spinner.setBounds(939, 25, 169, 28);
@@ -1066,19 +1067,18 @@ public class TinaInternalFrame extends JInternalFrame {
    *  
    * @return javax.swing.JTextField 
    */
-  private JTextField getTinaCameraRollREd() {
+  private JWFNumberField getTinaCameraRollREd() {
     if (tinaCameraRollREd == null) {
-      tinaCameraRollREd = new JTextField();
-      tinaCameraRollREd.setPreferredSize(new Dimension(100, 22));
-      tinaCameraRollREd.setText("");
-      tinaCameraRollREd.setLocation(new Point(100, 4));
-      tinaCameraRollREd.setSize(new Dimension(100, 22));
-      tinaCameraRollREd.setFont(new Font("Dialog", Font.PLAIN, 10));
-      tinaCameraRollREd.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent e) {
+      tinaCameraRollREd = new JWFNumberField();
+      tinaCameraRollREd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
           tinaController.cameraRollREd_changed();
         }
       });
+      tinaCameraRollREd.setPreferredSize(new Dimension(100, 22));
+      tinaCameraRollREd.setLocation(new Point(100, 4));
+      tinaCameraRollREd.setSize(new Dimension(100, 22));
+      tinaCameraRollREd.setFont(new Font("Dialog", Font.PLAIN, 10));
     }
     return tinaCameraRollREd;
   }
@@ -1088,19 +1088,19 @@ public class TinaInternalFrame extends JInternalFrame {
    *  
    * @return javax.swing.JTextField 
    */
-  private JTextField getTinaCameraPitchREd() {
+  private JWFNumberField getTinaCameraPitchREd() {
     if (tinaCameraPitchREd == null) {
-      tinaCameraPitchREd = new JTextField();
+      tinaCameraPitchREd = new JWFNumberField();
+      tinaCameraPitchREd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          tinaController.cameraPitchREd_changed();
+        }
+      });
       tinaCameraPitchREd.setPreferredSize(new Dimension(100, 22));
       tinaCameraPitchREd.setText("");
       tinaCameraPitchREd.setLocation(new Point(100, 28));
       tinaCameraPitchREd.setSize(new Dimension(100, 22));
       tinaCameraPitchREd.setFont(new Font("Dialog", Font.PLAIN, 10));
-      tinaCameraPitchREd.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.cameraPitchREd_changed();
-        }
-      });
     }
     return tinaCameraPitchREd;
   }
@@ -1110,19 +1110,19 @@ public class TinaInternalFrame extends JInternalFrame {
    *  
    * @return javax.swing.JTextField 
    */
-  private JTextField getTinaCameraYawREd() {
+  private JWFNumberField getTinaCameraYawREd() {
     if (tinaCameraYawREd == null) {
-      tinaCameraYawREd = new JTextField();
+      tinaCameraYawREd = new JWFNumberField();
+      tinaCameraYawREd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          tinaController.cameraYawREd_changed();
+        }
+      });
       tinaCameraYawREd.setPreferredSize(new Dimension(100, 22));
       tinaCameraYawREd.setText("");
       tinaCameraYawREd.setLocation(new Point(100, 52));
       tinaCameraYawREd.setSize(new Dimension(100, 22));
       tinaCameraYawREd.setFont(new Font("Dialog", Font.PLAIN, 10));
-      tinaCameraYawREd.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.cameraYawREd_changed();
-        }
-      });
     }
     return tinaCameraYawREd;
   }
@@ -1132,19 +1132,23 @@ public class TinaInternalFrame extends JInternalFrame {
    *  
    * @return javax.swing.JTextField 
    */
-  private JTextField getTinaCameraPerspectiveREd() {
+  private JWFNumberField getTinaCameraPerspectiveREd() {
     if (tinaCameraPerspectiveREd == null) {
-      tinaCameraPerspectiveREd = new JTextField();
+      tinaCameraPerspectiveREd = new JWFNumberField();
+      tinaCameraPerspectiveREd.setValueStep(0.01);
+      tinaCameraPerspectiveREd.setMaxValue(1.0);
+      tinaCameraPerspectiveREd.setHasMinValue(true);
+      tinaCameraPerspectiveREd.setHasMaxValue(true);
+      tinaCameraPerspectiveREd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          tinaController.cameraPerspectiveREd_changed();
+        }
+      });
       tinaCameraPerspectiveREd.setPreferredSize(new Dimension(100, 22));
       tinaCameraPerspectiveREd.setText("");
       tinaCameraPerspectiveREd.setLocation(new Point(100, 76));
       tinaCameraPerspectiveREd.setSize(new Dimension(100, 22));
       tinaCameraPerspectiveREd.setFont(new Font("Dialog", Font.PLAIN, 10));
-      tinaCameraPerspectiveREd.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.cameraPerspectiveREd_changed();
-        }
-      });
     }
     return tinaCameraPerspectiveREd;
   }
@@ -1329,19 +1333,20 @@ public class TinaInternalFrame extends JInternalFrame {
    *  
    * @return javax.swing.JTextField 
    */
-  private JTextField getTinaCameraCentreXREd() {
+  private JWFNumberField getTinaCameraCentreXREd() {
     if (tinaCameraCentreXREd == null) {
-      tinaCameraCentreXREd = new JTextField();
+      tinaCameraCentreXREd = new JWFNumberField();
+      tinaCameraCentreXREd.setValueStep(0.25);
+      tinaCameraCentreXREd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          tinaController.cameraCentreXREd_changed();
+        }
+      });
       tinaCameraCentreXREd.setPreferredSize(new Dimension(100, 22));
       tinaCameraCentreXREd.setText("");
       tinaCameraCentreXREd.setLocation(new Point(584, 4));
       tinaCameraCentreXREd.setSize(new Dimension(100, 22));
       tinaCameraCentreXREd.setFont(new Font("Dialog", Font.PLAIN, 10));
-      tinaCameraCentreXREd.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.cameraCentreXREd_changed();
-        }
-      });
     }
     return tinaCameraCentreXREd;
   }
@@ -1351,19 +1356,20 @@ public class TinaInternalFrame extends JInternalFrame {
    *  
    * @return javax.swing.JTextField 
    */
-  private JTextField getTinaCameraCentreYREd() {
+  private JWFNumberField getTinaCameraCentreYREd() {
     if (tinaCameraCentreYREd == null) {
-      tinaCameraCentreYREd = new JTextField();
+      tinaCameraCentreYREd = new JWFNumberField();
+      tinaCameraCentreYREd.setValueStep(0.25);
+      tinaCameraCentreYREd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          tinaController.cameraCentreYREd_changed();
+        }
+      });
       tinaCameraCentreYREd.setPreferredSize(new Dimension(100, 22));
       tinaCameraCentreYREd.setText("");
       tinaCameraCentreYREd.setLocation(new Point(584, 28));
       tinaCameraCentreYREd.setSize(new Dimension(100, 22));
       tinaCameraCentreYREd.setFont(new Font("Dialog", Font.PLAIN, 10));
-      tinaCameraCentreYREd.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.cameraCentreYREd_changed();
-        }
-      });
     }
     return tinaCameraCentreYREd;
   }
@@ -1419,19 +1425,20 @@ public class TinaInternalFrame extends JInternalFrame {
    *  
    * @return javax.swing.JTextField 
    */
-  private JTextField getTinaCameraZoomREd() {
+  private JWFNumberField getTinaCameraZoomREd() {
     if (tinaCameraZoomREd == null) {
-      tinaCameraZoomREd = new JTextField();
+      tinaCameraZoomREd = new JWFNumberField();
+      tinaCameraZoomREd.setValueStep(0.1);
+      tinaCameraZoomREd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          tinaController.cameraZoomREd_changed();
+        }
+      });
       tinaCameraZoomREd.setPreferredSize(new Dimension(100, 22));
       tinaCameraZoomREd.setText("");
       tinaCameraZoomREd.setLocation(new Point(584, 52));
       tinaCameraZoomREd.setSize(new Dimension(100, 22));
       tinaCameraZoomREd.setFont(new Font("Dialog", Font.PLAIN, 10));
-      tinaCameraZoomREd.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.cameraZoomREd_changed();
-        }
-      });
     }
     return tinaCameraZoomREd;
   }
@@ -1510,19 +1517,20 @@ public class TinaInternalFrame extends JInternalFrame {
    *  
    * @return javax.swing.JTextField 
    */
-  private JTextField getTinaPixelsPerUnitREd() {
+  private JWFNumberField getTinaPixelsPerUnitREd() {
     if (tinaPixelsPerUnitREd == null) {
-      tinaPixelsPerUnitREd = new JTextField();
+      tinaPixelsPerUnitREd = new JWFNumberField();
+      tinaPixelsPerUnitREd.setValueStep(1.0);
+      tinaPixelsPerUnitREd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          tinaController.pixelsPerUnitREd_changed();
+        }
+      });
       tinaPixelsPerUnitREd.setPreferredSize(new Dimension(100, 22));
       tinaPixelsPerUnitREd.setText("");
       tinaPixelsPerUnitREd.setLocation(new Point(584, 76));
       tinaPixelsPerUnitREd.setSize(new Dimension(100, 22));
       tinaPixelsPerUnitREd.setFont(new Font("Dialog", Font.PLAIN, 10));
-      tinaPixelsPerUnitREd.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.pixelsPerUnitREd_changed();
-        }
-      });
     }
     return tinaPixelsPerUnitREd;
   }
@@ -7282,19 +7290,20 @@ public class TinaInternalFrame extends JInternalFrame {
    * 	
    * @return javax.swing.JTextField	
    */
-  private JTextField getTinaCameraZPosREd() {
+  private JWFNumberField getTinaCameraZPosREd() {
     if (tinaCameraZPosREd == null) {
-      tinaCameraZPosREd = new JTextField();
+      tinaCameraZPosREd = new JWFNumberField();
+      tinaCameraZPosREd.setValueStep(0.1);
+      tinaCameraZPosREd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          tinaController.cameraZPosREd_changed();
+        }
+      });
       tinaCameraZPosREd.setPreferredSize(new Dimension(100, 22));
       tinaCameraZPosREd.setText("");
       tinaCameraZPosREd.setSize(new Dimension(100, 22));
       tinaCameraZPosREd.setLocation(new Point(100, 100));
       tinaCameraZPosREd.setFont(new Font("Dialog", Font.PLAIN, 10));
-      tinaCameraZPosREd.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.cameraZPosREd_changed();
-        }
-      });
     }
     return tinaCameraZPosREd;
   }
@@ -7350,19 +7359,21 @@ public class TinaInternalFrame extends JInternalFrame {
    * 	
    * @return javax.swing.JTextField	
    */
-  private JTextField getTinaCameraDOFREd() {
+  private JWFNumberField getTinaCameraDOFREd() {
     if (tinaCameraDOFREd == null) {
-      tinaCameraDOFREd = new JTextField();
+      tinaCameraDOFREd = new JWFNumberField();
+      tinaCameraDOFREd.setValueStep(0.05);
+      tinaCameraDOFREd.setHasMinValue(true);
+      tinaCameraDOFREd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          tinaController.cameraDOFREd_changed();
+        }
+      });
       tinaCameraDOFREd.setPreferredSize(new Dimension(100, 22));
       tinaCameraDOFREd.setText("");
       tinaCameraDOFREd.setSize(new Dimension(100, 22));
       tinaCameraDOFREd.setLocation(new Point(584, 100));
       tinaCameraDOFREd.setFont(new Font("Dialog", Font.PLAIN, 10));
-      tinaCameraDOFREd.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.cameraDOFREd_changed();
-        }
-      });
     }
     return tinaCameraDOFREd;
   }
@@ -9683,7 +9694,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JPanel getPanel_4() {
     if (panel_4 == null) {
       panel_4 = new JPanel();
-      panel_4.setBorder(new TitledBorder(null, "Reserved area for V0.46 ;-)", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+      panel_4.setBorder(new TitledBorder(null, "Reserved area for later ;-)", TitledBorder.LEADING, TitledBorder.TOP, null, null));
       panel_4.setLayout(null);
     }
     return panel_4;
