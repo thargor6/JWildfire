@@ -140,14 +140,14 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
   public static class NonlinearControlsRow {
     private final JComboBox nonlinearVarCmb;
     private final JComboBox nonlinearParamsCmb;
-    private final JTextField nonlinearVarREd;
-    private final JTextField nonlinearParamsREd;
+    private final JWFNumberField nonlinearVarREd;
+    private final JWFNumberField nonlinearParamsREd;
     private final JButton nonlinearVarLeftButton;
     private final JButton nonlinearVarRightButton;
     private final JButton nonlinearParamsLeftButton;
     private final JButton nonlinearParamsRightButton;
 
-    public NonlinearControlsRow(JComboBox pNonlinearVarCmb, JComboBox pNonlinearParamsCmb, JTextField pNonlinearVarREd, JTextField pNonlinearParamsREd,
+    public NonlinearControlsRow(JComboBox pNonlinearVarCmb, JComboBox pNonlinearParamsCmb, JWFNumberField pNonlinearVarREd, JWFNumberField pNonlinearParamsREd,
         JButton pNonlinearVarLeftButton, JButton pNonlinearVarRightButton, JButton pNonlinearParamsLeftButton, JButton pNonlinearParamsRightButton) {
       nonlinearVarCmb = pNonlinearVarCmb;
       nonlinearParamsCmb = pNonlinearParamsCmb;
@@ -182,11 +182,11 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       return nonlinearParamsCmb;
     }
 
-    public JTextField getNonlinearVarREd() {
+    public JWFNumberField getNonlinearVarREd() {
       return nonlinearVarREd;
     }
 
-    public JTextField getNonlinearParamsREd() {
+    public JWFNumberField getNonlinearParamsREd() {
       return nonlinearParamsREd;
     }
 
@@ -369,11 +369,11 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
   // Nonlinear transformations
   private final NonlinearControlsRow[] nonlinearControlsRows;
   // Color
-  private final JTextField xFormColorREd;
+  private final JWFNumberField xFormColorREd;
   private final JSlider xFormColorSlider;
-  private final JTextField xFormSymmetryREd;
+  private final JWFNumberField xFormSymmetryREd;
   private final JSlider xFormSymmetrySlider;
-  private final JTextField xFormOpacityREd;
+  private final JWFNumberField xFormOpacityREd;
   private final JSlider xFormOpacitySlider;
   private final JComboBox xFormDrawModeCmb;
   // Relative weights
@@ -423,7 +423,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       JButton pAffineRotateRightButton, JButton pAffineEnlargeButton, JButton pAffineShrinkButton, JButton pAffineMoveUpButton, JButton pAffineMoveLeftButton,
       JButton pAffineMoveRightButton, JButton pAffineMoveDownButton, JButton pAddTransformationButton, JButton pDuplicateTransformationButton,
       JButton pDeleteTransformationButton, JButton pAddFinalTransformationButton, JPanel pRandomBatchPanel, NonlinearControlsRow[] pNonlinearControlsRows,
-      JTextField pXFormColorREd, JSlider pXFormColorSlider, JTextField pXFormSymmetryREd, JSlider pXFormSymmetrySlider, JTextField pXFormOpacityREd,
+      JWFNumberField pXFormColorREd, JSlider pXFormColorSlider, JWFNumberField pXFormSymmetryREd, JSlider pXFormSymmetrySlider, JWFNumberField pXFormOpacityREd,
       JSlider pXFormOpacitySlider, JComboBox pXFormDrawModeCmb, JTable pRelWeightsTable, JButton pRelWeightsLeftButton, JButton pRelWeightsRightButton,
       JButton pTransformationWeightLeftButton, JButton pTransformationWeightRightButton,
       JToggleButton pMouseTransformMoveButton, JToggleButton pMouseTransformRotateButton, JToggleButton pMouseTransformScaleButton,
@@ -1797,6 +1797,48 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     }
   }
 
+  private void xFormSliderChanged(JSlider pSlider, JWFNumberField pTextField, String pProperty, double pSliderScale) {
+    if (noRefresh) {
+      return;
+    }
+    Flame currFlame = getCurrFlame();
+    if (currFlame == null) {
+      return;
+    }
+    XForm xForm = getCurrXForm();
+    if (xForm == null) {
+      return;
+    }
+    noRefresh = true;
+    try {
+      double propValue = pSlider.getValue() / pSliderScale;
+      pTextField.setText(Tools.doubleToString(propValue));
+      Class<?> cls = xForm.getClass();
+      Field field;
+      try {
+        field = cls.getDeclaredField(pProperty);
+        field.setAccessible(true);
+        Class<?> fieldCls = field.getType();
+        if (fieldCls == double.class || fieldCls == Double.class) {
+          field.setDouble(xForm, propValue);
+        }
+        else if (fieldCls == int.class || fieldCls == Integer.class) {
+          field.setInt(xForm, Tools.FTOI(propValue));
+        }
+        else {
+          throw new IllegalStateException();
+        }
+      }
+      catch (Throwable ex) {
+        ex.printStackTrace();
+      }
+      refreshFlameImage(false);
+    }
+    finally {
+      noRefresh = false;
+    }
+  }
+
   private void flameTextFieldChanged(JSlider pSlider, JTextField pTextField, String pProperty, double pSliderScale) {
     if (noRefresh) {
       return;
@@ -1915,6 +1957,45 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
   }
 
   private void xFormTextFieldChanged(JSlider pSlider, JTextField pTextField, String pProperty, double pSliderScale) {
+    if (noRefresh) {
+      return;
+    }
+    XForm xForm = getCurrXForm();
+    if (xForm == null) {
+      return;
+    }
+    noRefresh = true;
+    try {
+      double propValue = Tools.stringToDouble(pTextField.getText());
+      pSlider.setValue(Tools.FTOI(propValue * pSliderScale));
+
+      Class<?> cls = xForm.getClass();
+      Field field;
+      try {
+        field = cls.getDeclaredField(pProperty);
+        field.setAccessible(true);
+        Class<?> fieldCls = field.getType();
+        if (fieldCls == double.class || fieldCls == Double.class) {
+          field.setDouble(xForm, propValue);
+        }
+        else if (fieldCls == int.class || fieldCls == Integer.class) {
+          field.setInt(xForm, Tools.FTOI(propValue));
+        }
+        else {
+          throw new IllegalStateException();
+        }
+      }
+      catch (Throwable ex) {
+        ex.printStackTrace();
+      }
+      refreshFlameImage(false);
+    }
+    finally {
+      noRefresh = false;
+    }
+  }
+
+  private void xFormTextFieldChanged(JSlider pSlider, JWFNumberField pTextField, String pProperty, double pSliderScale) {
     if (noRefresh) {
       return;
     }

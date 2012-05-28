@@ -321,10 +321,10 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton randomBatchButton = null;
   private JLabel nonlinearVar1Lbl = null;
   private JComboBox nonlinearVar1Cmb = null;
-  private JTextField nonlinearVar1REd = null;
+  private JWFNumberField nonlinearVar1REd = null;
   private JLabel nonlinearParams1Lbl = null;
   private JComboBox nonlinearParams1Cmb = null;
-  private JTextField nonlinearParams1REd = null;
+  private JWFNumberField nonlinearParams1REd = null;
   private JPanel nonlinearVar1Panel = null;
   private JButton nonlinearVar1LeftButton = null;
   private JButton nonlinarVar1RightButton = null;
@@ -333,10 +333,10 @@ public class TinaInternalFrame extends JInternalFrame {
   private JPanel nonlinearVar2Panel = null;
   private JLabel nonlinearVar2Lbl = null;
   private JComboBox nonlinearVar2Cmb = null;
-  private JTextField nonlinearVar2REd = null;
+  private JWFNumberField nonlinearVar2REd = null;
   private JLabel nonlinearParams2Lbl = null;
   private JComboBox nonlinearParams2Cmb = null;
-  private JTextField nonlinearParams2REd = null;
+  private JWFNumberField nonlinearParams2REd = null;
   private JButton nonlinearVar2LeftButton = null;
   private JButton nonlinarVar2RightButton = null;
   private JButton nonlinearParams2LeftButton = null;
@@ -344,22 +344,22 @@ public class TinaInternalFrame extends JInternalFrame {
   private JPanel nonlinearVar3Panel = null;
   private JLabel nonlinearVar3Lbl = null;
   private JComboBox nonlinearVar3Cmb = null;
-  private JTextField nonlinearVar3REd = null;
+  private JWFNumberField nonlinearVar3REd = null;
   private JLabel nonlinearParams3Lbl = null;
   private JComboBox nonlinearParams3Cmb = null;
-  private JTextField nonlinearParams3REd = null;
+  private JWFNumberField nonlinearParams3REd = null;
   private JButton nonlinearVar3LeftButton = null;
   private JButton nonlinarVar3RightButton = null;
   private JButton nonlinearParams3LeftButton = null;
   private JButton nonlinarParams3RightButton = null;
   private JLabel xFormColorLbl = null;
-  private JTextField xFormColorREd = null;
+  private JWFNumberField xFormColorREd = null;
   private JSlider xFormColorSlider = null;
   private JLabel xFormSymmetryLbl = null;
-  private JTextField xFormSymmetryREd = null;
+  private JWFNumberField xFormSymmetryREd = null;
   private JSlider xFormSymmetrySlider = null;
   private JLabel xFormOpacityLbl = null;
-  private JTextField xFormOpacityREd = null;
+  private JWFNumberField xFormOpacityREd = null;
   private JSlider xFormOpacitySlider = null;
   private JLabel xFormDrawModeLbl = null;
   private JComboBox xFormDrawModeCmb = null;
@@ -407,10 +407,10 @@ public class TinaInternalFrame extends JInternalFrame {
   private JPanel nonlinearVar4Panel = null;
   private JLabel nonlinearVar4Lbl = null;
   private JComboBox nonlinearVar4Cmb = null;
-  private JTextField nonlinearVar4REd = null;
+  private JWFNumberField nonlinearVar4REd = null;
   private JLabel nonlinearParams4Lbl = null;
   private JComboBox nonlinearParams4Cmb = null;
-  private JTextField nonlinearParams4REd = null;
+  private JWFNumberField nonlinearParams4REd = null;
   private JButton nonlinearVar4LeftButton = null;
   private JButton nonlinarVar4RightButton = null;
   private JButton nonlinearParams4LeftButton = null;
@@ -423,10 +423,10 @@ public class TinaInternalFrame extends JInternalFrame {
   private JPanel nonlinearVar5Panel = null;
   private JLabel nonlinearVar5Lbl = null;
   private JComboBox nonlinearVar5Cmb = null;
-  private JTextField nonlinearVar5REd = null;
+  private JWFNumberField nonlinearVar5REd = null;
   private JLabel nonlinearParams5Lbl = null;
   private JComboBox nonlinearParams5Cmb = null;
-  private JTextField nonlinearParams5REd = null;
+  private JWFNumberField nonlinearParams5REd = null;
   private JButton nonlinearVar5LeftButton = null;
   private JButton nonlinarVar5RightButton = null;
   private JButton nonlinearParams5LeftButton = null;
@@ -434,10 +434,10 @@ public class TinaInternalFrame extends JInternalFrame {
   private JPanel nonlinearVar6Panel = null;
   private JLabel nonlinearVar6Lbl = null;
   private JComboBox nonlinearVar6Cmb = null;
-  private JTextField nonlinearVar6REd = null;
+  private JWFNumberField nonlinearVar6REd = null;
   private JLabel nonlinearParams6Lbl = null;
   private JComboBox nonlinearParams6Cmb = null;
-  private JTextField nonlinearParams6REd = null;
+  private JWFNumberField nonlinearParams6REd = null;
   private JButton nonlinearVar6LeftButton = null;
   private JButton nonlinarVar6RightButton = null;
   private JButton nonlinearParams6LeftButton = null;
@@ -445,10 +445,10 @@ public class TinaInternalFrame extends JInternalFrame {
   private JPanel nonlinearVar7Panel = null;
   private JLabel nonlinearVar7Lbl = null;
   private JComboBox nonlinearVar7Cmb = null;
-  private JTextField nonlinearVar7REd = null;
+  private JWFNumberField nonlinearVar7REd = null;
   private JLabel nonlinearParams7Lbl = null;
   private JComboBox nonlinearParams7Cmb = null;
-  private JTextField nonlinearParams7REd = null;
+  private JWFNumberField nonlinearParams7REd = null;
   private JButton nonlinearVar7LeftButton = null;
   private JButton nonlinarVar7RightButton = null;
   private JButton nonlinearParams7LeftButton = null;
@@ -456,10 +456,10 @@ public class TinaInternalFrame extends JInternalFrame {
   private JPanel nonlinearVar8Panel = null;
   private JLabel nonlinearVar8Lbl = null;
   private JComboBox nonlinearVar8Cmb = null;
-  private JTextField nonlinearVar8REd = null;
+  private JWFNumberField nonlinearVar8REd = null;
   private JLabel nonlinearParams8Lbl = null;
   private JComboBox nonlinearParams8Cmb = null;
-  private JTextField nonlinearParams8REd = null;
+  private JWFNumberField nonlinearParams8REd = null;
   private JButton nonlinearVar8LeftButton = null;
   private JButton nonlinarVar8RightButton = null;
   private JButton nonlinearParams8LeftButton = null;
@@ -467,10 +467,10 @@ public class TinaInternalFrame extends JInternalFrame {
   private JPanel nonlinearVar9Panel = null;
   private JLabel nonlinearVar9Lbl = null;
   private JComboBox nonlinearVar9Cmb = null;
-  private JTextField nonlinearVar9REd = null;
+  private JWFNumberField nonlinearVar9REd = null;
   private JLabel nonlinearParams9Lbl = null;
   private JComboBox nonlinearParams9Cmb = null;
-  private JTextField nonlinearParams9REd = null;
+  private JWFNumberField nonlinearParams9REd = null;
   private JButton nonlinearVar9LeftButton = null;
   private JButton nonlinarVar9RightButton = null;
   private JButton nonlinearParams9LeftButton = null;
@@ -478,10 +478,10 @@ public class TinaInternalFrame extends JInternalFrame {
   private JPanel nonlinearVar10Panel = null;
   private JLabel nonlinearVar10Lbl = null;
   private JComboBox nonlinearVar10Cmb = null;
-  private JTextField nonlinearVar10REd = null;
+  private JWFNumberField nonlinearVar10REd = null;
   private JLabel nonlinearParams10Lbl = null;
   private JComboBox nonlinearParams10Cmb = null;
-  private JTextField nonlinearParams10REd = null;
+  private JWFNumberField nonlinearParams10REd = null;
   private JButton nonlinearVar10LeftButton = null;
   private JButton nonlinarVar10RightButton = null;
   private JButton nonlinearParams10LeftButton = null;
@@ -489,10 +489,10 @@ public class TinaInternalFrame extends JInternalFrame {
   private JPanel nonlinearVar11Panel = null;
   private JLabel nonlinearVar11Lbl = null;
   private JComboBox nonlinearVar11Cmb = null;
-  private JTextField nonlinearVar11REd = null;
+  private JWFNumberField nonlinearVar11REd = null;
   private JLabel nonlinearParams11Lbl = null;
   private JComboBox nonlinearParams11Cmb = null;
-  private JTextField nonlinearParams11REd = null;
+  private JWFNumberField nonlinearParams11REd = null;
   private JButton nonlinearVar11LeftButton = null;
   private JButton nonlinarVar11RightButton = null;
   private JButton nonlinearParams11LeftButton = null;
@@ -500,10 +500,10 @@ public class TinaInternalFrame extends JInternalFrame {
   private JPanel nonlinearVar12Panel = null;
   private JLabel nonlinearVar12Lbl = null;
   private JComboBox nonlinearVar12Cmb = null;
-  private JTextField nonlinearVar12REd = null;
+  private JWFNumberField nonlinearVar12REd = null;
   private JLabel nonlinearParams12Lbl = null;
   private JComboBox nonlinearParams12Cmb = null;
-  private JTextField nonlinearParams12REd = null;
+  private JWFNumberField nonlinearParams12REd = null;
   private JButton nonlinearVar12LeftButton = null;
   private JButton nonlinarVar12RightButton = null;
   private JButton nonlinearParams12LeftButton = null;
@@ -3083,6 +3083,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JWFNumberField getAffineC00REd() {
     if (affineC00REd == null) {
       affineC00REd = new JWFNumberField();
+      affineC00REd.setValueStep(0.01);
       affineC00REd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           tinaController.affineC00REd_changed();
@@ -3105,6 +3106,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JWFNumberField getAffineC01REd() {
     if (affineC01REd == null) {
       affineC01REd = new JWFNumberField();
+      affineC01REd.setValueStep(0.01);
       affineC01REd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           tinaController.affineC01REd_changed();
@@ -3127,6 +3129,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JWFNumberField getAffineC10REd() {
     if (affineC10REd == null) {
       affineC10REd = new JWFNumberField();
+      affineC10REd.setValueStep(0.01);
       affineC10REd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           tinaController.affineC10REd_changed();
@@ -3149,6 +3152,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JWFNumberField getAffineC11REd() {
     if (affineC11REd == null) {
       affineC11REd = new JWFNumberField();
+      affineC11REd.setValueStep(0.01);
       affineC11REd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           tinaController.affineC11REd_changed();
@@ -3171,6 +3175,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JWFNumberField getAffineC20REd() {
     if (affineC20REd == null) {
       affineC20REd = new JWFNumberField();
+      affineC20REd.setValueStep(0.01);
       affineC20REd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           tinaController.affineC20REd_changed();
@@ -3193,6 +3198,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JWFNumberField getAffineC21REd() {
     if (affineC21REd == null) {
       affineC21REd = new JWFNumberField();
+      affineC21REd.setValueStep(0.01);
       affineC21REd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           tinaController.affineC21REd_changed();
@@ -3605,19 +3611,21 @@ public class TinaInternalFrame extends JInternalFrame {
    * 	
    * @return javax.swing.JTextField	
    */
-  private JTextField getNonlinearVar1REd() {
+  private JWFNumberField getNonlinearVar1REd() {
     if (nonlinearVar1REd == null) {
-      nonlinearVar1REd = new JTextField();
+      nonlinearVar1REd = new JWFNumberField();
+      nonlinearVar1REd.setValueStep(0.01);
+      nonlinearVar1REd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null)
+            tinaController.nonlinearVarREdChanged(0);
+        }
+      });
       nonlinearVar1REd.setPreferredSize(new Dimension(55, 22));
       nonlinearVar1REd.setText("");
       nonlinearVar1REd.setSize(new Dimension(55, 22));
       nonlinearVar1REd.setLocation(new Point(188, 2));
       nonlinearVar1REd.setFont(new Font("Dialog", Font.PLAIN, 10));
-      nonlinearVar1REd.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.nonlinearVarREdChanged(0);
-        }
-      });
     }
     return nonlinearVar1REd;
   }
@@ -3648,19 +3656,21 @@ public class TinaInternalFrame extends JInternalFrame {
    * 	
    * @return javax.swing.JTextField	
    */
-  private JTextField getNonlinearParams1REd() {
+  private JWFNumberField getNonlinearParams1REd() {
     if (nonlinearParams1REd == null) {
-      nonlinearParams1REd = new JTextField();
+      nonlinearParams1REd = new JWFNumberField();
+      nonlinearParams1REd.setValueStep(0.05);
+      nonlinearParams1REd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null)
+            tinaController.nonlinearParamsREdChanged(0);
+        }
+      });
       nonlinearParams1REd.setPreferredSize(new Dimension(55, 22));
       nonlinearParams1REd.setText("");
       nonlinearParams1REd.setSize(new Dimension(55, 22));
       nonlinearParams1REd.setLocation(new Point(188, 26));
       nonlinearParams1REd.setFont(new Font("Dialog", Font.PLAIN, 10));
-      nonlinearParams1REd.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.nonlinearParamsREdChanged(0);
-        }
-      });
     }
     return nonlinearParams1REd;
   }
@@ -3846,19 +3856,21 @@ public class TinaInternalFrame extends JInternalFrame {
    * 	
    * @return javax.swing.JTextField	
    */
-  private JTextField getNonlinearVar2REd() {
+  private JWFNumberField getNonlinearVar2REd() {
     if (nonlinearVar2REd == null) {
-      nonlinearVar2REd = new JTextField();
+      nonlinearVar2REd = new JWFNumberField();
+      nonlinearVar2REd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null)
+            tinaController.nonlinearVarREdChanged(1);
+        }
+      });
+      nonlinearVar2REd.setValueStep(0.01);
       nonlinearVar2REd.setLocation(new Point(188, 2));
       nonlinearVar2REd.setFont(new Font("Dialog", Font.PLAIN, 10));
       nonlinearVar2REd.setPreferredSize(new Dimension(55, 22));
       nonlinearVar2REd.setText("");
       nonlinearVar2REd.setSize(new Dimension(55, 22));
-      nonlinearVar2REd.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.nonlinearVarREdChanged(1);
-        }
-      });
     }
     return nonlinearVar2REd;
   }
@@ -3889,19 +3901,21 @@ public class TinaInternalFrame extends JInternalFrame {
    * 	
    * @return javax.swing.JTextField	
    */
-  private JTextField getNonlinearParams2REd() {
+  private JWFNumberField getNonlinearParams2REd() {
     if (nonlinearParams2REd == null) {
-      nonlinearParams2REd = new JTextField();
+      nonlinearParams2REd = new JWFNumberField();
+      nonlinearParams2REd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null)
+            tinaController.nonlinearParamsREdChanged(1);
+        }
+      });
+      nonlinearParams2REd.setValueStep(0.05);
       nonlinearParams2REd.setLocation(new Point(188, 26));
       nonlinearParams2REd.setFont(new Font("Dialog", Font.PLAIN, 10));
       nonlinearParams2REd.setPreferredSize(new Dimension(55, 22));
       nonlinearParams2REd.setText("");
       nonlinearParams2REd.setSize(new Dimension(55, 22));
-      nonlinearParams2REd.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.nonlinearParamsREdChanged(1);
-        }
-      });
     }
     return nonlinearParams2REd;
   }
@@ -4063,19 +4077,21 @@ public class TinaInternalFrame extends JInternalFrame {
    * 	
    * @return javax.swing.JTextField	
    */
-  private JTextField getNonlinearVar3REd() {
+  private JWFNumberField getNonlinearVar3REd() {
     if (nonlinearVar3REd == null) {
-      nonlinearVar3REd = new JTextField();
+      nonlinearVar3REd = new JWFNumberField();
+      nonlinearVar3REd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null)
+            tinaController.nonlinearVarREdChanged(2);
+        }
+      });
+      nonlinearVar3REd.setValueStep(0.01);
       nonlinearVar3REd.setLocation(new Point(188, 2));
       nonlinearVar3REd.setFont(new Font("Dialog", Font.PLAIN, 10));
       nonlinearVar3REd.setPreferredSize(new Dimension(55, 22));
       nonlinearVar3REd.setText("");
       nonlinearVar3REd.setSize(new Dimension(55, 22));
-      nonlinearVar3REd.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.nonlinearVarREdChanged(2);
-        }
-      });
     }
     return nonlinearVar3REd;
   }
@@ -4106,19 +4122,21 @@ public class TinaInternalFrame extends JInternalFrame {
    * 	
    * @return javax.swing.JTextField	
    */
-  private JTextField getNonlinearParams3REd() {
+  private JWFNumberField getNonlinearParams3REd() {
     if (nonlinearParams3REd == null) {
-      nonlinearParams3REd = new JTextField();
+      nonlinearParams3REd = new JWFNumberField();
+      nonlinearParams3REd.setValueStep(0.05);
+      nonlinearParams3REd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null)
+            tinaController.nonlinearParamsREdChanged(2);
+        }
+      });
       nonlinearParams3REd.setLocation(new Point(188, 26));
       nonlinearParams3REd.setFont(new Font("Dialog", Font.PLAIN, 10));
       nonlinearParams3REd.setPreferredSize(new Dimension(55, 22));
       nonlinearParams3REd.setText("");
       nonlinearParams3REd.setSize(new Dimension(55, 22));
-      nonlinearParams3REd.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.nonlinearParamsREdChanged(2);
-        }
-      });
     }
     return nonlinearParams3REd;
   }
@@ -4220,19 +4238,24 @@ public class TinaInternalFrame extends JInternalFrame {
    * 	
    * @return javax.swing.JTextField	
    */
-  private JTextField getXFormColorREd() {
+  private JWFNumberField getXFormColorREd() {
     if (xFormColorREd == null) {
-      xFormColorREd = new JTextField();
+      xFormColorREd = new JWFNumberField();
+      xFormColorREd.setValueStep(0.05);
+      xFormColorREd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null)
+            tinaController.xFormColorREd_changed();
+        }
+      });
+      xFormColorREd.setMaxValue(1.0);
+      xFormColorREd.setHasMinValue(true);
+      xFormColorREd.setHasMaxValue(true);
       xFormColorREd.setPreferredSize(new Dimension(55, 22));
       xFormColorREd.setText("");
       xFormColorREd.setSize(new Dimension(55, 22));
       xFormColorREd.setLocation(new Point(68, 4));
       xFormColorREd.setFont(new Font("Dialog", Font.PLAIN, 10));
-      xFormColorREd.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.xFormColorREd_changed();
-        }
-      });
     }
     return xFormColorREd;
   }
@@ -4266,19 +4289,25 @@ public class TinaInternalFrame extends JInternalFrame {
    * 	
    * @return javax.swing.JTextField	
    */
-  private JTextField getXFormSymmetryREd() {
+  private JWFNumberField getXFormSymmetryREd() {
     if (xFormSymmetryREd == null) {
-      xFormSymmetryREd = new JTextField();
+      xFormSymmetryREd = new JWFNumberField();
+      xFormSymmetryREd.setValueStep(0.05);
+      xFormSymmetryREd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null)
+            tinaController.xFormSymmetryREd_changed();
+        }
+      });
+      xFormSymmetryREd.setHasMinValue(true);
+      xFormSymmetryREd.setHasMaxValue(true);
+      xFormSymmetryREd.setMaxValue(1.0);
+      xFormSymmetryREd.setMinValue(-1.0);
       xFormSymmetryREd.setPreferredSize(new Dimension(55, 22));
       xFormSymmetryREd.setText("");
       xFormSymmetryREd.setSize(new Dimension(55, 22));
       xFormSymmetryREd.setLocation(new Point(68, 30));
       xFormSymmetryREd.setFont(new Font("Dialog", Font.PLAIN, 10));
-      xFormSymmetryREd.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.xFormSymmetryREd_changed();
-        }
-      });
     }
     return xFormSymmetryREd;
   }
@@ -4312,19 +4341,24 @@ public class TinaInternalFrame extends JInternalFrame {
    * 	
    * @return javax.swing.JTextField	
    */
-  private JTextField getXFormOpacityREd() {
+  private JWFNumberField getXFormOpacityREd() {
     if (xFormOpacityREd == null) {
-      xFormOpacityREd = new JTextField();
+      xFormOpacityREd = new JWFNumberField();
+      xFormOpacityREd.setValueStep(0.05);
+      xFormOpacityREd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null)
+            tinaController.xFormOpacityREd_changed();
+        }
+      });
+      xFormOpacityREd.setHasMaxValue(true);
+      xFormOpacityREd.setHasMinValue(true);
+      xFormOpacityREd.setMaxValue(1.0);
       xFormOpacityREd.setPreferredSize(new Dimension(55, 22));
       xFormOpacityREd.setText("");
       xFormOpacityREd.setSize(new Dimension(55, 22));
       xFormOpacityREd.setLocation(new Point(68, 56));
       xFormOpacityREd.setFont(new Font("Dialog", Font.PLAIN, 10));
-      xFormOpacityREd.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.xFormOpacityREd_changed();
-        }
-      });
     }
     return xFormOpacityREd;
   }
@@ -5254,19 +5288,21 @@ public class TinaInternalFrame extends JInternalFrame {
    * 	
    * @return javax.swing.JTextField	
    */
-  private JTextField getNonlinearVar4REd() {
+  private JWFNumberField getNonlinearVar4REd() {
     if (nonlinearVar4REd == null) {
-      nonlinearVar4REd = new JTextField();
+      nonlinearVar4REd = new JWFNumberField();
+      nonlinearVar4REd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null)
+            tinaController.nonlinearVarREdChanged(3);
+        }
+      });
+      nonlinearVar4REd.setValueStep(0.01);
       nonlinearVar4REd.setLocation(new Point(188, 2));
       nonlinearVar4REd.setFont(new Font("Dialog", Font.PLAIN, 10));
       nonlinearVar4REd.setPreferredSize(new Dimension(55, 22));
       nonlinearVar4REd.setText("");
       nonlinearVar4REd.setSize(new Dimension(55, 22));
-      nonlinearVar4REd.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.nonlinearVarREdChanged(3);
-        }
-      });
     }
     return nonlinearVar4REd;
   }
@@ -5297,19 +5333,21 @@ public class TinaInternalFrame extends JInternalFrame {
    * 	
    * @return javax.swing.JTextField	
    */
-  private JTextField getNonlinearParams4REd() {
+  private JWFNumberField getNonlinearParams4REd() {
     if (nonlinearParams4REd == null) {
-      nonlinearParams4REd = new JTextField();
+      nonlinearParams4REd = new JWFNumberField();
+      nonlinearParams4REd.setValueStep(0.05);
+      nonlinearParams4REd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null)
+            tinaController.nonlinearParamsREdChanged(3);
+        }
+      });
       nonlinearParams4REd.setLocation(new Point(188, 26));
       nonlinearParams4REd.setFont(new Font("Dialog", Font.PLAIN, 10));
       nonlinearParams4REd.setPreferredSize(new Dimension(55, 22));
       nonlinearParams4REd.setText("");
       nonlinearParams4REd.setSize(new Dimension(55, 22));
-      nonlinearParams4REd.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.nonlinearParamsREdChanged(3);
-        }
-      });
     }
     return nonlinearParams4REd;
   }
@@ -5545,19 +5583,21 @@ public class TinaInternalFrame extends JInternalFrame {
    * 	
    * @return javax.swing.JTextField	
    */
-  private JTextField getNonlinearVar5REd() {
+  private JWFNumberField getNonlinearVar5REd() {
     if (nonlinearVar5REd == null) {
-      nonlinearVar5REd = new JTextField();
+      nonlinearVar5REd = new JWFNumberField();
+      nonlinearVar5REd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null)
+            tinaController.nonlinearVarREdChanged(4);
+        }
+      });
+      nonlinearVar5REd.setValueStep(0.01);
       nonlinearVar5REd.setLocation(new Point(188, 2));
       nonlinearVar5REd.setFont(new Font("Dialog", Font.PLAIN, 10));
       nonlinearVar5REd.setPreferredSize(new Dimension(55, 22));
       nonlinearVar5REd.setText("");
       nonlinearVar5REd.setSize(new Dimension(55, 22));
-      nonlinearVar5REd.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.nonlinearVarREdChanged(4);
-        }
-      });
     }
     return nonlinearVar5REd;
   }
@@ -5588,19 +5628,21 @@ public class TinaInternalFrame extends JInternalFrame {
    * 	
    * @return javax.swing.JTextField	
    */
-  private JTextField getNonlinearParams5REd() {
+  private JWFNumberField getNonlinearParams5REd() {
     if (nonlinearParams5REd == null) {
-      nonlinearParams5REd = new JTextField();
+      nonlinearParams5REd = new JWFNumberField();
+      nonlinearParams5REd.setValueStep(0.05);
+      nonlinearParams5REd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null)
+            tinaController.nonlinearParamsREdChanged(4);
+        }
+      });
       nonlinearParams5REd.setLocation(new Point(188, 26));
       nonlinearParams5REd.setFont(new Font("Dialog", Font.PLAIN, 10));
       nonlinearParams5REd.setPreferredSize(new Dimension(55, 22));
       nonlinearParams5REd.setText("");
       nonlinearParams5REd.setSize(new Dimension(55, 22));
-      nonlinearParams5REd.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.nonlinearParamsREdChanged(4);
-        }
-      });
     }
     return nonlinearParams5REd;
   }
@@ -5762,19 +5804,21 @@ public class TinaInternalFrame extends JInternalFrame {
    * 	
    * @return javax.swing.JTextField	
    */
-  private JTextField getNonlinearVar6REd() {
+  private JWFNumberField getNonlinearVar6REd() {
     if (nonlinearVar6REd == null) {
-      nonlinearVar6REd = new JTextField();
+      nonlinearVar6REd = new JWFNumberField();
+      nonlinearVar6REd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null)
+            tinaController.nonlinearVarREdChanged(5);
+        }
+      });
+      nonlinearVar6REd.setValueStep(0.01);
       nonlinearVar6REd.setLocation(new Point(188, 2));
       nonlinearVar6REd.setFont(new Font("Dialog", Font.PLAIN, 10));
       nonlinearVar6REd.setPreferredSize(new Dimension(55, 22));
       nonlinearVar6REd.setText("");
       nonlinearVar6REd.setSize(new Dimension(55, 22));
-      nonlinearVar6REd.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.nonlinearVarREdChanged(5);
-        }
-      });
     }
     return nonlinearVar6REd;
   }
@@ -5805,19 +5849,21 @@ public class TinaInternalFrame extends JInternalFrame {
    * 	
    * @return javax.swing.JTextField	
    */
-  private JTextField getNonlinearParams6REd() {
+  private JWFNumberField getNonlinearParams6REd() {
     if (nonlinearParams6REd == null) {
-      nonlinearParams6REd = new JTextField();
+      nonlinearParams6REd = new JWFNumberField();
+      nonlinearParams6REd.setValueStep(0.05);
+      nonlinearParams6REd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null)
+            tinaController.nonlinearParamsREdChanged(5);
+        }
+      });
       nonlinearParams6REd.setLocation(new Point(188, 26));
       nonlinearParams6REd.setFont(new Font("Dialog", Font.PLAIN, 10));
       nonlinearParams6REd.setPreferredSize(new Dimension(55, 22));
       nonlinearParams6REd.setText("");
       nonlinearParams6REd.setSize(new Dimension(55, 22));
-      nonlinearParams6REd.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.nonlinearParamsREdChanged(5);
-        }
-      });
     }
     return nonlinearParams6REd;
   }
@@ -5978,19 +6024,21 @@ public class TinaInternalFrame extends JInternalFrame {
    * 	
    * @return javax.swing.JTextField	
    */
-  private JTextField getNonlinearVar7REd() {
+  private JWFNumberField getNonlinearVar7REd() {
     if (nonlinearVar7REd == null) {
-      nonlinearVar7REd = new JTextField();
+      nonlinearVar7REd = new JWFNumberField();
+      nonlinearVar7REd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null)
+            tinaController.nonlinearVarREdChanged(6);
+        }
+      });
+      nonlinearVar7REd.setValueStep(0.01);
       nonlinearVar7REd.setLocation(new Point(188, 2));
       nonlinearVar7REd.setFont(new Font("Dialog", Font.PLAIN, 10));
       nonlinearVar7REd.setPreferredSize(new Dimension(55, 22));
       nonlinearVar7REd.setText("");
       nonlinearVar7REd.setSize(new Dimension(55, 22));
-      nonlinearVar7REd.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.nonlinearVarREdChanged(6);
-        }
-      });
     }
     return nonlinearVar7REd;
   }
@@ -6021,19 +6069,21 @@ public class TinaInternalFrame extends JInternalFrame {
    * 	
    * @return javax.swing.JTextField	
    */
-  private JTextField getNonlinearParams7REd() {
+  private JWFNumberField getNonlinearParams7REd() {
     if (nonlinearParams7REd == null) {
-      nonlinearParams7REd = new JTextField();
+      nonlinearParams7REd = new JWFNumberField();
+      nonlinearParams7REd.setValueStep(0.05);
+      nonlinearParams7REd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null)
+            tinaController.nonlinearParamsREdChanged(6);
+        }
+      });
       nonlinearParams7REd.setLocation(new Point(188, 26));
       nonlinearParams7REd.setFont(new Font("Dialog", Font.PLAIN, 10));
       nonlinearParams7REd.setPreferredSize(new Dimension(55, 22));
       nonlinearParams7REd.setText("");
       nonlinearParams7REd.setSize(new Dimension(55, 22));
-      nonlinearParams7REd.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.nonlinearParamsREdChanged(6);
-        }
-      });
     }
     return nonlinearParams7REd;
   }
@@ -6194,19 +6244,21 @@ public class TinaInternalFrame extends JInternalFrame {
    * 	
    * @return javax.swing.JTextField	
    */
-  private JTextField getNonlinearVar8REd() {
+  private JWFNumberField getNonlinearVar8REd() {
     if (nonlinearVar8REd == null) {
-      nonlinearVar8REd = new JTextField();
+      nonlinearVar8REd = new JWFNumberField();
+      nonlinearVar8REd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null)
+            tinaController.nonlinearVarREdChanged(7);
+        }
+      });
+      nonlinearVar8REd.setValueStep(0.01);
       nonlinearVar8REd.setLocation(new Point(188, 2));
       nonlinearVar8REd.setFont(new Font("Dialog", Font.PLAIN, 10));
       nonlinearVar8REd.setPreferredSize(new Dimension(55, 22));
       nonlinearVar8REd.setText("");
       nonlinearVar8REd.setSize(new Dimension(55, 22));
-      nonlinearVar8REd.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.nonlinearVarREdChanged(7);
-        }
-      });
     }
     return nonlinearVar8REd;
   }
@@ -6237,19 +6289,21 @@ public class TinaInternalFrame extends JInternalFrame {
    * 	
    * @return javax.swing.JTextField	
    */
-  private JTextField getNonlinearParams8REd() {
+  private JWFNumberField getNonlinearParams8REd() {
     if (nonlinearParams8REd == null) {
-      nonlinearParams8REd = new JTextField();
+      nonlinearParams8REd = new JWFNumberField();
+      nonlinearParams8REd.setValueStep(0.05);
+      nonlinearParams8REd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null)
+            tinaController.nonlinearParamsREdChanged(7);
+        }
+      });
       nonlinearParams8REd.setLocation(new Point(188, 26));
       nonlinearParams8REd.setFont(new Font("Dialog", Font.PLAIN, 10));
       nonlinearParams8REd.setPreferredSize(new Dimension(55, 22));
       nonlinearParams8REd.setText("");
       nonlinearParams8REd.setSize(new Dimension(55, 22));
-      nonlinearParams8REd.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.nonlinearParamsREdChanged(7);
-        }
-      });
     }
     return nonlinearParams8REd;
   }
@@ -6410,19 +6464,21 @@ public class TinaInternalFrame extends JInternalFrame {
    * 	
    * @return javax.swing.JTextField	
    */
-  private JTextField getNonlinearVar9REd() {
+  private JWFNumberField getNonlinearVar9REd() {
     if (nonlinearVar9REd == null) {
-      nonlinearVar9REd = new JTextField();
+      nonlinearVar9REd = new JWFNumberField();
+      nonlinearVar9REd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null)
+            tinaController.nonlinearVarREdChanged(8);
+        }
+      });
+      nonlinearVar9REd.setValueStep(0.01);
       nonlinearVar9REd.setLocation(new Point(188, 2));
       nonlinearVar9REd.setFont(new Font("Dialog", Font.PLAIN, 10));
       nonlinearVar9REd.setPreferredSize(new Dimension(55, 22));
       nonlinearVar9REd.setText("");
       nonlinearVar9REd.setSize(new Dimension(55, 22));
-      nonlinearVar9REd.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.nonlinearVarREdChanged(8);
-        }
-      });
     }
     return nonlinearVar9REd;
   }
@@ -6453,19 +6509,21 @@ public class TinaInternalFrame extends JInternalFrame {
    * 	
    * @return javax.swing.JTextField	
    */
-  private JTextField getNonlinearParams9REd() {
+  private JWFNumberField getNonlinearParams9REd() {
     if (nonlinearParams9REd == null) {
-      nonlinearParams9REd = new JTextField();
+      nonlinearParams9REd = new JWFNumberField();
+      nonlinearParams9REd.setValueStep(0.05);
+      nonlinearParams9REd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null)
+            tinaController.nonlinearParamsREdChanged(8);
+        }
+      });
       nonlinearParams9REd.setLocation(new Point(188, 26));
       nonlinearParams9REd.setFont(new Font("Dialog", Font.PLAIN, 10));
       nonlinearParams9REd.setPreferredSize(new Dimension(55, 22));
       nonlinearParams9REd.setText("");
       nonlinearParams9REd.setSize(new Dimension(55, 22));
-      nonlinearParams9REd.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.nonlinearParamsREdChanged(8);
-        }
-      });
     }
     return nonlinearParams9REd;
   }
@@ -6626,19 +6684,21 @@ public class TinaInternalFrame extends JInternalFrame {
    * 	
    * @return javax.swing.JTextField	
    */
-  private JTextField getNonlinearVar10REd() {
+  private JWFNumberField getNonlinearVar10REd() {
     if (nonlinearVar10REd == null) {
-      nonlinearVar10REd = new JTextField();
+      nonlinearVar10REd = new JWFNumberField();
+      nonlinearVar10REd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null)
+            tinaController.nonlinearVarREdChanged(9);
+        }
+      });
+      nonlinearVar10REd.setValueStep(0.01);
       nonlinearVar10REd.setLocation(new Point(188, 2));
       nonlinearVar10REd.setFont(new Font("Dialog", Font.PLAIN, 10));
       nonlinearVar10REd.setPreferredSize(new Dimension(55, 22));
       nonlinearVar10REd.setText("");
       nonlinearVar10REd.setSize(new Dimension(55, 22));
-      nonlinearVar10REd.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.nonlinearVarREdChanged(9);
-        }
-      });
     }
     return nonlinearVar10REd;
   }
@@ -6669,19 +6729,21 @@ public class TinaInternalFrame extends JInternalFrame {
    * 	
    * @return javax.swing.JTextField	
    */
-  private JTextField getNonlinearParams10REd() {
+  private JWFNumberField getNonlinearParams10REd() {
     if (nonlinearParams10REd == null) {
-      nonlinearParams10REd = new JTextField();
+      nonlinearParams10REd = new JWFNumberField();
+      nonlinearParams10REd.setValueStep(0.05);
+      nonlinearParams10REd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null)
+            tinaController.nonlinearParamsREdChanged(9);
+        }
+      });
       nonlinearParams10REd.setLocation(new Point(188, 26));
       nonlinearParams10REd.setFont(new Font("Dialog", Font.PLAIN, 10));
       nonlinearParams10REd.setPreferredSize(new Dimension(55, 22));
       nonlinearParams10REd.setText("");
       nonlinearParams10REd.setSize(new Dimension(55, 22));
-      nonlinearParams10REd.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.nonlinearParamsREdChanged(9);
-        }
-      });
     }
     return nonlinearParams10REd;
   }
@@ -6842,19 +6904,21 @@ public class TinaInternalFrame extends JInternalFrame {
    * 	
    * @return javax.swing.JTextField	
    */
-  private JTextField getNonlinearVar11REd() {
+  private JWFNumberField getNonlinearVar11REd() {
     if (nonlinearVar11REd == null) {
-      nonlinearVar11REd = new JTextField();
+      nonlinearVar11REd = new JWFNumberField();
+      nonlinearVar11REd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null)
+            tinaController.nonlinearVarREdChanged(10);
+        }
+      });
+      nonlinearVar11REd.setValueStep(0.01);
       nonlinearVar11REd.setLocation(new Point(188, 2));
       nonlinearVar11REd.setFont(new Font("Dialog", Font.PLAIN, 10));
       nonlinearVar11REd.setPreferredSize(new Dimension(55, 22));
       nonlinearVar11REd.setText("");
       nonlinearVar11REd.setSize(new Dimension(55, 22));
-      nonlinearVar11REd.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.nonlinearVarREdChanged(10);
-        }
-      });
     }
     return nonlinearVar11REd;
   }
@@ -6885,19 +6949,21 @@ public class TinaInternalFrame extends JInternalFrame {
    * 	
    * @return javax.swing.JTextField	
    */
-  private JTextField getNonlinearParams11REd() {
+  private JWFNumberField getNonlinearParams11REd() {
     if (nonlinearParams11REd == null) {
-      nonlinearParams11REd = new JTextField();
+      nonlinearParams11REd = new JWFNumberField();
+      nonlinearParams11REd.setValueStep(0.05);
+      nonlinearParams11REd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null)
+            tinaController.nonlinearParamsREdChanged(10);
+        }
+      });
       nonlinearParams11REd.setLocation(new Point(188, 26));
       nonlinearParams11REd.setFont(new Font("Dialog", Font.PLAIN, 10));
       nonlinearParams11REd.setPreferredSize(new Dimension(55, 22));
       nonlinearParams11REd.setText("");
       nonlinearParams11REd.setSize(new Dimension(55, 22));
-      nonlinearParams11REd.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.nonlinearParamsREdChanged(10);
-        }
-      });
     }
     return nonlinearParams11REd;
   }
@@ -7058,19 +7124,21 @@ public class TinaInternalFrame extends JInternalFrame {
    * 	
    * @return javax.swing.JTextField	
    */
-  private JTextField getNonlinearVar12REd() {
+  private JWFNumberField getNonlinearVar12REd() {
     if (nonlinearVar12REd == null) {
-      nonlinearVar12REd = new JTextField();
+      nonlinearVar12REd = new JWFNumberField();
+      nonlinearVar12REd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null)
+            tinaController.nonlinearVarREdChanged(11);
+        }
+      });
+      nonlinearVar12REd.setValueStep(0.01);
       nonlinearVar12REd.setLocation(new Point(188, 2));
       nonlinearVar12REd.setFont(new Font("Dialog", Font.PLAIN, 10));
       nonlinearVar12REd.setPreferredSize(new Dimension(55, 22));
       nonlinearVar12REd.setText("");
       nonlinearVar12REd.setSize(new Dimension(55, 22));
-      nonlinearVar12REd.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.nonlinearVarREdChanged(11);
-        }
-      });
     }
     return nonlinearVar12REd;
   }
@@ -7101,19 +7169,21 @@ public class TinaInternalFrame extends JInternalFrame {
    * 	
    * @return javax.swing.JTextField	
    */
-  private JTextField getNonlinearParams12REd() {
+  private JWFNumberField getNonlinearParams12REd() {
     if (nonlinearParams12REd == null) {
-      nonlinearParams12REd = new JTextField();
+      nonlinearParams12REd = new JWFNumberField();
+      nonlinearParams12REd.setValueStep(0.05);
+      nonlinearParams12REd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null)
+            tinaController.nonlinearParamsREdChanged(11);
+        }
+      });
       nonlinearParams12REd.setLocation(new Point(188, 26));
       nonlinearParams12REd.setFont(new Font("Dialog", Font.PLAIN, 10));
       nonlinearParams12REd.setPreferredSize(new Dimension(55, 22));
       nonlinearParams12REd.setText("");
       nonlinearParams12REd.setSize(new Dimension(55, 22));
-      nonlinearParams12REd.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.nonlinearParamsREdChanged(11);
-        }
-      });
     }
     return nonlinearParams12REd;
   }

@@ -36,6 +36,7 @@ public class JWFNumberField extends JSpinner {
   private double maxValue = 0.0;
   private int xMouseOrigin = 0;
   private double originValue = 0.0;
+  private boolean onlyIntegers = false;
   private SpinnerNumberModel spinnerModel;
 
   public JWFNumberField() {
@@ -95,8 +96,13 @@ public class JWFNumberField extends JSpinner {
   }
 
   public void setText(String pText) {
-    if (pText != null && pText.length() > 0)
-      setValue(Tools.stringToDouble(pText));
+    if (pText != null && pText.length() > 0) {
+      double val = Tools.stringToDouble(pText);
+      if (onlyIntegers) {
+        val = Tools.FTOI(val);
+      }
+      setValue(val);
+    }
     else
       setValue(0.0);
   }
@@ -151,5 +157,28 @@ public class JWFNumberField extends JSpinner {
 
   public void setEditable(boolean enabled) {
     setEnabled(enabled);
+  }
+
+  public boolean isOnlyIntegers() {
+    return onlyIntegers;
+  }
+
+  public void setOnlyIntegers(boolean onlyIntegers) {
+    this.onlyIntegers = onlyIntegers;
+    if (onlyIntegers) {
+      spinnerModel.setStepSize(1.0);
+    }
+    else {
+      spinnerModel.setStepSize(valueStep);
+    }
+  }
+
+  @Override
+  public Object getValue() {
+    Object val = super.getValue();
+    if (val != null && val instanceof Double && onlyIntegers) {
+      val = Tools.FTOI((Double) val);
+    }
+    return val;
   }
 }
