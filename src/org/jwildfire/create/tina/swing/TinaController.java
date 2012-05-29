@@ -260,33 +260,33 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
   private final JSlider bgColorBlueSlider;
   // shading
   private final JComboBox shadingCmb;
-  private final JTextField shadingAmbientREd;
+  private final JWFNumberField shadingAmbientREd;
   private final JSlider shadingAmbientSlider;
-  private final JTextField shadingDiffuseREd;
+  private final JWFNumberField shadingDiffuseREd;
   private final JSlider shadingDiffuseSlider;
-  private final JTextField shadingPhongREd;
+  private final JWFNumberField shadingPhongREd;
   private final JSlider shadingPhongSlider;
-  private final JTextField shadingPhongSizeREd;
+  private final JWFNumberField shadingPhongSizeREd;
   private final JSlider shadingPhongSizeSlider;
   private final JComboBox shadingLightCmb;
-  private final JTextField shadingLightXREd;
+  private final JWFNumberField shadingLightXREd;
   private final JSlider shadingLightXSlider;
-  private final JTextField shadingLightYREd;
+  private final JWFNumberField shadingLightYREd;
   private final JSlider shadingLightYSlider;
-  private final JTextField shadingLightZREd;
+  private final JWFNumberField shadingLightZREd;
   private final JSlider shadingLightZSlider;
-  private final JTextField shadingLightRedREd;
+  private final JWFNumberField shadingLightRedREd;
   private final JSlider shadingLightRedSlider;
-  private final JTextField shadingLightGreenREd;
+  private final JWFNumberField shadingLightGreenREd;
   private final JSlider shadingLightGreenSlider;
-  private final JTextField shadingLightBlueREd;
+  private final JWFNumberField shadingLightBlueREd;
   private final JSlider shadingLightBlueSlider;
 
-  private final JTextField shadingBlurRadiusREd;
+  private final JWFNumberField shadingBlurRadiusREd;
   private final JSlider shadingBlurRadiusSlider;
-  private final JTextField shadingBlurFadeREd;
+  private final JWFNumberField shadingBlurFadeREd;
   private final JSlider shadingBlurFadeSlider;
-  private final JTextField shadingBlurFallOffREd;
+  private final JWFNumberField shadingBlurFallOffREd;
   private final JSlider shadingBlurFallOffSlider;
 
   // palette -> create
@@ -430,18 +430,18 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       JToggleButton pAffineEditPostTransformButton, JToggleButton pAffineEditPostTransformSmallButton, JButton pMouseEditZoomInButton, JButton pMouseEditZoomOutButton,
       JToggleButton pToggleTrianglesButton, ProgressUpdater pMainProgressUpdater, JCheckBox pRandomPostTransformCheckBox, JCheckBox pRandomSymmetryCheckBox,
       JButton pAffineResetTransformButton, JTable pCreatePaletteColorsTable,
-      JComboBox pShadingCmb, JTextField pShadingAmbientREd, JSlider pShadingAmbientSlider, JTextField pShadingDiffuseREd, JSlider pShadingDiffuseSlider,
-      JTextField pShadingPhongREd, JSlider pShadingPhongSlider, JTextField pShadingPhongSizeREd, JSlider pShadingPhongSizeSlider,
-      JComboBox pShadingLightCmb, JTextField pShadingLightXREd, JSlider pShadingLightXSlider, JTextField pShadingLightYREd, JSlider pShadingLightYSlider,
-      JTextField pShadingLightZREd, JSlider pShadingLightZSlider, JTextField pShadingLightRedREd, JSlider pShadingLightRedSlider,
-      JTextField pShadingLightGreenREd, JSlider pShadingLightGreenSlider, JTextField pShadingLightBlueREd, JSlider pShadingLightBlueSlider,
+      JComboBox pShadingCmb, JWFNumberField pShadingAmbientREd, JSlider pShadingAmbientSlider, JWFNumberField pShadingDiffuseREd, JSlider pShadingDiffuseSlider,
+      JWFNumberField pShadingPhongREd, JSlider pShadingPhongSlider, JWFNumberField pShadingPhongSizeREd, JSlider pShadingPhongSizeSlider,
+      JComboBox pShadingLightCmb, JWFNumberField pShadingLightXREd, JSlider pShadingLightXSlider, JWFNumberField pShadingLightYREd, JSlider pShadingLightYSlider,
+      JWFNumberField pShadingLightZREd, JSlider pShadingLightZSlider, JWFNumberField pShadingLightRedREd, JSlider pShadingLightRedSlider,
+      JWFNumberField pShadingLightGreenREd, JSlider pShadingLightGreenSlider, JWFNumberField pShadingLightBlueREd, JSlider pShadingLightBlueSlider,
       JToggleButton pMouseTransformSlowButton, JTable pRenderBatchJobsTable, JProgressBar pBatchRenderJobProgressBar,
       JProgressBar pBatchRenderTotalProgressBar, ProgressUpdater pJobProgressUpdater, JButton pBatchRenderAddFilesButton,
       JButton pBatchRenderFilesMoveDownButton, JButton pBatchRenderFilesMoveUpButton, JButton pBatchRenderFilesRemoveButton,
       JButton pBatchRenderFilesRemoveAllButton, JButton pBatchRenderStartButton, JTabbedPane pRootTabbedPane, JButton pAffineFlipHorizontalButton,
       JButton pAffineFlipVerticalButton, JToggleButton pToggleDarkTrianglesButton,
-      JTextField pShadingBlurRadiusREd, JSlider pShadingBlurRadiusSlider, JTextField pShadingBlurFadeREd, JSlider pShadingBlurFadeSlider,
-      JTextField pShadingBlurFallOffREd, JSlider pShadingBlurFallOffSlider, JTextArea pScriptTextArea, JToggleButton pAffineScaleXButton,
+      JWFNumberField pShadingBlurRadiusREd, JSlider pShadingBlurRadiusSlider, JWFNumberField pShadingBlurFadeREd, JSlider pShadingBlurFadeSlider,
+      JWFNumberField pShadingBlurFallOffREd, JSlider pShadingBlurFallOffSlider, JTextArea pScriptTextArea, JToggleButton pAffineScaleXButton,
       JToggleButton pAffineScaleYButton, JPanel pGradientLibraryPanel, JComboBox pGradientLibraryGradientCmb, JTextPane pHelpPane,
       JToggleButton pToggleVariationsButton, JToggleButton pAffinePreserveZButton,
       JComboBox pQualityProfileCmb, JComboBox pResolutionProfileCmb, JComboBox pBatchQualityProfileCmb, JComboBox pBatchResolutionProfileCmb,
@@ -1704,7 +1704,110 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     }
   }
 
+  private void shadingInfoTextFieldChanged(JSlider pSlider, JWFNumberField pTextField, String pProperty, double pSliderScale, int pIdx) {
+    Flame currFlame = getCurrFlame();
+    if (noRefresh || currFlame == null)
+      return;
+    ShadingInfo shadingInfo = currFlame.getShadingInfo();
+    noRefresh = true;
+    try {
+      double propValue = Tools.stringToDouble(pTextField.getText());
+      pSlider.setValue(Tools.FTOI(propValue * pSliderScale));
+
+      Class<?> cls = shadingInfo.getClass();
+      Field field;
+      try {
+        field = cls.getDeclaredField(pProperty);
+        field.setAccessible(true);
+        Class<?> fieldCls = field.getType();
+        if (fieldCls == double.class || fieldCls == Double.class) {
+          field.setDouble(shadingInfo, propValue);
+        }
+        else if (fieldCls == double[].class) {
+          double[] arr = (double[]) field.get(shadingInfo);
+          Array.set(arr, pIdx, propValue);
+        }
+        else if (fieldCls == Double[].class) {
+          Double[] arr = (Double[]) field.get(shadingInfo);
+          Array.set(arr, pIdx, propValue);
+        }
+        else if (fieldCls == int.class || fieldCls == Integer.class) {
+          field.setInt(shadingInfo, Tools.FTOI(propValue));
+        }
+        else if (fieldCls == int[].class) {
+          int[] arr = (int[]) field.get(shadingInfo);
+          Array.set(arr, pIdx, Tools.FTOI(propValue));
+        }
+        else if (fieldCls == Integer[].class) {
+          Integer[] arr = (Integer[]) field.get(shadingInfo);
+          Array.set(arr, pIdx, Tools.FTOI(propValue));
+        }
+        else {
+          throw new IllegalStateException();
+        }
+      }
+      catch (Throwable ex) {
+        ex.printStackTrace();
+      }
+      refreshFlameImage(false);
+    }
+    finally {
+      noRefresh = false;
+    }
+  }
+
   private void shadingInfoSliderChanged(JSlider pSlider, JTextField pTextField, String pProperty, double pSliderScale, int pIdx) {
+    Flame currFlame = getCurrFlame();
+    if (noRefresh || currFlame == null)
+      return;
+    ShadingInfo shadingInfo = currFlame.getShadingInfo();
+    noRefresh = true;
+    try {
+      double propValue = pSlider.getValue() / pSliderScale;
+      pTextField.setText(Tools.doubleToString(propValue));
+      Class<?> cls = shadingInfo.getClass();
+      Field field;
+      try {
+        field = cls.getDeclaredField(pProperty);
+        field.setAccessible(true);
+        Class<?> fieldCls = field.getType();
+        if (fieldCls == double.class || fieldCls == Double.class) {
+          field.setDouble(shadingInfo, propValue);
+        }
+        else if (fieldCls == double[].class) {
+          double[] arr = (double[]) field.get(shadingInfo);
+          Array.set(arr, pIdx, propValue);
+        }
+        else if (fieldCls == Double[].class) {
+          Double[] arr = (Double[]) field.get(shadingInfo);
+          Array.set(arr, pIdx, propValue);
+        }
+        else if (fieldCls == int.class || fieldCls == Integer.class) {
+          field.setInt(shadingInfo, Tools.FTOI(propValue));
+        }
+        else if (fieldCls == int[].class) {
+          int[] arr = (int[]) field.get(shadingInfo);
+          Array.set(arr, pIdx, Tools.FTOI(propValue));
+        }
+        else if (fieldCls == Integer[].class) {
+          Integer[] arr = (Integer[]) field.get(shadingInfo);
+          Array.set(arr, pIdx, Tools.FTOI(propValue));
+        }
+        else {
+          throw new IllegalStateException();
+        }
+      }
+      catch (Throwable ex) {
+        ex.printStackTrace();
+      }
+      refreshFlameImage(false);
+    }
+    finally {
+      noRefresh = false;
+    }
+  }
+
+  private void shadingInfoSliderChanged(JSlider pSlider, JWFNumberField pTextField, String pProperty, double pSliderScale, int pIdx) {
     Flame currFlame = getCurrFlame();
     if (noRefresh || currFlame == null)
       return;
