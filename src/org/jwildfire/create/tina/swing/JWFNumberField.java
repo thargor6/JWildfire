@@ -177,7 +177,7 @@ public class JWFNumberField extends JSpinner {
   public Object getValue() {
     Object val = super.getValue();
     if (val != null && val instanceof Double && onlyIntegers) {
-      val = Tools.FTOI((Double) val);
+      val = new Double(Tools.FTOI((Double) val));
     }
     return val;
   }

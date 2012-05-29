@@ -129,7 +129,7 @@ public class TinaInternalFrame extends JInternalFrame {
 
   private JLabel tinaBrightnessLbl = null;
 
-  private JTextField tinaBrightnessREd = null;
+  private JWFNumberField tinaBrightnessREd = null;
 
   private JSlider tinaBrightnessSlider = null;
 
@@ -152,11 +152,11 @@ public class TinaInternalFrame extends JInternalFrame {
 
   private JLabel tinaBGColorLbl = null;
 
-  private JTextField tinaBGColorRedREd = null;
+  private JWFNumberField tinaBGColorRedREd = null;
 
-  private JTextField tinaBGColorGreenREd = null;
+  private JWFNumberField tinaBGColorGreenREd = null;
 
-  private JTextField tinaBGColorBlueREd = null;
+  private JWFNumberField tinaBGColorBlueREd = null;
 
   private JSlider tinaBGColorRedSlider = null;
 
@@ -164,15 +164,15 @@ public class TinaInternalFrame extends JInternalFrame {
 
   private JSlider tinaBGColorBlueSlider = null;
 
-  private JTextField tinaContrastREd = null;
+  private JWFNumberField tinaContrastREd = null;
 
-  private JTextField tinaGammaREd = null;
+  private JWFNumberField tinaGammaREd = null;
 
-  private JTextField tinaVibrancyREd = null;
+  private JWFNumberField tinaVibrancyREd = null;
 
-  private JTextField tinaFilterRadiusREd = null;
+  private JWFNumberField tinaFilterRadiusREd = null;
 
-  private JTextField tinaGammaThresholdREd = null;
+  private JWFNumberField tinaGammaThresholdREd = null;
 
   private JSlider tinaContrastSlider = null;
 
@@ -1422,19 +1422,23 @@ public class TinaInternalFrame extends JInternalFrame {
    *  
    * @return javax.swing.JTextField 
    */
-  private JTextField getTinaBrightnessREd() {
+  private JWFNumberField getTinaBrightnessREd() {
     if (tinaBrightnessREd == null) {
-      tinaBrightnessREd = new JTextField();
+      tinaBrightnessREd = new JWFNumberField();
+      tinaBrightnessREd.setValueStep(0.05);
+      tinaBrightnessREd.setMaxValue(10.0);
+      tinaBrightnessREd.setHasMaxValue(true);
+      tinaBrightnessREd.setHasMinValue(true);
+      tinaBrightnessREd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          tinaController.brightnessREd_changed();
+        }
+      });
       tinaBrightnessREd.setPreferredSize(new Dimension(100, 22));
       tinaBrightnessREd.setText("");
       tinaBrightnessREd.setSize(new Dimension(100, 22));
       tinaBrightnessREd.setLocation(new Point(100, 4));
       tinaBrightnessREd.setFont(new Font("Dialog", Font.PLAIN, 10));
-      tinaBrightnessREd.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.brightnessREd_changed();
-        }
-      });
     }
     return tinaBrightnessREd;
   }
@@ -1514,19 +1518,25 @@ public class TinaInternalFrame extends JInternalFrame {
    *  
    * @return javax.swing.JTextField 
    */
-  private JTextField getTinaBGColorRedREd() {
+  private JWFNumberField getTinaBGColorRedREd() {
     if (tinaBGColorRedREd == null) {
-      tinaBGColorRedREd = new JTextField();
+      tinaBGColorRedREd = new JWFNumberField();
+      tinaBGColorRedREd.setValueStep(1.0);
+      tinaBGColorRedREd.setHasMinValue(true);
+      tinaBGColorRedREd.setOnlyIntegers(true);
+      tinaBGColorRedREd.setHasMaxValue(true);
+      tinaBGColorRedREd.setMaxValue(255.0);
+      tinaBGColorRedREd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null)
+            tinaController.bgColorRedREd_changed();
+        }
+      });
       tinaBGColorRedREd.setPreferredSize(new Dimension(56, 22));
       tinaBGColorRedREd.setText("");
       tinaBGColorRedREd.setLocation(new Point(584, 76));
       tinaBGColorRedREd.setSize(new Dimension(56, 22));
       tinaBGColorRedREd.setFont(new Font("Dialog", Font.PLAIN, 10));
-      tinaBGColorRedREd.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.bgColorRedREd_changed();
-        }
-      });
     }
     return tinaBGColorRedREd;
   }
@@ -1536,19 +1546,25 @@ public class TinaInternalFrame extends JInternalFrame {
    *  
    * @return javax.swing.JTextField 
    */
-  private JTextField getTinaBGColorGreenREd() {
+  private JWFNumberField getTinaBGColorGreenREd() {
     if (tinaBGColorGreenREd == null) {
-      tinaBGColorGreenREd = new JTextField();
+      tinaBGColorGreenREd = new JWFNumberField();
+      tinaBGColorGreenREd.setHasMinValue(true);
+      tinaBGColorGreenREd.setHasMaxValue(true);
+      tinaBGColorGreenREd.setMaxValue(255.0);
+      tinaBGColorGreenREd.setOnlyIntegers(true);
+      tinaBGColorGreenREd.setValueStep(1.0);
+      tinaBGColorGreenREd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null)
+            tinaController.bgColorGreenREd_changed();
+        }
+      });
       tinaBGColorGreenREd.setPreferredSize(new Dimension(56, 22));
       tinaBGColorGreenREd.setText("");
       tinaBGColorGreenREd.setLocation(new Point(712, 76));
       tinaBGColorGreenREd.setSize(new Dimension(56, 22));
       tinaBGColorGreenREd.setFont(new Font("Dialog", Font.PLAIN, 10));
-      tinaBGColorGreenREd.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.bgColorGreenREd_changed();
-        }
-      });
     }
     return tinaBGColorGreenREd;
   }
@@ -1558,19 +1574,25 @@ public class TinaInternalFrame extends JInternalFrame {
    *  
    * @return javax.swing.JTextField 
    */
-  private JTextField getTinaBGColorBlueREd() {
+  private JWFNumberField getTinaBGColorBlueREd() {
     if (tinaBGColorBlueREd == null) {
-      tinaBGColorBlueREd = new JTextField();
+      tinaBGColorBlueREd = new JWFNumberField();
+      tinaBGColorBlueREd.setOnlyIntegers(true);
+      tinaBGColorBlueREd.setValueStep(1.0);
+      tinaBGColorBlueREd.setMaxValue(255.0);
+      tinaBGColorBlueREd.setHasMinValue(true);
+      tinaBGColorBlueREd.setHasMaxValue(true);
+      tinaBGColorBlueREd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null)
+            tinaController.bgBGColorBlueREd_changed();
+        }
+      });
       tinaBGColorBlueREd.setPreferredSize(new Dimension(56, 22));
       tinaBGColorBlueREd.setText("");
       tinaBGColorBlueREd.setLocation(new Point(840, 76));
       tinaBGColorBlueREd.setSize(new Dimension(56, 22));
       tinaBGColorBlueREd.setFont(new Font("Dialog", Font.PLAIN, 10));
-      tinaBGColorBlueREd.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.bgBGColorBlueREd_changed();
-        }
-      });
     }
     return tinaBGColorBlueREd;
   }
@@ -1652,19 +1674,24 @@ public class TinaInternalFrame extends JInternalFrame {
    *  
    * @return javax.swing.JTextField 
    */
-  private JTextField getTinaContrastREd() {
+  private JWFNumberField getTinaContrastREd() {
     if (tinaContrastREd == null) {
-      tinaContrastREd = new JTextField();
+      tinaContrastREd = new JWFNumberField();
+      tinaContrastREd.setValueStep(0.05);
+      tinaContrastREd.setHasMinValue(true);
+      tinaContrastREd.setHasMaxValue(true);
+      tinaContrastREd.setMaxValue(5.0);
+      tinaContrastREd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null)
+            tinaController.contrastREd_changed();
+        }
+      });
       tinaContrastREd.setPreferredSize(new Dimension(100, 22));
       tinaContrastREd.setText("");
       tinaContrastREd.setLocation(new Point(100, 28));
       tinaContrastREd.setSize(new Dimension(100, 22));
       tinaContrastREd.setFont(new Font("Dialog", Font.PLAIN, 10));
-      tinaContrastREd.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.contrastREd_changed();
-        }
-      });
     }
     return tinaContrastREd;
   }
@@ -1674,19 +1701,24 @@ public class TinaInternalFrame extends JInternalFrame {
    *  
    * @return javax.swing.JTextField 
    */
-  private JTextField getTinaGammaREd() {
+  private JWFNumberField getTinaGammaREd() {
     if (tinaGammaREd == null) {
-      tinaGammaREd = new JTextField();
+      tinaGammaREd = new JWFNumberField();
+      tinaGammaREd.setHasMinValue(true);
+      tinaGammaREd.setHasMaxValue(true);
+      tinaGammaREd.setMaxValue(10.0);
+      tinaGammaREd.setValueStep(0.05);
+      tinaGammaREd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null)
+            tinaController.gammaREd_changed();
+        }
+      });
       tinaGammaREd.setPreferredSize(new Dimension(100, 22));
       tinaGammaREd.setText("");
       tinaGammaREd.setLocation(new Point(100, 52));
       tinaGammaREd.setSize(new Dimension(100, 22));
       tinaGammaREd.setFont(new Font("Dialog", Font.PLAIN, 10));
-      tinaGammaREd.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.gammaREd_changed();
-        }
-      });
     }
     return tinaGammaREd;
   }
@@ -1696,19 +1728,24 @@ public class TinaInternalFrame extends JInternalFrame {
    *  
    * @return javax.swing.JTextField 
    */
-  private JTextField getTinaVibrancyREd() {
+  private JWFNumberField getTinaVibrancyREd() {
     if (tinaVibrancyREd == null) {
-      tinaVibrancyREd = new JTextField();
+      tinaVibrancyREd = new JWFNumberField();
+      tinaVibrancyREd.setValueStep(0.05);
+      tinaVibrancyREd.setHasMinValue(true);
+      tinaVibrancyREd.setHasMaxValue(true);
+      tinaVibrancyREd.setMaxValue(1.0);
+      tinaVibrancyREd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null)
+            tinaController.vibrancyREd_changed();
+        }
+      });
       tinaVibrancyREd.setPreferredSize(new Dimension(100, 22));
       tinaVibrancyREd.setText("");
       tinaVibrancyREd.setLocation(new Point(100, 100));
       tinaVibrancyREd.setSize(new Dimension(100, 22));
       tinaVibrancyREd.setFont(new Font("Dialog", Font.PLAIN, 10));
-      tinaVibrancyREd.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.vibrancyREd_changed();
-        }
-      });
     }
     return tinaVibrancyREd;
   }
@@ -1718,19 +1755,24 @@ public class TinaInternalFrame extends JInternalFrame {
    *  
    * @return javax.swing.JTextField 
    */
-  private JTextField getTinaFilterRadiusREd() {
+  private JWFNumberField getTinaFilterRadiusREd() {
     if (tinaFilterRadiusREd == null) {
-      tinaFilterRadiusREd = new JTextField();
+      tinaFilterRadiusREd = new JWFNumberField();
+      tinaFilterRadiusREd.setValueStep(0.05);
+      tinaFilterRadiusREd.setMaxValue(5.0);
+      tinaFilterRadiusREd.setHasMinValue(true);
+      tinaFilterRadiusREd.setHasMaxValue(true);
+      tinaFilterRadiusREd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null)
+            tinaController.filterRadiusREd_changed();
+        }
+      });
       tinaFilterRadiusREd.setPreferredSize(new Dimension(100, 22));
       tinaFilterRadiusREd.setText("");
       tinaFilterRadiusREd.setLocation(new Point(584, 4));
       tinaFilterRadiusREd.setSize(new Dimension(100, 22));
       tinaFilterRadiusREd.setFont(new Font("Dialog", Font.PLAIN, 10));
-      tinaFilterRadiusREd.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.filterRadiusREd_changed();
-        }
-      });
     }
     return tinaFilterRadiusREd;
   }
@@ -1740,19 +1782,24 @@ public class TinaInternalFrame extends JInternalFrame {
    *  
    * @return javax.swing.JTextField 
    */
-  private JTextField getTinaGammaThresholdREd() {
+  private JWFNumberField getTinaGammaThresholdREd() {
     if (tinaGammaThresholdREd == null) {
-      tinaGammaThresholdREd = new JTextField();
+      tinaGammaThresholdREd = new JWFNumberField();
+      tinaGammaThresholdREd.setValueStep(0.005);
+      tinaGammaThresholdREd.setMaxValue(1.0);
+      tinaGammaThresholdREd.setHasMinValue(true);
+      tinaGammaThresholdREd.setHasMaxValue(true);
+      tinaGammaThresholdREd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null)
+            tinaController.gammaThresholdREd_changed();
+        }
+      });
       tinaGammaThresholdREd.setPreferredSize(new Dimension(100, 22));
       tinaGammaThresholdREd.setText("");
       tinaGammaThresholdREd.setLocation(new Point(100, 76));
       tinaGammaThresholdREd.setSize(new Dimension(100, 22));
       tinaGammaThresholdREd.setFont(new Font("Dialog", Font.PLAIN, 10));
-      tinaGammaThresholdREd.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.gammaThresholdREd_changed();
-        }
-      });
     }
     return tinaGammaThresholdREd;
   }

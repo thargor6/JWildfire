@@ -240,23 +240,23 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
   private final JSlider cameraDOFSlider;
   private final JWFNumberField pixelsPerUnitREd;
   private final JSlider pixelsPerUnitSlider;
-  private final JTextField brightnessREd;
+  private final JWFNumberField brightnessREd;
   private final JSlider brightnessSlider;
-  private final JTextField contrastREd;
+  private final JWFNumberField contrastREd;
   private final JSlider contrastSlider;
-  private final JTextField gammaREd;
+  private final JWFNumberField gammaREd;
   private final JSlider gammaSlider;
-  private final JTextField vibrancyREd;
+  private final JWFNumberField vibrancyREd;
   private final JSlider vibrancySlider;
-  private final JTextField filterRadiusREd;
+  private final JWFNumberField filterRadiusREd;
   private final JSlider filterRadiusSlider;
-  private final JTextField gammaThresholdREd;
+  private final JWFNumberField gammaThresholdREd;
   private final JSlider gammaThresholdSlider;
-  private final JTextField bgColorRedREd;
+  private final JWFNumberField bgColorRedREd;
   private final JSlider bgColorRedSlider;
-  private final JTextField bgColorGreenREd;
+  private final JWFNumberField bgColorGreenREd;
   private final JSlider bgColorGreenSlider;
-  private final JTextField bgColorBlueREd;
+  private final JWFNumberField bgColorBlueREd;
   private final JSlider bgColorBlueSlider;
   // shading
   private final JComboBox shadingCmb;
@@ -410,9 +410,9 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       JWFNumberField pCameraCentreXREd, JSlider pCameraCentreXSlider, JWFNumberField pCameraCentreYREd,
       JSlider pCameraCentreYSlider, JWFNumberField pCameraZoomREd, JSlider pCameraZoomSlider, JWFNumberField pCameraZPosREd, JSlider pCameraZPosSlider,
       JWFNumberField pCameraDOFREd, JSlider pCameraDOFSlider, JWFNumberField pPixelsPerUnitREd, JSlider pPixelsPerUnitSlider,
-      JTextField pBrightnessREd, JSlider pBrightnessSlider, JTextField pContrastREd, JSlider pContrastSlider, JTextField pGammaREd, JSlider pGammaSlider,
-      JTextField pVibrancyREd, JSlider pVibrancySlider, JTextField pFilterRadiusREd, JSlider pFilterRadiusSlider, JTextField pGammaThresholdREd,
-      JSlider pGammaThresholdSlider, JTextField pBGColorRedREd, JSlider pBGColorRedSlider, JTextField pBGColorGreenREd, JSlider pBGColorGreenSlider, JTextField pBGColorBlueREd,
+      JWFNumberField pBrightnessREd, JSlider pBrightnessSlider, JWFNumberField pContrastREd, JSlider pContrastSlider, JWFNumberField pGammaREd, JSlider pGammaSlider,
+      JWFNumberField pVibrancyREd, JSlider pVibrancySlider, JWFNumberField pFilterRadiusREd, JSlider pFilterRadiusSlider, JWFNumberField pGammaThresholdREd,
+      JSlider pGammaThresholdSlider, JWFNumberField pBGColorRedREd, JSlider pBGColorRedSlider, JWFNumberField pBGColorGreenREd, JSlider pBGColorGreenSlider, JWFNumberField pBGColorBlueREd,
       JSlider pBGColorBlueSlider, JTextField pPaletteRandomPointsREd, JPanel pPaletteImgPanel, JTextField pPaletteShiftREd, JSlider pPaletteShiftSlider,
       JTextField pPaletteRedREd, JSlider pPaletteRedSlider, JTextField pPaletteGreenREd, JSlider pPaletteGreenSlider, JTextField pPaletteBlueREd,
       JSlider pPaletteBlueSlider, JTextField pPaletteHueREd, JSlider pPaletteHueSlider, JTextField pPaletteSaturationREd, JSlider pPaletteSaturationSlider,
