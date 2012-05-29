@@ -326,10 +326,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JComboBox nonlinearParams1Cmb = null;
   private JWFNumberField nonlinearParams1REd = null;
   private JPanel nonlinearVar1Panel = null;
-  private JButton nonlinearVar1LeftButton = null;
-  private JButton nonlinarVar1RightButton = null;
   private JButton nonlinearParams1LeftButton = null;
-  private JButton nonlinarParams1RightButton = null;
   private JPanel nonlinearVar2Panel = null;
   private JLabel nonlinearVar2Lbl = null;
   private JComboBox nonlinearVar2Cmb = null;
@@ -337,10 +334,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JLabel nonlinearParams2Lbl = null;
   private JComboBox nonlinearParams2Cmb = null;
   private JWFNumberField nonlinearParams2REd = null;
-  private JButton nonlinearVar2LeftButton = null;
-  private JButton nonlinarVar2RightButton = null;
   private JButton nonlinearParams2LeftButton = null;
-  private JButton nonlinarParams2RightButton = null;
   private JPanel nonlinearVar3Panel = null;
   private JLabel nonlinearVar3Lbl = null;
   private JComboBox nonlinearVar3Cmb = null;
@@ -348,10 +342,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JLabel nonlinearParams3Lbl = null;
   private JComboBox nonlinearParams3Cmb = null;
   private JWFNumberField nonlinearParams3REd = null;
-  private JButton nonlinearVar3LeftButton = null;
-  private JButton nonlinarVar3RightButton = null;
   private JButton nonlinearParams3LeftButton = null;
-  private JButton nonlinarParams3RightButton = null;
   private JLabel xFormColorLbl = null;
   private JWFNumberField xFormColorREd = null;
   private JSlider xFormColorSlider = null;
@@ -368,9 +359,6 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton relWeightsRightButton = null;
   private JScrollPane relWeightsScrollPane = null;
   private JTable relWeightsTable = null;
-  private JPanel transformationWeightPanel = null;
-  private JButton transformationWeightLeftButton = null;
-  private JButton transformationWeightRightButton = null;
   private JButton newFlameButton = null;
   private JPanel tinaSWFAnimatorPanel = null;
   private JButton swfAnimatorGenerateButton = null;
@@ -411,10 +399,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JLabel nonlinearParams4Lbl = null;
   private JComboBox nonlinearParams4Cmb = null;
   private JWFNumberField nonlinearParams4REd = null;
-  private JButton nonlinearVar4LeftButton = null;
-  private JButton nonlinarVar4RightButton = null;
   private JButton nonlinearParams4LeftButton = null;
-  private JButton nonlinarParams4RightButton = null;
   private JLabel colorOversampleLbl = null;
   private JScrollPane createPaletteScrollPane = null;
   private JTable createPaletteColorsTable = null;
@@ -427,10 +412,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JLabel nonlinearParams5Lbl = null;
   private JComboBox nonlinearParams5Cmb = null;
   private JWFNumberField nonlinearParams5REd = null;
-  private JButton nonlinearVar5LeftButton = null;
-  private JButton nonlinarVar5RightButton = null;
   private JButton nonlinearParams5LeftButton = null;
-  private JButton nonlinarParams5RightButton = null;
   private JPanel nonlinearVar6Panel = null;
   private JLabel nonlinearVar6Lbl = null;
   private JComboBox nonlinearVar6Cmb = null;
@@ -438,10 +420,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JLabel nonlinearParams6Lbl = null;
   private JComboBox nonlinearParams6Cmb = null;
   private JWFNumberField nonlinearParams6REd = null;
-  private JButton nonlinearVar6LeftButton = null;
-  private JButton nonlinarVar6RightButton = null;
   private JButton nonlinearParams6LeftButton = null;
-  private JButton nonlinarParams6RightButton = null;
   private JPanel nonlinearVar7Panel = null;
   private JLabel nonlinearVar7Lbl = null;
   private JComboBox nonlinearVar7Cmb = null;
@@ -449,10 +428,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JLabel nonlinearParams7Lbl = null;
   private JComboBox nonlinearParams7Cmb = null;
   private JWFNumberField nonlinearParams7REd = null;
-  private JButton nonlinearVar7LeftButton = null;
-  private JButton nonlinarVar7RightButton = null;
   private JButton nonlinearParams7LeftButton = null;
-  private JButton nonlinarParams7RightButton = null;
   private JPanel nonlinearVar8Panel = null;
   private JLabel nonlinearVar8Lbl = null;
   private JComboBox nonlinearVar8Cmb = null;
@@ -460,10 +436,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JLabel nonlinearParams8Lbl = null;
   private JComboBox nonlinearParams8Cmb = null;
   private JWFNumberField nonlinearParams8REd = null;
-  private JButton nonlinearVar8LeftButton = null;
-  private JButton nonlinarVar8RightButton = null;
   private JButton nonlinearParams8LeftButton = null;
-  private JButton nonlinarParams8RightButton = null;
   private JPanel nonlinearVar9Panel = null;
   private JLabel nonlinearVar9Lbl = null;
   private JComboBox nonlinearVar9Cmb = null;
@@ -471,10 +444,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JLabel nonlinearParams9Lbl = null;
   private JComboBox nonlinearParams9Cmb = null;
   private JWFNumberField nonlinearParams9REd = null;
-  private JButton nonlinearVar9LeftButton = null;
-  private JButton nonlinarVar9RightButton = null;
   private JButton nonlinearParams9LeftButton = null;
-  private JButton nonlinarParams9RightButton = null;
   private JPanel nonlinearVar10Panel = null;
   private JLabel nonlinearVar10Lbl = null;
   private JComboBox nonlinearVar10Cmb = null;
@@ -482,10 +452,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JLabel nonlinearParams10Lbl = null;
   private JComboBox nonlinearParams10Cmb = null;
   private JWFNumberField nonlinearParams10REd = null;
-  private JButton nonlinearVar10LeftButton = null;
-  private JButton nonlinarVar10RightButton = null;
   private JButton nonlinearParams10LeftButton = null;
-  private JButton nonlinarParams10RightButton = null;
   private JPanel nonlinearVar11Panel = null;
   private JLabel nonlinearVar11Lbl = null;
   private JComboBox nonlinearVar11Cmb = null;
@@ -493,10 +460,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JLabel nonlinearParams11Lbl = null;
   private JComboBox nonlinearParams11Cmb = null;
   private JWFNumberField nonlinearParams11REd = null;
-  private JButton nonlinearVar11LeftButton = null;
-  private JButton nonlinarVar11RightButton = null;
   private JButton nonlinearParams11LeftButton = null;
-  private JButton nonlinarParams11RightButton = null;
   private JPanel nonlinearVar12Panel = null;
   private JLabel nonlinearVar12Lbl = null;
   private JComboBox nonlinearVar12Cmb = null;
@@ -504,10 +468,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JLabel nonlinearParams12Lbl = null;
   private JComboBox nonlinearParams12Cmb = null;
   private JWFNumberField nonlinearParams12REd = null;
-  private JButton nonlinearVar12LeftButton = null;
-  private JButton nonlinarVar12RightButton = null;
   private JButton nonlinearParams12LeftButton = null;
-  private JButton nonlinarParams12RightButton = null;
   private JButton tinaGrabPaletteFromFlameButton = null;
   private JLabel tinaCameraZPosLbl = null;
   private JWFNumberField tinaCameraZPosREd = null;
@@ -1021,6 +982,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JWFNumberField getTinaCameraRollREd() {
     if (tinaCameraRollREd == null) {
       tinaCameraRollREd = new JWFNumberField();
+      tinaCameraRollREd.setValueStep(1.0);
       tinaCameraRollREd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           tinaController.cameraRollREd_changed();
@@ -1042,6 +1004,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JWFNumberField getTinaCameraPitchREd() {
     if (tinaCameraPitchREd == null) {
       tinaCameraPitchREd = new JWFNumberField();
+      tinaCameraPitchREd.setValueStep(1.0);
       tinaCameraPitchREd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           tinaController.cameraPitchREd_changed();
@@ -1064,6 +1027,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JWFNumberField getTinaCameraYawREd() {
     if (tinaCameraYawREd == null) {
       tinaCameraYawREd = new JWFNumberField();
+      tinaCameraYawREd.setValueStep(1.0);
       tinaCameraYawREd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           tinaController.cameraYawREd_changed();
@@ -3021,29 +2985,29 @@ public class TinaInternalFrame extends JInternalFrame {
   public TinaController createController(StandardErrorHandler pErrorHandler, Prefs pPrefs) {
     nonlinearControlsRows = new NonlinearControlsRow[12];
     nonlinearControlsRows[0] = new NonlinearControlsRow(getNonlinearVar1Cmb(), getNonlinearParams1Cmb(), getNonlinearVar1REd(),
-        getNonlinearParams1REd(), getNonlinearVar1LeftButton(), getNonlinarVar1RightButton(), getNonlinearParams1LeftButton(), getNonlinarParams1RightButton());
+        getNonlinearParams1REd(), getNonlinearParams1LeftButton());
     nonlinearControlsRows[1] = new NonlinearControlsRow(getNonlinearVar2Cmb(), getNonlinearParams2Cmb(), getNonlinearVar2REd(),
-        getNonlinearParams2REd(), getNonlinearVar2LeftButton(), getNonlinarVar2RightButton(), getNonlinearParams2LeftButton(), getNonlinarParams2RightButton());
+        getNonlinearParams2REd(), getNonlinearParams2LeftButton());
     nonlinearControlsRows[2] = new NonlinearControlsRow(getNonlinearVar3Cmb(), getNonlinearParams3Cmb(), getNonlinearVar3REd(),
-        getNonlinearParams3REd(), getNonlinearVar3LeftButton(), getNonlinarVar3RightButton(), getNonlinearParams3LeftButton(), getNonlinarParams3RightButton());
+        getNonlinearParams3REd(), getNonlinearParams3LeftButton());
     nonlinearControlsRows[3] = new NonlinearControlsRow(getNonlinearVar4Cmb(), getNonlinearParams4Cmb(), getNonlinearVar4REd(),
-        getNonlinearParams4REd(), getNonlinearVar4LeftButton(), getNonlinarVar4RightButton(), getNonlinearParams4LeftButton(), getNonlinarParams4RightButton());
+        getNonlinearParams4REd(), getNonlinearParams4LeftButton());
     nonlinearControlsRows[4] = new NonlinearControlsRow(getNonlinearVar5Cmb(), getNonlinearParams5Cmb(), getNonlinearVar5REd(),
-        getNonlinearParams5REd(), getNonlinearVar5LeftButton(), getNonlinarVar5RightButton(), getNonlinearParams5LeftButton(), getNonlinarParams5RightButton());
+        getNonlinearParams5REd(), getNonlinearParams5LeftButton());
     nonlinearControlsRows[5] = new NonlinearControlsRow(getNonlinearVar6Cmb(), getNonlinearParams6Cmb(), getNonlinearVar6REd(),
-        getNonlinearParams6REd(), getNonlinearVar6LeftButton(), getNonlinarVar6RightButton(), getNonlinearParams6LeftButton(), getNonlinarParams6RightButton());
+        getNonlinearParams6REd(), getNonlinearParams6LeftButton());
     nonlinearControlsRows[6] = new NonlinearControlsRow(getNonlinearVar7Cmb(), getNonlinearParams7Cmb(), getNonlinearVar7REd(),
-        getNonlinearParams7REd(), getNonlinearVar7LeftButton(), getNonlinarVar7RightButton(), getNonlinearParams7LeftButton(), getNonlinarParams7RightButton());
+        getNonlinearParams7REd(), getNonlinearParams7LeftButton());
     nonlinearControlsRows[7] = new NonlinearControlsRow(getNonlinearVar8Cmb(), getNonlinearParams8Cmb(), getNonlinearVar8REd(),
-        getNonlinearParams8REd(), getNonlinearVar8LeftButton(), getNonlinarVar8RightButton(), getNonlinearParams8LeftButton(), getNonlinarParams8RightButton());
+        getNonlinearParams8REd(), getNonlinearParams8LeftButton());
     nonlinearControlsRows[8] = new NonlinearControlsRow(getNonlinearVar9Cmb(), getNonlinearParams9Cmb(), getNonlinearVar9REd(),
-        getNonlinearParams9REd(), getNonlinearVar9LeftButton(), getNonlinarVar9RightButton(), getNonlinearParams9LeftButton(), getNonlinarParams9RightButton());
+        getNonlinearParams9REd(), getNonlinearParams9LeftButton());
     nonlinearControlsRows[9] = new NonlinearControlsRow(getNonlinearVar10Cmb(), getNonlinearParams10Cmb(), getNonlinearVar10REd(),
-        getNonlinearParams10REd(), getNonlinearVar10LeftButton(), getNonlinarVar10RightButton(), getNonlinearParams10LeftButton(), getNonlinarParams10RightButton());
+        getNonlinearParams10REd(), getNonlinearParams10LeftButton());
     nonlinearControlsRows[10] = new NonlinearControlsRow(getNonlinearVar11Cmb(), getNonlinearParams11Cmb(), getNonlinearVar11REd(),
-        getNonlinearParams11REd(), getNonlinearVar11LeftButton(), getNonlinarVar11RightButton(), getNonlinearParams11LeftButton(), getNonlinarParams11RightButton());
+        getNonlinearParams11REd(), getNonlinearParams11LeftButton());
     nonlinearControlsRows[11] = new NonlinearControlsRow(getNonlinearVar12Cmb(), getNonlinearParams12Cmb(), getNonlinearVar12REd(),
-        getNonlinearParams12REd(), getNonlinearVar12LeftButton(), getNonlinarVar12RightButton(), getNonlinearParams12LeftButton(), getNonlinarParams12RightButton());
+        getNonlinearParams12REd(), getNonlinearParams12LeftButton());
 
     tinaController = new TinaController(pErrorHandler, pPrefs, getCenterCenterPanel(), getTinaCameraRollREd(), getTinaCameraRollSlider(), getTinaCameraPitchREd(),
         getTinaCameraPitchSlider(), getTinaCameraYawREd(), getTinaCameraYawSlider(), getTinaCameraPerspectiveREd(), getTinaCameraPerspectiveSlider(),
@@ -3065,7 +3029,7 @@ public class TinaInternalFrame extends JInternalFrame {
         getTinaDuplicateTransformationButton(), getTinaDeleteTransformationButton(), getTinaAddFinalTransformationButton(), getRandomBatchPanel(),
         nonlinearControlsRows, getXFormColorREd(), getXFormColorSlider(), getXFormSymmetryREd(), getXFormSymmetrySlider(), getXFormOpacityREd(),
         getXFormOpacitySlider(), getXFormDrawModeCmb(), getRelWeightsTable(), getRelWeightsLeftButton(), getRelWeightsRightButton(),
-        getTransformationWeightLeftButton(), getTransformationWeightRightButton(), getMouseTransformMoveButton(),
+        getMouseTransformMoveButton(),
         getMouseTransformRotateButton(), getMouseTransformScaleButton(), getAffineEditPostTransformButton(), getAffineEditPostTransformSmallButton(),
         getMouseTransformZoomInButton(), getMouseTransformZoomOutButton(), getToggleTrianglesButton(), new MainProgressUpdater(this), getRandomPostTransformCheckBox(),
         getRandomSymmetryCheckBox(), getAffineResetTransformButton(), getCreatePaletteColorsTable(),
@@ -3082,7 +3046,8 @@ public class TinaInternalFrame extends JInternalFrame {
         getAffineScaleXButton(), getAffineScaleYButton(), getGradientLibraryCenterPanel(), getGradientLibraryGradientCmb(), getHelpPane(),
         getToggleVariationsButton(), getAffinePreserveZButton(), getQualityProfileCmb(), getResolutionProfileCmb(),
         getBatchQualityProfileCmb(), getBatchResolutionProfileCmb(), getInteractiveQualityProfileCmb(), getInteractiveResolutionProfileCmb(),
-        getSwfAnimatorQualityProfileCmb(), getSwfAnimatorResolutionProfileCmb(), getTinaRenderFlameButton(), getTinaAppendToMovieButton());
+        getSwfAnimatorQualityProfileCmb(), getSwfAnimatorResolutionProfileCmb(), getTinaRenderFlameButton(), getTinaAppendToMovieButton(),
+        getTransformationWeightREd());
 
     tinaController.refreshing = tinaController.cmbRefreshing = tinaController.gridRefreshing = true;
     try {
@@ -3453,7 +3418,7 @@ public class TinaInternalFrame extends JInternalFrame {
       trnsformationsEastPanel.setFont(new Font("Dialog", Font.PLAIN, 10));
       trnsformationsEastPanel.setLayout(flowLayout);
       trnsformationsEastPanel.setPreferredSize(new Dimension(91, 0));
-      trnsformationsEastPanel.add(getTransformationWeightPanel(), null);
+      trnsformationsEastPanel.add(getTransformationWeightREd());
       trnsformationsEastPanel.add(getTinaAddTransformationButton(), null);
       trnsformationsEastPanel.add(getTinaDuplicateTransformationButton(), null);
       trnsformationsEastPanel.add(getTinaDeleteTransformationButton(), null);
@@ -3688,7 +3653,7 @@ public class TinaInternalFrame extends JInternalFrame {
     if (nonlinearVar1Cmb == null) {
       nonlinearVar1Cmb = new JComboBox();
       nonlinearVar1Cmb.setPreferredSize(new Dimension(120, 22));
-      nonlinearVar1Cmb.setSize(new Dimension(120, 22));
+      nonlinearVar1Cmb.setSize(new Dimension(120, 24));
       nonlinearVar1Cmb.setLocation(new Point(66, 2));
       nonlinearVar1Cmb.setMaximumRowCount(32);
       nonlinearVar1Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
@@ -3716,9 +3681,9 @@ public class TinaInternalFrame extends JInternalFrame {
             tinaController.nonlinearVarREdChanged(0);
         }
       });
-      nonlinearVar1REd.setPreferredSize(new Dimension(55, 22));
+      nonlinearVar1REd.setPreferredSize(new Dimension(56, 24));
       nonlinearVar1REd.setText("");
-      nonlinearVar1REd.setSize(new Dimension(55, 22));
+      nonlinearVar1REd.setSize(new Dimension(81, 24));
       nonlinearVar1REd.setLocation(new Point(188, 2));
       nonlinearVar1REd.setFont(new Font("Dialog", Font.PLAIN, 10));
     }
@@ -3734,7 +3699,7 @@ public class TinaInternalFrame extends JInternalFrame {
     if (nonlinearParams1Cmb == null) {
       nonlinearParams1Cmb = new JComboBox();
       nonlinearParams1Cmb.setPreferredSize(new Dimension(120, 22));
-      nonlinearParams1Cmb.setSize(new Dimension(120, 22));
+      nonlinearParams1Cmb.setSize(new Dimension(120, 24));
       nonlinearParams1Cmb.setLocation(new Point(66, 26));
       nonlinearParams1Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
       nonlinearParams1Cmb.addItemListener(new java.awt.event.ItemListener() {
@@ -3763,7 +3728,7 @@ public class TinaInternalFrame extends JInternalFrame {
       });
       nonlinearParams1REd.setPreferredSize(new Dimension(55, 22));
       nonlinearParams1REd.setText("");
-      nonlinearParams1REd.setSize(new Dimension(55, 22));
+      nonlinearParams1REd.setSize(new Dimension(81, 24));
       nonlinearParams1REd.setLocation(new Point(188, 26));
       nonlinearParams1REd.setFont(new Font("Dialog", Font.PLAIN, 10));
     }
@@ -3787,58 +3752,9 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearVar1Panel.add(nonlinearParams1Lbl, null);
       nonlinearVar1Panel.add(getNonlinearParams1Cmb(), null);
       nonlinearVar1Panel.add(getNonlinearParams1REd(), null);
-      nonlinearVar1Panel.add(getNonlinearVar1LeftButton(), null);
-      nonlinearVar1Panel.add(getNonlinarVar1RightButton(), null);
       nonlinearVar1Panel.add(getNonlinearParams1LeftButton(), null);
-      nonlinearVar1Panel.add(getNonlinarParams1RightButton(), null);
     }
     return nonlinearVar1Panel;
-  }
-
-  /**
-   * This method initializes nonlinearVar1LeftButton	
-   * 	
-   * @return javax.swing.JButton	
-   */
-  private JButton getNonlinearVar1LeftButton() {
-    if (nonlinearVar1LeftButton == null) {
-      nonlinearVar1LeftButton = new JButton();
-      nonlinearVar1LeftButton.setPreferredSize(new Dimension(22, 22));
-      nonlinearVar1LeftButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/moveLeft.gif")));
-      nonlinearVar1LeftButton.setText("");
-      nonlinearVar1LeftButton.setLocation(new Point(244, 2));
-      nonlinearVar1LeftButton.setSize(new Dimension(22, 22));
-      nonlinearVar1LeftButton.setFont(new Font("Dialog", Font.BOLD, 10));
-      nonlinearVar1LeftButton.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.nonlinearVarLeftButtonClicked(0);
-        }
-      });
-    }
-    return nonlinearVar1LeftButton;
-  }
-
-  /**
-   * This method initializes nonlinarVar1RightButton	
-   * 	
-   * @return javax.swing.JButton	
-   */
-  private JButton getNonlinarVar1RightButton() {
-    if (nonlinarVar1RightButton == null) {
-      nonlinarVar1RightButton = new JButton();
-      nonlinarVar1RightButton.setPreferredSize(new Dimension(22, 22));
-      nonlinarVar1RightButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/moveRight.gif")));
-      nonlinarVar1RightButton.setText("");
-      nonlinarVar1RightButton.setLocation(new Point(268, 2));
-      nonlinarVar1RightButton.setSize(new Dimension(22, 22));
-      nonlinarVar1RightButton.setFont(new Font("Dialog", Font.BOLD, 10));
-      nonlinarVar1RightButton.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.nonlinearVarRightButtonClicked(0);
-        }
-      });
-    }
-    return nonlinarVar1RightButton;
   }
 
   /**
@@ -3850,10 +3766,10 @@ public class TinaInternalFrame extends JInternalFrame {
     if (nonlinearParams1LeftButton == null) {
       nonlinearParams1LeftButton = new JButton();
       nonlinearParams1LeftButton.setPreferredSize(new Dimension(22, 22));
-      nonlinearParams1LeftButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/moveLeft.gif")));
+      nonlinearParams1LeftButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/details.gif")));
       nonlinearParams1LeftButton.setText("");
       nonlinearParams1LeftButton.setSize(new Dimension(22, 22));
-      nonlinearParams1LeftButton.setLocation(new Point(244, 26));
+      nonlinearParams1LeftButton.setLocation(new Point(269, 26));
       nonlinearParams1LeftButton.setFont(new Font("Dialog", Font.BOLD, 10));
       nonlinearParams1LeftButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -3862,29 +3778,6 @@ public class TinaInternalFrame extends JInternalFrame {
       });
     }
     return nonlinearParams1LeftButton;
-  }
-
-  /**
-   * This method initializes nonlinarParams1RightButton	
-   * 	
-   * @return javax.swing.JButton	
-   */
-  private JButton getNonlinarParams1RightButton() {
-    if (nonlinarParams1RightButton == null) {
-      nonlinarParams1RightButton = new JButton();
-      nonlinarParams1RightButton.setPreferredSize(new Dimension(22, 22));
-      nonlinarParams1RightButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/moveRight.gif")));
-      nonlinarParams1RightButton.setText("");
-      nonlinarParams1RightButton.setSize(new Dimension(22, 22));
-      nonlinarParams1RightButton.setLocation(new Point(268, 26));
-      nonlinarParams1RightButton.setFont(new Font("Dialog", Font.BOLD, 10));
-      nonlinarParams1RightButton.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.nonlinearParamsRightButtonClicked(0);
-        }
-      });
-    }
-    return nonlinarParams1RightButton;
   }
 
   /**
@@ -3916,10 +3809,7 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearVar2Panel.add(nonlinearParams2Lbl, null);
       nonlinearVar2Panel.add(getNonlinearParams2Cmb(), null);
       nonlinearVar2Panel.add(getNonlinearParams2REd(), null);
-      nonlinearVar2Panel.add(getNonlinearVar2LeftButton(), null);
-      nonlinearVar2Panel.add(getNonlinarVar2RightButton(), null);
       nonlinearVar2Panel.add(getNonlinearParams2LeftButton(), null);
-      nonlinearVar2Panel.add(getNonlinarParams2RightButton(), null);
     }
     return nonlinearVar2Panel;
   }
@@ -3936,7 +3826,7 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearVar2Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
       nonlinearVar2Cmb.setPreferredSize(new Dimension(120, 22));
       nonlinearVar2Cmb.setMaximumRowCount(32);
-      nonlinearVar2Cmb.setSize(new Dimension(120, 22));
+      nonlinearVar2Cmb.setSize(new Dimension(120, 24));
       nonlinearVar2Cmb.addItemListener(new java.awt.event.ItemListener() {
         public void itemStateChanged(java.awt.event.ItemEvent e) {
           tinaController.nonlinearVarCmbChanged(1);
@@ -3965,7 +3855,7 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearVar2REd.setFont(new Font("Dialog", Font.PLAIN, 10));
       nonlinearVar2REd.setPreferredSize(new Dimension(55, 22));
       nonlinearVar2REd.setText("");
-      nonlinearVar2REd.setSize(new Dimension(55, 22));
+      nonlinearVar2REd.setSize(new Dimension(81, 24));
     }
     return nonlinearVar2REd;
   }
@@ -3981,7 +3871,7 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearParams2Cmb.setLocation(new Point(66, 26));
       nonlinearParams2Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
       nonlinearParams2Cmb.setPreferredSize(new Dimension(120, 22));
-      nonlinearParams2Cmb.setSize(new Dimension(120, 22));
+      nonlinearParams2Cmb.setSize(new Dimension(120, 24));
       nonlinearParams2Cmb.addItemListener(new java.awt.event.ItemListener() {
         public void itemStateChanged(java.awt.event.ItemEvent e) {
           tinaController.nonlinearParamsCmbChanged(1);
@@ -4010,55 +3900,9 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearParams2REd.setFont(new Font("Dialog", Font.PLAIN, 10));
       nonlinearParams2REd.setPreferredSize(new Dimension(55, 22));
       nonlinearParams2REd.setText("");
-      nonlinearParams2REd.setSize(new Dimension(55, 22));
+      nonlinearParams2REd.setSize(new Dimension(81, 24));
     }
     return nonlinearParams2REd;
-  }
-
-  /**
-   * This method initializes nonlinearVar2LeftButton	
-   * 	
-   * @return javax.swing.JButton	
-   */
-  private JButton getNonlinearVar2LeftButton() {
-    if (nonlinearVar2LeftButton == null) {
-      nonlinearVar2LeftButton = new JButton();
-      nonlinearVar2LeftButton.setLocation(new Point(244, 2));
-      nonlinearVar2LeftButton.setFont(new Font("Dialog", Font.BOLD, 10));
-      nonlinearVar2LeftButton.setPreferredSize(new Dimension(22, 22));
-      nonlinearVar2LeftButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/moveLeft.gif")));
-      nonlinearVar2LeftButton.setText("");
-      nonlinearVar2LeftButton.setSize(new Dimension(22, 22));
-      nonlinearVar2LeftButton.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.nonlinearVarLeftButtonClicked(1);
-        }
-      });
-    }
-    return nonlinearVar2LeftButton;
-  }
-
-  /**
-   * This method initializes nonlinarVar2RightButton	
-   * 	
-   * @return javax.swing.JButton	
-   */
-  private JButton getNonlinarVar2RightButton() {
-    if (nonlinarVar2RightButton == null) {
-      nonlinarVar2RightButton = new JButton();
-      nonlinarVar2RightButton.setLocation(new Point(268, 2));
-      nonlinarVar2RightButton.setFont(new Font("Dialog", Font.BOLD, 10));
-      nonlinarVar2RightButton.setPreferredSize(new Dimension(22, 22));
-      nonlinarVar2RightButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/moveRight.gif")));
-      nonlinarVar2RightButton.setText("");
-      nonlinarVar2RightButton.setSize(new Dimension(22, 22));
-      nonlinarVar2RightButton.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.nonlinearVarRightButtonClicked(1);
-        }
-      });
-    }
-    return nonlinarVar2RightButton;
   }
 
   /**
@@ -4069,10 +3913,10 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton getNonlinearParams2LeftButton() {
     if (nonlinearParams2LeftButton == null) {
       nonlinearParams2LeftButton = new JButton();
-      nonlinearParams2LeftButton.setLocation(new Point(244, 26));
+      nonlinearParams2LeftButton.setLocation(new Point(269, 26));
       nonlinearParams2LeftButton.setFont(new Font("Dialog", Font.BOLD, 10));
       nonlinearParams2LeftButton.setPreferredSize(new Dimension(22, 22));
-      nonlinearParams2LeftButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/moveLeft.gif")));
+      nonlinearParams2LeftButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/details.gif")));
       nonlinearParams2LeftButton.setText("");
       nonlinearParams2LeftButton.setSize(new Dimension(22, 22));
       nonlinearParams2LeftButton.addActionListener(new java.awt.event.ActionListener() {
@@ -4082,29 +3926,6 @@ public class TinaInternalFrame extends JInternalFrame {
       });
     }
     return nonlinearParams2LeftButton;
-  }
-
-  /**
-   * This method initializes nonlinarParams2RightButton	
-   * 	
-   * @return javax.swing.JButton	
-   */
-  private JButton getNonlinarParams2RightButton() {
-    if (nonlinarParams2RightButton == null) {
-      nonlinarParams2RightButton = new JButton();
-      nonlinarParams2RightButton.setLocation(new Point(268, 26));
-      nonlinarParams2RightButton.setFont(new Font("Dialog", Font.BOLD, 10));
-      nonlinarParams2RightButton.setPreferredSize(new Dimension(22, 22));
-      nonlinarParams2RightButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/moveRight.gif")));
-      nonlinarParams2RightButton.setText("");
-      nonlinarParams2RightButton.setSize(new Dimension(22, 22));
-      nonlinarParams2RightButton.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.nonlinearParamsRightButtonClicked(1);
-        }
-      });
-    }
-    return nonlinarParams2RightButton;
   }
 
   /**
@@ -4137,10 +3958,7 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearVar3Panel.add(nonlinearParams3Lbl, null);
       nonlinearVar3Panel.add(getNonlinearParams3Cmb(), null);
       nonlinearVar3Panel.add(getNonlinearParams3REd(), null);
-      nonlinearVar3Panel.add(getNonlinearVar3LeftButton(), null);
-      nonlinearVar3Panel.add(getNonlinarVar3RightButton(), null);
       nonlinearVar3Panel.add(getNonlinearParams3LeftButton(), null);
-      nonlinearVar3Panel.add(getNonlinarParams3RightButton(), null);
     }
     return nonlinearVar3Panel;
   }
@@ -4157,7 +3975,7 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearVar3Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
       nonlinearVar3Cmb.setPreferredSize(new Dimension(120, 22));
       nonlinearVar3Cmb.setMaximumRowCount(32);
-      nonlinearVar3Cmb.setSize(new Dimension(120, 22));
+      nonlinearVar3Cmb.setSize(new Dimension(120, 24));
       nonlinearVar3Cmb.addItemListener(new java.awt.event.ItemListener() {
         public void itemStateChanged(java.awt.event.ItemEvent e) {
           tinaController.nonlinearVarCmbChanged(2);
@@ -4186,7 +4004,7 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearVar3REd.setFont(new Font("Dialog", Font.PLAIN, 10));
       nonlinearVar3REd.setPreferredSize(new Dimension(55, 22));
       nonlinearVar3REd.setText("");
-      nonlinearVar3REd.setSize(new Dimension(55, 22));
+      nonlinearVar3REd.setSize(new Dimension(81, 24));
     }
     return nonlinearVar3REd;
   }
@@ -4202,7 +4020,7 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearParams3Cmb.setLocation(new Point(66, 26));
       nonlinearParams3Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
       nonlinearParams3Cmb.setPreferredSize(new Dimension(120, 22));
-      nonlinearParams3Cmb.setSize(new Dimension(120, 22));
+      nonlinearParams3Cmb.setSize(new Dimension(120, 24));
       nonlinearParams3Cmb.addItemListener(new java.awt.event.ItemListener() {
         public void itemStateChanged(java.awt.event.ItemEvent e) {
           tinaController.nonlinearParamsCmbChanged(2);
@@ -4231,55 +4049,9 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearParams3REd.setFont(new Font("Dialog", Font.PLAIN, 10));
       nonlinearParams3REd.setPreferredSize(new Dimension(55, 22));
       nonlinearParams3REd.setText("");
-      nonlinearParams3REd.setSize(new Dimension(55, 22));
+      nonlinearParams3REd.setSize(new Dimension(81, 24));
     }
     return nonlinearParams3REd;
-  }
-
-  /**
-   * This method initializes nonlinearVar3LeftButton	
-   * 	
-   * @return javax.swing.JButton	
-   */
-  private JButton getNonlinearVar3LeftButton() {
-    if (nonlinearVar3LeftButton == null) {
-      nonlinearVar3LeftButton = new JButton();
-      nonlinearVar3LeftButton.setLocation(new Point(244, 2));
-      nonlinearVar3LeftButton.setFont(new Font("Dialog", Font.BOLD, 10));
-      nonlinearVar3LeftButton.setPreferredSize(new Dimension(22, 22));
-      nonlinearVar3LeftButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/moveLeft.gif")));
-      nonlinearVar3LeftButton.setText("");
-      nonlinearVar3LeftButton.setSize(new Dimension(22, 22));
-      nonlinearVar3LeftButton.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.nonlinearVarLeftButtonClicked(2);
-        }
-      });
-    }
-    return nonlinearVar3LeftButton;
-  }
-
-  /**
-   * This method initializes nonlinarVar3RightButton	
-   * 	
-   * @return javax.swing.JButton	
-   */
-  private JButton getNonlinarVar3RightButton() {
-    if (nonlinarVar3RightButton == null) {
-      nonlinarVar3RightButton = new JButton();
-      nonlinarVar3RightButton.setLocation(new Point(268, 2));
-      nonlinarVar3RightButton.setFont(new Font("Dialog", Font.BOLD, 10));
-      nonlinarVar3RightButton.setPreferredSize(new Dimension(22, 22));
-      nonlinarVar3RightButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/moveRight.gif")));
-      nonlinarVar3RightButton.setText("");
-      nonlinarVar3RightButton.setSize(new Dimension(22, 22));
-      nonlinarVar3RightButton.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.nonlinearVarRightButtonClicked(2);
-        }
-      });
-    }
-    return nonlinarVar3RightButton;
   }
 
   /**
@@ -4290,10 +4062,10 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton getNonlinearParams3LeftButton() {
     if (nonlinearParams3LeftButton == null) {
       nonlinearParams3LeftButton = new JButton();
-      nonlinearParams3LeftButton.setLocation(new Point(244, 26));
+      nonlinearParams3LeftButton.setLocation(new Point(269, 26));
       nonlinearParams3LeftButton.setFont(new Font("Dialog", Font.BOLD, 10));
       nonlinearParams3LeftButton.setPreferredSize(new Dimension(22, 22));
-      nonlinearParams3LeftButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/moveLeft.gif")));
+      nonlinearParams3LeftButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/details.gif")));
       nonlinearParams3LeftButton.setText("");
       nonlinearParams3LeftButton.setSize(new Dimension(22, 22));
       nonlinearParams3LeftButton.addActionListener(new java.awt.event.ActionListener() {
@@ -4303,29 +4075,6 @@ public class TinaInternalFrame extends JInternalFrame {
       });
     }
     return nonlinearParams3LeftButton;
-  }
-
-  /**
-   * This method initializes nonlinarParams3RightButton	
-   * 	
-   * @return javax.swing.JButton	
-   */
-  private JButton getNonlinarParams3RightButton() {
-    if (nonlinarParams3RightButton == null) {
-      nonlinarParams3RightButton = new JButton();
-      nonlinarParams3RightButton.setLocation(new Point(268, 26));
-      nonlinarParams3RightButton.setFont(new Font("Dialog", Font.BOLD, 10));
-      nonlinarParams3RightButton.setPreferredSize(new Dimension(22, 22));
-      nonlinarParams3RightButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/moveRight.gif")));
-      nonlinarParams3RightButton.setText("");
-      nonlinarParams3RightButton.setSize(new Dimension(22, 22));
-      nonlinarParams3RightButton.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.nonlinearParamsRightButtonClicked(2);
-        }
-      });
-    }
-    return nonlinarParams3RightButton;
   }
 
   /**
@@ -4590,68 +4339,6 @@ public class TinaInternalFrame extends JInternalFrame {
       relWeightsTable.setFont(new Font("Dialog", Font.PLAIN, 10));
     }
     return relWeightsTable;
-  }
-
-  /**
-   * This method initializes transformationWeightPanel	
-   * 	
-   * @return javax.swing.JPanel	
-   */
-  private JPanel getTransformationWeightPanel() {
-    if (transformationWeightPanel == null) {
-      transformationWeightPanel = new JPanel();
-      transformationWeightPanel.setLayout(null);
-      transformationWeightPanel.setPreferredSize(new Dimension(81, 22));
-      transformationWeightPanel.add(getTransformationWeightLeftButton(), null);
-      transformationWeightPanel.add(getTransformationWeightRightButton(), null);
-    }
-    return transformationWeightPanel;
-  }
-
-  /**
-   * This method initializes transformationWeightLeftButton	
-   * 	
-   * @return javax.swing.JButton	
-   */
-  private JButton getTransformationWeightLeftButton() {
-    if (transformationWeightLeftButton == null) {
-      transformationWeightLeftButton = new JButton();
-      transformationWeightLeftButton.setPreferredSize(new Dimension(40, 22));
-      transformationWeightLeftButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/moveLeft.gif")));
-      transformationWeightLeftButton.setText("");
-      transformationWeightLeftButton.setSize(new Dimension(40, 22));
-      transformationWeightLeftButton.setLocation(new Point(0, 0));
-      transformationWeightLeftButton.setFont(new Font("Dialog", Font.BOLD, 10));
-      transformationWeightLeftButton.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.transformationWeightLeftButton_clicked();
-        }
-      });
-    }
-    return transformationWeightLeftButton;
-  }
-
-  /**
-   * This method initializes transformationWeightRightButton	
-   * 	
-   * @return javax.swing.JButton	
-   */
-  private JButton getTransformationWeightRightButton() {
-    if (transformationWeightRightButton == null) {
-      transformationWeightRightButton = new JButton();
-      transformationWeightRightButton.setPreferredSize(new Dimension(40, 22));
-      transformationWeightRightButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/moveRight.gif")));
-      transformationWeightRightButton.setText("");
-      transformationWeightRightButton.setSize(new Dimension(40, 22));
-      transformationWeightRightButton.setLocation(new Point(41, 0));
-      transformationWeightRightButton.setFont(new Font("Dialog", Font.BOLD, 10));
-      transformationWeightRightButton.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.transformationWeightRightButton_clicked();
-        }
-      });
-    }
-    return transformationWeightRightButton;
   }
 
   /**
@@ -5348,10 +5035,7 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearVar4Panel.add(nonlinearParams4Lbl, null);
       nonlinearVar4Panel.add(getNonlinearParams4Cmb(), null);
       nonlinearVar4Panel.add(getNonlinearParams4REd(), null);
-      nonlinearVar4Panel.add(getNonlinearVar4LeftButton(), null);
-      nonlinearVar4Panel.add(getNonlinarVar4RightButton(), null);
       nonlinearVar4Panel.add(getNonlinearParams4LeftButton(), null);
-      nonlinearVar4Panel.add(getNonlinarParams4RightButton(), null);
     }
     return nonlinearVar4Panel;
   }
@@ -5368,7 +5052,7 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearVar4Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
       nonlinearVar4Cmb.setPreferredSize(new Dimension(120, 22));
       nonlinearVar4Cmb.setMaximumRowCount(32);
-      nonlinearVar4Cmb.setSize(new Dimension(120, 22));
+      nonlinearVar4Cmb.setSize(new Dimension(120, 24));
       nonlinearVar4Cmb.addItemListener(new java.awt.event.ItemListener() {
         public void itemStateChanged(java.awt.event.ItemEvent e) {
           tinaController.nonlinearVarCmbChanged(3);
@@ -5397,7 +5081,7 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearVar4REd.setFont(new Font("Dialog", Font.PLAIN, 10));
       nonlinearVar4REd.setPreferredSize(new Dimension(55, 22));
       nonlinearVar4REd.setText("");
-      nonlinearVar4REd.setSize(new Dimension(55, 22));
+      nonlinearVar4REd.setSize(new Dimension(81, 24));
     }
     return nonlinearVar4REd;
   }
@@ -5413,7 +5097,7 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearParams4Cmb.setLocation(new Point(66, 26));
       nonlinearParams4Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
       nonlinearParams4Cmb.setPreferredSize(new Dimension(120, 22));
-      nonlinearParams4Cmb.setSize(new Dimension(120, 22));
+      nonlinearParams4Cmb.setSize(new Dimension(120, 24));
       nonlinearParams4Cmb.addItemListener(new java.awt.event.ItemListener() {
         public void itemStateChanged(java.awt.event.ItemEvent e) {
           tinaController.nonlinearParamsCmbChanged(3);
@@ -5442,55 +5126,9 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearParams4REd.setFont(new Font("Dialog", Font.PLAIN, 10));
       nonlinearParams4REd.setPreferredSize(new Dimension(55, 22));
       nonlinearParams4REd.setText("");
-      nonlinearParams4REd.setSize(new Dimension(55, 22));
+      nonlinearParams4REd.setSize(new Dimension(81, 24));
     }
     return nonlinearParams4REd;
-  }
-
-  /**
-   * This method initializes nonlinearVar4LeftButton	
-   * 	
-   * @return javax.swing.JButton	
-   */
-  private JButton getNonlinearVar4LeftButton() {
-    if (nonlinearVar4LeftButton == null) {
-      nonlinearVar4LeftButton = new JButton();
-      nonlinearVar4LeftButton.setLocation(new Point(244, 2));
-      nonlinearVar4LeftButton.setFont(new Font("Dialog", Font.BOLD, 10));
-      nonlinearVar4LeftButton.setPreferredSize(new Dimension(22, 22));
-      nonlinearVar4LeftButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/moveLeft.gif")));
-      nonlinearVar4LeftButton.setText("");
-      nonlinearVar4LeftButton.setSize(new Dimension(22, 22));
-      nonlinearVar4LeftButton.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.nonlinearVarLeftButtonClicked(3);
-        }
-      });
-    }
-    return nonlinearVar4LeftButton;
-  }
-
-  /**
-   * This method initializes nonlinarVar4RightButton	
-   * 	
-   * @return javax.swing.JButton	
-   */
-  private JButton getNonlinarVar4RightButton() {
-    if (nonlinarVar4RightButton == null) {
-      nonlinarVar4RightButton = new JButton();
-      nonlinarVar4RightButton.setLocation(new Point(268, 2));
-      nonlinarVar4RightButton.setFont(new Font("Dialog", Font.BOLD, 10));
-      nonlinarVar4RightButton.setPreferredSize(new Dimension(22, 22));
-      nonlinarVar4RightButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/moveRight.gif")));
-      nonlinarVar4RightButton.setText("");
-      nonlinarVar4RightButton.setSize(new Dimension(22, 22));
-      nonlinarVar4RightButton.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.nonlinearVarRightButtonClicked(3);
-        }
-      });
-    }
-    return nonlinarVar4RightButton;
   }
 
   /**
@@ -5501,10 +5139,10 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton getNonlinearParams4LeftButton() {
     if (nonlinearParams4LeftButton == null) {
       nonlinearParams4LeftButton = new JButton();
-      nonlinearParams4LeftButton.setLocation(new Point(244, 26));
+      nonlinearParams4LeftButton.setLocation(new Point(269, 26));
       nonlinearParams4LeftButton.setFont(new Font("Dialog", Font.BOLD, 10));
       nonlinearParams4LeftButton.setPreferredSize(new Dimension(22, 22));
-      nonlinearParams4LeftButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/moveLeft.gif")));
+      nonlinearParams4LeftButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/details.gif")));
       nonlinearParams4LeftButton.setText("");
       nonlinearParams4LeftButton.setSize(new Dimension(22, 22));
       nonlinearParams4LeftButton.addActionListener(new java.awt.event.ActionListener() {
@@ -5514,29 +5152,6 @@ public class TinaInternalFrame extends JInternalFrame {
       });
     }
     return nonlinearParams4LeftButton;
-  }
-
-  /**
-   * This method initializes nonlinarParams4RightButton	
-   * 	
-   * @return javax.swing.JButton	
-   */
-  private JButton getNonlinarParams4RightButton() {
-    if (nonlinarParams4RightButton == null) {
-      nonlinarParams4RightButton = new JButton();
-      nonlinarParams4RightButton.setLocation(new Point(268, 26));
-      nonlinarParams4RightButton.setFont(new Font("Dialog", Font.BOLD, 10));
-      nonlinarParams4RightButton.setPreferredSize(new Dimension(22, 22));
-      nonlinarParams4RightButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/moveRight.gif")));
-      nonlinarParams4RightButton.setText("");
-      nonlinarParams4RightButton.setSize(new Dimension(22, 22));
-      nonlinarParams4RightButton.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.nonlinearParamsRightButtonClicked(3);
-        }
-      });
-    }
-    return nonlinarParams4RightButton;
   }
 
   /**
@@ -5643,10 +5258,7 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearVar5Panel.add(nonlinearParams5Lbl, null);
       nonlinearVar5Panel.add(getNonlinearParams5Cmb(), null);
       nonlinearVar5Panel.add(getNonlinearParams5REd(), null);
-      nonlinearVar5Panel.add(getNonlinearVar5LeftButton(), null);
-      nonlinearVar5Panel.add(getNonlinarVar5RightButton(), null);
       nonlinearVar5Panel.add(getNonlinearParams5LeftButton(), null);
-      nonlinearVar5Panel.add(getNonlinarParams5RightButton(), null);
     }
     return nonlinearVar5Panel;
   }
@@ -5663,7 +5275,7 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearVar5Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
       nonlinearVar5Cmb.setPreferredSize(new Dimension(120, 22));
       nonlinearVar5Cmb.setMaximumRowCount(32);
-      nonlinearVar5Cmb.setSize(new Dimension(120, 22));
+      nonlinearVar5Cmb.setSize(new Dimension(120, 24));
       nonlinearVar5Cmb.addItemListener(new java.awt.event.ItemListener() {
         public void itemStateChanged(java.awt.event.ItemEvent e) {
           tinaController.nonlinearVarCmbChanged(4);
@@ -5692,7 +5304,7 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearVar5REd.setFont(new Font("Dialog", Font.PLAIN, 10));
       nonlinearVar5REd.setPreferredSize(new Dimension(55, 22));
       nonlinearVar5REd.setText("");
-      nonlinearVar5REd.setSize(new Dimension(55, 22));
+      nonlinearVar5REd.setSize(new Dimension(81, 24));
     }
     return nonlinearVar5REd;
   }
@@ -5708,7 +5320,7 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearParams5Cmb.setLocation(new Point(66, 26));
       nonlinearParams5Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
       nonlinearParams5Cmb.setPreferredSize(new Dimension(120, 22));
-      nonlinearParams5Cmb.setSize(new Dimension(120, 22));
+      nonlinearParams5Cmb.setSize(new Dimension(120, 24));
       nonlinearParams5Cmb.addItemListener(new java.awt.event.ItemListener() {
         public void itemStateChanged(java.awt.event.ItemEvent e) {
           tinaController.nonlinearParamsCmbChanged(4);
@@ -5737,56 +5349,9 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearParams5REd.setFont(new Font("Dialog", Font.PLAIN, 10));
       nonlinearParams5REd.setPreferredSize(new Dimension(55, 22));
       nonlinearParams5REd.setText("");
-      nonlinearParams5REd.setSize(new Dimension(55, 22));
+      nonlinearParams5REd.setSize(new Dimension(81, 24));
     }
     return nonlinearParams5REd;
-  }
-
-  /**
-   * This method initializes nonlinearVar5LeftButton	
-   * 	
-   * @return javax.swing.JButton	
-   */
-  private JButton getNonlinearVar5LeftButton() {
-    if (nonlinearVar5LeftButton == null) {
-      nonlinearVar5LeftButton = new JButton();
-      nonlinearVar5LeftButton.setLocation(new Point(244, 2));
-      nonlinearVar5LeftButton.setFont(new Font("Dialog", Font.BOLD, 10));
-      nonlinearVar5LeftButton.setPreferredSize(new Dimension(22, 22));
-      nonlinearVar5LeftButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/moveLeft.gif")));
-      nonlinearVar5LeftButton.setText("");
-      nonlinearVar5LeftButton.setSize(new Dimension(22, 22));
-      nonlinearVar5LeftButton.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.nonlinearVarLeftButtonClicked(4);
-        }
-      });
-
-    }
-    return nonlinearVar5LeftButton;
-  }
-
-  /**
-   * This method initializes nonlinarVar5RightButton	
-   * 	
-   * @return javax.swing.JButton	
-   */
-  private JButton getNonlinarVar5RightButton() {
-    if (nonlinarVar5RightButton == null) {
-      nonlinarVar5RightButton = new JButton();
-      nonlinarVar5RightButton.setLocation(new Point(268, 2));
-      nonlinarVar5RightButton.setFont(new Font("Dialog", Font.BOLD, 10));
-      nonlinarVar5RightButton.setPreferredSize(new Dimension(22, 22));
-      nonlinarVar5RightButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/moveRight.gif")));
-      nonlinarVar5RightButton.setText("");
-      nonlinarVar5RightButton.setSize(new Dimension(22, 22));
-      nonlinarVar5RightButton.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.nonlinearVarRightButtonClicked(4);
-        }
-      });
-    }
-    return nonlinarVar5RightButton;
   }
 
   /**
@@ -5797,10 +5362,10 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton getNonlinearParams5LeftButton() {
     if (nonlinearParams5LeftButton == null) {
       nonlinearParams5LeftButton = new JButton();
-      nonlinearParams5LeftButton.setLocation(new Point(244, 26));
+      nonlinearParams5LeftButton.setLocation(new Point(269, 26));
       nonlinearParams5LeftButton.setFont(new Font("Dialog", Font.BOLD, 10));
       nonlinearParams5LeftButton.setPreferredSize(new Dimension(22, 22));
-      nonlinearParams5LeftButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/moveLeft.gif")));
+      nonlinearParams5LeftButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/details.gif")));
       nonlinearParams5LeftButton.setText("");
       nonlinearParams5LeftButton.setSize(new Dimension(22, 22));
       nonlinearParams5LeftButton.addActionListener(new java.awt.event.ActionListener() {
@@ -5810,29 +5375,6 @@ public class TinaInternalFrame extends JInternalFrame {
       });
     }
     return nonlinearParams5LeftButton;
-  }
-
-  /**
-   * This method initializes nonlinarParams5RightButton	
-   * 	
-   * @return javax.swing.JButton	
-   */
-  private JButton getNonlinarParams5RightButton() {
-    if (nonlinarParams5RightButton == null) {
-      nonlinarParams5RightButton = new JButton();
-      nonlinarParams5RightButton.setLocation(new Point(268, 26));
-      nonlinarParams5RightButton.setFont(new Font("Dialog", Font.BOLD, 10));
-      nonlinarParams5RightButton.setPreferredSize(new Dimension(22, 22));
-      nonlinarParams5RightButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/moveRight.gif")));
-      nonlinarParams5RightButton.setText("");
-      nonlinarParams5RightButton.setSize(new Dimension(22, 22));
-      nonlinarParams5RightButton.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.nonlinearParamsRightButtonClicked(4);
-        }
-      });
-    }
-    return nonlinarParams5RightButton;
   }
 
   /**
@@ -5864,10 +5406,7 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearVar6Panel.add(nonlinearParams6Lbl, null);
       nonlinearVar6Panel.add(getNonlinearParams6Cmb(), null);
       nonlinearVar6Panel.add(getNonlinearParams6REd(), null);
-      nonlinearVar6Panel.add(getNonlinearVar6LeftButton(), null);
-      nonlinearVar6Panel.add(getNonlinarVar6RightButton(), null);
       nonlinearVar6Panel.add(getNonlinearParams6LeftButton(), null);
-      nonlinearVar6Panel.add(getNonlinarParams6RightButton(), null);
     }
     return nonlinearVar6Panel;
   }
@@ -5884,7 +5423,7 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearVar6Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
       nonlinearVar6Cmb.setPreferredSize(new Dimension(120, 22));
       nonlinearVar6Cmb.setMaximumRowCount(32);
-      nonlinearVar6Cmb.setSize(new Dimension(120, 22));
+      nonlinearVar6Cmb.setSize(new Dimension(120, 24));
       nonlinearVar6Cmb.addItemListener(new java.awt.event.ItemListener() {
         public void itemStateChanged(java.awt.event.ItemEvent e) {
           tinaController.nonlinearVarCmbChanged(5);
@@ -5913,7 +5452,7 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearVar6REd.setFont(new Font("Dialog", Font.PLAIN, 10));
       nonlinearVar6REd.setPreferredSize(new Dimension(55, 22));
       nonlinearVar6REd.setText("");
-      nonlinearVar6REd.setSize(new Dimension(55, 22));
+      nonlinearVar6REd.setSize(new Dimension(81, 24));
     }
     return nonlinearVar6REd;
   }
@@ -5929,7 +5468,7 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearParams6Cmb.setLocation(new Point(66, 26));
       nonlinearParams6Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
       nonlinearParams6Cmb.setPreferredSize(new Dimension(120, 22));
-      nonlinearParams6Cmb.setSize(new Dimension(120, 22));
+      nonlinearParams6Cmb.setSize(new Dimension(120, 24));
       nonlinearParams6Cmb.addItemListener(new java.awt.event.ItemListener() {
         public void itemStateChanged(java.awt.event.ItemEvent e) {
           tinaController.nonlinearParamsCmbChanged(5);
@@ -5958,55 +5497,9 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearParams6REd.setFont(new Font("Dialog", Font.PLAIN, 10));
       nonlinearParams6REd.setPreferredSize(new Dimension(55, 22));
       nonlinearParams6REd.setText("");
-      nonlinearParams6REd.setSize(new Dimension(55, 22));
+      nonlinearParams6REd.setSize(new Dimension(81, 24));
     }
     return nonlinearParams6REd;
-  }
-
-  /**
-   * This method initializes nonlinearVar6LeftButton	
-   * 	
-   * @return javax.swing.JButton	
-   */
-  private JButton getNonlinearVar6LeftButton() {
-    if (nonlinearVar6LeftButton == null) {
-      nonlinearVar6LeftButton = new JButton();
-      nonlinearVar6LeftButton.setLocation(new Point(244, 2));
-      nonlinearVar6LeftButton.setFont(new Font("Dialog", Font.BOLD, 10));
-      nonlinearVar6LeftButton.setPreferredSize(new Dimension(22, 22));
-      nonlinearVar6LeftButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/moveLeft.gif")));
-      nonlinearVar6LeftButton.setText("");
-      nonlinearVar6LeftButton.setSize(new Dimension(22, 22));
-      nonlinearVar6LeftButton.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.nonlinearVarLeftButtonClicked(5);
-        }
-      });
-    }
-    return nonlinearVar6LeftButton;
-  }
-
-  /**
-   * This method initializes nonlinarVar6RightButton	
-   * 	
-   * @return javax.swing.JButton	
-   */
-  private JButton getNonlinarVar6RightButton() {
-    if (nonlinarVar6RightButton == null) {
-      nonlinarVar6RightButton = new JButton();
-      nonlinarVar6RightButton.setLocation(new Point(268, 2));
-      nonlinarVar6RightButton.setFont(new Font("Dialog", Font.BOLD, 10));
-      nonlinarVar6RightButton.setPreferredSize(new Dimension(22, 22));
-      nonlinarVar6RightButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/moveRight.gif")));
-      nonlinarVar6RightButton.setText("");
-      nonlinarVar6RightButton.setSize(new Dimension(22, 22));
-      nonlinarVar6RightButton.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.nonlinearVarRightButtonClicked(5);
-        }
-      });
-    }
-    return nonlinarVar6RightButton;
   }
 
   /**
@@ -6017,10 +5510,10 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton getNonlinearParams6LeftButton() {
     if (nonlinearParams6LeftButton == null) {
       nonlinearParams6LeftButton = new JButton();
-      nonlinearParams6LeftButton.setLocation(new Point(244, 26));
+      nonlinearParams6LeftButton.setLocation(new Point(269, 26));
       nonlinearParams6LeftButton.setFont(new Font("Dialog", Font.BOLD, 10));
       nonlinearParams6LeftButton.setPreferredSize(new Dimension(22, 22));
-      nonlinearParams6LeftButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/moveLeft.gif")));
+      nonlinearParams6LeftButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/details.gif")));
       nonlinearParams6LeftButton.setText("");
       nonlinearParams6LeftButton.setSize(new Dimension(22, 22));
       nonlinearParams6LeftButton.addActionListener(new java.awt.event.ActionListener() {
@@ -6030,29 +5523,6 @@ public class TinaInternalFrame extends JInternalFrame {
       });
     }
     return nonlinearParams6LeftButton;
-  }
-
-  /**
-   * This method initializes nonlinarParams6RightButton	
-   * 	
-   * @return javax.swing.JButton	
-   */
-  private JButton getNonlinarParams6RightButton() {
-    if (nonlinarParams6RightButton == null) {
-      nonlinarParams6RightButton = new JButton();
-      nonlinarParams6RightButton.setLocation(new Point(268, 26));
-      nonlinarParams6RightButton.setFont(new Font("Dialog", Font.BOLD, 10));
-      nonlinarParams6RightButton.setPreferredSize(new Dimension(22, 22));
-      nonlinarParams6RightButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/moveRight.gif")));
-      nonlinarParams6RightButton.setText("");
-      nonlinarParams6RightButton.setSize(new Dimension(22, 22));
-      nonlinarParams6RightButton.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.nonlinearParamsRightButtonClicked(5);
-        }
-      });
-    }
-    return nonlinarParams6RightButton;
   }
 
   /**
@@ -6084,10 +5554,7 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearVar7Panel.add(nonlinearParams7Lbl, null);
       nonlinearVar7Panel.add(getNonlinearParams7Cmb(), null);
       nonlinearVar7Panel.add(getNonlinearParams7REd(), null);
-      nonlinearVar7Panel.add(getNonlinearVar7LeftButton(), null);
-      nonlinearVar7Panel.add(getNonlinarVar7RightButton(), null);
       nonlinearVar7Panel.add(getNonlinearParams7LeftButton(), null);
-      nonlinearVar7Panel.add(getNonlinarParams7RightButton(), null);
     }
     return nonlinearVar7Panel;
   }
@@ -6104,7 +5571,7 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearVar7Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
       nonlinearVar7Cmb.setPreferredSize(new Dimension(120, 22));
       nonlinearVar7Cmb.setMaximumRowCount(32);
-      nonlinearVar7Cmb.setSize(new Dimension(120, 22));
+      nonlinearVar7Cmb.setSize(new Dimension(120, 24));
       nonlinearVar7Cmb.addItemListener(new java.awt.event.ItemListener() {
         public void itemStateChanged(java.awt.event.ItemEvent e) {
           tinaController.nonlinearVarCmbChanged(6);
@@ -6133,7 +5600,7 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearVar7REd.setFont(new Font("Dialog", Font.PLAIN, 10));
       nonlinearVar7REd.setPreferredSize(new Dimension(55, 22));
       nonlinearVar7REd.setText("");
-      nonlinearVar7REd.setSize(new Dimension(55, 22));
+      nonlinearVar7REd.setSize(new Dimension(81, 24));
     }
     return nonlinearVar7REd;
   }
@@ -6149,7 +5616,7 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearParams7Cmb.setLocation(new Point(66, 26));
       nonlinearParams7Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
       nonlinearParams7Cmb.setPreferredSize(new Dimension(120, 22));
-      nonlinearParams7Cmb.setSize(new Dimension(120, 22));
+      nonlinearParams7Cmb.setSize(new Dimension(120, 24));
       nonlinearParams7Cmb.addItemListener(new java.awt.event.ItemListener() {
         public void itemStateChanged(java.awt.event.ItemEvent e) {
           tinaController.nonlinearParamsCmbChanged(6);
@@ -6178,55 +5645,9 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearParams7REd.setFont(new Font("Dialog", Font.PLAIN, 10));
       nonlinearParams7REd.setPreferredSize(new Dimension(55, 22));
       nonlinearParams7REd.setText("");
-      nonlinearParams7REd.setSize(new Dimension(55, 22));
+      nonlinearParams7REd.setSize(new Dimension(81, 24));
     }
     return nonlinearParams7REd;
-  }
-
-  /**
-   * This method initializes nonlinearVar7LeftButton	
-   * 	
-   * @return javax.swing.JButton	
-   */
-  private JButton getNonlinearVar7LeftButton() {
-    if (nonlinearVar7LeftButton == null) {
-      nonlinearVar7LeftButton = new JButton();
-      nonlinearVar7LeftButton.setLocation(new Point(244, 2));
-      nonlinearVar7LeftButton.setFont(new Font("Dialog", Font.BOLD, 10));
-      nonlinearVar7LeftButton.setPreferredSize(new Dimension(22, 22));
-      nonlinearVar7LeftButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/moveLeft.gif")));
-      nonlinearVar7LeftButton.setText("");
-      nonlinearVar7LeftButton.setSize(new Dimension(22, 22));
-      nonlinearVar7LeftButton.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.nonlinearVarLeftButtonClicked(6);
-        }
-      });
-    }
-    return nonlinearVar7LeftButton;
-  }
-
-  /**
-   * This method initializes nonlinarVar7RightButton	
-   * 	
-   * @return javax.swing.JButton	
-   */
-  private JButton getNonlinarVar7RightButton() {
-    if (nonlinarVar7RightButton == null) {
-      nonlinarVar7RightButton = new JButton();
-      nonlinarVar7RightButton.setLocation(new Point(268, 2));
-      nonlinarVar7RightButton.setFont(new Font("Dialog", Font.BOLD, 10));
-      nonlinarVar7RightButton.setPreferredSize(new Dimension(22, 22));
-      nonlinarVar7RightButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/moveRight.gif")));
-      nonlinarVar7RightButton.setText("");
-      nonlinarVar7RightButton.setSize(new Dimension(22, 22));
-      nonlinarVar7RightButton.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.nonlinearVarRightButtonClicked(6);
-        }
-      });
-    }
-    return nonlinarVar7RightButton;
   }
 
   /**
@@ -6237,10 +5658,10 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton getNonlinearParams7LeftButton() {
     if (nonlinearParams7LeftButton == null) {
       nonlinearParams7LeftButton = new JButton();
-      nonlinearParams7LeftButton.setLocation(new Point(244, 26));
+      nonlinearParams7LeftButton.setLocation(new Point(269, 26));
       nonlinearParams7LeftButton.setFont(new Font("Dialog", Font.BOLD, 10));
       nonlinearParams7LeftButton.setPreferredSize(new Dimension(22, 22));
-      nonlinearParams7LeftButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/moveLeft.gif")));
+      nonlinearParams7LeftButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/details.gif")));
       nonlinearParams7LeftButton.setText("");
       nonlinearParams7LeftButton.setSize(new Dimension(22, 22));
       nonlinearParams7LeftButton.addActionListener(new java.awt.event.ActionListener() {
@@ -6250,29 +5671,6 @@ public class TinaInternalFrame extends JInternalFrame {
       });
     }
     return nonlinearParams7LeftButton;
-  }
-
-  /**
-   * This method initializes nonlinarParams7RightButton	
-   * 	
-   * @return javax.swing.JButton	
-   */
-  private JButton getNonlinarParams7RightButton() {
-    if (nonlinarParams7RightButton == null) {
-      nonlinarParams7RightButton = new JButton();
-      nonlinarParams7RightButton.setLocation(new Point(268, 26));
-      nonlinarParams7RightButton.setFont(new Font("Dialog", Font.BOLD, 10));
-      nonlinarParams7RightButton.setPreferredSize(new Dimension(22, 22));
-      nonlinarParams7RightButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/moveRight.gif")));
-      nonlinarParams7RightButton.setText("");
-      nonlinarParams7RightButton.setSize(new Dimension(22, 22));
-      nonlinarParams7RightButton.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.nonlinearParamsRightButtonClicked(6);
-        }
-      });
-    }
-    return nonlinarParams7RightButton;
   }
 
   /**
@@ -6304,10 +5702,7 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearVar8Panel.add(nonlinearParams8Lbl, null);
       nonlinearVar8Panel.add(getNonlinearParams8Cmb(), null);
       nonlinearVar8Panel.add(getNonlinearParams8REd(), null);
-      nonlinearVar8Panel.add(getNonlinearVar8LeftButton(), null);
-      nonlinearVar8Panel.add(getNonlinarVar8RightButton(), null);
       nonlinearVar8Panel.add(getNonlinearParams8LeftButton(), null);
-      nonlinearVar8Panel.add(getNonlinarParams8RightButton(), null);
     }
     return nonlinearVar8Panel;
   }
@@ -6324,7 +5719,7 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearVar8Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
       nonlinearVar8Cmb.setPreferredSize(new Dimension(120, 22));
       nonlinearVar8Cmb.setMaximumRowCount(32);
-      nonlinearVar8Cmb.setSize(new Dimension(120, 22));
+      nonlinearVar8Cmb.setSize(new Dimension(120, 24));
       nonlinearVar8Cmb.addItemListener(new java.awt.event.ItemListener() {
         public void itemStateChanged(java.awt.event.ItemEvent e) {
           tinaController.nonlinearVarCmbChanged(7);
@@ -6353,7 +5748,7 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearVar8REd.setFont(new Font("Dialog", Font.PLAIN, 10));
       nonlinearVar8REd.setPreferredSize(new Dimension(55, 22));
       nonlinearVar8REd.setText("");
-      nonlinearVar8REd.setSize(new Dimension(55, 22));
+      nonlinearVar8REd.setSize(new Dimension(81, 24));
     }
     return nonlinearVar8REd;
   }
@@ -6369,7 +5764,7 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearParams8Cmb.setLocation(new Point(66, 26));
       nonlinearParams8Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
       nonlinearParams8Cmb.setPreferredSize(new Dimension(120, 22));
-      nonlinearParams8Cmb.setSize(new Dimension(120, 22));
+      nonlinearParams8Cmb.setSize(new Dimension(120, 24));
       nonlinearParams8Cmb.addItemListener(new java.awt.event.ItemListener() {
         public void itemStateChanged(java.awt.event.ItemEvent e) {
           tinaController.nonlinearParamsCmbChanged(7);
@@ -6398,55 +5793,9 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearParams8REd.setFont(new Font("Dialog", Font.PLAIN, 10));
       nonlinearParams8REd.setPreferredSize(new Dimension(55, 22));
       nonlinearParams8REd.setText("");
-      nonlinearParams8REd.setSize(new Dimension(55, 22));
+      nonlinearParams8REd.setSize(new Dimension(81, 24));
     }
     return nonlinearParams8REd;
-  }
-
-  /**
-   * This method initializes nonlinearVar8LeftButton	
-   * 	
-   * @return javax.swing.JButton	
-   */
-  private JButton getNonlinearVar8LeftButton() {
-    if (nonlinearVar8LeftButton == null) {
-      nonlinearVar8LeftButton = new JButton();
-      nonlinearVar8LeftButton.setLocation(new Point(244, 2));
-      nonlinearVar8LeftButton.setFont(new Font("Dialog", Font.BOLD, 10));
-      nonlinearVar8LeftButton.setPreferredSize(new Dimension(22, 22));
-      nonlinearVar8LeftButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/moveLeft.gif")));
-      nonlinearVar8LeftButton.setText("");
-      nonlinearVar8LeftButton.setSize(new Dimension(22, 22));
-      nonlinearVar8LeftButton.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.nonlinearVarLeftButtonClicked(7);
-        }
-      });
-    }
-    return nonlinearVar8LeftButton;
-  }
-
-  /**
-   * This method initializes nonlinarVar8RightButton	
-   * 	
-   * @return javax.swing.JButton	
-   */
-  private JButton getNonlinarVar8RightButton() {
-    if (nonlinarVar8RightButton == null) {
-      nonlinarVar8RightButton = new JButton();
-      nonlinarVar8RightButton.setLocation(new Point(268, 2));
-      nonlinarVar8RightButton.setFont(new Font("Dialog", Font.BOLD, 10));
-      nonlinarVar8RightButton.setPreferredSize(new Dimension(22, 22));
-      nonlinarVar8RightButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/moveRight.gif")));
-      nonlinarVar8RightButton.setText("");
-      nonlinarVar8RightButton.setSize(new Dimension(22, 22));
-      nonlinarVar8RightButton.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.nonlinearVarRightButtonClicked(7);
-        }
-      });
-    }
-    return nonlinarVar8RightButton;
   }
 
   /**
@@ -6457,10 +5806,10 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton getNonlinearParams8LeftButton() {
     if (nonlinearParams8LeftButton == null) {
       nonlinearParams8LeftButton = new JButton();
-      nonlinearParams8LeftButton.setLocation(new Point(244, 26));
+      nonlinearParams8LeftButton.setLocation(new Point(269, 26));
       nonlinearParams8LeftButton.setFont(new Font("Dialog", Font.BOLD, 10));
       nonlinearParams8LeftButton.setPreferredSize(new Dimension(22, 22));
-      nonlinearParams8LeftButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/moveLeft.gif")));
+      nonlinearParams8LeftButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/details.gif")));
       nonlinearParams8LeftButton.setText("");
       nonlinearParams8LeftButton.setSize(new Dimension(22, 22));
       nonlinearParams8LeftButton.addActionListener(new java.awt.event.ActionListener() {
@@ -6470,29 +5819,6 @@ public class TinaInternalFrame extends JInternalFrame {
       });
     }
     return nonlinearParams8LeftButton;
-  }
-
-  /**
-   * This method initializes nonlinarParams8RightButton	
-   * 	
-   * @return javax.swing.JButton	
-   */
-  private JButton getNonlinarParams8RightButton() {
-    if (nonlinarParams8RightButton == null) {
-      nonlinarParams8RightButton = new JButton();
-      nonlinarParams8RightButton.setLocation(new Point(268, 26));
-      nonlinarParams8RightButton.setFont(new Font("Dialog", Font.BOLD, 10));
-      nonlinarParams8RightButton.setPreferredSize(new Dimension(22, 22));
-      nonlinarParams8RightButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/moveRight.gif")));
-      nonlinarParams8RightButton.setText("");
-      nonlinarParams8RightButton.setSize(new Dimension(22, 22));
-      nonlinarParams8RightButton.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.nonlinearParamsRightButtonClicked(7);
-        }
-      });
-    }
-    return nonlinarParams8RightButton;
   }
 
   /**
@@ -6524,10 +5850,7 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearVar9Panel.add(nonlinearParams9Lbl, null);
       nonlinearVar9Panel.add(getNonlinearParams9Cmb(), null);
       nonlinearVar9Panel.add(getNonlinearParams9REd(), null);
-      nonlinearVar9Panel.add(getNonlinearVar9LeftButton(), null);
-      nonlinearVar9Panel.add(getNonlinarVar9RightButton(), null);
       nonlinearVar9Panel.add(getNonlinearParams9LeftButton(), null);
-      nonlinearVar9Panel.add(getNonlinarParams9RightButton(), null);
     }
     return nonlinearVar9Panel;
   }
@@ -6544,7 +5867,7 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearVar9Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
       nonlinearVar9Cmb.setPreferredSize(new Dimension(120, 22));
       nonlinearVar9Cmb.setMaximumRowCount(32);
-      nonlinearVar9Cmb.setSize(new Dimension(120, 22));
+      nonlinearVar9Cmb.setSize(new Dimension(120, 24));
       nonlinearVar9Cmb.addItemListener(new java.awt.event.ItemListener() {
         public void itemStateChanged(java.awt.event.ItemEvent e) {
           tinaController.nonlinearVarCmbChanged(8);
@@ -6573,7 +5896,7 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearVar9REd.setFont(new Font("Dialog", Font.PLAIN, 10));
       nonlinearVar9REd.setPreferredSize(new Dimension(55, 22));
       nonlinearVar9REd.setText("");
-      nonlinearVar9REd.setSize(new Dimension(55, 22));
+      nonlinearVar9REd.setSize(new Dimension(81, 24));
     }
     return nonlinearVar9REd;
   }
@@ -6589,7 +5912,7 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearParams9Cmb.setLocation(new Point(66, 26));
       nonlinearParams9Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
       nonlinearParams9Cmb.setPreferredSize(new Dimension(120, 22));
-      nonlinearParams9Cmb.setSize(new Dimension(120, 22));
+      nonlinearParams9Cmb.setSize(new Dimension(120, 24));
       nonlinearParams9Cmb.addItemListener(new java.awt.event.ItemListener() {
         public void itemStateChanged(java.awt.event.ItemEvent e) {
           tinaController.nonlinearParamsCmbChanged(8);
@@ -6618,55 +5941,9 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearParams9REd.setFont(new Font("Dialog", Font.PLAIN, 10));
       nonlinearParams9REd.setPreferredSize(new Dimension(55, 22));
       nonlinearParams9REd.setText("");
-      nonlinearParams9REd.setSize(new Dimension(55, 22));
+      nonlinearParams9REd.setSize(new Dimension(81, 24));
     }
     return nonlinearParams9REd;
-  }
-
-  /**
-   * This method initializes nonlinearVar9LeftButton	
-   * 	
-   * @return javax.swing.JButton	
-   */
-  private JButton getNonlinearVar9LeftButton() {
-    if (nonlinearVar9LeftButton == null) {
-      nonlinearVar9LeftButton = new JButton();
-      nonlinearVar9LeftButton.setLocation(new Point(244, 2));
-      nonlinearVar9LeftButton.setFont(new Font("Dialog", Font.BOLD, 10));
-      nonlinearVar9LeftButton.setPreferredSize(new Dimension(22, 22));
-      nonlinearVar9LeftButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/moveLeft.gif")));
-      nonlinearVar9LeftButton.setText("");
-      nonlinearVar9LeftButton.setSize(new Dimension(22, 22));
-      nonlinearVar9LeftButton.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.nonlinearVarLeftButtonClicked(8);
-        }
-      });
-    }
-    return nonlinearVar9LeftButton;
-  }
-
-  /**
-   * This method initializes nonlinarVar9RightButton	
-   * 	
-   * @return javax.swing.JButton	
-   */
-  private JButton getNonlinarVar9RightButton() {
-    if (nonlinarVar9RightButton == null) {
-      nonlinarVar9RightButton = new JButton();
-      nonlinarVar9RightButton.setLocation(new Point(268, 2));
-      nonlinarVar9RightButton.setFont(new Font("Dialog", Font.BOLD, 10));
-      nonlinarVar9RightButton.setPreferredSize(new Dimension(22, 22));
-      nonlinarVar9RightButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/moveRight.gif")));
-      nonlinarVar9RightButton.setText("");
-      nonlinarVar9RightButton.setSize(new Dimension(22, 22));
-      nonlinarVar9RightButton.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.nonlinearVarRightButtonClicked(8);
-        }
-      });
-    }
-    return nonlinarVar9RightButton;
   }
 
   /**
@@ -6677,10 +5954,10 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton getNonlinearParams9LeftButton() {
     if (nonlinearParams9LeftButton == null) {
       nonlinearParams9LeftButton = new JButton();
-      nonlinearParams9LeftButton.setLocation(new Point(244, 26));
+      nonlinearParams9LeftButton.setLocation(new Point(269, 26));
       nonlinearParams9LeftButton.setFont(new Font("Dialog", Font.BOLD, 10));
       nonlinearParams9LeftButton.setPreferredSize(new Dimension(22, 22));
-      nonlinearParams9LeftButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/moveLeft.gif")));
+      nonlinearParams9LeftButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/details.gif")));
       nonlinearParams9LeftButton.setText("");
       nonlinearParams9LeftButton.setSize(new Dimension(22, 22));
       nonlinearParams9LeftButton.addActionListener(new java.awt.event.ActionListener() {
@@ -6690,29 +5967,6 @@ public class TinaInternalFrame extends JInternalFrame {
       });
     }
     return nonlinearParams9LeftButton;
-  }
-
-  /**
-   * This method initializes nonlinarParams9RightButton	
-   * 	
-   * @return javax.swing.JButton	
-   */
-  private JButton getNonlinarParams9RightButton() {
-    if (nonlinarParams9RightButton == null) {
-      nonlinarParams9RightButton = new JButton();
-      nonlinarParams9RightButton.setLocation(new Point(268, 26));
-      nonlinarParams9RightButton.setFont(new Font("Dialog", Font.BOLD, 10));
-      nonlinarParams9RightButton.setPreferredSize(new Dimension(22, 22));
-      nonlinarParams9RightButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/moveRight.gif")));
-      nonlinarParams9RightButton.setText("");
-      nonlinarParams9RightButton.setSize(new Dimension(22, 22));
-      nonlinarParams9RightButton.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.nonlinearParamsRightButtonClicked(8);
-        }
-      });
-    }
-    return nonlinarParams9RightButton;
   }
 
   /**
@@ -6744,10 +5998,7 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearVar10Panel.add(nonlinearParams10Lbl, null);
       nonlinearVar10Panel.add(getNonlinearParams10Cmb(), null);
       nonlinearVar10Panel.add(getNonlinearParams10REd(), null);
-      nonlinearVar10Panel.add(getNonlinearVar10LeftButton(), null);
-      nonlinearVar10Panel.add(getNonlinarVar10RightButton(), null);
       nonlinearVar10Panel.add(getNonlinearParams10LeftButton(), null);
-      nonlinearVar10Panel.add(getNonlinarParams10RightButton(), null);
     }
     return nonlinearVar10Panel;
   }
@@ -6764,7 +6015,7 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearVar10Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
       nonlinearVar10Cmb.setPreferredSize(new Dimension(120, 22));
       nonlinearVar10Cmb.setMaximumRowCount(32);
-      nonlinearVar10Cmb.setSize(new Dimension(120, 22));
+      nonlinearVar10Cmb.setSize(new Dimension(120, 24));
       nonlinearVar10Cmb.addItemListener(new java.awt.event.ItemListener() {
         public void itemStateChanged(java.awt.event.ItemEvent e) {
           tinaController.nonlinearVarCmbChanged(9);
@@ -6793,7 +6044,7 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearVar10REd.setFont(new Font("Dialog", Font.PLAIN, 10));
       nonlinearVar10REd.setPreferredSize(new Dimension(55, 22));
       nonlinearVar10REd.setText("");
-      nonlinearVar10REd.setSize(new Dimension(55, 22));
+      nonlinearVar10REd.setSize(new Dimension(81, 24));
     }
     return nonlinearVar10REd;
   }
@@ -6809,7 +6060,7 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearParams10Cmb.setLocation(new Point(66, 26));
       nonlinearParams10Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
       nonlinearParams10Cmb.setPreferredSize(new Dimension(120, 22));
-      nonlinearParams10Cmb.setSize(new Dimension(120, 22));
+      nonlinearParams10Cmb.setSize(new Dimension(120, 24));
       nonlinearParams10Cmb.addItemListener(new java.awt.event.ItemListener() {
         public void itemStateChanged(java.awt.event.ItemEvent e) {
           tinaController.nonlinearParamsCmbChanged(9);
@@ -6838,55 +6089,9 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearParams10REd.setFont(new Font("Dialog", Font.PLAIN, 10));
       nonlinearParams10REd.setPreferredSize(new Dimension(55, 22));
       nonlinearParams10REd.setText("");
-      nonlinearParams10REd.setSize(new Dimension(55, 22));
+      nonlinearParams10REd.setSize(new Dimension(81, 24));
     }
     return nonlinearParams10REd;
-  }
-
-  /**
-   * This method initializes nonlinearVar10LeftButton	
-   * 	
-   * @return javax.swing.JButton	
-   */
-  private JButton getNonlinearVar10LeftButton() {
-    if (nonlinearVar10LeftButton == null) {
-      nonlinearVar10LeftButton = new JButton();
-      nonlinearVar10LeftButton.setLocation(new Point(244, 2));
-      nonlinearVar10LeftButton.setFont(new Font("Dialog", Font.BOLD, 10));
-      nonlinearVar10LeftButton.setPreferredSize(new Dimension(22, 22));
-      nonlinearVar10LeftButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/moveLeft.gif")));
-      nonlinearVar10LeftButton.setText("");
-      nonlinearVar10LeftButton.setSize(new Dimension(22, 22));
-      nonlinearVar10LeftButton.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.nonlinearVarLeftButtonClicked(9);
-        }
-      });
-    }
-    return nonlinearVar10LeftButton;
-  }
-
-  /**
-   * This method initializes nonlinarVar10RightButton	
-   * 	
-   * @return javax.swing.JButton	
-   */
-  private JButton getNonlinarVar10RightButton() {
-    if (nonlinarVar10RightButton == null) {
-      nonlinarVar10RightButton = new JButton();
-      nonlinarVar10RightButton.setLocation(new Point(268, 2));
-      nonlinarVar10RightButton.setFont(new Font("Dialog", Font.BOLD, 10));
-      nonlinarVar10RightButton.setPreferredSize(new Dimension(22, 22));
-      nonlinarVar10RightButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/moveRight.gif")));
-      nonlinarVar10RightButton.setText("");
-      nonlinarVar10RightButton.setSize(new Dimension(22, 22));
-      nonlinarVar10RightButton.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.nonlinearVarRightButtonClicked(9);
-        }
-      });
-    }
-    return nonlinarVar10RightButton;
   }
 
   /**
@@ -6897,10 +6102,10 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton getNonlinearParams10LeftButton() {
     if (nonlinearParams10LeftButton == null) {
       nonlinearParams10LeftButton = new JButton();
-      nonlinearParams10LeftButton.setLocation(new Point(244, 26));
+      nonlinearParams10LeftButton.setLocation(new Point(269, 26));
       nonlinearParams10LeftButton.setFont(new Font("Dialog", Font.BOLD, 10));
       nonlinearParams10LeftButton.setPreferredSize(new Dimension(22, 22));
-      nonlinearParams10LeftButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/moveLeft.gif")));
+      nonlinearParams10LeftButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/details.gif")));
       nonlinearParams10LeftButton.setText("");
       nonlinearParams10LeftButton.setSize(new Dimension(22, 22));
       nonlinearParams10LeftButton.addActionListener(new java.awt.event.ActionListener() {
@@ -6910,29 +6115,6 @@ public class TinaInternalFrame extends JInternalFrame {
       });
     }
     return nonlinearParams10LeftButton;
-  }
-
-  /**
-   * This method initializes nonlinarParams10RightButton	
-   * 	
-   * @return javax.swing.JButton	
-   */
-  private JButton getNonlinarParams10RightButton() {
-    if (nonlinarParams10RightButton == null) {
-      nonlinarParams10RightButton = new JButton();
-      nonlinarParams10RightButton.setLocation(new Point(268, 26));
-      nonlinarParams10RightButton.setFont(new Font("Dialog", Font.BOLD, 10));
-      nonlinarParams10RightButton.setPreferredSize(new Dimension(22, 22));
-      nonlinarParams10RightButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/moveRight.gif")));
-      nonlinarParams10RightButton.setText("");
-      nonlinarParams10RightButton.setSize(new Dimension(22, 22));
-      nonlinarParams10RightButton.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.nonlinearParamsRightButtonClicked(9);
-        }
-      });
-    }
-    return nonlinarParams10RightButton;
   }
 
   /**
@@ -6964,10 +6146,7 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearVar11Panel.add(nonlinearParams11Lbl, null);
       nonlinearVar11Panel.add(getNonlinearParams11Cmb(), null);
       nonlinearVar11Panel.add(getNonlinearParams11REd(), null);
-      nonlinearVar11Panel.add(getNonlinearVar11LeftButton(), null);
-      nonlinearVar11Panel.add(getNonlinarVar11RightButton(), null);
       nonlinearVar11Panel.add(getNonlinearParams11LeftButton(), null);
-      nonlinearVar11Panel.add(getNonlinarParams11RightButton(), null);
     }
     return nonlinearVar11Panel;
   }
@@ -6984,7 +6163,7 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearVar11Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
       nonlinearVar11Cmb.setPreferredSize(new Dimension(120, 22));
       nonlinearVar11Cmb.setMaximumRowCount(32);
-      nonlinearVar11Cmb.setSize(new Dimension(120, 22));
+      nonlinearVar11Cmb.setSize(new Dimension(120, 24));
       nonlinearVar11Cmb.addItemListener(new java.awt.event.ItemListener() {
         public void itemStateChanged(java.awt.event.ItemEvent e) {
           tinaController.nonlinearVarCmbChanged(10);
@@ -7013,7 +6192,7 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearVar11REd.setFont(new Font("Dialog", Font.PLAIN, 10));
       nonlinearVar11REd.setPreferredSize(new Dimension(55, 22));
       nonlinearVar11REd.setText("");
-      nonlinearVar11REd.setSize(new Dimension(55, 22));
+      nonlinearVar11REd.setSize(new Dimension(81, 24));
     }
     return nonlinearVar11REd;
   }
@@ -7029,7 +6208,7 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearParams11Cmb.setLocation(new Point(66, 26));
       nonlinearParams11Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
       nonlinearParams11Cmb.setPreferredSize(new Dimension(120, 22));
-      nonlinearParams11Cmb.setSize(new Dimension(120, 22));
+      nonlinearParams11Cmb.setSize(new Dimension(120, 24));
       nonlinearParams11Cmb.addItemListener(new java.awt.event.ItemListener() {
         public void itemStateChanged(java.awt.event.ItemEvent e) {
           tinaController.nonlinearParamsCmbChanged(10);
@@ -7058,55 +6237,9 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearParams11REd.setFont(new Font("Dialog", Font.PLAIN, 10));
       nonlinearParams11REd.setPreferredSize(new Dimension(55, 22));
       nonlinearParams11REd.setText("");
-      nonlinearParams11REd.setSize(new Dimension(55, 22));
+      nonlinearParams11REd.setSize(new Dimension(81, 24));
     }
     return nonlinearParams11REd;
-  }
-
-  /**
-   * This method initializes nonlinearVar11LeftButton	
-   * 	
-   * @return javax.swing.JButton	
-   */
-  private JButton getNonlinearVar11LeftButton() {
-    if (nonlinearVar11LeftButton == null) {
-      nonlinearVar11LeftButton = new JButton();
-      nonlinearVar11LeftButton.setLocation(new Point(244, 2));
-      nonlinearVar11LeftButton.setFont(new Font("Dialog", Font.BOLD, 10));
-      nonlinearVar11LeftButton.setPreferredSize(new Dimension(22, 22));
-      nonlinearVar11LeftButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/moveLeft.gif")));
-      nonlinearVar11LeftButton.setText("");
-      nonlinearVar11LeftButton.setSize(new Dimension(22, 22));
-      nonlinearVar11LeftButton.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.nonlinearVarLeftButtonClicked(10);
-        }
-      });
-    }
-    return nonlinearVar11LeftButton;
-  }
-
-  /**
-   * This method initializes nonlinarVar11RightButton	
-   * 	
-   * @return javax.swing.JButton	
-   */
-  private JButton getNonlinarVar11RightButton() {
-    if (nonlinarVar11RightButton == null) {
-      nonlinarVar11RightButton = new JButton();
-      nonlinarVar11RightButton.setLocation(new Point(268, 2));
-      nonlinarVar11RightButton.setFont(new Font("Dialog", Font.BOLD, 10));
-      nonlinarVar11RightButton.setPreferredSize(new Dimension(22, 22));
-      nonlinarVar11RightButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/moveRight.gif")));
-      nonlinarVar11RightButton.setText("");
-      nonlinarVar11RightButton.setSize(new Dimension(22, 22));
-      nonlinarVar11RightButton.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.nonlinearVarRightButtonClicked(10);
-        }
-      });
-    }
-    return nonlinarVar11RightButton;
   }
 
   /**
@@ -7117,10 +6250,10 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton getNonlinearParams11LeftButton() {
     if (nonlinearParams11LeftButton == null) {
       nonlinearParams11LeftButton = new JButton();
-      nonlinearParams11LeftButton.setLocation(new Point(244, 26));
+      nonlinearParams11LeftButton.setLocation(new Point(269, 26));
       nonlinearParams11LeftButton.setFont(new Font("Dialog", Font.BOLD, 10));
       nonlinearParams11LeftButton.setPreferredSize(new Dimension(22, 22));
-      nonlinearParams11LeftButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/moveLeft.gif")));
+      nonlinearParams11LeftButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/details.gif")));
       nonlinearParams11LeftButton.setText("");
       nonlinearParams11LeftButton.setSize(new Dimension(22, 22));
       nonlinearParams11LeftButton.addActionListener(new java.awt.event.ActionListener() {
@@ -7130,29 +6263,6 @@ public class TinaInternalFrame extends JInternalFrame {
       });
     }
     return nonlinearParams11LeftButton;
-  }
-
-  /**
-   * This method initializes nonlinarParams11RightButton	
-   * 	
-   * @return javax.swing.JButton	
-   */
-  private JButton getNonlinarParams11RightButton() {
-    if (nonlinarParams11RightButton == null) {
-      nonlinarParams11RightButton = new JButton();
-      nonlinarParams11RightButton.setLocation(new Point(268, 26));
-      nonlinarParams11RightButton.setFont(new Font("Dialog", Font.BOLD, 10));
-      nonlinarParams11RightButton.setPreferredSize(new Dimension(22, 22));
-      nonlinarParams11RightButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/moveRight.gif")));
-      nonlinarParams11RightButton.setText("");
-      nonlinarParams11RightButton.setSize(new Dimension(22, 22));
-      nonlinarParams11RightButton.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.nonlinearParamsRightButtonClicked(10);
-        }
-      });
-    }
-    return nonlinarParams11RightButton;
   }
 
   /**
@@ -7184,10 +6294,7 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearVar12Panel.add(nonlinearParams12Lbl, null);
       nonlinearVar12Panel.add(getNonlinearParams12Cmb(), null);
       nonlinearVar12Panel.add(getNonlinearParams12REd(), null);
-      nonlinearVar12Panel.add(getNonlinearVar12LeftButton(), null);
-      nonlinearVar12Panel.add(getNonlinarVar12RightButton(), null);
       nonlinearVar12Panel.add(getNonlinearParams12LeftButton(), null);
-      nonlinearVar12Panel.add(getNonlinarParams12RightButton(), null);
     }
     return nonlinearVar12Panel;
   }
@@ -7204,7 +6311,7 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearVar12Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
       nonlinearVar12Cmb.setPreferredSize(new Dimension(120, 22));
       nonlinearVar12Cmb.setMaximumRowCount(32);
-      nonlinearVar12Cmb.setSize(new Dimension(120, 22));
+      nonlinearVar12Cmb.setSize(new Dimension(120, 24));
       nonlinearVar12Cmb.addItemListener(new java.awt.event.ItemListener() {
         public void itemStateChanged(java.awt.event.ItemEvent e) {
           tinaController.nonlinearVarCmbChanged(11);
@@ -7233,7 +6340,7 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearVar12REd.setFont(new Font("Dialog", Font.PLAIN, 10));
       nonlinearVar12REd.setPreferredSize(new Dimension(55, 22));
       nonlinearVar12REd.setText("");
-      nonlinearVar12REd.setSize(new Dimension(55, 22));
+      nonlinearVar12REd.setSize(new Dimension(81, 24));
     }
     return nonlinearVar12REd;
   }
@@ -7249,7 +6356,7 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearParams12Cmb.setLocation(new Point(66, 26));
       nonlinearParams12Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
       nonlinearParams12Cmb.setPreferredSize(new Dimension(120, 22));
-      nonlinearParams12Cmb.setSize(new Dimension(120, 22));
+      nonlinearParams12Cmb.setSize(new Dimension(120, 24));
       nonlinearParams12Cmb.addItemListener(new java.awt.event.ItemListener() {
         public void itemStateChanged(java.awt.event.ItemEvent e) {
           tinaController.nonlinearParamsCmbChanged(11);
@@ -7278,55 +6385,9 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearParams12REd.setFont(new Font("Dialog", Font.PLAIN, 10));
       nonlinearParams12REd.setPreferredSize(new Dimension(55, 22));
       nonlinearParams12REd.setText("");
-      nonlinearParams12REd.setSize(new Dimension(55, 22));
+      nonlinearParams12REd.setSize(new Dimension(81, 24));
     }
     return nonlinearParams12REd;
-  }
-
-  /**
-   * This method initializes nonlinearVar12LeftButton	
-   * 	
-   * @return javax.swing.JButton	
-   */
-  private JButton getNonlinearVar12LeftButton() {
-    if (nonlinearVar12LeftButton == null) {
-      nonlinearVar12LeftButton = new JButton();
-      nonlinearVar12LeftButton.setLocation(new Point(244, 2));
-      nonlinearVar12LeftButton.setFont(new Font("Dialog", Font.BOLD, 10));
-      nonlinearVar12LeftButton.setPreferredSize(new Dimension(22, 22));
-      nonlinearVar12LeftButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/moveLeft.gif")));
-      nonlinearVar12LeftButton.setText("");
-      nonlinearVar12LeftButton.setSize(new Dimension(22, 22));
-      nonlinearVar12LeftButton.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.nonlinearVarLeftButtonClicked(11);
-        }
-      });
-    }
-    return nonlinearVar12LeftButton;
-  }
-
-  /**
-   * This method initializes nonlinarVar12RightButton	
-   * 	
-   * @return javax.swing.JButton	
-   */
-  private JButton getNonlinarVar12RightButton() {
-    if (nonlinarVar12RightButton == null) {
-      nonlinarVar12RightButton = new JButton();
-      nonlinarVar12RightButton.setLocation(new Point(268, 2));
-      nonlinarVar12RightButton.setFont(new Font("Dialog", Font.BOLD, 10));
-      nonlinarVar12RightButton.setPreferredSize(new Dimension(22, 22));
-      nonlinarVar12RightButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/moveRight.gif")));
-      nonlinarVar12RightButton.setText("");
-      nonlinarVar12RightButton.setSize(new Dimension(22, 22));
-      nonlinarVar12RightButton.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.nonlinearVarRightButtonClicked(11);
-        }
-      });
-    }
-    return nonlinarVar12RightButton;
   }
 
   /**
@@ -7337,10 +6398,10 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton getNonlinearParams12LeftButton() {
     if (nonlinearParams12LeftButton == null) {
       nonlinearParams12LeftButton = new JButton();
-      nonlinearParams12LeftButton.setLocation(new Point(244, 26));
+      nonlinearParams12LeftButton.setLocation(new Point(269, 26));
       nonlinearParams12LeftButton.setFont(new Font("Dialog", Font.BOLD, 10));
       nonlinearParams12LeftButton.setPreferredSize(new Dimension(22, 22));
-      nonlinearParams12LeftButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/moveLeft.gif")));
+      nonlinearParams12LeftButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/details.gif")));
       nonlinearParams12LeftButton.setText("");
       nonlinearParams12LeftButton.setSize(new Dimension(22, 22));
       nonlinearParams12LeftButton.addActionListener(new java.awt.event.ActionListener() {
@@ -7350,29 +6411,6 @@ public class TinaInternalFrame extends JInternalFrame {
       });
     }
     return nonlinearParams12LeftButton;
-  }
-
-  /**
-   * This method initializes nonlinarParams12RightButton	
-   * 	
-   * @return javax.swing.JButton	
-   */
-  private JButton getNonlinarParams12RightButton() {
-    if (nonlinarParams12RightButton == null) {
-      nonlinarParams12RightButton = new JButton();
-      nonlinarParams12RightButton.setLocation(new Point(268, 26));
-      nonlinarParams12RightButton.setFont(new Font("Dialog", Font.BOLD, 10));
-      nonlinarParams12RightButton.setPreferredSize(new Dimension(22, 22));
-      nonlinarParams12RightButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/moveRight.gif")));
-      nonlinarParams12RightButton.setText("");
-      nonlinarParams12RightButton.setSize(new Dimension(22, 22));
-      nonlinarParams12RightButton.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.nonlinearParamsRightButtonClicked(11);
-        }
-      });
-    }
-    return nonlinarParams12RightButton;
   }
 
   /**
@@ -7403,7 +6441,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JWFNumberField getTinaCameraZPosREd() {
     if (tinaCameraZPosREd == null) {
       tinaCameraZPosREd = new JWFNumberField();
-      tinaCameraZPosREd.setValueStep(0.1);
+      tinaCameraZPosREd.setValueStep(0.01);
       tinaCameraZPosREd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           tinaController.cameraZPosREd_changed();
@@ -7472,7 +6510,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JWFNumberField getTinaCameraDOFREd() {
     if (tinaCameraDOFREd == null) {
       tinaCameraDOFREd = new JWFNumberField();
-      tinaCameraDOFREd.setValueStep(0.05);
+      tinaCameraDOFREd.setValueStep(0.01);
       tinaCameraDOFREd.setHasMinValue(true);
       tinaCameraDOFREd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
@@ -8328,6 +7366,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton tinaWrapIntoSubFlameButton;
   private JTextField swfAnimatorFromFrameREd;
   private JTextField swfAnimatorToFrameREd;
+  private JWFNumberField transformationWeightREd;
 
   private JTextPane getHelpPane() {
     if (helpPane == null) {
@@ -9991,5 +9030,25 @@ public class TinaInternalFrame extends JInternalFrame {
 
   public JTextField getSwfAnimatorFromFrameREd() {
     return swfAnimatorFromFrameREd;
+  }
+
+  private JWFNumberField getTransformationWeightREd() {
+    if (transformationWeightREd == null) {
+      transformationWeightREd = new JWFNumberField();
+      transformationWeightREd.setHasMinValue(true);
+      transformationWeightREd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null)
+            tinaController.transformationWeightREd_changed();
+        }
+      });
+      transformationWeightREd.setValueStep(0.05);
+      transformationWeightREd.setText("");
+      transformationWeightREd.setSize(new Dimension(81, 24));
+      transformationWeightREd.setPreferredSize(new Dimension(81, 24));
+      transformationWeightREd.setLocation(new Point(238, 6));
+      transformationWeightREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+    }
+    return transformationWeightREd;
   }
 } //  @jve:decl-index=0:visual-constraint="10,10"

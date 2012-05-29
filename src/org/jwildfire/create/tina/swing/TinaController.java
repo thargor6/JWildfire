@@ -41,7 +41,6 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
 
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -142,21 +141,15 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     private final JComboBox nonlinearParamsCmb;
     private final JWFNumberField nonlinearVarREd;
     private final JWFNumberField nonlinearParamsREd;
-    private final JButton nonlinearVarLeftButton;
-    private final JButton nonlinearVarRightButton;
     private final JButton nonlinearParamsLeftButton;
-    private final JButton nonlinearParamsRightButton;
 
     public NonlinearControlsRow(JComboBox pNonlinearVarCmb, JComboBox pNonlinearParamsCmb, JWFNumberField pNonlinearVarREd, JWFNumberField pNonlinearParamsREd,
-        JButton pNonlinearVarLeftButton, JButton pNonlinearVarRightButton, JButton pNonlinearParamsLeftButton, JButton pNonlinearParamsRightButton) {
+        JButton pNonlinearParamsLeftButton) {
       nonlinearVarCmb = pNonlinearVarCmb;
       nonlinearParamsCmb = pNonlinearParamsCmb;
       nonlinearVarREd = pNonlinearVarREd;
       nonlinearParamsREd = pNonlinearParamsREd;
-      nonlinearVarLeftButton = pNonlinearVarLeftButton;
-      nonlinearVarRightButton = pNonlinearVarRightButton;
       nonlinearParamsLeftButton = pNonlinearParamsLeftButton;
-      nonlinearParamsRightButton = pNonlinearParamsRightButton;
     }
 
     public void initControls() {
@@ -190,21 +183,10 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       return nonlinearParamsREd;
     }
 
-    public JButton getNonlinearVarLeftButton() {
-      return nonlinearVarLeftButton;
-    }
-
-    public JButton getNonlinearVarRightButton() {
-      return nonlinearVarRightButton;
-    }
-
     public JButton getNonlinearParamsLeftButton() {
       return nonlinearParamsLeftButton;
     }
 
-    public JButton getNonlinearParamsRightButton() {
-      return nonlinearParamsRightButton;
-    }
   }
 
   private MainController mainController;
@@ -347,8 +329,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
   private final JButton duplicateTransformationButton;
   private final JButton deleteTransformationButton;
   private final JButton addFinalTransformationButton;
-  private final JButton transformationWeightLeftButton;
-  private final JButton transformationWeightRightButton;
+  private final JWFNumberField transformationWeightREd;
   private final JToggleButton affineEditPostTransformButton;
   private final JToggleButton affineEditPostTransformSmallButton;
   private final JToggleButton affinePreserveZButton;
@@ -425,7 +406,6 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       JButton pDeleteTransformationButton, JButton pAddFinalTransformationButton, JPanel pRandomBatchPanel, NonlinearControlsRow[] pNonlinearControlsRows,
       JWFNumberField pXFormColorREd, JSlider pXFormColorSlider, JWFNumberField pXFormSymmetryREd, JSlider pXFormSymmetrySlider, JWFNumberField pXFormOpacityREd,
       JSlider pXFormOpacitySlider, JComboBox pXFormDrawModeCmb, JTable pRelWeightsTable, JButton pRelWeightsLeftButton, JButton pRelWeightsRightButton,
-      JButton pTransformationWeightLeftButton, JButton pTransformationWeightRightButton,
       JToggleButton pMouseTransformMoveButton, JToggleButton pMouseTransformRotateButton, JToggleButton pMouseTransformScaleButton,
       JToggleButton pAffineEditPostTransformButton, JToggleButton pAffineEditPostTransformSmallButton, JButton pMouseEditZoomInButton, JButton pMouseEditZoomOutButton,
       JToggleButton pToggleTrianglesButton, ProgressUpdater pMainProgressUpdater, JCheckBox pRandomPostTransformCheckBox, JCheckBox pRandomSymmetryCheckBox,
@@ -446,7 +426,8 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       JToggleButton pToggleVariationsButton, JToggleButton pAffinePreserveZButton,
       JComboBox pQualityProfileCmb, JComboBox pResolutionProfileCmb, JComboBox pBatchQualityProfileCmb, JComboBox pBatchResolutionProfileCmb,
       JComboBox pInteractiveQualityProfileCmb, JComboBox pInteractiveResolutionProfileCmb, JComboBox pSWFAnimatorQualityProfileCmb,
-      JComboBox pSWFAnimatorResolutionProfileCmb, JButton pRenderFlameButton, JButton pAppendToMovieButton) {
+      JComboBox pSWFAnimatorResolutionProfileCmb, JButton pRenderFlameButton, JButton pAppendToMovieButton,
+      JWFNumberField pTransformationWeightREd) {
     errorHandler = pErrorHandler;
     prefs = pPrefs;
     centerPanel = pCenterPanel;
@@ -572,8 +553,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     relWeightsLeftButton = pRelWeightsLeftButton;
     relWeightsRightButton = pRelWeightsRightButton;
 
-    transformationWeightLeftButton = pTransformationWeightLeftButton;
-    transformationWeightRightButton = pTransformationWeightRightButton;
+    transformationWeightREd = pTransformationWeightREd;
 
     mouseTransformMoveButton = pMouseTransformMoveButton;
     mouseTransformRotateButton = pMouseTransformRotateButton;
@@ -2688,13 +2668,11 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     affineC21REd.setEditable(enabled);
     affineResetTransformButton.setEnabled(enabled);
 
-    transformationWeightLeftButton.setEnabled(enabled);
-    transformationWeightRightButton.setEnabled(enabled);
+    transformationWeightREd.setEnabled(enabled);
+
     for (NonlinearControlsRow rows : nonlinearControlsRows) {
       rows.getNonlinearVarCmb().setEnabled(enabled);
       rows.getNonlinearVarREd().setEnabled(enabled);
-      rows.getNonlinearVarLeftButton().setEnabled(enabled);
-      rows.getNonlinearVarRightButton().setEnabled(enabled);
       rows.getNonlinearParamsCmb().setEnabled(enabled);
       rows.getNonlinearParamsREd().setEnabled(enabled);
       // refreshing occurs in refreshXFormUI():
@@ -2746,6 +2724,8 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
         xFormOpacityREd.setText(Tools.doubleToString(pXForm.getOpacity()));
         xFormOpacitySlider.setValue(Tools.FTOI(pXForm.getOpacity() * SLIDER_SCALE_COLOR));
         xFormDrawModeCmb.setSelectedItem(pXForm.getDrawMode());
+
+        transformationWeightREd.setText(Tools.doubleToString(pXForm.getWeight()));
       }
       else {
         affineC00REd.setText(null);
@@ -2760,6 +2740,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
         xFormSymmetrySlider.setValue(0);
         xFormOpacityREd.setText(null);
         xFormOpacitySlider.setValue(0);
+        transformationWeightREd.setText(null);
         xFormDrawModeCmb.setSelectedIndex(-1);
       }
 
@@ -2769,7 +2750,6 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
           if (pXForm == null || idx >= pXForm.getVariationCount()) {
             refreshParamCmb(row, null, null);
             row.getNonlinearParamsLeftButton().setEnabled(false);
-            row.getNonlinearParamsRightButton().setEnabled(false);
           }
           else {
             Variation var = pXForm.getVariation(idx);
@@ -3310,22 +3290,11 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
   private void enableNonlinearControls(NonlinearControlsRow pRow, boolean pRessource) {
     String selected = (String) pRow.getNonlinearParamsCmb().getSelectedItem();
     boolean enabled = selected != null && selected.length() > 0;
-    pRow.getNonlinearParamsLeftButton().setEnabled(enabled);
-    pRow.getNonlinearParamsRightButton().setEnabled(enabled && !pRessource);
-    pRow.getNonlinearParamsLeftButton().setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/" + (pRessource ? "details.gif" : "moveLeft.gif"))));
-    pRow.getNonlinearParamsREd().setEnabled(!pRessource);
+    pRow.getNonlinearParamsLeftButton().setEnabled(enabled && pRessource);
+    pRow.getNonlinearParamsREd().setEnabled(enabled && !pRessource);
   }
 
-  private final double DELTA_VAR = 0.05;
   private final double DELTA_PARAM = 0.1;
-
-  public void nonlinearVarLeftButtonClicked(int pIdx) {
-    nonlinearVarREdChanged(pIdx, -DELTA_VAR);
-  }
-
-  public void nonlinearVarRightButtonClicked(int pIdx) {
-    nonlinearVarREdChanged(pIdx, DELTA_VAR);
-  }
 
   public void nonlinearParamsLeftButtonClicked(int pIdx) {
     nonlinearParamsREdChanged(pIdx, -DELTA_PARAM);
@@ -3390,11 +3359,19 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     }
   }
 
-  private void transformationWeightChanged(double pDelta) {
+  public void relWeightsLeftButton_clicked() {
+    relWeightsChanged(-DELTA_PARAM);
+  }
+
+  public void relWeightsRightButton_clicked() {
+    relWeightsChanged(DELTA_PARAM);
+  }
+
+  public void transformationWeightREd_changed() {
     XForm xForm = getCurrXForm();
     Flame currFlame = getCurrFlame();
     if (xForm != null && currFlame != null && xForm != currFlame.getFinalXForm()) {
-      xForm.setWeight(xForm.getWeight() + pDelta);
+      xForm.setWeight(Tools.stringToDouble(transformationWeightREd.getText()));
       gridRefreshing = true;
       try {
         int row = transformationsTable.getSelectedRow();
@@ -3406,22 +3383,6 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
         gridRefreshing = false;
       }
     }
-  }
-
-  public void relWeightsLeftButton_clicked() {
-    relWeightsChanged(-DELTA_PARAM);
-  }
-
-  public void relWeightsRightButton_clicked() {
-    relWeightsChanged(DELTA_PARAM);
-  }
-
-  public void transformationWeightRightButton_clicked() {
-    transformationWeightChanged(DELTA_PARAM);
-  }
-
-  public void transformationWeightLeftButton_clicked() {
-    transformationWeightChanged(-DELTA_PARAM);
   }
 
   public void newFlameButton_clicked() {
