@@ -1,3 +1,24 @@
+V0.47 (29.05.2012):
+ - Fractal flame editor: some useful new controls for editing releative weights ("Xaos")
+ - Fractal flame editor: transformations/nonlinear tab improved
+ - Fractal flame editor: gradient tab changed to make use of the new number input component
+ - Fractal flame editor: moved the gradient-shift-option to a more prominent place
+ - Fractal flame editor: shading tabs changed to make use of the new number input component
+ - Fractal flame editor: coloring tab changed to make use of the new number input component
+ - Fractal flame editor: transformations/color tab changed to make use of the new number input component
+ - Fractal flame editor: Fractal flame editor: transformations/affine tab changed to make use of the new number input component
+ - Fractal flame editor: camera tab changed to make use of the new number input component
+ - Fractal flame editor: new input component for entering numeric values (which is derived from the default spinner component and allows to change values by dragging the mouse)
+ - Fractal flame editor: improved the "Bubbles" random flame generator
+ - Fractal flame editor: collideoscope variation by Michael Faber
+ - Fractal flame editor: some improvement to the random gradient generator
+ - Fractal flame editor: new "Spherical" random flame generator
+ - Fractal flame editor: layered_spiral variation by Will Evans
+ - Fractal flame editor: some improvements of the flame morphing ability
+ - Fractal flame editor: possibility to specify the frame range before creating animations
+ - Fractal flame editor: fixed a bug regarding to reading flam3 files
+ - Fractal flame editor: fixed a bug regarding to creating keyframe animations
+
 V0.46 (06.05.2012):
  - Fractal flame editir: changed the distribution of random flame generators in side the "All" random flame generator
  - Fractal flame editor: support for morphing the flames inside the "subflame_wf" variations while morphing flames
