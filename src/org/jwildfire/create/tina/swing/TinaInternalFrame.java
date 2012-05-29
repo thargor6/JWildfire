@@ -355,8 +355,8 @@ public class TinaInternalFrame extends JInternalFrame {
   private JLabel xFormDrawModeLbl = null;
   private JComboBox xFormDrawModeCmb = null;
   private JPanel relWeightsEastPanel = null;
-  private JButton relWeightsLeftButton = null;
-  private JButton relWeightsRightButton = null;
+  private JButton relWeightsZeroButton = null;
+  private JButton relWeightsOneButton = null;
   private JScrollPane relWeightsScrollPane = null;
   private JTable relWeightsTable = null;
   private JButton newFlameButton = null;
@@ -2525,6 +2525,8 @@ public class TinaInternalFrame extends JInternalFrame {
   private JWFNumberField getTinaPaletteShiftREd() {
     if (tinaPaletteShiftREd == null) {
       tinaPaletteShiftREd = new JWFNumberField();
+      tinaPaletteShiftREd.setMinValue(-255.0);
+      tinaPaletteShiftREd.setEditable(true);
       tinaPaletteShiftREd.setValueStep(1.0);
       tinaPaletteShiftREd.setOnlyIntegers(true);
       tinaPaletteShiftREd.setMaxValue(255.0);
@@ -3028,7 +3030,7 @@ public class TinaInternalFrame extends JInternalFrame {
         getAffineMoveUpButton(), getAffineMoveLeftButton(), getAffineMoveRightButton(), getAffineMoveDownButton(), getTinaAddTransformationButton(),
         getTinaDuplicateTransformationButton(), getTinaDeleteTransformationButton(), getTinaAddFinalTransformationButton(), getRandomBatchPanel(),
         nonlinearControlsRows, getXFormColorREd(), getXFormColorSlider(), getXFormSymmetryREd(), getXFormSymmetrySlider(), getXFormOpacityREd(),
-        getXFormOpacitySlider(), getXFormDrawModeCmb(), getRelWeightsTable(), getRelWeightsLeftButton(), getRelWeightsRightButton(),
+        getXFormOpacitySlider(), getXFormDrawModeCmb(), getRelWeightsTable(), getRelWeightsZeroButton(), getRelWeightsOneButton(), getRelWeightREd(),
         getMouseTransformMoveButton(),
         getMouseTransformRotateButton(), getMouseTransformScaleButton(), getAffineEditPostTransformButton(), getAffineEditPostTransformSmallButton(),
         getMouseTransformZoomInButton(), getMouseTransformZoomOutButton(), getToggleTrianglesButton(), new MainProgressUpdater(this), getRandomPostTransformCheckBox(),
@@ -4261,9 +4263,26 @@ public class TinaInternalFrame extends JInternalFrame {
     if (relWeightsEastPanel == null) {
       relWeightsEastPanel = new JPanel();
       relWeightsEastPanel.setLayout(null);
-      relWeightsEastPanel.setPreferredSize(new Dimension(54, 0));
-      relWeightsEastPanel.add(getRelWeightsLeftButton(), null);
-      relWeightsEastPanel.add(getRelWeightsRightButton(), null);
+      relWeightsEastPanel.setPreferredSize(new Dimension(91, 0));
+      relWeightsEastPanel.add(getRelWeightsZeroButton(), null);
+      relWeightsEastPanel.add(getRelWeightsOneButton(), null);
+
+      relWeightREd = new JWFNumberField();
+      relWeightREd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null)
+            tinaController.relWeightsREd_changed();
+        }
+      });
+      relWeightREd.setValueStep(0.05);
+      relWeightREd.setText("");
+      relWeightREd.setSize(new Dimension(81, 24));
+      relWeightREd.setPreferredSize(new Dimension(81, 24));
+      relWeightREd.setLocation(new Point(238, 6));
+      relWeightREd.setHasMinValue(true);
+      relWeightREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      relWeightREd.setBounds(4, 6, 81, 24);
+      relWeightsEastPanel.add(relWeightREd);
     }
     return relWeightsEastPanel;
   }
@@ -4273,22 +4292,23 @@ public class TinaInternalFrame extends JInternalFrame {
    * 	
    * @return javax.swing.JButton	
    */
-  private JButton getRelWeightsLeftButton() {
-    if (relWeightsLeftButton == null) {
-      relWeightsLeftButton = new JButton();
-      relWeightsLeftButton.setPreferredSize(new Dimension(22, 22));
-      relWeightsLeftButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/moveLeft.gif")));
-      relWeightsLeftButton.setText("");
-      relWeightsLeftButton.setSize(new Dimension(22, 22));
-      relWeightsLeftButton.setLocation(new Point(4, 4));
-      relWeightsLeftButton.setFont(new Font("Dialog", Font.BOLD, 10));
-      relWeightsLeftButton.addActionListener(new java.awt.event.ActionListener() {
+  private JButton getRelWeightsZeroButton() {
+    if (relWeightsZeroButton == null) {
+      relWeightsZeroButton = new JButton();
+      relWeightsZeroButton.setToolTipText("Set the relative weight to 0");
+      relWeightsZeroButton.setPreferredSize(new Dimension(22, 22));
+      relWeightsZeroButton.setIcon(null);
+      relWeightsZeroButton.setText("0");
+      relWeightsZeroButton.setSize(new Dimension(36, 22));
+      relWeightsZeroButton.setLocation(new Point(4, 37));
+      relWeightsZeroButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      relWeightsZeroButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.relWeightsLeftButton_clicked();
+          tinaController.relWeightsZeroButton_clicked();
         }
       });
     }
-    return relWeightsLeftButton;
+    return relWeightsZeroButton;
   }
 
   /**
@@ -4296,22 +4316,23 @@ public class TinaInternalFrame extends JInternalFrame {
    * 	
    * @return javax.swing.JButton	
    */
-  private JButton getRelWeightsRightButton() {
-    if (relWeightsRightButton == null) {
-      relWeightsRightButton = new JButton();
-      relWeightsRightButton.setPreferredSize(new Dimension(22, 22));
-      relWeightsRightButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/moveRight.gif")));
-      relWeightsRightButton.setText("");
-      relWeightsRightButton.setSize(new Dimension(22, 22));
-      relWeightsRightButton.setLocation(new Point(28, 4));
-      relWeightsRightButton.setFont(new Font("Dialog", Font.BOLD, 10));
-      relWeightsRightButton.addActionListener(new java.awt.event.ActionListener() {
+  private JButton getRelWeightsOneButton() {
+    if (relWeightsOneButton == null) {
+      relWeightsOneButton = new JButton();
+      relWeightsOneButton.setToolTipText("Set the relative weight to 1");
+      relWeightsOneButton.setPreferredSize(new Dimension(22, 22));
+      relWeightsOneButton.setIcon(null);
+      relWeightsOneButton.setText("1");
+      relWeightsOneButton.setSize(new Dimension(36, 22));
+      relWeightsOneButton.setLocation(new Point(49, 37));
+      relWeightsOneButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      relWeightsOneButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.relWeightsRightButton_clicked();
+          tinaController.relWeightsOneButton_clicked();
         }
       });
     }
-    return relWeightsRightButton;
+    return relWeightsOneButton;
   }
 
   /**
@@ -4337,6 +4358,16 @@ public class TinaInternalFrame extends JInternalFrame {
       relWeightsTable = new JTable();
       relWeightsTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
       relWeightsTable.setFont(new Font("Dialog", Font.PLAIN, 10));
+      relWeightsTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+
+        @Override
+        public void valueChanged(ListSelectionEvent e) {
+          if (!e.getValueIsAdjusting()) {
+            tinaController.relWeightsTableClicked();
+          }
+        }
+
+      });
     }
     return relWeightsTable;
   }
@@ -4405,7 +4436,6 @@ public class TinaInternalFrame extends JInternalFrame {
       swfAnimatorFlamesPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 5));
 
       JPanel panel_3 = new JPanel();
-      FlowLayout flowLayout = (FlowLayout) panel_3.getLayout();
       panel_3.setPreferredSize(new Dimension(160, 10));
       panel_9.add(panel_3, BorderLayout.EAST);
       panel_3.add(getSwfAnimatorLoadFlameFromMainButton());
@@ -7367,6 +7397,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JTextField swfAnimatorFromFrameREd;
   private JTextField swfAnimatorToFrameREd;
   private JWFNumberField transformationWeightREd;
+  private JWFNumberField relWeightREd;
 
   private JTextPane getHelpPane() {
     if (helpPane == null) {
@@ -9050,5 +9081,9 @@ public class TinaInternalFrame extends JInternalFrame {
       transformationWeightREd.setFont(new Font("Dialog", Font.PLAIN, 10));
     }
     return transformationWeightREd;
+  }
+
+  public JWFNumberField getRelWeightREd() {
+    return relWeightREd;
   }
 } //  @jve:decl-index=0:visual-constraint="10,10"

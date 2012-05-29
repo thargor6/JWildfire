@@ -359,8 +359,9 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
   private final JComboBox xFormDrawModeCmb;
   // Relative weights
   private final JTable relWeightsTable;
-  private final JButton relWeightsLeftButton;
-  private final JButton relWeightsRightButton;
+  private final JButton relWeightsZeroButton;
+  private final JButton relWeightsOneButton;
+  private final JWFNumberField relWeightREd;
   // misc
   private Flame currFlame;
   private boolean noRefresh;
@@ -405,8 +406,8 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       JButton pAffineMoveRightButton, JButton pAffineMoveDownButton, JButton pAddTransformationButton, JButton pDuplicateTransformationButton,
       JButton pDeleteTransformationButton, JButton pAddFinalTransformationButton, JPanel pRandomBatchPanel, NonlinearControlsRow[] pNonlinearControlsRows,
       JWFNumberField pXFormColorREd, JSlider pXFormColorSlider, JWFNumberField pXFormSymmetryREd, JSlider pXFormSymmetrySlider, JWFNumberField pXFormOpacityREd,
-      JSlider pXFormOpacitySlider, JComboBox pXFormDrawModeCmb, JTable pRelWeightsTable, JButton pRelWeightsLeftButton, JButton pRelWeightsRightButton,
-      JToggleButton pMouseTransformMoveButton, JToggleButton pMouseTransformRotateButton, JToggleButton pMouseTransformScaleButton,
+      JSlider pXFormOpacitySlider, JComboBox pXFormDrawModeCmb, JTable pRelWeightsTable, JButton pRelWeightsZeroButton, JButton pRelWeightsOneButton,
+      JWFNumberField pRelWeightREd, JToggleButton pMouseTransformMoveButton, JToggleButton pMouseTransformRotateButton, JToggleButton pMouseTransformScaleButton,
       JToggleButton pAffineEditPostTransformButton, JToggleButton pAffineEditPostTransformSmallButton, JButton pMouseEditZoomInButton, JButton pMouseEditZoomOutButton,
       JToggleButton pToggleTrianglesButton, ProgressUpdater pMainProgressUpdater, JCheckBox pRandomPostTransformCheckBox, JCheckBox pRandomSymmetryCheckBox,
       JButton pAffineResetTransformButton, JTable pCreatePaletteColorsTable,
@@ -550,8 +551,9 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     xFormDrawModeCmb = pXFormDrawModeCmb;
 
     relWeightsTable = pRelWeightsTable;
-    relWeightsLeftButton = pRelWeightsLeftButton;
-    relWeightsRightButton = pRelWeightsRightButton;
+    relWeightsZeroButton = pRelWeightsZeroButton;
+    relWeightsOneButton = pRelWeightsOneButton;
+    relWeightREd = pRelWeightREd;
 
     transformationWeightREd = pTransformationWeightREd;
 
@@ -1477,6 +1479,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
             valStr = "0";
           }
           xForm.getModifiedWeights()[row] = Tools.stringToDouble(valStr);
+          relWeightsTableClicked();
           refreshFlameImage(false);
         }
         super.setValueAt(aValue, row, column);
@@ -2613,6 +2616,31 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     }
   }
 
+  public void relWeightsTableClicked() {
+    if (!gridRefreshing) {
+      boolean oldGridRefreshing = gridRefreshing;
+      boolean oldCmbRefreshing = cmbRefreshing;
+      gridRefreshing = cmbRefreshing = true;
+      try {
+        int selRow = relWeightsTable.getSelectedRow();
+        XForm xForm = getCurrXForm();
+        if (xForm != null && selRow >= 0) {
+          relWeightREd.setText(Tools.doubleToString(xForm.getModifiedWeights()[selRow]));
+
+        }
+        else {
+          relWeightREd.setText("");
+        }
+        enableRelWeightsControls();
+
+      }
+      finally {
+        cmbRefreshing = oldCmbRefreshing;
+        gridRefreshing = oldGridRefreshing;
+      }
+    }
+  }
+
   private void enableControls() {
     enableJobRenderControls();
   }
@@ -2686,10 +2714,16 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     xFormOpacityREd.setEnabled(enabled && xForm.getDrawMode() == DrawMode.OPAQUE);
     xFormOpacitySlider.setEnabled(xFormOpacityREd.isEnabled());
     xFormDrawModeCmb.setEnabled(enabled);
-
     relWeightsTable.setEnabled(enabled);
-    relWeightsLeftButton.setEnabled(enabled);
-    relWeightsRightButton.setEnabled(enabled);
+    enableRelWeightsControls();
+  }
+
+  public void enableRelWeightsControls() {
+    int selRow = relWeightsTable.getSelectedRow();
+    boolean enabled = relWeightsTable.isEnabled() && selRow >= 0 && getCurrXForm() != null;
+    relWeightsZeroButton.setEnabled(enabled);
+    relWeightsOneButton.setEnabled(enabled);
+    relWeightREd.setEnabled(enabled);
   }
 
   private void refreshXFormUI(XForm pXForm) {
@@ -3339,13 +3373,13 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     xFormTextFieldChanged(xFormColorSlider, xFormColorREd, "color", SLIDER_SCALE_COLOR);
   }
 
-  private void relWeightsChanged(double pDelta) {
+  private void setRelWeight(double pValue) {
     XForm xForm = getCurrXForm();
     Flame currFlame = getCurrFlame();
     if (xForm != null && currFlame != null && xForm != currFlame.getFinalXForm()) {
       int row = relWeightsTable.getSelectedRow();
       if (row >= 0 && row < currFlame.getXForms().size()) {
-        xForm.getModifiedWeights()[row] += pDelta;
+        xForm.getModifiedWeights()[row] = pValue;
         gridRefreshing = true;
         try {
           refreshRelWeightsTable();
@@ -3359,12 +3393,18 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     }
   }
 
-  public void relWeightsLeftButton_clicked() {
-    relWeightsChanged(-DELTA_PARAM);
+  public void relWeightsREd_changed() {
+    setRelWeight(Tools.stringToDouble(relWeightREd.getText()));
   }
 
-  public void relWeightsRightButton_clicked() {
-    relWeightsChanged(DELTA_PARAM);
+  public void relWeightsZeroButton_clicked() {
+    setRelWeight(0.0);
+    relWeightsTableClicked();
+  }
+
+  public void relWeightsOneButton_clicked() {
+    setRelWeight(1.0);
+    relWeightsTableClicked();
   }
 
   public void transformationWeightREd_changed() {
