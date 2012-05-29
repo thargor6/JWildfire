@@ -294,25 +294,25 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
   private final JPanel paletteImgPanel;
   private ImagePanel palettePanel;
   // palette -> transform
-  private final JTextField paletteShiftREd;
+  private final JWFNumberField paletteShiftREd;
   private final JSlider paletteShiftSlider;
-  private final JTextField paletteRedREd;
+  private final JWFNumberField paletteRedREd;
   private final JSlider paletteRedSlider;
-  private final JTextField paletteGreenREd;
+  private final JWFNumberField paletteGreenREd;
   private final JSlider paletteGreenSlider;
-  private final JTextField paletteBlueREd;
+  private final JWFNumberField paletteBlueREd;
   private final JSlider paletteBlueSlider;
-  private final JTextField paletteHueREd;
+  private final JWFNumberField paletteHueREd;
   private final JSlider paletteHueSlider;
-  private final JTextField paletteSaturationREd;
+  private final JWFNumberField paletteSaturationREd;
   private final JSlider paletteSaturationSlider;
-  private final JTextField paletteContrastREd;
+  private final JWFNumberField paletteContrastREd;
   private final JSlider paletteContrastSlider;
-  private final JTextField paletteGammaREd;
+  private final JWFNumberField paletteGammaREd;
   private final JSlider paletteGammaSlider;
-  private final JTextField paletteBrightnessREd;
+  private final JWFNumberField paletteBrightnessREd;
   private final JSlider paletteBrightnessSlider;
-  private final JTextField paletteSwapRGBREd;
+  private final JWFNumberField paletteSwapRGBREd;
   private final JSlider paletteSwapRGBSlider;
   // Batch render
   private final JTable renderBatchJobsTable;
@@ -413,11 +413,11 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       JWFNumberField pBrightnessREd, JSlider pBrightnessSlider, JWFNumberField pContrastREd, JSlider pContrastSlider, JWFNumberField pGammaREd, JSlider pGammaSlider,
       JWFNumberField pVibrancyREd, JSlider pVibrancySlider, JWFNumberField pFilterRadiusREd, JSlider pFilterRadiusSlider, JWFNumberField pGammaThresholdREd,
       JSlider pGammaThresholdSlider, JWFNumberField pBGColorRedREd, JSlider pBGColorRedSlider, JWFNumberField pBGColorGreenREd, JSlider pBGColorGreenSlider, JWFNumberField pBGColorBlueREd,
-      JSlider pBGColorBlueSlider, JTextField pPaletteRandomPointsREd, JPanel pPaletteImgPanel, JTextField pPaletteShiftREd, JSlider pPaletteShiftSlider,
-      JTextField pPaletteRedREd, JSlider pPaletteRedSlider, JTextField pPaletteGreenREd, JSlider pPaletteGreenSlider, JTextField pPaletteBlueREd,
-      JSlider pPaletteBlueSlider, JTextField pPaletteHueREd, JSlider pPaletteHueSlider, JTextField pPaletteSaturationREd, JSlider pPaletteSaturationSlider,
-      JTextField pPaletteContrastREd, JSlider pPaletteContrastSlider, JTextField pPaletteGammaREd, JSlider pPaletteGammaSlider, JTextField pPaletteBrightnessREd,
-      JSlider pPaletteBrightnessSlider, JTextField pPaletteSwapRGBREd, JSlider pPaletteSwapRGBSlider, JTable pTransformationsTable, JWFNumberField pAffineC00REd,
+      JSlider pBGColorBlueSlider, JTextField pPaletteRandomPointsREd, JPanel pPaletteImgPanel, JWFNumberField pPaletteShiftREd, JSlider pPaletteShiftSlider,
+      JWFNumberField pPaletteRedREd, JSlider pPaletteRedSlider, JWFNumberField pPaletteGreenREd, JSlider pPaletteGreenSlider, JWFNumberField pPaletteBlueREd,
+      JSlider pPaletteBlueSlider, JWFNumberField pPaletteHueREd, JSlider pPaletteHueSlider, JWFNumberField pPaletteSaturationREd, JSlider pPaletteSaturationSlider,
+      JWFNumberField pPaletteContrastREd, JSlider pPaletteContrastSlider, JWFNumberField pPaletteGammaREd, JSlider pPaletteGammaSlider, JWFNumberField pPaletteBrightnessREd,
+      JSlider pPaletteBrightnessSlider, JWFNumberField pPaletteSwapRGBREd, JSlider pPaletteSwapRGBSlider, JTable pTransformationsTable, JWFNumberField pAffineC00REd,
       JWFNumberField pAffineC01REd, JWFNumberField pAffineC10REd, JWFNumberField pAffineC11REd, JWFNumberField pAffineC20REd, JWFNumberField pAffineC21REd,
       JTextField pAffineRotateAmountREd, JTextField pAffineScaleAmountREd, JTextField pAffineMoveAmountREd, JButton pAffineRotateLeftButton,
       JButton pAffineRotateRightButton, JButton pAffineEnlargeButton, JButton pAffineShrinkButton, JButton pAffineMoveUpButton, JButton pAffineMoveLeftButton,
@@ -1652,6 +1652,44 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     }
   }
 
+  private void paletteSliderChanged(JSlider pSlider, JWFNumberField pTextField, String pProperty, double pSliderScale) {
+    Flame currFlame = getCurrFlame();
+    if (noRefresh || currFlame == null)
+      return;
+    noRefresh = true;
+    try {
+      double propValue = pSlider.getValue() / pSliderScale;
+      pTextField.setText(Tools.doubleToString(propValue));
+      Class<?> cls = currFlame.getPalette().getClass();
+      Field field;
+      try {
+        field = cls.getDeclaredField(pProperty);
+        field.setAccessible(true);
+        Class<?> fieldCls = field.getType();
+        if (fieldCls == double.class || fieldCls == Double.class) {
+          field.setDouble(currFlame.getPalette(), propValue);
+        }
+        else if (fieldCls == int.class || fieldCls == Integer.class) {
+          field.setInt(currFlame.getPalette(), Tools.FTOI(propValue));
+        }
+        else {
+          throw new IllegalStateException();
+        }
+        field = cls.getDeclaredField("modified");
+        field.setAccessible(true);
+        field.setBoolean(currFlame.getPalette(), true);
+      }
+      catch (Throwable ex) {
+        ex.printStackTrace();
+      }
+      refreshPaletteImg();
+      refreshFlameImage(false);
+    }
+    finally {
+      noRefresh = false;
+    }
+  }
+
   private void shadingInfoTextFieldChanged(JSlider pSlider, JTextField pTextField, String pProperty, double pSliderScale, int pIdx) {
     Flame currFlame = getCurrFlame();
     if (noRefresh || currFlame == null)
@@ -2021,6 +2059,45 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
   }
 
   private void paletteTextFieldChanged(JSlider pSlider, JTextField pTextField, String pProperty, double pSliderScale) {
+    Flame currFlame = getCurrFlame();
+    if (noRefresh || currFlame == null)
+      return;
+    noRefresh = true;
+    try {
+      double propValue = Tools.stringToDouble(pTextField.getText());
+      pSlider.setValue(Tools.FTOI(propValue * pSliderScale));
+
+      Class<?> cls = currFlame.getPalette().getClass();
+      Field field;
+      try {
+        field = cls.getDeclaredField(pProperty);
+        field.setAccessible(true);
+        Class<?> fieldCls = field.getType();
+        if (fieldCls == double.class || fieldCls == Double.class) {
+          field.setDouble(currFlame.getPalette(), propValue);
+        }
+        else if (fieldCls == int.class || fieldCls == Integer.class) {
+          field.setInt(currFlame.getPalette(), Tools.FTOI(propValue));
+        }
+        else {
+          throw new IllegalStateException();
+        }
+        field = cls.getDeclaredField("modified");
+        field.setAccessible(true);
+        field.setBoolean(currFlame.getPalette(), true);
+      }
+      catch (Throwable ex) {
+        ex.printStackTrace();
+      }
+      refreshPaletteImg();
+      refreshFlameImage(false);
+    }
+    finally {
+      noRefresh = false;
+    }
+  }
+
+  private void paletteTextFieldChanged(JSlider pSlider, JWFNumberField pTextField, String pProperty, double pSliderScale) {
     Flame currFlame = getCurrFlame();
     if (noRefresh || currFlame == null)
       return;
@@ -2576,6 +2653,10 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
   private void enableXFormControls(XForm xForm) {
     Flame currFlame = getCurrFlame();
     boolean enabled = xForm != null;
+
+    affineRotateAmountREd.setEnabled(enabled);
+    affineScaleAmountREd.setEnabled(enabled);
+    affineMoveAmountREd.setEnabled(enabled);
     affineRotateLeftButton.setEnabled(enabled);
     affineRotateRightButton.setEnabled(enabled);
     affineEnlargeButton.setEnabled(enabled);
