@@ -4514,4 +4514,141 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     }
   }
 
+  public void action133() {
+    scriptTextArea.setText("import org.jwildfire.create.tina.base.Flame;\r\n" +
+        "import org.jwildfire.create.tina.base.XForm;\r\n" +
+        "import org.jwildfire.create.tina.variation.VariationFunc;\r\n" +
+        "import org.jwildfire.create.tina.variation.VariationFuncList;\r\n" +
+        "import org.jwildfire.create.tina.script.ScriptRunnerEnvironment;\r\n" +
+        "import org.jwildfire.create.tina.transform.XFormTransformService;\r\n" +
+        "\r\n" +
+        "import org.jwildfire.create.tina.variation.BubbleFunc;\r\n" +
+        "import org.jwildfire.create.tina.variation.HemisphereFunc;\r\n" +
+        "import org.jwildfire.create.tina.variation.Julia3DFunc;\r\n" +
+        "import org.jwildfire.create.tina.variation.LinearFunc;\r\n" +
+        "import org.jwildfire.create.tina.variation.PreBlurFunc;\r\n" +
+        "import org.jwildfire.create.tina.variation.SpirographFunc;\r\n" +
+        "import org.jwildfire.create.tina.variation.SplitsFunc;\r\n" +
+        "import org.jwildfire.create.tina.variation.ZTranslateFunc;\r\n" +
+        "\r\n" +
+        "// Based on the Apophysis script \"BC n BDs Textured Escher Flux\"\r\n" +
+        "//  http://fractal-resources.deviantart.com/art/BC-n-BDs-Textured-Escher-Flux-129501160\r\n" +
+        "public void run(ScriptRunnerEnvironment pEnv) throws Exception {\r\n" +
+        "  XForm xForm1;\r\n" +
+        "  VariationFunc varFunc;\r\n" +
+        "  Flame currFlame = pEnv.getCurrFlame();\r\n" +
+        "  if(currFlame==null) {\r\n" +
+        "    throw new Exception(\"Please select a flame at first\");\r\n" +
+        "  }\r\n" +
+        "  currFlame.getXForms().clear();\r\n" +
+        "\r\n" +
+        "  // First transform\r\n" +
+        "  {\r\n" +
+        "    XForm xForm = xForm1 = new XForm();\r\n" +
+        "    xForm.setWeight(0.5);\r\n" +
+        "    xForm.setColor(Math.random());\r\n" +
+        "    xForm.setColorSymmetry(-(0.8+(Math.random()*0.1)));\r\n" +
+        "\r\n" +
+        "    xForm.setCoeff00(0.266948); // a\r\n" +
+        "    xForm.setCoeff10(0.137096); // b\r\n" +
+        "    xForm.setCoeff20(0.04212);  // e\r\n" +
+        "    xForm.setCoeff01(0.071529); // c \r\n" +
+        "    xForm.setCoeff11(-0.511651); // d \r\n" +
+        "    xForm.setCoeff21(-0.334332); // f \r\n" +
+        "\r\n" +
+        "    xForm.setPostCoeff00(0.5);\r\n" +
+        "    xForm.setPostCoeff10(0);\r\n" +
+        "    xForm.setPostCoeff01(0);\r\n" +
+        "    xForm.setPostCoeff11(0.25);\r\n" +
+        "    xForm.setPostCoeff20(0);\r\n" +
+        "    xForm.setPostCoeff21(0.05);\r\n" +
+        "\r\n" +
+        "    xForm.addVariation((0.1+(Math.random()*0.1)), VariationFuncList.getVariationFuncInstance(\"bubble\", true));\r\n" +
+        "    xForm.addVariation(2.0, VariationFuncList.getVariationFuncInstance(\"pre_blur\", true));\r\n" +
+        "\r\n" +
+        "    varFunc = VariationFuncList.getVariationFuncInstance(\"rectangles\", true);\r\n" +
+        "    varFunc.setParameter(\"x\", (0.1+(Math.random()*0.1)));\r\n" +
+        "    varFunc.setParameter(\"y\", (1.5+(Math.random()*0.5)));\r\n" +
+        "    xForm.addVariation(-(0.2+(Math.random()*0.15)), varFunc);\r\n" +
+        "\r\n" +
+        "    varFunc = VariationFuncList.getVariationFuncInstance(\"hexes\", true);\r\n" +
+        "    varFunc.setParameter(\"cellsize\", ((int)(1+Math.random()*5.0)) *0.1+(Math.random()*0.1));\r\n" +
+        "    varFunc.setParameter(\"power\", 1.0);\r\n" +
+        "    varFunc.setParameter(\"rotate\", 0.0);\r\n" +
+        "    varFunc.setParameter(\"scale\", (0.25+(Math.random()*0.3)));\r\n" +
+        "    xForm.addVariation(-(0.05+(Math.random()*0.05)), varFunc);\r\n" +
+        "\r\n" +
+        "    currFlame.getXForms().add(xForm);\r\n" +
+        "  }\r\n" +
+        "  // 2nd transform\r\n" +
+        "  {\r\n" +
+        "    XForm xForm = new XForm();\r\n" +
+        "    xForm.setWeight(30.0);\r\n" +
+        "    xForm.setColor(Math.random());\r\n" +
+        "    xForm.setColorSymmetry((0.8+(Math.random()*0.1)));\r\n" +
+        "\r\n" +
+        "\r\n" +
+        "    xForm.setCoeff00(1.0); // a\r\n" +
+        "    xForm.setCoeff10((Math.random()*0.1)); // b\r\n" +
+        "    xForm.setCoeff20(0.0);  // e\r\n" +
+        "    xForm.setCoeff01((Math.random()*0.1)); // c \r\n" +
+        "    xForm.setCoeff11(1.0); // d \r\n" +
+        "    xForm.setCoeff21(0.0); // f \r\n" +
+        "    XFormTransformService.rotate(xForm, Math.random() * 360.0, false);\r\n" +
+        "\r\n" +
+        "    xForm.setPostCoeff00((1+(Math.random()*0.1)));\r\n" +
+        "    xForm.setPostCoeff10((Math.random()*0.1));\r\n" +
+        "    xForm.setPostCoeff01(-(0.1+(Math.random()*0.1)));\r\n" +
+        "    xForm.setPostCoeff11((0.9+(Math.random()*0.1)));\r\n" +
+        "    xForm.setPostCoeff20(0);\r\n" +
+        "    xForm.setPostCoeff21(0);\r\n" +
+        "\r\n" +
+        "    xForm.addVariation((0.02+(Math.random()*0.01)), VariationFuncList.getVariationFuncInstance(\"spherical\", true));\r\n" +
+        "    xForm.addVariation((0.02+(Math.random()*0.01)), VariationFuncList.getVariationFuncInstance(\"bubble\", true));\r\n" +
+        "\r\n" +
+        "    varFunc = VariationFuncList.getVariationFuncInstance(\"escher\", true);\r\n" +
+        "    varFunc.setParameter(\"beta\", (0.21+(Math.random()*0.03)));\r\n" +
+        "    xForm.addVariation(1.0, varFunc);\r\n" +
+        "\r\n" +
+        "    varFunc = VariationFuncList.getVariationFuncInstance(\"flux\", true);\r\n" +
+        "    varFunc.setParameter(\"spread\", -(1.5+(Math.random()*0.3)));\r\n" +
+        "    xForm.addVariation(0.05, varFunc);\r\n" +
+        "\r\n" +
+        "    currFlame.getXForms().add(xForm);\r\n" +
+        "  }\r\n" +
+        "\r\n" +
+        "  // 3rd transform\r\n" +
+        "  {\r\n" +
+        "    XForm xForm = xForm1.makeCopy();\r\n" +
+        "    xForm.setPostCoeff20(0.05);\r\n" +
+        "    xForm.setPostCoeff21(-0.25);\r\n" +
+        "    currFlame.getXForms().add(xForm);  \r\n" +
+        "  }\r\n" +
+        "  // final transform\r\n" +
+        "  {\r\n" +
+        "    XForm xForm = new XForm();\r\n" +
+        "    xForm.setCoeff00(1.0); // a\r\n" +
+        "    xForm.setCoeff10(0.0); // b\r\n" +
+        "    xForm.setCoeff20(0.0); // e\r\n" +
+        "    xForm.setCoeff01(0.0); // c \r\n" +
+        "    xForm.setCoeff11(1.0); // d \r\n" +
+        "    xForm.setCoeff21(-0.225); // f \r\n" +
+        "    varFunc = VariationFuncList.getVariationFuncInstance(\"juliascope\", true);\r\n" +
+        "    varFunc.setParameter(\"power\", 2.0);\r\n" +
+        "    varFunc.setParameter(\"dist\", 1.0);\r\n" +
+        "    xForm.addVariation(1.0, varFunc);\r\n" +
+        "    currFlame.setFinalXForm(xForm);\r\n" +
+        "  }\r\n" +
+        "  currFlame.setCamRoll(0.0);\r\n" +
+        "  currFlame.setCamPitch(0.0);\r\n" +
+        "  currFlame.setCamYaw(0.0);\r\n" +
+        "  currFlame.setCamPerspective(0.0);\r\n" +
+        "  currFlame.setPixelsPerUnit(50);\r\n" +
+        "  // Refresh the UI\r\n" +
+        "  pEnv.refreshUI();\r\n" +
+        "}\r\n" +
+        "");
+
+  }
+
 }

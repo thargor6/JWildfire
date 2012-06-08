@@ -22,46 +22,70 @@ import java.util.List;
 import org.jwildfire.base.Tools;
 
 public class RandomRGBPaletteGenerator {
+  /*
+    public List<RGBColor> generateKeyFrames(int pKeyFrames) {
+      if (pKeyFrames < 0 || pKeyFrames > RGBPalette.PALETTE_SIZE)
+        throw new IllegalArgumentException(String.valueOf(pKeyFrames));
+      List<RGBColor> keyFrames = new ArrayList<RGBColor>();
+      boolean gray = Math.random() < 0.06;
+      for (int i = 0; i < pKeyFrames; i++) {
+        int r = Tools.roundColor(256.0 * Math.random());
+        int g = Tools.roundColor(256.0 * Math.random());
+        int b = Tools.roundColor(256.0 * Math.random());
+        if (Math.random() < 0.25) {
+          double rnd = Math.random();
+          if (rnd < 0.33) {
+            b = g;
+          }
+          else if (rnd < 0.67) {
+            g = r;
+          }
+          else {
+            r = b;
+          }
+        }
+        if (gray) {
+          b = g = r;
+        }
+        if (Math.random() < 0.25) {
+          r /= 2;
+          g /= 2;
+          b /= 2;
+        }
 
+        RGBColor col = new RGBColor(r, g, b);
+        keyFrames.add(col);
+        if (Math.random() < 0.1) {
+          int skip = 1 + (int) (Math.random() * pKeyFrames * 0.11);
+          int j = 0;
+          while (j++ < skip && (++i < pKeyFrames)) {
+            keyFrames.add(col);
+          }
+        }
+      }
+      return keyFrames;
+    }
+  */
   public List<RGBColor> generateKeyFrames(int pKeyFrames) {
     if (pKeyFrames < 0 || pKeyFrames > RGBPalette.PALETTE_SIZE)
       throw new IllegalArgumentException(String.valueOf(pKeyFrames));
     List<RGBColor> keyFrames = new ArrayList<RGBColor>();
-    boolean gray = Math.random() < 0.06;
+    int lastR = 0, lastG = 0, lastB = 0;
+    int r, g, b;
     for (int i = 0; i < pKeyFrames; i++) {
-      int r = Tools.roundColor(256.0 * Math.random());
-      int g = Tools.roundColor(256.0 * Math.random());
-      int b = Tools.roundColor(256.0 * Math.random());
-      if (Math.random() < 0.25) {
-        double rnd = Math.random();
-        if (rnd < 0.33) {
-          b = g;
-        }
-        else if (rnd < 0.67) {
-          g = r;
-        }
-        else {
-          r = b;
-        }
+      while (true) {
+        r = Tools.roundColor(256.0 * Math.random());
+        g = Tools.roundColor(256.0 * Math.random());
+        b = Tools.roundColor(256.0 * Math.random());
+        double diff = Math.abs(r - lastR) * 0.299 + Math.abs(g - lastG) * 0.588 + Math.abs(b - lastB) * 0.1130;
+        if (diff > 66)
+          break;
       }
-      if (gray) {
-        b = g = r;
-      }
-      if (Math.random() < 0.25) {
-        r /= 2;
-        g /= 2;
-        b /= 2;
-      }
-
       RGBColor col = new RGBColor(r, g, b);
+      lastR = r;
+      lastG = g;
+      lastB = b;
       keyFrames.add(col);
-      if (Math.random() < 0.1) {
-        int skip = 1 + (int) (Math.random() * pKeyFrames * 0.11);
-        int j = 0;
-        while (j++ < skip && (++i < pKeyFrames)) {
-          keyFrames.add(col);
-        }
-      }
     }
     return keyFrames;
   }

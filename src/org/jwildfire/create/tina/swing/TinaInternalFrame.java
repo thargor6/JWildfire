@@ -7913,6 +7913,21 @@ public class TinaInternalFrame extends JInternalFrame {
       scriptPanel.add(getScriptScrollPane(), null);
       scriptPanel.add(getCompileScriptButton(), null);
       scriptPanel.add(getRunScriptButton(), null);
+
+      JButton button = new JButton();
+      button.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.action133();
+        }
+      });
+      button.setToolTipText("");
+      button.setText("133");
+      button.setSize(new Dimension(81, 24));
+      button.setPreferredSize(new Dimension(81, 24));
+      button.setLocation(new Point(97, 280));
+      button.setFont(new Font("Dialog", Font.BOLD, 10));
+      button.setBounds(9, 334, 81, 24);
+      scriptPanel.add(button);
     }
     return scriptPanel;
   }
