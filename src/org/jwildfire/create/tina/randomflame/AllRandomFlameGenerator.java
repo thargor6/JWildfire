@@ -22,45 +22,67 @@ import java.util.List;
 import org.jwildfire.create.tina.base.Flame;
 
 public class AllRandomFlameGenerator extends RandomFlameGenerator {
-  private static List<RandomFlameGenerator> generators;
+  private static List<RandomFlameGenerator> allGenerators;
+  private static List<RandomFlameGenerator> simpleGenerators;
+  private boolean useSimpleGenerators = false;
 
   static {
-    generators = new ArrayList<RandomFlameGenerator>();
-    generators.add(new LinearRandomFlameGenerator());
-    generators.add(new FilledFlowers3DRandomFlameGenerator());
-    generators.add(new SimpleRandomFlameGenerator());
-    generators.add(new SphericalRandomFlameGenerator());
-    generators.add(new Spherical3DRandomFlameGenerator());
-    generators.add(new BrokatRandomFlameGenerator());
-    generators.add(new GnarlRandomFlameGenerator());
-    generators.add(new ExperimentalGnarlRandomFlameGenerator());
-    generators.add(new BubblesRandomFlameGenerator());
-    generators.add(new Spherical3DRandomFlameGenerator());
-    generators.add(new BrokatRandomFlameGenerator());
-    generators.add(new SubFlameRandomFlameGenerator());
-    generators.add(new Bubbles3DRandomFlameGenerator());
-    generators.add(new SphericalRandomFlameGenerator());
-    generators.add(new GnarlRandomFlameGenerator());
-    generators.add(new Flowers3DRandomFlameGenerator());
-    generators.add(new FilledFlowers3DRandomFlameGenerator());
-    generators.add(new ExperimentalBubbles3DRandomFlameGenerator());
-    generators.add(new Spherical3DRandomFlameGenerator());
-    generators.add(new SubFlameRandomFlameGenerator());
-    generators.add(new JulianDiscRandomFlameGenerator());
-    generators.add(new BrokatRandomFlameGenerator());
-    generators.add(new FilledFlowers3DRandomFlameGenerator());
-    generators.add(new ExperimentalSimpleRandomFlameGenerator());
-    generators.add(new TentacleRandomFlameGenerator());
+    allGenerators = new ArrayList<RandomFlameGenerator>();
+    allGenerators.add(new LinearRandomFlameGenerator());
+    allGenerators.add(new FilledFlowers3DRandomFlameGenerator());
+    allGenerators.add(new SimpleRandomFlameGenerator());
+    allGenerators.add(new SphericalRandomFlameGenerator());
+    allGenerators.add(new Spherical3DRandomFlameGenerator());
+    allGenerators.add(new BrokatRandomFlameGenerator());
+    allGenerators.add(new GnarlRandomFlameGenerator());
+    allGenerators.add(new ExperimentalGnarlRandomFlameGenerator());
+    allGenerators.add(new BubblesRandomFlameGenerator());
+    allGenerators.add(new Spherical3DRandomFlameGenerator());
+    allGenerators.add(new BrokatRandomFlameGenerator());
+    allGenerators.add(new SubFlameRandomFlameGenerator());
+    allGenerators.add(new Bubbles3DRandomFlameGenerator());
+    allGenerators.add(new SphericalRandomFlameGenerator());
+    allGenerators.add(new GnarlRandomFlameGenerator());
+    allGenerators.add(new Flowers3DRandomFlameGenerator());
+    allGenerators.add(new FilledFlowers3DRandomFlameGenerator());
+    allGenerators.add(new ExperimentalBubbles3DRandomFlameGenerator());
+    allGenerators.add(new Spherical3DRandomFlameGenerator());
+    allGenerators.add(new SubFlameRandomFlameGenerator());
+    allGenerators.add(new JulianDiscRandomFlameGenerator());
+    allGenerators.add(new BrokatRandomFlameGenerator());
+    allGenerators.add(new FilledFlowers3DRandomFlameGenerator());
+    allGenerators.add(new ExperimentalSimpleRandomFlameGenerator());
+    allGenerators.add(new TentacleRandomFlameGenerator());
+
+    simpleGenerators = new ArrayList<RandomFlameGenerator>();
+    simpleGenerators.add(new LinearRandomFlameGenerator());
+    simpleGenerators.add(new FilledFlowers3DRandomFlameGenerator());
+    simpleGenerators.add(new SphericalRandomFlameGenerator());
+    simpleGenerators.add(new Spherical3DRandomFlameGenerator());
+    simpleGenerators.add(new BrokatRandomFlameGenerator());
+    simpleGenerators.add(new GnarlRandomFlameGenerator());
+    simpleGenerators.add(new BubblesRandomFlameGenerator());
+    simpleGenerators.add(new Spherical3DRandomFlameGenerator());
+    simpleGenerators.add(new Flowers3DRandomFlameGenerator());
   }
 
   @Override
   protected Flame createFlame() {
+    List<RandomFlameGenerator> generators = useSimpleGenerators ? simpleGenerators : allGenerators;
     return generators.get((int) (Math.random() * generators.size())).createFlame();
   }
 
   @Override
   public String getName() {
     return "All";
+  }
+
+  public boolean isUseSimpleGenerators() {
+    return useSimpleGenerators;
+  }
+
+  public void setUseSimpleGenerators(boolean useSimpleGenerators) {
+    this.useSimpleGenerators = useSimpleGenerators;
   }
 
 }
