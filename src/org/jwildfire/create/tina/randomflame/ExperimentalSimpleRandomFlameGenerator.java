@@ -48,7 +48,7 @@ public class ExperimentalSimpleRandomFlameGenerator extends
       "hexes", "truchet", "spirograph", "glynnSim3", "pdj", "popcorn",
       "parabola", "rings2", "spherical3D", "spiral", "rectangles",
       "elliptic", "waves", "swirl", "glynnSim1", "eclipse", "bwraps7", "layered_spiral",
-      "heart_wf", "colorscale_wf", "boarders", "secant2", "waffle", "lissajous" };
+      "heart_wf", "colorscale_wf", "boarders", "secant2", "waffle", "lissajous", "hypertile" };
 
   @Override
   protected Flame createFlame() {

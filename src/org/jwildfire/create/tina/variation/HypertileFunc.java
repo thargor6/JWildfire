@@ -36,7 +36,7 @@ public class HypertileFunc extends VariationFunc {
 
   private int p = 3;
   private int q = 7;
-  private int n = 0;
+  private int n = 1;
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {

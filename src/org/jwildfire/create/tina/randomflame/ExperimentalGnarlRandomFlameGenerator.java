@@ -71,32 +71,32 @@ public class ExperimentalGnarlRandomFlameGenerator extends RandomFlameGenerator 
       xForm.setWeight(wavesWeight);
       double varRnd = Math.random();
       String varName;
-      if (varRnd < 0.33) {
+      if (varRnd < 0.6) {
         varName = "waves2_wf";
       }
-      else if (varRnd < 0.66) {
+      else if (varRnd < 0.8) {
         varName = "waves3_wf";
       }
       else {
         varName = "waves4_wf";
       }
       VariationFunc w2 = VariationFuncList.getVariationFuncInstance(varName, true);
-      if (Math.random() < 0.5) {
+      if (Math.random() < 0.25) {
         w2.setParameter("use_cos_x", 1);
       }
       else {
         w2.setParameter("use_cos_x", 0);
       }
-      if (Math.random() < 0.5) {
+      if (Math.random() < 0.25) {
         w2.setParameter("use_cos_y", 1);
       }
       else {
         w2.setParameter("use_cos_y", 0);
       }
-      if (Math.random() < 0.5) {
+      if (Math.random() < 0.25) {
         w2.setParameter("dampx", -(0.01 + Math.random() * 0.39));
       }
-      if (Math.random() < 0.5) {
+      if (Math.random() < 0.25) {
         w2.setParameter("dampy", -(0.01 + Math.random() * 0.39));
       }
       w2.setParameter("freqx", freqX);
@@ -153,7 +153,7 @@ public class ExperimentalGnarlRandomFlameGenerator extends RandomFlameGenerator 
       }
 
       xForm.setColorSymmetry(symmetry);
-      xForm.setColor(0.1 + 0.9 * Math.random());
+      xForm.setColor(0.9);
       if (Math.random() > 0.5) {
         XFormTransformService.scale(xForm, 0.9 + Math.random() * 0.09, true, true);
       }
@@ -245,6 +245,10 @@ public class ExperimentalGnarlRandomFlameGenerator extends RandomFlameGenerator 
         case 3:
           xForm.addVariation(Math.random() * 0.7 + 0.3, VariationFuncList.getVariationFuncInstance("spherical3D", true));
           break;
+      }
+      XFormTransformService.rotate(xForm, 180 - Math.random() * 360.0);
+      if (Math.random() > 0.5) {
+        XFormTransformService.scale(xForm, 0.5 + Math.random() * 1.0, true, true);
       }
       xForm.setColorSymmetry(-1);
     }

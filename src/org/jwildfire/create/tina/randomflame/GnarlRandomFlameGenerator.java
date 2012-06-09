@@ -116,7 +116,8 @@ public class GnarlRandomFlameGenerator extends RandomFlameGenerator {
           throw new IllegalStateException();
       }
       xForm.setColorSymmetry(symmetry);
-      xForm.setColor(0.1 + 0.9 * Math.random());
+      //      xForm.setColor(0.1 + 0.9 * Math.random());
+      xForm.setColor(0.9);
       if (Math.random() > 0.5) {
         XFormTransformService.scale(xForm, 0.995, true, true);
       }

@@ -41,7 +41,7 @@ public class BubblesRandomFlameGenerator extends RandomFlameGenerator {
       xForm.addVariation(2 + Math.random() * 4, VariationFuncList.getVariationFuncInstance("spherical", true));
 
       String fName;
-      if (Math.random() < 0.25) {
+      if (Math.random() < 0.15) {
         fName = ExperimentalSimpleRandomFlameGenerator.FNCLST_EXPERIMENTAL[(int) (Math.random() * fncCount)];
       }
       else {
