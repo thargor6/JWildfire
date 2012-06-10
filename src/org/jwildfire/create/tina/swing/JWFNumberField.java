@@ -20,6 +20,7 @@ import java.awt.Cursor;
 import java.awt.event.MouseEvent;
 
 import javax.swing.JSpinner;
+import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
 
 import org.jwildfire.base.Tools;
@@ -45,6 +46,7 @@ public class JWFNumberField extends JSpinner {
     setValueStep(DFLT_STEP);
     setMouseThreshold(DFLT_MOUSE_THRESHOLD);
     addEvents();
+    ((JSpinner.DefaultEditor) getEditor()).getTextField().setHorizontalAlignment(JTextField.LEADING);
     setCursor();
   }
 
