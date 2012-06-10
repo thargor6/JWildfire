@@ -141,7 +141,6 @@ public class TinaInternalFrame extends JInternalFrame {
 
   private JLabel tinaFilterRadiusLbl = null;
 
-  private JLabel tinaOversampleLbl = null;
   private JLabel tinaGammaThresholdLbl;
 
   private JLabel tinaPixelsPerUnitLbl = null;
@@ -400,7 +399,6 @@ public class TinaInternalFrame extends JInternalFrame {
   private JComboBox nonlinearParams4Cmb = null;
   private JWFNumberField nonlinearParams4REd = null;
   private JButton nonlinearParams4LeftButton = null;
-  private JLabel colorOversampleLbl = null;
   private JScrollPane createPaletteScrollPane = null;
   private JTable createPaletteColorsTable = null;
   private JScrollPane nonlinearScrollPane = null;
@@ -7395,6 +7393,10 @@ public class TinaInternalFrame extends JInternalFrame {
   private JTextField swfAnimatorToFrameREd;
   private JWFNumberField transformationWeightREd;
   private JWFNumberField relWeightREd;
+  private JButton scriptLoadButton;
+  private JButton scriptSaveButton;
+  private JButton scriptWrapHeartButton;
+  private JButton btnWrapIntoBubble;
 
   private JTextPane getHelpPane() {
     if (helpPane == null) {
@@ -7911,20 +7913,39 @@ public class TinaInternalFrame extends JInternalFrame {
       scriptPanel.add(getCompileScriptButton(), null);
       scriptPanel.add(getRunScriptButton(), null);
 
-      JButton button = new JButton();
-      button.addActionListener(new ActionListener() {
+      JButton scriptEscherFluxButton = new JButton();
+      scriptEscherFluxButton.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
-          tinaController.action133();
+          tinaController.scriptExampleEscherFlux();
         }
       });
-      button.setToolTipText("");
-      button.setText("133");
-      button.setSize(new Dimension(81, 24));
-      button.setPreferredSize(new Dimension(81, 24));
-      button.setLocation(new Point(97, 280));
-      button.setFont(new Font("Dialog", Font.BOLD, 10));
-      button.setBounds(9, 334, 81, 24);
-      scriptPanel.add(button);
+      scriptEscherFluxButton.setToolTipText("Example: Textured Escher and Flux");
+      scriptEscherFluxButton.setText("Escher flux");
+      scriptEscherFluxButton.setSize(new Dimension(81, 24));
+      scriptEscherFluxButton.setPreferredSize(new Dimension(81, 24));
+      scriptEscherFluxButton.setLocation(new Point(97, 280));
+      scriptEscherFluxButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      scriptEscherFluxButton.setBounds(9, 345, 125, 24);
+      scriptPanel.add(scriptEscherFluxButton);
+
+      JButton scriptSoftJulianButton = new JButton();
+      scriptSoftJulianButton.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.scriptExampleSoftJulian();
+        }
+      });
+      scriptSoftJulianButton.setToolTipText("Example: Soft Julian");
+      scriptSoftJulianButton.setText("Soft Julian");
+      scriptSoftJulianButton.setSize(new Dimension(81, 24));
+      scriptSoftJulianButton.setPreferredSize(new Dimension(81, 24));
+      scriptSoftJulianButton.setLocation(new Point(97, 280));
+      scriptSoftJulianButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      scriptSoftJulianButton.setBounds(9, 373, 125, 24);
+      scriptPanel.add(scriptSoftJulianButton);
+      scriptPanel.add(getScriptLoadButton());
+      scriptPanel.add(getScriptSaveButton());
+      scriptPanel.add(getScriptWrapHeartButton());
+      scriptPanel.add(getBtnWrapIntoBubble());
     }
     return scriptPanel;
   }
@@ -7964,8 +7985,8 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton getCompileScriptButton() {
     if (compileScriptButton == null) {
       compileScriptButton = new JButton();
-      compileScriptButton.setBounds(new Rectangle(9, 280, 81, 24));
-      compileScriptButton.setPreferredSize(new Dimension(81, 24));
+      compileScriptButton.setBounds(new Rectangle(9, 280, 125, 24));
+      compileScriptButton.setPreferredSize(new Dimension(125, 24));
       compileScriptButton.setToolTipText("Compile the script");
       compileScriptButton.setText("Compile");
       compileScriptButton.setFont(new Font("Dialog", Font.BOLD, 10));
@@ -7986,11 +8007,11 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton getRunScriptButton() {
     if (runScriptButton == null) {
       runScriptButton = new JButton();
-      runScriptButton.setPreferredSize(new Dimension(81, 24));
+      runScriptButton.setPreferredSize(new Dimension(125, 24));
       runScriptButton.setToolTipText("Compile and run the script");
       runScriptButton.setText("Run");
-      runScriptButton.setSize(new Dimension(81, 24));
-      runScriptButton.setLocation(new Point(97, 280));
+      runScriptButton.setSize(new Dimension(125, 24));
+      runScriptButton.setLocation(new Point(192, 280));
       runScriptButton.setFont(new Font("Dialog", Font.BOLD, 10));
       runScriptButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -9097,5 +9118,69 @@ public class TinaInternalFrame extends JInternalFrame {
 
   public JWFNumberField getRelWeightREd() {
     return relWeightREd;
+  }
+
+  private JButton getScriptLoadButton() {
+    if (scriptLoadButton == null) {
+      scriptLoadButton = new JButton();
+      scriptLoadButton.setToolTipText("Load the script from disk");
+      scriptLoadButton.setText("Load script");
+      scriptLoadButton.setPreferredSize(new Dimension(125, 24));
+      scriptLoadButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      scriptLoadButton.setBounds(new Rectangle(9, 280, 125, 24));
+      scriptLoadButton.setBounds(9, 309, 125, 24);
+    }
+    return scriptLoadButton;
+  }
+
+  private JButton getScriptSaveButton() {
+    if (scriptSaveButton == null) {
+      scriptSaveButton = new JButton();
+      scriptSaveButton.setToolTipText("Save the script to disk");
+      scriptSaveButton.setText("Save script");
+      scriptSaveButton.setPreferredSize(new Dimension(125, 24));
+      scriptSaveButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      scriptSaveButton.setBounds(new Rectangle(9, 280, 125, 24));
+      scriptSaveButton.setBounds(192, 306, 125, 24);
+    }
+    return scriptSaveButton;
+  }
+
+  private JButton getScriptWrapHeartButton() {
+    if (scriptWrapHeartButton == null) {
+      scriptWrapHeartButton = new JButton();
+      scriptWrapHeartButton.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.scriptExampleWrapHeart();
+        }
+      });
+      scriptWrapHeartButton.setToolTipText("Example: Wrap into heart");
+      scriptWrapHeartButton.setText("Wrap into heart");
+      scriptWrapHeartButton.setSize(new Dimension(81, 24));
+      scriptWrapHeartButton.setPreferredSize(new Dimension(81, 24));
+      scriptWrapHeartButton.setLocation(new Point(97, 280));
+      scriptWrapHeartButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      scriptWrapHeartButton.setBounds(192, 345, 125, 24);
+    }
+    return scriptWrapHeartButton;
+  }
+
+  private JButton getBtnWrapIntoBubble() {
+    if (btnWrapIntoBubble == null) {
+      btnWrapIntoBubble = new JButton();
+      btnWrapIntoBubble.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.scriptExampleWrapBubble();
+        }
+      });
+      btnWrapIntoBubble.setToolTipText("Example: Wrap into bubble");
+      btnWrapIntoBubble.setText("Wrap into bubble");
+      btnWrapIntoBubble.setSize(new Dimension(81, 24));
+      btnWrapIntoBubble.setPreferredSize(new Dimension(81, 24));
+      btnWrapIntoBubble.setLocation(new Point(97, 280));
+      btnWrapIntoBubble.setFont(new Font("Dialog", Font.BOLD, 10));
+      btnWrapIntoBubble.setBounds(192, 373, 125, 24);
+    }
+    return btnWrapIntoBubble;
   }
 } //  @jve:decl-index=0:visual-constraint="10,10"
