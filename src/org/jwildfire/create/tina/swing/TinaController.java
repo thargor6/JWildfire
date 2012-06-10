@@ -4799,4 +4799,51 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     runScriptButton_clicked();
   }
 
+  public void loadScript() {
+    try {
+      JFileChooser chooser = new JWFScriptFileChooser(prefs);
+      if (prefs.getInputFlamePath() != null) {
+        try {
+          chooser.setCurrentDirectory(new File(prefs.getInputFlamePath()));
+        }
+        catch (Exception ex) {
+          ex.printStackTrace();
+        }
+      }
+      if (chooser.showOpenDialog(centerPanel) == JFileChooser.APPROVE_OPTION) {
+        File file = chooser.getSelectedFile();
+        String script = Tools.readUTF8Textfile(file.getAbsolutePath());
+        scriptTextArea.setText(script);
+      }
+    }
+    catch (Throwable ex) {
+      errorHandler.handleError(ex);
+    }
+  }
+
+  public void saveScript() {
+    try {
+      String script = scriptTextArea.getText();
+      if (script != null && script.trim().length() > 0) {
+        JFileChooser chooser = new JWFScriptFileChooser(prefs);
+        if (prefs.getOutputFlamePath() != null) {
+          try {
+            chooser.setCurrentDirectory(new File(prefs.getOutputFlamePath()));
+          }
+          catch (Exception ex) {
+            ex.printStackTrace();
+          }
+        }
+        if (chooser.showSaveDialog(centerPanel) == JFileChooser.APPROVE_OPTION) {
+          File file = chooser.getSelectedFile();
+          Tools.writeUTF8Textfile(file.getAbsolutePath(), script);
+          prefs.setLastOutputFlameFile(file);
+        }
+      }
+    }
+    catch (Throwable ex) {
+      errorHandler.handleError(ex);
+    }
+  }
+
 }

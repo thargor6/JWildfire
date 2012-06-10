@@ -9123,6 +9123,11 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton getScriptLoadButton() {
     if (scriptLoadButton == null) {
       scriptLoadButton = new JButton();
+      scriptLoadButton.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.loadScript();
+        }
+      });
       scriptLoadButton.setToolTipText("Load the script from disk");
       scriptLoadButton.setText("Load script");
       scriptLoadButton.setPreferredSize(new Dimension(125, 24));
@@ -9136,6 +9141,11 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton getScriptSaveButton() {
     if (scriptSaveButton == null) {
       scriptSaveButton = new JButton();
+      scriptSaveButton.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.saveScript();
+        }
+      });
       scriptSaveButton.setToolTipText("Save the script to disk");
       scriptSaveButton.setText("Save script");
       scriptSaveButton.setPreferredSize(new Dimension(125, 24));
