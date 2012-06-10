@@ -1391,7 +1391,6 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaBrightnessREd = new JWFNumberField();
       tinaBrightnessREd.setValueStep(0.05);
       tinaBrightnessREd.setMaxValue(10.0);
-      tinaBrightnessREd.setHasMaxValue(true);
       tinaBrightnessREd.setHasMinValue(true);
       tinaBrightnessREd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
@@ -1643,7 +1642,6 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaContrastREd = new JWFNumberField();
       tinaContrastREd.setValueStep(0.05);
       tinaContrastREd.setHasMinValue(true);
-      tinaContrastREd.setHasMaxValue(true);
       tinaContrastREd.setMaxValue(5.0);
       tinaContrastREd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
@@ -1669,7 +1667,6 @@ public class TinaInternalFrame extends JInternalFrame {
     if (tinaGammaREd == null) {
       tinaGammaREd = new JWFNumberField();
       tinaGammaREd.setHasMinValue(true);
-      tinaGammaREd.setHasMaxValue(true);
       tinaGammaREd.setMaxValue(10.0);
       tinaGammaREd.setValueStep(0.05);
       tinaGammaREd.addChangeListener(new ChangeListener() {
