@@ -239,6 +239,7 @@ public class VariationFuncList {
     registerVariationFunc(HypertileFunc.class);
     registerVariationFunc(Hypertile1Func.class);
     registerVariationFunc(Hypertile2Func.class);
+    registerVariationFunc(DCPerlinFunc.class);
   }
 
   private static void registerVariationFunc(
