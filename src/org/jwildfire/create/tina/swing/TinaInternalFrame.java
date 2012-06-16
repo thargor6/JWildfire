@@ -7293,13 +7293,11 @@ public class TinaInternalFrame extends JInternalFrame {
       JPanel helpPanel = new JPanel();
       rootTabbedPane.addTab("Help/About", null, helpPanel, null);
       helpPanel.setLayout(new BorderLayout(0, 0));
-
-      helpPanel.add(getHelpPane(), BorderLayout.CENTER);
+      helpPanel.add(getScrollPane(), BorderLayout.CENTER);
     }
     return rootTabbedPane;
   }
 
-  private JTextPane helpPane = null;
   private JPanel interactiveNorthPanel;
   private JPanel interactiveWestPanel;
   private JPanel interactiveEastPanel;
@@ -7376,15 +7374,8 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton scriptSaveButton;
   private JButton scriptWrapHeartButton;
   private JButton btnWrapIntoBubble;
-
-  private JTextPane getHelpPane() {
-    if (helpPane == null) {
-      helpPane = new JTextPane();
-      helpPane.setEditable(false);
-      return helpPane;
-    }
-    return helpPane;
-  }
+  private JScrollPane scrollPane;
+  private JTextPane helpPane;
 
   /**
    * This method initializes renderBatchJobsScrollPane	
@@ -9171,5 +9162,21 @@ public class TinaInternalFrame extends JInternalFrame {
       btnWrapIntoBubble.setBounds(192, 373, 125, 24);
     }
     return btnWrapIntoBubble;
+  }
+
+  private JScrollPane getScrollPane() {
+    if (scrollPane == null) {
+      scrollPane = new JScrollPane();
+      scrollPane.setViewportView(getHelpPane());
+    }
+    return scrollPane;
+  }
+
+  private JTextPane getHelpPane() {
+    if (helpPane == null) {
+      helpPane = new JTextPane();
+      helpPane.setEditable(false);
+    }
+    return helpPane;
   }
 } //  @jve:decl-index=0:visual-constraint="10,10"
