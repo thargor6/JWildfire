@@ -1,3 +1,18 @@
+V0.48 (16.06.2012):
+ - Fractal flame editor: included a FAQ section, improved the help section (larger font, hyperlink do work now)
+ - Fractal flame editor: removed the "Post transform" and "Symmetry" buttons
+ - Main: "Nimbus" is now the default visual theme, added the Mac theme
+ - Fractal flame editor: dc_perlin variation by slobo777
+ - Fractal flames editor: buttons for loading/saving scripts
+ - Fractal flame editor: 4 buttons with 4 example scripts in the script editor (which may partially be combinated)
+ - Fractal flame editor: changed the default horizontal alignment of numer fields to left aligned
+ - Fractal flames editor: removed trhe unnessary upper bounds for brightness, contrast and gamma in the user interface
+ - Fractal flame editor: improved the gnarls random flame generators
+ - Fractal flame editor: hypertile, hypertile1 and hypertile2 variation by Zueuk
+ - Fractal flame editir: support for background color in HDR images
+ - Fractal flame editor: support for background colors in the interactive renderer
+ - Fractal flame editor: improved the random gradient generator
+
 V0.47 (29.05.2012):
  - Fractal flame editor: some useful new controls for editing releative weights ("Xaos")
  - Fractal flame editor: transformations/nonlinear tab improved
