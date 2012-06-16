@@ -383,6 +383,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
   private final JButton batchRenderStartButton;
   //
   private final JTextPane helpPane;
+  private final JTextPane faqPane;
 
   public TinaController(ErrorHandler pErrorHandler, Prefs pPrefs, JPanel pCenterPanel, JWFNumberField pCameraRollREd, JSlider pCameraRollSlider, JWFNumberField pCameraPitchREd,
       JSlider pCameraPitchSlider, JWFNumberField pCameraYawREd, JSlider pCameraYawSlider, JWFNumberField pCameraPerspectiveREd, JSlider pCameraPerspectiveSlider,
@@ -419,7 +420,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       JButton pAffineFlipVerticalButton, JToggleButton pToggleDarkTrianglesButton,
       JWFNumberField pShadingBlurRadiusREd, JSlider pShadingBlurRadiusSlider, JWFNumberField pShadingBlurFadeREd, JSlider pShadingBlurFadeSlider,
       JWFNumberField pShadingBlurFallOffREd, JSlider pShadingBlurFallOffSlider, JTextArea pScriptTextArea, JToggleButton pAffineScaleXButton,
-      JToggleButton pAffineScaleYButton, JPanel pGradientLibraryPanel, JComboBox pGradientLibraryGradientCmb, JTextPane pHelpPane,
+      JToggleButton pAffineScaleYButton, JPanel pGradientLibraryPanel, JComboBox pGradientLibraryGradientCmb, JTextPane pHelpPane, JTextPane pFAQPane,
       JToggleButton pToggleVariationsButton, JToggleButton pAffinePreserveZButton,
       JComboBox pQualityProfileCmb, JComboBox pResolutionProfileCmb, JComboBox pBatchQualityProfileCmb, JComboBox pBatchResolutionProfileCmb,
       JComboBox pInteractiveQualityProfileCmb, JComboBox pInteractiveResolutionProfileCmb, JComboBox pSWFAnimatorQualityProfileCmb,
@@ -606,25 +607,10 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     batchRenderStartButton = pBatchRenderStartButton;
     rootTabbedPane = pRootTabbedPane;
     helpPane = pHelpPane;
-    helpPane.setContentType("text/html");
-    try {
-      InputStream is = this.getClass().getResourceAsStream("TINA.html");
-      StringBuffer content = new StringBuffer();
-      String lineFeed = System.getProperty("line.separator");
-      String line;
-      Reader r = new InputStreamReader(is, "utf-8");
-      BufferedReader in = new BufferedReader(r);
-      while ((line = in.readLine()) != null) {
-        content.append(line).append(lineFeed);
-      }
-      in.close();
+    faqPane = pFAQPane;
 
-      helpPane.setText(content.toString());
-
-    }
-    catch (Exception ex) {
-      ex.printStackTrace();
-    }
+    initHelpPane();
+    initFAQPane();
 
     refreshResolutionProfileCmb(resolutionProfileCmb, null);
     refreshResolutionProfileCmb(interactiveResolutionProfileCmb, null);
@@ -653,6 +639,52 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     enableShadingUI();
 
     enableXFormControls(null);
+  }
+
+  private void initHelpPane() {
+    helpPane.setContentType("text/html");
+    try {
+      InputStream is = this.getClass().getResourceAsStream("TINA.html");
+      StringBuffer content = new StringBuffer();
+      String lineFeed = System.getProperty("line.separator");
+      String line;
+      Reader r = new InputStreamReader(is, "utf-8");
+      BufferedReader in = new BufferedReader(r);
+      while ((line = in.readLine()) != null) {
+        content.append(line).append(lineFeed);
+      }
+      in.close();
+
+      helpPane.setText(content.toString());
+      helpPane.setSelectionStart(0);
+      helpPane.setSelectionEnd(0);
+    }
+    catch (Exception ex) {
+      ex.printStackTrace();
+    }
+  }
+
+  private void initFAQPane() {
+    faqPane.setContentType("text/html");
+    try {
+      InputStream is = this.getClass().getResourceAsStream("FAQ.html");
+      StringBuffer content = new StringBuffer();
+      String lineFeed = System.getProperty("line.separator");
+      String line;
+      Reader r = new InputStreamReader(is, "utf-8");
+      BufferedReader in = new BufferedReader(r);
+      while ((line = in.readLine()) != null) {
+        content.append(line).append(lineFeed);
+      }
+      in.close();
+
+      faqPane.setText(content.toString());
+      faqPane.setSelectionStart(0);
+      faqPane.setSelectionEnd(0);
+    }
+    catch (Exception ex) {
+      ex.printStackTrace();
+    }
   }
 
   private void refreshResolutionProfileCmb(JComboBox pCmb, ResolutionProfile pSelectedProfile) {

@@ -57,6 +57,8 @@ import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import javax.swing.event.HyperlinkEvent;
+import javax.swing.event.HyperlinkListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
@@ -3052,7 +3054,7 @@ public class TinaInternalFrame extends JInternalFrame {
         getRootTabbedPane(), getAffineFlipHorizontalButton(), getAffineFlipVerticalButton(), getDarkTrianglesToggleButton(), getShadingBlurRadiusREd(), getShadingBlurRadiusSlider(), getShadingBlurFadeREd(),
         getShadingBlurFadeSlider(), getShadingBlurFallOffREd(), getShadingBlurFallOffSlider(), getScriptTextArea(),
         getAffineScaleXButton(), getAffineScaleYButton(), getGradientLibraryCenterPanel(), getGradientLibraryGradientCmb(), getHelpPane(),
-        getToggleVariationsButton(), getAffinePreserveZButton(), getQualityProfileCmb(), getResolutionProfileCmb(),
+        getFaqPane(), getToggleVariationsButton(), getAffinePreserveZButton(), getQualityProfileCmb(), getResolutionProfileCmb(),
         getBatchQualityProfileCmb(), getBatchResolutionProfileCmb(), getInteractiveQualityProfileCmb(), getInteractiveResolutionProfileCmb(),
         getSwfAnimatorQualityProfileCmb(), getSwfAnimatorResolutionProfileCmb(), getTinaRenderFlameButton(), getTinaAppendToMovieButton(),
         getTransformationWeightREd());
@@ -7294,6 +7296,7 @@ public class TinaInternalFrame extends JInternalFrame {
       rootTabbedPane.addTab("Help/About", null, helpPanel, null);
       helpPanel.setLayout(new BorderLayout(0, 0));
       helpPanel.add(getScrollPane(), BorderLayout.CENTER);
+      rootTabbedPane.addTab("FAQ", null, getPanel(), null);
     }
     return rootTabbedPane;
   }
@@ -7376,6 +7379,9 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton btnWrapIntoBubble;
   private JScrollPane scrollPane;
   private JTextPane helpPane;
+  private JPanel panel;
+  private JScrollPane scrollPane_1;
+  private JTextPane faqPane;
 
   /**
    * This method initializes renderBatchJobsScrollPane	
@@ -9167,6 +9173,8 @@ public class TinaInternalFrame extends JInternalFrame {
   private JScrollPane getScrollPane() {
     if (scrollPane == null) {
       scrollPane = new JScrollPane();
+      scrollPane.setPreferredSize(new Dimension(6, 400));
+      scrollPane.setSize(new Dimension(0, 400));
       scrollPane.setViewportView(getHelpPane());
     }
     return scrollPane;
@@ -9175,8 +9183,63 @@ public class TinaInternalFrame extends JInternalFrame {
   private JTextPane getHelpPane() {
     if (helpPane == null) {
       helpPane = new JTextPane();
+      helpPane.setFont(new Font("SansSerif", Font.PLAIN, 14));
+      helpPane.addHyperlinkListener(new HyperlinkListener() {
+        public void hyperlinkUpdate(HyperlinkEvent e) {
+          if (e.getEventType() == HyperlinkEvent.EventType.ACTIVATED) {
+            try {
+              java.awt.Desktop.getDesktop().browse(e.getURL().toURI());
+            }
+            catch (Exception ex) {
+              ex.printStackTrace();
+            }
+          }
+        }
+      });
       helpPane.setEditable(false);
     }
     return helpPane;
+  }
+
+  private JPanel getPanel() {
+    if (panel == null) {
+      panel = new JPanel();
+      panel.setLayout(new BorderLayout(0, 0));
+      panel.add(getScrollPane_1(), BorderLayout.CENTER);
+    }
+    return panel;
+  }
+
+  private JScrollPane getScrollPane_1() {
+    if (scrollPane_1 == null) {
+      scrollPane_1 = new JScrollPane();
+      scrollPane_1.setViewportView(getTextPane_1());
+    }
+    return scrollPane_1;
+  }
+
+  private JTextPane getTextPane_1() {
+    if (faqPane == null) {
+      faqPane = new JTextPane();
+      faqPane.setFont(new Font("SansSerif", Font.PLAIN, 14));
+      faqPane.addHyperlinkListener(new HyperlinkListener() {
+        public void hyperlinkUpdate(HyperlinkEvent e) {
+          if (e.getEventType() == HyperlinkEvent.EventType.ACTIVATED) {
+            try {
+              java.awt.Desktop.getDesktop().browse(e.getURL().toURI());
+            }
+            catch (Exception ex) {
+              ex.printStackTrace();
+            }
+          }
+        }
+      });
+      faqPane.setEditable(false);
+    }
+    return faqPane;
+  }
+
+  public JTextPane getFaqPane() {
+    return getTextPane_1();
   }
 } //  @jve:decl-index=0:visual-constraint="10,10"
