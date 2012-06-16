@@ -18,8 +18,6 @@ package org.jwildfire.create.tina.randomflame;
 
 import org.jwildfire.base.Prefs;
 import org.jwildfire.create.tina.base.Flame;
-import org.jwildfire.create.tina.base.XForm;
-import org.jwildfire.create.tina.transform.XFormTransformService;
 
 public abstract class RandomFlameGenerator {
 
@@ -27,69 +25,45 @@ public abstract class RandomFlameGenerator {
 
   public abstract String getName();
 
-  public Flame createFlame(Prefs pPrefs, boolean pWithSymmetry, boolean pWithPostTransforms) {
+  public Flame createFlame(Prefs pPrefs) {
     Flame flame = createFlame();
     flame.setBGColorRed(pPrefs.getTinaRandomBatchBGColorRed());
     flame.setBGColorGreen(pPrefs.getTinaRandomBatchBGColorGreen());
     flame.setBGColorBlue(pPrefs.getTinaRandomBatchBGColorBlue());
-    if (pWithSymmetry && !pWithPostTransforms) {
-      addSymmetry(flame, false);
-    }
-    if (pWithPostTransforms) {
-      addPostTransforms(flame);
-      if (pWithSymmetry) {
-        addSymmetry(flame, true);
-      }
-    }
     return flame;
   }
 
-  protected void addSymmetry(Flame pFlame, boolean pPostTransformation) {
-    //    int symmetry = 2 + (int) (2 * Math.random() + 0.5);
-    int tCount = pFlame.getXForms().size();
-    int symmetry = tCount;
-    if (symmetry == 1) {
-      return;
-    }
-    int iMax = pFlame.getXForms().size() - 1;
-    if (iMax < 2) {
-      iMax = 2;
-    }
-    for (int i = 0; i < iMax; i++) {
-      XForm xForm = pFlame.getXForms().get(i);
-      double alpha = 2 * Math.PI / symmetry;
-      if (pPostTransformation) {
-        xForm.setPostCoeff00(Math.cos(i * alpha));
-        xForm.setPostCoeff01(Math.sin(i * alpha));
-        xForm.setPostCoeff10(-xForm.getPostCoeff01());
-        xForm.setPostCoeff11(xForm.getPostCoeff00());
-        xForm.setPostCoeff20(0.0);
-        xForm.setPostCoeff21(0.0);
-      }
-      else {
-        xForm.setCoeff00(Math.cos(i * alpha));
-        xForm.setCoeff01(Math.sin(i * alpha));
-        xForm.setCoeff10(-xForm.getCoeff01());
-        xForm.setCoeff11(xForm.getCoeff00());
-        xForm.setCoeff20(0.0);
-        xForm.setCoeff21(0.0);
-      }
-    }
-  }
-
-  protected void addPostTransforms(Flame pFlame) {
-    double scl = 1.0;
-    for (XForm xForm : pFlame.getXForms()) {
-      if (Math.random() < 0.5) {
-        XFormTransformService.rotate(xForm, 360.0 * Math.random(), true);
-      }
-      else {
-        XFormTransformService.rotate(xForm, -360.0 * Math.random(), true);
-      }
-      XFormTransformService.localTranslate(xForm, Math.random() - 1.0, Math.random() - 1.0, true);
-      scl *= 0.75 + Math.random() / 4;
-      XFormTransformService.scale(xForm, scl, true, true, true);
-    }
-  }
+  //  protected void addSymmetry(Flame pFlame, boolean pPostTransformation) {
+  //    //    int symmetry = 2 + (int) (2 * Math.random() + 0.5);
+  //    int tCount = pFlame.getXForms().size();
+  //    int symmetry = tCount;
+  //    if (symmetry == 1) {
+  //      return;
+  //    }
+  //    int iMax = pFlame.getXForms().size() - 1;
+  //    if (iMax < 2) {
+  //      iMax = 2;
+  //    }
+  //    for (int i = 0; i < iMax; i++) {
+  //      XForm xForm = pFlame.getXForms().get(i);
+  //      double alpha = 2 * Math.PI / symmetry;
+  //      if (pPostTransformation) {
+  //        xForm.setPostCoeff00(Math.cos(i * alpha));
+  //        xForm.setPostCoeff01(Math.sin(i * alpha));
+  //        xForm.setPostCoeff10(-xForm.getPostCoeff01());
+  //        xForm.setPostCoeff11(xForm.getPostCoeff00());
+  //        xForm.setPostCoeff20(0.0);
+  //        xForm.setPostCoeff21(0.0);
+  //      }
+  //      else {
+  //        xForm.setCoeff00(Math.cos(i * alpha));
+  //        xForm.setCoeff01(Math.sin(i * alpha));
+  //        xForm.setCoeff10(-xForm.getCoeff01());
+  //        xForm.setCoeff11(xForm.getCoeff00());
+  //        xForm.setCoeff20(0.0);
+  //        xForm.setCoeff21(0.0);
+  //      }
+  //    }
+  //  }
 
 }

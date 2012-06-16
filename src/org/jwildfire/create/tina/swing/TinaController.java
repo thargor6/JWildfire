@@ -42,7 +42,6 @@ import java.util.Collections;
 import java.util.List;
 
 import javax.swing.JButton;
-import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JPanel;
@@ -345,8 +344,6 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
   // Random batch
   private final JPanel randomBatchPanel;
   private JScrollPane randomBatchScrollPane = null;
-  private final JCheckBox randomPostTransformCheckBox;
-  private final JCheckBox randomSymmetryCheckBox;
   // Nonlinear transformations
   private final NonlinearControlsRow[] nonlinearControlsRows;
   // Color
@@ -409,8 +406,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       JSlider pXFormOpacitySlider, JComboBox pXFormDrawModeCmb, JTable pRelWeightsTable, JButton pRelWeightsZeroButton, JButton pRelWeightsOneButton,
       JWFNumberField pRelWeightREd, JToggleButton pMouseTransformMoveButton, JToggleButton pMouseTransformRotateButton, JToggleButton pMouseTransformScaleButton,
       JToggleButton pAffineEditPostTransformButton, JToggleButton pAffineEditPostTransformSmallButton, JButton pMouseEditZoomInButton, JButton pMouseEditZoomOutButton,
-      JToggleButton pToggleTrianglesButton, ProgressUpdater pMainProgressUpdater, JCheckBox pRandomPostTransformCheckBox, JCheckBox pRandomSymmetryCheckBox,
-      JButton pAffineResetTransformButton, JTable pCreatePaletteColorsTable,
+      JToggleButton pToggleTrianglesButton, ProgressUpdater pMainProgressUpdater, JButton pAffineResetTransformButton, JTable pCreatePaletteColorsTable,
       JComboBox pShadingCmb, JWFNumberField pShadingAmbientREd, JSlider pShadingAmbientSlider, JWFNumberField pShadingDiffuseREd, JSlider pShadingDiffuseSlider,
       JWFNumberField pShadingPhongREd, JSlider pShadingPhongSlider, JWFNumberField pShadingPhongSizeREd, JSlider pShadingPhongSizeSlider,
       JComboBox pShadingLightCmb, JWFNumberField pShadingLightXREd, JSlider pShadingLightXSlider, JWFNumberField pShadingLightYREd, JSlider pShadingLightYSlider,
@@ -565,8 +561,6 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     toggleDarkTrianglesButton = pToggleDarkTrianglesButton;
     mainProgressUpdater = pMainProgressUpdater;
     jobProgressUpdater = pJobProgressUpdater;
-    randomPostTransformCheckBox = pRandomPostTransformCheckBox;
-    randomSymmetryCheckBox = pRandomSymmetryCheckBox;
     affineResetTransformButton = pAffineResetTransformButton;
     createPaletteColorsTable = pCreatePaletteColorsTable;
     shadingCmb = pShadingCmb;
@@ -3098,7 +3092,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     RandomFlameGenerator randGen = RandomFlameGeneratorList.getRandomFlameGeneratorInstance(pGeneratorname, true);
     //int palettePoints = Integer.parseInt(paletteRandomPointsREd.getText());
     int palettePoints = 7 + (int) (Math.random() * 12.0);
-    RandomFlameGeneratorSampler sampler = new RandomFlameGeneratorSampler(IMG_WIDTH, IMG_HEIGHT, prefs, randGen, randomSymmetryCheckBox.isSelected(), randomPostTransformCheckBox.isSelected(), palettePoints);
+    RandomFlameGeneratorSampler sampler = new RandomFlameGeneratorSampler(IMG_WIDTH, IMG_HEIGHT, prefs, randGen, palettePoints);
     for (int i = 0; i < maxCount; i++) {
       RandomFlameGeneratorSample sample = sampler.createSample();
       randomBatch.add(sample.getFlame());

@@ -35,7 +35,6 @@ import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
@@ -404,8 +403,6 @@ public class TinaInternalFrame extends JInternalFrame {
   private JToggleButton toggleVariationsButton = null;
   private JLabel editSpaceLbl4 = null;
   private JProgressBar renderProgressBar = null;
-  private JCheckBox randomSymmetryCheckBox = null;
-  private JCheckBox randomPostTransformCheckBox = null;
   private JButton affineResetTransformButton = null;
   private JPanel nonlinearVar4Panel = null;
   private JLabel nonlinearVar4Lbl = null;
@@ -670,8 +667,6 @@ public class TinaInternalFrame extends JInternalFrame {
       randomStyleLbl.setFont(new Font("Dialog", Font.BOLD, 10));
       tinaNorthPanel.add(getRandomBatchButton(), null);
       tinaNorthPanel.add(randomStyleLbl, null);
-      tinaNorthPanel.add(getRandomSymmetryCheckBox(), null);
-      tinaNorthPanel.add(getRandomPostTransformCheckBox(), null);
       tinaNorthPanel.add(getRandomStyleCmb(), null);
       tinaNorthPanel.add(getNewFlameButton(), null);
       tinaNorthPanel.add(getLoadFromClipboardFlameButton(), null);
@@ -3044,8 +3039,8 @@ public class TinaInternalFrame extends JInternalFrame {
         getXFormOpacitySlider(), getXFormDrawModeCmb(), getRelWeightsTable(), getRelWeightsZeroButton(), getRelWeightsOneButton(), getRelWeightREd(),
         getMouseTransformMoveButton(),
         getMouseTransformRotateButton(), getMouseTransformScaleButton(), getAffineEditPostTransformButton(), getAffineEditPostTransformSmallButton(),
-        getMouseTransformZoomInButton(), getMouseTransformZoomOutButton(), getToggleTrianglesButton(), new MainProgressUpdater(this), getRandomPostTransformCheckBox(),
-        getRandomSymmetryCheckBox(), getAffineResetTransformButton(), getCreatePaletteColorsTable(),
+        getMouseTransformZoomInButton(), getMouseTransformZoomOutButton(), getToggleTrianglesButton(), new MainProgressUpdater(this),
+        getAffineResetTransformButton(), getCreatePaletteColorsTable(),
         getShadingCmb(), getShadingAmbientREd(), getShadingAmbientSlider(), getShadingDiffuseREd(), getShadingDiffuseSlider(),
         getShadingPhongREd(), getShadingPhongSlider(), getShadingPhongSizeREd(), getShadingPhongSizeSlider(), getShadingLightCmb(),
         getShadingLightXREd(), getShadingLightXSlider(), getShadingLightYREd(), getShadingLightYSlider(), getShadingLightZREd(),
@@ -4990,38 +4985,6 @@ public class TinaInternalFrame extends JInternalFrame {
       renderProgressBar.setStringPainted(true);
     }
     return renderProgressBar;
-  }
-
-  /**
-   * This method initializes randomSymmetryCheckBox	
-   * 	
-   * @return javax.swing.JCheckBox	
-   */
-  private JCheckBox getRandomSymmetryCheckBox() {
-    if (randomSymmetryCheckBox == null) {
-      randomSymmetryCheckBox = new JCheckBox();
-      randomSymmetryCheckBox.setText("Symmetry");
-      randomSymmetryCheckBox.setPreferredSize(new Dimension(94, 22));
-      randomSymmetryCheckBox.setBounds(new Rectangle(135, 35, 94, 22));
-      randomSymmetryCheckBox.setFont(new Font("Dialog", Font.BOLD, 10));
-    }
-    return randomSymmetryCheckBox;
-  }
-
-  /**
-   * This method initializes randomPostTransformCheckBox	
-   * 	
-   * @return javax.swing.JCheckBox	
-   */
-  private JCheckBox getRandomPostTransformCheckBox() {
-    if (randomPostTransformCheckBox == null) {
-      randomPostTransformCheckBox = new JCheckBox();
-      randomPostTransformCheckBox.setPreferredSize(new Dimension(94, 22));
-      randomPostTransformCheckBox.setText("Post Transforms");
-      randomPostTransformCheckBox.setBounds(new Rectangle(231, 35, 124, 22));
-      randomPostTransformCheckBox.setFont(new Font("Dialog", Font.BOLD, 10));
-    }
-    return randomPostTransformCheckBox;
   }
 
   /**

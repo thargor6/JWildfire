@@ -29,20 +29,16 @@ public class RandomFlameGeneratorSampler {
   private final int imageWidth;
   private final int imageHeight;
   private final Prefs prefs;
-  private final boolean withSymmetry;
-  private final boolean withPostTransforms;
   private final int paletteSize;
   private RandomFlameGenerator randGen;
   final int MAX_IMG_SAMPLES = 10;
   final double MIN_COVERAGE = 0.33;
 
-  public RandomFlameGeneratorSampler(int pImageWidth, int pImageHeight, Prefs pPrefs, RandomFlameGenerator pRandGen, boolean pWithSymmetry, boolean pWithPostTransforms, int pPaletteSize) {
+  public RandomFlameGeneratorSampler(int pImageWidth, int pImageHeight, Prefs pPrefs, RandomFlameGenerator pRandGen, int pPaletteSize) {
     imageWidth = pImageWidth;
     imageHeight = pImageHeight;
     prefs = pPrefs;
     randGen = pRandGen;
-    withSymmetry = pWithSymmetry;
-    withPostTransforms = pWithPostTransforms;
     paletteSize = pPaletteSize;
   }
 
@@ -55,7 +51,7 @@ public class RandomFlameGeneratorSampler {
     double bestCoverage = 0.0;
     for (int j = 0; j < MAX_IMG_SAMPLES; j++) {
       // create flame
-      Flame flame = randGen.createFlame(prefs, withSymmetry, withPostTransforms);
+      Flame flame = randGen.createFlame(prefs);
       flame.setWidth(imageWidth);
       flame.setHeight(imageHeight);
       flame.setPixelsPerUnit(10);

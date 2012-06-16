@@ -28,7 +28,7 @@ public class Prefs extends ManagedObject {
   // DON'T forget to update the assign() method after adding new properties!!!
   static final String PREFS_FILE = "j-wildfire.properties";
 
-  static final String KEY_GENERAL_PLAF_STYLE = "general.plaf.style";
+  static final String KEY_GENERAL_PLAF_STYLE = "general.plaf.style2";
   static final String KEY_GENERAL_PLAF_THEME = "general.plaf.theme";
   static final String KEY_GENERAL_PATH_IMAGES = "general.path.images";
   static final String KEY_GENERAL_PATH_SCRIPTS = "general.path.scripts";
@@ -106,12 +106,12 @@ public class Prefs extends ManagedObject {
     public PLAFStyleEditor() {
       super();
       setAvailableValues(new String[] { LookAndFeel.PLAF_AERO, LookAndFeel.PLAF_ALUMINIUM, LookAndFeel.PLAF_BERNSTEIN, LookAndFeel.PLAF_FAST, LookAndFeel.PLAF_GRAPHITE, LookAndFeel.PLAF_HIFI, LookAndFeel.PLAF_MCWIN, LookAndFeel.PLAF_MINT,
-          LookAndFeel.PLAF_NIMBUS, LookAndFeel.PLAF_NOIRE, LookAndFeel.PLAF_LUNA, LookAndFeel.PLAF_SMART });
+          LookAndFeel.PLAF_NIMBUS, LookAndFeel.PLAF_NOIRE, LookAndFeel.PLAF_LUNA, LookAndFeel.PLAF_SMART, LookAndFeel.PLAF_MAC });
     }
   }
 
   @Property(description = "Look and feel (major UI style) - changes are applied only after restarting the main program", category = PropertyCategory.TINA, editorClass = PLAFStyleEditor.class)
-  private String plafStyle = LookAndFeel.PLAF_NOIRE;
+  private String plafStyle = LookAndFeel.PLAF_NIMBUS;
   @Property(description = "Look and feel theme (UI sub style) - changes are applied only after restarting the main program", category = PropertyCategory.TINA)
   private String plafTheme = LookAndFeel.THEME_DEFAULT;
 
