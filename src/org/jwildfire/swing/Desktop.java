@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2012 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -69,6 +69,7 @@ public class Desktop extends JApplet {
   private JMenu helpMenu = null;
   private JMenuItem exitMenuItem = null;
   private JMenuItem welcomeMenuItem = null;
+  private JMenuItem systemInfoMenuItem = null;
   private JMenuItem saveMenuItem = null;
   private JDesktopPane mainDesktopPane = null;
   private JMenu windowMenu = null;
@@ -95,6 +96,7 @@ public class Desktop extends JApplet {
       mainDesktopPane.add(getEDENInternalFrame(), null);
       mainDesktopPane.add(getPreferencesInternalFrame(), null);
       mainDesktopPane.add(getWelcomeInternalFrame(), null);
+      mainDesktopPane.add(getSystemInfoInternalFrame(), null);
       if (!welcomeInternalFrame.isVisible()) {
         welcomeInternalFrame.setVisible(true);
       }
@@ -171,8 +173,31 @@ public class Desktop extends JApplet {
       formulaExplorerFrame.setMainController(mainController);
       formulaExplorerFrame.setFormulaExplorerController(formulaExplorerController);
 
+      setupShowSysInfoThread();
+
     }
     return mainDesktopPane;
+  }
+
+  private void setupShowSysInfoThread() {
+    final JInternalFrame tinaFrame = getTinaInternalFrame();
+    final String title = tinaFrame.getTitle();
+    new Thread(new Runnable() {
+
+      @Override
+      public void run() {
+        while (true) {
+          try {
+            SystemInfo sysInfo = new SystemInfo();
+            tinaFrame.setTitle(title + "(" + sysInfo.getUsedMemMB() + "MB / " + sysInfo.getMaxMemMB() + "MB)");
+            Thread.sleep(1000);
+          }
+          catch (InterruptedException e) {
+            e.printStackTrace();
+          }
+        }
+      }
+    }).start();
   }
 
   /**
@@ -1491,7 +1516,8 @@ public class Desktop extends JApplet {
     if (helpMenu == null) {
       helpMenu = new JMenu();
       helpMenu.setText("Help");
-      helpMenu.add(getAboutMenuItem());
+      helpMenu.add(getWelcomeMenuItem());
+      helpMenu.add(getSystemInfoMenuItem());
     }
     return helpMenu;
   }
@@ -1522,12 +1548,7 @@ public class Desktop extends JApplet {
     return exitMenuItem;
   }
 
-  /**
-   * This method initializes jMenuItem
-   * 
-   * @return javax.swing.JMenuItem
-   */
-  private JMenuItem getAboutMenuItem() {
+  private JMenuItem getWelcomeMenuItem() {
     if (welcomeMenuItem == null) {
       welcomeMenuItem = new JMenuItem();
       welcomeMenuItem.setText("Welcome to " + Tools.APP_TITLE);
@@ -1546,6 +1567,28 @@ public class Desktop extends JApplet {
       });
     }
     return welcomeMenuItem;
+  }
+
+  private JMenuItem getSystemInfoMenuItem() {
+    if (systemInfoMenuItem == null) {
+      systemInfoMenuItem = new JMenuItem();
+      systemInfoMenuItem.setText("System Information");
+      systemInfoMenuItem.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent e) {
+          if (!systemInfoInternalFrame.isVisible()) {
+            systemInfoInternalFrame.setVisible(true);
+          }
+          try {
+
+            systemInfoInternalFrame.setSelected(true);
+          }
+          catch (PropertyVetoException ex) {
+            ex.printStackTrace();
+          }
+        }
+      });
+    }
+    return systemInfoMenuItem;
   }
 
   /**
@@ -1847,6 +1890,7 @@ public class Desktop extends JApplet {
 
   private JInternalFrame edenInternalFrame = null;
   private JInternalFrame welcomeInternalFrame = null;
+  private JInternalFrame systemInfoInternalFrame = null;
 
   void enableControls() {
     edenMenuItem.setSelected(edenInternalFrame.isVisible());
@@ -1953,4 +1997,10 @@ public class Desktop extends JApplet {
     return welcomeInternalFrame;
   }
 
+  private JInternalFrame getSystemInfoInternalFrame() {
+    if (systemInfoInternalFrame == null) {
+      systemInfoInternalFrame = new SystemInfoInternalFrame();
+    }
+    return systemInfoInternalFrame;
+  }
 }
