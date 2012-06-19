@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2012 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -70,6 +70,8 @@ public class FlamePanel extends ImagePanel {
   private int renderWidth;
   private int renderHeight;
   private double renderAspect = 1.0;
+
+  private int selectedPoint = 1;
 
   private final JToggleButton toggleTrianglesButton;
   private final JToggleButton toggleVariationsButton;
@@ -299,9 +301,27 @@ public class FlamePanel extends ImagePanel {
     g.setStroke(isSelected ? SELECTED_LINE : NORMAL_LINE);
     g.drawPolygon(triangle.viewX, triangle.viewY, 3);
     if (isSelected) {
-      int radius = 10;
       g.setStroke(NORMAL_LINE);
-      g.drawOval(triangle.viewX[1] - radius / 2, triangle.viewY[1] - radius / 2, radius, radius);
+      // selected point
+      {
+        int radius = 10;
+        g.fillOval(triangle.viewX[selectedPoint] - radius / 2, triangle.viewY[selectedPoint] - radius / 2, radius, radius);
+      }
+      // axes
+      {
+        int offset = 16;
+        int cx = (triangle.viewX[0] + triangle.viewX[1] + triangle.viewX[2]) / 3;
+        int cy = (triangle.viewY[0] + triangle.viewY[1] + triangle.viewY[2]) / 3;
+        final String label = "xoy";
+        for (int i = 0; i < triangle.viewX.length; i++) {
+          double dx = triangle.viewX[i] - cx;
+          double dy = triangle.viewY[i] - cy;
+          double dr = MathLib.sqrt(dx * dx + dy * dy) + MathLib.EPSILON;
+          dx /= dr;
+          dy /= dr;
+          g.drawString(String.valueOf(label.charAt(i)), triangle.viewX[i] + (int) (offset * dx), triangle.viewY[i] + (int) (offset * dy));
+        }
+      }
     }
   }
 
@@ -357,6 +377,30 @@ public class FlamePanel extends ImagePanel {
               else {
                 selectedXForm.setCoeff20(selectedXForm.getCoeff20() + dx);
                 selectedXForm.setCoeff21(selectedXForm.getCoeff21() - dy);
+              }
+              return true;
+            }
+            case SHEAR: {
+              if (fineMovement) {
+                dx *= 0.25;
+                dy *= 0.25;
+              }
+              // move
+              //              if (editPostTransform) {
+              //                selectedXForm.setPostCoeff10(selectedXForm.getPostCoeff10() - dx);
+              //                selectedXForm.setPostCoeff11(selectedXForm.getPostCoeff11() + dy);
+              //              }
+              //              else {
+              //                selectedXForm.setCoeff10(selectedXForm.getCoeff10() - dx);
+              //                selectedXForm.setCoeff11(selectedXForm.getCoeff11() + dy);
+              //              }
+              if (editPostTransform) {
+                selectedXForm.setPostCoeff00(selectedXForm.getPostCoeff00() + dx);
+                selectedXForm.setPostCoeff01(selectedXForm.getPostCoeff01() - dy);
+              }
+              else {
+                selectedXForm.setCoeff00(selectedXForm.getCoeff00() + dx);
+                selectedXForm.setCoeff01(selectedXForm.getCoeff01() - dy);
               }
               return true;
             }
@@ -473,13 +517,14 @@ public class FlamePanel extends ImagePanel {
 
   public void setMouseDragOperation(MouseDragOperation mouseDragOperation) {
     this.mouseDragOperation = mouseDragOperation;
+    selectedPoint = 1;
   }
 
   public void setEditPostTransform(boolean pEditPostTransform) {
     editPostTransform = pEditPostTransform;
   }
 
-  public void zoomIn() {
+  public void zoomOut() {
     if (zoom > 0.2) {
       zoom -= 0.1;
     }
@@ -491,7 +536,7 @@ public class FlamePanel extends ImagePanel {
     }
   }
 
-  public void zoomOut() {
+  public void zoomIn() {
     zoom += 0.1;
   }
 
