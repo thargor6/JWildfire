@@ -373,6 +373,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
   private final JToggleButton mouseTransformMoveButton;
   private final JToggleButton mouseTransformRotateButton;
   private final JToggleButton mouseTransformScaleButton;
+  private final JToggleButton mouseTransformShearButton;
   private final JToggleButton mouseTransformSlowButton;
   //
   private final JButton batchRenderAddFilesButton;
@@ -406,6 +407,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       JWFNumberField pXFormColorREd, JSlider pXFormColorSlider, JWFNumberField pXFormSymmetryREd, JSlider pXFormSymmetrySlider, JWFNumberField pXFormOpacityREd,
       JSlider pXFormOpacitySlider, JComboBox pXFormDrawModeCmb, JTable pRelWeightsTable, JButton pRelWeightsZeroButton, JButton pRelWeightsOneButton,
       JWFNumberField pRelWeightREd, JToggleButton pMouseTransformMoveButton, JToggleButton pMouseTransformRotateButton, JToggleButton pMouseTransformScaleButton,
+      JToggleButton pMouseTransformShearButton,
       JToggleButton pAffineEditPostTransformButton, JToggleButton pAffineEditPostTransformSmallButton, JButton pMouseEditZoomInButton, JButton pMouseEditZoomOutButton,
       JToggleButton pToggleTrianglesButton, ProgressUpdater pMainProgressUpdater, JButton pAffineResetTransformButton, JTable pCreatePaletteColorsTable,
       JComboBox pShadingCmb, JWFNumberField pShadingAmbientREd, JSlider pShadingAmbientSlider, JWFNumberField pShadingDiffuseREd, JSlider pShadingDiffuseSlider,
@@ -557,6 +559,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     mouseTransformMoveButton = pMouseTransformMoveButton;
     mouseTransformRotateButton = pMouseTransformRotateButton;
     mouseTransformScaleButton = pMouseTransformScaleButton;
+    mouseTransformShearButton = pMouseTransformShearButton;
     toggleTrianglesButton = pToggleTrianglesButton;
     toggleVariationsButton = pToggleVariationsButton;
     toggleDarkTrianglesButton = pToggleDarkTrianglesButton;
@@ -3496,6 +3499,9 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       Flame flame = getCurrFlame();
       if (flame != null && flamePanel != null) {
         XForm xForm = flamePanel.mouseClicked(e.getX(), e.getY());
+        if (flamePanel.isRedrawAfterMouseClick()) {
+          refreshFlameImage(false);
+        }
         if (xForm != null) {
           for (int i = 0; i < flame.getXForms().size(); i++) {
             if (xForm == flame.getXForms().get(i)) {
@@ -3519,6 +3525,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       try {
         mouseTransformRotateButton.setSelected(false);
         mouseTransformScaleButton.setSelected(false);
+        mouseTransformShearButton.setSelected(false);
         if (flamePanel != null) {
           flamePanel.setMouseDragOperation(mouseTransformMoveButton.isSelected() ? MouseDragOperation.MOVE : MouseDragOperation.NONE);
         }
@@ -3535,6 +3542,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       try {
         mouseTransformMoveButton.setSelected(false);
         mouseTransformScaleButton.setSelected(false);
+        mouseTransformShearButton.setSelected(false);
         if (flamePanel != null) {
           flamePanel.setMouseDragOperation(mouseTransformRotateButton.isSelected() ? MouseDragOperation.ROTATE : MouseDragOperation.NONE);
         }
@@ -3551,6 +3559,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       try {
         mouseTransformMoveButton.setSelected(false);
         mouseTransformRotateButton.setSelected(false);
+        mouseTransformShearButton.setSelected(false);
         if (flamePanel != null) {
           flamePanel.setMouseDragOperation(mouseTransformScaleButton.isSelected() ? MouseDragOperation.SCALE : MouseDragOperation.NONE);
         }
@@ -4869,6 +4878,23 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     }
     catch (Throwable ex) {
       errorHandler.handleError(ex);
+    }
+  }
+
+  public void mouseTransformShearButton_clicked() {
+    if (!refreshing) {
+      refreshing = true;
+      try {
+        mouseTransformMoveButton.setSelected(false);
+        mouseTransformRotateButton.setSelected(false);
+        mouseTransformScaleButton.setSelected(false);
+        if (flamePanel != null) {
+          flamePanel.setMouseDragOperation(mouseTransformShearButton.isSelected() ? MouseDragOperation.SHEAR : MouseDragOperation.NONE);
+        }
+      }
+      finally {
+        refreshing = false;
+      }
     }
   }
 

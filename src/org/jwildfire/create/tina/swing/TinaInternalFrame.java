@@ -3040,7 +3040,7 @@ public class TinaInternalFrame extends JInternalFrame {
         nonlinearControlsRows, getXFormColorREd(), getXFormColorSlider(), getXFormSymmetryREd(), getXFormSymmetrySlider(), getXFormOpacityREd(),
         getXFormOpacitySlider(), getXFormDrawModeCmb(), getRelWeightsTable(), getRelWeightsZeroButton(), getRelWeightsOneButton(), getRelWeightREd(),
         getMouseTransformMoveButton(),
-        getMouseTransformRotateButton(), getMouseTransformScaleButton(), getAffineEditPostTransformButton(), getAffineEditPostTransformSmallButton(),
+        getMouseTransformRotateButton(), getMouseTransformScaleButton(), getMouseTransformShearButton(), getAffineEditPostTransformButton(), getAffineEditPostTransformSmallButton(),
         getMouseTransformZoomInButton(), getMouseTransformZoomOutButton(), getToggleTrianglesButton(), new MainProgressUpdater(this),
         getAffineResetTransformButton(), getCreatePaletteColorsTable(),
         getShadingCmb(), getShadingAmbientREd(), getShadingAmbientSlider(), getShadingDiffuseREd(), getShadingDiffuseSlider(),
@@ -4694,6 +4694,17 @@ public class TinaInternalFrame extends JInternalFrame {
       triangleOperationsPanel.add(getMouseTransformMoveButton(), null);
       triangleOperationsPanel.add(getMouseTransformRotateButton(), null);
       triangleOperationsPanel.add(getMouseTransformScaleButton(), null);
+
+      mouseTransformShearButton = new JToggleButton();
+      mouseTransformShearButton.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.mouseTransformShearButton_clicked();
+        }
+      });
+      mouseTransformShearButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/shear.gif")));
+      mouseTransformShearButton.setToolTipText("Enable free triangle shear mode");
+      mouseTransformShearButton.setPreferredSize(new Dimension(42, 36));
+      triangleOperationsPanel.add(mouseTransformShearButton);
       triangleOperationsPanel.add(editSpaceLbl1, null);
       triangleOperationsPanel.add(editSpaceLbl3, null);
       triangleOperationsPanel.add(getToggleTrianglesButton(), null);
@@ -7382,6 +7393,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JPanel panel;
   private JScrollPane scrollPane_1;
   private JTextPane faqPane;
+  private JToggleButton mouseTransformShearButton;
 
   /**
    * This method initializes renderBatchJobsScrollPane	
@@ -9241,5 +9253,9 @@ public class TinaInternalFrame extends JInternalFrame {
 
   public JTextPane getFaqPane() {
     return getTextPane_1();
+  }
+
+  public JToggleButton getMouseTransformShearButton() {
+    return mouseTransformShearButton;
   }
 } //  @jve:decl-index=0:visual-constraint="10,10"

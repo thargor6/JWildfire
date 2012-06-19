@@ -75,6 +75,7 @@ public class FlamePanel extends ImagePanel {
 
   private final JToggleButton toggleTrianglesButton;
   private final JToggleButton toggleVariationsButton;
+  private boolean redrawAfterMouseClick;
 
   public FlamePanel(SimpleImage pSimpleImage, int pX, int pY, int pWidth, FlameHolder pFlameHolder, JToggleButton pToggleTrianglesButton, JToggleButton pToggleVariationsButton) {
     super(pSimpleImage, pX, pY, pWidth);
@@ -385,22 +386,49 @@ public class FlamePanel extends ImagePanel {
                 dx *= 0.25;
                 dy *= 0.25;
               }
-              // move
-              //              if (editPostTransform) {
-              //                selectedXForm.setPostCoeff10(selectedXForm.getPostCoeff10() - dx);
-              //                selectedXForm.setPostCoeff11(selectedXForm.getPostCoeff11() + dy);
-              //              }
-              //              else {
-              //                selectedXForm.setCoeff10(selectedXForm.getCoeff10() - dx);
-              //                selectedXForm.setCoeff11(selectedXForm.getCoeff11() + dy);
-              //              }
-              if (editPostTransform) {
-                selectedXForm.setPostCoeff00(selectedXForm.getPostCoeff00() + dx);
-                selectedXForm.setPostCoeff01(selectedXForm.getPostCoeff01() - dy);
-              }
-              else {
-                selectedXForm.setCoeff00(selectedXForm.getCoeff00() + dx);
-                selectedXForm.setCoeff01(selectedXForm.getCoeff01() - dy);
+              switch (selectedPoint) {
+                case 0:
+                  if (editPostTransform) {
+                    selectedXForm.setPostCoeff00(selectedXForm.getPostCoeff00() + dx);
+                    selectedXForm.setPostCoeff01(selectedXForm.getPostCoeff01() - dy);
+                  }
+                  else {
+                    selectedXForm.setCoeff00(selectedXForm.getCoeff00() + dx);
+                    selectedXForm.setCoeff01(selectedXForm.getCoeff01() - dy);
+                  }
+                  break;
+                case 1:
+                  if (editPostTransform) {
+                    selectedXForm.setPostCoeff20(selectedXForm.getPostCoeff20() + dx);
+                    selectedXForm.setPostCoeff21(selectedXForm.getPostCoeff21() - dy);
+
+                    selectedXForm.setPostCoeff10(selectedXForm.getPostCoeff10() + dx);
+                    selectedXForm.setPostCoeff11(selectedXForm.getPostCoeff11() - dy);
+
+                    selectedXForm.setPostCoeff00(selectedXForm.getPostCoeff00() - dx);
+                    selectedXForm.setPostCoeff01(selectedXForm.getPostCoeff01() + dy);
+                  }
+                  else {
+                    selectedXForm.setCoeff20(selectedXForm.getCoeff20() + dx);
+                    selectedXForm.setCoeff21(selectedXForm.getCoeff21() - dy);
+
+                    selectedXForm.setCoeff10(selectedXForm.getCoeff10() + dx);
+                    selectedXForm.setCoeff11(selectedXForm.getCoeff11() - dy);
+
+                    selectedXForm.setCoeff00(selectedXForm.getCoeff00() - dx);
+                    selectedXForm.setCoeff01(selectedXForm.getCoeff01() + dy);
+                  }
+                  break;
+                case 2:
+                  if (editPostTransform) {
+                    selectedXForm.setPostCoeff10(selectedXForm.getPostCoeff10() - dx);
+                    selectedXForm.setPostCoeff11(selectedXForm.getPostCoeff11() + dy);
+                  }
+                  else {
+                    selectedXForm.setCoeff10(selectedXForm.getCoeff10() - dx);
+                    selectedXForm.setCoeff11(selectedXForm.getCoeff11() + dy);
+                  }
+                  break;
               }
               return true;
             }
@@ -495,22 +523,51 @@ public class FlamePanel extends ImagePanel {
     return (u >= 0) && (v >= 0) && (u + v < 1);
   }
 
+  private int selectNearestPoint(Triangle pTriangle, int viewX, int viewY) {
+    double dx, dy;
+    dx = pTriangle.viewX[0] - viewX;
+    dy = pTriangle.viewY[0] - viewY;
+    double dr0 = MathLib.sqrt(dx * dx + dy * dy);
+    dx = pTriangle.viewX[1] - viewX;
+    dy = pTriangle.viewY[1] - viewY;
+    double dr1 = MathLib.sqrt(dx * dx + dy * dy);
+    dx = pTriangle.viewX[2] - viewX;
+    dy = pTriangle.viewY[2] - viewY;
+    double dr2 = MathLib.sqrt(dx * dx + dy * dy);
+    return dr0 < dr1 ? (dr0 < dr2 ? 0 : 2) : (dr1 < dr2 ? 1 : 2);
+  }
+
   public XForm mouseClicked(int x, int y) {
+    redrawAfterMouseClick = false;
     // select flame
     Flame flame = flameHolder.getFlame();
     if (flame != null) {
       for (XForm xForm : flame.getXForms()) {
         Triangle triangle = new Triangle(xForm);
         if (insideTriange(triangle, x, y)) {
+          if (mouseDragOperation == MouseDragOperation.SHEAR) {
+            selectedPoint = selectNearestPoint(triangle, x, y);
+            redrawAfterMouseClick = true;
+          }
           return xForm;
         }
       }
       if (flame.getFinalXForm() != null) {
         Triangle triangle = new Triangle(flame.getFinalXForm());
         if (insideTriange(triangle, x, y)) {
+          if (mouseDragOperation == MouseDragOperation.SHEAR) {
+            selectedPoint = selectNearestPoint(triangle, x, y);
+            redrawAfterMouseClick = true;
+          }
           return flame.getFinalXForm();
         }
       }
+    }
+    // select nearest point
+    if (mouseDragOperation == MouseDragOperation.SHEAR && selectedXForm != null) {
+      Triangle triangle = new Triangle(selectedXForm);
+      selectedPoint = selectNearestPoint(triangle, x, y);
+      redrawAfterMouseClick = true;
     }
     return null;
   }
@@ -599,6 +656,14 @@ public class FlamePanel extends ImagePanel {
       flameRenderer.createColorMap();
     }
     return flameRenderer;
+  }
+
+  public MouseDragOperation getMouseDragOperation() {
+    return mouseDragOperation;
+  }
+
+  public boolean isRedrawAfterMouseClick() {
+    return redrawAfterMouseClick;
   }
 
 }
