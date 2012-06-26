@@ -4702,7 +4702,7 @@ public class TinaInternalFrame extends JInternalFrame {
         }
       });
       mouseTransformShearButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/shear.gif")));
-      mouseTransformShearButton.setToolTipText("Enable free triangle shear mode");
+      mouseTransformShearButton.setToolTipText("Enable free triangle editing mode");
       mouseTransformShearButton.setPreferredSize(new Dimension(42, 36));
       triangleOperationsPanel.add(mouseTransformShearButton);
       triangleOperationsPanel.add(editSpaceLbl1, null);
@@ -4823,10 +4823,13 @@ public class TinaInternalFrame extends JInternalFrame {
   private JPanel getCenterWestPanel() {
     if (centerWestPanel == null) {
       centerWestPanel = new JPanel();
-      centerWestPanel.setPreferredSize(new Dimension(52, 0));
+      centerWestPanel.setPreferredSize(new Dimension(70, 0));
       centerWestPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
       centerWestPanel.add(getTinaAppendToMovieButton());
       centerWestPanel.add(getTinaWrapIntoSubFlameButton());
+      centerWestPanel.add(getLabel_5());
+      centerWestPanel.add(getUndoButton());
+      centerWestPanel.add(getRedoButton());
     }
     return centerWestPanel;
   }
@@ -7394,6 +7397,9 @@ public class TinaInternalFrame extends JInternalFrame {
   private JScrollPane scrollPane_1;
   private JTextPane faqPane;
   private JToggleButton mouseTransformShearButton;
+  private JButton undoButton;
+  private JLabel label_5;
+  private JButton redoButton;
 
   /**
    * This method initializes renderBatchJobsScrollPane	
@@ -9043,8 +9049,8 @@ public class TinaInternalFrame extends JInternalFrame {
         }
       });
       tinaAppendToMovieButton.setToolTipText("Append to movie");
-      tinaAppendToMovieButton.setText("M");
-      tinaAppendToMovieButton.setPreferredSize(new Dimension(42, 36));
+      tinaAppendToMovieButton.setText("Movie");
+      tinaAppendToMovieButton.setPreferredSize(new Dimension(60, 36));
       tinaAppendToMovieButton.setMnemonic(KeyEvent.VK_M);
       tinaAppendToMovieButton.setFont(new Font("Dialog", Font.BOLD, 10));
     }
@@ -9069,7 +9075,7 @@ public class TinaInternalFrame extends JInternalFrame {
       });
       tinaWrapIntoSubFlameButton.setToolTipText("Wrap into sub flame");
       tinaWrapIntoSubFlameButton.setText("SF");
-      tinaWrapIntoSubFlameButton.setPreferredSize(new Dimension(42, 36));
+      tinaWrapIntoSubFlameButton.setPreferredSize(new Dimension(60, 36));
       tinaWrapIntoSubFlameButton.setMnemonic(KeyEvent.VK_S);
       tinaWrapIntoSubFlameButton.setFont(new Font("Dialog", Font.BOLD, 10));
     }
@@ -9257,5 +9263,49 @@ public class TinaInternalFrame extends JInternalFrame {
 
   public JToggleButton getMouseTransformShearButton() {
     return mouseTransformShearButton;
+  }
+
+  private JButton getUndoButton() {
+    if (undoButton == null) {
+      undoButton = new JButton();
+      undoButton.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.undoAction();
+        }
+      });
+      undoButton.setToolTipText("Undo");
+      undoButton.setText("Undo");
+      undoButton.setPreferredSize(new Dimension(60, 36));
+      undoButton.setMnemonic(KeyEvent.VK_Z);
+      undoButton.setFont(new Font("Dialog", Font.BOLD, 10));
+    }
+    return undoButton;
+  }
+
+  private JLabel getLabel_5() {
+    if (label_5 == null) {
+      label_5 = new JLabel();
+      label_5.setText("");
+      label_5.setPreferredSize(new Dimension(42, 100));
+      label_5.setFont(new Font("Dialog", Font.BOLD, 10));
+    }
+    return label_5;
+  }
+
+  private JButton getRedoButton() {
+    if (redoButton == null) {
+      redoButton = new JButton();
+      redoButton.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.redoAction();
+        }
+      });
+      redoButton.setToolTipText("Redo");
+      redoButton.setText("Redo");
+      redoButton.setPreferredSize(new Dimension(60, 36));
+      redoButton.setMnemonic(KeyEvent.VK_Y);
+      redoButton.setFont(new Font("Dialog", Font.BOLD, 10));
+    }
+    return redoButton;
   }
 } //  @jve:decl-index=0:visual-constraint="10,10"

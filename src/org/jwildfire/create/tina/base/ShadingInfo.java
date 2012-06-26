@@ -16,6 +16,8 @@
 */
 package org.jwildfire.create.tina.base;
 
+import org.jwildfire.create.tina.edit.PropertyChangeListener;
+
 public class ShadingInfo {
   // pseudo3D
   private static final int MAXLIGHTS = 4;
@@ -34,6 +36,11 @@ public class ShadingInfo {
   private int blurRadius;
   private double blurFade;
   private double blurFallOff;
+  private final Flame owner;
+
+  public ShadingInfo(Flame owner) {
+    this.owner = owner;
+  }
 
   protected void init() {
     shading = Shading.FLAT;
@@ -77,6 +84,9 @@ public class ShadingInfo {
   }
 
   public void setShading(Shading shading) {
+    for (PropertyChangeListener<Flame> listener : owner.getChangeListeners()) {
+      listener.propertyChanged(owner, "shading.shading", this.shading, shading);
+    }
     this.shading = shading;
   }
 
@@ -85,6 +95,9 @@ public class ShadingInfo {
   }
 
   public void setAmbient(double ambient) {
+    for (PropertyChangeListener<Flame> listener : owner.getChangeListeners()) {
+      listener.propertyChanged(owner, "shading.ambient", this.ambient, ambient);
+    }
     this.ambient = ambient;
   }
 
@@ -93,6 +106,9 @@ public class ShadingInfo {
   }
 
   public void setDiffuse(double diffuse) {
+    for (PropertyChangeListener<Flame> listener : owner.getChangeListeners()) {
+      listener.propertyChanged(owner, "shading.diffuse", this.diffuse, diffuse);
+    }
     this.diffuse = diffuse;
   }
 
@@ -114,6 +130,9 @@ public class ShadingInfo {
   }
 
   public void setPhong(double phong) {
+    for (PropertyChangeListener<Flame> listener : owner.getChangeListeners()) {
+      listener.propertyChanged(owner, "shading.phong", this.phong, phong);
+    }
     this.phong = phong;
   }
 
@@ -122,6 +141,9 @@ public class ShadingInfo {
   }
 
   public void setPhongSize(double phongSize) {
+    for (PropertyChangeListener<Flame> listener : owner.getChangeListeners()) {
+      listener.propertyChanged(owner, "shading.phongSize", this.phongSize, phongSize);
+    }
     this.phongSize = phongSize;
   }
 
@@ -130,6 +152,9 @@ public class ShadingInfo {
   }
 
   public void setLightPosX(int pIdx, double pLightPosX) {
+    for (PropertyChangeListener<Flame> listener : owner.getChangeListeners()) {
+      listener.propertyChanged(owner, "shading.lightPosX." + pIdx, this.lightPosX[pIdx], pLightPosX);
+    }
     this.lightPosX[pIdx] = pLightPosX;
   }
 
@@ -138,6 +163,9 @@ public class ShadingInfo {
   }
 
   public void setLightPosY(int pIdx, double pLightPosY) {
+    for (PropertyChangeListener<Flame> listener : owner.getChangeListeners()) {
+      listener.propertyChanged(owner, "shading.lightPosY." + pIdx, this.lightPosY[pIdx], pLightPosY);
+    }
     this.lightPosY[pIdx] = pLightPosY;
   }
 
@@ -146,6 +174,9 @@ public class ShadingInfo {
   }
 
   public void setLightPosZ(int pIdx, double pLightPosZ) {
+    for (PropertyChangeListener<Flame> listener : owner.getChangeListeners()) {
+      listener.propertyChanged(owner, "shading.lightPosZ." + pIdx, this.lightPosZ[pIdx], pLightPosZ);
+    }
     this.lightPosZ[pIdx] = pLightPosZ;
   }
 
@@ -154,6 +185,9 @@ public class ShadingInfo {
   }
 
   public void setLightRed(int pIdx, int pLightRed) {
+    for (PropertyChangeListener<Flame> listener : owner.getChangeListeners()) {
+      listener.propertyChanged(owner, "shading.lightRed." + pIdx, this.lightRed[pIdx], pLightRed);
+    }
     this.lightRed[pIdx] = pLightRed;
   }
 
@@ -162,6 +196,9 @@ public class ShadingInfo {
   }
 
   public void setLightGreen(int pIdx, int pLightGreen) {
+    for (PropertyChangeListener<Flame> listener : owner.getChangeListeners()) {
+      listener.propertyChanged(owner, "shading.lightGreen." + pIdx, this.lightGreen[pIdx], pLightGreen);
+    }
     this.lightGreen[pIdx] = pLightGreen;
   }
 
@@ -170,6 +207,9 @@ public class ShadingInfo {
   }
 
   public void setLightBlue(int pIdx, int pLightBlue) {
+    for (PropertyChangeListener<Flame> listener : owner.getChangeListeners()) {
+      listener.propertyChanged(owner, "shading.lightBlue." + pIdx, this.lightBlue[pIdx], pLightBlue);
+    }
     this.lightBlue[pIdx] = pLightBlue;
   }
 
@@ -217,6 +257,9 @@ public class ShadingInfo {
   }
 
   public void setBlurRadius(int blurRadius) {
+    for (PropertyChangeListener<Flame> listener : owner.getChangeListeners()) {
+      listener.propertyChanged(owner, "shading.blurRadius", this.blurRadius, blurRadius);
+    }
     this.blurRadius = blurRadius;
   }
 
@@ -225,6 +268,9 @@ public class ShadingInfo {
   }
 
   public void setBlurFade(double blurFade) {
+    for (PropertyChangeListener<Flame> listener : owner.getChangeListeners()) {
+      listener.propertyChanged(owner, "shading.blurFade", this.blurFade, blurFade);
+    }
     this.blurFade = blurFade;
   }
 
@@ -233,6 +279,9 @@ public class ShadingInfo {
   }
 
   public void setBlurFallOff(double blurFallOff) {
+    for (PropertyChangeListener<Flame> listener : owner.getChangeListeners()) {
+      listener.propertyChanged(owner, "shading.blurFallOff", this.blurFallOff, blurFallOff);
+    }
     this.blurFallOff = blurFallOff;
   }
 }

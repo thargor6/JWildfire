@@ -540,31 +540,33 @@ public class FlamePanel extends ImagePanel {
   public XForm mouseClicked(int x, int y) {
     redrawAfterMouseClick = false;
     // select flame
-    Flame flame = flameHolder.getFlame();
-    if (flame != null) {
-      for (XForm xForm : flame.getXForms()) {
-        Triangle triangle = new Triangle(xForm);
-        if (insideTriange(triangle, x, y)) {
-          if (mouseDragOperation == MouseDragOperation.SHEAR) {
-            selectedPoint = selectNearestPoint(triangle, x, y);
-            redrawAfterMouseClick = true;
+    if (mouseDragOperation != MouseDragOperation.SHEAR) {
+      Flame flame = flameHolder.getFlame();
+      if (flame != null) {
+        for (XForm xForm : flame.getXForms()) {
+          Triangle triangle = new Triangle(xForm);
+          if (insideTriange(triangle, x, y)) {
+            if (mouseDragOperation == MouseDragOperation.SHEAR) {
+              selectedPoint = selectNearestPoint(triangle, x, y);
+              redrawAfterMouseClick = true;
+            }
+            return xForm;
           }
-          return xForm;
         }
-      }
-      if (flame.getFinalXForm() != null) {
-        Triangle triangle = new Triangle(flame.getFinalXForm());
-        if (insideTriange(triangle, x, y)) {
-          if (mouseDragOperation == MouseDragOperation.SHEAR) {
-            selectedPoint = selectNearestPoint(triangle, x, y);
-            redrawAfterMouseClick = true;
+        if (flame.getFinalXForm() != null) {
+          Triangle triangle = new Triangle(flame.getFinalXForm());
+          if (insideTriange(triangle, x, y)) {
+            if (mouseDragOperation == MouseDragOperation.SHEAR) {
+              selectedPoint = selectNearestPoint(triangle, x, y);
+              redrawAfterMouseClick = true;
+            }
+            return flame.getFinalXForm();
           }
-          return flame.getFinalXForm();
         }
       }
     }
     // select nearest point
-    if (mouseDragOperation == MouseDragOperation.SHEAR && selectedXForm != null) {
+    else if (mouseDragOperation == MouseDragOperation.SHEAR && selectedXForm != null) {
       Triangle triangle = new Triangle(selectedXForm);
       selectedPoint = selectNearestPoint(triangle, x, y);
       redrawAfterMouseClick = true;

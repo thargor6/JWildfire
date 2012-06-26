@@ -240,6 +240,7 @@ public class VariationFuncList {
     registerVariationFunc(Hypertile1Func.class);
     registerVariationFunc(Hypertile2Func.class);
     registerVariationFunc(DCPerlinFunc.class);
+    registerVariationFunc(ColorMapWFFunc.class);
   }
 
   private static void registerVariationFunc(

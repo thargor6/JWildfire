@@ -8,6 +8,7 @@
 <li>Q0004. Isn't a Java program slow?
 <li>Q0005. What are HDR files and how are they used?
 <li>Q0006. How to change render size?
+<li>Q0007. How can we add plugins? I'd like to use the "snowflake" plugin but i'm not sure how they work with JWildfire.
 
 </ul>
 Note that a more recent version of this FAQ can usually be found at the JWildfire's users group at <a href="http://www.facebook.com/groups/jwildfire/">http://www.facebook.com/groups/jwildfire/</a> 
@@ -57,7 +58,15 @@ Those resolution profiles can then used in all parts of the program where you ch
 The resolution profiles are defined and modified on the main tab using the detail button right of the resolution combobobx in the right upper edge of the window.    
 <br>
 
-
+<hr>
+A0007: The Apophysis-plugins are compiled 32Bit-Windows-binaries and do not work directly in JWildfire. They must be rewritten in Java so that they can be used in JWildfire. This is usually very easy if the original source code
+(which is usually included) is available. <br>
+Please note that it is not sufficient to know the mathematical formula or concept behind a variation to make it 
+work 1:1 in JWildfire. The "snowflake" plugin is a good example, there is no way to build it from scratch 
+because the term "snowflake" does not describe all of the necessary details. 
+<br><br>
+There is a document at the JWildfire users group where you can add missing plugins: <a href="http://www.facebook.com/groups/jwildfire/doc/418984591455854/">http://www.facebook.com/groups/jwildfire/doc/418984591455854/</a>
+<br>
 
 </body>
 </html>

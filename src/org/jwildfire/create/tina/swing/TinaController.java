@@ -73,6 +73,7 @@ import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.batch.Job;
 import org.jwildfire.create.tina.batch.JobRenderThread;
 import org.jwildfire.create.tina.batch.JobRenderThreadController;
+import org.jwildfire.create.tina.edit.UndoManager;
 import org.jwildfire.create.tina.io.Flam3PaletteReader;
 import org.jwildfire.create.tina.io.Flam3Reader;
 import org.jwildfire.create.tina.io.Flam3Writer;
@@ -134,6 +135,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
   boolean refreshing = false;
 
   private final List<Job> batchRenderList = new ArrayList<Job>();
+  private final UndoManager<Flame> undoManager = new UndoManager<Flame>();
 
   public static class NonlinearControlsRow {
     private final JComboBox nonlinearVarCmb;
@@ -1053,7 +1055,6 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
   public void refreshUI() {
     noRefresh = true;
     try {
-      Flame currFlame = getCurrFlame();
       cameraRollREd.setText(Tools.doubleToString(currFlame.getCamRoll()));
       cameraRollSlider.setValue(Tools.FTOI(currFlame.getCamRoll()));
 
@@ -1134,7 +1135,6 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
   }
 
   private void refreshShadingUI() {
-    Flame currFlame = getCurrFlame();
     ShadingInfo shadingInfo = currFlame != null ? currFlame.getShadingInfo() : null;
     boolean pseudo3DEnabled;
     boolean blurEnabled;
@@ -1212,7 +1212,6 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
   }
 
   private void enableShadingUI() {
-    Flame currFlame = getCurrFlame();
     ShadingInfo shadingInfo = currFlame != null ? currFlame.getShadingInfo() : null;
     boolean pseudo3DEnabled;
     boolean blurEnabled;
@@ -1266,7 +1265,6 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
 
       @Override
       public int getRowCount() {
-        Flame currFlame = getCurrFlame();
         return currFlame != null ? currFlame.getXForms().size() + (currFlame.getFinalXForm() != null ? 1 : 0) : 0;
       }
 
@@ -1290,7 +1288,6 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
 
       @Override
       public Object getValueAt(int rowIndex, int columnIndex) {
-        Flame currFlame = getCurrFlame();
         if (currFlame != null) {
           XForm xForm = rowIndex < currFlame.getXForms().size() ? currFlame.getXForms().get(rowIndex) : currFlame.getFinalXForm();
           switch (columnIndex) {
@@ -1321,7 +1318,6 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
 
       @Override
       public void setValueAt(Object aValue, int row, int column) {
-        Flame currFlame = getCurrFlame();
         if (currFlame != null && column == COL_WEIGHT && row < currFlame.getXForms().size()) {
           XForm xForm = currFlame.getXForms().get(row);
           String valStr = (String) aValue;
@@ -1414,7 +1410,6 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
 
       @Override
       public void setValueAt(Object aValue, int row, int column) {
-        Flame currFlame = getCurrFlame();
         if (currFlame != null && paletteKeyFrames != null && paletteKeyFrames.size() > row) {
           String valStr = (String) aValue;
           if (valStr == null || valStr.length() == 0) {
@@ -1456,7 +1451,6 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
 
       @Override
       public int getRowCount() {
-        Flame currFlame = getCurrFlame();
         XForm xForm = getCurrXForm();
         return xForm != null && xForm != currFlame.getFinalXForm() ? currFlame.getXForms().size() : 0;
       }
@@ -1479,7 +1473,6 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
 
       @Override
       public Object getValueAt(int rowIndex, int columnIndex) {
-        Flame currFlame = getCurrFlame();
         if (currFlame != null) {
           switch (columnIndex) {
             case COL_TRANSFORM:
@@ -1501,7 +1494,6 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       @Override
       public void setValueAt(Object aValue, int row, int column) {
         XForm xForm = getCurrXForm();
-        Flame currFlame = getCurrFlame();
         if (currFlame != null && column == COL_WEIGHT && xForm != null) {
           String valStr = (String) aValue;
           if (valStr == null || valStr.length() == 0) {
@@ -1545,7 +1537,6 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
   }
 
   private void refreshPaletteImg() {
-    Flame currFlame = getCurrFlame();
     if (currFlame != null) {
       ImagePanel imgPanel = getPalettePanel();
       int width = imgPanel.getWidth();
@@ -1558,42 +1549,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     }
   }
 
-  private void flameSliderChanged(JSlider pSlider, JTextField pTextField, String pProperty, double pSliderScale) {
-    Flame currFlame = getCurrFlame();
-    if (noRefresh || currFlame == null)
-      return;
-    noRefresh = true;
-    try {
-      double propValue = pSlider.getValue() / pSliderScale;
-      pTextField.setText(Tools.doubleToString(propValue));
-      Class<?> cls = currFlame.getClass();
-      Field field;
-      try {
-        field = cls.getDeclaredField(pProperty);
-        field.setAccessible(true);
-        Class<?> fieldCls = field.getType();
-        if (fieldCls == double.class || fieldCls == Double.class) {
-          field.setDouble(currFlame, propValue);
-        }
-        else if (fieldCls == int.class || fieldCls == Integer.class) {
-          field.setInt(currFlame, Tools.FTOI(propValue));
-        }
-        else {
-          throw new IllegalStateException();
-        }
-      }
-      catch (Throwable ex) {
-        ex.printStackTrace();
-      }
-      refreshFlameImage(false);
-    }
-    finally {
-      noRefresh = false;
-    }
-  }
-
   private void flameSliderChanged(JSlider pSlider, JWFNumberField pTextField, String pProperty, double pSliderScale) {
-    Flame currFlame = getCurrFlame();
     if (noRefresh || currFlame == null)
       return;
     noRefresh = true;
@@ -1619,44 +1575,6 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       catch (Throwable ex) {
         ex.printStackTrace();
       }
-      refreshFlameImage(false);
-    }
-    finally {
-      noRefresh = false;
-    }
-  }
-
-  private void paletteSliderChanged(JSlider pSlider, JTextField pTextField, String pProperty, double pSliderScale) {
-    Flame currFlame = getCurrFlame();
-    if (noRefresh || currFlame == null)
-      return;
-    noRefresh = true;
-    try {
-      double propValue = pSlider.getValue() / pSliderScale;
-      pTextField.setText(Tools.doubleToString(propValue));
-      Class<?> cls = currFlame.getPalette().getClass();
-      Field field;
-      try {
-        field = cls.getDeclaredField(pProperty);
-        field.setAccessible(true);
-        Class<?> fieldCls = field.getType();
-        if (fieldCls == double.class || fieldCls == Double.class) {
-          field.setDouble(currFlame.getPalette(), propValue);
-        }
-        else if (fieldCls == int.class || fieldCls == Integer.class) {
-          field.setInt(currFlame.getPalette(), Tools.FTOI(propValue));
-        }
-        else {
-          throw new IllegalStateException();
-        }
-        field = cls.getDeclaredField("modified");
-        field.setAccessible(true);
-        field.setBoolean(currFlame.getPalette(), true);
-      }
-      catch (Throwable ex) {
-        ex.printStackTrace();
-      }
-      refreshPaletteImg();
       refreshFlameImage(false);
     }
     finally {
@@ -1665,7 +1583,6 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
   }
 
   private void paletteSliderChanged(JSlider pSlider, JWFNumberField pTextField, String pProperty, double pSliderScale) {
-    Flame currFlame = getCurrFlame();
     if (noRefresh || currFlame == null)
       return;
     noRefresh = true;
@@ -1702,60 +1619,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     }
   }
 
-  private void shadingInfoTextFieldChanged(JSlider pSlider, JTextField pTextField, String pProperty, double pSliderScale, int pIdx) {
-    Flame currFlame = getCurrFlame();
-    if (noRefresh || currFlame == null)
-      return;
-    ShadingInfo shadingInfo = currFlame.getShadingInfo();
-    noRefresh = true;
-    try {
-      double propValue = Tools.stringToDouble(pTextField.getText());
-      pSlider.setValue(Tools.FTOI(propValue * pSliderScale));
-
-      Class<?> cls = shadingInfo.getClass();
-      Field field;
-      try {
-        field = cls.getDeclaredField(pProperty);
-        field.setAccessible(true);
-        Class<?> fieldCls = field.getType();
-        if (fieldCls == double.class || fieldCls == Double.class) {
-          field.setDouble(shadingInfo, propValue);
-        }
-        else if (fieldCls == double[].class) {
-          double[] arr = (double[]) field.get(shadingInfo);
-          Array.set(arr, pIdx, propValue);
-        }
-        else if (fieldCls == Double[].class) {
-          Double[] arr = (Double[]) field.get(shadingInfo);
-          Array.set(arr, pIdx, propValue);
-        }
-        else if (fieldCls == int.class || fieldCls == Integer.class) {
-          field.setInt(shadingInfo, Tools.FTOI(propValue));
-        }
-        else if (fieldCls == int[].class) {
-          int[] arr = (int[]) field.get(shadingInfo);
-          Array.set(arr, pIdx, Tools.FTOI(propValue));
-        }
-        else if (fieldCls == Integer[].class) {
-          Integer[] arr = (Integer[]) field.get(shadingInfo);
-          Array.set(arr, pIdx, Tools.FTOI(propValue));
-        }
-        else {
-          throw new IllegalStateException();
-        }
-      }
-      catch (Throwable ex) {
-        ex.printStackTrace();
-      }
-      refreshFlameImage(false);
-    }
-    finally {
-      noRefresh = false;
-    }
-  }
-
   private void shadingInfoTextFieldChanged(JSlider pSlider, JWFNumberField pTextField, String pProperty, double pSliderScale, int pIdx) {
-    Flame currFlame = getCurrFlame();
     if (noRefresh || currFlame == null)
       return;
     ShadingInfo shadingInfo = currFlame.getShadingInfo();
@@ -1764,57 +1628,6 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       double propValue = Tools.stringToDouble(pTextField.getText());
       pSlider.setValue(Tools.FTOI(propValue * pSliderScale));
 
-      Class<?> cls = shadingInfo.getClass();
-      Field field;
-      try {
-        field = cls.getDeclaredField(pProperty);
-        field.setAccessible(true);
-        Class<?> fieldCls = field.getType();
-        if (fieldCls == double.class || fieldCls == Double.class) {
-          field.setDouble(shadingInfo, propValue);
-        }
-        else if (fieldCls == double[].class) {
-          double[] arr = (double[]) field.get(shadingInfo);
-          Array.set(arr, pIdx, propValue);
-        }
-        else if (fieldCls == Double[].class) {
-          Double[] arr = (Double[]) field.get(shadingInfo);
-          Array.set(arr, pIdx, propValue);
-        }
-        else if (fieldCls == int.class || fieldCls == Integer.class) {
-          field.setInt(shadingInfo, Tools.FTOI(propValue));
-        }
-        else if (fieldCls == int[].class) {
-          int[] arr = (int[]) field.get(shadingInfo);
-          Array.set(arr, pIdx, Tools.FTOI(propValue));
-        }
-        else if (fieldCls == Integer[].class) {
-          Integer[] arr = (Integer[]) field.get(shadingInfo);
-          Array.set(arr, pIdx, Tools.FTOI(propValue));
-        }
-        else {
-          throw new IllegalStateException();
-        }
-      }
-      catch (Throwable ex) {
-        ex.printStackTrace();
-      }
-      refreshFlameImage(false);
-    }
-    finally {
-      noRefresh = false;
-    }
-  }
-
-  private void shadingInfoSliderChanged(JSlider pSlider, JTextField pTextField, String pProperty, double pSliderScale, int pIdx) {
-    Flame currFlame = getCurrFlame();
-    if (noRefresh || currFlame == null)
-      return;
-    ShadingInfo shadingInfo = currFlame.getShadingInfo();
-    noRefresh = true;
-    try {
-      double propValue = pSlider.getValue() / pSliderScale;
-      pTextField.setText(Tools.doubleToString(propValue));
       Class<?> cls = shadingInfo.getClass();
       Field field;
       try {
@@ -1858,7 +1671,6 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
   }
 
   private void shadingInfoSliderChanged(JSlider pSlider, JWFNumberField pTextField, String pProperty, double pSliderScale, int pIdx) {
-    Flame currFlame = getCurrFlame();
     if (noRefresh || currFlame == null)
       return;
     ShadingInfo shadingInfo = currFlame.getShadingInfo();
@@ -1908,53 +1720,10 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     }
   }
 
-  private void xFormSliderChanged(JSlider pSlider, JTextField pTextField, String pProperty, double pSliderScale) {
-    if (noRefresh) {
-      return;
-    }
-    Flame currFlame = getCurrFlame();
-    if (currFlame == null) {
-      return;
-    }
-    XForm xForm = getCurrXForm();
-    if (xForm == null) {
-      return;
-    }
-    noRefresh = true;
-    try {
-      double propValue = pSlider.getValue() / pSliderScale;
-      pTextField.setText(Tools.doubleToString(propValue));
-      Class<?> cls = xForm.getClass();
-      Field field;
-      try {
-        field = cls.getDeclaredField(pProperty);
-        field.setAccessible(true);
-        Class<?> fieldCls = field.getType();
-        if (fieldCls == double.class || fieldCls == Double.class) {
-          field.setDouble(xForm, propValue);
-        }
-        else if (fieldCls == int.class || fieldCls == Integer.class) {
-          field.setInt(xForm, Tools.FTOI(propValue));
-        }
-        else {
-          throw new IllegalStateException();
-        }
-      }
-      catch (Throwable ex) {
-        ex.printStackTrace();
-      }
-      refreshFlameImage(false);
-    }
-    finally {
-      noRefresh = false;
-    }
-  }
-
   private void xFormSliderChanged(JSlider pSlider, JWFNumberField pTextField, String pProperty, double pSliderScale) {
     if (noRefresh) {
       return;
     }
-    Flame currFlame = getCurrFlame();
     if (currFlame == null) {
       return;
     }
@@ -1977,45 +1746,6 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
         }
         else if (fieldCls == int.class || fieldCls == Integer.class) {
           field.setInt(xForm, Tools.FTOI(propValue));
-        }
-        else {
-          throw new IllegalStateException();
-        }
-      }
-      catch (Throwable ex) {
-        ex.printStackTrace();
-      }
-      refreshFlameImage(false);
-    }
-    finally {
-      noRefresh = false;
-    }
-  }
-
-  private void flameTextFieldChanged(JSlider pSlider, JTextField pTextField, String pProperty, double pSliderScale) {
-    if (noRefresh) {
-      return;
-    }
-    Flame currFlame = getCurrFlame();
-    if (currFlame == null) {
-      return;
-    }
-    noRefresh = true;
-    try {
-      double propValue = Tools.stringToDouble(pTextField.getText());
-      pSlider.setValue(Tools.FTOI(propValue * pSliderScale));
-
-      Class<?> cls = currFlame.getClass();
-      Field field;
-      try {
-        field = cls.getDeclaredField(pProperty);
-        field.setAccessible(true);
-        Class<?> fieldCls = field.getType();
-        if (fieldCls == double.class || fieldCls == Double.class) {
-          field.setDouble(currFlame, propValue);
-        }
-        else if (fieldCls == int.class || fieldCls == Integer.class) {
-          field.setInt(currFlame, Tools.FTOI(propValue));
         }
         else {
           throw new IllegalStateException();
@@ -2035,7 +1765,6 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     if (noRefresh) {
       return;
     }
-    Flame currFlame = getCurrFlame();
     if (currFlame == null) {
       return;
     }
@@ -2070,47 +1799,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     }
   }
 
-  private void paletteTextFieldChanged(JSlider pSlider, JTextField pTextField, String pProperty, double pSliderScale) {
-    Flame currFlame = getCurrFlame();
-    if (noRefresh || currFlame == null)
-      return;
-    noRefresh = true;
-    try {
-      double propValue = Tools.stringToDouble(pTextField.getText());
-      pSlider.setValue(Tools.FTOI(propValue * pSliderScale));
-
-      Class<?> cls = currFlame.getPalette().getClass();
-      Field field;
-      try {
-        field = cls.getDeclaredField(pProperty);
-        field.setAccessible(true);
-        Class<?> fieldCls = field.getType();
-        if (fieldCls == double.class || fieldCls == Double.class) {
-          field.setDouble(currFlame.getPalette(), propValue);
-        }
-        else if (fieldCls == int.class || fieldCls == Integer.class) {
-          field.setInt(currFlame.getPalette(), Tools.FTOI(propValue));
-        }
-        else {
-          throw new IllegalStateException();
-        }
-        field = cls.getDeclaredField("modified");
-        field.setAccessible(true);
-        field.setBoolean(currFlame.getPalette(), true);
-      }
-      catch (Throwable ex) {
-        ex.printStackTrace();
-      }
-      refreshPaletteImg();
-      refreshFlameImage(false);
-    }
-    finally {
-      noRefresh = false;
-    }
-  }
-
   private void paletteTextFieldChanged(JSlider pSlider, JWFNumberField pTextField, String pProperty, double pSliderScale) {
-    Flame currFlame = getCurrFlame();
     if (noRefresh || currFlame == null)
       return;
     noRefresh = true;
@@ -2141,45 +1830,6 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
         ex.printStackTrace();
       }
       refreshPaletteImg();
-      refreshFlameImage(false);
-    }
-    finally {
-      noRefresh = false;
-    }
-  }
-
-  private void xFormTextFieldChanged(JSlider pSlider, JTextField pTextField, String pProperty, double pSliderScale) {
-    if (noRefresh) {
-      return;
-    }
-    XForm xForm = getCurrXForm();
-    if (xForm == null) {
-      return;
-    }
-    noRefresh = true;
-    try {
-      double propValue = Tools.stringToDouble(pTextField.getText());
-      pSlider.setValue(Tools.FTOI(propValue * pSliderScale));
-
-      Class<?> cls = xForm.getClass();
-      Field field;
-      try {
-        field = cls.getDeclaredField(pProperty);
-        field.setAccessible(true);
-        Class<?> fieldCls = field.getType();
-        if (fieldCls == double.class || fieldCls == Double.class) {
-          field.setDouble(xForm, propValue);
-        }
-        else if (fieldCls == int.class || fieldCls == Integer.class) {
-          field.setInt(xForm, Tools.FTOI(propValue));
-        }
-        else {
-          throw new IllegalStateException();
-        }
-      }
-      catch (Throwable ex) {
-        ex.printStackTrace();
-      }
       refreshFlameImage(false);
     }
     finally {
@@ -2287,6 +1937,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
         Flame flame = flames.get(0);
         prefs.setLastInputFlameFile(file);
         currFlame = flame;
+        undoManager.initUndoStack(flame);
 
         for (int i = flames.size() - 1; i >= 0; i--) {
           randomBatch.add(0, flames.get(i));
@@ -2406,7 +2057,6 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
   }
 
   public void randomPaletteButton_actionPerformed(ActionEvent e) {
-    Flame currFlame = getCurrFlame();
     if (currFlame != null) {
       RandomRGBPaletteGenerator generator = new RandomRGBPaletteGenerator();
       paletteKeyFrames = generator.generateKeyFrames(Integer.parseInt(paletteRandomPointsREd.getText()));
@@ -2435,7 +2085,6 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       prefs.setLastInputFlameFile(file);
       RGBPalette palette = flame.getPalette();
       paletteKeyFrames = null;
-      Flame currFlame = getCurrFlame();
       currFlame.setPalette(palette);
       refreshPaletteColorsTable();
       refreshPaletteUI(palette);
@@ -2516,7 +2165,6 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
   }
 
   public void renderImageButton_actionPerformed() {
-    Flame currFlame = getCurrFlame();
     if (currFlame != null) {
       try {
         JFileChooser chooser = new ImageFileChooser();
@@ -2586,7 +2234,6 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
 
   public void saveFlameButton_actionPerformed(ActionEvent e) {
     try {
-      Flame currFlame = getCurrFlame();
       if (currFlame != null) {
         JFileChooser chooser = new FlameFileChooser(prefs);
         if (prefs.getOutputFlamePath() != null) {
@@ -2611,7 +2258,6 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
 
   public XForm getCurrXForm() {
     XForm xForm = null;
-    Flame currFlame = getCurrFlame();
     if (currFlame != null) {
       int row = transformationsTable.getSelectedRow();
       if (row >= 0 && row < currFlame.getXForms().size()) {
@@ -2688,7 +2334,6 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
   }
 
   private void enableXFormControls(XForm xForm) {
-    Flame currFlame = getCurrFlame();
     boolean enabled = xForm != null;
 
     affineRotateAmountREd.setEnabled(enabled);
@@ -2887,7 +2532,6 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     XForm xForm = new XForm();
     xForm.addVariation(1.0, new Linear3DFunc());
     xForm.setWeight(0.5);
-    Flame currFlame = getCurrFlame();
     currFlame.getXForms().add(xForm);
     gridRefreshing = true;
     try {
@@ -2904,7 +2548,6 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
   public void duplicateXForm() {
     XForm xForm = new XForm();
     xForm.assign(getCurrXForm());
-    Flame currFlame = getCurrFlame();
     currFlame.getXForms().add(xForm);
     gridRefreshing = true;
     try {
@@ -2920,7 +2563,6 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
 
   public void deleteXForm() {
     int row = transformationsTable.getSelectedRow();
-    Flame currFlame = getCurrFlame();
     if (currFlame.getFinalXForm() != null && row == currFlame.getXForms().size()) {
       currFlame.setFinalXForm(null);
     }
@@ -2940,7 +2582,6 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
   public void addFinalXForm() {
     XForm xForm = new XForm();
     xForm.addVariation(1.0, new Linear3DFunc());
-    Flame currFlame = getCurrFlame();
     currFlame.setFinalXForm(xForm);
     gridRefreshing = true;
     try {
@@ -3153,6 +2794,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
   public void importFromRandomBatch(int pIdx) {
     if (pIdx >= 0 && pIdx < randomBatch.size()) {
       currFlame = randomBatch.get(pIdx);
+      undoManager.initUndoStack(currFlame);
       {
         FlamePanel imgPanel = getFlamePanel();
         Rectangle bounds = imgPanel.getImageBounds();
@@ -3404,7 +3046,6 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
 
   private void setRelWeight(double pValue) {
     XForm xForm = getCurrXForm();
-    Flame currFlame = getCurrFlame();
     if (xForm != null && currFlame != null && xForm != currFlame.getFinalXForm()) {
       int row = relWeightsTable.getSelectedRow();
       if (row >= 0 && row < currFlame.getXForms().size()) {
@@ -3438,7 +3079,6 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
 
   public void transformationWeightREd_changed() {
     XForm xForm = getCurrXForm();
-    Flame currFlame = getCurrFlame();
     if (xForm != null && currFlame != null && xForm != currFlame.getFinalXForm()) {
       xForm.setWeight(Tools.stringToDouble(transformationWeightREd.getText()));
       gridRefreshing = true;
@@ -3462,6 +3102,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     RGBPalette palette = new RandomRGBPaletteGenerator().generatePalette(Integer.parseInt(paletteRandomPointsREd.getText()));
     flame.setPalette(palette);
     currFlame = flame;
+    undoManager.initUndoStack(currFlame);
     refreshUI();
   }
 
@@ -3780,7 +3421,6 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     if (noRefresh) {
       return;
     }
-    Flame currFlame = getCurrFlame();
     if (currFlame == null) {
       return;
     }
@@ -3798,7 +3438,6 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     if (noRefresh) {
       return;
     }
-    Flame currFlame = getCurrFlame();
     if (currFlame == null) {
       return;
     }
@@ -3819,7 +3458,6 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     if (noRefresh) {
       return;
     }
-    Flame currFlame = getCurrFlame();
     if (currFlame == null) {
       return;
     }
@@ -3883,6 +3521,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
           List<Flame> flames = new Flam3Reader().readFlamesfromXML(xml);
           Flame flame = flames.get(0);
           currFlame = flame;
+          undoManager.initUndoStack(currFlame);
           for (int i = flames.size() - 1; i >= 0; i--) {
             randomBatch.add(0, flames.get(i));
           }
@@ -3899,13 +3538,13 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
 
   protected void importFlame(Flame pFlame) {
     currFlame = pFlame.makeCopy();
+    undoManager.initUndoStack(pFlame);
     setupProfiles(currFlame);
     updateThumbnails(null);
     refreshUI();
   }
 
   protected Flame exportFlame() {
-    Flame currFlame = getCurrFlame();
     if (currFlame != null) {
       return currFlame.makeCopy();
     }
@@ -3916,7 +3555,6 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
 
   public void saveFlameToClipboard() {
     try {
-      Flame currFlame = getCurrFlame();
       if (currFlame != null) {
         Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
         String xml = new Flam3Writer().getFlameXML(currFlame);
@@ -4333,7 +3971,6 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
 
   public void gradientLibraryGradientChanged() {
     if (!cmbRefreshing) {
-      Flame currFlame = getCurrFlame();
       if (currFlame != null && gradientLibraryGradientCmb.getSelectedIndex() >= 0 && gradientLibraryGradientCmb.getSelectedIndex() < gradientLibraryList.size()) {
         RGBPalette palette = gradientLibraryList.get(gradientLibraryGradientCmb.getSelectedIndex()).makeCopy();
         currFlame.setPalette(palette);
@@ -4433,7 +4070,6 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     if (gridRefreshing || cmbRefreshing) {
       return;
     }
-    Flame currFlame = getCurrFlame();
     if (currFlame != null) {
       currFlame.setPreserveZ(affinePreserveZButton.isSelected());
       refreshFlameImage(false);
@@ -4530,7 +4166,6 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
   }
 
   public void appendToMovieButton_actionPerformed(ActionEvent e) {
-    Flame currFlame = getCurrFlame();
     if (currFlame != null) {
       getSwfAnimatorCtrl().importFlameFromEditor(currFlame.makeCopy());
       rootTabbedPane.setSelectedIndex(TinaSWFAnimatorController.PAGE_INDEX);
@@ -4544,6 +4179,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
   public void tinaWrapIntoSubFlameButton_clicked() {
     if (currFlame != null) {
       currFlame = new SubFlameRandomFlameGenerator().embedFlame(currFlame);
+      undoManager.initUndoStack(currFlame);
       updateThumbnails(null);
       refreshUI();
     }
@@ -4894,6 +4530,28 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       }
       finally {
         refreshing = false;
+      }
+    }
+  }
+
+  public void undoAction() {
+    Flame currFlame = getCurrFlame();
+    if (currFlame != null) {
+      Flame undoFlame = undoManager.undo(currFlame);
+      if (undoFlame != null) {
+        currFlame.assign(undoFlame);
+        refreshUI();
+      }
+    }
+  }
+
+  public void redoAction() {
+    Flame currFlame = getCurrFlame();
+    if (currFlame != null) {
+      Flame undoFlame = undoManager.redo(currFlame);
+      if (undoFlame != null) {
+        currFlame.assign(undoFlame);
+        refreshUI();
       }
     }
   }
