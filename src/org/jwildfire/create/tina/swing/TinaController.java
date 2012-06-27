@@ -1014,7 +1014,6 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
         int oldSpatialOversample = flame.getSpatialOversample();
         int oldColorOversample = flame.getColorOversample();
         double oldSampleDensity = flame.getSampleDensity();
-        Boolean listenerState[] = flame.disableChangeListeners();
         try {
           double wScl = (double) info.getImageWidth() / (double) flame.getWidth();
           double hScl = (double) info.getImageHeight() / (double) flame.getHeight();
@@ -1046,7 +1045,6 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
           flame.setSpatialOversample(oldSpatialOversample);
           flame.setColorOversample(oldColorOversample);
           flame.setSampleDensity(oldSampleDensity);
-          flame.enableChangeListeners(listenerState);
         }
       }
     }
@@ -1963,7 +1961,6 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
         Flame flame = flames.get(0);
         prefs.setLastInputFlameFile(file);
         currFlame = flame;
-        currFlame.addPropertyChangeListener(undoManager);
         undoManager.initUndoStack(currFlame);
 
         for (int i = flames.size() - 1; i >= 0; i--) {
@@ -2225,7 +2222,6 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
           int oldSpatialOversample = flame.getSpatialOversample();
           int oldColorOversample = flame.getColorOversample();
           double oldFilterRadius = flame.getSpatialFilterRadius();
-          Boolean listenerState[] = flame.disableChangeListeners();
           try {
             flame.setSampleDensity(qualProfile.getQuality());
             flame.setSpatialOversample(qualProfile.getSpatialOversample());
@@ -2249,7 +2245,6 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
             flame.setSpatialOversample(oldSpatialOversample);
             flame.setColorOversample(oldColorOversample);
             flame.setSpatialFilterRadius(oldFilterRadius);
-            flame.enableChangeListeners(listenerState);
           }
           mainController.loadImage(file.getAbsolutePath(), false);
           //          JOptionPane.showMessageDialog(centerPanel, "Image was successfully saved", "Operation successful", JOptionPane.OK_OPTION);
@@ -2630,9 +2625,11 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       toggleTrianglesButton.setSelected(true);
     }
     double amount = Tools.stringToDouble(affineMoveAmountREd.getText()) * pScale;
-    XFormTransformService.globalTranslate(getCurrXForm(), amount, 0, affineEditPostTransformButton.isSelected());
-    transformationTableClicked();
-    //    refreshFlameImage();
+    if (MathLib.fabs(amount) > MathLib.EPSILON) {
+      saveUndoPoint();
+      XFormTransformService.globalTranslate(getCurrXForm(), amount, 0, affineEditPostTransformButton.isSelected());
+      transformationTableClicked();
+    }
   }
 
   public void xForm_rotateRight() {
@@ -2641,9 +2638,11 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       toggleTrianglesButton.setSelected(true);
     }
     double amount = Tools.stringToDouble(affineRotateAmountREd.getText());
-    XFormTransformService.rotate(getCurrXForm(), -amount, affineEditPostTransformButton.isSelected());
-    transformationTableClicked();
-    //    refreshFlameImage();
+    if (MathLib.fabs(amount) > MathLib.EPSILON) {
+      saveUndoPoint();
+      XFormTransformService.rotate(getCurrXForm(), -amount, affineEditPostTransformButton.isSelected());
+      transformationTableClicked();
+    }
   }
 
   public void xForm_moveLeft(double pScale) {
@@ -2652,9 +2651,11 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       toggleTrianglesButton.setSelected(true);
     }
     double amount = Tools.stringToDouble(affineMoveAmountREd.getText()) * pScale;
-    XFormTransformService.globalTranslate(getCurrXForm(), -amount, 0, affineEditPostTransformButton.isSelected());
-    transformationTableClicked();
-    //    refreshFlameImage();
+    if (MathLib.fabs(amount) > MathLib.EPSILON) {
+      saveUndoPoint();
+      XFormTransformService.globalTranslate(getCurrXForm(), -amount, 0, affineEditPostTransformButton.isSelected());
+      transformationTableClicked();
+    }
   }
 
   public void xForm_flipHorizontal() {
@@ -2662,9 +2663,9 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       flamePanel.setDrawTriangles(true);
       toggleTrianglesButton.setSelected(true);
     }
+    saveUndoPoint();
     XFormTransformService.flipHorizontal(getCurrXForm(), affineEditPostTransformButton.isSelected());
     transformationTableClicked();
-    //    refreshFlameImage();
   }
 
   public void xForm_flipVertical() {
@@ -2672,9 +2673,9 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       flamePanel.setDrawTriangles(true);
       toggleTrianglesButton.setSelected(true);
     }
+    saveUndoPoint();
     XFormTransformService.flipVertical(getCurrXForm(), affineEditPostTransformButton.isSelected());
     transformationTableClicked();
-    //    refreshFlameImage();
   }
 
   public void xForm_enlarge() {
@@ -2683,9 +2684,11 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       toggleTrianglesButton.setSelected(true);
     }
     double amount = Tools.stringToDouble(affineScaleAmountREd.getText()) / 100.0;
-    XFormTransformService.scale(getCurrXForm(), amount, affineScaleXButton.isSelected(), affineScaleYButton.isSelected(), affineEditPostTransformButton.isSelected());
-    transformationTableClicked();
-    //    refreshFlameImage();
+    if (MathLib.fabs(amount) > MathLib.EPSILON) {
+      saveUndoPoint();
+      XFormTransformService.scale(getCurrXForm(), amount, affineScaleXButton.isSelected(), affineScaleYButton.isSelected(), affineEditPostTransformButton.isSelected());
+      transformationTableClicked();
+    }
   }
 
   public void xForm_shrink() {
@@ -2694,9 +2697,11 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       toggleTrianglesButton.setSelected(true);
     }
     double amount = 100.0 / Tools.stringToDouble(affineScaleAmountREd.getText());
-    XFormTransformService.scale(getCurrXForm(), amount, affineScaleXButton.isSelected(), affineScaleYButton.isSelected(), affineEditPostTransformButton.isSelected());
-    transformationTableClicked();
-    //    refreshFlameImage();
+    if (MathLib.fabs(amount) > MathLib.EPSILON) {
+      saveUndoPoint();
+      XFormTransformService.scale(getCurrXForm(), amount, affineScaleXButton.isSelected(), affineScaleYButton.isSelected(), affineEditPostTransformButton.isSelected());
+      transformationTableClicked();
+    }
   }
 
   public void xForm_rotateLeft() {
@@ -2705,9 +2710,11 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       toggleTrianglesButton.setSelected(true);
     }
     double amount = Tools.stringToDouble(affineRotateAmountREd.getText());
-    XFormTransformService.rotate(getCurrXForm(), amount, affineEditPostTransformButton.isSelected());
-    transformationTableClicked();
-    //    refreshFlameImage();
+    if (MathLib.fabs(amount) > MathLib.EPSILON) {
+      saveUndoPoint();
+      XFormTransformService.rotate(getCurrXForm(), amount, affineEditPostTransformButton.isSelected());
+      transformationTableClicked();
+    }
   }
 
   public void xForm_moveUp(double pScale) {
@@ -2716,9 +2723,11 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       toggleTrianglesButton.setSelected(true);
     }
     double amount = Tools.stringToDouble(affineMoveAmountREd.getText()) * pScale;
-    XFormTransformService.globalTranslate(getCurrXForm(), 0, -amount, affineEditPostTransformButton.isSelected());
-    transformationTableClicked();
-    //    refreshFlameImage();
+    if (MathLib.fabs(amount) > MathLib.EPSILON) {
+      saveUndoPoint();
+      XFormTransformService.globalTranslate(getCurrXForm(), 0, -amount, affineEditPostTransformButton.isSelected());
+      transformationTableClicked();
+    }
   }
 
   public void xForm_moveDown(double pScale) {
@@ -2727,9 +2736,11 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       toggleTrianglesButton.setSelected(true);
     }
     double amount = Tools.stringToDouble(affineMoveAmountREd.getText()) * pScale;
-    XFormTransformService.globalTranslate(getCurrXForm(), 0, amount, affineEditPostTransformButton.isSelected());
-    transformationTableClicked();
-    //    refreshFlameImage();
+    if (MathLib.fabs(amount) > MathLib.EPSILON) {
+      saveUndoPoint();
+      XFormTransformService.globalTranslate(getCurrXForm(), 0, amount, affineEditPostTransformButton.isSelected());
+      transformationTableClicked();
+    }
   }
 
   private List<Flame> randomBatch = new ArrayList<Flame>();
@@ -2823,7 +2834,6 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
   public void importFromRandomBatch(int pIdx) {
     if (pIdx >= 0 && pIdx < randomBatch.size()) {
       currFlame = randomBatch.get(pIdx);
-      currFlame.addPropertyChangeListener(undoManager);
       undoManager.initUndoStack(currFlame);
       {
         FlamePanel imgPanel = getFlamePanel();
@@ -3132,7 +3142,6 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     RGBPalette palette = new RandomRGBPaletteGenerator().generatePalette(Integer.parseInt(paletteRandomPointsREd.getText()));
     flame.setPalette(palette);
     currFlame = flame;
-    currFlame.addPropertyChangeListener(undoManager);
     undoManager.initUndoStack(currFlame);
     refreshUI();
   }
@@ -3342,9 +3351,9 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
   public void affineResetTransformButton_clicked() {
     XForm xForm = getCurrXForm();
     if (xForm != null) {
+      saveUndoPoint();
       XFormTransformService.reset(xForm, affineEditPostTransformButton.isSelected());
       transformationTableClicked();
-      //      refreshFlameImage();
     }
   }
 
@@ -3552,7 +3561,6 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
           List<Flame> flames = new Flam3Reader().readFlamesfromXML(xml);
           Flame flame = flames.get(0);
           currFlame = flame;
-          currFlame.addPropertyChangeListener(undoManager);
           undoManager.initUndoStack(currFlame);
           for (int i = flames.size() - 1; i >= 0; i--) {
             randomBatch.add(0, flames.get(i));
@@ -3570,7 +3578,6 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
 
   protected void importFlame(Flame pFlame) {
     currFlame = pFlame.makeCopy();
-    currFlame.addPropertyChangeListener(undoManager);
     undoManager.initUndoStack(pFlame);
     setupProfiles(currFlame);
     updateThumbnails(null);
@@ -4104,6 +4111,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       return;
     }
     if (currFlame != null) {
+      saveUndoPoint();
       currFlame.setPreserveZ(affinePreserveZButton.isSelected());
       refreshFlameImage(false);
     }
@@ -4211,9 +4219,9 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
 
   public void tinaWrapIntoSubFlameButton_clicked() {
     if (currFlame != null) {
-      currFlame = new SubFlameRandomFlameGenerator().embedFlame(currFlame);
-      currFlame.addPropertyChangeListener(undoManager);
-      undoManager.initUndoStack(currFlame);
+      saveUndoPoint();
+      Flame newFlame = new SubFlameRandomFlameGenerator().embedFlame(currFlame);
+      currFlame.assign(newFlame);
       updateThumbnails(null);
       refreshUI();
     }
@@ -4581,6 +4589,13 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     if (currFlame != null) {
       undoManager.redo(currFlame);
       refreshUI();
+    }
+  }
+
+  public void saveUndoPoint() {
+    Flame currFlame = getCurrFlame();
+    if (currFlame != null) {
+      undoManager.saveUndoPoint(currFlame);
     }
   }
 

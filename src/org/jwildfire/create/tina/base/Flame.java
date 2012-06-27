@@ -22,7 +22,6 @@ import java.util.List;
 import org.jwildfire.base.QualityProfile;
 import org.jwildfire.base.ResolutionProfile;
 import org.jwildfire.create.tina.edit.Assignable;
-import org.jwildfire.create.tina.edit.PropertyChangeListener;
 import org.jwildfire.create.tina.palette.RGBPalette;
 import org.jwildfire.create.tina.variation.FlameTransformationContext;
 import org.jwildfire.create.tina.variation.Variation;
@@ -60,9 +59,7 @@ public class Flame implements Assignable<Flame> {
   private RGBPalette palette = new RGBPalette();
   private final List<XForm> xForms = new ArrayList<XForm>();
   private XForm finalXForm = null;
-  private ShadingInfo shadingInfo = new ShadingInfo(this);
-
-  private final List<PropertyChangeListener<Flame>> changeListeners = new ArrayList<PropertyChangeListener<Flame>>();
+  private ShadingInfo shadingInfo = new ShadingInfo();
 
   public Flame() {
     spatialFilterRadius = 0.0;
@@ -94,9 +91,6 @@ public class Flame implements Assignable<Flame> {
   }
 
   public void setCentreX(double centreX) {
-    for (PropertyChangeListener<Flame> listener : changeListeners) {
-      listener.propertyChanged(this, "centreX", this.centreX, centreX);
-    }
     this.centreX = centreX;
   }
 
@@ -105,9 +99,6 @@ public class Flame implements Assignable<Flame> {
   }
 
   public void setCentreY(double centreY) {
-    for (PropertyChangeListener<Flame> listener : changeListeners) {
-      listener.propertyChanged(this, "centreY", this.centreY, centreY);
-    }
     this.centreY = centreY;
   }
 
@@ -116,9 +107,6 @@ public class Flame implements Assignable<Flame> {
   }
 
   public void setCamRoll(double pCamRoll) {
-    for (PropertyChangeListener<Flame> listener : changeListeners) {
-      listener.propertyChanged(this, "camRoll", this.camRoll, camRoll);
-    }
     this.camRoll = pCamRoll;
   }
 
@@ -127,9 +115,6 @@ public class Flame implements Assignable<Flame> {
   }
 
   public void setBrightness(double brightness) {
-    for (PropertyChangeListener<Flame> listener : changeListeners) {
-      listener.propertyChanged(this, "brightness", this.brightness, brightness);
-    }
     this.brightness = brightness;
   }
 
@@ -138,9 +123,6 @@ public class Flame implements Assignable<Flame> {
   }
 
   public void setGamma(double gamma) {
-    for (PropertyChangeListener<Flame> listener : changeListeners) {
-      listener.propertyChanged(this, "gamma", this.gamma, gamma);
-    }
     this.gamma = gamma;
   }
 
@@ -149,9 +131,6 @@ public class Flame implements Assignable<Flame> {
   }
 
   public void setGammaThreshold(double gammaThreshold) {
-    for (PropertyChangeListener<Flame> listener : changeListeners) {
-      listener.propertyChanged(this, "gammaThreshold", this.gammaThreshold, gammaThreshold);
-    }
     this.gammaThreshold = gammaThreshold;
   }
 
@@ -160,9 +139,6 @@ public class Flame implements Assignable<Flame> {
   }
 
   public void setSpatialOversample(int spatialOversample) {
-    for (PropertyChangeListener<Flame> listener : changeListeners) {
-      listener.propertyChanged(this, "spatialOversample", this.spatialOversample, spatialOversample);
-    }
     this.spatialOversample = spatialOversample;
   }
 
@@ -171,9 +147,6 @@ public class Flame implements Assignable<Flame> {
   }
 
   public void setSpatialFilterRadius(double spatialFilterRadius) {
-    for (PropertyChangeListener<Flame> listener : changeListeners) {
-      listener.propertyChanged(this, "spatialFilterRadius", this.spatialFilterRadius, spatialFilterRadius);
-    }
     this.spatialFilterRadius = spatialFilterRadius;
   }
 
@@ -182,9 +155,6 @@ public class Flame implements Assignable<Flame> {
   }
 
   public void setSampleDensity(double sampleDensity) {
-    for (PropertyChangeListener<Flame> listener : changeListeners) {
-      listener.propertyChanged(this, "sampleDensity", this.sampleDensity, sampleDensity);
-    }
     this.sampleDensity = sampleDensity;
   }
 
@@ -197,9 +167,6 @@ public class Flame implements Assignable<Flame> {
   }
 
   public void setPixelsPerUnit(double pixelsPerUnit) {
-    for (PropertyChangeListener<Flame> listener : changeListeners) {
-      listener.propertyChanged(this, "pixelsPerUnit", this.pixelsPerUnit, pixelsPerUnit);
-    }
     this.pixelsPerUnit = pixelsPerUnit;
   }
 
@@ -208,9 +175,6 @@ public class Flame implements Assignable<Flame> {
   }
 
   public void setWhiteLevel(int whiteLevel) {
-    for (PropertyChangeListener<Flame> listener : changeListeners) {
-      listener.propertyChanged(this, "whiteLevel", this.whiteLevel, whiteLevel);
-    }
     this.whiteLevel = whiteLevel;
   }
 
@@ -219,9 +183,6 @@ public class Flame implements Assignable<Flame> {
   }
 
   public void setContrast(double contrast) {
-    for (PropertyChangeListener<Flame> listener : changeListeners) {
-      listener.propertyChanged(this, "contrast", this.contrast, contrast);
-    }
     this.contrast = contrast;
   }
 
@@ -230,9 +191,6 @@ public class Flame implements Assignable<Flame> {
   }
 
   public void setVibrancy(double vibrancy) {
-    for (PropertyChangeListener<Flame> listener : changeListeners) {
-      listener.propertyChanged(this, "vibrancy", this.vibrancy, vibrancy);
-    }
     this.vibrancy = vibrancy;
   }
 
@@ -245,9 +203,6 @@ public class Flame implements Assignable<Flame> {
   }
 
   public void setWidth(int width) {
-    for (PropertyChangeListener<Flame> listener : changeListeners) {
-      listener.propertyChanged(this, "width", this.width, width);
-    }
     this.width = width;
   }
 
@@ -256,9 +211,6 @@ public class Flame implements Assignable<Flame> {
   }
 
   public void setHeight(int height) {
-    for (PropertyChangeListener<Flame> listener : changeListeners) {
-      listener.propertyChanged(this, "height", this.height, height);
-    }
     this.height = height;
   }
 
@@ -267,9 +219,6 @@ public class Flame implements Assignable<Flame> {
   }
 
   public void setFinalXForm(XForm pFinalXForm) {
-    for (PropertyChangeListener<Flame> listener : changeListeners) {
-      listener.propertyChanged(this, "finalXForm", this.finalXForm, finalXForm);
-    }
     finalXForm = pFinalXForm;
   }
 
@@ -278,9 +227,6 @@ public class Flame implements Assignable<Flame> {
   }
 
   public void setCamPitch(double camPitch) {
-    for (PropertyChangeListener<Flame> listener : changeListeners) {
-      listener.propertyChanged(this, "camPitch", this.camPitch, camPitch);
-    }
     this.camPitch = camPitch;
   }
 
@@ -289,9 +235,6 @@ public class Flame implements Assignable<Flame> {
   }
 
   public void setCamYaw(double camYaw) {
-    for (PropertyChangeListener<Flame> listener : changeListeners) {
-      listener.propertyChanged(this, "camYaw", this.camYaw, camYaw);
-    }
     this.camYaw = camYaw;
   }
 
@@ -300,9 +243,6 @@ public class Flame implements Assignable<Flame> {
   }
 
   public void setCamPerspective(double camPerspective) {
-    for (PropertyChangeListener<Flame> listener : changeListeners) {
-      listener.propertyChanged(this, "camPerspective", this.camPerspective, camPerspective);
-    }
     this.camPerspective = camPerspective;
   }
 
@@ -311,9 +251,6 @@ public class Flame implements Assignable<Flame> {
   }
 
   public void setCamZoom(double camZoom) {
-    for (PropertyChangeListener<Flame> listener : changeListeners) {
-      listener.propertyChanged(this, "camZoom", this.camZoom, camZoom);
-    }
     this.camZoom = camZoom;
   }
 
@@ -322,9 +259,6 @@ public class Flame implements Assignable<Flame> {
   }
 
   public void setBGColorRed(int bgColorRed) {
-    for (PropertyChangeListener<Flame> listener : changeListeners) {
-      listener.propertyChanged(this, "bgColorRed", this.bgColorRed, bgColorRed);
-    }
     this.bgColorRed = bgColorRed;
   }
 
@@ -333,9 +267,6 @@ public class Flame implements Assignable<Flame> {
   }
 
   public void setBGColorGreen(int bgColorGreen) {
-    for (PropertyChangeListener<Flame> listener : changeListeners) {
-      listener.propertyChanged(this, "bgColorGreen", this.bgColorGreen, bgColorGreen);
-    }
     this.bgColorGreen = bgColorGreen;
   }
 
@@ -344,20 +275,13 @@ public class Flame implements Assignable<Flame> {
   }
 
   public void setBGColorBlue(int bgColorBlue) {
-    for (PropertyChangeListener<Flame> listener : changeListeners) {
-      listener.propertyChanged(this, "bgColorBlue", this.bgColorBlue, bgColorBlue);
-    }
     this.bgColorBlue = bgColorBlue;
   }
 
   public void setPalette(RGBPalette pPalette) {
     if (pPalette == null || pPalette.getSize() != RGBPalette.PALETTE_SIZE)
       throw new IllegalArgumentException(pPalette.toString());
-    for (PropertyChangeListener<Flame> listener : changeListeners) {
-      listener.propertyChanged(this, "palette", this.palette, pPalette);
-    }
     palette = pPalette;
-    palette.setOwner(this);
   }
 
   @Override
@@ -406,10 +330,6 @@ public class Flame implements Assignable<Flame> {
     if (pFlame.finalXForm != null) {
       finalXForm = pFlame.finalXForm.makeCopy();
     }
-    changeListeners.clear();
-    for (PropertyChangeListener<Flame> listener : pFlame.getChangeListeners()) {
-      changeListeners.add(listener);
-    }
   }
 
   public int getColorOversample() {
@@ -417,9 +337,6 @@ public class Flame implements Assignable<Flame> {
   }
 
   public void setColorOversample(int colorOversample) {
-    for (PropertyChangeListener<Flame> listener : changeListeners) {
-      listener.propertyChanged(this, "colorOversample", this.colorOversample, colorOversample);
-    }
     this.colorOversample = colorOversample;
   }
 
@@ -428,9 +345,6 @@ public class Flame implements Assignable<Flame> {
   }
 
   public void setCamZ(double camZ) {
-    for (PropertyChangeListener<Flame> listener : changeListeners) {
-      listener.propertyChanged(this, "camZ", this.camZ, camZ);
-    }
     this.camZ = camZ;
   }
 
@@ -439,9 +353,6 @@ public class Flame implements Assignable<Flame> {
   }
 
   public void setCamDOF(double camDOF) {
-    for (PropertyChangeListener<Flame> listener : changeListeners) {
-      listener.propertyChanged(this, "camDOF", this.camDOF, camDOF);
-    }
     this.camDOF = camDOF;
   }
 
@@ -450,46 +361,23 @@ public class Flame implements Assignable<Flame> {
   }
 
   public void setShadingInfo(ShadingInfo shadingInfo) {
-    for (PropertyChangeListener<Flame> listener : changeListeners) {
-      listener.propertyChanged(this, "shadingInfo", this.shadingInfo, shadingInfo);
-    }
     this.shadingInfo = shadingInfo;
   }
 
   public void distributeColors() {
-    RGBPalette oldPalette = changeListeners.size() > 0 ? getPalette().makeCopy() : null;
-    Boolean listenerState[] = disableChangeListeners();
-    try {
-      int cnt = getXForms().size();
-      if (cnt > 1) {
-        for (int i = 0; i < getXForms().size(); i++) {
-          XForm xForm = getXForms().get(i);
-          xForm.setColor((double) i / (double) (cnt - 1));
-        }
+    int cnt = getXForms().size();
+    if (cnt > 1) {
+      for (int i = 0; i < getXForms().size(); i++) {
+        XForm xForm = getXForms().get(i);
+        xForm.setColor((double) i / (double) (cnt - 1));
       }
-    }
-    finally {
-      enableChangeListeners(listenerState);
-    }
-    for (PropertyChangeListener<Flame> listener : changeListeners) {
-      listener.propertyChanged(this, "palette", oldPalette, this.getPalette());
     }
   }
 
   public void randomizeColors() {
-    RGBPalette oldPalette = changeListeners.size() > 0 ? getPalette().makeCopy() : null;
-    Boolean listenerState[] = disableChangeListeners();
-    try {
-      for (int i = 0; i < getXForms().size(); i++) {
-        XForm xForm = getXForms().get(i);
-        xForm.setColor(Math.random());
-      }
-    }
-    finally {
-      enableChangeListeners(listenerState);
-    }
-    for (PropertyChangeListener<Flame> listener : changeListeners) {
-      listener.propertyChanged(this, "palette", oldPalette, this.getPalette());
+    for (int i = 0; i < getXForms().size(); i++) {
+      XForm xForm = getXForms().get(i);
+      xForm.setColor(Math.random());
     }
   }
 
@@ -549,9 +437,6 @@ public class Flame implements Assignable<Flame> {
   }
 
   public void setPreserveZ(boolean preserveZ) {
-    for (PropertyChangeListener<Flame> listener : changeListeners) {
-      listener.propertyChanged(this, "preserveZ", this.preserveZ, preserveZ);
-    }
     this.preserveZ = preserveZ;
   }
 
@@ -560,16 +445,10 @@ public class Flame implements Assignable<Flame> {
   }
 
   public void setResolutionProfile(ResolutionProfile pResolutionProfile) {
-    for (PropertyChangeListener<Flame> listener : changeListeners) {
-      listener.propertyChanged(this, "resolutionProfile", this.resolutionProfile, pResolutionProfile.toString());
-    }
     resolutionProfile = pResolutionProfile.toString();
   }
 
   public void setResolutionProfile(String pResolutionProfile) {
-    for (PropertyChangeListener<Flame> listener : changeListeners) {
-      listener.propertyChanged(this, "resolutionProfile", this.resolutionProfile, pResolutionProfile);
-    }
     resolutionProfile = pResolutionProfile;
   }
 
@@ -578,51 +457,11 @@ public class Flame implements Assignable<Flame> {
   }
 
   public void setQualityProfile(QualityProfile pQualityProfile) {
-    for (PropertyChangeListener<Flame> listener : changeListeners) {
-      listener.propertyChanged(this, "qualityProfile", this.qualityProfile, pQualityProfile.toString());
-    }
     qualityProfile = pQualityProfile.toString();
   }
 
   public void setQualityProfile(String pQualityProfile) {
-    for (PropertyChangeListener<Flame> listener : changeListeners) {
-      listener.propertyChanged(this, "qualityProfile", this.qualityProfile, pQualityProfile);
-    }
     qualityProfile = pQualityProfile;
-  }
-
-  public void addPropertyChangeListener(PropertyChangeListener<Flame> pListener) {
-    if (pListener != null && changeListeners.indexOf(pListener) < 0) {
-      changeListeners.add(pListener);
-    }
-  }
-
-  public void clearPropertyChangeListeners() {
-    changeListeners.clear();
-  }
-
-  public List<PropertyChangeListener<Flame>> getChangeListeners() {
-    return changeListeners;
-  }
-
-  public Boolean[] disableChangeListeners() {
-    Boolean state[] = new Boolean[changeListeners.size()];
-    for (int i = 0; i < changeListeners.size(); i++) {
-      PropertyChangeListener<Flame> listener = changeListeners.get(i);
-      state[i] = listener.isEnabled();
-      listener.setEnabled(false);
-    }
-    return state;
-  }
-
-  public void enableChangeListeners(Boolean state[]) {
-    if (state == null || state.length != changeListeners.size()) {
-      throw new IllegalStateException();
-    }
-    for (int i = 0; i < changeListeners.size(); i++) {
-      PropertyChangeListener<Flame> listener = changeListeners.get(i);
-      listener.setEnabled(state[i]);
-    }
   }
 
 }

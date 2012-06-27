@@ -43,7 +43,7 @@ public class UndoManager<T extends Assignable<T>> implements PropertyChangeListe
     Integer pos = undoStackPosition.get(pInitialState);
     if (pos == null)
       throw new RuntimeException("initUndoStack was not called");
-    return -1;
+    return pos;
   }
 
   public void saveUndoPoint(T pInitialState) {
@@ -61,6 +61,7 @@ public class UndoManager<T extends Assignable<T>> implements PropertyChangeListe
     else {
       pos--;
     }
+    System.out.println("UNDO POS: " + pos + " " + stack.size());
     undoStackPosition.put(pInitialState, pos);
     if (pos >= 0 && pos < stack.size()) {
       pInitialState.assign(stack.get(pos).getData());
@@ -79,6 +80,7 @@ public class UndoManager<T extends Assignable<T>> implements PropertyChangeListe
     if (pos >= stack.size()) {
       pos = stack.size() - 1;
     }
+    System.out.println("REDO POS: " + pos + " " + stack.size());
     undoStackPosition.put(pInitialState, pos);
     if (pos >= 0 && pos < stack.size()) {
       pInitialState.assign(stack.get(pos).getData());

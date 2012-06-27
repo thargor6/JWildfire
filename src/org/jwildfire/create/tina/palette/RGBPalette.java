@@ -19,8 +19,6 @@ package org.jwildfire.create.tina.palette;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.jwildfire.create.tina.base.Flame;
-import org.jwildfire.create.tina.edit.PropertyChangeListener;
 import org.jwildfire.image.Pixel;
 import org.jwildfire.image.SimpleImage;
 import org.jwildfire.transform.BalancingTransformer;
@@ -48,8 +46,6 @@ public class RGBPalette {
 
   private final Map<Integer, RGBColor> rawColors = new HashMap<Integer, RGBColor>();
   private final Map<Integer, RGBColor> transformedColors = new HashMap<Integer, RGBColor>();
-
-  private Flame owner;
 
   public void addColor(int pRed, int pGreen, int pBlue) {
     RGBColor color = new RGBColor(pRed, pGreen, pBlue);
@@ -141,11 +137,6 @@ public class RGBPalette {
   }
 
   public void setModRed(int modRed) {
-    if (owner != null) {
-      for (PropertyChangeListener<Flame> listener : owner.getChangeListeners()) {
-        listener.propertyChanged(owner, "palette.modRed", this.modRed, modRed);
-      }
-    }
     this.modRed = modRed;
     modified = true;
   }
@@ -155,11 +146,6 @@ public class RGBPalette {
   }
 
   public void setModGreen(int modGreen) {
-    if (owner != null) {
-      for (PropertyChangeListener<Flame> listener : owner.getChangeListeners()) {
-        listener.propertyChanged(owner, "palette.modGreen", this.modGreen, modGreen);
-      }
-    }
     this.modGreen = modGreen;
     modified = true;
   }
@@ -169,11 +155,6 @@ public class RGBPalette {
   }
 
   public void setModBlue(int modBlue) {
-    if (owner != null) {
-      for (PropertyChangeListener<Flame> listener : owner.getChangeListeners()) {
-        listener.propertyChanged(owner, "palette.modBlue", this.modBlue, modBlue);
-      }
-    }
     this.modBlue = modBlue;
     modified = true;
   }
@@ -183,11 +164,6 @@ public class RGBPalette {
   }
 
   public void setModShift(int modShift) {
-    if (owner != null) {
-      for (PropertyChangeListener<Flame> listener : owner.getChangeListeners()) {
-        listener.propertyChanged(owner, "palette.modShift", this.modShift, modShift);
-      }
-    }
     this.modShift = modShift;
     modified = true;
   }
@@ -197,11 +173,6 @@ public class RGBPalette {
   }
 
   public void setModHue(int modHue) {
-    if (owner != null) {
-      for (PropertyChangeListener<Flame> listener : owner.getChangeListeners()) {
-        listener.propertyChanged(owner, "palette.modHue", this.modHue, modHue);
-      }
-    }
     this.modHue = modHue;
     modified = true;
   }
@@ -211,11 +182,6 @@ public class RGBPalette {
   }
 
   public void setModContrast(int modContrast) {
-    if (owner != null) {
-      for (PropertyChangeListener<Flame> listener : owner.getChangeListeners()) {
-        listener.propertyChanged(owner, "palette.modContrast", this.modContrast, modContrast);
-      }
-    }
     this.modContrast = modContrast;
     modified = true;
   }
@@ -225,11 +191,6 @@ public class RGBPalette {
   }
 
   public void setModGamma(int modGamma) {
-    if (owner != null) {
-      for (PropertyChangeListener<Flame> listener : owner.getChangeListeners()) {
-        listener.propertyChanged(owner, "palette.modGamma", this.modGamma, modGamma);
-      }
-    }
     this.modGamma = modGamma;
     modified = true;
   }
@@ -239,11 +200,6 @@ public class RGBPalette {
   }
 
   public void setModBrightness(int modBrightness) {
-    if (owner != null) {
-      for (PropertyChangeListener<Flame> listener : owner.getChangeListeners()) {
-        listener.propertyChanged(owner, "palette.modBrightness", this.modBrightness, modBrightness);
-      }
-    }
     this.modBrightness = modBrightness;
     modified = true;
   }
@@ -253,11 +209,6 @@ public class RGBPalette {
   }
 
   public void setModSwapRGB(int modSwapRGB) {
-    if (owner != null) {
-      for (PropertyChangeListener<Flame> listener : owner.getChangeListeners()) {
-        listener.propertyChanged(owner, "palette.modSwapRGB", this.modSwapRGB, modSwapRGB);
-      }
-    }
     this.modSwapRGB = modSwapRGB;
     modified = true;
   }
@@ -267,11 +218,6 @@ public class RGBPalette {
   }
 
   public void setModSaturation(int modSaturation) {
-    if (owner != null) {
-      for (PropertyChangeListener<Flame> listener : owner.getChangeListeners()) {
-        listener.propertyChanged(owner, "palette.modSaturation", this.modSaturation, modSaturation);
-      }
-    }
     this.modSaturation = modSaturation;
     modified = true;
   }
@@ -339,7 +285,6 @@ public class RGBPalette {
   }
 
   private void assign(RGBPalette pRGBPalette) {
-    owner = pRGBPalette.owner;
     highestIdx = pRGBPalette.highestIdx;
     modified = pRGBPalette.modified;
     modRed = pRGBPalette.modRed;
@@ -372,11 +317,6 @@ public class RGBPalette {
   }
 
   public void setFlam3Number(String flam3Number) {
-    if (owner != null) {
-      for (PropertyChangeListener<Flame> listener : owner.getChangeListeners()) {
-        listener.propertyChanged(owner, "palette.flam3Number", this.flam3Number, flam3Number);
-      }
-    }
     this.flam3Number = flam3Number;
   }
 
@@ -385,11 +325,6 @@ public class RGBPalette {
   }
 
   public void setFlam3Name(String flam3Name) {
-    if (owner != null) {
-      for (PropertyChangeListener<Flame> listener : owner.getChangeListeners()) {
-        listener.propertyChanged(owner, "palette.flam3Name", this.flam3Name, flam3Name);
-      }
-    }
     this.flam3Name = flam3Name;
   }
 
@@ -409,14 +344,6 @@ public class RGBPalette {
     else {
       return super.toString();
     }
-  }
-
-  public Flame getOwner() {
-    return owner;
-  }
-
-  public void setOwner(Flame owner) {
-    this.owner = owner;
   }
 
 }
