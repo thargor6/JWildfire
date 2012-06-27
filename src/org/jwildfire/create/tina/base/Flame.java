@@ -21,12 +21,13 @@ import java.util.List;
 
 import org.jwildfire.base.QualityProfile;
 import org.jwildfire.base.ResolutionProfile;
+import org.jwildfire.create.tina.edit.Assignable;
 import org.jwildfire.create.tina.edit.PropertyChangeListener;
 import org.jwildfire.create.tina.palette.RGBPalette;
 import org.jwildfire.create.tina.variation.FlameTransformationContext;
 import org.jwildfire.create.tina.variation.Variation;
 
-public class Flame {
+public class Flame implements Assignable<Flame> {
   private double centreX;
   private double centreY;
   private int width;
@@ -356,14 +357,17 @@ public class Flame {
       listener.propertyChanged(this, "palette", this.palette, pPalette);
     }
     palette = pPalette;
+    palette.setOwner(this);
   }
 
+  @Override
   public Flame makeCopy() {
     Flame res = new Flame();
     res.assign(this);
     return res;
   }
 
+  @Override
   public void assign(Flame pFlame) {
     centreX = pFlame.centreX;
     centreY = pFlame.centreY;
@@ -597,11 +601,11 @@ public class Flame {
     changeListeners.clear();
   }
 
-  protected List<PropertyChangeListener<Flame>> getChangeListeners() {
+  public List<PropertyChangeListener<Flame>> getChangeListeners() {
     return changeListeners;
   }
 
-  protected Boolean[] disableChangeListeners() {
+  public Boolean[] disableChangeListeners() {
     Boolean state[] = new Boolean[changeListeners.size()];
     for (int i = 0; i < changeListeners.size(); i++) {
       PropertyChangeListener<Flame> listener = changeListeners.get(i);
@@ -611,7 +615,7 @@ public class Flame {
     return state;
   }
 
-  protected void enableChangeListeners(Boolean state[]) {
+  public void enableChangeListeners(Boolean state[]) {
     if (state == null || state.length != changeListeners.size()) {
       throw new IllegalStateException();
     }

@@ -16,19 +16,11 @@
  */
 package org.jwildfire.create.tina.edit;
 
-public interface PropertyChangeListener<T> {
 
-  public void propertyChanged(T pOwner, String pName, double pOldValue, double pNewValue);
+public interface Assignable<T> {
 
-  public void propertyChanged(T pOwner, String pName, int pOldValue, int pNewValue);
+  public void assign(T pSrc);
 
-  public void propertyChanged(T pOwner, String pName, boolean pOldValue, boolean pNewValue);
+  public T makeCopy();
 
-  public void propertyChanged(T pOwner, String pName, String pOldValue, String pNewValue);
-
-  public void propertyChanged(T pOwner, String pName, Object pOldValue, Object pNewValue);
-
-  public void setEnabled(boolean pEnabled);
-
-  public boolean isEnabled();
 }
