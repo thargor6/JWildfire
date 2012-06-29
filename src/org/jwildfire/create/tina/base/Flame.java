@@ -16,6 +16,9 @@
 */
 package org.jwildfire.create.tina.base;
 
+import static org.jwildfire.base.MathLib.EPSILON;
+import static org.jwildfire.base.MathLib.fabs;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -291,47 +294,6 @@ public class Flame implements Assignable<Flame> {
     return res;
   }
 
-  @Override
-  public void assign(Flame pFlame) {
-    centreX = pFlame.centreX;
-    centreY = pFlame.centreY;
-    width = pFlame.width;
-    height = pFlame.height;
-    camPitch = pFlame.camPitch;
-    camYaw = pFlame.camYaw;
-    camPerspective = pFlame.camPerspective;
-    camRoll = pFlame.camRoll;
-    camZoom = pFlame.camZoom;
-    camZ = pFlame.camZ;
-    camDOF = pFlame.camDOF;
-    spatialOversample = pFlame.spatialOversample;
-    colorOversample = pFlame.colorOversample;
-    spatialFilterRadius = pFlame.spatialFilterRadius;
-    sampleDensity = pFlame.sampleDensity;
-    bgColorRed = pFlame.bgColorRed;
-    bgColorGreen = pFlame.bgColorGreen;
-    bgColorBlue = pFlame.bgColorBlue;
-    gamma = pFlame.gamma;
-    gammaThreshold = pFlame.gammaThreshold;
-    pixelsPerUnit = pFlame.pixelsPerUnit;
-    whiteLevel = pFlame.whiteLevel;
-    brightness = pFlame.brightness;
-    contrast = pFlame.contrast;
-    vibrancy = pFlame.vibrancy;
-    preserveZ = pFlame.preserveZ;
-    resolutionProfile = pFlame.resolutionProfile;
-    qualityProfile = pFlame.qualityProfile;
-    shadingInfo.assign(pFlame.shadingInfo);
-    palette = pFlame.palette.makeCopy();
-    xForms.clear();
-    for (XForm xForm : pFlame.getXForms()) {
-      xForms.add(xForm.makeCopy());
-    }
-    if (pFlame.finalXForm != null) {
-      finalXForm = pFlame.finalXForm.makeCopy();
-    }
-  }
-
   public int getColorOversample() {
     return colorOversample;
   }
@@ -464,4 +426,85 @@ public class Flame implements Assignable<Flame> {
     qualityProfile = pQualityProfile;
   }
 
+  @Override
+  public void assign(Flame pFlame) {
+    centreX = pFlame.centreX;
+    centreY = pFlame.centreY;
+    width = pFlame.width;
+    height = pFlame.height;
+    camPitch = pFlame.camPitch;
+    camYaw = pFlame.camYaw;
+    camPerspective = pFlame.camPerspective;
+    camRoll = pFlame.camRoll;
+    camZoom = pFlame.camZoom;
+    camZ = pFlame.camZ;
+    camDOF = pFlame.camDOF;
+    spatialOversample = pFlame.spatialOversample;
+    colorOversample = pFlame.colorOversample;
+    spatialFilterRadius = pFlame.spatialFilterRadius;
+    sampleDensity = pFlame.sampleDensity;
+    bgColorRed = pFlame.bgColorRed;
+    bgColorGreen = pFlame.bgColorGreen;
+    bgColorBlue = pFlame.bgColorBlue;
+    gamma = pFlame.gamma;
+    gammaThreshold = pFlame.gammaThreshold;
+    pixelsPerUnit = pFlame.pixelsPerUnit;
+    whiteLevel = pFlame.whiteLevel;
+    brightness = pFlame.brightness;
+    contrast = pFlame.contrast;
+    vibrancy = pFlame.vibrancy;
+    preserveZ = pFlame.preserveZ;
+    resolutionProfile = pFlame.resolutionProfile;
+    qualityProfile = pFlame.qualityProfile;
+    shadingInfo.assign(pFlame.shadingInfo);
+    palette = pFlame.palette.makeCopy();
+    xForms.clear();
+    for (XForm xForm : pFlame.getXForms()) {
+      xForms.add(xForm.makeCopy());
+    }
+    if (pFlame.finalXForm != null) {
+      finalXForm = pFlame.finalXForm.makeCopy();
+    }
+    else {
+      finalXForm = null;
+    }
+  }
+
+  @Override
+  public boolean isEqual(Flame pFlame) {
+    if (fabs(centreX - pFlame.centreX) > EPSILON || fabs(centreY - pFlame.centreY) > EPSILON ||
+        width != pFlame.width || height != pFlame.height ||
+        fabs(camPitch - pFlame.camPitch) > EPSILON || fabs(camYaw - pFlame.camYaw) > EPSILON ||
+        fabs(camPerspective - pFlame.camPerspective) > EPSILON || fabs(camRoll - pFlame.camRoll) > EPSILON ||
+        fabs(camZoom - pFlame.camZoom) > EPSILON || fabs(camZ - pFlame.camZ) > EPSILON ||
+        fabs(camDOF - pFlame.camDOF) > EPSILON || spatialOversample != pFlame.spatialOversample ||
+        colorOversample != pFlame.colorOversample) {
+      return false;
+    }
+
+    return true;
+  }
+  /*
+    private double spatialFilterRadius;
+    private double sampleDensity;
+    private int bgColorRed;
+    private int bgColorGreen;
+    private int bgColorBlue;
+    private double gamma;
+    private double gammaThreshold;
+    private double pixelsPerUnit;
+    private int whiteLevel;
+    private double brightness;
+    private double contrast;
+    private double vibrancy;
+    private boolean preserveZ;
+    private String resolutionProfile;
+    private String qualityProfile;
+
+    private RGBPalette palette = new RGBPalette();
+    private final List<XForm> xForms = new ArrayList<XForm>();
+    private XForm finalXForm = null;
+    private ShadingInfo shadingInfo = new ShadingInfo();
+     
+   */
 }

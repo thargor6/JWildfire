@@ -996,6 +996,9 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaCameraRollREd.setValueStep(1.0);
       tinaCameraRollREd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
+          if (!tinaCameraRollREd.isMouseAdjusting() || tinaCameraRollREd.getMouseChangeCount() == 0) {
+            tinaController.saveUndoPoint();
+          }
           tinaController.cameraRollREd_changed();
         }
       });
@@ -3057,7 +3060,7 @@ public class TinaInternalFrame extends JInternalFrame {
         getFaqPane(), getToggleVariationsButton(), getAffinePreserveZButton(), getQualityProfileCmb(), getResolutionProfileCmb(),
         getBatchQualityProfileCmb(), getBatchResolutionProfileCmb(), getInteractiveQualityProfileCmb(), getInteractiveResolutionProfileCmb(),
         getSwfAnimatorQualityProfileCmb(), getSwfAnimatorResolutionProfileCmb(), getTinaRenderFlameButton(), getTinaAppendToMovieButton(),
-        getTransformationWeightREd());
+        getTransformationWeightREd(), getUndoButton(), getRedoButton());
 
     tinaController.refreshing = tinaController.cmbRefreshing = tinaController.gridRefreshing = true;
     try {

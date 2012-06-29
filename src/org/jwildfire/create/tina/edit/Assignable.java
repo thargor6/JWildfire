@@ -16,11 +16,12 @@
  */
 package org.jwildfire.create.tina.edit;
 
-
 public interface Assignable<T> {
 
   public void assign(T pSrc);
 
   public T makeCopy();
+
+  public boolean isEqual(T pSrc);
 
 }

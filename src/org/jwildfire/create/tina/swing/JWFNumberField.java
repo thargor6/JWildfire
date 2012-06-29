@@ -39,6 +39,8 @@ public class JWFNumberField extends JSpinner {
   private double originValue = 0.0;
   private boolean onlyIntegers = false;
   private SpinnerNumberModel spinnerModel;
+  private boolean mouseAdjusting = false;
+  private int mouseChangeCount = 0;
 
   public JWFNumberField() {
     spinnerModel = new SpinnerNumberModel(new Double(0), null, null, new Double(valueStep));
@@ -71,6 +73,13 @@ public class JWFNumberField extends JSpinner {
           public void mousePressed(MouseEvent e) {
             xMouseOrigin = e.getX();
             originValue = (Double) getValue();
+            mouseAdjusting = true;
+            mouseChangeCount = 0;
+          }
+
+          @Override
+          public void mouseReleased(MouseEvent e) {
+            mouseAdjusting = false;
           }
 
         });
@@ -82,15 +91,25 @@ public class JWFNumberField extends JSpinner {
           public void mouseDragged(MouseEvent e) {
             //            System.out.println("DRAG " + (xMouseOrigin - e.getX()));
             double THRESHOLD = 10.0;
-            double dx = (xMouseOrigin - e.getX()) / THRESHOLD;
-            double value = (originValue) - dx * valueStep;
-            if (hasMinValue && value < minValue) {
-              value = minValue;
+            double MINMOVE = 3;
+            double dx = xMouseOrigin - e.getX();
+            if (dx > MINMOVE || dx < -MINMOVE) {
+              if (dx > 0) {
+                dx = (dx - MINMOVE) - THRESHOLD;
+              }
+              else {
+                dx = (dx + MINMOVE) - THRESHOLD;
+              }
+              double value = (originValue) - dx * valueStep;
+              if (hasMinValue && value < minValue) {
+                value = minValue;
+              }
+              else if (hasMaxValue && value > maxValue) {
+                value = maxValue;
+              }
+              setValue(value);
+              mouseChangeCount++;
             }
-            else if (hasMaxValue && value > maxValue) {
-              value = maxValue;
-            }
-            setValue(value);
           }
 
         });
@@ -183,4 +202,13 @@ public class JWFNumberField extends JSpinner {
     }
     return val;
   }
+
+  public boolean isMouseAdjusting() {
+    return mouseAdjusting;
+  }
+
+  public int getMouseChangeCount() {
+    return mouseChangeCount;
+  }
+
 }
