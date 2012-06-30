@@ -89,7 +89,6 @@ public class JWFNumberField extends JSpinner {
 
           @Override
           public void mouseDragged(MouseEvent e) {
-            //            System.out.println("DRAG " + (xMouseOrigin - e.getX()));
             double THRESHOLD = 10.0;
             double MINMOVE = 3;
             double dx = xMouseOrigin - e.getX();
