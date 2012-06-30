@@ -16,8 +16,7 @@
 */
 package org.jwildfire.create.tina.swing;
 
-import org.jwildfire.create.tina.base.Flame;
 
-public interface FlameHolder {
-  public Flame getFlame();
+public interface UndoManagerHolder<T> {
+  public void saveUndoPoint();
 }

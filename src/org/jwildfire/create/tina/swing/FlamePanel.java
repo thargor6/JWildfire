@@ -76,6 +76,7 @@ public class FlamePanel extends ImagePanel {
   private final JToggleButton toggleTrianglesButton;
   private final JToggleButton toggleVariationsButton;
   private boolean redrawAfterMouseClick;
+  private UndoManagerHolder<Flame> undoManagerHolder;
 
   public FlamePanel(SimpleImage pSimpleImage, int pX, int pY, int pWidth, FlameHolder pFlameHolder, JToggleButton pToggleTrianglesButton, JToggleButton pToggleVariationsButton) {
     super(pSimpleImage, pX, pY, pWidth);
@@ -485,6 +486,9 @@ public class FlamePanel extends ImagePanel {
     if (selectedXForm != null) {
       xBeginDrag = x;
       yBeginDrag = y;
+      if (undoManagerHolder != null) {
+        undoManagerHolder.saveUndoPoint();
+      }
       if (!drawTriangles) {
         drawTriangles = true;
         toggleTrianglesButton.setSelected(true);
@@ -666,6 +670,10 @@ public class FlamePanel extends ImagePanel {
 
   public boolean isRedrawAfterMouseClick() {
     return redrawAfterMouseClick;
+  }
+
+  public void setUndoManagerHolder(UndoManagerHolder<Flame> undoManagerHolder) {
+    this.undoManagerHolder = undoManagerHolder;
   }
 
 }

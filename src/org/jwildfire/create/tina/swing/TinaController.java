@@ -105,7 +105,7 @@ import org.jwildfire.swing.ImageFileChooser;
 import org.jwildfire.swing.ImagePanel;
 import org.jwildfire.swing.MainController;
 
-public class TinaController implements FlameHolder, JobRenderThreadController, ScriptRunnerEnvironment {
+public class TinaController implements FlameHolder, JobRenderThreadController, ScriptRunnerEnvironment, UndoManagerHolder<Flame> {
   private static final double SLIDER_SCALE_PERSPECTIVE = 100.0;
   private static final double SLIDER_SCALE_CENTRE = 5000.0;
   private static final double SLIDER_SCALE_ZOOM = 1000.0;
@@ -850,6 +850,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       SimpleImage img = new SimpleImage(width, height);
       img.fillBackground(0, 0, 0);
       flamePanel = new FlamePanel(img, 0, 0, centerPanel.getWidth(), this, toggleTrianglesButton, toggleVariationsButton);
+      flamePanel.setUndoManagerHolder(this);
       ResolutionProfile resProfile = getResolutionProfile();
       flamePanel.setRenderWidth(resProfile.getWidth());
       flamePanel.setRenderHeight(resProfile.getHeight());
@@ -3869,6 +3870,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
   public void runScriptButton_clicked() {
     try {
       ScriptRunner script = compileScript();
+      saveUndoPoint();
       script.run(this);
     }
     catch (Throwable ex) {
@@ -3900,6 +3902,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
   public void distributeColorsBtn_clicked() {
     Flame flame = getCurrFlame();
     if (flame != null) {
+      saveUndoPoint();
       flame.distributeColors();
       transformationTableClicked();
     }
@@ -3908,6 +3911,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
   public void randomizeColorsBtn_clicked() {
     Flame flame = getCurrFlame();
     if (flame != null) {
+      saveUndoPoint();
       flame.randomizeColors();
       transformationTableClicked();
     }
@@ -4001,6 +4005,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
   public void gradientLibraryGradientChanged() {
     if (!cmbRefreshing) {
       if (currFlame != null && gradientLibraryGradientCmb.getSelectedIndex() >= 0 && gradientLibraryGradientCmb.getSelectedIndex() < gradientLibraryList.size()) {
+        saveUndoPoint();
         RGBPalette palette = gradientLibraryList.get(gradientLibraryGradientCmb.getSelectedIndex()).makeCopy();
         currFlame.setPalette(palette);
         refreshPaletteUI(palette);
@@ -4596,6 +4601,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     }
   }
 
+  @Override
   public void saveUndoPoint() {
     Flame currFlame = getCurrFlame();
     if (currFlame != null) {
