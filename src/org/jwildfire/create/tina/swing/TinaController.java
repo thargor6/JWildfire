@@ -1332,7 +1332,9 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
           if (valStr == null || valStr.length() == 0) {
             valStr = "0";
           }
+          saveUndoPoint();
           xForm.setWeight(Tools.stringToDouble(valStr));
+          refreshXFormUI(xForm);
           refreshFlameImage(false);
         }
         super.setValueAt(aValue, row, column);
@@ -1436,6 +1438,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
           }
           refreshPaletteColorsTable();
           RGBPalette palette = new RandomRGBPaletteGenerator().generatePalette(paletteKeyFrames);
+          saveUndoPoint();
           currFlame.setPalette(palette);
           refreshPaletteUI(palette);
           refreshFlameImage(false);
@@ -1507,6 +1510,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
           if (valStr == null || valStr.length() == 0) {
             valStr = "0";
           }
+          saveUndoPoint();
           xForm.getModifiedWeights()[row] = Tools.stringToDouble(valStr);
           relWeightsTableClicked();
           refreshFlameImage(false);
@@ -2848,6 +2852,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     try {
       XForm xForm = getCurrXForm();
       if (xForm != null) {
+        saveUndoPoint();
         String fName = (String) nonlinearControlsRows[pIdx].getNonlinearVarCmb().getSelectedItem();
         Variation var;
         if (pIdx < xForm.getVariationCount()) {
@@ -2927,6 +2932,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       String selected = (String) nonlinearControlsRows[pIdx].getNonlinearParamsCmb().getSelectedItem();
       XForm xForm = getCurrXForm();
       if (xForm != null && selected != null && selected.length() > 0) {
+        saveUndoPoint();
         if (pIdx < xForm.getVariationCount()) {
           Variation var = xForm.getVariation(pIdx);
           int idx;
@@ -4619,11 +4625,11 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     int stackSize = undoManager.getUndoStackSize(currFlame);
     if (stackSize > 0) {
       int pos = undoManager.getUndoStackPosition(currFlame);
-      undoButton.setEnabled(pos >= 0 && pos < stackSize);
+      undoButton.setEnabled(pos > 0 && pos < stackSize);
       if (undoDebug) {
         undoButton.setText("U " + pos);
       }
-      redoButton.setEnabled(pos >= -1 && pos < stackSize - 1);
+      redoButton.setEnabled(pos >= 0 && pos < stackSize - 1);
       if (undoDebug) {
         redoButton.setText("R " + stackSize);
       }

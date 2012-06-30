@@ -16,8 +16,12 @@
 */
 package org.jwildfire.create.tina.base;
 
+import static org.jwildfire.base.MathLib.EPSILON;
+import static org.jwildfire.base.MathLib.fabs;
 
-public class ShadingInfo {
+import org.jwildfire.create.tina.edit.Assignable;
+
+public class ShadingInfo implements Assignable<ShadingInfo> {
   // pseudo3D
   private static final int MAXLIGHTS = 4;
   private Shading shading;
@@ -174,6 +178,7 @@ public class ShadingInfo {
     this.lightBlue[pIdx] = pLightBlue;
   }
 
+  @Override
   public void assign(ShadingInfo pSrc) {
     shading = pSrc.shading;
     ambient = pSrc.ambient;
@@ -235,5 +240,32 @@ public class ShadingInfo {
 
   public void setBlurFallOff(double blurFallOff) {
     this.blurFallOff = blurFallOff;
+  }
+
+  @Override
+  public ShadingInfo makeCopy() {
+    ShadingInfo res = new ShadingInfo();
+    res.assign(this);
+    return res;
+  }
+
+  @Override
+  public boolean isEqual(ShadingInfo pSrc) {
+    if (fabs(ambient - pSrc.ambient) > EPSILON || fabs(diffuse - pSrc.diffuse) > EPSILON ||
+        fabs(phong - pSrc.phong) > EPSILON || fabs(phongSize - pSrc.phongSize) > EPSILON ||
+        ((shading != null && pSrc.shading == null) || (shading == null && pSrc.shading != null) ||
+        (shading != null && pSrc.shading != null && !shading.equals(pSrc.shading))) ||
+        fabs(blurRadius - pSrc.blurRadius) > EPSILON || fabs(blurFade - pSrc.blurFade) > EPSILON ||
+        fabs(blurFallOff - pSrc.blurFallOff) > EPSILON) {
+      return false;
+    }
+    for (int i = 0; i < lightPosX.length; i++) {
+      if (fabs(lightPosX[i] - pSrc.lightPosX[i]) > EPSILON || fabs(lightPosY[i] - pSrc.lightPosY[i]) > EPSILON ||
+          fabs(lightPosZ[i] - pSrc.lightPosZ[i]) > EPSILON || lightRed[i] != pSrc.lightRed[i] ||
+          lightGreen[i] != pSrc.lightGreen[i] || lightBlue[i] != pSrc.lightBlue[i]) {
+        return false;
+      }
+    }
+    return true;
   }
 }

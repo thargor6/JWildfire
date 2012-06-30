@@ -16,7 +16,9 @@
 */
 package org.jwildfire.create.tina.palette;
 
-public class RGBColor {
+import org.jwildfire.create.tina.edit.Assignable;
+
+public class RGBColor implements Assignable<RGBColor> {
   private int red;
   private int green;
   private int blue;
@@ -54,16 +56,26 @@ public class RGBColor {
     this.blue = blue;
   }
 
+  @Override
   public RGBColor makeCopy() {
     RGBColor res = new RGBColor();
     res.assign(this);
     return res;
   }
 
-  private void assign(RGBColor pRGBColor) {
+  @Override
+  public void assign(RGBColor pRGBColor) {
     red = pRGBColor.red;
     green = pRGBColor.green;
     blue = pRGBColor.blue;
+  }
+
+  @Override
+  public boolean isEqual(RGBColor pSrc) {
+    if (red != pSrc.red || green != pSrc.green || blue != pSrc.blue) {
+      return false;
+    }
+    return true;
   }
 
 }

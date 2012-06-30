@@ -3775,8 +3775,12 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearVar1REd.setValueStep(0.01);
       nonlinearVar1REd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
-          if (tinaController != null)
+          if (tinaController != null) {
+            if (!nonlinearVar1REd.isMouseAdjusting() || nonlinearVar1REd.getMouseChangeCount() == 0) {
+              tinaController.saveUndoPoint();
+            }
             tinaController.nonlinearVarREdChanged(0);
+          }
         }
       });
       nonlinearVar1REd.setPreferredSize(new Dimension(56, 24));
@@ -3820,8 +3824,12 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearParams1REd.setValueStep(0.05);
       nonlinearParams1REd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
-          if (tinaController != null)
+          if (tinaController != null) {
+            if (!nonlinearParams1REd.isMouseAdjusting() || nonlinearParams1REd.getMouseChangeCount() == 0) {
+              tinaController.saveUndoPoint();
+            }
             tinaController.nonlinearParamsREdChanged(0);
+          }
         }
       });
       nonlinearParams1REd.setPreferredSize(new Dimension(55, 22));
@@ -3944,8 +3952,12 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearVar2REd = new JWFNumberField();
       nonlinearVar2REd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
-          if (tinaController != null)
+          if (tinaController != null) {
+            if (!nonlinearVar2REd.isMouseAdjusting() || nonlinearVar2REd.getMouseChangeCount() == 0) {
+              tinaController.saveUndoPoint();
+            }
             tinaController.nonlinearVarREdChanged(1);
+          }
         }
       });
       nonlinearVar2REd.setValueStep(0.01);
@@ -3989,8 +4001,12 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearParams2REd = new JWFNumberField();
       nonlinearParams2REd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
-          if (tinaController != null)
+          if (tinaController != null) {
+            if (!nonlinearParams2REd.isMouseAdjusting() || nonlinearParams2REd.getMouseChangeCount() == 0) {
+              tinaController.saveUndoPoint();
+            }
             tinaController.nonlinearParamsREdChanged(1);
+          }
         }
       });
       nonlinearParams2REd.setValueStep(0.05);
@@ -4093,8 +4109,12 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearVar3REd = new JWFNumberField();
       nonlinearVar3REd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
-          if (tinaController != null)
+          if (tinaController != null) {
+            if (!nonlinearVar3REd.isMouseAdjusting() || nonlinearVar3REd.getMouseChangeCount() == 0) {
+              tinaController.saveUndoPoint();
+            }
             tinaController.nonlinearVarREdChanged(2);
+          }
         }
       });
       nonlinearVar3REd.setValueStep(0.01);
@@ -4139,8 +4159,12 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearParams3REd.setValueStep(0.05);
       nonlinearParams3REd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
-          if (tinaController != null)
+          if (tinaController != null) {
+            if (!nonlinearParams3REd.isMouseAdjusting() || nonlinearParams3REd.getMouseChangeCount() == 0) {
+              tinaController.saveUndoPoint();
+            }
             tinaController.nonlinearParamsREdChanged(2);
+          }
         }
       });
       nonlinearParams3REd.setLocation(new Point(188, 26));
@@ -5199,8 +5223,12 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearVar4REd = new JWFNumberField();
       nonlinearVar4REd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
-          if (tinaController != null)
+          if (tinaController != null) {
+            if (!nonlinearVar4REd.isMouseAdjusting() || nonlinearVar4REd.getMouseChangeCount() == 0) {
+              tinaController.saveUndoPoint();
+            }
             tinaController.nonlinearVarREdChanged(3);
+          }
         }
       });
       nonlinearVar4REd.setValueStep(0.01);
@@ -5245,8 +5273,12 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearParams4REd.setValueStep(0.05);
       nonlinearParams4REd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
-          if (tinaController != null)
+          if (tinaController != null) {
+            if (!nonlinearParams4REd.isMouseAdjusting() || nonlinearParams4REd.getMouseChangeCount() == 0) {
+              tinaController.saveUndoPoint();
+            }
             tinaController.nonlinearParamsREdChanged(3);
+          }
         }
       });
       nonlinearParams4REd.setLocation(new Point(188, 26));
@@ -5422,8 +5454,12 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearVar5REd = new JWFNumberField();
       nonlinearVar5REd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
-          if (tinaController != null)
+          if (tinaController != null) {
+            if (!nonlinearVar5REd.isMouseAdjusting() || nonlinearVar5REd.getMouseChangeCount() == 0) {
+              tinaController.saveUndoPoint();
+            }
             tinaController.nonlinearVarREdChanged(4);
+          }
         }
       });
       nonlinearVar5REd.setValueStep(0.01);
@@ -5468,8 +5504,12 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearParams5REd.setValueStep(0.05);
       nonlinearParams5REd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
-          if (tinaController != null)
+          if (tinaController != null) {
+            if (!nonlinearParams5REd.isMouseAdjusting() || nonlinearParams5REd.getMouseChangeCount() == 0) {
+              tinaController.saveUndoPoint();
+            }
             tinaController.nonlinearParamsREdChanged(4);
+          }
         }
       });
       nonlinearParams5REd.setLocation(new Point(188, 26));
@@ -5570,8 +5610,12 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearVar6REd = new JWFNumberField();
       nonlinearVar6REd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
-          if (tinaController != null)
+          if (tinaController != null) {
+            if (!nonlinearVar6REd.isMouseAdjusting() || nonlinearVar6REd.getMouseChangeCount() == 0) {
+              tinaController.saveUndoPoint();
+            }
             tinaController.nonlinearVarREdChanged(5);
+          }
         }
       });
       nonlinearVar6REd.setValueStep(0.01);
@@ -5616,8 +5660,12 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearParams6REd.setValueStep(0.05);
       nonlinearParams6REd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
-          if (tinaController != null)
+          if (tinaController != null) {
+            if (!nonlinearParams6REd.isMouseAdjusting() || nonlinearParams6REd.getMouseChangeCount() == 0) {
+              tinaController.saveUndoPoint();
+            }
             tinaController.nonlinearParamsREdChanged(5);
+          }
         }
       });
       nonlinearParams6REd.setLocation(new Point(188, 26));
@@ -5718,8 +5766,12 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearVar7REd = new JWFNumberField();
       nonlinearVar7REd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
-          if (tinaController != null)
+          if (tinaController != null) {
+            if (!nonlinearVar7REd.isMouseAdjusting() || nonlinearVar7REd.getMouseChangeCount() == 0) {
+              tinaController.saveUndoPoint();
+            }
             tinaController.nonlinearVarREdChanged(6);
+          }
         }
       });
       nonlinearVar7REd.setValueStep(0.01);
@@ -5764,8 +5816,12 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearParams7REd.setValueStep(0.05);
       nonlinearParams7REd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
-          if (tinaController != null)
+          if (tinaController != null) {
+            if (!nonlinearParams7REd.isMouseAdjusting() || nonlinearParams7REd.getMouseChangeCount() == 0) {
+              tinaController.saveUndoPoint();
+            }
             tinaController.nonlinearParamsREdChanged(6);
+          }
         }
       });
       nonlinearParams7REd.setLocation(new Point(188, 26));
@@ -5866,8 +5922,12 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearVar8REd = new JWFNumberField();
       nonlinearVar8REd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
-          if (tinaController != null)
+          if (tinaController != null) {
+            if (!nonlinearVar8REd.isMouseAdjusting() || nonlinearVar8REd.getMouseChangeCount() == 0) {
+              tinaController.saveUndoPoint();
+            }
             tinaController.nonlinearVarREdChanged(7);
+          }
         }
       });
       nonlinearVar8REd.setValueStep(0.01);
@@ -5912,8 +5972,12 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearParams8REd.setValueStep(0.05);
       nonlinearParams8REd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
-          if (tinaController != null)
+          if (tinaController != null) {
+            if (!nonlinearParams8REd.isMouseAdjusting() || nonlinearParams8REd.getMouseChangeCount() == 0) {
+              tinaController.saveUndoPoint();
+            }
             tinaController.nonlinearParamsREdChanged(7);
+          }
         }
       });
       nonlinearParams8REd.setLocation(new Point(188, 26));
@@ -6014,8 +6078,12 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearVar9REd = new JWFNumberField();
       nonlinearVar9REd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
-          if (tinaController != null)
+          if (tinaController != null) {
+            if (!nonlinearVar9REd.isMouseAdjusting() || nonlinearVar9REd.getMouseChangeCount() == 0) {
+              tinaController.saveUndoPoint();
+            }
             tinaController.nonlinearVarREdChanged(8);
+          }
         }
       });
       nonlinearVar9REd.setValueStep(0.01);
@@ -6060,8 +6128,12 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearParams9REd.setValueStep(0.05);
       nonlinearParams9REd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
-          if (tinaController != null)
+          if (tinaController != null) {
+            if (!nonlinearParams9REd.isMouseAdjusting() || nonlinearParams9REd.getMouseChangeCount() == 0) {
+              tinaController.saveUndoPoint();
+            }
             tinaController.nonlinearParamsREdChanged(8);
+          }
         }
       });
       nonlinearParams9REd.setLocation(new Point(188, 26));
@@ -6162,8 +6234,12 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearVar10REd = new JWFNumberField();
       nonlinearVar10REd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
-          if (tinaController != null)
+          if (tinaController != null) {
+            if (!nonlinearVar10REd.isMouseAdjusting() || nonlinearVar10REd.getMouseChangeCount() == 0) {
+              tinaController.saveUndoPoint();
+            }
             tinaController.nonlinearVarREdChanged(9);
+          }
         }
       });
       nonlinearVar10REd.setValueStep(0.01);
@@ -6208,8 +6284,12 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearParams10REd.setValueStep(0.05);
       nonlinearParams10REd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
-          if (tinaController != null)
+          if (tinaController != null) {
+            if (!nonlinearParams10REd.isMouseAdjusting() || nonlinearParams10REd.getMouseChangeCount() == 0) {
+              tinaController.saveUndoPoint();
+            }
             tinaController.nonlinearParamsREdChanged(9);
+          }
         }
       });
       nonlinearParams10REd.setLocation(new Point(188, 26));
@@ -6310,8 +6390,12 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearVar11REd = new JWFNumberField();
       nonlinearVar11REd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
-          if (tinaController != null)
+          if (tinaController != null) {
+            if (!nonlinearVar11REd.isMouseAdjusting() || nonlinearVar11REd.getMouseChangeCount() == 0) {
+              tinaController.saveUndoPoint();
+            }
             tinaController.nonlinearVarREdChanged(10);
+          }
         }
       });
       nonlinearVar11REd.setValueStep(0.01);
@@ -6356,8 +6440,12 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearParams11REd.setValueStep(0.05);
       nonlinearParams11REd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
-          if (tinaController != null)
+          if (tinaController != null) {
+            if (!nonlinearParams11REd.isMouseAdjusting() || nonlinearParams11REd.getMouseChangeCount() == 0) {
+              tinaController.saveUndoPoint();
+            }
             tinaController.nonlinearParamsREdChanged(10);
+          }
         }
       });
       nonlinearParams11REd.setLocation(new Point(188, 26));
@@ -6458,8 +6546,12 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearVar12REd = new JWFNumberField();
       nonlinearVar12REd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
-          if (tinaController != null)
+          if (tinaController != null) {
+            if (!nonlinearVar12REd.isMouseAdjusting() || nonlinearVar12REd.getMouseChangeCount() == 0) {
+              tinaController.saveUndoPoint();
+            }
             tinaController.nonlinearVarREdChanged(11);
+          }
         }
       });
       nonlinearVar12REd.setValueStep(0.01);
@@ -6504,8 +6596,12 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearParams12REd.setValueStep(0.05);
       nonlinearParams12REd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
-          if (tinaController != null)
+          if (tinaController != null) {
+            if (!nonlinearParams12REd.isMouseAdjusting() || nonlinearParams12REd.getMouseChangeCount() == 0) {
+              tinaController.saveUndoPoint();
+            }
             tinaController.nonlinearParamsREdChanged(11);
+          }
         }
       });
       nonlinearParams12REd.setLocation(new Point(188, 26));

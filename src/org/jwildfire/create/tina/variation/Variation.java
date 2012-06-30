@@ -16,10 +16,14 @@
 */
 package org.jwildfire.create.tina.variation;
 
+import static org.jwildfire.base.MathLib.EPSILON;
+import static org.jwildfire.base.MathLib.fabs;
+
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+import org.jwildfire.create.tina.edit.Assignable;
 
-public class Variation {
+public class Variation implements Assignable<Variation> {
   private double amount;
   private VariationFunc func;
 
@@ -57,6 +61,7 @@ public class Variation {
     return func.getName() + "(" + amount + ")";
   }
 
+  @Override
   public void assign(Variation var) {
     amount = var.amount;
     func = VariationFuncList.getVariationFuncInstance(var.func.getName());
@@ -90,5 +95,70 @@ public class Variation {
       }
     }
 
+  }
+
+  @Override
+  public Variation makeCopy() {
+    Variation res = new Variation();
+    res.assign(this);
+    return res;
+  }
+
+  @Override
+  public boolean isEqual(Variation pSrc) {
+    if (fabs(amount - pSrc.amount) > EPSILON ||
+        ((func != null && pSrc.func == null) || (func == null && pSrc.func != null) ||
+        (func != null && pSrc.func != null && !func.getName().equals(pSrc.func.getName())))) {
+      return false;
+    }
+    // param values
+    {
+      Object vals[] = func.getParameterValues();
+      if (vals != null) {
+        Object srcVals[] = pSrc.func.getParameterValues();
+        for (int i = 0; i < vals.length; i++) {
+          Object o = vals[i];
+          Object s = srcVals[i];
+          if ((o != null && s == null) || (o == null && s != null)) {
+            return false;
+          }
+          else if (o != null && s != null) {
+            if (o instanceof Integer) {
+              if (((Integer) o).intValue() != ((Integer) s).intValue()) {
+                return false;
+              }
+            }
+            else if (o instanceof Double) {
+              if (fabs(((Double) o).doubleValue() - ((Double) s).doubleValue()) > EPSILON) {
+                return false;
+              }
+            }
+            else {
+              throw new IllegalStateException();
+            }
+          }
+        }
+      }
+    }
+    // ressources
+    {
+      byte vals[][] = func.getRessourceValues();
+      if (vals != null) {
+        byte srcVals[][] = pSrc.func.getRessourceValues();
+        for (int i = 0; i < vals.length; i++) {
+          byte[] o = vals[i];
+          byte[] s = srcVals[i];
+          if ((o != null && s == null) || (o == null && s != null) || (o != null && s != null && o.length != s.length)) {
+            return false;
+          }
+          for (int j = 0; j < o.length; j++) {
+            if (o[j] != s[j]) {
+              return false;
+            }
+          }
+        }
+      }
+    }
+    return true;
   }
 }

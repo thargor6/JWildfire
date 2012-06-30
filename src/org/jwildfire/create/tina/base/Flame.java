@@ -478,33 +478,29 @@ public class Flame implements Assignable<Flame> {
         fabs(camPerspective - pFlame.camPerspective) > EPSILON || fabs(camRoll - pFlame.camRoll) > EPSILON ||
         fabs(camZoom - pFlame.camZoom) > EPSILON || fabs(camZ - pFlame.camZ) > EPSILON ||
         fabs(camDOF - pFlame.camDOF) > EPSILON || spatialOversample != pFlame.spatialOversample ||
-        colorOversample != pFlame.colorOversample) {
+        colorOversample != pFlame.colorOversample || fabs(spatialFilterRadius - pFlame.spatialFilterRadius) > EPSILON ||
+        fabs(sampleDensity - pFlame.sampleDensity) > EPSILON || bgColorRed != pFlame.bgColorRed ||
+        bgColorGreen != pFlame.bgColorGreen || bgColorBlue != pFlame.bgColorBlue ||
+        fabs(gamma - pFlame.gamma) > EPSILON || fabs(gammaThreshold - pFlame.gammaThreshold) > EPSILON ||
+        fabs(pixelsPerUnit - pFlame.pixelsPerUnit) > EPSILON || whiteLevel != pFlame.whiteLevel ||
+        fabs(brightness - pFlame.brightness) > EPSILON || fabs(contrast - pFlame.contrast) > EPSILON ||
+        fabs(vibrancy - pFlame.vibrancy) > EPSILON || preserveZ != pFlame.preserveZ ||
+        ((resolutionProfile != null && pFlame.resolutionProfile == null) || (resolutionProfile == null && pFlame.resolutionProfile != null) ||
+        (resolutionProfile != null && pFlame.resolutionProfile != null && !resolutionProfile.equals(pFlame.resolutionProfile))) ||
+        ((qualityProfile != null && pFlame.qualityProfile == null) || (qualityProfile == null && pFlame.qualityProfile != null) ||
+        (qualityProfile != null && pFlame.qualityProfile != null && !qualityProfile.equals(pFlame.qualityProfile))) ||
+        ((finalXForm != null && pFlame.finalXForm == null) || (finalXForm == null && pFlame.finalXForm != null) ||
+        (finalXForm != null && pFlame.finalXForm != null && !finalXForm.isEqual(pFlame.finalXForm))) ||
+        !palette.isEqual(pFlame.palette) ||
+        !shadingInfo.isEqual(pFlame.shadingInfo) ||
+        (xForms.size() != pFlame.xForms.size())) {
       return false;
     }
-
+    for (int i = 0; i < xForms.size(); i++) {
+      if (!xForms.get(i).isEqual(pFlame.xForms.get(i))) {
+        return false;
+      }
+    }
     return true;
   }
-  /*
-    private double spatialFilterRadius;
-    private double sampleDensity;
-    private int bgColorRed;
-    private int bgColorGreen;
-    private int bgColorBlue;
-    private double gamma;
-    private double gammaThreshold;
-    private double pixelsPerUnit;
-    private int whiteLevel;
-    private double brightness;
-    private double contrast;
-    private double vibrancy;
-    private boolean preserveZ;
-    private String resolutionProfile;
-    private String qualityProfile;
-
-    private RGBPalette palette = new RGBPalette();
-    private final List<XForm> xForms = new ArrayList<XForm>();
-    private XForm finalXForm = null;
-    private ShadingInfo shadingInfo = new ShadingInfo();
-     
-   */
 }

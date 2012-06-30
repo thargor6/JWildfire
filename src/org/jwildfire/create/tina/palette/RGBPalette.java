@@ -19,6 +19,7 @@ package org.jwildfire.create.tina.palette;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.jwildfire.create.tina.edit.Assignable;
 import org.jwildfire.image.Pixel;
 import org.jwildfire.image.SimpleImage;
 import org.jwildfire.transform.BalancingTransformer;
@@ -26,7 +27,7 @@ import org.jwildfire.transform.HSLTransformer;
 import org.jwildfire.transform.SwapRGBTransformer;
 import org.jwildfire.transform.SwapRGBTransformer.Mode;
 
-public class RGBPalette {
+public class RGBPalette implements Assignable<RGBPalette> {
   public static final int PALETTE_SIZE = 256;
   static final RGBColor BLACK = new RGBColor(0, 0, 0);
   private int highestIdx = -1;
@@ -278,13 +279,15 @@ public class RGBPalette {
     return transformedColors;
   }
 
+  @Override
   public RGBPalette makeCopy() {
     RGBPalette res = new RGBPalette();
     res.assign(this);
     return res;
   }
 
-  private void assign(RGBPalette pRGBPalette) {
+  @Override
+  public void assign(RGBPalette pRGBPalette) {
     highestIdx = pRGBPalette.highestIdx;
     modified = pRGBPalette.modified;
     modRed = pRGBPalette.modRed;
@@ -344,6 +347,25 @@ public class RGBPalette {
     else {
       return super.toString();
     }
+  }
+
+  @Override
+  public boolean isEqual(RGBPalette pSrc) {
+    // flam3Number and flam3Name can not be changed
+    if (modRed != pSrc.modRed || modGreen != pSrc.modGreen || modBlue != pSrc.modBlue ||
+        modShift != pSrc.modShift || modHue != pSrc.modHue || modContrast != pSrc.modContrast ||
+        modGamma != pSrc.modGamma || modBrightness != pSrc.modBrightness || modSaturation != pSrc.modSaturation ||
+        modSwapRGB != pSrc.modSwapRGB || rawColors.size() != pSrc.rawColors.size()) {
+      return false;
+    }
+    for (int i = 0; i < PALETTE_SIZE; i++) {
+      RGBColor color = rawColors.get(i);
+      RGBColor srcColor = pSrc.rawColors.get(i);
+      if (!color.isEqual(srcColor)) {
+        return false;
+      }
+    }
+    return true;
   }
 
 }

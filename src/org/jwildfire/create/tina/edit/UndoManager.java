@@ -27,9 +27,11 @@ public class UndoManager<T extends Assignable<T>> {
   private boolean enabled = true;
 
   public void initUndoStack(T pInitialState) {
-    List<UndoItem<T>> items = new ArrayList<UndoItem<T>>();
-    undoStack.put(pInitialState, items);
-    undoStackPosition.put(pInitialState, -1);
+    if (undoStack.get(pInitialState) == null) {
+      List<UndoItem<T>> items = new ArrayList<UndoItem<T>>();
+      undoStack.put(pInitialState, items);
+      undoStackPosition.put(pInitialState, -1);
+    }
   }
 
   private List<UndoItem<T>> getUndoStack(T pInitialState) {
@@ -54,7 +56,11 @@ public class UndoManager<T extends Assignable<T>> {
   public void saveUndoPoint(T pInitialState) {
     if (enabled) {
       List<UndoItem<T>> stack = getUndoStack(pInitialState);
-      stack.add(new UndoItem<T>(pInitialState.makeCopy()));
+      UndoItem<T> prevState = stack.size() > 0 ? stack.get(stack.size() - 1) : null;
+      UndoItem<T> currState = new UndoItem<T>(pInitialState.makeCopy());
+      if (prevState == null || !prevState.getData().isEqual(currState.getData())) {
+        stack.add(currState);
+      }
       undoStackPosition.put(pInitialState, stack.size() - 1);
     }
   }
@@ -64,7 +70,14 @@ public class UndoManager<T extends Assignable<T>> {
     if (stack.size() > 0) {
       Integer pos = getUndoStackPosition(pInitialState);
       if (pos >= 0 && pos == stack.size() - 1) {
-        stack.add(new UndoItem<T>(pInitialState.makeCopy()));
+        UndoItem<T> prevState = stack.size() > 0 ? stack.get(stack.size() - 1) : null;
+        UndoItem<T> currState = new UndoItem<T>(pInitialState.makeCopy());
+        if (prevState == null || !prevState.getData().isEqual(currState.getData())) {
+          stack.add(currState);
+        }
+        else {
+          pos--;
+        }
       }
       else {
         pos--;

@@ -16,6 +16,7 @@
 */
 package org.jwildfire.create.tina.base;
 
+import static org.jwildfire.base.MathLib.EPSILON;
 import static org.jwildfire.base.MathLib.fabs;
 
 import java.util.ArrayList;
@@ -23,13 +24,14 @@ import java.util.Collections;
 import java.util.List;
 
 import org.jwildfire.base.MathLib;
+import org.jwildfire.create.tina.edit.Assignable;
 import org.jwildfire.create.tina.random.RandomNumberGenerator.RandGenStatus;
 import org.jwildfire.create.tina.variation.FlameTransformationContext;
 import org.jwildfire.create.tina.variation.Variation;
 import org.jwildfire.create.tina.variation.VariationFunc;
 import org.jwildfire.create.tina.variation.VariationPriorityComparator;
 
-public final class XForm {
+public final class XForm implements Assignable<XForm> {
   private double weight;
   private double color;
   private double colorSymmetry;
@@ -355,6 +357,7 @@ public final class XForm {
     this.drawMode = drawMode;
   }
 
+  @Override
   public void assign(XForm pXForm) {
     weight = pXForm.weight;
     color = pXForm.color;
@@ -373,7 +376,6 @@ public final class XForm {
     postCoeff21 = pXForm.postCoeff21;
     hasPostCoeffs = pXForm.hasPostCoeffs;
     hasCoeffs = pXForm.hasCoeffs;
-    System.arraycopy(pXForm.modifiedWeights, 0, modifiedWeights, 0, modifiedWeights.length);
     variations.clear();
     for (Variation var : pXForm.variations) {
       Variation newVar = new Variation();
@@ -381,10 +383,12 @@ public final class XForm {
       variations.add(newVar);
     }
     updateSortedVariations();
+    System.arraycopy(pXForm.modifiedWeights, 0, modifiedWeights, 0, pXForm.modifiedWeights.length);
     opacity = pXForm.opacity;
     drawMode = pXForm.drawMode;
   }
 
+  @Override
   public XForm makeCopy() {
     XForm res = new XForm();
     res.assign(this);
@@ -445,4 +449,31 @@ public final class XForm {
     updateHasPostCoeffs();
   }
 
+  @Override
+  public boolean isEqual(XForm pSrc) {
+    if (fabs(weight - pSrc.weight) > EPSILON || fabs(color - pSrc.color) > EPSILON ||
+        fabs(colorSymmetry - pSrc.colorSymmetry) > EPSILON || fabs(coeff00 - pSrc.coeff00) > EPSILON ||
+        fabs(coeff01 - pSrc.coeff01) > EPSILON || fabs(coeff10 - pSrc.coeff10) > EPSILON ||
+        fabs(coeff11 - pSrc.coeff11) > EPSILON || fabs(coeff20 - pSrc.coeff20) > EPSILON ||
+        fabs(coeff21 - pSrc.coeff21) > EPSILON || fabs(postCoeff00 - pSrc.postCoeff00) > EPSILON ||
+        fabs(postCoeff01 - pSrc.postCoeff01) > EPSILON || fabs(postCoeff10 - pSrc.postCoeff10) > EPSILON ||
+        fabs(postCoeff11 - pSrc.postCoeff11) > EPSILON || fabs(postCoeff20 - pSrc.postCoeff20) > EPSILON ||
+        fabs(postCoeff21 - pSrc.postCoeff21) > EPSILON || fabs(opacity - pSrc.opacity) > EPSILON ||
+        ((drawMode != null && pSrc.drawMode == null) || (drawMode == null && pSrc.drawMode != null) ||
+        (drawMode != null && pSrc.drawMode != null && !drawMode.equals(pSrc.drawMode))) ||
+        modifiedWeights.length != pSrc.modifiedWeights.length || variations.size() != pSrc.variations.size()) {
+      return false;
+    }
+    for (int i = 0; i < modifiedWeights.length; i++) {
+      if (fabs(modifiedWeights[i] - pSrc.modifiedWeights[i]) > EPSILON) {
+        return false;
+      }
+    }
+    for (int i = 0; i < variations.size(); i++) {
+      if (!variations.get(i).isEqual(pSrc.variations.get(i))) {
+        return false;
+      }
+    }
+    return true;
+  }
 }
