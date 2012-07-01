@@ -29,8 +29,9 @@ public class UndoManager<T extends Assignable<T>> {
   public void initUndoStack(T pInitialState) {
     if (undoStack.get(pInitialState) == null) {
       List<UndoItem<T>> items = new ArrayList<UndoItem<T>>();
+      items.add(new UndoItem<T>(pInitialState.makeCopy()));
       undoStack.put(pInitialState, items);
-      undoStackPosition.put(pInitialState, -1);
+      undoStackPosition.put(pInitialState, 0);
     }
   }
 
@@ -53,15 +54,16 @@ public class UndoManager<T extends Assignable<T>> {
     return items != null ? items.size() : 0;
   }
 
-  public void saveUndoPoint(T pInitialState) {
+  public void saveUndoPoint(T pState) {
     if (enabled) {
-      List<UndoItem<T>> stack = getUndoStack(pInitialState);
-      UndoItem<T> prevState = stack.size() > 0 ? stack.get(stack.size() - 1) : null;
-      UndoItem<T> currState = new UndoItem<T>(pInitialState.makeCopy());
-      if (prevState == null || !prevState.getData().isEqual(currState.getData())) {
+      List<UndoItem<T>> stack = getUndoStack(pState);
+      Integer pos = getUndoStackPosition(pState);
+      UndoItem<T> prevState = stack.get(pos);
+      if (!prevState.getData().isEqual(pState)) {
+        UndoItem<T> currState = new UndoItem<T>(pState.makeCopy());
         stack.add(currState);
+        undoStackPosition.put(pState, stack.size() - 1);
       }
-      undoStackPosition.put(pInitialState, stack.size() - 1);
     }
   }
 
@@ -69,10 +71,10 @@ public class UndoManager<T extends Assignable<T>> {
     List<UndoItem<T>> stack = getUndoStack(pInitialState);
     if (stack.size() > 0) {
       Integer pos = getUndoStackPosition(pInitialState);
-      if (pos >= 0 && pos == stack.size() - 1) {
-        UndoItem<T> prevState = stack.size() > 0 ? stack.get(stack.size() - 1) : null;
-        UndoItem<T> currState = new UndoItem<T>(pInitialState.makeCopy());
-        if (prevState == null || !prevState.getData().isEqual(currState.getData())) {
+      if (pos == stack.size() - 1) {
+        UndoItem<T> prevState = stack.get(stack.size() - 1);
+        if (!prevState.getData().isEqual(pInitialState)) {
+          UndoItem<T> currState = new UndoItem<T>(pInitialState.makeCopy());
           stack.add(currState);
         }
         else {

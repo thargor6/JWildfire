@@ -30,6 +30,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
@@ -614,6 +616,14 @@ public class TinaInternalFrame extends JInternalFrame {
     this.setResizable(true);
     this.setMaximizable(true);
     this.setContentPane(getJContentPane());
+    //    this.getInputMap().put(KeyStroke.getKeyStroke('z', InputEvent.CTRL_DOWN_MASK), new AbstractAction() {
+    //      private static final long serialVersionUID = 1L;
+    //
+    //      public void actionPerformed(ActionEvent e) {
+    //        System.out.println("ZZZZZZZZZZZZZZZZZZ");
+    //      }
+    //    }
+    //        );
   }
 
   /**
@@ -999,7 +1009,9 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaCameraRollREd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           if (!tinaCameraRollREd.isMouseAdjusting() || tinaCameraRollREd.getMouseChangeCount() == 0) {
-            tinaController.saveUndoPoint();
+            if (!tinaCameraRollSlider.getValueIsAdjusting()) {
+              tinaController.saveUndoPoint();
+            }
           }
           tinaController.cameraRollREd_changed();
         }
@@ -1024,7 +1036,9 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaCameraPitchREd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           if (!tinaCameraPitchREd.isMouseAdjusting() || tinaCameraPitchREd.getMouseChangeCount() == 0) {
-            tinaController.saveUndoPoint();
+            if (!tinaCameraPitchSlider.getValueIsAdjusting()) {
+              tinaController.saveUndoPoint();
+            }
           }
           tinaController.cameraPitchREd_changed();
         }
@@ -1050,7 +1064,9 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaCameraYawREd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           if (!tinaCameraYawREd.isMouseAdjusting() || tinaCameraYawREd.getMouseChangeCount() == 0) {
-            tinaController.saveUndoPoint();
+            if (!tinaCameraYawSlider.getValueIsAdjusting()) {
+              tinaController.saveUndoPoint();
+            }
           }
           tinaController.cameraYawREd_changed();
         }
@@ -1079,7 +1095,9 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaCameraPerspectiveREd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           if (!tinaCameraPerspectiveREd.isMouseAdjusting() || tinaCameraPerspectiveREd.getMouseChangeCount() == 0) {
-            tinaController.saveUndoPoint();
+            if (!tinaCameraPerspectiveSlider.getValueIsAdjusting()) {
+              tinaController.saveUndoPoint();
+            }
           }
           tinaController.cameraPerspectiveREd_changed();
         }
@@ -1101,6 +1119,12 @@ public class TinaInternalFrame extends JInternalFrame {
   private JSlider getTinaCameraRollSlider() {
     if (tinaCameraRollSlider == null) {
       tinaCameraRollSlider = new JSlider();
+      tinaCameraRollSlider.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mousePressed(MouseEvent e) {
+          tinaController.saveUndoPoint();
+        }
+      });
       tinaCameraRollSlider.setMaximum(180);
       tinaCameraRollSlider.setLocation(new Point(202, 4));
       tinaCameraRollSlider.setSize(new Dimension(220, 19));
@@ -1124,6 +1148,12 @@ public class TinaInternalFrame extends JInternalFrame {
   private JSlider getTinaCameraPitchSlider() {
     if (tinaCameraPitchSlider == null) {
       tinaCameraPitchSlider = new JSlider();
+      tinaCameraPitchSlider.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mousePressed(MouseEvent e) {
+          tinaController.saveUndoPoint();
+        }
+      });
       tinaCameraPitchSlider.setMaximum(180);
       tinaCameraPitchSlider.setPreferredSize(new Dimension(220, 19));
       tinaCameraPitchSlider.setLocation(new Point(202, 28));
@@ -1147,6 +1177,12 @@ public class TinaInternalFrame extends JInternalFrame {
   private JSlider getTinaCameraYawSlider() {
     if (tinaCameraYawSlider == null) {
       tinaCameraYawSlider = new JSlider();
+      tinaCameraYawSlider.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mousePressed(MouseEvent e) {
+          tinaController.saveUndoPoint();
+        }
+      });
       tinaCameraYawSlider.setMaximum(180);
       tinaCameraYawSlider.setPreferredSize(new Dimension(220, 19));
       tinaCameraYawSlider.setLocation(new Point(202, 52));
@@ -1170,6 +1206,12 @@ public class TinaInternalFrame extends JInternalFrame {
   private JSlider getTinaCameraPerspectiveSlider() {
     if (tinaCameraPerspectiveSlider == null) {
       tinaCameraPerspectiveSlider = new JSlider();
+      tinaCameraPerspectiveSlider.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mousePressed(MouseEvent e) {
+          tinaController.saveUndoPoint();
+        }
+      });
       tinaCameraPerspectiveSlider.setPreferredSize(new Dimension(220, 19));
       tinaCameraPerspectiveSlider.setSize(new Dimension(220, 19));
       tinaCameraPerspectiveSlider.setValue(0);
@@ -1280,7 +1322,9 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaCameraCentreXREd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           if (!tinaCameraCentreXREd.isMouseAdjusting() || tinaCameraCentreXREd.getMouseChangeCount() == 0) {
-            tinaController.saveUndoPoint();
+            if (!tinaCameraCentreXSlider.getValueIsAdjusting()) {
+              tinaController.saveUndoPoint();
+            }
           }
           tinaController.cameraCentreXREd_changed();
         }
@@ -1306,7 +1350,9 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaCameraCentreYREd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           if (!tinaCameraCentreYREd.isMouseAdjusting() || tinaCameraCentreYREd.getMouseChangeCount() == 0) {
-            tinaController.saveUndoPoint();
+            if (!tinaCameraCentreYSlider.getValueIsAdjusting()) {
+              tinaController.saveUndoPoint();
+            }
           }
           tinaController.cameraCentreYREd_changed();
         }
@@ -1328,6 +1374,12 @@ public class TinaInternalFrame extends JInternalFrame {
   private JSlider getTinaCameraCentreXSlider() {
     if (tinaCameraCentreXSlider == null) {
       tinaCameraCentreXSlider = new JSlider();
+      tinaCameraCentreXSlider.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mousePressed(MouseEvent e) {
+          tinaController.saveUndoPoint();
+        }
+      });
       tinaCameraCentreXSlider.setMinimum(-25000);
       tinaCameraCentreXSlider.setLocation(new Point(686, 4));
       tinaCameraCentreXSlider.setSize(new Dimension(220, 19));
@@ -1351,6 +1403,12 @@ public class TinaInternalFrame extends JInternalFrame {
   private JSlider getTinaCameraCentreYSlider() {
     if (tinaCameraCentreYSlider == null) {
       tinaCameraCentreYSlider = new JSlider();
+      tinaCameraCentreYSlider.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mousePressed(MouseEvent e) {
+          tinaController.saveUndoPoint();
+        }
+      });
       tinaCameraCentreYSlider.setMinimum(-25000);
       tinaCameraCentreYSlider.setLocation(new Point(686, 28));
       tinaCameraCentreYSlider.setSize(new Dimension(220, 19));
@@ -1378,7 +1436,9 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaCameraZoomREd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           if (!tinaCameraZoomREd.isMouseAdjusting() || tinaCameraZoomREd.getMouseChangeCount() == 0) {
-            tinaController.saveUndoPoint();
+            if (!tinaCameraZoomSlider.getValueIsAdjusting()) {
+              tinaController.saveUndoPoint();
+            }
           }
           tinaController.cameraZoomREd_changed();
         }
@@ -1400,6 +1460,12 @@ public class TinaInternalFrame extends JInternalFrame {
   private JSlider getTinaCameraZoomSlider() {
     if (tinaCameraZoomSlider == null) {
       tinaCameraZoomSlider = new JSlider();
+      tinaCameraZoomSlider.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mousePressed(MouseEvent e) {
+          tinaController.saveUndoPoint();
+        }
+      });
       tinaCameraZoomSlider.setMinimum(100);
       tinaCameraZoomSlider.setLocation(new Point(686, 52));
       tinaCameraZoomSlider.setSize(new Dimension(220, 19));
@@ -1429,7 +1495,9 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaBrightnessREd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           if (!tinaBrightnessREd.isMouseAdjusting() || tinaBrightnessREd.getMouseChangeCount() == 0) {
-            tinaController.saveUndoPoint();
+            if (!tinaBrightnessSlider.getValueIsAdjusting()) {
+              tinaController.saveUndoPoint();
+            }
           }
           tinaController.brightnessREd_changed();
         }
@@ -1451,6 +1519,12 @@ public class TinaInternalFrame extends JInternalFrame {
   private JSlider getTinaBrightnessSlider() {
     if (tinaBrightnessSlider == null) {
       tinaBrightnessSlider = new JSlider();
+      tinaBrightnessSlider.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mousePressed(MouseEvent e) {
+          tinaController.saveUndoPoint();
+        }
+      });
       tinaBrightnessSlider.setMinimum(0);
       tinaBrightnessSlider.setLocation(new Point(202, 4));
       tinaBrightnessSlider.setSize(new Dimension(220, 19));
@@ -1479,7 +1553,9 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaPixelsPerUnitREd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           if (!tinaPixelsPerUnitREd.isMouseAdjusting() || tinaPixelsPerUnitREd.getMouseChangeCount() == 0) {
-            tinaController.saveUndoPoint();
+            if (!tinaPixelsPerUnitSlider.getValueIsAdjusting()) {
+              tinaController.saveUndoPoint();
+            }
           }
           tinaController.pixelsPerUnitREd_changed();
         }
@@ -1501,6 +1577,12 @@ public class TinaInternalFrame extends JInternalFrame {
   private JSlider getTinaPixelsPerUnitSlider() {
     if (tinaPixelsPerUnitSlider == null) {
       tinaPixelsPerUnitSlider = new JSlider();
+      tinaPixelsPerUnitSlider.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mousePressed(MouseEvent e) {
+          tinaController.saveUndoPoint();
+        }
+      });
       tinaPixelsPerUnitSlider.setMaximum(1000);
       tinaPixelsPerUnitSlider.setMinimum(0);
       tinaPixelsPerUnitSlider.setValue(0);
@@ -1533,7 +1615,9 @@ public class TinaInternalFrame extends JInternalFrame {
         public void stateChanged(ChangeEvent e) {
           if (tinaController != null) {
             if (!tinaBGColorRedREd.isMouseAdjusting() || tinaBGColorRedREd.getMouseChangeCount() == 0) {
-              tinaController.saveUndoPoint();
+              if (!tinaBGColorRedSlider.getValueIsAdjusting()) {
+                tinaController.saveUndoPoint();
+              }
             }
             tinaController.bgColorRedREd_changed();
           }
@@ -1565,7 +1649,9 @@ public class TinaInternalFrame extends JInternalFrame {
         public void stateChanged(ChangeEvent e) {
           if (tinaController != null) {
             if (!tinaBGColorGreenREd.isMouseAdjusting() || tinaBGColorGreenREd.getMouseChangeCount() == 0) {
-              tinaController.saveUndoPoint();
+              if (!tinaBGColorGreenSlider.getValueIsAdjusting()) {
+                tinaController.saveUndoPoint();
+              }
             }
             tinaController.bgColorGreenREd_changed();
           }
@@ -1597,7 +1683,9 @@ public class TinaInternalFrame extends JInternalFrame {
         public void stateChanged(ChangeEvent e) {
           if (tinaController != null) {
             if (!tinaBGColorBlueREd.isMouseAdjusting() || tinaBGColorBlueREd.getMouseChangeCount() == 0) {
-              tinaController.saveUndoPoint();
+              if (!tinaBGColorBlueSlider.getValueIsAdjusting()) {
+                tinaController.saveUndoPoint();
+              }
             }
             tinaController.bgBGColorBlueREd_changed();
           }
@@ -1620,6 +1708,12 @@ public class TinaInternalFrame extends JInternalFrame {
   private JSlider getTinaBGColorRedSlider() {
     if (tinaBGColorRedSlider == null) {
       tinaBGColorRedSlider = new JSlider();
+      tinaBGColorRedSlider.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mousePressed(MouseEvent e) {
+          tinaController.saveUndoPoint();
+        }
+      });
       tinaBGColorRedSlider.setMaximum(255);
       tinaBGColorRedSlider.setMinimum(0);
       tinaBGColorRedSlider.setValue(0);
@@ -1644,6 +1738,12 @@ public class TinaInternalFrame extends JInternalFrame {
   private JSlider getTinaBGColorGreenSlider() {
     if (tinaBGColorGreenSlider == null) {
       tinaBGColorGreenSlider = new JSlider();
+      tinaBGColorGreenSlider.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mousePressed(MouseEvent e) {
+          tinaController.saveUndoPoint();
+        }
+      });
       tinaBGColorGreenSlider.setMaximum(255);
       tinaBGColorGreenSlider.setMinimum(0);
       tinaBGColorGreenSlider.setValue(0);
@@ -1668,6 +1768,12 @@ public class TinaInternalFrame extends JInternalFrame {
   private JSlider getTinaBGColorBlueSlider() {
     if (tinaBGColorBlueSlider == null) {
       tinaBGColorBlueSlider = new JSlider();
+      tinaBGColorBlueSlider.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mousePressed(MouseEvent e) {
+          tinaController.saveUndoPoint();
+        }
+      });
       tinaBGColorBlueSlider.setMaximum(255);
       tinaBGColorBlueSlider.setMinimum(0);
       tinaBGColorBlueSlider.setValue(0);
@@ -1699,7 +1805,9 @@ public class TinaInternalFrame extends JInternalFrame {
         public void stateChanged(ChangeEvent e) {
           if (tinaController != null) {
             if (!tinaContrastREd.isMouseAdjusting() || tinaContrastREd.getMouseChangeCount() == 0) {
-              tinaController.saveUndoPoint();
+              if (!tinaContrastSlider.getValueIsAdjusting()) {
+                tinaController.saveUndoPoint();
+              }
             }
             tinaController.contrastREd_changed();
           }
@@ -1729,7 +1837,9 @@ public class TinaInternalFrame extends JInternalFrame {
         public void stateChanged(ChangeEvent e) {
           if (tinaController != null) {
             if (!tinaGammaREd.isMouseAdjusting() || tinaGammaREd.getMouseChangeCount() == 0) {
-              tinaController.saveUndoPoint();
+              if (!tinaGammaSlider.getValueIsAdjusting()) {
+                tinaController.saveUndoPoint();
+              }
             }
             tinaController.gammaREd_changed();
           }
@@ -1760,7 +1870,9 @@ public class TinaInternalFrame extends JInternalFrame {
         public void stateChanged(ChangeEvent e) {
           if (tinaController != null) {
             if (!tinaVibrancyREd.isMouseAdjusting() || tinaVibrancyREd.getMouseChangeCount() == 0) {
-              tinaController.saveUndoPoint();
+              if (!tinaVibrancySlider.getValueIsAdjusting()) {
+                tinaController.saveUndoPoint();
+              }
             }
             tinaController.vibrancyREd_changed();
           }
@@ -1791,7 +1903,9 @@ public class TinaInternalFrame extends JInternalFrame {
         public void stateChanged(ChangeEvent e) {
           if (tinaController != null) {
             if (!tinaFilterRadiusREd.isMouseAdjusting() || tinaFilterRadiusREd.getMouseChangeCount() == 0) {
-              tinaController.saveUndoPoint();
+              if (!tinaFilterRadiusSlider.getValueIsAdjusting()) {
+                tinaController.saveUndoPoint();
+              }
             }
             tinaController.filterRadiusREd_changed();
           }
@@ -1822,7 +1936,9 @@ public class TinaInternalFrame extends JInternalFrame {
         public void stateChanged(ChangeEvent e) {
           if (tinaController != null) {
             if (!tinaGammaThresholdREd.isMouseAdjusting() || tinaGammaThresholdREd.getMouseChangeCount() == 0) {
-              tinaController.saveUndoPoint();
+              if (!tinaGammaThresholdSlider.getValueIsAdjusting()) {
+                tinaController.saveUndoPoint();
+              }
             }
             tinaController.gammaThresholdREd_changed();
           }
@@ -1845,6 +1961,12 @@ public class TinaInternalFrame extends JInternalFrame {
   private JSlider getTinaContrastSlider() {
     if (tinaContrastSlider == null) {
       tinaContrastSlider = new JSlider();
+      tinaContrastSlider.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mousePressed(MouseEvent e) {
+          tinaController.saveUndoPoint();
+        }
+      });
       tinaContrastSlider.setMaximum(500);
       tinaContrastSlider.setMinimum(0);
       tinaContrastSlider.setValue(0);
@@ -1869,6 +1991,12 @@ public class TinaInternalFrame extends JInternalFrame {
   private JSlider getTinaGammaSlider() {
     if (tinaGammaSlider == null) {
       tinaGammaSlider = new JSlider();
+      tinaGammaSlider.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mousePressed(MouseEvent e) {
+          tinaController.saveUndoPoint();
+        }
+      });
       tinaGammaSlider.setMaximum(1000);
       tinaGammaSlider.setMinimum(0);
       tinaGammaSlider.setValue(0);
@@ -1893,6 +2021,12 @@ public class TinaInternalFrame extends JInternalFrame {
   private JSlider getTinaVibrancySlider() {
     if (tinaVibrancySlider == null) {
       tinaVibrancySlider = new JSlider();
+      tinaVibrancySlider.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mousePressed(MouseEvent e) {
+          tinaController.saveUndoPoint();
+        }
+      });
       tinaVibrancySlider.setMaximum(100);
       tinaVibrancySlider.setMinimum(0);
       tinaVibrancySlider.setValue(0);
@@ -1917,6 +2051,12 @@ public class TinaInternalFrame extends JInternalFrame {
   private JSlider getTinaFilterRadiusSlider() {
     if (tinaFilterRadiusSlider == null) {
       tinaFilterRadiusSlider = new JSlider();
+      tinaFilterRadiusSlider.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mousePressed(MouseEvent e) {
+          tinaController.saveUndoPoint();
+        }
+      });
       tinaFilterRadiusSlider.setMaximum(500);
       tinaFilterRadiusSlider.setMinimum(0);
       tinaFilterRadiusSlider.setValue(0);
@@ -1941,6 +2081,12 @@ public class TinaInternalFrame extends JInternalFrame {
   private JSlider getTinaGammaThresholdSlider() {
     if (tinaGammaThresholdSlider == null) {
       tinaGammaThresholdSlider = new JSlider();
+      tinaGammaThresholdSlider.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mousePressed(MouseEvent e) {
+          tinaController.saveUndoPoint();
+        }
+      });
       tinaGammaThresholdSlider.setMaximum(1000);
       tinaGammaThresholdSlider.setMinimum(1);
       tinaGammaThresholdSlider.setValue(0);
@@ -2604,7 +2750,9 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaPaletteShiftREd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           if (!tinaPaletteShiftREd.isMouseAdjusting() || tinaPaletteShiftREd.getMouseChangeCount() == 0) {
-            tinaController.saveUndoPoint();
+            if (!tinaPaletteShiftSlider.getValueIsAdjusting()) {
+              tinaController.saveUndoPoint();
+            }
           }
           tinaController.paletteShiftREd_changed();
         }
@@ -2634,7 +2782,9 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaPaletteRedREd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           if (!tinaPaletteRedREd.isMouseAdjusting() || tinaPaletteRedREd.getMouseChangeCount() == 0) {
-            tinaController.saveUndoPoint();
+            if (!tinaPaletteRedSlider.getValueIsAdjusting()) {
+              tinaController.saveUndoPoint();
+            }
           }
           tinaController.paletteRedREd_changed();
         }
@@ -2665,7 +2815,9 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaPaletteGreenREd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           if (!tinaPaletteGreenREd.isMouseAdjusting() || tinaPaletteGreenREd.getMouseChangeCount() == 0) {
-            tinaController.saveUndoPoint();
+            if (!tinaPaletteGreenSlider.getValueIsAdjusting()) {
+              tinaController.saveUndoPoint();
+            }
           }
           tinaController.paletteGreenREd_changed();
         }
@@ -2696,7 +2848,9 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaPaletteBlueREd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           if (!tinaPaletteBlueREd.isMouseAdjusting() || tinaPaletteBlueREd.getMouseChangeCount() == 0) {
-            tinaController.saveUndoPoint();
+            if (!tinaPaletteBlueSlider.getValueIsAdjusting()) {
+              tinaController.saveUndoPoint();
+            }
           }
           tinaController.paletteBlueREd_changed();
         }
@@ -2727,7 +2881,9 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaPaletteHueREd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           if (!tinaPaletteHueREd.isMouseAdjusting() || tinaPaletteHueREd.getMouseChangeCount() == 0) {
-            tinaController.saveUndoPoint();
+            if (!tinaPaletteHueSlider.getValueIsAdjusting()) {
+              tinaController.saveUndoPoint();
+            }
           }
           tinaController.paletteHueREd_changed();
         }
@@ -2758,7 +2914,9 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaPaletteSaturationREd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           if (!tinaPaletteSaturationREd.isMouseAdjusting() || tinaPaletteSaturationREd.getMouseChangeCount() == 0) {
-            tinaController.saveUndoPoint();
+            if (!tinaPaletteSaturationSlider.getValueIsAdjusting()) {
+              tinaController.saveUndoPoint();
+            }
           }
           tinaController.paletteSaturationREd_changed();
         }
@@ -2789,7 +2947,9 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaPaletteContrastREd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           if (!tinaPaletteContrastREd.isMouseAdjusting() || tinaPaletteContrastREd.getMouseChangeCount() == 0) {
-            tinaController.saveUndoPoint();
+            if (!tinaPaletteContrastSlider.getValueIsAdjusting()) {
+              tinaController.saveUndoPoint();
+            }
           }
           tinaController.paletteContrastREd_changed();
         }
@@ -2820,7 +2980,9 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaPaletteGammaREd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           if (!tinaPaletteGammaREd.isMouseAdjusting() || tinaPaletteGammaREd.getMouseChangeCount() == 0) {
-            tinaController.saveUndoPoint();
+            if (!tinaPaletteGammaSlider.getValueIsAdjusting()) {
+              tinaController.saveUndoPoint();
+            }
           }
           tinaController.paletteGammaREd_changed();
         }
@@ -2851,7 +3013,9 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaPaletteBrightnessREd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           if (!tinaPaletteBrightnessREd.isMouseAdjusting() || tinaPaletteBrightnessREd.getMouseChangeCount() == 0) {
-            tinaController.saveUndoPoint();
+            if (!tinaPaletteBrightnessSlider.getValueIsAdjusting()) {
+              tinaController.saveUndoPoint();
+            }
           }
           tinaController.paletteBrightnessREd_changed();
         }
@@ -2873,6 +3037,12 @@ public class TinaInternalFrame extends JInternalFrame {
   private JSlider getTinaPaletteShiftSlider() {
     if (tinaPaletteShiftSlider == null) {
       tinaPaletteShiftSlider = new JSlider();
+      tinaPaletteShiftSlider.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mousePressed(MouseEvent e) {
+          tinaController.saveUndoPoint();
+        }
+      });
       tinaPaletteShiftSlider.setBounds(106, 6, 86, 22);
       tinaPaletteShiftSlider.setMaximum(255);
       tinaPaletteShiftSlider.setMinimum(-255);
@@ -2896,6 +3066,12 @@ public class TinaInternalFrame extends JInternalFrame {
   private JSlider getTinaPaletteRedSlider() {
     if (tinaPaletteRedSlider == null) {
       tinaPaletteRedSlider = new JSlider();
+      tinaPaletteRedSlider.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mousePressed(MouseEvent e) {
+          tinaController.saveUndoPoint();
+        }
+      });
       tinaPaletteRedSlider.setMaximum(255);
       tinaPaletteRedSlider.setMinimum(-255);
       tinaPaletteRedSlider.setValue(0);
@@ -2920,6 +3096,12 @@ public class TinaInternalFrame extends JInternalFrame {
   private JSlider getTinaPaletteGreenSlider() {
     if (tinaPaletteGreenSlider == null) {
       tinaPaletteGreenSlider = new JSlider();
+      tinaPaletteGreenSlider.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mousePressed(MouseEvent e) {
+          tinaController.saveUndoPoint();
+        }
+      });
       tinaPaletteGreenSlider.setMaximum(255);
       tinaPaletteGreenSlider.setMinimum(-255);
       tinaPaletteGreenSlider.setValue(0);
@@ -2944,6 +3126,12 @@ public class TinaInternalFrame extends JInternalFrame {
   private JSlider getTinaPaletteBlueSlider() {
     if (tinaPaletteBlueSlider == null) {
       tinaPaletteBlueSlider = new JSlider();
+      tinaPaletteBlueSlider.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mousePressed(MouseEvent e) {
+          tinaController.saveUndoPoint();
+        }
+      });
       tinaPaletteBlueSlider.setMaximum(255);
       tinaPaletteBlueSlider.setMinimum(-255);
       tinaPaletteBlueSlider.setValue(0);
@@ -2968,6 +3156,12 @@ public class TinaInternalFrame extends JInternalFrame {
   private JSlider getTinaPaletteHueSlider() {
     if (tinaPaletteHueSlider == null) {
       tinaPaletteHueSlider = new JSlider();
+      tinaPaletteHueSlider.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mousePressed(MouseEvent e) {
+          tinaController.saveUndoPoint();
+        }
+      });
       tinaPaletteHueSlider.setMaximum(255);
       tinaPaletteHueSlider.setMinimum(-255);
       tinaPaletteHueSlider.setValue(0);
@@ -2992,6 +3186,12 @@ public class TinaInternalFrame extends JInternalFrame {
   private JSlider getTinaPaletteSaturationSlider() {
     if (tinaPaletteSaturationSlider == null) {
       tinaPaletteSaturationSlider = new JSlider();
+      tinaPaletteSaturationSlider.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mousePressed(MouseEvent e) {
+          tinaController.saveUndoPoint();
+        }
+      });
       tinaPaletteSaturationSlider.setMaximum(255);
       tinaPaletteSaturationSlider.setMinimum(-255);
       tinaPaletteSaturationSlider.setValue(0);
@@ -3016,6 +3216,12 @@ public class TinaInternalFrame extends JInternalFrame {
   private JSlider getTinaPaletteContrastSlider() {
     if (tinaPaletteContrastSlider == null) {
       tinaPaletteContrastSlider = new JSlider();
+      tinaPaletteContrastSlider.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mousePressed(MouseEvent e) {
+          tinaController.saveUndoPoint();
+        }
+      });
       tinaPaletteContrastSlider.setMaximum(255);
       tinaPaletteContrastSlider.setMinimum(-255);
       tinaPaletteContrastSlider.setValue(0);
@@ -3040,6 +3246,12 @@ public class TinaInternalFrame extends JInternalFrame {
   private JSlider getTinaPaletteGammaSlider() {
     if (tinaPaletteGammaSlider == null) {
       tinaPaletteGammaSlider = new JSlider();
+      tinaPaletteGammaSlider.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mousePressed(MouseEvent e) {
+          tinaController.saveUndoPoint();
+        }
+      });
       tinaPaletteGammaSlider.setMaximum(255);
       tinaPaletteGammaSlider.setMinimum(-255);
       tinaPaletteGammaSlider.setValue(0);
@@ -3064,6 +3276,12 @@ public class TinaInternalFrame extends JInternalFrame {
   private JSlider getTinaPaletteBrightnessSlider() {
     if (tinaPaletteBrightnessSlider == null) {
       tinaPaletteBrightnessSlider = new JSlider();
+      tinaPaletteBrightnessSlider.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mousePressed(MouseEvent e) {
+          tinaController.saveUndoPoint();
+        }
+      });
       tinaPaletteBrightnessSlider.setMaximum(255);
       tinaPaletteBrightnessSlider.setMinimum(-255);
       tinaPaletteBrightnessSlider.setValue(0);
@@ -4212,7 +4430,9 @@ public class TinaInternalFrame extends JInternalFrame {
         public void stateChanged(ChangeEvent e) {
           if (tinaController != null) {
             if (!xFormColorREd.isMouseAdjusting() || xFormColorREd.getMouseChangeCount() == 0) {
-              tinaController.saveUndoPoint();
+              if (!xFormColorSlider.getValueIsAdjusting()) {
+                tinaController.saveUndoPoint();
+              }
             }
             tinaController.xFormColorREd_changed();
           }
@@ -4238,6 +4458,12 @@ public class TinaInternalFrame extends JInternalFrame {
   private JSlider getXFormColorSlider() {
     if (xFormColorSlider == null) {
       xFormColorSlider = new JSlider();
+      xFormColorSlider.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mousePressed(MouseEvent e) {
+          tinaController.saveUndoPoint();
+        }
+      });
       xFormColorSlider.setPreferredSize(new Dimension(172, 22));
       xFormColorSlider.setMaximum(100);
       xFormColorSlider.setMinimum(0);
@@ -4267,7 +4493,9 @@ public class TinaInternalFrame extends JInternalFrame {
         public void stateChanged(ChangeEvent e) {
           if (tinaController != null) {
             if (!xFormSymmetryREd.isMouseAdjusting() || xFormSymmetryREd.getMouseChangeCount() == 0) {
-              tinaController.saveUndoPoint();
+              if (!xFormSymmetrySlider.getValueIsAdjusting()) {
+                tinaController.saveUndoPoint();
+              }
             }
             tinaController.xFormSymmetryREd_changed();
           }
@@ -4294,6 +4522,12 @@ public class TinaInternalFrame extends JInternalFrame {
   private JSlider getXFormSymmetrySlider() {
     if (xFormSymmetrySlider == null) {
       xFormSymmetrySlider = new JSlider();
+      xFormSymmetrySlider.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mousePressed(MouseEvent e) {
+          tinaController.saveUndoPoint();
+        }
+      });
       xFormSymmetrySlider.setPreferredSize(new Dimension(172, 22));
       xFormSymmetrySlider.setMaximum(100);
       xFormSymmetrySlider.setMinimum(-100);
@@ -4323,7 +4557,9 @@ public class TinaInternalFrame extends JInternalFrame {
         public void stateChanged(ChangeEvent e) {
           if (tinaController != null) {
             if (!xFormOpacityREd.isMouseAdjusting() || xFormOpacityREd.getMouseChangeCount() == 0) {
-              tinaController.saveUndoPoint();
+              if (!xFormOpacitySlider.getValueIsAdjusting()) {
+                tinaController.saveUndoPoint();
+              }
             }
             tinaController.xFormOpacityREd_changed();
           }
@@ -4349,6 +4585,12 @@ public class TinaInternalFrame extends JInternalFrame {
   private JSlider getXFormOpacitySlider() {
     if (xFormOpacitySlider == null) {
       xFormOpacitySlider = new JSlider();
+      xFormOpacitySlider.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mousePressed(MouseEvent e) {
+          tinaController.saveUndoPoint();
+        }
+      });
       xFormOpacitySlider.setPreferredSize(new Dimension(172, 22));
       xFormOpacitySlider.setMaximum(100);
       xFormOpacitySlider.setMinimum(0);
@@ -6668,7 +6910,9 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaCameraZPosREd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           if (!tinaCameraZPosREd.isMouseAdjusting() || tinaCameraZPosREd.getMouseChangeCount() == 0) {
-            tinaController.saveUndoPoint();
+            if (!tinaCameraZPosSlider.getValueIsAdjusting()) {
+              tinaController.saveUndoPoint();
+            }
           }
           tinaController.cameraZPosREd_changed();
         }
@@ -6690,6 +6934,12 @@ public class TinaInternalFrame extends JInternalFrame {
   private JSlider getTinaCameraZPosSlider() {
     if (tinaCameraZPosSlider == null) {
       tinaCameraZPosSlider = new JSlider();
+      tinaCameraZPosSlider.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mousePressed(MouseEvent e) {
+          tinaController.saveUndoPoint();
+        }
+      });
       tinaCameraZPosSlider.setMaximum(100);
       tinaCameraZPosSlider.setMinimum(-100);
       tinaCameraZPosSlider.setValue(0);
@@ -6713,6 +6963,12 @@ public class TinaInternalFrame extends JInternalFrame {
   private JSlider getTinaCameraDOFSlider() {
     if (tinaCameraDOFSlider == null) {
       tinaCameraDOFSlider = new JSlider();
+      tinaCameraDOFSlider.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mousePressed(MouseEvent e) {
+          tinaController.saveUndoPoint();
+        }
+      });
       tinaCameraDOFSlider.setMaximum(100);
       tinaCameraDOFSlider.setMinimum(0);
       tinaCameraDOFSlider.setValue(0);
@@ -6741,7 +6997,9 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaCameraDOFREd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           if (!tinaCameraDOFREd.isMouseAdjusting() || tinaCameraDOFREd.getMouseChangeCount() == 0) {
-            tinaController.saveUndoPoint();
+            if (!tinaCameraDOFSlider.getValueIsAdjusting()) {
+              tinaController.saveUndoPoint();
+            }
           }
           tinaController.cameraDOFREd_changed();
         }
@@ -6881,7 +7139,9 @@ public class TinaInternalFrame extends JInternalFrame {
       shadingAmbientREd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           if (!shadingAmbientREd.isMouseAdjusting() || shadingAmbientREd.getMouseChangeCount() == 0) {
-            tinaController.saveUndoPoint();
+            if (!shadingAmbientSlider.getValueIsAdjusting()) {
+              tinaController.saveUndoPoint();
+            }
           }
           tinaController.shadingAmbientREd_changed();
         }
@@ -6910,7 +7170,9 @@ public class TinaInternalFrame extends JInternalFrame {
       shadingDiffuseREd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           if (!shadingDiffuseREd.isMouseAdjusting() || shadingDiffuseREd.getMouseChangeCount() == 0) {
-            tinaController.saveUndoPoint();
+            if (!shadingDiffuseSlider.getValueIsAdjusting()) {
+              tinaController.saveUndoPoint();
+            }
           }
           tinaController.shadingDiffuseREd_changed();
         }
@@ -6932,6 +7194,12 @@ public class TinaInternalFrame extends JInternalFrame {
   private JSlider getShadingAmbientSlider() {
     if (shadingAmbientSlider == null) {
       shadingAmbientSlider = new JSlider();
+      shadingAmbientSlider.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mousePressed(MouseEvent e) {
+          tinaController.saveUndoPoint();
+        }
+      });
       shadingAmbientSlider.setMaximum(100);
       shadingAmbientSlider.setMinimum(0);
       shadingAmbientSlider.setValue(0);
@@ -6955,6 +7223,12 @@ public class TinaInternalFrame extends JInternalFrame {
   private JSlider getShadingDiffuseSlider() {
     if (shadingDiffuseSlider == null) {
       shadingDiffuseSlider = new JSlider();
+      shadingDiffuseSlider.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mousePressed(MouseEvent e) {
+          tinaController.saveUndoPoint();
+        }
+      });
       shadingDiffuseSlider.setMaximum(100);
       shadingDiffuseSlider.setMinimum(0);
       shadingDiffuseSlider.setValue(0);
@@ -6985,7 +7259,9 @@ public class TinaInternalFrame extends JInternalFrame {
       shadingPhongREd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           if (!shadingPhongREd.isMouseAdjusting() || shadingPhongREd.getMouseChangeCount() == 0) {
-            tinaController.saveUndoPoint();
+            if (!shadingPhongSlider.getValueIsAdjusting()) {
+              tinaController.saveUndoPoint();
+            }
           }
           tinaController.shadingPhongREd_changed();
         }
@@ -7007,6 +7283,12 @@ public class TinaInternalFrame extends JInternalFrame {
   private JSlider getShadingPhongSlider() {
     if (shadingPhongSlider == null) {
       shadingPhongSlider = new JSlider();
+      shadingPhongSlider.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mousePressed(MouseEvent e) {
+          tinaController.saveUndoPoint();
+        }
+      });
       shadingPhongSlider.setMaximum(100);
       shadingPhongSlider.setMinimum(0);
       shadingPhongSlider.setValue(0);
@@ -7034,7 +7316,9 @@ public class TinaInternalFrame extends JInternalFrame {
       shadingPhongSizeREd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           if (!shadingPhongSizeREd.isMouseAdjusting() || shadingPhongSizeREd.getMouseChangeCount() == 0) {
-            tinaController.saveUndoPoint();
+            if (!shadingPhongSizeSlider.getValueIsAdjusting()) {
+              tinaController.saveUndoPoint();
+            }
           }
           tinaController.shadingPhongSizeREd_changed();
         }
@@ -7056,6 +7340,12 @@ public class TinaInternalFrame extends JInternalFrame {
   private JSlider getShadingPhongSizeSlider() {
     if (shadingPhongSizeSlider == null) {
       shadingPhongSizeSlider = new JSlider();
+      shadingPhongSizeSlider.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mousePressed(MouseEvent e) {
+          tinaController.saveUndoPoint();
+        }
+      });
       shadingPhongSizeSlider.setMaximum(1000);
       shadingPhongSizeSlider.setMinimum(0);
       shadingPhongSizeSlider.setValue(0);
@@ -7104,7 +7394,9 @@ public class TinaInternalFrame extends JInternalFrame {
       shadingLightXREd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           if (!shadingLightXREd.isMouseAdjusting() || shadingLightXREd.getMouseChangeCount() == 0) {
-            tinaController.saveUndoPoint();
+            if (!shadingLightXSlider.getValueIsAdjusting()) {
+              tinaController.saveUndoPoint();
+            }
           }
           tinaController.shadingLightXREd_changed();
         }
@@ -7126,6 +7418,12 @@ public class TinaInternalFrame extends JInternalFrame {
   private JSlider getShadingLightXSlider() {
     if (shadingLightXSlider == null) {
       shadingLightXSlider = new JSlider();
+      shadingLightXSlider.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mousePressed(MouseEvent e) {
+          tinaController.saveUndoPoint();
+        }
+      });
       shadingLightXSlider.setMaximum(2000);
       shadingLightXSlider.setMinimum(-2000);
       shadingLightXSlider.setValue(0);
@@ -7152,7 +7450,9 @@ public class TinaInternalFrame extends JInternalFrame {
       shadingLightYREd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           if (!shadingLightYREd.isMouseAdjusting() || shadingLightYREd.getMouseChangeCount() == 0) {
-            tinaController.saveUndoPoint();
+            if (!shadingLightYSlider.getValueIsAdjusting()) {
+              tinaController.saveUndoPoint();
+            }
           }
           tinaController.shadingLightYREd_changed();
         }
@@ -7174,6 +7474,12 @@ public class TinaInternalFrame extends JInternalFrame {
   private JSlider getShadingLightYSlider() {
     if (shadingLightYSlider == null) {
       shadingLightYSlider = new JSlider();
+      shadingLightYSlider.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mousePressed(MouseEvent e) {
+          tinaController.saveUndoPoint();
+        }
+      });
       shadingLightYSlider.setMaximum(2000);
       shadingLightYSlider.setMinimum(-2000);
       shadingLightYSlider.setValue(0);
@@ -7200,7 +7506,9 @@ public class TinaInternalFrame extends JInternalFrame {
       shadingLightZREd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           if (!shadingLightZREd.isMouseAdjusting() || shadingLightZREd.getMouseChangeCount() == 0) {
-            tinaController.saveUndoPoint();
+            if (!shadingLightZSlider.getValueIsAdjusting()) {
+              tinaController.saveUndoPoint();
+            }
           }
           tinaController.shadingLightZREd_changed();
         }
@@ -7222,6 +7530,12 @@ public class TinaInternalFrame extends JInternalFrame {
   private JSlider getShadingLightZSlider() {
     if (shadingLightZSlider == null) {
       shadingLightZSlider = new JSlider();
+      shadingLightZSlider.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mousePressed(MouseEvent e) {
+          tinaController.saveUndoPoint();
+        }
+      });
       shadingLightZSlider.setMaximum(2000);
       shadingLightZSlider.setMinimum(-2000);
       shadingLightZSlider.setValue(0);
@@ -7253,7 +7567,9 @@ public class TinaInternalFrame extends JInternalFrame {
       shadingLightRedREd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           if (!shadingLightRedREd.isMouseAdjusting() || shadingLightRedREd.getMouseChangeCount() == 0) {
-            tinaController.saveUndoPoint();
+            if (!shadingLightRedSlider.getValueIsAdjusting()) {
+              tinaController.saveUndoPoint();
+            }
           }
           tinaController.shadingLightRedREd_changed();
         }
@@ -7275,6 +7591,12 @@ public class TinaInternalFrame extends JInternalFrame {
   private JSlider getShadingLightRedSlider() {
     if (shadingLightRedSlider == null) {
       shadingLightRedSlider = new JSlider();
+      shadingLightRedSlider.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mousePressed(MouseEvent e) {
+          tinaController.saveUndoPoint();
+        }
+      });
       shadingLightRedSlider.setMaximum(255);
       shadingLightRedSlider.setMinimum(0);
       shadingLightRedSlider.setValue(0);
@@ -7306,7 +7628,9 @@ public class TinaInternalFrame extends JInternalFrame {
       shadingLightGreenREd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           if (!shadingLightGreenREd.isMouseAdjusting() || shadingLightGreenREd.getMouseChangeCount() == 0) {
-            tinaController.saveUndoPoint();
+            if (!shadingLightGreenSlider.getValueIsAdjusting()) {
+              tinaController.saveUndoPoint();
+            }
           }
           tinaController.shadingLightGreenREd_changed();
         }
@@ -7328,6 +7652,12 @@ public class TinaInternalFrame extends JInternalFrame {
   private JSlider getShadingLightGreenSlider() {
     if (shadingLightGreenSlider == null) {
       shadingLightGreenSlider = new JSlider();
+      shadingLightGreenSlider.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mousePressed(MouseEvent e) {
+          tinaController.saveUndoPoint();
+        }
+      });
       shadingLightGreenSlider.setMaximum(255);
       shadingLightGreenSlider.setMinimum(0);
       shadingLightGreenSlider.setValue(0);
@@ -7358,7 +7688,9 @@ public class TinaInternalFrame extends JInternalFrame {
       shadingLightBlueREd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           if (!shadingLightBlueREd.isMouseAdjusting() || shadingLightBlueREd.getMouseChangeCount() == 0) {
-            tinaController.saveUndoPoint();
+            if (!shadingLightBlueSlider.getValueIsAdjusting()) {
+              tinaController.saveUndoPoint();
+            }
           }
           tinaController.shadingLightBlueREd_changed();
         }
@@ -7380,6 +7712,12 @@ public class TinaInternalFrame extends JInternalFrame {
   private JSlider getShadingLightBlueSlider() {
     if (shadingLightBlueSlider == null) {
       shadingLightBlueSlider = new JSlider();
+      shadingLightBlueSlider.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mousePressed(MouseEvent e) {
+          tinaController.saveUndoPoint();
+        }
+      });
       shadingLightBlueSlider.setMaximum(255);
       shadingLightBlueSlider.setMinimum(0);
       shadingLightBlueSlider.setValue(0);
@@ -8002,7 +8340,9 @@ public class TinaInternalFrame extends JInternalFrame {
       shadingBlurRadiusREd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           if (!shadingBlurRadiusREd.isMouseAdjusting() || shadingBlurRadiusREd.getMouseChangeCount() == 0) {
-            tinaController.saveUndoPoint();
+            if (!shadingBlurRadiusSlider.getValueIsAdjusting()) {
+              tinaController.saveUndoPoint();
+            }
           }
           tinaController.shadingBlurRadiusREd_changed();
         }
@@ -8024,6 +8364,12 @@ public class TinaInternalFrame extends JInternalFrame {
   private JSlider getShadingBlurRadiusSlider() {
     if (shadingBlurRadiusSlider == null) {
       shadingBlurRadiusSlider = new JSlider();
+      shadingBlurRadiusSlider.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mousePressed(MouseEvent e) {
+          tinaController.saveUndoPoint();
+        }
+      });
       shadingBlurRadiusSlider.setMaximum(10);
       shadingBlurRadiusSlider.setMinimum(0);
       shadingBlurRadiusSlider.setValue(0);
@@ -8054,7 +8400,9 @@ public class TinaInternalFrame extends JInternalFrame {
       shadingBlurFadeREd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           if (!shadingBlurFadeREd.isMouseAdjusting() || shadingBlurFadeREd.getMouseChangeCount() == 0) {
-            tinaController.saveUndoPoint();
+            if (!shadingBlurFadeSlider.getValueIsAdjusting()) {
+              tinaController.saveUndoPoint();
+            }
           }
           tinaController.shadingBlurFadeREd_changed();
         }
@@ -8076,6 +8424,12 @@ public class TinaInternalFrame extends JInternalFrame {
   private JSlider getShadingBlurFadeSlider() {
     if (shadingBlurFadeSlider == null) {
       shadingBlurFadeSlider = new JSlider();
+      shadingBlurFadeSlider.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mousePressed(MouseEvent e) {
+          tinaController.saveUndoPoint();
+        }
+      });
       shadingBlurFadeSlider.setMaximum(100);
       shadingBlurFadeSlider.setMinimum(0);
       shadingBlurFadeSlider.setValue(0);
@@ -8106,7 +8460,9 @@ public class TinaInternalFrame extends JInternalFrame {
       shadingBlurFallOffREd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           if (!shadingBlurFallOffREd.isMouseAdjusting() || shadingBlurFallOffREd.getMouseChangeCount() == 0) {
-            tinaController.saveUndoPoint();
+            if (!shadingBlurFallOffSlider.getValueIsAdjusting()) {
+              tinaController.saveUndoPoint();
+            }
           }
           tinaController.shadingBlurFallOffREd_changed();
         }
@@ -8128,6 +8484,12 @@ public class TinaInternalFrame extends JInternalFrame {
   private JSlider getShadingBlurFallOffSlider() {
     if (shadingBlurFallOffSlider == null) {
       shadingBlurFallOffSlider = new JSlider();
+      shadingBlurFallOffSlider.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mousePressed(MouseEvent e) {
+          tinaController.saveUndoPoint();
+        }
+      });
       shadingBlurFallOffSlider.setMaximum(100);
       shadingBlurFallOffSlider.setMinimum(0);
       shadingBlurFallOffSlider.setValue(0);
@@ -8355,7 +8717,9 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaPaletteSwapRGBREd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           if (!tinaPaletteSwapRGBREd.isMouseAdjusting() || tinaPaletteSwapRGBREd.getMouseChangeCount() == 0) {
-            tinaController.saveUndoPoint();
+            if (!tinaPaletteSwapRGBSlider.getValueIsAdjusting()) {
+              tinaController.saveUndoPoint();
+            }
           }
           tinaController.paletteSwapRGBREd_changed();
         }
@@ -8377,6 +8741,12 @@ public class TinaInternalFrame extends JInternalFrame {
   private JSlider getTinaPaletteSwapRGBSlider() {
     if (tinaPaletteSwapRGBSlider == null) {
       tinaPaletteSwapRGBSlider = new JSlider();
+      tinaPaletteSwapRGBSlider.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mousePressed(MouseEvent e) {
+          tinaController.saveUndoPoint();
+        }
+      });
       tinaPaletteSwapRGBSlider.setPreferredSize(new Dimension(86, 22));
       tinaPaletteSwapRGBSlider.setMaximum(255);
       tinaPaletteSwapRGBSlider.setMinimum(-255);

@@ -4581,10 +4581,14 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     if (currFlame != null) {
       undoManager.setEnabled(false);
       try {
+        int txRow = transformationsTable.getSelectedRow();
         undoManager.saveUndoPoint(currFlame);
         undoManager.undo(currFlame);
         enableUndoControls();
         refreshUI();
+        if (txRow >= 0) {
+          transformationsTable.getSelectionModel().setSelectionInterval(txRow, txRow);
+        }
       }
       finally {
         undoManager.setEnabled(true);
@@ -4597,9 +4601,13 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     if (currFlame != null) {
       undoManager.setEnabled(false);
       try {
+        int txRow = transformationsTable.getSelectedRow();
         undoManager.redo(currFlame);
         enableUndoControls();
         refreshUI();
+        if (txRow >= 0) {
+          transformationsTable.getSelectionModel().setSelectionInterval(txRow, txRow);
+        }
       }
       finally {
         undoManager.setEnabled(true);
@@ -4613,10 +4621,15 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     if (currFlame != null) {
       undoManager.saveUndoPoint(currFlame);
       enableUndoControls();
+      undoButton.invalidate();
+      undoButton.validate();
+      redoButton.invalidate();
+      redoButton.validate();
+      undoButton.getParent().repaint();
     }
   }
 
-  private boolean undoDebug = true;
+  private boolean undoDebug = false;
 
   private void enableUndoControls() {
     final String UNDO_LABEL = "Undo";
@@ -4629,9 +4642,15 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       if (undoDebug) {
         undoButton.setText("U " + pos);
       }
+      else {
+        undoButton.setToolTipText(UNDO_LABEL + " " + pos + "/" + stackSize);
+      }
       redoButton.setEnabled(pos >= 0 && pos < stackSize - 1);
       if (undoDebug) {
         redoButton.setText("R " + stackSize);
+      }
+      else {
+        redoButton.setToolTipText(REDO_LABEL + " " + pos + "/" + stackSize);
       }
     }
     else {
@@ -4639,9 +4658,15 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       if (undoDebug) {
         undoButton.setText(UNDO_LABEL);
       }
+      else {
+        undoButton.setToolTipText(UNDO_LABEL);
+      }
       redoButton.setEnabled(false);
       if (undoDebug) {
         redoButton.setText(REDO_LABEL);
+      }
+      else {
+        redoButton.setToolTipText(REDO_LABEL);
       }
     }
   }
