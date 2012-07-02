@@ -41,6 +41,7 @@ public class JulianDiscRandomFlameGenerator extends RandomFlameGenerator {
     flame.setCentreY(0.0);
     flame.setCamPitch(0.0);
     flame.setCamYaw(0.0);
+    flame.setCamZoom(1.0);
     flame.setCamPerspective(0.0);
     flame.setPixelsPerUnit(100);
     flame.setFinalXForm(null);
@@ -57,8 +58,10 @@ public class JulianDiscRandomFlameGenerator extends RandomFlameGenerator {
       }
       varFunc.setParameter("power", power);
       xForm.addVariation(0.5, varFunc);
-      String fncName = Math.random() > 0.5 ? getNonBlurRandomFunc() : "gaussian_blur";
-      xForm.addVariation(0.001 + Math.random() * 0.039, VariationFuncList.getVariationFuncInstance(fncName, true));
+      //      {
+      //        String fncName = Math.random() > 0.5 ? getNonBlurRandomFunc() : "gaussian_blur";
+      //        xForm.addVariation(0.001 + Math.random() * 0.039, VariationFuncList.getVariationFuncInstance(fncName, true));
+      //      }
       xForm.setColor(0.0);
       xForm.setColorSymmetry(0.0);
     }
@@ -66,33 +69,24 @@ public class JulianDiscRandomFlameGenerator extends RandomFlameGenerator {
     {
       XForm xForm = new XForm();
       flame.getXForms().add(xForm);
-      xForm.setWeight(8.0 + Math.random() * 4.0);
-      if (Math.random() < 0.8) {
-        xForm.addVariation(1.0, VariationFuncList.getVariationFuncInstance("disc", true));
-        if (Math.random() < 0.33) {
-          String fncName = Math.random() > 0.5 ? getNonBlurRandomFunc() : "gaussian_blur";
-          xForm.addVariation(0.001 + Math.random() * 0.039, VariationFuncList.getVariationFuncInstance(fncName, true));
-        }
-      }
-      else {
-        xForm.addVariation(0.8 + Math.random() * 0.4, VariationFuncList.getVariationFuncInstance(getNonBlurRandomFunc(), true));
+      xForm.setWeight(2.0 + Math.random() * 24.0);
+      xForm.addVariation(1.0, VariationFuncList.getVariationFuncInstance("disc", true));
+      if (Math.random() < 0.33) {
+        String fncName = Math.random() > 0.5 ? getNonBlurRandomFunc() : "gaussian_blur";
+        xForm.addVariation(0.001 + Math.random() * 0.039, VariationFuncList.getVariationFuncInstance(fncName, true));
       }
       xForm.setColor(0.5 + Math.random() * 0.5);
       xForm.setColorSymmetry(0.6 + Math.random() * 0.33);
-      XFormTransformService.globalTranslate(xForm, -0.1 + 0.2 * Math.random(), -0.1 + 0.2 * Math.random(), false);
-      XFormTransformService.rotate(xForm, 360.0 - Math.random() * 720.0, false);
-      XFormTransformService.scale(xForm, 0.8 + Math.random() * 0.2, true, true, false);
       if (Math.random() < 0.5) {
-        if (Math.random() < 0.5) {
-          XFormTransformService.scale(xForm, 0.5 + Math.random() * 1.5, true, false, false);
-        }
-        else {
-          XFormTransformService.scale(xForm, 0.5 + Math.random() * 1.5, false, true, false);
-        }
+        XFormTransformService.globalTranslate(xForm, Math.random() < 0.5 ? -0.025 + 0.05 * Math.random() : -0.5 + Math.random(), Math.random() >= 0.5 ? -0.025 + 0.05 * Math.random() : -0.5 + Math.random(), false);
       }
+      if (Math.random() < 0.5) {
+        XFormTransformService.rotate(xForm, 6.0 - Math.random() * 12.0, false);
+      }
+      XFormTransformService.scale(xForm, 0.2 + Math.random() * 1.2, true, true, false);
     }
     // final
-    {
+    if (Math.random() < 0.5) {
       XForm xForm = new XForm();
       flame.setFinalXForm(xForm);
       if (Math.random() < 0.5) {
@@ -113,8 +107,7 @@ public class JulianDiscRandomFlameGenerator extends RandomFlameGenerator {
         xForm.addVariation(2.0 + Math.random() * 2.0, VariationFuncList.getVariationFuncInstance(varName, true));
       }
     }
-
-    //flame.randomizeColors();
+    flame.randomizeColors();
     return flame;
   }
 
