@@ -1318,7 +1318,8 @@ public class TinaInternalFrame extends JInternalFrame {
   private JWFNumberField getTinaCameraCentreXREd() {
     if (tinaCameraCentreXREd == null) {
       tinaCameraCentreXREd = new JWFNumberField();
-      tinaCameraCentreXREd.setValueStep(0.25);
+      tinaCameraCentreXREd.setMouseThreshold(1.0);
+      tinaCameraCentreXREd.setValueStep(0.05);
       tinaCameraCentreXREd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           if (!tinaCameraCentreXREd.isMouseAdjusting() || tinaCameraCentreXREd.getMouseChangeCount() == 0) {
@@ -1346,7 +1347,8 @@ public class TinaInternalFrame extends JInternalFrame {
   private JWFNumberField getTinaCameraCentreYREd() {
     if (tinaCameraCentreYREd == null) {
       tinaCameraCentreYREd = new JWFNumberField();
-      tinaCameraCentreYREd.setValueStep(0.25);
+      tinaCameraCentreYREd.setMouseThreshold(1.0);
+      tinaCameraCentreYREd.setValueStep(0.05);
       tinaCameraCentreYREd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           if (!tinaCameraCentreYREd.isMouseAdjusting() || tinaCameraCentreYREd.getMouseChangeCount() == 0) {
@@ -1432,7 +1434,8 @@ public class TinaInternalFrame extends JInternalFrame {
   private JWFNumberField getTinaCameraZoomREd() {
     if (tinaCameraZoomREd == null) {
       tinaCameraZoomREd = new JWFNumberField();
-      tinaCameraZoomREd.setValueStep(0.1);
+      tinaCameraZoomREd.setMouseThreshold(1.0);
+      tinaCameraZoomREd.setValueStep(0.01);
       tinaCameraZoomREd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           if (!tinaCameraZoomREd.isMouseAdjusting() || tinaCameraZoomREd.getMouseChangeCount() == 0) {
@@ -1549,6 +1552,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JWFNumberField getTinaPixelsPerUnitREd() {
     if (tinaPixelsPerUnitREd == null) {
       tinaPixelsPerUnitREd = new JWFNumberField();
+      tinaPixelsPerUnitREd.setMouseThreshold(1.0);
       tinaPixelsPerUnitREd.setValueStep(1.0);
       tinaPixelsPerUnitREd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
