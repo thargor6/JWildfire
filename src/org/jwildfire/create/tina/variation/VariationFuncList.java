@@ -41,6 +41,7 @@ public class VariationFuncList {
     aliasMap.put(GlynnSim3Func.class, "GlynnSim3");
     aliasMap.put(Spherical3DFunc.class, "Spherical3D");
     aliasMap.put(EpispiralFunc.class, "Epispiral");
+    aliasMap.put(SphericalNFunc.class, "SphericalN");
 
     aliasMap.put(CustomWFFunc.class, "t_custom");
     aliasMap.put(EpispiralWFFunc.class, "t_epispiral");
@@ -241,6 +242,7 @@ public class VariationFuncList {
     registerVariationFunc(Hypertile2Func.class);
     registerVariationFunc(DCPerlinFunc.class);
     registerVariationFunc(ColorMapWFFunc.class);
+    registerVariationFunc(SphericalNFunc.class);
   }
 
   private static void registerVariationFunc(
