@@ -1,3 +1,13 @@
+V0.49 (02.07.2012):
+ - Fractal flame editor: undo/redo manager
+ - Fractal flame editor: free triangle point editing mode
+ - Fractal flame editor: SphericalN variation by eralex61
+ - Fractal flame editor: improved the "smoothness" of the centre- and zoom-controls
+ - Fractal flame editor: FIXED: thumbnails were always created at the density which was stored in the flame files... which may be 50000 ;-)
+ - Fractal flame editor: improved the behaviour of numeric editing field so that they begin to change values only after a certain mouse movement andnot immediately after clicking at the field
+ - Fractal flame editor: inverted the behaviour of the triangle zoom-in/out buttons so that they now work as intended
+ - Fractal flame editor: show the available memory in the title bar
+
 V0.48 (16.06.2012):
  - Fractal flame editor: included a FAQ section, improved the help section (larger font, hyperlink do work now)
  - Fractal flame editor: removed the "Post transform" and "Symmetry" buttons
