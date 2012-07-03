@@ -3576,7 +3576,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
 
   protected void importFlame(Flame pFlame) {
     currFlame = pFlame.makeCopy();
-    undoManager.initUndoStack(pFlame);
+    undoManager.initUndoStack(currFlame);
     setupProfiles(currFlame);
     updateThumbnails(null);
     refreshUI();
