@@ -40,6 +40,7 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
@@ -8927,10 +8928,41 @@ public class TinaInternalFrame extends JInternalFrame {
       interactiveFlameToEditorButton.setMnemonic(KeyEvent.VK_D);
       interactiveFlameToEditorButton.setFont(new Font("Dialog", Font.BOLD, 10));
       interactiveFlameToEditorButton.setBounds(new Rectangle(806, 32, 125, 24));
-      interactiveFlameToEditorButton.setBounds(933, 7, 125, 24);
+      interactiveFlameToEditorButton.setBounds(904, 8, 125, 24);
       interactiveNorthPanel.add(interactiveFlameToEditorButton);
       interactiveNorthPanel.add(getLabel_1());
       interactiveNorthPanel.add(getLabel_2());
+
+      JButton interactivePauseButton = new JButton();
+      interactivePauseButton.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          // 
+        }
+      });
+      interactivePauseButton.setToolTipText("Save the current state for later resuming");
+      interactivePauseButton.setText("Save render state");
+      interactivePauseButton.setPreferredSize(new Dimension(125, 24));
+      interactivePauseButton.setMnemonic(KeyEvent.VK_T);
+      interactivePauseButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      interactivePauseButton.setBounds(new Rectangle(754, 32, 125, 24));
+      interactivePauseButton.setBounds(1045, 56, 125, 24);
+      interactiveNorthPanel.add(interactivePauseButton);
+
+      JButton btnResumeRender = new JButton();
+      btnResumeRender.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          //
+
+        }
+      });
+      btnResumeRender.setToolTipText("Load the current state and resume rendering");
+      btnResumeRender.setText("Resume render");
+      btnResumeRender.setPreferredSize(new Dimension(125, 24));
+      btnResumeRender.setMnemonic(KeyEvent.VK_T);
+      btnResumeRender.setFont(new Font("Dialog", Font.BOLD, 10));
+      btnResumeRender.setBounds(new Rectangle(754, 32, 125, 24));
+      btnResumeRender.setBounds(1045, 8, 125, 24);
+      interactiveNorthPanel.add(btnResumeRender);
     }
     return interactiveNorthPanel;
   }
@@ -9030,7 +9062,7 @@ public class TinaInternalFrame extends JInternalFrame {
       interactiveFlameToClipboardButton.setPreferredSize(new Dimension(125, 24));
       interactiveFlameToClipboardButton.setMnemonic(KeyEvent.VK_D);
       interactiveFlameToClipboardButton.setFont(new Font("Dialog", Font.BOLD, 10));
-      interactiveFlameToClipboardButton.setBounds(new Rectangle(933, 32, 125, 24));
+      interactiveFlameToClipboardButton.setBounds(new Rectangle(904, 33, 125, 24));
     }
     return interactiveFlameToClipboardButton;
   }
@@ -9040,14 +9072,18 @@ public class TinaInternalFrame extends JInternalFrame {
       interactiveStopButton = new JButton();
       interactiveStopButton.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
-          tinaController.getInteractiveRendererCtrl().stopButton_clicked();
+          int response = JOptionPane.showConfirmDialog(null, "Do you really want to cancel rendering?", "Confirm",
+              JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+          if (response == JOptionPane.YES_OPTION) {
+            tinaController.getInteractiveRendererCtrl().stopButton_clicked();
+          }
         }
       });
       interactiveStopButton.setText("Stop");
       interactiveStopButton.setPreferredSize(new Dimension(125, 24));
       interactiveStopButton.setMnemonic(KeyEvent.VK_D);
       interactiveStopButton.setFont(new Font("Dialog", Font.BOLD, 10));
-      interactiveStopButton.setBounds(new Rectangle(1099, 32, 71, 24));
+      interactiveStopButton.setBounds(new Rectangle(1114, 32, 56, 24));
     }
     return interactiveStopButton;
   }
@@ -9065,7 +9101,7 @@ public class TinaInternalFrame extends JInternalFrame {
       interactiveSaveFlameButton.setPreferredSize(new Dimension(125, 24));
       interactiveSaveFlameButton.setMnemonic(KeyEvent.VK_D);
       interactiveSaveFlameButton.setFont(new Font("Dialog", Font.BOLD, 10));
-      interactiveSaveFlameButton.setBounds(new Rectangle(933, 56, 125, 24));
+      interactiveSaveFlameButton.setBounds(new Rectangle(904, 57, 125, 24));
     }
     return interactiveSaveFlameButton;
   }
@@ -9080,9 +9116,9 @@ public class TinaInternalFrame extends JInternalFrame {
       });
       interactiveSaveImageButton.setText("Save image");
       interactiveSaveImageButton.setPreferredSize(new Dimension(125, 24));
-      interactiveSaveImageButton.setMnemonic(KeyEvent.VK_D);
+      interactiveSaveImageButton.setMnemonic(KeyEvent.VK_I);
       interactiveSaveImageButton.setFont(new Font("Dialog", Font.BOLD, 10));
-      interactiveSaveImageButton.setBounds(new Rectangle(754, 32, 125, 24));
+      interactiveSaveImageButton.setBounds(new Rectangle(740, 32, 125, 24));
     }
     return interactiveSaveImageButton;
   }
