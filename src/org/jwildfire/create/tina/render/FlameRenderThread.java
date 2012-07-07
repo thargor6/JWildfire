@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2012 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -49,12 +49,15 @@ public final class FlameRenderThread implements Runnable {
       try {
         switch (flame.getShadingInfo().getShading()) {
           case FLAT:
+            init_iterate_flat();
             iterate_flat();
             break;
           case BLUR:
+            init_iterate_blur();
             iterate_blur();
             break;
           case PSEUDO3D:
+            init_iterate_pseudo3D();
             iterate_pseudo3D();
             break;
           default:
@@ -71,20 +74,24 @@ public final class FlameRenderThread implements Runnable {
     }
   }
 
-  private void iterate_flat() {
-    List<IterationObserver> observers = renderer.getIterationObservers();
+  private XYZPoint affineT;
+  private XYZPoint varT;
+  private XYZPoint p;
+  private XYZPoint q;
+  private XForm xf;
+
+  private void init_iterate_flat() {
     FlameTransformationContext ctx = renderer.getFlameTransformationContext();
-    XYZPoint affineT = new XYZPoint(); // affine part of the transformation
-    XYZPoint varT = new XYZPoint(); // complete transformation
-    XYZPoint p = new XYZPoint();
-    XYZPoint q = new XYZPoint();
+    affineT = new XYZPoint(); // affine part of the transformation
+    varT = new XYZPoint(); // complete transformation
+    p = new XYZPoint();
+    q = new XYZPoint();
     p.x = 2.0 * renderer.random.random() - 1.0;
     p.y = 2.0 * renderer.random.random() - 1.0;
-    //    p.z = 2.0 * renderer.random.random() - 1.0;
-    p.z = 0.0;
+    p.z = 2.0 * renderer.random.random() - 1.0;
     p.color = renderer.random.random();
 
-    XForm xf = flame.getXForms().get(0);
+    xf = flame.getXForms().get(0);
     xf.transformPoint(ctx, affineT, varT, p, p);
     for (int i = 0; i <= Constants.INITIAL_ITERATIONS; i++) {
       xf = xf.getNextAppliedXFormTable()[renderer.random.random(Constants.NEXT_APPLIED_XFORM_TABLE_SIZE)];
@@ -92,10 +99,13 @@ public final class FlameRenderThread implements Runnable {
         return;
       }
     }
+  }
 
+  private void iterate_flat() {
+    List<IterationObserver> observers = renderer.getIterationObservers();
+    FlameTransformationContext ctx = renderer.getFlameTransformationContext();
     final double cosa = renderer.cosa;
     final double sina = renderer.sina;
-
     for (long i = 0; !forceAbort && (samples < 0 || i < samples); i++) {
       if (i % 100 == 0) {
         currSample = i;
@@ -159,19 +169,18 @@ public final class FlameRenderThread implements Runnable {
     }
   }
 
-  private void iterate_blur() {
-    List<IterationObserver> observers = renderer.getIterationObservers();
+  private void init_iterate_blur() {
     FlameTransformationContext ctx = renderer.getFlameTransformationContext();
-    XYZPoint affineT = new XYZPoint(); // affine part of the transformation
-    XYZPoint varT = new XYZPoint(); // complete transformation
-    XYZPoint p = new XYZPoint();
-    XYZPoint q = new XYZPoint();
+    affineT = new XYZPoint(); // affine part of the transformation
+    varT = new XYZPoint(); // complete transformation
+    p = new XYZPoint();
+    q = new XYZPoint();
     p.x = 2.0 * renderer.random.random() - 1.0;
     p.y = 2.0 * renderer.random.random() - 1.0;
     p.z = 2.0 * renderer.random.random() - 1.0;
     p.color = renderer.random.random();
 
-    XForm xf = flame.getXForms().get(0);
+    xf = flame.getXForms().get(0);
     xf.transformPoint(ctx, affineT, varT, p, p);
     for (int i = 0; i <= Constants.INITIAL_ITERATIONS; i++) {
       xf = xf.getNextAppliedXFormTable()[renderer.random.random(Constants.NEXT_APPLIED_XFORM_TABLE_SIZE)];
@@ -179,6 +188,11 @@ public final class FlameRenderThread implements Runnable {
         return;
       }
     }
+  }
+
+  private void iterate_blur() {
+    List<IterationObserver> observers = renderer.getIterationObservers();
+    FlameTransformationContext ctx = renderer.getFlameTransformationContext();
 
     double blurKernel[][] = flame.getShadingInfo().createBlurKernel();
     int blurRadius = flame.getShadingInfo().getBlurRadius();
@@ -282,45 +296,63 @@ public final class FlameRenderThread implements Runnable {
     }
   }
 
-  private void iterate_pseudo3D() {
-    List<IterationObserver> observers = renderer.getIterationObservers();
+  private XYZPoint[] affineTA;
+  private XYZPoint[] varTA;
+  private XYZPoint[] pA;
+  private XYZPoint[] qA;
+  private XYZPoint r;
+
+  private void init_iterate_pseudo3D() {
     FlameTransformationContext ctx = renderer.getFlameTransformationContext();
-    Pseudo3DShader shader = new Pseudo3DShader(flame.getShadingInfo());
-    shader.init();
-
-    XYZPoint[] affineT = new XYZPoint[3]; // affine part of the transformation
-    for (int i = 0; i < affineT.length; i++) {
-      affineT[i] = new XYZPoint();
+    affineTA = new XYZPoint[3]; // affine part of the transformation
+    for (int i = 0; i < affineTA.length; i++) {
+      affineTA[i] = new XYZPoint();
     }
-    XYZPoint[] varT = new XYZPoint[3]; // complete transformation
-    for (int i = 0; i < varT.length; i++) {
-      varT[i] = new XYZPoint();
+    varTA = new XYZPoint[3]; // complete transformation
+    for (int i = 0; i < varTA.length; i++) {
+      varTA[i] = new XYZPoint();
     }
-    XYZPoint[] p = new XYZPoint[3];
-    for (int i = 0; i < p.length; i++) {
-      p[i] = new XYZPoint();
+    pA = new XYZPoint[3];
+    for (int i = 0; i < pA.length; i++) {
+      pA[i] = new XYZPoint();
     }
-    XYZPoint r = new XYZPoint();
+    r = new XYZPoint();
 
-    p[0].x = 2.0 * renderer.random.random() - 1.0;
-    p[0].y = 2.0 * renderer.random.random() - 1.0;
-    p[0].z = 2.0 * renderer.random.random() - 1.0;
-    p[0].color = renderer.random.random();
+    pA[0].x = 2.0 * renderer.random.random() - 1.0;
+    pA[0].y = 2.0 * renderer.random.random() - 1.0;
+    pA[0].z = 2.0 * renderer.random.random() - 1.0;
+    pA[0].color = renderer.random.random();
 
-    shader.distributeInitialPoints(p);
-    XYZPoint[] q = new XYZPoint[3];
-    for (int i = 0; i < q.length; i++) {
-      q[i] = new XYZPoint();
+    distributeInitialPoints(pA);
+    qA = new XYZPoint[3];
+    for (int i = 0; i < qA.length; i++) {
+      qA[i] = new XYZPoint();
     }
 
-    XForm xf = flame.getXForms().get(0);
-    xf.transformPoints(ctx, affineT, varT, p, p);
+    xf = flame.getXForms().get(0);
+    xf.transformPoints(ctx, affineTA, varTA, pA, pA);
     for (int i = 0; i <= Constants.INITIAL_ITERATIONS; i++) {
       xf = xf.getNextAppliedXFormTable()[renderer.random.random(Constants.NEXT_APPLIED_XFORM_TABLE_SIZE)];
       if (xf == null) {
         return;
       }
     }
+  }
+
+  private void distributeInitialPoints(XYZPoint[] p) {
+    p[1].x = p[0].x + 0.001;
+    p[1].y = p[0].y;
+    p[1].z = p[0].z;
+    p[2].x = p[0].x;
+    p[2].y = p[0].y + 0.001;
+    p[2].z = p[0].z;
+  }
+
+  private void iterate_pseudo3D() {
+    List<IterationObserver> observers = renderer.getIterationObservers();
+    FlameTransformationContext ctx = renderer.getFlameTransformationContext();
+    Pseudo3DShader shader = new Pseudo3DShader(flame.getShadingInfo());
+    shader.init();
 
     for (long i = 0; !forceAbort && (samples < 0 || i < samples); i++) {
       if (i % 100 == 0) {
@@ -330,7 +362,7 @@ public final class FlameRenderThread implements Runnable {
       if (xf == null) {
         return;
       }
-      xf.transformPoints(ctx, affineT, varT, p, p);
+      xf.transformPoints(ctx, affineTA, varTA, pA, pA);
       if (xf.getDrawMode() == DrawMode.HIDDEN)
         continue;
       else if ((xf.getDrawMode() == DrawMode.OPAQUE) && (renderer.random.random() > xf.getOpacity()))
@@ -339,21 +371,21 @@ public final class FlameRenderThread implements Runnable {
       XForm finalXForm = flame.getFinalXForm();
       double px = 0.0, py = 0.0;
       if (finalXForm != null) {
-        for (int pIdx = 0; pIdx < p.length; pIdx++) {
-          q[pIdx] = new XYZPoint();
+        for (int pIdx = 0; pIdx < pA.length; pIdx++) {
+          qA[pIdx] = new XYZPoint();
         }
-        finalXForm.transformPoints(ctx, affineT, varT, p, q);
-        r.assign(q[0]);
+        finalXForm.transformPoints(ctx, affineTA, varTA, pA, qA);
+        r.assign(qA[0]);
         renderer.project(r);
         px = r.x * renderer.cosa + r.y * renderer.sina + renderer.rcX;
         py = r.y * renderer.cosa - r.x * renderer.sina + renderer.rcY;
       }
       else {
-        for (int pIdx = 0; pIdx < p.length; pIdx++) {
-          q[pIdx] = new XYZPoint();
-          q[pIdx].assign(p[pIdx]);
+        for (int pIdx = 0; pIdx < pA.length; pIdx++) {
+          qA[pIdx] = new XYZPoint();
+          qA[pIdx].assign(pA[pIdx]);
         }
-        r.assign(q[0]);
+        r.assign(qA[0]);
         renderer.project(r);
         px = r.x * renderer.cosa + r.y * renderer.sina + renderer.rcX;
         py = r.y * renderer.cosa - r.x * renderer.sina + renderer.rcY;
@@ -369,16 +401,16 @@ public final class FlameRenderThread implements Runnable {
 
       RasterPoint rp = renderer.raster[yIdx][xIdx];
       RenderColor color;
-      if (p[0].rgbColor) {
+      if (pA[0].rgbColor) {
         color = new RenderColor();
-        color.red = p[0].redColor;
-        color.green = p[0].greenColor;
-        color.blue = p[0].blueColor;
+        color.red = pA[0].redColor;
+        color.green = pA[0].greenColor;
+        color.blue = pA[0].blueColor;
       }
       else {
-        color = renderer.colorMap[(int) (p[0].color * renderer.paletteIdxScl + 0.5)];
+        color = renderer.colorMap[(int) (pA[0].color * renderer.paletteIdxScl + 0.5)];
       }
-      RenderColor shadedColor = shader.calculateColor(q, color);
+      RenderColor shadedColor = shader.calculateColor(qA, color);
 
       rp.red += shadedColor.red;
       rp.green += shadedColor.green;

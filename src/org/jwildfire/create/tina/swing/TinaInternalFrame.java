@@ -3411,7 +3411,8 @@ public class TinaInternalFrame extends JInternalFrame {
           getInteractiveLoadFlameButton(), getInteractiveLoadFlameFromClipboardButton(), getInteractiveNextButton(), getInteractiveStopButton(),
           getInteractiveFlameToClipboardButton(), getInteractiveSaveImageButton(),
           getInteractiveSaveFlameButton(), getInteractiveRandomStyleCmb(), getInteractiveCenterTopPanel(), getInteractiveStatsTextArea(),
-          getInteractiveHalveSizeButton(), getInteractiveResolutionProfileCmb(), getInteractiveQualityProfileCmb()));
+          getInteractiveHalveSizeButton(), getInteractiveResolutionProfileCmb(), getInteractiveQualityProfileCmb(),
+          getInteractivePauseButton(), getInteractiveResumeButton()));
       tinaController.getInteractiveRendererCtrl().enableControls();
 
       tinaController.setSwfAnimatorCtrl(new TinaSWFAnimatorController(tinaController, pErrorHandler, pPrefs,
@@ -7982,6 +7983,8 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton undoButton;
   private JLabel label_5;
   private JButton redoButton;
+  private JButton interactivePauseButton;
+  private JButton interactiveResumeButton;
 
   /**
    * This method initializes renderBatchJobsScrollPane	
@@ -8933,10 +8936,10 @@ public class TinaInternalFrame extends JInternalFrame {
       interactiveNorthPanel.add(getLabel_1());
       interactiveNorthPanel.add(getLabel_2());
 
-      JButton interactivePauseButton = new JButton();
+      interactivePauseButton = new JButton();
       interactivePauseButton.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
-          // 
+          tinaController.getInteractiveRendererCtrl().pauseBtn_clicked();
         }
       });
       interactivePauseButton.setToolTipText("Save the current state for later resuming");
@@ -8948,21 +8951,20 @@ public class TinaInternalFrame extends JInternalFrame {
       interactivePauseButton.setBounds(1045, 56, 125, 24);
       interactiveNorthPanel.add(interactivePauseButton);
 
-      JButton btnResumeRender = new JButton();
-      btnResumeRender.addActionListener(new ActionListener() {
+      interactiveResumeButton = new JButton();
+      interactiveResumeButton.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
-          //
-
+          tinaController.getInteractiveRendererCtrl().resumeBtn_clicked();
         }
       });
-      btnResumeRender.setToolTipText("Load the current state and resume rendering");
-      btnResumeRender.setText("Resume render");
-      btnResumeRender.setPreferredSize(new Dimension(125, 24));
-      btnResumeRender.setMnemonic(KeyEvent.VK_T);
-      btnResumeRender.setFont(new Font("Dialog", Font.BOLD, 10));
-      btnResumeRender.setBounds(new Rectangle(754, 32, 125, 24));
-      btnResumeRender.setBounds(1045, 8, 125, 24);
-      interactiveNorthPanel.add(btnResumeRender);
+      interactiveResumeButton.setToolTipText("Load the current state and resume rendering");
+      interactiveResumeButton.setText("Resume render");
+      interactiveResumeButton.setPreferredSize(new Dimension(125, 24));
+      interactiveResumeButton.setMnemonic(KeyEvent.VK_T);
+      interactiveResumeButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      interactiveResumeButton.setBounds(new Rectangle(754, 32, 125, 24));
+      interactiveResumeButton.setBounds(1045, 8, 125, 24);
+      interactiveNorthPanel.add(interactiveResumeButton);
     }
     return interactiveNorthPanel;
   }
@@ -9973,5 +9975,13 @@ public class TinaInternalFrame extends JInternalFrame {
       redoButton.setFont(new Font("Dialog", Font.BOLD, 10));
     }
     return redoButton;
+  }
+
+  public JButton getInteractivePauseButton() {
+    return interactivePauseButton;
+  }
+
+  public JButton getInteractiveResumeButton() {
+    return interactiveResumeButton;
   }
 } //  @jve:decl-index=0:visual-constraint="10,10"

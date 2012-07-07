@@ -75,6 +75,8 @@ public class TinaInteractiveRendererController implements IterationObserver {
   private final JToggleButton halveSizeButton;
   private final JComboBox interactiveResolutionProfileCmb;
   private final JComboBox interactiveQualityProfileCmb;
+  private final JButton pauseButton;
+  private final JButton resumeButton;
 
   private final JPanel imageRootPanel;
   private JScrollPane imageScrollPane;
@@ -89,7 +91,8 @@ public class TinaInteractiveRendererController implements IterationObserver {
       JButton pLoadFlameButton, JButton pFromClipboardButton, JButton pNextButton,
       JButton pStopButton, JButton pToClipboardButton, JButton pSaveImageButton, JButton pSaveFlameButton,
       JComboBox pRandomStyleCmb, JPanel pImagePanel, JTextArea pStatsTextArea, JToggleButton pHalveSizeButton,
-      JComboBox pInteractiveResolutionProfileCmb, JComboBox pInteractiveQualityProfileCmb) {
+      JComboBox pInteractiveResolutionProfileCmb, JComboBox pInteractiveQualityProfileCmb,
+      JButton pPauseButton, JButton pResumeButton) {
     parentCtrl = pParentCtrl;
     prefs = pPrefs;
     errorHandler = pErrorHandler;
@@ -106,6 +109,8 @@ public class TinaInteractiveRendererController implements IterationObserver {
     interactiveResolutionProfileCmb = pInteractiveResolutionProfileCmb;
     interactiveQualityProfileCmb = pInteractiveQualityProfileCmb;
     imageRootPanel = pImagePanel;
+    pauseButton = pPauseButton;
+    resumeButton = pResumeButton;
     // interactiveResolutionProfileCmb must be already filled here!
     refreshImagePanel();
     statsTextArea = pStatsTextArea;
@@ -160,6 +165,8 @@ public class TinaInteractiveRendererController implements IterationObserver {
   public void enableControls() {
     saveImageButton.setEnabled(image != null);
     stopButton.setEnabled(state == State.RENDER);
+    pauseButton.setEnabled(state == State.RENDER);
+    resumeButton.setEnabled(state != State.RENDER);
   }
 
   public void genRandomFlame() {
@@ -351,7 +358,6 @@ public class TinaInteractiveRendererController implements IterationObserver {
     catch (Throwable ex) {
       errorHandler.handleError(ex);
     }
-
   }
 
   public Flame getCurrFlame() {
@@ -492,6 +498,35 @@ public class TinaInteractiveRendererController implements IterationObserver {
     if (!parentCtrl.cmbRefreshing) {
       // Nothing special here
       halveSizeButton_clicked();
+    }
+  }
+
+  public void resumeBtn_clicked() {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void pauseBtn_clicked() {
+    if (state == State.RENDER) {
+      try {
+        JFileChooser chooser = new JWFRenderFileChooser(prefs);
+        if (prefs.getOutputImagePath() != null) {
+          try {
+            chooser.setCurrentDirectory(new File(prefs.getOutputImagePath()));
+          }
+          catch (Exception ex) {
+            ex.printStackTrace();
+          }
+        }
+        if (chooser.showSaveDialog(imageRootPanel) == JFileChooser.APPROVE_OPTION) {
+          File file = chooser.getSelectedFile();
+          prefs.setLastOutputImageFile(file);
+          renderer.saveState(file.getAbsolutePath(), threads);
+        }
+      }
+      catch (Throwable ex) {
+        errorHandler.handleError(ex);
+      }
     }
   }
 

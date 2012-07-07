@@ -701,4 +701,36 @@ public final class FlameRenderer {
     return iterationObservers;
   }
 
+  private void pauseThreads(List<FlameRenderThread> pThreads) {
+    while (true) {
+      boolean done = true;
+      for (FlameRenderThread thread : pThreads) {
+        if (!thread.isFinished()) {
+          done = false;
+          thread.cancel();
+          try {
+            Thread.sleep(1);
+          }
+          catch (InterruptedException e) {
+            e.printStackTrace();
+          }
+          break;
+        }
+      }
+      if (done) {
+        break;
+      }
+    }
+  }
+
+  public void saveState(String pAbsolutePath, List<FlameRenderThread> pThreads) {
+    pauseThreads(pThreads);
+
+    resumeThreads(pThreads);
+  }
+
+  private void resumeThreads(List<FlameRenderThread> pThreads) {
+    // TODO Auto-generated method stub
+
+  }
 }
