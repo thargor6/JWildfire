@@ -21,6 +21,11 @@ import static org.jwildfire.base.MathLib.cos;
 import static org.jwildfire.base.MathLib.fabs;
 import static org.jwildfire.base.MathLib.sin;
 
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -161,21 +166,6 @@ public final class FlameRenderer {
       pPoint.x = px / zr;
       pPoint.y = py / zr;
     }
-  }
-
-  public List<FlameRenderThread> startRenderFlame(RenderInfo pRenderInfo) {
-    renderInfo = pRenderInfo;
-    initRaster(pRenderInfo.getImageWidth(), pRenderInfo.getImageHeight());
-    init3D();
-    createColorMap();
-    initView();
-    List<Flame> renderFlames = new ArrayList<Flame>();
-    for (int t = 0; t < prefs.getTinaRenderThreads(); t++) {
-      Flame renderFlame = flame.makeCopy();
-      renderFlames.add(renderFlame);
-      renderFlame.refreshModWeightTables(flameTransformationContext);
-    }
-    return startIterate(renderFlames);
   }
 
   public RenderedFlame finishRenderFlame(long pSampleCount) {
@@ -624,14 +614,19 @@ public final class FlameRenderer {
     }
   }
 
-  private List<FlameRenderThread> startIterate(List<Flame> pFlames) {
+  private List<FlameRenderThread> startIterate(List<Flame> pFlames, FlameRenderThreadState pState[], boolean pStartThreads) {
     List<FlameRenderThread> threads = new ArrayList<FlameRenderThread>();
     int nThreads = pFlames.size();
     for (int i = 0; i < nThreads; i++) {
       FlameRenderThread t = createFlameRenderThread(pFlames.get(i), -1);
+      if (pState != null) {
+        t.setResumeState(pState[i]);
+      }
       t.setTonemapper(new SampleTonemapper(flame, raster, rasterWidth, rasterHeight, imageWidth, imageHeight));
       threads.add(t);
-      new Thread(t).start();
+      if (pStartThreads) {
+        new Thread(t).start();
+      }
     }
     return threads;
   }
@@ -736,14 +731,148 @@ public final class FlameRenderer {
     }
   }
 
-  public void saveState(String pAbsolutePath, List<FlameRenderThread> pThreads) {
+  public static class JWFRenderFileHeader implements Serializable {
+    private static final long serialVersionUID = 1L;
+    public final String id = "JWFRender";
+    public final int version = 1;
+    public final int numThreads;
+    public final boolean withPreviewImage;
+
+    public JWFRenderFileHeader(int pNumThreads, boolean pWithPreviewImage) {
+      numThreads = pNumThreads;
+      withPreviewImage = pWithPreviewImage;
+    }
+  }
+
+  public void saveState(String pAbsolutePath, List<FlameRenderThread> pThreads, SimpleImage pPreviewImage) {
+    // TODO
+    pPreviewImage = null;
+    //
+
     pauseThreads(pThreads);
-
-    resumeThreads(pThreads);
+    // store thread state
+    FlameRenderThreadState state[] = new FlameRenderThreadState[pThreads.size()];
+    for (int i = 0; i < pThreads.size(); i++) {
+      state[i] = pThreads.get(i).saveState();
+    }
+    try {
+      try {
+        ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream(pAbsolutePath));
+        try {
+          // save header
+          outputStream.writeObject(new JWFRenderFileHeader(pThreads.size(), pPreviewImage != null));
+          // save flame
+          outputStream.writeObject(flame);
+          // save renderInfo          
+          outputStream.writeObject(renderInfo);
+          // save thread state
+          for (int i = 0; i < pThreads.size(); i++) {
+            outputStream.writeObject(state[i]);
+          }
+          // save raster
+          outputStream.writeObject(raster);
+          // save preview image
+          if (pPreviewImage != null) {
+            outputStream.writeObject(pPreviewImage);
+          }
+        }
+        finally {
+          outputStream.flush();
+          outputStream.close();
+        }
+      }
+      catch (Exception ex) {
+        ex.printStackTrace();
+        throw new RuntimeException(ex);
+      }
+    }
+    finally {
+      resumeThreads(pThreads, state);
+    }
   }
 
-  private void resumeThreads(List<FlameRenderThread> pThreads) {
-    // TODO Auto-generated method stub
-
+  private void resumeThreads(List<FlameRenderThread> pThreads, FlameRenderThreadState pState[]) {
+    for (int i = 0; i < pThreads.size(); i++) {
+      FlameRenderThread t = pThreads.get(i);
+      t.setResumeState(pState[i]);
+      new Thread(t).start();
+    }
   }
+
+  public List<FlameRenderThread> startRenderFlame(RenderInfo pRenderInfo) {
+    renderInfo = pRenderInfo;
+    initRaster(pRenderInfo.getImageWidth(), pRenderInfo.getImageHeight());
+    init3D();
+    createColorMap();
+    initView();
+    List<Flame> renderFlames = new ArrayList<Flame>();
+    for (int t = 0; t < prefs.getTinaRenderThreads(); t++) {
+      Flame renderFlame = flame.makeCopy();
+      renderFlames.add(renderFlame);
+      renderFlame.refreshModWeightTables(flameTransformationContext);
+    }
+    return startIterate(renderFlames, null, true);
+  }
+
+  public List<FlameRenderThread> resumeRenderFlame(String pAbsolutePath, SimpleImage pPreviewImage) {
+    try {
+      ObjectInputStream in = new ObjectInputStream(new FileInputStream(pAbsolutePath));
+      try {
+        // read header
+        JWFRenderFileHeader header = (JWFRenderFileHeader) in.readObject();
+        // read flame
+        Flame rdFlame = (Flame) in.readObject();
+        flame.assign(rdFlame);
+        // restore renderInfo
+        renderInfo = (RenderInfo) in.readObject();
+        // restore thread state
+        FlameRenderThreadState state[] = new FlameRenderThreadState[header.numThreads];
+        for (int i = 0; i < header.numThreads; i++) {
+          state[i] = (FlameRenderThreadState) in.readObject();
+        }
+
+        initRaster(renderInfo.getImageWidth(), renderInfo.getImageHeight());
+        init3D();
+        createColorMap();
+        initView();
+        List<Flame> renderFlames = new ArrayList<Flame>();
+        for (int t = 0; t < header.numThreads; t++) {
+          Flame renderFlame = flame.makeCopy();
+          renderFlames.add(renderFlame);
+          renderFlame.refreshModWeightTables(flameTransformationContext);
+        }
+        raster = null;
+        // read raster
+        raster = (RasterPoint[][]) in.readObject();
+        if (header.withPreviewImage && pPreviewImage != null) {
+          // TODO          
+        }
+        return startIterate(renderFlames, state, false);
+      }
+      finally {
+        in.close();
+      }
+    }
+    catch (Exception ex) {
+      ex.printStackTrace();
+      throw new RuntimeException(ex);
+    }
+  }
+
+  public Flame getFlame() {
+    return flame;
+  }
+
+  public long calcSampleCount() {
+    long res = 0;
+    if (raster != null) {
+      for (int i = 0; i < rasterHeight; i++) {
+        for (int j = 0; j < rasterWidth; j++) {
+          res += raster[i][j].count;
+        }
+      }
+    }
+    return res;
+  }
+
 }

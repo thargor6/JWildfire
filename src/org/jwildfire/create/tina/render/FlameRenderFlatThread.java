@@ -34,6 +34,7 @@ public final class FlameRenderFlatThread extends FlameRenderThread {
   private XYZPoint q;
   private XForm xf;
   private long startIter;
+  private long iter;
 
   public FlameRenderFlatThread(FlameRenderer pRenderer, Flame pFlame, long pSamples) {
     super(pRenderer, pFlame, pSamples);
@@ -68,9 +69,9 @@ public final class FlameRenderFlatThread extends FlameRenderThread {
     FlameTransformationContext ctx = renderer.getFlameTransformationContext();
     final double cosa = renderer.cosa;
     final double sina = renderer.sina;
-    for (long i = startIter; !forceAbort && (samples < 0 || i < samples); i++) {
-      if (i % 100 == 0) {
-        currSample = i;
+    for (iter = startIter; !forceAbort && (samples < 0 || iter < samples); iter++) {
+      if (iter % 100 == 0) {
+        currSample = iter;
       }
       xf = xf.getNextAppliedXFormTable()[renderer.random.random(Constants.NEXT_APPLIED_XFORM_TABLE_SIZE)];
       if (xf == null) {
@@ -136,7 +137,7 @@ public final class FlameRenderFlatThread extends FlameRenderThread {
     FlameRenderFlatThreadState res = new FlameRenderFlatThreadState();
     res.currSample = currSample;
     res.xfIndex = (xf != null) ? flame.getXForms().indexOf(xf) : -1;
-    res.startIter = startIter;
+    res.startIter = iter;
     res.affineT = affineT != null ? affineT.makeCopy() : null;
     res.varT = varT != null ? varT.makeCopy() : null;
     res.p = p != null ? p.makeCopy() : null;

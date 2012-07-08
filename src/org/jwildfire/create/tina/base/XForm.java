@@ -19,6 +19,7 @@ package org.jwildfire.create.tina.base;
 import static org.jwildfire.base.MathLib.EPSILON;
 import static org.jwildfire.base.MathLib.fabs;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -31,7 +32,8 @@ import org.jwildfire.create.tina.variation.Variation;
 import org.jwildfire.create.tina.variation.VariationFunc;
 import org.jwildfire.create.tina.variation.VariationPriorityComparator;
 
-public final class XForm implements Assignable<XForm> {
+public final class XForm implements Assignable<XForm>, Serializable {
+  private static final long serialVersionUID = 1L;
   private double weight;
   private double color;
   private double colorSymmetry;

@@ -16,6 +16,7 @@
 */
 package org.jwildfire.create.tina.palette;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -27,7 +28,8 @@ import org.jwildfire.transform.HSLTransformer;
 import org.jwildfire.transform.SwapRGBTransformer;
 import org.jwildfire.transform.SwapRGBTransformer.Mode;
 
-public class RGBPalette implements Assignable<RGBPalette> {
+public class RGBPalette implements Assignable<RGBPalette>, Serializable {
+  private static final long serialVersionUID = 1L;
   public static final int PALETTE_SIZE = 256;
   static final RGBColor BLACK = new RGBColor(0, 0, 0);
   private int highestIdx = -1;

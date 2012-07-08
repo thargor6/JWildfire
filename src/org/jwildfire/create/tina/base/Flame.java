@@ -19,6 +19,7 @@ package org.jwildfire.create.tina.base;
 import static org.jwildfire.base.MathLib.EPSILON;
 import static org.jwildfire.base.MathLib.fabs;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,7 +30,8 @@ import org.jwildfire.create.tina.palette.RGBPalette;
 import org.jwildfire.create.tina.variation.FlameTransformationContext;
 import org.jwildfire.create.tina.variation.Variation;
 
-public class Flame implements Assignable<Flame> {
+public class Flame implements Assignable<Flame>, Serializable {
+  private static final long serialVersionUID = 1L;
   private double centreX;
   private double centreY;
   private int width;

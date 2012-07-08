@@ -502,17 +502,50 @@ public class TinaInteractiveRendererController implements IterationObserver {
   }
 
   public void resumeBtn_clicked() {
-    // TODO Auto-generated method stub
-
+    try {
+      JFileChooser chooser = new JWFRenderFileChooser(prefs);
+      if (prefs.getInputFlamePath() != null) {
+        try {
+          chooser.setCurrentDirectory(new File(prefs.getInputFlamePath()));
+        }
+        catch (Exception ex) {
+          ex.printStackTrace();
+        }
+      }
+      if (chooser.showOpenDialog(imageRootPanel) == JFileChooser.APPROVE_OPTION) {
+        cancelRender();
+        clearScreen();
+        File file = chooser.getSelectedFile();
+        Flame newFlame = new Flame();
+        FlameRenderer newRenderer = new FlameRenderer(newFlame, prefs);
+        threads = newRenderer.resumeRenderFlame(file.getAbsolutePath(), image);
+        Flame flame = currFlame = newRenderer.getFlame();
+        renderer = newRenderer;
+        setupProfiles(currFlame);
+        if (flame.getBGColorRed() > 0 || flame.getBGColorGreen() > 0 || flame.getBGColorBlue() > 0) {
+          image.fillBackground(flame.getBGColorRed(), flame.getBGColorGreen(), flame.getBGColorBlue());
+        }
+        for (FlameRenderThread thread : threads) {
+          new Thread(thread).start();
+        }
+        renderer.registerIterationObserver(this);
+        sampleCount = renderer.calcSampleCount();
+        state = State.RENDER;
+        enableControls();
+      }
+    }
+    catch (Throwable ex) {
+      errorHandler.handleError(ex);
+    }
   }
 
   public void pauseBtn_clicked() {
     if (state == State.RENDER) {
       try {
         JFileChooser chooser = new JWFRenderFileChooser(prefs);
-        if (prefs.getOutputImagePath() != null) {
+        if (prefs.getOutputFlamePath() != null) {
           try {
-            chooser.setCurrentDirectory(new File(prefs.getOutputImagePath()));
+            chooser.setCurrentDirectory(new File(prefs.getOutputFlamePath()));
           }
           catch (Exception ex) {
             ex.printStackTrace();
@@ -520,8 +553,8 @@ public class TinaInteractiveRendererController implements IterationObserver {
         }
         if (chooser.showSaveDialog(imageRootPanel) == JFileChooser.APPROVE_OPTION) {
           File file = chooser.getSelectedFile();
-          prefs.setLastOutputImageFile(file);
-          renderer.saveState(file.getAbsolutePath(), threads);
+          prefs.setLastOutputFlameFile(file);
+          renderer.saveState(file.getAbsolutePath(), threads, image);
         }
       }
       catch (Throwable ex) {

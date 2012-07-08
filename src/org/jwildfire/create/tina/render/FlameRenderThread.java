@@ -26,6 +26,7 @@ public abstract class FlameRenderThread implements Runnable {
   protected SampleTonemapper tonemapper;
   protected boolean forceAbort;
   protected boolean finished;
+  protected FlameRenderThreadState resumeState;
 
   public FlameRenderThread(FlameRenderer pRenderer, Flame pFlame, long pSamples) {
     renderer = pRenderer;
@@ -46,7 +47,13 @@ public abstract class FlameRenderThread implements Runnable {
     finished = forceAbort = false;
     try {
       try {
-        initState();
+        if (resumeState == null) {
+          initState();
+        }
+        else {
+          System.out.println("RESTORE: " + resumeState.startIter + " " + resumeState.xfIndex);
+          restoreState(resumeState);
+        }
         iterate();
       }
       catch (Throwable ex) {
@@ -77,6 +84,10 @@ public abstract class FlameRenderThread implements Runnable {
 
   public void cancel() {
     forceAbort = true;
+  }
+
+  public void setResumeState(FlameRenderThreadState resumeState) {
+    this.resumeState = resumeState;
   }
 
 }

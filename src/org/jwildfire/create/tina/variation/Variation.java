@@ -19,11 +19,14 @@ package org.jwildfire.create.tina.variation;
 import static org.jwildfire.base.MathLib.EPSILON;
 import static org.jwildfire.base.MathLib.fabs;
 
+import java.io.Serializable;
+
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 import org.jwildfire.create.tina.edit.Assignable;
 
-public class Variation implements Assignable<Variation> {
+public class Variation implements Assignable<Variation>, Serializable {
+  private static final long serialVersionUID = 1L;
   private double amount;
   private VariationFunc func;
 

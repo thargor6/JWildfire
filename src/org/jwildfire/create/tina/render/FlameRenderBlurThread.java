@@ -33,6 +33,7 @@ public final class FlameRenderBlurThread extends FlameRenderThread {
   private XYZPoint p;
   private XYZPoint q;
   private XForm xf;
+  private long iter;
   private long startIter;
 
   public FlameRenderBlurThread(FlameRenderer pRenderer, Flame pFlame, long pSamples) {
@@ -80,9 +81,9 @@ public final class FlameRenderBlurThread extends FlameRenderThread {
     int rasterWidth = renderer.rasterWidth;
     int rasterHeight = renderer.rasterHeight;
 
-    for (long i = startIter; !forceAbort && (samples < 0 || i < samples); i++) {
-      if (i % 100 == 0) {
-        currSample = i;
+    for (iter = startIter; !forceAbort && (samples < 0 || iter < samples); iter++) {
+      if (iter % 100 == 0) {
+        currSample = iter;
       }
       xf = xf.getNextAppliedXFormTable()[renderer.random.random(Constants.NEXT_APPLIED_XFORM_TABLE_SIZE)];
       if (xf == null) {
@@ -132,7 +133,7 @@ public final class FlameRenderBlurThread extends FlameRenderThread {
         color = renderer.colorMap[colorIdx];
       }
 
-      if (i < blurMax) {
+      if (iter < blurMax) {
         for (int k = yIdx - blurRadius, yk = 0; k <= yIdx + blurRadius; k++, yk++) {
           if (k >= 0 && k < rasterHeight) {
             for (int l = xIdx - blurRadius, xk = 0; l <= xIdx + blurRadius; l++, xk++) {
@@ -174,7 +175,7 @@ public final class FlameRenderBlurThread extends FlameRenderThread {
     FlameRenderBlurThreadState res = new FlameRenderBlurThreadState();
     res.currSample = currSample;
     res.xfIndex = (xf != null) ? flame.getXForms().indexOf(xf) : -1;
-    res.startIter = startIter;
+    res.startIter = iter;
     res.affineT = affineT != null ? affineT.makeCopy() : null;
     res.varT = varT != null ? varT.makeCopy() : null;
     res.p = p != null ? p.makeCopy() : null;

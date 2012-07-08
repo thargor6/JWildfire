@@ -16,7 +16,10 @@
 */
 package org.jwildfire.create.tina.base;
 
-public class RasterPoint {
+import java.io.Serializable;
+
+@SuppressWarnings("serial")
+public class RasterPoint implements Serializable {
   public double red;
   public double green;
   public double blue;

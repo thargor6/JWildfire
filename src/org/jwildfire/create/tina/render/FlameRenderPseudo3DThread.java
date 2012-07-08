@@ -34,6 +34,7 @@ public final class FlameRenderPseudo3DThread extends FlameRenderThread {
   private XYZPoint[] qA;
   private XYZPoint r;
   private XForm xf;
+  private long iter;
   private long startIter;
 
   public FlameRenderPseudo3DThread(FlameRenderer pRenderer, Flame pFlame, long pSamples) {
@@ -95,9 +96,9 @@ public final class FlameRenderPseudo3DThread extends FlameRenderThread {
     Pseudo3DShader shader = new Pseudo3DShader(flame.getShadingInfo());
     shader.init();
 
-    for (long i = startIter; !forceAbort && (samples < 0 || i < samples); i++) {
-      if (i % 100 == 0) {
-        currSample = i;
+    for (iter = startIter; !forceAbort && (samples < 0 || iter < samples); iter++) {
+      if (iter % 100 == 0) {
+        currSample = iter;
       }
       xf = xf.getNextAppliedXFormTable()[renderer.random.random(Constants.NEXT_APPLIED_XFORM_TABLE_SIZE)];
       if (xf == null) {
@@ -170,7 +171,7 @@ public final class FlameRenderPseudo3DThread extends FlameRenderThread {
     FlameRenderPseudo3DThreadState res = new FlameRenderPseudo3DThreadState();
     res.currSample = currSample;
     res.xfIndex = (xf != null) ? flame.getXForms().indexOf(xf) : -1;
-    res.startIter = startIter;
+    res.startIter = iter;
     res.r = r != null ? r.makeCopy() : null;
     res.affineTA = copyXYZPointArray(affineTA);
     res.varTA = copyXYZPointArray(varTA);

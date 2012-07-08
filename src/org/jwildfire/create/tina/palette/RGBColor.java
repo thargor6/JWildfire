@@ -16,9 +16,12 @@
 */
 package org.jwildfire.create.tina.palette;
 
+import java.io.Serializable;
+
 import org.jwildfire.create.tina.edit.Assignable;
 
-public class RGBColor implements Assignable<RGBColor> {
+public class RGBColor implements Assignable<RGBColor>, Serializable {
+  private static final long serialVersionUID = 1L;
   private int red;
   private int green;
   private int blue;

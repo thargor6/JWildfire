@@ -16,6 +16,7 @@
 */
 package org.jwildfire.image;
 
+
 public class Pixel {
   public int a, r, g, b;
 

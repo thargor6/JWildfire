@@ -16,10 +16,13 @@
 */
 package org.jwildfire.create.tina.variation;
 
+import java.io.Serializable;
+
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
-public abstract class VariationFunc {
+public abstract class VariationFunc implements Serializable {
+  private static final long serialVersionUID = 1L;
 
   public void init(FlameTransformationContext pContext, XForm pXForm, double pAmount) {
 

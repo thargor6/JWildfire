@@ -16,11 +16,20 @@
 */
 package org.jwildfire.create.tina.render;
 
-public class RenderInfo {
+import java.io.Serializable;
+
+import org.jwildfire.create.tina.edit.Assignable;
+
+public class RenderInfo implements Assignable<RenderInfo>, Serializable {
+  private static final long serialVersionUID = 1L;
   private boolean renderHDR;
   private boolean renderHDRIntensityMap;
   private int imageWidth;
   private int imageHeight;
+
+  protected RenderInfo() {
+
+  }
 
   public RenderInfo(int pImageWidth, int pImageHeight) {
     imageWidth = pImageWidth;
@@ -57,6 +66,30 @@ public class RenderInfo {
 
   public void setImageHeight(int imageHeight) {
     this.imageHeight = imageHeight;
+  }
+
+  @Override
+  public void assign(RenderInfo pSrc) {
+    renderHDR = pSrc.renderHDR;
+    renderHDRIntensityMap = pSrc.renderHDRIntensityMap;
+    imageWidth = pSrc.imageWidth;
+    imageHeight = pSrc.imageHeight;
+  }
+
+  @Override
+  public RenderInfo makeCopy() {
+    RenderInfo res = new RenderInfo();
+    res.assign(this);
+    return res;
+  }
+
+  @Override
+  public boolean isEqual(RenderInfo pSrc) {
+    if (renderHDR != pSrc.renderHDR || renderHDRIntensityMap != pSrc.renderHDRIntensityMap ||
+        imageWidth != pSrc.imageWidth || imageHeight != pSrc.imageHeight) {
+      return false;
+    }
+    return true;
   }
 
 }
