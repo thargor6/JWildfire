@@ -16,11 +16,13 @@
 */
 package org.jwildfire.create.tina.render;
 
-import java.io.Serializable;
+import org.jwildfire.create.tina.base.XYZPoint;
 
-public abstract class FlameRenderThreadState implements Serializable {
+public final class FlameRenderPseudo3DThreadState extends FlameRenderThreadState {
   private static final long serialVersionUID = 1L;
-  protected long currSample;
-  protected int xfIndex;
-  protected long startIter;
+  protected XYZPoint[] affineTA;
+  protected XYZPoint[] varTA;
+  protected XYZPoint[] pA;
+  protected XYZPoint[] qA;
+  protected XYZPoint r;
 }

@@ -16,13 +16,19 @@
 */
 package org.jwildfire.create.tina.base;
 
+import static org.jwildfire.base.MathLib.EPSILON;
 import static org.jwildfire.base.MathLib.SMALL_EPSILON;
 import static org.jwildfire.base.MathLib.atan2;
+import static org.jwildfire.base.MathLib.fabs;
 import static org.jwildfire.base.MathLib.sqrt;
 
+import java.io.Serializable;
+
+import org.jwildfire.create.tina.edit.Assignable;
 import org.jwildfire.create.tina.variation.FlameTransformationContext;
 
-public final class XYZPoint {
+public final class XYZPoint implements Serializable, Assignable<XYZPoint> {
+  private static final long serialVersionUID = 1L;
   public double x;
   public double y;
   public double z;
@@ -47,6 +53,7 @@ public final class XYZPoint {
   protected double cosA;
   protected boolean validCosA;
 
+  @Override
   public void assign(XYZPoint p) {
     x = p.x;
     y = p.y;
@@ -68,6 +75,13 @@ public final class XYZPoint {
     redColor = p.redColor;
     greenColor = p.greenColor;
     blueColor = p.blueColor;
+  }
+
+  @Override
+  public XYZPoint makeCopy() {
+    XYZPoint res = new XYZPoint();
+    res.assign(this);
+    return res;
   }
 
   public void invalidate() {
@@ -128,6 +142,17 @@ public final class XYZPoint {
       validCosA = true;
     }
     return cosA;
+  }
+
+  @Override
+  public boolean isEqual(XYZPoint pSrc) {
+    if (fabs(x - pSrc.x) > EPSILON || fabs(y - pSrc.y) > EPSILON ||
+        fabs(z - pSrc.z) > EPSILON || fabs(color - pSrc.color) > EPSILON ||
+        rgbColor != pSrc.rgbColor || fabs(redColor - pSrc.redColor) > EPSILON ||
+        fabs(greenColor - pSrc.greenColor) > EPSILON || fabs(blueColor - pSrc.blueColor) > EPSILON) {
+      return false;
+    }
+    return true;
   }
 
 }

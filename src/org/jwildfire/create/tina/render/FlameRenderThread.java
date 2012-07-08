@@ -16,25 +16,16 @@
 */
 package org.jwildfire.create.tina.render;
 
-import java.util.List;
-
-import org.jwildfire.create.tina.base.Constants;
-import org.jwildfire.create.tina.base.DrawMode;
 import org.jwildfire.create.tina.base.Flame;
-import org.jwildfire.create.tina.base.RasterPoint;
-import org.jwildfire.create.tina.base.XForm;
-import org.jwildfire.create.tina.base.XYZPoint;
-import org.jwildfire.create.tina.palette.RenderColor;
-import org.jwildfire.create.tina.variation.FlameTransformationContext;
 
-public final class FlameRenderThread implements Runnable {
-  private final FlameRenderer renderer;
-  private final Flame flame;
-  private final long samples;
-  private volatile long currSample;
-  private SampleTonemapper tonemapper;
-  private boolean forceAbort;
-  private boolean finished;
+public abstract class FlameRenderThread implements Runnable {
+  protected final FlameRenderer renderer;
+  protected final Flame flame;
+  protected final long samples;
+  protected volatile long currSample;
+  protected SampleTonemapper tonemapper;
+  protected boolean forceAbort;
+  protected boolean finished;
 
   public FlameRenderThread(FlameRenderer pRenderer, Flame pFlame, long pSamples) {
     renderer = pRenderer;
@@ -42,27 +33,21 @@ public final class FlameRenderThread implements Runnable {
     samples = pSamples;
   }
 
+  protected abstract void initState();
+
+  protected abstract void iterate();
+
+  protected abstract FlameRenderThreadState saveState();
+
+  protected abstract void restoreState(FlameRenderThreadState pState);
+
   @Override
   public void run() {
     finished = forceAbort = false;
     try {
       try {
-        switch (flame.getShadingInfo().getShading()) {
-          case FLAT:
-            init_iterate_flat();
-            iterate_flat();
-            break;
-          case BLUR:
-            init_iterate_blur();
-            iterate_blur();
-            break;
-          case PSEUDO3D:
-            init_iterate_pseudo3D();
-            iterate_pseudo3D();
-            break;
-          default:
-            throw new IllegalArgumentException(flame.getShadingInfo().getShading().toString());
-        }
+        initState();
+        iterate();
       }
       catch (Throwable ex) {
         ex.printStackTrace();
@@ -71,356 +56,6 @@ public final class FlameRenderThread implements Runnable {
     }
     finally {
       finished = true;
-    }
-  }
-
-  private XYZPoint affineT;
-  private XYZPoint varT;
-  private XYZPoint p;
-  private XYZPoint q;
-  private XForm xf;
-
-  private void init_iterate_flat() {
-    FlameTransformationContext ctx = renderer.getFlameTransformationContext();
-    affineT = new XYZPoint(); // affine part of the transformation
-    varT = new XYZPoint(); // complete transformation
-    p = new XYZPoint();
-    q = new XYZPoint();
-    p.x = 2.0 * renderer.random.random() - 1.0;
-    p.y = 2.0 * renderer.random.random() - 1.0;
-    p.z = 2.0 * renderer.random.random() - 1.0;
-    p.color = renderer.random.random();
-
-    xf = flame.getXForms().get(0);
-    xf.transformPoint(ctx, affineT, varT, p, p);
-    for (int i = 0; i <= Constants.INITIAL_ITERATIONS; i++) {
-      xf = xf.getNextAppliedXFormTable()[renderer.random.random(Constants.NEXT_APPLIED_XFORM_TABLE_SIZE)];
-      if (xf == null) {
-        return;
-      }
-    }
-  }
-
-  private void iterate_flat() {
-    List<IterationObserver> observers = renderer.getIterationObservers();
-    FlameTransformationContext ctx = renderer.getFlameTransformationContext();
-    final double cosa = renderer.cosa;
-    final double sina = renderer.sina;
-    for (long i = 0; !forceAbort && (samples < 0 || i < samples); i++) {
-      if (i % 100 == 0) {
-        currSample = i;
-      }
-      xf = xf.getNextAppliedXFormTable()[renderer.random.random(Constants.NEXT_APPLIED_XFORM_TABLE_SIZE)];
-      if (xf == null) {
-        return;
-      }
-      xf.transformPoint(ctx, affineT, varT, p, p);
-
-      if (xf.getDrawMode() == DrawMode.HIDDEN)
-        continue;
-      else if ((xf.getDrawMode() == DrawMode.OPAQUE) && (renderer.random.random() > xf.getOpacity()))
-        continue;
-
-      XForm finalXForm = flame.getFinalXForm();
-      double px, py;
-      if (finalXForm != null) {
-        finalXForm.transformPoint(ctx, affineT, varT, p, q);
-        renderer.project(q);
-        px = q.x * cosa + q.y * sina + renderer.rcX;
-        if ((px < 0) || (px > renderer.camW))
-          continue;
-        py = q.y * cosa - q.x * sina + renderer.rcY;
-        if ((py < 0) || (py > renderer.camH))
-          continue;
-      }
-      else {
-        q.assign(p);
-        renderer.project(q);
-        px = q.x * cosa + q.y * sina + renderer.rcX;
-        if ((px < 0) || (px > renderer.camW))
-          continue;
-        py = q.y * cosa - q.x * sina + renderer.rcY;
-        if ((py < 0) || (py > renderer.camH))
-          continue;
-      }
-
-      int xIdx = (int) (renderer.bws * px + 0.5);
-      int yIdx = (int) (renderer.bhs * py + 0.5);
-      RasterPoint rp = renderer.raster[yIdx][xIdx];
-
-      if (p.rgbColor) {
-        rp.red += p.redColor;
-        rp.green += p.greenColor;
-        rp.blue += p.blueColor;
-      }
-      else {
-        int colorIdx = (int) (p.color * renderer.paletteIdxScl + 0.5);
-        RenderColor color = renderer.colorMap[colorIdx];
-        rp.red += color.red;
-        rp.green += color.green;
-        rp.blue += color.blue;
-      }
-      rp.count++;
-      if (observers != null && observers.size() > 0) {
-        for (IterationObserver observer : observers) {
-          observer.notifyIterationFinished(this, xIdx, yIdx);
-        }
-      }
-    }
-  }
-
-  private void init_iterate_blur() {
-    FlameTransformationContext ctx = renderer.getFlameTransformationContext();
-    affineT = new XYZPoint(); // affine part of the transformation
-    varT = new XYZPoint(); // complete transformation
-    p = new XYZPoint();
-    q = new XYZPoint();
-    p.x = 2.0 * renderer.random.random() - 1.0;
-    p.y = 2.0 * renderer.random.random() - 1.0;
-    p.z = 2.0 * renderer.random.random() - 1.0;
-    p.color = renderer.random.random();
-
-    xf = flame.getXForms().get(0);
-    xf.transformPoint(ctx, affineT, varT, p, p);
-    for (int i = 0; i <= Constants.INITIAL_ITERATIONS; i++) {
-      xf = xf.getNextAppliedXFormTable()[renderer.random.random(Constants.NEXT_APPLIED_XFORM_TABLE_SIZE)];
-      if (xf == null) {
-        return;
-      }
-    }
-  }
-
-  private void iterate_blur() {
-    List<IterationObserver> observers = renderer.getIterationObservers();
-    FlameTransformationContext ctx = renderer.getFlameTransformationContext();
-
-    double blurKernel[][] = flame.getShadingInfo().createBlurKernel();
-    int blurRadius = flame.getShadingInfo().getBlurRadius();
-    double fade = flame.getShadingInfo().getBlurFade();
-    if (fade < 0.0) {
-      fade = 0.0;
-    }
-    else if (fade > 1.0) {
-      fade = 1.0;
-    }
-    long blurMax = (long) ((1 - fade) * samples);
-    int rasterWidth = renderer.rasterWidth;
-    int rasterHeight = renderer.rasterHeight;
-
-    for (long i = 0; !forceAbort && (samples < 0 || i < samples); i++) {
-      if (i % 100 == 0) {
-        currSample = i;
-      }
-      xf = xf.getNextAppliedXFormTable()[renderer.random.random(Constants.NEXT_APPLIED_XFORM_TABLE_SIZE)];
-      if (xf == null) {
-        return;
-      }
-      xf.transformPoint(ctx, affineT, varT, p, p);
-
-      if (xf.getDrawMode() == DrawMode.HIDDEN)
-        continue;
-      else if ((xf.getDrawMode() == DrawMode.OPAQUE) && (renderer.random.random() > xf.getOpacity()))
-        continue;
-
-      XForm finalXForm = flame.getFinalXForm();
-      double px, py;
-      if (finalXForm != null) {
-        finalXForm.transformPoint(ctx, affineT, varT, p, q);
-        renderer.project(q);
-        px = q.x * renderer.cosa + q.y * renderer.sina + renderer.rcX;
-        if ((px < 0) || (px > renderer.camW))
-          continue;
-        py = q.y * renderer.cosa - q.x * renderer.sina + renderer.rcY;
-        if ((py < 0) || (py > renderer.camH))
-          continue;
-      }
-      else {
-        q.assign(p);
-        renderer.project(q);
-        px = q.x * renderer.cosa + q.y * renderer.sina + renderer.rcX;
-        if ((px < 0) || (px > renderer.camW))
-          continue;
-        py = q.y * renderer.cosa - q.x * renderer.sina + renderer.rcY;
-        if ((py < 0) || (py > renderer.camH))
-          continue;
-      }
-
-      int xIdx = (int) (renderer.bws * px + 0.5);
-      int yIdx = (int) (renderer.bhs * py + 0.5);
-      RenderColor color;
-      if (p.rgbColor) {
-        color = new RenderColor();
-        color.red = p.redColor;
-        color.green = p.greenColor;
-        color.blue = p.blueColor;
-      }
-      else {
-        int colorIdx = (int) (p.color * renderer.paletteIdxScl + 0.5);
-        color = renderer.colorMap[colorIdx];
-      }
-
-      if (i < blurMax) {
-        for (int k = yIdx - blurRadius, yk = 0; k <= yIdx + blurRadius; k++, yk++) {
-          if (k >= 0 && k < rasterHeight) {
-            for (int l = xIdx - blurRadius, xk = 0; l <= xIdx + blurRadius; l++, xk++) {
-              if (l >= 0 && l < rasterWidth) {
-                // y, x
-                RasterPoint rp = renderer.raster[k][l];
-                double scl = blurKernel[yk][xk];
-                rp.red += color.red * scl;
-                rp.green += color.green * scl;
-                rp.blue += color.blue * scl;
-                rp.count++;
-                if (observers != null && observers.size() > 0) {
-                  for (IterationObserver observer : observers) {
-                    observer.notifyIterationFinished(this, k, l);
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-      else {
-        RasterPoint rp = renderer.raster[yIdx][xIdx];
-        rp.red += color.red;
-        rp.green += color.green;
-        rp.blue += color.blue;
-        rp.count++;
-        if (observers != null && observers.size() > 0) {
-          for (IterationObserver observer : observers) {
-            observer.notifyIterationFinished(this, xIdx, yIdx);
-          }
-        }
-      }
-    }
-  }
-
-  private XYZPoint[] affineTA;
-  private XYZPoint[] varTA;
-  private XYZPoint[] pA;
-  private XYZPoint[] qA;
-  private XYZPoint r;
-
-  private void init_iterate_pseudo3D() {
-    FlameTransformationContext ctx = renderer.getFlameTransformationContext();
-    affineTA = new XYZPoint[3]; // affine part of the transformation
-    for (int i = 0; i < affineTA.length; i++) {
-      affineTA[i] = new XYZPoint();
-    }
-    varTA = new XYZPoint[3]; // complete transformation
-    for (int i = 0; i < varTA.length; i++) {
-      varTA[i] = new XYZPoint();
-    }
-    pA = new XYZPoint[3];
-    for (int i = 0; i < pA.length; i++) {
-      pA[i] = new XYZPoint();
-    }
-    r = new XYZPoint();
-
-    pA[0].x = 2.0 * renderer.random.random() - 1.0;
-    pA[0].y = 2.0 * renderer.random.random() - 1.0;
-    pA[0].z = 2.0 * renderer.random.random() - 1.0;
-    pA[0].color = renderer.random.random();
-
-    distributeInitialPoints(pA);
-    qA = new XYZPoint[3];
-    for (int i = 0; i < qA.length; i++) {
-      qA[i] = new XYZPoint();
-    }
-
-    xf = flame.getXForms().get(0);
-    xf.transformPoints(ctx, affineTA, varTA, pA, pA);
-    for (int i = 0; i <= Constants.INITIAL_ITERATIONS; i++) {
-      xf = xf.getNextAppliedXFormTable()[renderer.random.random(Constants.NEXT_APPLIED_XFORM_TABLE_SIZE)];
-      if (xf == null) {
-        return;
-      }
-    }
-  }
-
-  private void distributeInitialPoints(XYZPoint[] p) {
-    p[1].x = p[0].x + 0.001;
-    p[1].y = p[0].y;
-    p[1].z = p[0].z;
-    p[2].x = p[0].x;
-    p[2].y = p[0].y + 0.001;
-    p[2].z = p[0].z;
-  }
-
-  private void iterate_pseudo3D() {
-    List<IterationObserver> observers = renderer.getIterationObservers();
-    FlameTransformationContext ctx = renderer.getFlameTransformationContext();
-    Pseudo3DShader shader = new Pseudo3DShader(flame.getShadingInfo());
-    shader.init();
-
-    for (long i = 0; !forceAbort && (samples < 0 || i < samples); i++) {
-      if (i % 100 == 0) {
-        currSample = i;
-      }
-      xf = xf.getNextAppliedXFormTable()[renderer.random.random(Constants.NEXT_APPLIED_XFORM_TABLE_SIZE)];
-      if (xf == null) {
-        return;
-      }
-      xf.transformPoints(ctx, affineTA, varTA, pA, pA);
-      if (xf.getDrawMode() == DrawMode.HIDDEN)
-        continue;
-      else if ((xf.getDrawMode() == DrawMode.OPAQUE) && (renderer.random.random() > xf.getOpacity()))
-        continue;
-
-      XForm finalXForm = flame.getFinalXForm();
-      double px = 0.0, py = 0.0;
-      if (finalXForm != null) {
-        for (int pIdx = 0; pIdx < pA.length; pIdx++) {
-          qA[pIdx] = new XYZPoint();
-        }
-        finalXForm.transformPoints(ctx, affineTA, varTA, pA, qA);
-        r.assign(qA[0]);
-        renderer.project(r);
-        px = r.x * renderer.cosa + r.y * renderer.sina + renderer.rcX;
-        py = r.y * renderer.cosa - r.x * renderer.sina + renderer.rcY;
-      }
-      else {
-        for (int pIdx = 0; pIdx < pA.length; pIdx++) {
-          qA[pIdx] = new XYZPoint();
-          qA[pIdx].assign(pA[pIdx]);
-        }
-        r.assign(qA[0]);
-        renderer.project(r);
-        px = r.x * renderer.cosa + r.y * renderer.sina + renderer.rcX;
-        py = r.y * renderer.cosa - r.x * renderer.sina + renderer.rcY;
-      }
-
-      if ((px < 0) || (px > renderer.camW))
-        continue;
-      if ((py < 0) || (py > renderer.camH))
-        continue;
-
-      int xIdx = (int) (renderer.bws * px + 0.5);
-      int yIdx = (int) (renderer.bhs * py + 0.5);
-
-      RasterPoint rp = renderer.raster[yIdx][xIdx];
-      RenderColor color;
-      if (pA[0].rgbColor) {
-        color = new RenderColor();
-        color.red = pA[0].redColor;
-        color.green = pA[0].greenColor;
-        color.blue = pA[0].blueColor;
-      }
-      else {
-        color = renderer.colorMap[(int) (pA[0].color * renderer.paletteIdxScl + 0.5)];
-      }
-      RenderColor shadedColor = shader.calculateColor(qA, color);
-
-      rp.red += shadedColor.red;
-      rp.green += shadedColor.green;
-      rp.blue += shadedColor.blue;
-      rp.count++;
-      if (observers != null && observers.size() > 0) {
-        for (IterationObserver observer : observers) {
-          observer.notifyIterationFinished(this, xIdx, yIdx);
-        }
-      }
     }
   }
 

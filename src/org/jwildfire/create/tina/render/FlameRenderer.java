@@ -561,6 +561,19 @@ public final class FlameRenderer {
     }
   }
 
+  private FlameRenderThread createFlameRenderThread(Flame pFlame, long pSamples) {
+    switch (flame.getShadingInfo().getShading()) {
+      case FLAT:
+        return new FlameRenderFlatThread(this, pFlame, pSamples);
+      case BLUR:
+        return new FlameRenderBlurThread(this, pFlame, pSamples);
+      case PSEUDO3D:
+        return new FlameRenderPseudo3DThread(this, pFlame, pSamples);
+      default:
+        throw new IllegalArgumentException(flame.getShadingInfo().getShading().toString());
+    }
+  }
+
   private void iterate(int pPart, int pParts, List<Flame> pFlames) {
     long nSamples = (long) ((flame.getSampleDensity() * (double) rasterSize + 0.5));
     //    if (flame.getSampleDensity() > 50) {
@@ -575,12 +588,12 @@ public final class FlameRenderer {
     List<FlameRenderThread> threads = new ArrayList<FlameRenderThread>();
     int nThreads = pFlames.size();
     if (nThreads <= 1) {
-      FlameRenderThread t = new FlameRenderThread(this, pFlames.get(0), nSamples / (long) nThreads);
+      FlameRenderThread t = createFlameRenderThread(pFlames.get(0), nSamples / (long) nThreads);
       t.run();
     }
     else {
       for (int i = 0; i < nThreads; i++) {
-        FlameRenderThread t = new FlameRenderThread(this, pFlames.get(i), nSamples / (long) nThreads);
+        FlameRenderThread t = createFlameRenderThread(pFlames.get(i), nSamples / (long) nThreads);
         threads.add(t);
         new Thread(t).start();
       }
@@ -615,7 +628,7 @@ public final class FlameRenderer {
     List<FlameRenderThread> threads = new ArrayList<FlameRenderThread>();
     int nThreads = pFlames.size();
     for (int i = 0; i < nThreads; i++) {
-      FlameRenderThread t = new FlameRenderThread(this, pFlames.get(i), -1);
+      FlameRenderThread t = createFlameRenderThread(pFlames.get(i), -1);
       t.setTonemapper(new SampleTonemapper(flame, raster, rasterWidth, rasterHeight, imageWidth, imageHeight));
       threads.add(t);
       new Thread(t).start();

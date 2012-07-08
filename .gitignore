@@ -14,3 +14,4 @@ bin/*
 build/dist/*
 tptpParseError.log
 src/odk/*
+build/j-wildfire/*
