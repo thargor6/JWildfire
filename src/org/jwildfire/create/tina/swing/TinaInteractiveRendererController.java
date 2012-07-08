@@ -514,12 +514,49 @@ public class TinaInteractiveRendererController implements IterationObserver {
       }
       if (chooser.showOpenDialog(imageRootPanel) == JFileChooser.APPROVE_OPTION) {
         cancelRender();
-        clearScreen();
         File file = chooser.getSelectedFile();
         Flame newFlame = new Flame();
         FlameRenderer newRenderer = new FlameRenderer(newFlame, prefs);
-        threads = newRenderer.resumeRenderFlame(file.getAbsolutePath(), image);
+        threads = newRenderer.resumeRenderFlame(file.getAbsolutePath());
         Flame flame = currFlame = newRenderer.getFlame();
+        // setup size profile
+        {
+          int width = newRenderer.getRenderInfo().getImageWidth();
+          int height = newRenderer.getRenderInfo().getImageHeight();
+          ResolutionProfile selected = null;
+          boolean halve = false;
+          for (int i = 0; i < interactiveResolutionProfileCmb.getItemCount(); i++) {
+            ResolutionProfile profile = (ResolutionProfile) interactiveResolutionProfileCmb.getItemAt(i);
+            if (profile.getWidth() == width && profile.getHeight() == height) {
+              selected = profile;
+              break;
+            }
+          }
+          if (selected == null) {
+            for (int i = 0; i < interactiveResolutionProfileCmb.getItemCount(); i++) {
+              ResolutionProfile profile = (ResolutionProfile) interactiveResolutionProfileCmb.getItemAt(i);
+              if (profile.getWidth() / 2 == width && profile.getHeight() / 2 == height) {
+                selected = profile;
+                halve = true;
+                break;
+              }
+            }
+          }
+          if (selected == null) {
+            selected = new ResolutionProfile(false, width, height);
+            halve = false;
+            interactiveResolutionProfileCmb.addItem(selected);
+          }
+          halveSizeButton.setSelected(halve);
+          ResolutionProfile currSel = (ResolutionProfile) interactiveResolutionProfileCmb.getSelectedItem();
+          if (currSel == null || !currSel.equals(selected)) {
+            interactiveResolutionProfileCmb.setSelectedItem(selected);
+            refreshImagePanel();
+          }
+          else {
+            clearScreen();
+          }
+        }
         renderer = newRenderer;
         setupProfiles(currFlame);
         if (flame.getBGColorRed() > 0 || flame.getBGColorGreen() > 0 || flame.getBGColorBlue() > 0) {
@@ -554,7 +591,7 @@ public class TinaInteractiveRendererController implements IterationObserver {
         if (chooser.showSaveDialog(imageRootPanel) == JFileChooser.APPROVE_OPTION) {
           File file = chooser.getSelectedFile();
           prefs.setLastOutputFlameFile(file);
-          renderer.saveState(file.getAbsolutePath(), threads, image);
+          renderer.saveState(file.getAbsolutePath(), threads);
         }
       }
       catch (Throwable ex) {

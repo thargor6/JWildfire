@@ -736,19 +736,13 @@ public final class FlameRenderer {
     public final String id = "JWFRender";
     public final int version = 1;
     public final int numThreads;
-    public final boolean withPreviewImage;
 
-    public JWFRenderFileHeader(int pNumThreads, boolean pWithPreviewImage) {
+    public JWFRenderFileHeader(int pNumThreads) {
       numThreads = pNumThreads;
-      withPreviewImage = pWithPreviewImage;
     }
   }
 
-  public void saveState(String pAbsolutePath, List<FlameRenderThread> pThreads, SimpleImage pPreviewImage) {
-    // TODO
-    pPreviewImage = null;
-    //
-
+  public void saveState(String pAbsolutePath, List<FlameRenderThread> pThreads) {
     pauseThreads(pThreads);
     // store thread state
     FlameRenderThreadState state[] = new FlameRenderThreadState[pThreads.size()];
@@ -760,7 +754,7 @@ public final class FlameRenderer {
         ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream(pAbsolutePath));
         try {
           // save header
-          outputStream.writeObject(new JWFRenderFileHeader(pThreads.size(), pPreviewImage != null));
+          outputStream.writeObject(new JWFRenderFileHeader(pThreads.size()));
           // save flame
           outputStream.writeObject(flame);
           // save renderInfo          
@@ -771,10 +765,6 @@ public final class FlameRenderer {
           }
           // save raster
           outputStream.writeObject(raster);
-          // save preview image
-          if (pPreviewImage != null) {
-            outputStream.writeObject(pPreviewImage);
-          }
         }
         finally {
           outputStream.flush();
@@ -814,7 +804,7 @@ public final class FlameRenderer {
     return startIterate(renderFlames, null, true);
   }
 
-  public List<FlameRenderThread> resumeRenderFlame(String pAbsolutePath, SimpleImage pPreviewImage) {
+  public List<FlameRenderThread> resumeRenderFlame(String pAbsolutePath) {
     try {
       ObjectInputStream in = new ObjectInputStream(new FileInputStream(pAbsolutePath));
       try {
@@ -844,9 +834,7 @@ public final class FlameRenderer {
         raster = null;
         // read raster
         raster = (RasterPoint[][]) in.readObject();
-        if (header.withPreviewImage && pPreviewImage != null) {
-          // TODO          
-        }
+        // create threads
         return startIterate(renderFlames, state, false);
       }
       finally {
@@ -873,6 +861,10 @@ public final class FlameRenderer {
       }
     }
     return res;
+  }
+
+  public RenderInfo getRenderInfo() {
+    return renderInfo;
   }
 
 }

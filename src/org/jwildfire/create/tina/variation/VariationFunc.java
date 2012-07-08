@@ -21,8 +21,8 @@ import java.io.Serializable;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
+@SuppressWarnings("serial")
 public abstract class VariationFunc implements Serializable {
-  private static final long serialVersionUID = 1L;
 
   public void init(FlameTransformationContext pContext, XForm pXForm, double pAmount) {
 
