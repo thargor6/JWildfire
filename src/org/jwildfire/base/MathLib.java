@@ -61,14 +61,13 @@ public final class MathLib {
   private static final double[] sin, cos, tan;
 
   public static final double sin(double a) {
-    //    return sin[(int) (a * radToIndex) & TRIG_PRECALC_MASK];
-    return FastMath.sin(a);
+    return sin[(int) (a * radToIndex) & TRIG_PRECALC_MASK];
+    // return FastMath.sin(a);
   }
 
   public static final double cos(double a) {
-    return FastMath.cos(a);
-
-    //    return cos[(int) (a * radToIndex) & TRIG_PRECALC_MASK];
+    //return FastMath.cos(a);
+    return cos[(int) (a * radToIndex) & TRIG_PRECALC_MASK];
   }
 
   public static final double tan(double a) {
@@ -77,7 +76,7 @@ public final class MathLib {
 
   static {
     // sin, cos, tan
-    TRIG_PRECALC_BITS = 16;
+    TRIG_PRECALC_BITS = 24;
     TRIG_PRECALC_MASK = ~(-1 << TRIG_PRECALC_BITS);
     TRIG_PRECALC_COUNT = TRIG_PRECALC_MASK + 1;
 
