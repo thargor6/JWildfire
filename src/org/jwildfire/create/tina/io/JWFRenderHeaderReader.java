@@ -14,32 +14,31 @@
   if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
   02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
-package org.jwildfire.create.tina.swing;
+package org.jwildfire.create.tina.io;
 
-import java.awt.Dimension;
+import java.io.FileInputStream;
+import java.io.ObjectInputStream;
 
-import javax.swing.filechooser.FileFilter;
+import org.jwildfire.create.tina.base.Flame;
+import org.jwildfire.create.tina.render.JWFRenderFileHeader;
 
-import org.jwildfire.base.Prefs;
-import org.jwildfire.base.Tools;
-import org.jwildfire.swing.DefaultFileChooser;
-
-public class JWFRenderFileChooser extends DefaultFileChooser {
-
-  private static final long serialVersionUID = 1L;
-
-  @Override
-  protected String getDefaultExtension() {
-    return Tools.FILEEXT_JWFRENDER;
-  }
-
-  public JWFRenderFileChooser(Prefs pPrefs) {
-    setPreferredSize(new Dimension(960, 600));
-    FileFilter filter = new JWFRenderFileFilter();
-    addChoosableFileFilter(filter);
-    setFileFilter(filter);
-    setAcceptAllFileFilterUsed(false);
-    setAccessory(new JWFRenderFilePreview(this, pPrefs));
+public class JWFRenderHeaderReader {
+  public JWFRenderHeader readRenderHeader(String pAbsolutePath) {
+    try {
+      ObjectInputStream in = new ObjectInputStream(new FileInputStream(pAbsolutePath));
+      try {
+        JWFRenderFileHeader header = (JWFRenderFileHeader) in.readObject();
+        Flame flame = (Flame) in.readObject();
+        return new JWFRenderHeader(header, flame);
+      }
+      finally {
+        in.close();
+      }
+    }
+    catch (Exception ex) {
+      ex.printStackTrace();
+      throw new RuntimeException(ex);
+    }
   }
 
 }

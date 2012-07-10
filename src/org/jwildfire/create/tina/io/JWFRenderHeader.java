@@ -14,32 +14,26 @@
   if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
   02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
-package org.jwildfire.create.tina.swing;
+package org.jwildfire.create.tina.io;
 
-import java.awt.Dimension;
+import org.jwildfire.create.tina.base.Flame;
+import org.jwildfire.create.tina.render.JWFRenderFileHeader;
 
-import javax.swing.filechooser.FileFilter;
+public class JWFRenderHeader {
+  private final JWFRenderFileHeader header;
+  private final Flame flame;
 
-import org.jwildfire.base.Prefs;
-import org.jwildfire.base.Tools;
-import org.jwildfire.swing.DefaultFileChooser;
-
-public class JWFRenderFileChooser extends DefaultFileChooser {
-
-  private static final long serialVersionUID = 1L;
-
-  @Override
-  protected String getDefaultExtension() {
-    return Tools.FILEEXT_JWFRENDER;
+  public JWFRenderHeader(JWFRenderFileHeader pHeader, Flame pFlame) {
+    header = pHeader;
+    flame = pFlame;
   }
 
-  public JWFRenderFileChooser(Prefs pPrefs) {
-    setPreferredSize(new Dimension(960, 600));
-    FileFilter filter = new JWFRenderFileFilter();
-    addChoosableFileFilter(filter);
-    setFileFilter(filter);
-    setAcceptAllFileFilterUsed(false);
-    setAccessory(new JWFRenderFilePreview(this, pPrefs));
+  public JWFRenderFileHeader getHeader() {
+    return header;
+  }
+
+  public Flame getFlame() {
+    return flame;
   }
 
 }

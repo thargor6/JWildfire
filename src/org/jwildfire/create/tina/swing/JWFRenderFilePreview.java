@@ -27,22 +27,21 @@ import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 
 import org.jwildfire.base.Prefs;
-import org.jwildfire.create.tina.animate.FlameMovie;
-import org.jwildfire.create.tina.animate.FlameMoviePart;
 import org.jwildfire.create.tina.base.Flame;
-import org.jwildfire.create.tina.io.JWFMovieReader;
+import org.jwildfire.create.tina.io.JWFRenderHeader;
+import org.jwildfire.create.tina.io.JWFRenderHeaderReader;
 import org.jwildfire.create.tina.render.FlameRenderer;
 import org.jwildfire.create.tina.render.RenderInfo;
 import org.jwildfire.create.tina.render.RenderedFlame;
 
-public class JWFMovieFilePreview extends JComponent implements PropertyChangeListener {
+public class JWFRenderFilePreview extends JComponent implements PropertyChangeListener {
   private static final long serialVersionUID = 1L;
   private final Prefs prefs;
 
   private ImageIcon currThumbnail = null;
   private File currFile = null;
 
-  public JWFMovieFilePreview(JFileChooser pFileChooser, Prefs pPrefs) {
+  public JWFRenderFilePreview(JFileChooser pFileChooser, Prefs pPrefs) {
     Dimension size = new Dimension(192, 120);
     setPreferredSize(size);
     setSize(size);
@@ -57,16 +56,8 @@ public class JWFMovieFilePreview extends JComponent implements PropertyChangeLis
     }
     try {
       if (currFile.exists()) {
-        FlameMovie movie = new JWFMovieReader().readMovie(currFile.getAbsolutePath());
-        Flame flame = null;
-        if (movie != null) {
-          for (FlameMoviePart part : movie.getParts()) {
-            if (part.getFlame() != null) {
-              flame = part.getFlame();
-              break;
-            }
-          }
-        }
+        JWFRenderHeader header = new JWFRenderHeaderReader().readRenderHeader(currFile.getAbsolutePath());
+        Flame flame = header.getFlame();
         if (flame != null) {
           int imgWidth = this.getPreferredSize().width;
           int imgHeight = this.getPreferredSize().height;
