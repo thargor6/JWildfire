@@ -50,6 +50,7 @@ import org.jwildfire.create.tina.render.FlameRenderer;
 import org.jwildfire.create.tina.render.IterationObserver;
 import org.jwildfire.create.tina.render.RenderInfo;
 import org.jwildfire.create.tina.render.RenderedFlame;
+import org.jwildfire.create.tina.render.ResumedFlameRender;
 import org.jwildfire.image.SimpleImage;
 import org.jwildfire.io.ImageWriter;
 import org.jwildfire.swing.ErrorHandler;
@@ -296,6 +297,8 @@ public class TinaInteractiveRendererController implements IterationObserver {
     renderer = new FlameRenderer(flame, prefs);
     renderer.registerIterationObserver(this);
     sampleCount = 0;
+    renderStartTime = System.currentTimeMillis();
+    pausedRenderTime = 0;
     threads = renderer.startRenderFlame(info);
     state = State.RENDER;
     enableControls();
@@ -365,6 +368,8 @@ public class TinaInteractiveRendererController implements IterationObserver {
   }
 
   private long sampleCount = 0;
+  private long renderStartTime = 0;
+  private long pausedRenderTime = 0;
 
   private synchronized void incSampleCount() {
     sampleCount++;
@@ -377,7 +382,8 @@ public class TinaInteractiveRendererController implements IterationObserver {
   private synchronized void updateStats(FlameRenderThread pEventSource) {
     double quality = pEventSource.getTonemapper().calcDensity(sampleCount);
     statsTextArea.setText("Current quality: " + Tools.doubleToString(quality) + "\n" +
-        "samples so far: " + sampleCount);
+        "samples so far: " + sampleCount + "\n" +
+        "render time: " + Tools.doubleToString((System.currentTimeMillis() - renderStartTime + pausedRenderTime) / 1000.0) + "s");
     statsTextArea.validate();
   }
 
@@ -517,7 +523,9 @@ public class TinaInteractiveRendererController implements IterationObserver {
         File file = chooser.getSelectedFile();
         Flame newFlame = new Flame();
         FlameRenderer newRenderer = new FlameRenderer(newFlame, prefs);
-        threads = newRenderer.resumeRenderFlame(file.getAbsolutePath());
+
+        ResumedFlameRender resumedRender = newRenderer.resumeRenderFlame(file.getAbsolutePath());
+        threads = resumedRender.getThreads();
         Flame flame = currFlame = newRenderer.getFlame();
         // setup size profile
         {
@@ -562,11 +570,13 @@ public class TinaInteractiveRendererController implements IterationObserver {
         if (flame.getBGColorRed() > 0 || flame.getBGColorGreen() > 0 || flame.getBGColorBlue() > 0) {
           image.fillBackground(flame.getBGColorRed(), flame.getBGColorGreen(), flame.getBGColorBlue());
         }
+        renderer.registerIterationObserver(this);
+        sampleCount = renderer.calcSampleCount();
+        pausedRenderTime = resumedRender.getHeader().getElapsedMilliseconds();
+        renderStartTime = System.currentTimeMillis();
         for (FlameRenderThread thread : threads) {
           new Thread(thread).start();
         }
-        renderer.registerIterationObserver(this);
-        sampleCount = renderer.calcSampleCount();
         state = State.RENDER;
         enableControls();
       }
@@ -591,7 +601,7 @@ public class TinaInteractiveRendererController implements IterationObserver {
         if (chooser.showSaveDialog(imageRootPanel) == JFileChooser.APPROVE_OPTION) {
           File file = chooser.getSelectedFile();
           prefs.setLastOutputFlameFile(file);
-          renderer.saveState(file.getAbsolutePath(), threads);
+          renderer.saveState(file.getAbsolutePath(), threads, sampleCount, System.currentTimeMillis() - renderStartTime + pausedRenderTime);
         }
       }
       catch (Throwable ex) {

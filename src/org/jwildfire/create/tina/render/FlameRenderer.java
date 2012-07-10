@@ -25,7 +25,6 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -731,18 +730,7 @@ public final class FlameRenderer {
     }
   }
 
-  public static class JWFRenderFileHeader implements Serializable {
-    private static final long serialVersionUID = 1L;
-    public final String id = "JWFRender";
-    public final int version = 1;
-    public final int numThreads;
-
-    public JWFRenderFileHeader(int pNumThreads) {
-      numThreads = pNumThreads;
-    }
-  }
-
-  public void saveState(String pAbsolutePath, List<FlameRenderThread> pThreads) {
+  public void saveState(String pAbsolutePath, List<FlameRenderThread> pThreads, long pSampleCount, long pElapsedMilliseconds) {
     pauseThreads(pThreads);
     // store thread state
     FlameRenderThreadState state[] = new FlameRenderThreadState[pThreads.size()];
@@ -754,7 +742,7 @@ public final class FlameRenderer {
         ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream(pAbsolutePath));
         try {
           // save header
-          outputStream.writeObject(new JWFRenderFileHeader(pThreads.size()));
+          outputStream.writeObject(new JWFRenderFileHeader(pThreads.size(), flame.getWidth(), flame.getHeight(), pSampleCount, pElapsedMilliseconds));
           // save flame
           outputStream.writeObject(flame);
           // save renderInfo          
@@ -804,7 +792,7 @@ public final class FlameRenderer {
     return startIterate(renderFlames, null, true);
   }
 
-  public List<FlameRenderThread> resumeRenderFlame(String pAbsolutePath) {
+  public ResumedFlameRender resumeRenderFlame(String pAbsolutePath) {
     try {
       ObjectInputStream in = new ObjectInputStream(new FileInputStream(pAbsolutePath));
       try {
@@ -835,7 +823,8 @@ public final class FlameRenderer {
         // read raster
         raster = (RasterPoint[][]) in.readObject();
         // create threads
-        return startIterate(renderFlames, state, false);
+        List<FlameRenderThread> threads = startIterate(renderFlames, state, false);
+        return new ResumedFlameRender(header, threads);
       }
       finally {
         in.close();
