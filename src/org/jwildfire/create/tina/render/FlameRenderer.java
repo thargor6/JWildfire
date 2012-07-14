@@ -21,6 +21,8 @@ import static org.jwildfire.base.MathLib.cos;
 import static org.jwildfire.base.MathLib.fabs;
 import static org.jwildfire.base.MathLib.sin;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
@@ -30,6 +32,7 @@ import java.util.List;
 
 import org.jwildfire.base.MathLib;
 import org.jwildfire.base.Prefs;
+import org.jwildfire.base.QualityProfile;
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.RasterPoint;
@@ -730,7 +733,7 @@ public final class FlameRenderer {
     }
   }
 
-  public void saveState(String pAbsolutePath, List<FlameRenderThread> pThreads, long pSampleCount, long pElapsedMilliseconds) {
+  public void saveState(String pAbsolutePath, List<FlameRenderThread> pThreads, long pSampleCount, long pElapsedMilliseconds, QualityProfile pQualityProfile) {
     pauseThreads(pThreads);
     // store thread state
     FlameRenderThreadState state[] = new FlameRenderThreadState[pThreads.size()];
@@ -739,10 +742,13 @@ public final class FlameRenderer {
     }
     try {
       try {
-        ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream(pAbsolutePath));
+        ObjectOutputStream outputStream = new ObjectOutputStream(new BufferedOutputStream(new FileOutputStream(pAbsolutePath)));
         try {
           // save header
-          outputStream.writeObject(new JWFRenderFileHeader(pThreads.size(), flame.getWidth(), flame.getHeight(), pSampleCount, pElapsedMilliseconds));
+          JWFRenderFileHeader header = new JWFRenderFileHeader(pThreads.size(), flame.getWidth(), flame.getHeight(),
+              pSampleCount, pElapsedMilliseconds, 1, 1, pQualityProfile.getQuality(),
+              pQualityProfile.isWithHDR(), pQualityProfile.isWithHDRIntensityMap());
+          outputStream.writeObject(header);
           // save flame
           outputStream.writeObject(flame);
           // save renderInfo          
@@ -794,7 +800,7 @@ public final class FlameRenderer {
 
   public ResumedFlameRender resumeRenderFlame(String pAbsolutePath) {
     try {
-      ObjectInputStream in = new ObjectInputStream(new FileInputStream(pAbsolutePath));
+      ObjectInputStream in = new ObjectInputStream(new BufferedInputStream(new FileInputStream(pAbsolutePath)));
       try {
         // read header
         JWFRenderFileHeader header = (JWFRenderFileHeader) in.readObject();

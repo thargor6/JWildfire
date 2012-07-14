@@ -16,7 +16,12 @@
 */
 package org.jwildfire.base;
 
-public class QualityProfile implements Cloneable {
+import java.io.Serializable;
+
+import org.jwildfire.create.tina.edit.Assignable;
+
+public class QualityProfile implements Assignable<QualityProfile>, Serializable {
+  private static final long serialVersionUID = 1L;
   private String caption;
   private int spatialOversample;
   private int colorOversample;
@@ -92,11 +97,6 @@ public class QualityProfile implements Cloneable {
     this.withHDRIntensityMap = withHDRIntensityMap;
   }
 
-  @Override
-  public Object clone() throws CloneNotSupportedException {
-    return super.clone();
-  }
-
   public boolean isDefaultProfile() {
     return defaultProfile;
   }
@@ -111,6 +111,35 @@ public class QualityProfile implements Cloneable {
 
   public int getQualityIndex() {
     return calculateQualityIndex(spatialOversample, colorOversample, quality);
+  }
+
+  @Override
+  public void assign(QualityProfile pSrc) {
+    caption = pSrc.caption;
+    spatialOversample = pSrc.spatialOversample;
+    colorOversample = pSrc.colorOversample;
+    quality = pSrc.quality;
+    withHDR = pSrc.withHDR;
+    withHDRIntensityMap = pSrc.withHDRIntensityMap;
+    defaultProfile = pSrc.defaultProfile;
+  }
+
+  @Override
+  public QualityProfile makeCopy() {
+    QualityProfile res = new QualityProfile();
+    res.assign(this);
+    return res;
+  }
+
+  @Override
+  public boolean isEqual(QualityProfile pSrc) {
+    if (caption != pSrc.caption || spatialOversample != pSrc.spatialOversample ||
+        colorOversample != pSrc.colorOversample || quality != pSrc.quality ||
+        withHDR != pSrc.withHDR || withHDRIntensityMap != pSrc.withHDRIntensityMap ||
+        defaultProfile != pSrc.defaultProfile) {
+      return false;
+    }
+    return true;
   }
 
 }

@@ -555,9 +555,10 @@ public class TinaInteractiveRendererController implements IterationObserver {
             halve = false;
             interactiveResolutionProfileCmb.addItem(selected);
           }
+          boolean wasHalveSelected = halveSizeButton.isSelected();
           halveSizeButton.setSelected(halve);
           ResolutionProfile currSel = (ResolutionProfile) interactiveResolutionProfileCmb.getSelectedItem();
-          if (currSel == null || !currSel.equals(selected)) {
+          if (currSel == null || !currSel.equals(selected) || wasHalveSelected != halve) {
             interactiveResolutionProfileCmb.setSelectedItem(selected);
             refreshImagePanel();
           }
@@ -565,6 +566,26 @@ public class TinaInteractiveRendererController implements IterationObserver {
             clearScreen();
           }
         }
+        // setup quality profile
+        {
+          QualityProfile selected = null;
+          for (int i = 0; i < interactiveQualityProfileCmb.getItemCount(); i++) {
+            QualityProfile profile = (QualityProfile) interactiveQualityProfileCmb.getItemAt(i);
+            // do not currenty take oversampling into account
+            if (profile.getQuality() == resumedRender.getHeader().getQuality() && profile.isWithHDR() == resumedRender.getHeader().isWithHDR() &&
+                profile.isWithHDRIntensityMap() == resumedRender.getHeader().isWithHDRIntensityMap()) {
+              selected = profile;
+              // break;
+              // no break, select the profile with the highest overall quality
+            }
+          }
+          if (selected == null) {
+            selected = new QualityProfile(false, "Resumed render", 1, 1, resumedRender.getHeader().getQuality(), resumedRender.getHeader().isWithHDR(), resumedRender.getHeader().isWithHDRIntensityMap());
+            interactiveQualityProfileCmb.addItem(selected);
+          }
+          interactiveQualityProfileCmb.setSelectedItem(selected);
+        }
+        //
         renderer = newRenderer;
         setupProfiles(currFlame);
         if (flame.getBGColorRed() > 0 || flame.getBGColorGreen() > 0 || flame.getBGColorBlue() > 0) {
@@ -601,7 +622,7 @@ public class TinaInteractiveRendererController implements IterationObserver {
         if (chooser.showSaveDialog(imageRootPanel) == JFileChooser.APPROVE_OPTION) {
           File file = chooser.getSelectedFile();
           prefs.setLastOutputFlameFile(file);
-          renderer.saveState(file.getAbsolutePath(), threads, sampleCount, System.currentTimeMillis() - renderStartTime + pausedRenderTime);
+          renderer.saveState(file.getAbsolutePath(), threads, sampleCount, System.currentTimeMillis() - renderStartTime + pausedRenderTime, getQualityProfile());
         }
       }
       catch (Throwable ex) {

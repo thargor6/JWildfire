@@ -17,6 +17,8 @@
 package org.jwildfire.create.tina.render;
 
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 
 public class JWFRenderFileHeader implements Serializable {
   private static final long serialVersionUID = 1L;
@@ -24,13 +26,24 @@ public class JWFRenderFileHeader implements Serializable {
   protected final int width, height;
   protected final long sampleCount;
   protected final long elapsedMilliseconds;
+  protected final int spatialOversample;
+  protected final int colorOversample;
+  protected final int quality;
+  protected final boolean withHDR;
+  protected final boolean withHDRIntensityMap;
+  private final Map<String, Serializable> additionalParams = new HashMap<String, Serializable>();
 
-  public JWFRenderFileHeader(int pNumThreads, int pWidth, int pHeight, long pSampleCount, long pElapsedMilliseconds) {
+  public JWFRenderFileHeader(int pNumThreads, int pWidth, int pHeight, long pSampleCount, long pElapsedMilliseconds, int pSpatialOversample, int pColorOversample, int pQuality, boolean pWithHDR, boolean pWithHDRIntensityMap) {
     numThreads = pNumThreads;
     width = pWidth;
     height = pHeight;
     sampleCount = pSampleCount;
     elapsedMilliseconds = pElapsedMilliseconds;
+    spatialOversample = pSpatialOversample;
+    colorOversample = pColorOversample;
+    quality = pQuality;
+    withHDR = pWithHDR;
+    withHDRIntensityMap = pWithHDRIntensityMap;
   }
 
   public int getNumThreads() {
@@ -51,5 +64,37 @@ public class JWFRenderFileHeader implements Serializable {
 
   public long getElapsedMilliseconds() {
     return elapsedMilliseconds;
+  }
+
+  public void setParam(String pName, Serializable pValue) {
+    additionalParams.put(pName, pValue);
+  }
+
+  public Serializable getParam(String pName) {
+    return additionalParams.get(pName);
+  }
+
+  public void clearParams() {
+    additionalParams.clear();
+  }
+
+  public int getSpatialOversample() {
+    return spatialOversample;
+  }
+
+  public int getColorOversample() {
+    return colorOversample;
+  }
+
+  public int getQuality() {
+    return quality;
+  }
+
+  public boolean isWithHDR() {
+    return withHDR;
+  }
+
+  public boolean isWithHDRIntensityMap() {
+    return withHDRIntensityMap;
   }
 }

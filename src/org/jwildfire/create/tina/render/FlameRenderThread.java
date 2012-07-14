@@ -51,7 +51,7 @@ public abstract class FlameRenderThread implements Runnable {
           initState();
         }
         else {
-          System.out.println("RESTORE: " + resumeState.startIter + " " + resumeState.xfIndex);
+          // System.out.println("RESTORE: " + resumeState.startIter + " " + resumeState.xfIndex);
           restoreState(resumeState);
         }
         iterate();

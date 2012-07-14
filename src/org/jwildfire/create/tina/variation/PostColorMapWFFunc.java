@@ -16,7 +16,7 @@
  */
 package org.jwildfire.create.tina.variation;
 
-
+@SuppressWarnings("serial")
 public class PostColorMapWFFunc extends ColorMapWFFunc {
 
   @Override

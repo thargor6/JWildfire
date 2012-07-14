@@ -349,22 +349,12 @@ public class Prefs extends ManagedObject {
 
     resolutionProfiles.clear();
     for (ResolutionProfile profile : pSrc.resolutionProfiles) {
-      try {
-        resolutionProfiles.add((ResolutionProfile) profile.clone());
-      }
-      catch (CloneNotSupportedException e) {
-        e.printStackTrace();
-      }
+      resolutionProfiles.add((ResolutionProfile) profile.makeCopy());
     }
 
     qualityProfiles.clear();
     for (QualityProfile profile : pSrc.qualityProfiles) {
-      try {
-        qualityProfiles.add((QualityProfile) profile.clone());
-      }
-      catch (CloneNotSupportedException e) {
-        e.printStackTrace();
-      }
+      qualityProfiles.add((QualityProfile) profile.makeCopy());
     }
   }
 

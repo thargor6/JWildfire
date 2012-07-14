@@ -345,13 +345,8 @@ public class QualityProfileDialog extends JDialog {
       getProfileCmb().removeAllItems();
       if (pProfiles != null) {
         for (QualityProfile profile : pProfiles) {
-          try {
-            QualityProfile clonedProfile = (QualityProfile) profile.clone();
-            getProfileCmb().addItem(clonedProfile);
-          }
-          catch (CloneNotSupportedException e) {
-            e.printStackTrace();
-          }
+          QualityProfile clonedProfile = (QualityProfile) profile.makeCopy();
+          getProfileCmb().addItem(clonedProfile);
         }
       }
       getProfileCmb().setSelectedIndex(-1);
