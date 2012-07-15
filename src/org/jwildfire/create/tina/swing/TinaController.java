@@ -78,6 +78,7 @@ import org.jwildfire.create.tina.io.Flam3PaletteReader;
 import org.jwildfire.create.tina.io.Flam3Reader;
 import org.jwildfire.create.tina.io.Flam3Writer;
 import org.jwildfire.create.tina.io.RGBPaletteReader;
+import org.jwildfire.create.tina.palette.MedianCutQuantizer;
 import org.jwildfire.create.tina.palette.RGBColor;
 import org.jwildfire.create.tina.palette.RGBPalette;
 import org.jwildfire.create.tina.palette.RGBPaletteRenderer;
@@ -99,6 +100,7 @@ import org.jwildfire.create.tina.variation.Variation;
 import org.jwildfire.create.tina.variation.VariationFunc;
 import org.jwildfire.create.tina.variation.VariationFuncList;
 import org.jwildfire.image.SimpleImage;
+import org.jwildfire.io.ImageReader;
 import org.jwildfire.io.ImageWriter;
 import org.jwildfire.swing.ErrorHandler;
 import org.jwildfire.swing.ImageFileChooser;
@@ -4669,6 +4671,35 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       }
       else {
         redoButton.setToolTipText(REDO_LABEL);
+      }
+    }
+  }
+
+  public void grabPaletteFromImageButton_actionPerformed(ActionEvent e) {
+    JFileChooser chooser = new ImageFileChooser();
+    if (prefs.getInputImagePath() != null) {
+      try {
+        chooser.setCurrentDirectory(new File(prefs.getInputImagePath()));
+      }
+      catch (Exception ex) {
+        ex.printStackTrace();
+      }
+    }
+    if (chooser.showOpenDialog(centerPanel) == JFileChooser.APPROVE_OPTION) {
+      File file = chooser.getSelectedFile();
+      try {
+        SimpleImage img = new ImageReader(centerPanel).loadImage(file.getAbsolutePath());
+        prefs.setLastInputImageFile(file);
+        RGBPalette palette = new MedianCutQuantizer().createPalette(img);
+        paletteKeyFrames = null;
+        saveUndoPoint();
+        currFlame.setPalette(palette);
+        refreshPaletteColorsTable();
+        refreshPaletteUI(palette);
+        refreshFlameImage(false);
+      }
+      catch (Throwable ex) {
+        errorHandler.handleError(ex);
       }
     }
   }

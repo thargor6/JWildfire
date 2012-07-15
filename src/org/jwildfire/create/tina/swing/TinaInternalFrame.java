@@ -2632,6 +2632,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JPanel getTinaPaletteCreatePanel() {
     if (tinaPaletteCreatePanel == null) {
       FlowLayout flowLayout2 = new FlowLayout();
+      flowLayout2.setVgap(3);
       flowLayout2.setAlignment(FlowLayout.LEFT);
       tinaPaletteCreatePanel = new JPanel();
       tinaPaletteCreatePanel.setLayout(flowLayout2);
@@ -2639,6 +2640,18 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaPaletteCreatePanel.add(getCreateRandomPointsPanel(), null);
       tinaPaletteCreatePanel.add(getCreatePaletteTablePanel(), null);
       tinaPaletteCreatePanel.add(getTinaGrabPaletteFromFlameButton(), null);
+
+      JButton tinaGrabPaletteFromImageButton = new JButton();
+      tinaGrabPaletteFromImageButton.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.grabPaletteFromImageButton_actionPerformed(e);
+        }
+      });
+      tinaGrabPaletteFromImageButton.setToolTipText("Create a gradient from an image by choosing the most important 256 colors");
+      tinaGrabPaletteFromImageButton.setText("Create from image");
+      tinaGrabPaletteFromImageButton.setPreferredSize(new Dimension(180, 24));
+      tinaGrabPaletteFromImageButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      tinaPaletteCreatePanel.add(tinaGrabPaletteFromImageButton);
     }
     return tinaPaletteCreatePanel;
   }
@@ -3923,7 +3936,7 @@ public class TinaInternalFrame extends JInternalFrame {
     if (createPaletteTablePanel == null) {
       createPaletteTablePanel = new JPanel();
       createPaletteTablePanel.setLayout(new BorderLayout());
-      createPaletteTablePanel.setPreferredSize(new Dimension(180, 178));
+      createPaletteTablePanel.setPreferredSize(new Dimension(180, 154));
       createPaletteTablePanel.add(getCreatePaletteScrollPane(), BorderLayout.CENTER);
     }
     return createPaletteTablePanel;
