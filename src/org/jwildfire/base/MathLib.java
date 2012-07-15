@@ -76,7 +76,7 @@ public final class MathLib {
 
   static {
     // sin, cos, tan
-    TRIG_PRECALC_BITS = 24;
+    TRIG_PRECALC_BITS = 20;
     TRIG_PRECALC_MASK = ~(-1 << TRIG_PRECALC_BITS);
     TRIG_PRECALC_COUNT = TRIG_PRECALC_MASK + 1;
 

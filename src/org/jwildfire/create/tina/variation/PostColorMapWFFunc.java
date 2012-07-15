@@ -16,8 +16,11 @@
  */
 package org.jwildfire.create.tina.variation;
 
-@SuppressWarnings("serial")
-public class PostColorMapWFFunc extends ColorMapWFFunc {
+import org.jwildfire.create.tina.base.XForm;
+import org.jwildfire.create.tina.base.XYZPoint;
+
+public class PostColorMapWFFunc extends AbstractColorMapWFFunc {
+  private static final long serialVersionUID = 1L;
 
   @Override
   public String getName() {
@@ -27,6 +30,11 @@ public class PostColorMapWFFunc extends ColorMapWFFunc {
   @Override
   public int getPriority() {
     return 1;
+  }
+
+  @Override
+  public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
+    transform(pContext, pXForm, pAffineTP, pVarTP, pAmount, pVarTP.x, pVarTP.y);
   }
 
 }
