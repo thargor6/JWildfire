@@ -17,7 +17,10 @@
 package org.jwildfire.create.tina.palette;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.jwildfire.create.tina.edit.Assignable;
@@ -368,6 +371,19 @@ public class RGBPalette implements Assignable<RGBPalette>, Serializable {
       }
     }
     return true;
+  }
+
+  public void sort() {
+    List<RGBColor> colors = new ArrayList<RGBColor>();
+    for (int i = 0; i < PALETTE_SIZE; i++) {
+      colors.add(rawColors.get(i));
+    }
+    Collections.sort(colors);
+    rawColors.clear();
+    for (int i = 0; i < PALETTE_SIZE; i++) {
+      rawColors.put(Integer.valueOf(i), colors.get(i));
+    }
+    modified = true;
   }
 
 }

@@ -293,13 +293,8 @@ public class ResolutionProfileDialog extends JDialog {
       getProfileCmb().removeAllItems();
       if (pProfiles != null) {
         for (ResolutionProfile profile : pProfiles) {
-          try {
-            ResolutionProfile clonedProfile = (ResolutionProfile) profile.clone();
-            getProfileCmb().addItem(clonedProfile);
-          }
-          catch (CloneNotSupportedException e) {
-            e.printStackTrace();
-          }
+          ResolutionProfile clonedProfile = (ResolutionProfile) profile.makeCopy();
+          getProfileCmb().addItem(clonedProfile);
         }
       }
       getProfileCmb().setSelectedIndex(-1);

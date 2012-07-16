@@ -351,6 +351,7 @@ public class MedianCutQuantizer {
     for (int i = res.getSize(); i < RGBPalette.PALETTE_SIZE; i++) {
       res.addColor(0, 0, 0);
     }
+    res.sort();
     return res;
   }
 }

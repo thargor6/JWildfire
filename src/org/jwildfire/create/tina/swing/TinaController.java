@@ -626,6 +626,20 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     initHelpPane();
     initFAQPane();
 
+    scriptTextArea = pScriptTextArea;
+
+    refreshPaletteColorsTable();
+    refreshRenderBatchJobsTable();
+
+    initDefaultScript();
+
+    initGradientLibrary();
+
+    enableControls();
+    enableShadingUI();
+
+    enableXFormControls(null);
+
     refreshResolutionProfileCmb(resolutionProfileCmb, null);
     refreshResolutionProfileCmb(interactiveResolutionProfileCmb, null);
     refreshResolutionProfileCmb(batchResolutionProfileCmb, null);
@@ -640,19 +654,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     if (swfAnimatorQualityProfileCmb.getItemCount() > 0) {
       swfAnimatorQualityProfileCmb.setSelectedIndex(0);
     }
-    scriptTextArea = pScriptTextArea;
 
-    refreshPaletteColorsTable();
-    refreshRenderBatchJobsTable();
-
-    initDefaultScript();
-
-    initGradientLibrary();
-
-    enableControls();
-    enableShadingUI();
-
-    enableXFormControls(null);
   }
 
   private void initHelpPane() {

@@ -18,9 +18,10 @@ package org.jwildfire.create.tina.palette;
 
 import java.io.Serializable;
 
+import org.jwildfire.base.MathLib;
 import org.jwildfire.create.tina.edit.Assignable;
 
-public class RGBColor implements Assignable<RGBColor>, Serializable {
+public class RGBColor implements Assignable<RGBColor>, Serializable, Comparable<RGBColor> {
   private static final long serialVersionUID = 1L;
   private int red;
   private int green;
@@ -81,4 +82,74 @@ public class RGBColor implements Assignable<RGBColor>, Serializable {
     return true;
   }
 
+  private static class HSV {
+    public double h;
+    @SuppressWarnings("unused")
+    public double s;
+    public double v;
+  }
+
+  protected HSV toHSV() {
+    double r = red / 255.0;
+    double g = green / 255.0;
+    double b = blue / 255.0;
+    HSV hsv = new HSV();
+
+    double min = Math.min(Math.min(r, g), b);
+    double max = Math.max(Math.max(r, g), b);
+    double delta = max - min;
+
+    hsv.v = max;
+    if (Math.abs(delta) <= MathLib.EPSILON) {
+      hsv.h = 0;
+      hsv.s = 0;
+    }
+    else {
+      hsv.s = delta / max;
+
+      double dR = (((max - r) / 6.0) + (delta / 2.0)) / delta;
+      double dG = (((max - g) / 6.0) + (delta / 2.0)) / delta;
+      double dB = (((max - b) / 6.0) + (delta / 2.0)) / delta;
+
+      if (MathLib.fabs(r - max) < MathLib.EPSILON) {
+        hsv.h = dB - dG;
+      }
+      else if (MathLib.fabs(g - max) < MathLib.EPSILON) {
+        hsv.h = (1.0 / 3.0) + dR - dB;
+      }
+      else {
+        hsv.h = (2.0 / 3.0) + dG - dR;
+      }
+      if (hsv.h < 0.0 - MathLib.EPSILON) {
+        hsv.h += 1.0;
+      }
+      if (hsv.h > 1.0 + MathLib.EPSILON) {
+        hsv.h -= 1.0;
+      }
+    }
+    return hsv;
+  }
+
+  @Override
+  public int compareTo(RGBColor o) {
+    HSV hsv = toHSV();
+    HSV rHSV = o.toHSV();
+    if (MathLib.fabs(hsv.h - rHSV.h) < 0.12) {
+      if (hsv.v < rHSV.v) {
+        return -1;
+      }
+      else if (hsv.v > rHSV.v) {
+        return 1;
+      }
+      else {
+        return 0;
+      }
+    }
+    else if (hsv.h < rHSV.h) {
+      return -1;
+    }
+    else /*(hsv.h > rHSV.h)*/{
+      return 1;
+    }
+  }
 }

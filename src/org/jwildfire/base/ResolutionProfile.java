@@ -57,11 +57,6 @@ public class ResolutionProfile implements Assignable<ResolutionProfile>, Seriali
     return width + "x" + height;
   }
 
-  @Override
-  public Object clone() throws CloneNotSupportedException {
-    return super.clone();
-  }
-
   public boolean isDefaultProfile() {
     return defaultProfile;
   }
