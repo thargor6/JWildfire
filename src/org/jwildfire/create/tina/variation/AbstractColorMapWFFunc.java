@@ -18,7 +18,6 @@ package org.jwildfire.create.tina.variation;
 
 import static org.jwildfire.base.MathLib.EPSILON;
 import static org.jwildfire.base.MathLib.fabs;
-import static org.jwildfire.base.MathLib.iabs;
 import static org.jwildfire.base.MathLib.sqrt;
 
 import org.jwildfire.base.Tools;
@@ -41,10 +40,11 @@ public abstract class AbstractColorMapWFFunc extends VariationFunc {
   private static final String PARAM_OFFSETZ = "offset_z";
   private static final String PARAM_TILEX = "tile_x";
   private static final String PARAM_TILEY = "tile_y";
+  private static final String PARAM_RESETZ = "reset_z";
 
   private static final String RESSOURCE_IMAGE_FILENAME = "image_filename";
 
-  private static final String[] paramNames = { PARAM_SCALEX, PARAM_SCALEY, PARAM_SCALEZ, PARAM_OFFSETX, PARAM_OFFSETY, PARAM_OFFSETZ, PARAM_TILEX, PARAM_TILEY };
+  private static final String[] paramNames = { PARAM_SCALEX, PARAM_SCALEY, PARAM_SCALEZ, PARAM_OFFSETX, PARAM_OFFSETY, PARAM_OFFSETZ, PARAM_TILEX, PARAM_TILEY, PARAM_RESETZ };
   private static final String[] ressourceNames = { RESSOURCE_IMAGE_FILENAME };
 
   private double scaleX = 1.0;
@@ -55,6 +55,7 @@ public abstract class AbstractColorMapWFFunc extends VariationFunc {
   private double offsetZ = 0.0;
   private int tileX = 1;
   private int tileY = 1;
+  private int resetZ = 1;
   private String imageFilename = null;
 
   // derived params
@@ -63,28 +64,31 @@ public abstract class AbstractColorMapWFFunc extends VariationFunc {
   private float[] rgbArray = new float[3];
 
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount, double pInputX, double pInputY) {
-    double x = (pInputX - offsetX + 1.0) / scaleX * 0.5 * (double) (imgWidth - 1);
-    double y = (pInputY - offsetY + 1.0) / scaleY * 0.5 * (double) (imgHeight - 1);
+    double x = (pInputX - (offsetX + 0.5) + 1.0) / scaleX * (double) (imgWidth - 1);
+    double y = (pInputY - (offsetY + 0.5) + 1.0) / scaleY * (double) (imgHeight - 1);
     int ix = Tools.FTOI(x);
     int iy = Tools.FTOI(y);
     if (this.tileX == 1) {
-      int nx = iabs(ix) / imgWidth + (ix % imgWidth == 0 ? 0 : 1);
       if (ix < 0) {
-        ix += nx * imgWidth;
+        int nx = ix / imgWidth - 1;
+        ix -= nx * imgWidth;
       }
       else if (ix >= imgWidth) {
+        int nx = ix / imgWidth;
         ix -= nx * imgWidth;
       }
     }
     if (this.tileY == 1) {
-      int ny = iabs(iy) / imgHeight + (iy % imgHeight == 0 ? 0 : 1);
       if (iy < 0) {
-        iy += ny * imgHeight;
+        int ny = iy / imgHeight - 1;
+        iy -= ny * imgHeight;
       }
       else if (iy >= imgHeight) {
+        int ny = iy / imgHeight;
         iy -= ny * imgHeight;
       }
     }
+
     if (ix >= 0 && ix < imgWidth && iy >= 0 && iy < imgHeight) {
       if (colorMap instanceof SimpleImage) {
         toolPixel.setARGBValue(((SimpleImage) colorMap).getARGBValue(
@@ -113,7 +117,12 @@ public abstract class AbstractColorMapWFFunc extends VariationFunc {
       double intensity = (0.299 * pVarTP.redColor + 0.588 * pVarTP.greenColor + 0.113 * pVarTP.blueColor) / 255.0;
       dz += scaleZ * intensity;
     }
-    pVarTP.z += dz;
+    if (resetZ != 0) {
+      pVarTP.z = dz;
+    }
+    else {
+      pVarTP.z += dz;
+    }
     pVarTP.color = getColorIdx(pVarTP.redColor, pVarTP.greenColor, pVarTP.blueColor);
   }
 
@@ -124,7 +133,7 @@ public abstract class AbstractColorMapWFFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { scaleX, scaleY, scaleZ, offsetX, offsetY, offsetZ, tileX, tileY };
+    return new Object[] { scaleX, scaleY, scaleZ, offsetX, offsetY, offsetZ, tileX, tileY, resetZ };
   }
 
   @Override
@@ -145,6 +154,8 @@ public abstract class AbstractColorMapWFFunc extends VariationFunc {
       tileX = Tools.FTOI(pValue);
     else if (PARAM_TILEY.equalsIgnoreCase(pName))
       tileY = Tools.FTOI(pValue);
+    else if (PARAM_RESETZ.equalsIgnoreCase(pName))
+      resetZ = Tools.FTOI(pValue);
     else
       throw new IllegalArgumentException(pName);
   }

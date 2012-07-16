@@ -50,7 +50,7 @@ public final class FlameRenderFlatThread extends FlameRenderThread {
     q = new XYZPoint();
     p.x = 2.0 * renderer.random.random() - 1.0;
     p.y = 2.0 * renderer.random.random() - 1.0;
-    p.z = 2.0 * renderer.random.random() - 1.0;
+    p.z = 0.0;
     p.color = renderer.random.random();
 
     xf = flame.getXForms().get(0);

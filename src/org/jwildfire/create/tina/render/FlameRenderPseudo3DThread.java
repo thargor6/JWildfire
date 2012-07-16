@@ -61,7 +61,7 @@ public final class FlameRenderPseudo3DThread extends FlameRenderThread {
 
     pA[0].x = 2.0 * renderer.random.random() - 1.0;
     pA[0].y = 2.0 * renderer.random.random() - 1.0;
-    pA[0].z = 2.0 * renderer.random.random() - 1.0;
+    pA[0].z = 0;
     pA[0].color = renderer.random.random();
 
     distributeInitialPoints(pA);
