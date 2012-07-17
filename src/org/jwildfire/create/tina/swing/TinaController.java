@@ -96,6 +96,7 @@ import org.jwildfire.create.tina.script.ScriptRunner;
 import org.jwildfire.create.tina.script.ScriptRunnerEnvironment;
 import org.jwildfire.create.tina.transform.XFormTransformService;
 import org.jwildfire.create.tina.variation.Linear3DFunc;
+import org.jwildfire.create.tina.variation.RessourceType;
 import org.jwildfire.create.tina.variation.Variation;
 import org.jwildfire.create.tina.variation.VariationFunc;
 import org.jwildfire.create.tina.variation.VariationFuncList;
@@ -2965,23 +2966,64 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
             nonlinearControlsRows[pIdx].getNonlinearParamsREd().setText(Tools.doubleToString(val));
           }
           else if ((idx = var.getFunc().getRessourceIndex(selected)) >= 0) {
-            RessourceDialog dlg = new RessourceDialog(SwingUtilities.getWindowAncestor(centerPanel));
             String rName = var.getFunc().getRessourceNames()[idx];
-            dlg.setRessourceName(rName);
-            byte val[] = var.getFunc().getRessourceValues()[idx];
-            if (val != null) {
-              dlg.setRessourceValue(new String(val));
-            }
-            dlg.setModal(true);
-            dlg.setVisible(true);
-            if (dlg.isConfirmed()) {
-              try {
-                String valStr = dlg.getRessourceValue();
-                byte[] valByteArray = valStr != null ? valStr.getBytes() : null;
-                var.getFunc().setRessource(rName, valByteArray);
+            RessourceType resType = var.getFunc().getRessourceType(rName);
+            switch (resType) {
+              case IMAGE_FILENAME: {
+                String oldFilename = null;
+                {
+                  byte val[] = var.getFunc().getRessourceValues()[idx];
+                  if (val != null) {
+                    oldFilename = new String(val);
+                  }
+                }
+                JFileChooser chooser = new ImageFileChooser();
+                if (oldFilename != null && oldFilename.length() > 0) {
+                  try {
+                    chooser.setCurrentDirectory(new File(oldFilename).getAbsoluteFile().getParentFile());
+                    chooser.setSelectedFile(new File(oldFilename));
+                  }
+                  catch (Exception ex) {
+                    ex.printStackTrace();
+                  }
+                }
+                else {
+                  if (prefs.getInputImagePath() != null) {
+                    try {
+                      chooser.setCurrentDirectory(new File(prefs.getInputImagePath()));
+                    }
+                    catch (Exception ex) {
+                      ex.printStackTrace();
+                    }
+                  }
+                }
+                if (chooser.showOpenDialog(centerPanel) == JFileChooser.APPROVE_OPTION) {
+                  File file = chooser.getSelectedFile();
+                  String valStr = file.getAbsolutePath();
+                  byte[] valByteArray = valStr != null ? valStr.getBytes() : null;
+                  var.getFunc().setRessource(rName, valByteArray);
+                }
               }
-              catch (Throwable ex) {
-                errorHandler.handleError(ex);
+                break;
+              default: {
+                RessourceDialog dlg = new RessourceDialog(SwingUtilities.getWindowAncestor(centerPanel));
+                dlg.setRessourceName(rName);
+                byte val[] = var.getFunc().getRessourceValues()[idx];
+                if (val != null) {
+                  dlg.setRessourceValue(new String(val));
+                }
+                dlg.setModal(true);
+                dlg.setVisible(true);
+                if (dlg.isConfirmed()) {
+                  try {
+                    String valStr = dlg.getRessourceValue();
+                    byte[] valByteArray = valStr != null ? valStr.getBytes() : null;
+                    var.getFunc().setRessource(rName, valByteArray);
+                  }
+                  catch (Throwable ex) {
+                    errorHandler.handleError(ex);
+                  }
+                }
               }
             }
           }

@@ -87,6 +87,10 @@ public abstract class VariationFunc implements Serializable {
     return -1;
   }
 
+  public RessourceType getRessourceType(String pName) {
+    return RessourceType.BYTEARRAY;
+  }
+
   protected double limitVal(double pValue, double pMin, double pMax) {
     if (pValue < pMin) {
       return pMin;

@@ -25,6 +25,7 @@ import org.jwildfire.image.SimpleImage;
 import org.jwildfire.image.WFImage;
 
 public class PostBumpMapWFFunc extends VariationFunc {
+  private static final long serialVersionUID = 1L;
 
   private static final String PARAM_SCALEX = "scale_x";
   private static final String PARAM_SCALEY = "scale_y";

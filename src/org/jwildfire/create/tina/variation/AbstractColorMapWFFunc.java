@@ -234,4 +234,13 @@ public abstract class AbstractColorMapWFFunc extends VariationFunc {
       throw new IllegalArgumentException(pName);
   }
 
+  @Override
+  public RessourceType getRessourceType(String pName) {
+    if (RESSOURCE_IMAGE_FILENAME.equalsIgnoreCase(pName)) {
+      return RessourceType.IMAGE_FILENAME;
+    }
+    else
+      throw new IllegalArgumentException(pName);
+  }
+
 }
