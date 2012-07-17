@@ -19,7 +19,6 @@ package org.jwildfire.base;
 import odk.lang.FastMath;
 
 public final class MathLib {
-
   public final static double SMALL_EPSILON = 1.0e-300;
   public static final double EPSILON = 0.00000001;
   public final static int TRUE = 1;
@@ -55,52 +54,54 @@ public final class MathLib {
   }
 
   // Fast sin/cos approx following http://www.java-gaming.org/index.php?topic=24191.0
-  private static final int TRIG_PRECALC_BITS, TRIG_PRECALC_MASK, TRIG_PRECALC_COUNT;
-  private static final double radFull, radToIndex;
-  private static final double degFull, degToIndex;
-  private static final double[] sin, cos, tan;
+  //  private static final int TRIG_PRECALC_BITS, TRIG_PRECALC_MASK, TRIG_PRECALC_COUNT;
+  //  private static final double radFull, radToIndex;
+  //  private static final double degFull, degToIndex;
+  //  private static final double[] sin, cos, tan;
 
   public static final double sin(double a) {
-    return sin[(int) (a * radToIndex) & TRIG_PRECALC_MASK];
-    // return FastMath.sin(a);
+    return FastMath.sin(a);
+    //    return sin[(int) (a * radToIndex) & TRIG_PRECALC_MASK];
   }
 
   public static final double cos(double a) {
-    //return FastMath.cos(a);
-    return cos[(int) (a * radToIndex) & TRIG_PRECALC_MASK];
+    return FastMath.cos(a);
+    //    return cos[(int) (a * radToIndex) & TRIG_PRECALC_MASK];
   }
 
   public static final double tan(double a) {
-    return tan[(int) (a * radToIndex) & TRIG_PRECALC_MASK];
+    return FastMath.tan(a);
+    //    return tan[(int) (a * radToIndex) & TRIG_PRECALC_MASK];
   }
 
-  static {
-    // sin, cos, tan
-    TRIG_PRECALC_BITS = 20;
-    TRIG_PRECALC_MASK = ~(-1 << TRIG_PRECALC_BITS);
-    TRIG_PRECALC_COUNT = TRIG_PRECALC_MASK + 1;
+  /*
+    static {
+      // sin, cos, tan
+      TRIG_PRECALC_BITS = 20;
+      TRIG_PRECALC_MASK = ~(-1 << TRIG_PRECALC_BITS);
+      TRIG_PRECALC_COUNT = TRIG_PRECALC_MASK + 1;
 
-    radFull = (Math.PI * 2.0);
-    degFull = (360.0);
-    radToIndex = TRIG_PRECALC_COUNT / radFull;
-    degToIndex = TRIG_PRECALC_COUNT / degFull;
+      radFull = (Math.PI * 2.0);
+      degFull = (360.0);
+      radToIndex = TRIG_PRECALC_COUNT / radFull;
+      degToIndex = TRIG_PRECALC_COUNT / degFull;
 
-    sin = new double[TRIG_PRECALC_COUNT];
-    cos = new double[TRIG_PRECALC_COUNT];
-    tan = new double[TRIG_PRECALC_COUNT];
+      sin = new double[TRIG_PRECALC_COUNT];
+      cos = new double[TRIG_PRECALC_COUNT];
+      tan = new double[TRIG_PRECALC_COUNT];
 
-    for (int i = 0; i < TRIG_PRECALC_COUNT; i++) {
-      sin[i] = Math.sin((i + 0.5) / TRIG_PRECALC_COUNT * radFull);
-      cos[i] = Math.cos((i + 0.5) / TRIG_PRECALC_COUNT * radFull);
-      tan[i] = Math.tan((i + 0.5) / TRIG_PRECALC_COUNT * radFull);
+      for (int i = 0; i < TRIG_PRECALC_COUNT; i++) {
+        sin[i] = Math.sin((i + 0.5) / TRIG_PRECALC_COUNT * radFull);
+        cos[i] = Math.cos((i + 0.5) / TRIG_PRECALC_COUNT * radFull);
+        tan[i] = Math.tan((i + 0.5) / TRIG_PRECALC_COUNT * radFull);
+      }
+      for (int i = 0; i < 360; i += 90) {
+        sin[(int) (i * degToIndex) & TRIG_PRECALC_MASK] = (double) Math.sin(i * Math.PI / 180.0);
+        cos[(int) (i * degToIndex) & TRIG_PRECALC_MASK] = (double) Math.cos(i * Math.PI / 180.0);
+        tan[(int) (i * degToIndex) & TRIG_PRECALC_MASK] = (double) Math.tan(i * Math.PI / 180.0);
+      }
     }
-    for (int i = 0; i < 360; i += 90) {
-      sin[(int) (i * degToIndex) & TRIG_PRECALC_MASK] = (double) Math.sin(i * Math.PI / 180.0);
-      cos[(int) (i * degToIndex) & TRIG_PRECALC_MASK] = (double) Math.cos(i * Math.PI / 180.0);
-      tan[(int) (i * degToIndex) & TRIG_PRECALC_MASK] = (double) Math.tan(i * Math.PI / 180.0);
-    }
-  }
-
+  */
   public static final double fmod(double a, double b) {
     return a % b;
   }
