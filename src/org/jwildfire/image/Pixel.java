@@ -16,8 +16,10 @@
 */
 package org.jwildfire.image;
 
+import java.io.Serializable;
 
-public class Pixel {
+public class Pixel implements Serializable {
+  private static final long serialVersionUID = 1L;
   public int a, r, g, b;
 
   public Pixel() {

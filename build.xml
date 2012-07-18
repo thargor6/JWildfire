@@ -6,7 +6,8 @@
 	<property name="build.dir" location="build/classes" />
 	<property name="lib.dir" location="lib" />
 	<property name="src.dir" location="src/" />
-	<property name="jar.name" value="build/j-wildfire.jar" />
+	<property name="jwildfire.jar.name" value="build/j-wildfire.jar" />
+  <property name="launcher.jar.name" value="build/j-wildfire-launcher.jar" />
   <property name="dist.name" value="build/j-wildfire.zip" />
 	
 	<path id="build.classpath">
@@ -54,8 +55,8 @@
     </javac>
   </target>
 	
-	<target name="packageJar" depends="compile" description="Package the jar file">
-		<jar destfile="${jar.name}">
+	<target name="packageJWildfireJar" depends="compile" description="Package the JWildfire jar file">
+		<jar destfile="${jwildfire.jar.name}">
 			<fileset dir="${build.dir}" includes="org/jwildfire/"/>
       <fileset dir="${src.dir}" includes="com/**/*.properties"/>
       <fileset dir="${src.dir}" includes="com/**/*.gif"/>
@@ -76,10 +77,26 @@
 		</jar>
 	</target>
 
-  <target name="packageDist" depends="packageJar" description="Package the distributable zip file">
+  <target name="packageLauncherJar" depends="compile" description="Package the Launcher jar file">
+    <jar destfile="${launcher.jar.name}">
+      <fileset dir="${build.dir}" includes="org/jwildfire/launcher/*"/>
+      <fileset dir="${build.dir}" includes="org/jwildfire/image/*"/>
+      <fileset dir="${build.dir}" includes="org/jwildfire/swing/ImagePanel.*"/>
+      <fileset dir="${src.dir}" includes="org/jwildfire/launcher/images/*.png"/>
+      <fileset dir="${src.dir}" includes="org/jwildfire/launcher/images/*.jpg"/>
+      <manifest>
+        <attribute name="Main-Class" value="org.jwildfire.launcher.Launcher"/>
+      </manifest>     
+    </jar>
+  </target>
+
+  <target name="packageDist" depends="packageJWildfireJar, packageLauncherJar" description="Package the distributable zip file">
     <copy todir="${dist.dir}/lib">
-       <fileset file="${jar.name}"/>
+       <fileset file="${jwildfire.jar.name}"/>
      </copy>  	
+    <copy todir="${dist.dir}/lib">
+       <fileset file="${launcher.jar.name}"/>
+     </copy>    
     <copy todir="${dist.dir}/">
        <fileset dir="build/appstart" includes="start.jar start.sh start.bat appstart.properties"/>
      </copy>    
