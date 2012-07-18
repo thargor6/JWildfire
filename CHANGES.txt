@@ -1,3 +1,15 @@
+V0.50 (18.07.2012):
+ - Fractal flame editor: use the standard image file dialog for selecting images from within the (post)colormap_wf variation
+ - Fractal flames editor: some fixes and lots of internal improvements to the (post)colormap_wf variation
+ - Fractal flames editor: sorting of from-image-generated gradients and some minor bug fixes
+ - Fractal flame editor: function to create a gradient from an image (using median cut quantization)
+ - Fractal flame editor: preview for JWFRender files
+ - Fractal flame editor: display and store also the elapsed time of a render
+ - Fractal flame editor: pause/resume render function for the interactive renderer
+ - Fractal flames editor: display a confirm-dialog before cancelling a render in the interactive renderer
+ - Fractal flame editor: FIXED: importing flames into the Editor from other program parts did not work
+ - Fractal flame editor: recreated the JulianDisc random flame generator from scratch
+
 V0.49 (02.07.2012):
  - Fractal flame editor: undo/redo manager
  - Fractal flame editor: free triangle point editing mode
