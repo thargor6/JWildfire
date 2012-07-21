@@ -30,12 +30,14 @@ import static org.jwildfire.base.MathLib.sin;
 import static org.jwildfire.base.MathLib.sqrt;
 import static org.jwildfire.base.MathLib.tan;
 
+import java.io.Serializable;
+
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
 public class NBlurFunc extends VariationFunc {
-
+  private static final long serialVersionUID = 1L;
   private static final String PARAM_NUMEDGES = "numEdges";
   private static final String PARAM_NUMSTRIPES = "numStripes";
   private static final String PARAM_RATIOSTRIPES = "ratioStripes";
@@ -104,7 +106,8 @@ public class NBlurFunc extends VariationFunc {
 
   }
 
-  private static class RandXYData {
+  private static class RandXYData implements Serializable {
+    private static final long serialVersionUID = 1L;
     public double x, y;
     public double lenXY;
     public double lenOuterEdges, lenInnerEdges;
