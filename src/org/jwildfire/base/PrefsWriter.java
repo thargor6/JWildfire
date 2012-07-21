@@ -74,8 +74,8 @@ public class PrefsWriter {
     pSB.append(pKey + "=" + String.valueOf(pValue) + "\n");
   }
 
-  private void addValue(StringBuilder pSB, String pKey, double pValue) {
-    pSB.append(pKey + "=" + Tools.doubleToString(pValue) + "\n");
-  }
+  //  private void addValue(StringBuilder pSB, String pKey, double pValue) {
+  //    pSB.append(pKey + "=" + Tools.doubleToString(pValue) + "\n");
+  //  }
 
 }

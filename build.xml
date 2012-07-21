@@ -80,6 +80,7 @@
   <target name="packageLauncherJar" depends="compile" description="Package the Launcher jar file">
     <jar destfile="${launcher.jar.name}">
       <fileset dir="${build.dir}" includes="org/jwildfire/launcher/*"/>
+      <fileset dir="${build.dir}" includes="org/jwildfire/base/Tools.*"/>
       <fileset dir="${build.dir}" includes="org/jwildfire/image/*"/>
       <fileset dir="${build.dir}" includes="org/jwildfire/swing/ImagePanel.*"/>
       <fileset dir="${src.dir}" includes="org/jwildfire/launcher/images/*.png"/>

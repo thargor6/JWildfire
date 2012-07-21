@@ -39,10 +39,10 @@ public class PrefsReader {
     return val.length() > 0 ? val.equalsIgnoreCase("true") : pDefaultValue;
   }
 
-  private double getDoubleProperty(Properties pProperties, String pKey, double pDefaultValue) {
-    String val = pProperties.getProperty(pKey, "").trim();
-    return val.length() > 0 ? Tools.stringToDouble(val) : pDefaultValue;
-  }
+  //  private double getDoubleProperty(Properties pProperties, String pKey, double pDefaultValue) {
+  //    String val = pProperties.getProperty(pKey, "").trim();
+  //    return val.length() > 0 ? Tools.stringToDouble(val) : pDefaultValue;
+  //  }
 
   public void readPrefs(Prefs pPrefs) throws Exception {
     File file = new File(System.getProperty("user.home"), Prefs.PREFS_FILE);
