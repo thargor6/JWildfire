@@ -72,7 +72,7 @@ public class JDKScanner {
     }
   }
 
-  private int getSafeJDKIndex(String pJDK) {
+  public int getSafeJDKIndex(String pJDK) {
     if (pJDK != null) {
       pJDK = pJDK.trim();
       return jdks.indexOf(pJDK);
@@ -80,7 +80,7 @@ public class JDKScanner {
     return -1;
   }
 
-  private void addSafeJDK(String pJDK) {
+  public void addSafeJDK(String pJDK) {
     if (pJDK != null) {
       pJDK = pJDK.trim();
       if (pJDK.length() > 0 && jdks.indexOf(pJDK) < 0) {

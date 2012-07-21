@@ -26,16 +26,21 @@ import java.awt.Image;
 import java.awt.MediaTracker;
 import java.awt.SystemColor;
 import java.awt.Toolkit;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.StringSelection;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.InputStream;
 import java.io.PrintStream;
 import java.util.List;
 
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -110,6 +115,7 @@ public class Launcher {
   private JPanel mainPanel;
   private JPanel imgDisplayPanel;
   private JTabbedPane mainTabbedPane;
+  private JCheckBox debugCmb;
 
   private void loadImages() {
     frame.setTitle("Welcome to " + Tools.APP_TITLE);
@@ -145,6 +151,7 @@ public class Launcher {
     scanner.scan();
     getJdkCmb().removeAllItems();
     List<String> jdks = scanner.getJDKs();
+    scanner.addSafeJDK(prefs.getJavaPath());
     if (jdks != null && jdks.size() > 0) {
       for (String jdk : jdks) {
         getJdkCmb().addItem(jdk);
@@ -194,10 +201,11 @@ public class Launcher {
     panel_2.setBackground(Color.BLACK);
     panel_2.setPreferredSize(new Dimension(10, 60));
     startPanel_1.add(panel_2, BorderLayout.SOUTH);
+    panel_2.setLayout(null);
 
     launchButton = new JButton("Start");
     panel_2.add(launchButton);
-    launchButton.setBounds(42, 76, 128, 48);
+    launchButton.setBounds(226, 5, 128, 48);
     launchButton.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
         launchAction();
@@ -207,6 +215,13 @@ public class Launcher {
     launchButton.setForeground(SystemColor.menu);
     launchButton.setBorderPainted(false);
     launchButton.setBackground(Color.BLACK);
+
+    debugCmb = new JCheckBox("Debug");
+    debugCmb.setBounds(16, 20, 59, 18);
+    debugCmb.setToolTipText("Trace the launching process and record messages");
+    debugCmb.setForeground(SystemColor.menu);
+    debugCmb.setBackground(Color.BLACK);
+    panel_2.add(debugCmb);
 
     mainPanel = new JPanel();
     mainPanel.setBackground(Color.BLACK);
@@ -237,6 +252,11 @@ public class Launcher {
     lblMemoryToUse.setFont(new Font("Dialog", Font.BOLD, 10));
 
     JButton btnAddJavaRuntime = new JButton("Add Java runtime...");
+    btnAddJavaRuntime.addActionListener(new ActionListener() {
+      public void actionPerformed(ActionEvent e) {
+        manualAddRuntime();
+      }
+    });
     btnAddJavaRuntime.setBounds(340, 32, 172, 28);
     mainPanel.add(btnAddJavaRuntime);
     btnAddJavaRuntime.setPreferredSize(new Dimension(128, 28));
@@ -273,6 +293,13 @@ public class Launcher {
     logPanel.add(panel, BorderLayout.SOUTH);
 
     JButton toClipboardBtn = new JButton("To Clipboard");
+    toClipboardBtn.addActionListener(new ActionListener() {
+      public void actionPerformed(ActionEvent e) {
+        Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+        StringSelection data = new StringSelection(getLogTextArea().getText());
+        clipboard.setContents(data, data);
+      }
+    });
     toClipboardBtn.setPreferredSize(new Dimension(128, 28));
     toClipboardBtn.setForeground(SystemColor.menu);
     toClipboardBtn.setBorderPainted(false);
@@ -339,23 +366,29 @@ public class Launcher {
     try {
       savePrefs();
       launchApp();
-      System.exit(0);
+      if (!getDebugCbx().isSelected()) {
+        System.exit(0);
+      }
     }
     catch (Throwable ex) {
-      ex.printStackTrace();
-      getMainTabbedPane().setSelectedIndex(1);
       getLaunchButton().setEnabled(true);
-      try {
-        ByteArrayOutputStream os = new ByteArrayOutputStream();
-        ex.printStackTrace(new PrintStream(os));
-        os.flush();
-        os.close();
-        getLogTextArea().setText(new String(os.toByteArray()));
-        getLogTextArea().select(0, 0);
-      }
-      catch (Exception ex2) {
-        ex2.printStackTrace();
-      }
+      handleError(ex);
+    }
+  }
+
+  private void handleError(Throwable ex) {
+    ex.printStackTrace();
+    getMainTabbedPane().setSelectedIndex(1);
+    try {
+      ByteArrayOutputStream os = new ByteArrayOutputStream();
+      ex.printStackTrace(new PrintStream(os));
+      os.flush();
+      os.close();
+      getLogTextArea().setText(new String(os.toByteArray()) + "\n" + getLogTextArea().getText());
+      getLogTextArea().select(0, 0);
+    }
+    catch (Exception ex2) {
+      ex2.printStackTrace();
     }
   }
 
@@ -404,8 +437,73 @@ public class Launcher {
   }
 
   private void launchApp() throws Exception {
-    // TODO Auto-generated method stub
+    AppLauncher launcher = new AppLauncher(prefs);
+    String launchCmd = launcher.getLaunchCmd();
+    getLogTextArea().setText("Attempting to launch " + Tools.APP_TITLE + " using the command:\n" + launchCmd + "\n");
+
+    if (getDebugCbx().isSelected()) {
+
+      ByteArrayOutputStream os = new ByteArrayOutputStream();
+      int retVal = launcher.launchAsync(launchCmd, os);
+      if (retVal != 0) {
+        getLogTextArea().setText(new String(os.toByteArray()) + "\n" + getLogTextArea().getText());
+        throw new Exception("Return code was " + retVal + " - see below for details:");
+      }
+    }
+    else {
+      launcher.launchSync(launchCmd);
+    }
+  }
+
+  private void manualAddRuntime() {
+    final String NO_JAVA_EXE = "Please select a java executable inside the \"bin\" directory inside your \"jdk\"- or \"jre\"-directory";
+    JFileChooser chooser = new JFileChooser();
+    if (chooser.showOpenDialog(centerPanel) == JFileChooser.APPROVE_OPTION) {
+      File file = chooser.getSelectedFile();
+      try {
+        String path = file.getAbsolutePath();
+        // check for "java..."
+        int lastSlash = path.lastIndexOf(File.separator);
+        if (lastSlash < 0) {
+          throw new Exception(NO_JAVA_EXE);
+        }
+        String hs = path.substring(lastSlash + 1, path.length());
+        if (hs.indexOf("java") != 0) {
+          throw new Exception(NO_JAVA_EXE);
+        }
+        // check for "bin"
+        path = path.substring(0, lastSlash);
+        lastSlash = path.lastIndexOf(File.separator);
+        if (lastSlash < 0) {
+          throw new Exception(NO_JAVA_EXE);
+        }
+        hs = path.substring(lastSlash + 1, path.length());
+        if (!hs.equals("bin")) {
+          throw new Exception(NO_JAVA_EXE);
+        }
+
+        //
+        String jdkPath = path.substring(0, lastSlash);
+        JDKScanner scanner = new JDKScanner();
+        scanner.scan();
+        scanner.addSafeJDK(jdkPath);
+
+        getJdkCmb().removeAllItems();
+        List<String> jdks = scanner.getJDKs();
+        for (String jdk : jdks) {
+          getJdkCmb().addItem(jdk);
+        }
+        getJdkCmb().setSelectedIndex(scanner.getSafeJDKIndex(jdkPath));
+        savePrefs();
+      }
+      catch (Throwable ex) {
+        handleError(ex);
+      }
+    }
 
   }
 
+  public JCheckBox getDebugCbx() {
+    return debugCmb;
+  }
 }
