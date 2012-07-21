@@ -57,10 +57,8 @@ public class AppLauncher {
 
   public void launchSync(String pCmd) throws Exception {
     Runtime runtime = Runtime.getRuntime();
-
-    Process proc;
     try {
-      proc = runtime.exec(pCmd);
+      runtime.exec(pCmd);
     }
     catch (Exception ex) {
       throw new RuntimeException(ex);
