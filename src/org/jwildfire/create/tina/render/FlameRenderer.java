@@ -23,6 +23,7 @@ import static org.jwildfire.base.MathLib.sin;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
@@ -767,6 +768,13 @@ public final class FlameRenderer {
       }
       catch (Exception ex) {
         ex.printStackTrace();
+        try {
+          new File(pAbsolutePath).delete();
+        }
+        catch (Exception ex2) {
+
+        }
+
         throw new RuntimeException(ex);
       }
     }
