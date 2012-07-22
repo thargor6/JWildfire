@@ -252,6 +252,7 @@ public class VariationFuncList {
     registerVariationFunc(InflateZ_4Func.class);
     registerVariationFunc(InflateZ_5Func.class);
     registerVariationFunc(InflateZ_6Func.class);
+    registerVariationFunc(Loonie_3DFunc.class);
   }
 
   private static void registerVariationFunc(
