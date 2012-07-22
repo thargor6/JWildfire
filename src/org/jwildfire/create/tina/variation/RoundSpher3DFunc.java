@@ -16,40 +16,48 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.MathLib.M_PI_2;
+import static org.jwildfire.base.MathLib.M_2_PI;
 import static org.jwildfire.base.MathLib.cos;
-import static org.jwildfire.base.MathLib.sin;
+import static org.jwildfire.base.MathLib.sqr;
+import static org.jwildfire.base.MathLib.sqrt;
 
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
-public class PostSpinZFunc extends SimpleVariationFunc {
+public class RoundSpher3DFunc extends SimpleVariationFunc {
   private static final long serialVersionUID = 1L;
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-    /* post_spin_z by Larry Berlin, http://aporev.deviantart.com/art/New-3D-Plugins-136484533?q=gallery%3Aaporev%2F8229210&qo=22 */
-    double y = pz_cos * pVarTP.y - pz_sin * pVarTP.x;
-    pVarTP.x = pz_sin * pVarTP.y + pz_cos * pVarTP.x;
-    pVarTP.y = y;
+    /* roundspher3D by Larry Berlin, http://aporev.deviantart.com/art/3D-Plugins-Collection-One-138514007?q=gallery%3Aaporev%2F8229210&qo=15 */
+    double inZ = pAffineTP.z;
+    double otherZ = pVarTP.z;
+    double f = sqrt(sqr(pAffineTP.x) + sqr(pAffineTP.y));
+    double tempTZ, tempPZ;
+    if (inZ == 0.0) {
+      tempTZ = cos(f);
+    }
+    else {
+      tempTZ = pAffineTP.z;
+    }
+    if (otherZ == 0.0) {
+      tempPZ = cos(f);
+    }
+    else
+    {
+      tempPZ = pVarTP.z;
+    }
+    double d = sqr(pAffineTP.x) + sqr(pAffineTP.y) + sqr(tempTZ);
+    double e = 1.0 / d + sqr(M_2_PI);
+
+    pVarTP.x += pAmount * (pAmount / d * pAffineTP.x / e);
+    pVarTP.y += pAmount * (pAmount / d * pAffineTP.y / e);
+    pVarTP.z = tempPZ + pAmount * (pAmount / d * tempTZ / e);
   }
 
   @Override
   public String getName() {
-    return "post_spin_z";
-  }
-
-  private double pz_sin, pz_cos;
-
-  @Override
-  public void init(FlameTransformationContext pContext, XForm pXForm, double pAmount) {
-    pz_sin = sin(pAmount * M_PI_2);
-    pz_cos = cos(pAmount * M_PI_2);
-  }
-
-  @Override
-  public int getPriority() {
-    return 1;
+    return "roundspher3D";
   }
 
 }
