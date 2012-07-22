@@ -257,6 +257,7 @@ public class VariationFuncList {
     registerVariationFunc(PostSpinZFunc.class);
     registerVariationFunc(RoundSpher3DFunc.class);
     registerVariationFunc(Cubic_3DFunc.class);
+    registerVariationFunc(Disc_3DFunc.class);
   }
 
   private static void registerVariationFunc(
