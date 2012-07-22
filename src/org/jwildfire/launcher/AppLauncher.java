@@ -50,7 +50,13 @@ public class AppLauncher {
     if (javaCmd.indexOf(" ") >= 0) {
       javaCmd = "\"" + javaCmd + "\"";
     }
-    String cmd = javaCmd + " " + options + " -cp " + currentDir.getParentFile().getAbsolutePath() + classpath + " " + JWILDFIRE_MAIN_CLASS;
+
+    String cp = currentDir.getParentFile().getAbsolutePath() + classpath;
+    if (cp.indexOf(" ") >= 0) {
+      cp = "\"" + cp + "\"";
+    }
+
+    String cmd = javaCmd + " " + options + " -cp " + cp + " " + JWILDFIRE_MAIN_CLASS;
 
     return cmd;
   }

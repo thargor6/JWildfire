@@ -243,6 +243,7 @@ public class VariationFuncList {
     registerVariationFunc(DCPerlinFunc.class);
     registerVariationFunc(ColorMapWFFunc.class);
     registerVariationFunc(SphericalNFunc.class);
+    registerVariationFunc(Waves2_3DFunc.class);
   }
 
   private static void registerVariationFunc(
