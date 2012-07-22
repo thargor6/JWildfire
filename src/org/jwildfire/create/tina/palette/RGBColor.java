@@ -19,6 +19,7 @@ package org.jwildfire.create.tina.palette;
 import java.io.Serializable;
 
 import org.jwildfire.base.MathLib;
+import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.edit.Assignable;
 
 public class RGBColor implements Assignable<RGBColor>, Serializable, Comparable<RGBColor> {
@@ -134,7 +135,15 @@ public class RGBColor implements Assignable<RGBColor>, Serializable, Comparable<
   public int compareTo(RGBColor o) {
     HSV hsv = toHSV();
     HSV rHSV = o.toHSV();
-    if (MathLib.fabs(hsv.h - rHSV.h) < 0.12) {
+    int h = Tools.FTOI(3.5 * hsv.h);
+    int rH = Tools.FTOI(3.5 * rHSV.h);
+    if (h < rH) {
+      return -1;
+    }
+    else if (h > rH) {
+      return 1;
+    }
+    else {
       if (hsv.v < rHSV.v) {
         return -1;
       }
@@ -144,12 +153,6 @@ public class RGBColor implements Assignable<RGBColor>, Serializable, Comparable<
       else {
         return 0;
       }
-    }
-    else if (hsv.h < rHSV.h) {
-      return -1;
-    }
-    else /*(hsv.h > rHSV.h)*/{
-      return 1;
     }
   }
 }
