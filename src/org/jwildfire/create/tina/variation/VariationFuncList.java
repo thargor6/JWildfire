@@ -246,6 +246,12 @@ public class VariationFuncList {
     registerVariationFunc(Waves2_3DFunc.class);
     registerVariationFunc(Scry_3DFunc.class);
     registerVariationFunc(Foci_3DFunc.class);
+    registerVariationFunc(InflateZ_1Func.class);
+    registerVariationFunc(InflateZ_2Func.class);
+    registerVariationFunc(InflateZ_3Func.class);
+    registerVariationFunc(InflateZ_4Func.class);
+    registerVariationFunc(InflateZ_5Func.class);
+    registerVariationFunc(InflateZ_6Func.class);
   }
 
   private static void registerVariationFunc(
