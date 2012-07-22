@@ -16,32 +16,41 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.MathLib.SMALL_EPSILON;
+import static org.jwildfire.base.MathLib.EPSILON;
+import static org.jwildfire.base.MathLib.atan2;
+import static org.jwildfire.base.MathLib.sqr;
 import static org.jwildfire.base.MathLib.sqrt;
 
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
-public class ScryFunc extends SimpleVariationFunc {
+public class Scry_3DFunc extends SimpleVariationFunc {
   private static final long serialVersionUID = 1L;
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-    /* scry from the apophysis plugin pack */
-
-    double t = pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y;
-    double r = 1.0 / (sqrt(t) * (t + 1.0 / (pAmount + SMALL_EPSILON)));
-
+    /* scry_3D by Larry Berlin, http://aporev.deviantart.com/art/New-3D-Plugins-136484533?q=gallery%3Aaporev%2F8229210&qo=22 */
+    double inv = 1.0 / (pAmount + EPSILON);
+    double t = sqr(pAffineTP.x) + sqr(pAffineTP.y) + sqr(pAffineTP.z);
+    double r = 1.0 / (sqrt(t) * (t + inv));
+    double Footzee, kikr;
+    kikr = atan2(pAffineTP.y, pAffineTP.x);
+    Footzee = pAffineTP.z;
     pVarTP.x += pAffineTP.x * r;
     pVarTP.y += pAffineTP.y * r;
-    if (pContext.isPreserveZCoordinate()) {
-      pVarTP.z += pAmount * pAffineTP.z;
+
+    if (Footzee != 0.0) {
+      pVarTP.z += Footzee * r;
+    }
+    else {
+      Footzee = kikr;
+      pVarTP.z += Footzee * r;
     }
   }
 
   @Override
   public String getName() {
-    return "scry";
+    return "scry_3D";
   }
 
 }

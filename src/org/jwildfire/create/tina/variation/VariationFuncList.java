@@ -244,6 +244,7 @@ public class VariationFuncList {
     registerVariationFunc(ColorMapWFFunc.class);
     registerVariationFunc(SphericalNFunc.class);
     registerVariationFunc(Waves2_3DFunc.class);
+    registerVariationFunc(Scry_3DFunc.class);
   }
 
   private static void registerVariationFunc(
