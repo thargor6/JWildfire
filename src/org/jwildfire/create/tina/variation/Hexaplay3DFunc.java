@@ -26,10 +26,6 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 public class Hexaplay3DFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
-
-  private double hexa3D_majp; // establishes 1 or 2 planes, and if 2, the distance between them
-  private double hexa3D_scale; // scales the effect of X and Y
-  private double hexa3D_zlift; // scales the effect of Z axis within the snowflake
   private double seg60x[] = new double[6];
   private double seg60y[] = new double[6];
   private double seg120x[] = new double[3];
@@ -43,9 +39,9 @@ public class Hexaplay3DFunc extends VariationFunc {
   private static final String PARAM_ZLIFT = "zlift";
   private static final String[] paramNames = { PARAM_MAJP, PARAM_SCALE, PARAM_ZLIFT };
 
-  private double majp = 1.0;
-  private double scale = 0.25;
-  private double zlift = 0.25;
+  private double majp = 1.0; // establishes 1 or 2 planes, and if 2, the distance between them
+  private double scale = 0.25; // scales the effect of X and Y
+  private double zlift = 0.25; // scales the effect of Z axis within the snowflake
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {

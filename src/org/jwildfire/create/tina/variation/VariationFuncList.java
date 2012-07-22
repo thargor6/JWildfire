@@ -260,6 +260,8 @@ public class VariationFuncList {
     registerVariationFunc(Disc_3DFunc.class);
     registerVariationFunc(CubicLattice_3DFunc.class);
     registerVariationFunc(Popcorn2_3DFunc.class);
+    registerVariationFunc(Hexaplay3DFunc.class);
+    registerVariationFunc(Hexnix3DFunc.class);
   }
 
   private static void registerVariationFunc(
