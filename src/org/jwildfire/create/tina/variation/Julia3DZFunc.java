@@ -22,6 +22,7 @@ import static org.jwildfire.base.MathLib.cos;
 import static org.jwildfire.base.MathLib.fabs;
 import static org.jwildfire.base.MathLib.pow;
 import static org.jwildfire.base.MathLib.sin;
+import static org.jwildfire.base.MathLib.sqr;
 import static org.jwildfire.base.MathLib.sqrt;
 
 import org.jwildfire.base.Tools;
@@ -29,17 +30,69 @@ import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
 public class Julia3DZFunc extends VariationFunc {
-
+  private static final long serialVersionUID = 1L;
   private static final String PARAM_POWER = "power";
   private static final String[] paramNames = { PARAM_POWER };
 
-  private int power = 2;
+  private int power = genRandomPower();
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-    double absPower = fabs(power);
-    double cPower = 1.0 / power * 0.5;
+    if (power == 2)
+      transformPower2(pContext, pXForm, pAffineTP, pVarTP, pAmount);
+    else if (power == -2)
+      transformPowerMinus2(pContext, pXForm, pAffineTP, pVarTP, pAmount);
+    else if (power == 1)
+      transformPower1(pContext, pXForm, pAffineTP, pVarTP, pAmount);
+    else if (power == -1)
+      transformPowerMinus1(pContext, pXForm, pAffineTP, pVarTP, pAmount);
+    else
+      transformFunction(pContext, pXForm, pAffineTP, pVarTP, pAmount);
+  }
 
+  public void transformPower2(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
+    double r2d = sqrt(sqr(pAffineTP.x) + sqr(pAffineTP.y));
+    double r = pAmount * sqrt(r2d);
+
+    pVarTP.z = pVarTP.z + r * pAffineTP.z / r2d / 2;
+
+    double a = (atan2(pAffineTP.y, pAffineTP.x) / 2 + M_PI * pContext.random(2));
+    double sina = sin(a);
+    double cosa = cos(a);
+    pVarTP.x = pVarTP.x + r * cosa;
+    pVarTP.y = pVarTP.y + r * sina;
+    pVarTP.z += r * pAffineTP.z / (sqrt(r2d) * absPower);
+  }
+
+  public void transformPowerMinus2(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
+    double r2d = sqrt(sqr(pAffineTP.x) + sqr(pAffineTP.y));
+    double r = pAmount / sqrt(r2d);
+
+    pVarTP.z = pVarTP.z + r * pAffineTP.z / r2d / 2;
+
+    double a = M_PI * pContext.random(2) - atan2(pAffineTP.y, pAffineTP.x) / 2;
+    double sina = sin(a);
+    double cosa = cos(a);
+
+    pVarTP.x = pVarTP.x + r * cosa;
+    pVarTP.y = pVarTP.y + r * sina;
+    pVarTP.z += r * pAffineTP.z / (sqrt(r2d) * absPower);
+  }
+
+  public void transformPower1(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
+    pVarTP.x = pVarTP.x + pAmount * pAffineTP.x;
+    pVarTP.y = pVarTP.y + pAmount * pAffineTP.y;
+    pVarTP.z = pVarTP.z + pAmount * pAffineTP.z;
+  }
+
+  public void transformPowerMinus1(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
+    double r = pAmount / (sqr(pAffineTP.x) + sqr(pAffineTP.y));
+    pVarTP.x = pVarTP.x + r * pAffineTP.x;
+    pVarTP.y = pVarTP.y + r * pAffineTP.y;
+    pVarTP.z = pVarTP.z + r * pAffineTP.z;
+  }
+
+  public void transformFunction(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     double r2d = pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y;
     double r = pAmount * pow(r2d, cPower);
 
@@ -73,6 +126,19 @@ public class Julia3DZFunc extends VariationFunc {
   @Override
   public String getName() {
     return "julia3Dz";
+  }
+
+  private int genRandomPower() {
+    int res = (int) (Math.random() * 5.0 + 2.5);
+    return Math.random() < 0.5 ? res : -res;
+  }
+
+  private double absPower, cPower;
+
+  @Override
+  public void init(FlameTransformationContext pContext, XForm pXForm, double pAmount) {
+    absPower = fabs(power);
+    cPower = 1.0 / power * 0.5;
   }
 
 }

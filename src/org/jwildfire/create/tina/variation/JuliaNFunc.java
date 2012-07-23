@@ -19,37 +19,101 @@ package org.jwildfire.create.tina.variation;
 import static org.jwildfire.base.MathLib.M_PI;
 import static org.jwildfire.base.MathLib.atan2;
 import static org.jwildfire.base.MathLib.cos;
-import static org.jwildfire.base.MathLib.fabs;
+import static org.jwildfire.base.MathLib.iabs;
 import static org.jwildfire.base.MathLib.pow;
 import static org.jwildfire.base.MathLib.sin;
+import static org.jwildfire.base.MathLib.sqr;
+import static org.jwildfire.base.MathLib.sqrt;
 
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
 public class JuliaNFunc extends VariationFunc {
-
+  private static final long serialVersionUID = 1L;
   private static final String PARAM_POWER = "power";
   private static final String PARAM_DIST = "dist";
   private static final String[] paramNames = { PARAM_POWER, PARAM_DIST };
 
-  private int power = 2;
+  private int power = genRandomPower();
   private double dist = 1;
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-    double rnd = pContext.random();
-    double angle = (atan2(pAffineTP.y, pAffineTP.x) + 2 * M_PI * ((int) (rnd * fabs(power)))) / (double) power;
-    double sina = sin(angle);
-    double cosa = cos(angle);
-    double d = dist / (power + power);
-    double r = pAmount * pow(pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y, d);
-    pVarTP.x += r * cosa;
-    pVarTP.y += r * sina;
+    if (power == 2)
+      transformPower2(pContext, pXForm, pAffineTP, pVarTP, pAmount);
+    else if (power == -2)
+      transformPowerMinus2(pContext, pXForm, pAffineTP, pVarTP, pAmount);
+    else if (power == 1)
+      transformPower1(pContext, pXForm, pAffineTP, pVarTP, pAmount);
+    else if (power == -1)
+      transformPowerMinus1(pContext, pXForm, pAffineTP, pVarTP, pAmount);
+    else
+      transformFunction(pContext, pXForm, pAffineTP, pVarTP, pAmount);
+  }
+
+  public void transformPower2(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
+    double d = sqrt(sqrt(sqr(pAffineTP.x) + sqr(pAffineTP.y)) + pAffineTP.x);
+    if (pContext.random(2) == 0) {
+      pVarTP.x = pVarTP.x + pAmount2 * d;
+      pVarTP.y = pVarTP.y + pAmount2 / d * pAffineTP.y;
+    }
+    else {
+      pVarTP.x = pVarTP.x - pAmount2 * d;
+      pVarTP.y = pVarTP.y - pAmount2 / d * pAffineTP.y;
+    }
     if (pContext.isPreserveZCoordinate()) {
       pVarTP.z += pAmount * pAffineTP.z;
     }
+  }
 
+  public void transformPowerMinus2(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
+    double r = sqrt(sqr(pAffineTP.x) + sqr(pAffineTP.y));
+    double xd = r + pAffineTP.x;
+
+    r = pAmount / sqrt(r * (sqr(pAffineTP.y) + sqr(xd)));
+
+    if (pContext.random(2) == 0) {
+      pVarTP.x = pVarTP.x + r * xd;
+      pVarTP.y = pVarTP.y - r * pAffineTP.y;
+    }
+    else {
+      pVarTP.x = pVarTP.x - r * xd;
+      pVarTP.y = pVarTP.y + r * pAffineTP.y;
+    }
+    if (pContext.isPreserveZCoordinate()) {
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
+  }
+
+  public void transformPower1(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
+    pVarTP.x = pVarTP.x + pAmount * pAffineTP.x;
+    pVarTP.y = pVarTP.y + pAmount * pAffineTP.y;
+    if (pContext.isPreserveZCoordinate()) {
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
+  }
+
+  public void transformPowerMinus1(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
+    double r = pAmount / (sqr(pAffineTP.x) + sqr(pAffineTP.y));
+    pVarTP.x = pVarTP.x + r * pAffineTP.x;
+    pVarTP.y = pVarTP.y + r * pAffineTP.y;
+    if (pContext.isPreserveZCoordinate()) {
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
+  }
+
+  public void transformFunction(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
+    double a = (atan2(pAffineTP.y, pAffineTP.x) + 2 * M_PI * pContext.random(absPower)) / power;
+    double sina = sin(a);
+    double cosa = cos(a);
+    double r = pAmount * pow(sqr(pAffineTP.x) + sqr(pAffineTP.y), cPower);
+
+    pVarTP.x = pVarTP.x + r * cosa;
+    pVarTP.y = pVarTP.y + r * sina;
+    if (pContext.isPreserveZCoordinate()) {
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
   }
 
   @Override
@@ -75,6 +139,21 @@ public class JuliaNFunc extends VariationFunc {
   @Override
   public String getName() {
     return "julian";
+  }
+
+  private int genRandomPower() {
+    int res = (int) (Math.random() * 5.0 + 2.5);
+    return Math.random() < 0.5 ? res : -res;
+  }
+
+  private int absPower;
+  private double cPower, pAmount2;
+
+  @Override
+  public void init(FlameTransformationContext pContext, XForm pXForm, double pAmount) {
+    absPower = iabs(Tools.FTOI(power));
+    cPower = dist / power * 0.5;
+    pAmount2 = pAmount * sqrt(2.0) / 2.0;
   }
 
 }
