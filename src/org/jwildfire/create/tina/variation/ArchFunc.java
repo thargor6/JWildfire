@@ -23,6 +23,7 @@ import static org.jwildfire.base.MathLib.sin;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
+@SuppressWarnings("serial")
 public class ArchFunc extends SimpleVariationFunc {
 
   @Override

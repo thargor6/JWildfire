@@ -26,6 +26,8 @@ import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.beans.PropertyVetoException;
 
 import javax.swing.BorderFactory;
@@ -54,6 +56,7 @@ import javax.swing.border.SoftBevelBorder;
 
 import org.jwildfire.base.Prefs;
 import org.jwildfire.base.Tools;
+import org.jwildfire.base.WindowPrefs;
 import org.jwildfire.create.eden.swing.EDENInternalFrame;
 import org.jwildfire.create.tina.randomflame.RandomFlameGeneratorList;
 import org.jwildfire.create.tina.swing.TinaController;
@@ -103,13 +106,6 @@ public class Desktop extends JApplet {
       errorHandler = new StandardErrorHandler(mainDesktopPane, getShowErrorDlg(), getShowErrorDlgMessageTextArea(),
           getShowErrorDlgStacktraceTextArea());
 
-      prefs = new Prefs();
-      try {
-        prefs.loadFromFile();
-      }
-      catch (Exception ex) {
-        ex.printStackTrace();
-      }
       TinaInternalFrame tinaFrame = (TinaInternalFrame) getTinaInternalFrame();
       tinaController = tinaFrame.createController(errorHandler, prefs);
       try {
@@ -173,7 +169,7 @@ public class Desktop extends JApplet {
       formulaExplorerFrame.setMainController(mainController);
       formulaExplorerFrame.setFormulaExplorerController(formulaExplorerController);
 
-      //setupShowSysInfoThread();
+      setupShowSysInfoThread();
 
     }
     return mainDesktopPane;
@@ -1378,6 +1374,9 @@ public class Desktop extends JApplet {
   private JInternalFrame getTinaInternalFrame() {
     if (tinaInternalFrame == null) {
       tinaInternalFrame = new TinaInternalFrame();
+      WindowPrefs wPrefs = prefs.getWindowPrefs(WindowPrefs.WINDOW_TINA);
+      tinaInternalFrame.setLocation(wPrefs.getLeft(), wPrefs.getTop());
+      tinaInternalFrame.setSize(wPrefs.getWidth(1188), wPrefs.getHeight(740));
       tinaInternalFrame
           .addInternalFrameListener(new javax.swing.event.InternalFrameAdapter() {
             public void internalFrameDeactivated(
@@ -1395,6 +1394,13 @@ public class Desktop extends JApplet {
           tinaController.refreshFlameImage(false);
         }
       });
+      try {
+        tinaInternalFrame.setSelected(true);
+        tinaInternalFrame.setMaximum(wPrefs.isMaximized());
+      }
+      catch (Exception e) {
+        // e.printStackTrace();
+      }
     }
     return tinaInternalFrame;
   }
@@ -1451,12 +1457,61 @@ public class Desktop extends JApplet {
    */
   private JFrame getJFrame() {
     if (jFrame == null) {
+      prefs = new Prefs();
+      try {
+        prefs.loadFromFile();
+      }
+      catch (Exception ex) {
+        ex.printStackTrace();
+      }
+
       jFrame = new JFrame();
       jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
       jFrame.setJMenuBar(getMainJMenuBar());
-      jFrame.setSize(1240, 800);
+      WindowPrefs wPrefs = prefs.getWindowPrefs(WindowPrefs.WINDOW_DESKTOP);
+      jFrame.setLocation(wPrefs.getLeft(), wPrefs.getTop());
+      jFrame.setSize(wPrefs.getWidth(1240), wPrefs.getHeight(800));
       jFrame.setContentPane(getJContentPane());
       jFrame.setTitle(Tools.APP_TITLE + " " + Tools.APP_VERSION);
+
+      jFrame.addWindowListener(new WindowAdapter() {
+        @Override
+        public void windowClosing(WindowEvent e) {
+          {
+            Dimension size = jFrame.getSize();
+            Point pos = jFrame.getLocation();
+            WindowPrefs wPrefs = prefs.getWindowPrefs(WindowPrefs.WINDOW_DESKTOP);
+            wPrefs.setLeft(pos.x);
+            wPrefs.setTop(pos.y);
+            wPrefs.setWidth(size.width);
+            wPrefs.setHeight(size.height);
+          }
+          if (tinaInternalFrame != null && tinaInternalFrame.isVisible()) {
+            Dimension size = tinaInternalFrame.getSize();
+            Point pos = tinaInternalFrame.getLocation();
+            WindowPrefs wPrefs = prefs.getWindowPrefs(WindowPrefs.WINDOW_TINA);
+            wPrefs.setLeft(pos.x);
+            wPrefs.setTop(pos.y);
+            wPrefs.setWidth(size.width);
+            wPrefs.setHeight(size.height);
+            wPrefs.setMaximized(tinaInternalFrame.isMaximum());
+          }
+          try {
+            prefs.saveToFromFile();
+          }
+          catch (Exception ex) {
+            ex.printStackTrace();
+          }
+
+          try {
+            prefs.saveToFromFile();
+          }
+          catch (Exception ex) {
+            ex.printStackTrace();
+          }
+        }
+      });
+
     }
     return jFrame;
   }

@@ -106,6 +106,26 @@ public class PrefsReader {
           }
           Collections.sort(pPrefs.getQualityProfiles(), new QualityProfileComparator());
         }
+        // window prefs
+        {
+          int count = getIntProperty(props, WindowPrefs.KEY_WINDOW_COUNT, 0);
+          for (int i = 0; i < count; i++) {
+            try {
+              String name = getProperty(props, WindowPrefs.KEY_NAME + "." + i, "");
+              WindowPrefs windowPrefs = pPrefs.getWindowPrefs(name);
+              if (windowPrefs != null) {
+                windowPrefs.setLeft(getIntProperty(props, WindowPrefs.KEY_LEFT + "." + i, 0));
+                windowPrefs.setTop(getIntProperty(props, WindowPrefs.KEY_TOP + "." + i, 0));
+                windowPrefs.setWidth(getIntProperty(props, WindowPrefs.KEY_WIDTH + "." + i, 0));
+                windowPrefs.setHeight(getIntProperty(props, WindowPrefs.KEY_HEIGHT + "." + i, 0));
+                windowPrefs.setMaximized(getBooleanProperty(props, WindowPrefs.KEY_MAXIMIZED + "." + i, false));
+              }
+            }
+            catch (Throwable ex) {
+              ex.printStackTrace();
+            }
+          }
+        }
         //
         pPrefs.setSunflowScenePath(getProperty(props, Prefs.KEY_SUNFLOW_PATH_SCENES, pPrefs.getSunflowScenePath()));
         //

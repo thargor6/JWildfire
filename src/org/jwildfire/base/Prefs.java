@@ -101,6 +101,7 @@ public class Prefs extends ManagedObject {
 
   private final List<QualityProfile> qualityProfiles = new ArrayList<QualityProfile>();
   private final List<ResolutionProfile> resolutionProfiles = new ArrayList<ResolutionProfile>();
+  private final List<WindowPrefs> windowPrefs = new ArrayList<WindowPrefs>();
 
   public static class PLAFStyleEditor extends ComboBoxPropertyEditor {
     public PLAFStyleEditor() {
@@ -356,6 +357,12 @@ public class Prefs extends ManagedObject {
     for (QualityProfile profile : pSrc.qualityProfiles) {
       qualityProfiles.add((QualityProfile) profile.makeCopy());
     }
+
+    windowPrefs.clear();
+    for (WindowPrefs prefs : pSrc.windowPrefs) {
+      windowPrefs.add((WindowPrefs) prefs.makeCopy());
+    }
+
   }
 
   public int getTinaRenderThreads() {
@@ -472,6 +479,25 @@ public class Prefs extends ManagedObject {
   public void setTinaAssociateProfilesWithFlames(boolean tinaAssociateProfilesWithFlames) {
     this.tinaAssociateProfilesWithFlames = tinaAssociateProfilesWithFlames;
   }
+
+  public WindowPrefs getWindowPrefs(String pName) {
+    for (WindowPrefs prefs : windowPrefs) {
+      if (prefs.getName().equals(pName)) {
+        return prefs;
+      }
+    }
+    return null;
+  }
+
+  public Prefs() {
+    windowPrefs.add(new WindowPrefs(WindowPrefs.WINDOW_DESKTOP));
+    windowPrefs.add(new WindowPrefs(WindowPrefs.WINDOW_TINA));
+  }
+
+  protected List<WindowPrefs> getWindowPrefs() {
+    return windowPrefs;
+  }
+
 }
 
 /*

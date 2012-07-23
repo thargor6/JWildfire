@@ -39,7 +39,7 @@ public class PrefsWriter {
     addValue(sb, Prefs.KEY_TINA_RANDOMBATCH_BGCOLOR_GREEN, pPrefs.getTinaRandomBatchBGColorGreen());
     addValue(sb, Prefs.KEY_TINA_RANDOMBATCH_BGCOLOR_BLUE, pPrefs.getTinaRandomBatchBGColorBlue());
     addValue(sb, Prefs.KEY_SUNFLOW_PATH_SCENES, pPrefs.getSunflowScenePath());
-    // Resolution profiles
+    // resolution profiles
     addValue(sb, Prefs.KEY_TINA_PROFILE_RESOLUTION_COUNT, pPrefs.getResolutionProfiles().size());
     for (int i = 0; i < pPrefs.getResolutionProfiles().size(); i++) {
       ResolutionProfile profile = pPrefs.getResolutionProfiles().get(i);
@@ -47,7 +47,7 @@ public class PrefsWriter {
       addValue(sb, Prefs.KEY_TINA_PROFILE_RESOLUTION_WIDTH + "." + i, profile.getWidth());
       addValue(sb, Prefs.KEY_TINA_PROFILE_RESOLUTION_HEIGHT + "." + i, profile.getHeight());
     }
-    // Quality profiles
+    // quality profiles
     addValue(sb, Prefs.KEY_TINA_PROFILE_QUALITY_COUNT, pPrefs.getQualityProfiles().size());
     for (int i = 0; i < pPrefs.getQualityProfiles().size(); i++) {
       QualityProfile profile = pPrefs.getQualityProfiles().get(i);
@@ -59,6 +59,18 @@ public class PrefsWriter {
       addValue(sb, Prefs.KEY_TINA_PROFILE_QUALITY_WITH_HDR + "." + i, profile.isWithHDR());
       addValue(sb, Prefs.KEY_TINA_PROFILE_QUALITY_WITH_HDR_INTENSITY_MAP + "." + i, profile.isWithHDRIntensityMap());
     }
+    // window prefs
+    addValue(sb, WindowPrefs.KEY_WINDOW_COUNT, pPrefs.getWindowPrefs().size());
+    for (int i = 0; i < pPrefs.getWindowPrefs().size(); i++) {
+      WindowPrefs prefs = pPrefs.getWindowPrefs().get(i);
+      addValue(sb, WindowPrefs.KEY_NAME + "." + i, prefs.getName());
+      addValue(sb, WindowPrefs.KEY_LEFT + "." + i, prefs.getLeft());
+      addValue(sb, WindowPrefs.KEY_TOP + "." + i, prefs.getTop());
+      addValue(sb, WindowPrefs.KEY_WIDTH + "." + i, prefs.getWidth());
+      addValue(sb, WindowPrefs.KEY_HEIGHT + "." + i, prefs.getHeight());
+      addValue(sb, WindowPrefs.KEY_MAXIMIZED + "." + i, prefs.isMaximized());
+    }
+    //
     Tools.writeUTF8Textfile(System.getProperty("user.home") + File.separator + Prefs.PREFS_FILE, sb.toString());
   }
 
