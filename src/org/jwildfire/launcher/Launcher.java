@@ -133,12 +133,16 @@ public class Launcher {
     }
 
     try {
-      final String[] imageFilenames = { "image1.jpg", "image2.jpg" };
+      final String[] imageFilenames = { "image01.jpg", "image02.jpg", "image03.jpg", "image04.jpg", "image05.jpg", "image06.jpg", "image07.jpg",
+          "image08.jpg", "image09.jpg", "image10.jpg", "image11.jpg", "image12.jpg", "image14.jpg", "image15.jpg",
+          "image16.jpg" };
       String imageFilename = imageFilenames[(int) (Math.random() * imageFilenames.length)];
       SimpleImage img = getImage(imageFilename);
       imgDisplayPanel.setLayout(null);
       ImagePanel imgPanel = new ImagePanel(img, 0, 0, img.getImageWidth());
       getImgDisplayPanel().add(imgPanel);
+
+      System.out.println(imgDisplayPanel.getSize().height + " " + imgDisplayPanel.getSize().width);
       imgPanel.setLayout(null);
     }
     catch (Throwable ex) {
@@ -257,7 +261,7 @@ public class Launcher {
         manualAddRuntime();
       }
     });
-    btnAddJavaRuntime.setBounds(340, 32, 172, 28);
+    btnAddJavaRuntime.setBounds(354, 34, 172, 28);
     mainPanel.add(btnAddJavaRuntime);
     btnAddJavaRuntime.setPreferredSize(new Dimension(128, 28));
     btnAddJavaRuntime.setForeground(SystemColor.menu);
@@ -265,7 +269,7 @@ public class Launcher {
     btnAddJavaRuntime.setBackground(Color.BLACK);
 
     jdkCmb = new JComboBox();
-    jdkCmb.setBounds(142, 6, 371, 22);
+    jdkCmb.setBounds(142, 6, 384, 22);
     mainPanel.add(jdkCmb);
     jdkCmb.setForeground(SystemColor.menu);
     jdkCmb.setBackground(Color.BLACK);
@@ -318,7 +322,7 @@ public class Launcher {
 
     imgDisplayPanel = new JPanel();
     imgDisplayPanel.setBackground(Color.BLACK);
-    imgDisplayPanel.setBounds(29, 86, 486, 270);
+    imgDisplayPanel.setBounds(20, 86, 500, 270);
     mainPanel.add(imgDisplayPanel);
 
   }

@@ -41,16 +41,16 @@ public class JuliaScopeFunc extends VariationFunc {
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-    if (power == 2)
-      transformPower2(pContext, pXForm, pAffineTP, pVarTP, pAmount);
-    else if (power == -2)
-      transformPowerMinus2(pContext, pXForm, pAffineTP, pVarTP, pAmount);
-    else if (power == 1)
-      transformPower1(pContext, pXForm, pAffineTP, pVarTP, pAmount);
-    else if (power == -1)
-      transformPowerMinus1(pContext, pXForm, pAffineTP, pVarTP, pAmount);
-    else
-      transformFunction(pContext, pXForm, pAffineTP, pVarTP, pAmount);
+    //    if (power == 2)
+    //      transformPower2(pContext, pXForm, pAffineTP, pVarTP, pAmount);
+    //    else if (power == -2)
+    //      transformPowerMinus2(pContext, pXForm, pAffineTP, pVarTP, pAmount);
+    //    else if (power == 1)
+    //      transformPower1(pContext, pXForm, pAffineTP, pVarTP, pAmount);
+    //    else if (power == -1)
+    //      transformPowerMinus1(pContext, pXForm, pAffineTP, pVarTP, pAmount);
+    //    else
+    transformFunction(pContext, pXForm, pAffineTP, pVarTP, pAmount);
   }
 
   public void transformPower2(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
