@@ -1,3 +1,26 @@
+V0.51 (26.07.2012):
+ - included 15 images from the launcher image voting contest into the launcher
+ - phoenix_julia variation by TyrantWave
+ - save/restore the desktop- and window-position and size
+ - Fractal flames editor: several internal changes to the julia* variations, additionaly those variations now always start with a random power index which may produce even more interesting results in the various random flame generators
+ - Fractal flame editor: hexnixD variation by Larry Berlin
+ - Fractal flame editor: hexaplay3D variation by Larry Berlin
+ - Fractal flame editor: popcorn2_3D variation by Larry Berlin
+ - Fractal flame editor: cubicLattice_3D variation by Larry Berlin
+ - Fractal flame editor: disc3D variation by Larry Berlin
+ - Fractal flame editor: cubic3D variation by Larry Berlin
+ - Fractal flame editor: roundspher3D variation by Larry Berlin
+ - Fractal flame editor: post_spin_z and pre_spin_z variations by Larry Berlin
+ - Fractal flame editor: loonie_3D variation by Larry Berlin
+ - Fractal flame editor: inflateZ_1 ... inflateZ_6 variations by Larry Berlin
+ - Fractal flame editor: foci_3D variation by Larry Berlin
+ - Fractal flame editor: scry_3D variation by Larry Berlin
+ - Fractal flame editor: waves2_3D variation by Larry Berlin
+ - Fractal flames editor: improved the gradient-from-image-creator and fixed a java7-related bug (sorting)
+ - Fractal flame editor: delete the partially created file if saving of render state fails
+ - Fractal flame editor: FIXED: saving the render state of flames containing the nBlur variation now works
+ - created a own JWildfire launcher (as separate application), removed the previously used launcher ("appstart") 
+
 V0.50 (18.07.2012):
  - Fractal flame editor: use the standard image file dialog for selecting images from within the (post)colormap_wf variation
  - Fractal flames editor: some fixes and lots of internal improvements to the (post)colormap_wf variation

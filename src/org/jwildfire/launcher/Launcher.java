@@ -118,7 +118,7 @@ public class Launcher {
   private JCheckBox debugCmb;
 
   private void loadImages() {
-    frame.setTitle("Welcome to " + Tools.APP_TITLE);
+    frame.setTitle("Welcome to " + Tools.APP_TITLE + " " + Tools.APP_VERSION);
     // Load logo
     try {
       SimpleImage img = getImage("logo.png");
@@ -142,7 +142,7 @@ public class Launcher {
       ImagePanel imgPanel = new ImagePanel(img, 0, 0, img.getImageWidth());
       getImgDisplayPanel().add(imgPanel);
 
-      System.out.println(imgDisplayPanel.getSize().height + " " + imgDisplayPanel.getSize().width);
+      //      System.out.println(imgDisplayPanel.getSize().height + " " + imgDisplayPanel.getSize().width);
       imgPanel.setLayout(null);
     }
     catch (Throwable ex) {

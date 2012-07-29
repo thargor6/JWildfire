@@ -1628,6 +1628,7 @@ public class Desktop extends JApplet {
     if (systemInfoMenuItem == null) {
       systemInfoMenuItem = new JMenuItem();
       systemInfoMenuItem.setText("System Information");
+      systemInfoMenuItem.setVisible(false);
       systemInfoMenuItem.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
           if (!systemInfoInternalFrame.isVisible()) {

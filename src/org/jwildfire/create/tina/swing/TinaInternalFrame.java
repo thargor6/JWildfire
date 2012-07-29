@@ -9576,7 +9576,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JPanel getPanel_4() {
     if (panel_4 == null) {
       panel_4 = new JPanel();
-      panel_4.setBorder(new TitledBorder(null, "Reserved area for later ;-)", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+      panel_4.setBorder(new TitledBorder(null, "(reserved area)", TitledBorder.LEADING, TitledBorder.TOP, null, null));
       panel_4.setLayout(null);
     }
     return panel_4;
