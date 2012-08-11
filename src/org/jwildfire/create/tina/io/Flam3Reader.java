@@ -451,6 +451,7 @@ public class Flam3Reader implements FlameReader {
             int r = Integer.parseInt(hs.substring(i, i + 2), 16);
             int g = Integer.parseInt(hs.substring(i + 2, i + 4), 16);
             int b = Integer.parseInt(hs.substring(i + 4, i + 6), 16);
+            //System.out.println("  flame->palette->setColor(" + index + "," + r + "," + g + "," + b + ");");
             flame.getPalette().setColor(index++, r, g, b);
           }
         }

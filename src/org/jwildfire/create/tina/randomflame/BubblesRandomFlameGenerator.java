@@ -77,16 +77,33 @@ public class BubblesRandomFlameGenerator extends RandomFlameGenerator {
     }
 
     // 3rd xForm
+    if (Math.random() > 0.25) {
+      XForm xForm = new XForm();
+      flame.getXForms().add(xForm);
+      xForm.setWeight(0.5 + Math.random() * 1.5);
+      String fName;
+      if (Math.random() > 0.6) {
+        fName = ExperimentalSimpleRandomFlameGenerator.FNCLST_EXPERIMENTAL[(int) (Math.random() * fncCount)];
+      }
+      else {
+        fName = Math.random() > 0.5 ? "linear3D" : "noise";
+      }
+      xForm.addVariation(0.5, VariationFuncList.getVariationFuncInstance(fName, true));
+      xForm.setColorSymmetry(-0.5);
+      XFormTransformService.rotate(xForm, 30.0 - Math.random() * 60.0, false);
+      //      XFormTransformService.localTranslate(xForm, 0.250 - 0.50 * Math.random(), 0.25 - 0.50 * Math.random(), false);
+    }
+    // 3rd xForm
     if (Math.random() > 0.5) {
       XForm xForm = new XForm();
       flame.getXForms().add(xForm);
       xForm.setWeight(0.5 + Math.random() * 1.5);
       String fName;
-      if (Math.random() > 0.5) {
+      if (Math.random() > 0.6) {
         fName = ExperimentalSimpleRandomFlameGenerator.FNCLST_EXPERIMENTAL[(int) (Math.random() * fncCount)];
       }
       else {
-        fName = "linear3D";
+        fName = Math.random() > 0.5 ? "linear3D" : "gaussian_blur";
       }
       xForm.addVariation(0.5, VariationFuncList.getVariationFuncInstance(fName, true));
       xForm.setColorSymmetry(-0.5);

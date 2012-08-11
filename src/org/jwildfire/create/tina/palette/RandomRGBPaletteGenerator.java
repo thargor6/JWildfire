@@ -113,9 +113,6 @@ public class RandomRGBPaletteGenerator {
         //      System.out.println(i + ": " + r + " " + g + " " + b);
       }
     }
-    if (Math.random() > 0.5) {
-      res.sort();
-    }
     return res;
   }
 
