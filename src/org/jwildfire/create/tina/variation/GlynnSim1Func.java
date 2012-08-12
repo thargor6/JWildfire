@@ -24,9 +24,12 @@ import static org.jwildfire.base.MathLib.sin;
 import static org.jwildfire.base.MathLib.sqr;
 import static org.jwildfire.base.MathLib.sqrt;
 
+import java.io.Serializable;
+
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
+@SuppressWarnings("serial")
 public class GlynnSim1Func extends VariationFunc {
 
   private static final String PARAM_RADIUS = "radius";
@@ -45,7 +48,7 @@ public class GlynnSim1Func extends VariationFunc {
   private double pow = 1.5;
   private double contrast = 0.5;
 
-  private class Point {
+  private class Point implements Serializable {
     private double x, y;
   }
 
