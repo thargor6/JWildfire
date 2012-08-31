@@ -18,11 +18,14 @@ package org.jwildfire.create.tina.variation;
 
 import static org.jwildfire.base.MathLib.M_PI;
 import static org.jwildfire.base.MathLib.sin;
+import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_CUDA;
+import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_JWILDFIRE;
 
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
 public class Waves2Func extends VariationFunc {
+  private static final long serialVersionUID = 1L;
 
   private static final String PARAM_SCALEX = "scalex";
   private static final String PARAM_SCALEY = "scaley";
@@ -72,6 +75,11 @@ public class Waves2Func extends VariationFunc {
   @Override
   public String getName() {
     return "waves2";
+  }
+
+  @Override
+  public int getAvailability() {
+    return AVAILABILITY_JWILDFIRE | AVAILABILITY_CUDA;
   }
 
 }

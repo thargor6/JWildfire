@@ -17,11 +17,14 @@
 package org.jwildfire.create.tina.variation;
 
 import static org.jwildfire.base.MathLib.cos;
+import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_CUDA;
+import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_JWILDFIRE;
 
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
 public class FlowerFunc extends VariationFunc {
+  private static final long serialVersionUID = 1L;
 
   private static final String PARAM_HOLES = "holes";
   private static final String PARAM_PETALS = "petals";
@@ -67,6 +70,11 @@ public class FlowerFunc extends VariationFunc {
   @Override
   public String getName() {
     return "flower";
+  }
+
+  @Override
+  public int getAvailability() {
+    return AVAILABILITY_JWILDFIRE | AVAILABILITY_CUDA;
   }
 
 }

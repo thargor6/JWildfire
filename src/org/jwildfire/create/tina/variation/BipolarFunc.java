@@ -22,11 +22,14 @@ import static org.jwildfire.base.MathLib.M_PI_2;
 import static org.jwildfire.base.MathLib.atan2;
 import static org.jwildfire.base.MathLib.fmod;
 import static org.jwildfire.base.MathLib.log;
+import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_CUDA;
+import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_JWILDFIRE;
 
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
 public class BipolarFunc extends VariationFunc {
+  private static final long serialVersionUID = 1L;
 
   private static final String PARAM_SHIFT = "shift";
   private static final String[] paramNames = { PARAM_SHIFT };
@@ -78,6 +81,11 @@ public class BipolarFunc extends VariationFunc {
   @Override
   public String getName() {
     return "bipolar";
+  }
+
+  @Override
+  public int getAvailability() {
+    return AVAILABILITY_JWILDFIRE | AVAILABILITY_CUDA;
   }
 
 }

@@ -20,16 +20,19 @@ import static org.jwildfire.base.MathLib.atan2;
 import static org.jwildfire.base.MathLib.cos;
 import static org.jwildfire.base.MathLib.sin;
 import static org.jwildfire.base.MathLib.sqrt;
+import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_CUDA;
+import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_JWILDFIRE;
 
-import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
 public class EpispiralWFFunc extends VariationFunc {
+  private static final long serialVersionUID = 1L;
+
   private static final String PARAM_WAVES = "waves";
   private static final String[] paramNames = { PARAM_WAVES };
 
-  private int waves = 4;
+  private double waves = 4.0;
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
@@ -59,7 +62,7 @@ public class EpispiralWFFunc extends VariationFunc {
   @Override
   public void setParameter(String pName, double pValue) {
     if (PARAM_WAVES.equalsIgnoreCase(pName))
-      waves = Tools.FTOI(pValue);
+      waves = pValue;
     else
       throw new IllegalArgumentException(pName);
   }
@@ -68,4 +71,10 @@ public class EpispiralWFFunc extends VariationFunc {
   public String getName() {
     return "epispiral_wf";
   }
+
+  @Override
+  public int getAvailability() {
+    return AVAILABILITY_JWILDFIRE | AVAILABILITY_CUDA;
+  }
+
 }

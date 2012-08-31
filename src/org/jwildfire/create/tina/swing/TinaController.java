@@ -3657,6 +3657,20 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     }
   }
 
+  public void saveFlameToClipboardCUDA() {
+    try {
+      if (currFlame != null) {
+        Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+        String xml = new Flam3Writer().getFlameCUDA(currFlame);
+        StringSelection data = new StringSelection(xml);
+        clipboard.setContents(data, data);
+      }
+    }
+    catch (Throwable ex) {
+      errorHandler.handleError(ex);
+    }
+  }
+
   public void mouseTransformSlowButton_clicked() {
     if (flamePanel != null) {
       flamePanel.setFineMovement(mouseTransformSlowButton.isSelected());

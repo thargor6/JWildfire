@@ -48,8 +48,8 @@ public final class FlameRenderFlatThread extends FlameRenderThread {
     varT = new XYZPoint(); // complete transformation
     p = new XYZPoint();
     q = new XYZPoint();
-    p.x = 2.0 * renderer.random.random() - 1.0;
-    p.y = 2.0 * renderer.random.random() - 1.0;
+    p.x = 0.51; //2.0 * renderer.random.random() - 1.0;
+    p.y = -0.49; //2.0 * renderer.random.random() - 1.0;
     p.z = 0.0;
     p.color = renderer.random.random();
 

@@ -19,18 +19,21 @@ package org.jwildfire.create.tina.variation;
 import static org.jwildfire.base.MathLib.M_PI;
 import static org.jwildfire.base.MathLib.cos;
 import static org.jwildfire.base.MathLib.sin;
+import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_CUDA;
+import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_JWILDFIRE;
 
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
 public class PieFunc extends VariationFunc {
+  private static final long serialVersionUID = 1L;
 
   private static final String PARAM_SLICES = "slices";
   private static final String PARAM_ROTATION = "rotation";
   private static final String PARAM_THICKNESS = "thickness";
   private static final String[] paramNames = { PARAM_SLICES, PARAM_ROTATION, PARAM_THICKNESS };
 
-  private double slices = 6;
+  private double slices = 6.0;
   private double rotation = 0.0;
   private double thickness = 0.5;
 
@@ -46,7 +49,6 @@ public class PieFunc extends VariationFunc {
     if (pContext.isPreserveZCoordinate()) {
       pVarTP.z += pAmount * pAffineTP.z;
     }
-
   }
 
   @Override
@@ -74,6 +76,11 @@ public class PieFunc extends VariationFunc {
   @Override
   public String getName() {
     return "pie";
+  }
+
+  @Override
+  public int getAvailability() {
+    return AVAILABILITY_JWILDFIRE | AVAILABILITY_CUDA;
   }
 
 }

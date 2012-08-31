@@ -914,6 +914,19 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaCameraPanel.add(getTinaCameraDOFSlider(), null);
       tinaCameraPanel.add(getTinaCameraDOFREd(), null);
       tinaCameraPanel.add(tinaCameraDOFLbl, null);
+
+      JButton toClipboardCUDABtn = new JButton();
+      toClipboardCUDABtn.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.saveFlameToClipboardCUDA();
+        }
+      });
+      toClipboardCUDABtn.setText("To Clipboard (CUDA)");
+      toClipboardCUDABtn.setPreferredSize(new Dimension(125, 24));
+      toClipboardCUDABtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      toClipboardCUDABtn.setBounds(new Rectangle(643, 7, 125, 24));
+      toClipboardCUDABtn.setBounds(997, 24, 158, 24);
+      tinaCameraPanel.add(toClipboardCUDABtn);
     }
     return tinaCameraPanel;
   }

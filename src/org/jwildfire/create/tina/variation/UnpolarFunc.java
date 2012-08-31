@@ -20,11 +20,14 @@ import static org.jwildfire.base.MathLib.M_PI;
 import static org.jwildfire.base.MathLib.cos;
 import static org.jwildfire.base.MathLib.exp;
 import static org.jwildfire.base.MathLib.sin;
+import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_CUDA;
+import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_JWILDFIRE;
 
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
 public class UnpolarFunc extends SimpleVariationFunc {
+  private static final long serialVersionUID = 1L;
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
@@ -49,6 +52,11 @@ public class UnpolarFunc extends SimpleVariationFunc {
   public void init(FlameTransformationContext pContext, XForm pXForm, double pAmount) {
     vvar = pAmount / M_PI;
     vvar_2 = vvar * 0.5;
+  }
+
+  @Override
+  public int getAvailability() {
+    return AVAILABILITY_JWILDFIRE | AVAILABILITY_CUDA;
   }
 
 }

@@ -21,4 +21,7 @@ public class Constants {
   public final static int NEXT_APPLIED_XFORM_TABLE_SIZE = 100;
   public final static int INITIAL_ITERATIONS = 42;
 
+  public final static int AVAILABILITY_JWILDFIRE = 0;
+  public final static int AVAILABILITY_CUDA = 1;
+
 }

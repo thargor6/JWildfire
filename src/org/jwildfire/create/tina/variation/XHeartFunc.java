@@ -19,11 +19,15 @@ package org.jwildfire.create.tina.variation;
 import static org.jwildfire.base.MathLib.M_PI_4;
 import static org.jwildfire.base.MathLib.cos;
 import static org.jwildfire.base.MathLib.sin;
+import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_CUDA;
+import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_JWILDFIRE;
 
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
 public class XHeartFunc extends VariationFunc {
+  private static final long serialVersionUID = 1L;
+
   private static final String PARAM_ANGLE = "angle";
   private static final String PARAM_RATIO = "ratio";
   private static final String[] paramNames = { PARAM_ANGLE, PARAM_RATIO };
@@ -88,4 +92,10 @@ public class XHeartFunc extends VariationFunc {
     cosa = cos(ang);
     rat = 6 + 2 * ratio;
   }
+
+  @Override
+  public int getAvailability() {
+    return AVAILABILITY_JWILDFIRE | AVAILABILITY_CUDA;
+  }
+
 }

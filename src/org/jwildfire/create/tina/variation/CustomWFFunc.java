@@ -16,10 +16,13 @@
 */
 package org.jwildfire.create.tina.variation;
 
+import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_JWILDFIRE;
+
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
 public class CustomWFFunc extends VariationFunc {
+  private static final long serialVersionUID = 1L;
 
   private static final String PARAM_A = "a";
   private static final String PARAM_B = "b";
@@ -178,6 +181,11 @@ public class CustomWFFunc extends VariationFunc {
       System.out.println("##############################################################");
       throw new RuntimeException(ex);
     }
+  }
+
+  @Override
+  public int getAvailability() {
+    return AVAILABILITY_JWILDFIRE;
   }
 
 }
