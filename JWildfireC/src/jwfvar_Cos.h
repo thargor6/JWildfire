@@ -5,7 +5,7 @@
  This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser
  General Public License as published by the Free Software Foundation; either version 2.1 of the
  License, or (at your option) any later version.
- 
+
  This software is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
  even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  Lesser General Public License for more details.
@@ -14,50 +14,37 @@
  if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-#ifndef JWFVAR_ELLIPTIC_H_
-#define JWFVAR_ELLIPTIC_H_
 
-#include "jwf_Constants.h"
+#ifndef JWFVAR_COS_H_
+#define JWFVAR_COS_H_
+
 #include "jwf_Variation.h"
 
-class EllipticFunc: public Variation {
+class CosFunc: public Variation {
 public:
-	EllipticFunc() {
+	CosFunc() {
 	}
 
 	const char* getName() const {
-		return "elliptic";
+		return "cos";
 	}
 
 	void transform(FlameTransformationContext *pContext, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
-    float tmp = pAffineTP->y * pAffineTP->y + pAffineTP->x * pAffineTP->x + 1.0;
-    float x2 = 2.0f * pAffineTP->x;
-    float xmax = 0.5f * (sqrtf(tmp + x2) + sqrtf(tmp - x2));
-
-    float a = pAffineTP->x / xmax;
-    float b = sqrt_safe(1.0f - a * a);
-
-    pVarTP->x += pAmount * atan2f(a, b);
-
-    if (pAffineTP->y > 0)
-      pVarTP->y += pAmount * log(xmax + sqrt_safe(xmax - 1.0));
-    else
-      pVarTP->y -= pAmount * log(xmax + sqrt_safe(xmax - 1.0));
-
-		if (pContext->isPreserveZCoordinate) {
-			pVarTP->z += pAmount * pAffineTP->z;
-		}
+    float cossin = sinf(pAffineTP->x);
+    float coscos = cosf(pAffineTP->x);
+    float cossinh = sinhf(pAffineTP->y);
+    float coscosh = coshf(pAffineTP->y);
+    pVarTP->x += pAmount * coscos * coscosh;
+    pVarTP->y -= pAmount * cossin * cossinh;
+    if (pContext->isPreserveZCoordinate) {
+      pVarTP->z += pAmount * pAffineTP->z;
+    }
 	}
 
-	EllipticFunc* makeCopy() {
-		return new EllipticFunc(*this);
-	}
-
-private:
-	float sqrt_safe(float x) {
-		return (x < EPSILON) ? 0.0 : sqrtf(x);
+	CosFunc* makeCopy() {
+		return new CosFunc(*this);
 	}
 
 };
 
-#endif // JWFVAR_ELLIPTIC_H_
+#endif // JWFVAR_COS_H_

@@ -16,51 +16,39 @@
 */
 package org.jwildfire.create.tina.variation;
 
+import static org.jwildfire.base.MathLib.EPSILON;
 import static org.jwildfire.base.MathLib.atan2;
 import static org.jwildfire.base.MathLib.log;
 import static org.jwildfire.base.MathLib.sqrt;
 import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_CUDA;
 import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_JWILDFIRE;
 
-import org.jwildfire.base.MathLib;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
 public class EllipticFunc extends SimpleVariationFunc {
   private static final long serialVersionUID = 1L;
 
+  private double sqrt_safe(double x) {
+    return (x < EPSILON) ? 0.0 : sqrt(x);
+  }
+
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-    /* Modified version of Elliptic from the Apophysis Plugin Pack */
-
-    double tmp = pAffineTP.getPrecalcSumsq() + 1.0;
+    double tmp = pAffineTP.y * pAffineTP.y + pAffineTP.x * pAffineTP.x + 1.0;
     double x2 = 2.0 * pAffineTP.x;
     double xmax = 0.5 * (sqrt(tmp + x2) + sqrt(tmp - x2));
+
     double a = pAffineTP.x / xmax;
-    double b = 1.0 - a * a;
-    double ssx = xmax - 1.0;
-    double w = pAmount / MathLib.M_PI_2;
+    double b = sqrt_safe(1.0 - a * a);
 
-    if (b < 0.0) {
-      b = 0.0;
-    }
-    else {
-      b = sqrt(b);
-    }
+    pVarTP.x += pAmount * atan2(a, b);
 
-    if (ssx < 0.0) {
-      ssx = 0.0;
-    }
-    else {
-      ssx = sqrt(ssx);
-    }
-    pVarTP.x += w * atan2(a, b);
-    if (pContext.random() < 0.5) {
-      pVarTP.y += w * log(xmax + ssx);
-    }
-    else {
-      pVarTP.y -= w * log(xmax + ssx);
-    }
+    if (pAffineTP.y > 0)
+      pVarTP.y += pAmount * log(xmax + sqrt_safe(xmax - 1.0));
+    else
+      pVarTP.y -= pAmount * log(xmax + sqrt_safe(xmax - 1.0));
+
     if (pContext.isPreserveZCoordinate()) {
       pVarTP.z += pAmount * pAffineTP.z;
     }

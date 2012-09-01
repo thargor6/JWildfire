@@ -20,7 +20,6 @@ import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
 public class ColorMapWFFunc extends AbstractColorMapWFFunc {
-  private static final long serialVersionUID = 1L;
 
   @Override
   public String getName() {

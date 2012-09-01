@@ -14,50 +14,38 @@
  if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-#ifndef JWFVAR_ELLIPTIC_H_
-#define JWFVAR_ELLIPTIC_H_
+#ifndef JWFVAR_BENT_H_
+#define JWFVAR_BENT_H_
 
-#include "jwf_Constants.h"
 #include "jwf_Variation.h"
 
-class EllipticFunc: public Variation {
+class BentFunc: public Variation {
 public:
-	EllipticFunc() {
+	BentFunc() {
 	}
 
 	const char* getName() const {
-		return "elliptic";
+		return "bent";
 	}
 
 	void transform(FlameTransformationContext *pContext, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
-    float tmp = pAffineTP->y * pAffineTP->y + pAffineTP->x * pAffineTP->x + 1.0;
-    float x2 = 2.0f * pAffineTP->x;
-    float xmax = 0.5f * (sqrtf(tmp + x2) + sqrtf(tmp - x2));
-
-    float a = pAffineTP->x / xmax;
-    float b = sqrt_safe(1.0f - a * a);
-
-    pVarTP->x += pAmount * atan2f(a, b);
-
-    if (pAffineTP->y > 0)
-      pVarTP->y += pAmount * log(xmax + sqrt_safe(xmax - 1.0));
-    else
-      pVarTP->y -= pAmount * log(xmax + sqrt_safe(xmax - 1.0));
-
-		if (pContext->isPreserveZCoordinate) {
-			pVarTP->z += pAmount * pAffineTP->z;
-		}
+    float nx = pAffineTP->x;
+    float ny = pAffineTP->y;
+    if (nx < 0)
+      nx = nx + nx;
+    if (ny < 0)
+      ny = ny * 0.5;
+    pVarTP->x += pAmount * nx;
+    pVarTP->y += pAmount * ny;
+    if (pContext->isPreserveZCoordinate) {
+      pVarTP->z += pAmount * pAffineTP->z;
+    }
 	}
 
-	EllipticFunc* makeCopy() {
-		return new EllipticFunc(*this);
-	}
-
-private:
-	float sqrt_safe(float x) {
-		return (x < EPSILON) ? 0.0 : sqrtf(x);
+	BentFunc* makeCopy() {
+		return new BentFunc(*this);
 	}
 
 };
 
-#endif // JWFVAR_ELLIPTIC_H_
+#endif // JWFVAR_BENT_H_

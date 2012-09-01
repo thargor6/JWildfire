@@ -16,3 +16,6 @@ build/dist/*
 tptpParseError.log
 src/odk/*
 build/j-wildfire/*
+JWildfireC/.settings
+JWildfireC/Debug
+JWildfireC/Release

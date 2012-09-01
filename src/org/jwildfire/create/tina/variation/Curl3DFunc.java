@@ -16,10 +16,15 @@
 */
 package org.jwildfire.create.tina.variation;
 
+import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_CUDA;
+import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_JWILDFIRE;
+
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
 public class Curl3DFunc extends VariationFunc {
+  private static final long serialVersionUID = 1L;
+
   private static final String PARAM_CX = "cx";
   private static final String PARAM_CY = "cy";
   private static final String PARAM_CZ = "cz";
@@ -35,17 +40,6 @@ public class Curl3DFunc extends VariationFunc {
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-    // TODO precalc?  
-    double c2x = 2 * cx;
-    double c2y = 2 * cy;
-    double c2z = 2 * cz;
-
-    double cx2 = sqr(cx);
-    double cy2 = sqr(cy);
-    double cz2 = sqr(cz);
-
-    double c2 = cx2 + cy2 + cz2;
-    //    
     double r2 = sqr(pAffineTP.x) + sqr(pAffineTP.y) + sqr(pAffineTP.z);
     double r = pAmount / (r2 * c2 + c2x * pAffineTP.x - c2y * pAffineTP.y + c2z * pAffineTP.z + 1);
 
@@ -79,6 +73,26 @@ public class Curl3DFunc extends VariationFunc {
   @Override
   public String getName() {
     return "curl3D";
+  }
+
+  private double c2x, c2y, c2z, c2;
+
+  @Override
+  public void init(FlameTransformationContext pContext, XForm pXForm, double pAmount) {
+    c2x = 2 * cx;
+    c2y = 2 * cy;
+    c2z = 2 * cz;
+
+    double cx2 = sqr(cx);
+    double cy2 = sqr(cy);
+    double cz2 = sqr(cz);
+
+    c2 = cx2 + cy2 + cz2;
+  }
+
+  @Override
+  public int getAvailability() {
+    return AVAILABILITY_JWILDFIRE | AVAILABILITY_CUDA;
   }
 
 }

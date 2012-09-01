@@ -14,50 +14,53 @@
  if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-#ifndef JWFVAR_ELLIPTIC_H_
-#define JWFVAR_ELLIPTIC_H_
+#ifndef JWFVAR_CURL_H_
+#define JWFVAR_CURL_H_
 
 #include "jwf_Constants.h"
 #include "jwf_Variation.h"
 
-class EllipticFunc: public Variation {
+class CurlFunc: public Variation {
 public:
-	EllipticFunc() {
+	CurlFunc() {
+		c1 = 0.0f;
+		c2 = 0.0f;
+		initParameterNames(2, "c1", "c2");
 	}
 
 	const char* getName() const {
-		return "elliptic";
+		return "curl";
+	}
+
+	void setParameter(char *pName, float pValue) {
+		if (strcmp(pName, "c1") == 0) {
+			c2 = pValue;
+		}
+		else if (strcmp(pName, "c2") == 0) {
+			c2 = pValue;
+		}
 	}
 
 	void transform(FlameTransformationContext *pContext, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
-    float tmp = pAffineTP->y * pAffineTP->y + pAffineTP->x * pAffineTP->x + 1.0;
-    float x2 = 2.0f * pAffineTP->x;
-    float xmax = 0.5f * (sqrtf(tmp + x2) + sqrtf(tmp - x2));
+    float re = 1.0f + c1 * pAffineTP->x + c2 * (pAffineTP->x*pAffineTP->x - pAffineTP->y*pAffineTP->y);
+    float im = c1 * pAffineTP->y + c2 * 2 * pAffineTP->x * pAffineTP->y;
 
-    float a = pAffineTP->x / xmax;
-    float b = sqrt_safe(1.0f - a * a);
+    double r = pAmount / (re*re + im*im);
 
-    pVarTP->x += pAmount * atan2f(a, b);
-
-    if (pAffineTP->y > 0)
-      pVarTP->y += pAmount * log(xmax + sqrt_safe(xmax - 1.0));
-    else
-      pVarTP->y -= pAmount * log(xmax + sqrt_safe(xmax - 1.0));
-
+    pVarTP->x += (pAffineTP->x * re + pAffineTP->y * im) * r;
+    pVarTP->y += (pAffineTP->y * re - pAffineTP->x * im) * r;
 		if (pContext->isPreserveZCoordinate) {
 			pVarTP->z += pAmount * pAffineTP->z;
 		}
 	}
 
-	EllipticFunc* makeCopy() {
-		return new EllipticFunc(*this);
+	CurlFunc* makeCopy() {
+		return new CurlFunc(*this);
 	}
 
 private:
-	float sqrt_safe(float x) {
-		return (x < EPSILON) ? 0.0 : sqrtf(x);
-	}
-
+	float c1;
+	float c2;
 };
 
-#endif // JWFVAR_ELLIPTIC_H_
+#endif // JWFVAR_CURL_H_

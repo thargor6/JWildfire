@@ -14,50 +14,32 @@
  if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-#ifndef JWFVAR_ELLIPTIC_H_
-#define JWFVAR_ELLIPTIC_H_
+#ifndef JWFVAR_SQUARE_H_
+#define JWFVAR_SQUARE_H_
 
-#include "jwf_Constants.h"
 #include "jwf_Variation.h"
 
-class EllipticFunc: public Variation {
+class SquareFunc: public Variation {
 public:
-	EllipticFunc() {
+	SquareFunc() {
 	}
 
 	const char* getName() const {
-		return "elliptic";
+		return "square";
 	}
 
 	void transform(FlameTransformationContext *pContext, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
-    float tmp = pAffineTP->y * pAffineTP->y + pAffineTP->x * pAffineTP->x + 1.0;
-    float x2 = 2.0f * pAffineTP->x;
-    float xmax = 0.5f * (sqrtf(tmp + x2) + sqrtf(tmp - x2));
-
-    float a = pAffineTP->x / xmax;
-    float b = sqrt_safe(1.0f - a * a);
-
-    pVarTP->x += pAmount * atan2f(a, b);
-
-    if (pAffineTP->y > 0)
-      pVarTP->y += pAmount * log(xmax + sqrt_safe(xmax - 1.0));
-    else
-      pVarTP->y -= pAmount * log(xmax + sqrt_safe(xmax - 1.0));
-
-		if (pContext->isPreserveZCoordinate) {
-			pVarTP->z += pAmount * pAffineTP->z;
-		}
+    pVarTP->x += pAmount * (pContext->randGen->random() - 0.5f);
+    pVarTP->y += pAmount * (pContext->randGen->random() - 0.5f);
+    if (pContext->isPreserveZCoordinate) {
+      pVarTP->z += pAmount * pAffineTP->z;
+    }
 	}
 
-	EllipticFunc* makeCopy() {
-		return new EllipticFunc(*this);
-	}
-
-private:
-	float sqrt_safe(float x) {
-		return (x < EPSILON) ? 0.0 : sqrtf(x);
+	SquareFunc* makeCopy() {
+		return new SquareFunc(*this);
 	}
 
 };
 
-#endif // JWFVAR_ELLIPTIC_H_
+#endif // JWFVAR_SQUARE_H_
