@@ -16,6 +16,8 @@
 */
 package org.jwildfire.create.tina.io;
 
+import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_CUDA;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -195,7 +197,29 @@ public class Flam3Writer {
     return res.indexOf(".") < 0 ? res + ".0" : res;
   }
 
+  public void checkFlameForCUDA(Flame pFlame) {
+    for (XForm xForm : pFlame.getXForms()) {
+      if (xForm.getVariationCount() > 0) {
+        for (int i = 0; i < xForm.getVariationCount(); i++) {
+          checkVariationForCUDA(xForm.getVariation(i));
+        }
+      }
+    }
+    if (pFlame.getFinalXForm() != null && pFlame.getFinalXForm().getVariationCount() > 0) {
+      for (int i = 0; i < pFlame.getFinalXForm().getVariationCount(); i++) {
+        checkVariationForCUDA(pFlame.getFinalXForm().getVariation(i));
+      }
+    }
+  }
+
+  private void checkVariationForCUDA(Variation pVariation) {
+    if ((pVariation.getFunc().getAvailability() & AVAILABILITY_CUDA) == 0) {
+      throw new RuntimeException("Variation <" + pVariation.getFunc().getName() + "> is currently not available for the external renderer. Please try to remove it or contact the author.");
+    }
+  }
+
   public String getFlameCUDA(Flame pFlame) {
+    checkFlameForCUDA(pFlame);
     StringBuffer sb = new StringBuffer();
     sb.append("Flame *createExampleFlame() {\n");
     sb.append("  Flame *flame;\n");
@@ -255,12 +279,12 @@ public class Flam3Writer {
         Variation var = xForm.getVariation(j);
         String paramNames[] = var.getFunc().getParameterNames();
         if (paramNames == null || paramNames.length == 0) {
-          sb.append("  flame->xForms[" + i + "]->addVariation(VARIATION_" + var.getFunc().getName().toUpperCase() + ", " + doubleToCUDA(var.getAmount()) + "f);\n");
+          sb.append("  flame->xForms[" + i + "]->addVariation(variationFactory->newInstance(\"" + var.getFunc().getName() + "\") , " + doubleToCUDA(var.getAmount()) + "f);\n");
         }
         else {
           Object values[] = var.getFunc().getParameterValues();
           sb.append("  {\n");
-          sb.append("    Variation *var=flame->xForms[" + i + "]->addVariation(VARIATION_" + var.getFunc().getName().toUpperCase() + ", " + doubleToCUDA(var.getAmount()) + "f);\n");
+          sb.append("    Variation *var=flame->xForms[" + i + "]->addVariation(variationFactory->newInstance(\"" + var.getFunc().getName() + "\") , " + doubleToCUDA(var.getAmount()) + "f);\n");
           for (int k = 0; k < paramNames.length; k++) {
             Object val = values[k];
             if (val == null) {
@@ -301,12 +325,12 @@ public class Flam3Writer {
         Variation var = xForm.getVariation(j);
         String paramNames[] = var.getFunc().getParameterNames();
         if (paramNames == null || paramNames.length == 0) {
-          sb.append("  flame->finalXForm->addVariation(VARIATION_" + var.getFunc().getName().toUpperCase() + ", " + doubleToCUDA(var.getAmount()) + "f);\n");
+          sb.append("  flame->finalXForm->addVariation(variationFactory->newInstance(\"" + var.getFunc().getName() + "\") , " + doubleToCUDA(var.getAmount()) + "f);\n");
         }
         else {
           Object values[] = var.getFunc().getParameterValues();
           sb.append("  {\n");
-          sb.append("    Variation *var=flame->finalXForm->addVariation(VARIATION_" + var.getFunc().getName().toUpperCase() + ", " + doubleToCUDA(var.getAmount()) + "f);\n");
+          sb.append("    Variation *var=flame->finalXForm->addVariation(variationFactory->newInstance(\"" + var.getFunc().getName() + "\") , " + doubleToCUDA(var.getAmount()) + "f);\n");
           for (int k = 0; k < paramNames.length; k++) {
             Object val = values[k];
             if (val == null) {
