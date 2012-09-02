@@ -28,6 +28,7 @@
 
 // JWF stuff
 #include "jwf_Constants.h"
+#include "jwf_FastMath.h"
 #include "jwf_AppSettings.h"
 #include "jwf_Types.h"
 #include "jwf_Util.h"
@@ -147,20 +148,16 @@ int renderFlame(AppSettings *pAppSettings) {
 		printf("No flame to render");
 		return -1;
 	}
-
   Flame *hostFlame=flames[0];
 
   FlameRenderer renderer;
   renderer.create(hostFlame,8);
   RenderInfo info;
 
-  info.imageWidth=hostFlame->width;
-  info.imageHeight=hostFlame->height;
 
-  info.imageWidth=800;
-  info.imageHeight=600;
 
-//   times: 800x600, 1000.0, 1, 27.5s
+  info.imageWidth=pAppSettings->getOutputWidth();
+  info.imageHeight=pAppSettings->getOutputHeight();
 
   if(info.imageWidth!=hostFlame->width || info.imageHeight!=hostFlame->height) {
     double wScl = (float) info.imageWidth / (float) hostFlame->width;
@@ -168,33 +165,46 @@ int renderFlame(AppSettings *pAppSettings) {
     hostFlame->pixelsPerUnit=(wScl + hScl) * 0.5 * hostFlame->pixelsPerUnit;
   }
 
-  hostFlame->sampleDensity=100.0;
-  hostFlame->spatialFilterRadius=0.5;
-  //hostFlame->spatialFilterRadius=0.0;
+  hostFlame->sampleDensity=pAppSettings->getSampleDensity();
+  hostFlame->spatialFilterRadius=pAppSettings->getFilterRadius();
 
   info.renderHDR=FALSE;
   info.renderHDRIntensityMap=FALSE;
 
-  info.poolSize=1000;
-  info.bundleSize=200;
+  boolean usePool=true;
+  for(int i=0;i<hostFlame->xFormCount;i++) {
+    XForm *xForm=hostFlame->xForms[i];
+    for(int j=0;j<hostFlame->xFormCount;j++) {
+    	if(fabs(xForm->modifiedWeights[j]-1.0f)>EPSILON) {
+    		usePool=false;
+    		break;
+    	}
+    }
+  }
+  hostFlame->dump();
 
-  //info.poolSize=1;
-//    info.bundleSize=1;
-
+  if(usePool==true) {
+    info.poolSize=1024;
+    info.bundleSize=256;
+  }
+  else {
+    info.poolSize=1;
+    info.bundleSize=1;
+  }
+	printf("Using pool %d/%d...\n",info.poolSize, info.bundleSize);
 
   clock_t begin = clock();
   RenderedFlame *res=renderer.renderFlame(&info);
   clock_t end = clock();
   double elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
-  hostFlame->dump();
+  // TODO: option
+
   printf("Elapsed render time %3.1f s\n",elapsed_secs);
 
   PPMWriter writer;
+  // TODO option:
   writer.writeImage("C:\\TMP\\CUDA.ppm",res->image);
   freeHostFlame(hostFlame);
-
-
-
 	return 0;
 }
 
@@ -208,10 +218,7 @@ int jwf_main(int argc, char *argv[]) {
   	return -1;
   }
   appSettings->dump();
-
-
   //testHost1000Flame();
-
   return renderFlame(appSettings);
 }
 

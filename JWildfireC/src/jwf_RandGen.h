@@ -34,7 +34,7 @@ public:
     if (res < 0.0f) {
       res = 0.0f - res;
     }
-    return res;
+    return res > 0 ? res : -res ;
   }
   
   int random(int pMax) {

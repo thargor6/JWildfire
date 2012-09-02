@@ -18,9 +18,9 @@
 #define __JWF_CONSTANTS_H__
 
 #define APP_TITLE "JWildfireC"
-#define APP_VERSION "0.01 (25.08.2012)"
+#define APP_VERSION "0.12 (02.09.2012)"
 
-#define EPSILON 1.0e-5f
+#define EPSILON 1.0e-8f
 
 #define MAX_MOD_WEIGHT_COUNT 100
 #define NEXT_APPLIED_XFORM_TABLE_SIZE 100
@@ -47,11 +47,7 @@
 #define DRAWMODE_NORMAL 0
 #define DRAWMODE_HIDDEN 1
 #define DRAWMODE_OPAQUE 2
-/*
-#ifndef BOOLEAN
-#define BOOLEAN unsigned char
-#endif
-*/
+
 #ifndef TRUE
 #define TRUE 1
 #endif

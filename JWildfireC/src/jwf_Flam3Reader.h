@@ -169,6 +169,11 @@ private:
 	}
 
 	void split(char *pString, char *delim, char ***tokens, int *tokenCount) {
+		printf("#%s#\n",pString);
+
+
+
+
 		*tokens = NULL;
 		*tokenCount = 0;
 		if (pString == NULL || strlen(pString) == 0) {
@@ -324,7 +329,6 @@ private:
 			}
 			freeStrArray(s, sCount);
 		}
-
 		// variations
 		{
 			for(int a=0;a<attCount;a++) {

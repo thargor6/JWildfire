@@ -17,20 +17,10 @@
 #ifndef __JWF_FLAME_VIEW_H__
 #define __JWF_FLAME_VIEW_H__
 
-struct FlameView {
-  Flame *flame;
-  bool doProject3D;
-  float cameraMatrix[3][3];
-  float cosa;
-  float sina;
-  float camW;
-  float camH;
-  float rcX;
-  float rcY;
-  float bws;
-  float bhs;
+class FlameView {
+public:
 
-  void create(Flame *pFlame) {
+  FlameView(Flame *pFlame) {
     flame=pFlame;
     cosa=0.0f;
     sina=0.0f;
@@ -46,9 +36,9 @@ struct FlameView {
         cameraMatrix[i][j]=0.0f;
       }
     }
-  }
 
-  void free() {
+    useDOF=fabs(flame->camDOF) > EPSILON;
+    camDOF_10 = 0.1f*flame->camDOF;
   }
 
   void initView(int pImageWidth,int pImageHeight,int pBorderWidth,int pMaxBorderWidth, int pRasterWidth,int pRasterHeight) {
@@ -109,20 +99,21 @@ struct FlameView {
     float py = cameraMatrix[0][1] * pPoint->x + cameraMatrix[1][1] * pPoint->y + cameraMatrix[2][1] * z;
     float pz = cameraMatrix[0][2] * pPoint->x + cameraMatrix[1][2] * pPoint->y + cameraMatrix[2][2] * z;
     float zr = 1.0f - flame->camPerspective * pz;
-    if (fabs(flame->camDOF) > EPSILON) {
+    if (useDOF) {
       float a = 2.0f * M_PI * pFlameTransformationContext->randGen->random();
-      float dsina = sin(a);
-      float dcosa = cos(a);
+      float dsina = sinf(a);
+      float dcosa = cosf(a);
       float zdist = (flame->camZ - pz);
       float dr;
       if (zdist > 0.0f) {
-        dr = pFlameTransformationContext->randGen->random() * flame->camDOF * 0.1f * zdist;
+        dr = pFlameTransformationContext->randGen->random() * camDOF_10 * zdist;
+        pPoint->x = (px + dr * dcosa) / zr;
+        pPoint->y = (py + dr * dsina) / zr;
       }
       else {
-        dr = 0.0f;
+        pPoint->x = px / zr;
+        pPoint->y = py / zr;
       }
-      pPoint->x = (px + dr * dcosa) / zr;
-      pPoint->y = (py + dr * dsina) / zr;
     }
     else {
       pPoint->x = px / zr;
@@ -130,6 +121,22 @@ struct FlameView {
     }
   }
 
+  float cosa;
+  float sina;
+  float camW;
+  float camH;
+  float rcX;
+  float rcY;
+  float bws;
+  float bhs;
+
+private:
+  Flame *flame;
+  bool doProject3D;
+  float cameraMatrix[3][3];
+
+  float camDOF_10;
+  bool useDOF;
 };
 
 

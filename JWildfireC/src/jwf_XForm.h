@@ -242,7 +242,16 @@ struct XForm {
   }
 
   void transformPoint(FlameTransformationContext *pContext, XYZPoint *pAffineT, XYZPoint *pVarT, XYZPoint *pSrcPoint, XYZPoint *pDstPoint) {
-    pAffineT->clear();
+    //pAffineT->clear();
+
+
+  	pAffineT->rgbColor = FALSE;
+  	pAffineT->redColor = pAffineT->greenColor = pAffineT->blueColor = 0.0f;
+  //	pAffineT->x = pAffineT->y = pAffineT->z = pAffineT->color = 0.0f;
+  //	pAffineT->sumsq = pAffineT->sqrt = pAffineT->atan = pAffineT->atanYX = pAffineT->sinA = pAffineT->cosA = 0.0f;
+  //	pAffineT->validSumsq = pAffineT->validSqrt = pAffineT->validAtan = pAffineT->validAtanYX = pAffineT->validSinA = pAffineT->validCosA = FALSE;
+
+
     pAffineT->color = pSrcPoint->color * __c1 + __c2;
     if (__hasCoeffs) {
       pAffineT->x = coeff00 * pSrcPoint->x + coeff10 * pSrcPoint->y + coeff20;
@@ -254,8 +263,9 @@ struct XForm {
     }
     pAffineT->z = pSrcPoint->z;
 
-    pVarT->invalidate();
+    //pVarT->invalidate();
     pVarT->x = pVarT->y = pVarT->z = pVarT->color = 0.0f;
+
 
     pVarT->color = pAffineT->color;
     pVarT->rgbColor = pAffineT->rgbColor;
@@ -266,10 +276,10 @@ struct XForm {
     Variation** vars=__preparedVariations[pContext->threadIdx];
     for (int i = 0; i < variationCount; i++) {
       Variation *variation = vars[i];
-      variation->transform(pContext, pAffineT, pVarT,variation->amount);
-      if (variation->getPriority() < 0) {
-        pAffineT->invalidate();
-      }
+      vars[i]->transform(pContext, pAffineT, pVarT,variation->amount);
+    //  if (variation->getPriority() < 0) {
+     //   pAffineT->invalidate();
+    // }
     }
     pDstPoint->color = pVarT->color;
     pDstPoint->rgbColor = pVarT->rgbColor;
@@ -280,16 +290,17 @@ struct XForm {
       float px = postCoeff00 * pVarT->x + postCoeff10 * pVarT->y + postCoeff20;
       float py = postCoeff01 * pVarT->x + postCoeff11 * pVarT->y + postCoeff21;
       float pz = pVarT->z;
-      pVarT->x = px;
-      pVarT->y = py;
-      pVarT->z = pz;
+      pDstPoint->x = px;
+      pDstPoint->y = py;
+      pDstPoint->z = pz;
     }
-    pDstPoint->x = pVarT->x;
-    pDstPoint->y = pVarT->y;
-    pDstPoint->z = pVarT->z;
+    else {
+			pDstPoint->x = pVarT->x;
+			pDstPoint->y = pVarT->y;
+			pDstPoint->z = pVarT->z;
+    }
   }
 
 };
-
 #endif // __JWF_XFORM_H__
 

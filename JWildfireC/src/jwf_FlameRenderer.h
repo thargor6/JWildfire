@@ -67,8 +67,7 @@ struct FlameRenderer {
     flameView=NULL;
     flameTransformationContext=new FlameTransformationContext(flame->preserveZ);
 
-    hostMalloc((void**)&flameView,sizeof(FlameView));
-    flameView->create(pFlame);
+    flameView=new FlameView(pFlame);
     threadCount=pThreadCount;
     if(threadCount<1) {
       threadCount=1;
@@ -76,6 +75,7 @@ struct FlameRenderer {
   }
 
   void free() {
+  	delete flameView;
     if(logDensityFilter!=NULL) {
       logDensityFilter->free();
       hostFree(logDensityFilter); 

@@ -14,49 +14,18 @@
   if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
   02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
-#ifndef __JWF_XYZPOINT_H__
-#define __JWF_XYZPOINT_H__
+#ifndef __JWF_FAST_MATH_H__
+#define __JWF_FAST_MATH_H__
+/*
+#define sinf __fastsin
+#define cosf __fastcos
 
-class XYZPoint {
-public:
-  float x;
-  float y;
-  float z;
-  float color;
+float __fastsin(float x) {
+	return x;
+}
 
-  // custom RGB colors
-  short rgbColor;
-  float redColor;
-  float greenColor;
-  float blueColor;
-
-  XYZPoint();
-
-  // often (but not always) used properties, calculation only if needed
-  void assign(XYZPoint *p);
-  void invalidate();
-  void clear();
-  float getPrecalcSumsq();
-  float getPrecalcSqrt();
-  float getPrecalcAtan();
-  float getPrecalcAtanYX();
-  float getPrecalcSinA();
-  float getPrecalcCosA();
-  bool isEqual(XYZPoint *pSrc);
-//private:
-  float sumsq;
-  bool validSumsq;
-  float sqrt;
-  bool validSqrt;
-  float atan;
-  bool validAtan;
-  float atanYX;
-  bool validAtanYX;
-  float sinA;
-  bool validSinA;
-  float cosA;
-  bool validCosA;
-};
-
-
-#endif // __JWF_XYZPOINT_H__
+float __fastcos(float x) {
+	return 1-x;
+}
+*/
+#endif // __JWF_FAST_MATH_H__

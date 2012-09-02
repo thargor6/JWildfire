@@ -25,6 +25,8 @@
 
 #include "jwfvar_Bent.h"
 #include "jwfvar_Bipolar.h"
+#include "jwfvar_Blade.h"
+#include "jwfvar_Blade3D.h"
 #include "jwfvar_Blur.h"
 #include "jwfvar_Bubble.h"
 #include "jwfvar_Butterfly.h"
@@ -43,12 +45,14 @@
 #include "jwfvar_Flower.h"
 #include "jwfvar_Flux.h"
 #include "jwfvar_GaussianBlur.h"
+#include "jwfvar_Hemisphere.h"
 #include "jwfvar_Julia3D.h"
 #include "jwfvar_JuliaN.h"
 #include "jwfvar_Linear.h"
 #include "jwfvar_Linear3D.h"
 #include "jwfvar_Lissajous.h"
 #include "jwfvar_Log.h"
+#include "jwfvar_Oscilloscope.h"
 #include "jwfvar_Pie.h"
 #include "jwfvar_Pie3D.h"
 #include "jwfvar_PreBlur.h"
@@ -56,6 +60,7 @@
 #include "jwfvar_RadialBlur.h"
 #include "jwfvar_Spherical.h"
 #include "jwfvar_Spherical3D.h"
+#include "jwfvar_Spherical3DWF.h"
 #include "jwfvar_Splits.h"
 #include "jwfvar_Square.h"
 #include "jwfvar_Square3D.h"
@@ -121,6 +126,8 @@ private:
 	void initVariations() {
 		addVariation(new BentFunc());
 		addVariation(new BipolarFunc());
+		addVariation(new BladeFunc());
+		addVariation(new Blade3DFunc());
 		addVariation(new BlurFunc());
 		addVariation(new BubbleFunc());
 		addVariation(new ButterflyFunc());
@@ -139,12 +146,14 @@ private:
 		addVariation(new FlowerFunc());
 		addVariation(new FluxFunc());
 		addVariation(new GaussianBlurFunc());
+		addVariation(new HemisphereFunc());
 		addVariation(new Julia3DFunc());
 		addVariation(new JuliaNFunc());
 		addVariation(new LinearFunc());
 		addVariation(new Linear3DFunc());
 		addVariation(new LissajousFunc());
 		addVariation(new LogFunc());
+		addVariation(new OscilloscopeFunc());
 		addVariation(new PieFunc());
 		addVariation(new Pie3DFunc());
 		addVariation(new PreBlurFunc());
@@ -152,6 +161,7 @@ private:
 		addVariation(new RadialBlurFunc());
 		addVariation(new SphericalFunc());
 		addVariation(new Spherical3DFunc());
+		addVariation(new Spherical3DWFFunc());
 		addVariation(new SplitsFunc());
 		addVariation(new SquareFunc());
 		addVariation(new Square3DFunc());
