@@ -79,6 +79,8 @@ public final class FlameRenderer {
   private boolean doProject3D = false;
   // init in init3D()
   private double cameraMatrix[][] = new double[3][3];
+  private double camDOF_10;
+  private boolean useDOF;
   //
   private ProgressUpdater progressUpdater;
   // 
@@ -120,6 +122,8 @@ public final class FlameRenderer {
     cameraMatrix[1][2] = sin(pitch) * cos(yaw);
     cameraMatrix[2][2] = cos(pitch);
     doProject3D = fabs(flame.getCamYaw()) > MathLib.EPSILON || fabs(flame.getCamPitch()) > MathLib.EPSILON || fabs(flame.getCamPerspective()) > MathLib.EPSILON || fabs(flame.getCamDOF()) > MathLib.EPSILON;
+    useDOF = fabs(flame.getCamDOF()) > MathLib.EPSILON;
+    camDOF_10 = 0.1 * flame.getCamDOF();
   }
 
   private void initRaster(int pImageWidth, int pImageHeight) {
@@ -149,21 +153,21 @@ public final class FlameRenderer {
     double py = cameraMatrix[0][1] * pPoint.x + cameraMatrix[1][1] * pPoint.y + cameraMatrix[2][1] * z;
     double pz = cameraMatrix[0][2] * pPoint.x + cameraMatrix[1][2] * pPoint.y + cameraMatrix[2][2] * z;
     double zr = 1.0 - flame.getCamPerspective() * pz;
-    if (fabs(flame.getCamDOF()) > MathLib.EPSILON) {
+    if (useDOF) {
       double a = 2.0 * M_PI * random.random();
       double dsina = sin(a);
       double dcosa = cos(a);
       double zdist = (flame.getCamZ() - pz);
       double dr;
       if (zdist > 0.0) {
-        dr = random.random() * flame.getCamDOF() * 0.1 * zdist;
+        dr = random.random() * camDOF_10 * zdist;
+        pPoint.x = (px + dr * dcosa) / zr;
+        pPoint.y = (py + dr * dsina) / zr;
       }
       else {
-        dr = 0.0;
+        pPoint.x = px / zr;
+        pPoint.y = py / zr;
       }
-      pPoint.x = (px + dr * dcosa) / zr;
-      pPoint.y = (py + dr * dsina) / zr;
-
     }
     else {
       pPoint.x = px / zr;

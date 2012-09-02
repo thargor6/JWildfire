@@ -20,12 +20,16 @@ import static org.jwildfire.base.MathLib.EPSILON;
 import static org.jwildfire.base.MathLib.SMALL_EPSILON;
 import static org.jwildfire.base.MathLib.fabs;
 import static org.jwildfire.base.MathLib.pow;
+import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_CUDA;
+import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_JWILDFIRE;
 
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
 public class Spherical3DWFFunc extends VariationFunc {
+  private static final long serialVersionUID = 1L;
+
   public static final String PARAM_INVERT = "invert";
   private static final String PARAM_EXPONENT = "exponent";
 
@@ -37,7 +41,7 @@ public class Spherical3DWFFunc extends VariationFunc {
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     double r;
-    if (fabs(exponent - 2.0) < EPSILON) {
+    if (_regularForm) {
       r = pAmount / (pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y + pAffineTP.z * pAffineTP.z + SMALL_EPSILON);
     }
     else {
@@ -78,6 +82,18 @@ public class Spherical3DWFFunc extends VariationFunc {
       exponent = pValue;
     else
       throw new IllegalArgumentException(pName);
+  }
+
+  private boolean _regularForm;
+
+  @Override
+  public void init(FlameTransformationContext pContext, XForm pXForm, double pAmount) {
+    _regularForm = fabs(exponent - 2.0) < EPSILON;
+  }
+
+  @Override
+  public int getAvailability() {
+    return AVAILABILITY_JWILDFIRE | AVAILABILITY_CUDA;
   }
 
 }

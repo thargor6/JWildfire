@@ -21,11 +21,14 @@ import static org.jwildfire.base.MathLib.M_PI;
 import static org.jwildfire.base.MathLib.cos;
 import static org.jwildfire.base.MathLib.exp;
 import static org.jwildfire.base.MathLib.fabs;
+import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_CUDA;
+import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_JWILDFIRE;
 
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
 public class OscilloscopeFunc extends VariationFunc {
+  private static final long serialVersionUID = 1L;
 
   private static final String PARAM_SEPARATION = "separation";
   private static final String PARAM_FREQUENCY = "frequency";
@@ -42,13 +45,12 @@ public class OscilloscopeFunc extends VariationFunc {
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     /* oscilloscope from the apophysis plugin pack */
-    double tpf = 2 * M_PI * frequency;
     double t;
-    if (fabs(damping) <= EPSILON) {
-      t = amplitude * cos(tpf * pAffineTP.x) + separation;
+    if (_noDamping) {
+      t = amplitude * cos(_tpf * pAffineTP.x) + separation;
     }
     else {
-      t = amplitude * exp(-fabs(pAffineTP.x) * damping) * cos(tpf * pAffineTP.x) + separation;
+      t = amplitude * exp(-fabs(pAffineTP.x) * damping) * cos(_tpf * pAffineTP.x) + separation;
     }
 
     if (fabs(pAffineTP.y) <= t) {
@@ -92,6 +94,20 @@ public class OscilloscopeFunc extends VariationFunc {
   @Override
   public String getName() {
     return "oscilloscope";
+  }
+
+  private double _tpf;
+  private boolean _noDamping;
+
+  @Override
+  public void init(FlameTransformationContext pContext, XForm pXForm, double pAmount) {
+    _tpf = 2.0f * M_PI * frequency;
+    _noDamping = fabs(damping) <= EPSILON;
+  }
+
+  @Override
+  public int getAvailability() {
+    return AVAILABILITY_JWILDFIRE | AVAILABILITY_CUDA;
   }
 
 }

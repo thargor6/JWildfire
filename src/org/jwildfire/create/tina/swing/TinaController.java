@@ -88,10 +88,12 @@ import org.jwildfire.create.tina.randomflame.RandomFlameGeneratorList;
 import org.jwildfire.create.tina.randomflame.RandomFlameGeneratorSample;
 import org.jwildfire.create.tina.randomflame.RandomFlameGeneratorSampler;
 import org.jwildfire.create.tina.randomflame.SubFlameRandomFlameGenerator;
+import org.jwildfire.create.tina.render.CUDARendererInterface;
 import org.jwildfire.create.tina.render.FlameRenderer;
 import org.jwildfire.create.tina.render.ProgressUpdater;
 import org.jwildfire.create.tina.render.RenderInfo;
 import org.jwildfire.create.tina.render.RenderedFlame;
+import org.jwildfire.create.tina.render.RendererType;
 import org.jwildfire.create.tina.script.ScriptRunner;
 import org.jwildfire.create.tina.script.ScriptRunnerEnvironment;
 import org.jwildfire.create.tina.transform.XFormTransformService;
@@ -203,6 +205,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
   private final JComboBox interactiveResolutionProfileCmb;
   private final JComboBox swfAnimatorQualityProfileCmb;
   private final JComboBox swfAnimatorResolutionProfileCmb;
+  private final JComboBox rendererCmb;
   // script
   private final JTextArea scriptTextArea;
   // camera, coloring  
@@ -435,7 +438,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       JComboBox pQualityProfileCmb, JComboBox pResolutionProfileCmb, JComboBox pBatchQualityProfileCmb, JComboBox pBatchResolutionProfileCmb,
       JComboBox pInteractiveQualityProfileCmb, JComboBox pInteractiveResolutionProfileCmb, JComboBox pSWFAnimatorQualityProfileCmb,
       JComboBox pSWFAnimatorResolutionProfileCmb, JButton pRenderFlameButton, JButton pAppendToMovieButton,
-      JWFNumberField pTransformationWeightREd, JButton pUndoButton, JButton pRedoButton) {
+      JWFNumberField pTransformationWeightREd, JButton pUndoButton, JButton pRedoButton, JComboBox pRendererCmb) {
     errorHandler = pErrorHandler;
     prefs = pPrefs;
     centerPanel = pCenterPanel;
@@ -509,6 +512,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     interactiveResolutionProfileCmb = pInteractiveResolutionProfileCmb;
     swfAnimatorQualityProfileCmb = pSWFAnimatorQualityProfileCmb;
     swfAnimatorResolutionProfileCmb = pSWFAnimatorResolutionProfileCmb;
+    rendererCmb = pRendererCmb;
 
     transformationsTable = pTransformationsTable;
     affineC00REd = pAffineC00REd;
@@ -1034,24 +1038,55 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
           flame.setWidth(info.getImageWidth());
           flame.setHeight(info.getImageHeight());
 
-          FlameRenderer renderer = new FlameRenderer(flame, prefs);
-          if (pQuickRender) {
-            renderer.setProgressUpdater(null);
-            flame.setSampleDensity(prefs.getTinaRenderRealtimeQuality());
-            flame.setSpatialFilterRadius(0.0);
-            flame.setSpatialOversample(1);
-            flame.setColorOversample(1);
+          RendererType rendererType = (RendererType) rendererCmb.getSelectedItem();
+          if (pQuickRender || rendererType == null) {
+            rendererType = RendererType.JAVA;
           }
-          else {
-            renderer.setProgressUpdater(mainProgressUpdater);
-            flame.setSampleDensity(prefs.getTinaRenderPreviewQuality());
-            flame.setSpatialFilterRadius(0.0);
-            flame.setSpatialOversample(1);
-            flame.setColorOversample(1);
+
+          switch (rendererType) {
+            case JAVA: {
+              FlameRenderer renderer = new FlameRenderer(flame, prefs);
+              if (pQuickRender) {
+                renderer.setProgressUpdater(null);
+                flame.setSampleDensity(prefs.getTinaRenderRealtimeQuality());
+                flame.setSpatialFilterRadius(0.0);
+                flame.setSpatialOversample(1);
+                flame.setColorOversample(1);
+              }
+              else {
+                renderer.setProgressUpdater(mainProgressUpdater);
+                flame.setSampleDensity(prefs.getTinaRenderPreviewQuality());
+                flame.setSpatialFilterRadius(0.0);
+                flame.setSpatialOversample(1);
+                flame.setColorOversample(1);
+              }
+              renderer.setRenderScale(renderScale);
+              long t0 = System.currentTimeMillis();
+              RenderedFlame res = renderer.renderFlame(info);
+              long t1 = System.currentTimeMillis();
+              if (!pQuickRender) {
+                System.out.println("Elapsed time: " + Tools.doubleToString((t1 - t0) * 0.001) + "s");
+              }
+              imgPanel.setImage(res.getImage());
+            }
+              break;
+            case CUDA: {
+              try {
+                flame.setSampleDensity(prefs.getTinaRenderPreviewQuality());
+                flame.setSpatialFilterRadius(0.0);
+                flame.setSpatialOversample(1);
+                flame.setColorOversample(1);
+
+                CUDARendererInterface cudaRenderer = new CUDARendererInterface();
+                cudaRenderer.checkFlameForCUDA(flame);
+                RenderedFlame res = cudaRenderer.renderFlame(info, flame);
+                imgPanel.setImage(res.getImage());
+              }
+              catch (Throwable ex) {
+                errorHandler.handleError(ex);
+              }
+            }
           }
-          renderer.setRenderScale(renderScale);
-          RenderedFlame res = renderer.renderFlame(info);
-          imgPanel.setImage(res.getImage());
         }
         finally {
           flame.setSpatialFilterRadius(oldSpatialFilterRadius);
@@ -3661,7 +3696,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     try {
       if (currFlame != null) {
         Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-        String xml = new Flam3Writer().getFlameCUDA(currFlame);
+        String xml = new CUDARendererInterface().getFlameCUDA(currFlame);
         StringSelection data = new StringSelection(xml);
         clipboard.setContents(data, data);
       }
