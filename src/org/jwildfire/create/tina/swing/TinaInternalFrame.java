@@ -32,6 +32,7 @@ import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.File;
 
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
@@ -70,6 +71,7 @@ import org.jwildfire.create.tina.animate.AnimationService;
 import org.jwildfire.create.tina.base.DrawMode;
 import org.jwildfire.create.tina.base.Shading;
 import org.jwildfire.create.tina.randomflame.RandomFlameGeneratorList;
+import org.jwildfire.create.tina.render.RendererType;
 import org.jwildfire.create.tina.swing.TinaController.NonlinearControlsRow;
 import org.jwildfire.swing.StandardErrorHandler;
 
@@ -675,8 +677,8 @@ public class TinaInternalFrame extends JInternalFrame {
 
       randomStyleLbl = new JLabel();
       randomStyleLbl.setPreferredSize(new Dimension(94, 22));
-      randomStyleLbl.setText("Random generator");
-      randomStyleLbl.setBounds(new Rectangle(135, 7, 94, 22));
+      randomStyleLbl.setText("Random generator:");
+      randomStyleLbl.setBounds(new Rectangle(137, 12, 115, 22));
       randomStyleLbl.setFont(new Font("Dialog", Font.BOLD, 10));
       tinaNorthPanel.add(getRandomBatchButton(), null);
       tinaNorthPanel.add(randomStyleLbl, null);
@@ -701,7 +703,7 @@ public class TinaInternalFrame extends JInternalFrame {
       resolutionProfileCmb.setMaximumRowCount(32);
       resolutionProfileCmb.setFont(new Font("Dialog", Font.BOLD, 10));
       resolutionProfileCmb.setBounds(new Rectangle(231, 7, 125, 22));
-      resolutionProfileCmb.setBounds(944, 7, 125, 22);
+      resolutionProfileCmb.setBounds(867, 7, 125, 22);
       tinaNorthPanel.add(resolutionProfileCmb);
 
       qualityProfileCmb = new JComboBox();
@@ -717,10 +719,26 @@ public class TinaInternalFrame extends JInternalFrame {
       qualityProfileCmb.setMaximumRowCount(32);
       qualityProfileCmb.setFont(new Font("Dialog", Font.BOLD, 10));
       qualityProfileCmb.setBounds(new Rectangle(231, 7, 125, 22));
-      qualityProfileCmb.setBounds(944, 35, 125, 22);
+      qualityProfileCmb.setBounds(867, 35, 125, 22);
       tinaNorthPanel.add(qualityProfileCmb);
       tinaNorthPanel.add(getQualityProfileBtn());
       tinaNorthPanel.add(getResolutionProfileBtn());
+
+      JLabel lblUseRenderer = new JLabel();
+      lblUseRenderer.setText("Use renderer:");
+      lblUseRenderer.setPreferredSize(new Dimension(94, 22));
+      lblUseRenderer.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblUseRenderer.setBounds(new Rectangle(137, 11, 115, 22));
+      lblUseRenderer.setBounds(1039, 12, 115, 22);
+      tinaNorthPanel.add(lblUseRenderer);
+
+      rendererCmb = new JComboBox();
+      rendererCmb.setPreferredSize(new Dimension(125, 22));
+      rendererCmb.setMaximumRowCount(32);
+      rendererCmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      rendererCmb.setBounds(new Rectangle(135, 37, 125, 22));
+      rendererCmb.setBounds(1037, 35, 125, 22);
+      tinaNorthPanel.add(rendererCmb);
 
     }
     return tinaNorthPanel;
@@ -1249,7 +1267,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaLoadFlameButton = new JButton();
       tinaLoadFlameButton.setText("Load Flame");
       tinaLoadFlameButton.setPreferredSize(new Dimension(125, 24));
-      tinaLoadFlameButton.setBounds(new Rectangle(504, 35, 125, 24));
+      tinaLoadFlameButton.setBounds(new Rectangle(440, 35, 125, 24));
       tinaLoadFlameButton.setFont(new Font("Dialog", Font.BOLD, 10));
       tinaLoadFlameButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -1270,7 +1288,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaSaveFlameButton = new JButton();
       tinaSaveFlameButton.setText("Save Flame");
       tinaSaveFlameButton.setPreferredSize(new Dimension(125, 24));
-      tinaSaveFlameButton.setBounds(new Rectangle(643, 35, 125, 24));
+      tinaSaveFlameButton.setBounds(new Rectangle(579, 35, 125, 24));
       tinaSaveFlameButton.setFont(new Font("Dialog", Font.BOLD, 10));
       tinaSaveFlameButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -1313,7 +1331,7 @@ public class TinaInternalFrame extends JInternalFrame {
       renderImageButton = new JButton();
       renderImageButton.setText("Render image");
       renderImageButton.setPreferredSize(new Dimension(180, 24));
-      renderImageButton.setBounds(new Rectangle(780, 7, 152, 52));
+      renderImageButton.setBounds(new Rectangle(738, 7, 125, 52));
       renderImageButton.setFont(new Font("Dialog", Font.BOLD, 10));
       renderImageButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -3356,6 +3374,8 @@ public class TinaInternalFrame extends JInternalFrame {
     nonlinearControlsRows[11] = new NonlinearControlsRow(getNonlinearVar12Cmb(), getNonlinearParams12Cmb(), getNonlinearVar12REd(),
         getNonlinearParams12REd(), getNonlinearParams12LeftButton());
 
+    initRendererCmb(pPrefs);
+
     tinaController = new TinaController(pErrorHandler, pPrefs, getCenterCenterPanel(), getTinaCameraRollREd(), getTinaCameraRollSlider(), getTinaCameraPitchREd(),
         getTinaCameraPitchSlider(), getTinaCameraYawREd(), getTinaCameraYawSlider(), getTinaCameraPerspectiveREd(), getTinaCameraPerspectiveSlider(),
         getTinaCameraCentreXREd(), getTinaCameraCentreXSlider(), getTinaCameraCentreYREd(),
@@ -3394,7 +3414,7 @@ public class TinaInternalFrame extends JInternalFrame {
         getFaqPane(), getToggleVariationsButton(), getAffinePreserveZButton(), getQualityProfileCmb(), getResolutionProfileCmb(),
         getBatchQualityProfileCmb(), getBatchResolutionProfileCmb(), getInteractiveQualityProfileCmb(), getInteractiveResolutionProfileCmb(),
         getSwfAnimatorQualityProfileCmb(), getSwfAnimatorResolutionProfileCmb(), getTinaRenderFlameButton(), getTinaAppendToMovieButton(),
-        getTransformationWeightREd(), getUndoButton(), getRedoButton());
+        getTransformationWeightREd(), getUndoButton(), getRedoButton(), getRendererCmb());
 
     tinaController.refreshing = tinaController.cmbRefreshing = tinaController.gridRefreshing = true;
     try {
@@ -3462,6 +3482,17 @@ public class TinaInternalFrame extends JInternalFrame {
     }
 
     return tinaController;
+  }
+
+  private void initRendererCmb(Prefs pPrefs) {
+    JComboBox cmb = getRendererCmb();
+    cmb.removeAllItems();
+    cmb.addItem(RendererType.JAVA);
+    // Currently Windows only
+    if (File.separatorChar == '\\') {
+      cmb.addItem(RendererType.CUDA);
+    }
+    cmb.setSelectedIndex(0);
   }
 
   /**
@@ -4797,7 +4828,7 @@ public class TinaInternalFrame extends JInternalFrame {
       newFlameButton.setMnemonic(KeyEvent.VK_N);
       newFlameButton.setText("New from scratch");
       newFlameButton.setActionCommand("New from scratch");
-      newFlameButton.setBounds(new Rectangle(367, 7, 125, 52));
+      newFlameButton.setBounds(new Rectangle(287, 7, 125, 52));
       newFlameButton.setFont(new Font("Dialog", Font.BOLD, 10));
       newFlameButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -5269,7 +5300,7 @@ public class TinaInternalFrame extends JInternalFrame {
       randomStyleCmb = new JComboBox();
       randomStyleCmb.setPreferredSize(new Dimension(125, 22));
       randomStyleCmb.setFont(new Font("Dialog", Font.BOLD, 10));
-      randomStyleCmb.setBounds(new Rectangle(231, 7, 125, 22));
+      randomStyleCmb.setBounds(new Rectangle(135, 37, 125, 22));
       randomStyleCmb.setMaximumRowCount(32);
       randomStyleCmb.removeAllItems();
       for (String name : RandomFlameGeneratorList.getNameList()) {
@@ -7792,7 +7823,7 @@ public class TinaInternalFrame extends JInternalFrame {
       loadFromClipboardFlameButton = new JButton();
       loadFromClipboardFlameButton.setPreferredSize(new Dimension(125, 24));
       loadFromClipboardFlameButton.setText("From Clipboard");
-      loadFromClipboardFlameButton.setBounds(new Rectangle(504, 7, 125, 24));
+      loadFromClipboardFlameButton.setBounds(new Rectangle(440, 7, 125, 24));
       loadFromClipboardFlameButton.setFont(new Font("Dialog", Font.BOLD, 10));
       loadFromClipboardFlameButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -7813,7 +7844,7 @@ public class TinaInternalFrame extends JInternalFrame {
       saveFlameToClipboardButton = new JButton();
       saveFlameToClipboardButton.setPreferredSize(new Dimension(125, 24));
       saveFlameToClipboardButton.setText("To Clipboard");
-      saveFlameToClipboardButton.setBounds(new Rectangle(643, 7, 125, 24));
+      saveFlameToClipboardButton.setBounds(new Rectangle(579, 7, 125, 24));
       saveFlameToClipboardButton.setFont(new Font("Dialog", Font.BOLD, 10));
       saveFlameToClipboardButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -8011,6 +8042,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton redoButton;
   private JButton interactivePauseButton;
   private JButton interactiveResumeButton;
+  private JComboBox rendererCmb;
 
   /**
    * This method initializes renderBatchJobsScrollPane	
@@ -9221,7 +9253,7 @@ public class TinaInternalFrame extends JInternalFrame {
       qualityProfileBtn.setPreferredSize(new Dimension(125, 24));
       qualityProfileBtn.setFont(new Font("Dialog", Font.BOLD, 10));
       qualityProfileBtn.setBounds(new Rectangle(508, 6, 125, 24));
-      qualityProfileBtn.setBounds(1077, 35, 40, 24);
+      qualityProfileBtn.setBounds(994, 35, 40, 24);
     }
     return qualityProfileBtn;
   }
@@ -9239,7 +9271,7 @@ public class TinaInternalFrame extends JInternalFrame {
       resolutionProfileBtn.setPreferredSize(new Dimension(125, 24));
       resolutionProfileBtn.setFont(new Font("Dialog", Font.BOLD, 10));
       resolutionProfileBtn.setBounds(new Rectangle(508, 6, 125, 24));
-      resolutionProfileBtn.setBounds(1077, 7, 40, 24);
+      resolutionProfileBtn.setBounds(994, 7, 40, 24);
     }
     return resolutionProfileBtn;
   }
@@ -10010,5 +10042,9 @@ public class TinaInternalFrame extends JInternalFrame {
 
   public JButton getInteractiveResumeButton() {
     return interactiveResumeButton;
+  }
+
+  public JComboBox getRendererCmb() {
+    return rendererCmb;
   }
 } //  @jve:decl-index=0:visual-constraint="10,10"
