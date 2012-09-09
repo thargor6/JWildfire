@@ -14,53 +14,58 @@
  if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-#ifndef JWFVAR_CURL_H_
-#define JWFVAR_CURL_H_
+#ifndef JWFVAR_BLOB_H_
+#define JWFVAR_BLOB_H_
 
 #include "jwf_Constants.h"
 #include "jwf_Variation.h"
 
-class CurlFunc: public Variation {
+class BlobFunc: public Variation {
 public:
-	CurlFunc() {
-		c1 = 0.0f;
-		c2 = 0.0f;
-		initParameterNames(2, "c1", "c2");
+	BlobFunc() {
+    low = 0.3f;
+    high = 1.2f;
+    waves = 6.0f;
+		initParameterNames(3, "low", "high", "waves");
 	}
 
 	const char* getName() const {
-		return "curl";
+		return "blob";
 	}
 
 	void setParameter(char *pName, float pValue) {
-		if (strcmp(pName, "c1") == 0) {
-			c1 = pValue;
+		if (strcmp(pName, "low") == 0) {
+			low = pValue;
 		}
-		else if (strcmp(pName, "c2") == 0) {
-			c2 = pValue;
+		else if (strcmp(pName, "high") == 0) {
+			high = pValue;
+		}
+		else if (strcmp(pName, "waves") == 0) {
+			waves = pValue;
 		}
 	}
 
 	void transform(FlameTransformationContext *pContext, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
-    float re = 1.0f + c1 * pAffineTP->x + c2 * (pAffineTP->x*pAffineTP->x - pAffineTP->y*pAffineTP->y);
-    float im = c1 * pAffineTP->y + c2 * 2 * pAffineTP->x * pAffineTP->y;
-
-    double r = pAmount / (re*re + im*im);
-
-    pVarTP->x += (pAffineTP->x * re + pAffineTP->y * im) * r;
-    pVarTP->y += (pAffineTP->y * re - pAffineTP->x * im) * r;
+    float a = atan2f(pAffineTP->x, pAffineTP->y);
+    float r = sqrtf(pAffineTP->x * pAffineTP->x + pAffineTP->y * pAffineTP->y);
+    r = r * (low + (high - low) * (0.5f + 0.5f * sinf(waves * a)));
+    float nx = sinf(a) * r;
+    float ny = cosf(a) * r;
+    pVarTP->x += pAmount * nx;
+    pVarTP->y += pAmount * ny;
 		if (pContext->isPreserveZCoordinate) {
 			pVarTP->z += pAmount * pAffineTP->z;
 		}
 	}
 
-	CurlFunc* makeCopy() {
-		return new CurlFunc(*this);
+	BlobFunc* makeCopy() {
+		return new BlobFunc(*this);
 	}
 
 private:
-	float c1;
-	float c2;
+	float low;
+	float high;
+	float waves;
 };
 
-#endif // JWFVAR_CURL_H_
+#endif // JWFVAR_BLOB_H_

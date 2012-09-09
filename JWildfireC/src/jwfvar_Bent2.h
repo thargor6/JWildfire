@@ -14,53 +14,54 @@
  if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-#ifndef JWFVAR_CURL_H_
-#define JWFVAR_CURL_H_
+#ifndef JWFVAR_BENT2_H_
+#define JWFVAR_BENT2_H_
 
 #include "jwf_Constants.h"
 #include "jwf_Variation.h"
 
-class CurlFunc: public Variation {
+class Bent2Func: public Variation {
 public:
-	CurlFunc() {
-		c1 = 0.0f;
-		c2 = 0.0f;
-		initParameterNames(2, "c1", "c2");
+	Bent2Func() {
+		x = 1.0f;
+		y = 1.0f;
+		initParameterNames(2, "x", "y");
 	}
 
 	const char* getName() const {
-		return "curl";
+		return "bent2";
 	}
 
 	void setParameter(char *pName, float pValue) {
-		if (strcmp(pName, "c1") == 0) {
-			c1 = pValue;
+		if (strcmp(pName, "x") == 0) {
+			x = pValue;
 		}
-		else if (strcmp(pName, "c2") == 0) {
-			c2 = pValue;
+		else if (strcmp(pName, "y") == 0) {
+			y = pValue;
 		}
 	}
 
 	void transform(FlameTransformationContext *pContext, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
-    float re = 1.0f + c1 * pAffineTP->x + c2 * (pAffineTP->x*pAffineTP->x - pAffineTP->y*pAffineTP->y);
-    float im = c1 * pAffineTP->y + c2 * 2 * pAffineTP->x * pAffineTP->y;
-
-    double r = pAmount / (re*re + im*im);
-
-    pVarTP->x += (pAffineTP->x * re + pAffineTP->y * im) * r;
-    pVarTP->y += (pAffineTP->y * re - pAffineTP->x * im) * r;
+    float nx = pAffineTP->x;
+    float ny = pAffineTP->y;
+    if (nx < 0.0)
+      nx = nx * x;
+    if (ny < 0.0)
+      ny = ny * y;
+    pVarTP->x += pAmount * nx;
+    pVarTP->y += pAmount * ny;
 		if (pContext->isPreserveZCoordinate) {
 			pVarTP->z += pAmount * pAffineTP->z;
 		}
 	}
 
-	CurlFunc* makeCopy() {
-		return new CurlFunc(*this);
+	Bent2Func* makeCopy() {
+		return new Bent2Func(*this);
 	}
 
 private:
-	float c1;
-	float c2;
+	float x;
+	float y;
 };
 
-#endif // JWFVAR_CURL_H_
+#endif // JWFVAR_BENT2_H_

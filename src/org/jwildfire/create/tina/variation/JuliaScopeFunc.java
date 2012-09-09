@@ -25,6 +25,8 @@ import static org.jwildfire.base.MathLib.round;
 import static org.jwildfire.base.MathLib.sin;
 import static org.jwildfire.base.MathLib.sqr;
 import static org.jwildfire.base.MathLib.sqrt;
+import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_CUDA;
+import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_JWILDFIRE;
 
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.XForm;
@@ -32,6 +34,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 public class JuliaScopeFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
+
   private static final String PARAM_POWER = "power";
   private static final String PARAM_DIST = "dist";
   private static final String[] paramNames = { PARAM_POWER, PARAM_DIST };
@@ -160,6 +163,11 @@ public class JuliaScopeFunc extends VariationFunc {
   public void init(FlameTransformationContext pContext, XForm pXForm, double pAmount) {
     absPower = iabs(Tools.FTOI(power));
     cPower = dist / power * 0.5;
+  }
+
+  @Override
+  public int getAvailability() {
+    return AVAILABILITY_JWILDFIRE | AVAILABILITY_CUDA;
   }
 
 }

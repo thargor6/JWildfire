@@ -40,10 +40,6 @@ public:
 		else if (strcmp(pName, "dist") == 0) {
 			dist = pValue;
 		}
-		else {
-			printf("Unknown parameter %s\n", pName);
-			exit(-1);
-		}
 	}
 
 	void init(FlameTransformationContext *pContext, float pAmount) {

@@ -24,6 +24,8 @@ import static org.jwildfire.base.MathLib.pow;
 import static org.jwildfire.base.MathLib.sin;
 import static org.jwildfire.base.MathLib.sqr;
 import static org.jwildfire.base.MathLib.sqrt;
+import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_CUDA;
+import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_JWILDFIRE;
 
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.XForm;
@@ -31,6 +33,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 public class Julia3DZFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
+
   private static final String PARAM_POWER = "power";
   private static final String[] paramNames = { PARAM_POWER };
 
@@ -139,6 +142,11 @@ public class Julia3DZFunc extends VariationFunc {
   public void init(FlameTransformationContext pContext, XForm pXForm, double pAmount) {
     absPower = fabs(power);
     cPower = 1.0 / power * 0.5;
+  }
+
+  @Override
+  public int getAvailability() {
+    return AVAILABILITY_JWILDFIRE | AVAILABILITY_CUDA;
   }
 
 }

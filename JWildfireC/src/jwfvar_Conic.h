@@ -14,53 +14,50 @@
  if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-#ifndef JWFVAR_CURL_H_
-#define JWFVAR_CURL_H_
+#ifndef JWFVAR_CONIC_H_
+#define JWFVAR_CONIC_H_
 
 #include "jwf_Constants.h"
 #include "jwf_Variation.h"
 
-class CurlFunc: public Variation {
+class ConicFunc: public Variation {
 public:
-	CurlFunc() {
-		c1 = 0.0f;
-		c2 = 0.0f;
-		initParameterNames(2, "c1", "c2");
+	ConicFunc() {
+		eccentricity = 1.0f;
+		holes = 0.0f;
+		initParameterNames(2, "eccentricity", "holes");
 	}
 
 	const char* getName() const {
-		return "curl";
+		return "conic";
 	}
 
 	void setParameter(char *pName, float pValue) {
-		if (strcmp(pName, "c1") == 0) {
-			c1 = pValue;
+		if (strcmp(pName, "eccentricity") == 0) {
+			eccentricity = pValue;
 		}
-		else if (strcmp(pName, "c2") == 0) {
-			c2 = pValue;
+		else if (strcmp(pName, "holes") == 0) {
+			holes = pValue;
 		}
 	}
 
 	void transform(FlameTransformationContext *pContext, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
-    float re = 1.0f + c1 * pAffineTP->x + c2 * (pAffineTP->x*pAffineTP->x - pAffineTP->y*pAffineTP->y);
-    float im = c1 * pAffineTP->y + c2 * 2 * pAffineTP->x * pAffineTP->y;
-
-    double r = pAmount / (re*re + im*im);
-
-    pVarTP->x += (pAffineTP->x * re + pAffineTP->y * im) * r;
-    pVarTP->y += (pAffineTP->y * re - pAffineTP->x * im) * r;
+    double ct = pAffineTP->x / pAffineTP->getPrecalcSqrt();
+    double r = pAmount * (pContext->randGen->random() - holes) * eccentricity / (1.0f + eccentricity * ct) / pAffineTP->getPrecalcSqrt();
+    pVarTP->x += r * pAffineTP->x;
+    pVarTP->y += r * pAffineTP->y;
 		if (pContext->isPreserveZCoordinate) {
 			pVarTP->z += pAmount * pAffineTP->z;
 		}
 	}
 
-	CurlFunc* makeCopy() {
-		return new CurlFunc(*this);
+	ConicFunc* makeCopy() {
+		return new ConicFunc(*this);
 	}
 
 private:
-	float c1;
-	float c2;
+	float eccentricity;
+	float holes;
 };
 
-#endif // JWFVAR_CURL_H_
+#endif // JWFVAR_CONIC_H_

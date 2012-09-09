@@ -42,7 +42,6 @@ public:
 	}
 
 	void transform(FlameTransformationContext *pContext, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
-/*
 		float r;
     if (_regularForm) {
       r = pAmount / (pAffineTP->x * pAffineTP->x + pAffineTP->y * pAffineTP->y + pAffineTP->z * pAffineTP->z + EPSILON);
@@ -60,7 +59,6 @@ public:
       pVarTP->y -= pAffineTP->y * r;
       pVarTP->z -= pAffineTP->z * r;
     }
-    */
 	}
 
 	void init(FlameTransformationContext *pContext, float pAmount) {

@@ -14,58 +14,65 @@
  if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-
-#ifndef JWFVAR_JULIA3D_H_
-#define JWFVAR_JULIA3D_H_
+#ifndef JWFVAR_JULIASCOPE_H_
+#define JWFVAR_JULIASCOPE_H_
 
 #include "jwf_Constants.h"
 #include "jwf_Variation.h"
 
-class Julia3DFunc: public Variation {
+class JuliascopeFunc: public Variation {
 public:
-	Julia3DFunc() {
-		power = 3.0f;
-		initParameterNames(1, "power");
+
+	JuliascopeFunc() {
+		power=3.0f;
+		dist=1.0f;
+		initParameterNames(2, "power", "dist");
 	}
 
 	const char* getName() const {
-		return "julia3D";
+		return "juliascope";
 	}
 
 	void setParameter(char *pName, float pValue) {
 		if (strcmp(pName, "power") == 0) {
 			power = pValue;
 		}
+		else if (strcmp(pName, "dist") == 0) {
+			dist = pValue;
+		}
 	}
 
 	void init(FlameTransformationContext *pContext, float pAmount) {
-		_absPower = abs(FTOI(power));
-		_cPower = (1.0f / power - 1.0f) * 0.5f;
+    _absPower = abs(FTOI(power));
+    _cPower = dist / power * 0.5f;
 	}
 
 	void transform(FlameTransformationContext *pContext, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
-		float z = pAffineTP->z / _absPower;
-		float r2d = pAffineTP->x * pAffineTP->x + pAffineTP->y * pAffineTP->y;
-		float r = pAmount * powf(r2d + z * z, _cPower);
+    int rnd = pContext->randGen->random(_absPower);
+    float a;
+    if ((rnd & 1) == 0)
+      a = (2 * M_PI * rnd + atan2f(pAffineTP->y, pAffineTP->x)) / power;
+    else
+      a = (2 * M_PI * rnd - atan2f(pAffineTP->y, pAffineTP->x)) / power;
+    float sina = sinf(a);
+    float cosa = cosf(a);
 
-		float r2 = r * sqrtf(r2d);
-		int rnd = (int) (pContext->randGen->random() * _absPower);
-		float angle = (atan2f(pAffineTP->y, pAffineTP->x) + 2 * M_PI * rnd) / (float) power;
-		float sina = sinf(angle);
-		float cosa = cosf(angle);
-
-		pVarTP->x += r2 * cosa;
-		pVarTP->y += r2 * sina;
-		pVarTP->z += r * z;
+    double r = pAmount * powf(pAffineTP->x*pAffineTP->x + pAffineTP->y*pAffineTP->y, _cPower);
+    pVarTP->x = pVarTP->x + r * cosa;
+    pVarTP->y = pVarTP->y + r * sina;
+		if (pContext->isPreserveZCoordinate) {
+			pVarTP->z += pAmount * pAffineTP->z;
+		}
 	}
 
-	Julia3DFunc* makeCopy() {
-		return new Julia3DFunc(*this);
+	JuliascopeFunc* makeCopy() {
+		return new JuliascopeFunc(*this);
 	}
+
 
 private:
-	float power;
+	float power, dist;
 	float _absPower, _cPower;
 };
 
-#endif // JWFVAR_JULIA3D_H_
+#endif // JWFVAR_JULIASCOPE_H_

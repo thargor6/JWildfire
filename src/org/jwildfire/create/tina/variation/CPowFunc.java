@@ -22,11 +22,14 @@ import static org.jwildfire.base.MathLib.exp;
 import static org.jwildfire.base.MathLib.floor;
 import static org.jwildfire.base.MathLib.log;
 import static org.jwildfire.base.MathLib.sin;
+import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_CUDA;
+import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_JWILDFIRE;
 
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
 public class CPowFunc extends VariationFunc {
+  private static final long serialVersionUID = 1L;
 
   private static final String PARAM_R = "r";
   private static final String PARAM_I = "i";
@@ -85,6 +88,11 @@ public class CPowFunc extends VariationFunc {
   @Override
   public String getName() {
     return "cpow";
+  }
+
+  @Override
+  public int getAvailability() {
+    return AVAILABILITY_JWILDFIRE | AVAILABILITY_CUDA;
   }
 
 }

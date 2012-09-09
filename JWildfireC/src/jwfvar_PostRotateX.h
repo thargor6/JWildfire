@@ -14,53 +14,38 @@
  if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-#ifndef JWFVAR_CURL_H_
-#define JWFVAR_CURL_H_
+
+#ifndef JWFVAR_POST_ROTATE_X_H_
+#define JWFVAR_POST_ROTATE_X_H_
 
 #include "jwf_Constants.h"
 #include "jwf_Variation.h"
 
-class CurlFunc: public Variation {
+class PostRotateXFunc: public Variation {
 public:
-	CurlFunc() {
-		c1 = 0.0f;
-		c2 = 0.0f;
-		initParameterNames(2, "c1", "c2");
+	PostRotateXFunc() {
 	}
 
 	const char* getName() const {
-		return "curl";
+		return "post_rotate_x";
 	}
 
-	void setParameter(char *pName, float pValue) {
-		if (strcmp(pName, "c1") == 0) {
-			c1 = pValue;
-		}
-		else if (strcmp(pName, "c2") == 0) {
-			c2 = pValue;
-		}
+	int const getPriority() {
+		return 1;
 	}
 
 	void transform(FlameTransformationContext *pContext, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
-    float re = 1.0f + c1 * pAffineTP->x + c2 * (pAffineTP->x*pAffineTP->x - pAffineTP->y*pAffineTP->y);
-    float im = c1 * pAffineTP->y + c2 * 2 * pAffineTP->x * pAffineTP->y;
-
-    double r = pAmount / (re*re + im*im);
-
-    pVarTP->x += (pAffineTP->x * re + pAffineTP->y * im) * r;
-    pVarTP->y += (pAffineTP->y * re - pAffineTP->x * im) * r;
-		if (pContext->isPreserveZCoordinate) {
-			pVarTP->z += pAmount * pAffineTP->z;
-		}
+    float sina = sinf(pAmount * M_PI * 0.5f);
+    float cosa = cosf(pAmount * M_PI * 0.5f);
+    float z = cosa * pVarTP->z - sina * pVarTP->y;
+    pVarTP->y = sina * pVarTP->z + cosa * pVarTP->y;
+    pVarTP->z = z;
 	}
 
-	CurlFunc* makeCopy() {
-		return new CurlFunc(*this);
+	PostRotateXFunc* makeCopy() {
+		return new PostRotateXFunc(*this);
 	}
 
-private:
-	float c1;
-	float c2;
 };
 
-#endif // JWFVAR_CURL_H_
+#endif // JWFVAR_POST_ROTATE_X_H_

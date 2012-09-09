@@ -14,53 +14,64 @@
  if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-#ifndef JWFVAR_CURL_H_
-#define JWFVAR_CURL_H_
+#ifndef JWFVAR_CPOW_H_
+#define JWFVAR_CPOW_H_
 
 #include "jwf_Constants.h"
 #include "jwf_Variation.h"
 
-class CurlFunc: public Variation {
+class CPowFunc: public Variation {
 public:
-	CurlFunc() {
-		c1 = 0.0f;
-		c2 = 0.0f;
-		initParameterNames(2, "c1", "c2");
+	CPowFunc() {
+		r = 1.0f;
+		i = 0.1f;
+		power = 1.5f;
+		initParameterNames(3, "r", "i", "power");
 	}
 
 	const char* getName() const {
-		return "curl";
+		return "cpow";
 	}
 
 	void setParameter(char *pName, float pValue) {
-		if (strcmp(pName, "c1") == 0) {
-			c1 = pValue;
+		if (strcmp(pName, "r") == 0) {
+			r = pValue;
 		}
-		else if (strcmp(pName, "c2") == 0) {
-			c2 = pValue;
+		else if (strcmp(pName, "i") == 0) {
+			i = pValue;
+		}
+		else if (strcmp(pName, "power") == 0) {
+			power = pValue;
 		}
 	}
 
 	void transform(FlameTransformationContext *pContext, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
-    float re = 1.0f + c1 * pAffineTP->x + c2 * (pAffineTP->x*pAffineTP->x - pAffineTP->y*pAffineTP->y);
-    float im = c1 * pAffineTP->y + c2 * 2 * pAffineTP->x * pAffineTP->y;
+		float a = pAffineTP->getPrecalcAtanYX();
+    float lnr = 0.5f * logf(pAffineTP->getPrecalcSumsq());
+    float va = 2.0f * M_PI / power;
+    float vc = r / power;
+    float vd = i / power;
+    float ang = vc * a + vd * lnr + va * floor(power * pContext->randGen->random());
 
-    double r = pAmount / (re*re + im*im);
+    float m = pAmount * expf(vc * lnr - vd * a);
+    float sa = sinf(ang);
+    float ca = cosf(ang);
 
-    pVarTP->x += (pAffineTP->x * re + pAffineTP->y * im) * r;
-    pVarTP->y += (pAffineTP->y * re - pAffineTP->x * im) * r;
+    pVarTP->x += m * ca;
+    pVarTP->y += m * sa;
 		if (pContext->isPreserveZCoordinate) {
 			pVarTP->z += pAmount * pAffineTP->z;
 		}
 	}
 
-	CurlFunc* makeCopy() {
-		return new CurlFunc(*this);
+	CPowFunc* makeCopy() {
+		return new CPowFunc(*this);
 	}
 
 private:
-	float c1;
-	float c2;
+	float r;
+	float i;
+	float power;
 };
 
-#endif // JWFVAR_CURL_H_
+#endif // JWFVAR_CPOW_H_

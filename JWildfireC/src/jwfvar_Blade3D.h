@@ -15,8 +15,8 @@
  02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-#ifndef JWFVAR_BLADE3D_H_
-#define JWFVAR_BLADE3D_H_
+#ifndef JWFVAR_BLADE_3D_H_
+#define JWFVAR_BLADE_3D_H_
 
 #include "jwf_Variation.h"
 
@@ -44,4 +44,4 @@ public:
 
 };
 
-#endif // JWFVAR_BLADE3D_H_
+#endif // JWFVAR_BLADE_3D_H_

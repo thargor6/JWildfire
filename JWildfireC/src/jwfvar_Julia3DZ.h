@@ -14,53 +14,55 @@
  if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-#ifndef JWFVAR_CURL_H_
-#define JWFVAR_CURL_H_
+
+#ifndef JWFVAR_JULIA3D_Z_H_
+#define JWFVAR_JULIA3D_Z_H_
 
 #include "jwf_Constants.h"
 #include "jwf_Variation.h"
 
-class CurlFunc: public Variation {
+class Julia3DZFunc: public Variation {
 public:
-	CurlFunc() {
-		c1 = 0.0f;
-		c2 = 0.0f;
-		initParameterNames(2, "c1", "c2");
+	Julia3DZFunc() {
+		power = 3.0f;
+		initParameterNames(1, "power");
 	}
 
 	const char* getName() const {
-		return "curl";
+		return "julia3Dz";
 	}
 
 	void setParameter(char *pName, float pValue) {
-		if (strcmp(pName, "c1") == 0) {
-			c1 = pValue;
+		if (strcmp(pName, "power") == 0) {
+			power = pValue;
 		}
-		else if (strcmp(pName, "c2") == 0) {
-			c2 = pValue;
-		}
+	}
+
+	void init(FlameTransformationContext *pContext, float pAmount) {
+    _absPower = abs(FTOI(power));
+    _cPower = 1.0f / power * 0.5f;
 	}
 
 	void transform(FlameTransformationContext *pContext, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
-    float re = 1.0f + c1 * pAffineTP->x + c2 * (pAffineTP->x*pAffineTP->x - pAffineTP->y*pAffineTP->y);
-    float im = c1 * pAffineTP->y + c2 * 2 * pAffineTP->x * pAffineTP->y;
+    float r2d = pAffineTP->x * pAffineTP->x + pAffineTP->y * pAffineTP->y;
+    float r = pAmount * powf(r2d, _cPower);
 
-    double r = pAmount / (re*re + im*im);
-
-    pVarTP->x += (pAffineTP->x * re + pAffineTP->y * im) * r;
-    pVarTP->y += (pAffineTP->y * re - pAffineTP->x * im) * r;
-		if (pContext->isPreserveZCoordinate) {
-			pVarTP->z += pAmount * pAffineTP->z;
-		}
+    int rnd = (int) (pContext->randGen->random() * _absPower);
+    float angle = (atan2f(pAffineTP->y, pAffineTP->x) + 2.0f * M_PI * rnd) / power;
+    float sina = sinf(angle);
+    float cosa = cosf(angle);
+    pVarTP->x += r * cosa;
+    pVarTP->y += r * sina;
+    pVarTP->z += r * pAffineTP->z / (sqrtf(r2d) * _absPower);
 	}
 
-	CurlFunc* makeCopy() {
-		return new CurlFunc(*this);
+	Julia3DZFunc* makeCopy() {
+		return new Julia3DZFunc(*this);
 	}
 
 private:
-	float c1;
-	float c2;
+	float power;
+	float _absPower, _cPower;
 };
 
-#endif // JWFVAR_CURL_H_
+#endif // JWFVAR_JULIA3D_Z_H_
