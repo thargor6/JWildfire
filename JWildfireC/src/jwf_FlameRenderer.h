@@ -134,8 +134,17 @@ struct FlameRenderer {
     LogDensityPoint *logDensityPnt;
     hostMalloc((void**)&logDensityPnt,sizeof(LogDensityPoint));
 
+    bool newShit=true;
+		float minDensity, maxDensity, avgDensity;
+
+
     if (pImage != NULL) {
-      logDensityFilter->setRaster(raster, rasterWidth, rasterHeight, pImage->imageWidth, pImage->imageHeight);
+
+    	logDensityFilter->setRaster(raster, rasterWidth, rasterHeight, pImage->imageWidth, pImage->imageHeight);
+    	if(newShit) {
+    		logDensityFilter->calcDensity(&minDensity, &maxDensity, &avgDensity);
+    		printf("AVG DENSITY: %f (%f...%f)\n",avgDensity, minDensity, maxDensity);
+    	}
     }
     else if (pHDRImage != NULL) {
       logDensityFilter->setRaster(raster, rasterWidth, rasterHeight, pHDRImage->imageWidth, pHDRImage->imageHeight);
@@ -149,7 +158,12 @@ struct FlameRenderer {
       hostMalloc((void**)&rbgPoint, sizeof(GammaCorrectedRGBPoint));
       for (int i = 0; i < pImage->imageHeight; i++) {
         for (int j = 0; j < pImage->imageWidth; j++) {
-          logDensityFilter->transformPoint(logDensityPnt, j, i);
+          if(newShit) {
+            logDensityFilter->transformPointNewShit(logDensityPnt, j, i, minDensity, maxDensity, avgDensity);
+          }
+          else {
+            logDensityFilter->transformPoint(logDensityPnt, j, i);
+          }
           gammaCorrectionFilter->transformPoint(logDensityPnt, rbgPoint);
           pImage->setRGB(j, i, rbgPoint->red, rbgPoint->green, rbgPoint->blue);
         }

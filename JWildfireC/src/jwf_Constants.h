@@ -18,7 +18,7 @@
 #define __JWF_CONSTANTS_H__
 
 #define APP_TITLE "JWildfireC"
-#define APP_VERSION "0.12 (02.09.2012)"
+#define APP_VERSION "0.15 (03.09.2012)"
 
 #define EPSILON 1.0e-8f
 

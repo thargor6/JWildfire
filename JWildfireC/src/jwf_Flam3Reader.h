@@ -169,11 +169,6 @@ private:
 	}
 
 	void split(char *pString, char *delim, char ***tokens, int *tokenCount) {
-		printf("#%s#\n",pString);
-
-
-
-
 		*tokens = NULL;
 		*tokenCount = 0;
 		if (pString == NULL || strlen(pString) == 0) {
@@ -191,7 +186,7 @@ private:
 			*tokenCount = 1;
 		}
 
-		char *p = strtok(copy, " ");
+		char *p = strtok(copy, delim);
 		while (p) {
 			l = strlen(p);
 			char *token = (char*) malloc((l + 1) * sizeof(char));
@@ -210,13 +205,13 @@ private:
 				*tokens = newTokens;
 				*tokenCount = (*tokenCount) + 1;
 			}
-			p = strtok(NULL, " ");
+			p = strtok(NULL, delim);
 		}
 		free(copy);
 	}
 
 	void freeStrArray(char **pArray, int pSize) {
-		if (pArray != NULL) {
+		if (pArray != NULL && pSize>0) {
 			for (int i = 0; i < pSize; i++) {
 				free(pArray[i]);
 			}
@@ -352,6 +347,7 @@ private:
 								char *pAttName=(char*)malloc(pAttNameLen*sizeof(char));
 								pAttName[0]='\0';
 								sprintf(pAttName, "%s_%s",name,pName);
+								pAttName[pAttNameLen-1]='\0';
 								if ((pHs = findAttribute(attNames, attValues, attCount, pAttName)) != NULL) {
 									var->setParameter(pName, atof(pHs));
 								}
@@ -548,7 +544,8 @@ private:
 					xForm->init();
 					parseXFormAttributes(xForm, hs);
 					flame->addXForm(xForm);
-					free(hs);
+					// TODO cause endless loop (?)
+       		// free(hs);
 					p = pe + 2;
 				}
 			}

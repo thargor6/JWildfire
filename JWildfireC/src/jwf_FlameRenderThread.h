@@ -45,7 +45,6 @@ struct FlameRenderThread {
 
   XForm *xf;
   long startIter;
-  long iter;
 
   void init(Flame *pFlame, FlameTransformationContext *pCtx, long pSamples,FlameView *pFlameView,RasterPoint **pRaster,int pRasterWidth,int pRasterHeight,RenderColor *pColorMap,float pPaletteIdxScl,int pPoolSize, int pBundleSize) {    
     xf=NULL;
@@ -146,10 +145,12 @@ struct FlameRenderThread {
   void iterate1() {
     XForm **xForms=flame->xForms;
     XForm *finalXForm = flame->finalXForm;
-    for (iter = startIter; iter < samples; iter++) {
+    RandGen *rnd=ctx->randGen;
+    for (long iter = startIter; iter < samples; iter++) {
       int xfIdx=xf->nextAppliedXFormIdxTable[ctx->randGen->random(NEXT_APPLIED_XFORM_TABLE_SIZE)];
       xf = xForms[xfIdx];
-      xf->transformPoint(ctx, &affineT, &varT, &p, &p);
+      //xf->transformPoint(ctx, &affineT, &varT, &p, &p);
+      xf->transformPoint(ctx, &affineT, &varT, &p);
 
       if(xf->drawMode!=DRAWMODE_NORMAL) {
 				if (xf->drawMode == DRAWMODE_HIDDEN)
@@ -179,10 +180,26 @@ struct FlameRenderThread {
         if ((py < 0) || (py > flameView->camH))
           continue;
       }
+      int xIdx, yIdx;
 
-      int xIdx = (int) (flameView->bws * px + 0.5f);
-      int yIdx = (int) (flameView->bhs * py + 0.5f);
-      if(xIdx>=rasterWidth || yIdx>=rasterHeight) {
+
+// #ifdef ANTIAALIAS
+      if(rnd->random()<0.5) {
+        float dr = expf(0.5f * sqrtf(-logf(rnd->random())))-1.0f;
+        float dtheta = rnd->random() * 2.0f * M_PI;
+        xIdx = (int) (flameView->bws * px + dr*cosf(dtheta) + 0.5f);
+        yIdx = (int) (flameView->bhs * py + dr*sinf(dtheta) + 0.5f);
+      }
+      else {
+        xIdx = (int) (flameView->bws * px + 0.5f);
+        yIdx = (int) (flameView->bhs * py + 0.5f);
+      }
+    if(xIdx<0 || xIdx>=rasterWidth || yIdx<0 || yIdx>=rasterHeight) {
+
+//#endif
+//      int xIdx = (int) (flameView->bws * px + 0.5f);
+//      int yIdx = (int) (flameView->bhs * py + 0.5f);
+//      if(xIdx>=rasterWidth || yIdx>=rasterHeight) {
         continue;
       }
 
@@ -207,9 +224,8 @@ struct FlameRenderThread {
   void iterateN() {
     XForm **xForms=flame->xForms;
     RandGen *rnd=ctx->randGen;
-
     register int idx;
-    for (iter = startIter; iter < samples; iter++) {
+    for (long iter = startIter; iter < samples; iter++) {
       int xfIdx=xf->nextAppliedXFormIdxTable[rnd->random(NEXT_APPLIED_XFORM_TABLE_SIZE)];
       xf = xForms[xfIdx];
       for(int i=0;i<bundleSize;i++) {
@@ -218,7 +234,7 @@ struct FlameRenderThread {
 
       for(int i=0;i<bundleSize;i++) {
         idx=bundle[i];
-        xf->transformPoint(ctx, &affineTArray[idx], &varTArray[idx], &pArray[idx], &pArray[idx]);
+        xf->transformPoint(ctx, &affineTArray[idx], &varTArray[idx], &pArray[idx]);
       }
 
       if(xf->drawMode != DRAWMODE_NORMAL) {
@@ -270,8 +286,6 @@ struct FlameRenderThread {
         idx=bundle[i];
         if(pValidArray[idx]==TRUE) {
           int xIdx, yIdx;
-            xIdx = (int) (flameView->bws * pxArray[idx] + 0.5f);
-            yIdx = (int) (flameView->bhs * pyArray[idx] + 0.5f);
 
 //#ifdef ALIAS
             if(rnd->random()<0.5) {
@@ -286,6 +300,8 @@ struct FlameRenderThread {
             }
           if(xIdx>=0 && xIdx<rasterWidth && yIdx>=0 && yIdx<rasterHeight) {
 //#endif
+//            xIdx = (int) (flameView->bws * pxArray[idx] + 0.5f);
+//            yIdx = (int) (flameView->bhs * pyArray[idx] + 0.5f);
   //        if(xIdx<rasterWidth && yIdx<rasterHeight) {
             RasterPoint *rp = &raster[yIdx][xIdx];
             if (pArray[idx].rgbColor) {

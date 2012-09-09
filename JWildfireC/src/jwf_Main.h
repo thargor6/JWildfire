@@ -143,17 +143,19 @@ int renderFlame(AppSettings *pAppSettings) {
 	Flam3Reader *reader=new Flam3Reader();
 	Flame **flames;
 	int flameCount;
+
 	reader->readFlames(pAppSettings->getFlameFilename(), &flames, &flameCount);
 	if(flameCount<1) {
 		printf("No flame to render");
 		return -1;
 	}
+
+
   Flame *hostFlame=flames[0];
 
   FlameRenderer renderer;
   renderer.create(hostFlame,8);
   RenderInfo info;
-
 
 
   info.imageWidth=pAppSettings->getOutputWidth();
@@ -182,6 +184,8 @@ int renderFlame(AppSettings *pAppSettings) {
     }
   }
   hostFlame->dump();
+
+  usePool=false;
 
   if(usePool==true) {
     info.poolSize=1024;

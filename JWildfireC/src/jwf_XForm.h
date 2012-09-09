@@ -221,7 +221,7 @@ struct XForm {
     freePreparedVariations();
     hostMalloc((void**)&__sortedVariations, variationCount * sizeof(Variation*));
     memcpy(__sortedVariations, variations, variationCount * sizeof(Variation*));
-
+    /*
     if(variationCount>1) {
       printf("UNSORTED:");
       for(int i=0;i<variationCount;i++) {
@@ -229,9 +229,11 @@ struct XForm {
       }
       printf("\n");
     }
+    */
     if(variationCount>1) {
       qsort(__sortedVariations,variationCount, sizeof(Variation*), variationCompare);
     }
+    /*
     if(variationCount>1) {
       printf("SORTED:");
       for(int i=0;i<variationCount;i++) {
@@ -239,6 +241,7 @@ struct XForm {
       }
       printf("\n");
     }
+    */
   }
 
   void transformPoint(FlameTransformationContext *pContext, XYZPoint *pAffineT, XYZPoint *pVarT, XYZPoint *pSrcPoint, XYZPoint *pDstPoint) {
@@ -301,6 +304,65 @@ struct XForm {
     }
   }
 
+  void transformPoint(FlameTransformationContext *pContext, XYZPoint *pAffineT, XYZPoint *pVarT, XYZPoint *pPoint) {
+    //pAffineT->clear();
+
+
+  	pAffineT->rgbColor = FALSE;
+  	pAffineT->redColor = pAffineT->greenColor = pAffineT->blueColor = 0.0f;
+  	pAffineT->x = pAffineT->y = pAffineT->z = pAffineT->color = 0.0f;
+  	pAffineT->sumsq = pAffineT->sqrt = pAffineT->atan = pAffineT->atanYX = pAffineT->sinA = pAffineT->cosA = 0.0f;
+  	pAffineT->validSumsq = pAffineT->validSqrt = pAffineT->validAtan = pAffineT->validAtanYX = pAffineT->validSinA = pAffineT->validCosA = FALSE;
+
+
+    pAffineT->color = pPoint->color * __c1 + __c2;
+    if (__hasCoeffs) {
+      pAffineT->x = coeff00 * pPoint->x + coeff10 * pPoint->y + coeff20;
+      pAffineT->y = coeff01 * pPoint->x + coeff11 * pPoint->y + coeff21;
+    }
+    else {
+      pAffineT->x = pPoint->x;
+      pAffineT->y = pPoint->y;
+    }
+    pAffineT->z = pPoint->z;
+
+    //pVarT->invalidate();
+    pVarT->x = pVarT->y = pVarT->z = pVarT->color = 0.0f;
+
+
+    pVarT->color = pAffineT->color;
+    pVarT->rgbColor = pAffineT->rgbColor;
+    pVarT->redColor = pAffineT->redColor;
+    pVarT->greenColor = pAffineT->greenColor;
+    pVarT->blueColor = pAffineT->blueColor;
+
+    Variation** vars=__preparedVariations[pContext->threadIdx];
+    for (int i = 0; i < variationCount; i++) {
+      Variation *variation = vars[i];
+      vars[i]->transform(pContext, pAffineT, pVarT,variation->amount);
+      if (variation->getPriority() < 0) {
+        pAffineT->invalidate();
+      }
+    }
+    pPoint->color = pVarT->color;
+    pPoint->rgbColor = pVarT->rgbColor;
+    pPoint->redColor = pVarT->redColor;
+    pPoint->greenColor = pVarT->greenColor;
+    pPoint->blueColor = pVarT->blueColor;
+    if (__hasPostCoeffs) {
+      float px = postCoeff00 * pVarT->x + postCoeff10 * pVarT->y + postCoeff20;
+      float py = postCoeff01 * pVarT->x + postCoeff11 * pVarT->y + postCoeff21;
+      float pz = pVarT->z;
+      pPoint->x = px;
+      pPoint->y = py;
+      pPoint->z = pz;
+    }
+    else {
+			pPoint->x = pVarT->x;
+			pPoint->y = pVarT->y;
+			pPoint->z = pVarT->z;
+    }
+  }
 };
 #endif // __JWF_XFORM_H__
 
