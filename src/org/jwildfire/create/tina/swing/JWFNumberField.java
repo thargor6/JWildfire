@@ -95,12 +95,12 @@ public class JWFNumberField extends JSpinner {
             }
             double MINMOVE = 3;
             double dx = xMouseOrigin - e.getX();
-            if (dx > MINMOVE || dx < -MINMOVE) {
+            if (mouseChangeCount > 0 || dx > MINMOVE || dx < -MINMOVE) {
               if (dx > 0) {
-                dx = (dx - MINMOVE) - threshold;
+                dx = (dx /*- MINMOVE*/) - threshold;
               }
               else {
-                dx = (dx + MINMOVE) + threshold;
+                dx = (dx /*+ MINMOVE*/) + threshold;
               }
               double value = (originValue) - dx * valueStep;
               if (hasMinValue && value < minValue) {
