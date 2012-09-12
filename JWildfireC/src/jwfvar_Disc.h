@@ -15,40 +15,37 @@
  02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-#ifndef JWFVAR_COT_H_
-#define JWFVAR_COT_H_
+#ifndef JWFVAR_DISC_H_
+#define JWFVAR_DISC_H_
 
 #include "jwf_Variation.h"
+#include "jwf_Constants.h"
 
-class CotFunc: public Variation {
+class DiscFunc: public Variation {
 public:
-	CotFunc() {
+	DiscFunc() {
 	}
 
 	const char* getName() const {
-		return "cot";
+		return "disc";
 	}
 
 	void transform(FlameTransformationContext *pContext, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
-    float cotsin = sinf(2.0f * pAffineTP->x);
-    float cotcos = cosf(2.0f * pAffineTP->x);
-    float cotsinh = sinhf(2.0f * pAffineTP->y);
-    float cotcosh = coshf(2.0f * pAffineTP->y);
-    float d=(cotcosh - cotcos);
-    if(d==0)
-    	return;
-    float cotden = 1.0f / d;
-    pVarTP->x += pAmount * cotden * cotsin;
-    pVarTP->y += pAmount * cotden * -1 * cotsinh;
+    float rPI = M_PI * sqrtf(pAffineTP->x * pAffineTP->x + pAffineTP->y * pAffineTP->y);
+    float sinr = sinf(rPI);
+    float cosr = cosf(rPI);
+    float r = pAmount * pAffineTP->getPrecalcAtan() / M_PI;
+    pVarTP->x += sinr * r;
+    pVarTP->y += cosr * r;
     if (pContext->isPreserveZCoordinate) {
       pVarTP->z += pAmount * pAffineTP->z;
     }
 	}
 
-	CotFunc* makeCopy() {
-		return new CotFunc(*this);
+	DiscFunc* makeCopy() {
+		return new DiscFunc(*this);
 	}
 
 };
 
-#endif // JWFVAR_COT_H_
+#endif // JWFVAR_DISC_H_

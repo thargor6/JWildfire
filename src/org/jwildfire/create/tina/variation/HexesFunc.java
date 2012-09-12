@@ -27,6 +27,8 @@ import static org.jwildfire.base.MathLib.cos;
 import static org.jwildfire.base.MathLib.floor;
 import static org.jwildfire.base.MathLib.pow;
 import static org.jwildfire.base.MathLib.sin;
+import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_CUDA;
+import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_JWILDFIRE;
 import static org.jwildfire.create.tina.variation.VoronoiTools.VORONOI_MAXPOINTS;
 import static org.jwildfire.create.tina.variation.VoronoiTools._x_;
 import static org.jwildfire.create.tina.variation.VoronoiTools._y_;
@@ -38,6 +40,7 @@ import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
 public class HexesFunc extends VariationFunc {
+  private static final long serialVersionUID = 1L;
 
   private static final String PARAM_CELLSIZE = "cellsize";
   private static final String PARAM_POWER = "power";
@@ -242,6 +245,11 @@ public class HexesFunc extends VariationFunc {
   public void init(FlameTransformationContext pContext, XForm pXForm, double pAmount) {
     rotSin = sin(rotate * 2.0 * MathLib.M_PI);
     rotCos = cos(rotate * 2.0 * MathLib.M_PI);
+  }
+
+  @Override
+  public int getAvailability() {
+    return AVAILABILITY_JWILDFIRE | AVAILABILITY_CUDA;
   }
 
 }

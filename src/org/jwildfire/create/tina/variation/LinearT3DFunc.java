@@ -18,11 +18,14 @@ package org.jwildfire.create.tina.variation;
 
 import static org.jwildfire.base.MathLib.fabs;
 import static org.jwildfire.base.MathLib.pow;
+import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_CUDA;
+import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_JWILDFIRE;
 
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
 public class LinearT3DFunc extends VariationFunc {
+  private static final long serialVersionUID = 1L;
 
   private static final String PARAM_POWX = "powX";
   private static final String PARAM_POWY = "powY";
@@ -80,6 +83,11 @@ public class LinearT3DFunc extends VariationFunc {
   @Override
   public String getName() {
     return "linearT3D";
+  }
+
+  @Override
+  public int getAvailability() {
+    return AVAILABILITY_JWILDFIRE | AVAILABILITY_CUDA;
   }
 
 }

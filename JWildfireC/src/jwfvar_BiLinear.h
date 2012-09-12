@@ -15,40 +15,32 @@
  02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-#ifndef JWFVAR_COT_H_
-#define JWFVAR_COT_H_
+#ifndef JWFVAR_BILINEAR_H_
+#define JWFVAR_BILINEAR_H_
 
 #include "jwf_Variation.h"
 
-class CotFunc: public Variation {
+class BiLinearFunc: public Variation {
 public:
-	CotFunc() {
+	BiLinearFunc() {
 	}
 
 	const char* getName() const {
-		return "cot";
+		return "bi_linear";
 	}
 
 	void transform(FlameTransformationContext *pContext, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
-    float cotsin = sinf(2.0f * pAffineTP->x);
-    float cotcos = cosf(2.0f * pAffineTP->x);
-    float cotsinh = sinhf(2.0f * pAffineTP->y);
-    float cotcosh = coshf(2.0f * pAffineTP->y);
-    float d=(cotcosh - cotcos);
-    if(d==0)
-    	return;
-    float cotden = 1.0f / d;
-    pVarTP->x += pAmount * cotden * cotsin;
-    pVarTP->y += pAmount * cotden * -1 * cotsinh;
+    pVarTP->x += pAmount * pAffineTP->y;
+    pVarTP->y += pAmount * pAffineTP->x;
     if (pContext->isPreserveZCoordinate) {
       pVarTP->z += pAmount * pAffineTP->z;
     }
 	}
 
-	CotFunc* makeCopy() {
-		return new CotFunc(*this);
+	BiLinearFunc* makeCopy() {
+		return new BiLinearFunc(*this);
 	}
 
 };
 
-#endif // JWFVAR_COT_H_
+#endif // JWFVAR_BILINEAR_H_

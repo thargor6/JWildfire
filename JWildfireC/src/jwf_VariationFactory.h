@@ -23,8 +23,10 @@
 #include "jwf_XYZPoint.h"
 #include "jwf_FlameTransformationContext.h"
 
+#include "jwfvar_Arch.h"
 #include "jwfvar_Bent.h"
 #include "jwfvar_Bent2.h"
+#include "jwfvar_BiLinear.h"
 #include "jwfvar_Bipolar.h"
 #include "jwfvar_Blade.h"
 #include "jwfvar_Blade3D.h"
@@ -37,16 +39,19 @@
 #include "jwfvar_Butterfly3D.h"
 #include "jwfvar_Cell.h"
 #include "jwfvar_Circlize.h"
+#include "jwfvar_Collideoscope.h"
 #include "jwfvar_Conic.h"
 #include "jwfvar_Cos.h"
 #include "jwfvar_Cosh.h"
 #include "jwfvar_Cot.h"
+#include "jwfvar_Coth.h"
 #include "jwfvar_CPow.h"
 #include "jwfvar_Cross.h"
 #include "jwfvar_Curl.h"
 #include "jwfvar_Curl3D.h"
 #include "jwfvar_Cylinder.h"
 #include "jwfvar_DCCube.h"
+#include "jwfvar_Disc.h"
 #include "jwfvar_Elliptic.h"
 #include "jwfvar_Epispiral.h"
 #include "jwfvar_EpispiralWF.h"
@@ -56,18 +61,21 @@
 #include "jwfvar_Flux.h"
 #include "jwfvar_GaussianBlur.h"
 #include "jwfvar_Hemisphere.h"
+#include "jwfvar_Hexes.h"
 #include "jwfvar_Julia3D.h"
 #include "jwfvar_Julia3DZ.h"
 #include "jwfvar_JuliaN.h"
 #include "jwfvar_Juliascope.h"
 #include "jwfvar_Linear.h"
 #include "jwfvar_Linear3D.h"
+#include "jwfvar_LinearT3D.h"
 #include "jwfvar_Lissajous.h"
 #include "jwfvar_Log.h"
 #include "jwfvar_Noise.h"
 #include "jwfvar_Oscilloscope.h"
 #include "jwfvar_Pie.h"
 #include "jwfvar_Pie3D.h"
+#include "jwfvar_PostMirrorWF.h"
 #include "jwfvar_PostRotateX.h"
 #include "jwfvar_PostRotateY.h"
 #include "jwfvar_PreBlur.h"
@@ -84,6 +92,7 @@
 #include "jwfvar_Unpolar.h"
 #include "jwfvar_Waves2.h"
 #include "jwfvar_Waves4WF.h"
+#include "jwfvar_Whorl.h"
 #include "jwfvar_XHeart.h"
 #include "jwfvar_ZCone.h"
 #include "jwfvar_ZScale.h"
@@ -141,8 +150,10 @@ private:
 	Variation **variations;
 
 	void initVariations() {
+		addVariation(new ArchFunc());
 		addVariation(new BentFunc());
 		addVariation(new Bent2Func());
+		addVariation(new BiLinearFunc());
 		addVariation(new BipolarFunc());
 		addVariation(new BladeFunc());
 		addVariation(new Blade3DFunc());
@@ -155,16 +166,19 @@ private:
 		addVariation(new Butterfly3DFunc());
 		addVariation(new CellFunc());
 		addVariation(new CirclizeFunc());
+		addVariation(new CollideoscopeFunc());
 		addVariation(new ConicFunc());
 		addVariation(new CosFunc());
 		addVariation(new CoshFunc());
 		addVariation(new CotFunc());
+		addVariation(new CothFunc());
 		addVariation(new CPowFunc());
 		addVariation(new CrossFunc());
 		addVariation(new CurlFunc());
 		addVariation(new Curl3DFunc());
 		addVariation(new CylinderFunc());
 		addVariation(new DCCubeFunc());
+		addVariation(new DiscFunc());
 		addVariation(new EllipticFunc());
 		addVariation(new EpispiralFunc());
 		addVariation(new EpispiralWFFunc());
@@ -174,18 +188,21 @@ private:
 		addVariation(new FluxFunc());
 		addVariation(new GaussianBlurFunc());
 		addVariation(new HemisphereFunc());
+		addVariation(new HexesFunc());
 		addVariation(new Julia3DFunc());
 		addVariation(new Julia3DZFunc());
 		addVariation(new JuliaNFunc());
 		addVariation(new JuliascopeFunc());
 		addVariation(new LinearFunc());
 		addVariation(new Linear3DFunc());
+		addVariation(new LinearT3DFunc());
 		addVariation(new LissajousFunc());
 		addVariation(new LogFunc());
 		addVariation(new NoiseFunc());
 		addVariation(new OscilloscopeFunc());
 		addVariation(new PieFunc());
 		addVariation(new Pie3DFunc());
+		addVariation(new PostMirrorWFFunc());
 		addVariation(new PostRotateXFunc());
 		addVariation(new PostRotateYFunc());
 		addVariation(new PreBlurFunc());
@@ -202,6 +219,7 @@ private:
 		addVariation(new UnpolarFunc());
 		addVariation(new Waves2Func());
 		addVariation(new Waves4WFFunc());
+		addVariation(new WhorlFunc());
 		addVariation(new XHeartFunc());
 		addVariation(new ZConeFunc());
 		addVariation(new ZScaleFunc());
