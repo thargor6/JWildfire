@@ -55,10 +55,14 @@
 #include "jwfvar_Csch.h"
 #include "jwfvar_Curl.h"
 #include "jwfvar_Curl3D.h"
+#include "jwfvar_Curve.h"
 #include "jwfvar_Cylinder.h"
 #include "jwfvar_DCCube.h"
 #include "jwfvar_Diamond.h"
 #include "jwfvar_Disc.h"
+#include "jwfvar_Disc2.h"
+#include "jwfvar_Disc_3D.h"
+#include "jwfvar_Eclipse.h"
 #include "jwfvar_EDisc.h"
 #include "jwfvar_Elliptic.h"
 #include "jwfvar_Epispiral.h"
@@ -69,12 +73,25 @@
 #include "jwfvar_Eyefish.h"
 #include "jwfvar_Fan.h"
 #include "jwfvar_Fisheye.h"
+#include "jwfvar_FlipCircle.h"
 #include "jwfvar_FlipY.h"
 #include "jwfvar_Flower.h"
 #include "jwfvar_Flux.h"
+#include "jwfvar_Foci.h"
 #include "jwfvar_GaussianBlur.h"
+#include "jwfvar_Handkerchief.h"
+#include "jwfvar_Heart.h"
+#include "jwfvar_Horseshoe.h"
+#include "jwfvar_Hyperbolic.h"
+#include "jwfvar_InflateZ_1.h"
+#include "jwfvar_InflateZ_2.h"
+#include "jwfvar_InflateZ_3.h"
+#include "jwfvar_InflateZ_4.h"
+#include "jwfvar_InflateZ_5.h"
+#include "jwfvar_InflateZ_6.h"
 #include "jwfvar_Hemisphere.h"
 #include "jwfvar_Hexes.h"
+#include "jwfvar_Hypertile1.h"
 #include "jwfvar_Julia.h"
 #include "jwfvar_Julia3D.h"
 #include "jwfvar_Julia3DZ.h"
@@ -82,14 +99,19 @@
 #include "jwfvar_Juliascope.h"
 #include "jwfvar_Linear.h"
 #include "jwfvar_Linear3D.h"
+#include "jwfvar_LinearT.h"
 #include "jwfvar_LinearT3D.h"
 #include "jwfvar_Lissajous.h"
 #include "jwfvar_Log.h"
 #include "jwfvar_Loonie.h"
+#include "jwfvar_Modulus.h"
 #include "jwfvar_Noise.h"
 #include "jwfvar_Oscilloscope.h"
+#include "jwfvar_Parabola.h"
+#include "jwfvar_Perspective.h"
 #include "jwfvar_Pie.h"
 #include "jwfvar_Pie3D.h"
+#include "jwfvar_Polar.h"
 #include "jwfvar_PostMirrorWF.h"
 #include "jwfvar_PostRotateX.h"
 #include "jwfvar_PostRotateY.h"
@@ -107,6 +129,8 @@
 #include "jwfvar_Splits.h"
 #include "jwfvar_Square.h"
 #include "jwfvar_Square3D.h"
+#include "jwfvar_Tan.h"
+#include "jwfvar_Tangent.h"
 #include "jwfvar_Unpolar.h"
 #include "jwfvar_Waves2.h"
 #include "jwfvar_Waves4WF.h"
@@ -200,10 +224,14 @@ private:
 		addVariation(new CschFunc());
 		addVariation(new CurlFunc());
 		addVariation(new Curl3DFunc());
+		addVariation(new CurveFunc());
 		addVariation(new CylinderFunc());
 		addVariation(new DCCubeFunc());
 		addVariation(new DiamondFunc());
 		addVariation(new DiscFunc());
+		addVariation(new Disc2Func());
+		addVariation(new Disc_3DFunc());
+		addVariation(new EclipseFunc());
 		addVariation(new EDiscFunc());
 		addVariation(new EllipticFunc());
 		addVariation(new EpispiralFunc());
@@ -214,12 +242,25 @@ private:
 		addVariation(new EyefishFunc());
 		addVariation(new FanFunc());
 		addVariation(new FisheyeFunc());
+		addVariation(new FlipCircleFunc());
 		addVariation(new FlipYFunc());
 		addVariation(new FlowerFunc());
 		addVariation(new FluxFunc());
+		addVariation(new FociFunc());
 		addVariation(new GaussianBlurFunc());
+		addVariation(new HandkerchiefFunc());
+		addVariation(new HeartFunc());
+		addVariation(new HyperbolicFunc());
+		addVariation(new HorseshoeFunc());
 		addVariation(new HemisphereFunc());
 		addVariation(new HexesFunc());
+		addVariation(new Hypertile1Func());
+		addVariation(new InflateZ_1Func());
+		addVariation(new InflateZ_2Func());
+		addVariation(new InflateZ_3Func());
+		addVariation(new InflateZ_4Func());
+		addVariation(new InflateZ_5Func());
+		addVariation(new InflateZ_6Func());
 		addVariation(new JuliaFunc());
 		addVariation(new Julia3DFunc());
 		addVariation(new Julia3DZFunc());
@@ -227,14 +268,19 @@ private:
 		addVariation(new JuliascopeFunc());
 		addVariation(new LinearFunc());
 		addVariation(new Linear3DFunc());
+		addVariation(new LinearTFunc());
 		addVariation(new LinearT3DFunc());
 		addVariation(new LissajousFunc());
 		addVariation(new LogFunc());
 		addVariation(new LoonieFunc());
+		addVariation(new ModulusFunc());
 		addVariation(new NoiseFunc());
 		addVariation(new OscilloscopeFunc());
+		addVariation(new ParabolaFunc());
+		addVariation(new PerspectiveFunc());
 		addVariation(new PieFunc());
 		addVariation(new Pie3DFunc());
+		addVariation(new PolarFunc());
 		addVariation(new PostMirrorWFFunc());
 		addVariation(new PostRotateXFunc());
 		addVariation(new PostRotateYFunc());
@@ -252,6 +298,8 @@ private:
 		addVariation(new SplitsFunc());
 		addVariation(new SquareFunc());
 		addVariation(new Square3DFunc());
+		addVariation(new TanFunc());
+		addVariation(new TangentFunc());
 		addVariation(new UnpolarFunc());
 		addVariation(new Waves2Func());
 		addVariation(new Waves4WFFunc());

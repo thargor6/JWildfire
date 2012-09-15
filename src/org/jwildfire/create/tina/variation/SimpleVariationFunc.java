@@ -20,6 +20,7 @@ import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
 public abstract class SimpleVariationFunc extends VariationFunc {
+  private static final long serialVersionUID = 1L;
 
   public void init(FlameTransformationContext pContext, XForm pXForm, double pAmount) {
 

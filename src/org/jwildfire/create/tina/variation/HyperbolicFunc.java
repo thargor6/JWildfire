@@ -16,10 +16,14 @@
 */
 package org.jwildfire.create.tina.variation;
 
+import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_CUDA;
+import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_JWILDFIRE;
+
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
 public class HyperbolicFunc extends SimpleVariationFunc {
+  private static final long serialVersionUID = 1L;
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
@@ -29,7 +33,6 @@ public class HyperbolicFunc extends SimpleVariationFunc {
     if (pContext.isPreserveZCoordinate()) {
       pVarTP.z += pAmount * pAffineTP.z;
     }
-
   }
 
   @Override
@@ -37,4 +40,8 @@ public class HyperbolicFunc extends SimpleVariationFunc {
     return "hyperbolic";
   }
 
+  @Override
+  public int getAvailability() {
+    return AVAILABILITY_JWILDFIRE | AVAILABILITY_CUDA;
+  }
 }

@@ -159,6 +159,10 @@ struct FlameRenderThread {
 					continue;
       }
 
+      if(p.x>1000000 || p.y>100000) {
+      	printf("%f %f %f\n", p.x, p.y, p.z);
+      }
+
       float px, py;
       if (finalXForm != NULL) {
         finalXForm->transformPoint(ctx, &affineT, &varT, &p, &q);

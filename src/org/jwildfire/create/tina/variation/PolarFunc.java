@@ -17,22 +17,25 @@
 package org.jwildfire.create.tina.variation;
 
 import static org.jwildfire.base.MathLib.sqrt;
+import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_CUDA;
+import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_JWILDFIRE;
 
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
 public class PolarFunc extends SimpleVariationFunc {
+  private static final long serialVersionUID = 1L;
+
+  private final static double R_PI = 0.31830989;
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-    double rPI = 0.31830989;
     double ny = sqrt(pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y) - 1.0;
-    pVarTP.x += pAmount * (pAffineTP.getPrecalcAtan(pContext) * rPI);
+    pVarTP.x += pAmount * (pAffineTP.getPrecalcAtan(pContext) * R_PI);
     pVarTP.y += pAmount * ny;
     if (pContext.isPreserveZCoordinate()) {
       pVarTP.z += pAmount * pAffineTP.z;
     }
-
   }
 
   @Override
@@ -40,4 +43,8 @@ public class PolarFunc extends SimpleVariationFunc {
     return "polar";
   }
 
+  @Override
+  public int getAvailability() {
+    return AVAILABILITY_JWILDFIRE | AVAILABILITY_CUDA;
+  }
 }

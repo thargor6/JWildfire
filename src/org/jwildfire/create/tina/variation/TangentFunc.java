@@ -19,11 +19,14 @@ package org.jwildfire.create.tina.variation;
 import static org.jwildfire.base.MathLib.cos;
 import static org.jwildfire.base.MathLib.sin;
 import static org.jwildfire.base.MathLib.tan;
+import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_CUDA;
+import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_JWILDFIRE;
 
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
 public class TangentFunc extends SimpleVariationFunc {
+  private static final long serialVersionUID = 1L;
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
@@ -34,7 +37,11 @@ public class TangentFunc extends SimpleVariationFunc {
       FPy := FPy + vars[30] * (sin(FTy)/cos(FTy));
     end;
     */
-    pVarTP.x += pAmount * sin(pAffineTP.x) / cos(pAffineTP.y);
+    double d = cos(pAffineTP.y);
+    if (d == 0) {
+      return;
+    }
+    pVarTP.x += pAmount * sin(pAffineTP.x) / d;
     pVarTP.y += pAmount * tan(pAffineTP.y);
     if (pContext.isPreserveZCoordinate()) {
       pVarTP.z += pAmount * pAffineTP.z;
@@ -46,4 +53,8 @@ public class TangentFunc extends SimpleVariationFunc {
     return "tangent";
   }
 
+  @Override
+  public int getAvailability() {
+    return AVAILABILITY_JWILDFIRE | AVAILABILITY_CUDA;
+  }
 }

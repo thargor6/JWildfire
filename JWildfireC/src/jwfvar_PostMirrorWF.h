@@ -23,13 +23,13 @@
 class PostMirrorWFFunc: public Variation {
 public:
 	PostMirrorWFFunc() {
-		xAxis = 1;
-		yAxis = 0;
-		zAxis = 0;
-		xShift = 0.0;
-		yShift = 0.0;
-		zShift = 0.0;
-		initParameterNames(6, "xAxis", "yAxis", "zAxis", "xShift", "yShift", "zShift");
+		xaxis = 1;
+		yaxis = 0;
+		zaxis = 0;
+		xshift = 0.0;
+		yshift = 0.0;
+		zshift = 0.0;
+		initParameterNames(6, "xaxis", "yaxis", "zaxis", "xshift", "yshift", "zshift");
 	}
 
 	const char* getName() const {
@@ -37,37 +37,37 @@ public:
 	}
 
 	void setParameter(char *pName, float pValue) {
-		if (strcmp(pName, "xAxis") == 0) {
-			xAxis = FTOI(pValue);
+		if (strcmp(pName, "xaxis") == 0) {
+			xaxis = FTOI(pValue);
 		}
-		else if (strcmp(pName, "yAxis") == 0) {
-			yAxis = FTOI(pValue);
+		else if (strcmp(pName, "yaxis") == 0) {
+			yaxis = FTOI(pValue);
 		}
-		else if (strcmp(pName, "zAxis") == 0) {
-			zAxis = FTOI(pValue);
+		else if (strcmp(pName, "zaxis") == 0) {
+			zaxis = FTOI(pValue);
 		}
-		else if (strcmp(pName, "xShift") == 0) {
-			xShift = pValue;
+		else if (strcmp(pName, "xshift") == 0) {
+			xshift = pValue;
 		}
-		else if (strcmp(pName, "yShift") == 0) {
-			yShift = pValue;
+		else if (strcmp(pName, "yshift") == 0) {
+			yshift = pValue;
 		}
-		else if (strcmp(pName, "zShift") == 0) {
-			zShift = pValue;
+		else if (strcmp(pName, "zshift") == 0) {
+			zshift = pValue;
 		}
 	}
 
 	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
-    if (xAxis > 0 && pContext->randGen->random() < 0.5f) {
-      pVarTP->x = -pVarTP->x - xShift;
+    if (xaxis > 0 && pContext->randGen->random() < 0.5f) {
+      pVarTP->x = -pVarTP->x - xshift;
     }
 
-    if (yAxis > 0 && pContext->randGen->random() < 0.5f) {
-      pVarTP->y = -pVarTP->y - yShift;
+    if (yaxis > 0 && pContext->randGen->random() < 0.5f) {
+      pVarTP->y = -pVarTP->y - yshift;
     }
 
-    if (zAxis > 0 && pContext->randGen->random() < 0.5) {
-      pVarTP->z = -pVarTP->z - zShift;
+    if (zaxis > 0 && pContext->randGen->random() < 0.5) {
+      pVarTP->z = -pVarTP->z - zshift;
     }
 	}
 
@@ -80,8 +80,8 @@ public:
 	}
 
 private:
-	int xAxis, yAxis, zAxis;
-	float xShift, yShift, zShift;
+	int xaxis, yaxis, zaxis;
+	float xshift, yshift, zshift;
 };
 
 #endif // JWFVAR_POST_MIRROR_WF_H_

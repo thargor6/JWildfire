@@ -19,6 +19,8 @@ package org.jwildfire.create.tina.variation;
 import static org.jwildfire.base.MathLib.M_PI_2;
 import static org.jwildfire.base.MathLib.atan2;
 import static org.jwildfire.base.MathLib.cos;
+import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_CUDA;
+import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_JWILDFIRE;
 
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
@@ -32,12 +34,16 @@ public class InflateZ_5Func extends SimpleVariationFunc {
     double ang1 = atan2(pAffineTP.y, pAffineTP.x);
     double val1 = cos(M_PI_2 - ang1) / 2.0;
     pVarTP.z += pAmount * val1;
-
   }
 
   @Override
   public String getName() {
     return "inflateZ_5";
+  }
+
+  @Override
+  public int getAvailability() {
+    return AVAILABILITY_JWILDFIRE | AVAILABILITY_CUDA;
   }
 
 }

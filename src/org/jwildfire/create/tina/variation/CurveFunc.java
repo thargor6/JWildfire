@@ -17,11 +17,14 @@
 package org.jwildfire.create.tina.variation;
 
 import static org.jwildfire.base.MathLib.exp;
+import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_CUDA;
+import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_JWILDFIRE;
 
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
 public class CurveFunc extends VariationFunc {
+  private static final long serialVersionUID = 1L;
 
   private static final String PARAM_XAMP = "xamp";
   private static final String PARAM_YAMP = "yamp";
@@ -38,17 +41,8 @@ public class CurveFunc extends VariationFunc {
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     /* Curve in the Apophysis Plugin Pack */
-    double pc_xlen = xLength * xLength;
-    double pc_ylen = yLength * yLength;
-
-    if (pc_xlen < 1E-20)
-      pc_xlen = 1E-20;
-
-    if (pc_ylen < 1E-20)
-      pc_ylen = 1E-20;
-
-    pVarTP.x += pAmount * (pAffineTP.x + xAmp * exp(-pAffineTP.y * pAffineTP.y / pc_xlen));
-    pVarTP.y += pAmount * (pAffineTP.y + yAmp * exp(-pAffineTP.x * pAffineTP.x / pc_ylen));
+    pVarTP.x += pAmount * (pAffineTP.x + xAmp * exp(-pAffineTP.y * pAffineTP.y / _pc_xlen));
+    pVarTP.y += pAmount * (pAffineTP.y + yAmp * exp(-pAffineTP.x * pAffineTP.x / _pc_ylen));
     if (pContext.isPreserveZCoordinate()) {
       pVarTP.z += pAmount * pAffineTP.z;
     }
@@ -83,4 +77,20 @@ public class CurveFunc extends VariationFunc {
     return "curve";
   }
 
+  private double _pc_xlen, _pc_ylen;
+
+  @Override
+  public void init(FlameTransformationContext pContext, XForm pXForm, double pAmount) {
+    _pc_xlen = xLength * xLength;
+    _pc_ylen = yLength * yLength;
+    if (_pc_xlen < 1E-20)
+      _pc_xlen = 1E-20;
+    if (_pc_ylen < 1E-20)
+      _pc_ylen = 1E-20;
+  }
+
+  @Override
+  public int getAvailability() {
+    return AVAILABILITY_JWILDFIRE | AVAILABILITY_CUDA;
+  }
 }

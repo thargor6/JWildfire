@@ -17,11 +17,14 @@
 package org.jwildfire.create.tina.variation;
 
 import static org.jwildfire.base.MathLib.fmod;
+import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_CUDA;
+import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_JWILDFIRE;
 
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
 public class ModulusFunc extends VariationFunc {
+  private static final long serialVersionUID = 1L;
 
   private static final String PARAM_X = "x";
   private static final String PARAM_Y = "y";
@@ -34,24 +37,21 @@ public class ModulusFunc extends VariationFunc {
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     /* Modulus in the Apophysis Plugin Pack */
-    double xr = 2.0 * x;
-    double yr = 2.0 * y;
-
     if (pAffineTP.x > x) {
-      pVarTP.x += pAmount * (-x + fmod(pAffineTP.x + x, xr));
+      pVarTP.x += pAmount * (-x + fmod(pAffineTP.x + x, _xr));
     }
     else if (pAffineTP.x < -x) {
-      pVarTP.x += pAmount * (x - fmod(x - pAffineTP.x, xr));
+      pVarTP.x += pAmount * (x - fmod(x - pAffineTP.x, _xr));
     }
     else {
       pVarTP.x += pAmount * pAffineTP.x;
     }
 
     if (pAffineTP.y > y) {
-      pVarTP.y += pAmount * (-y + fmod(pAffineTP.y + y, yr));
+      pVarTP.y += pAmount * (-y + fmod(pAffineTP.y + y, _yr));
     }
     else if (pAffineTP.y < -y) {
-      pVarTP.y += pAmount * (y - fmod(y - pAffineTP.y, yr));
+      pVarTP.y += pAmount * (y - fmod(y - pAffineTP.y, _yr));
     }
     else {
       pVarTP.y += pAmount * pAffineTP.y;
@@ -59,7 +59,6 @@ public class ModulusFunc extends VariationFunc {
     if (pContext.isPreserveZCoordinate()) {
       pVarTP.z += pAmount * pAffineTP.z;
     }
-
   }
 
   @Override
@@ -85,6 +84,19 @@ public class ModulusFunc extends VariationFunc {
   @Override
   public String getName() {
     return "modulus";
+  }
+
+  private double _xr, _yr;
+
+  @Override
+  public void init(FlameTransformationContext pContext, XForm pXForm, double pAmount) {
+    _xr = 2.0 * x;
+    _yr = 2.0 * y;
+  }
+
+  @Override
+  public int getAvailability() {
+    return AVAILABILITY_JWILDFIRE | AVAILABILITY_CUDA;
   }
 
 }

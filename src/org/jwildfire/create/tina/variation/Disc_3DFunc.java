@@ -22,12 +22,15 @@ import static org.jwildfire.base.MathLib.atan2;
 import static org.jwildfire.base.MathLib.cos;
 import static org.jwildfire.base.MathLib.sin;
 import static org.jwildfire.base.MathLib.sqrt;
+import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_CUDA;
+import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_JWILDFIRE;
 
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
 public class Disc_3DFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
+
   private static final String PARAM_PI = "pi";
   private static final String[] paramNames = { PARAM_PI };
 
@@ -67,6 +70,17 @@ public class Disc_3DFunc extends VariationFunc {
   @Override
   public String getName() {
     return "disc3d";
+  }
+
+  @Override
+  public void init(FlameTransformationContext pContext, XForm pXForm, double pAmount) {
+    if (pi == 0)
+      pi = EPSILON;
+  }
+
+  @Override
+  public int getAvailability() {
+    return AVAILABILITY_JWILDFIRE | AVAILABILITY_CUDA;
   }
 
 }

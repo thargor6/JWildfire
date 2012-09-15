@@ -19,11 +19,14 @@ package org.jwildfire.create.tina.variation;
 import static org.jwildfire.base.MathLib.M_PI;
 import static org.jwildfire.base.MathLib.cos;
 import static org.jwildfire.base.MathLib.sin;
+import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_CUDA;
+import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_JWILDFIRE;
 
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
 public class PerspectiveFunc extends VariationFunc {
+  private static final long serialVersionUID = 1L;
 
   private static final String PARAM_ANGLE = "angle";
   private static final String PARAM_DIST = "dist";
@@ -37,13 +40,16 @@ public class PerspectiveFunc extends VariationFunc {
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-    double t = 1.0 / (this.dist - pAffineTP.y * this.vsin);
+    double d = (this.dist - pAffineTP.y * this.vsin);
+    if (d == 0) {
+      return;
+    }
+    double t = 1.0 / d;
     pVarTP.x += pAmount * this.dist * pAffineTP.x * t;
     pVarTP.y += pAmount * this.vfcos * pAffineTP.y * t;
     if (pContext.isPreserveZCoordinate()) {
       pVarTP.z += pAmount * pAffineTP.z;
     }
-
   }
 
   @Override
@@ -76,5 +82,10 @@ public class PerspectiveFunc extends VariationFunc {
     double ang = this.angle * M_PI / 2.0;
     vsin = sin(ang);
     vfcos = this.dist * cos(ang);
+  }
+
+  @Override
+  public int getAvailability() {
+    return AVAILABILITY_JWILDFIRE | AVAILABILITY_CUDA;
   }
 }
