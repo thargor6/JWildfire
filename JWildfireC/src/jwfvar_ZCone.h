@@ -28,7 +28,7 @@ public:
 		return "zcone";
 	}
 
-	void transform(FlameTransformationContext *pContext, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
 		pVarTP->z += pAmount * sqrtf(pAffineTP->x * pAffineTP->x + pAffineTP->y * pAffineTP->y);
 	}
 

@@ -185,7 +185,7 @@ int renderFlame(AppSettings *pAppSettings) {
   }
   hostFlame->dump();
 
-  usePool=false;
+  //usePool=false;
 
   if(usePool==true) {
     info.poolSize=1024;

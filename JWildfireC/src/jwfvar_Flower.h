@@ -41,7 +41,7 @@ public:
 		}
 	}
 
-	void transform(FlameTransformationContext *pContext, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
 		float theta = pAffineTP->getPrecalcAtanYX();
 		float r = pAmount * (pContext->randGen->random() - holes) * cosf(petals * theta) / pAffineTP->getPrecalcSqrt();
 		pVarTP->x += r * pAffineTP->x;

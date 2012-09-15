@@ -29,7 +29,7 @@ public:
 		return "coth";
 	}
 
-	void transform(FlameTransformationContext *pContext, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
     float cothsin = sinf(2.0f * pAffineTP->y);
     float cothcos = cosf(2.0f * pAffineTP->y);
     float cothsinh = sinhf(2.0f * pAffineTP->x);

@@ -28,7 +28,7 @@ public:
 		return "zscale";
 	}
 
-	void transform(FlameTransformationContext *pContext, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
 		pVarTP->z += pAmount * pAffineTP->z;
 	}
 

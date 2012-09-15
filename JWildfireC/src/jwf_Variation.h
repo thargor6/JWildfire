@@ -20,6 +20,7 @@
 
 #include "stdio.h"
 #include "stdarg.h"
+#include "jwf_Constants.h"
 #include "jwf_XYZPoint.h"
 #include "jwf_FlameTransformationContext.h"
 
@@ -80,11 +81,11 @@ public:
 		return 0;
 	}
 
-	virtual void init(FlameTransformationContext *pContext, float pAmount) {
+	virtual void init(FlameTransformationContext *pContext, XForm *pXForm, float pAmount) {
 
 	}
 
-	virtual void transform(FlameTransformationContext *pContext, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) = 0;
+	virtual void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) = 0;
 
 	virtual void setParameter(char *pName, float pValue) {
 

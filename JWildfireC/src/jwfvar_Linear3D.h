@@ -29,7 +29,7 @@ public:
 		return "linear3D";
 	}
 
-	void transform(FlameTransformationContext *pContext, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
 		pVarTP->x += pAmount * pAffineTP->x;
 		pVarTP->y += pAmount * pAffineTP->y;
 		pVarTP->z += pAmount * pAffineTP->z;

@@ -123,7 +123,7 @@ struct Flame {
         for(int k=0;k<pThreadCount;k++) {
           pFlameTransformationContext->threadIdx=k;
           Variation *var=xForms[i]->__preparedVariations[k][j];
-          var->init(pFlameTransformationContext, var->amount);
+          var->init(pFlameTransformationContext, xForms[i], var->amount);
         }
       }
     }
@@ -136,7 +136,7 @@ struct Flame {
         for(int k=0;k<pThreadCount;k++) {
           pFlameTransformationContext->threadIdx=k;
           Variation *var=finalXForm->__preparedVariations[k][i];
-          var->init(pFlameTransformationContext, var->amount);          
+          var->init(pFlameTransformationContext, finalXForm, var->amount);
         }
       }
     }

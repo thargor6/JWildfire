@@ -28,7 +28,7 @@ public:
 		return "bubble";
 	}
 
-	void transform(FlameTransformationContext *pContext, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
 		float r = ((pAffineTP->x * pAffineTP->x + pAffineTP->y * pAffineTP->y) / 4.0f + 1.0f);
 		float t = pAmount / r;
 		pVarTP->x += t * pAffineTP->x;

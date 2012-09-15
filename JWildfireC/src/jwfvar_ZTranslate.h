@@ -28,7 +28,7 @@ public:
 		return "ztranslate";
 	}
 
-	void transform(FlameTransformationContext *pContext, XYZPoint *pAffineTP,
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP,
 			XYZPoint *pVarTP, float pAmount) {
 		pVarTP->z += pAmount;
 	}

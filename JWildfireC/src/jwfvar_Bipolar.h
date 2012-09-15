@@ -37,7 +37,7 @@ public:
 		}
 	}
 
-	void transform(FlameTransformationContext *pContext, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
 		float x2y2 = (pAffineTP->x * pAffineTP->x + pAffineTP->y * pAffineTP->y);
 		float t = x2y2 + 1.0f;
 		float x2 = 2 * pAffineTP->x;

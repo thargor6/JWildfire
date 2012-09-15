@@ -30,7 +30,7 @@ public:
 		return "arch";
 	}
 
-	void transform(FlameTransformationContext *pContext, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
     float ang = pContext->randGen->random() * pAmount * M_PI;
     float sinr = sinf(ang);
     float cosr = cosf(ang);

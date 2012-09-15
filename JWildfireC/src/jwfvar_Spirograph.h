@@ -69,7 +69,7 @@ public:
 		}
   }
 
-	void transform(FlameTransformationContext *pContext, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
     float t = (tMax - tMin) * pContext->randGen->random() + tMin;
     float y = (yMax - yMin) * pContext->randGen->random() + yMin;
     float x1 = (a + b) * cosf(t) - c1 * cosf((a + b) / b * t);

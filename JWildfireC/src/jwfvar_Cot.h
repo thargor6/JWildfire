@@ -29,7 +29,7 @@ public:
 		return "cot";
 	}
 
-	void transform(FlameTransformationContext *pContext, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
     float cotsin = sinf(2.0f * pAffineTP->x);
     float cotcos = cosf(2.0f * pAffineTP->x);
     float cotsinh = sinhf(2.0f * pAffineTP->y);

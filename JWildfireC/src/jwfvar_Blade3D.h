@@ -29,7 +29,7 @@ public:
 		return "blade3D";
 	}
 
-	void transform(FlameTransformationContext *pContext, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
     float r= pContext->randGen->random() * pAmount * sqrt(pAffineTP->x * pAffineTP->x + pAffineTP->y * pAffineTP->y);
     float sinr = sinf(r);
     float cosr = cosf(r);

@@ -37,7 +37,7 @@ public:
 		}
 	}
 
-	void transform(FlameTransformationContext *pContext, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
     float var4_PI = pAmount / M_PI_4;
 
     float absx = fabs(pAffineTP->x);

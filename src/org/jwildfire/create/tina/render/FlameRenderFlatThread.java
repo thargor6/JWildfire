@@ -83,7 +83,6 @@ public final class FlameRenderFlatThread extends FlameRenderThread {
         continue;
       else if ((xf.getDrawMode() == DrawMode.OPAQUE) && (renderer.random.random() > xf.getOpacity()))
         continue;
-
       XForm finalXForm = flame.getFinalXForm();
       double px, py;
       if (finalXForm != null) {

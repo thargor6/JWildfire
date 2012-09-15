@@ -45,7 +45,7 @@ public:
 		}
 	}
 
-	void transform(FlameTransformationContext *pContext, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
     float theta = atan2f(pAffineTP->y, pAffineTP->x);
     float t = -holes;
     if (fabs(thickness) > EPSILON) {

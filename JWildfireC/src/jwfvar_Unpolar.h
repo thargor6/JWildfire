@@ -29,7 +29,7 @@ public:
 		return "unpolar";
 	}
 
-	void transform(FlameTransformationContext *pContext, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
     float r = expf(pAffineTP->y);
     float s = sinf(pAffineTP->x);
     float c = cosf(pAffineTP->x);
@@ -44,7 +44,7 @@ public:
 		return new UnpolarFunc(*this);
 	}
 
-	void init(FlameTransformationContext *pContext, float pAmount) {
+	void init(FlameTransformationContext *pContext, XForm *pXForm, float pAmount) {
     vvar = pAmount / M_PI;
     vvar_2 = vvar * 0.5f;
 	}

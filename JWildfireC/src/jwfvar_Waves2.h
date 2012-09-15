@@ -48,7 +48,7 @@ public:
 		}
 	}
 
-	void transform(FlameTransformationContext *pContext, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
 		pVarTP->x += pAmount * (pAffineTP->x + scalex * sinf(pAffineTP->y * freqx));
 		pVarTP->y += pAmount * (pAffineTP->y + scaley * sinf(pAffineTP->x * freqy));
 		if (pContext->isPreserveZCoordinate) {

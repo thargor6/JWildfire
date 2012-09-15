@@ -17,17 +17,23 @@
 package org.jwildfire.create.tina.variation;
 
 import static org.jwildfire.base.MathLib.cos;
+import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_CUDA;
+import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_JWILDFIRE;
 
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
 public class Secant2Func extends SimpleVariationFunc {
+  private static final long serialVersionUID = 1L;
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     /* Intended as a 'fixed' version of secant */
     double r = pAmount * pAffineTP.getPrecalcSqrt(pContext);
     double cr = cos(r);
+    if (cr == 0) {
+      return;
+    }
     double icr = 1.0 / cr;
     pVarTP.x += pAmount * pAffineTP.x;
     if (cr < 0) {
@@ -44,6 +50,11 @@ public class Secant2Func extends SimpleVariationFunc {
   @Override
   public String getName() {
     return "secant2";
+  }
+
+  @Override
+  public int getAvailability() {
+    return AVAILABILITY_JWILDFIRE | AVAILABILITY_CUDA;
   }
 
 }

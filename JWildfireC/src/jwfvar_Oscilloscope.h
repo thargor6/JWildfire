@@ -49,7 +49,7 @@ public:
 		}
 	}
 
-	void transform(FlameTransformationContext *pContext, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
     float t;
     if (_noDamping) {
       t = amplitude * cosf(_tpf * pAffineTP->x) + separation;
@@ -71,7 +71,7 @@ public:
 		}
 	}
 
-	void init(FlameTransformationContext *pContext, float pAmount) {
+	void init(FlameTransformationContext *pContext, XForm *pXForm, float pAmount) {
     _tpf = 2.0f * M_PI * frequency;
     _noDamping=fabs(damping) <= EPSILON;
 	}

@@ -45,7 +45,7 @@ public:
 		}
 	}
 
-	void transform(FlameTransformationContext *pContext, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
     float r2 = pAffineTP->x*pAffineTP->x + pAffineTP->y*pAffineTP->y + pAffineTP->z*pAffineTP->z;
     float r = pAmount / (r2 * _c2 + _c2x * pAffineTP->x - _c2y * pAffineTP->y + _c2z * pAffineTP->z + 1.0f);
 
@@ -54,7 +54,7 @@ public:
     pVarTP->z += r * (pAffineTP->z + cz * r2);
 	}
 
-	void init(FlameTransformationContext *pContext, float pAmount) {
+	void init(FlameTransformationContext *pContext, XForm *pXForm, float pAmount) {
     _c2x = 2.0f * cx;
     _c2y = 2.0f * cy;
     _c2z = 2.0f * cz;

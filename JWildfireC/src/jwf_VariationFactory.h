@@ -34,34 +34,48 @@
 #include "jwfvar_Blob3D.h"
 #include "jwfvar_Blur.h"
 #include "jwfvar_Blur3D.h"
+#include "jwfvar_Boarders.h"
 #include "jwfvar_Bubble.h"
+#include "jwfvar_BubbleWF.h"
 #include "jwfvar_Butterfly.h"
 #include "jwfvar_Butterfly3D.h"
+#include "jwfvar_CannabisCurveWF.h"
 #include "jwfvar_Cell.h"
 #include "jwfvar_Circlize.h"
 #include "jwfvar_Collideoscope.h"
 #include "jwfvar_Conic.h"
 #include "jwfvar_Cos.h"
 #include "jwfvar_Cosh.h"
+#include "jwfvar_Cosine.h"
 #include "jwfvar_Cot.h"
 #include "jwfvar_Coth.h"
 #include "jwfvar_CPow.h"
 #include "jwfvar_Cross.h"
+#include "jwfvar_Csc.h"
+#include "jwfvar_Csch.h"
 #include "jwfvar_Curl.h"
 #include "jwfvar_Curl3D.h"
 #include "jwfvar_Cylinder.h"
 #include "jwfvar_DCCube.h"
+#include "jwfvar_Diamond.h"
 #include "jwfvar_Disc.h"
+#include "jwfvar_EDisc.h"
 #include "jwfvar_Elliptic.h"
 #include "jwfvar_Epispiral.h"
 #include "jwfvar_EpispiralWF.h"
+#include "jwfvar_Ex.h"
+#include "jwfvar_Exp.h"
+#include "jwfvar_Exponential.h"
 #include "jwfvar_Eyefish.h"
+#include "jwfvar_Fan.h"
+#include "jwfvar_Fisheye.h"
 #include "jwfvar_FlipY.h"
 #include "jwfvar_Flower.h"
 #include "jwfvar_Flux.h"
 #include "jwfvar_GaussianBlur.h"
 #include "jwfvar_Hemisphere.h"
 #include "jwfvar_Hexes.h"
+#include "jwfvar_Julia.h"
 #include "jwfvar_Julia3D.h"
 #include "jwfvar_Julia3DZ.h"
 #include "jwfvar_JuliaN.h"
@@ -71,6 +85,7 @@
 #include "jwfvar_LinearT3D.h"
 #include "jwfvar_Lissajous.h"
 #include "jwfvar_Log.h"
+#include "jwfvar_Loonie.h"
 #include "jwfvar_Noise.h"
 #include "jwfvar_Oscilloscope.h"
 #include "jwfvar_Pie.h"
@@ -80,7 +95,10 @@
 #include "jwfvar_PostRotateY.h"
 #include "jwfvar_PreBlur.h"
 #include "jwfvar_PreCircleCrop.h"
+#include "jwfvar_PreCrop.h"
 #include "jwfvar_RadialBlur.h"
+#include "jwfvar_Sec.h"
+#include "jwfvar_Secant2.h"
 #include "jwfvar_Spherical.h"
 #include "jwfvar_Spherical3D.h"
 #include "jwfvar_Spherical3DWF.h"
@@ -161,34 +179,48 @@ private:
 		addVariation(new Blob3DFunc());
 		addVariation(new BlurFunc());
 		addVariation(new Blur3DFunc());
+		addVariation(new BoardersFunc());
 		addVariation(new BubbleFunc());
+		addVariation(new BubbleWFFunc());
 		addVariation(new ButterflyFunc());
 		addVariation(new Butterfly3DFunc());
+		addVariation(new CannabisCurveWFFunc());
 		addVariation(new CellFunc());
 		addVariation(new CirclizeFunc());
 		addVariation(new CollideoscopeFunc());
 		addVariation(new ConicFunc());
 		addVariation(new CosFunc());
 		addVariation(new CoshFunc());
+		addVariation(new CosineFunc());
 		addVariation(new CotFunc());
 		addVariation(new CothFunc());
 		addVariation(new CPowFunc());
 		addVariation(new CrossFunc());
+		addVariation(new CscFunc());
+		addVariation(new CschFunc());
 		addVariation(new CurlFunc());
 		addVariation(new Curl3DFunc());
 		addVariation(new CylinderFunc());
 		addVariation(new DCCubeFunc());
+		addVariation(new DiamondFunc());
 		addVariation(new DiscFunc());
+		addVariation(new EDiscFunc());
 		addVariation(new EllipticFunc());
 		addVariation(new EpispiralFunc());
 		addVariation(new EpispiralWFFunc());
+		addVariation(new ExFunc());
+		addVariation(new ExpFunc());
+		addVariation(new ExponentialFunc());
 		addVariation(new EyefishFunc());
+		addVariation(new FanFunc());
+		addVariation(new FisheyeFunc());
 		addVariation(new FlipYFunc());
 		addVariation(new FlowerFunc());
 		addVariation(new FluxFunc());
 		addVariation(new GaussianBlurFunc());
 		addVariation(new HemisphereFunc());
 		addVariation(new HexesFunc());
+		addVariation(new JuliaFunc());
 		addVariation(new Julia3DFunc());
 		addVariation(new Julia3DZFunc());
 		addVariation(new JuliaNFunc());
@@ -198,6 +230,7 @@ private:
 		addVariation(new LinearT3DFunc());
 		addVariation(new LissajousFunc());
 		addVariation(new LogFunc());
+		addVariation(new LoonieFunc());
 		addVariation(new NoiseFunc());
 		addVariation(new OscilloscopeFunc());
 		addVariation(new PieFunc());
@@ -207,7 +240,10 @@ private:
 		addVariation(new PostRotateYFunc());
 		addVariation(new PreBlurFunc());
 		addVariation(new PreCircleCropFunc());
+		addVariation(new PreCropFunc());
 		addVariation(new RadialBlurFunc());
+		addVariation(new SecFunc());
+		addVariation(new Secant2Func());
 		addVariation(new SphericalFunc());
 		addVariation(new Spherical3DFunc());
 		addVariation(new Spherical3DWFFunc());

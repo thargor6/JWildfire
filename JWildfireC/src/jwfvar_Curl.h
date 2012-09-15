@@ -41,7 +41,7 @@ public:
 		}
 	}
 
-	void transform(FlameTransformationContext *pContext, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
     float re = 1.0f + c1 * pAffineTP->x + c2 * (pAffineTP->x*pAffineTP->x - pAffineTP->y*pAffineTP->y);
     float im = c1 * pAffineTP->y + c2 * 2 * pAffineTP->x * pAffineTP->y;
 

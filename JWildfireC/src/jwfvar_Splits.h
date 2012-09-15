@@ -41,7 +41,7 @@ public:
 		}
 	}
 
-	void transform(FlameTransformationContext *pContext, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
 		if (pAffineTP->x >= 0.0f) {
 			pVarTP->x += pAmount * (pAffineTP->x + x);
 		}

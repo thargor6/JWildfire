@@ -30,7 +30,7 @@ public:
 		return "disc";
 	}
 
-	void transform(FlameTransformationContext *pContext, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
     float rPI = M_PI * sqrtf(pAffineTP->x * pAffineTP->x + pAffineTP->y * pAffineTP->y);
     float sinr = sinf(rPI);
     float cosr = cosf(rPI);

@@ -45,7 +45,7 @@ public:
 		}
 	}
 
-	void transform(FlameTransformationContext *pContext, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
     int sl = (int) (pContext->randGen->random() * slices + 0.5f);
     float a = rotation + 2.0 * M_PI * (sl + pContext->randGen->random() * thickness) / slices;
     float r = pAmount * pContext->randGen->random();

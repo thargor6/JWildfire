@@ -28,7 +28,7 @@ public:
 		return "log";
 	}
 
-	void transform(FlameTransformationContext *pContext, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
     pVarTP->x += pAmount * 0.5f * logf(pAffineTP->getPrecalcSumsq());
     pVarTP->y += pAmount * pAffineTP->getPrecalcAtanYX();
     if (pContext->isPreserveZCoordinate) {

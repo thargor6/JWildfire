@@ -65,7 +65,7 @@ public:
 		}
 	}
 
-	void transform(FlameTransformationContext *pContext, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
     float dampingX = fabs(dampx) < EPSILON ? 1.0f : expf(dampx);
     float dampingY = fabs(dampy) < EPSILON ? 1.0f : expf(dampy);
     if (use_cos_x) {

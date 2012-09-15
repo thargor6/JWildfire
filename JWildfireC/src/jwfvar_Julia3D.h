@@ -38,12 +38,12 @@ public:
 		}
 	}
 
-	void init(FlameTransformationContext *pContext, float pAmount) {
+	void init(FlameTransformationContext *pContext, XForm *pXForm, float pAmount) {
 		_absPower = abs(FTOI(power));
 		_cPower = (1.0f / power - 1.0f) * 0.5f;
 	}
 
-	void transform(FlameTransformationContext *pContext, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
 		float z = pAffineTP->z / _absPower;
 		float r2d = pAffineTP->x * pAffineTP->x + pAffineTP->y * pAffineTP->y;
 		float r = pAmount * powf(r2d + z * z, _cPower);

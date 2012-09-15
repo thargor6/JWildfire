@@ -29,7 +29,7 @@ public:
 		return "hemisphere";
 	}
 
-	void transform(FlameTransformationContext *pContext, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
     float r = pAmount / sqrt(pAffineTP->x * pAffineTP->x + pAffineTP->y * pAffineTP->y + 1.0f);
     pVarTP->x += pAffineTP->x * r;
     pVarTP->y += pAffineTP->y * r;

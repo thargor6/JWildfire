@@ -111,7 +111,7 @@ public:
 	}
 
 
-	void transform(FlameTransformationContext *pContext, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
 		float P[VORONOI_MAXPOINTS][2];
 		float U[2];
 		float DXo, DYo, L, L1, L2, R, s, trgL, Vx, Vy;
@@ -231,7 +231,7 @@ public:
 		return new HexesFunc(*this);
 	}
 
-	virtual void init(FlameTransformationContext *pContext, float pAmount) {
+	virtual void init(FlameTransformationContext *pContext, XForm *pXForm, float pAmount) {
     _rotSin = sinf(rotate * 2.0f * M_PI);
     _rotCos = cosf(rotate * 2.0f * M_PI);
 	}

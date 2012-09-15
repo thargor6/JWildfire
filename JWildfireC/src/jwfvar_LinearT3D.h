@@ -45,7 +45,7 @@ public:
 		}
 	}
 
-	void transform(FlameTransformationContext *pContext, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
     pVarTP->x += sgn(pAffineTP->x) * powf(fabs(pAffineTP->x), powX) * pAmount;
     pVarTP->y += sgn(pAffineTP->y) * powf(fabs(pAffineTP->y), powY) * pAmount;
     pVarTP->z += sgn(pAffineTP->z) * powf(fabs(pAffineTP->z), powZ) * pAmount;

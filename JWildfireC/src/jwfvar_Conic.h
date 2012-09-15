@@ -41,7 +41,7 @@ public:
 		}
 	}
 
-	void transform(FlameTransformationContext *pContext, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
     double ct = pAffineTP->x / pAffineTP->getPrecalcSqrt();
     double r = pAmount * (pContext->randGen->random() - holes) * eccentricity / (1.0f + eccentricity * ct) / pAffineTP->getPrecalcSqrt();
     pVarTP->x += r * pAffineTP->x;

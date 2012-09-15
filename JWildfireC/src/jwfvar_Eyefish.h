@@ -29,7 +29,7 @@ public:
 		return "eyefish";
 	}
 
-	void transform(FlameTransformationContext *pContext, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
 		float r = 2.0f * pAmount / (sqrtf(pAffineTP->x * pAffineTP->x + pAffineTP->y * pAffineTP->y) + 1.0f);
 		pVarTP->x += r * pAffineTP->x;
 		pVarTP->y += r * pAffineTP->y;

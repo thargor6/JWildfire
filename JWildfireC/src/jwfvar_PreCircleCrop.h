@@ -54,7 +54,7 @@ public:
 		}
 	}
 
-	void transform(FlameTransformationContext *pContext, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
     float x0 = x;
     float y0 = y;
     float cr = radius;
@@ -93,7 +93,7 @@ public:
     }
 	}
 
-	void init(FlameTransformationContext *pContext, float pAmount) {
+	void init(FlameTransformationContext *pContext, XForm *pXForm, float pAmount) {
     #undef min
     #undef max
 		#define min(a,b) (((a)<(b))?(a):(b))

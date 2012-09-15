@@ -56,4 +56,7 @@
 #define FALSE 0
 #endif
 
+struct XForm;
+
+
 #endif // __JWF_CONSTANTS_H__

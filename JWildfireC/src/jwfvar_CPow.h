@@ -45,7 +45,7 @@ public:
 		}
 	}
 
-	void transform(FlameTransformationContext *pContext, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
 		float a = pAffineTP->getPrecalcAtanYX();
     float lnr = 0.5f * logf(pAffineTP->getPrecalcSumsq());
     float va = 2.0f * M_PI / power;

@@ -33,7 +33,7 @@ public:
 		return 1;
 	}
 
-	void transform(FlameTransformationContext *pContext, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
     float sina = sinf(pAmount * M_PI * 0.5f);
     float cosa = cosf(pAmount * M_PI * 0.5f);
     float x = cosa * pVarTP->x - sina * pVarTP->z;

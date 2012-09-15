@@ -41,7 +41,7 @@ public:
 		}
 	}
 
-	void transform(FlameTransformationContext *pContext, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
     float a = atan2f(pAffineTP->y, pAffineTP->x);
     float r = pAmount * sqrtf(pAffineTP->x*pAffineTP->x + pAffineTP->y*pAffineTP->y);
     int alt;
@@ -85,7 +85,7 @@ public:
 		return new CollideoscopeFunc(*this);
 	}
 
-	void init(FlameTransformationContext *pContext, float pAmount) {
+	void init(FlameTransformationContext *pContext, XForm *pXForm, float pAmount) {
     _kn_pi = (float) num * M_1_PI;
     _pi_kn = M_PI / (float) num;
     _ka = M_PI * a;

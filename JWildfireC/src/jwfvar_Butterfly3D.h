@@ -30,7 +30,7 @@ public:
 		return "butterfly3D";
 	}
 
-	void transform(FlameTransformationContext *pContext, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
     float wx = pAmount * 1.3029400317411197908970256609023f;
 
     float y2 = pAffineTP->y * 2.0;

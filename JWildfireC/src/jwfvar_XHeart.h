@@ -41,7 +41,7 @@ public:
 		}
 	}
 
-	void transform(FlameTransformationContext *pContext, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
     float r2_4 = pAffineTP->x * pAffineTP->x + pAffineTP->y * pAffineTP->y + 4;
     if (r2_4 == 0)
       r2_4 = 1;
@@ -66,7 +66,7 @@ public:
 		return new XHeartFunc(*this);
 	}
 
-	void init(FlameTransformationContext *pContext, float pAmount) {
+	void init(FlameTransformationContext *pContext, XForm *pXForm, float pAmount) {
     float ang = M_PI_4 + (0.5f * M_PI_4 * angle);
     _sina = sin(ang);
     _cosa = cos(ang);

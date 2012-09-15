@@ -29,7 +29,7 @@ public:
 		return "elliptic";
 	}
 
-	void transform(FlameTransformationContext *pContext, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
     float tmp = pAffineTP->y * pAffineTP->y + pAffineTP->x * pAffineTP->x + 1.0;
     float x2 = 2.0f * pAffineTP->x;
     float xmax = 0.5f * (sqrtf(tmp + x2) + sqrtf(tmp - x2));

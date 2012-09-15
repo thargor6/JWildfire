@@ -70,7 +70,7 @@ public:
 		}
 	}
 
-	void transform(FlameTransformationContext *pContext, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
     float p = 2.0f * pContext->randGen->random() - 1.0f;
     float q = 2.0f * pContext->randGen->random() - 1.0f;
     int i = pContext->randGen->random(INT_MAX) % 3;

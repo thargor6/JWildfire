@@ -42,12 +42,12 @@ public:
 		}
 	}
 
-	void init(FlameTransformationContext *pContext, float pAmount) {
+	void init(FlameTransformationContext *pContext, XForm *pXForm, float pAmount) {
     _absPower = abs(FTOI(power));
     _cPower = dist / power * 0.5f;
 	}
 
-	void transform(FlameTransformationContext *pContext, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
     int rnd = pContext->randGen->random(_absPower);
     float a;
     if ((rnd & 1) == 0)

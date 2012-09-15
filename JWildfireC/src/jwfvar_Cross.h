@@ -29,7 +29,7 @@ public:
 		return "cross";
 	}
 
-	void transform(FlameTransformationContext *pContext, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
     float s = pAffineTP->x * pAffineTP->x - pAffineTP->y * pAffineTP->y;
     float r = pAmount * sqrtf(1.0f / (s * s + EPSILON));
 

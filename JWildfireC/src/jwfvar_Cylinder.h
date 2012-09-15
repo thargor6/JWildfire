@@ -27,7 +27,7 @@ public:
 		return "cylinder";
 	}
 
-  void transform(FlameTransformationContext *pContext, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
+  void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
     pVarTP->x += pAmount * sinf(pAffineTP->x);
     pVarTP->y += pAmount * pAffineTP->y;
     if (pContext->isPreserveZCoordinate) {

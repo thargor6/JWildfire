@@ -279,10 +279,10 @@ struct XForm {
     Variation** vars=__preparedVariations[pContext->threadIdx];
     for (int i = 0; i < variationCount; i++) {
       Variation *variation = vars[i];
-      vars[i]->transform(pContext, pAffineT, pVarT,variation->amount);
-    //  if (variation->getPriority() < 0) {
-     //   pAffineT->invalidate();
-    // }
+      vars[i]->transform(pContext, this, pAffineT, pVarT,variation->amount);
+      if (variation->getPriority() < 0) {
+        pAffineT->invalidate();
+     }
     }
     pDstPoint->color = pVarT->color;
     pDstPoint->rgbColor = pVarT->rgbColor;
@@ -339,7 +339,7 @@ struct XForm {
     Variation** vars=__preparedVariations[pContext->threadIdx];
     for (int i = 0; i < variationCount; i++) {
       Variation *variation = vars[i];
-      vars[i]->transform(pContext, pAffineT, pVarT,variation->amount);
+      vars[i]->transform(pContext, this, pAffineT, pVarT,variation->amount);
       if (variation->getPriority() < 0) {
         pAffineT->invalidate();
       }

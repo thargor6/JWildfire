@@ -28,7 +28,7 @@ public:
 		return "square";
 	}
 
-	void transform(FlameTransformationContext *pContext, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
     pVarTP->x += pAmount * (pContext->randGen->random() - 0.5f);
     pVarTP->y += pAmount * (pContext->randGen->random() - 0.5f);
     if (pContext->isPreserveZCoordinate) {

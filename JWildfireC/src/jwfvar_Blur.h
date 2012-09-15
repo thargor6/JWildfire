@@ -29,7 +29,7 @@ public:
 		return "blur";
 	}
 
-	void transform(FlameTransformationContext *pContext, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
     float r = pContext->randGen->random() * (M_PI + M_PI);
     float sina = sinf(r);
     float cosa = cosf(r);

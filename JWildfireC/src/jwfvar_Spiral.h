@@ -29,7 +29,7 @@ public:
 		return "spiral";
 	}
 
-	void transform(FlameTransformationContext *pContext, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
     float sinA = pAffineTP->getPrecalcSinA();
     float cosA = pAffineTP->getPrecalcCosA();
     float r = pAffineTP->getPrecalcSqrt();

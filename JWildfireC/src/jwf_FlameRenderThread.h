@@ -183,7 +183,7 @@ struct FlameRenderThread {
       int xIdx, yIdx;
 
 
-// #ifdef ANTIAALIAS
+ //#ifdef ANTIAALIAS
       if(rnd->random()<0.5) {
         float dr = expf(0.5f * sqrtf(-logf(rnd->random())))-1.0f;
         float dtheta = rnd->random() * 2.0f * M_PI;
@@ -197,8 +197,8 @@ struct FlameRenderThread {
     if(xIdx<0 || xIdx>=rasterWidth || yIdx<0 || yIdx>=rasterHeight) {
 
 //#endif
-//      int xIdx = (int) (flameView->bws * px + 0.5f);
-//      int yIdx = (int) (flameView->bhs * py + 0.5f);
+//       xIdx = (int) (flameView->bws * px + 0.5f);
+//       yIdx = (int) (flameView->bhs * py + 0.5f);
 //      if(xIdx>=rasterWidth || yIdx>=rasterHeight) {
         continue;
       }

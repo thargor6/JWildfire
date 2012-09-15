@@ -57,7 +57,7 @@ public:
 		}
 	}
 
-	void transform(FlameTransformationContext *pContext, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
     if (xAxis > 0 && pContext->randGen->random() < 0.5f) {
       pVarTP->x = -pVarTP->x - xShift;
     }

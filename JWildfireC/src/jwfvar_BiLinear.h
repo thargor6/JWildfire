@@ -29,7 +29,7 @@ public:
 		return "bi_linear";
 	}
 
-	void transform(FlameTransformationContext *pContext, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
     pVarTP->x += pAmount * pAffineTP->y;
     pVarTP->y += pAmount * pAffineTP->x;
     if (pContext->isPreserveZCoordinate) {

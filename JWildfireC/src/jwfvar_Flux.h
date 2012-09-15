@@ -37,7 +37,7 @@ public:
 		}
 	}
 
-	void transform(FlameTransformationContext *pContext, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
 		float xpw = pAffineTP->x + pAmount;
 		float xmw = pAffineTP->x - pAmount;
 		float avgr = pAmount * (2.0f + spread) * sqrtf(sqrtf(pAffineTP->y * pAffineTP->y + xpw * xpw) / sqrtf(pAffineTP->y * pAffineTP->y + xmw * xmw));

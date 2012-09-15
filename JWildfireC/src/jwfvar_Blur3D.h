@@ -29,7 +29,7 @@ public:
 		return "blur3D";
 	}
 
-	void transform(FlameTransformationContext *pContext, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
     float angle = randGen->random() * twoPi;
     float sina = sinf(angle);
     float cosa = cosf(angle);
@@ -44,7 +44,7 @@ public:
     pVarTP->z += r * cosb;
 	}
 
-	void init(FlameTransformationContext *pContext, float pAmount) {
+	void init(FlameTransformationContext *pContext, XForm *pXForm, float pAmount) {
 		randGen=pContext->randGen;
     gauss_rnd[0] = randGen->random();
     gauss_rnd[1] = randGen->random();

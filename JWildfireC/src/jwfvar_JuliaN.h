@@ -42,13 +42,13 @@ public:
 		}
 	}
 
-	void init(FlameTransformationContext *pContext, float pAmount) {
+	void init(FlameTransformationContext *pContext, XForm *pXForm, float pAmount) {
 		_absPower = fabs(power);
 		_cPower = dist / power * 0.5f;
 		_pAmount2 = pAmount * sqrtf(2.0f) / 2.0f;
 	}
 
-	void transform(FlameTransformationContext *pContext, XYZPoint *pAffineTP,
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP,
 			XYZPoint *pVarTP, float pAmount) {
 		float a = (atan2f(pAffineTP->y, pAffineTP->x)
 				+ 2.0f * M_PI * pContext->randGen->random(_absPower)) / power;

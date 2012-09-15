@@ -28,7 +28,7 @@ public:
 		return "bent";
 	}
 
-	void transform(FlameTransformationContext *pContext, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
     float nx = pAffineTP->x;
     float ny = pAffineTP->y;
     if (nx < 0)
