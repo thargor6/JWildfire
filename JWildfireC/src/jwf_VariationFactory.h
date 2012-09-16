@@ -124,9 +124,14 @@
 #include "jwfvar_PreBlur.h"
 #include "jwfvar_PreCircleCrop.h"
 #include "jwfvar_PreCrop.h"
+#include "jwfvar_PreRotateX.h"
+#include "jwfvar_PreRotateY.h"
+#include "jwfvar_PreZScale.h"
+#include "jwfvar_PreZTranslate.h"
 #include "jwfvar_RadialBlur.h"
 #include "jwfvar_Scry.h"
 #include "jwfvar_Sec.h"
+#include "jwfvar_Sech.h"
 #include "jwfvar_Secant2.h"
 #include "jwfvar_Sin.h"
 #include "jwfvar_Spherical.h"
@@ -138,14 +143,20 @@
 #include "jwfvar_Square.h"
 #include "jwfvar_Square3D.h"
 #include "jwfvar_Tan.h"
+#include "jwfvar_Tanh.h"
 #include "jwfvar_Tangent.h"
+#include "jwfvar_Twintrian.h"
 #include "jwfvar_Unpolar.h"
+#include "jwfvar_Waffle.h"
 #include "jwfvar_Waves.h"
 #include "jwfvar_Waves2.h"
+#include "jwfvar_Waves2_3D.h"
 #include "jwfvar_Waves2WF.h"
 #include "jwfvar_Waves3WF.h"
 #include "jwfvar_Waves4WF.h"
 #include "jwfvar_Wedge.h"
+#include "jwfvar_WedgeJulia.h"
+#include "jwfvar_WedgeSph.h"
 #include "jwfvar_Whorl.h"
 #include "jwfvar_XHeart.h"
 #include "jwfvar_ZBlur.h"
@@ -153,13 +164,13 @@
 #include "jwfvar_ZScale.h"
 #include "jwfvar_ZTranslate.h"
 
-#define POOL_SIZE 1000
+#define VARIATION_POOL_SIZE 1000
 
 class VariationFactory {
 public:
 	VariationFactory() {
 		variationCount = 0;
-		variations = (Variation**) malloc(POOL_SIZE * sizeof(Variation*));
+		variations = (Variation**) malloc(VARIATION_POOL_SIZE * sizeof(Variation*));
 		initVariations();
 	}
 
@@ -306,9 +317,14 @@ private:
 		addVariation(new PreBlurFunc());
 		addVariation(new PreCircleCropFunc());
 		addVariation(new PreCropFunc());
+		addVariation(new PreRotateXFunc());
+		addVariation(new PreRotateYFunc());
+		addVariation(new PreZScaleFunc());
+		addVariation(new PreZTranslateFunc());
 		addVariation(new RadialBlurFunc());
 		addVariation(new ScryFunc());
 		addVariation(new SecFunc());
+		addVariation(new SechFunc());
 		addVariation(new Secant2Func());
 		addVariation(new SinFunc());
 		addVariation(new SphericalFunc());
@@ -320,14 +336,20 @@ private:
 		addVariation(new SquareFunc());
 		addVariation(new Square3DFunc());
 		addVariation(new TanFunc());
+		addVariation(new TanhFunc());
 		addVariation(new TangentFunc());
+		addVariation(new TwintrianFunc());
 		addVariation(new UnpolarFunc());
+		addVariation(new WaffleFunc());
 		addVariation(new WavesFunc());
 		addVariation(new Waves2Func());
+		addVariation(new Waves2_3DFunc());
 		addVariation(new Waves2WFFunc());
 		addVariation(new Waves3WFFunc());
 		addVariation(new Waves4WFFunc());
 		addVariation(new WedgeFunc());
+		addVariation(new WedgeJuliaFunc());
+		addVariation(new WedgeSphFunc());
 		addVariation(new WhorlFunc());
 		addVariation(new XHeartFunc());
 		addVariation(new ZBlurFunc());
@@ -337,8 +359,8 @@ private:
 	}
 
 	void addVariation(Variation *var) {
-		if(variationCount>=POOL_SIZE) {
-			printf("Variation pool size %d exceeded\n",POOL_SIZE);
+		if(variationCount>=VARIATION_POOL_SIZE) {
+			printf("Variation pool size %d exceeded\n",VARIATION_POOL_SIZE);
 			exit(-1);
 		}
 		variations[variationCount++]=var;
@@ -346,6 +368,6 @@ private:
 
 };
 
-#undef POOL_SIZE
+#undef VARIATION_POOL_SIZE
 
 #endif // __JWF_VARIATION_FACTORY_H__

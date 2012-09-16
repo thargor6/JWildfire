@@ -22,11 +22,14 @@ import static org.jwildfire.base.MathLib.M_PI;
 import static org.jwildfire.base.MathLib.cos;
 import static org.jwildfire.base.MathLib.floor;
 import static org.jwildfire.base.MathLib.sin;
+import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_CUDA;
+import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_JWILDFIRE;
 
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
 public class WedgeSphFunc extends VariationFunc {
+  private static final long serialVersionUID = 1L;
 
   private static final String PARAM_ANGLE = "angle";
   private static final String PARAM_HOLE = "hole";
@@ -92,4 +95,8 @@ public class WedgeSphFunc extends VariationFunc {
     return "wedge_sph";
   }
 
+  @Override
+  public int getAvailability() {
+    return AVAILABILITY_JWILDFIRE | AVAILABILITY_CUDA;
+  }
 }

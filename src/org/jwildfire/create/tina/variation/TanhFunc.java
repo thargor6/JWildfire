@@ -20,11 +20,14 @@ import static org.jwildfire.base.MathLib.cos;
 import static org.jwildfire.base.MathLib.cosh;
 import static org.jwildfire.base.MathLib.sin;
 import static org.jwildfire.base.MathLib.sinh;
+import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_CUDA;
+import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_JWILDFIRE;
 
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
 public class TanhFunc extends SimpleVariationFunc {
+  private static final long serialVersionUID = 1L;
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
@@ -35,7 +38,11 @@ public class TanhFunc extends SimpleVariationFunc {
     double tanhcos = cos(2.0 * pAffineTP.y);
     double tanhsinh = sinh(2.0 * pAffineTP.x);
     double tanhcosh = cosh(2.0 * pAffineTP.x);
-    double tanhden = 1.0 / (tanhcos + tanhcosh);
+    double d = (tanhcos + tanhcosh);
+    if (d == 0) {
+      return;
+    }
+    double tanhden = 1.0 / d;
     pVarTP.x += pAmount * tanhden * tanhsinh;
     pVarTP.y += pAmount * tanhden * tanhsin;
     if (pContext.isPreserveZCoordinate()) {
@@ -48,4 +55,8 @@ public class TanhFunc extends SimpleVariationFunc {
     return "tanh";
   }
 
+  @Override
+  public int getAvailability() {
+    return AVAILABILITY_JWILDFIRE | AVAILABILITY_CUDA;
+  }
 }

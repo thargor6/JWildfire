@@ -20,11 +20,14 @@ import static org.jwildfire.base.MathLib.cos;
 import static org.jwildfire.base.MathLib.cosh;
 import static org.jwildfire.base.MathLib.sin;
 import static org.jwildfire.base.MathLib.sinh;
+import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_CUDA;
+import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_JWILDFIRE;
 
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
 public class SechFunc extends SimpleVariationFunc {
+  private static final long serialVersionUID = 1L;
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
@@ -35,7 +38,11 @@ public class SechFunc extends SimpleVariationFunc {
     double sechcos = cos(pAffineTP.y);
     double sechsinh = sinh(pAffineTP.x);
     double sechcosh = cosh(pAffineTP.x);
-    double sechden = 2.0 / (cos(2.0 * pAffineTP.y) + cosh(2.0 * pAffineTP.x));
+    double d = (cos(2.0 * pAffineTP.y) + cosh(2.0 * pAffineTP.x));
+    if (d == 0) {
+      return;
+    }
+    double sechden = 2.0 / d;
     pVarTP.x += pAmount * sechden * sechcos * sechcosh;
     pVarTP.y -= pAmount * sechden * sechsin * sechsinh;
     if (pContext.isPreserveZCoordinate()) {
@@ -48,4 +55,8 @@ public class SechFunc extends SimpleVariationFunc {
     return "sech";
   }
 
+  @Override
+  public int getAvailability() {
+    return AVAILABILITY_JWILDFIRE | AVAILABILITY_CUDA;
+  }
 }

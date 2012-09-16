@@ -23,11 +23,14 @@ import static org.jwildfire.base.MathLib.fabs;
 import static org.jwildfire.base.MathLib.floor;
 import static org.jwildfire.base.MathLib.pow;
 import static org.jwildfire.base.MathLib.sin;
+import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_CUDA;
+import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_JWILDFIRE;
 
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
 public class WedgeJuliaFunc extends VariationFunc {
+  private static final long serialVersionUID = 1L;
 
   private static final String PARAM_POWER = "power";
   private static final String PARAM_DIST = "dist";
@@ -93,4 +96,8 @@ public class WedgeJuliaFunc extends VariationFunc {
     return "wedge_julia";
   }
 
+  @Override
+  public int getAvailability() {
+    return AVAILABILITY_JWILDFIRE | AVAILABILITY_CUDA;
+  }
 }

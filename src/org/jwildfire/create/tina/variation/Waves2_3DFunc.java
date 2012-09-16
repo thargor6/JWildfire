@@ -17,12 +17,15 @@
 package org.jwildfire.create.tina.variation;
 
 import static org.jwildfire.base.MathLib.sin;
+import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_CUDA;
+import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_JWILDFIRE;
 
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
 public class Waves2_3DFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
+
   private static final String PARAM_FREQ = "freq";
   private static final String PARAM_SCALE = "scale";
   private static final String[] paramNames = { PARAM_FREQ, PARAM_SCALE };
@@ -65,4 +68,8 @@ public class Waves2_3DFunc extends VariationFunc {
     return "waves2_3D";
   }
 
+  @Override
+  public int getAvailability() {
+    return AVAILABILITY_JWILDFIRE | AVAILABILITY_CUDA;
+  }
 }
