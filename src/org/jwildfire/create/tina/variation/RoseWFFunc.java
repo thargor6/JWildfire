@@ -35,8 +35,8 @@ public class RoseWFFunc extends VariationFunc {
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-    double a = pAffineTP.getPrecalcAtan(pContext);
-    double r = pAffineTP.getPrecalcSqrt(pContext);
+    double a = pAffineTP.getPrecalcAtan();
+    double r = pAffineTP.getPrecalcSqrt();
 
     r = amp * cos(waves * a);
 

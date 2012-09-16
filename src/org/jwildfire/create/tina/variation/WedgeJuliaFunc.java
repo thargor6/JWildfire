@@ -50,7 +50,7 @@ public class WedgeJuliaFunc extends VariationFunc {
 
     double r = pAmount * pow(pAffineTP.getPrecalcSumsq(), wedgeJulia_cn);
     int t_rnd = (int) ((wedgeJulia_rN) * pContext.random());
-    double a = (pAffineTP.getPrecalcAtanYX(pContext) + 2.0 * M_PI * t_rnd) / power;
+    double a = (pAffineTP.getPrecalcAtanYX() + 2.0 * M_PI * t_rnd) / power;
     double c = floor((count * a + M_PI) * M_1_PI * 0.5);
 
     a = a * wedgeJulia_cf + c * angle;

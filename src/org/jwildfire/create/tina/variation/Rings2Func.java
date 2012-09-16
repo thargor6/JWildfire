@@ -29,13 +29,13 @@ public class Rings2Func extends VariationFunc {
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-    double r = pAffineTP.getPrecalcSqrt(pContext);
+    double r = pAffineTP.getPrecalcSqrt();
     double dx = val * val + SMALL_EPSILON;
 
     r += -2.0 * dx * (int) ((r + dx) / (2.0 * dx)) + r * (1.0 - dx);
 
-    pVarTP.x += pAmount * pAffineTP.getPrecalcSinA(pContext) * r;
-    pVarTP.y += pAmount * pAffineTP.getPrecalcCosA(pContext) * r;
+    pVarTP.x += pAmount * pAffineTP.getPrecalcSinA() * r;
+    pVarTP.y += pAmount * pAffineTP.getPrecalcCosA() * r;
     if (pContext.isPreserveZCoordinate()) {
       pVarTP.z += pAmount * pAffineTP.z;
     }

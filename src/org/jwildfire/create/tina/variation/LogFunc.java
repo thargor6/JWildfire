@@ -33,7 +33,7 @@ public class LogFunc extends SimpleVariationFunc {
     //Natural Logarithm LOG
     // needs precalc_atanyx and precalc_sumsq
     pVarTP.x += pAmount * 0.5 * log(pAffineTP.getPrecalcSumsq());
-    pVarTP.y += pAmount * pAffineTP.getPrecalcAtanYX(pContext);
+    pVarTP.y += pAmount * pAffineTP.getPrecalcAtanYX();
     if (pContext.isPreserveZCoordinate()) {
       pVarTP.z += pAmount * pAffineTP.z;
     }

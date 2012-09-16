@@ -14,15 +14,15 @@
  if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-#ifndef JWFVAR_WAVES4_WF_H_
-#define JWFVAR_WAVES4_WF_H_
+#ifndef JWFVAR_WAVES3_WF_H_
+#define JWFVAR_WAVES3_WF_H_
 
 #include "jwf_Constants.h"
 #include "jwf_Variation.h"
 
-class Waves4WFFunc: public Variation {
+class Waves3WFFunc: public Variation {
 public:
-	Waves4WFFunc() {
+	Waves3WFFunc() {
 		scalex = 0.25f;
 		scaley = 0.5f;
 		freqx = M_PI / 2.0f;
@@ -35,7 +35,7 @@ public:
 	}
 
 	const char* getName() const {
-		return "waves4_wf";
+		return "waves3_wf";
 	}
 
 	void setParameter(char *pName, float pValue) {
@@ -66,30 +66,31 @@ public:
 	}
 
 	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
-    if (use_cos_x) {
-      pVarTP->x += pAmount * (pAffineTP->x + _dampingX * scalex * cosf(pAffineTP->y * freqx) * sinf(pAffineTP->y * freqx) * cosf(pAffineTP->y * freqx)) * _dampingX;
+    if (use_cos_x == 1) {
+      pVarTP->x += pAmount * (pAffineTP->x + _dampingX * scalex * cosf(pAffineTP->y * freqx) * cosf(pAffineTP->y * freqx)) * _dampingX;
     }
     else {
-      pVarTP->x += pAmount * (pAffineTP->x + _dampingX * scalex * sinf(pAffineTP->y * freqx) * cosf(pAffineTP->y * freqx) * sinf(pAffineTP->y * freqx)) * _dampingX;
+      pVarTP->x += pAmount * (pAffineTP->x + _dampingX * scalex * sinf(pAffineTP->y * freqx) * sinf(pAffineTP->y * freqx)) * _dampingX;
     }
-    if (use_cos_y) {
-      pVarTP->y += pAmount * (pAffineTP->y + _dampingY * scaley * cosf(pAffineTP->x * freqy) * sinf(pAffineTP->x * freqy) * cosf(pAffineTP->x * freqy)) * _dampingY;
+    if (use_cos_y == 1) {
+      pVarTP->y += pAmount * (pAffineTP->y + _dampingY * scaley * cosf(pAffineTP->x * freqy) * cosf(pAffineTP->x * freqy)) * _dampingY;
     }
     else {
-      pVarTP->y += pAmount * (pAffineTP->y + _dampingY * scaley * sinf(pAffineTP->x * freqy) * cosf(pAffineTP->x * freqy) * sinf(pAffineTP->x * freqy)) * _dampingY;
+      pVarTP->y += pAmount * (pAffineTP->y + _dampingY * scaley * sinf(pAffineTP->x * freqy) * sinf(pAffineTP->x * freqy)) * _dampingY;
     }
 		if (pContext->isPreserveZCoordinate) {
 			pVarTP->z += pAmount * pAffineTP->z;
 		}
 	}
 
+
 	void init(FlameTransformationContext *pContext, XForm *pXForm, float pAmount) {
-    _dampingX = fabs(dampx) < EPSILON ? 1.0f : expf(dampx);
-    _dampingY = fabs(dampy) < EPSILON ? 1.0f : expf(dampy);
+    _dampingX = fabsf(dampx) < EPSILON ? 1.0f : expf(dampx);
+    _dampingY = fabsf(dampy) < EPSILON ? 1.0f : expf(dampy);
 	}
 
-	Waves4WFFunc* makeCopy() {
-		return new Waves4WFFunc(*this);
+	Waves3WFFunc* makeCopy() {
+		return new Waves3WFFunc(*this);
 	}
 
 private:
@@ -104,4 +105,4 @@ private:
 	float _dampingX, _dampingY;
 };
 
-#endif // JWFVAR_WAVES4_WF_H_
+#endif // JWFVAR_WAVES3_WF_H_

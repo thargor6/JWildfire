@@ -35,10 +35,10 @@ public class FanFunc extends SimpleVariationFunc {
     double dx = M_PI * pXForm.getCoeff20() * pXForm.getCoeff20() + SMALL_EPSILON;
     double dx2 = dx / 2;
     double a;
-    if ((pAffineTP.getPrecalcAtan(pContext) + pXForm.getCoeff21() - ((int) ((pAffineTP.getPrecalcAtan(pContext) + pXForm.getCoeff21()) / dx)) * dx) > dx2)
-      a = pAffineTP.getPrecalcAtan(pContext) - dx2;
+    if ((pAffineTP.getPrecalcAtan() + pXForm.getCoeff21() - ((int) ((pAffineTP.getPrecalcAtan() + pXForm.getCoeff21()) / dx)) * dx) > dx2)
+      a = pAffineTP.getPrecalcAtan() - dx2;
     else
-      a = pAffineTP.getPrecalcAtan(pContext) + dx2;
+      a = pAffineTP.getPrecalcAtan() + dx2;
     double sinr = sin(a);
     double cosr = cos(a);
     double r = pAmount * sqrt(pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y);

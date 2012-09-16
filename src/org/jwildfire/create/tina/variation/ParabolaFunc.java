@@ -38,7 +38,7 @@ public class ParabolaFunc extends VariationFunc {
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     /* cyberxaos, 4/2007 */
-    double r = pAffineTP.getPrecalcSqrt(pContext);
+    double r = pAffineTP.getPrecalcSqrt();
     double sr = sin(r);
     double cr = cos(r);
     pVarTP.x += height * pAmount * sr * sr * pContext.random();

@@ -22,12 +22,15 @@ import static org.jwildfire.base.MathLib.cos;
 import static org.jwildfire.base.MathLib.exp;
 import static org.jwildfire.base.MathLib.fabs;
 import static org.jwildfire.base.MathLib.sin;
+import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_CUDA;
+import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_JWILDFIRE;
 
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
 public class Waves2WFFunc extends VariationFunc {
+  private static final long serialVersionUID = 1L;
 
   private static final String PARAM_SCALEX = "scalex";
   private static final String PARAM_SCALEY = "scaley";
@@ -51,19 +54,17 @@ public class Waves2WFFunc extends VariationFunc {
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     /* Modified version of waves2 from Joel F */
-    double dampingX = fabs(dampX) < EPSILON ? 1.0 : exp(dampX);
-    double dampingY = fabs(dampY) < EPSILON ? 1.0 : exp(dampY);
     if (useCosX == 1) {
-      pVarTP.x += pAmount * (pAffineTP.x + dampingX * scalex * cos(pAffineTP.y * freqx)) * dampingX;
+      pVarTP.x += pAmount * (pAffineTP.x + _dampingX * scalex * cos(pAffineTP.y * freqx)) * _dampingX;
     }
     else {
-      pVarTP.x += pAmount * (pAffineTP.x + dampingX * scalex * sin(pAffineTP.y * freqx)) * dampingX;
+      pVarTP.x += pAmount * (pAffineTP.x + _dampingX * scalex * sin(pAffineTP.y * freqx)) * _dampingX;
     }
     if (useCosY == 1) {
-      pVarTP.y += pAmount * (pAffineTP.y + dampingY * scaley * cos(pAffineTP.x * freqy)) * dampingY;
+      pVarTP.y += pAmount * (pAffineTP.y + _dampingY * scaley * cos(pAffineTP.x * freqy)) * _dampingY;
     }
     else {
-      pVarTP.y += pAmount * (pAffineTP.y + dampingY * scaley * sin(pAffineTP.x * freqy)) * dampingY;
+      pVarTP.y += pAmount * (pAffineTP.y + _dampingY * scaley * sin(pAffineTP.x * freqy)) * _dampingY;
     }
     if (pContext.isPreserveZCoordinate()) {
       pVarTP.z += pAmount * pAffineTP.z;
@@ -105,6 +106,19 @@ public class Waves2WFFunc extends VariationFunc {
   @Override
   public String getName() {
     return "waves2_wf";
+  }
+
+  private double _dampingX, _dampingY;
+
+  @Override
+  public void init(FlameTransformationContext pContext, XForm pXForm, double pAmount) {
+    _dampingX = fabs(dampX) < EPSILON ? 1.0 : exp(dampX);
+    _dampingY = fabs(dampY) < EPSILON ? 1.0 : exp(dampY);
+  }
+
+  @Override
+  public int getAvailability() {
+    return AVAILABILITY_JWILDFIRE | AVAILABILITY_CUDA;
   }
 
 }

@@ -1,6 +1,7 @@
 package org.jwildfire.create.tina.variation;
 
 public class PostCustomWFFunc extends CustomWFFunc {
+  private static final long serialVersionUID = 1L;
 
   @Override
   public String getName() {

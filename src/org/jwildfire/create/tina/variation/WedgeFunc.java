@@ -19,17 +19,18 @@ package org.jwildfire.create.tina.variation;
 import static org.jwildfire.base.MathLib.M_1_PI;
 import static org.jwildfire.base.MathLib.M_PI;
 import static org.jwildfire.base.MathLib.M_PI_2;
-import static org.jwildfire.base.MathLib.atan2;
 import static org.jwildfire.base.MathLib.cos;
 import static org.jwildfire.base.MathLib.floor;
 import static org.jwildfire.base.MathLib.sin;
-import static org.jwildfire.base.MathLib.sqrt;
+import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_CUDA;
+import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_JWILDFIRE;
 
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
 public class WedgeFunc extends VariationFunc {
+  private static final long serialVersionUID = 1L;
 
   private static final String PARAM_ANGLE = "angle";
   private static final String PARAM_HOLE = "hole";
@@ -45,12 +46,8 @@ public class WedgeFunc extends VariationFunc {
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     /* Wedge from apo plugins pack */
-    double precalc_sumsq = pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y;
-    double precalc_sqrt = sqrt(precalc_sumsq);
-    double precalc_atanyx = atan2(pAffineTP.y, pAffineTP.x);
-
-    double r = precalc_sqrt;
-    double a = precalc_atanyx + swirl * r;
+    double r = pAffineTP.getPrecalcSqrt();
+    double a = pAffineTP.getPrecalcAtanYX() + swirl * r;
     double c = floor((count * a + M_PI) * M_1_PI * 0.5);
 
     double comp_fac = 1 - angle * count * M_1_PI * 0.5;
@@ -98,4 +95,8 @@ public class WedgeFunc extends VariationFunc {
     return "wedge";
   }
 
+  @Override
+  public int getAvailability() {
+    return AVAILABILITY_JWILDFIRE | AVAILABILITY_CUDA;
+  }
 }

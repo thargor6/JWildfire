@@ -44,8 +44,8 @@ public class WedgeSphFunc extends VariationFunc {
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     /* Wedge_sph from apo plugins pack */
 
-    double r = 1.0 / (pAffineTP.getPrecalcSqrt(pContext) + EPSILON);
-    double a = pAffineTP.getPrecalcAtanYX(pContext) + swirl * r;
+    double r = 1.0 / (pAffineTP.getPrecalcSqrt() + EPSILON);
+    double a = pAffineTP.getPrecalcAtanYX() + swirl * r;
     double c = floor((count * a + M_PI) * M_1_PI * 0.5);
 
     double comp_fac = 1 - angle * count * M_1_PI * 0.5;

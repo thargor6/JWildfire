@@ -16,8 +16,9 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.MathLib.SMALL_EPSILON;
 import static org.jwildfire.base.MathLib.sqrt;
+import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_CUDA;
+import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_JWILDFIRE;
 
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
@@ -28,10 +29,12 @@ public class ScryFunc extends SimpleVariationFunc {
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     /* scry from the apophysis plugin pack */
-
     double t = pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y;
-    double r = 1.0 / (sqrt(t) * (t + 1.0 / (pAmount + SMALL_EPSILON)));
-
+    double d = (sqrt(t) * (t + 1.0 / pAmount));
+    if (d == 0) {
+      return;
+    }
+    double r = 1.0 / d;
     pVarTP.x += pAffineTP.x * r;
     pVarTP.y += pAffineTP.y * r;
     if (pContext.isPreserveZCoordinate()) {
@@ -42,6 +45,11 @@ public class ScryFunc extends SimpleVariationFunc {
   @Override
   public String getName() {
     return "scry";
+  }
+
+  @Override
+  public int getAvailability() {
+    return AVAILABILITY_JWILDFIRE | AVAILABILITY_CUDA;
   }
 
 }

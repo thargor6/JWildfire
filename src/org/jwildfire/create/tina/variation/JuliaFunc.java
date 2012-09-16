@@ -31,7 +31,7 @@ public class JuliaFunc extends SimpleVariationFunc {
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-    double a = pAffineTP.getPrecalcAtan(pContext) * 0.5 + M_PI * (int) (2.0 * pContext.random());
+    double a = pAffineTP.getPrecalcAtan() * 0.5 + M_PI * (int) (2.0 * pContext.random());
     double sina = sin(a);
     double cosa = cos(a);
     double r = pAmount * sqrt(sqrt(pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y));

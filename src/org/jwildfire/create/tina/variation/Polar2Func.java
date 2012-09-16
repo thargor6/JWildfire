@@ -18,27 +18,34 @@ package org.jwildfire.create.tina.variation;
 
 import static org.jwildfire.base.MathLib.M_PI;
 import static org.jwildfire.base.MathLib.log;
+import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_CUDA;
+import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_JWILDFIRE;
 
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
 public class Polar2Func extends SimpleVariationFunc {
+  private static final long serialVersionUID = 1L;
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     /* polar2 from the apophysis plugin pack */
     double p2v = pAmount / M_PI;
-    pVarTP.x += p2v * pAffineTP.getPrecalcAtan(pContext);
+    pVarTP.x += p2v * pAffineTP.getPrecalcAtan();
     pVarTP.y += p2v / 2.0 * log(pAffineTP.getPrecalcSumsq());
     if (pContext.isPreserveZCoordinate()) {
       pVarTP.z += pAmount * pAffineTP.z;
     }
-
   }
 
   @Override
   public String getName() {
     return "polar2";
+  }
+
+  @Override
+  public int getAvailability() {
+    return AVAILABILITY_JWILDFIRE | AVAILABILITY_CUDA;
   }
 
 }

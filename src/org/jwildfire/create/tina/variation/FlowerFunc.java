@@ -37,9 +37,9 @@ public class FlowerFunc extends VariationFunc {
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     /* cyberxaos, 4/2007 */
-    double theta = pAffineTP.getPrecalcAtanYX(pContext);
+    double theta = pAffineTP.getPrecalcAtanYX();
     double r = pAmount * (pContext.random() - holes) *
-        cos(petals * theta) / pAffineTP.getPrecalcSqrt(pContext);
+        cos(petals * theta) / pAffineTP.getPrecalcSqrt();
     pVarTP.x += r * pAffineTP.x;
     pVarTP.y += r * pAffineTP.y;
     if (pContext.isPreserveZCoordinate()) {

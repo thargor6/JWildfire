@@ -27,8 +27,8 @@ public class HorseshoeFunc extends SimpleVariationFunc {
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-    double sinA = pAffineTP.getPrecalcSinA(pContext);
-    double cosA = pAffineTP.getPrecalcCosA(pContext);
+    double sinA = pAffineTP.getPrecalcSinA();
+    double cosA = pAffineTP.getPrecalcCosA();
     pVarTP.x += pAmount * (sinA * pAffineTP.x - cosA * pAffineTP.y);
     pVarTP.y += pAmount * (cosA * pAffineTP.x + sinA * pAffineTP.y);
     if (pContext.isPreserveZCoordinate()) {

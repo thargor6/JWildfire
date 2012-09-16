@@ -31,7 +31,7 @@ public class PolarFunc extends SimpleVariationFunc {
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     double ny = sqrt(pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y) - 1.0;
-    pVarTP.x += pAmount * (pAffineTP.getPrecalcAtan(pContext) * R_PI);
+    pVarTP.x += pAmount * (pAffineTP.getPrecalcAtan() * R_PI);
     pVarTP.y += pAmount * ny;
     if (pContext.isPreserveZCoordinate()) {
       pVarTP.z += pAmount * pAffineTP.z;

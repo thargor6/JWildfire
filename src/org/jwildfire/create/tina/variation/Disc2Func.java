@@ -46,7 +46,7 @@ public class Disc2Func extends VariationFunc {
     double t = timespi * (pAffineTP.x + pAffineTP.y);
     double sinr = sin(t);
     double cosr = cos(t);
-    double r = pAmount * pAffineTP.getPrecalcAtan(pContext) / M_PI;
+    double r = pAmount * pAffineTP.getPrecalcAtan() / M_PI;
 
     pVarTP.x += (sinr + cosadd) * r;
     pVarTP.y += (cosr + sinadd) * r;

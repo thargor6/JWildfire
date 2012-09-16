@@ -46,7 +46,7 @@ public class NgonFunc extends VariationFunc {
 
     r_factor = pow(pAffineTP.getPrecalcSumsq(), power / 2.0);
 
-    theta = pAffineTP.getPrecalcAtanYX(pContext);
+    theta = pAffineTP.getPrecalcAtanYX();
     b = 2 * M_PI / sides;
 
     phi = theta - (b * floor(theta / b));

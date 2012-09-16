@@ -67,17 +67,20 @@
 #include "jwfvar_Elliptic.h"
 #include "jwfvar_Epispiral.h"
 #include "jwfvar_EpispiralWF.h"
+#include "jwfvar_Escher.h"
 #include "jwfvar_Ex.h"
 #include "jwfvar_Exp.h"
 #include "jwfvar_Exponential.h"
 #include "jwfvar_Eyefish.h"
 #include "jwfvar_Fan.h"
+#include "jwfvar_Fan2.h"
 #include "jwfvar_Fisheye.h"
 #include "jwfvar_FlipCircle.h"
 #include "jwfvar_FlipY.h"
 #include "jwfvar_Flower.h"
 #include "jwfvar_Flux.h"
 #include "jwfvar_Foci.h"
+#include "jwfvar_Foci3D.h"
 #include "jwfvar_GaussianBlur.h"
 #include "jwfvar_Handkerchief.h"
 #include "jwfvar_Heart.h"
@@ -104,6 +107,7 @@
 #include "jwfvar_Lissajous.h"
 #include "jwfvar_Log.h"
 #include "jwfvar_Loonie.h"
+#include "jwfvar_Loonie3D.h"
 #include "jwfvar_Modulus.h"
 #include "jwfvar_Noise.h"
 #include "jwfvar_Oscilloscope.h"
@@ -112,6 +116,8 @@
 #include "jwfvar_Pie.h"
 #include "jwfvar_Pie3D.h"
 #include "jwfvar_Polar.h"
+#include "jwfvar_Polar2.h"
+#include "jwfvar_Popcorn.h"
 #include "jwfvar_PostMirrorWF.h"
 #include "jwfvar_PostRotateX.h"
 #include "jwfvar_PostRotateY.h"
@@ -119,8 +125,10 @@
 #include "jwfvar_PreCircleCrop.h"
 #include "jwfvar_PreCrop.h"
 #include "jwfvar_RadialBlur.h"
+#include "jwfvar_Scry.h"
 #include "jwfvar_Sec.h"
 #include "jwfvar_Secant2.h"
+#include "jwfvar_Sin.h"
 #include "jwfvar_Spherical.h"
 #include "jwfvar_Spherical3D.h"
 #include "jwfvar_Spherical3DWF.h"
@@ -132,10 +140,15 @@
 #include "jwfvar_Tan.h"
 #include "jwfvar_Tangent.h"
 #include "jwfvar_Unpolar.h"
+#include "jwfvar_Waves.h"
 #include "jwfvar_Waves2.h"
+#include "jwfvar_Waves2WF.h"
+#include "jwfvar_Waves3WF.h"
 #include "jwfvar_Waves4WF.h"
+#include "jwfvar_Wedge.h"
 #include "jwfvar_Whorl.h"
 #include "jwfvar_XHeart.h"
+#include "jwfvar_ZBlur.h"
 #include "jwfvar_ZCone.h"
 #include "jwfvar_ZScale.h"
 #include "jwfvar_ZTranslate.h"
@@ -236,17 +249,20 @@ private:
 		addVariation(new EllipticFunc());
 		addVariation(new EpispiralFunc());
 		addVariation(new EpispiralWFFunc());
+		addVariation(new EscherFunc());
 		addVariation(new ExFunc());
 		addVariation(new ExpFunc());
 		addVariation(new ExponentialFunc());
 		addVariation(new EyefishFunc());
 		addVariation(new FanFunc());
+		addVariation(new Fan2Func());
 		addVariation(new FisheyeFunc());
 		addVariation(new FlipCircleFunc());
 		addVariation(new FlipYFunc());
 		addVariation(new FlowerFunc());
 		addVariation(new FluxFunc());
 		addVariation(new FociFunc());
+		addVariation(new Foci3DFunc());
 		addVariation(new GaussianBlurFunc());
 		addVariation(new HandkerchiefFunc());
 		addVariation(new HeartFunc());
@@ -273,6 +289,7 @@ private:
 		addVariation(new LissajousFunc());
 		addVariation(new LogFunc());
 		addVariation(new LoonieFunc());
+		addVariation(new Loonie3DFunc());
 		addVariation(new ModulusFunc());
 		addVariation(new NoiseFunc());
 		addVariation(new OscilloscopeFunc());
@@ -281,6 +298,8 @@ private:
 		addVariation(new PieFunc());
 		addVariation(new Pie3DFunc());
 		addVariation(new PolarFunc());
+		addVariation(new Polar2Func());
+		addVariation(new PopcornFunc());
 		addVariation(new PostMirrorWFFunc());
 		addVariation(new PostRotateXFunc());
 		addVariation(new PostRotateYFunc());
@@ -288,8 +307,10 @@ private:
 		addVariation(new PreCircleCropFunc());
 		addVariation(new PreCropFunc());
 		addVariation(new RadialBlurFunc());
+		addVariation(new ScryFunc());
 		addVariation(new SecFunc());
 		addVariation(new Secant2Func());
+		addVariation(new SinFunc());
 		addVariation(new SphericalFunc());
 		addVariation(new Spherical3DFunc());
 		addVariation(new Spherical3DWFFunc());
@@ -301,10 +322,15 @@ private:
 		addVariation(new TanFunc());
 		addVariation(new TangentFunc());
 		addVariation(new UnpolarFunc());
+		addVariation(new WavesFunc());
 		addVariation(new Waves2Func());
+		addVariation(new Waves2WFFunc());
+		addVariation(new Waves3WFFunc());
 		addVariation(new Waves4WFFunc());
+		addVariation(new WedgeFunc());
 		addVariation(new WhorlFunc());
 		addVariation(new XHeartFunc());
+		addVariation(new ZBlurFunc());
 		addVariation(new ZConeFunc());
 		addVariation(new ZScaleFunc());
 		addVariation(new ZTranslateFunc());

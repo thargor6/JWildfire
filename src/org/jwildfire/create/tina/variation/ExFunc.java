@@ -31,8 +31,8 @@ public class ExFunc extends SimpleVariationFunc {
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     double r = sqrt(pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y);
-    double n0 = sin(pAffineTP.getPrecalcAtan(pContext) + r);
-    double n1 = cos(pAffineTP.getPrecalcAtan(pContext) - r);
+    double n0 = sin(pAffineTP.getPrecalcAtan() + r);
+    double n1 = cos(pAffineTP.getPrecalcAtan() - r);
     double m0 = n0 * n0 * n0;
     double m1 = n1 * n1 * n1;
     r = r * pAmount;

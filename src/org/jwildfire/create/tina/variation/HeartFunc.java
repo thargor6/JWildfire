@@ -31,7 +31,7 @@ public class HeartFunc extends SimpleVariationFunc {
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     double r = sqrt(pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y);
-    double angle = pAffineTP.getPrecalcAtan(pContext);
+    double angle = pAffineTP.getPrecalcAtan();
     double sinr = sin(r * angle);
     double cosr = cos(r * angle);
     r *= pAmount;

@@ -20,11 +20,14 @@ import static org.jwildfire.base.MathLib.cos;
 import static org.jwildfire.base.MathLib.exp;
 import static org.jwildfire.base.MathLib.log;
 import static org.jwildfire.base.MathLib.sin;
+import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_CUDA;
+import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_JWILDFIRE;
 
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
 public class EscherFunc extends VariationFunc {
+  private static final long serialVersionUID = 1L;
 
   private static final String PARAM_BETA = "beta";
 
@@ -36,7 +39,7 @@ public class EscherFunc extends VariationFunc {
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     /* Escher in the Apophysis Plugin Pack */
 
-    double a = pAffineTP.getPrecalcAtanYX(pContext);
+    double a = pAffineTP.getPrecalcAtanYX();
     double lnr = 0.5 * log(pAffineTP.getPrecalcSumsq());
 
     double seb = sin(beta);
@@ -79,6 +82,11 @@ public class EscherFunc extends VariationFunc {
   @Override
   public String getName() {
     return "escher";
+  }
+
+  @Override
+  public int getAvailability() {
+    return AVAILABILITY_JWILDFIRE | AVAILABILITY_CUDA;
   }
 
 }

@@ -30,7 +30,7 @@ public class HandkerchiefFunc extends SimpleVariationFunc {
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-    double angle = pAffineTP.getPrecalcAtan(pContext);
+    double angle = pAffineTP.getPrecalcAtan();
     double r = sqrt(pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y);
     pVarTP.x += pAmount * (sin(angle + r) * r);
     pVarTP.y += pAmount * (cos(angle - r) * r);

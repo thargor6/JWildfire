@@ -19,6 +19,8 @@ package org.jwildfire.create.tina.variation;
 import static org.jwildfire.base.MathLib.atan2;
 import static org.jwildfire.base.MathLib.sqr;
 import static org.jwildfire.base.MathLib.sqrt;
+import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_CUDA;
+import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_JWILDFIRE;
 
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
@@ -50,12 +52,16 @@ public class Loonie_3DFunc extends SimpleVariationFunc {
       pVarTP.y += pAmount * pAffineTP.y;
       pVarTP.z += pAmount * efTez * 0.5;
     }
-
   }
 
   @Override
   public String getName() {
     return "loonie_3D";
+  }
+
+  @Override
+  public int getAvailability() {
+    return AVAILABILITY_JWILDFIRE | AVAILABILITY_CUDA;
   }
 
 }

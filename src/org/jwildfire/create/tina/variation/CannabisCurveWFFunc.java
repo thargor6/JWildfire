@@ -36,8 +36,8 @@ public class CannabisCurveWFFunc extends VariationFunc {
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-    double a = pAffineTP.getPrecalcAtan(pContext);
-    double r = pAffineTP.getPrecalcSqrt(pContext);
+    double a = pAffineTP.getPrecalcAtan();
+    double r = pAffineTP.getPrecalcSqrt();
 
     // cannabis curve (http://mathworld.wolfram.com/CannabisCurve.html)
     r = (1 + 9.0 / 10.0 * cos(8.0 * a)) * (1 + 1.0 / 10.0 * cos(24.0 * a)) * (9.0 / 10.0 + 1.0 / 10.0 * cos(200.0 * a)) * (1.0 + sin(a));

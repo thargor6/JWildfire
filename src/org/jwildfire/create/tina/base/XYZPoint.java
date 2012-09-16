@@ -25,7 +25,6 @@ import static org.jwildfire.base.MathLib.sqrt;
 import java.io.Serializable;
 
 import org.jwildfire.create.tina.edit.Assignable;
-import org.jwildfire.create.tina.variation.FlameTransformationContext;
 
 public final class XYZPoint implements Serializable, Assignable<XYZPoint> {
   private static final long serialVersionUID = 1L;
@@ -104,7 +103,7 @@ public final class XYZPoint implements Serializable, Assignable<XYZPoint> {
     return sumsq;
   }
 
-  public double getPrecalcSqrt(FlameTransformationContext pContext) {
+  public double getPrecalcSqrt() {
     if (!validSqrt) {
       sqrt = sqrt(x * x + y * y) + SMALL_EPSILON;
       validSqrt = true;
@@ -112,7 +111,7 @@ public final class XYZPoint implements Serializable, Assignable<XYZPoint> {
     return sqrt;
   }
 
-  public double getPrecalcAtan(FlameTransformationContext pContext) {
+  public double getPrecalcAtan() {
     if (!validAtan) {
       atan = atan2(x, y);
       validAtan = true;
@@ -120,7 +119,7 @@ public final class XYZPoint implements Serializable, Assignable<XYZPoint> {
     return atan;
   }
 
-  public double getPrecalcAtanYX(FlameTransformationContext pContext) {
+  public double getPrecalcAtanYX() {
     if (!validAtanYX) {
       atanYX = atan2(y, x);
       validAtanYX = true;
@@ -128,17 +127,17 @@ public final class XYZPoint implements Serializable, Assignable<XYZPoint> {
     return atanYX;
   }
 
-  public double getPrecalcSinA(FlameTransformationContext pContext) {
+  public double getPrecalcSinA() {
     if (!validSinA) {
-      sinA = x / getPrecalcSqrt(pContext);
+      sinA = x / getPrecalcSqrt();
       validSinA = true;
     }
     return sinA;
   }
 
-  public double getPrecalcCosA(FlameTransformationContext pContext) {
+  public double getPrecalcCosA() {
     if (!validCosA) {
-      cosA = y / getPrecalcSqrt(pContext);
+      cosA = y / getPrecalcSqrt();
       validCosA = true;
     }
     return cosA;

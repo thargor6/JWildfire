@@ -27,9 +27,9 @@ public class HyperbolicFunc extends SimpleVariationFunc {
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-    double r = pAffineTP.getPrecalcSqrt(pContext);
-    pVarTP.x += pAmount * pAffineTP.getPrecalcSinA(pContext) / r;
-    pVarTP.y += pAmount * pAffineTP.getPrecalcCosA(pContext) * r;
+    double r = pAffineTP.getPrecalcSqrt();
+    pVarTP.x += pAmount * pAffineTP.getPrecalcSinA() / r;
+    pVarTP.y += pAmount * pAffineTP.getPrecalcCosA() * r;
     if (pContext.isPreserveZCoordinate()) {
       pVarTP.z += pAmount * pAffineTP.z;
     }
