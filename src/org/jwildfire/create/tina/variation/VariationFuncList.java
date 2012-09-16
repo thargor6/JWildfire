@@ -263,6 +263,8 @@ public class VariationFuncList {
     registerVariationFunc(Hexaplay3DFunc.class);
     registerVariationFunc(Hexnix3DFunc.class);
     registerVariationFunc(PhoenixJuliaFunc.class);
+    registerVariationFunc(Boarders2Func.class);
+    registerVariationFunc(PreBoarders2Func.class);
   }
 
   private static void registerVariationFunc(

@@ -16,8 +16,6 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.MathLib.EPSILON;
-import static org.jwildfire.base.MathLib.atan2;
 import static org.jwildfire.base.MathLib.cos;
 import static org.jwildfire.base.MathLib.fabs;
 import static org.jwildfire.base.MathLib.sin;
@@ -42,13 +40,31 @@ public class EpispiralFunc extends VariationFunc {
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     // epispiral by cyberxaos, http://cyberxaos.deviantart.com/journal/Epispiral-Plugin-240086108   
-    double theta = atan2(pAffineTP.y, pAffineTP.x);
-    double t = -holes;
-    if (fabs(thickness) > EPSILON) {
-      t += (pContext.random() * thickness) * (1.0 / cos(n * theta));
+    //    double theta = Math.atan2(pAffineTP.y, pAffineTP.x);
+    //    double t = -holes;
+    //    if (fabs(thickness) > EPSILON) {
+    //      t += (pContext.random() * thickness) * (1.0 / cos(n * theta));
+    //    }
+    //    pVarTP.x += pAmount * t * cos(theta);
+    //    pVarTP.y += pAmount * t * sin(theta);
+    double theta = Math.atan2(pAffineTP.y, pAffineTP.x);
+    double EPSILON = 0.000001;
+    if (thickness < EPSILON)
+      thickness = EPSILON;
+    if (holes < EPSILON)
+      holes = EPSILON;
+
+    double t = (pContext.random() * thickness);
+    t *= (1 / cos(n * theta));
+    t -= holes;
+    if (fabs(t) == 0) {
+
     }
-    pVarTP.x += pAmount * t * cos(theta);
-    pVarTP.y += pAmount * t * sin(theta);
+    else {
+
+      pVarTP.x += pAmount * t * cos(theta);
+      pVarTP.y += pAmount * t * sin(theta);
+    }
     if (pContext.isPreserveZCoordinate()) {
       pVarTP.z += pAmount * pAffineTP.z;
     }

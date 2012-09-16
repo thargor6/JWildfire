@@ -24,9 +24,9 @@ import org.jwildfire.create.tina.variation.VariationFuncList;
 
 public class SimpleRandomFlameGenerator extends RandomFlameGenerator {
 
-  private static final String FNCLST_ORIGINAL[] = { "blur3D", "bubble", "curl3D", "diamond", "disc", "julia3D", "heart",
-      "julia3D", "hemisphere", "waffle", "bwraps7", "horseshoe", "blob3D", "julia3D", "pdj", "popcorn", "rings2", "rose_wf",
-      "spherical3D", "spiral", "rectangles", "blur", "waves", "swirl", "secant2" };
+  private static final String FNCLST_ORIGINAL[] = { "blur3D", "bubble", "curl3D", "diamond", "waves2_3D", "disc", "julia3D", "heart",
+      "julia3D", "hemisphere", "waffle", "bwraps7", "horseshoe", "boarders", "blob3D", "xheart", "julia3D", "pdj", "popcorn", "rings2", "rose_wf",
+      "spherical3D", "spiral", "rectangles", "blur", "waves", "swirl", "secant2", "boarders2" };
 
   @Override
   protected Flame createFlame() {
