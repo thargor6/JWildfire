@@ -16,37 +16,51 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.MathLib.EPSILON;
+import static org.jwildfire.base.MathLib.M_PI;
+import static org.jwildfire.base.MathLib.atan2;
 import static org.jwildfire.base.MathLib.cos;
-import static org.jwildfire.base.MathLib.fabs;
+import static org.jwildfire.base.MathLib.cosh;
+import static org.jwildfire.base.MathLib.log;
 import static org.jwildfire.base.MathLib.sin;
+import static org.jwildfire.base.MathLib.sinh;
+import static org.jwildfire.base.MathLib.sqr;
 
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
-public class EpispiralFunc extends VariationFunc {
-  private static final String PARAM_N = "n";
-  private static final String PARAM_THICKNESS = "thickness";
-  private static final String PARAM_HOLES = "holes";
-  private static final String[] paramNames = { PARAM_N, PARAM_THICKNESS, PARAM_HOLES };
+public class BSwirlFunc extends VariationFunc {
 
-  private double n = 6.0;
-  private double thickness = 0.0;
-  private double holes = 1.0;
+  private static final String PARAM_IN = "in";
+  private static final String PARAM_OUT = "out";
+
+  private static final String[] paramNames = { PARAM_IN, PARAM_OUT };
+
+  private double in = 0.0;
+  private double out = 0.0;
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-    // epispiral by cyberxaos, http://cyberxaos.deviantart.com/journal/Epispiral-Plugin-240086108   
-    double theta = Math.atan2(pAffineTP.y, pAffineTP.x);
-    double t = -holes;
-    if (fabs(thickness) > EPSILON) {
-      t += (pContext.random() * thickness) * (1.0 / cos(n * theta));
+    // bSwirl by Michael Faber, http://michaelfaber.deviantart.com/art/bSeries-320574477
+    double tau, sigma;
+    double temp;
+    double cosht, sinht;
+    double sins, coss;
+
+    tau = 0.5 * (log(sqr(pAffineTP.x + 1.0) + sqr(pAffineTP.y)) - log(sqr(pAffineTP.x - 1.0) + sqr(pAffineTP.y)));
+    sigma = M_PI - atan2(pAffineTP.y, pAffineTP.x + 1.0) - atan2(pAffineTP.y, 1.0 - pAffineTP.x);
+
+    sigma = sigma + tau * out + in / tau;
+
+    sinht = sinh(tau);
+    cosht = cosh(tau);
+    sins = sin(sigma);
+    coss = cos(sigma);
+    temp = cosht - coss;
+    if (temp == 0) {
+      return;
     }
-    else {
-      t += 1.0 / cos(n * theta);
-    }
-    pVarTP.x += pAmount * t * cos(theta);
-    pVarTP.y += pAmount * t * sin(theta);
+    pVarTP.x += pAmount * sinht / temp;
+    pVarTP.y += pAmount * sins / temp;
     if (pContext.isPreserveZCoordinate()) {
       pVarTP.z += pAmount * pAffineTP.z;
     }
@@ -59,24 +73,22 @@ public class EpispiralFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { n, thickness, holes };
+    return new Object[] { in, out };
   }
 
   @Override
   public void setParameter(String pName, double pValue) {
-    if (PARAM_N.equalsIgnoreCase(pName))
-      n = pValue;
-    else if (PARAM_THICKNESS.equalsIgnoreCase(pName))
-      thickness = pValue;
-    else if (PARAM_HOLES.equalsIgnoreCase(pName))
-      holes = pValue;
+    if (PARAM_IN.equalsIgnoreCase(pName))
+      in = pValue;
+    else if (PARAM_OUT.equalsIgnoreCase(pName))
+      out = pValue;
     else
       throw new IllegalArgumentException(pName);
   }
 
   @Override
   public String getName() {
-    return "epispiral";
+    return "bSwirl";
   }
 
 }

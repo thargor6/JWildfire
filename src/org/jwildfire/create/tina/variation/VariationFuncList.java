@@ -265,6 +265,10 @@ public class VariationFuncList {
     registerVariationFunc(PhoenixJuliaFunc.class);
     registerVariationFunc(Boarders2Func.class);
     registerVariationFunc(PreBoarders2Func.class);
+    registerVariationFunc(BCollideFunc.class);
+    registerVariationFunc(BModFunc.class);
+    registerVariationFunc(BSwirlFunc.class);
+    registerVariationFunc(BTransformFunc.class);
   }
 
   private static void registerVariationFunc(
