@@ -4034,7 +4034,7 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearVar1Cmb.setPreferredSize(new Dimension(120, 22));
       nonlinearVar1Cmb.setSize(new Dimension(120, 24));
       nonlinearVar1Cmb.setLocation(new Point(66, 2));
-      nonlinearVar1Cmb.setMaximumRowCount(32);
+      nonlinearVar1Cmb.setMaximumRowCount(16);
       nonlinearVar1Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
       nonlinearVar1Cmb.addItemListener(new java.awt.event.ItemListener() {
         public void itemStateChanged(java.awt.event.ItemEvent e) {
@@ -4212,7 +4212,7 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearVar2Cmb.setLocation(new Point(66, 2));
       nonlinearVar2Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
       nonlinearVar2Cmb.setPreferredSize(new Dimension(120, 22));
-      nonlinearVar2Cmb.setMaximumRowCount(32);
+      nonlinearVar2Cmb.setMaximumRowCount(16);
       nonlinearVar2Cmb.setSize(new Dimension(120, 24));
       nonlinearVar2Cmb.addItemListener(new java.awt.event.ItemListener() {
         public void itemStateChanged(java.awt.event.ItemEvent e) {
@@ -4369,7 +4369,7 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearVar3Cmb.setLocation(new Point(66, 2));
       nonlinearVar3Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
       nonlinearVar3Cmb.setPreferredSize(new Dimension(120, 22));
-      nonlinearVar3Cmb.setMaximumRowCount(32);
+      nonlinearVar3Cmb.setMaximumRowCount(16);
       nonlinearVar3Cmb.setSize(new Dimension(120, 24));
       nonlinearVar3Cmb.addItemListener(new java.awt.event.ItemListener() {
         public void itemStateChanged(java.awt.event.ItemEvent e) {
@@ -5507,7 +5507,7 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearVar4Cmb.setLocation(new Point(66, 2));
       nonlinearVar4Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
       nonlinearVar4Cmb.setPreferredSize(new Dimension(120, 22));
-      nonlinearVar4Cmb.setMaximumRowCount(32);
+      nonlinearVar4Cmb.setMaximumRowCount(16);
       nonlinearVar4Cmb.setSize(new Dimension(120, 24));
       nonlinearVar4Cmb.addItemListener(new java.awt.event.ItemListener() {
         public void itemStateChanged(java.awt.event.ItemEvent e) {
@@ -5738,7 +5738,7 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearVar5Cmb.setLocation(new Point(66, 2));
       nonlinearVar5Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
       nonlinearVar5Cmb.setPreferredSize(new Dimension(120, 22));
-      nonlinearVar5Cmb.setMaximumRowCount(32);
+      nonlinearVar5Cmb.setMaximumRowCount(16);
       nonlinearVar5Cmb.setSize(new Dimension(120, 24));
       nonlinearVar5Cmb.addItemListener(new java.awt.event.ItemListener() {
         public void itemStateChanged(java.awt.event.ItemEvent e) {
@@ -5894,7 +5894,7 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearVar6Cmb.setLocation(new Point(66, 2));
       nonlinearVar6Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
       nonlinearVar6Cmb.setPreferredSize(new Dimension(120, 22));
-      nonlinearVar6Cmb.setMaximumRowCount(32);
+      nonlinearVar6Cmb.setMaximumRowCount(16);
       nonlinearVar6Cmb.setSize(new Dimension(120, 24));
       nonlinearVar6Cmb.addItemListener(new java.awt.event.ItemListener() {
         public void itemStateChanged(java.awt.event.ItemEvent e) {
@@ -6050,7 +6050,7 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearVar7Cmb.setLocation(new Point(66, 2));
       nonlinearVar7Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
       nonlinearVar7Cmb.setPreferredSize(new Dimension(120, 22));
-      nonlinearVar7Cmb.setMaximumRowCount(32);
+      nonlinearVar7Cmb.setMaximumRowCount(16);
       nonlinearVar7Cmb.setSize(new Dimension(120, 24));
       nonlinearVar7Cmb.addItemListener(new java.awt.event.ItemListener() {
         public void itemStateChanged(java.awt.event.ItemEvent e) {
@@ -6206,7 +6206,7 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearVar8Cmb.setLocation(new Point(66, 2));
       nonlinearVar8Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
       nonlinearVar8Cmb.setPreferredSize(new Dimension(120, 22));
-      nonlinearVar8Cmb.setMaximumRowCount(32);
+      nonlinearVar8Cmb.setMaximumRowCount(16);
       nonlinearVar8Cmb.setSize(new Dimension(120, 24));
       nonlinearVar8Cmb.addItemListener(new java.awt.event.ItemListener() {
         public void itemStateChanged(java.awt.event.ItemEvent e) {
@@ -6362,7 +6362,7 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearVar9Cmb.setLocation(new Point(66, 2));
       nonlinearVar9Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
       nonlinearVar9Cmb.setPreferredSize(new Dimension(120, 22));
-      nonlinearVar9Cmb.setMaximumRowCount(32);
+      nonlinearVar9Cmb.setMaximumRowCount(16);
       nonlinearVar9Cmb.setSize(new Dimension(120, 24));
       nonlinearVar9Cmb.addItemListener(new java.awt.event.ItemListener() {
         public void itemStateChanged(java.awt.event.ItemEvent e) {
@@ -6518,7 +6518,7 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearVar10Cmb.setLocation(new Point(66, 2));
       nonlinearVar10Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
       nonlinearVar10Cmb.setPreferredSize(new Dimension(120, 22));
-      nonlinearVar10Cmb.setMaximumRowCount(32);
+      nonlinearVar10Cmb.setMaximumRowCount(16);
       nonlinearVar10Cmb.setSize(new Dimension(120, 24));
       nonlinearVar10Cmb.addItemListener(new java.awt.event.ItemListener() {
         public void itemStateChanged(java.awt.event.ItemEvent e) {
@@ -6674,7 +6674,7 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearVar11Cmb.setLocation(new Point(66, 2));
       nonlinearVar11Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
       nonlinearVar11Cmb.setPreferredSize(new Dimension(120, 22));
-      nonlinearVar11Cmb.setMaximumRowCount(32);
+      nonlinearVar11Cmb.setMaximumRowCount(16);
       nonlinearVar11Cmb.setSize(new Dimension(120, 24));
       nonlinearVar11Cmb.addItemListener(new java.awt.event.ItemListener() {
         public void itemStateChanged(java.awt.event.ItemEvent e) {
@@ -6830,7 +6830,7 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearVar12Cmb.setLocation(new Point(66, 2));
       nonlinearVar12Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
       nonlinearVar12Cmb.setPreferredSize(new Dimension(120, 22));
-      nonlinearVar12Cmb.setMaximumRowCount(32);
+      nonlinearVar12Cmb.setMaximumRowCount(16);
       nonlinearVar12Cmb.setSize(new Dimension(120, 24));
       nonlinearVar12Cmb.addItemListener(new java.awt.event.ItemListener() {
         public void itemStateChanged(java.awt.event.ItemEvent e) {
