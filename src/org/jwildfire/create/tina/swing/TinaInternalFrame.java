@@ -3490,7 +3490,7 @@ public class TinaInternalFrame extends JInternalFrame {
     cmb.addItem(RendererType.JAVA);
     // Currently Windows only
     if (File.separatorChar == '\\') {
-      cmb.addItem(RendererType.CUDA);
+      ////      cmb.addItem(RendererType.CUDA);
     }
     cmb.setSelectedIndex(0);
   }

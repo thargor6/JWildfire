@@ -276,6 +276,10 @@ public class VariationFuncList {
     registerVariationFunc(EJuliaFunc.class);
     registerVariationFunc(EModFunc.class);
     registerVariationFunc(EMotionFunc.class);
+    registerVariationFunc(EPushFunc.class);
+    registerVariationFunc(ERotateFunc.class);
+    registerVariationFunc(EScaleFunc.class);
+    registerVariationFunc(ESwirlFunc.class);
   }
 
   private static void registerVariationFunc(

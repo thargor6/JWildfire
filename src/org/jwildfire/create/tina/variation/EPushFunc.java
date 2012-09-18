@@ -27,14 +27,16 @@ import static org.jwildfire.base.MathLib.sqrt;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
-public class EMotionFunc extends VariationFunc {
+public class EPushFunc extends VariationFunc {
 
-  private static final String PARAM_MOVE = "move";
+  private static final String PARAM_PUSH = "push";
+  private static final String PARAM_DIST = "dist";
   private static final String PARAM_ROTATE = "rotate";
 
-  private static final String[] paramNames = { PARAM_MOVE, PARAM_ROTATE };
+  private static final String[] paramNames = { PARAM_PUSH, PARAM_DIST, PARAM_ROTATE };
 
-  private double move = 0.0;
+  private double push = 0.0;
+  private double dist = 1.0;
   private double rotate = 0.0;
 
   //Taking the square root of numbers close to zero is dangerous.  If x is negative
@@ -47,7 +49,7 @@ public class EMotionFunc extends VariationFunc {
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-    // eMotion by Michael Faber, http://michaelfaber.deviantart.com/art/eSeries-306044892
+    // ePush by Michael Faber, http://michaelfaber.deviantart.com/art/eSeries-306044892
     double tmp = pAffineTP.y * pAffineTP.y + pAffineTP.x * pAffineTP.x + 1.0;
     double tmp2 = 2.0 * pAffineTP.x;
     double xmax = (sqrt_safe(tmp + tmp2) + sqrt_safe(tmp - tmp2)) * 0.5;
@@ -57,31 +59,22 @@ public class EMotionFunc extends VariationFunc {
 
     double mu = acosh(xmax); //  mu > 0
     double t = pAffineTP.x / xmax;
-
     if (t > 1.0)
       t = 1.0;
     else if (t < -1.0)
       t = -1.0;
 
     double nu = acos(t); // -Pi < nu < Pi
-    if (pAffineTP.y < 0.0)
+    if (pAffineTP.y < 0)
       nu *= -1.0;
-
-    if (nu < 0.0) {
-      mu += move;
-    }
-    else {
-      mu -= move;
-    }
-    if (mu <= 0.0) {
-      mu *= -1.0;
-      nu *= -1.0;
-    }
-
     nu += rotate;
+
+    mu *= dist;
+    mu += push;
 
     sinhmu = sinh(mu);
     coshmu = cosh(mu);
+
     pVarTP.x += pAmount * coshmu * cos(nu);
     pVarTP.y += pAmount * sinhmu * sin(nu);
 
@@ -97,13 +90,15 @@ public class EMotionFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { move, rotate };
+    return new Object[] { push, dist, rotate };
   }
 
   @Override
   public void setParameter(String pName, double pValue) {
-    if (PARAM_MOVE.equalsIgnoreCase(pName))
-      move = pValue;
+    if (PARAM_PUSH.equalsIgnoreCase(pName))
+      push = pValue;
+    else if (PARAM_DIST.equalsIgnoreCase(pName))
+      dist = pValue;
     else if (PARAM_ROTATE.equalsIgnoreCase(pName))
       rotate = pValue;
     else
@@ -112,7 +107,7 @@ public class EMotionFunc extends VariationFunc {
 
   @Override
   public String getName() {
-    return "eMotion";
+    return "ePush";
   }
 
 }

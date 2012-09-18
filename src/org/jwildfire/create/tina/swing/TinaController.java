@@ -1065,7 +1065,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
               RenderedFlame res = renderer.renderFlame(info);
               long t1 = System.currentTimeMillis();
               if (!pQuickRender) {
-                System.out.println("Elapsed time: " + Tools.doubleToString((t1 - t0) * 0.001) + "s");
+                ////System.out.println("Elapsed time: " + Tools.doubleToString((t1 - t0) * 0.001) + "s");
               }
               imgPanel.setImage(res.getImage());
             }

@@ -16,10 +16,13 @@
 */
 package org.jwildfire.create.tina.variation;
 
+import static org.jwildfire.base.MathLib.M_2PI;
+import static org.jwildfire.base.MathLib.M_PI;
 import static org.jwildfire.base.MathLib.acos;
 import static org.jwildfire.base.MathLib.acosh;
 import static org.jwildfire.base.MathLib.cos;
 import static org.jwildfire.base.MathLib.cosh;
+import static org.jwildfire.base.MathLib.fmod;
 import static org.jwildfire.base.MathLib.sin;
 import static org.jwildfire.base.MathLib.sinh;
 import static org.jwildfire.base.MathLib.sqrt;
@@ -27,15 +30,15 @@ import static org.jwildfire.base.MathLib.sqrt;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
-public class EMotionFunc extends VariationFunc {
+public class EScaleFunc extends VariationFunc {
 
-  private static final String PARAM_MOVE = "move";
-  private static final String PARAM_ROTATE = "rotate";
+  private static final String PARAM_SCALE = "scale";
+  private static final String PARAM_ANGLE = "angle";
 
-  private static final String[] paramNames = { PARAM_MOVE, PARAM_ROTATE };
+  private static final String[] paramNames = { PARAM_SCALE, PARAM_ANGLE };
 
-  private double move = 0.0;
-  private double rotate = 0.0;
+  private double scale = 1.0;
+  private double angle = 0.0;
 
   //Taking the square root of numbers close to zero is dangerous.  If x is negative
   //due to floating point errors we get NaN results.
@@ -47,7 +50,7 @@ public class EMotionFunc extends VariationFunc {
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-    // eMotion by Michael Faber, http://michaelfaber.deviantart.com/art/eSeries-306044892
+    // eScale by Michael Faber, http://michaelfaber.deviantart.com/art/eSeries-306044892
     double tmp = pAffineTP.y * pAffineTP.y + pAffineTP.x * pAffineTP.x + 1.0;
     double tmp2 = 2.0 * pAffineTP.x;
     double xmax = (sqrt_safe(tmp + tmp2) + sqrt_safe(tmp - tmp2)) * 0.5;
@@ -67,18 +70,14 @@ public class EMotionFunc extends VariationFunc {
     if (pAffineTP.y < 0.0)
       nu *= -1.0;
 
-    if (nu < 0.0) {
-      mu += move;
-    }
-    else {
-      mu -= move;
-    }
-    if (mu <= 0.0) {
-      mu *= -1.0;
-      nu *= -1.0;
-    }
+    mu *= scale;
 
-    nu += rotate;
+    nu = fmod(fmod(scale * (nu + M_PI + angle), M_2PI * scale) - angle - scale * M_PI, M_2PI);
+
+    if (nu > M_PI)
+      nu -= M_2PI;
+    if (nu < -M_PI)
+      nu += M_2PI;
 
     sinhmu = sinh(mu);
     coshmu = cosh(mu);
@@ -97,22 +96,22 @@ public class EMotionFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { move, rotate };
+    return new Object[] { scale, angle };
   }
 
   @Override
   public void setParameter(String pName, double pValue) {
-    if (PARAM_MOVE.equalsIgnoreCase(pName))
-      move = pValue;
-    else if (PARAM_ROTATE.equalsIgnoreCase(pName))
-      rotate = pValue;
+    if (PARAM_SCALE.equalsIgnoreCase(pName))
+      scale = pValue;
+    else if (PARAM_ANGLE.equalsIgnoreCase(pName))
+      angle = pValue;
     else
       throw new IllegalArgumentException(pName);
   }
 
   @Override
   public String getName() {
-    return "eMotion";
+    return "eScale";
   }
 
 }
