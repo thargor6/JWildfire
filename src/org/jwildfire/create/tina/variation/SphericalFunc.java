@@ -16,18 +16,16 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_CUDA;
-import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_JWILDFIRE;
+import static org.jwildfire.base.MathLib.EPSILON;
 
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
 public class SphericalFunc extends SimpleVariationFunc {
-  private static final long serialVersionUID = 1L;
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-    double r = pAmount / (pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y);
+    double r = pAmount / (pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y + EPSILON);
     pVarTP.x += pAffineTP.x * r;
     pVarTP.y += pAffineTP.y * r;
     if (pContext.isPreserveZCoordinate()) {
@@ -38,11 +36,6 @@ public class SphericalFunc extends SimpleVariationFunc {
   @Override
   public String getName() {
     return "spherical";
-  }
-
-  @Override
-  public int getAvailability() {
-    return AVAILABILITY_JWILDFIRE | AVAILABILITY_CUDA;
   }
 
 }

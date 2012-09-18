@@ -89,7 +89,7 @@ public class BTransformFunc extends VariationFunc {
     if (PARAM_ROTATE.equalsIgnoreCase(pName))
       rotate = pValue;
     else if (PARAM_POWER.equalsIgnoreCase(pName))
-      move = limitIntVal(Tools.FTOI(pValue), 1, Integer.MAX_VALUE);
+      power = limitIntVal(Tools.FTOI(pValue), 1, Integer.MAX_VALUE);
     else if (PARAM_MOVE.equalsIgnoreCase(pName))
       move = pValue;
     else if (PARAM_SPLIT.equalsIgnoreCase(pName))

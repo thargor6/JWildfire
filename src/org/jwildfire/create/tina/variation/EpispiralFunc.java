@@ -40,10 +40,18 @@ public class EpispiralFunc extends VariationFunc {
     double theta = Math.atan2(pAffineTP.y, pAffineTP.x);
     double t = -holes;
     if (fabs(thickness) > EPSILON) {
-      t += (pContext.random() * thickness) * (1.0 / cos(n * theta));
+      double d = cos(n * theta);
+      if (d == 0) {
+        return;
+      }
+      t += (pContext.random() * thickness) * (1.0 / d);
     }
     else {
-      t += 1.0 / cos(n * theta);
+      double d = cos(n * theta);
+      if (d == 0) {
+        return;
+      }
+      t += 1.0 / d;
     }
     pVarTP.x += pAmount * t * cos(theta);
     pVarTP.y += pAmount * t * sin(theta);
