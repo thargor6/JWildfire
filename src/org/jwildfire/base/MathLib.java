@@ -185,4 +185,9 @@ public final class MathLib {
   public static final double frac(double value) {
     return value - trunc(value);
   }
+
+  public static final double acosh(double d) {
+    return log(sqrt(pow(d, 2.0) - 1.0) + d);
+  }
+
 }

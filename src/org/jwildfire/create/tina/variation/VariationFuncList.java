@@ -272,6 +272,10 @@ public class VariationFuncList {
     registerVariationFunc(BTransformFunc.class);
     registerVariationFunc(GlynniaFunc.class);
     registerVariationFunc(Cylinder3DFunc.class);
+    registerVariationFunc(ECollideFunc.class);
+    registerVariationFunc(EJuliaFunc.class);
+    registerVariationFunc(EModFunc.class);
+    registerVariationFunc(EMotionFunc.class);
   }
 
   private static void registerVariationFunc(
