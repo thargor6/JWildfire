@@ -65,6 +65,7 @@ public class Flam3Reader implements FlameReader {
   private static final String ATTR_CAM_ZPOS = "cam_zpos";
   private static final String ATTR_CAM_DOF = "cam_dof";
   private static final String ATTR_CAM_ZOOM = "cam_zoom";
+  private static final String ATTR_NEW_LINEAR = "new_linear";
   private static final String ATTR_SHADING_SHADING = "shading_shading";
   private static final String ATTR_SHADING_AMBIENT = "shading_ambient";
   private static final String ATTR_SHADING_DIFFUSE = "shading_diffuse";
@@ -223,6 +224,10 @@ public class Flam3Reader implements FlameReader {
     if ((hs = atts.get(ATTR_SHADING_BLUR_FALLOFF)) != null) {
       pFlame.getShadingInfo().setBlurFallOff(Double.parseDouble(hs));
     }
+    if ((hs = atts.get(ATTR_NEW_LINEAR)) != null) {
+      pFlame.setPreserveZ(hs.length() > 0 && Integer.parseInt(hs) == 1);
+    }
+
   }
 
   private static final String ATTR_WEIGHT = "weight";
