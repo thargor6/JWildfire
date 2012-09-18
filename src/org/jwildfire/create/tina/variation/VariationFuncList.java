@@ -280,6 +280,9 @@ public class VariationFuncList {
     registerVariationFunc(ERotateFunc.class);
     registerVariationFunc(EScaleFunc.class);
     registerVariationFunc(ESwirlFunc.class);
+    registerVariationFunc(DCZTranslFunc.class);
+    registerVariationFunc(PreDCZTranslFunc.class);
+    registerVariationFunc(PostDCZTranslFunc.class);
   }
 
   private static void registerVariationFunc(
