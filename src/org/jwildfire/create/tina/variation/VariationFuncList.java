@@ -271,6 +271,7 @@ public class VariationFuncList {
     registerVariationFunc(BSwirlFunc.class);
     registerVariationFunc(BTransformFunc.class);
     registerVariationFunc(GlynniaFunc.class);
+    registerVariationFunc(Cylinder3DFunc.class);
   }
 
   private static void registerVariationFunc(
