@@ -271,7 +271,7 @@ public class VariationFuncList {
     registerVariationFunc(BSwirlFunc.class);
     registerVariationFunc(BTransformFunc.class);
     registerVariationFunc(GlynniaFunc.class);
-    registerVariationFunc(Cylinder3DFunc.class);
+    registerVariationFunc(CylinderApoFunc.class);
     registerVariationFunc(ECollideFunc.class);
     registerVariationFunc(EJuliaFunc.class);
     registerVariationFunc(EModFunc.class);
@@ -283,6 +283,7 @@ public class VariationFuncList {
     registerVariationFunc(DCZTranslFunc.class);
     registerVariationFunc(PreDCZTranslFunc.class);
     registerVariationFunc(PostDCZTranslFunc.class);
+    registerVariationFunc(LogApoFunc.class);
   }
 
   private static void registerVariationFunc(

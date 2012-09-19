@@ -16,37 +16,56 @@
 */
 package org.jwildfire.create.tina.variation;
 
+import static org.jwildfire.base.MathLib.atan2;
 import static org.jwildfire.base.MathLib.log;
-import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_CUDA;
-import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_JWILDFIRE;
+import static org.jwildfire.base.MathLib.sqr;
 
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
-public class LogFunc extends SimpleVariationFunc {
-  private static final long serialVersionUID = 1L;
+public class LogApoFunc extends VariationFunc {
+
+  private static final String PARAM_base = "base";
+
+  private static final String[] paramNames = { PARAM_base };
+
+  private double base = 2.71828182845905;
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-    /* complex vars by cothe */
-    /* exp log sin cos tan sec csc cot sinh cosh tanh sech csch coth */
-    //Natural Logarithm LOG
-    // needs precalc_atanyx and precalc_sumsq
-    pVarTP.x += pAmount * 0.5 * log(pAffineTP.getPrecalcSumsq());
-    pVarTP.y += pAmount * pAffineTP.getPrecalcAtanYX();
-    if (pContext.isPreserveZCoordinate()) {
-      pVarTP.z += pAmount * pAffineTP.z;
-    }
+    pVarTP.x += pAmount * log(sqr(pAffineTP.x) + sqr(pAffineTP.y)) * _denom;
+    pVarTP.y += pAmount * atan2(pAffineTP.y, pAffineTP.x);
+    pVarTP.z += pAmount * pAffineTP.z;
+  }
+
+  @Override
+  public String[] getParameterNames() {
+    return paramNames;
+  }
+
+  @Override
+  public Object[] getParameterValues() {
+    return new Object[] { base };
+  }
+
+  @Override
+  public void setParameter(String pName, double pValue) {
+    if (PARAM_base.equalsIgnoreCase(pName))
+      base = pValue;
+    else
+      throw new IllegalArgumentException(pName);
   }
 
   @Override
   public String getName() {
-    return "log";
+    return "log_apo";
   }
 
+  private double _denom;
+
   @Override
-  public int getAvailability() {
-    return AVAILABILITY_JWILDFIRE | AVAILABILITY_CUDA;
+  public void init(FlameTransformationContext pContext, XForm pXForm, double pAmount) {
+    _denom = 0.5 / log(base);
   }
 
 }
