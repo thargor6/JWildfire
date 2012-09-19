@@ -1,3 +1,28 @@
+V0.52 (19.09.2012):
+ - "eCollide", "eJulia", "eMod", "eMotion", "ePush", "eRotate", "eScale" and "eSwirl" variations by Michael Faber
+ - "bCollide", "bMod", "bSwirl" and "bTransform" variations by Michael Faber
+ - adjusted the "epispiral" plugin that it seem to work the same as the *.dll version (where the code seems to be lost)
+ - "dc_ztransl", "post_dcztransl" and "pre_dcztransl" variations by Xyrus02
+ - "Glynnia" plugin by Michael Faber
+ - "boarders2" variation by Xyrus02
+ - new "cylinder_apo" variation to be compatible with the recent Apo version which seemed to change cylinder variation (you must then exchange cylinder by cylinder_apo in JWildfire).
+ - new "log_apo" variation (which is compatible to recent Apophysis versions)
+
+ - additional support for "cylinder_apo" variation in the "Spherical3D" random flames generator
+ - improved the "Bubbles" random generator
+ - make use more different colors in fractal flames generators
+ - fixed a problem regarding the saving render state of flams utilizing the "GlynnSim"* variations
+ - support for the new "new_linear" option from recent Apophysis versions
+ - reduced the vertical size of expanded variation list boxes
+ - some new variation styles for certain random flame generators
+ - slightly improved the behaviour of the nunmeric fields regarding to tracking mouse motion
+ - Main: suppress the console window by using the start.bat to invoke the launcher
+ 
+ - started to create a new (native) external faster renderer which eventually also will utilize graphic cards for rendering: "JWildfireC(UDA)"
+ - many new variations for the external renderer
+ - started to integrate the external renderer into JWildfire, please note that it will not be available in this release, but there was a lot ongoing under the hood. I. E. if it finally will come it will have already so many features that it will make sense to use it. 
+ - numerous internal optimizations regading the external renderer and numerous variations 
+ 
 V0.51 (26.07.2012):
  - included 15 images from the launcher image voting contest into the launcher
  - phoenix_julia variation by TyrantWave
