@@ -1,1 +1,1 @@
-java -jar j-wildfire-launcher.jar
+start javaw -jar j-wildfire-launcher.jar
