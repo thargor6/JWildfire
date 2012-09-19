@@ -74,8 +74,11 @@ public class Spherical3DRandomFlameGenerator extends RandomFlameGenerator {
       xForm.setColor(0.5);
       xForm.setColorSymmetry(0.9 + Math.random() * 0.1);
     }
+
+    String cylinderVar = Math.random() < 0.5 ? "cylinder" : "cylinder_apo";
+
     // 3rd xForm
-    String fncList[] = { "bipolar", "blade", "blur", "blur3D", "cannabiscurve_wf", "crackle", "cylinder", "edisc", "flower", "glynnSim2",
+    String fncList[] = { "bipolar", "blade", "blur", "blur3D", "cannabiscurve_wf", "crackle", "cylinder", "cylinder_apo", "edisc", "flower", "glynnSim2",
         "julia3D", "mandelbrot", "modulus", "noise", "parabola", "pie", "pie3D", "checks", "pre_subflame_wf", "radial_blur", "rays",
         "rings", "rose_wf", "secant2", "sinusoidal", "spiral", "spirograph", "splits", "square", "twintrian", "wedge_julia" };
     {
@@ -84,7 +87,7 @@ public class Spherical3DRandomFlameGenerator extends RandomFlameGenerator {
       xForm.setWeight(0.5);
       xForm.addVariation(0.25 + 0.25 * Math.random(), VariationFuncList.getVariationFuncInstance("pre_blur", true));
       xForm.addVariation(0.01 + Math.random() * 0.39, VariationFuncList.getVariationFuncInstance("ztranslate", true));
-      String fnc = Math.random() < 0.66 ? "cylinder" : fncList[(int) (Math.random() * fncList.length)];
+      String fnc = Math.random() < 0.66 ? cylinderVar : fncList[(int) (Math.random() * fncList.length)];
       xForm.addVariation(0.01 + Math.random() * 0.39, VariationFuncList.getVariationFuncInstance(fnc, true));
       XFormTransformService.scale(xForm, 5.0, false, true, true);
       xForm.setColor(1.0);
@@ -98,7 +101,7 @@ public class Spherical3DRandomFlameGenerator extends RandomFlameGenerator {
       xForm.setWeight(0.5);
       xForm.addVariation(0.025 + 0.025 * Math.random(), VariationFuncList.getVariationFuncInstance("pre_blur", true));
       xForm.addVariation(0.01 + Math.random() * 0.39, VariationFuncList.getVariationFuncInstance("ztranslate", true));
-      String fnc = Math.random() < 0.33 ? "cylinder" : fncList[(int) (Math.random() * fncList.length)];
+      String fnc = Math.random() < 0.33 ? cylinderVar : fncList[(int) (Math.random() * fncList.length)];
       xForm.addVariation(0.01 + Math.random() * 0.39, VariationFuncList.getVariationFuncInstance(fnc, true));
       XFormTransformService.scale(xForm, 3.0, false, true, true);
       xForm.setColor(1.0);
