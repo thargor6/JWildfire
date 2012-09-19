@@ -2843,7 +2843,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     mainProgressUpdater.initProgress(maxCount);
     RandomFlameGenerator randGen = RandomFlameGeneratorList.getRandomFlameGeneratorInstance(pGeneratorname, true);
     //int palettePoints = Integer.parseInt(paletteRandomPointsREd.getText());
-    int palettePoints = 7 + (int) (Math.random() * 12.0);
+    int palettePoints = 17 + (int) (Math.random() * 55.0);
     RandomFlameGeneratorSampler sampler = new RandomFlameGeneratorSampler(IMG_WIDTH, IMG_HEIGHT, prefs, randGen, palettePoints);
     for (int i = 0; i < maxCount; i++) {
       RandomFlameGeneratorSample sample = sampler.createSample();
