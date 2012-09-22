@@ -57,6 +57,7 @@
 #include "jwfvar_Curl3D.h"
 #include "jwfvar_Curve.h"
 #include "jwfvar_Cylinder.h"
+#include "jwfvar_CylinderApo.h"
 #include "jwfvar_DCCube.h"
 #include "jwfvar_Diamond.h"
 #include "jwfvar_Disc.h"
@@ -82,6 +83,7 @@
 #include "jwfvar_Foci.h"
 #include "jwfvar_Foci3D.h"
 #include "jwfvar_GaussianBlur.h"
+#include "jwfvar_Glynnia.h"
 #include "jwfvar_Handkerchief.h"
 #include "jwfvar_Heart.h"
 #include "jwfvar_Horseshoe.h"
@@ -106,6 +108,7 @@
 #include "jwfvar_LinearT3D.h"
 #include "jwfvar_Lissajous.h"
 #include "jwfvar_Log.h"
+#include "jwfvar_LogApo.h"
 #include "jwfvar_Loonie.h"
 #include "jwfvar_Loonie3D.h"
 #include "jwfvar_Modulus.h"
@@ -121,6 +124,7 @@
 #include "jwfvar_PostMirrorWF.h"
 #include "jwfvar_PostRotateX.h"
 #include "jwfvar_PostRotateY.h"
+#include "jwfvar_Power.h"
 #include "jwfvar_PreBlur.h"
 #include "jwfvar_PreCircleCrop.h"
 #include "jwfvar_PreCrop.h"
@@ -129,6 +133,7 @@
 #include "jwfvar_PreZScale.h"
 #include "jwfvar_PreZTranslate.h"
 #include "jwfvar_RadialBlur.h"
+#include "jwfvar_Rays.h"
 #include "jwfvar_Scry.h"
 #include "jwfvar_Sec.h"
 #include "jwfvar_Sech.h"
@@ -250,6 +255,7 @@ private:
 		addVariation(new Curl3DFunc());
 		addVariation(new CurveFunc());
 		addVariation(new CylinderFunc());
+		addVariation(new CylinderApoFunc());
 		addVariation(new DCCubeFunc());
 		addVariation(new DiamondFunc());
 		addVariation(new DiscFunc());
@@ -275,6 +281,7 @@ private:
 		addVariation(new FociFunc());
 		addVariation(new Foci3DFunc());
 		addVariation(new GaussianBlurFunc());
+		addVariation(new GlynniaFunc());
 		addVariation(new HandkerchiefFunc());
 		addVariation(new HeartFunc());
 		addVariation(new HyperbolicFunc());
@@ -299,6 +306,7 @@ private:
 		addVariation(new LinearT3DFunc());
 		addVariation(new LissajousFunc());
 		addVariation(new LogFunc());
+		addVariation(new LogApoFunc());
 		addVariation(new LoonieFunc());
 		addVariation(new Loonie3DFunc());
 		addVariation(new ModulusFunc());
@@ -314,6 +322,7 @@ private:
 		addVariation(new PostMirrorWFFunc());
 		addVariation(new PostRotateXFunc());
 		addVariation(new PostRotateYFunc());
+		addVariation(new PowerFunc());
 		addVariation(new PreBlurFunc());
 		addVariation(new PreCircleCropFunc());
 		addVariation(new PreCropFunc());
@@ -322,6 +331,7 @@ private:
 		addVariation(new PreZScaleFunc());
 		addVariation(new PreZTranslateFunc());
 		addVariation(new RadialBlurFunc());
+		addVariation(new RaysFunc());
 		addVariation(new ScryFunc());
 		addVariation(new SecFunc());
 		addVariation(new SechFunc());

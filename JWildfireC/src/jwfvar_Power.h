@@ -15,45 +15,33 @@
  02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-#ifndef JWFVAR_FOCI_H_
-#define JWFVAR_FOCI_H_
+#ifndef JWFVAR_POWER_H_
+#define JWFVAR_POWER_H_
 
 #include "jwf_Variation.h"
 
-class FociFunc: public Variation {
+class PowerFunc: public Variation {
 public:
-	FociFunc() {
+	PowerFunc() {
 	}
 
 	const char* getName() const {
-		return "foci";
+		return "power";
 	}
 
 	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
-    float expx = expf(pAffineTP->x) * 0.5f;
-    float expnx = 0.25f / expx;
-    if (expx <= EPSILON || expnx <= EPSILON) {
-      return;
-    }
-    float siny = sinf(pAffineTP->y);
-    float cosy = cosf(pAffineTP->y);
-
-    float tmp = (expx + expnx - cosy);
-    if (tmp == 0)
-      tmp = 1e-6f;
-    tmp = pAmount / tmp;
-
-    pVarTP->x += (expx - expnx) * tmp;
-    pVarTP->y += siny * tmp;
+    float r = pAmount * powf(pAffineTP->getPrecalcSqrt(), pAffineTP->getPrecalcSinA());
+    pVarTP->x += r * pAffineTP->getPrecalcCosA();
+    pVarTP->y += r * pAffineTP->getPrecalcSinA();
     if (pContext->isPreserveZCoordinate) {
       pVarTP->z += pAmount * pAffineTP->z;
     }
 	}
 
-	FociFunc* makeCopy() {
-		return new FociFunc(*this);
+	PowerFunc* makeCopy() {
+		return new PowerFunc(*this);
 	}
 
 };
 
-#endif // JWFVAR_FOCI_H_
+#endif // JWFVAR_POWER_H_

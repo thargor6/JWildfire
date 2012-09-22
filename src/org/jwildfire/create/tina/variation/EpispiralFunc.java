@@ -17,14 +17,19 @@
 package org.jwildfire.create.tina.variation;
 
 import static org.jwildfire.base.MathLib.EPSILON;
+import static org.jwildfire.base.MathLib.atan2;
 import static org.jwildfire.base.MathLib.cos;
 import static org.jwildfire.base.MathLib.fabs;
 import static org.jwildfire.base.MathLib.sin;
+import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_CUDA;
+import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_JWILDFIRE;
 
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
 public class EpispiralFunc extends VariationFunc {
+  private static final long serialVersionUID = 1L;
+
   private static final String PARAM_N = "n";
   private static final String PARAM_THICKNESS = "thickness";
   private static final String PARAM_HOLES = "holes";
@@ -37,7 +42,7 @@ public class EpispiralFunc extends VariationFunc {
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     // epispiral by cyberxaos, http://cyberxaos.deviantart.com/journal/Epispiral-Plugin-240086108   
-    double theta = Math.atan2(pAffineTP.y, pAffineTP.x);
+    double theta = atan2(pAffineTP.y, pAffineTP.x);
     double t = -holes;
     if (fabs(thickness) > EPSILON) {
       double d = cos(n * theta);
@@ -87,4 +92,8 @@ public class EpispiralFunc extends VariationFunc {
     return "epispiral";
   }
 
+  @Override
+  public int getAvailability() {
+    return AVAILABILITY_JWILDFIRE | AVAILABILITY_CUDA;
+  }
 }

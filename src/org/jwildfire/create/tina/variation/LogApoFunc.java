@@ -19,11 +19,14 @@ package org.jwildfire.create.tina.variation;
 import static org.jwildfire.base.MathLib.atan2;
 import static org.jwildfire.base.MathLib.log;
 import static org.jwildfire.base.MathLib.sqr;
+import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_CUDA;
+import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_JWILDFIRE;
 
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
 public class LogApoFunc extends VariationFunc {
+  private static final long serialVersionUID = 1L;
 
   private static final String PARAM_base = "base";
 
@@ -66,6 +69,11 @@ public class LogApoFunc extends VariationFunc {
   @Override
   public void init(FlameTransformationContext pContext, XForm pXForm, double pAmount) {
     _denom = 0.5 / log(base);
+  }
+
+  @Override
+  public int getAvailability() {
+    return AVAILABILITY_JWILDFIRE | AVAILABILITY_CUDA;
   }
 
 }

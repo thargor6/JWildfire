@@ -48,8 +48,19 @@ public:
 	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
     float theta = atan2f(pAffineTP->y, pAffineTP->x);
     float t = -holes;
-    if (fabs(thickness) > EPSILON) {
-      t += (pContext->randGen->random() * thickness) * (1.0f / cosf(n * theta));
+    if (fabsf(thickness) > EPSILON) {
+      float d = cosf(n * theta);
+      if (d == 0) {
+        return;
+      }
+      t += (pContext->randGen->random() * thickness) * (1.0f / d);
+    }
+    else {
+      float d = cosf(n * theta);
+      if (d == 0) {
+        return;
+      }
+      t += 1.0f / d;
     }
     pVarTP->x += pAmount * t * cosf(theta);
     pVarTP->y += pAmount * t * sinf(theta);

@@ -934,7 +934,6 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaCameraPanel.add(tinaCameraDOFLbl, null);
 
       JButton toClipboardCUDABtn = new JButton();
-      toClipboardCUDABtn.setVisible(false);
       toClipboardCUDABtn.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
           tinaController.saveFlameToClipboardCUDA();

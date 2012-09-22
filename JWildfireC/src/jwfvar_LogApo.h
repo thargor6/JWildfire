@@ -5,7 +5,7 @@
  This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser
  General Public License as published by the Free Software Foundation; either version 2.1 of the
  License, or (at your option) any later version.
-
+ 
  This software is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
  even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  Lesser General Public License for more details.
@@ -14,46 +14,46 @@
  if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
+#ifndef JWFVAR_LOG_APO_H_
+#define JWFVAR_LOG_APO_H_
 
-#ifndef JWFVAR_FOCI_H_
-#define JWFVAR_FOCI_H_
-
+#include "jwf_Constants.h"
 #include "jwf_Variation.h"
 
-class FociFunc: public Variation {
+class LogApoFunc: public Variation {
 public:
-	FociFunc() {
+	LogApoFunc() {
+		base = 2.71828182845905f;
+		initParameterNames(1, "base");
 	}
 
 	const char* getName() const {
-		return "foci";
+		return "log_apo";
+	}
+
+	void setParameter(char *pName, float pValue) {
+		if (strcmp(pName, "base") == 0) {
+			base = pValue;
+		}
 	}
 
 	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
-    float expx = expf(pAffineTP->x) * 0.5f;
-    float expnx = 0.25f / expx;
-    if (expx <= EPSILON || expnx <= EPSILON) {
-      return;
-    }
-    float siny = sinf(pAffineTP->y);
-    float cosy = cosf(pAffineTP->y);
-
-    float tmp = (expx + expnx - cosy);
-    if (tmp == 0)
-      tmp = 1e-6f;
-    tmp = pAmount / tmp;
-
-    pVarTP->x += (expx - expnx) * tmp;
-    pVarTP->y += siny * tmp;
-    if (pContext->isPreserveZCoordinate) {
-      pVarTP->z += pAmount * pAffineTP->z;
-    }
+    pVarTP->x += pAmount * logf(pAffineTP->x*pAffineTP->x + pAffineTP->y*pAffineTP->y) * _denom;
+    pVarTP->y += pAmount * atan2f(pAffineTP->y, pAffineTP->x);
+    pVarTP->z += pAmount * pAffineTP->z;
 	}
 
-	FociFunc* makeCopy() {
-		return new FociFunc(*this);
+	LogApoFunc* makeCopy() {
+		return new LogApoFunc(*this);
 	}
 
+	void init(FlameTransformationContext *pContext, XForm *pXForm, float pAmount) {
+    _denom = 0.5f / logf(base);
+	}
+
+private:
+	float base;
+	float _denom;
 };
 
-#endif // JWFVAR_FOCI_H_
+#endif // JWFVAR_LOG_APO_H_

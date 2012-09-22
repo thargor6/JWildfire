@@ -89,6 +89,7 @@ private:
 #define ATTR_PRESERVE_Z  "preserve_z"
 #define ATTR_RESOLUTION_PROFILE  "resolution_profile"
 #define ATTR_QUALITY_PROFILE  "quality_profile"
+#define ATTR_NEW_LINEAR "new_linear"
 // xforms
 #define ATTR_WEIGHT "weight"
 #define ATTR_COLOR "color"
@@ -470,6 +471,9 @@ private:
 			pFlame->camZoom = atof(hs);
 		}
 		// preserve-z
+		if ((hs = findAttribute(attNames, attValues, attCount, ATTR_NEW_LINEAR)) != NULL) {
+			pFlame->preserveZ = (strcmp("1", hs) == 0);
+		}
 		if ((hs = findAttribute(attNames, attValues, attCount, ATTR_PRESERVE_Z)) != NULL) {
 			pFlame->preserveZ = (strcmp("1", hs) == 0);
 		}

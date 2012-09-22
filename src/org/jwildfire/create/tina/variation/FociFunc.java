@@ -18,6 +18,7 @@ package org.jwildfire.create.tina.variation;
 
 import static org.jwildfire.base.MathLib.EPSILON;
 import static org.jwildfire.base.MathLib.cos;
+import static org.jwildfire.base.MathLib.exp;
 import static org.jwildfire.base.MathLib.sin;
 import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_CUDA;
 import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_JWILDFIRE;
@@ -32,7 +33,7 @@ public class FociFunc extends SimpleVariationFunc {
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     /* Foci in the Apophysis Plugin Pack */
 
-    double expx = Math.exp(pAffineTP.x) * 0.5;
+    double expx = exp(pAffineTP.x) * 0.5;
     double expnx = 0.25 / expx;
     if (expx <= EPSILON || expnx <= EPSILON) {
       return;
