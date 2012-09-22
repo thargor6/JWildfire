@@ -23,11 +23,14 @@ import static org.jwildfire.base.MathLib.cosh;
 import static org.jwildfire.base.MathLib.sin;
 import static org.jwildfire.base.MathLib.sinh;
 import static org.jwildfire.base.MathLib.sqrt;
+import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_CUDA;
+import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_JWILDFIRE;
 
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
 public class EPushFunc extends VariationFunc {
+  private static final long serialVersionUID = 1L;
 
   private static final String PARAM_PUSH = "push";
   private static final String PARAM_DIST = "dist";
@@ -110,4 +113,8 @@ public class EPushFunc extends VariationFunc {
     return "ePush";
   }
 
+  @Override
+  public int getAvailability() {
+    return AVAILABILITY_JWILDFIRE | AVAILABILITY_CUDA;
+  }
 }

@@ -18,11 +18,14 @@ package org.jwildfire.create.tina.variation;
 
 import static org.jwildfire.base.MathLib.fabs;
 import static org.jwildfire.base.MathLib.sin;
+import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_CUDA;
+import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_JWILDFIRE;
 
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
 public class AugerFunc extends VariationFunc {
+  private static final long serialVersionUID = 1L;
 
   private static final String PARAM_FREQ = "freq";
   private static final String PARAM_WEIGHT = "weight";
@@ -38,7 +41,7 @@ public class AugerFunc extends VariationFunc {
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-    // Auger, by Xyrus01
+    // Auger, by Xyrus02
     double s = sin(freq * pAffineTP.x);
     double t = sin(freq * pAffineTP.y);
     double dy = pAffineTP.y + weight * (scale * s * 0.5 + fabs(pAffineTP.y) * s);
@@ -78,6 +81,11 @@ public class AugerFunc extends VariationFunc {
   @Override
   public String getName() {
     return "auger";
+  }
+
+  @Override
+  public int getAvailability() {
+    return AVAILABILITY_JWILDFIRE | AVAILABILITY_CUDA;
   }
 
 }

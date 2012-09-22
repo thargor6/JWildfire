@@ -14,34 +14,64 @@
  if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
+#ifndef JWFVAR_AUGER_H_
+#define JWFVAR_AUGER_H_
 
-#ifndef JWFVAR_SPHERICAL_H_
-#define JWFVAR_SPHERICAL_H_
-
+#include "jwf_Constants.h"
 #include "jwf_Variation.h"
 
-class SphericalFunc: public Variation {
+class AugerFunc: public Variation {
 public:
-	SphericalFunc() {
+	AugerFunc() {
+    freq = 1.00f;
+    weight = 0.5f;
+    sym = 0.1f;
+    scale = 0.9f;
+		initParameterNames(4, "freq", "weight", "sym", "scale");
 	}
 
 	const char* getName() const {
-		return "spherical";
+		return "auger";
+	}
+
+	void setParameter(char *pName, float pValue) {
+		if (strcmp(pName, "freq") == 0) {
+			freq = pValue;
+		}
+		else if (strcmp(pName, "weight") == 0) {
+			weight = pValue;
+		}
+		else if (strcmp(pName, "sym") == 0) {
+			sym = pValue;
+		}
+		else if (strcmp(pName, "scale") == 0) {
+			scale = pValue;
+		}
 	}
 
 	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
-		float r = pAmount / (pAffineTP->x * pAffineTP->x + pAffineTP->y * pAffineTP->y + EPSILON);
-		pVarTP->x += pAffineTP->x * r;
-		pVarTP->y += pAffineTP->y * r;
+    float s = sinf(freq * pAffineTP->x);
+    float t = sinf(freq * pAffineTP->y);
+    float dy = pAffineTP->y + weight * (scale * s * 0.5f + fabsf(pAffineTP->y) * s);
+    float dx = pAffineTP->x + weight * (scale * t * 0.5f + fabsf(pAffineTP->x) * t);
+
+    pVarTP->x += pAmount * (pAffineTP->x + sym * (dx - pAffineTP->x));
+    pVarTP->y += pAmount * dy;
+
 		if (pContext->isPreserveZCoordinate) {
 			pVarTP->z += pAmount * pAffineTP->z;
 		}
 	}
 
-	SphericalFunc* makeCopy() {
-		return new SphericalFunc(*this);
+	AugerFunc* makeCopy() {
+		return new AugerFunc(*this);
 	}
 
+private:
+  float freq;
+  float weight;
+  float sym;
+  float scale;
 };
 
-#endif // JWFVAR_SPHERICAL_H_
+#endif // JWFVAR_AUGER_H_

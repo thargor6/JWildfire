@@ -23,6 +23,7 @@
 #include "jwf_XYZPoint.h"
 #include "jwf_FlameTransformationContext.h"
 
+#include "jwfvar_Auger.h"
 #include "jwfvar_Arch.h"
 #include "jwfvar_Bent.h"
 #include "jwfvar_Bent2.h"
@@ -68,6 +69,11 @@
 #include "jwfvar_Elliptic.h"
 #include "jwfvar_Epispiral.h"
 #include "jwfvar_EpispiralWF.h"
+#include "jwfvar_EMod.h"
+#include "jwfvar_EMotion.h"
+#include "jwfvar_EPush.h"
+#include "jwfvar_ERotate.h"
+#include "jwfvar_EScale.h"
 #include "jwfvar_Escher.h"
 #include "jwfvar_Ex.h"
 #include "jwfvar_Exp.h"
@@ -134,11 +140,13 @@
 #include "jwfvar_PreZTranslate.h"
 #include "jwfvar_RadialBlur.h"
 #include "jwfvar_Rays.h"
+#include "jwfvar_Rings.h"
 #include "jwfvar_Scry.h"
 #include "jwfvar_Sec.h"
 #include "jwfvar_Sech.h"
 #include "jwfvar_Secant2.h"
 #include "jwfvar_Sin.h"
+#include "jwfvar_Sinh.h"
 #include "jwfvar_Spherical.h"
 #include "jwfvar_Spherical3D.h"
 #include "jwfvar_Spherical3DWF.h"
@@ -221,6 +229,7 @@ private:
 	Variation **variations;
 
 	void initVariations() {
+		addVariation(new AugerFunc());
 		addVariation(new ArchFunc());
 		addVariation(new BentFunc());
 		addVariation(new Bent2Func());
@@ -266,6 +275,11 @@ private:
 		addVariation(new EllipticFunc());
 		addVariation(new EpispiralFunc());
 		addVariation(new EpispiralWFFunc());
+		addVariation(new EModFunc());
+		addVariation(new EMotionFunc());
+		addVariation(new EPushFunc());
+		addVariation(new ERotateFunc());
+		addVariation(new EScaleFunc());
 		addVariation(new EscherFunc());
 		addVariation(new ExFunc());
 		addVariation(new ExpFunc());
@@ -332,11 +346,13 @@ private:
 		addVariation(new PreZTranslateFunc());
 		addVariation(new RadialBlurFunc());
 		addVariation(new RaysFunc());
+		addVariation(new RingsFunc());
 		addVariation(new ScryFunc());
 		addVariation(new SecFunc());
 		addVariation(new SechFunc());
 		addVariation(new Secant2Func());
 		addVariation(new SinFunc());
+		addVariation(new SinhFunc());
 		addVariation(new SphericalFunc());
 		addVariation(new Spherical3DFunc());
 		addVariation(new Spherical3DWFFunc());
