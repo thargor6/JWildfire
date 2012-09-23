@@ -136,6 +136,7 @@
 #include "jwfvar_PreCrop.h"
 #include "jwfvar_PreRotateX.h"
 #include "jwfvar_PreRotateY.h"
+#include "jwfvar_PreSubFlameWF.h"
 #include "jwfvar_PreZScale.h"
 #include "jwfvar_PreZTranslate.h"
 #include "jwfvar_RadialBlur.h"
@@ -155,6 +156,7 @@
 #include "jwfvar_Splits.h"
 #include "jwfvar_Square.h"
 #include "jwfvar_Square3D.h"
+#include "jwfvar_SubFlameWF.h"
 #include "jwfvar_Tan.h"
 #include "jwfvar_Tanh.h"
 #include "jwfvar_Tangent.h"
@@ -342,6 +344,7 @@ private:
 		addVariation(new PreCropFunc());
 		addVariation(new PreRotateXFunc());
 		addVariation(new PreRotateYFunc());
+		addVariation(new PreSubFlameWFFunc());
 		addVariation(new PreZScaleFunc());
 		addVariation(new PreZTranslateFunc());
 		addVariation(new RadialBlurFunc());
@@ -361,6 +364,7 @@ private:
 		addVariation(new SplitsFunc());
 		addVariation(new SquareFunc());
 		addVariation(new Square3DFunc());
+		addVariation(new SubFlameWFFunc());
 		addVariation(new TanFunc());
 		addVariation(new TanhFunc());
 		addVariation(new TangentFunc());

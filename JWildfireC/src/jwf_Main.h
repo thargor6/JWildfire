@@ -53,6 +53,7 @@
 #include "jwf_FlameUtil.h"
 #include "jwf_FlameRenderer.h"
 #include "jwf_PPMWriter.h"
+#include "jwf_Flam3Reader.h"
 
 #include "jwfvar_Bipolar.h"
 #include "jwfvar_Bubble.h"
@@ -85,7 +86,6 @@
 #include "jwfvar_ZScale.h"
 #include "jwfvar_ZTranslate.h"
 
-#include "jwf_Flam3Reader.h"
 
 #include "jwf_ExampleFlames.h"
 
@@ -141,8 +141,8 @@ void testHost1000Flame() {
 
 int renderFlame(AppSettings *pAppSettings) {
 	Flam3Reader *reader=new Flam3Reader();
-	Flame **flames;
-	int flameCount;
+	Flame **flames=NULL;
+	int flameCount=0;
 
 	reader->readFlames(pAppSettings->getFlameFilename(), &flames, &flameCount);
 	if(flameCount<1) {

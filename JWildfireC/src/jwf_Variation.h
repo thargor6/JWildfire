@@ -29,8 +29,10 @@ public:
 	float amount;
 
 	Variation() {
-    parameterCount=0;
-    parameterNames=NULL;
+    parameterCount = 0;
+    parameterNames = NULL;
+    ressourceCount = 0;
+    ressourceNames = NULL;
 	}
 
 	virtual ~Variation() {
@@ -74,11 +76,33 @@ public:
 	}
 
 	virtual char **getRessourceNames() {
-		return NULL;
+		return ressourceNames;
 	}
 
 	virtual int getRessourceCount() {
-		return 0;
+		return ressourceCount;
+	}
+
+	virtual void initRessourceNames(int pCount, ...) {
+		if(pCount==0) {
+			ressourceCount=0;
+			ressourceNames=NULL;
+		}
+		else {
+			ressourceNames=(char**)malloc(pCount*sizeof(char*));
+			ressourceCount=pCount;
+			va_list list;
+			va_start ( list, pCount );
+			for (int i=0; i < pCount; i++) {
+				char *srcName=va_arg(list, char*);
+				int len=strlen(srcName);
+				char *dstName=(char*)malloc((len+1)*sizeof(char));
+				memcpy(dstName, srcName, len);
+				dstName[len]='\0';
+				ressourceNames[i]=dstName;
+			}
+			va_end(list);
+		}
 	}
 
 	virtual void init(FlameTransformationContext *pContext, XForm *pXForm, float pAmount) {
@@ -91,6 +115,10 @@ public:
 
 	}
 
+	virtual void setRessource(char *pName, void *pValue) {
+
+	}
+
 	void dump() {
 		printf("    Variation {\n");
 		printf("      name=%s priority=%d amount=%.5f\n", getName(), getPriority(), amount);
@@ -98,10 +126,12 @@ public:
 	}
 
 	virtual Variation* makeCopy() = 0;
+
 protected:
 	char **parameterNames;
 	int parameterCount;
-
+	char **ressourceNames;
+	int ressourceCount;
 };
 
 #endif // __JWF_VARIATION_H__

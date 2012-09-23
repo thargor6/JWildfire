@@ -43,13 +43,16 @@ public:
 			printf("File %s is empty\n", pFilename);
 			return;
 		}
-		char* flamesXML = new char[size];
+		char* flamesXML = new char[size+1];
 		rewind(f);
 		fread(flamesXML, sizeof(char), size, f);
 		fclose(f);
+		flamesXML[size]='\0';
 		readFlamesfromXML(flamesXML, pFlames, pFlameCount);
 	}
+
 private:
+
 #define ATTR_SIZE "size"
 #define ATTR_CENTER "center"
 #define ATTR_SCALE "scale"
@@ -99,9 +102,182 @@ private:
 #define ATTR_CHAOS "chaos"
 #define ATTR_SYMMETRY "symmetry"
 
+	void readFlamesfromXML(char *pXML, Flame ***pFlameArray, int *pFlameCount) {
+		int pFlames = 0;
+		while (true) {
+			char *flameXML;
+			{
+				int ps = indexOf(pXML, "<flame ", pFlames);
+				if (ps < 0)
+					break;
+				int pe = indexOf(pXML, "</flame>", ps + 1);
+				if (pe < 0)
+					break;
+				pFlames = pe + 8;
+				flameXML = substring(pXML, ps, pFlames);
+			}
+
+			Flame *flame = (Flame*) calloc(1, sizeof(Flame));
+			flame->create();
+			{
+				if (*pFlameCount == 0) {
+					*pFlameArray = (Flame**) malloc(sizeof(Flame*));
+					*pFlameArray[0] = flame;
+					*pFlameCount = 1;
+				}
+				else {
+					Flame **newFlames = (Flame**) malloc((*pFlameCount + 1) * sizeof(Flame*));
+					memcpy(newFlames, *pFlameArray, (*pFlameCount) * sizeof(Flame*));
+					newFlames[(*pFlameCount) + 1] = flame;
+					free(*pFlameArray);
+					*pFlameArray = newFlames;
+					*pFlameCount = *pFlameCount + 1;
+				}
+			}
+
+			// Flame attributes
+			{
+				int ps = indexOf(flameXML, "<flame ", 0);
+				int pe = -1;
+				boolean qt = false;
+				for (unsigned int i = ps + 1; i < strlen(flameXML); i++) {
+					if (flameXML[i] == '\"') {
+						qt = !qt;
+					}
+					else if (!qt && flameXML[i] == '>') {
+						pe = i;
+						break;
+					}
+				}
+				char *hs = substring(flameXML, ps + 7, pe);
+				parseFlameAttributes(flame, hs);
+				free(hs);
+			}
+			// XForms
+			{
+				int p = 0;
+				while (true) {
+					int ps = indexOf(flameXML, "<xform ", p + 1);
+					if (ps < 0)
+						break;
+					int pe = indexOf(flameXML, "</xform>", ps + 1);
+					if (pe < 0) {
+						pe = indexOf(flameXML, "/>", ps + 1);
+					}
+					char *hs = substring(flameXML, ps + 7, pe);
+					XForm *xForm = new XForm();
+					xForm->init();
+					parseXFormAttributes(xForm, hs);
+					flame->addXForm(xForm);
+					// TODO cause endless loop (?)
+					// free(hs);
+					p = pe + 2;
+				}
+			}
+			// FinalXForm
+			{
+				int p = 0;
+				while (true) {
+					int ps = indexOf(flameXML, "<finalxform ", p + 1);
+					if (ps < 0)
+						break;
+					int pe = indexOf(flameXML, "/>", ps + 1);
+					char *hs = substring(flameXML, ps + 12, pe);
+					XForm *xForm = new XForm();
+					xForm->init();
+					parseXFormAttributes(xForm, hs);
+					flame->finalXForm = xForm;
+					free(hs);
+					p = pe + 2;
+				}
+			}
+
+			// Colors
+			{
+				int p = 0;
+				while (true) {
+					int ps = indexOf(flameXML, "<color ", p + 1);
+					if (ps < 0)
+						break;
+					int pe = indexOf(flameXML, "/>", ps + 1);
+					char *hs = substring(flameXML, ps + 7, pe);
+					{
+						int index = 0;
+						int r = 0, g = 0, b = 0;
+						int attCount;
+						char **attNames, **attValues;
+						parseAttributes(hs, &attNames, &attValues, &attCount);
+						char *attr;
+						if ((attr = findAttribute(attNames, attValues, attCount, ATTR_INDEX)) != NULL) {
+							index = atoi(attr);
+						}
+						if ((attr = findAttribute(attNames, attValues, attCount, ATTR_RGB)) != NULL) {
+							char **s;
+							int sCount;
+							split(attr, " ", &s, &sCount);
+							if (sCount == 3) {
+								r = FTOI(atof(s[0]));
+								g = FTOI(atof(s[1]));
+								b = FTOI(atof(s[2]));
+							}
+							else {
+								printf("Bad color %s\n", attr);
+							}
+							freeStrArray(s, sCount);
+						}
+						freeStrArray(attNames, attCount);
+						freeStrArray(attValues, attCount);
+						flame->palette->setColor(index, r, g, b);
+					}
+					free(hs);
+					p = pe + 2;
+				}
+			}
+			// Palette
+			{
+				int ps = indexOf(flameXML, "<palette ", 0);
+				if (ps >= 0) {
+					ps = indexOf(flameXML, ">", ps + 1);
+					int pe = indexOf(flameXML, "</palette>", ps + 1);
+					char *hs = substring(flameXML, ps + 1, pe);
+					{
+						int len = strlen(hs);
+						char *sb = (char*) malloc((len + 1) * sizeof(char));
+						int sbLen = 0;
+						for (int i = 0; i < len; i++) {
+							char c = hs[i];
+							if ((c >= 'A' && c <= 'Z') || (c >= '0' && c <= '9')) {
+								sb[sbLen++] = c;
+							}
+						}
+						sb[sbLen] = '\0';
+						free(hs);
+						hs = sb;
+					}
+
+					int len = strlen(hs);
+					if ((len % 6) != 0) {
+						printf("Invalid/unknown palette");
+					}
+					int index = 0;
+
+					for (int i = 0; i < len; i += 6) {
+						int r = htoi(substring(hs, i, i + 2));
+						int g = htoi(substring(hs, i + 2, i + 4));
+						int b = htoi(substring(hs, i + 4, i + 6));
+						// printf(" flame->palette->setColor(%d, %d, %d, %d);\n", index, r, g, b);
+						flame->palette->setColor(index++, r, g, b);
+					}
+				}
+			}
+			free(flameXML);
+		}
+	}
+
 	int indexOf(char *pStr, char *pToken, int pOffset) {
+		int len=strlen(pStr);
 		char *pos = strstr(pStr + pOffset, pToken);
-		if (pos != NULL) {
+		if (pos != NULL && ((pos-pStr)<len)) {
 			return pos - pStr;
 		}
 		else {
@@ -212,7 +388,7 @@ private:
 	}
 
 	void freeStrArray(char **pArray, int pSize) {
-		if (pArray != NULL && pSize>0) {
+		if (pArray != NULL && pSize > 0) {
 			for (int i = 0; i < pSize; i++) {
 				free(pArray[i]);
 			}
@@ -327,28 +503,28 @@ private:
 		}
 		// variations
 		{
-			for(int a=0;a<attCount;a++) {
+			for (int a = 0; a < attCount; a++) {
 				char *name = attNames[a];
 				char *aliasName = NULL;
 				char *varName = aliasName != NULL ? aliasName : name;
-				Variation *srcVar=variationFactory->findVariation(varName);
-				if (srcVar!=NULL) {
-					Variation *var=srcVar->makeCopy();
-					float amount=atof(attValues[a]);
-				  pXForm->addVariation(var, amount);
+				Variation *srcVar = variationFactory->findVariation(varName);
+				if (srcVar != NULL) {
+					Variation *var = srcVar->makeCopy();
+					float amount = atof(attValues[a]);
+					pXForm->addVariation(var, amount);
 
-				  // params
+					// params
 					{
 						char **paramNames = var->getParameterNames();
 						if (paramNames != NULL) {
 							for (int i = 0; i < var->getParameterCount(); i++) {
 								char *pName = paramNames[i];
 								char *pHs;
-								int pAttNameLen=strlen(name)+strlen(pName)+2;
-								char *pAttName=(char*)malloc(pAttNameLen*sizeof(char));
-								pAttName[0]='\0';
-								sprintf(pAttName, "%s_%s",name,pName);
-								pAttName[pAttNameLen-1]='\0';
+								int pAttNameLen = strlen(name) + strlen(pName) + 2;
+								char *pAttName = (char*) malloc(pAttNameLen * sizeof(char));
+								pAttName[0] = '\0';
+								sprintf(pAttName, "%s_%s", name, pName);
+								pAttName[pAttNameLen - 1] = '\0';
 								if ((pHs = findAttribute(attNames, attValues, attCount, pAttName)) != NULL) {
 									var->setParameter(pName, atof(pHs));
 								}
@@ -356,21 +532,42 @@ private:
 						}
 					}
 					// ressources
-					// TODO
-#ifdef LATER
 					{
 						char **ressNames = var->getRessourceNames();
 						if (ressNames != NULL) {
-							for (int i=0;i<var->getRessourceCount();i++) {
+							for (int i = 0; i < var->getRessourceCount(); i++) {
+								char *pName = ressNames[i];
 								char *pHs;
-								if ((pHs = atts.get(name + "_" + pName)) != null) {
-									variation.getFunc().setRessource(pName, Tools.hexStringToByteArray(pHs));
+								int pRessNameLen = strlen(name) + strlen(pName) + 2;
+								char *pRessName = (char*) malloc(pRessNameLen * sizeof(char));
+								pRessName[0] = '\0';
+								sprintf(pRessName, "%s_%s", name, pName);
+								pRessName[pRessNameLen - 1] = '\0';
+								if ((pHs = findAttribute(attNames, attValues, attCount, pRessName)) != NULL) {
+									//var->setRessource(pName, hexStringToByteArray(pHs));
+
+                  // TODO: remove this
+									if(strcmp(pName, "flame")==0) {
+								    Flam3Reader *reader=new Flam3Reader();
+								  	Flame **flames=NULL;
+								  	int flameCount=0;
+								  	char *flameXML=hexStringToByteArray(pHs);
+								  	if(flameXML!=NULL && strlen(flameXML)>0) {
+											reader->readFlamesfromXML(flameXML, &flames, &flameCount);
+											free(flameXML);
+											if(flameCount<1) {
+												printf("No sub flame to render");
+											}
+											else {
+											  Flame *flame=flames[0];
+												var->setRessource(pName, flame);
+											}
+								  	}
+									}
 								}
 							}
 						}
 					}
-					//
-#endif
 				}
 			}
 		}
@@ -481,175 +678,83 @@ private:
 		freeStrArray(attValues, attCount);
 	}
 
-	void readFlamesfromXML(char *pXML, Flame ***pFlameArray, int *pFlameCount) {
-		int pFlames = 0;
-		while (true) {
-			char *flameXML;
-			{
-				int ps = indexOf(pXML, "<flame ", pFlames);
-				if (ps < 0)
-					break;
-				int pe = indexOf(pXML, "</flame>", ps + 1);
-				if (pe < 0)
-					break;
-				pFlames = pe + 8;
-				flameXML = substring(pXML, ps, pFlames);
+	char* hexStringToByteArray(char* pHexStr) {
+		if (pHexStr != NULL && strlen(pHexStr) > 0) {
+			int l = strlen(pHexStr);
+			if ((l % 2) != 0) {
+				printf("Illegal hex str %s\n", pHexStr);
+				return NULL;
 			}
-
-			Flame *flame = (Flame*) calloc(1, sizeof(Flame));
-			flame->create();
-			{
-				if (*pFlameCount == 0) {
-					*pFlameArray = (Flame**) malloc(sizeof(Flame*));
-					*pFlameArray[0] = flame;
-					*pFlameCount = 1;
+			char *b = (char*)malloc((l / 2 + 1) * sizeof(char));
+			b[l / 2] = '\0';
+			int k = 0;
+			for (int i = 0; i < l; i++) {
+				char c = pHexStr[i];
+				int v;
+				switch (c) {
+				case '0':
+					v = 0;
+					break;
+				case '1':
+					v = 1;
+					break;
+				case '2':
+					v = 2;
+					break;
+				case '3':
+					v = 3;
+					break;
+				case '4':
+					v = 4;
+					break;
+				case '5':
+					v = 5;
+					break;
+				case '6':
+					v = 6;
+					break;
+				case '7':
+					v = 7;
+					break;
+				case '8':
+					v = 8;
+					break;
+				case '9':
+					v = 9;
+					break;
+				case 'A':
+					v = 10;
+					break;
+				case 'B':
+					v = 11;
+					break;
+				case 'C':
+					v = 12;
+					break;
+				case 'D':
+					v = 13;
+					break;
+				case 'E':
+					v = 14;
+					break;
+				case 'F':
+					v = 15;
+					break;
+				default:
+					printf("Illegal hex char: %c\n", c);
+					return NULL;
+				}
+				if ((i % 2) != 0) {
+					b[i / 2] = (k + v);
 				}
 				else {
-					Flame **newFlames = (Flame**) malloc((*pFlameCount + 1) * sizeof(Flame*));
-					memcpy(newFlames, *pFlameArray, (*pFlameCount) * sizeof(Flame*));
-					newFlames[(*pFlameCount) + 1] = flame;
-					free(*pFlameArray);
-					*pFlameArray = newFlames;
-					*pFlameCount = *pFlameCount + 1;
+					k = v * 16;
 				}
 			}
-
-			// Flame attributes
-			{
-				int ps = indexOf(flameXML, "<flame ", 0);
-				int pe = -1;
-				boolean qt = false;
-				for (unsigned int i = ps + 1; i < strlen(flameXML); i++) {
-					if (flameXML[i] == '\"') {
-						qt = !qt;
-					}
-					else if (!qt && flameXML[i] == '>') {
-						pe = i;
-						break;
-					}
-				}
-				char *hs = substring(flameXML, ps + 7, pe);
-				parseFlameAttributes(flame, hs);
-				free(hs);
-			}
-			// XForms
-			{
-				int p = 0;
-				while (true) {
-					int ps = indexOf(flameXML, "<xform ", p + 1);
-					if (ps < 0)
-						break;
-					int pe = indexOf(flameXML, "</xform>", ps + 1);
-					if (pe < 0) {
-						pe = indexOf(flameXML, "/>", ps + 1);
-					}
-					char *hs = substring(flameXML, ps + 7, pe);
-					XForm *xForm = new XForm();
-					xForm->init();
-					parseXFormAttributes(xForm, hs);
-					flame->addXForm(xForm);
-					// TODO cause endless loop (?)
-       		// free(hs);
-					p = pe + 2;
-				}
-			}
-			// FinalXForm
-			{
-				int p = 0;
-				while (true) {
-					int ps = indexOf(flameXML, "<finalxform ", p + 1);
-					if (ps < 0)
-						break;
-					int pe = indexOf(flameXML, "/>", ps + 1);
-					char *hs = substring(flameXML, ps + 12, pe);
-					XForm *xForm = new XForm();
-					xForm->init();
-					parseXFormAttributes(xForm, hs);
-					flame->finalXForm = xForm;
-					free(hs);
-					p = pe + 2;
-				}
-			}
-
-			// Colors
-			{
-				int p = 0;
-				while (true) {
-					int ps = indexOf(flameXML, "<color ", p + 1);
-					if (ps < 0)
-						break;
-					int pe = indexOf(flameXML, "/>", ps + 1);
-					char *hs = substring(flameXML, ps + 7, pe);
-					{
-						int index = 0;
-						int r = 0, g = 0, b = 0;
-						int attCount;
-						char **attNames, **attValues;
-						parseAttributes(hs, &attNames, &attValues, &attCount);
-						char *attr;
-						if ((attr = findAttribute(attNames, attValues, attCount, ATTR_INDEX)) != NULL) {
-							index = atoi(attr);
-						}
-						if ((attr = findAttribute(attNames, attValues, attCount, ATTR_RGB)) != NULL) {
-							char **s;
-							int sCount;
-							split(attr, " ", &s, &sCount);
-							if (sCount == 3) {
-								r = FTOI(atof(s[0]));
-								g = FTOI(atof(s[1]));
-								b = FTOI(atof(s[2]));
-							}
-							else {
-								printf("Bad color %s\n", attr);
-							}
-							freeStrArray(s, sCount);
-						}
-						freeStrArray(attNames, attCount);
-						freeStrArray(attValues, attCount);
-						flame->palette->setColor(index, r, g, b);
-					}
-					free(hs);
-					p = pe + 2;
-				}
-			}
-			// Palette
-			{
-				int ps = indexOf(flameXML, "<palette ", 0);
-				if (ps >= 0) {
-					ps = indexOf(flameXML, ">", ps + 1);
-					int pe = indexOf(flameXML, "</palette>", ps + 1);
-					char *hs = substring(flameXML, ps + 1, pe);
-					{
-						int len = strlen(hs);
-						char *sb = (char*) malloc((len + 1) * sizeof(char));
-						int sbLen = 0;
-						for (int i = 0; i < len; i++) {
-							char c = hs[i];
-							if ((c >= 'A' && c <= 'Z') || (c >= '0' && c <= '9')) {
-								sb[sbLen++] = c;
-							}
-						}
-						sb[sbLen] = '\0';
-						free(hs);
-						hs = sb;
-					}
-
-					int len = strlen(hs);
-					if ((len % 6) != 0) {
-						printf("Invalid/unknown palette");
-					}
-					int index = 0;
-
-					for (int i = 0; i < len; i += 6) {
-						int r = htoi(substring(hs, i, i + 2));
-						int g = htoi(substring(hs, i + 2, i + 4));
-						int b = htoi(substring(hs, i + 4, i + 6));
-						// printf(" flame->palette->setColor(%d, %d, %d, %d);\n", index, r, g, b);
-						flame->palette->setColor(index++, r, g, b);
-					}
-				}
-			}
-			free(flameXML);
+			return b;
+		}
+		else {
+			return NULL;
 		}
 	}
 

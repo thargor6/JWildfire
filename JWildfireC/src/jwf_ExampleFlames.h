@@ -4844,5 +4844,4 @@ Flame *createExample12Flame() {
 #endif
 
 
-
 #endif // __JWF_EXAMPLE_FLAMES_H__

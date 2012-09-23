@@ -16,6 +16,9 @@
 */
 package org.jwildfire.create.tina.variation;
 
+import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_CUDA;
+import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_JWILDFIRE;
+
 import java.util.List;
 
 import org.jwildfire.create.tina.base.Constants;
@@ -26,6 +29,8 @@ import org.jwildfire.create.tina.base.XYZPoint;
 import org.jwildfire.create.tina.io.Flam3Reader;
 
 public class SubFlameWFFunc extends VariationFunc {
+  private static final long serialVersionUID = 1L;
+
   public static final String RESSOURCE_FLAME = "flame";
   private static final String PARAM_OFFSETX = "offset_x";
   private static final String PARAM_OFFSETY = "offset_y";
@@ -181,4 +186,8 @@ public class SubFlameWFFunc extends VariationFunc {
       throw new IllegalArgumentException(pName);
   }
 
+  @Override
+  public int getAvailability() {
+    return AVAILABILITY_JWILDFIRE | AVAILABILITY_CUDA;
+  }
 }
