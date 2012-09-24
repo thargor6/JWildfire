@@ -21,11 +21,14 @@ import static org.jwildfire.base.MathLib.SMALL_EPSILON;
 import static org.jwildfire.base.MathLib.cos;
 import static org.jwildfire.base.MathLib.floor;
 import static org.jwildfire.base.MathLib.pow;
+import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_CUDA;
+import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_JWILDFIRE;
 
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
 public class NgonFunc extends VariationFunc {
+  private static final long serialVersionUID = 1L;
 
   private static final String PARAM_CIRCLE = "circle";
   private static final String PARAM_CORNERS = "corners";
@@ -61,7 +64,6 @@ public class NgonFunc extends VariationFunc {
     if (pContext.isPreserveZCoordinate()) {
       pVarTP.z += pAmount * pAffineTP.z;
     }
-
   }
 
   @Override
@@ -93,4 +95,8 @@ public class NgonFunc extends VariationFunc {
     return "ngon";
   }
 
+  @Override
+  public int getAvailability() {
+    return AVAILABILITY_JWILDFIRE | AVAILABILITY_CUDA;
+  }
 }

@@ -65,7 +65,9 @@
 #include "jwfvar_Disc2.h"
 #include "jwfvar_Disc_3D.h"
 #include "jwfvar_Eclipse.h"
+#include "jwfvar_ECollide.h"
 #include "jwfvar_EDisc.h"
+#include "jwfvar_EJulia.h"
 #include "jwfvar_Elliptic.h"
 #include "jwfvar_Epispiral.h"
 #include "jwfvar_EpispiralWF.h"
@@ -75,6 +77,7 @@
 #include "jwfvar_ERotate.h"
 #include "jwfvar_EScale.h"
 #include "jwfvar_Escher.h"
+#include "jwfvar_ESwirl.h"
 #include "jwfvar_Ex.h"
 #include "jwfvar_Exp.h"
 #include "jwfvar_Exponential.h"
@@ -118,9 +121,11 @@
 #include "jwfvar_Loonie.h"
 #include "jwfvar_Loonie3D.h"
 #include "jwfvar_Modulus.h"
+#include "jwfvar_Ngon.h"
 #include "jwfvar_Noise.h"
 #include "jwfvar_Oscilloscope.h"
 #include "jwfvar_Parabola.h"
+#include "jwfvar_PDJ.h"
 #include "jwfvar_Perspective.h"
 #include "jwfvar_Pie.h"
 #include "jwfvar_Pie3D.h"
@@ -148,6 +153,7 @@
 #include "jwfvar_Secant2.h"
 #include "jwfvar_Sin.h"
 #include "jwfvar_Sinh.h"
+#include "jwfvar_Sinusoidal.h"
 #include "jwfvar_Spherical.h"
 #include "jwfvar_Spherical3D.h"
 #include "jwfvar_Spherical3DWF.h"
@@ -157,6 +163,7 @@
 #include "jwfvar_Square.h"
 #include "jwfvar_Square3D.h"
 #include "jwfvar_SubFlameWF.h"
+#include "jwfvar_Swirl.h"
 #include "jwfvar_Tan.h"
 #include "jwfvar_Tanh.h"
 #include "jwfvar_Tangent.h"
@@ -273,7 +280,9 @@ private:
 		addVariation(new Disc2Func());
 		addVariation(new Disc_3DFunc());
 		addVariation(new EclipseFunc());
+		addVariation(new ECollideFunc());
 		addVariation(new EDiscFunc());
+		addVariation(new EJuliaFunc());
 		addVariation(new EllipticFunc());
 		addVariation(new EpispiralFunc());
 		addVariation(new EpispiralWFFunc());
@@ -283,6 +292,7 @@ private:
 		addVariation(new ERotateFunc());
 		addVariation(new EScaleFunc());
 		addVariation(new EscherFunc());
+		addVariation(new ESwirlFunc());
 		addVariation(new ExFunc());
 		addVariation(new ExpFunc());
 		addVariation(new ExponentialFunc());
@@ -326,9 +336,11 @@ private:
 		addVariation(new LoonieFunc());
 		addVariation(new Loonie3DFunc());
 		addVariation(new ModulusFunc());
+		addVariation(new NgonFunc());
 		addVariation(new NoiseFunc());
 		addVariation(new OscilloscopeFunc());
 		addVariation(new ParabolaFunc());
+		addVariation(new PDJFunc());
 		addVariation(new PerspectiveFunc());
 		addVariation(new PieFunc());
 		addVariation(new Pie3DFunc());
@@ -356,6 +368,7 @@ private:
 		addVariation(new Secant2Func());
 		addVariation(new SinFunc());
 		addVariation(new SinhFunc());
+		addVariation(new SinusoidalFunc());
 		addVariation(new SphericalFunc());
 		addVariation(new Spherical3DFunc());
 		addVariation(new Spherical3DWFFunc());
@@ -365,6 +378,7 @@ private:
 		addVariation(new SquareFunc());
 		addVariation(new Square3DFunc());
 		addVariation(new SubFlameWFFunc());
+		addVariation(new SwirlFunc());
 		addVariation(new TanFunc());
 		addVariation(new TanhFunc());
 		addVariation(new TangentFunc());
