@@ -25,6 +25,7 @@
 
 #include "jwfvar_Auger.h"
 #include "jwfvar_Arch.h"
+#include "jwfvar_BCollide.h"
 #include "jwfvar_Bent.h"
 #include "jwfvar_Bent2.h"
 #include "jwfvar_BiLinear.h"
@@ -35,7 +36,10 @@
 #include "jwfvar_Blob3D.h"
 #include "jwfvar_Blur.h"
 #include "jwfvar_Blur3D.h"
+#include "jwfvar_BMod.h"
 #include "jwfvar_Boarders.h"
+#include "jwfvar_BSwirl.h"
+#include "jwfvar_BTransform.h"
 #include "jwfvar_Bubble.h"
 #include "jwfvar_BubbleWF.h"
 #include "jwfvar_Butterfly.h"
@@ -146,6 +150,7 @@
 #include "jwfvar_PreZTranslate.h"
 #include "jwfvar_RadialBlur.h"
 #include "jwfvar_Rays.h"
+#include "jwfvar_Rectangles.h"
 #include "jwfvar_Rings.h"
 #include "jwfvar_Scry.h"
 #include "jwfvar_Sec.h"
@@ -159,6 +164,7 @@
 #include "jwfvar_Spherical3DWF.h"
 #include "jwfvar_Spiral.h"
 #include "jwfvar_Spirograph.h"
+#include "jwfvar_Split.h"
 #include "jwfvar_Splits.h"
 #include "jwfvar_Square.h"
 #include "jwfvar_Square3D.h"
@@ -240,6 +246,7 @@ private:
 	void initVariations() {
 		addVariation(new AugerFunc());
 		addVariation(new ArchFunc());
+		addVariation(new BCollideFunc());
 		addVariation(new BentFunc());
 		addVariation(new Bent2Func());
 		addVariation(new BiLinearFunc());
@@ -250,7 +257,10 @@ private:
 		addVariation(new Blob3DFunc());
 		addVariation(new BlurFunc());
 		addVariation(new Blur3DFunc());
+		addVariation(new BModFunc());
 		addVariation(new BoardersFunc());
+		addVariation(new BSwirlFunc());
+		addVariation(new BTransformFunc());
 		addVariation(new BubbleFunc());
 		addVariation(new BubbleWFFunc());
 		addVariation(new ButterflyFunc());
@@ -361,6 +371,7 @@ private:
 		addVariation(new PreZTranslateFunc());
 		addVariation(new RadialBlurFunc());
 		addVariation(new RaysFunc());
+		addVariation(new RectanglesFunc());
 		addVariation(new RingsFunc());
 		addVariation(new ScryFunc());
 		addVariation(new SecFunc());
@@ -374,6 +385,7 @@ private:
 		addVariation(new Spherical3DWFFunc());
 		addVariation(new SpiralFunc());
 		addVariation(new SpirographFunc());
+		addVariation(new SplitFunc());
 		addVariation(new SplitsFunc());
 		addVariation(new SquareFunc());
 		addVariation(new Square3DFunc());

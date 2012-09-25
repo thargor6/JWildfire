@@ -16,13 +16,18 @@
 */
 package org.jwildfire.create.tina.variation;
 
+import static org.jwildfire.base.MathLib.EPSILON;
 import static org.jwildfire.base.MathLib.fabs;
 import static org.jwildfire.base.MathLib.floor;
+import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_CUDA;
+import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_JWILDFIRE;
 
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
 public class RectanglesFunc extends VariationFunc {
+  private static final long serialVersionUID = 1L;
+
   private static final String PARAM_X = "x";
   private static final String PARAM_Y = "y";
   private static final String[] paramNames = { PARAM_X, PARAM_Y };
@@ -31,7 +36,6 @@ public class RectanglesFunc extends VariationFunc {
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-    final double EPSILON = 1.0e-10;
     if (fabs(x) < EPSILON) {
       pVarTP.x += pAmount * pAffineTP.x;
     }
@@ -73,4 +77,10 @@ public class RectanglesFunc extends VariationFunc {
   public String getName() {
     return "rectangles";
   }
+
+  @Override
+  public int getAvailability() {
+    return AVAILABILITY_JWILDFIRE | AVAILABILITY_CUDA;
+  }
+
 }

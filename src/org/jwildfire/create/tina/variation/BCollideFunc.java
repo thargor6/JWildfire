@@ -26,12 +26,15 @@ import static org.jwildfire.base.MathLib.log;
 import static org.jwildfire.base.MathLib.sin;
 import static org.jwildfire.base.MathLib.sinh;
 import static org.jwildfire.base.MathLib.sqr;
+import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_CUDA;
+import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_JWILDFIRE;
 
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
 public class BCollideFunc extends VariationFunc {
+  private static final long serialVersionUID = 1L;
 
   private static final String PARAM_NUM = "num";
   private static final String PARAM_A = "a";
@@ -105,4 +108,8 @@ public class BCollideFunc extends VariationFunc {
     _bCa_bCn = _bCa / (double) num;
   }
 
+  @Override
+  public int getAvailability() {
+    return AVAILABILITY_JWILDFIRE | AVAILABILITY_CUDA;
+  }
 }

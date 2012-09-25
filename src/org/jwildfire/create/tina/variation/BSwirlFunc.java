@@ -24,11 +24,14 @@ import static org.jwildfire.base.MathLib.log;
 import static org.jwildfire.base.MathLib.sin;
 import static org.jwildfire.base.MathLib.sinh;
 import static org.jwildfire.base.MathLib.sqr;
+import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_CUDA;
+import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_JWILDFIRE;
 
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
 public class BSwirlFunc extends VariationFunc {
+  private static final long serialVersionUID = 1L;
 
   private static final String PARAM_IN = "in";
   private static final String PARAM_OUT = "out";
@@ -61,6 +64,7 @@ public class BSwirlFunc extends VariationFunc {
     }
     pVarTP.x += pAmount * sinht / temp;
     pVarTP.y += pAmount * sins / temp;
+
     if (pContext.isPreserveZCoordinate()) {
       pVarTP.z += pAmount * pAffineTP.z;
     }
@@ -91,4 +95,8 @@ public class BSwirlFunc extends VariationFunc {
     return "bSwirl";
   }
 
+  @Override
+  public int getAvailability() {
+    return AVAILABILITY_JWILDFIRE | AVAILABILITY_CUDA;
+  }
 }

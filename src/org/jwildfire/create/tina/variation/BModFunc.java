@@ -25,11 +25,14 @@ import static org.jwildfire.base.MathLib.log;
 import static org.jwildfire.base.MathLib.sin;
 import static org.jwildfire.base.MathLib.sinh;
 import static org.jwildfire.base.MathLib.sqr;
+import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_CUDA;
+import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_JWILDFIRE;
 
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
 public class BModFunc extends VariationFunc {
+  private static final long serialVersionUID = 1L;
 
   private static final String PARAM_RADIUS = "radius";
   private static final String PARAM_DISTANCE = "distance";
@@ -95,4 +98,8 @@ public class BModFunc extends VariationFunc {
     return "bMod";
   }
 
+  @Override
+  public int getAvailability() {
+    return AVAILABILITY_JWILDFIRE | AVAILABILITY_CUDA;
+  }
 }
