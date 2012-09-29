@@ -30,18 +30,18 @@ public:
 		return "arch";
 	}
 
-	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
-    float ang = pContext->randGen->random() * pAmount * M_PI;
-    float sinr = sinf(ang);
-    float cosr = cosf(ang);
-    if (cosr == 0) {
-      return;
-    }
-    pVarTP->x += pAmount * sinr;
-    pVarTP->y += pAmount * (sinr * sinr) / cosr;
-    if (pContext->isPreserveZCoordinate) {
-      pVarTP->z += pAmount * pAffineTP->z;
-    }
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
+		float ang = pContext->randGen->random() * pAmount * M_PI;
+		float sinr = JWF_SIN(ang);
+		float cosr = JWF_COS(ang);
+		if (cosr == 0) {
+			return;
+		}
+		pVarTP->x += pAmount * sinr;
+		pVarTP->y += pAmount * (sinr * sinr) / cosr;
+		if (pContext->isPreserveZCoordinate) {
+			pVarTP->z += pAmount * pAffineTP->z;
+		}
 	}
 
 	ArchFunc* makeCopy() {

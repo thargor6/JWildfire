@@ -29,16 +29,16 @@ public:
 		return "blur";
 	}
 
-	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
-    float r = pContext->randGen->random() * (M_PI + M_PI);
-    float sina = sinf(r);
-    float cosa = cosf(r);
-    float r2 = pAmount * pContext->randGen->random();
-    pVarTP->x += r2 * cosa;
-    pVarTP->y += r2 * sina;
-    if (pContext->isPreserveZCoordinate) {
-      pVarTP->z += pAmount * pAffineTP->z;
-    }
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
+		float r = pContext->randGen->random() * (M_PI + M_PI);
+		float sina = JWF_SIN(r);
+		float cosa = JWF_COS(r);
+		float r2 = pAmount * pContext->randGen->random();
+		pVarTP->x += r2 * cosa;
+		pVarTP->y += r2 * sina;
+		if (pContext->isPreserveZCoordinate) {
+			pVarTP->z += pAmount * pAffineTP->z;
+		}
 	}
 
 	BlurFunc* makeCopy() {

@@ -29,14 +29,14 @@ public:
 		return "diamond";
 	}
 
-	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
-    float length = pAffineTP->getPrecalcSqrt();
-    float sinA = pAffineTP->getPrecalcSinA();
-    float cosA = pAffineTP->getPrecalcCosA();
-    float sinr = sinf(length);
-    float cosr = cosf(length);
-    pVarTP->x += pAmount * sinA * cosr;
-    pVarTP->y += pAmount * cosA * sinr;
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
+		float length = pAffineTP->getPrecalcSqrt();
+		float sinA = pAffineTP->getPrecalcSinA();
+		float cosA = pAffineTP->getPrecalcCosA();
+		float sinr = JWF_SIN(length);
+		float cosr = JWF_COS(length);
+		pVarTP->x += pAmount * sinA * cosr;
+		pVarTP->y += pAmount * cosA * sinr;
 		if (pContext->isPreserveZCoordinate) {
 			pVarTP->z += pAmount * pAffineTP->z;
 		}

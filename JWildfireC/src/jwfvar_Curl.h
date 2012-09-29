@@ -32,7 +32,7 @@ public:
 		return "curl";
 	}
 
-	void setParameter(char *pName, float pValue) {
+	void setParameter(char *pName, JWF_FLOAT pValue) {
 		if (strcmp(pName, "c1") == 0) {
 			c1 = pValue;
 		}
@@ -41,14 +41,14 @@ public:
 		}
 	}
 
-	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
-    float re = 1.0f + c1 * pAffineTP->x + c2 * (pAffineTP->x*pAffineTP->x - pAffineTP->y*pAffineTP->y);
-    float im = c1 * pAffineTP->y + c2 * 2 * pAffineTP->x * pAffineTP->y;
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
+		float re = 1.0f + c1 * pAffineTP->x + c2 * (pAffineTP->x * pAffineTP->x - pAffineTP->y * pAffineTP->y);
+		float im = c1 * pAffineTP->y + c2 * 2 * pAffineTP->x * pAffineTP->y;
 
-    double r = pAmount / (re*re + im*im);
+		double r = pAmount / (re * re + im * im);
 
-    pVarTP->x += (pAffineTP->x * re + pAffineTP->y * im) * r;
-    pVarTP->y += (pAffineTP->y * re - pAffineTP->x * im) * r;
+		pVarTP->x += (pAffineTP->x * re + pAffineTP->y * im) * r;
+		pVarTP->y += (pAffineTP->y * re - pAffineTP->x * im) * r;
 		if (pContext->isPreserveZCoordinate) {
 			pVarTP->z += pAmount * pAffineTP->z;
 		}

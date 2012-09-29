@@ -28,17 +28,17 @@ public:
 		return "bubble_wf";
 	}
 
-	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
-    float r = ((pAffineTP->x * pAffineTP->x + pAffineTP->y * pAffineTP->y) / 4.0f + 1.0f);
-    float t = pAmount / r;
-    pVarTP->x += t * pAffineTP->x;
-    pVarTP->y += t * pAffineTP->y;
-    if (pContext->randGen->random() < 0.5f) {
-      pVarTP->z -= pAmount * (2.0f / r - 1.0f);
-    }
-    else {
-      pVarTP->z += pAmount * (2.0f / r - 1.0f);
-    }
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
+		float r = ((pAffineTP->x * pAffineTP->x + pAffineTP->y * pAffineTP->y) / 4.0f + 1.0f);
+		float t = pAmount / r;
+		pVarTP->x += t * pAffineTP->x;
+		pVarTP->y += t * pAffineTP->y;
+		if (pContext->randGen->random() < 0.5f) {
+			pVarTP->z -= pAmount * (2.0f / r - 1.0f);
+		}
+		else {
+			pVarTP->z += pAmount * (2.0f / r - 1.0f);
+		}
 	}
 
 	BubbleWFFunc* makeCopy() {

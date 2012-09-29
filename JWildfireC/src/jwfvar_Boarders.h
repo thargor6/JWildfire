@@ -29,41 +29,41 @@ public:
 		return "boarders";
 	}
 
-	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
-    float roundX = rintf(pAffineTP->x);
-    float roundY = rintf(pAffineTP->y);
-    float offsetX = pAffineTP->x - roundX;
-    float offsetY = pAffineTP->y - roundY;
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
+		float roundX = rintf(pAffineTP->x);
+		float roundY = rintf(pAffineTP->y);
+		float offsetX = pAffineTP->x - roundX;
+		float offsetY = pAffineTP->y - roundY;
 
-    if (pContext->randGen->random() >= 0.75f) {
-      pVarTP->x += pAmount * (offsetX * 0.5f + roundX);
-      pVarTP->y += pAmount * (offsetY * 0.5f + roundY);
-    }
-    else {
-      if (fabs(offsetX) >= fabs(offsetY)) {
+		if (pContext->randGen->random() >= 0.75f) {
+			pVarTP->x += pAmount * (offsetX * 0.5f + roundX);
+			pVarTP->y += pAmount * (offsetY * 0.5f + roundY);
+		}
+		else {
+			if (fabs(offsetX) >= JWF_FABS(offsetY)) {
 
-        if (offsetX >= 0.0) {
-          pVarTP->x += pAmount * (offsetX * 0.5f + roundX + 0.25f);
-          pVarTP->y += pAmount * (offsetY * 0.5f + roundY + 0.25f * offsetY / offsetX);
-        }
-        else {
-          pVarTP->x += pAmount * (offsetX * 0.5f + roundX - 0.25f);
-          pVarTP->y += pAmount * (offsetY * 0.5f + roundY - 0.25f * offsetY / offsetX);
-        }
+				if (offsetX >= 0.0) {
+					pVarTP->x += pAmount * (offsetX * 0.5f + roundX + 0.25f);
+					pVarTP->y += pAmount * (offsetY * 0.5f + roundY + 0.25f * offsetY / offsetX);
+				}
+				else {
+					pVarTP->x += pAmount * (offsetX * 0.5f + roundX - 0.25f);
+					pVarTP->y += pAmount * (offsetY * 0.5f + roundY - 0.25f * offsetY / offsetX);
+				}
 
-      }
-      else {
+			}
+			else {
 
-        if (offsetY >= 0.0f) {
-          pVarTP->y += pAmount * (offsetY * 0.5f + roundY + 0.25f);
-          pVarTP->x += pAmount * (offsetX * 0.5f + roundX + offsetX / offsetY * 0.25f);
-        }
-        else {
-          pVarTP->y += pAmount * (offsetY * 0.5f + roundY - 0.25f);
-          pVarTP->x += pAmount * (offsetX * 0.5f + roundX - offsetX / offsetY * 0.25f);
-        }
-      }
-    }
+				if (offsetY >= 0.0f) {
+					pVarTP->y += pAmount * (offsetY * 0.5f + roundY + 0.25f);
+					pVarTP->x += pAmount * (offsetX * 0.5f + roundX + offsetX / offsetY * 0.25f);
+				}
+				else {
+					pVarTP->y += pAmount * (offsetY * 0.5f + roundY - 0.25f);
+					pVarTP->x += pAmount * (offsetX * 0.5f + roundX - offsetX / offsetY * 0.25f);
+				}
+			}
+		}
 		if (pContext->isPreserveZCoordinate) {
 			pVarTP->z += pAmount * pAffineTP->z;
 		}

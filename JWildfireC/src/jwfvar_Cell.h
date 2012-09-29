@@ -31,47 +31,47 @@ public:
 		return "cell";
 	}
 
-	void setParameter(char *pName, float pValue) {
+	void setParameter(char *pName, JWF_FLOAT pValue) {
 		if (strcmp(pName, "size") == 0) {
 			size = pValue;
 		}
 	}
 
-	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
-    float inv_cell_size = 1.0f / size;
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
+		float inv_cell_size = 1.0f / size;
 
-    /* calculate input cell */
-    int x = (int) floor(pAffineTP->x * inv_cell_size);
-    int y = (int) floor(pAffineTP->y * inv_cell_size);
+		/* calculate input cell */
+		int x = (int) floor(pAffineTP->x * inv_cell_size);
+		int y = (int) floor(pAffineTP->y * inv_cell_size);
 
-    /* Offset from cell origin */
-    float dx = pAffineTP->x - x * size;
-    float dy = pAffineTP->y - y * size;
+		/* Offset from cell origin */
+		float dx = pAffineTP->x - x * size;
+		float dy = pAffineTP->y - y * size;
 
-    /* interleave cells */
-    if (y >= 0) {
-      if (x >= 0) {
-        y *= 2;
-        x *= 2;
-      }
-      else {
-        y *= 2;
-        x = -(2 * x + 1);
-      }
-    }
-    else {
-      if (x >= 0) {
-        y = -(2 * y + 1);
-        x *= 2;
-      }
-      else {
-        y = -(2 * y + 1);
-        x = -(2 * x + 1);
-      }
-    }
+		/* interleave cells */
+		if (y >= 0) {
+			if (x >= 0) {
+				y *= 2;
+				x *= 2;
+			}
+			else {
+				y *= 2;
+				x = -(2 * x + 1);
+			}
+		}
+		else {
+			if (x >= 0) {
+				y = -(2 * y + 1);
+				x *= 2;
+			}
+			else {
+				y = -(2 * y + 1);
+				x = -(2 * x + 1);
+			}
+		}
 
-    pVarTP->x += pAmount * (dx + x * size);
-    pVarTP->y -= pAmount * (dy + y * size);
+		pVarTP->x += pAmount * (dx + x * size);
+		pVarTP->y -= pAmount * (dy + y * size);
 
 		if (pContext->isPreserveZCoordinate) {
 			pVarTP->z += pAmount * pAffineTP->z;

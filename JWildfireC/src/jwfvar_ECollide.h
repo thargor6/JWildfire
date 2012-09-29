@@ -23,8 +23,8 @@
 class ECollideFunc: public Variation {
 public:
 	ECollideFunc() {
-    num = 1;
-    a = 0.0f;
+		num = 1;
+		a = 0.0f;
 		initParameterNames(2, "num", "a");
 	}
 
@@ -32,7 +32,7 @@ public:
 		return "eCollide";
 	}
 
-	void setParameter(char *pName, float pValue) {
+	void setParameter(char *pName, JWF_FLOAT pValue) {
 		if (strcmp(pName, "num") == 0) {
 			num = FTOI(pValue);
 		}
@@ -41,44 +41,44 @@ public:
 		}
 	}
 
-	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
-    float tmp = pAffineTP->y * pAffineTP->y + pAffineTP->x * pAffineTP->x + 1.0f;
-    float tmp2 = 2.0f * pAffineTP->x;
-    float xmax = (sqrtf_safe(tmp + tmp2) + sqrtf_safe(tmp - tmp2)) * 0.5f;
-    float sinnu, cosnu;
-    int alt;
-    if (xmax < 1.0f)
-      xmax = 1.0f;
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
+		float tmp = pAffineTP->y * pAffineTP->y + pAffineTP->x * pAffineTP->x + 1.0f;
+		float tmp2 = 2.0f * pAffineTP->x;
+		float xmax = (sqrtf_safe(tmp + tmp2) + sqrtf_safe(tmp - tmp2)) * 0.5f;
+		float sinnu, cosnu;
+		int alt;
+		if (xmax < 1.0f)
+			xmax = 1.0f;
 
-    double t = pAffineTP->x / xmax;
-    if (t > 1.0f)
-      t = 1.0f;
-    else if (t < -1.0f)
-      t = -1.0f;
-    double nu = acosf(t); // -Pi < nu < Pi
+		double t = pAffineTP->x / xmax;
+		if (t > 1.0f)
+			t = 1.0f;
+		else if (t < -1.0f)
+			t = -1.0f;
+		double nu = acosf(t); // -Pi < nu < Pi
 
-    if (pAffineTP->y > 0.0f) {
-      alt = (int) (nu * _eCn_pi);
-      if (alt % 2 == 0)
-        nu = alt * _pi_eCn + fmodf(nu + _eCa_eCn, _pi_eCn);
-      else
-        nu = alt * _pi_eCn + fmodf(nu - _eCa_eCn, _pi_eCn);
+		if (pAffineTP->y > 0.0f) {
+			alt = (int) (nu * _eCn_pi);
+			if (alt % 2 == 0)
+				nu = alt * _pi_eCn + fmodf(nu + _eCa_eCn, _pi_eCn);
+			else
+				nu = alt * _pi_eCn + fmodf(nu - _eCa_eCn, _pi_eCn);
 
-    }
-    else {
-      alt = (int) (nu * _eCn_pi);
-      if (alt % 2 == 0.0f)
-        nu = alt * _pi_eCn + fmodf(nu + _eCa_eCn, _pi_eCn);
-      else
-        nu = alt * _pi_eCn + fmodf(nu - _eCa_eCn, _pi_eCn);
+		}
+		else {
+			alt = (int) (nu * _eCn_pi);
+			if (alt % 2 == 0.0f)
+				nu = alt * _pi_eCn + fmodf(nu + _eCa_eCn, _pi_eCn);
+			else
+				nu = alt * _pi_eCn + fmodf(nu - _eCa_eCn, _pi_eCn);
 
-      nu *= -1.0f;
-    }
+			nu *= -1.0f;
+		}
 
-    sinnu = sinf(nu);
-    cosnu = cosf(nu);
-    pVarTP->x += pAmount * xmax * cosnu;
-    pVarTP->y += pAmount * sqrtf(xmax - 1.0) * sqrtf(xmax + 1.0) * sinnu;
+		sinnu = JWF_SIN(nu);
+		cosnu = JWF_COS(nu);
+		pVarTP->x += pAmount * xmax * cosnu;
+		pVarTP->y += pAmount * JWF_SQRT(xmax - 1.0) * JWF_SQRT(xmax + 1.0) * sinnu;
 		if (pContext->isPreserveZCoordinate) {
 			pVarTP->z += pAmount * pAffineTP->z;
 		}
@@ -88,23 +88,23 @@ public:
 		return new ECollideFunc(*this);
 	}
 
-	virtual void init(FlameTransformationContext *pContext, XForm *pXForm, float pAmount) {
-    _eCn_pi = (float) num * M_1_PI;
-    _pi_eCn = M_PI / (float) num;
-    _eCa = M_PI * a;
-    _eCa_eCn = _eCa / (float) num;
+	virtual void init(FlameTransformationContext *pContext, XForm *pXForm, JWF_FLOAT pAmount) {
+		_eCn_pi = (JWF_FLOAT) num * M_1_PI;
+		_pi_eCn = M_PI / (JWF_FLOAT) num;
+		_eCa = M_PI * a;
+		_eCa_eCn = _eCa / (JWF_FLOAT) num;
 	}
 
 private:
 	float sqrtf_safe(float x) {
 		if (x <= 0.0f)
 			return 0.0f;
-		return sqrtf(x);
+		return JWF_SQRT(x);
 	}
 
 	int num;
 	float a;
-  float _eCa, _eCn_pi, _eCa_eCn, _pi_eCn;
+	float _eCa, _eCn_pi, _eCa_eCn, _pi_eCn;
 };
 
 #endif // JWFVAR_ECOLLIDE_H_

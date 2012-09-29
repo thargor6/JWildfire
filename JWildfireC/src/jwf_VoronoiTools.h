@@ -20,11 +20,13 @@
 #ifndef __JWF_VORONOI_TOOLS_H__
 #define __JWF_VORONOI_TOOLS_H__
 
+#include "jwf_Math.h"
+
 #define VORONOI_MAXPOINTS 25
 
-float vratio( float P[2], float Q[2], float U[2] );
-int closest( float P[VORONOI_MAXPOINTS][2], int n, float U[2] );
-float voronoi( float P[VORONOI_MAXPOINTS][2], int n, int q, float U[2] );
+JWF_FLOAT vratio(JWF_FLOAT P[2], JWF_FLOAT Q[2], JWF_FLOAT U[2]);
+int closest(JWF_FLOAT P[VORONOI_MAXPOINTS][2], int n, JWF_FLOAT U[2]);
+JWF_FLOAT voronoi(JWF_FLOAT P[VORONOI_MAXPOINTS][2], int n, int q, JWF_FLOAT U[2]);
 
 #undef _x_
 #define _x_ 0

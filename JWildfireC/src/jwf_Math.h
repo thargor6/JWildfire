@@ -14,39 +14,31 @@
  if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-#ifndef __JWF_CONSTANTS_H__
-#define __JWF_CONSTANTS_H__
+#ifndef __JWF_MATH_H__
+#define __JWF_MATH_H__
 
-#define APP_TITLE "JWildfireC"
-#define APP_VERSION "0.15 (03.09.2012)"
-
-#define EPSILON 1.0e-8f
-
-#define MAX_MOD_WEIGHT_COUNT 100
-#define NEXT_APPLIED_XFORM_TABLE_SIZE 100
-#define INITIAL_ITERATIONS 42
+#ifdef EPSILON
+#undef EPSILON
+#endif
+#define EPSILON 1.0e-8
 
 #undef M_PI
-#define M_PI 3.1415926535898f
+#define M_PI 3.1415926535898
 
 #undef M_PI_2
-#define M_PI_2 (M_PI * 0.5f)
+#define M_PI_2 (M_PI * 0.5)
 
 #undef M_PI_4
-#define M_PI_4 (M_PI * 0.25f)
+#define M_PI_4 (M_PI * 0.25)
 
 #undef M_1_PI
-#define M_1_PI (1.0f / M_PI)
+#define M_1_PI (1.0 / M_PI)
 
 #undef M_2_PI
-#define M_2_PI (2.0f / M_PI)
+#define M_2_PI (2.0 / M_PI)
 
 #undef M_2PI
-#define M_2PI (2.0f * M_PI)
-
-#define DRAWMODE_NORMAL 0
-#define DRAWMODE_HIDDEN 1
-#define DRAWMODE_OPAQUE 2
+#define M_2PI (2.0 * M_PI)
 
 #ifndef TRUE
 #define TRUE 1
@@ -56,6 +48,19 @@
 #define FALSE 0
 #endif
 
-struct XForm;
+#define JWF_FLOAT float
 
-#endif // __JWF_CONSTANTS_H__
+#define JWF_SIN sinf
+#define JWF_COS cosf
+#define JWF_EXP expf
+#define JWF_SQRT sqrtf
+#define JWF_LOG logf
+#define JWF_FABS fabsf
+#define JWF_POW powf
+#define JWF_LOG10 log10f
+#define JWF_ERF erff
+#define JWF_SINH sinhf
+#define JWF_COSH coshf
+
+
+#endif // __JWF_MATH_H__

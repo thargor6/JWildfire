@@ -23,8 +23,8 @@
 class BSwirlFunc: public Variation {
 public:
 	BSwirlFunc() {
-    in = 0.0f;
-    out = 0.0f;
+		in = 0.0f;
+		out = 0.0f;
 		initParameterNames(2, "in", "out");
 	}
 
@@ -32,7 +32,7 @@ public:
 		return "bSwirl";
 	}
 
-	void setParameter(char *pName, float pValue) {
+	void setParameter(char *pName, JWF_FLOAT pValue) {
 		if (strcmp(pName, "in") == 0) {
 			in = pValue;
 		}
@@ -41,27 +41,28 @@ public:
 		}
 	}
 
-	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
-    float tau, sigma;
-    float temp;
-    float cosht, sinht;
-    float sins, coss;
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
+		float tau, sigma;
+		float temp;
+		float cosht, sinht;
+		float sins, coss;
 
-    tau = 0.5f * (logf((pAffineTP->x + 1.0f)*(pAffineTP->x + 1.0f) + pAffineTP->y*pAffineTP->y) - logf((pAffineTP->x - 1.0f)*(pAffineTP->x - 1.0f) + pAffineTP->y*pAffineTP->y));
-    sigma = M_PI - atan2f(pAffineTP->y, pAffineTP->x + 1.0f) - atan2(pAffineTP->y, 1.0f - pAffineTP->x);
+		tau = 0.5f
+				* (logf((pAffineTP->x + 1.0f) * (pAffineTP->x + 1.0f) + pAffineTP->y * pAffineTP->y) - JWF_LOG((pAffineTP->x - 1.0f) * (pAffineTP->x - 1.0f) + pAffineTP->y * pAffineTP->y));
+		sigma = M_PI - atan2f(pAffineTP->y, pAffineTP->x + 1.0f) - atan2(pAffineTP->y, 1.0f - pAffineTP->x);
 
-    sigma = sigma + tau * out + in / tau;
+		sigma = sigma + tau * out + in / tau;
 
-    sinht = sinhf(tau);
-    cosht = coshf(tau);
-    sins = sinf(sigma);
-    coss = cosf(sigma);
-    temp = cosht - coss;
-    if (temp == 0) {
-      return;
-    }
-    pVarTP->x += pAmount * sinht / temp;
-    pVarTP->y += pAmount * sins / temp;
+		sinht = JWF_SINH(tau);
+		cosht = JWF_COSH(tau);
+		sins = JWF_SIN(sigma);
+		coss = JWF_COS(sigma);
+		temp = cosht - coss;
+		if (temp == 0) {
+			return;
+		}
+		pVarTP->x += pAmount * sinht / temp;
+		pVarTP->y += pAmount * sins / temp;
 
 		if (pContext->isPreserveZCoordinate) {
 			pVarTP->z += pAmount * pAffineTP->z;
@@ -72,12 +73,11 @@ public:
 		return new BSwirlFunc(*this);
 	}
 
-
 private:
 	float sqrtf_safe(float x) {
 		if (x <= 0.0f)
 			return 0.0f;
-		return sqrtf(x);
+		return JWF_SQRT(x);
 	}
 
 	float in;

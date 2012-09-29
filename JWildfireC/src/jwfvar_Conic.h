@@ -32,7 +32,7 @@ public:
 		return "conic";
 	}
 
-	void setParameter(char *pName, float pValue) {
+	void setParameter(char *pName, JWF_FLOAT pValue) {
 		if (strcmp(pName, "eccentricity") == 0) {
 			eccentricity = pValue;
 		}
@@ -41,11 +41,11 @@ public:
 		}
 	}
 
-	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
-    double ct = pAffineTP->x / pAffineTP->getPrecalcSqrt();
-    double r = pAmount * (pContext->randGen->random() - holes) * eccentricity / (1.0f + eccentricity * ct) / pAffineTP->getPrecalcSqrt();
-    pVarTP->x += r * pAffineTP->x;
-    pVarTP->y += r * pAffineTP->y;
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
+		double ct = pAffineTP->x / pAffineTP->getPrecalcSqrt();
+		double r = pAmount * (pContext->randGen->random() - holes) * eccentricity / (1.0f + eccentricity * ct) / pAffineTP->getPrecalcSqrt();
+		pVarTP->x += r * pAffineTP->x;
+		pVarTP->y += r * pAffineTP->y;
 		if (pContext->isPreserveZCoordinate) {
 			pVarTP->z += pAmount * pAffineTP->z;
 		}

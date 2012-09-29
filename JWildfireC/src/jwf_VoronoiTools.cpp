@@ -17,8 +17,8 @@
 
 // Port of Hexes and Crackle plugin by slobo777, see http://slobo777.deviantart.com/art/Apo-Plugins-Hexes-And-Crackle-99243824
 // All credits for this wonderful plugin to him!
-
 #include "math.h"
+#include "jwf_Math.h"
 #include "float.h"
 #include "jwf_VoronoiTools.h"
 
@@ -27,31 +27,31 @@
 
 // Distance between U and P compared to U and Q. If U is at P, then the value is 0, if it is
 // equally far to Q and P then the value is 1.0
-float vratio( float P[2], float Q[2], float U[2] ) {
-	float PmQx, PmQy;
+JWF_FLOAT vratio(JWF_FLOAT P[2], JWF_FLOAT Q[2], JWF_FLOAT U[2]) {
+	JWF_FLOAT PmQx, PmQy;
 
 	PmQx = P[_x_] - Q[_x_];
 	PmQy = P[_y_] - Q[_y_];
 
-	if ( 0.0 == PmQx && 0.0 == PmQy ) {
+	if (0.0 == PmQx && 0.0 == PmQy) {
 		return 1.0;
 	}
 
-	return 2.0f * ( ( U[_x_] - Q[_x_] ) * PmQx + ( U[_y_] - Q[_y_] ) * PmQy ) / ( PmQx * PmQx + PmQy * PmQy );
+	return 2.0f * ((U[_x_] - Q[_x_]) * PmQx + (U[_y_] - Q[_y_]) * PmQy) / (PmQx * PmQx + PmQy * PmQy);
 }
 
 // Closest point to U from array P.
 //  P is an array of points
 //  n is number of points to check
 //  U is location to find closest
-int closest( float P[VORONOI_MAXPOINTS][2], int n, float U[2] ) {
-	float d2;
-	float d2min = FLT_MAX;
-	int i, j=0;
+int closest(JWF_FLOAT P[VORONOI_MAXPOINTS][2], int n, JWF_FLOAT U[2]) {
+	JWF_FLOAT d2;
+	JWF_FLOAT d2min = FLT_MAX;
+	int i, j = 0;
 
-	for( i = 0; i < n; i++ ) {
+	for (i = 0; i < n; i++) {
 		d2 = (P[i][_x_] - U[_x_]) * (P[i][_x_] - U[_x_]) + (P[i][_y_] - U[_y_]) * (P[i][_y_] - U[_y_]);
-		if ( d2 < d2min ) {
+		if (d2 < d2min) {
 			d2min = d2;
 			j = i;
 		}
@@ -66,15 +66,15 @@ int closest( float P[VORONOI_MAXPOINTS][2], int n, float U[2] ) {
 //  n is number of points in array
 //  q is chosen centre to measure distance from
 //  U is point to test
-float voronoi( float P[VORONOI_MAXPOINTS][2], int n, int q, float U[2] ) {
-	float ratio;
-	float ratiomax = -FLT_MAX;
+JWF_FLOAT voronoi(JWF_FLOAT P[VORONOI_MAXPOINTS][2], int n, int q, JWF_FLOAT U[2]) {
+	JWF_FLOAT ratio;
+	JWF_FLOAT ratiomax = -FLT_MAX;
 	int i;
 
-	for( i = 0; i < n; i++ ) {
-		if ( i != q ) {
-			ratio = vratio( P[i], P[q], U );
-			if ( ratio > ratiomax ) {
+	for (i = 0; i < n; i++) {
+		if (i != q) {
+			ratio = vratio(P[i], P[q], U);
+			if (ratio > ratiomax) {
 				ratiomax = ratio;
 			}
 		}
@@ -82,5 +82,4 @@ float voronoi( float P[VORONOI_MAXPOINTS][2], int n, int q, float U[2] ) {
 
 	return ratiomax;
 }
-
 

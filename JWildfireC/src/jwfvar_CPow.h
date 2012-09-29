@@ -33,7 +33,7 @@ public:
 		return "cpow";
 	}
 
-	void setParameter(char *pName, float pValue) {
+	void setParameter(char *pName, JWF_FLOAT pValue) {
 		if (strcmp(pName, "r") == 0) {
 			r = pValue;
 		}
@@ -45,20 +45,20 @@ public:
 		}
 	}
 
-	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
 		float a = pAffineTP->getPrecalcAtanYX();
-    float lnr = 0.5f * logf(pAffineTP->getPrecalcSumsq());
-    float va = 2.0f * M_PI / power;
-    float vc = r / power;
-    float vd = i / power;
-    float ang = vc * a + vd * lnr + va * floor(power * pContext->randGen->random());
+		float lnr = 0.5f * JWF_LOG(pAffineTP->getPrecalcSumsq());
+		float va = 2.0f * M_PI / power;
+		float vc = r / power;
+		float vd = i / power;
+		float ang = vc * a + vd * lnr + va * floor(power * pContext->randGen->random());
 
-    float m = pAmount * expf(vc * lnr - vd * a);
-    float sa = sinf(ang);
-    float ca = cosf(ang);
+		float m = pAmount * JWF_EXP(vc * lnr - vd * a);
+		float sa = JWF_SIN(ang);
+		float ca = JWF_COS(ang);
 
-    pVarTP->x += m * ca;
-    pVarTP->y += m * sa;
+		pVarTP->x += m * ca;
+		pVarTP->y += m * sa;
 		if (pContext->isPreserveZCoordinate) {
 			pVarTP->z += pAmount * pAffineTP->z;
 		}

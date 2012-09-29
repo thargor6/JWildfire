@@ -33,7 +33,7 @@ public:
 		return "curl3D";
 	}
 
-	void setParameter(char *pName, float pValue) {
+	void setParameter(char *pName, JWF_FLOAT pValue) {
 		if (strcmp(pName, "cx") == 0) {
 			cx = pValue;
 		}
@@ -45,25 +45,25 @@ public:
 		}
 	}
 
-	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
-    float r2 = pAffineTP->x*pAffineTP->x + pAffineTP->y*pAffineTP->y + pAffineTP->z*pAffineTP->z;
-    float r = pAmount / (r2 * _c2 + _c2x * pAffineTP->x - _c2y * pAffineTP->y + _c2z * pAffineTP->z + 1.0f);
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
+		float r2 = pAffineTP->x * pAffineTP->x + pAffineTP->y * pAffineTP->y + pAffineTP->z * pAffineTP->z;
+		float r = pAmount / (r2 * _c2 + _c2x * pAffineTP->x - _c2y * pAffineTP->y + _c2z * pAffineTP->z + 1.0f);
 
-    pVarTP->x += r * (pAffineTP->x + cx * r2);
-    pVarTP->y += r * (pAffineTP->y - cy * r2);
-    pVarTP->z += r * (pAffineTP->z + cz * r2);
+		pVarTP->x += r * (pAffineTP->x + cx * r2);
+		pVarTP->y += r * (pAffineTP->y - cy * r2);
+		pVarTP->z += r * (pAffineTP->z + cz * r2);
 	}
 
-	void init(FlameTransformationContext *pContext, XForm *pXForm, float pAmount) {
-    _c2x = 2.0f * cx;
-    _c2y = 2.0f * cy;
-    _c2z = 2.0f * cz;
+	void init(FlameTransformationContext *pContext, XForm *pXForm, JWF_FLOAT pAmount) {
+		_c2x = 2.0f * cx;
+		_c2y = 2.0f * cy;
+		_c2z = 2.0f * cz;
 
-    float cx2 = cx*cx;
-    float cy2 = cy*cy;
-    float cz2 = cz*cz;
+		float cx2 = cx * cx;
+		float cy2 = cy * cy;
+		float cz2 = cz * cz;
 
-    _c2 = cx2 + cy2 + cz2;
+		_c2 = cx2 + cy2 + cz2;
 	}
 
 	Curl3DFunc* makeCopy() {

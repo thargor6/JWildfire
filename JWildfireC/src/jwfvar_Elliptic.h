@@ -29,20 +29,20 @@ public:
 		return "elliptic";
 	}
 
-	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
-    float tmp = pAffineTP->y * pAffineTP->y + pAffineTP->x * pAffineTP->x + 1.0;
-    float x2 = 2.0f * pAffineTP->x;
-    float xmax = 0.5f * (sqrtf(tmp + x2) + sqrtf(tmp - x2));
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
+		float tmp = pAffineTP->y * pAffineTP->y + pAffineTP->x * pAffineTP->x + 1.0;
+		float x2 = 2.0f * pAffineTP->x;
+		float xmax = 0.5f * (sqrtf(tmp + x2) + JWF_SQRT(tmp - x2));
 
-    float a = pAffineTP->x / xmax;
-    float b = sqrt_safe(1.0f - a * a);
+		float a = pAffineTP->x / xmax;
+		float b = sqrt_safe(1.0f - a * a);
 
-    pVarTP->x += pAmount * atan2f(a, b);
+		pVarTP->x += pAmount * atan2f(a, b);
 
-    if (pAffineTP->y > 0)
-      pVarTP->y += pAmount * log(xmax + sqrt_safe(xmax - 1.0));
-    else
-      pVarTP->y -= pAmount * log(xmax + sqrt_safe(xmax - 1.0));
+		if (pAffineTP->y > 0)
+			pVarTP->y += pAmount * JWF_LOG(xmax + sqrt_safe(xmax - 1.0));
+		else
+			pVarTP->y -= pAmount * JWF_LOG(xmax + sqrt_safe(xmax - 1.0));
 
 		if (pContext->isPreserveZCoordinate) {
 			pVarTP->z += pAmount * pAffineTP->z;
@@ -55,7 +55,7 @@ public:
 
 private:
 	float sqrt_safe(float x) {
-		return (x < EPSILON) ? 0.0 : sqrtf(x);
+		return (x < EPSILON) ? 0.0 : JWF_SQRT(x);
 	}
 
 };

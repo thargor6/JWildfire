@@ -31,44 +31,44 @@ public:
 		return "circlize";
 	}
 
-	void setParameter(char *pName, float pValue) {
+	void setParameter(char *pName, JWF_FLOAT pValue) {
 		if (strcmp(pName, "hole") == 0) {
 			hole = pValue;
 		}
 	}
 
-	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
-    float var4_PI = pAmount / M_PI_4;
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
+		float var4_PI = pAmount / M_PI_4;
 
-    float absx = fabs(pAffineTP->x);
-    float absy = fabs(pAffineTP->y);
-    float perimeter, side;
-    if (absx >= absy) {
-      if (pAffineTP->x >= absy) {
-        perimeter = absx + pAffineTP->y;
-      }
-      else {
-        perimeter = 5.0f * absx - pAffineTP->y;
-      }
-      side = absx;
-    }
-    else {
-      if (pAffineTP->y >= absx) {
-        perimeter = 3.0f * absy - pAffineTP->x;
-      }
-      else {
-        perimeter = 7.0f * absy + pAffineTP->x;
-      }
-      side = absy;
-    }
+		float absx = JWF_FABS(pAffineTP->x);
+		float absy = JWF_FABS(pAffineTP->y);
+		float perimeter, side;
+		if (absx >= absy) {
+			if (pAffineTP->x >= absy) {
+				perimeter = absx + pAffineTP->y;
+			}
+			else {
+				perimeter = 5.0f * absx - pAffineTP->y;
+			}
+			side = absx;
+		}
+		else {
+			if (pAffineTP->y >= absx) {
+				perimeter = 3.0f * absy - pAffineTP->x;
+			}
+			else {
+				perimeter = 7.0f * absy + pAffineTP->x;
+			}
+			side = absy;
+		}
 
-    double r = var4_PI * side + hole;
-    double a = M_PI_4 * perimeter / side - M_PI_4;
-    double sina = sin(a);
-    double cosa = cos(a);
+		double r = var4_PI * side + hole;
+		double a = M_PI_4 * perimeter / side - M_PI_4;
+		double sina = JWF_SIN(a);
+		double cosa = JWF_COS(a);
 
-    pVarTP->x += r * cosa;
-    pVarTP->y += r * sina;
+		pVarTP->x += r * cosa;
+		pVarTP->y += r * sina;
 		if (pContext->isPreserveZCoordinate) {
 			pVarTP->z += pAmount * pAffineTP->z;
 		}

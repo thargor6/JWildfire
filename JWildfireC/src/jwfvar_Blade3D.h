@@ -29,13 +29,13 @@ public:
 		return "blade3D";
 	}
 
-	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
-    float r= pContext->randGen->random() * pAmount * sqrt(pAffineTP->x * pAffineTP->x + pAffineTP->y * pAffineTP->y);
-    float sinr = sinf(r);
-    float cosr = cosf(r);
-    pVarTP->x += pAmount * pAffineTP->x * (cosr + sinr);
-    pVarTP->y += pAmount * pAffineTP->x * (cosr - sinr);
-    pVarTP->z += pAmount * pAffineTP->y * (sinr - cosr);
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
+		float r = pContext->randGen->random() * pAmount * JWF_SQRT(pAffineTP->x * pAffineTP->x + pAffineTP->y * pAffineTP->y);
+		float sinr = JWF_SIN(r);
+		float cosr = JWF_COS(r);
+		pVarTP->x += pAmount * pAffineTP->x * (cosr + sinr);
+		pVarTP->y += pAmount * pAffineTP->x * (cosr - sinr);
+		pVarTP->z += pAmount * pAffineTP->y * (sinr - cosr);
 	}
 
 	Blade3DFunc* makeCopy() {

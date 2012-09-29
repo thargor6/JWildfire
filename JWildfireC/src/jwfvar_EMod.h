@@ -23,8 +23,8 @@
 class EModFunc: public Variation {
 public:
 	EModFunc() {
-    radius = 1.0f;
-    distance = 0.0f;
+		radius = 1.0f;
+		distance = 0.0f;
 		initParameterNames(2, "radius", "distance");
 	}
 
@@ -32,7 +32,7 @@ public:
 		return "eMod";
 	}
 
-	void setParameter(char *pName, float pValue) {
+	void setParameter(char *pName, JWF_FLOAT pValue) {
 		if (strcmp(pName, "radius") == 0) {
 			radius = pValue;
 		}
@@ -41,37 +41,37 @@ public:
 		}
 	}
 
-	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
-    float tmp = pAffineTP->y * pAffineTP->y + pAffineTP->x * pAffineTP->x + 1.0f;
-    float tmp2 = 2.0f * pAffineTP->x;
-    float xmax = (sqrtf_safe(tmp + tmp2) + sqrtf_safe(tmp - tmp2)) * 0.5f;
-    if (xmax < 1.0f)
-      xmax = 1.0f;
-    float sinhmu, coshmu;
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
+		float tmp = pAffineTP->y * pAffineTP->y + pAffineTP->x * pAffineTP->x + 1.0f;
+		float tmp2 = 2.0f * pAffineTP->x;
+		float xmax = (sqrtf_safe(tmp + tmp2) + sqrtf_safe(tmp - tmp2)) * 0.5f;
+		if (xmax < 1.0f)
+			xmax = 1.0f;
+		float sinhmu, coshmu;
 
-    float mu = acoshf(xmax); //  mu > 0
-    float t = pAffineTP->x / xmax;
-    if (t > 1.0f)
-      t = 1.0f;
-    else if (t < -1.0f)
-      t = -1.0f;
+		float mu = acoshf(xmax); //  mu > 0
+		float t = pAffineTP->x / xmax;
+		if (t > 1.0f)
+			t = 1.0f;
+		else if (t < -1.0f)
+			t = -1.0f;
 
-    float nu = acosf(t); // -Pi < nu < Pi
-    if (pAffineTP->y < 0)
-      nu *= -1.0f;
+		float nu = acosf(t); // -Pi < nu < Pi
+		if (pAffineTP->y < 0)
+			nu *= -1.0f;
 
-    if (mu < radius && -mu < radius) {
-      if (nu > 0.0f)
-        mu = fmodf(mu + radius + distance * radius, 2.0f * radius) - radius;
-      else
-        mu = fmodf(mu - radius - distance * radius, 2.0f * radius) + radius;
-    }
+		if (mu < radius && -mu < radius) {
+			if (nu > 0.0f)
+				mu = fmodf(mu + radius + distance * radius, 2.0f * radius) - radius;
+			else
+				mu = fmodf(mu - radius - distance * radius, 2.0f * radius) + radius;
+		}
 
-    sinhmu = sinhf(mu);
-    coshmu = coshf(mu);
+		sinhmu = JWF_SINH(mu);
+		coshmu = JWF_COSH(mu);
 
-    pVarTP->x += pAmount * coshmu * cosf(nu);
-    pVarTP->y += pAmount * sinhmu * sinf(nu);
+		pVarTP->x += pAmount * coshmu * JWF_COS(nu);
+		pVarTP->y += pAmount * sinhmu * JWF_SIN(nu);
 
 		if (pContext->isPreserveZCoordinate) {
 			pVarTP->z += pAmount * pAffineTP->z;
@@ -86,7 +86,7 @@ private:
 	float sqrtf_safe(float x) {
 		if (x <= 0.0f)
 			return 0.0f;
-		return sqrtf(x);
+		return JWF_SQRT(x);
 	}
 
 	float radius;

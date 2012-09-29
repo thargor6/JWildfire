@@ -31,33 +31,33 @@ public:
 		return "eclipse";
 	}
 
-	void setParameter(char *pName, float pValue) {
+	void setParameter(char *pName, JWF_FLOAT pValue) {
 		if (strcmp(pName, "shift") == 0) {
 			shift = pValue;
 		}
 	}
 
-	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
-    if (fabsf(pAffineTP->y) <= pAmount) {
-    	float c_2 = sqrtf(pAmount*pAmount - pAffineTP->y*pAffineTP->y);
-      if (fabsf(pAffineTP->x) <= c_2) {
-        double x = pAffineTP->x + shift * pAmount;
-        if (fabsf(x) >= c_2) {
-          pVarTP->x -= pAmount * pAffineTP->x;
-        }
-        else {
-          pVarTP->x += pAmount * x;
-        }
-      }
-      else {
-        pVarTP->x += pAmount * pAffineTP->x;
-      }
-      pVarTP->y += pAmount * pAffineTP->y;
-    }
-    else {
-      pVarTP->x += pAmount * pAffineTP->x;
-      pVarTP->y += pAmount * pAffineTP->y;
-    }
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
+		if (fabsf(pAffineTP->y) <= pAmount) {
+			float c_2 = JWF_SQRT(pAmount * pAmount - pAffineTP->y * pAffineTP->y);
+			if (fabsf(pAffineTP->x) <= c_2) {
+				double x = pAffineTP->x + shift * pAmount;
+				if (fabsf(x) >= c_2) {
+					pVarTP->x -= pAmount * pAffineTP->x;
+				}
+				else {
+					pVarTP->x += pAmount * x;
+				}
+			}
+			else {
+				pVarTP->x += pAmount * pAffineTP->x;
+			}
+			pVarTP->y += pAmount * pAffineTP->y;
+		}
+		else {
+			pVarTP->x += pAmount * pAffineTP->x;
+			pVarTP->y += pAmount * pAffineTP->y;
+		}
 		if (pContext->isPreserveZCoordinate) {
 			pVarTP->z += pAmount * pAffineTP->z;
 		}

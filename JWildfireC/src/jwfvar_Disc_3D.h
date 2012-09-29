@@ -31,21 +31,21 @@ public:
 		return "disc3d";
 	}
 
-	void setParameter(char *pName, float pValue) {
+	void setParameter(char *pName, JWF_FLOAT pValue) {
 		if (strcmp(pName, "pi") == 0) {
 			pi = pValue;
 		}
 	}
 
-	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
-    float r = sqrtf(pAffineTP->y * pAffineTP->y + pAffineTP->x * pAffineTP->x + EPSILON);
-    float a = pi * r;
-    float sr = sinf(a);
-    float cr = cosf(a);
-    float vv = pAmount * atan2f(pAffineTP->x, pAffineTP->y) / pi;
-    pVarTP->x += vv * sr;
-    pVarTP->y += vv * cr;
-    pVarTP->z += vv * (r * cos(pAffineTP->z));
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
+		float r = JWF_SQRT(pAffineTP->y * pAffineTP->y + pAffineTP->x * pAffineTP->x + EPSILON);
+		float a = pi * r;
+		float sr = JWF_SIN(a);
+		float cr = JWF_COS(a);
+		float vv = pAmount * atan2f(pAffineTP->x, pAffineTP->y) / pi;
+		pVarTP->x += vv * sr;
+		pVarTP->y += vv * cr;
+		pVarTP->z += vv * (r * JWF_COS(pAffineTP->z));
 		if (pContext->isPreserveZCoordinate) {
 			pVarTP->z += pAmount * pAffineTP->z;
 		}
@@ -55,11 +55,10 @@ public:
 		return new Disc_3DFunc(*this);
 	}
 
-	virtual void init(FlameTransformationContext *pContext, XForm *pXForm, float pAmount) {
-		if(pi==0)
-			pi=EPSILON;
+	virtual void init(FlameTransformationContext *pContext, XForm *pXForm, JWF_FLOAT pAmount) {
+		if (pi == 0)
+			pi = EPSILON;
 	}
-
 
 private:
 	float pi;

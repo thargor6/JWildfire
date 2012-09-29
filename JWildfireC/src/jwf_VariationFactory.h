@@ -222,18 +222,18 @@ public:
 	}
 
 	Variation* newInstance(char *varName) {
-		Variation* srcVar=findVariation(varName);
-		if(srcVar==NULL) {
-		  printf("Variation %s unknown\n", varName);
-		  exit(-1);
+		Variation* srcVar = findVariation(varName);
+		if (srcVar == NULL) {
+			printf("Variation %s unknown\n", varName);
+			exit(-1);
 		}
 		return srcVar->makeCopy();
 	}
 
 	Variation* findVariation(char *varName) {
-		for(int i=0;i<variationCount;i++) {
-			if(strcmp(varName, variations[i]->getName())==0) {
-        return variations[i];
+		for (int i = 0; i < variationCount; i++) {
+			if (strcmp(varName, variations[i]->getName()) == 0) {
+				return variations[i];
 			}
 		}
 		return NULL;
@@ -415,11 +415,11 @@ private:
 	}
 
 	void addVariation(Variation *var) {
-		if(variationCount>=VARIATION_POOL_SIZE) {
-			printf("Variation pool size %d exceeded\n",VARIATION_POOL_SIZE);
+		if (variationCount >= VARIATION_POOL_SIZE) {
+			printf("Variation pool size %d exceeded\n", VARIATION_POOL_SIZE);
 			exit(-1);
 		}
-		variations[variationCount++]=var;
+		variations[variationCount++] = var;
 	}
 
 };

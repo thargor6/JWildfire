@@ -32,7 +32,7 @@ public:
 		return "pie";
 	}
 
-	void setParameter(char *pName, float pValue) {
+	void setParameter(char *pName, JWF_FLOAT pValue) {
 		if (strcmp(pName, "a") == 0) {
 			a = pValue;
 		}
@@ -41,40 +41,35 @@ public:
 		}
 	}
 
-	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
-    float a = atan2f(pAffineTP->y, pAffineTP->x);
-    float r = pAmount * sqrtf(pAffineTP->x*pAffineTP->x + pAffineTP->y*pAffineTP->y);
-    int alt;
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
+		float a = atan2f(pAffineTP->y, pAffineTP->x);
+		float r = pAmount * JWF_SQRT(pAffineTP->x * pAffineTP->x + pAffineTP->y * pAffineTP->y);
+		int alt;
 
-    if (a >= 0.0) {
-      alt = (int) (a * _kn_pi);
-      if (alt % 2 == 0)
-      {
-        a = alt * _pi_kn + fmod(_ka_kn + a, _pi_kn);
-      }
-      else {
-        a = alt * _pi_kn + fmod(-_ka_kn + a, _pi_kn);
-      }
-    }
-    else
-    {
-      alt = (int) (-a * _kn_pi);
-      if (alt % 2 == 1)
-      {
-        a = -(alt * _pi_kn + fmod(-_ka_kn - a, _pi_kn));
-      }
-      else
-      {
-        a = -(alt * _pi_kn + fmod(_ka_kn - a, _pi_kn));
-      }
-    }
+		if (a >= 0.0) {
+			alt = (int) (a * _kn_pi);
+			if (alt % 2 == 0) {
+				a = alt * _pi_kn + fmod(_ka_kn + a, _pi_kn);
+			}
+			else {
+				a = alt * _pi_kn + fmod(-_ka_kn + a, _pi_kn);
+			}
+		}
+		else {
+			alt = (int) (-a * _kn_pi);
+			if (alt % 2 == 1) {
+				a = -(alt * _pi_kn + fmod(-_ka_kn - a, _pi_kn));
+			}
+			else {
+				a = -(alt * _pi_kn + fmod(_ka_kn - a, _pi_kn));
+			}
+		}
 
+		float s = JWF_SIN(a);
+		float c = JWF_COS(a);
 
-    float s = sinf(a);
-    float c = cosf(a);
-
-    pVarTP->x += r * c;
-    pVarTP->y += r * s;
+		pVarTP->x += r * c;
+		pVarTP->y += r * s;
 
 		if (pContext->isPreserveZCoordinate) {
 			pVarTP->z += pAmount * pAffineTP->z;
@@ -85,18 +80,18 @@ public:
 		return new CollideoscopeFunc(*this);
 	}
 
-	void init(FlameTransformationContext *pContext, XForm *pXForm, float pAmount) {
-    _kn_pi = (float) num * M_1_PI;
-    _pi_kn = M_PI / (float) num;
-    _ka = M_PI * a;
-    _ka_kn = _ka / (float) num;
-  }
+	void init(FlameTransformationContext *pContext, XForm *pXForm, JWF_FLOAT pAmount) {
+		_kn_pi = (JWF_FLOAT) num * M_1_PI;
+		_pi_kn = M_PI / (JWF_FLOAT) num;
+		_ka = M_PI * a;
+		_ka_kn = _ka / (JWF_FLOAT) num;
+	}
 
 private:
 	float a;
 	int num;
 
-  float _kn_pi, _pi_kn, _ka, _ka_kn;
+	float _kn_pi, _pi_kn, _ka, _ka_kn;
 };
 
 #endif // JWFVAR_COLLIDEOSCOPE_H_

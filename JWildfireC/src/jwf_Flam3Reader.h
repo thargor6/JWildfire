@@ -43,11 +43,11 @@ public:
 			printf("File %s is empty\n", pFilename);
 			return;
 		}
-		char* flamesXML = new char[size+1];
+		char* flamesXML = new char[size + 1];
 		rewind(f);
 		fread(flamesXML, sizeof(char), size, f);
 		fclose(f);
-		flamesXML[size]='\0';
+		flamesXML[size] = '\0';
 		readFlamesfromXML(flamesXML, pFlames, pFlameCount);
 	}
 
@@ -275,9 +275,9 @@ private:
 	}
 
 	int indexOf(char *pStr, char *pToken, int pOffset) {
-		int len=strlen(pStr);
+		int len = strlen(pStr);
 		char *pos = strstr(pStr + pOffset, pToken);
-		if (pos != NULL && ((pos-pStr)<len)) {
+		if (pos != NULL && ((pos - pStr) < len)) {
 			return pos - pStr;
 		}
 		else {
@@ -421,7 +421,7 @@ private:
 		return res;
 	}
 
-	int roundColor(float pColor) {
+	int roundColor(FLOAT pColor) {
 		int res = FTOI(pColor);
 		if (res < 0)
 			return 0;
@@ -443,12 +443,12 @@ private:
 			pXForm->color = atof(hs);
 		}
 		if ((hs = findAttribute(attNames, attValues, attCount, ATTR_OPACITY)) != NULL) {
-			float opacity = atof(hs);
+			FLOAT opacity = atof(hs);
 			pXForm->opacity = opacity;
 			if (fabs(opacity) <= EPSILON) {
 				pXForm->drawMode = DRAWMODE_HIDDEN;
 			}
-			else if (fabs(opacity - 1.0f) > EPSILON) {
+			else if (fabs(opacity - 1.0) > EPSILON) {
 				pXForm->drawMode = DRAWMODE_OPAQUE;
 			}
 			else {
@@ -510,7 +510,7 @@ private:
 				Variation *srcVar = variationFactory->findVariation(varName);
 				if (srcVar != NULL) {
 					Variation *var = srcVar->makeCopy();
-					float amount = atof(attValues[a]);
+					FLOAT amount = atof(attValues[a]);
 					pXForm->addVariation(var, amount);
 
 					// params
@@ -546,23 +546,23 @@ private:
 								if ((pHs = findAttribute(attNames, attValues, attCount, pRessName)) != NULL) {
 									//var->setRessource(pName, hexStringToByteArray(pHs));
 
-                  // TODO: remove this
-									if(strcmp(pName, "flame")==0) {
-								    Flam3Reader *reader=new Flam3Reader();
-								  	Flame **flames=NULL;
-								  	int flameCount=0;
-								  	char *flameXML=hexStringToByteArray(pHs);
-								  	if(flameXML!=NULL && strlen(flameXML)>0) {
+									// TODO: remove this
+									if (strcmp(pName, "flame") == 0) {
+										Flam3Reader *reader = new Flam3Reader();
+										Flame **flames = NULL;
+										int flameCount = 0;
+										char *flameXML = hexStringToByteArray(pHs);
+										if (flameXML != NULL && strlen(flameXML) > 0) {
 											reader->readFlamesfromXML(flameXML, &flames, &flameCount);
 											free(flameXML);
-											if(flameCount<1) {
+											if (flameCount < 1) {
 												printf("No sub flame to render");
 											}
 											else {
-											  Flame *flame=flames[0];
+												Flame *flame = flames[0];
 												var->setRessource(pName, flame);
 											}
-								  	}
+										}
 									}
 								}
 							}
@@ -685,7 +685,7 @@ private:
 				printf("Illegal hex str %s\n", pHexStr);
 				return NULL;
 			}
-			char *b = (char*)malloc((l / 2 + 1) * sizeof(char));
+			char *b = (char*) malloc((l / 2 + 1) * sizeof(char));
 			b[l / 2] = '\0';
 			int k = 0;
 			for (int i = 0; i < l; i++) {

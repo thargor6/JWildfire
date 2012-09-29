@@ -23,8 +23,8 @@
 class ESwirlFunc: public Variation {
 public:
 	ESwirlFunc() {
-    in = 0.0f;
-    out = 0.0f;
+		in = 0.0f;
+		out = 0.0f;
 		initParameterNames(2, "in", "out");
 	}
 
@@ -32,7 +32,7 @@ public:
 		return "eSwirl";
 	}
 
-	void setParameter(char *pName, float pValue) {
+	void setParameter(char *pName, JWF_FLOAT pValue) {
 		if (strcmp(pName, "in") == 0) {
 			in = pValue;
 		}
@@ -41,33 +41,33 @@ public:
 		}
 	}
 
-	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
-    float tmp = pAffineTP->y * pAffineTP->y + pAffineTP->x * pAffineTP->x + 1.0f;
-    float tmp2 = 2.0f * pAffineTP->x;
-    float xmax = (sqrtf_safe(tmp + tmp2) + sqrtf_safe(tmp - tmp2)) * 0.5f;
-    if (xmax < 1.0f)
-      xmax = 1.0f;
-    float sinhmu, coshmu, sinnu, cosnu;
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
+		float tmp = pAffineTP->y * pAffineTP->y + pAffineTP->x * pAffineTP->x + 1.0f;
+		float tmp2 = 2.0f * pAffineTP->x;
+		float xmax = (sqrtf_safe(tmp + tmp2) + sqrtf_safe(tmp - tmp2)) * 0.5f;
+		if (xmax < 1.0f)
+			xmax = 1.0f;
+		float sinhmu, coshmu, sinnu, cosnu;
 
-    float mu = acoshf(xmax); //  mu > 0
-    float t = pAffineTP->x / xmax;
-    if (t > 1.0f)
-      t = 1.0f;
-    else if (t < -1.0f)
-      t = -1.0f;
+		float mu = acoshf(xmax); //  mu > 0
+		float t = pAffineTP->x / xmax;
+		if (t > 1.0f)
+			t = 1.0f;
+		else if (t < -1.0f)
+			t = -1.0f;
 
-    float nu = acosf(t); // -Pi < nu < Pi
-    if (pAffineTP->y < 0.0f)
-      nu *= -1.0f;
+		float nu = acosf(t); // -Pi < nu < Pi
+		if (pAffineTP->y < 0.0f)
+			nu *= -1.0f;
 
-    nu = nu + mu * out + in / mu;
+		nu = nu + mu * out + in / mu;
 
-    sinhmu = sinhf(mu);
-    coshmu = coshf(mu);
-    sinnu = sinf(nu);
-    cosnu = cosf(nu);
-    pVarTP->x += pAmount * coshmu * cosnu;
-    pVarTP->y += pAmount * sinhmu * sinnu;
+		sinhmu = JWF_SINH(mu);
+		coshmu = JWF_COSH(mu);
+		sinnu = JWF_SIN(nu);
+		cosnu = JWF_COS(nu);
+		pVarTP->x += pAmount * coshmu * cosnu;
+		pVarTP->y += pAmount * sinhmu * sinnu;
 
 		if (pContext->isPreserveZCoordinate) {
 			pVarTP->z += pAmount * pAffineTP->z;
@@ -78,12 +78,11 @@ public:
 		return new ESwirlFunc(*this);
 	}
 
-
 private:
 	float sqrtf_safe(float x) {
 		if (x <= 0.0f)
 			return 0.0f;
-		return sqrtf(x);
+		return JWF_SQRT(x);
 	}
 
 	float in;

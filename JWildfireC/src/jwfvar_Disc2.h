@@ -32,7 +32,7 @@ public:
 		return "disc2";
 	}
 
-	void setParameter(char *pName, float pValue) {
+	void setParameter(char *pName, JWF_FLOAT pValue) {
 		if (strcmp(pName, "rot") == 0) {
 			rot = pValue;
 		}
@@ -41,13 +41,13 @@ public:
 		}
 	}
 
-	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
-    float t = _timespi * (pAffineTP->x + pAffineTP->y);
-    float sinr = sinf(t);
-    float cosr = cosf(t);
-    float r = pAmount * pAffineTP->getPrecalcAtan() / M_PI;
-    pVarTP->x += (sinr + _cosadd) * r;
-    pVarTP->y += (cosr + _sinadd) * r;
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
+		float t = _timespi * (pAffineTP->x + pAffineTP->y);
+		float sinr = JWF_SIN(t);
+		float cosr = JWF_COS(t);
+		float r = pAmount * pAffineTP->getPrecalcAtan() / M_PI;
+		pVarTP->x += (sinr + _cosadd) * r;
+		pVarTP->y += (cosr + _sinadd) * r;
 		if (pContext->isPreserveZCoordinate) {
 			pVarTP->z += pAmount * pAffineTP->z;
 		}
@@ -57,29 +57,29 @@ public:
 		return new Disc2Func(*this);
 	}
 
-	virtual void init(FlameTransformationContext *pContext, XForm *pXForm, float pAmount) {
-    float add = twist;
-    _timespi = rot * M_PI;
-    _sinadd = sinf(add);
-    _cosadd = cosf(add);
-    _cosadd -= 1.0f;
-    float k;
-    if (add > 2.0f * M_PI) {
-      k = (1.0f + add - 2.0f * M_PI);
-      _cosadd *= k;
-      _sinadd *= k;
-    }
-    if (add < -2.0f * M_PI) {
-      k = (1.0f + add + 2.0f * M_PI);
-      _cosadd *= k;
-      _sinadd *= k;
-    }
+	virtual void init(FlameTransformationContext *pContext, XForm *pXForm, JWF_FLOAT pAmount) {
+		float add = twist;
+		_timespi = rot * M_PI;
+		_sinadd = JWF_SIN(add);
+		_cosadd = JWF_COS(add);
+		_cosadd -= 1.0f;
+		float k;
+		if (add > 2.0f * M_PI) {
+			k = (1.0f + add - 2.0f * M_PI);
+			_cosadd *= k;
+			_sinadd *= k;
+		}
+		if (add < -2.0f * M_PI) {
+			k = (1.0f + add + 2.0f * M_PI);
+			_cosadd *= k;
+			_sinadd *= k;
+		}
 	}
 
 private:
 	float rot;
 	float twist;
-  float _timespi, _sinadd, _cosadd;
+	float _timespi, _sinadd, _cosadd;
 };
 
 #endif // JWFVAR_DISC2_H_

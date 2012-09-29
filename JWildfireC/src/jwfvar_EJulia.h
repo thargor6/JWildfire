@@ -23,7 +23,7 @@
 class EJuliaFunc: public Variation {
 public:
 	EJuliaFunc() {
-    power = 2;
+		power = 2;
 		initParameterNames(1, "power");
 	}
 
@@ -31,51 +31,51 @@ public:
 		return "eJulia";
 	}
 
-	void setParameter(char *pName, float pValue) {
+	void setParameter(char *pName, JWF_FLOAT pValue) {
 		if (strcmp(pName, "power") == 0) {
 			power = FTOI(pValue);
 		}
 	}
 
-	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
-    float r2 = pAffineTP->y * pAffineTP->y + pAffineTP->x * pAffineTP->x;
-    float tmp2;
-    float x;
-    if (_sign == 1)
-      x = pAffineTP->x;
-    else {
-      r2 = 1.0f / r2;
-      x = pAffineTP->x * r2;
-    }
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
+		float r2 = pAffineTP->y * pAffineTP->y + pAffineTP->x * pAffineTP->x;
+		float tmp2;
+		float x;
+		if (_sign == 1)
+			x = pAffineTP->x;
+		else {
+			r2 = 1.0f / r2;
+			x = pAffineTP->x * r2;
+		}
 
-    float tmp = r2 + 1.0f;
-    tmp2 = 2.0f * x;
-    float xmax = (sqrtf_safe(tmp + tmp2) + sqrtf_safe(tmp - tmp2)) * 0.5f;
-    if (xmax < 1.0f)
-      xmax = 1.0f;
-    float sinhmu, coshmu, sinnu, cosnu;
+		float tmp = r2 + 1.0f;
+		tmp2 = 2.0f * x;
+		float xmax = (sqrtf_safe(tmp + tmp2) + sqrtf_safe(tmp - tmp2)) * 0.5f;
+		if (xmax < 1.0f)
+			xmax = 1.0f;
+		float sinhmu, coshmu, sinnu, cosnu;
 
-    float mu = acoshf(xmax); //  mu > 0
-    float t = x / xmax;
-    if (t > 1.0f)
-      t = 1.0f;
-    else if (t < -1.0f)
-      t = -1.0f;
+		float mu = acoshf(xmax); //  mu > 0
+		float t = x / xmax;
+		if (t > 1.0f)
+			t = 1.0f;
+		else if (t < -1.0f)
+			t = -1.0f;
 
-    float nu = acosf(t); // -Pi < nu < Pi
-    if (pAffineTP->y < 0.0f)
-      nu *= -1.0f;
+		float nu = acosf(t); // -Pi < nu < Pi
+		if (pAffineTP->y < 0.0f)
+			nu *= -1.0f;
 
-    nu = nu / power + M_2PI / power * floorf(pContext->randGen->random() * power);
-    mu /= power;
+		nu = nu / power + M_2PI / power * floorf(pContext->randGen->random() * power);
+		mu /= power;
 
-    sinhmu = sinhf(mu);
-    coshmu = coshf(mu);
+		sinhmu = JWF_SINH(mu);
+		coshmu = JWF_COSH(mu);
 
-    sinnu = sinf(nu);
-    cosnu = cosf(nu);
-    pVarTP->x += pAmount * coshmu * cosnu;
-    pVarTP->y += pAmount * sinhmu * sinnu;
+		sinnu = JWF_SIN(nu);
+		cosnu = JWF_COS(nu);
+		pVarTP->x += pAmount * coshmu * cosnu;
+		pVarTP->y += pAmount * sinhmu * sinnu;
 
 		if (pContext->isPreserveZCoordinate) {
 			pVarTP->z += pAmount * pAffineTP->z;
@@ -86,17 +86,17 @@ public:
 		return new EJuliaFunc(*this);
 	}
 
-	virtual void init(FlameTransformationContext *pContext, XForm *pXForm, float pAmount) {
-    _sign = 1;
-    if (power < 0)
-      _sign = -1;
+	virtual void init(FlameTransformationContext *pContext, XForm *pXForm, JWF_FLOAT pAmount) {
+		_sign = 1;
+		if (power < 0)
+			_sign = -1;
 	}
 
 private:
 	float sqrtf_safe(float x) {
 		if (x <= 0.0f)
 			return 0.0f;
-		return sqrtf(x);
+		return JWF_SQRT(x);
 	}
 
 	int power;

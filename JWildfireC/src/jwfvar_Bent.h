@@ -28,18 +28,18 @@ public:
 		return "bent";
 	}
 
-	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
-    float nx = pAffineTP->x;
-    float ny = pAffineTP->y;
-    if (nx < 0)
-      nx = nx + nx;
-    if (ny < 0)
-      ny = ny * 0.5;
-    pVarTP->x += pAmount * nx;
-    pVarTP->y += pAmount * ny;
-    if (pContext->isPreserveZCoordinate) {
-      pVarTP->z += pAmount * pAffineTP->z;
-    }
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
+		float nx = pAffineTP->x;
+		float ny = pAffineTP->y;
+		if (nx < 0)
+			nx = nx + nx;
+		if (ny < 0)
+			ny = ny * 0.5;
+		pVarTP->x += pAmount * nx;
+		pVarTP->y += pAmount * ny;
+		if (pContext->isPreserveZCoordinate) {
+			pVarTP->z += pAmount * pAffineTP->z;
+		}
 	}
 
 	BentFunc* makeCopy() {

@@ -31,13 +31,13 @@ public:
 		return "bipolar";
 	}
 
-	void setParameter(char *pName, float pValue) {
+	void setParameter(char *pName, JWF_FLOAT pValue) {
 		if (strcmp(pName, "shift") == 0) {
 			shift = pValue;
 		}
 	}
 
-	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
 		float x2y2 = (pAffineTP->x * pAffineTP->x + pAffineTP->y * pAffineTP->y);
 		float t = x2y2 + 1.0f;
 		float x2 = 2 * pAffineTP->x;
@@ -51,13 +51,13 @@ public:
 			y = M_PI_2 - fmodf(M_PI_2 - y, M_PI);
 		}
 
-    float f = t + x2;
-    float g = t - x2;
+		float f = t + x2;
+		float g = t - x2;
 
-    if ((g == 0) || (f / g <= 0))
-      return;
+		if ((g == 0) || (f / g <= 0))
+			return;
 
-		pVarTP->x += pAmount * 0.25f * M_2_PI * logf((t + x2) / (t - x2));
+		pVarTP->x += pAmount * 0.25f * M_2_PI * JWF_LOG((t + x2) / (t - x2));
 		pVarTP->y += pAmount * M_2_PI * y;
 		if (pContext->isPreserveZCoordinate) {
 			pVarTP->z += pAmount * pAffineTP->z;

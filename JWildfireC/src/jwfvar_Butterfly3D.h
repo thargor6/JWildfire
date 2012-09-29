@@ -30,15 +30,15 @@ public:
 		return "butterfly3D";
 	}
 
-	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
-    float wx = pAmount * 1.3029400317411197908970256609023f;
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
+		float wx = pAmount * 1.3029400317411197908970256609023f;
 
-    float y2 = pAffineTP->y * 2.0;
-    float r = wx * sqrtf(fabs(pAffineTP->y * pAffineTP->x) / (EPSILON + pAffineTP->x * pAffineTP->x + y2 * y2));
+		float y2 = pAffineTP->y * 2.0;
+		float r = wx * JWF_SQRT(fabs(pAffineTP->y * pAffineTP->x) / (EPSILON + pAffineTP->x * pAffineTP->x + y2 * y2));
 
-    pVarTP->x += r * pAffineTP->x;
-    pVarTP->y += r * y2;
-    pVarTP->z += r * fabs(y2) * sqrt(pAffineTP->x * pAffineTP->x + pAffineTP->y * pAffineTP->y) / 4.0;
+		pVarTP->x += r * pAffineTP->x;
+		pVarTP->y += r * y2;
+		pVarTP->z += r * JWF_FABS(y2) * JWF_SQRT(pAffineTP->x * pAffineTP->x + pAffineTP->y * pAffineTP->y) / 4.0;
 	}
 
 	Butterfly3DFunc* makeCopy() {

@@ -29,15 +29,15 @@ public:
 		return "cosine";
 	}
 
-	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
-    double r = pAffineTP->x * M_PI;
-    double sinr = sinf(r);
-    double cosr = cosf(r);
-    pVarTP->x += pAmount * cosr * coshf(pAffineTP->y);
-    pVarTP->y -= pAmount * sinr * sinhf(pAffineTP->y);
-    if (pContext->isPreserveZCoordinate) {
-      pVarTP->z += pAmount * pAffineTP->z;
-    }
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
+		double r = pAffineTP->x * M_PI;
+		double sinr = JWF_SIN(r);
+		double cosr = JWF_COS(r);
+		pVarTP->x += pAmount * cosr * JWF_COSH(pAffineTP->y);
+		pVarTP->y -= pAmount * sinr * JWF_SINH(pAffineTP->y);
+		if (pContext->isPreserveZCoordinate) {
+			pVarTP->z += pAmount * pAffineTP->z;
+		}
 	}
 
 	CosineFunc* makeCopy() {

@@ -29,15 +29,15 @@ public:
 		return "cross";
 	}
 
-	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
-    float s = pAffineTP->x * pAffineTP->x - pAffineTP->y * pAffineTP->y;
-    float r = pAmount * sqrtf(1.0f / (s * s + EPSILON));
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
+		float s = pAffineTP->x * pAffineTP->x - pAffineTP->y * pAffineTP->y;
+		float r = pAmount * JWF_SQRT(1.0f / (s * s + EPSILON));
 
-    pVarTP->x += pAffineTP->x * r;
-    pVarTP->y += pAffineTP->y * r;
-    if (pContext->isPreserveZCoordinate) {
-      pVarTP->z += pAmount * pAffineTP->z;
-    }
+		pVarTP->x += pAffineTP->x * r;
+		pVarTP->y += pAffineTP->y * r;
+		if (pContext->isPreserveZCoordinate) {
+			pVarTP->z += pAmount * pAffineTP->z;
+		}
 	}
 
 	CrossFunc* makeCopy() {

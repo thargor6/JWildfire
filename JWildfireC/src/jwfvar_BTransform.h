@@ -23,10 +23,10 @@
 class BTransformFunc: public Variation {
 public:
 	BTransformFunc() {
-    rotate = 0.0;
-    power = 1;
-    move = 0.0;
-    split = 0.0;
+		rotate = 0.0;
+		power = 1;
+		move = 0.0;
+		split = 0.0;
 		initParameterNames(4, "rotate", "power", "move", "split");
 	}
 
@@ -34,7 +34,7 @@ public:
 		return "bTransform";
 	}
 
-	void setParameter(char *pName, float pValue) {
+	void setParameter(char *pName, JWF_FLOAT pValue) {
 		if (strcmp(pName, "rotate") == 0) {
 			rotate = pValue;
 		}
@@ -49,27 +49,29 @@ public:
 		}
 	}
 
-	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
-    float tau, sigma;
-    float temp;
-    float cosht, sinht;
-    float sins, coss;
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
+		float tau, sigma;
+		float temp;
+		float cosht, sinht;
+		float sins, coss;
 
-    tau = 0.5f * (logf((pAffineTP->x + 1.0f)*(pAffineTP->x + 1.0f) + pAffineTP->y*pAffineTP->y) - logf((pAffineTP->x - 1.0f)*(pAffineTP->x - 1.0f) + pAffineTP->y*pAffineTP->y)) / power + move;
-    sigma = M_PI - atan2f(pAffineTP->y, pAffineTP->x + 1.0f) - atan2f(pAffineTP->y, 1.0f - pAffineTP->x) + rotate;
-    sigma = sigma / power + M_2PI / power * floorf(pContext->randGen->random() * power);
+		tau = 0.5f
+				* (logf((pAffineTP->x + 1.0f) * (pAffineTP->x + 1.0f) + pAffineTP->y * pAffineTP->y) - JWF_LOG((pAffineTP->x - 1.0f) * (pAffineTP->x - 1.0f) + pAffineTP->y * pAffineTP->y))
+				/ power + move;
+		sigma = M_PI - atan2f(pAffineTP->y, pAffineTP->x + 1.0f) - atan2f(pAffineTP->y, 1.0f - pAffineTP->x) + rotate;
+		sigma = sigma / power + M_2PI / power * floorf(pContext->randGen->random() * power);
 
-    if (pAffineTP->x >= 0.0)
-      tau += split;
-    else
-      tau -= split;
-    sinht = sinhf(tau);
-    cosht = coshf(tau);
-    sins = sinf(sigma);
-    coss = cosf(sigma);
-    temp = cosht - coss;
-    pVarTP->x += pAmount * sinht / temp;
-    pVarTP->y += pAmount * sins / temp;
+		if (pAffineTP->x >= 0.0)
+			tau += split;
+		else
+			tau -= split;
+		sinht = JWF_SINH(tau);
+		cosht = JWF_COSH(tau);
+		sins = JWF_SIN(sigma);
+		coss = JWF_COS(sigma);
+		temp = cosht - coss;
+		pVarTP->x += pAmount * sinht / temp;
+		pVarTP->y += pAmount * sins / temp;
 
 		if (pContext->isPreserveZCoordinate) {
 			pVarTP->z += pAmount * pAffineTP->z;
@@ -84,13 +86,13 @@ private:
 	float sqrtf_safe(float x) {
 		if (x <= 0.0f)
 			return 0.0f;
-		return sqrtf(x);
+		return JWF_SQRT(x);
 	}
 
-  float rotate;
-  float power;
-  float move;
-  float split;
+	float rotate;
+	float power;
+	float move;
+	float split;
 };
 
 #endif // JWFVAR_BTRANSFORM_H_

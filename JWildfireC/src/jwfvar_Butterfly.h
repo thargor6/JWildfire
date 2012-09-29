@@ -30,16 +30,16 @@ public:
 		return "butterfly";
 	}
 
-	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
-    float wx = pAmount * 1.3029400317411197908970256609023f;
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
+		float wx = pAmount * 1.3029400317411197908970256609023f;
 
-    float y2 = pAffineTP->y * 2.0;
-    float r = wx * sqrtf(fabs(pAffineTP->y * pAffineTP->x) / (EPSILON + pAffineTP->x * pAffineTP->x + y2 * y2));
-    pVarTP->x += r * pAffineTP->x;
-    pVarTP->y += r * y2;
-    if (pContext->isPreserveZCoordinate) {
-      pVarTP->z += pAmount * pAffineTP->z;
-    }
+		float y2 = pAffineTP->y * 2.0;
+		float r = wx * JWF_SQRT(fabs(pAffineTP->y * pAffineTP->x) / (EPSILON + pAffineTP->x * pAffineTP->x + y2 * y2));
+		pVarTP->x += r * pAffineTP->x;
+		pVarTP->y += r * y2;
+		if (pContext->isPreserveZCoordinate) {
+			pVarTP->z += pAmount * pAffineTP->z;
+		}
 	}
 
 	ButterflyFunc* makeCopy() {

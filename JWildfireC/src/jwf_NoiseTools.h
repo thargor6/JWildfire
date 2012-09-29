@@ -20,10 +20,12 @@
 #ifndef __JWF_NOISE_TOOLS_H__
 #define __JWF_NOISE_TOOLS_H__
 
-float simplexNoise3D( float V[3] );
-float simplexDNoise3D( float V[3], float R[3] );
-float perlinNoise3D( float V[3], float aScale, float fScale, int octaves );
-float perlinDNoise3D( float V[3], float R[3], float aScale, float fScale, int octaves );
+#include "jwf_Math.h"
+
+JWF_FLOAT simplexNoise3D(JWF_FLOAT V[3]);
+JWF_FLOAT simplexDNoise3D(JWF_FLOAT V[3], JWF_FLOAT R[3]);
+JWF_FLOAT perlinNoise3D(JWF_FLOAT V[3], JWF_FLOAT aScale, JWF_FLOAT fScale, int octaves);
+JWF_FLOAT perlinDNoise3D(JWF_FLOAT V[3], JWF_FLOAT R[3], JWF_FLOAT aScale, JWF_FLOAT fScale, int octaves);
 
 // Cheap and cheerful vector definitions for 3D :-)
 // They just make reading vector code based on arrays

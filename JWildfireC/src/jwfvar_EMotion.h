@@ -23,8 +23,8 @@
 class EMotionFunc: public Variation {
 public:
 	EMotionFunc() {
-    move = 0.0f;
-    rotate = 0.0f;
+		move = 0.0f;
+		rotate = 0.0f;
 		initParameterNames(2, "move", "rotate");
 	}
 
@@ -32,7 +32,7 @@ public:
 		return "eMotion";
 	}
 
-	void setParameter(char *pName, float pValue) {
+	void setParameter(char *pName, JWF_FLOAT pValue) {
 		if (strcmp(pName, "move") == 0) {
 			move = pValue;
 		}
@@ -41,43 +41,43 @@ public:
 		}
 	}
 
-	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
-    float tmp = pAffineTP->y * pAffineTP->y + pAffineTP->x * pAffineTP->x + 1.0f;
-    float tmp2 = 2.0f * pAffineTP->x;
-    float xmax = (sqrtf_safe(tmp + tmp2) + sqrtf_safe(tmp - tmp2)) * 0.5f;
-    if (xmax < 1.0f)
-      xmax = 1.0f;
-    float sinhmu, coshmu;
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
+		float tmp = pAffineTP->y * pAffineTP->y + pAffineTP->x * pAffineTP->x + 1.0f;
+		float tmp2 = 2.0f * pAffineTP->x;
+		float xmax = (sqrtf_safe(tmp + tmp2) + sqrtf_safe(tmp - tmp2)) * 0.5f;
+		if (xmax < 1.0f)
+			xmax = 1.0f;
+		float sinhmu, coshmu;
 
-    float mu = acoshf(xmax); //  mu > 0
-    float t = pAffineTP->x / xmax;
+		float mu = acoshf(xmax); //  mu > 0
+		float t = pAffineTP->x / xmax;
 
-    if (t > 1.0f)
-      t = 1.0f;
-    else if (t < -1.0f)
-      t = -1.0f;
+		if (t > 1.0f)
+			t = 1.0f;
+		else if (t < -1.0f)
+			t = -1.0f;
 
-    float nu = acosf(t); // -Pi < nu < Pi
-    if (pAffineTP->y < 0.0f)
-      nu *= -1.0f;
+		float nu = acosf(t); // -Pi < nu < Pi
+		if (pAffineTP->y < 0.0f)
+			nu *= -1.0f;
 
-    if (nu < 0.0f) {
-      mu += move;
-    }
-    else {
-      mu -= move;
-    }
-    if (mu <= 0.0f) {
-      mu *= -1.0f;
-      nu *= -1.0f;
-    }
+		if (nu < 0.0f) {
+			mu += move;
+		}
+		else {
+			mu -= move;
+		}
+		if (mu <= 0.0f) {
+			mu *= -1.0f;
+			nu *= -1.0f;
+		}
 
-    nu += rotate;
+		nu += rotate;
 
-    sinhmu = sinhf(mu);
-    coshmu = coshf(mu);
-    pVarTP->x += pAmount * coshmu * cosf(nu);
-    pVarTP->y += pAmount * sinhmu * sinf(nu);
+		sinhmu = JWF_SINH(mu);
+		coshmu = JWF_COSH(mu);
+		pVarTP->x += pAmount * coshmu * JWF_COS(nu);
+		pVarTP->y += pAmount * sinhmu * JWF_SIN(nu);
 
 		if (pContext->isPreserveZCoordinate) {
 			pVarTP->z += pAmount * pAffineTP->z;
@@ -92,7 +92,7 @@ private:
 	float sqrtf_safe(float x) {
 		if (x <= 0.0f)
 			return 0.0f;
-		return sqrtf(x);
+		return JWF_SQRT(x);
 	}
 
 	float move;

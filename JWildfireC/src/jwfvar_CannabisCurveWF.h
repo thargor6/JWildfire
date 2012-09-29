@@ -31,29 +31,29 @@ public:
 		return "cannabiscurve_wf";
 	}
 
-	void setParameter(char *pName, float pValue) {
+	void setParameter(char *pName, JWF_FLOAT pValue) {
 		if (strcmp(pName, "filled") == 0) {
 			filled = FTOI(pValue);
 		}
 	}
 
-	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
-    float a= pAffineTP->getPrecalcAtan();
-    float r = pAffineTP->getPrecalcSqrt();
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
+		float a = pAffineTP->getPrecalcAtan();
+		float r = pAffineTP->getPrecalcSqrt();
 
-    // cannabis curve (http://mathworld.wolfram.com/CannabisCurve.html)
-    r = (1.0f + 9.0f / 10.0f * cosf(8.0f * a)) * (1.0f + 1.0f / 10.0f * cosf(24.0f * a)) * (9.0f / 10.0f + 1.0f / 10.0f * cosf(200.0f * a)) * (1.0f + sinf(a));
-    a += M_PI / 2.0f;
+		// cannabis curve (http://mathworld.wolfram.com/CannabisCurve.html)
+		r = (1.0f + 9.0f / 10.0f * JWF_COS(8.0f * a)) * (1.0f + 1.0f / 10.0f * JWF_COS(24.0f * a)) * (9.0f / 10.0f + 1.0f / 10.0f * JWF_COS(200.0f * a)) * (1.0f + JWF_SIN(a));
+		a += M_PI / 2.0f;
 
-    if (filled == 1) {
-      r *= pContext->randGen->random();
-    }
+		if (filled == 1) {
+			r *= pContext->randGen->random();
+		}
 
-    float nx = sinf(a) * r;
-    float ny = cosf(a) * r;
+		float nx = JWF_SIN(a) * r;
+		float ny = JWF_COS(a) * r;
 
-    pVarTP->x += pAmount * nx;
-    pVarTP->y += pAmount * ny;
+		pVarTP->x += pAmount * nx;
+		pVarTP->y += pAmount * ny;
 		if (pContext->isPreserveZCoordinate) {
 			pVarTP->z += pAmount * pAffineTP->z;
 		}

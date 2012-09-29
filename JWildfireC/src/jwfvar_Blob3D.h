@@ -23,9 +23,9 @@
 class Blob3DFunc: public Variation {
 public:
 	Blob3DFunc() {
-    low = 0.3f;
-    high = 1.2f;
-    waves = 6.0f;
+		low = 0.3f;
+		high = 1.2f;
+		waves = 6.0f;
 		initParameterNames(3, "low", "high", "waves");
 	}
 
@@ -33,7 +33,7 @@ public:
 		return "blob3D";
 	}
 
-	void setParameter(char *pName, float pValue) {
+	void setParameter(char *pName, JWF_FLOAT pValue) {
 		if (strcmp(pName, "low") == 0) {
 			low = pValue;
 		}
@@ -45,16 +45,16 @@ public:
 		}
 	}
 
-	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
-    float a = atan2f(pAffineTP->x, pAffineTP->y);
-    float r = sqrtf(pAffineTP->x * pAffineTP->x + pAffineTP->y * pAffineTP->y);
-    r = r * (low + (high - low) * (0.5f + 0.5f * sinf(waves * a)));
-    float nx = sinf(a) * r;
-    float ny = cosf(a) * r;
-    float nz = sinf(waves * a) * r;
-    pVarTP->x += pAmount * nx;
-    pVarTP->y += pAmount * ny;
-    pVarTP->z += pAmount * nz;
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
+		float a = atan2f(pAffineTP->x, pAffineTP->y);
+		float r = JWF_SQRT(pAffineTP->x * pAffineTP->x + pAffineTP->y * pAffineTP->y);
+		r = r * (low + (high - low) * (0.5f + 0.5f * JWF_SIN(waves * a)));
+		float nx = JWF_SIN(a) * r;
+		float ny = JWF_COS(a) * r;
+		float nz = JWF_SIN(waves * a) * r;
+		pVarTP->x += pAmount * nx;
+		pVarTP->y += pAmount * ny;
+		pVarTP->z += pAmount * nz;
 	}
 
 	Blob3DFunc* makeCopy() {

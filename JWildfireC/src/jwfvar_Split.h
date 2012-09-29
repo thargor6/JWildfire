@@ -32,7 +32,7 @@ public:
 		return "split";
 	}
 
-	void setParameter(char *pName, float pValue) {
+	void setParameter(char *pName, JWF_FLOAT pValue) {
 		if (strcmp(pName, "xsize") == 0) {
 			xsize = pValue;
 		}
@@ -41,20 +41,20 @@ public:
 		}
 	}
 
-	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
-    if (cosf(pAffineTP->x * xsize * M_PI) >= 0) {
-      pVarTP->y += pAmount * pAffineTP->y;
-    }
-    else {
-      pVarTP->y -= pAmount * pAffineTP->y;
-    }
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
+		if (cosf(pAffineTP->x * xsize * M_PI) >= 0) {
+			pVarTP->y += pAmount * pAffineTP->y;
+		}
+		else {
+			pVarTP->y -= pAmount * pAffineTP->y;
+		}
 
-    if (cosf(pAffineTP->y * ysize * M_PI) >= 0) {
-      pVarTP->x += pAmount * pAffineTP->x;
-    }
-    else {
-      pVarTP->x -= pAmount * pAffineTP->x;
-    }
+		if (cosf(pAffineTP->y * ysize * M_PI) >= 0) {
+			pVarTP->x += pAmount * pAffineTP->x;
+		}
+		else {
+			pVarTP->x -= pAmount * pAffineTP->x;
+		}
 		if (pContext->isPreserveZCoordinate) {
 			pVarTP->z += pAmount * pAffineTP->z;
 		}

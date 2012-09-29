@@ -32,7 +32,7 @@ public:
 		return "splits";
 	}
 
-	void setParameter(char *pName, float pValue) {
+	void setParameter(char *pName, JWF_FLOAT pValue) {
 		if (strcmp(pName, "x") == 0) {
 			x = pValue;
 		}
@@ -41,7 +41,7 @@ public:
 		}
 	}
 
-	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
 		if (pAffineTP->x >= 0.0f) {
 			pVarTP->x += pAmount * (pAffineTP->x + x);
 		}

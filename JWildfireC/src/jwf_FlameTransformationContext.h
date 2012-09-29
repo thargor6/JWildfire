@@ -22,7 +22,7 @@
 class FlameTransformationContext {
 public:
 	FlameTransformationContext(const int pPreserveZCoordinate) {
-		isPreserveZCoordinate=pPreserveZCoordinate;
+		isPreserveZCoordinate = pPreserveZCoordinate;
 		randGen = new RandGen();
 		randGen->init((int) (rand() * 666));
 	}
@@ -35,6 +35,5 @@ public:
 	bool isPreserveZCoordinate;
 	int threadIdx;
 };
-
 
 #endif // __JWF_FLAME_TRANSFORMATION_CONTEXT_H__

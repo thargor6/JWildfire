@@ -27,14 +27,14 @@ public:
 		yamp = 0.5f;
 		xlength = 1.0f;
 		ylength = 1.0f;
-		initParameterNames(4, "xamp", "yamp", "xlength","ylength");
+		initParameterNames(4, "xamp", "yamp", "xlength", "ylength");
 	}
 
 	const char* getName() const {
 		return "curve";
 	}
 
-	void setParameter(char *pName, float pValue) {
+	void setParameter(char *pName, JWF_FLOAT pValue) {
 		if (strcmp(pName, "xamp") == 0) {
 			xamp = pValue;
 		}
@@ -49,9 +49,9 @@ public:
 		}
 	}
 
-	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
-    pVarTP->x += pAmount * (pAffineTP->x + xamp * expf(-pAffineTP->y * pAffineTP->y / _pc_xlen));
-    pVarTP->y += pAmount * (pAffineTP->y + yamp * expf(-pAffineTP->x * pAffineTP->x / _pc_ylen));
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
+		pVarTP->x += pAmount * (pAffineTP->x + xamp * JWF_EXP(-pAffineTP->y * pAffineTP->y / _pc_xlen));
+		pVarTP->y += pAmount * (pAffineTP->y + yamp * JWF_EXP(-pAffineTP->x * pAffineTP->x / _pc_ylen));
 		if (pContext->isPreserveZCoordinate) {
 			pVarTP->z += pAmount * pAffineTP->z;
 		}
@@ -61,13 +61,13 @@ public:
 		return new CurveFunc(*this);
 	}
 
-	void init(FlameTransformationContext *pContext, XForm *pXForm, float pAmount) {
-	  _pc_xlen = xlength * xlength;
-	  _pc_ylen = ylength * ylength;
-	  if (_pc_xlen < 1E-20f)
-	    _pc_xlen = 1E-20f;
-	  if (_pc_ylen < 1E-20f)
-	    _pc_ylen = 1E-20f;
+	void init(FlameTransformationContext *pContext, XForm *pXForm, JWF_FLOAT pAmount) {
+		_pc_xlen = xlength * xlength;
+		_pc_ylen = ylength * ylength;
+		if (_pc_xlen < 1E-20f)
+			_pc_xlen = 1E-20f;
+		if (_pc_ylen < 1E-20f)
+			_pc_ylen = 1E-20f;
 	}
 
 private:

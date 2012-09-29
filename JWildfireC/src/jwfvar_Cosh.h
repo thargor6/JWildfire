@@ -29,16 +29,16 @@ public:
 		return "cosh";
 	}
 
-	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
-    float coshsin = sinf(pAffineTP->y);
-    float coshcos = cosf(pAffineTP->y);
-    float coshsinh = sinhf(pAffineTP->x);
-    float coshcosh = coshf(pAffineTP->x);
-    pVarTP->x += pAmount * coshcosh * coshcos;
-    pVarTP->y += pAmount * coshsinh * coshsin;
-    if (pContext->isPreserveZCoordinate) {
-      pVarTP->z += pAmount * pAffineTP->z;
-    }
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
+		float coshsin = JWF_SIN(pAffineTP->y);
+		float coshcos = JWF_COS(pAffineTP->y);
+		float coshsinh = JWF_SINH(pAffineTP->x);
+		float coshcosh = JWF_COSH(pAffineTP->x);
+		pVarTP->x += pAmount * coshcosh * coshcos;
+		pVarTP->y += pAmount * coshsinh * coshsin;
+		if (pContext->isPreserveZCoordinate) {
+			pVarTP->z += pAmount * pAffineTP->z;
+		}
 	}
 
 	CoshFunc* makeCopy() {

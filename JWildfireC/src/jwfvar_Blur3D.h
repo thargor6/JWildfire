@@ -29,29 +29,29 @@ public:
 		return "blur3D";
 	}
 
-	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
-    float angle = randGen->random() * twoPi;
-    float sina = sinf(angle);
-    float cosa = cosf(angle);
-    float r = pAmount * (gauss_rnd[0] + gauss_rnd[1] + gauss_rnd[2] + gauss_rnd[3] - 2.0f);
-    gauss_rnd[gauss_N] = randGen->random();
-    gauss_N = (gauss_N + 1) & 3;
-    angle = randGen->random() * M_PI;
-    double sinb = sinf(angle);
-    double cosb = cosf(angle);
-    pVarTP->x += r * sinb * cosa;
-    pVarTP->y += r * sinb * sina;
-    pVarTP->z += r * cosb;
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
+		float angle = randGen->random() * twoPi;
+		float sina = JWF_SIN(angle);
+		float cosa = JWF_COS(angle);
+		float r = pAmount * (gauss_rnd[0] + gauss_rnd[1] + gauss_rnd[2] + gauss_rnd[3] - 2.0f);
+		gauss_rnd[gauss_N] = randGen->random();
+		gauss_N = (gauss_N + 1) & 3;
+		angle = randGen->random() * M_PI;
+		double sinb = JWF_SIN(angle);
+		double cosb = JWF_COS(angle);
+		pVarTP->x += r * sinb * cosa;
+		pVarTP->y += r * sinb * sina;
+		pVarTP->z += r * cosb;
 	}
 
-	void init(FlameTransformationContext *pContext, XForm *pXForm, float pAmount) {
-		randGen=pContext->randGen;
-    gauss_rnd[0] = randGen->random();
-    gauss_rnd[1] = randGen->random();
-    gauss_rnd[2] = randGen->random();
-    gauss_rnd[3] = randGen->random();
-    gauss_N = 0;
-    twoPi=2 * M_PI;
+	void init(FlameTransformationContext *pContext, XForm *pXForm, JWF_FLOAT pAmount) {
+		randGen = pContext->randGen;
+		gauss_rnd[0] = randGen->random();
+		gauss_rnd[1] = randGen->random();
+		gauss_rnd[2] = randGen->random();
+		gauss_rnd[3] = randGen->random();
+		gauss_N = 0;
+		twoPi = 2 * M_PI;
 	}
 
 	Blur3DFunc* makeCopy() {
@@ -59,10 +59,10 @@ public:
 	}
 
 private:
-  float gauss_rnd[4];
-  float twoPi;
-  RandGen *randGen;
-  int gauss_N;
+	float gauss_rnd[4];
+	float twoPi;
+	RandGen *randGen;
+	int gauss_N;
 };
 
 #endif // JWFVAR_BLUR3D_H_

@@ -29,27 +29,27 @@ public:
 		return "edisc";
 	}
 
-	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
-    float tmp = pAffineTP->getPrecalcSumsq() + 1.0f;
-    float tmp2 = 2.0f * pAffineTP->x;
-    float r1 = sqrtf(tmp + tmp2);
-    float r2 = sqrtf(tmp - tmp2);
-    float xmax = (r1 + r2) * 0.5f;
-    float a1 = logf(xmax + sqrtf(xmax - 1.0));
-    float a2 = -acosf(pAffineTP->x / xmax);
-    float w = pAmount / 11.57034632f;
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
+		float tmp = pAffineTP->getPrecalcSumsq() + 1.0f;
+		float tmp2 = 2.0f * pAffineTP->x;
+		float r1 = JWF_SQRT(tmp + tmp2);
+		float r2 = JWF_SQRT(tmp - tmp2);
+		float xmax = (r1 + r2) * 0.5f;
+		float a1 = JWF_LOG(xmax + JWF_SQRT(xmax - 1.0));
+		float a2 = -acosf(pAffineTP->x / xmax);
+		float w = pAmount / 11.57034632f;
 
-    float snv = sinf(a1);
-    float csv = cosf(a1);
-    float snhu = sinhf(a2);
-    float cshu = coshf(a2);
+		float snv = JWF_SIN(a1);
+		float csv = JWF_COS(a1);
+		float snhu = JWF_SINH(a2);
+		float cshu = JWF_COSH(a2);
 
-    if (pAffineTP->y > 0.0) {
-      snv = -snv;
-    }
+		if (pAffineTP->y > 0.0) {
+			snv = -snv;
+		}
 
-    pVarTP->x += w * cshu * csv;
-    pVarTP->y += w * snhu * snv;
+		pVarTP->x += w * cshu * csv;
+		pVarTP->y += w * snhu * snv;
 		if (pContext->isPreserveZCoordinate) {
 			pVarTP->z += pAmount * pAffineTP->z;
 		}

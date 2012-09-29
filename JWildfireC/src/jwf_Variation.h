@@ -26,13 +26,13 @@
 
 class Variation {
 public:
-	float amount;
+	JWF_FLOAT amount;
 
 	Variation() {
-    parameterCount = 0;
-    parameterNames = NULL;
-    ressourceCount = 0;
-    ressourceNames = NULL;
+		parameterCount = 0;
+		parameterNames = NULL;
+		ressourceCount = 0;
+		ressourceNames = NULL;
 	}
 
 	virtual ~Variation() {
@@ -46,30 +46,31 @@ public:
 	}
 
 	char **getParameterNames() {
-    return parameterNames;
-	};
+		return parameterNames;
+	}
+	;
 
 	int getParameterCount() {
 		return parameterCount;
 	}
 
 	virtual void initParameterNames(int pCount, ...) {
-		if(pCount==0) {
-			parameterCount=0;
-			parameterNames=NULL;
+		if (pCount == 0) {
+			parameterCount = 0;
+			parameterNames = NULL;
 		}
 		else {
-			parameterNames=(char**)malloc(pCount*sizeof(char*));
-			parameterCount=pCount;
+			parameterNames = (char**) malloc(pCount * sizeof(char*));
+			parameterCount = pCount;
 			va_list list;
-			va_start ( list, pCount );
-			for (int i=0; i < pCount; i++) {
-				char *srcName=va_arg(list, char*);
-				int len=strlen(srcName);
-				char *dstName=(char*)malloc((len+1)*sizeof(char));
+			va_start( list, pCount);
+			for (int i = 0; i < pCount; i++) {
+				char *srcName = va_arg(list, char*);
+				int len = strlen(srcName);
+				char *dstName = (char*) malloc((len + 1) * sizeof(char));
 				memcpy(dstName, srcName, len);
-				dstName[len]='\0';
-				parameterNames[i]=dstName;
+				dstName[len] = '\0';
+				parameterNames[i] = dstName;
 			}
 			va_end(list);
 		}
@@ -84,34 +85,34 @@ public:
 	}
 
 	virtual void initRessourceNames(int pCount, ...) {
-		if(pCount==0) {
-			ressourceCount=0;
-			ressourceNames=NULL;
+		if (pCount == 0) {
+			ressourceCount = 0;
+			ressourceNames = NULL;
 		}
 		else {
-			ressourceNames=(char**)malloc(pCount*sizeof(char*));
-			ressourceCount=pCount;
+			ressourceNames = (char**) malloc(pCount * sizeof(char*));
+			ressourceCount = pCount;
 			va_list list;
-			va_start ( list, pCount );
-			for (int i=0; i < pCount; i++) {
-				char *srcName=va_arg(list, char*);
-				int len=strlen(srcName);
-				char *dstName=(char*)malloc((len+1)*sizeof(char));
+			va_start( list, pCount);
+			for (int i = 0; i < pCount; i++) {
+				char *srcName = va_arg(list, char*);
+				int len = strlen(srcName);
+				char *dstName = (char*) malloc((len + 1) * sizeof(char));
 				memcpy(dstName, srcName, len);
-				dstName[len]='\0';
-				ressourceNames[i]=dstName;
+				dstName[len] = '\0';
+				ressourceNames[i] = dstName;
 			}
 			va_end(list);
 		}
 	}
 
-	virtual void init(FlameTransformationContext *pContext, XForm *pXForm, float pAmount) {
+	virtual void init(FlameTransformationContext *pContext, XForm *pXForm, JWF_FLOAT pAmount) {
 
 	}
 
-	virtual void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) = 0;
+	virtual void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) = 0;
 
-	virtual void setParameter(char *pName, float pValue) {
+	virtual void setParameter(char *pName, JWF_FLOAT pValue) {
 
 	}
 

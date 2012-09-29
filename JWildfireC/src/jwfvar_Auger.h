@@ -23,10 +23,10 @@
 class AugerFunc: public Variation {
 public:
 	AugerFunc() {
-    freq = 1.00f;
-    weight = 0.5f;
-    sym = 0.1f;
-    scale = 0.9f;
+		freq = 1.00f;
+		weight = 0.5f;
+		sym = 0.1f;
+		scale = 0.9f;
 		initParameterNames(4, "freq", "weight", "sym", "scale");
 	}
 
@@ -34,7 +34,7 @@ public:
 		return "auger";
 	}
 
-	void setParameter(char *pName, float pValue) {
+	void setParameter(char *pName, JWF_FLOAT pValue) {
 		if (strcmp(pName, "freq") == 0) {
 			freq = pValue;
 		}
@@ -49,14 +49,14 @@ public:
 		}
 	}
 
-	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
-    float s = sinf(freq * pAffineTP->x);
-    float t = sinf(freq * pAffineTP->y);
-    float dy = pAffineTP->y + weight * (scale * s * 0.5f + fabsf(pAffineTP->y) * s);
-    float dx = pAffineTP->x + weight * (scale * t * 0.5f + fabsf(pAffineTP->x) * t);
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
+		float s = JWF_SIN(freq * pAffineTP->x);
+		float t = JWF_SIN(freq * pAffineTP->y);
+		float dy = pAffineTP->y + weight * (scale * s * 0.5f + JWF_FABS(pAffineTP->y) * s);
+		float dx = pAffineTP->x + weight * (scale * t * 0.5f + JWF_FABS(pAffineTP->x) * t);
 
-    pVarTP->x += pAmount * (pAffineTP->x + sym * (dx - pAffineTP->x));
-    pVarTP->y += pAmount * dy;
+		pVarTP->x += pAmount * (pAffineTP->x + sym * (dx - pAffineTP->x));
+		pVarTP->y += pAmount * dy;
 
 		if (pContext->isPreserveZCoordinate) {
 			pVarTP->z += pAmount * pAffineTP->z;
@@ -68,10 +68,10 @@ public:
 	}
 
 private:
-  float freq;
-  float weight;
-  float sym;
-  float scale;
+	float freq;
+	float weight;
+	float sym;
+	float scale;
 };
 
 #endif // JWFVAR_AUGER_H_

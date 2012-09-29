@@ -28,10 +28,10 @@ public:
 		return "square3D";
 	}
 
-	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
-    pVarTP->x += pAmount * (pContext->randGen->random() - 0.5f);
-    pVarTP->y += pAmount * (pContext->randGen->random() - 0.5f);
-    pVarTP->z += pAmount * (pContext->randGen->random() - 0.5f);
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
+		pVarTP->x += pAmount * (pContext->randGen->random() - 0.5f);
+		pVarTP->y += pAmount * (pContext->randGen->random() - 0.5f);
+		pVarTP->z += pAmount * (pContext->randGen->random() - 0.5f);
 	}
 
 	Square3DFunc* makeCopy() {

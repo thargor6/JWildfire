@@ -30,16 +30,16 @@ public:
 		return "disc";
 	}
 
-	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
-    float rPI = M_PI * sqrtf(pAffineTP->x * pAffineTP->x + pAffineTP->y * pAffineTP->y);
-    float sinr = sinf(rPI);
-    float cosr = cosf(rPI);
-    float r = pAmount * pAffineTP->getPrecalcAtan() / M_PI;
-    pVarTP->x += sinr * r;
-    pVarTP->y += cosr * r;
-    if (pContext->isPreserveZCoordinate) {
-      pVarTP->z += pAmount * pAffineTP->z;
-    }
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
+		float rPI = M_PI * JWF_SQRT(pAffineTP->x * pAffineTP->x + pAffineTP->y * pAffineTP->y);
+		float sinr = JWF_SIN(rPI);
+		float cosr = JWF_COS(rPI);
+		float r = pAmount * pAffineTP->getPrecalcAtan() / M_PI;
+		pVarTP->x += sinr * r;
+		pVarTP->y += cosr * r;
+		if (pContext->isPreserveZCoordinate) {
+			pVarTP->z += pAmount * pAffineTP->z;
+		}
 	}
 
 	DiscFunc* makeCopy() {

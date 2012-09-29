@@ -29,21 +29,21 @@ public:
 		return "csch";
 	}
 
-	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
-    float cschsin = sinf(pAffineTP->y);
-    float cschcos = cosf(pAffineTP->y);
-    float cschsinh = sinhf(pAffineTP->x);
-    float cschcosh = coshf(pAffineTP->x);
-    float d = (coshf(2.0f * pAffineTP->x) - cosf(2.0f * pAffineTP->y));
-    if (d == 0) {
-      return;
-    }
-    float cschden = 2.0f / d;
-    pVarTP->x += pAmount * cschden * cschsinh * cschcos;
-    pVarTP->y -= pAmount * cschden * cschcosh * cschsin;
-    if (pContext->isPreserveZCoordinate) {
-      pVarTP->z += pAmount * pAffineTP->z;
-    }
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
+		float cschsin = JWF_SIN(pAffineTP->y);
+		float cschcos = JWF_COS(pAffineTP->y);
+		float cschsinh = JWF_SINH(pAffineTP->x);
+		float cschcosh = JWF_COSH(pAffineTP->x);
+		float d = (coshf(2.0f * pAffineTP->x) - JWF_COS(2.0f * pAffineTP->y));
+		if (d == 0) {
+			return;
+		}
+		float cschden = 2.0f / d;
+		pVarTP->x += pAmount * cschden * cschsinh * cschcos;
+		pVarTP->y -= pAmount * cschden * cschcosh * cschsin;
+		if (pContext->isPreserveZCoordinate) {
+			pVarTP->z += pAmount * pAffineTP->z;
+		}
 	}
 
 	CschFunc* makeCopy() {

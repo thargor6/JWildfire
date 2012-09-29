@@ -22,10 +22,10 @@
 #define MAX_WIDTH 16000
 #define MIN_HEIGHT 16
 #define MAX_HEIGHT 16000
-#define MIN_FILTER_RADIUS 0.0f
-#define MAX_FILTER_RADIUS 100.0f
-#define MIN_DENSITY 1.0f
-#define MAX_DENSITY 1000000.0f
+#define MIN_FILTER_RADIUS 0.0
+#define MAX_FILTER_RADIUS 100.0
+#define MIN_DENSITY 1.0
+#define MAX_DENSITY 1000000.0
 
 #include "windows.h"
 
@@ -33,13 +33,13 @@ class AppSettings {
 public:
 	AppSettings() {
 		SYSTEM_INFO sysinfo;
-		GetSystemInfo( &sysinfo );
+		GetSystemInfo(&sysinfo);
 		maxThreadCount = sysinfo.dwNumberOfProcessors;
-		if(maxThreadCount<1)
-			maxThreadCount=1;
-		threadCount=maxThreadCount;
-		flameFilename=NULL;
-		outputFilename=NULL;
+		if (maxThreadCount < 1)
+			maxThreadCount = 1;
+		threadCount = maxThreadCount;
+		flameFilename = NULL;
+		outputFilename = NULL;
 		outputWidth = 800;
 		outputHeight = 600;
 		sampleDensity = 100.0;
@@ -47,22 +47,22 @@ public:
 	}
 
 	void setThreadCount(const int pThreadCount) {
-		if(pThreadCount>=MIN_THREAD_COUNT && pThreadCount<=maxThreadCount)
-			threadCount=pThreadCount;
+		if (pThreadCount >= MIN_THREAD_COUNT && pThreadCount <= maxThreadCount)
+			threadCount = pThreadCount;
 		else
-			printf("Invalid thread count %d (%d...%d)\n", pThreadCount,MIN_THREAD_COUNT,maxThreadCount);
+			printf("Invalid thread count %d (%d...%d)\n", pThreadCount, MIN_THREAD_COUNT, maxThreadCount);
 	}
 
 	void setOutputWidth(const int pOutputWidth) {
-		if(pOutputWidth>=MIN_WIDTH && pOutputWidth<=MAX_WIDTH)
-			outputWidth=pOutputWidth;
+		if (pOutputWidth >= MIN_WIDTH && pOutputWidth <= MAX_WIDTH)
+			outputWidth = pOutputWidth;
 		else
 			printf("Invalid output width %d (%d...%d)\n", pOutputWidth, MIN_WIDTH, MAX_WIDTH);
 	}
 
 	void setOutputHeight(const int pOutputHeight) {
-		if(pOutputHeight>=MIN_HEIGHT && pOutputHeight<=MAX_HEIGHT)
-			outputHeight=pOutputHeight;
+		if (pOutputHeight >= MIN_HEIGHT && pOutputHeight <= MAX_HEIGHT)
+			outputHeight = pOutputHeight;
 		else
 			printf("Invalid output width %d (%d...%d)\n", pOutputHeight, MIN_HEIGHT, MAX_HEIGHT);
 	}
@@ -87,113 +87,112 @@ public:
 		return outputFilename;
 	}
 
-  float getFilterRadius() {
-  	return filterRadius;
-  }
+	FLOAT getFilterRadius() {
+		return filterRadius;
+	}
 
-  float getSampleDensity() {
-  	return sampleDensity;
-  }
+	FLOAT getSampleDensity() {
+		return sampleDensity;
+	}
 
-	void setFilterRadius(const float pFilterRadius) {
-		if(pFilterRadius>=MIN_FILTER_RADIUS-EPSILON && pFilterRadius<=MAX_FILTER_RADIUS+EPSILON)
-			filterRadius=pFilterRadius;
+	void setFilterRadius(const FLOAT pFilterRadius) {
+		if (pFilterRadius >= MIN_FILTER_RADIUS - EPSILON && pFilterRadius <= MAX_FILTER_RADIUS + EPSILON)
+			filterRadius = pFilterRadius;
 		else
 			printf("Invalid filter radius %f (%f...%f)\n", pFilterRadius, MIN_FILTER_RADIUS, MAX_FILTER_RADIUS);
 	}
 
-	void setSampleDensity(const float pSampleDensity) {
-		if(pSampleDensity>=MIN_DENSITY-EPSILON && pSampleDensity<=MAX_DENSITY+EPSILON)
-			sampleDensity=pSampleDensity;
+	void setSampleDensity(const FLOAT pSampleDensity) {
+		if (pSampleDensity >= MIN_DENSITY - EPSILON && pSampleDensity <= MAX_DENSITY + EPSILON)
+			sampleDensity = pSampleDensity;
 		else
 			printf("Invalid sample density %f (%f...%f)\n", pSampleDensity, MIN_DENSITY, MAX_DENSITY);
 	}
 
 	int parseCmlLineArgs(int pArgc, char *pArgv[]) {
-	  int i=1;
-	  while(i<pArgc) {
-	    if(strcmp(pArgv[i],"-flameFilename")==0 || strcmp(pArgv[i],"-f")==0) {
-        if(i==pArgc-1) {
-  	    	printf("No value for parameter <%s> specified\n", pArgv[i]);
-  	    	return -1;
-        }
-        setParamValue(&flameFilename, pArgv[++i]);
-	    }
-	    else if(strcmp(pArgv[i],"-threadCount")==0 || strcmp(pArgv[i],"-t")==0) {
-        if(i==pArgc-1) {
-  	    	printf("No value for parameter <%s> specified\n", pArgv[i]);
-  	    	return -1;
-        }
-        setThreadCount(atoi(pArgv[++i]));
-	    }
-	    else if(strcmp(pArgv[i],"-outputFilename")==0 || strcmp(pArgv[i],"-o")==0) {
-        if(i==pArgc-1) {
-  	    	printf("No value for parameter <%s> specified\n", pArgv[i]);
-  	    	return -1;
-        }
-        setParamValue(&outputFilename, pArgv[++i]);
-	    }
-	    else if(strcmp(pArgv[i],"-outputWidth")==0 || strcmp(pArgv[i],"-w")==0) {
-        if(i==pArgc-1) {
-  	    	printf("No value for parameter <%s> specified\n", pArgv[i]);
-  	    	return -1;
-        }
-        setOutputWidth(atoi(pArgv[++i]));
-	    }
-	    else if(strcmp(pArgv[i],"-outputHeight")==0 || strcmp(pArgv[i],"-h")==0) {
-        if(i==pArgc-1) {
-  	    	printf("No value for parameter <%s> specified\n", pArgv[i]);
-  	    	return -1;
-        }
-        setOutputHeight(atoi(pArgv[++i]));
-	    }
-	    else if(strcmp(pArgv[i],"-sampleDensity")==0 || strcmp(pArgv[i],"-d")==0) {
-        if(i==pArgc-1) {
-  	    	printf("No value for parameter <%s> specified\n", pArgv[i]);
-  	    	return -1;
-        }
-        setSampleDensity(atof(pArgv[++i]));
-	    }
-	    else if(strcmp(pArgv[i],"-filterRadius")==0 || strcmp(pArgv[i],"-r")==0) {
-        if(i==pArgc-1) {
-  	    	printf("No value for parameter <%s> specified\n", pArgv[i]);
-  	    	return -1;
-        }
-        setFilterRadius(atof(pArgv[++i]));
-	    }
-	    else if(strcmp(pArgv[i],"-help")==0 || strcmp(pArgv[i],"-h")==0) {
- 	    	return -1;
-	    }
-	    else {
-	    	printf("Unkown parameter %s\n", pArgv[i]);
-	    }
-	  	i++;
-	  }
+		int i = 1;
+		while (i < pArgc) {
+			if (strcmp(pArgv[i], "-flameFilename") == 0 || strcmp(pArgv[i], "-f") == 0) {
+				if (i == pArgc - 1) {
+					printf("No value for parameter <%s> specified\n", pArgv[i]);
+					return -1;
+				}
+				setParamValue(&flameFilename, pArgv[++i]);
+			}
+			else if (strcmp(pArgv[i], "-threadCount") == 0 || strcmp(pArgv[i], "-t") == 0) {
+				if (i == pArgc - 1) {
+					printf("No value for parameter <%s> specified\n", pArgv[i]);
+					return -1;
+				}
+				setThreadCount(atoi(pArgv[++i]));
+			}
+			else if (strcmp(pArgv[i], "-outputFilename") == 0 || strcmp(pArgv[i], "-o") == 0) {
+				if (i == pArgc - 1) {
+					printf("No value for parameter <%s> specified\n", pArgv[i]);
+					return -1;
+				}
+				setParamValue(&outputFilename, pArgv[++i]);
+			}
+			else if (strcmp(pArgv[i], "-outputWidth") == 0 || strcmp(pArgv[i], "-w") == 0) {
+				if (i == pArgc - 1) {
+					printf("No value for parameter <%s> specified\n", pArgv[i]);
+					return -1;
+				}
+				setOutputWidth(atoi(pArgv[++i]));
+			}
+			else if (strcmp(pArgv[i], "-outputHeight") == 0 || strcmp(pArgv[i], "-h") == 0) {
+				if (i == pArgc - 1) {
+					printf("No value for parameter <%s> specified\n", pArgv[i]);
+					return -1;
+				}
+				setOutputHeight(atoi(pArgv[++i]));
+			}
+			else if (strcmp(pArgv[i], "-sampleDensity") == 0 || strcmp(pArgv[i], "-d") == 0) {
+				if (i == pArgc - 1) {
+					printf("No value for parameter <%s> specified\n", pArgv[i]);
+					return -1;
+				}
+				setSampleDensity(atof(pArgv[++i]));
+			}
+			else if (strcmp(pArgv[i], "-filterRadius") == 0 || strcmp(pArgv[i], "-r") == 0) {
+				if (i == pArgc - 1) {
+					printf("No value for parameter <%s> specified\n", pArgv[i]);
+					return -1;
+				}
+				setFilterRadius(atof(pArgv[++i]));
+			}
+			else if (strcmp(pArgv[i], "-help") == 0 || strcmp(pArgv[i], "-h") == 0) {
+				return -1;
+			}
+			else {
+				printf("Unkown parameter %s\n", pArgv[i]);
+			}
+			i++;
+		}
 
-    return validateSettings();
+		return validateSettings();
 	}
 
 	void showUsage(const char *exename) {
-		int pos=-1;
-		for(int i=strlen(exename)-1;i>=0;i--) {
-			if(exename[i]=='/' || exename[i]=='\\') {
-				pos=i;
+		int pos = -1;
+		for (int i = strlen(exename) - 1; i >= 0; i--) {
+			if (exename[i] == '/' || exename[i] == '\\') {
+				pos = i;
 				break;
 			}
 		}
-		printf("Usage: %s [-<param> <value>]\n", pos>0 ? &(exename[pos+1]) :  exename);
+		printf("Usage: %s [-<param> <value>]\n", pos > 0 ? &(exename[pos + 1]) : exename);
 		printf("Params:\n");
 		printf("  -threadCount (or -t): int (%d...%d)\n", MIN_THREAD_COUNT, maxThreadCount);
 		printf("  -flameFilename (or -f): string\n");
 		printf("  -outputFilename (or -o): string\n");
 		printf("  -outputWidth (or -w): int (%d...%d)\n", MIN_WIDTH, MAX_WIDTH);
 		printf("  -outputHeight (or -h): int (%d...%d)\n", MIN_HEIGHT, MAX_HEIGHT);
-		printf("  -filterRadius (or -r): float (%f...%f)\n", MIN_FILTER_RADIUS, MAX_FILTER_RADIUS);
-		printf("  -sampleDensity (or -d): float (%f...%f)\n", MIN_DENSITY, MAX_DENSITY);
+		printf("  -filterRadius (or -r): FLOAT (%f...%f)\n", MIN_FILTER_RADIUS, MAX_FILTER_RADIUS);
+		printf("  -sampleDensity (or -d): FLOAT (%f...%f)\n", MIN_DENSITY, MAX_DENSITY);
 		printf("  -help (or -h): void\n");
 		printf("Required param: -flameFilename\n");
 	}
-
 
 	void dump() {
 		printf("Settings {\n");
@@ -214,25 +213,25 @@ private:
 	int threadCount;
 	int outputWidth;
 	int outputHeight;
-	float sampleDensity;
-	float filterRadius;
+	FLOAT sampleDensity;
+	FLOAT filterRadius;
 
-  void setParamValue(char **pDst, char *pSrc) {
-    if((*pDst)!=NULL) {
-      free(*pDst);
-      *pDst=NULL;
-    }
-    *pDst=(char*)malloc((strlen(pSrc)+1)*sizeof(char));
-    strcpy(*pDst, pSrc);
-  }
+	void setParamValue(char **pDst, char *pSrc) {
+		if ((*pDst) != NULL) {
+			free(*pDst);
+			*pDst = NULL;
+		}
+		*pDst = (char*) malloc((strlen(pSrc) + 1) * sizeof(char));
+		strcpy(*pDst, pSrc);
+	}
 
-  int validateSettings() {
-  	if(flameFilename==NULL) {
-  		printf("No flame file specified\n");
-  		return -1;
-  	}
-  	return 0;
-  }
+	int validateSettings() {
+		if (flameFilename == NULL) {
+			printf("No flame file specified\n");
+			return -1;
+		}
+		return 0;
+	}
 
 };
 
@@ -247,5 +246,3 @@ private:
 #undef MIN_DENSITY
 
 #endif // JWF_APP_SETTINGS_H_
-
-

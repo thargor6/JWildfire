@@ -33,7 +33,7 @@ public:
 		return "epispiral";
 	}
 
-	void setParameter(char *pName, float pValue) {
+	void setParameter(char *pName, JWF_FLOAT pValue) {
 		if (strcmp(pName, "n") == 0) {
 			n = pValue;
 		}
@@ -45,25 +45,25 @@ public:
 		}
 	}
 
-	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
-    float theta = atan2f(pAffineTP->y, pAffineTP->x);
-    float t = -holes;
-    if (fabsf(thickness) > EPSILON) {
-      float d = cosf(n * theta);
-      if (d == 0) {
-        return;
-      }
-      t += (pContext->randGen->random() * thickness) * (1.0f / d);
-    }
-    else {
-      float d = cosf(n * theta);
-      if (d == 0) {
-        return;
-      }
-      t += 1.0f / d;
-    }
-    pVarTP->x += pAmount * t * cosf(theta);
-    pVarTP->y += pAmount * t * sinf(theta);
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
+		float theta = atan2f(pAffineTP->y, pAffineTP->x);
+		float t = -holes;
+		if (fabsf(thickness) > EPSILON) {
+			float d = JWF_COS(n * theta);
+			if (d == 0) {
+				return;
+			}
+			t += (pContext->randGen->random() * thickness) * (1.0f / d);
+		}
+		else {
+			float d = JWF_COS(n * theta);
+			if (d == 0) {
+				return;
+			}
+			t += 1.0f / d;
+		}
+		pVarTP->x += pAmount * t * JWF_COS(theta);
+		pVarTP->y += pAmount * t * JWF_SIN(theta);
 		if (pContext->isPreserveZCoordinate) {
 			pVarTP->z += pAmount * pAffineTP->z;
 		}
