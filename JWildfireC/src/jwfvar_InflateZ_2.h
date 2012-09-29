@@ -29,11 +29,11 @@ public:
 		return "inflateZ_2";
 	}
 
-	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
-    float val1 = pAffineTP->y * 2.0f;
-    float val2 = pAffineTP->x * 2.0f;
-    float aval = (val1 + val2) * 0.333333f;
-    pVarTP->z += pAmount * (0.25f - aval);
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
+		float val1 = pAffineTP->y * 2.0f;
+		float val2 = pAffineTP->x * 2.0f;
+		float aval = (val1 + val2) * 0.333333f;
+		pVarTP->z += pAmount * (0.25f - aval);
 	}
 
 	InflateZ_2Func* makeCopy() {

@@ -32,7 +32,7 @@ public:
 		return "modulus";
 	}
 
-	void setParameter(char *pName, float pValue) {
+	void setParameter(char *pName, JWF_FLOAT pValue) {
 		if (strcmp(pName, "x") == 0) {
 			x = pValue;
 		}
@@ -41,34 +41,34 @@ public:
 		}
 	}
 
-	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
-    if (pAffineTP->x > x) {
-      pVarTP->x += pAmount * (-x + fmodf(pAffineTP->x + x, _xr));
-    }
-    else if (pAffineTP->x < -x) {
-      pVarTP->x += pAmount * (x - fmodf(x - pAffineTP->x, _xr));
-    }
-    else {
-      pVarTP->x += pAmount * pAffineTP->x;
-    }
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
+		if (pAffineTP->x > x) {
+			pVarTP->x += pAmount * (-x + fmodf(pAffineTP->x + x, _xr));
+		}
+		else if (pAffineTP->x < -x) {
+			pVarTP->x += pAmount * (x - fmodf(x - pAffineTP->x, _xr));
+		}
+		else {
+			pVarTP->x += pAmount * pAffineTP->x;
+		}
 
-    if (pAffineTP->y > y) {
-      pVarTP->y += pAmount * (-y + fmodf(pAffineTP->y + y, _yr));
-    }
-    else if (pAffineTP->y < -y) {
-      pVarTP->y += pAmount * (y - fmodf(y - pAffineTP->y, _yr));
-    }
-    else {
-      pVarTP->y += pAmount * pAffineTP->y;
-    }
+		if (pAffineTP->y > y) {
+			pVarTP->y += pAmount * (-y + fmodf(pAffineTP->y + y, _yr));
+		}
+		else if (pAffineTP->y < -y) {
+			pVarTP->y += pAmount * (y - fmodf(y - pAffineTP->y, _yr));
+		}
+		else {
+			pVarTP->y += pAmount * pAffineTP->y;
+		}
 		if (pContext->isPreserveZCoordinate) {
 			pVarTP->z += pAmount * pAffineTP->z;
 		}
 	}
 
-	void init(FlameTransformationContext *pContext, XForm *pXForm, float pAmount) {
-    _xr = 2.0f * x;
-    _yr = 2.0f * y;
+	void init(FlameTransformationContext *pContext, XForm *pXForm, JWF_FLOAT pAmount) {
+		_xr = 2.0f * x;
+		_yr = 2.0f * y;
 	}
 
 	ModulusFunc* makeCopy() {

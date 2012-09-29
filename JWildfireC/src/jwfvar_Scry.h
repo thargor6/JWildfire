@@ -29,18 +29,18 @@ public:
 		return "scry";
 	}
 
-	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
-    float t = pAffineTP->x * pAffineTP->x + pAffineTP->y * pAffineTP->y;
-    float d = (sqrtf(t) * (t + 1.0f / pAmount));
-    if (d == 0) {
-      return;
-    }
-    float r = 1.0f / d;
-    pVarTP->x += pAffineTP->x * r;
-    pVarTP->y += pAffineTP->y * r;
-    if (pContext->isPreserveZCoordinate) {
-      pVarTP->z += pAmount * pAffineTP->z;
-    }
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
+		float t = pAffineTP->x * pAffineTP->x + pAffineTP->y * pAffineTP->y;
+		float d = (sqrtf(t) * (t + 1.0f / pAmount));
+		if (d == 0) {
+			return;
+		}
+		float r = 1.0f / d;
+		pVarTP->x += pAffineTP->x * r;
+		pVarTP->y += pAffineTP->y * r;
+		if (pContext->isPreserveZCoordinate) {
+			pVarTP->z += pAmount * pAffineTP->z;
+		}
 	}
 
 	ScryFunc* makeCopy() {

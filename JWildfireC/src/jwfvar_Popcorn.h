@@ -29,20 +29,20 @@ public:
 		return "popcorn";
 	}
 
-	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
-    float dx = tanf(3 * pAffineTP->y);
-    if (dx != dx)
-      dx = 0.0;
-    float dy = tanf(3 * pAffineTP->x);
-    if (dy != dy)
-      dy = 0.0;
-    float nx = pAffineTP->x + pXForm->coeff20 * sinf(dx);
-    float ny = pAffineTP->y + pXForm->coeff21 * sinf(dy);
-    pVarTP->x += pAmount * nx;
-    pVarTP->y += pAmount * ny;
-    if (pContext->isPreserveZCoordinate) {
-      pVarTP->z += pAmount * pAffineTP->z;
-    }
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
+		float dx = tanf(3 * pAffineTP->y);
+		if (dx != dx)
+			dx = 0.0;
+		float dy = tanf(3 * pAffineTP->x);
+		if (dy != dy)
+			dy = 0.0;
+		float nx = pAffineTP->x + pXForm->coeff20 * JWF_SIN(dx);
+		float ny = pAffineTP->y + pXForm->coeff21 * JWF_SIN(dy);
+		pVarTP->x += pAmount * nx;
+		pVarTP->y += pAmount * ny;
+		if (pContext->isPreserveZCoordinate) {
+			pVarTP->z += pAmount * pAffineTP->z;
+		}
 	}
 
 	PopcornFunc* makeCopy() {

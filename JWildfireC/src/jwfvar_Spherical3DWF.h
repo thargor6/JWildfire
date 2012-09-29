@@ -32,7 +32,7 @@ public:
 		return "spherical3D_wf";
 	}
 
-	void setParameter(char *pName, float pValue) {
+	void setParameter(char *pName, JWF_FLOAT pValue) {
 		if (strcmp(pName, "invert") == 0) {
 			invert = pValue;
 		}
@@ -41,29 +41,29 @@ public:
 		}
 	}
 
-	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
 		float r;
-    if (_regularForm) {
-      r = pAmount / (pAffineTP->x * pAffineTP->x + pAffineTP->y * pAffineTP->y + pAffineTP->z * pAffineTP->z + EPSILON);
-    }
-    else {
-      r = pAmount / powf(pAffineTP->x * pAffineTP->x + pAffineTP->y * pAffineTP->y + pAffineTP->z * pAffineTP->z + EPSILON, exponent / 2.0f);
-    }
-    if (_dontInvert) {
-      pVarTP->x += pAffineTP->x * r;
-      pVarTP->y += pAffineTP->y * r;
-      pVarTP->z += pAffineTP->z * r;
-    }
-    else {
-      pVarTP->x -= pAffineTP->x * r;
-      pVarTP->y -= pAffineTP->y * r;
-      pVarTP->z -= pAffineTP->z * r;
-    }
+		if (_regularForm) {
+			r = pAmount / (pAffineTP->x * pAffineTP->x + pAffineTP->y * pAffineTP->y + pAffineTP->z * pAffineTP->z + EPSILON);
+		}
+		else {
+			r = pAmount / JWF_POW(pAffineTP->x * pAffineTP->x + pAffineTP->y * pAffineTP->y + pAffineTP->z * pAffineTP->z + EPSILON, exponent / 2.0f);
+		}
+		if (_dontInvert) {
+			pVarTP->x += pAffineTP->x * r;
+			pVarTP->y += pAffineTP->y * r;
+			pVarTP->z += pAffineTP->z * r;
+		}
+		else {
+			pVarTP->x -= pAffineTP->x * r;
+			pVarTP->y -= pAffineTP->y * r;
+			pVarTP->z -= pAffineTP->z * r;
+		}
 	}
 
-	void init(FlameTransformationContext *pContext, XForm *pXForm, float pAmount) {
-    _regularForm = fabs(exponent - 2.0f) < EPSILON;
-    _dontInvert =fabs(invert)<EPSILON;
+	void init(FlameTransformationContext *pContext, XForm *pXForm, JWF_FLOAT pAmount) {
+		_regularForm = JWF_FABS(exponent - 2.0f) < EPSILON;
+		_dontInvert = JWF_FABS(invert) < EPSILON;
 	}
 
 	Spherical3DWFFunc* makeCopy() {
@@ -74,7 +74,7 @@ private:
 	float invert;
 	float exponent;
 
-  bool _dontInvert;
+	bool _dontInvert;
 	bool _regularForm;
 };
 

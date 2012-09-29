@@ -23,10 +23,10 @@
 class NgonFunc: public Variation {
 public:
 	NgonFunc() {
-    circle = 1.0f;
-    corners = 2.0f;
-    power = 3.0f;
-    sides = 5.0f;
+		circle = 1.0f;
+		corners = 2.0f;
+		power = 3.0f;
+		sides = 5.0f;
 		initParameterNames(4, "circle", "corners", "power", "sides");
 	}
 
@@ -34,7 +34,7 @@ public:
 		return "ngon";
 	}
 
-	void setParameter(char *pName, float pValue) {
+	void setParameter(char *pName, JWF_FLOAT pValue) {
 		if (strcmp(pName, "circle") == 0) {
 			circle = pValue;
 		}
@@ -49,23 +49,23 @@ public:
 		}
 	}
 
-	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
-    float r_factor, theta, phi, b, amp;
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
+		float r_factor, theta, phi, b, amp;
 
-    r_factor = powf(pAffineTP->getPrecalcSumsq(), power / 2.0f);
+		r_factor = JWF_POW(pAffineTP->getPrecalcSumsq(), power / 2.0f);
 
-    theta = pAffineTP->getPrecalcAtanYX();
-    b = 2.0f * M_PI / sides;
+		theta = pAffineTP->getPrecalcAtanYX();
+		b = 2.0f * M_PI / sides;
 
-    phi = theta - (b * floorf(theta / b));
-    if (phi > b / 2.0f)
-      phi -= b;
+		phi = theta - (b * floorf(theta / b));
+		if (phi > b / 2.0f)
+			phi -= b;
 
-    amp = corners * (1.0f / (cosf(phi) + EPSILON) - 1.0f) + circle;
-    amp /= (r_factor + EPSILON);
+		amp = corners * (1.0f / (cosf(phi) + EPSILON) - 1.0f) + circle;
+		amp /= (r_factor + EPSILON);
 
-    pVarTP->x += pAmount * pAffineTP->x * amp;
-    pVarTP->y += pAmount * pAffineTP->y * amp;
+		pVarTP->x += pAmount * pAffineTP->x * amp;
+		pVarTP->y += pAmount * pAffineTP->y * amp;
 		if (pContext->isPreserveZCoordinate) {
 			pVarTP->z += pAmount * pAffineTP->z;
 		}
@@ -76,10 +76,10 @@ public:
 	}
 
 private:
-  float circle;
-  float corners;
-  float power;
-  float sides;
+	float circle;
+	float corners;
+	float power;
+	float sides;
 };
 
 #endif // JWFVAR_NGON_H_

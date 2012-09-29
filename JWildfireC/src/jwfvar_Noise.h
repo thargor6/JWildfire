@@ -30,16 +30,16 @@ public:
 		return "noise";
 	}
 
-	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
-    float r = pContext->randGen->random() * 2.0f * M_PI;
-    float sinr = sinf(r);
-    float cosr = cosf(r);
-    r = pAmount * pContext->randGen->random();
-    pVarTP->x += pAffineTP->x * r * cosr;
-    pVarTP->y += pAffineTP->y * r * sinr;
-    if (pContext->isPreserveZCoordinate) {
-      pVarTP->z += pAmount * pAffineTP->z;
-    }
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
+		float r = pContext->randGen->random() * 2.0f * M_PI;
+		float sinr = JWF_SIN(r);
+		float cosr = JWF_COS(r);
+		r = pAmount * pContext->randGen->random();
+		pVarTP->x += pAffineTP->x * r * cosr;
+		pVarTP->y += pAffineTP->y * r * sinr;
+		if (pContext->isPreserveZCoordinate) {
+			pVarTP->z += pAmount * pAffineTP->z;
+		}
 	}
 
 	NoiseFunc* makeCopy() {

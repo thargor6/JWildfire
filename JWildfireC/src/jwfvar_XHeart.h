@@ -32,7 +32,7 @@ public:
 		return "xheart";
 	}
 
-	void setParameter(char *pName, float pValue) {
+	void setParameter(char *pName, JWF_FLOAT pValue) {
 		if (strcmp(pName, "angle") == 0) {
 			angle = pValue;
 		}
@@ -41,22 +41,22 @@ public:
 		}
 	}
 
-	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
-    float r2_4 = pAffineTP->x * pAffineTP->x + pAffineTP->y * pAffineTP->y + 4;
-    if (r2_4 == 0)
-      r2_4 = 1;
-    float bx = 4.0f / r2_4, by = _rat / r2_4;
-    float x = _cosa * (bx * pAffineTP->x) - _sina * (by * pAffineTP->y);
-    float y = _sina * (bx * pAffineTP->x) + _cosa * (by * pAffineTP->y);
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
+		float r2_4 = pAffineTP->x * pAffineTP->x + pAffineTP->y * pAffineTP->y + 4;
+		if (r2_4 == 0)
+			r2_4 = 1;
+		float bx = 4.0f / r2_4, by = _rat / r2_4;
+		float x = _cosa * (bx * pAffineTP->x) - _sina * (by * pAffineTP->y);
+		float y = _sina * (bx * pAffineTP->x) + _cosa * (by * pAffineTP->y);
 
-    if (x > 0) {
-      pVarTP->x += pAmount * x;
-      pVarTP->y += pAmount * y;
-    }
-    else {
-      pVarTP->x += pAmount * x;
-      pVarTP->y += -pAmount * y;
-    }
+		if (x > 0) {
+			pVarTP->x += pAmount * x;
+			pVarTP->y += pAmount * y;
+		}
+		else {
+			pVarTP->x += pAmount * x;
+			pVarTP->y += -pAmount * y;
+		}
 		if (pContext->isPreserveZCoordinate) {
 			pVarTP->z += pAmount * pAffineTP->z;
 		}
@@ -66,20 +66,19 @@ public:
 		return new XHeartFunc(*this);
 	}
 
-	void init(FlameTransformationContext *pContext, XForm *pXForm, float pAmount) {
-    float ang = M_PI_4 + (0.5f * M_PI_4 * angle);
-    _sina = sin(ang);
-    _cosa = cos(ang);
-    _rat = 6.0f + 2.0f * ratio;
+	void init(FlameTransformationContext *pContext, XForm *pXForm, JWF_FLOAT pAmount) {
+		float ang = M_PI_4 + (0.5f * M_PI_4 * angle);
+		_sina = JWF_SIN(ang);
+		_cosa = JWF_COS(ang);
+		_rat = 6.0f + 2.0f * ratio;
 	}
-
 
 private:
 	float angle;
 	float ratio;
-  float _sina;
-  float _cosa;
-  float _rat;
+	float _sina;
+	float _cosa;
+	float _rat;
 };
 
 #endif // JWFVAR_XHEART_H_

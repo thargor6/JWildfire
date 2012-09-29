@@ -29,11 +29,11 @@ public:
 		return "hemisphere";
 	}
 
-	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
-    float r = pAmount / sqrt(pAffineTP->x * pAffineTP->x + pAffineTP->y * pAffineTP->y + 1.0f);
-    pVarTP->x += pAffineTP->x * r;
-    pVarTP->y += pAffineTP->y * r;
-    pVarTP->z += r;
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
+		float r = pAmount / JWF_SQRT(pAffineTP->x * pAffineTP->x + pAffineTP->y * pAffineTP->y + 1.0f);
+		pVarTP->x += pAffineTP->x * r;
+		pVarTP->y += pAffineTP->y * r;
+		pVarTP->z += r;
 	}
 
 	HemisphereFunc* makeCopy() {

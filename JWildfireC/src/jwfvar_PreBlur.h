@@ -34,7 +34,7 @@ public:
 		return -1;
 	}
 
-	void init(FlameTransformationContext *pContext, XForm *pXForm, float pAmount) {
+	void init(FlameTransformationContext *pContext, XForm *pXForm, JWF_FLOAT pAmount) {
 		_gauss_rnd[0] = pContext->randGen->random();
 		_gauss_rnd[1] = pContext->randGen->random();
 		_gauss_rnd[2] = pContext->randGen->random();
@@ -42,10 +42,10 @@ public:
 		_gauss_N = 0;
 	}
 
-	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
 		float r = pContext->randGen->random() * 2 * M_PI;
-		float sina = sinf(r);
-		float cosa = cosf(r);
+		float sina = JWF_SIN(r);
+		float cosa = JWF_COS(r);
 		r = pAmount * (_gauss_rnd[0] + _gauss_rnd[1] + _gauss_rnd[2] + _gauss_rnd[3] - 2.0f);
 		_gauss_rnd[_gauss_N] = pContext->randGen->random();
 		_gauss_N = (_gauss_N + 1) & 3;

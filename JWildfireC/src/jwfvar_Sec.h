@@ -29,21 +29,21 @@ public:
 		return "sec";
 	}
 
-	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
-    float secsin = sinf(pAffineTP->x);
-    float seccos = cosf(pAffineTP->x);
-    float secsinh = sinhf(pAffineTP->y);
-    float seccosh = coshf(pAffineTP->y);
-    float d = (cosf(2.0f * pAffineTP->x) + coshf(2.0f * pAffineTP->y));
-    if (d == 0) {
-      return;
-    }
-    float secden = 2.0f / d;
-    pVarTP->x += pAmount * secden * seccos * seccosh;
-    pVarTP->y += pAmount * secden * secsin * secsinh;
-    if (pContext->isPreserveZCoordinate) {
-      pVarTP->z += pAmount * pAffineTP->z;
-    }
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
+		float secsin = JWF_SIN(pAffineTP->x);
+		float seccos = JWF_COS(pAffineTP->x);
+		float secsinh = JWF_SINH(pAffineTP->y);
+		float seccosh = JWF_COSH(pAffineTP->y);
+		float d = (cosf(2.0f * pAffineTP->x) + JWF_COSH(2.0f * pAffineTP->y));
+		if (d == 0) {
+			return;
+		}
+		float secden = 2.0f / d;
+		pVarTP->x += pAmount * secden * seccos * seccosh;
+		pVarTP->y += pAmount * secden * secsin * secsinh;
+		if (pContext->isPreserveZCoordinate) {
+			pVarTP->z += pAmount * pAffineTP->z;
+		}
 	}
 
 	SecFunc* makeCopy() {

@@ -29,15 +29,15 @@ public:
 		return "swirl";
 	}
 
-	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
-    float r2 = pAffineTP->x * pAffineTP->x + pAffineTP->y * pAffineTP->y;
-    float c1 = sinf(r2);
-    float c2 = cosf(r2);
-    pVarTP->x += pAmount * (c1 * pAffineTP->x - c2 * pAffineTP->y);
-    pVarTP->y += pAmount * (c2 * pAffineTP->x + c1 * pAffineTP->y);
-    if (pContext->isPreserveZCoordinate) {
-      pVarTP->z += pAmount * pAffineTP->z;
-    }
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
+		float r2 = pAffineTP->x * pAffineTP->x + pAffineTP->y * pAffineTP->y;
+		float c1 = JWF_SIN(r2);
+		float c2 = JWF_COS(r2);
+		pVarTP->x += pAmount * (c1 * pAffineTP->x - c2 * pAffineTP->y);
+		pVarTP->y += pAmount * (c2 * pAffineTP->x + c1 * pAffineTP->y);
+		if (pContext->isPreserveZCoordinate) {
+			pVarTP->z += pAmount * pAffineTP->z;
+		}
 	}
 
 	SwirlFunc* makeCopy() {

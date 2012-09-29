@@ -28,12 +28,12 @@ public:
 		return "log";
 	}
 
-	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
-    pVarTP->x += pAmount * 0.5f * logf(pAffineTP->getPrecalcSumsq());
-    pVarTP->y += pAmount * pAffineTP->getPrecalcAtanYX();
-    if (pContext->isPreserveZCoordinate) {
-      pVarTP->z += pAmount * pAffineTP->z;
-    }
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
+		pVarTP->x += pAmount * 0.5f * JWF_LOG(pAffineTP->getPrecalcSumsq());
+		pVarTP->y += pAmount * pAffineTP->getPrecalcAtanYX();
+		if (pContext->isPreserveZCoordinate) {
+			pVarTP->z += pAmount * pAffineTP->z;
+		}
 	}
 
 	LogFunc* makeCopy() {

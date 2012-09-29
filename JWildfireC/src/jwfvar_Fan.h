@@ -29,22 +29,22 @@ public:
 		return "fan";
 	}
 
-	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
-    float dx = M_PI * pXForm->coeff20 * pXForm->coeff20 + EPSILON;
-    float dx2 = dx / 2;
-    float a;
-    if ((pAffineTP->getPrecalcAtan() + pXForm->coeff21 - ((int) ((pAffineTP->getPrecalcAtan() + pXForm->coeff21) / dx)) * dx) > dx2)
-      a = pAffineTP->getPrecalcAtan() - dx2;
-    else
-      a = pAffineTP->getPrecalcAtan() + dx2;
-    float sinr = sinf(a);
-    float cosr = cosf(a);
-    float r = pAmount * sqrtf(pAffineTP->x * pAffineTP->x + pAffineTP->y * pAffineTP->y);
-    pVarTP->x += r * cosr;
-    pVarTP->y += r * sinr;
-    if (pContext->isPreserveZCoordinate) {
-      pVarTP->z += pAmount * pAffineTP->z;
-    }
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
+		float dx = M_PI * pXForm->coeff20 * pXForm->coeff20 + EPSILON;
+		float dx2 = dx / 2;
+		float a;
+		if ((pAffineTP->getPrecalcAtan() + pXForm->coeff21 - ((int) ((pAffineTP->getPrecalcAtan() + pXForm->coeff21) / dx)) * dx) > dx2)
+			a = pAffineTP->getPrecalcAtan() - dx2;
+		else
+			a = pAffineTP->getPrecalcAtan() + dx2;
+		float sinr = JWF_SIN(a);
+		float cosr = JWF_COS(a);
+		float r = pAmount * JWF_SQRT(pAffineTP->x * pAffineTP->x + pAffineTP->y * pAffineTP->y);
+		pVarTP->x += r * cosr;
+		pVarTP->y += r * sinr;
+		if (pContext->isPreserveZCoordinate) {
+			pVarTP->z += pAmount * pAffineTP->z;
+		}
 	}
 
 	FanFunc* makeCopy() {

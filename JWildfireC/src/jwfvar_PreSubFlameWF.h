@@ -23,7 +23,8 @@
 
 class PreSubFlameWFFunc: public SubFlameWFFunc {
 public:
-	PreSubFlameWFFunc(): SubFlameWFFunc() {
+	PreSubFlameWFFunc() :
+			SubFlameWFFunc() {
 	}
 
 	~PreSubFlameWFFunc() {
@@ -33,11 +34,10 @@ public:
 		return "pre_subflame_wf";
 	}
 
-	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
 		SubFlameWFFunc::transform(pContext, pXForm, pAffineTP, pVarTP, pAmount);
-    pAffineTP->assign(pVarTP);
+		pAffineTP->assign(pVarTP);
 	}
-
 
 	PreSubFlameWFFunc* makeCopy() {
 		return new PreSubFlameWFFunc(*this);

@@ -29,24 +29,24 @@ public:
 		return "foci_3D";
 	}
 
-	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
-    float expx = expf(pAffineTP->x) * 0.5f;
-    float expnx = 0.25f / expx;
-    float kikr, boot;
-    boot = pAffineTP->z;
-    kikr = atan2f(pAffineTP->y, pAffineTP->x);
-    if (boot == 0.0) {
-      boot = kikr;
-    }
-    float siny = sinf(pAffineTP->y);
-    float cosy = cosf(pAffineTP->y);
-    float sinz = sinf(boot);
-    float cosz = cosf(boot);
-    float tmp = pAmount / (expx + expnx - (cosy * cosz));
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
+		float expx = JWF_EXP(pAffineTP->x) * 0.5f;
+		float expnx = 0.25f / expx;
+		float kikr, boot;
+		boot = pAffineTP->z;
+		kikr = atan2f(pAffineTP->y, pAffineTP->x);
+		if (boot == 0.0) {
+			boot = kikr;
+		}
+		float siny = JWF_SIN(pAffineTP->y);
+		float cosy = JWF_COS(pAffineTP->y);
+		float sinz = JWF_SIN(boot);
+		float cosz = JWF_COS(boot);
+		float tmp = pAmount / (expx + expnx - (cosy * cosz));
 
-    pVarTP->x += (expx - expnx) * tmp;
-    pVarTP->y += siny * tmp;
-    pVarTP->z += sinz * tmp;
+		pVarTP->x += (expx - expnx) * tmp;
+		pVarTP->y += siny * tmp;
+		pVarTP->z += sinz * tmp;
 	}
 
 	Foci3DFunc* makeCopy() {

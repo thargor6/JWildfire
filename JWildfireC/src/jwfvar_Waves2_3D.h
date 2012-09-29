@@ -31,7 +31,7 @@ public:
 		return "waves2_3D";
 	}
 
-	void setParameter(char *pName, float pValue) {
+	void setParameter(char *pName, JWF_FLOAT pValue) {
 		if (strcmp(pName, "freq") == 0) {
 			freq = pValue;
 		}
@@ -40,11 +40,11 @@ public:
 		}
 	}
 
-	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
-    float avgxy = (pAffineTP->x + pAffineTP->y) / 2.0f;
-    pVarTP->x += pAmount * (pAffineTP->x + scale * sinf(pAffineTP->y * freq));
-    pVarTP->y += pAmount * (pAffineTP->y + scale * sinf(pAffineTP->x * freq));
-    pVarTP->z += pAmount * (pAffineTP->z + scale * sinf(avgxy * freq));
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
+		float avgxy = (pAffineTP->x + pAffineTP->y) / 2.0f;
+		pVarTP->x += pAmount * (pAffineTP->x + scale * JWF_SIN(pAffineTP->y * freq));
+		pVarTP->y += pAmount * (pAffineTP->y + scale * JWF_SIN(pAffineTP->x * freq));
+		pVarTP->z += pAmount * (pAffineTP->z + scale * JWF_SIN(avgxy * freq));
 	}
 
 	Waves2_3DFunc* makeCopy() {

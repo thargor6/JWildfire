@@ -29,25 +29,25 @@ public:
 		return "foci";
 	}
 
-	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
-    float expx = expf(pAffineTP->x) * 0.5f;
-    float expnx = 0.25f / expx;
-    if (expx <= EPSILON || expnx <= EPSILON) {
-      return;
-    }
-    float siny = sinf(pAffineTP->y);
-    float cosy = cosf(pAffineTP->y);
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
+		float expx = JWF_EXP(pAffineTP->x) * 0.5f;
+		float expnx = 0.25f / expx;
+		if (expx <= EPSILON || expnx <= EPSILON) {
+			return;
+		}
+		float siny = JWF_SIN(pAffineTP->y);
+		float cosy = JWF_COS(pAffineTP->y);
 
-    float tmp = (expx + expnx - cosy);
-    if (tmp == 0)
-      tmp = 1e-6f;
-    tmp = pAmount / tmp;
+		float tmp = (expx + expnx - cosy);
+		if (tmp == 0)
+			tmp = 1e-6f;
+		tmp = pAmount / tmp;
 
-    pVarTP->x += (expx - expnx) * tmp;
-    pVarTP->y += siny * tmp;
-    if (pContext->isPreserveZCoordinate) {
-      pVarTP->z += pAmount * pAffineTP->z;
-    }
+		pVarTP->x += (expx - expnx) * tmp;
+		pVarTP->y += siny * tmp;
+		if (pContext->isPreserveZCoordinate) {
+			pVarTP->z += pAmount * pAffineTP->z;
+		}
 	}
 
 	FociFunc* makeCopy() {

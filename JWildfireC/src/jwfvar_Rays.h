@@ -29,15 +29,15 @@ public:
 		return "rays";
 	}
 
-	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
-    float ang = pAmount * pContext->randGen->random() * M_PI;
-    float r = pAmount / (pAffineTP->getPrecalcSumsq() + EPSILON);
-    float tanr = pAmount * tanf(ang) * r;
-    pVarTP->x += tanr * cosf(pAffineTP->x);
-    pVarTP->y += tanr * sinf(pAffineTP->y);
-    if (pContext->isPreserveZCoordinate) {
-      pVarTP->z += pAmount * pAffineTP->z;
-    }
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
+		float ang = pAmount * pContext->randGen->random() * M_PI;
+		float r = pAmount / (pAffineTP->getPrecalcSumsq() + EPSILON);
+		float tanr = pAmount * tanf(ang) * r;
+		pVarTP->x += tanr * JWF_COS(pAffineTP->x);
+		pVarTP->y += tanr * JWF_SIN(pAffineTP->y);
+		if (pContext->isPreserveZCoordinate) {
+			pVarTP->z += pAmount * pAffineTP->z;
+		}
 	}
 
 	RaysFunc* makeCopy() {

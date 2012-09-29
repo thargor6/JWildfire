@@ -29,10 +29,10 @@ public:
 	}
 
 	const char* getName() const {
-		return "bipolar";
+		return "flower";
 	}
 
-	void setParameter(char *pName, float pValue) {
+	void setParameter(char *pName, JWF_FLOAT pValue) {
 		if (strcmp(pName, "holes") == 0) {
 			holes = pValue;
 		}
@@ -41,9 +41,13 @@ public:
 		}
 	}
 
-	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
 		float theta = pAffineTP->getPrecalcAtanYX();
-		float r = pAmount * (pContext->randGen->random() - holes) * cosf(petals * theta) / pAffineTP->getPrecalcSqrt();
+		double d = pAffineTP->getPrecalcSqrt();
+		if (d == 0) {
+			return;
+		}
+		float r = pAmount * (pContext->randGen->random() - holes) * JWF_COS(petals * theta) / d;
 		pVarTP->x += r * pAffineTP->x;
 		pVarTP->y += r * pAffineTP->y;
 		if (pContext->isPreserveZCoordinate) {

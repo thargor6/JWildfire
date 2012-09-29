@@ -32,7 +32,7 @@ public:
 		return "fan2";
 	}
 
-	void setParameter(char *pName, float pValue) {
+	void setParameter(char *pName, JWF_FLOAT pValue) {
 		if (strcmp(pName, "x") == 0) {
 			x = pValue;
 		}
@@ -41,31 +41,31 @@ public:
 		}
 	}
 
-	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
-    float r = sqrtf(pAffineTP->x * pAffineTP->x + pAffineTP->y * pAffineTP->y);
-    float angle;
-    if ((pAffineTP->x < -EPSILON) || (pAffineTP->x > EPSILON) || (pAffineTP->y < -EPSILON) || (pAffineTP->y > EPSILON)) {
-      angle = atan2f(pAffineTP->x, pAffineTP->y);
-    }
-    else {
-      angle = 0.0f;
-    }
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
+		float r = JWF_SQRT(pAffineTP->x * pAffineTP->x + pAffineTP->y * pAffineTP->y);
+		float angle;
+		if ((pAffineTP->x < -EPSILON) || (pAffineTP->x > EPSILON) || (pAffineTP->y < -EPSILON) || (pAffineTP->y > EPSILON)) {
+			angle = atan2f(pAffineTP->x, pAffineTP->y);
+		}
+		else {
+			angle = 0.0f;
+		}
 
-    float dy = y;
-    float dx = M_PI * (x * x) + EPSILON;
-    float dx2 = dx * 0.5f;
+		float dy = y;
+		float dx = M_PI * (x * x) + EPSILON;
+		float dx2 = dx * 0.5f;
 
-    float t = angle + dy - (int) ((angle + dy) / dx) * dx;
-    float a;
-    if (t > dx2) {
-      a = angle - dx2;
-    }
-    else {
-      a = angle + dx2;
-    }
+		float t = angle + dy - (int) ((angle + dy) / dx) * dx;
+		float a;
+		if (t > dx2) {
+			a = angle - dx2;
+		}
+		else {
+			a = angle + dx2;
+		}
 
-    pVarTP->x += pAmount * r * sinf(a);
-    pVarTP->y += pAmount * r * cosf(a);
+		pVarTP->x += pAmount * r * JWF_SIN(a);
+		pVarTP->y += pAmount * r * JWF_COS(a);
 		if (pContext->isPreserveZCoordinate) {
 			pVarTP->z += pAmount * pAffineTP->z;
 		}

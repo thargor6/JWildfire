@@ -30,13 +30,13 @@ public:
 		return "polar2";
 	}
 
-	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
-    float p2v = pAmount / M_PI;
-    pVarTP->x += p2v * pAffineTP->getPrecalcAtan();
-    pVarTP->y += p2v / 2.0f * log(pAffineTP->getPrecalcSumsq());
-    if (pContext->isPreserveZCoordinate) {
-      pVarTP->z += pAmount * pAffineTP->z;
-    }
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
+		float p2v = pAmount / M_PI;
+		pVarTP->x += p2v * pAffineTP->getPrecalcAtan();
+		pVarTP->y += p2v / 2.0f * JWF_LOG(pAffineTP->getPrecalcSumsq());
+		if (pContext->isPreserveZCoordinate) {
+			pVarTP->z += pAmount * pAffineTP->z;
+		}
 	}
 
 	Polar2Func* makeCopy() {

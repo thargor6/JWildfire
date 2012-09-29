@@ -29,21 +29,21 @@ public:
 		return "sech";
 	}
 
-	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
-    float sechsin = sinf(pAffineTP->y);
-    float sechcos = cosf(pAffineTP->y);
-    float sechsinh = sinhf(pAffineTP->x);
-    float sechcosh = coshf(pAffineTP->x);
-    double d = (cosf(2.0f * pAffineTP->y) + coshf(2.0f * pAffineTP->x));
-    if (d == 0) {
-      return;
-    }
-    float sechden = 2.0f / d;
-    pVarTP->x += pAmount * sechden * sechcos * sechcosh;
-    pVarTP->y -= pAmount * sechden * sechsin * sechsinh;
-    if (pContext->isPreserveZCoordinate) {
-      pVarTP->z += pAmount * pAffineTP->z;
-    }
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
+		float sechsin = JWF_SIN(pAffineTP->y);
+		float sechcos = JWF_COS(pAffineTP->y);
+		float sechsinh = JWF_SINH(pAffineTP->x);
+		float sechcosh = JWF_COSH(pAffineTP->x);
+		double d = (cosf(2.0f * pAffineTP->y) + JWF_COSH(2.0f * pAffineTP->x));
+		if (d == 0) {
+			return;
+		}
+		float sechden = 2.0f / d;
+		pVarTP->x += pAmount * sechden * sechcos * sechcosh;
+		pVarTP->y -= pAmount * sechden * sechsin * sechsinh;
+		if (pContext->isPreserveZCoordinate) {
+			pVarTP->z += pAmount * pAffineTP->z;
+		}
 	}
 
 	SechFunc* makeCopy() {

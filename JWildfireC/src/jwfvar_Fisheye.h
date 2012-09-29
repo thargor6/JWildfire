@@ -29,11 +29,11 @@ public:
 		return "fisheye";
 	}
 
-	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
-    float r = sqrtf(pAffineTP->x * pAffineTP->x + pAffineTP->y * pAffineTP->y);
-    r = 2.0f * r / (r + 1.0f);
-    pVarTP->x += pAmount * r * pAffineTP->getPrecalcCosA();
-    pVarTP->y += pAmount * r * pAffineTP->getPrecalcSinA();
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
+		float r = JWF_SQRT(pAffineTP->x * pAffineTP->x + pAffineTP->y * pAffineTP->y);
+		r = 2.0f * r / (r + 1.0f);
+		pVarTP->x += pAmount * r * pAffineTP->getPrecalcCosA();
+		pVarTP->y += pAmount * r * pAffineTP->getPrecalcSinA();
 		if (pContext->isPreserveZCoordinate) {
 			pVarTP->z += pAmount * pAffineTP->z;
 		}

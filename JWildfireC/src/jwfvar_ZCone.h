@@ -28,8 +28,8 @@ public:
 		return "zcone";
 	}
 
-	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
-		pVarTP->z += pAmount * sqrtf(pAffineTP->x * pAffineTP->x + pAffineTP->y * pAffineTP->y);
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
+		pVarTP->z += pAmount * JWF_SQRT(pAffineTP->x * pAffineTP->x + pAffineTP->y * pAffineTP->y);
 	}
 
 	ZConeFunc* makeCopy() {

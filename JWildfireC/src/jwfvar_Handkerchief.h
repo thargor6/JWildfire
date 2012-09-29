@@ -29,14 +29,14 @@ public:
 		return "handkerchief";
 	}
 
-	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
-    float angle = pAffineTP->getPrecalcAtan();
-    float r = sqrtf(pAffineTP->x * pAffineTP->x + pAffineTP->y * pAffineTP->y);
-    pVarTP->x += pAmount * (sinf(angle + r) * r);
-    pVarTP->y += pAmount * (cosf(angle - r) * r);
-    if (pContext->isPreserveZCoordinate) {
-      pVarTP->z += pAmount * pAffineTP->z;
-    }
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
+		float angle = pAffineTP->getPrecalcAtan();
+		float r = JWF_SQRT(pAffineTP->x * pAffineTP->x + pAffineTP->y * pAffineTP->y);
+		pVarTP->x += pAmount * (sinf(angle + r) * r);
+		pVarTP->y += pAmount * (cosf(angle - r) * r);
+		if (pContext->isPreserveZCoordinate) {
+			pVarTP->z += pAmount * pAffineTP->z;
+		}
 	}
 
 	HandkerchiefFunc* makeCopy() {

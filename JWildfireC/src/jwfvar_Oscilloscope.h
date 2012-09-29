@@ -27,14 +27,14 @@ public:
 		frequency = M_PI;
 		amplitude = 1.0f;
 		damping = 0.0f;
-		initParameterNames(4, "separation", "frequency", "amplitude","damping");
+		initParameterNames(4, "separation", "frequency", "amplitude", "damping");
 	}
 
 	const char* getName() const {
 		return "oscilloscope";
 	}
 
-	void setParameter(char *pName, float pValue) {
+	void setParameter(char *pName, JWF_FLOAT pValue) {
 		if (strcmp(pName, "separation") == 0) {
 			separation = pValue;
 		}
@@ -49,31 +49,31 @@ public:
 		}
 	}
 
-	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
-    float t;
-    if (_noDamping) {
-      t = amplitude * cosf(_tpf * pAffineTP->x) + separation;
-    }
-    else {
-      t = amplitude * expf(-fabs(pAffineTP->x) * damping) * cosf(_tpf * pAffineTP->x) + separation;
-    }
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
+		float t;
+		if (_noDamping) {
+			t = amplitude * JWF_COS(_tpf * pAffineTP->x) + separation;
+		}
+		else {
+			t = amplitude * JWF_EXP(-fabs(pAffineTP->x) * damping) * JWF_COS(_tpf * pAffineTP->x) + separation;
+		}
 
-    if (fabs(pAffineTP->y) <= t) {
-      pVarTP->x += pAmount * pAffineTP->x;
-      pVarTP->y -= pAmount * pAffineTP->y;
-    }
-    else {
-      pVarTP->x += pAmount * pAffineTP->x;
-      pVarTP->y += pAmount * pAffineTP->y;
-    }
+		if (fabs(pAffineTP->y) <= t) {
+			pVarTP->x += pAmount * pAffineTP->x;
+			pVarTP->y -= pAmount * pAffineTP->y;
+		}
+		else {
+			pVarTP->x += pAmount * pAffineTP->x;
+			pVarTP->y += pAmount * pAffineTP->y;
+		}
 		if (pContext->isPreserveZCoordinate) {
 			pVarTP->z += pAmount * pAffineTP->z;
 		}
 	}
 
-	void init(FlameTransformationContext *pContext, XForm *pXForm, float pAmount) {
-    _tpf = 2.0f * M_PI * frequency;
-    _noDamping=fabs(damping) <= EPSILON;
+	void init(FlameTransformationContext *pContext, XForm *pXForm, JWF_FLOAT pAmount) {
+		_tpf = 2.0f * M_PI * frequency;
+		_noDamping = JWF_FABS(damping) <= EPSILON;
 	}
 
 	OscilloscopeFunc* makeCopy() {

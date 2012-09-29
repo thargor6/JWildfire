@@ -38,7 +38,7 @@ public:
 		return "lissajous";
 	}
 
-	void setParameter(char *pName, float pValue) {
+	void setParameter(char *pName, JWF_FLOAT pValue) {
 		if (strcmp(pName, "tmin") == 0) {
 			tmin = pValue;
 		}
@@ -62,11 +62,11 @@ public:
 		}
 	}
 
-	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
 		float t = (tmax - tmin) * pContext->randGen->random() + tmin;
 		float y = pContext->randGen->random() - 0.5f;
-		float x1 = sinf(a * t + d);
-		float y1 = sinf(b * t);
+		float x1 = JWF_SIN(a * t + d);
+		float y1 = JWF_SIN(b * t);
 		pVarTP->x += pAmount * (x1 + c * t + e * y);
 		pVarTP->y += pAmount * (y1 + c * t + e * y);
 		if (pContext->isPreserveZCoordinate) {

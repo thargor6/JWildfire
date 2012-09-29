@@ -31,20 +31,20 @@ public:
 		return "epispiral_wf";
 	}
 
-	void setParameter(char *pName, float pValue) {
+	void setParameter(char *pName, JWF_FLOAT pValue) {
 		if (strcmp(pName, "waves") == 0) {
 			waves = pValue;
 		}
 	}
 
-	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
-    float a = atan2f(pAffineTP->x, pAffineTP->y);
-    float r = sqrtf(pAffineTP->x * pAffineTP->x + pAffineTP->y * pAffineTP->y);
-    r = 0.5 / cosf(waves * a);
-    float nx = sinf(a) * r;
-    float ny = cosf(a) * r;
-    pVarTP->x += pAmount * nx;
-    pVarTP->y += pAmount * ny;
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
+		float a = atan2f(pAffineTP->x, pAffineTP->y);
+		float r = JWF_SQRT(pAffineTP->x * pAffineTP->x + pAffineTP->y * pAffineTP->y);
+		r = 0.5 / JWF_COS(waves * a);
+		float nx = JWF_SIN(a) * r;
+		float ny = JWF_COS(a) * r;
+		pVarTP->x += pAmount * nx;
+		pVarTP->y += pAmount * ny;
 		if (pContext->isPreserveZCoordinate) {
 			pVarTP->z += pAmount * pAffineTP->z;
 		}

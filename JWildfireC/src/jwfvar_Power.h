@@ -29,13 +29,13 @@ public:
 		return "power";
 	}
 
-	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
-    float r = pAmount * powf(pAffineTP->getPrecalcSqrt(), pAffineTP->getPrecalcSinA());
-    pVarTP->x += r * pAffineTP->getPrecalcCosA();
-    pVarTP->y += r * pAffineTP->getPrecalcSinA();
-    if (pContext->isPreserveZCoordinate) {
-      pVarTP->z += pAmount * pAffineTP->z;
-    }
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
+		float r = pAmount * JWF_POW(pAffineTP->getPrecalcSqrt(), pAffineTP->getPrecalcSinA());
+		pVarTP->x += r * pAffineTP->getPrecalcCosA();
+		pVarTP->y += r * pAffineTP->getPrecalcSinA();
+		if (pContext->isPreserveZCoordinate) {
+			pVarTP->z += pAmount * pAffineTP->z;
+		}
 	}
 
 	PowerFunc* makeCopy() {

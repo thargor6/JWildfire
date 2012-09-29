@@ -32,7 +32,7 @@ public:
 		return "perspective";
 	}
 
-	void setParameter(char *pName, float pValue) {
+	void setParameter(char *pName, JWF_FLOAT pValue) {
 		if (strcmp(pName, "angle") == 0) {
 			angle = pValue;
 		}
@@ -41,14 +41,14 @@ public:
 		}
 	}
 
-	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
-    float  d = (dist - pAffineTP->y * _vsin);
-    if (d == 0) {
-      return;
-    }
-    float t = 1.0f / d;
-    pVarTP->x += pAmount * dist * pAffineTP->x * t;
-    pVarTP->y += pAmount * _vfcos * pAffineTP->y * t;
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
+		float d = (dist - pAffineTP->y * _vsin);
+		if (d == 0) {
+			return;
+		}
+		float t = 1.0f / d;
+		pVarTP->x += pAmount * dist * pAffineTP->x * t;
+		pVarTP->y += pAmount * _vfcos * pAffineTP->y * t;
 		if (pContext->isPreserveZCoordinate) {
 			pVarTP->z += pAmount * pAffineTP->z;
 		}
@@ -58,10 +58,10 @@ public:
 		return new PerspectiveFunc(*this);
 	}
 
-	virtual void init(FlameTransformationContext *pContext, XForm *pXForm, float pAmount) {
-    float ang = angle * M_PI / 2.0f;
-    _vsin = sinf(ang);
-    _vfcos = dist * cosf(ang);
+	virtual void init(FlameTransformationContext *pContext, XForm *pXForm, JWF_FLOAT pAmount) {
+		float ang = angle * M_PI / 2.0f;
+		_vsin = JWF_SIN(ang);
+		_vfcos = dist * JWF_COS(ang);
 	}
 
 private:

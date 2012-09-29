@@ -29,10 +29,10 @@ public:
 		return "inflateZ_3";
 	}
 
-	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
-    float ang = atan2f(pAffineTP->y, pAffineTP->x);
-    float val1 = 0.2f * (M_PI - ang) * cosf(3.0f * ang + (pAffineTP->y - pAffineTP->x));
-    pVarTP->z += pAmount * val1;
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
+		float ang = atan2f(pAffineTP->y, pAffineTP->x);
+		float val1 = 0.2f * (M_PI - ang) * JWF_COS(3.0f * ang + (pAffineTP->y - pAffineTP->x));
+		pVarTP->z += pAmount * val1;
 	}
 
 	InflateZ_3Func* makeCopy() {

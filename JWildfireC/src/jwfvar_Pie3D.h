@@ -33,7 +33,7 @@ public:
 		return "pie3D";
 	}
 
-	void setParameter(char *pName, float pValue) {
+	void setParameter(char *pName, JWF_FLOAT pValue) {
 		if (strcmp(pName, "slices") == 0) {
 			slices = pValue;
 		}
@@ -45,15 +45,15 @@ public:
 		}
 	}
 
-	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
-    int sl = (int) (pContext->randGen->random() * slices + 0.5f);
-    float a = rotation + 2.0 * M_PI * (sl + pContext->randGen->random() * thickness) / slices;
-    float r = pAmount * pContext->randGen->random();
-    double sina = sinf(a);
-    double cosa = cosf(a);
-    pVarTP->x += r * cosa;
-    pVarTP->y += r * sina;
-    pVarTP->z += r * sinf(r);
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
+		int sl = (int) (pContext->randGen->random() * slices + 0.5f);
+		float a = rotation + 2.0 * M_PI * (sl + pContext->randGen->random() * thickness) / slices;
+		float r = pAmount * pContext->randGen->random();
+		double sina = JWF_SIN(a);
+		double cosa = JWF_COS(a);
+		pVarTP->x += r * cosa;
+		pVarTP->y += r * sina;
+		pVarTP->z += r * JWF_SIN(r);
 	}
 
 	Pie3DFunc* makeCopy() {

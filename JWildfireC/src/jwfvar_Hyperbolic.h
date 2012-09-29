@@ -29,13 +29,13 @@ public:
 		return "hyperbolic";
 	}
 
-	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
-    float r = pAffineTP->getPrecalcSqrt();
-    pVarTP->x += pAmount * pAffineTP->getPrecalcSinA() / r;
-    pVarTP->y += pAmount * pAffineTP->getPrecalcCosA() * r;
-    if (pContext->isPreserveZCoordinate) {
-      pVarTP->z += pAmount * pAffineTP->z;
-    }
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
+		float r = pAffineTP->getPrecalcSqrt();
+		pVarTP->x += pAmount * pAffineTP->getPrecalcSinA() / r;
+		pVarTP->y += pAmount * pAffineTP->getPrecalcCosA() * r;
+		if (pContext->isPreserveZCoordinate) {
+			pVarTP->z += pAmount * pAffineTP->z;
+		}
 	}
 
 	HyperbolicFunc* makeCopy() {

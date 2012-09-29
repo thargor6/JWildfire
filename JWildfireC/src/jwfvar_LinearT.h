@@ -32,7 +32,7 @@ public:
 		return "linearT3D";
 	}
 
-	void setParameter(char *pName, float pValue) {
+	void setParameter(char *pName, JWF_FLOAT pValue) {
 		if (strcmp(pName, "powX") == 0) {
 			powX = pValue;
 		}
@@ -41,12 +41,12 @@ public:
 		}
 	}
 
-	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
-    pVarTP->x += sgn(pAffineTP->x) * powf(fabs(pAffineTP->x), powX) * pAmount;
-    pVarTP->y += sgn(pAffineTP->y) * powf(fabs(pAffineTP->y), powY) * pAmount;
-    if (pContext->isPreserveZCoordinate) {
-      pVarTP->z += pAmount * pAffineTP->z;
-    }
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
+		pVarTP->x += sgn(pAffineTP->x) * JWF_POW(fabs(pAffineTP->x), powX) * pAmount;
+		pVarTP->y += sgn(pAffineTP->y) * JWF_POW(fabs(pAffineTP->y), powY) * pAmount;
+		if (pContext->isPreserveZCoordinate) {
+			pVarTP->z += pAmount * pAffineTP->z;
+		}
 	}
 
 	LinearTFunc* makeCopy() {
@@ -54,12 +54,12 @@ public:
 	}
 
 private:
-  float sgn(float arg) {
-    if (arg > 0)
-      return 1.0f;
-    else
-     return -1.0f;
-  }
+	float sgn(float arg) {
+		if (arg > 0)
+			return 1.0f;
+		else
+			return -1.0f;
+	}
 
 	float powX;
 	float powY;

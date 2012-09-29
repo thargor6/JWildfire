@@ -29,22 +29,22 @@ public:
 		return "twintrian";
 	}
 
-	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
-    float r = pContext->randGen->random() * pAmount * pAffineTP->getPrecalcSqrt();
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
+		float r = pContext->randGen->random() * pAmount * pAffineTP->getPrecalcSqrt();
 
-    float sinr = sinf(r);
-    float cosr = cosf(r);
-    float diff = log10f(sinr * sinr) + cosr;
+		float sinr = JWF_SIN(r);
+		float cosr = JWF_COS(r);
+		float diff = JWF_LOG10(sinr * sinr) + cosr;
 
-    if (fabsf(diff) < EPSILON) {
-      diff = -30.0f;
-    }
+		if (fabsf(diff) < EPSILON) {
+			diff = -30.0f;
+		}
 
-    pVarTP->x += pAmount * pAffineTP->x * diff;
-    pVarTP->y += pAmount * pAffineTP->x * (diff - sinr * M_PI);
-    if (pContext->isPreserveZCoordinate) {
-      pVarTP->z += pAmount * pAffineTP->z;
-    }
+		pVarTP->x += pAmount * pAffineTP->x * diff;
+		pVarTP->y += pAmount * pAffineTP->x * (diff - sinr * M_PI);
+		if (pContext->isPreserveZCoordinate) {
+			pVarTP->z += pAmount * pAffineTP->z;
+		}
 	}
 
 	TwintrianFunc* makeCopy() {

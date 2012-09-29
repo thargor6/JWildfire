@@ -29,28 +29,28 @@ public:
 		return "unpolar";
 	}
 
-	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
-    float r = expf(pAffineTP->y);
-    float s = sinf(pAffineTP->x);
-    float c = cosf(pAffineTP->x);
-    pVarTP->y += vvar_2 * r * c;
-    pVarTP->x += vvar_2 * r * s;
-    if (pContext->isPreserveZCoordinate) {
-      pVarTP->z += pAmount * pAffineTP->z;
-    }
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
+		float r = JWF_EXP(pAffineTP->y);
+		float s = JWF_SIN(pAffineTP->x);
+		float c = JWF_COS(pAffineTP->x);
+		pVarTP->y += vvar_2 * r * c;
+		pVarTP->x += vvar_2 * r * s;
+		if (pContext->isPreserveZCoordinate) {
+			pVarTP->z += pAmount * pAffineTP->z;
+		}
 	}
 
 	UnpolarFunc* makeCopy() {
 		return new UnpolarFunc(*this);
 	}
 
-	void init(FlameTransformationContext *pContext, XForm *pXForm, float pAmount) {
-    vvar = pAmount / M_PI;
-    vvar_2 = vvar * 0.5f;
+	void init(FlameTransformationContext *pContext, XForm *pXForm, JWF_FLOAT pAmount) {
+		vvar = pAmount / M_PI;
+		vvar_2 = vvar * 0.5f;
 	}
 
 private:
-  float vvar, vvar_2;
+	float vvar, vvar_2;
 
 };
 

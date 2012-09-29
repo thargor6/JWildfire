@@ -29,12 +29,12 @@ public:
 		return "sinusoidal";
 	}
 
-	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
-    pVarTP->x += pAmount * sinf(pAffineTP->x);
-    pVarTP->y += pAmount * sinf(pAffineTP->y);
-    if (pContext->isPreserveZCoordinate) {
-      pVarTP->z += pAmount * pAffineTP->z;
-    }
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
+		pVarTP->x += pAmount * JWF_SIN(pAffineTP->x);
+		pVarTP->y += pAmount * JWF_SIN(pAffineTP->y);
+		if (pContext->isPreserveZCoordinate) {
+			pVarTP->z += pAmount * pAffineTP->z;
+		}
 	}
 
 	SinusoidalFunc* makeCopy() {

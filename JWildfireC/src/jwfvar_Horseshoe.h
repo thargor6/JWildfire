@@ -29,14 +29,14 @@ public:
 		return "horseshoe";
 	}
 
-	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
-    float sinA = pAffineTP->getPrecalcSinA();
-    float cosA = pAffineTP->getPrecalcCosA();
-    pVarTP->x += pAmount * (sinA * pAffineTP->x - cosA * pAffineTP->y);
-    pVarTP->y += pAmount * (cosA * pAffineTP->x + sinA * pAffineTP->y);
-    if (pContext->isPreserveZCoordinate) {
-      pVarTP->z += pAmount * pAffineTP->z;
-    }
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
+		float sinA = pAffineTP->getPrecalcSinA();
+		float cosA = pAffineTP->getPrecalcCosA();
+		pVarTP->x += pAmount * (sinA * pAffineTP->x - cosA * pAffineTP->y);
+		pVarTP->y += pAmount * (cosA * pAffineTP->x + sinA * pAffineTP->y);
+		if (pContext->isPreserveZCoordinate) {
+			pVarTP->z += pAmount * pAffineTP->z;
+		}
 	}
 
 	HorseshoeFunc* makeCopy() {

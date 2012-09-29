@@ -24,8 +24,8 @@ class JuliascopeFunc: public Variation {
 public:
 
 	JuliascopeFunc() {
-		power=3.0f;
-		dist=1.0f;
+		power = 3.0f;
+		dist = 1.0f;
 		initParameterNames(2, "power", "dist");
 	}
 
@@ -33,7 +33,7 @@ public:
 		return "juliascope";
 	}
 
-	void setParameter(char *pName, float pValue) {
+	void setParameter(char *pName, JWF_FLOAT pValue) {
 		if (strcmp(pName, "power") == 0) {
 			power = pValue;
 		}
@@ -42,24 +42,24 @@ public:
 		}
 	}
 
-	void init(FlameTransformationContext *pContext, XForm *pXForm, float pAmount) {
-    _absPower = abs(FTOI(power));
-    _cPower = dist / power * 0.5f;
+	void init(FlameTransformationContext *pContext, XForm *pXForm, JWF_FLOAT pAmount) {
+		_absPower = abs(FTOI(power));
+		_cPower = dist / power * 0.5f;
 	}
 
-	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
-    int rnd = pContext->randGen->random(_absPower);
-    float a;
-    if ((rnd & 1) == 0)
-      a = (2 * M_PI * rnd + atan2f(pAffineTP->y, pAffineTP->x)) / power;
-    else
-      a = (2 * M_PI * rnd - atan2f(pAffineTP->y, pAffineTP->x)) / power;
-    float sina = sinf(a);
-    float cosa = cosf(a);
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
+		int rnd = pContext->randGen->random(_absPower);
+		float a;
+		if ((rnd & 1) == 0)
+			a = (2 * M_PI * rnd + atan2f(pAffineTP->y, pAffineTP->x)) / power;
+		else
+			a = (2 * M_PI * rnd - atan2f(pAffineTP->y, pAffineTP->x)) / power;
+		float sina = JWF_SIN(a);
+		float cosa = JWF_COS(a);
 
-    double r = pAmount * powf(pAffineTP->x*pAffineTP->x + pAffineTP->y*pAffineTP->y, _cPower);
-    pVarTP->x = pVarTP->x + r * cosa;
-    pVarTP->y = pVarTP->y + r * sina;
+		double r = pAmount * JWF_POW(pAffineTP->x * pAffineTP->x + pAffineTP->y * pAffineTP->y, _cPower);
+		pVarTP->x = pVarTP->x + r * cosa;
+		pVarTP->y = pVarTP->y + r * sina;
 		if (pContext->isPreserveZCoordinate) {
 			pVarTP->z += pAmount * pAffineTP->z;
 		}
@@ -68,7 +68,6 @@ public:
 	JuliascopeFunc* makeCopy() {
 		return new JuliascopeFunc(*this);
 	}
-
 
 private:
 	float power, dist;

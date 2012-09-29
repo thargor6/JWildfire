@@ -31,30 +31,30 @@ public:
 		return "escher";
 	}
 
-	void setParameter(char *pName, float pValue) {
+	void setParameter(char *pName, JWF_FLOAT pValue) {
 		if (strcmp(pName, "beta") == 0) {
 			beta = pValue;
 		}
 	}
 
-	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
-    float a = pAffineTP->getPrecalcAtanYX();
-    float lnr = 0.5f * logf(pAffineTP->getPrecalcSumsq());
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
+		float a = pAffineTP->getPrecalcAtanYX();
+		float lnr = 0.5f * JWF_LOG(pAffineTP->getPrecalcSumsq());
 
-    float seb = sinf(beta);
-    float ceb = cosf(beta);
+		float seb = JWF_SIN(beta);
+		float ceb = JWF_COS(beta);
 
-    float vc = 0.5f * (1.0f + ceb);
-    float vd = 0.5f * seb;
+		float vc = 0.5f * (1.0f + ceb);
+		float vd = 0.5f * seb;
 
-    float m = pAmount * expf(vc * lnr - vd * a);
-    float n = vc * a + vd * lnr;
+		float m = pAmount * JWF_EXP(vc * lnr - vd * a);
+		float n = vc * a + vd * lnr;
 
-    float sn = sinf(n);
-    float cn = cosf(n);
+		float sn = JWF_SIN(n);
+		float cn = JWF_COS(n);
 
-    pVarTP->x += m * cn;
-    pVarTP->y += m * sn;
+		pVarTP->x += m * cn;
+		pVarTP->y += m * sn;
 		if (pContext->isPreserveZCoordinate) {
 			pVarTP->z += pAmount * pAffineTP->z;
 		}

@@ -23,23 +23,23 @@
 class SpirographFunc: public Variation {
 public:
 	SpirographFunc() {
-	  a = 3.0;
-	  b = 2.0;
-	  d = 0.0;
-	  c1 = 0.0;
-	  c2 = 0.0;
-	  tMin = -1.0;
-	  tMax = 1.0;
-	  yMin = -1.0;
-	  yMax = 1.0;
-		initParameterNames(9, "a", "b", "d","c1","c2","tMin","tMax","yMin","yMax" );
+		a = 3.0;
+		b = 2.0;
+		d = 0.0;
+		c1 = 0.0;
+		c2 = 0.0;
+		tMin = -1.0;
+		tMax = 1.0;
+		yMin = -1.0;
+		yMax = 1.0;
+		initParameterNames(9, "a", "b", "d", "c1", "c2", "tMin", "tMax", "yMin", "yMax");
 	}
 
 	const char* getName() const {
 		return "spirograph";
 	}
 
-	void setParameter(char *pName, float pValue) {
+	void setParameter(char *pName, JWF_FLOAT pValue) {
 		if (strcmp(pName, "a") == 0) {
 			a = pValue;
 		}
@@ -67,15 +67,15 @@ public:
 		else if (strcmp(pName, "yMax") == 0) {
 			yMax = pValue;
 		}
-  }
+	}
 
-	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
-    float t = (tMax - tMin) * pContext->randGen->random() + tMin;
-    float y = (yMax - yMin) * pContext->randGen->random() + yMin;
-    float x1 = (a + b) * cosf(t) - c1 * cosf((a + b) / b * t);
-    float y1 = (a + b) * sinf(t) - c2 * sinf((a + b) / b * t);
-    pVarTP->x += pAmount * (x1 + d * cos(t) + y);
-    pVarTP->y += pAmount * (y1 + d * sin(t) + y);
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
+		float t = (tMax - tMin) * pContext->randGen->random() + tMin;
+		float y = (yMax - yMin) * pContext->randGen->random() + yMin;
+		float x1 = (a + b) * JWF_COS(t) - c1 * JWF_COS((a + b) / b * t);
+		float y1 = (a + b) * JWF_SIN(t) - c2 * JWF_SIN((a + b) / b * t);
+		pVarTP->x += pAmount * (x1 + d * JWF_COS(t) + y);
+		pVarTP->y += pAmount * (y1 + d * JWF_SIN(t) + y);
 		if (pContext->isPreserveZCoordinate) {
 			pVarTP->z += pAmount * pAffineTP->z;
 		}
@@ -86,15 +86,15 @@ public:
 	}
 
 private:
-  float a;
-  float b;
-  float d;
-  float c1;
-  float c2;
-  float tMin;
-  float tMax;
-  float yMin;
-  float yMax;
+	float a;
+	float b;
+	float d;
+	float c1;
+	float c2;
+	float tMin;
+	float tMax;
+	float yMin;
+	float yMax;
 };
 
 #endif // JWFVAR_SPIROGRAPH_H_

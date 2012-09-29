@@ -29,18 +29,18 @@ public:
 		return "ex";
 	}
 
-	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
-    float r = sqrtf(pAffineTP->x * pAffineTP->x + pAffineTP->y * pAffineTP->y);
-    float n0 = sinf(pAffineTP->getPrecalcAtan() + r);
-    float n1 = cosf(pAffineTP->getPrecalcAtan() - r);
-    float m0 = n0 * n0 * n0;
-    float m1 = n1 * n1 * n1;
-    r = r * pAmount;
-    pVarTP->x += r * (m0 + m1);
-    pVarTP->y += r * (m0 - m1);
-    if (pContext->isPreserveZCoordinate) {
-      pVarTP->z += pAmount * pAffineTP->z;
-    }
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
+		float r = JWF_SQRT(pAffineTP->x * pAffineTP->x + pAffineTP->y * pAffineTP->y);
+		float n0 = JWF_SIN(pAffineTP->getPrecalcAtan() + r);
+		float n1 = JWF_COS(pAffineTP->getPrecalcAtan() - r);
+		float m0 = n0 * n0 * n0;
+		float m1 = n1 * n1 * n1;
+		r = r * pAmount;
+		pVarTP->x += r * (m0 + m1);
+		pVarTP->y += r * (m0 - m1);
+		if (pContext->isPreserveZCoordinate) {
+			pVarTP->z += pAmount * pAffineTP->z;
+		}
 	}
 
 	ExFunc* makeCopy() {

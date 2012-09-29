@@ -34,7 +34,7 @@ public:
 		return "pdj";
 	}
 
-	void setParameter(char *pName, float pValue) {
+	void setParameter(char *pName, JWF_FLOAT pValue) {
 		if (strcmp(pName, "a") == 0) {
 			a = pValue;
 		}
@@ -49,9 +49,9 @@ public:
 		}
 	}
 
-	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
-    pVarTP->x += pAmount * (sinf(a * pAffineTP->y) - cosf(b * pAffineTP->x));
-    pVarTP->y += pAmount * (sinf(c * pAffineTP->x) - cosf(d * pAffineTP->y));
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
+		pVarTP->x += pAmount * (sinf(a * pAffineTP->y) - JWF_COS(b * pAffineTP->x));
+		pVarTP->y += pAmount * (sinf(c * pAffineTP->x) - JWF_COS(d * pAffineTP->y));
 		if (pContext->isPreserveZCoordinate) {
 			pVarTP->z += pAmount * pAffineTP->z;
 		}

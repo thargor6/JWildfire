@@ -29,28 +29,28 @@ public:
 		return "loonie_3D";
 	}
 
-	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
-    float sqrvvar = pAmount * pAmount;
-    float efTez = pAffineTP->z;
-    float kikr;
-    kikr = atan2f(pAffineTP->y, pAffineTP->x);
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
+		float sqrvvar = pAmount * pAmount;
+		float efTez = pAffineTP->z;
+		float kikr;
+		kikr = atan2f(pAffineTP->y, pAffineTP->x);
 
-    if (efTez == 0.0) {
-      efTez = kikr;
-    }
+		if (efTez == 0.0) {
+			efTez = kikr;
+		}
 
-    float r2 = pAffineTP->x*pAffineTP->x + pAffineTP->y*pAffineTP->y + efTez*efTez; // added the z element
-    if (r2 < sqrvvar) {
-    	float r = pAmount * sqrtf(sqrvvar / r2 - 1.0f);
-      pVarTP->x += r * pAffineTP->x;
-      pVarTP->y += r * pAffineTP->y;
-      pVarTP->z += r * efTez * 0.5f;
-    }
-    else {
-      pVarTP->x += pAmount * pAffineTP->x;
-      pVarTP->y += pAmount * pAffineTP->y;
-      pVarTP->z += pAmount * efTez * 0.5f;
-    }
+		float r2 = pAffineTP->x * pAffineTP->x + pAffineTP->y * pAffineTP->y + efTez * efTez; // added the z element
+		if (r2 < sqrvvar) {
+			float r = pAmount * JWF_SQRT(sqrvvar / r2 - 1.0f);
+			pVarTP->x += r * pAffineTP->x;
+			pVarTP->y += r * pAffineTP->y;
+			pVarTP->z += r * efTez * 0.5f;
+		}
+		else {
+			pVarTP->x += pAmount * pAffineTP->x;
+			pVarTP->y += pAmount * pAffineTP->y;
+			pVarTP->z += pAmount * efTez * 0.5f;
+		}
 	}
 
 	Loonie3DFunc* makeCopy() {

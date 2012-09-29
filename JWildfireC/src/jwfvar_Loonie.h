@@ -29,19 +29,19 @@ public:
 		return "loonie";
 	}
 
-	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
-    float r2 = pAffineTP->getPrecalcSumsq();
-    float w2 = pAmount * pAmount;
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
+		float r2 = pAffineTP->getPrecalcSumsq();
+		float w2 = pAmount * pAmount;
 
-    if (r2 < w2 && r2 != 0) {
-      float r = pAmount * sqrt(w2 / r2 - 1.0f);
-      pVarTP->x += r * pAffineTP->x;
-      pVarTP->y += r * pAffineTP->y;
-    }
-    else {
-      pVarTP->x += pAmount * pAffineTP->x;
-      pVarTP->y += pAmount * pAffineTP->y;
-    }
+		if (r2 < w2 && r2 != 0) {
+			float r = pAmount * JWF_SQRT(w2 / r2 - 1.0f);
+			pVarTP->x += r * pAffineTP->x;
+			pVarTP->y += r * pAffineTP->y;
+		}
+		else {
+			pVarTP->x += pAmount * pAffineTP->x;
+			pVarTP->y += pAmount * pAffineTP->y;
+		}
 		if (pContext->isPreserveZCoordinate) {
 			pVarTP->z += pAmount * pAffineTP->z;
 		}

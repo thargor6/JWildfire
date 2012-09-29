@@ -36,7 +36,7 @@ public:
 		return "post_mirror_wf";
 	}
 
-	void setParameter(char *pName, float pValue) {
+	void setParameter(char *pName, JWF_FLOAT pValue) {
 		if (strcmp(pName, "xaxis") == 0) {
 			xaxis = FTOI(pValue);
 		}
@@ -57,18 +57,18 @@ public:
 		}
 	}
 
-	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
-    if (xaxis > 0 && pContext->randGen->random() < 0.5f) {
-      pVarTP->x = -pVarTP->x - xshift;
-    }
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
+		if (xaxis > 0 && pContext->randGen->random() < 0.5f) {
+			pVarTP->x = -pVarTP->x - xshift;
+		}
 
-    if (yaxis > 0 && pContext->randGen->random() < 0.5f) {
-      pVarTP->y = -pVarTP->y - yshift;
-    }
+		if (yaxis > 0 && pContext->randGen->random() < 0.5f) {
+			pVarTP->y = -pVarTP->y - yshift;
+		}
 
-    if (zaxis > 0 && pContext->randGen->random() < 0.5) {
-      pVarTP->z = -pVarTP->z - zshift;
-    }
+		if (zaxis > 0 && pContext->randGen->random() < 0.5) {
+			pVarTP->z = -pVarTP->z - zshift;
+		}
 	}
 
 	PostMirrorWFFunc* makeCopy() {

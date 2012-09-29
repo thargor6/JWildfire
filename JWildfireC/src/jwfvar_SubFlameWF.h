@@ -27,24 +27,24 @@ public:
 		offset_y = 0.0f;
 		offset_z = 0.0f;
 
-    flame = NULL;
-    xf = NULL;
-    p = NULL;
-    q = new XYZPoint();
+		flame = NULL;
+		xf = NULL;
+		p = NULL;
+		q = new XYZPoint();
 
 		initParameterNames(3, "offset_x", "offset_y", "offset_z");
 		initRessourceNames(1, "flame");
 	}
 
 	~SubFlameWFFunc() {
-    delete q;
+		delete q;
 	}
 
 	const char* getName() const {
 		return "subflame_wf";
 	}
 
-	void setParameter(char *pName, float pValue) {
+	void setParameter(char *pName, JWF_FLOAT pValue) {
 		if (strcmp(pName, "offset_x") == 0) {
 			offset_x = pValue;
 		}
@@ -58,49 +58,48 @@ public:
 
 	void setRessource(char *pName, void *pValue) {
 		if (strcmp(pName, "flame") == 0) {
-	    flame = (Flame*)pValue;
-	    xf = NULL;
-	    p = NULL;
+			flame = (Flame*) pValue;
+			xf = NULL;
+			p = NULL;
 		}
 	}
 
-	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
-    if (xf != NULL) {
-    	int xfIdx= xf->nextAppliedXFormIdxTable[pContext->randGen->random(NEXT_APPLIED_XFORM_TABLE_SIZE)];
-      xf = xfIdx>=0 ? flame->xForms[xfIdx] : NULL;
-    	if (xf == NULL) {
-        return;
-      }
-      xf->transformPoint(pContext, pAffineTP, pVarTP, p, p);
-      if (xf->drawMode == DRAWMODE_HIDDEN)
-        return;
-      else if ((xf->drawMode == DRAWMODE_OPAQUE) && (pContext->randGen->random() > xf->opacity))
-        return;
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
+		if (xf != NULL) {
+			int xfIdx = xf->nextAppliedXFormIdxTable[pContext->randGen->random(NEXT_APPLIED_XFORM_TABLE_SIZE)];
+			xf = xfIdx >= 0 ? flame->xForms[xfIdx] : NULL;
+			if (xf == NULL) {
+				return;
+			}
+			xf->transformPoint(pContext, pAffineTP, pVarTP, p, p);
+			if (xf->drawMode == DRAWMODE_HIDDEN)
+				return;
+			else if ((xf->drawMode == DRAWMODE_OPAQUE) && (pContext->randGen->random() > xf->opacity))
+				return;
 
-      XForm *finalXForm = flame->finalXForm;
-      if (finalXForm != NULL) {
-        finalXForm->transformPoint(pContext, pAffineTP, pVarTP, p, q);
-      }
-    }
+			XForm *finalXForm = flame->finalXForm;
+			if (finalXForm != NULL) {
+				finalXForm->transformPoint(pContext, pAffineTP, pVarTP, p, q);
+			}
+		}
 
-    pVarTP->x += offset_x;
-    pVarTP->y += offset_y;
-    pVarTP->z += offset_z;
+		pVarTP->x += offset_x;
+		pVarTP->y += offset_y;
+		pVarTP->z += offset_z;
 	}
 
-	virtual void init(FlameTransformationContext *pContext, XForm *pXForm, float pAmount) {
-    if (flame != NULL) {
-    	// TODO remove hack!
-      flame->prepareFlame(pContext, pContext->threadIdx+1);
-      xf = flame->xForms[0];
-      p = new XYZPoint();
-      p->x = 2.0 * pContext->randGen->random() - 1.0;
-      p->y = 2.0 * pContext->randGen->random() - 1.0;
-      p->z = 0.0;
-      p->color = pContext->randGen->random();
-    }
+	virtual void init(FlameTransformationContext *pContext, XForm *pXForm, JWF_FLOAT pAmount) {
+		if (flame != NULL) {
+			// TODO remove hack!
+			flame->prepareFlame(pContext, pContext->threadIdx + 1);
+			xf = flame->xForms[0];
+			p = new XYZPoint();
+			p->x = 2.0 * pContext->randGen->random() - 1.0;
+			p->y = 2.0 * pContext->randGen->random() - 1.0;
+			p->z = 0.0;
+			p->color = pContext->randGen->random();
+		}
 	}
-
 
 	SubFlameWFFunc* makeCopy() {
 		return new SubFlameWFFunc(*this);
@@ -111,10 +110,10 @@ protected:
 	float offset_y;
 	float offset_z;
 
-  Flame *flame;
-  XForm *xf;
-  XYZPoint *p;
-  XYZPoint *q;
+	Flame *flame;
+	XForm *xf;
+	XYZPoint *p;
+	XYZPoint *q;
 };
 
 #endif // JWFVAR_SUBFLAME_WF_H_

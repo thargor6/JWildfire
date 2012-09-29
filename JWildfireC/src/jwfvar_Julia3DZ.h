@@ -32,28 +32,28 @@ public:
 		return "julia3Dz";
 	}
 
-	void setParameter(char *pName, float pValue) {
+	void setParameter(char *pName, JWF_FLOAT pValue) {
 		if (strcmp(pName, "power") == 0) {
 			power = pValue;
 		}
 	}
 
-	void init(FlameTransformationContext *pContext, XForm *pXForm, float pAmount) {
-    _absPower = abs(FTOI(power));
-    _cPower = 1.0f / power * 0.5f;
+	void init(FlameTransformationContext *pContext, XForm *pXForm, JWF_FLOAT pAmount) {
+		_absPower = abs(FTOI(power));
+		_cPower = 1.0f / power * 0.5f;
 	}
 
-	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
-    float r2d = pAffineTP->x * pAffineTP->x + pAffineTP->y * pAffineTP->y;
-    float r = pAmount * powf(r2d, _cPower);
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
+		float r2d = pAffineTP->x * pAffineTP->x + pAffineTP->y * pAffineTP->y;
+		float r = pAmount * JWF_POW(r2d, _cPower);
 
-    int rnd = (int) (pContext->randGen->random() * _absPower);
-    float angle = (atan2f(pAffineTP->y, pAffineTP->x) + 2.0f * M_PI * rnd) / power;
-    float sina = sinf(angle);
-    float cosa = cosf(angle);
-    pVarTP->x += r * cosa;
-    pVarTP->y += r * sina;
-    pVarTP->z += r * pAffineTP->z / (sqrtf(r2d) * _absPower);
+		int rnd = (int) (pContext->randGen->random() * _absPower);
+		float angle = (atan2f(pAffineTP->y, pAffineTP->x) + 2.0f * M_PI * rnd) / power;
+		float sina = JWF_SIN(angle);
+		float cosa = JWF_COS(angle);
+		pVarTP->x += r * cosa;
+		pVarTP->y += r * sina;
+		pVarTP->z += r * pAffineTP->z / (sqrtf(r2d) * _absPower);
 	}
 
 	Julia3DZFunc* makeCopy() {

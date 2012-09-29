@@ -29,12 +29,12 @@ public:
 		return "waves";
 	}
 
-	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
-    pVarTP->x += pAmount * (pAffineTP->x + pXForm->coeff10 * sinf(pAffineTP->y / (pXForm->coeff20 * pXForm->coeff20 + EPSILON)));
-    pVarTP->y += pAmount * (pAffineTP->y + pXForm->coeff11 * sinf(pAffineTP->x / (pXForm->coeff21 * pXForm->coeff21 + EPSILON)));
-    if (pContext->isPreserveZCoordinate) {
-      pVarTP->z += pAmount * pAffineTP->z;
-    }
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
+		pVarTP->x += pAmount * (pAffineTP->x + pXForm->coeff10 * JWF_SIN(pAffineTP->y / (pXForm->coeff20 * pXForm->coeff20 + EPSILON)));
+		pVarTP->y += pAmount * (pAffineTP->y + pXForm->coeff11 * JWF_SIN(pAffineTP->x / (pXForm->coeff21 * pXForm->coeff21 + EPSILON)));
+		if (pContext->isPreserveZCoordinate) {
+			pVarTP->z += pAmount * pAffineTP->z;
+		}
 	}
 
 	WavesFunc* makeCopy() {

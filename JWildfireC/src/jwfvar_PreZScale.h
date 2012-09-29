@@ -29,8 +29,8 @@ public:
 		return "pre_ztranslate";
 	}
 
-	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
-    pAffineTP->z *= pAmount;
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
+		pAffineTP->z *= pAmount;
 	}
 
 	PreZScaleFunc* makeCopy() {

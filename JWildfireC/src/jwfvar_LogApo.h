@@ -31,24 +31,24 @@ public:
 		return "log_apo";
 	}
 
-	void setParameter(char *pName, float pValue) {
+	void setParameter(char *pName, JWF_FLOAT pValue) {
 		if (strcmp(pName, "base") == 0) {
 			base = pValue;
 		}
 	}
 
-	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
-    pVarTP->x += pAmount * logf(pAffineTP->x*pAffineTP->x + pAffineTP->y*pAffineTP->y) * _denom;
-    pVarTP->y += pAmount * atan2f(pAffineTP->y, pAffineTP->x);
-    pVarTP->z += pAmount * pAffineTP->z;
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
+		pVarTP->x += pAmount * JWF_LOG(pAffineTP->x * pAffineTP->x + pAffineTP->y * pAffineTP->y) * _denom;
+		pVarTP->y += pAmount * atan2f(pAffineTP->y, pAffineTP->x);
+		pVarTP->z += pAmount * pAffineTP->z;
 	}
 
 	LogApoFunc* makeCopy() {
 		return new LogApoFunc(*this);
 	}
 
-	void init(FlameTransformationContext *pContext, XForm *pXForm, float pAmount) {
-    _denom = 0.5f / logf(base);
+	void init(FlameTransformationContext *pContext, XForm *pXForm, JWF_FLOAT pAmount) {
+		_denom = 0.5f / JWF_LOG(base);
 	}
 
 private:

@@ -30,13 +30,13 @@ public:
 		return "polar";
 	}
 
-	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
-    float ny = sqrtf(pAffineTP->x * pAffineTP->x + pAffineTP->y * pAffineTP->y) - 1.0f;
-    pVarTP->x += pAmount * (pAffineTP->getPrecalcAtan() * R_PI);
-    pVarTP->y += pAmount * ny;
-    if (pContext->isPreserveZCoordinate) {
-      pVarTP->z += pAmount * pAffineTP->z;
-    }
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
+		float ny = JWF_SQRT(pAffineTP->x * pAffineTP->x + pAffineTP->y * pAffineTP->y) - 1.0f;
+		pVarTP->x += pAmount * (pAffineTP->getPrecalcAtan() * R_PI);
+		pVarTP->y += pAmount * ny;
+		if (pContext->isPreserveZCoordinate) {
+			pVarTP->z += pAmount * pAffineTP->z;
+		}
 	}
 
 	PolarFunc* makeCopy() {
@@ -44,7 +44,7 @@ public:
 	}
 
 private:
-  static const float R_PI = 0.31830989f;
+	static const JWF_FLOAT R_PI = 0.31830989f;
 };
 
 #endif // JWFVAR_POLAR_H_

@@ -33,7 +33,7 @@ public:
 		return "waffle";
 	}
 
-	void setParameter(char *pName, float pValue) {
+	void setParameter(char *pName, JWF_FLOAT pValue) {
 		if (strcmp(pName, "slices") == 0) {
 			slices = FTOI(pValue);
 		}
@@ -48,40 +48,40 @@ public:
 		}
 	}
 
-	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
-    float a = 0.0, r = 0.0;
-    switch (pContext->randGen->random(5)) {
-      case 0:
-        a = (pContext->randGen->random(slices) + pContext->randGen->random() * xthickness) / slices;
-        r = (pContext->randGen->random(slices) + pContext->randGen->random() * ythickness) / slices;
-        break;
-      case 1:
-        a = (pContext->randGen->random(slices) + pContext->randGen->random()) / slices;
-        r = (pContext->randGen->random(slices) + ythickness) / slices;
-        break;
-      case 2:
-        a = (pContext->randGen->random(slices) + xthickness) / slices;
-        r = (pContext->randGen->random(slices) + pContext->randGen->random()) / slices;
-        break;
-      case 3:
-        a = pContext->randGen->random();
-        r = (pContext->randGen->random(slices) + ythickness + pContext->randGen->random() * (1.0f - ythickness)) / slices;
-        break;
-      case 4:
-        a = (pContext->randGen->random(slices) + xthickness + pContext->randGen->random() * (1.0f - xthickness)) / slices;
-        r = pContext->randGen->random();
-        break;
-    }
-    pVarTP->x += (_vcosr * a + _vsinr * r); // note that post-transforms make this redundant!
-    pVarTP->y += (-_vsinr * a + _vcosr * r);
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
+		float a = 0.0, r = 0.0;
+		switch (pContext->randGen->random(5)) {
+		case 0:
+			a = (pContext->randGen->random(slices) + pContext->randGen->random() * xthickness) / slices;
+			r = (pContext->randGen->random(slices) + pContext->randGen->random() * ythickness) / slices;
+			break;
+		case 1:
+			a = (pContext->randGen->random(slices) + pContext->randGen->random()) / slices;
+			r = (pContext->randGen->random(slices) + ythickness) / slices;
+			break;
+		case 2:
+			a = (pContext->randGen->random(slices) + xthickness) / slices;
+			r = (pContext->randGen->random(slices) + pContext->randGen->random()) / slices;
+			break;
+		case 3:
+			a = pContext->randGen->random();
+			r = (pContext->randGen->random(slices) + ythickness + pContext->randGen->random() * (1.0f - ythickness)) / slices;
+			break;
+		case 4:
+			a = (pContext->randGen->random(slices) + xthickness + pContext->randGen->random() * (1.0f - xthickness)) / slices;
+			r = pContext->randGen->random();
+			break;
+		}
+		pVarTP->x += (_vcosr * a + _vsinr * r); // note that post-transforms make this redundant!
+		pVarTP->y += (-_vsinr * a + _vcosr * r);
 		if (pContext->isPreserveZCoordinate) {
 			pVarTP->z += pAmount * pAffineTP->z;
 		}
 	}
 
-	void init(FlameTransformationContext *pContext, XForm *pXForm, float pAmount) {
-    _vcosr = pAmount * cosf(rotation);
-    _vsinr = pAmount * sinf(rotation);
+	void init(FlameTransformationContext *pContext, XForm *pXForm, JWF_FLOAT pAmount) {
+		_vcosr = pAmount * JWF_COS(rotation);
+		_vsinr = pAmount * JWF_SIN(rotation);
 	}
 
 	WaffleFunc* makeCopy() {

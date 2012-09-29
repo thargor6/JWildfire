@@ -29,18 +29,18 @@ public:
 		return "spiral";
 	}
 
-	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
-    float sinA = pAffineTP->getPrecalcSinA();
-    float cosA = pAffineTP->getPrecalcCosA();
-    float r = pAffineTP->getPrecalcSqrt();
-    float sinr = sin(r);
-    float cosr = cos(r);
-    r = pAmount / r;
-    pVarTP->x += (cosA + sinr) * r;
-    pVarTP->y += (sinA - cosr) * r;
-    if (pContext->isPreserveZCoordinate) {
-      pVarTP->z += pAmount * pAffineTP->z;
-    }
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
+		float sinA = pAffineTP->getPrecalcSinA();
+		float cosA = pAffineTP->getPrecalcCosA();
+		float r = pAffineTP->getPrecalcSqrt();
+		float sinr = JWF_SIN(r);
+		float cosr = JWF_COS(r);
+		r = pAmount / r;
+		pVarTP->x += (cosA + sinr) * r;
+		pVarTP->y += (sinA - cosr) * r;
+		if (pContext->isPreserveZCoordinate) {
+			pVarTP->z += pAmount * pAffineTP->z;
+		}
 	}
 
 	SpiralFunc* makeCopy() {

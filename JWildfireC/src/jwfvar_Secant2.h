@@ -29,20 +29,20 @@ public:
 		return "secant2";
 	}
 
-	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
-    float r = pAmount * pAffineTP->getPrecalcSqrt();
-    float cr = cosf(r);
-    if (cr == 0) {
-      return;
-    }
-    float icr = 1.0f / cr;
-    pVarTP->x += pAmount * pAffineTP->x;
-    if (cr < 0) {
-      pVarTP->y += pAmount * (icr + 1);
-    }
-    else {
-      pVarTP->y += pAmount * (icr - 1);
-    }
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
+		float r = pAmount * pAffineTP->getPrecalcSqrt();
+		float cr = JWF_COS(r);
+		if (cr == 0) {
+			return;
+		}
+		float icr = 1.0 / cr;
+		pVarTP->x += pAmount * pAffineTP->x;
+		if (cr < 0) {
+			pVarTP->y += pAmount * (icr + 1);
+		}
+		else {
+			pVarTP->y += pAmount * (icr - 1);
+		}
 		if (pContext->isPreserveZCoordinate) {
 			pVarTP->z += pAmount * pAffineTP->z;
 		}

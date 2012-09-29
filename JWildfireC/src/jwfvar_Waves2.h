@@ -33,7 +33,7 @@ public:
 		return "waves2";
 	}
 
-	void setParameter(char *pName, float pValue) {
+	void setParameter(char *pName, JWF_FLOAT pValue) {
 		if (strcmp(pName, "scalex") == 0) {
 			scalex = pValue;
 		}
@@ -48,9 +48,9 @@ public:
 		}
 	}
 
-	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
-		pVarTP->x += pAmount * (pAffineTP->x + scalex * sinf(pAffineTP->y * freqx));
-		pVarTP->y += pAmount * (pAffineTP->y + scaley * sinf(pAffineTP->x * freqy));
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
+		pVarTP->x += pAmount * (pAffineTP->x + scalex * JWF_SIN(pAffineTP->y * freqx));
+		pVarTP->y += pAmount * (pAffineTP->y + scaley * JWF_SIN(pAffineTP->x * freqy));
 		if (pContext->isPreserveZCoordinate) {
 			pVarTP->z += pAmount * pAffineTP->z;
 		}

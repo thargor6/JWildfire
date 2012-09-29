@@ -32,7 +32,7 @@ public:
 		return "rectangles";
 	}
 
-	void setParameter(char *pName, float pValue) {
+	void setParameter(char *pName, JWF_FLOAT pValue) {
 		if (strcmp(pName, "x") == 0) {
 			x = pValue;
 		}
@@ -41,19 +41,19 @@ public:
 		}
 	}
 
-	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
-    if (fabsf(x) < EPSILON) {
-      pVarTP->x += pAmount * pAffineTP->x;
-    }
-    else {
-      pVarTP->x += pAmount * ((2.0f * floorf(pAffineTP->x / x) + 1.0f) * x - pAffineTP->x);
-    }
-    if (fabsf(y) < EPSILON) {
-      pVarTP->y += pAmount * pAffineTP->y;
-    }
-    else {
-      pVarTP->y += pAmount * ((2.0f * floorf(pAffineTP->y / y) + 1.0f) * y - pAffineTP->y);
-    }
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
+		if (fabsf(x) < EPSILON) {
+			pVarTP->x += pAmount * pAffineTP->x;
+		}
+		else {
+			pVarTP->x += pAmount * ((2.0f * floorf(pAffineTP->x / x) + 1.0f) * x - pAffineTP->x);
+		}
+		if (fabsf(y) < EPSILON) {
+			pVarTP->y += pAmount * pAffineTP->y;
+		}
+		else {
+			pVarTP->y += pAmount * ((2.0f * floorf(pAffineTP->y / y) + 1.0f) * y - pAffineTP->y);
+		}
 		if (pContext->isPreserveZCoordinate) {
 			pVarTP->z += pAmount * pAffineTP->z;
 		}

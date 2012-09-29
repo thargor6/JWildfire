@@ -32,7 +32,7 @@ public:
 		return "parabola";
 	}
 
-	void setParameter(char *pName, float pValue) {
+	void setParameter(char *pName, JWF_FLOAT pValue) {
 		if (strcmp(pName, "width") == 0) {
 			width = pValue;
 		}
@@ -41,12 +41,12 @@ public:
 		}
 	}
 
-	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
-    float r = pAffineTP->getPrecalcSqrt();
-    float sr = sinf(r);
-    float cr = cosf(r);
-    pVarTP->x += height * pAmount * sr * sr * pContext->randGen->random();
-    pVarTP->y += width * pAmount * cr * pContext->randGen->random();
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
+		float r = pAffineTP->getPrecalcSqrt();
+		float sr = JWF_SIN(r);
+		float cr = JWF_COS(r);
+		pVarTP->x += height * pAmount * sr * sr * pContext->randGen->random();
+		pVarTP->y += width * pAmount * cr * pContext->randGen->random();
 		if (pContext->isPreserveZCoordinate) {
 			pVarTP->z += pAmount * pAffineTP->z;
 		}

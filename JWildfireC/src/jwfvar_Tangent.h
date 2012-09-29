@@ -29,16 +29,16 @@ public:
 		return "tangent";
 	}
 
-	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
-    float d = cosf(pAffineTP->y);
-    if (d == 0) {
-      return;
-    }
-    pVarTP->x += pAmount * sinf(pAffineTP->x) / d;
-    pVarTP->y += pAmount * tanf(pAffineTP->y);
-    if (pContext->isPreserveZCoordinate) {
-      pVarTP->z += pAmount * pAffineTP->z;
-    }
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
+		float d = JWF_COS(pAffineTP->y);
+		if (d == 0) {
+			return;
+		}
+		pVarTP->x += pAmount * JWF_SIN(pAffineTP->x) / d;
+		pVarTP->y += pAmount * tanf(pAffineTP->y);
+		if (pContext->isPreserveZCoordinate) {
+			pVarTP->z += pAmount * pAffineTP->z;
+		}
 	}
 
 	TangentFunc* makeCopy() {

@@ -29,15 +29,15 @@ public:
 		return "exp";
 	}
 
-	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
-    float expe = expf(pAffineTP->x);
-    float expsin = sinf(pAffineTP->y);
-    float expcos = cosf(pAffineTP->y);
-    pVarTP->x += pAmount * expe * expcos;
-    pVarTP->y += pAmount * expe * expsin;
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
+		float expe = JWF_EXP(pAffineTP->x);
+		float expsin = JWF_SIN(pAffineTP->y);
+		float expcos = JWF_COS(pAffineTP->y);
+		pVarTP->x += pAmount * expe * expcos;
+		pVarTP->y += pAmount * expe * expsin;
 		if (pContext->isPreserveZCoordinate) {
-      pVarTP->z += pAmount * pAffineTP->z;
-    }
+			pVarTP->z += pAmount * pAffineTP->z;
+		}
 	}
 
 	ExpFunc* makeCopy() {

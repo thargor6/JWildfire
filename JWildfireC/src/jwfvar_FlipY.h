@@ -29,15 +29,15 @@ public:
 		return "flipy";
 	}
 
-	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
-    if (pAffineTP->x > 0.0)
-      pVarTP->y -= pAmount * pAffineTP->y;
-    else
-      pVarTP->y += pAmount * pAffineTP->y;
-    pVarTP->x += pAmount * pAffineTP->x;
-    if (pContext->isPreserveZCoordinate) {
-      pVarTP->z += pAmount * pAffineTP->z;
-    }
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
+		if (pAffineTP->x > 0.0)
+			pVarTP->y -= pAmount * pAffineTP->y;
+		else
+			pVarTP->y += pAmount * pAffineTP->y;
+		pVarTP->x += pAmount * pAffineTP->x;
+		if (pContext->isPreserveZCoordinate) {
+			pVarTP->z += pAmount * pAffineTP->z;
+		}
 	}
 
 	FlipYFunc* makeCopy() {

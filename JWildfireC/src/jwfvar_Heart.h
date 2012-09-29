@@ -29,17 +29,17 @@ public:
 		return "heart";
 	}
 
-	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
-    float r = sqrtf(pAffineTP->x * pAffineTP->x + pAffineTP->y * pAffineTP->y);
-    float angle = pAffineTP->getPrecalcAtan();
-    float sinr = sinf(r * angle);
-    float cosr = cosf(r * angle);
-    r *= pAmount;
-    pVarTP->x += r * sinr;
-    pVarTP->y -= r * cosr;
-    if (pContext->isPreserveZCoordinate) {
-      pVarTP->z += pAmount * pAffineTP->z;
-    }
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
+		float r = JWF_SQRT(pAffineTP->x * pAffineTP->x + pAffineTP->y * pAffineTP->y);
+		float angle = pAffineTP->getPrecalcAtan();
+		float sinr = JWF_SIN(r * angle);
+		float cosr = JWF_COS(r * angle);
+		r *= pAmount;
+		pVarTP->x += r * sinr;
+		pVarTP->y -= r * cosr;
+		if (pContext->isPreserveZCoordinate) {
+			pVarTP->z += pAmount * pAffineTP->z;
+		}
 	}
 
 	HeartFunc* makeCopy() {

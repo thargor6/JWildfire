@@ -24,8 +24,8 @@ class JuliaNFunc: public Variation {
 public:
 
 	JuliaNFunc() {
-		power=3.0f;
-		dist=1.0f;
+		power = 3.0f;
+		dist = 1.0f;
 		initParameterNames(2, "power", "dist");
 	}
 
@@ -33,7 +33,7 @@ public:
 		return "julian";
 	}
 
-	void setParameter(char *pName, float pValue) {
+	void setParameter(char *pName, JWF_FLOAT pValue) {
 		if (strcmp(pName, "power") == 0) {
 			power = pValue;
 		}
@@ -42,21 +42,17 @@ public:
 		}
 	}
 
-	void init(FlameTransformationContext *pContext, XForm *pXForm, float pAmount) {
-		_absPower = fabs(power);
+	void init(FlameTransformationContext *pContext, XForm *pXForm, JWF_FLOAT pAmount) {
+		_absPower = JWF_FABS(power);
 		_cPower = dist / power * 0.5f;
-		_pAmount2 = pAmount * sqrtf(2.0f) / 2.0f;
+		_pAmount2 = pAmount * JWF_SQRT(2.0f) / 2.0f;
 	}
 
-	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP,
-			XYZPoint *pVarTP, float pAmount) {
-		float a = (atan2f(pAffineTP->y, pAffineTP->x)
-				+ 2.0f * M_PI * pContext->randGen->random(_absPower)) / power;
-		float sina = sinf(a);
-		float cosa = cosf(a);
-		float r = pAmount
-				* powf(pAffineTP->x * pAffineTP->x + pAffineTP->y * pAffineTP->y,
-						_cPower);
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
+		float a = (atan2f(pAffineTP->y, pAffineTP->x) + 2.0f * M_PI * pContext->randGen->random(_absPower)) / power;
+		float sina = JWF_SIN(a);
+		float cosa = JWF_COS(a);
+		float r = pAmount * JWF_POW(pAffineTP->x * pAffineTP->x + pAffineTP->y * pAffineTP->y, _cPower);
 
 		pVarTP->x = pVarTP->x + r * cosa;
 		pVarTP->y = pVarTP->y + r * sina;
@@ -68,7 +64,6 @@ public:
 	JuliaNFunc* makeCopy() {
 		return new JuliaNFunc(*this);
 	}
-
 
 private:
 	float _absPower, _cPower, _pAmount2;

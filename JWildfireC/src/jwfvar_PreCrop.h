@@ -23,12 +23,12 @@
 class PreCropFunc: public Variation {
 public:
 	PreCropFunc() {
-    left = -1.0f;
-    top = 1.0f;
-    right = 1.0f;
-    bottom = 1.0f;
-    scatter_area = 0.0f;
-    zero = 0;
+		left = -1.0f;
+		top = 1.0f;
+		right = 1.0f;
+		bottom = 1.0f;
+		scatter_area = 0.0f;
+		zero = 0;
 		initParameterNames(6, "left", "top", "right", "bottom", "scatter_area", "zero");
 	}
 
@@ -36,7 +36,7 @@ public:
 		return "pre_crop";
 	}
 
-	void setParameter(char *pName, float pValue) {
+	void setParameter(char *pName, JWF_FLOAT pValue) {
 		if (strcmp(pName, "left") == 0) {
 			left = pValue;
 		}
@@ -53,49 +53,48 @@ public:
 			scatter_area = pValue;
 		}
 		else if (strcmp(pName, "zero") == 0) {
-			zero = FTOI(pValue)==1;
+			zero = FTOI(pValue) == 1;
 		}
 	}
 
-	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
-    float x = pAffineTP->x;
-    float y = pAffineTP->y;
-    if (((x < _xmin) || (x > _xmax) || (y < _ymin) || (y > _ymax)) && (zero != 0)) {
-      x = y = 0.0f;
-    }
-    else {
-      if (x < _xmin)
-        x = _xmin + pContext->randGen->random() * _w;
-      else if (x > _xmax)
-        x = _xmax - pContext->randGen->random() * _w;
-      if (y < _ymin)
-        y = _ymin + pContext->randGen->random() * _h;
-      else if (y > _ymax)
-        y = _ymax - pContext->randGen->random() * _h;
-    }
-    pAffineTP->x = pAmount * x;
-    pAffineTP->y = pAmount * y;
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
+		float x = pAffineTP->x;
+		float y = pAffineTP->y;
+		if (((x < _xmin) || (x > _xmax) || (y < _ymin) || (y > _ymax)) && (zero != 0)) {
+			x = y = 0.0f;
+		}
+		else {
+			if (x < _xmin)
+				x = _xmin + pContext->randGen->random() * _w;
+			else if (x > _xmax)
+				x = _xmax - pContext->randGen->random() * _w;
+			if (y < _ymin)
+				y = _ymin + pContext->randGen->random() * _h;
+			else if (y > _ymax)
+				y = _ymax - pContext->randGen->random() * _h;
+		}
+		pAffineTP->x = pAmount * x;
+		pAffineTP->y = pAmount * y;
 	}
 
-	void init(FlameTransformationContext *pContext, XForm *pXForm, float pAmount) {
-    #undef min
-    #undef max
-		#define min(a,b) (((a)<(b))?(a):(b))
-		#define max(a,b) (((a)>(b))?(a):(b))
-    _xmin = min(left, right);
-    _ymin = min(top, bottom);
-    _xmax = max(left, right);
-    _ymax = max(top, bottom);
-    _w = (_xmax - _xmin) * 0.5 * scatter_area;
-    _h = (_ymax - _ymin) * 0.5 * scatter_area;
-    #undef max
-    #undef min
+	void init(FlameTransformationContext *pContext, XForm *pXForm, JWF_FLOAT pAmount) {
+#undef min
+#undef max
+#define min(a,b) (((a)<(b))?(a):(b))
+#define max(a,b) (((a)>(b))?(a):(b))
+		_xmin = min(left, right);
+		_ymin = min(top, bottom);
+		_xmax = max(left, right);
+		_ymax = max(top, bottom);
+		_w = (_xmax - _xmin) * 0.5 * scatter_area;
+		_h = (_ymax - _ymin) * 0.5 * scatter_area;
+#undef max
+#undef min
 	}
 
 	int const getPriority() {
 		return -1;
 	}
-
 
 	PreCropFunc* makeCopy() {
 		return new PreCropFunc(*this);
@@ -109,7 +108,7 @@ private:
 	float scatter_area;
 	bool zero;
 
-  float _xmin, _xmax, _ymin, _ymax, _w, _h;
+	float _xmin, _xmax, _ymin, _ymax, _w, _h;
 
 };
 

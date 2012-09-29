@@ -29,16 +29,16 @@ public:
 		return "sin";
 	}
 
-	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
-    float sinsin = sinf(pAffineTP->x);
-    float sincos = cosf(pAffineTP->x);
-    float sinsinh = sinhf(pAffineTP->y);
-    float sincosh = coshf(pAffineTP->y);
-    pVarTP->x += pAmount * sinsin * sincosh;
-    pVarTP->y += pAmount * sincos * sinsinh;
-    if (pContext->isPreserveZCoordinate) {
-      pVarTP->z += pAmount * pAffineTP->z;
-    }
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
+		float sinsin = JWF_SIN(pAffineTP->x);
+		float sincos = JWF_COS(pAffineTP->x);
+		float sinsinh = JWF_SINH(pAffineTP->y);
+		float sincosh = JWF_COSH(pAffineTP->y);
+		pVarTP->x += pAmount * sinsin * sincosh;
+		pVarTP->y += pAmount * sincos * sinsinh;
+		if (pContext->isPreserveZCoordinate) {
+			pVarTP->z += pAmount * pAffineTP->z;
+		}
 	}
 
 	SinFunc* makeCopy() {

@@ -22,10 +22,10 @@
 class WedgeJuliaFunc: public Variation {
 public:
 	WedgeJuliaFunc() {
-    power = 7.00f;
-    dist = 0.20f;
-    count = 2.0f;
-    angle = 0.30f;
+		power = 7.00f;
+		dist = 0.20f;
+		count = 2.0f;
+		angle = 0.30f;
 		initParameterNames(4, "power", "dist", "count", "angle");
 	}
 
@@ -33,7 +33,7 @@ public:
 		return "wedge_julia";
 	}
 
-	void setParameter(char *pName, float pValue) {
+	void setParameter(char *pName, JWF_FLOAT pValue) {
 		if (strcmp(pName, "power") == 0) {
 			power = pValue;
 		}
@@ -48,23 +48,23 @@ public:
 		}
 	}
 
-	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
-    float wedgeJulia_cf = 1.0f - angle * count * M_1_PI * 0.5f;
-    float wedgeJulia_rN = fabsf(power);
-    float wedgeJulia_cn = dist / power / 2.0f;
-    /* wedge_julia from apo plugin pack */
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
+		float wedgeJulia_cf = 1.0f - angle * count * M_1_PI * 0.5f;
+		float wedgeJulia_rN = JWF_FABS(power);
+		float wedgeJulia_cn = dist / power / 2.0f;
+		/* wedge_julia from apo plugin pack */
 
-    float r = pAmount * powf(pAffineTP->getPrecalcSumsq(), wedgeJulia_cn);
-    int t_rnd = (int) ((wedgeJulia_rN) * pContext->randGen->random());
-    float a = (pAffineTP->getPrecalcAtanYX() + 2.0f * M_PI * t_rnd) / power;
-    float c = floorf((count * a + M_PI) * M_1_PI * 0.5f);
+		float r = pAmount * JWF_POW(pAffineTP->getPrecalcSumsq(), wedgeJulia_cn);
+		int t_rnd = (int) ((wedgeJulia_rN) * pContext->randGen->random());
+		float a = (pAffineTP->getPrecalcAtanYX() + 2.0f * M_PI * t_rnd) / power;
+		float c = floorf((count * a + M_PI) * M_1_PI * 0.5f);
 
-    a = a * wedgeJulia_cf + c * angle;
-    float sa = sinf(a);
-    float ca = cosf(sa);
+		a = a * wedgeJulia_cf + c * angle;
+		float sa = JWF_SIN(a);
+		float ca = JWF_COS(sa);
 
-    pVarTP->x += r * ca;
-    pVarTP->y += r * sa;
+		pVarTP->x += r * ca;
+		pVarTP->y += r * sa;
 		if (pContext->isPreserveZCoordinate) {
 			pVarTP->z += pAmount * pAffineTP->z;
 		}

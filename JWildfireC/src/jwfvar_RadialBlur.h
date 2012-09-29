@@ -31,13 +31,13 @@ public:
 		return "radial_blur";
 	}
 
-	void setParameter(char *pName, float pValue) {
+	void setParameter(char *pName, JWF_FLOAT pValue) {
 		if (strcmp(pName, "angle") == 0) {
 			angle = pValue;
 		}
 	}
 
-	void init(FlameTransformationContext *pContext, XForm *pXForm, float pAmount) {
+	void init(FlameTransformationContext *pContext, XForm *pXForm, JWF_FLOAT pAmount) {
 		_gauss_rnd[0] = pContext->randGen->random();
 		_gauss_rnd[1] = pContext->randGen->random();
 		_gauss_rnd[2] = pContext->randGen->random();
@@ -45,18 +45,18 @@ public:
 		_gauss_N = 0;
 	}
 
-	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
 		float rndG = (_gauss_rnd[0] + _gauss_rnd[1] + _gauss_rnd[2] + _gauss_rnd[3] - 2.0f);
 		_gauss_rnd[_gauss_N] = pContext->randGen->random();
 		_gauss_N = (_gauss_N + 1) & 3;
 
-		float spin = pAmount * sinf(angle * M_PI * 0.5f);
-		float zoom = pAmount * cosf(angle * M_PI * 0.5f);
+		float spin = pAmount * JWF_SIN(angle * M_PI * 0.5f);
+		float zoom = pAmount * JWF_COS(angle * M_PI * 0.5f);
 
-		float ra = sqrtf(pAffineTP->x * pAffineTP->x + pAffineTP->y * pAffineTP->y);
+		float ra = JWF_SQRT(pAffineTP->x * pAffineTP->x + pAffineTP->y * pAffineTP->y);
 		float alpha = atan2f(pAffineTP->y, pAffineTP->x) + spin * rndG;
-		float sina = sinf(alpha);
-		float cosa = cosf(alpha);
+		float sina = JWF_SIN(alpha);
+		float cosa = JWF_COS(alpha);
 		float rz = zoom * rndG - 1;
 		pVarTP->x += ra * cosa + rz * pAffineTP->x;
 		pVarTP->y += ra * sina + rz * pAffineTP->y;

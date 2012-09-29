@@ -29,19 +29,19 @@ public:
 		return "zblur";
 	}
 
-	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
-    pVarTP->z += pAmount * (_gauss_rnd[0] + _gauss_rnd[1] + _gauss_rnd[2] + _gauss_rnd[3] - 2.0f);
-    _gauss_rnd[_gauss_N] = _randGen->random();
-    _gauss_N = (_gauss_N + 1) & 3;
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
+		pVarTP->z += pAmount * (_gauss_rnd[0] + _gauss_rnd[1] + _gauss_rnd[2] + _gauss_rnd[3] - 2.0f);
+		_gauss_rnd[_gauss_N] = _randGen->random();
+		_gauss_N = (_gauss_N + 1) & 3;
 	}
 
-	void init(FlameTransformationContext *pContext, XForm *pXForm, float pAmount) {
-		_randGen=pContext->randGen;
-    _gauss_rnd[0] = _randGen->random();
-    _gauss_rnd[1] = _randGen->random();
-    _gauss_rnd[2] = _randGen->random();
-    _gauss_rnd[3] = _randGen->random();
-    _gauss_N = 0;
+	void init(FlameTransformationContext *pContext, XForm *pXForm, JWF_FLOAT pAmount) {
+		_randGen = pContext->randGen;
+		_gauss_rnd[0] = _randGen->random();
+		_gauss_rnd[1] = _randGen->random();
+		_gauss_rnd[2] = _randGen->random();
+		_gauss_rnd[3] = _randGen->random();
+		_gauss_N = 0;
 	}
 
 	ZBlurFunc* makeCopy() {
@@ -49,9 +49,9 @@ public:
 	}
 
 private:
-  float _gauss_rnd[4];
-  RandGen *_randGen;
-  int _gauss_N;
+	float _gauss_rnd[4];
+	RandGen *_randGen;
+	int _gauss_N;
 };
 
 #endif // JWFVAR_ZBLUR_H_

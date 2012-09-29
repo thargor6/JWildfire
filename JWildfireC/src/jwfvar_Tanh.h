@@ -29,21 +29,21 @@ public:
 		return "tanh";
 	}
 
-	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
-    float tanhsin = sinf(2.0f * pAffineTP->y);
-    float tanhcos = cosf(2.0f * pAffineTP->y);
-    float tanhsinh = sinhf(2.0f * pAffineTP->x);
-    float tanhcosh = coshf(2.0f * pAffineTP->x);
-    float d = (tanhcos + tanhcosh);
-    if (d == 0) {
-      return;
-    }
-    float tanhden = 1.0f / d;
-    pVarTP->x += pAmount * tanhden * tanhsinh;
-    pVarTP->y += pAmount * tanhden * tanhsin;
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
+		float tanhsin = JWF_SIN(2.0f * pAffineTP->y);
+		float tanhcos = JWF_COS(2.0f * pAffineTP->y);
+		float tanhsinh = JWF_SINH(2.0f * pAffineTP->x);
+		float tanhcosh = JWF_COSH(2.0f * pAffineTP->x);
+		float d = (tanhcos + tanhcosh);
+		if (d == 0) {
+			return;
+		}
+		float tanhden = 1.0f / d;
+		pVarTP->x += pAmount * tanhden * tanhsinh;
+		pVarTP->y += pAmount * tanhden * tanhsin;
 		if (pContext->isPreserveZCoordinate) {
-      pVarTP->z += pAmount * pAffineTP->z;
-    }
+			pVarTP->z += pAmount * pAffineTP->z;
+		}
 	}
 
 	TanhFunc* makeCopy() {

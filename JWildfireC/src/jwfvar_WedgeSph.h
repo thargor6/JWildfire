@@ -33,7 +33,7 @@ public:
 		return "wedge_sph";
 	}
 
-	void setParameter(char *pName, float pValue) {
+	void setParameter(char *pName, JWF_FLOAT pValue) {
 		if (strcmp(pName, "angle") == 0) {
 			angle = pValue;
 		}
@@ -48,21 +48,21 @@ public:
 		}
 	}
 
-	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
-    float r = 1.0f / (pAffineTP->getPrecalcSqrt() + EPSILON);
-    float a = pAffineTP->getPrecalcAtanYX() + swirl * r;
-    float c = floorf((count * a + M_PI) * M_1_PI * 0.5f);
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
+		float r = 1.0f / (pAffineTP->getPrecalcSqrt() + EPSILON);
+		float a = pAffineTP->getPrecalcAtanYX() + swirl * r;
+		float c = floorf((count * a + M_PI) * M_1_PI * 0.5f);
 
-    float comp_fac = 1.0f - angle * count * M_1_PI * 0.5f;
+		float comp_fac = 1.0f - angle * count * M_1_PI * 0.5f;
 
-    a = a * comp_fac + c * angle;
+		a = a * comp_fac + c * angle;
 
-    float sa = sinf(a);
-    float ca = cosf(a);
-    r = pAmount * (r + hole);
+		float sa = JWF_SIN(a);
+		float ca = JWF_COS(a);
+		r = pAmount * (r + hole);
 
-    pVarTP->x += r * ca;
-    pVarTP->y += r * sa;
+		pVarTP->x += r * ca;
+		pVarTP->y += r * sa;
 		if (pContext->isPreserveZCoordinate) {
 			pVarTP->z += pAmount * pAffineTP->z;
 		}

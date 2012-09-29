@@ -29,15 +29,15 @@ public:
 		return "rings";
 	}
 
-	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
-    float dx = pXForm->coeff20 * pXForm->coeff20 + EPSILON;
-    float r = pAffineTP->getPrecalcSqrt();
-    r = r + dx - ((int) ((r + dx) / (2.0f * dx))) * 2.0f * dx - dx + r * (1.0f - dx);
-    pVarTP->x += r * pAffineTP->getPrecalcCosA();
-    pVarTP->y += r * pAffineTP->getPrecalcSinA();
-    if (pContext->isPreserveZCoordinate) {
-      pVarTP->z += pAmount * pAffineTP->z;
-    }
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
+		float dx = pXForm->coeff20 * pXForm->coeff20 + EPSILON;
+		float r = pAffineTP->getPrecalcSqrt();
+		r = r + dx - ((int) ((r + dx) / (2.0f * dx))) * 2.0f * dx - dx + r * (1.0f - dx);
+		pVarTP->x += r * pAffineTP->getPrecalcCosA();
+		pVarTP->y += r * pAffineTP->getPrecalcSinA();
+		if (pContext->isPreserveZCoordinate) {
+			pVarTP->z += pAmount * pAffineTP->z;
+		}
 	}
 
 	RingsFunc* makeCopy() {

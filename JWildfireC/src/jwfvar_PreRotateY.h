@@ -29,12 +29,12 @@ public:
 		return "pre_rotate_y";
 	}
 
-	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
-    float sina = sinf(pAmount * M_PI * 0.5f);
-    float cosa = cosf(pAmount * M_PI * 0.5f);
-    float x = cosa * pAffineTP->x - sina * pAffineTP->z;
-    pAffineTP->z = sina * pAffineTP->x + cosa * pAffineTP->z;
-    pAffineTP->x = x;
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
+		float sina = JWF_SIN(pAmount * M_PI * 0.5f);
+		float cosa = JWF_COS(pAmount * M_PI * 0.5f);
+		float x = cosa * pAffineTP->x - sina * pAffineTP->z;
+		pAffineTP->z = sina * pAffineTP->x + cosa * pAffineTP->z;
+		pAffineTP->x = x;
 	}
 
 	PreRotateYFunc* makeCopy() {

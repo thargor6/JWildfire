@@ -31,20 +31,20 @@ public:
 		return "flux";
 	}
 
-	void setParameter(char *pName, float pValue) {
+	void setParameter(char *pName, JWF_FLOAT pValue) {
 		if (strcmp(pName, "spread") == 0) {
 			spread = pValue;
 		}
 	}
 
-	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
 		float xpw = pAffineTP->x + pAmount;
 		float xmw = pAffineTP->x - pAmount;
-		float avgr = pAmount * (2.0f + spread) * sqrtf(sqrtf(pAffineTP->y * pAffineTP->y + xpw * xpw) / sqrtf(pAffineTP->y * pAffineTP->y + xmw * xmw));
+		float avgr = pAmount * (2.0f + spread) * JWF_SQRT(sqrtf(pAffineTP->y * pAffineTP->y + xpw * xpw) / JWF_SQRT(pAffineTP->y * pAffineTP->y + xmw * xmw));
 		float avga = (atan2f(pAffineTP->y, xmw) - atan2f(pAffineTP->y, xpw)) * 0.5f;
 
-		pVarTP->x += avgr * cosf(avga);
-		pVarTP->y += avgr * sinf(avga);
+		pVarTP->x += avgr * JWF_COS(avga);
+		pVarTP->y += avgr * JWF_SIN(avga);
 		if (pContext->isPreserveZCoordinate) {
 			pVarTP->z += pAmount * pAffineTP->z;
 		}
@@ -53,7 +53,6 @@ public:
 	FluxFunc* makeCopy() {
 		return new FluxFunc(*this);
 	}
-
 
 private:
 	float spread;

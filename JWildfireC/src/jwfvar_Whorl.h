@@ -32,7 +32,7 @@ public:
 		return "whorl";
 	}
 
-	void setParameter(char *pName, float pValue) {
+	void setParameter(char *pName, JWF_FLOAT pValue) {
 		if (strcmp(pName, "inside") == 0) {
 			inside = pValue;
 		}
@@ -41,19 +41,19 @@ public:
 		}
 	}
 
-	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
-    float r = pAffineTP->getPrecalcSqrt();
-    float a;
-    if (r < pAmount)
-      a = pAffineTP->getPrecalcAtanYX() + inside / (pAmount - r);
-    else
-      a = pAffineTP->getPrecalcAtanYX() + outside / (pAmount - r);
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
+		float r = pAffineTP->getPrecalcSqrt();
+		float a;
+		if (r < pAmount)
+			a = pAffineTP->getPrecalcAtanYX() + inside / (pAmount - r);
+		else
+			a = pAffineTP->getPrecalcAtanYX() + outside / (pAmount - r);
 
-    float sa = sinf(a);
-    float ca = cosf(a);
+		float sa = JWF_SIN(a);
+		float ca = JWF_COS(a);
 
-    pVarTP->x += pAmount * r * ca;
-    pVarTP->y += pAmount * r * sa;
+		pVarTP->x += pAmount * r * ca;
+		pVarTP->y += pAmount * r * sa;
 		if (pContext->isPreserveZCoordinate) {
 			pVarTP->z += pAmount * pAffineTP->z;
 		}

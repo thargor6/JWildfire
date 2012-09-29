@@ -34,12 +34,12 @@ public:
 		return 1;
 	}
 
-	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
-    float sina = sinf(pAmount * M_PI * 0.5f);
-    float cosa = cosf(pAmount * M_PI * 0.5f);
-    float z = cosa * pVarTP->z - sina * pVarTP->y;
-    pVarTP->y = sina * pVarTP->z + cosa * pVarTP->y;
-    pVarTP->z = z;
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
+		float sina = JWF_SIN(pAmount * M_PI * 0.5f);
+		float cosa = JWF_COS(pAmount * M_PI * 0.5f);
+		float z = cosa * pVarTP->z - sina * pVarTP->y;
+		pVarTP->y = sina * pVarTP->z + cosa * pVarTP->y;
+		pVarTP->z = z;
 	}
 
 	PostRotateXFunc* makeCopy() {

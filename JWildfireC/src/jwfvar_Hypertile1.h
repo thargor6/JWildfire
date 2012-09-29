@@ -33,7 +33,7 @@ public:
 		return "hypertile1";
 	}
 
-	void setParameter(char *pName, float pValue) {
+	void setParameter(char *pName, JWF_FLOAT pValue) {
 		if (strcmp(pName, "p") == 0) {
 			p = FTOI(pValue);
 		}
@@ -42,24 +42,24 @@ public:
 		}
 	}
 
-	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
-    float rpa = pContext->randGen->random(INT_MAX) * _pa;
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
+		float rpa = pContext->randGen->random(INT_MAX) * _pa;
 
-    float sina = sinf(rpa);
-    float cosa = cosf(rpa);
+		float sina = JWF_SIN(rpa);
+		float cosa = JWF_COS(rpa);
 
-    float re = _r * cosa;
-    float im = _r * sina;
+		float re = _r * cosa;
+		float im = _r * sina;
 
-    float a = pAffineTP->x + re, b = pAffineTP->y - im;
+		float a = pAffineTP->x + re, b = pAffineTP->y - im;
 
-    float c = re * pAffineTP->x - im * pAffineTP->y + 1;
-    float d = re * pAffineTP->y + im * pAffineTP->x;
+		float c = re * pAffineTP->x - im * pAffineTP->y + 1;
+		float d = re * pAffineTP->y + im * pAffineTP->x;
 
-    float vr = pAmount / (c*c + d*d);
+		float vr = pAmount / (c * c + d * d);
 
-    pVarTP->x += vr * (a * c + b * d);
-    pVarTP->y += vr * (b * c - a * d);
+		pVarTP->x += vr * (a * c + b * d);
+		pVarTP->y += vr * (b * c - a * d);
 
 		if (pContext->isPreserveZCoordinate) {
 			pVarTP->z += pAmount * pAffineTP->z;
@@ -70,15 +70,15 @@ public:
 		return new Hypertile1Func(*this);
 	}
 
-	virtual void init(FlameTransformationContext *pContext, XForm *pXForm, float pAmount) {
-    _pa = 2.0f * M_PI / p;
+	virtual void init(FlameTransformationContext *pContext, XForm *pXForm, JWF_FLOAT pAmount) {
+		_pa = 2.0f * M_PI / p;
 
-    float r2 = 1.0f - (cosf(2.0f * M_PI / p) - 1.0f) / (cosf(2.0f * M_PI / p) + cosf(2.0f * M_PI / q));
-    if (r2 > 0)
-      _r = 1.0f / sqrtf(r2);
-    else
-      _r = 1.0f;
-		}
+		float r2 = 1.0f - (cosf(2.0f * M_PI / p) - 1.0f) / (cosf(2.0f * M_PI / p) + JWF_COS(2.0f * M_PI / q));
+		if (r2 > 0)
+			_r = 1.0f / JWF_SQRT(r2);
+		else
+			_r = 1.0f;
+	}
 
 private:
 	int p;

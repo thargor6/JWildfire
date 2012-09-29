@@ -29,16 +29,16 @@ public:
 		return "exponential";
 	}
 
-	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
-    float r = M_PI * pAffineTP->y;
-    float sinr = sinf(r);
-    float cosr = cosf(r);
-    float d = pAmount * expf(pAffineTP->x - 1.0f);
-    pVarTP->x += cosr * d;
-    pVarTP->y += sinr * d;
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
+		float r = M_PI * pAffineTP->y;
+		float sinr = JWF_SIN(r);
+		float cosr = JWF_COS(r);
+		float d = pAmount * JWF_EXP(pAffineTP->x - 1.0f);
+		pVarTP->x += cosr * d;
+		pVarTP->y += sinr * d;
 		if (pContext->isPreserveZCoordinate) {
-      pVarTP->z += pAmount * pAffineTP->z;
-    }
+			pVarTP->z += pAmount * pAffineTP->z;
+		}
 	}
 
 	ExponentialFunc* makeCopy() {

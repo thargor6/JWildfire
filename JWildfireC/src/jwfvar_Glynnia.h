@@ -29,61 +29,61 @@ public:
 		return "glynnia";
 	}
 
-	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
-    float r = sqrtf(pAffineTP->x*pAffineTP->x + pAffineTP->y*pAffineTP->y);
-    float d;
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
+		float r = JWF_SQRT(pAffineTP->x * pAffineTP->x + pAffineTP->y * pAffineTP->y);
+		float d;
 
-    if (r >= 1.0f) {
-      if (pContext->randGen->random() > 0.5f) {
-        d = sqrtf(r + pAffineTP->x);
-        if (d == 0) {
-          return;
-        }
-        pVarTP->x += _vvar2 * d;
-        pVarTP->y -= _vvar2 / d * pAffineTP->y; //+= _vvar2 / d * pAffineTP->y;
-      }
-      else {
-        d = r + pAffineTP->x;
-        float dx = sqrtf(r * (pAffineTP->y*pAffineTP->y + d*d));
-        if (dx == 0) {
-          return;
-        }
-        r = pAmount / dx;
-        pVarTP->x += r * d;
-        pVarTP->y += r * pAffineTP->y; //-= r * pAffineTP->y;
-      }
-    }
-    else {
-      if (pContext->randGen->random() > 0.5f) {
-        d = sqrtf(r + pAffineTP->x);
-        if (d == 0) {
-          return;
-        }
-        pVarTP->x -= _vvar2 * d;
-        pVarTP->y -= _vvar2 / d * pAffineTP->y;
-      }
-      else {
-        d = r + pAffineTP->x;
-        float dx = sqrtf(r * (pAffineTP->y*pAffineTP->y + d*d));
-        if (dx == 0) {
-          return;
-        }
-        r = pAmount / dx;
-        pVarTP->x -= r * d;
-        pVarTP->y += r * pAffineTP->y;
-      }
-    }
+		if (r >= 1.0f) {
+			if (pContext->randGen->random() > 0.5f) {
+				d = JWF_SQRT(r + pAffineTP->x);
+				if (d == 0) {
+					return;
+				}
+				pVarTP->x += _vvar2 * d;
+				pVarTP->y -= _vvar2 / d * pAffineTP->y; //+= _vvar2 / d * pAffineTP->y;
+			}
+			else {
+				d = r + pAffineTP->x;
+				float dx = JWF_SQRT(r * (pAffineTP->y * pAffineTP->y + d * d));
+				if (dx == 0) {
+					return;
+				}
+				r = pAmount / dx;
+				pVarTP->x += r * d;
+				pVarTP->y += r * pAffineTP->y; //-= r * pAffineTP->y;
+			}
+		}
+		else {
+			if (pContext->randGen->random() > 0.5f) {
+				d = JWF_SQRT(r + pAffineTP->x);
+				if (d == 0) {
+					return;
+				}
+				pVarTP->x -= _vvar2 * d;
+				pVarTP->y -= _vvar2 / d * pAffineTP->y;
+			}
+			else {
+				d = r + pAffineTP->x;
+				float dx = JWF_SQRT(r * (pAffineTP->y * pAffineTP->y + d * d));
+				if (dx == 0) {
+					return;
+				}
+				r = pAmount / dx;
+				pVarTP->x -= r * d;
+				pVarTP->y += r * pAffineTP->y;
+			}
+		}
 		if (pContext->isPreserveZCoordinate) {
-      pVarTP->z += pAmount * pAffineTP->z;
-    }
+			pVarTP->z += pAmount * pAffineTP->z;
+		}
 	}
 
 	GlynniaFunc* makeCopy() {
 		return new GlynniaFunc(*this);
 	}
 
-	virtual void init(FlameTransformationContext *pContext, XForm *pXForm, float pAmount) {
-    _vvar2 = pAmount * sqrtf(2.0f) / 2.0f;
+	virtual void init(FlameTransformationContext *pContext, XForm *pXForm, JWF_FLOAT pAmount) {
+		_vvar2 = pAmount * JWF_SQRT(2.0f) / 2.0f;
 	}
 
 private:

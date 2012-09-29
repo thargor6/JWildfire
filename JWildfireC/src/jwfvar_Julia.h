@@ -29,16 +29,16 @@ public:
 		return "julia";
 	}
 
-	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, float pAmount) {
-    float a = pAffineTP->getPrecalcAtan() * 0.5f + M_PI * (int) (2.0f * pContext->randGen->random());
-    float sina = sinf(a);
-    float cosa = cosf(a);
-    float r = pAmount * sqrtf(sqrtf(pAffineTP->x * pAffineTP->x + pAffineTP->y * pAffineTP->y));
-    pVarTP->x += r * cosa;
-    pVarTP->y += r * sina;
-    if (pContext->isPreserveZCoordinate) {
-      pVarTP->z += pAmount * pAffineTP->z;
-    }
+	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
+		float a = pAffineTP->getPrecalcAtan() * 0.5f + M_PI * (int) (2.0f * pContext->randGen->random());
+		float sina = JWF_SIN(a);
+		float cosa = JWF_COS(a);
+		float r = pAmount * JWF_SQRT(sqrtf(pAffineTP->x * pAffineTP->x + pAffineTP->y * pAffineTP->y));
+		pVarTP->x += r * cosa;
+		pVarTP->y += r * sina;
+		if (pContext->isPreserveZCoordinate) {
+			pVarTP->z += pAmount * pAffineTP->z;
+		}
 	}
 
 	JuliaFunc* makeCopy() {
