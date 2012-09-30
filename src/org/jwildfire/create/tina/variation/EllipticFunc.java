@@ -44,7 +44,8 @@ public class EllipticFunc extends SimpleVariationFunc {
 
     pVarTP.x += pAmount * atan2(a, b);
 
-    if (pAffineTP.y > 0)
+    //    if (pAffineTP.y > 0)
+    if (pContext.random() < 0.5)
       pVarTP.y += pAmount * log(xmax + sqrt_safe(xmax - 1.0));
     else
       pVarTP.y -= pAmount * log(xmax + sqrt_safe(xmax - 1.0));
