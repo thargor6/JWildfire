@@ -58,6 +58,8 @@ public final class XForm implements Assignable<XForm>, Serializable {
   private double opacity = 0.0;
   private final XForm[] nextAppliedXFormTable = new XForm[Constants.NEXT_APPLIED_XFORM_TABLE_SIZE];
   private DrawMode drawMode = DrawMode.NORMAL;
+  private double antialiasAmount = 0.0;
+  private double antialiasRadius = 0.5;
 
   public XForm() {
     coeff00 = 1;
@@ -388,6 +390,8 @@ public final class XForm implements Assignable<XForm>, Serializable {
     System.arraycopy(pXForm.modifiedWeights, 0, modifiedWeights, 0, pXForm.modifiedWeights.length);
     opacity = pXForm.opacity;
     drawMode = pXForm.drawMode;
+    antialiasAmount = pXForm.antialiasAmount;
+    antialiasRadius = pXForm.antialiasRadius;
   }
 
   @Override
@@ -463,7 +467,8 @@ public final class XForm implements Assignable<XForm>, Serializable {
         fabs(postCoeff21 - pSrc.postCoeff21) > EPSILON || fabs(opacity - pSrc.opacity) > EPSILON ||
         ((drawMode != null && pSrc.drawMode == null) || (drawMode == null && pSrc.drawMode != null) ||
         (drawMode != null && pSrc.drawMode != null && !drawMode.equals(pSrc.drawMode))) ||
-        modifiedWeights.length != pSrc.modifiedWeights.length || variations.size() != pSrc.variations.size()) {
+        modifiedWeights.length != pSrc.modifiedWeights.length || variations.size() != pSrc.variations.size() ||
+        fabs(antialiasAmount - pSrc.antialiasAmount) > EPSILON || fabs(antialiasRadius - pSrc.antialiasRadius) > EPSILON) {
       return false;
     }
     for (int i = 0; i < modifiedWeights.length; i++) {
@@ -477,5 +482,21 @@ public final class XForm implements Assignable<XForm>, Serializable {
       }
     }
     return true;
+  }
+
+  public double getAntialiasAmount() {
+    return antialiasAmount;
+  }
+
+  public void setAntialiasAmount(double antialiasAmount) {
+    this.antialiasAmount = antialiasAmount;
+  }
+
+  public double getAntialiasRadius() {
+    return antialiasRadius;
+  }
+
+  public void setAntialiasRadius(double antialiasRadius) {
+    this.antialiasRadius = antialiasRadius;
   }
 }

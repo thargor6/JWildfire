@@ -16,6 +16,8 @@
 */
 package org.jwildfire.create.tina.io;
 
+import static org.jwildfire.base.MathLib.EPSILON;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,6 +48,10 @@ public class Flam3Writer {
       attrList.add(pXB.createAttr("opacity", 0.0));
     }
     attrList.add(pXB.createAttr("symmetry", pXForm.getColorSymmetry()));
+    if (pXForm.getAntialiasAmount() > EPSILON) {
+      attrList.add(pXB.createAttr("antialias_amount", pXForm.getAntialiasAmount()));
+      attrList.add(pXB.createAttr("antialias_radius", pXForm.getAntialiasRadius()));
+    }
 
     for (int vIdx = 0; vIdx < pXForm.getVariationCount(); vIdx++) {
       Variation v = pXForm.getVariation(vIdx);

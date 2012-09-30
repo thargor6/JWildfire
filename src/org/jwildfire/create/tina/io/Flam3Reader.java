@@ -237,6 +237,8 @@ public class Flam3Reader implements FlameReader {
   private static final String ATTR_POST = "post";
   private static final String ATTR_CHAOS = "chaos";
   private static final String ATTR_SYMMETRY = "symmetry";
+  private static final String ATTR_ANTIALIAS_AMOUNT = "antialias_amount";
+  private static final String ATTR_ANTIALIAS_RADIUS = "antialias_radius";
 
   private void parseXFormAttributes(XForm pXForm, String pXML) {
     Map<String, String> atts = Tools.parseAttributes(pXML);
@@ -246,6 +248,12 @@ public class Flam3Reader implements FlameReader {
     }
     if ((hs = atts.get(ATTR_COLOR)) != null) {
       pXForm.setColor(Double.parseDouble(hs));
+    }
+    if ((hs = atts.get(ATTR_ANTIALIAS_AMOUNT)) != null) {
+      pXForm.setAntialiasAmount(Double.parseDouble(hs));
+    }
+    if ((hs = atts.get(ATTR_ANTIALIAS_RADIUS)) != null) {
+      pXForm.setAntialiasRadius(Double.parseDouble(hs));
     }
     if ((hs = atts.get(ATTR_OPACITY)) != null) {
       double opacity = Double.parseDouble(hs);

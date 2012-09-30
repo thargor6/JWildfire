@@ -16,6 +16,14 @@
 */
 package org.jwildfire.create.tina.render;
 
+import static org.jwildfire.base.MathLib.EPSILON;
+import static org.jwildfire.base.MathLib.M_PI;
+import static org.jwildfire.base.MathLib.cos;
+import static org.jwildfire.base.MathLib.exp;
+import static org.jwildfire.base.MathLib.log;
+import static org.jwildfire.base.MathLib.sin;
+import static org.jwildfire.base.MathLib.sqrt;
+
 import java.util.List;
 
 import org.jwildfire.create.tina.base.Constants;
@@ -112,6 +120,7 @@ public final class FlameRenderPseudo3DThread extends FlameRenderThread {
 
       XForm finalXForm = flame.getFinalXForm();
       double px = 0.0, py = 0.0;
+      int xIdx, yIdx;
       if (finalXForm != null) {
         for (int pIdx = 0; pIdx < pA.length; pIdx++) {
           qA[pIdx] = new XYZPoint();
@@ -121,6 +130,26 @@ public final class FlameRenderPseudo3DThread extends FlameRenderThread {
         renderer.project(r);
         px = r.x * renderer.cosa + r.y * renderer.sina + renderer.rcX;
         py = r.y * renderer.cosa - r.x * renderer.sina + renderer.rcY;
+        if ((px < 0) || (px > renderer.camW))
+          continue;
+        if ((py < 0) || (py > renderer.camH))
+          continue;
+
+        if ((finalXForm.getAntialiasAmount() > EPSILON) && (finalXForm.getAntialiasRadius() > EPSILON) && (renderer.random.random() > 1.0 - finalXForm.getAntialiasAmount())) {
+          double dr = exp(finalXForm.getAntialiasRadius() * sqrt(-log(renderer.random.random()))) - 1.0;
+          double dtheta = renderer.random.random() * 2.0 * M_PI;
+          xIdx = (int) (renderer.bws * px + dr * cos(dtheta) + 0.5);
+          if (xIdx < 0 || xIdx >= renderer.rasterWidth)
+            continue;
+          yIdx = (int) (renderer.bhs * py + dr * sin(dtheta) + 0.5);
+          if (yIdx < 0 || yIdx >= renderer.rasterHeight)
+            continue;
+        }
+        else {
+          xIdx = (int) (renderer.bws * px + 0.5);
+          yIdx = (int) (renderer.bhs * py + 0.5);
+        }
+
       }
       else {
         for (int pIdx = 0; pIdx < pA.length; pIdx++) {
@@ -131,15 +160,30 @@ public final class FlameRenderPseudo3DThread extends FlameRenderThread {
         renderer.project(r);
         px = r.x * renderer.cosa + r.y * renderer.sina + renderer.rcX;
         py = r.y * renderer.cosa - r.x * renderer.sina + renderer.rcY;
+        if ((px < 0) || (px > renderer.camW))
+          continue;
+        if ((py < 0) || (py > renderer.camH))
+          continue;
+
+        if ((xf.getAntialiasAmount() > EPSILON) && (xf.getAntialiasRadius() > EPSILON) && (renderer.random.random() > 1.0 - xf.getAntialiasAmount())) {
+          double dr = exp(xf.getAntialiasRadius() * sqrt(-log(renderer.random.random()))) - 1.0;
+          double dtheta = renderer.random.random() * 2.0 * M_PI;
+          xIdx = (int) (renderer.bws * px + dr * cos(dtheta) + 0.5);
+          if (xIdx < 0 || xIdx >= renderer.rasterWidth)
+            continue;
+          yIdx = (int) (renderer.bhs * py + dr * sin(dtheta) + 0.5);
+          if (yIdx < 0 || yIdx >= renderer.rasterHeight)
+            continue;
+        }
+        else {
+          xIdx = (int) (renderer.bws * px + 0.5);
+          yIdx = (int) (renderer.bhs * py + 0.5);
+        }
+
       }
 
-      if ((px < 0) || (px > renderer.camW))
-        continue;
-      if ((py < 0) || (py > renderer.camH))
-        continue;
-
-      int xIdx = (int) (renderer.bws * px + 0.5);
-      int yIdx = (int) (renderer.bhs * py + 0.5);
+      //int xIdx = (int) (renderer.bws * px + 0.5);
+      //int yIdx = (int) (renderer.bhs * py + 0.5);
 
       RasterPoint rp = renderer.raster[yIdx][xIdx];
       RenderColor color;
