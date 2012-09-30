@@ -523,14 +523,29 @@ public final class FlameRenderer {
     }
   }
 
-  private void renderImageSimple(SimpleImage pImage) {
-    LogDensityPoint logDensityPnt = new LogDensityPoint();
-    GammaCorrectedRGBPoint rbgPoint = new GammaCorrectedRGBPoint();
-    logDensityFilter.setRaster(raster, rasterWidth, rasterHeight, pImage.getImageWidth(), pImage.getImageHeight());
-    if (renderScale == 2) {
-      SimpleImage newImg = new SimpleImage(pImage.getImageWidth() * renderScale, pImage.getImageHeight() * renderScale);
-      for (int i = 0; i < pImage.getImageHeight(); i++) {
-        for (int j = 0; j < pImage.getImageWidth(); j++) {
+  public class RenderImageSimpleScaledThread implements Runnable {
+    private final int startRow, endRow;
+    private final LogDensityPoint logDensityPnt;
+    private final GammaCorrectedRGBPoint rbgPoint;
+    private final SimpleImage img;
+    private final SimpleImage newImg;
+    private boolean done;
+
+    public RenderImageSimpleScaledThread(int pStartRow, int pEndRow, SimpleImage pImg, SimpleImage pNewImg) {
+      startRow = pStartRow;
+      endRow = pEndRow;
+      logDensityPnt = new LogDensityPoint();
+      rbgPoint = new GammaCorrectedRGBPoint();
+      img = pImg;
+      newImg = pNewImg;
+      done = false;
+    }
+
+    @Override
+    public void run() {
+      done = false;
+      for (int i = startRow; i < endRow; i++) {
+        for (int j = 0; j < img.getImageWidth(); j++) {
           logDensityFilter.transformPointSimple(logDensityPnt, j, i);
           gammaCorrectionFilter.transformPointSimple(logDensityPnt, rbgPoint);
           int x = j * renderScale;
@@ -542,14 +557,146 @@ public final class FlameRenderer {
           newImg.setRGB(x + 1, y + 1, rbgPoint.red, rbgPoint.green, rbgPoint.blue);
         }
       }
+      done = true;
+    }
+
+    public boolean isDone() {
+      return done;
+    }
+
+  }
+
+  public class RenderImageSimpleThread implements Runnable {
+    private final int startRow, endRow;
+    private final LogDensityPoint logDensityPnt;
+    private final GammaCorrectedRGBPoint rbgPoint;
+    private final SimpleImage img;
+    private boolean done;
+
+    public RenderImageSimpleThread(int pStartRow, int pEndRow, SimpleImage pImg) {
+      startRow = pStartRow;
+      endRow = pEndRow;
+      logDensityPnt = new LogDensityPoint();
+      rbgPoint = new GammaCorrectedRGBPoint();
+      img = pImg;
+      done = false;
+    }
+
+    @Override
+    public void run() {
+      done = false;
+      for (int i = startRow; i < endRow; i++) {
+        for (int j = 0; j < img.getImageWidth(); j++) {
+          logDensityFilter.transformPointSimple(logDensityPnt, j, i);
+          gammaCorrectionFilter.transformPointSimple(logDensityPnt, rbgPoint);
+          img.setRGB(j, i, rbgPoint.red, rbgPoint.green, rbgPoint.blue);
+        }
+      }
+      done = true;
+    }
+
+    public boolean isDone() {
+      return done;
+    }
+
+  }
+
+  private void renderImageSimple(SimpleImage pImage) {
+    int threadCount = prefs.getTinaRenderThreads() - 1;
+    if (threadCount < 1)
+      threadCount = 1;
+    logDensityFilter.setRaster(raster, rasterWidth, rasterHeight, pImage.getImageWidth(), pImage.getImageHeight());
+    if (renderScale == 2) {
+      SimpleImage newImg = new SimpleImage(pImage.getImageWidth() * renderScale, pImage.getImageHeight() * renderScale);
+      if (threadCount == 1) {
+        LogDensityPoint logDensityPnt = new LogDensityPoint();
+        GammaCorrectedRGBPoint rbgPoint = new GammaCorrectedRGBPoint();
+        for (int i = 0; i < pImage.getImageHeight(); i++) {
+          for (int j = 0; j < pImage.getImageWidth(); j++) {
+            logDensityFilter.transformPointSimple(logDensityPnt, j, i);
+            gammaCorrectionFilter.transformPointSimple(logDensityPnt, rbgPoint);
+            int x = j * renderScale;
+            int y = i * renderScale;
+
+            newImg.setRGB(x, y, rbgPoint.red, rbgPoint.green, rbgPoint.blue);
+            newImg.setRGB(x + 1, y, rbgPoint.red, rbgPoint.green, rbgPoint.blue);
+            newImg.setRGB(x, y + 1, rbgPoint.red, rbgPoint.green, rbgPoint.blue);
+            newImg.setRGB(x + 1, y + 1, rbgPoint.red, rbgPoint.green, rbgPoint.blue);
+          }
+        }
+      }
+      else {
+        int rowsPerThread = pImage.getImageHeight() / threadCount;
+        List<RenderImageSimpleScaledThread> threads = new ArrayList<RenderImageSimpleScaledThread>();
+        for (int i = 0; i < threadCount; i++) {
+          int startRow = i * rowsPerThread;
+          int endRow = i < rowsPerThread - 1 ? startRow + rowsPerThread : pImage.getImageHeight();
+          RenderImageSimpleScaledThread thread = new RenderImageSimpleScaledThread(startRow, endRow, pImage, newImg);
+          threads.add(thread);
+          thread.run();
+        }
+        while (true) {
+          boolean ready = true;
+          for (RenderImageSimpleScaledThread t : threads) {
+            if (!t.isDone()) {
+              ready = false;
+              break;
+            }
+          }
+          if (!ready) {
+            try {
+              Thread.sleep(1);
+            }
+            catch (InterruptedException e) {
+              e.printStackTrace();
+            }
+          }
+          else
+            break;
+        }
+      }
       pImage.setBufferedImage(newImg.getBufferedImg(), newImg.getImageWidth(), newImg.getImageHeight());
     }
     else if (renderScale == 1) {
-      for (int i = 0; i < pImage.getImageHeight(); i++) {
-        for (int j = 0; j < pImage.getImageWidth(); j++) {
-          logDensityFilter.transformPointSimple(logDensityPnt, j, i);
-          gammaCorrectionFilter.transformPointSimple(logDensityPnt, rbgPoint);
-          pImage.setRGB(j, i, rbgPoint.red, rbgPoint.green, rbgPoint.blue);
+      if (threadCount == 1) {
+        LogDensityPoint logDensityPnt = new LogDensityPoint();
+        GammaCorrectedRGBPoint rbgPoint = new GammaCorrectedRGBPoint();
+        for (int i = 0; i < pImage.getImageHeight(); i++) {
+          for (int j = 0; j < pImage.getImageWidth(); j++) {
+            logDensityFilter.transformPointSimple(logDensityPnt, j, i);
+            gammaCorrectionFilter.transformPointSimple(logDensityPnt, rbgPoint);
+            pImage.setRGB(j, i, rbgPoint.red, rbgPoint.green, rbgPoint.blue);
+          }
+        }
+      }
+      else {
+        int rowsPerThread = pImage.getImageHeight() / threadCount;
+        List<RenderImageSimpleThread> threads = new ArrayList<RenderImageSimpleThread>();
+        for (int i = 0; i < threadCount; i++) {
+          int startRow = i * rowsPerThread;
+          int endRow = i < rowsPerThread - 1 ? startRow + rowsPerThread : pImage.getImageHeight();
+          RenderImageSimpleThread thread = new RenderImageSimpleThread(startRow, endRow, pImage);
+          threads.add(thread);
+          thread.run();
+        }
+        while (true) {
+          boolean ready = true;
+          for (RenderImageSimpleThread t : threads) {
+            if (!t.isDone()) {
+              ready = false;
+              break;
+            }
+          }
+          if (!ready) {
+            try {
+              Thread.sleep(1);
+            }
+            catch (InterruptedException e) {
+              e.printStackTrace();
+            }
+          }
+          else
+            break;
         }
       }
     }

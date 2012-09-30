@@ -137,11 +137,11 @@ public final class FlameRenderPseudo3DThread extends FlameRenderThread {
 
         if ((finalXForm.getAntialiasAmount() > EPSILON) && (finalXForm.getAntialiasRadius() > EPSILON) && (renderer.random.random() > 1.0 - finalXForm.getAntialiasAmount())) {
           double dr = exp(finalXForm.getAntialiasRadius() * sqrt(-log(renderer.random.random()))) - 1.0;
-          double dtheta = renderer.random.random() * 2.0 * M_PI;
-          xIdx = (int) (renderer.bws * px + dr * cos(dtheta) + 0.5);
+          double da = renderer.random.random() * 2.0 * M_PI;
+          xIdx = (int) (renderer.bws * px + dr * cos(da) + 0.5);
           if (xIdx < 0 || xIdx >= renderer.rasterWidth)
             continue;
-          yIdx = (int) (renderer.bhs * py + dr * sin(dtheta) + 0.5);
+          yIdx = (int) (renderer.bhs * py + dr * sin(da) + 0.5);
           if (yIdx < 0 || yIdx >= renderer.rasterHeight)
             continue;
         }
@@ -167,11 +167,11 @@ public final class FlameRenderPseudo3DThread extends FlameRenderThread {
 
         if ((xf.getAntialiasAmount() > EPSILON) && (xf.getAntialiasRadius() > EPSILON) && (renderer.random.random() > 1.0 - xf.getAntialiasAmount())) {
           double dr = exp(xf.getAntialiasRadius() * sqrt(-log(renderer.random.random()))) - 1.0;
-          double dtheta = renderer.random.random() * 2.0 * M_PI;
-          xIdx = (int) (renderer.bws * px + dr * cos(dtheta) + 0.5);
+          double da = renderer.random.random() * 2.0 * M_PI;
+          xIdx = (int) (renderer.bws * px + dr * cos(da) + 0.5);
           if (xIdx < 0 || xIdx >= renderer.rasterWidth)
             continue;
-          yIdx = (int) (renderer.bhs * py + dr * sin(dtheta) + 0.5);
+          yIdx = (int) (renderer.bhs * py + dr * sin(da) + 0.5);
           if (yIdx < 0 || yIdx >= renderer.rasterHeight)
             continue;
         }
