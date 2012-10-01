@@ -932,19 +932,6 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaCameraPanel.add(getTinaCameraDOFSlider(), null);
       tinaCameraPanel.add(getTinaCameraDOFREd(), null);
       tinaCameraPanel.add(tinaCameraDOFLbl, null);
-
-      JButton toClipboardCUDABtn = new JButton();
-      toClipboardCUDABtn.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-          tinaController.saveFlameToClipboardCUDA();
-        }
-      });
-      toClipboardCUDABtn.setText("To Clipboard (CUDA)");
-      toClipboardCUDABtn.setPreferredSize(new Dimension(125, 24));
-      toClipboardCUDABtn.setFont(new Font("Dialog", Font.BOLD, 10));
-      toClipboardCUDABtn.setBounds(new Rectangle(643, 7, 125, 24));
-      toClipboardCUDABtn.setBounds(997, 24, 158, 24);
-      tinaCameraPanel.add(toClipboardCUDABtn);
     }
     return tinaCameraPanel;
   }
@@ -2421,6 +2408,18 @@ public class TinaInternalFrame extends JInternalFrame {
       affinePreserveZButton.setFont(new Font("Dialog", Font.BOLD, 10));
       affinePreserveZButton.setBounds(4, 214, 138, 24);
       tinaAffineTransformationPanel.add(affinePreserveZButton);
+
+      JButton checkCUDACompatiblityBtn = new JButton();
+      checkCUDACompatiblityBtn.setBounds(145, 214, 138, 24);
+      tinaAffineTransformationPanel.add(checkCUDACompatiblityBtn);
+      checkCUDACompatiblityBtn.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.checkCUDACompatibility();
+        }
+      });
+      checkCUDACompatiblityBtn.setText("Check for C(UDA)");
+      checkCUDACompatiblityBtn.setPreferredSize(new Dimension(125, 24));
+      checkCUDACompatiblityBtn.setFont(new Font("Dialog", Font.BOLD, 10));
     }
     return tinaAffineTransformationPanel;
   }
@@ -5453,7 +5452,7 @@ public class TinaInternalFrame extends JInternalFrame {
       affineResetTransformButton.setPreferredSize(new Dimension(136, 24));
       affineResetTransformButton.setText("Reset");
       affineResetTransformButton.setLocation(new Point(146, 181));
-      affineResetTransformButton.setSize(new Dimension(130, 24));
+      affineResetTransformButton.setSize(new Dimension(138, 24));
       affineResetTransformButton.setToolTipText("Reset triangle to defaults");
       affineResetTransformButton.setFont(new Font("Dialog", Font.BOLD, 10));
       affineResetTransformButton.addActionListener(new java.awt.event.ActionListener() {
@@ -7851,7 +7850,7 @@ public class TinaInternalFrame extends JInternalFrame {
       saveFlameToClipboardButton.setFont(new Font("Dialog", Font.BOLD, 10));
       saveFlameToClipboardButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.saveFlameToClipboard();
+          tinaController.checkCUDACompatibility();
         }
       });
     }

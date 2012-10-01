@@ -44,6 +44,7 @@ import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
@@ -3738,13 +3739,11 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     }
   }
 
-  public void saveFlameToClipboardCUDA() {
+  public void checkCUDACompatibility() {
     try {
       if (currFlame != null) {
-        Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-        String xml = new CUDARendererInterface().getFlameCUDA(currFlame);
-        StringSelection data = new StringSelection(xml);
-        clipboard.setContents(data, data);
+        new CUDARendererInterface().checkFlameForCUDA(currFlame);
+        JOptionPane.showMessageDialog(centerPanel, "Flame should render fine under JWildfireC(UDA)", "JWildfireC(UDA) compatibility check", JOptionPane.INFORMATION_MESSAGE);
       }
     }
     catch (Throwable ex) {
