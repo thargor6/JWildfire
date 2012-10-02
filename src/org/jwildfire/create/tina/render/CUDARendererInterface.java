@@ -18,11 +18,22 @@ package org.jwildfire.create.tina.render;
 
 import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_CUDA;
 
+import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.PrintWriter;
+
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.XForm;
+import org.jwildfire.create.tina.io.Flam3Writer;
 import org.jwildfire.create.tina.palette.RGBColor;
 import org.jwildfire.create.tina.variation.Variation;
+import org.jwildfire.image.SimpleImage;
 
 public class CUDARendererInterface {
 
@@ -193,7 +204,182 @@ public class CUDARendererInterface {
     RenderedFlame res = new RenderedFlame();
     res.init(pInfo);
     System.out.println(pInfo.getImageWidth() + "x" + pInfo.getImageHeight() + " " + pFlame.getSampleDensity());
+
+    String cmd = "F:\\DEV\\eclipse_indigo_c_workspace\\JWildfireC\\Debug\\JWildfireC.exe";
+
+    try {
+      new Flam3Writer().writeFlame(pFlame, "C:\\TMP\\CUDATmpFlame.flame");
+    }
+    catch (Exception e) {
+      throw new RuntimeException(e);
+    }
+    String args = " -flameFilename C:\\TMP\\CUDATmpFlame.flame -outputFilename C:\\TMP\\CUDA.ppm -threadCount 8 -outputWidth " + pInfo.getImageWidth() + " -outputHeight " + pInfo.getImageHeight() + " -sampleDensity " + doubleToCUDA(pFlame.getSampleDensity());
+    ByteArrayOutputStream bos = new ByteArrayOutputStream();
+
+    int retVal = launchCmd(cmd + args, bos);
+    if (retVal != 0) {
+      throw new RuntimeException(bos.toString());
+    }
+
+    loadImage("C:\\TMP\\CUDA.ppm", res.getImage());
+
     return res;
+  }
+
+  public void loadImage(String pFilename, SimpleImage pImg) {
+    try {
+      String magicNumber = new String();
+      String imgSize = "";
+
+      FileInputStream is = new FileInputStream(pFilename);
+      byte buffer;
+      // Identifier
+      do {
+        buffer = (byte) is.read();
+        magicNumber = magicNumber + Character.valueOf((char) buffer);
+      }
+      while (buffer != '\n' && buffer != ' ');
+      if (!(magicNumber.charAt(0) == 'P' && magicNumber.charAt(1) == '6')) {
+        throw new RuntimeException("Unsupported format");
+      }
+      // Image size
+      buffer = (byte) is.read();
+      // skip comment
+      if (buffer == '#') {
+        do {
+          buffer = (byte) is.read();
+        }
+        while (buffer != '\n');
+        buffer = (byte) is.read();
+      }
+
+      do {
+        imgSize = imgSize + Character.valueOf((char) buffer);
+        buffer = (byte) is.read();
+      }
+      while (buffer != ' ' && buffer != '\n');
+
+      int imgWidth = Integer.parseInt(imgSize);
+      imgSize = "";
+      buffer = (byte) is.read();
+      do {
+        imgSize = imgSize + Character.valueOf((char) buffer);
+        buffer = (byte) is.read();
+      }
+      while (buffer != ' ' && buffer != '\n');
+      int imageHeight = Integer.parseInt(imgSize);
+      do {
+        buffer = (byte) is.read();
+      }
+      while (buffer != ' ' && buffer != '\n');
+
+      // width * height * 3 bytes
+      byte[] row = new byte[imgWidth * 3];
+      for (int y = 0; y < imageHeight; y++) {
+        is.read(row, 0, imgWidth * 3);
+        for (int i = 0; i < imgWidth; i++) {
+          int r = row[3 * i];
+          if (r < 0)
+            r += 256;
+          int g = row[3 * i + 1];
+          if (g < 0)
+            g += 256;
+          int b = row[3 * i + 2];
+          if (b < 0)
+            b += 256;
+          pImg.setRGB(i, y, r, g, b);
+        }
+
+      }
+      is.close();
+    }
+    catch (Exception ex) {
+      throw new RuntimeException(ex);
+    }
+  }
+
+  private int launchCmd(String pCmd, OutputStream pOS) {
+    int exitVal;
+    try {
+      Runtime runtime = Runtime.getRuntime();
+
+      Process proc;
+      try {
+        proc = runtime.exec(pCmd);
+      }
+      catch (IOException ex) {
+        throw new RuntimeException(ex);
+      }
+
+      final boolean dumpToOut = true;
+      StreamRedirector outputStreamHandler = new StreamRedirector(proc.getInputStream(), pOS, dumpToOut);
+      StreamRedirector errorStreamHandler = new StreamRedirector(proc.getErrorStream(), pOS, dumpToOut);
+      errorStreamHandler.start();
+      outputStreamHandler.start();
+      try {
+        exitVal = proc.waitFor();
+      }
+      catch (InterruptedException e) {
+        exitVal = -1;
+        e.printStackTrace();
+      }
+      if (dumpToOut) {
+        System.out.println("EXITVALUE=" + exitVal);
+      }
+    }
+    finally {
+      try {
+        pOS.flush();
+        pOS.close();
+      }
+      catch (IOException e) {
+        exitVal = -1;
+        e.printStackTrace();
+      }
+    }
+    return exitVal;
+  }
+
+  private class StreamRedirector extends Thread {
+    private final InputStream is;
+    private final OutputStream os;
+    private final boolean copyToOut;
+
+    public StreamRedirector(InputStream pIs, OutputStream pOs, boolean pCopyToOut) {
+      is = pIs;
+      os = pOs;
+      copyToOut = pCopyToOut;
+    }
+
+    public void run() {
+      try {
+        PrintWriter pw = null;
+        try {
+          if (os != null) {
+            pw = new PrintWriter(os);
+          }
+          InputStreamReader isr = new InputStreamReader(is);
+          BufferedReader br = new BufferedReader(isr);
+          String line = null;
+          while ((line = br.readLine()) != null) {
+            if (pw != null) {
+              pw.println(line);
+            }
+            if (copyToOut) {
+              System.out.println(line);
+            }
+          }
+        }
+        finally {
+          if (pw != null) {
+            pw.flush();
+          }
+        }
+      }
+      catch (IOException ex) {
+        ex.printStackTrace();
+      }
+    }
   }
 
 }

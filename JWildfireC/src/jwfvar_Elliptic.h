@@ -39,7 +39,7 @@ public:
 
 		pVarTP->x += pAmount * atan2f(a, b);
 
-		if (pAffineTP->y > 0)
+    if (pContext->randGen->random() < 0.5)
 			pVarTP->y += pAmount * JWF_LOG(xmax + sqrt_safe(xmax - 1.0));
 		else
 			pVarTP->y -= pAmount * JWF_LOG(xmax + sqrt_safe(xmax - 1.0));

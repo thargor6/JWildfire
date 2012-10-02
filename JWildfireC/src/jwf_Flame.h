@@ -18,31 +18,31 @@
 #define __JWF_FLAME_H__
 
 struct Flame {
-	FLOAT centreX;
-	FLOAT centreY;
+	JWF_FLOAT centreX;
+	JWF_FLOAT centreY;
 	int width;
 	int height;
-	FLOAT camPitch;
-	FLOAT camYaw;
-	FLOAT camPerspective;
-	FLOAT camRoll;
-	FLOAT camZoom;
-	FLOAT camZ;
-	FLOAT camDOF;
+	JWF_FLOAT camPitch;
+	JWF_FLOAT camYaw;
+	JWF_FLOAT camPerspective;
+	JWF_FLOAT camRoll;
+	JWF_FLOAT camZoom;
+	JWF_FLOAT camZ;
+	JWF_FLOAT camDOF;
 	int spatialOversample;
 	int colorOversample;
-	FLOAT spatialFilterRadius;
-	FLOAT sampleDensity;
+	JWF_FLOAT spatialFilterRadius;
+	JWF_FLOAT sampleDensity;
 	int bgColorRed;
 	int bgColorGreen;
 	int bgColorBlue;
-	FLOAT gamma;
-	FLOAT gammaThreshold;
-	FLOAT pixelsPerUnit;
+	JWF_FLOAT gamma;
+	JWF_FLOAT gammaThreshold;
+	JWF_FLOAT pixelsPerUnit;
 	int whiteLevel;
-	FLOAT brightness;
-	FLOAT contrast;
-	FLOAT vibrancy;
+	JWF_FLOAT brightness;
+	JWF_FLOAT contrast;
+	JWF_FLOAT vibrancy;
 	bool preserveZ;
 
 	RGBPalette *palette;
@@ -112,7 +112,7 @@ struct Flame {
 	}
 
 	void prepareFlame(FlameTransformationContext *pFlameTransformationContext, int pThreadCount) {
-		FLOAT tp[MAX_MOD_WEIGHT_COUNT];
+		JWF_FLOAT tp[MAX_MOD_WEIGHT_COUNT];
 		int n = xFormCount;
 		// sort and init variations
 		for (int i = 0; i < xFormCount; i++) {
@@ -142,7 +142,7 @@ struct Flame {
 		}
 		// calculate modified weights tables
 		for (int k = 0; k < n; k++) {
-			FLOAT totValue = 0.0;
+			JWF_FLOAT totValue = 0.0;
 			XForm *xForm = xForms[k];
 			memset(xForm->nextAppliedXFormIdxTable, -1, NEXT_APPLIED_XFORM_TABLE_SIZE * sizeof(int));
 			for (int i = 0; i < n; i++) {
@@ -151,9 +151,9 @@ struct Flame {
 			}
 
 			if (totValue > 0.0) {
-				FLOAT loopValue = 0.0;
+				JWF_FLOAT loopValue = 0.0;
 				for (int i = 0; i < NEXT_APPLIED_XFORM_TABLE_SIZE; i++) {
-					FLOAT totalProb = 0;
+					JWF_FLOAT totalProb = 0;
 					int j = -1;
 					do {
 						j++;
@@ -161,7 +161,7 @@ struct Flame {
 					}
 					while (!((totalProb > loopValue) || (j == n - 1)));
 					xForm->nextAppliedXFormIdxTable[i] = j;
-					loopValue = loopValue + totValue / (FLOAT) NEXT_APPLIED_XFORM_TABLE_SIZE;
+					loopValue = loopValue + totValue / (JWF_FLOAT) NEXT_APPLIED_XFORM_TABLE_SIZE;
 				}
 			}
 			else {

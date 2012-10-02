@@ -101,6 +101,9 @@ private:
 #define ATTR_POST "post"
 #define ATTR_CHAOS "chaos"
 #define ATTR_SYMMETRY "symmetry"
+#define ATTR_ANTIALIAS_AMOUNT "antialias_amount"
+#define ATTR_ANTIALIAS_RADIUS "antialias_radius"
+
 
 	void readFlamesfromXML(char *pXML, Flame ***pFlameArray, int *pFlameCount) {
 		int pFlames = 0;
@@ -457,6 +460,12 @@ private:
 		}
 		if ((hs = findAttribute(attNames, attValues, attCount, ATTR_SYMMETRY)) != NULL) {
 			pXForm->colorSymmetry = atof(hs);
+		}
+		if ((hs = findAttribute(attNames, attValues, attCount, ATTR_ANTIALIAS_AMOUNT)) != NULL) {
+			pXForm->antialiasAmount = atof(hs);
+		}
+		if ((hs = findAttribute(attNames, attValues, attCount, ATTR_ANTIALIAS_RADIUS)) != NULL) {
+			pXForm->antialiasRadius = atof(hs);
 		}
 		if ((hs = findAttribute(attNames, attValues, attCount, ATTR_COEFS)) != NULL) {
 			char **s;

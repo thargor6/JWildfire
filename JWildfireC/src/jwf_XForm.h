@@ -49,6 +49,8 @@ struct XForm {
 	JWF_FLOAT postCoeff21;
 	JWF_FLOAT opacity;
 	int drawMode;
+	JWF_FLOAT antialiasAmount;
+	JWF_FLOAT antialiasRadius;
 	// derived properties
 	bool __hasPostCoeffs;
 	bool __hasCoeffs;
@@ -88,6 +90,9 @@ struct XForm {
 		colorSymmetry = 0.0;
 		opacity = 0.0;
 		drawMode = DRAWMODE_NORMAL;
+		antialiasAmount = 0.0;
+		antialiasRadius = 0.5;
+
 		__hasPostCoeffs = FALSE;
 		__hasCoeffs = FALSE;
 		__c1 = __c2 = 0.0f;
@@ -159,7 +164,7 @@ struct XForm {
 		printf("    coeff01=%.2f coeff11=%.2f coeff21=%.2f\n", coeff01, coeff11, coeff21);
 		printf("    postCoeff00=%.2f postCoeff10=%.2f postCoeff20=%.2f\n", postCoeff00, postCoeff10, postCoeff20);
 		printf("    postCoeff01=%.2f postCoeff11=%.2f postCoeff21=%.2f\n", postCoeff01, postCoeff11, postCoeff21);
-		printf("    drawMode=%d\n", drawMode);
+		printf("    drawMode=%d antialiasAmount=%.2f antialiasRadius=%.2f\n", drawMode, antialiasAmount, antialiasRadius);
 		printf("    modifiedWeights=%.2f", modifiedWeights[0]);
 		for (int i = 1; i < 10 /*MAX_MOD_WEIGHT_COUNT*/; i++) {
 			printf(" %.2f", modifiedWeights[i]);

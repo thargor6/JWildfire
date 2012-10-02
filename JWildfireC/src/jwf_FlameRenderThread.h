@@ -17,6 +17,8 @@
 #ifndef __JWF_FLAME_RENDER_THREAD_H__
 #define __JWF_FLAME_RENDER_THREAD_H__
 
+#include "jwf_Math.h"
+
 struct FlameRenderThread {
 	Flame *flame;
 	FlameTransformationContext *ctx;
@@ -160,6 +162,7 @@ struct FlameRenderThread {
 			}
 
 			FLOAT px, py;
+			int xIdx, yIdx;
 			if (finalXForm != NULL) {
 				finalXForm->transformPoint(ctx, &affineT, &varT, &p, &q);
 				flameView->project(&q, ctx);
@@ -169,6 +172,26 @@ struct FlameRenderThread {
 				py = q.y * flameView->cosa - q.x * flameView->sina + flameView->rcY;
 				if ((py < 0) || (py > flameView->camH))
 					continue;
+
+        if ((finalXForm->antialiasAmount > EPSILON) && (finalXForm->antialiasRadius > EPSILON) && (rnd->random() > 1.0 - finalXForm->antialiasAmount)) {
+          JWF_FLOAT dr = JWF_EXP(finalXForm->antialiasRadius* JWF_SQRT(-JWF_LOG(rnd->random()))) - 1.0;
+          JWF_FLOAT da = rnd->random() * 2.0 * M_PI;
+  				xIdx = (int) (flameView->bws * px + dr * JWF_COS(da) + 0.5);
+          if (xIdx < 0 || xIdx >= rasterWidth)
+            continue;
+  				yIdx = (int) (flameView->bhs * py + dr * JWF_SIN(da) + 0.5);
+          if (yIdx < 0 || yIdx >=rasterHeight)
+            continue;
+        }
+        else {
+        	xIdx = (int) (flameView->bws * px + 0.5);
+          if (xIdx < 0 || xIdx >= rasterWidth)
+            continue;
+  				yIdx = (int) (flameView->bhs * py + 0.5);
+          if (yIdx < 0 || yIdx >=rasterHeight)
+            continue;
+        }
+
 			}
 			else {
 				q.assign(&p);
@@ -179,27 +202,26 @@ struct FlameRenderThread {
 				py = q.y * flameView->cosa - q.x * flameView->sina + flameView->rcY;
 				if ((py < 0) || (py > flameView->camH))
 					continue;
-			}
-			int xIdx, yIdx;
 
-			//#ifdef ANTIAALIAS
-			if (rnd->random() < 0.5) {
-				FLOAT dr = JWF_EXP(0.5 * JWF_SQRT(-JWF_LOG(rnd->random()))) - 1.0;
-				FLOAT dtheta = rnd->random() * 2.0 * M_PI;
-				xIdx = (int) (flameView->bws * px + dr * JWF_COS(dtheta) + 0.5);
-				yIdx = (int) (flameView->bhs * py + dr * JWF_SIN(dtheta) + 0.5);
-			}
-			else {
-				xIdx = (int) (flameView->bws * px + 0.5);
-				yIdx = (int) (flameView->bhs * py + 0.5);
-			}
-			if (xIdx < 0 || xIdx >= rasterWidth || yIdx < 0 || yIdx >= rasterHeight) {
+        if ((xf->antialiasAmount > EPSILON) && (xf->antialiasRadius > EPSILON) && (rnd->random() > 1.0 - xf->antialiasAmount)) {
+          JWF_FLOAT dr = JWF_EXP(xf->antialiasRadius * JWF_SQRT(-JWF_LOG(rnd->random()))) - 1.0;
+          JWF_FLOAT da = rnd->random() * 2.0 * M_PI;
+  				xIdx = (int) (flameView->bws * px + dr * JWF_COS(da) + 0.5);
+          if (xIdx < 0 || xIdx >= rasterWidth)
+            continue;
+  				yIdx = (int) (flameView->bhs * py + dr * JWF_SIN(da) + 0.5);
+          if (yIdx < 0 || yIdx >=rasterHeight)
+            continue;
+        }
+        else {
+        	xIdx = (int) (flameView->bws * px + 0.5);
+          if (xIdx < 0 || xIdx >= rasterWidth)
+            continue;
+  				yIdx = (int) (flameView->bhs * py + 0.5);
+          if (yIdx < 0 || yIdx >=rasterHeight)
+            continue;
+        }
 
-//#endif
-//       xIdx = (int) (flameView->bws * px + 0.5);
-//       yIdx = (int) (flameView->bhs * py + 0.5);
-//      if(xIdx>=rasterWidth || yIdx>=rasterHeight) {
-				continue;
 			}
 
 			RasterPoint *rp = &raster[yIdx][xIdx];
@@ -286,19 +308,20 @@ struct FlameRenderThread {
 				if (pValidArray[idx] == TRUE) {
 					int xIdx, yIdx;
 
-//#ifdef ALIAS
-					if (rnd->random() < 0.5) {
-						FLOAT dr = JWF_EXP(0.5 * JWF_SQRT(-JWF_LOG(rnd->random()))) - 1.0;
-						FLOAT dtheta = rnd->random() * 2.0f * M_PI;
-						xIdx = (int) (flameView->bws * pxArray[idx] + dr * JWF_COS(dtheta) + 0.5);
-						yIdx = (int) (flameView->bhs * pyArray[idx] + dr * JWF_SIN(dtheta) + 0.5);
-					}
-					else {
+					XForm *currXForm = finalXForm != NULL ? finalXForm : xf;
+
+	        if ((currXForm->antialiasAmount > EPSILON) && (currXForm->antialiasRadius > EPSILON) && (rnd->random() > 1.0 - currXForm->antialiasAmount)) {
+	        	JWF_FLOAT dr = JWF_EXP(currXForm->antialiasRadius * JWF_SQRT(-JWF_LOG(rnd->random()))) - 1.0;
+	        	JWF_FLOAT da = rnd->random() * 2.0 * M_PI;
+						xIdx = (int) (flameView->bws * pxArray[idx] + dr * JWF_COS(da) + 0.5);
+						yIdx = (int) (flameView->bhs * pyArray[idx] + dr * JWF_SIN(da) + 0.5);
+	        }
+	        else {
 						xIdx = (int) (flameView->bws * pxArray[idx] + 0.5);
 						yIdx = (int) (flameView->bhs * pyArray[idx] + 0.5);
-					}
+	        }
+
 					if (xIdx >= 0 && xIdx < rasterWidth && yIdx >= 0 && yIdx < rasterHeight) {
-//#endif
 //            xIdx = (int) (flameView->bws * pxArray[idx] + 0.5);
 //            yIdx = (int) (flameView->bhs * pyArray[idx] + 0.5);
 						//        if(xIdx<rasterWidth && yIdx<rasterHeight) {
