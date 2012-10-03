@@ -1,3 +1,20 @@
+V0.53 (04.10.2012):
+ - new antialising option on the transform level, you can control this by two parameters: amount (how many samples are affected by this effect) and radius (how strong is the antialasing effect) 
+ - new gradient manipulation functions: invert and reverse gradient
+ - new gradient manipulation properties: blur and frequency
+ - added a link to the official article about fractal flames by it's inventor Scott Draves to the main start screen
+ - changed the layout of the main toolbar so that it better resizes according to different screen resolutions
+ - new built-in script example (based on "Mobius Dragon" by penny5775)
+ - first "raw" integration of the external renderer in the preview area
+ - JWildfireC(UDA) compatibility check for flames
+ - using multiple threads for tonemapping of the realtime preview which should result in smoother behaviour on most machines
+ - fixed a bug in the Elliptic variation
+ - abstract JWF_FLOAT datatype for the external renderer (to be prepared for the demand of different versions speed vs accuracy)
+ - sub flames for the external renderer
+ - new variations for the external renderer
+ - improved the behaviour of the mouse dragging ability of the number fields
+ - some new variations for the external renderer
+
 V0.52 (19.09.2012):
  - "eCollide", "eJulia", "eMod", "eMotion", "ePush", "eRotate", "eScale" and "eSwirl" variations by Michael Faber
  - "bCollide", "bMod", "bSwirl" and "bTransform" variations by Michael Faber
