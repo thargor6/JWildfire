@@ -19,3 +19,4 @@ build/j-wildfire/*
 JWildfireC/.settings
 JWildfireC/Debug
 JWildfireC/Release
+*.pdf

@@ -733,6 +733,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaNorthPanel.add(lblUseRenderer);
 
       rendererCmb = new JComboBox();
+      rendererCmb.setEnabled(false);
       rendererCmb.setPreferredSize(new Dimension(125, 22));
       rendererCmb.setMaximumRowCount(32);
       rendererCmb.setFont(new Font("Dialog", Font.BOLD, 10));
@@ -7850,7 +7851,7 @@ public class TinaInternalFrame extends JInternalFrame {
       saveFlameToClipboardButton.setFont(new Font("Dialog", Font.BOLD, 10));
       saveFlameToClipboardButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.checkCUDACompatibility();
+          tinaController.saveFlameToClipboard();
         }
       });
     }
@@ -8627,6 +8628,21 @@ public class TinaInternalFrame extends JInternalFrame {
       scriptPanel.add(getScriptSaveButton());
       scriptPanel.add(getScriptWrapHeartButton());
       scriptPanel.add(getBtnWrapIntoBubble());
+
+      JButton scriptMobiusDragonButton = new JButton();
+      scriptMobiusDragonButton.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.scriptExampleMobiusDragon();
+        }
+      });
+      scriptMobiusDragonButton.setToolTipText("Example: Mobius Dragon");
+      scriptMobiusDragonButton.setText("Mobius Dragon");
+      scriptMobiusDragonButton.setSize(new Dimension(81, 24));
+      scriptMobiusDragonButton.setPreferredSize(new Dimension(81, 24));
+      scriptMobiusDragonButton.setLocation(new Point(97, 280));
+      scriptMobiusDragonButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      scriptMobiusDragonButton.setBounds(9, 400, 125, 24);
+      scriptPanel.add(scriptMobiusDragonButton);
     }
     return scriptPanel;
   }

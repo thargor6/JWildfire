@@ -342,6 +342,11 @@ public class VariationFuncList {
     return resolvedAliasMap;
   }
 
+  public static String getRandomVariationname() {
+    int idx = (int) (Math.random() * getNameList().size());
+    return getNameList().get(idx);
+  }
+
   public static VariationFunc getVariationFuncInstance(String pName) {
     return getVariationFuncInstance(pName, false);
   }

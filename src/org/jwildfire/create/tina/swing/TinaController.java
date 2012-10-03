@@ -1080,7 +1080,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
               RenderedFlame res = renderer.renderFlame(info);
               long t1 = System.currentTimeMillis();
               if (!pQuickRender) {
-                ////System.out.println("Elapsed time: " + Tools.doubleToString((t1 - t0) * 0.001) + "s");
+                System.out.println("Elapsed time: " + Tools.doubleToString((t1 - t0) * 0.001) + "s");
               }
               imgPanel.setImage(res.getImage());
             }
@@ -1092,9 +1092,12 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
                 flame.setSpatialOversample(1);
                 flame.setColorOversample(1);
 
+                long t0 = System.currentTimeMillis();
                 CUDARendererInterface cudaRenderer = new CUDARendererInterface();
                 cudaRenderer.checkFlameForCUDA(flame);
                 RenderedFlame res = cudaRenderer.renderFlame(info, flame);
+                long t1 = System.currentTimeMillis();
+                System.out.println("Elapsed time: " + Tools.doubleToString((t1 - t0) * 0.001) + "s");
                 imgPanel.setImage(res.getImage());
               }
               catch (Throwable ex) {
@@ -4517,7 +4520,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     runScriptButton_clicked();
   }
 
-  public void scriptExampleEscherFlux() {
+  public void scriptExampleMobiusDragon() {
     scriptTextArea.setText("import org.jwildfire.create.tina.base.Flame;\r\n" +
         "import org.jwildfire.create.tina.base.XForm;\r\n" +
         "import org.jwildfire.create.tina.variation.VariationFunc;\r\n" +
@@ -4525,14 +4528,138 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
         "import org.jwildfire.create.tina.script.ScriptRunnerEnvironment;\r\n" +
         "import org.jwildfire.create.tina.transform.XFormTransformService;\r\n" +
         "\r\n" +
-        "import org.jwildfire.create.tina.variation.BubbleFunc;\r\n" +
-        "import org.jwildfire.create.tina.variation.HemisphereFunc;\r\n" +
-        "import org.jwildfire.create.tina.variation.Julia3DFunc;\r\n" +
-        "import org.jwildfire.create.tina.variation.LinearFunc;\r\n" +
-        "import org.jwildfire.create.tina.variation.PreBlurFunc;\r\n" +
-        "import org.jwildfire.create.tina.variation.SpirographFunc;\r\n" +
-        "import org.jwildfire.create.tina.variation.SplitsFunc;\r\n" +
-        "import org.jwildfire.create.tina.variation.ZTranslateFunc;\r\n" +
+        "// Based on the Apophysis script \"Mobius Dragon\" by penny5775\r\n" +
+        "//   http://penny5775.deviantart.com/art/Mobius-Dragon-Script-104021373\r\n" +
+        "public void run(ScriptRunnerEnvironment pEnv) throws Exception {\r\n" +
+        "  XForm xForm1;\r\n" +
+        "  VariationFunc varFunc;\r\n" +
+        "  Flame currFlame = pEnv.getCurrFlame();\r\n" +
+        "  if(currFlame==null) {\r\n" +
+        "    throw new Exception(\"Please select a flame at first\");\r\n" +
+        "  }\r\n" +
+        "  currFlame.getXForms().clear();\r\n" +
+        "  double ranx = (Math.random() / 10.0)*1.2;   \r\n" +
+        "  double rany = (Math.random() / 10.0)*1.2;\r\n" +
+        "\r\n" +
+        "  //T1 mobius\r\n" +
+        "  {\r\n" +
+        "    XForm xForm = new XForm();\r\n" +
+        "    xForm.setWeight(0.5+Math.random()*4.0);\r\n" +
+        "    xForm.setColor(Math.random());\r\n" +
+        "    xForm.setColorSymmetry(0.8);\r\n" +
+        "\r\n" +
+        "    varFunc = VariationFuncList.getVariationFuncInstance(\"mobius\", true);\r\n" +
+        "    varFunc.setParameter(\"re_a\", 1.0);\r\n" +
+        "    varFunc.setParameter(\"im_a\", 0.0);\r\n" +
+        "    varFunc.setParameter(\"re_b\", 0.0);\r\n" +
+        "    varFunc.setParameter(\"im_b\", 0.0);\r\n" +
+        "    varFunc.setParameter(\"re_c\", 0.0);\r\n" +
+        "    varFunc.setParameter(\"im_c\", -1.0);\r\n" +
+        "    varFunc.setParameter(\"re_d\", 1.0);\r\n" +
+        "    varFunc.setParameter(\"im_d\", 0.0);\r\n" +
+        "    xForm.setCoeff20(ranx);\r\n" +
+        "    xForm.setCoeff21(-rany);\r\n" +
+        "    xForm.addVariation(1.0, varFunc);\r\n" +
+        "    currFlame.getXForms().add(xForm);\r\n" +
+        "  }\r\n" +
+        "  // T2 linear\r\n" +
+        "  {\r\n" +
+        "    XForm xForm = new XForm();\r\n" +
+        "    xForm.setWeight(0.5+Math.random()*0.8);\r\n" +
+        "    xForm.setColor(Math.random());\r\n" +
+        "    xForm.setColorSymmetry(0.8);\r\n" +
+        "\r\n" +
+        "    xForm.setPostCoeff00(-1.0);\r\n" +
+        "    xForm.setPostCoeff01(0.0);\r\n" +
+        "    xForm.setPostCoeff10(0.0);\r\n" +
+        "    xForm.setPostCoeff11(-1.0);\r\n" +
+        "    xForm.setCoeff20(ranx);\r\n" +
+        "    xForm.setCoeff21(-rany);\r\n" +
+        "    xForm.addVariation(1.0, VariationFuncList.getVariationFuncInstance(\"linear3D\", true));\r\n" +
+        "    currFlame.getXForms().add(xForm);\r\n" +
+        "  }\r\n" +
+        "  // T3 linear\r\n" +
+        "  {\r\n" +
+        "    XForm xForm = new XForm();\r\n" +
+        "    xForm.setWeight(0.4+Math.random()*0.3);\r\n" +
+        "    xForm.setColor(Math.random());\r\n" +
+        "    xForm.setColorSymmetry(1.0);\r\n" +
+        "\r\n" +
+        "    xForm.setCoeff20(-1.0);\r\n" +
+        "    xForm.addVariation(1.0, VariationFuncList.getVariationFuncInstance(\"linear3D\", true));\r\n" +
+        "    currFlame.getXForms().add(xForm);\r\n" +
+        "  }\r\n" +
+        "  // T4 linear\r\n" +
+        "  {\r\n" +
+        "    XForm xForm = new XForm();\r\n" +
+        "    xForm.setWeight(0.15+Math.random()*0.25);\r\n" +
+        "    xForm.setColor(Math.random());\r\n" +
+        "    xForm.setColorSymmetry(1.0);\r\n" +
+        "\r\n" +
+        "    xForm.setCoeff20(1.0);\r\n" +
+        "    xForm.addVariation(1.0, VariationFuncList.getVariationFuncInstance(\"linear3D\", true));\r\n" +
+        "    currFlame.getXForms().add(xForm);\r\n" +
+        "  }\r\n" +
+        "  // T5 linear moved away on y axis\r\n" +
+        "  {\r\n" +
+        "    XForm xForm = new XForm();\r\n" +
+        "    xForm.setWeight(0.0625);\r\n" +
+        "    xForm.setColor(Math.random());\r\n" +
+        "\r\n" +
+        "    xForm.setCoeff21(-3.0);\r\n" +
+        "    xForm.setPostCoeff20(-ranx);\r\n" +
+        "    xForm.setPostCoeff21(-rany);\r\n" +
+        "    xForm.addVariation(1.0, VariationFuncList.getVariationFuncInstance(\"linear3D\", true));\r\n" +
+        "    currFlame.getXForms().add(xForm);\r\n" +
+        "  }\r\n" +
+        "  // T6 linear line at edge of design\r\n" +
+        "  {\r\n" +
+        "    XForm xForm = new XForm();\r\n" +
+        "    xForm.setWeight(0.0625);\r\n" +
+        "    xForm.setColor(Math.random());\r\n" +
+        "\r\n" +
+        "    xForm.setPostCoeff11(0.001);\r\n" +
+        "    xForm.setPostCoeff20(-ranx);\r\n" +
+        "    xForm.setPostCoeff21(1.0-rany);\r\n" +
+        "    xForm.addVariation(1.0, VariationFuncList.getVariationFuncInstance(\"linear3D\", true));\r\n" +
+        "    currFlame.getXForms().add(xForm);\r\n" +
+        "  }\r\n" +
+        "  // T7 a detail in center of void\r\n" +
+        "  {\r\n" +
+        "    XForm xForm = new XForm();\r\n" +
+        "    xForm.setWeight(0.0625);\r\n" +
+        "    xForm.setColor(Math.random());\r\n" +
+        "\r\n" +
+        "    xForm.setPostCoeff20(0.5-(ranx/2.0));\r\n" +
+        "    xForm.setPostCoeff21(-(rany/2.0));\r\n" +
+        "    xForm.addVariation(Math.random()/10.0+0.1, VariationFuncList.getVariationFuncInstance(VariationFuncList.getRandomVariationname(), true));\r\n" +
+        "    currFlame.getXForms().add(xForm);\r\n" +
+        "  }\r\n" +
+        "\r\n" +
+        "  // final\r\n" +
+        "  currFlame.setFinalXForm(null);\r\n" +
+        "\r\n" +
+        "  currFlame.setCentreX(0.0);\r\n" +
+        "  currFlame.setCentreY(0.0);\r\n" +
+        "  currFlame.setCamRoll(0.0);\r\n" +
+        "  currFlame.setCamPitch(0.0);\r\n" +
+        "  currFlame.setCamYaw(0.0);\r\n" +
+        "  currFlame.setCamPerspective(0.0);\r\n" +
+        "  currFlame.setPixelsPerUnit(120);\r\n" +
+        "  // Refresh the UI\r\n" +
+        "  pEnv.refreshUI();\r\n" +
+        "}\r\n" +
+        "");
+    runScriptButton_clicked();
+  }
+
+  public void scriptExampleEscherFlux() {
+    scriptTextArea.setText("import org.jwildfire.create.tina.base.Flame;\r\n" +
+        "import org.jwildfire.create.tina.base.XForm;\r\n" +
+        "import org.jwildfire.create.tina.variation.VariationFunc;\r\n" +
+        "import org.jwildfire.create.tina.variation.VariationFuncList;\r\n" +
+        "import org.jwildfire.create.tina.script.ScriptRunnerEnvironment;\r\n" +
+        "import org.jwildfire.create.tina.transform.XFormTransformService;\r\n" +
         "\r\n" +
         "// Based on the Apophysis script \"BC n BDs Textured Escher Flux\"\r\n" +
         "//  http://fractal-resources.deviantart.com/art/BC-n-BDs-Textured-Escher-Flux-129501160\r\n" +
