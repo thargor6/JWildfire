@@ -304,6 +304,12 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
   private final JSlider paletteBrightnessSlider;
   private final JWFNumberField paletteSwapRGBREd;
   private final JSlider paletteSwapRGBSlider;
+  private final JWFNumberField paletteFrequencyREd;
+  private final JSlider paletteFrequencySlider;
+  private final JWFNumberField paletteBlurREd;
+  private final JSlider paletteBlurSlider;
+  private final JButton paletteInvertBtn;
+  private final JButton paletteReverseBtn;
   // Batch render
   private final JTable renderBatchJobsTable;
   private final JProgressBar batchRenderJobProgressBar;
@@ -416,7 +422,9 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       JWFNumberField pPaletteRedREd, JSlider pPaletteRedSlider, JWFNumberField pPaletteGreenREd, JSlider pPaletteGreenSlider, JWFNumberField pPaletteBlueREd,
       JSlider pPaletteBlueSlider, JWFNumberField pPaletteHueREd, JSlider pPaletteHueSlider, JWFNumberField pPaletteSaturationREd, JSlider pPaletteSaturationSlider,
       JWFNumberField pPaletteContrastREd, JSlider pPaletteContrastSlider, JWFNumberField pPaletteGammaREd, JSlider pPaletteGammaSlider, JWFNumberField pPaletteBrightnessREd,
-      JSlider pPaletteBrightnessSlider, JWFNumberField pPaletteSwapRGBREd, JSlider pPaletteSwapRGBSlider, JTable pTransformationsTable, JWFNumberField pAffineC00REd,
+      JSlider pPaletteBrightnessSlider, JWFNumberField pPaletteSwapRGBREd, JSlider pPaletteSwapRGBSlider, JWFNumberField pPaletteFrequencyREd, JSlider pPaletteFrequencySlider,
+      JWFNumberField pPaletteBlurREd, JSlider pPaletteBlurSlider, JButton pPaletteInvertBtn, JButton pPaletteReverseBtn,
+      JTable pTransformationsTable, JWFNumberField pAffineC00REd,
       JWFNumberField pAffineC01REd, JWFNumberField pAffineC10REd, JWFNumberField pAffineC11REd, JWFNumberField pAffineC20REd, JWFNumberField pAffineC21REd,
       JTextField pAffineRotateAmountREd, JTextField pAffineScaleAmountREd, JTextField pAffineMoveAmountREd, JButton pAffineRotateLeftButton,
       JButton pAffineRotateRightButton, JButton pAffineEnlargeButton, JButton pAffineShrinkButton, JButton pAffineMoveUpButton, JButton pAffineMoveLeftButton,
@@ -512,6 +520,12 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     paletteBrightnessSlider = pPaletteBrightnessSlider;
     paletteSwapRGBREd = pPaletteSwapRGBREd;
     paletteSwapRGBSlider = pPaletteSwapRGBSlider;
+    paletteFrequencyREd = pPaletteFrequencyREd;
+    paletteFrequencySlider = pPaletteFrequencySlider;
+    paletteBlurREd = pPaletteBlurREd;
+    paletteBlurSlider = pPaletteBlurSlider;
+    paletteInvertBtn = pPaletteInvertBtn;
+    paletteReverseBtn = pPaletteReverseBtn;
 
     qualityProfileCmb = pQualityProfileCmb;
     resolutionProfileCmb = pResolutionProfileCmb;
@@ -1597,6 +1611,10 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     paletteBrightnessSlider.setValue(pPalette.getModBrightness());
     paletteSwapRGBREd.setText(String.valueOf(pPalette.getModSwapRGB()));
     paletteSwapRGBSlider.setValue(pPalette.getModSwapRGB());
+    paletteFrequencyREd.setText(String.valueOf(pPalette.getModFrequency()));
+    paletteFrequencySlider.setValue(pPalette.getModFrequency());
+    paletteBlurREd.setText(String.valueOf(pPalette.getModBlur()));
+    paletteBlurSlider.setValue(pPalette.getModBlur());
     paletteGammaREd.setText(String.valueOf(pPalette.getModGamma()));
     paletteGammaSlider.setValue(pPalette.getModGamma());
     paletteShiftREd.setText(String.valueOf(pPalette.getModShift()));
@@ -4076,6 +4094,22 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     paletteSliderChanged(paletteSwapRGBSlider, paletteSwapRGBREd, "modSwapRGB", 1.0);
   }
 
+  public void paletteFrequencyREd_changed() {
+    paletteTextFieldChanged(paletteFrequencySlider, paletteFrequencyREd, "modFrequency", 1.0);
+  }
+
+  public void paletteFrequencySlider_stateChanged(ChangeEvent e) {
+    paletteSliderChanged(paletteFrequencySlider, paletteFrequencyREd, "modFrequency", 1.0);
+  }
+
+  public void paletteBlurREd_changed() {
+    paletteTextFieldChanged(paletteBlurSlider, paletteBlurREd, "modBlur", 1.0);
+  }
+
+  public void paletteBlurSlider_stateChanged(ChangeEvent e) {
+    paletteSliderChanged(paletteBlurSlider, paletteBlurREd, "modBlur", 1.0);
+  }
+
   private List<RGBPalette> gradientLibraryList = new ArrayList<RGBPalette>();
   private final int GRADIENT_THUMB_HEIGHT = 20;
   private final int GRADIENT_THUMB_BORDER = 2;
@@ -4988,4 +5022,25 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     }
 
   }
+
+  public void paletteInvertBtn_clicked() {
+    Flame flame = getCurrFlame();
+    if (flame != null) {
+      saveUndoPoint();
+      flame.getPalette().negativeColors();
+      refreshPaletteUI(flame.getPalette());
+      transformationTableClicked();
+    }
+  }
+
+  public void paletteReverseBtn_clicked() {
+    Flame flame = getCurrFlame();
+    if (flame != null) {
+      saveUndoPoint();
+      flame.getPalette().reverseColors();
+      refreshPaletteUI(flame.getPalette());
+      transformationTableClicked();
+    }
+  }
+
 }

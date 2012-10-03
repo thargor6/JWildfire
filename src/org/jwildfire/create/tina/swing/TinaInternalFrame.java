@@ -572,8 +572,6 @@ public class TinaInternalFrame extends JInternalFrame {
   private JToggleButton affineScaleYButton = null;
   private JButton randomizeColorsButton = null;
   private JLabel tinaPaletteSwapRGBLbl = null;
-  private JWFNumberField tinaPaletteSwapRGBREd = null;
-  private JSlider tinaPaletteSwapRGBSlider = null;
   private JPanel gradientLibraryPanel = null;
   private JPanel gradientLibrarySouthPanel = null;
   private JPanel gradientLibraryCenterPanel = null;
@@ -2597,11 +2595,13 @@ public class TinaInternalFrame extends JInternalFrame {
   private JTabbedPane getTinaPaletteSubTabbedPane() {
     if (tinaPaletteSubTabbedPane == null) {
       tinaPaletteSubTabbedPane = new JTabbedPane();
+      tinaPaletteSubTabbedPane.setAutoscrolls(true);
       tinaPaletteSubTabbedPane.setToolTipText("");
       tinaPaletteSubTabbedPane.setFont(new Font("Dialog", Font.BOLD, 10));
       tinaPaletteSubTabbedPane.addTab("Create", null, getTinaPaletteCreatePanel(), null);
       tinaPaletteSubTabbedPane.addTab("Library", null, getGradientLibraryPanel(), null);
-      tinaPaletteSubTabbedPane.addTab("Transform", null, getTinaPaletteBalancingPanel(), null);
+      tinaPaletteSubTabbedPane.addTab("Transform", null, getTinaPaletteTransformPanel(), null);
+      tinaPaletteSubTabbedPane.addTab("Balancing", null, getTinaPaletteBalancingPanel(), null);
     }
     return tinaPaletteSubTabbedPane;
   }
@@ -2645,58 +2645,52 @@ public class TinaInternalFrame extends JInternalFrame {
    */
   private JPanel getTinaPaletteBalancingPanel() {
     if (tinaPaletteBalancingPanel == null) {
-      tinaPaletteSwapRGBLbl = new JLabel();
-      tinaPaletteSwapRGBLbl.setPreferredSize(new Dimension(64, 22));
-      tinaPaletteSwapRGBLbl.setText("Swap RGB");
-      tinaPaletteSwapRGBLbl.setSize(new Dimension(56, 22));
-      tinaPaletteSwapRGBLbl.setLocation(new Point(4, 238));
-      tinaPaletteSwapRGBLbl.setFont(new Font("Dialog", Font.BOLD, 10));
       tinaPaletteBrightnessLbl = new JLabel();
       tinaPaletteBrightnessLbl.setText("Brightness");
       tinaPaletteBrightnessLbl.setSize(new Dimension(56, 22));
-      tinaPaletteBrightnessLbl.setLocation(new Point(4, 212));
+      tinaPaletteBrightnessLbl.setLocation(new Point(6, 188));
       tinaPaletteBrightnessLbl.setFont(new Font("Dialog", Font.BOLD, 10));
       tinaPaletteBrightnessLbl.setPreferredSize(new Dimension(64, 22));
       tinaPaletteGammaLbl = new JLabel();
       tinaPaletteGammaLbl.setText("Gamma");
       tinaPaletteGammaLbl.setSize(new Dimension(56, 22));
-      tinaPaletteGammaLbl.setLocation(new Point(4, 186));
+      tinaPaletteGammaLbl.setLocation(new Point(6, 162));
       tinaPaletteGammaLbl.setFont(new Font("Dialog", Font.BOLD, 10));
       tinaPaletteGammaLbl.setPreferredSize(new Dimension(64, 22));
       tinaPaletteContrastLbl = new JLabel();
       tinaPaletteContrastLbl.setText("Contrast");
       tinaPaletteContrastLbl.setSize(new Dimension(56, 22));
-      tinaPaletteContrastLbl.setLocation(new Point(4, 160));
+      tinaPaletteContrastLbl.setLocation(new Point(6, 136));
       tinaPaletteContrastLbl.setFont(new Font("Dialog", Font.BOLD, 10));
       tinaPaletteContrastLbl.setPreferredSize(new Dimension(64, 22));
       tinaPaletteSaturationLbl = new JLabel();
       tinaPaletteSaturationLbl.setText("Saturation");
       tinaPaletteSaturationLbl.setSize(new Dimension(56, 22));
-      tinaPaletteSaturationLbl.setLocation(new Point(4, 134));
+      tinaPaletteSaturationLbl.setLocation(new Point(6, 110));
       tinaPaletteSaturationLbl.setFont(new Font("Dialog", Font.BOLD, 10));
       tinaPaletteSaturationLbl.setPreferredSize(new Dimension(64, 22));
       tinaPaletteHueLbl = new JLabel();
       tinaPaletteHueLbl.setText("Hue");
       tinaPaletteHueLbl.setSize(new Dimension(56, 22));
-      tinaPaletteHueLbl.setLocation(new Point(4, 108));
+      tinaPaletteHueLbl.setLocation(new Point(6, 84));
       tinaPaletteHueLbl.setFont(new Font("Dialog", Font.BOLD, 10));
       tinaPaletteHueLbl.setPreferredSize(new Dimension(64, 22));
       tinaPaletteBlueLbl = new JLabel();
       tinaPaletteBlueLbl.setText("Blue");
       tinaPaletteBlueLbl.setSize(new Dimension(56, 22));
-      tinaPaletteBlueLbl.setLocation(new Point(4, 82));
+      tinaPaletteBlueLbl.setLocation(new Point(6, 58));
       tinaPaletteBlueLbl.setFont(new Font("Dialog", Font.BOLD, 10));
       tinaPaletteBlueLbl.setPreferredSize(new Dimension(64, 22));
       tinaPaletteGreenLbl = new JLabel();
       tinaPaletteGreenLbl.setText("Green");
       tinaPaletteGreenLbl.setSize(new Dimension(56, 22));
-      tinaPaletteGreenLbl.setLocation(new Point(4, 56));
+      tinaPaletteGreenLbl.setLocation(new Point(6, 32));
       tinaPaletteGreenLbl.setFont(new Font("Dialog", Font.BOLD, 10));
       tinaPaletteGreenLbl.setPreferredSize(new Dimension(64, 22));
       tinaPaletteRedLbl = new JLabel();
       tinaPaletteRedLbl.setText("Red");
       tinaPaletteRedLbl.setSize(new Dimension(56, 22));
-      tinaPaletteRedLbl.setLocation(new Point(4, 30));
+      tinaPaletteRedLbl.setLocation(new Point(6, 6));
       tinaPaletteRedLbl.setFont(new Font("Dialog", Font.BOLD, 10));
       tinaPaletteRedLbl.setPreferredSize(new Dimension(64, 22));
       tinaPaletteBalancingPanel = new JPanel();
@@ -2725,9 +2719,6 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaPaletteBalancingPanel.add(getTinaPaletteContrastSlider(), null);
       tinaPaletteBalancingPanel.add(getTinaPaletteGammaSlider(), null);
       tinaPaletteBalancingPanel.add(getTinaPaletteBrightnessSlider(), null);
-      tinaPaletteBalancingPanel.add(tinaPaletteSwapRGBLbl, null);
-      tinaPaletteBalancingPanel.add(getTinaPaletteSwapRGBREd(), null);
-      tinaPaletteBalancingPanel.add(getTinaPaletteSwapRGBSlider(), null);
     }
     return tinaPaletteBalancingPanel;
   }
@@ -2792,7 +2783,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaPaletteRedREd.setPreferredSize(new Dimension(36, 22));
       tinaPaletteRedREd.setText("0");
       tinaPaletteRedREd.setSize(new Dimension(56, 24));
-      tinaPaletteRedREd.setLocation(new Point(60, 30));
+      tinaPaletteRedREd.setLocation(new Point(62, 6));
       tinaPaletteRedREd.setFont(new Font("Dialog", Font.PLAIN, 10));
     }
     return tinaPaletteRedREd;
@@ -2825,7 +2816,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaPaletteGreenREd.setPreferredSize(new Dimension(36, 22));
       tinaPaletteGreenREd.setText("0");
       tinaPaletteGreenREd.setSize(new Dimension(56, 24));
-      tinaPaletteGreenREd.setLocation(new Point(60, 56));
+      tinaPaletteGreenREd.setLocation(new Point(62, 32));
       tinaPaletteGreenREd.setFont(new Font("Dialog", Font.PLAIN, 10));
     }
     return tinaPaletteGreenREd;
@@ -2858,7 +2849,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaPaletteBlueREd.setPreferredSize(new Dimension(36, 22));
       tinaPaletteBlueREd.setText("0");
       tinaPaletteBlueREd.setSize(new Dimension(56, 24));
-      tinaPaletteBlueREd.setLocation(new Point(60, 82));
+      tinaPaletteBlueREd.setLocation(new Point(62, 58));
       tinaPaletteBlueREd.setFont(new Font("Dialog", Font.PLAIN, 10));
     }
     return tinaPaletteBlueREd;
@@ -2891,7 +2882,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaPaletteHueREd.setPreferredSize(new Dimension(36, 22));
       tinaPaletteHueREd.setText("0");
       tinaPaletteHueREd.setSize(new Dimension(56, 24));
-      tinaPaletteHueREd.setLocation(new Point(60, 108));
+      tinaPaletteHueREd.setLocation(new Point(62, 84));
       tinaPaletteHueREd.setFont(new Font("Dialog", Font.PLAIN, 10));
     }
     return tinaPaletteHueREd;
@@ -2924,7 +2915,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaPaletteSaturationREd.setPreferredSize(new Dimension(36, 22));
       tinaPaletteSaturationREd.setText("0");
       tinaPaletteSaturationREd.setSize(new Dimension(56, 24));
-      tinaPaletteSaturationREd.setLocation(new Point(60, 134));
+      tinaPaletteSaturationREd.setLocation(new Point(62, 110));
       tinaPaletteSaturationREd.setFont(new Font("Dialog", Font.PLAIN, 10));
     }
     return tinaPaletteSaturationREd;
@@ -2957,7 +2948,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaPaletteContrastREd.setPreferredSize(new Dimension(36, 22));
       tinaPaletteContrastREd.setText("0");
       tinaPaletteContrastREd.setSize(new Dimension(56, 24));
-      tinaPaletteContrastREd.setLocation(new Point(60, 160));
+      tinaPaletteContrastREd.setLocation(new Point(62, 136));
       tinaPaletteContrastREd.setFont(new Font("Dialog", Font.PLAIN, 10));
     }
     return tinaPaletteContrastREd;
@@ -2990,7 +2981,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaPaletteGammaREd.setPreferredSize(new Dimension(36, 22));
       tinaPaletteGammaREd.setText("0");
       tinaPaletteGammaREd.setSize(new Dimension(56, 24));
-      tinaPaletteGammaREd.setLocation(new Point(60, 186));
+      tinaPaletteGammaREd.setLocation(new Point(62, 162));
       tinaPaletteGammaREd.setFont(new Font("Dialog", Font.PLAIN, 10));
     }
     return tinaPaletteGammaREd;
@@ -3023,7 +3014,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaPaletteBrightnessREd.setPreferredSize(new Dimension(36, 22));
       tinaPaletteBrightnessREd.setText("0");
       tinaPaletteBrightnessREd.setSize(new Dimension(56, 24));
-      tinaPaletteBrightnessREd.setLocation(new Point(60, 212));
+      tinaPaletteBrightnessREd.setLocation(new Point(62, 188));
       tinaPaletteBrightnessREd.setFont(new Font("Dialog", Font.PLAIN, 10));
     }
     return tinaPaletteBrightnessREd;
@@ -3076,7 +3067,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaPaletteRedSlider.setMinimum(-255);
       tinaPaletteRedSlider.setValue(0);
       tinaPaletteRedSlider.setSize(new Dimension(74, 22));
-      tinaPaletteRedSlider.setLocation(new Point(116, 30));
+      tinaPaletteRedSlider.setLocation(new Point(118, 6));
       tinaPaletteRedSlider.setFont(new Font("Dialog", Font.BOLD, 10));
       tinaPaletteRedSlider.setPreferredSize(new Dimension(86, 22));
       tinaPaletteRedSlider.addChangeListener(new javax.swing.event.ChangeListener() {
@@ -3106,7 +3097,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaPaletteGreenSlider.setMinimum(-255);
       tinaPaletteGreenSlider.setValue(0);
       tinaPaletteGreenSlider.setSize(new Dimension(74, 22));
-      tinaPaletteGreenSlider.setLocation(new Point(116, 56));
+      tinaPaletteGreenSlider.setLocation(new Point(118, 32));
       tinaPaletteGreenSlider.setFont(new Font("Dialog", Font.BOLD, 10));
       tinaPaletteGreenSlider.setPreferredSize(new Dimension(86, 22));
       tinaPaletteGreenSlider.addChangeListener(new javax.swing.event.ChangeListener() {
@@ -3136,7 +3127,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaPaletteBlueSlider.setMinimum(-255);
       tinaPaletteBlueSlider.setValue(0);
       tinaPaletteBlueSlider.setSize(new Dimension(74, 22));
-      tinaPaletteBlueSlider.setLocation(new Point(116, 82));
+      tinaPaletteBlueSlider.setLocation(new Point(118, 58));
       tinaPaletteBlueSlider.setFont(new Font("Dialog", Font.BOLD, 10));
       tinaPaletteBlueSlider.setPreferredSize(new Dimension(86, 22));
       tinaPaletteBlueSlider.addChangeListener(new javax.swing.event.ChangeListener() {
@@ -3166,7 +3157,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaPaletteHueSlider.setMinimum(-255);
       tinaPaletteHueSlider.setValue(0);
       tinaPaletteHueSlider.setSize(new Dimension(74, 22));
-      tinaPaletteHueSlider.setLocation(new Point(116, 108));
+      tinaPaletteHueSlider.setLocation(new Point(118, 84));
       tinaPaletteHueSlider.setFont(new Font("Dialog", Font.BOLD, 10));
       tinaPaletteHueSlider.setPreferredSize(new Dimension(86, 22));
       tinaPaletteHueSlider.addChangeListener(new javax.swing.event.ChangeListener() {
@@ -3196,7 +3187,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaPaletteSaturationSlider.setMinimum(-255);
       tinaPaletteSaturationSlider.setValue(0);
       tinaPaletteSaturationSlider.setSize(new Dimension(74, 22));
-      tinaPaletteSaturationSlider.setLocation(new Point(116, 134));
+      tinaPaletteSaturationSlider.setLocation(new Point(118, 110));
       tinaPaletteSaturationSlider.setFont(new Font("Dialog", Font.BOLD, 10));
       tinaPaletteSaturationSlider.setPreferredSize(new Dimension(86, 22));
       tinaPaletteSaturationSlider.addChangeListener(new javax.swing.event.ChangeListener() {
@@ -3226,7 +3217,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaPaletteContrastSlider.setMinimum(-255);
       tinaPaletteContrastSlider.setValue(0);
       tinaPaletteContrastSlider.setSize(new Dimension(74, 22));
-      tinaPaletteContrastSlider.setLocation(new Point(116, 160));
+      tinaPaletteContrastSlider.setLocation(new Point(118, 136));
       tinaPaletteContrastSlider.setFont(new Font("Dialog", Font.BOLD, 10));
       tinaPaletteContrastSlider.setPreferredSize(new Dimension(86, 22));
       tinaPaletteContrastSlider.addChangeListener(new javax.swing.event.ChangeListener() {
@@ -3256,7 +3247,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaPaletteGammaSlider.setMinimum(-255);
       tinaPaletteGammaSlider.setValue(0);
       tinaPaletteGammaSlider.setSize(new Dimension(74, 22));
-      tinaPaletteGammaSlider.setLocation(new Point(116, 186));
+      tinaPaletteGammaSlider.setLocation(new Point(118, 162));
       tinaPaletteGammaSlider.setFont(new Font("Dialog", Font.BOLD, 10));
       tinaPaletteGammaSlider.setPreferredSize(new Dimension(86, 22));
       tinaPaletteGammaSlider.addChangeListener(new javax.swing.event.ChangeListener() {
@@ -3286,7 +3277,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaPaletteBrightnessSlider.setMinimum(-255);
       tinaPaletteBrightnessSlider.setValue(0);
       tinaPaletteBrightnessSlider.setSize(new Dimension(74, 22));
-      tinaPaletteBrightnessSlider.setLocation(new Point(116, 212));
+      tinaPaletteBrightnessSlider.setLocation(new Point(118, 188));
       tinaPaletteBrightnessSlider.setFont(new Font("Dialog", Font.BOLD, 10));
       tinaPaletteBrightnessSlider.setPreferredSize(new Dimension(86, 22));
       tinaPaletteBrightnessSlider.addChangeListener(new javax.swing.event.ChangeListener() {
@@ -3340,7 +3331,9 @@ public class TinaInternalFrame extends JInternalFrame {
         getTinaPaletteRedREd(), getTinaPaletteRedSlider(), getTinaPaletteGreenREd(), getTinaPaletteGreenSlider(), getTinaPaletteBlueREd(),
         getTinaPaletteBlueSlider(), getTinaPaletteHueREd(), getTinaPaletteHueSlider(), getTinaPaletteSaturationREd(), getTinaPaletteSaturationSlider(),
         getTinaPaletteContrastREd(), getTinaPaletteContrastSlider(), getTinaPaletteGammaREd(), getTinaPaletteGammaSlider(), getTinaPaletteBrightnessREd(),
-        getTinaPaletteBrightnessSlider(), getTinaPaletteSwapRGBREd(), getTinaPaletteSwapRGBSlider(), getTinaTransformationsTable(), getAffineC00REd(),
+        getTinaPaletteBrightnessSlider(), getTinaPaletteSwapRGBREd(), getTinaPaletteSwapRGBSlider(),
+        getTinaPaletteFrequencyREd(), getTinaPaletteFrequencySlider(), getTinaPaletteBlurREd(), getTinaPaletteBlurSlider(), getTinaPaletteInvertBtn(), getTinaPaletteReverseBtn(),
+        getTinaTransformationsTable(), getAffineC00REd(),
         getAffineC01REd(), getAffineC10REd(), getAffineC11REd(), getAffineC20REd(), getAffineC21REd(), getAffineRotateAmountREd(), getAffineScaleAmountREd(),
         getAffineMoveAmountREd(), getAffineRotateLeftButton(), getAffineRotateRightButton(), getAffineEnlargeButton(), getAffineShrinkButton(),
         getAffineMoveUpButton(), getAffineMoveLeftButton(), getAffineMoveRightButton(), getAffineMoveDownButton(), getTinaAddTransformationButton(),
@@ -3933,7 +3926,7 @@ public class TinaInternalFrame extends JInternalFrame {
     if (createPaletteTablePanel == null) {
       createPaletteTablePanel = new JPanel();
       createPaletteTablePanel.setLayout(new BorderLayout());
-      createPaletteTablePanel.setPreferredSize(new Dimension(180, 154));
+      createPaletteTablePanel.setPreferredSize(new Dimension(180, 134));
       createPaletteTablePanel.add(getCreatePaletteScrollPane(), BorderLayout.CENTER);
     }
     return createPaletteTablePanel;
@@ -8017,6 +8010,15 @@ public class TinaInternalFrame extends JInternalFrame {
   private JPanel panel_17;
   private JPanel panel_18;
   private JPanel panel_19;
+  private JPanel tinaPaletteTransformPanel;
+  private JWFNumberField tinaPaletteSwapRGBREd;
+  private JSlider tinaPaletteSwapRGBSlider;
+  private JWFNumberField tinaPaletteFrequencyREd;
+  private JSlider tinaPaletteFrequencySlider;
+  private JWFNumberField tinaPaletteBlurREd;
+  private JSlider tinaPaletteBlurSlider;
+  private JButton tinaPaletteInvertBtn;
+  private JButton tinaPaletteReverseBtn;
 
   /**
    * This method initializes renderBatchJobsScrollPane	
@@ -8753,69 +8755,6 @@ public class TinaInternalFrame extends JInternalFrame {
       });
     }
     return randomizeColorsButton;
-  }
-
-  /**
-   * This method initializes tinaPaletteSwapRGBREd	
-   * 	
-   * @return javax.swing.JTextField	
-   */
-  private JWFNumberField getTinaPaletteSwapRGBREd() {
-    if (tinaPaletteSwapRGBREd == null) {
-      tinaPaletteSwapRGBREd = new JWFNumberField();
-      tinaPaletteSwapRGBREd.setValueStep(5.0);
-      tinaPaletteSwapRGBREd.setOnlyIntegers(true);
-      tinaPaletteSwapRGBREd.setMinValue(-255.0);
-      tinaPaletteSwapRGBREd.setMaxValue(255.0);
-      tinaPaletteSwapRGBREd.setHasMinValue(true);
-      tinaPaletteSwapRGBREd.setHasMaxValue(true);
-      tinaPaletteSwapRGBREd.addChangeListener(new ChangeListener() {
-        public void stateChanged(ChangeEvent e) {
-          if (!tinaPaletteSwapRGBREd.isMouseAdjusting() || tinaPaletteSwapRGBREd.getMouseChangeCount() == 0) {
-            if (!tinaPaletteSwapRGBSlider.getValueIsAdjusting()) {
-              tinaController.saveUndoPoint();
-            }
-          }
-          tinaController.paletteSwapRGBREd_changed();
-        }
-      });
-      tinaPaletteSwapRGBREd.setPreferredSize(new Dimension(36, 22));
-      tinaPaletteSwapRGBREd.setText("0");
-      tinaPaletteSwapRGBREd.setSize(new Dimension(56, 24));
-      tinaPaletteSwapRGBREd.setLocation(new Point(60, 238));
-      tinaPaletteSwapRGBREd.setFont(new Font("Dialog", Font.PLAIN, 10));
-    }
-    return tinaPaletteSwapRGBREd;
-  }
-
-  /**
-   * This method initializes tinaPaletteSwapRGBSlider	
-   * 	
-   * @return javax.swing.JSlider	
-   */
-  private JSlider getTinaPaletteSwapRGBSlider() {
-    if (tinaPaletteSwapRGBSlider == null) {
-      tinaPaletteSwapRGBSlider = new JSlider();
-      tinaPaletteSwapRGBSlider.addMouseListener(new MouseAdapter() {
-        @Override
-        public void mousePressed(MouseEvent e) {
-          tinaController.saveUndoPoint();
-        }
-      });
-      tinaPaletteSwapRGBSlider.setPreferredSize(new Dimension(86, 22));
-      tinaPaletteSwapRGBSlider.setMaximum(255);
-      tinaPaletteSwapRGBSlider.setMinimum(-255);
-      tinaPaletteSwapRGBSlider.setValue(0);
-      tinaPaletteSwapRGBSlider.setSize(new Dimension(74, 22));
-      tinaPaletteSwapRGBSlider.setLocation(new Point(116, 238));
-      tinaPaletteSwapRGBSlider.setFont(new Font("Dialog", Font.BOLD, 10));
-      tinaPaletteSwapRGBSlider.addChangeListener(new javax.swing.event.ChangeListener() {
-        public void stateChanged(javax.swing.event.ChangeEvent e) {
-          tinaController.paletteSwapRGBSlider_stateChanged(e);
-        }
-      });
-    }
-    return tinaPaletteSwapRGBSlider;
   }
 
   /**
@@ -10339,5 +10278,253 @@ public class TinaInternalFrame extends JInternalFrame {
       panel_19 = new JPanel();
     }
     return panel_19;
+  }
+
+  private JPanel getTinaPaletteTransformPanel() {
+    if (tinaPaletteTransformPanel == null) {
+      tinaPaletteTransformPanel = new JPanel();
+      tinaPaletteTransformPanel.setLayout(null);
+
+      JLabel tinaPaletteSwapRGBLbl_1 = new JLabel();
+      tinaPaletteSwapRGBLbl_1.setText("Swap RGB");
+      tinaPaletteSwapRGBLbl_1.setSize(new Dimension(56, 22));
+      tinaPaletteSwapRGBLbl_1.setPreferredSize(new Dimension(64, 22));
+      tinaPaletteSwapRGBLbl_1.setLocation(new Point(6, 214));
+      tinaPaletteSwapRGBLbl_1.setFont(new Font("Dialog", Font.BOLD, 10));
+      tinaPaletteSwapRGBLbl_1.setBounds(6, 6, 56, 22);
+      tinaPaletteTransformPanel.add(tinaPaletteSwapRGBLbl_1);
+
+      tinaPaletteSwapRGBREd = new JWFNumberField();
+      tinaPaletteSwapRGBREd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null) {
+            if (!tinaPaletteSwapRGBREd.isMouseAdjusting() || tinaPaletteSwapRGBREd.getMouseChangeCount() == 0) {
+              if (!tinaPaletteSwapRGBSlider.getValueIsAdjusting()) {
+                tinaController.saveUndoPoint();
+              }
+            }
+            tinaController.paletteSwapRGBREd_changed();
+          }
+        }
+      });
+      tinaPaletteSwapRGBREd.setValueStep(5.0);
+      tinaPaletteSwapRGBREd.setText("0");
+      tinaPaletteSwapRGBREd.setSize(new Dimension(56, 24));
+      tinaPaletteSwapRGBREd.setPreferredSize(new Dimension(36, 22));
+      tinaPaletteSwapRGBREd.setOnlyIntegers(true);
+      tinaPaletteSwapRGBREd.setMinValue(-255.0);
+      tinaPaletteSwapRGBREd.setMaxValue(255.0);
+      tinaPaletteSwapRGBREd.setLocation(new Point(62, 214));
+      tinaPaletteSwapRGBREd.setHasMinValue(true);
+      tinaPaletteSwapRGBREd.setHasMaxValue(true);
+      tinaPaletteSwapRGBREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      tinaPaletteSwapRGBREd.setBounds(62, 6, 56, 24);
+      tinaPaletteTransformPanel.add(tinaPaletteSwapRGBREd);
+
+      tinaPaletteSwapRGBSlider = new JSlider();
+      tinaPaletteSwapRGBSlider.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null) {
+            tinaController.paletteSwapRGBSlider_stateChanged(e);
+          }
+        }
+      });
+      tinaPaletteSwapRGBSlider.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mousePressed(MouseEvent e) {
+          tinaController.saveUndoPoint();
+        }
+      });
+      tinaPaletteSwapRGBSlider.setValue(0);
+      tinaPaletteSwapRGBSlider.setSize(new Dimension(74, 22));
+      tinaPaletteSwapRGBSlider.setPreferredSize(new Dimension(86, 22));
+      tinaPaletteSwapRGBSlider.setMinimum(-255);
+      tinaPaletteSwapRGBSlider.setMaximum(255);
+      tinaPaletteSwapRGBSlider.setLocation(new Point(118, 214));
+      tinaPaletteSwapRGBSlider.setFont(new Font("Dialog", Font.BOLD, 10));
+      tinaPaletteSwapRGBSlider.setBounds(118, 6, 74, 22);
+      tinaPaletteTransformPanel.add(tinaPaletteSwapRGBSlider);
+
+      JLabel tinaPaletteFrequencyLbl = new JLabel();
+      tinaPaletteFrequencyLbl.setText("Frequency");
+      tinaPaletteFrequencyLbl.setSize(new Dimension(56, 22));
+      tinaPaletteFrequencyLbl.setPreferredSize(new Dimension(64, 22));
+      tinaPaletteFrequencyLbl.setLocation(new Point(6, 214));
+      tinaPaletteFrequencyLbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      tinaPaletteFrequencyLbl.setBounds(6, 31, 56, 22);
+      tinaPaletteTransformPanel.add(tinaPaletteFrequencyLbl);
+
+      tinaPaletteFrequencyREd = new JWFNumberField();
+      tinaPaletteFrequencyREd.setMinValue(1.0);
+      tinaPaletteFrequencyREd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null) {
+            if (!tinaPaletteFrequencyREd.isMouseAdjusting() || tinaPaletteFrequencyREd.getMouseChangeCount() == 0) {
+              if (!tinaPaletteFrequencySlider.getValueIsAdjusting()) {
+                tinaController.saveUndoPoint();
+              }
+            }
+            tinaController.paletteFrequencyREd_changed();
+          }
+        }
+      });
+      tinaPaletteFrequencyREd.setValueStep(5.0);
+      tinaPaletteFrequencyREd.setText("0");
+      tinaPaletteFrequencyREd.setSize(new Dimension(56, 24));
+      tinaPaletteFrequencyREd.setPreferredSize(new Dimension(36, 22));
+      tinaPaletteFrequencyREd.setOnlyIntegers(true);
+      tinaPaletteFrequencyREd.setMaxValue(16.0);
+      tinaPaletteFrequencyREd.setLocation(new Point(62, 214));
+      tinaPaletteFrequencyREd.setHasMinValue(true);
+      tinaPaletteFrequencyREd.setHasMaxValue(true);
+      tinaPaletteFrequencyREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      tinaPaletteFrequencyREd.setBounds(62, 31, 56, 24);
+      tinaPaletteTransformPanel.add(tinaPaletteFrequencyREd);
+
+      tinaPaletteFrequencySlider = new JSlider();
+      tinaPaletteFrequencySlider.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null) {
+            tinaController.paletteFrequencySlider_stateChanged(e);
+          }
+        }
+      });
+      tinaPaletteFrequencySlider.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mousePressed(MouseEvent e) {
+          tinaController.saveUndoPoint();
+        }
+      });
+      tinaPaletteFrequencySlider.setValue(0);
+      tinaPaletteFrequencySlider.setSize(new Dimension(74, 22));
+      tinaPaletteFrequencySlider.setPreferredSize(new Dimension(86, 22));
+      tinaPaletteFrequencySlider.setMinimum(1);
+      tinaPaletteFrequencySlider.setMaximum(16);
+      tinaPaletteFrequencySlider.setLocation(new Point(118, 214));
+      tinaPaletteFrequencySlider.setFont(new Font("Dialog", Font.BOLD, 10));
+      tinaPaletteFrequencySlider.setBounds(118, 31, 74, 22);
+      tinaPaletteTransformPanel.add(tinaPaletteFrequencySlider);
+
+      JLabel tinaPaletteBlurLbl = new JLabel();
+      tinaPaletteBlurLbl.setText("Blur");
+      tinaPaletteBlurLbl.setSize(new Dimension(56, 22));
+      tinaPaletteBlurLbl.setPreferredSize(new Dimension(64, 22));
+      tinaPaletteBlurLbl.setLocation(new Point(6, 214));
+      tinaPaletteBlurLbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      tinaPaletteBlurLbl.setBounds(6, 55, 56, 22);
+      tinaPaletteTransformPanel.add(tinaPaletteBlurLbl);
+
+      tinaPaletteBlurREd = new JWFNumberField();
+      tinaPaletteBlurREd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null) {
+            if (!tinaPaletteBlurREd.isMouseAdjusting() || tinaPaletteBlurREd.getMouseChangeCount() == 0) {
+              if (!tinaPaletteBlurSlider.getValueIsAdjusting()) {
+                tinaController.saveUndoPoint();
+              }
+            }
+            tinaController.paletteBlurREd_changed();
+          }
+        }
+      });
+      tinaPaletteBlurREd.setValueStep(5.0);
+      tinaPaletteBlurREd.setText("0");
+      tinaPaletteBlurREd.setSize(new Dimension(56, 24));
+      tinaPaletteBlurREd.setPreferredSize(new Dimension(36, 22));
+      tinaPaletteBlurREd.setOnlyIntegers(true);
+      tinaPaletteBlurREd.setMaxValue(127.0);
+      tinaPaletteBlurREd.setLocation(new Point(62, 214));
+      tinaPaletteBlurREd.setHasMinValue(true);
+      tinaPaletteBlurREd.setHasMaxValue(true);
+      tinaPaletteBlurREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      tinaPaletteBlurREd.setBounds(62, 55, 56, 24);
+      tinaPaletteTransformPanel.add(tinaPaletteBlurREd);
+
+      tinaPaletteBlurSlider = new JSlider();
+      tinaPaletteBlurSlider.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null) {
+            tinaController.paletteBlurSlider_stateChanged(e);
+          }
+        }
+      });
+      tinaPaletteBlurSlider.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mousePressed(MouseEvent e) {
+          tinaController.saveUndoPoint();
+        }
+      });
+      tinaPaletteBlurSlider.setValue(0);
+      tinaPaletteBlurSlider.setSize(new Dimension(74, 22));
+      tinaPaletteBlurSlider.setPreferredSize(new Dimension(86, 22));
+      tinaPaletteBlurSlider.setMaximum(127);
+      tinaPaletteBlurSlider.setLocation(new Point(118, 214));
+      tinaPaletteBlurSlider.setFont(new Font("Dialog", Font.BOLD, 10));
+      tinaPaletteBlurSlider.setBounds(118, 55, 74, 22);
+      tinaPaletteTransformPanel.add(tinaPaletteBlurSlider);
+
+      tinaPaletteInvertBtn = new JButton();
+      tinaPaletteInvertBtn.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.paletteInvertBtn_clicked();
+        }
+      });
+      tinaPaletteInvertBtn.setToolTipText("Turn into negative colors");
+      tinaPaletteInvertBtn.setText("Invert");
+      tinaPaletteInvertBtn.setSize(new Dimension(138, 24));
+      tinaPaletteInvertBtn.setPreferredSize(new Dimension(136, 24));
+      tinaPaletteInvertBtn.setLocation(new Point(4, 181));
+      tinaPaletteInvertBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      tinaPaletteInvertBtn.setBounds(6, 119, 88, 24);
+      tinaPaletteTransformPanel.add(tinaPaletteInvertBtn);
+
+      tinaPaletteReverseBtn = new JButton();
+      tinaPaletteReverseBtn.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.paletteReverseBtn_clicked();
+        }
+      });
+      tinaPaletteReverseBtn.setToolTipText("Reverse color order");
+      tinaPaletteReverseBtn.setText("Reverse");
+      tinaPaletteReverseBtn.setSize(new Dimension(138, 24));
+      tinaPaletteReverseBtn.setPreferredSize(new Dimension(136, 24));
+      tinaPaletteReverseBtn.setLocation(new Point(4, 181));
+      tinaPaletteReverseBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      tinaPaletteReverseBtn.setBounds(104, 119, 88, 24);
+      tinaPaletteTransformPanel.add(tinaPaletteReverseBtn);
+    }
+    return tinaPaletteTransformPanel;
+  }
+
+  public JWFNumberField getTinaPaletteSwapRGBREd() {
+    return tinaPaletteSwapRGBREd;
+  }
+
+  public JSlider getTinaPaletteSwapRGBSlider() {
+    return tinaPaletteSwapRGBSlider;
+  }
+
+  public JWFNumberField getTinaPaletteFrequencyREd() {
+    return tinaPaletteFrequencyREd;
+  }
+
+  public JSlider getTinaPaletteFrequencySlider() {
+    return tinaPaletteFrequencySlider;
+  }
+
+  public JWFNumberField getTinaPaletteBlurREd() {
+    return tinaPaletteBlurREd;
+  }
+
+  public JSlider getTinaPaletteBlurSlider() {
+    return tinaPaletteBlurSlider;
+  }
+
+  public JButton getTinaPaletteInvertBtn() {
+    return tinaPaletteInvertBtn;
+  }
+
+  public JButton getTinaPaletteReverseBtn() {
+    return tinaPaletteReverseBtn;
   }
 } //  @jve:decl-index=0:visual-constraint="10,10"
