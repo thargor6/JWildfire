@@ -699,7 +699,7 @@ public class TinaInternalFrame extends JInternalFrame {
     if (tinaWestPanel == null) {
       tinaWestPanel = new JPanel();
       tinaWestPanel.setLayout(new BorderLayout());
-      tinaWestPanel.setPreferredSize(new Dimension(200, 0));
+      tinaWestPanel.setPreferredSize(new Dimension(210, 0));
       tinaWestPanel.setVisible(true);
       tinaWestPanel.add(getTinaWestTabbedPane(), BorderLayout.CENTER);
     }
@@ -2486,7 +2486,7 @@ public class TinaInternalFrame extends JInternalFrame {
     if (tinaRandomPaletteButton == null) {
       tinaRandomPaletteButton = new JButton();
       tinaRandomPaletteButton.setText("Random Gradient");
-      tinaRandomPaletteButton.setPreferredSize(new Dimension(180, 24));
+      tinaRandomPaletteButton.setPreferredSize(new Dimension(190, 24));
       tinaRandomPaletteButton.setActionCommand("Random Gradient");
       tinaRandomPaletteButton.setFont(new Font("Dialog", Font.BOLD, 10));
       tinaRandomPaletteButton.addActionListener(new java.awt.event.ActionListener() {
@@ -2506,10 +2506,10 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton getDistributeColorsButton() {
     if (distributeColorsButton == null) {
       distributeColorsButton = new JButton();
-      distributeColorsButton.setBounds(6, 56, 180, 24);
+      distributeColorsButton.setBounds(6, 56, 190, 24);
       distributeColorsButton.setText("Distribute colors");
       distributeColorsButton.setFont(new Font("Dialog", Font.BOLD, 10));
-      distributeColorsButton.setPreferredSize(new Dimension(180, 24));
+      distributeColorsButton.setPreferredSize(new Dimension(190, 24));
       distributeColorsButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
           tinaController.distributeColorsBtn_clicked();
@@ -2598,10 +2598,10 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaPaletteSubTabbedPane.setAutoscrolls(true);
       tinaPaletteSubTabbedPane.setToolTipText("");
       tinaPaletteSubTabbedPane.setFont(new Font("Dialog", Font.BOLD, 10));
-      tinaPaletteSubTabbedPane.addTab("Create", null, getTinaPaletteCreatePanel(), null);
-      tinaPaletteSubTabbedPane.addTab("Library", null, getGradientLibraryPanel(), null);
-      tinaPaletteSubTabbedPane.addTab("Transform", null, getTinaPaletteTransformPanel(), null);
-      tinaPaletteSubTabbedPane.addTab("Balancing", null, getTinaPaletteBalancingPanel(), null);
+      tinaPaletteSubTabbedPane.addTab("New", null, getTinaPaletteCreatePanel(), "Create or import a gradient");
+      tinaPaletteSubTabbedPane.addTab("Lib", null, getGradientLibraryPanel(), "Gradient library");
+      tinaPaletteSubTabbedPane.addTab("TX", null, getTinaPaletteTransformPanel(), "Transform the gradient");
+      tinaPaletteSubTabbedPane.addTab("Balance", null, getTinaPaletteBalancingPanel(), "Apply common color balancing options to the gradient");
     }
     return tinaPaletteSubTabbedPane;
   }
@@ -2631,7 +2631,7 @@ public class TinaInternalFrame extends JInternalFrame {
       });
       tinaGrabPaletteFromImageButton.setToolTipText("Create a gradient from an image by choosing the most important 256 colors");
       tinaGrabPaletteFromImageButton.setText("Create from image");
-      tinaGrabPaletteFromImageButton.setPreferredSize(new Dimension(180, 24));
+      tinaGrabPaletteFromImageButton.setPreferredSize(new Dimension(190, 24));
       tinaGrabPaletteFromImageButton.setFont(new Font("Dialog", Font.BOLD, 10));
       tinaPaletteCreatePanel.add(tinaGrabPaletteFromImageButton);
     }
@@ -3926,7 +3926,7 @@ public class TinaInternalFrame extends JInternalFrame {
     if (createPaletteTablePanel == null) {
       createPaletteTablePanel = new JPanel();
       createPaletteTablePanel.setLayout(new BorderLayout());
-      createPaletteTablePanel.setPreferredSize(new Dimension(180, 134));
+      createPaletteTablePanel.setPreferredSize(new Dimension(190, 134));
       createPaletteTablePanel.add(getCreatePaletteScrollPane(), BorderLayout.CENTER);
     }
     return createPaletteTablePanel;
@@ -6900,7 +6900,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaGrabPaletteFromFlameButton = new JButton();
       tinaGrabPaletteFromFlameButton.setFont(new Font("Dialog", Font.BOLD, 10));
       tinaGrabPaletteFromFlameButton.setText("Grab from flame");
-      tinaGrabPaletteFromFlameButton.setPreferredSize(new Dimension(180, 24));
+      tinaGrabPaletteFromFlameButton.setPreferredSize(new Dimension(190, 24));
       tinaGrabPaletteFromFlameButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
           tinaController.grabPaletteFromFlameButton_actionPerformed(e);
@@ -8744,10 +8744,10 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton getRandomizeColorsButton() {
     if (randomizeColorsButton == null) {
       randomizeColorsButton = new JButton();
-      randomizeColorsButton.setBounds(6, 32, 180, 24);
+      randomizeColorsButton.setBounds(6, 32, 190, 24);
       randomizeColorsButton.setFont(new Font("Dialog", Font.BOLD, 10));
       randomizeColorsButton.setText("Randomize colors");
-      randomizeColorsButton.setPreferredSize(new Dimension(180, 24));
+      randomizeColorsButton.setPreferredSize(new Dimension(190, 24));
       randomizeColorsButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
           tinaController.randomizeColorsBtn_clicked();
@@ -8810,8 +8810,8 @@ public class TinaInternalFrame extends JInternalFrame {
       gradientLibraryGradientCmb = new JComboBox();
       gradientLibraryGradientCmb.setPreferredSize(new Dimension(126, 22));
       gradientLibraryGradientCmb.setMaximumRowCount(32);
-      gradientLibraryGradientCmb.setSize(new Dimension(182, 22));
-      gradientLibraryGradientCmb.setLocation(new Point(4, 4));
+      gradientLibraryGradientCmb.setSize(new Dimension(198, 22));
+      gradientLibraryGradientCmb.setLocation(new Point(6, 6));
       gradientLibraryGradientCmb.setFont(new Font("Dialog", Font.BOLD, 10));
       gradientLibraryGradientCmb.addItemListener(new java.awt.event.ItemListener() {
         public void itemStateChanged(java.awt.event.ItemEvent e) {
@@ -10248,10 +10248,10 @@ public class TinaInternalFrame extends JInternalFrame {
       lblUseRenderer.setFont(new Font("Dialog", Font.BOLD, 10));
 
       rendererCmb = new JComboBox();
+      rendererCmb.setEnabled(false);
       rendererCmb.setMinimumSize(new Dimension(100, 24));
       rendererCmb.setMaximumSize(new Dimension(32767, 24));
       panel_16.add(rendererCmb);
-      rendererCmb.setEnabled(false);
       rendererCmb.setPreferredSize(new Dimension(125, 24));
       rendererCmb.setMaximumRowCount(32);
       rendererCmb.setFont(new Font("Dialog", Font.BOLD, 10));

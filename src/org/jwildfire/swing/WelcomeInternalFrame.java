@@ -181,19 +181,19 @@ public class WelcomeInternalFrame extends JInternalFrame {
     enterBtn.setBounds(178, 0, 122, 62);
     southPanel.add(enterBtn);
 
-    JButton youtubeTutorialsBtn = new JButton("YouTube tutorials");
-    youtubeTutorialsBtn.setDefaultCapable(false);
-    youtubeTutorialsBtn.addActionListener(new ActionListener() {
+    JButton dravesBtn = new JButton("About \"flames\"");
+    dravesBtn.setDefaultCapable(false);
+    dravesBtn.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
-        browse("http://www.andreas-maschke.com/?page_id=1407");
+        browse("http://www.flam3.com/flame_draves.pdf");
       }
     });
-    youtubeTutorialsBtn.setPreferredSize(new Dimension(128, 24));
-    youtubeTutorialsBtn.setForeground(SystemColor.menu);
-    youtubeTutorialsBtn.setBorderPainted(false);
-    youtubeTutorialsBtn.setBackground(Color.BLACK);
-    youtubeTutorialsBtn.setBounds(338, 0, 134, 28);
-    southPanel.add(youtubeTutorialsBtn);
+    dravesBtn.setPreferredSize(new Dimension(128, 24));
+    dravesBtn.setForeground(SystemColor.menu);
+    dravesBtn.setBorderPainted(false);
+    dravesBtn.setBackground(Color.BLACK);
+    dravesBtn.setBounds(338, 0, 134, 28);
+    southPanel.add(dravesBtn);
 
     JPanel panel_2 = new JPanel();
     panel_2.setBackground(Color.BLACK);

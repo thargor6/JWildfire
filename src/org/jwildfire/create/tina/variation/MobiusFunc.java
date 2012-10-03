@@ -16,10 +16,14 @@
 */
 package org.jwildfire.create.tina.variation;
 
+import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_CUDA;
+import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_JWILDFIRE;
+
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
 public class MobiusFunc extends VariationFunc {
+  private static final long serialVersionUID = 1L;
 
   private static final String PARAM_RE_A = "re_a";
   private static final String PARAM_RE_B = "re_b";
@@ -101,4 +105,8 @@ public class MobiusFunc extends VariationFunc {
     return "mobius";
   }
 
+  @Override
+  public int getAvailability() {
+    return AVAILABILITY_JWILDFIRE | AVAILABILITY_CUDA;
+  }
 }
