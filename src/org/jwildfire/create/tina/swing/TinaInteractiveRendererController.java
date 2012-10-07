@@ -371,6 +371,8 @@ public class TinaInteractiveRendererController implements IterationObserver {
   private long renderStartTime = 0;
   private long pausedRenderTime = 0;
 
+  private long responsibility = 1;
+
   private synchronized void incSampleCount() {
     sampleCount++;
   }
@@ -392,10 +394,10 @@ public class TinaInteractiveRendererController implements IterationObserver {
     incSampleCount();
     if (pX >= 0 && pX < image.getImageWidth() && pY >= 0 && pY < image.getImageHeight()) {
       image.setARGB(pX, pY, pEventSource.getTonemapper().tonemapSample(pX, pY));
-      if (sampleCount % 1000 == 0) {
+      if (sampleCount % (1000 * responsibility) == 0) {
         updateImage();
       }
-      if (sampleCount % 1000000 == 0) {
+      if (sampleCount % (100000 * responsibility) == 0) {
         updateStats(pEventSource);
       }
     }

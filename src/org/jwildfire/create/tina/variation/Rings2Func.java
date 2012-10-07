@@ -16,7 +16,7 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.MathLib.SMALL_EPSILON;
+import static org.jwildfire.base.MathLib.EPSILON;
 
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
@@ -29,13 +29,15 @@ public class Rings2Func extends VariationFunc {
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-    double r = pAffineTP.getPrecalcSqrt();
-    double dx = val * val + SMALL_EPSILON;
+    double l = pAffineTP.getPrecalcSqrt();
+    if (_dx == 0 || l == 0) {
+      return;
+    }
+    double r = pAmount * (2.0 - _dx * ((int) ((l / _dx + 1) / 2) * 2 / l + 1));
 
-    r += -2.0 * dx * (int) ((r + dx) / (2.0 * dx)) + r * (1.0 - dx);
+    pVarTP.x += r * pAffineTP.x;
+    pVarTP.y += r * pAffineTP.y;
 
-    pVarTP.x += pAmount * pAffineTP.getPrecalcSinA() * r;
-    pVarTP.y += pAmount * pAffineTP.getPrecalcCosA() * r;
     if (pContext.isPreserveZCoordinate()) {
       pVarTP.z += pAmount * pAffineTP.z;
     }
@@ -62,5 +64,12 @@ public class Rings2Func extends VariationFunc {
   @Override
   public String getName() {
     return "rings2";
+  }
+
+  private double _dx;
+
+  @Override
+  public void init(FlameTransformationContext pContext, XForm pXForm, double pAmount) {
+    _dx = pAmount * pAmount + EPSILON;
   }
 }
