@@ -14,8 +14,6 @@
  if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-#ifndef JWFVAR_BLOB_H_
-#define JWFVAR_BLOB_H_
 
 #include "jwf_Constants.h"
 #include "jwf_Variation.h"
@@ -23,9 +21,9 @@
 class BlobFunc: public Variation {
 public:
 	BlobFunc() {
-		low = 0.3f;
-		high = 1.2f;
-		waves = 6.0f;
+		low = 0.3;
+		high = 1.2;
+		waves = 6.0;
 		initParameterNames(3, "low", "high", "waves");
 	}
 
@@ -46,11 +44,11 @@ public:
 	}
 
 	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
-		float a = atan2f(pAffineTP->x, pAffineTP->y);
-		float r = JWF_SQRT(pAffineTP->x * pAffineTP->x + pAffineTP->y * pAffineTP->y);
-		r = r * (low + (high - low) * (0.5f + 0.5f * JWF_SIN(waves * a)));
-		float nx = JWF_SIN(a) * r;
-		float ny = JWF_COS(a) * r;
+		JWF_FLOAT a = JWF_ATAN2(pAffineTP->x, pAffineTP->y);
+		JWF_FLOAT r = JWF_SQRT(pAffineTP->x * pAffineTP->x + pAffineTP->y * pAffineTP->y);
+		r = r * (low + (high - low) * (0.5 + 0.5 * JWF_SIN(waves * a)));
+		JWF_FLOAT nx = JWF_SIN(a) * r;
+		JWF_FLOAT ny = JWF_COS(a) * r;
 		pVarTP->x += pAmount * nx;
 		pVarTP->y += pAmount * ny;
 		if (pContext->isPreserveZCoordinate) {
@@ -63,9 +61,8 @@ public:
 	}
 
 private:
-	float low;
-	float high;
-	float waves;
+	JWF_FLOAT low;
+	JWF_FLOAT high;
+	JWF_FLOAT waves;
 };
 
-#endif // JWFVAR_BLOB_H_

@@ -44,21 +44,21 @@ public:
 	}
 
 	void initView(int pImageWidth, int pImageHeight, int pBorderWidth, int pMaxBorderWidth, int pRasterWidth, int pRasterHeight) {
-		FLOAT pixelsPerUnit = flame->pixelsPerUnit * flame->camZoom;
-		FLOAT corner_x = flame->centreX - (FLOAT) pImageWidth / pixelsPerUnit / 2.0;
-		FLOAT corner_y = flame->centreY - (FLOAT) pImageHeight / pixelsPerUnit / 2.0;
-		FLOAT t0 = pBorderWidth / pixelsPerUnit;
-		FLOAT t1 = pBorderWidth / pixelsPerUnit;
-		FLOAT t2 = (2 * pMaxBorderWidth - pBorderWidth) / pixelsPerUnit;
-		FLOAT t3 = (2 * pMaxBorderWidth - pBorderWidth) / pixelsPerUnit;
+		JWF_FLOAT pixelsPerUnit = flame->pixelsPerUnit * flame->camZoom;
+		JWF_FLOAT corner_x = flame->centreX - (JWF_FLOAT) pImageWidth / pixelsPerUnit / 2.0;
+		JWF_FLOAT corner_y = flame->centreY - (JWF_FLOAT) pImageHeight / pixelsPerUnit / 2.0;
+		JWF_FLOAT t0 = pBorderWidth / pixelsPerUnit;
+		JWF_FLOAT t1 = pBorderWidth / pixelsPerUnit;
+		JWF_FLOAT t2 = (2 * pMaxBorderWidth - pBorderWidth) / pixelsPerUnit;
+		JWF_FLOAT t3 = (2 * pMaxBorderWidth - pBorderWidth) / pixelsPerUnit;
 
-		FLOAT camX0 = corner_x - t0;
-		FLOAT camY0 = corner_y - t1;
-		FLOAT camX1 = corner_x + (FLOAT) pImageWidth / pixelsPerUnit + t2;
-		FLOAT camY1 = corner_y + (FLOAT) pImageHeight / pixelsPerUnit + t3;
+		JWF_FLOAT camX0 = corner_x - t0;
+		JWF_FLOAT camY0 = corner_y - t1;
+		JWF_FLOAT camX1 = corner_x + (JWF_FLOAT) pImageWidth / pixelsPerUnit + t2;
+		JWF_FLOAT camY1 = corner_y + (JWF_FLOAT) pImageHeight / pixelsPerUnit + t3;
 
 		camW = camX1 - camX0;
-		FLOAT Xsize, Ysize;
+		JWF_FLOAT Xsize, Ysize;
 		if (JWF_FABS(camW) > 0.01)
 			Xsize = 1.0 / camW;
 		else
@@ -78,8 +78,8 @@ public:
 	}
 
 	void init3D() {
-		FLOAT yaw = -flame->camYaw * M_PI / 180.0;
-		FLOAT pitch = flame->camPitch * M_PI / 180.0;
+		JWF_FLOAT yaw = -flame->camYaw * M_PI / 180.0;
+		JWF_FLOAT pitch = flame->camPitch * M_PI / 180.0;
 		cameraMatrix[0][0] = JWF_COS(yaw);
 		cameraMatrix[1][0] = -JWF_SIN(yaw);
 		cameraMatrix[2][0] = 0.0;
@@ -96,17 +96,17 @@ public:
 		if (!doProject3D) {
 			return;
 		}
-		FLOAT z = pPoint->z;
-		FLOAT px = cameraMatrix[0][0] * pPoint->x + cameraMatrix[1][0] * pPoint->y;
-		FLOAT py = cameraMatrix[0][1] * pPoint->x + cameraMatrix[1][1] * pPoint->y + cameraMatrix[2][1] * z;
-		FLOAT pz = cameraMatrix[0][2] * pPoint->x + cameraMatrix[1][2] * pPoint->y + cameraMatrix[2][2] * z;
-		FLOAT zr = 1.0 - flame->camPerspective * pz;
+		JWF_FLOAT z = pPoint->z;
+		JWF_FLOAT px = cameraMatrix[0][0] * pPoint->x + cameraMatrix[1][0] * pPoint->y;
+		JWF_FLOAT py = cameraMatrix[0][1] * pPoint->x + cameraMatrix[1][1] * pPoint->y + cameraMatrix[2][1] * z;
+		JWF_FLOAT pz = cameraMatrix[0][2] * pPoint->x + cameraMatrix[1][2] * pPoint->y + cameraMatrix[2][2] * z;
+		JWF_FLOAT zr = 1.0 - flame->camPerspective * pz;
 		if (useDOF) {
-			FLOAT a = 2.0 * M_PI * pFlameTransformationContext->randGen->random();
-			FLOAT dsina = JWF_SIN(a);
-			FLOAT dcosa = JWF_COS(a);
-			FLOAT zdist = (flame->camZ - pz);
-			FLOAT dr;
+			JWF_FLOAT a = 2.0 * M_PI * pFlameTransformationContext->randGen->random();
+			JWF_FLOAT dsina = JWF_SIN(a);
+			JWF_FLOAT dcosa = JWF_COS(a);
+			JWF_FLOAT zdist = (flame->camZ - pz);
+			JWF_FLOAT dr;
 			if (zdist > 0.0) {
 				dr = pFlameTransformationContext->randGen->random() * camDOF_10 * zdist;
 				pPoint->x = (px + dr * dcosa) / zr;
@@ -123,21 +123,21 @@ public:
 		}
 	}
 
-	FLOAT cosa;
-	FLOAT sina;
-	FLOAT camW;
-	FLOAT camH;
-	FLOAT rcX;
-	FLOAT rcY;
-	FLOAT bws;
-	FLOAT bhs;
+	JWF_FLOAT cosa;
+	JWF_FLOAT sina;
+	JWF_FLOAT camW;
+	JWF_FLOAT camH;
+	JWF_FLOAT rcX;
+	JWF_FLOAT rcY;
+	JWF_FLOAT bws;
+	JWF_FLOAT bhs;
 
 private:
 	Flame *flame;
 	bool doProject3D;
-	FLOAT cameraMatrix[3][3];
+	JWF_FLOAT cameraMatrix[3][3];
 
-	FLOAT camDOF_10;
+	JWF_FLOAT camDOF_10;
 	bool useDOF;
 };
 

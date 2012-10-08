@@ -14,8 +14,6 @@
  if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-#ifndef JWFVAR_PDJ_H_
-#define JWFVAR_PDJ_H_
 
 #include "jwf_Constants.h"
 #include "jwf_Variation.h"
@@ -23,10 +21,10 @@
 class PDJFunc: public Variation {
 public:
 	PDJFunc() {
-		a = 1.0f;
-		b = 2.0f;
-		c = 3.0f;
-		d = 4.0f;
+		a = 1.0;
+		b = 2.0;
+		c = 3.0;
+		d = 4.0;
 		initParameterNames(4, "a", "b", "c", "d");
 	}
 
@@ -50,8 +48,8 @@ public:
 	}
 
 	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
-		pVarTP->x += pAmount * (sinf(a * pAffineTP->y) - JWF_COS(b * pAffineTP->x));
-		pVarTP->y += pAmount * (sinf(c * pAffineTP->x) - JWF_COS(d * pAffineTP->y));
+		pVarTP->x += pAmount * (JWF_SIN(a * pAffineTP->y) - JWF_COS(b * pAffineTP->x));
+		pVarTP->y += pAmount * (JWF_SIN(c * pAffineTP->x) - JWF_COS(d * pAffineTP->y));
 		if (pContext->isPreserveZCoordinate) {
 			pVarTP->z += pAmount * pAffineTP->z;
 		}
@@ -62,7 +60,6 @@ public:
 	}
 
 private:
-	float a, b, c, d;
+	JWF_FLOAT a, b, c, d;
 };
 
-#endif // JWFVAR_PDJ_H_

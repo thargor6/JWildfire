@@ -25,14 +25,14 @@ struct LogDensityFilter {
 #define FILTER_WHITE  (1 << 26)
 #define BRIGHTNESS_SCALE  2.3 * 268.0
 #define PRECALC_LOG_ARRAY_SIZE 6000
-	FLOAT **filter;
+	JWF_FLOAT **filter;
 	int noiseFilterSize;
-	FLOAT *precalcLogArray; // precalculated log-values
-	FLOAT k1, k2;
+	JWF_FLOAT *precalcLogArray; // precalculated log-values
+	JWF_FLOAT k1, k2;
 	RasterPoint *emptyRasterPoint;
 
 #define MAX_FILTER_RADIUS 7.0
-	FLOAT ***filterArray;
+	JWF_FLOAT ***filterArray;
 
 	void create(Flame *pFlame) {
 		raster = NULL;
@@ -49,8 +49,8 @@ struct LogDensityFilter {
 		emptyRasterPoint->clear();
 
 		int maxFilterSize = calcFilterSize(MAX_FILTER_RADIUS);
-		filterArray = (FLOAT***) malloc((maxFilterSize + 1) * sizeof(FLOAT**));
-		memset(filterArray, 0, (maxFilterSize + 1) * sizeof(FLOAT**));
+		filterArray = (JWF_FLOAT***) malloc((maxFilterSize + 1) * sizeof(JWF_FLOAT**));
+		memset(filterArray, 0, (maxFilterSize + 1) * sizeof(JWF_FLOAT**));
 	}
 
 	void free() {
@@ -71,7 +71,7 @@ struct LogDensityFilter {
 		}
 	}
 
-	int calcFilterSize(FLOAT pFilterRadius) {
+	int calcFilterSize(JWF_FLOAT pFilterRadius) {
 		if (pFilterRadius < EPSILON) {
 			return 0;
 		}
@@ -84,7 +84,7 @@ struct LogDensityFilter {
 		}
 	}
 
-	FLOAT calcFilterAdjust(FLOAT pFilterRadius) {
+	JWF_FLOAT calcFilterAdjust(JWF_FLOAT pFilterRadius) {
 		if (pFilterRadius < EPSILON) {
 			return 0.0;
 		}
@@ -102,34 +102,40 @@ struct LogDensityFilter {
 		}
 	}
 
-	void getFilter(FLOAT pFilterRadius, int *pFilterSize, FLOAT ***pFilter) {
+	void getFilter(JWF_FLOAT pFilterRadius, int *pFilterSize, JWF_FLOAT ***pFilter) {
 		if (pFilterRadius < 0.0)
 			pFilterRadius = 0.0;
 		else if (pFilterRadius > MAX_FILTER_RADIUS)
 			pFilterRadius = MAX_FILTER_RADIUS;
 		*pFilterSize = calcFilterSize(pFilterRadius);
+
+		// TODO
+		//if((*pFilterSize)<2)
+//			*pFilterSize=2;
+
+
 		if (filterArray[*pFilterSize] == NULL) {
 			initFilter(pFilterRadius, *pFilterSize, &(filterArray[*pFilterSize]));
 		}
 		*pFilter = filterArray[*pFilterSize];
 	}
 
-	void initFilter(FLOAT pFilterRadius, int pFilterSize, FLOAT ***pFilter) {
-		FLOAT adjust = calcFilterAdjust(pFilterRadius);
-		hostMalloc((void**) pFilter, pFilterSize * sizeof(FLOAT*));
+	void initFilter(JWF_FLOAT pFilterRadius, int pFilterSize, JWF_FLOAT ***pFilter) {
+		JWF_FLOAT adjust = calcFilterAdjust(pFilterRadius);
+		hostMalloc((void**) pFilter, pFilterSize * sizeof(JWF_FLOAT*));
 		for (int i = 0; i < pFilterSize; i++) {
-			hostMalloc((void**) &(*pFilter)[i], pFilterSize * sizeof(FLOAT));
+			hostMalloc((void**) &(*pFilter)[i], pFilterSize * sizeof(JWF_FLOAT));
 		}
 		for (int i = 0; i < pFilterSize; i++) {
 			for (int j = 0; j < pFilterSize; j++) {
-				FLOAT ii = ((2.0 * i + 1.0) / pFilterSize - 1.0) * adjust;
-				FLOAT jj = ((2.0 * j + 1.0) / pFilterSize - 1.0) * adjust;
+				JWF_FLOAT ii = ((2.0 * i + 1.0) / pFilterSize - 1.0) * adjust;
+				JWF_FLOAT jj = ((2.0 * j + 1.0) / pFilterSize - 1.0) * adjust;
 				(*pFilter)[i][j] = JWF_EXP(-2.0 * (ii * ii + jj * jj));
 			}
 		}
 		// normalize
 		{
-			FLOAT t = 0.0;
+			JWF_FLOAT t = 0.0;
 			for (int i = 0; i < pFilterSize; i++) {
 				for (int j = 0; j < pFilterSize; j++) {
 					t += (*pFilter)[i][j];
@@ -154,11 +160,11 @@ struct LogDensityFilter {
 		rasterHeight = pRasterHeight;
 		rasterSize = rasterWidth * rasterHeight;
 		k1 = (flame->contrast * BRIGHTNESS_SCALE * flame->brightness * FILTER_WHITE) / 256.0;
-		FLOAT pixelsPerUnit = flame->pixelsPerUnit * flame->camZoom;
-		FLOAT area = ((FLOAT) pImageWidth * (FLOAT) pImageHeight) / (pixelsPerUnit * pixelsPerUnit);
-		k2 = 1.0 / (flame->contrast * area * (FLOAT) flame->whiteLevel * flame->sampleDensity);
+		JWF_FLOAT pixelsPerUnit = flame->pixelsPerUnit * flame->camZoom;
+		JWF_FLOAT area = ((JWF_FLOAT) pImageWidth * (JWF_FLOAT) pImageHeight) / (pixelsPerUnit * pixelsPerUnit);
+		k2 = 1.0 / (flame->contrast * area * (JWF_FLOAT) flame->whiteLevel * flame->sampleDensity);
 
-		hostMalloc((void**) &precalcLogArray, (PRECALC_LOG_ARRAY_SIZE + 1) * sizeof(FLOAT));
+		hostMalloc((void**) &precalcLogArray, (PRECALC_LOG_ARRAY_SIZE + 1) * sizeof(JWF_FLOAT));
 		for (int i = 1; i <= PRECALC_LOG_ARRAY_SIZE; i++) {
 			precalcLogArray[i] = (k1 * JWF_LOG10(1 + flame->whiteLevel * i * k2)) / (flame->whiteLevel * i);
 		}
@@ -170,7 +176,7 @@ struct LogDensityFilter {
 			for (int i = 0; i < noiseFilterSize; i++) {
 				for (int j = 0; j < noiseFilterSize; j++) {
 					RasterPoint *point = getRasterPoint(pX + j, pY + i);
-					FLOAT logScale;
+					JWF_FLOAT logScale;
 					if (point->count < PRECALC_LOG_ARRAY_SIZE) {
 						logScale = precalcLogArray[(int) point->count];
 					}
@@ -191,7 +197,7 @@ struct LogDensityFilter {
 		}
 		else {
 			RasterPoint *point = getRasterPoint(pX, pY);
-			FLOAT ls;
+			JWF_FLOAT ls;
 			if (point->count < PRECALC_LOG_ARRAY_SIZE) {
 				ls = precalcLogArray[(int) point->count] / FILTER_WHITE;
 			}
@@ -225,16 +231,16 @@ struct LogDensityFilter {
 		}
 		else {
 			RasterPoint *point = getRasterPoint(pX, pY);
-			pFilteredPnt->red = point->red;
-			pFilteredPnt->green = point->green;
-			pFilteredPnt->blue = point->blue;
-			pFilteredPnt->intensity = (FLOAT) point->count * flame->whiteLevel;
+			pFilteredPnt->red = point->red/FILTER_WHITE;
+			pFilteredPnt->green = point->green/FILTER_WHITE;
+			pFilteredPnt->blue = point->blue/FILTER_WHITE;
+			pFilteredPnt->intensity = (JWF_FLOAT) (point->count * flame->whiteLevel/FILTER_WHITE);
 		}
 	}
 
 	void transformPointSimple(LogDensityPoint *pFilteredPnt, int pX, int pY) {
 		RasterPoint *point = getRasterPoint(pX, pY);
-		FLOAT ls;
+		JWF_FLOAT ls;
 		if (point->count < PRECALC_LOG_ARRAY_SIZE) {
 			ls = precalcLogArray[(int) point->count] / FILTER_WHITE;
 		}
@@ -254,18 +260,18 @@ struct LogDensityFilter {
 			return &raster[pY][pX];
 	}
 
-	FLOAT calcDensity(long pSampleCount, long pRasterSize) {
-		return (FLOAT) pSampleCount / (FLOAT) pRasterSize;
+	JWF_FLOAT calcDensity(long pSampleCount, long pRasterSize) {
+		return (JWF_FLOAT) pSampleCount / (JWF_FLOAT) pRasterSize;
 	}
 
-	FLOAT calcDensity(long pSampleCount) {
+	JWF_FLOAT calcDensity(long pSampleCount) {
 		if (rasterSize == 0) {
 			return 0.0;
 		}
-		return (FLOAT) ((FLOAT) pSampleCount / (FLOAT) rasterSize);
+		return (JWF_FLOAT) ((JWF_FLOAT) pSampleCount / (JWF_FLOAT) rasterSize);
 	}
 
-	void calcDensity(FLOAT *minDensity, FLOAT *maxDensity, FLOAT *avgDensity) {
+	void calcDensity(JWF_FLOAT *minDensity, JWF_FLOAT *maxDensity, JWF_FLOAT *avgDensity) {
 		*minDensity = FLT_MAX;
 		*maxDensity = *avgDensity = 0.0;
 		for (int y = 0; y < rasterHeight; y++) {
@@ -280,14 +286,126 @@ struct LogDensityFilter {
 				*avgDensity += p.count;
 			}
 		}
-		*avgDensity /= (FLOAT) (rasterWidth * rasterHeight);
+		*avgDensity /= (JWF_FLOAT) (rasterWidth * rasterHeight);
 	}
 
-	void transformPointNewShit(LogDensityPoint *pFilteredPnt, int pX, int pY, FLOAT minDesity, FLOAT maxDensity, FLOAT avgDensity) {
-		FLOAT density;
+	void transformPointHDRNewShit(LogDensityPoint *pFilteredPnt, int pX, int pY,JWF_FLOAT maxDensity) {
+		JWF_FLOAT density;
 		int densityRect = 7;
 		int dr2 = densityRect / 2;
-		FLOAT curve = 1.25;
+		JWF_FLOAT curve = 1.25;
+
+		if (pX < dr2 || pY < dr2 || (pX >= rasterWidth - dr2) || (pY >= rasterHeight - dr2)) {
+			density = getRasterPoint(pX, pY)->count;
+//    printf("%f ", density);
+		}
+		else {
+			// 0.07  0.11  0.07
+			// 0.11  0.28  0.11
+			// 0.07  0.11  0.07
+			/*
+			 density=0.28f*getRasterPoint(pX, pY)->count +
+			 0.11f*(getRasterPoint(pX-1, pY)->count + getRasterPoint(pX+1, pY)->count + getRasterPoint(pX, pY-1)->count + getRasterPoint(pX, pY+1)->count) +
+			 0.07f*(getRasterPoint(pX-1, pY-1)->count + getRasterPoint(pX-1, pY+1)->count + getRasterPoint(pX+1, pY-1)->count + getRasterPoint(pX+1, pY+1)->count);
+			 */
+			// 0.01  0.015 0.035 0.015 0.01
+			// 0.015 0.05  0.08  0.05  0.015
+			// 0.035 0.08  0.18  0.08  0.035
+			// 0.015 0.05  0.08  0.05  0.015
+			// 0.01  0.015 0.035 0.015 0.01
+			/*
+			 density=0.18f*getRasterPoint(pX, pY)->count +
+			 0.08f*(getRasterPoint(pX-1, pY)->count + getRasterPoint(pX+1, pY)->count + getRasterPoint(pX, pY-1)->count + getRasterPoint(pX, pY+1)->count) +
+			 0.05f*(getRasterPoint(pX-1, pY-1)->count + getRasterPoint(pX-1, pY+1)->count + getRasterPoint(pX+1, pY-1)->count + getRasterPoint(pX+1, pY+1)->count) +
+			 0.035f*(getRasterPoint(pX-2, pY)->count + getRasterPoint(pX+2, pY)->count + getRasterPoint(pX, pY-2)->count + getRasterPoint(pX, pY+2)->count) +
+			 0.015f*(getRasterPoint(pX-2, pY-1)->count + getRasterPoint(pX-1, pY-2)->count + getRasterPoint(pX+1, pY-2)->count + getRasterPoint(pX+2, pY-1)->count +
+			 getRasterPoint(pX-2, pY+1)->count + getRasterPoint(pX-1, pY+2)->count + getRasterPoint(pX+1, pY+2)->count + getRasterPoint(pX+2, pY+1)->count) +
+			 0.01f*(getRasterPoint(pX-2, pY-2)->count + getRasterPoint(pX+2, pY-2)->count + getRasterPoint(pX+2, pY+2)->count + getRasterPoint(pX-2, pY+2)->count);
+			 */
+
+			density = 0.0;
+			JWF_FLOAT kernelSum = 0.0;
+			for (int y = 0; y < densityRect; y++) {
+				for (int x = 0; x < densityRect; x++) {
+					JWF_FLOAT intensity = 1.0 / (1.0 + (y - dr2) * (y - dr2) + (x - dr2) * (x - dr2));
+					kernelSum += intensity;
+
+					//printf("(%d %d) %f\n",x,y,intensity);
+
+					density += intensity * getRasterPoint(pX + x - dr2, pY + y - dr2)->count;
+				}
+			}
+			density /= kernelSum;
+		}
+
+		JWF_FLOAT oDensity = density;
+
+		density = JWF_LOG(density + 1);
+		density /= JWF_LOG(maxDensity + 1);
+
+		JWF_FLOAT minRadius = 0.05;
+		JWF_FLOAT maxRadius = JWF_SQRT(rasterWidth * rasterWidth + rasterHeight * rasterHeight) * 0.5;
+		if (maxRadius > 50.0) {
+			maxRadius = 50.0;
+		}
+		JWF_FLOAT radius;
+		radius = minRadius + (maxRadius - minRadius) * JWF_ERF(1.0 / (1.0 + curve * density * density * density));
+		if (radius < minRadius) {
+			radius = minRadius;
+		}
+		else if (radius > maxRadius) {
+			radius = maxRadius;
+		}
+
+		if (pX < dr2 || pY < dr2 || (pX >= rasterWidth - dr2) || (pY >= rasterHeight - dr2)) {
+
+		}
+		else {
+//printf("density= %f, avg=%f, max=%f, r=%d\n", density, JWF_LOG(1.0f+avgDensity), JWF_LOG(1.0f+maxDensity), calcFilterSize(radius));
+		}
+
+		radius = JWF_FABS(JWF_ERF(oDensity - getRasterPoint(pX, pY)->count) * curve);
+		if (radius > 50.0)
+			radius = 50.0;
+		//  printf("density= %f, rad=%f, deltaDens= %f, final rad=%d\n", oDensity, radius, (oDensity-getRasterPoint(pX, pY)->count), calcFilterSize(radius));
+
+		int filterSize;
+		JWF_FLOAT **noiseFilter;
+		getFilter(radius, &filterSize, &noiseFilter);
+
+
+
+		if (filterSize > 1) {
+			pFilteredPnt->clear();
+			for (int i = 0; i < filterSize; i++) {
+				for (int j = 0; j < filterSize; j++) {
+					RasterPoint *point = getRasterPoint(pX + j, pY + i);
+					pFilteredPnt->red += noiseFilter[i][j] * point->red;
+					pFilteredPnt->green += noiseFilter[i][j] * point->green;
+					pFilteredPnt->blue += noiseFilter[i][j] * point->blue;
+					pFilteredPnt->intensity += noiseFilter[i][j] * point->count;
+				}
+			}
+
+			pFilteredPnt->red /= FILTER_WHITE;
+			pFilteredPnt->green /= FILTER_WHITE;
+			pFilteredPnt->blue /= FILTER_WHITE;
+			pFilteredPnt->intensity = flame->whiteLevel * pFilteredPnt->intensity / FILTER_WHITE;
+		}
+		else {
+			RasterPoint *point = getRasterPoint(pX, pY);
+			pFilteredPnt->red = point->red/FILTER_WHITE;
+			pFilteredPnt->green = point->green/FILTER_WHITE;
+			pFilteredPnt->blue = point->blue/FILTER_WHITE;
+			pFilteredPnt->intensity = (JWF_FLOAT) (point->count * flame->whiteLevel/FILTER_WHITE);
+		}
+	}
+
+	void transformPointNewShit(LogDensityPoint *pFilteredPnt, int pX, int pY, JWF_FLOAT minDesity, JWF_FLOAT maxDensity, JWF_FLOAT avgDensity) {
+		JWF_FLOAT density;
+		int densityRect = 7;
+		int dr2 = densityRect / 2;
+		JWF_FLOAT curve = 1.25;
 		bool saveDens = false;
 
 		if (pX < dr2 || pY < dr2 || (pX >= rasterWidth - dr2) || (pY >= rasterHeight - dr2)) {
@@ -319,10 +437,10 @@ struct LogDensityFilter {
 			 */
 
 			density = 0.0;
-			FLOAT kernelSum = 0.0;
+			JWF_FLOAT kernelSum = 0.0;
 			for (int y = 0; y < densityRect; y++) {
 				for (int x = 0; x < densityRect; x++) {
-					FLOAT intensity = 1.0 / (1.0 + (y - dr2) * (y - dr2) + (x - dr2) * (x - dr2));
+					JWF_FLOAT intensity = 1.0 / (1.0 + (y - dr2) * (y - dr2) + (x - dr2) * (x - dr2));
 					kernelSum += intensity;
 
 					//printf("(%d %d) %f\n",x,y,intensity);
@@ -333,17 +451,17 @@ struct LogDensityFilter {
 			density /= kernelSum;
 		}
 
-		FLOAT oDensity = density;
+		JWF_FLOAT oDensity = density;
 
 		density = JWF_LOG(density + 1);
 		density /= JWF_LOG(maxDensity + 1);
 
-		FLOAT minRadius = 0.05;
-		FLOAT maxRadius = JWF_SQRT(rasterWidth * rasterWidth + rasterHeight * rasterHeight) * 0.5;
+		JWF_FLOAT minRadius = 0.05;
+		JWF_FLOAT maxRadius = JWF_SQRT(rasterWidth * rasterWidth + rasterHeight * rasterHeight) * 0.5;
 		if (maxRadius > 50.0) {
 			maxRadius = 50.0;
 		}
-		FLOAT radius;
+		JWF_FLOAT radius;
 		radius = minRadius + (maxRadius - minRadius) * JWF_ERF(1.0 / (1.0 + curve * density * density * density));
 		if (radius < minRadius) {
 			radius = minRadius;
@@ -373,7 +491,7 @@ struct LogDensityFilter {
 		}
 
 		int filterSize;
-		FLOAT **noiseFilter;
+		JWF_FLOAT **noiseFilter;
 		getFilter(radius, &filterSize, &noiseFilter);
 
 		if (filterSize > 1) {
@@ -381,7 +499,7 @@ struct LogDensityFilter {
 			for (int i = 0; i < filterSize; i++) {
 				for (int j = 0; j < filterSize; j++) {
 					RasterPoint *point = getRasterPoint(pX + j - filterSize / 2, pY + i - filterSize / 2);
-					FLOAT logScale;
+					JWF_FLOAT logScale;
 					if (point->count < PRECALC_LOG_ARRAY_SIZE) {
 						logScale = precalcLogArray[(int) point->count];
 					}
@@ -402,7 +520,7 @@ struct LogDensityFilter {
 		}
 		else {
 			RasterPoint *point = getRasterPoint(pX, pY);
-			FLOAT ls;
+			JWF_FLOAT ls;
 			if (point->count < PRECALC_LOG_ARRAY_SIZE) {
 				ls = precalcLogArray[(int) point->count] / FILTER_WHITE;
 			}

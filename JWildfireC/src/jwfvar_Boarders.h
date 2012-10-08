@@ -15,8 +15,6 @@
  02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-#ifndef JWFVAR_BOARDERS_H_
-#define JWFVAR_BOARDERS_H_
 
 #include "jwf_Variation.h"
 
@@ -30,37 +28,37 @@ public:
 	}
 
 	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
-		float roundX = rintf(pAffineTP->x);
-		float roundY = rintf(pAffineTP->y);
-		float offsetX = pAffineTP->x - roundX;
-		float offsetY = pAffineTP->y - roundY;
+		JWF_FLOAT roundX = JWF_RINT(pAffineTP->x);
+		JWF_FLOAT roundY = JWF_RINT(pAffineTP->y);
+		JWF_FLOAT offsetX = pAffineTP->x - roundX;
+		JWF_FLOAT offsetY = pAffineTP->y - roundY;
 
-		if (pContext->randGen->random() >= 0.75f) {
-			pVarTP->x += pAmount * (offsetX * 0.5f + roundX);
-			pVarTP->y += pAmount * (offsetY * 0.5f + roundY);
+		if (pContext->randGen->random() >= 0.75) {
+			pVarTP->x += pAmount * (offsetX * 0.5 + roundX);
+			pVarTP->y += pAmount * (offsetY * 0.5 + roundY);
 		}
 		else {
-			if (fabs(offsetX) >= JWF_FABS(offsetY)) {
+			if (JWF_FABS(offsetX) >= JWF_FABS(offsetY)) {
 
 				if (offsetX >= 0.0) {
-					pVarTP->x += pAmount * (offsetX * 0.5f + roundX + 0.25f);
-					pVarTP->y += pAmount * (offsetY * 0.5f + roundY + 0.25f * offsetY / offsetX);
+					pVarTP->x += pAmount * (offsetX * 0.5 + roundX + 0.25);
+					pVarTP->y += pAmount * (offsetY * 0.5 + roundY + 0.25 * offsetY / offsetX);
 				}
 				else {
-					pVarTP->x += pAmount * (offsetX * 0.5f + roundX - 0.25f);
-					pVarTP->y += pAmount * (offsetY * 0.5f + roundY - 0.25f * offsetY / offsetX);
+					pVarTP->x += pAmount * (offsetX * 0.5 + roundX - 0.25);
+					pVarTP->y += pAmount * (offsetY * 0.5 + roundY - 0.25 * offsetY / offsetX);
 				}
 
 			}
 			else {
 
-				if (offsetY >= 0.0f) {
-					pVarTP->y += pAmount * (offsetY * 0.5f + roundY + 0.25f);
-					pVarTP->x += pAmount * (offsetX * 0.5f + roundX + offsetX / offsetY * 0.25f);
+				if (offsetY >= 0.0) {
+					pVarTP->y += pAmount * (offsetY * 0.5 + roundY + 0.25);
+					pVarTP->x += pAmount * (offsetX * 0.5 + roundX + offsetX / offsetY * 0.25);
 				}
 				else {
-					pVarTP->y += pAmount * (offsetY * 0.5f + roundY - 0.25f);
-					pVarTP->x += pAmount * (offsetX * 0.5f + roundX - offsetX / offsetY * 0.25f);
+					pVarTP->y += pAmount * (offsetY * 0.5 + roundY - 0.25);
+					pVarTP->x += pAmount * (offsetX * 0.5 + roundX - offsetX / offsetY * 0.25);
 				}
 			}
 		}
@@ -75,4 +73,3 @@ public:
 
 };
 
-#endif // JWFVAR_BOARDERS_H_

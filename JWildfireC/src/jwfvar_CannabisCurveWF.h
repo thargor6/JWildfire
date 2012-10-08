@@ -14,8 +14,6 @@
  if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-#ifndef JWFVAR_CANNABISCURVE_WF_H_
-#define JWFVAR_CANNABISCURVE_WF_H_
 
 #include "jwf_Constants.h"
 #include "jwf_Variation.h"
@@ -38,19 +36,19 @@ public:
 	}
 
 	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
-		float a = pAffineTP->getPrecalcAtan();
-		float r = pAffineTP->getPrecalcSqrt();
+		JWF_FLOAT a = pAffineTP->getPrecalcAtan();
+		JWF_FLOAT r = pAffineTP->getPrecalcSqrt();
 
 		// cannabis curve (http://mathworld.wolfram.com/CannabisCurve.html)
-		r = (1.0f + 9.0f / 10.0f * JWF_COS(8.0f * a)) * (1.0f + 1.0f / 10.0f * JWF_COS(24.0f * a)) * (9.0f / 10.0f + 1.0f / 10.0f * JWF_COS(200.0f * a)) * (1.0f + JWF_SIN(a));
-		a += M_PI / 2.0f;
+		r = (1.0 + 9.0 / 10.0 * JWF_COS(8.0 * a)) * (1.0 + 1.0 / 10.0 * JWF_COS(24.0 * a)) * (9.0 / 10.0 + 1.0 / 10.0 * JWF_COS(200.0 * a)) * (1.0 + JWF_SIN(a));
+		a += M_PI / 2.0;
 
 		if (filled == 1) {
 			r *= pContext->randGen->random();
 		}
 
-		float nx = JWF_SIN(a) * r;
-		float ny = JWF_COS(a) * r;
+		JWF_FLOAT nx = JWF_SIN(a) * r;
+		JWF_FLOAT ny = JWF_COS(a) * r;
 
 		pVarTP->x += pAmount * nx;
 		pVarTP->y += pAmount * ny;
@@ -67,4 +65,3 @@ private:
 	int filled;
 };
 
-#endif // JWFVAR_CANNABISCURVE_WF_H_

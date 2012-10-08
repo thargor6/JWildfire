@@ -15,8 +15,6 @@
  02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-#ifndef JWFVAR_RINGS_H_
-#define JWFVAR_RINGS_H_
 
 #include "jwf_Variation.h"
 
@@ -30,9 +28,9 @@ public:
 	}
 
 	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
-		float dx = pXForm->coeff20 * pXForm->coeff20 + EPSILON;
-		float r = pAffineTP->getPrecalcSqrt();
-		r = r + dx - ((int) ((r + dx) / (2.0f * dx))) * 2.0f * dx - dx + r * (1.0f - dx);
+		JWF_FLOAT dx = pXForm->coeff20 * pXForm->coeff20 + EPSILON;
+		JWF_FLOAT r = pAffineTP->getPrecalcSqrt();
+		r = r + dx - ((int) ((r + dx) / (2.0 * dx))) * 2.0 * dx - dx + r * (1.0 - dx);
 		pVarTP->x += r * pAffineTP->getPrecalcCosA();
 		pVarTP->y += r * pAffineTP->getPrecalcSinA();
 		if (pContext->isPreserveZCoordinate) {
@@ -46,4 +44,3 @@ public:
 
 };
 
-#endif // JWFVAR_RINGS_H_

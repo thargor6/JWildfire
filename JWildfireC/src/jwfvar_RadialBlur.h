@@ -14,8 +14,6 @@
  if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-#ifndef JWFVAR_RADIALBLUR_H_
-#define JWFVAR_RADIALBLUR_H_
 
 #include "jwf_Constants.h"
 #include "jwf_Variation.h"
@@ -23,7 +21,7 @@
 class RadialBlurFunc: public Variation {
 public:
 	RadialBlurFunc() {
-		angle = 0.5f;
+		angle = 0.5;
 		initParameterNames(1, "angle");
 	}
 
@@ -46,18 +44,18 @@ public:
 	}
 
 	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
-		float rndG = (_gauss_rnd[0] + _gauss_rnd[1] + _gauss_rnd[2] + _gauss_rnd[3] - 2.0f);
+		JWF_FLOAT rndG = (_gauss_rnd[0] + _gauss_rnd[1] + _gauss_rnd[2] + _gauss_rnd[3] - 2.0);
 		_gauss_rnd[_gauss_N] = pContext->randGen->random();
 		_gauss_N = (_gauss_N + 1) & 3;
 
-		float spin = pAmount * JWF_SIN(angle * M_PI * 0.5f);
-		float zoom = pAmount * JWF_COS(angle * M_PI * 0.5f);
+		JWF_FLOAT spin = pAmount * JWF_SIN(angle * M_PI * 0.5);
+		JWF_FLOAT zoom = pAmount * JWF_COS(angle * M_PI * 0.5);
 
-		float ra = JWF_SQRT(pAffineTP->x * pAffineTP->x + pAffineTP->y * pAffineTP->y);
-		float alpha = atan2f(pAffineTP->y, pAffineTP->x) + spin * rndG;
-		float sina = JWF_SIN(alpha);
-		float cosa = JWF_COS(alpha);
-		float rz = zoom * rndG - 1;
+		JWF_FLOAT ra = JWF_SQRT(pAffineTP->x * pAffineTP->x + pAffineTP->y * pAffineTP->y);
+		JWF_FLOAT alpha = JWF_ATAN2(pAffineTP->y, pAffineTP->x) + spin * rndG;
+		JWF_FLOAT sina = JWF_SIN(alpha);
+		JWF_FLOAT cosa = JWF_COS(alpha);
+		JWF_FLOAT rz = zoom * rndG - 1.0;
 		pVarTP->x += ra * cosa + rz * pAffineTP->x;
 		pVarTP->y += ra * sina + rz * pAffineTP->y;
 		if (pContext->isPreserveZCoordinate) {
@@ -70,9 +68,8 @@ public:
 	}
 
 private:
-	float angle;
-	float _gauss_rnd[4];
+	JWF_FLOAT angle;
+	JWF_FLOAT _gauss_rnd[4];
 	int _gauss_N;
 };
 
-#endif // JWFVAR_RADIALBLUR_H_

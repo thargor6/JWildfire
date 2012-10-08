@@ -15,9 +15,6 @@
  02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-#ifndef JWFVAR_PRE_ZTRANSLATE_H_
-#define JWFVAR_PRE_ZTRANSLATE_H_
-
 #include "jwf_Variation.h"
 
 class PreZTranslateFunc: public Variation {
@@ -43,4 +40,3 @@ public:
 
 };
 
-#endif // JWFVAR_PRE_ZTRANSLATE_H_

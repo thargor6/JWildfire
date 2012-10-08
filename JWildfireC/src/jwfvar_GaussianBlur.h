@@ -15,9 +15,6 @@
  02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-#ifndef JWFVAR_GAUSSIAN_BLUR_H_
-#define JWFVAR_GAUSSIAN_BLUR_H_
-
 #include "jwf_Constants.h"
 #include "jwf_Variation.h"
 
@@ -31,10 +28,10 @@ public:
 	}
 
 	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
-		float r = pContext->randGen->random() * 2.0f * M_PI;
-		float sina = JWF_SIN(r);
-		float cosa = JWF_COS(r);
-		r = pAmount * (pContext->randGen->random() + pContext->randGen->random() + pContext->randGen->random() + pContext->randGen->random() - 2.0f);
+		JWF_FLOAT r = pContext->randGen->random() * 2.0 * M_PI;
+		JWF_FLOAT sina = JWF_SIN(r);
+		JWF_FLOAT cosa = JWF_COS(r);
+		r = pAmount * (pContext->randGen->random() + pContext->randGen->random() + pContext->randGen->random() + pContext->randGen->random() - 2.0);
 		pVarTP->x += r * cosa;
 		pVarTP->y += r * sina;
 		if (pContext->isPreserveZCoordinate) {
@@ -48,4 +45,3 @@ public:
 
 };
 
-#endif // JWFVAR_GAUSSIAN_BLUR_H_

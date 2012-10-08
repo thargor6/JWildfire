@@ -14,8 +14,6 @@
  if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-#ifndef JWFVAR_ECOLLIDE_H_
-#define JWFVAR_ECOLLIDE_H_
 
 #include "jwf_Constants.h"
 #include "jwf_Variation.h"
@@ -24,7 +22,7 @@ class ECollideFunc: public Variation {
 public:
 	ECollideFunc() {
 		num = 1;
-		a = 0.0f;
+		a = 0.0;
 		initParameterNames(2, "num", "a");
 	}
 
@@ -42,37 +40,37 @@ public:
 	}
 
 	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
-		float tmp = pAffineTP->y * pAffineTP->y + pAffineTP->x * pAffineTP->x + 1.0f;
-		float tmp2 = 2.0f * pAffineTP->x;
-		float xmax = (sqrtf_safe(tmp + tmp2) + sqrtf_safe(tmp - tmp2)) * 0.5f;
-		float sinnu, cosnu;
+		JWF_FLOAT tmp = pAffineTP->y * pAffineTP->y + pAffineTP->x * pAffineTP->x + 1.0;
+		JWF_FLOAT tmp2 = 2.0 * pAffineTP->x;
+		JWF_FLOAT xmax = (sqrtf_safe(tmp + tmp2) + sqrtf_safe(tmp - tmp2)) * 0.5;
+		JWF_FLOAT sinnu, cosnu;
 		int alt;
-		if (xmax < 1.0f)
-			xmax = 1.0f;
+		if (xmax < 1.0)
+			xmax = 1.0;
 
 		double t = pAffineTP->x / xmax;
-		if (t > 1.0f)
-			t = 1.0f;
-		else if (t < -1.0f)
-			t = -1.0f;
-		double nu = acosf(t); // -Pi < nu < Pi
+		if (t > 1.0)
+			t = 1.0;
+		else if (t < -1.0)
+			t = -1.0;
+		double nu = JWF_ACOS(t); // -Pi < nu < Pi
 
-		if (pAffineTP->y > 0.0f) {
+		if (pAffineTP->y > 0.0) {
 			alt = (int) (nu * _eCn_pi);
 			if (alt % 2 == 0)
-				nu = alt * _pi_eCn + fmodf(nu + _eCa_eCn, _pi_eCn);
+				nu = alt * _pi_eCn + JWF_FMOD(nu + _eCa_eCn, _pi_eCn);
 			else
-				nu = alt * _pi_eCn + fmodf(nu - _eCa_eCn, _pi_eCn);
+				nu = alt * _pi_eCn + JWF_FMOD(nu - _eCa_eCn, _pi_eCn);
 
 		}
 		else {
 			alt = (int) (nu * _eCn_pi);
 			if (alt % 2 == 0.0f)
-				nu = alt * _pi_eCn + fmodf(nu + _eCa_eCn, _pi_eCn);
+				nu = alt * _pi_eCn + JWF_FMOD(nu + _eCa_eCn, _pi_eCn);
 			else
-				nu = alt * _pi_eCn + fmodf(nu - _eCa_eCn, _pi_eCn);
+				nu = alt * _pi_eCn + JWF_FMOD(nu - _eCa_eCn, _pi_eCn);
 
-			nu *= -1.0f;
+			nu *= -1.0;
 		}
 
 		sinnu = JWF_SIN(nu);
@@ -96,15 +94,14 @@ public:
 	}
 
 private:
-	float sqrtf_safe(float x) {
-		if (x <= 0.0f)
-			return 0.0f;
+	JWF_FLOAT sqrtf_safe(JWF_FLOAT x) {
+		if (x <= 0.0)
+			return 0.0;
 		return JWF_SQRT(x);
 	}
 
 	int num;
-	float a;
-	float _eCa, _eCn_pi, _eCa_eCn, _pi_eCn;
+	JWF_FLOAT a;
+	JWF_FLOAT _eCa, _eCn_pi, _eCa_eCn, _pi_eCn;
 };
 
-#endif // JWFVAR_ECOLLIDE_H_

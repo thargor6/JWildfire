@@ -14,18 +14,16 @@
  if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-#ifndef JWFVAR_WAVES2_H_
-#define JWFVAR_WAVES2_H_
 
 #include "jwf_Variation.h"
 
 class Waves2Func: public Variation {
 public:
 	Waves2Func() {
-		scalex = 0.25f;
-		scaley = 0.5f;
-		freqx = M_PI / 2.0f;
-		freqy = M_PI / 4.0f;
+		scalex = 0.25;
+		scaley = 0.5;
+		freqx = M_PI / 2.0;
+		freqy = M_PI / 4.0;
 		initParameterNames(4, "scalex", "scaley", "freqx", "freqy");
 	}
 
@@ -61,10 +59,9 @@ public:
 	}
 
 private:
-	float scalex;
-	float scaley;
-	float freqx;
-	float freqy;
+	JWF_FLOAT scalex;
+	JWF_FLOAT scaley;
+	JWF_FLOAT freqx;
+	JWF_FLOAT freqy;
 };
 
-#endif // JWFVAR_WAVES2_H_

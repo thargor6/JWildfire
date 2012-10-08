@@ -14,8 +14,6 @@
  if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-#ifndef JWFVAR_CELL_H_
-#define JWFVAR_CELL_H_
 
 #include "jwf_Constants.h"
 #include "jwf_Variation.h"
@@ -23,7 +21,7 @@
 class CellFunc: public Variation {
 public:
 	CellFunc() {
-		size = 0.6f;
+		size = 0.6;
 		initParameterNames(1, "size");
 	}
 
@@ -38,15 +36,15 @@ public:
 	}
 
 	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
-		float inv_cell_size = 1.0f / size;
+		JWF_FLOAT inv_cell_size = 1.0 / size;
 
 		/* calculate input cell */
-		int x = (int) floor(pAffineTP->x * inv_cell_size);
-		int y = (int) floor(pAffineTP->y * inv_cell_size);
+		int x = (int) JWF_FLOOR(pAffineTP->x * inv_cell_size);
+		int y = (int) JWF_FLOOR(pAffineTP->y * inv_cell_size);
 
 		/* Offset from cell origin */
-		float dx = pAffineTP->x - x * size;
-		float dy = pAffineTP->y - y * size;
+		JWF_FLOAT dx = pAffineTP->x - x * size;
+		JWF_FLOAT dy = pAffineTP->y - y * size;
 
 		/* interleave cells */
 		if (y >= 0) {
@@ -83,7 +81,6 @@ public:
 	}
 
 private:
-	float size;
+	JWF_FLOAT size;
 };
 
-#endif // JWFVAR_CELL_H_

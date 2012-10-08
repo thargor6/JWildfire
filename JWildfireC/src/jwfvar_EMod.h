@@ -14,8 +14,6 @@
  if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-#ifndef JWFVAR_EMOD_H_
-#define JWFVAR_EMOD_H_
 
 #include "jwf_Constants.h"
 #include "jwf_Variation.h"
@@ -23,8 +21,8 @@
 class EModFunc: public Variation {
 public:
 	EModFunc() {
-		radius = 1.0f;
-		distance = 0.0f;
+		radius = 1.0;
+		distance = 0.0;
 		initParameterNames(2, "radius", "distance");
 	}
 
@@ -42,29 +40,29 @@ public:
 	}
 
 	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
-		float tmp = pAffineTP->y * pAffineTP->y + pAffineTP->x * pAffineTP->x + 1.0f;
-		float tmp2 = 2.0f * pAffineTP->x;
-		float xmax = (sqrtf_safe(tmp + tmp2) + sqrtf_safe(tmp - tmp2)) * 0.5f;
-		if (xmax < 1.0f)
-			xmax = 1.0f;
-		float sinhmu, coshmu;
+		JWF_FLOAT tmp = pAffineTP->y * pAffineTP->y + pAffineTP->x * pAffineTP->x + 1.0;
+		JWF_FLOAT tmp2 = 2.0 * pAffineTP->x;
+		JWF_FLOAT xmax = (sqrtf_safe(tmp + tmp2) + sqrtf_safe(tmp - tmp2)) * 0.5;
+		if (xmax < 1.0)
+			xmax = 1.0;
+		JWF_FLOAT sinhmu, coshmu;
 
-		float mu = acoshf(xmax); //  mu > 0
-		float t = pAffineTP->x / xmax;
-		if (t > 1.0f)
-			t = 1.0f;
-		else if (t < -1.0f)
-			t = -1.0f;
+		JWF_FLOAT mu = JWF_ACOSH(xmax); //  mu > 0
+		JWF_FLOAT t = pAffineTP->x / xmax;
+		if (t > 1.0)
+			t = 1.0;
+		else if (t < -1.0)
+			t = -1.0;
 
-		float nu = acosf(t); // -Pi < nu < Pi
+		JWF_FLOAT nu = JWF_ACOS(t); // -Pi < nu < Pi
 		if (pAffineTP->y < 0)
-			nu *= -1.0f;
+			nu *= -1.0;
 
 		if (mu < radius && -mu < radius) {
-			if (nu > 0.0f)
-				mu = fmodf(mu + radius + distance * radius, 2.0f * radius) - radius;
+			if (nu > 0.0)
+				mu = JWF_FMOD(mu + radius + distance * radius, 2.0 * radius) - radius;
 			else
-				mu = fmodf(mu - radius - distance * radius, 2.0f * radius) + radius;
+				mu = JWF_FMOD(mu - radius - distance * radius, 2.0 * radius) + radius;
 		}
 
 		sinhmu = JWF_SINH(mu);
@@ -83,14 +81,13 @@ public:
 	}
 
 private:
-	float sqrtf_safe(float x) {
-		if (x <= 0.0f)
-			return 0.0f;
+	JWF_FLOAT sqrtf_safe(JWF_FLOAT x) {
+		if (x <= 0.0)
+			return 0.0;
 		return JWF_SQRT(x);
 	}
 
-	float radius;
-	float distance;
+	JWF_FLOAT radius;
+	JWF_FLOAT distance;
 };
 
-#endif // JWFVAR_EMOD_H_

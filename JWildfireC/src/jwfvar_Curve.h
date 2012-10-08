@@ -14,8 +14,6 @@
  if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-#ifndef JWFVAR_CURVE_H_
-#define JWFVAR_CURVE_H_
 
 #include "jwf_Constants.h"
 #include "jwf_Variation.h"
@@ -23,10 +21,10 @@
 class CurveFunc: public Variation {
 public:
 	CurveFunc() {
-		xamp = 0.25f;
-		yamp = 0.5f;
-		xlength = 1.0f;
-		ylength = 1.0f;
+		xamp = 0.25;
+		yamp = 0.5;
+		xlength = 1.0;
+		ylength = 1.0;
 		initParameterNames(4, "xamp", "yamp", "xlength", "ylength");
 	}
 
@@ -64,16 +62,15 @@ public:
 	void init(FlameTransformationContext *pContext, XForm *pXForm, JWF_FLOAT pAmount) {
 		_pc_xlen = xlength * xlength;
 		_pc_ylen = ylength * ylength;
-		if (_pc_xlen < 1E-20f)
-			_pc_xlen = 1E-20f;
-		if (_pc_ylen < 1E-20f)
-			_pc_ylen = 1E-20f;
+		if (_pc_xlen < 1E-20)
+			_pc_xlen = 1E-20;
+		if (_pc_ylen < 1E-20)
+			_pc_ylen = 1E-20;
 	}
 
 private:
-	float xamp, yamp;
-	float xlength, ylength;
-	float _pc_xlen, _pc_ylen;
+	JWF_FLOAT xamp, yamp;
+	JWF_FLOAT xlength, ylength;
+	JWF_FLOAT _pc_xlen, _pc_ylen;
 };
 
-#endif // JWFVAR_CURVE_H_

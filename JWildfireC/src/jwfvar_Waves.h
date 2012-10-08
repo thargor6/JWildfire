@@ -15,9 +15,6 @@
  02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-#ifndef JWFVAR_WAVES_H_
-#define JWFVAR_WAVES_H_
-
 #include "jwf_Variation.h"
 
 class WavesFunc: public Variation {
@@ -43,4 +40,3 @@ public:
 
 };
 
-#endif // JWFVAR_WAVES_H_

@@ -15,8 +15,6 @@
  02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-#ifndef JWFVAR_SPHERICAL_H_
-#define JWFVAR_SPHERICAL_H_
 
 #include "jwf_Variation.h"
 
@@ -30,7 +28,7 @@ public:
 	}
 
 	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
-		float r = pAmount / (pAffineTP->x * pAffineTP->x + pAffineTP->y * pAffineTP->y + EPSILON);
+		JWF_FLOAT r = pAmount / (pAffineTP->x * pAffineTP->x + pAffineTP->y * pAffineTP->y + EPSILON);
 		pVarTP->x += pAffineTP->x * r;
 		pVarTP->y += pAffineTP->y * r;
 		if (pContext->isPreserveZCoordinate) {
@@ -44,4 +42,3 @@ public:
 
 };
 
-#endif // JWFVAR_SPHERICAL_H_

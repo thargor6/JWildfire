@@ -14,8 +14,6 @@
  if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-#ifndef JWFVAR_HYPERTILE1_H_
-#define JWFVAR_HYPERTILE1_H_
 
 #include "limits.h"
 #include "jwf_Constants.h"
@@ -43,20 +41,20 @@ public:
 	}
 
 	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
-		float rpa = pContext->randGen->random(INT_MAX) * _pa;
+		JWF_FLOAT rpa = pContext->randGen->random(INT_MAX) * _pa;
 
-		float sina = JWF_SIN(rpa);
-		float cosa = JWF_COS(rpa);
+		JWF_FLOAT sina = JWF_SIN(rpa);
+		JWF_FLOAT cosa = JWF_COS(rpa);
 
-		float re = _r * cosa;
-		float im = _r * sina;
+		JWF_FLOAT re = _r * cosa;
+		JWF_FLOAT im = _r * sina;
 
-		float a = pAffineTP->x + re, b = pAffineTP->y - im;
+		JWF_FLOAT a = pAffineTP->x + re, b = pAffineTP->y - im;
 
-		float c = re * pAffineTP->x - im * pAffineTP->y + 1;
-		float d = re * pAffineTP->y + im * pAffineTP->x;
+		JWF_FLOAT c = re * pAffineTP->x - im * pAffineTP->y + 1;
+		JWF_FLOAT d = re * pAffineTP->y + im * pAffineTP->x;
 
-		float vr = pAmount / (c * c + d * d);
+		JWF_FLOAT vr = pAmount / (c * c + d * d);
 
 		pVarTP->x += vr * (a * c + b * d);
 		pVarTP->y += vr * (b * c - a * d);
@@ -71,19 +69,18 @@ public:
 	}
 
 	virtual void init(FlameTransformationContext *pContext, XForm *pXForm, JWF_FLOAT pAmount) {
-		_pa = 2.0f * M_PI / p;
+		_pa = 2.0 * M_PI / p;
 
-		float r2 = 1.0f - (cosf(2.0f * M_PI / p) - 1.0f) / (cosf(2.0f * M_PI / p) + JWF_COS(2.0f * M_PI / q));
+		JWF_FLOAT r2 = 1.0 - (JWF_COS(2.0 * M_PI / p) - 1.0) / (JWF_COS(2.0 * M_PI / p) + JWF_COS(2.0 * M_PI / q));
 		if (r2 > 0)
-			_r = 1.0f / JWF_SQRT(r2);
+			_r = 1.0 / JWF_SQRT(r2);
 		else
-			_r = 1.0f;
+			_r = 1.0;
 	}
 
 private:
 	int p;
 	int q;
-	float _pa, _r;
+	JWF_FLOAT _pa, _r;
 };
 
-#endif // JWFVAR_HYPERTILE1_H_

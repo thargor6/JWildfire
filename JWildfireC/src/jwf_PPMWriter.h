@@ -17,7 +17,8 @@
 #ifndef __JWF_PPM_WRITER_H__
 #define __JWF_PPM_WRITER_H__
 
-struct PPMWriter {
+class PPMWriter {
+public:
 	void writeImage(char *pFilename, SimpleImage *pImg) {
 		FILE *fp;
 		//open file for output

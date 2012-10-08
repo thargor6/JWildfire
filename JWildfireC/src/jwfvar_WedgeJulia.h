@@ -14,18 +14,15 @@
  if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-#ifndef JWFVAR_WEDGEJULIA_H_
-#define JWFVAR_WEDGEJULIA_H_
-
 #include "jwf_Variation.h"
 
 class WedgeJuliaFunc: public Variation {
 public:
 	WedgeJuliaFunc() {
-		power = 7.00f;
-		dist = 0.20f;
-		count = 2.0f;
-		angle = 0.30f;
+		power = 7.00;
+		dist = 0.20;
+		count = 2.0;
+		angle = 0.30;
 		initParameterNames(4, "power", "dist", "count", "angle");
 	}
 
@@ -49,19 +46,19 @@ public:
 	}
 
 	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
-		float wedgeJulia_cf = 1.0f - angle * count * M_1_PI * 0.5f;
-		float wedgeJulia_rN = JWF_FABS(power);
-		float wedgeJulia_cn = dist / power / 2.0f;
+		JWF_FLOAT wedgeJulia_cf = 1.0f - angle * count * M_1_PI * 0.5;
+		JWF_FLOAT wedgeJulia_rN = JWF_FABS(power);
+		JWF_FLOAT wedgeJulia_cn = dist / power / 2.0;
 		/* wedge_julia from apo plugin pack */
 
-		float r = pAmount * JWF_POW(pAffineTP->getPrecalcSumsq(), wedgeJulia_cn);
+		JWF_FLOAT r = pAmount * JWF_POW(pAffineTP->getPrecalcSumsq(), wedgeJulia_cn);
 		int t_rnd = (int) ((wedgeJulia_rN) * pContext->randGen->random());
-		float a = (pAffineTP->getPrecalcAtanYX() + 2.0f * M_PI * t_rnd) / power;
-		float c = floorf((count * a + M_PI) * M_1_PI * 0.5f);
+		JWF_FLOAT a = (pAffineTP->getPrecalcAtanYX() + 2.0 * M_PI * t_rnd) / power;
+		JWF_FLOAT c = JWF_FLOOR((count * a + M_PI) * M_1_PI * 0.5);
 
 		a = a * wedgeJulia_cf + c * angle;
-		float sa = JWF_SIN(a);
-		float ca = JWF_COS(sa);
+		JWF_FLOAT sa = JWF_SIN(a);
+		JWF_FLOAT ca = JWF_COS(sa);
 
 		pVarTP->x += r * ca;
 		pVarTP->y += r * sa;
@@ -75,10 +72,9 @@ public:
 	}
 
 private:
-	float power;
-	float dist;
-	float count;
-	float angle;
+	JWF_FLOAT power;
+	JWF_FLOAT dist;
+	JWF_FLOAT count;
+	JWF_FLOAT angle;
 };
 
-#endif // JWFVAR_WEDGEJULIA_H_

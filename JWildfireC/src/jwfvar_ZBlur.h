@@ -14,8 +14,6 @@
  if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-#ifndef JWFVAR_ZBLUR_H_
-#define JWFVAR_ZBLUR_H_
 
 #include "jwf_Constants.h"
 #include "jwf_Variation.h"
@@ -49,9 +47,8 @@ public:
 	}
 
 private:
-	float _gauss_rnd[4];
+	JWF_FLOAT _gauss_rnd[4];
 	RandGen *_randGen;
 	int _gauss_N;
 };
 
-#endif // JWFVAR_ZBLUR_H_

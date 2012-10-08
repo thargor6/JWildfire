@@ -15,8 +15,6 @@
  02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-#ifndef JWFVAR_BLADE_3D_H_
-#define JWFVAR_BLADE_3D_H_
 
 #include "jwf_Variation.h"
 
@@ -30,9 +28,9 @@ public:
 	}
 
 	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
-		float r = pContext->randGen->random() * pAmount * JWF_SQRT(pAffineTP->x * pAffineTP->x + pAffineTP->y * pAffineTP->y);
-		float sinr = JWF_SIN(r);
-		float cosr = JWF_COS(r);
+		JWF_FLOAT r = pContext->randGen->random() * pAmount * JWF_SQRT(pAffineTP->x * pAffineTP->x + pAffineTP->y * pAffineTP->y);
+		JWF_FLOAT sinr = JWF_SIN(r);
+		JWF_FLOAT cosr = JWF_COS(r);
 		pVarTP->x += pAmount * pAffineTP->x * (cosr + sinr);
 		pVarTP->y += pAmount * pAffineTP->x * (cosr - sinr);
 		pVarTP->z += pAmount * pAffineTP->y * (sinr - cosr);
@@ -44,4 +42,3 @@ public:
 
 };
 
-#endif // JWFVAR_BLADE_3D_H_

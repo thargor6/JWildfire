@@ -46,6 +46,7 @@
 #include "jwfvar_Butterfly3D.h"
 #include "jwfvar_CannabisCurveWF.h"
 #include "jwfvar_Cell.h"
+#include "jwfvar_CircleCrop.h"
 #include "jwfvar_Circlize.h"
 #include "jwfvar_Collideoscope.h"
 #include "jwfvar_Conic.h"
@@ -124,6 +125,7 @@
 #include "jwfvar_LogApo.h"
 #include "jwfvar_Loonie.h"
 #include "jwfvar_Loonie3D.h"
+#include "jwfvar_Mobius.h"
 #include "jwfvar_Modulus.h"
 #include "jwfvar_Ngon.h"
 #include "jwfvar_Noise.h"
@@ -136,6 +138,7 @@
 #include "jwfvar_Polar.h"
 #include "jwfvar_Polar2.h"
 #include "jwfvar_Popcorn.h"
+#include "jwfvar_PostColorScaleWF.h"
 #include "jwfvar_PostMirrorWF.h"
 #include "jwfvar_PostRotateX.h"
 #include "jwfvar_PostRotateY.h"
@@ -168,7 +171,7 @@
 #include "jwfvar_Splits.h"
 #include "jwfvar_Square.h"
 #include "jwfvar_Square3D.h"
-#include "jwfvar_SubFlameWF.h"
+//#include "jwfvar_SubFlameWF.h" // already included with jwfvar_PreSubFlameWF.h
 #include "jwfvar_Swirl.h"
 #include "jwfvar_Tan.h"
 #include "jwfvar_Tanh.h"
@@ -267,6 +270,7 @@ private:
 		addVariation(new Butterfly3DFunc());
 		addVariation(new CannabisCurveWFFunc());
 		addVariation(new CellFunc());
+		addVariation(new CircleCropFunc());
 		addVariation(new CirclizeFunc());
 		addVariation(new CollideoscopeFunc());
 		addVariation(new ConicFunc());
@@ -345,6 +349,7 @@ private:
 		addVariation(new LogApoFunc());
 		addVariation(new LoonieFunc());
 		addVariation(new Loonie3DFunc());
+		addVariation(new MobiusFunc());
 		addVariation(new ModulusFunc());
 		addVariation(new NgonFunc());
 		addVariation(new NoiseFunc());
@@ -357,6 +362,7 @@ private:
 		addVariation(new PolarFunc());
 		addVariation(new Polar2Func());
 		addVariation(new PopcornFunc());
+		addVariation(new PostColorScaleWFFunc());
 		addVariation(new PostMirrorWFFunc());
 		addVariation(new PostRotateXFunc());
 		addVariation(new PostRotateYFunc());

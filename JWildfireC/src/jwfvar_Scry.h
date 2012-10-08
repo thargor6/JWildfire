@@ -15,8 +15,6 @@
  02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-#ifndef JWFVAR_SCRY_H_
-#define JWFVAR_SCRY_H_
 
 #include "jwf_Variation.h"
 
@@ -30,12 +28,12 @@ public:
 	}
 
 	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
-		float t = pAffineTP->x * pAffineTP->x + pAffineTP->y * pAffineTP->y;
-		float d = (sqrtf(t) * (t + 1.0f / pAmount));
+		JWF_FLOAT t = pAffineTP->x * pAffineTP->x + pAffineTP->y * pAffineTP->y;
+		JWF_FLOAT d = JWF_SQRT(t) * (t + 1.0 / pAmount);
 		if (d == 0) {
 			return;
 		}
-		float r = 1.0f / d;
+		JWF_FLOAT r = 1.0 / d;
 		pVarTP->x += pAffineTP->x * r;
 		pVarTP->y += pAffineTP->y * r;
 		if (pContext->isPreserveZCoordinate) {
@@ -49,4 +47,3 @@ public:
 
 };
 
-#endif // JWFVAR_SCRY_H_

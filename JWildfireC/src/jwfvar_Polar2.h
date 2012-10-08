@@ -15,8 +15,6 @@
  02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-#ifndef JWFVAR_POLAR2_H_
-#define JWFVAR_POLAR2_H_
 
 #include "jwf_Variation.h"
 
@@ -31,9 +29,9 @@ public:
 	}
 
 	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
-		float p2v = pAmount / M_PI;
+		JWF_FLOAT p2v = pAmount / M_PI;
 		pVarTP->x += p2v * pAffineTP->getPrecalcAtan();
-		pVarTP->y += p2v / 2.0f * JWF_LOG(pAffineTP->getPrecalcSumsq());
+		pVarTP->y += p2v / 2.0 * JWF_LOG(pAffineTP->getPrecalcSumsq());
 		if (pContext->isPreserveZCoordinate) {
 			pVarTP->z += pAmount * pAffineTP->z;
 		}
@@ -45,4 +43,3 @@ public:
 
 };
 
-#endif // JWFVAR_POLAR2_H_

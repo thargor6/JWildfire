@@ -14,8 +14,6 @@
  if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-#ifndef JWFVAR_EROTATE_H_
-#define JWFVAR_EROTATE_H_
 
 #include "jwf_Constants.h"
 #include "jwf_Variation.h"
@@ -23,7 +21,7 @@
 class ERotateFunc: public Variation {
 public:
 	ERotateFunc() {
-		rotate = 0.0f;
+		rotate = 0.0;
 		initParameterNames(1, "rotate");
 	}
 
@@ -38,28 +36,28 @@ public:
 	}
 
 	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
-		float tmp = pAffineTP->y * pAffineTP->y + pAffineTP->x * pAffineTP->x + 1.0f;
-		float tmp2 = 2.0f * pAffineTP->x;
-		float xmax = (sqrtf_safe(tmp + tmp2) + sqrtf_safe(tmp - tmp2)) * 0.5f;
-		float sinnu, cosnu;
-		if (xmax < 1.0f)
-			xmax = 1.0f;
+		JWF_FLOAT tmp = pAffineTP->y * pAffineTP->y + pAffineTP->x * pAffineTP->x + 1.0;
+		JWF_FLOAT tmp2 = 2.0 * pAffineTP->x;
+		JWF_FLOAT xmax = (sqrtf_safe(tmp + tmp2) + sqrtf_safe(tmp - tmp2)) * 0.5;
+		JWF_FLOAT sinnu, cosnu;
+		if (xmax < 1.0)
+			xmax = 1.0;
 
-		float t = pAffineTP->x / xmax;
-		if (t > 1.0f)
-			t = 1.0f;
-		else if (t < -1.0f)
-			t = -1.0f;
-		float nu = acosf(t); // -Pi < nu < Pi
+		JWF_FLOAT t = pAffineTP->x / xmax;
+		if (t > 1.0)
+			t = 1.0;
+		else if (t < -1.0)
+			t = -1.0;
+		JWF_FLOAT nu = JWF_ACOS(t); // -Pi < nu < Pi
 		if (pAffineTP->y < 0)
-			nu *= -1.0f;
+			nu *= -1.0;
 
-		nu = fmodf(nu + rotate + M_PI, M_2PI) - M_PI;
+		nu = JWF_FMOD(nu + rotate + M_PI, M_2PI) - M_PI;
 
 		sinnu = JWF_SIN(nu);
 		cosnu = JWF_COS(nu);
 		pVarTP->x += pAmount * xmax * cosnu;
-		pVarTP->y += pAmount * JWF_SQRT(xmax - 1.0f) * JWF_SQRT(xmax + 1.0f) * sinnu;
+		pVarTP->y += pAmount * JWF_SQRT(xmax - 1.0) * JWF_SQRT(xmax + 1.0) * sinnu;
 
 		if (pContext->isPreserveZCoordinate) {
 			pVarTP->z += pAmount * pAffineTP->z;
@@ -71,14 +69,12 @@ public:
 	}
 
 private:
-
-	float sqrtf_safe(float x) {
-		if (x <= 0.0f)
-			return 0.0f;
+	JWF_FLOAT sqrtf_safe(JWF_FLOAT x) {
+		if (x <= 0.0)
+			return 0.0;
 		return JWF_SQRT(x);
 	}
 
-	float rotate;
+	JWF_FLOAT rotate;
 };
 
-#endif // JWFVAR_EROTATE_H_

@@ -14,8 +14,6 @@
  if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-#ifndef JWFVAR_BENT_H_
-#define JWFVAR_BENT_H_
 
 #include "jwf_Variation.h"
 
@@ -29,8 +27,8 @@ public:
 	}
 
 	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
-		float nx = pAffineTP->x;
-		float ny = pAffineTP->y;
+		JWF_FLOAT nx = pAffineTP->x;
+		JWF_FLOAT ny = pAffineTP->y;
 		if (nx < 0)
 			nx = nx + nx;
 		if (ny < 0)
@@ -48,4 +46,3 @@ public:
 
 };
 
-#endif // JWFVAR_BENT_H_

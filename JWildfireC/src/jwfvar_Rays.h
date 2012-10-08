@@ -15,9 +15,6 @@
  02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-#ifndef JWFVAR_RAYS_H_
-#define JWFVAR_RAYS_H_
-
 #include "jwf_Variation.h"
 
 class RaysFunc: public Variation {
@@ -30,9 +27,9 @@ public:
 	}
 
 	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
-		float ang = pAmount * pContext->randGen->random() * M_PI;
-		float r = pAmount / (pAffineTP->getPrecalcSumsq() + EPSILON);
-		float tanr = pAmount * tanf(ang) * r;
+		JWF_FLOAT ang = pAmount * pContext->randGen->random() * M_PI;
+		JWF_FLOAT r = pAmount / (pAffineTP->getPrecalcSumsq() + EPSILON);
+		JWF_FLOAT tanr = pAmount * JWF_TAN(ang) * r;
 		pVarTP->x += tanr * JWF_COS(pAffineTP->x);
 		pVarTP->y += tanr * JWF_SIN(pAffineTP->y);
 		if (pContext->isPreserveZCoordinate) {
@@ -46,4 +43,3 @@ public:
 
 };
 
-#endif // JWFVAR_RAYS_H_

@@ -15,8 +15,6 @@
  02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-#ifndef JWFVAR_COT_H_
-#define JWFVAR_COT_H_
 
 #include "jwf_Variation.h"
 
@@ -30,14 +28,14 @@ public:
 	}
 
 	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
-		float cotsin = JWF_SIN(2.0f * pAffineTP->x);
-		float cotcos = JWF_COS(2.0f * pAffineTP->x);
-		float cotsinh = JWF_SINH(2.0f * pAffineTP->y);
-		float cotcosh = JWF_COSH(2.0f * pAffineTP->y);
-		float d = (cotcosh - cotcos);
+		JWF_FLOAT cotsin = JWF_SIN(2.0 * pAffineTP->x);
+		JWF_FLOAT cotcos = JWF_COS(2.0 * pAffineTP->x);
+		JWF_FLOAT cotsinh = JWF_SINH(2.0 * pAffineTP->y);
+		JWF_FLOAT cotcosh = JWF_COSH(2.0 * pAffineTP->y);
+		JWF_FLOAT d = (cotcosh - cotcos);
 		if (d == 0)
 			return;
-		float cotden = 1.0f / d;
+		JWF_FLOAT cotden = 1.0 / d;
 		pVarTP->x += pAmount * cotden * cotsin;
 		pVarTP->y += pAmount * cotden * -1 * cotsinh;
 		if (pContext->isPreserveZCoordinate) {
@@ -51,4 +49,3 @@ public:
 
 };
 
-#endif // JWFVAR_COT_H_

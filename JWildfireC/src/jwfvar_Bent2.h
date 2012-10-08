@@ -14,8 +14,6 @@
  if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-#ifndef JWFVAR_BENT2_H_
-#define JWFVAR_BENT2_H_
 
 #include "jwf_Constants.h"
 #include "jwf_Variation.h"
@@ -23,8 +21,8 @@
 class Bent2Func: public Variation {
 public:
 	Bent2Func() {
-		x = 1.0f;
-		y = 1.0f;
+		x = 1.0;
+		y = 1.0;
 		initParameterNames(2, "x", "y");
 	}
 
@@ -42,8 +40,8 @@ public:
 	}
 
 	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
-		float nx = pAffineTP->x;
-		float ny = pAffineTP->y;
+		JWF_FLOAT nx = pAffineTP->x;
+		JWF_FLOAT ny = pAffineTP->y;
 		if (nx < 0.0)
 			nx = nx * x;
 		if (ny < 0.0)
@@ -60,8 +58,7 @@ public:
 	}
 
 private:
-	float x;
-	float y;
+	JWF_FLOAT x;
+	JWF_FLOAT y;
 };
 
-#endif // JWFVAR_BENT2_H_

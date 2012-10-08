@@ -14,8 +14,6 @@
  if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-#ifndef JWFVAR_CIRCLIZE_H_
-#define JWFVAR_CIRCLIZE_H_
 
 #include "jwf_Constants.h"
 #include "jwf_Variation.h"
@@ -23,7 +21,7 @@
 class CirclizeFunc: public Variation {
 public:
 	CirclizeFunc() {
-		hole = 0.40f;
+		hole = 0.40;
 		initParameterNames(1, "hole");
 	}
 
@@ -38,26 +36,26 @@ public:
 	}
 
 	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
-		float var4_PI = pAmount / M_PI_4;
+		JWF_FLOAT var4_PI = pAmount / M_PI_4;
 
-		float absx = JWF_FABS(pAffineTP->x);
-		float absy = JWF_FABS(pAffineTP->y);
-		float perimeter, side;
+		JWF_FLOAT absx = JWF_FABS(pAffineTP->x);
+		JWF_FLOAT absy = JWF_FABS(pAffineTP->y);
+		JWF_FLOAT perimeter, side;
 		if (absx >= absy) {
 			if (pAffineTP->x >= absy) {
 				perimeter = absx + pAffineTP->y;
 			}
 			else {
-				perimeter = 5.0f * absx - pAffineTP->y;
+				perimeter = 5.0 * absx - pAffineTP->y;
 			}
 			side = absx;
 		}
 		else {
 			if (pAffineTP->y >= absx) {
-				perimeter = 3.0f * absy - pAffineTP->x;
+				perimeter = 3.0 * absy - pAffineTP->x;
 			}
 			else {
-				perimeter = 7.0f * absy + pAffineTP->x;
+				perimeter = 7.0 * absy + pAffineTP->x;
 			}
 			side = absy;
 		}
@@ -79,7 +77,6 @@ public:
 	}
 
 private:
-	float hole;
+	JWF_FLOAT hole;
 };
 
-#endif // JWFVAR_CIRCLIZE_H_

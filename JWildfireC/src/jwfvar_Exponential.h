@@ -15,9 +15,6 @@
  02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-#ifndef JWFVAR_EXPONENTIAL_H_
-#define JWFVAR_EXPONENTIAL_H_
-
 #include "jwf_Variation.h"
 
 class ExponentialFunc: public Variation {
@@ -30,10 +27,10 @@ public:
 	}
 
 	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
-		float r = M_PI * pAffineTP->y;
-		float sinr = JWF_SIN(r);
-		float cosr = JWF_COS(r);
-		float d = pAmount * JWF_EXP(pAffineTP->x - 1.0f);
+		JWF_FLOAT r = M_PI * pAffineTP->y;
+		JWF_FLOAT sinr = JWF_SIN(r);
+		JWF_FLOAT cosr = JWF_COS(r);
+		JWF_FLOAT d = pAmount * JWF_EXP(pAffineTP->x - 1.0);
 		pVarTP->x += cosr * d;
 		pVarTP->y += sinr * d;
 		if (pContext->isPreserveZCoordinate) {
@@ -47,4 +44,3 @@ public:
 
 };
 
-#endif // JWFVAR_EXPONENTIAL_H_

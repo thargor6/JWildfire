@@ -14,8 +14,6 @@
  if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-#ifndef JWFVAR_CURL3D_H_
-#define JWFVAR_CURL3D_H_
 
 #include "jwf_Constants.h"
 #include "jwf_Variation.h"
@@ -23,9 +21,9 @@
 class Curl3DFunc: public Variation {
 public:
 	Curl3DFunc() {
-		cx = 0.0f;
-		cy = 0.0f;
-		cz = 0.0f;
+		cx = 0.0;
+		cy = 0.0;
+		cz = 0.0;
 		initParameterNames(3, "cx", "cy", "cz");
 	}
 
@@ -46,8 +44,8 @@ public:
 	}
 
 	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
-		float r2 = pAffineTP->x * pAffineTP->x + pAffineTP->y * pAffineTP->y + pAffineTP->z * pAffineTP->z;
-		float r = pAmount / (r2 * _c2 + _c2x * pAffineTP->x - _c2y * pAffineTP->y + _c2z * pAffineTP->z + 1.0f);
+		JWF_FLOAT r2 = pAffineTP->x * pAffineTP->x + pAffineTP->y * pAffineTP->y + pAffineTP->z * pAffineTP->z;
+		JWF_FLOAT r = pAmount / (r2 * _c2 + _c2x * pAffineTP->x - _c2y * pAffineTP->y + _c2z * pAffineTP->z + 1.0);
 
 		pVarTP->x += r * (pAffineTP->x + cx * r2);
 		pVarTP->y += r * (pAffineTP->y - cy * r2);
@@ -55,13 +53,13 @@ public:
 	}
 
 	void init(FlameTransformationContext *pContext, XForm *pXForm, JWF_FLOAT pAmount) {
-		_c2x = 2.0f * cx;
-		_c2y = 2.0f * cy;
-		_c2z = 2.0f * cz;
+		_c2x = 2.0 * cx;
+		_c2y = 2.0 * cy;
+		_c2z = 2.0 * cz;
 
-		float cx2 = cx * cx;
-		float cy2 = cy * cy;
-		float cz2 = cz * cz;
+		JWF_FLOAT cx2 = cx * cx;
+		JWF_FLOAT cy2 = cy * cy;
+		JWF_FLOAT cz2 = cz * cz;
 
 		_c2 = cx2 + cy2 + cz2;
 	}
@@ -71,11 +69,10 @@ public:
 	}
 
 private:
-	float cx;
-	float cy;
-	float cz;
+	JWF_FLOAT cx;
+	JWF_FLOAT cy;
+	JWF_FLOAT cz;
 
-	float _c2x, _c2y, _c2z, _c2;
+	JWF_FLOAT _c2x, _c2y, _c2z, _c2;
 };
 
-#endif // JWFVAR_CURL3D_H_

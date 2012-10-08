@@ -15,15 +15,13 @@
  02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-#ifndef JWFVAR_FLUX_H_
-#define JWFVAR_FLUX_H_
 
 #include "jwf_Variation.h"
 
 class FluxFunc: public Variation {
 public:
 	FluxFunc() {
-		spread = 0.0f;
+		spread = 0.0;
 		initParameterNames(1, "spread");
 	}
 
@@ -38,10 +36,10 @@ public:
 	}
 
 	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
-		float xpw = pAffineTP->x + pAmount;
-		float xmw = pAffineTP->x - pAmount;
-		float avgr = pAmount * (2.0f + spread) * JWF_SQRT(sqrtf(pAffineTP->y * pAffineTP->y + xpw * xpw) / JWF_SQRT(pAffineTP->y * pAffineTP->y + xmw * xmw));
-		float avga = (atan2f(pAffineTP->y, xmw) - atan2f(pAffineTP->y, xpw)) * 0.5f;
+		JWF_FLOAT xpw = pAffineTP->x + pAmount;
+		JWF_FLOAT xmw = pAffineTP->x - pAmount;
+		JWF_FLOAT avgr = pAmount * (2.0 + spread) * JWF_SQRT(JWF_SQRT(pAffineTP->y * pAffineTP->y + xpw * xpw) / JWF_SQRT(pAffineTP->y * pAffineTP->y + xmw * xmw));
+		JWF_FLOAT avga = (JWF_ATAN2(pAffineTP->y, xmw) - JWF_ATAN2(pAffineTP->y, xpw)) * 0.5;
 
 		pVarTP->x += avgr * JWF_COS(avga);
 		pVarTP->y += avgr * JWF_SIN(avga);
@@ -55,7 +53,6 @@ public:
 	}
 
 private:
-	float spread;
+	JWF_FLOAT spread;
 };
 
-#endif // JWFVAR_FLUX_H_

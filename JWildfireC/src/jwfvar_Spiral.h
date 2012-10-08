@@ -15,8 +15,6 @@
  02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-#ifndef JWFVAR_SPIRAL_H_
-#define JWFVAR_SPIRAL_H_
 
 #include "jwf_Variation.h"
 
@@ -30,11 +28,11 @@ public:
 	}
 
 	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
-		float sinA = pAffineTP->getPrecalcSinA();
-		float cosA = pAffineTP->getPrecalcCosA();
-		float r = pAffineTP->getPrecalcSqrt();
-		float sinr = JWF_SIN(r);
-		float cosr = JWF_COS(r);
+		JWF_FLOAT sinA = pAffineTP->getPrecalcSinA();
+		JWF_FLOAT cosA = pAffineTP->getPrecalcCosA();
+		JWF_FLOAT r = pAffineTP->getPrecalcSqrt();
+		JWF_FLOAT sinr = JWF_SIN(r);
+		JWF_FLOAT cosr = JWF_COS(r);
 		r = pAmount / r;
 		pVarTP->x += (cosA + sinr) * r;
 		pVarTP->y += (sinA - cosr) * r;
@@ -49,4 +47,3 @@ public:
 
 };
 
-#endif // JWFVAR_SPIRAL_H_

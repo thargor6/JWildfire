@@ -59,9 +59,9 @@ struct RGBPalette {
 		RenderColor *res;
 		hostMalloc((void**) &res, PALETTE_SIZE * sizeof(RenderColor));
 		for (int i = 0; i < PALETTE_SIZE; i++) {
-			res[i].red = (rawColors[i].red * pWhiteLevel) / 256.0f;
-			res[i].green = (rawColors[i].green * pWhiteLevel) / 256.0f;
-			res[i].blue = (rawColors[i].blue * pWhiteLevel) / 256.0f;
+			res[i].red = (rawColors[i].red * pWhiteLevel) / 256.0;
+			res[i].green = (rawColors[i].green * pWhiteLevel) / 256.0;
+			res[i].blue = (rawColors[i].blue * pWhiteLevel) / 256.0;
 		}
 		return res;
 	}

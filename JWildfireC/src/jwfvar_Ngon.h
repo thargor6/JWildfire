@@ -14,8 +14,6 @@
  if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-#ifndef JWFVAR_NGON_H_
-#define JWFVAR_NGON_H_
 
 #include "jwf_Constants.h"
 #include "jwf_Variation.h"
@@ -23,10 +21,10 @@
 class NgonFunc: public Variation {
 public:
 	NgonFunc() {
-		circle = 1.0f;
-		corners = 2.0f;
-		power = 3.0f;
-		sides = 5.0f;
+		circle = 1.0;
+		corners = 2.0;
+		power = 3.0;
+		sides = 5.0;
 		initParameterNames(4, "circle", "corners", "power", "sides");
 	}
 
@@ -50,18 +48,18 @@ public:
 	}
 
 	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
-		float r_factor, theta, phi, b, amp;
+		JWF_FLOAT r_factor, theta, phi, b, amp;
 
-		r_factor = JWF_POW(pAffineTP->getPrecalcSumsq(), power / 2.0f);
+		r_factor = JWF_POW(pAffineTP->getPrecalcSumsq(), power / 2.0);
 
 		theta = pAffineTP->getPrecalcAtanYX();
-		b = 2.0f * M_PI / sides;
+		b = 2.0 * M_PI / sides;
 
-		phi = theta - (b * floorf(theta / b));
-		if (phi > b / 2.0f)
+		phi = theta - (b * JWF_FLOOR(theta / b));
+		if (phi > b / 2.0)
 			phi -= b;
 
-		amp = corners * (1.0f / (cosf(phi) + EPSILON) - 1.0f) + circle;
+		amp = corners * (1.0 / (JWF_COS(phi) + EPSILON) - 1.0) + circle;
 		amp /= (r_factor + EPSILON);
 
 		pVarTP->x += pAmount * pAffineTP->x * amp;
@@ -76,10 +74,9 @@ public:
 	}
 
 private:
-	float circle;
-	float corners;
-	float power;
-	float sides;
+	JWF_FLOAT circle;
+	JWF_FLOAT corners;
+	JWF_FLOAT power;
+	JWF_FLOAT sides;
 };
 
-#endif // JWFVAR_NGON_H_

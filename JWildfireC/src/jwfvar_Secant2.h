@@ -15,8 +15,6 @@
  02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-#ifndef JWFVAR_SECANT2_H_
-#define JWFVAR_SECANT2_H_
 
 #include "jwf_Variation.h"
 
@@ -30,12 +28,12 @@ public:
 	}
 
 	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
-		float r = pAmount * pAffineTP->getPrecalcSqrt();
-		float cr = JWF_COS(r);
+		JWF_FLOAT r = pAmount * pAffineTP->getPrecalcSqrt();
+		JWF_FLOAT cr = JWF_COS(r);
 		if (cr == 0) {
 			return;
 		}
-		float icr = 1.0 / cr;
+		JWF_FLOAT icr = 1.0 / cr;
 		pVarTP->x += pAmount * pAffineTP->x;
 		if (cr < 0) {
 			pVarTP->y += pAmount * (icr + 1);
@@ -54,4 +52,3 @@ public:
 
 };
 
-#endif // JWFVAR_SECANT2_H_

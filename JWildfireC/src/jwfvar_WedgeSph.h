@@ -14,16 +14,14 @@
  if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-#ifndef JWFVAR_WEDGESPH_H_
-#define JWFVAR_WEDGESPH_H_
 
 #include "jwf_Variation.h"
 
 class WedgeSphFunc: public Variation {
 public:
 	WedgeSphFunc() {
-		angle = 0.20f;
-		hole = 0.20f;
+		angle = 0.20;
+		hole = 0.20;
 		count = 2.0;
 		swirl = 0.30;
 		initParameterNames(4, "angle", "hole", "count", "swirl");
@@ -49,16 +47,16 @@ public:
 	}
 
 	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
-		float r = 1.0f / (pAffineTP->getPrecalcSqrt() + EPSILON);
-		float a = pAffineTP->getPrecalcAtanYX() + swirl * r;
-		float c = floorf((count * a + M_PI) * M_1_PI * 0.5f);
+		JWF_FLOAT r = 1.0f / (pAffineTP->getPrecalcSqrt() + EPSILON);
+		JWF_FLOAT a = pAffineTP->getPrecalcAtanYX() + swirl * r;
+		JWF_FLOAT c = JWF_FLOOR((count * a + M_PI) * M_1_PI * 0.5);
 
-		float comp_fac = 1.0f - angle * count * M_1_PI * 0.5f;
+		JWF_FLOAT comp_fac = 1.0 - angle * count * M_1_PI * 0.5;
 
 		a = a * comp_fac + c * angle;
 
-		float sa = JWF_SIN(a);
-		float ca = JWF_COS(a);
+		JWF_FLOAT sa = JWF_SIN(a);
+		JWF_FLOAT ca = JWF_COS(a);
 		r = pAmount * (r + hole);
 
 		pVarTP->x += r * ca;
@@ -73,10 +71,9 @@ public:
 	}
 
 private:
-	float angle;
-	float hole;
-	float count;
-	float swirl;
+	JWF_FLOAT angle;
+	JWF_FLOAT hole;
+	JWF_FLOAT count;
+	JWF_FLOAT swirl;
 };
 
-#endif // JWFVAR_WEDGESPH_H_

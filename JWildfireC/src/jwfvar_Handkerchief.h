@@ -15,8 +15,6 @@
  02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-#ifndef JWFVAR_HANDKERCHIEF_H_
-#define JWFVAR_HANDKERCHIEF_H_
 
 #include "jwf_Variation.h"
 
@@ -30,10 +28,10 @@ public:
 	}
 
 	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
-		float angle = pAffineTP->getPrecalcAtan();
-		float r = JWF_SQRT(pAffineTP->x * pAffineTP->x + pAffineTP->y * pAffineTP->y);
-		pVarTP->x += pAmount * (sinf(angle + r) * r);
-		pVarTP->y += pAmount * (cosf(angle - r) * r);
+		JWF_FLOAT angle = pAffineTP->getPrecalcAtan();
+		JWF_FLOAT r = JWF_SQRT(pAffineTP->x * pAffineTP->x + pAffineTP->y * pAffineTP->y);
+		pVarTP->x += pAmount * (JWF_SIN(angle + r) * r);
+		pVarTP->y += pAmount * (JWF_COS(angle - r) * r);
 		if (pContext->isPreserveZCoordinate) {
 			pVarTP->z += pAmount * pAffineTP->z;
 		}
@@ -45,4 +43,3 @@ public:
 
 };
 
-#endif // JWFVAR_HANDKERCHIEF_H_

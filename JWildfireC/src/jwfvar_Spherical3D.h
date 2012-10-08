@@ -14,8 +14,6 @@
  if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-#ifndef JWFVAR_SPHERICAL3D_H_
-#define JWFVAR_SPHERICAL3D_H_
 
 #include "jwf_Constants.h"
 #include "jwf_Variation.h"
@@ -30,7 +28,7 @@ public:
 	}
 
 	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
-		float r = pAmount / (pAffineTP->x * pAffineTP->x + pAffineTP->y * pAffineTP->y + pAffineTP->z * pAffineTP->z + EPSILON);
+		JWF_FLOAT r = pAmount / (pAffineTP->x * pAffineTP->x + pAffineTP->y * pAffineTP->y + pAffineTP->z * pAffineTP->z + EPSILON);
 		pVarTP->x += pAffineTP->x * r;
 		pVarTP->y += pAffineTP->y * r;
 		pVarTP->z += pAffineTP->z * r;
@@ -42,4 +40,3 @@ public:
 
 };
 
-#endif // JWFVAR_SPHERICAL3D_H_

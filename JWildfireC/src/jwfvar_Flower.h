@@ -14,8 +14,6 @@
  if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-#ifndef JWFVAR_FLOWER_H_
-#define JWFVAR_FLOWER_H_
 
 #include "jwf_Constants.h"
 #include "jwf_Variation.h"
@@ -23,8 +21,8 @@
 class FlowerFunc: public Variation {
 public:
 	FlowerFunc() {
-		holes = 0.40f;
-		petals = 7.0f;
+		holes = 0.40;
+		petals = 7.0;
 		initParameterNames(2, "holes", "petals");
 	}
 
@@ -42,12 +40,12 @@ public:
 	}
 
 	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
-		float theta = pAffineTP->getPrecalcAtanYX();
+		JWF_FLOAT theta = pAffineTP->getPrecalcAtanYX();
 		double d = pAffineTP->getPrecalcSqrt();
 		if (d == 0) {
 			return;
 		}
-		float r = pAmount * (pContext->randGen->random() - holes) * JWF_COS(petals * theta) / d;
+		JWF_FLOAT r = pAmount * (pContext->randGen->random() - holes) * JWF_COS(petals * theta) / d;
 		pVarTP->x += r * pAffineTP->x;
 		pVarTP->y += r * pAffineTP->y;
 		if (pContext->isPreserveZCoordinate) {
@@ -60,8 +58,7 @@ public:
 	}
 
 private:
-	float holes;
-	float petals;
+	JWF_FLOAT holes;
+	JWF_FLOAT petals;
 };
 
-#endif // JWFVAR_FLOWER_H_

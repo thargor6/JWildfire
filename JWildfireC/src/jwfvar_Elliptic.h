@@ -14,8 +14,6 @@
  if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-#ifndef JWFVAR_ELLIPTIC_H_
-#define JWFVAR_ELLIPTIC_H_
 
 #include "jwf_Constants.h"
 #include "jwf_Variation.h"
@@ -30,14 +28,14 @@ public:
 	}
 
 	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
-		float tmp = pAffineTP->y * pAffineTP->y + pAffineTP->x * pAffineTP->x + 1.0;
-		float x2 = 2.0f * pAffineTP->x;
-		float xmax = 0.5f * (sqrtf(tmp + x2) + JWF_SQRT(tmp - x2));
+		JWF_FLOAT tmp = pAffineTP->y * pAffineTP->y + pAffineTP->x * pAffineTP->x + 1.0;
+		JWF_FLOAT x2 = 2.0 * pAffineTP->x;
+		JWF_FLOAT xmax = 0.5f * (JWF_SQRT(tmp + x2) + JWF_SQRT(tmp - x2));
 
-		float a = pAffineTP->x / xmax;
-		float b = sqrt_safe(1.0f - a * a);
+		JWF_FLOAT a = pAffineTP->x / xmax;
+		JWF_FLOAT b = sqrt_safe(1.0 - a * a);
 
-		pVarTP->x += pAmount * atan2f(a, b);
+		pVarTP->x += pAmount * JWF_ATAN2(a, b);
 
     if (pContext->randGen->random() < 0.5)
 			pVarTP->y += pAmount * JWF_LOG(xmax + sqrt_safe(xmax - 1.0));
@@ -54,10 +52,9 @@ public:
 	}
 
 private:
-	float sqrt_safe(float x) {
+	JWF_FLOAT sqrt_safe(JWF_FLOAT x) {
 		return (x < EPSILON) ? 0.0 : JWF_SQRT(x);
 	}
 
 };
 
-#endif // JWFVAR_ELLIPTIC_H_

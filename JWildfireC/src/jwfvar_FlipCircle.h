@@ -15,9 +15,6 @@
  02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-#ifndef JWFVAR_FLIPCIRCLE_H_
-#define JWFVAR_FLIPCIRCLE_H_
-
 #include "jwf_Variation.h"
 
 class FlipCircleFunc: public Variation {
@@ -46,4 +43,3 @@ public:
 
 };
 
-#endif // JWFVAR_FLIPCIRCLE_H_

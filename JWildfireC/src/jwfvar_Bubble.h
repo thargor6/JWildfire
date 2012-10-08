@@ -14,8 +14,6 @@
  if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-#ifndef JWFVAR_BUBBLE_H_
-#define JWFVAR_BUBBLE_H_
 
 #include "jwf_Variation.h"
 
@@ -29,11 +27,11 @@ public:
 	}
 
 	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
-		float r = ((pAffineTP->x * pAffineTP->x + pAffineTP->y * pAffineTP->y) / 4.0f + 1.0f);
-		float t = pAmount / r;
+		JWF_FLOAT r = ((pAffineTP->x * pAffineTP->x + pAffineTP->y * pAffineTP->y) / 4.0 + 1.0);
+		JWF_FLOAT t = pAmount / r;
 		pVarTP->x += t * pAffineTP->x;
 		pVarTP->y += t * pAffineTP->y;
-		pVarTP->z += pAmount * (2.0f / r - 1.0f);
+		pVarTP->z += pAmount * (2.0 / r - 1.0);
 	}
 
 	BubbleFunc* makeCopy() {
@@ -42,4 +40,3 @@ public:
 
 };
 
-#endif // JWFVAR_BUBBLE_H_

@@ -48,7 +48,7 @@ public:
 //private:
 	JWF_FLOAT sumsq;
 	bool validSumsq;
-	JWF_FLOAT sqrt;
+	JWF_FLOAT _sqrt;
 	bool validSqrt;
 	JWF_FLOAT atan;
 	bool validAtan;

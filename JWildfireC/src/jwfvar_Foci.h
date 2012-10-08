@@ -15,9 +15,6 @@
  02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-#ifndef JWFVAR_FOCI_H_
-#define JWFVAR_FOCI_H_
-
 #include "jwf_Variation.h"
 
 class FociFunc: public Variation {
@@ -30,15 +27,15 @@ public:
 	}
 
 	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
-		float expx = JWF_EXP(pAffineTP->x) * 0.5f;
-		float expnx = 0.25f / expx;
+		JWF_FLOAT expx = JWF_EXP(pAffineTP->x) * 0.5;
+		JWF_FLOAT expnx = 0.25 / expx;
 		if (expx <= EPSILON || expnx <= EPSILON) {
 			return;
 		}
-		float siny = JWF_SIN(pAffineTP->y);
-		float cosy = JWF_COS(pAffineTP->y);
+		JWF_FLOAT siny = JWF_SIN(pAffineTP->y);
+		JWF_FLOAT cosy = JWF_COS(pAffineTP->y);
 
-		float tmp = (expx + expnx - cosy);
+		JWF_FLOAT tmp = (expx + expnx - cosy);
 		if (tmp == 0)
 			tmp = 1e-6f;
 		tmp = pAmount / tmp;
@@ -56,4 +53,3 @@ public:
 
 };
 
-#endif // JWFVAR_FOCI_H_

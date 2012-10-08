@@ -15,9 +15,6 @@
  02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-#ifndef JWFVAR_PRE_ROTATEX_H_
-#define JWFVAR_PRE_ROTATEX_H_
-
 #include "jwf_Variation.h"
 
 class PreRotateXFunc: public Variation {
@@ -30,9 +27,9 @@ public:
 	}
 
 	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
-		float sina = JWF_SIN(pAmount * M_PI * 0.5f);
-		float cosa = JWF_COS(pAmount * M_PI * 0.5f);
-		float z = cosa * pAffineTP->z - sina * pAffineTP->y;
+		JWF_FLOAT sina = JWF_SIN(pAmount * M_PI * 0.5);
+		JWF_FLOAT cosa = JWF_COS(pAmount * M_PI * 0.5);
+		JWF_FLOAT z = cosa * pAffineTP->z - sina * pAffineTP->y;
 		pAffineTP->y = sina * pAffineTP->z + cosa * pAffineTP->y;
 		pAffineTP->z = z;
 	}
@@ -47,4 +44,3 @@ public:
 
 };
 
-#endif // JWFVAR_PRE_ROTATEX_H_

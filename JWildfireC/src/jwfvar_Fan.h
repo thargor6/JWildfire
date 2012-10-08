@@ -15,8 +15,6 @@
  02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-#ifndef JWFVAR_FAN_H_
-#define JWFVAR_FAN_H_
 
 #include "jwf_Variation.h"
 
@@ -30,16 +28,16 @@ public:
 	}
 
 	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
-		float dx = M_PI * pXForm->coeff20 * pXForm->coeff20 + EPSILON;
-		float dx2 = dx / 2;
-		float a;
+		JWF_FLOAT dx = M_PI * pXForm->coeff20 * pXForm->coeff20 + EPSILON;
+		JWF_FLOAT dx2 = dx / 2;
+		JWF_FLOAT a;
 		if ((pAffineTP->getPrecalcAtan() + pXForm->coeff21 - ((int) ((pAffineTP->getPrecalcAtan() + pXForm->coeff21) / dx)) * dx) > dx2)
 			a = pAffineTP->getPrecalcAtan() - dx2;
 		else
 			a = pAffineTP->getPrecalcAtan() + dx2;
-		float sinr = JWF_SIN(a);
-		float cosr = JWF_COS(a);
-		float r = pAmount * JWF_SQRT(pAffineTP->x * pAffineTP->x + pAffineTP->y * pAffineTP->y);
+		JWF_FLOAT sinr = JWF_SIN(a);
+		JWF_FLOAT cosr = JWF_COS(a);
+		JWF_FLOAT r = pAmount * JWF_SQRT(pAffineTP->x * pAffineTP->x + pAffineTP->y * pAffineTP->y);
 		pVarTP->x += r * cosr;
 		pVarTP->y += r * sinr;
 		if (pContext->isPreserveZCoordinate) {
@@ -53,4 +51,3 @@ public:
 
 };
 
-#endif // JWFVAR_FAN_H_

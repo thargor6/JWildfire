@@ -14,8 +14,6 @@
  if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-#ifndef JWFVAR_LINEART_H_
-#define JWFVAR_LINEART_H_
 
 #include "jwf_Constants.h"
 #include "jwf_Variation.h"
@@ -23,8 +21,8 @@
 class LinearTFunc: public Variation {
 public:
 	LinearTFunc() {
-		powX = 1.2f;
-		powY = 1.2f;
+		powX = 1.2;
+		powY = 1.2;
 		initParameterNames(2, "powX", "powY");
 	}
 
@@ -42,8 +40,8 @@ public:
 	}
 
 	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
-		pVarTP->x += sgn(pAffineTP->x) * JWF_POW(fabs(pAffineTP->x), powX) * pAmount;
-		pVarTP->y += sgn(pAffineTP->y) * JWF_POW(fabs(pAffineTP->y), powY) * pAmount;
+		pVarTP->x += sgn(pAffineTP->x) * JWF_POW(JWF_FABS(pAffineTP->x), powX) * pAmount;
+		pVarTP->y += sgn(pAffineTP->y) * JWF_POW(JWF_FABS(pAffineTP->y), powY) * pAmount;
 		if (pContext->isPreserveZCoordinate) {
 			pVarTP->z += pAmount * pAffineTP->z;
 		}
@@ -54,15 +52,14 @@ public:
 	}
 
 private:
-	float sgn(float arg) {
+	JWF_FLOAT sgn(JWF_FLOAT arg) {
 		if (arg > 0)
-			return 1.0f;
+			return 1.0;
 		else
-			return -1.0f;
+			return -1.0;
 	}
 
-	float powX;
-	float powY;
+	JWF_FLOAT powX;
+	JWF_FLOAT powY;
 };
 
-#endif // JWFVAR_LINEART_H_

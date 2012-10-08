@@ -14,8 +14,6 @@
  if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-#ifndef JWFVAR_LOG_H_
-#define JWFVAR_LOG_H_
 
 #include "jwf_Variation.h"
 
@@ -29,7 +27,7 @@ public:
 	}
 
 	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
-		pVarTP->x += pAmount * 0.5f * JWF_LOG(pAffineTP->getPrecalcSumsq());
+		pVarTP->x += pAmount * 0.5 * JWF_LOG(pAffineTP->getPrecalcSumsq());
 		pVarTP->y += pAmount * pAffineTP->getPrecalcAtanYX();
 		if (pContext->isPreserveZCoordinate) {
 			pVarTP->z += pAmount * pAffineTP->z;
@@ -42,4 +40,3 @@ public:
 
 };
 
-#endif // JWFVAR_LOG_H_

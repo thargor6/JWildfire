@@ -14,8 +14,6 @@
  if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-#ifndef JWFVAR_DISC2_H_
-#define JWFVAR_DISC2_H_
 
 #include "jwf_Constants.h"
 #include "jwf_Variation.h"
@@ -23,8 +21,8 @@
 class Disc2Func: public Variation {
 public:
 	Disc2Func() {
-		rot = 2.0f;
-		twist = 0.5f;
+		rot = 2.0;
+		twist = 0.5;
 		initParameterNames(2, "rot", "twist");
 	}
 
@@ -42,10 +40,10 @@ public:
 	}
 
 	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
-		float t = _timespi * (pAffineTP->x + pAffineTP->y);
-		float sinr = JWF_SIN(t);
-		float cosr = JWF_COS(t);
-		float r = pAmount * pAffineTP->getPrecalcAtan() / M_PI;
+		JWF_FLOAT t = _timespi * (pAffineTP->x + pAffineTP->y);
+		JWF_FLOAT sinr = JWF_SIN(t);
+		JWF_FLOAT cosr = JWF_COS(t);
+		JWF_FLOAT r = pAmount * pAffineTP->getPrecalcAtan() / M_PI;
 		pVarTP->x += (sinr + _cosadd) * r;
 		pVarTP->y += (cosr + _sinadd) * r;
 		if (pContext->isPreserveZCoordinate) {
@@ -58,28 +56,27 @@ public:
 	}
 
 	virtual void init(FlameTransformationContext *pContext, XForm *pXForm, JWF_FLOAT pAmount) {
-		float add = twist;
+		JWF_FLOAT add = twist;
 		_timespi = rot * M_PI;
 		_sinadd = JWF_SIN(add);
 		_cosadd = JWF_COS(add);
-		_cosadd -= 1.0f;
-		float k;
-		if (add > 2.0f * M_PI) {
-			k = (1.0f + add - 2.0f * M_PI);
+		_cosadd -= 1.0;
+		JWF_FLOAT k;
+		if (add > 2.0 * M_PI) {
+			k = (1.0 + add - 2.0 * M_PI);
 			_cosadd *= k;
 			_sinadd *= k;
 		}
-		if (add < -2.0f * M_PI) {
-			k = (1.0f + add + 2.0f * M_PI);
+		if (add < -2.0 * M_PI) {
+			k = (1.0 + add + 2.0 * M_PI);
 			_cosadd *= k;
 			_sinadd *= k;
 		}
 	}
 
 private:
-	float rot;
-	float twist;
-	float _timespi, _sinadd, _cosadd;
+	JWF_FLOAT rot;
+	JWF_FLOAT twist;
+	JWF_FLOAT _timespi, _sinadd, _cosadd;
 };
 
-#endif // JWFVAR_DISC2_H_

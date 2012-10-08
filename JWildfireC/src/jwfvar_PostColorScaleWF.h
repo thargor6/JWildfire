@@ -15,51 +15,67 @@
  02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-
 #include "jwf_Constants.h"
 #include "jwf_Variation.h"
 
-class Julia3DZFunc: public Variation {
+class PostColorScaleWFFunc: public Variation {
 public:
-	Julia3DZFunc() {
-		power = 3.0;
-		initParameterNames(1, "power");
+	PostColorScaleWFFunc() {
+		scale_x = 0.0;
+		scale_y = 0.0;
+		scale_z = 0.5;
+		offset_z = 0.0;
+		reset_z = 0.0;
+		initParameterNames(5, "scale_x", "scale_y", "scale_z", "offset_z", "reset_z");
 	}
 
 	const char* getName() const {
-		return "julia3Dz";
+		return "post_colorscale_wf";
 	}
 
 	void setParameter(char *pName, JWF_FLOAT pValue) {
-		if (strcmp(pName, "power") == 0) {
-			power = pValue;
+		if (strcmp(pName, "scale_x") == 0) {
+			scale_x = pValue;
+		}
+		else if (strcmp(pName, "scale_y") == 0) {
+			scale_y = pValue;
+		}
+		else if (strcmp(pName, "scale_z") == 0) {
+			scale_z = pValue;
+		}
+		else if (strcmp(pName, "offset_z") == 0) {
+			offset_z = pValue;
+		}
+		else if (strcmp(pName, "reset_z") == 0) {
+			reset_z = pValue;
 		}
 	}
 
-	void init(FlameTransformationContext *pContext, XForm *pXForm, JWF_FLOAT pAmount) {
-		_absPower = abs(FTOI(power));
-		_cPower = 1.0 / power * 0.5;
-	}
-
 	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
-		JWF_FLOAT r2d = pAffineTP->x * pAffineTP->x + pAffineTP->y * pAffineTP->y;
-		JWF_FLOAT r = pAmount * JWF_POW(r2d, _cPower);
-
-		int rnd = (int) (pContext->randGen->random() * _absPower);
-		JWF_FLOAT angle = (JWF_ATAN2(pAffineTP->y, pAffineTP->x) + 2.0 * M_PI * rnd) / power;
-		JWF_FLOAT sina = JWF_SIN(angle);
-		JWF_FLOAT cosa = JWF_COS(angle);
-		pVarTP->x += r * cosa;
-		pVarTP->y += r * sina;
-		pVarTP->z += r * pAffineTP->z / (sqrtf(r2d) * _absPower);
+    pVarTP->x += pAmount * scale_x * pVarTP->x;
+    pVarTP->y += pAmount * scale_y * pVarTP->y;
+    JWF_FLOAT dz = pVarTP->color * scale_z * pAmount + offset_z;
+    if (reset_z > 0) {
+      pVarTP->z = dz;
+    }
+    else {
+      pVarTP->z += dz;
+    }
 	}
 
-	Julia3DZFunc* makeCopy() {
-		return new Julia3DZFunc(*this);
+	int const getPriority() {
+		return 1;
+	}
+
+	PostColorScaleWFFunc* makeCopy() {
+		return new PostColorScaleWFFunc(*this);
 	}
 
 private:
-	JWF_FLOAT power;
-	JWF_FLOAT _absPower, _cPower;
+	JWF_FLOAT scale_x;
+	JWF_FLOAT scale_y;
+	JWF_FLOAT scale_z;
+	JWF_FLOAT offset_z;
+	JWF_FLOAT reset_z;
 };
 

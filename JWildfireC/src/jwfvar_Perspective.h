@@ -14,8 +14,6 @@
  if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-#ifndef JWFVAR_PERSPECTIVE_H_
-#define JWFVAR_PERSPECTIVE_H_
 
 #include "jwf_Constants.h"
 #include "jwf_Variation.h"
@@ -42,11 +40,11 @@ public:
 	}
 
 	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
-		float d = (dist - pAffineTP->y * _vsin);
+		JWF_FLOAT d = (dist - pAffineTP->y * _vsin);
 		if (d == 0) {
 			return;
 		}
-		float t = 1.0f / d;
+		JWF_FLOAT t = 1.0f / d;
 		pVarTP->x += pAmount * dist * pAffineTP->x * t;
 		pVarTP->y += pAmount * _vfcos * pAffineTP->y * t;
 		if (pContext->isPreserveZCoordinate) {
@@ -59,15 +57,14 @@ public:
 	}
 
 	virtual void init(FlameTransformationContext *pContext, XForm *pXForm, JWF_FLOAT pAmount) {
-		float ang = angle * M_PI / 2.0f;
+		JWF_FLOAT ang = angle * M_PI / 2.0;
 		_vsin = JWF_SIN(ang);
 		_vfcos = dist * JWF_COS(ang);
 	}
 
 private:
-	float angle;
-	float dist;
-	float _vsin, _vfcos;
+	JWF_FLOAT angle;
+	JWF_FLOAT dist;
+	JWF_FLOAT _vsin, _vfcos;
 };
 
-#endif // JWFVAR_PERSPECTIVE_H_

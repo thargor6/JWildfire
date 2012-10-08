@@ -15,8 +15,6 @@
  02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-#ifndef JWFVAR_LISSAJOUS_H_
-#define JWFVAR_LISSAJOUS_H_
 
 #include "jwf_Constants.h"
 #include "jwf_Variation.h"
@@ -26,11 +24,11 @@ public:
 	LissajousFunc() {
 		tmin = -M_PI;
 		tmax = M_PI;
-		a = 3.0f;
-		b = 2.0f;
-		c = 0.0f;
-		d = 0.0f;
-		e = 0.0f;
+		a = 3.0;
+		b = 2.0;
+		c = 0.0;
+		d = 0.0;
+		e = 0.0;
 		initParameterNames(7, "tmin", "tmax", "a", "b", "c", "d", "e");
 	}
 
@@ -63,10 +61,10 @@ public:
 	}
 
 	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
-		float t = (tmax - tmin) * pContext->randGen->random() + tmin;
-		float y = pContext->randGen->random() - 0.5f;
-		float x1 = JWF_SIN(a * t + d);
-		float y1 = JWF_SIN(b * t);
+		JWF_FLOAT t = (tmax - tmin) * pContext->randGen->random() + tmin;
+		JWF_FLOAT y = pContext->randGen->random() - 0.5;
+		JWF_FLOAT x1 = JWF_SIN(a * t + d);
+		JWF_FLOAT y1 = JWF_SIN(b * t);
 		pVarTP->x += pAmount * (x1 + c * t + e * y);
 		pVarTP->y += pAmount * (y1 + c * t + e * y);
 		if (pContext->isPreserveZCoordinate) {
@@ -79,7 +77,6 @@ public:
 	}
 
 private:
-	float tmin, tmax, a, b, c, d, e;
+	JWF_FLOAT tmin, tmax, a, b, c, d, e;
 };
 
-#endif // JWFVAR_LISSAJOUS_H_

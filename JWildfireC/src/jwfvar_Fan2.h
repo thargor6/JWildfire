@@ -14,8 +14,6 @@
  if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-#ifndef JWFVAR_FAN2_H_
-#define JWFVAR_FAN2_H_
 
 #include "jwf_Constants.h"
 #include "jwf_Variation.h"
@@ -23,8 +21,8 @@
 class Fan2Func: public Variation {
 public:
 	Fan2Func() {
-		x = 0.20f;
-		y = 0.50f;
+		x = 0.20;
+		y = 0.50;
 		initParameterNames(2, "x", "y");
 	}
 
@@ -42,21 +40,21 @@ public:
 	}
 
 	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
-		float r = JWF_SQRT(pAffineTP->x * pAffineTP->x + pAffineTP->y * pAffineTP->y);
-		float angle;
+		JWF_FLOAT r = JWF_SQRT(pAffineTP->x * pAffineTP->x + pAffineTP->y * pAffineTP->y);
+		JWF_FLOAT angle;
 		if ((pAffineTP->x < -EPSILON) || (pAffineTP->x > EPSILON) || (pAffineTP->y < -EPSILON) || (pAffineTP->y > EPSILON)) {
-			angle = atan2f(pAffineTP->x, pAffineTP->y);
+			angle = JWF_ATAN2(pAffineTP->x, pAffineTP->y);
 		}
 		else {
 			angle = 0.0f;
 		}
 
-		float dy = y;
-		float dx = M_PI * (x * x) + EPSILON;
-		float dx2 = dx * 0.5f;
+		JWF_FLOAT dy = y;
+		JWF_FLOAT dx = M_PI * (x * x) + EPSILON;
+		JWF_FLOAT dx2 = dx * 0.5;
 
-		float t = angle + dy - (int) ((angle + dy) / dx) * dx;
-		float a;
+		JWF_FLOAT t = angle + dy - (int) ((angle + dy) / dx) * dx;
+		JWF_FLOAT a;
 		if (t > dx2) {
 			a = angle - dx2;
 		}
@@ -76,7 +74,6 @@ public:
 	}
 
 private:
-	float x, y;
+	JWF_FLOAT x, y;
 };
 
-#endif // JWFVAR_FAN2_H_

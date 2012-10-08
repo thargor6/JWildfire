@@ -15,8 +15,6 @@
  02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-#ifndef JWFVAR_DISC_H_
-#define JWFVAR_DISC_H_
 
 #include "jwf_Variation.h"
 #include "jwf_Constants.h"
@@ -31,10 +29,10 @@ public:
 	}
 
 	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
-		float rPI = M_PI * JWF_SQRT(pAffineTP->x * pAffineTP->x + pAffineTP->y * pAffineTP->y);
-		float sinr = JWF_SIN(rPI);
-		float cosr = JWF_COS(rPI);
-		float r = pAmount * pAffineTP->getPrecalcAtan() / M_PI;
+		JWF_FLOAT rPI = M_PI * JWF_SQRT(pAffineTP->x * pAffineTP->x + pAffineTP->y * pAffineTP->y);
+		JWF_FLOAT sinr = JWF_SIN(rPI);
+		JWF_FLOAT cosr = JWF_COS(rPI);
+		JWF_FLOAT r = pAmount * pAffineTP->getPrecalcAtan() / M_PI;
 		pVarTP->x += sinr * r;
 		pVarTP->y += cosr * r;
 		if (pContext->isPreserveZCoordinate) {
@@ -48,4 +46,3 @@ public:
 
 };
 
-#endif // JWFVAR_DISC_H_

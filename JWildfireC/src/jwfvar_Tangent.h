@@ -15,8 +15,6 @@
  02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-#ifndef JWFVAR_TANGENT_H_
-#define JWFVAR_TANGENT_H_
 
 #include "jwf_Variation.h"
 
@@ -30,12 +28,12 @@ public:
 	}
 
 	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
-		float d = JWF_COS(pAffineTP->y);
+		JWF_FLOAT d = JWF_COS(pAffineTP->y);
 		if (d == 0) {
 			return;
 		}
 		pVarTP->x += pAmount * JWF_SIN(pAffineTP->x) / d;
-		pVarTP->y += pAmount * tanf(pAffineTP->y);
+		pVarTP->y += pAmount * JWF_TAN(pAffineTP->y);
 		if (pContext->isPreserveZCoordinate) {
 			pVarTP->z += pAmount * pAffineTP->z;
 		}
@@ -47,4 +45,3 @@ public:
 
 };
 
-#endif // JWFVAR_TANGENT_H_

@@ -15,8 +15,6 @@
  02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-#ifndef JWFVAR_FLIPY_H_
-#define JWFVAR_FLIPY_H_
 
 #include "jwf_Variation.h"
 
@@ -46,4 +44,3 @@ public:
 
 };
 
-#endif // JWFVAR_FLIPY_H_

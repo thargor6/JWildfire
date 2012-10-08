@@ -15,9 +15,6 @@
  02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-#ifndef JWFVAR_ARCH_H_
-#define JWFVAR_ARCH_H_
-
 #include "jwf_Variation.h"
 #include "jwf_Constants.h"
 
@@ -31,9 +28,9 @@ public:
 	}
 
 	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
-		float ang = pContext->randGen->random() * pAmount * M_PI;
-		float sinr = JWF_SIN(ang);
-		float cosr = JWF_COS(ang);
+		JWF_FLOAT ang = pContext->randGen->random() * pAmount * M_PI;
+		JWF_FLOAT sinr = JWF_SIN(ang);
+		JWF_FLOAT cosr = JWF_COS(ang);
 		if (cosr == 0) {
 			return;
 		}
@@ -50,4 +47,3 @@ public:
 
 };
 
-#endif // JWFVAR_ARCH_H_

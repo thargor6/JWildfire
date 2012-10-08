@@ -20,29 +20,9 @@
 #define APP_TITLE "JWildfireC"
 #define APP_VERSION "0.15 (03.09.2012)"
 
-#define EPSILON 1.0e-8f
-
 #define MAX_MOD_WEIGHT_COUNT 100
 #define NEXT_APPLIED_XFORM_TABLE_SIZE 100
 #define INITIAL_ITERATIONS 42
-
-#undef M_PI
-#define M_PI 3.1415926535898f
-
-#undef M_PI_2
-#define M_PI_2 (M_PI * 0.5f)
-
-#undef M_PI_4
-#define M_PI_4 (M_PI * 0.25f)
-
-#undef M_1_PI
-#define M_1_PI (1.0f / M_PI)
-
-#undef M_2_PI
-#define M_2_PI (2.0f / M_PI)
-
-#undef M_2PI
-#define M_2PI (2.0f * M_PI)
 
 #define DRAWMODE_NORMAL 0
 #define DRAWMODE_HIDDEN 1

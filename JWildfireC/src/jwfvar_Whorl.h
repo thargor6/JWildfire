@@ -14,8 +14,6 @@
  if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-#ifndef JWFVAR_WHORL_H_
-#define JWFVAR_WHORL_H_
 
 #include "jwf_Constants.h"
 #include "jwf_Variation.h"
@@ -42,15 +40,15 @@ public:
 	}
 
 	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
-		float r = pAffineTP->getPrecalcSqrt();
-		float a;
+		JWF_FLOAT r = pAffineTP->getPrecalcSqrt();
+		JWF_FLOAT a;
 		if (r < pAmount)
 			a = pAffineTP->getPrecalcAtanYX() + inside / (pAmount - r);
 		else
 			a = pAffineTP->getPrecalcAtanYX() + outside / (pAmount - r);
 
-		float sa = JWF_SIN(a);
-		float ca = JWF_COS(a);
+		JWF_FLOAT sa = JWF_SIN(a);
+		JWF_FLOAT ca = JWF_COS(a);
 
 		pVarTP->x += pAmount * r * ca;
 		pVarTP->y += pAmount * r * sa;
@@ -64,8 +62,7 @@ public:
 	}
 
 private:
-	float inside;
-	float outside;
+	JWF_FLOAT inside;
+	JWF_FLOAT outside;
 };
 
-#endif // JWFVAR_WHORL_H_

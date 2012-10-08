@@ -14,8 +14,6 @@
  if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-#ifndef JWFVAR_POST_MIRROR_WF_H_
-#define JWFVAR_POST_MIRROR_WF_H_
 
 #include "jwf_Constants.h"
 #include "jwf_Variation.h"
@@ -58,11 +56,11 @@ public:
 	}
 
 	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
-		if (xaxis > 0 && pContext->randGen->random() < 0.5f) {
+		if (xaxis > 0 && pContext->randGen->random() < 0.5) {
 			pVarTP->x = -pVarTP->x - xshift;
 		}
 
-		if (yaxis > 0 && pContext->randGen->random() < 0.5f) {
+		if (yaxis > 0 && pContext->randGen->random() < 0.5) {
 			pVarTP->y = -pVarTP->y - yshift;
 		}
 
@@ -81,7 +79,6 @@ public:
 
 private:
 	int xaxis, yaxis, zaxis;
-	float xshift, yshift, zshift;
+	JWF_FLOAT xshift, yshift, zshift;
 };
 
-#endif // JWFVAR_POST_MIRROR_WF_H_

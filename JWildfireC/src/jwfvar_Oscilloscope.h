@@ -14,8 +14,6 @@
  if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-#ifndef JWFVAR_OSCILLOSCOPE_H_
-#define JWFVAR_OSCILLOSCOPE_H_
 
 #include "jwf_Constants.h"
 #include "jwf_Variation.h"
@@ -23,10 +21,10 @@
 class OscilloscopeFunc: public Variation {
 public:
 	OscilloscopeFunc() {
-		separation = 1.0f;
+		separation = 1.0;
 		frequency = M_PI;
-		amplitude = 1.0f;
-		damping = 0.0f;
+		amplitude = 1.0;
+		damping = 0.0;
 		initParameterNames(4, "separation", "frequency", "amplitude", "damping");
 	}
 
@@ -50,15 +48,15 @@ public:
 	}
 
 	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
-		float t;
+		JWF_FLOAT t;
 		if (_noDamping) {
 			t = amplitude * JWF_COS(_tpf * pAffineTP->x) + separation;
 		}
 		else {
-			t = amplitude * JWF_EXP(-fabs(pAffineTP->x) * damping) * JWF_COS(_tpf * pAffineTP->x) + separation;
+			t = amplitude * JWF_EXP(-JWF_FABS(pAffineTP->x) * damping) * JWF_COS(_tpf * pAffineTP->x) + separation;
 		}
 
-		if (fabs(pAffineTP->y) <= t) {
+		if (JWF_FABS(pAffineTP->y) <= t) {
 			pVarTP->x += pAmount * pAffineTP->x;
 			pVarTP->y -= pAmount * pAffineTP->y;
 		}
@@ -72,7 +70,7 @@ public:
 	}
 
 	void init(FlameTransformationContext *pContext, XForm *pXForm, JWF_FLOAT pAmount) {
-		_tpf = 2.0f * M_PI * frequency;
+		_tpf = 2.0 * M_PI * frequency;
 		_noDamping = JWF_FABS(damping) <= EPSILON;
 	}
 
@@ -81,13 +79,12 @@ public:
 	}
 
 private:
-	float separation;
-	float frequency;
-	float amplitude;
-	float damping;
+	JWF_FLOAT separation;
+	JWF_FLOAT frequency;
+	JWF_FLOAT amplitude;
+	JWF_FLOAT damping;
 
-	float _tpf;
-	float _noDamping;
+	JWF_FLOAT _tpf;
+	JWF_FLOAT _noDamping;
 };
 
-#endif // JWFVAR_OSCILLOSCOPE_H_

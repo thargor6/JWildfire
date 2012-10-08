@@ -14,8 +14,6 @@
  if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-#ifndef JWFVAR_JULIAN_H_
-#define JWFVAR_JULIAN_H_
 
 #include "jwf_Constants.h"
 #include "jwf_Variation.h"
@@ -24,8 +22,8 @@ class JuliaNFunc: public Variation {
 public:
 
 	JuliaNFunc() {
-		power = 3.0f;
-		dist = 1.0f;
+		power = 3.0;
+		dist = 1.0;
 		initParameterNames(2, "power", "dist");
 	}
 
@@ -44,15 +42,15 @@ public:
 
 	void init(FlameTransformationContext *pContext, XForm *pXForm, JWF_FLOAT pAmount) {
 		_absPower = JWF_FABS(power);
-		_cPower = dist / power * 0.5f;
-		_pAmount2 = pAmount * JWF_SQRT(2.0f) / 2.0f;
+		_cPower = dist / power * 0.5;
+		_pAmount2 = pAmount * JWF_SQRT(2.0) / 2.0;
 	}
 
 	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
-		float a = (atan2f(pAffineTP->y, pAffineTP->x) + 2.0f * M_PI * pContext->randGen->random(_absPower)) / power;
-		float sina = JWF_SIN(a);
-		float cosa = JWF_COS(a);
-		float r = pAmount * JWF_POW(pAffineTP->x * pAffineTP->x + pAffineTP->y * pAffineTP->y, _cPower);
+		JWF_FLOAT a = (JWF_ATAN2(pAffineTP->y, pAffineTP->x) + 2.0 * M_PI * pContext->randGen->random(_absPower)) / power;
+		JWF_FLOAT sina = JWF_SIN(a);
+		JWF_FLOAT cosa = JWF_COS(a);
+		JWF_FLOAT r = pAmount * JWF_POW(pAffineTP->x * pAffineTP->x + pAffineTP->y * pAffineTP->y, _cPower);
 
 		pVarTP->x = pVarTP->x + r * cosa;
 		pVarTP->y = pVarTP->y + r * sina;
@@ -66,8 +64,7 @@ public:
 	}
 
 private:
-	float _absPower, _cPower, _pAmount2;
-	float power, dist;
+	JWF_FLOAT _absPower, _cPower, _pAmount2;
+	JWF_FLOAT power, dist;
 };
 
-#endif // JWFVAR_JULIAN_H_

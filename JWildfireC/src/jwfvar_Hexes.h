@@ -14,8 +14,6 @@
  if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-#ifndef JWFVAR_HEXES_H_
-#define JWFVAR_HEXES_H_
 
 #include "jwf_Constants.h"
 #include "jwf_Variation.h"
@@ -110,9 +108,9 @@ public:
 	}
 
 	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
-		float P[VORONOI_MAXPOINTS][2];
-		float U[2];
-		float DXo, DYo, L, L1, L2, R, s, trgL, Vx, Vy;
+		JWF_FLOAT P[VORONOI_MAXPOINTS][2];
+		JWF_FLOAT U[2];
+		JWF_FLOAT DXo, DYo, L, L1, L2, R, s, trgL, Vx, Vy;
 		int Hx, Hy;
 
 		// For speed/convenience
@@ -127,8 +125,8 @@ public:
 		U[_x_] = pAffineTP->x;
 		U[_y_] = pAffineTP->y;
 
-		Hx = (int) floor((a_hex * U[_x_] + b_hex * U[_y_]) / s);
-		Hy = (int) floor((c_hex * U[_x_] + d_hex * U[_y_]) / s);
+		Hx = (int) JWF_FLOOR((a_hex * U[_x_] + b_hex * U[_y_]) / s);
+		Hy = (int) JWF_FLOOR((c_hex * U[_x_] + d_hex * U[_y_]) / s);
 
 		// Get a set of 9 hex centre points, based around the one above
 		int i = 0;
@@ -231,17 +229,16 @@ public:
 	}
 
 	virtual void init(FlameTransformationContext *pContext, XForm *pXForm, JWF_FLOAT pAmount) {
-		_rotSin = JWF_SIN(rotate * 2.0f * M_PI);
-		_rotCos = JWF_COS(rotate * 2.0f * M_PI);
+		_rotSin = JWF_SIN(rotate * 2.0 * M_PI);
+		_rotCos = JWF_COS(rotate * 2.0 * M_PI);
 	}
 
 private:
 	int cell_choice[9][2];
-	float cellsize;
-	float power;
-	float rotate;
-	float scale;
-	float _rotSin, _rotCos;
+	JWF_FLOAT cellsize;
+	JWF_FLOAT power;
+	JWF_FLOAT rotate;
+	JWF_FLOAT scale;
+	JWF_FLOAT _rotSin, _rotCos;
 };
 
-#endif // JWFVAR_HEXES_H_

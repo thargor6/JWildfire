@@ -14,8 +14,6 @@
  if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-#ifndef JWFVAR_COLLIDEOSCOPE_H_
-#define JWFVAR_COLLIDEOSCOPE_H_
 
 #include "jwf_Constants.h"
 #include "jwf_Variation.h"
@@ -23,7 +21,7 @@
 class CollideoscopeFunc: public Variation {
 public:
 	CollideoscopeFunc() {
-		a = 0.20f;
+		a = 0.20;
 		num = 1;
 		initParameterNames(2, "a", "num");
 	}
@@ -42,31 +40,31 @@ public:
 	}
 
 	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
-		float a = atan2f(pAffineTP->y, pAffineTP->x);
-		float r = pAmount * JWF_SQRT(pAffineTP->x * pAffineTP->x + pAffineTP->y * pAffineTP->y);
+		JWF_FLOAT a = JWF_ATAN2(pAffineTP->y, pAffineTP->x);
+		JWF_FLOAT r = pAmount * JWF_SQRT(pAffineTP->x * pAffineTP->x + pAffineTP->y * pAffineTP->y);
 		int alt;
 
 		if (a >= 0.0) {
 			alt = (int) (a * _kn_pi);
 			if (alt % 2 == 0) {
-				a = alt * _pi_kn + fmod(_ka_kn + a, _pi_kn);
+				a = alt * _pi_kn + JWF_FMOD(_ka_kn + a, _pi_kn);
 			}
 			else {
-				a = alt * _pi_kn + fmod(-_ka_kn + a, _pi_kn);
+				a = alt * _pi_kn + JWF_FMOD(-_ka_kn + a, _pi_kn);
 			}
 		}
 		else {
 			alt = (int) (-a * _kn_pi);
 			if (alt % 2 == 1) {
-				a = -(alt * _pi_kn + fmod(-_ka_kn - a, _pi_kn));
+				a = -(alt * _pi_kn + JWF_FMOD(-_ka_kn - a, _pi_kn));
 			}
 			else {
-				a = -(alt * _pi_kn + fmod(_ka_kn - a, _pi_kn));
+				a = -(alt * _pi_kn + JWF_FMOD(_ka_kn - a, _pi_kn));
 			}
 		}
 
-		float s = JWF_SIN(a);
-		float c = JWF_COS(a);
+		JWF_FLOAT s = JWF_SIN(a);
+		JWF_FLOAT c = JWF_COS(a);
 
 		pVarTP->x += r * c;
 		pVarTP->y += r * s;
@@ -88,10 +86,9 @@ public:
 	}
 
 private:
-	float a;
+	JWF_FLOAT a;
 	int num;
 
-	float _kn_pi, _pi_kn, _ka, _ka_kn;
+	JWF_FLOAT _kn_pi, _pi_kn, _ka, _ka_kn;
 };
 
-#endif // JWFVAR_COLLIDEOSCOPE_H_

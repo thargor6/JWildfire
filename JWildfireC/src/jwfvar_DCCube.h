@@ -14,8 +14,6 @@
  if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-#ifndef JWFVAR_DC_CUBE_H_
-#define JWFVAR_DC_CUBE_H_
 
 #include "limits.h"
 #include "jwf_Constants.h"
@@ -24,15 +22,15 @@
 class DCCubeFunc: public Variation {
 public:
 	DCCubeFunc() {
-		c1 = 0.1f;
-		c2 = 0.2f;
-		c3 = 0.3f;
-		c4 = 0.4f;
-		c5 = 0.5f;
-		c6 = 0.6f;
-		x = 1.0f;
-		y = 1.0f;
-		z = 1.0f;
+		c1 = 0.1;
+		c2 = 0.2;
+		c3 = 0.3;
+		c4 = 0.4;
+		c5 = 0.5;
+		c6 = 0.6;
+		x = 1.0;
+		y = 1.0;
+		z = 1.0;
 		initParameterNames(9, "c1", "c2", "c3", "c4", "c5", "c6", "x", "y", "z");
 	}
 
@@ -71,11 +69,11 @@ public:
 	}
 
 	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
-		float p = 2.0f * pContext->randGen->random() - 1.0f;
-		float q = 2.0f * pContext->randGen->random() - 1.0f;
+		JWF_FLOAT p = 2.0 * pContext->randGen->random() - 1.0;
+		JWF_FLOAT q = 2.0 * pContext->randGen->random() - 1.0;
 		int i = pContext->randGen->random(INT_MAX) % 3;
 		boolean j = (pContext->randGen->random(INT_MAX) & 1) == 1;
-		float x = 0.0, y = 0.0, z = 0.0;
+		JWF_FLOAT x = 0.0, y = 0.0, z = 0.0;
 		switch (i) {
 		case 0:
 			x = pAmount * (j ? -1 : 1);
@@ -115,8 +113,7 @@ public:
 	}
 
 private:
-	float c1, c2, c3, c4, c5, c6;
-	float x, y, z;
+	JWF_FLOAT c1, c2, c3, c4, c5, c6;
+	JWF_FLOAT x, y, z;
 };
 
-#endif // JWFVAR_DC_CUBE_H_

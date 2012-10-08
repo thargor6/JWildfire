@@ -424,7 +424,7 @@ private:
 		return res;
 	}
 
-	int roundColor(FLOAT pColor) {
+	int roundColor(JWF_FLOAT pColor) {
 		int res = FTOI(pColor);
 		if (res < 0)
 			return 0;
@@ -446,7 +446,7 @@ private:
 			pXForm->color = atof(hs);
 		}
 		if ((hs = findAttribute(attNames, attValues, attCount, ATTR_OPACITY)) != NULL) {
-			FLOAT opacity = atof(hs);
+			JWF_FLOAT opacity = atof(hs);
 			pXForm->opacity = opacity;
 			if (fabs(opacity) <= EPSILON) {
 				pXForm->drawMode = DRAWMODE_HIDDEN;
@@ -519,7 +519,7 @@ private:
 				Variation *srcVar = variationFactory->findVariation(varName);
 				if (srcVar != NULL) {
 					Variation *var = srcVar->makeCopy();
-					FLOAT amount = atof(attValues[a]);
+					JWF_FLOAT amount = atof(attValues[a]);
 					pXForm->addVariation(var, amount);
 
 					// params

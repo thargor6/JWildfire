@@ -14,8 +14,6 @@
  if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-#ifndef JWFVAR_DISC_3D_H_
-#define JWFVAR_DISC_3D_H_
 
 #include "jwf_Constants.h"
 #include "jwf_Variation.h"
@@ -38,11 +36,11 @@ public:
 	}
 
 	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
-		float r = JWF_SQRT(pAffineTP->y * pAffineTP->y + pAffineTP->x * pAffineTP->x + EPSILON);
-		float a = pi * r;
-		float sr = JWF_SIN(a);
-		float cr = JWF_COS(a);
-		float vv = pAmount * atan2f(pAffineTP->x, pAffineTP->y) / pi;
+		JWF_FLOAT r = JWF_SQRT(pAffineTP->y * pAffineTP->y + pAffineTP->x * pAffineTP->x + EPSILON);
+		JWF_FLOAT a = pi * r;
+		JWF_FLOAT sr = JWF_SIN(a);
+		JWF_FLOAT cr = JWF_COS(a);
+		JWF_FLOAT vv = pAmount * JWF_ATAN2(pAffineTP->x, pAffineTP->y) / pi;
 		pVarTP->x += vv * sr;
 		pVarTP->y += vv * cr;
 		pVarTP->z += vv * (r * JWF_COS(pAffineTP->z));
@@ -61,7 +59,6 @@ public:
 	}
 
 private:
-	float pi;
+	JWF_FLOAT pi;
 };
 
-#endif // JWFVAR_DISC_3D_H_

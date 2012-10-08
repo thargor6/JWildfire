@@ -14,8 +14,6 @@
  if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-#ifndef JWFVAR_ESCHER_H_
-#define JWFVAR_ESCHER_H_
 
 #include "jwf_Constants.h"
 #include "jwf_Variation.h"
@@ -23,7 +21,7 @@
 class EscherFunc: public Variation {
 public:
 	EscherFunc() {
-		beta = 0.30f;
+		beta = 0.30;
 		initParameterNames(1, "beta");
 	}
 
@@ -38,20 +36,20 @@ public:
 	}
 
 	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
-		float a = pAffineTP->getPrecalcAtanYX();
-		float lnr = 0.5f * JWF_LOG(pAffineTP->getPrecalcSumsq());
+		JWF_FLOAT a = pAffineTP->getPrecalcAtanYX();
+		JWF_FLOAT lnr = 0.5 * JWF_LOG(pAffineTP->getPrecalcSumsq());
 
-		float seb = JWF_SIN(beta);
-		float ceb = JWF_COS(beta);
+		JWF_FLOAT seb = JWF_SIN(beta);
+		JWF_FLOAT ceb = JWF_COS(beta);
 
-		float vc = 0.5f * (1.0f + ceb);
-		float vd = 0.5f * seb;
+		JWF_FLOAT vc = 0.5 * (1.0 + ceb);
+		JWF_FLOAT vd = 0.5 * seb;
 
-		float m = pAmount * JWF_EXP(vc * lnr - vd * a);
-		float n = vc * a + vd * lnr;
+		JWF_FLOAT m = pAmount * JWF_EXP(vc * lnr - vd * a);
+		JWF_FLOAT n = vc * a + vd * lnr;
 
-		float sn = JWF_SIN(n);
-		float cn = JWF_COS(n);
+		JWF_FLOAT sn = JWF_SIN(n);
+		JWF_FLOAT cn = JWF_COS(n);
 
 		pVarTP->x += m * cn;
 		pVarTP->y += m * sn;
@@ -65,7 +63,6 @@ public:
 	}
 
 private:
-	float beta;
+	JWF_FLOAT beta;
 };
 
-#endif // JWFVAR_ESCHER_H_

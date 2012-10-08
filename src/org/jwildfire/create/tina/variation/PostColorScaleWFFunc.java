@@ -16,10 +16,14 @@
 */
 package org.jwildfire.create.tina.variation;
 
+import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_CUDA;
+import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_JWILDFIRE;
+
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
 public class PostColorScaleWFFunc extends VariationFunc {
+  private static final long serialVersionUID = 1L;
 
   private static final String PARAM_SCALEX = "scale_x";
   private static final String PARAM_SCALEY = "scale_y";
@@ -84,4 +88,8 @@ public class PostColorScaleWFFunc extends VariationFunc {
     return 1;
   }
 
+  @Override
+  public int getAvailability() {
+    return AVAILABILITY_JWILDFIRE | AVAILABILITY_CUDA;
+  }
 }

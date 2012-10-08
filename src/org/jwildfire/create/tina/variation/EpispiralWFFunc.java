@@ -38,7 +38,11 @@ public class EpispiralWFFunc extends VariationFunc {
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     double a = atan2(pAffineTP.x, pAffineTP.y);
     double r = sqrt(pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y);
-    r = 0.5 / cos(waves * a);
+    double d = cos(waves * a);
+    if (d == 0) {
+      return;
+    }
+    r = 0.5 / d;
     double nx = sin(a) * r;
     double ny = cos(a) * r;
 

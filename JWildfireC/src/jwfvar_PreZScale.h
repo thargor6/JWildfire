@@ -15,9 +15,6 @@
  02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-#ifndef JWFVAR_PRE_ZSCALE_H_
-#define JWFVAR_PRE_ZSCALE_H_
-
 #include "jwf_Variation.h"
 
 class PreZScaleFunc: public Variation {
@@ -26,7 +23,7 @@ public:
 	}
 
 	const char* getName() const {
-		return "pre_ztranslate";
+		return "pre_zscale";
 	}
 
 	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
@@ -43,4 +40,3 @@ public:
 
 };
 
-#endif // JWFVAR_PRE_ZSCALE_H_

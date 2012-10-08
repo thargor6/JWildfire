@@ -14,17 +14,12 @@
  if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-#ifndef JWFVAR_BMOD_H_
-#define JWFVAR_BMOD_H_
-
-#include "jwf_Constants.h"
-#include "jwf_Variation.h"
 
 class BModFunc: public Variation {
 public:
 	BModFunc() {
-		radius = 1.0f;
-		distance = 0.0f;
+		radius = 1.0;
+		distance = 0.0;
 		initParameterNames(2, "radius", "distance");
 	}
 
@@ -42,19 +37,19 @@ public:
 	}
 
 	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
-		float tau, sigma;
-		float temp;
-		float cosht, sinht;
-		float sins, coss;
+		JWF_FLOAT tau, sigma;
+		JWF_FLOAT temp;
+		JWF_FLOAT cosht, sinht;
+		JWF_FLOAT sins, coss;
 
 		tau =
-				0.5f
-						* (logf((pAffineTP->x + 1.0) * (pAffineTP->x + 1.0) + (pAffineTP->y) * (pAffineTP->y))
+				0.5
+						* (JWF_LOG((pAffineTP->x + 1.0) * (pAffineTP->x + 1.0) + (pAffineTP->y) * (pAffineTP->y))
 								- JWF_LOG((pAffineTP->x - 1.0) * (pAffineTP->x - 1.0) + (pAffineTP->y) * (pAffineTP->y)));
-		sigma = M_PI - atan2f(pAffineTP->y, pAffineTP->x + 1.0f) - atan2f(pAffineTP->y, 1.0f - pAffineTP->x);
+		sigma = M_PI - JWF_ATAN2(pAffineTP->y, pAffineTP->x + 1.0) - JWF_ATAN2(pAffineTP->y, 1.0 - pAffineTP->x);
 
 		if (tau < radius && -tau < radius) {
-			tau = fmodf(tau + radius + distance * radius, 2.0f * radius) - radius;
+			tau = JWF_FMOD(tau + radius + distance * radius, 2.0 * radius) - radius;
 		}
 
 		sinht = JWF_SINH(tau);
@@ -78,14 +73,13 @@ public:
 	}
 
 private:
-	float sqrtf_safe(float x) {
-		if (x <= 0.0f)
-			return 0.0f;
+	JWF_FLOAT sqrtf_safe(JWF_FLOAT x) {
+		if (x <= 0.0)
+			return 0.0;
 		return JWF_SQRT(x);
 	}
 
-	float radius;
-	float distance;
+	JWF_FLOAT radius;
+	JWF_FLOAT distance;
 };
 
-#endif // JWFVAR_BMOD_H_

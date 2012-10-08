@@ -14,8 +14,6 @@
  if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-#ifndef JWFVAR_EPISPIRAL_H_
-#define JWFVAR_EPISPIRAL_H_
 
 #include "jwf_Constants.h"
 #include "jwf_Variation.h"
@@ -23,9 +21,9 @@
 class EpispiralFunc: public Variation {
 public:
 	EpispiralFunc() {
-		n = 6.0f;
-		thickness = 0.0f;
-		holes = 1.0f;
+		n = 6.0;
+		thickness = 0.0;
+		holes = 1.0;
 		initParameterNames(3, "n", "thickness", "holes");
 	}
 
@@ -46,21 +44,21 @@ public:
 	}
 
 	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
-		float theta = atan2f(pAffineTP->y, pAffineTP->x);
-		float t = -holes;
-		if (fabsf(thickness) > EPSILON) {
-			float d = JWF_COS(n * theta);
+		JWF_FLOAT theta = JWF_ATAN2(pAffineTP->y, pAffineTP->x);
+		JWF_FLOAT t = -holes;
+		if (JWF_FABS(thickness) > EPSILON) {
+			JWF_FLOAT d = JWF_COS(n * theta);
 			if (d == 0) {
 				return;
 			}
-			t += (pContext->randGen->random() * thickness) * (1.0f / d);
+			t += (pContext->randGen->random() * thickness) * (1.0 / d);
 		}
 		else {
-			float d = JWF_COS(n * theta);
+			JWF_FLOAT d = JWF_COS(n * theta);
 			if (d == 0) {
 				return;
 			}
-			t += 1.0f / d;
+			t += 1.0 / d;
 		}
 		pVarTP->x += pAmount * t * JWF_COS(theta);
 		pVarTP->y += pAmount * t * JWF_SIN(theta);
@@ -74,9 +72,8 @@ public:
 	}
 
 private:
-	float n;
-	float thickness;
-	float holes;
+	JWF_FLOAT n;
+	JWF_FLOAT thickness;
+	JWF_FLOAT holes;
 };
 
-#endif // JWFVAR_EPISPIRAL_H_

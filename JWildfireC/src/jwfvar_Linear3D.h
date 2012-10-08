@@ -15,8 +15,6 @@
  02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-#ifndef JWFVAR_LINEAR3D_H_
-#define JWFVAR_LINEAR3D_H_
 
 #include "jwf_Variation.h"
 
@@ -41,4 +39,3 @@ public:
 
 };
 
-#endif /* JWFVAR_LINEAR3D_H_ */

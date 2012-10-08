@@ -14,8 +14,6 @@
  if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-#ifndef JWFVAR_WAFFLE_H_
-#define JWFVAR_WAFFLE_H_
 
 #include "jwf_Variation.h"
 
@@ -23,9 +21,9 @@ class WaffleFunc: public Variation {
 public:
 	WaffleFunc() {
 		slices = 6;
-		xthickness = 0.5f;
-		ythickness = 0.5f;
-		rotation = 0.0f;
+		xthickness = 0.5;
+		ythickness = 0.5;
+		rotation = 0.0;
 		initParameterNames(4, "slices", "xthickness", "ythickness", "rotation");
 	}
 
@@ -49,7 +47,7 @@ public:
 	}
 
 	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
-		float a = 0.0, r = 0.0;
+		JWF_FLOAT a = 0.0, r = 0.0;
 		switch (pContext->randGen->random(5)) {
 		case 0:
 			a = (pContext->randGen->random(slices) + pContext->randGen->random() * xthickness) / slices;
@@ -65,10 +63,10 @@ public:
 			break;
 		case 3:
 			a = pContext->randGen->random();
-			r = (pContext->randGen->random(slices) + ythickness + pContext->randGen->random() * (1.0f - ythickness)) / slices;
+			r = (pContext->randGen->random(slices) + ythickness + pContext->randGen->random() * (1.0 - ythickness)) / slices;
 			break;
 		case 4:
-			a = (pContext->randGen->random(slices) + xthickness + pContext->randGen->random() * (1.0f - xthickness)) / slices;
+			a = (pContext->randGen->random(slices) + xthickness + pContext->randGen->random() * (1.0 - xthickness)) / slices;
 			r = pContext->randGen->random();
 			break;
 		}
@@ -90,10 +88,9 @@ public:
 
 private:
 	int slices;
-	float xthickness;
-	float ythickness;
-	float rotation;
-	float _vcosr, _vsinr;
+	JWF_FLOAT xthickness;
+	JWF_FLOAT ythickness;
+	JWF_FLOAT rotation;
+	JWF_FLOAT _vcosr, _vsinr;
 };
 
-#endif // JWFVAR_WAFFLE_H_

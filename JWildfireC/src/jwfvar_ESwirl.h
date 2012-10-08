@@ -14,8 +14,6 @@
  if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-#ifndef JWFVAR_ESWIRL_H_
-#define JWFVAR_ESWIRL_H_
 
 #include "jwf_Constants.h"
 #include "jwf_Variation.h"
@@ -23,8 +21,8 @@
 class ESwirlFunc: public Variation {
 public:
 	ESwirlFunc() {
-		in = 0.0f;
-		out = 0.0f;
+		in = 0.0;
+		out = 0.0;
 		initParameterNames(2, "in", "out");
 	}
 
@@ -42,23 +40,23 @@ public:
 	}
 
 	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
-		float tmp = pAffineTP->y * pAffineTP->y + pAffineTP->x * pAffineTP->x + 1.0f;
-		float tmp2 = 2.0f * pAffineTP->x;
-		float xmax = (sqrtf_safe(tmp + tmp2) + sqrtf_safe(tmp - tmp2)) * 0.5f;
-		if (xmax < 1.0f)
-			xmax = 1.0f;
-		float sinhmu, coshmu, sinnu, cosnu;
+		JWF_FLOAT tmp = pAffineTP->y * pAffineTP->y + pAffineTP->x * pAffineTP->x + 1.0;
+		JWF_FLOAT tmp2 = 2.0 * pAffineTP->x;
+		JWF_FLOAT xmax = (sqrtf_safe(tmp + tmp2) + sqrtf_safe(tmp - tmp2)) * 0.5;
+		if (xmax < 1.0)
+			xmax = 1.0;
+		JWF_FLOAT sinhmu, coshmu, sinnu, cosnu;
 
-		float mu = acoshf(xmax); //  mu > 0
-		float t = pAffineTP->x / xmax;
-		if (t > 1.0f)
-			t = 1.0f;
-		else if (t < -1.0f)
-			t = -1.0f;
+		JWF_FLOAT mu = JWF_ACOSH(xmax); //  mu > 0
+		JWF_FLOAT t = pAffineTP->x / xmax;
+		if (t > 1.0)
+			t = 1.0;
+		else if (t < -1.0)
+			t = -1.0;
 
-		float nu = acosf(t); // -Pi < nu < Pi
-		if (pAffineTP->y < 0.0f)
-			nu *= -1.0f;
+		JWF_FLOAT nu = JWF_ACOS(t); // -Pi < nu < Pi
+		if (pAffineTP->y < 0.0)
+			nu *= -1.0;
 
 		nu = nu + mu * out + in / mu;
 
@@ -79,14 +77,13 @@ public:
 	}
 
 private:
-	float sqrtf_safe(float x) {
-		if (x <= 0.0f)
-			return 0.0f;
+	JWF_FLOAT sqrtf_safe(JWF_FLOAT x) {
+		if (x <= 0.0)
+			return 0.0;
 		return JWF_SQRT(x);
 	}
 
-	float in;
-	float out;
+	JWF_FLOAT in;
+	JWF_FLOAT out;
 };
 
-#endif // JWFVAR_ESWIRL_H_

@@ -14,8 +14,6 @@
  if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-#ifndef JWFVAR_RECTANGLES_H_
-#define JWFVAR_RECTANGLES_H_
 
 #include "jwf_Constants.h"
 #include "jwf_Variation.h"
@@ -23,8 +21,8 @@
 class RectanglesFunc: public Variation {
 public:
 	RectanglesFunc() {
-		x = 0.0f;
-		y = 0.0f;
+		x = 0.0;
+		y = 0.0;
 		initParameterNames(2, "x", "y");
 	}
 
@@ -42,17 +40,17 @@ public:
 	}
 
 	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
-		if (fabsf(x) < EPSILON) {
+		if (JWF_FABS(x) < EPSILON) {
 			pVarTP->x += pAmount * pAffineTP->x;
 		}
 		else {
-			pVarTP->x += pAmount * ((2.0f * floorf(pAffineTP->x / x) + 1.0f) * x - pAffineTP->x);
+			pVarTP->x += pAmount * ((2.0 * JWF_FLOOR(pAffineTP->x / x) + 1.0) * x - pAffineTP->x);
 		}
-		if (fabsf(y) < EPSILON) {
+		if (JWF_FABS(y) < EPSILON) {
 			pVarTP->y += pAmount * pAffineTP->y;
 		}
 		else {
-			pVarTP->y += pAmount * ((2.0f * floorf(pAffineTP->y / y) + 1.0f) * y - pAffineTP->y);
+			pVarTP->y += pAmount * ((2.0 * JWF_FLOOR(pAffineTP->y / y) + 1.0) * y - pAffineTP->y);
 		}
 		if (pContext->isPreserveZCoordinate) {
 			pVarTP->z += pAmount * pAffineTP->z;
@@ -64,8 +62,7 @@ public:
 	}
 
 private:
-	float x;
-	float y;
+	JWF_FLOAT x;
+	JWF_FLOAT y;
 };
 
-#endif // JWFVAR_RECTANGLES_H_

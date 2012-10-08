@@ -14,8 +14,6 @@
  if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-#ifndef JWFVAR_WAVES4_WF_H_
-#define JWFVAR_WAVES4_WF_H_
 
 #include "jwf_Constants.h"
 #include "jwf_Variation.h"
@@ -23,14 +21,14 @@
 class Waves4WFFunc: public Variation {
 public:
 	Waves4WFFunc() {
-		scalex = 0.25f;
-		scaley = 0.5f;
-		freqx = M_PI / 2.0f;
-		freqy = M_PI / 4.0f;
+		scalex = 0.25;
+		scaley = 0.5;
+		freqx = M_PI / 2.0;
+		freqy = M_PI / 4.0;
 		use_cos_x = true;
 		use_cos_y = false;
-		dampx = 0.0f;
-		dampy = 0.0f;
+		dampx = 0.0;
+		dampy = 0.0;
 		initParameterNames(8, "scalex", "scaley", "freqx", "freqy", "use_cos_x", "uses_cos_y", "dampx", "danmpy");
 	}
 
@@ -84,8 +82,8 @@ public:
 	}
 
 	void init(FlameTransformationContext *pContext, XForm *pXForm, JWF_FLOAT pAmount) {
-		_dampingX = JWF_FABS(dampx) < EPSILON ? 1.0f : JWF_EXP(dampx);
-		_dampingY = JWF_FABS(dampy) < EPSILON ? 1.0f : JWF_EXP(dampy);
+		_dampingX = JWF_FABS(dampx) < EPSILON ? 1.0 : JWF_EXP(dampx);
+		_dampingY = JWF_FABS(dampy) < EPSILON ? 1.0 : JWF_EXP(dampy);
 	}
 
 	Waves4WFFunc* makeCopy() {
@@ -93,15 +91,14 @@ public:
 	}
 
 private:
-	float scalex;
-	float scaley;
-	float freqx;
-	float freqy;
+	JWF_FLOAT scalex;
+	JWF_FLOAT scaley;
+	JWF_FLOAT freqx;
+	JWF_FLOAT freqy;
 	bool use_cos_x;
 	bool use_cos_y;
-	float dampx;
-	float dampy;
-	float _dampingX, _dampingY;
+	JWF_FLOAT dampx;
+	JWF_FLOAT dampy;
+	JWF_FLOAT _dampingX, _dampingY;
 };
 
-#endif // JWFVAR_WAVES4_WF_H_

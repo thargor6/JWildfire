@@ -21,12 +21,12 @@ struct GammaCorrectionFilter {
 	Flame *flame;
 	int vibInt;
 	int inverseVibInt;
-	FLOAT vibDouble;
-	FLOAT inverseVibDouble;
-	FLOAT gamma;
-	FLOAT sclGamma;
+	JWF_FLOAT vibDouble;
+	JWF_FLOAT inverseVibDouble;
+	JWF_FLOAT gamma;
+	JWF_FLOAT sclGamma;
 	int bgRed, bgGreen, bgBlue;
-	FLOAT bgRedDouble, bgGreenDouble, bgBlueDouble;
+	JWF_FLOAT bgRedDouble, bgGreenDouble, bgBlueDouble;
 
 	void create(Flame *pFlame) {
 		flame = pFlame;
@@ -71,13 +71,13 @@ struct GammaCorrectionFilter {
 	}
 
 	void transformPoint(LogDensityPoint *logDensityPnt, GammaCorrectedRGBPoint *pRGBPoint) {
-		FLOAT logScl;
+		JWF_FLOAT logScl;
 		int inverseAlphaInt;
 		if (logDensityPnt->intensity > 0.0) {
 			// gamma linearization
-			FLOAT alpha;
+			JWF_FLOAT alpha;
 			if (logDensityPnt->intensity <= flame->gammaThreshold) {
-				FLOAT frac = logDensityPnt->intensity / flame->gammaThreshold;
+				JWF_FLOAT frac = logDensityPnt->intensity / flame->gammaThreshold;
 				alpha = (1.0 - frac) * logDensityPnt->intensity * sclGamma + frac * JWF_POW(logDensityPnt->intensity, gamma);
 			}
 			else {
@@ -134,13 +134,13 @@ struct GammaCorrectionFilter {
 	}
 
 	void transformPointHDR(LogDensityPoint *logDensityPnt, GammaCorrectedHDRPoint *pHDRPoint) {
-		FLOAT logScl;
-		FLOAT inverseAlpha;
+		JWF_FLOAT logScl;
+		JWF_FLOAT inverseAlpha;
 		if (logDensityPnt->intensity > 0.0) {
 			// gamma linearization
-			FLOAT alpha;
+			JWF_FLOAT alpha;
 			if (logDensityPnt->intensity <= flame->gammaThreshold) {
-				FLOAT frac = logDensityPnt->intensity / flame->gammaThreshold;
+				JWF_FLOAT frac = logDensityPnt->intensity / flame->gammaThreshold;
 				alpha = (1.0 - frac) * logDensityPnt->intensity * sclGamma + frac * JWF_POW(logDensityPnt->intensity, gamma);
 			}
 			else {
@@ -155,13 +155,13 @@ struct GammaCorrectionFilter {
 			inverseAlpha = (1.0 - alpha);
 		}
 		else {
-			pHDRPoint->red = (FLOAT) -1.0;
-			pHDRPoint->green = (FLOAT) -1.0;
-			pHDRPoint->blue = (FLOAT) -1.0;
+			pHDRPoint->red = (JWF_FLOAT) -1.0;
+			pHDRPoint->green = (JWF_FLOAT) -1.0;
+			pHDRPoint->blue = (JWF_FLOAT) -1.0;
 			return;
 		}
 
-		FLOAT red, green, blue;
+		JWF_FLOAT red, green, blue;
 		if (inverseVibDouble > 0.0) {
 			red = logScl * logDensityPnt->red + inverseVibDouble * JWF_POW(logDensityPnt->red, gamma);
 			green = logScl * logDensityPnt->green + inverseVibDouble * JWF_POW(logDensityPnt->green, gamma);
@@ -176,17 +176,17 @@ struct GammaCorrectionFilter {
 		green += inverseAlpha * bgGreenDouble;
 		blue += inverseAlpha * bgBlueDouble;
 
-		pHDRPoint->red = (FLOAT) red;
-		pHDRPoint->green = (FLOAT) green;
-		pHDRPoint->blue = (FLOAT) blue;
+		pHDRPoint->red = (JWF_FLOAT) red;
+		pHDRPoint->green = (JWF_FLOAT) green;
+		pHDRPoint->blue = (JWF_FLOAT) blue;
 	}
 
 	void transformPointSimple(LogDensityPoint *logDensityPnt, GammaCorrectedRGBPoint *pRGBPoint) {
-		FLOAT logScl;
+		JWF_FLOAT logScl;
 		int inverseAlphaInt;
 		if (logDensityPnt->intensity > 0.0) {
 			// gamma linearization
-			FLOAT alpha = JWF_POW(logDensityPnt->intensity, gamma);
+			JWF_FLOAT alpha = JWF_POW(logDensityPnt->intensity, gamma);
 			logScl = vibInt * alpha / logDensityPnt->intensity;
 			int alphaInt = (int) (alpha * 256.0 + 0.5);
 			if (alphaInt < 0)

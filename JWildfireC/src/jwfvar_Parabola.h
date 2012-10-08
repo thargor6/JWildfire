@@ -14,8 +14,6 @@
  if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-#ifndef JWFVAR_PARABOLA_H_
-#define JWFVAR_PARABOLA_H_
 
 #include "jwf_Constants.h"
 #include "jwf_Variation.h"
@@ -23,8 +21,8 @@
 class ParabolaFunc: public Variation {
 public:
 	ParabolaFunc() {
-		width = 1.0f;
-		height = 0.5f;
+		width = 1.0;
+		height = 0.5;
 		initParameterNames(2, "width", "height");
 	}
 
@@ -42,9 +40,9 @@ public:
 	}
 
 	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
-		float r = pAffineTP->getPrecalcSqrt();
-		float sr = JWF_SIN(r);
-		float cr = JWF_COS(r);
+		JWF_FLOAT r = pAffineTP->getPrecalcSqrt();
+		JWF_FLOAT sr = JWF_SIN(r);
+		JWF_FLOAT cr = JWF_COS(r);
 		pVarTP->x += height * pAmount * sr * sr * pContext->randGen->random();
 		pVarTP->y += width * pAmount * cr * pContext->randGen->random();
 		if (pContext->isPreserveZCoordinate) {
@@ -57,8 +55,7 @@ public:
 	}
 
 private:
-	float width;
-	float height;
+	JWF_FLOAT width;
+	JWF_FLOAT height;
 };
 
-#endif // JWFVAR_PARABOLA_H_

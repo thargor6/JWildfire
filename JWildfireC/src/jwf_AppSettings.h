@@ -40,6 +40,7 @@ public:
 		threadCount = maxThreadCount;
 		flameFilename = NULL;
 		outputFilename = NULL;
+		outputHDRFilename = NULL;
 		outputWidth = 800;
 		outputHeight = 600;
 		sampleDensity = 100.0;
@@ -87,22 +88,26 @@ public:
 		return outputFilename;
 	}
 
-	FLOAT getFilterRadius() {
+	char *getOutputHDRFilename() {
+		return outputHDRFilename;
+	}
+
+	JWF_FLOAT getFilterRadius() {
 		return filterRadius;
 	}
 
-	FLOAT getSampleDensity() {
+	JWF_FLOAT getSampleDensity() {
 		return sampleDensity;
 	}
 
-	void setFilterRadius(const FLOAT pFilterRadius) {
+	void setFilterRadius(const JWF_FLOAT pFilterRadius) {
 		if (pFilterRadius >= MIN_FILTER_RADIUS - EPSILON && pFilterRadius <= MAX_FILTER_RADIUS + EPSILON)
 			filterRadius = pFilterRadius;
 		else
 			printf("Invalid filter radius %f (%f...%f)\n", pFilterRadius, MIN_FILTER_RADIUS, MAX_FILTER_RADIUS);
 	}
 
-	void setSampleDensity(const FLOAT pSampleDensity) {
+	void setSampleDensity(const JWF_FLOAT pSampleDensity) {
 		if (pSampleDensity >= MIN_DENSITY - EPSILON && pSampleDensity <= MAX_DENSITY + EPSILON)
 			sampleDensity = pSampleDensity;
 		else
@@ -132,6 +137,13 @@ public:
 					return -1;
 				}
 				setParamValue(&outputFilename, pArgv[++i]);
+			}
+			else if (strcmp(pArgv[i], "-outputHDRFilename") == 0 || strcmp(pArgv[i], "-hdr") == 0) {
+				if (i == pArgc - 1) {
+					printf("No value for parameter <%s> specified\n", pArgv[i]);
+					return -1;
+				}
+				setParamValue(&outputHDRFilename, pArgv[++i]);
 			}
 			else if (strcmp(pArgv[i], "-outputWidth") == 0 || strcmp(pArgv[i], "-w") == 0) {
 				if (i == pArgc - 1) {
@@ -186,10 +198,11 @@ public:
 		printf("  -threadCount (or -t): int (%d...%d)\n", MIN_THREAD_COUNT, maxThreadCount);
 		printf("  -flameFilename (or -f): string\n");
 		printf("  -outputFilename (or -o): string\n");
+		printf("  -outputHDRFilename (or -hdr): string\n");
 		printf("  -outputWidth (or -w): int (%d...%d)\n", MIN_WIDTH, MAX_WIDTH);
 		printf("  -outputHeight (or -h): int (%d...%d)\n", MIN_HEIGHT, MAX_HEIGHT);
-		printf("  -filterRadius (or -r): FLOAT (%f...%f)\n", MIN_FILTER_RADIUS, MAX_FILTER_RADIUS);
-		printf("  -sampleDensity (or -d): FLOAT (%f...%f)\n", MIN_DENSITY, MAX_DENSITY);
+		printf("  -filterRadius (or -r): JWF_FLOAT (%f...%f)\n", MIN_FILTER_RADIUS, MAX_FILTER_RADIUS);
+		printf("  -sampleDensity (or -d): JWF_FLOAT (%f...%f)\n", MIN_DENSITY, MAX_DENSITY);
 		printf("  -help (or -h): void\n");
 		printf("Required param: -flameFilename\n");
 	}
@@ -199,6 +212,7 @@ public:
 		printf("  threadCount: %d\n", threadCount);
 		printf("  flameFilename: %s\n", flameFilename);
 		printf("  outputFilename: %s\n", outputFilename);
+		printf("  outputHDRFilename: %s\n", outputHDRFilename);
 		printf("  outputWidth: %d\n", outputWidth);
 		printf("  outputHeight: %d\n", outputHeight);
 		printf("  filterRadius: %f\n", filterRadius);
@@ -209,12 +223,13 @@ public:
 private:
 	char *flameFilename;
 	char *outputFilename;
+	char *outputHDRFilename;
 	int maxThreadCount;
 	int threadCount;
 	int outputWidth;
 	int outputHeight;
-	FLOAT sampleDensity;
-	FLOAT filterRadius;
+	JWF_FLOAT sampleDensity;
+	JWF_FLOAT filterRadius;
 
 	void setParamValue(char **pDst, char *pSrc) {
 		if ((*pDst) != NULL) {

@@ -14,8 +14,6 @@
  if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-#ifndef JWFVAR_LINEART_3D_H_
-#define JWFVAR_LINEART_3D_H_
 
 #include "jwf_Constants.h"
 #include "jwf_Variation.h"
@@ -23,9 +21,9 @@
 class LinearT3DFunc: public Variation {
 public:
 	LinearT3DFunc() {
-		powX = 1.2f;
-		powY = 1.2f;
-		powZ = 1.2f;
+		powX = 1.2;
+		powY = 1.2;
+		powZ = 1.2;
 		initParameterNames(3, "powX", "powY", "powZ");
 	}
 
@@ -46,9 +44,9 @@ public:
 	}
 
 	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
-		pVarTP->x += sgn(pAffineTP->x) * JWF_POW(fabs(pAffineTP->x), powX) * pAmount;
-		pVarTP->y += sgn(pAffineTP->y) * JWF_POW(fabs(pAffineTP->y), powY) * pAmount;
-		pVarTP->z += sgn(pAffineTP->z) * JWF_POW(fabs(pAffineTP->z), powZ) * pAmount;
+		pVarTP->x += sgn(pAffineTP->x) * JWF_POW(JWF_FABS(pAffineTP->x), powX) * pAmount;
+		pVarTP->y += sgn(pAffineTP->y) * JWF_POW(JWF_FABS(pAffineTP->y), powY) * pAmount;
+		pVarTP->z += sgn(pAffineTP->z) * JWF_POW(JWF_FABS(pAffineTP->z), powZ) * pAmount;
 	}
 
 	LinearT3DFunc* makeCopy() {
@@ -56,16 +54,15 @@ public:
 	}
 
 private:
-	float sgn(float arg) {
+	JWF_FLOAT sgn(JWF_FLOAT arg) {
 		if (arg > 0)
-			return 1.0f;
+			return 1.0;
 		else
-			return -1.0f;
+			return -1.0;
 	}
 
-	float powX;
-	float powY;
-	float powZ;
+	JWF_FLOAT powX;
+	JWF_FLOAT powY;
+	JWF_FLOAT powZ;
 };
 
-#endif // JWFVAR_LINEART_3D_H_

@@ -14,16 +14,14 @@
  if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-#ifndef JWFVAR_WAVES2_3D_H_
-#define JWFVAR_WAVES2_3D_H_
 
 #include "jwf_Variation.h"
 
 class Waves2_3DFunc: public Variation {
 public:
 	Waves2_3DFunc() {
-		freq = 2.0f;
-		scale = 1.0f;
+		freq = 2.0;
+		scale = 1.0;
 		initParameterNames(2, "freq", "scale");
 	}
 
@@ -41,7 +39,7 @@ public:
 	}
 
 	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
-		float avgxy = (pAffineTP->x + pAffineTP->y) / 2.0f;
+		JWF_FLOAT avgxy = (pAffineTP->x + pAffineTP->y) / 2.0;
 		pVarTP->x += pAmount * (pAffineTP->x + scale * JWF_SIN(pAffineTP->y * freq));
 		pVarTP->y += pAmount * (pAffineTP->y + scale * JWF_SIN(pAffineTP->x * freq));
 		pVarTP->z += pAmount * (pAffineTP->z + scale * JWF_SIN(avgxy * freq));
@@ -52,8 +50,7 @@ public:
 	}
 
 private:
-	float freq;
-	float scale;
+	JWF_FLOAT freq;
+	JWF_FLOAT scale;
 };
 
-#endif // JWFVAR_WAVES2_3D_H_

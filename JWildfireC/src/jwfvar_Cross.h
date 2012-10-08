@@ -14,8 +14,6 @@
  if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-#ifndef JWFVAR_CROSS_H_
-#define JWFVAR_CROSS_H_
 
 #include "jwf_Constants.h"
 #include "jwf_Variation.h"
@@ -30,8 +28,8 @@ public:
 	}
 
 	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
-		float s = pAffineTP->x * pAffineTP->x - pAffineTP->y * pAffineTP->y;
-		float r = pAmount * JWF_SQRT(1.0f / (s * s + EPSILON));
+		JWF_FLOAT s = pAffineTP->x * pAffineTP->x - pAffineTP->y * pAffineTP->y;
+		JWF_FLOAT r = pAmount * JWF_SQRT(1.0 / (s * s + EPSILON));
 
 		pVarTP->x += pAffineTP->x * r;
 		pVarTP->y += pAffineTP->y * r;
@@ -46,4 +44,3 @@ public:
 
 };
 
-#endif // JWFVAR_CROSS_H_

@@ -15,8 +15,6 @@
  02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-#ifndef JWFVAR_DIAMOND_H_
-#define JWFVAR_DIAMOND_H_
 
 #include "jwf_Variation.h"
 
@@ -30,11 +28,11 @@ public:
 	}
 
 	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
-		float length = pAffineTP->getPrecalcSqrt();
-		float sinA = pAffineTP->getPrecalcSinA();
-		float cosA = pAffineTP->getPrecalcCosA();
-		float sinr = JWF_SIN(length);
-		float cosr = JWF_COS(length);
+		JWF_FLOAT length = pAffineTP->getPrecalcSqrt();
+		JWF_FLOAT sinA = pAffineTP->getPrecalcSinA();
+		JWF_FLOAT cosA = pAffineTP->getPrecalcCosA();
+		JWF_FLOAT sinr = JWF_SIN(length);
+		JWF_FLOAT cosr = JWF_COS(length);
 		pVarTP->x += pAmount * sinA * cosr;
 		pVarTP->y += pAmount * cosA * sinr;
 		if (pContext->isPreserveZCoordinate) {
@@ -48,4 +46,3 @@ public:
 
 };
 
-#endif // JWFVAR_DIAMOND_H_

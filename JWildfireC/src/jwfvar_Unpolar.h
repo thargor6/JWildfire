@@ -14,8 +14,6 @@
  if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-#ifndef JWFVAR_UNPOLAR_H_
-#define JWFVAR_UNPOLAR_H_
 
 #include "jwf_Constants.h"
 #include "jwf_Variation.h"
@@ -30,9 +28,9 @@ public:
 	}
 
 	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
-		float r = JWF_EXP(pAffineTP->y);
-		float s = JWF_SIN(pAffineTP->x);
-		float c = JWF_COS(pAffineTP->x);
+		JWF_FLOAT r = JWF_EXP(pAffineTP->y);
+		JWF_FLOAT s = JWF_SIN(pAffineTP->x);
+		JWF_FLOAT c = JWF_COS(pAffineTP->x);
 		pVarTP->y += vvar_2 * r * c;
 		pVarTP->x += vvar_2 * r * s;
 		if (pContext->isPreserveZCoordinate) {
@@ -46,12 +44,11 @@ public:
 
 	void init(FlameTransformationContext *pContext, XForm *pXForm, JWF_FLOAT pAmount) {
 		vvar = pAmount / M_PI;
-		vvar_2 = vvar * 0.5f;
+		vvar_2 = vvar * 0.5;
 	}
 
 private:
-	float vvar, vvar_2;
+	JWF_FLOAT vvar, vvar_2;
 
 };
 
-#endif // JWFVAR_UNPOLAR_H_

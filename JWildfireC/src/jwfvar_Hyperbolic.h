@@ -15,9 +15,6 @@
  02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-#ifndef JWFVAR_HYPERBOLIC_H_
-#define JWFVAR_HYPERBOLIC_H_
-
 #include "jwf_Variation.h"
 
 class HyperbolicFunc: public Variation {
@@ -30,7 +27,7 @@ public:
 	}
 
 	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
-		float r = pAffineTP->getPrecalcSqrt();
+		JWF_FLOAT r = pAffineTP->getPrecalcSqrt();
 		pVarTP->x += pAmount * pAffineTP->getPrecalcSinA() / r;
 		pVarTP->y += pAmount * pAffineTP->getPrecalcCosA() * r;
 		if (pContext->isPreserveZCoordinate) {
@@ -44,4 +41,3 @@ public:
 
 };
 
-#endif // JWFVAR_HYPERBOLIC_H_

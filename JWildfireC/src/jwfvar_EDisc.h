@@ -15,8 +15,6 @@
  02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-#ifndef JWFVAR_EDISC_H_
-#define JWFVAR_EDISC_H_
 
 #include "jwf_Variation.h"
 
@@ -30,19 +28,19 @@ public:
 	}
 
 	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
-		float tmp = pAffineTP->getPrecalcSumsq() + 1.0f;
-		float tmp2 = 2.0f * pAffineTP->x;
-		float r1 = JWF_SQRT(tmp + tmp2);
-		float r2 = JWF_SQRT(tmp - tmp2);
-		float xmax = (r1 + r2) * 0.5f;
-		float a1 = JWF_LOG(xmax + JWF_SQRT(xmax - 1.0));
-		float a2 = -acosf(pAffineTP->x / xmax);
-		float w = pAmount / 11.57034632f;
+		JWF_FLOAT tmp = pAffineTP->getPrecalcSumsq() + 1.0;
+		JWF_FLOAT tmp2 = 2.0 * pAffineTP->x;
+		JWF_FLOAT r1 = JWF_SQRT(tmp + tmp2);
+		JWF_FLOAT r2 = JWF_SQRT(tmp - tmp2);
+		JWF_FLOAT xmax = (r1 + r2) * 0.5;
+		JWF_FLOAT a1 = JWF_LOG(xmax + JWF_SQRT(xmax - 1.0));
+		JWF_FLOAT a2 = -JWF_ACOS(pAffineTP->x / xmax);
+		JWF_FLOAT w = pAmount / 11.57034632;
 
-		float snv = JWF_SIN(a1);
-		float csv = JWF_COS(a1);
-		float snhu = JWF_SINH(a2);
-		float cshu = JWF_COSH(a2);
+		JWF_FLOAT snv = JWF_SIN(a1);
+		JWF_FLOAT csv = JWF_COS(a1);
+		JWF_FLOAT snhu = JWF_SINH(a2);
+		JWF_FLOAT cshu = JWF_COSH(a2);
 
 		if (pAffineTP->y > 0.0) {
 			snv = -snv;
@@ -61,4 +59,3 @@ public:
 
 };
 
-#endif // JWFVAR_EDISC_H_

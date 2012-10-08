@@ -15,8 +15,6 @@
  02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-#ifndef JWFVAR_INFLATEZ_5_H_
-#define JWFVAR_INFLATEZ_5_H_
 
 #include "jwf_Variation.h"
 
@@ -30,8 +28,8 @@ public:
 	}
 
 	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
-		float ang1 = atan2f(pAffineTP->y, pAffineTP->x);
-		float val1 = JWF_COS(M_PI_2 - ang1) / 2.0f;
+		JWF_FLOAT ang1 = JWF_ATAN2(pAffineTP->y, pAffineTP->x);
+		JWF_FLOAT val1 = JWF_COS(M_PI_2 - ang1) / 2.0;
 		pVarTP->z += pAmount * val1;
 	}
 
@@ -41,4 +39,3 @@ public:
 
 };
 
-#endif // JWFVAR_INFLATEZ_5_H_

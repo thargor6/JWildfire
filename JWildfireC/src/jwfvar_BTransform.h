@@ -14,8 +14,6 @@
  if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-#ifndef JWFVAR_BTRANSFORM_H_
-#define JWFVAR_BTRANSFORM_H_
 
 #include "jwf_Constants.h"
 #include "jwf_Variation.h"
@@ -50,16 +48,16 @@ public:
 	}
 
 	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
-		float tau, sigma;
-		float temp;
-		float cosht, sinht;
-		float sins, coss;
+		JWF_FLOAT tau, sigma;
+		JWF_FLOAT temp;
+		JWF_FLOAT cosht, sinht;
+		JWF_FLOAT sins, coss;
 
-		tau = 0.5f
-				* (logf((pAffineTP->x + 1.0f) * (pAffineTP->x + 1.0f) + pAffineTP->y * pAffineTP->y) - JWF_LOG((pAffineTP->x - 1.0f) * (pAffineTP->x - 1.0f) + pAffineTP->y * pAffineTP->y))
+		tau = 0.5
+				* (JWF_LOG((pAffineTP->x + 1.0) * (pAffineTP->x + 1.0) + pAffineTP->y * pAffineTP->y) - JWF_LOG((pAffineTP->x - 1.0) * (pAffineTP->x - 1.0) + pAffineTP->y * pAffineTP->y))
 				/ power + move;
-		sigma = M_PI - atan2f(pAffineTP->y, pAffineTP->x + 1.0f) - atan2f(pAffineTP->y, 1.0f - pAffineTP->x) + rotate;
-		sigma = sigma / power + M_2PI / power * floorf(pContext->randGen->random() * power);
+		sigma = M_PI - JWF_ATAN2(pAffineTP->y, pAffineTP->x + 1.0) - JWF_ATAN2(pAffineTP->y, 1.0 - pAffineTP->x) + rotate;
+		sigma = sigma / power + M_2PI / power * JWF_FLOOR((JWF_FLOAT)(pContext->randGen->random() * power));
 
 		if (pAffineTP->x >= 0.0)
 			tau += split;
@@ -83,16 +81,15 @@ public:
 	}
 
 private:
-	float sqrtf_safe(float x) {
-		if (x <= 0.0f)
-			return 0.0f;
+	JWF_FLOAT sqrtf_safe(JWF_FLOAT x) {
+		if (x <= 0.0)
+			return 0.0;
 		return JWF_SQRT(x);
 	}
 
-	float rotate;
-	float power;
-	float move;
-	float split;
+	JWF_FLOAT rotate;
+	JWF_FLOAT power;
+	JWF_FLOAT move;
+	JWF_FLOAT split;
 };
 
-#endif // JWFVAR_BTRANSFORM_H_

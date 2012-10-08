@@ -15,9 +15,6 @@
  02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-#ifndef JWFVAR_LOONIE_H_
-#define JWFVAR_LOONIE_H_
-
 #include "jwf_Variation.h"
 
 class LoonieFunc: public Variation {
@@ -30,11 +27,11 @@ public:
 	}
 
 	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
-		float r2 = pAffineTP->getPrecalcSumsq();
-		float w2 = pAmount * pAmount;
+		JWF_FLOAT r2 = pAffineTP->getPrecalcSumsq();
+		JWF_FLOAT w2 = pAmount * pAmount;
 
 		if (r2 < w2 && r2 != 0) {
-			float r = pAmount * JWF_SQRT(w2 / r2 - 1.0f);
+			JWF_FLOAT r = pAmount * JWF_SQRT(w2 / r2 - 1.0);
 			pVarTP->x += r * pAffineTP->x;
 			pVarTP->y += r * pAffineTP->y;
 		}
@@ -53,4 +50,3 @@ public:
 
 };
 
-#endif // JWFVAR_LOONIE_H_

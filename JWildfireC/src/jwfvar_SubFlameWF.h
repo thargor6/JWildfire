@@ -14,8 +14,6 @@
  if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-#ifndef JWFVAR_SUBFLAME_WF_H_
-#define JWFVAR_SUBFLAME_WF_H_
 
 #include "jwf_Constants.h"
 #include "jwf_Variation.h"
@@ -23,9 +21,9 @@
 class SubFlameWFFunc: public Variation {
 public:
 	SubFlameWFFunc() {
-		offset_x = 0.0f;
-		offset_y = 0.0f;
-		offset_z = 0.0f;
+		offset_x = 0.0;
+		offset_y = 0.0;
+		offset_z = 0.0;
 
 		flame = NULL;
 		xf = NULL;
@@ -106,9 +104,9 @@ public:
 	}
 
 protected:
-	float offset_x;
-	float offset_y;
-	float offset_z;
+	JWF_FLOAT offset_x;
+	JWF_FLOAT offset_y;
+	JWF_FLOAT offset_z;
 
 	Flame *flame;
 	XForm *xf;
@@ -116,4 +114,3 @@ protected:
 	XYZPoint *q;
 };
 
-#endif // JWFVAR_SUBFLAME_WF_H_

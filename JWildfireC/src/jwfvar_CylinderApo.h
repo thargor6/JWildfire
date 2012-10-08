@@ -14,8 +14,6 @@
  if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-#ifndef JWFVAR_CYLINDER_APO_H_
-#define JWFVAR_CYLINDER_APO_H_
 
 #include "jwf_Variation.h"
 
@@ -40,4 +38,3 @@ public:
 
 };
 
-#endif // JWFVAR_CYLINDER_APO_H_

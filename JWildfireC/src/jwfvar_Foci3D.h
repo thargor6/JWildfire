@@ -15,9 +15,6 @@
  02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-#ifndef JWFVAR_FOCI_3D_H_
-#define JWFVAR_FOCI_3D_H_
-
 #include "jwf_Variation.h"
 
 class Foci3DFunc: public Variation {
@@ -30,19 +27,19 @@ public:
 	}
 
 	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
-		float expx = JWF_EXP(pAffineTP->x) * 0.5f;
-		float expnx = 0.25f / expx;
-		float kikr, boot;
+		JWF_FLOAT expx = JWF_EXP(pAffineTP->x) * 0.5;
+		JWF_FLOAT expnx = 0.25 / expx;
+		JWF_FLOAT kikr, boot;
 		boot = pAffineTP->z;
-		kikr = atan2f(pAffineTP->y, pAffineTP->x);
+		kikr = JWF_ATAN2(pAffineTP->y, pAffineTP->x);
 		if (boot == 0.0) {
 			boot = kikr;
 		}
-		float siny = JWF_SIN(pAffineTP->y);
-		float cosy = JWF_COS(pAffineTP->y);
-		float sinz = JWF_SIN(boot);
-		float cosz = JWF_COS(boot);
-		float tmp = pAmount / (expx + expnx - (cosy * cosz));
+		JWF_FLOAT siny = JWF_SIN(pAffineTP->y);
+		JWF_FLOAT cosy = JWF_COS(pAffineTP->y);
+		JWF_FLOAT sinz = JWF_SIN(boot);
+		JWF_FLOAT cosz = JWF_COS(boot);
+		JWF_FLOAT tmp = pAmount / (expx + expnx - (cosy * cosz));
 
 		pVarTP->x += (expx - expnx) * tmp;
 		pVarTP->y += siny * tmp;
@@ -55,4 +52,3 @@ public:
 
 };
 
-#endif // JWFVAR_FOCI_3D_H_

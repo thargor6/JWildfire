@@ -14,8 +14,6 @@
  if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-#ifndef JWFVAR_AUGER_H_
-#define JWFVAR_AUGER_H_
 
 #include "jwf_Constants.h"
 #include "jwf_Variation.h"
@@ -23,10 +21,10 @@
 class AugerFunc: public Variation {
 public:
 	AugerFunc() {
-		freq = 1.00f;
-		weight = 0.5f;
-		sym = 0.1f;
-		scale = 0.9f;
+		freq = 1.00;
+		weight = 0.5;
+		sym = 0.1;
+		scale = 0.9;
 		initParameterNames(4, "freq", "weight", "sym", "scale");
 	}
 
@@ -50,10 +48,10 @@ public:
 	}
 
 	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
-		float s = JWF_SIN(freq * pAffineTP->x);
-		float t = JWF_SIN(freq * pAffineTP->y);
-		float dy = pAffineTP->y + weight * (scale * s * 0.5f + JWF_FABS(pAffineTP->y) * s);
-		float dx = pAffineTP->x + weight * (scale * t * 0.5f + JWF_FABS(pAffineTP->x) * t);
+		JWF_FLOAT s = JWF_SIN(freq * pAffineTP->x);
+		JWF_FLOAT t = JWF_SIN(freq * pAffineTP->y);
+		JWF_FLOAT dy = pAffineTP->y + weight * (scale * s * 0.5 + JWF_FABS(pAffineTP->y) * s);
+		JWF_FLOAT dx = pAffineTP->x + weight * (scale * t * 0.5 + JWF_FABS(pAffineTP->x) * t);
 
 		pVarTP->x += pAmount * (pAffineTP->x + sym * (dx - pAffineTP->x));
 		pVarTP->y += pAmount * dy;
@@ -68,10 +66,9 @@ public:
 	}
 
 private:
-	float freq;
-	float weight;
-	float sym;
-	float scale;
+	JWF_FLOAT freq;
+	JWF_FLOAT weight;
+	JWF_FLOAT sym;
+	JWF_FLOAT scale;
 };
 
-#endif // JWFVAR_AUGER_H_

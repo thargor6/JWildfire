@@ -14,8 +14,6 @@
  if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-#ifndef JWFVAR_PIE_H_
-#define JWFVAR_PIE_H_
 
 #include "jwf_Constants.h"
 #include "jwf_Variation.h"
@@ -23,9 +21,9 @@
 class PieFunc: public Variation {
 public:
 	PieFunc() {
-		slices = 6.0f;
-		rotation = 0.0f;
-		thickness = 0.5f;
+		slices = 6.0;
+		rotation = 0.0;
+		thickness = 0.5;
 		initParameterNames(3, "slices", "rotation", "thickness");
 	}
 
@@ -46,9 +44,9 @@ public:
 	}
 
 	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
-		int sl = (int) (pContext->randGen->random() * slices + 0.5f);
-		float a = rotation + 2.0 * M_PI * (sl + pContext->randGen->random() * thickness) / slices;
-		float r = pAmount * pContext->randGen->random();
+		int sl = (int) (pContext->randGen->random() * slices + 0.5);
+		JWF_FLOAT a = rotation + 2.0 * M_PI * (sl + pContext->randGen->random() * thickness) / slices;
+		JWF_FLOAT r = pAmount * pContext->randGen->random();
 		double sina = JWF_SIN(a);
 		double cosa = JWF_COS(a);
 		pVarTP->x += r * cosa;
@@ -63,9 +61,8 @@ public:
 	}
 
 private:
-	float slices;
-	float rotation;
-	float thickness;
+	JWF_FLOAT slices;
+	JWF_FLOAT rotation;
+	JWF_FLOAT thickness;
 };
 
-#endif // JWFVAR_PIE_H_

@@ -15,9 +15,6 @@
  02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-#ifndef JWFVAR_LOONIE_3D_H_
-#define JWFVAR_LOONIE_3D_H_
-
 #include "jwf_Variation.h"
 
 class Loonie3DFunc: public Variation {
@@ -30,26 +27,26 @@ public:
 	}
 
 	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
-		float sqrvvar = pAmount * pAmount;
-		float efTez = pAffineTP->z;
-		float kikr;
-		kikr = atan2f(pAffineTP->y, pAffineTP->x);
+		JWF_FLOAT sqrvvar = pAmount * pAmount;
+		JWF_FLOAT efTez = pAffineTP->z;
+		JWF_FLOAT kikr;
+		kikr = JWF_ATAN2(pAffineTP->y, pAffineTP->x);
 
 		if (efTez == 0.0) {
 			efTez = kikr;
 		}
 
-		float r2 = pAffineTP->x * pAffineTP->x + pAffineTP->y * pAffineTP->y + efTez * efTez; // added the z element
+		JWF_FLOAT r2 = pAffineTP->x * pAffineTP->x + pAffineTP->y * pAffineTP->y + efTez * efTez; // added the z element
 		if (r2 < sqrvvar) {
-			float r = pAmount * JWF_SQRT(sqrvvar / r2 - 1.0f);
+			JWF_FLOAT r = pAmount * JWF_SQRT(sqrvvar / r2 - 1.0);
 			pVarTP->x += r * pAffineTP->x;
 			pVarTP->y += r * pAffineTP->y;
-			pVarTP->z += r * efTez * 0.5f;
+			pVarTP->z += r * efTez * 0.5;
 		}
 		else {
 			pVarTP->x += pAmount * pAffineTP->x;
 			pVarTP->y += pAmount * pAffineTP->y;
-			pVarTP->z += pAmount * efTez * 0.5f;
+			pVarTP->z += pAmount * efTez * 0.5;
 		}
 	}
 
@@ -59,4 +56,3 @@ public:
 
 };
 
-#endif // JWFVAR_LOONIE_3D_H_

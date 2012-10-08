@@ -53,7 +53,11 @@ public class MobiusFunc extends VariationFunc {
     double re_v = re_c * pAffineTP.x - im_c * pAffineTP.y + re_d;
     double im_v = re_c * pAffineTP.y + im_c * pAffineTP.x + im_d;
 
-    double rad_v = pAmount / (re_v * re_v + im_v * im_v);
+    double d = (re_v * re_v + im_v * im_v);
+    if (d == 0) {
+      return;
+    }
+    double rad_v = pAmount / d;
 
     pVarTP.x += rad_v * (re_u * re_v + im_u * im_v);
     pVarTP.y += rad_v * (im_u * re_v - re_u * im_v);

@@ -15,8 +15,6 @@
  02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-#ifndef JWFVAR_TAN_H_
-#define JWFVAR_TAN_H_
 
 #include "jwf_Variation.h"
 
@@ -30,15 +28,15 @@ public:
 	}
 
 	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
-		float tansin = JWF_SIN(2.0f * pAffineTP->x);
-		float tancos = JWF_COS(2.0f * pAffineTP->x);
-		float tansinh = JWF_SINH(2.0f * pAffineTP->y);
-		float tancosh = JWF_COSH(2.0f * pAffineTP->y);
-		float d = (tancos + tancosh);
+		JWF_FLOAT tansin = JWF_SIN(2.0 * pAffineTP->x);
+		JWF_FLOAT tancos = JWF_COS(2.0 * pAffineTP->x);
+		JWF_FLOAT tansinh = JWF_SINH(2.0 * pAffineTP->y);
+		JWF_FLOAT tancosh = JWF_COSH(2.0 * pAffineTP->y);
+		JWF_FLOAT d = (tancos + tancosh);
 		if (d == 0) {
 			return;
 		}
-		float tanden = 1.0f / d;
+		JWF_FLOAT tanden = 1.0 / d;
 		pVarTP->x += pAmount * tanden * tansin;
 		pVarTP->y += pAmount * tanden * tansinh;
 		if (pContext->isPreserveZCoordinate) {
@@ -52,4 +50,3 @@ public:
 
 };
 
-#endif // JWFVAR_TAN_H_

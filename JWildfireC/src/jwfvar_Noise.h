@@ -15,9 +15,6 @@
  02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-#ifndef JWFVAR_NOISE_H_
-#define JWFVAR_NOISE_H_
-
 #include "jwf_Variation.h"
 #include "jwf_Constants.h"
 
@@ -31,9 +28,9 @@ public:
 	}
 
 	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
-		float r = pContext->randGen->random() * 2.0f * M_PI;
-		float sinr = JWF_SIN(r);
-		float cosr = JWF_COS(r);
+		JWF_FLOAT r = pContext->randGen->random() * 2.0 * M_PI;
+		JWF_FLOAT sinr = JWF_SIN(r);
+		JWF_FLOAT cosr = JWF_COS(r);
 		r = pAmount * pContext->randGen->random();
 		pVarTP->x += pAffineTP->x * r * cosr;
 		pVarTP->y += pAffineTP->y * r * sinr;
@@ -48,4 +45,3 @@ public:
 
 };
 
-#endif // JWFVAR_NOISE_H_

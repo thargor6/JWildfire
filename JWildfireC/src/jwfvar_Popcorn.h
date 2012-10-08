@@ -15,8 +15,6 @@
  02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-#ifndef JWFVAR_POPCORN_H_
-#define JWFVAR_POPCORN_H_
 
 #include "jwf_Variation.h"
 
@@ -30,14 +28,14 @@ public:
 	}
 
 	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
-		float dx = tanf(3 * pAffineTP->y);
+		JWF_FLOAT dx = JWF_TAN(3 * pAffineTP->y);
 		if (dx != dx)
 			dx = 0.0;
-		float dy = tanf(3 * pAffineTP->x);
+		JWF_FLOAT dy = JWF_TAN(3 * pAffineTP->x);
 		if (dy != dy)
 			dy = 0.0;
-		float nx = pAffineTP->x + pXForm->coeff20 * JWF_SIN(dx);
-		float ny = pAffineTP->y + pXForm->coeff21 * JWF_SIN(dy);
+		JWF_FLOAT nx = pAffineTP->x + pXForm->coeff20 * JWF_SIN(dx);
+		JWF_FLOAT ny = pAffineTP->y + pXForm->coeff21 * JWF_SIN(dy);
 		pVarTP->x += pAmount * nx;
 		pVarTP->y += pAmount * ny;
 		if (pContext->isPreserveZCoordinate) {
@@ -51,4 +49,3 @@ public:
 
 };
 
-#endif // JWFVAR_POPCORN_H_

@@ -248,10 +248,11 @@ struct XForm {
 	}
 
 	void transformPoint(FlameTransformationContext *pContext, XYZPoint *pAffineT, XYZPoint *pVarT, XYZPoint *pSrcPoint, XYZPoint *pDstPoint) {
-		//pAffineT->clear();
+		pAffineT->clear();
 
 		pAffineT->rgbColor = FALSE;
 		pAffineT->redColor = pAffineT->greenColor = pAffineT->blueColor = 0.0;
+
 		//	pAffineT->x = pAffineT->y = pAffineT->z = pAffineT->color = 0.0f;
 		//	pAffineT->sumsq = pAffineT->sqrt = pAffineT->atan = pAffineT->atanYX = pAffineT->sinA = pAffineT->cosA = 0.0f;
 		//	pAffineT->validSumsq = pAffineT->validSqrt = pAffineT->validAtan = pAffineT->validAtanYX = pAffineT->validSinA = pAffineT->validCosA = FALSE;
@@ -310,7 +311,7 @@ struct XForm {
 		pAffineT->rgbColor = FALSE;
 		pAffineT->redColor = pAffineT->greenColor = pAffineT->blueColor = 0.0;
 		pAffineT->x = pAffineT->y = pAffineT->z = pAffineT->color = 0.0;
-		pAffineT->sumsq = pAffineT->sqrt = pAffineT->atan = pAffineT->atanYX = pAffineT->sinA = pAffineT->cosA = 0.0;
+		pAffineT->sumsq = pAffineT->_sqrt = pAffineT->atan = pAffineT->atanYX = pAffineT->sinA = pAffineT->cosA = 0.0;
 		pAffineT->validSumsq = pAffineT->validSqrt = pAffineT->validAtan = pAffineT->validAtanYX = pAffineT->validSinA = pAffineT->validCosA = FALSE;
 
 		pAffineT->color = pPoint->color * __c1 + __c2;

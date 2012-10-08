@@ -15,9 +15,6 @@
  02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-#ifndef JWFVAR_HORSESHOE_H_
-#define JWFVAR_HORSESHOE_H_
-
 #include "jwf_Variation.h"
 
 class HorseshoeFunc: public Variation {
@@ -30,8 +27,8 @@ public:
 	}
 
 	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
-		float sinA = pAffineTP->getPrecalcSinA();
-		float cosA = pAffineTP->getPrecalcCosA();
+		JWF_FLOAT sinA = pAffineTP->getPrecalcSinA();
+		JWF_FLOAT cosA = pAffineTP->getPrecalcCosA();
 		pVarTP->x += pAmount * (sinA * pAffineTP->x - cosA * pAffineTP->y);
 		pVarTP->y += pAmount * (cosA * pAffineTP->x + sinA * pAffineTP->y);
 		if (pContext->isPreserveZCoordinate) {
@@ -45,4 +42,3 @@ public:
 
 };
 
-#endif // JWFVAR_HORSESHOE_H_

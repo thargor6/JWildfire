@@ -14,8 +14,6 @@
  if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-#ifndef JWFVAR_BCOLLIDE_H_
-#define JWFVAR_BCOLLIDE_H_
 
 #include "jwf_Constants.h"
 #include "jwf_Variation.h"
@@ -24,7 +22,7 @@ class BCollideFunc: public Variation {
 public:
 	BCollideFunc() {
 		num = 1;
-		a = 0.0f;
+		a = 0.0;
 		initParameterNames(2, "num", "a");
 	}
 
@@ -42,21 +40,21 @@ public:
 	}
 
 	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
-		float tau, sigma;
-		float temp;
-		float cosht, sinht;
-		float sins, coss;
+		JWF_FLOAT tau, sigma;
+		JWF_FLOAT temp;
+		JWF_FLOAT cosht, sinht;
+		JWF_FLOAT sins, coss;
 		int alt;
 
-		tau = 0.5f
-				* (logf((pAffineTP->x + 1.0f) * (pAffineTP->x + 1.0f) + pAffineTP->y * pAffineTP->y) - JWF_LOG((pAffineTP->x - 1.0) * (pAffineTP->x - 1.0) + pAffineTP->y * pAffineTP->y));
-		sigma = M_PI - atan2f(pAffineTP->y, pAffineTP->x + 1.0f) - atan2f(pAffineTP->y, 1.0f - pAffineTP->x);
+		tau = 0.5
+				* (JWF_LOG((pAffineTP->x + 1.0) * (pAffineTP->x + 1.0) + pAffineTP->y * pAffineTP->y) - JWF_LOG((pAffineTP->x - 1.0) * (pAffineTP->x - 1.0) + pAffineTP->y * pAffineTP->y));
+		sigma = M_PI - JWF_ATAN2(pAffineTP->y, pAffineTP->x + 1.0) - JWF_ATAN2(pAffineTP->y, 1.0 - pAffineTP->x);
 
 		alt = (int) (sigma * _bCn_pi);
 		if (alt % 2 == 0)
-			sigma = alt * _pi_bCn + fmodf(sigma + _bCa_bCn, _pi_bCn);
+			sigma = alt * _pi_bCn + JWF_FMOD(sigma + _bCa_bCn, _pi_bCn);
 		else
-			sigma = alt * _pi_bCn + fmodf(sigma - _bCa_bCn, _pi_bCn);
+			sigma = alt * _pi_bCn + JWF_FMOD(sigma - _bCa_bCn, _pi_bCn);
 		sinht = JWF_SINH(tau);
 		cosht = JWF_COSH(tau);
 		sins = JWF_SIN(sigma);
@@ -82,15 +80,14 @@ public:
 	}
 
 private:
-	float sqrtf_safe(float x) {
-		if (x <= 0.0f)
-			return 0.0f;
+	JWF_FLOAT sqrtf_safe(JWF_FLOAT x) {
+		if (x <= 0.0)
+			return 0.0;
 		return JWF_SQRT(x);
 	}
 
 	int num;
-	float a;
-	float _bCa, _bCn_pi, _bCa_bCn, _pi_bCn;
+	JWF_FLOAT a;
+	JWF_FLOAT _bCa, _bCn_pi, _bCa_bCn, _pi_bCn;
 };
 
-#endif // JWFVAR_BCOLLIDE_H_

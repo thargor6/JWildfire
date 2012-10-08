@@ -15,8 +15,6 @@
  02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-#ifndef JWFVAR_EYEFISH_H_
-#define JWFVAR_EYEFISH_H_
 
 #include "jwf_Variation.h"
 
@@ -30,7 +28,7 @@ public:
 	}
 
 	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
-		float r = 2.0f * pAmount / (sqrtf(pAffineTP->x * pAffineTP->x + pAffineTP->y * pAffineTP->y) + 1.0f);
+		JWF_FLOAT r = 2.0 * pAmount / (JWF_SQRT(pAffineTP->x * pAffineTP->x + pAffineTP->y * pAffineTP->y) + 1.0);
 		pVarTP->x += r * pAffineTP->x;
 		pVarTP->y += r * pAffineTP->y;
 		if (pContext->isPreserveZCoordinate) {
@@ -44,4 +42,3 @@ public:
 
 };
 
-#endif // JWFVAR_EYEFISH_H_

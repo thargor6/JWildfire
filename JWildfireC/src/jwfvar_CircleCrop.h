@@ -15,12 +15,10 @@
  02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-#include "jwf_Constants.h"
-#include "jwf_Variation.h"
 
-class PreCircleCropFunc: public Variation {
+class CircleCropFunc: public Variation {
 public:
-	PreCircleCropFunc() {
+	CircleCropFunc() {
 		radius = 1.0;
 		x = 0.0;
 		y = 0.0;
@@ -30,7 +28,7 @@ public:
 	}
 
 	const char* getName() const {
-		return "pre_circlecrop";
+		return "circlecrop";
 	}
 
 	void setParameter(char *pName, JWF_FLOAT pValue) {
@@ -61,7 +59,7 @@ public:
 		pAffineTP->x -= x0;
 		pAffineTP->y -= y0;
 
-		pAffineTP->z += vv * pAffineTP->z;
+		pVarTP->z += vv * pAffineTP->z;
 
 		JWF_FLOAT rad = JWF_SQRT(pAffineTP->x * pAffineTP->x + pAffineTP->y * pAffineTP->y);
 		JWF_FLOAT ang = JWF_ATAN2(pAffineTP->y, pAffineTP->x);
@@ -74,32 +72,32 @@ public:
 		JWF_FLOAT c = JWF_COS(ang);
 
 		if (cr0 && esc) {
-			pAffineTP->x = pAffineTP->y = 0.0;
+			pVarTP->x = pVarTP->y = 0.0;
 		}
 		else if (cr0 && !esc) {
-			pAffineTP->x += vv * pAffineTP->x + x0;
-			pAffineTP->y += vv * pAffineTP->y + y0;
+			pVarTP->x += vv * pVarTP->x + x0;
+			pVarTP->y += vv * pVarTP->y + y0;
 		}
 		else if (!cr0 && esc) {
-			pAffineTP->x += vv * rdc * c + x0;
-			pAffineTP->y += vv * rdc * s + y0;
+			pVarTP->x += vv * rdc * c + x0;
+			pVarTP->y += vv * rdc * s + y0;
 		}
 		else if (!cr0 && !esc) {
-			pAffineTP->x += vv * pAffineTP->x + x0;
-			pAffineTP->y += vv * pAffineTP->y + y0;
+			pVarTP->x += vv * pVarTP->x + x0;
+			pVarTP->y += vv * pVarTP->y + y0;
 		}
+		if (pContext->isPreserveZCoordinate) {
+			pVarTP->z += pAmount * pAffineTP->z;
+		}
+
 	}
 
 	void init(FlameTransformationContext *pContext, XForm *pXForm, JWF_FLOAT pAmount) {
-		_cA = JWF_MAX(-1.0, JWF_MIN(scatter_area, 1.0));
+		_cA = JWF_MAX(-1.0f, JWF_MIN(scatter_area, 1.0));
 	}
 
-	int const getPriority() {
-		return -1;
-	}
-
-	PreCircleCropFunc* makeCopy() {
-		return new PreCircleCropFunc(*this);
+	CircleCropFunc* makeCopy() {
+		return new CircleCropFunc(*this);
 	}
 
 private:

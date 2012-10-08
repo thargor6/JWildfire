@@ -15,16 +15,13 @@
  02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-#ifndef JWFVAR_JULIA3D_H_
-#define JWFVAR_JULIA3D_H_
-
 #include "jwf_Constants.h"
 #include "jwf_Variation.h"
 
 class Julia3DFunc: public Variation {
 public:
 	Julia3DFunc() {
-		power = 3.0f;
+		power = 3.0;
 		initParameterNames(1, "power");
 	}
 
@@ -40,19 +37,19 @@ public:
 
 	void init(FlameTransformationContext *pContext, XForm *pXForm, JWF_FLOAT pAmount) {
 		_absPower = abs(FTOI(power));
-		_cPower = (1.0f / power - 1.0f) * 0.5f;
+		_cPower = (1.0 / power - 1.0) * 0.5;
 	}
 
 	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
-		float z = pAffineTP->z / _absPower;
-		float r2d = pAffineTP->x * pAffineTP->x + pAffineTP->y * pAffineTP->y;
-		float r = pAmount * JWF_POW(r2d + z * z, _cPower);
+		JWF_FLOAT z = pAffineTP->z / _absPower;
+		JWF_FLOAT r2d = pAffineTP->x * pAffineTP->x + pAffineTP->y * pAffineTP->y;
+		JWF_FLOAT r = pAmount * JWF_POW(r2d + z * z, _cPower);
 
-		float r2 = r * JWF_SQRT(r2d);
+		JWF_FLOAT r2 = r * JWF_SQRT(r2d);
 		int rnd = (int) (pContext->randGen->random() * _absPower);
-		float angle = (atan2f(pAffineTP->y, pAffineTP->x) + 2 * M_PI * rnd) / (JWF_FLOAT) power;
-		float sina = JWF_SIN(angle);
-		float cosa = JWF_COS(angle);
+		JWF_FLOAT angle = (JWF_ATAN2(pAffineTP->y, pAffineTP->x) + 2 * M_PI * rnd) / (JWF_FLOAT) power;
+		JWF_FLOAT sina = JWF_SIN(angle);
+		JWF_FLOAT cosa = JWF_COS(angle);
 
 		pVarTP->x += r2 * cosa;
 		pVarTP->y += r2 * sina;
@@ -64,8 +61,7 @@ public:
 	}
 
 private:
-	float power;
-	float _absPower, _cPower;
+	JWF_FLOAT power;
+	JWF_FLOAT _absPower, _cPower;
 };
 
-#endif // JWFVAR_JULIA3D_H_

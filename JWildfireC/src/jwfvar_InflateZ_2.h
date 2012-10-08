@@ -15,9 +15,6 @@
  02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-#ifndef JWFVAR_INFLATEZ_2_H_
-#define JWFVAR_INFLATEZ_2_H_
-
 #include "jwf_Variation.h"
 
 class InflateZ_2Func: public Variation {
@@ -30,10 +27,10 @@ public:
 	}
 
 	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
-		float val1 = pAffineTP->y * 2.0f;
-		float val2 = pAffineTP->x * 2.0f;
-		float aval = (val1 + val2) * 0.333333f;
-		pVarTP->z += pAmount * (0.25f - aval);
+		JWF_FLOAT val1 = pAffineTP->y * 2.0;
+		JWF_FLOAT val2 = pAffineTP->x * 2.0;
+		JWF_FLOAT aval = (val1 + val2) * 0.333333;
+		pVarTP->z += pAmount * (0.25 - aval);
 	}
 
 	InflateZ_2Func* makeCopy() {
@@ -42,4 +39,3 @@ public:
 
 };
 
-#endif // JWFVAR_INFLATEZ_2_H_

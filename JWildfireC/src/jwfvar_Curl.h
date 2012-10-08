@@ -14,8 +14,6 @@
  if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-#ifndef JWFVAR_CURL_H_
-#define JWFVAR_CURL_H_
 
 #include "jwf_Constants.h"
 #include "jwf_Variation.h"
@@ -23,8 +21,8 @@
 class CurlFunc: public Variation {
 public:
 	CurlFunc() {
-		c1 = 0.0f;
-		c2 = 0.0f;
+		c1 = 0.0;
+		c2 = 0.0;
 		initParameterNames(2, "c1", "c2");
 	}
 
@@ -42,8 +40,8 @@ public:
 	}
 
 	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
-		float re = 1.0f + c1 * pAffineTP->x + c2 * (pAffineTP->x * pAffineTP->x - pAffineTP->y * pAffineTP->y);
-		float im = c1 * pAffineTP->y + c2 * 2 * pAffineTP->x * pAffineTP->y;
+		JWF_FLOAT re = 1.0 + c1 * pAffineTP->x + c2 * (pAffineTP->x * pAffineTP->x - pAffineTP->y * pAffineTP->y);
+		JWF_FLOAT im = c1 * pAffineTP->y + c2 * 2 * pAffineTP->x * pAffineTP->y;
 
 		double r = pAmount / (re * re + im * im);
 
@@ -59,8 +57,7 @@ public:
 	}
 
 private:
-	float c1;
-	float c2;
+	JWF_FLOAT c1;
+	JWF_FLOAT c2;
 };
 
-#endif // JWFVAR_CURL_H_

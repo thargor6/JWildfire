@@ -15,9 +15,6 @@
  02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-#ifndef JWFVAR_HEMISPHERE_H_
-#define JWFVAR_HEMISPHERE_H_
-
 #include "jwf_Variation.h"
 
 class HemisphereFunc: public Variation {
@@ -30,7 +27,7 @@ public:
 	}
 
 	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
-		float r = pAmount / JWF_SQRT(pAffineTP->x * pAffineTP->x + pAffineTP->y * pAffineTP->y + 1.0f);
+		JWF_FLOAT r = pAmount / JWF_SQRT(pAffineTP->x * pAffineTP->x + pAffineTP->y * pAffineTP->y + 1.0);
 		pVarTP->x += pAffineTP->x * r;
 		pVarTP->y += pAffineTP->y * r;
 		pVarTP->z += r;
@@ -42,4 +39,3 @@ public:
 
 };
 
-#endif // JWFVAR_HEMISPHERE_H_

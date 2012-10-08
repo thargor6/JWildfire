@@ -14,8 +14,6 @@
  if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-#ifndef JWFVAR_BLUR3D_H_
-#define JWFVAR_BLUR3D_H_
 
 #include "jwf_Constants.h"
 #include "jwf_Variation.h"
@@ -30,10 +28,10 @@ public:
 	}
 
 	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
-		float angle = randGen->random() * twoPi;
-		float sina = JWF_SIN(angle);
-		float cosa = JWF_COS(angle);
-		float r = pAmount * (gauss_rnd[0] + gauss_rnd[1] + gauss_rnd[2] + gauss_rnd[3] - 2.0f);
+		JWF_FLOAT angle = randGen->random() * twoPi;
+		JWF_FLOAT sina = JWF_SIN(angle);
+		JWF_FLOAT cosa = JWF_COS(angle);
+		JWF_FLOAT r = pAmount * (gauss_rnd[0] + gauss_rnd[1] + gauss_rnd[2] + gauss_rnd[3] - 2.0);
 		gauss_rnd[gauss_N] = randGen->random();
 		gauss_N = (gauss_N + 1) & 3;
 		angle = randGen->random() * M_PI;
@@ -59,10 +57,9 @@ public:
 	}
 
 private:
-	float gauss_rnd[4];
-	float twoPi;
+	JWF_FLOAT gauss_rnd[4];
+	JWF_FLOAT twoPi;
 	RandGen *randGen;
 	int gauss_N;
 };
 
-#endif // JWFVAR_BLUR3D_H_

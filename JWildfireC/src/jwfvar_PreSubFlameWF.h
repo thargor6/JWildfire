@@ -14,9 +14,6 @@
  if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-#ifndef JWFVAR_PRE_SUBFLAME_WF_H_
-#define JWFVAR_PRE_SUBFLAME_WF_H_
-
 #include "jwf_Constants.h"
 #include "jwf_Variation.h"
 #include "jwfvar_SubFlameWF.h"
@@ -49,4 +46,3 @@ public:
 
 };
 
-#endif // JWFVAR_PRE_SUBFLAME_WF_H_

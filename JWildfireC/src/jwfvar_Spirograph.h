@@ -14,8 +14,6 @@
  if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-#ifndef JWFVAR_SPIROGRAPH_H_
-#define JWFVAR_SPIROGRAPH_H_
 
 #include "jwf_Constants.h"
 #include "jwf_Variation.h"
@@ -70,10 +68,10 @@ public:
 	}
 
 	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
-		float t = (tMax - tMin) * pContext->randGen->random() + tMin;
-		float y = (yMax - yMin) * pContext->randGen->random() + yMin;
-		float x1 = (a + b) * JWF_COS(t) - c1 * JWF_COS((a + b) / b * t);
-		float y1 = (a + b) * JWF_SIN(t) - c2 * JWF_SIN((a + b) / b * t);
+		JWF_FLOAT t = (tMax - tMin) * pContext->randGen->random() + tMin;
+		JWF_FLOAT y = (yMax - yMin) * pContext->randGen->random() + yMin;
+		JWF_FLOAT x1 = (a + b) * JWF_COS(t) - c1 * JWF_COS((a + b) / b * t);
+		JWF_FLOAT y1 = (a + b) * JWF_SIN(t) - c2 * JWF_SIN((a + b) / b * t);
 		pVarTP->x += pAmount * (x1 + d * JWF_COS(t) + y);
 		pVarTP->y += pAmount * (y1 + d * JWF_SIN(t) + y);
 		if (pContext->isPreserveZCoordinate) {
@@ -86,15 +84,14 @@ public:
 	}
 
 private:
-	float a;
-	float b;
-	float d;
-	float c1;
-	float c2;
-	float tMin;
-	float tMax;
-	float yMin;
-	float yMax;
+	JWF_FLOAT a;
+	JWF_FLOAT b;
+	JWF_FLOAT d;
+	JWF_FLOAT c1;
+	JWF_FLOAT c2;
+	JWF_FLOAT tMin;
+	JWF_FLOAT tMax;
+	JWF_FLOAT yMin;
+	JWF_FLOAT yMax;
 };
 
-#endif // JWFVAR_SPIROGRAPH_H_

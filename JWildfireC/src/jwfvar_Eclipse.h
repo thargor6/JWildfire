@@ -14,8 +14,6 @@
  if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-#ifndef JWFVAR_ECLIPSE_H_
-#define JWFVAR_ECLIPSE_H_
 
 #include "jwf_Constants.h"
 #include "jwf_Variation.h"
@@ -23,7 +21,7 @@
 class EclipseFunc: public Variation {
 public:
 	EclipseFunc() {
-		shift = 0.0f;
+		shift = 0.0;
 		initParameterNames(1, "shift");
 	}
 
@@ -39,10 +37,10 @@ public:
 
 	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
 		if (fabsf(pAffineTP->y) <= pAmount) {
-			float c_2 = JWF_SQRT(pAmount * pAmount - pAffineTP->y * pAffineTP->y);
+			JWF_FLOAT c_2 = JWF_SQRT(pAmount * pAmount - pAffineTP->y * pAffineTP->y);
 			if (fabsf(pAffineTP->x) <= c_2) {
 				double x = pAffineTP->x + shift * pAmount;
-				if (fabsf(x) >= c_2) {
+				if (JWF_FABS(x) >= c_2) {
 					pVarTP->x -= pAmount * pAffineTP->x;
 				}
 				else {
@@ -68,7 +66,6 @@ public:
 	}
 
 private:
-	float shift;
+	JWF_FLOAT shift;
 };
 
-#endif // JWFVAR_ECLIPSE_H_

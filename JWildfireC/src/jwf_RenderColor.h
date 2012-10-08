@@ -18,9 +18,9 @@
 #define __JWF_RENDER_COLOR_H__
 
 struct RenderColor {
-	float red;
-	float green;
-	float blue;
+	JWF_FLOAT red;
+	JWF_FLOAT green;
+	JWF_FLOAT blue;
 };
 
 #endif // __JWF_RENDER_COLOR_H__

@@ -15,8 +15,6 @@
  02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-#ifndef JWFVAR_SINUSOIDAL_H_
-#define JWFVAR_SINUSOIDAL_H_
 
 #include "jwf_Variation.h"
 
@@ -43,4 +41,3 @@ public:
 
 };
 
-#endif // JWFVAR_SINUSOIDAL_H_

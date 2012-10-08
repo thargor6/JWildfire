@@ -14,8 +14,6 @@
  if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-#ifndef JWFVAR_EPISPIRAL_WF_H_
-#define JWFVAR_EPISPIRAL_WF_H_
 
 #include "jwf_Constants.h"
 #include "jwf_Variation.h"
@@ -23,7 +21,7 @@
 class EpispiralWFFunc: public Variation {
 public:
 	EpispiralWFFunc() {
-		waves = 4.0f;
+		waves = 4.0;
 		initParameterNames(1, "waves");
 	}
 
@@ -38,11 +36,15 @@ public:
 	}
 
 	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
-		float a = atan2f(pAffineTP->x, pAffineTP->y);
-		float r = JWF_SQRT(pAffineTP->x * pAffineTP->x + pAffineTP->y * pAffineTP->y);
-		r = 0.5 / JWF_COS(waves * a);
-		float nx = JWF_SIN(a) * r;
-		float ny = JWF_COS(a) * r;
+		JWF_FLOAT a = JWF_ATAN2(pAffineTP->x, pAffineTP->y);
+		JWF_FLOAT r = JWF_SQRT(pAffineTP->x * pAffineTP->x + pAffineTP->y * pAffineTP->y);
+		JWF_FLOAT d = JWF_COS(waves * a);
+		if(d==0) {
+			return;
+		}
+		r = 0.5 / d;
+		JWF_FLOAT nx = JWF_SIN(a) * r;
+		JWF_FLOAT ny = JWF_COS(a) * r;
 		pVarTP->x += pAmount * nx;
 		pVarTP->y += pAmount * ny;
 		if (pContext->isPreserveZCoordinate) {
@@ -55,7 +57,6 @@ public:
 	}
 
 private:
-	float waves;
+	JWF_FLOAT waves;
 };
 
-#endif // JWFVAR_EPISPIRAL_WF_H_

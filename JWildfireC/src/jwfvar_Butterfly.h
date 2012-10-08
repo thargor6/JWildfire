@@ -15,8 +15,6 @@
  02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-#ifndef JWFVAR_BUTTERFLY_H_
-#define JWFVAR_BUTTERFLY_H_
 
 #include "jwf_Constants.h"
 #include "jwf_Variation.h"
@@ -31,10 +29,10 @@ public:
 	}
 
 	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
-		float wx = pAmount * 1.3029400317411197908970256609023f;
+		JWF_FLOAT wx = pAmount * 1.3029400317411197908970256609023;
 
-		float y2 = pAffineTP->y * 2.0;
-		float r = wx * JWF_SQRT(fabs(pAffineTP->y * pAffineTP->x) / (EPSILON + pAffineTP->x * pAffineTP->x + y2 * y2));
+		JWF_FLOAT y2 = pAffineTP->y * 2.0;
+		JWF_FLOAT r = wx * JWF_SQRT(JWF_FABS(pAffineTP->y * pAffineTP->x) / (EPSILON + pAffineTP->x * pAffineTP->x + y2 * y2));
 		pVarTP->x += r * pAffineTP->x;
 		pVarTP->y += r * y2;
 		if (pContext->isPreserveZCoordinate) {
@@ -48,4 +46,3 @@ public:
 
 };
 
-#endif // JWFVAR_BUTTERFLY_H_

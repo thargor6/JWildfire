@@ -14,8 +14,6 @@
  if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-#ifndef JWFVAR_SPLITS_H_
-#define JWFVAR_SPLITS_H_
 
 #include "jwf_Constants.h"
 #include "jwf_Variation.h"
@@ -23,8 +21,8 @@
 class SplitsFunc: public Variation {
 public:
 	SplitsFunc() {
-		x = 0.40f;
-		y = 0.60f;
+		x = 0.40;
+		y = 0.60;
 		initParameterNames(2, "x", "y");
 	}
 
@@ -42,14 +40,14 @@ public:
 	}
 
 	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
-		if (pAffineTP->x >= 0.0f) {
+		if (pAffineTP->x >= 0.0) {
 			pVarTP->x += pAmount * (pAffineTP->x + x);
 		}
 		else {
 			pVarTP->x += pAmount * (pAffineTP->x - x);
 		}
 
-		if (pAffineTP->y >= 0.0f) {
+		if (pAffineTP->y >= 0.0) {
 			pVarTP->y += pAmount * (pAffineTP->y + y);
 		}
 		else {
@@ -65,8 +63,7 @@ public:
 	}
 
 private:
-	float x;
-	float y;
+	JWF_FLOAT x;
+	JWF_FLOAT y;
 };
 
-#endif // JWFVAR_SPLITS_H_

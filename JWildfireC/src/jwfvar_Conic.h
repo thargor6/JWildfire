@@ -14,8 +14,6 @@
  if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-#ifndef JWFVAR_CONIC_H_
-#define JWFVAR_CONIC_H_
 
 #include "jwf_Constants.h"
 #include "jwf_Variation.h"
@@ -23,8 +21,8 @@
 class ConicFunc: public Variation {
 public:
 	ConicFunc() {
-		eccentricity = 1.0f;
-		holes = 0.0f;
+		eccentricity = 1.0;
+		holes = 0.0;
 		initParameterNames(2, "eccentricity", "holes");
 	}
 
@@ -43,7 +41,7 @@ public:
 
 	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
 		double ct = pAffineTP->x / pAffineTP->getPrecalcSqrt();
-		double r = pAmount * (pContext->randGen->random() - holes) * eccentricity / (1.0f + eccentricity * ct) / pAffineTP->getPrecalcSqrt();
+		double r = pAmount * (pContext->randGen->random() - holes) * eccentricity / (1.0 + eccentricity * ct) / pAffineTP->getPrecalcSqrt();
 		pVarTP->x += r * pAffineTP->x;
 		pVarTP->y += r * pAffineTP->y;
 		if (pContext->isPreserveZCoordinate) {
@@ -56,8 +54,7 @@ public:
 	}
 
 private:
-	float eccentricity;
-	float holes;
+	JWF_FLOAT eccentricity;
+	JWF_FLOAT holes;
 };
 
-#endif // JWFVAR_CONIC_H_

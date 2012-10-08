@@ -14,8 +14,6 @@
  if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-#ifndef JWFVAR_CPOW_H_
-#define JWFVAR_CPOW_H_
 
 #include "jwf_Constants.h"
 #include "jwf_Variation.h"
@@ -23,9 +21,9 @@
 class CPowFunc: public Variation {
 public:
 	CPowFunc() {
-		r = 1.0f;
-		i = 0.1f;
-		power = 1.5f;
+		r = 1.0;
+		i = 0.1;
+		power = 1.5;
 		initParameterNames(3, "r", "i", "power");
 	}
 
@@ -46,16 +44,16 @@ public:
 	}
 
 	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
-		float a = pAffineTP->getPrecalcAtanYX();
-		float lnr = 0.5f * JWF_LOG(pAffineTP->getPrecalcSumsq());
-		float va = 2.0f * M_PI / power;
-		float vc = r / power;
-		float vd = i / power;
-		float ang = vc * a + vd * lnr + va * floor(power * pContext->randGen->random());
+		JWF_FLOAT a = pAffineTP->getPrecalcAtanYX();
+		JWF_FLOAT lnr = 0.5 * JWF_LOG(pAffineTP->getPrecalcSumsq());
+		JWF_FLOAT va = 2.0 * M_PI / power;
+		JWF_FLOAT vc = r / power;
+		JWF_FLOAT vd = i / power;
+		JWF_FLOAT ang = vc * a + vd * lnr + va * JWF_FLOOR((JWF_FLOAT)(power * pContext->randGen->random()));
 
-		float m = pAmount * JWF_EXP(vc * lnr - vd * a);
-		float sa = JWF_SIN(ang);
-		float ca = JWF_COS(ang);
+		JWF_FLOAT m = pAmount * JWF_EXP(vc * lnr - vd * a);
+		JWF_FLOAT sa = JWF_SIN(ang);
+		JWF_FLOAT ca = JWF_COS(ang);
 
 		pVarTP->x += m * ca;
 		pVarTP->y += m * sa;
@@ -69,9 +67,8 @@ public:
 	}
 
 private:
-	float r;
-	float i;
-	float power;
+	JWF_FLOAT r;
+	JWF_FLOAT i;
+	JWF_FLOAT power;
 };
 
-#endif // JWFVAR_CPOW_H_

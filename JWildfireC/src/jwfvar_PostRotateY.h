@@ -15,8 +15,6 @@
  02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-#ifndef JWFVAR_POST_ROTATE_Y_H_
-#define JWFVAR_POST_ROTATE_Y_H_
 #include "jwf_Constants.h"
 #include "jwf_Variation.h"
 
@@ -34,9 +32,9 @@ public:
 	}
 
 	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
-		float sina = JWF_SIN(pAmount * M_PI * 0.5f);
-		float cosa = JWF_COS(pAmount * M_PI * 0.5f);
-		float x = cosa * pVarTP->x - sina * pVarTP->z;
+		JWF_FLOAT sina = JWF_SIN(pAmount * M_PI * 0.5);
+		JWF_FLOAT cosa = JWF_COS(pAmount * M_PI * 0.5);
+		JWF_FLOAT x = cosa * pVarTP->x - sina * pVarTP->z;
 		pVarTP->z = sina * pVarTP->x + cosa * pVarTP->z;
 		pVarTP->x = x;
 	}
@@ -47,4 +45,3 @@ public:
 
 };
 
-#endif // JWFVAR_POST_ROTATE_Y_H_

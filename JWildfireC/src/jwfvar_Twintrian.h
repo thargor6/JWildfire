@@ -15,9 +15,6 @@
  02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-#ifndef JWFVAR_TWINTRIAN_H_
-#define JWFVAR_TWINTRIAN_H_
-
 #include "jwf_Variation.h"
 
 class TwintrianFunc: public Variation {
@@ -30,14 +27,14 @@ public:
 	}
 
 	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
-		float r = pContext->randGen->random() * pAmount * pAffineTP->getPrecalcSqrt();
+		JWF_FLOAT r = pContext->randGen->random() * pAmount * pAffineTP->getPrecalcSqrt();
 
-		float sinr = JWF_SIN(r);
-		float cosr = JWF_COS(r);
-		float diff = JWF_LOG10(sinr * sinr) + cosr;
+		JWF_FLOAT sinr = JWF_SIN(r);
+		JWF_FLOAT cosr = JWF_COS(r);
+		JWF_FLOAT diff = JWF_LOG10(sinr * sinr) + cosr;
 
-		if (fabsf(diff) < EPSILON) {
-			diff = -30.0f;
+		if (JWF_FABS(diff) < EPSILON) {
+			diff = -30.0;
 		}
 
 		pVarTP->x += pAmount * pAffineTP->x * diff;
@@ -53,4 +50,3 @@ public:
 
 };
 
-#endif // JWFVAR_TWINTRIAN_H_

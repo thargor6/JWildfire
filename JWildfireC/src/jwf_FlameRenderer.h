@@ -40,7 +40,7 @@ struct FlameRenderer {
 	RasterPoint **raster;
 	// init in createColorMap
 	RenderColor *colorMap;
-	FLOAT paletteIdxScl;
+	JWF_FLOAT paletteIdxScl;
 	FlameTransformationContext *flameTransformationContext;
 	RenderInfo *renderInfo;
 	FlameView *flameView;
@@ -135,20 +135,20 @@ struct FlameRenderer {
 		hostMalloc((void**) &logDensityPnt, sizeof(LogDensityPoint));
 
 		bool newShit = true;
-		FLOAT minDensity, maxDensity, avgDensity;
+		JWF_FLOAT minDensity, maxDensity, avgDensity;
 
 		if (pImage != NULL) {
 			logDensityFilter->setRaster(raster, rasterWidth, rasterHeight, pImage->imageWidth, pImage->imageHeight);
-			if (newShit) {
-				logDensityFilter->calcDensity(&minDensity, &maxDensity, &avgDensity);
-				printf("AVG DENSITY: %f (%f...%f)\n", avgDensity, minDensity, maxDensity);
-			}
 		}
 		else if (pHDRImage != NULL) {
 			logDensityFilter->setRaster(raster, rasterWidth, rasterHeight, pHDRImage->imageWidth, pHDRImage->imageHeight);
 		}
 		else if (pHDRIntensityMap != NULL) {
 			logDensityFilter->setRaster(raster, rasterWidth, rasterHeight, pHDRIntensityMap->imageWidth, pHDRIntensityMap->imageHeight);
+		}
+		if (newShit) {
+			logDensityFilter->calcDensity(&minDensity, &maxDensity, &avgDensity);
+			printf("AVG DENSITY: %f (%f...%f)\n", avgDensity, minDensity, maxDensity);
 		}
 
 		if (pImage != NULL) {
@@ -179,10 +179,15 @@ struct FlameRenderer {
 				BOOLEAN *bgMap;
 				hostMalloc((void**) &bgMap, pHDRImage->imageWidth * pHDRImage->imageHeight * sizeof(BOOLEAN));
 				memset(bgMap, 0, pHDRImage->imageWidth * pHDRImage->imageHeight * sizeof(BOOLEAN));
-				FLOAT minLum = FLT_MAX, maxLum = 0.0;
+				JWF_FLOAT minLum = FLT_MAX, maxLum = 0.0;
 				for (int i = 0; i < pHDRImage->imageHeight; i++) {
 					for (int j = 0; j < pHDRImage->imageWidth; j++) {
-						logDensityFilter->transformPointHDR(logDensityPnt, j, i);
+						if (newShit) {
+						  logDensityFilter->transformPointHDRNewShit(logDensityPnt, j, i, maxDensity);
+						}
+						else {
+							logDensityFilter->transformPointHDR(logDensityPnt, j, i);
+						}
 						gammaCorrectionFilter->transformPointHDR(logDensityPnt, rbgPoint);
 						if (rbgPoint->red < 0.0f) {
 							bgMap[i * pHDRImage->imageWidth + j] = TRUE;
@@ -190,7 +195,7 @@ struct FlameRenderer {
 						}
 						else {
 							pHDRImage->setRGB(j, i, rbgPoint->red, rbgPoint->green, rbgPoint->blue);
-							FLOAT lum = (rbgPoint->red * 0.299 + rbgPoint->green * 0.588 + rbgPoint->blue * 0.113);
+							JWF_FLOAT lum = (rbgPoint->red * 0.299 + rbgPoint->green * 0.588 + rbgPoint->blue * 0.113);
 							if (lum > maxLum) {
 								maxLum = lum;
 							}
@@ -201,10 +206,10 @@ struct FlameRenderer {
 					}
 				}
 				if (setBG) {
-					FLOAT weight = (FLOAT) (0.25 * (maxLum + 3.0 * minLum));
-					FLOAT bgRed = (FLOAT) (gammaCorrectionFilter->bgRedDouble * weight);
-					FLOAT bgGreen = (FLOAT) (gammaCorrectionFilter->bgGreenDouble * weight);
-					FLOAT bgBlue = (FLOAT) (gammaCorrectionFilter->bgBlueDouble * weight);
+					JWF_FLOAT weight = (JWF_FLOAT) (0.25 * (maxLum + 3.0 * minLum));
+					JWF_FLOAT bgRed = (JWF_FLOAT) (gammaCorrectionFilter->bgRedDouble * weight);
+					JWF_FLOAT bgGreen = (JWF_FLOAT) (gammaCorrectionFilter->bgGreenDouble * weight);
+					JWF_FLOAT bgBlue = (JWF_FLOAT) (gammaCorrectionFilter->bgBlueDouble * weight);
 					for (int i = 0; i < pHDRImage->imageHeight; i++) {
 						for (int j = 0; j < pHDRImage->imageWidth; j++) {
 							if (bgMap[i * pHDRImage->imageWidth + j]) {
@@ -218,7 +223,12 @@ struct FlameRenderer {
 			else {
 				for (int i = 0; i < pHDRImage->imageHeight; i++) {
 					for (int j = 0; j < pHDRImage->imageWidth; j++) {
-						logDensityFilter->transformPointHDR(logDensityPnt, j, i);
+						if(newShit) {
+						  logDensityFilter->transformPointHDRNewShit(logDensityPnt, j, i, maxDensity);
+						}
+						else {
+							logDensityFilter->transformPointHDR(logDensityPnt, j, i);
+						}
 						gammaCorrectionFilter->transformPointHDR(logDensityPnt, rbgPoint);
 						pHDRImage->setRGB(j, i, rbgPoint->red, rbgPoint->green, rbgPoint->blue);
 					}
@@ -232,7 +242,7 @@ struct FlameRenderer {
 			for (int i = 0; i < pHDRIntensityMap->imageHeight; i++) {
 				for (int j = 0; j < pHDRIntensityMap->imageWidth; j++) {
 					logDensityFilter->transformPointHDR(logDensityPnt, j, i);
-					pHDRIntensityMap->setRGB(j, i, (FLOAT) logDensityPnt->intensity, (FLOAT) logDensityPnt->intensity, (FLOAT) logDensityPnt->intensity);
+					pHDRIntensityMap->setRGB(j, i, (JWF_FLOAT) logDensityPnt->intensity, (JWF_FLOAT) logDensityPnt->intensity, (JWF_FLOAT) logDensityPnt->intensity);
 				}
 			}
 		}
@@ -283,8 +293,8 @@ struct FlameRenderer {
 		createColorMap();
 		flameView->initView(imageWidth, imageHeight, borderWidth, maxBorderWidth, rasterWidth, rasterHeight);
 		flame->prepareFlame(flameTransformationContext, threadCount);
-		long nSamples = (long) ((double) flame->sampleDensity * (double) rasterSize / ((double) threadCount * (double) pRenderInfo->bundleSize) + 0.5);
-		printf("SAMPLES: %ld (%d threads)\n", nSamples * (long) threadCount, threadCount);
+		double nSamples = ((double) flame->sampleDensity * (double) rasterSize / ((double) threadCount * (double) pRenderInfo->bundleSize) + 0.5);
+		printf("SAMPLES: %fd (%d threads)\n", nSamples * (double) threadCount, threadCount);
 
 		if (threadCount == 1) {
 			FlameRenderThread thread;
@@ -338,7 +348,7 @@ struct FlameRenderer {
 
 	void createColorMap() {
 		colorMap = flame->palette->createRenderPalette(flame->whiteLevel);
-		paletteIdxScl = (FLOAT) flame->palette->getSize() - 1.0;
+		paletteIdxScl = (JWF_FLOAT) flame->palette->getSize() - 1.0;
 	}
 
 };

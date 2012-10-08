@@ -15,9 +15,6 @@
  02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-#ifndef JWFVAR_HEART_H_
-#define JWFVAR_HEART_H_
-
 #include "jwf_Variation.h"
 
 class HeartFunc: public Variation {
@@ -30,10 +27,10 @@ public:
 	}
 
 	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
-		float r = JWF_SQRT(pAffineTP->x * pAffineTP->x + pAffineTP->y * pAffineTP->y);
-		float angle = pAffineTP->getPrecalcAtan();
-		float sinr = JWF_SIN(r * angle);
-		float cosr = JWF_COS(r * angle);
+		JWF_FLOAT r = JWF_SQRT(pAffineTP->x * pAffineTP->x + pAffineTP->y * pAffineTP->y);
+		JWF_FLOAT angle = pAffineTP->getPrecalcAtan();
+		JWF_FLOAT sinr = JWF_SIN(r * angle);
+		JWF_FLOAT cosr = JWF_COS(r * angle);
 		r *= pAmount;
 		pVarTP->x += r * sinr;
 		pVarTP->y -= r * cosr;
@@ -48,4 +45,3 @@ public:
 
 };
 
-#endif // JWFVAR_HEART_H_

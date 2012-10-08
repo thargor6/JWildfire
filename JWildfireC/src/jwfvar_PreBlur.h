@@ -15,8 +15,6 @@
  02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-#ifndef JWFVAR_PRE_BLUR_H_
-#define JWFVAR_PRE_BLUR_H_
 
 #include "jwf_Constants.h"
 #include "jwf_Variation.h"
@@ -43,10 +41,10 @@ public:
 	}
 
 	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
-		float r = pContext->randGen->random() * 2 * M_PI;
-		float sina = JWF_SIN(r);
-		float cosa = JWF_COS(r);
-		r = pAmount * (_gauss_rnd[0] + _gauss_rnd[1] + _gauss_rnd[2] + _gauss_rnd[3] - 2.0f);
+		JWF_FLOAT r = pContext->randGen->random() * 2 * M_PI;
+		JWF_FLOAT sina = JWF_SIN(r);
+		JWF_FLOAT cosa = JWF_COS(r);
+		r = pAmount * (_gauss_rnd[0] + _gauss_rnd[1] + _gauss_rnd[2] + _gauss_rnd[3] - 2.0);
 		_gauss_rnd[_gauss_N] = pContext->randGen->random();
 		_gauss_N = (_gauss_N + 1) & 3;
 		pAffineTP->x += r * cosa;
@@ -58,8 +56,7 @@ public:
 	}
 
 private:
-	float _gauss_rnd[4];
+	JWF_FLOAT _gauss_rnd[4];
 	int _gauss_N;
 };
 
-#endif // JWFVAR_PRE_BLUR_H_

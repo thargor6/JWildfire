@@ -53,38 +53,8 @@
 #include "jwf_FlameUtil.h"
 #include "jwf_FlameRenderer.h"
 #include "jwf_PPMWriter.h"
+#include "jwf_HDRWriter.h"
 #include "jwf_Flam3Reader.h"
-
-#include "jwfvar_Bipolar.h"
-#include "jwfvar_Bubble.h"
-#include "jwfvar_Cross.h"
-#include "jwfvar_Cylinder.h"
-#include "jwfvar_Elliptic.h"
-#include "jwfvar_Epispiral.h"
-#include "jwfvar_EpispiralWF.h"
-#include "jwfvar_Eyefish.h"
-#include "jwfvar_Flower.h"
-#include "jwfvar_Flux.h"
-#include "jwfvar_GaussianBlur.h"
-#include "jwfvar_Julia3D.h"
-#include "jwfvar_JuliaN.h"
-#include "jwfvar_Linear3D.h"
-#include "jwfvar_Lissajous.h"
-#include "jwfvar_Log.h"
-#include "jwfvar_Pie.h"
-#include "jwfvar_Pie3D.h"
-#include "jwfvar_PreBlur.h"
-#include "jwfvar_PreCircleCrop.h"
-#include "jwfvar_RadialBlur.h"
-#include "jwfvar_Spherical.h"
-#include "jwfvar_Spherical3D.h"
-#include "jwfvar_Splits.h"
-#include "jwfvar_Unpolar.h"
-#include "jwfvar_Waves2.h"
-#include "jwfvar_Waves4WF.h"
-#include "jwfvar_ZCone.h"
-#include "jwfvar_ZScale.h"
-#include "jwfvar_ZTranslate.h"
 
 int renderFlame(AppSettings *pAppSettings) {
 	Flam3Reader *reader = new Flam3Reader();
@@ -113,12 +83,13 @@ int renderFlame(AppSettings *pAppSettings) {
 	}
 
 	hostFlame->sampleDensity = pAppSettings->getSampleDensity();
-	hostFlame->spatialFilterRadius = pAppSettings->getFilterRadius();
+	// TODO remove option
+	//hostFlame->spatialFilterRadius = pAppSettings->getFilterRadius();
 
-	info.renderHDR = FALSE;
+	info.renderHDR =  (pAppSettings->getOutputHDRFilename()!=NULL && strlen(pAppSettings->getOutputHDRFilename())>0) ? TRUE :  FALSE;
 	info.renderHDRIntensityMap = FALSE;
 
-	boolean usePool = true;
+	boolean usePool = hostFlame->sampleDensity > 150.0;
 	for (int i = 0; i < hostFlame->xFormCount; i++) {
 		XForm *xForm = hostFlame->xForms[i];
 		for (int j = 0; j < hostFlame->xFormCount; j++) {
@@ -130,7 +101,7 @@ int renderFlame(AppSettings *pAppSettings) {
 	}
 	hostFlame->dump();
 
-	//usePool=false;
+	usePool=false;
 
 	if (usePool == true) {
 		info.poolSize = 1024;
@@ -146,13 +117,18 @@ int renderFlame(AppSettings *pAppSettings) {
 	RenderedFlame *res = renderer.renderFlame(&info);
 	clock_t end = clock();
 	FLOAT elapsed_secs = (FLOAT) (end - begin) / CLOCKS_PER_SEC;
-	// TODO: option
 
 	printf("Elapsed render time %3.1f s\n", elapsed_secs);
+	if(res->image!=NULL && pAppSettings->getOutputFilename()!=NULL && strlen(pAppSettings->getOutputFilename())>0) {
+	  PPMWriter *writer=new PPMWriter();
+	  writer->writeImage(pAppSettings->getOutputFilename(), res->image);
+	}
+	if(res->hdrImage!=NULL && pAppSettings->getOutputHDRFilename()!=NULL && strlen(pAppSettings->getOutputHDRFilename())>0) {
+	  HDRWriter *writer=new HDRWriter();
+	  writer->writeImage(pAppSettings->getOutputHDRFilename(), res->hdrImage);
+	}
 
-	PPMWriter writer;
-	// TODO option:
-	writer.writeImage("C:\\TMP\\CUDA.ppm", res->image);
+
 	freeHostFlame(hostFlame);
 	return 0;
 }
@@ -166,7 +142,6 @@ int jwf_main(int argc, char *argv[]) {
 		return -1;
 	}
 	appSettings->dump();
-	//testHost1000Flame();
 	return renderFlame(appSettings);
 }
 

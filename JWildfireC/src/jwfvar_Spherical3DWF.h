@@ -14,8 +14,6 @@
  if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-#ifndef JWFVAR_SPHERICAL3D_WF_H_
-#define JWFVAR_SPHERICAL3D_WF_H_
 
 #include "jwf_Constants.h"
 #include "jwf_Variation.h"
@@ -23,8 +21,8 @@
 class Spherical3DWFFunc: public Variation {
 public:
 	Spherical3DWFFunc() {
-		invert = 0.0f;
-		exponent = 2.0f;
+		invert = 0.0;
+		exponent = 2.0;
 		initParameterNames(2, "invert", "exponent");
 	}
 
@@ -42,12 +40,12 @@ public:
 	}
 
 	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
-		float r;
+		JWF_FLOAT r;
 		if (_regularForm) {
 			r = pAmount / (pAffineTP->x * pAffineTP->x + pAffineTP->y * pAffineTP->y + pAffineTP->z * pAffineTP->z + EPSILON);
 		}
 		else {
-			r = pAmount / JWF_POW(pAffineTP->x * pAffineTP->x + pAffineTP->y * pAffineTP->y + pAffineTP->z * pAffineTP->z + EPSILON, exponent / 2.0f);
+			r = pAmount / JWF_POW(pAffineTP->x * pAffineTP->x + pAffineTP->y * pAffineTP->y + pAffineTP->z * pAffineTP->z + EPSILON, exponent / 2.0);
 		}
 		if (_dontInvert) {
 			pVarTP->x += pAffineTP->x * r;
@@ -62,7 +60,7 @@ public:
 	}
 
 	void init(FlameTransformationContext *pContext, XForm *pXForm, JWF_FLOAT pAmount) {
-		_regularForm = JWF_FABS(exponent - 2.0f) < EPSILON;
+		_regularForm = JWF_FABS(exponent - 2.0) < EPSILON;
 		_dontInvert = JWF_FABS(invert) < EPSILON;
 	}
 
@@ -71,11 +69,10 @@ public:
 	}
 
 private:
-	float invert;
-	float exponent;
+	JWF_FLOAT invert;
+	JWF_FLOAT exponent;
 
 	bool _dontInvert;
 	bool _regularForm;
 };
 
-#endif // JWFVAR_SPHERICAL3D_WF_H_

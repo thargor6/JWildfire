@@ -15,8 +15,6 @@
  02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-#ifndef JWFVAR_GLYNNIA_H_
-#define JWFVAR_GLYNNIA_H_
 
 #include "jwf_Variation.h"
 
@@ -30,11 +28,11 @@ public:
 	}
 
 	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
-		float r = JWF_SQRT(pAffineTP->x * pAffineTP->x + pAffineTP->y * pAffineTP->y);
-		float d;
+		JWF_FLOAT r = JWF_SQRT(pAffineTP->x * pAffineTP->x + pAffineTP->y * pAffineTP->y);
+		JWF_FLOAT d;
 
-		if (r >= 1.0f) {
-			if (pContext->randGen->random() > 0.5f) {
+		if (r >= 1.0) {
+			if (pContext->randGen->random() > 0.5) {
 				d = JWF_SQRT(r + pAffineTP->x);
 				if (d == 0) {
 					return;
@@ -44,7 +42,7 @@ public:
 			}
 			else {
 				d = r + pAffineTP->x;
-				float dx = JWF_SQRT(r * (pAffineTP->y * pAffineTP->y + d * d));
+				JWF_FLOAT dx = JWF_SQRT(r * (pAffineTP->y * pAffineTP->y + d * d));
 				if (dx == 0) {
 					return;
 				}
@@ -54,7 +52,7 @@ public:
 			}
 		}
 		else {
-			if (pContext->randGen->random() > 0.5f) {
+			if (pContext->randGen->random() > 0.5) {
 				d = JWF_SQRT(r + pAffineTP->x);
 				if (d == 0) {
 					return;
@@ -64,7 +62,7 @@ public:
 			}
 			else {
 				d = r + pAffineTP->x;
-				float dx = JWF_SQRT(r * (pAffineTP->y * pAffineTP->y + d * d));
+				JWF_FLOAT dx = JWF_SQRT(r * (pAffineTP->y * pAffineTP->y + d * d));
 				if (dx == 0) {
 					return;
 				}
@@ -83,11 +81,10 @@ public:
 	}
 
 	virtual void init(FlameTransformationContext *pContext, XForm *pXForm, JWF_FLOAT pAmount) {
-		_vvar2 = pAmount * JWF_SQRT(2.0f) / 2.0f;
+		_vvar2 = pAmount * JWF_SQRT(2.0f) / 2.0;
 	}
 
 private:
-	float _vvar2;
+	JWF_FLOAT _vvar2;
 };
 
-#endif // JWFVAR_GLYNNIA_H_

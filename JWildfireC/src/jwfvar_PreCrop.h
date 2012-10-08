@@ -14,8 +14,6 @@
  if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-#ifndef JWFVAR_PRE_CROP_H_
-#define JWFVAR_PRE_CROP_H_
 
 #include "jwf_Constants.h"
 #include "jwf_Variation.h"
@@ -23,11 +21,11 @@
 class PreCropFunc: public Variation {
 public:
 	PreCropFunc() {
-		left = -1.0f;
-		top = 1.0f;
-		right = 1.0f;
-		bottom = 1.0f;
-		scatter_area = 0.0f;
+		left = -1.0;
+		top = 1.0;
+		right = 1.0;
+		bottom = 1.0;
+		scatter_area = 0.0;
 		zero = 0;
 		initParameterNames(6, "left", "top", "right", "bottom", "scatter_area", "zero");
 	}
@@ -58,10 +56,10 @@ public:
 	}
 
 	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
-		float x = pAffineTP->x;
-		float y = pAffineTP->y;
+		JWF_FLOAT x = pAffineTP->x;
+		JWF_FLOAT y = pAffineTP->y;
 		if (((x < _xmin) || (x > _xmax) || (y < _ymin) || (y > _ymax)) && (zero != 0)) {
-			x = y = 0.0f;
+			x = y = 0.0;
 		}
 		else {
 			if (x < _xmin)
@@ -78,18 +76,12 @@ public:
 	}
 
 	void init(FlameTransformationContext *pContext, XForm *pXForm, JWF_FLOAT pAmount) {
-#undef min
-#undef max
-#define min(a,b) (((a)<(b))?(a):(b))
-#define max(a,b) (((a)>(b))?(a):(b))
-		_xmin = min(left, right);
-		_ymin = min(top, bottom);
-		_xmax = max(left, right);
-		_ymax = max(top, bottom);
+		_xmin = JWF_MIN(left, right);
+		_ymin = JWF_MIN(top, bottom);
+		_xmax = JWF_MAX(left, right);
+		_ymax = JWF_MAX(top, bottom);
 		_w = (_xmax - _xmin) * 0.5 * scatter_area;
 		_h = (_ymax - _ymin) * 0.5 * scatter_area;
-#undef max
-#undef min
 	}
 
 	int const getPriority() {
@@ -101,15 +93,14 @@ public:
 	}
 
 private:
-	float left;
-	float right;
-	float top;
-	float bottom;
-	float scatter_area;
+	JWF_FLOAT left;
+	JWF_FLOAT right;
+	JWF_FLOAT top;
+	JWF_FLOAT bottom;
+	JWF_FLOAT scatter_area;
 	bool zero;
 
-	float _xmin, _xmax, _ymin, _ymax, _w, _h;
+	JWF_FLOAT _xmin, _xmax, _ymin, _ymax, _w, _h;
 
 };
 
-#endif // JWFVAR_PRE_CROP_H_

@@ -15,8 +15,6 @@
  02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-#ifndef JWFVAR_SECH_H_
-#define JWFVAR_SECH_H_
 
 #include "jwf_Variation.h"
 
@@ -30,15 +28,15 @@ public:
 	}
 
 	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
-		float sechsin = JWF_SIN(pAffineTP->y);
-		float sechcos = JWF_COS(pAffineTP->y);
-		float sechsinh = JWF_SINH(pAffineTP->x);
-		float sechcosh = JWF_COSH(pAffineTP->x);
-		double d = (cosf(2.0f * pAffineTP->y) + JWF_COSH(2.0f * pAffineTP->x));
+		JWF_FLOAT sechsin = JWF_SIN(pAffineTP->y);
+		JWF_FLOAT sechcos = JWF_COS(pAffineTP->y);
+		JWF_FLOAT sechsinh = JWF_SINH(pAffineTP->x);
+		JWF_FLOAT sechcosh = JWF_COSH(pAffineTP->x);
+		JWF_FLOAT d = (JWF_COS(2.0 * pAffineTP->y) + JWF_COSH(2.0 * pAffineTP->x));
 		if (d == 0) {
 			return;
 		}
-		float sechden = 2.0f / d;
+		JWF_FLOAT sechden = 2.0 / d;
 		pVarTP->x += pAmount * sechden * sechcos * sechcosh;
 		pVarTP->y -= pAmount * sechden * sechsin * sechsinh;
 		if (pContext->isPreserveZCoordinate) {
@@ -52,4 +50,3 @@ public:
 
 };
 
-#endif // JWFVAR_SECH_H_

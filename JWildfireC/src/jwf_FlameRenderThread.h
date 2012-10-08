@@ -22,13 +22,13 @@
 struct FlameRenderThread {
 	Flame *flame;
 	FlameTransformationContext *ctx;
-	long samples;
+	double samples;
 	FlameView *flameView;
 	RasterPoint **raster;
 	int rasterWidth;
 	int rasterHeight;
 	RenderColor *colorMap;
-	FLOAT paletteIdxScl;
+	JWF_FLOAT paletteIdxScl;
 	int poolSize;
 	int bundleSize;
 	//
@@ -41,15 +41,15 @@ struct FlameRenderThread {
 	XYZPoint *varTArray;
 	XYZPoint *pArray;
 	XYZPoint *qArray;
-	FLOAT *pxArray, *pyArray;
+	JWF_FLOAT *pxArray, *pyArray;
 	bool *pValidArray;
 	int *bundle;
 
 	XForm *xf;
-	long startIter;
+	double startIter;
 
-	void init(Flame *pFlame, FlameTransformationContext *pCtx, long pSamples, FlameView *pFlameView, RasterPoint **pRaster, int pRasterWidth, int pRasterHeight,
-			RenderColor *pColorMap, FLOAT pPaletteIdxScl, int pPoolSize, int pBundleSize) {
+	void init(Flame *pFlame, FlameTransformationContext *pCtx, double pSamples, FlameView *pFlameView, RasterPoint **pRaster, int pRasterWidth, int pRasterHeight,
+			RenderColor *pColorMap, JWF_FLOAT pPaletteIdxScl, int pPoolSize, int pBundleSize) {
 		xf = NULL;
 		flame = pFlame;
 		ctx = pCtx;
@@ -89,8 +89,8 @@ struct FlameRenderThread {
 		pArray = new XYZPoint[poolSize];
 		qArray = new XYZPoint[poolSize];
 
-		hostMalloc((void**) &pxArray, poolSize * sizeof(FLOAT));
-		hostMalloc((void**) &pyArray, poolSize * sizeof(FLOAT));
+		hostMalloc((void**) &pxArray, poolSize * sizeof(JWF_FLOAT));
+		hostMalloc((void**) &pyArray, poolSize * sizeof(JWF_FLOAT));
 		hostMalloc((void**) &pValidArray, poolSize * sizeof(bool));
 		hostMalloc((void**) &bundle, bundleSize * sizeof(int));
 
@@ -120,8 +120,8 @@ struct FlameRenderThread {
 	void initState1() {
 		XForm **xForms = flame->xForms;
 		startIter = 0;
-		p.x = 2.0 * ctx->randGen->random() - 1.0;
-		p.y = 2.0 * ctx->randGen->random() - 1.0;
+		p.x = 4.0 * ctx->randGen->random() - 2.0;
+		p.y = 4.0 * ctx->randGen->random() - 2.0;
 		p.z = 0.0;
 		p.color = ctx->randGen->random();
 
@@ -148,7 +148,7 @@ struct FlameRenderThread {
 		XForm **xForms = flame->xForms;
 		XForm *finalXForm = flame->finalXForm;
 		RandGen *rnd = ctx->randGen;
-		for (long iter = startIter; iter < samples; iter++) {
+		for (double iter = startIter; iter < samples; iter=iter+1.0) {
 			int xfIdx = xf->nextAppliedXFormIdxTable[ctx->randGen->random(NEXT_APPLIED_XFORM_TABLE_SIZE)];
 			xf = xForms[xfIdx];
 			//xf->transformPoint(ctx, &affineT, &varT, &p, &p);
@@ -161,7 +161,7 @@ struct FlameRenderThread {
 					continue;
 			}
 
-			FLOAT px, py;
+			JWF_FLOAT px, py;
 			int xIdx, yIdx;
 			if (finalXForm != NULL) {
 				finalXForm->transformPoint(ctx, &affineT, &varT, &p, &q);
@@ -174,7 +174,7 @@ struct FlameRenderThread {
 					continue;
 
         if ((finalXForm->antialiasAmount > EPSILON) && (finalXForm->antialiasRadius > EPSILON) && (rnd->random() > 1.0 - finalXForm->antialiasAmount)) {
-          JWF_FLOAT dr = JWF_EXP(finalXForm->antialiasRadius* JWF_SQRT(-JWF_LOG(rnd->random()))) - 1.0;
+          JWF_FLOAT dr = JWF_EXP(finalXForm->antialiasRadius* JWF_SQRT(-JWF_LOG((JWF_FLOAT)rnd->random()))) - 1.0;
           JWF_FLOAT da = rnd->random() * 2.0 * M_PI;
   				xIdx = (int) (flameView->bws * px + dr * JWF_COS(da) + 0.5);
           if (xIdx < 0 || xIdx >= rasterWidth)
@@ -204,7 +204,7 @@ struct FlameRenderThread {
 					continue;
 
         if ((xf->antialiasAmount > EPSILON) && (xf->antialiasRadius > EPSILON) && (rnd->random() > 1.0 - xf->antialiasAmount)) {
-          JWF_FLOAT dr = JWF_EXP(xf->antialiasRadius * JWF_SQRT(-JWF_LOG(rnd->random()))) - 1.0;
+          JWF_FLOAT dr = JWF_EXP(xf->antialiasRadius * JWF_SQRT(-JWF_LOG((JWF_FLOAT)rnd->random()))) - 1.0;
           JWF_FLOAT da = rnd->random() * 2.0 * M_PI;
   				xIdx = (int) (flameView->bws * px + dr * JWF_COS(da) + 0.5);
           if (xIdx < 0 || xIdx >= rasterWidth)
@@ -246,7 +246,7 @@ struct FlameRenderThread {
 		XForm **xForms = flame->xForms;
 		RandGen *rnd = ctx->randGen;
 		register int idx;
-		for (long iter = startIter; iter < samples; iter++) {
+		for (double iter = startIter; iter < samples; iter=iter+1.0) {
 			int xfIdx = xf->nextAppliedXFormIdxTable[rnd->random(NEXT_APPLIED_XFORM_TABLE_SIZE)];
 			xf = xForms[xfIdx];
 			for (int i = 0; i < bundleSize; i++) {
@@ -311,7 +311,7 @@ struct FlameRenderThread {
 					XForm *currXForm = finalXForm != NULL ? finalXForm : xf;
 
 	        if ((currXForm->antialiasAmount > EPSILON) && (currXForm->antialiasRadius > EPSILON) && (rnd->random() > 1.0 - currXForm->antialiasAmount)) {
-	        	JWF_FLOAT dr = JWF_EXP(currXForm->antialiasRadius * JWF_SQRT(-JWF_LOG(rnd->random()))) - 1.0;
+	        	JWF_FLOAT dr = JWF_EXP(currXForm->antialiasRadius * JWF_SQRT(-JWF_LOG((JWF_FLOAT)rnd->random()))) - 1.0;
 	        	JWF_FLOAT da = rnd->random() * 2.0 * M_PI;
 						xIdx = (int) (flameView->bws * pxArray[idx] + dr * JWF_COS(da) + 0.5);
 						yIdx = (int) (flameView->bhs * pyArray[idx] + dr * JWF_SIN(da) + 0.5);

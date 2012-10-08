@@ -14,8 +14,6 @@
  if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-#ifndef JWFVAR_ESCALE_H_
-#define JWFVAR_ESCALE_H_
 
 #include "jwf_Constants.h"
 #include "jwf_Variation.h"
@@ -23,8 +21,8 @@
 class EScaleFunc: public Variation {
 public:
 	EScaleFunc() {
-		scale = 1.0f;
-		angle = 0.0f;
+		scale = 1.0;
+		angle = 0.0;
 		initParameterNames(2, "scale", "angle");
 	}
 
@@ -42,28 +40,28 @@ public:
 	}
 
 	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
-		float tmp = pAffineTP->y * pAffineTP->y + pAffineTP->x * pAffineTP->x + 1.0f;
-		float tmp2 = 2.0f * pAffineTP->x;
-		float xmax = (sqrtf_safe(tmp + tmp2) + sqrtf_safe(tmp - tmp2)) * 0.5f;
-		if (xmax < 1.0f)
-			xmax = 1.0f;
-		float sinhmu, coshmu;
+		JWF_FLOAT tmp = pAffineTP->y * pAffineTP->y + pAffineTP->x * pAffineTP->x + 1.0;
+		JWF_FLOAT tmp2 = 2.0 * pAffineTP->x;
+		JWF_FLOAT xmax = (sqrtf_safe(tmp + tmp2) + sqrtf_safe(tmp - tmp2)) * 0.5;
+		if (xmax < 1.0)
+			xmax = 1.0;
+		JWF_FLOAT sinhmu, coshmu;
 
-		float mu = acoshf(xmax); //  mu > 0
-		float t = pAffineTP->x / xmax;
+		JWF_FLOAT mu = JWF_ACOSH(xmax); //  mu > 0
+		JWF_FLOAT t = pAffineTP->x / xmax;
 
-		if (t > 1.0f)
-			t = 1.0f;
-		else if (t < -1.0f)
-			t = -1.0f;
+		if (t > 1.0)
+			t = 1.0;
+		else if (t < -1.0)
+			t = -1.0;
 
-		float nu = acosf(t); // -Pi < nu < Pi
-		if (pAffineTP->y < 0.0f)
-			nu *= -1.0f;
+		JWF_FLOAT nu = JWF_ACOS(t); // -Pi < nu < Pi
+		if (pAffineTP->y < 0.0)
+			nu *= -1.0;
 
 		mu *= scale;
 
-		nu = fmodf(fmodf(scale * (nu + M_PI + angle), M_2PI * scale) - angle - scale * M_PI, M_2PI);
+		nu = JWF_FMOD(JWF_FMOD(scale * (nu + M_PI + angle), M_2PI * scale) - angle - scale * M_PI, M_2PI);
 
 		if (nu > M_PI)
 			nu -= M_2PI;
@@ -85,14 +83,13 @@ public:
 	}
 
 private:
-	float sqrtf_safe(float x) {
-		if (x <= 0.0f)
-			return 0.0f;
+	JWF_FLOAT sqrtf_safe(JWF_FLOAT x) {
+		if (x <= 0.0)
+			return 0.0;
 		return JWF_SQRT(x);
 	}
 
-	float scale;
-	float angle;
+	JWF_FLOAT scale;
+	JWF_FLOAT angle;
 };
 
-#endif // JWFVAR_ESCALE_H_

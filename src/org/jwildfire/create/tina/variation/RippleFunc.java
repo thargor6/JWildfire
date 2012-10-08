@@ -34,7 +34,7 @@ public class RippleFunc extends VariationFunc {
   private static final String PARAM_CENTERY = "centery";
   private static final String PARAM_PHASE = "phase";
   private static final String PARAM_SCALE = "scale";
-  private static final String PARAM_FIXED_DIST_CALC = "fix_dist_calc";
+  private static final String PARAM_FIXED_DIST_CALC = "fixed_dist_calc";
 
   private static final String[] paramNames = { PARAM_FREQUENCY, PARAM_VELOCITY, PARAM_AMPLITUDE, PARAM_CENTERX, PARAM_CENTERY, PARAM_PHASE, PARAM_SCALE, PARAM_FIXED_DIST_CALC };
 

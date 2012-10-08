@@ -33,7 +33,7 @@ void XYZPoint::assign(XYZPoint *p) {
 	color = p->color;
 	sumsq = p->sumsq;
 	validSumsq = p->validSumsq;
-	sqrt = p->sqrt;
+	_sqrt = p->_sqrt;
 	validSqrt = p->validSqrt;
 	atan = p->atan;
 	validAtan = p->validAtan;
@@ -55,9 +55,9 @@ void XYZPoint::invalidate() {
 
 void XYZPoint::clear() {
 	rgbColor = FALSE;
-	redColor = greenColor = blueColor = 0.0f;
-	x = y = z = color = 0.0f;
-	sumsq = sqrt = atan = atanYX = sinA = cosA = 0.0f;
+	redColor = greenColor = blueColor = 0.0;
+	x = y = z = color = 0.0;
+	sumsq = _sqrt = atan = atanYX = sinA = cosA = 0.0;
 	validSumsq = validSqrt = validAtan = validAtanYX = validSinA = validCosA = FALSE;
 }
 
@@ -71,15 +71,15 @@ JWF_FLOAT XYZPoint::getPrecalcSumsq() {
 
 JWF_FLOAT XYZPoint::getPrecalcSqrt() {
 	if (validSqrt == FALSE) {
-		sqrt = JWF_SQRT(x * x + y * y) + EPSILON;
+		_sqrt = JWF_SQRT(x * x + y * y) + EPSILON;
 		validSqrt = TRUE;
 	}
-	return sqrt;
+	return _sqrt;
 }
 
 JWF_FLOAT XYZPoint::getPrecalcAtan() {
 	if (validAtan == FALSE) {
-		atan = atan2f(x, y);
+		atan = JWF_ATAN2(x, y);
 		validAtan = TRUE;
 	}
 	return atan;
@@ -87,7 +87,7 @@ JWF_FLOAT XYZPoint::getPrecalcAtan() {
 
 JWF_FLOAT XYZPoint::getPrecalcAtanYX() {
 	if (validAtanYX == FALSE) {
-		atanYX = atan2f(y, x);
+		atanYX = JWF_ATAN2(y, x);
 		validAtanYX = TRUE;
 	}
 	return atanYX;
