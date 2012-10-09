@@ -21,11 +21,14 @@ import static org.jwildfire.base.MathLib.cos;
 import static org.jwildfire.base.MathLib.fabs;
 import static org.jwildfire.base.MathLib.floor;
 import static org.jwildfire.base.MathLib.sin;
+import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_CUDA;
+import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_JWILDFIRE;
 
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
-public class BubbleWrapFunc extends VariationFunc {
+public class BWraps7Func extends VariationFunc {
+  private static final long serialVersionUID = 1L;
 
   private static final String PARAM_CELLSIZE = "cellsize";
   private static final String PARAM_SPACE = "space";
@@ -41,9 +44,9 @@ public class BubbleWrapFunc extends VariationFunc {
   private double inner_twist = 0.0;
   private double outer_twist = 0.0;
   // precalculated
-  private double g2;
-  private double r2;
-  private double rfactor;
+  private double _g2;
+  private double _r2;
+  private double _rfactor;
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
@@ -73,7 +76,7 @@ public class BubbleWrapFunc extends VariationFunc {
     Lx = Vx - Cx;
     Ly = Vy - Cy;
 
-    if ((Lx * Lx + Ly * Ly) > r2) {
+    if ((Lx * Lx + Ly * Ly) > _r2) {
       // Linear if outside the bubble
       pVarTP.x += pAmount * Vx;
       pVarTP.y += pAmount * Vy;
@@ -86,14 +89,14 @@ public class BubbleWrapFunc extends VariationFunc {
     // We're in the bubble!
 
     // Bubble distortion on local co-ordinates:
-    Lx *= g2;
-    Ly *= g2;
-    r = rfactor / ((Lx * Lx + Ly * Ly) / 4.0 + 1.0);
+    Lx *= _g2;
+    Ly *= _g2;
+    r = _rfactor / ((Lx * Lx + Ly * Ly) / 4.0 + 1.0);
     Lx *= r;
     Ly *= r;
 
     // Spin around the centre:
-    r = (Lx * Lx + Ly * Ly) / r2; // r should be 0.0 - 1.0
+    r = (Lx * Lx + Ly * Ly) / _r2; // r should be 0.0 - 1.0
     theta = inner_twist * (1.0 - r) + outer_twist * r;
     s = sin(theta);
     c = cos(theta);
@@ -146,10 +149,10 @@ public class BubbleWrapFunc extends VariationFunc {
     double radius = 0.5 * (cellsize / (1.0 + space * space));
 
     // g2 is multiplier for radius
-    g2 = gain * gain + 1.0e-6;
+    _g2 = gain * gain + 1.0e-6;
 
     // Start max_bubble as maximum x or y value before applying bubble
-    double max_bubble = g2 * radius;
+    double max_bubble = _g2 * radius;
 
     if (max_bubble > 2.0) {
       // Values greater than 2.0 "recurve" round the back of the bubble
@@ -160,8 +163,12 @@ public class BubbleWrapFunc extends VariationFunc {
       max_bubble *= 1.0 / ((max_bubble * max_bubble) / 4.0 + 1.0);
     }
 
-    r2 = radius * radius;
-    rfactor = radius / max_bubble;
+    _r2 = radius * radius;
+    _rfactor = radius / max_bubble;
   }
 
+  @Override
+  public int getAvailability() {
+    return AVAILABILITY_JWILDFIRE | AVAILABILITY_CUDA;
+  }
 }

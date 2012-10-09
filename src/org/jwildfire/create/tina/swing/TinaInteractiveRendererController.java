@@ -371,7 +371,7 @@ public class TinaInteractiveRendererController implements IterationObserver {
   private long renderStartTime = 0;
   private long pausedRenderTime = 0;
 
-  private long responsibility = 10;
+  private long responsibility = 1;
 
   private synchronized void incSampleCount() {
     sampleCount++;

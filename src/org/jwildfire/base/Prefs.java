@@ -367,7 +367,7 @@ public class Prefs extends ManagedObject {
 
   public int getTinaRenderThreads() {
     // TODO
-    return tinaRenderThreads * 10;
+    return tinaRenderThreads * 1;
   }
 
   public int getTinaRenderPreviewQuality() {

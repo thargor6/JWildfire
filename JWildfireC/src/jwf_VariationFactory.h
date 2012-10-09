@@ -38,12 +38,14 @@
 #include "jwfvar_Blur3D.h"
 #include "jwfvar_BMod.h"
 #include "jwfvar_Boarders.h"
+#include "jwfvar_Boarders2.h"
 #include "jwfvar_BSwirl.h"
 #include "jwfvar_BTransform.h"
 #include "jwfvar_Bubble.h"
 #include "jwfvar_BubbleWF.h"
 #include "jwfvar_Butterfly.h"
 #include "jwfvar_Butterfly3D.h"
+#include "jwfvar_BWraps7.h"
 #include "jwfvar_CannabisCurveWF.h"
 #include "jwfvar_Cell.h"
 #include "jwfvar_CircleCrop.h"
@@ -100,6 +102,7 @@
 #include "jwfvar_Glynnia.h"
 #include "jwfvar_Handkerchief.h"
 #include "jwfvar_Heart.h"
+#include "jwfvar_HeartWF.h"
 #include "jwfvar_Horseshoe.h"
 #include "jwfvar_Hyperbolic.h"
 #include "jwfvar_InflateZ_1.h"
@@ -176,6 +179,7 @@
 #include "jwfvar_Tan.h"
 #include "jwfvar_Tanh.h"
 #include "jwfvar_Tangent.h"
+#include "jwfvar_Tangent3D.h"
 #include "jwfvar_Twintrian.h"
 #include "jwfvar_Unpolar.h"
 #include "jwfvar_Waffle.h"
@@ -262,12 +266,14 @@ private:
 		addVariation(new Blur3DFunc());
 		addVariation(new BModFunc());
 		addVariation(new BoardersFunc());
+		addVariation(new Boarders2Func());
 		addVariation(new BSwirlFunc());
 		addVariation(new BTransformFunc());
 		addVariation(new BubbleFunc());
 		addVariation(new BubbleWFFunc());
 		addVariation(new ButterflyFunc());
 		addVariation(new Butterfly3DFunc());
+		addVariation(new BWraps7Func());
 		addVariation(new CannabisCurveWFFunc());
 		addVariation(new CellFunc());
 		addVariation(new CircleCropFunc());
@@ -324,6 +330,7 @@ private:
 		addVariation(new GlynniaFunc());
 		addVariation(new HandkerchiefFunc());
 		addVariation(new HeartFunc());
+		addVariation(new HeartWFFunc());
 		addVariation(new HyperbolicFunc());
 		addVariation(new HorseshoeFunc());
 		addVariation(new HemisphereFunc());
@@ -400,6 +407,7 @@ private:
 		addVariation(new TanFunc());
 		addVariation(new TanhFunc());
 		addVariation(new TangentFunc());
+		addVariation(new Tangent3DFunc());
 		addVariation(new TwintrianFunc());
 		addVariation(new UnpolarFunc());
 		addVariation(new WaffleFunc());

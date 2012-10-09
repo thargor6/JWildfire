@@ -21,11 +21,15 @@ import static org.jwildfire.base.MathLib.atan2;
 import static org.jwildfire.base.MathLib.cos;
 import static org.jwildfire.base.MathLib.sin;
 import static org.jwildfire.base.MathLib.sqrt;
+import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_CUDA;
+import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_JWILDFIRE;
 
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
 public class HeartWFFunc extends VariationFunc {
+  private static final long serialVersionUID = 1L;
+
   private static final String PARAM_SCALEX = "scale_x";
   private static final String PARAM_SCALET = "scale_t";
   private static final String PARAM_SHIFTT = "shift_t";
@@ -33,11 +37,11 @@ public class HeartWFFunc extends VariationFunc {
   private static final String PARAM_SCALE_T_RIGHT = "scale_r_right";
   private static final String[] paramNames = { PARAM_SCALEX, PARAM_SCALET, PARAM_SHIFTT, PARAM_SCALE_T_LEFT, PARAM_SCALE_T_RIGHT };
 
-  private double scaleX = 1.0;
-  private double scaleT = 1.0;
-  private double shiftT = 0.0;
-  private double scaleTLeft = 1.0;
-  private double scaleTRight = 1.0;
+  private double scale_x = 1.0;
+  private double scale_t = 1.0;
+  private double shift_t = 0.0;
+  private double scale_t_left = 1.0;
+  private double scale_t_right = 1.0;
 
   private static final double T_MAX = 60.0;
 
@@ -47,27 +51,26 @@ public class HeartWFFunc extends VariationFunc {
     double r = sqrt(pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y);
     double nx, t;
     if (a < 0) {
-      t = -a / M_PI * T_MAX * scaleTLeft - shiftT;
+      t = -a / M_PI * T_MAX * scale_t_left - shift_t;
       if (t > T_MAX) {
         t = T_MAX;
       }
       nx = -0.001 * (-t * t + 40 * t + 1200) * sin(M_PI * t / 180.0) * r;
     }
     else {
-      t = a / M_PI * T_MAX * scaleTRight - shiftT;
+      t = a / M_PI * T_MAX * scale_t_right - shift_t;
       if (t > T_MAX) {
         t = T_MAX;
       }
       nx = 0.001 * (-t * t + 40 * t + 1200) * sin(M_PI * t / 180.0) * r;
     }
     double ny = -0.001 * (-t * t + 40 * t + 400) * cos(M_PI * t / 180.0) * r;
-    nx *= scaleX;
+    nx *= scale_x;
     pVarTP.x += pAmount * nx;
     pVarTP.y += pAmount * ny;
     if (pContext.isPreserveZCoordinate()) {
       pVarTP.z += pAmount * pAffineTP.z;
     }
-
   }
 
   @Override
@@ -77,21 +80,21 @@ public class HeartWFFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { scaleX, scaleT, shiftT, scaleTLeft, scaleTRight };
+    return new Object[] { scale_x, scale_t, shift_t, scale_t_left, scale_t_right };
   }
 
   @Override
   public void setParameter(String pName, double pValue) {
     if (PARAM_SCALEX.equalsIgnoreCase(pName))
-      scaleX = pValue;
+      scale_x = pValue;
     else if (PARAM_SCALET.equalsIgnoreCase(pName))
-      scaleT = pValue;
+      scale_t = pValue;
     else if (PARAM_SHIFTT.equalsIgnoreCase(pName))
-      shiftT = pValue;
+      shift_t = pValue;
     else if (PARAM_SCALE_T_LEFT.equalsIgnoreCase(pName))
-      scaleTLeft = pValue;
+      scale_t_left = pValue;
     else if (PARAM_SCALE_T_RIGHT.equalsIgnoreCase(pName))
-      scaleTRight = pValue;
+      scale_t_right = pValue;
     else
       throw new IllegalArgumentException(pName);
   }
@@ -99,5 +102,10 @@ public class HeartWFFunc extends VariationFunc {
   @Override
   public String getName() {
     return "heart_wf";
+  }
+
+  @Override
+  public int getAvailability() {
+    return AVAILABILITY_JWILDFIRE | AVAILABILITY_CUDA;
   }
 }

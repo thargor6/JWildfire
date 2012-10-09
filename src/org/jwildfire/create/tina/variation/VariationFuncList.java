@@ -182,7 +182,7 @@ public class VariationFuncList {
     registerVariationFunc(CirclizeFunc.class);
     registerVariationFunc(PostMirrorWFFunc.class);
     registerVariationFunc(PreWave3DWFFunc.class);
-    registerVariationFunc(BubbleWrapFunc.class);
+    registerVariationFunc(BWraps7Func.class);
     registerVariationFunc(ColorScaleWFFunc.class);
     registerVariationFunc(HeartWFFunc.class);
     registerVariationFunc(XHeartFunc.class);
