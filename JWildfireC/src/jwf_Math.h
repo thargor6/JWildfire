@@ -103,4 +103,8 @@
 
 #endif // #ifdef JWF_PREC_DOUBLE
 
+inline JWF_FLOAT JWF_SQR(JWF_FLOAT a) {
+	return a*a;
+}
+
 #endif // __JWF_MATH_H__

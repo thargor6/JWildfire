@@ -58,6 +58,7 @@
 #include "jwfvar_Cot.h"
 #include "jwfvar_Coth.h"
 #include "jwfvar_CPow.h"
+#include "jwfvar_Crop.h"
 #include "jwfvar_Cross.h"
 #include "jwfvar_Csc.h"
 #include "jwfvar_Csch.h"
@@ -100,6 +101,7 @@
 #include "jwfvar_Foci3D.h"
 #include "jwfvar_GaussianBlur.h"
 #include "jwfvar_Glynnia.h"
+#include "jwfvar_GlynnSim1.h"
 #include "jwfvar_Handkerchief.h"
 #include "jwfvar_Heart.h"
 #include "jwfvar_HeartWF.h"
@@ -119,6 +121,7 @@
 #include "jwfvar_Julia3DZ.h"
 #include "jwfvar_JuliaN.h"
 #include "jwfvar_Juliascope.h"
+#include "jwfvar_LazySusan.h"
 #include "jwfvar_Linear.h"
 #include "jwfvar_Linear3D.h"
 #include "jwfvar_LinearT.h"
@@ -141,12 +144,15 @@
 #include "jwfvar_Polar.h"
 #include "jwfvar_Polar2.h"
 #include "jwfvar_Popcorn.h"
+#include "jwfvar_PostCircleCrop.h"
 #include "jwfvar_PostColorScaleWF.h"
+#include "jwfvar_PostCrop.h"
 #include "jwfvar_PostMirrorWF.h"
 #include "jwfvar_PostRotateX.h"
 #include "jwfvar_PostRotateY.h"
 #include "jwfvar_Power.h"
 #include "jwfvar_PreBlur.h"
+#include "jwfvar_PreBoarders2.h"
 #include "jwfvar_PreCircleCrop.h"
 #include "jwfvar_PreCrop.h"
 #include "jwfvar_PreRotateX.h"
@@ -158,16 +164,19 @@
 #include "jwfvar_Rays.h"
 #include "jwfvar_Rectangles.h"
 #include "jwfvar_Rings.h"
+#include "jwfvar_Ripple.h"
 #include "jwfvar_Scry.h"
 #include "jwfvar_Sec.h"
 #include "jwfvar_Sech.h"
 #include "jwfvar_Secant2.h"
+#include "jwfvar_Separation.h"
 #include "jwfvar_Sin.h"
 #include "jwfvar_Sinh.h"
 #include "jwfvar_Sinusoidal.h"
 #include "jwfvar_Spherical.h"
 #include "jwfvar_Spherical3D.h"
 #include "jwfvar_Spherical3DWF.h"
+#include "jwfvar_SphericalN.h"
 #include "jwfvar_Spiral.h"
 #include "jwfvar_Spirograph.h"
 #include "jwfvar_Split.h"
@@ -175,6 +184,8 @@
 #include "jwfvar_Square.h"
 #include "jwfvar_Square3D.h"
 //#include "jwfvar_SubFlameWF.h" // already included with jwfvar_PreSubFlameWF.h
+#include "jwfvar_Stripes.h"
+#include "jwfvar_SuperShape.h"
 #include "jwfvar_Swirl.h"
 #include "jwfvar_Tan.h"
 #include "jwfvar_Tanh.h"
@@ -286,6 +297,7 @@ private:
 		addVariation(new CotFunc());
 		addVariation(new CothFunc());
 		addVariation(new CPowFunc());
+		addVariation(new CropFunc());
 		addVariation(new CrossFunc());
 		addVariation(new CscFunc());
 		addVariation(new CschFunc());
@@ -328,6 +340,7 @@ private:
 		addVariation(new Foci3DFunc());
 		addVariation(new GaussianBlurFunc());
 		addVariation(new GlynniaFunc());
+		addVariation(new GlynnSim1Func());
 		addVariation(new HandkerchiefFunc());
 		addVariation(new HeartFunc());
 		addVariation(new HeartWFFunc());
@@ -347,6 +360,7 @@ private:
 		addVariation(new Julia3DZFunc());
 		addVariation(new JuliaNFunc());
 		addVariation(new JuliascopeFunc());
+		addVariation(new LazySusanFunc());
 		addVariation(new LinearFunc());
 		addVariation(new Linear3DFunc());
 		addVariation(new LinearTFunc());
@@ -369,12 +383,15 @@ private:
 		addVariation(new PolarFunc());
 		addVariation(new Polar2Func());
 		addVariation(new PopcornFunc());
+		addVariation(new PostCircleCropFunc());
 		addVariation(new PostColorScaleWFFunc());
+		addVariation(new PostCropFunc());
 		addVariation(new PostMirrorWFFunc());
 		addVariation(new PostRotateXFunc());
 		addVariation(new PostRotateYFunc());
 		addVariation(new PowerFunc());
 		addVariation(new PreBlurFunc());
+		addVariation(new PreBoarders2Func());
 		addVariation(new PreCircleCropFunc());
 		addVariation(new PreCropFunc());
 		addVariation(new PreRotateXFunc());
@@ -386,23 +403,28 @@ private:
 		addVariation(new RaysFunc());
 		addVariation(new RectanglesFunc());
 		addVariation(new RingsFunc());
+		addVariation(new RippleFunc());
 		addVariation(new ScryFunc());
 		addVariation(new SecFunc());
 		addVariation(new SechFunc());
 		addVariation(new Secant2Func());
+		addVariation(new SeparationFunc());
 		addVariation(new SinFunc());
 		addVariation(new SinhFunc());
 		addVariation(new SinusoidalFunc());
 		addVariation(new SphericalFunc());
 		addVariation(new Spherical3DFunc());
 		addVariation(new Spherical3DWFFunc());
+		addVariation(new SphericalNFunc());
 		addVariation(new SpiralFunc());
 		addVariation(new SpirographFunc());
 		addVariation(new SplitFunc());
 		addVariation(new SplitsFunc());
 		addVariation(new SquareFunc());
 		addVariation(new Square3DFunc());
+		addVariation(new StripesFunc());
 		addVariation(new SubFlameWFFunc());
+		addVariation(new SuperShapeFunc());
 		addVariation(new SwirlFunc());
 		addVariation(new TanFunc());
 		addVariation(new TanhFunc());

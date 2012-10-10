@@ -38,7 +38,7 @@ public class PreCropFunc extends VariationFunc {
   private static final String[] paramNames = { PARAM_LEFT, PARAM_RIGHT, PARAM_TOP, PARAM_BOTTOM, PARAM_SCATTER_AREA, PARAM_ZERO };
 
   private double left = -1.0;
-  private double top = 1.0;
+  private double top = -1.0;
   private double right = 1.0;
   private double bottom = 1.0;
   private double scatter_area = 0.0;

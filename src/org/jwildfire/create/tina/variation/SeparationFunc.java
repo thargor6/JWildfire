@@ -17,11 +17,14 @@
 package org.jwildfire.create.tina.variation;
 
 import static org.jwildfire.base.MathLib.sqrt;
+import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_CUDA;
+import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_JWILDFIRE;
 
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
 public class SeparationFunc extends VariationFunc {
+  private static final long serialVersionUID = 1L;
 
   private static final String PARAM_X = "x";
   private static final String PARAM_XINSIDE = "xinside";
@@ -31,9 +34,9 @@ public class SeparationFunc extends VariationFunc {
   private static final String[] paramNames = { PARAM_X, PARAM_XINSIDE, PARAM_Y, PARAM_YINSIDE };
 
   private double x = 0.5;
-  private double xInside = 0.05;
+  private double xinside = 0.05;
   private double y = 0.25;
-  private double yInside = 0.025;
+  private double yinside = 0.025;
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
@@ -42,17 +45,17 @@ public class SeparationFunc extends VariationFunc {
     double sy2 = y * y;
 
     if (pAffineTP.x > 0.0) {
-      pVarTP.x += pAmount * (sqrt(pAffineTP.x * pAffineTP.x + sx2) - pAffineTP.x * xInside);
+      pVarTP.x += pAmount * (sqrt(pAffineTP.x * pAffineTP.x + sx2) - pAffineTP.x * xinside);
     }
     else {
-      pVarTP.x -= pAmount * (sqrt(pAffineTP.x * pAffineTP.x + sx2) + pAffineTP.x * xInside);
+      pVarTP.x -= pAmount * (sqrt(pAffineTP.x * pAffineTP.x + sx2) + pAffineTP.x * xinside);
     }
 
     if (pAffineTP.y > 0.0) {
-      pVarTP.y += pAmount * (sqrt(pAffineTP.y * pAffineTP.y + sy2) - pAffineTP.y * yInside);
+      pVarTP.y += pAmount * (sqrt(pAffineTP.y * pAffineTP.y + sy2) - pAffineTP.y * yinside);
     }
     else {
-      pVarTP.y -= pAmount * (sqrt(pAffineTP.y * pAffineTP.y + sy2) + pAffineTP.y * yInside);
+      pVarTP.y -= pAmount * (sqrt(pAffineTP.y * pAffineTP.y + sy2) + pAffineTP.y * yinside);
     }
     if (pContext.isPreserveZCoordinate()) {
       pVarTP.z += pAmount * pAffineTP.z;
@@ -66,7 +69,7 @@ public class SeparationFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { x, xInside, y, yInside };
+    return new Object[] { x, xinside, y, yinside };
   }
 
   @Override
@@ -74,11 +77,11 @@ public class SeparationFunc extends VariationFunc {
     if (PARAM_X.equalsIgnoreCase(pName))
       x = pValue;
     else if (PARAM_XINSIDE.equalsIgnoreCase(pName))
-      xInside = pValue;
+      xinside = pValue;
     else if (PARAM_Y.equalsIgnoreCase(pName))
       y = pValue;
     else if (PARAM_YINSIDE.equalsIgnoreCase(pName))
-      yInside = pValue;
+      yinside = pValue;
     else
       throw new IllegalArgumentException(pName);
   }
@@ -88,4 +91,8 @@ public class SeparationFunc extends VariationFunc {
     return "separation";
   }
 
+  @Override
+  public int getAvailability() {
+    return AVAILABILITY_JWILDFIRE | AVAILABILITY_CUDA;
+  }
 }

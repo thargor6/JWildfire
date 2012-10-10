@@ -18,9 +18,9 @@
 #include "jwf_Constants.h"
 #include "jwf_Variation.h"
 
-class PreCropFunc: public Variation {
+class PostCropFunc: public Variation {
 public:
-	PreCropFunc() {
+	PostCropFunc() {
 		left = -1.0;
 		top = -1.0;
 		right = 1.0;
@@ -31,7 +31,7 @@ public:
 	}
 
 	const char* getName() const {
-		return "pre_crop";
+		return "post_crop";
 	}
 
 	void setParameter(char *pName, JWF_FLOAT pValue) {
@@ -56,23 +56,23 @@ public:
 	}
 
 	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
-		JWF_FLOAT x = pAffineTP->x;
-		JWF_FLOAT y = pAffineTP->y;
-		if (((x < _xmin) || (x > _xmax) || (y < _ymin) || (y > _ymax)) && (zero != 0)) {
-			x = y = 0.0;
-		}
-		else {
-			if (x < _xmin)
-				x = _xmin + pContext->randGen->random() * _w;
-			else if (x > _xmax)
-				x = _xmax - pContext->randGen->random() * _w;
-			if (y < _ymin)
-				y = _ymin + pContext->randGen->random() * _h;
-			else if (y > _ymax)
-				y = _ymax - pContext->randGen->random() * _h;
-		}
-		pAffineTP->x = pAmount * x;
-		pAffineTP->y = pAmount * y;
+    JWF_FLOAT x = pVarTP->x;
+    JWF_FLOAT y = pVarTP->y;
+    if (((x < _xmin) || (x > _xmax) || (y < _ymin) || (y > _ymax)) && (zero != 0)) {
+      x = y = 0;
+    }
+    else {
+      if (x < _xmin)
+        x = _xmin + pContext->randGen->random() * _w;
+      else if (x > _xmax)
+        x = _xmax - pContext->randGen->random() * _w;
+      if (y < _ymin)
+        y = _ymin + pContext->randGen->random() * _h;
+      else if (y > _ymax)
+        y = _ymax - pContext->randGen->random() * _h;
+    }
+    pVarTP->x = pAmount * x;
+    pVarTP->y = pAmount * y;
 	}
 
 	void init(FlameTransformationContext *pContext, XForm *pXForm, JWF_FLOAT pAmount) {
@@ -85,11 +85,11 @@ public:
 	}
 
 	int const getPriority() {
-		return -1;
+		return 1;
 	}
 
-	PreCropFunc* makeCopy() {
-		return new PreCropFunc(*this);
+	PostCropFunc* makeCopy() {
+		return new PostCropFunc(*this);
 	}
 
 private:
@@ -101,6 +101,5 @@ private:
 	bool zero;
 
 	JWF_FLOAT _xmin, _xmax, _ymin, _ymax, _w, _h;
-
 };
 

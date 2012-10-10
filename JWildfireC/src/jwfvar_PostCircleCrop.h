@@ -18,34 +18,30 @@
 #include "jwf_Constants.h"
 #include "jwf_Variation.h"
 
-class PreCropFunc: public Variation {
+class PostCircleCropFunc: public Variation {
 public:
-	PreCropFunc() {
-		left = -1.0;
-		top = -1.0;
-		right = 1.0;
-		bottom = 1.0;
+	PostCircleCropFunc() {
+		radius = 1.0;
+		x = 0.0;
+		y = 0.0;
 		scatter_area = 0.0;
-		zero = 0;
-		initParameterNames(6, "left", "top", "right", "bottom", "scatter_area", "zero");
+		zero = true;
+		initParameterNames(5, "radius", "x", "y", "scatter_area", "zero");
 	}
 
 	const char* getName() const {
-		return "pre_crop";
+		return "post_circlecrop";
 	}
 
 	void setParameter(char *pName, JWF_FLOAT pValue) {
-		if (strcmp(pName, "left") == 0) {
-			left = pValue;
+		if (strcmp(pName, "radius") == 0) {
+			radius = pValue;
 		}
-		else if (strcmp(pName, "top") == 0) {
-			top = pValue;
+		else if (strcmp(pName, "x") == 0) {
+			x = pValue;
 		}
-		else if (strcmp(pName, "right") == 0) {
-			right = pValue;
-		}
-		else if (strcmp(pName, "bottom") == 0) {
-			bottom = pValue;
+		else if (strcmp(pName, "y") == 0) {
+			y = pValue;
 		}
 		else if (strcmp(pName, "scatter_area") == 0) {
 			scatter_area = pValue;
@@ -56,51 +52,62 @@ public:
 	}
 
 	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
-		JWF_FLOAT x = pAffineTP->x;
-		JWF_FLOAT y = pAffineTP->y;
-		if (((x < _xmin) || (x > _xmax) || (y < _ymin) || (y > _ymax)) && (zero != 0)) {
-			x = y = 0.0;
-		}
-		else {
-			if (x < _xmin)
-				x = _xmin + pContext->randGen->random() * _w;
-			else if (x > _xmax)
-				x = _xmax - pContext->randGen->random() * _w;
-			if (y < _ymin)
-				y = _ymin + pContext->randGen->random() * _h;
-			else if (y > _ymax)
-				y = _ymax - pContext->randGen->random() * _h;
-		}
-		pAffineTP->x = pAmount * x;
-		pAffineTP->y = pAmount * y;
+    JWF_FLOAT x0 = x;
+    JWF_FLOAT y0 = y;
+    JWF_FLOAT cr = radius;
+    JWF_FLOAT ca = _cA;
+    JWF_FLOAT vv = pAmount;
+
+    pVarTP->x -= x0;
+    pVarTP->y -= y0;
+
+    pVarTP->z += vv * pVarTP->z;
+
+    JWF_FLOAT rad = JWF_SQRT(pVarTP->x * pVarTP->x + pVarTP->y * pVarTP->y);
+    JWF_FLOAT ang = JWF_ATAN2(pVarTP->y, pVarTP->x);
+    JWF_FLOAT rdc = cr + (pContext->randGen->random() * 0.5 * ca);
+
+    boolean esc = rad > cr;
+    boolean cr0 = zero == 1;
+
+    JWF_FLOAT s = JWF_SIN(ang);
+    JWF_FLOAT c = JWF_COS(ang);
+
+    if (cr0 && esc) {
+      pVarTP->x = pVarTP->y = 0;
+    }
+    else if (cr0 && !esc) {
+      pVarTP->x += vv * pVarTP->x + x0;
+      pVarTP->y += vv * pVarTP->y + y0;
+    }
+    else if (!cr0 && esc) {
+      pVarTP->x += vv * rdc * c + x0;
+      pVarTP->y += vv * rdc * s + y0;
+    }
+    else if (!cr0 && !esc) {
+      pVarTP->x += vv * pVarTP->x + x0;
+      pVarTP->y += vv * pVarTP->y + y0;
+    }
 	}
 
 	void init(FlameTransformationContext *pContext, XForm *pXForm, JWF_FLOAT pAmount) {
-		_xmin = JWF_MIN(left, right);
-		_ymin = JWF_MIN(top, bottom);
-		_xmax = JWF_MAX(left, right);
-		_ymax = JWF_MAX(top, bottom);
-		_w = (_xmax - _xmin) * 0.5 * scatter_area;
-		_h = (_ymax - _ymin) * 0.5 * scatter_area;
+		_cA = JWF_MAX(-1.0, JWF_MIN(scatter_area, 1.0));
 	}
 
 	int const getPriority() {
-		return -1;
+		return 1;
 	}
 
-	PreCropFunc* makeCopy() {
-		return new PreCropFunc(*this);
+	PostCircleCropFunc* makeCopy() {
+		return new PostCircleCropFunc(*this);
 	}
 
 private:
-	JWF_FLOAT left;
-	JWF_FLOAT right;
-	JWF_FLOAT top;
-	JWF_FLOAT bottom;
+	JWF_FLOAT radius;
+	JWF_FLOAT x;
+	JWF_FLOAT y;
 	JWF_FLOAT scatter_area;
 	bool zero;
-
-	JWF_FLOAT _xmin, _xmax, _ymin, _ymax, _w, _h;
-
+	JWF_FLOAT _cA;
 };
 

@@ -20,11 +20,14 @@ import static org.jwildfire.base.MathLib.atan2;
 import static org.jwildfire.base.MathLib.cos;
 import static org.jwildfire.base.MathLib.sin;
 import static org.jwildfire.base.MathLib.sqrt;
+import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_CUDA;
+import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_JWILDFIRE;
 
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
 public class LazySusanFunc extends VariationFunc {
+  private static final long serialVersionUID = 1L;
 
   private static final String PARAM_SPACE = "space";
   private static final String PARAM_TWIST = "twist";
@@ -44,24 +47,24 @@ public class LazySusanFunc extends VariationFunc {
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     /* Lazysusan in the Apophysis Plugin Pack */
 
-    double x = pAffineTP.x - this.x;
-    double y = pAffineTP.y + this.y;
-    double r = sqrt(x * x + y * y);
+    double xx = pAffineTP.x - x;
+    double yy = pAffineTP.y + y;
+    double rr = sqrt(xx * xx + yy * yy);
 
-    if (r < pAmount) {
-      double a = atan2(y, x) + spin + twist * (pAmount - r);
+    if (rr < pAmount) {
+      double a = atan2(yy, xx) + spin + twist * (pAmount - rr);
       double sina = sin(a);
       double cosa = cos(a);
-      r = pAmount * r;
+      rr = pAmount * rr;
 
-      pVarTP.x += r * cosa + this.x;
-      pVarTP.y += r * sina - this.y;
+      pVarTP.x += rr * cosa + x;
+      pVarTP.y += rr * sina - y;
     }
     else {
-      r = pAmount * (1.0 + space / r);
+      rr = pAmount * (1.0 + space / rr);
 
-      pVarTP.x += r * x + this.x;
-      pVarTP.y += r * y - this.y;
+      pVarTP.x += rr * xx + x;
+      pVarTP.y += rr * yy - y;
     }
     if (pContext.isPreserveZCoordinate()) {
       pVarTP.z += pAmount * pAffineTP.z;
@@ -100,4 +103,8 @@ public class LazySusanFunc extends VariationFunc {
     return "lazysusan";
   }
 
+  @Override
+  public int getAvailability() {
+    return AVAILABILITY_JWILDFIRE | AVAILABILITY_CUDA;
+  }
 }

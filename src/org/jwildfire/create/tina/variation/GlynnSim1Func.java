@@ -23,18 +23,20 @@ import static org.jwildfire.base.MathLib.pow;
 import static org.jwildfire.base.MathLib.sin;
 import static org.jwildfire.base.MathLib.sqr;
 import static org.jwildfire.base.MathLib.sqrt;
+import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_CUDA;
+import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_JWILDFIRE;
 
 import java.io.Serializable;
 
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
-@SuppressWarnings("serial")
 public class GlynnSim1Func extends VariationFunc {
+  private static final long serialVersionUID = 1L;
 
   private static final String PARAM_RADIUS = "radius";
   private static final String PARAM_RADIUS1 = "radius1";
-  private static final String PARAM_PHI1 = "Phi1";
+  private static final String PARAM_PHI1 = "phi1";
   private static final String PARAM_THICKNESS = "thickness";
   private static final String PARAM_POW = "pow";
   private static final String PARAM_CONTRAST = "contrast";
@@ -49,6 +51,7 @@ public class GlynnSim1Func extends VariationFunc {
   private double contrast = 0.5;
 
   private class Point implements Serializable {
+    private static final long serialVersionUID = 1L;
     private double x, y;
   }
 
@@ -57,8 +60,8 @@ public class GlynnSim1Func extends VariationFunc {
     double Phi = 2.0 * M_PI * pContext.random();
     double sinPhi = sin(Phi);
     double cosPhi = cos(Phi);
-    p.x = r * cosPhi + this.x1;
-    p.y = r * sinPhi + this.y1;
+    p.x = r * cosPhi + this._x1;
+    p.y = r * sinPhi + this._y1;
   }
 
   @Override
@@ -72,7 +75,7 @@ public class GlynnSim1Func extends VariationFunc {
       pVarTP.y += pAmount * toolPoint.y;
     }
     else {
-      if (pContext.random() > this.contrast * pow(Alpha, this.absPow)) {
+      if (pContext.random() > this.contrast * pow(Alpha, this._absPow)) {
         toolPoint.x = pAffineTP.x;
         toolPoint.y = pAffineTP.y;
       }
@@ -80,7 +83,7 @@ public class GlynnSim1Func extends VariationFunc {
         toolPoint.x = Alpha * Alpha * pAffineTP.x;
         toolPoint.y = Alpha * Alpha * pAffineTP.y;
       }
-      double Z = sqr(toolPoint.x - this.x1) + sqr(toolPoint.y - this.y1);
+      double Z = sqr(toolPoint.x - this._x1) + sqr(toolPoint.y - this._y1);
       if (Z < this.radius1 * this.radius1) { //object generation
         circle(pContext, toolPoint);
         pVarTP.x += pAmount * toolPoint.x;
@@ -94,7 +97,6 @@ public class GlynnSim1Func extends VariationFunc {
     if (pContext.isPreserveZCoordinate()) {
       pVarTP.z += pAmount * pAffineTP.z;
     }
-
   }
 
   @Override
@@ -130,7 +132,7 @@ public class GlynnSim1Func extends VariationFunc {
     return "glynnSim1";
   }
 
-  private double x1, y1, absPow;
+  private double _x1, _y1, _absPow;
   private Point toolPoint = new Point();
 
   @Override
@@ -138,8 +140,14 @@ public class GlynnSim1Func extends VariationFunc {
     double a = M_PI * phi1 / 180.0;
     double sinPhi1 = sin(a);
     double cosPhi1 = cos(a);
-    this.x1 = this.radius * cosPhi1;
-    this.y1 = this.radius * sinPhi1;
-    this.absPow = fabs(this.pow);
+    this._x1 = this.radius * cosPhi1;
+    this._y1 = this.radius * sinPhi1;
+    this._absPow = fabs(this.pow);
   }
+
+  @Override
+  public int getAvailability() {
+    return AVAILABILITY_JWILDFIRE | AVAILABILITY_CUDA;
+  }
+
 }

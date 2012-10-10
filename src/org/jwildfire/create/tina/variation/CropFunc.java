@@ -18,12 +18,15 @@ package org.jwildfire.create.tina.variation;
 
 import static org.jwildfire.base.MathLib.max;
 import static org.jwildfire.base.MathLib.min;
+import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_CUDA;
+import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_JWILDFIRE;
 
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
 public class CropFunc extends VariationFunc {
+  private static final long serialVersionUID = 1L;
 
   private static final String PARAM_LEFT = "left";
   private static final String PARAM_RIGHT = "right";
@@ -35,7 +38,7 @@ public class CropFunc extends VariationFunc {
   private static final String[] paramNames = { PARAM_LEFT, PARAM_RIGHT, PARAM_TOP, PARAM_BOTTOM, PARAM_SCATTER_AREA, PARAM_ZERO };
 
   private double left = -1.0;
-  private double top = 1.0;
+  private double top = -1.0;
   private double right = 1.0;
   private double bottom = 1.0;
   private double scatter_area = 0.0;
@@ -111,4 +114,8 @@ public class CropFunc extends VariationFunc {
     h = (ymax - ymin) * 0.5 * scatter_area;
   }
 
+  @Override
+  public int getAvailability() {
+    return AVAILABILITY_JWILDFIRE | AVAILABILITY_CUDA;
+  }
 }
