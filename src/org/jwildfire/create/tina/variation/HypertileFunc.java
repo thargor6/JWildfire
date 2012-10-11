@@ -21,12 +21,15 @@ import static org.jwildfire.base.MathLib.cos;
 import static org.jwildfire.base.MathLib.sin;
 import static org.jwildfire.base.MathLib.sqr;
 import static org.jwildfire.base.MathLib.sqrt;
+import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_CUDA;
+import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_JWILDFIRE;
 
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
 public class HypertileFunc extends VariationFunc {
+  private static final long serialVersionUID = 1L;
 
   private static final String PARAM_P = "p";
   private static final String PARAM_Q = "q";
@@ -104,4 +107,8 @@ public class HypertileFunc extends VariationFunc {
     im = r * sin(a);
   }
 
+  @Override
+  public int getAvailability() {
+    return AVAILABILITY_JWILDFIRE | AVAILABILITY_CUDA;
+  }
 }

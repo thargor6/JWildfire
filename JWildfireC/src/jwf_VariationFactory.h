@@ -48,6 +48,7 @@
 #include "jwfvar_BWraps7.h"
 #include "jwfvar_CannabisCurveWF.h"
 #include "jwfvar_Cell.h"
+#include "jwfvar_Checks.h"
 #include "jwfvar_CircleCrop.h"
 #include "jwfvar_Circlize.h"
 #include "jwfvar_Collideoscope.h"
@@ -68,6 +69,7 @@
 #include "jwfvar_Cylinder.h"
 #include "jwfvar_CylinderApo.h"
 #include "jwfvar_DCCube.h"
+#include "jwfvar_DCTransl.h"
 #include "jwfvar_Diamond.h"
 #include "jwfvar_Disc.h"
 #include "jwfvar_Disc2.h"
@@ -115,7 +117,9 @@
 #include "jwfvar_InflateZ_6.h"
 #include "jwfvar_Hemisphere.h"
 #include "jwfvar_Hexes.h"
+#include "jwfvar_Hypertile.h"
 #include "jwfvar_Hypertile1.h"
+#include "jwfvar_Hypertile2.h"
 #include "jwfvar_Julia.h"
 #include "jwfvar_Julia3D.h"
 #include "jwfvar_Julia3DZ.h"
@@ -131,6 +135,7 @@
 #include "jwfvar_LogApo.h"
 #include "jwfvar_Loonie.h"
 #include "jwfvar_Loonie3D.h"
+#include "jwfvar_Mandelbrot.h"
 #include "jwfvar_Mobius.h"
 #include "jwfvar_Modulus.h"
 #include "jwfvar_Ngon.h"
@@ -147,6 +152,7 @@
 #include "jwfvar_PostCircleCrop.h"
 #include "jwfvar_PostColorScaleWF.h"
 #include "jwfvar_PostCrop.h"
+#include "jwfvar_PostDCTransl.h"
 #include "jwfvar_PostMirrorWF.h"
 #include "jwfvar_PostRotateX.h"
 #include "jwfvar_PostRotateY.h"
@@ -155,6 +161,7 @@
 #include "jwfvar_PreBoarders2.h"
 #include "jwfvar_PreCircleCrop.h"
 #include "jwfvar_PreCrop.h"
+#include "jwfvar_PreDCTransl.h"
 #include "jwfvar_PreRotateX.h"
 #include "jwfvar_PreRotateY.h"
 #include "jwfvar_PreSubFlameWF.h"
@@ -166,6 +173,7 @@
 #include "jwfvar_Rings.h"
 #include "jwfvar_Ripple.h"
 #include "jwfvar_Scry.h"
+#include "jwfvar_Scry3D.h"
 #include "jwfvar_Sec.h"
 #include "jwfvar_Sech.h"
 #include "jwfvar_Secant2.h"
@@ -287,6 +295,7 @@ private:
 		addVariation(new BWraps7Func());
 		addVariation(new CannabisCurveWFFunc());
 		addVariation(new CellFunc());
+		addVariation(new ChecksFunc());
 		addVariation(new CircleCropFunc());
 		addVariation(new CirclizeFunc());
 		addVariation(new CollideoscopeFunc());
@@ -307,6 +316,7 @@ private:
 		addVariation(new CylinderFunc());
 		addVariation(new CylinderApoFunc());
 		addVariation(new DCCubeFunc());
+		addVariation(new DCTranslFunc());
 		addVariation(new DiamondFunc());
 		addVariation(new DiscFunc());
 		addVariation(new Disc2Func());
@@ -348,7 +358,9 @@ private:
 		addVariation(new HorseshoeFunc());
 		addVariation(new HemisphereFunc());
 		addVariation(new HexesFunc());
+		addVariation(new HypertileFunc());
 		addVariation(new Hypertile1Func());
+		addVariation(new Hypertile2Func());
 		addVariation(new InflateZ_1Func());
 		addVariation(new InflateZ_2Func());
 		addVariation(new InflateZ_3Func());
@@ -370,6 +382,7 @@ private:
 		addVariation(new LogApoFunc());
 		addVariation(new LoonieFunc());
 		addVariation(new Loonie3DFunc());
+		addVariation(new MandelbrotFunc());
 		addVariation(new MobiusFunc());
 		addVariation(new ModulusFunc());
 		addVariation(new NgonFunc());
@@ -386,6 +399,7 @@ private:
 		addVariation(new PostCircleCropFunc());
 		addVariation(new PostColorScaleWFFunc());
 		addVariation(new PostCropFunc());
+		addVariation(new PostDCTranslFunc());
 		addVariation(new PostMirrorWFFunc());
 		addVariation(new PostRotateXFunc());
 		addVariation(new PostRotateYFunc());
@@ -394,6 +408,7 @@ private:
 		addVariation(new PreBoarders2Func());
 		addVariation(new PreCircleCropFunc());
 		addVariation(new PreCropFunc());
+		addVariation(new PreDCTranslFunc());
 		addVariation(new PreRotateXFunc());
 		addVariation(new PreRotateYFunc());
 		addVariation(new PreSubFlameWFFunc());
@@ -405,6 +420,7 @@ private:
 		addVariation(new RingsFunc());
 		addVariation(new RippleFunc());
 		addVariation(new ScryFunc());
+		addVariation(new Scry3DFunc());
 		addVariation(new SecFunc());
 		addVariation(new SechFunc());
 		addVariation(new Secant2Func());

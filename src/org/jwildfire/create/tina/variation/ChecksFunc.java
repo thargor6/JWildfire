@@ -17,11 +17,14 @@
 package org.jwildfire.create.tina.variation;
 
 import static org.jwildfire.base.MathLib.EPSILON;
+import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_CUDA;
+import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_JWILDFIRE;
 
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
 public class ChecksFunc extends VariationFunc {
+  private static final long serialVersionUID = 1L;
 
   private static final String PARAM_X = "x";
   private static final String PARAM_Y = "y";
@@ -38,10 +41,10 @@ public class ChecksFunc extends VariationFunc {
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     // Fixed checks plugin by Keeps and Xyrus02, http://xyrus02.deviantart.com/art/Checks-The-fixed-version-138967784?q=favby%3Aapophysis-plugins%2F39181234&qo=3
-    double x = pAffineTP.x * cs;
-    double y = pAffineTP.y * cs;
+    double x = pAffineTP.x * _cs;
+    double y = pAffineTP.y * _cs;
 
-    int isXY = (int) Math.rint(pAffineTP.x * cs) + (int) Math.rint(pAffineTP.y * cs);
+    int isXY = (int) Math.rint(pAffineTP.x * _cs) + (int) Math.rint(pAffineTP.y * _cs);
 
     // -X- This is just for code readability,
     //     if there is any impact on performance, its minimal :-)
@@ -50,11 +53,10 @@ public class ChecksFunc extends VariationFunc {
     double dx, dy;
     if (isXY % 2 == 0) {
       // -X- The -VAR(checks_#) stuff caused the error!
-      dx = ncx + rnx;
-      dy = ncy;
+      dx = _ncx + rnx;
+      dy = _ncy;
     }
-    else
-    {
+    else {
       dx = x;
       dy = y + rny;
     }
@@ -95,15 +97,19 @@ public class ChecksFunc extends VariationFunc {
     return "checks";
   }
 
-  private double cs, ncx, ncy;
+  private double _cs, _ncx, _ncy;
 
   @Override
   public void init(FlameTransformationContext pContext, XForm pXForm, double pAmount) {
     // Multiplication is faster than division, so divide in precalc, multiply in calc.
-    cs = 1.0 / (size + EPSILON);
+    _cs = 1.0 / (size + EPSILON);
     // -X- Then precalculate -checkx_x, -checks_y
-    ncx = x * -1.0;
-    ncy = y * -1.0;
+    _ncx = x * -1.0;
+    _ncy = y * -1.0;
   }
 
+  @Override
+  public int getAvailability() {
+    return AVAILABILITY_JWILDFIRE | AVAILABILITY_CUDA;
+  }
 }

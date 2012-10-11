@@ -19,11 +19,16 @@
 //  Jed Kelsey, 20 June 2007
 package org.jwildfire.create.tina.variation;
 
+import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_CUDA;
+import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_JWILDFIRE;
+
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
 public class MandelbrotFunc extends VariationFunc {
+  private static final long serialVersionUID = 1L;
+
   private static final String PARAM_ITER = "iter";
   private static final String PARAM_XMIN = "xmin";
   private static final String PARAM_XMAX = "xmax";
@@ -36,59 +41,59 @@ public class MandelbrotFunc extends VariationFunc {
 
   private static final String[] paramNames = { PARAM_ITER, PARAM_XMIN, PARAM_XMAX, PARAM_YMIN, PARAM_YMAX, PARAM_INVERT, PARAM_SKIN, PARAM_CX, PARAM_CY };
 
-  private int maxIter = 100;
+  private int iter = 100;
   private double xmin = -1.6;
   private double xmax = 1.6;
   private double ymin = -1.2;
   private double ymax = 1.2;
-  private int invertProb = 0;
+  private int invert = 0;
   private double skin = 0;
   private double cx = 0.0;
   private double cy = 0.0;
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-    double x1 = x0;
-    double x = x0;
-    double y1 = y0;
-    double y = y0;
-    int iter;
+    double x1 = _x0;
+    double x = _x0;
+    double y1 = _y0;
+    double y = _y0;
+    int currIter;
 
-    boolean inverted = pContext.random() < this.invertProb;
+    boolean inverted = pContext.random() < this.invert;
     if (inverted) {
-      iter = 0;
+      currIter = 0;
     }
     else {
-      iter = maxIter;
+      currIter = iter;
     }
-    while ((inverted && (iter < maxIter)) ||
-        ((!inverted) && ((iter >= maxIter) ||
-        ((skin < 1) && (iter < 0.1 * maxIter * (1 - skin)))))) {
-      if ((x0 == 0) && (y0 == 0)) {
+    while ((inverted && (currIter < iter)) ||
+        ((!inverted) && ((currIter >= iter) ||
+        ((skin < 1) && (currIter < 0.1 * iter * (1 - skin)))))) {
+      if ((_x0 == 0) && (_y0 == 0)) {
         // Choose a point at random
-        x0 = (xmax - xmin) * pContext.random() + xmin;
-        y0 = (ymax - ymin) * pContext.random() + ymin;
+        _x0 = (xmax - xmin) * pContext.random() + xmin;
+        _y0 = (ymax - ymin) * pContext.random() + ymin;
       }
       else {
         // Choose a point close to previous point
-        x0 = (skin + 0.001) * (pContext.random() - 0.5) + x0;
-        y0 = (skin + 0.001) * (pContext.random() - 0.5) + y0;
+        _x0 = (skin + 0.001) * (pContext.random() - 0.5) + _x0;
+        _y0 = (skin + 0.001) * (pContext.random() - 0.5) + _y0;
       }
-      x1 = x0;
-      y1 = y0;
-      x = x0;
-      y = y0;
-      iter = 0;
-      while (((x * x + y * y < 2 * 2) && (iter < maxIter))) {
-        double xtemp = x * x - y * y + x0;
-        y = 2.0 * x * y + y0;
+      x1 = _x0;
+      y1 = _y0;
+      x = _x0;
+      y = _y0;
+      currIter = 0;
+      while (((x * x + y * y < 2 * 2) && (currIter < iter))) {
+        double xtemp = x * x - y * y + _x0;
+        y = 2.0 * x * y + _y0;
         x = xtemp;
-        iter++;
+        currIter++;
       }
-      if ((iter >= maxIter) || (skin == 1) || (iter < 0.1 * (maxIter * (1 - skin)))) {
+      if ((currIter >= iter) || (skin == 1) || (currIter < 0.1 * (iter * (1 - skin)))) {
         // Random point next time
-        x0 = 0;
-        y0 = 0;
+        _x0 = 0;
+        _y0 = 0;
       }
     }
     pVarTP.x += pAmount * (x1 + cx * x); // + FTx^;
@@ -96,7 +101,6 @@ public class MandelbrotFunc extends VariationFunc {
     if (pContext.isPreserveZCoordinate()) {
       pVarTP.z += pAmount * pAffineTP.z;
     }
-
   }
 
   @Override
@@ -106,13 +110,13 @@ public class MandelbrotFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { maxIter, xmin, xmax, ymin, ymax, invertProb, skin, cx, cy };
+    return new Object[] { iter, xmin, xmax, ymin, ymax, invert, skin, cx, cy };
   }
 
   @Override
   public void setParameter(String pName, double pValue) {
     if (PARAM_ITER.equalsIgnoreCase(pName))
-      maxIter = Tools.FTOI(pValue);
+      iter = Tools.FTOI(pValue);
     else if (PARAM_XMIN.equalsIgnoreCase(pName))
       xmin = pValue;
     else if (PARAM_XMAX.equalsIgnoreCase(pName))
@@ -122,7 +126,7 @@ public class MandelbrotFunc extends VariationFunc {
     else if (PARAM_YMAX.equalsIgnoreCase(pName))
       ymax = pValue;
     else if (PARAM_INVERT.equalsIgnoreCase(pName))
-      invertProb = Tools.FTOI(pValue);
+      invert = Tools.FTOI(pValue);
     else if (PARAM_SKIN.equalsIgnoreCase(pName))
       skin = pValue;
     else if (PARAM_CX.equalsIgnoreCase(pName))
@@ -138,11 +142,15 @@ public class MandelbrotFunc extends VariationFunc {
     return "mandelbrot";
   }
 
-  private double x0, y0;
+  private double _x0, _y0;
 
   @Override
   public void init(FlameTransformationContext pContext, XForm pXForm, double pAmount) {
-    x0 = y0 = 0.0;
+    _x0 = _y0 = 0.0;
   }
 
+  @Override
+  public int getAvailability() {
+    return AVAILABILITY_JWILDFIRE | AVAILABILITY_CUDA;
+  }
 }

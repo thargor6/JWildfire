@@ -17,12 +17,16 @@
 package org.jwildfire.create.tina.variation;
 
 import static org.jwildfire.base.MathLib.EPSILON;
+import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_CUDA;
+import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_JWILDFIRE;
 
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
 public class DCZTranslFunc extends VariationFunc {
+  private static final long serialVersionUID = 1L;
+
   private static final String PARAM_X0 = "x0";
   private static final String PARAM_X1 = "x1";
   private static final String PARAM_FACTOR = "factor";
@@ -94,4 +98,8 @@ public class DCZTranslFunc extends VariationFunc {
     _x1_m_x0 = _x1 - _x0 == 0 ? EPSILON : _x1 - _x0;
   }
 
+  @Override
+  public int getAvailability() {
+    return AVAILABILITY_JWILDFIRE | AVAILABILITY_CUDA;
+  }
 }
