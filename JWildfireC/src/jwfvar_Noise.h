@@ -29,8 +29,8 @@ public:
 
 	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
 		JWF_FLOAT r = pContext->randGen->random() * 2.0 * M_PI;
-		JWF_FLOAT sinr = JWF_SIN(r);
-		JWF_FLOAT cosr = JWF_COS(r);
+		JWF_FLOAT sinr, cosr;
+		JWF_SINCOS(r, &sinr, &cosr);
 		r = pAmount * pContext->randGen->random();
 		pVarTP->x += pAffineTP->x * r * cosr;
 		pVarTP->y += pAffineTP->y * r * sinr;

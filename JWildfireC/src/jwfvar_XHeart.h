@@ -66,8 +66,7 @@ public:
 
 	void init(FlameTransformationContext *pContext, XForm *pXForm, JWF_FLOAT pAmount) {
 		JWF_FLOAT ang = M_PI_4 + (0.5 * M_PI_4 * angle);
-		_sina = JWF_SIN(ang);
-		_cosa = JWF_COS(ang);
+		JWF_SINCOS(ang, &_sina, &_cosa);
 		_rat = 6.0 + 2.0 * ratio;
 	}
 

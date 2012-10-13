@@ -29,8 +29,8 @@ public:
 	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
 		JWF_FLOAT r = JWF_SQRT(pAffineTP->x * pAffineTP->x + pAffineTP->y * pAffineTP->y);
 		JWF_FLOAT angle = pAffineTP->getPrecalcAtan();
-		JWF_FLOAT sinr = JWF_SIN(r * angle);
-		JWF_FLOAT cosr = JWF_COS(r * angle);
+		JWF_FLOAT sinr, cosr;
+		JWF_SINCOS(r * angle, &sinr, &cosr);
 		r *= pAmount;
 		pVarTP->x += r * sinr;
 		pVarTP->y -= r * cosr;

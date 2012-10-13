@@ -53,8 +53,8 @@ public:
     JWF_FLOAT vr = pAmount / (JWF_SQR(c) + JWF_SQR(d));
 
     JWF_FLOAT rpa = _pa * pContext->randGen->random(INT_MAX);
-    JWF_FLOAT sina = JWF_SIN(rpa);
-    JWF_FLOAT cosa = JWF_COS(rpa);
+    JWF_FLOAT sina, cosa;
+    JWF_SINCOS(rpa, &sina, &cosa);
 
     pVarTP->x += vr * (x * cosa + y * sina);
     pVarTP->y += vr * (y * cosa - x * sina);

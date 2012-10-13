@@ -71,8 +71,8 @@ public:
 		bws = (pRasterWidth - 0.5) * Xsize;
 		bhs = (pRasterHeight - 0.5) * Ysize;
 
-		cosa = JWF_COS(-M_PI * (flame->camRoll) / 180.0);
-		sina = JWF_SIN(-M_PI * (flame->camRoll) / 180.0);
+		JWF_SINCOS(-M_PI * (flame->camRoll) / 180.0, &sina, &cosa);
+
 		rcX = flame->centreX * (1.0 - cosa) - flame->centreY * sina - camX0;
 		rcY = flame->centreY * (1.0 - cosa) + flame->centreX * sina - camY0;
 	}
@@ -103,8 +103,8 @@ public:
 		JWF_FLOAT zr = 1.0 - flame->camPerspective * pz;
 		if (useDOF) {
 			JWF_FLOAT a = 2.0 * M_PI * pFlameTransformationContext->randGen->random();
-			JWF_FLOAT dsina = JWF_SIN(a);
-			JWF_FLOAT dcosa = JWF_COS(a);
+			JWF_FLOAT dsina, dcosa;
+			JWF_SINCOS(a, &dsina, &dcosa);
 			JWF_FLOAT zdist = (flame->camZ - pz);
 			JWF_FLOAT dr;
 			if (zdist > 0.0) {

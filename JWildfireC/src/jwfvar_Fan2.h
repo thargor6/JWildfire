@@ -62,8 +62,10 @@ public:
 			a = angle + dx2;
 		}
 
-		pVarTP->x += pAmount * r * JWF_SIN(a);
-		pVarTP->y += pAmount * r * JWF_COS(a);
+		JWF_FLOAT sina, cosa;
+		JWF_SINCOS(a, &sina, &cosa);
+		pVarTP->x += pAmount * r * sina;
+		pVarTP->y += pAmount * r * cosa;
 		if (pContext->isPreserveZCoordinate) {
 			pVarTP->z += pAmount * pAffineTP->z;
 		}

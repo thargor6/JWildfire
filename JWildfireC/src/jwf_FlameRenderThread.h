@@ -176,10 +176,12 @@ struct FlameRenderThread {
         if ((finalXForm->antialiasAmount > EPSILON) && (finalXForm->antialiasRadius > EPSILON) && (rnd->random() > 1.0 - finalXForm->antialiasAmount)) {
           JWF_FLOAT dr = JWF_EXP(finalXForm->antialiasRadius* JWF_SQRT(-JWF_LOG((JWF_FLOAT)rnd->random()))) - 1.0;
           JWF_FLOAT da = rnd->random() * 2.0 * M_PI;
-  				xIdx = (int) (flameView->bws * px + dr * JWF_COS(da) + 0.5);
+          JWF_FLOAT sinda, cosda;
+          JWF_SINCOS(da, &sinda, &cosda);
+  				xIdx = (int) (flameView->bws * px + dr * cosda + 0.5);
           if (xIdx < 0 || xIdx >= rasterWidth)
             continue;
-  				yIdx = (int) (flameView->bhs * py + dr * JWF_SIN(da) + 0.5);
+  				yIdx = (int) (flameView->bhs * py + dr * sinda + 0.5);
           if (yIdx < 0 || yIdx >=rasterHeight)
             continue;
         }
@@ -194,7 +196,10 @@ struct FlameRenderThread {
 
 			}
 			else {
-				q.assign(&p);
+				//q.assign(&p);
+				q.x=p.x;
+				q.y=p.y;
+				q.z=p.z;
 				flameView->project(&q, ctx);
 				px = q.x * flameView->cosa + q.y * flameView->sina + flameView->rcX;
 				if ((px < 0) || (px > flameView->camW))
@@ -206,10 +211,13 @@ struct FlameRenderThread {
         if ((xf->antialiasAmount > EPSILON) && (xf->antialiasRadius > EPSILON) && (rnd->random() > 1.0 - xf->antialiasAmount)) {
           JWF_FLOAT dr = JWF_EXP(xf->antialiasRadius * JWF_SQRT(-JWF_LOG((JWF_FLOAT)rnd->random()))) - 1.0;
           JWF_FLOAT da = rnd->random() * 2.0 * M_PI;
-  				xIdx = (int) (flameView->bws * px + dr * JWF_COS(da) + 0.5);
+          JWF_FLOAT sinda, cosda;
+          JWF_SINCOS(da, &sinda, &cosda);
+
+  				xIdx = (int) (flameView->bws * px + dr * cosda + 0.5);
           if (xIdx < 0 || xIdx >= rasterWidth)
             continue;
-  				yIdx = (int) (flameView->bhs * py + dr * JWF_SIN(da) + 0.5);
+  				yIdx = (int) (flameView->bhs * py + dr * sinda + 0.5);
           if (yIdx < 0 || yIdx >=rasterHeight)
             continue;
         }
@@ -287,7 +295,11 @@ struct FlameRenderThread {
 			else {
 				for (int i = 0; i < bundleSize; i++) {
 					idx = bundle[i];
-					qArray[idx].assign(&pArray[idx]);
+					//qArray[idx].assign(&pArray[idx]);
+					qArray[idx].x=pArray[idx].x;
+					qArray[idx].y=pArray[idx].y;
+					qArray[idx].z=pArray[idx].z;
+
 					flameView->project(&qArray[idx], ctx);
 					pxArray[idx] = qArray[idx].x * flameView->cosa + qArray[idx].y * flameView->sina + flameView->rcX;
 					if ((pxArray[idx] < 0) || (pxArray[idx] > flameView->camW)) {
@@ -313,8 +325,10 @@ struct FlameRenderThread {
 	        if ((currXForm->antialiasAmount > EPSILON) && (currXForm->antialiasRadius > EPSILON) && (rnd->random() > 1.0 - currXForm->antialiasAmount)) {
 	        	JWF_FLOAT dr = JWF_EXP(currXForm->antialiasRadius * JWF_SQRT(-JWF_LOG((JWF_FLOAT)rnd->random()))) - 1.0;
 	        	JWF_FLOAT da = rnd->random() * 2.0 * M_PI;
-						xIdx = (int) (flameView->bws * pxArray[idx] + dr * JWF_COS(da) + 0.5);
-						yIdx = (int) (flameView->bhs * pyArray[idx] + dr * JWF_SIN(da) + 0.5);
+	        	JWF_FLOAT sinda, cosda;
+	        	JWF_SINCOS(da, &sinda, &cosda);
+						xIdx = (int) (flameView->bws * pxArray[idx] + dr * cosda + 0.5);
+						yIdx = (int) (flameView->bhs * pyArray[idx] + dr * sinda + 0.5);
 	        }
 	        else {
 						xIdx = (int) (flameView->bws * pxArray[idx] + 0.5);

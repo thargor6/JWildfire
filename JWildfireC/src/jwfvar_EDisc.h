@@ -37,8 +37,8 @@ public:
 		JWF_FLOAT a2 = -JWF_ACOS(pAffineTP->x / xmax);
 		JWF_FLOAT w = pAmount / 11.57034632;
 
-		JWF_FLOAT snv = JWF_SIN(a1);
-		JWF_FLOAT csv = JWF_COS(a1);
+		JWF_FLOAT snv, csv;
+		JWF_SINCOS(a1, &snv, &csv);
 		JWF_FLOAT snhu = JWF_SINH(a2);
 		JWF_FLOAT cshu = JWF_COSH(a2);
 

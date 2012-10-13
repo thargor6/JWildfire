@@ -98,8 +98,7 @@ public:
     // Spin around the centre:
     r = (Lx * Lx + Ly * Ly) / _r2; // r should be 0.0 - 1.0
     theta = inner_twist * (1.0 - r) + outer_twist * r;
-    s = JWF_SIN(theta);
-    c = JWF_COS(theta);
+    JWF_SINCOS(theta, &s, &c);
 
     // Add rotated local vectors direct to centre (avoids use of temp storage)
     Vx = Cx + c * Lx + s * Ly;

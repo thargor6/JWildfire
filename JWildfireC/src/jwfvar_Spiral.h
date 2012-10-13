@@ -31,8 +31,8 @@ public:
 		JWF_FLOAT sinA = pAffineTP->getPrecalcSinA();
 		JWF_FLOAT cosA = pAffineTP->getPrecalcCosA();
 		JWF_FLOAT r = pAffineTP->getPrecalcSqrt();
-		JWF_FLOAT sinr = JWF_SIN(r);
-		JWF_FLOAT cosr = JWF_COS(r);
+		JWF_FLOAT sinr, cosr;
+		JWF_SINCOS(r, &sinr, &cosr);
 		r = pAmount / r;
 		pVarTP->x += (cosA + sinr) * r;
 		pVarTP->y += (sinA - cosr) * r;

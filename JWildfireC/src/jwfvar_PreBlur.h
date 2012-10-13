@@ -42,8 +42,8 @@ public:
 
 	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
 		JWF_FLOAT r = pContext->randGen->random() * 2 * M_PI;
-		JWF_FLOAT sina = JWF_SIN(r);
-		JWF_FLOAT cosa = JWF_COS(r);
+		JWF_FLOAT sina, cosa;
+		JWF_SINCOS(r, &sina, &cosa);
 		r = pAmount * (_gauss_rnd[0] + _gauss_rnd[1] + _gauss_rnd[2] + _gauss_rnd[3] - 2.0);
 		_gauss_rnd[_gauss_N] = pContext->randGen->random();
 		_gauss_N = (_gauss_N + 1) & 3;

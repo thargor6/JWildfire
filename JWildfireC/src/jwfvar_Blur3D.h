@@ -29,14 +29,14 @@ public:
 
 	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
 		JWF_FLOAT angle = randGen->random() * twoPi;
-		JWF_FLOAT sina = JWF_SIN(angle);
-		JWF_FLOAT cosa = JWF_COS(angle);
+		JWF_FLOAT sina, cosa;
+		JWF_SINCOS(angle, &sina, &cosa);
 		JWF_FLOAT r = pAmount * (gauss_rnd[0] + gauss_rnd[1] + gauss_rnd[2] + gauss_rnd[3] - 2.0);
 		gauss_rnd[gauss_N] = randGen->random();
 		gauss_N = (gauss_N + 1) & 3;
 		angle = randGen->random() * M_PI;
-		double sinb = JWF_SIN(angle);
-		double cosb = JWF_COS(angle);
+		double sinb, cosb;
+		JWF_SINCOS(angle, &sinb, &cosb);
 		pVarTP->x += r * sinb * cosa;
 		pVarTP->y += r * sinb * sina;
 		pVarTP->z += r * cosb;

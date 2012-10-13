@@ -28,21 +28,18 @@ public:
 		rrmax = 1.0 / (JWF_FLOAT) RAND_MAX123;
 	}
 
-	JWF_FLOAT random() {
+	inline JWF_FLOAT random() {
 		a = (a * 1103515245 + 12345) % RAND_MAX123;
 		JWF_FLOAT res = (JWF_FLOAT)(a * rrmax);
-		if (res < 0.0) {
-			res = 0.0 - res;
-		}
-		return res > 0 ? res : -res;
+		return res >= 0 ? res : -res;
 	}
 
-	int random(int pMax) {
+	inline int random(int pMax) {
 		int res = (int) (random() * pMax);
+		if (res < 0)
+			res = -res;
 		if (res >= pMax)
 			res = pMax - 1;
-		if (res < 0)
-			res = 0;
 		return res;
 	}
 

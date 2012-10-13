@@ -31,8 +31,8 @@ public:
 		JWF_FLOAT length = pAffineTP->getPrecalcSqrt();
 		JWF_FLOAT sinA = pAffineTP->getPrecalcSinA();
 		JWF_FLOAT cosA = pAffineTP->getPrecalcCosA();
-		JWF_FLOAT sinr = JWF_SIN(length);
-		JWF_FLOAT cosr = JWF_COS(length);
+		JWF_FLOAT sinr, cosr;
+		JWF_SINCOS(length, &sinr, &cosr);
 		pVarTP->x += pAmount * sinA * cosr;
 		pVarTP->y += pAmount * cosA * sinr;
 		if (pContext->isPreserveZCoordinate) {

@@ -58,8 +58,8 @@ public:
 
     if (rr < pAmount) {
       JWF_FLOAT a = JWF_ATAN2(yy, xx) + spin + twist * (pAmount - rr);
-      JWF_FLOAT sina = JWF_SIN(a);
-      JWF_FLOAT cosa = JWF_COS(a);
+      JWF_FLOAT sina, cosa;
+      JWF_SINCOS(a, &sina, &cosa);
       rr = pAmount * rr;
 
       pVarTP->x += rr * cosa + x;

@@ -47,8 +47,8 @@ public:
 		else
 			a = pAffineTP->getPrecalcAtanYX() + outside / (pAmount - r);
 
-		JWF_FLOAT sa = JWF_SIN(a);
-		JWF_FLOAT ca = JWF_COS(a);
+		JWF_FLOAT sa, ca;
+		JWF_SINCOS(a, &sa, &ca);
 
 		pVarTP->x += pAmount * r * ca;
 		pVarTP->y += pAmount * r * sa;

@@ -33,7 +33,6 @@ import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.io.File;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -73,6 +72,7 @@ import org.jwildfire.create.tina.animate.AnimationService;
 import org.jwildfire.create.tina.base.DrawMode;
 import org.jwildfire.create.tina.base.Shading;
 import org.jwildfire.create.tina.randomflame.RandomFlameGeneratorList;
+import org.jwildfire.create.tina.render.CUDARendererInterface;
 import org.jwildfire.create.tina.render.RendererType;
 import org.jwildfire.create.tina.swing.TinaController.NonlinearControlsRow;
 import org.jwildfire.swing.StandardErrorHandler;
@@ -3434,8 +3434,7 @@ public class TinaInternalFrame extends JInternalFrame {
     JComboBox cmb = getRendererCmb();
     cmb.removeAllItems();
     cmb.addItem(RendererType.JAVA);
-    // Currently Windows only
-    if (File.separatorChar == '\\') {
+    if (CUDARendererInterface.isCUDAAvailable()) {
       cmb.addItem(RendererType.CUDA);
     }
     cmb.setSelectedIndex(0);
@@ -10248,7 +10247,6 @@ public class TinaInternalFrame extends JInternalFrame {
       lblUseRenderer.setFont(new Font("Dialog", Font.BOLD, 10));
 
       rendererCmb = new JComboBox();
-      rendererCmb.setEnabled(false);
       rendererCmb.setMinimumSize(new Dimension(100, 24));
       rendererCmb.setMaximumSize(new Dimension(32767, 24));
       panel_16.add(rendererCmb);

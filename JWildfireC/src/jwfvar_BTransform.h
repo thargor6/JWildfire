@@ -65,8 +65,7 @@ public:
 			tau -= split;
 		sinht = JWF_SINH(tau);
 		cosht = JWF_COSH(tau);
-		sins = JWF_SIN(sigma);
-		coss = JWF_COS(sigma);
+		JWF_SINCOS(sigma, &sins, &coss);
 		temp = cosht - coss;
 		pVarTP->x += pAmount * sinht / temp;
 		pVarTP->y += pAmount * sins / temp;

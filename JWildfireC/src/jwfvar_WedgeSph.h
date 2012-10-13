@@ -55,8 +55,8 @@ public:
 
 		a = a * comp_fac + c * angle;
 
-		JWF_FLOAT sa = JWF_SIN(a);
-		JWF_FLOAT ca = JWF_COS(a);
+		JWF_FLOAT sa, ca;
+		JWF_SINCOS(a, &sa, &ca);
 		r = pAmount * (r + hole);
 
 		pVarTP->x += r * ca;

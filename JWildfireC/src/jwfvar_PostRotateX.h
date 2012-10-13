@@ -32,8 +32,8 @@ public:
 	}
 
 	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
-		JWF_FLOAT sina = JWF_SIN(pAmount * M_PI * 0.5);
-		JWF_FLOAT cosa = JWF_COS(pAmount * M_PI * 0.5);
+		JWF_FLOAT sina, cosa;
+		JWF_SINCOS(pAmount * M_PI * 0.5, &sina, &cosa);
 		JWF_FLOAT z = cosa * pVarTP->z - sina * pVarTP->y;
 		pVarTP->y = sina * pVarTP->z + cosa * pVarTP->y;
 		pVarTP->z = z;

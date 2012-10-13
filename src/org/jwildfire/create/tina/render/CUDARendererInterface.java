@@ -20,6 +20,7 @@ import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_CUDA;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -205,7 +206,7 @@ public class CUDARendererInterface {
     res.init(pInfo);
     System.out.println(pInfo.getImageWidth() + "x" + pInfo.getImageHeight() + " " + pFlame.getSampleDensity());
 
-    String cmd = "F:\\DEV\\eclipse_indigo_c_workspace\\JWildfireC\\Debug\\JWildfireC.exe";
+    String cmd = "F:\\DEV\\eclipse_indigo_c_workspace\\JWildfireC\\Release\\JWildfireC.exe";
 
     try {
       new Flam3Writer().writeFlame(pFlame, "C:\\TMP\\CUDATmpFlame.flame");
@@ -380,6 +381,11 @@ public class CUDARendererInterface {
         ex.printStackTrace();
       }
     }
+  }
+
+  public static boolean isCUDAAvailable() {
+    // Currently Windows only
+    return (File.separatorChar == '\\');
   }
 
 }

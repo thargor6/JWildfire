@@ -52,8 +52,8 @@ public:
 		JWF_FLOAT ang = vc * a + vd * lnr + va * JWF_FLOOR((JWF_FLOAT)(power * pContext->randGen->random()));
 
 		JWF_FLOAT m = pAmount * JWF_EXP(vc * lnr - vd * a);
-		JWF_FLOAT sa = JWF_SIN(ang);
-		JWF_FLOAT ca = JWF_COS(ang);
+		JWF_FLOAT sa, ca;
+		JWF_SINCOS(ang, &sa, &ca);
 
 		pVarTP->x += m * ca;
 		pVarTP->y += m * sa;

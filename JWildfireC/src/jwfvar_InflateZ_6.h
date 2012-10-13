@@ -31,7 +31,7 @@ public:
 		JWF_FLOAT ang = JWF_ATAN2(pAffineTP->y, pAffineTP->x);
 		JWF_FLOAT adf = pAffineTP->y - pAffineTP->x;
 		JWF_FLOAT kik = ang * JWF_SIN(adf);
-		pVarTP->z += pAmount * (1.5 - acosf(sinf(ang) * kik * 0.5));
+		pVarTP->z += pAmount * (1.5 - JWF_ACOS(JWF_SIN(ang) * kik * 0.5));
 	}
 
 	InflateZ_6Func* makeCopy() {

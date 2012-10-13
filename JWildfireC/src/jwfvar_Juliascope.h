@@ -52,8 +52,8 @@ public:
 			a = (2 * M_PI * rnd + JWF_ATAN2(pAffineTP->y, pAffineTP->x)) / power;
 		else
 			a = (2 * M_PI * rnd - JWF_ATAN2(pAffineTP->y, pAffineTP->x)) / power;
-		JWF_FLOAT sina = JWF_SIN(a);
-		JWF_FLOAT cosa = JWF_COS(a);
+		JWF_FLOAT sina, cosa;
+		JWF_SINCOS(a, &sina, &cosa);
 
 		double r = pAmount * JWF_POW(pAffineTP->x * pAffineTP->x + pAffineTP->y * pAffineTP->y, _cPower);
 		pVarTP->x = pVarTP->x + r * cosa;

@@ -35,10 +35,10 @@ public:
 		if (boot == 0.0) {
 			boot = kikr;
 		}
-		JWF_FLOAT siny = JWF_SIN(pAffineTP->y);
-		JWF_FLOAT cosy = JWF_COS(pAffineTP->y);
-		JWF_FLOAT sinz = JWF_SIN(boot);
-		JWF_FLOAT cosz = JWF_COS(boot);
+		JWF_FLOAT siny, cosy;
+		JWF_SINCOS(pAffineTP->y, &siny, &cosy);
+		JWF_FLOAT sinz, cosz;
+		JWF_SINCOS(boot, &sinz, &cosz);
 		JWF_FLOAT tmp = pAmount / (expx + expnx - (cosy * cosz));
 
 		pVarTP->x += (expx - expnx) * tmp;

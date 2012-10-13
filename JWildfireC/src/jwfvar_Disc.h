@@ -30,8 +30,8 @@ public:
 
 	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
 		JWF_FLOAT rPI = M_PI * JWF_SQRT(pAffineTP->x * pAffineTP->x + pAffineTP->y * pAffineTP->y);
-		JWF_FLOAT sinr = JWF_SIN(rPI);
-		JWF_FLOAT cosr = JWF_COS(rPI);
+		JWF_FLOAT sinr, cosr;
+		JWF_SINCOS(rPI, &sinr, &cosr);
 		JWF_FLOAT r = pAmount * pAffineTP->getPrecalcAtan() / M_PI;
 		pVarTP->x += sinr * r;
 		pVarTP->y += cosr * r;

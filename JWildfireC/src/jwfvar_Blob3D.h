@@ -47,8 +47,10 @@ public:
 		JWF_FLOAT a = JWF_ATAN2(pAffineTP->x, pAffineTP->y);
 		JWF_FLOAT r = JWF_SQRT(pAffineTP->x * pAffineTP->x + pAffineTP->y * pAffineTP->y);
 		r = r * (low + (high - low) * (0.5 + 0.5 * JWF_SIN(waves * a)));
-		JWF_FLOAT nx = JWF_SIN(a) * r;
-		JWF_FLOAT ny = JWF_COS(a) * r;
+		JWF_FLOAT sina, cosa;
+		JWF_SINCOS(a, &sina, &cosa);
+		JWF_FLOAT nx = sina * r;
+		JWF_FLOAT ny = cosa * r;
 		JWF_FLOAT nz = JWF_SIN(waves * a) * r;
 		pVarTP->x += pAmount * nx;
 		pVarTP->y += pAmount * ny;

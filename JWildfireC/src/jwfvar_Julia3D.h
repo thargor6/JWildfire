@@ -48,8 +48,8 @@ public:
 		JWF_FLOAT r2 = r * JWF_SQRT(r2d);
 		int rnd = (int) (pContext->randGen->random() * _absPower);
 		JWF_FLOAT angle = (JWF_ATAN2(pAffineTP->y, pAffineTP->x) + 2 * M_PI * rnd) / (JWF_FLOAT) power;
-		JWF_FLOAT sina = JWF_SIN(angle);
-		JWF_FLOAT cosa = JWF_COS(angle);
+		JWF_FLOAT sina, cosa;
+		JWF_SINCOS(angle, &sina, &cosa);
 
 		pVarTP->x += r2 * cosa;
 		pVarTP->y += r2 * sina;

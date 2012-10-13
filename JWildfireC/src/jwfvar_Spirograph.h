@@ -70,10 +70,14 @@ public:
 	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
 		JWF_FLOAT t = (tMax - tMin) * pContext->randGen->random() + tMin;
 		JWF_FLOAT y = (yMax - yMin) * pContext->randGen->random() + yMin;
-		JWF_FLOAT x1 = (a + b) * JWF_COS(t) - c1 * JWF_COS((a + b) / b * t);
-		JWF_FLOAT y1 = (a + b) * JWF_SIN(t) - c2 * JWF_SIN((a + b) / b * t);
-		pVarTP->x += pAmount * (x1 + d * JWF_COS(t) + y);
-		pVarTP->y += pAmount * (y1 + d * JWF_SIN(t) + y);
+		JWF_FLOAT sint, cost;
+		JWF_SINCOS(t, &sint, &cost);
+		JWF_FLOAT sina,cosa;
+		JWF_SINCOS((a + b) / b * t, &sina, &cosa);
+		JWF_FLOAT x1 = (a + b) * cost - c1 * cosa;
+		JWF_FLOAT y1 = (a + b) * sint - c2 * sina;
+		pVarTP->x += pAmount * (x1 + d * cost + y);
+		pVarTP->y += pAmount * (y1 + d * sint + y);
 		if (pContext->isPreserveZCoordinate) {
 			pVarTP->z += pAmount * pAffineTP->z;
 		}

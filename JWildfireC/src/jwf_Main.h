@@ -57,6 +57,7 @@
 #include "jwf_Flam3Reader.h"
 
 int renderFlame(AppSettings *pAppSettings) {
+	init_fastmath();
 	Flam3Reader *reader = new Flam3Reader();
 	Flame **flames = NULL;
 	int flameCount = 0;
@@ -70,7 +71,7 @@ int renderFlame(AppSettings *pAppSettings) {
 	Flame *hostFlame = flames[0];
 
 	FlameRenderer renderer;
-	renderer.create(hostFlame, 8);
+	renderer.create(hostFlame, pAppSettings->getThreadCount());
 	RenderInfo info;
 
 	info.imageWidth = pAppSettings->getOutputWidth();
@@ -89,7 +90,7 @@ int renderFlame(AppSettings *pAppSettings) {
 	info.renderHDR =  (pAppSettings->getOutputHDRFilename()!=NULL && strlen(pAppSettings->getOutputHDRFilename())>0) ? TRUE :  FALSE;
 	info.renderHDRIntensityMap = FALSE;
 
-	boolean usePool = hostFlame->sampleDensity > 150.0;
+	boolean usePool = hostFlame->sampleDensity >= 20.0;
 	for (int i = 0; i < hostFlame->xFormCount; i++) {
 		XForm *xForm = hostFlame->xForms[i];
 		for (int j = 0; j < hostFlame->xFormCount; j++) {
@@ -99,9 +100,7 @@ int renderFlame(AppSettings *pAppSettings) {
 			}
 		}
 	}
-	hostFlame->dump();
-
-	usePool=false;
+	//hostFlame->dump();
 
 	if (usePool == true) {
 		info.poolSize = 1024;

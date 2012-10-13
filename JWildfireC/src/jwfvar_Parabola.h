@@ -41,8 +41,8 @@ public:
 
 	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
 		JWF_FLOAT r = pAffineTP->getPrecalcSqrt();
-		JWF_FLOAT sr = JWF_SIN(r);
-		JWF_FLOAT cr = JWF_COS(r);
+		JWF_FLOAT sr, cr;
+		JWF_SINCOS(r, &sr, &cr);
 		pVarTP->x += height * pAmount * sr * sr * pContext->randGen->random();
 		pVarTP->y += width * pAmount * cr * pContext->randGen->random();
 		if (pContext->isPreserveZCoordinate) {

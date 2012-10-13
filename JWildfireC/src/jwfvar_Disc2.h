@@ -41,8 +41,8 @@ public:
 
 	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
 		JWF_FLOAT t = _timespi * (pAffineTP->x + pAffineTP->y);
-		JWF_FLOAT sinr = JWF_SIN(t);
-		JWF_FLOAT cosr = JWF_COS(t);
+		JWF_FLOAT sinr, cosr;
+		JWF_SINCOS(t, &sinr, &cosr);
 		JWF_FLOAT r = pAmount * pAffineTP->getPrecalcAtan() / M_PI;
 		pVarTP->x += (sinr + _cosadd) * r;
 		pVarTP->y += (cosr + _sinadd) * r;
@@ -58,8 +58,7 @@ public:
 	virtual void init(FlameTransformationContext *pContext, XForm *pXForm, JWF_FLOAT pAmount) {
 		JWF_FLOAT add = twist;
 		_timespi = rot * M_PI;
-		_sinadd = JWF_SIN(add);
-		_cosadd = JWF_COS(add);
+		JWF_SINCOS(add, &_sinadd, &_cosadd);
 		_cosadd -= 1.0;
 		JWF_FLOAT k;
 		if (add > 2.0 * M_PI) {

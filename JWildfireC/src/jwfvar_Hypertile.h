@@ -77,9 +77,11 @@ public:
       r = 1.0;
 
     JWF_FLOAT a = n * pa;
+    JWF_FLOAT sina, cosa;
+    JWF_SINCOS(a, &sina, &cosa);
 
-    _re = r * JWF_COS(a);
-    _im = r * JWF_SIN(a);
+    _re = r * cosa;
+    _im = r * sina;
 	}
 
 private:

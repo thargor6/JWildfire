@@ -70,8 +70,8 @@ public:
 		boolean esc = rad > cr;
 		boolean cr0 = zero;
 
-		JWF_FLOAT s = JWF_SIN(ang);
-		JWF_FLOAT c = JWF_COS(ang);
+		JWF_FLOAT s, c;
+		JWF_SINCOS(ang, &s, &c);
 
 		if (cr0 && esc) {
 			pAffineTP->x = pAffineTP->y = 0.0;

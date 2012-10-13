@@ -63,8 +63,8 @@ public:
 			}
 		}
 
-		JWF_FLOAT s = JWF_SIN(a);
-		JWF_FLOAT c = JWF_COS(a);
+		JWF_FLOAT s, c;
+		JWF_SINCOS(a, &s, &c);
 
 		pVarTP->x += r * c;
 		pVarTP->y += r * s;

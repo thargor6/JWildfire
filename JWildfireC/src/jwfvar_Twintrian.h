@@ -29,8 +29,8 @@ public:
 	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
 		JWF_FLOAT r = pContext->randGen->random() * pAmount * pAffineTP->getPrecalcSqrt();
 
-		JWF_FLOAT sinr = JWF_SIN(r);
-		JWF_FLOAT cosr = JWF_COS(r);
+		JWF_FLOAT sinr, cosr;
+		JWF_SINCOS(r, &sinr, &cosr);
 		JWF_FLOAT diff = JWF_LOG10(sinr * sinr) + cosr;
 
 		if (JWF_FABS(diff) < EPSILON) {

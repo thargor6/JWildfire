@@ -43,8 +43,11 @@ public:
 			return;
 		}
 		r = 0.5 / d;
-		JWF_FLOAT nx = JWF_SIN(a) * r;
-		JWF_FLOAT ny = JWF_COS(a) * r;
+		JWF_FLOAT sina, cosa;
+		JWF_SINCOS(a, &sina, &cosa);
+
+		JWF_FLOAT nx = sina * r;
+		JWF_FLOAT ny = cosa * r;
 		pVarTP->x += pAmount * nx;
 		pVarTP->y += pAmount * ny;
 		if (pContext->isPreserveZCoordinate) {

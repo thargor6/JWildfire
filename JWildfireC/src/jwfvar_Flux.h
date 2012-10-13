@@ -41,8 +41,10 @@ public:
 		JWF_FLOAT avgr = pAmount * (2.0 + spread) * JWF_SQRT(JWF_SQRT(pAffineTP->y * pAffineTP->y + xpw * xpw) / JWF_SQRT(pAffineTP->y * pAffineTP->y + xmw * xmw));
 		JWF_FLOAT avga = (JWF_ATAN2(pAffineTP->y, xmw) - JWF_ATAN2(pAffineTP->y, xpw)) * 0.5;
 
-		pVarTP->x += avgr * JWF_COS(avga);
-		pVarTP->y += avgr * JWF_SIN(avga);
+		JWF_FLOAT sina, cosa;
+		JWF_SINCOS(avga, &sina, &cosa);
+		pVarTP->x += avgr * cosa;
+		pVarTP->y += avgr * sina;
 		if (pContext->isPreserveZCoordinate) {
 			pVarTP->z += pAmount * pAffineTP->z;
 		}

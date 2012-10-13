@@ -62,8 +62,7 @@ public:
 
 		sinhmu = JWF_SINH(mu);
 		coshmu = JWF_COSH(mu);
-		sinnu = JWF_SIN(nu);
-		cosnu = JWF_COS(nu);
+		JWF_SINCOS(nu,&sinnu, &cosnu);
 		pVarTP->x += pAmount * coshmu * cosnu;
 		pVarTP->y += pAmount * sinhmu * sinnu;
 

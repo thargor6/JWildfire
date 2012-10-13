@@ -229,8 +229,8 @@ public:
 	}
 
 	virtual void init(FlameTransformationContext *pContext, XForm *pXForm, JWF_FLOAT pAmount) {
-		_rotSin = JWF_SIN(rotate * 2.0 * M_PI);
-		_rotCos = JWF_COS(rotate * 2.0 * M_PI);
+		JWF_FLOAT a = rotate * 2.0 * M_PI;
+		JWF_SINCOS(a, &_rotSin, &_rotCos);
 	}
 
 private:

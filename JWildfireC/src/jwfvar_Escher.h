@@ -39,8 +39,8 @@ public:
 		JWF_FLOAT a = pAffineTP->getPrecalcAtanYX();
 		JWF_FLOAT lnr = 0.5 * JWF_LOG(pAffineTP->getPrecalcSumsq());
 
-		JWF_FLOAT seb = JWF_SIN(beta);
-		JWF_FLOAT ceb = JWF_COS(beta);
+		JWF_FLOAT seb, ceb;
+		JWF_SINCOS(beta, &seb, &ceb);
 
 		JWF_FLOAT vc = 0.5 * (1.0 + ceb);
 		JWF_FLOAT vd = 0.5 * seb;
@@ -48,8 +48,8 @@ public:
 		JWF_FLOAT m = pAmount * JWF_EXP(vc * lnr - vd * a);
 		JWF_FLOAT n = vc * a + vd * lnr;
 
-		JWF_FLOAT sn = JWF_SIN(n);
-		JWF_FLOAT cn = JWF_COS(n);
+		JWF_FLOAT sn, cn;
+		JWF_SINCOS(n, &sn, &cn);
 
 		pVarTP->x += m * cn;
 		pVarTP->y += m * sn;

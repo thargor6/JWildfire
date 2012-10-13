@@ -20,3 +20,8 @@ JWildfireC/.settings
 JWildfireC/Debug
 JWildfireC/Release
 *.pdf
+JWildfireC/gmon.out
+JWildfireC/*.txt
+JWildfireC/*.bat
+JWildfireC/*.flame
+JWildfireC/src/jwf_FastMath.cpp

@@ -47,8 +47,8 @@ public:
 		int sl = (int) (pContext->randGen->random() * slices + 0.5);
 		JWF_FLOAT a = rotation + 2.0 * M_PI * (sl + pContext->randGen->random() * thickness) / slices;
 		JWF_FLOAT r = pAmount * pContext->randGen->random();
-		double sina = JWF_SIN(a);
-		double cosa = JWF_COS(a);
+		double sina, cosa;
+		JWF_SINCOS(a, &sina, &cosa);
 		pVarTP->x += r * cosa;
 		pVarTP->y += r * sina;
 		if (pContext->isPreserveZCoordinate) {

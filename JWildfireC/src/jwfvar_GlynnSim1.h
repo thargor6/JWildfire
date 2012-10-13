@@ -99,8 +99,8 @@ public:
 
 	virtual void init(FlameTransformationContext *pContext, XForm *pXForm, JWF_FLOAT pAmount) {
     JWF_FLOAT a = M_PI * phi1 / 180.0;
-    JWF_FLOAT sinPhi1 = JWF_SIN(a);
-    JWF_FLOAT cosPhi1 = JWF_COS(a);
+    JWF_FLOAT sinPhi1, cosPhi1;
+    JWF_SINCOS(a, &sinPhi1, &cosPhi1);
     _x1 = radius * cosPhi1;
     _y1 = radius * sinPhi1;
     _absPow = JWF_FABS(_pow);
@@ -125,8 +125,8 @@ private:
   void circle(FlameTransformationContext *pContext, Point *p) {
   	JWF_FLOAT r = radius1 * (thickness + (1.0 - thickness) * pContext->randGen->random());
   	JWF_FLOAT Phi = 2.0 * M_PI * pContext->randGen->random();
-  	JWF_FLOAT sinPhi = JWF_SIN(Phi);
-  	JWF_FLOAT cosPhi = JWF_COS(Phi);
+  	JWF_FLOAT sinPhi, cosPhi;
+  	JWF_SINCOS(Phi, &sinPhi, &cosPhi);
     p->x = r * cosPhi + _x1;
     p->y = r * sinPhi + _y1;
   }

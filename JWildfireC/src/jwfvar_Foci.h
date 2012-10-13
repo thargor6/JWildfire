@@ -32,8 +32,8 @@ public:
 		if (expx <= EPSILON || expnx <= EPSILON) {
 			return;
 		}
-		JWF_FLOAT siny = JWF_SIN(pAffineTP->y);
-		JWF_FLOAT cosy = JWF_COS(pAffineTP->y);
+		JWF_FLOAT siny, cosy;
+		JWF_SINCOS(pAffineTP->y, &siny, &cosy);
 
 		JWF_FLOAT tmp = (expx + expnx - cosy);
 		if (tmp == 0)

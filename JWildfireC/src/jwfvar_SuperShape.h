@@ -61,8 +61,8 @@ public:
 
     JWF_FLOAT theta = pm_4 * pAffineTP->getPrecalcAtanYX() + M_PI_4;
 
-    JWF_FLOAT st = JWF_SIN(theta);
-    JWF_FLOAT ct = JWF_COS(theta);
+    JWF_FLOAT st, ct;
+    JWF_SINCOS(theta, &st, &ct);
 
     JWF_FLOAT t1 = JWF_FABS(ct);
     t1 = JWF_POW(t1, n2);

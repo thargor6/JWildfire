@@ -73,8 +73,7 @@ public:
 			nu *= -1.0;
 		}
 
-		sinnu = JWF_SIN(nu);
-		cosnu = JWF_COS(nu);
+		JWF_SINCOS(nu, &sinnu, &cosnu);
 		pVarTP->x += pAmount * xmax * cosnu;
 		pVarTP->y += pAmount * JWF_SQRT(xmax - 1.0) * JWF_SQRT(xmax + 1.0) * sinnu;
 		if (pContext->isPreserveZCoordinate) {

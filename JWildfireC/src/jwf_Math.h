@@ -17,7 +17,10 @@
 #ifndef __JWF_MATH_H__
 #define __JWF_MATH_H__
 
-#define JWF_PREC_DOUBLE
+#include <math.h>
+#include "jwf_FastMath.h"
+
+//#define JWF_PREC_DOUBLE
 
 #undef M_PI
 #define M_PI 3.1415926535898
@@ -48,12 +51,14 @@
 #define JWF_MIN(a,b) (((a)<(b))?(a):(b))
 #define JWF_MAX(a,b) (((a)>(b))?(a):(b))
 
+#define JWF_PREC_DOUBLE
+
 #ifdef JWF_PREC_DOUBLE
 #define JWF_FLOAT double
 #define JWF_ACOS acos
 #define JWF_ACOSH acosh
-#define JWF_ATAN2 atan2
-#define JWF_COS cos
+#define JWF_ATAN2 fast_atan2
+#define JWF_COS fast_cos
 #define JWF_COSH cosh
 #define JWF_ERF erf
 #define JWF_EXP exp
@@ -64,15 +69,16 @@
 #define JWF_LOG10 log10
 #define JWF_POW pow
 #define JWF_RINT rint
-#define JWF_SIN sin
+#define JWF_SIN fast_sin
 #define JWF_SINH sinh
 #define JWF_SQRT sqrt
-#define JWF_TAN tanf
+#define JWF_TAN fast_tan
+#define JWF_SINCOS fast_sincos
 
 #ifdef EPSILON
 #undef EPSILON
 #endif
-#define EPSILON 1.0e-16
+#define EPSILON 1.0e-8
 
 #else // #ifdef JWF_PREC_DOUBLE
 #define JWF_FLOAT float
@@ -95,6 +101,12 @@
 #define JWF_SINH sinhf
 #define JWF_SQRT sqrtf
 #define JWF_TAN tanf
+#define JWF_SINCOS sincosf
+
+inline JWF_SINCOS (JWF_FLOAT a, JWF_FLOAT *sine, JWF_FLOAT *cosine) {
+	*sine = sinf(a);
+	*cosine = cosf(a);
+}
 
 #ifdef EPSILON
 #undef EPSILON

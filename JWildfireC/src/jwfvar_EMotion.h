@@ -74,8 +74,12 @@ public:
 
 		sinhmu = JWF_SINH(mu);
 		coshmu = JWF_COSH(mu);
-		pVarTP->x += pAmount * coshmu * JWF_COS(nu);
-		pVarTP->y += pAmount * sinhmu * JWF_SIN(nu);
+
+		JWF_FLOAT sinnu, cosnu;
+		JWF_SINCOS(nu, &sinnu, &cosnu);
+
+		pVarTP->x += pAmount * coshmu * cosnu;
+		pVarTP->y += pAmount * sinhmu * sinnu;
 
 		if (pContext->isPreserveZCoordinate) {
 			pVarTP->z += pAmount * pAffineTP->z;

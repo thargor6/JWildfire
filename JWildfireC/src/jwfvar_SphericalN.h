@@ -43,8 +43,8 @@ public:
     JWF_FLOAT R = JWF_POW(JWF_SQRT(JWF_SQR(pAffineTP->x) + JWF_SQR(pAffineTP->y)), dist);
     int N = (int) JWF_FLOOR(power * pContext->randGen->random());
     JWF_FLOAT alpha = JWF_ATAN2(pAffineTP->y, pAffineTP->x) + N * M_2PI / JWF_FLOOR(power);
-    JWF_FLOAT sina = JWF_SIN(alpha);
-    JWF_FLOAT cosa = JWF_COS(alpha);
+    JWF_FLOAT sina, cosa;
+    JWF_SINCOS(alpha, &sina, &cosa);
 
     if (R > EPSILON) {
       pVarTP->x += pAmount * cosa / R;

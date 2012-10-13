@@ -57,8 +57,7 @@ public:
 			sigma = alt * _pi_bCn + JWF_FMOD(sigma - _bCa_bCn, _pi_bCn);
 		sinht = JWF_SINH(tau);
 		cosht = JWF_COSH(tau);
-		sins = JWF_SIN(sigma);
-		coss = JWF_COS(sigma);
+		JWF_SINCOS(sigma, &sins, &coss);
 		temp = cosht - coss;
 		pVarTP->x += pAmount * sinht / temp;
 		pVarTP->y += pAmount * sins / temp;

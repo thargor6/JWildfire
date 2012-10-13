@@ -48,8 +48,8 @@ public:
 
 	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
 		JWF_FLOAT a = (JWF_ATAN2(pAffineTP->y, pAffineTP->x) + 2.0 * M_PI * pContext->randGen->random(_absPower)) / power;
-		JWF_FLOAT sina = JWF_SIN(a);
-		JWF_FLOAT cosa = JWF_COS(a);
+		JWF_FLOAT sina, cosa;
+		JWF_SINCOS(a, &sina, &cosa);
 		JWF_FLOAT r = pAmount * JWF_POW(pAffineTP->x * pAffineTP->x + pAffineTP->y * pAffineTP->y, _cPower);
 
 		pVarTP->x = pVarTP->x + r * cosa;

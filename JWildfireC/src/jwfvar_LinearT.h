@@ -27,7 +27,7 @@ public:
 	}
 
 	const char* getName() const {
-		return "linearT3D";
+		return "linearT";
 	}
 
 	void setParameter(char *pName, JWF_FLOAT pValue) {

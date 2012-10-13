@@ -57,8 +57,8 @@ public:
 		JWF_FLOAT c = JWF_FLOOR((count * a + M_PI) * M_1_PI * 0.5);
 
 		a = a * wedgeJulia_cf + c * angle;
-		JWF_FLOAT sa = JWF_SIN(a);
-		JWF_FLOAT ca = JWF_COS(sa);
+		JWF_FLOAT sa, ca;
+		JWF_SINCOS(a, &sa, &ca);
 
 		pVarTP->x += r * ca;
 		pVarTP->y += r * sa;

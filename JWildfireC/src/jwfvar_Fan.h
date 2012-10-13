@@ -35,8 +35,8 @@ public:
 			a = pAffineTP->getPrecalcAtan() - dx2;
 		else
 			a = pAffineTP->getPrecalcAtan() + dx2;
-		JWF_FLOAT sinr = JWF_SIN(a);
-		JWF_FLOAT cosr = JWF_COS(a);
+		JWF_FLOAT sinr, cosr;
+		JWF_SINCOS(a, &sinr, &cosr);
 		JWF_FLOAT r = pAmount * JWF_SQRT(pAffineTP->x * pAffineTP->x + pAffineTP->y * pAffineTP->y);
 		pVarTP->x += r * cosr;
 		pVarTP->y += r * sinr;

@@ -27,9 +27,11 @@ public:
 	}
 
 	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
-		pVarTP->x += pAmount * JWF_SIN(pAffineTP->x);
+		JWF_FLOAT sinx, cosx;
+		JWF_SINCOS(pAffineTP->x, &sinx, &cosx);
+		pVarTP->x += pAmount * sinx;
 		pVarTP->y += pAmount * pAffineTP->y;
-		pVarTP->z += pAmount * JWF_COS(pAffineTP->x);
+		pVarTP->z += pAmount * cosx;
 	}
 
 	CylinderApoFunc* makeCopy() {

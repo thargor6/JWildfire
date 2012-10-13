@@ -60,8 +60,11 @@ public:
 			}
 			t += 1.0 / d;
 		}
-		pVarTP->x += pAmount * t * JWF_COS(theta);
-		pVarTP->y += pAmount * t * JWF_SIN(theta);
+		JWF_FLOAT sintheta, costheta;
+		JWF_SINCOS(theta, &sintheta, &costheta);
+
+		pVarTP->x += pAmount * t * costheta;
+		pVarTP->y += pAmount * t * sintheta;
 		if (pContext->isPreserveZCoordinate) {
 			pVarTP->z += pAmount * pAffineTP->z;
 		}

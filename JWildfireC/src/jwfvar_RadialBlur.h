@@ -48,13 +48,15 @@ public:
 		_gauss_rnd[_gauss_N] = pContext->randGen->random();
 		_gauss_N = (_gauss_N + 1) & 3;
 
-		JWF_FLOAT spin = pAmount * JWF_SIN(angle * M_PI * 0.5);
-		JWF_FLOAT zoom = pAmount * JWF_COS(angle * M_PI * 0.5);
+		JWF_FLOAT sinangle, cosangle;
+		JWF_SINCOS(angle * M_PI * 0.5, &sinangle, &cosangle);
+		JWF_FLOAT spin = pAmount * sinangle;
+		JWF_FLOAT zoom = pAmount * cosangle;
 
 		JWF_FLOAT ra = JWF_SQRT(pAffineTP->x * pAffineTP->x + pAffineTP->y * pAffineTP->y);
 		JWF_FLOAT alpha = JWF_ATAN2(pAffineTP->y, pAffineTP->x) + spin * rndG;
-		JWF_FLOAT sina = JWF_SIN(alpha);
-		JWF_FLOAT cosa = JWF_COS(alpha);
+		JWF_FLOAT sina, cosa;
+		JWF_SINCOS(alpha, &sina, &cosa);
 		JWF_FLOAT rz = zoom * rndG - 1.0;
 		pVarTP->x += ra * cosa + rz * pAffineTP->x;
 		pVarTP->y += ra * sina + rz * pAffineTP->y;

@@ -78,8 +78,10 @@ public:
 	}
 
 	void init(FlameTransformationContext *pContext, XForm *pXForm, JWF_FLOAT pAmount) {
-		_vcosr = pAmount * JWF_COS(rotation);
-		_vsinr = pAmount * JWF_SIN(rotation);
+		JWF_FLOAT sinr, cosr;
+		JWF_SINCOS(rotation, &sinr, &cosr);
+		_vcosr = pAmount * cosr;
+		_vsinr = pAmount * sinr;
 	}
 
 	WaffleFunc* makeCopy() {

@@ -28,8 +28,8 @@ public:
 	}
 
 	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
-		JWF_FLOAT cscsin = JWF_SIN(pAffineTP->x);
-		JWF_FLOAT csccos = JWF_COS(pAffineTP->x);
+		JWF_FLOAT cscsin, csccos;
+		JWF_SINCOS(pAffineTP->x, &cscsin, &csccos);
 		JWF_FLOAT cscsinh = JWF_SINH(pAffineTP->y);
 		JWF_FLOAT csccosh = JWF_COSH(pAffineTP->y);
 		JWF_FLOAT d = (JWF_COSH(2.0 * pAffineTP->y) - JWF_COS(2.0 * pAffineTP->x));

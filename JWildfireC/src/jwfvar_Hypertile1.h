@@ -43,8 +43,8 @@ public:
 	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
 		JWF_FLOAT rpa = pContext->randGen->random(INT_MAX) * _pa;
 
-		JWF_FLOAT sina = JWF_SIN(rpa);
-		JWF_FLOAT cosa = JWF_COS(rpa);
+		JWF_FLOAT sina, cosa;
+		JWF_SINCOS(rpa, &sina, &cosa);
 
 		JWF_FLOAT re = _r * cosa;
 		JWF_FLOAT im = _r * sina;

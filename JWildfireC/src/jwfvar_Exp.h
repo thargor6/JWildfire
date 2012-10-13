@@ -29,8 +29,8 @@ public:
 
 	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
 		JWF_FLOAT expe = JWF_EXP(pAffineTP->x);
-		JWF_FLOAT expsin = JWF_SIN(pAffineTP->y);
-		JWF_FLOAT expcos = JWF_COS(pAffineTP->y);
+		JWF_FLOAT expsin, expcos;
+		JWF_SINCOS(pAffineTP->y, &expsin, &expcos);
 		pVarTP->x += pAmount * expe * expcos;
 		pVarTP->y += pAmount * expe * expsin;
 		if (pContext->isPreserveZCoordinate) {

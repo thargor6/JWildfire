@@ -62,8 +62,8 @@ public:
 
 		double r = var4_PI * side + hole;
 		double a = M_PI_4 * perimeter / side - M_PI_4;
-		double sina = JWF_SIN(a);
-		double cosa = JWF_COS(a);
+		double sina, cosa;
+		JWF_SINCOS(a, &sina, &cosa);
 
 		pVarTP->x += r * cosa;
 		pVarTP->y += r * sina;
