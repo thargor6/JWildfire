@@ -22,12 +22,15 @@ import static org.jwildfire.base.MathLib.fabs;
 import static org.jwildfire.base.MathLib.sin;
 import static org.jwildfire.base.MathLib.sqrt;
 import static org.jwildfire.base.MathLib.trunc;
+import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_CUDA;
+import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_JWILDFIRE;
 
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
-public class CubicLattice_3DFunc extends VariationFunc {
+public class CubicLattice3DFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
+
   private static final String PARAM_XPAND = "xpand";
   private static final String PARAM_STYLE = "style";
   private static final String[] paramNames = { PARAM_XPAND, PARAM_STYLE };
@@ -45,7 +48,7 @@ public class CubicLattice_3DFunc extends VariationFunc {
     else {
       fill = sqrt(this.xpand) * 0.5; // values above 0.5
     }
-    if (iStyle == 2) {
+    if (_iStyle == 2) {
       exnze = cos(atan2(pAffineTP.x, pAffineTP.z));
       wynze = sin(atan2(pAffineTP.y, pAffineTP.z));
       znxy = (exnze + wynze) / 2.0;
@@ -65,37 +68,37 @@ public class CubicLattice_3DFunc extends VariationFunc {
       pVarTP.y = (pVarTP.y + pAffineTP.y) * fill * wynze + lattd;
       pVarTP.z = (pVarTP.z + pAffineTP.z) * fill * znxy + lattd;
     }
-    if (useNode == 1) {
+    else if (useNode == 1) {
       pVarTP.x = (pVarTP.x + pAffineTP.x) * fill * exnze + lattd;
       pVarTP.y = (pVarTP.y + pAffineTP.y) * fill * wynze - lattd;
       pVarTP.z = (pVarTP.z + pAffineTP.z) * fill * znxy + lattd;
     }
-    if (useNode == 2) {
+    else if (useNode == 2) {
       pVarTP.x = (pVarTP.x + pAffineTP.x) * fill * exnze + lattd;
       pVarTP.y = (pVarTP.y + pAffineTP.y) * fill * wynze + lattd;
       pVarTP.z = (pVarTP.z + pAffineTP.z) * fill * znxy - lattd;
     }
-    if (useNode == 3) {
+    else if (useNode == 3) {
       pVarTP.x = (pVarTP.x + pAffineTP.x) * fill * exnze + lattd;
       pVarTP.y = (pVarTP.y + pAffineTP.y) * fill * wynze - lattd;
       pVarTP.z = (pVarTP.z + pAffineTP.z) * fill * znxy - lattd;
     }
-    if (useNode == 4) {
+    else if (useNode == 4) {
       pVarTP.x = (pVarTP.x + pAffineTP.x) * fill * exnze - lattd;
       pVarTP.y = (pVarTP.y + pAffineTP.y) * fill * wynze + lattd;
       pVarTP.z = (pVarTP.z + pAffineTP.z) * fill * znxy + lattd;
     }
-    if (useNode == 5) {
+    else if (useNode == 5) {
       pVarTP.x = (pVarTP.x + pAffineTP.x) * fill * exnze - lattd;
       pVarTP.y = (pVarTP.y + pAffineTP.y) * fill * wynze - lattd;
       pVarTP.z = (pVarTP.z + pAffineTP.z) * fill * znxy + lattd;
     }
-    if (useNode == 6) {
+    else if (useNode == 6) {
       pVarTP.x = (pVarTP.x + pAffineTP.x) * fill * exnze - lattd;
       pVarTP.y = (pVarTP.y + pAffineTP.y) * fill * wynze + lattd;
       pVarTP.z = (pVarTP.z + pAffineTP.z) * fill * znxy - lattd;
     }
-    if (useNode == 7) {
+    else if (useNode == 7) {
       pVarTP.x = (pVarTP.x + pAffineTP.x) * fill * exnze - lattd;
       pVarTP.y = (pVarTP.y + pAffineTP.y) * fill * wynze - lattd;
       pVarTP.z = (pVarTP.z + pAffineTP.z) * fill * znxy - lattd;
@@ -127,16 +130,20 @@ public class CubicLattice_3DFunc extends VariationFunc {
     return "cubicLattice_3D";
   }
 
-  int iStyle;
+  private int _iStyle;
 
   @Override
   public void init(FlameTransformationContext pContext, XForm pXForm, double pAmount) {
     if (fabs(this.style) >= 2.0) {
-      iStyle = 2;
+      _iStyle = 2;
     }
     else {
-      iStyle = 1;
+      _iStyle = 1;
     }
   }
 
+  @Override
+  public int getAvailability() {
+    return AVAILABILITY_JWILDFIRE | AVAILABILITY_CUDA;
+  }
 }

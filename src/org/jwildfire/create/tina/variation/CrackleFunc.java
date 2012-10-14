@@ -29,6 +29,8 @@ import static org.jwildfire.base.MathLib.fabs;
 import static org.jwildfire.base.MathLib.floor;
 import static org.jwildfire.base.MathLib.pow;
 import static org.jwildfire.base.MathLib.sin;
+import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_CUDA;
+import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_JWILDFIRE;
 import static org.jwildfire.create.tina.variation.NoiseTools.simplexNoise3D;
 import static org.jwildfire.create.tina.variation.VoronoiTools.VORONOI_MAXPOINTS;
 import static org.jwildfire.create.tina.variation.VoronoiTools._x_;
@@ -41,6 +43,7 @@ import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
 public class CrackleFunc extends VariationFunc {
+  private static final long serialVersionUID = 1L;
 
   private static final String PARAM_CELLSIZE = "cellsize";
   private static final String PARAM_POWER = "power";
@@ -141,7 +144,6 @@ public class CrackleFunc extends VariationFunc {
     if (pContext.isPreserveZCoordinate()) {
       pVarTP.z += pAmount * pAffineTP.z;
     }
-
   }
 
   @Override
@@ -227,4 +229,8 @@ public class CrackleFunc extends VariationFunc {
     }
   }
 
+  @Override
+  public int getAvailability() {
+    return AVAILABILITY_JWILDFIRE | AVAILABILITY_CUDA;
+  }
 }

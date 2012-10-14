@@ -259,7 +259,7 @@ public class VariationFuncList {
     registerVariationFunc(RoundSpher3DFunc.class);
     registerVariationFunc(Cubic_3DFunc.class);
     registerVariationFunc(Disc_3DFunc.class);
-    registerVariationFunc(CubicLattice_3DFunc.class);
+    registerVariationFunc(CubicLattice3DFunc.class);
     registerVariationFunc(Popcorn2_3DFunc.class);
     registerVariationFunc(Hexaplay3DFunc.class);
     registerVariationFunc(Hexnix3DFunc.class);

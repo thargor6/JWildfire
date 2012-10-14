@@ -61,16 +61,19 @@
 #include "jwfvar_Cot.h"
 #include "jwfvar_Coth.h"
 #include "jwfvar_CPow.h"
+#include "jwfvar_Crackle.h"
 #include "jwfvar_Crop.h"
 #include "jwfvar_Cross.h"
 #include "jwfvar_Csc.h"
 #include "jwfvar_Csch.h"
+#include "jwfvar_CubicLattice3D.h"
 #include "jwfvar_Curl.h"
 #include "jwfvar_Curl3D.h"
 #include "jwfvar_Curve.h"
 #include "jwfvar_Cylinder.h"
 #include "jwfvar_CylinderApo.h"
 #include "jwfvar_DCCube.h"
+#include "jwfvar_DCPerlin.h"
 #include "jwfvar_DCTransl.h"
 #include "jwfvar_Diamond.h"
 #include "jwfvar_Disc.h"
@@ -94,8 +97,10 @@
 #include "jwfvar_Exp.h"
 #include "jwfvar_Exponential.h"
 #include "jwfvar_Eyefish.h"
+#include "jwfvar_Falloff2.h"
 #include "jwfvar_Fan.h"
 #include "jwfvar_Fan2.h"
+#include "jwfvar_FarBlur.h"
 #include "jwfvar_Fisheye.h"
 #include "jwfvar_FlipCircle.h"
 #include "jwfvar_FlipY.h"
@@ -106,6 +111,8 @@
 #include "jwfvar_GaussianBlur.h"
 #include "jwfvar_Glynnia.h"
 #include "jwfvar_GlynnSim1.h"
+#include "jwfvar_GlynnSim2.h"
+#include "jwfvar_GlynnSim3.h"
 #include "jwfvar_Handkerchief.h"
 #include "jwfvar_Heart.h"
 #include "jwfvar_HeartWF.h"
@@ -119,6 +126,8 @@
 #include "jwfvar_InflateZ_6.h"
 #include "jwfvar_Hemisphere.h"
 #include "jwfvar_Hexes.h"
+#include "jwfvar_Hexaplay3D.h"
+#include "jwfvar_Hexnix3D.h"
 #include "jwfvar_Hypertile.h"
 #include "jwfvar_Hypertile1.h"
 #include "jwfvar_Hypertile2.h"
@@ -142,6 +151,7 @@
 #include "jwfvar_Mandelbrot.h"
 #include "jwfvar_Mobius.h"
 #include "jwfvar_Modulus.h"
+#include "jwfvar_NBlur.h"
 #include "jwfvar_Ngon.h"
 #include "jwfvar_Noise.h"
 #include "jwfvar_NPolar.h"
@@ -161,6 +171,7 @@
 #include "jwfvar_PostColorScaleWF.h"
 #include "jwfvar_PostCrop.h"
 #include "jwfvar_PostDCTransl.h"
+#include "jwfvar_PostFalloff2.h"
 #include "jwfvar_PostMirrorWF.h"
 #include "jwfvar_PostRotateX.h"
 #include "jwfvar_PostRotateY.h"
@@ -215,6 +226,7 @@
 #include "jwfvar_Tanh.h"
 #include "jwfvar_Tangent.h"
 #include "jwfvar_Tangent3D.h"
+#include "jwfvar_Truchet.h"
 #include "jwfvar_Twintrian.h"
 #include "jwfvar_Unpolar.h"
 #include "jwfvar_Waffle.h"
@@ -324,16 +336,19 @@ private:
 		addVariation(new CotFunc());
 		addVariation(new CothFunc());
 		addVariation(new CPowFunc());
+		addVariation(new CrackleFunc());
 		addVariation(new CropFunc());
 		addVariation(new CrossFunc());
 		addVariation(new CscFunc());
 		addVariation(new CschFunc());
+		addVariation(new CubicLattice3DFunc());
 		addVariation(new CurlFunc());
 		addVariation(new Curl3DFunc());
 		addVariation(new CurveFunc());
 		addVariation(new CylinderFunc());
 		addVariation(new CylinderApoFunc());
 		addVariation(new DCCubeFunc());
+		addVariation(new DCPerlinFunc());
 		addVariation(new DCTranslFunc());
 		addVariation(new DiamondFunc());
 		addVariation(new DiscFunc());
@@ -357,8 +372,10 @@ private:
 		addVariation(new ExpFunc());
 		addVariation(new ExponentialFunc());
 		addVariation(new EyefishFunc());
+		addVariation(new Falloff2Func());
 		addVariation(new FanFunc());
 		addVariation(new Fan2Func());
+		addVariation(new FarBlurFunc());
 		addVariation(new FisheyeFunc());
 		addVariation(new FlipCircleFunc());
 		addVariation(new FlipYFunc());
@@ -369,9 +386,13 @@ private:
 		addVariation(new GaussianBlurFunc());
 		addVariation(new GlynniaFunc());
 		addVariation(new GlynnSim1Func());
+		addVariation(new GlynnSim2Func());
+		addVariation(new GlynnSim3Func());
 		addVariation(new HandkerchiefFunc());
 		addVariation(new HeartFunc());
 		addVariation(new HeartWFFunc());
+		addVariation(new Hexaplay3DFunc());
+		addVariation(new Hexnix3DFunc());
 		addVariation(new HyperbolicFunc());
 		addVariation(new HorseshoeFunc());
 		addVariation(new HemisphereFunc());
@@ -405,6 +426,7 @@ private:
 		addVariation(new MandelbrotFunc());
 		addVariation(new MobiusFunc());
 		addVariation(new ModulusFunc());
+		addVariation(new NBlurFunc());
 		addVariation(new NgonFunc());
 		addVariation(new NoiseFunc());
 		addVariation(new NPolarFunc());
@@ -424,6 +446,7 @@ private:
 		addVariation(new PostColorScaleWFFunc());
 		addVariation(new PostCropFunc());
 		addVariation(new PostDCTranslFunc());
+		addVariation(new PostFalloff2Func());
 		addVariation(new PostMirrorWFFunc());
 		addVariation(new PostRotateXFunc());
 		addVariation(new PostRotateYFunc());
@@ -478,6 +501,7 @@ private:
 		addVariation(new TanhFunc());
 		addVariation(new TangentFunc());
 		addVariation(new Tangent3DFunc());
+		addVariation(new TruchetFunc());
 		addVariation(new TwintrianFunc());
 		addVariation(new UnpolarFunc());
 		addVariation(new WaffleFunc());

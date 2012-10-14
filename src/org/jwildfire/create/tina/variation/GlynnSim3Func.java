@@ -22,20 +22,22 @@ import static org.jwildfire.base.MathLib.pow;
 import static org.jwildfire.base.MathLib.sin;
 import static org.jwildfire.base.MathLib.sqr;
 import static org.jwildfire.base.MathLib.sqrt;
+import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_CUDA;
+import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_JWILDFIRE;
 
 import java.io.Serializable;
 
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
-@SuppressWarnings("serial")
 public class GlynnSim3Func extends VariationFunc {
+  private static final long serialVersionUID = 1L;
 
   private static final String PARAM_RADIUS = "radius";
   private static final String PARAM_THICKNESS = "thickness";
   private static final String PARAM_THICKNESS2 = "thickness2";
-  private static final String PARAM_POW = "pow";
   private static final String PARAM_CONTRAST = "contrast";
+  private static final String PARAM_POW = "pow";
 
   private static final String[] paramNames = { PARAM_RADIUS, PARAM_THICKNESS, PARAM_THICKNESS2, PARAM_CONTRAST, PARAM_POW };
 
@@ -46,20 +48,22 @@ public class GlynnSim3Func extends VariationFunc {
   private double pow = 1.5;
 
   private class Point implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     private double x, y;
   }
 
   private void circle2(FlameTransformationContext pContext, Point p) {
     //    double r = this.radius + this.thickness - this.Gamma * pContext.random();
-    double Phi = 2.0 * M_PI * pContext.random();
-    double sinPhi = sin(Phi);
-    double cosPhi = cos(Phi);
+    double phi = 2.0 * M_PI * pContext.random();
+    double sinPhi = sin(phi);
+    double cosPhi = cos(phi);
     double r;
-    if (pContext.random() < this.Gamma) {
-      r = this.radius1;
+    if (pContext.random() < this._gamma) {
+      r = this._radius1;
     }
     else {
-      r = this.radius2;
+      r = this._radius2;
     }
     p.x = r * cosPhi;
     p.y = r * sinPhi;
@@ -69,27 +73,26 @@ public class GlynnSim3Func extends VariationFunc {
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     /* GlynnSim3 by eralex61, http://eralex61.deviantart.com/art/GlynnSim-plugin-112621621 */
     double r = sqrt(pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y);
-    double Alpha = this.radius / r;
-    if (r < this.radius1) {
+    double alpha = this.radius / r;
+    if (r < this._radius1) {
       circle2(pContext, toolPoint);
       pVarTP.x += pAmount * toolPoint.x;
       pVarTP.y += pAmount * toolPoint.y;
     }
     else {
-      if (pContext.random() > this.contrast * pow(Alpha, this.absPow)) {
+      if (pContext.random() > this.contrast * pow(alpha, this._absPow)) {
 
         pVarTP.x += pAmount * pAffineTP.x;
         pVarTP.y += pAmount * pAffineTP.y;
       }
       else {
-        pVarTP.x += pAmount * Alpha * Alpha * pAffineTP.x;
-        pVarTP.y += pAmount * Alpha * Alpha * pAffineTP.y;
+        pVarTP.x += pAmount * alpha * alpha * pAffineTP.x;
+        pVarTP.y += pAmount * alpha * alpha * pAffineTP.y;
       }
     }
     if (pContext.isPreserveZCoordinate()) {
       pVarTP.z += pAmount * pAffineTP.z;
     }
-
   }
 
   @Override
@@ -124,13 +127,18 @@ public class GlynnSim3Func extends VariationFunc {
   }
 
   private Point toolPoint = new Point();
-  private double radius1, radius2, Gamma, absPow;
+  private double _radius1, _radius2, _gamma, _absPow;
 
   @Override
   public void init(FlameTransformationContext pContext, XForm pXForm, double pAmount) {
-    this.radius1 = this.radius + this.thickness;
-    this.radius2 = sqr(this.radius) / this.radius1;
-    this.Gamma = this.radius1 / (this.radius1 + this.radius2);
-    this.absPow = fabs(this.pow);
+    this._radius1 = this.radius + this.thickness;
+    this._radius2 = sqr(this.radius) / this._radius1;
+    this._gamma = this._radius1 / (this._radius1 + this._radius2);
+    this._absPow = fabs(this.pow);
+  }
+
+  @Override
+  public int getAvailability() {
+    return AVAILABILITY_JWILDFIRE | AVAILABILITY_CUDA;
   }
 }

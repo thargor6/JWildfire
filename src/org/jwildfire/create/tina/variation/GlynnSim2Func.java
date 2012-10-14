@@ -22,21 +22,23 @@ import static org.jwildfire.base.MathLib.fabs;
 import static org.jwildfire.base.MathLib.pow;
 import static org.jwildfire.base.MathLib.sin;
 import static org.jwildfire.base.MathLib.sqrt;
+import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_CUDA;
+import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_JWILDFIRE;
 
 import java.io.Serializable;
 
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
-@SuppressWarnings("serial")
 public class GlynnSim2Func extends VariationFunc {
+  private static final long serialVersionUID = 1L;
 
   private static final String PARAM_RADIUS = "radius";
   private static final String PARAM_THICKNESS = "thickness";
   private static final String PARAM_CONTRAST = "contrast";
   private static final String PARAM_POW = "pow";
-  private static final String PARAM_PHI1 = "Phi1";
-  private static final String PARAM_PHI2 = "Phi2";
+  private static final String PARAM_PHI1 = "phi1";
+  private static final String PARAM_PHI2 = "phi2";
 
   private static final String[] paramNames = { PARAM_RADIUS, PARAM_THICKNESS, PARAM_CONTRAST, PARAM_POW, PARAM_PHI1, PARAM_PHI2 };
 
@@ -48,12 +50,14 @@ public class GlynnSim2Func extends VariationFunc {
   private double phi2 = 150.0;
 
   private class Point implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     private double x, y;
   }
 
   private void circle(FlameTransformationContext pContext, Point p) {
-    double r = this.radius + this.thickness - this.Gamma * pContext.random();
-    double Phi = this.Phi10 + this.Delta * pContext.random();
+    double r = this.radius + this.thickness - this._gamma * pContext.random();
+    double Phi = this._phi10 + this._delta * pContext.random();
     double sinPhi = sin(Phi);
     double cosPhi = cos(Phi);
     p.x = r * cosPhi;
@@ -71,7 +75,7 @@ public class GlynnSim2Func extends VariationFunc {
       pVarTP.y += pAmount * toolPoint.y;
     }
     else {
-      if (pContext.random() > this.contrast * pow(Alpha, this.absPow)) {
+      if (pContext.random() > this.contrast * pow(Alpha, this._absPow)) {
         pVarTP.x += pAmount * pAffineTP.x;
         pVarTP.y += pAmount * pAffineTP.y;
       }
@@ -119,14 +123,19 @@ public class GlynnSim2Func extends VariationFunc {
   }
 
   private Point toolPoint = new Point();
-  private double Phi10, Phi20, Gamma, Delta, absPow;
+  private double _phi10, _phi20, _gamma, _delta, _absPow;
 
   @Override
   public void init(FlameTransformationContext pContext, XForm pXForm, double pAmount) {
-    this.Phi10 = M_PI * this.phi1 / 180.0;
-    this.Phi20 = M_PI * this.phi2 / 180.0;
-    this.Gamma = this.thickness * (2.0 * this.radius + this.thickness) / (this.radius + this.thickness);
-    this.Delta = this.Phi20 - this.Phi10;
-    this.absPow = fabs(this.pow);
+    this._phi10 = M_PI * this.phi1 / 180.0;
+    this._phi20 = M_PI * this.phi2 / 180.0;
+    this._gamma = this.thickness * (2.0 * this.radius + this.thickness) / (this.radius + this.thickness);
+    this._delta = this._phi20 - this._phi10;
+    this._absPow = fabs(this.pow);
+  }
+
+  @Override
+  public int getAvailability() {
+    return AVAILABILITY_JWILDFIRE | AVAILABILITY_CUDA;
   }
 }

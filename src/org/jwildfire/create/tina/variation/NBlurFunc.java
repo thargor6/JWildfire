@@ -29,6 +29,8 @@ import static org.jwildfire.base.MathLib.pow;
 import static org.jwildfire.base.MathLib.sin;
 import static org.jwildfire.base.MathLib.sqrt;
 import static org.jwildfire.base.MathLib.tan;
+import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_CUDA;
+import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_JWILDFIRE;
 
 import java.io.Serializable;
 
@@ -38,6 +40,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 public class NBlurFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
+
   private static final String PARAM_NUMEDGES = "numEdges";
   private static final String PARAM_NUMSTRIPES = "numStripes";
   private static final String PARAM_RATIOSTRIPES = "ratioStripes";
@@ -59,7 +62,7 @@ public class NBlurFunc extends VariationFunc {
   private int equalBlur = 1;
   private int exactCalc = 0;
   private double highlightEdges = 1.0;
-  private RandXYData randXYData = new RandXYData();
+  private RandXYData _randXYData = new RandXYData();
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
@@ -67,35 +70,35 @@ public class NBlurFunc extends VariationFunc {
     //*********Adjustment of width of shape*********
     if (this.adjustToLinear == TRUE) {
       if ((this.numEdges) % 4 == 0) {
-        pAmount /= sqrt(2.0 - 2.0 * cos(this.midAngle * ((double) this.numEdges / 2.0 - 1.0))) / 2.0;
+        pAmount /= sqrt(2.0 - 2.0 * cos(this._midAngle * ((double) this.numEdges / 2.0 - 1.0))) / 2.0;
       }
       else
       {
-        pAmount /= sqrt(2.0 - 2.0 * cos(this.midAngle * floor(((double) this.numEdges / 2.0)))) / 2.0;
+        pAmount /= sqrt(2.0 - 2.0 * cos(this._midAngle * floor(((double) this.numEdges / 2.0)))) / 2.0;
       }
     }
     //
-    randXY(pContext, randXYData);
+    randXY(pContext, _randXYData);
 
     //********Exact calculation slower - interpolated calculation faster********
     if ((this.exactCalc == TRUE) && (this.circumCircle == FALSE))
     {
-      while ((randXYData.lenXY < randXYData.lenInnerEdges) || (randXYData.lenXY > randXYData.lenOuterEdges))
-        randXY(pContext, randXYData);
+      while ((_randXYData.lenXY < _randXYData.lenInnerEdges) || (_randXYData.lenXY > _randXYData.lenOuterEdges))
+        randXY(pContext, _randXYData);
     }
     if ((this.exactCalc == TRUE) && (this.circumCircle == TRUE))
     {
-      while (randXYData.lenXY < randXYData.lenInnerEdges)
-        randXY(pContext, randXYData);
+      while (_randXYData.lenXY < _randXYData.lenInnerEdges)
+        randXY(pContext, _randXYData);
     }
-    double xTmp = randXYData.x;
-    double yTmp = randXYData.y;
+    double xTmp = _randXYData.x;
+    double yTmp = _randXYData.y;
 
     //**************************************************************************
 
     //********Begin of horizontal adjustment (rotation)********
-    double x = this.cosa * xTmp - this.sina * yTmp;
-    double y = this.sina * xTmp + this.cosa * yTmp;
+    double x = this._cosa * xTmp - this._sina * yTmp;
+    double y = this._sina * xTmp + this._cosa * yTmp;
     //*********End of horizontal adjustment (rotation)*********
 
     pVarTP.x += pAmount * x;
@@ -103,7 +106,6 @@ public class NBlurFunc extends VariationFunc {
     if (pContext.isPreserveZCoordinate()) {
       pVarTP.z += pAmount * pAffineTP.z;
     }
-
   }
 
   private static class RandXYData implements Serializable {
@@ -121,98 +123,82 @@ public class NBlurFunc extends VariationFunc {
     double ratioTmp, ratioTmpNum, ratioTmpDen;
     double speedCalcTmp;
     int count;
-    if (this.exactCalc == TRUE)
-    {
+    if (this.exactCalc == TRUE) {
       angXY = pContext.random() * M_2PI;
     }
-    else
-    {
-      angXY = (atan(this.arc_tan1 * (pContext.random() - 0.5)) / this.arc_tan2 + 0.5 + (double) (rand(pContext) % this.numEdges)) * this.midAngle;
+    else {
+      angXY = (atan(this._arc_tan1 * (pContext.random() - 0.5)) / this._arc_tan2 + 0.5 + (double) (rand(pContext) % this.numEdges)) * this._midAngle;
     }
     x = sin(angXY);
     y = cos(angXY);
     angMem = angXY;
 
-    while (angXY > this.midAngle)
-    {
-      angXY -= this.midAngle;
+    while (angXY > this._midAngle) {
+      angXY -= this._midAngle;
     }
 
     //********Begin of xy-calculation of radial stripes******** 
-    if (this.hasStripes == TRUE)
-    {
-      angTmp = this.angStart;
+    if (this._hasStripes == TRUE) {
+      angTmp = this._angStart;
       count = 0;
 
-      while (angXY > angTmp)
-      {
-        angTmp += this.angStripes;
-        if (angTmp > this.midAngle)
-          angTmp = this.midAngle;
+      while (angXY > angTmp) {
+        angTmp += this._angStripes;
+        if (angTmp > this._midAngle)
+          angTmp = this._midAngle;
         count++;
       }
 
-      if (angTmp != this.midAngle)
-        angTmp -= this.angStart;
+      if (angTmp != this._midAngle)
+        angTmp -= this._angStart;
 
-      if (this.negStripes == FALSE)
-      {
-        if ((count % 2) == 1)
-        {
-          if (angXY > angTmp)
-          {
-            angXY = angXY + this.angStart;
-            angMem = angMem + this.angStart;
+      if (this._negStripes == FALSE) {
+        if ((count % 2) == 1) {
+          if (angXY > angTmp) {
+            angXY = angXY + this._angStart;
+            angMem = angMem + this._angStart;
             x = sin(angMem);
             y = cos(angMem);
-            angTmp += this.angStripes;
+            angTmp += this._angStripes;
             count++;
           }
-          else
-          {
-            angXY = angXY - this.angStart;
-            angMem = angMem - this.angStart;
+          else {
+            angXY = angXY - this._angStart;
+            angMem = angMem - this._angStart;
             x = sin(angMem);
             y = cos(angMem);
-            angTmp -= this.angStripes;
+            angTmp -= this._angStripes;
             count--;
           }
         }
-        if (((count % 2) == 0) && (this.ratioStripes > 1.0))
-        {
-          if ((angXY > angTmp) && (count != this.maxStripes))
-          {
-            angMem = angMem - angXY + angTmp + (angXY - angTmp) / this.angStart * this.ratioStripes * this.angStart;
-            angXY = angTmp + (angXY - angTmp) / this.angStart * this.ratioStripes * this.angStart;
+        if (((count % 2) == 0) && (this.ratioStripes > 1.0)) {
+          if ((angXY > angTmp) && (count != this._maxStripes)) {
+            angMem = angMem - angXY + angTmp + (angXY - angTmp) / this._angStart * this.ratioStripes * this._angStart;
+            angXY = angTmp + (angXY - angTmp) / this._angStart * this.ratioStripes * this._angStart;
             x = sin(angMem);
             y = cos(angMem);
           }
-          else
-          {
-            angMem = angMem - angXY + angTmp - (angTmp - angXY) / this.angStart * this.ratioStripes * this.angStart;
-            angXY = angTmp + (angXY - angTmp) / this.angStart * this.ratioStripes * this.angStart;
+          else {
+            angMem = angMem - angXY + angTmp - (angTmp - angXY) / this._angStart * this.ratioStripes * this._angStart;
+            angXY = angTmp + (angXY - angTmp) / this._angStart * this.ratioStripes * this._angStart;
             x = sin(angMem);
             y = cos(angMem);
           }
         }
-        if (((count % 2) == 0) && (this.ratioStripes < 1.0))
-        {
-          if ((fabs(angXY - angTmp) > this.speedCalc2) && (count != (this.maxStripes)))
-          {
-            if ((angXY - angTmp) > this.speedCalc2)
-            {
-              ratioTmpNum = (angXY - (angTmp + this.speedCalc2)) * this.speedCalc2;
-              ratioTmpDen = this.angStart - this.speedCalc2;
+        if (((count % 2) == 0) && (this.ratioStripes < 1.0)) {
+          if ((fabs(angXY - angTmp) > this._speedCalc2) && (count != (this._maxStripes))) {
+            if ((angXY - angTmp) > this._speedCalc2) {
+              ratioTmpNum = (angXY - (angTmp + this._speedCalc2)) * this._speedCalc2;
+              ratioTmpDen = this._angStart - this._speedCalc2;
               ratioTmp = ratioTmpNum / ratioTmpDen;
               double a = (angMem - angXY + angTmp + ratioTmp);
               x = sin(a);
               y = cos(a);
               angXY = angTmp + ratioTmp;
             }
-            if ((angTmp - angXY) > this.speedCalc2)
-            {
-              ratioTmpNum = ((angTmp - this.speedCalc2 - angXY)) * this.speedCalc2;
-              ratioTmpDen = this.angStart - this.speedCalc2;
+            if ((angTmp - angXY) > this._speedCalc2) {
+              ratioTmpNum = ((angTmp - this._speedCalc2 - angXY)) * this._speedCalc2;
+              ratioTmpDen = this._angStart - this._speedCalc2;
               ratioTmp = ratioTmpNum / ratioTmpDen;
               double a = (angMem - angXY + angTmp - ratioTmp);
               x = sin(a);
@@ -220,12 +206,10 @@ public class NBlurFunc extends VariationFunc {
               angXY = angTmp - ratioTmp;
             }
           }
-          if (count == this.maxStripes)
-          {
-            if ((angTmp - angXY) > this.speedCalc2)
-            {
-              ratioTmpNum = ((angTmp - this.speedCalc2 - angXY)) * this.speedCalc2;
-              ratioTmpDen = this.angStart - this.speedCalc2;
+          if (count == this._maxStripes) {
+            if ((angTmp - angXY) > this._speedCalc2) {
+              ratioTmpNum = ((angTmp - this._speedCalc2 - angXY)) * this._speedCalc2;
+              ratioTmpDen = this._angStart - this._speedCalc2;
               ratioTmp = ratioTmpNum / ratioTmpDen;
               double a = (angMem - angXY + angTmp - ratioTmp);
               x = sin(a);
@@ -239,68 +223,58 @@ public class NBlurFunc extends VariationFunc {
       {
         //********Change ratio and ratioComplement******** 
         ratioTmp = this.ratioStripes;
-        this.ratioStripes = this.nb_ratioComplement;
-        this.nb_ratioComplement = ratioTmp;
-        speedCalcTmp = this.speedCalc1;
-        this.speedCalc1 = this.speedCalc2;
-        this.speedCalc2 = speedCalcTmp;
+        this.ratioStripes = this._nb_ratioComplement;
+        this._nb_ratioComplement = ratioTmp;
+        speedCalcTmp = this._speedCalc1;
+        this._speedCalc1 = this._speedCalc2;
+        this._speedCalc2 = speedCalcTmp;
         //************************************************ 
-        if ((count % 2) == 0)
-        {
-          if ((angXY > angTmp) && (count != this.maxStripes))
-          {
-            angXY = angXY + this.angStart;
-            angMem = angMem + this.angStart;
+        if ((count % 2) == 0) {
+          if ((angXY > angTmp) && (count != this._maxStripes)) {
+            angXY = angXY + this._angStart;
+            angMem = angMem + this._angStart;
             x = sin(angMem);
             y = cos(angMem);
-            angTmp += this.angStripes;
+            angTmp += this._angStripes;
             count++;
           }
-          else
-          {
-            angXY = angXY - this.angStart;
-            angMem = angMem - this.angStart;
+          else {
+            angXY = angXY - this._angStart;
+            angMem = angMem - this._angStart;
             x = sin(angMem);
             y = cos(angMem);
-            angTmp -= this.angStripes;
+            angTmp -= this._angStripes;
             count--;
           }
         }
-        if (((count % 2) == 1) && (this.ratioStripes > 1.0))
-        {
-          if ((angXY > angTmp) && (count != this.maxStripes))
-          {
-            angMem = angMem - angXY + angTmp + (angXY - angTmp) / this.angStart * this.ratioStripes * this.angStart;
-            angXY = angTmp + (angXY - angTmp) / this.angStart * this.ratioStripes * this.angStart;
+        if (((count % 2) == 1) && (this.ratioStripes > 1.0)) {
+          if ((angXY > angTmp) && (count != this._maxStripes)) {
+            angMem = angMem - angXY + angTmp + (angXY - angTmp) / this._angStart * this.ratioStripes * this._angStart;
+            angXY = angTmp + (angXY - angTmp) / this._angStart * this.ratioStripes * this._angStart;
             x = sin(angMem);
             y = cos(angMem);
           }
-          else
-          {
-            angMem = angMem - angXY + angTmp - (angTmp - angXY) / this.angStart * this.ratioStripes * this.angStart;
-            angXY = angTmp + (angXY - angTmp) / this.angStart * this.ratioStripes * this.angStart;
+          else {
+            angMem = angMem - angXY + angTmp - (angTmp - angXY) / this._angStart * this.ratioStripes * this._angStart;
+            angXY = angTmp + (angXY - angTmp) / this._angStart * this.ratioStripes * this._angStart;
             x = sin(angMem);
             y = cos(angMem);
           }
         }
-        if (((count % 2) == 1) && (this.ratioStripes < 1.0))
-        {
-          if ((fabs(angXY - angTmp) > this.speedCalc2) && (count != this.maxStripes))
-          {
-            if ((angXY - angTmp) > this.speedCalc2)
-            {
-              ratioTmpNum = (angXY - (angTmp + this.speedCalc2)) * this.speedCalc2;
-              ratioTmpDen = this.angStart - this.speedCalc2;
+        if (((count % 2) == 1) && (this.ratioStripes < 1.0)) {
+          if ((fabs(angXY - angTmp) > this._speedCalc2) && (count != this._maxStripes)) {
+            if ((angXY - angTmp) > this._speedCalc2) {
+              ratioTmpNum = (angXY - (angTmp + this._speedCalc2)) * this._speedCalc2;
+              ratioTmpDen = this._angStart - this._speedCalc2;
               ratioTmp = ratioTmpNum / ratioTmpDen;
               double a = (angMem - angXY + angTmp + ratioTmp);
               x = sin(a);
               y = cos(a);
               angXY = angTmp + ratioTmp;
             }
-            if ((angTmp - angXY) > this.speedCalc2)
-            {
-              ratioTmpNum = ((angTmp - this.speedCalc2 - angXY)) * this.speedCalc2;
-              ratioTmpDen = this.angStart - this.speedCalc2;
+            if ((angTmp - angXY) > this._speedCalc2) {
+              ratioTmpNum = ((angTmp - this._speedCalc2 - angXY)) * this._speedCalc2;
+              ratioTmpDen = this._angStart - this._speedCalc2;
               ratioTmp = ratioTmpNum / ratioTmpDen;
               double a = (angMem - angXY + angTmp - ratioTmp);
               x = sin(a);
@@ -308,13 +282,11 @@ public class NBlurFunc extends VariationFunc {
               angXY = angTmp - ratioTmp;
             }
           }
-          if (count == this.maxStripes)
-          {
-            angTmp = this.midAngle;
-            if ((angTmp - angXY) > this.speedCalc2)
-            {
-              ratioTmpNum = ((angTmp - this.speedCalc2 - angXY)) * this.speedCalc2;
-              ratioTmpDen = this.angStart - this.speedCalc2;
+          if (count == this._maxStripes) {
+            angTmp = this._midAngle;
+            if ((angTmp - angXY) > this._speedCalc2) {
+              ratioTmpNum = ((angTmp - this._speedCalc2 - angXY)) * this._speedCalc2;
+              ratioTmpDen = this._angStart - this._speedCalc2;
               ratioTmp = ratioTmpNum / ratioTmpDen;
               double a = (angMem - angXY + angTmp - ratioTmp);
               x = sin(a);
@@ -325,41 +297,37 @@ public class NBlurFunc extends VariationFunc {
         }
         //********Restore ratio and ratioComplement******* 
         ratioTmp = this.ratioStripes;
-        this.ratioStripes = this.nb_ratioComplement;
-        this.nb_ratioComplement = ratioTmp;
-        speedCalcTmp = this.speedCalc1;
-        this.speedCalc1 = this.speedCalc2;
-        this.speedCalc2 = speedCalcTmp;
+        this.ratioStripes = this._nb_ratioComplement;
+        this._nb_ratioComplement = ratioTmp;
+        speedCalcTmp = this._speedCalc1;
+        this._speedCalc1 = this._speedCalc2;
+        this._speedCalc2 = speedCalcTmp;
         //************************************************ 
       }
     }
     //********End of xy-calculation of radial stripes********
 
     //********Begin of calculation of edge limits********
-    xTmp = this.tan90_m_2 / (this.tan90_m_2 - tan(angXY));
+    xTmp = this._tan90_m_2 / (this._tan90_m_2 - tan(angXY));
     yTmp = xTmp * tan(angXY);
     lenOuterEdges = sqrt(xTmp * xTmp + yTmp * yTmp);
     //*********End of calculation of edge limits********
 
     //********Begin of radius-calculation (optionally hole)********
-    if (this.exactCalc == TRUE)
-    {
+    if (this.exactCalc == TRUE) {
       if (this.equalBlur == TRUE)
         ranTmp = sqrt(pContext.random());
       else
         ranTmp = pContext.random();
     }
-    else
-    {
-      if (this.circumCircle == TRUE)
-      {
+    else {
+      if (this.circumCircle == TRUE) {
         if (this.equalBlur == TRUE)
           ranTmp = sqrt(pContext.random());
         else
           ranTmp = pContext.random();
       }
-      else
-      {
+      else {
         if (this.equalBlur == TRUE)
           ranTmp = sqrt(pContext.random()) * lenOuterEdges;
         else
@@ -368,12 +336,9 @@ public class NBlurFunc extends VariationFunc {
     }
     lenInnerEdges = this.ratioHole * lenOuterEdges;
 
-    if (this.exactCalc == FALSE)
-    {
-      if (ranTmp < lenInnerEdges)
-      {
-        if (this.circumCircle == TRUE)
-        {
+    if (this.exactCalc == FALSE) {
+      if (ranTmp < lenInnerEdges) {
+        if (this.circumCircle == TRUE) {
           if (this.equalBlur == TRUE)
             ranTmp = lenInnerEdges + sqrt(pContext.random()) * (1.0 - lenInnerEdges + SMALL_EPSILON);
           else
@@ -451,14 +416,14 @@ public class NBlurFunc extends VariationFunc {
     return "nBlur";
   }
 
-  private double midAngle, angStripes, angStart;
-  private double tan90_m_2, sina, cosa;
-  private int hasStripes, negStripes;
+  private double _midAngle, _angStripes, _angStart;
+  private double _tan90_m_2, _sina, _cosa;
+  private int _hasStripes, _negStripes;
   //**********Variables for speed up***********
-  private double speedCalc1, speedCalc2;
-  private double maxStripes;
-  private double arc_tan1, arc_tan2;
-  private double nb_ratioComplement;
+  private double _speedCalc1, _speedCalc2;
+  private double _maxStripes;
+  private double _arc_tan1, _arc_tan2;
+  private double _nb_ratioComplement;
 
   @Override
   public void init(FlameTransformationContext pContext, XForm pXForm, double pAmount) {
@@ -467,28 +432,28 @@ public class NBlurFunc extends VariationFunc {
 
     //*********Prepare stripes related stuff*********
     if (this.numStripes != 0) {
-      this.hasStripes = TRUE;
+      this._hasStripes = TRUE;
       if (this.numStripes < 0) {
-        this.negStripes = TRUE;
+        this._negStripes = TRUE;
         this.numStripes *= -1;
       }
       else
       {
-        this.negStripes = FALSE;
+        this._negStripes = FALSE;
       }
     }
     else
     {
-      this.hasStripes = FALSE;
-      this.negStripes = FALSE;
+      this._hasStripes = FALSE;
+      this._negStripes = FALSE;
     }
 
     //**********Prepare angle related stuff**********
-    this.midAngle = M_2PI / (double) this.numEdges;
-    if (this.hasStripes == TRUE) {
-      this.angStripes = this.midAngle / (double) (2 * this.numStripes);
-      this.angStart = this.angStripes / 2.0;
-      this.nb_ratioComplement = 2.0 - this.ratioStripes;
+    this._midAngle = M_2PI / (double) this.numEdges;
+    if (this._hasStripes == TRUE) {
+      this._angStripes = this._midAngle / (double) (2 * this.numStripes);
+      this._angStart = this._angStripes / 2.0;
+      this._nb_ratioComplement = 2.0 - this.ratioStripes;
     }
 
     //**********Prepare hole related stuff***********
@@ -496,10 +461,10 @@ public class NBlurFunc extends VariationFunc {
       this.ratioHole = 0.95;
 
     //*********Prepare edge calculation related stuff*********
-    this.tan90_m_2 = tan(M_PI_2 + this.midAngle / 2.0);
-    double angle = this.midAngle / 2.0;
-    this.sina = sin(angle);
-    this.cosa = cos(angle);
+    this._tan90_m_2 = tan(M_PI_2 + this._midAngle / 2.0);
+    double angle = this._midAngle / 2.0;
+    this._sina = sin(angle);
+    this._cosa = cos(angle);
 
     //*********Prepare factor of adjustment of interpolated calculation*********
     if (this.highlightEdges <= 0.1)
@@ -513,18 +478,23 @@ public class NBlurFunc extends VariationFunc {
     }
 
     //*********Prepare speed up related stuff*********
-    this.speedCalc1 = this.nb_ratioComplement * this.angStart;
-    this.speedCalc2 = this.ratioStripes * this.angStart;
-    this.maxStripes = 2 * this.numStripes;
-    if (this.negStripes == FALSE)
+    this._speedCalc1 = this._nb_ratioComplement * this._angStart;
+    this._speedCalc2 = this.ratioStripes * this._angStart;
+    this._maxStripes = 2 * this.numStripes;
+    if (this._negStripes == FALSE)
     {
-      this.arc_tan1 = (13.0 / pow(this.numEdges, 1.3)) * this.highlightEdges;
-      this.arc_tan2 = (2.0 * atan(this.arc_tan1 / (-2.0)));
+      this._arc_tan1 = (13.0 / pow(this.numEdges, 1.3)) * this.highlightEdges;
+      this._arc_tan2 = (2.0 * atan(this._arc_tan1 / (-2.0)));
     }
     else
     {
-      this.arc_tan1 = (7.5 / pow(this.numEdges, 1.3)) * this.highlightEdges;
-      this.arc_tan2 = (2.0 * atan(this.arc_tan1 / (-2.0)));
+      this._arc_tan1 = (7.5 / pow(this.numEdges, 1.3)) * this.highlightEdges;
+      this._arc_tan2 = (2.0 * atan(this._arc_tan1 / (-2.0)));
     }
+  }
+
+  @Override
+  public int getAvailability() {
+    return AVAILABILITY_JWILDFIRE | AVAILABILITY_CUDA;
   }
 }

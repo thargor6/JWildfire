@@ -20,19 +20,22 @@ import static org.jwildfire.base.MathLib.M_PI;
 import static org.jwildfire.base.MathLib.fabs;
 import static org.jwildfire.base.MathLib.sin;
 import static org.jwildfire.base.MathLib.trunc;
+import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_CUDA;
+import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_JWILDFIRE;
 
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
 public class Hexaplay3DFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
-  private double seg60x[] = new double[6];
-  private double seg60y[] = new double[6];
-  private double seg120x[] = new double[3];
-  private double seg120y[] = new double[3];
-  private int rswtch; //  A value for choosing between 6 or 3 segments to a plane
-  private int fcycle; //  markers to count cycles... 
-  private int bcycle;
+
+  private double _seg60x[] = new double[6];
+  private double _seg60y[] = new double[6];
+  private double _seg120x[] = new double[3];
+  private double _seg120y[] = new double[3];
+  private int _rswtch; //  A value for choosing between 6 or 3 segments to a plane
+  private int _fcycle; //  markers to count cycles... 
+  private int _bcycle;
 
   private static final String PARAM_MAJP = "majp";
   private static final String PARAM_SCALE = "scale";
@@ -46,13 +49,13 @@ public class Hexaplay3DFunc extends VariationFunc {
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     /* hexaplay3D by Larry Berlin, http://aporev.deviantart.com/art/3D-Plugins-Collection-One-138514007?q=gallery%3Aaporev%2F8229210&qo=15 */
-    if (this.fcycle > 5) {
-      this.fcycle = 0;
-      this.rswtch = (int) trunc(pContext.random() * 3.0); //  Chooses new 6 or 3 nodes
+    if (this._fcycle > 5) {
+      this._fcycle = 0;
+      this._rswtch = (int) trunc(pContext.random() * 3.0); //  Chooses new 6 or 3 nodes
     }
-    if (this.bcycle > 2) {
-      this.bcycle = 0;
-      this.rswtch = (int) trunc(pContext.random() * 3.0); //  Chooses new 6 or 3 nodes
+    if (this._bcycle > 2) {
+      this._bcycle = 0;
+      this._rswtch = (int) trunc(pContext.random() * 3.0); //  Chooses new 6 or 3 nodes
     }
 
     double lrmaj = pAmount; // Sets hexagon length radius - major plane
@@ -86,20 +89,20 @@ public class Hexaplay3DFunc extends VariationFunc {
     }
 
     // Work out the segments and hexagonal nodes
-    if (this.rswtch <= 1) { // Occasion to build using 60 degree segments
+    if (this._rswtch <= 1) { // Occasion to build using 60 degree segments
       //loc60 = trunc(pContext.random()*6.0);  // random nodes selection
-      loc60 = this.fcycle; // sequential nodes selection
-      pVarTP.x = ((pVarTP.x + pAffineTP.x) * scale) + (lrmaj * seg60x[loc60]);
-      pVarTP.y = ((pVarTP.y + pAffineTP.y) * scale) + (lrmaj * seg60y[loc60]);
-      this.fcycle += 1;
+      loc60 = this._fcycle; // sequential nodes selection
+      pVarTP.x = ((pVarTP.x + pAffineTP.x) * scale) + (lrmaj * _seg60x[loc60]);
+      pVarTP.y = ((pVarTP.y + pAffineTP.y) * scale) + (lrmaj * _seg60y[loc60]);
+      this._fcycle += 1;
     }
     else {// Occasion to build on 120 degree segments
 
       //loc120 = trunc(pContext.random()*3.0);  // random nodes selection
-      loc120 = this.bcycle; // sequential nodes selection
-      pVarTP.x = ((pVarTP.x + pAffineTP.x) * scale) + (lrmaj * seg120x[loc120]);
-      pVarTP.y = ((pVarTP.y + pAffineTP.y) * scale) + (lrmaj * seg120y[loc120]);
-      this.bcycle += 1;
+      loc120 = this._bcycle; // sequential nodes selection
+      pVarTP.x = ((pVarTP.x + pAffineTP.x) * scale) + (lrmaj * _seg120x[loc120]);
+      pVarTP.y = ((pVarTP.y + pAffineTP.y) * scale) + (lrmaj * _seg120y[loc120]);
+      this._bcycle += 1;
     }
   }
 
@@ -133,31 +136,35 @@ public class Hexaplay3DFunc extends VariationFunc {
   @Override
   public void init(FlameTransformationContext pContext, XForm pXForm, double pAmount) {
     /*  Set up two major angle systems */
-    rswtch = (int) trunc(pContext.random() * 3.0); //  Chooses 6 or 3 nodes
+    _rswtch = (int) trunc(pContext.random() * 3.0); //  Chooses 6 or 3 nodes
     double hlift = sin(M_PI / 3.0);
-    fcycle = 0;
-    bcycle = 0;
-    seg60x[0] = 1.0;
-    seg60x[1] = 0.5;
-    seg60x[2] = -0.5;
-    seg60x[3] = -1.0;
-    seg60x[4] = -0.5;
-    seg60x[5] = 0.5;
+    _fcycle = 0;
+    _bcycle = 0;
+    _seg60x[0] = 1.0;
+    _seg60x[1] = 0.5;
+    _seg60x[2] = -0.5;
+    _seg60x[3] = -1.0;
+    _seg60x[4] = -0.5;
+    _seg60x[5] = 0.5;
 
-    seg60y[0] = 0.0;
-    seg60y[1] = hlift;
-    seg60y[2] = hlift;
-    seg60y[3] = 0.0;
-    seg60y[4] = -hlift;
-    seg60y[5] = -hlift;
+    _seg60y[0] = 0.0;
+    _seg60y[1] = hlift;
+    _seg60y[2] = hlift;
+    _seg60y[3] = 0.0;
+    _seg60y[4] = -hlift;
+    _seg60y[5] = -hlift;
 
-    seg120x[0] = 1.0;
-    seg120x[1] = -0.5;
-    seg120x[2] = -0.5;
+    _seg120x[0] = 1.0;
+    _seg120x[1] = -0.5;
+    _seg120x[2] = -0.5;
 
-    seg120y[0] = 0.0;
-    seg120y[1] = hlift;
-    seg120y[2] = -hlift;
+    _seg120y[0] = 0.0;
+    _seg120y[1] = hlift;
+    _seg120y[2] = -hlift;
   }
 
+  @Override
+  public int getAvailability() {
+    return AVAILABILITY_JWILDFIRE | AVAILABILITY_CUDA;
+  }
 }

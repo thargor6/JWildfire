@@ -16,14 +16,18 @@
 */
 package org.jwildfire.create.tina.variation;
 
+import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_CUDA;
+import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_JWILDFIRE;
+
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
 public class PostFalloff2Func extends Falloff2Func {
+  private static final long serialVersionUID = 1L;
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-    /* falloff2 by Xyrus02 */
+    /* post_falloff2 by Xyrus02 */
     switch (type) {
       case 1:
         calcFunctionRadial(pContext, pXForm, pVarTP.x, pVarTP.y, pVarTP.z, pAffineTP, pVarTP, pAmount);
@@ -41,4 +45,8 @@ public class PostFalloff2Func extends Falloff2Func {
     return "post_falloff2";
   }
 
+  @Override
+  public int getAvailability() {
+    return AVAILABILITY_JWILDFIRE | AVAILABILITY_CUDA;
+  }
 }

@@ -20,11 +20,14 @@ import static org.jwildfire.base.MathLib.M_2PI;
 import static org.jwildfire.base.MathLib.cos;
 import static org.jwildfire.base.MathLib.sin;
 import static org.jwildfire.base.MathLib.sqr;
+import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_CUDA;
+import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_JWILDFIRE;
 
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
 public class FarBlurFunc extends VariationFunc {
+  private static final long serialVersionUID = 1L;
 
   private static final String PARAM_X = "x";
   private static final String PARAM_Y = "y";
@@ -48,9 +51,9 @@ public class FarBlurFunc extends VariationFunc {
     double r = pAmount * (sqr(pVarTP.x - x_origin) +
         sqr(pVarTP.y - y_origin) +
         sqr(pVarTP.z - z_origin)) *
-        (this.r[0] + this.r[1] + this.r[2] + this.r[3] - 2.0);
-    this.r[n] = pContext.random();
-    n = n + 1 & 3;
+        (this._r[0] + this._r[1] + this._r[2] + this._r[3] - 2.0);
+    this._r[_n] = pContext.random();
+    _n = (_n + 1) & 3;
     double u = pContext.random() * M_2PI;
     double su = sin(u);
     double cu = cos(u);
@@ -96,16 +99,16 @@ public class FarBlurFunc extends VariationFunc {
     return "farblur";
   }
 
-  private double r[] = new double[4];
-  private int n;
+  private double _r[] = new double[4];
+  private int _n;
 
   @Override
   public void init(FlameTransformationContext pContext, XForm pXForm, double pAmount) {
-    n = 0;
-    r[0] = pContext.random();
-    r[1] = pContext.random();
-    r[2] = pContext.random();
-    r[3] = pContext.random();
+    _n = 0;
+    _r[0] = pContext.random();
+    _r[1] = pContext.random();
+    _r[2] = pContext.random();
+    _r[3] = pContext.random();
   }
 
   @Override
@@ -113,4 +116,8 @@ public class FarBlurFunc extends VariationFunc {
     return 1;
   }
 
+  @Override
+  public int getAvailability() {
+    return AVAILABILITY_JWILDFIRE | AVAILABILITY_CUDA;
+  }
 }

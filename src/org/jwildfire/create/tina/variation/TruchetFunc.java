@@ -29,12 +29,15 @@ import static org.jwildfire.base.MathLib.pow;
 import static org.jwildfire.base.MathLib.round;
 import static org.jwildfire.base.MathLib.sin;
 import static org.jwildfire.base.MathLib.sqrt;
+import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_CUDA;
+import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_JWILDFIRE;
 
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
 public class TruchetFunc extends VariationFunc {
+  private static final long serialVersionUID = 1L;
 
   private static final String PARAM_EXTENDED = "extended";
   private static final String PARAM_EXPONENT = "exponent";
@@ -55,12 +58,10 @@ public class TruchetFunc extends VariationFunc {
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     //APO VARIABLES
-    int extended = this.extended;
-    double n = this.exponent;
-    double onen = 1.0 / this.exponent;
-    double tdeg = this.rotation;
-    double width = this.arc_width;
-    double size = this.size;
+    double n = exponent;
+    double onen = 1.0 / exponent;
+    double tdeg = rotation;
+    double width = arc_width;
     double seed = fabs(this.seed);
     double seed2 = sqrt(seed + (seed / 2) + SMALL_EPSILON) / ((seed * 0.5) + SMALL_EPSILON) * 0.25;
     //VARIABLES   
@@ -167,7 +168,6 @@ public class TruchetFunc extends VariationFunc {
         pVarTP.z += pAmount * pAffineTP.z;
       }
     }
-
   }
 
   @Override
@@ -229,5 +229,10 @@ public class TruchetFunc extends VariationFunc {
     else if (size > 10.0) {
       size = 10.0;
     }
+  }
+
+  @Override
+  public int getAvailability() {
+    return AVAILABILITY_JWILDFIRE | AVAILABILITY_CUDA;
   }
 }

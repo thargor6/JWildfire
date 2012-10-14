@@ -22,12 +22,15 @@ import static org.jwildfire.base.MathLib.cos;
 import static org.jwildfire.base.MathLib.floor;
 import static org.jwildfire.base.MathLib.sin;
 import static org.jwildfire.base.MathLib.sqrt;
+import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_CUDA;
+import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_JWILDFIRE;
 
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
 public class DCPerlinFunc extends VariationFunc {
+  private static final long serialVersionUID = 1L;
 
   private static final String PARAM_SHAPE = "shape";
   private static final String PARAM_MAP = "map";
@@ -86,7 +89,7 @@ public class DCPerlinFunc extends VariationFunc {
         case SHAPE_SQUARE:
           Vx = (1.0 + this.edge) * (pContext.random() - 0.5);
           Vy = (1.0 + this.edge) * (pContext.random() - 0.5);
-          r = Vx * Vx > Vy * Vy ? sqrt(Vx * Vx) : sqrt(Vy * Vy);
+          r = Vx * Vx > Vy * Vy ? Vx : Vy;
           if (r > 1.0 - this.edge) {
             e = 0.5 * (r - 1.0 + this.edge) / this.edge;
           }
@@ -184,7 +187,7 @@ public class DCPerlinFunc extends VariationFunc {
         e = p * (1.0 + e * e * 20.0) - 2.0 * e;
       }
     }
-    while ((e < notch_bottom || e > notch_top) && t++ < this.select_bailout);
+    while ((e < _notch_bottom || e > _notch_top) && t++ < this.select_bailout);
 
     // Add blur effect to transform
     pVarTP.x += pAmount * Vx;
@@ -245,16 +248,20 @@ public class DCPerlinFunc extends VariationFunc {
     return "dc_perlin";
   }
 
-  private double notch_bottom, notch_top;
+  private double _notch_bottom, _notch_top;
 
   @Override
   public void init(FlameTransformationContext pContext, XForm pXForm, double pAmount) {
-    notch_bottom = select_centre - select_range;
-    notch_bottom = (notch_bottom > 0.75) ? 0.75 : notch_bottom;
-    notch_bottom = (notch_bottom < -2.0) ? -3.0 : notch_bottom;
-    notch_top = select_centre + select_range;
-    notch_top = (notch_top < -0.75) ? -0.75 : notch_top;
-    notch_top = (notch_top > 3.0) ? 3.0 : notch_top;
+    _notch_bottom = select_centre - select_range;
+    _notch_bottom = (_notch_bottom > 0.75) ? 0.75 : _notch_bottom;
+    _notch_bottom = (_notch_bottom < -2.0) ? -3.0 : _notch_bottom;
+    _notch_top = select_centre + select_range;
+    _notch_top = (_notch_top < -0.75) ? -0.75 : _notch_top;
+    _notch_top = (_notch_top > 3.0) ? 3.0 : _notch_top;
   }
 
+  @Override
+  public int getAvailability() {
+    return AVAILABILITY_JWILDFIRE | AVAILABILITY_CUDA;
+  }
 }

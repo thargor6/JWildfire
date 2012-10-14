@@ -15,77 +15,66 @@
  02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
+#include <stdlib.h>
 #include "jwf_Constants.h"
 #include "jwf_Variation.h"
 
-class GlynnSim1Func: public Variation {
+class GlynnSim3Func: public Variation {
 public:
-	GlynnSim1Func() {
-	  radius = 1.0;
-	  radius1 = 0.1;
-	  phi1 = 110.0;
-	  thickness = 0.1;
-	  _pow = 1.5;
-	  contrast = 0.5;
-		initParameterNames(6, "radius", "radius1", "phi1", "thickness", "pow", "contrast");
+	GlynnSim3Func() {
+    radius = 1.0;
+    thickness = 0.1;
+    thickness2 = 0.1;
+    contrast = 0.5;
+    _pow = 1.5;
+		initParameterNames(5, "radius", "thickness", "thickness2", "contrast", "pow");
 		toolPoint=(Point*)calloc(1, sizeof(Point));
 	}
 
-	~GlynnSim1Func() {
+	~GlynnSim3Func() {
 		free(toolPoint);
 	}
 
 	const char* getName() const {
-		return "glynnSim1";
+		return "glynnSim3";
 	}
 
 	void setParameter(char *pName, JWF_FLOAT pValue) {
 		if (strcmp(pName, "radius") == 0) {
 			radius = pValue;
 		}
-		else if (strcmp(pName, "radius1") == 0) {
-			radius1 = pValue;
-		}
-		else if (strcmp(pName, "phi1") == 0) {
-			phi1 = pValue;
-		}
 		else if (strcmp(pName, "thickness") == 0) {
 			thickness = pValue;
 		}
-		else if (strcmp(pName, "pow") == 0) {
-			_pow = pValue;
+		else if (strcmp(pName, "thickness2") == 0) {
+			thickness2 = pValue;
 		}
 		else if (strcmp(pName, "contrast") == 0) {
 			contrast = pValue;
 		}
+		else if (strcmp(pName, "pow") == 0) {
+			_pow = pValue;
+		}
 	}
 
 	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
+    /* GlynnSim3 by eralex61, http://eralex61.deviantart.com/art/GlynnSim-plugin-112621621 */
     JWF_FLOAT r = JWF_SQRT(pAffineTP->x * pAffineTP->x + pAffineTP->y * pAffineTP->y);
-    JWF_FLOAT Alpha = radius / r;
-    if (r < radius) { //object generation
-      circle(pContext, toolPoint);
+    JWF_FLOAT alpha = radius / r;
+    if (r < _radius1) {
+      circle2(pContext, toolPoint);
       pVarTP->x += pAmount * toolPoint->x;
       pVarTP->y += pAmount * toolPoint->y;
     }
     else {
-      if (pContext->randGen->random() > contrast * JWF_POW(Alpha, _absPow)) {
-        toolPoint->x = pAffineTP->x;
-        toolPoint->y = pAffineTP->y;
+      if (pContext->randGen->random() > contrast * JWF_POW(alpha, _absPow)) {
+
+        pVarTP->x += pAmount * pAffineTP->x;
+        pVarTP->y += pAmount * pAffineTP->y;
       }
       else {
-        toolPoint->x = Alpha * Alpha * pAffineTP->x;
-        toolPoint->y = Alpha * Alpha * pAffineTP->y;
-      }
-      JWF_FLOAT Z = JWF_SQR(toolPoint->x - _x1) + JWF_SQR(toolPoint->y - _y1);
-      if (Z < radius1 * radius1) { //object generation
-        circle(pContext, toolPoint);
-        pVarTP->x += pAmount * toolPoint->x;
-        pVarTP->y += pAmount * toolPoint->y;
-      }
-      else {
-        pVarTP->x += pAmount * toolPoint->x;
-        pVarTP->y += pAmount * toolPoint->y;
+        pVarTP->x += pAmount * alpha * alpha * pAffineTP->x;
+        pVarTP->y += pAmount * alpha * alpha * pAffineTP->y;
       }
     }
 		if (pContext->isPreserveZCoordinate) {
@@ -93,28 +82,23 @@ public:
 		}
 	}
 
-	GlynnSim1Func* makeCopy() {
-		return new GlynnSim1Func(*this);
+	GlynnSim3Func* makeCopy() {
+		return new GlynnSim3Func(*this);
 	}
 
 	virtual void init(FlameTransformationContext *pContext, XForm *pXForm, JWF_FLOAT pAmount) {
-    JWF_FLOAT a = M_PI * phi1 / 180.0;
-    JWF_FLOAT sinPhi1, cosPhi1;
-    JWF_SINCOS(a, &sinPhi1, &cosPhi1);
-    _x1 = radius * cosPhi1;
-    _y1 = radius * sinPhi1;
+    _radius1 = radius + thickness;
+    _radius2 = JWF_SQR(radius) / _radius1;
+    _gamma = _radius1 / (_radius1 + _radius2);
     _absPow = JWF_FABS(_pow);
 	}
 
 private:
   JWF_FLOAT radius;
-  JWF_FLOAT radius1;
-  JWF_FLOAT phi1;
   JWF_FLOAT thickness;
-  JWF_FLOAT _pow;
+  JWF_FLOAT thickness2;
   JWF_FLOAT contrast;
-
-  JWF_FLOAT _x1, _y1, _absPow;
+  JWF_FLOAT _pow;
 
   struct Point {
   	JWF_FLOAT x, y;
@@ -122,13 +106,23 @@ private:
 
   Point *toolPoint;
 
-  void circle(FlameTransformationContext *pContext, Point *p) {
-  	JWF_FLOAT r = radius1 * (thickness + (1.0 - thickness) * pContext->randGen->random());
-  	JWF_FLOAT Phi = 2.0 * M_PI * pContext->randGen->random();
-  	JWF_FLOAT sinPhi, cosPhi;
-  	JWF_SINCOS(Phi, &sinPhi, &cosPhi);
-    p->x = r * cosPhi + _x1;
-    p->y = r * sinPhi + _y1;
+  JWF_FLOAT _radius1, _radius2, _gamma, _absPow;
+
+
+  void circle2(FlameTransformationContext *pContext, Point *p) {
+    //    JWF_FLOAT r = radius + thickness - Gamma * pContext.random();
+    JWF_FLOAT phi = 2.0 * M_PI * pContext->randGen->random();
+    JWF_FLOAT sinPhi, cosPhi;
+    JWF_SINCOS(phi, &sinPhi, &cosPhi);
+    JWF_FLOAT r;
+    if (pContext->randGen->random() < _gamma) {
+      r = _radius1;
+    }
+    else {
+      r = _radius2;
+    }
+    p->x = r * cosPhi;
+    p->y = r * sinPhi;
   }
 
 };

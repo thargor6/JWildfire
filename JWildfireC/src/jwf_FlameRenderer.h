@@ -134,7 +134,7 @@ struct FlameRenderer {
 		LogDensityPoint *logDensityPnt;
 		hostMalloc((void**) &logDensityPnt, sizeof(LogDensityPoint));
 
-		bool newShit = true;
+		bool newShit = false;
 		JWF_FLOAT minDensity, maxDensity, avgDensity;
 
 		if (pImage != NULL) {
