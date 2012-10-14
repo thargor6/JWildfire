@@ -20,6 +20,8 @@ import static org.jwildfire.base.MathLib.M_2_PI;
 import static org.jwildfire.base.MathLib.cos;
 import static org.jwildfire.base.MathLib.sqr;
 import static org.jwildfire.base.MathLib.sqrt;
+import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_CUDA;
+import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_JWILDFIRE;
 
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
@@ -43,8 +45,7 @@ public class RoundSpher3DFunc extends SimpleVariationFunc {
     if (otherZ == 0.0) {
       tempPZ = cos(f);
     }
-    else
-    {
+    else {
       tempPZ = pVarTP.z;
     }
     double d = sqr(pAffineTP.x) + sqr(pAffineTP.y) + sqr(tempTZ);
@@ -60,4 +61,8 @@ public class RoundSpher3DFunc extends SimpleVariationFunc {
     return "roundspher3D";
   }
 
+  @Override
+  public int getAvailability() {
+    return AVAILABILITY_JWILDFIRE | AVAILABILITY_CUDA;
+  }
 }

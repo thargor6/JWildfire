@@ -51,7 +51,9 @@
 #include "jwfvar_Checks.h"
 #include "jwfvar_CircleCrop.h"
 #include "jwfvar_Circlize.h"
+#include "jwfvar_CloverLeafWF.h"
 #include "jwfvar_Collideoscope.h"
+#include "jwfvar_ColorScaleWF.h"
 #include "jwfvar_Conic.h"
 #include "jwfvar_Cos.h"
 #include "jwfvar_Cosh.h"
@@ -125,7 +127,9 @@
 #include "jwfvar_Julia3DZ.h"
 #include "jwfvar_JuliaN.h"
 #include "jwfvar_Juliascope.h"
+#include "jwfvar_Kaleidoscope.h"
 #include "jwfvar_LazySusan.h"
+#include "jwfvar_LayeredSpiral.h"
 #include "jwfvar_Linear.h"
 #include "jwfvar_Linear3D.h"
 #include "jwfvar_LinearT.h"
@@ -140,15 +144,19 @@
 #include "jwfvar_Modulus.h"
 #include "jwfvar_Ngon.h"
 #include "jwfvar_Noise.h"
+#include "jwfvar_NPolar.h"
 #include "jwfvar_Oscilloscope.h"
 #include "jwfvar_Parabola.h"
 #include "jwfvar_PDJ.h"
 #include "jwfvar_Perspective.h"
+#include "jwfvar_PhoenixJulia.h"
 #include "jwfvar_Pie.h"
 #include "jwfvar_Pie3D.h"
 #include "jwfvar_Polar.h"
 #include "jwfvar_Polar2.h"
 #include "jwfvar_Popcorn.h"
+#include "jwfvar_Popcorn2.h"
+#include "jwfvar_Popcorn2_3D.h"
 #include "jwfvar_PostCircleCrop.h"
 #include "jwfvar_PostColorScaleWF.h"
 #include "jwfvar_PostCrop.h"
@@ -156,6 +164,9 @@
 #include "jwfvar_PostMirrorWF.h"
 #include "jwfvar_PostRotateX.h"
 #include "jwfvar_PostRotateY.h"
+#include "jwfvar_PostSpinZ.h"
+#include "jwfvar_PostZScaleWF.h"
+#include "jwfvar_PostZTranslateWF.h"
 #include "jwfvar_Power.h"
 #include "jwfvar_PreBlur.h"
 #include "jwfvar_PreBoarders2.h"
@@ -164,14 +175,19 @@
 #include "jwfvar_PreDCTransl.h"
 #include "jwfvar_PreRotateX.h"
 #include "jwfvar_PreRotateY.h"
+#include "jwfvar_PreSpinZ.h"
 #include "jwfvar_PreSubFlameWF.h"
+#include "jwfvar_PreWave3DWF.h"
 #include "jwfvar_PreZScale.h"
 #include "jwfvar_PreZTranslate.h"
 #include "jwfvar_RadialBlur.h"
 #include "jwfvar_Rays.h"
 #include "jwfvar_Rectangles.h"
 #include "jwfvar_Rings.h"
+#include "jwfvar_Rings2.h"
 #include "jwfvar_Ripple.h"
+#include "jwfvar_RoseWF.h"
+#include "jwfvar_RoundSpher3D.h"
 #include "jwfvar_Scry.h"
 #include "jwfvar_Scry3D.h"
 #include "jwfvar_Sec.h"
@@ -298,7 +314,9 @@ private:
 		addVariation(new ChecksFunc());
 		addVariation(new CircleCropFunc());
 		addVariation(new CirclizeFunc());
+		addVariation(new CloverLeafWFFunc());
 		addVariation(new CollideoscopeFunc());
+		addVariation(new ColorScaleWFFunc());
 		addVariation(new ConicFunc());
 		addVariation(new CosFunc());
 		addVariation(new CoshFunc());
@@ -372,6 +390,8 @@ private:
 		addVariation(new Julia3DZFunc());
 		addVariation(new JuliaNFunc());
 		addVariation(new JuliascopeFunc());
+		addVariation(new KaleidoscopeFunc());
+		addVariation(new LayeredSpiralFunc());
 		addVariation(new LazySusanFunc());
 		addVariation(new LinearFunc());
 		addVariation(new Linear3DFunc());
@@ -387,15 +407,19 @@ private:
 		addVariation(new ModulusFunc());
 		addVariation(new NgonFunc());
 		addVariation(new NoiseFunc());
+		addVariation(new NPolarFunc());
 		addVariation(new OscilloscopeFunc());
 		addVariation(new ParabolaFunc());
 		addVariation(new PDJFunc());
 		addVariation(new PerspectiveFunc());
+		addVariation(new PhoenixJuliaFunc());
 		addVariation(new PieFunc());
 		addVariation(new Pie3DFunc());
 		addVariation(new PolarFunc());
 		addVariation(new Polar2Func());
 		addVariation(new PopcornFunc());
+		addVariation(new Popcorn2Func());
+		addVariation(new Popcorn2_3DFunc());
 		addVariation(new PostCircleCropFunc());
 		addVariation(new PostColorScaleWFFunc());
 		addVariation(new PostCropFunc());
@@ -403,6 +427,9 @@ private:
 		addVariation(new PostMirrorWFFunc());
 		addVariation(new PostRotateXFunc());
 		addVariation(new PostRotateYFunc());
+		addVariation(new PostSpinZFunc());
+		addVariation(new PostZScaleWFFunc());
+		addVariation(new PostZTranslateWFFunc());
 		addVariation(new PowerFunc());
 		addVariation(new PreBlurFunc());
 		addVariation(new PreBoarders2Func());
@@ -411,14 +438,19 @@ private:
 		addVariation(new PreDCTranslFunc());
 		addVariation(new PreRotateXFunc());
 		addVariation(new PreRotateYFunc());
+		addVariation(new PreSpinZFunc());
 		addVariation(new PreSubFlameWFFunc());
+		addVariation(new PreWave3DWFFunc());
 		addVariation(new PreZScaleFunc());
 		addVariation(new PreZTranslateFunc());
 		addVariation(new RadialBlurFunc());
 		addVariation(new RaysFunc());
 		addVariation(new RectanglesFunc());
 		addVariation(new RingsFunc());
+		addVariation(new Rings2Func());
 		addVariation(new RippleFunc());
+		addVariation(new RoseWFFunc());
+		addVariation(new RoundSpher3DFunc());
 		addVariation(new ScryFunc());
 		addVariation(new Scry3DFunc());
 		addVariation(new SecFunc());

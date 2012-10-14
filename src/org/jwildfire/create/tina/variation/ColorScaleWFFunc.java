@@ -16,10 +16,14 @@
 */
 package org.jwildfire.create.tina.variation;
 
+import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_CUDA;
+import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_JWILDFIRE;
+
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
 public class ColorScaleWFFunc extends VariationFunc {
+  private static final long serialVersionUID = 1L;
 
   private static final String PARAM_SCALEX = "scale_x";
   private static final String PARAM_SCALEY = "scale_y";
@@ -29,18 +33,18 @@ public class ColorScaleWFFunc extends VariationFunc {
 
   private static final String[] paramNames = { PARAM_SCALEX, PARAM_SCALEY, PARAM_SCALEZ, PARAM_OFFSETZ, PARAM_RESETZ };
 
-  private double scaleX = 0.0;
-  private double scaleY = 0.0;
-  private double scaleZ = 0.5;
-  private double offsetZ = 0.0;
-  private double resetZ = 0.0;
+  private double scale_x = 0.0;
+  private double scale_y = 0.0;
+  private double scale_z = 0.5;
+  private double offset_z = 0.0;
+  private double reset_z = 0.0;
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-    pVarTP.x += pAmount * scaleX * pAffineTP.x;
-    pVarTP.y += pAmount * scaleY * pAffineTP.y;
-    double dz = pAffineTP.color * scaleZ * pAmount + offsetZ;
-    if (resetZ > 0) {
+    pVarTP.x += pAmount * scale_x * pAffineTP.x;
+    pVarTP.y += pAmount * scale_y * pAffineTP.y;
+    double dz = pAffineTP.color * scale_z * pAmount + offset_z;
+    if (reset_z > 0) {
       pVarTP.z = dz;
     }
     else {
@@ -55,21 +59,21 @@ public class ColorScaleWFFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { scaleX, scaleY, scaleZ, offsetZ, resetZ };
+    return new Object[] { scale_x, scale_y, scale_z, offset_z, reset_z };
   }
 
   @Override
   public void setParameter(String pName, double pValue) {
     if (PARAM_SCALEX.equalsIgnoreCase(pName))
-      scaleX = pValue;
+      scale_x = pValue;
     else if (PARAM_SCALEY.equalsIgnoreCase(pName))
-      scaleY = pValue;
+      scale_y = pValue;
     else if (PARAM_SCALEZ.equalsIgnoreCase(pName))
-      scaleZ = pValue;
+      scale_z = pValue;
     else if (PARAM_OFFSETZ.equalsIgnoreCase(pName))
-      offsetZ = pValue;
+      offset_z = pValue;
     else if (PARAM_RESETZ.equalsIgnoreCase(pName))
-      resetZ = pValue;
+      reset_z = pValue;
     else
       throw new IllegalArgumentException(pName);
   }
@@ -79,4 +83,8 @@ public class ColorScaleWFFunc extends VariationFunc {
     return "colorscale_wf";
   }
 
+  @Override
+  public int getAvailability() {
+    return AVAILABILITY_JWILDFIRE | AVAILABILITY_CUDA;
+  }
 }

@@ -22,12 +22,15 @@ import static org.jwildfire.base.MathLib.cos;
 import static org.jwildfire.base.MathLib.pow;
 import static org.jwildfire.base.MathLib.sin;
 import static org.jwildfire.base.MathLib.sqr;
+import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_CUDA;
+import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_JWILDFIRE;
 
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
 public class PhoenixJuliaFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
+
   private static final String PARAM_POWER = "power";
   private static final String PARAM_DIST = "dist";
   private static final String PARAM_X_DISTORT = "x_distort";
@@ -45,10 +48,10 @@ public class PhoenixJuliaFunc extends VariationFunc {
     double preX = pAffineTP.x * (this.x_distort + 1.0);
     double preY = pAffineTP.y * (this.y_distort + 1.0);
 
-    double a = atan2(preY, preX) * this.invN + pContext.random(Integer.MAX_VALUE) * this.inv2PI_N;
+    double a = atan2(preY, preX) * this._invN + pContext.random(Integer.MAX_VALUE) * this._inv2PI_N;
     double sina = sin(a);
     double cosa = cos(a);
-    double r = pAmount * pow(sqr(pAffineTP.x) + sqr(pAffineTP.y), this.cN);
+    double r = pAmount * pow(sqr(pAffineTP.x) + sqr(pAffineTP.y), this._cN);
 
     pVarTP.x += r * cosa;
     pVarTP.y += r * sina;
@@ -98,13 +101,17 @@ public class PhoenixJuliaFunc extends VariationFunc {
     return Math.random() < 0.5 ? res : -res;
   }
 
-  private double invN, inv2PI_N, cN;
+  private double _invN, _inv2PI_N, _cN;
 
   @Override
   public void init(FlameTransformationContext pContext, XForm pXForm, double pAmount) {
-    invN = dist / power;
-    inv2PI_N = M_2PI / power;
-    cN = dist / power / 2.0;
+    _invN = dist / power;
+    _inv2PI_N = M_2PI / power;
+    _cN = dist / power / 2.0;
   }
 
+  @Override
+  public int getAvailability() {
+    return AVAILABILITY_JWILDFIRE | AVAILABILITY_CUDA;
+  }
 }

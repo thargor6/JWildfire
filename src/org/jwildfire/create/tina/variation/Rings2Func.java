@@ -17,11 +17,15 @@
 package org.jwildfire.create.tina.variation;
 
 import static org.jwildfire.base.MathLib.EPSILON;
+import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_CUDA;
+import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_JWILDFIRE;
 
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
 public class Rings2Func extends VariationFunc {
+  private static final long serialVersionUID = 1L;
+
   private static final String PARAM_VAL = "val";
   private static final String[] paramNames = { PARAM_VAL };
 
@@ -72,4 +76,10 @@ public class Rings2Func extends VariationFunc {
   public void init(FlameTransformationContext pContext, XForm pXForm, double pAmount) {
     _dx = pAmount * pAmount + EPSILON;
   }
+
+  @Override
+  public int getAvailability() {
+    return AVAILABILITY_JWILDFIRE | AVAILABILITY_CUDA;
+  }
+
 }

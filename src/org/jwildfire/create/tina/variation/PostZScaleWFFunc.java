@@ -16,10 +16,15 @@
 */
 package org.jwildfire.create.tina.variation;
 
+import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_CUDA;
+import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_JWILDFIRE;
+
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
 public class PostZScaleWFFunc extends VariationFunc {
+  private static final long serialVersionUID = 1L;
+
   private static final String PARAM_ZTRANSLATE = "ztranslate";
 
   private static final String[] paramNames = { PARAM_ZTRANSLATE };
@@ -54,4 +59,8 @@ public class PostZScaleWFFunc extends VariationFunc {
       throw new IllegalArgumentException(pName);
   }
 
+  @Override
+  public int getAvailability() {
+    return AVAILABILITY_JWILDFIRE | AVAILABILITY_CUDA;
+  }
 }

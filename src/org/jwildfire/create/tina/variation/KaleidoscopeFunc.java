@@ -18,11 +18,14 @@ package org.jwildfire.create.tina.variation;
 
 import static org.jwildfire.base.MathLib.cos;
 import static org.jwildfire.base.MathLib.sin;
+import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_CUDA;
+import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_JWILDFIRE;
 
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
 public class KaleidoscopeFunc extends VariationFunc {
+  private static final long serialVersionUID = 1L;
 
   private static final String PARAM_PULL = "pull";
   private static final String PARAM_ROTATE = "rotate";
@@ -41,18 +44,17 @@ public class KaleidoscopeFunc extends VariationFunc {
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     /* Kaleidoscope by Will Evans, http://eevans1.deviantart.com/art/kaleidoscope-plugin-122185469  */
-    pVarTP.x += ((w * pAffineTP.x) * cos(45.0) - pAffineTP.y * sin(45.0) + e) + r;
+    pVarTP.x += ((_w * pAffineTP.x) * cos(45.0) - pAffineTP.y * sin(45.0) + _e) + _r;
     // the if function splits the plugin in two.
     if (pAffineTP.y > 0) {
-      pVarTP.y += ((w * pAffineTP.y) * cos(45.0) + pAffineTP.x * sin(45.0) + q + e) + t;
+      pVarTP.y += ((_w * pAffineTP.y) * cos(45.0) + pAffineTP.x * sin(45.0) + _q + _e) + _t;
     }
     else {
-      pVarTP.y += (w * pAffineTP.y) * cos(45.0) + pAffineTP.x * sin(45.0) - q - e;
+      pVarTP.y += (_w * pAffineTP.y) * cos(45.0) + pAffineTP.x * sin(45.0) - _q - _e;
     }
     if (pContext.isPreserveZCoordinate()) {
       pVarTP.z += pAmount * pAffineTP.z;
     }
-
   }
 
   @Override
@@ -86,15 +88,19 @@ public class KaleidoscopeFunc extends VariationFunc {
     return "kaleidoscope";
   }
 
-  double q, w, e, r, t, i;
+  double _q, _w, _e, _r, _t, _i;
 
   @Override
   public void init(FlameTransformationContext pContext, XForm pXForm, double pAmount) {
-    q = pull; // pulls apart the 2 sections of the plugin
-    w = rotate; // rotates both halves of the plugin
-    e = line_up;
-    r = x; // changes x co-ordinates
-    t = y; // changes y co-ordinates for 1 part of the plugin
+    _q = pull; // pulls apart the 2 sections of the plugin
+    _w = rotate; // rotates both halves of the plugin
+    _e = line_up;
+    _r = x; // changes x co-ordinates
+    _t = y; // changes y co-ordinates for 1 part of the plugin
   }
 
+  @Override
+  public int getAvailability() {
+    return AVAILABILITY_JWILDFIRE | AVAILABILITY_CUDA;
+  }
 }

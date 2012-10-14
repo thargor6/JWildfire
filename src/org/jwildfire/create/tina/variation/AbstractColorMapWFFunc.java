@@ -30,8 +30,9 @@ import org.jwildfire.image.SimpleHDRImage;
 import org.jwildfire.image.SimpleImage;
 import org.jwildfire.image.WFImage;
 
-@SuppressWarnings("serial")
 public abstract class AbstractColorMapWFFunc extends VariationFunc {
+  private static final long serialVersionUID = 1L;
+
   private static final String PARAM_SCALEX = "scale_x";
   private static final String PARAM_SCALEY = "scale_y";
   private static final String PARAM_SCALEZ = "scale_z";

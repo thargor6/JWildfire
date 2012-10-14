@@ -16,6 +16,8 @@
  */
 package org.jwildfire.create.tina.variation;
 
+import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_JWILDFIRE;
+
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
@@ -37,4 +39,8 @@ public class PostColorMapWFFunc extends AbstractColorMapWFFunc {
     transform(pContext, pXForm, pAffineTP, pVarTP, pAmount, pVarTP.x, pVarTP.y);
   }
 
+  @Override
+  public int getAvailability() {
+    return AVAILABILITY_JWILDFIRE;
+  }
 }

@@ -19,6 +19,8 @@ package org.jwildfire.create.tina.variation;
 import static org.jwildfire.base.MathLib.M_PI_2;
 import static org.jwildfire.base.MathLib.cos;
 import static org.jwildfire.base.MathLib.sin;
+import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_CUDA;
+import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_JWILDFIRE;
 
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
@@ -29,8 +31,8 @@ public class PreSpinZFunc extends SimpleVariationFunc {
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     /* pre_spin_z by Larry Berlin, http://aporev.deviantart.com/art/New-3D-Plugins-136484533?q=gallery%3Aaporev%2F8229210&qo=22 */
-    double y = rz_cos * pAffineTP.y - rz_sin * pAffineTP.x;
-    pAffineTP.x = rz_sin * pAffineTP.y + rz_cos * pAffineTP.x;
+    double y = _rz_cos * pAffineTP.y - _rz_sin * pAffineTP.x;
+    pAffineTP.x = _rz_sin * pAffineTP.y + _rz_cos * pAffineTP.x;
     pAffineTP.y = y;
   }
 
@@ -39,17 +41,22 @@ public class PreSpinZFunc extends SimpleVariationFunc {
     return "pre_spin_z";
   }
 
-  private double rz_sin, rz_cos;
+  private double _rz_sin, _rz_cos;
 
   @Override
   public void init(FlameTransformationContext pContext, XForm pXForm, double pAmount) {
-    rz_sin = sin(pAmount * M_PI_2);
-    rz_cos = cos(pAmount * M_PI_2);
+    _rz_sin = sin(pAmount * M_PI_2);
+    _rz_cos = cos(pAmount * M_PI_2);
   }
 
   @Override
   public int getPriority() {
     return -1;
+  }
+
+  @Override
+  public int getAvailability() {
+    return AVAILABILITY_JWILDFIRE | AVAILABILITY_CUDA;
   }
 
 }
