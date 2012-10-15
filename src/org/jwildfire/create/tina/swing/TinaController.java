@@ -90,7 +90,7 @@ import org.jwildfire.create.tina.randomflame.RandomFlameGeneratorList;
 import org.jwildfire.create.tina.randomflame.RandomFlameGeneratorSample;
 import org.jwildfire.create.tina.randomflame.RandomFlameGeneratorSampler;
 import org.jwildfire.create.tina.randomflame.SubFlameRandomFlameGenerator;
-import org.jwildfire.create.tina.render.CUDARendererInterface;
+import org.jwildfire.create.tina.render.CRendererInterface;
 import org.jwildfire.create.tina.render.FlameRenderer;
 import org.jwildfire.create.tina.render.ProgressUpdater;
 import org.jwildfire.create.tina.render.RenderInfo;
@@ -1102,17 +1102,17 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
               statusMessage("Render time: " + Tools.doubleToString((t1 - t0) * 0.001) + "s");
             }
               break;
-            case CUDA: {
+            case C32:
+            case C64: {
               try {
                 flame.setSampleDensity(prefs.getTinaRenderPreviewQuality());
                 flame.setSpatialFilterRadius(0.0);
                 flame.setSpatialOversample(1);
                 flame.setColorOversample(1);
-
-                long t0 = System.currentTimeMillis();
-                CUDARendererInterface cudaRenderer = new CUDARendererInterface();
-                cudaRenderer.checkFlameForCUDA(flame);
+                CRendererInterface cudaRenderer = new CRendererInterface(rendererType);
+                CRendererInterface.checkFlameForCUDA(flame);
                 cudaRenderer.setProgressUpdater(mainProgressUpdater);
+                long t0 = System.currentTimeMillis();
                 RenderedFlame res = cudaRenderer.renderFlame(info, flame, prefs);
                 long t1 = System.currentTimeMillis();
                 statusMessage("Render time: " + Tools.doubleToString((t1 - t0) * 0.001) + "s");
@@ -1122,6 +1122,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
                 errorHandler.handleError(ex);
               }
             }
+              break;
           }
         }
         finally {
@@ -2293,21 +2294,57 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
           int oldColorOversample = flame.getColorOversample();
           double oldFilterRadius = flame.getSpatialFilterRadius();
           try {
-            flame.setSampleDensity(qualProfile.getQuality());
-            flame.setSpatialOversample(qualProfile.getSpatialOversample());
-            flame.setColorOversample(qualProfile.getColorOversample());
-            long t0 = Calendar.getInstance().getTimeInMillis();
-            FlameRenderer renderer = new FlameRenderer(flame, prefs);
-            renderer.setProgressUpdater(mainProgressUpdater);
-            RenderedFlame res = renderer.renderFlame(info);
-            long t1 = Calendar.getInstance().getTimeInMillis();
-            System.err.println("RENDER TIME: " + ((double) (t1 - t0) / 1000.0) + "s");
-            new ImageWriter().saveImage(res.getImage(), file.getAbsolutePath());
-            if (res.getHDRImage() != null) {
-              new ImageWriter().saveImage(res.getHDRImage(), file.getAbsolutePath() + ".hdr");
+            RendererType rendererType = (RendererType) rendererCmb.getSelectedItem();
+            if (rendererType == null) {
+              rendererType = RendererType.JAVA;
             }
-            if (res.getHDRIntensityMap() != null) {
-              new ImageWriter().saveImage(res.getHDRIntensityMap(), file.getAbsolutePath() + ".intensity.hdr");
+            flame.setSampleDensity(qualProfile.getQuality());
+            switch (rendererType) {
+              case JAVA: {
+                flame.setSpatialOversample(qualProfile.getSpatialOversample());
+                flame.setColorOversample(qualProfile.getColorOversample());
+                FlameRenderer renderer = new FlameRenderer(flame, prefs);
+                renderer.setProgressUpdater(mainProgressUpdater);
+                long t0 = Calendar.getInstance().getTimeInMillis();
+                RenderedFlame res = renderer.renderFlame(info);
+                long t1 = Calendar.getInstance().getTimeInMillis();
+                statusMessage("Render time: " + Tools.doubleToString((t1 - t0) * 0.001) + "s");
+                new ImageWriter().saveImage(res.getImage(), file.getAbsolutePath());
+                if (res.getHDRImage() != null) {
+                  new ImageWriter().saveImage(res.getHDRImage(), file.getAbsolutePath() + ".hdr");
+                }
+                if (res.getHDRIntensityMap() != null) {
+                  new ImageWriter().saveImage(res.getHDRIntensityMap(), file.getAbsolutePath() + ".intensity.hdr");
+                }
+              }
+                break;
+              case C32:
+              case C64: {
+                try {
+                  flame.setSpatialFilterRadius(0.0);
+                  flame.setSpatialOversample(1);
+                  flame.setColorOversample(1);
+                  CRendererInterface cudaRenderer = new CRendererInterface(rendererType);
+                  CRendererInterface.checkFlameForCUDA(flame);
+                  cudaRenderer.setProgressUpdater(mainProgressUpdater);
+                  long t0 = System.currentTimeMillis();
+                  RenderedFlame res = cudaRenderer.renderFlame(info, flame, prefs);
+                  long t1 = System.currentTimeMillis();
+                  statusMessage("Render time: " + Tools.doubleToString((t1 - t0) * 0.001) + "s");
+                  new ImageWriter().saveImage(res.getImage(), file.getAbsolutePath());
+                  if (res.getHDRImage() != null) {
+                    new ImageWriter().saveImage(res.getHDRImage(), file.getAbsolutePath() + ".hdr");
+                  }
+                  if (res.getHDRIntensityMap() != null) {
+                    new ImageWriter().saveImage(res.getHDRIntensityMap(), file.getAbsolutePath() + ".intensity.hdr");
+                  }
+                }
+                catch (Throwable ex) {
+                  errorHandler.handleError(ex);
+                }
+              }
+                break;
+
             }
           }
           finally {
@@ -3767,7 +3804,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
   public void checkCUDACompatibility() {
     try {
       if (currFlame != null) {
-        new CUDARendererInterface().checkFlameForCUDA(currFlame);
+        CRendererInterface.checkFlameForCUDA(currFlame);
         JOptionPane.showMessageDialog(centerPanel, "Flame should render fine under JWildfireC(UDA)", "JWildfireC(UDA) compatibility check", JOptionPane.INFORMATION_MESSAGE);
       }
     }

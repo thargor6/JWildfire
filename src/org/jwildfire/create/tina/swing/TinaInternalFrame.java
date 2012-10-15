@@ -72,7 +72,7 @@ import org.jwildfire.create.tina.animate.AnimationService;
 import org.jwildfire.create.tina.base.DrawMode;
 import org.jwildfire.create.tina.base.Shading;
 import org.jwildfire.create.tina.randomflame.RandomFlameGeneratorList;
-import org.jwildfire.create.tina.render.CUDARendererInterface;
+import org.jwildfire.create.tina.render.CRendererInterface;
 import org.jwildfire.create.tina.render.RendererType;
 import org.jwildfire.create.tina.swing.TinaController.NonlinearControlsRow;
 import org.jwildfire.swing.StandardErrorHandler;
@@ -3434,8 +3434,9 @@ public class TinaInternalFrame extends JInternalFrame {
     JComboBox cmb = getRendererCmb();
     cmb.removeAllItems();
     cmb.addItem(RendererType.JAVA);
-    if (CUDARendererInterface.isCUDAAvailable()) {
-      cmb.addItem(RendererType.CUDA);
+    if (CRendererInterface.isCUDAAvailable()) {
+      cmb.addItem(RendererType.C32);
+      cmb.addItem(RendererType.C64);
     }
     cmb.setSelectedIndex(0);
   }

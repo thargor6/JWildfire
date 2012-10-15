@@ -28,6 +28,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.security.CodeSource;
 
 import org.jwildfire.base.Prefs;
 import org.jwildfire.base.Tools;
@@ -38,10 +39,15 @@ import org.jwildfire.create.tina.palette.RGBColor;
 import org.jwildfire.create.tina.variation.Variation;
 import org.jwildfire.image.SimpleImage;
 
-public class CUDARendererInterface {
+public class CRendererInterface {
   private ProgressUpdater progressUpdater;
+  private final RendererType rendererType;
 
-  public void checkFlameForCUDA(Flame pFlame) {
+  public CRendererInterface(RendererType pRendererType) {
+    rendererType = pRendererType;
+  }
+
+  public static void checkFlameForCUDA(Flame pFlame) {
     for (XForm xForm : pFlame.getXForms()) {
       if (xForm.getVariationCount() > 0) {
         for (int i = 0; i < xForm.getVariationCount(); i++) {
@@ -56,7 +62,7 @@ public class CUDARendererInterface {
     }
   }
 
-  private void checkVariationForCUDA(Variation pVariation) {
+  private static void checkVariationForCUDA(Variation pVariation) {
     if ((pVariation.getFunc().getAvailability() & AVAILABILITY_CUDA) == 0) {
       throw new RuntimeException("Variation <" + pVariation.getFunc().getName() + "> is currently not available for the external renderer. Please try to remove it or contact the author.");
     }
@@ -214,7 +220,29 @@ public class CUDARendererInterface {
     String currTmpFilename = tmpFile.getAbsolutePath();
     tmpFile.delete();
 
-    String cmd = "F:\\DEV\\eclipse_indigo_c_workspace\\JWildfireC\\Release\\JWildfireC.exe";
+    CodeSource codeSource = this.getClass().getProtectionDomain().getCodeSource();
+    File jarFile = new File(codeSource.getLocation().toURI().getPath());
+    File jarDir = jarFile.getParentFile();
+    String jarParentDir = jarDir.getParentFile().getPath();
+
+    String cmd;
+    switch (rendererType) {
+      case C32:
+        cmd = jarParentDir + "\\JWildfireC\\win32\\JWildfireC.exe";
+        break;
+      case C64:
+        cmd = jarParentDir + "\\JWildfireC\\win64\\JWildfireC.exe";
+        break;
+      default:
+        throw new Exception("Unsupported render type <" + rendererType + ">");
+    }
+    if (!new File(cmd).exists()) {
+      throw new Exception("Renderer <" + cmd + "> not found");
+    }
+
+    System.out.println(cmd);
+    // String cmd = "F:\\DEV\\eclipse_indigo_c_workspace\\JWildfireC\\Release\\JWildfireC.exe";
+
     String flameFilename = currTmpFilename + ".flame";
     String ppmFilename = currTmpFilename + ".ppm";
     String statusFilename = currTmpFilename + ".ppm.status";

@@ -34,6 +34,25 @@ public:
 		scale = 1.0;
 	  z=0.0;
 		initParameterNames(5, "cellsize", "power", "distort", "scale", "z");
+
+	  offset[0][0] = -1;
+	  offset[0][1] = -1;
+	  offset[1][0] = -1;
+	  offset[1][1] = 0;
+	  offset[2][0] = -1;
+	  offset[2][1] = 1;
+	  offset[3][0] = 0;
+	  offset[3][1] = -1;
+	  offset[4][0] = 0;
+	  offset[4][1] = 0;
+	  offset[5][0] = 0;
+	  offset[5][1] = 1;
+	  offset[6][0] = 1;
+	  offset[6][1] = -1;
+	  offset[7][0] = 1;
+	  offset[7][1] = 0;
+	  offset[8][0] = 1;
+	  offset[8][1] = 1;
 	}
 
 	const char* getName() const {
@@ -168,10 +187,7 @@ private:
   // C is a cache of pre-calculated centres
   JWF_FLOAT C[CACHE_WIDTH][CACHE_WIDTH][2];
 
-  int const offset[9][2] = { { -1, -1 }, { -1, 0 }, { -1, 1 },
-      { 0, -1 }, { 0, 0 }, { 0, 1 },
-      { 1, -1 }, { 1, 0 }, { 1, 1 } };
-
+  int offset[9][2];
 
   //Waffle's cells are based on a simple square grid which is distorted using a noise function
 

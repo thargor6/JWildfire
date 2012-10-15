@@ -101,7 +101,10 @@
     <copy todir="${dist.dir}/">
        <fileset dir="build/launcher" includes="start.sh start.bat"/>
      </copy>    
-     <copy todir="${dist.dir}/">
+    <copy todir="${dist.dir}/JWildfireC/">
+       <fileset dir="build/JWildfireC" />
+     </copy>    
+  	<copy todir="${dist.dir}/">
        <fileset file="CHANGES.txt" />
        <fileset file="README_LAUNCH.txt" />
      </copy>    
