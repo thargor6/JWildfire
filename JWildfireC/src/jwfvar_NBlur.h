@@ -216,7 +216,7 @@ private:
 			angXY = pContext->randGen->random() * M_2PI;
 		}
 		else {
-			angXY = (JWF_ATAN((JWF_FLOAT)(_arc_tan1 * (pContext->randGen->random() - 0.5))) / _arc_tan2 + 0.5 + (JWF_FLOAT) (pContext->randGen->random(INT_MAX) % numEdges)) * _midAngle;
+			angXY = (JWF_ATAN((JWF_FLOAT)(_arc_tan1 * (pContext->randGen->random() - 0.5))) / _arc_tan2 + 0.5 + (JWF_FLOAT) (pContext->randGen->random(32768) % numEdges)) * _midAngle;
 		}
 		JWF_SINCOS(angXY, &x, &y);
 		angMem = angXY;

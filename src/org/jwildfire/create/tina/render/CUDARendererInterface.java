@@ -22,12 +22,14 @@ import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 
+import org.jwildfire.base.Prefs;
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.XForm;
@@ -37,6 +39,7 @@ import org.jwildfire.create.tina.variation.Variation;
 import org.jwildfire.image.SimpleImage;
 
 public class CUDARendererInterface {
+  private ProgressUpdater progressUpdater;
 
   public void checkFlameForCUDA(Flame pFlame) {
     for (XForm xForm : pFlame.getXForms()) {
@@ -199,31 +202,45 @@ public class CUDARendererInterface {
     return res.indexOf(".") < 0 ? res + ".0" : res;
   }
 
-  //  -flameFilename C:\TMP\CUDAExample.flame -outputFilename C:\TMP\CUDA.ppm -threadCount 8 -outputWidth 1920 -outputHeight 1080 -sampleDensity 100.0 -filterRadius 0.0
+  public RenderedFlame renderFlame(RenderInfo pInfo, Flame pFlame, Prefs pPrefs) throws Exception {
+    if (progressUpdater != null) {
+      progressUpdater.initProgress(100);
+    }
 
-  public RenderedFlame renderFlame(RenderInfo pInfo, Flame pFlame) {
     RenderedFlame res = new RenderedFlame();
     res.init(pInfo);
-    System.out.println(pInfo.getImageWidth() + "x" + pInfo.getImageHeight() + " " + pFlame.getSampleDensity());
+
+    File tmpFile = File.createTempFile("JWF", "");
+    String currTmpFilename = tmpFile.getAbsolutePath();
+    tmpFile.delete();
 
     String cmd = "F:\\DEV\\eclipse_indigo_c_workspace\\JWildfireC\\Release\\JWildfireC.exe";
+    String flameFilename = currTmpFilename + ".flame";
+    String ppmFilename = currTmpFilename + ".ppm";
+    String statusFilename = currTmpFilename + ".ppm.status";
 
     try {
-      new Flam3Writer().writeFlame(pFlame, "C:\\TMP\\CUDATmpFlame.flame");
+      new Flam3Writer().writeFlame(pFlame, flameFilename);
     }
     catch (Exception e) {
       throw new RuntimeException(e);
     }
-    String args = " -flameFilename C:\\TMP\\CUDATmpFlame.flame -outputFilename C:\\TMP\\CUDA.ppm -threadCount 8 -outputWidth " + pInfo.getImageWidth() + " -outputHeight " + pInfo.getImageHeight() + " -sampleDensity " + doubleToCUDA(pFlame.getSampleDensity());
+    String args = " -flameFilename \"" + flameFilename + "\" -outputFilename \"" + ppmFilename + "\" -threadCount " + pPrefs.getTinaRenderThreads() + " -reportStatus -outputWidth " + pInfo.getImageWidth() + " -outputHeight " + pInfo.getImageHeight() + " -sampleDensity " + doubleToCUDA(pFlame.getSampleDensity());
     ByteArrayOutputStream bos = new ByteArrayOutputStream();
 
-    int retVal = launchCmd(cmd + args, bos);
+    int retVal = launchCmd(cmd + args, bos, statusFilename, true);
     if (retVal != 0) {
       throw new RuntimeException(bos.toString());
     }
 
-    loadImage("C:\\TMP\\CUDA.ppm", res.getImage());
+    loadImage(ppmFilename, res.getImage());
 
+    new File(flameFilename).delete();
+    new File(ppmFilename).delete();
+
+    if (progressUpdater != null) {
+      progressUpdater.updateProgress(100);
+    }
     return res;
   }
 
@@ -299,46 +316,120 @@ public class CUDARendererInterface {
     }
   }
 
-  private int launchCmd(String pCmd, OutputStream pOS) {
-    int exitVal;
-    try {
-      Runtime runtime = Runtime.getRuntime();
+  private class ExecCmdThread implements Runnable {
+    private final String cmd;
+    private final OutputStream os;
+    private boolean finished;
+    private int exitVal;
 
-      Process proc;
-      try {
-        proc = runtime.exec(pCmd);
-      }
-      catch (IOException ex) {
-        throw new RuntimeException(ex);
-      }
+    public ExecCmdThread(String pCmd, OutputStream pOS) {
+      cmd = pCmd;
+      os = pOS;
+    }
 
-      final boolean dumpToOut = true;
-      StreamRedirector outputStreamHandler = new StreamRedirector(proc.getInputStream(), pOS, dumpToOut);
-      StreamRedirector errorStreamHandler = new StreamRedirector(proc.getErrorStream(), pOS, dumpToOut);
-      errorStreamHandler.start();
-      outputStreamHandler.start();
+    @Override
+    public void run() {
+      finished = false;
       try {
-        exitVal = proc.waitFor();
+        try {
+          Runtime runtime = Runtime.getRuntime();
+
+          Process proc;
+          try {
+            proc = runtime.exec(cmd);
+          }
+          catch (IOException ex) {
+            throw new RuntimeException(ex);
+          }
+
+          final boolean dumpToOut = true;
+          StreamRedirector outputStreamHandler = new StreamRedirector(proc.getInputStream(), os, dumpToOut);
+          StreamRedirector errorStreamHandler = new StreamRedirector(proc.getErrorStream(), os, dumpToOut);
+          errorStreamHandler.start();
+          outputStreamHandler.start();
+
+          try {
+            exitVal = proc.waitFor();
+          }
+          catch (InterruptedException e) {
+            exitVal = -1;
+            e.printStackTrace();
+          }
+
+          if (dumpToOut) {
+            System.out.println("EXITVALUE=" + exitVal);
+          }
+        }
+        finally {
+          try {
+            os.flush();
+            os.close();
+          }
+          catch (IOException e) {
+            exitVal = -1;
+            e.printStackTrace();
+          }
+        }
       }
-      catch (InterruptedException e) {
-        exitVal = -1;
-        e.printStackTrace();
-      }
-      if (dumpToOut) {
-        System.out.println("EXITVALUE=" + exitVal);
+      finally {
+        finished = true;
       }
     }
-    finally {
-      try {
-        pOS.flush();
-        pOS.close();
-      }
-      catch (IOException e) {
-        exitVal = -1;
-        e.printStackTrace();
+
+    public boolean isFinished() {
+      return finished;
+    }
+
+    public int getExitVal() {
+      return exitVal;
+    }
+  }
+
+  private int launchCmd(String pCmd, OutputStream pOS, String pStatusFilename, boolean pInBackground) {
+    ExecCmdThread thread = new ExecCmdThread(pCmd, pOS);
+    if (pInBackground) {
+      new Thread(thread).start();
+      while (!thread.isFinished()) {
+        try {
+          Thread.sleep(1);
+          if (progressUpdater != null && pStatusFilename != null) {
+            String currProgressStr;
+            try {
+              BufferedReader in = new BufferedReader(new FileReader(pStatusFilename));
+              try {
+                currProgressStr = in.readLine();
+              }
+              finally {
+                in.close();
+              }
+            }
+            catch (Throwable ex) {
+              //ex.printStackTrace();
+              currProgressStr = "";
+            }
+            int currProgressVal = 0;
+            if (currProgressStr != null && currProgressStr.length() > 0) {
+              try {
+                currProgressVal = Integer.parseInt(currProgressStr);
+              }
+              catch (Exception ex) {
+                currProgressVal = 0;
+              }
+            }
+            if (currProgressVal > 0 && currProgressVal <= 100) {
+              progressUpdater.updateProgress(currProgressVal);
+            }
+          }
+        }
+        catch (InterruptedException e) {
+          e.printStackTrace();
+        }
       }
     }
-    return exitVal;
+    else {
+      thread.run();
+    }
+    return thread.getExitVal();
   }
 
   private class StreamRedirector extends Thread {
@@ -388,4 +479,7 @@ public class CUDARendererInterface {
     return (File.separatorChar == '\\');
   }
 
+  public void setProgressUpdater(ProgressUpdater pProgressUpdater) {
+    progressUpdater = pProgressUpdater;
+  }
 }

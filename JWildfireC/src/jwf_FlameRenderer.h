@@ -134,7 +134,7 @@ struct FlameRenderer {
 		LogDensityPoint *logDensityPnt;
 		hostMalloc((void**) &logDensityPnt, sizeof(LogDensityPoint));
 
-		bool newShit = false;
+		bool newShit = true;
 		JWF_FLOAT minDensity, maxDensity, avgDensity;
 
 		if (pImage != NULL) {
@@ -183,7 +183,7 @@ struct FlameRenderer {
 				for (int i = 0; i < pHDRImage->imageHeight; i++) {
 					for (int j = 0; j < pHDRImage->imageWidth; j++) {
 						if (newShit) {
-						  logDensityFilter->transformPointHDRNewShit(logDensityPnt, j, i, maxDensity);
+							logDensityFilter->transformPointHDRNewShit(logDensityPnt, j, i, maxDensity);
 						}
 						else {
 							logDensityFilter->transformPointHDR(logDensityPnt, j, i);
@@ -206,10 +206,10 @@ struct FlameRenderer {
 					}
 				}
 				if (setBG) {
-					JWF_FLOAT weight = (JWF_FLOAT) (0.25 * (maxLum + 3.0 * minLum));
-					JWF_FLOAT bgRed = (JWF_FLOAT) (gammaCorrectionFilter->bgRedDouble * weight);
-					JWF_FLOAT bgGreen = (JWF_FLOAT) (gammaCorrectionFilter->bgGreenDouble * weight);
-					JWF_FLOAT bgBlue = (JWF_FLOAT) (gammaCorrectionFilter->bgBlueDouble * weight);
+					JWF_FLOAT weight = (JWF_FLOAT)(0.25 * (maxLum + 3.0 * minLum));
+					JWF_FLOAT bgRed = (JWF_FLOAT)(gammaCorrectionFilter->bgRedDouble * weight);
+					JWF_FLOAT bgGreen = (JWF_FLOAT)(gammaCorrectionFilter->bgGreenDouble * weight);
+					JWF_FLOAT bgBlue = (JWF_FLOAT)(gammaCorrectionFilter->bgBlueDouble * weight);
 					for (int i = 0; i < pHDRImage->imageHeight; i++) {
 						for (int j = 0; j < pHDRImage->imageWidth; j++) {
 							if (bgMap[i * pHDRImage->imageWidth + j]) {
@@ -223,8 +223,8 @@ struct FlameRenderer {
 			else {
 				for (int i = 0; i < pHDRImage->imageHeight; i++) {
 					for (int j = 0; j < pHDRImage->imageWidth; j++) {
-						if(newShit) {
-						  logDensityFilter->transformPointHDRNewShit(logDensityPnt, j, i, maxDensity);
+						if (newShit) {
+							logDensityFilter->transformPointHDRNewShit(logDensityPnt, j, i, maxDensity);
 						}
 						else {
 							logDensityFilter->transformPointHDR(logDensityPnt, j, i);
@@ -293,14 +293,15 @@ struct FlameRenderer {
 		createColorMap();
 		flameView->initView(imageWidth, imageHeight, borderWidth, maxBorderWidth, rasterWidth, rasterHeight);
 		flame->prepareFlame(flameTransformationContext, threadCount);
-		double nSamples = ((double) flame->sampleDensity * (double) rasterSize / ((double) threadCount * (double) pRenderInfo->bundleSize) + 0.5);
-		printf("SAMPLES: %fd (%d threads)\n", nSamples * (double) threadCount, threadCount);
+		double nSamples = ((double) flame->sampleDensity * (double) rasterSize / (double) pRenderInfo->bundleSize);
+		double *threadStatusArray = (double*) calloc(threadCount, sizeof(double));
+		printf("SAMPLES: %fd (%d threads)\n", nSamples , threadCount);
 
 		if (threadCount == 1) {
 			FlameRenderThread thread;
 			flameTransformationContext->threadIdx = 0;
 			thread.init(flame, flameTransformationContext, nSamples, flameView, raster, rasterWidth, rasterHeight, colorMap, paletteIdxScl, pRenderInfo->poolSize,
-					pRenderInfo->bundleSize);
+					pRenderInfo->bundleSize, threadCount, threadStatusArray, pRenderInfo->statusFilename);
 			thread.initState();
 			thread.iterate();
 		}
@@ -313,10 +314,12 @@ struct FlameRenderer {
 			hostMalloc((void**) &hThreadArray, sizeof(HANDLE) * threadCount);
 			DWORD *dwThreadIdArray;
 			hostMalloc((void**) &dwThreadIdArray, sizeof(DWORD) * threadCount);
+
 			for (int i = 0; i < threadCount; i++) {
 				ctxArray[i] = new FlameTransformationContext(flame->preserveZ);
 				ctxArray[i]->threadIdx = i;
-				threads[i].init(flame, ctxArray[i], nSamples, flameView, raster, rasterWidth, rasterHeight, colorMap, paletteIdxScl, pRenderInfo->poolSize, pRenderInfo->bundleSize);
+				threads[i].init(flame, ctxArray[i], nSamples, flameView, raster, rasterWidth, rasterHeight, colorMap, paletteIdxScl,
+				  pRenderInfo->poolSize, pRenderInfo->bundleSize, threadCount, threadStatusArray, i==0 ? pRenderInfo->statusFilename : NULL);
 				threads[i].initState();
 				hThreadArray[i] = CreateThread(NULL, // default security attributes
 						0, // use default stack size
@@ -337,6 +340,7 @@ struct FlameRenderer {
 			hostFree(ctxArray);
 			hostFree(threads);
 		}
+		hostFree(threadStatusArray);
 		if (flame->sampleDensity <= 10.0) {
 			renderImageSimple(res->image);
 		}

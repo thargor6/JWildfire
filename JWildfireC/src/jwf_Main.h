@@ -84,11 +84,16 @@ int renderFlame(AppSettings *pAppSettings) {
 	}
 
 	hostFlame->sampleDensity = pAppSettings->getSampleDensity();
-	// TODO remove option
-	//hostFlame->spatialFilterRadius = pAppSettings->getFilterRadius();
 
 	info.renderHDR =  (pAppSettings->getOutputHDRFilename()!=NULL && strlen(pAppSettings->getOutputHDRFilename())>0) ? TRUE :  FALSE;
 	info.renderHDRIntensityMap = FALSE;
+
+	if(pAppSettings->isReportStatus() && pAppSettings->getOutputFilename()!=NULL && strlen(pAppSettings->getOutputFilename())>0) {
+		info.statusFilename = (char*)calloc(strlen(pAppSettings->getOutputFilename())+16,sizeof(char));
+		sprintf(info.statusFilename,"%s.status",pAppSettings->getOutputFilename());
+	}
+	else
+		info.statusFilename=NULL;
 
 	boolean usePool = hostFlame->sampleDensity >= 20.0;
 	for (int i = 0; i < hostFlame->xFormCount; i++) {
@@ -101,7 +106,6 @@ int renderFlame(AppSettings *pAppSettings) {
 		}
 	}
 	//hostFlame->dump();
-
 	if (usePool == true) {
 		info.poolSize = 1024;
 		info.bundleSize = 256;
@@ -129,6 +133,10 @@ int renderFlame(AppSettings *pAppSettings) {
 
 
 	freeHostFlame(hostFlame);
+	if(info.statusFilename!=NULL) {
+    remove(info.statusFilename);
+	}
+
 	return 0;
 }
 

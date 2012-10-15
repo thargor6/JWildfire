@@ -15,7 +15,6 @@
  02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-#include <limits.h>
 #include "jwf_Constants.h"
 #include "jwf_Variation.h"
 
@@ -53,7 +52,7 @@ public:
     JWF_FLOAT preX = pAffineTP->x * (x_distort + 1.0);
     JWF_FLOAT preY = pAffineTP->y * (y_distort + 1.0);
 
-    JWF_FLOAT a = JWF_ATAN2(preY, preX) * _invN + pContext->randGen->random(INT_MAX) * _inv2PI_N;
+    JWF_FLOAT a = JWF_ATAN2(preY, preX) * _invN + pContext->randGen->random(32768) * _inv2PI_N;
     JWF_FLOAT sina, cosa;
     JWF_SINCOS(a, &sina, &cosa);
     JWF_FLOAT r = pAmount * JWF_POW(JWF_SQR(pAffineTP->x) + JWF_SQR(pAffineTP->y), _cN);

@@ -24,6 +24,7 @@ struct RenderInfo {
 	int imageHeight;
 	int poolSize;
 	int bundleSize;
+	char* statusFilename;
 };
 
 #endif // __JWF_RENDER_INFO_H__

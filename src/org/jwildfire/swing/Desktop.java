@@ -169,7 +169,7 @@ public class Desktop extends JApplet {
       formulaExplorerFrame.setMainController(mainController);
       formulaExplorerFrame.setFormulaExplorerController(formulaExplorerController);
 
-      setupShowSysInfoThread();
+      // setupShowSysInfoThread();
 
     }
     return mainDesktopPane;

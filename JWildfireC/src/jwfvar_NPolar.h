@@ -15,7 +15,6 @@
  02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-#include <limits.h>
 #include "jwf_Constants.h"
 #include "jwf_Variation.h"
 
@@ -43,7 +42,7 @@ public:
 	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
     JWF_FLOAT x = (_isodd != 0) ? pAffineTP->x : _vvar * JWF_ATAN2(pAffineTP->x, pAffineTP->y);
     JWF_FLOAT y = (_isodd != 0) ? pAffineTP->y : _vvar_2 * JWF_LOG(pAffineTP->x * pAffineTP->x + pAffineTP->y * pAffineTP->y);
-    JWF_FLOAT angle = (JWF_ATAN2(y, x) + M_2PI * (pContext->randGen->random(INT_MAX) % (int) _absn)) / _nnz;
+    JWF_FLOAT angle = (JWF_ATAN2(y, x) + M_2PI * (pContext->randGen->random(32768) % (int) _absn)) / _nnz;
     JWF_FLOAT r = pAmount * JWF_POW(JWF_SQR(x) + JWF_SQR(y), _cn) * ((_isodd == 0) ? 1.0 : parity);
     JWF_FLOAT sina, cosa;
     JWF_SINCOS(angle, &sina, &cosa);

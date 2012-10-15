@@ -15,7 +15,6 @@
  02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-#include "limits.h"
 #include "jwf_Constants.h"
 #include "jwf_Variation.h"
 
@@ -71,8 +70,8 @@ public:
 	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
 		JWF_FLOAT p = 2.0 * pContext->randGen->random() - 1.0;
 		JWF_FLOAT q = 2.0 * pContext->randGen->random() - 1.0;
-		int i = pContext->randGen->random(INT_MAX) % 3;
-		boolean j = (pContext->randGen->random(INT_MAX) & 1) == 1;
+		int i = pContext->randGen->random(32768) % 3;
+		boolean j = (pContext->randGen->random(32768) & 1) == 1;
 		JWF_FLOAT x = 0.0, y = 0.0, z = 0.0;
 		switch (i) {
 		case 0:

@@ -22,13 +22,12 @@
 struct FlameRenderThread {
 	Flame *flame;
 	FlameTransformationContext *ctx;
-	double samples;
+	double totalSamples;
 	FlameView *flameView;
 	RasterPoint **raster;
 	int rasterWidth;
 	int rasterHeight;
-	RenderColor *colorMap;
-	JWF_FLOAT paletteIdxScl;
+	RenderColor *colorMap;JWF_FLOAT paletteIdxScl;
 	int poolSize;
 	int bundleSize;
 	//
@@ -40,20 +39,26 @@ struct FlameRenderThread {
 	XYZPoint *affineTArray;
 	XYZPoint *varTArray;
 	XYZPoint *pArray;
-	XYZPoint *qArray;
-	JWF_FLOAT *pxArray, *pyArray;
+	XYZPoint *qArray;JWF_FLOAT *pxArray, *pyArray;
 	bool *pValidArray;
 	int *bundle;
 
 	XForm *xf;
 	double startIter;
 
-	void init(Flame *pFlame, FlameTransformationContext *pCtx, double pSamples, FlameView *pFlameView, RasterPoint **pRaster, int pRasterWidth, int pRasterHeight,
-			RenderColor *pColorMap, JWF_FLOAT pPaletteIdxScl, int pPoolSize, int pBundleSize) {
+	int threadCount;
+	double *threadStatus;
+	bool reportStatus;
+	char *statusFilename;
+	int lastReportedStatus;
+
+	void init(Flame *pFlame, FlameTransformationContext *pCtx, double pTotalSamples, FlameView *pFlameView, RasterPoint **pRaster, int pRasterWidth, int pRasterHeight,
+			RenderColor *pColorMap, JWF_FLOAT pPaletteIdxScl, int pPoolSize, int pBundleSize, int pThreadCount, double *pThreadStatus,
+			char *pStatusFilename) {
 		xf = NULL;
 		flame = pFlame;
 		ctx = pCtx;
-		samples = pSamples;
+		totalSamples = pTotalSamples;
 		flameView = pFlameView;
 		raster = pRaster;
 		rasterWidth = pRasterWidth;
@@ -71,6 +76,11 @@ struct FlameRenderThread {
 		affineTArray = varTArray = pArray = qArray = NULL;
 		pxArray = pyArray = NULL;
 		pValidArray = NULL;
+		threadCount = pThreadCount;
+		threadStatus = pThreadStatus;
+		statusFilename = pStatusFilename;
+		reportStatus = statusFilename!=NULL && strlen(statusFilename)>0;
+		lastReportedStatus=0;
 	}
 
 	void initState() {
@@ -82,7 +92,6 @@ struct FlameRenderThread {
 
 	void initStateN() {
 		XForm **xForms = flame->xForms;
-		startIter = 0;
 		// TODO: free
 		affineTArray = new XYZPoint[poolSize];
 		varTArray = new XYZPoint[poolSize];
@@ -119,7 +128,6 @@ struct FlameRenderThread {
 
 	void initState1() {
 		XForm **xForms = flame->xForms;
-		startIter = 0;
 		p.x = 4.0 * ctx->randGen->random() - 2.0;
 		p.y = 4.0 * ctx->randGen->random() - 2.0;
 		p.z = 0.0;
@@ -148,7 +156,8 @@ struct FlameRenderThread {
 		XForm **xForms = flame->xForms;
 		XForm *finalXForm = flame->finalXForm;
 		RandGen *rnd = ctx->randGen;
-		for (double iter = startIter; iter < samples; iter=iter+1.0) {
+		bool ready = false;
+		for (double iter = 1; !ready; iter = iter + 1.0) {
 			int xfIdx = xf->nextAppliedXFormIdxTable[ctx->randGen->random(NEXT_APPLIED_XFORM_TABLE_SIZE)];
 			xf = xForms[xfIdx];
 			//xf->transformPoint(ctx, &affineT, &varT, &p, &p);
@@ -173,33 +182,33 @@ struct FlameRenderThread {
 				if ((py < 0) || (py > flameView->camH))
 					continue;
 
-        if ((finalXForm->antialiasAmount > EPSILON) && (finalXForm->antialiasRadius > EPSILON) && (rnd->random() > 1.0 - finalXForm->antialiasAmount)) {
-          JWF_FLOAT dr = JWF_EXP(finalXForm->antialiasRadius* JWF_SQRT(-JWF_LOG((JWF_FLOAT)rnd->random()))) - 1.0;
-          JWF_FLOAT da = rnd->random() * 2.0 * M_PI;
-          JWF_FLOAT sinda, cosda;
-          JWF_SINCOS(da, &sinda, &cosda);
-  				xIdx = (int) (flameView->bws * px + dr * cosda + 0.5);
-          if (xIdx < 0 || xIdx >= rasterWidth)
-            continue;
-  				yIdx = (int) (flameView->bhs * py + dr * sinda + 0.5);
-          if (yIdx < 0 || yIdx >=rasterHeight)
-            continue;
-        }
-        else {
-        	xIdx = (int) (flameView->bws * px + 0.5);
-          if (xIdx < 0 || xIdx >= rasterWidth)
-            continue;
-  				yIdx = (int) (flameView->bhs * py + 0.5);
-          if (yIdx < 0 || yIdx >=rasterHeight)
-            continue;
-        }
+				if ((finalXForm->antialiasAmount > EPSILON) && (finalXForm->antialiasRadius > EPSILON) && (rnd->random() > 1.0 - finalXForm->antialiasAmount)) {
+					JWF_FLOAT dr = JWF_EXP(finalXForm->antialiasRadius * JWF_SQRT(-JWF_LOG((JWF_FLOAT) rnd->random()))) - 1.0;
+					JWF_FLOAT da = rnd->random() * 2.0 * M_PI;
+					JWF_FLOAT sinda, cosda;
+					JWF_SINCOS(da, &sinda, &cosda);
+					xIdx = (int) (flameView->bws * px + dr * cosda + 0.5);
+					if (xIdx < 0 || xIdx >= rasterWidth)
+						continue;
+					yIdx = (int) (flameView->bhs * py + dr * sinda + 0.5);
+					if (yIdx < 0 || yIdx >= rasterHeight)
+						continue;
+				}
+				else {
+					xIdx = (int) (flameView->bws * px + 0.5);
+					if (xIdx < 0 || xIdx >= rasterWidth)
+						continue;
+					yIdx = (int) (flameView->bhs * py + 0.5);
+					if (yIdx < 0 || yIdx >= rasterHeight)
+						continue;
+				}
 
 			}
 			else {
 				//q.assign(&p);
-				q.x=p.x;
-				q.y=p.y;
-				q.z=p.z;
+				q.x = p.x;
+				q.y = p.y;
+				q.z = p.z;
 				flameView->project(&q, ctx);
 				px = q.x * flameView->cosa + q.y * flameView->sina + flameView->rcX;
 				if ((px < 0) || (px > flameView->camW))
@@ -208,27 +217,27 @@ struct FlameRenderThread {
 				if ((py < 0) || (py > flameView->camH))
 					continue;
 
-        if ((xf->antialiasAmount > EPSILON) && (xf->antialiasRadius > EPSILON) && (rnd->random() > 1.0 - xf->antialiasAmount)) {
-          JWF_FLOAT dr = JWF_EXP(xf->antialiasRadius * JWF_SQRT(-JWF_LOG((JWF_FLOAT)rnd->random()))) - 1.0;
-          JWF_FLOAT da = rnd->random() * 2.0 * M_PI;
-          JWF_FLOAT sinda, cosda;
-          JWF_SINCOS(da, &sinda, &cosda);
+				if ((xf->antialiasAmount > EPSILON) && (xf->antialiasRadius > EPSILON) && (rnd->random() > 1.0 - xf->antialiasAmount)) {
+					JWF_FLOAT dr = JWF_EXP(xf->antialiasRadius * JWF_SQRT(-JWF_LOG((JWF_FLOAT) rnd->random()))) - 1.0;
+					JWF_FLOAT da = rnd->random() * 2.0 * M_PI;
+					JWF_FLOAT sinda, cosda;
+					JWF_SINCOS(da, &sinda, &cosda);
 
-  				xIdx = (int) (flameView->bws * px + dr * cosda + 0.5);
-          if (xIdx < 0 || xIdx >= rasterWidth)
-            continue;
-  				yIdx = (int) (flameView->bhs * py + dr * sinda + 0.5);
-          if (yIdx < 0 || yIdx >=rasterHeight)
-            continue;
-        }
-        else {
-        	xIdx = (int) (flameView->bws * px + 0.5);
-          if (xIdx < 0 || xIdx >= rasterWidth)
-            continue;
-  				yIdx = (int) (flameView->bhs * py + 0.5);
-          if (yIdx < 0 || yIdx >=rasterHeight)
-            continue;
-        }
+					xIdx = (int) (flameView->bws * px + dr * cosda + 0.5);
+					if (xIdx < 0 || xIdx >= rasterWidth)
+						continue;
+					yIdx = (int) (flameView->bhs * py + dr * sinda + 0.5);
+					if (yIdx < 0 || yIdx >= rasterHeight)
+						continue;
+				}
+				else {
+					xIdx = (int) (flameView->bws * px + 0.5);
+					if (xIdx < 0 || xIdx >= rasterWidth)
+						continue;
+					yIdx = (int) (flameView->bhs * py + 0.5);
+					if (yIdx < 0 || yIdx >= rasterHeight)
+						continue;
+				}
 
 			}
 
@@ -247,14 +256,42 @@ struct FlameRenderThread {
 				rp->blue += color.blue;
 			}
 			rp->count++;
+
+			ready = checkStatus(iter);
 		}
 	}
+
+	bool checkStatus(double iter) {
+		if (fmod(iter, 10.0*threadCount) < EPSILON) {
+			threadStatus[ctx->threadIdx]=iter;
+			double samples=0;
+			for (int s = 0; s < threadCount; s++) {
+				samples += threadStatus[s];
+			}
+			if(reportStatus && samples>0) {
+        int p=((samples/totalSamples)*100+0.5);
+        if(p>0 && p<100 && p%5==0 && p>lastReportedStatus) {
+        	FILE *fp= fopen(statusFilename, "w");
+        	fprintf(fp,"%03d\n",p);
+  				fclose(fp);
+  				/*
+        	printf("%03d\n",p);
+        	fflush(stdout);*/
+        	lastReportedStatus=p;
+        }
+			}
+			return samples > totalSamples;
+		}
+    return false;
+	}
+
 
 	void iterateN() {
 		XForm **xForms = flame->xForms;
 		RandGen *rnd = ctx->randGen;
-		register int idx;
-		for (double iter = startIter; iter < samples; iter=iter+1.0) {
+		int idx;
+		bool ready = false;
+		for (double iter = 0; !ready; iter = iter + 1.0) {
 			int xfIdx = xf->nextAppliedXFormIdxTable[rnd->random(NEXT_APPLIED_XFORM_TABLE_SIZE)];
 			xf = xForms[xfIdx];
 			for (int i = 0; i < bundleSize; i++) {
@@ -296,9 +333,9 @@ struct FlameRenderThread {
 				for (int i = 0; i < bundleSize; i++) {
 					idx = bundle[i];
 					//qArray[idx].assign(&pArray[idx]);
-					qArray[idx].x=pArray[idx].x;
-					qArray[idx].y=pArray[idx].y;
-					qArray[idx].z=pArray[idx].z;
+					qArray[idx].x = pArray[idx].x;
+					qArray[idx].y = pArray[idx].y;
+					qArray[idx].z = pArray[idx].z;
 
 					flameView->project(&qArray[idx], ctx);
 					pxArray[idx] = qArray[idx].x * flameView->cosa + qArray[idx].y * flameView->sina + flameView->rcX;
@@ -322,18 +359,18 @@ struct FlameRenderThread {
 
 					XForm *currXForm = finalXForm != NULL ? finalXForm : xf;
 
-	        if ((currXForm->antialiasAmount > EPSILON) && (currXForm->antialiasRadius > EPSILON) && (rnd->random() > 1.0 - currXForm->antialiasAmount)) {
-	        	JWF_FLOAT dr = JWF_EXP(currXForm->antialiasRadius * JWF_SQRT(-JWF_LOG((JWF_FLOAT)rnd->random()))) - 1.0;
-	        	JWF_FLOAT da = rnd->random() * 2.0 * M_PI;
-	        	JWF_FLOAT sinda, cosda;
-	        	JWF_SINCOS(da, &sinda, &cosda);
+					if ((currXForm->antialiasAmount > EPSILON) && (currXForm->antialiasRadius > EPSILON) && (rnd->random() > 1.0 - currXForm->antialiasAmount)) {
+						JWF_FLOAT dr = JWF_EXP(currXForm->antialiasRadius * JWF_SQRT(-JWF_LOG((JWF_FLOAT) rnd->random()))) - 1.0;
+						JWF_FLOAT da = rnd->random() * 2.0 * M_PI;
+						JWF_FLOAT sinda, cosda;
+						JWF_SINCOS(da, &sinda, &cosda);
 						xIdx = (int) (flameView->bws * pxArray[idx] + dr * cosda + 0.5);
 						yIdx = (int) (flameView->bhs * pyArray[idx] + dr * sinda + 0.5);
-	        }
-	        else {
+					}
+					else {
 						xIdx = (int) (flameView->bws * pxArray[idx] + 0.5);
 						yIdx = (int) (flameView->bhs * pyArray[idx] + 0.5);
-	        }
+					}
 
 					if (xIdx >= 0 && xIdx < rasterWidth && yIdx >= 0 && yIdx < rasterHeight) {
 //            xIdx = (int) (flameView->bws * pxArray[idx] + 0.5);
@@ -356,6 +393,8 @@ struct FlameRenderThread {
 					}
 				}
 			}
+
+			ready = checkStatus(iter);
 		}
 	}
 

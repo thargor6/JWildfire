@@ -44,6 +44,7 @@ import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
+import javax.swing.JInternalFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
@@ -130,6 +131,8 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
   private TinaInteractiveRendererController interactiveRendererCtrl;
   private TinaSWFAnimatorController swfAnimatorCtrl;
 
+  private final JInternalFrame tinaFrame;
+  private final String tinaFrameTitle;
   private final JPanel centerPanel;
   private boolean firstFlamePanel = true;
   private FlamePanel flamePanel;
@@ -410,7 +413,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
   private final JButton undoButton;
   private final JButton redoButton;
 
-  public TinaController(ErrorHandler pErrorHandler, Prefs pPrefs, JPanel pCenterPanel, JWFNumberField pCameraRollREd, JSlider pCameraRollSlider, JWFNumberField pCameraPitchREd,
+  public TinaController(JInternalFrame pTinaFrame, ErrorHandler pErrorHandler, Prefs pPrefs, JPanel pCenterPanel, JWFNumberField pCameraRollREd, JSlider pCameraRollSlider, JWFNumberField pCameraPitchREd,
       JSlider pCameraPitchSlider, JWFNumberField pCameraYawREd, JSlider pCameraYawSlider, JWFNumberField pCameraPerspectiveREd, JSlider pCameraPerspectiveSlider,
       JWFNumberField pCameraCentreXREd, JSlider pCameraCentreXSlider, JWFNumberField pCameraCentreYREd,
       JSlider pCameraCentreYSlider, JWFNumberField pCameraZoomREd, JSlider pCameraZoomSlider, JWFNumberField pCameraZPosREd, JSlider pCameraZPosSlider,
@@ -456,6 +459,8 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       JWFNumberField pTransformationWeightREd, JButton pUndoButton, JButton pRedoButton, JComboBox pRendererCmb,
       JWFNumberField pXFormAntialiasAmountREd, JSlider pXFormAntialiasAmountSlider, JWFNumberField pXFormAntialiasRadiusREd, JSlider pXFormAntialiasRadiusSlider,
       JButton pXFormAntialiasCopyToAllBtn) {
+    tinaFrame = pTinaFrame;
+    tinaFrameTitle = tinaFrame.getTitle();
     errorHandler = pErrorHandler;
     prefs = pPrefs;
     centerPanel = pCenterPanel;
@@ -1093,10 +1098,8 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
               long t0 = System.currentTimeMillis();
               RenderedFlame res = renderer.renderFlame(info);
               long t1 = System.currentTimeMillis();
-              if (!pQuickRender) {
-                System.out.println("Elapsed time: " + Tools.doubleToString((t1 - t0) * 0.001) + "s");
-              }
               imgPanel.setImage(res.getImage());
+              statusMessage("Render time: " + Tools.doubleToString((t1 - t0) * 0.001) + "s");
             }
               break;
             case CUDA: {
@@ -1109,9 +1112,10 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
                 long t0 = System.currentTimeMillis();
                 CUDARendererInterface cudaRenderer = new CUDARendererInterface();
                 cudaRenderer.checkFlameForCUDA(flame);
-                RenderedFlame res = cudaRenderer.renderFlame(info, flame);
+                cudaRenderer.setProgressUpdater(mainProgressUpdater);
+                RenderedFlame res = cudaRenderer.renderFlame(info, flame, prefs);
                 long t1 = System.currentTimeMillis();
-                System.out.println("Elapsed time: " + Tools.doubleToString((t1 - t0) * 0.001) + "s");
+                statusMessage("Render time: " + Tools.doubleToString((t1 - t0) * 0.001) + "s");
                 imgPanel.setImage(res.getImage());
               }
               catch (Throwable ex) {
@@ -5043,4 +5047,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     }
   }
 
+  private void statusMessage(String pStatus) {
+    tinaFrame.setTitle(tinaFrameTitle + (pStatus != null && pStatus.length() > 0 ? ": " + pStatus : ""));
+  }
 }

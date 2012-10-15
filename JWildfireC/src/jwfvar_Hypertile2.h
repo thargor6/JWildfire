@@ -15,7 +15,6 @@
  02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-#include "limits.h"
 #include "jwf_Constants.h"
 #include "jwf_Variation.h"
 
@@ -52,7 +51,7 @@ public:
 
     JWF_FLOAT vr = pAmount / (JWF_SQR(c) + JWF_SQR(d));
 
-    JWF_FLOAT rpa = _pa * pContext->randGen->random(INT_MAX);
+    JWF_FLOAT rpa = _pa * pContext->randGen->random(32768);
     JWF_FLOAT sina, cosa;
     JWF_SINCOS(rpa, &sina, &cosa);
 

@@ -44,7 +44,7 @@ public:
 		outputWidth = 800;
 		outputHeight = 600;
 		sampleDensity = 100.0;
-		filterRadius = 0.0;
+		reportStatus = false;
 	}
 
 	void setThreadCount(const int pThreadCount) {
@@ -92,19 +92,12 @@ public:
 		return outputHDRFilename;
 	}
 
-	JWF_FLOAT getFilterRadius() {
-		return filterRadius;
-	}
-
 	JWF_FLOAT getSampleDensity() {
 		return sampleDensity;
 	}
 
-	void setFilterRadius(const JWF_FLOAT pFilterRadius) {
-		if (pFilterRadius >= MIN_FILTER_RADIUS - EPSILON && pFilterRadius <= MAX_FILTER_RADIUS + EPSILON)
-			filterRadius = pFilterRadius;
-		else
-			printf("Invalid filter radius %f (%f...%f)\n", pFilterRadius, MIN_FILTER_RADIUS, MAX_FILTER_RADIUS);
+	bool isReportStatus() {
+		return reportStatus;
 	}
 
 	void setSampleDensity(const JWF_FLOAT pSampleDensity) {
@@ -166,15 +159,11 @@ public:
 				}
 				setSampleDensity(atof(pArgv[++i]));
 			}
-			else if (strcmp(pArgv[i], "-filterRadius") == 0 || strcmp(pArgv[i], "-r") == 0) {
-				if (i == pArgc - 1) {
-					printf("No value for parameter <%s> specified\n", pArgv[i]);
-					return -1;
-				}
-				setFilterRadius(atof(pArgv[++i]));
-			}
 			else if (strcmp(pArgv[i], "-help") == 0 || strcmp(pArgv[i], "-h") == 0) {
 				return -1;
+			}
+			else if (strcmp(pArgv[i], "-reportStatus") == 0 || strcmp(pArgv[i], "-r") == 0) {
+				reportStatus = true;
 			}
 			else {
 				printf("Unkown parameter %s\n", pArgv[i]);
@@ -201,8 +190,8 @@ public:
 		printf("  -outputHDRFilename (or -hdr): string\n");
 		printf("  -outputWidth (or -w): int (%d...%d)\n", MIN_WIDTH, MAX_WIDTH);
 		printf("  -outputHeight (or -h): int (%d...%d)\n", MIN_HEIGHT, MAX_HEIGHT);
-		printf("  -filterRadius (or -r): JWF_FLOAT (%f...%f)\n", MIN_FILTER_RADIUS, MAX_FILTER_RADIUS);
 		printf("  -sampleDensity (or -d): JWF_FLOAT (%f...%f)\n", MIN_DENSITY, MAX_DENSITY);
+		printf("  -reportStatus (or -r): void\n");
 		printf("  -help (or -h): void\n");
 		printf("Required param: -flameFilename\n");
 	}
@@ -215,8 +204,8 @@ public:
 		printf("  outputHDRFilename: %s\n", outputHDRFilename);
 		printf("  outputWidth: %d\n", outputWidth);
 		printf("  outputHeight: %d\n", outputHeight);
-		printf("  filterRadius: %f\n", filterRadius);
 		printf("  sampleDensity: %f\n", sampleDensity);
+		printf("  reportStatus: %d\n", reportStatus);
 		printf("}\n");
 	}
 
@@ -229,7 +218,7 @@ private:
 	int outputWidth;
 	int outputHeight;
 	JWF_FLOAT sampleDensity;
-	JWF_FLOAT filterRadius;
+	bool reportStatus;
 
 	void setParamValue(char **pDst, char *pSrc) {
 		if ((*pDst) != NULL) {
