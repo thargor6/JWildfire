@@ -5024,7 +5024,6 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       }
       transformationTableClicked();
     }
-
   }
 
   public void paletteInvertBtn_clicked() {
