@@ -108,12 +108,6 @@ struct LogDensityFilter {
 		else if (pFilterRadius > MAX_FILTER_RADIUS)
 			pFilterRadius = MAX_FILTER_RADIUS;
 		*pFilterSize = calcFilterSize(pFilterRadius);
-
-		// TODO
-		//if((*pFilterSize)<2)
-//			*pFilterSize=2;
-
-
 		if (filterArray[*pFilterSize] == NULL) {
 			initFilter(pFilterRadius, *pFilterSize, &(filterArray[*pFilterSize]));
 		}
@@ -289,11 +283,11 @@ struct LogDensityFilter {
 		*avgDensity /= (JWF_FLOAT) (rasterWidth * rasterHeight);
 	}
 
-	void transformPointHDRNewShit(LogDensityPoint *pFilteredPnt, int pX, int pY,JWF_FLOAT maxDensity) {
+	void transformPointHDRWithDEFilter(LogDensityPoint *pFilteredPnt, int pX, int pY,JWF_FLOAT maxDensity) {
 		JWF_FLOAT density;
-		int densityRect = 7;
+		int densityRect = flame->deFilterRadius;
 		int dr2 = densityRect / 2;
-		JWF_FLOAT curve = 1.25;
+		JWF_FLOAT curve = flame->deFilterAmount;
 
 		if (pX < dr2 || pY < dr2 || (pX >= rasterWidth - dr2) || (pY >= rasterHeight - dr2)) {
 			density = getRasterPoint(pX, pY)->count;
@@ -401,11 +395,11 @@ struct LogDensityFilter {
 		}
 	}
 
-	void transformPointNewShit(LogDensityPoint *pFilteredPnt, int pX, int pY, JWF_FLOAT minDesity, JWF_FLOAT maxDensity, JWF_FLOAT avgDensity) {
+	void transformPointWithDEFilter(LogDensityPoint *pFilteredPnt, int pX, int pY, JWF_FLOAT minDesity, JWF_FLOAT maxDensity, JWF_FLOAT avgDensity) {
 		JWF_FLOAT density;
-		int densityRect = 7;
+		int densityRect = flame->deFilterRadius;
 		int dr2 = densityRect / 2;
-		JWF_FLOAT curve = 1.25;
+		JWF_FLOAT curve = flame->deFilterAmount;
 		bool saveDens = false;
 
 		if (pX < dr2 || pY < dr2 || (pX >= rasterWidth - dr2) || (pY >= rasterHeight - dr2)) {

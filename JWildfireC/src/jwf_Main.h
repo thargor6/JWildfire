@@ -105,7 +105,7 @@ int renderFlame(AppSettings *pAppSettings) {
 			}
 		}
 	}
-	//hostFlame->dump();
+	hostFlame->dump();
 	if (usePool == true) {
 		info.poolSize = 1024;
 		info.bundleSize = 256;

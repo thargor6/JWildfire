@@ -44,6 +44,8 @@ struct Flame {
 	JWF_FLOAT contrast;
 	JWF_FLOAT vibrancy;
 	bool preserveZ;
+	int deFilterRadius;
+	JWF_FLOAT deFilterAmount;
 
 	RGBPalette *palette;
 	XForm **xForms;
@@ -59,7 +61,7 @@ struct Flame {
 		printf("  gamma=%.2f gammaThreshold=%.2f brightness=%.2f contrast=%.2f\n", gamma, gammaThreshold, brightness, contrast);
 		printf("  pixelsPerUnit=%.2f vibrancy=%.2f whiteLevel=%d preserveZ=%d\n", pixelsPerUnit, vibrancy, whiteLevel, preserveZ);
 		printf("  bgColorRed=%d bgColorGreen=%d bgColorBlue=%d\n", bgColorRed, bgColorGreen, bgColorBlue);
-		printf("  spatialOversample=%d\n", spatialOversample);
+		printf("  spatialOversample=%d deFilterRadius=%d deFilterAmount=%.2f\n", spatialOversample, deFilterRadius, deFilterAmount);
 		for (int i = 0; i < xFormCount; i++) {
 			xForms[i]->dump("XForm");
 		}
@@ -100,6 +102,8 @@ struct Flame {
 		pixelsPerUnit = 50;
 		whiteLevel = 200;
 		preserveZ = FALSE;
+		deFilterRadius= 7;
+		deFilterAmount = 1.25;
 		hostMalloc((void**) &palette, sizeof(RGBPalette));
 		palette->create();
 	}

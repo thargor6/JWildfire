@@ -134,7 +134,7 @@ struct FlameRenderer {
 		LogDensityPoint *logDensityPnt;
 		hostMalloc((void**) &logDensityPnt, sizeof(LogDensityPoint));
 
-		bool newShit = true;
+		bool useDEFilter = flame->deFilterRadius>1 && flame->deFilterAmount>0;
 		JWF_FLOAT minDensity, maxDensity, avgDensity;
 
 		if (pImage != NULL) {
@@ -146,9 +146,8 @@ struct FlameRenderer {
 		else if (pHDRIntensityMap != NULL) {
 			logDensityFilter->setRaster(raster, rasterWidth, rasterHeight, pHDRIntensityMap->imageWidth, pHDRIntensityMap->imageHeight);
 		}
-		if (newShit) {
+		if (useDEFilter) {
 			logDensityFilter->calcDensity(&minDensity, &maxDensity, &avgDensity);
-			printf("AVG DENSITY: %f (%f...%f)\n", avgDensity, minDensity, maxDensity);
 		}
 
 		if (pImage != NULL) {
@@ -156,8 +155,8 @@ struct FlameRenderer {
 			hostMalloc((void**) &rbgPoint, sizeof(GammaCorrectedRGBPoint));
 			for (int i = 0; i < pImage->imageHeight; i++) {
 				for (int j = 0; j < pImage->imageWidth; j++) {
-					if (newShit) {
-						logDensityFilter->transformPointNewShit(logDensityPnt, j, i, minDensity, maxDensity, avgDensity);
+					if (useDEFilter) {
+						logDensityFilter->transformPointWithDEFilter(logDensityPnt, j, i, minDensity, maxDensity, avgDensity);
 					}
 					else {
 						logDensityFilter->transformPoint(logDensityPnt, j, i);
@@ -182,8 +181,8 @@ struct FlameRenderer {
 				JWF_FLOAT minLum = FLT_MAX, maxLum = 0.0;
 				for (int i = 0; i < pHDRImage->imageHeight; i++) {
 					for (int j = 0; j < pHDRImage->imageWidth; j++) {
-						if (newShit) {
-							logDensityFilter->transformPointHDRNewShit(logDensityPnt, j, i, maxDensity);
+						if (useDEFilter) {
+							logDensityFilter->transformPointHDRWithDEFilter(logDensityPnt, j, i, maxDensity);
 						}
 						else {
 							logDensityFilter->transformPointHDR(logDensityPnt, j, i);
@@ -223,8 +222,8 @@ struct FlameRenderer {
 			else {
 				for (int i = 0; i < pHDRImage->imageHeight; i++) {
 					for (int j = 0; j < pHDRImage->imageWidth; j++) {
-						if (newShit) {
-							logDensityFilter->transformPointHDRNewShit(logDensityPnt, j, i, maxDensity);
+						if (useDEFilter) {
+							logDensityFilter->transformPointHDRWithDEFilter(logDensityPnt, j, i, maxDensity);
 						}
 						else {
 							logDensityFilter->transformPointHDR(logDensityPnt, j, i);

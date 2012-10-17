@@ -93,6 +93,9 @@ private:
 #define ATTR_RESOLUTION_PROFILE  "resolution_profile"
 #define ATTR_QUALITY_PROFILE  "quality_profile"
 #define ATTR_NEW_LINEAR "new_linear"
+#define ATTR_DE_FILTER_AMOUNT "de_filter_amount"
+#define ATTR_DE_FILTER_RADIUS "de_filter_radius"
+
 // xforms
 #define ATTR_WEIGHT "weight"
 #define ATTR_COLOR "color"
@@ -632,6 +635,12 @@ private:
 		}
 		if ((hs = findAttribute(attNames, attValues, attCount, ATTR_QUALITY)) != NULL) {
 			pFlame->sampleDensity = atof(hs);
+		}
+		if ((hs = findAttribute(attNames, attValues, attCount, ATTR_DE_FILTER_RADIUS)) != NULL) {
+			pFlame->deFilterRadius = atoi(hs);
+		}
+		if ((hs = findAttribute(attNames, attValues, attCount, ATTR_DE_FILTER_AMOUNT)) != NULL) {
+			pFlame->deFilterAmount = atof(hs);
 		}
 		if ((hs = findAttribute(attNames, attValues, attCount, ATTR_BACKGROUND)) != NULL) {
 			char **s;

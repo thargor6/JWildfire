@@ -18,7 +18,7 @@
 #define __JWF_CONSTANTS_H__
 
 #define APP_TITLE "JWildfireC"
-#define APP_VERSION "0.15 (03.09.2012)"
+#define APP_VERSION "0.49 (17.10.2012)"
 
 #define MAX_MOD_WEIGHT_COUNT 100
 #define NEXT_APPLIED_XFORM_TABLE_SIZE 100
