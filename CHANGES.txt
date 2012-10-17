@@ -1,3 +1,11 @@
+V0.54 (17.10.2012):
+ - new family of external C++ based renderers called "JWildfireC". They need less memory and are faster and are optimized for rendering high quality images in acceptable time. Some features of JWildfire (e. g. the integrated Java compiler) are not available. Currently only binaries for Windows 32Bit and Windows 64Bit (faster) are available. The renderer currently features 222 variations and also the generation of hdr images.       
+ - density estimating filter for JWildfireC optimized to gain good image qiality at low samling (=quality) rates
+ - new preferences option to set up the default renderer
+ - display render time in the title bar 
+ - new controls for the density estimation filter options in the editor
+ - "ripple" variation by Xyrus02, added a new parameter "fixed_dist_calc" for calculating distance right (looks totally different then and make no sense to fix it in the original plugin)
+ 
 V0.53 (04.10.2012):
  - new antialising option on the transform level, you can control this by two parameters: amount (how many samples are affected by this effect) and radius (how strong is the antialasing effect) 
  - new gradient manipulation functions: invert and reverse gradient
