@@ -42,6 +42,7 @@ import org.jwildfire.image.SimpleImage;
 public class CRendererInterface {
   private ProgressUpdater progressUpdater;
   private final RendererType rendererType;
+  private long nextProgressUpdate;
 
   public CRendererInterface(RendererType pRendererType) {
     rendererType = pRendererType;
@@ -212,6 +213,7 @@ public class CRendererInterface {
     if (progressUpdater != null) {
       progressUpdater.initProgress(100);
     }
+    nextProgressUpdate = System.currentTimeMillis();
 
     RenderedFlame res = new RenderedFlame();
     res.init(pInfo);
@@ -240,9 +242,9 @@ public class CRendererInterface {
       throw new Exception("Renderer <" + cmd + "> not found");
     }
 
-    System.out.println(cmd);
-    // String cmd = "F:\\DEV\\eclipse_indigo_c_workspace\\JWildfireC\\Release\\JWildfireC.exe";
-
+    if (pPrefs.isDevelopmentMode()) {
+      cmd = "F:\\DEV\\eclipse_indigo_c_workspace\\JWildfireC\\Debug\\JWildfireC.exe";
+    }
     String flameFilename = currTmpFilename + ".flame";
     String ppmFilename = currTmpFilename + ".ppm";
     String statusFilename = currTmpFilename + ".ppm.status";
@@ -420,7 +422,7 @@ public class CRendererInterface {
       while (!thread.isFinished()) {
         try {
           Thread.sleep(1);
-          if (progressUpdater != null && pStatusFilename != null) {
+          if (progressUpdater != null && pStatusFilename != null && (System.currentTimeMillis() > nextProgressUpdate)) {
             String currProgressStr;
             try {
               BufferedReader in = new BufferedReader(new FileReader(pStatusFilename));
@@ -447,6 +449,7 @@ public class CRendererInterface {
             if (currProgressVal > 0 && currProgressVal <= 100) {
               progressUpdater.updateProgress(currProgressVal);
             }
+            nextProgressUpdate = System.currentTimeMillis() + 250;
           }
         }
         catch (InterruptedException e) {
