@@ -119,6 +119,8 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
   private static final double SLIDER_SCALE_BRIGHTNESS_CONTRAST_VIBRANCY = 100.0;
   private static final double SLIDER_SCALE_GAMMA = 100.0;
   private static final double SLIDER_SCALE_FILTER_RADIUS = 100.0;
+  private static final double SLIDER_SCALE_DE_FILTER_RADIUS = 1.0;
+  private static final double SLIDER_SCALE_DE_FILTER_AMOUNT = 100.0;
   private static final double SLIDER_SCALE_GAMMA_THRESHOLD = 5000.0;
   private static final double SLIDER_SCALE_COLOR = 100.0;
   private static final double SLIDER_SCALE_ZPOS = 50.0;
@@ -251,6 +253,10 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
   private final JSlider bgColorGreenSlider;
   private final JWFNumberField bgColorBlueREd;
   private final JSlider bgColorBlueSlider;
+  private final JWFNumberField deFilterRadiusREd;
+  private final JSlider deFilterRadiusSlider;
+  private final JWFNumberField deFilterAmountREd;
+  private final JSlider deFilterAmountSlider;
   // shading
   private final JComboBox shadingCmb;
   private final JWFNumberField shadingAmbientREd;
@@ -419,7 +425,8 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       JSlider pCameraCentreYSlider, JWFNumberField pCameraZoomREd, JSlider pCameraZoomSlider, JWFNumberField pCameraZPosREd, JSlider pCameraZPosSlider,
       JWFNumberField pCameraDOFREd, JSlider pCameraDOFSlider, JWFNumberField pPixelsPerUnitREd, JSlider pPixelsPerUnitSlider,
       JWFNumberField pBrightnessREd, JSlider pBrightnessSlider, JWFNumberField pContrastREd, JSlider pContrastSlider, JWFNumberField pGammaREd, JSlider pGammaSlider,
-      JWFNumberField pVibrancyREd, JSlider pVibrancySlider, JWFNumberField pFilterRadiusREd, JSlider pFilterRadiusSlider, JWFNumberField pGammaThresholdREd,
+      JWFNumberField pVibrancyREd, JSlider pVibrancySlider, JWFNumberField pFilterRadiusREd, JSlider pFilterRadiusSlider,
+      JWFNumberField pDEFilterRadiusREd, JSlider pDEFilterRadiusSlider, JWFNumberField pDEFilterAmountREd, JSlider pDEFilterAmountSlider, JWFNumberField pGammaThresholdREd,
       JSlider pGammaThresholdSlider, JWFNumberField pBGColorRedREd, JSlider pBGColorRedSlider, JWFNumberField pBGColorGreenREd, JSlider pBGColorGreenSlider, JWFNumberField pBGColorBlueREd,
       JSlider pBGColorBlueSlider, JTextField pPaletteRandomPointsREd, JPanel pPaletteImgPanel, JWFNumberField pPaletteShiftREd, JSlider pPaletteShiftSlider,
       JWFNumberField pPaletteRedREd, JSlider pPaletteRedSlider, JWFNumberField pPaletteGreenREd, JSlider pPaletteGreenSlider, JWFNumberField pPaletteBlueREd,
@@ -495,6 +502,10 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     vibrancySlider = pVibrancySlider;
     filterRadiusREd = pFilterRadiusREd;
     filterRadiusSlider = pFilterRadiusSlider;
+    deFilterRadiusREd = pDEFilterRadiusREd;
+    deFilterRadiusSlider = pDEFilterRadiusSlider;
+    deFilterAmountREd = pDEFilterAmountREd;
+    deFilterAmountSlider = pDEFilterAmountSlider;
     gammaThresholdREd = pGammaThresholdREd;
     gammaThresholdSlider = pGammaThresholdSlider;
     bgColorRedREd = pBGColorRedREd;
@@ -1189,6 +1200,11 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
 
       filterRadiusREd.setText(Tools.doubleToString(currFlame.getSpatialFilterRadius()));
       filterRadiusSlider.setValue(Tools.FTOI(currFlame.getSpatialFilterRadius() * SLIDER_SCALE_FILTER_RADIUS));
+
+      deFilterRadiusREd.setText(Tools.doubleToString(currFlame.getDEFilterRadius()));
+      deFilterRadiusSlider.setValue(Tools.FTOI(currFlame.getDEFilterRadius() * SLIDER_SCALE_DE_FILTER_RADIUS));
+      deFilterAmountREd.setText(Tools.doubleToString(currFlame.getDEFilterAmount()));
+      deFilterAmountSlider.setValue(Tools.FTOI(currFlame.getDEFilterAmount() * SLIDER_SCALE_DE_FILTER_AMOUNT));
 
       gammaThresholdREd.setText(String.valueOf(currFlame.getGammaThreshold()));
       gammaThresholdSlider.setValue(Tools.FTOI(currFlame.getGammaThreshold() * SLIDER_SCALE_GAMMA_THRESHOLD));
@@ -2082,6 +2098,14 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     flameTextFieldChanged(filterRadiusSlider, filterRadiusREd, "spatialFilterRadius", SLIDER_SCALE_FILTER_RADIUS);
   }
 
+  public void deFilterRadiusREd_changed() {
+    flameTextFieldChanged(deFilterRadiusSlider, deFilterRadiusREd, "deFilterRadius", SLIDER_SCALE_DE_FILTER_RADIUS);
+  }
+
+  public void deFilterAmountREd_changed() {
+    flameTextFieldChanged(deFilterAmountSlider, deFilterAmountREd, "deFilterAmount", SLIDER_SCALE_DE_FILTER_AMOUNT);
+  }
+
   public void bgColorGreenSlider_stateChanged(ChangeEvent e) {
     flameSliderChanged(bgColorGreenSlider, bgColorGreenREd, "bgColorGreen", 1.0);
   }
@@ -2112,6 +2136,14 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
 
   public void filterRadiusSlider_stateChanged(ChangeEvent e) {
     flameSliderChanged(filterRadiusSlider, filterRadiusREd, "spatialFilterRadius", SLIDER_SCALE_FILTER_RADIUS);
+  }
+
+  public void deFilterRadiusSlider_stateChanged(ChangeEvent e) {
+    flameSliderChanged(deFilterRadiusSlider, deFilterRadiusREd, "deFilterRadius", SLIDER_SCALE_DE_FILTER_RADIUS);
+  }
+
+  public void deFilterAmountSlider_stateChanged(ChangeEvent e) {
+    flameSliderChanged(deFilterAmountSlider, deFilterAmountREd, "deFilterAmount", SLIDER_SCALE_DE_FILTER_AMOUNT);
   }
 
   public void gammaThresholdSlider_stateChanged(ChangeEvent e) {

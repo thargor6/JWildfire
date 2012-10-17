@@ -66,6 +66,8 @@ public class Flam3Reader implements FlameReader {
   private static final String ATTR_CAM_DOF = "cam_dof";
   private static final String ATTR_CAM_ZOOM = "cam_zoom";
   private static final String ATTR_NEW_LINEAR = "new_linear";
+  private static final String ATTR_DE_FILTER_AMOUNT = "de_filter_amount";
+  private static final String ATTR_DE_FILTER_RADIUS = "de_filter_radius";
   private static final String ATTR_SHADING_SHADING = "shading_shading";
   private static final String ATTR_SHADING_AMBIENT = "shading_ambient";
   private static final String ATTR_SHADING_DIFFUSE = "shading_diffuse";
@@ -116,6 +118,12 @@ public class Flam3Reader implements FlameReader {
     }
     if ((hs = atts.get(ATTR_QUALITY)) != null) {
       pFlame.setSampleDensity(Double.parseDouble(hs));
+    }
+    if ((hs = atts.get(ATTR_DE_FILTER_RADIUS)) != null) {
+      pFlame.setDEFilterRadius(Integer.parseInt(hs));
+    }
+    if ((hs = atts.get(ATTR_DE_FILTER_AMOUNT)) != null) {
+      pFlame.setDEFilterAmount(Double.parseDouble(hs));
     }
     if ((hs = atts.get(ATTR_BACKGROUND)) != null) {
       String s[] = hs.split(" ");

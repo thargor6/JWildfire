@@ -137,7 +137,8 @@ public class Flam3Writer {
     }
     attrList.add(xb.createAttr("resolution_profile", pFlame.getResolutionProfile()));
     attrList.add(xb.createAttr("quality_profile", pFlame.getQualityProfile()));
-
+    attrList.add(xb.createAttr("de_filter_radius", pFlame.getDEFilterRadius()));
+    attrList.add(xb.createAttr("de_filter_amount", pFlame.getDEFilterAmount()));
     ShadingInfo shadingInfo = pFlame.getShadingInfo();
     attrList.add(xb.createAttr("shading_shading", shadingInfo.getShading().toString()));
     if (shadingInfo.getShading() == Shading.PSEUDO3D) {

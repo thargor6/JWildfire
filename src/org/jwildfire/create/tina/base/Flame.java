@@ -60,6 +60,8 @@ public class Flame implements Assignable<Flame>, Serializable {
   private boolean preserveZ;
   private String resolutionProfile;
   private String qualityProfile;
+  private int deFilterRadius;
+  private double deFilterAmount;
 
   private RGBPalette palette = new RGBPalette();
   private final List<XForm> xForms = new ArrayList<XForm>();
@@ -88,6 +90,8 @@ public class Flame implements Assignable<Flame>, Serializable {
     gammaThreshold = 0.04;
     pixelsPerUnit = 50;
     whiteLevel = 200;
+    deFilterRadius = 7;
+    deFilterAmount = 1.25;
     shadingInfo.init();
   }
 
@@ -456,6 +460,8 @@ public class Flame implements Assignable<Flame>, Serializable {
     contrast = pFlame.contrast;
     vibrancy = pFlame.vibrancy;
     preserveZ = pFlame.preserveZ;
+    deFilterRadius = pFlame.deFilterRadius;
+    deFilterAmount = pFlame.deFilterAmount;
     resolutionProfile = pFlame.resolutionProfile;
     qualityProfile = pFlame.qualityProfile;
     shadingInfo.assign(pFlame.shadingInfo);
@@ -487,6 +493,7 @@ public class Flame implements Assignable<Flame>, Serializable {
         fabs(pixelsPerUnit - pFlame.pixelsPerUnit) > EPSILON || whiteLevel != pFlame.whiteLevel ||
         fabs(brightness - pFlame.brightness) > EPSILON || fabs(contrast - pFlame.contrast) > EPSILON ||
         fabs(vibrancy - pFlame.vibrancy) > EPSILON || preserveZ != pFlame.preserveZ ||
+        deFilterRadius != pFlame.deFilterRadius || fabs(deFilterAmount - pFlame.deFilterAmount) > EPSILON ||
         ((resolutionProfile != null && pFlame.resolutionProfile == null) || (resolutionProfile == null && pFlame.resolutionProfile != null) ||
         (resolutionProfile != null && pFlame.resolutionProfile != null && !resolutionProfile.equals(pFlame.resolutionProfile))) ||
         ((qualityProfile != null && pFlame.qualityProfile == null) || (qualityProfile == null && pFlame.qualityProfile != null) ||
@@ -504,5 +511,21 @@ public class Flame implements Assignable<Flame>, Serializable {
       }
     }
     return true;
+  }
+
+  public int getDEFilterRadius() {
+    return deFilterRadius;
+  }
+
+  public void setDEFilterRadius(int deFilterRadius) {
+    this.deFilterRadius = deFilterRadius;
+  }
+
+  public double getDEFilterAmount() {
+    return deFilterAmount;
+  }
+
+  public void setDEFilterAmount(double deFilterAmount) {
+    this.deFilterAmount = deFilterAmount;
   }
 }

@@ -263,7 +263,7 @@ public class CRendererInterface {
 
     ByteArrayOutputStream bos = new ByteArrayOutputStream();
 
-    int retVal = launchCmd(cmd + args, bos, statusFilename, true);
+    int retVal = launchCmd(cmd + args, bos, pPrefs, statusFilename, true);
     if (retVal != 0) {
       throw new RuntimeException(bos.toString());
     }
@@ -356,10 +356,12 @@ public class CRendererInterface {
     private final OutputStream os;
     private boolean finished;
     private int exitVal;
+    private Prefs prefs;
 
-    public ExecCmdThread(String pCmd, OutputStream pOS) {
+    public ExecCmdThread(String pCmd, OutputStream pOS, Prefs pPrefs) {
       cmd = pCmd;
       os = pOS;
+      prefs = pPrefs;
     }
 
     @Override
@@ -377,7 +379,7 @@ public class CRendererInterface {
             throw new RuntimeException(ex);
           }
 
-          final boolean dumpToOut = true;
+          final boolean dumpToOut = prefs.isDevelopmentMode();
           StreamRedirector outputStreamHandler = new StreamRedirector(proc.getInputStream(), os, dumpToOut);
           StreamRedirector errorStreamHandler = new StreamRedirector(proc.getErrorStream(), os, dumpToOut);
           errorStreamHandler.start();
@@ -391,7 +393,7 @@ public class CRendererInterface {
             e.printStackTrace();
           }
 
-          if (dumpToOut) {
+          if (dumpToOut && exitVal != 0) {
             System.out.println("EXITVALUE=" + exitVal);
           }
         }
@@ -420,8 +422,8 @@ public class CRendererInterface {
     }
   }
 
-  private int launchCmd(String pCmd, OutputStream pOS, String pStatusFilename, boolean pInBackground) {
-    ExecCmdThread thread = new ExecCmdThread(pCmd, pOS);
+  private int launchCmd(String pCmd, OutputStream pOS, Prefs pPrefs, String pStatusFilename, boolean pInBackground) {
+    ExecCmdThread thread = new ExecCmdThread(pCmd, pOS, pPrefs);
     if (pInBackground) {
       new Thread(thread).start();
       while (!thread.isFinished()) {
