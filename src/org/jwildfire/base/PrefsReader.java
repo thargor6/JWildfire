@@ -22,6 +22,8 @@ import java.io.InputStream;
 import java.util.Collections;
 import java.util.Properties;
 
+import org.jwildfire.create.tina.render.RendererType;
+
 public class PrefsReader {
 
   private String getProperty(Properties pProperties, String pKey, String pDefaultValue) {
@@ -51,6 +53,7 @@ public class PrefsReader {
       try {
         Properties props = new Properties();
         props.load(inputStream);
+        pPrefs.setDevelopmentMode(getBooleanProperty(props, Prefs.KEY_GENERAL_DEVELOPMENT_MODE, pPrefs.isDevelopmentMode()));
         pPrefs.setPlafStyle(getProperty(props, Prefs.KEY_GENERAL_PLAF_STYLE, pPrefs.getPlafStyle()));
         pPrefs.setPlafTheme(getProperty(props, Prefs.KEY_GENERAL_PLAF_THEME, pPrefs.getPlafTheme()));
         pPrefs.setImagePath(getProperty(props, Prefs.KEY_GENERAL_PATH_IMAGES, pPrefs.getImagePath()));
@@ -59,6 +62,15 @@ public class PrefsReader {
         pPrefs.setSoundFilePath(getProperty(props, Prefs.KEY_GENERAL_PATH_SOUND_FILES, pPrefs.getSoundFilePath()));
 
         pPrefs.setTinaAssociateProfilesWithFlames(getBooleanProperty(props, Prefs.KEY_TINA_PROFILE_ASSOCIATE_WITH_FLAMES, pPrefs.isTinaAssociateProfilesWithFlames()));
+        {
+          String rendererName = getProperty(props, Prefs.KEY_TINA_RENDER_DEFAULT_RENDERER, pPrefs.getTinaDefaultRenderer().name());
+          try {
+            pPrefs.setTinaDefaultRenderer(RendererType.valueOf(rendererName));
+          }
+          catch (Exception ex) {
+            ex.printStackTrace();
+          }
+        }
         pPrefs.setTinaFlamePath(getProperty(props, Prefs.KEY_TINA_PATH_FLAMES, pPrefs.getTinaFlamePath()));
         pPrefs.setTinaJWFMoviePath(getProperty(props, Prefs.KEY_TINA_PATH_JWFMOVIES, pPrefs.getTinaJWFMoviePath()));
         pPrefs.setTinaRenderMovieFrames(getIntProperty(props, Prefs.KEY_TINA_RENDER_MOVIE_FRAMES, pPrefs.getTinaRenderMovieFrames()));

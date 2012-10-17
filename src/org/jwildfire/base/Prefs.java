@@ -20,6 +20,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.jwildfire.create.tina.render.CRendererInterface;
+import org.jwildfire.create.tina.render.RendererType;
 import org.jwildfire.swing.LookAndFeel;
 
 import com.l2fprod.common.beans.editor.ComboBoxPropertyEditor;
@@ -34,6 +36,9 @@ public class Prefs extends ManagedObject {
   static final String KEY_GENERAL_PATH_SCRIPTS = "general.path.scripts";
   static final String KEY_GENERAL_PATH_SOUND_FILES = "sunflow.path.sound_files";
   static final String KEY_GENERAL_PATH_SWF = "sunflow.path.swf";
+
+  static final String KEY_GENERAL_DEVELOPMENT_MODE = "general.development_mode";
+
   static final String KEY_SUNFLOW_PATH_SCENES = "sunflow.path.scenes";
 
   static final String KEY_TINA_PROFILE_RESOLUTION_COUNT = "tina.profile.resolution.count";
@@ -56,6 +61,7 @@ public class Prefs extends ManagedObject {
 
   static final String KEY_TINA_RENDER_REALTIME_QUALITY = "tina.render.realtime.quality";
   static final String KEY_TINA_RENDER_PREVIEW_QUALITY = "tina.render.preview.quality";
+  static final String KEY_TINA_RENDER_DEFAULT_RENDERER = "tina.render.default_renderer";
   static final String KEY_TINA_PROFILE_ASSOCIATE_WITH_FLAMES = "tina.profile.associate_with_flames";
 
   static final String KEY_TINA_RANDOMBATCH_SIZE = "tina.random_batch.size";
@@ -99,6 +105,9 @@ public class Prefs extends ManagedObject {
   private String lastInputSunflowScenePath = null;
   private String lastOutputSunflowScenePath = null;
 
+  @Property(description = "Development mode", category = PropertyCategory.GENERAL)
+  private boolean developmentMode = false;
+
   private final List<QualityProfile> qualityProfiles = new ArrayList<QualityProfile>();
   private final List<ResolutionProfile> resolutionProfiles = new ArrayList<ResolutionProfile>();
   private final List<WindowPrefs> windowPrefs = new ArrayList<WindowPrefs>();
@@ -108,6 +117,18 @@ public class Prefs extends ManagedObject {
       super();
       setAvailableValues(new String[] { LookAndFeel.PLAF_AERO, LookAndFeel.PLAF_ALUMINIUM, LookAndFeel.PLAF_BERNSTEIN, LookAndFeel.PLAF_FAST, LookAndFeel.PLAF_GRAPHITE, LookAndFeel.PLAF_HIFI, LookAndFeel.PLAF_MCWIN, LookAndFeel.PLAF_MINT,
           LookAndFeel.PLAF_NIMBUS, LookAndFeel.PLAF_NOIRE, LookAndFeel.PLAF_LUNA, LookAndFeel.PLAF_SMART, LookAndFeel.PLAF_MAC });
+    }
+  }
+
+  public static class TINARendererEditor extends ComboBoxPropertyEditor {
+    public TINARendererEditor() {
+      super();
+      if (CRendererInterface.isCUDAAvailable()) {
+        setAvailableValues(new RendererType[] { RendererType.JAVA, RendererType.C32, RendererType.C64 });
+      }
+      else {
+        setAvailableValues(new RendererType[] { RendererType.JAVA });
+      }
     }
   }
 
@@ -135,6 +156,9 @@ public class Prefs extends ManagedObject {
   private int tinaRandomBatchBGColorGreen = 0;
   @Property(description = "Red component of the background color of randomly generated flames", category = PropertyCategory.TINA)
   private int tinaRandomBatchBGColorBlue = 0;
+
+  @Property(description = "Default renderer", category = PropertyCategory.TINA, editorClass = TINARendererEditor.class)
+  private RendererType tinaDefaultRenderer = RendererType.JAVA;
 
   public String getInputScriptPath() {
     return lastInputScriptPath != null ? lastInputScriptPath : scriptPath;
@@ -338,6 +362,7 @@ public class Prefs extends ManagedObject {
     lastOutputSWFPath = pSrc.lastOutputSWFPath;
     plafStyle = pSrc.plafStyle;
     plafTheme = pSrc.plafTheme;
+    developmentMode = pSrc.developmentMode;
 
     tinaRenderMovieFrames = pSrc.tinaRenderMovieFrames;
     tinaRenderPreviewQuality = pSrc.tinaRenderPreviewQuality;
@@ -347,6 +372,7 @@ public class Prefs extends ManagedObject {
     tinaRandomBatchBGColorGreen = pSrc.tinaRandomBatchBGColorGreen;
     tinaRandomBatchBGColorBlue = pSrc.tinaRandomBatchBGColorBlue;
     tinaAssociateProfilesWithFlames = pSrc.tinaAssociateProfilesWithFlames;
+    tinaDefaultRenderer = pSrc.tinaDefaultRenderer;
 
     resolutionProfiles.clear();
     for (ResolutionProfile profile : pSrc.resolutionProfiles) {
@@ -366,8 +392,7 @@ public class Prefs extends ManagedObject {
   }
 
   public int getTinaRenderThreads() {
-    // TODO
-    return tinaRenderThreads * 1;
+    return tinaRenderThreads;
   }
 
   public int getTinaRenderPreviewQuality() {
@@ -497,6 +522,22 @@ public class Prefs extends ManagedObject {
 
   protected List<WindowPrefs> getWindowPrefs() {
     return windowPrefs;
+  }
+
+  public boolean isDevelopmentMode() {
+    return developmentMode;
+  }
+
+  public void setDevelopmentMode(boolean developmentMode) {
+    this.developmentMode = developmentMode;
+  }
+
+  public RendererType getTinaDefaultRenderer() {
+    return tinaDefaultRenderer != null ? tinaDefaultRenderer : RendererType.JAVA;
+  }
+
+  public void setTinaDefaultRenderer(RendererType tinaDefaultRenderer) {
+    this.tinaDefaultRenderer = tinaDefaultRenderer;
   }
 
 }

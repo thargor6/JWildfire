@@ -22,12 +22,14 @@ public class PrefsWriter {
 
   public void writePrefs(Prefs pPrefs) throws Exception {
     StringBuilder sb = new StringBuilder();
+    addValue(sb, Prefs.KEY_GENERAL_DEVELOPMENT_MODE, pPrefs.isDevelopmentMode());
     addValue(sb, Prefs.KEY_GENERAL_PLAF_STYLE, pPrefs.getPlafStyle());
     addValue(sb, Prefs.KEY_GENERAL_PLAF_THEME, pPrefs.getPlafTheme());
     addValue(sb, Prefs.KEY_GENERAL_PATH_IMAGES, pPrefs.getImagePath());
     addValue(sb, Prefs.KEY_GENERAL_PATH_SCRIPTS, pPrefs.getScriptPath());
     addValue(sb, Prefs.KEY_GENERAL_PATH_SWF, pPrefs.getSwfPath());
     addValue(sb, Prefs.KEY_GENERAL_PATH_SOUND_FILES, pPrefs.getSoundFilePath());
+    addValue(sb, Prefs.KEY_TINA_RENDER_DEFAULT_RENDERER, pPrefs.getTinaDefaultRenderer().name());
     addValue(sb, Prefs.KEY_TINA_PROFILE_ASSOCIATE_WITH_FLAMES, pPrefs.isTinaAssociateProfilesWithFlames());
     addValue(sb, Prefs.KEY_TINA_PATH_FLAMES, pPrefs.getTinaFlamePath());
     addValue(sb, Prefs.KEY_TINA_PATH_JWFMOVIES, pPrefs.getTinaJWFMoviePath());
