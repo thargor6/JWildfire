@@ -2332,17 +2332,18 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
                   CRendererInterface cudaRenderer = new CRendererInterface(rendererType);
                   CRendererInterface.checkFlameForCUDA(flame);
                   cudaRenderer.setProgressUpdater(mainProgressUpdater);
+                  if (info.isRenderHDR()) {
+                    String hdrFilename = file.getAbsolutePath() + ".hdr";
+                    cudaRenderer.setHDROutputfilename(hdrFilename);
+                    // do not allocate unnessary memory as the HDR file is completely generated and saved by the external renderer 
+                    info.setRenderHDR(false);
+                    info.setRenderHDRIntensityMap(false);
+                  }
                   long t0 = System.currentTimeMillis();
                   RenderedFlame res = cudaRenderer.renderFlame(info, flame, prefs);
                   long t1 = System.currentTimeMillis();
                   statusMessage("Render time: " + Tools.doubleToString((t1 - t0) * 0.001) + "s");
                   new ImageWriter().saveImage(res.getImage(), file.getAbsolutePath());
-                  if (res.getHDRImage() != null) {
-                    new ImageWriter().saveImage(res.getHDRImage(), file.getAbsolutePath() + ".hdr");
-                  }
-                  if (res.getHDRIntensityMap() != null) {
-                    new ImageWriter().saveImage(res.getHDRIntensityMap(), file.getAbsolutePath() + ".intensity.hdr");
-                  }
                 }
                 catch (Throwable ex) {
                   errorHandler.handleError(ex);

@@ -43,6 +43,7 @@ public class CRendererInterface {
   private ProgressUpdater progressUpdater;
   private final RendererType rendererType;
   private long nextProgressUpdate;
+  private String hdrOutputfilename;
 
   public CRendererInterface(RendererType pRendererType) {
     rendererType = pRendererType;
@@ -256,6 +257,10 @@ public class CRendererInterface {
       throw new RuntimeException(e);
     }
     String args = " -flameFilename \"" + flameFilename + "\" -outputFilename \"" + ppmFilename + "\" -threadCount " + pPrefs.getTinaRenderThreads() + " -reportStatus -outputWidth " + pInfo.getImageWidth() + " -outputHeight " + pInfo.getImageHeight() + " -sampleDensity " + doubleToCUDA(pFlame.getSampleDensity());
+    if (hdrOutputfilename != null && hdrOutputfilename.length() > 0) {
+      args += " -outputHDRFilename \"" + hdrOutputfilename;
+    }
+
     ByteArrayOutputStream bos = new ByteArrayOutputStream();
 
     int retVal = launchCmd(cmd + args, bos, statusFilename, true);
@@ -512,5 +517,9 @@ public class CRendererInterface {
 
   public void setProgressUpdater(ProgressUpdater pProgressUpdater) {
     progressUpdater = pProgressUpdater;
+  }
+
+  public void setHDROutputfilename(String pHDRFilename) {
+    hdrOutputfilename = pHDRFilename;
   }
 }
