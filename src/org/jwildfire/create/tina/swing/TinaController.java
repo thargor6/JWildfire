@@ -98,6 +98,7 @@ import org.jwildfire.create.tina.render.RenderedFlame;
 import org.jwildfire.create.tina.render.RendererType;
 import org.jwildfire.create.tina.script.ScriptRunner;
 import org.jwildfire.create.tina.script.ScriptRunnerEnvironment;
+import org.jwildfire.create.tina.sound.JLayerInterface;
 import org.jwildfire.create.tina.transform.XFormTransformService;
 import org.jwildfire.create.tina.variation.Linear3DFunc;
 import org.jwildfire.create.tina.variation.RessourceType;
@@ -2036,6 +2037,8 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
 
   public void loadFlameButton_actionPerformed(ActionEvent e) {
     try {
+      if (iface != null)
+        iface.stop();
       JFileChooser chooser = new FlameFileChooser(prefs);
       if (prefs.getInputFlamePath() != null) {
         try {
@@ -2054,9 +2057,9 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
         undoManager.initUndoStack(currFlame);
 
         for (int i = flames.size() - 1; i >= 0; i--) {
-          randomBatch.add(0, flames.get(i));
+          randomBatch.add(0, new FlameThumbnail(flames.get(i), null));
         }
-        updateThumbnails(null);
+        updateThumbnails();
         setupProfiles(currFlame);
         refreshUI();
       }
@@ -2908,13 +2911,49 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     }
   }
 
-  private List<Flame> randomBatch = new ArrayList<Flame>();
+  private class FlameThumbnail {
+    private Flame flame;
+    private SimpleImage preview;
+
+    public FlameThumbnail(Flame pFlame, SimpleImage pPreview) {
+      flame = pFlame;
+      preview = pPreview;
+    }
+
+    private void generatePreview() {
+      RenderInfo info = new RenderInfo(IMG_WIDTH, IMG_HEIGHT);
+      Flame renderFlame = flame.makeCopy();
+      double wScl = (double) info.getImageWidth() / (double) renderFlame.getWidth();
+      double hScl = (double) info.getImageHeight() / (double) renderFlame.getHeight();
+      renderFlame.setPixelsPerUnit((wScl + hScl) * 0.5 * renderFlame.getPixelsPerUnit());
+      renderFlame.setWidth(IMG_WIDTH);
+      renderFlame.setHeight(IMG_HEIGHT);
+      renderFlame.setSampleDensity(prefs.getTinaRenderPreviewQuality());
+      FlameRenderer renderer = new FlameRenderer(renderFlame, prefs);
+      renderFlame.setSampleDensity(100);
+      RenderedFlame res = renderer.renderFlame(info);
+      preview = res.getImage();
+    }
+
+    public SimpleImage getPreview() {
+      if (preview == null) {
+        generatePreview();
+      }
+      return preview;
+    }
+
+    public Flame getFlame() {
+      return flame;
+    }
+  }
+
+  private List<FlameThumbnail> randomBatch = new ArrayList<FlameThumbnail>();
 
   private final int IMG_WIDTH = 80;
   private final int IMG_HEIGHT = 60;
   private final int BORDER_SIZE = 10;
 
-  public void updateThumbnails(List<SimpleImage> pImages) {
+  public void updateThumbnails() {
     if (randomBatchScrollPane != null) {
       randomBatchPanel.remove(randomBatchScrollPane);
       randomBatchScrollPane = null;
@@ -2926,24 +2965,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     batchPanel.setSize(panelWidth, panelHeight);
     batchPanel.setPreferredSize(new Dimension(panelWidth, panelHeight));
     for (int i = 0; i < randomBatch.size(); i++) {
-      SimpleImage img;
-      if (pImages != null) {
-        img = pImages.get(i);
-      }
-      else {
-        RenderInfo info = new RenderInfo(IMG_WIDTH, IMG_HEIGHT);
-        Flame flame = randomBatch.get(i).makeCopy();
-        double wScl = (double) info.getImageWidth() / (double) flame.getWidth();
-        double hScl = (double) info.getImageHeight() / (double) flame.getHeight();
-        flame.setPixelsPerUnit((wScl + hScl) * 0.5 * flame.getPixelsPerUnit());
-        flame.setWidth(IMG_WIDTH);
-        flame.setHeight(IMG_HEIGHT);
-        flame.setSampleDensity(prefs.getTinaRenderPreviewQuality());
-        FlameRenderer renderer = new FlameRenderer(flame, prefs);
-        flame.setSampleDensity(100);
-        RenderedFlame res = renderer.renderFlame(info);
-        img = res.getImage();
-      }
+      SimpleImage img = randomBatch.get(i).getPreview();
       // add it to the main panel
       ImagePanel imgPanel = new ImagePanel(img, 0, 0, img.getImageWidth());
       imgPanel.setImage(img);
@@ -2978,7 +3000,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     RandomFlameGeneratorSampler sampler = new RandomFlameGeneratorSampler(IMG_WIDTH, IMG_HEIGHT, prefs, randGen, palettePoints);
     for (int i = 0; i < maxCount; i++) {
       RandomFlameGeneratorSample sample = sampler.createSample();
-      randomBatch.add(sample.getFlame());
+      randomBatch.add(new FlameThumbnail(sample.getFlame(), sample.getImage()));
       imgList.add(sample.getImage());
       // add it to the main panel
       SimpleImage img = imgList.get(imgList.size() - 1);
@@ -2995,12 +3017,12 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       });
       mainProgressUpdater.updateProgress(i + 1);
     }
-    updateThumbnails(imgList);
+    updateThumbnails();
   }
 
   public void importFromRandomBatch(int pIdx) {
     if (pIdx >= 0 && pIdx < randomBatch.size()) {
-      currFlame = randomBatch.get(pIdx);
+      currFlame = randomBatch.get(pIdx).getFlame();
       undoManager.initUndoStack(currFlame);
       {
         FlamePanel imgPanel = getFlamePanel();
@@ -3776,8 +3798,14 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     shadingInfoSliderChanged(shadingPhongSizeSlider, shadingPhongSizeREd, "phongSize", SLIDER_SCALE_PHONGSIZE, 0);
   }
 
+  JLayerInterface iface;
+
   public void loadFlameFromClipboard() {
     try {
+      if (iface == null)
+        iface = new JLayerInterface();
+      iface.play("C:\\TMP\\darkly_noon_complete_album\\J13satori-DarklyNoon-11-ThreeYears.mp3");
+
       Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
       Transferable clipData = clipboard.getContents(clipboard);
       if (clipData != null) {
@@ -3789,10 +3817,10 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
           currFlame = flame;
           undoManager.initUndoStack(currFlame);
           for (int i = flames.size() - 1; i >= 0; i--) {
-            randomBatch.add(0, flames.get(i));
+            randomBatch.add(0, new FlameThumbnail(flames.get(i), null));
           }
           setupProfiles(currFlame);
-          updateThumbnails(null);
+          updateThumbnails();
           refreshUI();
         }
       }
@@ -3806,7 +3834,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     currFlame = pFlame.makeCopy();
     undoManager.initUndoStack(currFlame);
     setupProfiles(currFlame);
-    updateThumbnails(null);
+    updateThumbnails();
     refreshUI();
   }
 
@@ -4480,7 +4508,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       saveUndoPoint();
       Flame newFlame = new SubFlameRandomFlameGenerator().embedFlame(currFlame);
       currFlame.assign(newFlame);
-      updateThumbnails(null);
+      updateThumbnails();
       refreshUI();
     }
   }
