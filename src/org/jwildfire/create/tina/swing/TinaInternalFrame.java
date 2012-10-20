@@ -1364,7 +1364,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaRenderFlameButton.setMnemonic(KeyEvent.VK_R);
       tinaRenderFlameButton.setFont(new Font("Dialog", Font.BOLD, 10));
       tinaRenderFlameButton.setToolTipText("Render image");
-      tinaRenderFlameButton.setPreferredSize(new Dimension(42, 36));
+      tinaRenderFlameButton.setPreferredSize(new Dimension(42, 32));
       tinaRenderFlameButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
           tinaController.renderFlameButton_actionPerformed(e);
@@ -5209,7 +5209,7 @@ public class TinaInternalFrame extends JInternalFrame {
       });
       mouseTransformShearButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/shear.gif")));
       mouseTransformShearButton.setToolTipText("Enable free triangle editing mode");
-      mouseTransformShearButton.setPreferredSize(new Dimension(42, 36));
+      mouseTransformShearButton.setPreferredSize(new Dimension(42, 32));
       triangleOperationsPanel.add(mouseTransformShearButton);
       triangleOperationsPanel.add(editSpaceLbl1, null);
       triangleOperationsPanel.add(getToggleTrianglesButton(), null);
@@ -5227,7 +5227,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JToggleButton getMouseTransformMoveButton() {
     if (mouseTransformMoveButton == null) {
       mouseTransformMoveButton = new JToggleButton();
-      mouseTransformMoveButton.setPreferredSize(new Dimension(42, 36));
+      mouseTransformMoveButton.setPreferredSize(new Dimension(42, 32));
       mouseTransformMoveButton.setSelected(true);
       mouseTransformMoveButton.setToolTipText("Enable triangle dragging mode");
       mouseTransformMoveButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/move.gif")));
@@ -5248,7 +5248,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JToggleButton getMouseTransformRotateButton() {
     if (mouseTransformRotateButton == null) {
       mouseTransformRotateButton = new JToggleButton();
-      mouseTransformRotateButton.setPreferredSize(new Dimension(42, 36));
+      mouseTransformRotateButton.setPreferredSize(new Dimension(42, 32));
       mouseTransformRotateButton.setToolTipText("Enable triangle rotating mode");
       mouseTransformRotateButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/rotate.gif")));
       mouseTransformRotateButton.addActionListener(new java.awt.event.ActionListener() {
@@ -5268,7 +5268,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JToggleButton getMouseTransformScaleButton() {
     if (mouseTransformScaleButton == null) {
       mouseTransformScaleButton = new JToggleButton();
-      mouseTransformScaleButton.setPreferredSize(new Dimension(42, 36));
+      mouseTransformScaleButton.setPreferredSize(new Dimension(42, 32));
       mouseTransformScaleButton.setToolTipText("Enable triangle scale mode");
       mouseTransformScaleButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/scale.gif")));
       mouseTransformScaleButton.addActionListener(new java.awt.event.ActionListener() {
@@ -5418,7 +5418,7 @@ public class TinaInternalFrame extends JInternalFrame {
       affineEditPostTransformSmallButton.setText("P");
       affineEditPostTransformSmallButton.setToolTipText("Toggle post transform mode");
       affineEditPostTransformSmallButton.setMnemonic(KeyEvent.VK_P);
-      affineEditPostTransformSmallButton.setPreferredSize(new Dimension(42, 36));
+      affineEditPostTransformSmallButton.setPreferredSize(new Dimension(42, 32));
       affineEditPostTransformSmallButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
           tinaController.affineEditPostTransformSmallButton_clicked();
@@ -5436,7 +5436,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton getMouseTransformZoomInButton() {
     if (mouseTransformZoomInButton == null) {
       mouseTransformZoomInButton = new JButton();
-      mouseTransformZoomInButton.setBounds(462, 4, 42, 24);
+      mouseTransformZoomInButton.setBounds(451, 4, 42, 24);
       mouseTransformZoomInButton.setFont(new Font("Dialog", Font.BOLD, 8));
       mouseTransformZoomInButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/triangleEnlarge.gif")));
       mouseTransformZoomInButton.setText("");
@@ -5459,7 +5459,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton getMouseTransformZoomOutButton() {
     if (mouseTransformZoomOutButton == null) {
       mouseTransformZoomOutButton = new JButton();
-      mouseTransformZoomOutButton.setBounds(504, 4, 42, 24);
+      mouseTransformZoomOutButton.setBounds(498, 4, 42, 24);
       mouseTransformZoomOutButton.setFont(new Font("Dialog", Font.BOLD, 8));
       mouseTransformZoomOutButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/triangleShrink.gif")));
       mouseTransformZoomOutButton.setText("");
@@ -5482,7 +5482,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JToggleButton getToggleTrianglesButton() {
     if (toggleTrianglesButton == null) {
       toggleTrianglesButton = new JToggleButton();
-      toggleTrianglesButton.setPreferredSize(new Dimension(42, 36));
+      toggleTrianglesButton.setPreferredSize(new Dimension(42, 32));
       toggleTrianglesButton.setSelected(true);
       toggleTrianglesButton.setToolTipText("Display/hide triangles");
       toggleTrianglesButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/triangle.gif")));
@@ -8422,7 +8422,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JToggleButton getDarkTrianglesToggleButton() {
     if (darkTrianglesToggleButton == null) {
       darkTrianglesToggleButton = new JToggleButton();
-      darkTrianglesToggleButton.setBounds(new Rectangle(556, 4, 82, 24));
+      darkTrianglesToggleButton.setBounds(new Rectangle(546, 4, 82, 24));
       darkTrianglesToggleButton.setToolTipText("Toggle dark triangle colors");
       darkTrianglesToggleButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/triangle.gif")));
       darkTrianglesToggleButton.setSelected(false);
@@ -9865,7 +9865,7 @@ public class TinaInternalFrame extends JInternalFrame {
       });
       tinaAppendToMovieButton.setToolTipText("Append to movie");
       tinaAppendToMovieButton.setText("Movie");
-      tinaAppendToMovieButton.setPreferredSize(new Dimension(60, 36));
+      tinaAppendToMovieButton.setPreferredSize(new Dimension(60, 32));
       tinaAppendToMovieButton.setMnemonic(KeyEvent.VK_M);
       tinaAppendToMovieButton.setFont(new Font("Dialog", Font.BOLD, 10));
     }
@@ -9890,7 +9890,7 @@ public class TinaInternalFrame extends JInternalFrame {
       });
       tinaWrapIntoSubFlameButton.setToolTipText("Wrap into sub flame");
       tinaWrapIntoSubFlameButton.setText("SF");
-      tinaWrapIntoSubFlameButton.setPreferredSize(new Dimension(60, 36));
+      tinaWrapIntoSubFlameButton.setPreferredSize(new Dimension(60, 32));
       tinaWrapIntoSubFlameButton.setMnemonic(KeyEvent.VK_S);
       tinaWrapIntoSubFlameButton.setFont(new Font("Dialog", Font.BOLD, 10));
     }
@@ -10094,7 +10094,7 @@ public class TinaInternalFrame extends JInternalFrame {
       });
       undoButton.setToolTipText("Undo");
       undoButton.setText("Undo");
-      undoButton.setPreferredSize(new Dimension(60, 36));
+      undoButton.setPreferredSize(new Dimension(60, 32));
       undoButton.setMnemonic(KeyEvent.VK_Z);
       undoButton.setFont(new Font("Dialog", Font.BOLD, 10));
     }
@@ -10121,7 +10121,7 @@ public class TinaInternalFrame extends JInternalFrame {
       });
       redoButton.setToolTipText("Redo");
       redoButton.setText("Redo");
-      redoButton.setPreferredSize(new Dimension(60, 36));
+      redoButton.setPreferredSize(new Dimension(60, 32));
       redoButton.setMnemonic(KeyEvent.VK_Y);
       redoButton.setFont(new Font("Dialog", Font.BOLD, 10));
     }
@@ -10717,7 +10717,7 @@ public class TinaInternalFrame extends JInternalFrame {
       });
       snapShotButton.setToolTipText("Create a snapshot of the current flame and store it to the thumbnail ribbon");
       snapShotButton.setText("SShot");
-      snapShotButton.setPreferredSize(new Dimension(60, 36));
+      snapShotButton.setPreferredSize(new Dimension(60, 32));
       snapShotButton.setMnemonic(KeyEvent.VK_H);
       snapShotButton.setFont(new Font("Dialog", Font.BOLD, 10));
     }
@@ -10734,7 +10734,7 @@ public class TinaInternalFrame extends JInternalFrame {
       });
       btnQsave.setToolTipText("Quicksave the current flame");
       btnQsave.setText("QSv");
-      btnQsave.setPreferredSize(new Dimension(60, 36));
+      btnQsave.setPreferredSize(new Dimension(60, 32));
       btnQsave.setMnemonic(KeyEvent.VK_Q);
       btnQsave.setFont(new Font("Dialog", Font.BOLD, 10));
     }
