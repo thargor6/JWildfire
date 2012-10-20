@@ -2473,11 +2473,11 @@ public class TinaInternalFrame extends JInternalFrame {
       affinePreserveZButton.setPreferredSize(new Dimension(136, 24));
       affinePreserveZButton.setLocation(new Point(4, 181));
       affinePreserveZButton.setFont(new Font("Dialog", Font.BOLD, 10));
-      affinePreserveZButton.setBounds(4, 214, 138, 24);
+      affinePreserveZButton.setBounds(4, 204, 138, 24);
       tinaAffineTransformationPanel.add(affinePreserveZButton);
 
       JButton checkCUDACompatiblityBtn = new JButton();
-      checkCUDACompatiblityBtn.setBounds(145, 214, 138, 24);
+      checkCUDACompatiblityBtn.setBounds(145, 204, 138, 24);
       tinaAffineTransformationPanel.add(checkCUDACompatiblityBtn);
       checkCUDACompatiblityBtn.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
@@ -3477,7 +3477,7 @@ public class TinaInternalFrame extends JInternalFrame {
         getShadingBlurFadeSlider(), getShadingBlurFallOffREd(), getShadingBlurFallOffSlider(), getScriptTextArea(),
         getAffineScaleXButton(), getAffineScaleYButton(), getGradientLibraryCenterPanel(), getGradientLibraryGradientCmb(), getHelpPane(),
         getFaqPane(), getToggleVariationsButton(), getAffinePreserveZButton(), getQualityProfileCmb(), getResolutionProfileCmb(),
-        getBatchQualityProfileCmb(), getBatchResolutionProfileCmb(), getInteractiveQualityProfileCmb(), getInteractiveResolutionProfileCmb(),
+        getBatchQualityProfileCmb(), getBatchResolutionProfileCmb(), getBatchRendererCmb(), getInteractiveQualityProfileCmb(), getInteractiveResolutionProfileCmb(),
         getSwfAnimatorQualityProfileCmb(), getSwfAnimatorResolutionProfileCmb(), getTinaRenderFlameButton(), getTinaAppendToMovieButton(),
         getTransformationWeightREd(), getUndoButton(), getRedoButton(), getRendererCmb(),
         getXFormAntialiasAmountREd(), getXFormAntialiasAmountSlider(), getXFormAntialiasRadiusREd(), getXFormAntialiasRadiusSlider(),
@@ -4052,7 +4052,7 @@ public class TinaInternalFrame extends JInternalFrame {
     if (createPaletteTablePanel == null) {
       createPaletteTablePanel = new JPanel();
       createPaletteTablePanel.setLayout(new BorderLayout());
-      createPaletteTablePanel.setPreferredSize(new Dimension(190, 134));
+      createPaletteTablePanel.setPreferredSize(new Dimension(190, 114));
       createPaletteTablePanel.add(getCreatePaletteScrollPane(), BorderLayout.CENTER);
     }
     return createPaletteTablePanel;
@@ -5336,8 +5336,8 @@ public class TinaInternalFrame extends JInternalFrame {
       centerWestPanel.add(getUndoButton());
       centerWestPanel.add(getRedoButton());
       centerWestPanel.add(getLabel_6());
-      centerWestPanel.add(getSnapShotButton());
       centerWestPanel.add(getBtnQsave());
+      centerWestPanel.add(getSnapShotButton());
     }
     return centerWestPanel;
   }
@@ -5396,7 +5396,7 @@ public class TinaInternalFrame extends JInternalFrame {
       affineEditPostTransformButton.setSize(new Dimension(138, 24));
       affineEditPostTransformButton.setText("Edit Post  Transform");
       affineEditPostTransformButton.setFont(new Font("Dialog", Font.BOLD, 10));
-      affineEditPostTransformButton.setLocation(new Point(4, 181));
+      affineEditPostTransformButton.setLocation(new Point(4, 178));
       affineEditPostTransformButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
           tinaController.affineEditPostTransformButton_clicked();
@@ -5522,7 +5522,7 @@ public class TinaInternalFrame extends JInternalFrame {
       affineResetTransformButton = new JButton();
       affineResetTransformButton.setPreferredSize(new Dimension(136, 24));
       affineResetTransformButton.setText("Reset");
-      affineResetTransformButton.setLocation(new Point(146, 181));
+      affineResetTransformButton.setLocation(new Point(146, 178));
       affineResetTransformButton.setSize(new Dimension(138, 24));
       affineResetTransformButton.setToolTipText("Reset triangle to defaults");
       affineResetTransformButton.setFont(new Font("Dialog", Font.BOLD, 10));
@@ -9517,7 +9517,7 @@ public class TinaInternalFrame extends JInternalFrame {
       swfAnimatorRendererCmb.setMaximumSize(new Dimension(32767, 24));
       swfAnimatorRendererCmb.setMaximumRowCount(32);
       swfAnimatorRendererCmb.setFont(new Font("Dialog", Font.BOLD, 10));
-      swfAnimatorRendererCmb.setBounds(237, 65, 159, 24);
+      swfAnimatorRendererCmb.setBounds(237, 62, 125, 24);
       panel_5.add(swfAnimatorRendererCmb);
     }
     return panel_5;
@@ -9610,8 +9610,9 @@ public class TinaInternalFrame extends JInternalFrame {
   private JComboBox getSwfAnimatorResolutionProfileCmb() {
     if (swfAnimatorResolutionProfileCmb == null) {
       swfAnimatorResolutionProfileCmb = new JComboBox();
-      swfAnimatorResolutionProfileCmb.setBounds(88, 37, 125, 22);
-      swfAnimatorResolutionProfileCmb.setPreferredSize(new Dimension(125, 22));
+      swfAnimatorResolutionProfileCmb.setMinimumSize(new Dimension(33, 24));
+      swfAnimatorResolutionProfileCmb.setBounds(88, 37, 125, 24);
+      swfAnimatorResolutionProfileCmb.setPreferredSize(new Dimension(125, 24));
       swfAnimatorResolutionProfileCmb.setMaximumRowCount(32);
       swfAnimatorResolutionProfileCmb.setFont(new Font("Dialog", Font.BOLD, 10));
     }
@@ -9643,8 +9644,9 @@ public class TinaInternalFrame extends JInternalFrame {
   private JComboBox getSwfAnimatorQualityProfileCmb() {
     if (swfAnimatorQualityProfileCmb == null) {
       swfAnimatorQualityProfileCmb = new JComboBox();
-      swfAnimatorQualityProfileCmb.setBounds(88, 62, 125, 22);
-      swfAnimatorQualityProfileCmb.setPreferredSize(new Dimension(125, 22));
+      swfAnimatorQualityProfileCmb.setMinimumSize(new Dimension(33, 24));
+      swfAnimatorQualityProfileCmb.setBounds(88, 62, 125, 24);
+      swfAnimatorQualityProfileCmb.setPreferredSize(new Dimension(125, 24));
       swfAnimatorQualityProfileCmb.setMaximumRowCount(32);
       swfAnimatorQualityProfileCmb.setFont(new Font("Dialog", Font.BOLD, 10));
     }
@@ -9816,7 +9818,7 @@ public class TinaInternalFrame extends JInternalFrame {
       swfAnimatorMovieFromDiskButton.setPreferredSize(new Dimension(125, 24));
       swfAnimatorMovieFromDiskButton.setFont(new Font("Dialog", Font.BOLD, 10));
       swfAnimatorMovieFromDiskButton.setBounds(new Rectangle(504, 35, 125, 24));
-      swfAnimatorMovieFromDiskButton.setBounds(237, 40, 125, 24);
+      swfAnimatorMovieFromDiskButton.setBounds(237, 37, 125, 24);
     }
     return swfAnimatorMovieFromDiskButton;
   }
@@ -9850,7 +9852,7 @@ public class TinaInternalFrame extends JInternalFrame {
       swfAnimatorMovieToDiskButton.setPreferredSize(new Dimension(125, 24));
       swfAnimatorMovieToDiskButton.setFont(new Font("Dialog", Font.BOLD, 10));
       swfAnimatorMovieToDiskButton.setBounds(new Rectangle(643, 35, 125, 24));
-      swfAnimatorMovieToDiskButton.setBounds(381, 40, 125, 24);
+      swfAnimatorMovieToDiskButton.setBounds(381, 37, 125, 24);
     }
     return swfAnimatorMovieToDiskButton;
   }
