@@ -58,6 +58,7 @@ import javax.swing.ListSelectionModel;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
 import javax.swing.WindowConstants;
+import javax.swing.border.EmptyBorder;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.ChangeEvent;
@@ -3433,7 +3434,9 @@ public class TinaInternalFrame extends JInternalFrame {
     nonlinearControlsRows[11] = new NonlinearControlsRow(getNonlinearVar12Cmb(), getNonlinearParams12Cmb(), getNonlinearVar12REd(),
         getNonlinearParams12REd(), getNonlinearParams12LeftButton());
 
-    initRendererCmb(pPrefs);
+    initRendererCmb(getRendererCmb(), pPrefs);
+    initRendererCmb(getSwfAnimatorRendererCmb(), pPrefs);
+    initRendererCmb(getBatchRendererCmb(), pPrefs);
 
     tinaController = new TinaController(this, pErrorHandler, pPrefs, getCenterCenterPanel(), getTinaCameraRollREd(), getTinaCameraRollSlider(), getTinaCameraPitchREd(),
         getTinaCameraPitchSlider(), getTinaCameraYawREd(), getTinaCameraYawSlider(), getTinaCameraPerspectiveREd(), getTinaCameraPerspectiveSlider(),
@@ -3548,15 +3551,20 @@ public class TinaInternalFrame extends JInternalFrame {
     return tinaController;
   }
 
-  private void initRendererCmb(Prefs pPrefs) {
-    JComboBox cmb = getRendererCmb();
-    cmb.removeAllItems();
-    cmb.addItem(RendererType.JAVA);
+  private void initRendererCmb(JComboBox pCmb, Prefs pPrefs) {
+    pCmb.removeAllItems();
+    pCmb.addItem(RendererType.JAVA);
     if (CRendererInterface.isCUDAAvailable()) {
-      cmb.addItem(RendererType.C32);
-      cmb.addItem(RendererType.C64);
+      pCmb.addItem(RendererType.C32);
+      pCmb.addItem(RendererType.C64);
     }
-    cmb.setSelectedIndex(0);
+    pCmb.setSelectedIndex(0);
+    try {
+      pCmb.setSelectedItem(pPrefs.getTinaDefaultRenderer());
+    }
+    catch (Exception ex) {
+
+    }
   }
 
   /**
@@ -7953,47 +7961,59 @@ public class TinaInternalFrame extends JInternalFrame {
    */
   private JPanel getBatchRenderPanel() {
     if (batchRenderPanel == null) {
-      batchRenderTotalProgressLbl = new JLabel();
-      batchRenderTotalProgressLbl.setPreferredSize(new Dimension(94, 22));
-      batchRenderTotalProgressLbl.setText("Total progress");
-      batchRenderTotalProgressLbl.setSize(new Dimension(94, 22));
-      batchRenderTotalProgressLbl.setLocation(new Point(8, 442));
-      batchRenderTotalProgressLbl.setFont(new Font("Dialog", Font.BOLD, 10));
-      batchRenderJobProgressLbl = new JLabel();
-      batchRenderJobProgressLbl.setPreferredSize(new Dimension(94, 22));
-      batchRenderJobProgressLbl.setText("Job progress");
-      batchRenderJobProgressLbl.setSize(new Dimension(94, 22));
-      batchRenderJobProgressLbl.setLocation(new Point(8, 415));
-      batchRenderJobProgressLbl.setFont(new Font("Dialog", Font.BOLD, 10));
       batchRenderPanel = new JPanel();
-      batchRenderPanel.setLayout(null);
-      batchRenderPanel.add(getRenderBatchJobsScrollPane(), null);
-      batchRenderPanel.add(getBatchRenderAddFilesButton(), null);
-      batchRenderPanel.add(getBatchRenderFilesMoveUpButton(), null);
-      batchRenderPanel.add(getBatchRenderFilesMoveDownButton(), null);
-      batchRenderPanel.add(getBatchRenderJobProgressBar(), null);
-      batchRenderPanel.add(getBatchRenderTotalProgressBar(), null);
-      batchRenderPanel.add(getBatchRenderFilesRemoveButton(), null);
-      batchRenderPanel.add(getBatchRenderFilesRemoveAllButton(), null);
-      batchRenderPanel.add(batchRenderJobProgressLbl, null);
-      batchRenderPanel.add(batchRenderTotalProgressLbl, null);
-      batchRenderPanel.add(getBatchRenderStartButton(), null);
+      batchRenderPanel.setLayout(new BorderLayout(0, 0));
 
-      batchQualityProfileCmb = new JComboBox();
-      batchQualityProfileCmb.setPreferredSize(new Dimension(125, 22));
-      batchQualityProfileCmb.setMaximumRowCount(32);
-      batchQualityProfileCmb.setFont(new Font("Dialog", Font.BOLD, 10));
-      batchQualityProfileCmb.setBounds(new Rectangle(231, 7, 125, 22));
-      batchQualityProfileCmb.setBounds(680, 385, 125, 22);
-      batchRenderPanel.add(batchQualityProfileCmb);
+      JPanel panel_1 = new JPanel();
+      panel_1.setBorder(new EmptyBorder(10, 10, 10, 10));
+      batchRenderPanel.add(panel_1);
+      panel_1.setLayout(new BorderLayout(0, 0));
+
+      JPanel panel_2 = new JPanel();
+      panel_2.setPreferredSize(new Dimension(160, 10));
+      panel_1.add(panel_2, BorderLayout.EAST);
+      panel_2.setLayout(new BoxLayout(panel_2, BoxLayout.Y_AXIS));
+      panel_2.add(getBatchRenderAddFilesButton());
+      panel_2.add(getPanel_20());
+      panel_2.add(getBatchRenderFilesMoveDownButton());
+      panel_2.add(getBatchRenderFilesMoveUpButton());
+      panel_2.add(getPanel_21());
+      panel_2.add(getBatchRenderFilesRemoveButton());
+      panel_2.add(getBatchRenderFilesRemoveAllButton());
+      panel_2.add(getPanel_22());
+
+      batchRendererCmb = new JComboBox();
+      panel_2.add(batchRendererCmb);
+      batchRendererCmb.setPreferredSize(new Dimension(159, 24));
+      batchRendererCmb.setMinimumSize(new Dimension(159, 24));
+      batchRendererCmb.setMaximumSize(new Dimension(159, 24));
+      batchRendererCmb.setMaximumRowCount(32);
+      batchRendererCmb.setFont(new Font("Dialog", Font.BOLD, 10));
 
       batchResolutionProfileCmb = new JComboBox();
-      batchResolutionProfileCmb.setPreferredSize(new Dimension(125, 22));
+      batchResolutionProfileCmb.setMinimumSize(new Dimension(159, 24));
+      batchResolutionProfileCmb.setMaximumSize(new Dimension(159, 24));
+      panel_2.add(batchResolutionProfileCmb);
+      batchResolutionProfileCmb.setPreferredSize(new Dimension(159, 24));
       batchResolutionProfileCmb.setMaximumRowCount(32);
       batchResolutionProfileCmb.setFont(new Font("Dialog", Font.BOLD, 10));
-      batchResolutionProfileCmb.setBounds(new Rectangle(231, 7, 125, 22));
-      batchResolutionProfileCmb.setBounds(680, 357, 125, 22);
-      batchRenderPanel.add(batchResolutionProfileCmb);
+
+      batchQualityProfileCmb = new JComboBox();
+      panel_2.add(batchQualityProfileCmb);
+      batchQualityProfileCmb.setMinimumSize(new Dimension(159, 24));
+      batchQualityProfileCmb.setMaximumSize(new Dimension(159, 24));
+      batchQualityProfileCmb.setPreferredSize(new Dimension(159, 24));
+      batchQualityProfileCmb.setMaximumRowCount(32);
+      batchQualityProfileCmb.setFont(new Font("Dialog", Font.BOLD, 10));
+
+      JPanel panel_3 = new JPanel();
+      panel_3.setPreferredSize(new Dimension(10, 100));
+      panel_1.add(panel_3, BorderLayout.SOUTH);
+      panel_3.setLayout(new BoxLayout(panel_3, BoxLayout.X_AXIS));
+      panel_3.add(getPanel_25());
+      panel_3.add(getPanel_26());
+      panel_3.add(getBatchRenderStartButton());
+      panel_1.add(getRenderBatchJobsScrollPane(), BorderLayout.CENTER);
     }
     return batchRenderPanel;
   }
@@ -8142,6 +8162,15 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton snapShotButton;
   private JButton btnQsave;
   private JLabel label_6;
+  private JComboBox batchRendererCmb;
+  private JComboBox swfAnimatorRendererCmb;
+  private JPanel panel_20;
+  private JPanel panel_21;
+  private JPanel panel_22;
+  private JPanel panel_23;
+  private JPanel panel_24;
+  private JPanel panel_25;
+  private JPanel panel_26;
 
   /**
    * This method initializes renderBatchJobsScrollPane	
@@ -8151,8 +8180,6 @@ public class TinaInternalFrame extends JInternalFrame {
   private JScrollPane getRenderBatchJobsScrollPane() {
     if (renderBatchJobsScrollPane == null) {
       renderBatchJobsScrollPane = new JScrollPane();
-      renderBatchJobsScrollPane.setSize(new Dimension(667, 399));
-      renderBatchJobsScrollPane.setLocation(new Point(8, 8));
       renderBatchJobsScrollPane.setViewportView(getRenderBatchJobsTable());
     }
     return renderBatchJobsScrollPane;
@@ -8178,10 +8205,12 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton getBatchRenderAddFilesButton() {
     if (batchRenderAddFilesButton == null) {
       batchRenderAddFilesButton = new JButton();
+      batchRenderAddFilesButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+      batchRenderAddFilesButton.setSize(new Dimension(159, 24));
+      batchRenderAddFilesButton.setMinimumSize(new Dimension(159, 24));
+      batchRenderAddFilesButton.setMaximumSize(new Dimension(159, 24));
       batchRenderAddFilesButton.setPreferredSize(new Dimension(125, 24));
       batchRenderAddFilesButton.setText("Add files");
-      batchRenderAddFilesButton.setSize(new Dimension(125, 24));
-      batchRenderAddFilesButton.setLocation(new Point(680, 8));
       batchRenderAddFilesButton.setFont(new Font("Dialog", Font.BOLD, 10));
       batchRenderAddFilesButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -8200,10 +8229,11 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton getBatchRenderFilesMoveUpButton() {
     if (batchRenderFilesMoveUpButton == null) {
       batchRenderFilesMoveUpButton = new JButton();
-      batchRenderFilesMoveUpButton.setPreferredSize(new Dimension(125, 24));
+      batchRenderFilesMoveUpButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+      batchRenderFilesMoveUpButton.setMinimumSize(new Dimension(159, 24));
+      batchRenderFilesMoveUpButton.setMaximumSize(new Dimension(159, 24));
+      batchRenderFilesMoveUpButton.setPreferredSize(new Dimension(159, 24));
       batchRenderFilesMoveUpButton.setText("Move up");
-      batchRenderFilesMoveUpButton.setSize(new Dimension(125, 24));
-      batchRenderFilesMoveUpButton.setLocation(new Point(680, 144));
       batchRenderFilesMoveUpButton.setFont(new Font("Dialog", Font.BOLD, 10));
       batchRenderFilesMoveUpButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -8222,8 +8252,11 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton getBatchRenderFilesMoveDownButton() {
     if (batchRenderFilesMoveDownButton == null) {
       batchRenderFilesMoveDownButton = new JButton();
-      batchRenderFilesMoveDownButton.setBounds(new Rectangle(680, 115, 125, 24));
-      batchRenderFilesMoveDownButton.setPreferredSize(new Dimension(125, 24));
+      batchRenderFilesMoveDownButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+      batchRenderFilesMoveDownButton.setSize(new Dimension(159, 24));
+      batchRenderFilesMoveDownButton.setMinimumSize(new Dimension(159, 24));
+      batchRenderFilesMoveDownButton.setMaximumSize(new Dimension(159, 24));
+      batchRenderFilesMoveDownButton.setPreferredSize(new Dimension(159, 24));
       batchRenderFilesMoveDownButton.setText("Move down");
       batchRenderFilesMoveDownButton.setFont(new Font("Dialog", Font.BOLD, 10));
       batchRenderFilesMoveDownButton.addActionListener(new java.awt.event.ActionListener() {
@@ -8243,7 +8276,6 @@ public class TinaInternalFrame extends JInternalFrame {
   JProgressBar getBatchRenderJobProgressBar() {
     if (batchRenderJobProgressBar == null) {
       batchRenderJobProgressBar = new JProgressBar();
-      batchRenderJobProgressBar.setBounds(new Rectangle(105, 416, 568, 21));
       batchRenderJobProgressBar.setValue(0);
       batchRenderJobProgressBar.setPreferredSize(new Dimension(568, 21));
       batchRenderJobProgressBar.setStringPainted(true);
@@ -8260,8 +8292,6 @@ public class TinaInternalFrame extends JInternalFrame {
     if (batchRenderTotalProgressBar == null) {
       batchRenderTotalProgressBar = new JProgressBar();
       batchRenderTotalProgressBar.setValue(0);
-      batchRenderTotalProgressBar.setSize(new Dimension(568, 21));
-      batchRenderTotalProgressBar.setLocation(new Point(105, 443));
       batchRenderTotalProgressBar.setPreferredSize(new Dimension(568, 21));
       batchRenderTotalProgressBar.setStringPainted(true);
     }
@@ -8276,10 +8306,11 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton getBatchRenderFilesRemoveButton() {
     if (batchRenderFilesRemoveButton == null) {
       batchRenderFilesRemoveButton = new JButton();
-      batchRenderFilesRemoveButton.setPreferredSize(new Dimension(125, 24));
+      batchRenderFilesRemoveButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+      batchRenderFilesRemoveButton.setMinimumSize(new Dimension(159, 12));
+      batchRenderFilesRemoveButton.setMaximumSize(new Dimension(159, 24));
+      batchRenderFilesRemoveButton.setPreferredSize(new Dimension(159, 24));
       batchRenderFilesRemoveButton.setText("Remove");
-      batchRenderFilesRemoveButton.setSize(new Dimension(125, 24));
-      batchRenderFilesRemoveButton.setLocation(new Point(680, 239));
       batchRenderFilesRemoveButton.setFont(new Font("Dialog", Font.BOLD, 10));
       batchRenderFilesRemoveButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -8298,10 +8329,11 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton getBatchRenderFilesRemoveAllButton() {
     if (batchRenderFilesRemoveAllButton == null) {
       batchRenderFilesRemoveAllButton = new JButton();
-      batchRenderFilesRemoveAllButton.setPreferredSize(new Dimension(125, 24));
+      batchRenderFilesRemoveAllButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+      batchRenderFilesRemoveAllButton.setMinimumSize(new Dimension(159, 24));
+      batchRenderFilesRemoveAllButton.setMaximumSize(new Dimension(159, 24));
+      batchRenderFilesRemoveAllButton.setPreferredSize(new Dimension(159, 24));
       batchRenderFilesRemoveAllButton.setText("Remove All");
-      batchRenderFilesRemoveAllButton.setSize(new Dimension(125, 24));
-      batchRenderFilesRemoveAllButton.setLocation(new Point(680, 270));
       batchRenderFilesRemoveAllButton.setFont(new Font("Dialog", Font.BOLD, 10));
       batchRenderFilesRemoveAllButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -8320,10 +8352,10 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton getBatchRenderStartButton() {
     if (batchRenderStartButton == null) {
       batchRenderStartButton = new JButton();
-      batchRenderStartButton.setPreferredSize(new Dimension(125, 52));
+      batchRenderStartButton.setMinimumSize(new Dimension(159, 52));
+      batchRenderStartButton.setMaximumSize(new Dimension(159, 59));
+      batchRenderStartButton.setPreferredSize(new Dimension(159, 52));
       batchRenderStartButton.setText("Render");
-      batchRenderStartButton.setLocation(new Point(680, 414));
-      batchRenderStartButton.setSize(new Dimension(125, 52));
       batchRenderStartButton.setFont(new Font("Dialog", Font.BOLD, 10));
       batchRenderStartButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -9478,6 +9510,15 @@ public class TinaInternalFrame extends JInternalFrame {
       swfAnimatorToFrameREd.setFont(new Font("Dialog", Font.PLAIN, 10));
       swfAnimatorToFrameREd.setBounds(967, 38, 56, 22);
       panel_5.add(swfAnimatorToFrameREd);
+
+      swfAnimatorRendererCmb = new JComboBox();
+      swfAnimatorRendererCmb.setPreferredSize(new Dimension(125, 24));
+      swfAnimatorRendererCmb.setMinimumSize(new Dimension(100, 24));
+      swfAnimatorRendererCmb.setMaximumSize(new Dimension(32767, 24));
+      swfAnimatorRendererCmb.setMaximumRowCount(32);
+      swfAnimatorRendererCmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      swfAnimatorRendererCmb.setBounds(237, 65, 159, 24);
+      panel_5.add(swfAnimatorRendererCmb);
     }
     return panel_5;
   }
@@ -10708,5 +10749,93 @@ public class TinaInternalFrame extends JInternalFrame {
       label_6.setFont(new Font("Dialog", Font.BOLD, 10));
     }
     return label_6;
+  }
+
+  public JComboBox getBatchRendererCmb() {
+    return batchRendererCmb;
+  }
+
+  public JComboBox getSwfAnimatorRendererCmb() {
+    return swfAnimatorRendererCmb;
+  }
+
+  private JPanel getPanel_20() {
+    if (panel_20 == null) {
+      panel_20 = new JPanel();
+      panel_20.setMaximumSize(new Dimension(159, 50));
+    }
+    return panel_20;
+  }
+
+  private JPanel getPanel_21() {
+    if (panel_21 == null) {
+      panel_21 = new JPanel();
+      panel_21.setMaximumSize(new Dimension(159, 50));
+    }
+    return panel_21;
+  }
+
+  private JPanel getPanel_22() {
+    if (panel_22 == null) {
+      panel_22 = new JPanel();
+      panel_22.setMaximumSize(new Dimension(32767, 50));
+    }
+    return panel_22;
+  }
+
+  private JPanel getPanel_23() {
+    if (panel_23 == null) {
+      panel_23 = new JPanel();
+      panel_23.setPreferredSize(new Dimension(10, 28));
+      panel_23.setMinimumSize(new Dimension(10, 28));
+      panel_23.setMaximumSize(new Dimension(32767, 28));
+      panel_23.setLayout(new BoxLayout(panel_23, BoxLayout.X_AXIS));
+      batchRenderJobProgressLbl = new JLabel();
+      batchRenderJobProgressLbl.setMinimumSize(new Dimension(100, 0));
+      panel_23.add(batchRenderJobProgressLbl);
+      batchRenderJobProgressLbl.setPreferredSize(new Dimension(100, 22));
+      batchRenderJobProgressLbl.setText("Job progress");
+      batchRenderJobProgressLbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      panel_23.add(getBatchRenderJobProgressBar());
+    }
+    return panel_23;
+  }
+
+  private JPanel getPanel_24() {
+    if (panel_24 == null) {
+      panel_24 = new JPanel();
+      panel_24.setPreferredSize(new Dimension(10, 28));
+      panel_24.setMinimumSize(new Dimension(10, 28));
+      panel_24.setMaximumSize(new Dimension(32767, 28));
+      panel_24.setLayout(new BoxLayout(panel_24, BoxLayout.X_AXIS));
+      batchRenderTotalProgressLbl = new JLabel();
+      batchRenderTotalProgressLbl.setMinimumSize(new Dimension(100, 0));
+      panel_24.add(batchRenderTotalProgressLbl);
+      batchRenderTotalProgressLbl.setPreferredSize(new Dimension(100, 22));
+      batchRenderTotalProgressLbl.setText("Total progress");
+      batchRenderTotalProgressLbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      panel_24.add(getBatchRenderTotalProgressBar());
+    }
+    return panel_24;
+  }
+
+  private JPanel getPanel_25() {
+    if (panel_25 == null) {
+      panel_25 = new JPanel();
+      panel_25.setLayout(new BoxLayout(panel_25, BoxLayout.Y_AXIS));
+      panel_25.add(getPanel_23());
+      panel_25.add(getPanel_24());
+    }
+    return panel_25;
+  }
+
+  private JPanel getPanel_26() {
+    if (panel_26 == null) {
+      panel_26 = new JPanel();
+      panel_26.setPreferredSize(new Dimension(6, 10));
+      panel_26.setMinimumSize(new Dimension(6, 10));
+      panel_26.setMaximumSize(new Dimension(6, 32767));
+    }
+    return panel_26;
   }
 } //  @jve:decl-index=0:visual-constraint="10,10"

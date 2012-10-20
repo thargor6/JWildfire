@@ -553,12 +553,6 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     swfAnimatorQualityProfileCmb = pSWFAnimatorQualityProfileCmb;
     swfAnimatorResolutionProfileCmb = pSWFAnimatorResolutionProfileCmb;
     rendererCmb = pRendererCmb;
-    try {
-      rendererCmb.setSelectedItem(pPrefs.getTinaDefaultRenderer());
-    }
-    catch (Exception ex) {
-
-    }
     transformationsTable = pTransformationsTable;
     affineC00REd = pAffineC00REd;
     affineC01REd = pAffineC01REd;
