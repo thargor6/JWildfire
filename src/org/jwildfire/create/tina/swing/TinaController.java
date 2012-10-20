@@ -98,7 +98,6 @@ import org.jwildfire.create.tina.render.RenderedFlame;
 import org.jwildfire.create.tina.render.RendererType;
 import org.jwildfire.create.tina.script.ScriptRunner;
 import org.jwildfire.create.tina.script.ScriptRunnerEnvironment;
-import org.jwildfire.create.tina.sound.JLayerInterface;
 import org.jwildfire.create.tina.transform.XFormTransformService;
 import org.jwildfire.create.tina.variation.Linear3DFunc;
 import org.jwildfire.create.tina.variation.RessourceType;
@@ -2037,8 +2036,6 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
 
   public void loadFlameButton_actionPerformed(ActionEvent e) {
     try {
-      if (iface != null)
-        iface.stop();
       JFileChooser chooser = new FlameFileChooser(prefs);
       if (prefs.getInputFlamePath() != null) {
         try {
@@ -2360,32 +2357,26 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
                 break;
               case C32:
               case C64: {
-                try {
-                  flame.setSpatialFilterRadius(0.0);
-                  flame.setSpatialOversample(1);
-                  flame.setColorOversample(1);
-                  CRendererInterface cudaRenderer = new CRendererInterface(rendererType);
-                  CRendererInterface.checkFlameForCUDA(flame);
-                  cudaRenderer.setProgressUpdater(mainProgressUpdater);
-                  if (info.isRenderHDR()) {
-                    String hdrFilename = file.getAbsolutePath() + ".hdr";
-                    cudaRenderer.setHDROutputfilename(hdrFilename);
-                    // do not allocate unnessary memory as the HDR file is completely generated and saved by the external renderer 
-                    info.setRenderHDR(false);
-                    info.setRenderHDRIntensityMap(false);
-                  }
-                  long t0 = System.currentTimeMillis();
-                  RenderedFlame res = cudaRenderer.renderFlame(info, flame, prefs);
-                  long t1 = System.currentTimeMillis();
-                  statusMessage("Render time: " + Tools.doubleToString((t1 - t0) * 0.001) + "s");
-                  new ImageWriter().saveImage(res.getImage(), file.getAbsolutePath());
+                flame.setSpatialFilterRadius(0.0);
+                flame.setSpatialOversample(1);
+                flame.setColorOversample(1);
+                CRendererInterface cudaRenderer = new CRendererInterface(rendererType);
+                CRendererInterface.checkFlameForCUDA(flame);
+                cudaRenderer.setProgressUpdater(mainProgressUpdater);
+                if (info.isRenderHDR()) {
+                  String hdrFilename = file.getAbsolutePath() + ".hdr";
+                  cudaRenderer.setHDROutputfilename(hdrFilename);
+                  // do not allocate unnessary memory as the HDR file is completely generated and saved by the external renderer 
+                  info.setRenderHDR(false);
+                  info.setRenderHDRIntensityMap(false);
                 }
-                catch (Throwable ex) {
-                  errorHandler.handleError(ex);
-                }
+                long t0 = System.currentTimeMillis();
+                RenderedFlame res = cudaRenderer.renderFlame(info, flame, prefs);
+                long t1 = System.currentTimeMillis();
+                statusMessage("Render time: " + Tools.doubleToString((t1 - t0) * 0.001) + "s");
+                new ImageWriter().saveImage(res.getImage(), file.getAbsolutePath());
               }
                 break;
-
             }
           }
           finally {
@@ -3798,14 +3789,8 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     shadingInfoSliderChanged(shadingPhongSizeSlider, shadingPhongSizeREd, "phongSize", SLIDER_SCALE_PHONGSIZE, 0);
   }
 
-  JLayerInterface iface;
-
   public void loadFlameFromClipboard() {
     try {
-      if (iface == null)
-        iface = new JLayerInterface();
-      iface.play("C:\\TMP\\darkly_noon_complete_album\\J13satori-DarklyNoon-11-ThreeYears.mp3");
-
       Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
       Transferable clipData = clipboard.getContents(clipboard);
       if (clipData != null) {
