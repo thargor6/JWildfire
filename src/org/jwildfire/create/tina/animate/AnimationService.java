@@ -19,9 +19,11 @@ package org.jwildfire.create.tina.animate;
 import org.jwildfire.base.Prefs;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.XForm;
+import org.jwildfire.create.tina.render.CRendererInterface;
 import org.jwildfire.create.tina.render.FlameRenderer;
 import org.jwildfire.create.tina.render.RenderInfo;
 import org.jwildfire.create.tina.render.RenderedFlame;
+import org.jwildfire.create.tina.render.RendererType;
 import org.jwildfire.create.tina.transform.XFormTransformService;
 import org.jwildfire.image.SimpleImage;
 
@@ -118,7 +120,7 @@ public class AnimationService {
 
   }
 
-  public static SimpleImage renderFrame(int pFrame, int pFrames, Flame pFlame, GlobalScript pGlobalScript, XFormScript pXFormScript, int pWidth, int pHeight, Prefs pPrefs) throws Exception {
+  public static SimpleImage renderFrame(int pFrame, int pFrames, Flame pFlame, GlobalScript pGlobalScript, XFormScript pXFormScript, int pWidth, int pHeight, Prefs pPrefs, RendererType pRendererType) throws Exception {
     Flame flame = createFlame(pFrame, pFrames, pFlame, pGlobalScript, pXFormScript, pPrefs);
     RenderInfo info = new RenderInfo(pWidth, pHeight);
     double wScl = (double) info.getImageWidth() / (double) flame.getWidth();
@@ -126,8 +128,23 @@ public class AnimationService {
     flame.setPixelsPerUnit((wScl + hScl) * 0.5 * flame.getPixelsPerUnit());
     flame.setWidth(info.getImageWidth());
     flame.setHeight(info.getImageHeight());
-    FlameRenderer renderer = new FlameRenderer(flame, pPrefs);
-    RenderedFlame res = renderer.renderFlame(info);
-    return res.getImage();
+    switch (pRendererType) {
+      case JAVA: {
+        FlameRenderer renderer = new FlameRenderer(flame, pPrefs);
+        RenderedFlame res = renderer.renderFlame(info);
+        return res.getImage();
+      }
+      case C32:
+      case C64: {
+        flame.setSpatialOversample(1);
+        flame.setColorOversample(1);
+        CRendererInterface cudaRenderer = new CRendererInterface(pRendererType);
+        CRendererInterface.checkFlameForCUDA(flame);
+        RenderedFlame res = cudaRenderer.renderFlame(info, flame, pPrefs);
+        return res.getImage();
+      }
+      default:
+        return null;
+    }
   }
 }

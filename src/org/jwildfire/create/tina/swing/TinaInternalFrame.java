@@ -3540,7 +3540,7 @@ public class TinaInternalFrame extends JInternalFrame {
           getSwfAnimatorOutputCmb(), getSwfAnimatorMoveUpButton(), getSwfAnimatorMoveDownButton(), getSwfAnimatorRemoveFlameButton(),
           getSwfAnimatorRemoveAllFlamesButton(), getSwfAnimatorMovieFromClipboardButton(), getSwfAnimatorMovieFromDiskButton(),
           getSwfAnimatorMovieToClipboardButton(), getSwfAnimatorMovieToDiskButton(), getSwfAnimatorFrameToEditorBtn(),
-          getSwfAnimatorPlayButton(), getSwfAnimatorFromFrameREd(), getSwfAnimatorToFrameREd()));
+          getSwfAnimatorPlayButton(), getSwfAnimatorFromFrameREd(), getSwfAnimatorToFrameREd(), getSwfAnimatorRendererCmb()));
       tinaController.getSwfAnimatorCtrl().enableControls();
 
     }
@@ -8171,6 +8171,15 @@ public class TinaInternalFrame extends JInternalFrame {
   private JPanel panel_24;
   private JPanel panel_25;
   private JPanel panel_26;
+  private JPanel panel_27;
+  private JPanel panel_28;
+  private JPanel panel_29;
+  private JPanel panel_30;
+  private JPanel panel_31;
+  private JPanel panel_32;
+  private JPanel panel_33;
+  private JPanel panel_34;
+  private JPanel panel_35;
 
   /**
    * This method initializes renderBatchJobsScrollPane	
@@ -8982,117 +8991,16 @@ public class TinaInternalFrame extends JInternalFrame {
   private JPanel getInteractiveNorthPanel() {
     if (interactiveNorthPanel == null) {
       interactiveNorthPanel = new JPanel();
+      interactiveNorthPanel.setBorder(new EmptyBorder(5, 5, 0, 0));
       interactiveNorthPanel.setPreferredSize(new Dimension(0, 86));
       interactiveNorthPanel.setSize(new Dimension(0, 42));
-      interactiveNorthPanel.setLayout(null);
-      interactiveNorthPanel.add(getInteractiveNextButton());
-      interactiveNorthPanel.add(getInteractiveLoadFlameFromClipboardButton());
-      interactiveNorthPanel.add(getInteractiveLoadFlameButton());
-      interactiveNorthPanel.add(getInteractiveSaveImageButton());
-      interactiveNorthPanel.add(getInteractiveSaveFlameButton());
-      interactiveNorthPanel.add(getInteractiveStopButton());
-      interactiveNorthPanel.add(getInteractiveFlameToClipboardButton());
-
-      JLabel label = new JLabel();
-      label.setText("Random generator");
-      label.setPreferredSize(new Dimension(94, 22));
-      label.setFont(new Font("Dialog", Font.BOLD, 10));
-      label.setBounds(new Rectangle(135, 7, 94, 22));
-      label.setBounds(529, 8, 94, 22);
-      interactiveNorthPanel.add(label);
-
-      interactiveRandomStyleCmb = new JComboBox();
-      interactiveRandomStyleCmb.setPreferredSize(new Dimension(125, 22));
-      interactiveRandomStyleCmb.setMaximumRowCount(32);
-      interactiveRandomStyleCmb.setFont(new Font("Dialog", Font.BOLD, 10));
-      interactiveRandomStyleCmb.setBounds(new Rectangle(231, 7, 125, 22));
-      interactiveRandomStyleCmb.setBounds(622, 8, 125, 22);
-      interactiveRandomStyleCmb.setMaximumRowCount(32);
-      interactiveRandomStyleCmb.removeAllItems();
-      for (String name : RandomFlameGeneratorList.getNameList()) {
-        interactiveRandomStyleCmb.addItem(name);
-      }
-      interactiveRandomStyleCmb.setSelectedItem(RandomFlameGeneratorList.DEFAULT_GENERATOR_NAME);
-
-      interactiveNorthPanel.add(interactiveRandomStyleCmb);
-
-      interactiveHalfSizeButton = new JToggleButton();
-      interactiveHalfSizeButton.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-          tinaController.getInteractiveRendererCtrl().halveSizeButton_clicked();
-        }
-      });
-      interactiveHalfSizeButton.setToolTipText("Switch to half render resolution (to get rid of scroll bars in exploration mode)");
-      interactiveHalfSizeButton.setText("Half size");
-      interactiveHalfSizeButton.setPreferredSize(new Dimension(42, 24));
-      interactiveHalfSizeButton.setMnemonic(KeyEvent.VK_M);
-      interactiveHalfSizeButton.setFont(new Font("Dialog", Font.BOLD, 10));
-      interactiveHalfSizeButton.setBounds(364, 8, 125, 24);
-      interactiveNorthPanel.add(interactiveHalfSizeButton);
-      interactiveNorthPanel.add(getInteractiveResolutionProfileCmb());
-
-      interactiveQualityProfileCmb = new JComboBox();
-      interactiveQualityProfileCmb.addItemListener(new ItemListener() {
-        public void itemStateChanged(ItemEvent e) {
-          if (tinaController != null) {
-            tinaController.getInteractiveRendererCtrl().qualityProfile_changed();
-          }
-        }
-      });
-      interactiveQualityProfileCmb.setPreferredSize(new Dimension(125, 22));
-      interactiveQualityProfileCmb.setMaximumRowCount(32);
-      interactiveQualityProfileCmb.setFont(new Font("Dialog", Font.BOLD, 10));
-      interactiveQualityProfileCmb.setBounds(new Rectangle(231, 7, 125, 22));
-      interactiveQualityProfileCmb.setBounds(364, 59, 125, 22);
-      interactiveNorthPanel.add(interactiveQualityProfileCmb);
-
-      interactiveLoadFlameFromMainButton = new JButton();
-      interactiveLoadFlameFromMainButton.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-          tinaController.getInteractiveRendererCtrl().fromEditorButton_clicked();
-        }
-      });
-      interactiveLoadFlameFromMainButton.setToolTipText("Load flame from Editor and render");
-      interactiveLoadFlameFromMainButton.setText("From Editor");
-      interactiveLoadFlameFromMainButton.setPreferredSize(new Dimension(125, 24));
-      interactiveLoadFlameFromMainButton.setFont(new Font("Dialog", Font.BOLD, 10));
-      interactiveLoadFlameFromMainButton.setBounds(new Rectangle(8, 32, 125, 24));
-      interactiveLoadFlameFromMainButton.setBounds(8, 8, 125, 24);
-      interactiveNorthPanel.add(interactiveLoadFlameFromMainButton);
-
-      interactiveFlameToEditorButton = new JButton();
-      interactiveFlameToEditorButton.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-          tinaController.getInteractiveRendererCtrl().toEditorButton_clicked();
-        }
-      });
-      interactiveFlameToEditorButton.setToolTipText("Copy the current fractal into the Editor");
-      interactiveFlameToEditorButton.setText("To Editor");
-      interactiveFlameToEditorButton.setPreferredSize(new Dimension(125, 24));
-      interactiveFlameToEditorButton.setMnemonic(KeyEvent.VK_D);
-      interactiveFlameToEditorButton.setFont(new Font("Dialog", Font.BOLD, 10));
-      interactiveFlameToEditorButton.setBounds(new Rectangle(806, 32, 125, 24));
-      interactiveFlameToEditorButton.setBounds(950, 7, 125, 24);
-      interactiveNorthPanel.add(interactiveFlameToEditorButton);
-      interactiveNorthPanel.add(getLabel_1());
-      interactiveNorthPanel.add(getLabel_2());
-
-      interactivePauseButton = new JButton();
-      interactivePauseButton.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-          tinaController.getInteractiveRendererCtrl().pauseBtn_clicked();
-        }
-      });
-      interactivePauseButton.setToolTipText("Save the current state for later resuming");
-      interactivePauseButton.setText("Save render state");
-      interactivePauseButton.setPreferredSize(new Dimension(125, 24));
-      interactivePauseButton.setMnemonic(KeyEvent.VK_T);
-      interactivePauseButton.setFont(new Font("Dialog", Font.BOLD, 10));
-      interactivePauseButton.setBounds(new Rectangle(754, 32, 125, 24));
-      interactivePauseButton.setBounds(786, 6, 125, 24);
-      interactiveNorthPanel.add(interactivePauseButton);
+      interactiveNorthPanel.setLayout(new BoxLayout(interactiveNorthPanel, BoxLayout.X_AXIS));
+      interactiveNorthPanel.add(getPanel_27());
 
       interactiveResumeButton = new JButton();
+      interactiveNorthPanel.add(interactiveResumeButton);
+      interactiveResumeButton.setMinimumSize(new Dimension(100, 24));
+      interactiveResumeButton.setMaximumSize(new Dimension(150, 24));
       interactiveResumeButton.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
           tinaController.getInteractiveRendererCtrl().resumeBtn_clicked();
@@ -9103,9 +9011,14 @@ public class TinaInternalFrame extends JInternalFrame {
       interactiveResumeButton.setPreferredSize(new Dimension(125, 24));
       interactiveResumeButton.setMnemonic(KeyEvent.VK_T);
       interactiveResumeButton.setFont(new Font("Dialog", Font.BOLD, 10));
-      interactiveResumeButton.setBounds(new Rectangle(754, 32, 125, 24));
-      interactiveResumeButton.setBounds(145, 32, 125, 24);
-      interactiveNorthPanel.add(interactiveResumeButton);
+      interactiveNorthPanel.add(getPanel_28());
+      interactiveNorthPanel.add(getPanel_32());
+      interactiveNorthPanel.add(getPanel_33());
+      interactiveNorthPanel.add(getPanel_35());
+      interactiveNorthPanel.add(getInteractiveStopButton());
+      for (String name : RandomFlameGeneratorList.getNameList()) {
+        interactiveRandomStyleCmb.addItem(name);
+      }
     }
     return interactiveNorthPanel;
   }
@@ -9142,6 +9055,8 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton getInteractiveNextButton() {
     if (interactiveNextButton == null) {
       interactiveNextButton = new JButton();
+      interactiveNextButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+      interactiveNextButton.setMaximumSize(new Dimension(32000, 32000));
       interactiveNextButton.setToolTipText("Cancel render, generate new random fractal and start render");
       interactiveNextButton.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
@@ -9153,7 +9068,6 @@ public class TinaInternalFrame extends JInternalFrame {
       interactiveNextButton.setPreferredSize(new Dimension(125, 48));
       interactiveNextButton.setMnemonic(KeyEvent.VK_D);
       interactiveNextButton.setFont(new Font("Dialog", Font.BOLD, 10));
-      interactiveNextButton.setBounds(new Rectangle(529, 32, 218, 48));
     }
     return interactiveNextButton;
   }
@@ -9161,6 +9075,8 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton getInteractiveLoadFlameFromClipboardButton() {
     if (interactiveLoadFlameFromClipboardButton == null) {
       interactiveLoadFlameFromClipboardButton = new JButton();
+      interactiveLoadFlameFromClipboardButton.setMinimumSize(new Dimension(100, 24));
+      interactiveLoadFlameFromClipboardButton.setMaximumSize(new Dimension(32000, 24));
       interactiveLoadFlameFromClipboardButton.setToolTipText("Load flame from clipboard and render");
       interactiveLoadFlameFromClipboardButton.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
@@ -9170,7 +9086,6 @@ public class TinaInternalFrame extends JInternalFrame {
       interactiveLoadFlameFromClipboardButton.setText("From Clipboard");
       interactiveLoadFlameFromClipboardButton.setPreferredSize(new Dimension(125, 24));
       interactiveLoadFlameFromClipboardButton.setFont(new Font("Dialog", Font.BOLD, 10));
-      interactiveLoadFlameFromClipboardButton.setBounds(new Rectangle(8, 32, 125, 24));
     }
     return interactiveLoadFlameFromClipboardButton;
   }
@@ -9178,6 +9093,8 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton getInteractiveLoadFlameButton() {
     if (interactiveLoadFlameButton == null) {
       interactiveLoadFlameButton = new JButton();
+      interactiveLoadFlameButton.setMinimumSize(new Dimension(100, 24));
+      interactiveLoadFlameButton.setMaximumSize(new Dimension(32000, 24));
       interactiveLoadFlameButton.setToolTipText("Load flame from file and render");
       interactiveLoadFlameButton.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
@@ -9187,7 +9104,6 @@ public class TinaInternalFrame extends JInternalFrame {
       interactiveLoadFlameButton.setText("Load Flame");
       interactiveLoadFlameButton.setPreferredSize(new Dimension(125, 24));
       interactiveLoadFlameButton.setFont(new Font("Dialog", Font.BOLD, 10));
-      interactiveLoadFlameButton.setBounds(new Rectangle(8, 56, 125, 24));
     }
     return interactiveLoadFlameButton;
   }
@@ -9195,6 +9111,8 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton getInteractiveFlameToClipboardButton() {
     if (interactiveFlameToClipboardButton == null) {
       interactiveFlameToClipboardButton = new JButton();
+      interactiveFlameToClipboardButton.setMinimumSize(new Dimension(100, 24));
+      interactiveFlameToClipboardButton.setMaximumSize(new Dimension(32000, 24));
       interactiveFlameToClipboardButton.setToolTipText("Copy the current fractal into the clipboard");
       interactiveFlameToClipboardButton.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
@@ -9205,7 +9123,6 @@ public class TinaInternalFrame extends JInternalFrame {
       interactiveFlameToClipboardButton.setPreferredSize(new Dimension(125, 24));
       interactiveFlameToClipboardButton.setMnemonic(KeyEvent.VK_D);
       interactiveFlameToClipboardButton.setFont(new Font("Dialog", Font.BOLD, 10));
-      interactiveFlameToClipboardButton.setBounds(new Rectangle(950, 32, 125, 24));
     }
     return interactiveFlameToClipboardButton;
   }
@@ -9213,6 +9130,8 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton getInteractiveStopButton() {
     if (interactiveStopButton == null) {
       interactiveStopButton = new JButton();
+      interactiveStopButton.setMinimumSize(new Dimension(80, 24));
+      interactiveStopButton.setMaximumSize(new Dimension(150, 24));
       interactiveStopButton.setToolTipText("Stop the render and free associated ressources");
       interactiveStopButton.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
@@ -9227,7 +9146,6 @@ public class TinaInternalFrame extends JInternalFrame {
       interactiveStopButton.setPreferredSize(new Dimension(125, 24));
       interactiveStopButton.setMnemonic(KeyEvent.VK_D);
       interactiveStopButton.setFont(new Font("Dialog", Font.BOLD, 10));
-      interactiveStopButton.setBounds(new Rectangle(1114, 32, 56, 24));
     }
     return interactiveStopButton;
   }
@@ -9235,6 +9153,8 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton getInteractiveSaveFlameButton() {
     if (interactiveSaveFlameButton == null) {
       interactiveSaveFlameButton = new JButton();
+      interactiveSaveFlameButton.setMinimumSize(new Dimension(100, 24));
+      interactiveSaveFlameButton.setMaximumSize(new Dimension(32000, 24));
       interactiveSaveFlameButton.setToolTipText("Save the current fractal");
       interactiveSaveFlameButton.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
@@ -9245,7 +9165,6 @@ public class TinaInternalFrame extends JInternalFrame {
       interactiveSaveFlameButton.setPreferredSize(new Dimension(125, 24));
       interactiveSaveFlameButton.setMnemonic(KeyEvent.VK_D);
       interactiveSaveFlameButton.setFont(new Font("Dialog", Font.BOLD, 10));
-      interactiveSaveFlameButton.setBounds(new Rectangle(950, 56, 125, 24));
     }
     return interactiveSaveFlameButton;
   }
@@ -9253,6 +9172,8 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton getInteractiveSaveImageButton() {
     if (interactiveSaveImageButton == null) {
       interactiveSaveImageButton = new JButton();
+      interactiveSaveImageButton.setMinimumSize(new Dimension(100, 24));
+      interactiveSaveImageButton.setMaximumSize(new Dimension(32000, 24));
       interactiveSaveImageButton.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
           tinaController.getInteractiveRendererCtrl().saveImageButton_clicked();
@@ -9262,7 +9183,6 @@ public class TinaInternalFrame extends JInternalFrame {
       interactiveSaveImageButton.setPreferredSize(new Dimension(125, 24));
       interactiveSaveImageButton.setMnemonic(KeyEvent.VK_I);
       interactiveSaveImageButton.setFont(new Font("Dialog", Font.BOLD, 10));
-      interactiveSaveImageButton.setBounds(new Rectangle(786, 31, 125, 24));
     }
     return interactiveSaveImageButton;
   }
@@ -9362,6 +9282,8 @@ public class TinaInternalFrame extends JInternalFrame {
   private JComboBox getInteractiveResolutionProfileCmb() {
     if (interactiveResolutionProfileCmb == null) {
       interactiveResolutionProfileCmb = new JComboBox();
+      interactiveResolutionProfileCmb.setMaximumSize(new Dimension(32767, 24));
+      interactiveResolutionProfileCmb.setMinimumSize(new Dimension(100, 24));
       interactiveResolutionProfileCmb.addItemListener(new ItemListener() {
         public void itemStateChanged(ItemEvent e) {
           if (tinaController != null && tinaController.getInteractiveRendererCtrl() != null) {
@@ -9369,11 +9291,9 @@ public class TinaInternalFrame extends JInternalFrame {
           }
         }
       });
-      interactiveResolutionProfileCmb.setPreferredSize(new Dimension(125, 22));
+      interactiveResolutionProfileCmb.setPreferredSize(new Dimension(125, 24));
       interactiveResolutionProfileCmb.setMaximumRowCount(32);
       interactiveResolutionProfileCmb.setFont(new Font("Dialog", Font.BOLD, 10));
-      interactiveResolutionProfileCmb.setBounds(new Rectangle(231, 7, 125, 22));
-      interactiveResolutionProfileCmb.setBounds(364, 34, 125, 22);
     }
     return interactiveResolutionProfileCmb;
   }
@@ -9574,10 +9494,10 @@ public class TinaInternalFrame extends JInternalFrame {
   private JLabel getLabel_1() {
     if (label_1 == null) {
       label_1 = new JLabel();
+      label_1.setMinimumSize(new Dimension(80, 22));
       label_1.setText("Resolution");
-      label_1.setPreferredSize(new Dimension(94, 22));
+      label_1.setPreferredSize(new Dimension(80, 22));
       label_1.setFont(new Font("Dialog", Font.BOLD, 10));
-      label_1.setBounds(292, 32, 71, 22);
     }
     return label_1;
   }
@@ -9585,10 +9505,10 @@ public class TinaInternalFrame extends JInternalFrame {
   private JLabel getLabel_2() {
     if (label_2 == null) {
       label_2 = new JLabel();
+      label_2.setMinimumSize(new Dimension(80, 22));
       label_2.setText("Quality");
-      label_2.setPreferredSize(new Dimension(94, 22));
+      label_2.setPreferredSize(new Dimension(80, 22));
       label_2.setFont(new Font("Dialog", Font.BOLD, 10));
-      label_2.setBounds(292, 58, 71, 22);
     }
     return label_2;
   }
@@ -10839,5 +10759,185 @@ public class TinaInternalFrame extends JInternalFrame {
       panel_26.setMaximumSize(new Dimension(6, 32767));
     }
     return panel_26;
+  }
+
+  private JPanel getPanel_27() {
+    if (panel_27 == null) {
+      panel_27 = new JPanel();
+      panel_27.setBorder(new EmptyBorder(0, 6, 0, 6));
+      panel_27.setMinimumSize(new Dimension(110, 10));
+      panel_27.setMaximumSize(new Dimension(150, 32767));
+      panel_27.setLayout(new BoxLayout(panel_27, BoxLayout.Y_AXIS));
+
+      interactiveLoadFlameFromMainButton = new JButton();
+      panel_27.add(interactiveLoadFlameFromMainButton);
+      interactiveLoadFlameFromMainButton.setMaximumSize(new Dimension(32000, 24));
+      interactiveLoadFlameFromMainButton.setMinimumSize(new Dimension(100, 24));
+      interactiveLoadFlameFromMainButton.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getInteractiveRendererCtrl().fromEditorButton_clicked();
+        }
+      });
+      interactiveLoadFlameFromMainButton.setToolTipText("Load flame from Editor and render");
+      interactiveLoadFlameFromMainButton.setText("From Editor");
+      interactiveLoadFlameFromMainButton.setPreferredSize(new Dimension(125, 24));
+      interactiveLoadFlameFromMainButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      panel_27.add(getInteractiveLoadFlameFromClipboardButton());
+      panel_27.add(getInteractiveLoadFlameButton());
+    }
+    return panel_27;
+  }
+
+  private JPanel getPanel_28() {
+    if (panel_28 == null) {
+      panel_28 = new JPanel();
+      panel_28.setBorder(new EmptyBorder(0, 6, 0, 6));
+      panel_28.setMaximumSize(new Dimension(250, 32767));
+      panel_28.setMinimumSize(new Dimension(200, 10));
+      panel_28.setLayout(new BoxLayout(panel_28, BoxLayout.Y_AXIS));
+
+      interactiveHalfSizeButton = new JToggleButton();
+      panel_28.add(interactiveHalfSizeButton);
+      interactiveHalfSizeButton.setMinimumSize(new Dimension(125, 24));
+      interactiveHalfSizeButton.setMaximumSize(new Dimension(32000, 24));
+      interactiveHalfSizeButton.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getInteractiveRendererCtrl().halveSizeButton_clicked();
+        }
+      });
+      interactiveHalfSizeButton.setToolTipText("Switch to half render resolution (to get rid of scroll bars in exploration mode)");
+      interactiveHalfSizeButton.setText("Half size");
+      interactiveHalfSizeButton.setPreferredSize(new Dimension(100, 24));
+      interactiveHalfSizeButton.setMnemonic(KeyEvent.VK_M);
+      interactiveHalfSizeButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      panel_28.add(getPanel_29());
+      panel_28.add(getPanel_30());
+    }
+    return panel_28;
+  }
+
+  private JPanel getPanel_29() {
+    if (panel_29 == null) {
+      panel_29 = new JPanel();
+      panel_29.setLayout(new BoxLayout(panel_29, BoxLayout.X_AXIS));
+      panel_29.add(getLabel_1());
+      panel_29.add(getInteractiveResolutionProfileCmb());
+    }
+    return panel_29;
+  }
+
+  private JPanel getPanel_30() {
+    if (panel_30 == null) {
+      panel_30 = new JPanel();
+      panel_30.setLayout(new BoxLayout(panel_30, BoxLayout.X_AXIS));
+      panel_30.add(getLabel_2());
+
+      interactiveQualityProfileCmb = new JComboBox();
+      panel_30.add(interactiveQualityProfileCmb);
+      interactiveQualityProfileCmb.setMinimumSize(new Dimension(100, 24));
+      interactiveQualityProfileCmb.setMaximumSize(new Dimension(32767, 24));
+      interactiveQualityProfileCmb.addItemListener(new ItemListener() {
+        public void itemStateChanged(ItemEvent e) {
+          if (tinaController != null) {
+            tinaController.getInteractiveRendererCtrl().qualityProfile_changed();
+          }
+        }
+      });
+      interactiveQualityProfileCmb.setPreferredSize(new Dimension(125, 24));
+      interactiveQualityProfileCmb.setMaximumRowCount(32);
+      interactiveQualityProfileCmb.setFont(new Font("Dialog", Font.BOLD, 10));
+    }
+    return panel_30;
+  }
+
+  private JPanel getPanel_31() {
+    if (panel_31 == null) {
+      panel_31 = new JPanel();
+      panel_31.setLayout(new BoxLayout(panel_31, BoxLayout.X_AXIS));
+
+      JLabel label = new JLabel();
+      panel_31.add(label);
+      label.setText("Random generator");
+      label.setPreferredSize(new Dimension(94, 22));
+      label.setFont(new Font("Dialog", Font.BOLD, 10));
+
+      interactiveRandomStyleCmb = new JComboBox();
+      panel_31.add(interactiveRandomStyleCmb);
+      interactiveRandomStyleCmb.setMinimumSize(new Dimension(100, 24));
+      interactiveRandomStyleCmb.setMaximumSize(new Dimension(32767, 24));
+      interactiveRandomStyleCmb.setPreferredSize(new Dimension(125, 24));
+      interactiveRandomStyleCmb.setMaximumRowCount(32);
+      interactiveRandomStyleCmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      interactiveRandomStyleCmb.setMaximumRowCount(32);
+      interactiveRandomStyleCmb.removeAllItems();
+      interactiveRandomStyleCmb.setSelectedItem(RandomFlameGeneratorList.DEFAULT_GENERATOR_NAME);
+    }
+    return panel_31;
+  }
+
+  private JPanel getPanel_32() {
+    if (panel_32 == null) {
+      panel_32 = new JPanel();
+      panel_32.setBorder(new EmptyBorder(0, 11, 0, 11));
+      panel_32.setMinimumSize(new Dimension(200, 10));
+      panel_32.setMaximumSize(new Dimension(250, 32767));
+      panel_32.setLayout(new BoxLayout(panel_32, BoxLayout.Y_AXIS));
+      panel_32.add(getPanel_31());
+      panel_32.add(getInteractiveNextButton());
+    }
+    return panel_32;
+  }
+
+  private JPanel getPanel_33() {
+    if (panel_33 == null) {
+      panel_33 = new JPanel();
+      panel_33.setBorder(new EmptyBorder(0, 3, 0, 3));
+      panel_33.setMaximumSize(new Dimension(150, 32767));
+      panel_33.setLayout(new BoxLayout(panel_33, BoxLayout.Y_AXIS));
+
+      interactivePauseButton = new JButton();
+      panel_33.add(interactivePauseButton);
+      interactivePauseButton.setMinimumSize(new Dimension(100, 24));
+      interactivePauseButton.setMaximumSize(new Dimension(3200, 24));
+      interactivePauseButton.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getInteractiveRendererCtrl().pauseBtn_clicked();
+        }
+      });
+      interactivePauseButton.setToolTipText("Save the current state for later resuming");
+      interactivePauseButton.setText("Save render state");
+      interactivePauseButton.setPreferredSize(new Dimension(125, 24));
+      interactivePauseButton.setMnemonic(KeyEvent.VK_T);
+      interactivePauseButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      panel_33.add(getInteractiveSaveImageButton());
+    }
+    return panel_33;
+  }
+
+  private JPanel getPanel_35() {
+    if (panel_35 == null) {
+      panel_35 = new JPanel();
+      panel_35.setBorder(new EmptyBorder(0, 3, 0, 16));
+      panel_35.setMaximumSize(new Dimension(150, 32767));
+      panel_35.setLayout(new BoxLayout(panel_35, BoxLayout.Y_AXIS));
+
+      interactiveFlameToEditorButton = new JButton();
+      panel_35.add(interactiveFlameToEditorButton);
+      interactiveFlameToEditorButton.setMinimumSize(new Dimension(100, 24));
+      interactiveFlameToEditorButton.setMaximumSize(new Dimension(32000, 24));
+      interactiveFlameToEditorButton.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getInteractiveRendererCtrl().toEditorButton_clicked();
+        }
+      });
+      interactiveFlameToEditorButton.setToolTipText("Copy the current fractal into the Editor");
+      interactiveFlameToEditorButton.setText("To Editor");
+      interactiveFlameToEditorButton.setPreferredSize(new Dimension(125, 24));
+      interactiveFlameToEditorButton.setMnemonic(KeyEvent.VK_D);
+      interactiveFlameToEditorButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      panel_35.add(getInteractiveFlameToClipboardButton());
+      panel_35.add(getInteractiveSaveFlameButton());
+    }
+    return panel_35;
   }
 } //  @jve:decl-index=0:visual-constraint="10,10"

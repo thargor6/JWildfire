@@ -21,6 +21,7 @@ import java.io.File;
 import javax.imageio.ImageIO;
 
 import org.jwildfire.create.tina.base.Flame;
+import org.jwildfire.create.tina.render.RendererType;
 import org.jwildfire.image.SimpleImage;
 import org.jwildfire.io.ImageWriter;
 
@@ -41,6 +42,7 @@ import com.flagstone.transform.util.sound.SoundFactory;
 public class SWFAnimationRenderThread implements Runnable {
   private final SWFAnimationRenderThreadController controller;
   private final String outputFilename;
+  private final RendererType rendererType;
   private boolean cancelSignalled;
   private final int fromFrame, toFrame;
   private FlameMovie flameMovie;
@@ -49,12 +51,13 @@ public class SWFAnimationRenderThread implements Runnable {
   private int uid;
   private Throwable lastError;
 
-  public SWFAnimationRenderThread(SWFAnimationRenderThreadController pController, FlameMovie pAnimation, String pOutputFilename, int pFromFrame, int pToFrame) {
+  public SWFAnimationRenderThread(SWFAnimationRenderThreadController pController, FlameMovie pAnimation, String pOutputFilename, int pFromFrame, int pToFrame, RendererType pRendererType) {
     controller = pController;
     flameMovie = pAnimation;
     outputFilename = pOutputFilename;
     fromFrame = pFromFrame;
     toFrame = pToFrame;
+    rendererType = pRendererType;
   }
 
   @Override
@@ -129,7 +132,7 @@ public class SWFAnimationRenderThread implements Runnable {
   private SimpleImage renderImage(int pFrame) throws Exception {
     Flame flame1 = flameMovie.getFlame(pFrame);
     prepareFlame(flame1);
-    return AnimationService.renderFrame(pFrame, flameMovie.getFrameCount(), flame1, flameMovie.getGlobalScript(), flameMovie.getxFormScript(), flameMovie.getFrameWidth(), flameMovie.getFrameHeight(), controller.getPrefs());
+    return AnimationService.renderFrame(pFrame, flameMovie.getFrameCount(), flame1, flameMovie.getGlobalScript(), flameMovie.getxFormScript(), flameMovie.getFrameWidth(), flameMovie.getFrameHeight(), controller.getPrefs(), rendererType);
   }
 
   private void saveFrame(SimpleImage pImage, int pFrame) throws Exception {
