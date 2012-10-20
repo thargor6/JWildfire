@@ -208,6 +208,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
   private final JComboBox resolutionProfileCmb;
   private final JComboBox batchQualityProfileCmb;
   private final JComboBox batchResolutionProfileCmb;
+  private final JComboBox batchRendererCmb;
   private final JComboBox interactiveQualityProfileCmb;
   private final JComboBox interactiveResolutionProfileCmb;
   private final JComboBox swfAnimatorQualityProfileCmb;
@@ -462,6 +463,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       JToggleButton pAffineScaleYButton, JPanel pGradientLibraryPanel, JComboBox pGradientLibraryGradientCmb, JTextPane pHelpPane, JTextPane pFAQPane,
       JToggleButton pToggleVariationsButton, JToggleButton pAffinePreserveZButton,
       JComboBox pQualityProfileCmb, JComboBox pResolutionProfileCmb, JComboBox pBatchQualityProfileCmb, JComboBox pBatchResolutionProfileCmb,
+      JComboBox pBatchRendererCmb,
       JComboBox pInteractiveQualityProfileCmb, JComboBox pInteractiveResolutionProfileCmb, JComboBox pSWFAnimatorQualityProfileCmb,
       JComboBox pSWFAnimatorResolutionProfileCmb, JButton pRenderFlameButton, JButton pAppendToMovieButton,
       JWFNumberField pTransformationWeightREd, JButton pUndoButton, JButton pRedoButton, JComboBox pRendererCmb,
@@ -548,6 +550,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     resolutionProfileCmb = pResolutionProfileCmb;
     batchQualityProfileCmb = pBatchQualityProfileCmb;
     batchResolutionProfileCmb = pBatchResolutionProfileCmb;
+    batchRendererCmb = pBatchRendererCmb;
     interactiveQualityProfileCmb = pInteractiveQualityProfileCmb;
     interactiveResolutionProfileCmb = pInteractiveResolutionProfileCmb;
     swfAnimatorQualityProfileCmb = pSWFAnimatorQualityProfileCmb;
@@ -1120,7 +1123,6 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
             case C64: {
               try {
                 flame.setSampleDensity(prefs.getTinaRenderPreviewQuality());
-                flame.setSpatialFilterRadius(0.0);
                 flame.setSpatialOversample(1);
                 flame.setColorOversample(1);
                 CRendererInterface cudaRenderer = new CRendererInterface(rendererType);
@@ -2355,7 +2357,6 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
                 break;
               case C32:
               case C64: {
-                flame.setSpatialFilterRadius(0.0);
                 flame.setSpatialOversample(1);
                 flame.setColorOversample(1);
                 CRendererInterface cudaRenderer = new CRendererInterface(rendererType);
@@ -4026,7 +4027,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       }
     }
     if (activeJobList.size() > 0) {
-      jobRenderThread = new JobRenderThread(this, activeJobList, (ResolutionProfile) batchResolutionProfileCmb.getSelectedItem(), (QualityProfile) batchQualityProfileCmb.getSelectedItem());
+      jobRenderThread = new JobRenderThread(this, activeJobList, (ResolutionProfile) batchResolutionProfileCmb.getSelectedItem(), (QualityProfile) batchQualityProfileCmb.getSelectedItem(), (RendererType) batchRendererCmb.getSelectedItem());
       new Thread(jobRenderThread).start();
     }
     enableJobRenderControls();

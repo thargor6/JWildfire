@@ -24,9 +24,11 @@ import org.jwildfire.base.QualityProfile;
 import org.jwildfire.base.ResolutionProfile;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.io.Flam3Reader;
+import org.jwildfire.create.tina.render.CRendererInterface;
 import org.jwildfire.create.tina.render.FlameRenderer;
 import org.jwildfire.create.tina.render.RenderInfo;
 import org.jwildfire.create.tina.render.RenderedFlame;
+import org.jwildfire.create.tina.render.RendererType;
 import org.jwildfire.io.ImageWriter;
 
 public class JobRenderThread implements Runnable {
@@ -34,13 +36,15 @@ public class JobRenderThread implements Runnable {
   private final JobRenderThreadController controller;
   private final QualityProfile qualityProfile;
   private final ResolutionProfile resolutionProfile;
+  private final RendererType rendererType;
   private boolean cancelSignalled;
 
-  public JobRenderThread(JobRenderThreadController pController, List<Job> pActiveJobList, ResolutionProfile pResolutionProfile, QualityProfile pQualityProfile) {
+  public JobRenderThread(JobRenderThreadController pController, List<Job> pActiveJobList, ResolutionProfile pResolutionProfile, QualityProfile pQualityProfile, RendererType pRendererType) {
     controller = pController;
     activeJobList = pActiveJobList;
     resolutionProfile = pResolutionProfile;
     qualityProfile = pQualityProfile;
+    rendererType = pRendererType;
   }
 
   @Override
@@ -75,23 +79,52 @@ public class JobRenderThread implements Runnable {
             double oldFilterRadius = flame.getSpatialFilterRadius();
             try {
               flame.setSampleDensity(qualityProfile.getQuality());
-              flame.setSpatialOversample(qualityProfile.getSpatialOversample());
-              flame.setColorOversample(qualityProfile.getColorOversample());
-              long t0 = Calendar.getInstance().getTimeInMillis();
-              FlameRenderer renderer = new FlameRenderer(flame, controller.getPrefs());
-              renderer.setProgressUpdater(controller.getJobProgressUpdater());
-              RenderedFlame res = renderer.renderFlame(info);
-              long t1 = Calendar.getInstance().getTimeInMillis();
-              job.setFinished(true);
-              job.setElapsedSeconds(((double) (t1 - t0) / 1000.0));
-              System.err.println("RENDER TIME: " + job.getElapsedSeconds() + "s");
-              new ImageWriter().saveImage(res.getImage(), job.getImageFilename());
-              if (res.getHDRImage() != null) {
-                new ImageWriter().saveImage(res.getHDRImage(), job.getImageFilename() + ".hdr");
+
+              switch (rendererType) {
+                case JAVA: {
+                  flame.setSpatialOversample(qualityProfile.getSpatialOversample());
+                  flame.setColorOversample(qualityProfile.getColorOversample());
+                  FlameRenderer renderer = new FlameRenderer(flame, controller.getPrefs());
+                  renderer.setProgressUpdater(controller.getJobProgressUpdater());
+                  long t0 = Calendar.getInstance().getTimeInMillis();
+                  RenderedFlame res = renderer.renderFlame(info);
+                  long t1 = Calendar.getInstance().getTimeInMillis();
+                  job.setFinished(true);
+                  job.setElapsedSeconds(((double) (t1 - t0) / 1000.0));
+                  new ImageWriter().saveImage(res.getImage(), job.getImageFilename());
+                  if (res.getHDRImage() != null) {
+                    new ImageWriter().saveImage(res.getHDRImage(), job.getImageFilename() + ".hdr");
+                  }
+                  if (res.getHDRIntensityMap() != null) {
+                    new ImageWriter().saveImage(res.getHDRIntensityMap(), job.getImageFilename() + ".intensity.hdr");
+                  }
+
+                }
+                  break;
+                case C32:
+                case C64: {
+                  flame.setSpatialOversample(1);
+                  flame.setColorOversample(1);
+                  CRendererInterface cudaRenderer = new CRendererInterface(rendererType);
+                  CRendererInterface.checkFlameForCUDA(flame);
+                  cudaRenderer.setProgressUpdater(controller.getJobProgressUpdater());
+                  if (info.isRenderHDR()) {
+                    String hdrFilename = job.getImageFilename() + ".hdr";
+                    cudaRenderer.setHDROutputfilename(hdrFilename);
+                    // do not allocate unnessary memory as the HDR file is completely generated and saved by the external renderer 
+                    info.setRenderHDR(false);
+                    info.setRenderHDRIntensityMap(false);
+                  }
+                  long t0 = System.currentTimeMillis();
+                  RenderedFlame res = cudaRenderer.renderFlame(info, flame, controller.getPrefs());
+                  long t1 = System.currentTimeMillis();
+                  job.setFinished(true);
+                  job.setElapsedSeconds(((double) (t1 - t0) / 1000.0));
+                  new ImageWriter().saveImage(res.getImage(), job.getImageFilename());
+                }
+                  break;
               }
-              if (res.getHDRIntensityMap() != null) {
-                new ImageWriter().saveImage(res.getHDRIntensityMap(), job.getImageFilename() + ".intensity.hdr");
-              }
+
               try {
                 {
                   controller.refreshRenderBatchJobsTable();
