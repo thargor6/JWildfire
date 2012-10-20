@@ -5176,10 +5176,6 @@ public class TinaInternalFrame extends JInternalFrame {
       editSpaceLbl4.setFont(new Font("Dialog", Font.BOLD, 10));
       editSpaceLbl4.setText("");
       editSpaceLbl4.setPreferredSize(new Dimension(42, 2));
-      editSpaceLbl3 = new JLabel();
-      editSpaceLbl3.setFont(new Font("Dialog", Font.BOLD, 10));
-      editSpaceLbl3.setText("");
-      editSpaceLbl3.setPreferredSize(new Dimension(42, 10));
       editSpaceLbl2 = new JLabel();
       editSpaceLbl2.setFont(new Font("Dialog", Font.BOLD, 10));
       editSpaceLbl2.setText("");
@@ -5208,7 +5204,6 @@ public class TinaInternalFrame extends JInternalFrame {
       mouseTransformShearButton.setPreferredSize(new Dimension(42, 36));
       triangleOperationsPanel.add(mouseTransformShearButton);
       triangleOperationsPanel.add(editSpaceLbl1, null);
-      triangleOperationsPanel.add(editSpaceLbl3, null);
       triangleOperationsPanel.add(getToggleTrianglesButton(), null);
       triangleOperationsPanel.add(editSpaceLbl2, null);
       triangleOperationsPanel.add(getTinaRenderFlameButton(), null);
@@ -5332,6 +5327,9 @@ public class TinaInternalFrame extends JInternalFrame {
       centerWestPanel.add(getLabel_5());
       centerWestPanel.add(getUndoButton());
       centerWestPanel.add(getRedoButton());
+      centerWestPanel.add(getLabel_6());
+      centerWestPanel.add(getSnapShotButton());
+      centerWestPanel.add(getBtnQsave());
     }
     return centerWestPanel;
   }
@@ -8141,6 +8139,9 @@ public class TinaInternalFrame extends JInternalFrame {
   private JWFNumberField tinaDEFilterAmountREd;
   private JSlider tinaDEFilterRadiusSlider;
   private JSlider tinaDEFilterAmountSlider;
+  private JButton snapShotButton;
+  private JButton btnQsave;
+  private JLabel label_6;
 
   /**
    * This method initializes renderBatchJobsScrollPane	
@@ -10063,7 +10064,7 @@ public class TinaInternalFrame extends JInternalFrame {
     if (label_5 == null) {
       label_5 = new JLabel();
       label_5.setText("");
-      label_5.setPreferredSize(new Dimension(42, 100));
+      label_5.setPreferredSize(new Dimension(42, 24));
       label_5.setFont(new Font("Dialog", Font.BOLD, 10));
     }
     return label_5;
@@ -10663,5 +10664,49 @@ public class TinaInternalFrame extends JInternalFrame {
 
   public JSlider getTinaDEFilterAmountSlider() {
     return tinaDEFilterAmountSlider;
+  }
+
+  private JButton getSnapShotButton() {
+    if (snapShotButton == null) {
+      snapShotButton = new JButton();
+      snapShotButton.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.snapshotButton_clicked();
+        }
+      });
+      snapShotButton.setToolTipText("Create a snapshot of the current flame and store it to the thumbnail ribbon");
+      snapShotButton.setText("SShot");
+      snapShotButton.setPreferredSize(new Dimension(60, 36));
+      snapShotButton.setMnemonic(KeyEvent.VK_H);
+      snapShotButton.setFont(new Font("Dialog", Font.BOLD, 10));
+    }
+    return snapShotButton;
+  }
+
+  private JButton getBtnQsave() {
+    if (btnQsave == null) {
+      btnQsave = new JButton();
+      btnQsave.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.quicksaveButton_clicked();
+        }
+      });
+      btnQsave.setToolTipText("Quicksave the current flame");
+      btnQsave.setText("QSv");
+      btnQsave.setPreferredSize(new Dimension(60, 36));
+      btnQsave.setMnemonic(KeyEvent.VK_Q);
+      btnQsave.setFont(new Font("Dialog", Font.BOLD, 10));
+    }
+    return btnQsave;
+  }
+
+  private JLabel getLabel_6() {
+    if (label_6 == null) {
+      label_6 = new JLabel();
+      label_6.setText("");
+      label_6.setPreferredSize(new Dimension(42, 24));
+      label_6.setFont(new Font("Dialog", Font.BOLD, 10));
+    }
+    return label_6;
   }
 } //  @jve:decl-index=0:visual-constraint="10,10"

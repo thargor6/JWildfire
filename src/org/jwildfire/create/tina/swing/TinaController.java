@@ -5137,4 +5137,19 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
   private void statusMessage(String pStatus) {
     tinaFrame.setTitle(tinaFrameTitle + (pStatus != null && pStatus.length() > 0 ? ": " + pStatus : ""));
   }
+
+  public void snapshotButton_clicked() {
+    Flame flame = getCurrFlame();
+    if (flame != null) {
+      Flame storedFlame = flame.makeCopy();
+      undoManager.initUndoStack(storedFlame);
+      randomBatch.add(0, new FlameThumbnail(storedFlame, null));
+      updateThumbnails();
+    }
+  }
+
+  public void quicksaveButton_clicked() {
+    // TODO Auto-generated method stub
+
+  }
 }
