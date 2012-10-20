@@ -147,6 +147,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
 
   private final List<Job> batchRenderList = new ArrayList<Job>();
   private final UndoManager<Flame> undoManager = new UndoManager<Flame>();
+  private final QuickSaveFilenameGen qsaveFilenameGen;
 
   public static class NonlinearControlsRow {
     private final JComboBox nonlinearVarCmb;
@@ -676,6 +677,9 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
 
     undoButton = pUndoButton;
     redoButton = pRedoButton;
+
+    qsaveFilenameGen = new QuickSaveFilenameGen(prefs);
+
     enableUndoControls();
 
     initHelpPane();
@@ -2410,6 +2414,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
         if (chooser.showSaveDialog(centerPanel) == JFileChooser.APPROVE_OPTION) {
           File file = chooser.getSelectedFile();
           new Flam3Writer().writeFlame(currFlame, file.getAbsolutePath());
+          statusMessage("Flame file <" + file.getAbsolutePath() + "> saved");
           prefs.setLastOutputFlameFile(file);
         }
       }
@@ -5149,7 +5154,16 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
   }
 
   public void quicksaveButton_clicked() {
-    // TODO Auto-generated method stub
-
+    try {
+      if (currFlame != null) {
+        String filename = qsaveFilenameGen.generateNextFilename();
+        new Flam3Writer().writeFlame(currFlame, filename);
+        statusMessage("Flame file <" + filename + "> saved");
+      }
+    }
+    catch (Throwable ex) {
+      errorHandler.handleError(ex);
+    }
   }
+
 }
