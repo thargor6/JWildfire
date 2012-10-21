@@ -67,6 +67,12 @@ struct SimpleImage {
 		bufferedImg[pX + pY * imageWidth] = argb;
 	}
 
+	void setARGB(int pX, int pY, int pA, int pR, int pG, int pB) {
+		toolPixel->setARGB(pA, pR, pG, pB);
+		int argb = toolPixel->getARGBValue();
+		bufferedImg[pX + pY * imageWidth] = argb;
+	}
+
 	void setARGBValue(int pX, int pY, int pARGBValue) {
 		bufferedImg[pX + pY * imageWidth] = pARGBValue;
 	}
@@ -98,6 +104,11 @@ struct SimpleImage {
 			return 0;
 		else
 			return getGValue(pX, pY);
+	}
+
+	int getAValue(int pX, int pY) {
+		toolPixel->setARGBValue(getARGBValue(pX, pY));
+		return toolPixel->a;
 	}
 
 	int getRValue(int pX, int pY) {

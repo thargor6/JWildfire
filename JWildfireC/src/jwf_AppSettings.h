@@ -45,6 +45,7 @@ public:
 		outputHeight = 600;
 		sampleDensity = 100.0;
 		reportStatus = false;
+		withAlpha = false;
 	}
 
 	void setThreadCount(const int pThreadCount) {
@@ -98,6 +99,10 @@ public:
 
 	bool isReportStatus() {
 		return reportStatus;
+	}
+
+	bool isWithAlpha() {
+		return withAlpha;
 	}
 
 	void setSampleDensity(const JWF_FLOAT pSampleDensity) {
@@ -165,6 +170,9 @@ public:
 			else if (strcmp(pArgv[i], "-reportStatus") == 0 || strcmp(pArgv[i], "-r") == 0) {
 				reportStatus = true;
 			}
+			else if (strcmp(pArgv[i], "-withAlpha") == 0 || strcmp(pArgv[i], "-a") == 0) {
+				withAlpha = true;
+			}
 			else {
 				printf("Unkown parameter %s\n", pArgv[i]);
 			}
@@ -192,6 +200,7 @@ public:
 		printf("  -outputHeight (or -h): int (%d...%d)\n", MIN_HEIGHT, MAX_HEIGHT);
 		printf("  -sampleDensity (or -d): JWF_FLOAT (%f...%f)\n", MIN_DENSITY, MAX_DENSITY);
 		printf("  -reportStatus (or -r): void\n");
+		printf("  -withAlpha (or -a): void\n");
 		printf("  -help (or -h): void\n");
 		printf("Required param: -flameFilename\n");
 	}
@@ -206,6 +215,7 @@ public:
 		printf("  outputHeight: %d\n", outputHeight);
 		printf("  sampleDensity: %f\n", sampleDensity);
 		printf("  reportStatus: %d\n", reportStatus);
+		printf("  withAlpha: %d\n", withAlpha);
 		printf("}\n");
 	}
 
@@ -219,6 +229,7 @@ private:
 	int outputHeight;
 	JWF_FLOAT sampleDensity;
 	bool reportStatus;
+	bool withAlpha;
 
 	void setParamValue(char **pDst, char *pSrc) {
 		if ((*pDst) != NULL) {

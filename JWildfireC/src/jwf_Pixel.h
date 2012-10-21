@@ -29,7 +29,8 @@ struct Pixel {
 	}
 
 	void clear() {
-		a = r = g = b = 0;
+		r = g = b = 0;
+		a = 255;
 	}
 
 	void setARGBValue(int pValue) {
@@ -54,7 +55,14 @@ struct Pixel {
 		r = pR;
 		g = pG;
 		b = pB;
-		a = 100;
+		a = 255;
+	}
+
+	void setARGB(int pA, int pR, int pG, int pB) {
+		a = pA;
+		r = pR;
+		g = pG;
+		b = pB;
 	}
 };
 

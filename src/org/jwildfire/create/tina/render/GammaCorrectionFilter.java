@@ -29,11 +29,13 @@ public class GammaCorrectionFilter {
   private double gamma;
   private double sclGamma;
   private int bgRed, bgGreen, bgBlue;
+  private boolean withAlpha;
 
   private float bgRedDouble, bgGreenDouble, bgBlueDouble;
 
-  public GammaCorrectionFilter(Flame pFlame) {
+  public GammaCorrectionFilter(Flame pFlame, boolean pWithAlpha) {
     flame = pFlame;
+    withAlpha = pWithAlpha;
     initFilter();
   }
 
@@ -91,11 +93,13 @@ public class GammaCorrectionFilter {
       else if (alphaInt > 255)
         alphaInt = 255;
       inverseAlphaInt = 255 - alphaInt;
+      pRGBPoint.alpha = withAlpha ? alphaInt : 255;
     }
     else {
       pRGBPoint.red = bgRed;
       pRGBPoint.green = bgGreen;
       pRGBPoint.blue = bgBlue;
+      pRGBPoint.alpha = withAlpha ? 0 : 255;
       return;
     }
 
@@ -195,8 +199,10 @@ public class GammaCorrectionFilter {
       else if (alphaInt > 255)
         alphaInt = 255;
       inverseAlphaInt = 255 - alphaInt;
+      pRGBPoint.alpha = withAlpha ? alphaInt : 255;
     }
     else {
+      pRGBPoint.alpha = withAlpha ? 0 : 255;
       pRGBPoint.red = bgRed;
       pRGBPoint.green = bgGreen;
       pRGBPoint.blue = bgBlue;

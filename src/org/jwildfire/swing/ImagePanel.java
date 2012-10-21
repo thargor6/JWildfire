@@ -22,7 +22,6 @@ import javax.swing.JPanel;
 
 import org.jwildfire.image.SimpleImage;
 
-
 public class ImagePanel extends JPanel {
   private static final long serialVersionUID = 1L;
   private SimpleImage simpleImage;
@@ -33,9 +32,14 @@ public class ImagePanel extends JPanel {
     setImage(pSimpleImage, pX, pY, pWidth);
   }
 
+  protected void drawImage(Graphics g) {
+    g.drawImage(simpleImage.getBufferedImg(), x, y, width, height, this);
+  }
+
   @Override
   public void paintComponent(Graphics g) {
-    g.drawImage(simpleImage.getBufferedImg(), x, y, width, height, this);
+    super.paintComponent(g);
+    drawImage(g);
   }
 
   public void setImage(SimpleImage pSimpleImage) {

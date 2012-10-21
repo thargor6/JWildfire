@@ -32,7 +32,7 @@ public class SampleTonemapper {
     toolPixel = new Pixel();
     rbgPoint = new GammaCorrectedRGBPoint();
     logDensityFilter = new LogDensityFilter(pFlame);
-    gammaCorrectionFilter = new GammaCorrectionFilter(pFlame);
+    gammaCorrectionFilter = new GammaCorrectionFilter(pFlame, false);
     logDensityFilter.setRaster(pRaster, pRasterWidth, pRasterHeight, pImageWidth, pImageHeight);
   }
 
@@ -42,6 +42,7 @@ public class SampleTonemapper {
     toolPixel.r = rbgPoint.red;
     toolPixel.g = rbgPoint.green;
     toolPixel.b = rbgPoint.blue;
+    toolPixel.a = rbgPoint.alpha;
     return toolPixel.getARGBValue();
   }
 

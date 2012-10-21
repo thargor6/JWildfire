@@ -44,9 +44,11 @@ public class CRendererInterface {
   private final RendererType rendererType;
   private long nextProgressUpdate;
   private String hdrOutputfilename;
+  private boolean withAlpha;
 
-  public CRendererInterface(RendererType pRendererType) {
+  public CRendererInterface(RendererType pRendererType, boolean pWithAlpha) {
     rendererType = pRendererType;
+    withAlpha = pWithAlpha;
   }
 
   public static void checkFlameForCUDA(Flame pFlame) {
@@ -260,6 +262,9 @@ public class CRendererInterface {
     if (hdrOutputfilename != null && hdrOutputfilename.length() > 0) {
       args += " -outputHDRFilename \"" + hdrOutputfilename;
     }
+    if (withAlpha) {
+      args += " -a";
+    }
 
     ByteArrayOutputStream bos = new ByteArrayOutputStream();
 
@@ -268,7 +273,7 @@ public class CRendererInterface {
       throw new RuntimeException(bos.toString());
     }
 
-    loadImage(ppmFilename, res.getImage());
+    loadImage(ppmFilename, res.getImage(), withAlpha);
 
     new File(flameFilename).delete();
     new File(ppmFilename).delete();
@@ -279,7 +284,7 @@ public class CRendererInterface {
     return res;
   }
 
-  public void loadImage(String pFilename, SimpleImage pImg) {
+  public void loadImage(String pFilename, SimpleImage pImg, boolean pWithAlpha) {
     try {
       String magicNumber = new String();
       String imgSize = "";
@@ -326,23 +331,46 @@ public class CRendererInterface {
       }
       while (buffer != ' ' && buffer != '\n');
 
-      // width * height * 3 bytes
-      byte[] row = new byte[imgWidth * 3];
-      for (int y = 0; y < imageHeight; y++) {
-        is.read(row, 0, imgWidth * 3);
-        for (int i = 0; i < imgWidth; i++) {
-          int r = row[3 * i];
-          if (r < 0)
-            r += 256;
-          int g = row[3 * i + 1];
-          if (g < 0)
-            g += 256;
-          int b = row[3 * i + 2];
-          if (b < 0)
-            b += 256;
-          pImg.setRGB(i, y, r, g, b);
+      if (pWithAlpha) {
+        // width * height * 4 bytes (ARGB)
+        byte[] row = new byte[imgWidth * 4];
+        for (int y = 0; y < imageHeight; y++) {
+          is.read(row, 0, imgWidth * 4);
+          for (int i = 0; i < imgWidth; i++) {
+            int a = row[4 * i];
+            if (a < 0)
+              a += 256;
+            int r = row[4 * i + 1];
+            if (r < 0)
+              r += 256;
+            int g = row[4 * i + 2];
+            if (g < 0)
+              g += 256;
+            int b = row[4 * i + 3];
+            if (b < 0)
+              b += 256;
+            pImg.setARGB(i, y, a, r, g, b);
+          }
         }
-
+      }
+      else {
+        // width * height * 3 bytes (RGB)
+        byte[] row = new byte[imgWidth * 3];
+        for (int y = 0; y < imageHeight; y++) {
+          is.read(row, 0, imgWidth * 3);
+          for (int i = 0; i < imgWidth; i++) {
+            int r = row[3 * i];
+            if (r < 0)
+              r += 256;
+            int g = row[3 * i + 1];
+            if (g < 0)
+              g += 256;
+            int b = row[3 * i + 2];
+            if (b < 0)
+              b += 256;
+            pImg.setRGB(i, y, r, g, b);
+          }
+        }
       }
       is.close();
     }

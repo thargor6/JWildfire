@@ -27,9 +27,11 @@ struct GammaCorrectionFilter {
 	JWF_FLOAT sclGamma;
 	int bgRed, bgGreen, bgBlue;
 	JWF_FLOAT bgRedDouble, bgGreenDouble, bgBlueDouble;
+	bool withAlpha;
 
-	void create(Flame *pFlame) {
+	void create(Flame *pFlame, bool pWithAlpha) {
 		flame = pFlame;
+		withAlpha = pWithAlpha;
 		initFilter();
 	}
 
@@ -90,11 +92,13 @@ struct GammaCorrectionFilter {
 			else if (alphaInt > 255)
 				alphaInt = 255;
 			inverseAlphaInt = 255 - alphaInt;
+			pRGBPoint->alpha = withAlpha ? alphaInt : 255;
 		}
 		else {
 			pRGBPoint->red = bgRed;
 			pRGBPoint->green = bgGreen;
 			pRGBPoint->blue = bgBlue;
+      pRGBPoint->alpha = withAlpha ? 0 : 255;
 			return;
 		}
 
@@ -194,8 +198,10 @@ struct GammaCorrectionFilter {
 			else if (alphaInt > 255)
 				alphaInt = 255;
 			inverseAlphaInt = 255 - alphaInt;
+      pRGBPoint->alpha = withAlpha ? alphaInt : 255;
 		}
 		else {
+      pRGBPoint->alpha = withAlpha ? 0 : 255;
 			pRGBPoint->red = bgRed;
 			pRGBPoint->green = bgGreen;
 			pRGBPoint->blue = bgBlue;

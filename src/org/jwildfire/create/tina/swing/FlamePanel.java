@@ -16,6 +16,10 @@
 */
 package org.jwildfire.create.tina.swing;
 
+import static org.jwildfire.base.MathLib.M_PI;
+import static org.jwildfire.base.MathLib.cos;
+import static org.jwildfire.base.MathLib.sin;
+
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
@@ -59,6 +63,7 @@ public class FlamePanel extends ImagePanel {
   private XForm selectedXForm = null;
   private boolean allowScaleX = true;
   private boolean allowScaleY = true;
+  private boolean showTransparency = false;
 
   private double viewXScale, viewYScale;
   private double viewXTrans, viewYTrans;
@@ -87,10 +92,11 @@ public class FlamePanel extends ImagePanel {
 
   @Override
   public void paintComponent(Graphics g) {
+    super.paintComponent(g);
     fillBackground(g);
     initView();
     if (drawImage) {
-      super.paintComponent(g);
+      drawImage(g);
     }
     if (drawVariations) {
       paintVariations((Graphics2D) g);
@@ -102,8 +108,38 @@ public class FlamePanel extends ImagePanel {
 
   private void fillBackground(Graphics g) {
     Rectangle bounds = this.getBounds();
-    g.setColor(BACKGROUND_COLOR);
-    g.fillRect(0, 0, bounds.width, bounds.height);
+    if (showTransparency) {
+      SimpleImage bgImg = getTransparencyImg(bounds.width, bounds.height);
+      g.drawImage(bgImg.getBufferedImg(), 0, 0, bounds.width, bounds.height, this);
+    }
+    else {
+      g.setColor(BACKGROUND_COLOR);
+      g.fillRect(0, 0, bounds.width, bounds.height);
+    }
+  }
+
+  private SimpleImage _transpBGImg = null;
+
+  private SimpleImage getTransparencyImg(int pWidth, int pHeight) {
+    if (_transpBGImg != null && (_transpBGImg.getImageWidth() != pWidth || _transpBGImg.getImageHeight() != pHeight)) {
+      _transpBGImg = null;
+    }
+    if (_transpBGImg == null) {
+      _transpBGImg = new SimpleImage(pWidth, pHeight);
+      final int SQUARE_SIZE = 8;
+      final int BRIGHT_COLOR = 250;
+      final int DARK_COLOR = 200;
+      for (int i = 0; i < pHeight; i++) {
+        for (int j = 0; j < pWidth; j++) {
+          boolean hAlt = (i / SQUARE_SIZE) % 2 == 0;
+          boolean wAlt = (j / SQUARE_SIZE) % 2 == 0;
+          boolean alt = wAlt ^ hAlt;
+          int color = alt ? BRIGHT_COLOR : DARK_COLOR;
+          _transpBGImg.setARGB(j, i, 255, color, color, color);
+        }
+      }
+    }
+    return _transpBGImg;
   }
 
   private class Triangle {
@@ -356,123 +392,136 @@ public class FlamePanel extends ImagePanel {
   }
 
   public boolean mouseDragged(int pX, int pY) {
-    if (selectedXForm != null && mouseDragOperation != MouseDragOperation.NONE) {
-      int viewDX = pX - xBeginDrag;
-      int viewDY = pY - yBeginDrag;
-      if (viewDX != 0 || viewDY != 0) {
-        double dx = viewToX(pX) - viewToX(xBeginDrag);
-        double dy = viewToY(pY) - viewToY(yBeginDrag);
-        xBeginDrag = pX;
-        yBeginDrag = pY;
-        if (Math.abs(dx) > MathLib.EPSILON || Math.abs(dy) > MathLib.EPSILON) {
-          switch (mouseDragOperation) {
-            case MOVE: {
-              if (fineMovement) {
-                dx *= 0.25;
-                dy *= 0.25;
-              }
-              // move
-              if (editPostTransform) {
-                selectedXForm.setPostCoeff20(selectedXForm.getPostCoeff20() + dx);
-                selectedXForm.setPostCoeff21(selectedXForm.getPostCoeff21() - dy);
-              }
-              else {
-                selectedXForm.setCoeff20(selectedXForm.getCoeff20() + dx);
-                selectedXForm.setCoeff21(selectedXForm.getCoeff21() - dy);
-              }
-              return true;
+    int viewDX = pX - xBeginDrag;
+    int viewDY = pY - yBeginDrag;
+    if (viewDX != 0 || viewDY != 0) {
+      double dx = viewToX(pX) - viewToX(xBeginDrag);
+      double dy = viewToY(pY) - viewToY(yBeginDrag);
+      xBeginDrag = pX;
+      yBeginDrag = pY;
+      if (Math.abs(dx) > MathLib.EPSILON || Math.abs(dy) > MathLib.EPSILON) {
+        switch (mouseDragOperation) {
+          case MOVE: {
+            if (fineMovement) {
+              dx *= 0.25;
+              dy *= 0.25;
             }
-            case SHEAR: {
-              if (fineMovement) {
-                dx *= 0.25;
-                dy *= 0.25;
-              }
-              switch (selectedPoint) {
-                case 0:
-                  if (editPostTransform) {
-                    selectedXForm.setPostCoeff00(selectedXForm.getPostCoeff00() + dx);
-                    selectedXForm.setPostCoeff01(selectedXForm.getPostCoeff01() - dy);
-                  }
-                  else {
-                    selectedXForm.setCoeff00(selectedXForm.getCoeff00() + dx);
-                    selectedXForm.setCoeff01(selectedXForm.getCoeff01() - dy);
-                  }
-                  break;
-                case 1:
-                  if (editPostTransform) {
-                    selectedXForm.setPostCoeff20(selectedXForm.getPostCoeff20() + dx);
-                    selectedXForm.setPostCoeff21(selectedXForm.getPostCoeff21() - dy);
-
-                    selectedXForm.setPostCoeff10(selectedXForm.getPostCoeff10() + dx);
-                    selectedXForm.setPostCoeff11(selectedXForm.getPostCoeff11() - dy);
-
-                    selectedXForm.setPostCoeff00(selectedXForm.getPostCoeff00() - dx);
-                    selectedXForm.setPostCoeff01(selectedXForm.getPostCoeff01() + dy);
-                  }
-                  else {
-                    selectedXForm.setCoeff20(selectedXForm.getCoeff20() + dx);
-                    selectedXForm.setCoeff21(selectedXForm.getCoeff21() - dy);
-
-                    selectedXForm.setCoeff10(selectedXForm.getCoeff10() + dx);
-                    selectedXForm.setCoeff11(selectedXForm.getCoeff11() - dy);
-
-                    selectedXForm.setCoeff00(selectedXForm.getCoeff00() - dx);
-                    selectedXForm.setCoeff01(selectedXForm.getCoeff01() + dy);
-                  }
-                  break;
-                case 2:
-                  if (editPostTransform) {
-                    selectedXForm.setPostCoeff10(selectedXForm.getPostCoeff10() - dx);
-                    selectedXForm.setPostCoeff11(selectedXForm.getPostCoeff11() + dy);
-                  }
-                  else {
-                    selectedXForm.setCoeff10(selectedXForm.getCoeff10() - dx);
-                    selectedXForm.setCoeff11(selectedXForm.getCoeff11() + dy);
-                  }
-                  break;
-              }
-              return true;
+            // move
+            if (editPostTransform) {
+              selectedXForm.setPostCoeff20(selectedXForm.getPostCoeff20() + dx);
+              selectedXForm.setPostCoeff21(selectedXForm.getPostCoeff21() - dy);
             }
-            case SCALE: {
-              if (fineMovement) {
-                dx *= 0.1;
-                dy *= 0.1;
-              }
-              Triangle triangle = new Triangle(selectedXForm);
-              double v1x = triangle.x[0] - triangle.x[1];
-              double v1y = triangle.y[0] - triangle.y[1];
-              double v2x = v1x + dx;
-              double v2y = v1y + dy;
-              double dr1 = Math.sqrt(v1x * v1x + v1y * v1y);
-              double dr2 = Math.sqrt(v2x * v2x + v2y * v2y);
-              double scale = dr2 / dr1;
-              if (editPostTransform) {
-                if (allowScaleX) {
-                  selectedXForm.setPostCoeff00(selectedXForm.getPostCoeff00() * scale);
-                  selectedXForm.setPostCoeff01(selectedXForm.getPostCoeff01() * scale);
-                }
-                if (allowScaleY) {
-                  selectedXForm.setPostCoeff10(selectedXForm.getPostCoeff10() * scale);
-                  selectedXForm.setPostCoeff11(selectedXForm.getPostCoeff11() * scale);
-                }
-              }
-              else {
-                if (allowScaleX) {
-                  selectedXForm.setCoeff00(selectedXForm.getCoeff00() * scale);
-                  selectedXForm.setCoeff01(selectedXForm.getCoeff01() * scale);
-                }
-                if (allowScaleY) {
-                  selectedXForm.setCoeff10(selectedXForm.getCoeff10() * scale);
-                  selectedXForm.setCoeff11(selectedXForm.getCoeff11() * scale);
-                }
-              }
-              return true;
+            else {
+              selectedXForm.setCoeff20(selectedXForm.getCoeff20() + dx);
+              selectedXForm.setCoeff21(selectedXForm.getCoeff21() - dy);
             }
-            case ROTATE: {
-              if (fineMovement) {
-                dx *= 0.1;
+            return true;
+          }
+          case SHEAR: {
+            if (fineMovement) {
+              dx *= 0.25;
+              dy *= 0.25;
+            }
+            switch (selectedPoint) {
+              case 0:
+                if (editPostTransform) {
+                  selectedXForm.setPostCoeff00(selectedXForm.getPostCoeff00() + dx);
+                  selectedXForm.setPostCoeff01(selectedXForm.getPostCoeff01() - dy);
+                }
+                else {
+                  selectedXForm.setCoeff00(selectedXForm.getCoeff00() + dx);
+                  selectedXForm.setCoeff01(selectedXForm.getCoeff01() - dy);
+                }
+                break;
+              case 1:
+                if (editPostTransform) {
+                  selectedXForm.setPostCoeff20(selectedXForm.getPostCoeff20() + dx);
+                  selectedXForm.setPostCoeff21(selectedXForm.getPostCoeff21() - dy);
+
+                  selectedXForm.setPostCoeff10(selectedXForm.getPostCoeff10() + dx);
+                  selectedXForm.setPostCoeff11(selectedXForm.getPostCoeff11() - dy);
+
+                  selectedXForm.setPostCoeff00(selectedXForm.getPostCoeff00() - dx);
+                  selectedXForm.setPostCoeff01(selectedXForm.getPostCoeff01() + dy);
+                }
+                else {
+                  selectedXForm.setCoeff20(selectedXForm.getCoeff20() + dx);
+                  selectedXForm.setCoeff21(selectedXForm.getCoeff21() - dy);
+
+                  selectedXForm.setCoeff10(selectedXForm.getCoeff10() + dx);
+                  selectedXForm.setCoeff11(selectedXForm.getCoeff11() - dy);
+
+                  selectedXForm.setCoeff00(selectedXForm.getCoeff00() - dx);
+                  selectedXForm.setCoeff01(selectedXForm.getCoeff01() + dy);
+                }
+                break;
+              case 2:
+                if (editPostTransform) {
+                  selectedXForm.setPostCoeff10(selectedXForm.getPostCoeff10() - dx);
+                  selectedXForm.setPostCoeff11(selectedXForm.getPostCoeff11() + dy);
+                }
+                else {
+                  selectedXForm.setCoeff10(selectedXForm.getCoeff10() - dx);
+                  selectedXForm.setCoeff11(selectedXForm.getCoeff11() + dy);
+                }
+                break;
+            }
+            return true;
+          }
+          case SCALE: {
+            if (fineMovement) {
+              dx *= 0.1;
+              dy *= 0.1;
+            }
+            Triangle triangle = new Triangle(selectedXForm);
+            double v1x = triangle.x[0] - triangle.x[1];
+            double v1y = triangle.y[0] - triangle.y[1];
+            double v2x = v1x + dx;
+            double v2y = v1y + dy;
+            double dr1 = Math.sqrt(v1x * v1x + v1y * v1y);
+            double dr2 = Math.sqrt(v2x * v2x + v2y * v2y);
+            double scale = dr2 / dr1;
+            if (editPostTransform) {
+              if (allowScaleX) {
+                selectedXForm.setPostCoeff00(selectedXForm.getPostCoeff00() * scale);
+                selectedXForm.setPostCoeff01(selectedXForm.getPostCoeff01() * scale);
               }
-              XFormTransformService.rotate(selectedXForm, dx * 30, editPostTransform);
+              if (allowScaleY) {
+                selectedXForm.setPostCoeff10(selectedXForm.getPostCoeff10() * scale);
+                selectedXForm.setPostCoeff11(selectedXForm.getPostCoeff11() * scale);
+              }
+            }
+            else {
+              if (allowScaleX) {
+                selectedXForm.setCoeff00(selectedXForm.getCoeff00() * scale);
+                selectedXForm.setCoeff01(selectedXForm.getCoeff01() * scale);
+              }
+              if (allowScaleY) {
+                selectedXForm.setCoeff10(selectedXForm.getCoeff10() * scale);
+                selectedXForm.setCoeff11(selectedXForm.getCoeff11() * scale);
+              }
+            }
+            return true;
+          }
+          case ROTATE: {
+            if (fineMovement) {
+              dx *= 0.1;
+            }
+            XFormTransformService.rotate(selectedXForm, dx * 30, editPostTransform);
+            return true;
+          }
+          // Viewport
+          case NONE: {
+            if (flameHolder != null && flameHolder.getFlame() != null) {
+              Flame flame = flameHolder.getFlame();
+
+              double cosa = cos(-M_PI * (flame.getCamRoll()) / 180.0);
+              double sina = sin(-M_PI * (flame.getCamRoll()) / 180.0);
+              double rcX = dx * cosa - dy * sina;
+              double rcY = dy * cosa + dx * sina;
+
+              flame.setCentreX(flame.getCentreX() - rcX * 0.5);
+              flame.setCentreY(flame.getCentreY() + rcY * 0.5);
               return true;
             }
           }
@@ -658,7 +707,7 @@ public class FlamePanel extends ImagePanel {
       catch (Exception ex) {
         ex.printStackTrace();
       }
-      flameRenderer = new FlameRenderer(flame, prefs);
+      flameRenderer = new FlameRenderer(flame, prefs, showTransparency);
       flameRenderer.createColorMap();
     }
     return flameRenderer;
@@ -674,6 +723,10 @@ public class FlamePanel extends ImagePanel {
 
   public void setUndoManagerHolder(UndoManagerHolder<Flame> undoManagerHolder) {
     this.undoManagerHolder = undoManagerHolder;
+  }
+
+  public void setShowTransparency(boolean pShowTransparency) {
+    showTransparency = pShowTransparency;
   }
 
 }

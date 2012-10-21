@@ -3476,7 +3476,7 @@ public class TinaInternalFrame extends JInternalFrame {
         getRootTabbedPane(), getAffineFlipHorizontalButton(), getAffineFlipVerticalButton(), getDarkTrianglesToggleButton(), getShadingBlurRadiusREd(), getShadingBlurRadiusSlider(), getShadingBlurFadeREd(),
         getShadingBlurFadeSlider(), getShadingBlurFallOffREd(), getShadingBlurFallOffSlider(), getScriptTextArea(),
         getAffineScaleXButton(), getAffineScaleYButton(), getGradientLibraryCenterPanel(), getGradientLibraryGradientCmb(), getHelpPane(),
-        getFaqPane(), getToggleVariationsButton(), getAffinePreserveZButton(), getQualityProfileCmb(), getResolutionProfileCmb(),
+        getFaqPane(), getToggleVariationsButton(), getToggleTransparencyButton(), getAffinePreserveZButton(), getQualityProfileCmb(), getResolutionProfileCmb(),
         getBatchQualityProfileCmb(), getBatchResolutionProfileCmb(), getBatchRendererCmb(), getInteractiveQualityProfileCmb(), getInteractiveResolutionProfileCmb(),
         getSwfAnimatorQualityProfileCmb(), getSwfAnimatorResolutionProfileCmb(), getTinaRenderFlameButton(), getTinaAppendToMovieButton(),
         getTransformationWeightREd(), getUndoButton(), getRedoButton(), getRendererCmb(),
@@ -5296,7 +5296,7 @@ public class TinaInternalFrame extends JInternalFrame {
       centerNorthPanel.add(getMouseTransformZoomInButton());
       centerNorthPanel.add(getMouseTransformZoomOutButton());
       centerNorthPanel.add(getToggleVariationsButton());
-      centerNorthPanel.add(getCancelRenderButton());
+      centerNorthPanel.add(getToggleTransparencyButton());
     }
     return centerNorthPanel;
   }
@@ -5436,7 +5436,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton getMouseTransformZoomInButton() {
     if (mouseTransformZoomInButton == null) {
       mouseTransformZoomInButton = new JButton();
-      mouseTransformZoomInButton.setBounds(451, 4, 42, 24);
+      mouseTransformZoomInButton.setBounds(299, 4, 42, 24);
       mouseTransformZoomInButton.setFont(new Font("Dialog", Font.BOLD, 8));
       mouseTransformZoomInButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/triangleEnlarge.gif")));
       mouseTransformZoomInButton.setText("");
@@ -5459,7 +5459,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton getMouseTransformZoomOutButton() {
     if (mouseTransformZoomOutButton == null) {
       mouseTransformZoomOutButton = new JButton();
-      mouseTransformZoomOutButton.setBounds(498, 4, 42, 24);
+      mouseTransformZoomOutButton.setBounds(340, 4, 42, 24);
       mouseTransformZoomOutButton.setFont(new Font("Dialog", Font.BOLD, 8));
       mouseTransformZoomOutButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/triangleShrink.gif")));
       mouseTransformZoomOutButton.setText("");
@@ -5504,7 +5504,7 @@ public class TinaInternalFrame extends JInternalFrame {
     if (renderProgressBar == null) {
       renderProgressBar = new JProgressBar();
       renderProgressBar.setValue(0);
-      renderProgressBar.setSize(new Dimension(192, 14));
+      renderProgressBar.setSize(new Dimension(160, 14));
       renderProgressBar.setLocation(new Point(136, 9));
       renderProgressBar.setPreferredSize(new Dimension(179, 14));
       renderProgressBar.setStringPainted(true);
@@ -8071,7 +8071,6 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton interactiveFlameToEditorButton;
   private JButton interactiveLoadFlameFromMainButton;
   private JComboBox interactiveQualityProfileCmb;
-  private JButton cancelRenderButton;
   private JTextField swfAnimatorFramesPerSecondREd;
   private JPanel panel_5;
   private JButton swfAnimatorLoadFlameFromMainButton;
@@ -8180,6 +8179,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JPanel panel_33;
   private JPanel panel_34;
   private JPanel panel_35;
+  private JToggleButton toggleTransparencyButton;
 
   /**
    * This method initializes renderBatchJobsScrollPane	
@@ -8431,7 +8431,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JToggleButton getDarkTrianglesToggleButton() {
     if (darkTrianglesToggleButton == null) {
       darkTrianglesToggleButton = new JToggleButton();
-      darkTrianglesToggleButton.setBounds(new Rectangle(546, 4, 82, 24));
+      darkTrianglesToggleButton.setBounds(new Rectangle(444, 4, 82, 24));
       darkTrianglesToggleButton.setToolTipText("Toggle dark triangle colors");
       darkTrianglesToggleButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/triangle.gif")));
       darkTrianglesToggleButton.setSelected(false);
@@ -8736,7 +8736,7 @@ public class TinaInternalFrame extends JInternalFrame {
       scriptEscherFluxButton.setPreferredSize(new Dimension(81, 24));
       scriptEscherFluxButton.setLocation(new Point(97, 280));
       scriptEscherFluxButton.setFont(new Font("Dialog", Font.BOLD, 10));
-      scriptEscherFluxButton.setBounds(9, 345, 125, 24);
+      scriptEscherFluxButton.setBounds(9, 338, 125, 24);
       scriptPanel.add(scriptEscherFluxButton);
 
       JButton scriptSoftJulianButton = new JButton();
@@ -8751,7 +8751,7 @@ public class TinaInternalFrame extends JInternalFrame {
       scriptSoftJulianButton.setPreferredSize(new Dimension(81, 24));
       scriptSoftJulianButton.setLocation(new Point(97, 280));
       scriptSoftJulianButton.setFont(new Font("Dialog", Font.BOLD, 10));
-      scriptSoftJulianButton.setBounds(9, 373, 125, 24);
+      scriptSoftJulianButton.setBounds(9, 362, 125, 24);
       scriptPanel.add(scriptSoftJulianButton);
       scriptPanel.add(getScriptLoadButton());
       scriptPanel.add(getScriptSaveButton());
@@ -8770,7 +8770,7 @@ public class TinaInternalFrame extends JInternalFrame {
       scriptMobiusDragonButton.setPreferredSize(new Dimension(81, 24));
       scriptMobiusDragonButton.setLocation(new Point(97, 280));
       scriptMobiusDragonButton.setFont(new Font("Dialog", Font.BOLD, 10));
-      scriptMobiusDragonButton.setBounds(9, 400, 125, 24);
+      scriptMobiusDragonButton.setBounds(9, 387, 125, 24);
       scriptPanel.add(scriptMobiusDragonButton);
     }
     return scriptPanel;
@@ -9324,19 +9324,6 @@ public class TinaInternalFrame extends JInternalFrame {
 
   public JComboBox getInteractiveQualityProfileCmb() {
     return interactiveQualityProfileCmb;
-  }
-
-  private JButton getCancelRenderButton() {
-    if (cancelRenderButton == null) {
-      cancelRenderButton = new JButton();
-      cancelRenderButton.setVisible(false);
-      cancelRenderButton.setToolTipText("");
-      cancelRenderButton.setText("Cancel");
-      cancelRenderButton.setPreferredSize(new Dimension(81, 24));
-      cancelRenderButton.setFont(new Font("Dialog", Font.BOLD, 10));
-      cancelRenderButton.setBounds(332, 5, 81, 24);
-    }
-    return cancelRenderButton;
   }
 
   public JTextField getSwfAnimatorFramesPerSecondREd() {
@@ -9905,7 +9892,7 @@ public class TinaInternalFrame extends JInternalFrame {
       scriptWrapHeartButton.setPreferredSize(new Dimension(81, 24));
       scriptWrapHeartButton.setLocation(new Point(97, 280));
       scriptWrapHeartButton.setFont(new Font("Dialog", Font.BOLD, 10));
-      scriptWrapHeartButton.setBounds(192, 345, 125, 24);
+      scriptWrapHeartButton.setBounds(192, 338, 125, 24);
     }
     return scriptWrapHeartButton;
   }
@@ -9924,7 +9911,7 @@ public class TinaInternalFrame extends JInternalFrame {
       btnWrapIntoBubble.setPreferredSize(new Dimension(81, 24));
       btnWrapIntoBubble.setLocation(new Point(97, 280));
       btnWrapIntoBubble.setFont(new Font("Dialog", Font.BOLD, 10));
-      btnWrapIntoBubble.setBounds(192, 373, 125, 24);
+      btnWrapIntoBubble.setBounds(192, 362, 125, 24);
     }
     return btnWrapIntoBubble;
   }
@@ -10878,7 +10865,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JPanel getPanel_32() {
     if (panel_32 == null) {
       panel_32 = new JPanel();
-      panel_32.setBorder(new EmptyBorder(0, 11, 0, 11));
+      panel_32.setBorder(new EmptyBorder(0, 11, 9, 11));
       panel_32.setMinimumSize(new Dimension(200, 10));
       panel_32.setMaximumSize(new Dimension(250, 32767));
       panel_32.setLayout(new BoxLayout(panel_32, BoxLayout.Y_AXIS));
@@ -10939,5 +10926,24 @@ public class TinaInternalFrame extends JInternalFrame {
       panel_35.add(getInteractiveSaveFlameButton());
     }
     return panel_35;
+  }
+
+  public JToggleButton getToggleTransparencyButton() {
+    if (toggleTransparencyButton == null) {
+      toggleTransparencyButton = new JToggleButton();
+      toggleTransparencyButton.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.toggleTransparencyButton_clicked();
+        }
+      });
+      toggleTransparencyButton.setToolTipText("Display/hide transparency");
+      toggleTransparencyButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/transparency.gif")));
+      toggleTransparencyButton.setSize(new Dimension(95, 24));
+      toggleTransparencyButton.setSelected(false);
+      toggleTransparencyButton.setPreferredSize(new Dimension(42, 24));
+      toggleTransparencyButton.setLocation(new Point(4, 4));
+      toggleTransparencyButton.setBounds(392, 4, 42, 24);
+    }
+    return toggleTransparencyButton;
   }
 } //  @jve:decl-index=0:visual-constraint="10,10"

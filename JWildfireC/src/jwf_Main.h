@@ -54,6 +54,7 @@
 #include "jwf_FlameRenderer.h"
 #include "jwf_PPMWriter.h"
 #include "jwf_HDRWriter.h"
+#include "jwf_PPMAWriter.h"
 #include "jwf_Flam3Reader.h"
 
 int renderFlame(AppSettings *pAppSettings) {
@@ -71,7 +72,7 @@ int renderFlame(AppSettings *pAppSettings) {
 	Flame *hostFlame = flames[0];
 
 	FlameRenderer renderer;
-	renderer.create(hostFlame, pAppSettings->getThreadCount());
+	renderer.create(hostFlame, pAppSettings->getThreadCount(), pAppSettings->isWithAlpha());
 	RenderInfo info;
 
 	info.imageWidth = pAppSettings->getOutputWidth();
@@ -123,8 +124,14 @@ int renderFlame(AppSettings *pAppSettings) {
 
 	printf("Elapsed render time %3.1f s\n", elapsed_secs);
 	if(res->image!=NULL && pAppSettings->getOutputFilename()!=NULL && strlen(pAppSettings->getOutputFilename())>0) {
-	  PPMWriter *writer=new PPMWriter();
-	  writer->writeImage(pAppSettings->getOutputFilename(), res->image);
+		if(pAppSettings->isWithAlpha()) {
+	    PPMAWriter *writer=new PPMAWriter();
+		  writer->writeImage(pAppSettings->getOutputFilename(), res->image);
+		}
+		else {
+		  PPMWriter *writer=new PPMWriter();
+		  writer->writeImage(pAppSettings->getOutputFilename(), res->image);
+		}
 	}
 	if(res->hdrImage!=NULL && pAppSettings->getOutputHDRFilename()!=NULL && strlen(pAppSettings->getOutputHDRFilename())>0) {
 	  HDRWriter *writer=new HDRWriter();

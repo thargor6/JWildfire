@@ -67,7 +67,7 @@ public class FlameFilePreview extends JComponent implements PropertyChangeListen
         flame.setWidth(imgWidth);
         flame.setHeight(imgHeight);
 
-        FlameRenderer renderer = new FlameRenderer(flame, prefs);
+        FlameRenderer renderer = new FlameRenderer(flame, prefs, false);
         renderer.setProgressUpdater(null);
         flame.setSampleDensity(50);
         flame.setSpatialFilterRadius(0.0);

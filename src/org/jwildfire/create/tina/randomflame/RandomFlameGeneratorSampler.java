@@ -59,10 +59,10 @@ public class RandomFlameGeneratorSampler {
       flame.setPalette(palette);
       // render it   
       flame.setSampleDensity(50);
-      FlameRenderer renderer = new FlameRenderer(flame, prefs);
+      FlameRenderer renderer = new FlameRenderer(flame, prefs, false);
       RenderedFlame renderedFlame = renderer.renderFlame(info);
       if (j == MAX_IMG_SAMPLES - 1) {
-        renderedFlame = new FlameRenderer(bestFlame, prefs).renderFlame(info);
+        renderedFlame = new FlameRenderer(bestFlame, prefs, false).renderFlame(info);
         return new RandomFlameGeneratorSample(bestFlame, renderedFlame.getImage());
       }
       else {

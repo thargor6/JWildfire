@@ -119,7 +119,7 @@ public class SubFlameRandomFlameGenerator extends RandomFlameGenerator {
       subFlame.setSampleDensity(50);
       RGBPalette palette = new RandomRGBPaletteGenerator().generatePalette(11);
       subFlame.setPalette(palette);
-      FlameRenderer renderer = new FlameRenderer(subFlame, prefs);
+      FlameRenderer renderer = new FlameRenderer(subFlame, prefs, false);
       RenderInfo info = new RenderInfo(IMG_WIDTH, IMG_HEIGHT);
       RenderedFlame res = renderer.renderFlame(info);
       SimpleImage img = res.getImage();

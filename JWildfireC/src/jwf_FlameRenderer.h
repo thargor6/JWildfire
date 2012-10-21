@@ -45,8 +45,9 @@ struct FlameRenderer {
 	RenderInfo *renderInfo;
 	FlameView *flameView;
 	Flame *flame;
+	bool withAlpha;
 
-	void create(Flame *pFlame, int pThreadCount) {
+	void create(Flame *pFlame, int pThreadCount,bool pWithAlpha) {
 		imageWidth = 0;
 		imageHeight = 0;
 		rasterWidth = 0;
@@ -65,6 +66,7 @@ struct FlameRenderer {
 		renderInfo = NULL;
 		flame = pFlame;
 		flameView = NULL;
+		withAlpha = pWithAlpha;
 		flameTransformationContext = new FlameTransformationContext(flame->preserveZ);
 
 		flameView = new FlameView(pFlame);
@@ -115,7 +117,7 @@ struct FlameRenderer {
 		hostMalloc((void**) &logDensityFilter, sizeof(LogDensityFilter));
 		logDensityFilter->create(flame);
 		hostMalloc((void**) &gammaCorrectionFilter, sizeof(GammaCorrectionFilter));
-		gammaCorrectionFilter->create(flame);
+		gammaCorrectionFilter->create(flame, withAlpha);
 		maxBorderWidth = (MAX_FILTER_WIDTH - 1) / 2;
 		borderWidth = (logDensityFilter->noiseFilterSize - 1) / 2;
 		rasterWidth = imageWidth + 2 * maxBorderWidth;
@@ -162,7 +164,7 @@ struct FlameRenderer {
 						logDensityFilter->transformPoint(logDensityPnt, j, i);
 					}
 					gammaCorrectionFilter->transformPoint(logDensityPnt, rbgPoint);
-					pImage->setRGB(j, i, rbgPoint->red, rbgPoint->green, rbgPoint->blue);
+					pImage->setARGB(j, i, rbgPoint->alpha, rbgPoint->red, rbgPoint->green, rbgPoint->blue);
 				}
 			}
 			hostFree(rbgPoint);
@@ -262,7 +264,7 @@ struct FlameRenderer {
 			for (int j = 0; j < pImage->imageWidth; j++) {
 				logDensityFilter->transformPointSimple(logDensityPnt, j, i);
 				gammaCorrectionFilter->transformPointSimple(logDensityPnt, rbgPoint);
-				pImage->setRGB(j, i, rbgPoint->red, rbgPoint->green, rbgPoint->blue);
+				pImage->setARGB(j, i, rbgPoint->alpha,  rbgPoint->red, rbgPoint->green, rbgPoint->blue);
 			}
 		}
 

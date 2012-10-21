@@ -27,7 +27,7 @@ public class SimpleImage implements WFImage {
   private BufferedImage bufferedImg;
 
   public SimpleImage(int pWidth, int pHeight) {
-    bufferedImg = new BufferedImage(pWidth, pHeight, BufferedImage.TYPE_INT_RGB);
+    bufferedImg = new BufferedImage(pWidth, pHeight, BufferedImage.TYPE_INT_ARGB);
     imageWidth = pWidth;
     imageHeight = pHeight;
   }
@@ -76,7 +76,7 @@ public class SimpleImage implements WFImage {
   public SimpleImage clone() {
     SimpleImage res = new SimpleImage();
     res.bufferedImg = new BufferedImage(getImageWidth(), getImageHeight(),
-        BufferedImage.TYPE_INT_RGB);
+        BufferedImage.TYPE_INT_ARGB);
     res.imageWidth = getImageWidth();
     res.imageHeight = getImageHeight();
     Graphics g = res.bufferedImg.getGraphics();
@@ -90,6 +90,12 @@ public class SimpleImage implements WFImage {
 
   public void setRGB(int pX, int pY, int pR, int pG, int pB) {
     toolPixel.setRGB(pR, pG, pB);
+    int argb = toolPixel.getARGBValue();
+    getBufferedImg().setRGB(pX, pY, argb);
+  }
+
+  public void setARGB(int pX, int pY, int pA, int pR, int pG, int pB) {
+    toolPixel.setARGB(pA, pR, pG, pB);
     int argb = toolPixel.getARGBValue();
     getBufferedImg().setRGB(pX, pY, argb);
   }

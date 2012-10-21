@@ -363,6 +363,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
   private final JToggleButton toggleTrianglesButton;
   private final JToggleButton toggleDarkTrianglesButton;
   private final JToggleButton toggleVariationsButton;
+  private final JToggleButton toggleTransparencyButton;
   // Gradient
   private final JPanel gradientLibraryPanel;
   private JScrollPane gradientLibraryScrollPane = null;
@@ -461,7 +462,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       JWFNumberField pShadingBlurRadiusREd, JSlider pShadingBlurRadiusSlider, JWFNumberField pShadingBlurFadeREd, JSlider pShadingBlurFadeSlider,
       JWFNumberField pShadingBlurFallOffREd, JSlider pShadingBlurFallOffSlider, JTextArea pScriptTextArea, JToggleButton pAffineScaleXButton,
       JToggleButton pAffineScaleYButton, JPanel pGradientLibraryPanel, JComboBox pGradientLibraryGradientCmb, JTextPane pHelpPane, JTextPane pFAQPane,
-      JToggleButton pToggleVariationsButton, JToggleButton pAffinePreserveZButton,
+      JToggleButton pToggleVariationsButton, JToggleButton pToggleTransparencyButton, JToggleButton pAffinePreserveZButton,
       JComboBox pQualityProfileCmb, JComboBox pResolutionProfileCmb, JComboBox pBatchQualityProfileCmb, JComboBox pBatchResolutionProfileCmb,
       JComboBox pBatchRendererCmb,
       JComboBox pInteractiveQualityProfileCmb, JComboBox pInteractiveResolutionProfileCmb, JComboBox pSWFAnimatorQualityProfileCmb,
@@ -622,6 +623,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     mouseTransformShearButton = pMouseTransformShearButton;
     toggleTrianglesButton = pToggleTrianglesButton;
     toggleVariationsButton = pToggleVariationsButton;
+    toggleTransparencyButton = pToggleTransparencyButton;
     toggleDarkTrianglesButton = pToggleDarkTrianglesButton;
     mainProgressUpdater = pMainProgressUpdater;
     jobProgressUpdater = pJobProgressUpdater;
@@ -1096,7 +1098,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
 
           switch (rendererType) {
             case JAVA: {
-              FlameRenderer renderer = new FlameRenderer(flame, prefs);
+              FlameRenderer renderer = new FlameRenderer(flame, prefs, toggleTransparencyButton.isSelected());
               if (pQuickRender) {
                 renderer.setProgressUpdater(null);
                 flame.setSampleDensity(prefs.getTinaRenderRealtimeQuality());
@@ -1125,7 +1127,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
                 flame.setSampleDensity(prefs.getTinaRenderPreviewQuality());
                 flame.setSpatialOversample(1);
                 flame.setColorOversample(1);
-                CRendererInterface cudaRenderer = new CRendererInterface(rendererType);
+                CRendererInterface cudaRenderer = new CRendererInterface(rendererType, toggleTransparencyButton.isSelected());
                 CRendererInterface.checkFlameForCUDA(flame);
                 cudaRenderer.setProgressUpdater(mainProgressUpdater);
                 long t0 = System.currentTimeMillis();
@@ -2340,7 +2342,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
               case JAVA: {
                 flame.setSpatialOversample(qualProfile.getSpatialOversample());
                 flame.setColorOversample(qualProfile.getColorOversample());
-                FlameRenderer renderer = new FlameRenderer(flame, prefs);
+                FlameRenderer renderer = new FlameRenderer(flame, prefs, true);
                 renderer.setProgressUpdater(mainProgressUpdater);
                 long t0 = Calendar.getInstance().getTimeInMillis();
                 RenderedFlame res = renderer.renderFlame(info);
@@ -2359,7 +2361,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
               case C64: {
                 flame.setSpatialOversample(1);
                 flame.setColorOversample(1);
-                CRendererInterface cudaRenderer = new CRendererInterface(rendererType);
+                CRendererInterface cudaRenderer = new CRendererInterface(rendererType, true);
                 CRendererInterface.checkFlameForCUDA(flame);
                 cudaRenderer.setProgressUpdater(mainProgressUpdater);
                 if (info.isRenderHDR()) {
@@ -2920,7 +2922,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       renderFlame.setWidth(IMG_WIDTH);
       renderFlame.setHeight(IMG_HEIGHT);
       renderFlame.setSampleDensity(prefs.getTinaRenderPreviewQuality());
-      FlameRenderer renderer = new FlameRenderer(renderFlame, prefs);
+      FlameRenderer renderer = new FlameRenderer(renderFlame, prefs, false);
       renderFlame.setSampleDensity(100);
       RenderedFlame res = renderer.renderFlame(info);
       preview = res.getImage();
@@ -5161,4 +5163,13 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     }
   }
 
+  public void toggleTransparencyButton_clicked() {
+    if (refreshing) {
+      return;
+    }
+    if (flamePanel != null) {
+      flamePanel.setShowTransparency(toggleTransparencyButton.isSelected());
+      refreshFlameImage(false);
+    }
+  }
 }

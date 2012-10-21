@@ -44,6 +44,7 @@ struct GammaCorrectedRGBPoint {
 	int red;
 	int green;
 	int blue;
+	int alpha;
 };
 
 struct GammaCorrectedHDRPoint {

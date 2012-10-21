@@ -81,6 +81,7 @@ public final class FlameRenderer {
   private double cameraMatrix[][] = new double[3][3];
   private double camDOF_10;
   private boolean useDOF;
+  private boolean withAlpha;
   //
   private ProgressUpdater progressUpdater;
   // 
@@ -102,9 +103,10 @@ public final class FlameRenderer {
     iterationObservers.add(pObserver);
   }
 
-  public FlameRenderer(Flame pFlame, Prefs pPrefs) {
+  public FlameRenderer(Flame pFlame, Prefs pPrefs, boolean pWithAlpha) {
     flame = pFlame;
     prefs = pPrefs;
+    withAlpha = pWithAlpha;
     flameTransformationContext = new FlameTransformationContext(this);
     flameTransformationContext.setPreserveZCoordinate(pFlame.isPreserveZ());
   }
@@ -130,7 +132,7 @@ public final class FlameRenderer {
     imageWidth = pImageWidth;
     imageHeight = pImageHeight;
     logDensityFilter = new LogDensityFilter(flame);
-    gammaCorrectionFilter = new GammaCorrectionFilter(flame);
+    gammaCorrectionFilter = new GammaCorrectionFilter(flame, withAlpha);
     maxBorderWidth = (MAX_FILTER_WIDTH - 1) / 2;
     borderWidth = (logDensityFilter.getNoiseFilterSize() - 1) / 2;
     rasterWidth = imageWidth + 2 * maxBorderWidth;
@@ -456,7 +458,7 @@ public final class FlameRenderer {
         for (int j = 0; j < pImage.getImageWidth(); j++) {
           logDensityFilter.transformPoint(logDensityPnt, j, i);
           gammaCorrectionFilter.transformPoint(logDensityPnt, rbgPoint);
-          pImage.setRGB(j, i, rbgPoint.red, rbgPoint.green, rbgPoint.blue);
+          pImage.setARGB(j, i, rbgPoint.alpha, rbgPoint.red, rbgPoint.green, rbgPoint.blue);
         }
       }
     }
@@ -551,10 +553,10 @@ public final class FlameRenderer {
           int x = j * renderScale;
           int y = i * renderScale;
 
-          newImg.setRGB(x, y, rbgPoint.red, rbgPoint.green, rbgPoint.blue);
-          newImg.setRGB(x + 1, y, rbgPoint.red, rbgPoint.green, rbgPoint.blue);
-          newImg.setRGB(x, y + 1, rbgPoint.red, rbgPoint.green, rbgPoint.blue);
-          newImg.setRGB(x + 1, y + 1, rbgPoint.red, rbgPoint.green, rbgPoint.blue);
+          newImg.setARGB(x, y, rbgPoint.alpha, rbgPoint.red, rbgPoint.green, rbgPoint.blue);
+          newImg.setARGB(x + 1, y, rbgPoint.alpha, rbgPoint.red, rbgPoint.green, rbgPoint.blue);
+          newImg.setARGB(x, y + 1, rbgPoint.alpha, rbgPoint.red, rbgPoint.green, rbgPoint.blue);
+          newImg.setARGB(x + 1, y + 1, rbgPoint.alpha, rbgPoint.red, rbgPoint.green, rbgPoint.blue);
         }
       }
       done = true;
@@ -589,7 +591,7 @@ public final class FlameRenderer {
         for (int j = 0; j < img.getImageWidth(); j++) {
           logDensityFilter.transformPointSimple(logDensityPnt, j, i);
           gammaCorrectionFilter.transformPointSimple(logDensityPnt, rbgPoint);
-          img.setRGB(j, i, rbgPoint.red, rbgPoint.green, rbgPoint.blue);
+          img.setARGB(j, i, rbgPoint.alpha, rbgPoint.red, rbgPoint.green, rbgPoint.blue);
         }
       }
       done = true;
@@ -618,10 +620,10 @@ public final class FlameRenderer {
             int x = j * renderScale;
             int y = i * renderScale;
 
-            newImg.setRGB(x, y, rbgPoint.red, rbgPoint.green, rbgPoint.blue);
-            newImg.setRGB(x + 1, y, rbgPoint.red, rbgPoint.green, rbgPoint.blue);
-            newImg.setRGB(x, y + 1, rbgPoint.red, rbgPoint.green, rbgPoint.blue);
-            newImg.setRGB(x + 1, y + 1, rbgPoint.red, rbgPoint.green, rbgPoint.blue);
+            newImg.setARGB(x, y, rbgPoint.alpha, rbgPoint.red, rbgPoint.green, rbgPoint.blue);
+            newImg.setARGB(x + 1, y, rbgPoint.alpha, rbgPoint.red, rbgPoint.green, rbgPoint.blue);
+            newImg.setARGB(x, y + 1, rbgPoint.alpha, rbgPoint.red, rbgPoint.green, rbgPoint.blue);
+            newImg.setARGB(x + 1, y + 1, rbgPoint.alpha, rbgPoint.red, rbgPoint.green, rbgPoint.blue);
           }
         }
       }
@@ -665,7 +667,7 @@ public final class FlameRenderer {
           for (int j = 0; j < pImage.getImageWidth(); j++) {
             logDensityFilter.transformPointSimple(logDensityPnt, j, i);
             gammaCorrectionFilter.transformPointSimple(logDensityPnt, rbgPoint);
-            pImage.setRGB(j, i, rbgPoint.red, rbgPoint.green, rbgPoint.blue);
+            pImage.setARGB(j, i, rbgPoint.alpha, rbgPoint.red, rbgPoint.green, rbgPoint.blue);
           }
         }
       }
