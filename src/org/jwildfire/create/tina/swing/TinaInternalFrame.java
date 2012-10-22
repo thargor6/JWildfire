@@ -39,6 +39,7 @@ import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
@@ -1076,6 +1077,18 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaDEFilterAmountSlider.setFont(new Font("Dialog", Font.BOLD, 10));
       tinaDEFilterAmountSlider.setBounds(686, 52, 220, 19);
       tinaColoringPanel.add(tinaDEFilterAmountSlider);
+
+      bgTransparencyCBx = new JCheckBox("Background transparency");
+      bgTransparencyCBx.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null) {
+            tinaController.saveUndoPoint();
+            tinaController.flameTransparencyCbx_changed();
+          }
+        }
+      });
+      bgTransparencyCBx.setBounds(584, 77, 197, 18);
+      tinaColoringPanel.add(bgTransparencyCBx);
     }
     return tinaColoringPanel;
   }
@@ -1364,7 +1377,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaRenderFlameButton.setMnemonic(KeyEvent.VK_R);
       tinaRenderFlameButton.setFont(new Font("Dialog", Font.BOLD, 10));
       tinaRenderFlameButton.setToolTipText("Render image");
-      tinaRenderFlameButton.setPreferredSize(new Dimension(42, 32));
+      tinaRenderFlameButton.setPreferredSize(new Dimension(42, 24));
       tinaRenderFlameButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
           tinaController.renderFlameButton_actionPerformed(e);
@@ -3447,7 +3460,7 @@ public class TinaInternalFrame extends JInternalFrame {
         getTinaBrightnessREd(), getTinaBrightnessSlider(), getTinaContrastREd(), getTinaContrastSlider(), getTinaGammaREd(), getTinaGammaSlider(),
         getTinaVibrancyREd(), getTinaVibrancySlider(), getTinaFilterRadiusREd(), getTinaFilterRadiusSlider(), getTinaDEFilterRadiusREd(), getTinaDEFilterRadiusSlider(),
         getTinaDEFilterAmountREd(), getTinaDEFilterAmountSlider(), getTinaGammaThresholdREd(),
-        getTinaGammaThresholdSlider(), getTinaBGColorRedREd(), getTinaBGColorRedSlider(), getTinaBGColorGreenREd(), getTinaBGColorGreenSlider(), getTinaBGColorBlueREd(),
+        getTinaGammaThresholdSlider(), getBgTransparencyCBx(), getTinaBGColorRedREd(), getTinaBGColorRedSlider(), getTinaBGColorGreenREd(), getTinaBGColorGreenSlider(), getTinaBGColorBlueREd(),
         getTinaBGColorBlueSlider(), getTinaPaletteRandomPointsREd(), getTinaPaletteImgPanel(), getTinaPaletteShiftREd(), getTinaPaletteShiftSlider(),
         getTinaPaletteRedREd(), getTinaPaletteRedSlider(), getTinaPaletteGreenREd(), getTinaPaletteGreenSlider(), getTinaPaletteBlueREd(),
         getTinaPaletteBlueSlider(), getTinaPaletteHueREd(), getTinaPaletteHueSlider(), getTinaPaletteSaturationREd(), getTinaPaletteSaturationSlider(),
@@ -5180,10 +5193,6 @@ public class TinaInternalFrame extends JInternalFrame {
    */
   private JPanel getTriangleOperationsPanel() {
     if (triangleOperationsPanel == null) {
-      editSpaceLbl4 = new JLabel();
-      editSpaceLbl4.setFont(new Font("Dialog", Font.BOLD, 10));
-      editSpaceLbl4.setText("");
-      editSpaceLbl4.setPreferredSize(new Dimension(42, 2));
       editSpaceLbl2 = new JLabel();
       editSpaceLbl2.setFont(new Font("Dialog", Font.BOLD, 10));
       editSpaceLbl2.setText("");
@@ -5196,7 +5205,6 @@ public class TinaInternalFrame extends JInternalFrame {
       triangleOperationsPanel.setLayout(new FlowLayout());
       triangleOperationsPanel.setPreferredSize(new Dimension(52, 0));
       triangleOperationsPanel.add(getAffineEditPostTransformSmallButton(), null);
-      triangleOperationsPanel.add(editSpaceLbl4, null);
       triangleOperationsPanel.add(getMouseTransformMoveButton(), null);
       triangleOperationsPanel.add(getMouseTransformRotateButton(), null);
       triangleOperationsPanel.add(getMouseTransformScaleButton(), null);
@@ -5209,7 +5217,7 @@ public class TinaInternalFrame extends JInternalFrame {
       });
       mouseTransformShearButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/shear.gif")));
       mouseTransformShearButton.setToolTipText("Enable free triangle editing mode");
-      mouseTransformShearButton.setPreferredSize(new Dimension(42, 32));
+      mouseTransformShearButton.setPreferredSize(new Dimension(42, 24));
       triangleOperationsPanel.add(mouseTransformShearButton);
       triangleOperationsPanel.add(editSpaceLbl1, null);
       triangleOperationsPanel.add(getToggleTrianglesButton(), null);
@@ -5227,7 +5235,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JToggleButton getMouseTransformMoveButton() {
     if (mouseTransformMoveButton == null) {
       mouseTransformMoveButton = new JToggleButton();
-      mouseTransformMoveButton.setPreferredSize(new Dimension(42, 32));
+      mouseTransformMoveButton.setPreferredSize(new Dimension(42, 24));
       mouseTransformMoveButton.setSelected(true);
       mouseTransformMoveButton.setToolTipText("Enable triangle dragging mode");
       mouseTransformMoveButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/move.gif")));
@@ -5248,7 +5256,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JToggleButton getMouseTransformRotateButton() {
     if (mouseTransformRotateButton == null) {
       mouseTransformRotateButton = new JToggleButton();
-      mouseTransformRotateButton.setPreferredSize(new Dimension(42, 32));
+      mouseTransformRotateButton.setPreferredSize(new Dimension(42, 24));
       mouseTransformRotateButton.setToolTipText("Enable triangle rotating mode");
       mouseTransformRotateButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/rotate.gif")));
       mouseTransformRotateButton.addActionListener(new java.awt.event.ActionListener() {
@@ -5268,7 +5276,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JToggleButton getMouseTransformScaleButton() {
     if (mouseTransformScaleButton == null) {
       mouseTransformScaleButton = new JToggleButton();
-      mouseTransformScaleButton.setPreferredSize(new Dimension(42, 32));
+      mouseTransformScaleButton.setPreferredSize(new Dimension(42, 24));
       mouseTransformScaleButton.setToolTipText("Enable triangle scale mode");
       mouseTransformScaleButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/scale.gif")));
       mouseTransformScaleButton.addActionListener(new java.awt.event.ActionListener() {
@@ -5418,7 +5426,7 @@ public class TinaInternalFrame extends JInternalFrame {
       affineEditPostTransformSmallButton.setText("P");
       affineEditPostTransformSmallButton.setToolTipText("Toggle post transform mode");
       affineEditPostTransformSmallButton.setMnemonic(KeyEvent.VK_P);
-      affineEditPostTransformSmallButton.setPreferredSize(new Dimension(42, 32));
+      affineEditPostTransformSmallButton.setPreferredSize(new Dimension(42, 24));
       affineEditPostTransformSmallButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
           tinaController.affineEditPostTransformSmallButton_clicked();
@@ -5482,7 +5490,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JToggleButton getToggleTrianglesButton() {
     if (toggleTrianglesButton == null) {
       toggleTrianglesButton = new JToggleButton();
-      toggleTrianglesButton.setPreferredSize(new Dimension(42, 32));
+      toggleTrianglesButton.setPreferredSize(new Dimension(42, 24));
       toggleTrianglesButton.setSelected(true);
       toggleTrianglesButton.setToolTipText("Display/hide triangles");
       toggleTrianglesButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/triangle.gif")));
@@ -8180,6 +8188,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JPanel panel_34;
   private JPanel panel_35;
   private JToggleButton toggleTransparencyButton;
+  private JCheckBox bgTransparencyCBx;
 
   /**
    * This method initializes renderBatchJobsScrollPane	
@@ -8431,11 +8440,11 @@ public class TinaInternalFrame extends JInternalFrame {
   private JToggleButton getDarkTrianglesToggleButton() {
     if (darkTrianglesToggleButton == null) {
       darkTrianglesToggleButton = new JToggleButton();
-      darkTrianglesToggleButton.setBounds(new Rectangle(444, 4, 82, 24));
+      darkTrianglesToggleButton.setBounds(new Rectangle(434, 4, 72, 24));
       darkTrianglesToggleButton.setToolTipText("Toggle dark triangle colors");
       darkTrianglesToggleButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/triangle.gif")));
       darkTrianglesToggleButton.setSelected(false);
-      darkTrianglesToggleButton.setText("Dark");
+      darkTrianglesToggleButton.setText("Drk");
       darkTrianglesToggleButton.setPreferredSize(new Dimension(42, 24));
       darkTrianglesToggleButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -9774,7 +9783,7 @@ public class TinaInternalFrame extends JInternalFrame {
       });
       tinaAppendToMovieButton.setToolTipText("Append to movie");
       tinaAppendToMovieButton.setText("Movie");
-      tinaAppendToMovieButton.setPreferredSize(new Dimension(60, 32));
+      tinaAppendToMovieButton.setPreferredSize(new Dimension(60, 24));
       tinaAppendToMovieButton.setMnemonic(KeyEvent.VK_M);
       tinaAppendToMovieButton.setFont(new Font("Dialog", Font.BOLD, 10));
     }
@@ -9799,7 +9808,7 @@ public class TinaInternalFrame extends JInternalFrame {
       });
       tinaWrapIntoSubFlameButton.setToolTipText("Wrap into sub flame");
       tinaWrapIntoSubFlameButton.setText("SF");
-      tinaWrapIntoSubFlameButton.setPreferredSize(new Dimension(60, 32));
+      tinaWrapIntoSubFlameButton.setPreferredSize(new Dimension(60, 24));
       tinaWrapIntoSubFlameButton.setMnemonic(KeyEvent.VK_S);
       tinaWrapIntoSubFlameButton.setFont(new Font("Dialog", Font.BOLD, 10));
     }
@@ -10003,7 +10012,7 @@ public class TinaInternalFrame extends JInternalFrame {
       });
       undoButton.setToolTipText("Undo");
       undoButton.setText("Undo");
-      undoButton.setPreferredSize(new Dimension(60, 32));
+      undoButton.setPreferredSize(new Dimension(60, 24));
       undoButton.setMnemonic(KeyEvent.VK_Z);
       undoButton.setFont(new Font("Dialog", Font.BOLD, 10));
     }
@@ -10030,7 +10039,7 @@ public class TinaInternalFrame extends JInternalFrame {
       });
       redoButton.setToolTipText("Redo");
       redoButton.setText("Redo");
-      redoButton.setPreferredSize(new Dimension(60, 32));
+      redoButton.setPreferredSize(new Dimension(60, 24));
       redoButton.setMnemonic(KeyEvent.VK_Y);
       redoButton.setFont(new Font("Dialog", Font.BOLD, 10));
     }
@@ -10626,7 +10635,7 @@ public class TinaInternalFrame extends JInternalFrame {
       });
       snapShotButton.setToolTipText("Create a snapshot of the current flame and store it to the thumbnail ribbon");
       snapShotButton.setText("SShot");
-      snapShotButton.setPreferredSize(new Dimension(60, 32));
+      snapShotButton.setPreferredSize(new Dimension(60, 24));
       snapShotButton.setMnemonic(KeyEvent.VK_H);
       snapShotButton.setFont(new Font("Dialog", Font.BOLD, 10));
     }
@@ -10643,7 +10652,7 @@ public class TinaInternalFrame extends JInternalFrame {
       });
       btnQsave.setToolTipText("Quicksave the current flame");
       btnQsave.setText("QSv");
-      btnQsave.setPreferredSize(new Dimension(60, 32));
+      btnQsave.setPreferredSize(new Dimension(60, 24));
       btnQsave.setMnemonic(KeyEvent.VK_Q);
       btnQsave.setFont(new Font("Dialog", Font.BOLD, 10));
     }
@@ -10942,8 +10951,12 @@ public class TinaInternalFrame extends JInternalFrame {
       toggleTransparencyButton.setSelected(false);
       toggleTransparencyButton.setPreferredSize(new Dimension(42, 24));
       toggleTransparencyButton.setLocation(new Point(4, 4));
-      toggleTransparencyButton.setBounds(392, 4, 42, 24);
+      toggleTransparencyButton.setBounds(386, 4, 42, 24);
     }
     return toggleTransparencyButton;
+  }
+
+  public JCheckBox getBgTransparencyCBx() {
+    return bgTransparencyCBx;
   }
 } //  @jve:decl-index=0:visual-constraint="10,10"
