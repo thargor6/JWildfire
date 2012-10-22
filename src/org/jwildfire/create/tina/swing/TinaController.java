@@ -3420,6 +3420,8 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     flame.setPalette(palette);
     currFlame = flame;
     undoManager.initUndoStack(currFlame);
+    randomBatch.add(0, new FlameThumbnail(currFlame, null));
+    updateThumbnails();
     refreshUI();
   }
 
