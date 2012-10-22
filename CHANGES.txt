@@ -1,3 +1,20 @@
+V0.55 (23.10.2012):
+ - create also a thumbnail if a new flame from scratch is created 
+ - update the thumbnails according to the state of the flame itself
+ - preferences option for default background transparency
+ - per-flame-option for background transparency
+ - support for background transparency
+ - support for the external renderer in the movie maker
+ - support for the external renderer in the batch renderer
+ - minor optimizations for screens with lower resolutions in the main editor
+ - added a "Third-party" components section in the help section
+ - integrated JLayer mp3 library for further enhancements regarding the processing of sound
+ - changed to layout of the Batch renderer so that it automatically is resized according to the window size
+ - Quicksave function (Stores the current flame in the default flame output folder with a generated filename "qsave_YYYY.MM.DD_NNN.flame")
+ - snapshot function to store the current state of a flame to the thumbnail ribbon
+ - if a variation is missing in the external renderer a proper error message is displayed 
+ - improved the performance of updating the thumbnail ribbon
+
 V0.54 (17.10.2012):
  - new family of external C++ based renderers called "JWildfireC". They need less memory and are faster and are optimized for rendering high quality images in acceptable time. Some features of JWildfire (e. g. the integrated Java compiler) are not available. Currently only binaries for Windows 32Bit and Windows 64Bit (faster) are available. The renderer currently features 222 variations and also the generation of hdr images.       
  - density estimating filter for JWildfireC optimized to gain good image qiality at low samling (=quality) rates
