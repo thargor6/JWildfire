@@ -62,6 +62,7 @@ public class Prefs extends ManagedObject {
   static final String KEY_TINA_RENDER_REALTIME_QUALITY = "tina.render.realtime.quality";
   static final String KEY_TINA_RENDER_PREVIEW_QUALITY = "tina.render.preview.quality";
   static final String KEY_TINA_RENDER_DEFAULT_RENDERER = "tina.render.default_renderer";
+  static final String KEY_TINA_RENDER_DEFAULT_BG_TRANSPARENCY = "tina.render.default_bg_transparency";
   static final String KEY_TINA_PROFILE_ASSOCIATE_WITH_FLAMES = "tina.profile.associate_with_flames";
 
   static final String KEY_TINA_RANDOMBATCH_SIZE = "tina.random_batch.size";
@@ -159,6 +160,9 @@ public class Prefs extends ManagedObject {
 
   @Property(description = "Default renderer", category = PropertyCategory.TINA, editorClass = TINARendererEditor.class)
   private RendererType tinaDefaultRenderer = RendererType.JAVA;
+
+  @Property(description = "Default background transparency", category = PropertyCategory.TINA)
+  private boolean tinaDefaultBGTransparency = true;
 
   public String getInputScriptPath() {
     return lastInputScriptPath != null ? lastInputScriptPath : scriptPath;
@@ -373,6 +377,7 @@ public class Prefs extends ManagedObject {
     tinaRandomBatchBGColorBlue = pSrc.tinaRandomBatchBGColorBlue;
     tinaAssociateProfilesWithFlames = pSrc.tinaAssociateProfilesWithFlames;
     tinaDefaultRenderer = pSrc.tinaDefaultRenderer;
+    tinaDefaultBGTransparency = pSrc.tinaDefaultBGTransparency;
 
     resolutionProfiles.clear();
     for (ResolutionProfile profile : pSrc.resolutionProfiles) {
@@ -538,6 +543,14 @@ public class Prefs extends ManagedObject {
 
   public void setTinaDefaultRenderer(RendererType tinaDefaultRenderer) {
     this.tinaDefaultRenderer = tinaDefaultRenderer;
+  }
+
+  public boolean isTinaDefaultBGTransparency() {
+    return tinaDefaultBGTransparency;
+  }
+
+  public void setTinaDefaultBGTransparency(boolean tinaDefaultBGTransparency) {
+    this.tinaDefaultBGTransparency = tinaDefaultBGTransparency;
   }
 
 }
