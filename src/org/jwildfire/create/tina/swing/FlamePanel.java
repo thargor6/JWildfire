@@ -16,10 +16,6 @@
 */
 package org.jwildfire.create.tina.swing;
 
-import static org.jwildfire.base.MathLib.M_PI;
-import static org.jwildfire.base.MathLib.cos;
-import static org.jwildfire.base.MathLib.sin;
-
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
@@ -511,20 +507,22 @@ public class FlamePanel extends ImagePanel {
             return true;
           }
           // Viewport
-          case NONE: {
-            if (flameHolder != null && flameHolder.getFlame() != null) {
-              Flame flame = flameHolder.getFlame();
+          /*
+                    case NONE: {
+                      if (flameHolder != null && flameHolder.getFlame() != null) {
+                        Flame flame = flameHolder.getFlame();
 
-              double cosa = cos(-M_PI * (flame.getCamRoll()) / 180.0);
-              double sina = sin(-M_PI * (flame.getCamRoll()) / 180.0);
-              double rcX = dx * cosa - dy * sina;
-              double rcY = dy * cosa + dx * sina;
+                        double cosa = cos(M_PI * (flame.getCamRoll()) / 180.0);
+                        double sina = sin(M_PI * (flame.getCamRoll()) / 180.0);
+                        double rcX = dx * cosa - dy * sina;
+                        double rcY = dy * cosa + dx * sina;
 
-              flame.setCentreX(flame.getCentreX() - rcX * 0.5);
-              flame.setCentreY(flame.getCentreY() + rcY * 0.5);
-              return true;
-            }
-          }
+                        flame.setCentreX(flame.getCentreX() - rcX * 0.5);
+                        flame.setCentreY(flame.getCentreY() + rcY * 0.5);
+                        return true;
+                      }
+                    }
+          */
         }
       }
     }

@@ -42,6 +42,7 @@ import java.util.Collections;
 import java.util.List;
 
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JInternalFrame;
@@ -249,6 +250,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
   private final JSlider filterRadiusSlider;
   private final JWFNumberField gammaThresholdREd;
   private final JSlider gammaThresholdSlider;
+  private final JCheckBox bgTransparencyCBx;
   private final JWFNumberField bgColorRedREd;
   private final JSlider bgColorRedSlider;
   private final JWFNumberField bgColorGreenREd;
@@ -430,7 +432,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       JWFNumberField pBrightnessREd, JSlider pBrightnessSlider, JWFNumberField pContrastREd, JSlider pContrastSlider, JWFNumberField pGammaREd, JSlider pGammaSlider,
       JWFNumberField pVibrancyREd, JSlider pVibrancySlider, JWFNumberField pFilterRadiusREd, JSlider pFilterRadiusSlider,
       JWFNumberField pDEFilterRadiusREd, JSlider pDEFilterRadiusSlider, JWFNumberField pDEFilterAmountREd, JSlider pDEFilterAmountSlider, JWFNumberField pGammaThresholdREd,
-      JSlider pGammaThresholdSlider, JWFNumberField pBGColorRedREd, JSlider pBGColorRedSlider, JWFNumberField pBGColorGreenREd, JSlider pBGColorGreenSlider, JWFNumberField pBGColorBlueREd,
+      JSlider pGammaThresholdSlider, JCheckBox pBGTransparencyCBx, JWFNumberField pBGColorRedREd, JSlider pBGColorRedSlider, JWFNumberField pBGColorGreenREd, JSlider pBGColorGreenSlider, JWFNumberField pBGColorBlueREd,
       JSlider pBGColorBlueSlider, JTextField pPaletteRandomPointsREd, JPanel pPaletteImgPanel, JWFNumberField pPaletteShiftREd, JSlider pPaletteShiftSlider,
       JWFNumberField pPaletteRedREd, JSlider pPaletteRedSlider, JWFNumberField pPaletteGreenREd, JSlider pPaletteGreenSlider, JWFNumberField pPaletteBlueREd,
       JSlider pPaletteBlueSlider, JWFNumberField pPaletteHueREd, JSlider pPaletteHueSlider, JWFNumberField pPaletteSaturationREd, JSlider pPaletteSaturationSlider,
@@ -512,6 +514,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     deFilterAmountSlider = pDEFilterAmountSlider;
     gammaThresholdREd = pGammaThresholdREd;
     gammaThresholdSlider = pGammaThresholdSlider;
+    bgTransparencyCBx = pBGTransparencyCBx;
     bgColorRedREd = pBGColorRedREd;
     bgColorRedSlider = pBGColorRedSlider;
     bgColorGreenREd = pBGColorGreenREd;
@@ -1150,8 +1153,25 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
           flame.setSampleDensity(oldSampleDensity);
         }
       }
+      if (!pMouseDown) {
+        for (int i = 0; i < randomBatch.size(); i++) {
+          Flame bFlame = randomBatch.get(i).getFlame();
+          if (bFlame == flame) {
+            randomBatch.get(i).preview = null;
+            ImagePanel pnl = randomBatch.get(i).getImgPanel();
+            if (pnl != null) {
+              pnl.replaceImage(randomBatch.get(i).getPreview(prefs.getTinaRenderPreviewQuality() / 2));
+              pnl.repaint();
+            }
+            break;
+          }
+        }
+
+      }
+
     }
-    centerPanel.repaint();
+    centerPanel.invalidate();
+    centerPanel.validate();
   }
 
   @Override
@@ -1210,6 +1230,8 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
 
       gammaThresholdREd.setText(String.valueOf(currFlame.getGammaThreshold()));
       gammaThresholdSlider.setValue(Tools.FTOI(currFlame.getGammaThreshold() * SLIDER_SCALE_GAMMA_THRESHOLD));
+
+      bgTransparencyCBx.setSelected(currFlame.isBGTransparency());
 
       bgColorRedREd.setText(String.valueOf(currFlame.getBGColorRed()));
       bgColorRedSlider.setValue(currFlame.getBGColorRed());
@@ -2049,7 +2071,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       }
       if (chooser.showOpenDialog(centerPanel) == JFileChooser.APPROVE_OPTION) {
         File file = chooser.getSelectedFile();
-        List<Flame> flames = new Flam3Reader().readFlames(file.getAbsolutePath());
+        List<Flame> flames = new Flam3Reader(prefs).readFlames(file.getAbsolutePath());
         Flame flame = flames.get(0);
         prefs.setLastInputFlameFile(file);
         currFlame = flame;
@@ -2213,7 +2235,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     }
     if (chooser.showOpenDialog(centerPanel) == JFileChooser.APPROVE_OPTION) {
       File file = chooser.getSelectedFile();
-      List<Flame> flames = new Flam3Reader().readFlames(file.getAbsolutePath());
+      List<Flame> flames = new Flam3Reader(prefs).readFlames(file.getAbsolutePath());
       Flame flame = flames.get(0);
       prefs.setLastInputFlameFile(file);
       RGBPalette palette = flame.getPalette();
@@ -2342,7 +2364,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
               case JAVA: {
                 flame.setSpatialOversample(qualProfile.getSpatialOversample());
                 flame.setColorOversample(qualProfile.getColorOversample());
-                FlameRenderer renderer = new FlameRenderer(flame, prefs, true);
+                FlameRenderer renderer = new FlameRenderer(flame, prefs, flame.isBGTransparency());
                 renderer.setProgressUpdater(mainProgressUpdater);
                 long t0 = Calendar.getInstance().getTimeInMillis();
                 RenderedFlame res = renderer.renderFlame(info);
@@ -2361,7 +2383,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
               case C64: {
                 flame.setSpatialOversample(1);
                 flame.setColorOversample(1);
-                CRendererInterface cudaRenderer = new CRendererInterface(rendererType, true);
+                CRendererInterface cudaRenderer = new CRendererInterface(rendererType, flame.isBGTransparency());
                 CRendererInterface.checkFlameForCUDA(flame);
                 cudaRenderer.setProgressUpdater(mainProgressUpdater);
                 if (info.isRenderHDR()) {
@@ -2907,13 +2929,14 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
   private class FlameThumbnail {
     private Flame flame;
     private SimpleImage preview;
+    private ImagePanel imgPanel;
 
     public FlameThumbnail(Flame pFlame, SimpleImage pPreview) {
       flame = pFlame;
       preview = pPreview;
     }
 
-    private void generatePreview() {
+    private void generatePreview(int pQuality) {
       RenderInfo info = new RenderInfo(IMG_WIDTH, IMG_HEIGHT);
       Flame renderFlame = flame.makeCopy();
       double wScl = (double) info.getImageWidth() / (double) renderFlame.getWidth();
@@ -2923,20 +2946,28 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       renderFlame.setHeight(IMG_HEIGHT);
       renderFlame.setSampleDensity(prefs.getTinaRenderPreviewQuality());
       FlameRenderer renderer = new FlameRenderer(renderFlame, prefs, false);
-      renderFlame.setSampleDensity(100);
+      renderFlame.setSampleDensity(pQuality);
       RenderedFlame res = renderer.renderFlame(info);
       preview = res.getImage();
     }
 
-    public SimpleImage getPreview() {
+    public SimpleImage getPreview(int pQuality) {
       if (preview == null) {
-        generatePreview();
+        generatePreview(pQuality);
       }
       return preview;
     }
 
     public Flame getFlame() {
       return flame;
+    }
+
+    public ImagePanel getImgPanel() {
+      return imgPanel;
+    }
+
+    public void setImgPanel(ImagePanel imgPanel) {
+      this.imgPanel = imgPanel;
     }
   }
 
@@ -2958,11 +2989,12 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     batchPanel.setSize(panelWidth, panelHeight);
     batchPanel.setPreferredSize(new Dimension(panelWidth, panelHeight));
     for (int i = 0; i < randomBatch.size(); i++) {
-      SimpleImage img = randomBatch.get(i).getPreview();
+      SimpleImage img = randomBatch.get(i).getPreview(3 * prefs.getTinaRenderPreviewQuality() / 4);
       // add it to the main panel
       ImagePanel imgPanel = new ImagePanel(img, 0, 0, img.getImageWidth());
       imgPanel.setImage(img);
       imgPanel.setLocation(i * IMG_WIDTH + (i + 1) * BORDER_SIZE, BORDER_SIZE);
+      randomBatch.get(i).setImgPanel(imgPanel);
       final int idx = i;
       imgPanel.addMouseListener(new java.awt.event.MouseAdapter() {
         public void mouseClicked(java.awt.event.MouseEvent e) {
@@ -2993,13 +3025,16 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     RandomFlameGeneratorSampler sampler = new RandomFlameGeneratorSampler(IMG_WIDTH, IMG_HEIGHT, prefs, randGen, palettePoints);
     for (int i = 0; i < maxCount; i++) {
       RandomFlameGeneratorSample sample = sampler.createSample();
-      randomBatch.add(new FlameThumbnail(sample.getFlame(), sample.getImage()));
+      FlameThumbnail thumbnail;
+      thumbnail = new FlameThumbnail(sample.getFlame(), sample.getImage());
+      randomBatch.add(thumbnail);
       imgList.add(sample.getImage());
       // add it to the main panel
       SimpleImage img = imgList.get(imgList.size() - 1);
       ImagePanel imgPanel = new ImagePanel(img, 0, 0, img.getImageWidth());
       imgPanel.setImage(img);
       imgPanel.setLocation(i * IMG_WIDTH + (i + 1) * BORDER_SIZE, BORDER_SIZE);
+      thumbnail.setImgPanel(imgPanel);
       final int idx = i;
       imgPanel.addMouseListener(new java.awt.event.MouseAdapter() {
         public void mouseClicked(java.awt.event.MouseEvent e) {
@@ -3380,6 +3415,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     flame.setWidth(800);
     flame.setHeight(600);
     flame.setPixelsPerUnit(50);
+    flame.setBGTransparency(prefs.isTinaDefaultBGTransparency());
     RGBPalette palette = new RandomRGBPaletteGenerator().generatePalette(Integer.parseInt(paletteRandomPointsREd.getText()));
     flame.setPalette(palette);
     currFlame = flame;
@@ -3799,7 +3835,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
         if (clipData.isDataFlavorSupported(DataFlavor.stringFlavor)) {
           String xml = (String) (clipData.getTransferData(
               DataFlavor.stringFlavor));
-          List<Flame> flames = new Flam3Reader().readFlamesfromXML(xml);
+          List<Flame> flames = new Flam3Reader(prefs).readFlamesfromXML(xml);
           Flame flame = flames.get(0);
           currFlame = flame;
           undoManager.initUndoStack(currFlame);
@@ -5170,6 +5206,12 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     if (flamePanel != null) {
       flamePanel.setShowTransparency(toggleTransparencyButton.isSelected());
       refreshFlameImage(false);
+    }
+  }
+
+  public void flameTransparencyCbx_changed() {
+    if (currFlame != null) {
+      currFlame.setBGTransparency(bgTransparencyCBx.isSelected());
     }
   }
 }

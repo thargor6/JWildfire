@@ -47,6 +47,7 @@ public class Flame implements Assignable<Flame>, Serializable {
   private int colorOversample;
   private double spatialFilterRadius;
   private double sampleDensity;
+  private boolean bgTransparency;
   private int bgColorRed;
   private int bgColorGreen;
   private int bgColorBlue;
@@ -71,6 +72,7 @@ public class Flame implements Assignable<Flame>, Serializable {
   public Flame() {
     spatialFilterRadius = 0.0;
     sampleDensity = 100.0;
+    bgTransparency = true;
     bgColorRed = bgColorGreen = bgColorBlue = 0;
     brightness = 4;
     contrast = 1;
@@ -449,6 +451,7 @@ public class Flame implements Assignable<Flame>, Serializable {
     colorOversample = pFlame.colorOversample;
     spatialFilterRadius = pFlame.spatialFilterRadius;
     sampleDensity = pFlame.sampleDensity;
+    bgTransparency = pFlame.bgTransparency;
     bgColorRed = pFlame.bgColorRed;
     bgColorGreen = pFlame.bgColorGreen;
     bgColorBlue = pFlame.bgColorBlue;
@@ -487,7 +490,7 @@ public class Flame implements Assignable<Flame>, Serializable {
         fabs(camZoom - pFlame.camZoom) > EPSILON || fabs(camZ - pFlame.camZ) > EPSILON ||
         fabs(camDOF - pFlame.camDOF) > EPSILON || spatialOversample != pFlame.spatialOversample ||
         colorOversample != pFlame.colorOversample || fabs(spatialFilterRadius - pFlame.spatialFilterRadius) > EPSILON ||
-        fabs(sampleDensity - pFlame.sampleDensity) > EPSILON || bgColorRed != pFlame.bgColorRed ||
+        fabs(sampleDensity - pFlame.sampleDensity) > EPSILON || bgTransparency != pFlame.bgTransparency || bgColorRed != pFlame.bgColorRed ||
         bgColorGreen != pFlame.bgColorGreen || bgColorBlue != pFlame.bgColorBlue ||
         fabs(gamma - pFlame.gamma) > EPSILON || fabs(gammaThreshold - pFlame.gammaThreshold) > EPSILON ||
         fabs(pixelsPerUnit - pFlame.pixelsPerUnit) > EPSILON || whiteLevel != pFlame.whiteLevel ||
@@ -527,5 +530,13 @@ public class Flame implements Assignable<Flame>, Serializable {
 
   public void setDEFilterAmount(double deFilterAmount) {
     this.deFilterAmount = deFilterAmount;
+  }
+
+  public boolean isBGTransparency() {
+    return bgTransparency;
+  }
+
+  public void setBGTransparency(boolean bgTransparency) {
+    this.bgTransparency = bgTransparency;
   }
 }

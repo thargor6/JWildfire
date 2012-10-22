@@ -189,7 +189,7 @@ public class TinaInteractiveRendererController implements IterationObserver {
         if (clipData.isDataFlavorSupported(DataFlavor.stringFlavor)) {
           String xml = (String) (clipData.getTransferData(
               DataFlavor.stringFlavor));
-          List<Flame> flames = new Flam3Reader().readFlamesfromXML(xml);
+          List<Flame> flames = new Flam3Reader(prefs).readFlamesfromXML(xml);
           if (flames.size() > 0) {
             newFlame = flames.get(0);
           }
@@ -256,7 +256,7 @@ public class TinaInteractiveRendererController implements IterationObserver {
       }
       if (chooser.showOpenDialog(imageRootPanel) == JFileChooser.APPROVE_OPTION) {
         File file = chooser.getSelectedFile();
-        List<Flame> flames = new Flam3Reader().readFlames(file.getAbsolutePath());
+        List<Flame> flames = new Flam3Reader(prefs).readFlames(file.getAbsolutePath());
         Flame newFlame = flames.get(0);
         prefs.setLastInputFlameFile(file);
         currFlame = newFlame;
@@ -294,7 +294,7 @@ public class TinaInteractiveRendererController implements IterationObserver {
     if (flame.getBGColorRed() > 0 || flame.getBGColorGreen() > 0 || flame.getBGColorBlue() > 0) {
       image.fillBackground(flame.getBGColorRed(), flame.getBGColorGreen(), flame.getBGColorBlue());
     }
-    renderer = new FlameRenderer(flame, prefs, true);
+    renderer = new FlameRenderer(flame, prefs, flame.isBGTransparency());
     renderer.registerIterationObserver(this);
     sampleCount = 0;
     renderStartTime = System.currentTimeMillis();
@@ -524,7 +524,7 @@ public class TinaInteractiveRendererController implements IterationObserver {
         cancelRender();
         File file = chooser.getSelectedFile();
         Flame newFlame = new Flame();
-        FlameRenderer newRenderer = new FlameRenderer(newFlame, prefs, true);
+        FlameRenderer newRenderer = new FlameRenderer(newFlame, prefs, newFlame.isBGTransparency());
 
         ResumedFlameRender resumedRender = newRenderer.resumeRenderFlame(file.getAbsolutePath());
         threads = resumedRender.getThreads();

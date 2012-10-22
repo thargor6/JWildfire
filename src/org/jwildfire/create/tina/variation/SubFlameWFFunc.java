@@ -21,6 +21,7 @@ import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_JWILDFIRE;
 
 import java.util.List;
 
+import org.jwildfire.base.Prefs;
 import org.jwildfire.create.tina.base.Constants;
 import org.jwildfire.create.tina.base.DrawMode;
 import org.jwildfire.create.tina.base.Flame;
@@ -110,7 +111,7 @@ public class SubFlameWFFunc extends VariationFunc {
     xf = null;
     p = null;
     try {
-      List<Flame> flames = new Flam3Reader().readFlamesfromXML(flameXML);
+      List<Flame> flames = new Flam3Reader(new Prefs()).readFlamesfromXML(flameXML);
       if (flames.size() > 0) {
         flame = flames.get(0);
       }

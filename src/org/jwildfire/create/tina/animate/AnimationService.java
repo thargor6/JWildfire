@@ -130,7 +130,7 @@ public class AnimationService {
     flame.setHeight(info.getImageHeight());
     switch (pRendererType) {
       case JAVA: {
-        FlameRenderer renderer = new FlameRenderer(flame, pPrefs, true);
+        FlameRenderer renderer = new FlameRenderer(flame, pPrefs, flame.isBGTransparency());
         RenderedFlame res = renderer.renderFlame(info);
         return res.getImage();
       }
@@ -138,7 +138,7 @@ public class AnimationService {
       case C64: {
         flame.setSpatialOversample(1);
         flame.setColorOversample(1);
-        CRendererInterface cudaRenderer = new CRendererInterface(pRendererType, true);
+        CRendererInterface cudaRenderer = new CRendererInterface(pRendererType, flame.isBGTransparency());
         CRendererInterface.checkFlameForCUDA(flame);
         RenderedFlame res = cudaRenderer.renderFlame(info, flame, pPrefs);
         return res.getImage();

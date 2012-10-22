@@ -57,7 +57,7 @@ public class JWFMovieFilePreview extends JComponent implements PropertyChangeLis
     }
     try {
       if (currFile.exists()) {
-        FlameMovie movie = new JWFMovieReader().readMovie(currFile.getAbsolutePath());
+        FlameMovie movie = new JWFMovieReader(prefs).readMovie(currFile.getAbsolutePath());
         Flame flame = null;
         if (movie != null) {
           for (FlameMoviePart part : movie.getParts()) {
@@ -77,7 +77,7 @@ public class JWFMovieFilePreview extends JComponent implements PropertyChangeLis
           flame.setWidth(imgWidth);
           flame.setHeight(imgHeight);
 
-          FlameRenderer renderer = new FlameRenderer(flame, prefs, false);
+          FlameRenderer renderer = new FlameRenderer(flame, prefs, flame.isBGTransparency());
           renderer.setProgressUpdater(null);
           flame.setSampleDensity(50);
           flame.setSpatialFilterRadius(0.0);

@@ -119,6 +119,7 @@ public class Flam3Writer {
     attrList.add(xb.createAttr("filter", pFlame.getSpatialFilterRadius()));
     attrList.add(xb.createAttr("quality", pFlame.getSampleDensity()));
     attrList.add(xb.createAttr("background", (double) pFlame.getBGColorRed() / 255.0 + " " + (double) pFlame.getBGColorGreen() / 255.0 + " " + (double) pFlame.getBGColorBlue() / 255.0));
+    attrList.add(xb.createAttr("bg_transparency", pFlame.isBGTransparency() ? "1" : "0"));
     attrList.add(xb.createAttr("brightness", pFlame.getBrightness()));
     attrList.add(xb.createAttr("gamma", pFlame.getGamma()));
     attrList.add(xb.createAttr("gamma_threshold", pFlame.getGammaThreshold()));
@@ -195,5 +196,4 @@ public class Flam3Writer {
     xb.endElement("flame");
     return xb.buildXML();
   }
-
 }

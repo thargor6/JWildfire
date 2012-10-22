@@ -46,6 +46,10 @@ public class ImagePanel extends JPanel {
     setImage(pSimpleImage, 0, 0, pSimpleImage.getImageWidth());
   }
 
+  public void replaceImage(SimpleImage pSimpleImage) {
+    simpleImage.setBufferedImage(pSimpleImage.getBufferedImg(), simpleImage.getImageWidth(), simpleImage.getImageHeight());
+  }
+
   public void setImage(SimpleImage pSimpleImage, int pX, int pY, int pWidth) {
     simpleImage = pSimpleImage;
     x = pX;

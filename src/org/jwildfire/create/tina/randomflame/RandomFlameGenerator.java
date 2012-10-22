@@ -27,6 +27,7 @@ public abstract class RandomFlameGenerator {
 
   public Flame createFlame(Prefs pPrefs) {
     Flame flame = createFlame();
+    flame.setBGTransparency(pPrefs.isTinaDefaultBGTransparency());
     flame.setBGColorRed(pPrefs.getTinaRandomBatchBGColorRed());
     flame.setBGColorGreen(pPrefs.getTinaRandomBatchBGColorGreen());
     flame.setBGColorBlue(pPrefs.getTinaRandomBatchBGColorBlue());

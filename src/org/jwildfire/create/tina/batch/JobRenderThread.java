@@ -66,7 +66,7 @@ public class JobRenderThread implements Runnable {
             RenderInfo info = new RenderInfo(width, height);
             info.setRenderHDR(qualityProfile.isWithHDR());
             info.setRenderHDRIntensityMap(qualityProfile.isWithHDRIntensityMap());
-            List<Flame> flames = new Flam3Reader().readFlames(job.getFlameFilename());
+            List<Flame> flames = new Flam3Reader(controller.getPrefs()).readFlames(job.getFlameFilename());
             Flame flame = flames.get(0);
             double wScl = (double) info.getImageWidth() / (double) flame.getWidth();
             double hScl = (double) info.getImageHeight() / (double) flame.getHeight();
@@ -84,7 +84,7 @@ public class JobRenderThread implements Runnable {
                 case JAVA: {
                   flame.setSpatialOversample(qualityProfile.getSpatialOversample());
                   flame.setColorOversample(qualityProfile.getColorOversample());
-                  FlameRenderer renderer = new FlameRenderer(flame, controller.getPrefs(), true);
+                  FlameRenderer renderer = new FlameRenderer(flame, controller.getPrefs(), flame.isBGTransparency());
                   renderer.setProgressUpdater(controller.getJobProgressUpdater());
                   long t0 = Calendar.getInstance().getTimeInMillis();
                   RenderedFlame res = renderer.renderFlame(info);
@@ -105,7 +105,7 @@ public class JobRenderThread implements Runnable {
                 case C64: {
                   flame.setSpatialOversample(1);
                   flame.setColorOversample(1);
-                  CRendererInterface cudaRenderer = new CRendererInterface(rendererType, true);
+                  CRendererInterface cudaRenderer = new CRendererInterface(rendererType, flame.isBGTransparency());
                   CRendererInterface.checkFlameForCUDA(flame);
                   cudaRenderer.setProgressUpdater(controller.getJobProgressUpdater());
                   if (info.isRenderHDR()) {

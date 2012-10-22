@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.jwildfire.base.MathLib;
+import org.jwildfire.base.Prefs;
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.DrawMode;
 import org.jwildfire.create.tina.base.Flame;
@@ -32,6 +33,11 @@ import org.jwildfire.create.tina.variation.VariationFunc;
 import org.jwildfire.create.tina.variation.VariationFuncList;
 
 public class Flam3Reader implements FlameReader {
+  private final Prefs prefs;
+
+  public Flam3Reader(Prefs pPrefs) {
+    prefs = pPrefs;
+  }
 
   @Override
   public List<Flame> readFlames(String pFilename) {
@@ -53,6 +59,7 @@ public class Flam3Reader implements FlameReader {
   private static final String ATTR_FILTER = "filter";
   private static final String ATTR_QUALITY = "quality";
   private static final String ATTR_BACKGROUND = "background";
+  private static final String ATTR_BG_TRANSPARENCY = "bg_transparency";
   private static final String ATTR_BRIGHTNESS = "brightness";
   private static final String ATTR_GAMMA = "gamma";
   private static final String ATTR_GAMMA_THRESHOLD = "gamma_threshold";
@@ -133,6 +140,12 @@ public class Flam3Reader implements FlameReader {
     }
     if ((hs = atts.get(ATTR_BRIGHTNESS)) != null) {
       pFlame.setBrightness(Double.parseDouble(hs));
+    }
+    if ((hs = atts.get(ATTR_BG_TRANSPARENCY)) != null) {
+      pFlame.setBGTransparency(Integer.parseInt(hs) == 1);
+    }
+    else {
+      pFlame.setBGTransparency(prefs.isTinaDefaultBGTransparency());
     }
     if ((hs = atts.get(ATTR_GAMMA)) != null) {
       pFlame.setGamma(Double.parseDouble(hs));

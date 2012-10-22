@@ -33,6 +33,7 @@ import static org.jwildfire.create.tina.io.JWFMovieWriter.TAG_JWF_MOVIE_PART;
 
 import java.util.Map;
 
+import org.jwildfire.base.Prefs;
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.animate.AnimationService.GlobalScript;
 import org.jwildfire.create.tina.animate.AnimationService.XFormScript;
@@ -42,6 +43,11 @@ import org.jwildfire.create.tina.animate.OutputFormat;
 import org.jwildfire.create.tina.base.Flame;
 
 public class JWFMovieReader {
+  private final Prefs prefs;
+
+  public JWFMovieReader(Prefs pPrefs) {
+    prefs = pPrefs;
+  }
 
   public FlameMovie readMovie(String pFilename) {
     try {
@@ -65,7 +71,7 @@ public class JWFMovieReader {
         return null;
       movieXML = pXML.substring(ps, pe);
     }
-    FlameMovie movie = new FlameMovie();
+    FlameMovie movie = new FlameMovie(prefs);
     // Movie attributes
     {
       int ps = movieXML.indexOf("<" + TAG_JWF_MOVIE + " ");
@@ -101,7 +107,7 @@ public class JWFMovieReader {
         if (psFlame > 0) {
           int peFlame = hs.indexOf("</flame>", psFlame + 1);
           String flameXML = hs.substring(psFlame, peFlame + 8);
-          Flame flame = new Flam3Reader().readFlamesfromXML(flameXML).get(0);
+          Flame flame = new Flam3Reader(prefs).readFlamesfromXML(flameXML).get(0);
           part.setFlame(flame);
           //System.out.println(flameXML);
           hs = hs.substring(0, psFlame);

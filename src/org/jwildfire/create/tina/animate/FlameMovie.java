@@ -19,11 +19,13 @@ package org.jwildfire.create.tina.animate;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.jwildfire.base.Prefs;
 import org.jwildfire.create.tina.animate.AnimationService.GlobalScript;
 import org.jwildfire.create.tina.animate.AnimationService.XFormScript;
 import org.jwildfire.create.tina.base.Flame;
 
 public class FlameMovie {
+  private final Prefs prefs;
   private String soundFilename;
   private GlobalScript globalScript;
   private XFormScript xFormScript;
@@ -36,6 +38,10 @@ public class FlameMovie {
   private int frameWidth;
   private int frameHeight;
   private double framesPerSecond;
+
+  public FlameMovie(Prefs pPrefs) {
+    prefs = pPrefs;
+  }
 
   public GlobalScript getGlobalScript() {
     return globalScript;
@@ -94,7 +100,7 @@ public class FlameMovie {
           Flame flame2 = parts.get(i + 1).getFlame().makeCopy();
           int morphFrame = pFrame - (currFrame - morphFrames);
           //          System.out.println(pFrame + ": " + morphFrame);
-          return FlameMorphService.morphFlames(flame1, flame2, morphFrame, morphFrames);
+          return FlameMorphService.morphFlames(prefs, flame1, flame2, morphFrame, morphFrames);
         }
       }
     }

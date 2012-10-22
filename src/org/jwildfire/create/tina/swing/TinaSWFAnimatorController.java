@@ -71,7 +71,7 @@ import org.jwildfire.swing.SWFFileChooser;
 public class TinaSWFAnimatorController implements SWFAnimationRenderThreadController, FlameHolder {
   public static final int PAGE_INDEX = 2;
   private SWFAnimationRenderThread renderThread = null;
-  private FlameMovie currMovie = new FlameMovie();
+  private FlameMovie currMovie;
   private final TinaController parentCtrl;
   private final Prefs prefs;
   private final ErrorHandler errorHandler;
@@ -135,6 +135,7 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
     try {
       parentCtrl = pParentCtrl;
       prefs = pPrefs;
+      currMovie = new FlameMovie(pPrefs);
       errorHandler = pErrorHandler;
       swfAnimatorGlobalScriptCmb = pSWFAnimatorGlobalScriptCmb;
       swfAnimatorXFormScriptCmb = pSWFAnimatorXFormScriptCmb;
@@ -335,7 +336,7 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
         flame.setPixelsPerUnit((wScl + hScl) * 0.5 * flame.getPixelsPerUnit());
         flame.setWidth(imageWidth);
         flame.setHeight(imageHeight);
-        FlameRenderer renderer = new FlameRenderer(flame, prefs, true);
+        FlameRenderer renderer = new FlameRenderer(flame, prefs, flame.isBGTransparency());
         RenderedFlame res = renderer.renderFlame(info);
         img = res.getImage();
       }
@@ -436,7 +437,7 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
         if (clipData.isDataFlavorSupported(DataFlavor.stringFlavor)) {
           String xml = (String) (clipData.getTransferData(
               DataFlavor.stringFlavor));
-          List<Flame> flames = new Flam3Reader().readFlamesfromXML(xml);
+          List<Flame> flames = new Flam3Reader(prefs).readFlamesfromXML(xml);
           if (flames.size() > 0) {
             newFlame = flames.get(0);
           }
@@ -468,7 +469,7 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
       }
       if (chooser.showOpenDialog(swfAnimatorPreviewRootPanel) == JFileChooser.APPROVE_OPTION) {
         File file = chooser.getSelectedFile();
-        List<Flame> flames = new Flam3Reader().readFlames(file.getAbsolutePath());
+        List<Flame> flames = new Flam3Reader(prefs).readFlames(file.getAbsolutePath());
         Flame newFlame = flames.get(0);
         prefs.setLastInputFlameFile(file);
         addFlame(newFlame);
@@ -669,7 +670,7 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
             flame.setWidth(info.getImageWidth());
             flame.setHeight(info.getImageHeight());
 
-            FlameRenderer renderer = new FlameRenderer(flame, prefs, true);
+            FlameRenderer renderer = new FlameRenderer(flame, prefs, flame.isBGTransparency());
             renderer.setProgressUpdater(null);
             flame.setSampleDensity(prefs.getTinaRenderRealtimeQuality());
             flame.setSpatialFilterRadius(0.0);
@@ -865,7 +866,7 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
         if (clipData.isDataFlavorSupported(DataFlavor.stringFlavor)) {
           String xml = (String) (clipData.getTransferData(
               DataFlavor.stringFlavor));
-          FlameMovie movie = new JWFMovieReader().readMovieFromXML(xml);
+          FlameMovie movie = new JWFMovieReader(prefs).readMovieFromXML(xml);
           if (movie != null) {
             currMovie = movie;
           }
@@ -972,7 +973,7 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
       }
       if (chooser.showOpenDialog(swfAnimatorFlamesPanel) == JFileChooser.APPROVE_OPTION) {
         File file = chooser.getSelectedFile();
-        FlameMovie movie = new JWFMovieReader().readMovie(file.getAbsolutePath());
+        FlameMovie movie = new JWFMovieReader(prefs).readMovie(file.getAbsolutePath());
         if (movie != null) {
           currMovie = movie;
         }

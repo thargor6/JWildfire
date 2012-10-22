@@ -21,6 +21,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.jwildfire.base.MathLib;
+import org.jwildfire.base.Prefs;
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.XForm;
@@ -36,7 +37,7 @@ import org.jwildfire.create.tina.variation.VariationFuncList;
 
 public class FlameMorphService {
 
-  public static Flame morphFlames(Flame pFlame1, Flame pFlame2, int pFrame, int pFrames) {
+  public static Flame morphFlames(Prefs pPrefs, Flame pFlame1, Flame pFlame2, int pFrame, int pFrames) {
     if (pFrame < 1 || pFrames < 2)
       return pFlame1;
     double fScl = (double) (pFrame - 1) / (pFrames - 1);
@@ -68,7 +69,7 @@ public class FlameMorphService {
         xForm2.setWeight(0.0);
       }
 
-      XForm morphedXForm = morphXForms(xForm1, xForm2, fScl, pFrame, pFrames);
+      XForm morphedXForm = morphXForms(pPrefs, xForm1, xForm2, fScl, pFrame, pFrames);
       res.getXForms().add(morphedXForm);
     }
     // morph final XForms
@@ -85,7 +86,7 @@ public class FlameMorphService {
         xForm2.addVariation(1.0, VariationFuncList.getVariationFuncInstance("linear3D", true));
       }
 
-      XForm morphedXForm = morphXForms(xForm1, xForm2, fScl, pFrame, pFrames);
+      XForm morphedXForm = morphXForms(pPrefs, xForm1, xForm2, fScl, pFrame, pFrames);
       res.setFinalXForm(morphedXForm);
     }
     // morph colors
@@ -127,7 +128,7 @@ public class FlameMorphService {
     return res;
   }
 
-  private static XForm morphXForms(XForm pXForm1, XForm pXForm2, double pFScl, int pFrame, int pFrames) {
+  private static XForm morphXForms(Prefs pPrefs, XForm pXForm1, XForm pXForm2, double pFScl, int pFrame, int pFrames) {
     pXForm1 = pXForm1.makeCopy();
     pXForm2 = pXForm2.makeCopy();
     prepareMorphXForm(pXForm1);
@@ -238,9 +239,9 @@ public class FlameMorphService {
             String flame1XML = new String((byte[]) ress1[j]);
             String flame2XML = new String((byte[]) ress2[j]);
             try {
-              Flame flame1 = new Flam3Reader().readFlamesfromXML(flame1XML).get(0);
-              Flame flame2 = new Flam3Reader().readFlamesfromXML(flame2XML).get(0);
-              Flame morphedFlame = morphFlames(flame1, flame2, pFrame, pFrames);
+              Flame flame1 = new Flam3Reader(pPrefs).readFlamesfromXML(flame1XML).get(0);
+              Flame flame2 = new Flam3Reader(pPrefs).readFlamesfromXML(flame2XML).get(0);
+              Flame morphedFlame = morphFlames(pPrefs, flame1, flame2, pFrame, pFrames);
               String morphedFlameXML = new Flam3Writer().getFlameXML(morphedFlame);
               var.getFunc().setRessource(SubFlameWFFunc.RESSOURCE_FLAME, morphedFlameXML.getBytes());
             }

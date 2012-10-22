@@ -56,7 +56,7 @@ public class FlameFilePreview extends JComponent implements PropertyChangeListen
     }
     try {
       if (currFile.exists()) {
-        List<Flame> flames = new Flam3Reader().readFlames(currFile.getAbsolutePath());
+        List<Flame> flames = new Flam3Reader(prefs).readFlames(currFile.getAbsolutePath());
         Flame flame = flames.get(0);
         int imgWidth = this.getPreferredSize().width;
         int imgHeight = this.getPreferredSize().height;
@@ -67,7 +67,7 @@ public class FlameFilePreview extends JComponent implements PropertyChangeListen
         flame.setWidth(imgWidth);
         flame.setHeight(imgHeight);
 
-        FlameRenderer renderer = new FlameRenderer(flame, prefs, false);
+        FlameRenderer renderer = new FlameRenderer(flame, prefs, flame.isBGTransparency());
         renderer.setProgressUpdater(null);
         flame.setSampleDensity(50);
         flame.setSpatialFilterRadius(0.0);
