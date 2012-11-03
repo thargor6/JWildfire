@@ -16,42 +16,11 @@
 */
 package org.jwildfire.create.tina.audio;
 
-public class PlayerAudioProcessor implements AudioProcessor {
-  private byte[] byteBuf = new byte[4096];
-  private JWFAudioDevice audioDevice;
+public interface AudioProcessor {
 
-  @Override
-  public void process(short[] samples, int offs, int len) {
-    byte[] b = toByteArray(samples, offs, len);
-    audioDevice.getSource().write(b, 0, len * 2);
-  }
+  void process(short[] pSamples, int pOffset, int pLength);
 
-  @Override
-  public void init(JWFAudioDevice pJWFAudioDevice) {
-    audioDevice = pJWFAudioDevice;
-  }
+  void init(JWFAudioDevice pAudioDevice);
 
-  private byte[] getByteArray(int length) {
-    if (byteBuf.length < length) {
-      byteBuf = new byte[length + 1024];
-    }
-    return byteBuf;
-  }
-
-  protected byte[] toByteArray(short[] samples, int offs, int len) {
-    byte[] b = getByteArray(len * 2);
-    int idx = 0;
-    short s;
-    while (len-- > 0) {
-      s = samples[offs++];
-      b[idx++] = (byte) s;
-      b[idx++] = (byte) (s >>> 8);
-    }
-    return b;
-  }
-
-  @Override
-  public void finish() {
-    // no op
-  }
+  void finish();
 }

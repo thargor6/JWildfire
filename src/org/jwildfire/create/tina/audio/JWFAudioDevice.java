@@ -115,4 +115,8 @@ public class JWFAudioDevice extends AudioDeviceBase {
     return source != null ? source.getFramePosition() : 0;
   }
 
+  public int getChannelCount() {
+    return source != null ? getDecoder().getOutputChannels() : 0;
+  }
+
 }
