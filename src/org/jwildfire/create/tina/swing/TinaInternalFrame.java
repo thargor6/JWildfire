@@ -5339,6 +5339,7 @@ public class TinaInternalFrame extends JInternalFrame {
       centerWestPanel.setPreferredSize(new Dimension(70, 0));
       centerWestPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
       centerWestPanel.add(getTinaAppendToMovieButton());
+      centerWestPanel.add(getTinaAppendToDancingFlamesButton());
       centerWestPanel.add(getTinaWrapIntoSubFlameButton());
       centerWestPanel.add(getLabel_5());
       centerWestPanel.add(getUndoButton());
@@ -8039,7 +8040,7 @@ public class TinaInternalFrame extends JInternalFrame {
       rootTabbedPane.addTab("Flame Editor", null, getRootPanel(), null);
       rootTabbedPane.addTab("Interactive Renderer", null, getInteractiveRenderPanel(), null);
       rootTabbedPane.addTab("JWFMovie Maker", null, getTinaSWFAnimatorPanel(), null);
-      rootTabbedPane.addTab("Dancing fractals", null, getPanel_36(), null);
+      rootTabbedPane.addTab("Dancing flames", null, getPanel_36(), null);
       rootTabbedPane.addTab("Batch Flame Renderer", null, getBatchRenderPanel(), null);
 
       JPanel helpPanel = new JPanel();
@@ -8195,6 +8196,32 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton btnRenderFlame;
   private JButton btnStopRenderFlame;
   private JPanel realtimeGraph1Pnl;
+  private JButton tinaAppendToDancingFlamesButton;
+  private JButton dancingFlamesAddFromEditorBtn;
+  private JButton dancingFlamesAddFromClipboardBtn;
+  private JButton dancingFlamesAddFromDiscBtn;
+  private JPanel panel_38;
+  private JPanel panel_39;
+  private JPanel panel_40;
+  private JPanel panel_41;
+  private JTable table;
+  private JPanel panel_42;
+  private JPanel panel_43;
+  private JPanel panel_44;
+  private JButton dancingFlamesLoadSoundBtn;
+  private JPanel panel_45;
+  private JPanel panel_46;
+  private JPanel panel_47;
+  private JLabel lblRandomGenerator;
+  private JPanel panel_48;
+  private JPanel panel_49;
+  private JPanel panel_50;
+  private JPanel panel_51;
+  private JPanel panel_52;
+  private JPanel panel_53;
+  private JPanel panel_54;
+  private JPanel panel_55;
+  private JPanel panel_56;
 
   /**
    * This method initializes renderBatchJobsScrollPane	
@@ -10029,7 +10056,7 @@ public class TinaInternalFrame extends JInternalFrame {
     if (label_5 == null) {
       label_5 = new JLabel();
       label_5.setText("");
-      label_5.setPreferredSize(new Dimension(42, 24));
+      label_5.setPreferredSize(new Dimension(42, 12));
       label_5.setFont(new Font("Dialog", Font.BOLD, 10));
     }
     return label_5;
@@ -10669,7 +10696,7 @@ public class TinaInternalFrame extends JInternalFrame {
     if (label_6 == null) {
       label_6 = new JLabel();
       label_6.setText("");
-      label_6.setPreferredSize(new Dimension(42, 24));
+      label_6.setPreferredSize(new Dimension(42, 12));
       label_6.setFont(new Font("Dialog", Font.BOLD, 10));
     }
     return label_6;
@@ -10969,90 +10996,9 @@ public class TinaInternalFrame extends JInternalFrame {
   private JPanel getPanel_36() {
     if (panel_36 == null) {
       panel_36 = new JPanel();
-      panel_36.setLayout(null);
-
-      JButton btnPlay = new JButton();
-      btnPlay.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-          tinaController.getDancingFractalsController().play();
-        }
-      });
-      btnPlay.setText("Play sound");
-      btnPlay.setPreferredSize(new Dimension(125, 24));
-      btnPlay.setMinimumSize(new Dimension(100, 24));
-      btnPlay.setMaximumSize(new Dimension(32000, 24));
-      btnPlay.setFont(new Font("Dialog", Font.BOLD, 10));
-      btnPlay.setBounds(16, 73, 127, 24);
-      panel_36.add(btnPlay);
-
-      JButton btnStop = new JButton();
-      btnStop.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-          tinaController.getDancingFractalsController().stop();
-        }
-      });
-      btnStop.setText("Stop sound");
-      btnStop.setPreferredSize(new Dimension(125, 24));
-      btnStop.setMinimumSize(new Dimension(100, 24));
-      btnStop.setMaximumSize(new Dimension(32000, 24));
-      btnStop.setFont(new Font("Dialog", Font.BOLD, 10));
-      btnStop.setBounds(16, 37, 127, 24);
-      panel_36.add(btnStop);
-
-      JButton btnImportFlame = new JButton();
-      btnImportFlame.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-          tinaController.getDancingFractalsController().importFlame(tinaController.getCurrFlame());
-        }
-      });
-      btnImportFlame.setText("Import flame");
-      btnImportFlame.setPreferredSize(new Dimension(125, 24));
-      btnImportFlame.setMinimumSize(new Dimension(100, 24));
-      btnImportFlame.setMaximumSize(new Dimension(32000, 24));
-      btnImportFlame.setFont(new Font("Dialog", Font.BOLD, 10));
-      btnImportFlame.setBounds(338, 87, 127, 24);
-      panel_36.add(btnImportFlame);
-
-      realtimeFlamePnl = new JPanel();
-      realtimeFlamePnl.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
-      realtimeFlamePnl.setBounds(205, 174, 363, 264);
-      panel_36.add(realtimeFlamePnl);
-      realtimeFlamePnl.setLayout(new BorderLayout(0, 0));
-      panel_36.add(getBtnRenderFlame());
-      panel_36.add(getBtnStopRenderFlame());
-
-      JButton btnRandomFlame = new JButton();
-      btnRandomFlame.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-          tinaController.getDancingFractalsController().randomFlame(tinaController.getCurrFlame(), (String) randomStyleCmb.getSelectedItem());
-        }
-      });
-      btnRandomFlame.setText("Random flame");
-      btnRandomFlame.setPreferredSize(new Dimension(125, 24));
-      btnRandomFlame.setMinimumSize(new Dimension(100, 24));
-      btnRandomFlame.setMaximumSize(new Dimension(32000, 24));
-      btnRandomFlame.setFont(new Font("Dialog", Font.BOLD, 10));
-      btnRandomFlame.setBounds(338, 57, 127, 24);
-      panel_36.add(btnRandomFlame);
-
-      realtimeGraph1Pnl = new JPanel();
-      realtimeGraph1Pnl.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
-      realtimeGraph1Pnl.setBounds(205, 438, 363, 57);
-      panel_36.add(realtimeGraph1Pnl);
-      realtimeGraph1Pnl.setLayout(new BorderLayout(0, 0));
-
-      JButton button = new JButton();
-      button.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-          tinaController.getDancingFractalsController().loadSoundButton_clicked();
-        }
-      });
-      button.setToolTipText("Load a *.wav or *.mp3 file");
-      button.setText("Load sound");
-      button.setPreferredSize(new Dimension(125, 24));
-      button.setFont(new Font("Dialog", Font.BOLD, 10));
-      button.setBounds(16, 6, 125, 24);
-      panel_36.add(button);
+      panel_36.setLayout(new BorderLayout(0, 0));
+      panel_36.add(getPanel_38(), BorderLayout.EAST);
+      panel_36.add(getPanel_43());
     }
     return panel_36;
   }
@@ -11065,12 +11011,11 @@ public class TinaInternalFrame extends JInternalFrame {
           tinaController.getDancingFractalsController().startRender();
         }
       });
-      btnRenderFlame.setText("Render flame");
+      btnRenderFlame.setText("Start show");
       btnRenderFlame.setPreferredSize(new Dimension(125, 24));
       btnRenderFlame.setMinimumSize(new Dimension(100, 24));
       btnRenderFlame.setMaximumSize(new Dimension(32000, 24));
       btnRenderFlame.setFont(new Font("Dialog", Font.BOLD, 10));
-      btnRenderFlame.setBounds(470, 37, 127, 24);
     }
     return btnRenderFlame;
   }
@@ -11083,12 +11028,11 @@ public class TinaInternalFrame extends JInternalFrame {
           tinaController.getDancingFractalsController().stopRender();
         }
       });
-      btnStopRenderFlame.setText("Stop render flame");
+      btnStopRenderFlame.setText("Stop show");
       btnStopRenderFlame.setPreferredSize(new Dimension(125, 24));
       btnStopRenderFlame.setMinimumSize(new Dimension(100, 24));
       btnStopRenderFlame.setMaximumSize(new Dimension(32000, 24));
       btnStopRenderFlame.setFont(new Font("Dialog", Font.BOLD, 10));
-      btnStopRenderFlame.setBounds(470, 108, 127, 24);
     }
     return btnStopRenderFlame;
   }
@@ -11099,5 +11043,410 @@ public class TinaInternalFrame extends JInternalFrame {
 
   public JPanel getRealtimeGraph1Pnl() {
     return realtimeGraph1Pnl;
+  }
+
+  private JButton getTinaAppendToDancingFlamesButton() {
+    if (tinaAppendToDancingFlamesButton == null) {
+      tinaAppendToDancingFlamesButton = new JButton();
+      tinaAppendToDancingFlamesButton.setToolTipText("Append to dancing flames show");
+      tinaAppendToDancingFlamesButton.setText("Dance");
+      tinaAppendToDancingFlamesButton.setPreferredSize(new Dimension(60, 24));
+      tinaAppendToDancingFlamesButton.setMnemonic(KeyEvent.VK_D);
+      tinaAppendToDancingFlamesButton.setFont(new Font("Dialog", Font.BOLD, 10));
+    }
+    return tinaAppendToDancingFlamesButton;
+  }
+
+  private JButton getDancingFlamesAddFromEditorBtn() {
+    if (dancingFlamesAddFromEditorBtn == null) {
+      dancingFlamesAddFromEditorBtn = new JButton();
+      dancingFlamesAddFromEditorBtn.setMinimumSize(new Dimension(125, 24));
+      dancingFlamesAddFromEditorBtn.setMaximumSize(new Dimension(30000, 24));
+      dancingFlamesAddFromEditorBtn.setToolTipText("Load flame from Editor and add it to the movie");
+      dancingFlamesAddFromEditorBtn.setText("Add from Editor");
+      dancingFlamesAddFromEditorBtn.setPreferredSize(new Dimension(125, 24));
+      dancingFlamesAddFromEditorBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+    }
+    return dancingFlamesAddFromEditorBtn;
+  }
+
+  private JButton getDancingFlamesAddFromClipboardBtn() {
+    if (dancingFlamesAddFromClipboardBtn == null) {
+      dancingFlamesAddFromClipboardBtn = new JButton();
+      dancingFlamesAddFromClipboardBtn.setMinimumSize(new Dimension(125, 24));
+      dancingFlamesAddFromClipboardBtn.setMaximumSize(new Dimension(30000, 24));
+      dancingFlamesAddFromClipboardBtn.setToolTipText("Load flame from clipboard and add it to the movie");
+      dancingFlamesAddFromClipboardBtn.setText("Add from Clipboard");
+      dancingFlamesAddFromClipboardBtn.setPreferredSize(new Dimension(125, 24));
+      dancingFlamesAddFromClipboardBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+    }
+    return dancingFlamesAddFromClipboardBtn;
+  }
+
+  private JButton getDancingFlamesAddFromDiscBtn() {
+    if (dancingFlamesAddFromDiscBtn == null) {
+      dancingFlamesAddFromDiscBtn = new JButton();
+      dancingFlamesAddFromDiscBtn.setMaximumSize(new Dimension(30000, 24));
+      dancingFlamesAddFromDiscBtn.setMinimumSize(new Dimension(125, 24));
+      dancingFlamesAddFromDiscBtn.setToolTipText("Load flame from file and add it to the movie");
+      dancingFlamesAddFromDiscBtn.setText("Add flame from disc");
+      dancingFlamesAddFromDiscBtn.setPreferredSize(new Dimension(125, 24));
+      dancingFlamesAddFromDiscBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+    }
+    return dancingFlamesAddFromDiscBtn;
+  }
+
+  private JPanel getPanel_38() {
+    if (panel_38 == null) {
+      panel_38 = new JPanel();
+      panel_38.setMaximumSize(new Dimension(300, 32767));
+      panel_38.setPreferredSize(new Dimension(300, 10));
+      panel_38.setBorder(new TitledBorder(null, "Flame pool", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+      panel_38.setLayout(new BorderLayout(0, 0));
+      panel_38.add(getPanel_39(), BorderLayout.NORTH);
+      panel_38.add(getPanel_40(), BorderLayout.SOUTH);
+      panel_38.add(getPanel_41(), BorderLayout.EAST);
+
+      JScrollPane scrollPane_2 = new JScrollPane();
+      scrollPane_2.setFont(new Font("Dialog", Font.PLAIN, 10));
+      panel_38.add(scrollPane_2, BorderLayout.CENTER);
+
+      table = new JTable();
+      table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+      table.setFont(new Font("Dialog", Font.PLAIN, 10));
+      scrollPane_2.setViewportView(table);
+      panel_38.add(getPanel_42(), BorderLayout.WEST);
+    }
+    return panel_38;
+  }
+
+  private JPanel getPanel_39() {
+    if (panel_39 == null) {
+      panel_39 = new JPanel();
+      panel_39.setPreferredSize(new Dimension(10, 200));
+      panel_39.setLayout(new BorderLayout(0, 0));
+
+      JPanel panel_1 = new JPanel();
+      panel_1.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
+      panel_1.setPreferredSize(new Dimension(60, 10));
+      panel_39.add(panel_1, BorderLayout.EAST);
+
+      JSlider slider = new JSlider();
+      panel_1.add(slider);
+      slider.setValue(0);
+      slider.setPreferredSize(new Dimension(86, 22));
+      slider.setMinimum(-255);
+      slider.setMaximum(255);
+      slider.setFont(new Font("Dialog", Font.BOLD, 10));
+
+      JPanel panel_2 = new JPanel();
+      panel_2.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
+      panel_39.add(panel_2, BorderLayout.CENTER);
+      panel_2.setLayout(new BorderLayout(0, 0));
+    }
+    return panel_39;
+  }
+
+  private JPanel getPanel_40() {
+    if (panel_40 == null) {
+      panel_40 = new JPanel();
+      panel_40.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
+      panel_40.setPreferredSize(new Dimension(10, 100));
+    }
+    return panel_40;
+  }
+
+  private JPanel getPanel_41() {
+    if (panel_41 == null) {
+      panel_41 = new JPanel();
+      panel_41.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
+      panel_41.setPreferredSize(new Dimension(60, 10));
+    }
+    return panel_41;
+  }
+
+  private JPanel getPanel_42() {
+    if (panel_42 == null) {
+      panel_42 = new JPanel();
+      panel_42.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
+      panel_42.setPreferredSize(new Dimension(60, 10));
+    }
+    return panel_42;
+  }
+
+  private JPanel getPanel_43() {
+    if (panel_43 == null) {
+      panel_43 = new JPanel();
+      panel_43.setLayout(new BorderLayout(0, 0));
+      panel_43.add(getPanel_44(), BorderLayout.NORTH);
+      panel_43.add(getPanel_49(), BorderLayout.WEST);
+      panel_43.add(getPanel_50(), BorderLayout.EAST);
+      panel_43.add(getPanel_51(), BorderLayout.SOUTH);
+      panel_43.add(getPanel_52(), BorderLayout.CENTER);
+    }
+    return panel_43;
+  }
+
+  private JPanel getPanel_44() {
+    if (panel_44 == null) {
+      panel_44 = new JPanel();
+      panel_44.setBorder(new TitledBorder(null, "Ressources", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+      panel_44.setPreferredSize(new Dimension(10, 110));
+      panel_44.setLayout(new BoxLayout(panel_44, BoxLayout.X_AXIS));
+
+      dancingFlamesLoadSoundBtn = new JButton();
+      dancingFlamesLoadSoundBtn.setMaximumSize(new Dimension(125, 24));
+      dancingFlamesLoadSoundBtn.setMinimumSize(new Dimension(100, 24));
+      panel_44.add(dancingFlamesLoadSoundBtn);
+      dancingFlamesLoadSoundBtn.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getDancingFractalsController().loadSoundButton_clicked();
+        }
+      });
+      dancingFlamesLoadSoundBtn.setToolTipText("Load a *.wav or *.mp3 file");
+      dancingFlamesLoadSoundBtn.setText("Load sound");
+      dancingFlamesLoadSoundBtn.setPreferredSize(new Dimension(125, 24));
+      dancingFlamesLoadSoundBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      panel_44.add(getPanel_45());
+      panel_44.add(getPanel_46());
+    }
+    return panel_44;
+  }
+
+  public JButton getDancingFlamesLoadSoundBtn() {
+    return dancingFlamesLoadSoundBtn;
+  }
+
+  private JPanel getPanel_45() {
+    if (panel_45 == null) {
+      panel_45 = new JPanel();
+      panel_45.setBorder(new EmptyBorder(0, 5, 0, 5));
+      panel_45.setMaximumSize(new Dimension(145, 32767));
+      panel_45.setLayout(new BoxLayout(panel_45, BoxLayout.Y_AXIS));
+      panel_45.add(getDancingFlamesAddFromClipboardBtn());
+      panel_45.add(getDancingFlamesAddFromEditorBtn());
+      panel_45.add(getDancingFlamesAddFromDiscBtn());
+    }
+    return panel_45;
+  }
+
+  private JPanel getPanel_46() {
+    if (panel_46 == null) {
+      panel_46 = new JPanel();
+      panel_46.setMaximumSize(new Dimension(300, 32767));
+      panel_46.setMinimumSize(new Dimension(200, 10));
+      panel_46.setLayout(new BoxLayout(panel_46, BoxLayout.Y_AXIS));
+      panel_46.add(getPanel_47());
+      panel_46.add(getPanel_48());
+
+      JButton btnRandomFlame = new JButton();
+      panel_46.add(btnRandomFlame);
+      btnRandomFlame.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getDancingFractalsController().randomFlame(tinaController.getCurrFlame(), (String) randomStyleCmb.getSelectedItem());
+        }
+      });
+      btnRandomFlame.setText("Random flame");
+      btnRandomFlame.setPreferredSize(new Dimension(125, 24));
+      btnRandomFlame.setMinimumSize(new Dimension(100, 24));
+      btnRandomFlame.setMaximumSize(new Dimension(125, 24));
+      btnRandomFlame.setFont(new Font("Dialog", Font.BOLD, 10));
+    }
+    return panel_46;
+  }
+
+  private JPanel getPanel_47() {
+    if (panel_47 == null) {
+      panel_47 = new JPanel();
+      panel_47.setMaximumSize(new Dimension(32767, 24));
+      panel_47.setLayout(new BoxLayout(panel_47, BoxLayout.X_AXIS));
+      panel_47.add(getLblRandomGenerator());
+
+      JComboBox comboBox = new JComboBox();
+      panel_47.add(comboBox);
+      comboBox.setPreferredSize(new Dimension(125, 24));
+      comboBox.setMinimumSize(new Dimension(125, 24));
+      comboBox.setMaximumSize(new Dimension(125, 24));
+      comboBox.setMaximumRowCount(32);
+      comboBox.setFont(new Font("Dialog", Font.BOLD, 10));
+    }
+    return panel_47;
+  }
+
+  private JLabel getLblRandomGenerator() {
+    if (lblRandomGenerator == null) {
+      lblRandomGenerator = new JLabel();
+      lblRandomGenerator.setMinimumSize(new Dimension(100, 24));
+      lblRandomGenerator.setText("Random generator");
+      lblRandomGenerator.setPreferredSize(new Dimension(100, 24));
+      lblRandomGenerator.setFont(new Font("Dialog", Font.BOLD, 10));
+    }
+    return lblRandomGenerator;
+  }
+
+  private JPanel getPanel_48() {
+    if (panel_48 == null) {
+      panel_48 = new JPanel();
+      panel_48.setMaximumSize(new Dimension(32767, 24));
+      panel_48.setLayout(new BoxLayout(panel_48, BoxLayout.X_AXIS));
+
+      JLabel lblCount = new JLabel();
+      lblCount.setMinimumSize(new Dimension(100, 24));
+      panel_48.add(lblCount);
+      lblCount.setText("Count");
+      lblCount.setPreferredSize(new Dimension(100, 24));
+      lblCount.setFont(new Font("Dialog", Font.BOLD, 10));
+
+      JWFNumberField numberField = new JWFNumberField();
+      numberField.setMinimumSize(new Dimension(125, 24));
+      numberField.setMaximumSize(new Dimension(125, 24));
+      panel_48.add(numberField);
+      numberField.setValueStep(1.0);
+      numberField.setText("0");
+      numberField.setPreferredSize(new Dimension(125, 24));
+      numberField.setOnlyIntegers(true);
+      numberField.setMinValue(-255.0);
+      numberField.setMaxValue(255.0);
+      numberField.setHasMinValue(true);
+      numberField.setHasMaxValue(true);
+      numberField.setFont(new Font("Dialog", Font.PLAIN, 10));
+      numberField.setEditable(true);
+
+      JButton btnImportFlame = new JButton();
+      panel_48.add(btnImportFlame);
+      btnImportFlame.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getDancingFractalsController().importFlame(tinaController.getCurrFlame());
+        }
+      });
+      btnImportFlame.setText("Import flame");
+      btnImportFlame.setPreferredSize(new Dimension(125, 24));
+      btnImportFlame.setMinimumSize(new Dimension(100, 24));
+      btnImportFlame.setMaximumSize(new Dimension(32000, 24));
+      btnImportFlame.setFont(new Font("Dialog", Font.BOLD, 10));
+    }
+    return panel_48;
+  }
+
+  private JPanel getPanel_49() {
+    if (panel_49 == null) {
+      panel_49 = new JPanel();
+      panel_49.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
+      panel_49.setPreferredSize(new Dimension(100, 10));
+      panel_49.add(getBtnRenderFlame());
+
+      JButton btnNextFlame = new JButton();
+      panel_49.add(btnNextFlame);
+      btnNextFlame.setText("Next flame");
+      btnNextFlame.setPreferredSize(new Dimension(125, 24));
+      btnNextFlame.setMinimumSize(new Dimension(100, 24));
+      btnNextFlame.setMaximumSize(new Dimension(32000, 24));
+      btnNextFlame.setFont(new Font("Dialog", Font.BOLD, 10));
+      panel_49.add(getBtnStopRenderFlame());
+
+      JButton btnPlay = new JButton();
+      panel_49.add(btnPlay);
+      btnPlay.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getDancingFractalsController().play();
+        }
+      });
+      btnPlay.setText("Play sound");
+      btnPlay.setPreferredSize(new Dimension(125, 24));
+      btnPlay.setMinimumSize(new Dimension(100, 24));
+      btnPlay.setMaximumSize(new Dimension(32000, 24));
+      btnPlay.setFont(new Font("Dialog", Font.BOLD, 10));
+
+      JButton btnStop = new JButton();
+      panel_49.add(btnStop);
+      btnStop.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getDancingFractalsController().stop();
+        }
+      });
+      btnStop.setText("Stop sound");
+      btnStop.setPreferredSize(new Dimension(125, 24));
+      btnStop.setMinimumSize(new Dimension(100, 24));
+      btnStop.setMaximumSize(new Dimension(32000, 24));
+      btnStop.setFont(new Font("Dialog", Font.BOLD, 10));
+    }
+    return panel_49;
+  }
+
+  private JPanel getPanel_50() {
+    if (panel_50 == null) {
+      panel_50 = new JPanel();
+      panel_50.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
+      panel_50.setPreferredSize(new Dimension(100, 10));
+    }
+    return panel_50;
+  }
+
+  private JPanel getPanel_51() {
+    if (panel_51 == null) {
+      panel_51 = new JPanel();
+      panel_51.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
+      panel_51.setPreferredSize(new Dimension(10, 100));
+    }
+    return panel_51;
+  }
+
+  private JPanel getPanel_52() {
+    if (panel_52 == null) {
+      panel_52 = new JPanel();
+      panel_52.setLayout(new BorderLayout(0, 0));
+      panel_52.add(getPanel_53(), BorderLayout.NORTH);
+      panel_52.add(getPanel_54(), BorderLayout.EAST);
+      panel_52.add(getPanel_55(), BorderLayout.WEST);
+      panel_52.add(getPanel_56(), BorderLayout.SOUTH);
+
+      realtimeFlamePnl = new JPanel();
+      panel_52.add(realtimeFlamePnl, BorderLayout.CENTER);
+      realtimeFlamePnl.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
+      realtimeFlamePnl.setLayout(new BorderLayout(0, 0));
+    }
+    return panel_52;
+  }
+
+  private JPanel getPanel_53() {
+    if (panel_53 == null) {
+      panel_53 = new JPanel();
+      panel_53.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
+      panel_53.setPreferredSize(new Dimension(10, 50));
+      panel_53.setLayout(new BorderLayout(0, 0));
+
+      realtimeGraph1Pnl = new JPanel();
+      panel_53.add(realtimeGraph1Pnl);
+      realtimeGraph1Pnl.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
+      realtimeGraph1Pnl.setLayout(new BorderLayout(0, 0));
+    }
+    return panel_53;
+  }
+
+  private JPanel getPanel_54() {
+    if (panel_54 == null) {
+      panel_54 = new JPanel();
+      panel_54.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
+      panel_54.setPreferredSize(new Dimension(50, 10));
+    }
+    return panel_54;
+  }
+
+  private JPanel getPanel_55() {
+    if (panel_55 == null) {
+      panel_55 = new JPanel();
+      panel_55.setPreferredSize(new Dimension(50, 10));
+      panel_55.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
+    }
+    return panel_55;
+  }
+
+  private JPanel getPanel_56() {
+    if (panel_56 == null) {
+      panel_56 = new JPanel();
+      panel_56.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
+      panel_56.setPreferredSize(new Dimension(10, 50));
+    }
+    return panel_56;
   }
 } //  @jve:decl-index=0:visual-constraint="10,10"
