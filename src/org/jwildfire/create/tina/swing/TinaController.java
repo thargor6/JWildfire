@@ -131,6 +131,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
   private static final double SLIDER_SCALE_LIGHTPOS = 100.0;
   private static final double SLIDER_SCALE_BLUR_FALLOFF = 10.0;
 
+  private DancingFractalsController dancingFractalsController;
   private TinaInteractiveRendererController interactiveRendererCtrl;
   private TinaSWFAnimatorController swfAnimatorCtrl;
 
@@ -471,12 +472,14 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       JComboBox pSWFAnimatorResolutionProfileCmb, JButton pRenderFlameButton, JButton pAppendToMovieButton,
       JWFNumberField pTransformationWeightREd, JButton pUndoButton, JButton pRedoButton, JComboBox pRendererCmb,
       JWFNumberField pXFormAntialiasAmountREd, JSlider pXFormAntialiasAmountSlider, JWFNumberField pXFormAntialiasRadiusREd, JSlider pXFormAntialiasRadiusSlider,
-      JButton pXFormAntialiasCopyToAllBtn) {
+      JButton pXFormAntialiasCopyToAllBtn, JPanel pRealtimeFlamePnl, JPanel pRealtimeGraph1Pnl) {
     tinaFrame = pTinaFrame;
     tinaFrameTitle = tinaFrame.getTitle();
     errorHandler = pErrorHandler;
     prefs = pPrefs;
     centerPanel = pCenterPanel;
+
+    dancingFractalsController = new DancingFractalsController(this, pErrorHandler, pRealtimeFlamePnl, pRealtimeGraph1Pnl);
 
     cameraRollREd = pCameraRollREd;
     cameraRollSlider = pCameraRollSlider;
@@ -5215,5 +5218,9 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     if (currFlame != null) {
       currFlame.setBGTransparency(bgTransparencyCBx.isSelected());
     }
+  }
+
+  public DancingFractalsController getDancingFractalsController() {
+    return dancingFractalsController;
   }
 }

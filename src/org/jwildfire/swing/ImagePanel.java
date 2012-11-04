@@ -59,4 +59,16 @@ public class ImagePanel extends JPanel {
     setBounds(x, y, width, height);
   }
 
+  public int getImageWidth() {
+    return simpleImage != null ? simpleImage.getImageWidth() : 0;
+  }
+
+  public int getImageHeight() {
+    return simpleImage != null ? simpleImage.getImageWidth() : 0;
+  }
+
+  public SimpleImage getImage() {
+    return simpleImage;
+  }
+
 }
