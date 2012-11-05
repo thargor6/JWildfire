@@ -3494,7 +3494,9 @@ public class TinaInternalFrame extends JInternalFrame {
         getSwfAnimatorQualityProfileCmb(), getSwfAnimatorResolutionProfileCmb(), getTinaRenderFlameButton(), getTinaAppendToMovieButton(),
         getTransformationWeightREd(), getUndoButton(), getRedoButton(), getRendererCmb(),
         getXFormAntialiasAmountREd(), getXFormAntialiasAmountSlider(), getXFormAntialiasRadiusREd(), getXFormAntialiasRadiusSlider(),
-        getXFormAntialiasCopyToAllBtn(), getRealtimeFlamePnl(), getRealtimeGraph1Pnl());
+        getXFormAntialiasCopyToAllBtn(), getRealtimeFlamePnl(), getRealtimeGraph1Pnl(), getDancingFlamesLoadSoundBtn(), getDancingFlamesAddFromClipboardBtn(),
+        getDancingFlamesAddFromEditorBtn(), getDancingFlamesAddFromDiscBtn(), getDancingFlamesRandomCountIEd(), getDancingFlamesGenRandFlamesBtn(),
+        getDancingFlamesRandomGenCmb(), getDancingFlamesPoolTable(), getDancingFlamesPoolFlamePreviewPnl());
 
     tinaController.refreshing = tinaController.cmbRefreshing = tinaController.gridRefreshing = true;
     try {
@@ -8192,10 +8194,10 @@ public class TinaInternalFrame extends JInternalFrame {
   private JToggleButton toggleTransparencyButton;
   private JCheckBox bgTransparencyCBx;
   private JPanel panel_36;
-  private JPanel realtimeFlamePnl;
+  private JPanel dancingFlamesFlamePnl;
   private JButton btnRenderFlame;
   private JButton btnStopRenderFlame;
-  private JPanel realtimeGraph1Pnl;
+  private JPanel dancingFlamesGraph1Pnl;
   private JButton tinaAppendToDancingFlamesButton;
   private JButton dancingFlamesAddFromEditorBtn;
   private JButton dancingFlamesAddFromClipboardBtn;
@@ -8204,7 +8206,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JPanel panel_39;
   private JPanel panel_40;
   private JPanel panel_41;
-  private JTable table;
+  private JTable dancingFlamesPoolTable;
   private JPanel panel_42;
   private JPanel panel_43;
   private JPanel panel_44;
@@ -8222,6 +8224,10 @@ public class TinaInternalFrame extends JInternalFrame {
   private JPanel panel_54;
   private JPanel panel_55;
   private JPanel panel_56;
+  private JComboBox dancingFlamesRandomGenCmb;
+  private JWFNumberField dancingFlamesRandomCountIEd;
+  private JButton dancingFlamesGenRandFlamesBtn;
+  private JPanel dancingFlamesPoolFlamePreviewPnl;
 
   /**
    * This method initializes renderBatchJobsScrollPane	
@@ -11038,11 +11044,11 @@ public class TinaInternalFrame extends JInternalFrame {
   }
 
   public JPanel getRealtimeFlamePnl() {
-    return realtimeFlamePnl;
+    return dancingFlamesFlamePnl;
   }
 
   public JPanel getRealtimeGraph1Pnl() {
-    return realtimeGraph1Pnl;
+    return dancingFlamesGraph1Pnl;
   }
 
   private JButton getTinaAppendToDancingFlamesButton() {
@@ -11060,6 +11066,11 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton getDancingFlamesAddFromEditorBtn() {
     if (dancingFlamesAddFromEditorBtn == null) {
       dancingFlamesAddFromEditorBtn = new JButton();
+      dancingFlamesAddFromEditorBtn.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getDancingFractalsController().importFlame(tinaController.getCurrFlame());
+        }
+      });
       dancingFlamesAddFromEditorBtn.setMinimumSize(new Dimension(125, 24));
       dancingFlamesAddFromEditorBtn.setMaximumSize(new Dimension(30000, 24));
       dancingFlamesAddFromEditorBtn.setToolTipText("Load flame from Editor and add it to the movie");
@@ -11111,10 +11122,10 @@ public class TinaInternalFrame extends JInternalFrame {
       scrollPane_2.setFont(new Font("Dialog", Font.PLAIN, 10));
       panel_38.add(scrollPane_2, BorderLayout.CENTER);
 
-      table = new JTable();
-      table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-      table.setFont(new Font("Dialog", Font.PLAIN, 10));
-      scrollPane_2.setViewportView(table);
+      dancingFlamesPoolTable = new JTable();
+      dancingFlamesPoolTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+      dancingFlamesPoolTable.setFont(new Font("Dialog", Font.PLAIN, 10));
+      scrollPane_2.setViewportView(dancingFlamesPoolTable);
       panel_38.add(getPanel_42(), BorderLayout.WEST);
     }
     return panel_38;
@@ -11139,10 +11150,10 @@ public class TinaInternalFrame extends JInternalFrame {
       slider.setMaximum(255);
       slider.setFont(new Font("Dialog", Font.BOLD, 10));
 
-      JPanel panel_2 = new JPanel();
-      panel_2.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
-      panel_39.add(panel_2, BorderLayout.CENTER);
-      panel_2.setLayout(new BorderLayout(0, 0));
+      dancingFlamesPoolFlamePreviewPnl = new JPanel();
+      dancingFlamesPoolFlamePreviewPnl.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
+      panel_39.add(dancingFlamesPoolFlamePreviewPnl, BorderLayout.CENTER);
+      dancingFlamesPoolFlamePreviewPnl.setLayout(new BorderLayout(0, 0));
     }
     return panel_39;
   }
@@ -11220,8 +11231,8 @@ public class TinaInternalFrame extends JInternalFrame {
   private JPanel getPanel_45() {
     if (panel_45 == null) {
       panel_45 = new JPanel();
-      panel_45.setBorder(new EmptyBorder(0, 5, 0, 5));
-      panel_45.setMaximumSize(new Dimension(145, 32767));
+      panel_45.setBorder(new EmptyBorder(0, 15, 0, 15));
+      panel_45.setMaximumSize(new Dimension(165, 32767));
       panel_45.setLayout(new BoxLayout(panel_45, BoxLayout.Y_AXIS));
       panel_45.add(getDancingFlamesAddFromClipboardBtn());
       panel_45.add(getDancingFlamesAddFromEditorBtn());
@@ -11233,24 +11244,24 @@ public class TinaInternalFrame extends JInternalFrame {
   private JPanel getPanel_46() {
     if (panel_46 == null) {
       panel_46 = new JPanel();
-      panel_46.setMaximumSize(new Dimension(300, 32767));
+      panel_46.setMaximumSize(new Dimension(250, 32767));
       panel_46.setMinimumSize(new Dimension(200, 10));
       panel_46.setLayout(new BoxLayout(panel_46, BoxLayout.Y_AXIS));
       panel_46.add(getPanel_47());
       panel_46.add(getPanel_48());
 
-      JButton btnRandomFlame = new JButton();
-      panel_46.add(btnRandomFlame);
-      btnRandomFlame.addActionListener(new ActionListener() {
+      dancingFlamesGenRandFlamesBtn = new JButton();
+      panel_46.add(dancingFlamesGenRandFlamesBtn);
+      dancingFlamesGenRandFlamesBtn.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
           tinaController.getDancingFractalsController().randomFlame(tinaController.getCurrFlame(), (String) randomStyleCmb.getSelectedItem());
         }
       });
-      btnRandomFlame.setText("Random flame");
-      btnRandomFlame.setPreferredSize(new Dimension(125, 24));
-      btnRandomFlame.setMinimumSize(new Dimension(100, 24));
-      btnRandomFlame.setMaximumSize(new Dimension(125, 24));
-      btnRandomFlame.setFont(new Font("Dialog", Font.BOLD, 10));
+      dancingFlamesGenRandFlamesBtn.setText("Generate random flames");
+      dancingFlamesGenRandFlamesBtn.setPreferredSize(new Dimension(125, 24));
+      dancingFlamesGenRandFlamesBtn.setMinimumSize(new Dimension(100, 24));
+      dancingFlamesGenRandFlamesBtn.setMaximumSize(new Dimension(30000, 24));
+      dancingFlamesGenRandFlamesBtn.setFont(new Font("Dialog", Font.BOLD, 10));
     }
     return panel_46;
   }
@@ -11258,17 +11269,19 @@ public class TinaInternalFrame extends JInternalFrame {
   private JPanel getPanel_47() {
     if (panel_47 == null) {
       panel_47 = new JPanel();
+      panel_47.setAlignmentX(Component.LEFT_ALIGNMENT);
       panel_47.setMaximumSize(new Dimension(32767, 24));
       panel_47.setLayout(new BoxLayout(panel_47, BoxLayout.X_AXIS));
       panel_47.add(getLblRandomGenerator());
 
-      JComboBox comboBox = new JComboBox();
-      panel_47.add(comboBox);
-      comboBox.setPreferredSize(new Dimension(125, 24));
-      comboBox.setMinimumSize(new Dimension(125, 24));
-      comboBox.setMaximumSize(new Dimension(125, 24));
-      comboBox.setMaximumRowCount(32);
-      comboBox.setFont(new Font("Dialog", Font.BOLD, 10));
+      dancingFlamesRandomGenCmb = new JComboBox();
+      dancingFlamesRandomGenCmb.setAlignmentX(Component.RIGHT_ALIGNMENT);
+      panel_47.add(dancingFlamesRandomGenCmb);
+      dancingFlamesRandomGenCmb.setPreferredSize(new Dimension(125, 24));
+      dancingFlamesRandomGenCmb.setMinimumSize(new Dimension(125, 24));
+      dancingFlamesRandomGenCmb.setMaximumSize(new Dimension(30000, 24));
+      dancingFlamesRandomGenCmb.setMaximumRowCount(32);
+      dancingFlamesRandomGenCmb.setFont(new Font("Dialog", Font.BOLD, 10));
     }
     return panel_47;
   }
@@ -11287,6 +11300,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JPanel getPanel_48() {
     if (panel_48 == null) {
       panel_48 = new JPanel();
+      panel_48.setAlignmentX(Component.LEFT_ALIGNMENT);
       panel_48.setMaximumSize(new Dimension(32767, 24));
       panel_48.setLayout(new BoxLayout(panel_48, BoxLayout.X_AXIS));
 
@@ -11297,33 +11311,20 @@ public class TinaInternalFrame extends JInternalFrame {
       lblCount.setPreferredSize(new Dimension(100, 24));
       lblCount.setFont(new Font("Dialog", Font.BOLD, 10));
 
-      JWFNumberField numberField = new JWFNumberField();
-      numberField.setMinimumSize(new Dimension(125, 24));
-      numberField.setMaximumSize(new Dimension(125, 24));
-      panel_48.add(numberField);
-      numberField.setValueStep(1.0);
-      numberField.setText("0");
-      numberField.setPreferredSize(new Dimension(125, 24));
-      numberField.setOnlyIntegers(true);
-      numberField.setMinValue(-255.0);
-      numberField.setMaxValue(255.0);
-      numberField.setHasMinValue(true);
-      numberField.setHasMaxValue(true);
-      numberField.setFont(new Font("Dialog", Font.PLAIN, 10));
-      numberField.setEditable(true);
-
-      JButton btnImportFlame = new JButton();
-      panel_48.add(btnImportFlame);
-      btnImportFlame.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-          tinaController.getDancingFractalsController().importFlame(tinaController.getCurrFlame());
-        }
-      });
-      btnImportFlame.setText("Import flame");
-      btnImportFlame.setPreferredSize(new Dimension(125, 24));
-      btnImportFlame.setMinimumSize(new Dimension(100, 24));
-      btnImportFlame.setMaximumSize(new Dimension(32000, 24));
-      btnImportFlame.setFont(new Font("Dialog", Font.BOLD, 10));
+      dancingFlamesRandomCountIEd = new JWFNumberField();
+      dancingFlamesRandomCountIEd.setMinimumSize(new Dimension(125, 24));
+      dancingFlamesRandomCountIEd.setMaximumSize(new Dimension(30000, 24));
+      panel_48.add(dancingFlamesRandomCountIEd);
+      dancingFlamesRandomCountIEd.setValueStep(1.0);
+      dancingFlamesRandomCountIEd.setText("12");
+      dancingFlamesRandomCountIEd.setPreferredSize(new Dimension(125, 24));
+      dancingFlamesRandomCountIEd.setOnlyIntegers(true);
+      dancingFlamesRandomCountIEd.setMinValue(-255.0);
+      dancingFlamesRandomCountIEd.setMaxValue(255.0);
+      dancingFlamesRandomCountIEd.setHasMinValue(true);
+      dancingFlamesRandomCountIEd.setHasMaxValue(true);
+      dancingFlamesRandomCountIEd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      dancingFlamesRandomCountIEd.setEditable(true);
     }
     return panel_48;
   }
@@ -11400,10 +11401,10 @@ public class TinaInternalFrame extends JInternalFrame {
       panel_52.add(getPanel_55(), BorderLayout.WEST);
       panel_52.add(getPanel_56(), BorderLayout.SOUTH);
 
-      realtimeFlamePnl = new JPanel();
-      panel_52.add(realtimeFlamePnl, BorderLayout.CENTER);
-      realtimeFlamePnl.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
-      realtimeFlamePnl.setLayout(new BorderLayout(0, 0));
+      dancingFlamesFlamePnl = new JPanel();
+      panel_52.add(dancingFlamesFlamePnl, BorderLayout.CENTER);
+      dancingFlamesFlamePnl.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
+      dancingFlamesFlamePnl.setLayout(new BorderLayout(0, 0));
     }
     return panel_52;
   }
@@ -11415,10 +11416,10 @@ public class TinaInternalFrame extends JInternalFrame {
       panel_53.setPreferredSize(new Dimension(10, 50));
       panel_53.setLayout(new BorderLayout(0, 0));
 
-      realtimeGraph1Pnl = new JPanel();
-      panel_53.add(realtimeGraph1Pnl);
-      realtimeGraph1Pnl.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
-      realtimeGraph1Pnl.setLayout(new BorderLayout(0, 0));
+      dancingFlamesGraph1Pnl = new JPanel();
+      panel_53.add(dancingFlamesGraph1Pnl);
+      dancingFlamesGraph1Pnl.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
+      dancingFlamesGraph1Pnl.setLayout(new BorderLayout(0, 0));
     }
     return panel_53;
   }
@@ -11448,5 +11449,25 @@ public class TinaInternalFrame extends JInternalFrame {
       panel_56.setPreferredSize(new Dimension(10, 50));
     }
     return panel_56;
+  }
+
+  public JComboBox getDancingFlamesRandomGenCmb() {
+    return dancingFlamesRandomGenCmb;
+  }
+
+  public JWFNumberField getDancingFlamesRandomCountIEd() {
+    return dancingFlamesRandomCountIEd;
+  }
+
+  public JButton getDancingFlamesGenRandFlamesBtn() {
+    return dancingFlamesGenRandFlamesBtn;
+  }
+
+  public JTable getDancingFlamesPoolTable() {
+    return dancingFlamesPoolTable;
+  }
+
+  public JPanel getDancingFlamesPoolFlamePreviewPnl() {
+    return dancingFlamesPoolFlamePreviewPnl;
   }
 } //  @jve:decl-index=0:visual-constraint="10,10"

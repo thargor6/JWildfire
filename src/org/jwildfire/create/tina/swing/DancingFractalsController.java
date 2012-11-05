@@ -20,8 +20,11 @@ import java.awt.BorderLayout;
 import java.awt.Rectangle;
 import java.io.File;
 
+import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JPanel;
+import javax.swing.JTable;
 
 import org.jwildfire.base.Prefs;
 import org.jwildfire.create.tina.audio.JLayerInterface;
@@ -41,6 +44,16 @@ public class DancingFractalsController implements FlameHolder {
   private final ErrorHandler errorHandler;
   private final TinaController parent;
   private final Prefs prefs;
+  private final JButton loadSoundBtn;
+  private final JButton addFromClipboardBtn;
+  private final JButton addFromEditorBtn;
+  private final JButton addFromDiscBtn;
+  private final JWFNumberField randomCountIEd;
+  private final JButton genRandFlamesBtn;
+  private final JComboBox randomGenCmb;
+  private final JTable poolTable;
+  private final JPanel poolFlamePreviewPnl;
+
   final JPanel flameRootPanel;
   final JPanel graph1RootPanel;
   JLayerInterface jLayer = new JLayerInterface();
@@ -51,12 +64,24 @@ public class DancingFractalsController implements FlameHolder {
 
   private String soundFilename;
 
-  public DancingFractalsController(TinaController pParent, ErrorHandler pErrorHandler, JPanel pRealtimeFlamePnl, JPanel pRealtimeGraph1Pnl) {
+  public DancingFractalsController(TinaController pParent, ErrorHandler pErrorHandler, JPanel pRealtimeFlamePnl, JPanel pRealtimeGraph1Pnl,
+      JButton pLoadSoundBtn, JButton pAddFromClipboardBtn, JButton pAddFromEditorBtn, JButton pAddFromDiscBtn, JWFNumberField pRandomCountIEd,
+      JButton pGenRandFlamesBtn, JComboBox pRandomGenCmb, JTable pPoolTable, JPanel pPoolFlamePreviewPnl) {
     parent = pParent;
     errorHandler = pErrorHandler;
     prefs = parent.getPrefs();
     flameRootPanel = pRealtimeFlamePnl;
     graph1RootPanel = pRealtimeGraph1Pnl;
+    loadSoundBtn = pLoadSoundBtn;
+    addFromClipboardBtn = pAddFromClipboardBtn;
+    addFromEditorBtn = pAddFromEditorBtn;
+    addFromDiscBtn = pAddFromDiscBtn;
+    randomCountIEd = pRandomCountIEd;
+    genRandFlamesBtn = pGenRandFlamesBtn;
+    randomGenCmb = pRandomGenCmb;
+    poolTable = pPoolTable;
+    poolFlamePreviewPnl = pPoolFlamePreviewPnl;
+
   }
 
   // getFlamePanel().getParent().paint(getFlamePanel().getParent().getGraphics());
@@ -167,11 +192,13 @@ public class DancingFractalsController implements FlameHolder {
   }
 
   public void importFlame(Flame pFlame) {
-    flame = pFlame;
-    if (renderThread != null) {
-      renderThread.notifyFlameChange(flame);
+    if (pFlame != null) {
+      flame = pFlame;
+      if (renderThread != null) {
+        renderThread.notifyFlameChange(flame);
+      }
+      refreshFlameImage(flame, false);
     }
-    refreshFlameImage(flame, false);
   }
 
   public void startRender() {

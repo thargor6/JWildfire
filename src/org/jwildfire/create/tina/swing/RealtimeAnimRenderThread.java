@@ -44,7 +44,7 @@ public class RealtimeAnimRenderThread implements Runnable {
   public void run() {
     done = forceAbort = false;
     double alpha = 0.0;
-    boolean doDrawFFT = false;
+    boolean doDrawFFT = true;
 
     try {
       while (!done && !forceAbort) {
