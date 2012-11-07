@@ -63,6 +63,7 @@ public class Flame implements Assignable<Flame>, Serializable {
   private String qualityProfile;
   private int deFilterRadius;
   private double deFilterAmount;
+  private String name = "";
 
   private RGBPalette palette = new RGBPalette();
   private final List<XForm> xForms = new ArrayList<XForm>();
@@ -469,6 +470,7 @@ public class Flame implements Assignable<Flame>, Serializable {
     qualityProfile = pFlame.qualityProfile;
     shadingInfo.assign(pFlame.shadingInfo);
     palette = pFlame.palette.makeCopy();
+    name = pFlame.name;
     xForms.clear();
     for (XForm xForm : pFlame.getXForms()) {
       xForms.add(xForm.makeCopy());
@@ -503,7 +505,7 @@ public class Flame implements Assignable<Flame>, Serializable {
         (qualityProfile != null && pFlame.qualityProfile != null && !qualityProfile.equals(pFlame.qualityProfile))) ||
         ((finalXForm != null && pFlame.finalXForm == null) || (finalXForm == null && pFlame.finalXForm != null) ||
         (finalXForm != null && pFlame.finalXForm != null && !finalXForm.isEqual(pFlame.finalXForm))) ||
-        !palette.isEqual(pFlame.palette) ||
+        !palette.isEqual(pFlame.palette) || !name.equals(pFlame.name) ||
         !shadingInfo.isEqual(pFlame.shadingInfo) ||
         (xForms.size() != pFlame.xForms.size())) {
       return false;
@@ -538,5 +540,13 @@ public class Flame implements Assignable<Flame>, Serializable {
 
   public void setBGTransparency(boolean bgTransparency) {
     this.bgTransparency = bgTransparency;
+  }
+
+  public String getName() {
+    return name;
+  }
+
+  public void setName(String name) {
+    this.name = name != null ? name : "";
   }
 }

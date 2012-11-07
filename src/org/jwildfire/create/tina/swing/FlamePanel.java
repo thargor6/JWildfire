@@ -206,7 +206,7 @@ public class FlamePanel extends ImagePanel {
   }
 
   public Rectangle getImageBounds() {
-    Rectangle bounds = this.getParent().getBounds();
+    Rectangle bounds = this.getBounds();
     double aspect = (double) bounds.width / (double) bounds.height;
     int imageWidth, imageHeight;
     if (aspect <= renderAspect) {

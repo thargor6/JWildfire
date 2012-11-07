@@ -3496,7 +3496,7 @@ public class TinaInternalFrame extends JInternalFrame {
         getXFormAntialiasAmountREd(), getXFormAntialiasAmountSlider(), getXFormAntialiasRadiusREd(), getXFormAntialiasRadiusSlider(),
         getXFormAntialiasCopyToAllBtn(), getRealtimeFlamePnl(), getRealtimeGraph1Pnl(), getDancingFlamesLoadSoundBtn(), getDancingFlamesAddFromClipboardBtn(),
         getDancingFlamesAddFromEditorBtn(), getDancingFlamesAddFromDiscBtn(), getDancingFlamesRandomCountIEd(), getDancingFlamesGenRandFlamesBtn(),
-        getDancingFlamesRandomGenCmb(), getDancingFlamesPoolTable(), getDancingFlamesPoolFlamePreviewPnl());
+        getDancingFlamesRandomGenCmb(), getDancingFlamesPoolTable(), getDancingFlamesPoolFlamePreviewPnl(), getDancingFlamesBorderSizeSlider());
 
     tinaController.refreshing = tinaController.cmbRefreshing = tinaController.gridRefreshing = true;
     try {
@@ -3553,8 +3553,8 @@ public class TinaInternalFrame extends JInternalFrame {
           new SWFAnimatorProgressUpdater(this), getSwfAnimatorPreviewRootPanel(), getSwfAnimatorSoundCaptionLbl(),
           getSwfAnimatorFrameSlider(), getSwfAnimatorFrameREd(), getSwfAnimatorFlamesPanel(), getSwfAnimatorFlamesButtonGroup(),
           getSwfAnimatorOutputCmb(), getSwfAnimatorMoveUpButton(), getSwfAnimatorMoveDownButton(), getSwfAnimatorRemoveFlameButton(),
-          getSwfAnimatorRemoveAllFlamesButton(), getSwfAnimatorMovieFromClipboardButton(), getSwfAnimatorMovieFromDiskButton(),
-          getSwfAnimatorMovieToClipboardButton(), getSwfAnimatorMovieToDiskButton(), getSwfAnimatorFrameToEditorBtn(),
+          getSwfAnimatorRemoveAllFlamesButton(), getSwfAnimatorMovieFromClipboardButton(), getSwfAnimatorMovieFromDiscButton(),
+          getSwfAnimatorMovieToClipboardButton(), getSwfAnimatorMovieToDiscButton(), getSwfAnimatorFrameToEditorBtn(),
           getSwfAnimatorPlayButton(), getSwfAnimatorFromFrameREd(), getSwfAnimatorToFrameREd(), getSwfAnimatorRendererCmb()));
       tinaController.getSwfAnimatorCtrl().enableControls();
 
@@ -8114,9 +8114,9 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton swfAnimatorMoveUpButton;
   private JButton swfAnimatorMoveDownButton;
   private JButton swfAnimatorMovieFromClipboardButton;
-  private JButton swfAnimatorMovieFromDiskButton;
+  private JButton swfAnimatorMovieFromDiscButton;
   private JButton swfAnimatorMovieToClipboardButton;
-  private JButton swfAnimatorMovieToDiskButton;
+  private JButton swfAnimatorMovieToDiscButton;
   private JButton tinaAppendToMovieButton;
   private JButton swfAnimatorFrameToEditorBtn;
   private JButton swfAnimatorPlayButton;
@@ -8228,6 +8228,8 @@ public class TinaInternalFrame extends JInternalFrame {
   private JWFNumberField dancingFlamesRandomCountIEd;
   private JButton dancingFlamesGenRandFlamesBtn;
   private JPanel dancingFlamesPoolFlamePreviewPnl;
+  private JLabel lblBorderSize;
+  private JSlider dancingFlamesBorderSizeSlider;
 
   /**
    * This method initializes renderBatchJobsScrollPane	
@@ -9431,9 +9433,9 @@ public class TinaInternalFrame extends JInternalFrame {
       panel_5.add(getLabel_4());
       panel_5.add(getSwfAnimatorQualityProfileCmb());
       panel_5.add(getSwfAnimatorMovieFromClipboardButton());
-      panel_5.add(getSwfAnimatorMovieFromDiskButton());
+      panel_5.add(getSwfAnimatorMovieFromDiscButton());
       panel_5.add(getSwfAnimatorMovieToClipboardButton());
-      panel_5.add(getSwfAnimatorMovieToDiskButton());
+      panel_5.add(getSwfAnimatorMovieToDiscButton());
 
       swfAnimatorPlayButton = new JButton();
       swfAnimatorPlayButton.addActionListener(new ActionListener() {
@@ -9519,7 +9521,7 @@ public class TinaInternalFrame extends JInternalFrame {
         }
       });
       swfAnimatorLoadFlameButton.setToolTipText("Load flame from file and add it to the movie");
-      swfAnimatorLoadFlameButton.setText("Add flame from disk");
+      swfAnimatorLoadFlameButton.setText("Add flame from disc");
       swfAnimatorLoadFlameButton.setPreferredSize(new Dimension(135, 24));
       swfAnimatorLoadFlameButton.setFont(new Font("Dialog", Font.BOLD, 10));
     }
@@ -9761,21 +9763,21 @@ public class TinaInternalFrame extends JInternalFrame {
     return swfAnimatorMovieFromClipboardButton;
   }
 
-  private JButton getSwfAnimatorMovieFromDiskButton() {
-    if (swfAnimatorMovieFromDiskButton == null) {
-      swfAnimatorMovieFromDiskButton = new JButton();
-      swfAnimatorMovieFromDiskButton.addActionListener(new ActionListener() {
+  private JButton getSwfAnimatorMovieFromDiscButton() {
+    if (swfAnimatorMovieFromDiscButton == null) {
+      swfAnimatorMovieFromDiscButton = new JButton();
+      swfAnimatorMovieFromDiscButton.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
-          tinaController.getSwfAnimatorCtrl().movieFromDiskButton_clicked();
+          tinaController.getSwfAnimatorCtrl().movieFromDiscButton_clicked();
         }
       });
-      swfAnimatorMovieFromDiskButton.setText("Load Movie");
-      swfAnimatorMovieFromDiskButton.setPreferredSize(new Dimension(125, 24));
-      swfAnimatorMovieFromDiskButton.setFont(new Font("Dialog", Font.BOLD, 10));
-      swfAnimatorMovieFromDiskButton.setBounds(new Rectangle(504, 35, 125, 24));
-      swfAnimatorMovieFromDiskButton.setBounds(237, 37, 125, 24);
+      swfAnimatorMovieFromDiscButton.setText("Load Movie");
+      swfAnimatorMovieFromDiscButton.setPreferredSize(new Dimension(125, 24));
+      swfAnimatorMovieFromDiscButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      swfAnimatorMovieFromDiscButton.setBounds(new Rectangle(504, 35, 125, 24));
+      swfAnimatorMovieFromDiscButton.setBounds(237, 37, 125, 24);
     }
-    return swfAnimatorMovieFromDiskButton;
+    return swfAnimatorMovieFromDiscButton;
   }
 
   private JButton getSwfAnimatorMovieToClipboardButton() {
@@ -9795,21 +9797,21 @@ public class TinaInternalFrame extends JInternalFrame {
     return swfAnimatorMovieToClipboardButton;
   }
 
-  private JButton getSwfAnimatorMovieToDiskButton() {
-    if (swfAnimatorMovieToDiskButton == null) {
-      swfAnimatorMovieToDiskButton = new JButton();
-      swfAnimatorMovieToDiskButton.addActionListener(new ActionListener() {
+  private JButton getSwfAnimatorMovieToDiscButton() {
+    if (swfAnimatorMovieToDiscButton == null) {
+      swfAnimatorMovieToDiscButton = new JButton();
+      swfAnimatorMovieToDiscButton.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
-          tinaController.getSwfAnimatorCtrl().movieToDiskButton_clicked();
+          tinaController.getSwfAnimatorCtrl().movieToDiscButton_clicked();
         }
       });
-      swfAnimatorMovieToDiskButton.setText("Save Movie");
-      swfAnimatorMovieToDiskButton.setPreferredSize(new Dimension(125, 24));
-      swfAnimatorMovieToDiskButton.setFont(new Font("Dialog", Font.BOLD, 10));
-      swfAnimatorMovieToDiskButton.setBounds(new Rectangle(643, 35, 125, 24));
-      swfAnimatorMovieToDiskButton.setBounds(381, 37, 125, 24);
+      swfAnimatorMovieToDiscButton.setText("Save Movie");
+      swfAnimatorMovieToDiscButton.setPreferredSize(new Dimension(125, 24));
+      swfAnimatorMovieToDiscButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      swfAnimatorMovieToDiscButton.setBounds(new Rectangle(643, 35, 125, 24));
+      swfAnimatorMovieToDiscButton.setBounds(381, 37, 125, 24);
     }
-    return swfAnimatorMovieToDiskButton;
+    return swfAnimatorMovieToDiscButton;
   }
 
   private JButton getTinaAppendToMovieButton() {
@@ -9898,7 +9900,7 @@ public class TinaInternalFrame extends JInternalFrame {
           tinaController.loadScript();
         }
       });
-      scriptLoadButton.setToolTipText("Load the script from disk");
+      scriptLoadButton.setToolTipText("Load the script from disc");
       scriptLoadButton.setText("Load script");
       scriptLoadButton.setPreferredSize(new Dimension(125, 24));
       scriptLoadButton.setFont(new Font("Dialog", Font.BOLD, 10));
@@ -9916,7 +9918,7 @@ public class TinaInternalFrame extends JInternalFrame {
           tinaController.saveScript();
         }
       });
-      scriptSaveButton.setToolTipText("Save the script to disk");
+      scriptSaveButton.setToolTipText("Save the script to disc");
       scriptSaveButton.setText("Save script");
       scriptSaveButton.setPreferredSize(new Dimension(125, 24));
       scriptSaveButton.setFont(new Font("Dialog", Font.BOLD, 10));
@@ -11084,6 +11086,11 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton getDancingFlamesAddFromClipboardBtn() {
     if (dancingFlamesAddFromClipboardBtn == null) {
       dancingFlamesAddFromClipboardBtn = new JButton();
+      dancingFlamesAddFromClipboardBtn.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getDancingFractalsController().loadFlameFromClipboardButton_clicked();
+        }
+      });
       dancingFlamesAddFromClipboardBtn.setMinimumSize(new Dimension(125, 24));
       dancingFlamesAddFromClipboardBtn.setMaximumSize(new Dimension(30000, 24));
       dancingFlamesAddFromClipboardBtn.setToolTipText("Load flame from clipboard and add it to the movie");
@@ -11097,6 +11104,11 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton getDancingFlamesAddFromDiscBtn() {
     if (dancingFlamesAddFromDiscBtn == null) {
       dancingFlamesAddFromDiscBtn = new JButton();
+      dancingFlamesAddFromDiscBtn.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getDancingFractalsController().loadFlameButton_clicked();
+        }
+      });
       dancingFlamesAddFromDiscBtn.setMaximumSize(new Dimension(30000, 24));
       dancingFlamesAddFromDiscBtn.setMinimumSize(new Dimension(125, 24));
       dancingFlamesAddFromDiscBtn.setToolTipText("Load flame from file and add it to the movie");
@@ -11110,8 +11122,8 @@ public class TinaInternalFrame extends JInternalFrame {
   private JPanel getPanel_38() {
     if (panel_38 == null) {
       panel_38 = new JPanel();
-      panel_38.setMaximumSize(new Dimension(300, 32767));
-      panel_38.setPreferredSize(new Dimension(300, 10));
+      panel_38.setMaximumSize(new Dimension(400, 32767));
+      panel_38.setPreferredSize(new Dimension(400, 10));
       panel_38.setBorder(new TitledBorder(null, "Flame pool", TitledBorder.LEADING, TitledBorder.TOP, null, null));
       panel_38.setLayout(new BorderLayout(0, 0));
       panel_38.add(getPanel_39(), BorderLayout.NORTH);
@@ -11125,6 +11137,15 @@ public class TinaInternalFrame extends JInternalFrame {
       dancingFlamesPoolTable = new JTable();
       dancingFlamesPoolTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
       dancingFlamesPoolTable.setFont(new Font("Dialog", Font.PLAIN, 10));
+      dancingFlamesPoolTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+        @Override
+        public void valueChanged(ListSelectionEvent e) {
+          if (!e.getValueIsAdjusting()) {
+            tinaController.getDancingFractalsController().dancingFlamesPoolTableClicked();
+          }
+        }
+      });
+
       scrollPane_2.setViewportView(dancingFlamesPoolTable);
       panel_38.add(getPanel_42(), BorderLayout.WEST);
     }
@@ -11141,14 +11162,6 @@ public class TinaInternalFrame extends JInternalFrame {
       panel_1.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
       panel_1.setPreferredSize(new Dimension(60, 10));
       panel_39.add(panel_1, BorderLayout.EAST);
-
-      JSlider slider = new JSlider();
-      panel_1.add(slider);
-      slider.setValue(0);
-      slider.setPreferredSize(new Dimension(86, 22));
-      slider.setMinimum(-255);
-      slider.setMaximum(255);
-      slider.setFont(new Font("Dialog", Font.BOLD, 10));
 
       dancingFlamesPoolFlamePreviewPnl = new JPanel();
       dancingFlamesPoolFlamePreviewPnl.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
@@ -11202,7 +11215,7 @@ public class TinaInternalFrame extends JInternalFrame {
     if (panel_44 == null) {
       panel_44 = new JPanel();
       panel_44.setBorder(new TitledBorder(null, "Ressources", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-      panel_44.setPreferredSize(new Dimension(10, 110));
+      panel_44.setPreferredSize(new Dimension(10, 120));
       panel_44.setLayout(new BoxLayout(panel_44, BoxLayout.X_AXIS));
 
       dancingFlamesLoadSoundBtn = new JButton();
@@ -11254,7 +11267,7 @@ public class TinaInternalFrame extends JInternalFrame {
       panel_46.add(dancingFlamesGenRandFlamesBtn);
       dancingFlamesGenRandFlamesBtn.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
-          tinaController.getDancingFractalsController().randomFlame(tinaController.getCurrFlame(), (String) randomStyleCmb.getSelectedItem());
+          tinaController.getDancingFractalsController().randomFlame();
         }
       });
       dancingFlamesGenRandFlamesBtn.setText("Generate random flames");
@@ -11282,6 +11295,11 @@ public class TinaInternalFrame extends JInternalFrame {
       dancingFlamesRandomGenCmb.setMaximumSize(new Dimension(30000, 24));
       dancingFlamesRandomGenCmb.setMaximumRowCount(32);
       dancingFlamesRandomGenCmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      dancingFlamesRandomGenCmb.removeAllItems();
+      for (String name : RandomFlameGeneratorList.getNameList()) {
+        dancingFlamesRandomGenCmb.addItem(name);
+      }
+      dancingFlamesRandomGenCmb.setSelectedItem(RandomFlameGeneratorList.DEFAULT_GENERATOR_NAME);
     }
     return panel_47;
   }
@@ -11403,7 +11421,7 @@ public class TinaInternalFrame extends JInternalFrame {
 
       dancingFlamesFlamePnl = new JPanel();
       panel_52.add(dancingFlamesFlamePnl, BorderLayout.CENTER);
-      dancingFlamesFlamePnl.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
+      dancingFlamesFlamePnl.setBorder(new EmptyBorder(25, 25, 25, 25));
       dancingFlamesFlamePnl.setLayout(new BorderLayout(0, 0));
     }
     return panel_52;
@@ -11447,6 +11465,20 @@ public class TinaInternalFrame extends JInternalFrame {
       panel_56 = new JPanel();
       panel_56.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
       panel_56.setPreferredSize(new Dimension(10, 50));
+      panel_56.add(getLblBorderSize());
+
+      dancingFlamesBorderSizeSlider = new JSlider();
+      dancingFlamesBorderSizeSlider.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null)
+            tinaController.getDancingFractalsController().borderSizeSlider_changed();
+        }
+      });
+      panel_56.add(dancingFlamesBorderSizeSlider);
+      dancingFlamesBorderSizeSlider.setValue(25);
+      dancingFlamesBorderSizeSlider.setPreferredSize(new Dimension(200, 22));
+      dancingFlamesBorderSizeSlider.setMaximum(255);
+      dancingFlamesBorderSizeSlider.setFont(new Font("Dialog", Font.BOLD, 10));
     }
     return panel_56;
   }
@@ -11469,5 +11501,20 @@ public class TinaInternalFrame extends JInternalFrame {
 
   public JPanel getDancingFlamesPoolFlamePreviewPnl() {
     return dancingFlamesPoolFlamePreviewPnl;
+  }
+
+  private JLabel getLblBorderSize() {
+    if (lblBorderSize == null) {
+      lblBorderSize = new JLabel();
+      lblBorderSize.setText("Border size");
+      lblBorderSize.setPreferredSize(new Dimension(100, 24));
+      lblBorderSize.setMinimumSize(new Dimension(100, 24));
+      lblBorderSize.setFont(new Font("Dialog", Font.BOLD, 10));
+    }
+    return lblBorderSize;
+  }
+
+  public JSlider getDancingFlamesBorderSizeSlider() {
+    return dancingFlamesBorderSizeSlider;
   }
 } //  @jve:decl-index=0:visual-constraint="10,10"

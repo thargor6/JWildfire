@@ -103,12 +103,14 @@ public class RealtimeAnimRenderThread implements Runnable {
   private double amp0, amp1, amp2, amp3, amp4, amp5, amp6;
 
   public void notifyFlameChange(Flame pFlame) {
-    xForm0 = pFlame.getXForms().get(0);
-    xForm1 = pFlame.getXForms().get(1);
-    xFormF = pFlame.getFinalXForm();
-    if (xFormF == null) {
-      xFormF = new XForm();
-      xFormF.addVariation(1.0, VariationFuncList.getVariationFuncInstance("linear3D"));
+    if (pFlame != null) {
+      xForm0 = pFlame.getXForms().get(0);
+      xForm1 = pFlame.getXForms().get(1);
+      xFormF = pFlame.getFinalXForm();
+      if (xFormF == null) {
+        xFormF = new XForm();
+        xFormF.addVariation(1.0, VariationFuncList.getVariationFuncInstance("linear3D"));
+      }
     }
   }
 

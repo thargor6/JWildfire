@@ -18,18 +18,28 @@ package org.jwildfire.create.tina.swing;
 
 import java.awt.BorderLayout;
 import java.awt.Rectangle;
+import java.awt.Toolkit;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.Transferable;
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JPanel;
+import javax.swing.JSlider;
 import javax.swing.JTable;
+import javax.swing.border.EmptyBorder;
+import javax.swing.table.DefaultTableModel;
 
 import org.jwildfire.base.Prefs;
 import org.jwildfire.create.tina.audio.JLayerInterface;
 import org.jwildfire.create.tina.audio.RecordedFFT;
 import org.jwildfire.create.tina.base.Flame;
+import org.jwildfire.create.tina.io.Flam3Reader;
 import org.jwildfire.create.tina.randomflame.RandomFlameGenerator;
 import org.jwildfire.create.tina.randomflame.RandomFlameGeneratorList;
 import org.jwildfire.create.tina.randomflame.RandomFlameGeneratorSampler;
@@ -53,20 +63,22 @@ public class DancingFractalsController implements FlameHolder {
   private final JComboBox randomGenCmb;
   private final JTable poolTable;
   private final JPanel poolFlamePreviewPnl;
+  private final JSlider borderSizeSlider;
+  private final JPanel flameRootPanel;
+  private final JPanel graph1RootPanel;
 
-  final JPanel flameRootPanel;
-  final JPanel graph1RootPanel;
   JLayerInterface jLayer = new JLayerInterface();
   private FlamePanel flamePanel = null;
   private ImagePanel graph1Panel = null;
-  private Flame flame;
+  private List<Flame> flames = new ArrayList<Flame>();
+  private boolean refreshing;
   private RealtimeAnimRenderThread renderThread;
 
   private String soundFilename;
 
   public DancingFractalsController(TinaController pParent, ErrorHandler pErrorHandler, JPanel pRealtimeFlamePnl, JPanel pRealtimeGraph1Pnl,
       JButton pLoadSoundBtn, JButton pAddFromClipboardBtn, JButton pAddFromEditorBtn, JButton pAddFromDiscBtn, JWFNumberField pRandomCountIEd,
-      JButton pGenRandFlamesBtn, JComboBox pRandomGenCmb, JTable pPoolTable, JPanel pPoolFlamePreviewPnl) {
+      JButton pGenRandFlamesBtn, JComboBox pRandomGenCmb, JTable pPoolTable, JPanel pPoolFlamePreviewPnl, JSlider pBorderSizeSlider) {
     parent = pParent;
     errorHandler = pErrorHandler;
     prefs = parent.getPrefs();
@@ -81,18 +93,28 @@ public class DancingFractalsController implements FlameHolder {
     randomGenCmb = pRandomGenCmb;
     poolTable = pPoolTable;
     poolFlamePreviewPnl = pPoolFlamePreviewPnl;
-
+    borderSizeSlider = pBorderSizeSlider;
+    refreshPoolTable();
+    enableControls();
   }
 
   // getFlamePanel().getParent().paint(getFlamePanel().getParent().getGraphics());
 
+  private void enableControls() {
+    // TODO Auto-generated method stub
+
+  }
+
   private FlamePanel getFlamePanel() {
     if (flamePanel == null && flameRootPanel != null) {
-      int width = flameRootPanel.getWidth();
-      int height = flameRootPanel.getHeight();
+      int borderWidth = flameRootPanel.getBorder().getBorderInsets(flameRootPanel).left;
+      int width = flameRootPanel.getWidth() - borderWidth;
+      int height = flameRootPanel.getHeight() - borderWidth;
+      if (width < 16 || height < 16)
+        return null;
       SimpleImage img = new SimpleImage(width, height);
       img.fillBackground(0, 0, 0);
-      flamePanel = new FlamePanel(img, 0, 0, flameRootPanel.getWidth(), this, null, null);
+      flamePanel = new FlamePanel(img, 0, 0, flameRootPanel.getWidth() - borderWidth, this, null, null);
       flamePanel.setRenderWidth(640);
       flamePanel.setRenderHeight(480);
       flamePanel.setFocusable(true);
@@ -119,6 +141,8 @@ public class DancingFractalsController implements FlameHolder {
 
   public void refreshFlameImage(Flame flame, boolean pDrawTriangles) {
     FlamePanel imgPanel = getFlamePanel();
+    if (imgPanel == null)
+      return;
     Rectangle bounds = imgPanel.getImageBounds();
     int width = bounds.width;
     int height = bounds.height;
@@ -183,28 +207,28 @@ public class DancingFractalsController implements FlameHolder {
     catch (Throwable ex) {
       errorHandler.handleError(ex);
     }
-
   }
 
   @Override
   public Flame getFlame() {
-    return flame;
+    int row = poolTable.getSelectedRow();
+    return row >= 0 && row < flames.size() ? flames.get(row) : null;
   }
 
   public void importFlame(Flame pFlame) {
     if (pFlame != null) {
-      flame = pFlame;
-      if (renderThread != null) {
-        renderThread.notifyFlameChange(flame);
-      }
-      refreshFlameImage(flame, false);
+      flames.add(pFlame);
+      refreshPoolTable();
+      enableControls();
+      // TODO
+      //refreshFlameImage(flame, false);
     }
   }
 
   public void startRender() {
     stopRender();
     renderThread = new RealtimeAnimRenderThread(this);
-    renderThread.notifyFlameChange(flame);
+    renderThread.notifyFlameChange(getFlame());
     renderThread.setFFTData(fft);
     renderThread.setMusicPlayer(jLayer);
     renderThread.setFFTPanel(getGraph1Panel());
@@ -226,18 +250,28 @@ public class DancingFractalsController implements FlameHolder {
     }
   }
 
-  public void randomFlame(Flame currFlame, String pRandomStyle) {
-    final int IMG_WIDTH = 80;
-    final int IMG_HEIGHT = 60;
+  public void randomFlame() {
+    try {
+      final int IMG_WIDTH = 80;
+      final int IMG_HEIGHT = 60;
+      int count = (int) ((Double) randomCountIEd.getValue() + 0.5);
+      for (int i = 0; i < count; i++) {
 
-    RandomFlameGenerator randGen = RandomFlameGeneratorList.getRandomFlameGeneratorInstance(pRandomStyle, true);
-    int palettePoints = 3 + (int) (Math.random() * 68.0);
-    RandomFlameGeneratorSampler sampler = new RandomFlameGeneratorSampler(IMG_WIDTH, IMG_HEIGHT, prefs, randGen, palettePoints);
-    flame = sampler.createSample().getFlame();
-    if (renderThread != null) {
-      renderThread.notifyFlameChange(flame);
+        RandomFlameGenerator randGen = RandomFlameGeneratorList.getRandomFlameGeneratorInstance((String) randomGenCmb.getSelectedItem(), true);
+        int palettePoints = 3 + (int) (Math.random() * 68.0);
+        RandomFlameGeneratorSampler sampler = new RandomFlameGeneratorSampler(IMG_WIDTH, IMG_HEIGHT, prefs, randGen, palettePoints);
+        flames.add(sampler.createSample().getFlame());
+      }
+      refreshPoolTable();
+      enableControls();
+      // TODO
+      //    flame = 
+
+      // refreshFlameImage(flame, false);
     }
-    refreshFlameImage(flame, false);
+    catch (Throwable ex) {
+      errorHandler.handleError(ex);
+    }
   }
 
   public void loadSoundButton_clicked() {
@@ -269,4 +303,137 @@ public class DancingFractalsController implements FlameHolder {
     }
   }
 
+  public void dancingFlamesPoolTableClicked() {
+    if (!refreshing) {
+      boolean oldRefreshing = refreshing;
+      refreshing = true;
+      try {
+        // TODO
+      }
+      finally {
+        refreshing = oldRefreshing;
+      }
+    }
+
+  }
+
+  private void refreshPoolTable() {
+    final int COL_FLAME = 0;
+    final int COL_TRANSFORMS = 1;
+    poolTable.setModel(new DefaultTableModel() {
+      private static final long serialVersionUID = 1L;
+
+      @Override
+      public int getRowCount() {
+        return flames.size();
+      }
+
+      @Override
+      public int getColumnCount() {
+        return 2;
+      }
+
+      @Override
+      public String getColumnName(int columnIndex) {
+        switch (columnIndex) {
+          case COL_FLAME:
+            return "Flame";
+          case COL_TRANSFORMS:
+            return "Transforms";
+        }
+        return null;
+      }
+
+      @Override
+      public Object getValueAt(int rowIndex, int columnIndex) {
+        Flame flame = rowIndex < flames.size() ? flames.get(rowIndex) : null;
+        if (flame != null) {
+          switch (columnIndex) {
+            case COL_FLAME:
+              return flame.getName().equals("") ? flame.hashCode() : flame.getName();
+            case COL_TRANSFORMS:
+              return String.valueOf(flame.getXForms().size());
+          }
+        }
+        return null;
+      }
+
+      @Override
+      public boolean isCellEditable(int row, int column) {
+        return false;
+      }
+
+    });
+    poolTable.getTableHeader().setFont(poolTable.getFont());
+    poolTable.getColumnModel().getColumn(COL_FLAME).setWidth(60);
+    poolTable.getColumnModel().getColumn(COL_TRANSFORMS).setWidth(16);
+  }
+
+  public void loadFlameFromClipboardButton_clicked() {
+    List<Flame> newFlames = null;
+    try {
+      Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+      Transferable clipData = clipboard.getContents(clipboard);
+      if (clipData != null) {
+        if (clipData.isDataFlavorSupported(DataFlavor.stringFlavor)) {
+          String xml = (String) (clipData.getTransferData(
+              DataFlavor.stringFlavor));
+          newFlames = new Flam3Reader(prefs).readFlamesfromXML(xml);
+        }
+      }
+      if (newFlames == null || newFlames.size() < 1) {
+        throw new Exception("There is currently no valid flame in the clipboard");
+      }
+      else {
+        flames.addAll(newFlames);
+        refreshPoolTable();
+        enableControls();
+      }
+    }
+    catch (Throwable ex) {
+      errorHandler.handleError(ex);
+    }
+  }
+
+  public void loadFlameButton_clicked() {
+    try {
+      JFileChooser chooser = new FlameFileChooser(prefs);
+      if (prefs.getInputFlamePath() != null) {
+        try {
+          chooser.setCurrentDirectory(new File(prefs.getInputFlamePath()));
+        }
+        catch (Exception ex) {
+          ex.printStackTrace();
+        }
+      }
+      if (chooser.showOpenDialog(poolFlamePreviewPnl) == JFileChooser.APPROVE_OPTION) {
+        File file = chooser.getSelectedFile();
+        List<Flame> newFlames = new Flam3Reader(prefs).readFlames(file.getAbsolutePath());
+        prefs.setLastInputFlameFile(file);
+        if (newFlames != null && newFlames.size() > 0) {
+          flames.addAll(newFlames);
+          refreshPoolTable();
+          enableControls();
+        }
+      }
+    }
+    catch (Throwable ex) {
+      errorHandler.handleError(ex);
+    }
+  }
+
+  public void borderSizeSlider_changed() {
+    int value = borderSizeSlider.getValue();
+    int currValue = flameRootPanel.getBorder().getBorderInsets(flameRootPanel).left;
+    if (currValue != value) {
+      flameRootPanel.setBorder(new EmptyBorder(0, 0, value, value));
+      if (flamePanel != null) {
+        FlamePanel oldFlamePanel = flamePanel;
+        flamePanel = null;
+        flameRootPanel.remove(oldFlamePanel);
+        flameRootPanel.getParent().validate();
+        flameRootPanel.repaint();
+      }
+    }
+  }
 }

@@ -474,7 +474,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       JWFNumberField pXFormAntialiasAmountREd, JSlider pXFormAntialiasAmountSlider, JWFNumberField pXFormAntialiasRadiusREd, JSlider pXFormAntialiasRadiusSlider,
       JButton pXFormAntialiasCopyToAllBtn, JPanel pDancingFlamesFlamePnl, JPanel pDancingFlamesGraph1Pnl, JButton pDancingFlamesLoadSoundBtn, JButton pDancingFlamesAddFromClipboardBtn,
       JButton pDancingFlamesAddFromEditorBtn, JButton pDancingFlamesAddFromDiscBtn, JWFNumberField pDancingFlamesRandomCountIEd, JButton pDancingFlamesGenRandFlamesBtn,
-      JComboBox pDancingFlamesRandomGenCmb, JTable pDancingFlamesPoolTable, JPanel pDancingFlamesPoolFlamePreviewPnl) {
+      JComboBox pDancingFlamesRandomGenCmb, JTable pDancingFlamesPoolTable, JPanel pDancingFlamesPoolFlamePreviewPnl, JSlider pBorderSizeSlider) {
     tinaFrame = pTinaFrame;
     tinaFrameTitle = tinaFrame.getTitle();
     errorHandler = pErrorHandler;
@@ -484,7 +484,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     dancingFractalsController = new DancingFractalsController(this, pErrorHandler, pDancingFlamesFlamePnl, pDancingFlamesGraph1Pnl,
         pDancingFlamesLoadSoundBtn, pDancingFlamesAddFromClipboardBtn, pDancingFlamesAddFromEditorBtn,
         pDancingFlamesAddFromDiscBtn, pDancingFlamesRandomCountIEd, pDancingFlamesGenRandFlamesBtn,
-        pDancingFlamesRandomGenCmb, pDancingFlamesPoolTable, pDancingFlamesPoolFlamePreviewPnl);
+        pDancingFlamesRandomGenCmb, pDancingFlamesPoolTable, pDancingFlamesPoolFlamePreviewPnl, pBorderSizeSlider);
 
     cameraRollREd = pCameraRollREd;
     cameraRollSlider = pCameraRollSlider;

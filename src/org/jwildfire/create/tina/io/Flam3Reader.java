@@ -50,6 +50,7 @@ public class Flam3Reader implements FlameReader {
     }
   }
 
+  private static final String ATTR_NAME = "name";
   private static final String ATTR_SIZE = "size";
   private static final String ATTR_CENTER = "center";
   private static final String ATTR_SCALE = "scale";
@@ -97,6 +98,9 @@ public class Flam3Reader implements FlameReader {
   private void parseFlameAttributes(Flame pFlame, String pXML) {
     Map<String, String> atts = Tools.parseAttributes(pXML);
     String hs;
+    if ((hs = atts.get(ATTR_NAME)) != null) {
+      pFlame.setName(hs);
+    }
     if ((hs = atts.get(ATTR_SIZE)) != null) {
       String s[] = hs.split(" ");
       pFlame.setWidth(Integer.parseInt(s[0]));

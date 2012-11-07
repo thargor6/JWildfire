@@ -69,7 +69,11 @@ public class AllRandomFlameGenerator extends RandomFlameGenerator {
   @Override
   protected Flame createFlame() {
     List<RandomFlameGenerator> generators = useSimpleGenerators ? simpleGenerators : allGenerators;
-    return generators.get((int) (Math.random() * generators.size())).createFlame();
+    RandomFlameGenerator generator = generators.get((int) (Math.random() * generators.size()));
+
+    Flame flame = generator.createFlame();
+    flame.setName(generator.getName() + " - " + flame.hashCode());
+    return flame;
   }
 
   @Override

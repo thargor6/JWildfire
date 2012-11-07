@@ -108,8 +108,10 @@ public class Flam3Writer {
     SimpleXMLBuilder xb = new SimpleXMLBuilder();
     // Flame
     List<SimpleXMLBuilder.Attribute<?>> attrList = new ArrayList<SimpleXMLBuilder.Attribute<?>>();
-    attrList.add(xb.createAttr("name", Tools.APP_TITLE));
-    attrList.add(xb.createAttr("version", Tools.APP_VERSION));
+    if (!pFlame.getName().equals("")) {
+      attrList.add(xb.createAttr("name", pFlame.getName()));
+    }
+    attrList.add(xb.createAttr("version", Tools.APP_TITLE + " " + Tools.APP_VERSION));
     attrList.add(xb.createAttr("size", pFlame.getWidth() + " " + pFlame.getHeight()));
     attrList.add(xb.createAttr("center", pFlame.getCentreX() + " " + pFlame.getCentreY()));
     attrList.add(xb.createAttr("scale", pFlame.getPixelsPerUnit()));

@@ -960,7 +960,7 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
     }
   }
 
-  public void movieFromDiskButton_clicked() {
+  public void movieFromDiscButton_clicked() {
     try {
       JFileChooser chooser = new JWFMovieFileChooser(prefs);
       if (prefs.getInputJWFMoviePath() != null) {
@@ -999,7 +999,7 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
 
   }
 
-  public void movieToDiskButton_clicked() {
+  public void movieToDiscButton_clicked() {
     updateMovieFields();
     try {
       JFileChooser chooser = new JWFMovieFileChooser(prefs);
