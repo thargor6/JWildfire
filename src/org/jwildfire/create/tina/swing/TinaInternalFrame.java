@@ -43,7 +43,6 @@ import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
@@ -9185,11 +9184,7 @@ public class TinaInternalFrame extends JInternalFrame {
       interactiveStopButton.setToolTipText("Stop the render and free associated ressources");
       interactiveStopButton.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
-          int response = JOptionPane.showConfirmDialog(null, "Do you really want to cancel rendering?", "Confirm",
-              JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
-          if (response == JOptionPane.YES_OPTION) {
-            tinaController.getInteractiveRendererCtrl().stopButton_clicked();
-          }
+          tinaController.getInteractiveRendererCtrl().stopButton_clicked();
         }
       });
       interactiveStopButton.setText("Stop");
