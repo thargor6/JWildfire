@@ -32,7 +32,7 @@ public class Flowers3DRandomFlameGenerator extends RandomFlameGenerator {
     flame.setCamPitch(49.0);
     flame.setCamYaw(12.0);
     flame.setPixelsPerUnit(200);
-    flame.setFinalXForm(null);
+    flame.getFinalXForms().clear();
     flame.getXForms().clear();
     //    int fncCount = ExperimentalSimpleRandomFlameGenerator.FNCLST_EXPERIMENTAL.length;
     // 1st xForm
@@ -107,7 +107,7 @@ public class Flowers3DRandomFlameGenerator extends RandomFlameGenerator {
     // final xForm
     {
       XForm xForm = new XForm();
-      flame.setFinalXForm(xForm);
+      flame.getFinalXForms().add(xForm);
       VariationFunc varFunc = VariationFuncList.getVariationFuncInstance("julia3D", true);
       double power = -2.0;
       if (Math.random() < 0.25) {

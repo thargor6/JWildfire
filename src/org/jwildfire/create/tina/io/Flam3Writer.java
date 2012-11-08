@@ -169,9 +169,9 @@ public class Flam3Writer {
     for (XForm xForm : pFlame.getXForms()) {
       xb.emptyElement("xform", createXFormAttrList(xb, pFlame, xForm));
     }
-
-    if (pFlame.getFinalXForm() != null) {
-      xb.emptyElement("finalxform", createXFormAttrList(xb, pFlame, pFlame.getFinalXForm()));
+    // FinalXForms
+    for (XForm xForm : pFlame.getFinalXForms()) {
+      xb.emptyElement("finalxform", createXFormAttrList(xb, pFlame, xForm));
     }
     // Palette
     {

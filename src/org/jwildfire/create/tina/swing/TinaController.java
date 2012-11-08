@@ -1403,7 +1403,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
 
       @Override
       public int getRowCount() {
-        return currFlame != null ? currFlame.getXForms().size() + (currFlame.getFinalXForm() != null ? 1 : 0) : 0;
+        return currFlame != null ? currFlame.getXForms().size() + currFlame.getFinalXForms().size() : 0;
       }
 
       @Override
@@ -1427,7 +1427,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       @Override
       public Object getValueAt(int rowIndex, int columnIndex) {
         if (currFlame != null) {
-          XForm xForm = rowIndex < currFlame.getXForms().size() ? currFlame.getXForms().get(rowIndex) : currFlame.getFinalXForm();
+          XForm xForm = rowIndex < currFlame.getXForms().size() ? currFlame.getXForms().get(rowIndex) : currFlame.getFinalXForms().get(rowIndex - currFlame.getXForms().size());
           switch (columnIndex) {
             case COL_TRANSFORM:
               return rowIndex < currFlame.getXForms().size() ? String.valueOf(rowIndex + 1) : "Final";
@@ -1593,7 +1593,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       @Override
       public int getRowCount() {
         XForm xForm = getCurrXForm();
-        return xForm != null && xForm != currFlame.getFinalXForm() ? currFlame.getXForms().size() : 0;
+        return xForm != null && currFlame.getFinalXForms().indexOf(xForm) < 0 ? currFlame.getXForms().size() : 0;
       }
 
       @Override
@@ -2458,8 +2458,8 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       if (row >= 0 && row < currFlame.getXForms().size()) {
         xForm = currFlame.getXForms().get(row);
       }
-      else if (row == currFlame.getXForms().size()) {
-        xForm = currFlame.getFinalXForm();
+      else if (row >= currFlame.getXForms().size() && row < (currFlame.getXForms().size() + currFlame.getFinalXForms().size())) {
+        xForm = currFlame.getFinalXForms().get(row - currFlame.getXForms().size());
       }
     }
     return xForm;
@@ -2548,7 +2548,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     addTransformationButton.setEnabled(currFlame != null);
     duplicateTransformationButton.setEnabled(enabled);
     deleteTransformationButton.setEnabled(enabled);
-    addFinalTransformationButton.setEnabled(currFlame != null && currFlame.getFinalXForm() == null);
+    addFinalTransformationButton.setEnabled(currFlame != null);
 
     affineEditPostTransformButton.setEnabled(currFlame != null);
     affineEditPostTransformSmallButton.setEnabled(currFlame != null);
@@ -2777,8 +2777,8 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
   public void deleteXForm() {
     int row = transformationsTable.getSelectedRow();
     saveUndoPoint();
-    if (currFlame.getFinalXForm() != null && row == currFlame.getXForms().size()) {
-      currFlame.setFinalXForm(null);
+    if (row >= currFlame.getXForms().size()) {
+      currFlame.getFinalXForms().remove(row - currFlame.getXForms().size());
     }
     else {
       currFlame.getXForms().remove(getCurrXForm());
@@ -2797,7 +2797,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     XForm xForm = new XForm();
     xForm.addVariation(1.0, new Linear3DFunc());
     saveUndoPoint();
-    currFlame.setFinalXForm(xForm);
+    currFlame.getFinalXForms().add(xForm);
     gridRefreshing = true;
     try {
       refreshTransformationsTable();
@@ -2805,7 +2805,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     finally {
       gridRefreshing = false;
     }
-    int row = currFlame.getXForms().size();
+    int row = currFlame.getXForms().size() + currFlame.getFinalXForms().size() - 1;
     transformationsTable.getSelectionModel().setSelectionInterval(row, row);
     refreshFlameImage(false);
   }
@@ -3370,7 +3370,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
 
   private void setRelWeight(double pValue) {
     XForm xForm = getCurrXForm();
-    if (xForm != null && currFlame != null && xForm != currFlame.getFinalXForm()) {
+    if (xForm != null && currFlame != null && currFlame.getFinalXForms().indexOf(xForm) < 0) {
       int row = relWeightsTable.getSelectedRow();
       if (row >= 0 && row < currFlame.getXForms().size()) {
         xForm.getModifiedWeights()[row] = pValue;
@@ -3403,7 +3403,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
 
   public void transformationWeightREd_changed() {
     XForm xForm = getCurrXForm();
-    if (xForm != null && currFlame != null && xForm != currFlame.getFinalXForm()) {
+    if (xForm != null && currFlame != null && currFlame.getFinalXForms().indexOf(xForm) < 0) {
       xForm.setWeight(Tools.stringToDouble(transformationWeightREd.getText()));
       gridRefreshing = true;
       try {
@@ -3477,10 +3477,12 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
               return;
             }
           }
-          if (xForm == flame.getFinalXForm()) {
-            int row = flame.getXForms().size();
-            transformationsTable.getSelectionModel().setSelectionInterval(row, row);
-            return;
+          for (int i = 0; i < flame.getFinalXForms().size(); i++) {
+            if (xForm == flame.getFinalXForms().get(i)) {
+              int row = flame.getXForms().size() + i;
+              transformationsTable.getSelectionModel().setSelectionInterval(row, row);
+              return;
+            }
           }
         }
       }
@@ -5154,9 +5156,11 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
           xf.setAntialiasRadius(xForm.getAntialiasRadius());
         }
       }
-      if (flame.getFinalXForm() != null && flame.getFinalXForm() != xForm) {
-        flame.getFinalXForm().setAntialiasAmount(xForm.getAntialiasAmount());
-        flame.getFinalXForm().setAntialiasRadius(xForm.getAntialiasRadius());
+      for (XForm xf : flame.getFinalXForms()) {
+        if (xf != xForm) {
+          xf.setAntialiasAmount(xForm.getAntialiasAmount());
+          xf.setAntialiasRadius(xForm.getAntialiasRadius());
+        }
       }
       transformationTableClicked();
     }

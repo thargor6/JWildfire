@@ -34,7 +34,7 @@ public class Spherical3DRandomFlameGenerator extends RandomFlameGenerator {
     flame.setCamZoom(3.6);
     flame.setCamPerspective(0.32);
     flame.setPixelsPerUnit(200);
-    flame.setFinalXForm(null);
+    flame.getFinalXForms().clear();
     flame.getXForms().clear();
     flame.setPreserveZ(Math.random() < 0.5);
 
@@ -122,7 +122,7 @@ public class Spherical3DRandomFlameGenerator extends RandomFlameGenerator {
     // 6th (final) xForm
     if (Math.random() < 0.5) {
       XForm xForm = new XForm();
-      flame.setFinalXForm(xForm);
+      flame.getFinalXForms().add(xForm);
       xForm.setWeight(0.1);
       int power;
       int style = (int) (3 * Math.random());

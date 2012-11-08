@@ -29,25 +29,30 @@ public class RealtimeAnimRenderThread implements Runnable {
   private final DancingFractalsController controller;
   private boolean forceAbort;
   private boolean done;
-  private XForm xForm0;
-  private XForm xForm1;
-  private XForm xFormF;
+  private XForm xForm0, xForm1, xForm2, xFormF;
   private RecordedFFT fftData;
   private JLayerInterface musicPlayer;
   private ImagePanel fftPanel;
+  private double finalXFormAlpha = 0.0;
 
   public RealtimeAnimRenderThread(DancingFractalsController pController) {
     controller = pController;
   }
 
+  private double getFFTValue(short[] pFFT, int pIdx) {
+    short val = pIdx < pFFT.length ? pFFT[pIdx] : 0;
+    return 2.0 * val / (double) Short.MAX_VALUE;
+  }
+
   @Override
   public void run() {
     done = forceAbort = false;
-    double alpha = 0.0;
+    finalXFormAlpha = 0.0;
     boolean doDrawFFT = true;
 
     try {
       while (!done && !forceAbort) {
+        Flame flame = controller.getFlame();
         if (fftPanel != null && fftData != null) {
           SimpleImage img = fftPanel.getImage();
           short currFFT[] = fftData.getData(musicPlayer.getPosition());
@@ -55,42 +60,10 @@ public class RealtimeAnimRenderThread implements Runnable {
             drawFFT(img, currFFT);
             fftPanel.repaint();
           }
-          amp0 = 2.0 * currFFT[1] / (double) Short.MAX_VALUE;
-          amp1 = 2.0 * currFFT[2] / (double) Short.MAX_VALUE;
-          amp2 = 2.0 * currFFT[3] / (double) Short.MAX_VALUE;
-          amp3 = 2.0 * currFFT[4] / (double) Short.MAX_VALUE;
-          amp4 = 2.0 * currFFT[5] / (double) Short.MAX_VALUE;
-          amp5 = 2.0 * currFFT[6] / (double) Short.MAX_VALUE;
-          amp6 = 2.0 * currFFT[0] / (double) Short.MAX_VALUE;
-        }
-        else {
-          amp0 = amp1 = amp2 = amp3 = amp4 = amp5 = amp6 = 0.0;
-        }
-        Flame flame = controller.getFlame();
-
-        //        flame.setBGColorRed(200);
-        //        flame.setBGColorGreen(225);
-        //        flame.setBGColorBlue(255);
-        {
-          XForm xForm = xForm0.makeCopy();
-          XFormTransformService.rotate(xForm, -amp0 * 7, false);
-          XFormTransformService.localTranslate(xForm, -amp1 * 0.5, amp2 * 0.5);
-          flame.getXForms().set(0, xForm);
-        }
-        {
-          XForm xForm = xForm1.makeCopy();
-          XFormTransformService.rotate(xForm, -amp3 * 2, false);
-          XFormTransformService.localTranslate(xForm, amp4 * 0.25, -amp5 * 0.25);
-          flame.getXForms().set(1, xForm);
-        }
-        {
-          XForm xForm = xFormF.makeCopy();
-          XFormTransformService.rotate(xForm, alpha, false);
-          alpha += amp6;
-          if (alpha > 360)
-            alpha -= 360;
-          XFormTransformService.scale(xForm, 1.0 + amp0 * 0.1, true, true, false);
-          flame.setFinalXForm(xForm);
+          transformXForm1(currFFT, flame);
+          transformXForm2(currFFT, flame);
+          transformXForm3(currFFT, flame);
+          transformXFormF(currFFT, flame);
         }
         controller.refreshFlameImage(flame, doDrawFFT);
       }
@@ -100,13 +73,63 @@ public class RealtimeAnimRenderThread implements Runnable {
     }
   }
 
-  private double amp0, amp1, amp2, amp3, amp4, amp5, amp6;
+  private void transformXForm1(short[] pFFT, Flame pFlame) {
+    if (xForm0 != null) {
+      double amp0 = getFFTValue(pFFT, 0);
+      double amp1 = getFFTValue(pFFT, 1);
+      double amp2 = getFFTValue(pFFT, 2);
+      XForm xForm = xForm0.makeCopy();
+      XFormTransformService.rotate(xForm, -amp0 * 7, false);
+      XFormTransformService.localTranslate(xForm, -amp1 * 0.5, amp2 * 0.5);
+      pFlame.getXForms().set(0, xForm);
+    }
+  }
+
+  private void transformXForm2(short[] pFFT, Flame pFlame) {
+    if (xForm1 != null) {
+      double amp3 = getFFTValue(pFFT, 3);
+      double amp4 = getFFTValue(pFFT, 4);
+      double amp5 = getFFTValue(pFFT, 5);
+      XForm xForm = xForm1.makeCopy();
+      XFormTransformService.rotate(xForm, -amp3 * 2, false);
+      XFormTransformService.localTranslate(xForm, amp4 * 0.25, -amp5 * 0.25);
+      pFlame.getXForms().set(1, xForm);
+    }
+  }
+
+  private void transformXForm3(short[] pFFT, Flame pFlame) {
+    if (xForm2 != null) {
+      double amp7 = getFFTValue(pFFT, 47);
+      double amp8 = getFFTValue(pFFT, 48);
+      double amp9 = getFFTValue(pFFT, 49);
+      XForm xForm = xForm2.makeCopy();
+      XFormTransformService.rotate(xForm, amp7 * 5, false);
+      XFormTransformService.localTranslate(xForm, -amp8 * 0.75, amp9 * 0.5);
+      pFlame.getXForms().set(2, xForm);
+    }
+  }
+
+  private void transformXFormF(short[] pFFT, Flame pFlame) {
+    if (xFormF != null) {
+      double amp2 = getFFTValue(pFFT, 2);
+      double amp6 = getFFTValue(pFFT, 6);
+      XForm xForm = xFormF.makeCopy();
+      XFormTransformService.rotate(xForm, finalXFormAlpha, false);
+      finalXFormAlpha += amp6;
+      if (finalXFormAlpha > 360)
+        finalXFormAlpha -= 360;
+      XFormTransformService.scale(xForm, 1.0 + amp2 * 0.1, true, true, false);
+      pFlame.getFinalXForms().clear();
+      pFlame.getFinalXForms().add(xForm);
+    }
+  }
 
   public void notifyFlameChange(Flame pFlame) {
     if (pFlame != null) {
       xForm0 = pFlame.getXForms().get(0);
-      xForm1 = pFlame.getXForms().get(1);
-      xFormF = pFlame.getFinalXForm();
+      xForm1 = pFlame.getXForms().size() > 1 ? pFlame.getXForms().get(1) : null;
+      xForm2 = pFlame.getXForms().size() > 2 ? pFlame.getXForms().get(2) : null;
+      xFormF = pFlame.getFinalXForms().size() > 0 ? pFlame.getFinalXForms().get(pFlame.getFinalXForms().size() - 1) : null;
       if (xFormF == null) {
         xFormF = new XForm();
         xFormF.addVariation(1.0, VariationFuncList.getVariationFuncInstance("linear3D"));

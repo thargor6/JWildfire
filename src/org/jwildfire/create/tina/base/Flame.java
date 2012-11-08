@@ -67,7 +67,7 @@ public class Flame implements Assignable<Flame>, Serializable {
 
   private RGBPalette palette = new RGBPalette();
   private final List<XForm> xForms = new ArrayList<XForm>();
-  private XForm finalXForm = null;
+  private final List<XForm> finalXForms = new ArrayList<XForm>();
   private ShadingInfo shadingInfo = new ShadingInfo();
 
   public Flame() {
@@ -95,6 +95,7 @@ public class Flame implements Assignable<Flame>, Serializable {
     whiteLevel = 200;
     deFilterRadius = 7;
     deFilterAmount = 1.25;
+    name = "Untitled";
     shadingInfo.init();
   }
 
@@ -174,6 +175,10 @@ public class Flame implements Assignable<Flame>, Serializable {
     return xForms;
   }
 
+  public List<XForm> getFinalXForms() {
+    return finalXForms;
+  }
+
   public double getPixelsPerUnit() {
     return pixelsPerUnit;
   }
@@ -224,14 +229,6 @@ public class Flame implements Assignable<Flame>, Serializable {
 
   public void setHeight(int height) {
     this.height = height;
-  }
-
-  public XForm getFinalXForm() {
-    return finalXForm;
-  }
-
-  public void setFinalXForm(XForm pFinalXForm) {
-    finalXForm = pFinalXForm;
   }
 
   public double getCamPitch() {
@@ -362,8 +359,7 @@ public class Flame implements Assignable<Flame>, Serializable {
         var.getFunc().init(pFlameTransformationContext, xForm, var.getAmount());
       }
     }
-    if (getFinalXForm() != null) {
-      XForm xForm = getFinalXForm();
+    for (XForm xForm : this.getFinalXForms()) {
       xForm.initTransform();
       for (Variation var : xForm.getSortedVariations()) {
         var.getFunc().init(pFlameTransformationContext, xForm, var.getAmount());
@@ -475,11 +471,9 @@ public class Flame implements Assignable<Flame>, Serializable {
     for (XForm xForm : pFlame.getXForms()) {
       xForms.add(xForm.makeCopy());
     }
-    if (pFlame.finalXForm != null) {
-      finalXForm = pFlame.finalXForm.makeCopy();
-    }
-    else {
-      finalXForm = null;
+    finalXForms.clear();
+    for (XForm xForm : pFlame.getFinalXForms()) {
+      finalXForms.add(xForm.makeCopy());
     }
   }
 
@@ -503,15 +497,18 @@ public class Flame implements Assignable<Flame>, Serializable {
         (resolutionProfile != null && pFlame.resolutionProfile != null && !resolutionProfile.equals(pFlame.resolutionProfile))) ||
         ((qualityProfile != null && pFlame.qualityProfile == null) || (qualityProfile == null && pFlame.qualityProfile != null) ||
         (qualityProfile != null && pFlame.qualityProfile != null && !qualityProfile.equals(pFlame.qualityProfile))) ||
-        ((finalXForm != null && pFlame.finalXForm == null) || (finalXForm == null && pFlame.finalXForm != null) ||
-        (finalXForm != null && pFlame.finalXForm != null && !finalXForm.isEqual(pFlame.finalXForm))) ||
         !palette.isEqual(pFlame.palette) || !name.equals(pFlame.name) ||
         !shadingInfo.isEqual(pFlame.shadingInfo) ||
-        (xForms.size() != pFlame.xForms.size())) {
+        (xForms.size() != pFlame.xForms.size()) || (finalXForms.size() != pFlame.finalXForms.size())) {
       return false;
     }
     for (int i = 0; i < xForms.size(); i++) {
       if (!xForms.get(i).isEqual(pFlame.xForms.get(i))) {
+        return false;
+      }
+    }
+    for (int i = 0; i < finalXForms.size(); i++) {
+      if (!finalXForms.get(i).isEqual(pFlame.finalXForms.get(i))) {
         return false;
       }
     }

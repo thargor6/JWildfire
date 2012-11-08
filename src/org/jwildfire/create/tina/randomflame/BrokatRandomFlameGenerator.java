@@ -32,7 +32,7 @@ public class BrokatRandomFlameGenerator extends RandomFlameGenerator {
     flame.setPixelsPerUnit(200);
     flame.setCamZoom(2.0);
     flame.setCamRoll(-90.0);
-    flame.setFinalXForm(null);
+    flame.getFinalXForms().clear();
     flame.getXForms().clear();
     // 1st xForm
     {

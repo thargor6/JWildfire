@@ -44,7 +44,7 @@ public class JulianDiscRandomFlameGenerator extends RandomFlameGenerator {
     flame.setCamZoom(1.0);
     flame.setCamPerspective(0.0);
     flame.setPixelsPerUnit(100);
-    flame.setFinalXForm(null);
+    flame.getFinalXForms().clear();
     flame.getXForms().clear();
     // 1st xForm
     {
@@ -88,7 +88,7 @@ public class JulianDiscRandomFlameGenerator extends RandomFlameGenerator {
     // final
     if (Math.random() < 0.5) {
       XForm xForm = new XForm();
-      flame.setFinalXForm(xForm);
+      flame.getFinalXForms().add(xForm);
       if (Math.random() < 0.5) {
         String varName = Math.random() < 0.67 ? "polar" : "polar2";
         xForm.addVariation(2.0 + Math.random() * 2.0, VariationFuncList.getVariationFuncInstance(varName, true));

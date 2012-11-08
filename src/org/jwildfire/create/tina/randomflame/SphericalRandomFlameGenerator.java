@@ -35,7 +35,7 @@ public class SphericalRandomFlameGenerator extends RandomFlameGenerator {
     flame.setCamZoom(2.4);
     flame.setCamPerspective(0.32);
     flame.setPixelsPerUnit(200);
-    flame.setFinalXForm(null);
+    flame.getFinalXForms().clear();
     flame.getXForms().clear();
 
     VariationFunc varFunc;

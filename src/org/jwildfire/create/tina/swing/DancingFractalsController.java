@@ -308,7 +308,9 @@ public class DancingFractalsController implements FlameHolder {
       boolean oldRefreshing = refreshing;
       refreshing = true;
       try {
-        // TODO
+        // TODO more
+        if (renderThread != null)
+          renderThread.notifyFlameChange(getFlame());
       }
       finally {
         refreshing = oldRefreshing;

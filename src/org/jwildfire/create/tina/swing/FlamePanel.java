@@ -259,8 +259,8 @@ public class FlamePanel extends ImagePanel {
       for (XForm xForm : flame.getXForms()) {
         drawXForm(g, xForm, false);
       }
-      if (flame.getFinalXForm() != null) {
-        drawXForm(g, flame.getFinalXForm(), true);
+      for (XForm xForm : flame.getFinalXForms()) {
+        drawXForm(g, xForm, true);
       }
     }
   }
@@ -604,14 +604,14 @@ public class FlamePanel extends ImagePanel {
             return xForm;
           }
         }
-        if (flame.getFinalXForm() != null) {
-          Triangle triangle = new Triangle(flame.getFinalXForm());
+        for (XForm xForm : flame.getFinalXForms()) {
+          Triangle triangle = new Triangle(xForm);
           if (insideTriange(triangle, x, y)) {
             if (mouseDragOperation == MouseDragOperation.SHEAR) {
               selectedPoint = selectNearestPoint(triangle, x, y);
               redrawAfterMouseClick = true;
             }
-            return flame.getFinalXForm();
+            return xForm;
           }
         }
       }

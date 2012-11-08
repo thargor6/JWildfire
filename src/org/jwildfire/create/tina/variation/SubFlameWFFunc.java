@@ -62,11 +62,13 @@ public class SubFlameWFFunc extends VariationFunc {
       else if ((xf.getDrawMode() == DrawMode.OPAQUE) && (pContext.random() > xf.getOpacity()))
         return;
 
-      XForm finalXForm = flame.getFinalXForm();
-      if (finalXForm != null) {
-        finalXForm.transformPoint(pContext, pAffineTP, pVarTP, p, q);
+      List<XForm> finalXForms = flame.getFinalXForms();
+      if (finalXForms.size() > 0) {
+        finalXForms.get(0).transformPoint(pContext, pAffineTP, pVarTP, p, q);
+        for (int i = 1; i < finalXForms.size(); i++) {
+          finalXForms.get(i).transformPoint(pContext, pAffineTP, pVarTP, q, q);
+        }
       }
-
       //      pVarTP.color += parentColor;
       //      while (pVarTP.color < 0.0)
       //        pVarTP.color += 1.0;

@@ -35,7 +35,7 @@ public class FilledFlowers3DRandomFlameGenerator extends RandomFlameGenerator {
     flame.setPixelsPerUnit(200);
     flame.setCamZoom(2.0);
     flame.setCamPerspective(0.32);
-    flame.setFinalXForm(null);
+    flame.getFinalXForms().clear();
     flame.getXForms().clear();
     // 1st xForm
     {
@@ -138,7 +138,7 @@ public class FilledFlowers3DRandomFlameGenerator extends RandomFlameGenerator {
     // final xForm
     {
       XForm xForm = new XForm();
-      flame.setFinalXForm(xForm);
+      flame.getFinalXForms().add(xForm);
       {
         VariationFunc varFunc;
         xForm.addVariation(0.05 + Math.random() * 0.2, VariationFuncList.getVariationFuncInstance("zscale", true));

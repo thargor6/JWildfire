@@ -92,12 +92,16 @@ public final class FlameRenderFlatThread extends FlameRenderThread {
         continue;
       else if ((xf.getDrawMode() == DrawMode.OPAQUE) && (renderer.random.random() > xf.getOpacity()))
         continue;
-      XForm finalXForm = flame.getFinalXForm();
+      List<XForm> finalXForms = flame.getFinalXForms();
+
       double px, py;
 
       int xIdx, yIdx;
-      if (finalXForm != null) {
-        finalXForm.transformPoint(ctx, affineT, varT, p, q);
+      if (finalXForms.size() > 0) {
+        finalXForms.get(0).transformPoint(ctx, affineT, varT, p, q);
+        for (int i = 1; i < finalXForms.size(); i++) {
+          finalXForms.get(i).transformPoint(ctx, affineT, varT, q, q);
+        }
         renderer.project(q);
         px = q.x * cosa + q.y * sina + renderer.rcX;
         if ((px < 0) || (px > renderer.camW))
@@ -105,7 +109,7 @@ public final class FlameRenderFlatThread extends FlameRenderThread {
         py = q.y * cosa - q.x * sina + renderer.rcY;
         if ((py < 0) || (py > renderer.camH))
           continue;
-
+        XForm finalXForm = finalXForms.get(finalXForms.size() - 1);
         if ((finalXForm.getAntialiasAmount() > EPSILON) && (finalXForm.getAntialiasRadius() > EPSILON) && (renderer.random.random() > 1.0 - finalXForm.getAntialiasAmount())) {
           double dr = exp(finalXForm.getAntialiasRadius() * sqrt(-log(renderer.random.random()))) - 1.0;
           double da = renderer.random.random() * 2.0 * M_PI;

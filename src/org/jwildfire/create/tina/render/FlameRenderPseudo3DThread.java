@@ -118,14 +118,17 @@ public final class FlameRenderPseudo3DThread extends FlameRenderThread {
       else if ((xf.getDrawMode() == DrawMode.OPAQUE) && (renderer.random.random() > xf.getOpacity()))
         continue;
 
-      XForm finalXForm = flame.getFinalXForm();
+      List<XForm> finalXForms = flame.getFinalXForms();
       double px = 0.0, py = 0.0;
       int xIdx, yIdx;
-      if (finalXForm != null) {
+      if (finalXForms.size() > 0) {
         for (int pIdx = 0; pIdx < pA.length; pIdx++) {
           qA[pIdx] = new XYZPoint();
         }
-        finalXForm.transformPoints(ctx, affineTA, varTA, pA, qA);
+        finalXForms.get(0).transformPoints(ctx, affineTA, varTA, pA, qA);
+        for (int i = 1; i < finalXForms.size(); i++) {
+          finalXForms.get(i).transformPoints(ctx, affineTA, varTA, qA, qA);
+        }
         r.assign(qA[0]);
         renderer.project(r);
         px = r.x * renderer.cosa + r.y * renderer.sina + renderer.rcX;
@@ -135,6 +138,7 @@ public final class FlameRenderPseudo3DThread extends FlameRenderThread {
         if ((py < 0) || (py > renderer.camH))
           continue;
 
+        XForm finalXForm = finalXForms.get(finalXForms.size() - 1);
         if ((finalXForm.getAntialiasAmount() > EPSILON) && (finalXForm.getAntialiasRadius() > EPSILON) && (renderer.random.random() > 1.0 - finalXForm.getAntialiasAmount())) {
           double dr = exp(finalXForm.getAntialiasRadius() * sqrt(-log(renderer.random.random()))) - 1.0;
           double da = renderer.random.random() * 2.0 * M_PI;

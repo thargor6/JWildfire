@@ -430,15 +430,17 @@ public class Flam3Reader implements FlameReader {
           int ps = flameXML.indexOf("<finalxform ", p + 1);
           if (ps < 0)
             break;
-          int pe = flameXML.indexOf("/>", ps + 1);
-          String hs = flameXML.substring(ps + 12, pe);
+          int pe = flameXML.indexOf("</finalxform>", ps + 1);
+          if (pe < 0) {
+            pe = flameXML.indexOf("/>", ps + 1);
+          }
+          String hs = flameXML.substring(ps + 7, pe);
           XForm xForm = new XForm();
           parseXFormAttributes(xForm, hs);
-          flame.setFinalXForm(xForm);
+          flame.getFinalXForms().add(xForm);
           p = pe + 2;
         }
       }
-
       // Colors
       {
         int p = 0;

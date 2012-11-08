@@ -50,45 +50,55 @@ public class FlameMorphService {
     //    System.out.println("MMMMMMMMM: " + fScl);
     Flame res = pFlame1.makeCopy();
     res.getXForms().clear();
-    // morph XForms  
-    int size1 = pFlame1.getXForms().size();
-    int size2 = pFlame2.getXForms().size();
-    int maxSize = size1 > size2 ? size1 : size2;
-    for (int i = 0; i < maxSize; i++) {
-      XForm xForm1 = i < size1 ? pFlame1.getXForms().get(i) : null;
-      if (xForm1 == null) {
-        xForm1 = new XForm();
-        xForm1.addVariation(0.0, VariationFuncList.getVariationFuncInstance("linear3D", true));
-        xForm1.setWeight(0.0);
-      }
+    // morph XForms
+    {
+      int size1 = pFlame1.getXForms().size();
+      int size2 = pFlame2.getXForms().size();
+      int maxSize = size1 > size2 ? size1 : size2;
+      for (int i = 0; i < maxSize; i++) {
+        XForm xForm1 = i < size1 ? pFlame1.getXForms().get(i) : null;
+        if (xForm1 == null) {
+          xForm1 = new XForm();
+          xForm1.addVariation(0.0, VariationFuncList.getVariationFuncInstance("linear3D", true));
+          xForm1.setWeight(0.0);
+        }
 
-      XForm xForm2 = i < size2 ? pFlame2.getXForms().get(i) : null;
-      if (xForm2 == null) {
-        xForm2 = new XForm();
-        xForm2.addVariation(0.0, VariationFuncList.getVariationFuncInstance("linear3D", true));
-        xForm2.setWeight(0.0);
-      }
+        XForm xForm2 = i < size2 ? pFlame2.getXForms().get(i) : null;
+        if (xForm2 == null) {
+          xForm2 = new XForm();
+          xForm2.addVariation(0.0, VariationFuncList.getVariationFuncInstance("linear3D", true));
+          xForm2.setWeight(0.0);
+        }
 
-      XForm morphedXForm = morphXForms(pPrefs, xForm1, xForm2, fScl, pFrame, pFrames);
-      res.getXForms().add(morphedXForm);
+        XForm morphedXForm = morphXForms(pPrefs, xForm1, xForm2, fScl, pFrame, pFrames);
+        res.getXForms().add(morphedXForm);
+      }
     }
     // morph final XForms
-    if (pFlame1.getFinalXForm() != null || pFlame2.getFinalXForm() != null) {
-      XForm xForm1 = pFlame1.getFinalXForm();
-      if (xForm1 == null) {
-        xForm1 = new XForm();
-        xForm1.addVariation(1.0, VariationFuncList.getVariationFuncInstance("linear3D", true));
-      }
+    {
+      int size1 = pFlame1.getFinalXForms().size();
+      int size2 = pFlame2.getFinalXForms().size();
+      int maxSize = size1 > size2 ? size1 : size2;
+      for (int i = 0; i < maxSize; i++) {
+        XForm xForm1 = i < size1 ? pFlame1.getFinalXForms().get(i) : null;
+        if (xForm1 == null) {
+          xForm1 = new XForm();
+          xForm1.addVariation(0.0, VariationFuncList.getVariationFuncInstance("linear3D", true));
+          xForm1.setWeight(0.0);
+        }
 
-      XForm xForm2 = pFlame2.getFinalXForm();
-      if (xForm2 == null) {
-        xForm2 = new XForm();
-        xForm2.addVariation(1.0, VariationFuncList.getVariationFuncInstance("linear3D", true));
-      }
+        XForm xForm2 = i < size2 ? pFlame2.getFinalXForms().get(i) : null;
+        if (xForm2 == null) {
+          xForm2 = new XForm();
+          xForm2.addVariation(0.0, VariationFuncList.getVariationFuncInstance("linear3D", true));
+          xForm2.setWeight(0.0);
+        }
 
-      XForm morphedXForm = morphXForms(pPrefs, xForm1, xForm2, fScl, pFrame, pFrames);
-      res.setFinalXForm(morphedXForm);
+        XForm morphedXForm = morphXForms(pPrefs, xForm1, xForm2, fScl, pFrame, pFrames);
+        res.getFinalXForms().add(morphedXForm);
+      }
     }
+
     // morph colors
     RGBPalette palette1 = pFlame1.getPalette();
     RGBPalette palette2 = pFlame2.getPalette();

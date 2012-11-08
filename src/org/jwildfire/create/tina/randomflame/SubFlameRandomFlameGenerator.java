@@ -37,7 +37,7 @@ public class SubFlameRandomFlameGenerator extends RandomFlameGenerator {
     Flame flame = new Flame();
     flame.assign(pSubFlame);
 
-    flame.setFinalXForm(null);
+    flame.getFinalXForms().clear();
     flame.getXForms().clear();
     flame.setPalette(pSubFlame.getPalette().makeCopy());
     // 1st xForm

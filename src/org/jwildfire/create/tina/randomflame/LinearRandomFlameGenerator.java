@@ -29,7 +29,7 @@ public class LinearRandomFlameGenerator extends RandomFlameGenerator {
     flame.setCentreX(0.0);
     flame.setCentreY(0.0);
     flame.setPixelsPerUnit(200);
-    flame.setFinalXForm(null);
+    flame.getFinalXForms().clear();
     flame.getXForms().clear();
 
     int maxXForms = (int) (1.0 + Math.random() * 5.0);

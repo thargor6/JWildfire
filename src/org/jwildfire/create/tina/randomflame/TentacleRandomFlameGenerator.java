@@ -29,7 +29,7 @@ public class TentacleRandomFlameGenerator extends RandomFlameGenerator {
     flame.setCentreX(0.0);
     flame.setCentreY(0.0);
     flame.setPixelsPerUnit(200);
-    flame.setFinalXForm(null);
+    flame.getFinalXForms().clear();
     flame.getXForms().clear();
     int maxXFormsX = (int) (2.0 + Math.random() * 3.0);
     int maxXFormsY = (int) (2.0 + Math.random() * 3.0);

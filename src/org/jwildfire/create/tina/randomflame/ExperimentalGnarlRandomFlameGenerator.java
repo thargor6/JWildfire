@@ -32,7 +32,7 @@ public class ExperimentalGnarlRandomFlameGenerator extends RandomFlameGenerator 
     flame.setCentreX(0.0);
     flame.setCentreY(0.0);
     flame.setPixelsPerUnit(200);
-    flame.setFinalXForm(null);
+    flame.getFinalXForms().clear();
     flame.getXForms().clear();
     // init
     double scaleX = Math.random() * 0.04 + 0.04;
