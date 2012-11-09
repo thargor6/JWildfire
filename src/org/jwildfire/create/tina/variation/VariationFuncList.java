@@ -285,6 +285,8 @@ public class VariationFuncList {
     registerVariationFunc(PostDCZTranslFunc.class);
     registerVariationFunc(LogApoFunc.class);
     registerVariationFunc(RippleFunc.class);
+    registerVariationFunc(JuliaN2Func.class);
+    registerVariationFunc(Cross2Func.class);
   }
 
   private static void registerVariationFunc(

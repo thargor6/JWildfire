@@ -54,6 +54,7 @@ public class JuliaN2Func extends VariationFunc {
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
+    // julian2 by Xyrus02, http://xyrus02.deviantart.com/art/JuliaN2-Plugin-for-Apophysis-136717838
     double x = a * pAffineTP.x + b * pAffineTP.y + e;
     double y = c * pAffineTP.x + d * pAffineTP.y + f;
     double sina = 0.0, cosa = 0.0;
