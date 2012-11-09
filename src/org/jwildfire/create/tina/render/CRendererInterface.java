@@ -126,7 +126,7 @@ public class CRendererInterface {
     }
     String args = " -flameFilename \"" + flameFilename + "\" -outputFilename \"" + ppmFilename + "\" -threadCount " + pPrefs.getTinaRenderThreads() + " -reportStatus -outputWidth " + pInfo.getImageWidth() + " -outputHeight " + pInfo.getImageHeight() + " -sampleDensity " + doubleToCUDA(pFlame.getSampleDensity());
     if (hdrOutputfilename != null && hdrOutputfilename.length() > 0) {
-      args += " -outputHDRFilename \"" + hdrOutputfilename;
+      args += " -outputHDRFilename \"" + hdrOutputfilename + "\"";
     }
     if (withAlpha) {
       args += " -a";
