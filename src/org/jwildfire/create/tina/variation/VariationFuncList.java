@@ -287,6 +287,8 @@ public class VariationFuncList {
     registerVariationFunc(RippleFunc.class);
     registerVariationFunc(JuliaN2Func.class);
     registerVariationFunc(Cross2Func.class);
+    registerVariationFunc(PostBWraps2Func.class);
+    registerVariationFunc(PreBWraps2Func.class);
   }
 
   private static void registerVariationFunc(
