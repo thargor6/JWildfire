@@ -35,12 +35,12 @@ public:
 		JWF_FLOAT a = pAffineTP->x / xmax;
 		JWF_FLOAT b = sqrt_safe(1.0 - a * a);
 
-		pVarTP->x += pAmount * JWF_ATAN2(a, b);
+		pVarTP->x += _v * JWF_ATAN2(a, b);
 
     if (pContext->randGen->random() < 0.5)
-			pVarTP->y += pAmount * JWF_LOG(xmax + sqrt_safe(xmax - 1.0));
+			pVarTP->y += _v * JWF_LOG(xmax + sqrt_safe(xmax - 1.0));
 		else
-			pVarTP->y -= pAmount * JWF_LOG(xmax + sqrt_safe(xmax - 1.0));
+			pVarTP->y -= _v * JWF_LOG(xmax + sqrt_safe(xmax - 1.0));
 
 		if (pContext->isPreserveZCoordinate) {
 			pVarTP->z += pAmount * pAffineTP->z;
@@ -51,7 +51,13 @@ public:
 		return new EllipticFunc(*this);
 	}
 
+	virtual void init(FlameTransformationContext *pContext, XForm *pXForm, JWF_FLOAT pAmount) {
+    _v = pAmount / (M_PI / 2.0);
+	}
+
 private:
+	JWF_FLOAT _v;
+
 	JWF_FLOAT sqrt_safe(JWF_FLOAT x) {
 		return (x < EPSILON) ? 0.0 : JWF_SQRT(x);
 	}

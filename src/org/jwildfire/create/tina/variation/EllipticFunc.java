@@ -17,6 +17,7 @@
 package org.jwildfire.create.tina.variation;
 
 import static org.jwildfire.base.MathLib.EPSILON;
+import static org.jwildfire.base.MathLib.M_PI;
 import static org.jwildfire.base.MathLib.atan2;
 import static org.jwildfire.base.MathLib.log;
 import static org.jwildfire.base.MathLib.sqrt;
@@ -42,13 +43,13 @@ public class EllipticFunc extends SimpleVariationFunc {
     double a = pAffineTP.x / xmax;
     double b = sqrt_safe(1.0 - a * a);
 
-    pVarTP.x += pAmount * atan2(a, b);
+    pVarTP.x += _v * atan2(a, b);
 
     //    if (pAffineTP.y > 0)
     if (pContext.random() < 0.5)
-      pVarTP.y += pAmount * log(xmax + sqrt_safe(xmax - 1.0));
+      pVarTP.y += _v * log(xmax + sqrt_safe(xmax - 1.0));
     else
-      pVarTP.y -= pAmount * log(xmax + sqrt_safe(xmax - 1.0));
+      pVarTP.y -= _v * log(xmax + sqrt_safe(xmax - 1.0));
 
     if (pContext.isPreserveZCoordinate()) {
       pVarTP.z += pAmount * pAffineTP.z;
@@ -63,5 +64,12 @@ public class EllipticFunc extends SimpleVariationFunc {
   @Override
   public int getAvailability() {
     return AVAILABILITY_JWILDFIRE | AVAILABILITY_CUDA;
+  }
+
+  private double _v;
+
+  @Override
+  public void init(FlameTransformationContext pContext, XForm pXForm, double pAmount) {
+    _v = pAmount / (M_PI / 2.0);
   }
 }
