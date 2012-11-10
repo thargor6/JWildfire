@@ -43,7 +43,7 @@ public class FociFunc extends SimpleVariationFunc {
 
     double tmp = (expx + expnx - cosy);
     if (tmp == 0)
-      tmp = 1e-6;
+      return;
     tmp = pAmount / tmp;
 
     pVarTP.x += (expx - expnx) * tmp;
