@@ -4641,12 +4641,10 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
         "  if(currFlame==null) {\r\n" +
         "    throw new Exception(\"Please select a flame at first\");\r\n" +
         "  }\r\n" +
-        "  // if(currFlame.getFinalXForm()!=null) {\r\n" +
-        "  //   throw new Exception(\"This flame has already a final transform. Please remove it at first.\");\r\n" +
-        "  // }\r\n" +
         "  XForm xForm=new XForm(); \r\n" +
         "  xForm.addVariation(1.0, VariationFuncList.getVariationFuncInstance(\"xheart\", true));  \r\n" +
-        "  currFlame.setFinalXForm(xForm);\r\n" +
+        "  currFlame.getFinalXForms().clear();\r\n" +
+        "  currFlame.getFinalXForms().add(xForm);\r\n" +
         "  // Final settings   \r\n" +
         "  currFlame.setCamRoll(0.0);\r\n" +
         "  currFlame.setCamPitch(0.0);\r\n" +
@@ -4674,12 +4672,10 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
         "  if(currFlame==null) {\r\n" +
         "    throw new Exception(\"Please select a flame at first\");\r\n" +
         "  }\r\n" +
-        "  // if(currFlame.getFinalXForm()!=null) {\r\n" +
-        "  //   throw new Exception(\"This flame has already a final transform. Please remove it at first.\");\r\n" +
-        "  // }\r\n" +
         "  XForm xForm=new XForm(); \r\n" +
         "  xForm.addVariation(1.0, VariationFuncList.getVariationFuncInstance(\"bubble\", true));  \r\n" +
-        "  currFlame.setFinalXForm(xForm);\r\n" +
+        "  currFlame.getFinalXForms().clear();\r\n" +
+        "  currFlame.getFinalXForms().add(xForm);\r\n" +
         "  // Final settings   \r\n" +
         "  currFlame.setCamRoll(11.0);\r\n" +
         "  currFlame.setCamPitch(26.0);\r\n" +
@@ -4813,7 +4809,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
         "  }\r\n" +
         "\r\n" +
         "  // final\r\n" +
-        "  currFlame.setFinalXForm(null);\r\n" +
+        "  currFlame.getFinalXForms().clear();\r\n" +
         "\r\n" +
         "  currFlame.setCentreX(0.0);\r\n" +
         "  currFlame.setCentreY(0.0);\r\n" +
@@ -4943,7 +4939,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
         "    varFunc.setParameter(\"power\", 2.0);\r\n" +
         "    varFunc.setParameter(\"dist\", 1.0);\r\n" +
         "    xForm.addVariation(1.0, varFunc);\r\n" +
-        "    currFlame.setFinalXForm(xForm);\r\n" +
+        "    currFlame.getFinalXForms().add(xForm);\r\n" +
         "  }\r\n" +
         "  currFlame.setCamRoll(0.0);\r\n" +
         "  currFlame.setCamPitch(0.0);\r\n" +

@@ -154,7 +154,6 @@ struct FlameRenderThread {
 
 	void iterate1() {
 		XForm **xForms = flame->xForms;
-		XForm *finalXForm = flame->finalXForm;
 		RandGen *rnd = ctx->randGen;
 		bool ready = false;
 		for (double iter = 1; !ready; iter = iter + 1.0) {
@@ -172,8 +171,11 @@ struct FlameRenderThread {
 
 			JWF_FLOAT px, py;
 			int xIdx, yIdx;
-			if (finalXForm != NULL) {
-				finalXForm->transformPoint(ctx, &affineT, &varT, &p, &q);
+			if (flame->finalXFormCount>0) {
+				flame->finalXForms[0]->transformPoint(ctx, &affineT, &varT, &p, &q);
+				for(int i=1;i<flame->finalXFormCount;i++) {
+					flame->finalXForms[i]->transformPoint(ctx, &affineT, &varT, &q, &q);
+				}
 				flameView->project(&q, ctx);
 				px = q.x * flameView->cosa + q.y * flameView->sina + flameView->rcX;
 				if ((px < 0) || (px > flameView->camW))
@@ -181,7 +183,7 @@ struct FlameRenderThread {
 				py = q.y * flameView->cosa - q.x * flameView->sina + flameView->rcY;
 				if ((py < 0) || (py > flameView->camH))
 					continue;
-
+        XForm *finalXForm = flame->finalXForms[flame->finalXFormCount-1];
 				if ((finalXForm->antialiasAmount > EPSILON) && (finalXForm->antialiasRadius > EPSILON) && (rnd->random() > 1.0 - finalXForm->antialiasAmount)) {
 					JWF_FLOAT dr = JWF_EXP(finalXForm->antialiasRadius * JWF_SQRT(-JWF_LOG((JWF_FLOAT) rnd->random()))) - 1.0;
 					JWF_FLOAT da = rnd->random() * 2.0 * M_PI;
@@ -310,11 +312,13 @@ struct FlameRenderThread {
 					continue;
 			}
 
-			XForm *finalXForm = flame->finalXForm;
-			if (finalXForm != NULL) {
+			if (flame->finalXFormCount>0) {
 				for (int i = 0; i < bundleSize; i++) {
 					idx = bundle[i];
-					finalXForm->transformPoint(ctx, &affineTArray[idx], &varTArray[idx], &pArray[idx], &qArray[idx]);
+					flame->finalXForms[0]->transformPoint(ctx, &affineTArray[idx], &varTArray[idx], &pArray[idx], &qArray[idx]);
+					for(int i=1;i<flame->finalXFormCount;i++) {
+						flame->finalXForms[i]->transformPoint(ctx, &affineTArray[idx], &varTArray[idx], &qArray[idx], &qArray[idx]);
+					}
 					flameView->project(&qArray[idx], ctx);
 					pxArray[idx] = qArray[idx].x * flameView->cosa + qArray[idx].y * flameView->sina + flameView->rcX;
 					if ((pxArray[idx] < 0) || (pxArray[idx] > flameView->camW)) {
@@ -357,7 +361,7 @@ struct FlameRenderThread {
 				if (pValidArray[idx] == TRUE) {
 					int xIdx, yIdx;
 
-					XForm *currXForm = finalXForm != NULL ? finalXForm : xf;
+					XForm *currXForm =  flame->finalXFormCount>0  ? flame->finalXForms[flame->finalXFormCount-1] : xf;
 
 					if ((currXForm->antialiasAmount > EPSILON) && (currXForm->antialiasRadius > EPSILON) && (rnd->random() > 1.0 - currXForm->antialiasAmount)) {
 						JWF_FLOAT dr = JWF_EXP(currXForm->antialiasRadius * JWF_SQRT(-JWF_LOG((JWF_FLOAT) rnd->random()))) - 1.0;

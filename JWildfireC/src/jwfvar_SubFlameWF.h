@@ -75,9 +75,12 @@ public:
 			else if ((xf->drawMode == DRAWMODE_OPAQUE) && (pContext->randGen->random() > xf->opacity))
 				return;
 
-			XForm *finalXForm = flame->finalXForm;
-			if (finalXForm != NULL) {
-				finalXForm->transformPoint(pContext, pAffineTP, pVarTP, p, q);
+			if (flame->finalXFormCount>0) {
+				flame->finalXForms[0]->transformPoint(pContext, pAffineTP, pVarTP, p, q);
+				XForm **finalXForms = flame->finalXForms;
+				for(int i=1;i<flame->finalXFormCount;i++) {
+					flame->finalXForms[i]->transformPoint(pContext, pAffineTP, pVarTP, q, q);
+				}
 			}
 		}
 

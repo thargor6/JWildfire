@@ -24,7 +24,7 @@ public:
 	  majp = 1.0;
 	  scale = 0.25;
 	  zlift = 0.25;
-		initParameterNames(4, "majp", "scale", "zlift");
+		initParameterNames(3, "majp", "scale", "zlift");
 	}
 
 	const char* getName() const {

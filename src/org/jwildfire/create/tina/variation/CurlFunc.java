@@ -16,6 +16,7 @@
 */
 package org.jwildfire.create.tina.variation;
 
+import static org.jwildfire.base.MathLib.sqr;
 import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_CUDA;
 import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_JWILDFIRE;
 
@@ -31,10 +32,6 @@ public class CurlFunc extends VariationFunc {
 
   private double c1 = 0;
   private double c2 = 0;
-
-  private double sqr(double pVal) {
-    return pVal * pVal;
-  }
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {

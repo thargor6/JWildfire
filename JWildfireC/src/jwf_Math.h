@@ -20,8 +20,6 @@
 #include <math.h>
 #include "jwf_FastMath.h"
 
-//#define JWF_PREC_DOUBLE
-
 #undef M_PI
 #define M_PI 3.1415926535898
 
@@ -59,7 +57,7 @@
 #define JWF_ACOSH acosh
 #define JWF_ASIN asin
 #define JWF_ATAN atan
-#define JWF_ATAN2 fast_atan2
+#define JWF_ATAN2 atan2
 #define JWF_CEIL ceil
 #define JWF_COS fast_cos
 #define JWF_COSH cosh
@@ -77,7 +75,7 @@
 #define JWF_SIN fast_sin
 #define JWF_SINH sinh
 #define JWF_SQRT sqrt
-#define JWF_TAN fast_tan
+#define JWF_TAN tan
 #define JWF_SINCOS fast_sincos
 
 #ifdef EPSILON

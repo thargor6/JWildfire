@@ -180,24 +180,27 @@ private:
 					p = pe + 2;
 				}
 			}
-			// FinalXForm
+			// FinalXForms
 			{
 				int p = 0;
 				while (true) {
 					int ps = indexOf(flameXML, "<finalxform ", p + 1);
 					if (ps < 0)
 						break;
-					int pe = indexOf(flameXML, "/>", ps + 1);
-					char *hs = substring(flameXML, ps + 12, pe);
+					int pe = indexOf(flameXML, "</finalxform>", ps + 1);
+					if (pe < 0) {
+						pe = indexOf(flameXML, "/>", ps + 1);
+					}
+					char *hs = substring(flameXML, ps + 7, pe);
 					XForm *xForm = new XForm();
 					xForm->init();
 					parseXFormAttributes(xForm, hs);
-					flame->finalXForm = xForm;
-					free(hs);
+					flame->addFinalXForm(xForm);
+					// TODO cause endless loop (?)
+					// free(hs);
 					p = pe + 2;
 				}
 			}
-
 			// Colors
 			{
 				int p = 0;

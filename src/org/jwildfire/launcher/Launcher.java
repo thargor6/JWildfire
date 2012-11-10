@@ -135,7 +135,7 @@ public class Launcher {
     try {
       final String[] imageFilenames = { "image01.jpg", "image02.jpg", "image03.jpg", "image04.jpg", "image05.jpg", "image06.jpg", "image07.jpg",
           "image08.jpg", "image09.jpg", "image10.jpg", "image11.jpg", "image12.jpg", "image14.jpg", "image15.jpg",
-          "image16.jpg" };
+          "image16.jpg", "image17.jpg", "image18.jpg", "image19.jpg" };
       String imageFilename = imageFilenames[(int) (Math.random() * imageFilenames.length)];
       SimpleImage img = getImage(imageFilename);
       imgDisplayPanel.setLayout(null);

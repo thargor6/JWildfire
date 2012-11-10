@@ -31,7 +31,7 @@ public:
 	}
 
 	const char* getName() const {
-		return "pie";
+		return "truchet";
 	}
 
 	void setParameter(char *pName, JWF_FLOAT pValue) {

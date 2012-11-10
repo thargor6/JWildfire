@@ -289,6 +289,8 @@ public class VariationFuncList {
     registerVariationFunc(Cross2Func.class);
     registerVariationFunc(PostBWraps2Func.class);
     registerVariationFunc(PreBWraps2Func.class);
+    registerVariationFunc(PostCurlFunc.class);
+    registerVariationFunc(PostCurl3DFunc.class);
   }
 
   private static void registerVariationFunc(

@@ -155,7 +155,7 @@ int jwf_main(int argc, char *argv[]) {
 		appSettings->showUsage(argv[0]);
 		return -1;
 	}
-	appSettings->dump();
+	//appSettings->dump();
 	return renderFlame(appSettings);
 }
 

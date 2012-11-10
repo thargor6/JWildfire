@@ -64,8 +64,10 @@
 #include "jwfvar_Crackle.h"
 #include "jwfvar_Crop.h"
 #include "jwfvar_Cross.h"
+#include "jwfvar_Cross2.h"
 #include "jwfvar_Csc.h"
 #include "jwfvar_Csch.h"
+#include "jwfvar_Cubic3D.h"
 #include "jwfvar_CubicLattice3D.h"
 #include "jwfvar_Curl.h"
 #include "jwfvar_Curl3D.h"
@@ -135,6 +137,7 @@
 #include "jwfvar_Julia3D.h"
 #include "jwfvar_Julia3DZ.h"
 #include "jwfvar_JuliaN.h"
+#include "jwfvar_JuliaN2.h"
 #include "jwfvar_Juliascope.h"
 #include "jwfvar_Kaleidoscope.h"
 #include "jwfvar_LazySusan.h"
@@ -167,9 +170,12 @@
 #include "jwfvar_Popcorn.h"
 #include "jwfvar_Popcorn2.h"
 #include "jwfvar_Popcorn2_3D.h"
+#include "jwfvar_PostBWraps2.h"
 #include "jwfvar_PostCircleCrop.h"
 #include "jwfvar_PostColorScaleWF.h"
 #include "jwfvar_PostCrop.h"
+#include "jwfvar_PostCurl.h"
+#include "jwfvar_PostCurl3D.h"
 #include "jwfvar_PostDCTransl.h"
 #include "jwfvar_PostFalloff2.h"
 #include "jwfvar_PostMirrorWF.h"
@@ -181,6 +187,7 @@
 #include "jwfvar_Power.h"
 #include "jwfvar_PreBlur.h"
 #include "jwfvar_PreBoarders2.h"
+#include "jwfvar_PreBWraps2.h"
 #include "jwfvar_PreCircleCrop.h"
 #include "jwfvar_PreCrop.h"
 #include "jwfvar_PreDCTransl.h"
@@ -339,8 +346,10 @@ private:
 		addVariation(new CrackleFunc());
 		addVariation(new CropFunc());
 		addVariation(new CrossFunc());
+		addVariation(new Cross2Func());
 		addVariation(new CscFunc());
 		addVariation(new CschFunc());
+		addVariation(new Cubic3DFunc());
 		addVariation(new CubicLattice3DFunc());
 		addVariation(new CurlFunc());
 		addVariation(new Curl3DFunc());
@@ -410,6 +419,7 @@ private:
 		addVariation(new Julia3DFunc());
 		addVariation(new Julia3DZFunc());
 		addVariation(new JuliaNFunc());
+		addVariation(new JuliaN2Func());
 		addVariation(new JuliascopeFunc());
 		addVariation(new KaleidoscopeFunc());
 		addVariation(new LayeredSpiralFunc());
@@ -442,9 +452,12 @@ private:
 		addVariation(new PopcornFunc());
 		addVariation(new Popcorn2Func());
 		addVariation(new Popcorn2_3DFunc());
+		addVariation(new PostBWraps2Func());
 		addVariation(new PostCircleCropFunc());
 		addVariation(new PostColorScaleWFFunc());
 		addVariation(new PostCropFunc());
+		addVariation(new PostCurlFunc());
+		addVariation(new PostCurl3DFunc());
 		addVariation(new PostDCTranslFunc());
 		addVariation(new PostFalloff2Func());
 		addVariation(new PostMirrorWFFunc());
@@ -456,6 +469,7 @@ private:
 		addVariation(new PowerFunc());
 		addVariation(new PreBlurFunc());
 		addVariation(new PreBoarders2Func());
+		addVariation(new PreBWraps2Func());
 		addVariation(new PreCircleCropFunc());
 		addVariation(new PreCropFunc());
 		addVariation(new PreDCTranslFunc());

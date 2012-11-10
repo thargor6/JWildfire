@@ -8041,7 +8041,9 @@ public class TinaInternalFrame extends JInternalFrame {
       rootTabbedPane.addTab("Flame Editor", null, getRootPanel(), null);
       rootTabbedPane.addTab("Interactive Renderer", null, getInteractiveRenderPanel(), null);
       rootTabbedPane.addTab("JWFMovie Maker", null, getTinaSWFAnimatorPanel(), null);
-      rootTabbedPane.addTab("Dancing flames", null, getPanel_36(), null);
+      // TODO
+      getPanel_36();
+      // rootTabbedPane.addTab("Dancing flames", null, getPanel_36(), null);
       rootTabbedPane.addTab("Batch Flame Renderer", null, getBatchRenderPanel(), null);
 
       JPanel helpPanel = new JPanel();

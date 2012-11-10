@@ -22,6 +22,8 @@ import static org.jwildfire.base.MathLib.fabs;
 import static org.jwildfire.base.MathLib.sin;
 import static org.jwildfire.base.MathLib.sqrt;
 import static org.jwildfire.base.MathLib.trunc;
+import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_CUDA;
+import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_JWILDFIRE;
 
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
@@ -124,7 +126,6 @@ public class Cubic_3DFunc extends VariationFunc {
       pVarTP.y = ((pVarTP.y - (smooth * (1.0 - fill) * pVarTP.y * wynze)) + (pAffineTP.y * smooth * fill * wynze)) - lattd;
       pVarTP.z = ((pVarTP.z - (smooth * (1.0 - fill) * pVarTP.z * znxy)) + (pAffineTP.z * smooth * fill * znxy)) - lattd;
     }
-
   }
 
   @Override
@@ -152,4 +153,8 @@ public class Cubic_3DFunc extends VariationFunc {
     return "cubic3D";
   }
 
+  @Override
+  public int getAvailability() {
+    return AVAILABILITY_JWILDFIRE | AVAILABILITY_CUDA;
+  }
 }

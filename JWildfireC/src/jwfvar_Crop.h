@@ -51,7 +51,7 @@ public:
 			scatter_area = pValue;
 		}
 		else if (strcmp(pName, "zero") == 0) {
-			zero = FTOI(pValue) == 1;
+			zero = FTOI(pValue);
 		}
 	}
 

@@ -50,7 +50,9 @@ struct Flame {
 	RGBPalette *palette;
 	XForm **xForms;
 	int xFormCount;
-	XForm *finalXForm;
+	XForm **finalXForms;
+	int finalXFormCount;
+
 
 	void dump() {
 		printf("Flame {\n");
@@ -65,8 +67,8 @@ struct Flame {
 		for (int i = 0; i < xFormCount; i++) {
 			xForms[i]->dump("XForm");
 		}
-		if (finalXForm != NULL) {
-			finalXForm->dump("FinalXForm");
+		for (int i = 0; i < finalXFormCount; i++) {
+			finalXForms[i]->dump("FinalXForm");
 		}
 		if (palette != NULL) {
 			palette->dump();
@@ -78,7 +80,8 @@ struct Flame {
 		palette = NULL;
 		xForms = NULL;
 		xFormCount = 0;
-		finalXForm = NULL;
+		finalXForms = NULL;
+		finalXFormCount = 0;
 		//
 		spatialFilterRadius = 0.0;
 		sampleDensity = 100.0;
@@ -122,8 +125,6 @@ struct Flame {
 		for (int i = 0; i < xFormCount; i++) {
 			xForms[i]->prepareXForm(pThreadCount);
 			for (int j = 0; j < xForms[i]->variationCount; j++) {
-				//Variation *var=xForms[i]->__sortedVariations[j];
-				//var->init(pFlameTransformationContext, var->amount);
 				for (int k = 0; k < pThreadCount; k++) {
 					pFlameTransformationContext->threadIdx = k;
 					Variation *var = xForms[i]->__preparedVariations[k][j];
@@ -131,16 +132,14 @@ struct Flame {
 				}
 			}
 		}
-		// sort and init variations of final transform
-		if (finalXForm != NULL) {
-			finalXForm->prepareXForm(pThreadCount);
-			for (int i = 0; i < finalXForm->variationCount; i++) {
-				//Variation *var=finalXForm->__sortedVariations[i];
-				//var->init(pFlameTransformationContext, var->amount);
+		// sort and init variations of final transforms
+		for (int i = 0; i < finalXFormCount; i++) {
+			finalXForms[i]->prepareXForm(pThreadCount);
+			for (int j = 0; j < finalXForms[i]->variationCount; j++) {
 				for (int k = 0; k < pThreadCount; k++) {
 					pFlameTransformationContext->threadIdx = k;
-					Variation *var = finalXForm->__preparedVariations[k][i];
-					var->init(pFlameTransformationContext, finalXForm, var->amount);
+					Variation *var = finalXForms[i]->__preparedVariations[k][j];
+					var->init(pFlameTransformationContext, finalXForms[i], var->amount);
 				}
 			}
 		}
@@ -192,7 +191,23 @@ struct Flame {
 			xForms = newXForms;
 			xFormCount++;
 		}
+	}
 
+	void addFinalXForm(XForm *pXForm) {
+		if (finalXFormCount == 0) {
+			hostMalloc((void**) &finalXForms, sizeof(XForm*));
+			finalXForms[0] = pXForm;
+			finalXFormCount = 1;
+		}
+		else {
+			XForm **newFinalXForms;
+			hostMalloc((void**) &newFinalXForms, (finalXFormCount + 1) * sizeof(XForm*));
+			memcpy(newFinalXForms, finalXForms, finalXFormCount * sizeof(XForm*));
+			newFinalXForms[finalXFormCount] = pXForm;
+			hostFree(finalXForms);
+			finalXForms = newFinalXForms;
+			finalXFormCount++;
+		}
 	}
 
 };

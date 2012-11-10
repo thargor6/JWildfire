@@ -29,7 +29,7 @@ public:
 	}
 
 	const char* getName() const {
-		return "pie";
+		return "hexnix3D";
 	}
 
 	void setParameter(char *pName, JWF_FLOAT pValue) {

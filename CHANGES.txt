@@ -1,3 +1,18 @@
+V0.56 (10.11.2012):
+ - support for multiple final transforms
+ - post_curl and post_curl3d variations
+ - pre_bwraps2 and post_bwraps2 variation by Xyrus02
+ - new cross2 variation
+ - new julian2 variation by Xyrus02
+ - FIXED: hdr-rendering was broken in the external renderer
+ - FIXED: several variation problems regarding the external renderer
+ - added the missing cubic3d variation to the external renderer
+ - three new images for the launcher
+ - removed the cancel render dialog in the interactive renderer (pressing stop just stops)
+ - first alpha version of the "dancing flames" module (invisible in the release, )
+ - framework for creating a FFT of a mp3 file for further sound processing
+ - integrated the jTransforms library of Piotr Wendykier for further sound processing
+
 V0.55 (23.10.2012):
  - create also a thumbnail if a new flame from scratch is created 
  - update the thumbnails according to the state of the flame itself
