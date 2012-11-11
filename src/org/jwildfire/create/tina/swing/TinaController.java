@@ -476,8 +476,9 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       JWFNumberField pXFormAntialiasAmountREd, JSlider pXFormAntialiasAmountSlider, JWFNumberField pXFormAntialiasRadiusREd, JSlider pXFormAntialiasRadiusSlider,
       JButton pXFormAntialiasCopyToAllBtn, JPanel pDancingFlamesFlamePnl, JPanel pDancingFlamesGraph1Pnl, JButton pDancingFlamesLoadSoundBtn, JButton pDancingFlamesAddFromClipboardBtn,
       JButton pDancingFlamesAddFromEditorBtn, JButton pDancingFlamesAddFromDiscBtn, JWFNumberField pDancingFlamesRandomCountIEd, JButton pDancingFlamesGenRandFlamesBtn,
-      JComboBox pDancingFlamesRandomGenCmb, JTable pDancingFlamesPoolTable, JPanel pDancingFlamesPoolFlamePreviewPnl, JSlider pBorderSizeSlider,
-      JButton pFlameToEditorBtn, JButton pDeleteFlameBtn, JTextField pFramesPerSecondIEd, JTextField pMorphFrameCountIEd) {
+      JComboBox pDancingFlamesRandomGenCmb, JTable pDancingFlamesPoolTable, JPanel pDancingFlamesPoolFlamePreviewPnl, JSlider pDancingFlamesBorderSizeSlider,
+      JButton pDancingFlamesFlameToEditorBtn, JButton pDancingFlamesDeleteFlameBtn, JTextField pDancingFlamesFramesPerSecondIEd,
+      JTextField pDancingFlamesMorphFrameCountIEd, JButton pDancingFlamesStartShowButton, JButton pDancingFlamesStopShowButton) {
     tinaFrame = pTinaFrame;
     tinaFrameTitle = tinaFrame.getTitle();
     errorHandler = pErrorHandler;
@@ -487,8 +488,8 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     dancingFractalsController = new DancingFractalsController(this, pErrorHandler, pDancingFlamesFlamePnl, pDancingFlamesGraph1Pnl,
         pDancingFlamesLoadSoundBtn, pDancingFlamesAddFromClipboardBtn, pDancingFlamesAddFromEditorBtn,
         pDancingFlamesAddFromDiscBtn, pDancingFlamesRandomCountIEd, pDancingFlamesGenRandFlamesBtn,
-        pDancingFlamesRandomGenCmb, pDancingFlamesPoolTable, pDancingFlamesPoolFlamePreviewPnl, pBorderSizeSlider,
-        pFlameToEditorBtn, pDeleteFlameBtn, pFramesPerSecondIEd, pMorphFrameCountIEd);
+        pDancingFlamesRandomGenCmb, pDancingFlamesPoolTable, pDancingFlamesPoolFlamePreviewPnl, pDancingFlamesBorderSizeSlider,
+        pDancingFlamesFlameToEditorBtn, pDancingFlamesDeleteFlameBtn, pDancingFlamesFramesPerSecondIEd, pDancingFlamesMorphFrameCountIEd, pDancingFlamesStartShowButton, pDancingFlamesStopShowButton);
 
     cameraRollREd = pCameraRollREd;
     cameraRollSlider = pCameraRollSlider;

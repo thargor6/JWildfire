@@ -69,7 +69,10 @@ public class RealtimeAnimRenderThread implements Runnable {
           time = System.currentTimeMillis();
         }
         nextFrame = (long) (time + 1000.0 / (double) framesPerSecond + 0.5);
-        Flame flame = controller.getFlame();
+        Flame flame = currFlame;
+        while (flameChanging) {
+          flame = currFlame;
+        }
         if (fftPanel != null && fftData != null) {
           SimpleImage img = fftPanel.getImage();
           short currFFT[] = fftData.getData(musicPlayer.getPosition());
@@ -148,16 +151,26 @@ public class RealtimeAnimRenderThread implements Runnable {
     }
   }
 
-  public void notifyFlameChange(Flame pFlame) {
-    if (pFlame != null) {
-      xForm0 = pFlame.getXForms().get(0);
-      xForm1 = pFlame.getXForms().size() > 1 ? pFlame.getXForms().get(1) : null;
-      xForm2 = pFlame.getXForms().size() > 2 ? pFlame.getXForms().get(2) : null;
-      xFormF = pFlame.getFinalXForms().size() > 0 ? pFlame.getFinalXForms().get(pFlame.getFinalXForms().size() - 1) : null;
-      if (xFormF == null) {
-        xFormF = new XForm();
-        xFormF.addVariation(1.0, VariationFuncList.getVariationFuncInstance("linear3D"));
+  private boolean flameChanging = false;
+  private Flame currFlame;
+
+  public void changeFlame(Flame pFlame) {
+    flameChanging = true;
+    try {
+      if (pFlame != null) {
+        xForm0 = pFlame.getXForms().get(0);
+        xForm1 = pFlame.getXForms().size() > 1 ? pFlame.getXForms().get(1) : null;
+        xForm2 = pFlame.getXForms().size() > 2 ? pFlame.getXForms().get(2) : null;
+        xFormF = pFlame.getFinalXForms().size() > 0 ? pFlame.getFinalXForms().get(pFlame.getFinalXForms().size() - 1) : null;
+        if (xFormF == null) {
+          xFormF = new XForm();
+          xFormF.addVariation(1.0, VariationFuncList.getVariationFuncInstance("linear3D"));
+        }
       }
+      currFlame = pFlame;
+    }
+    finally {
+      flameChanging = false;
     }
   }
 
