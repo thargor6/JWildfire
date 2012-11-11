@@ -95,7 +95,7 @@ public class Flame implements Assignable<Flame>, Serializable {
     whiteLevel = 200;
     deFilterRadius = 7;
     deFilterAmount = 1.25;
-    name = "Untitled";
+    name = "";
     shadingInfo.init();
   }
 

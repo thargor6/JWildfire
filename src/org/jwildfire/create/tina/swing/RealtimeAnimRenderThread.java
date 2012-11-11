@@ -34,6 +34,8 @@ public class RealtimeAnimRenderThread implements Runnable {
   private JLayerInterface musicPlayer;
   private ImagePanel fftPanel;
   private double finalXFormAlpha = 0.0;
+  private int framesPerSecond = 12;
+  private boolean drawTriangles = true;
 
   public RealtimeAnimRenderThread(DancingFractalsController pController) {
     controller = pController;
@@ -51,7 +53,22 @@ public class RealtimeAnimRenderThread implements Runnable {
     boolean doDrawFFT = true;
 
     try {
+      long fpsMeasureMentFrameCount = 0;
+      long startFPSMeasurement = System.currentTimeMillis();
+      long nextFrame = startFPSMeasurement;
+      double fps = 0.0;
       while (!done && !forceAbort) {
+        long time = System.currentTimeMillis();
+        while (time < nextFrame) {
+          try {
+            Thread.sleep(1);
+          }
+          catch (Exception ex) {
+            ex.printStackTrace();
+          }
+          time = System.currentTimeMillis();
+        }
+        nextFrame = (long) (time + 1000.0 / (double) framesPerSecond + 0.5);
         Flame flame = controller.getFlame();
         if (fftPanel != null && fftData != null) {
           SimpleImage img = fftPanel.getImage();
@@ -65,7 +82,14 @@ public class RealtimeAnimRenderThread implements Runnable {
           transformXForm3(currFFT, flame);
           transformXFormF(currFFT, flame);
         }
-        controller.refreshFlameImage(flame, doDrawFFT);
+        fpsMeasureMentFrameCount++;
+        long dt = (System.currentTimeMillis() - startFPSMeasurement);
+        if (dt > 500) {
+          fps = (double) (fpsMeasureMentFrameCount * 1000.0) / (double) dt;
+          fpsMeasureMentFrameCount = 0;
+          startFPSMeasurement = System.currentTimeMillis();
+        }
+        controller.refreshFlameImage(flame, drawTriangles, fps);
       }
     }
     finally {
@@ -178,7 +202,14 @@ public class RealtimeAnimRenderThread implements Runnable {
       for (int x = i * blockSize; x < (i + 1) * blockSize; x++) {
         img.setARGB(x, imgHeight - 1 - iVal, 255, 255, 0, 0);
       }
-
     }
+  }
+
+  public void setFramesPerSecond(int pFPS) {
+    framesPerSecond = pFPS;
+  }
+
+  public void setDrawTriangles(boolean drawTriangles) {
+    this.drawTriangles = drawTriangles;
   }
 }

@@ -17,6 +17,7 @@
 package org.jwildfire.create.tina.swing;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
@@ -32,10 +33,12 @@ import javax.swing.JFileChooser;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
 import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 
 import org.jwildfire.base.Prefs;
+import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.audio.JLayerInterface;
 import org.jwildfire.create.tina.audio.RecordedFFT;
 import org.jwildfire.create.tina.base.Flame;
@@ -49,10 +52,15 @@ import org.jwildfire.create.tina.render.RenderedFlame;
 import org.jwildfire.image.SimpleImage;
 import org.jwildfire.swing.ErrorHandler;
 import org.jwildfire.swing.ImagePanel;
+import org.jwildfire.transform.TextTransformer;
+import org.jwildfire.transform.TextTransformer.FontStyle;
+import org.jwildfire.transform.TextTransformer.HAlignment;
+import org.jwildfire.transform.TextTransformer.Mode;
+import org.jwildfire.transform.TextTransformer.VAlignment;
 
 public class DancingFractalsController implements FlameHolder {
   private final ErrorHandler errorHandler;
-  private final TinaController parent;
+  private final TinaController parentCtrl;
   private final Prefs prefs;
   private final JButton loadSoundBtn;
   private final JButton addFromClipboardBtn;
@@ -66,9 +74,14 @@ public class DancingFractalsController implements FlameHolder {
   private final JSlider borderSizeSlider;
   private final JPanel flameRootPanel;
   private final JPanel graph1RootPanel;
+  private final JButton flameToEditorBtn;
+  private final JButton deleteFlameBtn;
+  private final JTextField framesPerSecondIEd;
+  private final JTextField morphFrameCountIEd;
 
   JLayerInterface jLayer = new JLayerInterface();
   private FlamePanel flamePanel = null;
+  private FlamePanel poolFlamePreviewFlamePanel = null;
   private ImagePanel graph1Panel = null;
   private List<Flame> flames = new ArrayList<Flame>();
   private boolean refreshing;
@@ -78,10 +91,11 @@ public class DancingFractalsController implements FlameHolder {
 
   public DancingFractalsController(TinaController pParent, ErrorHandler pErrorHandler, JPanel pRealtimeFlamePnl, JPanel pRealtimeGraph1Pnl,
       JButton pLoadSoundBtn, JButton pAddFromClipboardBtn, JButton pAddFromEditorBtn, JButton pAddFromDiscBtn, JWFNumberField pRandomCountIEd,
-      JButton pGenRandFlamesBtn, JComboBox pRandomGenCmb, JTable pPoolTable, JPanel pPoolFlamePreviewPnl, JSlider pBorderSizeSlider) {
-    parent = pParent;
+      JButton pGenRandFlamesBtn, JComboBox pRandomGenCmb, JTable pPoolTable, JPanel pPoolFlamePreviewPnl, JSlider pBorderSizeSlider,
+      JButton pFlameToEditorBtn, JButton pDeleteFlameBtn, JTextField pFramesPerSecondIEd, JTextField pMorphFrameCountIEd) {
+    parentCtrl = pParent;
     errorHandler = pErrorHandler;
-    prefs = parent.getPrefs();
+    prefs = parentCtrl.getPrefs();
     flameRootPanel = pRealtimeFlamePnl;
     graph1RootPanel = pRealtimeGraph1Pnl;
     loadSoundBtn = pLoadSoundBtn;
@@ -94,6 +108,10 @@ public class DancingFractalsController implements FlameHolder {
     poolTable = pPoolTable;
     poolFlamePreviewPnl = pPoolFlamePreviewPnl;
     borderSizeSlider = pBorderSizeSlider;
+    flameToEditorBtn = pFlameToEditorBtn;
+    deleteFlameBtn = pDeleteFlameBtn;
+    framesPerSecondIEd = pFramesPerSecondIEd;
+    morphFrameCountIEd = pMorphFrameCountIEd;
     refreshPoolTable();
     enableControls();
   }
@@ -115,14 +133,31 @@ public class DancingFractalsController implements FlameHolder {
       SimpleImage img = new SimpleImage(width, height);
       img.fillBackground(0, 0, 0);
       flamePanel = new FlamePanel(img, 0, 0, flameRootPanel.getWidth() - borderWidth, this, null, null);
+      // TODO right aspect
       flamePanel.setRenderWidth(640);
       flamePanel.setRenderHeight(480);
-      flamePanel.setFocusable(true);
       flameRootPanel.add(flamePanel, BorderLayout.CENTER);
       flameRootPanel.getParent().validate();
       flameRootPanel.repaint();
     }
     return flamePanel;
+  }
+
+  private FlamePanel getPoolPreviewFlamePanel() {
+    if (poolFlamePreviewFlamePanel == null && poolFlamePreviewPnl != null) {
+      int width = poolFlamePreviewPnl.getWidth();
+      int height = poolFlamePreviewPnl.getHeight();
+      SimpleImage img = new SimpleImage(width, height);
+      img.fillBackground(0, 0, 0);
+      poolFlamePreviewFlamePanel = new FlamePanel(img, 0, 0, poolFlamePreviewPnl.getWidth(), this, null, null);
+      // TODO right aspect
+      poolFlamePreviewFlamePanel.setRenderWidth(640);
+      poolFlamePreviewFlamePanel.setRenderHeight(480);
+      poolFlamePreviewPnl.add(poolFlamePreviewFlamePanel, BorderLayout.CENTER);
+      poolFlamePreviewPnl.getParent().validate();
+      poolFlamePreviewPnl.repaint();
+    }
+    return poolFlamePreviewFlamePanel;
   }
 
   private ImagePanel getGraph1Panel() {
@@ -139,13 +174,14 @@ public class DancingFractalsController implements FlameHolder {
     return graph1Panel;
   }
 
-  public void refreshFlameImage(Flame flame, boolean pDrawTriangles) {
+  public void refreshFlameImage(Flame flame, boolean pDrawTriangles, double pFPS) {
     FlamePanel imgPanel = getFlamePanel();
     if (imgPanel == null)
       return;
     Rectangle bounds = imgPanel.getImageBounds();
     int width = bounds.width;
     int height = bounds.height;
+    boolean showFPS = true;
     if (width >= 16 && height >= 16) {
       RenderInfo info = new RenderInfo(width, height);
       if (flame != null) {
@@ -171,7 +207,21 @@ public class DancingFractalsController implements FlameHolder {
           flame.setSpatialOversample(1);
           flame.setColorOversample(1);
           RenderedFlame res = renderer.renderFlame(info);
-          imgPanel.setImage(res.getImage());
+          SimpleImage img = res.getImage();
+          if (showFPS) {
+            TextTransformer txt = new TextTransformer();
+            txt.setText1("fps: " + Tools.doubleToString(pFPS));
+            txt.setAntialiasing(false);
+            txt.setColor(Color.LIGHT_GRAY);
+            txt.setMode(Mode.NORMAL);
+            txt.setFontStyle(FontStyle.PLAIN);
+            txt.setFontName("Arial");
+            txt.setFontSize(10);
+            txt.setHAlign(HAlignment.LEFT);
+            txt.setVAlign(VAlignment.BOTTOM);
+            txt.transformImage(img);
+          }
+          imgPanel.setImage(img);
         }
         finally {
           flame.setSpatialFilterRadius(oldSpatialFilterRadius);
@@ -185,6 +235,49 @@ public class DancingFractalsController implements FlameHolder {
       imgPanel.setImage(new SimpleImage(width, height));
     }
     flameRootPanel.repaint();
+  }
+
+  public void refreshPoolPreviewFlameImage(Flame flame) {
+    FlamePanel imgPanel = getPoolPreviewFlamePanel();
+    if (imgPanel == null)
+      return;
+    Rectangle bounds = imgPanel.getImageBounds();
+    int width = bounds.width;
+    int height = bounds.height;
+    if (width >= 16 && height >= 16) {
+      RenderInfo info = new RenderInfo(width, height);
+      if (flame != null) {
+        double oldSpatialFilterRadius = flame.getSpatialFilterRadius();
+        int oldSpatialOversample = flame.getSpatialOversample();
+        int oldColorOversample = flame.getColorOversample();
+        double oldSampleDensity = flame.getSampleDensity();
+        imgPanel.setDrawTriangles(false);
+        try {
+          double wScl = (double) info.getImageWidth() / (double) flame.getWidth();
+          double hScl = (double) info.getImageHeight() / (double) flame.getHeight();
+          flame.setPixelsPerUnit((wScl + hScl) * 0.5 * flame.getPixelsPerUnit());
+          flame.setWidth(info.getImageWidth());
+          flame.setHeight(info.getImageHeight());
+          FlameRenderer renderer = new FlameRenderer(flame, prefs, false);
+          renderer.setProgressUpdater(null);
+          flame.setSampleDensity(prefs.getTinaRenderRealtimeQuality());
+          flame.setSpatialOversample(1);
+          flame.setColorOversample(1);
+          RenderedFlame res = renderer.renderFlame(info);
+          imgPanel.setImage(res.getImage());
+        }
+        finally {
+          flame.setSpatialFilterRadius(oldSpatialFilterRadius);
+          flame.setSpatialOversample(oldSpatialOversample);
+          flame.setColorOversample(oldColorOversample);
+          flame.setSampleDensity(oldSampleDensity);
+        }
+      }
+    }
+    else {
+      imgPanel.setImage(new SimpleImage(width, height));
+    }
+    poolFlamePreviewPnl.repaint();
   }
 
   private RecordedFFT fft;
@@ -232,6 +325,7 @@ public class DancingFractalsController implements FlameHolder {
     renderThread.setFFTData(fft);
     renderThread.setMusicPlayer(jLayer);
     renderThread.setFFTPanel(getGraph1Panel());
+    renderThread.setFramesPerSecond(Integer.parseInt(framesPerSecondIEd.getText()));
     new Thread(renderThread).start();
   }
 
@@ -311,6 +405,7 @@ public class DancingFractalsController implements FlameHolder {
         // TODO more
         if (renderThread != null)
           renderThread.notifyFlameChange(getFlame());
+        refreshPoolPreviewFlameImage(getFlame());
       }
       finally {
         refreshing = oldRefreshing;
@@ -437,5 +532,18 @@ public class DancingFractalsController implements FlameHolder {
         flameRootPanel.repaint();
       }
     }
+  }
+
+  public void flameToEditorBtn_clicked() {
+    Flame flame = getFlame();
+    if (flame != null) {
+      parentCtrl.importFlame(flame);
+      parentCtrl.getRootTabbedPane().setSelectedIndex(0);
+    }
+
+  }
+
+  public void deleteFlameBtn_clicked() {
+    // TODO
   }
 }
