@@ -81,7 +81,7 @@ public class Flam3Writer {
         if (ressNames != null) {
           byte vals[][] = func.getRessourceValues();
           for (int i = 0; i < ressNames.length; i++) {
-            String hexStr = vals[i] != null ? Tools.byteArrayToHexString(vals[i]) : "";
+            String hexStr = vals[i] != null && vals[i].length > 0 ? Tools.byteArrayToHexString(vals[i]) : "";
             attrList.add(pXB.createAttr((func.getName() + "_" + ressNames[i]), hexStr));
           }
         }
@@ -138,8 +138,10 @@ public class Flam3Writer {
     if (pFlame.isPreserveZ()) {
       attrList.add(xb.createAttr("preserve_z", "1"));
     }
-    attrList.add(xb.createAttr("resolution_profile", pFlame.getResolutionProfile()));
-    attrList.add(xb.createAttr("quality_profile", pFlame.getQualityProfile()));
+    if (pFlame.getResolutionProfile() != null && pFlame.getResolutionProfile().length() > 0)
+      attrList.add(xb.createAttr("resolution_profile", pFlame.getResolutionProfile()));
+    if (pFlame.getQualityProfile() != null && pFlame.getQualityProfile().length() > 0)
+      attrList.add(xb.createAttr("quality_profile", pFlame.getQualityProfile()));
     attrList.add(xb.createAttr("de_filter_radius", pFlame.getDEFilterRadius()));
     attrList.add(xb.createAttr("de_filter_amount", pFlame.getDEFilterAmount()));
     ShadingInfo shadingInfo = pFlame.getShadingInfo();

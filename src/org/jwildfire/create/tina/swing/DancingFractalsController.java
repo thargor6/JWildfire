@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JPanel;
@@ -39,6 +40,7 @@ import javax.swing.table.DefaultTableModel;
 
 import org.jwildfire.base.Prefs;
 import org.jwildfire.base.Tools;
+import org.jwildfire.create.tina.animate.FlameMorphService;
 import org.jwildfire.create.tina.audio.JLayerInterface;
 import org.jwildfire.create.tina.audio.RecordedFFT;
 import org.jwildfire.create.tina.base.Flame;
@@ -80,6 +82,8 @@ public class DancingFractalsController {
   private final JTextField morphFrameCountIEd;
   private final JButton startShowButton;
   private final JButton stopShowButton;
+  private final JButton shuffleFlamesBtn;
+  private final JCheckBox doRecordCBx;
 
   JLayerInterface jLayer = new JLayerInterface();
   private FlamePanel flamePanel = null;
@@ -97,7 +101,7 @@ public class DancingFractalsController {
       JButton pLoadSoundBtn, JButton pAddFromClipboardBtn, JButton pAddFromEditorBtn, JButton pAddFromDiscBtn, JWFNumberField pRandomCountIEd,
       JButton pGenRandFlamesBtn, JComboBox pRandomGenCmb, JTable pPoolTable, JPanel pPoolFlamePreviewPnl, JSlider pBorderSizeSlider,
       JButton pFlameToEditorBtn, JButton pDeleteFlameBtn, JTextField pFramesPerSecondIEd, JTextField pMorphFrameCountIEd,
-      JButton pStartShowButton, JButton pStopShowButton) {
+      JButton pStartShowButton, JButton pStopShowButton, JButton pShuffleFlamesBtn, JCheckBox pDoRecordCBx) {
     parentCtrl = pParent;
     errorHandler = pErrorHandler;
     prefs = parentCtrl.getPrefs();
@@ -119,6 +123,8 @@ public class DancingFractalsController {
     morphFrameCountIEd = pMorphFrameCountIEd;
     startShowButton = pStartShowButton;
     stopShowButton = pStopShowButton;
+    shuffleFlamesBtn = pShuffleFlamesBtn;
+    doRecordCBx = pDoRecordCBx;
     refreshPoolTable();
     enableControls();
   }
@@ -126,22 +132,41 @@ public class DancingFractalsController {
   public class RenderFlameHolder implements FlameHolder {
     private Flame currFlame = null;
     private Flame nextFlame = null;
+    private int morphFrameCount;
+    private int morphFrame;
 
     @Override
     public Flame getFlame() {
       if (nextFlame != null) {
-        Flame newFlame = nextFlame.makeCopy();
-        if (renderThread != null) {
-          renderThread.changeFlame(newFlame);
+        if (currFlame != null && morphFrameCount > 1 && morphFrame < morphFrameCount) {
+          Flame newFlame = FlameMorphService.morphFlames(prefs, currFlame, nextFlame, morphFrame++, morphFrameCount);
+          if (renderThread != null) {
+            renderThread.changeFlame(newFlame, true);
+          }
+          return newFlame;
         }
-        currFlame = newFlame;
-        nextFlame = null;
+        else {
+          Flame newFlame = nextFlame.makeCopy();
+          if (renderThread != null) {
+            renderThread.changeFlame(newFlame, false);
+          }
+          currFlame = newFlame;
+          nextFlame = null;
+          return newFlame;
+        }
       }
       return currFlame;
     }
 
     public void setNextFlame(Flame pFlame) {
+      morphFrameCount = Integer.parseInt(morphFrameCountIEd.getText());
+      if (morphFrameCount < 1)
+        morphFrameCount = 1;
+      if (doRecordCBx.isSelected() && renderThread != null) {
+        renderThread.recordFlameChange(pFlame, morphFrameCount);
+      }
       nextFlame = pFlame;
+      morphFrame = 1;
     }
   }
 
@@ -309,8 +334,6 @@ public class DancingFractalsController {
     try {
       if (flames.size() == 0)
         throw new Exception("No flames to animate");
-      if (poolTable.getSelectedRow() < 0)
-        poolTable.setRowSelectionInterval(0, 0);
       if (soundFilename == null || soundFilename.length() == 0)
         throw new Exception("No sound file specified");
       if (fft == null)
@@ -336,7 +359,7 @@ public class DancingFractalsController {
     }
   }
 
-  public void startRender() {
+  public void startRender() throws Exception {
     stopRender();
     renderThread = new RealtimeAnimRenderThread(this);
     renderFlameHolder.setNextFlame(poolFlameHolder.getFlame());
@@ -347,14 +370,33 @@ public class DancingFractalsController {
     new Thread(renderThread).start();
   }
 
-  public void stopRender() {
+  public void stopRender() throws Exception {
     if (renderThread != null) {
+      if (doRecordCBx.isSelected()) {
+        renderThread.recordStop();
+      }
       renderThread.setForceAbort(true);
+      if (doRecordCBx.isSelected()) {
+        JFileChooser chooser = new FlameFileChooser(prefs);
+        if (prefs.getOutputFlamePath() != null) {
+          try {
+            chooser.setCurrentDirectory(new File(prefs.getOutputFlamePath()));
+          }
+          catch (Exception ex) {
+            ex.printStackTrace();
+          }
+        }
+        if (chooser.showSaveDialog(flameRootPanel) == JFileChooser.APPROVE_OPTION) {
+          File file = chooser.getSelectedFile();
+          prefs.setLastOutputFlameFile(file);
+          renderThread.createRecordedFlameFiles(file.getAbsolutePath());
+        }
+      }
       renderThread = null;
     }
   }
 
-  public void randomFlame() {
+  public void genRandomFlames() {
     try {
       final int IMG_WIDTH = 80;
       final int IMG_HEIGHT = 60;
@@ -476,6 +518,8 @@ public class DancingFractalsController {
     poolTable.getTableHeader().setFont(poolTable.getFont());
     poolTable.getColumnModel().getColumn(COL_FLAME).setWidth(60);
     poolTable.getColumnModel().getColumn(COL_TRANSFORMS).setWidth(16);
+    if (flames.size() > 0 && poolTable.getSelectedRow() < 0)
+      poolTable.setRowSelectionInterval(0, 0);
   }
 
   public void loadFlameFromClipboardButton_clicked() {
@@ -515,15 +559,17 @@ public class DancingFractalsController {
           ex.printStackTrace();
         }
       }
+      chooser.setMultiSelectionEnabled(true);
       if (chooser.showOpenDialog(poolFlamePreviewPnl) == JFileChooser.APPROVE_OPTION) {
-        File file = chooser.getSelectedFile();
-        List<Flame> newFlames = new Flam3Reader(prefs).readFlames(file.getAbsolutePath());
-        prefs.setLastInputFlameFile(file);
-        if (newFlames != null && newFlames.size() > 0) {
-          flames.addAll(newFlames);
-          refreshPoolTable();
-          enableControls();
+        for (File file : chooser.getSelectedFiles()) {
+          List<Flame> newFlames = new Flam3Reader(prefs).readFlames(file.getAbsolutePath());
+          prefs.setLastInputFlameFile(file);
+          if (newFlames != null && newFlames.size() > 0) {
+            flames.addAll(newFlames);
+          }
         }
+        refreshPoolTable();
+        enableControls();
       }
     }
     catch (Throwable ex) {
@@ -559,8 +605,6 @@ public class DancingFractalsController {
     if (flame != null) {
       flames.remove(flame);
       refreshPoolTable();
-      if (flames.size() > 0)
-        poolTable.setRowSelectionInterval(0, 0);
       enableControls();
     }
   }
@@ -598,5 +642,32 @@ public class DancingFractalsController {
     morphFrameCountIEd.setEnabled(true);
     startShowButton.setEnabled(!running && flames != null && flames.size() > 0 && soundFilename != null && soundFilename.length() > 0 && fft != null);
     stopShowButton.setEnabled(running);
+    shuffleFlamesBtn.setEnabled(flames != null && flames.size() > 0);
+    doRecordCBx.setEnabled(!running);
+  }
+
+  public void shuffleFlamesBtn_clicked() {
+    if (flames.size() > 0) {
+      List<Flame> currFlames = new ArrayList<Flame>();
+      currFlames.addAll(flames);
+      Flame selFlame;
+      {
+        int currIdx = poolTable.getSelectedRow();
+        if (currIdx < 0)
+          currIdx = 0;
+        selFlame = flames.get(currIdx);
+      }
+      List<Flame> newFlames = new ArrayList<Flame>();
+      while (currFlames.size() > 0) {
+        int idx = (int) (Math.random() * currFlames.size());
+        newFlames.add(currFlames.get(idx));
+        currFlames.remove(idx);
+      }
+      flames = newFlames;
+      refreshPoolTable();
+      int newIdx = flames.indexOf(selFlame);
+      poolTable.setRowSelectionInterval(newIdx, newIdx);
+    }
+
   }
 }

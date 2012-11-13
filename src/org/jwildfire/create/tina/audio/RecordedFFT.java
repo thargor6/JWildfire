@@ -90,6 +90,12 @@ public class RecordedFFT {
     }
   }
 
+  public short[] getDataByTimeOffset(long pTimeOffsetInMS) {
+    double intervals = (double) pTimeOffsetInMS / (double) recordedIntervalInMilliseconds;
+    long position = (long) (inputSamplePerFFTRowCount * intervals / (double) recordedChannels + 0.5);
+    return getData(position);
+  }
+
   public short[] getData(long pPosition) {
     short[] res = new short[storedValuesPerFFTRow];
     double fidx = (double) pPosition / (double) inputSamplePerFFTRowCount * (double) recordedChannels;

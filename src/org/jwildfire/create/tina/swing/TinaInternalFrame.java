@@ -3497,7 +3497,7 @@ public class TinaInternalFrame extends JInternalFrame {
         getDancingFlamesAddFromEditorBtn(), getDancingFlamesAddFromDiscBtn(), getDancingFlamesRandomCountIEd(), getDancingFlamesGenRandFlamesBtn(),
         getDancingFlamesRandomGenCmb(), getDancingFlamesPoolTable(), getDancingFlamesPoolFlamePreviewPnl(), getDancingFlamesBorderSizeSlider(),
         getDancingFlamesFlameToEditorBtn(), getDancingFlamesDeleteFlameBtn(), getDancingFlamesFramesPerSecondIEd(), getDancingFlamesMorphFrameCountIEd(),
-        getDancingFlamesStartShowBtn(), getDancingFlamesStopShowBtn());
+        getDancingFlamesStartShowBtn(), getDancingFlamesStopShowBtn(), getDancingFlamesShuffleFlamesBtn(), getDancingFlamesDoRecordCBx());
 
     tinaController.refreshing = tinaController.cmbRefreshing = tinaController.gridRefreshing = true;
     try {
@@ -8246,6 +8246,8 @@ public class TinaInternalFrame extends JInternalFrame {
   private JLabel lblMorphFrames;
   private JPanel batchPreviewRootPanel;
   private JButton dancingFlamesStartShowBtn;
+  private JButton dancingFlamesShuffleFlamesBtn;
+  private JCheckBox dancingFlamesDoRecordCBx;
 
   /**
    * This method initializes renderBatchJobsScrollPane	
@@ -11116,8 +11118,8 @@ public class TinaInternalFrame extends JInternalFrame {
       });
       dancingFlamesAddFromDiscBtn.setMaximumSize(new Dimension(30000, 24));
       dancingFlamesAddFromDiscBtn.setMinimumSize(new Dimension(125, 24));
-      dancingFlamesAddFromDiscBtn.setToolTipText("Load flame from file and add it to the movie");
-      dancingFlamesAddFromDiscBtn.setText("Add flame from disc");
+      dancingFlamesAddFromDiscBtn.setToolTipText("Load flames from file and add it to the movie");
+      dancingFlamesAddFromDiscBtn.setText("Add flames from disc");
       dancingFlamesAddFromDiscBtn.setPreferredSize(new Dimension(125, 24));
       dancingFlamesAddFromDiscBtn.setFont(new Font("Dialog", Font.BOLD, 10));
     }
@@ -11276,7 +11278,7 @@ public class TinaInternalFrame extends JInternalFrame {
       panel_46.add(dancingFlamesGenRandFlamesBtn);
       dancingFlamesGenRandFlamesBtn.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
-          tinaController.getDancingFractalsController().randomFlame();
+          tinaController.getDancingFractalsController().genRandomFlames();
         }
       });
       dancingFlamesGenRandFlamesBtn.setText("Generate random flames");
@@ -11384,6 +11386,8 @@ public class TinaInternalFrame extends JInternalFrame {
       dancingFlamesStartShowBtn.setMaximumSize(new Dimension(32000, 24));
       dancingFlamesStartShowBtn.setFont(new Font("Dialog", Font.BOLD, 10));
       panel_50.add(getDancingFlamesStopShowBtn());
+      panel_50.add(getDancingFlamesShuffleFlamesBtn());
+      panel_50.add(getDancingFlamesDoRecordCBx());
     }
     return panel_50;
   }
@@ -11566,7 +11570,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JTextField getDancingFlamesMorphFrameCountIEd() {
     if (dancingFlamesMorphFrameCountIEd == null) {
       dancingFlamesMorphFrameCountIEd = new JTextField();
-      dancingFlamesMorphFrameCountIEd.setText("30");
+      dancingFlamesMorphFrameCountIEd.setText("7");
       dancingFlamesMorphFrameCountIEd.setPreferredSize(new Dimension(56, 22));
       dancingFlamesMorphFrameCountIEd.setFont(new Font("Dialog", Font.PLAIN, 10));
     }
@@ -11595,5 +11599,32 @@ public class TinaInternalFrame extends JInternalFrame {
 
   public JButton getDancingFlamesStartShowBtn() {
     return dancingFlamesStartShowBtn;
+  }
+
+  private JButton getDancingFlamesShuffleFlamesBtn() {
+    if (dancingFlamesShuffleFlamesBtn == null) {
+      dancingFlamesShuffleFlamesBtn = new JButton();
+      dancingFlamesShuffleFlamesBtn.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getDancingFractalsController().shuffleFlamesBtn_clicked();
+        }
+      });
+      dancingFlamesShuffleFlamesBtn.setMnemonic(KeyEvent.VK_H);
+      dancingFlamesShuffleFlamesBtn.setToolTipText("Reorganize the flame list");
+      dancingFlamesShuffleFlamesBtn.setText("Shuffle");
+      dancingFlamesShuffleFlamesBtn.setPreferredSize(new Dimension(125, 24));
+      dancingFlamesShuffleFlamesBtn.setMinimumSize(new Dimension(100, 24));
+      dancingFlamesShuffleFlamesBtn.setMaximumSize(new Dimension(32000, 24));
+      dancingFlamesShuffleFlamesBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+    }
+    return dancingFlamesShuffleFlamesBtn;
+  }
+
+  private JCheckBox getDancingFlamesDoRecordCBx() {
+    if (dancingFlamesDoRecordCBx == null) {
+      dancingFlamesDoRecordCBx = new JCheckBox("Record");
+      dancingFlamesDoRecordCBx.setPreferredSize(new Dimension(125, 18));
+    }
+    return dancingFlamesDoRecordCBx;
   }
 } //  @jve:decl-index=0:visual-constraint="10,10"
