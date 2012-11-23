@@ -291,6 +291,9 @@ public class VariationFuncList {
     registerVariationFunc(PreBWraps2Func.class);
     registerVariationFunc(PostCurlFunc.class);
     registerVariationFunc(PostCurl3DFunc.class);
+
+    registerVariationFunc(FractDragonWFFunc.class);
+    registerVariationFunc(FractMandelbrotWFFunc.class);
   }
 
   private static void registerVariationFunc(
