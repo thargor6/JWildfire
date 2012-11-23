@@ -20,10 +20,12 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.jwildfire.create.tina.animate.FlameMorphService;
 import org.jwildfire.create.tina.audio.JLayerInterface;
 import org.jwildfire.create.tina.audio.RecordedFFT;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.XForm;
+import org.jwildfire.create.tina.io.Flam3Reader;
 import org.jwildfire.create.tina.io.Flam3Writer;
 import org.jwildfire.create.tina.transform.XFormTransformService;
 import org.jwildfire.create.tina.variation.VariationFuncList;
@@ -56,7 +58,7 @@ public class RealtimeAnimRenderThread implements Runnable {
   public void run() {
     running = forceAbort = false;
     finalXFormAlpha = 0.0;
-    boolean doDrawFFT = true;
+    boolean doDrawFFT = false;
     // TODO unify
     try {
       long fpsMeasureMentFrameCount = 0;
@@ -164,11 +166,11 @@ public class RealtimeAnimRenderThread implements Runnable {
       double amp2 = getFFTValue(pFFT, 2);
       double amp6 = getFFTValue(pFFT, 6);
       XForm xForm = xFormF.makeCopy();
-      XFormTransformService.rotate(xForm, finalXFormAlpha, false);
+      //      XFormTransformService.rotate(xForm, finalXFormAlpha, false);
       finalXFormAlpha += amp6;
       if (finalXFormAlpha > 360)
         finalXFormAlpha -= 360;
-      XFormTransformService.scale(xForm, 1.0 + amp2 * 0.1, true, true, false);
+      XFormTransformService.scale(xForm, 1.0 + (amp2 + amp6) * 0.25, true, true, false);
       pFlame.getFinalXForms().clear();
       pFlame.getFinalXForms().add(xForm);
     }
@@ -317,17 +319,29 @@ public class RealtimeAnimRenderThread implements Runnable {
   }
 
   public void createRecordedFlameFiles(String pAbsolutePath) throws Exception {
+    // TODO
+    Flame paletteFlame;
+    try {
+
+      List<Flame> flames = new Flam3Reader(controller.getParentCtrl().getPrefs()).readFlames("C:\\TMP\\wf\\Apophysis\\dance\\0frost.flame");
+      paletteFlame = flames.get(0);
+    }
+    catch (Exception ex) {
+      paletteFlame = null;
+    }
+
     if (recordedActions.size() >= 2) {
       int actionIdx = 0;
       StartAction startAction = (StartAction) recordedActions.get(actionIdx++);
       Flame currFlame = startAction.getFlame();
       changeFlame(currFlame, false);
       List<Flame> flames = new ArrayList<Flame>();
-      flames.add(currFlame);
 
       RecordedAction nextAction = recordedActions.get(actionIdx++);
       long timeRenderStarted = System.currentTimeMillis();
       long nextFrame = (long) (timeRenderStarted + 1000.0 / (double) framesPerSecond + 0.5);
+      int morphFrameCount = 0, morphFrame = 0;
+      Flame nextFlame = null, prevFlame = null;
       while (true) {
         long time = System.currentTimeMillis();
         while (time < nextFrame) {
@@ -341,7 +355,21 @@ public class RealtimeAnimRenderThread implements Runnable {
         }
         nextFrame = (long) (time + 1000.0 / (double) framesPerSecond + 0.5);
 
-        Flame flame = currFlame;
+        Flame flame;
+        if (nextFlame != null && nextFlame != null) {
+          if (morphFrame < morphFrameCount) {
+            flame = FlameMorphService.morphFlames(controller.getParentCtrl().getPrefs(), prevFlame, nextFlame, morphFrame++, morphFrameCount);
+            changeFlame(flame, true);
+          }
+          else {
+            flame = currFlame = nextFlame;
+            changeFlame(flame, false);
+            nextFlame = null;
+          }
+        }
+        else {
+          flame = currFlame;
+        }
         if (fftData != null) {
           short currFFT[] = fftData.getDataByTimeOffset(time - timeRenderStarted);
           if (!currIsMorphing) {
@@ -355,7 +383,18 @@ public class RealtimeAnimRenderThread implements Runnable {
 
         //
         flame.setBGTransparency(false);
-        flame.setGamma(1.6);
+        flame.setGamma(1.5);
+        flame.setBrightness(3.36);
+        flame.getPalette().setModRed(90);
+        flame.getPalette().setModRed(60);
+        flame.getPalette().setModBlue(-60);
+
+        //        flame.setBrightness(3.36);
+        //        flame.setContrast(1.69);
+        //        flame.getPalette().setModRed(-11);
+        //        flame.getPalette().setModGreen(7);
+        //        flame.getPalette().setModBlue(99);
+        //        flame.getPalette().setModSaturation(-123);
         //
 
         flames.add(flame.makeCopy());
@@ -364,8 +403,19 @@ public class RealtimeAnimRenderThread implements Runnable {
             break;
           }
           else if (nextAction instanceof FlameChangeAction) {
-            currFlame = ((FlameChangeAction) nextAction).getFlame();
-            changeFlame(currFlame, false);
+            nextFlame = ((FlameChangeAction) nextAction).getFlame();
+            prevFlame = currFlame;
+            morphFrameCount = ((FlameChangeAction) nextAction).morphFrameCount;
+            morphFrame = 1;
+            if (morphFrameCount > 1) {
+              currFlame = FlameMorphService.morphFlames(controller.getParentCtrl().getPrefs(), prevFlame, nextFlame, morphFrame++, morphFrameCount);
+              changeFlame(currFlame, true);
+            }
+            else {
+              currFlame = nextFlame;
+              nextFlame = null;
+              changeFlame(currFlame, false);
+            }
             nextAction = recordedActions.get(actionIdx++);
           }
           else {

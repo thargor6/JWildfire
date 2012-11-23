@@ -3497,7 +3497,8 @@ public class TinaInternalFrame extends JInternalFrame {
         getDancingFlamesAddFromEditorBtn(), getDancingFlamesAddFromDiscBtn(), getDancingFlamesRandomCountIEd(), getDancingFlamesGenRandFlamesBtn(),
         getDancingFlamesRandomGenCmb(), getDancingFlamesPoolTable(), getDancingFlamesPoolFlamePreviewPnl(), getDancingFlamesBorderSizeSlider(),
         getDancingFlamesFlameToEditorBtn(), getDancingFlamesDeleteFlameBtn(), getDancingFlamesFramesPerSecondIEd(), getDancingFlamesMorphFrameCountIEd(),
-        getDancingFlamesStartShowBtn(), getDancingFlamesStopShowBtn(), getDancingFlamesShuffleFlamesBtn(), getDancingFlamesDoRecordCBx());
+        getDancingFlamesStartShowBtn(), getDancingFlamesStopShowBtn(), getDancingFlamesShuffleFlamesBtn(), getDancingFlamesDoRecordCBx(),
+        getDancingFlamesSaveAllFlamesBtn());
 
     tinaController.refreshing = tinaController.cmbRefreshing = tinaController.gridRefreshing = true;
     try {
@@ -8248,6 +8249,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton dancingFlamesStartShowBtn;
   private JButton dancingFlamesShuffleFlamesBtn;
   private JCheckBox dancingFlamesDoRecordCBx;
+  private JButton dancingFlamesSaveAllFlamesBtn;
 
   /**
    * This method initializes renderBatchJobsScrollPane	
@@ -11205,6 +11207,7 @@ public class TinaInternalFrame extends JInternalFrame {
       panel_42.setPreferredSize(new Dimension(70, 10));
       panel_42.add(getDancingFlamesFlameToEditorBtn());
       panel_42.add(getDancingFlamesDeleteFlameBtn());
+      panel_42.add(getDancingFlamesSaveAllFlamesBtn());
     }
     return panel_42;
   }
@@ -11626,5 +11629,22 @@ public class TinaInternalFrame extends JInternalFrame {
       dancingFlamesDoRecordCBx.setPreferredSize(new Dimension(125, 18));
     }
     return dancingFlamesDoRecordCBx;
+  }
+
+  private JButton getDancingFlamesSaveAllFlamesBtn() {
+    if (dancingFlamesSaveAllFlamesBtn == null) {
+      dancingFlamesSaveAllFlamesBtn = new JButton();
+      dancingFlamesSaveAllFlamesBtn.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getDancingFractalsController().saveAllFlamesBtn_clicked();
+        }
+      });
+      dancingFlamesSaveAllFlamesBtn.setToolTipText("Save all flames to disc (as numbered file sequence)");
+      dancingFlamesSaveAllFlamesBtn.setText("Save");
+      dancingFlamesSaveAllFlamesBtn.setPreferredSize(new Dimension(60, 24));
+      dancingFlamesSaveAllFlamesBtn.setMnemonic(KeyEvent.VK_S);
+      dancingFlamesSaveAllFlamesBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+    }
+    return dancingFlamesSaveAllFlamesBtn;
   }
 } //  @jve:decl-index=0:visual-constraint="10,10"

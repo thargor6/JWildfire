@@ -18,7 +18,6 @@ package org.jwildfire.create.tina.swing;
 
 import org.jwildfire.create.tina.render.ProgressUpdater;
 
-
 public class JobProgressUpdater implements ProgressUpdater {
   private final TinaInternalFrame parent;
 
@@ -36,7 +35,7 @@ public class JobProgressUpdater implements ProgressUpdater {
       parent.getBatchRenderJobProgressBar().validate();
     }
     catch (Throwable ex) {
-      ex.printStackTrace();
+      //      ex.printStackTrace();
     }
   }
 
@@ -48,7 +47,7 @@ public class JobProgressUpdater implements ProgressUpdater {
       parent.getBatchRenderJobProgressBar().validate();
     }
     catch (Throwable ex) {
-      ex.printStackTrace();
+      //    ex.printStackTrace();
     }
   }
 

@@ -45,6 +45,7 @@ import org.jwildfire.create.tina.audio.JLayerInterface;
 import org.jwildfire.create.tina.audio.RecordedFFT;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.io.Flam3Reader;
+import org.jwildfire.create.tina.io.Flam3Writer;
 import org.jwildfire.create.tina.randomflame.RandomFlameGenerator;
 import org.jwildfire.create.tina.randomflame.RandomFlameGeneratorList;
 import org.jwildfire.create.tina.randomflame.RandomFlameGeneratorSampler;
@@ -84,6 +85,7 @@ public class DancingFractalsController {
   private final JButton stopShowButton;
   private final JButton shuffleFlamesBtn;
   private final JCheckBox doRecordCBx;
+  private final JButton saveAllFlamesBtn;
 
   JLayerInterface jLayer = new JLayerInterface();
   private FlamePanel flamePanel = null;
@@ -101,7 +103,7 @@ public class DancingFractalsController {
       JButton pLoadSoundBtn, JButton pAddFromClipboardBtn, JButton pAddFromEditorBtn, JButton pAddFromDiscBtn, JWFNumberField pRandomCountIEd,
       JButton pGenRandFlamesBtn, JComboBox pRandomGenCmb, JTable pPoolTable, JPanel pPoolFlamePreviewPnl, JSlider pBorderSizeSlider,
       JButton pFlameToEditorBtn, JButton pDeleteFlameBtn, JTextField pFramesPerSecondIEd, JTextField pMorphFrameCountIEd,
-      JButton pStartShowButton, JButton pStopShowButton, JButton pShuffleFlamesBtn, JCheckBox pDoRecordCBx) {
+      JButton pStartShowButton, JButton pStopShowButton, JButton pShuffleFlamesBtn, JCheckBox pDoRecordCBx, JButton pSaveAllFlamesBtn) {
     parentCtrl = pParent;
     errorHandler = pErrorHandler;
     prefs = parentCtrl.getPrefs();
@@ -125,6 +127,7 @@ public class DancingFractalsController {
     stopShowButton = pStopShowButton;
     shuffleFlamesBtn = pShuffleFlamesBtn;
     doRecordCBx = pDoRecordCBx;
+    saveAllFlamesBtn = pSaveAllFlamesBtn;
     refreshPoolTable();
     enableControls();
   }
@@ -259,7 +262,13 @@ public class DancingFractalsController {
           FlameRenderer renderer = new FlameRenderer(flame, prefs, false);
           renderer.setProgressUpdater(null);
 
-          flame.setGamma(1.6);
+          flame.setBGTransparency(false);
+          flame.setGamma(1.5);
+          flame.setBrightness(3.36);
+          flame.getPalette().setModRed(90);
+          flame.getPalette().setModRed(60);
+          flame.getPalette().setModBlue(-60);
+
           flame.setSampleDensity(15);
           flame.setSpatialFilterRadius(0.75);
 
@@ -469,8 +478,9 @@ public class DancingFractalsController {
   }
 
   private void refreshPoolTable() {
-    final int COL_FLAME = 0;
-    final int COL_TRANSFORMS = 1;
+    final int COL_NO = 0;
+    final int COL_FLAME = 1;
+    final int COL_TRANSFORMS = 2;
     poolTable.setModel(new DefaultTableModel() {
       private static final long serialVersionUID = 1L;
 
@@ -481,12 +491,14 @@ public class DancingFractalsController {
 
       @Override
       public int getColumnCount() {
-        return 2;
+        return 3;
       }
 
       @Override
       public String getColumnName(int columnIndex) {
         switch (columnIndex) {
+          case COL_NO:
+            return "";
           case COL_FLAME:
             return "Flame";
           case COL_TRANSFORMS:
@@ -500,6 +512,8 @@ public class DancingFractalsController {
         Flame flame = rowIndex < flames.size() ? flames.get(rowIndex) : null;
         if (flame != null) {
           switch (columnIndex) {
+            case COL_NO:
+              return String.valueOf(rowIndex + 1);
             case COL_FLAME:
               return flame.getName().equals("") ? flame.hashCode() : flame.getName();
             case COL_TRANSFORMS:
@@ -636,7 +650,7 @@ public class DancingFractalsController {
     genRandFlamesBtn.setEnabled(!running);
     randomGenCmb.setEnabled(!running);
     flameToEditorBtn.setEnabled(flames.size() > 0 && poolTable.getSelectedRow() >= 0);
-    deleteFlameBtn.setEnabled(!running && flames.size() > 0 && poolTable.getSelectedRow() >= 0);
+    deleteFlameBtn.setEnabled(flames.size() > 0 && poolTable.getSelectedRow() >= 0);
     framesPerSecondIEd.setEnabled(!running);
     borderSizeSlider.setEnabled(true);
     morphFrameCountIEd.setEnabled(true);
@@ -644,6 +658,7 @@ public class DancingFractalsController {
     stopShowButton.setEnabled(running);
     shuffleFlamesBtn.setEnabled(flames != null && flames.size() > 0);
     doRecordCBx.setEnabled(!running);
+    saveAllFlamesBtn.setEnabled(!running && flames != null && flames.size() > 0);
   }
 
   public void shuffleFlamesBtn_clicked() {
@@ -669,5 +684,48 @@ public class DancingFractalsController {
       poolTable.setRowSelectionInterval(newIdx, newIdx);
     }
 
+  }
+
+  protected TinaController getParentCtrl() {
+    return parentCtrl;
+  }
+
+  public void saveAllFlamesBtn_clicked() {
+    try {
+      JFileChooser chooser = new FlameFileChooser(prefs);
+      if (prefs.getOutputFlamePath() != null) {
+        try {
+          chooser.setCurrentDirectory(new File(prefs.getOutputFlamePath()));
+        }
+        catch (Exception ex) {
+          ex.printStackTrace();
+        }
+      }
+      if (chooser.showSaveDialog(flameRootPanel) == JFileChooser.APPROVE_OPTION) {
+        File file = chooser.getSelectedFile();
+        prefs.setLastOutputFlameFile(file);
+        if (flames.size() > 0) {
+          String fn = file.getName();
+          {
+            int p = fn.indexOf(".flame");
+            if (p > 0 && p == fn.length() - 6) {
+              fn = fn.substring(0, p);
+            }
+          }
+
+          int fileIdx = 1;
+          for (Flame flame : flames) {
+            String hs = String.valueOf(fileIdx++);
+            while (hs.length() < 5) {
+              hs = "0" + hs;
+            }
+            new Flam3Writer().writeFlame(flame, new File(file.getParent(), fn + hs + ".flame").getAbsolutePath());
+          }
+        }
+      }
+    }
+    catch (Exception ex) {
+      errorHandler.handleError(ex);
+    }
   }
 }

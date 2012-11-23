@@ -54,4 +54,8 @@ public class FlameTransformationContext {
     preserveZCoordinate = pPreserveZCoordinate;
   }
 
+  public RandomNumberGenerator getRandGen() {
+    return randGen;
+  }
+
 }
