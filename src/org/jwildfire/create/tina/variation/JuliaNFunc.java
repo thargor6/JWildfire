@@ -23,7 +23,6 @@ import static org.jwildfire.base.MathLib.iabs;
 import static org.jwildfire.base.MathLib.pow;
 import static org.jwildfire.base.MathLib.sin;
 import static org.jwildfire.base.MathLib.sqr;
-import static org.jwildfire.base.MathLib.sqrt;
 import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_CUDA;
 import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_JWILDFIRE;
 
@@ -86,13 +85,12 @@ public class JuliaNFunc extends VariationFunc {
   }
 
   private int absPower;
-  private double cPower, pAmount2;
+  private double cPower;
 
   @Override
   public void init(FlameTransformationContext pContext, XForm pXForm, double pAmount) {
     absPower = iabs(Tools.FTOI(power));
     cPower = dist / power * 0.5;
-    pAmount2 = pAmount * sqrt(2.0) / 2.0;
   }
 
   @Override

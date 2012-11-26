@@ -294,6 +294,10 @@ public class VariationFuncList {
 
     registerVariationFunc(FractDragonWFFunc.class);
     registerVariationFunc(FractMandelbrotWFFunc.class);
+    registerVariationFunc(FractMeteorsWFFunc.class);
+    registerVariationFunc(FractJuliaWFFunc.class);
+    registerVariationFunc(FractPearlsWFFunc.class);
+    registerVariationFunc(FractMandForthWFFunc.class);
   }
 
   private static void registerVariationFunc(

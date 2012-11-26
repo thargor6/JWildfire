@@ -19,12 +19,12 @@ package org.jwildfire.create.tina.variation;
 
 import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_JWILDFIRE;
 
-public class FractMandelbrotWFFunc extends AbstractFractWFFunc {
+public class FractMandForthWFFunc extends AbstractFractWFFunc {
   private static final long serialVersionUID = 1L;
 
   @Override
   public String getName() {
-    return "fract_mandelbrot_wf";
+    return "fract_mandforth_wf";
   }
 
   @Override
@@ -40,8 +40,9 @@ public class FractMandelbrotWFFunc extends AbstractFractWFFunc {
     double xs = x1 * x1;
     double ys = y1 * y1;
     while ((currIter++ < max_iter) && (xs + ys < 4.0)) {
-      y1 = 2.0 * x1 * y1 + pY;
-      x1 = (xs - ys) + pX;
+      double x2 = xs * xs + ys * ys - 6.0 * xs * ys + pX;
+      y1 = 4.0 * x1 * y1 * (xs - ys) + pY;
+      x1 = x2;
       xs = x1 * x1;
       ys = y1 * y1;
     }
@@ -50,14 +51,14 @@ public class FractMandelbrotWFFunc extends AbstractFractWFFunc {
 
   @Override
   protected void initParams() {
-    xmin = -2.35;
-    xmax = 0.75;
-    ymin = -1.2;
-    ymax = 1.2;
+    xmin = -1.35;
+    xmax = 1.2;
+    ymin = -1.25;
+    ymax = 1.25;
     xseed = 0;
     yseed = 0;
-    clip_iter_min = 3;
-    offsetx = 0.55;
+    clip_iter_min = 6;
+    max_clip_iter = 7;
     scale = 4.0;
   }
 }
