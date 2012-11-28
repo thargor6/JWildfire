@@ -19,8 +19,16 @@ package org.jwildfire.create.tina.variation;
 
 import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_JWILDFIRE;
 
+import java.util.List;
+
 public class FractDragonWFFunc extends AbstractFractWFFunc {
   private static final long serialVersionUID = 1L;
+
+  private static final String PARAM_XSEED = "xseed";
+  private static final String PARAM_YSEED = "yseed";
+
+  private double xseed;
+  private double yseed;
 
   @Override
   public String getName() {
@@ -63,4 +71,30 @@ public class FractDragonWFFunc extends AbstractFractWFFunc {
     offsetx = -0.5;
     scale = 5.0;
   }
+
+  @Override
+  protected boolean setCustomParameter(String pName, double pValue) {
+    if (PARAM_XSEED.equalsIgnoreCase(pName)) {
+      xseed = pValue;
+      return true;
+    }
+    else if (PARAM_YSEED.equalsIgnoreCase(pName)) {
+      yseed = pValue;
+      return true;
+    }
+    return false;
+  }
+
+  @Override
+  protected void addCustomParameterNames(List<String> pList) {
+    pList.add(PARAM_XSEED);
+    pList.add(PARAM_YSEED);
+  }
+
+  @Override
+  protected void addCustomParameterValues(List<Object> pList) {
+    pList.add(xseed);
+    pList.add(yseed);
+  }
+
 }

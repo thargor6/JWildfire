@@ -297,7 +297,6 @@ public class VariationFuncList {
     registerVariationFunc(FractMeteorsWFFunc.class);
     registerVariationFunc(FractJuliaWFFunc.class);
     registerVariationFunc(FractPearlsWFFunc.class);
-    registerVariationFunc(FractMandForthWFFunc.class);
   }
 
   private static void registerVariationFunc(

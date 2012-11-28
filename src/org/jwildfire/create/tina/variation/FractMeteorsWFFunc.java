@@ -19,6 +19,8 @@ package org.jwildfire.create.tina.variation;
 
 import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_JWILDFIRE;
 
+import java.util.List;
+
 public class FractMeteorsWFFunc extends AbstractFractWFFunc {
   private static final long serialVersionUID = 1L;
 
@@ -41,8 +43,8 @@ public class FractMeteorsWFFunc extends AbstractFractWFFunc {
     double xs = x1 * x1;
     double ys = y1 * y1;
     while ((currIter++ < max_iter) && (xs + ys < 4.0)) {
-      double x2 = (pX * x1 - pY * y1) * (1 - yseed) - (pX * x1 + pY * y1) / (xs + ys) * (1 + xseed);
-      y1 = (pX * y1 + pY * x1) * (1 - xseed) + (pX * y1 - pY * x1) / (xs + ys) * (1 + yseed);
+      double x2 = (pX * x1 - pY * y1) - (pX * x1 + pY * y1) / (xs + ys);
+      y1 = (pX * y1 + pY * x1) + (pX * y1 - pY * x1) / (xs + ys);
 
       x1 = x2;
       xs = x1 * x1;
@@ -57,9 +59,22 @@ public class FractMeteorsWFFunc extends AbstractFractWFFunc {
     xmax = 1.7;
     ymin = -1.1;
     ymax = 1.1;
-    xseed = 0;
-    yseed = 0;
     clip_iter_min = 3;
     scale = 5.7;
+  }
+
+  @Override
+  protected boolean setCustomParameter(String pName, double pValue) {
+    return false;
+  }
+
+  @Override
+  protected void addCustomParameterNames(List<String> pList) {
+    // no op
+  }
+
+  @Override
+  protected void addCustomParameterValues(List<Object> pList) {
+    // no op
   }
 }
