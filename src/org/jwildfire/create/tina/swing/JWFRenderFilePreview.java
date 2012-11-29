@@ -68,7 +68,7 @@ public class JWFRenderFilePreview extends JComponent implements PropertyChangeLi
           flame.setWidth(imgWidth);
           flame.setHeight(imgHeight);
 
-          FlameRenderer renderer = new FlameRenderer(flame, prefs, flame.isBGTransparency());
+          FlameRenderer renderer = new FlameRenderer(flame, prefs, false);
           renderer.setProgressUpdater(null);
           flame.setSampleDensity(50);
           flame.setSpatialFilterRadius(0.0);
