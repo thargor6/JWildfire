@@ -705,8 +705,8 @@ public class BenoitCreator extends ImageCreator {
   }
 
   private void push(double x, double y) {
-    stack[stackptr++] = x;
     stack[stackptr++] = y;
+    stack[stackptr++] = x;
   }
 
   private double pop() {
