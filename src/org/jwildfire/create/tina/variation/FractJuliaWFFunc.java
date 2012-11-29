@@ -31,7 +31,6 @@ public class FractJuliaWFFunc extends AbstractFractWFFunc {
   private static final String PARAM_YSEED = "yseed";
 
   private int power;
-
   private double xseed;
   private double yseed;
 
