@@ -60,6 +60,7 @@ import javax.swing.SwingConstants;
 import javax.swing.WindowConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.EtchedBorder;
+import javax.swing.border.MatteBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -8214,7 +8215,6 @@ public class TinaInternalFrame extends JInternalFrame {
   private JPanel panel_38;
   private JPanel panel_39;
   private JPanel panel_40;
-  private JPanel panel_41;
   private JTable dancingFlamesPoolTable;
   private JPanel panel_42;
   private JPanel panel_43;
@@ -8225,14 +8225,9 @@ public class TinaInternalFrame extends JInternalFrame {
   private JPanel panel_47;
   private JLabel lblRandomGenerator;
   private JPanel panel_48;
-  private JPanel panel_49;
   private JPanel panel_50;
-  private JPanel panel_51;
   private JPanel panel_52;
-  private JPanel panel_53;
   private JPanel panel_54;
-  private JPanel panel_55;
-  private JPanel panel_56;
   private JComboBox dancingFlamesRandomGenCmb;
   private JWFNumberField dancingFlamesRandomCountIEd;
   private JButton dancingFlamesGenRandFlamesBtn;
@@ -8250,6 +8245,8 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton dancingFlamesShuffleFlamesBtn;
   private JCheckBox dancingFlamesDoRecordCBx;
   private JButton dancingFlamesSaveAllFlamesBtn;
+  private JPanel panel_37;
+  private JPanel panel_41;
 
   /**
    * This method initializes renderBatchJobsScrollPane	
@@ -11065,6 +11062,14 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton getTinaAppendToDancingFlamesButton() {
     if (tinaAppendToDancingFlamesButton == null) {
       tinaAppendToDancingFlamesButton = new JButton();
+      tinaAppendToDancingFlamesButton.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          if (tinaController.getCurrFlame() != null) {
+            tinaController.getDancingFractalsController().importFlame(tinaController.getCurrFlame());
+            rootTabbedPane.setSelectedIndex(DancingFractalsController.PAGE_INDEX);
+          }
+        }
+      });
       tinaAppendToDancingFlamesButton.setToolTipText("Append to dancing flames show");
       tinaAppendToDancingFlamesButton.setText("Dance");
       tinaAppendToDancingFlamesButton.setPreferredSize(new Dimension(60, 24));
@@ -11131,13 +11136,12 @@ public class TinaInternalFrame extends JInternalFrame {
   private JPanel getPanel_38() {
     if (panel_38 == null) {
       panel_38 = new JPanel();
-      panel_38.setMaximumSize(new Dimension(400, 32767));
-      panel_38.setPreferredSize(new Dimension(400, 10));
+      panel_38.setMaximumSize(new Dimension(300, 32767));
+      panel_38.setPreferredSize(new Dimension(300, 10));
       panel_38.setBorder(new TitledBorder(null, "Flame pool", TitledBorder.LEADING, TitledBorder.TOP, null, null));
       panel_38.setLayout(new BorderLayout(0, 0));
       panel_38.add(getPanel_39(), BorderLayout.NORTH);
       panel_38.add(getPanel_40(), BorderLayout.SOUTH);
-      panel_38.add(getPanel_41(), BorderLayout.EAST);
 
       JScrollPane scrollPane_2 = new JScrollPane();
       scrollPane_2.setFont(new Font("Dialog", Font.PLAIN, 10));
@@ -11164,17 +11168,14 @@ public class TinaInternalFrame extends JInternalFrame {
   private JPanel getPanel_39() {
     if (panel_39 == null) {
       panel_39 = new JPanel();
-      panel_39.setPreferredSize(new Dimension(10, 200));
-      panel_39.setLayout(new BorderLayout(0, 0));
-
-      JPanel panel_1 = new JPanel();
-      panel_1.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
-      panel_1.setPreferredSize(new Dimension(60, 10));
-      panel_39.add(panel_1, BorderLayout.EAST);
+      panel_39.setPreferredSize(new Dimension(10, 160));
+      panel_39.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 
       dancingFlamesPoolFlamePreviewPnl = new JPanel();
-      dancingFlamesPoolFlamePreviewPnl.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
-      panel_39.add(dancingFlamesPoolFlamePreviewPnl, BorderLayout.CENTER);
+      dancingFlamesPoolFlamePreviewPnl.setPreferredSize(new Dimension(240, 140));
+      dancingFlamesPoolFlamePreviewPnl.setMinimumSize(new Dimension(160, 100));
+      dancingFlamesPoolFlamePreviewPnl.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(0, 0, 0)));
+      panel_39.add(dancingFlamesPoolFlamePreviewPnl);
       dancingFlamesPoolFlamePreviewPnl.setLayout(new BorderLayout(0, 0));
     }
     return panel_39;
@@ -11183,27 +11184,18 @@ public class TinaInternalFrame extends JInternalFrame {
   private JPanel getPanel_40() {
     if (panel_40 == null) {
       panel_40 = new JPanel();
-      panel_40.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
-      panel_40.setPreferredSize(new Dimension(10, 100));
+      panel_40.setBorder(new EmptyBorder(0, 0, 0, 0));
+      panel_40.setPreferredSize(new Dimension(10, 36));
       panel_40.add(getLblMorphFrames());
       panel_40.add(getDancingFlamesMorphFrameCountIEd());
     }
     return panel_40;
   }
 
-  private JPanel getPanel_41() {
-    if (panel_41 == null) {
-      panel_41 = new JPanel();
-      panel_41.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
-      panel_41.setPreferredSize(new Dimension(60, 10));
-    }
-    return panel_41;
-  }
-
   private JPanel getPanel_42() {
     if (panel_42 == null) {
       panel_42 = new JPanel();
-      panel_42.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
+      panel_42.setBorder(new EmptyBorder(0, 0, 0, 0));
       panel_42.setPreferredSize(new Dimension(70, 10));
       panel_42.add(getDancingFlamesFlameToEditorBtn());
       panel_42.add(getDancingFlamesDeleteFlameBtn());
@@ -11217,9 +11209,7 @@ public class TinaInternalFrame extends JInternalFrame {
       panel_43 = new JPanel();
       panel_43.setLayout(new BorderLayout(0, 0));
       panel_43.add(getPanel_44(), BorderLayout.NORTH);
-      panel_43.add(getPanel_49(), BorderLayout.WEST);
       panel_43.add(getPanel_50(), BorderLayout.EAST);
-      panel_43.add(getPanel_51(), BorderLayout.SOUTH);
       panel_43.add(getPanel_52(), BorderLayout.CENTER);
     }
     return panel_43;
@@ -11361,19 +11351,10 @@ public class TinaInternalFrame extends JInternalFrame {
     return panel_48;
   }
 
-  private JPanel getPanel_49() {
-    if (panel_49 == null) {
-      panel_49 = new JPanel();
-      panel_49.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
-      panel_49.setPreferredSize(new Dimension(20, 10));
-    }
-    return panel_49;
-  }
-
   private JPanel getPanel_50() {
     if (panel_50 == null) {
       panel_50 = new JPanel();
-      panel_50.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
+      panel_50.setBorder(new TitledBorder(null, "Show", TitledBorder.LEADING, TitledBorder.TOP, null, null));
       panel_50.setPreferredSize(new Dimension(140, 10));
 
       dancingFlamesStartShowBtn = new JButton();
@@ -11395,23 +11376,12 @@ public class TinaInternalFrame extends JInternalFrame {
     return panel_50;
   }
 
-  private JPanel getPanel_51() {
-    if (panel_51 == null) {
-      panel_51 = new JPanel();
-      panel_51.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
-      panel_51.setPreferredSize(new Dimension(10, 100));
-    }
-    return panel_51;
-  }
-
   private JPanel getPanel_52() {
     if (panel_52 == null) {
       panel_52 = new JPanel();
+      panel_52.setBorder(new TitledBorder(null, "Preview", TitledBorder.LEADING, TitledBorder.TOP, null, null));
       panel_52.setLayout(new BorderLayout(0, 0));
-      panel_52.add(getPanel_53(), BorderLayout.NORTH);
       panel_52.add(getPanel_54(), BorderLayout.EAST);
-      panel_52.add(getPanel_55(), BorderLayout.WEST);
-      panel_52.add(getPanel_56(), BorderLayout.SOUTH);
 
       dancingFlamesFlamePnl = new JPanel();
       panel_52.add(dancingFlamesFlamePnl, BorderLayout.CENTER);
@@ -11421,62 +11391,22 @@ public class TinaInternalFrame extends JInternalFrame {
     return panel_52;
   }
 
-  private JPanel getPanel_53() {
-    if (panel_53 == null) {
-      panel_53 = new JPanel();
-      panel_53.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
-      panel_53.setPreferredSize(new Dimension(10, 50));
-      panel_53.setLayout(new BorderLayout(0, 0));
-
-      dancingFlamesGraph1Pnl = new JPanel();
-      panel_53.add(dancingFlamesGraph1Pnl);
-      dancingFlamesGraph1Pnl.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
-      dancingFlamesGraph1Pnl.setLayout(new BorderLayout(0, 0));
-    }
-    return panel_53;
-  }
-
   private JPanel getPanel_54() {
     if (panel_54 == null) {
       panel_54 = new JPanel();
-      panel_54.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
-      panel_54.setPreferredSize(new Dimension(50, 10));
+      panel_54.setBorder(new EmptyBorder(0, 0, 0, 0));
+      panel_54.setPreferredSize(new Dimension(200, 10));
+
+      dancingFlamesGraph1Pnl = new JPanel();
+      dancingFlamesGraph1Pnl.setMinimumSize(new Dimension(180, 24));
+      dancingFlamesGraph1Pnl.setPreferredSize(new Dimension(180, 24));
+      panel_54.add(dancingFlamesGraph1Pnl);
+      dancingFlamesGraph1Pnl.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(0, 0, 0)));
+      dancingFlamesGraph1Pnl.setLayout(new BorderLayout(0, 0));
+      panel_54.add(getPanel_37());
+      panel_54.add(getPanel_41());
     }
     return panel_54;
-  }
-
-  private JPanel getPanel_55() {
-    if (panel_55 == null) {
-      panel_55 = new JPanel();
-      panel_55.setPreferredSize(new Dimension(50, 10));
-      panel_55.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
-    }
-    return panel_55;
-  }
-
-  private JPanel getPanel_56() {
-    if (panel_56 == null) {
-      panel_56 = new JPanel();
-      panel_56.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
-      panel_56.setPreferredSize(new Dimension(10, 50));
-      panel_56.add(getLabel_7());
-      panel_56.add(getDancingFlamesFramesPerSecondIEd());
-      panel_56.add(getLblBorderSize());
-
-      dancingFlamesBorderSizeSlider = new JSlider();
-      dancingFlamesBorderSizeSlider.addChangeListener(new ChangeListener() {
-        public void stateChanged(ChangeEvent e) {
-          if (tinaController != null)
-            tinaController.getDancingFractalsController().borderSizeSlider_changed();
-        }
-      });
-      panel_56.add(dancingFlamesBorderSizeSlider);
-      dancingFlamesBorderSizeSlider.setValue(25);
-      dancingFlamesBorderSizeSlider.setPreferredSize(new Dimension(220, 22));
-      dancingFlamesBorderSizeSlider.setMaximum(320);
-      dancingFlamesBorderSizeSlider.setFont(new Font("Dialog", Font.BOLD, 10));
-    }
-    return panel_56;
   }
 
   public JComboBox getDancingFlamesRandomGenCmb() {
@@ -11504,7 +11434,7 @@ public class TinaInternalFrame extends JInternalFrame {
       lblBorderSize = new JLabel();
       lblBorderSize.setHorizontalAlignment(SwingConstants.RIGHT);
       lblBorderSize.setText("Border size");
-      lblBorderSize.setPreferredSize(new Dimension(100, 24));
+      lblBorderSize.setPreferredSize(new Dimension(60, 24));
       lblBorderSize.setMinimumSize(new Dimension(100, 24));
       lblBorderSize.setFont(new Font("Dialog", Font.BOLD, 10));
     }
@@ -11546,7 +11476,7 @@ public class TinaInternalFrame extends JInternalFrame {
     if (label_7 == null) {
       label_7 = new JLabel();
       label_7.setText("Frames per second");
-      label_7.setPreferredSize(new Dimension(120, 22));
+      label_7.setPreferredSize(new Dimension(110, 22));
       label_7.setHorizontalAlignment(SwingConstants.RIGHT);
       label_7.setFont(new Font("Dialog", Font.BOLD, 10));
     }
@@ -11573,7 +11503,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JTextField getDancingFlamesMorphFrameCountIEd() {
     if (dancingFlamesMorphFrameCountIEd == null) {
       dancingFlamesMorphFrameCountIEd = new JTextField();
-      dancingFlamesMorphFrameCountIEd.setText("7");
+      dancingFlamesMorphFrameCountIEd.setText("0");
       dancingFlamesMorphFrameCountIEd.setPreferredSize(new Dimension(56, 22));
       dancingFlamesMorphFrameCountIEd.setFont(new Font("Dialog", Font.PLAIN, 10));
     }
@@ -11625,7 +11555,9 @@ public class TinaInternalFrame extends JInternalFrame {
 
   private JCheckBox getDancingFlamesDoRecordCBx() {
     if (dancingFlamesDoRecordCBx == null) {
-      dancingFlamesDoRecordCBx = new JCheckBox("Record");
+      dancingFlamesDoRecordCBx = new JCheckBox("Record show");
+      dancingFlamesDoRecordCBx.setActionCommand("Record show");
+      dancingFlamesDoRecordCBx.setFont(new Font("Dialog", Font.PLAIN, 10));
       dancingFlamesDoRecordCBx.setPreferredSize(new Dimension(125, 18));
     }
     return dancingFlamesDoRecordCBx;
@@ -11646,5 +11578,40 @@ public class TinaInternalFrame extends JInternalFrame {
       dancingFlamesSaveAllFlamesBtn.setFont(new Font("Dialog", Font.BOLD, 10));
     }
     return dancingFlamesSaveAllFlamesBtn;
+  }
+
+  private JPanel getPanel_37() {
+    if (panel_37 == null) {
+      panel_37 = new JPanel();
+      panel_37.setPreferredSize(new Dimension(180, 32));
+      panel_37.setMinimumSize(new Dimension(180, 32));
+      panel_37.add(getLabel_7());
+      panel_37.add(getDancingFlamesFramesPerSecondIEd());
+    }
+    return panel_37;
+  }
+
+  private JPanel getPanel_41() {
+    if (panel_41 == null) {
+      panel_41 = new JPanel();
+      panel_41.setMinimumSize(new Dimension(180, 32));
+      panel_41.setPreferredSize(new Dimension(180, 32));
+      panel_41.add(getLblBorderSize());
+
+      dancingFlamesBorderSizeSlider = new JSlider();
+      dancingFlamesBorderSizeSlider.setPaintLabels(true);
+      panel_41.add(dancingFlamesBorderSizeSlider);
+      dancingFlamesBorderSizeSlider.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null)
+            tinaController.getDancingFractalsController().borderSizeSlider_changed();
+        }
+      });
+      dancingFlamesBorderSizeSlider.setValue(200);
+      dancingFlamesBorderSizeSlider.setPreferredSize(new Dimension(100, 22));
+      dancingFlamesBorderSizeSlider.setMaximum(640);
+      dancingFlamesBorderSizeSlider.setFont(new Font("Dialog", Font.BOLD, 10));
+    }
+    return panel_41;
   }
 } //  @jve:decl-index=0:visual-constraint="10,10"

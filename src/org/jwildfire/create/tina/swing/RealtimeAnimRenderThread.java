@@ -25,7 +25,6 @@ import org.jwildfire.create.tina.audio.JLayerInterface;
 import org.jwildfire.create.tina.audio.RecordedFFT;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.XForm;
-import org.jwildfire.create.tina.io.Flam3Reader;
 import org.jwildfire.create.tina.io.Flam3Writer;
 import org.jwildfire.create.tina.transform.XFormTransformService;
 import org.jwildfire.create.tina.variation.VariationFuncList;
@@ -58,7 +57,7 @@ public class RealtimeAnimRenderThread implements Runnable {
   public void run() {
     running = forceAbort = false;
     finalXFormAlpha = 0.0;
-    boolean doDrawFFT = false;
+    boolean doDrawFFT = true;
     // TODO unify
     try {
       long fpsMeasureMentFrameCount = 0;
@@ -115,7 +114,6 @@ public class RealtimeAnimRenderThread implements Runnable {
   private void transformXForm1(short[] pFFT, Flame pFlame) {
     if (xForm0 != null) {
       double amp0 = getFFTValue(pFFT, 0);
-      System.out.println("TX: " + amp0);
       double amp1 = getFFTValue(pFFT, 1);
       double amp2 = getFFTValue(pFFT, 2);
       XForm xForm = xForm0.makeCopy();
@@ -319,17 +317,6 @@ public class RealtimeAnimRenderThread implements Runnable {
   }
 
   public void createRecordedFlameFiles(String pAbsolutePath) throws Exception {
-    // TODO
-    Flame paletteFlame;
-    try {
-
-      List<Flame> flames = new Flam3Reader(controller.getParentCtrl().getPrefs()).readFlames("C:\\TMP\\wf\\Apophysis\\dance\\0frost.flame");
-      paletteFlame = flames.get(0);
-    }
-    catch (Exception ex) {
-      paletteFlame = null;
-    }
-
     if (recordedActions.size() >= 2) {
       int actionIdx = 0;
       StartAction startAction = (StartAction) recordedActions.get(actionIdx++);
@@ -381,21 +368,10 @@ public class RealtimeAnimRenderThread implements Runnable {
           }
         }
 
-        //
+        // TODO
         flame.setBGTransparency(false);
         flame.setGamma(1.5);
         flame.setBrightness(3.36);
-        flame.getPalette().setModRed(90);
-        flame.getPalette().setModRed(60);
-        flame.getPalette().setModBlue(-60);
-
-        //        flame.setBrightness(3.36);
-        //        flame.setContrast(1.69);
-        //        flame.getPalette().setModRed(-11);
-        //        flame.getPalette().setModGreen(7);
-        //        flame.getPalette().setModBlue(99);
-        //        flame.getPalette().setModSaturation(-123);
-        //
 
         flames.add(flame.makeCopy());
         if (time >= timeRenderStarted + nextAction.getTime()) {
@@ -424,7 +400,7 @@ public class RealtimeAnimRenderThread implements Runnable {
         }
       }
 
-      System.out.println("flames: " + flames.size() + " (fps: " + framesPerSecond + ")");
+      //      System.out.println("flames: " + flames.size() + " (fps: " + framesPerSecond + ")");
 
       if (flames.size() > 0) {
         File file = new File(pAbsolutePath);

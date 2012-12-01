@@ -292,14 +292,14 @@ public class VariationFuncList {
     registerVariationFunc(PostCurlFunc.class);
     registerVariationFunc(PostCurl3DFunc.class);
 
-    registerVariationFunc(FractDragonWFFunc.class);
-    registerVariationFunc(FractMandelbrotWFFunc.class);
-    registerVariationFunc(FractMeteorsWFFunc.class);
-    registerVariationFunc(FractJuliaWFFunc.class);
-    registerVariationFunc(FractPearlsWFFunc.class);
-    registerVariationFunc(FractSalamanderWFFunc.class);
-    registerVariationFunc(FractFormulaJuliaWFFunc.class);
-    registerVariationFunc(FractFormulaMandWFFunc.class);
+    //    registerVariationFunc(FractDragonWFFunc.class);
+    //    registerVariationFunc(FractMandelbrotWFFunc.class);
+    //    registerVariationFunc(FractMeteorsWFFunc.class);
+    //    registerVariationFunc(FractJuliaWFFunc.class);
+    //    registerVariationFunc(FractPearlsWFFunc.class);
+    //    registerVariationFunc(FractSalamanderWFFunc.class);
+    //    registerVariationFunc(FractFormulaJuliaWFFunc.class);
+    //    registerVariationFunc(FractFormulaMandWFFunc.class);
   }
 
   private static void registerVariationFunc(

@@ -246,7 +246,22 @@ public final class XForm implements Assignable<XForm>, Serializable {
 
   public void transformPoint(FlameTransformationContext pContext, XYZPoint pAffineT, XYZPoint pVarT, XYZPoint pSrcPoint, XYZPoint pDstPoint) {
     pAffineT.clear();
+    //    pAffineT.color = pSrcPoint.color * c1 + c2;
+
+    //pAffineT.color = (pSrcPoint.color + color) * 0.5 * (1 - colorSymmetry) + colorSymmetry * pSrcPoint.color;
+    //    pAffineT.color = 1.0 - Math.exp(-pAffineT.color);
+    //    pAffineT.color = fabs(Math.log(pAffineT.color));
+    //    pAffineT.color = fabs(Math.sin(pAffineT.color));
+    //    pAffineT.color = fabs(Math.cos(pAffineT.color));
+
+    //    pAffineT.color = pAffineT.color * pAffineT.color;
+    //    pAffineT.color = Math.sqrt(pAffineT.color);
+    //    if (pAffineT.color < 0)
+    //      pAffineT.color = 0;
+    //    else if (pAffineT.color > 1)
+    //      pAffineT.color = 1;
     pAffineT.color = pSrcPoint.color * c1 + c2;
+
     if (isHasCoeffs()) {
       pAffineT.x = coeff00 * pSrcPoint.x + coeff10 * pSrcPoint.y + coeff20;
       pAffineT.y = coeff01 * pSrcPoint.x + coeff11 * pSrcPoint.y + coeff21;

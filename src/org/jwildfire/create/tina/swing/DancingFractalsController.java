@@ -62,6 +62,7 @@ import org.jwildfire.transform.TextTransformer.Mode;
 import org.jwildfire.transform.TextTransformer.VAlignment;
 
 public class DancingFractalsController {
+  public static final int PAGE_INDEX = 3;
   private final ErrorHandler errorHandler;
   private final TinaController parentCtrl;
   private final Prefs prefs;
@@ -262,18 +263,8 @@ public class DancingFractalsController {
           FlameRenderer renderer = new FlameRenderer(flame, prefs, false);
           renderer.setProgressUpdater(null);
 
-          flame.setBGTransparency(false);
-          flame.setGamma(1.5);
-          flame.setBrightness(3.36);
-          flame.getPalette().setModRed(90);
-          flame.getPalette().setModRed(60);
-          flame.getPalette().setModBlue(-60);
+          prepareFlameToRender(flame);
 
-          flame.setSampleDensity(15);
-          flame.setSpatialFilterRadius(0.75);
-
-          flame.setSpatialOversample(1);
-          flame.setColorOversample(1);
           RenderedFlame res = renderer.renderFlame(info);
           SimpleImage img = res.getImage();
           if (showFPS) {
@@ -300,9 +291,27 @@ public class DancingFractalsController {
       }
     }
     else {
-      imgPanel.setImage(new SimpleImage(width, height));
+      try {
+        imgPanel.setImage(new SimpleImage(width, height));
+      }
+      catch (Exception ex) {
+        ex.printStackTrace();
+      }
     }
     flameRootPanel.repaint();
+  }
+
+  private void prepareFlameToRender(Flame pFlame) {
+    pFlame.setBGTransparency(false);
+    pFlame.setGamma(1.5);
+    pFlame.setBrightness(3.36);
+    pFlame.getPalette().setModRed(90);
+    pFlame.getPalette().setModRed(60);
+    pFlame.getPalette().setModBlue(-60);
+    pFlame.setSampleDensity(2 * prefs.getTinaRenderRealtimeQuality());
+    pFlame.setSpatialFilterRadius(0.75);
+    pFlame.setSpatialOversample(1);
+    pFlame.setColorOversample(1);
   }
 
   public void refreshPoolPreviewFlameImage(Flame flame) {
@@ -323,9 +332,7 @@ public class DancingFractalsController {
         flame.setHeight(info.getImageHeight());
         FlameRenderer renderer = new FlameRenderer(flame, prefs, false);
         renderer.setProgressUpdater(null);
-        flame.setSampleDensity(prefs.getTinaRenderRealtimeQuality());
-        flame.setSpatialOversample(1);
-        flame.setColorOversample(1);
+        prepareFlameToRender(flame);
         RenderedFlame res = renderer.renderFlame(info);
         imgPanel.setImage(res.getImage());
       }
