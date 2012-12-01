@@ -1,3 +1,12 @@
+V0.57 (01.12.2012):
+ - first working version of the dancing flame fractals editor
+ - new "Splits" random flame generator
+ - flame preview in the batch renderer
+ - switched the background transparency display in the movie editor off
+ - turned off background transparency display in flame file previews
+ - FIXED: the elliptic variation was broken
+ - FIXED: Formula mode was broken in the Benoit creator
+
 V0.56 (10.11.2012):
  - support for multiple final transforms
  - post_curl and post_curl3d variations
