@@ -336,7 +336,7 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
         flame.setPixelsPerUnit((wScl + hScl) * 0.5 * flame.getPixelsPerUnit());
         flame.setWidth(imageWidth);
         flame.setHeight(imageHeight);
-        FlameRenderer renderer = new FlameRenderer(flame, prefs, flame.isBGTransparency());
+        FlameRenderer renderer = new FlameRenderer(flame, prefs, false);
         RenderedFlame res = renderer.renderFlame(info);
         img = res.getImage();
       }
@@ -670,7 +670,7 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
             flame.setWidth(info.getImageWidth());
             flame.setHeight(info.getImageHeight());
 
-            FlameRenderer renderer = new FlameRenderer(flame, prefs, flame.isBGTransparency());
+            FlameRenderer renderer = new FlameRenderer(flame, prefs, false);
             renderer.setProgressUpdater(null);
             flame.setSampleDensity(prefs.getTinaRenderRealtimeQuality());
             flame.setSpatialFilterRadius(0.0);
