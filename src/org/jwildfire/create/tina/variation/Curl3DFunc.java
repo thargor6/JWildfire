@@ -31,8 +31,8 @@ public class Curl3DFunc extends VariationFunc {
   private static final String[] paramNames = { PARAM_CX, PARAM_CY, PARAM_CZ };
 
   private double cx = 0;
-  private double cy = 0;
-  private double cz = 0;
+  private double cy = 0.05;
+  private double cz = 0.05;
 
   private double sqr(double pVal) {
     return pVal * pVal;

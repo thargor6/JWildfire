@@ -50,7 +50,7 @@ public abstract class AbstractFractWFFunc extends VariationFunc {
   protected int direct_color = 1;
   protected double scalez = 1.0;
   protected int clip_iter_min = 3;
-  protected int clip_iter_max = 80;
+  protected int clip_iter_max = -5;
   protected double scale = 3.0;
   protected double offsetx = 0.0;
   protected double offsety = 0.0;
@@ -69,9 +69,9 @@ public abstract class AbstractFractWFFunc extends VariationFunc {
       x0 = (xmax - xmin) * pContext.random() + xmin;
       y0 = (ymax - ymin) * pContext.random() + ymin;
       iterCount = iterate(x0, y0);
-      if ((clip_iter_max > 0 && iterCount >= clip_iter_max) || (clip_iter_min > 0 && iterCount <= clip_iter_min)) {
+      if ((clip_iter_max < 0 && iterCount >= (max_iter + clip_iter_max)) || (clip_iter_min > 0 && iterCount <= clip_iter_min)) {
         if (i == max_clip_iter - 1) {
-          pVarTP.x = pVarTP.y = pVarTP.z = -20000.0 * (Math.random() + 0.5);
+          pVarTP.x = pVarTP.y = pVarTP.z = -120000.0 * (Math.random() + 0.5);
           return;
         }
       }

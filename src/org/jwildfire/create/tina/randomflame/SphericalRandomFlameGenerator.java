@@ -40,9 +40,8 @@ public class SphericalRandomFlameGenerator extends RandomFlameGenerator {
 
     VariationFunc varFunc;
     // 1st xForm
-    XForm xForm1;
     {
-      XForm xForm = xForm1 = new XForm();
+      XForm xForm = new XForm();
       flame.getXForms().add(xForm);
       xForm.setWeight(4.0 + 12.0 * Math.random());
       varFunc = VariationFuncList.getVariationFuncInstance("spherical3D", true);
@@ -55,9 +54,8 @@ public class SphericalRandomFlameGenerator extends RandomFlameGenerator {
       xForm.setColorSymmetry(0.9 + Math.random() * 0.2);
     }
     // 2nd xForm
-    XForm xForm2;
     {
-      XForm xForm = xForm2 = new XForm();
+      XForm xForm = new XForm();
       flame.getXForms().add(xForm);
       xForm.setWeight(3.0 + 11.0 * Math.random());
       varFunc = VariationFuncList.getVariationFuncInstance("spherical3D", true);
@@ -69,9 +67,8 @@ public class SphericalRandomFlameGenerator extends RandomFlameGenerator {
       xForm.setColorSymmetry(0.9 + Math.random() * 0.2);
     }
     // 3rd xForm
-    XForm xForm3;
     {
-      XForm xForm = xForm3 = new XForm();
+      XForm xForm = new XForm();
       flame.getXForms().add(xForm);
       xForm.setWeight(0.3 + 0.2 * Math.random());
       varFunc = VariationFuncList.getVariationFuncInstance("linear3D", true);
@@ -81,9 +78,8 @@ public class SphericalRandomFlameGenerator extends RandomFlameGenerator {
       xForm.setColor(Math.random());
       xForm.setColorSymmetry(0);
     }
-    XForm xForm4;
     {
-      XForm xForm = xForm4 = new XForm();
+      XForm xForm = new XForm();
       flame.getXForms().add(xForm);
       xForm.setWeight(0.2 + 0.15 * Math.random());
       varFunc = VariationFuncList.getVariationFuncInstance("linear3D", true);

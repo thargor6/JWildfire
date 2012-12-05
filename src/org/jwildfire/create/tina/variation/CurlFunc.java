@@ -30,7 +30,7 @@ public class CurlFunc extends VariationFunc {
   private static final String PARAM_C2 = "c2";
   private static final String[] paramNames = { PARAM_C1, PARAM_C2 };
 
-  private double c1 = 0;
+  private double c1 = 0.1;
   private double c2 = 0;
 
   @Override
