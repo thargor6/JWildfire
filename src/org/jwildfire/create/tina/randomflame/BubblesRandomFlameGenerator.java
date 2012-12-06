@@ -45,7 +45,7 @@ public class BubblesRandomFlameGenerator extends RandomFlameGenerator {
         fName = ExperimentalSimpleRandomFlameGenerator.FNCLST_EXPERIMENTAL[(int) (Math.random() * fncCount)];
       }
       else {
-        fName = Math.random() < 0.75 ? "eyefish" : "fisheye";
+        fName = Math.random() < 0.8 ? "eyefish" : "fisheye";
       }
       xForm.addVariation(0.05 + Math.random() * 0.5, VariationFuncList.getVariationFuncInstance(fName, true));
       xForm.setColorSymmetry(0.991 + Math.random() * 0.08);
@@ -58,7 +58,7 @@ public class BubblesRandomFlameGenerator extends RandomFlameGenerator {
       XForm xForm = new XForm();
       flame.getXForms().add(xForm);
       xForm.setWeight(0.5 + Math.random() * 0.8);
-      if (Math.random() < 0.125) {
+      if (Math.random() < 0.05) {
         xForm.addVariation(0.01 + Math.random() * 0.4, VariationFuncList.getVariationFuncInstance("bubble", true));
         VariationFunc checks = VariationFuncList.getVariationFuncInstance("checks", true);
         checks.setParameter("size", 5.0);
@@ -82,7 +82,7 @@ public class BubblesRandomFlameGenerator extends RandomFlameGenerator {
       flame.getXForms().add(xForm);
       xForm.setWeight(0.5 + Math.random() * 1.5);
       String fName;
-      if (Math.random() > 0.6) {
+      if (Math.random() > 0.8) {
         fName = ExperimentalSimpleRandomFlameGenerator.FNCLST_EXPERIMENTAL[(int) (Math.random() * fncCount)];
       }
       else {
@@ -99,7 +99,7 @@ public class BubblesRandomFlameGenerator extends RandomFlameGenerator {
       flame.getXForms().add(xForm);
       xForm.setWeight(0.5 + Math.random() * 1.5);
       String fName;
-      if (Math.random() > 0.6) {
+      if (Math.random() > 0.8) {
         fName = ExperimentalSimpleRandomFlameGenerator.FNCLST_EXPERIMENTAL[(int) (Math.random() * fncCount)];
       }
       else {
