@@ -33,7 +33,6 @@ import org.jwildfire.create.tina.base.RasterPoint;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 import org.jwildfire.create.tina.palette.RenderColor;
-import org.jwildfire.create.tina.variation.FlameTransformationContext;
 
 public final class FlameRenderFlatThread extends FlameRenderThread {
   private XYZPoint affineT;
@@ -51,7 +50,6 @@ public final class FlameRenderFlatThread extends FlameRenderThread {
   @Override
   protected void initState() {
     startIter = 0;
-    FlameTransformationContext ctx = renderer.getFlameTransformationContext();
     affineT = new XYZPoint(); // affine part of the transformation
     varT = new XYZPoint(); // complete transformation
     p = new XYZPoint();
@@ -74,7 +72,6 @@ public final class FlameRenderFlatThread extends FlameRenderThread {
   @Override
   protected void iterate() {
     List<IterationObserver> observers = renderer.getIterationObservers();
-    FlameTransformationContext ctx = renderer.getFlameTransformationContext();
     final double cosa = renderer.cosa;
     final double sina = renderer.sina;
 

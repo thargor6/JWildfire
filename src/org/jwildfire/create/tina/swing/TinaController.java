@@ -1138,7 +1138,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
               RenderedFlame res = renderer.renderFlame(info);
               long t1 = System.currentTimeMillis();
               imgPanel.setImage(res.getImage());
-              statusMessage("Render time: " + Tools.doubleToString((t1 - t0) * 0.001) + "s");
+              showStatusMessage(flame, "render time: " + Tools.doubleToString((t1 - t0) * 0.001) + "s");
             }
               break;
             case C32:
@@ -1153,7 +1153,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
                 long t0 = System.currentTimeMillis();
                 RenderedFlame res = cudaRenderer.renderFlame(info, flame, prefs);
                 long t1 = System.currentTimeMillis();
-                statusMessage("Render time: " + Tools.doubleToString((t1 - t0) * 0.001) + "s");
+                showStatusMessage(flame, "render time: " + Tools.doubleToString((t1 - t0) * 0.001) + "s");
                 imgPanel.setImage(res.getImage());
               }
               catch (Throwable ex) {
@@ -2090,6 +2090,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
         Flame flame = flames.get(0);
         prefs.setLastInputFlameFile(file);
         currFlame = flame;
+        currFlame.setLastFilename(file.getName());
         undoManager.initUndoStack(currFlame);
 
         for (int i = flames.size() - 1; i >= 0; i--) {
@@ -2098,6 +2099,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
         updateThumbnails();
         setupProfiles(currFlame);
         refreshUI();
+        showStatusMessage(currFlame, "opened from disc");
       }
     }
     catch (Throwable ex) {
@@ -2384,7 +2386,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
                 long t0 = Calendar.getInstance().getTimeInMillis();
                 RenderedFlame res = renderer.renderFlame(info);
                 long t1 = Calendar.getInstance().getTimeInMillis();
-                statusMessage("Render time: " + Tools.doubleToString((t1 - t0) * 0.001) + "s");
+                showStatusMessage(flame, "render time: " + Tools.doubleToString((t1 - t0) * 0.001) + "s");
                 new ImageWriter().saveImage(res.getImage(), file.getAbsolutePath());
                 if (res.getHDRImage() != null) {
                   new ImageWriter().saveImage(res.getHDRImage(), file.getAbsolutePath() + ".hdr");
@@ -2411,7 +2413,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
                 long t0 = System.currentTimeMillis();
                 RenderedFlame res = cudaRenderer.renderFlame(info, flame, prefs);
                 long t1 = System.currentTimeMillis();
-                statusMessage("Render time: " + Tools.doubleToString((t1 - t0) * 0.001) + "s");
+                showStatusMessage(flame, "render time: " + Tools.doubleToString((t1 - t0) * 0.001) + "s");
                 new ImageWriter().saveImage(res.getImage(), file.getAbsolutePath());
               }
                 break;
@@ -2448,7 +2450,8 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
         if (chooser.showSaveDialog(centerPanel) == JFileChooser.APPROVE_OPTION) {
           File file = chooser.getSelectedFile();
           new Flam3Writer().writeFlame(currFlame, file.getAbsolutePath());
-          statusMessage("Flame file <" + file.getAbsolutePath() + "> saved");
+          currFlame.setLastFilename(file.getName());
+          showStatusMessage(currFlame, "flame saved to disc");
           prefs.setLastOutputFlameFile(file);
         }
       }
@@ -3872,6 +3875,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
           setupProfiles(currFlame);
           updateThumbnails();
           refreshUI();
+          showStatusMessage(currFlame, "opened from clipboard");
         }
       }
     }
@@ -3886,6 +3890,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     setupProfiles(currFlame);
     updateThumbnails();
     refreshUI();
+    showStatusMessage(currFlame, "imported into editor");
   }
 
   protected Flame exportFlame() {
@@ -3910,6 +3915,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
         //        catch (Throwable ex) {
         //          ex.printStackTrace();
         //        }
+        showStatusMessage(currFlame, "flame saved to clipboard");
       }
     }
     catch (Throwable ex) {
@@ -5199,8 +5205,24 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     }
   }
 
-  private void statusMessage(String pStatus) {
-    tinaFrame.setTitle(tinaFrameTitle + (pStatus != null && pStatus.length() > 0 ? ": " + pStatus : ""));
+  private void showStatusMessage(Flame pFlame, String pStatus) {
+    if (pFlame == null)
+      return;
+    String prefix;
+    if (pFlame.getName() != null && pFlame.getName().length() > 0) {
+      prefix = "Flame \"" + pFlame.getName() + "\"";
+    }
+    else {
+      prefix = "Unamed flame";
+    }
+    if (pFlame.getLastFilename() != null && pFlame.getLastFilename().length() > 0) {
+      prefix += " (" + pFlame.getLastFilename() + ") ";
+    }
+    else {
+      prefix += " ";
+    }
+    tinaFrame.setTitle(prefix + (pStatus != null && pStatus.length() > 0 ? ": " + pStatus : ""));
+    //    tinaFrame.setTitle(tinaFrameTitle + (pStatus != null && pStatus.length() > 0 ? ": " + pStatus : ""));
   }
 
   public void snapshotButton_clicked() {
@@ -5218,7 +5240,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       if (currFlame != null) {
         String filename = qsaveFilenameGen.generateNextFilename();
         new Flam3Writer().writeFlame(currFlame, filename);
-        statusMessage("Flame file <" + filename + "> saved");
+        showStatusMessage(currFlame, "quicksave <" + new File(filename).getName() + "> saved");
       }
     }
     catch (Throwable ex) {

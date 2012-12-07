@@ -23,7 +23,8 @@ public class RandomNumberGenerator {
   private double buffer[] = new double[40960];
   private int bufferIdx;
 
-  private static final int RAND_MAX = 0x7fffffff + 1;
+  private static final int RAND_MAX = 0x7fffffff;
+  private static final double RAND_MAX_MUL = 1.0 / (double) RAND_MAX;
 
   public void randomize(long pSeed) {
     u = (int) (pSeed << 16);
@@ -36,19 +37,16 @@ public class RandomNumberGenerator {
         v = 36969 * (v & 65535) + (v >> 16);
         u = 18000 * (u & 65535) + (u >> 16);
         int rnd = (v << 16) + u;
-        double res = (double) rnd / (double) RAND_MAX;
-        if (res < 0) {
-          res = 0.0 - res;
-        }
-        return res;
+        double res = (double) rnd * RAND_MAX_MUL;
+        return res < 0 ? -res : res;
       }
       case RECORDING: {
         v = 36969 * (v & 65535) + (v >> 16);
         u = 18000 * (u & 65535) + (u >> 16);
         int rnd = (v << 16) + u;
-        double res = (double) rnd / (double) RAND_MAX;
+        double res = (double) rnd * RAND_MAX_MUL;
         if (res < 0) {
-          res = 0.0 - res;
+          res = -res;
         }
         buffer[bufferIdx++] = res;
         return res;
@@ -66,11 +64,47 @@ public class RandomNumberGenerator {
   }
 
   public int random(int pMax) {
-    return (int) (random() * pMax);
+    int res = (int) (random() * pMax);
+    return res < pMax ? res : pMax - 1;
   }
 
   public enum RandGenStatus {
     DEFAULT, RECORDING, REPLAY
   }
 
+  //  private static int a = 1;
+  //
+  //  private static final int RAND_MAX123 = 0x7fffffff;
+  //
+  //  private static double rrmax = 1.0 / (double) RAND_MAX123;
+  //
+  //  public void randomize(long pSeed) {
+  //    a = (int) pSeed;
+  //  }
+  //
+  //  public double random() {
+  //    switch (status) {
+  //      case DEFAULT: {
+  //        a = (a * 1103515245 + 12345) % RAND_MAX123;
+  //        double res = (double) (a * rrmax);
+  //        if (res < 0) {
+  //          res = 0.0 - res;
+  //        }
+  //        return res;
+  //      }
+  //      case RECORDING: {
+  //        a = (a * 1103515245 + 12345) % RAND_MAX123;
+  //        double res = (double) (a * rrmax);
+  //        if (res < 0) {
+  //          res = 0.0 - res;
+  //        }
+  //        buffer[bufferIdx++] = res;
+  //        return res;
+  //      }
+  //      case REPLAY:
+  //        return buffer[bufferIdx++];
+  //      default:
+  //        throw new IllegalStateException();
+  //    }
+  //  }
 }

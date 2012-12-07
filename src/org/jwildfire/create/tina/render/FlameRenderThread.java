@@ -17,6 +17,7 @@
 package org.jwildfire.create.tina.render;
 
 import org.jwildfire.create.tina.base.Flame;
+import org.jwildfire.create.tina.variation.FlameTransformationContext;
 
 public abstract class FlameRenderThread implements Runnable {
   protected final FlameRenderer renderer;
@@ -27,11 +28,14 @@ public abstract class FlameRenderThread implements Runnable {
   protected boolean forceAbort;
   protected boolean finished;
   protected FlameRenderThreadState resumeState;
+  protected FlameTransformationContext ctx;
 
   public FlameRenderThread(FlameRenderer pRenderer, Flame pFlame, long pSamples) {
     renderer = pRenderer;
     flame = pFlame;
     samples = pSamples;
+    ctx = new FlameTransformationContext(pRenderer);
+    ctx.setPreserveZCoordinate(pFlame.isPreserveZ());
   }
 
   protected abstract void initState();

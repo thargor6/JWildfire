@@ -32,6 +32,7 @@ import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 import org.jwildfire.create.tina.render.FlameRenderer;
 import org.jwildfire.create.tina.transform.XFormTransformService;
+import org.jwildfire.create.tina.variation.FlameTransformationContext;
 import org.jwildfire.create.tina.variation.Variation;
 import org.jwildfire.image.SimpleImage;
 import org.jwildfire.swing.ImagePanel;
@@ -270,7 +271,7 @@ public class FlamePanel extends ImagePanel {
       try {
         selectedXForm.initTransform();
         for (Variation var : selectedXForm.getSortedVariations()) {
-          var.getFunc().init(getFlameRenderer().getFlameTransformationContext(), selectedXForm, var.getAmount());
+          var.getFunc().init(getFlameTransformationContext(), selectedXForm, var.getAmount());
         }
 
         // TODO
@@ -297,7 +298,7 @@ public class FlamePanel extends ImagePanel {
               p.y = y;
 
               p.z = 0.0;
-              selectedXForm.transformPoint(getFlameRenderer().getFlameTransformationContext(), affineT, varT, p, p);
+              selectedXForm.transformPoint(getFlameTransformationContext(), affineT, varT, p, p);
               xx[i][j] = xToView(p.x);
               yy[i][j] = yToView(-p.y);
               x += xs;
@@ -507,22 +508,21 @@ public class FlamePanel extends ImagePanel {
             return true;
           }
           // Viewport
-          /*
-                    case NONE: {
-                      if (flameHolder != null && flameHolder.getFlame() != null) {
-                        Flame flame = flameHolder.getFlame();
+          //          case NONE: {
+          //            if (flameHolder != null && flameHolder.getFlame() != null) {
+          //              Flame flame = flameHolder.getFlame();
+          //
+          //              double cosa = cos(M_PI * (flame.getCamRoll()) / 180.0);
+          //              double sina = sin(M_PI * (flame.getCamRoll()) / 180.0);
+          //              double rcX = dx * cosa - dy * sina;
+          //              double rcY = dy * cosa + dx * sina;
+          //
+          //              flame.setCentreX(flame.getCentreX() - rcX * 0.5);
+          //              flame.setCentreY(flame.getCentreY() + rcY * 0.5);
+          //              return true;
+          //            }
+          //          }
 
-                        double cosa = cos(M_PI * (flame.getCamRoll()) / 180.0);
-                        double sina = sin(M_PI * (flame.getCamRoll()) / 180.0);
-                        double rcX = dx * cosa - dy * sina;
-                        double rcY = dy * cosa + dx * sina;
-
-                        flame.setCentreX(flame.getCentreX() - rcX * 0.5);
-                        flame.setCentreY(flame.getCentreY() + rcY * 0.5);
-                        return true;
-                      }
-                    }
-          */
         }
       }
     }
@@ -709,6 +709,15 @@ public class FlamePanel extends ImagePanel {
       flameRenderer.createColorMap();
     }
     return flameRenderer;
+  }
+
+  private FlameTransformationContext flameTransformationContext = null;
+
+  private FlameTransformationContext getFlameTransformationContext() {
+    if (flameTransformationContext == null) {
+      flameTransformationContext = new FlameTransformationContext(getFlameRenderer());
+    }
+    return flameTransformationContext;
   }
 
   public MouseDragOperation getMouseDragOperation() {

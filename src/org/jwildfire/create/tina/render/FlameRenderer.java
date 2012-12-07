@@ -849,10 +849,6 @@ public final class FlameRenderer {
     return random;
   }
 
-  public FlameTransformationContext getFlameTransformationContext() {
-    return flameTransformationContext;
-  }
-
   public void setRenderScale(int pRenderScale) {
     renderScale = pRenderScale;
   }

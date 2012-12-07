@@ -69,6 +69,7 @@ public class Flame implements Assignable<Flame>, Serializable {
   private final List<XForm> xForms = new ArrayList<XForm>();
   private final List<XForm> finalXForms = new ArrayList<XForm>();
   private ShadingInfo shadingInfo = new ShadingInfo();
+  private String lastFilename = null;
 
   public Flame() {
     spatialFilterRadius = 0.0;
@@ -475,6 +476,7 @@ public class Flame implements Assignable<Flame>, Serializable {
     for (XForm xForm : pFlame.getFinalXForms()) {
       finalXForms.add(xForm.makeCopy());
     }
+    lastFilename = pFlame.lastFilename;
   }
 
   @Override
@@ -545,5 +547,13 @@ public class Flame implements Assignable<Flame>, Serializable {
 
   public void setName(String name) {
     this.name = name != null ? name : "";
+  }
+
+  public void setLastFilename(String pLastFilename) {
+    lastFilename = pLastFilename;
+  }
+
+  public String getLastFilename() {
+    return lastFilename;
   }
 }
