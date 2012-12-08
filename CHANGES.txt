@@ -1,3 +1,10 @@
+V0.58 (08.12.2012):
+ - improved render quality (also applies to the external renderers)
+ - new "fract_mandelbrot_wf", "fract_julia_wf", "fract_salamander_wf", "fract_pearls_wf", "fract_meteor_wf", "fract_dragon_wf" variations (also applies to the external renderers)
+ - new "Mandelbrot" random flame generator
+ - display the flame name and flame file name (if available) in the status display (currently window title, but this place may change in future)
+ - improved the "Bubbles" random flame generator
+
 V0.57 (01.12.2012):
  - first working version of the dancing flame fractals editor
  - new "Splits" random flame generator

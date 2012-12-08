@@ -20,18 +20,22 @@
 class RandGen {
 public:
 	RandGen() {
-		init(123);
-	}
-
-	void init(int pSeed) {
-		a = (int) pSeed;
+    u = 12244355;
+    v = 34384;
 		rrmax = 1.0 / (JWF_FLOAT) RAND_MAX123;
 	}
 
+	void init(int seed) {
+    u = (int) (seed << 16);
+    v = (int) (seed << 16) >> 16;
+	}
+
 	inline JWF_FLOAT random() {
-		a = (a * 1103515245 + 12345) % RAND_MAX123;
-		JWF_FLOAT res = (JWF_FLOAT)(a * rrmax);
-		return res >= 0 ? res : -res;
+    v = 36969 * (v & 65535) + (v >> 16);
+    u = 18000 * (u & 65535) + (u >> 16);
+    int rnd = (v << 16) + u;
+    double res = (double) rnd * rrmax;
+    return res < 0 ? -res : res;
 	}
 
 	inline int random(int pMax) {
@@ -44,7 +48,7 @@ public:
 	}
 
 private:
-	int a;
+  int u, v;
 
 	static const int RAND_MAX123 = 0x7fffffff;
 	JWF_FLOAT rrmax;

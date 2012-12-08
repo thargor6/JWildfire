@@ -17,6 +17,7 @@
 
 package org.jwildfire.create.tina.variation;
 
+import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_CUDA;
 import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_JWILDFIRE;
 
 import java.util.List;
@@ -37,7 +38,7 @@ public class FractPearlsWFFunc extends AbstractFractWFFunc {
 
   @Override
   public int getAvailability() {
-    return AVAILABILITY_JWILDFIRE;
+    return AVAILABILITY_JWILDFIRE | AVAILABILITY_CUDA;
   }
 
   @Override
@@ -72,7 +73,6 @@ public class FractPearlsWFFunc extends AbstractFractWFFunc {
     scale = 2.45;
     xseed = 0.0;
     yseed = -0.31;
-
   }
 
   @Override

@@ -110,6 +110,12 @@
 #include "jwfvar_Flux.h"
 #include "jwfvar_Foci.h"
 #include "jwfvar_Foci3D.h"
+#include "jwfvar_FractDragonWF.h"
+#include "jwfvar_FractJuliaWF.h"
+#include "jwfvar_FractMandelbrotWF.h"
+#include "jwfvar_FractMeteorsWF.h"
+#include "jwfvar_FractPearlsWF.h"
+#include "jwfvar_FractSalamanderWF.h"
 #include "jwfvar_GaussianBlur.h"
 #include "jwfvar_Glynnia.h"
 #include "jwfvar_GlynnSim1.h"
@@ -392,6 +398,12 @@ private:
 		addVariation(new FluxFunc());
 		addVariation(new FociFunc());
 		addVariation(new Foci3DFunc());
+		addVariation(new FractDragonWFFunc());
+		addVariation(new FractJuliaWFFunc());
+		addVariation(new FractMandelbrotWFFunc());
+		addVariation(new FractMeteorsWFFunc());
+		addVariation(new FractPearlsWFFunc());
+		addVariation(new FractSalamanderWFFunc());
 		addVariation(new GaussianBlurFunc());
 		addVariation(new GlynniaFunc());
 		addVariation(new GlynnSim1Func());

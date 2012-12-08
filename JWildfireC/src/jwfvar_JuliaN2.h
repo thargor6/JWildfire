@@ -70,9 +70,10 @@ public:
 	}
 
 	void transform(FlameTransformationContext *pContext, XForm *pXForm, XYZPoint *pAffineTP, XYZPoint *pVarTP, JWF_FLOAT pAmount) {
+    if(power==0)
+    	return;
     JWF_FLOAT x = a * pAffineTP->x + b * pAffineTP->y + e;
     JWF_FLOAT y = c * pAffineTP->x + d * pAffineTP->y + f;
-
     JWF_FLOAT angle = (JWF_ATAN2(y, x) + M_2PI * (pContext->randGen->random(INT_MAX) % _absN)) / power;
     JWF_FLOAT r = pAmount * JWF_POW(JWF_SQR(x) + JWF_SQR(y), _cN);
 
