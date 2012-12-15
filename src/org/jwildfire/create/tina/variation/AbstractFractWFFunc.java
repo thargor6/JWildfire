@@ -86,7 +86,10 @@ public abstract class AbstractFractWFFunc extends VariationFunc {
     pVarTP.y += scale * pAmount * (y0 + offsety);
     pVarTP.z += scale * pAmount * (scalez / 10 * ((double) iterCount / (double) max_iter) + offsetz);
     if (direct_color != 0) {
-      pVarTP.color = (double) iterCount / (double) max_iter;
+      pVarTP.color += (double) iterCount / (double) max_iter;
+      if (pVarTP.color > 1.0)
+        pVarTP.color -= 1.0;
+
       if (pVarTP.color < 0)
         pVarTP.color = 0;
       else if (pVarTP.color > 1.0)
