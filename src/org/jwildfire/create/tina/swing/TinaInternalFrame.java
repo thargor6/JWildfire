@@ -3476,7 +3476,8 @@ public class TinaInternalFrame extends JInternalFrame {
         nonlinearControlsRows, getXFormColorREd(), getXFormColorSlider(), getXFormSymmetryREd(), getXFormSymmetrySlider(), getXFormOpacityREd(),
         getXFormOpacitySlider(), getXFormDrawModeCmb(), getRelWeightsTable(), getRelWeightsZeroButton(), getRelWeightsOneButton(), getRelWeightREd(),
         getMouseTransformMoveButton(),
-        getMouseTransformRotateButton(), getMouseTransformScaleButton(), getMouseTransformShearButton(), getAffineEditPostTransformButton(), getAffineEditPostTransformSmallButton(),
+        getMouseTransformRotateButton(), getMouseTransformScaleButton(), getMouseTransformShearButton(), getMouseTransformViewButton(),
+        getAffineEditPostTransformButton(), getAffineEditPostTransformSmallButton(),
         getMouseTransformZoomInButton(), getMouseTransformZoomOutButton(), getToggleTrianglesButton(), new MainProgressUpdater(this),
         getAffineResetTransformButton(), getCreatePaletteColorsTable(),
         getShadingCmb(), getShadingAmbientREd(), getShadingAmbientSlider(), getShadingDiffuseREd(), getShadingDiffuseSlider(),
@@ -5211,6 +5212,18 @@ public class TinaInternalFrame extends JInternalFrame {
       triangleOperationsPanel.setLayout(new FlowLayout());
       triangleOperationsPanel.setPreferredSize(new Dimension(52, 0));
       triangleOperationsPanel.add(getAffineEditPostTransformSmallButton(), null);
+
+      mouseTransformViewButton = new JToggleButton();
+      mouseTransformViewButton.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.mouseTransformViewButton_clicked();
+        }
+      });
+      mouseTransformViewButton.setSelected(true);
+      mouseTransformViewButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/editView.gif")));
+      mouseTransformViewButton.setToolTipText("Enable view editing mode (Left mouse: move, right mouse: rotate, middle/wheel: zoom)");
+      mouseTransformViewButton.setPreferredSize(new Dimension(42, 24));
+      triangleOperationsPanel.add(mouseTransformViewButton);
       triangleOperationsPanel.add(getMouseTransformMoveButton(), null);
       triangleOperationsPanel.add(getMouseTransformRotateButton(), null);
       triangleOperationsPanel.add(getMouseTransformScaleButton(), null);
@@ -5242,7 +5255,6 @@ public class TinaInternalFrame extends JInternalFrame {
     if (mouseTransformMoveButton == null) {
       mouseTransformMoveButton = new JToggleButton();
       mouseTransformMoveButton.setPreferredSize(new Dimension(42, 24));
-      mouseTransformMoveButton.setSelected(true);
       mouseTransformMoveButton.setToolTipText("Enable triangle dragging mode");
       mouseTransformMoveButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/move.gif")));
       mouseTransformMoveButton.addActionListener(new java.awt.event.ActionListener() {
@@ -8248,6 +8260,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton dancingFlamesSaveAllFlamesBtn;
   private JPanel panel_37;
   private JPanel panel_41;
+  private JToggleButton mouseTransformViewButton;
 
   /**
    * This method initializes renderBatchJobsScrollPane	
@@ -11617,5 +11630,9 @@ public class TinaInternalFrame extends JInternalFrame {
       dancingFlamesBorderSizeSlider.setFont(new Font("Dialog", Font.BOLD, 10));
     }
     return panel_41;
+  }
+
+  public JToggleButton getMouseTransformViewButton() {
+    return mouseTransformViewButton;
   }
 } //  @jve:decl-index=0:visual-constraint="10,10"

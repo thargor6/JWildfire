@@ -16,6 +16,10 @@
 */
 package org.jwildfire.create.tina.swing;
 
+import static org.jwildfire.base.MathLib.M_PI;
+import static org.jwildfire.base.MathLib.cos;
+import static org.jwildfire.base.MathLib.sin;
+
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
@@ -64,7 +68,7 @@ public class FlamePanel extends ImagePanel {
 
   private double viewXScale, viewYScale;
   private double viewXTrans, viewYTrans;
-  private MouseDragOperation mouseDragOperation = MouseDragOperation.MOVE;
+  private MouseDragOperation mouseDragOperation = MouseDragOperation.VIEW;
   private int xBeginDrag, yBeginDrag;
   private boolean editPostTransform = false;
   private double zoom = 1.0;
@@ -388,7 +392,7 @@ public class FlamePanel extends ImagePanel {
     this.selectedXForm = selectedXForm;
   }
 
-  public boolean mouseDragged(int pX, int pY) {
+  public boolean mouseDragged(int pX, int pY, boolean pLeftButton, boolean pRightButton, boolean pMiddleButton) {
     int viewDX = pX - xBeginDrag;
     int viewDY = pY - yBeginDrag;
     if (viewDX != 0 || viewDY != 0) {
@@ -507,21 +511,41 @@ public class FlamePanel extends ImagePanel {
             XFormTransformService.rotate(selectedXForm, dx * 30, editPostTransform);
             return true;
           }
-          // Viewport
-          //          case NONE: {
-          //            if (flameHolder != null && flameHolder.getFlame() != null) {
-          //              Flame flame = flameHolder.getFlame();
-          //
-          //              double cosa = cos(M_PI * (flame.getCamRoll()) / 180.0);
-          //              double sina = sin(M_PI * (flame.getCamRoll()) / 180.0);
-          //              double rcX = dx * cosa - dy * sina;
-          //              double rcY = dy * cosa + dx * sina;
-          //
-          //              flame.setCentreX(flame.getCentreX() - rcX * 0.5);
-          //              flame.setCentreY(flame.getCentreY() + rcY * 0.5);
-          //              return true;
-          //            }
-          //          }
+          case VIEW: {
+            if (flameHolder != null && flameHolder.getFlame() != null) {
+              Flame flame = flameHolder.getFlame();
+              // Move
+              if (pLeftButton) {
+                double cosa = cos(M_PI * (flame.getCamRoll()) / 180.0);
+                double sina = sin(M_PI * (flame.getCamRoll()) / 180.0);
+                double rcX = dx * cosa - dy * sina;
+                double rcY = dy * cosa + dx * sina;
+
+                if (fineMovement) {
+                  rcX *= 0.1;
+                  rcY *= 0.1;
+                }
+                flame.setCentreX(flame.getCentreX() - rcX * 0.3);
+                flame.setCentreY(flame.getCentreY() + rcY * 0.3);
+              }
+              // rotate
+              if (pRightButton) {
+                if (fineMovement) {
+                  dx *= 0.1;
+                }
+                flame.setCamRoll(flame.getCamRoll() - 12 * dx);
+              }
+              // zoom
+              if (pMiddleButton) {
+                if (fineMovement) {
+                  dx *= 0.1;
+                  dy *= 0.1;
+                }
+                flame.setPixelsPerUnit(flame.getPixelsPerUnit() + 2.0 * dx);
+              }
+              return true;
+            }
+          }
 
         }
       }
@@ -535,10 +559,6 @@ public class FlamePanel extends ImagePanel {
       yBeginDrag = y;
       if (undoManagerHolder != null) {
         undoManagerHolder.saveUndoPoint();
-      }
-      if (!drawTriangles) {
-        drawTriangles = true;
-        toggleTrianglesButton.setSelected(true);
       }
     }
   }
@@ -734,6 +754,19 @@ public class FlamePanel extends ImagePanel {
 
   public void setShowTransparency(boolean pShowTransparency) {
     showTransparency = pShowTransparency;
+  }
+
+  public boolean mouseWheelMoved(int pRotateAmount) {
+    if (pRotateAmount != 0 && mouseDragOperation == MouseDragOperation.VIEW && flameHolder != null && flameHolder.getFlame() != null) {
+      Flame flame = flameHolder.getFlame();
+      double dx = pRotateAmount * 3.0;
+      if (fineMovement) {
+        dx *= 0.1;
+      }
+      flame.setPixelsPerUnit(flame.getPixelsPerUnit() - dx);
+      return true;
+    }
+    return false;
   }
 
 }

@@ -370,8 +370,6 @@ public class DancingFractalsController {
       flames.add(pFlame);
       refreshPoolTable();
       enableControls();
-      // TODO
-      //refreshFlameImage(flame, false);
     }
   }
 
@@ -430,10 +428,6 @@ public class DancingFractalsController {
       }
       refreshPoolTable();
       enableControls();
-      // TODO
-      //    flame = 
-
-      // refreshFlameImage(flame, false);
     }
     catch (Throwable ex) {
       errorHandler.handleError(ex);

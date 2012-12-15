@@ -36,6 +36,7 @@ public class AllRandomFlameGenerator extends RandomFlameGenerator {
     allGenerators.add(new BrokatRandomFlameGenerator());
     allGenerators.add(new MandelbrotRandomFlameGenerator());
     allGenerators.add(new GnarlRandomFlameGenerator());
+    allGenerators.add(new Spherical3DRandomFlameGenerator());
     allGenerators.add(new ExperimentalGnarlRandomFlameGenerator());
     allGenerators.add(new BubblesRandomFlameGenerator());
     allGenerators.add(new Spherical3DRandomFlameGenerator());
@@ -45,6 +46,7 @@ public class AllRandomFlameGenerator extends RandomFlameGenerator {
     allGenerators.add(new SphericalRandomFlameGenerator());
     allGenerators.add(new MandelbrotRandomFlameGenerator());
     allGenerators.add(new SplitsRandomFlameGenerator());
+    allGenerators.add(new BubblesRandomFlameGenerator());
     allGenerators.add(new GnarlRandomFlameGenerator());
     allGenerators.add(new Flowers3DRandomFlameGenerator());
     allGenerators.add(new FilledFlowers3DRandomFlameGenerator());
