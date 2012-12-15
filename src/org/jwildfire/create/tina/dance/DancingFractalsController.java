@@ -14,7 +14,7 @@
   if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
   02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
-package org.jwildfire.create.tina.swing;
+package org.jwildfire.create.tina.dance;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -44,6 +44,8 @@ import org.jwildfire.create.tina.animate.FlameMorphService;
 import org.jwildfire.create.tina.audio.JLayerInterface;
 import org.jwildfire.create.tina.audio.RecordedFFT;
 import org.jwildfire.create.tina.base.Flame;
+import org.jwildfire.create.tina.dance.action.ActionRecorder;
+import org.jwildfire.create.tina.dance.action.PostRecordFlameGenerator;
 import org.jwildfire.create.tina.io.Flam3Reader;
 import org.jwildfire.create.tina.io.Flam3Writer;
 import org.jwildfire.create.tina.randomflame.RandomFlameGenerator;
@@ -52,6 +54,12 @@ import org.jwildfire.create.tina.randomflame.RandomFlameGeneratorSampler;
 import org.jwildfire.create.tina.render.FlameRenderer;
 import org.jwildfire.create.tina.render.RenderInfo;
 import org.jwildfire.create.tina.render.RenderedFlame;
+import org.jwildfire.create.tina.swing.FlameFileChooser;
+import org.jwildfire.create.tina.swing.FlameHolder;
+import org.jwildfire.create.tina.swing.FlamePanel;
+import org.jwildfire.create.tina.swing.JWFNumberField;
+import org.jwildfire.create.tina.swing.SoundFileChooser;
+import org.jwildfire.create.tina.swing.TinaController;
 import org.jwildfire.image.SimpleImage;
 import org.jwildfire.swing.ErrorHandler;
 import org.jwildfire.swing.ImagePanel;
@@ -95,10 +103,12 @@ public class DancingFractalsController {
   private List<Flame> flames = new ArrayList<Flame>();
   private boolean refreshing;
   private RealtimeAnimRenderThread renderThread;
+  private ActionRecorder actionRecorder;
 
   private RecordedFFT fft;
   private String soundFilename;
   private boolean running = false;
+  private final org.jwildfire.create.tina.dance.DanceFlameHolder flameHolder;
 
   public DancingFractalsController(TinaController pParent, ErrorHandler pErrorHandler, JPanel pRealtimeFlamePnl, JPanel pRealtimeGraph1Pnl,
       JButton pLoadSoundBtn, JButton pAddFromClipboardBtn, JButton pAddFromEditorBtn, JButton pAddFromDiscBtn, JWFNumberField pRandomCountIEd,
@@ -129,6 +139,9 @@ public class DancingFractalsController {
     shuffleFlamesBtn = pShuffleFlamesBtn;
     doRecordCBx = pDoRecordCBx;
     saveAllFlamesBtn = pSaveAllFlamesBtn;
+
+    flameHolder = new org.jwildfire.create.tina.dance.DanceFlameHolder();
+
     refreshPoolTable();
     enableControls();
   }
@@ -145,14 +158,14 @@ public class DancingFractalsController {
         if (currFlame != null && morphFrameCount > 1 && morphFrame < morphFrameCount) {
           Flame newFlame = FlameMorphService.morphFlames(prefs, currFlame, nextFlame, morphFrame++, morphFrameCount);
           if (renderThread != null) {
-            renderThread.changeFlame(newFlame, true);
+            flameHolder.changeFlame(newFlame, true);
           }
           return newFlame;
         }
         else {
           Flame newFlame = nextFlame.makeCopy();
           if (renderThread != null) {
-            renderThread.changeFlame(newFlame, false);
+            flameHolder.changeFlame(newFlame, false);
           }
           currFlame = newFlame;
           nextFlame = null;
@@ -167,7 +180,7 @@ public class DancingFractalsController {
       if (morphFrameCount < 1)
         morphFrameCount = 1;
       if (doRecordCBx.isSelected() && renderThread != null) {
-        renderThread.recordFlameChange(pFlame, morphFrameCount);
+        actionRecorder.recordFlameChange(pFlame, morphFrameCount);
       }
       nextFlame = pFlame;
       morphFrame = 1;
@@ -263,7 +276,7 @@ public class DancingFractalsController {
           FlameRenderer renderer = new FlameRenderer(flame, prefs, false);
           renderer.setProgressUpdater(null);
 
-          prepareFlameToRender(flame);
+          new FlamePreparer(prefs).prepareFlame(flame);
 
           RenderedFlame res = renderer.renderFlame(info);
           SimpleImage img = res.getImage();
@@ -301,19 +314,6 @@ public class DancingFractalsController {
     flameRootPanel.repaint();
   }
 
-  private void prepareFlameToRender(Flame pFlame) {
-    pFlame.setBGTransparency(false);
-    pFlame.setGamma(1.5);
-    pFlame.setBrightness(3.36);
-    pFlame.getPalette().setModRed(90);
-    pFlame.getPalette().setModRed(60);
-    pFlame.getPalette().setModBlue(-60);
-    pFlame.setSampleDensity(2 * prefs.getTinaRenderRealtimeQuality());
-    pFlame.setSpatialFilterRadius(0.75);
-    pFlame.setSpatialOversample(1);
-    pFlame.setColorOversample(1);
-  }
-
   public void refreshPoolPreviewFlameImage(Flame flame) {
     FlamePanel imgPanel = getPoolPreviewFlamePanel();
     if (imgPanel == null)
@@ -332,7 +332,7 @@ public class DancingFractalsController {
         flame.setHeight(info.getImageHeight());
         FlameRenderer renderer = new FlameRenderer(flame, prefs, false);
         renderer.setProgressUpdater(null);
-        prepareFlameToRender(flame);
+        new FlamePreparer(prefs).prepareFlame(flame);
         RenderedFlame res = renderer.renderFlame(info);
         imgPanel.setImage(res.getImage());
       }
@@ -377,7 +377,9 @@ public class DancingFractalsController {
 
   public void startRender() throws Exception {
     stopRender();
-    renderThread = new RealtimeAnimRenderThread(this);
+    renderThread = new RealtimeAnimRenderThread(this, flameHolder);
+    actionRecorder = new ActionRecorder(renderThread);
+
     renderFlameHolder.setNextFlame(poolFlameHolder.getFlame());
     renderThread.setFFTData(fft);
     renderThread.setMusicPlayer(jLayer);
@@ -389,7 +391,7 @@ public class DancingFractalsController {
   public void stopRender() throws Exception {
     if (renderThread != null) {
       if (doRecordCBx.isSelected()) {
-        renderThread.recordStop();
+        actionRecorder.recordStop();
       }
       renderThread.setForceAbort(true);
       if (doRecordCBx.isSelected()) {
@@ -405,10 +407,12 @@ public class DancingFractalsController {
         if (chooser.showSaveDialog(flameRootPanel) == JFileChooser.APPROVE_OPTION) {
           File file = chooser.getSelectedFile();
           prefs.setLastOutputFlameFile(file);
-          renderThread.createRecordedFlameFiles(file.getAbsolutePath());
+          PostRecordFlameGenerator generator = new PostRecordFlameGenerator(getParentCtrl().getPrefs(), actionRecorder, renderThread, flameHolder, fft);
+          generator.createRecordedFlameFiles(file.getAbsolutePath());
         }
       }
       renderThread = null;
+      actionRecorder = null;
     }
   }
 

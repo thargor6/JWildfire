@@ -661,7 +661,7 @@ public class FlamePanel extends ImagePanel {
     }
   }
 
-  void setRenderHeight(int pRenderHeight) {
+  public void setRenderHeight(int pRenderHeight) {
     renderHeight = pRenderHeight;
     updateRenderAspect();
   }

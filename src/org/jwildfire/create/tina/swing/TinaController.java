@@ -76,6 +76,7 @@ import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.batch.Job;
 import org.jwildfire.create.tina.batch.JobRenderThread;
 import org.jwildfire.create.tina.batch.JobRenderThreadController;
+import org.jwildfire.create.tina.dance.DancingFractalsController;
 import org.jwildfire.create.tina.edit.UndoManager;
 import org.jwildfire.create.tina.io.Flam3PaletteReader;
 import org.jwildfire.create.tina.io.Flam3Reader;
@@ -3884,7 +3885,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     }
   }
 
-  protected void importFlame(Flame pFlame) {
+  public void importFlame(Flame pFlame) {
     currFlame = pFlame.makeCopy();
     undoManager.initUndoStack(currFlame);
     setupProfiles(currFlame);
@@ -4557,7 +4558,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     }
   }
 
-  protected JTabbedPane getRootTabbedPane() {
+  public JTabbedPane getRootTabbedPane() {
     return rootTabbedPane;
   }
 

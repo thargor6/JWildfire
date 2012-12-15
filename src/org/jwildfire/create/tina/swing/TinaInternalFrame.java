@@ -73,6 +73,7 @@ import org.jwildfire.base.Prefs;
 import org.jwildfire.create.tina.animate.AnimationService;
 import org.jwildfire.create.tina.base.DrawMode;
 import org.jwildfire.create.tina.base.Shading;
+import org.jwildfire.create.tina.dance.DancingFractalsController;
 import org.jwildfire.create.tina.randomflame.RandomFlameGeneratorList;
 import org.jwildfire.create.tina.render.CRendererInterface;
 import org.jwildfire.create.tina.render.RendererType;
@@ -11185,7 +11186,8 @@ public class TinaInternalFrame extends JInternalFrame {
     if (panel_40 == null) {
       panel_40 = new JPanel();
       panel_40.setBorder(new EmptyBorder(0, 0, 0, 0));
-      panel_40.setPreferredSize(new Dimension(10, 36));
+      panel_40.setPreferredSize(new Dimension(10, 136));
+      panel_40.setLayout(null);
       panel_40.add(getLblMorphFrames());
       panel_40.add(getDancingFlamesMorphFrameCountIEd());
     }
@@ -11503,6 +11505,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JTextField getDancingFlamesMorphFrameCountIEd() {
     if (dancingFlamesMorphFrameCountIEd == null) {
       dancingFlamesMorphFrameCountIEd = new JTextField();
+      dancingFlamesMorphFrameCountIEd.setBounds(170, 5, 56, 22);
       dancingFlamesMorphFrameCountIEd.setText("0");
       dancingFlamesMorphFrameCountIEd.setPreferredSize(new Dimension(56, 22));
       dancingFlamesMorphFrameCountIEd.setFont(new Font("Dialog", Font.PLAIN, 10));
@@ -11513,6 +11516,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JLabel getLblMorphFrames() {
     if (lblMorphFrames == null) {
       lblMorphFrames = new JLabel();
+      lblMorphFrames.setBounds(45, 5, 120, 22);
       lblMorphFrames.setText("Morph frames");
       lblMorphFrames.setPreferredSize(new Dimension(120, 22));
       lblMorphFrames.setHorizontalAlignment(SwingConstants.RIGHT);
