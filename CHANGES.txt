@@ -1,3 +1,8 @@
+V0.59 (16.12.2012):
+ - new interactive view editing mode (move, rotate, zoom)
+ - color and color symmetry does also affect the new fract_* family of variations
+ - lots of internal refactoring regarding the dancing flames editor
+
 V0.58 (08.12.2012):
  - improved render quality (also applies to the external renderers)
  - new "fract_mandelbrot_wf", "fract_julia_wf", "fract_salamander_wf", "fract_pearls_wf", "fract_meteor_wf", "fract_dragon_wf" variations (also applies to the external renderers)

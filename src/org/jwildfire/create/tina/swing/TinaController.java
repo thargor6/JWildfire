@@ -966,6 +966,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
         public void mouseReleased(MouseEvent e) {
           if (dragging) {
             refreshFlameImage(false);
+            flamePanel_mouseReleased(e);
           }
           dragging = false;
         }
@@ -3468,7 +3469,6 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       if (flamePanel.mouseDragged(e.getX(), e.getY(), leftButton, rightButton, middleButton)) {
         refreshXFormUI(getCurrXForm());
         refreshFlameImage(true);
-        refreshVisualCamValues();
       }
     }
   }
@@ -3476,6 +3476,13 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
   private void flamePanel_mousePressed(MouseEvent e) {
     if (flamePanel != null) {
       flamePanel.mousePressed(e.getX(), e.getY());
+    }
+  }
+
+  private void flamePanel_mouseReleased(MouseEvent e) {
+    if (flamePanel != null) {
+      refreshVisualCamValues();
+
     }
   }
 
@@ -3537,6 +3544,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
           }
         }
       }
+
     }
   }
 

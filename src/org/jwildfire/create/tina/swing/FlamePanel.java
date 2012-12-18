@@ -554,7 +554,7 @@ public class FlamePanel extends ImagePanel {
   }
 
   public void mousePressed(int x, int y) {
-    if (selectedXForm != null) {
+    if (selectedXForm != null || mouseDragOperation == MouseDragOperation.VIEW) {
       xBeginDrag = x;
       yBeginDrag = y;
       if (undoManagerHolder != null) {
