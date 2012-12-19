@@ -485,7 +485,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       JButton pDancingFlamesFlameToEditorBtn, JButton pDancingFlamesDeleteFlameBtn, JTextField pDancingFlamesFramesPerSecondIEd,
       JTextField pDancingFlamesMorphFrameCountIEd, JButton pDancingFlamesStartShowButton, JButton pDancingFlamesStopShowButton,
       JButton pDancingFlamesShuffleFlamesBtn, JCheckBox pDancingFlamesDoRecordCBx, JButton pDancingFlamesSaveAllFlamesBtn,
-      JComboBox pDancingFlamesGlobalScriptCmb, JComboBox pDancingFlamesXFormScriptCmb) {
+      JComboBox pDancingFlamesGlobalScriptCmb, JComboBox pDancingFlamesGlobalSpeedCmb, JComboBox pDancingFlamesXFormScriptCmb, JComboBox pDancingFlamesXFormSpeedCmb) {
     tinaFrame = pTinaFrame;
     tinaFrameTitle = tinaFrame.getTitle();
     errorHandler = pErrorHandler;
@@ -498,7 +498,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
         pDancingFlamesRandomGenCmb, pDancingFlamesPoolTable, pDancingFlamesPoolFlamePreviewPnl, pDancingFlamesBorderSizeSlider,
         pDancingFlamesFlameToEditorBtn, pDancingFlamesDeleteFlameBtn, pDancingFlamesFramesPerSecondIEd, pDancingFlamesMorphFrameCountIEd,
         pDancingFlamesStartShowButton, pDancingFlamesStopShowButton, pDancingFlamesShuffleFlamesBtn, pDancingFlamesDoRecordCBx,
-        pDancingFlamesSaveAllFlamesBtn, pDancingFlamesGlobalScriptCmb, pDancingFlamesXFormScriptCmb);
+        pDancingFlamesSaveAllFlamesBtn, pDancingFlamesGlobalScriptCmb, pDancingFlamesGlobalSpeedCmb, pDancingFlamesXFormScriptCmb, pDancingFlamesXFormSpeedCmb);
 
     cameraRollREd = pCameraRollREd;
     cameraRollSlider = pCameraRollSlider;

@@ -29,121 +29,117 @@ import org.jwildfire.image.SimpleImage;
 
 public class AnimationService {
 
-  public static Flame createFlame(int pFrame, int pFrames, Flame pFlame, GlobalScript pGlobalScript, MotionSpeed pGlobalSpeed, XFormScript pXFormScript, MotionSpeed pXFormSpeed, Prefs pPrefs) {
+  public static Flame createFlame(Flame pFlame, GlobalScript pGlobalScript, double pGlobalTime, XFormScript pXFormScript, double pXFormTime, Prefs pPrefs) {
     Flame flame = pFlame.makeCopy();
-    {
-      double globalTime = pGlobalSpeed.calcTime(pFrame, pFrames, true);
-      switch (pGlobalScript) {
-        case ROTATE_PITCH: {
-          double camPitch = 360.0 * globalTime;
-          flame.setCamPitch(camPitch);
-        }
-          break;
-        case ROTATE_YAW: {
-          double camYaw = 360.0 * globalTime;
-          flame.setCamYaw(camYaw);
-        }
-          break;
-        case ROTATE_PITCH_YAW: {
-          double camRoll = 86;
-          double camPitch = 360.0 * globalTime;
-          double camYaw = -180 - camPitch;
-          flame.setCamRoll(camRoll);
-          flame.setCamPitch(camPitch);
-          flame.setCamYaw(camYaw);
-          flame.setCamPerspective(0.2);
-        }
-          break;
-        case ROTATE_ROLL: {
-          double camRoll = 360.0 * globalTime;
-          flame.setCamRoll(camRoll);
-        }
-          break;
+    switch (pGlobalScript) {
+      case ROTATE_PITCH: {
+        double camPitch = 360.0 * pGlobalTime;
+        flame.setCamPitch(camPitch);
       }
+        break;
+      case ROTATE_YAW: {
+        double camYaw = 360.0 * pGlobalTime;
+        flame.setCamYaw(camYaw);
+      }
+        break;
+      case ROTATE_PITCH_YAW: {
+        double camRoll = 86;
+        double camPitch = 360.0 * pGlobalTime;
+        double camYaw = -180 - camPitch;
+        flame.setCamRoll(camRoll);
+        flame.setCamPitch(camPitch);
+        flame.setCamYaw(camYaw);
+        flame.setCamPerspective(0.2);
+      }
+        break;
+      case ROTATE_ROLL: {
+        double camRoll = 360.0 * pGlobalTime;
+        flame.setCamRoll(camRoll);
+      }
+        break;
     }
-    {
-      double xFormTime = pXFormSpeed.calcTime(pFrame, pFrames, true);
-      switch (pXFormScript) {
-        case ROTATE_FULL: {
-          int idx = 0;
-          for (XForm xForm : flame.getXForms()) {
-            idx++;
-            double angle = 360.0 * xFormTime;
-            if (idx % 2 == 0) {
-              angle = -angle;
-            }
-            XFormTransformService.rotate(xForm, angle);
+    switch (pXFormScript) {
+      case ROTATE_FULL: {
+        int idx = 0;
+        for (XForm xForm : flame.getXForms()) {
+          idx++;
+          double angle = 360.0 * pXFormTime;
+          if (idx % 2 == 0) {
+            angle = -angle;
           }
+          XFormTransformService.rotate(xForm, angle);
         }
-          break;
-        case ROTATE_SLIGHTLY: {
-          int idx = 0;
-          for (XForm xForm : flame.getXForms()) {
-            double maxAngle = (++idx * 3.0) + 90;
-            double angle = maxAngle * xFormTime;
-            angle = maxAngle * (1.0 - Math.cos((double) (pFrame - 1) * pXFormSpeed.getMultiplier() / ((double) (pFrames - 1) * pXFormSpeed.getDivisor()) * 2.0 * Math.PI)) * 0.5;
-            if (idx % 2 == 0) {
-              angle = -angle;
-            }
-            XFormTransformService.rotate(xForm, angle);
-          }
-        }
-          break;
-        case ROTATE_LAST_XFORM: {
-          if (flame.getXForms().size() > 0) {
-            XForm xForm = flame.getXForms().get(flame.getXForms().size() - 1);
-            double angle = 360.0 * xFormTime;
-            XFormTransformService.rotate(xForm, angle);
-          }
-        }
-          break;
-        case ROTATE_FIRST_XFORM: {
-          if (flame.getXForms().size() > 0) {
-            XForm xForm = flame.getXForms().get(0);
-            double angle = 360.0 * xFormTime;
-            XFormTransformService.rotate(xForm, angle);
-          }
-        }
-          break;
-        case ROTATE_2ND_XFORM: {
-          if (flame.getXForms().size() > 1) {
-            XForm xForm = flame.getXForms().get(1);
-            double angle = 360.0 * xFormTime;
-            XFormTransformService.rotate(xForm, angle);
-          }
-        }
-          break;
-        case ROTATE_3RD_XFORM: {
-          if (flame.getXForms().size() > 2) {
-            XForm xForm = flame.getXForms().get(2);
-            double angle = 360.0 * xFormTime;
-            XFormTransformService.rotate(xForm, angle);
-          }
-        }
-          break;
-        case ROTATE_4TH_XFORM: {
-          if (flame.getXForms().size() > 3) {
-            XForm xForm = flame.getXForms().get(3);
-            double angle = 360.0 * xFormTime;
-            XFormTransformService.rotate(xForm, angle);
-          }
-        }
-          break;
-        case ROTATE_5TH_XFORM: {
-          if (flame.getXForms().size() > 4) {
-            XForm xForm = flame.getXForms().get(4);
-            double angle = 360.0 * xFormTime;
-            XFormTransformService.rotate(xForm, angle);
-          }
-        }
-          break;
       }
+        break;
+      case ROTATE_SLIGHTLY: {
+        int idx = 0;
+        for (XForm xForm : flame.getXForms()) {
+          double maxAngle = (++idx * 3.0) + 90;
+          double angle = maxAngle * pXFormTime;
+          angle = maxAngle * (1.0 - Math.cos(pXFormTime * 2.0 * Math.PI)) * 0.5;
+          if (idx % 2 == 0) {
+            angle = -angle;
+          }
+          XFormTransformService.rotate(xForm, angle);
+        }
+      }
+        break;
+      case ROTATE_LAST_XFORM: {
+        if (flame.getXForms().size() > 0) {
+          XForm xForm = flame.getXForms().get(flame.getXForms().size() - 1);
+          double angle = 360.0 * pXFormTime;
+          XFormTransformService.rotate(xForm, angle);
+        }
+      }
+        break;
+      case ROTATE_FIRST_XFORM: {
+        if (flame.getXForms().size() > 0) {
+          XForm xForm = flame.getXForms().get(0);
+          double angle = 360.0 * pXFormTime;
+          XFormTransformService.rotate(xForm, angle);
+        }
+      }
+        break;
+      case ROTATE_2ND_XFORM: {
+        if (flame.getXForms().size() > 1) {
+          XForm xForm = flame.getXForms().get(1);
+          double angle = 360.0 * pXFormTime;
+          XFormTransformService.rotate(xForm, angle);
+        }
+      }
+        break;
+      case ROTATE_3RD_XFORM: {
+        if (flame.getXForms().size() > 2) {
+          XForm xForm = flame.getXForms().get(2);
+          double angle = 360.0 * pXFormTime;
+          XFormTransformService.rotate(xForm, angle);
+        }
+      }
+        break;
+      case ROTATE_4TH_XFORM: {
+        if (flame.getXForms().size() > 3) {
+          XForm xForm = flame.getXForms().get(3);
+          double angle = 360.0 * pXFormTime;
+          XFormTransformService.rotate(xForm, angle);
+        }
+      }
+        break;
+      case ROTATE_5TH_XFORM: {
+        if (flame.getXForms().size() > 4) {
+          XForm xForm = flame.getXForms().get(4);
+          double angle = 360.0 * pXFormTime;
+          XFormTransformService.rotate(xForm, angle);
+        }
+      }
+        break;
     }
     return flame;
   }
 
   public static SimpleImage renderFrame(int pFrame, int pFrames, Flame pFlame, GlobalScript pGlobalScript, MotionSpeed pGlobalSpeed, XFormScript pXFormScript, MotionSpeed pXFormSpeed, int pWidth, int pHeight, Prefs pPrefs, RendererType pRendererType) throws Exception {
-    Flame flame = createFlame(pFrame, pFrames, pFlame, pGlobalScript, pGlobalSpeed, pXFormScript, pXFormSpeed, pPrefs);
+    double globalTime = pGlobalSpeed.calcTime(pFrame, pFrames, true);
+    double xFormTime = pXFormSpeed.calcTime(pFrame, pFrames, true);
+    Flame flame = createFlame(pFlame, pGlobalScript, globalTime, pXFormScript, xFormTime, pPrefs);
     RenderInfo info = new RenderInfo(pWidth, pHeight);
     double wScl = (double) info.getImageWidth() / (double) flame.getWidth();
     double hScl = (double) info.getImageHeight() / (double) flame.getHeight();

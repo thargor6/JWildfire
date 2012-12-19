@@ -42,6 +42,7 @@ import org.jwildfire.base.Prefs;
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.animate.FlameMorphService;
 import org.jwildfire.create.tina.animate.GlobalScript;
+import org.jwildfire.create.tina.animate.MotionSpeed;
 import org.jwildfire.create.tina.animate.XFormScript;
 import org.jwildfire.create.tina.audio.JLayerInterface;
 import org.jwildfire.create.tina.audio.RecordedFFT;
@@ -98,7 +99,9 @@ public class DancingFractalsController {
   private final JCheckBox doRecordCBx;
   private final JButton saveAllFlamesBtn;
   private final JComboBox globalScriptCmb;
+  private final JComboBox globalSpeedCmb;
   private final JComboBox xFormScriptCmb;
+  private final JComboBox xFormSpeedCmb;
 
   JLayerInterface jLayer = new JLayerInterface();
   private FlamePanel flamePanel = null;
@@ -119,7 +122,7 @@ public class DancingFractalsController {
       JButton pGenRandFlamesBtn, JComboBox pRandomGenCmb, JTable pPoolTable, JPanel pPoolFlamePreviewPnl, JSlider pBorderSizeSlider,
       JButton pFlameToEditorBtn, JButton pDeleteFlameBtn, JTextField pFramesPerSecondIEd, JTextField pMorphFrameCountIEd,
       JButton pStartShowButton, JButton pStopShowButton, JButton pShuffleFlamesBtn, JCheckBox pDoRecordCBx, JButton pSaveAllFlamesBtn,
-      JComboBox pGlobalScriptCmb, JComboBox pXFormScriptCmb) {
+      JComboBox pGlobalScriptCmb, JComboBox pGlobalSpeedCmb, JComboBox pXFormScriptCmb, JComboBox pXFormSpeedCmb) {
     parentCtrl = pParent;
     errorHandler = pErrorHandler;
     prefs = parentCtrl.getPrefs();
@@ -145,8 +148,9 @@ public class DancingFractalsController {
     doRecordCBx = pDoRecordCBx;
     saveAllFlamesBtn = pSaveAllFlamesBtn;
     globalScriptCmb = pGlobalScriptCmb;
+    globalSpeedCmb = pGlobalSpeedCmb;
     xFormScriptCmb = pXFormScriptCmb;
-
+    xFormSpeedCmb = pXFormSpeedCmb;
     flameHolder = new org.jwildfire.create.tina.dance.DanceFlameHolder();
 
     refreshPoolTable();
@@ -391,7 +395,9 @@ public class DancingFractalsController {
     renderThread.setFFTPanel(getGraph1Panel());
     renderThread.setFramesPerSecond(Integer.parseInt(framesPerSecondIEd.getText()));
     renderThread.setGlobalScript((GlobalScript) globalScriptCmb.getSelectedItem());
+    renderThread.setGlobalSpeed((MotionSpeed) globalSpeedCmb.getSelectedItem());
     renderThread.setXFormScript((XFormScript) xFormScriptCmb.getSelectedItem());
+    renderThread.setXFormSpeed((MotionSpeed) xFormSpeedCmb.getSelectedItem());
     new Thread(renderThread).start();
   }
 
@@ -760,11 +766,15 @@ public class DancingFractalsController {
 
   public void globalSpeedCmb_changed() {
     // TODO Auto-generated method stub
-
+    if (renderThread != null) {
+      renderThread.setGlobalSpeed((MotionSpeed) globalSpeedCmb.getSelectedItem());
+    }
   }
 
   public void xFormSpeedCmb_changed() {
     // TODO Auto-generated method stub
-
+    if (renderThread != null) {
+      renderThread.setXFormSpeed((MotionSpeed) xFormSpeedCmb.getSelectedItem());
+    }
   }
 }

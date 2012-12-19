@@ -43,6 +43,7 @@ public class RealtimeAnimRenderThread implements Runnable {
   private MotionSpeed globalSpeed = MotionSpeed.S1_1;
   private XFormScript xFormScript = XFormScript.NONE;
   private MotionSpeed xFormSpeed = MotionSpeed.S1_1;
+  private static final int SPEED_REF_FRAMES = 180;
 
   public RealtimeAnimRenderThread(DancingFractalsController pController, DanceFlameHolder pFlameHolder) {
     controller = pController;
@@ -59,9 +60,11 @@ public class RealtimeAnimRenderThread implements Runnable {
       long startFPSMeasurement = System.currentTimeMillis();
       long nextFrame = timeRenderStarted = startFPSMeasurement;
       double fps = 0.0;
-      int frames = 360;
-      int frame = 1;
       setRunning(true);
+      double globalTime = 0.0;
+      double xFormTime = 0.0;
+      int refFrames = (int) (SPEED_REF_FRAMES / (double) framesPerSecond * 25.0 + 0.5);
+
       while (!forceAbort) {
         long time = System.currentTimeMillis();
         while (time < nextFrame) {
@@ -86,10 +89,15 @@ public class RealtimeAnimRenderThread implements Runnable {
             fftPanel.repaint();
           }
           if (flame != null) {
-            flame = AnimationService.createFlame(frame++, frames, flame, globalScript, globalSpeed, xFormScript, xFormSpeed, controller.getParentCtrl().getPrefs());
-            if (frame > frames) {
-              frame = 1;
-            }
+            flame = AnimationService.createFlame(flame, globalScript, globalTime, xFormScript, xFormTime, controller.getParentCtrl().getPrefs());
+            globalTime += globalSpeed.calcTime(2, refFrames, false);
+            if (globalTime > 1.0)
+              globalTime = 0.0;
+
+            xFormTime += xFormSpeed.calcTime(2, refFrames, false);
+            if (xFormTime > 1.0)
+              xFormTime = 0.0;
+
           }
           if (!flameHolder.isCurrIsMorphing()) {
             transformer.transformFlame(flame, currFFT);

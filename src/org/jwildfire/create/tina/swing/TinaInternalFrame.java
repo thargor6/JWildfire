@@ -71,6 +71,7 @@ import javax.swing.event.ListSelectionListener;
 
 import org.jwildfire.base.Prefs;
 import org.jwildfire.create.tina.animate.GlobalScript;
+import org.jwildfire.create.tina.animate.MotionSpeed;
 import org.jwildfire.create.tina.animate.XFormScript;
 import org.jwildfire.create.tina.base.DrawMode;
 import org.jwildfire.create.tina.base.Shading;
@@ -3502,7 +3503,8 @@ public class TinaInternalFrame extends JInternalFrame {
         getDancingFlamesRandomGenCmb(), getDancingFlamesPoolTable(), getDancingFlamesPoolFlamePreviewPnl(), getDancingFlamesBorderSizeSlider(),
         getDancingFlamesFlameToEditorBtn(), getDancingFlamesDeleteFlameBtn(), getDancingFlamesFramesPerSecondIEd(), getDancingFlamesMorphFrameCountIEd(),
         getDancingFlamesStartShowBtn(), getDancingFlamesStopShowBtn(), getDancingFlamesShuffleFlamesBtn(), getDancingFlamesDoRecordCBx(),
-        getDancingFlamesSaveAllFlamesBtn(), getDancingFlamesGlobalScriptCmb(), getDancingFlamesXFormScriptCmb());
+        getDancingFlamesSaveAllFlamesBtn(), getDancingFlamesGlobalScriptCmb(), getDancingFlamesGlobalSpeedCmb(),
+        getDancingFlamesXFormScriptCmb(), getDancingFlamesXFormSpeedCmb());
 
     tinaController.refreshing = tinaController.cmbRefreshing = tinaController.gridRefreshing = true;
     try {
@@ -3529,11 +3531,13 @@ public class TinaInternalFrame extends JInternalFrame {
       getSwfAnimatorGlobalScriptCmb().setSelectedItem(GlobalScript.NONE);
       fillGlobalScriptCmb(getDancingFlamesGlobalScriptCmb());
       getDancingFlamesGlobalScriptCmb().setSelectedItem(GlobalScript.NONE);
+      fillMotionSpeedCmb(getDancingFlamesGlobalSpeedCmb());
 
       fillXFormScriptCmb(getSwfAnimatorXFormScriptCmb());
       getSwfAnimatorXFormScriptCmb().setSelectedItem(XFormScript.ROTATE_FIRST_XFORM);
       fillXFormScriptCmb(getDancingFlamesXFormScriptCmb());
       getDancingFlamesXFormScriptCmb().setSelectedItem(XFormScript.NONE);
+      fillMotionSpeedCmb(getDancingFlamesXFormSpeedCmb());
 
       tinaController.setInteractiveRendererCtrl(new TinaInteractiveRendererController(tinaController, pErrorHandler, pPrefs,
           getInteractiveLoadFlameButton(), getInteractiveLoadFlameFromClipboardButton(), getInteractiveNextButton(), getInteractiveStopButton(),
@@ -3564,6 +3568,30 @@ public class TinaInternalFrame extends JInternalFrame {
     }
 
     return tinaController;
+  }
+
+  private void fillMotionSpeedCmb(JComboBox pCmb) {
+    pCmb.removeAllItems();
+    pCmb.addItem(MotionSpeed.S1_10);
+    pCmb.addItem(MotionSpeed.S1_9);
+    pCmb.addItem(MotionSpeed.S1_8);
+    pCmb.addItem(MotionSpeed.S1_7);
+    pCmb.addItem(MotionSpeed.S1_6);
+    pCmb.addItem(MotionSpeed.S1_5);
+    pCmb.addItem(MotionSpeed.S1_4);
+    pCmb.addItem(MotionSpeed.S1_3);
+    pCmb.addItem(MotionSpeed.S1_2);
+    pCmb.addItem(MotionSpeed.S1_1);
+    pCmb.addItem(MotionSpeed.S2_1);
+    pCmb.addItem(MotionSpeed.S3_1);
+    pCmb.addItem(MotionSpeed.S4_1);
+    pCmb.addItem(MotionSpeed.S5_1);
+    pCmb.addItem(MotionSpeed.S6_1);
+    pCmb.addItem(MotionSpeed.S7_1);
+    pCmb.addItem(MotionSpeed.S8_1);
+    pCmb.addItem(MotionSpeed.S9_1);
+    pCmb.addItem(MotionSpeed.S10_1);
+    pCmb.setSelectedItem(MotionSpeed.S1_1);
   }
 
   private void fillXFormScriptCmb(JComboBox pCmb) {

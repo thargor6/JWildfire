@@ -720,7 +720,8 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
       GlobalScript globalScript = (GlobalScript) swfAnimatorGlobalScriptCmb.getSelectedItem();
       XFormScript xFormScript = (XFormScript) swfAnimatorXFormScriptCmb.getSelectedItem();
       try {
-        return AnimationService.createFlame(frame, frameCount, flame, globalScript, MotionSpeed.S1_1, xFormScript, MotionSpeed.S1_1, prefs);
+        double time = MotionSpeed.S1_1.calcTime(frame, frameCount, true);
+        return AnimationService.createFlame(flame, globalScript, time, xFormScript, time, prefs);
       }
       catch (Throwable ex) {
         ex.printStackTrace();
