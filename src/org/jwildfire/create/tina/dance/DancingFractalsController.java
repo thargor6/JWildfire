@@ -41,6 +41,8 @@ import javax.swing.table.DefaultTableModel;
 import org.jwildfire.base.Prefs;
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.animate.FlameMorphService;
+import org.jwildfire.create.tina.animate.GlobalScript;
+import org.jwildfire.create.tina.animate.XFormScript;
 import org.jwildfire.create.tina.audio.JLayerInterface;
 import org.jwildfire.create.tina.audio.RecordedFFT;
 import org.jwildfire.create.tina.base.Flame;
@@ -95,6 +97,8 @@ public class DancingFractalsController {
   private final JButton shuffleFlamesBtn;
   private final JCheckBox doRecordCBx;
   private final JButton saveAllFlamesBtn;
+  private final JComboBox globalScriptCmb;
+  private final JComboBox xFormScriptCmb;
 
   JLayerInterface jLayer = new JLayerInterface();
   private FlamePanel flamePanel = null;
@@ -114,7 +118,8 @@ public class DancingFractalsController {
       JButton pLoadSoundBtn, JButton pAddFromClipboardBtn, JButton pAddFromEditorBtn, JButton pAddFromDiscBtn, JWFNumberField pRandomCountIEd,
       JButton pGenRandFlamesBtn, JComboBox pRandomGenCmb, JTable pPoolTable, JPanel pPoolFlamePreviewPnl, JSlider pBorderSizeSlider,
       JButton pFlameToEditorBtn, JButton pDeleteFlameBtn, JTextField pFramesPerSecondIEd, JTextField pMorphFrameCountIEd,
-      JButton pStartShowButton, JButton pStopShowButton, JButton pShuffleFlamesBtn, JCheckBox pDoRecordCBx, JButton pSaveAllFlamesBtn) {
+      JButton pStartShowButton, JButton pStopShowButton, JButton pShuffleFlamesBtn, JCheckBox pDoRecordCBx, JButton pSaveAllFlamesBtn,
+      JComboBox pGlobalScriptCmb, JComboBox pXFormScriptCmb) {
     parentCtrl = pParent;
     errorHandler = pErrorHandler;
     prefs = parentCtrl.getPrefs();
@@ -139,6 +144,8 @@ public class DancingFractalsController {
     shuffleFlamesBtn = pShuffleFlamesBtn;
     doRecordCBx = pDoRecordCBx;
     saveAllFlamesBtn = pSaveAllFlamesBtn;
+    globalScriptCmb = pGlobalScriptCmb;
+    xFormScriptCmb = pXFormScriptCmb;
 
     flameHolder = new org.jwildfire.create.tina.dance.DanceFlameHolder();
 
@@ -383,6 +390,8 @@ public class DancingFractalsController {
     renderThread.setMusicPlayer(jLayer);
     renderThread.setFFTPanel(getGraph1Panel());
     renderThread.setFramesPerSecond(Integer.parseInt(framesPerSecondIEd.getText()));
+    renderThread.setGlobalScript((GlobalScript) globalScriptCmb.getSelectedItem());
+    renderThread.setXFormScript((XFormScript) xFormScriptCmb.getSelectedItem());
     new Thread(renderThread).start();
   }
 
@@ -732,5 +741,30 @@ public class DancingFractalsController {
     catch (Exception ex) {
       errorHandler.handleError(ex);
     }
+  }
+
+  public void globalScriptCmb_changed() {
+    // TODO Auto-generated method stub
+    if (renderThread != null) {
+      renderThread.setGlobalScript((GlobalScript) globalScriptCmb.getSelectedItem());
+    }
+
+  }
+
+  public void xFormScriptCmb_changed() {
+    // TODO Auto-generated method stub
+    if (renderThread != null) {
+      renderThread.setXFormScript((XFormScript) xFormScriptCmb.getSelectedItem());
+    }
+  }
+
+  public void globalSpeedCmb_changed() {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void xFormSpeedCmb_changed() {
+    // TODO Auto-generated method stub
+
   }
 }

@@ -70,7 +70,8 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import org.jwildfire.base.Prefs;
-import org.jwildfire.create.tina.animate.AnimationService;
+import org.jwildfire.create.tina.animate.GlobalScript;
+import org.jwildfire.create.tina.animate.XFormScript;
 import org.jwildfire.create.tina.base.DrawMode;
 import org.jwildfire.create.tina.base.Shading;
 import org.jwildfire.create.tina.dance.DancingFractalsController;
@@ -3501,7 +3502,7 @@ public class TinaInternalFrame extends JInternalFrame {
         getDancingFlamesRandomGenCmb(), getDancingFlamesPoolTable(), getDancingFlamesPoolFlamePreviewPnl(), getDancingFlamesBorderSizeSlider(),
         getDancingFlamesFlameToEditorBtn(), getDancingFlamesDeleteFlameBtn(), getDancingFlamesFramesPerSecondIEd(), getDancingFlamesMorphFrameCountIEd(),
         getDancingFlamesStartShowBtn(), getDancingFlamesStopShowBtn(), getDancingFlamesShuffleFlamesBtn(), getDancingFlamesDoRecordCBx(),
-        getDancingFlamesSaveAllFlamesBtn());
+        getDancingFlamesSaveAllFlamesBtn(), getDancingFlamesGlobalScriptCmb(), getDancingFlamesXFormScriptCmb());
 
     tinaController.refreshing = tinaController.cmbRefreshing = tinaController.gridRefreshing = true;
     try {
@@ -3524,21 +3525,15 @@ public class TinaInternalFrame extends JInternalFrame {
       getShadingLightCmb().addItem(String.valueOf("3"));
       getShadingLightCmb().addItem(String.valueOf("4"));
 
-      getSwfAnimatorGlobalScriptCmb().removeAllItems();
-      getSwfAnimatorGlobalScriptCmb().addItem(AnimationService.GlobalScript.NONE);
-      getSwfAnimatorGlobalScriptCmb().addItem(AnimationService.GlobalScript.ROTATE_PITCH);
-      getSwfAnimatorGlobalScriptCmb().addItem(AnimationService.GlobalScript.ROTATE_ROLL);
-      getSwfAnimatorGlobalScriptCmb().addItem(AnimationService.GlobalScript.ROTATE_YAW);
-      getSwfAnimatorGlobalScriptCmb().addItem(AnimationService.GlobalScript.ROTATE_PITCH_YAW);
-      getSwfAnimatorGlobalScriptCmb().setSelectedItem(AnimationService.GlobalScript.NONE);
+      fillGlobalScriptCmb(getSwfAnimatorGlobalScriptCmb());
+      getSwfAnimatorGlobalScriptCmb().setSelectedItem(GlobalScript.NONE);
+      fillGlobalScriptCmb(getDancingFlamesGlobalScriptCmb());
+      getDancingFlamesGlobalScriptCmb().setSelectedItem(GlobalScript.NONE);
 
-      getSwfAnimatorXFormScriptCmb().removeAllItems();
-      getSwfAnimatorXFormScriptCmb().addItem(AnimationService.XFormScript.NONE);
-      getSwfAnimatorXFormScriptCmb().addItem(AnimationService.XFormScript.ROTATE_FULL);
-      getSwfAnimatorXFormScriptCmb().addItem(AnimationService.XFormScript.ROTATE_SLIGHTLY);
-      getSwfAnimatorXFormScriptCmb().addItem(AnimationService.XFormScript.ROTATE_FIRST_XFORM);
-      getSwfAnimatorXFormScriptCmb().addItem(AnimationService.XFormScript.ROTATE_LAST_XFORM);
-      getSwfAnimatorXFormScriptCmb().setSelectedItem(AnimationService.XFormScript.ROTATE_FIRST_XFORM);
+      fillXFormScriptCmb(getSwfAnimatorXFormScriptCmb());
+      getSwfAnimatorXFormScriptCmb().setSelectedItem(XFormScript.ROTATE_FIRST_XFORM);
+      fillXFormScriptCmb(getDancingFlamesXFormScriptCmb());
+      getDancingFlamesXFormScriptCmb().setSelectedItem(XFormScript.NONE);
 
       tinaController.setInteractiveRendererCtrl(new TinaInteractiveRendererController(tinaController, pErrorHandler, pPrefs,
           getInteractiveLoadFlameButton(), getInteractiveLoadFlameFromClipboardButton(), getInteractiveNextButton(), getInteractiveStopButton(),
@@ -3569,6 +3564,28 @@ public class TinaInternalFrame extends JInternalFrame {
     }
 
     return tinaController;
+  }
+
+  private void fillXFormScriptCmb(JComboBox pCmb) {
+    pCmb.removeAllItems();
+    pCmb.addItem(XFormScript.NONE);
+    pCmb.addItem(XFormScript.ROTATE_FULL);
+    pCmb.addItem(XFormScript.ROTATE_SLIGHTLY);
+    pCmb.addItem(XFormScript.ROTATE_FIRST_XFORM);
+    pCmb.addItem(XFormScript.ROTATE_2ND_XFORM);
+    pCmb.addItem(XFormScript.ROTATE_3RD_XFORM);
+    pCmb.addItem(XFormScript.ROTATE_4TH_XFORM);
+    pCmb.addItem(XFormScript.ROTATE_5TH_XFORM);
+    pCmb.addItem(XFormScript.ROTATE_LAST_XFORM);
+  }
+
+  private void fillGlobalScriptCmb(JComboBox pCmb) {
+    pCmb.removeAllItems();
+    pCmb.addItem(GlobalScript.NONE);
+    pCmb.addItem(GlobalScript.ROTATE_PITCH);
+    pCmb.addItem(GlobalScript.ROTATE_ROLL);
+    pCmb.addItem(GlobalScript.ROTATE_YAW);
+    pCmb.addItem(GlobalScript.ROTATE_PITCH_YAW);
   }
 
   private void initRendererCmb(JComboBox pCmb, Prefs pPrefs) {
@@ -8261,6 +8278,10 @@ public class TinaInternalFrame extends JInternalFrame {
   private JPanel panel_37;
   private JPanel panel_41;
   private JToggleButton mouseTransformViewButton;
+  private JComboBox dancingFlamesGlobalScriptCmb;
+  private JComboBox dancingFlamesXFormScriptCmb;
+  private JComboBox dancingFlamesGlobalSpeedCmb;
+  private JComboBox dancingFlamesXFormSpeedCmb;
 
   /**
    * This method initializes renderBatchJobsScrollPane	
@@ -11203,6 +11224,58 @@ public class TinaInternalFrame extends JInternalFrame {
       panel_40.setLayout(null);
       panel_40.add(getLblMorphFrames());
       panel_40.add(getDancingFlamesMorphFrameCountIEd());
+
+      JLabel lblGlobalScript = new JLabel();
+      lblGlobalScript.setText("Global script");
+      lblGlobalScript.setPreferredSize(new Dimension(120, 22));
+      lblGlobalScript.setHorizontalAlignment(SwingConstants.RIGHT);
+      lblGlobalScript.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblGlobalScript.setBounds(6, 30, 83, 22);
+      panel_40.add(lblGlobalScript);
+
+      dancingFlamesGlobalScriptCmb = new JComboBox();
+      dancingFlamesGlobalScriptCmb.addItemListener(new ItemListener() {
+        public void itemStateChanged(ItemEvent e) {
+          if (tinaController != null) {
+            tinaController.getDancingFractalsController().globalScriptCmb_changed();
+          }
+        }
+      });
+      dancingFlamesGlobalScriptCmb.setPreferredSize(new Dimension(125, 24));
+      dancingFlamesGlobalScriptCmb.setMinimumSize(new Dimension(125, 24));
+      dancingFlamesGlobalScriptCmb.setMaximumSize(new Dimension(30000, 24));
+      dancingFlamesGlobalScriptCmb.setMaximumRowCount(32);
+      dancingFlamesGlobalScriptCmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      dancingFlamesGlobalScriptCmb.setAlignmentX(1.0f);
+      dancingFlamesGlobalScriptCmb.setBounds(92, 29, 115, 24);
+      panel_40.add(dancingFlamesGlobalScriptCmb);
+
+      JLabel lblXformScript = new JLabel();
+      lblXformScript.setText("XForm script");
+      lblXformScript.setPreferredSize(new Dimension(120, 22));
+      lblXformScript.setHorizontalAlignment(SwingConstants.RIGHT);
+      lblXformScript.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblXformScript.setBounds(6, 52, 83, 22);
+      panel_40.add(lblXformScript);
+
+      dancingFlamesXFormScriptCmb = new JComboBox();
+      dancingFlamesXFormScriptCmb.addItemListener(new ItemListener() {
+        public void itemStateChanged(ItemEvent e) {
+          if (tinaController != null) {
+            tinaController.getDancingFractalsController().xFormScriptCmb_changed();
+          }
+        }
+      });
+      dancingFlamesXFormScriptCmb.setPreferredSize(new Dimension(125, 24));
+      dancingFlamesXFormScriptCmb.setMinimumSize(new Dimension(125, 24));
+      dancingFlamesXFormScriptCmb.setMaximumSize(new Dimension(30000, 24));
+      dancingFlamesXFormScriptCmb.setMaximumRowCount(32);
+      dancingFlamesXFormScriptCmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      dancingFlamesXFormScriptCmb.setAlignmentX(1.0f);
+      dancingFlamesXFormScriptCmb.setBounds(92, 51, 115, 24);
+      panel_40.add(dancingFlamesXFormScriptCmb);
+      panel_40.add(getDancingFlamesGlobalSpeedCmb());
+      panel_40.add(getDancingFlamesXFormSpeedCmb());
     }
     return panel_40;
   }
@@ -11518,7 +11591,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JTextField getDancingFlamesMorphFrameCountIEd() {
     if (dancingFlamesMorphFrameCountIEd == null) {
       dancingFlamesMorphFrameCountIEd = new JTextField();
-      dancingFlamesMorphFrameCountIEd.setBounds(170, 5, 56, 22);
+      dancingFlamesMorphFrameCountIEd.setBounds(92, 5, 56, 22);
       dancingFlamesMorphFrameCountIEd.setText("0");
       dancingFlamesMorphFrameCountIEd.setPreferredSize(new Dimension(56, 22));
       dancingFlamesMorphFrameCountIEd.setFont(new Font("Dialog", Font.PLAIN, 10));
@@ -11529,7 +11602,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JLabel getLblMorphFrames() {
     if (lblMorphFrames == null) {
       lblMorphFrames = new JLabel();
-      lblMorphFrames.setBounds(45, 5, 120, 22);
+      lblMorphFrames.setBounds(6, 5, 83, 22);
       lblMorphFrames.setText("Morph frames");
       lblMorphFrames.setPreferredSize(new Dimension(120, 22));
       lblMorphFrames.setHorizontalAlignment(SwingConstants.RIGHT);
@@ -11634,5 +11707,55 @@ public class TinaInternalFrame extends JInternalFrame {
 
   public JToggleButton getMouseTransformViewButton() {
     return mouseTransformViewButton;
+  }
+
+  public JComboBox getDancingFlamesGlobalScriptCmb() {
+    return dancingFlamesGlobalScriptCmb;
+  }
+
+  public JComboBox getDancingFlamesXFormScriptCmb() {
+    return dancingFlamesXFormScriptCmb;
+  }
+
+  private JComboBox getDancingFlamesGlobalSpeedCmb() {
+    if (dancingFlamesGlobalSpeedCmb == null) {
+      dancingFlamesGlobalSpeedCmb = new JComboBox();
+      dancingFlamesGlobalSpeedCmb.addItemListener(new ItemListener() {
+        public void itemStateChanged(ItemEvent e) {
+          if (tinaController != null) {
+            tinaController.getDancingFractalsController().globalSpeedCmb_changed();
+          }
+        }
+      });
+      dancingFlamesGlobalSpeedCmb.setPreferredSize(new Dimension(125, 24));
+      dancingFlamesGlobalSpeedCmb.setMinimumSize(new Dimension(125, 24));
+      dancingFlamesGlobalSpeedCmb.setMaximumSize(new Dimension(30000, 24));
+      dancingFlamesGlobalSpeedCmb.setMaximumRowCount(32);
+      dancingFlamesGlobalSpeedCmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      dancingFlamesGlobalSpeedCmb.setAlignmentX(1.0f);
+      dancingFlamesGlobalSpeedCmb.setBounds(210, 29, 62, 24);
+    }
+    return dancingFlamesGlobalSpeedCmb;
+  }
+
+  private JComboBox getDancingFlamesXFormSpeedCmb() {
+    if (dancingFlamesXFormSpeedCmb == null) {
+      dancingFlamesXFormSpeedCmb = new JComboBox();
+      dancingFlamesXFormSpeedCmb.addItemListener(new ItemListener() {
+        public void itemStateChanged(ItemEvent e) {
+          if (tinaController != null) {
+            tinaController.getDancingFractalsController().xFormSpeedCmb_changed();
+          }
+        }
+      });
+      dancingFlamesXFormSpeedCmb.setPreferredSize(new Dimension(125, 24));
+      dancingFlamesXFormSpeedCmb.setMinimumSize(new Dimension(125, 24));
+      dancingFlamesXFormSpeedCmb.setMaximumSize(new Dimension(30000, 24));
+      dancingFlamesXFormSpeedCmb.setMaximumRowCount(32);
+      dancingFlamesXFormSpeedCmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      dancingFlamesXFormSpeedCmb.setAlignmentX(1.0f);
+      dancingFlamesXFormSpeedCmb.setBounds(210, 51, 62, 24);
+    }
+    return dancingFlamesXFormSpeedCmb;
   }
 } //  @jve:decl-index=0:visual-constraint="10,10"

@@ -20,8 +20,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.jwildfire.base.Prefs;
-import org.jwildfire.create.tina.animate.AnimationService.GlobalScript;
-import org.jwildfire.create.tina.animate.AnimationService.XFormScript;
 import org.jwildfire.create.tina.base.Flame;
 
 public class FlameMovie {

@@ -35,11 +35,11 @@ import java.util.Map;
 
 import org.jwildfire.base.Prefs;
 import org.jwildfire.base.Tools;
-import org.jwildfire.create.tina.animate.AnimationService.GlobalScript;
-import org.jwildfire.create.tina.animate.AnimationService.XFormScript;
 import org.jwildfire.create.tina.animate.FlameMovie;
 import org.jwildfire.create.tina.animate.FlameMoviePart;
+import org.jwildfire.create.tina.animate.GlobalScript;
 import org.jwildfire.create.tina.animate.OutputFormat;
+import org.jwildfire.create.tina.animate.XFormScript;
 import org.jwildfire.create.tina.base.Flame;
 
 public class JWFMovieReader {

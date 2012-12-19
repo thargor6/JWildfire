@@ -16,6 +16,10 @@
 */
 package org.jwildfire.create.tina.dance;
 
+import org.jwildfire.create.tina.animate.AnimationService;
+import org.jwildfire.create.tina.animate.GlobalScript;
+import org.jwildfire.create.tina.animate.MotionSpeed;
+import org.jwildfire.create.tina.animate.XFormScript;
 import org.jwildfire.create.tina.audio.JLayerInterface;
 import org.jwildfire.create.tina.audio.RecordedFFT;
 import org.jwildfire.create.tina.base.Flame;
@@ -35,6 +39,10 @@ public class RealtimeAnimRenderThread implements Runnable {
   private long timeRenderStarted = 0;
   private final DanceFlameHolder flameHolder;
   private final DanceFlameTransformer transformer;
+  private GlobalScript globalScript = GlobalScript.NONE;
+  private MotionSpeed globalSpeed = MotionSpeed.S1_1;
+  private XFormScript xFormScript = XFormScript.NONE;
+  private MotionSpeed xFormSpeed = MotionSpeed.S1_1;
 
   public RealtimeAnimRenderThread(DancingFractalsController pController, DanceFlameHolder pFlameHolder) {
     controller = pController;
@@ -51,6 +59,8 @@ public class RealtimeAnimRenderThread implements Runnable {
       long startFPSMeasurement = System.currentTimeMillis();
       long nextFrame = timeRenderStarted = startFPSMeasurement;
       double fps = 0.0;
+      int frames = 360;
+      int frame = 1;
       setRunning(true);
       while (!forceAbort) {
         long time = System.currentTimeMillis();
@@ -66,14 +76,20 @@ public class RealtimeAnimRenderThread implements Runnable {
         nextFrame = (long) (time + 1000.0 / (double) getFramesPerSecond() + 0.5);
         Flame flame = flameHolder.getCurrFlame();
         while (flameHolder.isFlameChanging()) {
-          flame = flameHolder.getCurrFlame();
+          flame = flameHolder.getCurrFlame().makeCopy();
         }
-        if (fftPanel != null && fftData != null) {
-          SimpleImage img = fftPanel.getImage();
+        if (fftData != null) {
           short currFFT[] = fftData.getData(musicPlayer.getPosition());
-          if (doDrawFFT) {
+          if (doDrawFFT && fftPanel != null) {
+            SimpleImage img = fftPanel.getImage();
             drawFFT(img, currFFT);
             fftPanel.repaint();
+          }
+          if (flame != null) {
+            flame = AnimationService.createFlame(frame++, frames, flame, globalScript, globalSpeed, xFormScript, xFormSpeed, controller.getParentCtrl().getPrefs());
+            if (frame > frames) {
+              frame = 1;
+            }
           }
           if (!flameHolder.isCurrIsMorphing()) {
             transformer.transformFlame(flame, currFFT);
@@ -161,4 +177,21 @@ public class RealtimeAnimRenderThread implements Runnable {
   public int getFramesPerSecond() {
     return framesPerSecond;
   }
+
+  public void setGlobalScript(GlobalScript pGlobalScript) {
+    globalScript = pGlobalScript;
+  }
+
+  public void setXFormScript(XFormScript pXFormScript) {
+    xFormScript = pXFormScript;
+  }
+
+  public void setGlobalSpeed(MotionSpeed pGlobalSpeed) {
+    globalSpeed = pGlobalSpeed;
+  }
+
+  public void setXFormSpeed(MotionSpeed pXFormSpeed) {
+    xFormSpeed = pXFormSpeed;
+  }
+
 }

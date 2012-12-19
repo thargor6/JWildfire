@@ -47,13 +47,14 @@ import org.jwildfire.base.QualityProfile;
 import org.jwildfire.base.ResolutionProfile;
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.animate.AnimationService;
-import org.jwildfire.create.tina.animate.AnimationService.GlobalScript;
-import org.jwildfire.create.tina.animate.AnimationService.XFormScript;
 import org.jwildfire.create.tina.animate.FlameMovie;
 import org.jwildfire.create.tina.animate.FlameMoviePart;
+import org.jwildfire.create.tina.animate.GlobalScript;
+import org.jwildfire.create.tina.animate.MotionSpeed;
 import org.jwildfire.create.tina.animate.OutputFormat;
 import org.jwildfire.create.tina.animate.SWFAnimationRenderThread;
 import org.jwildfire.create.tina.animate.SWFAnimationRenderThreadController;
+import org.jwildfire.create.tina.animate.XFormScript;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.io.Flam3Reader;
 import org.jwildfire.create.tina.io.JWFMovieReader;
@@ -719,7 +720,7 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
       GlobalScript globalScript = (GlobalScript) swfAnimatorGlobalScriptCmb.getSelectedItem();
       XFormScript xFormScript = (XFormScript) swfAnimatorXFormScriptCmb.getSelectedItem();
       try {
-        return AnimationService.createFlame(frame, frameCount, flame, globalScript, xFormScript, prefs);
+        return AnimationService.createFlame(frame, frameCount, flame, globalScript, MotionSpeed.S1_1, xFormScript, MotionSpeed.S1_1, prefs);
       }
       catch (Throwable ex) {
         ex.printStackTrace();
