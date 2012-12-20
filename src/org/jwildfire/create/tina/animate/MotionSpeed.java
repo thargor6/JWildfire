@@ -156,7 +156,7 @@ public enum MotionSpeed {
   },
   S1_1 {
     public String toString() {
-      return "default";
+      return "1x";
     }
 
     @Override
@@ -314,7 +314,6 @@ public enum MotionSpeed {
     if (pDoWrap && t > 1.0) {
       t -= (int) (t);
     }
-    System.out.println(t);
     return t;
   }
 

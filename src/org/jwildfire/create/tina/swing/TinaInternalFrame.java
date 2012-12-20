@@ -3503,8 +3503,11 @@ public class TinaInternalFrame extends JInternalFrame {
         getDancingFlamesRandomGenCmb(), getDancingFlamesPoolTable(), getDancingFlamesPoolFlamePreviewPnl(), getDancingFlamesBorderSizeSlider(),
         getDancingFlamesFlameToEditorBtn(), getDancingFlamesDeleteFlameBtn(), getDancingFlamesFramesPerSecondIEd(), getDancingFlamesMorphFrameCountIEd(),
         getDancingFlamesStartShowBtn(), getDancingFlamesStopShowBtn(), getDancingFlamesShuffleFlamesBtn(), getDancingFlamesDoRecordCBx(),
-        getDancingFlamesSaveAllFlamesBtn(), getDancingFlamesGlobalScriptCmb(), getDancingFlamesGlobalSpeedCmb(),
-        getDancingFlamesXFormScriptCmb(), getDancingFlamesXFormSpeedCmb());
+        getDancingFlamesSaveAllFlamesBtn(), getDancingFlamesGlobalScript1Cmb(), getDancingFlamesGlobalSpeed1Cmb(),
+        getDancingFlamesGlobalScript2Cmb(), getDancingFlamesGlobalSpeed2Cmb(), getDancingFlamesGlobalScript3Cmb(), getDancingFlamesGlobalSpeed3Cmb(),
+        getDancingFlamesXFormScript1Cmb(), getDancingFlamesXFormSpeed1Cmb(), getDancingFlamesXFormScript2Cmb(), getDancingFlamesXFormSpeed2Cmb(),
+        getDancingFlamesXFormScript3Cmb(), getDancingFlamesXFormSpeed3Cmb(), getDancingFlamesFlameCmb(), getDancingFlamesDrawTrianglesCBx(),
+        getDancingFlamesDrawFFTCBx(), getDancingFlamesDrawFPSCBx());
 
     tinaController.refreshing = tinaController.cmbRefreshing = tinaController.gridRefreshing = true;
     try {
@@ -3529,15 +3532,29 @@ public class TinaInternalFrame extends JInternalFrame {
 
       fillGlobalScriptCmb(getSwfAnimatorGlobalScriptCmb());
       getSwfAnimatorGlobalScriptCmb().setSelectedItem(GlobalScript.NONE);
-      fillGlobalScriptCmb(getDancingFlamesGlobalScriptCmb());
-      getDancingFlamesGlobalScriptCmb().setSelectedItem(GlobalScript.NONE);
-      fillMotionSpeedCmb(getDancingFlamesGlobalSpeedCmb());
+
+      fillGlobalScriptCmb(getDancingFlamesGlobalScript1Cmb());
+      getDancingFlamesGlobalScript1Cmb().setSelectedItem(GlobalScript.NONE);
+      fillMotionSpeedCmb(getDancingFlamesGlobalSpeed1Cmb());
+      fillGlobalScriptCmb(getDancingFlamesGlobalScript2Cmb());
+      getDancingFlamesGlobalScript2Cmb().setSelectedItem(GlobalScript.NONE);
+      fillMotionSpeedCmb(getDancingFlamesGlobalSpeed2Cmb());
+      fillGlobalScriptCmb(getDancingFlamesGlobalScript3Cmb());
+      getDancingFlamesGlobalScript3Cmb().setSelectedItem(GlobalScript.NONE);
+      fillMotionSpeedCmb(getDancingFlamesGlobalSpeed3Cmb());
 
       fillXFormScriptCmb(getSwfAnimatorXFormScriptCmb());
       getSwfAnimatorXFormScriptCmb().setSelectedItem(XFormScript.ROTATE_FIRST_XFORM);
-      fillXFormScriptCmb(getDancingFlamesXFormScriptCmb());
-      getDancingFlamesXFormScriptCmb().setSelectedItem(XFormScript.NONE);
-      fillMotionSpeedCmb(getDancingFlamesXFormSpeedCmb());
+
+      fillXFormScriptCmb(getDancingFlamesXFormScript1Cmb());
+      getDancingFlamesXFormScript1Cmb().setSelectedItem(XFormScript.NONE);
+      fillMotionSpeedCmb(getDancingFlamesXFormSpeed1Cmb());
+      fillXFormScriptCmb(getDancingFlamesXFormScript2Cmb());
+      getDancingFlamesXFormScript2Cmb().setSelectedItem(XFormScript.NONE);
+      fillMotionSpeedCmb(getDancingFlamesXFormSpeed2Cmb());
+      fillXFormScriptCmb(getDancingFlamesXFormScript3Cmb());
+      getDancingFlamesXFormScript3Cmb().setSelectedItem(XFormScript.NONE);
+      fillMotionSpeedCmb(getDancingFlamesXFormSpeed3Cmb());
 
       tinaController.setInteractiveRendererCtrl(new TinaInteractiveRendererController(tinaController, pErrorHandler, pPrefs,
           getInteractiveLoadFlameButton(), getInteractiveLoadFlameFromClipboardButton(), getInteractiveNextButton(), getInteractiveStopButton(),
@@ -3611,8 +3628,11 @@ public class TinaInternalFrame extends JInternalFrame {
     pCmb.removeAllItems();
     pCmb.addItem(GlobalScript.NONE);
     pCmb.addItem(GlobalScript.ROTATE_PITCH);
+    pCmb.addItem(GlobalScript.ROTATE_PITCH_NEG);
     pCmb.addItem(GlobalScript.ROTATE_ROLL);
+    pCmb.addItem(GlobalScript.ROTATE_ROLL_NEG);
     pCmb.addItem(GlobalScript.ROTATE_YAW);
+    pCmb.addItem(GlobalScript.ROTATE_YAW_NEG);
     pCmb.addItem(GlobalScript.ROTATE_PITCH_YAW);
   }
 
@@ -8272,7 +8292,6 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton dancingFlamesAddFromDiscBtn;
   private JPanel panel_38;
   private JPanel panel_39;
-  private JPanel panel_40;
   private JTable dancingFlamesPoolTable;
   private JPanel panel_42;
   private JPanel panel_43;
@@ -8306,10 +8325,25 @@ public class TinaInternalFrame extends JInternalFrame {
   private JPanel panel_37;
   private JPanel panel_41;
   private JToggleButton mouseTransformViewButton;
-  private JComboBox dancingFlamesGlobalScriptCmb;
-  private JComboBox dancingFlamesXFormScriptCmb;
-  private JComboBox dancingFlamesGlobalSpeedCmb;
-  private JComboBox dancingFlamesXFormSpeedCmb;
+  private JComboBox dancingFlamesGlobalScript1Cmb;
+  private JComboBox dancingFlamesXFormScript1Cmb;
+  private JComboBox dancingFlamesGlobalSpeed1Cmb;
+  private JComboBox dancingFlamesXFormSpeed1Cmb;
+  private JPanel panel_49;
+  private JTabbedPane tabbedPane;
+  private JPanel panel_51;
+  private JComboBox dancingFlamesFlameCmb;
+  private JComboBox dancingFlamesGlobalScript2Cmb;
+  private JComboBox dancingFlamesGlobalScript3Cmb;
+  private JComboBox dancingFlamesGlobalSpeed2Cmb;
+  private JComboBox dancingFlamesXFormScript2Cmb;
+  private JComboBox dancingFlamesXFormScript3Cmb;
+  private JComboBox dancingFlamesXFormSpeed2Cmb;
+  private JComboBox dancingFlamesXFormSpeed3Cmb;
+  private JComboBox dancingFlamesGlobalSpeed3Cmb;
+  private JCheckBox dancingFlamesDrawTrianglesCBx;
+  private JCheckBox dancingFlamesDrawFFTCBx;
+  private JCheckBox dancingFlamesDrawFPSCBx;
 
   /**
    * This method initializes renderBatchJobsScrollPane	
@@ -11204,7 +11238,6 @@ public class TinaInternalFrame extends JInternalFrame {
       panel_38.setBorder(new TitledBorder(null, "Flame pool", TitledBorder.LEADING, TitledBorder.TOP, null, null));
       panel_38.setLayout(new BorderLayout(0, 0));
       panel_38.add(getPanel_39(), BorderLayout.NORTH);
-      panel_38.add(getPanel_40(), BorderLayout.SOUTH);
 
       JScrollPane scrollPane_2 = new JScrollPane();
       scrollPane_2.setFont(new Font("Dialog", Font.PLAIN, 10));
@@ -11244,70 +11277,6 @@ public class TinaInternalFrame extends JInternalFrame {
     return panel_39;
   }
 
-  private JPanel getPanel_40() {
-    if (panel_40 == null) {
-      panel_40 = new JPanel();
-      panel_40.setBorder(new EmptyBorder(0, 0, 0, 0));
-      panel_40.setPreferredSize(new Dimension(10, 136));
-      panel_40.setLayout(null);
-      panel_40.add(getLblMorphFrames());
-      panel_40.add(getDancingFlamesMorphFrameCountIEd());
-
-      JLabel lblGlobalScript = new JLabel();
-      lblGlobalScript.setText("Global script");
-      lblGlobalScript.setPreferredSize(new Dimension(120, 22));
-      lblGlobalScript.setHorizontalAlignment(SwingConstants.RIGHT);
-      lblGlobalScript.setFont(new Font("Dialog", Font.BOLD, 10));
-      lblGlobalScript.setBounds(6, 30, 83, 22);
-      panel_40.add(lblGlobalScript);
-
-      dancingFlamesGlobalScriptCmb = new JComboBox();
-      dancingFlamesGlobalScriptCmb.addItemListener(new ItemListener() {
-        public void itemStateChanged(ItemEvent e) {
-          if (tinaController != null) {
-            tinaController.getDancingFractalsController().globalScriptCmb_changed();
-          }
-        }
-      });
-      dancingFlamesGlobalScriptCmb.setPreferredSize(new Dimension(125, 24));
-      dancingFlamesGlobalScriptCmb.setMinimumSize(new Dimension(125, 24));
-      dancingFlamesGlobalScriptCmb.setMaximumSize(new Dimension(30000, 24));
-      dancingFlamesGlobalScriptCmb.setMaximumRowCount(32);
-      dancingFlamesGlobalScriptCmb.setFont(new Font("Dialog", Font.BOLD, 10));
-      dancingFlamesGlobalScriptCmb.setAlignmentX(1.0f);
-      dancingFlamesGlobalScriptCmb.setBounds(92, 29, 115, 24);
-      panel_40.add(dancingFlamesGlobalScriptCmb);
-
-      JLabel lblXformScript = new JLabel();
-      lblXformScript.setText("XForm script");
-      lblXformScript.setPreferredSize(new Dimension(120, 22));
-      lblXformScript.setHorizontalAlignment(SwingConstants.RIGHT);
-      lblXformScript.setFont(new Font("Dialog", Font.BOLD, 10));
-      lblXformScript.setBounds(6, 52, 83, 22);
-      panel_40.add(lblXformScript);
-
-      dancingFlamesXFormScriptCmb = new JComboBox();
-      dancingFlamesXFormScriptCmb.addItemListener(new ItemListener() {
-        public void itemStateChanged(ItemEvent e) {
-          if (tinaController != null) {
-            tinaController.getDancingFractalsController().xFormScriptCmb_changed();
-          }
-        }
-      });
-      dancingFlamesXFormScriptCmb.setPreferredSize(new Dimension(125, 24));
-      dancingFlamesXFormScriptCmb.setMinimumSize(new Dimension(125, 24));
-      dancingFlamesXFormScriptCmb.setMaximumSize(new Dimension(30000, 24));
-      dancingFlamesXFormScriptCmb.setMaximumRowCount(32);
-      dancingFlamesXFormScriptCmb.setFont(new Font("Dialog", Font.BOLD, 10));
-      dancingFlamesXFormScriptCmb.setAlignmentX(1.0f);
-      dancingFlamesXFormScriptCmb.setBounds(92, 51, 115, 24);
-      panel_40.add(dancingFlamesXFormScriptCmb);
-      panel_40.add(getDancingFlamesGlobalSpeedCmb());
-      panel_40.add(getDancingFlamesXFormSpeedCmb());
-    }
-    return panel_40;
-  }
-
   private JPanel getPanel_42() {
     if (panel_42 == null) {
       panel_42 = new JPanel();
@@ -11324,6 +11293,7 @@ public class TinaInternalFrame extends JInternalFrame {
     if (panel_43 == null) {
       panel_43 = new JPanel();
       panel_43.setLayout(new BorderLayout(0, 0));
+      panel_43.add(getPanel_49(), BorderLayout.SOUTH);
       panel_43.add(getPanel_44(), BorderLayout.NORTH);
       panel_43.add(getPanel_50(), BorderLayout.EAST);
       panel_43.add(getPanel_52(), BorderLayout.CENTER);
@@ -11497,7 +11467,7 @@ public class TinaInternalFrame extends JInternalFrame {
       panel_52 = new JPanel();
       panel_52.setBorder(new TitledBorder(null, "Preview", TitledBorder.LEADING, TitledBorder.TOP, null, null));
       panel_52.setLayout(new BorderLayout(0, 0));
-      panel_52.add(getPanel_54(), BorderLayout.EAST);
+      panel_52.add(getPanel_54(), BorderLayout.WEST);
 
       dancingFlamesFlamePnl = new JPanel();
       panel_52.add(dancingFlamesFlamePnl, BorderLayout.CENTER);
@@ -11521,6 +11491,9 @@ public class TinaInternalFrame extends JInternalFrame {
       dancingFlamesGraph1Pnl.setLayout(new BorderLayout(0, 0));
       panel_54.add(getPanel_37());
       panel_54.add(getPanel_41());
+      panel_54.add(getDancingFlamesDrawTrianglesCBx());
+      panel_54.add(getDancingFlamesDrawFFTCBx());
+      panel_54.add(getDancingFlamesDrawFPSCBx());
     }
     return panel_54;
   }
@@ -11619,7 +11592,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JTextField getDancingFlamesMorphFrameCountIEd() {
     if (dancingFlamesMorphFrameCountIEd == null) {
       dancingFlamesMorphFrameCountIEd = new JTextField();
-      dancingFlamesMorphFrameCountIEd.setBounds(92, 5, 56, 22);
+      dancingFlamesMorphFrameCountIEd.setBounds(786, 6, 56, 22);
       dancingFlamesMorphFrameCountIEd.setText("0");
       dancingFlamesMorphFrameCountIEd.setPreferredSize(new Dimension(56, 22));
       dancingFlamesMorphFrameCountIEd.setFont(new Font("Dialog", Font.PLAIN, 10));
@@ -11630,7 +11603,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JLabel getLblMorphFrames() {
     if (lblMorphFrames == null) {
       lblMorphFrames = new JLabel();
-      lblMorphFrames.setBounds(6, 5, 83, 22);
+      lblMorphFrames.setBounds(700, 6, 83, 22);
       lblMorphFrames.setText("Morph frames");
       lblMorphFrames.setPreferredSize(new Dimension(120, 22));
       lblMorphFrames.setHorizontalAlignment(SwingConstants.RIGHT);
@@ -11737,53 +11710,418 @@ public class TinaInternalFrame extends JInternalFrame {
     return mouseTransformViewButton;
   }
 
-  public JComboBox getDancingFlamesGlobalScriptCmb() {
-    return dancingFlamesGlobalScriptCmb;
+  public JComboBox getDancingFlamesGlobalScript1Cmb() {
+    return dancingFlamesGlobalScript1Cmb;
   }
 
-  public JComboBox getDancingFlamesXFormScriptCmb() {
-    return dancingFlamesXFormScriptCmb;
+  public JComboBox getDancingFlamesXFormScript1Cmb() {
+    return dancingFlamesXFormScript1Cmb;
   }
 
-  private JComboBox getDancingFlamesGlobalSpeedCmb() {
-    if (dancingFlamesGlobalSpeedCmb == null) {
-      dancingFlamesGlobalSpeedCmb = new JComboBox();
-      dancingFlamesGlobalSpeedCmb.addItemListener(new ItemListener() {
+  private JComboBox getDancingFlamesGlobalSpeed1Cmb() {
+    if (dancingFlamesGlobalSpeed1Cmb == null) {
+      dancingFlamesGlobalSpeed1Cmb = new JComboBox();
+      dancingFlamesGlobalSpeed1Cmb.setBounds(204, 43, 62, 24);
+      dancingFlamesGlobalSpeed1Cmb.addItemListener(new ItemListener() {
         public void itemStateChanged(ItemEvent e) {
           if (tinaController != null) {
-            tinaController.getDancingFractalsController().globalSpeedCmb_changed();
+            tinaController.getDancingFractalsController().globalSpeedCmb1_changed();
           }
         }
       });
-      dancingFlamesGlobalSpeedCmb.setPreferredSize(new Dimension(125, 24));
-      dancingFlamesGlobalSpeedCmb.setMinimumSize(new Dimension(125, 24));
-      dancingFlamesGlobalSpeedCmb.setMaximumSize(new Dimension(30000, 24));
-      dancingFlamesGlobalSpeedCmb.setMaximumRowCount(32);
-      dancingFlamesGlobalSpeedCmb.setFont(new Font("Dialog", Font.BOLD, 10));
-      dancingFlamesGlobalSpeedCmb.setAlignmentX(1.0f);
-      dancingFlamesGlobalSpeedCmb.setBounds(210, 29, 62, 24);
+      dancingFlamesGlobalSpeed1Cmb.setPreferredSize(new Dimension(125, 24));
+      dancingFlamesGlobalSpeed1Cmb.setMinimumSize(new Dimension(125, 24));
+      dancingFlamesGlobalSpeed1Cmb.setMaximumSize(new Dimension(30000, 24));
+      dancingFlamesGlobalSpeed1Cmb.setMaximumRowCount(32);
+      dancingFlamesGlobalSpeed1Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      dancingFlamesGlobalSpeed1Cmb.setAlignmentX(1.0f);
     }
-    return dancingFlamesGlobalSpeedCmb;
+    return dancingFlamesGlobalSpeed1Cmb;
   }
 
-  private JComboBox getDancingFlamesXFormSpeedCmb() {
-    if (dancingFlamesXFormSpeedCmb == null) {
-      dancingFlamesXFormSpeedCmb = new JComboBox();
-      dancingFlamesXFormSpeedCmb.addItemListener(new ItemListener() {
+  private JComboBox getDancingFlamesXFormSpeed1Cmb() {
+    if (dancingFlamesXFormSpeed1Cmb == null) {
+      dancingFlamesXFormSpeed1Cmb = new JComboBox();
+      dancingFlamesXFormSpeed1Cmb.setBounds(482, 43, 62, 24);
+      dancingFlamesXFormSpeed1Cmb.addItemListener(new ItemListener() {
         public void itemStateChanged(ItemEvent e) {
           if (tinaController != null) {
-            tinaController.getDancingFractalsController().xFormSpeedCmb_changed();
+            tinaController.getDancingFractalsController().xFormSpeedCmb1_changed();
           }
         }
       });
-      dancingFlamesXFormSpeedCmb.setPreferredSize(new Dimension(125, 24));
-      dancingFlamesXFormSpeedCmb.setMinimumSize(new Dimension(125, 24));
-      dancingFlamesXFormSpeedCmb.setMaximumSize(new Dimension(30000, 24));
-      dancingFlamesXFormSpeedCmb.setMaximumRowCount(32);
-      dancingFlamesXFormSpeedCmb.setFont(new Font("Dialog", Font.BOLD, 10));
-      dancingFlamesXFormSpeedCmb.setAlignmentX(1.0f);
-      dancingFlamesXFormSpeedCmb.setBounds(210, 51, 62, 24);
+      dancingFlamesXFormSpeed1Cmb.setPreferredSize(new Dimension(125, 24));
+      dancingFlamesXFormSpeed1Cmb.setMinimumSize(new Dimension(125, 24));
+      dancingFlamesXFormSpeed1Cmb.setMaximumSize(new Dimension(30000, 24));
+      dancingFlamesXFormSpeed1Cmb.setMaximumRowCount(32);
+      dancingFlamesXFormSpeed1Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      dancingFlamesXFormSpeed1Cmb.setAlignmentX(1.0f);
     }
-    return dancingFlamesXFormSpeedCmb;
+    return dancingFlamesXFormSpeed1Cmb;
+  }
+
+  private JPanel getPanel_49() {
+    if (panel_49 == null) {
+      panel_49 = new JPanel();
+      panel_49.setBorder(new TitledBorder(null, "Interact", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+      panel_49.setPreferredSize(new Dimension(10, 200));
+      panel_49.setMinimumSize(new Dimension(10, 100));
+      panel_49.setLayout(new BorderLayout(0, 0));
+      panel_49.add(getTabbedPane(), BorderLayout.CENTER);
+    }
+    return panel_49;
+  }
+
+  private JTabbedPane getTabbedPane() {
+    if (tabbedPane == null) {
+      tabbedPane = new JTabbedPane(JTabbedPane.TOP);
+      tabbedPane.addTab("Flames and motions", null, getPanel_51(), null);
+    }
+    return tabbedPane;
+  }
+
+  private JPanel getPanel_51() {
+    if (panel_51 == null) {
+      panel_51 = new JPanel();
+      panel_51.setLayout(null);
+      panel_51.add(getDancingFlamesMorphFrameCountIEd());
+      panel_51.add(getLblMorphFrames());
+
+      dancingFlamesGlobalScript1Cmb = new JComboBox();
+      dancingFlamesGlobalScript1Cmb.setBounds(86, 43, 115, 24);
+      panel_51.add(dancingFlamesGlobalScript1Cmb);
+      dancingFlamesGlobalScript1Cmb.addItemListener(new ItemListener() {
+        public void itemStateChanged(ItemEvent e) {
+          if (tinaController != null) {
+            tinaController.getDancingFractalsController().globalScriptCmb1_changed();
+          }
+        }
+      });
+      dancingFlamesGlobalScript1Cmb.setPreferredSize(new Dimension(125, 24));
+      dancingFlamesGlobalScript1Cmb.setMinimumSize(new Dimension(125, 24));
+      dancingFlamesGlobalScript1Cmb.setMaximumSize(new Dimension(30000, 24));
+      dancingFlamesGlobalScript1Cmb.setMaximumRowCount(32);
+      dancingFlamesGlobalScript1Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      dancingFlamesGlobalScript1Cmb.setAlignmentX(1.0f);
+
+      JLabel lblGlobalScript = new JLabel();
+      lblGlobalScript.setBounds(0, 44, 83, 22);
+      panel_51.add(lblGlobalScript);
+      lblGlobalScript.setText("Global script 1");
+      lblGlobalScript.setPreferredSize(new Dimension(120, 22));
+      lblGlobalScript.setHorizontalAlignment(SwingConstants.RIGHT);
+      lblGlobalScript.setFont(new Font("Dialog", Font.BOLD, 10));
+      panel_51.add(getDancingFlamesGlobalSpeed1Cmb());
+
+      dancingFlamesXFormScript1Cmb = new JComboBox();
+      dancingFlamesXFormScript1Cmb.setBounds(364, 43, 115, 24);
+      panel_51.add(dancingFlamesXFormScript1Cmb);
+      dancingFlamesXFormScript1Cmb.addItemListener(new ItemListener() {
+        public void itemStateChanged(ItemEvent e) {
+          if (tinaController != null) {
+            tinaController.getDancingFractalsController().xFormScriptCmb1_changed();
+          }
+        }
+      });
+      dancingFlamesXFormScript1Cmb.setPreferredSize(new Dimension(125, 24));
+      dancingFlamesXFormScript1Cmb.setMinimumSize(new Dimension(125, 24));
+      dancingFlamesXFormScript1Cmb.setMaximumSize(new Dimension(30000, 24));
+      dancingFlamesXFormScript1Cmb.setMaximumRowCount(32);
+      dancingFlamesXFormScript1Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      dancingFlamesXFormScript1Cmb.setAlignmentX(1.0f);
+
+      JLabel lblXformScript = new JLabel();
+      lblXformScript.setBounds(278, 44, 83, 22);
+      panel_51.add(lblXformScript);
+      lblXformScript.setText("XForm script 1");
+      lblXformScript.setPreferredSize(new Dimension(120, 22));
+      lblXformScript.setHorizontalAlignment(SwingConstants.RIGHT);
+      lblXformScript.setFont(new Font("Dialog", Font.BOLD, 10));
+      panel_51.add(getDancingFlamesXFormSpeed1Cmb());
+
+      dancingFlamesFlameCmb = new JComboBox();
+      dancingFlamesFlameCmb.addItemListener(new ItemListener() {
+        public void itemStateChanged(ItemEvent e) {
+          if (tinaController != null) {
+            tinaController.getDancingFractalsController().flameCmb_changed();
+          }
+        }
+      });
+      dancingFlamesFlameCmb.setPreferredSize(new Dimension(125, 24));
+      dancingFlamesFlameCmb.setMinimumSize(new Dimension(125, 24));
+      dancingFlamesFlameCmb.setMaximumSize(new Dimension(30000, 24));
+      dancingFlamesFlameCmb.setMaximumRowCount(32);
+      dancingFlamesFlameCmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      dancingFlamesFlameCmb.setAlignmentX(1.0f);
+      dancingFlamesFlameCmb.setBounds(86, 5, 180, 24);
+      panel_51.add(dancingFlamesFlameCmb);
+
+      JLabel lblFlame = new JLabel();
+      lblFlame.setText("Flame");
+      lblFlame.setPreferredSize(new Dimension(120, 22));
+      lblFlame.setHorizontalAlignment(SwingConstants.RIGHT);
+      lblFlame.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblFlame.setBounds(0, 6, 83, 22);
+      panel_51.add(lblFlame);
+
+      JLabel lblGlobalScript_1 = new JLabel();
+      lblGlobalScript_1.setText("Global script 2");
+      lblGlobalScript_1.setPreferredSize(new Dimension(120, 22));
+      lblGlobalScript_1.setHorizontalAlignment(SwingConstants.RIGHT);
+      lblGlobalScript_1.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblGlobalScript_1.setBounds(0, 68, 83, 22);
+      panel_51.add(lblGlobalScript_1);
+
+      dancingFlamesGlobalScript2Cmb = new JComboBox();
+      dancingFlamesGlobalScript2Cmb.addItemListener(new ItemListener() {
+        public void itemStateChanged(ItemEvent e) {
+          if (tinaController != null) {
+            tinaController.getDancingFractalsController().globalScriptCmb2_changed();
+          }
+        }
+      });
+      dancingFlamesGlobalScript2Cmb.setPreferredSize(new Dimension(125, 24));
+      dancingFlamesGlobalScript2Cmb.setMinimumSize(new Dimension(125, 24));
+      dancingFlamesGlobalScript2Cmb.setMaximumSize(new Dimension(30000, 24));
+      dancingFlamesGlobalScript2Cmb.setMaximumRowCount(32);
+      dancingFlamesGlobalScript2Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      dancingFlamesGlobalScript2Cmb.setAlignmentX(1.0f);
+      dancingFlamesGlobalScript2Cmb.setBounds(86, 67, 115, 24);
+      panel_51.add(dancingFlamesGlobalScript2Cmb);
+
+      dancingFlamesGlobalSpeed2Cmb = new JComboBox();
+      dancingFlamesGlobalSpeed2Cmb.addItemListener(new ItemListener() {
+        public void itemStateChanged(ItemEvent e) {
+          if (tinaController != null) {
+            tinaController.getDancingFractalsController().globalSpeedCmb2_changed();
+          }
+        }
+      });
+      dancingFlamesGlobalSpeed2Cmb.setPreferredSize(new Dimension(125, 24));
+      dancingFlamesGlobalSpeed2Cmb.setMinimumSize(new Dimension(125, 24));
+      dancingFlamesGlobalSpeed2Cmb.setMaximumSize(new Dimension(30000, 24));
+      dancingFlamesGlobalSpeed2Cmb.setMaximumRowCount(32);
+      dancingFlamesGlobalSpeed2Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      dancingFlamesGlobalSpeed2Cmb.setAlignmentX(1.0f);
+      dancingFlamesGlobalSpeed2Cmb.setBounds(204, 67, 62, 24);
+      panel_51.add(dancingFlamesGlobalSpeed2Cmb);
+
+      JLabel lblGlobalScript_2 = new JLabel();
+      lblGlobalScript_2.setText("Global script 3");
+      lblGlobalScript_2.setPreferredSize(new Dimension(120, 22));
+      lblGlobalScript_2.setHorizontalAlignment(SwingConstants.RIGHT);
+      lblGlobalScript_2.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblGlobalScript_2.setBounds(0, 92, 83, 22);
+      panel_51.add(lblGlobalScript_2);
+
+      dancingFlamesGlobalScript3Cmb = new JComboBox();
+      dancingFlamesGlobalScript3Cmb.addItemListener(new ItemListener() {
+        public void itemStateChanged(ItemEvent e) {
+          if (tinaController != null) {
+            tinaController.getDancingFractalsController().globalScriptCmb3_changed();
+          }
+        }
+      });
+      dancingFlamesGlobalScript3Cmb.setPreferredSize(new Dimension(125, 24));
+      dancingFlamesGlobalScript3Cmb.setMinimumSize(new Dimension(125, 24));
+      dancingFlamesGlobalScript3Cmb.setMaximumSize(new Dimension(30000, 24));
+      dancingFlamesGlobalScript3Cmb.setMaximumRowCount(32);
+      dancingFlamesGlobalScript3Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      dancingFlamesGlobalScript3Cmb.setAlignmentX(1.0f);
+      dancingFlamesGlobalScript3Cmb.setBounds(86, 91, 115, 24);
+      panel_51.add(dancingFlamesGlobalScript3Cmb);
+
+      dancingFlamesGlobalSpeed3Cmb = new JComboBox();
+      dancingFlamesGlobalSpeed3Cmb.addItemListener(new ItemListener() {
+        public void itemStateChanged(ItemEvent e) {
+          if (tinaController != null) {
+            tinaController.getDancingFractalsController().globalSpeedCmb3_changed();
+          }
+        }
+      });
+      dancingFlamesGlobalSpeed3Cmb.setPreferredSize(new Dimension(125, 24));
+      dancingFlamesGlobalSpeed3Cmb.setMinimumSize(new Dimension(125, 24));
+      dancingFlamesGlobalSpeed3Cmb.setMaximumSize(new Dimension(30000, 24));
+      dancingFlamesGlobalSpeed3Cmb.setMaximumRowCount(32);
+      dancingFlamesGlobalSpeed3Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      dancingFlamesGlobalSpeed3Cmb.setAlignmentX(1.0f);
+      dancingFlamesGlobalSpeed3Cmb.setBounds(204, 91, 62, 24);
+      panel_51.add(dancingFlamesGlobalSpeed3Cmb);
+
+      dancingFlamesXFormScript2Cmb = new JComboBox();
+      dancingFlamesXFormScript2Cmb.addItemListener(new ItemListener() {
+        public void itemStateChanged(ItemEvent e) {
+          if (tinaController != null) {
+            tinaController.getDancingFractalsController().xFormScriptCmb2_changed();
+          }
+        }
+      });
+      dancingFlamesXFormScript2Cmb.setPreferredSize(new Dimension(125, 24));
+      dancingFlamesXFormScript2Cmb.setMinimumSize(new Dimension(125, 24));
+      dancingFlamesXFormScript2Cmb.setMaximumSize(new Dimension(30000, 24));
+      dancingFlamesXFormScript2Cmb.setMaximumRowCount(32);
+      dancingFlamesXFormScript2Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      dancingFlamesXFormScript2Cmb.setAlignmentX(1.0f);
+      dancingFlamesXFormScript2Cmb.setBounds(364, 68, 115, 24);
+      panel_51.add(dancingFlamesXFormScript2Cmb);
+
+      JLabel lblXformScript_1 = new JLabel();
+      lblXformScript_1.setText("XForm script 2");
+      lblXformScript_1.setPreferredSize(new Dimension(120, 22));
+      lblXformScript_1.setHorizontalAlignment(SwingConstants.RIGHT);
+      lblXformScript_1.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblXformScript_1.setBounds(278, 69, 83, 22);
+      panel_51.add(lblXformScript_1);
+
+      dancingFlamesXFormSpeed2Cmb = new JComboBox();
+      dancingFlamesXFormSpeed2Cmb.addItemListener(new ItemListener() {
+        public void itemStateChanged(ItemEvent e) {
+          if (tinaController != null) {
+            tinaController.getDancingFractalsController().xFormSpeedCmb2_changed();
+          }
+        }
+      });
+      dancingFlamesXFormSpeed2Cmb.setPreferredSize(new Dimension(125, 24));
+      dancingFlamesXFormSpeed2Cmb.setMinimumSize(new Dimension(125, 24));
+      dancingFlamesXFormSpeed2Cmb.setMaximumSize(new Dimension(30000, 24));
+      dancingFlamesXFormSpeed2Cmb.setMaximumRowCount(32);
+      dancingFlamesXFormSpeed2Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      dancingFlamesXFormSpeed2Cmb.setAlignmentX(1.0f);
+      dancingFlamesXFormSpeed2Cmb.setBounds(482, 68, 62, 24);
+      panel_51.add(dancingFlamesXFormSpeed2Cmb);
+
+      dancingFlamesXFormScript3Cmb = new JComboBox();
+      dancingFlamesXFormScript3Cmb.addItemListener(new ItemListener() {
+        public void itemStateChanged(ItemEvent e) {
+          if (tinaController != null) {
+            tinaController.getDancingFractalsController().xFormScriptCmb3_changed();
+          }
+        }
+      });
+      dancingFlamesXFormScript3Cmb.setPreferredSize(new Dimension(125, 24));
+      dancingFlamesXFormScript3Cmb.setMinimumSize(new Dimension(125, 24));
+      dancingFlamesXFormScript3Cmb.setMaximumSize(new Dimension(30000, 24));
+      dancingFlamesXFormScript3Cmb.setMaximumRowCount(32);
+      dancingFlamesXFormScript3Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      dancingFlamesXFormScript3Cmb.setAlignmentX(1.0f);
+      dancingFlamesXFormScript3Cmb.setBounds(364, 92, 115, 24);
+      panel_51.add(dancingFlamesXFormScript3Cmb);
+
+      JLabel lblXformScript_2 = new JLabel();
+      lblXformScript_2.setText("XForm script 3");
+      lblXformScript_2.setPreferredSize(new Dimension(120, 22));
+      lblXformScript_2.setHorizontalAlignment(SwingConstants.RIGHT);
+      lblXformScript_2.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblXformScript_2.setBounds(278, 93, 83, 22);
+      panel_51.add(lblXformScript_2);
+
+      dancingFlamesXFormSpeed3Cmb = new JComboBox();
+      dancingFlamesXFormSpeed3Cmb.addItemListener(new ItemListener() {
+        public void itemStateChanged(ItemEvent e) {
+          if (tinaController != null) {
+            tinaController.getDancingFractalsController().xFormSpeedCmb3_changed();
+          }
+        }
+      });
+      dancingFlamesXFormSpeed3Cmb.setPreferredSize(new Dimension(125, 24));
+      dancingFlamesXFormSpeed3Cmb.setMinimumSize(new Dimension(125, 24));
+      dancingFlamesXFormSpeed3Cmb.setMaximumSize(new Dimension(30000, 24));
+      dancingFlamesXFormSpeed3Cmb.setMaximumRowCount(32);
+      dancingFlamesXFormSpeed3Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      dancingFlamesXFormSpeed3Cmb.setAlignmentX(1.0f);
+      dancingFlamesXFormSpeed3Cmb.setBounds(482, 92, 62, 24);
+      panel_51.add(dancingFlamesXFormSpeed3Cmb);
+    }
+    return panel_51;
+  }
+
+  public JComboBox getDancingFlamesFlameCmb() {
+    return dancingFlamesFlameCmb;
+  }
+
+  public JComboBox getDancingFlamesGlobalScript2Cmb() {
+    return dancingFlamesGlobalScript2Cmb;
+  }
+
+  public JComboBox getDancingFlamesGlobalScript3Cmb() {
+    return dancingFlamesGlobalScript3Cmb;
+  }
+
+  public JComboBox getDancingFlamesGlobalSpeed2Cmb() {
+    return dancingFlamesGlobalSpeed2Cmb;
+  }
+
+  public JComboBox getDancingFlamesXFormScript2Cmb() {
+    return dancingFlamesXFormScript2Cmb;
+  }
+
+  public JComboBox getDancingFlamesXFormScript3Cmb() {
+    return dancingFlamesXFormScript3Cmb;
+  }
+
+  public JComboBox getDancingFlamesXFormSpeed2Cmb() {
+    return dancingFlamesXFormSpeed2Cmb;
+  }
+
+  public JComboBox getDancingFlamesXFormSpeed3Cmb() {
+    return dancingFlamesXFormSpeed3Cmb;
+  }
+
+  public JComboBox getDancingFlamesGlobalSpeed3Cmb() {
+    return dancingFlamesGlobalSpeed3Cmb;
+  }
+
+  private JCheckBox getDancingFlamesDrawTrianglesCBx() {
+    if (dancingFlamesDrawTrianglesCBx == null) {
+      dancingFlamesDrawTrianglesCBx = new JCheckBox("Draw triangles");
+      dancingFlamesDrawTrianglesCBx.addItemListener(new ItemListener() {
+        public void itemStateChanged(ItemEvent e) {
+          if (tinaController != null) {
+            tinaController.getDancingFractalsController().drawTrianglesCBx_changed();
+          }
+        }
+      });
+      dancingFlamesDrawTrianglesCBx.setSelected(true);
+      dancingFlamesDrawTrianglesCBx.setMaximumSize(new Dimension(160, 18));
+      dancingFlamesDrawTrianglesCBx.setPreferredSize(new Dimension(160, 18));
+      dancingFlamesDrawTrianglesCBx.setMinimumSize(new Dimension(140, 18));
+    }
+    return dancingFlamesDrawTrianglesCBx;
+  }
+
+  private JCheckBox getDancingFlamesDrawFFTCBx() {
+    if (dancingFlamesDrawFFTCBx == null) {
+      dancingFlamesDrawFFTCBx = new JCheckBox("Show FFT data");
+      dancingFlamesDrawFFTCBx.addItemListener(new ItemListener() {
+        public void itemStateChanged(ItemEvent e) {
+          if (tinaController != null) {
+            tinaController.getDancingFractalsController().drawFFTCBx_changed();
+          }
+        }
+      });
+      dancingFlamesDrawFFTCBx.setSelected(true);
+      dancingFlamesDrawFFTCBx.setPreferredSize(new Dimension(160, 18));
+      dancingFlamesDrawFFTCBx.setMinimumSize(new Dimension(140, 18));
+      dancingFlamesDrawFFTCBx.setMaximumSize(new Dimension(160, 18));
+    }
+    return dancingFlamesDrawFFTCBx;
+  }
+
+  private JCheckBox getDancingFlamesDrawFPSCBx() {
+    if (dancingFlamesDrawFPSCBx == null) {
+      dancingFlamesDrawFPSCBx = new JCheckBox("Show fps");
+      dancingFlamesDrawFPSCBx.addItemListener(new ItemListener() {
+        public void itemStateChanged(ItemEvent e) {
+          if (tinaController != null) {
+            tinaController.getDancingFractalsController().drawFPSCBx_changed();
+          }
+        }
+      });
+      dancingFlamesDrawFPSCBx.setSelected(true);
+      dancingFlamesDrawFPSCBx.setPreferredSize(new Dimension(160, 18));
+      dancingFlamesDrawFPSCBx.setMinimumSize(new Dimension(140, 18));
+      dancingFlamesDrawFPSCBx.setMaximumSize(new Dimension(160, 18));
+    }
+    return dancingFlamesDrawFPSCBx;
   }
 } //  @jve:decl-index=0:visual-constraint="10,10"

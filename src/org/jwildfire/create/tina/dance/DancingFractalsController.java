@@ -40,7 +40,6 @@ import javax.swing.table.DefaultTableModel;
 
 import org.jwildfire.base.Prefs;
 import org.jwildfire.base.Tools;
-import org.jwildfire.create.tina.animate.FlameMorphService;
 import org.jwildfire.create.tina.animate.GlobalScript;
 import org.jwildfire.create.tina.animate.MotionSpeed;
 import org.jwildfire.create.tina.animate.XFormScript;
@@ -98,10 +97,22 @@ public class DancingFractalsController {
   private final JButton shuffleFlamesBtn;
   private final JCheckBox doRecordCBx;
   private final JButton saveAllFlamesBtn;
-  private final JComboBox globalScriptCmb;
-  private final JComboBox globalSpeedCmb;
-  private final JComboBox xFormScriptCmb;
-  private final JComboBox xFormSpeedCmb;
+  private final JComboBox globalScript1Cmb;
+  private final JComboBox globalSpeed1Cmb;
+  private final JComboBox globalScript2Cmb;
+  private final JComboBox globalSpeed2Cmb;
+  private final JComboBox globalScript3Cmb;
+  private final JComboBox globalSpeed3Cmb;
+  private final JComboBox xFormScript1Cmb;
+  private final JComboBox xFormSpeed1Cmb;
+  private final JComboBox xFormScript2Cmb;
+  private final JComboBox xFormSpeed2Cmb;
+  private final JComboBox xFormScript3Cmb;
+  private final JComboBox xFormSpeed3Cmb;
+  private final JComboBox flamesCmb;
+  private final JCheckBox drawTrianglesCbx;
+  private final JCheckBox drawFFTCbx;
+  private final JCheckBox drawFPSCbx;
 
   JLayerInterface jLayer = new JLayerInterface();
   private FlamePanel flamePanel = null;
@@ -115,14 +126,16 @@ public class DancingFractalsController {
   private RecordedFFT fft;
   private String soundFilename;
   private boolean running = false;
-  private final org.jwildfire.create.tina.dance.DanceFlameHolder flameHolder;
 
   public DancingFractalsController(TinaController pParent, ErrorHandler pErrorHandler, JPanel pRealtimeFlamePnl, JPanel pRealtimeGraph1Pnl,
       JButton pLoadSoundBtn, JButton pAddFromClipboardBtn, JButton pAddFromEditorBtn, JButton pAddFromDiscBtn, JWFNumberField pRandomCountIEd,
       JButton pGenRandFlamesBtn, JComboBox pRandomGenCmb, JTable pPoolTable, JPanel pPoolFlamePreviewPnl, JSlider pBorderSizeSlider,
       JButton pFlameToEditorBtn, JButton pDeleteFlameBtn, JTextField pFramesPerSecondIEd, JTextField pMorphFrameCountIEd,
       JButton pStartShowButton, JButton pStopShowButton, JButton pShuffleFlamesBtn, JCheckBox pDoRecordCBx, JButton pSaveAllFlamesBtn,
-      JComboBox pGlobalScriptCmb, JComboBox pGlobalSpeedCmb, JComboBox pXFormScriptCmb, JComboBox pXFormSpeedCmb) {
+      JComboBox pGlobalScript1Cmb, JComboBox pGlobalSpeed1Cmb, JComboBox pGlobalScript2Cmb, JComboBox pGlobalSpeed2Cmb,
+      JComboBox pGlobalScript3Cmb, JComboBox pGlobalSpeed3Cmb, JComboBox pXFormScript1Cmb, JComboBox pXFormSpeed1Cmb,
+      JComboBox pXFormScript2Cmb, JComboBox pXFormSpeed2Cmb, JComboBox pXFormScript3Cmb, JComboBox pXFormSpeed3Cmb,
+      JComboBox pFlamesCmb, JCheckBox pDrawTrianglesCbx, JCheckBox pDrawFFTCbx, JCheckBox pDrawFPSCbx) {
     parentCtrl = pParent;
     errorHandler = pErrorHandler;
     prefs = parentCtrl.getPrefs();
@@ -147,55 +160,24 @@ public class DancingFractalsController {
     shuffleFlamesBtn = pShuffleFlamesBtn;
     doRecordCBx = pDoRecordCBx;
     saveAllFlamesBtn = pSaveAllFlamesBtn;
-    globalScriptCmb = pGlobalScriptCmb;
-    globalSpeedCmb = pGlobalSpeedCmb;
-    xFormScriptCmb = pXFormScriptCmb;
-    xFormSpeedCmb = pXFormSpeedCmb;
-    flameHolder = new org.jwildfire.create.tina.dance.DanceFlameHolder();
-
+    globalScript1Cmb = pGlobalScript1Cmb;
+    globalSpeed1Cmb = pGlobalSpeed1Cmb;
+    globalScript2Cmb = pGlobalScript2Cmb;
+    globalSpeed2Cmb = pGlobalSpeed2Cmb;
+    globalScript3Cmb = pGlobalScript3Cmb;
+    globalSpeed3Cmb = pGlobalSpeed3Cmb;
+    xFormScript1Cmb = pXFormScript1Cmb;
+    xFormSpeed1Cmb = pXFormSpeed1Cmb;
+    xFormScript2Cmb = pXFormScript2Cmb;
+    xFormSpeed2Cmb = pXFormSpeed2Cmb;
+    xFormScript3Cmb = pXFormScript3Cmb;
+    xFormSpeed3Cmb = pXFormSpeed3Cmb;
+    flamesCmb = pFlamesCmb;
+    drawTrianglesCbx = pDrawTrianglesCbx;
+    drawFFTCbx = pDrawFFTCbx;
+    drawFPSCbx = pDrawFPSCbx;
     refreshPoolTable();
     enableControls();
-  }
-
-  public class RenderFlameHolder implements FlameHolder {
-    private Flame currFlame = null;
-    private Flame nextFlame = null;
-    private int morphFrameCount;
-    private int morphFrame;
-
-    @Override
-    public Flame getFlame() {
-      if (nextFlame != null) {
-        if (currFlame != null && morphFrameCount > 1 && morphFrame < morphFrameCount) {
-          Flame newFlame = FlameMorphService.morphFlames(prefs, currFlame, nextFlame, morphFrame++, morphFrameCount);
-          if (renderThread != null) {
-            flameHolder.changeFlame(newFlame, true);
-          }
-          return newFlame;
-        }
-        else {
-          Flame newFlame = nextFlame.makeCopy();
-          if (renderThread != null) {
-            flameHolder.changeFlame(newFlame, false);
-          }
-          currFlame = newFlame;
-          nextFlame = null;
-          return newFlame;
-        }
-      }
-      return currFlame;
-    }
-
-    public void setNextFlame(Flame pFlame) {
-      morphFrameCount = Integer.parseInt(morphFrameCountIEd.getText());
-      if (morphFrameCount < 1)
-        morphFrameCount = 1;
-      if (doRecordCBx.isSelected() && renderThread != null) {
-        actionRecorder.recordFlameChange(pFlame, morphFrameCount);
-      }
-      nextFlame = pFlame;
-      morphFrame = 1;
-    }
   }
 
   private class PoolFlameHolder implements FlameHolder {
@@ -206,7 +188,6 @@ public class DancingFractalsController {
     }
   }
 
-  private final RenderFlameHolder renderFlameHolder = new RenderFlameHolder();
   private final PoolFlameHolder poolFlameHolder = new PoolFlameHolder();
 
   private FlamePanel getFlamePanel() {
@@ -218,7 +199,8 @@ public class DancingFractalsController {
         return null;
       SimpleImage img = new SimpleImage(width, height);
       img.fillBackground(0, 0, 0);
-      flamePanel = new FlamePanel(img, 0, 0, flameRootPanel.getWidth() - borderWidth, renderFlameHolder, null, null);
+      // TODO
+      flamePanel = new FlamePanel(img, 0, 0, flameRootPanel.getWidth() - borderWidth, null, null, null);
       // TODO right aspect
       flamePanel.setRenderWidth(640);
       flamePanel.setRenderHeight(480);
@@ -226,6 +208,7 @@ public class DancingFractalsController {
       flameRootPanel.getParent().validate();
       flameRootPanel.repaint();
     }
+    flamePanel.setFlameHolder(renderThread);
     return flamePanel;
   }
 
@@ -386,18 +369,17 @@ public class DancingFractalsController {
 
   public void startRender() throws Exception {
     stopRender();
-    renderThread = new RealtimeAnimRenderThread(this, flameHolder);
+    renderThread = new RealtimeAnimRenderThread(this);
     actionRecorder = new ActionRecorder(renderThread);
-
-    renderFlameHolder.setNextFlame(poolFlameHolder.getFlame());
+    renderThread.setFlame(poolFlameHolder.getFlame());
     renderThread.setFFTData(fft);
     renderThread.setMusicPlayer(jLayer);
     renderThread.setFFTPanel(getGraph1Panel());
     renderThread.setFramesPerSecond(Integer.parseInt(framesPerSecondIEd.getText()));
-    renderThread.setGlobalScript((GlobalScript) globalScriptCmb.getSelectedItem());
-    renderThread.setGlobalSpeed((MotionSpeed) globalSpeedCmb.getSelectedItem());
-    renderThread.setXFormScript((XFormScript) xFormScriptCmb.getSelectedItem());
-    renderThread.setXFormSpeed((MotionSpeed) xFormSpeedCmb.getSelectedItem());
+    renderThread.setGlobalScript((GlobalScript) globalScript1Cmb.getSelectedItem());
+    renderThread.setGlobalSpeed((MotionSpeed) globalSpeed1Cmb.getSelectedItem());
+    renderThread.setXFormScript((XFormScript) xFormScript1Cmb.getSelectedItem());
+    renderThread.setXFormSpeed((MotionSpeed) xFormSpeed1Cmb.getSelectedItem());
     new Thread(renderThread).start();
   }
 
@@ -420,7 +402,7 @@ public class DancingFractalsController {
         if (chooser.showSaveDialog(flameRootPanel) == JFileChooser.APPROVE_OPTION) {
           File file = chooser.getSelectedFile();
           prefs.setLastOutputFlameFile(file);
-          PostRecordFlameGenerator generator = new PostRecordFlameGenerator(getParentCtrl().getPrefs(), actionRecorder, renderThread, flameHolder, fft);
+          PostRecordFlameGenerator generator = new PostRecordFlameGenerator(getParentCtrl().getPrefs(), actionRecorder, renderThread, fft);
           generator.createRecordedFlameFiles(file.getAbsolutePath());
         }
       }
@@ -488,7 +470,8 @@ public class DancingFractalsController {
       boolean oldRefreshing = refreshing;
       refreshing = true;
       try {
-        renderFlameHolder.setNextFlame(poolFlameHolder.getFlame());
+        // TODO
+        //renderFlameHolder.setNextFlame(poolFlameHolder.getFlame());
         refreshPoolPreviewFlameImage(poolFlameHolder.getFlame());
       }
       finally {
@@ -657,10 +640,6 @@ public class DancingFractalsController {
     }
   }
 
-  protected RenderFlameHolder getRenderFlameHolder() {
-    return renderFlameHolder;
-  }
-
   private void enableControls() {
     loadSoundBtn.setEnabled(!running);
     addFromClipboardBtn.setEnabled(!running);
@@ -749,32 +728,93 @@ public class DancingFractalsController {
     }
   }
 
-  public void globalScriptCmb_changed() {
+  public void globalScriptCmb1_changed() {
     // TODO Auto-generated method stub
     if (renderThread != null) {
-      renderThread.setGlobalScript((GlobalScript) globalScriptCmb.getSelectedItem());
+      renderThread.setGlobalScript((GlobalScript) globalScript1Cmb.getSelectedItem());
     }
 
   }
 
-  public void xFormScriptCmb_changed() {
+  public void xFormScriptCmb1_changed() {
     // TODO Auto-generated method stub
     if (renderThread != null) {
-      renderThread.setXFormScript((XFormScript) xFormScriptCmb.getSelectedItem());
+      renderThread.setXFormScript((XFormScript) xFormScript1Cmb.getSelectedItem());
     }
   }
 
-  public void globalSpeedCmb_changed() {
+  public void globalSpeedCmb1_changed() {
     // TODO Auto-generated method stub
     if (renderThread != null) {
-      renderThread.setGlobalSpeed((MotionSpeed) globalSpeedCmb.getSelectedItem());
+      renderThread.setGlobalSpeed((MotionSpeed) globalSpeed1Cmb.getSelectedItem());
     }
   }
 
-  public void xFormSpeedCmb_changed() {
+  public void xFormSpeedCmb1_changed() {
     // TODO Auto-generated method stub
     if (renderThread != null) {
-      renderThread.setXFormSpeed((MotionSpeed) xFormSpeedCmb.getSelectedItem());
+      renderThread.setXFormSpeed((MotionSpeed) xFormSpeed1Cmb.getSelectedItem());
     }
   }
+
+  public void globalScriptCmb2_changed() {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void globalScriptCmb3_changed() {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void flameCmb_changed() {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void globalSpeedCmb2_changed() {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void globalSpeedCmb3_changed() {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void xFormScriptCmb2_changed() {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void xFormScriptCmb3_changed() {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void xFormSpeedCmb2_changed() {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void xFormSpeedCmb3_changed() {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void drawTrianglesCBx_changed() {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void drawFFTCBx_changed() {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void drawFPSCBx_changed() {
+    // TODO Auto-generated method stub
+
+  }
+
 }

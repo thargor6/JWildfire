@@ -485,7 +485,10 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       JButton pDancingFlamesFlameToEditorBtn, JButton pDancingFlamesDeleteFlameBtn, JTextField pDancingFlamesFramesPerSecondIEd,
       JTextField pDancingFlamesMorphFrameCountIEd, JButton pDancingFlamesStartShowButton, JButton pDancingFlamesStopShowButton,
       JButton pDancingFlamesShuffleFlamesBtn, JCheckBox pDancingFlamesDoRecordCBx, JButton pDancingFlamesSaveAllFlamesBtn,
-      JComboBox pDancingFlamesGlobalScriptCmb, JComboBox pDancingFlamesGlobalSpeedCmb, JComboBox pDancingFlamesXFormScriptCmb, JComboBox pDancingFlamesXFormSpeedCmb) {
+      JComboBox pDancingFlamesGlobalScript1Cmb, JComboBox pDancingFlamesGlobalSpeed1Cmb, JComboBox pDancingFlamesGlobalScript2Cmb, JComboBox pDancingFlamesGlobalSpeed2Cmb,
+      JComboBox pDancingFlamesGlobalScript3Cmb, JComboBox pDancingFlamesGlobalSpeed3Cmb, JComboBox pDancingFlamesXFormScript1Cmb, JComboBox pDancingFlamesXFormSpeed1Cmb,
+      JComboBox pDancingFlamesXFormScript2Cmb, JComboBox pDancingFlamesXFormSpeed2Cmb, JComboBox pDancingFlamesXFormScript3Cmb, JComboBox pDancingFlamesXFormSpeed3Cmb,
+      JComboBox pDancingFlamesFlamesCmb, JCheckBox pDancingFlamesDrawTrianglesCBx, JCheckBox pDancingFlamesDrawFFTCBx, JCheckBox pDancingFlamesDrawFPSCBx) {
     tinaFrame = pTinaFrame;
     tinaFrameTitle = tinaFrame.getTitle();
     errorHandler = pErrorHandler;
@@ -498,7 +501,10 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
         pDancingFlamesRandomGenCmb, pDancingFlamesPoolTable, pDancingFlamesPoolFlamePreviewPnl, pDancingFlamesBorderSizeSlider,
         pDancingFlamesFlameToEditorBtn, pDancingFlamesDeleteFlameBtn, pDancingFlamesFramesPerSecondIEd, pDancingFlamesMorphFrameCountIEd,
         pDancingFlamesStartShowButton, pDancingFlamesStopShowButton, pDancingFlamesShuffleFlamesBtn, pDancingFlamesDoRecordCBx,
-        pDancingFlamesSaveAllFlamesBtn, pDancingFlamesGlobalScriptCmb, pDancingFlamesGlobalSpeedCmb, pDancingFlamesXFormScriptCmb, pDancingFlamesXFormSpeedCmb);
+        pDancingFlamesSaveAllFlamesBtn, pDancingFlamesGlobalScript1Cmb, pDancingFlamesGlobalSpeed1Cmb, pDancingFlamesGlobalScript2Cmb, pDancingFlamesGlobalSpeed2Cmb,
+        pDancingFlamesGlobalScript3Cmb, pDancingFlamesGlobalSpeed3Cmb, pDancingFlamesXFormScript1Cmb, pDancingFlamesXFormSpeed1Cmb,
+        pDancingFlamesXFormScript2Cmb, pDancingFlamesXFormSpeed2Cmb, pDancingFlamesXFormScript3Cmb, pDancingFlamesXFormSpeed3Cmb, pDancingFlamesFlamesCmb,
+        pDancingFlamesDrawTrianglesCBx, pDancingFlamesDrawFFTCBx, pDancingFlamesDrawFPSCBx);
 
     cameraRollREd = pCameraRollREd;
     cameraRollSlider = pCameraRollSlider;

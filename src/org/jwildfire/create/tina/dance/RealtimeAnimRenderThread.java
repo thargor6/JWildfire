@@ -24,10 +24,11 @@ import org.jwildfire.create.tina.audio.JLayerInterface;
 import org.jwildfire.create.tina.audio.RecordedFFT;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.dance.transform.DanceFlameTransformer;
+import org.jwildfire.create.tina.swing.FlameHolder;
 import org.jwildfire.image.SimpleImage;
 import org.jwildfire.swing.ImagePanel;
 
-public class RealtimeAnimRenderThread implements Runnable {
+public class RealtimeAnimRenderThread implements Runnable, FlameHolder {
   private final DancingFractalsController controller;
   private boolean forceAbort;
   private boolean running;
@@ -37,18 +38,17 @@ public class RealtimeAnimRenderThread implements Runnable {
   private int framesPerSecond = 12;
   private boolean drawTriangles = true;
   private long timeRenderStarted = 0;
-  private final DanceFlameHolder flameHolder;
   private final DanceFlameTransformer transformer;
   private GlobalScript globalScript = GlobalScript.NONE;
   private MotionSpeed globalSpeed = MotionSpeed.S1_1;
   private XFormScript xFormScript = XFormScript.NONE;
   private MotionSpeed xFormSpeed = MotionSpeed.S1_1;
   private static final int SPEED_REF_FRAMES = 180;
+  private Flame flame;
 
-  public RealtimeAnimRenderThread(DancingFractalsController pController, DanceFlameHolder pFlameHolder) {
+  public RealtimeAnimRenderThread(DancingFractalsController pController) {
     controller = pController;
-    flameHolder = pFlameHolder;
-    transformer = new DanceFlameTransformer(pFlameHolder);
+    transformer = new DanceFlameTransformer();
   }
 
   @Override
@@ -77,10 +77,8 @@ public class RealtimeAnimRenderThread implements Runnable {
           time = System.currentTimeMillis();
         }
         nextFrame = (long) (time + 1000.0 / (double) getFramesPerSecond() + 0.5);
-        Flame flame = flameHolder.getCurrFlame();
-        while (flameHolder.isFlameChanging()) {
-          flame = flameHolder.getCurrFlame().makeCopy();
-        }
+        // TODO
+        Flame flame = this.flame != null ? this.flame.makeCopy() : null;
         if (fftData != null) {
           short currFFT[] = fftData.getData(musicPlayer.getPosition());
           if (doDrawFFT && fftPanel != null) {
@@ -98,8 +96,6 @@ public class RealtimeAnimRenderThread implements Runnable {
             if (xFormTime > 1.0)
               xFormTime = 0.0;
 
-          }
-          if (!flameHolder.isCurrIsMorphing()) {
             transformer.transformFlame(flame, currFFT);
           }
         }
@@ -200,6 +196,16 @@ public class RealtimeAnimRenderThread implements Runnable {
 
   public void setXFormSpeed(MotionSpeed pXFormSpeed) {
     xFormSpeed = pXFormSpeed;
+  }
+
+  public void setFlame(Flame pFlame) {
+    flame = pFlame;
+  }
+
+  @Override
+  public Flame getFlame() {
+    // TODO
+    return flame;
   }
 
 }

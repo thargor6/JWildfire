@@ -37,8 +37,18 @@ public class AnimationService {
         flame.setCamPitch(camPitch);
       }
         break;
+      case ROTATE_PITCH_NEG: {
+        double camPitch = -360.0 * pGlobalTime;
+        flame.setCamPitch(camPitch);
+      }
+        break;
       case ROTATE_YAW: {
         double camYaw = 360.0 * pGlobalTime;
+        flame.setCamYaw(camYaw);
+      }
+        break;
+      case ROTATE_YAW_NEG: {
+        double camYaw = -360.0 * pGlobalTime;
         flame.setCamYaw(camYaw);
       }
         break;
@@ -54,6 +64,11 @@ public class AnimationService {
         break;
       case ROTATE_ROLL: {
         double camRoll = 360.0 * pGlobalTime;
+        flame.setCamRoll(camRoll);
+      }
+        break;
+      case ROTATE_ROLL_NEG: {
+        double camRoll = -360.0 * pGlobalTime;
         flame.setCamRoll(camRoll);
       }
         break;

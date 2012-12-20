@@ -21,10 +21,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.jwildfire.base.Prefs;
-import org.jwildfire.create.tina.animate.FlameMorphService;
 import org.jwildfire.create.tina.audio.RecordedFFT;
 import org.jwildfire.create.tina.base.Flame;
-import org.jwildfire.create.tina.dance.DanceFlameHolder;
 import org.jwildfire.create.tina.dance.FlamePreparer;
 import org.jwildfire.create.tina.dance.RealtimeAnimRenderThread;
 import org.jwildfire.create.tina.dance.transform.DanceFlameTransformer;
@@ -34,17 +32,15 @@ public class PostRecordFlameGenerator {
   private final RealtimeAnimRenderThread thread;
   private final ActionRecorder recorder;
   private final Prefs prefs;
-  private final DanceFlameHolder flameHolder;
   private final RecordedFFT fftData;
   private final DanceFlameTransformer transformer;
 
-  public PostRecordFlameGenerator(Prefs pPrefs, ActionRecorder pRecorder, RealtimeAnimRenderThread pThread, DanceFlameHolder pFlameHolder, RecordedFFT pFFTData) {
+  public PostRecordFlameGenerator(Prefs pPrefs, ActionRecorder pRecorder, RealtimeAnimRenderThread pThread, RecordedFFT pFFTData) {
     prefs = pPrefs;
     recorder = pRecorder;
     thread = pThread;
-    flameHolder = pFlameHolder;
     fftData = pFFTData;
-    transformer = new DanceFlameTransformer(pFlameHolder);
+    transformer = new DanceFlameTransformer();
   }
 
   public void createRecordedFlameFiles(String pAbsolutePath) throws Exception {
@@ -52,7 +48,6 @@ public class PostRecordFlameGenerator {
       int actionIdx = 0;
       StartAction startAction = (StartAction) recorder.getRecordedActions().get(actionIdx++);
       Flame currFlame = startAction.getFlame();
-      flameHolder.changeFlame(currFlame, false);
       List<Flame> flames = new ArrayList<Flame>();
 
       RecordedAction nextAction = recorder.getRecordedActions().get(actionIdx++);
@@ -74,26 +69,29 @@ public class PostRecordFlameGenerator {
         nextFrame = (long) (time + 1000.0 / (double) thread.getFramesPerSecond() + 0.5);
 
         Flame flame;
-        if (nextFlame != null && nextFlame != null) {
-          if (morphFrame < morphFrameCount) {
-            flame = FlameMorphService.morphFlames(prefs, prevFlame, nextFlame, morphFrame++, morphFrameCount);
-            flameHolder.changeFlame(flame, true);
-          }
-          else {
-            flame = currFlame = nextFlame;
-            flameHolder.changeFlame(flame, false);
-            nextFlame = null;
-          }
-        }
-        else {
-          flame = currFlame;
-        }
 
+        // TODO
+
+        flame = null;
+        /*        
+                if (nextFlame != null && nextFlame != null) {
+                  if (morphFrame < morphFrameCount) {
+                    flame = FlameMorphService.morphFlames(prefs, prevFlame, nextFlame, morphFrame++, morphFrameCount);
+                    flameHolder.changeFlame(flame, true);
+                  }
+                  else {
+                    flame = currFlame = nextFlame;
+                    flameHolder.changeFlame(flame, false);
+                    nextFlame = null;
+                  }
+                }
+                else {
+                  flame = currFlame;
+                }
+        */
         if (fftData != null) {
           short currFFT[] = fftData.getDataByTimeOffset(time - timeRenderStarted);
-          if (!flameHolder.isCurrIsMorphing()) {
-            transformer.transformFlame(flame, currFFT);
-          }
+          transformer.transformFlame(flame, currFFT);
         }
 
         new FlamePreparer(prefs).prepareFlame(flame);
@@ -108,6 +106,8 @@ public class PostRecordFlameGenerator {
             prevFlame = currFlame;
             morphFrameCount = ((FlameChangeAction) nextAction).getMorphFrameCount();
             morphFrame = 1;
+            // todo
+            /*
             if (morphFrameCount > 1) {
               currFlame = FlameMorphService.morphFlames(prefs, prevFlame, nextFlame, morphFrame++, morphFrameCount);
               flameHolder.changeFlame(currFlame, true);
@@ -116,7 +116,7 @@ public class PostRecordFlameGenerator {
               currFlame = nextFlame;
               nextFlame = null;
               flameHolder.changeFlame(currFlame, false);
-            }
+            }*/
             nextAction = recorder.getRecordedActions().get(actionIdx++);
           }
           else {

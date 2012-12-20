@@ -54,7 +54,7 @@ public class FlamePanel extends ImagePanel {
   private static BasicStroke NORMAL_LINE = new BasicStroke(1.0f);
 
   private static final long serialVersionUID = 1L;
-  private final FlameHolder flameHolder;
+  private FlameHolder flameHolder;
 
   private boolean darkTriangles = false;
   private boolean drawImage = true;
@@ -258,14 +258,16 @@ public class FlamePanel extends ImagePanel {
   }
 
   private void paintTriangles(Graphics2D g) {
-    Flame flame = flameHolder.getFlame();
-    if (flame != null) {
-      g.setColor(editPostTransform ? (darkTriangles ? XFORM_POST_COLOR_DARK : XFORM_POST_COLOR) : (darkTriangles ? XFORM_COLOR_DARK : XFORM_COLOR));
-      for (XForm xForm : flame.getXForms()) {
-        drawXForm(g, xForm, false);
-      }
-      for (XForm xForm : flame.getFinalXForms()) {
-        drawXForm(g, xForm, true);
+    if (flameHolder != null) {
+      Flame flame = flameHolder.getFlame();
+      if (flame != null) {
+        g.setColor(editPostTransform ? (darkTriangles ? XFORM_POST_COLOR_DARK : XFORM_POST_COLOR) : (darkTriangles ? XFORM_COLOR_DARK : XFORM_COLOR));
+        for (XForm xForm : flame.getXForms()) {
+          drawXForm(g, xForm, false);
+        }
+        for (XForm xForm : flame.getFinalXForms()) {
+          drawXForm(g, xForm, true);
+        }
       }
     }
   }
@@ -767,6 +769,10 @@ public class FlamePanel extends ImagePanel {
       return true;
     }
     return false;
+  }
+
+  public void setFlameHolder(FlameHolder pFlameHolder) {
+    flameHolder = pFlameHolder;
   }
 
 }
