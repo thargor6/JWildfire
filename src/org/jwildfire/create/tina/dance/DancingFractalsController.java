@@ -244,14 +244,13 @@ public class DancingFractalsController {
     return graph1Panel;
   }
 
-  public void refreshFlameImage(Flame flame, boolean pDrawTriangles, double pFPS) {
+  public void refreshFlameImage(Flame flame, boolean pDrawTriangles, double pFPS, boolean pDrawFPS) {
     FlamePanel imgPanel = getFlamePanel();
     if (imgPanel == null)
       return;
     Rectangle bounds = imgPanel.getImageBounds();
     int width = bounds.width;
     int height = bounds.height;
-    boolean showFPS = true;
     if (width >= 16 && height >= 16) {
       RenderInfo info = new RenderInfo(width, height);
       if (flame != null) {
@@ -274,7 +273,7 @@ public class DancingFractalsController {
 
           RenderedFlame res = renderer.renderFlame(info);
           SimpleImage img = res.getImage();
-          if (showFPS) {
+          if (pDrawFPS) {
             TextTransformer txt = new TextTransformer();
             txt.setText1("fps: " + Tools.doubleToString(pFPS));
             txt.setAntialiasing(false);
@@ -376,10 +375,21 @@ public class DancingFractalsController {
     renderThread.setMusicPlayer(jLayer);
     renderThread.setFFTPanel(getGraph1Panel());
     renderThread.setFramesPerSecond(Integer.parseInt(framesPerSecondIEd.getText()));
-    renderThread.setGlobalScript((GlobalScript) globalScript1Cmb.getSelectedItem());
-    renderThread.setGlobalSpeed((MotionSpeed) globalSpeed1Cmb.getSelectedItem());
-    renderThread.setXFormScript((XFormScript) xFormScript1Cmb.getSelectedItem());
-    renderThread.setXFormSpeed((MotionSpeed) xFormSpeed1Cmb.getSelectedItem());
+    renderThread.setGlobalScript(0, (GlobalScript) globalScript1Cmb.getSelectedItem());
+    renderThread.setGlobalSpeed(0, (MotionSpeed) globalSpeed1Cmb.getSelectedItem());
+    renderThread.setXFormScript(0, (XFormScript) xFormScript1Cmb.getSelectedItem());
+    renderThread.setXFormSpeed(0, (MotionSpeed) xFormSpeed1Cmb.getSelectedItem());
+    renderThread.setGlobalScript(1, (GlobalScript) globalScript2Cmb.getSelectedItem());
+    renderThread.setGlobalSpeed(1, (MotionSpeed) globalSpeed2Cmb.getSelectedItem());
+    renderThread.setXFormScript(1, (XFormScript) xFormScript2Cmb.getSelectedItem());
+    renderThread.setXFormSpeed(1, (MotionSpeed) xFormSpeed2Cmb.getSelectedItem());
+    renderThread.setGlobalScript(2, (GlobalScript) globalScript3Cmb.getSelectedItem());
+    renderThread.setGlobalSpeed(2, (MotionSpeed) globalSpeed3Cmb.getSelectedItem());
+    renderThread.setXFormScript(2, (XFormScript) xFormScript3Cmb.getSelectedItem());
+    renderThread.setXFormSpeed(2, (MotionSpeed) xFormSpeed3Cmb.getSelectedItem());
+    renderThread.setDrawTriangles(drawTrianglesCbx.isSelected());
+    renderThread.setDrawFFT(drawFFTCbx.isSelected());
+    renderThread.setDrawFPS(drawFPSCbx.isSelected());
     new Thread(renderThread).start();
   }
 
@@ -465,78 +475,86 @@ public class DancingFractalsController {
     }
   }
 
-  public void dancingFlamesPoolTableClicked() {
-    if (!refreshing) {
-      boolean oldRefreshing = refreshing;
-      refreshing = true;
-      try {
-        // TODO
-        //renderFlameHolder.setNextFlame(poolFlameHolder.getFlame());
-        refreshPoolPreviewFlameImage(poolFlameHolder.getFlame());
-      }
-      finally {
-        refreshing = oldRefreshing;
-      }
-    }
+  private String getFlameCaption(Flame pFlame) {
+    return pFlame.getName().equals("") ? String.valueOf(pFlame.hashCode()) : pFlame.getName();
   }
 
   private void refreshPoolTable() {
-    final int COL_NO = 0;
-    final int COL_FLAME = 1;
-    final int COL_TRANSFORMS = 2;
-    poolTable.setModel(new DefaultTableModel() {
-      private static final long serialVersionUID = 1L;
+    boolean oldRefreshing = refreshing;
+    refreshing = true;
+    try {
+      final int COL_NO = 0;
+      final int COL_FLAME = 1;
+      final int COL_TRANSFORMS = 2;
+      poolTable.setModel(new DefaultTableModel() {
+        private static final long serialVersionUID = 1L;
 
-      @Override
-      public int getRowCount() {
-        return flames.size();
-      }
-
-      @Override
-      public int getColumnCount() {
-        return 3;
-      }
-
-      @Override
-      public String getColumnName(int columnIndex) {
-        switch (columnIndex) {
-          case COL_NO:
-            return "";
-          case COL_FLAME:
-            return "Flame";
-          case COL_TRANSFORMS:
-            return "Transforms";
+        @Override
+        public int getRowCount() {
+          return flames.size();
         }
-        return null;
-      }
 
-      @Override
-      public Object getValueAt(int rowIndex, int columnIndex) {
-        Flame flame = rowIndex < flames.size() ? flames.get(rowIndex) : null;
-        if (flame != null) {
+        @Override
+        public int getColumnCount() {
+          return 3;
+        }
+
+        @Override
+        public String getColumnName(int columnIndex) {
           switch (columnIndex) {
             case COL_NO:
-              return String.valueOf(rowIndex + 1);
+              return "";
             case COL_FLAME:
-              return flame.getName().equals("") ? flame.hashCode() : flame.getName();
+              return "Flame";
             case COL_TRANSFORMS:
-              return String.valueOf(flame.getXForms().size());
+              return "Transforms";
           }
+          return null;
         }
-        return null;
-      }
 
-      @Override
-      public boolean isCellEditable(int row, int column) {
-        return false;
-      }
+        @Override
+        public Object getValueAt(int rowIndex, int columnIndex) {
+          Flame flame = rowIndex < flames.size() ? flames.get(rowIndex) : null;
+          if (flame != null) {
+            switch (columnIndex) {
+              case COL_NO:
+                return String.valueOf(rowIndex + 1);
+              case COL_FLAME:
+                return getFlameCaption(flame);
+              case COL_TRANSFORMS:
+                return String.valueOf(flame.getXForms().size());
+            }
+          }
+          return null;
+        }
 
-    });
-    poolTable.getTableHeader().setFont(poolTable.getFont());
-    poolTable.getColumnModel().getColumn(COL_FLAME).setWidth(60);
-    poolTable.getColumnModel().getColumn(COL_TRANSFORMS).setWidth(16);
-    if (flames.size() > 0 && poolTable.getSelectedRow() < 0)
-      poolTable.setRowSelectionInterval(0, 0);
+        @Override
+        public boolean isCellEditable(int row, int column) {
+          return false;
+        }
+
+      });
+      poolTable.getTableHeader().setFont(poolTable.getFont());
+      poolTable.getColumnModel().getColumn(COL_FLAME).setWidth(60);
+      poolTable.getColumnModel().getColumn(COL_TRANSFORMS).setWidth(16);
+      if (flames.size() > 0 && poolTable.getSelectedRow() < 0)
+        poolTable.setRowSelectionInterval(0, 0);
+
+      Flame selFlame = flamesCmb.getSelectedIndex() >= 0 && flamesCmb.getSelectedIndex() < flames.size() ? flames.get(flamesCmb.getSelectedIndex()) : null;
+      int newSelIdx = -1;
+      flamesCmb.removeAllItems();
+      for (int i = 0; i < flames.size(); i++) {
+        Flame flame = flames.get(i);
+        if (newSelIdx < 0 && flame.equals(selFlame)) {
+          newSelIdx = i;
+        }
+        flamesCmb.addItem(getFlameCaption(flame));
+      }
+      flamesCmb.setSelectedIndex(newSelIdx >= 0 ? newSelIdx : flames.size() > 0 ? 0 : -1);
+    }
+    finally {
+      refreshing = oldRefreshing;
+    }
   }
 
   public void loadFlameFromClipboardButton_clicked() {
@@ -729,92 +747,117 @@ public class DancingFractalsController {
   }
 
   public void globalScriptCmb1_changed() {
-    // TODO Auto-generated method stub
     if (renderThread != null) {
-      renderThread.setGlobalScript((GlobalScript) globalScript1Cmb.getSelectedItem());
+      renderThread.setGlobalScript(0, (GlobalScript) globalScript1Cmb.getSelectedItem());
     }
-
   }
 
   public void xFormScriptCmb1_changed() {
-    // TODO Auto-generated method stub
     if (renderThread != null) {
-      renderThread.setXFormScript((XFormScript) xFormScript1Cmb.getSelectedItem());
+      renderThread.setXFormScript(0, (XFormScript) xFormScript1Cmb.getSelectedItem());
     }
   }
 
   public void globalSpeedCmb1_changed() {
-    // TODO Auto-generated method stub
     if (renderThread != null) {
-      renderThread.setGlobalSpeed((MotionSpeed) globalSpeed1Cmb.getSelectedItem());
+      renderThread.setGlobalSpeed(0, (MotionSpeed) globalSpeed1Cmb.getSelectedItem());
     }
   }
 
   public void xFormSpeedCmb1_changed() {
-    // TODO Auto-generated method stub
     if (renderThread != null) {
-      renderThread.setXFormSpeed((MotionSpeed) xFormSpeed1Cmb.getSelectedItem());
+      renderThread.setXFormSpeed(0, (MotionSpeed) xFormSpeed1Cmb.getSelectedItem());
     }
   }
 
   public void globalScriptCmb2_changed() {
-    // TODO Auto-generated method stub
-
+    if (renderThread != null) {
+      renderThread.setGlobalScript(1, (GlobalScript) globalScript2Cmb.getSelectedItem());
+    }
   }
 
   public void globalScriptCmb3_changed() {
-    // TODO Auto-generated method stub
-
-  }
-
-  public void flameCmb_changed() {
-    // TODO Auto-generated method stub
-
+    if (renderThread != null) {
+      renderThread.setGlobalScript(2, (GlobalScript) globalScript3Cmb.getSelectedItem());
+    }
   }
 
   public void globalSpeedCmb2_changed() {
-    // TODO Auto-generated method stub
-
+    if (renderThread != null) {
+      renderThread.setGlobalSpeed(1, (MotionSpeed) globalSpeed2Cmb.getSelectedItem());
+    }
   }
 
   public void globalSpeedCmb3_changed() {
-    // TODO Auto-generated method stub
-
+    if (renderThread != null) {
+      renderThread.setGlobalSpeed(2, (MotionSpeed) globalSpeed3Cmb.getSelectedItem());
+    }
   }
 
   public void xFormScriptCmb2_changed() {
-    // TODO Auto-generated method stub
-
+    if (renderThread != null) {
+      renderThread.setXFormScript(1, (XFormScript) xFormScript2Cmb.getSelectedItem());
+    }
   }
 
   public void xFormScriptCmb3_changed() {
-    // TODO Auto-generated method stub
-
+    if (renderThread != null) {
+      renderThread.setXFormScript(2, (XFormScript) xFormScript3Cmb.getSelectedItem());
+    }
   }
 
   public void xFormSpeedCmb2_changed() {
-    // TODO Auto-generated method stub
-
+    if (renderThread != null) {
+      renderThread.setXFormSpeed(1, (MotionSpeed) xFormSpeed2Cmb.getSelectedItem());
+    }
   }
 
   public void xFormSpeedCmb3_changed() {
-    // TODO Auto-generated method stub
-
+    if (renderThread != null) {
+      renderThread.setXFormSpeed(2, (MotionSpeed) xFormSpeed3Cmb.getSelectedItem());
+    }
   }
 
   public void drawTrianglesCBx_changed() {
-    // TODO Auto-generated method stub
-
+    if (renderThread != null) {
+      renderThread.setDrawTriangles(drawTrianglesCbx.isSelected());
+    }
   }
 
   public void drawFFTCBx_changed() {
-    // TODO Auto-generated method stub
-
+    if (renderThread != null) {
+      renderThread.setDrawFFT(drawFFTCbx.isSelected());
+    }
   }
 
   public void drawFPSCBx_changed() {
-    // TODO Auto-generated method stub
+    if (renderThread != null) {
+      renderThread.setDrawFPS(drawFPSCbx.isSelected());
+    }
+  }
 
+  public void dancingFlamesPoolTableClicked() {
+    if (!refreshing) {
+      boolean oldRefreshing = refreshing;
+      refreshing = true;
+      try {
+        // TODO
+        //renderFlameHolder.setNextFlame(poolFlameHolder.getFlame());
+        refreshPoolPreviewFlameImage(poolFlameHolder.getFlame());
+      }
+      finally {
+        refreshing = oldRefreshing;
+      }
+    }
+  }
+
+  public void flameCmb_changed() {
+    if (!refreshing) {
+      Flame selFlame = flamesCmb.getSelectedIndex() >= 0 && flamesCmb.getSelectedIndex() < flames.size() ? flames.get(flamesCmb.getSelectedIndex()) : null;
+      if (selFlame != null && renderThread != null) {
+        renderThread.setFlame(selFlame);
+      }
+    }
   }
 
 }

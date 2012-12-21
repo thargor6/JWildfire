@@ -36,15 +36,17 @@ public class RealtimeAnimRenderThread implements Runnable, FlameHolder {
   private JLayerInterface musicPlayer;
   private ImagePanel fftPanel;
   private int framesPerSecond = 12;
-  private boolean drawTriangles = true;
   private long timeRenderStarted = 0;
   private final DanceFlameTransformer transformer;
-  private GlobalScript globalScript = GlobalScript.NONE;
-  private MotionSpeed globalSpeed = MotionSpeed.S1_1;
-  private XFormScript xFormScript = XFormScript.NONE;
-  private MotionSpeed xFormSpeed = MotionSpeed.S1_1;
+  private GlobalScript globalScript[] = { GlobalScript.NONE, GlobalScript.NONE, GlobalScript.NONE };
+  private MotionSpeed globalSpeed[] = { MotionSpeed.S1_1, MotionSpeed.S1_1, MotionSpeed.S1_1 };
+  private XFormScript xFormScript[] = { XFormScript.NONE, XFormScript.NONE, XFormScript.NONE };
+  private MotionSpeed xFormSpeed[] = { MotionSpeed.S1_1, MotionSpeed.S1_1, MotionSpeed.S1_1 };
   private static final int SPEED_REF_FRAMES = 180;
   private Flame flame;
+  private boolean drawTriangles = true;
+  private boolean drawFFT = true;
+  private boolean drawFPS = true;
 
   public RealtimeAnimRenderThread(DancingFractalsController pController) {
     controller = pController;
@@ -54,15 +56,15 @@ public class RealtimeAnimRenderThread implements Runnable, FlameHolder {
   @Override
   public void run() {
     setRunning(forceAbort = false);
-    boolean doDrawFFT = true;
     try {
       long fpsMeasureMentFrameCount = 0;
       long startFPSMeasurement = System.currentTimeMillis();
       long nextFrame = timeRenderStarted = startFPSMeasurement;
       double fps = 0.0;
       setRunning(true);
-      double globalTime = 0.0;
-      double xFormTime = 0.0;
+      final int scriptMaxCount = globalScript.length;
+      double globalTime[] = new double[scriptMaxCount];
+      double xFormTime[] = new double[scriptMaxCount];
       int refFrames = (int) (SPEED_REF_FRAMES / (double) framesPerSecond * 25.0 + 0.5);
 
       while (!forceAbort) {
@@ -81,21 +83,22 @@ public class RealtimeAnimRenderThread implements Runnable, FlameHolder {
         Flame flame = this.flame != null ? this.flame.makeCopy() : null;
         if (fftData != null) {
           short currFFT[] = fftData.getData(musicPlayer.getPosition());
-          if (doDrawFFT && fftPanel != null) {
+          if (drawFFT && fftPanel != null) {
             SimpleImage img = fftPanel.getImage();
             drawFFT(img, currFFT);
             fftPanel.repaint();
           }
           if (flame != null) {
-            flame = AnimationService.createFlame(flame, globalScript, globalTime, xFormScript, xFormTime, controller.getParentCtrl().getPrefs());
-            globalTime += globalSpeed.calcTime(2, refFrames, false);
-            if (globalTime > 1.0)
-              globalTime = 0.0;
+            for (int s = 0; s < scriptMaxCount; s++) {
+              flame = AnimationService.createFlame(flame, globalScript[s], globalTime[s], xFormScript[s], xFormTime[s], controller.getParentCtrl().getPrefs());
+              globalTime[s] += globalSpeed[s].calcTime(2, refFrames, false);
+              if (globalTime[s] > 1.0)
+                globalTime[s] = 0.0;
 
-            xFormTime += xFormSpeed.calcTime(2, refFrames, false);
-            if (xFormTime > 1.0)
-              xFormTime = 0.0;
-
+              xFormTime[s] += xFormSpeed[s].calcTime(2, refFrames, false);
+              if (xFormTime[s] > 1.0)
+                xFormTime[s] = 0.0;
+            }
             transformer.transformFlame(flame, currFFT);
           }
         }
@@ -106,7 +109,7 @@ public class RealtimeAnimRenderThread implements Runnable, FlameHolder {
           fpsMeasureMentFrameCount = 0;
           startFPSMeasurement = System.currentTimeMillis();
         }
-        controller.refreshFlameImage(flame, drawTriangles, fps);
+        controller.refreshFlameImage(flame, drawTriangles, fps, drawFPS);
       }
     }
     finally {
@@ -162,10 +165,6 @@ public class RealtimeAnimRenderThread implements Runnable, FlameHolder {
     framesPerSecond = pFPS;
   }
 
-  public void setDrawTriangles(boolean drawTriangles) {
-    this.drawTriangles = drawTriangles;
-  }
-
   public boolean isRunning() {
     return running;
   }
@@ -182,20 +181,20 @@ public class RealtimeAnimRenderThread implements Runnable, FlameHolder {
     return framesPerSecond;
   }
 
-  public void setGlobalScript(GlobalScript pGlobalScript) {
-    globalScript = pGlobalScript;
+  public void setGlobalScript(int pIdx, GlobalScript pGlobalScript) {
+    globalScript[pIdx] = pGlobalScript;
   }
 
-  public void setXFormScript(XFormScript pXFormScript) {
-    xFormScript = pXFormScript;
+  public void setXFormScript(int pIdx, XFormScript pXFormScript) {
+    xFormScript[pIdx] = pXFormScript;
   }
 
-  public void setGlobalSpeed(MotionSpeed pGlobalSpeed) {
-    globalSpeed = pGlobalSpeed;
+  public void setGlobalSpeed(int pIdx, MotionSpeed pGlobalSpeed) {
+    globalSpeed[pIdx] = pGlobalSpeed;
   }
 
-  public void setXFormSpeed(MotionSpeed pXFormSpeed) {
-    xFormSpeed = pXFormSpeed;
+  public void setXFormSpeed(int pIdx, MotionSpeed pXFormSpeed) {
+    xFormSpeed[pIdx] = pXFormSpeed;
   }
 
   public void setFlame(Flame pFlame) {
@@ -208,4 +207,15 @@ public class RealtimeAnimRenderThread implements Runnable, FlameHolder {
     return flame;
   }
 
+  public void setDrawFFT(boolean pDrawFFT) {
+    drawFFT = pDrawFFT;
+  }
+
+  public void setDrawFPS(boolean pDrawFPS) {
+    drawFPS = pDrawFPS;
+  }
+
+  public void setDrawTriangles(boolean pDrawTriangles) {
+    drawTriangles = pDrawTriangles;
+  }
 }
