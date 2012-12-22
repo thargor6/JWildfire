@@ -17,6 +17,7 @@
 package org.jwildfire.transform;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
@@ -103,17 +104,18 @@ public class TextTransformer extends Mesh2DTransformer {
   @Property(description = "Enable antialiasing")
   private boolean antialiasing;
 
-  @Override
-  protected void performPixelTransformation(WFImage pImg) {
-    SimpleImage img = (SimpleImage) pImg;
-    List<TextRow> rows = getRows();
-    if ((rows == null) || (rows.size() < 1))
-      return;
+  private class TextRenderInfo {
+    private Font font;
+    int maxWidth = 0, maxHeight = 0, maxRow = 0;
+    int yOffset = 0;
+    int areaHeight;
+  }
+
+  private TextRenderInfo createTextRenderInfo(SimpleImage pImg, List<TextRow> pRows) {
     // create font and calculate the row sizes
-    Font font;
-    int maxWidth = 0, maxHeight = 0, maxRow = 0, yOffset;
+    TextRenderInfo res = new TextRenderInfo();
     {
-      Graphics g = img.getGraphics();
+      Graphics g = pImg.getGraphics();
       {
         int fontStyle;
         switch (this.fontStyle) {
@@ -127,31 +129,51 @@ public class TextTransformer extends Mesh2DTransformer {
             fontStyle = Font.PLAIN;
             break;
         }
-        font = new Font(this.fontName, fontStyle, this.fontSize);
+        res.font = new Font(this.fontName, fontStyle, this.fontSize);
       }
-      g.setFont(font);
+      g.setFont(res.font);
       FontMetrics fm = g.getFontMetrics();
-      yOffset = fm.getMaxAscent();
+      res.yOffset = fm.getMaxAscent();
       FontRenderContext frc = fm.getFontRenderContext();
-      for (TextRow row : rows) {
-        Rectangle2D rect = font.getStringBounds(row.text, frc);
+      for (TextRow row : pRows) {
+        Rectangle2D rect = res.font.getStringBounds(row.text, frc);
         row.width = (int) (rect.getWidth() + 0.5);
         row.height = (int) (rect.getHeight() + 0.5);
         if (this.mode == Mode.OUTLINE) {
           row.width += 2 * this.outlineWidth;
           row.height += 2 * this.outlineWidth;
         }
-        if (row.width > maxWidth)
-          maxWidth = row.width;
-        if (row.height > maxHeight)
-          maxHeight = row.height;
-        if (row.row > maxRow)
-          maxRow = row.row;
+        if (row.width > res.maxWidth)
+          res.maxWidth = row.width;
+        if (row.height > res.maxHeight)
+          res.maxHeight = row.height;
+        if (row.row > res.maxRow)
+          res.maxRow = row.row;
       }
     }
+    res.areaHeight = (res.maxRow + 1) * res.maxHeight;
+    return res;
+  }
+
+  public Dimension calculateTextSize() {
+    SimpleImage img = new SimpleImage(320, 256);
+    List<TextRow> rows = getRows();
+    if ((rows == null) || (rows.size() < 1))
+      return new Dimension(0, 0);
+    TextRenderInfo renderInfo = createTextRenderInfo(img, rows);
+    return new Dimension(renderInfo.maxWidth, renderInfo.areaHeight);
+  }
+
+  @Override
+  protected void performPixelTransformation(WFImage pImg) {
+    SimpleImage img = (SimpleImage) pImg;
+    List<TextRow> rows = getRows();
+    if ((rows == null) || (rows.size() < 1))
+      return;
+
     // calculate the offsets
     // int areaWidth = maxWidth;
-    int areaHeight = (maxRow + 1) * maxHeight;
+    TextRenderInfo renderInfo = createTextRenderInfo(img, rows);
     int width = pImg.getImageWidth();
     int height = pImg.getImageHeight();
     for (TextRow row : rows) {
@@ -168,13 +190,13 @@ public class TextTransformer extends Mesh2DTransformer {
       }
       switch (vAlign) {
         case CENTRE:
-          row.top = (height - areaHeight) / 2 + row.row * maxHeight;
+          row.top = (height - renderInfo.areaHeight) / 2 + row.row * renderInfo.maxHeight;
           break;
         case TOP:
-          row.top = row.row * maxHeight;
+          row.top = row.row * renderInfo.maxHeight;
           break;
         case BOTTOM:
-          row.top = height - (maxRow + 1 - row.row) * maxHeight;
+          row.top = height - (renderInfo.maxRow + 1 - row.row) * renderInfo.maxHeight;
           break;
       }
     }
@@ -190,7 +212,7 @@ public class TextTransformer extends Mesh2DTransformer {
     switch (this.mode) {
       case NORMAL: {
         Graphics g = img.getGraphics();
-        g.setFont(font);
+        g.setFont(renderInfo.font);
         g.setColor(this.color);
         Graphics2D g2d = (Graphics2D) g;
         if (antialiasing) {
@@ -198,14 +220,14 @@ public class TextTransformer extends Mesh2DTransformer {
               RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
         }
         for (TextRow row : rows) {
-          g.drawString(row.text, offLeft + row.left, offRight + row.top + yOffset);
+          g.drawString(row.text, offLeft + row.left, offRight + row.top + renderInfo.yOffset);
         }
       }
         break;
       case OUTLINE: {
         SimpleImage textImg = new SimpleImage(width, height);
         Graphics g = textImg.getGraphics();
-        g.setFont(font);
+        g.setFont(renderInfo.font);
         g.setColor(this.color);
         Graphics2D g2d = (Graphics2D) g;
         if (antialiasing) {
@@ -213,7 +235,7 @@ public class TextTransformer extends Mesh2DTransformer {
               RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
         }
         for (TextRow row : rows) {
-          g.drawString(row.text, offLeft + row.left, offRight + row.top + yOffset);
+          g.drawString(row.text, offLeft + row.left, offRight + row.top + renderInfo.yOffset);
         }
         SimpleImage dilateImg = textImg.clone();
         {

@@ -43,14 +43,16 @@ public class RealtimeAnimRenderThread implements Runnable, FlameHolder {
   private XFormScript xFormScript[] = { XFormScript.NONE, XFormScript.NONE, XFormScript.NONE };
   private MotionSpeed xFormSpeed[] = { MotionSpeed.S1_1, MotionSpeed.S1_1, MotionSpeed.S1_1 };
   private static final int SPEED_REF_FRAMES = 180;
-  private Flame flame;
+  private final FlameStack flameStack;
+  private Flame currFlame;
   private boolean drawTriangles = true;
   private boolean drawFFT = true;
   private boolean drawFPS = true;
 
-  public RealtimeAnimRenderThread(DancingFractalsController pController) {
+  public RealtimeAnimRenderThread(DancingFractalsController pController, FlameStack pFlameStack) {
     controller = pController;
     transformer = new DanceFlameTransformer();
+    flameStack = pFlameStack;
   }
 
   @Override
@@ -79,8 +81,9 @@ public class RealtimeAnimRenderThread implements Runnable, FlameHolder {
           time = System.currentTimeMillis();
         }
         nextFrame = (long) (time + 1000.0 / (double) getFramesPerSecond() + 0.5);
-        // TODO
-        Flame flame = this.flame != null ? this.flame.makeCopy() : null;
+        Flame flame = flameStack.getFlame();
+        if (flame != null)
+          flame = flame.makeCopy();
         if (fftData != null) {
           short currFFT[] = fftData.getData(musicPlayer.getPosition());
           if (drawFFT && fftPanel != null) {
@@ -109,6 +112,7 @@ public class RealtimeAnimRenderThread implements Runnable, FlameHolder {
           fpsMeasureMentFrameCount = 0;
           startFPSMeasurement = System.currentTimeMillis();
         }
+        currFlame = flame;
         controller.refreshFlameImage(flame, drawTriangles, fps, drawFPS);
       }
     }
@@ -197,14 +201,9 @@ public class RealtimeAnimRenderThread implements Runnable, FlameHolder {
     xFormSpeed[pIdx] = pXFormSpeed;
   }
 
-  public void setFlame(Flame pFlame) {
-    flame = pFlame;
-  }
-
   @Override
   public Flame getFlame() {
-    // TODO
-    return flame;
+    return currFlame;
   }
 
   public void setDrawFFT(boolean pDrawFFT) {

@@ -122,6 +122,7 @@ public class DancingFractalsController {
   private boolean refreshing;
   private RealtimeAnimRenderThread renderThread;
   private ActionRecorder actionRecorder;
+  private FlameStack flameStack;
 
   private RecordedFFT fft;
   private String soundFilename;
@@ -368,9 +369,13 @@ public class DancingFractalsController {
 
   public void startRender() throws Exception {
     stopRender();
-    renderThread = new RealtimeAnimRenderThread(this);
+    flameStack = new FlameStack(this.prefs);
+    {
+      Flame selFlame = flamesCmb.getSelectedIndex() >= 0 && flamesCmb.getSelectedIndex() < flames.size() ? flames.get(flamesCmb.getSelectedIndex()) : null;
+      flameStack.addFlame(selFlame, 0);
+    }
+    renderThread = new RealtimeAnimRenderThread(this, flameStack);
     actionRecorder = new ActionRecorder(renderThread);
-    renderThread.setFlame(poolFlameHolder.getFlame());
     renderThread.setFFTData(fft);
     renderThread.setMusicPlayer(jLayer);
     renderThread.setFFTPanel(getGraph1Panel());
@@ -855,7 +860,7 @@ public class DancingFractalsController {
     if (!refreshing) {
       Flame selFlame = flamesCmb.getSelectedIndex() >= 0 && flamesCmb.getSelectedIndex() < flames.size() ? flames.get(flamesCmb.getSelectedIndex()) : null;
       if (selFlame != null && renderThread != null) {
-        renderThread.setFlame(selFlame);
+        flameStack.addFlame(selFlame, Integer.parseInt(morphFrameCountIEd.getText()));
       }
     }
   }

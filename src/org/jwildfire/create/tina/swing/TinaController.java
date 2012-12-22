@@ -19,6 +19,7 @@ package org.jwildfire.create.tina.swing;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
@@ -116,6 +117,8 @@ import org.jwildfire.swing.ErrorHandler;
 import org.jwildfire.swing.ImageFileChooser;
 import org.jwildfire.swing.ImagePanel;
 import org.jwildfire.swing.MainController;
+
+import com.l2fprod.common.swing.JFontChooser;
 
 public class TinaController implements FlameHolder, JobRenderThreadController, ScriptRunnerEnvironment, UndoManagerHolder<Flame> {
   private static final double SLIDER_SCALE_PERSPECTIVE = 100.0;
@@ -3216,6 +3219,23 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
             String rName = var.getFunc().getRessourceNames()[idx];
             RessourceType resType = var.getFunc().getRessourceType(rName);
             switch (resType) {
+              case FONT_NAME: {
+                String oldFontname = null;
+                {
+                  byte val[] = var.getFunc().getRessourceValues()[idx];
+                  if (val != null) {
+                    oldFontname = new String(val);
+                  }
+                }
+                Font oldFont = new Font(oldFontname != null ? oldFontname : "Arial", Font.PLAIN, 24);
+                Font selectedFont = JFontChooser.showDialog(centerPanel, "Choose font", oldFont);
+                if (selectedFont != null) {
+                  String valStr = selectedFont.getFontName();
+                  byte[] valByteArray = valStr != null ? valStr.getBytes() : null;
+                  var.getFunc().setRessource(rName, valByteArray);
+                }
+              }
+                break;
               case IMAGE_FILENAME: {
                 String oldFilename = null;
                 {

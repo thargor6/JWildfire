@@ -300,6 +300,8 @@ public class VariationFuncList {
     registerVariationFunc(FractSalamanderWFFunc.class);
     //registerVariationFunc(FractFormulaJuliaWFFunc.class);
     //registerVariationFunc(FractFormulaMandWFFunc.class);
+
+    registerVariationFunc(TextWFFunc.class);
   }
 
   private static void registerVariationFunc(
