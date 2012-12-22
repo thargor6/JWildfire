@@ -58,11 +58,11 @@ public class RessourceManager {
     return res;
   }
 
-  public static Object getRessource(String pKey) throws Exception {
+  public static Object getRessource(String pKey) {
     return ressourceMap.get(pKey);
   }
 
-  public static void putRessource(String pKey, Object pRessource) throws Exception {
+  public static void putRessource(String pKey, Object pRessource) {
     ressourceMap.put(pKey, pRessource);
   }
 }

@@ -17,5 +17,5 @@
 package org.jwildfire.create.tina.variation;
 
 public enum RessourceType {
-  BYTEARRAY, IMAGE_FILENAME
+  BYTEARRAY, IMAGE_FILENAME, FONT_NAME
 }
