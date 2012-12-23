@@ -370,10 +370,8 @@ public class DancingFractalsController {
   public void startRender() throws Exception {
     stopRender();
     flameStack = new FlameStack(this.prefs);
-    {
-      Flame selFlame = flamesCmb.getSelectedIndex() >= 0 && flamesCmb.getSelectedIndex() < flames.size() ? flames.get(flamesCmb.getSelectedIndex()) : null;
-      flameStack.addFlame(selFlame, 0);
-    }
+    Flame selFlame = flamesCmb.getSelectedIndex() >= 0 && flamesCmb.getSelectedIndex() < flames.size() ? flames.get(flamesCmb.getSelectedIndex()) : null;
+    flameStack.addFlame(selFlame, 0);
     renderThread = new RealtimeAnimRenderThread(this, flameStack);
     actionRecorder = new ActionRecorder(renderThread);
     renderThread.setFFTData(fft);
@@ -395,6 +393,7 @@ public class DancingFractalsController {
     renderThread.setDrawTriangles(drawTrianglesCbx.isSelected());
     renderThread.setDrawFFT(drawFFTCbx.isSelected());
     renderThread.setDrawFPS(drawFPSCbx.isSelected());
+    actionRecorder.recordStart(selFlame);
     new Thread(renderThread).start();
   }
 
@@ -681,6 +680,20 @@ public class DancingFractalsController {
     shuffleFlamesBtn.setEnabled(flames != null && flames.size() > 0);
     doRecordCBx.setEnabled(!running);
     saveAllFlamesBtn.setEnabled(!running && flames != null && flames.size() > 0);
+
+    globalScript1Cmb.setEnabled(false);
+    globalSpeed1Cmb.setEnabled(false);
+    globalScript2Cmb.setEnabled(false);
+    globalSpeed2Cmb.setEnabled(false);
+    globalScript3Cmb.setEnabled(false);
+    globalSpeed3Cmb.setEnabled(false);
+    xFormScript1Cmb.setEnabled(false);
+    xFormSpeed1Cmb.setEnabled(false);
+    xFormScript2Cmb.setEnabled(false);
+    xFormSpeed2Cmb.setEnabled(false);
+    xFormScript3Cmb.setEnabled(false);
+    xFormSpeed3Cmb.setEnabled(false);
+
   }
 
   public void shuffleFlamesBtn_clicked() {
@@ -842,25 +855,17 @@ public class DancingFractalsController {
   }
 
   public void dancingFlamesPoolTableClicked() {
-    if (!refreshing) {
-      boolean oldRefreshing = refreshing;
-      refreshing = true;
-      try {
-        // TODO
-        //renderFlameHolder.setNextFlame(poolFlameHolder.getFlame());
-        refreshPoolPreviewFlameImage(poolFlameHolder.getFlame());
-      }
-      finally {
-        refreshing = oldRefreshing;
-      }
-    }
+    refreshPoolPreviewFlameImage(poolFlameHolder.getFlame());
   }
 
   public void flameCmb_changed() {
     if (!refreshing) {
       Flame selFlame = flamesCmb.getSelectedIndex() >= 0 && flamesCmb.getSelectedIndex() < flames.size() ? flames.get(flamesCmb.getSelectedIndex()) : null;
       if (selFlame != null && renderThread != null) {
-        flameStack.addFlame(selFlame, Integer.parseInt(morphFrameCountIEd.getText()));
+        int morphFrameCount = Integer.parseInt(morphFrameCountIEd.getText());
+        flameStack.addFlame(selFlame, morphFrameCount);
+        if (actionRecorder != null)
+          actionRecorder.recordFlameChange(selFlame, morphFrameCount);
       }
     }
   }

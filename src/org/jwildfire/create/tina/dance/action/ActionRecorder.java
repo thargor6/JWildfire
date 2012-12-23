@@ -31,15 +31,12 @@ public class ActionRecorder {
   }
 
   public void recordFlameChange(Flame pFlame, int pMorphFrameCount) {
-    if (!thread.isRunning()) {
-      getRecordedActions().clear();
-      getRecordedActions().add(new StartAction(pFlame));
-    }
-    else {
-      getRecordedActions().add(new FlameChangeAction(System.currentTimeMillis() - thread.getTimeRenderStarted(), pFlame, pMorphFrameCount));
-    }
+    getRecordedActions().add(new FlameChangeAction(System.currentTimeMillis() - thread.getTimeRenderStarted(), pFlame, pMorphFrameCount));
+  }
 
-    System.out.println(getRecordedActions().get(getRecordedActions().size() - 1).getTime());
+  public void recordStart(Flame pFlame) {
+    getRecordedActions().clear();
+    getRecordedActions().add(new StartAction(pFlame));
   }
 
   public void recordStop() {

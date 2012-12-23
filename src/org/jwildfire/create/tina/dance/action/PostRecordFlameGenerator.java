@@ -24,6 +24,7 @@ import org.jwildfire.base.Prefs;
 import org.jwildfire.create.tina.audio.RecordedFFT;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.dance.FlamePreparer;
+import org.jwildfire.create.tina.dance.FlameStack;
 import org.jwildfire.create.tina.dance.RealtimeAnimRenderThread;
 import org.jwildfire.create.tina.dance.transform.DanceFlameTransformer;
 import org.jwildfire.create.tina.io.Flam3Writer;
@@ -45,16 +46,15 @@ public class PostRecordFlameGenerator {
 
   public void createRecordedFlameFiles(String pAbsolutePath) throws Exception {
     if (recorder.getRecordedActions().size() >= 2) {
-      int actionIdx = 0;
-      StartAction startAction = (StartAction) recorder.getRecordedActions().get(actionIdx++);
-      Flame currFlame = startAction.getFlame();
       List<Flame> flames = new ArrayList<Flame>();
+      int actionIdx = 0;
 
+      StartAction startAction = (StartAction) recorder.getRecordedActions().get(actionIdx++);
+      FlameStack flameStack = new FlameStack(prefs);
+      flameStack.addFlame(startAction.getFlame(), 0);
       RecordedAction nextAction = recorder.getRecordedActions().get(actionIdx++);
       long timeRenderStarted = System.currentTimeMillis();
       long nextFrame = (long) (timeRenderStarted + 1000.0 / (double) thread.getFramesPerSecond() + 0.5);
-      int morphFrameCount = 0, morphFrame = 0;
-      Flame nextFlame = null, prevFlame = null;
       while (true) {
         long time = System.currentTimeMillis();
         while (time < nextFrame) {
@@ -68,27 +68,8 @@ public class PostRecordFlameGenerator {
         }
         nextFrame = (long) (time + 1000.0 / (double) thread.getFramesPerSecond() + 0.5);
 
-        Flame flame;
+        Flame flame = flameStack.getFlame();
 
-        // TODO
-
-        flame = null;
-        /*        
-                if (nextFlame != null && nextFlame != null) {
-                  if (morphFrame < morphFrameCount) {
-                    flame = FlameMorphService.morphFlames(prefs, prevFlame, nextFlame, morphFrame++, morphFrameCount);
-                    flameHolder.changeFlame(flame, true);
-                  }
-                  else {
-                    flame = currFlame = nextFlame;
-                    flameHolder.changeFlame(flame, false);
-                    nextFlame = null;
-                  }
-                }
-                else {
-                  flame = currFlame;
-                }
-        */
         if (fftData != null) {
           short currFFT[] = fftData.getDataByTimeOffset(time - timeRenderStarted);
           transformer.transformFlame(flame, currFFT);
@@ -102,21 +83,7 @@ public class PostRecordFlameGenerator {
             break;
           }
           else if (nextAction instanceof FlameChangeAction) {
-            nextFlame = ((FlameChangeAction) nextAction).getFlame();
-            prevFlame = currFlame;
-            morphFrameCount = ((FlameChangeAction) nextAction).getMorphFrameCount();
-            morphFrame = 1;
-            // todo
-            /*
-            if (morphFrameCount > 1) {
-              currFlame = FlameMorphService.morphFlames(prefs, prevFlame, nextFlame, morphFrame++, morphFrameCount);
-              flameHolder.changeFlame(currFlame, true);
-            }
-            else {
-              currFlame = nextFlame;
-              nextFlame = null;
-              flameHolder.changeFlame(currFlame, false);
-            }*/
+            flameStack.addFlame(((FlameChangeAction) nextAction).getFlame(), ((FlameChangeAction) nextAction).getMorphFrameCount());
             nextAction = recorder.getRecordedActions().get(actionIdx++);
           }
           else {
@@ -124,8 +91,6 @@ public class PostRecordFlameGenerator {
           }
         }
       }
-
-      //      System.out.println("flames: " + flames.size() + " (fps: " + framesPerSecond + ")");
 
       if (flames.size() > 0) {
         File file = new File(pAbsolutePath);
@@ -155,5 +120,4 @@ public class PostRecordFlameGenerator {
       throw new Exception("No valid recording");
     }
   }
-
 }
