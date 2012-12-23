@@ -101,8 +101,8 @@ public class JulianDiscRandomFlameGenerator extends RandomFlameGenerator {
             "curve", "cylinder", "diamond", "disc", "eclipse", "edisc", "elliptic", "ex", "exp", "exponential",
             "eyefish", "fan", "fan2", "fisheye", "heart_wf", "hemisphere", "horseshoe", "hyperbolic", "julia",
             "julia3D", "julia3Dz", "julian", "juliascope", "linearT", "log", "mobius", "ngon", "oscilloscope",
-            "rings", "rings2", "scry", "sec", "sin", "sinh", "sinusoidal", "spherical", "swirl", "tan", "tangent",
-            "tanh", "boarders2" };
+            "rings", "rings2", "scry", "xtrb", "sec", "sin", "sinh", "sinusoidal", "spherical", "swirl", "tan",
+            "tangent", "tanh", "boarders2" };
         String varName = fncList[(int) (Math.random() * fncList.length)];
         xForm.addVariation(2.0 + Math.random() * 2.0, VariationFuncList.getVariationFuncInstance(varName, true));
       }

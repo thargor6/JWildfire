@@ -302,6 +302,7 @@ public class VariationFuncList {
     //registerVariationFunc(FractFormulaMandWFFunc.class);
 
     registerVariationFunc(TextWFFunc.class);
+    registerVariationFunc(XTrbFunc.class);
   }
 
   private static void registerVariationFunc(
