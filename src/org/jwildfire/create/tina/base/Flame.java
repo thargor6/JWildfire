@@ -25,6 +25,7 @@ import java.util.List;
 
 import org.jwildfire.base.QualityProfile;
 import org.jwildfire.base.ResolutionProfile;
+import org.jwildfire.create.tina.animate.AnimAware;
 import org.jwildfire.create.tina.edit.Assignable;
 import org.jwildfire.create.tina.palette.RGBPalette;
 import org.jwildfire.create.tina.variation.FlameTransformationContext;
@@ -32,31 +33,47 @@ import org.jwildfire.create.tina.variation.Variation;
 
 public class Flame implements Assignable<Flame>, Serializable {
   private static final long serialVersionUID = 1L;
+  @AnimAware
   private double centreX;
+  @AnimAware
   private double centreY;
   private int width;
   private int height;
+  @AnimAware
   private double camPitch;
+  @AnimAware
   private double camYaw;
+  @AnimAware
   private double camPerspective;
+  @AnimAware
   private double camRoll;
+  @AnimAware
   private double camZoom;
+  @AnimAware
   private double camZ;
+  @AnimAware
   private double camDOF;
   private int spatialOversample;
   private int colorOversample;
   private double spatialFilterRadius;
   private double sampleDensity;
+  @AnimAware
   private boolean bgTransparency;
+  @AnimAware
   private int bgColorRed;
+  @AnimAware
   private int bgColorGreen;
+  @AnimAware
   private int bgColorBlue;
   private double gamma;
   private double gammaThreshold;
   private double pixelsPerUnit;
   private int whiteLevel;
+  @AnimAware
   private double brightness;
+  @AnimAware
   private double contrast;
+  @AnimAware
   private double vibrancy;
   private boolean preserveZ;
   private String resolutionProfile;
@@ -64,9 +81,11 @@ public class Flame implements Assignable<Flame>, Serializable {
   private int deFilterRadius;
   private double deFilterAmount;
   private String name = "";
-
+  @AnimAware
   private RGBPalette palette = new RGBPalette();
+  @AnimAware
   private final List<XForm> xForms = new ArrayList<XForm>();
+  @AnimAware
   private final List<XForm> finalXForms = new ArrayList<XForm>();
   private ShadingInfo shadingInfo = new ShadingInfo();
   private String lastFilename = null;

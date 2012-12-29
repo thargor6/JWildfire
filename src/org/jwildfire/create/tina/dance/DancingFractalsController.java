@@ -48,6 +48,8 @@ import org.jwildfire.create.tina.audio.RecordedFFT;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.dance.action.ActionRecorder;
 import org.jwildfire.create.tina.dance.action.PostRecordFlameGenerator;
+import org.jwildfire.create.tina.dance.model.AnimationModelService;
+import org.jwildfire.create.tina.dance.model.PropertyNode;
 import org.jwildfire.create.tina.io.Flam3Reader;
 import org.jwildfire.create.tina.io.Flam3Writer;
 import org.jwildfire.create.tina.randomflame.RandomFlameGenerator;
@@ -364,6 +366,9 @@ public class DancingFractalsController {
       flames.add(pFlame);
       refreshPoolTable();
       enableControls();
+      // TODO
+      PropertyNode model = AnimationModelService.createModel(pFlame);
+      System.out.println(model.toXML());
     }
   }
 
@@ -680,20 +685,6 @@ public class DancingFractalsController {
     shuffleFlamesBtn.setEnabled(flames != null && flames.size() > 0);
     doRecordCBx.setEnabled(!running);
     saveAllFlamesBtn.setEnabled(!running && flames != null && flames.size() > 0);
-
-    globalScript1Cmb.setEnabled(false);
-    globalSpeed1Cmb.setEnabled(false);
-    globalScript2Cmb.setEnabled(false);
-    globalSpeed2Cmb.setEnabled(false);
-    globalScript3Cmb.setEnabled(false);
-    globalSpeed3Cmb.setEnabled(false);
-    xFormScript1Cmb.setEnabled(false);
-    xFormSpeed1Cmb.setEnabled(false);
-    xFormScript2Cmb.setEnabled(false);
-    xFormSpeed2Cmb.setEnabled(false);
-    xFormScript3Cmb.setEnabled(false);
-    xFormSpeed3Cmb.setEnabled(false);
-
   }
 
   public void shuffleFlamesBtn_clicked() {
@@ -871,3 +862,13 @@ public class DancingFractalsController {
   }
 
 }
+
+/*
+  
+  FlameAnimModel
+   *nodes
+   *
+  
+  FlameProperty
+    Path  
+ */

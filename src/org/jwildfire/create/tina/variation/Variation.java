@@ -21,13 +21,16 @@ import static org.jwildfire.base.MathLib.fabs;
 
 import java.io.Serializable;
 
+import org.jwildfire.create.tina.animate.AnimAware;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 import org.jwildfire.create.tina.edit.Assignable;
 
 public class Variation implements Assignable<Variation>, Serializable {
   private static final long serialVersionUID = 1L;
+  @AnimAware
   private double amount;
+  @AnimAware
   private VariationFunc func;
 
   public Variation() {

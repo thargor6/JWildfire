@@ -25,6 +25,7 @@ import java.util.Collections;
 import java.util.List;
 
 import org.jwildfire.base.MathLib;
+import org.jwildfire.create.tina.animate.AnimAware;
 import org.jwildfire.create.tina.edit.Assignable;
 import org.jwildfire.create.tina.random.RandomNumberGenerator.RandGenStatus;
 import org.jwildfire.create.tina.variation.FlameTransformationContext;
@@ -34,31 +35,50 @@ import org.jwildfire.create.tina.variation.VariationPriorityComparator;
 
 public final class XForm implements Assignable<XForm>, Serializable {
   private static final long serialVersionUID = 1L;
+  @AnimAware
   private double weight;
+  @AnimAware
   private double color;
+  @AnimAware
   private double colorSymmetry;
+  @AnimAware
   private double coeff00;
+  @AnimAware
   private double coeff01;
+  @AnimAware
   private double coeff10;
+  @AnimAware
   private double coeff11;
+  @AnimAware
   private double coeff20;
+  @AnimAware
   private double coeff21;
+  @AnimAware
   private double postCoeff00;
+  @AnimAware
   private double postCoeff01;
+  @AnimAware
   private double postCoeff10;
+  @AnimAware
   private double postCoeff11;
+  @AnimAware
   private double postCoeff20;
+  @AnimAware
   private double postCoeff21;
   private boolean hasPostCoeffs;
   private boolean hasCoeffs;
+  @AnimAware
   private final List<Variation> variations = new ArrayList<Variation>();
   private final List<Variation> sortedVariations = new ArrayList<Variation>();
   private Variation[] sortedVariationsArray = null;
   private final double modifiedWeights[] = new double[Constants.MAX_MOD_WEIGHT_COUNT]; // the same like "xaos" in Apophysis
+  @AnimAware
   private double opacity = 0.0;
   private final XForm[] nextAppliedXFormTable = new XForm[Constants.NEXT_APPLIED_XFORM_TABLE_SIZE];
   private DrawMode drawMode = DrawMode.NORMAL;
+  @AnimAware
   private double antialiasAmount = 0.0;
+  @AnimAware
   private double antialiasRadius = 0.5;
 
   public XForm() {
