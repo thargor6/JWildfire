@@ -19,23 +19,12 @@ package org.jwildfire.create.tina.dance.model;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PropertyNode {
-  private final String name;
-  private final Class<?> type;
+public class PropertyNode extends AbstractProperty {
   private final List<PlainProperty> properties = new ArrayList<PlainProperty>();
   private final List<PropertyNode> chields = new ArrayList<PropertyNode>();
 
   public PropertyNode(String pName, Class<?> pType) {
-    name = pName;
-    type = pType;
-  }
-
-  public String getName() {
-    return name;
-  }
-
-  public Class<?> getType() {
-    return type;
+    super(pName, pType);
   }
 
   public List<PlainProperty> getProperties() {

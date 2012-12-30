@@ -61,6 +61,7 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
 import javax.swing.JToggleButton;
+import javax.swing.JTree;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
@@ -491,7 +492,8 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       JComboBox pDancingFlamesGlobalScript1Cmb, JComboBox pDancingFlamesGlobalSpeed1Cmb, JComboBox pDancingFlamesGlobalScript2Cmb, JComboBox pDancingFlamesGlobalSpeed2Cmb,
       JComboBox pDancingFlamesGlobalScript3Cmb, JComboBox pDancingFlamesGlobalSpeed3Cmb, JComboBox pDancingFlamesXFormScript1Cmb, JComboBox pDancingFlamesXFormSpeed1Cmb,
       JComboBox pDancingFlamesXFormScript2Cmb, JComboBox pDancingFlamesXFormSpeed2Cmb, JComboBox pDancingFlamesXFormScript3Cmb, JComboBox pDancingFlamesXFormSpeed3Cmb,
-      JComboBox pDancingFlamesFlamesCmb, JCheckBox pDancingFlamesDrawTrianglesCBx, JCheckBox pDancingFlamesDrawFFTCBx, JCheckBox pDancingFlamesDrawFPSCBx) {
+      JComboBox pDancingFlamesFlamesCmb, JCheckBox pDancingFlamesDrawTrianglesCBx, JCheckBox pDancingFlamesDrawFFTCBx, JCheckBox pDancingFlamesDrawFPSCBx,
+      JTree pDancingFlamesFlamePropertiesTree) {
     tinaFrame = pTinaFrame;
     tinaFrameTitle = tinaFrame.getTitle();
     errorHandler = pErrorHandler;
@@ -507,7 +509,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
         pDancingFlamesSaveAllFlamesBtn, pDancingFlamesGlobalScript1Cmb, pDancingFlamesGlobalSpeed1Cmb, pDancingFlamesGlobalScript2Cmb, pDancingFlamesGlobalSpeed2Cmb,
         pDancingFlamesGlobalScript3Cmb, pDancingFlamesGlobalSpeed3Cmb, pDancingFlamesXFormScript1Cmb, pDancingFlamesXFormSpeed1Cmb,
         pDancingFlamesXFormScript2Cmb, pDancingFlamesXFormSpeed2Cmb, pDancingFlamesXFormScript3Cmb, pDancingFlamesXFormSpeed3Cmb, pDancingFlamesFlamesCmb,
-        pDancingFlamesDrawTrianglesCBx, pDancingFlamesDrawFFTCBx, pDancingFlamesDrawFPSCBx);
+        pDancingFlamesDrawTrianglesCBx, pDancingFlamesDrawFFTCBx, pDancingFlamesDrawFPSCBx, pDancingFlamesFlamePropertiesTree);
 
     cameraRollREd = pCameraRollREd;
     cameraRollSlider = pCameraRollSlider;

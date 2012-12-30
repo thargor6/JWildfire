@@ -35,8 +35,13 @@ import javax.swing.JPanel;
 import javax.swing.JSlider;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.JTree;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.TreeSelectionEvent;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreePath;
 
 import org.jwildfire.base.Prefs;
 import org.jwildfire.base.Tools;
@@ -49,6 +54,7 @@ import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.dance.action.ActionRecorder;
 import org.jwildfire.create.tina.dance.action.PostRecordFlameGenerator;
 import org.jwildfire.create.tina.dance.model.AnimationModelService;
+import org.jwildfire.create.tina.dance.model.PlainProperty;
 import org.jwildfire.create.tina.dance.model.PropertyNode;
 import org.jwildfire.create.tina.io.Flam3Reader;
 import org.jwildfire.create.tina.io.Flam3Writer;
@@ -115,6 +121,7 @@ public class DancingFractalsController {
   private final JCheckBox drawTrianglesCbx;
   private final JCheckBox drawFFTCbx;
   private final JCheckBox drawFPSCbx;
+  private final JTree flamePropertiesTree;
 
   JLayerInterface jLayer = new JLayerInterface();
   private FlamePanel flamePanel = null;
@@ -138,7 +145,7 @@ public class DancingFractalsController {
       JComboBox pGlobalScript1Cmb, JComboBox pGlobalSpeed1Cmb, JComboBox pGlobalScript2Cmb, JComboBox pGlobalSpeed2Cmb,
       JComboBox pGlobalScript3Cmb, JComboBox pGlobalSpeed3Cmb, JComboBox pXFormScript1Cmb, JComboBox pXFormSpeed1Cmb,
       JComboBox pXFormScript2Cmb, JComboBox pXFormSpeed2Cmb, JComboBox pXFormScript3Cmb, JComboBox pXFormSpeed3Cmb,
-      JComboBox pFlamesCmb, JCheckBox pDrawTrianglesCbx, JCheckBox pDrawFFTCbx, JCheckBox pDrawFPSCbx) {
+      JComboBox pFlamesCmb, JCheckBox pDrawTrianglesCbx, JCheckBox pDrawFFTCbx, JCheckBox pDrawFPSCbx, JTree pFlamePropertiesTree) {
     parentCtrl = pParent;
     errorHandler = pErrorHandler;
     prefs = parentCtrl.getPrefs();
@@ -179,6 +186,7 @@ public class DancingFractalsController {
     drawTrianglesCbx = pDrawTrianglesCbx;
     drawFFTCbx = pDrawFFTCbx;
     drawFPSCbx = pDrawFPSCbx;
+    flamePropertiesTree = pFlamePropertiesTree;
     refreshPoolTable();
     enableControls();
   }
@@ -366,9 +374,6 @@ public class DancingFractalsController {
       flames.add(pFlame);
       refreshPoolTable();
       enableControls();
-      // TODO
-      PropertyNode model = AnimationModelService.createModel(pFlame);
-      System.out.println(model.toXML());
     }
   }
 
@@ -549,20 +554,63 @@ public class DancingFractalsController {
       if (flames.size() > 0 && poolTable.getSelectedRow() < 0)
         poolTable.setRowSelectionInterval(0, 0);
 
-      Flame selFlame = flamesCmb.getSelectedIndex() >= 0 && flamesCmb.getSelectedIndex() < flames.size() ? flames.get(flamesCmb.getSelectedIndex()) : null;
-      int newSelIdx = -1;
-      flamesCmb.removeAllItems();
-      for (int i = 0; i < flames.size(); i++) {
-        Flame flame = flames.get(i);
-        if (newSelIdx < 0 && flame.equals(selFlame)) {
-          newSelIdx = i;
-        }
-        flamesCmb.addItem(getFlameCaption(flame));
-      }
-      flamesCmb.setSelectedIndex(newSelIdx >= 0 ? newSelIdx : flames.size() > 0 ? 0 : -1);
+      refreshFlamesCmb();
+
+      refreshFlamePropertiesTree();
     }
     finally {
       refreshing = oldRefreshing;
+    }
+  }
+
+  private void refreshFlamesCmb() {
+    Flame selFlame = flamesCmb.getSelectedIndex() >= 0 && flamesCmb.getSelectedIndex() < flames.size() ? flames.get(flamesCmb.getSelectedIndex()) : null;
+    int newSelIdx = -1;
+    flamesCmb.removeAllItems();
+    for (int i = 0; i < flames.size(); i++) {
+      Flame flame = flames.get(i);
+      if (newSelIdx < 0 && flame.equals(selFlame)) {
+        newSelIdx = i;
+      }
+      flamesCmb.addItem(getFlameCaption(flame));
+    }
+    flamesCmb.setSelectedIndex(newSelIdx >= 0 ? newSelIdx : flames.size() > 0 ? 0 : -1);
+  }
+
+  private class FlamePropertiesTreeNode<T> extends DefaultMutableTreeNode {
+    private static final long serialVersionUID = 1L;
+    private final T nodeData;
+
+    public FlamePropertiesTreeNode(String pCaption, T pNodeData, boolean pAllowsChildren) {
+      super(pCaption, pAllowsChildren);
+      nodeData = pNodeData;
+    }
+
+    public T getNodeData() {
+      return nodeData;
+    }
+  }
+
+  private void refreshFlamePropertiesTree() {
+    FlamePropertiesTreeNode<Object> root = new FlamePropertiesTreeNode<Object>("Flames", null, true);
+    for (Flame flame : flames) {
+      FlamePropertiesTreeNode<Flame> flameNode = new FlamePropertiesTreeNode<Flame>(getFlameCaption(flame), flame, true);
+      PropertyNode model = AnimationModelService.createModel(flame);
+      addNodesToTree(model, flameNode);
+      root.add(flameNode);
+    }
+    flamePropertiesTree.setModel(new DefaultTreeModel(root));
+  }
+
+  private void addNodesToTree(PropertyNode pModel, FlamePropertiesTreeNode<?> pParentNode) {
+    for (PropertyNode subNode : pModel.getChields()) {
+      FlamePropertiesTreeNode child = new FlamePropertiesTreeNode(subNode.getName(), subNode, true);
+      pParentNode.add(child);
+      addNodesToTree(subNode, child);
+    }
+    for (PlainProperty property : pModel.getProperties()) {
+      FlamePropertiesTreeNode child = new FlamePropertiesTreeNode(property.getName(), property, false);
+      pParentNode.add(child);
     }
   }
 
@@ -861,14 +909,18 @@ public class DancingFractalsController {
     }
   }
 
-}
+  public void flamePropertiesTree_changed(TreeSelectionEvent e) {
+    if (!refreshing) {
+      TreePath path = e.getNewLeadSelectionPath();
+      Object[] selection = path.getPath();
+      if (selection != null && selection.length > 1) {
+        FlamePropertiesTreeNode flameNode = (FlamePropertiesTreeNode) selection[1];
+        Flame selFlame = (Flame) flameNode.getNodeData();
+        refreshPoolPreviewFlameImage(selFlame);
 
-/*
-  
-  FlameAnimModel
-   *nodes
-   *
-  
-  FlameProperty
-    Path  
- */
+      }
+      System.out.println(path);
+    }
+  }
+
+}

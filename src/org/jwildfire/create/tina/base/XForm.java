@@ -76,9 +76,7 @@ public final class XForm implements Assignable<XForm>, Serializable {
   private double opacity = 0.0;
   private final XForm[] nextAppliedXFormTable = new XForm[Constants.NEXT_APPLIED_XFORM_TABLE_SIZE];
   private DrawMode drawMode = DrawMode.NORMAL;
-  @AnimAware
   private double antialiasAmount = 0.0;
-  @AnimAware
   private double antialiasRadius = 0.5;
 
   public XForm() {

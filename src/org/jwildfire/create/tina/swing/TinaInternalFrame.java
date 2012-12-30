@@ -54,6 +54,7 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
 import javax.swing.JToggleButton;
+import javax.swing.JTree;
 import javax.swing.ListSelectionModel;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
@@ -68,6 +69,8 @@ import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.event.TreeSelectionEvent;
+import javax.swing.event.TreeSelectionListener;
 
 import org.jwildfire.base.Prefs;
 import org.jwildfire.create.tina.animate.GlobalScript;
@@ -3507,7 +3510,7 @@ public class TinaInternalFrame extends JInternalFrame {
         getDancingFlamesGlobalScript2Cmb(), getDancingFlamesGlobalSpeed2Cmb(), getDancingFlamesGlobalScript3Cmb(), getDancingFlamesGlobalSpeed3Cmb(),
         getDancingFlamesXFormScript1Cmb(), getDancingFlamesXFormSpeed1Cmb(), getDancingFlamesXFormScript2Cmb(), getDancingFlamesXFormSpeed2Cmb(),
         getDancingFlamesXFormScript3Cmb(), getDancingFlamesXFormSpeed3Cmb(), getDancingFlamesFlameCmb(), getDancingFlamesDrawTrianglesCBx(),
-        getDancingFlamesDrawFFTCBx(), getDancingFlamesDrawFPSCBx());
+        getDancingFlamesDrawFFTCBx(), getDancingFlamesDrawFPSCBx(), getDancingFlamesFlamePropertiesTree());
 
     tinaController.refreshing = tinaController.cmbRefreshing = tinaController.gridRefreshing = true;
     try {
@@ -8344,6 +8347,12 @@ public class TinaInternalFrame extends JInternalFrame {
   private JCheckBox dancingFlamesDrawTrianglesCBx;
   private JCheckBox dancingFlamesDrawFFTCBx;
   private JCheckBox dancingFlamesDrawFPSCBx;
+  private JPanel panel_40;
+  private JPanel panel_53;
+  private JLabel label_8;
+  private JComboBox comboBox;
+  private JComboBox comboBox_1;
+  private JTree dancingFlamesFlamePropertiesTree;
 
   /**
    * This method initializes renderBatchJobsScrollPane	
@@ -11776,6 +11785,7 @@ public class TinaInternalFrame extends JInternalFrame {
     if (tabbedPane == null) {
       tabbedPane = new JTabbedPane(JTabbedPane.TOP);
       tabbedPane.addTab("Flames and motions", null, getPanel_51(), null);
+      tabbedPane.addTab("Motions", null, getPanel_40(), null);
     }
     return tabbedPane;
   }
@@ -12123,5 +12133,84 @@ public class TinaInternalFrame extends JInternalFrame {
       dancingFlamesDrawFPSCBx.setMaximumSize(new Dimension(160, 18));
     }
     return dancingFlamesDrawFPSCBx;
+  }
+
+  private JPanel getPanel_40() {
+    if (panel_40 == null) {
+      panel_40 = new JPanel();
+      panel_40.setLayout(new BorderLayout(0, 0));
+      panel_40.add(getPanel_53(), BorderLayout.EAST);
+
+      JScrollPane scrollPane_2 = new JScrollPane();
+      panel_40.add(scrollPane_2, BorderLayout.CENTER);
+
+      dancingFlamesFlamePropertiesTree = new JTree();
+      dancingFlamesFlamePropertiesTree.addTreeSelectionListener(new TreeSelectionListener() {
+        public void valueChanged(TreeSelectionEvent e) {
+          if (tinaController != null) {
+            tinaController.getDancingFractalsController().flamePropertiesTree_changed(e);
+          }
+        }
+      });
+      dancingFlamesFlamePropertiesTree.setRootVisible(false);
+      scrollPane_2.setViewportView(dancingFlamesFlamePropertiesTree);
+    }
+    return panel_40;
+  }
+
+  private JPanel getPanel_53() {
+    if (panel_53 == null) {
+      panel_53 = new JPanel();
+      panel_53.setPreferredSize(new Dimension(300, 10));
+      panel_53.setLayout(null);
+      panel_53.add(getLabel_8());
+      panel_53.add(getComboBox());
+      panel_53.add(getComboBox_1());
+    }
+    return panel_53;
+  }
+
+  private JLabel getLabel_8() {
+    if (label_8 == null) {
+      label_8 = new JLabel();
+      label_8.setText("XForm script 1");
+      label_8.setPreferredSize(new Dimension(120, 22));
+      label_8.setHorizontalAlignment(SwingConstants.RIGHT);
+      label_8.setFont(new Font("Dialog", Font.BOLD, 10));
+      label_8.setBounds(6, 7, 83, 22);
+    }
+    return label_8;
+  }
+
+  private JComboBox getComboBox() {
+    if (comboBox == null) {
+      comboBox = new JComboBox();
+      comboBox.setPreferredSize(new Dimension(125, 24));
+      comboBox.setMinimumSize(new Dimension(125, 24));
+      comboBox.setMaximumSize(new Dimension(30000, 24));
+      comboBox.setMaximumRowCount(32);
+      comboBox.setFont(new Font("Dialog", Font.BOLD, 10));
+      comboBox.setAlignmentX(1.0f);
+      comboBox.setBounds(92, 6, 115, 24);
+    }
+    return comboBox;
+  }
+
+  private JComboBox getComboBox_1() {
+    if (comboBox_1 == null) {
+      comboBox_1 = new JComboBox();
+      comboBox_1.setPreferredSize(new Dimension(125, 24));
+      comboBox_1.setMinimumSize(new Dimension(125, 24));
+      comboBox_1.setMaximumSize(new Dimension(30000, 24));
+      comboBox_1.setMaximumRowCount(32);
+      comboBox_1.setFont(new Font("Dialog", Font.BOLD, 10));
+      comboBox_1.setAlignmentX(1.0f);
+      comboBox_1.setBounds(210, 6, 62, 24);
+    }
+    return comboBox_1;
+  }
+
+  public JTree getDancingFlamesFlamePropertiesTree() {
+    return dancingFlamesFlamePropertiesTree;
   }
 } //  @jve:decl-index=0:visual-constraint="10,10"

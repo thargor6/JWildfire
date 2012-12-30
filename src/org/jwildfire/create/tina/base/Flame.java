@@ -57,7 +57,6 @@ public class Flame implements Assignable<Flame>, Serializable {
   private int colorOversample;
   private double spatialFilterRadius;
   private double sampleDensity;
-  @AnimAware
   private boolean bgTransparency;
   @AnimAware
   private int bgColorRed;
@@ -71,7 +70,6 @@ public class Flame implements Assignable<Flame>, Serializable {
   private int whiteLevel;
   @AnimAware
   private double brightness;
-  @AnimAware
   private double contrast;
   @AnimAware
   private double vibrancy;

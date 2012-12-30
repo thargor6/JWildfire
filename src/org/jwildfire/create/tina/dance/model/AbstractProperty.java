@@ -16,10 +16,21 @@
 */
 package org.jwildfire.create.tina.dance.model;
 
-public class PlainProperty extends AbstractProperty {
+public abstract class AbstractProperty {
+  protected final String name;
+  protected final Class<?> type;
 
-  public PlainProperty(String pName, Class<?> pType) {
-    super(pName, pType);
+  public AbstractProperty(String pName, Class<?> pType) {
+    name = pName;
+    type = pType;
+  }
+
+  public String getName() {
+    return name;
+  }
+
+  public Class<?> getType() {
+    return type;
   }
 
 }
