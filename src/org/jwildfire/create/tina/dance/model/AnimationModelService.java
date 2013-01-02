@@ -59,7 +59,7 @@ public class AnimationModelService {
             if (xForms != null) {
               int idx = 0;
               for (XForm xForm : xForms) {
-                addXFormToModel(res, field.getName(), idx++, xForm);
+                addXFormToModel(res, field.getName().indexOf("final") == 0, idx++, xForm);
               }
             }
           }
@@ -69,11 +69,29 @@ public class AnimationModelService {
     return res;
   }
 
+  private final static String PROPNAME_XFORM = "transform";
+  private final static String PROPNAME_FINALXFORM = "finalTransform";
+  private final static String PROPNAME_ORIGIN_X = "originX";
+  private final static String PROPNAME_ORIGIN_Y = "originY";
+  private final static String PROPNAME_ANGLE = "angle";
+  private final static String PROPNAME_ZOOM = "zoom";
+  private final static String PROPNAME_POST_ORIGIN_X = "postOriginX";
+  private final static String PROPNAME_POST_ORIGIN_Y = "postOriginY";
+  private final static String PROPNAME_POST_ANGLE = "postAngle";
+  private final static String PROPNAME_POST_ZOOM = "postZoom";
+
+  private final static String[] ADD_XFORM_PROPS = { PROPNAME_ORIGIN_X, PROPNAME_ORIGIN_Y, PROPNAME_ANGLE, PROPNAME_ZOOM, PROPNAME_POST_ORIGIN_X, PROPNAME_POST_ORIGIN_Y, PROPNAME_POST_ANGLE, PROPNAME_POST_ZOOM };
+
   @SuppressWarnings("unchecked")
-  private static void addXFormToModel(PropertyNode pNode, String pFieldName, int pIndex, XForm pXForm) {
+  private static void addXFormToModel(PropertyNode pNode, boolean pIsFinal, int pIndex, XForm pXForm) {
     Class<?> cls = pXForm.getClass();
-    PropertyNode xFormNode = new PropertyNode(pFieldName + (pIndex + 1), cls);
+    String fieldname = pIsFinal ? PROPNAME_FINALXFORM : PROPNAME_XFORM;
+    PropertyNode xFormNode = new PropertyNode(fieldname + (pIndex + 1), cls);
     pNode.getChields().add(xFormNode);
+    for (String propName : ADD_XFORM_PROPS) {
+      PlainProperty property = new PlainProperty(propName, Double.class);
+      xFormNode.getProperties().add(property);
+    }
     for (Field field : cls.getDeclaredFields()) {
       field.setAccessible(true);
       if (field.getAnnotation(AnimAware.class) != null) {

@@ -8339,12 +8339,19 @@ public class TinaInternalFrame extends JInternalFrame {
   private JCheckBox dancingFlamesDrawFFTCBx;
   private JCheckBox dancingFlamesDrawFPSCBx;
   private JTree dancingFlamesFlamePropertiesTree;
-  private JPanel panel_55;
   private JPanel panel_42;
   private JPanel panel_40;
   private JPanel panel_44;
   private JPanel panel_45;
   private JPanel panel_46;
+  private JLabel label_8;
+  private JComboBox comboBox_4;
+  private JLabel label_9;
+  private JComboBox comboBox_5;
+  private JComboBox comboBox_6;
+  private JLabel lblFromValue;
+  private JComboBox comboBox_7;
+  private JLabel lblToValue;
 
   /**
    * This method initializes renderBatchJobsScrollPane	
@@ -11181,6 +11188,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton getDancingFlamesAddFromEditorBtn() {
     if (dancingFlamesAddFromEditorBtn == null) {
       dancingFlamesAddFromEditorBtn = new JButton();
+      dancingFlamesAddFromEditorBtn.setBounds(262, 6, 135, 24);
       dancingFlamesAddFromEditorBtn.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
           tinaController.getDancingFractalsController().importFlame(tinaController.getCurrFlame());
@@ -11199,6 +11207,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton getDancingFlamesAddFromClipboardBtn() {
     if (dancingFlamesAddFromClipboardBtn == null) {
       dancingFlamesAddFromClipboardBtn = new JButton();
+      dancingFlamesAddFromClipboardBtn.setBounds(262, 31, 135, 24);
       dancingFlamesAddFromClipboardBtn.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
           tinaController.getDancingFractalsController().loadFlameFromClipboardButton_clicked();
@@ -11217,6 +11226,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton getDancingFlamesAddFromDiscBtn() {
     if (dancingFlamesAddFromDiscBtn == null) {
       dancingFlamesAddFromDiscBtn = new JButton();
+      dancingFlamesAddFromDiscBtn.setBounds(262, 56, 135, 24);
       dancingFlamesAddFromDiscBtn.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
           tinaController.getDancingFractalsController().loadFlameButton_clicked();
@@ -11236,7 +11246,7 @@ public class TinaInternalFrame extends JInternalFrame {
     if (panel_38 == null) {
       panel_38 = new JPanel();
       panel_38.setMaximumSize(new Dimension(400, 32767));
-      panel_38.setPreferredSize(new Dimension(425, 10));
+      panel_38.setPreferredSize(new Dimension(560, 10));
       panel_38.setBorder(new TitledBorder(null, "Flame pool", TitledBorder.LEADING, TitledBorder.TOP, null, null));
       panel_38.setLayout(new BorderLayout(0, 0));
       panel_38.add(getPanel_39(), BorderLayout.NORTH);
@@ -11249,17 +11259,9 @@ public class TinaInternalFrame extends JInternalFrame {
   private JPanel getPanel_39() {
     if (panel_39 == null) {
       panel_39 = new JPanel();
-      panel_39.setPreferredSize(new Dimension(10, 260));
+      panel_39.setPreferredSize(new Dimension(10, 88));
       panel_39.setLayout(new BorderLayout(0, 0));
-      panel_39.add(getPanel_55(), BorderLayout.EAST);
       panel_39.add(getPanel_40(), BorderLayout.NORTH);
-
-      dancingFlamesPoolFlamePreviewPnl = new JPanel();
-      dancingFlamesPoolFlamePreviewPnl.setPreferredSize(new Dimension(240, 140));
-      dancingFlamesPoolFlamePreviewPnl.setMinimumSize(new Dimension(160, 100));
-      dancingFlamesPoolFlamePreviewPnl.setBorder(new EtchedBorder(EtchedBorder.RAISED, null, null));
-      panel_39.add(dancingFlamesPoolFlamePreviewPnl);
-      dancingFlamesPoolFlamePreviewPnl.setLayout(new BorderLayout(0, 0));
     }
     return panel_39;
   }
@@ -11281,7 +11283,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JLabel getLblRandomGenerator() {
     if (lblRandomGenerator == null) {
       lblRandomGenerator = new JLabel();
-      lblRandomGenerator.setBounds(0, 5, 100, 14);
+      lblRandomGenerator.setBounds(0, 11, 100, 14);
       lblRandomGenerator.setMinimumSize(new Dimension(100, 24));
       lblRandomGenerator.setText("Random generator");
       lblRandomGenerator.setPreferredSize(new Dimension(100, 24));
@@ -11410,7 +11412,7 @@ public class TinaInternalFrame extends JInternalFrame {
       });
       dancingFlamesDeleteFlameBtn.setToolTipText("Delete the current flame");
       dancingFlamesDeleteFlameBtn.setText("Del");
-      dancingFlamesDeleteFlameBtn.setPreferredSize(new Dimension(60, 24));
+      dancingFlamesDeleteFlameBtn.setPreferredSize(new Dimension(125, 24));
       dancingFlamesDeleteFlameBtn.setMnemonic(KeyEvent.VK_D);
       dancingFlamesDeleteFlameBtn.setFont(new Font("Dialog", Font.BOLD, 10));
     }
@@ -11467,6 +11469,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton getDancingFlamesSaveAllFlamesBtn() {
     if (dancingFlamesSaveAllFlamesBtn == null) {
       dancingFlamesSaveAllFlamesBtn = new JButton();
+      dancingFlamesSaveAllFlamesBtn.setBounds(407, 6, 125, 24);
       dancingFlamesSaveAllFlamesBtn.setMinimumSize(new Dimension(100, 24));
       dancingFlamesSaveAllFlamesBtn.setMaximumSize(new Dimension(160, 24));
       dancingFlamesSaveAllFlamesBtn.addActionListener(new ActionListener() {
@@ -11475,7 +11478,7 @@ public class TinaInternalFrame extends JInternalFrame {
         }
       });
       dancingFlamesSaveAllFlamesBtn.setToolTipText("Save all flames to disc (as numbered file sequence)");
-      dancingFlamesSaveAllFlamesBtn.setText("Save");
+      dancingFlamesSaveAllFlamesBtn.setText("Save all flames");
       dancingFlamesSaveAllFlamesBtn.setPreferredSize(new Dimension(60, 24));
       dancingFlamesSaveAllFlamesBtn.setMnemonic(KeyEvent.VK_S);
       dancingFlamesSaveAllFlamesBtn.setFont(new Font("Dialog", Font.BOLD, 10));
@@ -11972,22 +11975,13 @@ public class TinaInternalFrame extends JInternalFrame {
     return dancingFlamesFlamePropertiesTree;
   }
 
-  private JPanel getPanel_55() {
-    if (panel_55 == null) {
-      panel_55 = new JPanel();
-      panel_55.setPreferredSize(new Dimension(135, 10));
-      panel_55.setLayout(new BoxLayout(panel_55, BoxLayout.Y_AXIS));
-    }
-    return panel_55;
-  }
-
   private JPanel getPanel_42_1() {
     if (panel_42 == null) {
       panel_42 = new JPanel();
       panel_42.setLayout(new BorderLayout(0, 0));
 
       JScrollPane scrollPane_2 = new JScrollPane();
-      panel_42.add(scrollPane_2, BorderLayout.NORTH);
+      panel_42.add(scrollPane_2, BorderLayout.CENTER);
 
       dancingFlamesFlamePropertiesTree = new JTree();
       dancingFlamesFlamePropertiesTree.addTreeSelectionListener(new TreeSelectionListener() {
@@ -12007,46 +12001,11 @@ public class TinaInternalFrame extends JInternalFrame {
     if (panel_40 == null) {
       panel_40 = new JPanel();
       panel_40.setPreferredSize(new Dimension(10, 100));
-      panel_40.setLayout(new BorderLayout(0, 0));
-      panel_40.add(getPanel_45(), BorderLayout.EAST);
-      panel_40.add(getPanel_46(), BorderLayout.CENTER);
-    }
-    return panel_40;
-  }
-
-  private JPanel getPanel_44_1() {
-    if (panel_44 == null) {
-      panel_44 = new JPanel();
-      panel_44.setBorder(new EmptyBorder(0, 0, 0, 0));
-      panel_44.setPreferredSize(new Dimension(135, 10));
-      panel_44.setLayout(new BoxLayout(panel_44, BoxLayout.Y_AXIS));
-      panel_44.add(getDancingFlamesFlameToEditorBtn());
-      panel_44.add(getDancingFlamesDeleteFlameBtn());
-    }
-    return panel_44;
-  }
-
-  private JPanel getPanel_45() {
-    if (panel_45 == null) {
-      panel_45 = new JPanel();
-      panel_45.setPreferredSize(new Dimension(135, 10));
-      panel_45.setLayout(new BoxLayout(panel_45, BoxLayout.Y_AXIS));
-      panel_45.add(getDancingFlamesAddFromEditorBtn());
-      panel_45.add(getDancingFlamesAddFromClipboardBtn());
-      panel_45.add(getDancingFlamesAddFromDiscBtn());
-      panel_45.add(getDancingFlamesSaveAllFlamesBtn());
-    }
-    return panel_45;
-  }
-
-  private JPanel getPanel_46() {
-    if (panel_46 == null) {
-      panel_46 = new JPanel();
-      panel_46.setLayout(null);
+      panel_40.setLayout(null);
 
       dancingFlamesRandomGenCmb = new JComboBox();
-      dancingFlamesRandomGenCmb.setBounds(100, 0, 150, 24);
-      panel_46.add(dancingFlamesRandomGenCmb);
+      dancingFlamesRandomGenCmb.setBounds(100, 6, 150, 24);
+      panel_40.add(dancingFlamesRandomGenCmb);
       dancingFlamesRandomGenCmb.setAlignmentX(Component.RIGHT_ALIGNMENT);
       dancingFlamesRandomGenCmb.setPreferredSize(new Dimension(125, 24));
       dancingFlamesRandomGenCmb.setMinimumSize(new Dimension(125, 24));
@@ -12058,11 +12017,19 @@ public class TinaInternalFrame extends JInternalFrame {
         dancingFlamesRandomGenCmb.addItem(name);
       }
       dancingFlamesRandomGenCmb.setSelectedItem(RandomFlameGeneratorList.DEFAULT_GENERATOR_NAME);
-      panel_46.add(getLblRandomGenerator());
+      panel_40.add(getLblRandomGenerator());
+
+      JLabel lblCount = new JLabel();
+      lblCount.setBounds(0, 36, 100, 14);
+      panel_40.add(lblCount);
+      lblCount.setMinimumSize(new Dimension(100, 24));
+      lblCount.setText("Count");
+      lblCount.setPreferredSize(new Dimension(100, 24));
+      lblCount.setFont(new Font("Dialog", Font.BOLD, 10));
 
       dancingFlamesRandomCountIEd = new JWFNumberField();
-      dancingFlamesRandomCountIEd.setBounds(100, 25, 150, 24);
-      panel_46.add(dancingFlamesRandomCountIEd);
+      dancingFlamesRandomCountIEd.setBounds(100, 31, 150, 24);
+      panel_40.add(dancingFlamesRandomCountIEd);
       dancingFlamesRandomCountIEd.setMinimumSize(new Dimension(125, 24));
       dancingFlamesRandomCountIEd.setMaximumSize(new Dimension(30000, 24));
       dancingFlamesRandomCountIEd.setValueStep(1.0);
@@ -12076,17 +12043,9 @@ public class TinaInternalFrame extends JInternalFrame {
       dancingFlamesRandomCountIEd.setFont(new Font("Dialog", Font.PLAIN, 10));
       dancingFlamesRandomCountIEd.setEditable(true);
 
-      JLabel lblCount = new JLabel();
-      lblCount.setBounds(0, 30, 100, 14);
-      panel_46.add(lblCount);
-      lblCount.setMinimumSize(new Dimension(100, 24));
-      lblCount.setText("Count");
-      lblCount.setPreferredSize(new Dimension(100, 24));
-      lblCount.setFont(new Font("Dialog", Font.BOLD, 10));
-
       dancingFlamesGenRandFlamesBtn = new JButton();
-      dancingFlamesGenRandFlamesBtn.setBounds(0, 50, 250, 24);
-      panel_46.add(dancingFlamesGenRandFlamesBtn);
+      dancingFlamesGenRandFlamesBtn.setBounds(0, 56, 250, 24);
+      panel_40.add(dancingFlamesGenRandFlamesBtn);
       dancingFlamesGenRandFlamesBtn.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
           tinaController.getDancingFractalsController().genRandomFlames();
@@ -12097,7 +12056,255 @@ public class TinaInternalFrame extends JInternalFrame {
       dancingFlamesGenRandFlamesBtn.setMinimumSize(new Dimension(100, 24));
       dancingFlamesGenRandFlamesBtn.setMaximumSize(new Dimension(30000, 24));
       dancingFlamesGenRandFlamesBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      panel_40.add(getDancingFlamesSaveAllFlamesBtn());
+      panel_40.add(getDancingFlamesAddFromEditorBtn());
+      panel_40.add(getDancingFlamesAddFromClipboardBtn());
+      panel_40.add(getDancingFlamesAddFromDiscBtn());
+    }
+    return panel_40;
+  }
+
+  private JPanel getPanel_44_1() {
+    if (panel_44 == null) {
+      panel_44 = new JPanel();
+      panel_44.setBorder(new EmptyBorder(0, 0, 0, 0));
+      panel_44.setPreferredSize(new Dimension(270, 10));
+      panel_44.setLayout(new BorderLayout(0, 0));
+
+      dancingFlamesPoolFlamePreviewPnl = new JPanel();
+      dancingFlamesPoolFlamePreviewPnl.setMaximumSize(new Dimension(32767, 160));
+      panel_44.add(dancingFlamesPoolFlamePreviewPnl, BorderLayout.NORTH);
+      dancingFlamesPoolFlamePreviewPnl.setPreferredSize(new Dimension(240, 160));
+      dancingFlamesPoolFlamePreviewPnl.setMinimumSize(new Dimension(160, 100));
+      dancingFlamesPoolFlamePreviewPnl.setBorder(new EtchedBorder(EtchedBorder.RAISED, null, null));
+      dancingFlamesPoolFlamePreviewPnl.setLayout(new BorderLayout(0, 0));
+      panel_44.add(getPanel_45(), BorderLayout.CENTER);
+    }
+    return panel_44;
+  }
+
+  private JPanel getPanel_45() {
+    if (panel_45 == null) {
+      panel_45 = new JPanel();
+      panel_45.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+
+      JPanel panel_1 = new JPanel();
+      FlowLayout flowLayout = (FlowLayout) panel_1.getLayout();
+      flowLayout.setAlignment(FlowLayout.LEFT);
+      panel_45.add(panel_1);
+      panel_1.add(getDancingFlamesFlameToEditorBtn());
+      panel_1.add(getDancingFlamesDeleteFlameBtn());
+
+      JPanel panel_2 = new JPanel();
+      panel_2.setMinimumSize(new Dimension(240, 80));
+      panel_2.setBorder(new TitledBorder(null, "Link to sound", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+      panel_2.setPreferredSize(new Dimension(260, 90));
+      panel_45.add(panel_2);
+      panel_2.setLayout(null);
+
+      JLabel lblChannel = new JLabel();
+      lblChannel.setText("Channel");
+      lblChannel.setPreferredSize(new Dimension(120, 22));
+      lblChannel.setHorizontalAlignment(SwingConstants.RIGHT);
+      lblChannel.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblChannel.setBounds(83, 20, 67, 22);
+      panel_2.add(lblChannel);
+
+      JComboBox comboBox_1 = new JComboBox();
+      comboBox_1.setPreferredSize(new Dimension(125, 24));
+      comboBox_1.setMinimumSize(new Dimension(125, 24));
+      comboBox_1.setMaximumSize(new Dimension(30000, 24));
+      comboBox_1.setMaximumRowCount(32);
+      comboBox_1.setFont(new Font("Dialog", Font.BOLD, 10));
+      comboBox_1.setAlignmentX(1.0f);
+      comboBox_1.setBounds(154, 20, 89, 24);
+      panel_2.add(comboBox_1);
+
+      JLabel lblAmplitude = new JLabel();
+      lblAmplitude.setText("Amplitude");
+      lblAmplitude.setPreferredSize(new Dimension(120, 22));
+      lblAmplitude.setHorizontalAlignment(SwingConstants.RIGHT);
+      lblAmplitude.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblAmplitude.setBounds(83, 45, 67, 22);
+      panel_2.add(lblAmplitude);
+
+      JComboBox comboBox = new JComboBox();
+      comboBox.setPreferredSize(new Dimension(125, 24));
+      comboBox.setMinimumSize(new Dimension(125, 24));
+      comboBox.setMaximumSize(new Dimension(30000, 24));
+      comboBox.setMaximumRowCount(32);
+      comboBox.setFont(new Font("Dialog", Font.BOLD, 10));
+      comboBox.setAlignmentX(1.0f);
+      comboBox.setBounds(154, 45, 89, 24);
+      panel_2.add(comboBox);
+
+      JPanel panel_3 = new JPanel();
+      panel_3.setBorder(new TitledBorder(null, "Rotate", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+      panel_3.setLayout(null);
+      panel_3.setPreferredSize(new Dimension(260, 90));
+      panel_3.setMinimumSize(new Dimension(240, 80));
+      panel_45.add(panel_3);
+
+      JLabel lblUnit = new JLabel();
+      lblUnit.setText("Speed");
+      lblUnit.setPreferredSize(new Dimension(120, 22));
+      lblUnit.setHorizontalAlignment(SwingConstants.RIGHT);
+      lblUnit.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblUnit.setBounds(83, 18, 67, 22);
+      panel_3.add(lblUnit);
+
+      JComboBox comboBox_2 = new JComboBox();
+      comboBox_2.setPreferredSize(new Dimension(125, 24));
+      comboBox_2.setMinimumSize(new Dimension(125, 24));
+      comboBox_2.setMaximumSize(new Dimension(30000, 24));
+      comboBox_2.setMaximumRowCount(32);
+      comboBox_2.setFont(new Font("Dialog", Font.BOLD, 10));
+      comboBox_2.setAlignmentX(1.0f);
+      comboBox_2.setBounds(154, 18, 89, 24);
+      panel_3.add(comboBox_2);
+
+      JLabel lblSpeed = new JLabel();
+      lblSpeed.setText("Unit");
+      lblSpeed.setPreferredSize(new Dimension(120, 22));
+      lblSpeed.setHorizontalAlignment(SwingConstants.RIGHT);
+      lblSpeed.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblSpeed.setBounds(83, 43, 67, 22);
+      panel_3.add(lblSpeed);
+
+      JComboBox comboBox_3 = new JComboBox();
+      comboBox_3.setPreferredSize(new Dimension(125, 24));
+      comboBox_3.setMinimumSize(new Dimension(125, 24));
+      comboBox_3.setMaximumSize(new Dimension(30000, 24));
+      comboBox_3.setMaximumRowCount(32);
+      comboBox_3.setFont(new Font("Dialog", Font.BOLD, 10));
+      comboBox_3.setAlignmentX(1.0f);
+      comboBox_3.setBounds(154, 43, 89, 24);
+      panel_3.add(comboBox_3);
+      panel_45.add(getPanel_46());
+    }
+    return panel_45;
+  }
+
+  private JPanel getPanel_46() {
+    if (panel_46 == null) {
+      panel_46 = new JPanel();
+      panel_46.setBorder(new TitledBorder(null, "Oscillate", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+      panel_46.setLayout(null);
+      panel_46.setPreferredSize(new Dimension(260, 140));
+      panel_46.setMinimumSize(new Dimension(240, 80));
+      panel_46.add(getLabel_8());
+      panel_46.add(getComboBox_4());
+      panel_46.add(getLabel_9());
+      panel_46.add(getComboBox_5());
+      panel_46.add(getComboBox_6());
+      panel_46.add(getLblFromValue());
+      panel_46.add(getComboBox_7());
+      panel_46.add(getLblToValue());
     }
     return panel_46;
+  }
+
+  private JLabel getLabel_8() {
+    if (label_8 == null) {
+      label_8 = new JLabel();
+      label_8.setText("Unit");
+      label_8.setPreferredSize(new Dimension(120, 22));
+      label_8.setHorizontalAlignment(SwingConstants.RIGHT);
+      label_8.setFont(new Font("Dialog", Font.BOLD, 10));
+      label_8.setBounds(83, 18, 67, 22);
+    }
+    return label_8;
+  }
+
+  private JComboBox getComboBox_4() {
+    if (comboBox_4 == null) {
+      comboBox_4 = new JComboBox();
+      comboBox_4.setPreferredSize(new Dimension(125, 24));
+      comboBox_4.setMinimumSize(new Dimension(125, 24));
+      comboBox_4.setMaximumSize(new Dimension(30000, 24));
+      comboBox_4.setMaximumRowCount(32);
+      comboBox_4.setFont(new Font("Dialog", Font.BOLD, 10));
+      comboBox_4.setAlignmentX(1.0f);
+      comboBox_4.setBounds(154, 18, 89, 24);
+    }
+    return comboBox_4;
+  }
+
+  private JLabel getLabel_9() {
+    if (label_9 == null) {
+      label_9 = new JLabel();
+      label_9.setText("Speed");
+      label_9.setPreferredSize(new Dimension(120, 22));
+      label_9.setHorizontalAlignment(SwingConstants.RIGHT);
+      label_9.setFont(new Font("Dialog", Font.BOLD, 10));
+      label_9.setBounds(83, 43, 67, 22);
+    }
+    return label_9;
+  }
+
+  private JComboBox getComboBox_5() {
+    if (comboBox_5 == null) {
+      comboBox_5 = new JComboBox();
+      comboBox_5.setPreferredSize(new Dimension(125, 24));
+      comboBox_5.setMinimumSize(new Dimension(125, 24));
+      comboBox_5.setMaximumSize(new Dimension(30000, 24));
+      comboBox_5.setMaximumRowCount(32);
+      comboBox_5.setFont(new Font("Dialog", Font.BOLD, 10));
+      comboBox_5.setAlignmentX(1.0f);
+      comboBox_5.setBounds(154, 43, 89, 24);
+    }
+    return comboBox_5;
+  }
+
+  private JComboBox getComboBox_6() {
+    if (comboBox_6 == null) {
+      comboBox_6 = new JComboBox();
+      comboBox_6.setPreferredSize(new Dimension(125, 24));
+      comboBox_6.setMinimumSize(new Dimension(125, 24));
+      comboBox_6.setMaximumSize(new Dimension(30000, 24));
+      comboBox_6.setMaximumRowCount(32);
+      comboBox_6.setFont(new Font("Dialog", Font.BOLD, 10));
+      comboBox_6.setAlignmentX(1.0f);
+      comboBox_6.setBounds(154, 70, 89, 24);
+    }
+    return comboBox_6;
+  }
+
+  private JLabel getLblFromValue() {
+    if (lblFromValue == null) {
+      lblFromValue = new JLabel();
+      lblFromValue.setText("From value");
+      lblFromValue.setPreferredSize(new Dimension(120, 22));
+      lblFromValue.setHorizontalAlignment(SwingConstants.RIGHT);
+      lblFromValue.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblFromValue.setBounds(83, 70, 67, 22);
+    }
+    return lblFromValue;
+  }
+
+  private JComboBox getComboBox_7() {
+    if (comboBox_7 == null) {
+      comboBox_7 = new JComboBox();
+      comboBox_7.setPreferredSize(new Dimension(125, 24));
+      comboBox_7.setMinimumSize(new Dimension(125, 24));
+      comboBox_7.setMaximumSize(new Dimension(30000, 24));
+      comboBox_7.setMaximumRowCount(32);
+      comboBox_7.setFont(new Font("Dialog", Font.BOLD, 10));
+      comboBox_7.setAlignmentX(1.0f);
+      comboBox_7.setBounds(154, 96, 89, 24);
+    }
+    return comboBox_7;
+  }
+
+  private JLabel getLblToValue() {
+    if (lblToValue == null) {
+      lblToValue = new JLabel();
+      lblToValue.setText("To value");
+      lblToValue.setPreferredSize(new Dimension(120, 22));
+      lblToValue.setHorizontalAlignment(SwingConstants.RIGHT);
+      lblToValue.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblToValue.setBounds(83, 96, 67, 22);
+    }
+    return lblToValue;
   }
 } //  @jve:decl-index=0:visual-constraint="10,10"

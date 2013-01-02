@@ -23,7 +23,7 @@ import org.jwildfire.create.tina.animate.XFormScript;
 import org.jwildfire.create.tina.audio.JLayerInterface;
 import org.jwildfire.create.tina.audio.RecordedFFT;
 import org.jwildfire.create.tina.base.Flame;
-import org.jwildfire.create.tina.dance.transform.DanceFlameTransformer;
+import org.jwildfire.create.tina.dance.motion.DanceFlameTransformer;
 import org.jwildfire.create.tina.swing.FlameHolder;
 import org.jwildfire.image.SimpleImage;
 import org.jwildfire.swing.ImagePanel;

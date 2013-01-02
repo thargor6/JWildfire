@@ -17,9 +17,11 @@
 package org.jwildfire.create.tina.audio;
 
 public class FFTRecordingAudioProcessor extends RecordingAudioProcessor {
+  public static final int FFT_SIZE = 64;
+
   private int recordingIntervalInMilliseconds = 5; // ms
   private int movingAvgSize = 4;
-  private int storedValuesPerFFTRow = 64;
+  private int storedValuesPerFFTRow = FFT_SIZE;
   private int inputSamplePerFFTRowCount;
   private int currOff = 0;
   private RecordedFFT fft = null;

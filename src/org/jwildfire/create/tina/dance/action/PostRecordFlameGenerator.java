@@ -26,7 +26,7 @@ import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.dance.FlamePreparer;
 import org.jwildfire.create.tina.dance.FlameStack;
 import org.jwildfire.create.tina.dance.RealtimeAnimRenderThread;
-import org.jwildfire.create.tina.dance.transform.DanceFlameTransformer;
+import org.jwildfire.create.tina.dance.motion.DanceFlameTransformer;
 import org.jwildfire.create.tina.io.Flam3Writer;
 
 public class PostRecordFlameGenerator {
