@@ -413,6 +413,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
   private final JTable createPaletteColorsTable;
   private List<RGBColor> paletteKeyFrames;
   private final JButton renderFlameButton;
+  private final JButton renderMainButton;
   private final JButton appendToMovieButton;
 
   // mouse dragging
@@ -480,7 +481,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       JComboBox pQualityProfileCmb, JComboBox pResolutionProfileCmb, JComboBox pBatchQualityProfileCmb, JComboBox pBatchResolutionProfileCmb,
       JComboBox pBatchRendererCmb,
       JComboBox pInteractiveQualityProfileCmb, JComboBox pInteractiveResolutionProfileCmb, JComboBox pSWFAnimatorQualityProfileCmb,
-      JComboBox pSWFAnimatorResolutionProfileCmb, JButton pRenderFlameButton, JButton pAppendToMovieButton,
+      JComboBox pSWFAnimatorResolutionProfileCmb, JButton pRenderFlameButton, JButton pRenderMainButton, JButton pAppendToMovieButton,
       JWFNumberField pTransformationWeightREd, JButton pUndoButton, JButton pRedoButton, JComboBox pRendererCmb,
       JWFNumberField pXFormAntialiasAmountREd, JSlider pXFormAntialiasAmountSlider, JWFNumberField pXFormAntialiasRadiusREd, JSlider pXFormAntialiasRadiusSlider,
       JButton pXFormAntialiasCopyToAllBtn, JPanel pDancingFlamesFlamePnl, JPanel pDancingFlamesGraph1Pnl, JButton pDancingFlamesLoadSoundBtn, JButton pDancingFlamesAddFromClipboardBtn,
@@ -625,6 +626,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     gradientLibraryPanel = pGradientLibraryPanel;
     gradientLibraryGradientCmb = pGradientLibraryGradientCmb;
     renderFlameButton = pRenderFlameButton;
+    renderMainButton = pRenderMainButton;
     appendToMovieButton = pAppendToMovieButton;
 
     xFormColorREd = pXFormColorREd;
@@ -2338,96 +2340,6 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
 
   public void paletteShiftSlider_stateChanged(ChangeEvent e) {
     paletteSliderChanged(paletteShiftSlider, paletteShiftREd, "modShift", 1.0);
-  }
-
-  public void renderImageButton_actionPerformed() {
-    if (currFlame != null) {
-      try {
-        JFileChooser chooser = new ImageFileChooser();
-        if (prefs.getOutputImagePath() != null) {
-          try {
-            chooser.setCurrentDirectory(new File(prefs.getOutputImagePath()));
-          }
-          catch (Exception ex) {
-            ex.printStackTrace();
-          }
-        }
-        if (chooser.showSaveDialog(centerPanel) == JFileChooser.APPROVE_OPTION) {
-          QualityProfile qualProfile = getQualityProfile();
-          ResolutionProfile resProfile = getResolutionProfile();
-          File file = chooser.getSelectedFile();
-          prefs.setLastOutputImageFile(file);
-          int width = resProfile.getWidth();
-          int height = resProfile.getHeight();
-          RenderInfo info = new RenderInfo(width, height);
-          Flame flame = getCurrFlame();
-          double wScl = (double) info.getImageWidth() / (double) flame.getWidth();
-          double hScl = (double) info.getImageHeight() / (double) flame.getHeight();
-          flame.setPixelsPerUnit((wScl + hScl) * 0.5 * flame.getPixelsPerUnit());
-          flame.setWidth(info.getImageWidth());
-          flame.setHeight(info.getImageHeight());
-          boolean renderHDR = qualProfile.isWithHDR();
-          info.setRenderHDR(renderHDR);
-          boolean renderHDRIntensityMap = qualProfile.isWithHDRIntensityMap();
-          info.setRenderHDRIntensityMap(renderHDRIntensityMap);
-          double oldSampleDensity = flame.getSampleDensity();
-          double oldFilterRadius = flame.getSpatialFilterRadius();
-          try {
-            RendererType rendererType = (RendererType) rendererCmb.getSelectedItem();
-            if (rendererType == null) {
-              rendererType = RendererType.JAVA;
-            }
-            flame.setSampleDensity(qualProfile.getQuality());
-            switch (rendererType) {
-              case JAVA: {
-                FlameRenderer renderer = new FlameRenderer(flame, prefs, flame.isBGTransparency());
-                renderer.setProgressUpdater(mainProgressUpdater);
-                long t0 = Calendar.getInstance().getTimeInMillis();
-                RenderedFlame res = renderer.renderFlame(info);
-                long t1 = Calendar.getInstance().getTimeInMillis();
-                showStatusMessage(flame, "render time: " + Tools.doubleToString((t1 - t0) * 0.001) + "s");
-                new ImageWriter().saveImage(res.getImage(), file.getAbsolutePath());
-                if (res.getHDRImage() != null) {
-                  new ImageWriter().saveImage(res.getHDRImage(), file.getAbsolutePath() + ".hdr");
-                }
-                if (res.getHDRIntensityMap() != null) {
-                  new ImageWriter().saveImage(res.getHDRIntensityMap(), file.getAbsolutePath() + ".intensity.hdr");
-                }
-              }
-                break;
-              case C32:
-              case C64: {
-                CRendererInterface cudaRenderer = new CRendererInterface(rendererType, flame.isBGTransparency());
-                CRendererInterface.checkFlameForCUDA(flame);
-                cudaRenderer.setProgressUpdater(mainProgressUpdater);
-                if (info.isRenderHDR()) {
-                  String hdrFilename = file.getAbsolutePath() + ".hdr";
-                  cudaRenderer.setHDROutputfilename(hdrFilename);
-                  // do not allocate unnessary memory as the HDR file is completely generated and saved by the external renderer 
-                  info.setRenderHDR(false);
-                  info.setRenderHDRIntensityMap(false);
-                }
-                long t0 = System.currentTimeMillis();
-                RenderedFlame res = cudaRenderer.renderFlame(info, flame, prefs);
-                long t1 = System.currentTimeMillis();
-                showStatusMessage(flame, "render time: " + Tools.doubleToString((t1 - t0) * 0.001) + "s");
-                new ImageWriter().saveImage(res.getImage(), file.getAbsolutePath());
-              }
-                break;
-            }
-          }
-          finally {
-            flame.setSampleDensity(oldSampleDensity);
-            flame.setSpatialFilterRadius(oldFilterRadius);
-          }
-          mainController.loadImage(file.getAbsolutePath(), false);
-          //          JOptionPane.showMessageDialog(centerPanel, "Image was successfully saved", "Operation successful", JOptionPane.OK_OPTION);
-        }
-      }
-      catch (Throwable ex) {
-        errorHandler.handleError(ex);
-      }
-    }
   }
 
   public void saveFlameButton_actionPerformed(ActionEvent e) {
@@ -5427,5 +5339,168 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       batchPreviewFlamePanel = null;
     }
     renderBatchJobsTableClicked();
+  }
+
+  public void renderImageButton_actionPerformed0() {
+    if (currFlame != null) {
+      try {
+        JFileChooser chooser = new ImageFileChooser();
+        if (prefs.getOutputImagePath() != null) {
+          try {
+            chooser.setCurrentDirectory(new File(prefs.getOutputImagePath()));
+          }
+          catch (Exception ex) {
+            ex.printStackTrace();
+          }
+        }
+        if (chooser.showSaveDialog(centerPanel) == JFileChooser.APPROVE_OPTION) {
+          QualityProfile qualProfile = getQualityProfile();
+          ResolutionProfile resProfile = getResolutionProfile();
+          File file = chooser.getSelectedFile();
+          prefs.setLastOutputImageFile(file);
+          int width = resProfile.getWidth();
+          int height = resProfile.getHeight();
+          RenderInfo info = new RenderInfo(width, height);
+          Flame flame = getCurrFlame();
+          double wScl = (double) info.getImageWidth() / (double) flame.getWidth();
+          double hScl = (double) info.getImageHeight() / (double) flame.getHeight();
+          flame.setPixelsPerUnit((wScl + hScl) * 0.5 * flame.getPixelsPerUnit());
+          flame.setWidth(info.getImageWidth());
+          flame.setHeight(info.getImageHeight());
+          boolean renderHDR = qualProfile.isWithHDR();
+          info.setRenderHDR(renderHDR);
+          boolean renderHDRIntensityMap = qualProfile.isWithHDRIntensityMap();
+          info.setRenderHDRIntensityMap(renderHDRIntensityMap);
+          double oldSampleDensity = flame.getSampleDensity();
+          double oldFilterRadius = flame.getSpatialFilterRadius();
+          try {
+            RendererType rendererType = (RendererType) rendererCmb.getSelectedItem();
+            if (rendererType == null) {
+              rendererType = RendererType.JAVA;
+            }
+            flame.setSampleDensity(qualProfile.getQuality());
+            switch (rendererType) {
+              case JAVA: {
+                FlameRenderer renderer = new FlameRenderer(flame, prefs, flame.isBGTransparency());
+                renderer.setProgressUpdater(mainProgressUpdater);
+                long t0 = Calendar.getInstance().getTimeInMillis();
+                RenderedFlame res = renderer.renderFlame(info);
+                long t1 = Calendar.getInstance().getTimeInMillis();
+                showStatusMessage(flame, "render time: " + Tools.doubleToString((t1 - t0) * 0.001) + "s");
+                new ImageWriter().saveImage(res.getImage(), file.getAbsolutePath());
+                if (res.getHDRImage() != null) {
+                  new ImageWriter().saveImage(res.getHDRImage(), file.getAbsolutePath() + ".hdr");
+                }
+                if (res.getHDRIntensityMap() != null) {
+                  new ImageWriter().saveImage(res.getHDRIntensityMap(), file.getAbsolutePath() + ".intensity.hdr");
+                }
+              }
+                break;
+              case C32:
+              case C64: {
+                CRendererInterface cudaRenderer = new CRendererInterface(rendererType, flame.isBGTransparency());
+                CRendererInterface.checkFlameForCUDA(flame);
+                cudaRenderer.setProgressUpdater(mainProgressUpdater);
+                if (info.isRenderHDR()) {
+                  String hdrFilename = file.getAbsolutePath() + ".hdr";
+                  cudaRenderer.setHDROutputfilename(hdrFilename);
+                  // do not allocate unnessary memory as the HDR file is completely generated and saved by the external renderer 
+                  info.setRenderHDR(false);
+                  info.setRenderHDRIntensityMap(false);
+                }
+                long t0 = System.currentTimeMillis();
+                RenderedFlame res = cudaRenderer.renderFlame(info, flame, prefs);
+                long t1 = System.currentTimeMillis();
+                showStatusMessage(flame, "render time: " + Tools.doubleToString((t1 - t0) * 0.001) + "s");
+                new ImageWriter().saveImage(res.getImage(), file.getAbsolutePath());
+              }
+                break;
+            }
+          }
+          finally {
+            flame.setSampleDensity(oldSampleDensity);
+            flame.setSpatialFilterRadius(oldFilterRadius);
+          }
+          mainController.loadImage(file.getAbsolutePath(), false);
+        }
+      }
+      catch (Throwable ex) {
+        errorHandler.handleError(ex);
+      }
+    }
+  }
+
+  private RenderMainFlameThread mainRenderThread = null;
+
+  private void enableMainRenderControls() {
+    renderMainButton.setText(mainRenderThread == null ? "Render" : "Cancel render");
+  }
+
+  public void renderImageButton_actionPerformed() {
+    if (mainRenderThread != null) {
+      mainRenderThread.setForceAbort();
+      while (mainRenderThread.isFinished()) {
+        try {
+          Thread.sleep(10);
+        }
+        catch (InterruptedException e) {
+          e.printStackTrace();
+        }
+      }
+      mainRenderThread = null;
+      enableMainRenderControls();
+    }
+    else if (currFlame != null) {
+      try {
+        JFileChooser chooser = new ImageFileChooser();
+        if (prefs.getOutputImagePath() != null) {
+          try {
+            chooser.setCurrentDirectory(new File(prefs.getOutputImagePath()));
+          }
+          catch (Exception ex) {
+            ex.printStackTrace();
+          }
+        }
+        if (chooser.showSaveDialog(centerPanel) == JFileChooser.APPROVE_OPTION) {
+          QualityProfile qualProfile = getQualityProfile();
+          ResolutionProfile resProfile = getResolutionProfile();
+          final Flame flame = getCurrFlame();
+          final File file = chooser.getSelectedFile();
+          prefs.setLastOutputImageFile(file);
+          RendererType rendererType = (RendererType) rendererCmb.getSelectedItem();
+
+          RenderMainFlameThreadFinishEvent finishEvent = new RenderMainFlameThreadFinishEvent() {
+
+            @Override
+            public void succeeded(double pElapsedTime) {
+              try {
+                showStatusMessage(flame, "render time: " + Tools.doubleToString(pElapsedTime) + "s");
+                mainController.loadImage(file.getAbsolutePath(), false);
+              }
+              catch (Throwable ex) {
+                errorHandler.handleError(ex);
+              }
+              mainRenderThread = null;
+              enableMainRenderControls();
+            }
+
+            @Override
+            public void failed(Throwable exception) {
+              errorHandler.handleError(exception);
+              mainRenderThread = null;
+              enableMainRenderControls();
+            }
+
+          };
+          mainRenderThread = new RenderMainFlameThread(prefs, flame, file, qualProfile, resProfile, rendererType, finishEvent, mainProgressUpdater);
+          enableMainRenderControls();
+          new Thread(mainRenderThread).start();
+
+        }
+      }
+      catch (Throwable ex) {
+        errorHandler.handleError(ex);
+      }
+    }
   }
 }

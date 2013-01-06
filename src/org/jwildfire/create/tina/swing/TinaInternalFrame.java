@@ -139,7 +139,7 @@ public class TinaInternalFrame extends JInternalFrame {
 
   private JButton tinaRenderFlameButton = null;
 
-  private JButton renderImageButton = null;
+  private JButton renderMainButton = null;
 
   private JLabel tinaCameraCentreXLbl = null;
 
@@ -690,7 +690,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaNorthPanel.add(getPanel_6());
       tinaNorthPanel.add(getPanel_13());
       tinaNorthPanel.add(getPanel_19());
-      tinaNorthPanel.add(getRenderImageButton());
+      tinaNorthPanel.add(getRenderMainButton());
       tinaNorthPanel.add(getPanel_15());
       tinaNorthPanel.add(getPanel_16());
 
@@ -1398,21 +1398,21 @@ public class TinaInternalFrame extends JInternalFrame {
    *  
    * @return javax.swing.JButton  
    */
-  private JButton getRenderImageButton() {
-    if (renderImageButton == null) {
-      renderImageButton = new JButton();
-      renderImageButton.setMinimumSize(new Dimension(125, 52));
-      renderImageButton.setMaximumSize(new Dimension(32000, 52));
-      renderImageButton.setText("Render image");
-      renderImageButton.setPreferredSize(new Dimension(125, 24));
-      renderImageButton.setFont(new Font("Dialog", Font.BOLD, 10));
-      renderImageButton.addActionListener(new java.awt.event.ActionListener() {
+  private JButton getRenderMainButton() {
+    if (renderMainButton == null) {
+      renderMainButton = new JButton();
+      renderMainButton.setMinimumSize(new Dimension(125, 52));
+      renderMainButton.setMaximumSize(new Dimension(32000, 52));
+      renderMainButton.setText("Render image");
+      renderMainButton.setPreferredSize(new Dimension(125, 24));
+      renderMainButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      renderMainButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
           tinaController.renderImageButton_actionPerformed();
         }
       });
     }
-    return renderImageButton;
+    return renderMainButton;
   }
 
   /**
@@ -3498,7 +3498,7 @@ public class TinaInternalFrame extends JInternalFrame {
         getAffineScaleXButton(), getAffineScaleYButton(), getGradientLibraryCenterPanel(), getGradientLibraryGradientCmb(), getHelpPane(),
         getFaqPane(), getToggleVariationsButton(), getToggleTransparencyButton(), getAffinePreserveZButton(), getQualityProfileCmb(), getResolutionProfileCmb(),
         getBatchQualityProfileCmb(), getBatchResolutionProfileCmb(), getBatchRendererCmb(), getInteractiveQualityProfileCmb(), getInteractiveResolutionProfileCmb(),
-        getSwfAnimatorQualityProfileCmb(), getSwfAnimatorResolutionProfileCmb(), getTinaRenderFlameButton(), getTinaAppendToMovieButton(),
+        getSwfAnimatorQualityProfileCmb(), getSwfAnimatorResolutionProfileCmb(), getTinaRenderFlameButton(), getRenderMainButton(), getTinaAppendToMovieButton(),
         getTransformationWeightREd(), getUndoButton(), getRedoButton(), getRendererCmb(),
         getXFormAntialiasAmountREd(), getXFormAntialiasAmountSlider(), getXFormAntialiasRadiusREd(), getXFormAntialiasRadiusSlider(),
         getXFormAntialiasCopyToAllBtn(), getRealtimeFlamePnl(), getRealtimeGraph1Pnl(), getDancingFlamesLoadSoundBtn(), getDancingFlamesAddFromClipboardBtn(),

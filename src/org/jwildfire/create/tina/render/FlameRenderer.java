@@ -88,6 +88,8 @@ public final class FlameRenderer {
   private final Prefs prefs;
 
   private List<IterationObserver> iterationObservers;
+  private List<FlameRenderThread> runningThreads;
+  private boolean forceAbort;
 
   public void registerIterationObserver(IterationObserver pObserver) {
     if (iterationObservers == null) {
@@ -240,13 +242,15 @@ public final class FlameRenderer {
         renderFlames.add(renderFlame);
         renderFlame.refreshModWeightTables(flameTransformationContext);
       }
-
+      forceAbort = false;
       iterate(0, 1, renderFlames);
-      if (flame.getSampleDensity() <= 10.0) {
-        renderImageSimple(img);
-      }
-      else {
-        renderImage(img, hdrImg, hdrIntensityMapImg);
+      if (!forceAbort) {
+        if (flame.getSampleDensity() <= 10.0) {
+          renderImageSimple(img);
+        }
+        else {
+          renderImage(img, hdrImg, hdrIntensityMapImg);
+        }
       }
     }
     finally {
@@ -572,40 +576,34 @@ public final class FlameRenderer {
     }
     long sampleProgressUpdateStep = nSamples / PROGRESS_STEPS;
     long nextProgressUpdate = sampleProgressUpdateStep;
-    List<FlameRenderThread> threads = new ArrayList<FlameRenderThread>();
+    runningThreads = new ArrayList<FlameRenderThread>();
     int nThreads = pFlames.size();
-    if (nThreads <= 1) {
-      FlameRenderThread t = createFlameRenderThread(pFlames.get(0), nSamples / (long) nThreads);
-      t.run();
+    for (int i = 0; i < nThreads; i++) {
+      FlameRenderThread t = createFlameRenderThread(pFlames.get(i), nSamples / (long) nThreads);
+      runningThreads.add(t);
+      new Thread(t).start();
     }
-    else {
-      for (int i = 0; i < nThreads; i++) {
-        FlameRenderThread t = createFlameRenderThread(pFlames.get(i), nSamples / (long) nThreads);
-        threads.add(t);
-        new Thread(t).start();
+    boolean done = false;
+    while (!done) {
+      try {
+        Thread.sleep(10);
       }
-      boolean done = false;
-      while (!done) {
-        try {
-          Thread.sleep(10);
+      catch (InterruptedException e) {
+        e.printStackTrace();
+      }
+      done = true;
+      long currSamples = 0;
+      for (FlameRenderThread t : runningThreads) {
+        if (!t.isFinished()) {
+          done = false;
         }
-        catch (InterruptedException e) {
-          e.printStackTrace();
-        }
-        done = true;
-        long currSamples = 0;
-        for (FlameRenderThread t : threads) {
-          if (!t.isFinished()) {
-            done = false;
-          }
-          currSamples += t.getCurrSample();
-        }
-        if (currSamples >= nextProgressUpdate) {
-          if (progressUpdater != null) {
-            int currProgress = (int) ((currSamples * PROGRESS_STEPS) / nSamples);
-            progressUpdater.updateProgress(currProgress + pPart * PROGRESS_STEPS);
-            nextProgressUpdate = (currProgress + 1) * sampleProgressUpdateStep;
-          }
+        currSamples += t.getCurrSample();
+      }
+      if (currSamples >= nextProgressUpdate) {
+        if (progressUpdater != null) {
+          int currProgress = (int) ((currSamples * PROGRESS_STEPS) / nSamples);
+          progressUpdater.updateProgress(currProgress + pPart * PROGRESS_STEPS);
+          nextProgressUpdate = (currProgress + 1) * sampleProgressUpdateStep;
         }
       }
     }
@@ -858,6 +856,31 @@ public final class FlameRenderer {
 
   public RenderInfo getRenderInfo() {
     return renderInfo;
+  }
+
+  public void cancel() {
+    forceAbort = true;
+    if (runningThreads != null) {
+      while (true) {
+        boolean done = true;
+        for (FlameRenderThread thread : runningThreads) {
+          if (!thread.isFinished()) {
+            done = false;
+            thread.cancel();
+            try {
+              Thread.sleep(1);
+            }
+            catch (InterruptedException e) {
+              e.printStackTrace();
+            }
+            break;
+          }
+        }
+        if (done) {
+          break;
+        }
+      }
+    }
   }
 
 }
