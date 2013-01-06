@@ -489,9 +489,6 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       JButton pDancingFlamesFlameToEditorBtn, JButton pDancingFlamesDeleteFlameBtn, JTextField pDancingFlamesFramesPerSecondIEd,
       JTextField pDancingFlamesMorphFrameCountIEd, JButton pDancingFlamesStartShowButton, JButton pDancingFlamesStopShowButton,
       JCheckBox pDancingFlamesDoRecordCBx, JButton pDancingFlamesSaveAllFlamesBtn,
-      JComboBox pDancingFlamesGlobalScript1Cmb, JComboBox pDancingFlamesGlobalSpeed1Cmb, JComboBox pDancingFlamesGlobalScript2Cmb, JComboBox pDancingFlamesGlobalSpeed2Cmb,
-      JComboBox pDancingFlamesGlobalScript3Cmb, JComboBox pDancingFlamesGlobalSpeed3Cmb, JComboBox pDancingFlamesXFormScript1Cmb, JComboBox pDancingFlamesXFormSpeed1Cmb,
-      JComboBox pDancingFlamesXFormScript2Cmb, JComboBox pDancingFlamesXFormSpeed2Cmb, JComboBox pDancingFlamesXFormScript3Cmb, JComboBox pDancingFlamesXFormSpeed3Cmb,
       JComboBox pDancingFlamesFlamesCmb, JCheckBox pDancingFlamesDrawTrianglesCBx, JCheckBox pDancingFlamesDrawFFTCBx, JCheckBox pDancingFlamesDrawFPSCBx,
       JTree pDancingFlamesFlamePropertiesTree) {
     tinaFrame = pTinaFrame;
@@ -506,9 +503,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
         pDancingFlamesRandomGenCmb, pDancingFlamesPoolFlamePreviewPnl, pDancingFlamesBorderSizeSlider,
         pDancingFlamesFlameToEditorBtn, pDancingFlamesDeleteFlameBtn, pDancingFlamesFramesPerSecondIEd, pDancingFlamesMorphFrameCountIEd,
         pDancingFlamesStartShowButton, pDancingFlamesStopShowButton, pDancingFlamesDoRecordCBx,
-        pDancingFlamesSaveAllFlamesBtn, pDancingFlamesGlobalScript1Cmb, pDancingFlamesGlobalSpeed1Cmb, pDancingFlamesGlobalScript2Cmb, pDancingFlamesGlobalSpeed2Cmb,
-        pDancingFlamesGlobalScript3Cmb, pDancingFlamesGlobalSpeed3Cmb, pDancingFlamesXFormScript1Cmb, pDancingFlamesXFormSpeed1Cmb,
-        pDancingFlamesXFormScript2Cmb, pDancingFlamesXFormSpeed2Cmb, pDancingFlamesXFormScript3Cmb, pDancingFlamesXFormSpeed3Cmb, pDancingFlamesFlamesCmb,
+        pDancingFlamesSaveAllFlamesBtn, pDancingFlamesFlamesCmb,
         pDancingFlamesDrawTrianglesCBx, pDancingFlamesDrawFFTCBx, pDancingFlamesDrawFPSCBx, pDancingFlamesFlamePropertiesTree);
 
     cameraRollREd = pCameraRollREd;

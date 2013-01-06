@@ -30,6 +30,7 @@ import org.jwildfire.swing.ImagePanel;
 
 public class RealtimeAnimRenderThread implements Runnable, FlameHolder {
   private final DancingFractalsController controller;
+  private final FlameStack flameStack;
   private boolean forceAbort;
   private boolean running;
   private RecordedFFT fftData;
@@ -43,16 +44,15 @@ public class RealtimeAnimRenderThread implements Runnable, FlameHolder {
   private XFormScript xFormScript[] = { XFormScript.NONE, XFormScript.NONE, XFormScript.NONE };
   private MotionSpeed xFormSpeed[] = { MotionSpeed.S1_1, MotionSpeed.S1_1, MotionSpeed.S1_1 };
   private static final int SPEED_REF_FRAMES = 180;
-  private final FlameStack flameStack;
   private Flame currFlame;
   private boolean drawTriangles = true;
   private boolean drawFFT = true;
   private boolean drawFPS = true;
 
-  public RealtimeAnimRenderThread(DancingFractalsController pController, FlameStack pFlameStack) {
+  public RealtimeAnimRenderThread(DancingFractalsController pController) {
     controller = pController;
     transformer = new DanceFlameTransformer();
-    flameStack = pFlameStack;
+    flameStack = new FlameStack(pController.getParentCtrl().getPrefs());
   }
 
   @Override
@@ -113,7 +113,12 @@ public class RealtimeAnimRenderThread implements Runnable, FlameHolder {
           startFPSMeasurement = System.currentTimeMillis();
         }
         currFlame = flame;
-        controller.refreshFlameImage(flame, drawTriangles, fps, drawFPS);
+        try {
+          controller.refreshFlameImage(flame, drawTriangles, fps, drawFPS);
+        }
+        catch (Exception ex) {
+          ex.printStackTrace();
+        }
       }
     }
     finally {
@@ -185,22 +190,6 @@ public class RealtimeAnimRenderThread implements Runnable, FlameHolder {
     return framesPerSecond;
   }
 
-  public void setGlobalScript(int pIdx, GlobalScript pGlobalScript) {
-    globalScript[pIdx] = pGlobalScript;
-  }
-
-  public void setXFormScript(int pIdx, XFormScript pXFormScript) {
-    xFormScript[pIdx] = pXFormScript;
-  }
-
-  public void setGlobalSpeed(int pIdx, MotionSpeed pGlobalSpeed) {
-    globalSpeed[pIdx] = pGlobalSpeed;
-  }
-
-  public void setXFormSpeed(int pIdx, MotionSpeed pXFormSpeed) {
-    xFormSpeed[pIdx] = pXFormSpeed;
-  }
-
   @Override
   public Flame getFlame() {
     return currFlame;
@@ -216,5 +205,9 @@ public class RealtimeAnimRenderThread implements Runnable, FlameHolder {
 
   public void setDrawTriangles(boolean pDrawTriangles) {
     drawTriangles = pDrawTriangles;
+  }
+
+  public FlameStack getFlameStack() {
+    return flameStack;
   }
 }

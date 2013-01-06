@@ -43,9 +43,6 @@ import javax.swing.tree.TreePath;
 
 import org.jwildfire.base.Prefs;
 import org.jwildfire.base.Tools;
-import org.jwildfire.create.tina.animate.GlobalScript;
-import org.jwildfire.create.tina.animate.MotionSpeed;
-import org.jwildfire.create.tina.animate.XFormScript;
 import org.jwildfire.create.tina.audio.JLayerInterface;
 import org.jwildfire.create.tina.audio.RecordedFFT;
 import org.jwildfire.create.tina.base.Flame;
@@ -101,18 +98,6 @@ public class DancingFractalsController {
   private final JButton stopShowButton;
   private final JCheckBox doRecordCBx;
   private final JButton saveAllFlamesBtn;
-  private final JComboBox globalScript1Cmb;
-  private final JComboBox globalSpeed1Cmb;
-  private final JComboBox globalScript2Cmb;
-  private final JComboBox globalSpeed2Cmb;
-  private final JComboBox globalScript3Cmb;
-  private final JComboBox globalSpeed3Cmb;
-  private final JComboBox xFormScript1Cmb;
-  private final JComboBox xFormSpeed1Cmb;
-  private final JComboBox xFormScript2Cmb;
-  private final JComboBox xFormSpeed2Cmb;
-  private final JComboBox xFormScript3Cmb;
-  private final JComboBox xFormSpeed3Cmb;
   private final JComboBox flamesCmb;
   private final JCheckBox drawTrianglesCbx;
   private final JCheckBox drawFFTCbx;
@@ -123,11 +108,10 @@ public class DancingFractalsController {
   private FlamePanel flamePanel = null;
   private FlamePanel poolFlamePreviewFlamePanel = null;
   private ImagePanel graph1Panel = null;
-  private List<Flame> flames = new ArrayList<Flame>();
+  private List<DancingFlame> dancingFlames = new ArrayList<DancingFlame>();
   private boolean refreshing;
   private RealtimeAnimRenderThread renderThread;
   private ActionRecorder actionRecorder;
-  private FlameStack flameStack;
 
   private RecordedFFT fft;
   private String soundFilename;
@@ -139,9 +123,6 @@ public class DancingFractalsController {
       JButton pGenRandFlamesBtn, JComboBox pRandomGenCmb, JPanel pPoolFlamePreviewPnl, JSlider pBorderSizeSlider,
       JButton pFlameToEditorBtn, JButton pDeleteFlameBtn, JTextField pFramesPerSecondIEd, JTextField pMorphFrameCountIEd,
       JButton pStartShowButton, JButton pStopShowButton, JCheckBox pDoRecordCBx, JButton pSaveAllFlamesBtn,
-      JComboBox pGlobalScript1Cmb, JComboBox pGlobalSpeed1Cmb, JComboBox pGlobalScript2Cmb, JComboBox pGlobalSpeed2Cmb,
-      JComboBox pGlobalScript3Cmb, JComboBox pGlobalSpeed3Cmb, JComboBox pXFormScript1Cmb, JComboBox pXFormSpeed1Cmb,
-      JComboBox pXFormScript2Cmb, JComboBox pXFormSpeed2Cmb, JComboBox pXFormScript3Cmb, JComboBox pXFormSpeed3Cmb,
       JComboBox pFlamesCmb, JCheckBox pDrawTrianglesCbx, JCheckBox pDrawFFTCbx, JCheckBox pDrawFPSCbx, JTree pFlamePropertiesTree) {
     parentCtrl = pParent;
     errorHandler = pErrorHandler;
@@ -165,18 +146,6 @@ public class DancingFractalsController {
     stopShowButton = pStopShowButton;
     doRecordCBx = pDoRecordCBx;
     saveAllFlamesBtn = pSaveAllFlamesBtn;
-    globalScript1Cmb = pGlobalScript1Cmb;
-    globalSpeed1Cmb = pGlobalSpeed1Cmb;
-    globalScript2Cmb = pGlobalScript2Cmb;
-    globalSpeed2Cmb = pGlobalSpeed2Cmb;
-    globalScript3Cmb = pGlobalScript3Cmb;
-    globalSpeed3Cmb = pGlobalSpeed3Cmb;
-    xFormScript1Cmb = pXFormScript1Cmb;
-    xFormSpeed1Cmb = pXFormSpeed1Cmb;
-    xFormScript2Cmb = pXFormScript2Cmb;
-    xFormSpeed2Cmb = pXFormSpeed2Cmb;
-    xFormScript3Cmb = pXFormScript3Cmb;
-    xFormSpeed3Cmb = pXFormSpeed3Cmb;
     flamesCmb = pFlamesCmb;
     drawTrianglesCbx = pDrawTrianglesCbx;
     drawFFTCbx = pDrawFFTCbx;
@@ -339,7 +308,7 @@ public class DancingFractalsController {
 
   public void startShow() {
     try {
-      if (flames.size() == 0)
+      if (dancingFlames.size() == 0)
         throw new Exception("No flames to animate");
       if (soundFilename == null || soundFilename.length() == 0)
         throw new Exception("No sound file specified");
@@ -358,7 +327,7 @@ public class DancingFractalsController {
 
   public void importFlame(Flame pFlame) {
     if (pFlame != null) {
-      flames.add(pFlame);
+      dancingFlames.add(new DancingFlame(pFlame));
       refreshPoolFlames();
       enableControls();
     }
@@ -366,31 +335,18 @@ public class DancingFractalsController {
 
   public void startRender() throws Exception {
     stopRender();
-    flameStack = new FlameStack(this.prefs);
-    Flame selFlame = flamesCmb.getSelectedIndex() >= 0 && flamesCmb.getSelectedIndex() < flames.size() ? flames.get(flamesCmb.getSelectedIndex()) : null;
-    flameStack.addFlame(selFlame, 0);
-    renderThread = new RealtimeAnimRenderThread(this, flameStack);
+    DancingFlame selFlame = flamesCmb.getSelectedIndex() >= 0 && flamesCmb.getSelectedIndex() < dancingFlames.size() ? dancingFlames.get(flamesCmb.getSelectedIndex()) : null;
+    renderThread = new RealtimeAnimRenderThread(this);
+    renderThread.getFlameStack().addFlame(selFlame.getFlame(), 0);
     actionRecorder = new ActionRecorder(renderThread);
     renderThread.setFFTData(fft);
     renderThread.setMusicPlayer(jLayer);
     renderThread.setFFTPanel(getGraph1Panel());
     renderThread.setFramesPerSecond(Integer.parseInt(framesPerSecondIEd.getText()));
-    renderThread.setGlobalScript(0, (GlobalScript) globalScript1Cmb.getSelectedItem());
-    renderThread.setGlobalSpeed(0, (MotionSpeed) globalSpeed1Cmb.getSelectedItem());
-    renderThread.setXFormScript(0, (XFormScript) xFormScript1Cmb.getSelectedItem());
-    renderThread.setXFormSpeed(0, (MotionSpeed) xFormSpeed1Cmb.getSelectedItem());
-    renderThread.setGlobalScript(1, (GlobalScript) globalScript2Cmb.getSelectedItem());
-    renderThread.setGlobalSpeed(1, (MotionSpeed) globalSpeed2Cmb.getSelectedItem());
-    renderThread.setXFormScript(1, (XFormScript) xFormScript2Cmb.getSelectedItem());
-    renderThread.setXFormSpeed(1, (MotionSpeed) xFormSpeed2Cmb.getSelectedItem());
-    renderThread.setGlobalScript(2, (GlobalScript) globalScript3Cmb.getSelectedItem());
-    renderThread.setGlobalSpeed(2, (MotionSpeed) globalSpeed3Cmb.getSelectedItem());
-    renderThread.setXFormScript(2, (XFormScript) xFormScript3Cmb.getSelectedItem());
-    renderThread.setXFormSpeed(2, (MotionSpeed) xFormSpeed3Cmb.getSelectedItem());
     renderThread.setDrawTriangles(drawTrianglesCbx.isSelected());
     renderThread.setDrawFFT(drawFFTCbx.isSelected());
     renderThread.setDrawFPS(drawFPSCbx.isSelected());
-    actionRecorder.recordStart(selFlame);
+    actionRecorder.recordStart(selFlame.getFlame());
     new Thread(renderThread).start();
   }
 
@@ -432,7 +388,7 @@ public class DancingFractalsController {
         RandomFlameGenerator randGen = RandomFlameGeneratorList.getRandomFlameGeneratorInstance((String) randomGenCmb.getSelectedItem(), true);
         int palettePoints = 3 + (int) (Math.random() * 68.0);
         RandomFlameGeneratorSampler sampler = new RandomFlameGeneratorSampler(IMG_WIDTH, IMG_HEIGHT, prefs, randGen, palettePoints);
-        flames.add(sampler.createSample().getFlame());
+        dancingFlames.add(new DancingFlame(sampler.createSample().getFlame()));
       }
       refreshPoolFlames();
       enableControls();
@@ -493,17 +449,17 @@ public class DancingFractalsController {
   }
 
   private void refreshFlamesCmb() {
-    Flame selFlame = flamesCmb.getSelectedIndex() >= 0 && flamesCmb.getSelectedIndex() < flames.size() ? flames.get(flamesCmb.getSelectedIndex()) : null;
+    DancingFlame selFlame = flamesCmb.getSelectedIndex() >= 0 && flamesCmb.getSelectedIndex() < dancingFlames.size() ? dancingFlames.get(flamesCmb.getSelectedIndex()) : null;
     int newSelIdx = -1;
     flamesCmb.removeAllItems();
-    for (int i = 0; i < flames.size(); i++) {
-      Flame flame = flames.get(i);
+    for (int i = 0; i < dancingFlames.size(); i++) {
+      DancingFlame flame = dancingFlames.get(i);
       if (newSelIdx < 0 && flame.equals(selFlame)) {
         newSelIdx = i;
       }
-      flamesCmb.addItem(getFlameCaption(flame));
+      flamesCmb.addItem(getFlameCaption(flame.getFlame()));
     }
-    flamesCmb.setSelectedIndex(newSelIdx >= 0 ? newSelIdx : flames.size() > 0 ? 0 : -1);
+    flamesCmb.setSelectedIndex(newSelIdx >= 0 ? newSelIdx : dancingFlames.size() > 0 ? 0 : -1);
   }
 
   private class FlamePropertiesTreeNode<T> extends DefaultMutableTreeNode {
@@ -522,9 +478,9 @@ public class DancingFractalsController {
 
   private void refreshFlamePropertiesTree() {
     FlamePropertiesTreeNode<Object> root = new FlamePropertiesTreeNode<Object>("Flames", null, true);
-    for (Flame flame : flames) {
-      FlamePropertiesTreeNode<Flame> flameNode = new FlamePropertiesTreeNode<Flame>(getFlameCaption(flame), flame, true);
-      PropertyNode model = AnimationModelService.createModel(flame);
+    for (DancingFlame flame : dancingFlames) {
+      FlamePropertiesTreeNode<DancingFlame> flameNode = new FlamePropertiesTreeNode<DancingFlame>(getFlameCaption(flame.getFlame()), flame, true);
+      PropertyNode model = AnimationModelService.createModel(flame.getFlame());
       addNodesToTree(model, flameNode);
       root.add(flameNode);
     }
@@ -559,7 +515,9 @@ public class DancingFractalsController {
         throw new Exception("There is currently no valid flame in the clipboard");
       }
       else {
-        flames.addAll(newFlames);
+        for (Flame newFlame : newFlames) {
+          dancingFlames.add(new DancingFlame(newFlame));
+        }
         refreshPoolFlames();
         enableControls();
       }
@@ -586,7 +544,9 @@ public class DancingFractalsController {
           List<Flame> newFlames = new Flam3Reader(prefs).readFlames(file.getAbsolutePath());
           prefs.setLastInputFlameFile(file);
           if (newFlames != null && newFlames.size() > 0) {
-            flames.addAll(newFlames);
+            for (Flame newFlame : newFlames) {
+              dancingFlames.add(new DancingFlame(newFlame));
+            }
           }
         }
         refreshPoolFlames();
@@ -624,7 +584,7 @@ public class DancingFractalsController {
   public void deleteFlameBtn_clicked() {
     Flame flame = poolFlameHolder.getFlame();
     if (flame != null) {
-      flames.remove(flame);
+      dancingFlames.remove(flame);
       refreshPoolFlames();
       enableControls();
     }
@@ -652,15 +612,15 @@ public class DancingFractalsController {
     randomCountIEd.setEnabled(!running);
     genRandFlamesBtn.setEnabled(!running);
     randomGenCmb.setEnabled(!running);
-    flameToEditorBtn.setEnabled(flames.size() > 0 && poolFlameHolder.getFlame() != null);
-    deleteFlameBtn.setEnabled(flames.size() > 0 && poolFlameHolder.getFlame() != null);
+    flameToEditorBtn.setEnabled(dancingFlames.size() > 0 && poolFlameHolder.getFlame() != null);
+    deleteFlameBtn.setEnabled(dancingFlames.size() > 0 && poolFlameHolder.getFlame() != null);
     framesPerSecondIEd.setEnabled(!running);
     borderSizeSlider.setEnabled(true);
     morphFrameCountIEd.setEnabled(true);
-    startShowButton.setEnabled(!running && flames != null && flames.size() > 0 && soundFilename != null && soundFilename.length() > 0 && fft != null);
+    startShowButton.setEnabled(!running && dancingFlames != null && dancingFlames.size() > 0 && soundFilename != null && soundFilename.length() > 0 && fft != null);
     stopShowButton.setEnabled(running);
     doRecordCBx.setEnabled(!running);
-    saveAllFlamesBtn.setEnabled(!running && flames != null && flames.size() > 0);
+    saveAllFlamesBtn.setEnabled(!running && dancingFlames != null && dancingFlames.size() > 0);
   }
 
   protected TinaController getParentCtrl() {
@@ -681,7 +641,7 @@ public class DancingFractalsController {
       if (chooser.showSaveDialog(flameRootPanel) == JFileChooser.APPROVE_OPTION) {
         File file = chooser.getSelectedFile();
         prefs.setLastOutputFlameFile(file);
-        if (flames.size() > 0) {
+        if (dancingFlames.size() > 0) {
           String fn = file.getName();
           {
             int p = fn.indexOf(".flame");
@@ -691,90 +651,18 @@ public class DancingFractalsController {
           }
 
           int fileIdx = 1;
-          for (Flame flame : flames) {
+          for (DancingFlame flame : dancingFlames) {
             String hs = String.valueOf(fileIdx++);
             while (hs.length() < 5) {
               hs = "0" + hs;
             }
-            new Flam3Writer().writeFlame(flame, new File(file.getParent(), fn + hs + ".flame").getAbsolutePath());
+            new Flam3Writer().writeFlame(flame.getFlame(), new File(file.getParent(), fn + hs + ".flame").getAbsolutePath());
           }
         }
       }
     }
     catch (Exception ex) {
       errorHandler.handleError(ex);
-    }
-  }
-
-  public void globalScriptCmb1_changed() {
-    if (renderThread != null) {
-      renderThread.setGlobalScript(0, (GlobalScript) globalScript1Cmb.getSelectedItem());
-    }
-  }
-
-  public void xFormScriptCmb1_changed() {
-    if (renderThread != null) {
-      renderThread.setXFormScript(0, (XFormScript) xFormScript1Cmb.getSelectedItem());
-    }
-  }
-
-  public void globalSpeedCmb1_changed() {
-    if (renderThread != null) {
-      renderThread.setGlobalSpeed(0, (MotionSpeed) globalSpeed1Cmb.getSelectedItem());
-    }
-  }
-
-  public void xFormSpeedCmb1_changed() {
-    if (renderThread != null) {
-      renderThread.setXFormSpeed(0, (MotionSpeed) xFormSpeed1Cmb.getSelectedItem());
-    }
-  }
-
-  public void globalScriptCmb2_changed() {
-    if (renderThread != null) {
-      renderThread.setGlobalScript(1, (GlobalScript) globalScript2Cmb.getSelectedItem());
-    }
-  }
-
-  public void globalScriptCmb3_changed() {
-    if (renderThread != null) {
-      renderThread.setGlobalScript(2, (GlobalScript) globalScript3Cmb.getSelectedItem());
-    }
-  }
-
-  public void globalSpeedCmb2_changed() {
-    if (renderThread != null) {
-      renderThread.setGlobalSpeed(1, (MotionSpeed) globalSpeed2Cmb.getSelectedItem());
-    }
-  }
-
-  public void globalSpeedCmb3_changed() {
-    if (renderThread != null) {
-      renderThread.setGlobalSpeed(2, (MotionSpeed) globalSpeed3Cmb.getSelectedItem());
-    }
-  }
-
-  public void xFormScriptCmb2_changed() {
-    if (renderThread != null) {
-      renderThread.setXFormScript(1, (XFormScript) xFormScript2Cmb.getSelectedItem());
-    }
-  }
-
-  public void xFormScriptCmb3_changed() {
-    if (renderThread != null) {
-      renderThread.setXFormScript(2, (XFormScript) xFormScript3Cmb.getSelectedItem());
-    }
-  }
-
-  public void xFormSpeedCmb2_changed() {
-    if (renderThread != null) {
-      renderThread.setXFormSpeed(1, (MotionSpeed) xFormSpeed2Cmb.getSelectedItem());
-    }
-  }
-
-  public void xFormSpeedCmb3_changed() {
-    if (renderThread != null) {
-      renderThread.setXFormSpeed(2, (MotionSpeed) xFormSpeed3Cmb.getSelectedItem());
     }
   }
 
@@ -797,13 +685,13 @@ public class DancingFractalsController {
   }
 
   public void flameCmb_changed() {
-    if (!refreshing) {
-      Flame selFlame = flamesCmb.getSelectedIndex() >= 0 && flamesCmb.getSelectedIndex() < flames.size() ? flames.get(flamesCmb.getSelectedIndex()) : null;
+    if (!refreshing && renderThread != null) {
+      DancingFlame selFlame = flamesCmb.getSelectedIndex() >= 0 && flamesCmb.getSelectedIndex() < dancingFlames.size() ? dancingFlames.get(flamesCmb.getSelectedIndex()) : null;
       if (selFlame != null && renderThread != null) {
         int morphFrameCount = Integer.parseInt(morphFrameCountIEd.getText());
-        flameStack.addFlame(selFlame, morphFrameCount);
+        renderThread.getFlameStack().addFlame(selFlame.getFlame(), morphFrameCount);
         if (actionRecorder != null)
-          actionRecorder.recordFlameChange(selFlame, morphFrameCount);
+          actionRecorder.recordFlameChange(selFlame.getFlame(), morphFrameCount);
       }
     }
   }
@@ -815,8 +703,8 @@ public class DancingFractalsController {
       Object[] selection = flamePropertiesTree.getSelectionPaths();
       if (selection != null && selection.length > 1) {
         FlamePropertiesTreeNode flameNode = (FlamePropertiesTreeNode) selection[1];
-        Flame selFlame = (Flame) flameNode.getNodeData();
-        return selFlame;
+        DancingFlame selFlame = (DancingFlame) flameNode.getNodeData();
+        return selFlame.getFlame();
       }
       return null;
     }
@@ -830,8 +718,8 @@ public class DancingFractalsController {
         Object[] selection = path.getPath();
         if (selection != null && selection.length > 1) {
           FlamePropertiesTreeNode flameNode = (FlamePropertiesTreeNode) selection[1];
-          Flame selFlame = (Flame) flameNode.getNodeData();
-          refreshPoolPreviewFlameImage(selFlame);
+          DancingFlame selFlame = (DancingFlame) flameNode.getNodeData();
+          refreshPoolPreviewFlameImage(selFlame.getFlame());
         }
       }
     }
