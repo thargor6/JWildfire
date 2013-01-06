@@ -48,7 +48,6 @@ public class WelcomeInternalFrame extends JInternalFrame {
   private static final long serialVersionUID = 1L;
 
   private String[] imageFilenames = { "bronze_bubbles.jpg", "smoky_dreams.jpg", "watchers2.jpg", "woven.jpg" };
-  //  private String[] imageFilenames = { "merry_christmas.jpg" };
   private JButton enterBtn;
 
   public WelcomeInternalFrame() {
@@ -211,7 +210,6 @@ public class WelcomeInternalFrame extends JInternalFrame {
     // Load logo
     try {
       SimpleImage img = getImage("logo.png");
-      //      SimpleImage img = getImage("logo_christmas.jpg");
       ImagePanel imgPanel = new ImagePanel(img, 0, 0, img.getImageWidth());
       imgPanel.setPreferredSize(new Dimension(img.getImageWidth(), img.getImageHeight()));
       imgPanel.setLocation(4, 4);

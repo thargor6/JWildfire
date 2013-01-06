@@ -117,6 +117,8 @@ public class SubFlameRandomFlameGenerator extends RandomFlameGenerator {
       //          subFlame.setPixelsPerUnit(10);
       // render it   
       subFlame.setSampleDensity(50);
+      subFlame.setDEFilterAmount(0.0);
+      subFlame.setSpatialFilterRadius(0.0);
       RGBPalette palette = new RandomRGBPaletteGenerator().generatePalette(11);
       subFlame.setPalette(palette);
       FlameRenderer renderer = new FlameRenderer(subFlame, prefs, false);

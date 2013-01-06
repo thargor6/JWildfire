@@ -55,6 +55,8 @@ public class RandomFlameGeneratorSampler {
       flame.setWidth(imageWidth);
       flame.setHeight(imageHeight);
       flame.setPixelsPerUnit(10);
+      flame.setDEFilterAmount(0.0);
+      flame.setSpatialFilterRadius(0.0);
       RGBPalette palette = new RandomRGBPaletteGenerator().generatePalette(paletteSize);
       flame.setPalette(palette);
       // render it   
