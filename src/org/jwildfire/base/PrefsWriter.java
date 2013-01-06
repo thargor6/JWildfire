@@ -56,8 +56,6 @@ public class PrefsWriter {
       QualityProfile profile = pPrefs.getQualityProfiles().get(i);
       addValue(sb, Prefs.KEY_TINA_PROFILE_QUALITY_DEFAULT_PROFILE + "." + i, profile.isDefaultProfile());
       addValue(sb, Prefs.KEY_TINA_PROFILE_QUALITY_CAPTION + "." + i, profile.getCaption());
-      addValue(sb, Prefs.KEY_TINA_PROFILE_QUALITY_SPATIAL_OVERSAMPLE + "." + i, profile.getSpatialOversample());
-      addValue(sb, Prefs.KEY_TINA_PROFILE_QUALITY_COLOR_OVERSAMPLE + "." + i, profile.getColorOversample());
       addValue(sb, Prefs.KEY_TINA_PROFILE_QUALITY_QUALITY + "." + i, profile.getQuality());
       addValue(sb, Prefs.KEY_TINA_PROFILE_QUALITY_WITH_HDR + "." + i, profile.isWithHDR());
       addValue(sb, Prefs.KEY_TINA_PROFILE_QUALITY_WITH_HDR_INTENSITY_MAP + "." + i, profile.isWithHDRIntensityMap());

@@ -35,8 +35,6 @@ public class FlamePreparer {
     pFlame.getPalette().setModBlue(-60);
     pFlame.setSampleDensity(2 * prefs.getTinaRenderRealtimeQuality());
     pFlame.setSpatialFilterRadius(0.75);
-    pFlame.setSpatialOversample(1);
-    pFlame.setColorOversample(1);
   }
 
 }

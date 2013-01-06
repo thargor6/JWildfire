@@ -169,8 +169,6 @@ public class AnimationService {
       }
       case C32:
       case C64: {
-        flame.setSpatialOversample(1);
-        flame.setColorOversample(1);
         CRendererInterface cudaRenderer = new CRendererInterface(pRendererType, flame.isBGTransparency());
         CRendererInterface.checkFlameForCUDA(flame);
         RenderedFlame res = cudaRenderer.renderFlame(info, flame, pPrefs);

@@ -131,7 +131,7 @@ public class TinaInteractiveRendererController implements IterationObserver {
   private QualityProfile getQualityProfile() {
     QualityProfile res = (QualityProfile) interactiveQualityProfileCmb.getSelectedItem();
     if (res == null) {
-      res = new QualityProfile(false, "default", 1, 1, 0, true, false);
+      res = new QualityProfile(false, "default", 0, true, false);
     }
     return res;
   }
@@ -582,7 +582,7 @@ public class TinaInteractiveRendererController implements IterationObserver {
             }
           }
           if (selected == null) {
-            selected = new QualityProfile(false, "Resumed render", 1, 1, resumedRender.getHeader().getQuality(), resumedRender.getHeader().isWithHDR(), resumedRender.getHeader().isWithHDRIntensityMap());
+            selected = new QualityProfile(false, "Resumed render", resumedRender.getHeader().getQuality(), resumedRender.getHeader().isWithHDR(), resumedRender.getHeader().isWithHDRIntensityMap());
             interactiveQualityProfileCmb.addItem(selected);
           }
           interactiveQualityProfileCmb.setSelectedItem(selected);

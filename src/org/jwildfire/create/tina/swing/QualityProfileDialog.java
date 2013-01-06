@@ -60,10 +60,6 @@ public class QualityProfileDialog extends JDialog {
   private JLabel statusLbl;
   private JTextField qualityREd;
   private JLabel lblQuality;
-  private JTextField spatialOversamplingREd;
-  private JLabel lblSpatialOversampling;
-  private JTextField colorOversamplingREd;
-  private JLabel lblColorOversampling;
   private JCheckBox withHDRCBx;
   private JCheckBox withHdrIntensityMapCBx;
 
@@ -212,42 +208,6 @@ public class QualityProfileDialog extends JDialog {
     lblQuality.setBounds(6, 60, 118, 22);
     contentPanel.add(lblQuality);
 
-    spatialOversamplingREd = new JTextField();
-    spatialOversamplingREd.setText("");
-    spatialOversamplingREd.setSize(new Dimension(100, 22));
-    spatialOversamplingREd.setPreferredSize(new Dimension(100, 22));
-    spatialOversamplingREd.setLocation(new Point(100, 4));
-    spatialOversamplingREd.setFont(new Font("Dialog", Font.PLAIN, 10));
-    spatialOversamplingREd.setEnabled(false);
-    spatialOversamplingREd.setBounds(125, 88, 100, 22);
-    contentPanel.add(spatialOversamplingREd);
-
-    lblSpatialOversampling = new JLabel();
-    lblSpatialOversampling.setText("Spatial oversampling");
-    lblSpatialOversampling.setPreferredSize(new Dimension(94, 22));
-    lblSpatialOversampling.setFont(new Font("Dialog", Font.BOLD, 10));
-    lblSpatialOversampling.setBounds(new Rectangle(135, 7, 94, 22));
-    lblSpatialOversampling.setBounds(6, 88, 118, 22);
-    contentPanel.add(lblSpatialOversampling);
-
-    colorOversamplingREd = new JTextField();
-    colorOversamplingREd.setText("");
-    colorOversamplingREd.setSize(new Dimension(100, 22));
-    colorOversamplingREd.setPreferredSize(new Dimension(100, 22));
-    colorOversamplingREd.setLocation(new Point(100, 4));
-    colorOversamplingREd.setFont(new Font("Dialog", Font.PLAIN, 10));
-    colorOversamplingREd.setEnabled(false);
-    colorOversamplingREd.setBounds(125, 118, 100, 22);
-    contentPanel.add(colorOversamplingREd);
-
-    lblColorOversampling = new JLabel();
-    lblColorOversampling.setText("Color oversampling");
-    lblColorOversampling.setPreferredSize(new Dimension(94, 22));
-    lblColorOversampling.setFont(new Font("Dialog", Font.BOLD, 10));
-    lblColorOversampling.setBounds(new Rectangle(135, 7, 94, 22));
-    lblColorOversampling.setBounds(6, 118, 118, 22);
-    contentPanel.add(lblColorOversampling);
-
     withHDRCBx = new JCheckBox("with HDR");
     withHDRCBx.setEnabled(false);
     withHDRCBx.setBounds(125, 152, 223, 18);
@@ -390,8 +350,6 @@ public class QualityProfileDialog extends JDialog {
     getSaveButton().setEnabled(edit);
     getCaptionREd().setEnabled(edit);
     getQualityREd().setEnabled(edit);
-    getSpatialOversamplingREd().setEnabled(edit);
-    getColorOversamplingREd().setEnabled(edit);
     getWithHDRCBx().setEnabled(edit);
     getWithHdrIntensityMapCBx().setEnabled(edit);
     getDefaultCBx().setEnabled(edit);
@@ -408,8 +366,6 @@ public class QualityProfileDialog extends JDialog {
     if (profile == null) {
       getCaptionREd().setText("");
       getQualityREd().setText("");
-      getSpatialOversamplingREd().setText("");
-      getColorOversamplingREd().setText("");
       getWithHDRCBx().setSelected(false);
       getWithHdrIntensityMapCBx().setSelected(false);
       getDefaultCBx().setSelected(false);
@@ -417,8 +373,6 @@ public class QualityProfileDialog extends JDialog {
     else {
       getCaptionREd().setText(profile.getCaption());
       getQualityREd().setText(String.valueOf(profile.getQuality()));
-      getSpatialOversamplingREd().setText(String.valueOf(profile.getSpatialOversample()));
-      getColorOversamplingREd().setText(String.valueOf(profile.getColorOversample()));
       getWithHDRCBx().setSelected(profile.isWithHDR());
       getWithHdrIntensityMapCBx().setSelected(profile.isWithHDRIntensityMap());
       getDefaultCBx().setSelected(profile.isDefaultProfile());
@@ -436,17 +390,6 @@ public class QualityProfileDialog extends JDialog {
       if (quality < MIN_QUALITY) {
         throw new Exception("Quality must be at least " + MIN_QUALITY);
       }
-      final int MIN_OVERSAMPLE = 1;
-      final int MAX_SPATIAL_OVERSAMPLE = 6;
-      final int MAX_COLOR_OVERSAMPLE = 30;
-      int spatialOversample = Integer.parseInt(getSpatialOversamplingREd().getText());
-      if (spatialOversample < MIN_OVERSAMPLE || spatialOversample > MAX_SPATIAL_OVERSAMPLE) {
-        throw new Exception("Spatial oversample msut be in the range " + MIN_OVERSAMPLE + "..." + MAX_SPATIAL_OVERSAMPLE);
-      }
-      int colorOversample = Integer.parseInt(getColorOversamplingREd().getText());
-      if (colorOversample < MIN_OVERSAMPLE || colorOversample > MAX_COLOR_OVERSAMPLE) {
-        throw new Exception("Color oversample msut be in the range " + MIN_OVERSAMPLE + "..." + MAX_COLOR_OVERSAMPLE);
-      }
 
       QualityProfile profile;
       if (editStatus == EditStatus.NEW) {
@@ -457,8 +400,6 @@ public class QualityProfileDialog extends JDialog {
       }
       profile.setCaption(caption);
       profile.setQuality(quality);
-      profile.setSpatialOversample(spatialOversample);
-      profile.setColorOversample(colorOversample);
       profile.setWithHDR(getWithHDRCBx().isSelected());
       profile.setWithHDRIntensityMap(getWithHdrIntensityMapCBx().isSelected());
       profile.setDefaultProfile(getDefaultCBx().isSelected());
@@ -507,14 +448,6 @@ public class QualityProfileDialog extends JDialog {
 
   public JTextField getQualityREd() {
     return qualityREd;
-  }
-
-  public JTextField getSpatialOversamplingREd() {
-    return spatialOversamplingREd;
-  }
-
-  public JTextField getColorOversamplingREd() {
-    return colorOversamplingREd;
   }
 
   public JCheckBox getWithHDRCBx() {

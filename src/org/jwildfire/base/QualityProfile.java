@@ -23,8 +23,6 @@ import org.jwildfire.create.tina.edit.Assignable;
 public class QualityProfile implements Assignable<QualityProfile>, Serializable {
   private static final long serialVersionUID = 1L;
   private String caption;
-  private int spatialOversample;
-  private int colorOversample;
   private int quality;
   private boolean withHDR;
   private boolean withHDRIntensityMap;
@@ -34,11 +32,9 @@ public class QualityProfile implements Assignable<QualityProfile>, Serializable 
 
   }
 
-  public QualityProfile(boolean pDefaultProfile, String pCaption, int pSpatialOversample, int pColorOversample, int pQuality, boolean pWithHDR, boolean pWithHDRIntensityMap) {
+  public QualityProfile(boolean pDefaultProfile, String pCaption, int pQuality, boolean pWithHDR, boolean pWithHDRIntensityMap) {
     defaultProfile = pDefaultProfile;
     caption = pCaption;
-    spatialOversample = pSpatialOversample;
-    colorOversample = pColorOversample;
     quality = pQuality;
     withHDR = pWithHDR;
     withHDRIntensityMap = pWithHDRIntensityMap;
@@ -55,22 +51,6 @@ public class QualityProfile implements Assignable<QualityProfile>, Serializable 
 
   public void setCaption(String caption) {
     this.caption = caption;
-  }
-
-  public int getSpatialOversample() {
-    return spatialOversample;
-  }
-
-  public void setSpatialOversample(int spatialOversample) {
-    this.spatialOversample = spatialOversample;
-  }
-
-  public int getColorOversample() {
-    return colorOversample;
-  }
-
-  public void setColorOversample(int colorOversample) {
-    this.colorOversample = colorOversample;
   }
 
   public int getQuality() {
@@ -105,19 +85,17 @@ public class QualityProfile implements Assignable<QualityProfile>, Serializable 
     this.defaultProfile = defaultProfile;
   }
 
-  public static final int calculateQualityIndex(int pSpatialOversample, int pColorOversample, int pQuality) {
-    return pSpatialOversample * pColorOversample * pQuality;
+  public static final int calculateQualityIndex(int pQuality) {
+    return pQuality;
   }
 
   public int getQualityIndex() {
-    return calculateQualityIndex(spatialOversample, colorOversample, quality);
+    return calculateQualityIndex(quality);
   }
 
   @Override
   public void assign(QualityProfile pSrc) {
     caption = pSrc.caption;
-    spatialOversample = pSrc.spatialOversample;
-    colorOversample = pSrc.colorOversample;
     quality = pSrc.quality;
     withHDR = pSrc.withHDR;
     withHDRIntensityMap = pSrc.withHDRIntensityMap;
@@ -133,8 +111,7 @@ public class QualityProfile implements Assignable<QualityProfile>, Serializable 
 
   @Override
   public boolean isEqual(QualityProfile pSrc) {
-    if (caption != pSrc.caption || spatialOversample != pSrc.spatialOversample ||
-        colorOversample != pSrc.colorOversample || quality != pSrc.quality ||
+    if (caption != pSrc.caption || quality != pSrc.quality ||
         withHDR != pSrc.withHDR || withHDRIntensityMap != pSrc.withHDRIntensityMap ||
         defaultProfile != pSrc.defaultProfile) {
       return false;

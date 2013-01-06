@@ -123,8 +123,6 @@ public class SWFAnimationRenderThread implements Runnable {
 
   private void prepareFlame(Flame pFlame) {
     pFlame.setSpatialFilterRadius(1.0);
-    pFlame.setSpatialOversample(flameMovie.getSpatialOversampling());
-    pFlame.setColorOversample(flameMovie.getColorOversampling());
     pFlame.setSampleDensity(flameMovie.getQuality());
 
   }

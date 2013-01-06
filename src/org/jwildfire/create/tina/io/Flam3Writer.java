@@ -116,8 +116,6 @@ public class Flam3Writer {
     attrList.add(xb.createAttr("center", pFlame.getCentreX() + " " + pFlame.getCentreY()));
     attrList.add(xb.createAttr("scale", pFlame.getPixelsPerUnit()));
     attrList.add(xb.createAttr("rotate", pFlame.getCamRoll()));
-    attrList.add(xb.createAttr("oversample", pFlame.getSpatialOversample()));
-    attrList.add(xb.createAttr("color_oversample", pFlame.getColorOversample()));
     attrList.add(xb.createAttr("filter", pFlame.getSpatialFilterRadius()));
     attrList.add(xb.createAttr("quality", pFlame.getSampleDensity()));
     attrList.add(xb.createAttr("background", (double) pFlame.getBGColorRed() / 255.0 + " " + (double) pFlame.getBGColorGreen() / 255.0 + " " + (double) pFlame.getBGColorBlue() / 255.0));

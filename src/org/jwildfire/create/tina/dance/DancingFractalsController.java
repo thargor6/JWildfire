@@ -222,8 +222,6 @@ public class DancingFractalsController {
       RenderInfo info = new RenderInfo(width, height);
       if (flame != null) {
         double oldSpatialFilterRadius = flame.getSpatialFilterRadius();
-        int oldSpatialOversample = flame.getSpatialOversample();
-        int oldColorOversample = flame.getColorOversample();
         double oldSampleDensity = flame.getSampleDensity();
         imgPanel.setDrawTriangles(pDrawTriangles);
         try {
@@ -257,8 +255,6 @@ public class DancingFractalsController {
         }
         finally {
           flame.setSpatialFilterRadius(oldSpatialFilterRadius);
-          flame.setSpatialOversample(oldSpatialOversample);
-          flame.setColorOversample(oldColorOversample);
           flame.setSampleDensity(oldSampleDensity);
         }
       }

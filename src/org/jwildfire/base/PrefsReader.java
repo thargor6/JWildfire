@@ -105,8 +105,6 @@ public class PrefsReader {
             try {
               QualityProfile profile = new QualityProfile();
               profile.setDefaultProfile(getBooleanProperty(props, Prefs.KEY_TINA_PROFILE_QUALITY_DEFAULT_PROFILE + "." + i, false));
-              profile.setSpatialOversample(getIntProperty(props, Prefs.KEY_TINA_PROFILE_QUALITY_SPATIAL_OVERSAMPLE + "." + i, 1));
-              profile.setColorOversample(getIntProperty(props, Prefs.KEY_TINA_PROFILE_QUALITY_COLOR_OVERSAMPLE + "." + i, 1));
               profile.setQuality(getIntProperty(props, Prefs.KEY_TINA_PROFILE_QUALITY_QUALITY + "." + i, 1));
               profile.setWithHDR(getBooleanProperty(props, Prefs.KEY_TINA_PROFILE_QUALITY_WITH_HDR + "." + i, false));
               profile.setWithHDRIntensityMap(getBooleanProperty(props, Prefs.KEY_TINA_PROFILE_QUALITY_WITH_HDR_INTENSITY_MAP + "." + i, false));
@@ -159,11 +157,11 @@ public class PrefsReader {
       pPrefs.getResolutionProfiles().add(new ResolutionProfile(false, 1920, 1080));
     }
     if (pPrefs.getQualityProfiles().size() == 0) {
-      pPrefs.getQualityProfiles().add(new QualityProfile(false, "Very low quality", 1, 1, 200, false, false));
-      pPrefs.getQualityProfiles().add(new QualityProfile(true, "Low quality", 1, 2, 300, false, false));
-      pPrefs.getQualityProfiles().add(new QualityProfile(false, "Medium quality", 1, 3, 500, false, false));
-      pPrefs.getQualityProfiles().add(new QualityProfile(false, "High quality", 1, 3, 800, true, false));
-      pPrefs.getQualityProfiles().add(new QualityProfile(false, "Very high quality", 2, 4, 1000, true, true));
+      pPrefs.getQualityProfiles().add(new QualityProfile(false, "Very low quality", 200, false, false));
+      pPrefs.getQualityProfiles().add(new QualityProfile(false, "Low quality", 500, false, false));
+      pPrefs.getQualityProfiles().add(new QualityProfile(false, "Medium quality", 800, false, false));
+      pPrefs.getQualityProfiles().add(new QualityProfile(true, "High quality", 1000, true, false));
+      pPrefs.getQualityProfiles().add(new QualityProfile(false, "Very high quality", 2000, true, false));
     }
   }
 

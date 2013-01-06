@@ -46,14 +46,12 @@ public class Prefs extends ManagedObject {
   static final String KEY_TINA_PROFILE_RESOLUTION_HEIGHT = "tina.profile.resolution.height";
   static final String KEY_TINA_PROFILE_RESOLUTION_DEFAULT_PROFILE = "tina.profile.resolution.default_profile";
 
-  static final String KEY_TINA_PROFILE_QUALITY_COUNT = "tina.profile.quality.count";
-  static final String KEY_TINA_PROFILE_QUALITY_SPATIAL_OVERSAMPLE = "tina.profile.quality.spatial_oversample";
-  static final String KEY_TINA_PROFILE_QUALITY_COLOR_OVERSAMPLE = "tina.profile.quality.color_oversample";
-  static final String KEY_TINA_PROFILE_QUALITY_QUALITY = "tina.profile.quality.quality";
-  static final String KEY_TINA_PROFILE_QUALITY_WITH_HDR = "tina.profile.quality.with_hdr";
-  static final String KEY_TINA_PROFILE_QUALITY_WITH_HDR_INTENSITY_MAP = "tina.profile.quality.with_hdr_intensity_map";
-  static final String KEY_TINA_PROFILE_QUALITY_CAPTION = "tina.profile.quality.caption";
-  static final String KEY_TINA_PROFILE_QUALITY_DEFAULT_PROFILE = "tina.profile.quality.default_profile";
+  static final String KEY_TINA_PROFILE_QUALITY_COUNT = "tina.profile.quality2.count";
+  static final String KEY_TINA_PROFILE_QUALITY_QUALITY = "tina.profile.quality2.quality";
+  static final String KEY_TINA_PROFILE_QUALITY_WITH_HDR = "tina.profile.quality2.with_hdr";
+  static final String KEY_TINA_PROFILE_QUALITY_WITH_HDR_INTENSITY_MAP = "tina.profile.quality2.with_hdr_intensity_map";
+  static final String KEY_TINA_PROFILE_QUALITY_CAPTION = "tina.profile.quality2.caption";
+  static final String KEY_TINA_PROFILE_QUALITY_DEFAULT_PROFILE = "tina.profile.quality2.default_profile";
 
   static final String KEY_TINA_PATH_FLAMES = "tina.path.flames";
   static final String KEY_TINA_PATH_JWFMOVIES = "tina.path.jwfmovies";

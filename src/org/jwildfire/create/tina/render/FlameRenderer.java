@@ -34,18 +34,14 @@ import java.util.List;
 import org.jwildfire.base.MathLib;
 import org.jwildfire.base.Prefs;
 import org.jwildfire.base.QualityProfile;
-import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.RasterPoint;
 import org.jwildfire.create.tina.base.XYZPoint;
 import org.jwildfire.create.tina.palette.RenderColor;
 import org.jwildfire.create.tina.random.RandomNumberGenerator;
 import org.jwildfire.create.tina.variation.FlameTransformationContext;
-import org.jwildfire.image.Pixel;
 import org.jwildfire.image.SimpleHDRImage;
 import org.jwildfire.image.SimpleImage;
-import org.jwildfire.transform.ScaleAspect;
-import org.jwildfire.transform.ScaleTransformer;
 
 public final class FlameRenderer {
   // constants
@@ -215,217 +211,42 @@ public final class FlameRenderer {
       }
       return res;
     }
-    int spatialOversample = flame.getSampleDensity() >= 100.0 ? flame.getSpatialOversample() : 1;
-    if (spatialOversample < 1 || spatialOversample > 6) {
-      throw new IllegalArgumentException(String.valueOf(spatialOversample));
-    }
-    int colorOversample = flame.getSampleDensity() >= 100.0 ? flame.getColorOversample() : 1;
-    if (colorOversample < 1 || colorOversample > 10) {
-      throw new IllegalArgumentException(String.valueOf(colorOversample));
-    }
 
     double origZoom = flame.getCamZoom();
     try {
-      SimpleImage images[] = renderNormal ? new SimpleImage[colorOversample] : null;
-      SimpleHDRImage hdrImages[] = renderHDR ? new SimpleHDRImage[colorOversample] : null;
-      SimpleHDRImage hdrIntensityMapImages[] = renderHDRIntensityMap ? new SimpleHDRImage[colorOversample] : null;
-      for (int i = 0; i < colorOversample; i++) {
-        SimpleImage img = null;
-        SimpleHDRImage hdrImg = null;
-        SimpleHDRImage hdrIntensityMapImg = null;
-        // spatial oversampling: create enlarged image
-        if (spatialOversample > 1) {
-          if (renderNormal) {
-            img = new SimpleImage(res.getImage().getImageWidth() * spatialOversample, res.getImage().getImageHeight() * spatialOversample);
-          }
-          if (renderHDR) {
-            hdrImg = new SimpleHDRImage(res.getHDRImage().getImageWidth() * spatialOversample, res.getHDRImage().getImageHeight() * spatialOversample);
-          }
-          //
-          if (renderHDRIntensityMap) {
-            hdrIntensityMapImg = new SimpleHDRImage(res.getHDRIntensityMap().getImageWidth() * spatialOversample, res.getHDRIntensityMap().getImageHeight() * spatialOversample);
-          }
-          if (i == 0) {
-            flame.setCamZoom((double) spatialOversample * flame.getCamZoom());
-          }
-        }
-        else {
-          if (colorOversample > 1) {
-            if (renderNormal) {
-              img = new SimpleImage(res.getImage().getImageWidth(), res.getImage().getImageHeight());
-            }
-            if (renderHDR) {
-              hdrImg = new SimpleHDRImage(res.getHDRImage().getImageWidth(), res.getHDRImage().getImageHeight());
-            }
-            if (renderHDRIntensityMap) {
-              hdrIntensityMapImg = new SimpleHDRImage(res.getHDRIntensityMap().getImageWidth(), res.getHDRIntensityMap().getImageHeight());
-            }
-          }
-          else {
-            if (renderNormal) {
-              img = res.getImage();
-            }
-            if (renderHDR) {
-              hdrImg = res.getHDRImage();
-            }
-            if (renderHDR) {
-              hdrIntensityMapImg = res.getHDRIntensityMap();
-            }
-          }
-        }
-        if (renderNormal) {
-          images[i] = img;
-        }
-        if (renderHDR) {
-          hdrImages[i] = hdrImg;
-        }
-        if (renderHDRIntensityMap) {
-          hdrIntensityMapImages[i] = hdrIntensityMapImg;
-        }
+      SimpleImage img = renderNormal ? res.getImage() : null;
+      SimpleHDRImage hdrImg = renderHDR ? res.getHDRImage() : null;
+      SimpleHDRImage hdrIntensityMapImg = renderHDRIntensityMap ? res.getHDRIntensityMap() : null;
 
-        if (renderNormal) {
-          initRaster(img.getImageWidth(), img.getImageHeight());
-        }
-        else if (renderHDR) {
-          initRaster(hdrImg.getImageWidth(), hdrImg.getImageHeight());
-        }
-        else if (renderHDRIntensityMap) {
-          initRaster(hdrIntensityMapImg.getImageWidth(), hdrIntensityMapImg.getImageHeight());
-        }
-        else {
-          throw new IllegalStateException();
-        }
-
-        init3D();
-        createColorMap();
-        initView();
-        List<Flame> renderFlames = new ArrayList<Flame>();
-        for (int t = 0; t < prefs.getTinaRenderThreads(); t++) {
-          Flame renderFlame = flame.makeCopy();
-          renderFlames.add(renderFlame);
-          renderFlame.refreshModWeightTables(flameTransformationContext);
-        }
-
-        iterate(i, colorOversample, renderFlames);
-        if (flame.getSampleDensity() <= 10.0) {
-          renderImageSimple(img);
-        }
-        else {
-          renderImage(img, hdrImg, hdrIntensityMapImg);
-        }
+      if (renderNormal) {
+        initRaster(img.getImageWidth(), img.getImageHeight());
       }
-
-      // color oversampling
-      SimpleImage img = null;
-      SimpleHDRImage hdrImg = null;
-      SimpleHDRImage hdrIntensityMapImg = null;
-      if (colorOversample == 1) {
-        if (renderNormal) {
-          img = images[0];
-        }
-        if (renderHDR) {
-          hdrImg = hdrImages[0];
-        }
-        if (renderHDRIntensityMap) {
-          hdrIntensityMapImg = hdrIntensityMapImages[0];
-        }
+      else if (renderHDR) {
+        initRaster(hdrImg.getImageWidth(), hdrImg.getImageHeight());
+      }
+      else if (renderHDRIntensityMap) {
+        initRaster(hdrIntensityMapImg.getImageWidth(), hdrIntensityMapImg.getImageHeight());
       }
       else {
-        if (renderNormal) {
-          int width = images[0].getImageWidth();
-          int height = images[0].getImageHeight();
-          if (spatialOversample > 1) {
-            img = new SimpleImage(width, height);
-          }
-          else {
-            img = res.getImage();
-          }
-          Pixel toolPixel = new Pixel();
-          for (int i = 0; i < height; i++) {
-            for (int j = 0; j < width; j++) {
-              int r = 0, g = 0, b = 0;
-              for (int k = 0; k < colorOversample; k++) {
-                toolPixel.setARGBValue(images[k].getARGBValue(j, i));
-                r += toolPixel.r;
-                g += toolPixel.g;
-                b += toolPixel.b;
-              }
-              toolPixel.r = Tools.roundColor((double) r / (double) colorOversample);
-              toolPixel.g = Tools.roundColor((double) g / (double) colorOversample);
-              toolPixel.b = Tools.roundColor((double) b / (double) colorOversample);
-              img.setARGB(j, i, toolPixel.getARGBValue());
-            }
-          }
-        }
-        if (renderHDR) {
-          int width = hdrImages[0].getImageWidth();
-          int height = hdrImages[0].getImageHeight();
-          if (spatialOversample > 1) {
-            hdrImg = new SimpleHDRImage(width, height);
-          }
-          else {
-            hdrImg = res.getHDRImage();
-          }
-          for (int i = 0; i < height; i++) {
-            for (int j = 0; j < width; j++) {
-              double r = 0, g = 0, b = 0;
-              for (int k = 0; k < colorOversample; k++) {
-                r += hdrImages[k].getRValue(j, i);
-                g += hdrImages[k].getGValue(j, i);
-                b += hdrImages[k].getBValue(j, i);
-              }
-              r /= (double) colorOversample;
-              g /= (double) colorOversample;
-              b /= (double) colorOversample;
-              hdrImg.setRGB(j, i, (float) r, (float) g, (float) b);
-            }
-          }
-        }
-        if (renderHDRIntensityMap) {
-          int width = hdrIntensityMapImages[0].getImageWidth();
-          int height = hdrIntensityMapImages[0].getImageHeight();
-          if (spatialOversample > 1) {
-            hdrIntensityMapImg = new SimpleHDRImage(width, height);
-          }
-          else {
-            hdrIntensityMapImg = res.getHDRIntensityMap();
-          }
-          for (int i = 0; i < height; i++) {
-            for (int j = 0; j < width; j++) {
-              double r = 0, g = 0, b = 0;
-              for (int k = 0; k < colorOversample; k++) {
-                r += hdrIntensityMapImages[k].getRValue(j, i);
-                g += hdrIntensityMapImages[k].getGValue(j, i);
-                b += hdrIntensityMapImages[k].getBValue(j, i);
-              }
-              r /= (double) colorOversample;
-              g /= (double) colorOversample;
-              b /= (double) colorOversample;
-              hdrIntensityMapImg.setRGB(j, i, (float) r, (float) g, (float) b);
-            }
-          }
-        }
-
+        throw new IllegalStateException();
       }
 
-      // spatial oversampling: scale down      
-      if (spatialOversample > 1) {
-        if (renderNormal) {
-          ScaleTransformer scaleT = new ScaleTransformer();
-          scaleT.setScaleWidth(res.getImage().getImageWidth());
-          scaleT.setScaleHeight(res.getImage().getImageHeight());
-          scaleT.setAspect(ScaleAspect.IGNORE);
-          scaleT.transformImage(img);
-          res.getImage().setBufferedImage(img.getBufferedImg(), res.getImage().getImageWidth(), res.getImage().getImageHeight());
-        }
-        if (renderHDR) {
-          hdrImg.sampleDown(spatialOversample);
-          res.getHDRImage().assignImage(hdrImg);
-        }
-        if (renderHDRIntensityMap) {
-          hdrIntensityMapImg.sampleDown(spatialOversample);
-          res.getHDRIntensityMap().assignImage(hdrIntensityMapImg);
-        }
+      init3D();
+      createColorMap();
+      initView();
+      List<Flame> renderFlames = new ArrayList<Flame>();
+      for (int t = 0; t < prefs.getTinaRenderThreads(); t++) {
+        Flame renderFlame = flame.makeCopy();
+        renderFlames.add(renderFlame);
+        renderFlame.refreshModWeightTables(flameTransformationContext);
+      }
+
+      iterate(0, 1, renderFlames);
+      if (flame.getSampleDensity() <= 10.0) {
+        renderImageSimple(img);
+      }
+      else {
+        renderImage(img, hdrImg, hdrIntensityMapImg);
       }
     }
     finally {

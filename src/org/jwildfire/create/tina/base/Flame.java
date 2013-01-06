@@ -53,8 +53,6 @@ public class Flame implements Assignable<Flame>, Serializable {
   private double camZ;
   @AnimAware
   private double camDOF;
-  private int spatialOversample;
-  private int colorOversample;
   private double spatialFilterRadius;
   private double sampleDensity;
   private boolean bgTransparency;
@@ -106,8 +104,6 @@ public class Flame implements Assignable<Flame>, Serializable {
     camZoom = 1.0;
     camZ = 0.0;
     camDOF = 0.0;
-    spatialOversample = 1;
-    colorOversample = 1;
     gammaThreshold = 0.04;
     pixelsPerUnit = 50;
     whiteLevel = 200;
@@ -163,14 +159,6 @@ public class Flame implements Assignable<Flame>, Serializable {
 
   public void setGammaThreshold(double gammaThreshold) {
     this.gammaThreshold = gammaThreshold;
-  }
-
-  public int getSpatialOversample() {
-    return spatialOversample;
-  }
-
-  public void setSpatialOversample(int spatialOversample) {
-    this.spatialOversample = spatialOversample;
   }
 
   public double getSpatialFilterRadius() {
@@ -318,14 +306,6 @@ public class Flame implements Assignable<Flame>, Serializable {
     return res;
   }
 
-  public int getColorOversample() {
-    return colorOversample;
-  }
-
-  public void setColorOversample(int colorOversample) {
-    this.colorOversample = colorOversample;
-  }
-
   public double getCamZ() {
     return camZ;
   }
@@ -462,8 +442,6 @@ public class Flame implements Assignable<Flame>, Serializable {
     camZoom = pFlame.camZoom;
     camZ = pFlame.camZ;
     camDOF = pFlame.camDOF;
-    spatialOversample = pFlame.spatialOversample;
-    colorOversample = pFlame.colorOversample;
     spatialFilterRadius = pFlame.spatialFilterRadius;
     sampleDensity = pFlame.sampleDensity;
     bgTransparency = pFlame.bgTransparency;
@@ -503,8 +481,8 @@ public class Flame implements Assignable<Flame>, Serializable {
         fabs(camPitch - pFlame.camPitch) > EPSILON || fabs(camYaw - pFlame.camYaw) > EPSILON ||
         fabs(camPerspective - pFlame.camPerspective) > EPSILON || fabs(camRoll - pFlame.camRoll) > EPSILON ||
         fabs(camZoom - pFlame.camZoom) > EPSILON || fabs(camZ - pFlame.camZ) > EPSILON ||
-        fabs(camDOF - pFlame.camDOF) > EPSILON || spatialOversample != pFlame.spatialOversample ||
-        colorOversample != pFlame.colorOversample || fabs(spatialFilterRadius - pFlame.spatialFilterRadius) > EPSILON ||
+        fabs(camDOF - pFlame.camDOF) > EPSILON ||
+        fabs(spatialFilterRadius - pFlame.spatialFilterRadius) > EPSILON ||
         fabs(sampleDensity - pFlame.sampleDensity) > EPSILON || bgTransparency != pFlame.bgTransparency || bgColorRed != pFlame.bgColorRed ||
         bgColorGreen != pFlame.bgColorGreen || bgColorBlue != pFlame.bgColorBlue ||
         fabs(gamma - pFlame.gamma) > EPSILON || fabs(gammaThreshold - pFlame.gammaThreshold) > EPSILON ||

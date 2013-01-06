@@ -74,16 +74,12 @@ public class JobRenderThread implements Runnable {
             flame.setWidth(info.getImageWidth());
             flame.setHeight(info.getImageHeight());
             double oldSampleDensity = flame.getSampleDensity();
-            int oldSpatialOversample = flame.getSpatialOversample();
-            int oldColorOversample = flame.getColorOversample();
             double oldFilterRadius = flame.getSpatialFilterRadius();
             try {
               flame.setSampleDensity(qualityProfile.getQuality());
 
               switch (rendererType) {
                 case JAVA: {
-                  flame.setSpatialOversample(qualityProfile.getSpatialOversample());
-                  flame.setColorOversample(qualityProfile.getColorOversample());
                   FlameRenderer renderer = new FlameRenderer(flame, controller.getPrefs(), flame.isBGTransparency());
                   renderer.setProgressUpdater(controller.getJobProgressUpdater());
                   long t0 = Calendar.getInstance().getTimeInMillis();
@@ -103,8 +99,6 @@ public class JobRenderThread implements Runnable {
                   break;
                 case C32:
                 case C64: {
-                  flame.setSpatialOversample(1);
-                  flame.setColorOversample(1);
                   CRendererInterface cudaRenderer = new CRendererInterface(rendererType, flame.isBGTransparency());
                   CRendererInterface.checkFlameForCUDA(flame);
                   cudaRenderer.setProgressUpdater(controller.getJobProgressUpdater());
@@ -151,8 +145,6 @@ public class JobRenderThread implements Runnable {
             }
             finally {
               flame.setSampleDensity(oldSampleDensity);
-              flame.setSpatialOversample(oldSpatialOversample);
-              flame.setColorOversample(oldColorOversample);
               flame.setSpatialFilterRadius(oldFilterRadius);
             }
           }

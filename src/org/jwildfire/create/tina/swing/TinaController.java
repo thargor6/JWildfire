@@ -1124,8 +1124,6 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       Flame flame = getCurrFlame();
       if (flame != null) {
         double oldSpatialFilterRadius = flame.getSpatialFilterRadius();
-        int oldSpatialOversample = flame.getSpatialOversample();
-        int oldColorOversample = flame.getColorOversample();
         double oldSampleDensity = flame.getSampleDensity();
         try {
           double wScl = (double) info.getImageWidth() / (double) flame.getWidth();
@@ -1146,15 +1144,11 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
                 renderer.setProgressUpdater(null);
                 flame.setSampleDensity(prefs.getTinaRenderRealtimeQuality());
                 flame.setSpatialFilterRadius(0.0);
-                flame.setSpatialOversample(1);
-                flame.setColorOversample(1);
               }
               else {
                 renderer.setProgressUpdater(mainProgressUpdater);
                 flame.setSampleDensity(prefs.getTinaRenderPreviewQuality());
                 flame.setSpatialFilterRadius(0.0);
-                flame.setSpatialOversample(1);
-                flame.setColorOversample(1);
               }
               renderer.setRenderScale(renderScale);
               long t0 = System.currentTimeMillis();
@@ -1168,8 +1162,6 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
             case C64: {
               try {
                 flame.setSampleDensity(prefs.getTinaRenderPreviewQuality());
-                flame.setSpatialOversample(1);
-                flame.setColorOversample(1);
                 CRendererInterface cudaRenderer = new CRendererInterface(rendererType, toggleTransparencyButton.isSelected());
                 CRendererInterface.checkFlameForCUDA(flame);
                 cudaRenderer.setProgressUpdater(mainProgressUpdater);
@@ -1188,8 +1180,6 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
         }
         finally {
           flame.setSpatialFilterRadius(oldSpatialFilterRadius);
-          flame.setSpatialOversample(oldSpatialOversample);
-          flame.setColorOversample(oldColorOversample);
           flame.setSampleDensity(oldSampleDensity);
         }
       }
@@ -2381,8 +2371,6 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
           boolean renderHDRIntensityMap = qualProfile.isWithHDRIntensityMap();
           info.setRenderHDRIntensityMap(renderHDRIntensityMap);
           double oldSampleDensity = flame.getSampleDensity();
-          int oldSpatialOversample = flame.getSpatialOversample();
-          int oldColorOversample = flame.getColorOversample();
           double oldFilterRadius = flame.getSpatialFilterRadius();
           try {
             RendererType rendererType = (RendererType) rendererCmb.getSelectedItem();
@@ -2392,8 +2380,6 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
             flame.setSampleDensity(qualProfile.getQuality());
             switch (rendererType) {
               case JAVA: {
-                flame.setSpatialOversample(qualProfile.getSpatialOversample());
-                flame.setColorOversample(qualProfile.getColorOversample());
                 FlameRenderer renderer = new FlameRenderer(flame, prefs, flame.isBGTransparency());
                 renderer.setProgressUpdater(mainProgressUpdater);
                 long t0 = Calendar.getInstance().getTimeInMillis();
@@ -2411,8 +2397,6 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
                 break;
               case C32:
               case C64: {
-                flame.setSpatialOversample(1);
-                flame.setColorOversample(1);
                 CRendererInterface cudaRenderer = new CRendererInterface(rendererType, flame.isBGTransparency());
                 CRendererInterface.checkFlameForCUDA(flame);
                 cudaRenderer.setProgressUpdater(mainProgressUpdater);
@@ -2434,8 +2418,6 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
           }
           finally {
             flame.setSampleDensity(oldSampleDensity);
-            flame.setSpatialOversample(oldSpatialOversample);
-            flame.setColorOversample(oldColorOversample);
             flame.setSpatialFilterRadius(oldFilterRadius);
           }
           mainController.loadImage(file.getAbsolutePath(), false);
@@ -3835,7 +3817,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
   private QualityProfile getQualityProfile() {
     QualityProfile res = (QualityProfile) qualityProfileCmb.getSelectedItem();
     if (res == null) {
-      res = new QualityProfile(false, "Default", 1, 1, 500, false, false);
+      res = new QualityProfile(false, "Default", 500, false, false);
     }
     return res;
   }
@@ -5428,8 +5410,6 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
         FlameRenderer renderer = new FlameRenderer(flame, prefs, toggleTransparencyButton.isSelected());
         flame.setSampleDensity(prefs.getTinaRenderRealtimeQuality());
         flame.setSpatialFilterRadius(0.0);
-        flame.setSpatialOversample(1);
-        flame.setColorOversample(1);
         RenderedFlame res = renderer.renderFlame(info);
         imgPanel.setImage(res.getImage());
       }

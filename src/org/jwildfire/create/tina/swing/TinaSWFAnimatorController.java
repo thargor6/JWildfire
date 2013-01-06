@@ -508,8 +508,6 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
     }
     currMovie.setGlobalScript(globalScript);
     currMovie.setxFormScript(xFormScript);
-    currMovie.setSpatialOversampling(qualityProfile.getSpatialOversample());
-    currMovie.setColorOversampling(qualityProfile.getColorOversample());
     currMovie.setQuality(qualityProfile.getQuality());
     currMovie.setOutputFormat(outputFormat);
     currMovie.setFrameWidth(frameWidth);
@@ -609,7 +607,7 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
   private QualityProfile getQualityProfile() {
     QualityProfile res = (QualityProfile) swfAnimatorQualityProfileCmb.getSelectedItem();
     if (res == null) {
-      res = new QualityProfile(false, "default", 1, 1, 200, true, false);
+      res = new QualityProfile(false, "default", 200, true, false);
     }
     return res;
   }
@@ -661,8 +659,6 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
         Flame flame = getCurrFlame();
         if (flame != null) {
           double oldSpatialFilterRadius = flame.getSpatialFilterRadius();
-          int oldSpatialOversample = flame.getSpatialOversample();
-          int oldColorOversample = flame.getColorOversample();
           double oldSampleDensity = flame.getSampleDensity();
           try {
             double wScl = (double) info.getImageWidth() / (double) flame.getWidth();
@@ -675,15 +671,11 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
             renderer.setProgressUpdater(null);
             flame.setSampleDensity(prefs.getTinaRenderRealtimeQuality());
             flame.setSpatialFilterRadius(0.0);
-            flame.setSpatialOversample(1);
-            flame.setColorOversample(1);
             RenderedFlame res = renderer.renderFlame(info);
             imgPanel.setImage(res.getImage());
           }
           finally {
             flame.setSpatialFilterRadius(oldSpatialFilterRadius);
-            flame.setSpatialOversample(oldSpatialOversample);
-            flame.setColorOversample(oldColorOversample);
             flame.setSampleDensity(oldSampleDensity);
           }
         }
@@ -697,8 +689,6 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
 
   private void prepareFlame(Flame pFlame) {
     pFlame.setSpatialFilterRadius(0.0);
-    pFlame.setSpatialOversample(1);
-    pFlame.setColorOversample(1);
     pFlame.setSampleDensity(prefs.getTinaRenderRealtimeQuality());
   }
 
@@ -913,10 +903,10 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
       {
         QualityProfile fittingProfile = null;
         QualityProfile nearestProfile = null;
-        int qualityIndex = QualityProfile.calculateQualityIndex(currMovie.getSpatialOversampling(), currMovie.getColorOversampling(), currMovie.getQuality());
+        int qualityIndex = QualityProfile.calculateQualityIndex(currMovie.getQuality());
         for (int i = 0; i < swfAnimatorQualityProfileCmb.getItemCount(); i++) {
           QualityProfile profile = (QualityProfile) swfAnimatorQualityProfileCmb.getItemAt(i);
-          if (profile.getColorOversample() == currMovie.getColorOversampling() && profile.getSpatialOversample() == currMovie.getSpatialOversampling() && profile.getQuality() == currMovie.getQuality()) {
+          if (profile.getQuality() == currMovie.getQuality()) {
             fittingProfile = profile;
             break;
           }
