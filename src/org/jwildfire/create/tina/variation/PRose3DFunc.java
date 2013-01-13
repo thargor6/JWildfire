@@ -72,7 +72,6 @@ public class PRose3DFunc extends VariationFunc {
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     // pRose3D by Larry Berlin, http://aporev.deviantart.com/gallery/#/d2blmhg 
     int posNeg = 1;
-    double option = 0;
     double th = 0.0;
     double sth, cth, pang, wig, wag, wag2, wag3, wag12 = 0.0, waggle = 0.0, ghostPrep; // ?? offset as variable? or preset calculated value?
     double length = this.l;
@@ -85,7 +84,6 @@ public class PRose3DFunc extends VariationFunc {
     double opScale = fabs(this.optSc);
     double ghost = sqr(this.transp); // Sets the testing limit for randoms to determine transparency
     double wagScale = this.wagsc;
-    double wagSign = Math.copySign(1.0, wagScale);
     double curveScale = this.crvsc;
     double frequency = this.f * M_2PI;
     double wigScale = this.wigsc * 0.5;

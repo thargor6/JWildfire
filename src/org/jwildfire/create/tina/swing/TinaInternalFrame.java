@@ -968,6 +968,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaColoringPanel.add(getTinaGammaThresholdSlider(), null);
 
       tinaDEFilterRadiusREd = new JWFNumberField();
+      tinaDEFilterRadiusREd.setEditable(true);
       tinaDEFilterRadiusREd.setOnlyIntegers(true);
       tinaDEFilterRadiusREd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
@@ -981,11 +982,11 @@ public class TinaInternalFrame extends JInternalFrame {
           }
         }
       });
-      tinaDEFilterRadiusREd.setValueStep(0.05);
+      tinaDEFilterRadiusREd.setValueStep(1.0);
       tinaDEFilterRadiusREd.setText("");
       tinaDEFilterRadiusREd.setSize(new Dimension(100, 24));
       tinaDEFilterRadiusREd.setPreferredSize(new Dimension(100, 24));
-      tinaDEFilterRadiusREd.setMaxValue(20.0);
+      tinaDEFilterRadiusREd.setMaxValue(16.0);
       tinaDEFilterRadiusREd.setLocation(new Point(584, 4));
       tinaDEFilterRadiusREd.setHasMinValue(true);
       tinaDEFilterRadiusREd.setHasMaxValue(true);
@@ -1020,13 +1021,14 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaDEFilterRadiusSlider.setSize(new Dimension(220, 19));
       tinaDEFilterRadiusSlider.setPreferredSize(new Dimension(220, 19));
       tinaDEFilterRadiusSlider.setMinimum(0);
-      tinaDEFilterRadiusSlider.setMaximum(20);
+      tinaDEFilterRadiusSlider.setMaximum(16);
       tinaDEFilterRadiusSlider.setLocation(new Point(686, 4));
       tinaDEFilterRadiusSlider.setFont(new Font("Dialog", Font.BOLD, 10));
       tinaDEFilterRadiusSlider.setBounds(686, 28, 220, 19);
       tinaColoringPanel.add(tinaDEFilterRadiusSlider);
 
       tinaDEFilterAmountREd = new JWFNumberField();
+      tinaDEFilterAmountREd.setEditable(true);
       tinaDEFilterAmountREd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           if (tinaController != null) {
@@ -1043,7 +1045,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaDEFilterAmountREd.setText("");
       tinaDEFilterAmountREd.setSize(new Dimension(100, 24));
       tinaDEFilterAmountREd.setPreferredSize(new Dimension(100, 24));
-      tinaDEFilterAmountREd.setMaxValue(5.0);
+      tinaDEFilterAmountREd.setMaxValue(2.0);
       tinaDEFilterAmountREd.setLocation(new Point(584, 4));
       tinaDEFilterAmountREd.setHasMinValue(true);
       tinaDEFilterAmountREd.setHasMaxValue(true);
@@ -1078,7 +1080,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaDEFilterAmountSlider.setSize(new Dimension(220, 19));
       tinaDEFilterAmountSlider.setPreferredSize(new Dimension(220, 19));
       tinaDEFilterAmountSlider.setMinimum(0);
-      tinaDEFilterAmountSlider.setMaximum(500);
+      tinaDEFilterAmountSlider.setMaximum(200);
       tinaDEFilterAmountSlider.setLocation(new Point(686, 4));
       tinaDEFilterAmountSlider.setFont(new Font("Dialog", Font.BOLD, 10));
       tinaDEFilterAmountSlider.setBounds(686, 52, 220, 19);
@@ -2004,6 +2006,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JWFNumberField getTinaFilterRadiusREd() {
     if (tinaFilterRadiusREd == null) {
       tinaFilterRadiusREd = new JWFNumberField();
+      tinaFilterRadiusREd.setEditable(true);
       tinaFilterRadiusREd.setValueStep(0.05);
       tinaFilterRadiusREd.setMaxValue(5.0);
       tinaFilterRadiusREd.setHasMinValue(true);

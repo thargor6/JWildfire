@@ -50,7 +50,7 @@ public class XTrbFunc extends VariationFunc {
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     // xtrb by Xyrus02, http://xyrus02.deviantart.com/art/XTrb-Plugin-for-Apophysis-136800563
-    double Alpha, Beta, Gamma, OffsetAl, OffsetBe, OffsetGa, X, Y;
+    double Alpha, Beta, OffsetAl, OffsetBe, OffsetGa, X, Y;
     int M, N;
 
     // transfer to trilinear coordinates, normalized to real distances from triangle sides
@@ -59,7 +59,6 @@ public class XTrbFunc extends VariationFunc {
       DirectTrilinear(pAffineTP.x, pAffineTP.y, to);
       Alpha = to.Al;
       Beta = to.Be;
-      Gamma = to.Ga;
     }
 
     M = (int) Math.floor(Alpha / S2a);
@@ -199,7 +198,7 @@ public class XTrbFunc extends VariationFunc {
   }
 
   private class DirectTrilinearTO {
-    double Al, Be, Ga;
+    double Al, Be;
   }
 
   private void DirectTrilinear(double x, double y, DirectTrilinearTO res) {
@@ -207,7 +206,6 @@ public class XTrbFunc extends VariationFunc {
     double V = x * sinC - y * cosC + radius;
     res.Al = U;
     res.Be = V;
-    res.Ga = S2c - ac * U - bc * V;
   }
 
   private class InverseTrilinearTO {

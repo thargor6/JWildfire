@@ -267,6 +267,7 @@ public final class FlameRenderer {
     boolean useDEFilter = flame.getDEFilterRadius() > 1 && flame.getDEFilterAmount() > 0;
 
     LogDensityPoint logDensityPnt = new LogDensityPoint();
+    LogDensityPoint logDensity2Pnt = new LogDensityPoint();
     if (pImage != null) {
       logDensityFilter.setRaster(raster, rasterWidth, rasterHeight, pImage.getImageWidth(), pImage.getImageHeight());
     }
@@ -280,14 +281,19 @@ public final class FlameRenderer {
       throw new IllegalStateException();
     }
 
-    double maxDensity = useDEFilter ? logDensityFilter.calcMaxDensity() : 0.0;
-
     if (pImage != null) {
       GammaCorrectedRGBPoint rbgPoint = new GammaCorrectedRGBPoint();
       for (int i = 0; i < pImage.getImageHeight(); i++) {
         for (int j = 0; j < pImage.getImageWidth(); j++) {
           if (useDEFilter) {
-            logDensityFilter.transformPointWithDEFilter(logDensityPnt, j, i, maxDensity);
+            logDensityFilter.transformPoint(logDensity2Pnt, j, i);
+            logDensityFilter.transformPointWithDEFilter(logDensityPnt, j, i);
+            double deWeight = 0.67;
+            double fWeight = 1.0 - deWeight;
+            logDensityPnt.red = logDensity2Pnt.red * fWeight + logDensityPnt.red * deWeight;
+            logDensityPnt.green = logDensity2Pnt.green * fWeight + logDensityPnt.green * deWeight;
+            logDensityPnt.blue = logDensity2Pnt.blue * fWeight + logDensityPnt.blue * deWeight;
+            logDensityPnt.intensity = logDensity2Pnt.intensity * fWeight + logDensityPnt.intensity * deWeight;
           }
           else {
             logDensityFilter.transformPoint(logDensityPnt, j, i);
@@ -307,12 +313,12 @@ public final class FlameRenderer {
         double minLum = Double.MAX_VALUE, maxLum = 0.0;
         for (int i = 0; i < pHDRImage.getImageHeight(); i++) {
           for (int j = 0; j < pHDRImage.getImageWidth(); j++) {
-            if (useDEFilter) {
-              logDensityFilter.transformPointHDRWithDEFilter(logDensityPnt, j, i, maxDensity);
-            }
-            else {
-              logDensityFilter.transformPointHDR(logDensityPnt, j, i);
-            }
+            //            if (useDEFilter) {
+            //              logDensityFilter.transformPointHDRWithDEFilter(logDensityPnt, j, i);
+            //            }
+            //            else {
+            logDensityFilter.transformPointHDR(logDensityPnt, j, i);
+            //            }
             gammaCorrectionFilter.transformPointHDR(logDensityPnt, rbgPoint);
             if (rbgPoint.red < 0.0) {
               bgMap[i][j] = true;
@@ -347,12 +353,12 @@ public final class FlameRenderer {
       else {
         for (int i = 0; i < pHDRImage.getImageHeight(); i++) {
           for (int j = 0; j < pHDRImage.getImageWidth(); j++) {
-            if (useDEFilter) {
-              logDensityFilter.transformPointHDRWithDEFilter(logDensityPnt, j, i, maxDensity);
-            }
-            else {
-              logDensityFilter.transformPointHDR(logDensityPnt, j, i);
-            }
+            //            if (useDEFilter) {
+            //              logDensityFilter.transformPointHDRWithDEFilter(logDensityPnt, j, i);
+            //            }
+            //            else {
+            logDensityFilter.transformPointHDR(logDensityPnt, j, i);
+            //            }
             gammaCorrectionFilter.transformPointHDR(logDensityPnt, rbgPoint);
             pHDRImage.setRGB(j, i, rbgPoint.red, rbgPoint.green, rbgPoint.blue);
           }
@@ -805,6 +811,8 @@ public final class FlameRenderer {
         flame.assign(rdFlame);
         // restore renderInfo
         renderInfo = (RenderInfo) in.readObject();
+
+        //        renderInfo.setRenderHDR(true);
         // restore thread state
         FlameRenderThreadState state[] = new FlameRenderThreadState[header.numThreads];
         for (int i = 0; i < header.numThreads; i++) {

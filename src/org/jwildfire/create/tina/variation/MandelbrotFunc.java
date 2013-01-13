@@ -51,6 +51,61 @@ public class MandelbrotFunc extends VariationFunc {
   private double cx = 0.0;
   private double cy = 0.0;
 
+  //  public void transformM(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
+  //    double minX = -1.5;
+  //    double maxX = 1.5;
+  //    double minY = -1.5;
+  //    double maxY = 1.5;
+  //    double minZ = -1.5;
+  //    double maxZ = 1.5;
+  //
+  //    double order = 8.0;
+  //    int maxIterations = 150;
+  //    double bail = 10.0;
+  //
+  //    double x0 = minX + (maxX - minX) * pContext.random();
+  //    double y0 = minY + (maxY - minY) * pContext.random();
+  //    double z0 = minZ + (maxZ - minZ) * pContext.random();
+  //
+  //    double x = x0, y = y0, z = z0;
+  //    int iteration = 0;
+  //
+  //    while (true) {
+  //      double xsquare = x * x;
+  //      double ysquare = y * y;
+  //      double zsquare = z * z;
+  //
+  //      double r = sqrt(xsquare + ysquare + zsquare);
+  //
+  //      double theta = atan2(sqrt(xsquare + ysquare), z);
+  //      double phi = atan2(y, x);
+  //      double powr = pow(r, order);
+  //
+  //      double sinThetaOrder = sin(theta * order);
+  //      x = (powr * sinThetaOrder * cos(phi * order));
+  //      y = (powr * sinThetaOrder * sin(phi * order));
+  //      z = (powr * cos(theta * order));
+  //
+  //      x += x0;
+  //      y += y0;
+  //      z += z0;
+  //
+  //      iteration++;
+  //
+  //      if (iteration >= maxIterations || ((xsquare + ysquare + zsquare) > bail)) {
+  //        pVarTP.x += x;
+  //        pVarTP.y += y;
+  //        pVarTP.z += z;
+  //        pVarTP.color += (double) log(iteration + 1.0) / (double) log(maxIterations + 1.0);
+  //        if (pVarTP.color < 0.0)
+  //          pVarTP.color = 0.0;
+  //        else if (pVarTP.color > 1.0)
+  //          pVarTP.color = 1.0;
+  //        break;
+  //      }
+  //    }
+  //  }
+
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     double x1 = _x0;

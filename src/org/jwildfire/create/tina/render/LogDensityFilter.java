@@ -358,93 +358,60 @@ public class LogDensityFilter {
     }
   }
 
-  public void transformPointWithDEFilter(LogDensityPoint pFilteredPnt, int pX, int pY, double pMaxDensity) {
+  private boolean deValuesDirty = true;
+  private double avgDensity;
+
+  private double getAVGDensity() {
+    double scale = 1.1;
+    if (deValuesDirty) {
+      avgDensity = 0.0;
+      for (int i = 0; i < rasterHeight; i++) {
+        for (int j = 0; j < rasterWidth; j++) {
+          avgDensity += getRasterPoint(j, i).count;
+        }
+      }
+      avgDensity = ((avgDensity / (double) rasterWidth) / (double) rasterHeight) * scale;
+      if (avgDensity < EPSILON)
+        avgDensity = EPSILON;
+      deValuesDirty = false;
+    }
+    return avgDensity;
+  }
+
+  public void transformPointWithDEFilter(LogDensityPoint pFilteredPnt, int pX, int pY) {
     double density;
     int densityRect = flame.getDEFilterRadius();
     int dr2 = densityRect / 2;
     double curve = flame.getDEFilterAmount();
-    boolean saveDens = false;
 
     if (pX < dr2 || pY < dr2 || (pX >= rasterWidth - dr2) || (pY >= rasterHeight - dr2)) {
       density = getRasterPoint(pX, pY).count;
-      //    printf("%f ", density);
     }
     else {
-      // 0.07  0.11  0.07
-      // 0.11  0.28  0.11
-      // 0.07  0.11  0.07
-      /*
-       density=0.28f*getRasterPoint(pX, pY)->count +
-       0.11f*(getRasterPoint(pX-1, pY)->count + getRasterPoint(pX+1, pY)->count + getRasterPoint(pX, pY-1)->count + getRasterPoint(pX, pY+1)->count) +
-       0.07f*(getRasterPoint(pX-1, pY-1)->count + getRasterPoint(pX-1, pY+1)->count + getRasterPoint(pX+1, pY-1)->count + getRasterPoint(pX+1, pY+1)->count);
-       */
-      // 0.01  0.015 0.035 0.015 0.01
-      // 0.015 0.05  0.08  0.05  0.015
-      // 0.035 0.08  0.18  0.08  0.035
-      // 0.015 0.05  0.08  0.05  0.015
-      // 0.01  0.015 0.035 0.015 0.01
-      /*
-       density=0.18f*getRasterPoint(pX, pY)->count +
-       0.08f*(getRasterPoint(pX-1, pY)->count + getRasterPoint(pX+1, pY)->count + getRasterPoint(pX, pY-1)->count + getRasterPoint(pX, pY+1)->count) +
-       0.05f*(getRasterPoint(pX-1, pY-1)->count + getRasterPoint(pX-1, pY+1)->count + getRasterPoint(pX+1, pY-1)->count + getRasterPoint(pX+1, pY+1)->count) +
-       0.035f*(getRasterPoint(pX-2, pY)->count + getRasterPoint(pX+2, pY)->count + getRasterPoint(pX, pY-2)->count + getRasterPoint(pX, pY+2)->count) +
-       0.015f*(getRasterPoint(pX-2, pY-1)->count + getRasterPoint(pX-1, pY-2)->count + getRasterPoint(pX+1, pY-2)->count + getRasterPoint(pX+2, pY-1)->count +
-       getRasterPoint(pX-2, pY+1)->count + getRasterPoint(pX-1, pY+2)->count + getRasterPoint(pX+1, pY+2)->count + getRasterPoint(pX+2, pY+1)->count) +
-       0.01f*(getRasterPoint(pX-2, pY-2)->count + getRasterPoint(pX+2, pY-2)->count + getRasterPoint(pX+2, pY+2)->count + getRasterPoint(pX-2, pY+2)->count);
-       */
-
       density = 0.0;
       double kernelSum = 0.0;
       for (int y = 0; y < densityRect; y++) {
         for (int x = 0; x < densityRect; x++) {
           double intensity = 1.0 / (1.0 + (y - dr2) * (y - dr2) + (x - dr2) * (x - dr2));
           kernelSum += intensity;
-
-          //printf("(%d %d) %f\n",x,y,intensity);
-
           density += intensity * getRasterPoint(pX + x - dr2, pY + y - dr2).count;
         }
       }
       density /= kernelSum;
     }
 
-    double oDensity = density;
+    density /= getAVGDensity();
+    if (density > 1.0)
+      density = 1.0;
 
-    density = log(density + 1);
-    density /= log(pMaxDensity + 1);
-
-    double minRadius = 0.05;
-    double maxRadius = sqrt(rasterWidth * rasterWidth + rasterHeight * rasterHeight) * 0.5;
-    if (maxRadius > 50.0) {
-      maxRadius = 50.0;
-    }
-    double radius;
-    radius = minRadius + (maxRadius - minRadius) * erf(1.0 / (1.0 + curve * density * density * density));
-    if (radius < minRadius) {
+    double radius = flame.getDEFilterRadius() * (1.0 - exp((density - 1) * curve));
+    radius *= radius;
+    double minRadius = 0.16;
+    double maxRadius = 50.0;
+    if (radius < minRadius)
       radius = minRadius;
-    }
-    else if (radius > maxRadius) {
+    else if (radius > maxRadius)
       radius = maxRadius;
-    }
-
-    if (pX < dr2 || pY < dr2 || (pX >= rasterWidth - dr2) || (pY >= rasterHeight - dr2)) {
-
-    }
-    else {
-      //printf("density= %f, avg=%f, max=%f, r=%d\n", density, JWF_LOG(1.0f+avgDensity), JWF_LOG(1.0f+maxDensity), calcFilterSize(radius));
-    }
-
-    radius = fabs(erf(oDensity - getRasterPoint(pX, pY).count) * curve);
-    if (radius > 50.0)
-      radius = 50.0;
-
-    if (saveDens) {
-      pFilteredPnt.red = radius;
-      pFilteredPnt.green = radius;
-      pFilteredPnt.blue = radius;
-      pFilteredPnt.intensity = radius;
-      return;
-    }
 
     double noiseFilter[][] = getFilter(radius);
     int filterSize = noiseFilter.length;
@@ -512,19 +479,6 @@ public class LogDensityFilter {
       return ans;
     else
       return -ans;
-  }
-
-  public double calcMaxDensity() {
-    double maxDensity = 0.0;
-    for (int y = 0; y < rasterHeight; y++) {
-      for (int x = 0; x < rasterWidth; x++) {
-        RasterPoint p = raster[y][x];
-        if (p.count > maxDensity) {
-          maxDensity = p.count;
-        }
-      }
-    }
-    return maxDensity;
   }
 
 }

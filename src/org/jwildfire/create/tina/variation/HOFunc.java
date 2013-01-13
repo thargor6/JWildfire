@@ -16,7 +16,6 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.MathLib.EPSILON;
 import static org.jwildfire.base.MathLib.atan2;
 import static org.jwildfire.base.MathLib.cos;
 import static org.jwildfire.base.MathLib.pow;
@@ -40,7 +39,7 @@ public class HOFunc extends VariationFunc {
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-    //ho by Larry Berlin, http://aporev.deviantart.com/gallery/#/d2blmhg
+    // ho by Larry Berlin, http://aporev.deviantart.com/gallery/#/d2blmhg
     //    A Hyperbolic Octahedra
     //    As described in "CRC Concise Encyclopedia of Mathematics" by Weisstein 2nd ed.
     //
@@ -51,16 +50,8 @@ public class HOFunc extends VariationFunc {
     double v = pAffineTP.y;
     double w = pAffineTP.z;
 
-    double alpha = (v * v + u * u + EPSILON); // y^2 + x^2
-
-    double beta = (u * u + w * w + EPSILON); // x^2 + z^2
-    double delta = (v * v + w * w + EPSILON); // y^2 + z^2
-    double epsilon = (v * v + u * u + w * w + EPSILON); // y^2 + x^2 + z^2
-
     double at_omega_x = atan2(v * v, w * w);
     double at_omega_y = atan2(u * u, w * w);
-    double at_omega_z = atan2(v * v, u * u);
-
     double sv = sin(v);
     double cv = cos(v);
 

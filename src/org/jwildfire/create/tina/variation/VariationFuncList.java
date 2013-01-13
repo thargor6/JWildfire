@@ -298,12 +298,16 @@ public class VariationFuncList {
     registerVariationFunc(FractJuliaWFFunc.class);
     registerVariationFunc(FractPearlsWFFunc.class);
     registerVariationFunc(FractSalamanderWFFunc.class);
-    //registerVariationFunc(FractFormulaJuliaWFFunc.class);
-    //registerVariationFunc(FractFormulaMandWFFunc.class);
+    //    registerVariationFunc(FractFormulaJuliaWFFunc.class);
+    //    registerVariationFunc(FractFormulaMandWFFunc.class);
 
     registerVariationFunc(TextWFFunc.class);
     registerVariationFunc(XTrbFunc.class);
     registerVariationFunc(SuperShape3DFunc.class);
+    registerVariationFunc(Fibonacci2Func.class);
+    registerVariationFunc(Ovoid3DFunc.class);
+    registerVariationFunc(HOFunc.class);
+    registerVariationFunc(PRose3DFunc.class);
   }
 
   private static void registerVariationFunc(
