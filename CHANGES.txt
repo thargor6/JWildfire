@@ -1,3 +1,11 @@
+V0.61 (13.01.2013):
+ - The main render function now is a background task which makes it possible to cancel it (currently only for internal renderer) and continue to work while rendering
+ - removed the ancient spatial and color oversampling options (all user-defined quality profiles will be removed with this update!, if you face problems with noise use spatial and/or DE filter options)
+ - experimental new DE filter (internal renderer only)
+ - new "pRose3D", "ho", "ovoid3d" and "fibonacci2" variations by Larry Berlin
+ - experimental tree to show flame properties for the dancing flame module
+ - lots of internal refactoring regarding the dancing flame editor
+
 V0.60 (24.12.2012):
  - new "text_wf" variation for integrating arbitrary text objects with your fractals
  - "SuperShape3D" variation by David Young
