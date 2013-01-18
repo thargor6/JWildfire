@@ -16,8 +16,10 @@
 */
 package org.jwildfire.create.tina.swing;
 
+import static org.jwildfire.base.MathLib.EPSILON;
 import static org.jwildfire.base.MathLib.M_PI;
 import static org.jwildfire.base.MathLib.cos;
+import static org.jwildfire.base.MathLib.fabs;
 import static org.jwildfire.base.MathLib.sin;
 
 import java.awt.BasicStroke;
@@ -104,6 +106,7 @@ public class FlamePanel extends ImagePanel {
     }
     if (drawTriangles) {
       paintTriangles((Graphics2D) g);
+      paintFocusPoint((Graphics2D) g);
     }
   }
 
@@ -255,6 +258,30 @@ public class FlamePanel extends ImagePanel {
     viewXTrans = viewXMin * viewXScale - areaLeft;
     viewYTrans = viewYMin * viewYScale - areaBottom;
     viewXScale /= renderAspect;
+  }
+
+  private XYZPoint focusPoint = new XYZPoint();
+
+  private void paintFocusPoint(Graphics2D g) {
+    if (flameHolder != null) {
+      Flame flame = flameHolder.getFlame();
+      if (flame != null) {
+        FlameRenderer renderer = new FlameRenderer(flame, new Prefs(), false);
+        if (fabs(flame.getCamDOF()) > EPSILON) {
+          g.setColor(editPostTransform ? (darkTriangles ? XFORM_POST_COLOR_DARK : XFORM_POST_COLOR) : (darkTriangles ? XFORM_COLOR_DARK : XFORM_COLOR));
+          final int SIZE = 10;
+          focusPoint.x = flame.getCamX();
+          focusPoint.y = flame.getCamY();
+          focusPoint.z = flame.getCamZ();
+          renderer.init3D();
+          renderer.projectWithoutDOF(focusPoint);
+          double x = xToView(focusPoint.x);
+          double y = yToView(focusPoint.y);
+          g.drawLine((int) (x - SIZE), (int) (y + SIZE), (int) (x + SIZE), (int) (y - SIZE));
+          g.drawLine((int) (x - SIZE), (int) (y - SIZE), (int) (x + SIZE), (int) (y + SIZE));
+        }
+      }
+    }
   }
 
   private void paintTriangles(Graphics2D g) {
@@ -534,8 +561,10 @@ public class FlamePanel extends ImagePanel {
               if (pRightButton) {
                 if (fineMovement) {
                   dx *= 0.1;
+                  dy *= 0.1;
                 }
                 flame.setCamRoll(flame.getCamRoll() - 12 * dx);
+                flame.setCamPitch(flame.getCamPitch() + 12 * dy);
               }
               // zoom
               if (pMiddleButton) {
