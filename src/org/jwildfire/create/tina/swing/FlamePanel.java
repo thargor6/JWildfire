@@ -270,9 +270,9 @@ public class FlamePanel extends ImagePanel {
         if (fabs(flame.getCamDOF()) > EPSILON) {
           g.setColor(editPostTransform ? (darkTriangles ? XFORM_POST_COLOR_DARK : XFORM_POST_COLOR) : (darkTriangles ? XFORM_COLOR_DARK : XFORM_COLOR));
           final int SIZE = 10;
-          focusPoint.x = flame.getCamX();
+          focusPoint.x = -flame.getCamX();
           focusPoint.y = flame.getCamY();
-          focusPoint.z = flame.getCamZ();
+          focusPoint.z = -flame.getCamZ();
           renderer.init3D();
           renderer.projectWithoutDOF(focusPoint);
           double x = xToView(focusPoint.x);
@@ -544,7 +544,7 @@ public class FlamePanel extends ImagePanel {
             if (flameHolder != null && flameHolder.getFlame() != null) {
               Flame flame = flameHolder.getFlame();
               // Move
-              if (pLeftButton) {
+              if (pLeftButton && !pRightButton) {
                 double cosa = cos(M_PI * (flame.getCamRoll()) / 180.0);
                 double sina = sin(M_PI * (flame.getCamRoll()) / 180.0);
                 double rcX = dx * cosa - dy * sina;
@@ -563,11 +563,16 @@ public class FlamePanel extends ImagePanel {
                   dx *= 0.1;
                   dy *= 0.1;
                 }
-                flame.setCamRoll(flame.getCamRoll() - 12 * dx);
-                flame.setCamPitch(flame.getCamPitch() + 12 * dy);
+                if (pLeftButton) {
+                  flame.setCamYaw(flame.getCamYaw() + 12 * dx);
+                }
+                else {
+                  flame.setCamRoll(flame.getCamRoll() - 12 * dx);
+                  flame.setCamPitch(flame.getCamPitch() + 12 * dy);
+                }
               }
               // zoom
-              if (pMiddleButton) {
+              if (pMiddleButton && !pLeftButton && !pRightButton) {
                 if (fineMovement) {
                   dx *= 0.1;
                   dy *= 0.1;
