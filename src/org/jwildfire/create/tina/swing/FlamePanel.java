@@ -28,8 +28,6 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 
-import javax.swing.JToggleButton;
-
 import org.jwildfire.base.MathLib;
 import org.jwildfire.base.Prefs;
 import org.jwildfire.base.Tools;
@@ -60,7 +58,7 @@ public class FlamePanel extends ImagePanel {
 
   private boolean darkTriangles = false;
   private boolean drawImage = true;
-  private boolean drawTriangles = true;
+  private boolean drawTriangles = false;
   private boolean drawVariations = false;
   private boolean fineMovement = false;
   private XForm selectedXForm = null;
@@ -81,16 +79,12 @@ public class FlamePanel extends ImagePanel {
 
   private int selectedPoint = 1;
 
-  private final JToggleButton toggleTrianglesButton;
-  private final JToggleButton toggleVariationsButton;
   private boolean redrawAfterMouseClick;
   private UndoManagerHolder<Flame> undoManagerHolder;
 
-  public FlamePanel(SimpleImage pSimpleImage, int pX, int pY, int pWidth, FlameHolder pFlameHolder, JToggleButton pToggleTrianglesButton, JToggleButton pToggleVariationsButton) {
+  public FlamePanel(SimpleImage pSimpleImage, int pX, int pY, int pWidth, FlameHolder pFlameHolder) {
     super(pSimpleImage, pX, pY, pWidth);
     flameHolder = pFlameHolder;
-    toggleTrianglesButton = pToggleTrianglesButton;
-    toggleVariationsButton = pToggleVariationsButton;
   }
 
   @Override
@@ -431,21 +425,68 @@ public class FlamePanel extends ImagePanel {
       yBeginDrag = pY;
       if (Math.abs(dx) > MathLib.EPSILON || Math.abs(dy) > MathLib.EPSILON) {
         switch (mouseDragOperation) {
-          case MOVE: {
-            if (fineMovement) {
-              dx *= 0.25;
-              dy *= 0.25;
+          case TRIANGLE: {
+            // Move
+            if (pLeftButton && !pRightButton) {
+              if (fineMovement) {
+                dx *= 0.25;
+                dy *= 0.25;
+              }
+              // move
+              if (editPostTransform) {
+                selectedXForm.setPostCoeff20(selectedXForm.getPostCoeff20() + dx);
+                selectedXForm.setPostCoeff21(selectedXForm.getPostCoeff21() - dy);
+              }
+              else {
+                selectedXForm.setCoeff20(selectedXForm.getCoeff20() + dx);
+                selectedXForm.setCoeff21(selectedXForm.getCoeff21() - dy);
+              }
+              return true;
             }
-            // move
-            if (editPostTransform) {
-              selectedXForm.setPostCoeff20(selectedXForm.getPostCoeff20() + dx);
-              selectedXForm.setPostCoeff21(selectedXForm.getPostCoeff21() - dy);
+            // rotate
+            else if (pRightButton) {
+              if (fineMovement) {
+                dx *= 0.1;
+              }
+              XFormTransformService.rotate(selectedXForm, dx * 30, editPostTransform);
+              return true;
             }
-            else {
-              selectedXForm.setCoeff20(selectedXForm.getCoeff20() + dx);
-              selectedXForm.setCoeff21(selectedXForm.getCoeff21() - dy);
+            // zoom
+            else if (pMiddleButton && !pLeftButton && !pRightButton) {
+              if (fineMovement) {
+                dx *= 0.1;
+                dy *= 0.1;
+              }
+              Triangle triangle = new Triangle(selectedXForm);
+              double v1x = triangle.x[0] - triangle.x[1];
+              double v1y = triangle.y[0] - triangle.y[1];
+              double v2x = v1x + dx;
+              double v2y = v1y + dy;
+              double dr1 = Math.sqrt(v1x * v1x + v1y * v1y);
+              double dr2 = Math.sqrt(v2x * v2x + v2y * v2y);
+              double scale = dr2 / dr1;
+              if (editPostTransform) {
+                if (allowScaleX) {
+                  selectedXForm.setPostCoeff00(selectedXForm.getPostCoeff00() * scale);
+                  selectedXForm.setPostCoeff01(selectedXForm.getPostCoeff01() * scale);
+                }
+                if (allowScaleY) {
+                  selectedXForm.setPostCoeff10(selectedXForm.getPostCoeff10() * scale);
+                  selectedXForm.setPostCoeff11(selectedXForm.getPostCoeff11() * scale);
+                }
+              }
+              else {
+                if (allowScaleX) {
+                  selectedXForm.setCoeff00(selectedXForm.getCoeff00() * scale);
+                  selectedXForm.setCoeff01(selectedXForm.getCoeff01() * scale);
+                }
+                if (allowScaleY) {
+                  selectedXForm.setCoeff10(selectedXForm.getCoeff10() * scale);
+                  selectedXForm.setCoeff11(selectedXForm.getCoeff11() * scale);
+                }
+              }
+              return true;
             }
-            return true;
           }
           case SHEAR: {
             if (fineMovement) {
@@ -498,48 +539,6 @@ public class FlamePanel extends ImagePanel {
             }
             return true;
           }
-          case SCALE: {
-            if (fineMovement) {
-              dx *= 0.1;
-              dy *= 0.1;
-            }
-            Triangle triangle = new Triangle(selectedXForm);
-            double v1x = triangle.x[0] - triangle.x[1];
-            double v1y = triangle.y[0] - triangle.y[1];
-            double v2x = v1x + dx;
-            double v2y = v1y + dy;
-            double dr1 = Math.sqrt(v1x * v1x + v1y * v1y);
-            double dr2 = Math.sqrt(v2x * v2x + v2y * v2y);
-            double scale = dr2 / dr1;
-            if (editPostTransform) {
-              if (allowScaleX) {
-                selectedXForm.setPostCoeff00(selectedXForm.getPostCoeff00() * scale);
-                selectedXForm.setPostCoeff01(selectedXForm.getPostCoeff01() * scale);
-              }
-              if (allowScaleY) {
-                selectedXForm.setPostCoeff10(selectedXForm.getPostCoeff10() * scale);
-                selectedXForm.setPostCoeff11(selectedXForm.getPostCoeff11() * scale);
-              }
-            }
-            else {
-              if (allowScaleX) {
-                selectedXForm.setCoeff00(selectedXForm.getCoeff00() * scale);
-                selectedXForm.setCoeff01(selectedXForm.getCoeff01() * scale);
-              }
-              if (allowScaleY) {
-                selectedXForm.setCoeff10(selectedXForm.getCoeff10() * scale);
-                selectedXForm.setCoeff11(selectedXForm.getCoeff11() * scale);
-              }
-            }
-            return true;
-          }
-          case ROTATE: {
-            if (fineMovement) {
-              dx *= 0.1;
-            }
-            XFormTransformService.rotate(selectedXForm, dx * 30, editPostTransform);
-            return true;
-          }
           case VIEW: {
             if (flameHolder != null && flameHolder.getFlame() != null) {
               Flame flame = flameHolder.getFlame();
@@ -556,9 +555,10 @@ public class FlamePanel extends ImagePanel {
                 }
                 flame.setCentreX(flame.getCentreX() - rcX * 0.3);
                 flame.setCentreY(flame.getCentreY() + rcY * 0.3);
+                return true;
               }
               // rotate
-              if (pRightButton) {
+              else if (pRightButton) {
                 if (fineMovement) {
                   dx *= 0.1;
                   dy *= 0.1;
@@ -570,16 +570,17 @@ public class FlamePanel extends ImagePanel {
                   flame.setCamRoll(flame.getCamRoll() - 12 * dx);
                   flame.setCamPitch(flame.getCamPitch() + 12 * dy);
                 }
+                return true;
               }
               // zoom
-              if (pMiddleButton && !pLeftButton && !pRightButton) {
+              else if (pMiddleButton && !pLeftButton && !pRightButton) {
                 if (fineMovement) {
                   dx *= 0.1;
                   dy *= 0.1;
                 }
                 flame.setPixelsPerUnit(flame.getPixelsPerUnit() + 2.0 * dx);
+                return true;
               }
-              return true;
             }
           }
 
@@ -800,6 +801,43 @@ public class FlamePanel extends ImagePanel {
         dx *= 0.1;
       }
       flame.setPixelsPerUnit(flame.getPixelsPerUnit() - dx);
+      return true;
+    }
+    else if (pRotateAmount != 0 && mouseDragOperation == MouseDragOperation.TRIANGLE && selectedXForm != null) {
+      double dx = -pRotateAmount * 0.1;
+      double dy = dx;
+      if (fineMovement) {
+        dx *= 0.1;
+        dy *= 0.1;
+      }
+      Triangle triangle = new Triangle(selectedXForm);
+      double v1x = triangle.x[0] - triangle.x[1];
+      double v1y = triangle.y[0] - triangle.y[1];
+      double v2x = v1x + dx;
+      double v2y = v1y + dy;
+      double dr1 = Math.sqrt(v1x * v1x + v1y * v1y);
+      double dr2 = Math.sqrt(v2x * v2x + v2y * v2y);
+      double scale = dr2 / dr1;
+      if (editPostTransform) {
+        if (allowScaleX) {
+          selectedXForm.setPostCoeff00(selectedXForm.getPostCoeff00() * scale);
+          selectedXForm.setPostCoeff01(selectedXForm.getPostCoeff01() * scale);
+        }
+        if (allowScaleY) {
+          selectedXForm.setPostCoeff10(selectedXForm.getPostCoeff10() * scale);
+          selectedXForm.setPostCoeff11(selectedXForm.getPostCoeff11() * scale);
+        }
+      }
+      else {
+        if (allowScaleX) {
+          selectedXForm.setCoeff00(selectedXForm.getCoeff00() * scale);
+          selectedXForm.setCoeff01(selectedXForm.getCoeff01() * scale);
+        }
+        if (allowScaleY) {
+          selectedXForm.setCoeff10(selectedXForm.getCoeff10() * scale);
+          selectedXForm.setCoeff11(selectedXForm.getCoeff11() * scale);
+        }
+      }
       return true;
     }
     return false;

@@ -401,7 +401,6 @@ public class TinaInternalFrame extends JInternalFrame {
   private JComboBox swfAnimatorXFormScriptCmb = null;
   private JPanel triangleOperationsPanel = null;
   private JToggleButton mouseTransformMoveButton = null;
-  private JToggleButton mouseTransformRotateButton = null;
   private JToggleButton mouseTransformScaleButton = null;
   private JPanel centerNorthPanel = null;
   private JPanel centerWestPanel = null;
@@ -416,7 +415,6 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton mouseTransformZoomInButton = null;
   private JButton mouseTransformZoomOutButton = null;
   private JLabel editSpaceLbl3 = null;
-  private JToggleButton toggleTrianglesButton = null;
   private JToggleButton toggleVariationsButton = null;
   private JLabel editSpaceLbl4 = null;
   private JProgressBar renderProgressBar = null;
@@ -798,13 +796,13 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaCameraDOFLbl.setPreferredSize(new Dimension(94, 22));
       tinaCameraDOFLbl.setText("Depth of field");
       tinaCameraDOFLbl.setSize(new Dimension(94, 22));
-      tinaCameraDOFLbl.setLocation(new Point(488, 100));
+      tinaCameraDOFLbl.setLocation(new Point(4, 100));
       tinaCameraDOFLbl.setFont(new Font("Dialog", Font.BOLD, 10));
       tinaCameraZPosLbl = new JLabel();
       tinaCameraZPosLbl.setPreferredSize(new Dimension(94, 22));
-      tinaCameraZPosLbl.setText("Camera distance");
+      tinaCameraZPosLbl.setText("Focus point");
       tinaCameraZPosLbl.setSize(new Dimension(94, 22));
-      tinaCameraZPosLbl.setLocation(new Point(4, 100));
+      tinaCameraZPosLbl.setLocation(new Point(488, 100));
       tinaCameraZPosLbl.setFont(new Font("Dialog", Font.BOLD, 10));
       tinaPixelsPerUnitLbl = new JLabel();
       tinaPixelsPerUnitLbl.setText("Pixels per unit");
@@ -886,6 +884,98 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaCameraPanel.add(getTinaCameraDOFSlider(), null);
       tinaCameraPanel.add(getTinaCameraDOFREd(), null);
       tinaCameraPanel.add(tinaCameraDOFLbl, null);
+
+      tinaCameraYPosSlider = new JSlider();
+      tinaCameraYPosSlider.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null) {
+            tinaController.cameraYPosSlider_stateChanged(e);
+          }
+        }
+      });
+      tinaCameraYPosSlider.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mousePressed(MouseEvent e) {
+          tinaController.saveUndoPoint();
+        }
+      });
+      tinaCameraYPosSlider.setValue(0);
+      tinaCameraYPosSlider.setSize(new Dimension(56, 19));
+      tinaCameraYPosSlider.setPreferredSize(new Dimension(220, 19));
+      tinaCameraYPosSlider.setMinimum(-100);
+      tinaCameraYPosSlider.setMaximum(100);
+      tinaCameraYPosSlider.setLocation(new Point(640, 103));
+      tinaCameraYPosSlider.setBounds(764, 103, 56, 19);
+      tinaCameraPanel.add(tinaCameraYPosSlider);
+
+      tinaCameraYPosREd = new JWFNumberField();
+      tinaCameraYPosREd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null) {
+            if (!tinaCameraYPosREd.isMouseAdjusting() || tinaCameraYPosREd.getMouseChangeCount() == 0) {
+              if (!tinaCameraYPosSlider.getValueIsAdjusting()) {
+                tinaController.saveUndoPoint();
+              }
+            }
+            tinaController.cameraYPosREd_changed();
+          }
+        }
+      });
+      tinaCameraYPosREd.setValueStep(0.01);
+      tinaCameraYPosREd.setText("");
+      tinaCameraYPosREd.setSize(new Dimension(56, 24));
+      tinaCameraYPosREd.setPreferredSize(new Dimension(56, 24));
+      tinaCameraYPosREd.setLocation(new Point(584, 100));
+      tinaCameraYPosREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      tinaCameraYPosREd.setBounds(708, 100, 56, 24);
+      tinaCameraPanel.add(tinaCameraYPosREd);
+
+      tinaCameraXPosSlider = new JSlider();
+      tinaCameraXPosSlider.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null) {
+            tinaController.cameraXPosSlider_stateChanged(e);
+          }
+        }
+      });
+      tinaCameraXPosSlider.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mousePressed(MouseEvent e) {
+          tinaController.saveUndoPoint();
+        }
+      });
+      tinaCameraXPosSlider.setValue(0);
+      tinaCameraXPosSlider.setSize(new Dimension(56, 19));
+      tinaCameraXPosSlider.setPreferredSize(new Dimension(220, 19));
+      tinaCameraXPosSlider.setMinimum(-100);
+      tinaCameraXPosSlider.setMaximum(100);
+      tinaCameraXPosSlider.setLocation(new Point(640, 103));
+      tinaCameraXPosSlider.setBounds(640, 103, 56, 19);
+      tinaCameraPanel.add(tinaCameraXPosSlider);
+
+      tinaCameraXPosREd = new JWFNumberField();
+      tinaCameraXPosREd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null) {
+
+            if (!tinaCameraXPosREd.isMouseAdjusting() || tinaCameraXPosREd.getMouseChangeCount() == 0) {
+              if (!tinaCameraXPosSlider.getValueIsAdjusting()) {
+                tinaController.saveUndoPoint();
+              }
+            }
+            tinaController.cameraXPosREd_changed();
+          }
+        }
+      });
+      tinaCameraXPosREd.setEditable(true);
+      tinaCameraXPosREd.setValueStep(0.01);
+      tinaCameraXPosREd.setText("");
+      tinaCameraXPosREd.setSize(new Dimension(56, 24));
+      tinaCameraXPosREd.setPreferredSize(new Dimension(56, 24));
+      tinaCameraXPosREd.setLocation(new Point(584, 100));
+      tinaCameraXPosREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      tinaCameraXPosREd.setBounds(584, 100, 56, 24);
+      tinaCameraPanel.add(tinaCameraXPosREd);
     }
     return tinaCameraPanel;
   }
@@ -3464,8 +3554,8 @@ public class TinaInternalFrame extends JInternalFrame {
         getTinaCameraPitchSlider(), getTinaCameraYawREd(), getTinaCameraYawSlider(), getTinaCameraPerspectiveREd(), getTinaCameraPerspectiveSlider(),
         getTinaCameraCentreXREd(), getTinaCameraCentreXSlider(), getTinaCameraCentreYREd(),
         getTinaCameraCentreYSlider(), getTinaCameraZoomREd(), getTinaCameraZoomSlider(),
-        getTinaCameraZPosREd(), getTinaCameraZPosSlider(), getTinaCameraDOFREd(), getTinaCameraDOFSlider(),
-        getTinaPixelsPerUnitREd(), getTinaPixelsPerUnitSlider(),
+        getTinaCameraXPosREd(), getTinaCameraXPosSlider(), getTinaCameraYPosREd(), getTinaCameraYPosSlider(), getTinaCameraZPosREd(), getTinaCameraZPosSlider(),
+        getTinaCameraDOFREd(), getTinaCameraDOFSlider(), getTinaPixelsPerUnitREd(), getTinaPixelsPerUnitSlider(),
         getTinaBrightnessREd(), getTinaBrightnessSlider(), getTinaContrastREd(), getTinaContrastSlider(), getTinaGammaREd(), getTinaGammaSlider(),
         getTinaVibrancyREd(), getTinaVibrancySlider(), getTinaFilterRadiusREd(), getTinaFilterRadiusSlider(), getTinaDEFilterRadiusREd(), getTinaDEFilterRadiusSlider(),
         getTinaDEFilterAmountREd(), getTinaDEFilterAmountSlider(), getTinaGammaThresholdREd(),
@@ -3484,9 +3574,9 @@ public class TinaInternalFrame extends JInternalFrame {
         nonlinearControlsRows, getXFormColorREd(), getXFormColorSlider(), getXFormSymmetryREd(), getXFormSymmetrySlider(), getXFormOpacityREd(),
         getXFormOpacitySlider(), getXFormDrawModeCmb(), getRelWeightsTable(), getRelWeightsZeroButton(), getRelWeightsOneButton(), getRelWeightREd(),
         getMouseTransformMoveButton(),
-        getMouseTransformRotateButton(), getMouseTransformScaleButton(), getMouseTransformShearButton(), getMouseTransformViewButton(),
+        getMouseTransformScaleButton(), getMouseTransformShearButton(), getMouseTransformViewButton(),
         getAffineEditPostTransformButton(), getAffineEditPostTransformSmallButton(),
-        getMouseTransformZoomInButton(), getMouseTransformZoomOutButton(), getToggleTrianglesButton(), new MainProgressUpdater(this),
+        getMouseTransformZoomInButton(), getMouseTransformZoomOutButton(), new MainProgressUpdater(this),
         getAffineResetTransformButton(), getCreatePaletteColorsTable(),
         getShadingCmb(), getShadingAmbientREd(), getShadingAmbientSlider(), getShadingDiffuseREd(), getShadingDiffuseSlider(),
         getShadingPhongREd(), getShadingPhongSlider(), getShadingPhongSizeREd(), getShadingPhongSizeSlider(), getShadingLightCmb(),
@@ -5273,8 +5363,6 @@ public class TinaInternalFrame extends JInternalFrame {
       mouseTransformViewButton.setPreferredSize(new Dimension(42, 24));
       triangleOperationsPanel.add(mouseTransformViewButton);
       triangleOperationsPanel.add(getMouseTransformMoveButton(), null);
-      triangleOperationsPanel.add(getMouseTransformRotateButton(), null);
-      triangleOperationsPanel.add(getMouseTransformScaleButton(), null);
 
       mouseTransformShearButton = new JToggleButton();
       mouseTransformShearButton.addActionListener(new ActionListener() {
@@ -5286,8 +5374,8 @@ public class TinaInternalFrame extends JInternalFrame {
       mouseTransformShearButton.setToolTipText("Enable free triangle editing mode");
       mouseTransformShearButton.setPreferredSize(new Dimension(42, 24));
       triangleOperationsPanel.add(mouseTransformShearButton);
+      triangleOperationsPanel.add(getMouseTransformScaleButton(), null);
       triangleOperationsPanel.add(editSpaceLbl1, null);
-      triangleOperationsPanel.add(getToggleTrianglesButton(), null);
       triangleOperationsPanel.add(editSpaceLbl2, null);
       triangleOperationsPanel.add(getTinaRenderFlameButton(), null);
     }
@@ -5303,8 +5391,8 @@ public class TinaInternalFrame extends JInternalFrame {
     if (mouseTransformMoveButton == null) {
       mouseTransformMoveButton = new JToggleButton();
       mouseTransformMoveButton.setPreferredSize(new Dimension(42, 24));
-      mouseTransformMoveButton.setToolTipText("Enable triangle dragging mode");
-      mouseTransformMoveButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/move.gif")));
+      mouseTransformMoveButton.setToolTipText("Edit triangles (left mouse: move, right mouse: rotate, mouse wheel: scale)");
+      mouseTransformMoveButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/triangle.gif")));
       mouseTransformMoveButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
           tinaController.mouseTransformMoveButton_clicked();
@@ -5312,26 +5400,6 @@ public class TinaInternalFrame extends JInternalFrame {
       });
     }
     return mouseTransformMoveButton;
-  }
-
-  /**
-   * This method initializes mouseTransformRotateButton	
-   * 	
-   * @return javax.swing.JToggleButton	
-   */
-  private JToggleButton getMouseTransformRotateButton() {
-    if (mouseTransformRotateButton == null) {
-      mouseTransformRotateButton = new JToggleButton();
-      mouseTransformRotateButton.setPreferredSize(new Dimension(42, 24));
-      mouseTransformRotateButton.setToolTipText("Enable triangle rotating mode");
-      mouseTransformRotateButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/rotate.gif")));
-      mouseTransformRotateButton.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.mouseTransformRotateButton_clicked();
-        }
-      });
-    }
-    return mouseTransformRotateButton;
   }
 
   /**
@@ -5547,27 +5615,6 @@ public class TinaInternalFrame extends JInternalFrame {
       });
     }
     return mouseTransformZoomOutButton;
-  }
-
-  /**
-   * This method initializes toggleTrianglesButton	
-   * 	
-   * @return javax.swing.JToggleButton	
-   */
-  private JToggleButton getToggleTrianglesButton() {
-    if (toggleTrianglesButton == null) {
-      toggleTrianglesButton = new JToggleButton();
-      toggleTrianglesButton.setPreferredSize(new Dimension(42, 24));
-      toggleTrianglesButton.setSelected(true);
-      toggleTrianglesButton.setToolTipText("Display/hide triangles");
-      toggleTrianglesButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/triangle.gif")));
-      toggleTrianglesButton.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.toggleTrianglesButton_clicked();
-        }
-      });
-    }
-    return toggleTrianglesButton;
   }
 
   /**
@@ -7117,6 +7164,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JWFNumberField getTinaCameraZPosREd() {
     if (tinaCameraZPosREd == null) {
       tinaCameraZPosREd = new JWFNumberField();
+      tinaCameraZPosREd.setEditable(true);
       tinaCameraZPosREd.setValueStep(0.01);
       tinaCameraZPosREd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
@@ -7128,10 +7176,10 @@ public class TinaInternalFrame extends JInternalFrame {
           tinaController.cameraZPosREd_changed();
         }
       });
-      tinaCameraZPosREd.setPreferredSize(new Dimension(100, 24));
+      tinaCameraZPosREd.setPreferredSize(new Dimension(56, 24));
       tinaCameraZPosREd.setText("");
-      tinaCameraZPosREd.setSize(new Dimension(100, 24));
-      tinaCameraZPosREd.setLocation(new Point(100, 100));
+      tinaCameraZPosREd.setSize(new Dimension(56, 24));
+      tinaCameraZPosREd.setLocation(new Point(832, 100));
       tinaCameraZPosREd.setFont(new Font("Dialog", Font.PLAIN, 10));
     }
     return tinaCameraZPosREd;
@@ -7154,8 +7202,8 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaCameraZPosSlider.setMaximum(100);
       tinaCameraZPosSlider.setMinimum(-100);
       tinaCameraZPosSlider.setValue(0);
-      tinaCameraZPosSlider.setSize(new Dimension(220, 19));
-      tinaCameraZPosSlider.setLocation(new Point(202, 100));
+      tinaCameraZPosSlider.setSize(new Dimension(56, 19));
+      tinaCameraZPosSlider.setLocation(new Point(887, 103));
       tinaCameraZPosSlider.setPreferredSize(new Dimension(220, 19));
       tinaCameraZPosSlider.addChangeListener(new javax.swing.event.ChangeListener() {
         public void stateChanged(javax.swing.event.ChangeEvent e) {
@@ -7184,7 +7232,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaCameraDOFSlider.setMinimum(0);
       tinaCameraDOFSlider.setValue(0);
       tinaCameraDOFSlider.setSize(new Dimension(220, 19));
-      tinaCameraDOFSlider.setLocation(new Point(686, 100));
+      tinaCameraDOFSlider.setLocation(new Point(202, 100));
       tinaCameraDOFSlider.setPreferredSize(new Dimension(220, 19));
       tinaCameraDOFSlider.addChangeListener(new javax.swing.event.ChangeListener() {
         public void stateChanged(javax.swing.event.ChangeEvent e) {
@@ -7218,7 +7266,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaCameraDOFREd.setPreferredSize(new Dimension(100, 24));
       tinaCameraDOFREd.setText("");
       tinaCameraDOFREd.setSize(new Dimension(100, 24));
-      tinaCameraDOFREd.setLocation(new Point(584, 100));
+      tinaCameraDOFREd.setLocation(new Point(100, 100));
       tinaCameraDOFREd.setFont(new Font("Dialog", Font.PLAIN, 10));
     }
     return tinaCameraDOFREd;
@@ -8309,6 +8357,10 @@ public class TinaInternalFrame extends JInternalFrame {
   private JPanel panel_40;
   private JPanel panel_44;
   private JPanel panel_45;
+  private JWFNumberField tinaCameraXPosREd;
+  private JWFNumberField tinaCameraYPosREd;
+  private JSlider tinaCameraXPosSlider;
+  private JSlider tinaCameraYPosSlider;
 
   /**
    * This method initializes renderBatchJobsScrollPane	
@@ -11736,5 +11788,21 @@ public class TinaInternalFrame extends JInternalFrame {
       panel_45.setLayout(new BorderLayout(0, 0));
     }
     return panel_45;
+  }
+
+  public JWFNumberField getTinaCameraXPosREd() {
+    return tinaCameraXPosREd;
+  }
+
+  public JWFNumberField getTinaCameraYPosREd() {
+    return tinaCameraYPosREd;
+  }
+
+  public JSlider getTinaCameraXPosSlider() {
+    return tinaCameraXPosSlider;
+  }
+
+  public JSlider getTinaCameraYPosSlider() {
+    return tinaCameraYPosSlider;
   }
 } //  @jve:decl-index=0:visual-constraint="10,10"

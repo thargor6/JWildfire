@@ -242,6 +242,10 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
   private final JSlider cameraCentreYSlider;
   private final JWFNumberField cameraZoomREd;
   private final JSlider cameraZoomSlider;
+  private final JWFNumberField cameraXPosREd;
+  private final JSlider cameraXPosSlider;
+  private final JWFNumberField cameraYPosREd;
+  private final JSlider cameraYPosSlider;
   private final JWFNumberField cameraZPosREd;
   private final JSlider cameraZPosSlider;
   private final JWFNumberField cameraDOFREd;
@@ -373,7 +377,6 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
   private final JToggleButton affinePreserveZButton;
   private final JButton mouseEditZoomInButton;
   private final JButton mouseEditZoomOutButton;
-  private final JToggleButton toggleTrianglesButton;
   private final JToggleButton toggleDarkTrianglesButton;
   private final JToggleButton toggleVariationsButton;
   private final JToggleButton toggleTransparencyButton;
@@ -418,7 +421,6 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
 
   // mouse dragging
   private final JToggleButton mouseTransformMoveButton;
-  private final JToggleButton mouseTransformRotateButton;
   private final JToggleButton mouseTransformScaleButton;
   private final JToggleButton mouseTransformShearButton;
   private final JToggleButton mouseTransformViewButton;
@@ -440,7 +442,8 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
   public TinaController(JInternalFrame pTinaFrame, ErrorHandler pErrorHandler, Prefs pPrefs, JPanel pCenterPanel, JWFNumberField pCameraRollREd, JSlider pCameraRollSlider, JWFNumberField pCameraPitchREd,
       JSlider pCameraPitchSlider, JWFNumberField pCameraYawREd, JSlider pCameraYawSlider, JWFNumberField pCameraPerspectiveREd, JSlider pCameraPerspectiveSlider,
       JWFNumberField pCameraCentreXREd, JSlider pCameraCentreXSlider, JWFNumberField pCameraCentreYREd,
-      JSlider pCameraCentreYSlider, JWFNumberField pCameraZoomREd, JSlider pCameraZoomSlider, JWFNumberField pCameraZPosREd, JSlider pCameraZPosSlider,
+      JSlider pCameraCentreYSlider, JWFNumberField pCameraZoomREd, JSlider pCameraZoomSlider, JWFNumberField pCameraXPosREd, JSlider pCameraXPosSlider,
+      JWFNumberField pCameraYPosREd, JSlider pCameraYPosSlider, JWFNumberField pCameraZPosREd, JSlider pCameraZPosSlider,
       JWFNumberField pCameraDOFREd, JSlider pCameraDOFSlider, JWFNumberField pPixelsPerUnitREd, JSlider pPixelsPerUnitSlider,
       JWFNumberField pBrightnessREd, JSlider pBrightnessSlider, JWFNumberField pContrastREd, JSlider pContrastSlider, JWFNumberField pGammaREd, JSlider pGammaSlider,
       JWFNumberField pVibrancyREd, JSlider pVibrancySlider, JWFNumberField pFilterRadiusREd, JSlider pFilterRadiusSlider,
@@ -460,10 +463,10 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       JButton pDeleteTransformationButton, JButton pAddFinalTransformationButton, JPanel pRandomBatchPanel, NonlinearControlsRow[] pNonlinearControlsRows,
       JWFNumberField pXFormColorREd, JSlider pXFormColorSlider, JWFNumberField pXFormSymmetryREd, JSlider pXFormSymmetrySlider, JWFNumberField pXFormOpacityREd,
       JSlider pXFormOpacitySlider, JComboBox pXFormDrawModeCmb, JTable pRelWeightsTable, JButton pRelWeightsZeroButton, JButton pRelWeightsOneButton,
-      JWFNumberField pRelWeightREd, JToggleButton pMouseTransformMoveButton, JToggleButton pMouseTransformRotateButton, JToggleButton pMouseTransformScaleButton,
+      JWFNumberField pRelWeightREd, JToggleButton pMouseTransformMoveButton, JToggleButton pMouseTransformScaleButton,
       JToggleButton pMouseTransformShearButton, JToggleButton pMouseTransformViewButton,
       JToggleButton pAffineEditPostTransformButton, JToggleButton pAffineEditPostTransformSmallButton, JButton pMouseEditZoomInButton, JButton pMouseEditZoomOutButton,
-      JToggleButton pToggleTrianglesButton, ProgressUpdater pMainProgressUpdater, JButton pAffineResetTransformButton, JTable pCreatePaletteColorsTable,
+      ProgressUpdater pMainProgressUpdater, JButton pAffineResetTransformButton, JTable pCreatePaletteColorsTable,
       JComboBox pShadingCmb, JWFNumberField pShadingAmbientREd, JSlider pShadingAmbientSlider, JWFNumberField pShadingDiffuseREd, JSlider pShadingDiffuseSlider,
       JWFNumberField pShadingPhongREd, JSlider pShadingPhongSlider, JWFNumberField pShadingPhongSizeREd, JSlider pShadingPhongSizeSlider,
       JComboBox pShadingLightCmb, JWFNumberField pShadingLightXREd, JSlider pShadingLightXSlider, JWFNumberField pShadingLightYREd, JSlider pShadingLightYSlider,
@@ -521,6 +524,10 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     cameraCentreYSlider = pCameraCentreYSlider;
     cameraZoomREd = pCameraZoomREd;
     cameraZoomSlider = pCameraZoomSlider;
+    cameraXPosREd = pCameraXPosREd;
+    cameraXPosSlider = pCameraXPosSlider;
+    cameraYPosREd = pCameraYPosREd;
+    cameraYPosSlider = pCameraYPosSlider;
     cameraZPosREd = pCameraZPosREd;
     cameraZPosSlider = pCameraZPosSlider;
     cameraDOFREd = pCameraDOFREd;
@@ -651,11 +658,9 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     transformationWeightREd = pTransformationWeightREd;
 
     mouseTransformMoveButton = pMouseTransformMoveButton;
-    mouseTransformRotateButton = pMouseTransformRotateButton;
     mouseTransformScaleButton = pMouseTransformScaleButton;
     mouseTransformShearButton = pMouseTransformShearButton;
     mouseTransformViewButton = pMouseTransformViewButton;
-    toggleTrianglesButton = pToggleTrianglesButton;
     toggleVariationsButton = pToggleVariationsButton;
     toggleTransparencyButton = pToggleTransparencyButton;
     toggleDarkTrianglesButton = pToggleDarkTrianglesButton;
@@ -946,7 +951,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       int height = centerPanel.getHeight();
       SimpleImage img = new SimpleImage(width, height);
       img.fillBackground(0, 0, 0);
-      flamePanel = new FlamePanel(img, 0, 0, centerPanel.getWidth(), this, toggleTrianglesButton, toggleVariationsButton);
+      flamePanel = new FlamePanel(img, 0, 0, centerPanel.getWidth(), this);
       flamePanel.setUndoManagerHolder(this);
       ResolutionProfile resProfile = getResolutionProfile();
       flamePanel.setRenderWidth(resProfile.getWidth());
@@ -1210,17 +1215,17 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     try {
       refreshVisualCamValues();
 
-      cameraPitchREd.setText(Tools.doubleToString(currFlame.getCamPitch()));
-      cameraPitchSlider.setValue(Tools.FTOI(currFlame.getCamPitch()));
-
-      cameraYawREd.setText(Tools.doubleToString(currFlame.getCamYaw()));
-      cameraYawSlider.setValue(Tools.FTOI(currFlame.getCamYaw()));
-
       cameraPerspectiveREd.setText(Tools.doubleToString(currFlame.getCamPerspective()));
       cameraPerspectiveSlider.setValue(Tools.FTOI(currFlame.getCamPerspective() * SLIDER_SCALE_PERSPECTIVE));
 
       cameraZoomREd.setText(Tools.doubleToString(currFlame.getCamZoom()));
       cameraZoomSlider.setValue(Tools.FTOI(currFlame.getCamZoom() * SLIDER_SCALE_ZOOM));
+
+      cameraXPosREd.setText(Tools.doubleToString(currFlame.getCamX()));
+      cameraXPosSlider.setValue(Tools.FTOI(currFlame.getCamX() * SLIDER_SCALE_ZPOS));
+
+      cameraYPosREd.setText(Tools.doubleToString(currFlame.getCamY()));
+      cameraYPosSlider.setValue(Tools.FTOI(currFlame.getCamY() * SLIDER_SCALE_ZPOS));
 
       cameraZPosREd.setText(Tools.doubleToString(currFlame.getCamZ()));
       cameraZPosSlider.setValue(Tools.FTOI(currFlame.getCamZ() * SLIDER_SCALE_ZPOS));
@@ -2067,14 +2072,6 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
   }
 
   public void renderFlameButton_actionPerformed(ActionEvent e) {
-    //    refreshing = true;
-    //    try {
-    //      toggleTrianglesButton.setSelected(false);
-    //      flamePanel.setDrawFlame(false);
-    //    }
-    //    finally {
-    //      refreshing = false;
-    //    }
     refreshFlameImage(false, false);
   }
 
@@ -2471,7 +2468,6 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     affineEditPostTransformSmallButton.setEnabled(currFlame != null);
     mouseEditZoomInButton.setEnabled(currFlame != null);
     mouseEditZoomOutButton.setEnabled(currFlame != null);
-    toggleTrianglesButton.setEnabled(currFlame != null);
     toggleVariationsButton.setEnabled(currFlame != null);
 
     affineC00REd.setEditable(enabled);
@@ -2727,11 +2723,19 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     refreshFlameImage(false);
   }
 
-  public void xForm_moveRight(double pScale) {
-    if (!toggleTrianglesButton.isSelected()) {
+  private void forceTriangleMode() {
+    if (flamePanel.getMouseDragOperation() != MouseDragOperation.TRIANGLE) {
+      flamePanel.setMouseDragOperation(MouseDragOperation.TRIANGLE);
       flamePanel.setDrawTriangles(true);
-      toggleTrianglesButton.setSelected(true);
+      mouseTransformMoveButton.setSelected(true);
+      mouseTransformShearButton.setSelected(false);
+      mouseTransformViewButton.setSelected(false);
+      mouseTransformScaleButton.setSelected(false);
     }
+  }
+
+  public void xForm_moveRight(double pScale) {
+    forceTriangleMode();
     double amount = Tools.stringToDouble(affineMoveAmountREd.getText()) * pScale;
     if (MathLib.fabs(amount) > MathLib.EPSILON) {
       saveUndoPoint();
@@ -2741,10 +2745,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
   }
 
   public void xForm_rotateRight() {
-    if (!toggleTrianglesButton.isSelected()) {
-      flamePanel.setDrawTriangles(true);
-      toggleTrianglesButton.setSelected(true);
-    }
+    forceTriangleMode();
     double amount = Tools.stringToDouble(affineRotateAmountREd.getText());
     if (MathLib.fabs(amount) > MathLib.EPSILON) {
       saveUndoPoint();
@@ -2754,10 +2755,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
   }
 
   public void xForm_moveLeft(double pScale) {
-    if (!toggleTrianglesButton.isSelected()) {
-      flamePanel.setDrawTriangles(true);
-      toggleTrianglesButton.setSelected(true);
-    }
+    forceTriangleMode();
     double amount = Tools.stringToDouble(affineMoveAmountREd.getText()) * pScale;
     if (MathLib.fabs(amount) > MathLib.EPSILON) {
       saveUndoPoint();
@@ -2767,30 +2765,21 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
   }
 
   public void xForm_flipHorizontal() {
-    if (!toggleTrianglesButton.isSelected()) {
-      flamePanel.setDrawTriangles(true);
-      toggleTrianglesButton.setSelected(true);
-    }
+    forceTriangleMode();
     saveUndoPoint();
     XFormTransformService.flipHorizontal(getCurrXForm(), affineEditPostTransformButton.isSelected());
     transformationTableClicked();
   }
 
   public void xForm_flipVertical() {
-    if (!toggleTrianglesButton.isSelected()) {
-      flamePanel.setDrawTriangles(true);
-      toggleTrianglesButton.setSelected(true);
-    }
+    forceTriangleMode();
     saveUndoPoint();
     XFormTransformService.flipVertical(getCurrXForm(), affineEditPostTransformButton.isSelected());
     transformationTableClicked();
   }
 
   public void xForm_enlarge() {
-    if (!toggleTrianglesButton.isSelected()) {
-      flamePanel.setDrawTriangles(true);
-      toggleTrianglesButton.setSelected(true);
-    }
+    forceTriangleMode();
     double amount = Tools.stringToDouble(affineScaleAmountREd.getText()) / 100.0;
     if (MathLib.fabs(amount) > MathLib.EPSILON) {
       saveUndoPoint();
@@ -2800,10 +2789,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
   }
 
   public void xForm_shrink() {
-    if (!toggleTrianglesButton.isSelected()) {
-      flamePanel.setDrawTriangles(true);
-      toggleTrianglesButton.setSelected(true);
-    }
+    forceTriangleMode();
     double amount = 100.0 / Tools.stringToDouble(affineScaleAmountREd.getText());
     if (MathLib.fabs(amount) > MathLib.EPSILON) {
       saveUndoPoint();
@@ -2813,10 +2799,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
   }
 
   public void xForm_rotateLeft() {
-    if (!toggleTrianglesButton.isSelected()) {
-      flamePanel.setDrawTriangles(true);
-      toggleTrianglesButton.setSelected(true);
-    }
+    forceTriangleMode();
     double amount = Tools.stringToDouble(affineRotateAmountREd.getText());
     if (MathLib.fabs(amount) > MathLib.EPSILON) {
       saveUndoPoint();
@@ -2826,10 +2809,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
   }
 
   public void xForm_moveUp(double pScale) {
-    if (!toggleTrianglesButton.isSelected()) {
-      flamePanel.setDrawTriangles(true);
-      toggleTrianglesButton.setSelected(true);
-    }
+    forceTriangleMode();
     double amount = Tools.stringToDouble(affineMoveAmountREd.getText()) * pScale;
     if (MathLib.fabs(amount) > MathLib.EPSILON) {
       saveUndoPoint();
@@ -2839,10 +2819,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
   }
 
   public void xForm_moveDown(double pScale) {
-    if (!toggleTrianglesButton.isSelected()) {
-      flamePanel.setDrawTriangles(true);
-      toggleTrianglesButton.setSelected(true);
-    }
+    forceTriangleMode();
     double amount = Tools.stringToDouble(affineMoveAmountREd.getText()) * pScale;
     if (MathLib.fabs(amount) > MathLib.EPSILON) {
       saveUndoPoint();
@@ -3421,6 +3398,12 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       cameraRollREd.setText(Tools.doubleToString(currFlame.getCamRoll()));
       cameraRollSlider.setValue(Tools.FTOI(currFlame.getCamRoll()));
 
+      cameraPitchREd.setText(Tools.doubleToString(currFlame.getCamPitch()));
+      cameraPitchSlider.setValue(Tools.FTOI(currFlame.getCamPitch()));
+
+      cameraYawREd.setText(Tools.doubleToString(currFlame.getCamYaw()));
+      cameraYawSlider.setValue(Tools.FTOI(currFlame.getCamYaw()));
+
       cameraCentreXREd.setText(Tools.doubleToString(currFlame.getCentreX()));
       cameraCentreXSlider.setValue(Tools.FTOI(currFlame.getCentreX() * SLIDER_SCALE_CENTRE));
 
@@ -3470,30 +3453,13 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     if (!refreshing) {
       refreshing = true;
       try {
-        mouseTransformRotateButton.setSelected(false);
         mouseTransformScaleButton.setSelected(false);
         mouseTransformShearButton.setSelected(false);
         mouseTransformViewButton.setSelected(false);
         if (flamePanel != null) {
-          flamePanel.setMouseDragOperation(mouseTransformMoveButton.isSelected() ? MouseDragOperation.MOVE : MouseDragOperation.NONE);
-        }
-      }
-      finally {
-        refreshing = false;
-      }
-    }
-  }
-
-  public void mouseTransformRotateButton_clicked() {
-    if (!refreshing) {
-      refreshing = true;
-      try {
-        mouseTransformMoveButton.setSelected(false);
-        mouseTransformScaleButton.setSelected(false);
-        mouseTransformShearButton.setSelected(false);
-        mouseTransformViewButton.setSelected(false);
-        if (flamePanel != null) {
-          flamePanel.setMouseDragOperation(mouseTransformRotateButton.isSelected() ? MouseDragOperation.ROTATE : MouseDragOperation.NONE);
+          flamePanel.setMouseDragOperation(mouseTransformMoveButton.isSelected() ? MouseDragOperation.TRIANGLE : MouseDragOperation.NONE);
+          flamePanel.setDrawTriangles(flamePanel.getMouseDragOperation() == MouseDragOperation.TRIANGLE);
+          refreshFlameImage(false);
         }
       }
       finally {
@@ -3507,11 +3473,12 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       refreshing = true;
       try {
         mouseTransformMoveButton.setSelected(false);
-        mouseTransformRotateButton.setSelected(false);
         mouseTransformShearButton.setSelected(false);
         mouseTransformViewButton.setSelected(false);
         if (flamePanel != null) {
-          flamePanel.setMouseDragOperation(mouseTransformScaleButton.isSelected() ? MouseDragOperation.SCALE : MouseDragOperation.NONE);
+          flamePanel.setMouseDragOperation(mouseTransformScaleButton.isSelected() ? MouseDragOperation.FOCUS : MouseDragOperation.NONE);
+          flamePanel.setDrawTriangles(flamePanel.getMouseDragOperation() == MouseDragOperation.TRIANGLE);
+          refreshFlameImage(false);
         }
       }
       finally {
@@ -3530,10 +3497,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     }
     refreshing = true;
     try {
-      if (!toggleTrianglesButton.isSelected()) {
-        flamePanel.setDrawTriangles(true);
-        toggleTrianglesButton.setSelected(true);
-      }
+      forceTriangleMode();
       XForm xForm = getCurrXForm();
       if (flamePanel != null) {
         flamePanel.setEditPostTransform(affineEditPostTransformButton.isSelected());
@@ -3568,16 +3532,6 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
   public void mouseTransformZoomOutButton_clicked() {
     if (flamePanel != null) {
       flamePanel.zoomOut();
-      refreshFlameImage(false);
-    }
-  }
-
-  public void toggleTrianglesButton_clicked() {
-    if (refreshing) {
-      return;
-    }
-    if (flamePanel != null) {
-      flamePanel.setDrawTriangles(toggleTrianglesButton.isSelected());
       refreshFlameImage(false);
     }
   }
@@ -3630,8 +3584,24 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     flameSliderChanged(cameraZPosSlider, cameraZPosREd, "camZ", SLIDER_SCALE_ZPOS);
   }
 
+  public void cameraXPosSlider_stateChanged(ChangeEvent e) {
+    flameSliderChanged(cameraXPosSlider, cameraXPosREd, "camX", SLIDER_SCALE_ZPOS);
+  }
+
+  public void cameraYPosSlider_stateChanged(ChangeEvent e) {
+    flameSliderChanged(cameraYPosSlider, cameraYPosREd, "camY", SLIDER_SCALE_ZPOS);
+  }
+
   public void cameraDOFSlider_stateChanged(ChangeEvent e) {
     flameSliderChanged(cameraDOFSlider, cameraDOFREd, "camDOF", SLIDER_SCALE_DOF);
+  }
+
+  public void cameraXPosREd_changed() {
+    flameTextFieldChanged(cameraXPosSlider, cameraXPosREd, "camX", SLIDER_SCALE_ZPOS);
+  }
+
+  public void cameraYPosREd_changed() {
+    flameTextFieldChanged(cameraYPosSlider, cameraYPosREd, "camY", SLIDER_SCALE_ZPOS);
   }
 
   public void cameraZPosREd_changed() {
@@ -4998,11 +4968,12 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       refreshing = true;
       try {
         mouseTransformMoveButton.setSelected(false);
-        mouseTransformRotateButton.setSelected(false);
         mouseTransformScaleButton.setSelected(false);
         mouseTransformViewButton.setSelected(false);
         if (flamePanel != null) {
           flamePanel.setMouseDragOperation(mouseTransformShearButton.isSelected() ? MouseDragOperation.SHEAR : MouseDragOperation.NONE);
+          flamePanel.setDrawTriangles(flamePanel.getMouseDragOperation() == MouseDragOperation.TRIANGLE);
+          refreshFlameImage(false);
         }
       }
       finally {
@@ -5016,11 +4987,12 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       refreshing = true;
       try {
         mouseTransformMoveButton.setSelected(false);
-        mouseTransformRotateButton.setSelected(false);
         mouseTransformScaleButton.setSelected(false);
         mouseTransformShearButton.setSelected(false);
         if (flamePanel != null) {
           flamePanel.setMouseDragOperation(mouseTransformViewButton.isSelected() ? MouseDragOperation.VIEW : MouseDragOperation.NONE);
+          flamePanel.setDrawTriangles(flamePanel.getMouseDragOperation() == MouseDragOperation.TRIANGLE);
+          refreshFlameImage(false);
         }
       }
       finally {
@@ -5292,7 +5264,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       int height = batchPreviewRootPanel.getHeight();
       SimpleImage img = new SimpleImage(width, height);
       img.fillBackground(0, 0, 0);
-      batchPreviewFlamePanel = new FlamePanel(img, 0, 0, batchPreviewRootPanel.getWidth(), getBatchRenderPreviewFlameHolder(), null, null);
+      batchPreviewFlamePanel = new FlamePanel(img, 0, 0, batchPreviewRootPanel.getWidth(), getBatchRenderPreviewFlameHolder());
       ResolutionProfile resProfile = getBatchRenderResolutionProfile();
       batchPreviewFlamePanel.setRenderWidth(resProfile.getWidth());
       batchPreviewFlamePanel.setRenderHeight(resProfile.getHeight());

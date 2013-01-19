@@ -17,5 +17,5 @@
 package org.jwildfire.create.tina.swing;
 
 public enum MouseDragOperation {
-  MOVE, ROTATE, SCALE, SHEAR, NONE, VIEW
+  VIEW, TRIANGLE, SHEAR, FOCUS, NONE
 }
