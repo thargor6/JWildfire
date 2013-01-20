@@ -72,8 +72,8 @@ public final class FlameRenderFlatThread extends FlameRenderThread {
   @Override
   protected void iterate() {
     List<IterationObserver> observers = renderer.getIterationObservers();
-    final double cosa = renderer.cosa;
-    final double sina = renderer.sina;
+    final double cosa = renderer.getCosa();
+    final double sina = renderer.getSina();
 
     for (iter = startIter; !forceAbort && (samples < 0 || iter < samples); iter++) {
       if (iter % 100 == 0) {
@@ -100,10 +100,10 @@ public final class FlameRenderFlatThread extends FlameRenderThread {
           finalXForms.get(i).transformPoint(ctx, affineT, varT, q, q);
         }
         renderer.project(q);
-        px = q.x * cosa + q.y * sina + renderer.rcX;
+        px = q.x * cosa + q.y * sina + renderer.getRcX();
         if ((px < 0) || (px > renderer.camW))
           continue;
-        py = q.y * cosa - q.x * sina + renderer.rcY;
+        py = q.y * cosa - q.x * sina + renderer.getRcY();
         if ((py < 0) || (py > renderer.camH))
           continue;
         XForm finalXForm = finalXForms.get(finalXForms.size() - 1);
@@ -125,10 +125,10 @@ public final class FlameRenderFlatThread extends FlameRenderThread {
       else {
         q.assign(p);
         renderer.project(q);
-        px = q.x * cosa + q.y * sina + renderer.rcX;
+        px = q.x * cosa + q.y * sina + renderer.getRcX();
         if ((px < 0) || (px > renderer.camW))
           continue;
-        py = q.y * cosa - q.x * sina + renderer.rcY;
+        py = q.y * cosa - q.x * sina + renderer.getRcY();
         if ((py < 0) || (py > renderer.camH))
           continue;
 

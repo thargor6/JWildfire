@@ -50,7 +50,11 @@ public class Flame implements Assignable<Flame>, Serializable {
   @AnimAware
   private double camZoom;
   @AnimAware
-  private double camZ;
+  private double focusX;
+  @AnimAware
+  private double focusY;
+  @AnimAware
+  private double focusZ;
   @AnimAware
   private double camDOF;
   private double spatialFilterRadius;
@@ -102,7 +106,9 @@ public class Flame implements Assignable<Flame>, Serializable {
     camYaw = 0.0;
     camPerspective = 0.0;
     camZoom = 1.0;
-    camZ = 0.0;
+    focusX = 0.0;
+    focusY = 0.0;
+    focusZ = 0.0;
     camDOF = 0.0;
     gammaThreshold = 0.04;
     pixelsPerUnit = 50;
@@ -306,12 +312,28 @@ public class Flame implements Assignable<Flame>, Serializable {
     return res;
   }
 
-  public double getCamZ() {
-    return camZ;
+  public double getFocusX() {
+    return focusX;
   }
 
-  public void setCamZ(double camZ) {
-    this.camZ = camZ;
+  public void setFocusX(double focusX) {
+    this.focusX = focusX;
+  }
+
+  public double getFocusY() {
+    return focusY;
+  }
+
+  public void setFocusY(double focusY) {
+    this.focusY = focusY;
+  }
+
+  public double getFocusZ() {
+    return focusZ;
+  }
+
+  public void setFocusZ(double focusZ) {
+    this.focusZ = focusZ;
   }
 
   public double getCamDOF() {
@@ -440,7 +462,9 @@ public class Flame implements Assignable<Flame>, Serializable {
     camPerspective = pFlame.camPerspective;
     camRoll = pFlame.camRoll;
     camZoom = pFlame.camZoom;
-    camZ = pFlame.camZ;
+    focusX = pFlame.focusX;
+    focusY = pFlame.focusY;
+    focusZ = pFlame.focusZ;
     camDOF = pFlame.camDOF;
     spatialFilterRadius = pFlame.spatialFilterRadius;
     sampleDensity = pFlame.sampleDensity;
@@ -480,7 +504,8 @@ public class Flame implements Assignable<Flame>, Serializable {
         width != pFlame.width || height != pFlame.height ||
         fabs(camPitch - pFlame.camPitch) > EPSILON || fabs(camYaw - pFlame.camYaw) > EPSILON ||
         fabs(camPerspective - pFlame.camPerspective) > EPSILON || fabs(camRoll - pFlame.camRoll) > EPSILON ||
-        fabs(camZoom - pFlame.camZoom) > EPSILON || fabs(camZ - pFlame.camZ) > EPSILON ||
+        fabs(camZoom - pFlame.camZoom) > EPSILON || fabs(focusX - pFlame.focusX) > EPSILON ||
+        fabs(focusY - pFlame.focusY) > EPSILON || fabs(focusZ - pFlame.focusZ) > EPSILON ||
         fabs(camDOF - pFlame.camDOF) > EPSILON ||
         fabs(spatialFilterRadius - pFlame.spatialFilterRadius) > EPSILON ||
         fabs(sampleDensity - pFlame.sampleDensity) > EPSILON || bgTransparency != pFlame.bgTransparency || bgColorRed != pFlame.bgColorRed ||

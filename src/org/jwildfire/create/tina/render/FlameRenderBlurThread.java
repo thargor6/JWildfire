@@ -111,10 +111,10 @@ public final class FlameRenderBlurThread extends FlameRenderThread {
           finalXForms.get(i).transformPoint(ctx, affineT, varT, q, q);
         }
         renderer.project(q);
-        px = q.x * renderer.cosa + q.y * renderer.sina + renderer.rcX;
+        px = q.x * renderer.getCosa() + q.y * renderer.getSina() + renderer.getRcX();
         if ((px < 0) || (px > renderer.camW))
           continue;
-        py = q.y * renderer.cosa - q.x * renderer.sina + renderer.rcY;
+        py = q.y * renderer.getCosa() - q.x * renderer.getSina() + renderer.getRcY();
         if ((py < 0) || (py > renderer.camH))
           continue;
 
@@ -138,10 +138,10 @@ public final class FlameRenderBlurThread extends FlameRenderThread {
       else {
         q.assign(p);
         renderer.project(q);
-        px = q.x * renderer.cosa + q.y * renderer.sina + renderer.rcX;
+        px = q.x * renderer.getCosa() + q.y * renderer.getSina() + renderer.getRcX();
         if ((px < 0) || (px > renderer.camW))
           continue;
-        py = q.y * renderer.cosa - q.x * renderer.sina + renderer.rcY;
+        py = q.y * renderer.getCosa() - q.x * renderer.getSina() + renderer.getRcY();
         if ((py < 0) || (py > renderer.camH))
           continue;
 

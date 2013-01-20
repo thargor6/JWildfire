@@ -400,8 +400,8 @@ public class TinaInternalFrame extends JInternalFrame {
   private JLabel animateXFormScriptLbl = null;
   private JComboBox swfAnimatorXFormScriptCmb = null;
   private JPanel triangleOperationsPanel = null;
-  private JToggleButton mouseTransformMoveButton = null;
-  private JToggleButton mouseTransformScaleButton = null;
+  private JToggleButton mouseTransformEditTrianglesButton = null;
+  private JToggleButton mouseTransformEditFocusPointButton = null;
   private JPanel centerNorthPanel = null;
   private JPanel centerWestPanel = null;
   private JPanel centerCenterPanel = null;
@@ -889,7 +889,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaCameraYPosSlider.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           if (tinaController != null) {
-            tinaController.cameraYPosSlider_stateChanged(e);
+            tinaController.cameraYFocusSlider_stateChanged(e);
           }
         }
       });
@@ -917,7 +917,7 @@ public class TinaInternalFrame extends JInternalFrame {
                 tinaController.saveUndoPoint();
               }
             }
-            tinaController.cameraYPosREd_changed();
+            tinaController.cameraYFocusREd_changed();
           }
         }
       });
@@ -934,7 +934,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaCameraXPosSlider.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           if (tinaController != null) {
-            tinaController.cameraXPosSlider_stateChanged(e);
+            tinaController.cameraXFocusSlider_stateChanged(e);
           }
         }
       });
@@ -963,7 +963,7 @@ public class TinaInternalFrame extends JInternalFrame {
                 tinaController.saveUndoPoint();
               }
             }
-            tinaController.cameraXPosREd_changed();
+            tinaController.cameraXFocusREd_changed();
           }
         }
       });
@@ -3573,8 +3573,8 @@ public class TinaInternalFrame extends JInternalFrame {
         getTinaDuplicateTransformationButton(), getTinaDeleteTransformationButton(), getTinaAddFinalTransformationButton(), getRandomBatchPanel(),
         nonlinearControlsRows, getXFormColorREd(), getXFormColorSlider(), getXFormSymmetryREd(), getXFormSymmetrySlider(), getXFormOpacityREd(),
         getXFormOpacitySlider(), getXFormDrawModeCmb(), getRelWeightsTable(), getRelWeightsZeroButton(), getRelWeightsOneButton(), getRelWeightREd(),
-        getMouseTransformMoveButton(),
-        getMouseTransformScaleButton(), getMouseTransformShearButton(), getMouseTransformViewButton(),
+        getMouseTransformEditTrianglesButton(),
+        getMouseTransformEditFocusPointButton(), getMouseTransformShearButton(), getMouseTransformViewButton(),
         getAffineEditPostTransformButton(), getAffineEditPostTransformSmallButton(),
         getMouseTransformZoomInButton(), getMouseTransformZoomOutButton(), new MainProgressUpdater(this),
         getAffineResetTransformButton(), getCreatePaletteColorsTable(),
@@ -5351,30 +5351,30 @@ public class TinaInternalFrame extends JInternalFrame {
       triangleOperationsPanel.setPreferredSize(new Dimension(52, 0));
       triangleOperationsPanel.add(getAffineEditPostTransformSmallButton(), null);
 
-      mouseTransformViewButton = new JToggleButton();
-      mouseTransformViewButton.addActionListener(new ActionListener() {
+      mouseTransformEditViewButton = new JToggleButton();
+      mouseTransformEditViewButton.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
           tinaController.mouseTransformViewButton_clicked();
         }
       });
-      mouseTransformViewButton.setSelected(true);
-      mouseTransformViewButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/editView.gif")));
-      mouseTransformViewButton.setToolTipText("Enable view editing mode (Left mouse: move, right mouse: rotate, middle/wheel: zoom)");
-      mouseTransformViewButton.setPreferredSize(new Dimension(42, 24));
-      triangleOperationsPanel.add(mouseTransformViewButton);
-      triangleOperationsPanel.add(getMouseTransformMoveButton(), null);
+      mouseTransformEditViewButton.setSelected(true);
+      mouseTransformEditViewButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/editView.gif")));
+      mouseTransformEditViewButton.setToolTipText("Enable view editing mode (Left mouse: move, right mouse: rotate, middle/wheel: zoom)");
+      mouseTransformEditViewButton.setPreferredSize(new Dimension(42, 24));
+      triangleOperationsPanel.add(mouseTransformEditViewButton);
+      triangleOperationsPanel.add(getMouseTransformEditTrianglesButton(), null);
 
-      mouseTransformShearButton = new JToggleButton();
-      mouseTransformShearButton.addActionListener(new ActionListener() {
+      mouseTransformEditPointsButton = new JToggleButton();
+      mouseTransformEditPointsButton.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
-          tinaController.mouseTransformShearButton_clicked();
+          tinaController.mouseTransformEditPointsButton_clicked();
         }
       });
-      mouseTransformShearButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/shear.gif")));
-      mouseTransformShearButton.setToolTipText("Enable free triangle editing mode");
-      mouseTransformShearButton.setPreferredSize(new Dimension(42, 24));
-      triangleOperationsPanel.add(mouseTransformShearButton);
-      triangleOperationsPanel.add(getMouseTransformScaleButton(), null);
+      mouseTransformEditPointsButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/shear.gif")));
+      mouseTransformEditPointsButton.setToolTipText("Enable free triangle editing mode");
+      mouseTransformEditPointsButton.setPreferredSize(new Dimension(42, 24));
+      triangleOperationsPanel.add(mouseTransformEditPointsButton);
+      triangleOperationsPanel.add(getMouseTransformEditFocusPointButton(), null);
       triangleOperationsPanel.add(editSpaceLbl1, null);
       triangleOperationsPanel.add(editSpaceLbl2, null);
       triangleOperationsPanel.add(getTinaRenderFlameButton(), null);
@@ -5387,19 +5387,19 @@ public class TinaInternalFrame extends JInternalFrame {
    * 	
    * @return javax.swing.JToggleButton	
    */
-  private JToggleButton getMouseTransformMoveButton() {
-    if (mouseTransformMoveButton == null) {
-      mouseTransformMoveButton = new JToggleButton();
-      mouseTransformMoveButton.setPreferredSize(new Dimension(42, 24));
-      mouseTransformMoveButton.setToolTipText("Edit triangles (left mouse: move, right mouse: rotate, mouse wheel: scale)");
-      mouseTransformMoveButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/triangle.gif")));
-      mouseTransformMoveButton.addActionListener(new java.awt.event.ActionListener() {
+  private JToggleButton getMouseTransformEditTrianglesButton() {
+    if (mouseTransformEditTrianglesButton == null) {
+      mouseTransformEditTrianglesButton = new JToggleButton();
+      mouseTransformEditTrianglesButton.setPreferredSize(new Dimension(42, 24));
+      mouseTransformEditTrianglesButton.setToolTipText("Edit triangles (left mouse: move, right mouse: rotate, mouse wheel: scale)");
+      mouseTransformEditTrianglesButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/triangle.gif")));
+      mouseTransformEditTrianglesButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.mouseTransformMoveButton_clicked();
+          tinaController.mouseTransformEditTrianglesButton_clicked();
         }
       });
     }
-    return mouseTransformMoveButton;
+    return mouseTransformEditTrianglesButton;
   }
 
   /**
@@ -5407,19 +5407,19 @@ public class TinaInternalFrame extends JInternalFrame {
    * 	
    * @return javax.swing.JToggleButton	
    */
-  private JToggleButton getMouseTransformScaleButton() {
-    if (mouseTransformScaleButton == null) {
-      mouseTransformScaleButton = new JToggleButton();
-      mouseTransformScaleButton.setPreferredSize(new Dimension(42, 24));
-      mouseTransformScaleButton.setToolTipText("Enable triangle scale mode");
-      mouseTransformScaleButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/scale.gif")));
-      mouseTransformScaleButton.addActionListener(new java.awt.event.ActionListener() {
+  private JToggleButton getMouseTransformEditFocusPointButton() {
+    if (mouseTransformEditFocusPointButton == null) {
+      mouseTransformEditFocusPointButton = new JToggleButton();
+      mouseTransformEditFocusPointButton.setPreferredSize(new Dimension(42, 24));
+      mouseTransformEditFocusPointButton.setToolTipText("Edit focus point");
+      mouseTransformEditFocusPointButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/focusPoint.gif")));
+      mouseTransformEditFocusPointButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.mouseTransformScaleButton_clicked();
+          tinaController.mouseTransformEditFocusPointButton_clicked();
         }
       });
     }
-    return mouseTransformScaleButton;
+    return mouseTransformEditFocusPointButton;
   }
 
   /**
@@ -7173,7 +7173,7 @@ public class TinaInternalFrame extends JInternalFrame {
               tinaController.saveUndoPoint();
             }
           }
-          tinaController.cameraZPosREd_changed();
+          tinaController.cameraZFocusREd_changed();
         }
       });
       tinaCameraZPosREd.setPreferredSize(new Dimension(56, 24));
@@ -7207,7 +7207,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaCameraZPosSlider.setPreferredSize(new Dimension(220, 19));
       tinaCameraZPosSlider.addChangeListener(new javax.swing.event.ChangeListener() {
         public void stateChanged(javax.swing.event.ChangeEvent e) {
-          tinaController.cameraZPosSlider_stateChanged(e);
+          tinaController.cameraZFocusSlider_stateChanged(e);
         }
       });
     }
@@ -8254,7 +8254,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JPanel panel;
   private JScrollPane scrollPane_1;
   private JTextPane faqPane;
-  private JToggleButton mouseTransformShearButton;
+  private JToggleButton mouseTransformEditPointsButton;
   private JButton undoButton;
   private JLabel label_5;
   private JButton redoButton;
@@ -8346,7 +8346,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton dancingFlamesSaveAllFlamesBtn;
   private JPanel panel_37;
   private JPanel panel_41;
-  private JToggleButton mouseTransformViewButton;
+  private JToggleButton mouseTransformEditViewButton;
   private JPanel panel_49;
   private JComboBox dancingFlamesFlameCmb;
   private JCheckBox dancingFlamesDrawTrianglesCBx;
@@ -10177,7 +10177,7 @@ public class TinaInternalFrame extends JInternalFrame {
   }
 
   public JToggleButton getMouseTransformShearButton() {
-    return mouseTransformShearButton;
+    return mouseTransformEditPointsButton;
   }
 
   private JButton getUndoButton() {
@@ -11501,7 +11501,7 @@ public class TinaInternalFrame extends JInternalFrame {
   }
 
   public JToggleButton getMouseTransformViewButton() {
-    return mouseTransformViewButton;
+    return mouseTransformEditViewButton;
   }
 
   private JPanel getPanel_49() {

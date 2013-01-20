@@ -128,8 +128,8 @@ public final class FlameRenderPseudo3DThread extends FlameRenderThread {
         }
         r.assign(qA[0]);
         renderer.project(r);
-        px = r.x * renderer.cosa + r.y * renderer.sina + renderer.rcX;
-        py = r.y * renderer.cosa - r.x * renderer.sina + renderer.rcY;
+        px = r.x * renderer.getCosa() + r.y * renderer.getSina() + renderer.getRcX();
+        py = r.y * renderer.getCosa() - r.x * renderer.getSina() + renderer.getRcY();
         if ((px < 0) || (px > renderer.camW))
           continue;
         if ((py < 0) || (py > renderer.camH))
@@ -159,8 +159,8 @@ public final class FlameRenderPseudo3DThread extends FlameRenderThread {
         }
         r.assign(qA[0]);
         renderer.project(r);
-        px = r.x * renderer.cosa + r.y * renderer.sina + renderer.rcX;
-        py = r.y * renderer.cosa - r.x * renderer.sina + renderer.rcY;
+        px = r.x * renderer.getCosa() + r.y * renderer.getSina() + renderer.getRcX();
+        py = r.y * renderer.getCosa() - r.x * renderer.getSina() + renderer.getRcY();
         if ((px < 0) || (px > renderer.camW))
           continue;
         if ((py < 0) || (py > renderer.camH))

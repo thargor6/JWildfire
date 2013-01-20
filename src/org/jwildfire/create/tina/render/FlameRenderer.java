@@ -20,6 +20,7 @@ import static org.jwildfire.base.MathLib.M_PI;
 import static org.jwildfire.base.MathLib.cos;
 import static org.jwildfire.base.MathLib.fabs;
 import static org.jwildfire.base.MathLib.sin;
+import static org.jwildfire.base.MathLib.sqrt;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -43,7 +44,7 @@ import org.jwildfire.create.tina.variation.FlameTransformationContext;
 import org.jwildfire.image.SimpleHDRImage;
 import org.jwildfire.image.SimpleImage;
 
-public final class FlameRenderer {
+public class FlameRenderer {
   // constants
   private final static int MAX_FILTER_WIDTH = 25;
   // init in initRaster
@@ -58,12 +59,12 @@ public final class FlameRenderer {
   GammaCorrectionFilter gammaCorrectionFilter;
   RasterPoint[][] raster;
   // init in initView
-  double cosa;
-  double sina;
-  double camW;
-  double camH;
-  double rcX;
-  double rcY;
+  private double cosa;
+  private double sina;
+  double camX0, camX1, camY0, camY1;
+  double camW, camH;
+  private double rcX;
+  private double rcY;
   double bws;
   double bhs;
   private int renderScale = 1;
@@ -72,11 +73,11 @@ public final class FlameRenderer {
   double paletteIdxScl;
   RandomNumberGenerator random = new RandomNumberGenerator();
   // 3D stuff
-  private boolean doProject3D = false;
+  protected boolean doProject3D = false;
   // init in init3D()
-  private double cameraMatrix[][] = new double[3][3];
-  private double camDOF_10;
-  private boolean useDOF;
+  protected double cameraMatrix[][] = new double[3][3];
+  protected double camDOF_10;
+  protected boolean useDOF;
   private boolean withAlpha;
   //
   private ProgressUpdater progressUpdater;
@@ -84,7 +85,7 @@ public final class FlameRenderer {
   private final FlameTransformationContext flameTransformationContext;
   private RenderInfo renderInfo;
 
-  private final Flame flame;
+  protected final Flame flame;
   private final Prefs prefs;
 
   private List<IterationObserver> iterationObservers;
@@ -109,7 +110,7 @@ public final class FlameRenderer {
     flameTransformationContext.setPreserveZCoordinate(pFlame.isPreserveZ());
   }
 
-  private void init3D() {
+  public void init3D() {
     double yaw = -flame.getCamYaw() * M_PI / 180.0;
     double pitch = flame.getCamPitch() * M_PI / 180.0;
     cameraMatrix[0][0] = cos(yaw);
@@ -126,7 +127,7 @@ public final class FlameRenderer {
     camDOF_10 = 0.1 * flame.getCamDOF();
   }
 
-  private void initRaster(int pImageWidth, int pImageHeight) {
+  public void initRasterSizes(int pImageWidth, int pImageHeight) {
     imageWidth = pImageWidth;
     imageHeight = pImageHeight;
     logDensityFilter = new LogDensityFilter(flame);
@@ -136,6 +137,10 @@ public final class FlameRenderer {
     rasterWidth = imageWidth + 2 * maxBorderWidth;
     rasterHeight = imageHeight + 2 * maxBorderWidth;
     rasterSize = rasterWidth * rasterHeight;
+  }
+
+  private void initRaster(int pImageWidth, int pImageHeight) {
+    initRasterSizes(pImageWidth, pImageHeight);
     raster = new RasterPoint[rasterHeight][rasterWidth];
     for (int i = 0; i < rasterHeight; i++) {
       for (int j = 0; j < rasterWidth; j++) {
@@ -149,18 +154,20 @@ public final class FlameRenderer {
       return;
     }
     double z = pPoint.z;
-    double px = cameraMatrix[0][0] * pPoint.x + cameraMatrix[1][0] * pPoint.y;
+    double px = cameraMatrix[0][0] * pPoint.x + cameraMatrix[1][0] * pPoint.y /*+ cameraMatrix[2][0] * z*/;
     double py = cameraMatrix[0][1] * pPoint.x + cameraMatrix[1][1] * pPoint.y + cameraMatrix[2][1] * z;
     double pz = cameraMatrix[0][2] * pPoint.x + cameraMatrix[1][2] * pPoint.y + cameraMatrix[2][2] * z;
     double zr = 1.0 - flame.getCamPerspective() * pz;
     if (useDOF) {
-      double a = 2.0 * M_PI * random.random();
-      double dsina = sin(a);
-      double dcosa = cos(a);
-      double zdist = (flame.getCamZ() - pz);
-      double dr;
-      if (zdist > 0.0) {
-        dr = random.random() * camDOF_10 * zdist;
+      double xdist = (px - flame.getFocusX());
+      double ydist = (py - flame.getFocusY());
+      double zdist = (pz - flame.getFocusZ());
+      double dist = sqrt(xdist * xdist + ydist * ydist + zdist * zdist);
+      if (dist > 0.05) {
+        double dr = random.random() * camDOF_10 * dist;
+        double a = 2.0 * M_PI * random.random();
+        double dsina = sin(a);
+        double dcosa = cos(a);
         pPoint.x = (px + dr * dcosa) / zr;
         pPoint.y = (py + dr * dsina) / zr;
       }
@@ -632,7 +639,7 @@ public final class FlameRenderer {
     return threads;
   }
 
-  private void initView() {
+  public void initView() {
     double pixelsPerUnit = flame.getPixelsPerUnit() * flame.getCamZoom();
     double corner_x = flame.getCentreX() - (double) imageWidth / pixelsPerUnit / 2.0;
     double corner_y = flame.getCentreY() - (double) imageHeight / pixelsPerUnit / 2.0;
@@ -641,10 +648,10 @@ public final class FlameRenderer {
     double t2 = (2 * maxBorderWidth - borderWidth) / pixelsPerUnit;
     double t3 = (2 * maxBorderWidth - borderWidth) / pixelsPerUnit;
 
-    double camX0 = corner_x - t0;
-    double camY0 = corner_y - t1;
-    double camX1 = corner_x + (double) imageWidth / pixelsPerUnit + t2;
-    double camY1 = corner_y + (double) imageHeight / pixelsPerUnit + t3;
+    camX0 = corner_x - t0;
+    camY0 = corner_y - t1;
+    camX1 = corner_x + (double) imageWidth / pixelsPerUnit + t2;
+    camY1 = corner_y + (double) imageHeight / pixelsPerUnit + t3;
 
     camW = camX1 - camX0;
     double Xsize, Ysize;
@@ -662,8 +669,8 @@ public final class FlameRenderer {
 
     cosa = cos(-M_PI * (flame.getCamRoll()) / 180.0);
     sina = sin(-M_PI * (flame.getCamRoll()) / 180.0);
-    rcX = flame.getCentreX() * (1 - cosa) - flame.getCentreY() * sina - camX0;
-    rcY = flame.getCentreY() * (1 - cosa) + flame.getCentreX() * sina - camY0;
+    rcX = flame.getCentreX() * (1 - getCosa()) - flame.getCentreY() * getSina() - camX0;
+    rcY = flame.getCentreY() * (1 - getCosa()) + flame.getCentreX() * getSina() - camY0;
   }
 
   public void createColorMap() {
@@ -889,6 +896,38 @@ public final class FlameRenderer {
         }
       }
     }
+  }
+
+  public double getCamX0() {
+    return camX0;
+  }
+
+  public double getCamX1() {
+    return camX1;
+  }
+
+  public double getCamY0() {
+    return camY0;
+  }
+
+  public double getCamY1() {
+    return camY1;
+  }
+
+  public double getRcX() {
+    return rcX;
+  }
+
+  public double getRcY() {
+    return rcY;
+  }
+
+  public double getCosa() {
+    return cosa;
+  }
+
+  public double getSina() {
+    return sina;
   }
 
 }

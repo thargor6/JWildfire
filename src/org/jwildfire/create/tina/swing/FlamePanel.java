@@ -16,10 +16,8 @@
 */
 package org.jwildfire.create.tina.swing;
 
-import static org.jwildfire.base.MathLib.EPSILON;
 import static org.jwildfire.base.MathLib.M_PI;
 import static org.jwildfire.base.MathLib.cos;
-import static org.jwildfire.base.MathLib.fabs;
 import static org.jwildfire.base.MathLib.sin;
 
 import java.awt.BasicStroke;
@@ -66,12 +64,12 @@ public class FlamePanel extends ImagePanel {
   private boolean allowScaleY = true;
   private boolean showTransparency = false;
 
-  private double viewXScale, viewYScale;
-  private double viewXTrans, viewYTrans;
+  private double triangleViewXScale, triangleViewYScale;
+  private double triangleViewXTrans, triangleViewYTrans;
   private MouseDragOperation mouseDragOperation = MouseDragOperation.VIEW;
   private int xBeginDrag, yBeginDrag;
   private boolean editPostTransform = false;
-  private double zoom = 1.0;
+  private double triangleZoom = 1.0;
 
   private int renderWidth;
   private int renderHeight;
@@ -91,7 +89,7 @@ public class FlamePanel extends ImagePanel {
   public void paintComponent(Graphics g) {
     super.paintComponent(g);
     fillBackground(g);
-    initView();
+    initTriangleView();
     if (drawImage) {
       drawImage(g);
     }
@@ -100,7 +98,6 @@ public class FlamePanel extends ImagePanel {
     }
     if (drawTriangles) {
       paintTriangles((Graphics2D) g);
-      paintFocusPoint((Graphics2D) g);
     }
   }
 
@@ -165,8 +162,8 @@ public class FlamePanel extends ImagePanel {
         // use the same layout as Apophysis
         double tx = affineTransformedX(x[i], y[i]);
         double ty = affineTransformedY(x[i], y[i]);
-        viewX[i] = xToView(tx);
-        viewY[i] = yToView(ty);
+        viewX[i] = triangleXToView(tx);
+        viewY[i] = triangleYToView(ty);
       }
     }
 
@@ -225,7 +222,7 @@ public class FlamePanel extends ImagePanel {
 
   private boolean initViewFlag = false;
 
-  private void initView() {
+  private void initTriangleView() {
     if (initViewFlag) {
       return;
     }
@@ -247,35 +244,11 @@ public class FlamePanel extends ImagePanel {
     //      int areaTop = BORDER;
     int areaBottom = height - 1 - BORDER;
 
-    viewXScale = (double) (width - 2 * BORDER) / (viewXMax - viewXMin);
-    viewYScale = (double) (height - 2 * BORDER) / (viewYMin - viewYMax);
-    viewXTrans = viewXMin * viewXScale - areaLeft;
-    viewYTrans = viewYMin * viewYScale - areaBottom;
-    viewXScale /= renderAspect;
-  }
-
-  private XYZPoint focusPoint = new XYZPoint();
-
-  private void paintFocusPoint(Graphics2D g) {
-    if (flameHolder != null) {
-      Flame flame = flameHolder.getFlame();
-      if (flame != null) {
-        FlameRenderer renderer = new FlameRenderer(flame, new Prefs(), false);
-        if (fabs(flame.getCamDOF()) > EPSILON) {
-          g.setColor(editPostTransform ? (darkTriangles ? XFORM_POST_COLOR_DARK : XFORM_POST_COLOR) : (darkTriangles ? XFORM_COLOR_DARK : XFORM_COLOR));
-          final int SIZE = 10;
-          focusPoint.x = -flame.getCamX();
-          focusPoint.y = flame.getCamY();
-          focusPoint.z = -flame.getCamZ();
-          renderer.init3D();
-          renderer.projectWithoutDOF(focusPoint);
-          double x = xToView(focusPoint.x);
-          double y = yToView(focusPoint.y);
-          g.drawLine((int) (x - SIZE), (int) (y + SIZE), (int) (x + SIZE), (int) (y - SIZE));
-          g.drawLine((int) (x - SIZE), (int) (y - SIZE), (int) (x + SIZE), (int) (y + SIZE));
-        }
-      }
-    }
+    triangleViewXScale = (double) (width - 2 * BORDER) / (viewXMax - viewXMin);
+    triangleViewYScale = (double) (height - 2 * BORDER) / (viewYMin - viewYMax);
+    triangleViewXTrans = viewXMin * triangleViewXScale - areaLeft;
+    triangleViewYTrans = viewYMin * triangleViewYScale - areaBottom;
+    triangleViewXScale /= renderAspect;
   }
 
   private void paintTriangles(Graphics2D g) {
@@ -326,8 +299,8 @@ public class FlamePanel extends ImagePanel {
 
               p.z = 0.0;
               selectedXForm.transformPoint(getFlameTransformationContext(), affineT, varT, p, p);
-              xx[i][j] = xToView(p.x);
-              yy[i][j] = yToView(-p.y);
+              xx[i][j] = triangleXToView(p.x);
+              yy[i][j] = triangleYToView(-p.y);
               x += xs;
             }
             y += ys;
@@ -387,20 +360,20 @@ public class FlamePanel extends ImagePanel {
     }
   }
 
-  private int xToView(double pX) {
-    return Tools.FTOI(viewXScale * zoom * pX - viewXTrans);
+  private int triangleXToView(double pX) {
+    return Tools.FTOI(triangleViewXScale * triangleZoom * pX - triangleViewXTrans);
   }
 
-  private int yToView(double pY) {
-    return Tools.FTOI(viewYScale * zoom * pY - viewYTrans);
+  private int triangleYToView(double pY) {
+    return Tools.FTOI(triangleViewYScale * triangleZoom * pY - triangleViewYTrans);
   }
 
-  private double viewToX(int viewX) {
-    return ((double) viewX + viewXTrans) / (viewXScale * zoom);
+  private double triangleViewToX(int viewX) {
+    return ((double) viewX + triangleViewXTrans) / (triangleViewXScale * triangleZoom);
   }
 
-  private double viewToY(int viewY) {
-    return ((double) viewY + viewYTrans) / (viewYScale * zoom);
+  private double triangleViewToY(int viewY) {
+    return ((double) viewY + triangleViewYTrans) / (triangleViewYScale * triangleZoom);
   }
 
   public void setDrawImage(boolean drawImage) {
@@ -419,8 +392,8 @@ public class FlamePanel extends ImagePanel {
     int viewDX = pX - xBeginDrag;
     int viewDY = pY - yBeginDrag;
     if (viewDX != 0 || viewDY != 0) {
-      double dx = viewToX(pX) - viewToX(xBeginDrag);
-      double dy = viewToY(pY) - viewToY(yBeginDrag);
+      double dx = triangleViewToX(pX) - triangleViewToX(xBeginDrag);
+      double dy = triangleViewToY(pY) - triangleViewToY(yBeginDrag);
       xBeginDrag = pX;
       yBeginDrag = pY;
       if (Math.abs(dx) > MathLib.EPSILON || Math.abs(dy) > MathLib.EPSILON) {
@@ -488,7 +461,7 @@ public class FlamePanel extends ImagePanel {
               return true;
             }
           }
-          case SHEAR: {
+          case POINTS: {
             if (fineMovement) {
               dx *= 0.25;
               dy *= 0.25;
@@ -583,7 +556,20 @@ public class FlamePanel extends ImagePanel {
               }
             }
           }
-
+          case FOCUS: {
+            Flame flame = flameHolder.getFlame();
+            double cosa = cos(M_PI * (flame.getCamRoll()) / 180.0);
+            double sina = sin(M_PI * (flame.getCamRoll()) / 180.0);
+            double rcX = dx * cosa - dy * sina;
+            double rcY = dy * cosa + dx * sina;
+            if (fineMovement) {
+              rcX *= 0.1;
+              rcY *= 0.1;
+            }
+            flame.setFocusX(flame.getFocusX() + rcX * 0.5);
+            flame.setFocusY(flame.getFocusY() - rcY * 0.5);
+            return true;
+          }
         }
       }
     }
@@ -648,13 +634,13 @@ public class FlamePanel extends ImagePanel {
   public XForm mouseClicked(int x, int y) {
     redrawAfterMouseClick = false;
     // select flame
-    if (mouseDragOperation != MouseDragOperation.SHEAR) {
+    if (mouseDragOperation != MouseDragOperation.POINTS) {
       Flame flame = flameHolder.getFlame();
       if (flame != null) {
         for (XForm xForm : flame.getXForms()) {
           Triangle triangle = new Triangle(xForm);
           if (insideTriange(triangle, x, y)) {
-            if (mouseDragOperation == MouseDragOperation.SHEAR) {
+            if (mouseDragOperation == MouseDragOperation.POINTS) {
               selectedPoint = selectNearestPoint(triangle, x, y);
               redrawAfterMouseClick = true;
             }
@@ -664,7 +650,7 @@ public class FlamePanel extends ImagePanel {
         for (XForm xForm : flame.getFinalXForms()) {
           Triangle triangle = new Triangle(xForm);
           if (insideTriange(triangle, x, y)) {
-            if (mouseDragOperation == MouseDragOperation.SHEAR) {
+            if (mouseDragOperation == MouseDragOperation.POINTS) {
               selectedPoint = selectNearestPoint(triangle, x, y);
               redrawAfterMouseClick = true;
             }
@@ -674,7 +660,7 @@ public class FlamePanel extends ImagePanel {
       }
     }
     // select nearest point
-    else if (mouseDragOperation == MouseDragOperation.SHEAR && selectedXForm != null) {
+    else if (mouseDragOperation == MouseDragOperation.POINTS && selectedXForm != null) {
       Triangle triangle = new Triangle(selectedXForm);
       selectedPoint = selectNearestPoint(triangle, x, y);
       redrawAfterMouseClick = true;
@@ -692,19 +678,19 @@ public class FlamePanel extends ImagePanel {
   }
 
   public void zoomOut() {
-    if (zoom > 0.2) {
-      zoom -= 0.1;
+    if (triangleZoom > 0.2) {
+      triangleZoom -= 0.1;
     }
-    else if (zoom > 0.05) {
-      zoom -= 0.01;
+    else if (triangleZoom > 0.05) {
+      triangleZoom -= 0.01;
     }
     else {
-      zoom -= 0.001;
+      triangleZoom -= 0.001;
     }
   }
 
   public void zoomIn() {
-    zoom += 0.1;
+    triangleZoom += 0.1;
   }
 
   public void setRenderWidth(int pRenderWidth) {
@@ -794,51 +780,62 @@ public class FlamePanel extends ImagePanel {
   }
 
   public boolean mouseWheelMoved(int pRotateAmount) {
-    if (pRotateAmount != 0 && mouseDragOperation == MouseDragOperation.VIEW && flameHolder != null && flameHolder.getFlame() != null) {
-      Flame flame = flameHolder.getFlame();
-      double dx = pRotateAmount * 3.0;
-      if (fineMovement) {
-        dx *= 0.1;
-      }
-      flame.setPixelsPerUnit(flame.getPixelsPerUnit() - dx);
-      return true;
-    }
-    else if (pRotateAmount != 0 && mouseDragOperation == MouseDragOperation.TRIANGLE && selectedXForm != null) {
-      double dx = -pRotateAmount * 0.1;
-      double dy = dx;
-      if (fineMovement) {
-        dx *= 0.1;
-        dy *= 0.1;
-      }
-      Triangle triangle = new Triangle(selectedXForm);
-      double v1x = triangle.x[0] - triangle.x[1];
-      double v1y = triangle.y[0] - triangle.y[1];
-      double v2x = v1x + dx;
-      double v2y = v1y + dy;
-      double dr1 = Math.sqrt(v1x * v1x + v1y * v1y);
-      double dr2 = Math.sqrt(v2x * v2x + v2y * v2y);
-      double scale = dr2 / dr1;
-      if (editPostTransform) {
-        if (allowScaleX) {
-          selectedXForm.setPostCoeff00(selectedXForm.getPostCoeff00() * scale);
-          selectedXForm.setPostCoeff01(selectedXForm.getPostCoeff01() * scale);
+    if (pRotateAmount != 0) {
+      if (mouseDragOperation == MouseDragOperation.VIEW && flameHolder != null && flameHolder.getFlame() != null) {
+        Flame flame = flameHolder.getFlame();
+        double dx = pRotateAmount * 3.0;
+        if (fineMovement) {
+          dx *= 0.1;
         }
-        if (allowScaleY) {
-          selectedXForm.setPostCoeff10(selectedXForm.getPostCoeff10() * scale);
-          selectedXForm.setPostCoeff11(selectedXForm.getPostCoeff11() * scale);
-        }
+        flame.setPixelsPerUnit(flame.getPixelsPerUnit() - dx);
+        return true;
       }
-      else {
-        if (allowScaleX) {
-          selectedXForm.setCoeff00(selectedXForm.getCoeff00() * scale);
-          selectedXForm.setCoeff01(selectedXForm.getCoeff01() * scale);
+      else if (mouseDragOperation == MouseDragOperation.TRIANGLE && selectedXForm != null) {
+        double dx = -pRotateAmount * 0.1;
+        double dy = dx;
+        if (fineMovement) {
+          dx *= 0.1;
+          dy *= 0.1;
         }
-        if (allowScaleY) {
-          selectedXForm.setCoeff10(selectedXForm.getCoeff10() * scale);
-          selectedXForm.setCoeff11(selectedXForm.getCoeff11() * scale);
+        Triangle triangle = new Triangle(selectedXForm);
+        double v1x = triangle.x[0] - triangle.x[1];
+        double v1y = triangle.y[0] - triangle.y[1];
+        double v2x = v1x + dx;
+        double v2y = v1y + dy;
+        double dr1 = Math.sqrt(v1x * v1x + v1y * v1y);
+        double dr2 = Math.sqrt(v2x * v2x + v2y * v2y);
+        double scale = dr2 / dr1;
+        if (editPostTransform) {
+          if (allowScaleX) {
+            selectedXForm.setPostCoeff00(selectedXForm.getPostCoeff00() * scale);
+            selectedXForm.setPostCoeff01(selectedXForm.getPostCoeff01() * scale);
+          }
+          if (allowScaleY) {
+            selectedXForm.setPostCoeff10(selectedXForm.getPostCoeff10() * scale);
+            selectedXForm.setPostCoeff11(selectedXForm.getPostCoeff11() * scale);
+          }
         }
+        else {
+          if (allowScaleX) {
+            selectedXForm.setCoeff00(selectedXForm.getCoeff00() * scale);
+            selectedXForm.setCoeff01(selectedXForm.getCoeff01() * scale);
+          }
+          if (allowScaleY) {
+            selectedXForm.setCoeff10(selectedXForm.getCoeff10() * scale);
+            selectedXForm.setCoeff11(selectedXForm.getCoeff11() * scale);
+          }
+        }
+        return true;
       }
-      return true;
+      else if (mouseDragOperation == MouseDragOperation.FOCUS && flameHolder != null && flameHolder.getFlame() != null) {
+        double dz = -pRotateAmount * 0.1;
+        if (fineMovement) {
+          dz *= 0.1;
+        }
+        Flame flame = flameHolder.getFlame();
+        flame.setFocusZ(flame.getFocusZ() + dz);
+        return true;
+      }
     }
     return false;
   }
