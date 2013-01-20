@@ -50,6 +50,7 @@ public class FlameMorphService {
     //    System.out.println("MMMMMMMMM: " + fScl);
     Flame res = pFlame1.makeCopy();
     res.getXForms().clear();
+    res.getFinalXForms().clear();
     // morph XForms
     {
       int size1 = pFlame1.getXForms().size();
