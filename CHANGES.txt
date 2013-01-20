@@ -1,3 +1,14 @@
+V0.62 (20.01.2013):
+ - more accurate calculation of dof (depth of field)
+ - freely specify the focus point in dof 
+ - special edit mode to specify the focus point visually (by dragging it with the mouse)
+ - simplified triangle editing modes (move, rotate and scale is one mode and uses the same controls as view editing mode), free point editing is the same as before
+ - allow to change the camera yaw angle by dragging the mouse in the preview window (hold left and right mouse button)
+ - mouse view editing: modify camera pitch by dragging the mouse in the vertical (y) direction, modify camera roll by dragging the mouse in the horizontal (x) direction
+ - "circus" variation my Michael Faber
+ - FIXED a bug in the Flame morphing service regarding flames with final transforms (which caused final transforms to be duplicated)
+ - reset the DE filter amount to 0 of older flames (because the meaning of the value had changed and would cause too much blur if used as before) 
+
 V0.61 (13.01.2013):
  - The main render function now is a background task which makes it possible to cancel it (currently only for internal renderer) and continue to work while rendering
  - removed the ancient spatial and color oversampling options (all user-defined quality profiles will be removed with this update!, if you face problems with noise use spatial and/or DE filter options)
