@@ -131,7 +131,9 @@ public class Flam3Writer {
     attrList.add(xb.createAttr("cam_pitch", (pFlame.getCamPitch() * Math.PI) / 180.0));
     attrList.add(xb.createAttr("cam_yaw", (pFlame.getCamYaw() * Math.PI) / 180.0));
     attrList.add(xb.createAttr("cam_persp", pFlame.getCamPerspective()));
-    attrList.add(xb.createAttr("cam_zpos", pFlame.getCamZ()));
+    attrList.add(xb.createAttr("cam_xfocus", pFlame.getFocusX()));
+    attrList.add(xb.createAttr("cam_yfocus", pFlame.getFocusY()));
+    attrList.add(xb.createAttr("cam_zfocus", pFlame.getFocusZ()));
     attrList.add(xb.createAttr("cam_dof", pFlame.getCamDOF()));
     if (pFlame.isPreserveZ()) {
       attrList.add(xb.createAttr("preserve_z", "1"));
@@ -141,7 +143,7 @@ public class Flam3Writer {
     if (pFlame.getQualityProfile() != null && pFlame.getQualityProfile().length() > 0)
       attrList.add(xb.createAttr("quality_profile", pFlame.getQualityProfile()));
     attrList.add(xb.createAttr("de_filter_radius", pFlame.getDEFilterRadius()));
-    attrList.add(xb.createAttr("de_filter_amount", pFlame.getDEFilterAmount()));
+    attrList.add(xb.createAttr("de_filter_adjust", pFlame.getDEFilterAmount()));
     ShadingInfo shadingInfo = pFlame.getShadingInfo();
     attrList.add(xb.createAttr("shading_shading", shadingInfo.getShading().toString()));
     if (shadingInfo.getShading() == Shading.PSEUDO3D) {

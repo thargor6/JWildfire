@@ -68,11 +68,14 @@ public class Flam3Reader implements FlameReader {
   private static final String ATTR_CAM_YAW = "cam_yaw";
   private static final String ATTR_CAM_PERSP = "cam_persp";
   private static final String ATTR_CAM_PERSPECTIVE = "cam_perspective"; // old version
-  private static final String ATTR_CAM_ZPOS = "cam_zpos";
+  private static final String ATTR_CAM_XPOS = "cam_xpos";
+  private static final String ATTR_CAM_XFOCUS = "cam_xfocus";
+  private static final String ATTR_CAM_YFOCUS = "cam_yfocus";
+  private static final String ATTR_CAM_ZFOCUS = "cam_zfocus";
   private static final String ATTR_CAM_DOF = "cam_dof";
   private static final String ATTR_CAM_ZOOM = "cam_zoom";
   private static final String ATTR_NEW_LINEAR = "new_linear";
-  private static final String ATTR_DE_FILTER_AMOUNT = "de_filter_amount";
+  private static final String ATTR_DE_FILTER_AMOUNT = "de_filter_adjust";
   private static final String ATTR_DE_FILTER_RADIUS = "de_filter_radius";
   private static final String ATTR_SHADING_SHADING = "shading_shading";
   private static final String ATTR_SHADING_AMBIENT = "shading_ambient";
@@ -155,8 +158,17 @@ public class Flam3Reader implements FlameReader {
     if ((hs = atts.get(ATTR_CAM_PERSPECTIVE)) != null) {
       pFlame.setCamPerspective(Double.parseDouble(hs));
     }
-    if ((hs = atts.get(ATTR_CAM_ZPOS)) != null) {
-      pFlame.setCamZ(Double.parseDouble(hs));
+    if ((hs = atts.get(ATTR_CAM_XPOS)) != null) {
+      pFlame.setFocusX(Double.parseDouble(hs));
+    }
+    if ((hs = atts.get(ATTR_CAM_XFOCUS)) != null) {
+      pFlame.setFocusX(Double.parseDouble(hs));
+    }
+    if ((hs = atts.get(ATTR_CAM_YFOCUS)) != null) {
+      pFlame.setFocusY(Double.parseDouble(hs));
+    }
+    if ((hs = atts.get(ATTR_CAM_ZFOCUS)) != null) {
+      pFlame.setFocusZ(Double.parseDouble(hs));
     }
     if ((hs = atts.get(ATTR_CAM_DOF)) != null) {
       pFlame.setCamDOF(Double.parseDouble(hs));
