@@ -308,6 +308,7 @@ public class VariationFuncList {
     registerVariationFunc(Ovoid3DFunc.class);
     registerVariationFunc(HOFunc.class);
     registerVariationFunc(PRose3DFunc.class);
+    registerVariationFunc(CircusFunc.class);
   }
 
   private static void registerVariationFunc(
