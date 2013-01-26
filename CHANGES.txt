@@ -1,3 +1,9 @@
+V0.63 (26.01.2013):
+ - new parameters "area" and "exponent" for DOF
+ - restored the old method to calculate DOF and allow to switch between old and new method freely
+ - buddhabrot (="ghostly") mode for all fractal variations (beginning with "fract...")
+ - "lazyTravis" variation by Michael Faber
+
 V0.62 (20.01.2013):
  - more accurate calculation of dof (depth of field)
  - freely specify the focus point in dof 

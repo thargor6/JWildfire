@@ -42,28 +42,12 @@ public class FractFormulaMandWFFunc extends AbstractFractFormulaWFFunc {
   }
 
   @Override
-  protected int iterate(double pX, double pY) {
-    int currIter = 0;
-    double x1 = pX;
-    double y1 = pY;
-    double xs = x1 * x1;
-    double ys = y1 * y1;
-    while ((currIter++ < max_iter) && (xs + ys < 4.0)) {
-      Complex z = perform_formula(power, x1, y1, pX, pY);
-      x1 = z.re;
-      y1 = z.im;
-      xs = x1 * x1;
-      ys = y1 * y1;
-    }
-    return currIter;
-  }
-
-  @Override
   protected void initParams() {
-    xmin = -1.0;
-    xmax = 1.0;
+    xmin = -2.35;
+    xmax = 0.75;
     ymin = -1.2;
     ymax = 1.2;
+    max_iter = 30;
     clip_iter_min = 1;
     scale = 3.8;
     power = 2;
@@ -95,4 +79,28 @@ public class FractFormulaMandWFFunc extends AbstractFractFormulaWFFunc {
     super.init(pContext, pXForm, pAmount);
     prepare_formula("((z^n)+c)");
   }
+
+  public class FormulaMandIterator extends Iterator {
+
+    @Override
+    protected void nextIteration() {
+      double x1 = this.currX;
+      double y1 = this.currY;
+      this.xs = x1 * x1;
+      this.ys = y1 * y1;
+      Complex z = perform_formula(power, x1, y1, this.startX, this.startY);
+      x1 = z.re;
+      y1 = z.im;
+      setCurrPoint(x1, y1);
+    }
+
+  }
+
+  private FormulaMandIterator iterator = new FormulaMandIterator();
+
+  @Override
+  protected Iterator getIterator() {
+    return iterator;
+  }
+
 }
