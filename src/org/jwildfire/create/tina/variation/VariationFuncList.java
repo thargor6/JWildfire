@@ -298,8 +298,6 @@ public class VariationFuncList {
     registerVariationFunc(FractJuliaWFFunc.class);
     registerVariationFunc(FractPearlsWFFunc.class);
     registerVariationFunc(FractSalamanderWFFunc.class);
-    //    registerVariationFunc(FractFormulaJuliaWFFunc.class);
-    //    registerVariationFunc(FractFormulaMandWFFunc.class);
 
     registerVariationFunc(TextWFFunc.class);
     registerVariationFunc(XTrbFunc.class);
@@ -309,6 +307,11 @@ public class VariationFuncList {
     registerVariationFunc(HOFunc.class);
     registerVariationFunc(PRose3DFunc.class);
     registerVariationFunc(CircusFunc.class);
+    registerVariationFunc(LazyTravisFunc.class);
+
+    //    registerVariationFunc(FractFormulaJuliaWFFunc.class);
+    //    registerVariationFunc(FractFormulaMandWFFunc.class);
+
   }
 
   private static void registerVariationFunc(
