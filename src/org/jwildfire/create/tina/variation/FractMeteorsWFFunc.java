@@ -36,25 +36,6 @@ public class FractMeteorsWFFunc extends AbstractFractWFFunc {
   }
 
   @Override
-  protected int iterate(double pX, double pY) {
-    int currIter = 0;
-    double x1 = pX;
-    double y1 = pY;
-
-    double xs = x1 * x1;
-    double ys = y1 * y1;
-    while ((currIter++ < max_iter) && (xs + ys < 4.0)) {
-      double x2 = (pX * x1 - pY * y1) - (pX * x1 + pY * y1) / (xs + ys);
-      y1 = (pX * y1 + pY * x1) + (pX * y1 - pY * x1) / (xs + ys);
-
-      x1 = x2;
-      xs = x1 * x1;
-      ys = y1 * y1;
-    }
-    return currIter;
-  }
-
-  @Override
   protected void initParams() {
     xmin = -1.7;
     xmax = 1.7;
@@ -78,4 +59,27 @@ public class FractMeteorsWFFunc extends AbstractFractWFFunc {
   protected void addCustomParameterValues(List<Object> pList) {
     // no op
   }
+
+  public class MeteorsIterator extends Iterator {
+
+    @Override
+    protected void nextIteration() {
+      double x1 = this.currX;
+      double y1 = this.currY;
+      this.xs = x1 * x1;
+      this.ys = y1 * y1;
+      double x2 = (this.startX * x1 - this.startY * y1) - (this.startX * x1 + this.startY * y1) / (this.xs + this.ys);
+      y1 = (this.startX * y1 + this.startY * x1) + (this.startX * y1 - this.startY * x1) / (this.xs + this.ys);
+      x1 = x2;
+      setCurrPoint(x1, y1);
+    }
+  }
+
+  private MeteorsIterator iterator = new MeteorsIterator();
+
+  @Override
+  protected Iterator getIterator() {
+    return iterator;
+  }
+
 }

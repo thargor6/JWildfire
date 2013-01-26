@@ -32,6 +32,8 @@ public abstract class AbstractFractWFFunc extends VariationFunc {
   private static final String PARAM_XMAX = "xmax";
   private static final String PARAM_YMIN = "ymin";
   private static final String PARAM_YMAX = "ymax";
+  private static final String PARAM_BUDDHABROT_MODE = "buddhabrot_mode";
+  private static final String PARAM_BUDDHABROT_MIN_ITER = "buddhabrot_min_iter";
   private static final String PARAM_DIRECT_COLOR = "direct_color";
   private static final String PARAM_SCALEZ = "scalez";
   private static final String PARAM_CLIP_ITER_MIN = "clip_iter_min";
@@ -56,19 +58,121 @@ public abstract class AbstractFractWFFunc extends VariationFunc {
   protected double offsety = 0.0;
   protected double offsetz = 0.0;
   protected int max_clip_iter = 3;
+  protected int buddhabrot_mode = 0;
+  protected int buddhabrot_min_iter = 7;
 
   public AbstractFractWFFunc() {
     initParams();
   }
 
+  public abstract class Iterator {
+    protected double xs, ys;
+    public int currIter, maxIter;
+    public double startX, startY;
+    public double currX, currY;
+    public double nextX, nextY;
+
+    public void init(double pX0, double pY0) {
+      xs = ys = 0;
+      startX = currX = pX0;
+      startY = currY = pY0;
+      currIter = 0;
+    }
+
+    public void setCurrPoint(double pX, double pY) {
+      currX = pX;
+      currY = pY;
+      currIter++;
+    }
+
+    protected boolean bailout() {
+      return (xs + ys >= 4.0);
+    }
+
+    protected int iterate(double pStartX, double pStartY, int pMaxIter) {
+      init(pStartX, pStartY);
+      int currIter = 0;
+      while ((currIter++ < pMaxIter) && !bailout()) {
+        nextIteration();
+      }
+      return currIter;
+    }
+
+    protected boolean preBuddhaIterate(double pStartX, double pStartY, int pMaxIter) {
+      init(pStartX, pStartY);
+      int currIter = 0;
+      while ((currIter++ < pMaxIter) && !bailout()) {
+        nextIteration();
+      }
+      if (bailout()) {
+        maxIter = currIter;
+        return maxIter > buddhabrot_min_iter;
+      }
+      else {
+        return false;
+      }
+    }
+
+    protected abstract void nextIteration();
+
+  }
+
+  @Override
+  public void init(FlameTransformationContext pContext, XForm pXForm, double pAmount) {
+    chooseNewPoint = true;
+  }
+
+  private boolean chooseNewPoint;
+
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
+    if (buddhabrot_mode > 0)
+      transformBuddhabrot(pContext, pXForm, pAffineTP, pVarTP, pAmount);
+    else
+      transformIterate(pContext, pXForm, pAffineTP, pVarTP, pAmount);
+  }
+
+  public void transformBuddhabrot(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
+    Iterator iterator = getIterator();
+    double x0, y0;
+    if (chooseNewPoint) {
+      while (true) {
+        x0 = (xmax - xmin) * pContext.random() + xmin;
+        y0 = (ymax - ymin) * pContext.random() + ymin;
+        if (iterator.preBuddhaIterate(x0, y0, max_iter)) {
+          break;
+        }
+      }
+      chooseNewPoint = false;
+      iterator.init(x0, y0);
+      for (int skip = 0; skip < buddhabrot_min_iter; skip++) {
+        iterator.nextIteration();
+      }
+    }
+
+    iterator.nextIteration();
+    if (iterator.currIter >= iterator.maxIter) {
+      chooseNewPoint = true;
+    }
+
+    pVarTP.x += scale * pAmount * (iterator.currX + offsetx);
+    pVarTP.y += scale * pAmount * (iterator.currY + offsety);
+
+    pVarTP.color += (double) iterator.currIter / (double) iterator.maxIter;
+    if (pVarTP.color < 0)
+      pVarTP.color = 0;
+    else if (pVarTP.color > 1.0)
+      pVarTP.color = 1.0;
+  }
+
+  public void transformIterate(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
+    Iterator iterator = getIterator();
     double x0 = 0.0, y0 = 0.0;
     int iterCount = 0;
     for (int i = 0; i < max_clip_iter; i++) {
       x0 = (xmax - xmin) * pContext.random() + xmin;
       y0 = (ymax - ymin) * pContext.random() + ymin;
-      iterCount = iterate(x0, y0);
+      iterCount = iterator.iterate(x0, y0, max_iter);
       if ((clip_iter_max < 0 && iterCount >= (max_iter + clip_iter_max)) || (clip_iter_min > 0 && iterCount <= clip_iter_min)) {
         if (i == max_clip_iter - 1) {
           pVarTP.x = pVarTP.y = pVarTP.z = -120000.0 * (pContext.random() + 0.5);
@@ -97,7 +201,7 @@ public abstract class AbstractFractWFFunc extends VariationFunc {
     }
   }
 
-  protected abstract int iterate(double pX, double pY);
+  protected abstract Iterator getIterator();
 
   protected abstract void initParams();
 
@@ -115,12 +219,14 @@ public abstract class AbstractFractWFFunc extends VariationFunc {
     lst.add(PARAM_XMAX);
     lst.add(PARAM_YMIN);
     lst.add(PARAM_YMAX);
+    lst.add(PARAM_BUDDHABROT_MODE);
     addCustomParameterNames(lst);
     lst.add(PARAM_DIRECT_COLOR);
     lst.add(PARAM_SCALEZ);
     lst.add(PARAM_CLIP_ITER_MIN);
     lst.add(PARAM_CLIP_ITER_MAX);
     lst.add(PARAM_MAX_CLIP_ITER);
+    lst.add(PARAM_BUDDHABROT_MIN_ITER);
     lst.add(PARAM_SCALE);
     lst.add(PARAM_OFFSETX);
     lst.add(PARAM_OFFSETY);
@@ -136,12 +242,14 @@ public abstract class AbstractFractWFFunc extends VariationFunc {
     lst.add(xmax);
     lst.add(ymin);
     lst.add(ymax);
+    lst.add(buddhabrot_mode);
     addCustomParameterValues(lst);
     lst.add(direct_color);
     lst.add(scalez);
     lst.add(clip_iter_min);
     lst.add(clip_iter_max);
     lst.add(max_clip_iter);
+    lst.add(buddhabrot_min_iter);
     lst.add(scale);
     lst.add(offsetx);
     lst.add(offsety);
@@ -179,6 +287,10 @@ public abstract class AbstractFractWFFunc extends VariationFunc {
       offsety = pValue;
     else if (PARAM_OFFSETZ.equalsIgnoreCase(pName))
       offsetz = pValue;
+    else if (PARAM_BUDDHABROT_MODE.equalsIgnoreCase(pName))
+      buddhabrot_mode = Tools.FTOI(pValue);
+    else if (PARAM_BUDDHABROT_MIN_ITER.equalsIgnoreCase(pName))
+      buddhabrot_min_iter = Tools.FTOI(pValue);
     else if (!setCustomParameter(pName, pValue))
       throw new IllegalArgumentException(pName);
   }

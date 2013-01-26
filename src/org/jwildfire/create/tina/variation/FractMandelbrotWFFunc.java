@@ -23,6 +23,7 @@ import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_JWILDFIRE;
 import java.util.List;
 
 import org.jwildfire.base.Tools;
+import org.jwildfire.create.tina.base.XForm;
 
 public class FractMandelbrotWFFunc extends AbstractFractWFFunc {
   private static final long serialVersionUID = 1L;
@@ -39,91 +40,6 @@ public class FractMandelbrotWFFunc extends AbstractFractWFFunc {
   @Override
   public int getAvailability() {
     return AVAILABILITY_JWILDFIRE | AVAILABILITY_CUDA;
-  }
-
-  @Override
-  protected int iterate(double pX, double pY) {
-    switch (power) {
-      case 2:
-        return iterate2(pX, pY);
-      case 3:
-        return iterate3(pX, pY);
-      case 4:
-        return iterate4(pX, pY);
-      default:
-        return iterateN(pX, pY);
-    }
-  }
-
-  protected int iterate2(double pX, double pY) {
-    int currIter = 0;
-    double x1 = pX;
-    double y1 = pY;
-    double xs = x1 * x1;
-    double ys = y1 * y1;
-    while ((currIter++ < max_iter) && (xs + ys < 4.0)) {
-      y1 = 2.0 * x1 * y1 + pY;
-      x1 = (xs - ys) + pX;
-      xs = x1 * x1;
-      ys = y1 * y1;
-    }
-    return currIter;
-  }
-
-  protected int iterate3(double pX, double pY) {
-    int currIter = 0;
-    double x1 = pX;
-    double y1 = pY;
-    double xs = x1 * x1;
-    double ys = y1 * y1;
-    while ((currIter++ < max_iter) && (xs + ys < 4.0)) {
-      double x2 = xs * x1 - 3.0 * x1 * ys + pX;
-      y1 = 3.0 * xs * y1 - ys * y1 + pY;
-      x1 = x2;
-      xs = x1 * x1;
-      ys = y1 * y1;
-    }
-    return currIter;
-  }
-
-  protected int iterate4(double pX, double pY) {
-    int currIter = 0;
-    double x1 = pX;
-    double y1 = pY;
-    double xs = x1 * x1;
-    double ys = y1 * y1;
-    while ((currIter++ < max_iter) && (xs + ys < 4.0)) {
-      double x2 = xs * xs + ys * ys - 6.0 * xs * ys + pX;
-      y1 = 4.0 * x1 * y1 * (xs - ys) + pY;
-      x1 = x2;
-      xs = x1 * x1;
-      ys = y1 * y1;
-    }
-    return currIter;
-  }
-
-  protected int iterateN(double pX, double pY) {
-    int currIter = 0;
-    double x1 = pX;
-    double y1 = pY;
-    double xs = x1 * x1;
-    double ys = y1 * y1;
-    while ((currIter++ < max_iter) && (xs + ys < 4.0)) {
-      double x2 = x1 * (xs * xs - 10.0 * xs * ys + 5.0 * ys * ys);
-      double y2 = y1 * (ys * ys - 10.0 * xs * ys + 5.0 * xs * xs);
-      for (int k = 5; k < power; k++) {
-        double xa = x1 * x2 - y1 * y2;
-        double ya = x1 * y2 + x2 * y1;
-        x2 = xa;
-        y2 = ya;
-      }
-      x1 = x2 + pX;
-      y1 = y2 + pY;
-
-      xs = x1 * x1;
-      ys = y1 * y1;
-    }
-    return currIter;
   }
 
   @Override
@@ -158,4 +74,106 @@ public class FractMandelbrotWFFunc extends AbstractFractWFFunc {
     }
     return false;
   }
+
+  public class Mandelbrot2Iterator extends Iterator {
+
+    @Override
+    protected void nextIteration() {
+      double x1 = this.currX;
+      double y1 = this.currY;
+      this.xs = x1 * x1;
+      this.ys = y1 * y1;
+
+      y1 = 2.0 * x1 * y1 + this.startY;
+      x1 = (this.xs - this.ys) + this.startX;
+
+      setCurrPoint(x1, y1);
+    }
+
+  }
+
+  public class Mandelbrot3Iterator extends Iterator {
+
+    @Override
+    protected void nextIteration() {
+      double x1 = this.currX;
+      double y1 = this.currY;
+      this.xs = x1 * x1;
+      this.ys = y1 * y1;
+
+      double x2 = this.xs * x1 - 3.0 * x1 * this.ys + this.startX;
+      y1 = 3.0 * this.xs * y1 - this.ys * y1 + this.startY;
+      x1 = x2;
+      setCurrPoint(x1, y1);
+    }
+  }
+
+  public class Mandelbrot4Iterator extends Iterator {
+
+    @Override
+    protected void nextIteration() {
+      double x1 = this.currX;
+      double y1 = this.currY;
+      this.xs = x1 * x1;
+      this.ys = y1 * y1;
+      double x2 = this.xs * this.xs + this.ys * this.ys - 6.0 * this.xs * this.ys + this.startX;
+      y1 = 4.0 * x1 * y1 * (this.xs - this.ys) + this.startY;
+      x1 = x2;
+      setCurrPoint(x1, y1);
+    }
+  }
+
+  public class MandelbrotNIterator extends Iterator {
+
+    @Override
+    protected void nextIteration() {
+      double x1 = this.currX;
+      double y1 = this.currY;
+      this.xs = x1 * x1;
+      this.ys = y1 * y1;
+      double x2 = x1 * (this.xs * this.xs - 10.0 * this.xs * this.ys + 5.0 * this.ys * this.ys);
+      double y2 = y1 * (this.ys * this.ys - 10.0 * this.xs * this.ys + 5.0 * this.xs * this.xs);
+      for (int k = 5; k < power; k++) {
+        double xa = x1 * x2 - y1 * y2;
+        double ya = x1 * y2 + x2 * y1;
+        x2 = xa;
+        y2 = ya;
+      }
+      x1 = x2 + this.startX;
+      y1 = y2 + this.startY;
+      setCurrPoint(x1, y1);
+    }
+
+  }
+
+  private Mandelbrot2Iterator iterator2 = new Mandelbrot2Iterator();
+  private Mandelbrot3Iterator iterator3 = new Mandelbrot3Iterator();
+  private Mandelbrot4Iterator iterator4 = new Mandelbrot4Iterator();
+  private MandelbrotNIterator iteratorN = new MandelbrotNIterator();
+  private Iterator iterator;
+
+  @Override
+  protected Iterator getIterator() {
+    return iterator;
+  }
+
+  @Override
+  public void init(FlameTransformationContext pContext, XForm pXForm, double pAmount) {
+    super.init(pContext, pXForm, pAmount);
+    switch (power) {
+      case 2:
+        iterator = iterator2;
+        break;
+      case 3:
+        iterator = iterator3;
+        break;
+      case 4:
+        iterator = iterator4;
+        break;
+      default:
+        iterator = iteratorN;
+        break;
+    }
+  }
+
 }

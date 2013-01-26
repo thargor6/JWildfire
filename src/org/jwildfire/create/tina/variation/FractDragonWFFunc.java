@@ -42,25 +42,6 @@ public class FractDragonWFFunc extends AbstractFractWFFunc {
   }
 
   @Override
-  protected int iterate(double pX, double pY) {
-    int currIter = 0;
-    double x1 = pX;
-    double y1 = pY;
-
-    double xs = x1 * x1;
-    double ys = y1 * y1;
-    while ((currIter++ < max_iter) && (xs + ys < 4.0)) {
-      double x2 = (x1 - xs + ys) * xseed - (y1 - 2.0 * x1 * y1) * yseed;
-      y1 = (x1 - xs + ys) * yseed + (y1 - 2.0 * x1 * y1) * xseed;
-
-      x1 = x2;
-      xs = x1 * x1;
-      ys = y1 * y1;
-    }
-    return currIter;
-  }
-
-  @Override
   protected void initParams() {
     xmin = -0.25;
     xmax = 1.2;
@@ -96,6 +77,29 @@ public class FractDragonWFFunc extends AbstractFractWFFunc {
   protected void addCustomParameterValues(List<Object> pList) {
     pList.add(xseed);
     pList.add(yseed);
+  }
+
+  public class DragonIterator extends Iterator {
+
+    @Override
+    protected void nextIteration() {
+      double x1 = this.currX;
+      double y1 = this.currY;
+      this.xs = x1 * x1;
+      this.ys = y1 * y1;
+      double x2 = (x1 - this.xs + this.ys) * xseed - (y1 - 2.0 * x1 * y1) * yseed;
+      y1 = (x1 - this.xs + this.ys) * yseed + (y1 - 2.0 * x1 * y1) * xseed;
+      x1 = x2;
+      setCurrPoint(x1, y1);
+    }
+
+  }
+
+  private DragonIterator iterator = new DragonIterator();
+
+  @Override
+  protected Iterator getIterator() {
+    return iterator;
   }
 
 }

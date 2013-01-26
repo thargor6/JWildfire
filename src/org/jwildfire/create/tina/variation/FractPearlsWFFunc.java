@@ -42,28 +42,6 @@ public class FractPearlsWFFunc extends AbstractFractWFFunc {
   }
 
   @Override
-  protected int iterate(double pX, double pY) {
-    int currIter = 0;
-    double x1 = pX;
-    double y1 = pY;
-
-    double jx = xseed;
-    double jy = yseed;
-
-    double xs = x1 * x1;
-    double ys = y1 * y1;
-    while ((currIter++ < max_iter) && (xs + ys < 4.0)) {
-      double x2 = jx * x1 - jy * y1 - ((jx * x1 + jy * y1) / (xs + ys));
-      y1 = jx * y1 + jy * x1 + ((jx * y1 - jy * x1) / (xs + ys));
-
-      x1 = x2;
-      xs = x1 * x1;
-      ys = y1 * y1;
-    }
-    return currIter;
-  }
-
-  @Override
   protected void initParams() {
     xmin = -2.0;
     xmax = 2.0;
@@ -99,4 +77,28 @@ public class FractPearlsWFFunc extends AbstractFractWFFunc {
     pList.add(xseed);
     pList.add(yseed);
   }
+
+  public class PearlsIterator extends Iterator {
+
+    @Override
+    protected void nextIteration() {
+      double x1 = this.currX;
+      double y1 = this.currY;
+      this.xs = x1 * x1;
+      this.ys = y1 * y1;
+      double x2 = xseed * x1 - yseed * y1 - ((xseed * x1 + yseed * y1) / (this.xs + this.ys));
+      y1 = xseed * y1 + yseed * x1 + ((xseed * y1 - yseed * x1) / (this.xs + this.ys));
+      x1 = x2;
+      setCurrPoint(x1, y1);
+    }
+
+  }
+
+  private PearlsIterator iterator = new PearlsIterator();
+
+  @Override
+  protected Iterator getIterator() {
+    return iterator;
+  }
+
 }

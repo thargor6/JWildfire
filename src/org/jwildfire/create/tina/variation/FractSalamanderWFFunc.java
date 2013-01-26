@@ -42,25 +42,6 @@ public class FractSalamanderWFFunc extends AbstractFractWFFunc {
   }
 
   @Override
-  protected int iterate(double pX, double pY) {
-    int currIter = 0;
-    double x1 = pX;
-    double y1 = pY;
-
-    double xs = x1 * x1;
-    double ys = y1 * y1;
-    while ((currIter++ < max_iter) && (xs + ys < 4.0)) {
-      double x2 = (xs - ys) * xseed - (2.0 * x1 * y1) * yseed - 1.0;
-      y1 = (xs - ys) * yseed + (2.0 * x1 * y1) * xseed;
-
-      x1 = x2;
-      xs = x1 * x1;
-      ys = y1 * y1;
-    }
-    return currIter;
-  }
-
-  @Override
   protected void initParams() {
     xmin = -2.0;
     xmax = 2.0;
@@ -96,4 +77,28 @@ public class FractSalamanderWFFunc extends AbstractFractWFFunc {
     pList.add(xseed);
     pList.add(yseed);
   }
+
+  public class SalamanderIterator extends Iterator {
+
+    @Override
+    protected void nextIteration() {
+      double x1 = this.currX;
+      double y1 = this.currY;
+      this.xs = x1 * x1;
+      this.ys = y1 * y1;
+      double x2 = (this.xs - this.ys) * xseed - (2.0 * x1 * y1) * yseed - 1.0;
+      y1 = (this.xs - this.ys) * yseed + (2.0 * x1 * y1) * xseed;
+      x1 = x2;
+      setCurrPoint(x1, y1);
+    }
+
+  }
+
+  private SalamanderIterator iterator = new SalamanderIterator();
+
+  @Override
+  protected Iterator getIterator() {
+    return iterator;
+  }
+
 }
