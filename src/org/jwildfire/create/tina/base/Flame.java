@@ -50,6 +50,8 @@ public class Flame implements Assignable<Flame>, Serializable {
   @AnimAware
   private double camZoom;
   @AnimAware
+  private double camZ;
+  @AnimAware
   private double focusX;
   @AnimAware
   private double focusY;
@@ -57,6 +59,11 @@ public class Flame implements Assignable<Flame>, Serializable {
   private double focusZ;
   @AnimAware
   private double camDOF;
+  @AnimAware
+  private double camDOFExponent;
+  @AnimAware
+  private double camDOFArea;
+  private boolean newCamDOF;
   private double spatialFilterRadius;
   private double sampleDensity;
   private boolean bgTransparency;
@@ -110,6 +117,10 @@ public class Flame implements Assignable<Flame>, Serializable {
     focusY = 0.0;
     focusZ = 0.0;
     camDOF = 0.0;
+    camZ = 0.0;
+    newCamDOF = false;
+    camDOFArea = 0.5;
+    camDOFExponent = 2.0;
     gammaThreshold = 0.04;
     pixelsPerUnit = 50;
     whiteLevel = 200;
@@ -336,12 +347,36 @@ public class Flame implements Assignable<Flame>, Serializable {
     this.focusZ = focusZ;
   }
 
+  public double getCamZ() {
+    return camZ;
+  }
+
+  public void setCamZ(double camZ) {
+    this.camZ = camZ;
+  }
+
   public double getCamDOF() {
     return camDOF;
   }
 
   public void setCamDOF(double camDOF) {
     this.camDOF = camDOF;
+  }
+
+  public double getCamDOFArea() {
+    return camDOFArea;
+  }
+
+  public void setCamDOFArea(double camDOFArea) {
+    this.camDOFArea = camDOFArea;
+  }
+
+  public double getCamDOFExponent() {
+    return camDOFExponent;
+  }
+
+  public void setCamDOFExponent(double camDOFExponent) {
+    this.camDOFExponent = camDOFExponent;
   }
 
   public ShadingInfo getShadingInfo() {
@@ -465,7 +500,11 @@ public class Flame implements Assignable<Flame>, Serializable {
     focusX = pFlame.focusX;
     focusY = pFlame.focusY;
     focusZ = pFlame.focusZ;
+    camZ = pFlame.camZ;
     camDOF = pFlame.camDOF;
+    newCamDOF = pFlame.newCamDOF;
+    camDOFArea = pFlame.camDOFArea;
+    camDOFExponent = pFlame.camDOFExponent;
     spatialFilterRadius = pFlame.spatialFilterRadius;
     sampleDensity = pFlame.sampleDensity;
     bgTransparency = pFlame.bgTransparency;
@@ -506,7 +545,9 @@ public class Flame implements Assignable<Flame>, Serializable {
         fabs(camPerspective - pFlame.camPerspective) > EPSILON || fabs(camRoll - pFlame.camRoll) > EPSILON ||
         fabs(camZoom - pFlame.camZoom) > EPSILON || fabs(focusX - pFlame.focusX) > EPSILON ||
         fabs(focusY - pFlame.focusY) > EPSILON || fabs(focusZ - pFlame.focusZ) > EPSILON ||
-        fabs(camDOF - pFlame.camDOF) > EPSILON ||
+        fabs(camDOF - pFlame.camDOF) > EPSILON || fabs(camDOFArea - pFlame.camDOFArea) > EPSILON ||
+        fabs(camDOFExponent - pFlame.camDOFExponent) > EPSILON || fabs(camZ - pFlame.camZ) > EPSILON ||
+        newCamDOF != pFlame.newCamDOF ||
         fabs(spatialFilterRadius - pFlame.spatialFilterRadius) > EPSILON ||
         fabs(sampleDensity - pFlame.sampleDensity) > EPSILON || bgTransparency != pFlame.bgTransparency || bgColorRed != pFlame.bgColorRed ||
         bgColorGreen != pFlame.bgColorGreen || bgColorBlue != pFlame.bgColorBlue ||
@@ -575,5 +616,13 @@ public class Flame implements Assignable<Flame>, Serializable {
 
   public String getLastFilename() {
     return lastFilename;
+  }
+
+  public boolean isNewCamDOF() {
+    return newCamDOF;
+  }
+
+  public void setNewCamDOF(boolean newCamDOF) {
+    this.newCamDOF = newCamDOF;
   }
 }

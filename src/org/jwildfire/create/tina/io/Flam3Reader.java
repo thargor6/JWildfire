@@ -68,11 +68,14 @@ public class Flam3Reader implements FlameReader {
   private static final String ATTR_CAM_YAW = "cam_yaw";
   private static final String ATTR_CAM_PERSP = "cam_persp";
   private static final String ATTR_CAM_PERSPECTIVE = "cam_perspective"; // old version
-  private static final String ATTR_CAM_XPOS = "cam_xpos";
+  private static final String ATTR_CAM_ZPOS = "cam_zpos";
   private static final String ATTR_CAM_XFOCUS = "cam_xfocus";
   private static final String ATTR_CAM_YFOCUS = "cam_yfocus";
   private static final String ATTR_CAM_ZFOCUS = "cam_zfocus";
   private static final String ATTR_CAM_DOF = "cam_dof";
+  private static final String ATTR_CAM_DOF_AREA = "cam_dof_area";
+  private static final String ATTR_CAM_DOF_EXPONENT = "cam_dof_exponent";
+  private static final String ATTR_NEW_DOF = "new_dof";
   private static final String ATTR_CAM_ZOOM = "cam_zoom";
   private static final String ATTR_NEW_LINEAR = "new_linear";
   private static final String ATTR_DE_FILTER_AMOUNT = "de_filter_adjust";
@@ -158,8 +161,8 @@ public class Flam3Reader implements FlameReader {
     if ((hs = atts.get(ATTR_CAM_PERSPECTIVE)) != null) {
       pFlame.setCamPerspective(Double.parseDouble(hs));
     }
-    if ((hs = atts.get(ATTR_CAM_XPOS)) != null) {
-      pFlame.setFocusX(Double.parseDouble(hs));
+    if ((hs = atts.get(ATTR_CAM_ZPOS)) != null) {
+      pFlame.setCamZ(Double.parseDouble(hs));
     }
     if ((hs = atts.get(ATTR_CAM_XFOCUS)) != null) {
       pFlame.setFocusX(Double.parseDouble(hs));
@@ -173,6 +176,12 @@ public class Flam3Reader implements FlameReader {
     if ((hs = atts.get(ATTR_CAM_DOF)) != null) {
       pFlame.setCamDOF(Double.parseDouble(hs));
     }
+    if ((hs = atts.get(ATTR_CAM_DOF_AREA)) != null) {
+      pFlame.setCamDOFArea(Double.parseDouble(hs));
+    }
+    if ((hs = atts.get(ATTR_CAM_DOF_EXPONENT)) != null) {
+      pFlame.setCamDOFExponent(Double.parseDouble(hs));
+    }
     if ((hs = atts.get(ATTR_CAM_PITCH)) != null) {
       pFlame.setCamPitch(Double.parseDouble(hs) * 180.0 / Math.PI);
     }
@@ -181,6 +190,9 @@ public class Flam3Reader implements FlameReader {
     }
     if ((hs = atts.get(ATTR_CAM_ZOOM)) != null) {
       pFlame.setCamZoom(Double.parseDouble(hs));
+    }
+    if ((hs = atts.get(ATTR_NEW_DOF)) != null) {
+      pFlame.setNewCamDOF("1".equals(hs));
     }
     // preserve-z
     if ((hs = atts.get(ATTR_PRESERVE_Z)) != null) {
