@@ -20,7 +20,6 @@ import static org.jwildfire.base.MathLib.M_PI;
 import static org.jwildfire.base.MathLib.cos;
 import static org.jwildfire.base.MathLib.fabs;
 import static org.jwildfire.base.MathLib.sin;
-import static org.jwildfire.base.MathLib.sqrt;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -78,6 +77,7 @@ public class FlameRenderer {
   protected double cameraMatrix[][] = new double[3][3];
   protected double camDOF_10;
   protected boolean useDOF;
+  protected boolean legacyDOF;
   private boolean withAlpha;
   //
   private ProgressUpdater progressUpdater;
@@ -124,6 +124,7 @@ public class FlameRenderer {
     cameraMatrix[2][2] = cos(pitch);
     doProject3D = fabs(flame.getCamYaw()) > MathLib.EPSILON || fabs(flame.getCamPitch()) > MathLib.EPSILON || fabs(flame.getCamPerspective()) > MathLib.EPSILON || fabs(flame.getCamDOF()) > MathLib.EPSILON;
     useDOF = fabs(flame.getCamDOF()) > MathLib.EPSILON;
+    legacyDOF = !flame.isNewCamDOF();
     camDOF_10 = 0.1 * flame.getCamDOF();
   }
 
@@ -159,21 +160,38 @@ public class FlameRenderer {
     double pz = cameraMatrix[0][2] * pPoint.x + cameraMatrix[1][2] * pPoint.y + cameraMatrix[2][2] * z;
     double zr = 1.0 - flame.getCamPerspective() * pz;
     if (useDOF) {
-      double xdist = (px - flame.getFocusX());
-      double ydist = (py - flame.getFocusY());
-      double zdist = (pz - flame.getFocusZ());
-      double dist = sqrt(xdist * xdist + ydist * ydist + zdist * zdist);
-      if (dist > 0.05) {
-        double dr = random.random() * camDOF_10 * dist;
-        double a = 2.0 * M_PI * random.random();
-        double dsina = sin(a);
-        double dcosa = cos(a);
-        pPoint.x = (px + dr * dcosa) / zr;
-        pPoint.y = (py + dr * dsina) / zr;
+      if (legacyDOF) {
+        double zdist = (flame.getCamZ() - pz);
+        if (zdist > 0.0) {
+          double dr = random.random() * camDOF_10 * zdist;
+          double a = 2.0 * M_PI * random.random();
+          double dsina = sin(a);
+          double dcosa = cos(a);
+          pPoint.x = (px + dr * dcosa) / zr;
+          pPoint.y = (py + dr * dsina) / zr;
+        }
+        else {
+          pPoint.x = px / zr;
+          pPoint.y = py / zr;
+        }
       }
       else {
-        pPoint.x = px / zr;
-        pPoint.y = py / zr;
+        double xdist = (px - flame.getFocusX());
+        double ydist = (py - flame.getFocusY());
+        double zdist = (pz - flame.getFocusZ());
+        double dist = Math.pow(xdist * xdist + ydist * ydist + zdist * zdist, 1 / flame.getCamDOFExponent()) - flame.getCamDOFArea();
+        if (dist > 0.05) {
+          double dr = random.random() * camDOF_10 * dist;
+          double a = 2.0 * M_PI * random.random();
+          double dsina = sin(a);
+          double dcosa = cos(a);
+          pPoint.x = (px + dr * dcosa) / zr;
+          pPoint.y = (py + dr * dsina) / zr;
+        }
+        else {
+          pPoint.x = px / zr;
+          pPoint.y = py / zr;
+        }
       }
     }
     else {

@@ -24,7 +24,8 @@ public class DrawFocusPointFlameRenderer extends FlameRenderer {
     double ydist = (py - flame.getFocusY());
     double zdist = (pz - flame.getFocusZ());
     double dist = sqrt(xdist * xdist + ydist * ydist + zdist * zdist);
-    if (dist > 0.42) {
+
+    if (dist > 0.12 + flame.getCamDOFArea()) {
       // dont draw outer points
       pPoint.x = 10000 + 10000 * Math.random();
       pPoint.y = 10000 + 10000 * Math.random();

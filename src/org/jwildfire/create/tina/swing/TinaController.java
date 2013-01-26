@@ -135,6 +135,8 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
   private static final double SLIDER_SCALE_COLOR = 100.0;
   private static final double SLIDER_SCALE_ZPOS = 50.0;
   private static final double SLIDER_SCALE_DOF = 100.0;
+  private static final double SLIDER_SCALE_DOF_AREA = 100.0;
+  private static final double SLIDER_SCALE_DOF_EXPONENT = 100.0;
   private static final double SLIDER_SCALE_AMBIENT = 100.0;
   private static final double SLIDER_SCALE_PHONGSIZE = 10.0;
   private static final double SLIDER_SCALE_LIGHTPOS = 100.0;
@@ -243,14 +245,21 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
   private final JSlider cameraCentreYSlider;
   private final JWFNumberField cameraZoomREd;
   private final JSlider cameraZoomSlider;
-  private final JWFNumberField cameraXFocusREd;
-  private final JSlider cameraXFocusSlider;
-  private final JWFNumberField cameraYFocusREd;
-  private final JSlider cameraYFocusSlider;
-  private final JWFNumberField cameraZFocusREd;
-  private final JSlider cameraZFocusSlider;
+  private final JWFNumberField focusXREd;
+  private final JSlider focusXSlider;
+  private final JWFNumberField focusYREd;
+  private final JSlider focusYSlider;
+  private final JWFNumberField focusZREd;
+  private final JSlider focusZSlider;
+  private final JWFNumberField camZREd;
+  private final JSlider camZSlider;
   private final JWFNumberField cameraDOFREd;
   private final JSlider cameraDOFSlider;
+  private final JWFNumberField cameraDOFAreaREd;
+  private final JSlider cameraDOFAreaSlider;
+  private final JWFNumberField cameraDOFExponentREd;
+  private final JSlider cameraDOFExponentSlider;
+  private final JCheckBox newDOFCBx;
   private final JWFNumberField pixelsPerUnitREd;
   private final JSlider pixelsPerUnitSlider;
   private final JWFNumberField brightnessREd;
@@ -443,9 +452,11 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
   public TinaController(JInternalFrame pTinaFrame, ErrorHandler pErrorHandler, Prefs pPrefs, JPanel pCenterPanel, JWFNumberField pCameraRollREd, JSlider pCameraRollSlider, JWFNumberField pCameraPitchREd,
       JSlider pCameraPitchSlider, JWFNumberField pCameraYawREd, JSlider pCameraYawSlider, JWFNumberField pCameraPerspectiveREd, JSlider pCameraPerspectiveSlider,
       JWFNumberField pCameraCentreXREd, JSlider pCameraCentreXSlider, JWFNumberField pCameraCentreYREd,
-      JSlider pCameraCentreYSlider, JWFNumberField pCameraZoomREd, JSlider pCameraZoomSlider, JWFNumberField pCameraXPosREd, JSlider pCameraXPosSlider,
-      JWFNumberField pCameraYPosREd, JSlider pCameraYPosSlider, JWFNumberField pCameraZPosREd, JSlider pCameraZPosSlider,
-      JWFNumberField pCameraDOFREd, JSlider pCameraDOFSlider, JWFNumberField pPixelsPerUnitREd, JSlider pPixelsPerUnitSlider,
+      JSlider pCameraCentreYSlider, JWFNumberField pCameraZoomREd, JSlider pCameraZoomSlider,
+      JCheckBox pNewDOFCBx, JWFNumberField pFocusXREd, JSlider pFocusXSlider, JWFNumberField pFocusYREd, JSlider pFocusYSlider, JWFNumberField pFocusZREd,
+      JSlider pFocusZSlider, JWFNumberField pCameraDOFREd, JSlider pCameraDOFSlider, JWFNumberField pCameraDOFAreaREd, JSlider pCameraDOFAreaSlider,
+      JWFNumberField pCameraDOFExponentREd, JSlider pCameraDOFExponentSlider, JWFNumberField pCamZREd, JSlider pCamZSlider,
+      JWFNumberField pPixelsPerUnitREd, JSlider pPixelsPerUnitSlider,
       JWFNumberField pBrightnessREd, JSlider pBrightnessSlider, JWFNumberField pContrastREd, JSlider pContrastSlider, JWFNumberField pGammaREd, JSlider pGammaSlider,
       JWFNumberField pVibrancyREd, JSlider pVibrancySlider, JWFNumberField pFilterRadiusREd, JSlider pFilterRadiusSlider,
       JWFNumberField pDEFilterRadiusREd, JSlider pDEFilterRadiusSlider, JWFNumberField pDEFilterAmountREd, JSlider pDEFilterAmountSlider, JWFNumberField pGammaThresholdREd,
@@ -525,14 +536,21 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     cameraCentreYSlider = pCameraCentreYSlider;
     cameraZoomREd = pCameraZoomREd;
     cameraZoomSlider = pCameraZoomSlider;
-    cameraXFocusREd = pCameraXPosREd;
-    cameraXFocusSlider = pCameraXPosSlider;
-    cameraYFocusREd = pCameraYPosREd;
-    cameraYFocusSlider = pCameraYPosSlider;
-    cameraZFocusREd = pCameraZPosREd;
-    cameraZFocusSlider = pCameraZPosSlider;
+    newDOFCBx = pNewDOFCBx;
+    focusXREd = pFocusXREd;
+    focusXSlider = pFocusXSlider;
+    focusYREd = pFocusYREd;
+    focusYSlider = pFocusYSlider;
+    focusZREd = pFocusZREd;
+    focusZSlider = pFocusZSlider;
     cameraDOFREd = pCameraDOFREd;
     cameraDOFSlider = pCameraDOFSlider;
+    cameraDOFAreaREd = pCameraDOFAreaREd;
+    cameraDOFAreaSlider = pCameraDOFAreaSlider;
+    cameraDOFExponentREd = pCameraDOFExponentREd;
+    cameraDOFExponentSlider = pCameraDOFExponentSlider;
+    camZREd = pCamZREd;
+    camZSlider = pCamZSlider;
     pixelsPerUnitREd = pPixelsPerUnitREd;
     pixelsPerUnitSlider = pPixelsPerUnitSlider;
     brightnessREd = pBrightnessREd;
@@ -736,6 +754,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
 
     enableControls();
     enableShadingUI();
+    enableDOFUI();
 
     enableXFormControls(null);
 
@@ -1231,6 +1250,17 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       cameraDOFREd.setText(Tools.doubleToString(currFlame.getCamDOF()));
       cameraDOFSlider.setValue(Tools.FTOI(currFlame.getCamDOF() * SLIDER_SCALE_DOF));
 
+      cameraDOFAreaREd.setText(Tools.doubleToString(currFlame.getCamDOFArea()));
+      cameraDOFAreaSlider.setValue(Tools.FTOI(currFlame.getCamDOFArea() * SLIDER_SCALE_DOF_AREA));
+
+      cameraDOFExponentREd.setText(Tools.doubleToString(currFlame.getCamDOFExponent()));
+      cameraDOFExponentSlider.setValue(Tools.FTOI(currFlame.getCamDOFExponent() * SLIDER_SCALE_DOF_EXPONENT));
+
+      camZREd.setText(Tools.doubleToString(currFlame.getCamZ()));
+      camZSlider.setValue(Tools.FTOI(currFlame.getCamZ() * SLIDER_SCALE_ZPOS));
+
+      newDOFCBx.setSelected(currFlame.isNewCamDOF());
+
       brightnessREd.setText(Tools.doubleToString(currFlame.getBrightness()));
       brightnessSlider.setValue(Tools.FTOI(currFlame.getBrightness() * SLIDER_SCALE_BRIGHTNESS_CONTRAST_VIBRANCY));
 
@@ -1279,6 +1309,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       shadingLightCmb.setSelectedIndex(0);
       refreshShadingUI();
       enableShadingUI();
+      enableDOFUI();
       //      refreshFlameImage();
       refreshPaletteUI(currFlame.getPalette());
     }
@@ -1362,6 +1393,23 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       shadingBlurFallOffREd.setText("");
       shadingBlurFallOffSlider.setValue(0);
     }
+  }
+
+  private void enableDOFUI() {
+    boolean newDOF = currFlame != null ? currFlame.isNewCamDOF() : false;
+    mouseTransformEditFocusPointButton.setEnabled(newDOF);
+    focusXREd.setEnabled(newDOF);
+    focusXSlider.setEnabled(newDOF);
+    focusYREd.setEnabled(newDOF);
+    focusYSlider.setEnabled(newDOF);
+    focusZREd.setEnabled(newDOF);
+    focusZSlider.setEnabled(newDOF);
+    cameraDOFAreaREd.setEnabled(newDOF);
+    cameraDOFAreaSlider.setEnabled(newDOF);
+    cameraDOFExponentREd.setEnabled(newDOF);
+    cameraDOFExponentSlider.setEnabled(newDOF);
+    camZREd.setEnabled(!newDOF);
+    camZSlider.setEnabled(!newDOF);
   }
 
   private void enableShadingUI() {
@@ -3411,14 +3459,14 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       pixelsPerUnitREd.setText(Tools.doubleToString(currFlame.getPixelsPerUnit()));
       pixelsPerUnitSlider.setValue(Tools.FTOI(currFlame.getPixelsPerUnit()));
 
-      cameraXFocusREd.setText(Tools.doubleToString(currFlame.getFocusX()));
-      cameraXFocusSlider.setValue(Tools.FTOI(currFlame.getFocusX() * SLIDER_SCALE_ZPOS));
+      focusXREd.setText(Tools.doubleToString(currFlame.getFocusX()));
+      focusXSlider.setValue(Tools.FTOI(currFlame.getFocusX() * SLIDER_SCALE_ZPOS));
 
-      cameraYFocusREd.setText(Tools.doubleToString(currFlame.getFocusY()));
-      cameraYFocusSlider.setValue(Tools.FTOI(currFlame.getFocusY() * SLIDER_SCALE_ZPOS));
+      focusYREd.setText(Tools.doubleToString(currFlame.getFocusY()));
+      focusYSlider.setValue(Tools.FTOI(currFlame.getFocusY() * SLIDER_SCALE_ZPOS));
 
-      cameraZFocusREd.setText(Tools.doubleToString(currFlame.getFocusZ()));
-      cameraZFocusSlider.setValue(Tools.FTOI(currFlame.getFocusZ() * SLIDER_SCALE_ZPOS));
+      focusZREd.setText(Tools.doubleToString(currFlame.getFocusZ()));
+      focusZSlider.setValue(Tools.FTOI(currFlame.getFocusZ() * SLIDER_SCALE_ZPOS));
 
     }
     finally {
@@ -3588,36 +3636,69 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     }
   }
 
-  public void cameraZFocusSlider_stateChanged(ChangeEvent e) {
-    flameSliderChanged(cameraZFocusSlider, cameraZFocusREd, "focusZ", SLIDER_SCALE_ZPOS);
+  public void newDOFCBx_changed() {
+    Flame flame = getCurrFlame();
+    if (flame != null) {
+      saveUndoPoint();
+      flame.setNewCamDOF(newDOFCBx.isSelected());
+      enableDOFUI();
+    }
   }
 
-  public void cameraXFocusSlider_stateChanged(ChangeEvent e) {
-    flameSliderChanged(cameraXFocusSlider, cameraXFocusREd, "focusX", SLIDER_SCALE_ZPOS);
+  public void focusZSlider_stateChanged(ChangeEvent e) {
+    flameSliderChanged(focusZSlider, focusZREd, "focusZ", SLIDER_SCALE_ZPOS);
   }
 
-  public void cameraYFocusSlider_stateChanged(ChangeEvent e) {
-    flameSliderChanged(cameraYFocusSlider, cameraYFocusREd, "focusY", SLIDER_SCALE_ZPOS);
+  public void focusXSlider_stateChanged(ChangeEvent e) {
+    flameSliderChanged(focusXSlider, focusXREd, "focusX", SLIDER_SCALE_ZPOS);
+  }
+
+  public void focusYSlider_stateChanged(ChangeEvent e) {
+    flameSliderChanged(focusYSlider, focusYREd, "focusY", SLIDER_SCALE_ZPOS);
+  }
+
+  public void camZSlider_stateChanged(ChangeEvent e) {
+    flameSliderChanged(camZSlider, camZREd, "camZ", SLIDER_SCALE_ZPOS);
   }
 
   public void cameraDOFSlider_stateChanged(ChangeEvent e) {
     flameSliderChanged(cameraDOFSlider, cameraDOFREd, "camDOF", SLIDER_SCALE_DOF);
   }
 
-  public void cameraXFocusREd_changed() {
-    flameTextFieldChanged(cameraXFocusSlider, cameraXFocusREd, "focusX", SLIDER_SCALE_ZPOS);
+  public void cameraDOFAreaSlider_stateChanged(ChangeEvent e) {
+    flameSliderChanged(cameraDOFAreaSlider, cameraDOFAreaREd, "camDOFArea", SLIDER_SCALE_DOF_AREA);
   }
 
-  public void cameraYFocusREd_changed() {
-    flameTextFieldChanged(cameraYFocusSlider, cameraYFocusREd, "focusY", SLIDER_SCALE_ZPOS);
+  public void cameraDOFExponentSlider_stateChanged(ChangeEvent e) {
+    flameSliderChanged(cameraDOFExponentSlider, cameraDOFExponentREd, "camDOFExponent", SLIDER_SCALE_DOF_EXPONENT);
   }
 
-  public void cameraZFocusREd_changed() {
-    flameTextFieldChanged(cameraZFocusSlider, cameraZFocusREd, "focusZ", SLIDER_SCALE_ZPOS);
+  public void focusXREd_changed() {
+    flameTextFieldChanged(focusXSlider, focusXREd, "focusX", SLIDER_SCALE_ZPOS);
+  }
+
+  public void focusYREd_changed() {
+    flameTextFieldChanged(focusYSlider, focusYREd, "focusY", SLIDER_SCALE_ZPOS);
+  }
+
+  public void focusZREd_changed() {
+    flameTextFieldChanged(focusZSlider, focusZREd, "focusZ", SLIDER_SCALE_ZPOS);
   }
 
   public void cameraDOFREd_changed() {
     flameTextFieldChanged(cameraDOFSlider, cameraDOFREd, "camDOF", SLIDER_SCALE_DOF);
+  }
+
+  public void camZREd_changed() {
+    flameTextFieldChanged(camZSlider, camZREd, "camZ", SLIDER_SCALE_ZPOS);
+  }
+
+  public void cameraDOFAreaREd_changed() {
+    flameTextFieldChanged(cameraDOFAreaSlider, cameraDOFAreaREd, "camDOFArea", SLIDER_SCALE_DOF_AREA);
+  }
+
+  public void cameraDOFExponentREd_changed() {
+    flameTextFieldChanged(cameraDOFExponentSlider, cameraDOFExponentREd, "camDOFExponent", SLIDER_SCALE_DOF_EXPONENT);
   }
 
   public void shadingAmbientREd_changed() {
@@ -5230,6 +5311,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
   public void flameTransparencyCbx_changed() {
     if (currFlame != null) {
       currFlame.setBGTransparency(bgTransparencyCBx.isSelected());
+      enableDOFUI();
     }
   }
 

@@ -497,10 +497,6 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton nonlinearParams12LeftButton = null;
   private JButton tinaGrabPaletteFromFlameButton = null;
   private JLabel tinaCameraZPosLbl = null;
-  private JWFNumberField tinaCameraZPosREd = null;
-  private JSlider tinaCameraZPosSlider = null;
-  private JSlider tinaCameraDOFSlider = null;
-  private JWFNumberField tinaCameraDOFREd = null;
   private JLabel tinaCameraDOFLbl = null;
   private JPanel pseudo3DShadingPanel = null;
   private JLabel shadingDiffuseLbl = null;
@@ -777,6 +773,405 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaSouthTabbedPane = new JTabbedPane();
       tinaSouthTabbedPane.setFont(new Font("Dialog", Font.BOLD, 10));
       tinaSouthTabbedPane.addTab("Camera", null, getTinaCameraPanel(), null);
+
+      JPanel panel_1 = new JPanel();
+      tinaSouthTabbedPane.addTab("DOF", null, panel_1, null);
+      panel_1.setLayout(null);
+
+      dofDOFSlider = new JSlider();
+      dofDOFSlider.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mousePressed(MouseEvent e) {
+          tinaController.saveUndoPoint();
+        }
+      });
+      dofDOFSlider.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null) {
+            tinaController.cameraDOFSlider_stateChanged(e);
+          }
+        }
+      });
+      dofDOFSlider.setValue(0);
+      dofDOFSlider.setSize(new Dimension(220, 19));
+      dofDOFSlider.setPreferredSize(new Dimension(220, 19));
+      dofDOFSlider.setMinimum(0);
+      dofDOFSlider.setMaximum(100);
+      dofDOFSlider.setLocation(new Point(202, 98));
+      dofDOFSlider.setBounds(204, 30, 220, 19);
+      panel_1.add(dofDOFSlider);
+
+      dofDOFREd = new JWFNumberField();
+      dofDOFREd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null) {
+            if (!dofDOFREd.isMouseAdjusting() || dofDOFREd.getMouseChangeCount() == 0) {
+              if (!dofDOFSlider.getValueIsAdjusting()) {
+                tinaController.saveUndoPoint();
+              }
+            }
+            tinaController.cameraDOFREd_changed();
+          }
+        }
+      });
+      dofDOFREd.setValueStep(0.01);
+      dofDOFREd.setText("");
+      dofDOFREd.setSize(new Dimension(100, 24));
+      dofDOFREd.setPreferredSize(new Dimension(100, 24));
+      dofDOFREd.setLocation(new Point(100, 98));
+      dofDOFREd.setHasMinValue(true);
+      dofDOFREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      dofDOFREd.setBounds(102, 28, 100, 24);
+      panel_1.add(dofDOFREd);
+
+      JLabel lblDepthOfField = new JLabel();
+      lblDepthOfField.setText("Amount");
+      lblDepthOfField.setSize(new Dimension(94, 22));
+      lblDepthOfField.setPreferredSize(new Dimension(94, 22));
+      lblDepthOfField.setLocation(new Point(4, 98));
+      lblDepthOfField.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblDepthOfField.setBounds(6, 28, 94, 22);
+      panel_1.add(lblDepthOfField);
+
+      dofNewDOFCBx = new JCheckBox("New DOF");
+      dofNewDOFCBx.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          tinaController.newDOFCBx_changed();
+        }
+      });
+      dofNewDOFCBx.setBounds(102, 6, 104, 18);
+      panel_1.add(dofNewDOFCBx);
+
+      JLabel lblArea = new JLabel();
+      lblArea.setText("Area");
+      lblArea.setSize(new Dimension(94, 22));
+      lblArea.setPreferredSize(new Dimension(94, 22));
+      lblArea.setLocation(new Point(4, 98));
+      lblArea.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblArea.setBounds(6, 52, 94, 22);
+      panel_1.add(lblArea);
+
+      dofDOFAreaSlider = new JSlider();
+      dofDOFAreaSlider.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null) {
+            tinaController.cameraDOFAreaSlider_stateChanged(e);
+          }
+        }
+      });
+      dofDOFAreaSlider.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mousePressed(MouseEvent e) {
+          tinaController.saveUndoPoint();
+        }
+      });
+      dofDOFAreaSlider.setValue(0);
+      dofDOFAreaSlider.setSize(new Dimension(220, 19));
+      dofDOFAreaSlider.setPreferredSize(new Dimension(220, 19));
+      dofDOFAreaSlider.setMinimum(0);
+      dofDOFAreaSlider.setMaximum(200);
+      dofDOFAreaSlider.setLocation(new Point(202, 98));
+      dofDOFAreaSlider.setBounds(204, 54, 220, 19);
+      panel_1.add(dofDOFAreaSlider);
+
+      dofDOFAreaREd = new JWFNumberField();
+      dofDOFAreaREd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null) {
+            if (!dofDOFAreaREd.isMouseAdjusting() || dofDOFAreaREd.getMouseChangeCount() == 0) {
+              if (!dofDOFAreaSlider.getValueIsAdjusting()) {
+                tinaController.saveUndoPoint();
+              }
+            }
+            tinaController.cameraDOFAreaREd_changed();
+          }
+        }
+      });
+      dofDOFAreaREd.setValueStep(0.01);
+      dofDOFAreaREd.setText("");
+      dofDOFAreaREd.setSize(new Dimension(100, 24));
+      dofDOFAreaREd.setPreferredSize(new Dimension(100, 24));
+      dofDOFAreaREd.setLocation(new Point(100, 98));
+      dofDOFAreaREd.setHasMinValue(true);
+      dofDOFAreaREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      dofDOFAreaREd.setBounds(102, 52, 100, 24);
+      panel_1.add(dofDOFAreaREd);
+
+      JLabel lblExponent = new JLabel();
+      lblExponent.setText("Exponent");
+      lblExponent.setSize(new Dimension(94, 22));
+      lblExponent.setPreferredSize(new Dimension(94, 22));
+      lblExponent.setLocation(new Point(4, 98));
+      lblExponent.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblExponent.setBounds(6, 76, 94, 22);
+      panel_1.add(lblExponent);
+
+      dofDOFExponentSlider = new JSlider();
+      dofDOFExponentSlider.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null) {
+            tinaController.cameraDOFExponentSlider_stateChanged(e);
+          }
+        }
+      });
+      dofDOFExponentSlider.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mousePressed(MouseEvent e) {
+          tinaController.saveUndoPoint();
+        }
+      });
+      dofDOFExponentSlider.setValue(0);
+      dofDOFExponentSlider.setSize(new Dimension(220, 19));
+      dofDOFExponentSlider.setPreferredSize(new Dimension(220, 19));
+      dofDOFExponentSlider.setMinimum(10);
+      dofDOFExponentSlider.setMaximum(400);
+      dofDOFExponentSlider.setLocation(new Point(202, 98));
+      dofDOFExponentSlider.setBounds(204, 79, 220, 19);
+      panel_1.add(dofDOFExponentSlider);
+
+      dofDOFExponentREd = new JWFNumberField();
+      dofDOFExponentREd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null) {
+            if (!dofDOFExponentREd.isMouseAdjusting() || dofDOFExponentREd.getMouseChangeCount() == 0) {
+              if (!dofDOFExponentSlider.getValueIsAdjusting()) {
+                tinaController.saveUndoPoint();
+              }
+            }
+            tinaController.cameraDOFExponentREd_changed();
+          }
+        }
+      });
+      dofDOFExponentREd.setValueStep(0.01);
+      dofDOFExponentREd.setText("");
+      dofDOFExponentREd.setSize(new Dimension(100, 24));
+      dofDOFExponentREd.setPreferredSize(new Dimension(100, 24));
+      dofDOFExponentREd.setLocation(new Point(100, 98));
+      dofDOFExponentREd.setHasMinValue(true);
+      dofDOFExponentREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      dofDOFExponentREd.setBounds(102, 76, 100, 24);
+      panel_1.add(dofDOFExponentREd);
+
+      JLabel lblCameraDistance = new JLabel();
+      lblCameraDistance.setText("Camera distance");
+      lblCameraDistance.setSize(new Dimension(94, 22));
+      lblCameraDistance.setPreferredSize(new Dimension(94, 22));
+      lblCameraDistance.setLocation(new Point(4, 98));
+      lblCameraDistance.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblCameraDistance.setBounds(447, 4, 94, 22);
+      panel_1.add(lblCameraDistance);
+
+      dofCamZSlider = new JSlider();
+      dofCamZSlider.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null) {
+            tinaController.camZSlider_stateChanged(e);
+          }
+        }
+      });
+      dofCamZSlider.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mousePressed(MouseEvent e) {
+          tinaController.saveUndoPoint();
+        }
+      });
+      dofCamZSlider.setValue(0);
+      dofCamZSlider.setSize(new Dimension(220, 19));
+      dofCamZSlider.setPreferredSize(new Dimension(220, 19));
+      dofCamZSlider.setMinimum(-100);
+      dofCamZSlider.setMaximum(100);
+      dofCamZSlider.setLocation(new Point(202, 98));
+      dofCamZSlider.setBounds(645, 7, 220, 19);
+      panel_1.add(dofCamZSlider);
+
+      dofCamZREd = new JWFNumberField();
+      dofCamZREd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null) {
+            if (!dofCamZREd.isMouseAdjusting() || dofCamZREd.getMouseChangeCount() == 0) {
+              if (!dofCamZSlider.getValueIsAdjusting()) {
+                tinaController.saveUndoPoint();
+              }
+            }
+            tinaController.camZREd_changed();
+          }
+        }
+      });
+      dofCamZREd.setValueStep(0.01);
+      dofCamZREd.setText("");
+      dofCamZREd.setSize(new Dimension(100, 24));
+      dofCamZREd.setPreferredSize(new Dimension(100, 24));
+      dofCamZREd.setLocation(new Point(100, 98));
+      dofCamZREd.setHasMinValue(true);
+      dofCamZREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      dofCamZREd.setBounds(543, 4, 100, 24);
+      panel_1.add(dofCamZREd);
+
+      JLabel lblFocusx = new JLabel();
+      lblFocusx.setText("FocusX");
+      lblFocusx.setSize(new Dimension(94, 22));
+      lblFocusx.setPreferredSize(new Dimension(94, 22));
+      lblFocusx.setLocation(new Point(4, 98));
+      lblFocusx.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblFocusx.setBounds(447, 28, 94, 22);
+      panel_1.add(lblFocusx);
+
+      dofFocusXREd = new JWFNumberField();
+      dofFocusXREd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null) {
+            if (!dofFocusXREd.isMouseAdjusting() || dofFocusXREd.getMouseChangeCount() == 0) {
+              if (!dofFocusXSlider.getValueIsAdjusting()) {
+                tinaController.saveUndoPoint();
+              }
+            }
+            tinaController.focusXREd_changed();
+          }
+        }
+      });
+      dofFocusXREd.setValueStep(0.01);
+      dofFocusXREd.setText("");
+      dofFocusXREd.setSize(new Dimension(100, 24));
+      dofFocusXREd.setPreferredSize(new Dimension(100, 24));
+      dofFocusXREd.setLocation(new Point(100, 98));
+      dofFocusXREd.setHasMinValue(true);
+      dofFocusXREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      dofFocusXREd.setBounds(543, 28, 100, 24);
+      panel_1.add(dofFocusXREd);
+
+      dofFocusXSlider = new JSlider();
+      dofFocusXSlider.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null) {
+            tinaController.focusXSlider_stateChanged(e);
+          }
+        }
+      });
+      dofFocusXSlider.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mousePressed(MouseEvent e) {
+          tinaController.saveUndoPoint();
+        }
+      });
+      dofFocusXSlider.setValue(0);
+      dofFocusXSlider.setSize(new Dimension(220, 19));
+      dofFocusXSlider.setPreferredSize(new Dimension(220, 19));
+      dofFocusXSlider.setMinimum(-100);
+      dofFocusXSlider.setMaximum(100);
+      dofFocusXSlider.setLocation(new Point(202, 98));
+      dofFocusXSlider.setBounds(645, 31, 220, 19);
+      panel_1.add(dofFocusXSlider);
+
+      JLabel lblFocusy = new JLabel();
+      lblFocusy.setText("FocusY");
+      lblFocusy.setSize(new Dimension(94, 22));
+      lblFocusy.setPreferredSize(new Dimension(94, 22));
+      lblFocusy.setLocation(new Point(4, 98));
+      lblFocusy.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblFocusy.setBounds(447, 52, 94, 22);
+      panel_1.add(lblFocusy);
+
+      dofFocusYREd = new JWFNumberField();
+      dofFocusYREd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null) {
+            if (!dofFocusYREd.isMouseAdjusting() || dofFocusYREd.getMouseChangeCount() == 0) {
+              if (!dofFocusYSlider.getValueIsAdjusting()) {
+                tinaController.saveUndoPoint();
+              }
+            }
+            tinaController.focusYREd_changed();
+          }
+        }
+      });
+      dofFocusYREd.setValueStep(0.01);
+      dofFocusYREd.setText("");
+      dofFocusYREd.setSize(new Dimension(100, 24));
+      dofFocusYREd.setPreferredSize(new Dimension(100, 24));
+      dofFocusYREd.setLocation(new Point(100, 98));
+      dofFocusYREd.setHasMinValue(true);
+      dofFocusYREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      dofFocusYREd.setBounds(543, 52, 100, 24);
+      panel_1.add(dofFocusYREd);
+
+      dofFocusYSlider = new JSlider();
+      dofFocusYSlider.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null) {
+            tinaController.focusYSlider_stateChanged(e);
+          }
+        }
+      });
+      dofFocusYSlider.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mousePressed(MouseEvent e) {
+          tinaController.saveUndoPoint();
+        }
+      });
+      dofFocusYSlider.setValue(0);
+      dofFocusYSlider.setSize(new Dimension(220, 19));
+      dofFocusYSlider.setPreferredSize(new Dimension(220, 19));
+      dofFocusYSlider.setMinimum(-100);
+      dofFocusYSlider.setMaximum(100);
+      dofFocusYSlider.setLocation(new Point(202, 98));
+      dofFocusYSlider.setBounds(645, 55, 220, 19);
+      panel_1.add(dofFocusYSlider);
+
+      JLabel lblFocusz = new JLabel();
+      lblFocusz.setText("FocusZ");
+      lblFocusz.setSize(new Dimension(94, 22));
+      lblFocusz.setPreferredSize(new Dimension(94, 22));
+      lblFocusz.setLocation(new Point(4, 98));
+      lblFocusz.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblFocusz.setBounds(447, 76, 94, 22);
+      panel_1.add(lblFocusz);
+
+      dofFocusZSlider = new JSlider();
+      dofFocusZSlider.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null) {
+            tinaController.focusZSlider_stateChanged(e);
+          }
+        }
+      });
+      dofFocusZSlider.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mousePressed(MouseEvent e) {
+          tinaController.saveUndoPoint();
+        }
+      });
+      dofFocusZSlider.setValue(0);
+      dofFocusZSlider.setSize(new Dimension(220, 19));
+      dofFocusZSlider.setPreferredSize(new Dimension(220, 19));
+      dofFocusZSlider.setMinimum(-100);
+      dofFocusZSlider.setMaximum(100);
+      dofFocusZSlider.setLocation(new Point(202, 98));
+      dofFocusZSlider.setBounds(645, 79, 220, 19);
+      panel_1.add(dofFocusZSlider);
+
+      dofFocusZREd = new JWFNumberField();
+      dofFocusZREd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null) {
+            if (!dofFocusZREd.isMouseAdjusting() || dofFocusZREd.getMouseChangeCount() == 0) {
+              if (!dofFocusZSlider.getValueIsAdjusting()) {
+                tinaController.saveUndoPoint();
+              }
+            }
+            tinaController.focusZREd_changed();
+          }
+        }
+      });
+      dofFocusZREd.setValueStep(0.01);
+      dofFocusZREd.setText("");
+      dofFocusZREd.setSize(new Dimension(100, 24));
+      dofFocusZREd.setPreferredSize(new Dimension(100, 24));
+      dofFocusZREd.setLocation(new Point(100, 98));
+      dofFocusZREd.setHasMinValue(true);
+      dofFocusZREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      dofFocusZREd.setBounds(543, 76, 100, 24);
+      panel_1.add(dofFocusZREd);
+
       tinaSouthTabbedPane.addTab("Coloring", null, getTinaColoringPanel(), null);
       tinaSouthTabbedPane.addTab("Shading", null, getShadingPanel(), null);
       tinaSouthTabbedPane.addTab("Pseudo3D-Shading", null, getPseudo3DShadingPanel(), null);
@@ -792,18 +1187,6 @@ public class TinaInternalFrame extends JInternalFrame {
    */
   private JPanel getTinaCameraPanel() {
     if (tinaCameraPanel == null) {
-      tinaCameraDOFLbl = new JLabel();
-      tinaCameraDOFLbl.setPreferredSize(new Dimension(94, 22));
-      tinaCameraDOFLbl.setText("Depth of field");
-      tinaCameraDOFLbl.setSize(new Dimension(94, 22));
-      tinaCameraDOFLbl.setLocation(new Point(4, 100));
-      tinaCameraDOFLbl.setFont(new Font("Dialog", Font.BOLD, 10));
-      tinaCameraZPosLbl = new JLabel();
-      tinaCameraZPosLbl.setPreferredSize(new Dimension(94, 22));
-      tinaCameraZPosLbl.setText("Focus point");
-      tinaCameraZPosLbl.setSize(new Dimension(94, 22));
-      tinaCameraZPosLbl.setLocation(new Point(488, 100));
-      tinaCameraZPosLbl.setFont(new Font("Dialog", Font.BOLD, 10));
       tinaPixelsPerUnitLbl = new JLabel();
       tinaPixelsPerUnitLbl.setText("Pixels per unit");
       tinaPixelsPerUnitLbl.setFont(new Font("Dialog", Font.BOLD, 10));
@@ -878,104 +1261,6 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaCameraPanel.add(tinaPixelsPerUnitLbl, null);
       tinaCameraPanel.add(getTinaPixelsPerUnitREd(), null);
       tinaCameraPanel.add(getTinaPixelsPerUnitSlider(), null);
-      tinaCameraPanel.add(tinaCameraZPosLbl, null);
-      tinaCameraPanel.add(getTinaCameraZPosREd(), null);
-      tinaCameraPanel.add(getTinaCameraZPosSlider(), null);
-      tinaCameraPanel.add(getTinaCameraDOFSlider(), null);
-      tinaCameraPanel.add(getTinaCameraDOFREd(), null);
-      tinaCameraPanel.add(tinaCameraDOFLbl, null);
-
-      tinaCameraYPosSlider = new JSlider();
-      tinaCameraYPosSlider.addChangeListener(new ChangeListener() {
-        public void stateChanged(ChangeEvent e) {
-          if (tinaController != null) {
-            tinaController.cameraYFocusSlider_stateChanged(e);
-          }
-        }
-      });
-      tinaCameraYPosSlider.addMouseListener(new MouseAdapter() {
-        @Override
-        public void mousePressed(MouseEvent e) {
-          tinaController.saveUndoPoint();
-        }
-      });
-      tinaCameraYPosSlider.setValue(0);
-      tinaCameraYPosSlider.setSize(new Dimension(56, 19));
-      tinaCameraYPosSlider.setPreferredSize(new Dimension(220, 19));
-      tinaCameraYPosSlider.setMinimum(-100);
-      tinaCameraYPosSlider.setMaximum(100);
-      tinaCameraYPosSlider.setLocation(new Point(640, 103));
-      tinaCameraYPosSlider.setBounds(764, 103, 56, 19);
-      tinaCameraPanel.add(tinaCameraYPosSlider);
-
-      tinaCameraYPosREd = new JWFNumberField();
-      tinaCameraYPosREd.addChangeListener(new ChangeListener() {
-        public void stateChanged(ChangeEvent e) {
-          if (tinaController != null) {
-            if (!tinaCameraYPosREd.isMouseAdjusting() || tinaCameraYPosREd.getMouseChangeCount() == 0) {
-              if (!tinaCameraYPosSlider.getValueIsAdjusting()) {
-                tinaController.saveUndoPoint();
-              }
-            }
-            tinaController.cameraYFocusREd_changed();
-          }
-        }
-      });
-      tinaCameraYPosREd.setValueStep(0.01);
-      tinaCameraYPosREd.setText("");
-      tinaCameraYPosREd.setSize(new Dimension(56, 24));
-      tinaCameraYPosREd.setPreferredSize(new Dimension(56, 24));
-      tinaCameraYPosREd.setLocation(new Point(584, 100));
-      tinaCameraYPosREd.setFont(new Font("Dialog", Font.PLAIN, 10));
-      tinaCameraYPosREd.setBounds(708, 100, 56, 24);
-      tinaCameraPanel.add(tinaCameraYPosREd);
-
-      tinaCameraXPosSlider = new JSlider();
-      tinaCameraXPosSlider.addChangeListener(new ChangeListener() {
-        public void stateChanged(ChangeEvent e) {
-          if (tinaController != null) {
-            tinaController.cameraXFocusSlider_stateChanged(e);
-          }
-        }
-      });
-      tinaCameraXPosSlider.addMouseListener(new MouseAdapter() {
-        @Override
-        public void mousePressed(MouseEvent e) {
-          tinaController.saveUndoPoint();
-        }
-      });
-      tinaCameraXPosSlider.setValue(0);
-      tinaCameraXPosSlider.setSize(new Dimension(56, 19));
-      tinaCameraXPosSlider.setPreferredSize(new Dimension(220, 19));
-      tinaCameraXPosSlider.setMinimum(-100);
-      tinaCameraXPosSlider.setMaximum(100);
-      tinaCameraXPosSlider.setLocation(new Point(640, 103));
-      tinaCameraXPosSlider.setBounds(640, 103, 56, 19);
-      tinaCameraPanel.add(tinaCameraXPosSlider);
-
-      tinaCameraXPosREd = new JWFNumberField();
-      tinaCameraXPosREd.addChangeListener(new ChangeListener() {
-        public void stateChanged(ChangeEvent e) {
-          if (tinaController != null) {
-
-            if (!tinaCameraXPosREd.isMouseAdjusting() || tinaCameraXPosREd.getMouseChangeCount() == 0) {
-              if (!tinaCameraXPosSlider.getValueIsAdjusting()) {
-                tinaController.saveUndoPoint();
-              }
-            }
-            tinaController.cameraXFocusREd_changed();
-          }
-        }
-      });
-      tinaCameraXPosREd.setEditable(true);
-      tinaCameraXPosREd.setValueStep(0.01);
-      tinaCameraXPosREd.setText("");
-      tinaCameraXPosREd.setSize(new Dimension(56, 24));
-      tinaCameraXPosREd.setPreferredSize(new Dimension(56, 24));
-      tinaCameraXPosREd.setLocation(new Point(584, 100));
-      tinaCameraXPosREd.setFont(new Font("Dialog", Font.PLAIN, 10));
-      tinaCameraXPosREd.setBounds(584, 100, 56, 24);
-      tinaCameraPanel.add(tinaCameraXPosREd);
     }
     return tinaCameraPanel;
   }
@@ -1731,7 +2016,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaBrightnessSlider.setPreferredSize(new Dimension(220, 19));
       tinaBrightnessSlider.setValue(0);
       tinaBrightnessSlider.setFont(new Font("Dialog", Font.BOLD, 10));
-      tinaBrightnessSlider.setMaximum(1000);
+      tinaBrightnessSlider.setMaximum(2000);
       tinaBrightnessSlider.addChangeListener(new javax.swing.event.ChangeListener() {
         public void stateChanged(javax.swing.event.ChangeEvent e) {
           tinaController.brightnessSlider_stateChanged(e);
@@ -3553,9 +3838,10 @@ public class TinaInternalFrame extends JInternalFrame {
     tinaController = new TinaController(this, pErrorHandler, pPrefs, getCenterCenterPanel(), getTinaCameraRollREd(), getTinaCameraRollSlider(), getTinaCameraPitchREd(),
         getTinaCameraPitchSlider(), getTinaCameraYawREd(), getTinaCameraYawSlider(), getTinaCameraPerspectiveREd(), getTinaCameraPerspectiveSlider(),
         getTinaCameraCentreXREd(), getTinaCameraCentreXSlider(), getTinaCameraCentreYREd(),
-        getTinaCameraCentreYSlider(), getTinaCameraZoomREd(), getTinaCameraZoomSlider(),
-        getTinaCameraXPosREd(), getTinaCameraXPosSlider(), getTinaCameraYPosREd(), getTinaCameraYPosSlider(), getTinaCameraZPosREd(), getTinaCameraZPosSlider(),
-        getTinaCameraDOFREd(), getTinaCameraDOFSlider(), getTinaPixelsPerUnitREd(), getTinaPixelsPerUnitSlider(),
+        getTinaCameraCentreYSlider(), getTinaCameraZoomREd(), getTinaCameraZoomSlider(), getDofNewDOFCBx(),
+        getDofFocusXREd(), getDofFocusXSlider(), getDofFocusYREd(), getDofFocusYSlider(), getDofFocusZREd(), getDofFocusZSlider(),
+        getDofDOFREd(), getDofDOFSlider(), getDofDOFAreaREd(), getDofDOFAreaSlider(), getDofDOFExponentREd(), getDofDOFExponentSlider(),
+        getDofCamZREd(), getDofCamZSlider(), getTinaPixelsPerUnitREd(), getTinaPixelsPerUnitSlider(),
         getTinaBrightnessREd(), getTinaBrightnessSlider(), getTinaContrastREd(), getTinaContrastSlider(), getTinaGammaREd(), getTinaGammaSlider(),
         getTinaVibrancyREd(), getTinaVibrancySlider(), getTinaFilterRadiusREd(), getTinaFilterRadiusSlider(), getTinaDEFilterRadiusREd(), getTinaDEFilterRadiusSlider(),
         getTinaDEFilterAmountREd(), getTinaDEFilterAmountSlider(), getTinaGammaThresholdREd(),
@@ -7157,122 +7443,6 @@ public class TinaInternalFrame extends JInternalFrame {
   }
 
   /**
-   * This method initializes tinaCameraZPosREd	
-   * 	
-   * @return javax.swing.JTextField	
-   */
-  private JWFNumberField getTinaCameraZPosREd() {
-    if (tinaCameraZPosREd == null) {
-      tinaCameraZPosREd = new JWFNumberField();
-      tinaCameraZPosREd.setEditable(true);
-      tinaCameraZPosREd.setValueStep(0.01);
-      tinaCameraZPosREd.addChangeListener(new ChangeListener() {
-        public void stateChanged(ChangeEvent e) {
-          if (!tinaCameraZPosREd.isMouseAdjusting() || tinaCameraZPosREd.getMouseChangeCount() == 0) {
-            if (!tinaCameraZPosSlider.getValueIsAdjusting()) {
-              tinaController.saveUndoPoint();
-            }
-          }
-          tinaController.cameraZFocusREd_changed();
-        }
-      });
-      tinaCameraZPosREd.setPreferredSize(new Dimension(56, 24));
-      tinaCameraZPosREd.setText("");
-      tinaCameraZPosREd.setSize(new Dimension(56, 24));
-      tinaCameraZPosREd.setLocation(new Point(832, 100));
-      tinaCameraZPosREd.setFont(new Font("Dialog", Font.PLAIN, 10));
-    }
-    return tinaCameraZPosREd;
-  }
-
-  /**
-   * This method initializes tinaCameraZPosSlider	
-   * 	
-   * @return javax.swing.JSlider	
-   */
-  private JSlider getTinaCameraZPosSlider() {
-    if (tinaCameraZPosSlider == null) {
-      tinaCameraZPosSlider = new JSlider();
-      tinaCameraZPosSlider.addMouseListener(new MouseAdapter() {
-        @Override
-        public void mousePressed(MouseEvent e) {
-          tinaController.saveUndoPoint();
-        }
-      });
-      tinaCameraZPosSlider.setMaximum(100);
-      tinaCameraZPosSlider.setMinimum(-100);
-      tinaCameraZPosSlider.setValue(0);
-      tinaCameraZPosSlider.setSize(new Dimension(56, 19));
-      tinaCameraZPosSlider.setLocation(new Point(887, 103));
-      tinaCameraZPosSlider.setPreferredSize(new Dimension(220, 19));
-      tinaCameraZPosSlider.addChangeListener(new javax.swing.event.ChangeListener() {
-        public void stateChanged(javax.swing.event.ChangeEvent e) {
-          tinaController.cameraZFocusSlider_stateChanged(e);
-        }
-      });
-    }
-    return tinaCameraZPosSlider;
-  }
-
-  /**
-   * This method initializes tinaCameraDOFSlider	
-   * 	
-   * @return javax.swing.JSlider	
-   */
-  private JSlider getTinaCameraDOFSlider() {
-    if (tinaCameraDOFSlider == null) {
-      tinaCameraDOFSlider = new JSlider();
-      tinaCameraDOFSlider.addMouseListener(new MouseAdapter() {
-        @Override
-        public void mousePressed(MouseEvent e) {
-          tinaController.saveUndoPoint();
-        }
-      });
-      tinaCameraDOFSlider.setMaximum(100);
-      tinaCameraDOFSlider.setMinimum(0);
-      tinaCameraDOFSlider.setValue(0);
-      tinaCameraDOFSlider.setSize(new Dimension(220, 19));
-      tinaCameraDOFSlider.setLocation(new Point(202, 100));
-      tinaCameraDOFSlider.setPreferredSize(new Dimension(220, 19));
-      tinaCameraDOFSlider.addChangeListener(new javax.swing.event.ChangeListener() {
-        public void stateChanged(javax.swing.event.ChangeEvent e) {
-          tinaController.cameraDOFSlider_stateChanged(e);
-        }
-      });
-    }
-    return tinaCameraDOFSlider;
-  }
-
-  /**
-   * This method initializes tinaCameraDOFREd	
-   * 	
-   * @return javax.swing.JTextField	
-   */
-  private JWFNumberField getTinaCameraDOFREd() {
-    if (tinaCameraDOFREd == null) {
-      tinaCameraDOFREd = new JWFNumberField();
-      tinaCameraDOFREd.setValueStep(0.01);
-      tinaCameraDOFREd.setHasMinValue(true);
-      tinaCameraDOFREd.addChangeListener(new ChangeListener() {
-        public void stateChanged(ChangeEvent e) {
-          if (!tinaCameraDOFREd.isMouseAdjusting() || tinaCameraDOFREd.getMouseChangeCount() == 0) {
-            if (!tinaCameraDOFSlider.getValueIsAdjusting()) {
-              tinaController.saveUndoPoint();
-            }
-          }
-          tinaController.cameraDOFREd_changed();
-        }
-      });
-      tinaCameraDOFREd.setPreferredSize(new Dimension(100, 24));
-      tinaCameraDOFREd.setText("");
-      tinaCameraDOFREd.setSize(new Dimension(100, 24));
-      tinaCameraDOFREd.setLocation(new Point(100, 100));
-      tinaCameraDOFREd.setFont(new Font("Dialog", Font.PLAIN, 10));
-    }
-    return tinaCameraDOFREd;
-  }
-
-  /**
    * This method initializes pseudo3DShadingPanel	
    * 	
    * @return javax.swing.JPanel	
@@ -8357,10 +8527,21 @@ public class TinaInternalFrame extends JInternalFrame {
   private JPanel panel_40;
   private JPanel panel_44;
   private JPanel panel_45;
-  private JWFNumberField tinaCameraXPosREd;
-  private JWFNumberField tinaCameraYPosREd;
-  private JSlider tinaCameraXPosSlider;
-  private JSlider tinaCameraYPosSlider;
+  private JCheckBox dofNewDOFCBx;
+  private JWFNumberField dofDOFREd;
+  private JSlider dofDOFSlider;
+  private JWFNumberField dofDOFAreaREd;
+  private JSlider dofDOFAreaSlider;
+  private JWFNumberField dofDOFExponentREd;
+  private JSlider dofDOFExponentSlider;
+  private JWFNumberField dofCamZREd;
+  private JSlider dofCamZSlider;
+  private JWFNumberField dofFocusXREd;
+  private JSlider dofFocusXSlider;
+  private JWFNumberField dofFocusYREd;
+  private JSlider dofFocusYSlider;
+  private JWFNumberField dofFocusZREd;
+  private JSlider dofFocusZSlider;
 
   /**
    * This method initializes renderBatchJobsScrollPane	
@@ -11790,19 +11971,63 @@ public class TinaInternalFrame extends JInternalFrame {
     return panel_45;
   }
 
-  public JWFNumberField getTinaCameraXPosREd() {
-    return tinaCameraXPosREd;
+  public JCheckBox getDofNewDOFCBx() {
+    return dofNewDOFCBx;
   }
 
-  public JWFNumberField getTinaCameraYPosREd() {
-    return tinaCameraYPosREd;
+  public JWFNumberField getDofDOFREd() {
+    return dofDOFREd;
   }
 
-  public JSlider getTinaCameraXPosSlider() {
-    return tinaCameraXPosSlider;
+  public JSlider getDofDOFSlider() {
+    return dofDOFSlider;
   }
 
-  public JSlider getTinaCameraYPosSlider() {
-    return tinaCameraYPosSlider;
+  public JWFNumberField getDofDOFAreaREd() {
+    return dofDOFAreaREd;
+  }
+
+  public JSlider getDofDOFAreaSlider() {
+    return dofDOFAreaSlider;
+  }
+
+  public JWFNumberField getDofDOFExponentREd() {
+    return dofDOFExponentREd;
+  }
+
+  public JSlider getDofDOFExponentSlider() {
+    return dofDOFExponentSlider;
+  }
+
+  public JWFNumberField getDofCamZREd() {
+    return dofCamZREd;
+  }
+
+  public JSlider getDofCamZSlider() {
+    return dofCamZSlider;
+  }
+
+  public JWFNumberField getDofFocusXREd() {
+    return dofFocusXREd;
+  }
+
+  public JSlider getDofFocusXSlider() {
+    return dofFocusXSlider;
+  }
+
+  public JWFNumberField getDofFocusYREd() {
+    return dofFocusYREd;
+  }
+
+  public JSlider getDofFocusYSlider() {
+    return dofFocusYSlider;
+  }
+
+  public JWFNumberField getDofFocusZREd() {
+    return dofFocusZREd;
+  }
+
+  public JSlider getDofFocusZSlider() {
+    return dofFocusZSlider;
   }
 } //  @jve:decl-index=0:visual-constraint="10,10"
