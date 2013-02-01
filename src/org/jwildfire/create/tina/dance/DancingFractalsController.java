@@ -33,6 +33,7 @@ import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
+import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.JTree;
 import javax.swing.border.EmptyBorder;
@@ -103,6 +104,16 @@ public class DancingFractalsController {
   private final JCheckBox drawFFTCbx;
   private final JCheckBox drawFPSCbx;
   private final JTree flamePropertiesTree;
+  private final JPanel motionPropertyPnl;
+  private final JTable motionTable;
+  private final JComboBox addMotionCmb;
+  private final JButton addMotionBtn;
+  private final JButton deleteMotionBtn;
+  private final JButton linkMotionBtn;
+  private final JButton unlinkMotionBtn;
+  private final JButton selectNextPropertyBtn;
+  private final JComboBox createMotionsCmb;
+  private final JButton clearMotionsBtn;
 
   JLayerInterface jLayer = new JLayerInterface();
   private FlamePanel flamePanel = null;
@@ -123,7 +134,9 @@ public class DancingFractalsController {
       JButton pGenRandFlamesBtn, JComboBox pRandomGenCmb, JPanel pPoolFlamePreviewPnl, JSlider pBorderSizeSlider,
       JButton pFlameToEditorBtn, JButton pDeleteFlameBtn, JTextField pFramesPerSecondIEd, JTextField pMorphFrameCountIEd,
       JButton pStartShowButton, JButton pStopShowButton, JCheckBox pDoRecordCBx, JButton pSaveAllFlamesBtn,
-      JComboBox pFlamesCmb, JCheckBox pDrawTrianglesCbx, JCheckBox pDrawFFTCbx, JCheckBox pDrawFPSCbx, JTree pFlamePropertiesTree) {
+      JComboBox pFlamesCmb, JCheckBox pDrawTrianglesCbx, JCheckBox pDrawFFTCbx, JCheckBox pDrawFPSCbx, JTree pFlamePropertiesTree,
+      JPanel pMotionPropertyPnl, JTable pMotionTable, JComboBox pAddMotionCmb, JButton pAddMotionBtn, JButton pDeleteMotionBtn,
+      JButton pLinkMotionBtn, JButton pUnlinkMotionBtn, JButton pSelectNextPropertyBtn, JComboBox pCreateMotionsCmb, JButton pClearMotionsBtn) {
     parentCtrl = pParent;
     errorHandler = pErrorHandler;
     prefs = parentCtrl.getPrefs();
@@ -150,6 +163,17 @@ public class DancingFractalsController {
     drawTrianglesCbx = pDrawTrianglesCbx;
     drawFFTCbx = pDrawFFTCbx;
     drawFPSCbx = pDrawFPSCbx;
+    motionPropertyPnl = pMotionPropertyPnl;
+    motionTable = pMotionTable;
+    addMotionCmb = pAddMotionCmb;
+    addMotionBtn = pAddMotionBtn;
+    deleteMotionBtn = pDeleteMotionBtn;
+    linkMotionBtn = pLinkMotionBtn;
+    unlinkMotionBtn = pUnlinkMotionBtn;
+    selectNextPropertyBtn = pSelectNextPropertyBtn;
+    createMotionsCmb = pCreateMotionsCmb;
+    clearMotionsBtn = pClearMotionsBtn;
+
     flamePropertiesTree = pFlamePropertiesTree;
     poolFlameHolder = new PoolFlameHolder();
 

@@ -506,7 +506,10 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       JTextField pDancingFlamesMorphFrameCountIEd, JButton pDancingFlamesStartShowButton, JButton pDancingFlamesStopShowButton,
       JCheckBox pDancingFlamesDoRecordCBx, JButton pDancingFlamesSaveAllFlamesBtn,
       JComboBox pDancingFlamesFlamesCmb, JCheckBox pDancingFlamesDrawTrianglesCBx, JCheckBox pDancingFlamesDrawFFTCBx, JCheckBox pDancingFlamesDrawFPSCBx,
-      JTree pDancingFlamesFlamePropertiesTree) {
+      JTree pDancingFlamesFlamePropertiesTree,
+      JPanel pDancingFlamesMotionPropertyPnl, JTable pDancingFlamesMotionTable, JComboBox pDancingFlamesAddMotionCmb, JButton pDancingFlamesAddMotionBtn,
+      JButton pDancingFlamesDeleteMotionBtn, JButton pDancingFlamesLinkMotionBtn, JButton pDancingFlamesUnlinkMotionBtn, JButton pDancingFlamesSelectNextPropertyBtn,
+      JComboBox pDancingFlamesCreateMotionsCmb, JButton pDancingFlamesClearMotionsBtn) {
     tinaFrame = pTinaFrame;
     tinaFrameTitle = tinaFrame.getTitle();
     errorHandler = pErrorHandler;
@@ -520,7 +523,10 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
         pDancingFlamesFlameToEditorBtn, pDancingFlamesDeleteFlameBtn, pDancingFlamesFramesPerSecondIEd, pDancingFlamesMorphFrameCountIEd,
         pDancingFlamesStartShowButton, pDancingFlamesStopShowButton, pDancingFlamesDoRecordCBx,
         pDancingFlamesSaveAllFlamesBtn, pDancingFlamesFlamesCmb,
-        pDancingFlamesDrawTrianglesCBx, pDancingFlamesDrawFFTCBx, pDancingFlamesDrawFPSCBx, pDancingFlamesFlamePropertiesTree);
+        pDancingFlamesDrawTrianglesCBx, pDancingFlamesDrawFFTCBx, pDancingFlamesDrawFPSCBx, pDancingFlamesFlamePropertiesTree,
+        pDancingFlamesMotionPropertyPnl, pDancingFlamesMotionTable, pDancingFlamesAddMotionCmb, pDancingFlamesAddMotionBtn,
+        pDancingFlamesDeleteMotionBtn, pDancingFlamesLinkMotionBtn, pDancingFlamesUnlinkMotionBtn, pDancingFlamesSelectNextPropertyBtn,
+        pDancingFlamesCreateMotionsCmb, pDancingFlamesClearMotionsBtn);
 
     cameraRollREd = pCameraRollREd;
     cameraRollSlider = pCameraRollSlider;
