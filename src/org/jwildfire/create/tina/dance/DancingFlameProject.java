@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2012 Andreas Maschke
+  Copyright (C) 1995-2013 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -14,35 +14,26 @@
   if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
   02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
-package org.jwildfire.create.tina.dance.motion;
+package org.jwildfire.create.tina.dance;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
-import org.jwildfire.base.ManagedObject;
-import org.jwildfire.base.Property;
-import org.jwildfire.base.PropertyCategory;
+import org.jwildfire.create.tina.base.Flame;
+import org.jwildfire.create.tina.dance.motion.Motion;
 
-public abstract class Motion extends ManagedObject implements Serializable {
+public class DancingFlameProject implements Serializable {
   private static final long serialVersionUID = 1L;
+  private List<Flame> flames = new ArrayList<Flame>();
+  private List<Motion> motions = new ArrayList<Motion>();
 
-  @Property(description = "Start time", category = PropertyCategory.GENERAL)
-  protected Double startTime;
-  @Property(description = "End time", category = PropertyCategory.GENERAL)
-  protected Double endTime;
-
-  public Double getStartTime() {
-    return startTime;
+  public List<Flame> getFlames() {
+    return flames;
   }
 
-  public void setStartTime(Double startTime) {
-    this.startTime = startTime;
+  public List<Motion> getMotions() {
+    return motions;
   }
 
-  public Double getEndTime() {
-    return endTime;
-  }
-
-  public void setEndTime(Double endTime) {
-    this.endTime = endTime;
-  }
 }

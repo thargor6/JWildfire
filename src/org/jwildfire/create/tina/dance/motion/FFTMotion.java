@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2012 Andreas Maschke
+  Copyright (C) 1995-2013 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -16,22 +16,21 @@
 */
 package org.jwildfire.create.tina.dance.motion;
 
-import org.jwildfire.create.tina.dance.model.AbstractProperty;
+import org.jwildfire.base.Property;
+import org.jwildfire.base.PropertyCategory;
 
 public class FFTMotion extends Motion {
-  private int fftIndex = 0;
+  private static final long serialVersionUID = 1L;
 
-  protected FFTMotion(AbstractProperty[] pPropertyPath, int pFFTIndex) {
-    super(pPropertyPath);
-    fftIndex = pFFTIndex;
+  @Property(description = "FFT channel", category = PropertyCategory.GENERAL)
+  private int fftChannel = 0;
+
+  public int getFftChannel() {
+    return fftChannel;
   }
 
-  public int getFFTIndex() {
-    return fftIndex;
-  }
-
-  public void setFFTIndex(int pFFTIndex) {
-    fftIndex = pFFTIndex;
+  public void setFftChannel(int pFFTIndex) {
+    fftChannel = pFFTIndex;
   }
 
 }
