@@ -57,11 +57,13 @@ public class JulianDiscRandomFlameGenerator extends RandomFlameGenerator {
         power = -30;
       }
       varFunc.setParameter("power", power);
-      xForm.addVariation(0.5, varFunc);
-      //      {
-      //        String fncName = Math.random() > 0.5 ? getNonBlurRandomFunc() : "gaussian_blur";
-      //        xForm.addVariation(0.001 + Math.random() * 0.039, VariationFuncList.getVariationFuncInstance(fncName, true));
-      //      }
+      double amounts[] = { 0.25, 0.5, 0.75 };
+
+      xForm.addVariation(amounts[(int) (Math.random() * amounts.length)], varFunc);
+      if (Math.random() < 0.5) {
+        String fncName = Math.random() > 0.5 ? getNonBlurRandomFunc() : "gaussian_blur";
+        xForm.addVariation(0.001 + Math.random() * 0.039, VariationFuncList.getVariationFuncInstance(fncName, true));
+      }
       xForm.setColor(0.0);
       xForm.setColorSymmetry(0.0);
     }
@@ -71,38 +73,36 @@ public class JulianDiscRandomFlameGenerator extends RandomFlameGenerator {
       flame.getXForms().add(xForm);
       xForm.setWeight(2.0 + Math.random() * 24.0);
       xForm.addVariation(1.0, VariationFuncList.getVariationFuncInstance("disc", true));
-      if (Math.random() < 0.33) {
+      if (Math.random() < 0.125) {
         String fncName = Math.random() > 0.5 ? getNonBlurRandomFunc() : "gaussian_blur";
         xForm.addVariation(0.001 + Math.random() * 0.039, VariationFuncList.getVariationFuncInstance(fncName, true));
       }
       xForm.setColor(0.5 + Math.random() * 0.5);
       xForm.setColorSymmetry(0.6 + Math.random() * 0.33);
       if (Math.random() < 0.5) {
-        XFormTransformService.globalTranslate(xForm, Math.random() < 0.5 ? -0.025 + 0.05 * Math.random() : -0.5 + Math.random(), Math.random() >= 0.5 ? -0.025 + 0.05 * Math.random() : -0.5 + Math.random(), false);
+        XFormTransformService.globalTranslate(xForm, -0.0125 + 0.025 * Math.random(), -0.0125 + 0.025 * Math.random(), false);
       }
-      if (Math.random() < 0.5) {
+      if (Math.random() < 0.15) {
         XFormTransformService.rotate(xForm, 6.0 - Math.random() * 12.0, false);
       }
-      XFormTransformService.scale(xForm, 0.2 + Math.random() * 1.2, true, true, false);
+      else if (Math.random() < 0.5) {
+        XFormTransformService.rotate(xForm, -45.0, false);
+      }
+      if (Math.random() < 0.25) {
+        //        XFormTransformService.scale(xForm, 0.2 + Math.random() * 1.2, true, true, false);
+      }
     }
     // final
-    if (Math.random() < 0.5) {
+    if (Math.random() < 0.33) {
       XForm xForm = new XForm();
       flame.getFinalXForms().add(xForm);
       if (Math.random() < 0.5) {
-        String varName = Math.random() < 0.67 ? "polar" : "polar2";
-        xForm.addVariation(2.0 + Math.random() * 2.0, VariationFuncList.getVariationFuncInstance(varName, true));
-        double dy = -0.5 + 2.5 * Math.random();
-        XFormTransformService.globalTranslate(xForm, 0, dy, true);
-        flame.setCentreY(-(2.0 - dy));
-      }
-      else {
         String[] fncList = { "auger", "bent", "bent2", "boarders", "bubble", "butterfly", "bwraps7", "cosine",
             "curve", "cylinder", "diamond", "disc", "eclipse", "edisc", "elliptic", "ex", "exp", "exponential",
             "eyefish", "fan", "fan2", "fisheye", "heart_wf", "hemisphere", "horseshoe", "hyperbolic", "julia",
             "julia3D", "julia3Dz", "julian", "juliascope", "linearT", "log", "mobius", "ngon", "oscilloscope",
             "rings", "rings2", "scry", "xtrb", "sec", "sin", "sinh", "sinusoidal", "spherical", "swirl", "tan",
-            "tangent", "tanh", "boarders2" };
+            "tangent", "tanh", "boarders2", "polar" };
         String varName = fncList[(int) (Math.random() * fncList.length)];
         xForm.addVariation(2.0 + Math.random() * 2.0, VariationFuncList.getVariationFuncInstance(varName, true));
       }
