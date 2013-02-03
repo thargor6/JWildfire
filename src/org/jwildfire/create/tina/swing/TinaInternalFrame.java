@@ -2940,25 +2940,25 @@ public class TinaInternalFrame extends JInternalFrame {
       xFormDrawModeLbl.setPreferredSize(new Dimension(64, 22));
       xFormDrawModeLbl.setText("Draw mode");
       xFormDrawModeLbl.setSize(new Dimension(64, 22));
-      xFormDrawModeLbl.setLocation(new Point(4, 82));
+      xFormDrawModeLbl.setLocation(new Point(6, 99));
       xFormDrawModeLbl.setFont(new Font("Dialog", Font.BOLD, 10));
       xFormOpacityLbl = new JLabel();
       xFormOpacityLbl.setPreferredSize(new Dimension(64, 22));
       xFormOpacityLbl.setText("Opacity");
       xFormOpacityLbl.setSize(new Dimension(64, 22));
-      xFormOpacityLbl.setLocation(new Point(4, 56));
+      xFormOpacityLbl.setLocation(new Point(6, 73));
       xFormOpacityLbl.setFont(new Font("Dialog", Font.BOLD, 10));
       xFormSymmetryLbl = new JLabel();
       xFormSymmetryLbl.setPreferredSize(new Dimension(64, 22));
       xFormSymmetryLbl.setText("Symmetry");
       xFormSymmetryLbl.setSize(new Dimension(64, 22));
-      xFormSymmetryLbl.setLocation(new Point(4, 30));
+      xFormSymmetryLbl.setLocation(new Point(6, 47));
       xFormSymmetryLbl.setFont(new Font("Dialog", Font.BOLD, 10));
       xFormColorLbl = new JLabel();
       xFormColorLbl.setPreferredSize(new Dimension(64, 22));
       xFormColorLbl.setText("Color");
       xFormColorLbl.setSize(new Dimension(64, 22));
-      xFormColorLbl.setLocation(new Point(4, 4));
+      xFormColorLbl.setLocation(new Point(6, 21));
       xFormColorLbl.setFont(new Font("Dialog", Font.BOLD, 10));
       tinaTransformationColorPanel = new JPanel();
       tinaTransformationColorPanel.setLayout(null);
@@ -2973,6 +2973,11 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaTransformationColorPanel.add(getXFormOpacitySlider(), null);
       tinaTransformationColorPanel.add(xFormDrawModeLbl, null);
       tinaTransformationColorPanel.add(getXFormDrawModeCmb(), null);
+
+      tinaColorChooserPaletteImgPanel = new JPanel();
+      tinaColorChooserPaletteImgPanel.setBounds(125, 10, 172, 10);
+      tinaTransformationColorPanel.add(tinaColorChooserPaletteImgPanel);
+      tinaColorChooserPaletteImgPanel.setLayout(new BorderLayout(0, 0));
     }
     return tinaTransformationColorPanel;
   }
@@ -3846,7 +3851,7 @@ public class TinaInternalFrame extends JInternalFrame {
         getTinaVibrancyREd(), getTinaVibrancySlider(), getTinaFilterRadiusREd(), getTinaFilterRadiusSlider(), getTinaDEFilterRadiusREd(), getTinaDEFilterRadiusSlider(),
         getTinaDEFilterAmountREd(), getTinaDEFilterAmountSlider(), getTinaGammaThresholdREd(),
         getTinaGammaThresholdSlider(), getBgTransparencyCBx(), getTinaBGColorRedREd(), getTinaBGColorRedSlider(), getTinaBGColorGreenREd(), getTinaBGColorGreenSlider(), getTinaBGColorBlueREd(),
-        getTinaBGColorBlueSlider(), getTinaPaletteRandomPointsREd(), getTinaPaletteImgPanel(), getTinaPaletteShiftREd(), getTinaPaletteShiftSlider(),
+        getTinaBGColorBlueSlider(), getTinaPaletteRandomPointsREd(), getTinaPaletteImgPanel(), getTinaCholorChooserPaletteImgPanel(), getTinaPaletteShiftREd(), getTinaPaletteShiftSlider(),
         getTinaPaletteRedREd(), getTinaPaletteRedSlider(), getTinaPaletteGreenREd(), getTinaPaletteGreenSlider(), getTinaPaletteBlueREd(),
         getTinaPaletteBlueSlider(), getTinaPaletteHueREd(), getTinaPaletteHueSlider(), getTinaPaletteSaturationREd(), getTinaPaletteSaturationSlider(),
         getTinaPaletteContrastREd(), getTinaPaletteContrastSlider(), getTinaPaletteGammaREd(), getTinaPaletteGammaSlider(), getTinaPaletteBrightnessREd(),
@@ -3889,7 +3894,8 @@ public class TinaInternalFrame extends JInternalFrame {
         getDancingFlamesDrawFFTCBx(), getDancingFlamesDrawFPSCBx(), getDancingFlamesFlamePropertiesTree(),
         getDancingFlamesMotionPropertyPnl(), getDancingFlamesMotionTable(), getDancingFlamesAddMotionCmb(), getDancingFlamesAddMotionBtn(),
         getDancingFlamesDeleteMotionBtn(), getDancingFlamesLinkMotionBtn(), getDancingFlamesUnlinkMotionBtn(), getDancingFlamesSelectNextPropertyBtn(),
-        getDancingFlamesCreateMotionsCmb(), getDancingFlamesClearMotionsBtn(), getDancingFlamesLoadProjectBtn(), getDancingFlamesSaveProjectBtn());
+        getDancingFlamesCreateMotionsCmb(), getDancingFlamesClearMotionsBtn(), getDancingFlamesLoadProjectBtn(), getDancingFlamesSaveProjectBtn(),
+        getDancingFlamesMotionLinkToAllBtn(), getDancingFlamesUnlinkFromAllMotionsBtn(), getDancingFlamesMotionLinksTable());
 
     tinaController.refreshing = tinaController.cmbRefreshing = tinaController.gridRefreshing = true;
     try {
@@ -5027,7 +5033,7 @@ public class TinaInternalFrame extends JInternalFrame {
       xFormColorREd.setPreferredSize(new Dimension(55, 22));
       xFormColorREd.setText("");
       xFormColorREd.setSize(new Dimension(55, 22));
-      xFormColorREd.setLocation(new Point(68, 4));
+      xFormColorREd.setLocation(new Point(70, 21));
       xFormColorREd.setFont(new Font("Dialog", Font.PLAIN, 10));
     }
     return xFormColorREd;
@@ -5052,7 +5058,7 @@ public class TinaInternalFrame extends JInternalFrame {
       xFormColorSlider.setMinimum(0);
       xFormColorSlider.setValue(0);
       xFormColorSlider.setSize(new Dimension(172, 22));
-      xFormColorSlider.setLocation(new Point(123, 4));
+      xFormColorSlider.setLocation(new Point(125, 21));
       xFormColorSlider.setFont(new Font("Dialog", Font.BOLD, 10));
       xFormColorSlider.addChangeListener(new javax.swing.event.ChangeListener() {
         public void stateChanged(javax.swing.event.ChangeEvent e) {
@@ -5091,7 +5097,7 @@ public class TinaInternalFrame extends JInternalFrame {
       xFormSymmetryREd.setPreferredSize(new Dimension(55, 22));
       xFormSymmetryREd.setText("");
       xFormSymmetryREd.setSize(new Dimension(55, 22));
-      xFormSymmetryREd.setLocation(new Point(68, 30));
+      xFormSymmetryREd.setLocation(new Point(70, 47));
       xFormSymmetryREd.setFont(new Font("Dialog", Font.PLAIN, 10));
     }
     return xFormSymmetryREd;
@@ -5115,7 +5121,7 @@ public class TinaInternalFrame extends JInternalFrame {
       xFormSymmetrySlider.setMaximum(100);
       xFormSymmetrySlider.setMinimum(-100);
       xFormSymmetrySlider.setValue(0);
-      xFormSymmetrySlider.setLocation(new Point(123, 30));
+      xFormSymmetrySlider.setLocation(new Point(125, 47));
       xFormSymmetrySlider.setSize(new Dimension(172, 22));
       xFormSymmetrySlider.setFont(new Font("Dialog", Font.BOLD, 10));
       xFormSymmetrySlider.addChangeListener(new javax.swing.event.ChangeListener() {
@@ -5154,7 +5160,7 @@ public class TinaInternalFrame extends JInternalFrame {
       xFormOpacityREd.setPreferredSize(new Dimension(55, 22));
       xFormOpacityREd.setText("");
       xFormOpacityREd.setSize(new Dimension(55, 22));
-      xFormOpacityREd.setLocation(new Point(68, 56));
+      xFormOpacityREd.setLocation(new Point(70, 73));
       xFormOpacityREd.setFont(new Font("Dialog", Font.PLAIN, 10));
     }
     return xFormOpacityREd;
@@ -5179,7 +5185,7 @@ public class TinaInternalFrame extends JInternalFrame {
       xFormOpacitySlider.setMinimum(0);
       xFormOpacitySlider.setValue(0);
       xFormOpacitySlider.setSize(new Dimension(172, 22));
-      xFormOpacitySlider.setLocation(new Point(123, 56));
+      xFormOpacitySlider.setLocation(new Point(125, 73));
       xFormOpacitySlider.setFont(new Font("Dialog", Font.BOLD, 10));
       xFormOpacitySlider.addChangeListener(new javax.swing.event.ChangeListener() {
         public void stateChanged(javax.swing.event.ChangeEvent e) {
@@ -5200,7 +5206,7 @@ public class TinaInternalFrame extends JInternalFrame {
       xFormDrawModeCmb = new JComboBox();
       xFormDrawModeCmb.setPreferredSize(new Dimension(120, 22));
       xFormDrawModeCmb.setSize(new Dimension(120, 22));
-      xFormDrawModeCmb.setLocation(new Point(68, 82));
+      xFormDrawModeCmb.setLocation(new Point(70, 99));
       xFormDrawModeCmb.setFont(new Font("Dialog", Font.BOLD, 10));
       xFormDrawModeCmb.addItemListener(new java.awt.event.ItemListener() {
         public void itemStateChanged(java.awt.event.ItemEvent e) {
@@ -8561,6 +8567,11 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton dancingFlamesClearMotionsBtn;
   private JButton dancingFlamesLoadProjectBtn;
   private JButton dancingFlamesSaveProjectBtn;
+  private JPanel panel_50;
+  private JButton dancingFlamesMotionLinkToAllBtn;
+  private JTable dancingFlamesMotionLinksTable;
+  private JButton dancingFlamesUnlinkFromAllMotionsBtn;
+  private JPanel tinaColorChooserPaletteImgPanel;
 
   /**
    * This method initializes renderBatchJobsScrollPane	
@@ -12057,40 +12068,21 @@ public class TinaInternalFrame extends JInternalFrame {
       panel_48.add(getPanel_45(), BorderLayout.CENTER);
 
       JPanel panel_1 = new JPanel();
-      panel_1.setPreferredSize(new Dimension(10, 32));
+      panel_1.setBorder(new TitledBorder(null, "Motion-Links", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+      panel_1.setPreferredSize(new Dimension(10, 120));
       panel_48.add(panel_1, BorderLayout.NORTH);
-      panel_1.setLayout(null);
+      panel_1.setLayout(new BorderLayout(0, 0));
+      panel_1.add(getPanel_50(), BorderLayout.EAST);
 
-      dancingFlamesLinkMotionBtn = new JButton();
-      dancingFlamesLinkMotionBtn.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-          tinaController.getDancingFractalsController().linkMotionBtn_clicked();
-        }
-      });
-      dancingFlamesLinkMotionBtn.setToolTipText("Link the currently selected motion to the currently selected flame property");
-      dancingFlamesLinkMotionBtn.setText("Link motion");
-      dancingFlamesLinkMotionBtn.setPreferredSize(new Dimension(125, 24));
-      dancingFlamesLinkMotionBtn.setMinimumSize(new Dimension(100, 24));
-      dancingFlamesLinkMotionBtn.setMaximumSize(new Dimension(32000, 24));
-      dancingFlamesLinkMotionBtn.setFont(new Font("Dialog", Font.BOLD, 10));
-      dancingFlamesLinkMotionBtn.setBounds(6, 4, 125, 24);
-      panel_1.add(dancingFlamesLinkMotionBtn);
+      JPanel panel_2 = new JPanel();
+      panel_1.add(panel_2, BorderLayout.CENTER);
+      panel_2.setLayout(new BorderLayout(0, 0));
 
-      dancingFlamesUnlinkMotionBtn = new JButton();
-      dancingFlamesUnlinkMotionBtn.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-          tinaController.getDancingFractalsController().unlinkMotionBtn_clicked();
-        }
-      });
-      dancingFlamesUnlinkMotionBtn.setToolTipText("Unlink the currently selected motion from the currently selected flame property");
-      dancingFlamesUnlinkMotionBtn.setText("Unlink motion");
-      dancingFlamesUnlinkMotionBtn.setPreferredSize(new Dimension(125, 24));
-      dancingFlamesUnlinkMotionBtn.setMinimumSize(new Dimension(100, 24));
-      dancingFlamesUnlinkMotionBtn.setMaximumSize(new Dimension(32000, 24));
-      dancingFlamesUnlinkMotionBtn.setFont(new Font("Dialog", Font.BOLD, 10));
-      dancingFlamesUnlinkMotionBtn.setBounds(401, 4, 125, 24);
-      panel_1.add(dancingFlamesUnlinkMotionBtn);
-      panel_1.add(getDancingFlamesSelectNextPropertyBtn());
+      JScrollPane scrollPane_2 = new JScrollPane();
+      panel_2.add(scrollPane_2, BorderLayout.CENTER);
+
+      dancingFlamesMotionLinksTable = new JTable();
+      scrollPane_2.setViewportView(dancingFlamesMotionLinksTable);
     }
     return panel_48;
   }
@@ -12225,6 +12217,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton getDancingFlamesSelectNextPropertyBtn() {
     if (dancingFlamesSelectNextPropertyBtn == null) {
       dancingFlamesSelectNextPropertyBtn = new JButton();
+      dancingFlamesSelectNextPropertyBtn.setBounds(0, 26, 224, 24);
       dancingFlamesSelectNextPropertyBtn.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
           tinaController.getDancingFractalsController().selectNextLinkedPropertyBtn_clicked();
@@ -12236,7 +12229,6 @@ public class TinaInternalFrame extends JInternalFrame {
       dancingFlamesSelectNextPropertyBtn.setMinimumSize(new Dimension(100, 24));
       dancingFlamesSelectNextPropertyBtn.setMaximumSize(new Dimension(32000, 24));
       dancingFlamesSelectNextPropertyBtn.setFont(new Font("Dialog", Font.BOLD, 10));
-      dancingFlamesSelectNextPropertyBtn.setBounds(167, 4, 196, 24);
     }
     return dancingFlamesSelectNextPropertyBtn;
   }
@@ -12298,5 +12290,81 @@ public class TinaInternalFrame extends JInternalFrame {
 
   public JButton getDancingFlamesSaveProjectBtn() {
     return dancingFlamesSaveProjectBtn;
+  }
+
+  private JPanel getPanel_50() {
+    if (panel_50 == null) {
+      panel_50 = new JPanel();
+      panel_50.setPreferredSize(new Dimension(230, 10));
+      panel_50.setLayout(null);
+
+      dancingFlamesLinkMotionBtn = new JButton();
+      dancingFlamesLinkMotionBtn.setBounds(0, 0, 110, 24);
+      panel_50.add(dancingFlamesLinkMotionBtn);
+      dancingFlamesLinkMotionBtn.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getDancingFractalsController().linkMotionBtn_clicked();
+        }
+      });
+      dancingFlamesLinkMotionBtn.setToolTipText("Link the currently selected motion to the currently selected flame property");
+      dancingFlamesLinkMotionBtn.setText("Link motion");
+      dancingFlamesLinkMotionBtn.setPreferredSize(new Dimension(125, 24));
+      dancingFlamesLinkMotionBtn.setMinimumSize(new Dimension(100, 24));
+      dancingFlamesLinkMotionBtn.setMaximumSize(new Dimension(32000, 24));
+      dancingFlamesLinkMotionBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+
+      dancingFlamesUnlinkMotionBtn = new JButton();
+      dancingFlamesUnlinkMotionBtn.setBounds(114, 0, 110, 24);
+      panel_50.add(dancingFlamesUnlinkMotionBtn);
+      dancingFlamesUnlinkMotionBtn.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getDancingFractalsController().unlinkMotionBtn_clicked();
+        }
+      });
+      dancingFlamesUnlinkMotionBtn.setToolTipText("Unlink the currently selected motion from the currently selected flame property");
+      dancingFlamesUnlinkMotionBtn.setText("Unlink motion");
+      dancingFlamesUnlinkMotionBtn.setPreferredSize(new Dimension(125, 24));
+      dancingFlamesUnlinkMotionBtn.setMinimumSize(new Dimension(100, 24));
+      dancingFlamesUnlinkMotionBtn.setMaximumSize(new Dimension(32000, 24));
+      dancingFlamesUnlinkMotionBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      panel_50.add(getDancingFlamesSelectNextPropertyBtn());
+
+      dancingFlamesMotionLinkToAllBtn = new JButton();
+      dancingFlamesMotionLinkToAllBtn.setToolTipText("Link the currently selected motion to all flames containing the currently selected flame property");
+      dancingFlamesMotionLinkToAllBtn.setText("Link to all");
+      dancingFlamesMotionLinkToAllBtn.setPreferredSize(new Dimension(125, 24));
+      dancingFlamesMotionLinkToAllBtn.setMinimumSize(new Dimension(100, 24));
+      dancingFlamesMotionLinkToAllBtn.setMaximumSize(new Dimension(32000, 24));
+      dancingFlamesMotionLinkToAllBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      dancingFlamesMotionLinkToAllBtn.setBounds(0, 51, 110, 24);
+      panel_50.add(dancingFlamesMotionLinkToAllBtn);
+
+      dancingFlamesUnlinkFromAllMotionsBtn = new JButton();
+      dancingFlamesUnlinkFromAllMotionsBtn.setToolTipText("Unlink the currently selected motion from all flame properties");
+      dancingFlamesUnlinkFromAllMotionsBtn.setText("Unlink all");
+      dancingFlamesUnlinkFromAllMotionsBtn.setPreferredSize(new Dimension(125, 24));
+      dancingFlamesUnlinkFromAllMotionsBtn.setMinimumSize(new Dimension(100, 24));
+      dancingFlamesUnlinkFromAllMotionsBtn.setMaximumSize(new Dimension(32000, 24));
+      dancingFlamesUnlinkFromAllMotionsBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      dancingFlamesUnlinkFromAllMotionsBtn.setBounds(114, 51, 110, 24);
+      panel_50.add(dancingFlamesUnlinkFromAllMotionsBtn);
+    }
+    return panel_50;
+  }
+
+  public JButton getDancingFlamesMotionLinkToAllBtn() {
+    return dancingFlamesMotionLinkToAllBtn;
+  }
+
+  public JTable getDancingFlamesMotionLinksTable() {
+    return dancingFlamesMotionLinksTable;
+  }
+
+  public JButton getDancingFlamesUnlinkFromAllMotionsBtn() {
+    return dancingFlamesUnlinkFromAllMotionsBtn;
+  }
+
+  public JPanel getTinaCholorChooserPaletteImgPanel() {
+    return tinaColorChooserPaletteImgPanel;
   }
 } //  @jve:decl-index=0:visual-constraint="10,10"

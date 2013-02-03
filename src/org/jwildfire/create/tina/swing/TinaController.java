@@ -319,7 +319,9 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
   // palette -> create
   private final JTextField paletteRandomPointsREd;
   private final JPanel paletteImgPanel;
+  private final JPanel colorChooserPaletteImgPanel;
   private ImagePanel palettePanel;
+  private ImagePanel colorChooserPalettePanel;
   // palette -> transform
   private final JWFNumberField paletteShiftREd;
   private final JSlider paletteShiftSlider;
@@ -461,7 +463,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       JWFNumberField pVibrancyREd, JSlider pVibrancySlider, JWFNumberField pFilterRadiusREd, JSlider pFilterRadiusSlider,
       JWFNumberField pDEFilterRadiusREd, JSlider pDEFilterRadiusSlider, JWFNumberField pDEFilterAmountREd, JSlider pDEFilterAmountSlider, JWFNumberField pGammaThresholdREd,
       JSlider pGammaThresholdSlider, JCheckBox pBGTransparencyCBx, JWFNumberField pBGColorRedREd, JSlider pBGColorRedSlider, JWFNumberField pBGColorGreenREd, JSlider pBGColorGreenSlider, JWFNumberField pBGColorBlueREd,
-      JSlider pBGColorBlueSlider, JTextField pPaletteRandomPointsREd, JPanel pPaletteImgPanel, JWFNumberField pPaletteShiftREd, JSlider pPaletteShiftSlider,
+      JSlider pBGColorBlueSlider, JTextField pPaletteRandomPointsREd, JPanel pPaletteImgPanel, JPanel pColorChooserPaletteImgPanel, JWFNumberField pPaletteShiftREd, JSlider pPaletteShiftSlider,
       JWFNumberField pPaletteRedREd, JSlider pPaletteRedSlider, JWFNumberField pPaletteGreenREd, JSlider pPaletteGreenSlider, JWFNumberField pPaletteBlueREd,
       JSlider pPaletteBlueSlider, JWFNumberField pPaletteHueREd, JSlider pPaletteHueSlider, JWFNumberField pPaletteSaturationREd, JSlider pPaletteSaturationSlider,
       JWFNumberField pPaletteContrastREd, JSlider pPaletteContrastSlider, JWFNumberField pPaletteGammaREd, JSlider pPaletteGammaSlider, JWFNumberField pPaletteBrightnessREd,
@@ -509,7 +511,8 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       JTree pDancingFlamesFlamePropertiesTree,
       JPanel pDancingFlamesMotionPropertyPnl, JTable pDancingFlamesMotionTable, JComboBox pDancingFlamesAddMotionCmb, JButton pDancingFlamesAddMotionBtn,
       JButton pDancingFlamesDeleteMotionBtn, JButton pDancingFlamesLinkMotionBtn, JButton pDancingFlamesUnlinkMotionBtn, JButton pDancingFlamesSelectNextPropertyBtn,
-      JComboBox pDancingFlamesCreateMotionsCmb, JButton pDancingFlamesClearMotionsBtn, JButton pDancingFlamesLoadProjectBtn, JButton pDancingFlamesSaveProjectBtn) {
+      JComboBox pDancingFlamesCreateMotionsCmb, JButton pDancingFlamesClearMotionsBtn, JButton pDancingFlamesLoadProjectBtn, JButton pDancingFlamesSaveProjectBtn,
+      JButton pDancingFlamesMotionLinkToAllBtn, JButton pDancingFlamesUnlinkFromAllMotionsBtn, JTable pDancingFlamesMotionLinksTable) {
     tinaFrame = pTinaFrame;
     tinaFrameTitle = tinaFrame.getTitle();
     errorHandler = pErrorHandler;
@@ -526,7 +529,8 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
         pDancingFlamesDrawTrianglesCBx, pDancingFlamesDrawFFTCBx, pDancingFlamesDrawFPSCBx, pDancingFlamesFlamePropertiesTree,
         pDancingFlamesMotionPropertyPnl, pDancingFlamesMotionTable, pDancingFlamesAddMotionCmb, pDancingFlamesAddMotionBtn,
         pDancingFlamesDeleteMotionBtn, pDancingFlamesLinkMotionBtn, pDancingFlamesUnlinkMotionBtn, pDancingFlamesSelectNextPropertyBtn,
-        pDancingFlamesCreateMotionsCmb, pDancingFlamesClearMotionsBtn, pDancingFlamesLoadProjectBtn, pDancingFlamesSaveProjectBtn);
+        pDancingFlamesCreateMotionsCmb, pDancingFlamesClearMotionsBtn, pDancingFlamesLoadProjectBtn, pDancingFlamesSaveProjectBtn,
+        pDancingFlamesMotionLinkToAllBtn, pDancingFlamesUnlinkFromAllMotionsBtn, pDancingFlamesMotionLinksTable);
 
     cameraRollREd = pCameraRollREd;
     cameraRollSlider = pCameraRollSlider;
@@ -584,6 +588,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     bgColorBlueSlider = pBGColorBlueSlider;
     paletteRandomPointsREd = pPaletteRandomPointsREd;
     paletteImgPanel = pPaletteImgPanel;
+    colorChooserPaletteImgPanel = pColorChooserPaletteImgPanel;
     paletteShiftREd = pPaletteShiftREd;
     paletteShiftSlider = pPaletteShiftSlider;
     paletteRedREd = pPaletteRedREd;
@@ -1137,6 +1142,19 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     return palettePanel;
   }
 
+  private ImagePanel getColorChooserPalettePanel() {
+    if (colorChooserPalettePanel == null) {
+      int width = colorChooserPaletteImgPanel.getWidth();
+      int height = colorChooserPaletteImgPanel.getHeight();
+      SimpleImage img = new SimpleImage(width, height);
+      img.fillBackground(0, 0, 0);
+      colorChooserPalettePanel = new ImagePanel(img, 0, 0, colorChooserPaletteImgPanel.getWidth());
+      colorChooserPaletteImgPanel.add(colorChooserPalettePanel, BorderLayout.CENTER);
+      colorChooserPaletteImgPanel.getParent().validate();
+    }
+    return colorChooserPalettePanel;
+  }
+
   public void refreshFlameImage(boolean pMouseDown) {
     refreshFlameImage(true, pMouseDown);
   }
@@ -1237,8 +1255,8 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
         }
       }
     }
-    centerPanel.invalidate();
-    centerPanel.validate();
+    centerPanel.getParent().validate();
+    centerPanel.repaint();
   }
 
   @Override
@@ -1753,14 +1771,17 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
 
   private void refreshPaletteImg() {
     if (currFlame != null) {
-      ImagePanel imgPanel = getPalettePanel();
-      int width = imgPanel.getWidth();
-      int height = imgPanel.getHeight();
-      if (width >= 16 && height >= 16) {
-        SimpleImage img = new RGBPaletteRenderer().renderHorizPalette(currFlame.getPalette(), width, height);
-        imgPanel.setImage(img);
+      ImagePanel panels[] = { getPalettePanel(), getColorChooserPalettePanel() };
+      for (ImagePanel imgPanel : panels) {
+        int width = imgPanel.getWidth();
+        int height = imgPanel.getHeight();
+        if (width >= 16 && height >= 4) {
+          SimpleImage img = new RGBPaletteRenderer().renderHorizPalette(currFlame.getPalette(), width, height);
+          imgPanel.setImage(img);
+        }
+        imgPanel.getParent().validate();
+        imgPanel.repaint();
       }
-      palettePanel.getParent().validate();
     }
   }
 
