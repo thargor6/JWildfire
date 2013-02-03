@@ -64,8 +64,8 @@ public class JulianDiscRandomFlameGenerator extends RandomFlameGenerator {
         String fncName = Math.random() > 0.5 ? getNonBlurRandomFunc() : "gaussian_blur";
         xForm.addVariation(0.001 + Math.random() * 0.039, VariationFuncList.getVariationFuncInstance(fncName, true));
       }
+      xForm.setColorSymmetry(-1.0);
       xForm.setColor(0.0);
-      xForm.setColorSymmetry(0.0);
     }
     // 2nd xForm
     {
@@ -88,9 +88,7 @@ public class JulianDiscRandomFlameGenerator extends RandomFlameGenerator {
       else if (Math.random() < 0.5) {
         XFormTransformService.rotate(xForm, -45.0, false);
       }
-      if (Math.random() < 0.25) {
-        //        XFormTransformService.scale(xForm, 0.2 + Math.random() * 1.2, true, true, false);
-      }
+      xForm.setColorSymmetry(Math.random());
     }
     // final
     if (Math.random() < 0.33) {

@@ -309,6 +309,10 @@ public class VariationFuncList {
     registerVariationFunc(CircusFunc.class);
     registerVariationFunc(LazyTravisFunc.class);
 
+    registerVariationFunc(Hypertile3DFunc.class);
+    registerVariationFunc(Hypertile3D1Func.class);
+    registerVariationFunc(Hypertile3D2Func.class);
+    registerVariationFunc(Poincare3DFunc.class);
     //    registerVariationFunc(FractFormulaJuliaWFFunc.class);
     //    registerVariationFunc(FractFormulaMandWFFunc.class);
 
