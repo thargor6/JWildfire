@@ -19,11 +19,11 @@ package org.jwildfire.create.tina.dance.model;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PropertyNode extends AbstractProperty {
+public class PropertyModel extends AbstractProperty {
   private final List<PlainProperty> properties = new ArrayList<PlainProperty>();
-  private final List<PropertyNode> chields = new ArrayList<PropertyNode>();
+  private final List<PropertyModel> chields = new ArrayList<PropertyModel>();
 
-  public PropertyNode(String pName, Class<?> pType) {
+  public PropertyModel(String pName, Class<?> pType) {
     super(pName, pType);
   }
 
@@ -31,7 +31,7 @@ public class PropertyNode extends AbstractProperty {
     return properties;
   }
 
-  public List<PropertyNode> getChields() {
+  public List<PropertyModel> getChields() {
     return chields;
   }
 
@@ -42,7 +42,7 @@ public class PropertyNode extends AbstractProperty {
     return sb.toString();
   }
 
-  private void addToXML(StringBuilder pSB, PropertyNode pNode, int pDepth) {
+  private void addToXML(StringBuilder pSB, PropertyModel pNode, int pDepth) {
     for (int i = 0; i < pDepth; i++)
       pSB.append("  ");
     pSB.append("<" + pNode.getName());
@@ -50,7 +50,7 @@ public class PropertyNode extends AbstractProperty {
       pSB.append(" " + property.getName());
     }
     pSB.append(">\n");
-    for (PropertyNode node : pNode.getChields()) {
+    for (PropertyModel node : pNode.getChields()) {
       addToXML(pSB, node, pDepth + 1);
     }
     for (int i = 0; i < pDepth; i++)

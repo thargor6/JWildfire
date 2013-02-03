@@ -16,7 +16,11 @@
 */
 package org.jwildfire.create.tina.dance.model;
 
-public abstract class AbstractProperty {
+import java.io.Serializable;
+
+public abstract class AbstractProperty implements Serializable {
+  private static final long serialVersionUID = 1L;
+
   protected final String name;
   protected final Class<?> type;
 

@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2013 Andreas Maschke
+  Copyright (C) 1995-2012 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -14,39 +14,29 @@
   if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
   02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
-package org.jwildfire.create.tina.dance;
+package org.jwildfire.create.tina.dance.motion;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
-import org.jwildfire.create.tina.base.Flame;
-import org.jwildfire.create.tina.dance.motion.Motion;
-import org.jwildfire.create.tina.dance.motion.MotionLink;
-
-public class DancingFlameProject implements Serializable {
+public abstract class MotionLink implements Serializable {
   private static final long serialVersionUID = 1L;
-  private List<Flame> flames = new ArrayList<Flame>();
-  private List<Motion> motions = new ArrayList<Motion>();
-  private List<MotionLink> motionLinks = new ArrayList<MotionLink>();
+  private Motion motion;
+  private String[] properyPath;
 
-  public List<Flame> getFlames() {
-    return flames;
+  public Motion getMotion() {
+    return motion;
   }
 
-  public List<Motion> getMotions() {
-    return motions;
+  public void setMotion(Motion motion) {
+    this.motion = motion;
   }
 
-  public List<MotionLink> getLinks(Motion pMotion) {
-    List<MotionLink> res = new ArrayList<MotionLink>();
-    for (MotionLink link : motionLinks) {
-      if (link.getMotion().equals(pMotion)) {
-        res.add(link);
-      }
+  public String[] getProperyPath() {
+    return properyPath;
+  }
 
-    }
-    return res;
+  public void setProperyPath(String[] properyPath) {
+    this.properyPath = properyPath;
   }
 
 }

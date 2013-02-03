@@ -33,8 +33,8 @@ public class AnimationModelService {
   }
 
   @SuppressWarnings("unchecked")
-  public static PropertyNode createModel(Flame pFlame) {
-    PropertyNode res = new PropertyNode("flame", pFlame.getClass());
+  public static PropertyModel createModel(Flame pFlame) {
+    PropertyModel res = new PropertyModel("flame", pFlame.getClass());
     Class<?> cls = pFlame.getClass();
     for (Field field : cls.getDeclaredFields()) {
       field.setAccessible(true);
@@ -83,10 +83,10 @@ public class AnimationModelService {
   private final static String[] ADD_XFORM_PROPS = { PROPNAME_ORIGIN_X, PROPNAME_ORIGIN_Y, PROPNAME_ANGLE, PROPNAME_ZOOM, PROPNAME_POST_ORIGIN_X, PROPNAME_POST_ORIGIN_Y, PROPNAME_POST_ANGLE, PROPNAME_POST_ZOOM };
 
   @SuppressWarnings("unchecked")
-  private static void addXFormToModel(PropertyNode pNode, boolean pIsFinal, int pIndex, XForm pXForm) {
+  private static void addXFormToModel(PropertyModel pNode, boolean pIsFinal, int pIndex, XForm pXForm) {
     Class<?> cls = pXForm.getClass();
     String fieldname = pIsFinal ? PROPNAME_FINALXFORM : PROPNAME_XFORM;
-    PropertyNode xFormNode = new PropertyNode(fieldname + (pIndex + 1), cls);
+    PropertyModel xFormNode = new PropertyModel(fieldname + (pIndex + 1), cls);
     pNode.getChields().add(xFormNode);
     for (String propName : ADD_XFORM_PROPS) {
       PlainProperty property = new PlainProperty(propName, Double.class);
@@ -123,9 +123,9 @@ public class AnimationModelService {
     }
   }
 
-  private static void addVariationToModel(PropertyNode pXFormNode, Variation pVariation) {
+  private static void addVariationToModel(PropertyModel pXFormNode, Variation pVariation) {
     Class<?> cls = pVariation.getClass();
-    PropertyNode variationNode = new PropertyNode(pVariation.getFunc().getName(), cls);
+    PropertyModel variationNode = new PropertyModel(pVariation.getFunc().getName(), cls);
     pXFormNode.getChields().add(variationNode);
     for (Field field : cls.getDeclaredFields()) {
       field.setAccessible(true);

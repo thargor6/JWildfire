@@ -53,7 +53,7 @@ import org.jwildfire.create.tina.dance.action.ActionRecorder;
 import org.jwildfire.create.tina.dance.action.PostRecordFlameGenerator;
 import org.jwildfire.create.tina.dance.model.AnimationModelService;
 import org.jwildfire.create.tina.dance.model.PlainProperty;
-import org.jwildfire.create.tina.dance.model.PropertyNode;
+import org.jwildfire.create.tina.dance.model.PropertyModel;
 import org.jwildfire.create.tina.dance.motion.Motion;
 import org.jwildfire.create.tina.dance.motion.MotionCreatorType;
 import org.jwildfire.create.tina.dance.motion.MotionType;
@@ -108,7 +108,6 @@ public class DancingFractalsController {
   private final JCheckBox drawFFTCbx;
   private final JCheckBox drawFPSCbx;
   private final JTree flamePropertiesTree;
-  // TODO enable/disable
   private final JPanel motionPropertyRootPnl;
   private PropertyPanel motionPropertyPnl = null;
   private final JTable motionTable;
@@ -575,7 +574,7 @@ public class DancingFractalsController {
     FlamePropertiesTreeNode<Object> root = new FlamePropertiesTreeNode<Object>("Flames", null, true);
     for (Flame flame : project.getFlames()) {
       FlamePropertiesTreeNode<Flame> flameNode = new FlamePropertiesTreeNode<Flame>(getFlameCaption(flame), flame, true);
-      PropertyNode model = AnimationModelService.createModel(flame);
+      PropertyModel model = AnimationModelService.createModel(flame);
       addNodesToTree(model, flameNode);
       root.add(flameNode);
     }
@@ -583,8 +582,8 @@ public class DancingFractalsController {
   }
 
   @SuppressWarnings({ "rawtypes", "unchecked" })
-  private void addNodesToTree(PropertyNode pModel, FlamePropertiesTreeNode<?> pParentNode) {
-    for (PropertyNode subNode : pModel.getChields()) {
+  private void addNodesToTree(PropertyModel pModel, FlamePropertiesTreeNode<?> pParentNode) {
+    for (PropertyModel subNode : pModel.getChields()) {
       FlamePropertiesTreeNode child = new FlamePropertiesTreeNode(subNode.getName(), subNode, true);
       pParentNode.add(child);
       addNodesToTree(subNode, child);
@@ -680,8 +679,13 @@ public class DancingFractalsController {
   public void deleteFlameBtn_clicked() {
     Flame flame = poolFlameHolder.getFlame();
     if (flame != null) {
-      project.getFlames().remove(flame);
+      int idx = flamePropertiesTree.getSelectionRows()[0];
+      // cant remove the flame by object reference because its a clone
+      project.getFlames().remove(idx);
       refreshProjectFlames();
+      if (project.getFlames().size() == 0) {
+        flamePropertiesTree_changed(null);
+      }
       enableControls();
     }
   }
@@ -708,14 +712,47 @@ public class DancingFractalsController {
     randomCountIEd.setEnabled(!running);
     genRandFlamesBtn.setEnabled(!running);
     randomGenCmb.setEnabled(!running);
-    flameToEditorBtn.setEnabled(project.getFlames().size() > 0 && poolFlameHolder.getFlame() != null);
-    deleteFlameBtn.setEnabled(project.getFlames().size() > 0 && poolFlameHolder.getFlame() != null);
+    boolean flameSelected = poolFlameHolder.getFlame() != null;
+    flameToEditorBtn.setEnabled(flameSelected);
+    deleteFlameBtn.setEnabled(flameSelected);
+
     framesPerSecondIEd.setEnabled(!running);
     borderSizeSlider.setEnabled(true);
     morphFrameCountIEd.setEnabled(true);
     startShowButton.setEnabled(!running && project.getFlames().size() > 0 && soundFilename != null && soundFilename.length() > 0 && fft != null);
     stopShowButton.setEnabled(running);
     doRecordCBx.setEnabled(!running);
+
+    motionTable.setEnabled(!running);
+    addMotionCmb.setEnabled(!running);
+    addMotionBtn.setEnabled(!running);
+    Motion selMotion = motionTable.getSelectedRow() >= 0 && motionTable.getSelectedRow() < project.getMotions().size() ? project.getMotions().get(motionTable.getSelectedRow()) : null;
+
+    deleteMotionBtn.setEnabled(!running && selMotion != null);
+    {
+      boolean linkMotionEnabled = false;
+      boolean unlinkMotionEnabled = false;
+      boolean selectNextLinkEnabled = false;
+      if (!running) {
+        FlamePropertiesTreeNode<?> selectedLeaf = getSelectedLeaf();
+        if (selectedLeaf != null) {
+          Object data = selectedLeaf.getNodeData();
+          boolean propertySelected = data != null && data instanceof PlainProperty;
+          if (propertySelected && selMotion != null) {
+
+          }
+        }
+
+        selectNextLinkEnabled = selMotion != null && project.getLinks(selMotion).size() > 0;
+      }
+      linkMotionBtn.setEnabled(linkMotionEnabled);
+      unlinkMotionBtn.setEnabled(unlinkMotionEnabled);
+      selectNextPropertyBtn.setEnabled(selectNextLinkEnabled);
+    }
+    createMotionsCmb.setEnabled(!running);
+    clearMotionsBtn.setEnabled(!running && project.getMotions().size() > 0);
+    loadProjectBtn.setEnabled(!running);
+    saveProjectBtn.setEnabled(!running);
   }
 
   protected TinaController getParentCtrl() {
@@ -752,32 +789,45 @@ public class DancingFractalsController {
     }
   }
 
+  private FlamePropertiesTreeNode<?> getSelectedLeaf() {
+    if (flamePropertiesTree.getSelectionPath() != null) {
+      Object[] selection = flamePropertiesTree.getSelectionPath().getPath();
+      if (selection != null && selection.length > 0) {
+        return (FlamePropertiesTreeNode<?>) selection[selection.length - 1];
+      }
+    }
+    return null;
+  }
+
   private class PoolFlameHolder implements FlameHolder {
 
     @Override
     public Flame getFlame() {
-      Object[] selection = flamePropertiesTree.getSelectionPaths();
-      if (selection != null && selection.length > 1) {
-        FlamePropertiesTreeNode<?> flameNode = (FlamePropertiesTreeNode<?>) selection[1];
-        Flame selFlame = (Flame) flameNode.getNodeData();
-        return selFlame;
+      if (flamePropertiesTree.getSelectionPath() != null) {
+        Object[] selection = flamePropertiesTree.getSelectionPath().getPath();
+        if (selection != null && selection.length > 1) {
+          FlamePropertiesTreeNode<?> flameNode = (FlamePropertiesTreeNode<?>) selection[1];
+          Flame selFlame = (Flame) flameNode.getNodeData();
+          return selFlame;
+        }
       }
       return null;
     }
-
   }
 
   public void flamePropertiesTree_changed(TreeSelectionEvent e) {
     if (!refreshing) {
-      TreePath path = e.getNewLeadSelectionPath();
+      Flame selFlame = null;
+      TreePath path = e != null ? e.getNewLeadSelectionPath() : null;
       if (path != null) {
         Object[] selection = path.getPath();
         if (selection != null && selection.length > 1) {
           FlamePropertiesTreeNode<?> flameNode = (FlamePropertiesTreeNode<?>) selection[1];
-          Flame selFlame = (Flame) flameNode.getNodeData();
-          refreshPoolPreviewFlameImage(selFlame);
+          selFlame = (Flame) flameNode.getNodeData();
         }
       }
+      refreshPoolPreviewFlameImage(selFlame);
+      enableControls();
     }
   }
 
@@ -807,7 +857,6 @@ public class DancingFractalsController {
   }
 
   public void clearMotionsBtn_clicked() {
-    // TODO Auto-generated method stub
 
   }
 
@@ -863,6 +912,7 @@ public class DancingFractalsController {
 
         motionPropertyRootPnl.add(motionPropertyPnl,
             BorderLayout.CENTER);
+        enableControls();
       }
       motionPropertyRootPnl.invalidate();
       motionPropertyRootPnl.validate();
