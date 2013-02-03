@@ -121,6 +121,9 @@ public class DancingFractalsController {
   private final JButton clearMotionsBtn;
   private final JButton loadProjectBtn;
   private final JButton saveProjectBtn;
+  private final JButton motionLinkToAllBtn;
+  private final JButton unlinkFromAllMotionsBtn;
+  private final JTable motionLinksTable;
 
   JLayerInterface jLayer = new JLayerInterface();
   private FlamePanel flamePanel = null;
@@ -143,7 +146,7 @@ public class DancingFractalsController {
       JButton pStartShowButton, JButton pStopShowButton, JCheckBox pDoRecordCBx, JComboBox pFlamesCmb, JCheckBox pDrawTrianglesCbx, JCheckBox pDrawFFTCbx, JCheckBox pDrawFPSCbx, JTree pFlamePropertiesTree,
       JPanel pMotionPropertyRootPnl, JTable pMotionTable, JComboBox pAddMotionCmb, JButton pAddMotionBtn, JButton pDeleteMotionBtn,
       JButton pLinkMotionBtn, JButton pUnlinkMotionBtn, JButton pSelectNextPropertyBtn, JComboBox pCreateMotionsCmb, JButton pClearMotionsBtn,
-      JButton pLoadProjectBtn, JButton pSaveProjectBtn) {
+      JButton pLoadProjectBtn, JButton pSaveProjectBtn, JButton pMotionLinkToAllBtn, JButton pUnlinkFromAllMotionsBtn, JTable pMotionLinksTable) {
     parentCtrl = pParent;
     errorHandler = pErrorHandler;
     prefs = parentCtrl.getPrefs();
@@ -181,6 +184,9 @@ public class DancingFractalsController {
     clearMotionsBtn = pClearMotionsBtn;
     loadProjectBtn = pLoadProjectBtn;
     saveProjectBtn = pSaveProjectBtn;
+    motionLinkToAllBtn = pMotionLinkToAllBtn;
+    unlinkFromAllMotionsBtn = pUnlinkFromAllMotionsBtn;
+    motionLinksTable = pMotionLinksTable;
 
     addMotionCmb.addItem(MotionType.FFT);
     addMotionCmb.addItem(MotionType.ROTATE);
