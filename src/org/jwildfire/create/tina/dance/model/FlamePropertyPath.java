@@ -16,11 +16,38 @@
 */
 package org.jwildfire.create.tina.dance.model;
 
-public class PlainProperty extends AbstractProperty {
-  private static final long serialVersionUID = 1L;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
-  public PlainProperty(String pName, Class<?> pType) {
-    super(pName, pType);
+import org.jwildfire.create.tina.base.Flame;
+
+public class FlamePropertyPath implements Serializable {
+  private static final long serialVersionUID = 1L;
+  private final Flame flame;
+  private final List<AbstractProperty> propertyPath = new ArrayList<AbstractProperty>();
+
+  public FlamePropertyPath(Flame pFlame) {
+    flame = pFlame;
   }
 
+  public Flame getFlame() {
+    return flame;
+  }
+
+  public List<AbstractProperty> getPropertyPath() {
+    return propertyPath;
+  }
+
+  public String getPathCaption() {
+    StringBuilder sb = new StringBuilder();
+    sb.append("");
+    for (int i = 0; i < propertyPath.size(); i++) {
+      sb.append(propertyPath.get(i).name);
+      if (i < propertyPath.size() - 1) {
+        sb.append(".");
+      }
+    }
+    return sb.toString();
+  }
 }

@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2012 Andreas Maschke
+  Copyright (C) 1995-2013 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -18,25 +18,17 @@ package org.jwildfire.create.tina.dance.motion;
 
 import java.io.Serializable;
 
-public abstract class MotionLink implements Serializable {
+import org.jwildfire.create.tina.dance.model.FlamePropertyPath;
+
+public class MotionLink implements Serializable {
   private static final long serialVersionUID = 1L;
-  private Motion motion;
-  private String[] properyPath;
+  private final FlamePropertyPath properyPath;
 
-  public Motion getMotion() {
-    return motion;
+  public MotionLink(FlamePropertyPath pProperyPath) {
+    properyPath = pProperyPath;
   }
 
-  public void setMotion(Motion motion) {
-    this.motion = motion;
-  }
-
-  public String[] getProperyPath() {
+  public FlamePropertyPath getProperyPath() {
     return properyPath;
   }
-
-  public void setProperyPath(String[] properyPath) {
-    this.properyPath = properyPath;
-  }
-
 }

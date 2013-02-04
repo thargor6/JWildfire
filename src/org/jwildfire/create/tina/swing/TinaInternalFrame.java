@@ -11786,7 +11786,7 @@ public class TinaInternalFrame extends JInternalFrame {
       });
       dancingFlamesDrawTrianglesCBx.setSelected(true);
       dancingFlamesDrawTrianglesCBx.setMaximumSize(new Dimension(160, 18));
-      dancingFlamesDrawTrianglesCBx.setPreferredSize(new Dimension(160, 18));
+      dancingFlamesDrawTrianglesCBx.setPreferredSize(new Dimension(110, 18));
       dancingFlamesDrawTrianglesCBx.setMinimumSize(new Dimension(140, 18));
     }
     return dancingFlamesDrawTrianglesCBx;
@@ -11803,7 +11803,7 @@ public class TinaInternalFrame extends JInternalFrame {
         }
       });
       dancingFlamesDrawFFTCBx.setSelected(true);
-      dancingFlamesDrawFFTCBx.setPreferredSize(new Dimension(160, 18));
+      dancingFlamesDrawFFTCBx.setPreferredSize(new Dimension(110, 18));
       dancingFlamesDrawFFTCBx.setMinimumSize(new Dimension(140, 18));
       dancingFlamesDrawFFTCBx.setMaximumSize(new Dimension(160, 18));
     }
@@ -11821,7 +11821,7 @@ public class TinaInternalFrame extends JInternalFrame {
         }
       });
       dancingFlamesDrawFPSCBx.setSelected(true);
-      dancingFlamesDrawFPSCBx.setPreferredSize(new Dimension(160, 18));
+      dancingFlamesDrawFPSCBx.setPreferredSize(new Dimension(110, 18));
       dancingFlamesDrawFPSCBx.setMinimumSize(new Dimension(140, 18));
       dancingFlamesDrawFPSCBx.setMaximumSize(new Dimension(160, 18));
     }
@@ -12039,7 +12039,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JPanel getPanel_46() {
     if (panel_46 == null) {
       panel_46 = new JPanel();
-      panel_46.setPreferredSize(new Dimension(560, 10));
+      panel_46.setPreferredSize(new Dimension(620, 10));
       panel_46.setLayout(new BorderLayout(0, 0));
       panel_46.add(getPanel_47(), BorderLayout.NORTH);
       panel_46.add(getPanel_48(), BorderLayout.CENTER);
@@ -12100,7 +12100,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JPanel getPanel_38() {
     if (panel_38 == null) {
       panel_38 = new JPanel();
-      panel_38.setPreferredSize(new Dimension(10, 70));
+      panel_38.setPreferredSize(new Dimension(10, 62));
       panel_38.setLayout(null);
 
       dancingFlamesAddMotionCmb = new JComboBox();
@@ -12247,7 +12247,7 @@ public class TinaInternalFrame extends JInternalFrame {
       dancingFlamesCreateMotionsBtn.setMinimumSize(new Dimension(100, 24));
       dancingFlamesCreateMotionsBtn.setMaximumSize(new Dimension(32000, 24));
       dancingFlamesCreateMotionsBtn.setFont(new Font("Dialog", Font.BOLD, 10));
-      dancingFlamesCreateMotionsBtn.setBounds(6, 40, 125, 24);
+      dancingFlamesCreateMotionsBtn.setBounds(5, 31, 125, 24);
     }
     return dancingFlamesCreateMotionsBtn;
   }
@@ -12261,7 +12261,7 @@ public class TinaInternalFrame extends JInternalFrame {
       dancingFlamesCreateMotionsCmb.setMaximumRowCount(32);
       dancingFlamesCreateMotionsCmb.setFont(new Font("Dialog", Font.BOLD, 10));
       dancingFlamesCreateMotionsCmb.setAlignmentX(1.0f);
-      dancingFlamesCreateMotionsCmb.setBounds(132, 40, 180, 24);
+      dancingFlamesCreateMotionsCmb.setBounds(131, 31, 180, 24);
     }
     return dancingFlamesCreateMotionsCmb;
   }
@@ -12279,7 +12279,7 @@ public class TinaInternalFrame extends JInternalFrame {
       dancingFlamesClearMotionsBtn.setMinimumSize(new Dimension(100, 24));
       dancingFlamesClearMotionsBtn.setMaximumSize(new Dimension(32000, 24));
       dancingFlamesClearMotionsBtn.setFont(new Font("Dialog", Font.BOLD, 10));
-      dancingFlamesClearMotionsBtn.setBounds(401, 40, 125, 24);
+      dancingFlamesClearMotionsBtn.setBounds(400, 31, 125, 24);
     }
     return dancingFlamesClearMotionsBtn;
   }

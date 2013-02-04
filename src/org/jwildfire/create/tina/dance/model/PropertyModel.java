@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PropertyModel extends AbstractProperty {
+  private static final long serialVersionUID = 1L;
   private final List<PlainProperty> properties = new ArrayList<PlainProperty>();
   private final List<PropertyModel> chields = new ArrayList<PropertyModel>();
 
