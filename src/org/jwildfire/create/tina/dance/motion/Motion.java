@@ -56,6 +56,10 @@ public abstract class Motion extends ManagedObject implements Serializable {
   }
 
   public boolean hasLink(FlamePropertyPath pSelPath) {
+    return getLink(pSelPath) != null;
+  }
+
+  public MotionLink getLink(FlamePropertyPath pSelPath) {
     for (MotionLink link : motionLinks) {
       if (pSelPath.getFlame().isEqual(link.getProperyPath().getFlame()) && pSelPath.getPropertyPath().size() == link.getProperyPath().getPropertyPath().size()) {
         boolean equal = true;
@@ -68,10 +72,10 @@ public abstract class Motion extends ManagedObject implements Serializable {
           }
         }
         if (equal) {
-          return true;
+          return link;
         }
       }
     }
-    return false;
+    return null;
   }
 }

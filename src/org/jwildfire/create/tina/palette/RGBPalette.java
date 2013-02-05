@@ -405,11 +405,11 @@ public class RGBPalette implements Assignable<RGBPalette>, Serializable {
   @Override
   public boolean isEqual(RGBPalette pSrc) {
     // flam3Number and flam3Name can not be changed
-    if (modRed != pSrc.modRed || modGreen != pSrc.modGreen || modBlue != pSrc.modBlue ||
-        modShift != pSrc.modShift || modHue != pSrc.modHue || modContrast != pSrc.modContrast ||
-        modGamma != pSrc.modGamma || modBrightness != pSrc.modBrightness || modSaturation != pSrc.modSaturation ||
-        modSwapRGB != pSrc.modSwapRGB || modFrequency != pSrc.modFrequency || modBlur != pSrc.modBlue ||
-        rawColors.size() != pSrc.rawColors.size()) {
+    if ((modRed != pSrc.modRed) || (modGreen != pSrc.modGreen) || (modBlue != pSrc.modBlue) ||
+        (modShift != pSrc.modShift) || (modHue != pSrc.modHue) || (modContrast != pSrc.modContrast) ||
+        (modGamma != pSrc.modGamma) || (modBrightness != pSrc.modBrightness) || (modSaturation != pSrc.modSaturation) ||
+        (modSwapRGB != pSrc.modSwapRGB) || (modFrequency != pSrc.modFrequency) || (modBlur != pSrc.modBlur) ||
+        (rawColors.size() != pSrc.rawColors.size())) {
       return false;
     }
     for (int i = 0; i < PALETTE_SIZE; i++) {

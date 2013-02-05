@@ -26,6 +26,7 @@ import java.awt.datatransfer.Transferable;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JButton;
@@ -40,6 +41,7 @@ import javax.swing.JTree;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
 
 import org.jwildfire.base.Prefs;
@@ -49,6 +51,7 @@ import org.jwildfire.create.tina.audio.RecordedFFT;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.dance.action.ActionRecorder;
 import org.jwildfire.create.tina.dance.action.PostRecordFlameGenerator;
+import org.jwildfire.create.tina.dance.model.AbstractProperty;
 import org.jwildfire.create.tina.dance.model.FlamePropertyPath;
 import org.jwildfire.create.tina.dance.motion.Motion;
 import org.jwildfire.create.tina.dance.motion.MotionCreatorType;
@@ -757,11 +760,11 @@ public class DancingFractalsController {
     Motion selMotion = getSelectedMotion();
 
     deleteMotionBtn.setEnabled(!running && selMotion != null);
+    boolean plainPropertySelected = flamePropertiesTreeService.isPlainPropertySelected(flamePropertiesTree);
     {
       boolean linkMotionEnabled = false;
       boolean selectNextLinkEnabled = false;
       if (!running && selMotion != null) {
-        boolean plainPropertySelected = flamePropertiesTreeService.isPlainPropertySelected(flamePropertiesTree);
         if (plainPropertySelected) {
           FlamePropertyPath selPath = flamePropertiesTreeService.getSelectedPropertyPath(flamePropertiesTree);
           linkMotionEnabled = !selMotion.hasLink(selPath);
@@ -772,7 +775,7 @@ public class DancingFractalsController {
       unlinkMotionBtn.setEnabled(!linkMotionEnabled && selMotion != null && selMotion.getMotionLinks().size() > 0);
       selectNextPropertyBtn.setEnabled(selectNextLinkEnabled);
     }
-    motionLinkToAllBtn.setEnabled(!running && selMotion != null);
+    motionLinkToAllBtn.setEnabled(!running && selMotion != null && plainPropertySelected);
 
     MotionLink selMotionLink = getSelectedMotionLink();
     unlinkFromAllMotionsBtn.setEnabled(!running && selMotion != null && selMotionLink != null);
@@ -882,6 +885,7 @@ public class DancingFractalsController {
       if (project.getMotions().size() > 0 && motionTable.getSelectedRow() >= 0 && motionTable.getSelectedRow() < project.getMotions().size()) {
         Motion motion = project.getMotions().get(motionTable.getSelectedRow());
         motionPropertyPnl = new PropertyPanel(motion);
+        motionPropertyPnl.setDescriptionVisible(false);
 
         PropertyChangeListener listener = new PropertyChangeListener() {
           public void propertyChange(PropertyChangeEvent evt) {
@@ -943,19 +947,32 @@ public class DancingFractalsController {
     enableControls();
   }
 
-  public void selectNextLinkedPropertyBtn_clicked() {
-    // TODO Auto-generated method stub
-
-  }
-
   public void unlinkMotionBtn_clicked() {
-    // TODO Auto-generated method stub
-
+    Motion selMotion = getSelectedMotion();
+    if (selMotion != null) {
+      FlamePropertyPath selPath = flamePropertiesTreeService.getSelectedPropertyPath(flamePropertiesTree);
+      if (selPath != null) {
+        MotionLink selLink = selMotion.getLink(selPath);
+        if (selLink != null) {
+          selMotion.getMotionLinks().remove(selLink);
+          int selRow = motionLinksTable.getSelectedRow();
+          motionTableClicked();
+          if (selRow >= selMotion.getMotionLinks().size()) {
+            selRow--;
+          }
+          motionLinksTable.getSelectionModel().setSelectionInterval(selRow, selRow);
+        }
+      }
+    }
   }
 
   public void createMotionsBtn_clicked() {
     // TODO Auto-generated method stub
 
+  }
+
+  public void selectNextLinkedPropertyBtn_clicked() {
+    // TODO Auto-generated method stub
   }
 
   public void dancingFlamesLoadProjectBtn_clicked() {
@@ -964,6 +981,71 @@ public class DancingFractalsController {
   }
 
   public void dancingFlamesSaveProjectBtn_clicked() {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void linkMotionToAllBtn_clicked() {
+    Motion selMotion = getSelectedMotion();
+    if (selMotion != null) {
+      FlamePropertyPath selPath = flamePropertiesTreeService.getSelectedPropertyPath(flamePropertiesTree);
+      if (selPath != null) {
+        TreeModel model = flamePropertiesTree.getModel();
+        @SuppressWarnings("unchecked")
+        FlamePropertiesTreeNode<Object> rootNode = (FlamePropertiesTreeNode<Object>) model.getRoot();
+        int added = 0;
+        for (int i = 0; i < rootNode.getChildCount(); i++) {
+          @SuppressWarnings("unchecked")
+          FlamePropertiesTreeNode<Flame> flameNode = (FlamePropertiesTreeNode<Flame>) rootNode.getChildAt(i);
+          added += linkMotionToFlame(selMotion, flameNode, selPath);
+        }
+        if (added > 0) {
+          int row = motionLinksTable.getSelectedRow();
+          refreshMotionLinksTable();
+          motionLinksTable.getSelectionModel().setSelectionInterval(row, row);
+        }
+      }
+    }
+  }
+
+  @SuppressWarnings("unchecked")
+  private int linkMotionToFlame(Motion pMotion, FlamePropertiesTreeNode<Flame> pFlameNode, FlamePropertyPath pSelPath) {
+    int added = 0;
+    for (int i = 0; i < pFlameNode.getChildCount(); i++) {
+      FlamePropertiesTreeNode<AbstractProperty> node = (FlamePropertiesTreeNode<AbstractProperty>) pFlameNode.getChildAt(i);
+      List<FlamePropertiesTreeNode<AbstractProperty>> currPath = new ArrayList<FlamePropertiesTreeNode<AbstractProperty>>();
+      currPath.add(node);
+
+      FlamePropertiesTreeNode<AbstractProperty> child = node;
+      while (child.getChildCount() > 0) {
+        child = (FlamePropertiesTreeNode<AbstractProperty>) child.getChildAt(0);
+        currPath.add(child);
+      }
+
+      if (pSelPath.getPropertyPath().size() == currPath.size()) {
+        boolean equal = true;
+        for (int j = currPath.size() - 1; j >= 0; j--) {
+          if (!pSelPath.getPropertyPath().get(j).getName().equals(currPath.get(j).getNodeData().getName())) {
+            equal = false;
+            break;
+          }
+        }
+        if (equal) {
+          FlamePropertyPath newPath = new FlamePropertyPath(pFlameNode.getNodeData());
+          for (FlamePropertiesTreeNode<AbstractProperty> currNode : currPath) {
+            newPath.getPropertyPath().add(currNode.getNodeData());
+          }
+          if (!pMotion.hasLink(newPath)) {
+            pMotion.getMotionLinks().add(new MotionLink(newPath));
+            added++;
+          }
+        }
+      }
+    }
+    return added;
+  }
+
+  public void unlinkMotionFromAllBtn_clicked() {
     // TODO Auto-generated method stub
 
   }

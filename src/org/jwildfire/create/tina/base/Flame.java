@@ -539,23 +539,23 @@ public class Flame implements Assignable<Flame>, Serializable {
 
   @Override
   public boolean isEqual(Flame pFlame) {
-    if (fabs(centreX - pFlame.centreX) > EPSILON || fabs(centreY - pFlame.centreY) > EPSILON ||
-        width != pFlame.width || height != pFlame.height ||
-        fabs(camPitch - pFlame.camPitch) > EPSILON || fabs(camYaw - pFlame.camYaw) > EPSILON ||
-        fabs(camPerspective - pFlame.camPerspective) > EPSILON || fabs(camRoll - pFlame.camRoll) > EPSILON ||
-        fabs(camZoom - pFlame.camZoom) > EPSILON || fabs(focusX - pFlame.focusX) > EPSILON ||
-        fabs(focusY - pFlame.focusY) > EPSILON || fabs(focusZ - pFlame.focusZ) > EPSILON ||
-        fabs(camDOF - pFlame.camDOF) > EPSILON || fabs(camDOFArea - pFlame.camDOFArea) > EPSILON ||
-        fabs(camDOFExponent - pFlame.camDOFExponent) > EPSILON || fabs(camZ - pFlame.camZ) > EPSILON ||
-        newCamDOF != pFlame.newCamDOF ||
-        fabs(spatialFilterRadius - pFlame.spatialFilterRadius) > EPSILON ||
-        fabs(sampleDensity - pFlame.sampleDensity) > EPSILON || bgTransparency != pFlame.bgTransparency || bgColorRed != pFlame.bgColorRed ||
-        bgColorGreen != pFlame.bgColorGreen || bgColorBlue != pFlame.bgColorBlue ||
-        fabs(gamma - pFlame.gamma) > EPSILON || fabs(gammaThreshold - pFlame.gammaThreshold) > EPSILON ||
-        fabs(pixelsPerUnit - pFlame.pixelsPerUnit) > EPSILON || whiteLevel != pFlame.whiteLevel ||
-        fabs(brightness - pFlame.brightness) > EPSILON || fabs(contrast - pFlame.contrast) > EPSILON ||
-        fabs(vibrancy - pFlame.vibrancy) > EPSILON || preserveZ != pFlame.preserveZ ||
-        deFilterRadius != pFlame.deFilterRadius || fabs(deFilterAmount - pFlame.deFilterAmount) > EPSILON ||
+    if ((fabs(centreX - pFlame.centreX) > EPSILON) || (fabs(centreY - pFlame.centreY) > EPSILON) ||
+        (width != pFlame.width) || (height != pFlame.height) ||
+        (fabs(camPitch - pFlame.camPitch) > EPSILON) || (fabs(camYaw - pFlame.camYaw) > EPSILON) ||
+        (fabs(camPerspective - pFlame.camPerspective) > EPSILON) || (fabs(camRoll - pFlame.camRoll) > EPSILON) ||
+        (fabs(camZoom - pFlame.camZoom) > EPSILON) || (fabs(focusX - pFlame.focusX) > EPSILON) ||
+        (fabs(focusY - pFlame.focusY) > EPSILON) || (fabs(focusZ - pFlame.focusZ) > EPSILON) ||
+        (fabs(camDOF - pFlame.camDOF) > EPSILON) || (fabs(camDOFArea - pFlame.camDOFArea) > EPSILON) ||
+        (fabs(camDOFExponent - pFlame.camDOFExponent) > EPSILON) || (fabs(camZ - pFlame.camZ) > EPSILON) ||
+        (newCamDOF != pFlame.newCamDOF) ||
+        (fabs(spatialFilterRadius - pFlame.spatialFilterRadius) > EPSILON) ||
+        (fabs(sampleDensity - pFlame.sampleDensity) > EPSILON) || (bgTransparency != pFlame.bgTransparency) || (bgColorRed != pFlame.bgColorRed) ||
+        (bgColorGreen != pFlame.bgColorGreen) || (bgColorBlue != pFlame.bgColorBlue) ||
+        (fabs(gamma - pFlame.gamma) > EPSILON) || (fabs(gammaThreshold - pFlame.gammaThreshold) > EPSILON) ||
+        (fabs(pixelsPerUnit - pFlame.pixelsPerUnit) > EPSILON) || (whiteLevel != pFlame.whiteLevel) ||
+        (fabs(brightness - pFlame.brightness) > EPSILON) || (fabs(contrast - pFlame.contrast) > EPSILON) ||
+        (fabs(vibrancy - pFlame.vibrancy) > EPSILON) || (preserveZ != pFlame.preserveZ) ||
+        (deFilterRadius != pFlame.deFilterRadius) || (fabs(deFilterAmount - pFlame.deFilterAmount) > EPSILON) ||
         ((resolutionProfile != null && pFlame.resolutionProfile == null) || (resolutionProfile == null && pFlame.resolutionProfile != null) ||
         (resolutionProfile != null && pFlame.resolutionProfile != null && !resolutionProfile.equals(pFlame.resolutionProfile))) ||
         ((qualityProfile != null && pFlame.qualityProfile == null) || (qualityProfile == null && pFlame.qualityProfile != null) ||

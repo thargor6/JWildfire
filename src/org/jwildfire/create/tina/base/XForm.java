@@ -490,18 +490,18 @@ public final class XForm implements Assignable<XForm>, Serializable {
 
   @Override
   public boolean isEqual(XForm pSrc) {
-    if (fabs(weight - pSrc.weight) > EPSILON || fabs(color - pSrc.color) > EPSILON ||
-        fabs(colorSymmetry - pSrc.colorSymmetry) > EPSILON || fabs(coeff00 - pSrc.coeff00) > EPSILON ||
-        fabs(coeff01 - pSrc.coeff01) > EPSILON || fabs(coeff10 - pSrc.coeff10) > EPSILON ||
-        fabs(coeff11 - pSrc.coeff11) > EPSILON || fabs(coeff20 - pSrc.coeff20) > EPSILON ||
-        fabs(coeff21 - pSrc.coeff21) > EPSILON || fabs(postCoeff00 - pSrc.postCoeff00) > EPSILON ||
-        fabs(postCoeff01 - pSrc.postCoeff01) > EPSILON || fabs(postCoeff10 - pSrc.postCoeff10) > EPSILON ||
-        fabs(postCoeff11 - pSrc.postCoeff11) > EPSILON || fabs(postCoeff20 - pSrc.postCoeff20) > EPSILON ||
-        fabs(postCoeff21 - pSrc.postCoeff21) > EPSILON || fabs(opacity - pSrc.opacity) > EPSILON ||
+    if ((fabs(weight - pSrc.weight) > EPSILON) || (fabs(color - pSrc.color) > EPSILON) ||
+        (fabs(colorSymmetry - pSrc.colorSymmetry) > EPSILON) || (fabs(coeff00 - pSrc.coeff00) > EPSILON) ||
+        (fabs(coeff01 - pSrc.coeff01) > EPSILON) || (fabs(coeff10 - pSrc.coeff10) > EPSILON) ||
+        (fabs(coeff11 - pSrc.coeff11) > EPSILON) || (fabs(coeff20 - pSrc.coeff20) > EPSILON) ||
+        (fabs(coeff21 - pSrc.coeff21) > EPSILON) || (fabs(postCoeff00 - pSrc.postCoeff00) > EPSILON) ||
+        (fabs(postCoeff01 - pSrc.postCoeff01) > EPSILON) || (fabs(postCoeff10 - pSrc.postCoeff10) > EPSILON) ||
+        (fabs(postCoeff11 - pSrc.postCoeff11) > EPSILON) || (fabs(postCoeff20 - pSrc.postCoeff20) > EPSILON) ||
+        (fabs(postCoeff21 - pSrc.postCoeff21) > EPSILON) || (fabs(opacity - pSrc.opacity) > EPSILON) ||
         ((drawMode != null && pSrc.drawMode == null) || (drawMode == null && pSrc.drawMode != null) ||
         (drawMode != null && pSrc.drawMode != null && !drawMode.equals(pSrc.drawMode))) ||
-        modifiedWeights.length != pSrc.modifiedWeights.length || variations.size() != pSrc.variations.size() ||
-        fabs(antialiasAmount - pSrc.antialiasAmount) > EPSILON || fabs(antialiasRadius - pSrc.antialiasRadius) > EPSILON) {
+        (modifiedWeights.length != pSrc.modifiedWeights.length) || (variations.size() != pSrc.variations.size()) ||
+        (fabs(antialiasAmount - pSrc.antialiasAmount) > EPSILON) || (fabs(antialiasRadius - pSrc.antialiasRadius) > EPSILON)) {
       return false;
     }
     for (int i = 0; i < modifiedWeights.length; i++) {

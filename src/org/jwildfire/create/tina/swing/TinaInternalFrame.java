@@ -12330,6 +12330,11 @@ public class TinaInternalFrame extends JInternalFrame {
       panel_50.add(getDancingFlamesSelectNextPropertyBtn());
 
       dancingFlamesMotionLinkToAllBtn = new JButton();
+      dancingFlamesMotionLinkToAllBtn.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getDancingFractalsController().linkMotionToAllBtn_clicked();
+        }
+      });
       dancingFlamesMotionLinkToAllBtn.setToolTipText("Link the currently selected motion to all flames containing the currently selected flame property");
       dancingFlamesMotionLinkToAllBtn.setText("Link to all");
       dancingFlamesMotionLinkToAllBtn.setPreferredSize(new Dimension(125, 24));
@@ -12340,6 +12345,11 @@ public class TinaInternalFrame extends JInternalFrame {
       panel_50.add(dancingFlamesMotionLinkToAllBtn);
 
       dancingFlamesUnlinkFromAllMotionsBtn = new JButton();
+      dancingFlamesUnlinkFromAllMotionsBtn.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getDancingFractalsController().unlinkMotionFromAllBtn_clicked();
+        }
+      });
       dancingFlamesUnlinkFromAllMotionsBtn.setToolTipText("Unlink the currently selected motion from all flame properties");
       dancingFlamesUnlinkFromAllMotionsBtn.setText("Unlink all");
       dancingFlamesUnlinkFromAllMotionsBtn.setPreferredSize(new Dimension(125, 24));
