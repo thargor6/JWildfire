@@ -23,6 +23,8 @@ import java.util.List;
 import org.jwildfire.base.ManagedObject;
 import org.jwildfire.base.Property;
 import org.jwildfire.base.PropertyCategory;
+import org.jwildfire.create.tina.dance.model.AbstractProperty;
+import org.jwildfire.create.tina.dance.model.FlamePropertyPath;
 
 public abstract class Motion extends ManagedObject implements Serializable {
   private static final long serialVersionUID = 1L;
@@ -51,5 +53,25 @@ public abstract class Motion extends ManagedObject implements Serializable {
 
   public List<MotionLink> getMotionLinks() {
     return motionLinks;
+  }
+
+  public boolean hasLink(FlamePropertyPath pSelPath) {
+    for (MotionLink link : motionLinks) {
+      if (pSelPath.getFlame().isEqual(link.getProperyPath().getFlame()) && pSelPath.getPropertyPath().size() == link.getProperyPath().getPropertyPath().size()) {
+        boolean equal = true;
+        for (int i = 0; i < pSelPath.getPropertyPath().size(); i++) {
+          AbstractProperty selNode = pSelPath.getPropertyPath().get(i);
+          AbstractProperty linkNode = link.getProperyPath().getPropertyPath().get(i);
+          if (!selNode.getName().equals(linkNode.getName())) {
+            equal = false;
+            break;
+          }
+        }
+        if (equal) {
+          return true;
+        }
+      }
+    }
+    return false;
   }
 }

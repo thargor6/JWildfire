@@ -211,9 +211,7 @@ public class DancingFractalsController {
         return null;
       SimpleImage img = new SimpleImage(width, height);
       img.fillBackground(0, 0, 0);
-      // TODO
       flamePanel = new FlamePanel(img, 0, 0, flameRootPanel.getWidth() - borderWidth, null);
-      // TODO right aspect
       flamePanel.setRenderWidth(640);
       flamePanel.setRenderHeight(480);
       flameRootPanel.add(flamePanel, BorderLayout.CENTER);
@@ -231,7 +229,6 @@ public class DancingFractalsController {
       SimpleImage img = new SimpleImage(width, height);
       img.fillBackground(0, 0, 0);
       poolFlamePreviewFlamePanel = new FlamePanel(img, 0, 0, poolFlamePreviewPnl.getWidth(), poolFlameHolder);
-      // TODO right aspect
       poolFlamePreviewFlamePanel.setRenderWidth(640);
       poolFlamePreviewFlamePanel.setRenderHeight(480);
       poolFlamePreviewFlamePanel.setDrawTriangles(false);
@@ -601,6 +598,16 @@ public class DancingFractalsController {
     return motionTable.getSelectedRow() >= 0 && motionTable.getSelectedRow() < project.getMotions().size() ? project.getMotions().get(motionTable.getSelectedRow()) : null;
   }
 
+  private MotionLink getSelectedMotionLink() {
+    Motion motion = getSelectedMotion();
+    if (motion != null) {
+      return motionLinksTable.getSelectedRow() >= 0 && motionLinksTable.getSelectedRow() < motion.getMotionLinks().size() ? motion.getMotionLinks().get(motionLinksTable.getSelectedRow()) : null;
+    }
+    else {
+      return null;
+    }
+  }
+
   private void refreshFlamesCmb() {
     Flame selFlame = flamesCmb.getSelectedIndex() >= 0 && flamesCmb.getSelectedIndex() < project.getFlames().size() ? project.getFlames().get(flamesCmb.getSelectedIndex()) : null;
     int newSelIdx = -1;
@@ -752,26 +759,23 @@ public class DancingFractalsController {
     deleteMotionBtn.setEnabled(!running && selMotion != null);
     {
       boolean linkMotionEnabled = false;
-      boolean unlinkMotionEnabled = false;
       boolean selectNextLinkEnabled = false;
-      if (!running) {
+      if (!running && selMotion != null) {
         boolean plainPropertySelected = flamePropertiesTreeService.isPlainPropertySelected(flamePropertiesTree);
-        if (plainPropertySelected && selMotion != null) {
-          unlinkMotionEnabled = true;
-          linkMotionEnabled = true;
-          // TODO check if already linked
-
+        if (plainPropertySelected) {
+          FlamePropertyPath selPath = flamePropertiesTreeService.getSelectedPropertyPath(flamePropertiesTree);
+          linkMotionEnabled = !selMotion.hasLink(selPath);
         }
-
-        selectNextLinkEnabled = selMotion != null && selMotion.getMotionLinks().size() > 0;
+        selectNextLinkEnabled = selMotion.getMotionLinks().size() > 0;
       }
       linkMotionBtn.setEnabled(linkMotionEnabled);
-      unlinkMotionBtn.setEnabled(unlinkMotionEnabled);
+      unlinkMotionBtn.setEnabled(!linkMotionEnabled && selMotion != null && selMotion.getMotionLinks().size() > 0);
       selectNextPropertyBtn.setEnabled(selectNextLinkEnabled);
-
-      motionLinkToAllBtn.setEnabled(linkMotionEnabled);
-      unlinkFromAllMotionsBtn.setEnabled(unlinkMotionEnabled);
     }
+    motionLinkToAllBtn.setEnabled(!running && selMotion != null);
+
+    MotionLink selMotionLink = getSelectedMotionLink();
+    unlinkFromAllMotionsBtn.setEnabled(!running && selMotion != null && selMotionLink != null);
     createMotionsCmb.setEnabled(!running);
     clearMotionsBtn.setEnabled(!running && project.getMotions().size() > 0);
     loadProjectBtn.setEnabled(!running);
@@ -844,30 +848,6 @@ public class DancingFractalsController {
     }
   }
 
-  public void selectNextLinkedPropertyBtn_clicked() {
-    // TODO Auto-generated method stub
-
-  }
-
-  public void unlinkMotionBtn_clicked() {
-    // TODO Auto-generated method stub
-
-  }
-
-  public void deleteMotionBtn_clicked() {
-    // TODO Auto-generated method stub
-
-  }
-
-  public void createMotionsBtn_clicked() {
-    // TODO Auto-generated method stub
-
-  }
-
-  public void clearMotionsBtn_clicked() {
-
-  }
-
   public void addMotionBtn_clicked() {
     try {
       MotionType motionType = (MotionType) addMotionCmb.getSelectedItem();
@@ -922,10 +902,60 @@ public class DancingFractalsController {
             BorderLayout.CENTER);
         enableControls();
       }
-      refreshMotionLinksTable();
-      motionPropertyRootPnl.invalidate();
-      motionPropertyRootPnl.validate();
     }
+    refreshMotionLinksTable();
+    motionPropertyRootPnl.invalidate();
+    motionPropertyRootPnl.validate();
+  }
+
+  public void linkMotionBtn_clicked() {
+    Motion currMotion = getSelectedMotion();
+    if (currMotion != null && flamePropertiesTreeService.isPlainPropertySelected(flamePropertiesTree)) {
+      FlamePropertyPath propertyPath = flamePropertiesTreeService.getSelectedPropertyPath(flamePropertiesTree);
+      currMotion.getMotionLinks().add(new MotionLink(propertyPath));
+      refreshMotionLinksTable();
+      int selectRow = currMotion.getMotionLinks().size() - 1;
+      motionLinksTable.getSelectionModel().setSelectionInterval(selectRow, selectRow);
+      enableControls();
+    }
+  }
+
+  public void deleteMotionBtn_clicked() {
+    int row = motionTable.getSelectedRow();
+    if (row >= 0 && row < project.getMotions().size()) {
+      project.getMotions().remove(row);
+      refreshMotionTable();
+      if (row >= project.getMotions().size()) {
+        row--;
+      }
+      if (row >= 0) {
+        motionTable.getSelectionModel().setSelectionInterval(row, row);
+      }
+      motionTableClicked();
+      enableControls();
+    }
+  }
+
+  public void clearMotionsBtn_clicked() {
+    project.getMotions().clear();
+    refreshMotionTable();
+    motionTableClicked();
+    enableControls();
+  }
+
+  public void selectNextLinkedPropertyBtn_clicked() {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void unlinkMotionBtn_clicked() {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void createMotionsBtn_clicked() {
+    // TODO Auto-generated method stub
+
   }
 
   public void dancingFlamesLoadProjectBtn_clicked() {
@@ -938,14 +968,4 @@ public class DancingFractalsController {
 
   }
 
-  public void linkMotionBtn_clicked() {
-    Motion currMotion = getSelectedMotion();
-    if (currMotion != null && flamePropertiesTreeService.isPlainPropertySelected(flamePropertiesTree)) {
-      FlamePropertyPath propertyPath = flamePropertiesTreeService.getSelectedPropertyPath(flamePropertiesTree);
-      currMotion.getMotionLinks().add(new MotionLink(propertyPath));
-      refreshMotionLinksTable();
-      int selectRow = currMotion.getMotionLinks().size() - 1;
-      motionTable.getSelectionModel().setSelectionInterval(selectRow, selectRow);
-    }
-  }
 }
