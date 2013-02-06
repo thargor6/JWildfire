@@ -17,37 +17,38 @@
 package org.jwildfire.create.tina.dance.model;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.jwildfire.create.tina.base.Flame;
 
 public class FlamePropertyPath implements Serializable {
+  public final static String DELIMITER = ".";
   private static final long serialVersionUID = 1L;
   private final Flame flame;
-  private final List<AbstractProperty> propertyPath = new ArrayList<AbstractProperty>();
+  private final String path;
 
-  public FlamePropertyPath(Flame pFlame) {
+  public FlamePropertyPath(Flame pFlame, List<String> pPath) {
     flame = pFlame;
+    StringBuilder sb = new StringBuilder();
+    sb.append(pPath.get(0));
+    for (int i = 1; i < pPath.size(); i++) {
+      sb.append(DELIMITER);
+      sb.append(pPath.get(i));
+    }
+    path = sb.toString();
+  }
+
+  public FlamePropertyPath(Flame pFlame, String pPath) {
+    flame = pFlame;
+    path = pPath;
   }
 
   public Flame getFlame() {
     return flame;
   }
 
-  public List<AbstractProperty> getPropertyPath() {
-    return propertyPath;
+  public String getPath() {
+    return path;
   }
 
-  public String getPathCaption() {
-    StringBuilder sb = new StringBuilder();
-    sb.append("");
-    for (int i = 0; i < propertyPath.size(); i++) {
-      sb.append(propertyPath.get(i).name);
-      if (i < propertyPath.size() - 1) {
-        sb.append(".");
-      }
-    }
-    return sb.toString();
-  }
 }

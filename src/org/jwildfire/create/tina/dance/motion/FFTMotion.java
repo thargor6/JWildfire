@@ -25,12 +25,23 @@ public class FFTMotion extends Motion {
   @Property(description = "FFT channel", category = PropertyCategory.GENERAL)
   private int fftChannel = 0;
 
+  @Property(description = "Amplitude", category = PropertyCategory.GENERAL)
+  private double amplitude = 1.0;
+
   public int getFftChannel() {
     return fftChannel;
   }
 
   public void setFftChannel(int pFFTIndex) {
     fftChannel = pFFTIndex;
+  }
+
+  public double getAmplitude() {
+    return amplitude;
+  }
+
+  public void setAmplitude(double pAmplitude) {
+    amplitude = pAmplitude;
   }
 
 }

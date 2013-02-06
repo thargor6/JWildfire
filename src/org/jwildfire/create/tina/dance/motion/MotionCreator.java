@@ -16,6 +16,10 @@
 */
 package org.jwildfire.create.tina.dance.motion;
 
+import org.jwildfire.create.tina.dance.DancingFlameProject;
+
 public interface MotionCreator {
+
+  public void createMotions(DancingFlameProject pProject);
 
 }

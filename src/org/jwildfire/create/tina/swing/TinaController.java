@@ -510,7 +510,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       JComboBox pDancingFlamesFlamesCmb, JCheckBox pDancingFlamesDrawTrianglesCBx, JCheckBox pDancingFlamesDrawFFTCBx, JCheckBox pDancingFlamesDrawFPSCBx,
       JTree pDancingFlamesFlamePropertiesTree,
       JPanel pDancingFlamesMotionPropertyPnl, JTable pDancingFlamesMotionTable, JComboBox pDancingFlamesAddMotionCmb, JButton pDancingFlamesAddMotionBtn,
-      JButton pDancingFlamesDeleteMotionBtn, JButton pDancingFlamesLinkMotionBtn, JButton pDancingFlamesUnlinkMotionBtn, JButton pDancingFlamesSelectNextPropertyBtn,
+      JButton pDancingFlamesDeleteMotionBtn, JButton pDancingFlamesLinkMotionBtn, JButton pDancingFlamesUnlinkMotionBtn,
       JComboBox pDancingFlamesCreateMotionsCmb, JButton pDancingFlamesClearMotionsBtn, JButton pDancingFlamesLoadProjectBtn, JButton pDancingFlamesSaveProjectBtn,
       JButton pDancingFlamesMotionLinkToAllBtn, JButton pDancingFlamesUnlinkFromAllMotionsBtn, JTable pDancingFlamesMotionLinksTable) {
     tinaFrame = pTinaFrame;
@@ -528,7 +528,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
         pDancingFlamesFlamesCmb,
         pDancingFlamesDrawTrianglesCBx, pDancingFlamesDrawFFTCBx, pDancingFlamesDrawFPSCBx, pDancingFlamesFlamePropertiesTree,
         pDancingFlamesMotionPropertyPnl, pDancingFlamesMotionTable, pDancingFlamesAddMotionCmb, pDancingFlamesAddMotionBtn,
-        pDancingFlamesDeleteMotionBtn, pDancingFlamesLinkMotionBtn, pDancingFlamesUnlinkMotionBtn, pDancingFlamesSelectNextPropertyBtn,
+        pDancingFlamesDeleteMotionBtn, pDancingFlamesLinkMotionBtn, pDancingFlamesUnlinkMotionBtn,
         pDancingFlamesCreateMotionsCmb, pDancingFlamesClearMotionsBtn, pDancingFlamesLoadProjectBtn, pDancingFlamesSaveProjectBtn,
         pDancingFlamesMotionLinkToAllBtn, pDancingFlamesUnlinkFromAllMotionsBtn, pDancingFlamesMotionLinksTable);
 

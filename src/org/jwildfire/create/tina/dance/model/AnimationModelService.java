@@ -69,16 +69,16 @@ public class AnimationModelService {
     return res;
   }
 
-  private final static String PROPNAME_XFORM = "transform";
-  private final static String PROPNAME_FINALXFORM = "finalTransform";
-  private final static String PROPNAME_ORIGIN_X = "originX";
-  private final static String PROPNAME_ORIGIN_Y = "originY";
-  private final static String PROPNAME_ANGLE = "angle";
-  private final static String PROPNAME_ZOOM = "zoom";
-  private final static String PROPNAME_POST_ORIGIN_X = "postOriginX";
-  private final static String PROPNAME_POST_ORIGIN_Y = "postOriginY";
-  private final static String PROPNAME_POST_ANGLE = "postAngle";
-  private final static String PROPNAME_POST_ZOOM = "postZoom";
+  public final static String PROPNAME_XFORM = "transform";
+  public final static String PROPNAME_FINALXFORM = "finalTransform";
+  public final static String PROPNAME_ORIGIN_X = "originX";
+  public final static String PROPNAME_ORIGIN_Y = "originY";
+  public final static String PROPNAME_ANGLE = "angle";
+  public final static String PROPNAME_ZOOM = "zoom";
+  public final static String PROPNAME_POST_ORIGIN_X = "postOriginX";
+  public final static String PROPNAME_POST_ORIGIN_Y = "postOriginY";
+  public final static String PROPNAME_POST_ANGLE = "postAngle";
+  public final static String PROPNAME_POST_ZOOM = "postZoom";
 
   private final static String[] ADD_XFORM_PROPS = { PROPNAME_ORIGIN_X, PROPNAME_ORIGIN_Y, PROPNAME_ANGLE, PROPNAME_ZOOM, PROPNAME_POST_ORIGIN_X, PROPNAME_POST_ORIGIN_Y, PROPNAME_POST_ANGLE, PROPNAME_POST_ZOOM };
 
