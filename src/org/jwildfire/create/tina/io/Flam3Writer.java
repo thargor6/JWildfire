@@ -117,6 +117,7 @@ public class Flam3Writer {
     attrList.add(xb.createAttr("scale", pFlame.getPixelsPerUnit()));
     attrList.add(xb.createAttr("rotate", pFlame.getCamRoll()));
     attrList.add(xb.createAttr("filter", pFlame.getSpatialFilterRadius()));
+    attrList.add(xb.createAttr("filter_kernel", pFlame.getSpatialFilterKernel().toString()));
     attrList.add(xb.createAttr("quality", pFlame.getSampleDensity()));
     attrList.add(xb.createAttr("background", (double) pFlame.getBGColorRed() / 255.0 + " " + (double) pFlame.getBGColorGreen() / 255.0 + " " + (double) pFlame.getBGColorBlue() / 255.0));
     attrList.add(xb.createAttr("bg_transparency", pFlame.isBGTransparency() ? "1" : "0"));
@@ -127,6 +128,7 @@ public class Flam3Writer {
     attrList.add(xb.createAttr("estimator_radius", pFlame.getDeFilterMaxRadius()));
     attrList.add(xb.createAttr("estimator_minimum", pFlame.getDeFilterMinRadius()));
     attrList.add(xb.createAttr("estimator_curve", pFlame.getDeFilterCurve()));
+    attrList.add(xb.createAttr("estimator_kernel", pFlame.getDeFilterKernel().toString()));
     attrList.add(xb.createAttr("temporal_samples", 1.0));
     attrList.add(xb.createAttr("cam_zoom", pFlame.getCamZoom()));
     attrList.add(xb.createAttr("cam_pitch", (pFlame.getCamPitch() * Math.PI) / 180.0));

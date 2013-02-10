@@ -18,29 +18,28 @@ package org.jwildfire.create.tina.render;
 
 import static java.lang.Math.ceil;
 import static java.lang.Math.floor;
-import static org.jwildfire.base.MathLib.M_PI;
-import static org.jwildfire.base.MathLib.cos;
-import static org.jwildfire.base.MathLib.exp;
-import static org.jwildfire.base.MathLib.log10;
+import static org.jwildfire.base.MathLib.log;
 import static org.jwildfire.base.MathLib.pow;
-import static org.jwildfire.base.MathLib.sin;
 import static org.jwildfire.base.MathLib.sqrt;
 
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.RasterPoint;
+import org.jwildfire.create.tina.render.filter.FilterKernel;
 
-// port of the de filter from flam3: http://flam3.com/index.cgi?&menu=code
+// bases on the DE filter code from flam3: http://flam3.com/index.cgi?&menu=code
 public class Flam3DEFilter {
   private final Flame flame;
   final static int DE_THRESH = 100;
-  int max_filtered_counts;
-  int max_filter_index;
-  int kernel_size;
-  double filter_widths[];
-  double filter_coefs[];
+  private int max_filtered_counts;
+  private int max_filter_index;
+  private int kernel_size;
+  private double filter_widths[];
+  private double filter_coefs[];
+  private final FilterKernel filterKernel;
 
   public Flam3DEFilter(Flame pFlame) {
     flame = pFlame;
+    filterKernel = pFlame.getDeFilterKernel().createFilterInstance();
     int ss = 1;
     double max_rad = flame.getDeFilterMaxRadius();
     double min_rad = flame.getDeFilterMinRadius();
@@ -131,8 +130,7 @@ public class Flam3DEFilter {
           if (de_filt_d <= 1.0) {
 
             /* Gaussian */
-            de_filt_sum += flam3_spatial_filter(flam3_gaussian_kernel,
-                flam3_spatial_support[flam3_gaussian_kernel] * de_filt_d);
+            de_filt_sum += filterKernel.getFilterCoeff(filterKernel.getSpatialSupport() * de_filt_d);
 
             /* Epanichnikov */
             //              de_filt_sum += (1.0 - (de_filt_d * de_filt_d));
@@ -153,9 +151,7 @@ public class Flam3DEFilter {
           else {
 
             /* Gaussian */
-            this.filter_coefs[filter_coef_idx] = flam3_spatial_filter(flam3_gaussian_kernel,
-                flam3_spatial_support[flam3_gaussian_kernel] * de_filt_d) / de_filt_sum;
-
+            this.filter_coefs[filter_coef_idx] = filterKernel.getFilterCoeff(filterKernel.getSpatialSupport() * de_filt_d) / de_filt_sum;
             /* Epanichnikov */
             //            this.filter_coefs[filter_coef_idx] = (1.0 - (de_filt_d * de_filt_d)) / de_filt_sum;
           }
@@ -171,215 +167,6 @@ public class Flam3DEFilter {
     if (this.max_filter_index == 0)
       this.max_filter_index = de_max_ind - 1;
   }
-
-  private double flam3_spatial_filter(int knum, double x) {
-    if (knum == 0)
-      return flam3_gaussian_filter(x);
-    else if (knum == 1)
-      return flam3_hermite_filter(x);
-    else if (knum == 2)
-      return flam3_box_filter(x);
-    else if (knum == 3)
-      return flam3_triangle_filter(x);
-    else if (knum == 4)
-      return flam3_bell_filter(x);
-    else if (knum == 5)
-      return flam3_b_spline_filter(x);
-    else if (knum == 6)
-      return flam3_mitchell_filter(x);
-    else if (knum == 7)
-      return flam3_sinc(x) * flam3_blackman_filter(x);
-    else if (knum == 8)
-      return flam3_catrom_filter(x);
-    else if (knum == 9)
-      return flam3_sinc(x) * flam3_hanning_filter(x);
-    else if (knum == 10)
-      return flam3_sinc(x) * flam3_hamming_filter(x);
-    else if (knum == 11)
-      return flam3_lanczos3_filter(x) * flam3_sinc(x / 3.0);
-    else if (knum == 12)
-      return flam3_lanczos2_filter(x) * flam3_sinc(x / 2.0);
-    else if (knum == 13)
-      return flam3_quadratic_filter(x);
-    else
-      throw new RuntimeException();
-  }
-
-  private double flam3_b_spline_filter(double t) {
-
-    /* box (*) box (*) box (*) box */
-    double tt;
-
-    if (t < 0)
-      t = -t;
-    if (t < 1) {
-      tt = t * t;
-      return ((.5 * tt * t) - tt + (2.0 / 3.0));
-    }
-    else if (t < 2) {
-      t = 2 - t;
-      return ((1.0 / 6.0) * (t * t * t));
-    }
-    return (0.0);
-  }
-
-  private double flam3_sinc(double x) {
-    x *= M_PI;
-    if (x != 0)
-      return (sin(x) / x);
-    return (1.0);
-  }
-
-  private double flam3_blackman_filter(double x) {
-    return (0.42 + 0.5 * cos(M_PI * x) + 0.08 * cos(2 * M_PI * x));
-  }
-
-  private double flam3_catrom_filter(double x) {
-    if (x < -2.0)
-      return (0.0);
-    if (x < -1.0)
-      return (0.5 * (4.0 + x * (8.0 + x * (5.0 + x))));
-    if (x < 0.0)
-      return (0.5 * (2.0 + x * x * (-5.0 - 3.0 * x)));
-    if (x < 1.0)
-      return (0.5 * (2.0 + x * x * (-5.0 + 3.0 * x)));
-    if (x < 2.0)
-      return (0.5 * (4.0 + x * (-8.0 + x * (5.0 - x))));
-    return (0.0);
-  }
-
-  private double flam3_mitchell_filter(double t) {
-    double tt;
-
-    tt = t * t;
-    if (t < 0)
-      t = -t;
-    if (t < 1.0) {
-      t = (((12.0 - 9.0 * flam3_mitchell_b - 6.0 * flam3_mitchell_c) * (t * tt))
-          + ((-18.0 + 12.0 * flam3_mitchell_b + 6.0 * flam3_mitchell_c) * tt)
-          + (6.0 - 2 * flam3_mitchell_b));
-      return (t / 6.0);
-    }
-    else if (t < 2.0) {
-      t = (((-1.0 * flam3_mitchell_b - 6.0 * flam3_mitchell_c) * (t * tt))
-          + ((6.0 * flam3_mitchell_b + 30.0 * flam3_mitchell_c) * tt)
-          + ((-12.0 * flam3_mitchell_b - 48.0 * flam3_mitchell_c) * t)
-          + (8.0 * flam3_mitchell_b + 24 * flam3_mitchell_c));
-      return (t / 6.0);
-    }
-    return (0.0);
-  }
-
-  private double flam3_hanning_filter(double x) {
-    return (0.5 + 0.5 * cos(M_PI * x));
-  }
-
-  private double flam3_hamming_filter(double x) {
-    return (0.54 + 0.46 * cos(M_PI * x));
-  }
-
-  private double flam3_lanczos3_filter(double t) {
-    if (t < 0)
-      t = -t;
-    if (t < 3.0)
-      return (flam3_sinc(t) * flam3_sinc(t / 3.0));
-    return (0.0);
-  }
-
-  private double flam3_lanczos2_filter(double t) {
-    if (t < 0)
-      t = -t;
-    if (t < 2.0)
-      return (flam3_sinc(t) * flam3_sinc(t / 2.0));
-    return (0.0);
-  }
-
-  private double flam3_gaussian_filter(double x) {
-    return (exp((-2.0 * x * x)) * sqrt(2.0 / M_PI));
-  }
-
-  private double flam3_quadratic_filter(double x) {
-    if (x < -1.5)
-      return (0.0);
-    if (x < -0.5)
-      return (0.5 * (x + 1.5) * (x + 1.5));
-    if (x < 0.5)
-      return (0.75 - x * x);
-    if (x < 1.5)
-      return (0.5 * (x - 1.5) * (x - 1.5));
-    return (0.0);
-  }
-
-  private double flam3_hermite_filter(double t) {
-    /* f(t) = 2|t|^3 - 3|t|^2 + 1, -1 <= t <= 1 */
-    if (t < 0.0)
-      t = -t;
-    if (t < 1.0)
-      return ((2.0 * t - 3.0) * t * t + 1.0);
-    return (0.0);
-  }
-
-  private double flam3_box_filter(double t) {
-    if ((t > -0.5) && (t <= 0.5))
-      return (1.0);
-    return (0.0);
-  }
-
-  private double flam3_triangle_filter(double t) {
-    if (t < 0.0)
-      t = -t;
-    if (t < 1.0)
-      return (1.0 - t);
-    return (0.0);
-  }
-
-  private double flam3_bell_filter(double t) {
-    /* box (*) box (*) box */
-    if (t < 0)
-      t = -t;
-    if (t < .5)
-      return (.75 - (t * t));
-    if (t < 1.5) {
-      t = (t - 1.5);
-      return (.5 * (t * t));
-    }
-    return (0.0);
-  }
-
-  private double flam3_spatial_support[] = {
-      1.5, /* gaussian */
-      1.0, /* hermite */
-      0.5, /* box */
-      1.0, /* triangle */
-      1.5, /* bell */
-      2.0, /* b spline */
-      2.0, /* mitchell */
-      1.0, /* blackman */
-      2.0, /* catrom */
-      1.0, /* hanning */
-      1.0, /* hamming */
-      3.0, /* lanczos3 */
-      2.0, /* lanczos2 */
-      1.5 /* quadratic */
-  };
-
-  private final double flam3_mitchell_b = (1.0 / 3.0);
-  private final double flam3_mitchell_c = (1.0 / 3.0);
-
-  private final int flam3_gaussian_kernel = 0;
-  private final int flam3_hermite_kernel = 1;
-  private final int flam3_box_kernel = 2;
-  private final int flam3_triangle_kernel = 3;
-  private final int flam3_bell_kernel = 4;
-  private final int flam3_b_spline_kernel = 5;
-  private final int flam3_lanczos3_kernel = 6;
-  private final int flam3_lanczos2_kernel = 7;
-  private final int flam3_mitchell_kernel = 8;
-  private final int flam3_blackman_kernel = 9;
-  private final int flam3_catrom_kernel = 10;
-  private final int flam3_hamming_kernel = 11;
-  private final int flam3_hanning_kernel = 12;
-  private final int flam3_quadratic_kernel = 13;
 
   private double k1, k2;
   private RasterPoint[][] raster;
@@ -464,7 +251,7 @@ public class Flam3DEFilter {
         blue = point.blue;
         intensity = point.count;
 
-        ls = filter_coefs[f_coef_idx] * (k1 * log10(1.0 + intensity * k2)) / intensity;
+        ls = filter_coefs[f_coef_idx] * (k1 * log(1.0 + intensity * k2)) / intensity;
 
         red *= ls;
         green *= ls;

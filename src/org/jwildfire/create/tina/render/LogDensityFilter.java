@@ -16,18 +16,16 @@
 */
 package org.jwildfire.create.tina.render;
 
-import static org.jwildfire.base.MathLib.EPSILON;
-import static org.jwildfire.base.MathLib.exp;
 import static org.jwildfire.base.MathLib.log10;
 
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.RasterPoint;
+import org.jwildfire.create.tina.render.filter.FilterKernel;
 
 public class LogDensityFilter {
   private final Flame flame;
   private RasterPoint[][] raster;
   private int rasterWidth, rasterHeight, rasterSize;
-  private final static double FILTER_CUTOFF = 1.8;
   public static final int FILTER_WHITE = (1 << 26);
   public final static double BRIGHTNESS_SCALE = 2.3 * 268.0;
   private final int PRECALC_LOG_ARRAY_SIZE = 6000;
@@ -35,56 +33,23 @@ public class LogDensityFilter {
   private int noiseFilterSize;
   private double precalcLogArray[]; // precalculated log-values
   private double k1, k2;
+  private final FilterKernel filterKernel;
 
   public LogDensityFilter(Flame pFlame) {
     flame = pFlame;
-    initFilter(pFlame);
-  }
-
-  private int calcFilterSize(double pFilterRadius) {
-    if (pFilterRadius < EPSILON) {
-      return 0;
-    }
-    else {
-      int fw = (int) (2.0 * FILTER_CUTOFF * pFilterRadius);
-      int filterSize = fw + 1;
-      if (filterSize % 2 == 0)
-        filterSize++;
-      return filterSize;
-    }
-  }
-
-  private double calcFilterAdjust(double pFilterRadius) {
-    if (pFilterRadius < EPSILON) {
-      return 0.0;
-    }
-    else {
-      int fw = (int) (2.0 * FILTER_CUTOFF * pFilterRadius);
-      int filterSize = fw + 1;
-      if (filterSize % 2 == 0)
-        filterSize++;
-      if (fw > 0) {
-        return (1.0 * FILTER_CUTOFF * filterSize) / fw;
-      }
-      else {
-        return 1.0;
-      }
-    }
-  }
-
-  private void initFilter(Flame pFlame) {
-    noiseFilterSize = calcFilterSize(pFlame.getSpatialFilterRadius());
+    filterKernel = pFlame.getSpatialFilterKernel().createFilterInstance();
+    noiseFilterSize = filterKernel.getFilterSize(pFlame.getSpatialFilterRadius());
     filter = new double[noiseFilterSize][noiseFilterSize];
     initFilter(pFlame.getSpatialFilterRadius(), noiseFilterSize, filter);
   }
 
   private void initFilter(double pFilterRadius, int pFilterSize, double[][] pFilter) {
-    double adjust = calcFilterAdjust(pFilterRadius);
+    double adjust = filterKernel.getFilterAdjust(pFilterRadius);
     for (int i = 0; i < pFilterSize; i++) {
       for (int j = 0; j < pFilterSize; j++) {
         double ii = ((2.0 * i + 1.0) / pFilterSize - 1.0) * adjust;
         double jj = ((2.0 * j + 1.0) / pFilterSize - 1.0) * adjust;
-        pFilter[i][j] = exp(-2.0 * (ii * ii + jj * jj));
+        pFilter[i][j] = filterKernel.getFilterCoeff(ii) * filterKernel.getFilterCoeff(jj);
       }
     }
     // normalize
