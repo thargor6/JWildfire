@@ -33,6 +33,7 @@ import org.jwildfire.create.tina.base.RasterPoint;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 import org.jwildfire.create.tina.palette.RenderColor;
+import org.jwildfire.create.tina.random.RandomNumberGenerator;
 
 public final class FlameRenderPseudo3DThread extends FlameRenderThread {
   private XYZPoint[] affineTA;
@@ -43,6 +44,7 @@ public final class FlameRenderPseudo3DThread extends FlameRenderThread {
   private XForm xf;
   private long iter;
   private long startIter;
+  private RandomNumberGenerator randGen = new RandomNumberGenerator();
 
   public FlameRenderPseudo3DThread(FlameRenderer pRenderer, Flame pFlame, long pSamples) {
     super(pRenderer, pFlame, pSamples);
@@ -65,10 +67,10 @@ public final class FlameRenderPseudo3DThread extends FlameRenderThread {
     }
     r = new XYZPoint();
 
-    pA[0].x = 2.0 * renderer.random.random() - 1.0;
-    pA[0].y = 2.0 * renderer.random.random() - 1.0;
+    pA[0].x = 2.0 * randGen.random() - 1.0;
+    pA[0].y = 2.0 * randGen.random() - 1.0;
     pA[0].z = 0;
-    pA[0].color = renderer.random.random();
+    pA[0].color = randGen.random();
 
     distributeInitialPoints(pA);
     qA = new XYZPoint[3];
@@ -79,7 +81,7 @@ public final class FlameRenderPseudo3DThread extends FlameRenderThread {
     xf = flame.getXForms().get(0);
     xf.transformPoints(ctx, affineTA, varTA, pA, pA);
     for (int i = 0; i <= Constants.INITIAL_ITERATIONS; i++) {
-      xf = xf.getNextAppliedXFormTable()[renderer.random.random(Constants.NEXT_APPLIED_XFORM_TABLE_SIZE)];
+      xf = xf.getNextAppliedXFormTable()[randGen.random(Constants.NEXT_APPLIED_XFORM_TABLE_SIZE)];
       if (xf == null) {
         return;
       }
@@ -105,14 +107,14 @@ public final class FlameRenderPseudo3DThread extends FlameRenderThread {
       if (iter % 100 == 0) {
         currSample = iter;
       }
-      xf = xf.getNextAppliedXFormTable()[renderer.random.random(Constants.NEXT_APPLIED_XFORM_TABLE_SIZE)];
+      xf = xf.getNextAppliedXFormTable()[randGen.random(Constants.NEXT_APPLIED_XFORM_TABLE_SIZE)];
       if (xf == null) {
         return;
       }
       xf.transformPoints(ctx, affineTA, varTA, pA, pA);
       if (xf.getDrawMode() == DrawMode.HIDDEN)
         continue;
-      else if ((xf.getDrawMode() == DrawMode.OPAQUE) && (renderer.random.random() > xf.getOpacity()))
+      else if ((xf.getDrawMode() == DrawMode.OPAQUE) && (randGen.random() > xf.getOpacity()))
         continue;
 
       List<XForm> finalXForms = flame.getFinalXForms();
@@ -136,9 +138,9 @@ public final class FlameRenderPseudo3DThread extends FlameRenderThread {
           continue;
 
         XForm finalXForm = finalXForms.get(finalXForms.size() - 1);
-        if ((finalXForm.getAntialiasAmount() > EPSILON) && (finalXForm.getAntialiasRadius() > EPSILON) && (renderer.random.random() > 1.0 - finalXForm.getAntialiasAmount())) {
-          double dr = exp(finalXForm.getAntialiasRadius() * sqrt(-log(renderer.random.random()))) - 1.0;
-          double da = renderer.random.random() * 2.0 * M_PI;
+        if ((finalXForm.getAntialiasAmount() > EPSILON) && (finalXForm.getAntialiasRadius() > EPSILON) && (randGen.random() > 1.0 - finalXForm.getAntialiasAmount())) {
+          double dr = exp(finalXForm.getAntialiasRadius() * sqrt(-log(randGen.random()))) - 1.0;
+          double da = randGen.random() * 2.0 * M_PI;
           xIdx = (int) (renderer.bws * px + dr * cos(da) + 0.5);
           if (xIdx < 0 || xIdx >= renderer.rasterWidth)
             continue;
@@ -166,25 +168,21 @@ public final class FlameRenderPseudo3DThread extends FlameRenderThread {
         if ((py < 0) || (py > renderer.camH))
           continue;
 
-        if ((xf.getAntialiasAmount() > EPSILON) && (xf.getAntialiasRadius() > EPSILON) && (renderer.random.random() > 1.0 - xf.getAntialiasAmount())) {
-          double dr = exp(xf.getAntialiasRadius() * sqrt(-log(renderer.random.random()))) - 1.0;
-          double da = renderer.random.random() * 2.0 * M_PI;
+        if ((xf.getAntialiasAmount() > EPSILON) && (xf.getAntialiasRadius() > EPSILON) && (randGen.random() > 1.0 - xf.getAntialiasAmount())) {
+          double dr = exp(xf.getAntialiasRadius() * sqrt(-log(randGen.random()))) - 1.0;
+          double da = randGen.random() * 2.0 * M_PI;
           xIdx = (int) (renderer.bws * px + dr * cos(da) + 0.5);
-          if (xIdx < 0 || xIdx >= renderer.rasterWidth)
-            continue;
           yIdx = (int) (renderer.bhs * py + dr * sin(da) + 0.5);
-          if (yIdx < 0 || yIdx >= renderer.rasterHeight)
-            continue;
         }
         else {
           xIdx = (int) (renderer.bws * px + 0.5);
           yIdx = (int) (renderer.bhs * py + 0.5);
         }
-
       }
-
-      //int xIdx = (int) (renderer.bws * px + 0.5);
-      //int yIdx = (int) (renderer.bhs * py + 0.5);
+      if (xIdx < 0 || xIdx >= renderer.rasterWidth)
+        continue;
+      if (yIdx < 0 || yIdx >= renderer.rasterHeight)
+        continue;
 
       RasterPoint rp = renderer.raster[yIdx][xIdx];
       RenderColor color;

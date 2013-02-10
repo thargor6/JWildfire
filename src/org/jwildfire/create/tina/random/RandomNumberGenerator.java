@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2013 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -25,6 +25,10 @@ public class RandomNumberGenerator {
 
   private static final int RAND_MAX = 0x7fffffff;
   private static final double RAND_MAX_MUL = 1.0 / (double) RAND_MAX;
+
+  public RandomNumberGenerator() {
+    randomize((long) (Long.MAX_VALUE * Math.random()));
+  }
 
   public void randomize(long pSeed) {
     u = (int) (pSeed << 16);

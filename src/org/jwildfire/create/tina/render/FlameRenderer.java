@@ -70,7 +70,7 @@ public class FlameRenderer {
   // init in createColorMap
   RenderColor[] colorMap;
   double paletteIdxScl;
-  RandomNumberGenerator random = new RandomNumberGenerator();
+  private RandomNumberGenerator randGen = new RandomNumberGenerator();
   // 3D stuff
   protected boolean doProject3D = false;
   // init in init3D()
@@ -163,8 +163,8 @@ public class FlameRenderer {
       if (legacyDOF) {
         double zdist = (flame.getCamZ() - pz);
         if (zdist > 0.0) {
-          double dr = random.random() * camDOF_10 * zdist;
-          double a = 2.0 * M_PI * random.random();
+          double dr = randGen.random() * camDOF_10 * zdist;
+          double a = 2.0 * M_PI * randGen.random();
           double dsina = sin(a);
           double dcosa = cos(a);
           pPoint.x = (px + dr * dcosa) / zr;
@@ -181,8 +181,8 @@ public class FlameRenderer {
         double zdist = (pz - flame.getFocusZ());
         double dist = Math.pow(xdist * xdist + ydist * ydist + zdist * zdist, 1 / flame.getCamDOFExponent()) - flame.getCamDOFArea();
         if (dist > 0.05) {
-          double dr = random.random() * camDOF_10 * dist;
-          double a = 2.0 * M_PI * random.random();
+          double dr = randGen.random() * camDOF_10 * dist;
+          double a = 2.0 * M_PI * randGen.random();
           double dsina = sin(a);
           double dcosa = cos(a);
           pPoint.x = (px + dr * dcosa) / zr;
@@ -713,11 +713,11 @@ public class FlameRenderer {
 
   public void createColorMap() {
     colorMap = flame.getPalette().createRenderPalette(flame.getWhiteLevel());
-    paletteIdxScl = colorMap.length - 1;
+    paletteIdxScl = colorMap.length - 2;
   }
 
   public void setRandomNumberGenerator(RandomNumberGenerator random) {
-    this.random = random;
+    this.randGen = random;
   }
 
   public void setProgressUpdater(ProgressUpdater pProgressUpdater) {
@@ -736,7 +736,7 @@ public class FlameRenderer {
   }
 
   public RandomNumberGenerator getRandomNumberGenerator() {
-    return random;
+    return randGen;
   }
 
   public void setRenderScale(int pRenderScale) {
@@ -967,11 +967,5 @@ public class FlameRenderer {
   public double getSina() {
     return sina;
   }
-
-  // TODO
-  // color curves
-  // DE filter kernel
-  // spatial filter kernel
-  // Math Library
 
 }

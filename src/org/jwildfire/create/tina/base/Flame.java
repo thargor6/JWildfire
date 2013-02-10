@@ -28,6 +28,7 @@ import org.jwildfire.base.ResolutionProfile;
 import org.jwildfire.create.tina.animate.AnimAware;
 import org.jwildfire.create.tina.edit.Assignable;
 import org.jwildfire.create.tina.palette.RGBPalette;
+import org.jwildfire.create.tina.render.filter.FilterKernelType;
 import org.jwildfire.create.tina.variation.FlameTransformationContext;
 import org.jwildfire.create.tina.variation.Variation;
 
@@ -65,10 +66,12 @@ public class Flame implements Assignable<Flame>, Serializable {
   private double camDOFArea;
   private boolean newCamDOF;
   private double spatialFilterRadius;
+  private FilterKernelType spatialFilterKernel;
   private boolean deFilterEnabled;
   private double deFilterMaxRadius;
   private double deFilterMinRadius;
   private double deFilterCurve;
+  private FilterKernelType deFilterKernel;
   private double sampleDensity;
   private boolean bgTransparency;
   @AnimAware
@@ -127,10 +130,12 @@ public class Flame implements Assignable<Flame>, Serializable {
     whiteLevel = 200;
     name = "";
     spatialFilterRadius = 0.0;
+    spatialFilterKernel = FilterKernelType.GAUSSIAN;
     deFilterEnabled = true;
     deFilterMaxRadius = 2.0;
     deFilterMinRadius = 0.0;
     deFilterCurve = 0.5;
+    deFilterKernel = FilterKernelType.GAUSSIAN;
     shadingInfo.init();
   }
 
@@ -510,10 +515,12 @@ public class Flame implements Assignable<Flame>, Serializable {
     camDOFArea = pFlame.camDOFArea;
     camDOFExponent = pFlame.camDOFExponent;
     spatialFilterRadius = pFlame.spatialFilterRadius;
+    spatialFilterKernel = pFlame.spatialFilterKernel;
     deFilterEnabled = pFlame.deFilterEnabled;
     deFilterMaxRadius = pFlame.deFilterMaxRadius;
     deFilterMinRadius = pFlame.deFilterMinRadius;
     deFilterCurve = pFlame.deFilterCurve;
+    deFilterKernel = pFlame.deFilterKernel;
     sampleDensity = pFlame.sampleDensity;
     bgTransparency = pFlame.bgTransparency;
     bgColorRed = pFlame.bgColorRed;
@@ -554,6 +561,7 @@ public class Flame implements Assignable<Flame>, Serializable {
         (fabs(camDOF - pFlame.camDOF) > EPSILON) || (fabs(camDOFArea - pFlame.camDOFArea) > EPSILON) ||
         (fabs(camDOFExponent - pFlame.camDOFExponent) > EPSILON) || (fabs(camZ - pFlame.camZ) > EPSILON) ||
         (newCamDOF != pFlame.newCamDOF) || (fabs(spatialFilterRadius - pFlame.spatialFilterRadius) > EPSILON) ||
+        !spatialFilterKernel.equals(pFlame.spatialFilterKernel) || !deFilterKernel.equals(pFlame.deFilterKernel) ||
         (deFilterEnabled != pFlame.deFilterEnabled) || (fabs(deFilterMaxRadius - pFlame.deFilterMaxRadius) > EPSILON) ||
         (fabs(deFilterMinRadius - pFlame.deFilterMinRadius) > EPSILON) || (fabs(deFilterCurve - pFlame.deFilterCurve) > EPSILON) ||
         (fabs(sampleDensity - pFlame.sampleDensity) > EPSILON) || (bgTransparency != pFlame.bgTransparency) || (bgColorRed != pFlame.bgColorRed) ||
@@ -646,5 +654,21 @@ public class Flame implements Assignable<Flame>, Serializable {
 
   public void setDeFilterCurve(double deFilterCurve) {
     this.deFilterCurve = deFilterCurve;
+  }
+
+  public FilterKernelType getSpatialFilterKernel() {
+    return spatialFilterKernel;
+  }
+
+  public void setSpatialFilterKernel(FilterKernelType spatialFilterKernel) {
+    this.spatialFilterKernel = spatialFilterKernel;
+  }
+
+  public FilterKernelType getDeFilterKernel() {
+    return deFilterKernel;
+  }
+
+  public void setDeFilterKernel(FilterKernelType deFilterKernel) {
+    this.deFilterKernel = deFilterKernel;
   }
 }

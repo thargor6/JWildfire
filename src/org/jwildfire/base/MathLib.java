@@ -102,7 +102,7 @@ public final class MathLib {
   }
 
   public static final double log(double value) {
-    return FastMath.log(value);
+    return Math.log(value);
   }
 
   public static final double sinh(double value) {
