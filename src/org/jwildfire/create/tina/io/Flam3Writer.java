@@ -123,9 +123,10 @@ public class Flam3Writer {
     attrList.add(xb.createAttr("brightness", pFlame.getBrightness()));
     attrList.add(xb.createAttr("gamma", pFlame.getGamma()));
     attrList.add(xb.createAttr("gamma_threshold", pFlame.getGammaThreshold()));
-    attrList.add(xb.createAttr("estimator_radius", 9));
-    attrList.add(xb.createAttr("estimator_minimum", 0));
-    attrList.add(xb.createAttr("estimator_curve", 0.4));
+    attrList.add(xb.createAttr("estimator_enabled", pFlame.isDeFilterEnabled() ? "1" : "0"));
+    attrList.add(xb.createAttr("estimator_radius", pFlame.getDeFilterMaxRadius()));
+    attrList.add(xb.createAttr("estimator_minimum", pFlame.getDeFilterMinRadius()));
+    attrList.add(xb.createAttr("estimator_curve", pFlame.getDeFilterCurve()));
     attrList.add(xb.createAttr("temporal_samples", 1.0));
     attrList.add(xb.createAttr("cam_zoom", pFlame.getCamZoom()));
     attrList.add(xb.createAttr("cam_pitch", (pFlame.getCamPitch() * Math.PI) / 180.0));
@@ -148,8 +149,6 @@ public class Flam3Writer {
       attrList.add(xb.createAttr("resolution_profile", pFlame.getResolutionProfile()));
     if (pFlame.getQualityProfile() != null && pFlame.getQualityProfile().length() > 0)
       attrList.add(xb.createAttr("quality_profile", pFlame.getQualityProfile()));
-    attrList.add(xb.createAttr("de_filter_radius", pFlame.getDEFilterRadius()));
-    attrList.add(xb.createAttr("de_filter_adjust", pFlame.getDEFilterAmount()));
     ShadingInfo shadingInfo = pFlame.getShadingInfo();
     attrList.add(xb.createAttr("shading_shading", shadingInfo.getShading().toString()));
     if (shadingInfo.getShading() == Shading.PSEUDO3D) {

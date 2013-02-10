@@ -19,6 +19,7 @@ package org.jwildfire.create.tina.dance.motion;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.dance.DancingFlameProject;
 import org.jwildfire.create.tina.dance.model.AnimationModelService;
+import org.jwildfire.create.tina.dance.model.FlamePropertyPath;
 import org.jwildfire.create.tina.dance.model.PropertyModel;
 
 public class DefaultMotionCreator implements MotionCreator {
@@ -120,9 +121,8 @@ public class DefaultMotionCreator implements MotionCreator {
   }
 
   protected void addXFormLink(PropertyModel pModel, Motion pMotion, Flame pFlame, int pXFormIndex, String pPropname) {
-    //    FlamePropertyPath path = new FlamePropertyPath(pFlame);
-    // TODO
-    //    MotionLink link = new MotionLink(path);
-    //    pMotion.getMotionLinks().add(link);
+    FlamePropertyPath path = new FlamePropertyPath(pFlame, AnimationModelService.createXFormPropertyPath(pXFormIndex, pPropname));
+    MotionLink link = new MotionLink(path);
+    pMotion.getMotionLinks().add(link);
   }
 }

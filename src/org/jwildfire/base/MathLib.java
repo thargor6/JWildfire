@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2013 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -53,55 +53,18 @@ public final class MathLib {
       return 0;
   }
 
-  // Fast sin/cos approx following http://www.java-gaming.org/index.php?topic=24191.0
-  //  private static final int TRIG_PRECALC_BITS, TRIG_PRECALC_MASK, TRIG_PRECALC_COUNT;
-  //  private static final double radFull, radToIndex;
-  //  private static final double degFull, degToIndex;
-  //  private static final double[] sin, cos, tan;
-
   public static final double sin(double a) {
     return FastMath.sin(a);
-    //    return sin[(int) (a * radToIndex) & TRIG_PRECALC_MASK];
   }
 
   public static final double cos(double a) {
     return FastMath.cos(a);
-    //    return cos[(int) (a * radToIndex) & TRIG_PRECALC_MASK];
   }
 
   public static final double tan(double a) {
     return FastMath.tan(a);
-    //    return tan[(int) (a * radToIndex) & TRIG_PRECALC_MASK];
   }
 
-  /*
-    static {
-      // sin, cos, tan
-      TRIG_PRECALC_BITS = 20;
-      TRIG_PRECALC_MASK = ~(-1 << TRIG_PRECALC_BITS);
-      TRIG_PRECALC_COUNT = TRIG_PRECALC_MASK + 1;
-
-      radFull = (Math.PI * 2.0);
-      degFull = (360.0);
-      radToIndex = TRIG_PRECALC_COUNT / radFull;
-      degToIndex = TRIG_PRECALC_COUNT / degFull;
-
-      sin = new double[TRIG_PRECALC_COUNT];
-      cos = new double[TRIG_PRECALC_COUNT];
-      tan = new double[TRIG_PRECALC_COUNT];
-
-      for (int i = 0; i < TRIG_PRECALC_COUNT; i++) {
-        sin[i] = Math.sin((i + 0.5) / TRIG_PRECALC_COUNT * radFull);
-        cos[i] = Math.cos((i + 0.5) / TRIG_PRECALC_COUNT * radFull);
-        tan[i] = Math.tan((i + 0.5) / TRIG_PRECALC_COUNT * radFull);
-      }
-      for (int i = 0; i < 360; i += 90) {
-        sin[(int) (i * degToIndex) & TRIG_PRECALC_MASK] = (double) Math.sin(i * Math.PI / 180.0);
-        cos[(int) (i * degToIndex) & TRIG_PRECALC_MASK] = (double) Math.cos(i * Math.PI / 180.0);
-        tan[(int) (i * degToIndex) & TRIG_PRECALC_MASK] = (double) Math.tan(i * Math.PI / 180.0);
-      }
-    }
-  */
   public static final double fmod(double a, double b) {
     return a % b;
   }
@@ -188,6 +151,31 @@ public final class MathLib {
 
   public static final double acosh(double d) {
     return log(sqrt(pow(d, 2.0) - 1.0) + d);
+  }
+
+  // Quick erf code taken from http://introcs.cs.princeton.edu/java/21function/ErrorFunction.java.html
+  // Copyright © 2000–2010, Robert Sedgewick and Kevin Wayne. 
+  //fractional error in math formula less than 1.2 * 10 ^ -7.
+  // although subject to catastrophic cancellation when z in very close to 0
+  // from Chebyshev fitting formula for erf(z) from Numerical Recipes, 6.2
+  public static double erf(double z) {
+    double t = 1.0 / (1.0 + 0.5 * Math.abs(z));
+
+    // use Horner's method
+    double ans = 1 - t * Math.exp(-z * z - 1.26551223 +
+        t * (1.00002368 +
+        t * (0.37409196 +
+            t * (0.09678418 +
+                t * (-0.18628806 +
+                    t * (0.27886807 +
+                        t * (-1.13520398 +
+                            t * (1.48851587 +
+                                t * (-0.82215223 +
+                                    t * (0.17087277))))))))));
+    if (z >= 0)
+      return ans;
+    else
+      return -ans;
   }
 
 }

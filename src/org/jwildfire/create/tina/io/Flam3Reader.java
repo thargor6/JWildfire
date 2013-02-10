@@ -56,6 +56,10 @@ public class Flam3Reader implements FlameReader {
   private static final String ATTR_SCALE = "scale";
   private static final String ATTR_ROTATE = "rotate";
   private static final String ATTR_FILTER = "filter";
+  private static final String ATTR_DE_FILTER_ENABLED = "estimator_enabled";
+  private static final String ATTR_DE_FILTER_MAX_RADIUS = "estimator_radius";
+  private static final String ATTR_DE_FILTER_MIN_RADIUS = "estimator_minimum";
+  private static final String ATTR_DE_FILTER_CURVE = "estimator_curve";
   private static final String ATTR_QUALITY = "quality";
   private static final String ATTR_BACKGROUND = "background";
   private static final String ATTR_BG_TRANSPARENCY = "bg_transparency";
@@ -78,8 +82,6 @@ public class Flam3Reader implements FlameReader {
   private static final String ATTR_NEW_DOF = "new_dof";
   private static final String ATTR_CAM_ZOOM = "cam_zoom";
   private static final String ATTR_NEW_LINEAR = "new_linear";
-  private static final String ATTR_DE_FILTER_AMOUNT = "de_filter_adjust";
-  private static final String ATTR_DE_FILTER_RADIUS = "de_filter_radius";
   private static final String ATTR_SHADING_SHADING = "shading_shading";
   private static final String ATTR_SHADING_AMBIENT = "shading_ambient";
   private static final String ATTR_SHADING_DIFFUSE = "shading_diffuse";
@@ -125,14 +127,23 @@ public class Flam3Reader implements FlameReader {
     if ((hs = atts.get(ATTR_FILTER)) != null) {
       pFlame.setSpatialFilterRadius(Double.parseDouble(hs));
     }
+    // Disable DE filter and check if it is set explicitely on. There are lots of Apo flames out there
+    // which are carrying DE settings, but they were never used and may look terrible (e. g. DE max radius 9.0) 
+    pFlame.setDeFilterEnabled(false);
+    if ((hs = atts.get(ATTR_DE_FILTER_ENABLED)) != null) {
+      pFlame.setDeFilterEnabled(Integer.parseInt(hs) == 1);
+    }
+    if ((hs = atts.get(ATTR_DE_FILTER_MAX_RADIUS)) != null) {
+      pFlame.setDeFilterMaxRadius(Double.parseDouble(hs));
+    }
+    if ((hs = atts.get(ATTR_DE_FILTER_MIN_RADIUS)) != null) {
+      pFlame.setDeFilterMinRadius(Double.parseDouble(hs));
+    }
+    if ((hs = atts.get(ATTR_DE_FILTER_CURVE)) != null) {
+      pFlame.setDeFilterCurve(Double.parseDouble(hs));
+    }
     if ((hs = atts.get(ATTR_QUALITY)) != null) {
       pFlame.setSampleDensity(Double.parseDouble(hs));
-    }
-    if ((hs = atts.get(ATTR_DE_FILTER_RADIUS)) != null) {
-      pFlame.setDEFilterRadius(Integer.parseInt(hs));
-    }
-    if ((hs = atts.get(ATTR_DE_FILTER_AMOUNT)) != null) {
-      pFlame.setDEFilterAmount(Double.parseDouble(hs));
     }
     if ((hs = atts.get(ATTR_BACKGROUND)) != null) {
       String s[] = hs.split(" ");

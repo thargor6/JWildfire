@@ -117,13 +117,20 @@ public class SubFlameRandomFlameGenerator extends RandomFlameGenerator {
       //          subFlame.setPixelsPerUnit(10);
       // render it   
       subFlame.setSampleDensity(50);
-      subFlame.setDEFilterAmount(0.0);
       subFlame.setSpatialFilterRadius(0.0);
       RGBPalette palette = new RandomRGBPaletteGenerator().generatePalette(11);
       subFlame.setPalette(palette);
-      FlameRenderer renderer = new FlameRenderer(subFlame, prefs, false);
-      RenderInfo info = new RenderInfo(IMG_WIDTH, IMG_HEIGHT);
-      RenderedFlame res = renderer.renderFlame(info);
+      RenderedFlame res;
+      boolean deEnabled = subFlame.isDeFilterEnabled();
+      try {
+        subFlame.setDeFilterEnabled(false);
+        FlameRenderer renderer = new FlameRenderer(subFlame, prefs, false);
+        RenderInfo info = new RenderInfo(IMG_WIDTH, IMG_HEIGHT);
+        res = renderer.renderFlame(info);
+      }
+      finally {
+        subFlame.setDeFilterEnabled(deEnabled);
+      }
       SimpleImage img = res.getImage();
       long maxCoverage = img.getImageWidth() * img.getImageHeight();
       long coverage = 0;

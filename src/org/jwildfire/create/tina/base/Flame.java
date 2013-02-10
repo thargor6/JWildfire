@@ -65,6 +65,10 @@ public class Flame implements Assignable<Flame>, Serializable {
   private double camDOFArea;
   private boolean newCamDOF;
   private double spatialFilterRadius;
+  private boolean deFilterEnabled;
+  private double deFilterMaxRadius;
+  private double deFilterMinRadius;
+  private double deFilterCurve;
   private double sampleDensity;
   private boolean bgTransparency;
   @AnimAware
@@ -85,8 +89,6 @@ public class Flame implements Assignable<Flame>, Serializable {
   private boolean preserveZ;
   private String resolutionProfile;
   private String qualityProfile;
-  private int deFilterRadius;
-  private double deFilterAmount;
   private String name = "";
   @AnimAware
   private RGBPalette palette = new RGBPalette();
@@ -98,7 +100,6 @@ public class Flame implements Assignable<Flame>, Serializable {
   private String lastFilename = null;
 
   public Flame() {
-    spatialFilterRadius = 0.0;
     sampleDensity = 100.0;
     bgTransparency = true;
     bgColorRed = bgColorGreen = bgColorBlue = 0;
@@ -124,9 +125,12 @@ public class Flame implements Assignable<Flame>, Serializable {
     gammaThreshold = 0.04;
     pixelsPerUnit = 50;
     whiteLevel = 200;
-    deFilterRadius = 5;
-    deFilterAmount = 0.0;
     name = "";
+    spatialFilterRadius = 0.0;
+    deFilterEnabled = true;
+    deFilterMaxRadius = 2.0;
+    deFilterMinRadius = 0.0;
+    deFilterCurve = 0.5;
     shadingInfo.init();
   }
 
@@ -506,6 +510,10 @@ public class Flame implements Assignable<Flame>, Serializable {
     camDOFArea = pFlame.camDOFArea;
     camDOFExponent = pFlame.camDOFExponent;
     spatialFilterRadius = pFlame.spatialFilterRadius;
+    deFilterEnabled = pFlame.deFilterEnabled;
+    deFilterMaxRadius = pFlame.deFilterMaxRadius;
+    deFilterMinRadius = pFlame.deFilterMinRadius;
+    deFilterCurve = pFlame.deFilterCurve;
     sampleDensity = pFlame.sampleDensity;
     bgTransparency = pFlame.bgTransparency;
     bgColorRed = pFlame.bgColorRed;
@@ -519,8 +527,6 @@ public class Flame implements Assignable<Flame>, Serializable {
     contrast = pFlame.contrast;
     vibrancy = pFlame.vibrancy;
     preserveZ = pFlame.preserveZ;
-    deFilterRadius = pFlame.deFilterRadius;
-    deFilterAmount = pFlame.deFilterAmount;
     resolutionProfile = pFlame.resolutionProfile;
     qualityProfile = pFlame.qualityProfile;
     shadingInfo.assign(pFlame.shadingInfo);
@@ -547,15 +553,15 @@ public class Flame implements Assignable<Flame>, Serializable {
         (fabs(focusY - pFlame.focusY) > EPSILON) || (fabs(focusZ - pFlame.focusZ) > EPSILON) ||
         (fabs(camDOF - pFlame.camDOF) > EPSILON) || (fabs(camDOFArea - pFlame.camDOFArea) > EPSILON) ||
         (fabs(camDOFExponent - pFlame.camDOFExponent) > EPSILON) || (fabs(camZ - pFlame.camZ) > EPSILON) ||
-        (newCamDOF != pFlame.newCamDOF) ||
-        (fabs(spatialFilterRadius - pFlame.spatialFilterRadius) > EPSILON) ||
+        (newCamDOF != pFlame.newCamDOF) || (fabs(spatialFilterRadius - pFlame.spatialFilterRadius) > EPSILON) ||
+        (deFilterEnabled != pFlame.deFilterEnabled) || (fabs(deFilterMaxRadius - pFlame.deFilterMaxRadius) > EPSILON) ||
+        (fabs(deFilterMinRadius - pFlame.deFilterMinRadius) > EPSILON) || (fabs(deFilterCurve - pFlame.deFilterCurve) > EPSILON) ||
         (fabs(sampleDensity - pFlame.sampleDensity) > EPSILON) || (bgTransparency != pFlame.bgTransparency) || (bgColorRed != pFlame.bgColorRed) ||
         (bgColorGreen != pFlame.bgColorGreen) || (bgColorBlue != pFlame.bgColorBlue) ||
         (fabs(gamma - pFlame.gamma) > EPSILON) || (fabs(gammaThreshold - pFlame.gammaThreshold) > EPSILON) ||
         (fabs(pixelsPerUnit - pFlame.pixelsPerUnit) > EPSILON) || (whiteLevel != pFlame.whiteLevel) ||
         (fabs(brightness - pFlame.brightness) > EPSILON) || (fabs(contrast - pFlame.contrast) > EPSILON) ||
         (fabs(vibrancy - pFlame.vibrancy) > EPSILON) || (preserveZ != pFlame.preserveZ) ||
-        (deFilterRadius != pFlame.deFilterRadius) || (fabs(deFilterAmount - pFlame.deFilterAmount) > EPSILON) ||
         ((resolutionProfile != null && pFlame.resolutionProfile == null) || (resolutionProfile == null && pFlame.resolutionProfile != null) ||
         (resolutionProfile != null && pFlame.resolutionProfile != null && !resolutionProfile.equals(pFlame.resolutionProfile))) ||
         ((qualityProfile != null && pFlame.qualityProfile == null) || (qualityProfile == null && pFlame.qualityProfile != null) ||
@@ -576,22 +582,6 @@ public class Flame implements Assignable<Flame>, Serializable {
       }
     }
     return true;
-  }
-
-  public int getDEFilterRadius() {
-    return deFilterRadius;
-  }
-
-  public void setDEFilterRadius(int deFilterRadius) {
-    this.deFilterRadius = deFilterRadius;
-  }
-
-  public double getDEFilterAmount() {
-    return deFilterAmount;
-  }
-
-  public void setDEFilterAmount(double deFilterAmount) {
-    this.deFilterAmount = deFilterAmount;
   }
 
   public boolean isBGTransparency() {
@@ -624,5 +614,37 @@ public class Flame implements Assignable<Flame>, Serializable {
 
   public void setNewCamDOF(boolean newCamDOF) {
     this.newCamDOF = newCamDOF;
+  }
+
+  public boolean isDeFilterEnabled() {
+    return deFilterEnabled;
+  }
+
+  public void setDeFilterEnabled(boolean deFilterEnabled) {
+    this.deFilterEnabled = deFilterEnabled;
+  }
+
+  public double getDeFilterMaxRadius() {
+    return deFilterMaxRadius;
+  }
+
+  public void setDeFilterMaxRadius(double deFilterMaxRadius) {
+    this.deFilterMaxRadius = deFilterMaxRadius;
+  }
+
+  public double getDeFilterMinRadius() {
+    return deFilterMinRadius;
+  }
+
+  public void setDeFilterMinRadius(double deFilterMinRadius) {
+    this.deFilterMinRadius = deFilterMinRadius;
+  }
+
+  public double getDeFilterCurve() {
+    return deFilterCurve;
+  }
+
+  public void setDeFilterCurve(double deFilterCurve) {
+    this.deFilterCurve = deFilterCurve;
   }
 }

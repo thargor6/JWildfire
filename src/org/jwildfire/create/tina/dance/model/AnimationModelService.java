@@ -18,6 +18,7 @@ package org.jwildfire.create.tina.dance.model;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.jwildfire.create.tina.animate.AnimAware;
@@ -153,5 +154,25 @@ public class AnimationModelService {
         }
       }
     }
+  }
+
+  public static List<String> createFlamePropertyPath(String pProperty) {
+    List<String> res = new ArrayList<String>();
+    res.add(pProperty);
+    return res;
+  }
+
+  public static List<String> createXFormPropertyPath(int pXFormIndex, String pProperty) {
+    List<String> res = new ArrayList<String>();
+    res.add(PROPNAME_XFORM + (pXFormIndex + 1));
+    res.add(pProperty);
+    return res;
+  }
+
+  public static List<String> createFinalXFormPropertyPath(int pXFormIndex, String pProperty) {
+    List<String> res = new ArrayList<String>();
+    res.add(PROPNAME_FINALXFORM + (pXFormIndex + 1));
+    res.add(pProperty);
+    return res;
   }
 }

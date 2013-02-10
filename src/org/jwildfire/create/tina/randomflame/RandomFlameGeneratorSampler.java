@@ -55,14 +55,21 @@ public class RandomFlameGeneratorSampler {
       flame.setWidth(imageWidth);
       flame.setHeight(imageHeight);
       flame.setPixelsPerUnit(10);
-      flame.setDEFilterAmount(0.0);
       flame.setSpatialFilterRadius(0.0);
       RGBPalette palette = new RandomRGBPaletteGenerator().generatePalette(paletteSize);
       flame.setPalette(palette);
       // render it   
       flame.setSampleDensity(50);
-      FlameRenderer renderer = new FlameRenderer(flame, prefs, false);
-      RenderedFlame renderedFlame = renderer.renderFlame(info);
+      RenderedFlame renderedFlame;
+      boolean oldDEEnabled = flame.isDeFilterEnabled();
+      flame.setDeFilterEnabled(false);
+      try {
+        FlameRenderer renderer = new FlameRenderer(flame, prefs, false);
+        renderedFlame = renderer.renderFlame(info);
+      }
+      finally {
+        flame.setDeFilterEnabled(oldDEEnabled);
+      }
       if (j == MAX_IMG_SAMPLES - 1) {
         renderedFlame = new FlameRenderer(bestFlame, prefs, false).renderFlame(info);
         return new RandomFlameGeneratorSample(bestFlame, renderedFlame.getImage());

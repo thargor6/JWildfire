@@ -288,11 +288,48 @@ public class FlameRenderer {
     if (renderScale > 1) {
       throw new IllegalArgumentException("renderScale != 1");
     }
+    boolean useDEFilter = flame.isDeFilterEnabled() && (flame.getDeFilterMaxRadius() > 0);
+    RasterPoint accumRaster[][] = null;
+    Flam3DEFilter deFilter = null;
+    if (useDEFilter) {
+      try {
+        accumRaster = new RasterPoint[rasterHeight][rasterWidth];
+        for (int i = 0; i < rasterHeight; i++) {
+          for (int j = 0; j < rasterWidth; j++) {
+            accumRaster[i][j] = new RasterPoint();
+          }
+        }
+      }
+      catch (Exception ex) {
+        ex.printStackTrace();
+        useDEFilter = false;
+      }
+      deFilter = new Flam3DEFilter(flame);
+    }
 
-    boolean useDEFilter = flame.getDEFilterRadius() > 1 && flame.getDEFilterAmount() > 0;
+    if (useDEFilter) {
+      if (pImage != null) {
+        deFilter.setRaster(accumRaster, raster, rasterWidth, rasterHeight, pImage.getImageWidth(), pImage.getImageHeight());
+      }
+      else if (pHDRImage != null) {
+        deFilter.setRaster(accumRaster, raster, rasterWidth, rasterHeight, pHDRImage.getImageWidth(), pHDRImage.getImageHeight());
+      }
+      else if (pHDRIntensityMap != null) {
+        deFilter.setRaster(accumRaster, raster, rasterWidth, rasterHeight, pHDRIntensityMap.getImageWidth(), pHDRIntensityMap.getImageHeight());
+      }
+      else {
+        throw new IllegalStateException();
+      }
+      for (int i = 0; i < pImage.getImageHeight(); i++) {
+        for (int j = 0; j < pImage.getImageWidth(); j++) {
+          deFilter.transformPoint(j, i);
+        }
+      }
+      raster = null;
+      raster = accumRaster;
+    }
 
     LogDensityPoint logDensityPnt = new LogDensityPoint();
-    LogDensityPoint logDensity2Pnt = new LogDensityPoint();
     if (pImage != null) {
       logDensityFilter.setRaster(raster, rasterWidth, rasterHeight, pImage.getImageWidth(), pImage.getImageHeight());
     }
@@ -311,14 +348,7 @@ public class FlameRenderer {
       for (int i = 0; i < pImage.getImageHeight(); i++) {
         for (int j = 0; j < pImage.getImageWidth(); j++) {
           if (useDEFilter) {
-            logDensityFilter.transformPoint(logDensity2Pnt, j, i);
-            logDensityFilter.transformPointWithDEFilter(logDensityPnt, j, i);
-            double deWeight = 0.67;
-            double fWeight = 1.0 - deWeight;
-            logDensityPnt.red = logDensity2Pnt.red * fWeight + logDensityPnt.red * deWeight;
-            logDensityPnt.green = logDensity2Pnt.green * fWeight + logDensityPnt.green * deWeight;
-            logDensityPnt.blue = logDensity2Pnt.blue * fWeight + logDensityPnt.blue * deWeight;
-            logDensityPnt.intensity = logDensity2Pnt.intensity * fWeight + logDensityPnt.intensity * deWeight;
+            logDensityFilter.transformPointPastDE(logDensityPnt, j, i);
           }
           else {
             logDensityFilter.transformPoint(logDensityPnt, j, i);
@@ -338,12 +368,7 @@ public class FlameRenderer {
         double minLum = Double.MAX_VALUE, maxLum = 0.0;
         for (int i = 0; i < pHDRImage.getImageHeight(); i++) {
           for (int j = 0; j < pHDRImage.getImageWidth(); j++) {
-            //            if (useDEFilter) {
-            //              logDensityFilter.transformPointHDRWithDEFilter(logDensityPnt, j, i);
-            //            }
-            //            else {
             logDensityFilter.transformPointHDR(logDensityPnt, j, i);
-            //            }
             gammaCorrectionFilter.transformPointHDR(logDensityPnt, rbgPoint);
             if (rbgPoint.red < 0.0) {
               bgMap[i][j] = true;
@@ -378,12 +403,7 @@ public class FlameRenderer {
       else {
         for (int i = 0; i < pHDRImage.getImageHeight(); i++) {
           for (int j = 0; j < pHDRImage.getImageWidth(); j++) {
-            //            if (useDEFilter) {
-            //              logDensityFilter.transformPointHDRWithDEFilter(logDensityPnt, j, i);
-            //            }
-            //            else {
             logDensityFilter.transformPointHDR(logDensityPnt, j, i);
-            //            }
             gammaCorrectionFilter.transformPointHDR(logDensityPnt, rbgPoint);
             pHDRImage.setRGB(j, i, rbgPoint.red, rbgPoint.green, rbgPoint.blue);
           }
@@ -947,5 +967,11 @@ public class FlameRenderer {
   public double getSina() {
     return sina;
   }
+
+  // TODO
+  // color curves
+  // DE filter kernel
+  // spatial filter kernel
+  // Math Library
 
 }
