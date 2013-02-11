@@ -27,7 +27,7 @@ public class RandomNumberGenerator {
   private static final double RAND_MAX_MUL = 1.0 / (double) RAND_MAX;
 
   public RandomNumberGenerator() {
-    randomize((long) (Long.MAX_VALUE * Math.random()));
+    randomize((long) (Integer.MAX_VALUE * Math.random()));
   }
 
   public void randomize(long pSeed) {

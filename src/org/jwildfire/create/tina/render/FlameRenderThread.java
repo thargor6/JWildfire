@@ -38,6 +38,8 @@ public abstract class FlameRenderThread implements Runnable {
     ctx.setPreserveZCoordinate(pFlame.isPreserveZ());
   }
 
+  protected abstract void preFuseIter();
+
   protected abstract void initState();
 
   protected abstract void iterate();

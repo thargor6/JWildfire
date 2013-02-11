@@ -53,39 +53,7 @@ public final class FlameRenderPseudo3DThread extends FlameRenderThread {
   @Override
   protected void initState() {
     startIter = 0;
-    affineTA = new XYZPoint[3]; // affine part of the transformation
-    for (int i = 0; i < affineTA.length; i++) {
-      affineTA[i] = new XYZPoint();
-    }
-    varTA = new XYZPoint[3]; // complete transformation
-    for (int i = 0; i < varTA.length; i++) {
-      varTA[i] = new XYZPoint();
-    }
-    pA = new XYZPoint[3];
-    for (int i = 0; i < pA.length; i++) {
-      pA[i] = new XYZPoint();
-    }
-    r = new XYZPoint();
-
-    pA[0].x = 2.0 * randGen.random() - 1.0;
-    pA[0].y = 2.0 * randGen.random() - 1.0;
-    pA[0].z = 0;
-    pA[0].color = randGen.random();
-
-    distributeInitialPoints(pA);
-    qA = new XYZPoint[3];
-    for (int i = 0; i < qA.length; i++) {
-      qA[i] = new XYZPoint();
-    }
-
-    xf = flame.getXForms().get(0);
-    xf.transformPoints(ctx, affineTA, varTA, pA, pA);
-    for (int i = 0; i <= Constants.INITIAL_ITERATIONS; i++) {
-      xf = xf.getNextAppliedXFormTable()[randGen.random(Constants.NEXT_APPLIED_XFORM_TABLE_SIZE)];
-      if (xf == null) {
-        return;
-      }
-    }
+    preFuseIter();
   }
 
   private void distributeInitialPoints(XYZPoint[] p) {
@@ -106,6 +74,13 @@ public final class FlameRenderPseudo3DThread extends FlameRenderThread {
     for (iter = startIter; !forceAbort && (samples < 0 || iter < samples); iter++) {
       if (iter % 100 == 0) {
         currSample = iter;
+        for (int pIdx = 0; pIdx < pA.length; pIdx++) {
+          if (Double.isInfinite(pA[pIdx].x) || Double.isInfinite(pA[pIdx].y) || Double.isInfinite(pA[pIdx].z) || Double.isNaN(pA[pIdx].x) || Double.isNaN(pA[pIdx].y) || Double.isNaN(pA[pIdx].z)) {
+            System.out.println("REFUSE");
+            preFuseIter();
+            break;
+          }
+        }
       }
       xf = xf.getNextAppliedXFormTable()[randGen.random(Constants.NEXT_APPLIED_XFORM_TABLE_SIZE)];
       if (xf == null) {
@@ -246,6 +221,43 @@ public final class FlameRenderPseudo3DThread extends FlameRenderThread {
     }
     else {
       return null;
+    }
+  }
+
+  @Override
+  protected void preFuseIter() {
+    affineTA = new XYZPoint[3]; // affine part of the transformation
+    for (int i = 0; i < affineTA.length; i++) {
+      affineTA[i] = new XYZPoint();
+    }
+    varTA = new XYZPoint[3]; // complete transformation
+    for (int i = 0; i < varTA.length; i++) {
+      varTA[i] = new XYZPoint();
+    }
+    pA = new XYZPoint[3];
+    for (int i = 0; i < pA.length; i++) {
+      pA[i] = new XYZPoint();
+    }
+    r = new XYZPoint();
+
+    pA[0].x = 2.0 * randGen.random() - 1.0;
+    pA[0].y = 2.0 * randGen.random() - 1.0;
+    pA[0].z = 0;
+    pA[0].color = randGen.random();
+
+    distributeInitialPoints(pA);
+    qA = new XYZPoint[3];
+    for (int i = 0; i < qA.length; i++) {
+      qA[i] = new XYZPoint();
+    }
+
+    xf = flame.getXForms().get(0);
+    xf.transformPoints(ctx, affineTA, varTA, pA, pA);
+    for (int i = 0; i <= Constants.INITIAL_ITERATIONS; i++) {
+      xf = xf.getNextAppliedXFormTable()[randGen.random(Constants.NEXT_APPLIED_XFORM_TABLE_SIZE)];
+      if (xf == null) {
+        return;
+      }
     }
   }
 

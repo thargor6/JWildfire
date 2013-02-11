@@ -50,8 +50,7 @@ public final class FlameRenderFlatThread extends FlameRenderThread {
   }
 
   @Override
-  protected void initState() {
-    startIter = 0;
+  protected void preFuseIter() {
     affineT = new XYZPoint(); // affine part of the transformation
     varT = new XYZPoint(); // complete transformation
     p = new XYZPoint();
@@ -72,6 +71,12 @@ public final class FlameRenderFlatThread extends FlameRenderThread {
   }
 
   @Override
+  protected void initState() {
+    startIter = 0;
+    preFuseIter();
+  }
+
+  @Override
   protected void iterate() {
     List<IterationObserver> observers = renderer.getIterationObservers();
     final double cosa = renderer.getCosa();
@@ -80,6 +85,10 @@ public final class FlameRenderFlatThread extends FlameRenderThread {
     for (iter = startIter; !forceAbort && (samples < 0 || iter < samples); iter++) {
       if (iter % 100 == 0) {
         currSample = iter;
+        if (Double.isInfinite(p.x) || Double.isInfinite(p.y) || Double.isInfinite(p.z) || Double.isNaN(p.x) || Double.isNaN(p.y) || Double.isNaN(p.z)) {
+          System.out.println("REFUSE");
+          preFuseIter();
+        }
       }
       xf = xf.getNextAppliedXFormTable()[randGen.random(Constants.NEXT_APPLIED_XFORM_TABLE_SIZE)];
       if (xf == null) {
@@ -113,11 +122,7 @@ public final class FlameRenderFlatThread extends FlameRenderThread {
           double dr = exp(finalXForm.getAntialiasRadius() * sqrt(-log(randGen.random()))) - 1.0;
           double da = randGen.random() * 2.0 * M_PI;
           xIdx = (int) (renderer.bws * px + dr * cos(da) + 0.5);
-          if (xIdx < 0 || xIdx >= renderer.rasterWidth)
-            continue;
           yIdx = (int) (renderer.bhs * py + dr * sin(da) + 0.5);
-          if (yIdx < 0 || yIdx >= renderer.rasterHeight)
-            continue;
         }
         else {
           xIdx = (int) (renderer.bws * px + 0.5);

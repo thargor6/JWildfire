@@ -1392,7 +1392,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaDEFilterCurveREd.setText("");
       tinaDEFilterCurveREd.setSize(new Dimension(100, 24));
       tinaDEFilterCurveREd.setPreferredSize(new Dimension(100, 24));
-      tinaDEFilterCurveREd.setMaxValue(2.0);
+      tinaDEFilterCurveREd.setMaxValue(0.9);
       tinaDEFilterCurveREd.setLocation(new Point(584, 2));
       tinaDEFilterCurveREd.setHasMinValue(true);
       tinaDEFilterCurveREd.setHasMaxValue(true);
@@ -1402,7 +1402,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaFilteringPanel.add(tinaDEFilterCurveREd);
 
       tinaDEFilterCurveSlider = new JSlider();
-      tinaDEFilterCurveSlider.setMaximum(200);
+      tinaDEFilterCurveSlider.setMaximum(90);
       tinaDEFilterCurveSlider.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           if (tinaController != null) {
@@ -9734,7 +9734,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JPanel getInteractiveCenterTopPanel() {
     if (interactiveCenterTopPanel == null) {
       interactiveCenterTopPanel = new JPanel();
-      interactiveCenterTopPanel.setBorder(new TitledBorder(null, "Quick preview", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+      interactiveCenterTopPanel.setBorder(new TitledBorder(null, "Fast-tonemapped preview", TitledBorder.LEADING, TitledBorder.TOP, null, null));
       interactiveCenterTopPanel.setLayout(new BorderLayout(0, 0));
     }
     return interactiveCenterTopPanel;

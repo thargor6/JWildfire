@@ -52,23 +52,7 @@ public final class FlameRenderBlurThread extends FlameRenderThread {
   @Override
   protected void initState() {
     startIter = 0;
-    affineT = new XYZPoint(); // affine part of the transformation
-    varT = new XYZPoint(); // complete transformation
-    p = new XYZPoint();
-    q = new XYZPoint();
-    p.x = 2.0 * randGen.random() - 1.0;
-    p.y = 2.0 * randGen.random() - 1.0;
-    p.z = 0.0;
-    p.color = randGen.random();
-
-    xf = flame.getXForms().get(0);
-    xf.transformPoint(ctx, affineT, varT, p, p);
-    for (int i = 0; i <= Constants.INITIAL_ITERATIONS; i++) {
-      xf = xf.getNextAppliedXFormTable()[randGen.random(Constants.NEXT_APPLIED_XFORM_TABLE_SIZE)];
-      if (xf == null) {
-        return;
-      }
-    }
+    preFuseIter();
   }
 
   @Override
@@ -93,6 +77,10 @@ public final class FlameRenderBlurThread extends FlameRenderThread {
     for (iter = startIter; !forceAbort && (samples < 0 || iter < samples); iter++) {
       if (iter % 100 == 0) {
         currSample = iter;
+        if (Double.isInfinite(p.x) || Double.isInfinite(p.y) || Double.isInfinite(p.z) || Double.isNaN(p.x) || Double.isNaN(p.y) || Double.isNaN(p.z)) {
+          System.out.println("REFUSE");
+          preFuseIter();
+        }
       }
       xf = xf.getNextAppliedXFormTable()[randGen.random(Constants.NEXT_APPLIED_XFORM_TABLE_SIZE)];
       if (xf == null) {
@@ -237,6 +225,27 @@ public final class FlameRenderBlurThread extends FlameRenderThread {
     varT = state.varT != null ? state.varT.makeCopy() : null;
     p = state.p != null ? state.p.makeCopy() : null;
     q = state.q != null ? state.q.makeCopy() : null;
+  }
+
+  @Override
+  protected void preFuseIter() {
+    affineT = new XYZPoint(); // affine part of the transformation
+    varT = new XYZPoint(); // complete transformation
+    p = new XYZPoint();
+    q = new XYZPoint();
+    p.x = 2.0 * randGen.random() - 1.0;
+    p.y = 2.0 * randGen.random() - 1.0;
+    p.z = 0.0;
+    p.color = randGen.random();
+
+    xf = flame.getXForms().get(0);
+    xf.transformPoint(ctx, affineT, varT, p, p);
+    for (int i = 0; i <= Constants.INITIAL_ITERATIONS; i++) {
+      xf = xf.getNextAppliedXFormTable()[randGen.random(Constants.NEXT_APPLIED_XFORM_TABLE_SIZE)];
+      if (xf == null) {
+        return;
+      }
+    }
   }
 
 }

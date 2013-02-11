@@ -18,7 +18,7 @@ package org.jwildfire.create.tina.render;
 
 import static java.lang.Math.ceil;
 import static java.lang.Math.floor;
-import static org.jwildfire.base.MathLib.log;
+import static org.jwildfire.base.MathLib.log10;
 import static org.jwildfire.base.MathLib.pow;
 import static org.jwildfire.base.MathLib.sqrt;
 
@@ -251,7 +251,7 @@ public class Flam3DEFilter {
         blue = point.blue;
         intensity = point.count;
 
-        ls = filter_coefs[f_coef_idx] * (k1 * log(1.0 + intensity * k2)) / intensity;
+        ls = filter_coefs[f_coef_idx] * (k1 * log10(1.0 + intensity * k2)) / intensity;
 
         red *= ls;
         green *= ls;
