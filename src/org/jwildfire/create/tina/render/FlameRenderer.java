@@ -38,7 +38,8 @@ import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.RasterPoint;
 import org.jwildfire.create.tina.base.XYZPoint;
 import org.jwildfire.create.tina.palette.RenderColor;
-import org.jwildfire.create.tina.random.RandomNumberGenerator;
+import org.jwildfire.create.tina.random.AbstractRandomGenerator;
+import org.jwildfire.create.tina.random.RandomGeneratorFactory;
 import org.jwildfire.create.tina.variation.FlameTransformationContext;
 import org.jwildfire.image.SimpleHDRImage;
 import org.jwildfire.image.SimpleImage;
@@ -70,7 +71,7 @@ public class FlameRenderer {
   // init in createColorMap
   RenderColor[] colorMap;
   double paletteIdxScl;
-  private RandomNumberGenerator randGen = new RandomNumberGenerator();
+  private AbstractRandomGenerator randGen;
   // 3D stuff
   protected boolean doProject3D = false;
   // init in init3D()
@@ -106,7 +107,8 @@ public class FlameRenderer {
     flame = pFlame;
     prefs = pPrefs;
     withAlpha = pWithAlpha;
-    flameTransformationContext = new FlameTransformationContext(this);
+    randGen = RandomGeneratorFactory.getInstance(prefs.getTinaRandomNumberGenerator());
+    flameTransformationContext = new FlameTransformationContext(this, randGen);
     flameTransformationContext.setPreserveZCoordinate(pFlame.isPreserveZ());
   }
 
@@ -320,6 +322,7 @@ public class FlameRenderer {
       else {
         throw new IllegalStateException();
       }
+
       for (int i = 0; i < pImage.getImageHeight(); i++) {
         for (int j = 0; j < pImage.getImageWidth(); j++) {
           deFilter.transformPoint(j, i);
@@ -603,14 +606,14 @@ public class FlameRenderer {
     }
   }
 
-  private FlameRenderThread createFlameRenderThread(Flame pFlame, long pSamples) {
+  private FlameRenderThread createFlameRenderThread(int pThreadId, Flame pFlame, long pSamples) {
     switch (flame.getShadingInfo().getShading()) {
       case FLAT:
-        return new FlameRenderFlatThread(this, pFlame, pSamples);
+        return new FlameRenderFlatThread(prefs, pThreadId, this, pFlame, pSamples);
       case BLUR:
-        return new FlameRenderBlurThread(this, pFlame, pSamples);
+        return new FlameRenderBlurThread(prefs, pThreadId, this, pFlame, pSamples);
       case PSEUDO3D:
-        return new FlameRenderPseudo3DThread(this, pFlame, pSamples);
+        return new FlameRenderPseudo3DThread(prefs, pThreadId, this, pFlame, pSamples);
       default:
         throw new IllegalArgumentException(flame.getShadingInfo().getShading().toString());
     }
@@ -630,7 +633,7 @@ public class FlameRenderer {
     runningThreads = new ArrayList<FlameRenderThread>();
     int nThreads = pFlames.size();
     for (int i = 0; i < nThreads; i++) {
-      FlameRenderThread t = createFlameRenderThread(pFlames.get(i), nSamples / (long) nThreads);
+      FlameRenderThread t = createFlameRenderThread(i, pFlames.get(i), nSamples / (long) nThreads);
       runningThreads.add(t);
       new Thread(t).start();
     }
@@ -664,7 +667,7 @@ public class FlameRenderer {
     List<FlameRenderThread> threads = new ArrayList<FlameRenderThread>();
     int nThreads = pFlames.size();
     for (int i = 0; i < nThreads; i++) {
-      FlameRenderThread t = createFlameRenderThread(pFlames.get(i), -1);
+      FlameRenderThread t = createFlameRenderThread(i, pFlames.get(i), -1);
       if (pState != null) {
         t.setResumeState(pState[i]);
       }
@@ -716,7 +719,7 @@ public class FlameRenderer {
     paletteIdxScl = colorMap.length - 2;
   }
 
-  public void setRandomNumberGenerator(RandomNumberGenerator random) {
+  public void setRandomNumberGenerator(AbstractRandomGenerator random) {
     this.randGen = random;
   }
 
@@ -733,10 +736,6 @@ public class FlameRenderer {
     else {
       return null;
     }
-  }
-
-  public RandomNumberGenerator getRandomNumberGenerator() {
-    return randGen;
   }
 
   public void setRenderScale(int pRenderScale) {

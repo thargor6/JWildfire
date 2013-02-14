@@ -32,6 +32,8 @@ import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+import org.jwildfire.create.tina.random.RandomGeneratorFactory;
+import org.jwildfire.create.tina.random.RandomGeneratorType;
 import org.jwildfire.create.tina.render.FlameRenderer;
 import org.jwildfire.create.tina.transform.XFormTransformService;
 import org.jwildfire.create.tina.variation.FlameTransformationContext;
@@ -758,7 +760,7 @@ public class FlamePanel extends ImagePanel {
 
   private FlameTransformationContext getFlameTransformationContext() {
     if (flameTransformationContext == null) {
-      flameTransformationContext = new FlameTransformationContext(getFlameRenderer());
+      flameTransformationContext = new FlameTransformationContext(getFlameRenderer(), RandomGeneratorFactory.getInstance(RandomGeneratorType.getDefaultValue()));
     }
     return flameTransformationContext;
   }

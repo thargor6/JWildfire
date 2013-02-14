@@ -20,6 +20,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.jwildfire.create.tina.random.RandomGeneratorType;
 import org.jwildfire.create.tina.render.CRendererInterface;
 import org.jwildfire.create.tina.render.RendererType;
 import org.jwildfire.swing.LookAndFeel;
@@ -63,6 +64,7 @@ public class Prefs extends ManagedObject {
   static final String KEY_TINA_RENDER_DEFAULT_BG_TRANSPARENCY = "tina.render.default_bg_transparency";
   static final String KEY_TINA_PROFILE_ASSOCIATE_WITH_FLAMES = "tina.profile.associate_with_flames";
 
+  static final String KEY_TINA_RANDOM_GENERATOR = "tina.random.generator";
   static final String KEY_TINA_RANDOMBATCH_SIZE = "tina.random_batch.size";
   static final String KEY_TINA_RANDOMBATCH_BGCOLOR_RED = "tina.random_batch.bg_color.red";
   static final String KEY_TINA_RANDOMBATCH_BGCOLOR_GREEN = "tina.random_batch.bg_color.green";
@@ -119,6 +121,13 @@ public class Prefs extends ManagedObject {
     }
   }
 
+  public static class RandomGeneratorTypEditor extends ComboBoxPropertyEditor {
+    public RandomGeneratorTypEditor() {
+      super();
+      setAvailableValues(new RandomGeneratorType[] { RandomGeneratorType.SIMPLE, RandomGeneratorType.MARSAGLIA, RandomGeneratorType.MERSENNE_TWISTER, RandomGeneratorType.JAVA_INTERNAL });
+    }
+  }
+
   public static class TINARendererEditor extends ComboBoxPropertyEditor {
     public TINARendererEditor() {
       super();
@@ -140,6 +149,9 @@ public class Prefs extends ManagedObject {
   private int tinaRenderMovieFrames = 90;
 
   private static int tinaRenderThreads;
+
+  @Property(description = "Random number generator to use", category = PropertyCategory.TINA, editorClass = RandomGeneratorTypEditor.class)
+  private RandomGeneratorType tinaRandomNumberGenerator = RandomGeneratorType.getDefaultValue();
 
   @Property(description = "Quality for realtime rendering (please restart app after changing this)", category = PropertyCategory.TINA)
   private int tinaRenderRealtimeQuality = 1;
@@ -365,6 +377,7 @@ public class Prefs extends ManagedObject {
     plafStyle = pSrc.plafStyle;
     plafTheme = pSrc.plafTheme;
     developmentMode = pSrc.developmentMode;
+    tinaRandomNumberGenerator = pSrc.tinaRandomNumberGenerator;
 
     tinaRenderMovieFrames = pSrc.tinaRenderMovieFrames;
     tinaRenderPreviewQuality = pSrc.tinaRenderPreviewQuality;
@@ -549,6 +562,14 @@ public class Prefs extends ManagedObject {
 
   public void setTinaDefaultBGTransparency(boolean tinaDefaultBGTransparency) {
     this.tinaDefaultBGTransparency = tinaDefaultBGTransparency;
+  }
+
+  public RandomGeneratorType getTinaRandomNumberGenerator() {
+    return tinaRandomNumberGenerator;
+  }
+
+  public void setTinaRandomNumberGenerator(RandomGeneratorType tinaRandomNumberGenerator) {
+    this.tinaRandomNumberGenerator = tinaRandomNumberGenerator;
   }
 
 }

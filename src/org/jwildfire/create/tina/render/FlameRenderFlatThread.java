@@ -24,8 +24,11 @@ import static org.jwildfire.base.MathLib.log;
 import static org.jwildfire.base.MathLib.sin;
 import static org.jwildfire.base.MathLib.sqrt;
 
+import java.util.Date;
 import java.util.List;
 
+import org.jwildfire.base.Prefs;
+import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Constants;
 import org.jwildfire.create.tina.base.DrawMode;
 import org.jwildfire.create.tina.base.Flame;
@@ -33,7 +36,6 @@ import org.jwildfire.create.tina.base.RasterPoint;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 import org.jwildfire.create.tina.palette.RenderColor;
-import org.jwildfire.create.tina.random.RandomNumberGenerator;
 
 public final class FlameRenderFlatThread extends FlameRenderThread {
   private XYZPoint affineT;
@@ -43,10 +45,9 @@ public final class FlameRenderFlatThread extends FlameRenderThread {
   private XForm xf;
   private long startIter;
   private long iter;
-  private RandomNumberGenerator randGen = new RandomNumberGenerator();
 
-  public FlameRenderFlatThread(FlameRenderer pRenderer, Flame pFlame, long pSamples) {
-    super(pRenderer, pFlame, pSamples);
+  public FlameRenderFlatThread(Prefs pPrefs, int pThreadId, FlameRenderer pRenderer, Flame pFlame, long pSamples) {
+    super(pPrefs, pThreadId, pRenderer, pFlame, pSamples);
   }
 
   @Override
@@ -86,7 +87,7 @@ public final class FlameRenderFlatThread extends FlameRenderThread {
       if (iter % 100 == 0) {
         currSample = iter;
         if (Double.isInfinite(p.x) || Double.isInfinite(p.y) || Double.isInfinite(p.z) || Double.isNaN(p.x) || Double.isNaN(p.y) || Double.isNaN(p.z)) {
-          System.out.println("REFUSE");
+          System.out.println(Tools.TimeToString(new Date()) + ": recovering...");
           preFuseIter();
         }
       }

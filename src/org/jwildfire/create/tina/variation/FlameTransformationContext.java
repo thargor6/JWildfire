@@ -16,17 +16,17 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import org.jwildfire.create.tina.random.RandomNumberGenerator;
-import org.jwildfire.create.tina.random.RandomNumberGenerator.RandGenStatus;
+import org.jwildfire.create.tina.random.AbstractRandomGenerator;
+import org.jwildfire.create.tina.random.AbstractRandomGenerator.RandGenStatus;
 import org.jwildfire.create.tina.render.FlameRenderer;
 
 public class FlameTransformationContext {
-  private final RandomNumberGenerator randGen;
+  private final AbstractRandomGenerator randGen;
   private final FlameRenderer flameRenderer;
   private boolean preserveZCoordinate = false;
 
-  public FlameTransformationContext(FlameRenderer pFlameRenderer) {
-    randGen = pFlameRenderer.getRandomNumberGenerator();
+  public FlameTransformationContext(FlameRenderer pFlameRenderer, AbstractRandomGenerator pRandGen) {
+    randGen = pRandGen;
     flameRenderer = pFlameRenderer;
   }
 
@@ -54,7 +54,7 @@ public class FlameTransformationContext {
     preserveZCoordinate = pPreserveZCoordinate;
   }
 
-  public RandomNumberGenerator getRandGen() {
+  public AbstractRandomGenerator getRandGen() {
     return randGen;
   }
 

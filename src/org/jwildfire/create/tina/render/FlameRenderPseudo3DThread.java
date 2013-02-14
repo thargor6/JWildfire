@@ -24,8 +24,11 @@ import static org.jwildfire.base.MathLib.log;
 import static org.jwildfire.base.MathLib.sin;
 import static org.jwildfire.base.MathLib.sqrt;
 
+import java.util.Date;
 import java.util.List;
 
+import org.jwildfire.base.Prefs;
+import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Constants;
 import org.jwildfire.create.tina.base.DrawMode;
 import org.jwildfire.create.tina.base.Flame;
@@ -33,7 +36,6 @@ import org.jwildfire.create.tina.base.RasterPoint;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 import org.jwildfire.create.tina.palette.RenderColor;
-import org.jwildfire.create.tina.random.RandomNumberGenerator;
 
 public final class FlameRenderPseudo3DThread extends FlameRenderThread {
   private XYZPoint[] affineTA;
@@ -44,10 +46,9 @@ public final class FlameRenderPseudo3DThread extends FlameRenderThread {
   private XForm xf;
   private long iter;
   private long startIter;
-  private RandomNumberGenerator randGen = new RandomNumberGenerator();
 
-  public FlameRenderPseudo3DThread(FlameRenderer pRenderer, Flame pFlame, long pSamples) {
-    super(pRenderer, pFlame, pSamples);
+  public FlameRenderPseudo3DThread(Prefs pPrefs, int pThreadId, FlameRenderer pRenderer, Flame pFlame, long pSamples) {
+    super(pPrefs, pThreadId, pRenderer, pFlame, pSamples);
   }
 
   @Override
@@ -76,7 +77,7 @@ public final class FlameRenderPseudo3DThread extends FlameRenderThread {
         currSample = iter;
         for (int pIdx = 0; pIdx < pA.length; pIdx++) {
           if (Double.isInfinite(pA[pIdx].x) || Double.isInfinite(pA[pIdx].y) || Double.isInfinite(pA[pIdx].z) || Double.isNaN(pA[pIdx].x) || Double.isNaN(pA[pIdx].y) || Double.isNaN(pA[pIdx].z)) {
-            System.out.println("REFUSE");
+            System.out.println(Tools.TimeToString(new Date()) + ": recovering...");
             preFuseIter();
             break;
           }

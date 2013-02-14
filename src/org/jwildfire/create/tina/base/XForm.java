@@ -27,7 +27,7 @@ import java.util.List;
 import org.jwildfire.base.MathLib;
 import org.jwildfire.create.tina.animate.AnimAware;
 import org.jwildfire.create.tina.edit.Assignable;
-import org.jwildfire.create.tina.random.RandomNumberGenerator.RandGenStatus;
+import org.jwildfire.create.tina.random.AbstractRandomGenerator.RandGenStatus;
 import org.jwildfire.create.tina.variation.FlameTransformationContext;
 import org.jwildfire.create.tina.variation.Variation;
 import org.jwildfire.create.tina.variation.VariationFunc;

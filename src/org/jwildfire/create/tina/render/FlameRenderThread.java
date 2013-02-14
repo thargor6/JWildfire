@@ -16,7 +16,10 @@
 */
 package org.jwildfire.create.tina.render;
 
+import org.jwildfire.base.Prefs;
 import org.jwildfire.create.tina.base.Flame;
+import org.jwildfire.create.tina.random.AbstractRandomGenerator;
+import org.jwildfire.create.tina.random.RandomGeneratorFactory;
 import org.jwildfire.create.tina.variation.FlameTransformationContext;
 
 public abstract class FlameRenderThread implements Runnable {
@@ -29,12 +32,14 @@ public abstract class FlameRenderThread implements Runnable {
   protected boolean finished;
   protected FlameRenderThreadState resumeState;
   protected FlameTransformationContext ctx;
+  protected AbstractRandomGenerator randGen;
 
-  public FlameRenderThread(FlameRenderer pRenderer, Flame pFlame, long pSamples) {
+  public FlameRenderThread(Prefs pPrefs, int pThreadId, FlameRenderer pRenderer, Flame pFlame, long pSamples) {
     renderer = pRenderer;
     flame = pFlame;
     samples = pSamples;
-    ctx = new FlameTransformationContext(pRenderer);
+    randGen = RandomGeneratorFactory.getInstance(pPrefs.getTinaRandomNumberGenerator(), pThreadId);
+    ctx = new FlameTransformationContext(pRenderer, randGen);
     ctx.setPreserveZCoordinate(pFlame.isPreserveZ());
   }
 
