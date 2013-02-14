@@ -62,6 +62,7 @@ public class Prefs extends ManagedObject {
   static final String KEY_TINA_RENDER_PREVIEW_QUALITY = "tina.render.preview.quality";
   static final String KEY_TINA_RENDER_DEFAULT_RENDERER = "tina.render.default_renderer";
   static final String KEY_TINA_RENDER_DEFAULT_BG_TRANSPARENCY = "tina.render.default_bg_transparency";
+  static final String KEY_TINA_RENDER_DEFAULT_DE_MAX_RADIUS = "tina.render.default_de_max_radius";
   static final String KEY_TINA_PROFILE_ASSOCIATE_WITH_FLAMES = "tina.profile.associate_with_flames";
 
   static final String KEY_TINA_RANDOM_GENERATOR = "tina.random.generator";
@@ -156,9 +157,6 @@ public class Prefs extends ManagedObject {
   @Property(description = "Quality for realtime rendering (please restart app after changing this)", category = PropertyCategory.TINA)
   private int tinaRenderRealtimeQuality = 1;
 
-  @Property(description = "Quality for preview rendering", category = PropertyCategory.TINA)
-  private int tinaRenderPreviewQuality = 100;
-
   @Property(description = "Number of generated flames by invoking the \"Random flames\" function", category = PropertyCategory.TINA)
   private int tinaRandomBatchSize = 24;
   @Property(description = "Red component of the background color of randomly generated flames", category = PropertyCategory.TINA)
@@ -173,6 +171,11 @@ public class Prefs extends ManagedObject {
 
   @Property(description = "Default background transparency", category = PropertyCategory.TINA)
   private boolean tinaDefaultBGTransparency = true;
+  @Property(description = "Default DE max radius (set to zero to turn DE off by default)", category = PropertyCategory.TINA)
+  private double tinaDefaultDEMaxRadius = 0.7;
+
+  @Property(description = "Quality for preview rendering", category = PropertyCategory.TINA)
+  private int tinaRenderPreviewQuality = 100;
 
   public String getInputScriptPath() {
     return lastInputScriptPath != null ? lastInputScriptPath : scriptPath;
@@ -389,6 +392,7 @@ public class Prefs extends ManagedObject {
     tinaAssociateProfilesWithFlames = pSrc.tinaAssociateProfilesWithFlames;
     tinaDefaultRenderer = pSrc.tinaDefaultRenderer;
     tinaDefaultBGTransparency = pSrc.tinaDefaultBGTransparency;
+    tinaDefaultDEMaxRadius = pSrc.tinaDefaultDEMaxRadius;
 
     resolutionProfiles.clear();
     for (ResolutionProfile profile : pSrc.resolutionProfiles) {
@@ -570,6 +574,14 @@ public class Prefs extends ManagedObject {
 
   public void setTinaRandomNumberGenerator(RandomGeneratorType tinaRandomNumberGenerator) {
     this.tinaRandomNumberGenerator = tinaRandomNumberGenerator;
+  }
+
+  public double getTinaDefaultDEMaxRadius() {
+    return tinaDefaultDEMaxRadius;
+  }
+
+  public void setTinaDefaultDEMaxRadius(double tinaDefaultDEMaxRadius) {
+    this.tinaDefaultDEMaxRadius = tinaDefaultDEMaxRadius;
   }
 
 }

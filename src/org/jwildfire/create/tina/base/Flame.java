@@ -131,7 +131,7 @@ public class Flame implements Assignable<Flame>, Serializable {
     name = "";
     spatialFilterRadius = 0.0;
     spatialFilterKernel = FilterKernelType.GAUSSIAN;
-    deFilterEnabled = true;
+    deFilterEnabled = false;
     deFilterMaxRadius = 0.7;
     deFilterMinRadius = 0.0;
     deFilterCurve = 0.36;

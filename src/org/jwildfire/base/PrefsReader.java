@@ -42,10 +42,10 @@ public class PrefsReader {
     return val.length() > 0 ? val.equalsIgnoreCase("true") : pDefaultValue;
   }
 
-  //  private double getDoubleProperty(Properties pProperties, String pKey, double pDefaultValue) {
-  //    String val = pProperties.getProperty(pKey, "").trim();
-  //    return val.length() > 0 ? Tools.stringToDouble(val) : pDefaultValue;
-  //  }
+  private double getDoubleProperty(Properties pProperties, String pKey, double pDefaultValue) {
+    String val = pProperties.getProperty(pKey, "").trim();
+    return val.length() > 0 ? Tools.stringToDouble(val) : pDefaultValue;
+  }
 
   public void readPrefs(Prefs pPrefs) throws Exception {
     File file = new File(System.getProperty("user.home"), Prefs.PREFS_FILE);
@@ -73,6 +73,7 @@ public class PrefsReader {
           }
         }
         pPrefs.setTinaDefaultBGTransparency(getBooleanProperty(props, Prefs.KEY_TINA_RENDER_DEFAULT_BG_TRANSPARENCY, pPrefs.isTinaDefaultBGTransparency()));
+        pPrefs.setTinaDefaultDEMaxRadius(getDoubleProperty(props, Prefs.KEY_TINA_RENDER_DEFAULT_DE_MAX_RADIUS, pPrefs.getTinaDefaultDEMaxRadius()));
         pPrefs.setTinaFlamePath(getProperty(props, Prefs.KEY_TINA_PATH_FLAMES, pPrefs.getTinaFlamePath()));
         pPrefs.setTinaJWFMoviePath(getProperty(props, Prefs.KEY_TINA_PATH_JWFMOVIES, pPrefs.getTinaJWFMoviePath()));
         pPrefs.setTinaRenderMovieFrames(getIntProperty(props, Prefs.KEY_TINA_RENDER_MOVIE_FRAMES, pPrefs.getTinaRenderMovieFrames()));

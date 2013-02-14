@@ -16,6 +16,8 @@
 */
 package org.jwildfire.create.tina.randomflame;
 
+import static org.jwildfire.base.MathLib.EPSILON;
+
 import org.jwildfire.base.Prefs;
 import org.jwildfire.create.tina.base.Flame;
 
@@ -33,6 +35,13 @@ public abstract class RandomFlameGenerator {
     flame.setBGColorRed(pPrefs.getTinaRandomBatchBGColorRed());
     flame.setBGColorGreen(pPrefs.getTinaRandomBatchBGColorGreen());
     flame.setBGColorBlue(pPrefs.getTinaRandomBatchBGColorBlue());
+    if (pPrefs.getTinaDefaultDEMaxRadius() < EPSILON) {
+      flame.setDeFilterEnabled(false);
+    }
+    else {
+      flame.setDeFilterEnabled(true);
+      flame.setDeFilterMaxRadius(pPrefs.getTinaDefaultDEMaxRadius());
+    }
     return flame;
   }
 

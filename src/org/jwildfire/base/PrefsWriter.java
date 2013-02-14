@@ -31,6 +31,7 @@ public class PrefsWriter {
     addValue(sb, Prefs.KEY_GENERAL_PATH_SOUND_FILES, pPrefs.getSoundFilePath());
     addValue(sb, Prefs.KEY_TINA_RENDER_DEFAULT_RENDERER, pPrefs.getTinaDefaultRenderer().name());
     addValue(sb, Prefs.KEY_TINA_RENDER_DEFAULT_BG_TRANSPARENCY, pPrefs.isTinaDefaultBGTransparency());
+    addValue(sb, Prefs.KEY_TINA_RENDER_DEFAULT_DE_MAX_RADIUS, pPrefs.getTinaDefaultDEMaxRadius());
     addValue(sb, Prefs.KEY_TINA_PROFILE_ASSOCIATE_WITH_FLAMES, pPrefs.isTinaAssociateProfilesWithFlames());
     addValue(sb, Prefs.KEY_TINA_PATH_FLAMES, pPrefs.getTinaFlamePath());
     addValue(sb, Prefs.KEY_TINA_PATH_JWFMOVIES, pPrefs.getTinaJWFMoviePath());
@@ -88,8 +89,8 @@ public class PrefsWriter {
     pSB.append(pKey + "=" + String.valueOf(pValue) + "\n");
   }
 
-  //  private void addValue(StringBuilder pSB, String pKey, double pValue) {
-  //    pSB.append(pKey + "=" + Tools.doubleToString(pValue) + "\n");
-  //  }
+  private void addValue(StringBuilder pSB, String pKey, double pValue) {
+    pSB.append(pKey + "=" + Tools.doubleToString(pValue) + "\n");
+  }
 
 }

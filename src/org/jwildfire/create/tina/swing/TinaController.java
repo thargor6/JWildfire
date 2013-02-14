@@ -16,6 +16,8 @@
 */
 package org.jwildfire.create.tina.swing;
 
+import static org.jwildfire.base.MathLib.EPSILON;
+
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -3446,6 +3448,13 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     flame.setHeight(600);
     flame.setPixelsPerUnit(50);
     flame.setBGTransparency(prefs.isTinaDefaultBGTransparency());
+    if (prefs.getTinaDefaultDEMaxRadius() < EPSILON) {
+      flame.setDeFilterEnabled(false);
+    }
+    else {
+      flame.setDeFilterEnabled(true);
+      flame.setDeFilterMaxRadius(prefs.getTinaDefaultDEMaxRadius());
+    }
     RGBPalette palette = new RandomRGBPaletteGenerator().generatePalette(Integer.parseInt(paletteRandomPointsREd.getText()));
     flame.setPalette(palette);
     currFlame = flame;
