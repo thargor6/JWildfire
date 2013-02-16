@@ -1,3 +1,18 @@
+V0.64 (16.02.2013):
+ - 37 phantastic new images for the launcher from the community
+ - a whole family of random number generators is now available: SIMPLE, MARSAGLIA, MERSENNE_TWISTER, JAVA_INTERNAL (default is MERSENNE_TWISTER, you can change this in the Preferences)
+ - removed the old DE filter code and replaced it by a flam3-compatible implementation
+ - 14 different filter kernels for both DE and spatial filtering
+ - recover "lost" (=infinite) points, this should avoid the effect of "rendering turns into black" on certain flames 
+ - its now possible to choose from different implementations of basic mathematical functions. Two implementations are currently provided: FAST_MATH and JAVA_MATH. You can select them from the preferences window. Normally FAST_MATH should work perfect, if you are loosing details at high zoom factors just use JAVA_MATH
+ - new Preferences option for default DE filter radius
+ - antialiasing is now enabled by default, you can find new options for the default values in the Preferences
+ - since this version the pitch angle is (again) not altered while rotating the view with the mouse (this makes it easier to just modify the roll angle)
+ - additional color indicator on the "color" tab which color corresponds to your selected color index
+ - new hypertile3D, hypertile3D1, hypertile3D2 and poincare3D variations by Zueuk
+ - improved the JulianDisc random flame generator
+ - several additions to the dancing flames module (still work in progress)
+
 V0.63 (26.01.2013):
  - new parameters "area" and "exponent" for DOF
  - restored the old method to calculate DOF and allow to switch between old and new method freely
