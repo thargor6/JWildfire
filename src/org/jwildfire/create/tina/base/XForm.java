@@ -16,15 +16,15 @@
 */
 package org.jwildfire.create.tina.base;
 
-import static org.jwildfire.base.MathLib.EPSILON;
-import static org.jwildfire.base.MathLib.fabs;
+import static org.jwildfire.base.mathlib.MathLib.EPSILON;
+import static org.jwildfire.base.mathlib.MathLib.fabs;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.jwildfire.base.MathLib;
+import org.jwildfire.base.mathlib.MathLib;
 import org.jwildfire.create.tina.animate.AnimAware;
 import org.jwildfire.create.tina.edit.Assignable;
 import org.jwildfire.create.tina.random.AbstractRandomGenerator.RandGenStatus;

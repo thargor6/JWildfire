@@ -16,7 +16,7 @@
 */
 package org.jwildfire.create.tina.render;
 
-import static org.jwildfire.base.MathLib.log10;
+import static org.jwildfire.base.mathlib.MathLib.log10;
 
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.RasterPoint;

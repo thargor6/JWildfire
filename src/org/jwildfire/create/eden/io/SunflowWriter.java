@@ -1,7 +1,7 @@
 package org.jwildfire.create.eden.io;
 
-import org.jwildfire.base.MathLib;
 import org.jwildfire.base.Tools;
+import org.jwildfire.base.mathlib.MathLib;
 import org.jwildfire.create.eden.group.Group;
 import org.jwildfire.create.eden.group.GroupMember;
 import org.jwildfire.create.eden.primitive.Box;

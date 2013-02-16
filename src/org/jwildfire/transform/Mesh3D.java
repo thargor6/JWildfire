@@ -16,8 +16,8 @@
 */
 package org.jwildfire.transform;
 
-import org.jwildfire.base.MathLib;
 import org.jwildfire.base.Tools;
+import org.jwildfire.base.mathlib.MathLib;
 import org.jwildfire.image.SimpleImage;
 
 

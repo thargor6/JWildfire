@@ -16,7 +16,7 @@
 */
 package org.jwildfire.create.tina.transform;
 
-import org.jwildfire.base.MathLib;
+import org.jwildfire.base.mathlib.MathLib;
 import org.jwildfire.create.tina.base.XForm;
 
 public class XFormTransformService {

@@ -16,11 +16,11 @@
 */
 package org.jwildfire.create.tina.base;
 
-import static org.jwildfire.base.MathLib.EPSILON;
-import static org.jwildfire.base.MathLib.SMALL_EPSILON;
-import static org.jwildfire.base.MathLib.atan2;
-import static org.jwildfire.base.MathLib.fabs;
-import static org.jwildfire.base.MathLib.sqrt;
+import static org.jwildfire.base.mathlib.MathLib.EPSILON;
+import static org.jwildfire.base.mathlib.MathLib.SMALL_EPSILON;
+import static org.jwildfire.base.mathlib.MathLib.atan2;
+import static org.jwildfire.base.mathlib.MathLib.fabs;
+import static org.jwildfire.base.mathlib.MathLib.sqrt;
 
 import java.io.Serializable;
 

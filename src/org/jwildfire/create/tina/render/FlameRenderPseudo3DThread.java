@@ -16,19 +16,17 @@
 */
 package org.jwildfire.create.tina.render;
 
-import static org.jwildfire.base.MathLib.EPSILON;
-import static org.jwildfire.base.MathLib.M_PI;
-import static org.jwildfire.base.MathLib.cos;
-import static org.jwildfire.base.MathLib.exp;
-import static org.jwildfire.base.MathLib.log;
-import static org.jwildfire.base.MathLib.sin;
-import static org.jwildfire.base.MathLib.sqrt;
+import static org.jwildfire.base.mathlib.MathLib.EPSILON;
+import static org.jwildfire.base.mathlib.MathLib.M_PI;
+import static org.jwildfire.base.mathlib.MathLib.cos;
+import static org.jwildfire.base.mathlib.MathLib.exp;
+import static org.jwildfire.base.mathlib.MathLib.log;
+import static org.jwildfire.base.mathlib.MathLib.sin;
+import static org.jwildfire.base.mathlib.MathLib.sqrt;
 
-import java.util.Date;
 import java.util.List;
 
 import org.jwildfire.base.Prefs;
-import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Constants;
 import org.jwildfire.create.tina.base.DrawMode;
 import org.jwildfire.create.tina.base.Flame;
@@ -77,7 +75,7 @@ public final class FlameRenderPseudo3DThread extends FlameRenderThread {
         currSample = iter;
         for (int pIdx = 0; pIdx < pA.length; pIdx++) {
           if (Double.isInfinite(pA[pIdx].x) || Double.isInfinite(pA[pIdx].y) || Double.isInfinite(pA[pIdx].z) || Double.isNaN(pA[pIdx].x) || Double.isNaN(pA[pIdx].y) || Double.isNaN(pA[pIdx].z)) {
-            System.out.println(Tools.TimeToString(new Date()) + ": recovering...");
+            //            System.out.println(Tools.TimeToString(new Date()) + ": recovering...");
             preFuseIter();
             break;
           }

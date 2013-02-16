@@ -16,8 +16,8 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.MathLib.max;
-import static org.jwildfire.base.MathLib.min;
+import static org.jwildfire.base.mathlib.MathLib.max;
+import static org.jwildfire.base.mathlib.MathLib.min;
 import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_CUDA;
 import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_JWILDFIRE;
 

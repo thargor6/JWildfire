@@ -20,8 +20,8 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.jwildfire.base.MathLib;
 import org.jwildfire.base.Tools;
+import org.jwildfire.base.mathlib.MathLib;
 import org.jwildfire.transform.Mesh3D;
 import org.jwildfire.transform.Mesh3DTransformer.Rotate;
 

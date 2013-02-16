@@ -1,6 +1,6 @@
 package org.jwildfire.create.tina.render;
 
-import static org.jwildfire.base.MathLib.sqrt;
+import static org.jwildfire.base.mathlib.MathLib.sqrt;
 
 import org.jwildfire.base.Prefs;
 import org.jwildfire.create.tina.base.Flame;

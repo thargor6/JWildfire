@@ -16,7 +16,7 @@
 */
 package org.jwildfire.create.tina.render;
 
-import static org.jwildfire.base.MathLib.pow;
+import static org.jwildfire.base.mathlib.MathLib.pow;
 
 import org.jwildfire.create.tina.base.Flame;
 

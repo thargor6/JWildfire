@@ -16,9 +16,9 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.MathLib.M_PI;
-import static org.jwildfire.base.MathLib.fabs;
-import static org.jwildfire.base.MathLib.fmod;
+import static org.jwildfire.base.mathlib.MathLib.M_PI;
+import static org.jwildfire.base.mathlib.MathLib.fabs;
+import static org.jwildfire.base.mathlib.MathLib.fmod;
 import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_JWILDFIRE;
 
 import org.jwildfire.create.tina.base.XForm;

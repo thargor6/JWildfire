@@ -16,10 +16,10 @@
 */
 package org.jwildfire.create.tina.render;
 
-import static org.jwildfire.base.MathLib.M_PI;
-import static org.jwildfire.base.MathLib.cos;
-import static org.jwildfire.base.MathLib.fabs;
-import static org.jwildfire.base.MathLib.sin;
+import static org.jwildfire.base.mathlib.MathLib.M_PI;
+import static org.jwildfire.base.mathlib.MathLib.cos;
+import static org.jwildfire.base.mathlib.MathLib.fabs;
+import static org.jwildfire.base.mathlib.MathLib.sin;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -31,9 +31,9 @@ import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.jwildfire.base.MathLib;
 import org.jwildfire.base.Prefs;
 import org.jwildfire.base.QualityProfile;
+import org.jwildfire.base.mathlib.MathLib;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.RasterPoint;
 import org.jwildfire.create.tina.base.XYZPoint;

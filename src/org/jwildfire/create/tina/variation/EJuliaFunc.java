@@ -16,15 +16,15 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.MathLib.M_2PI;
-import static org.jwildfire.base.MathLib.acos;
-import static org.jwildfire.base.MathLib.acosh;
-import static org.jwildfire.base.MathLib.cos;
-import static org.jwildfire.base.MathLib.cosh;
-import static org.jwildfire.base.MathLib.floor;
-import static org.jwildfire.base.MathLib.sin;
-import static org.jwildfire.base.MathLib.sinh;
-import static org.jwildfire.base.MathLib.sqrt;
+import static org.jwildfire.base.mathlib.MathLib.M_2PI;
+import static org.jwildfire.base.mathlib.MathLib.acos;
+import static org.jwildfire.base.mathlib.MathLib.acosh;
+import static org.jwildfire.base.mathlib.MathLib.cos;
+import static org.jwildfire.base.mathlib.MathLib.cosh;
+import static org.jwildfire.base.mathlib.MathLib.floor;
+import static org.jwildfire.base.mathlib.MathLib.sin;
+import static org.jwildfire.base.mathlib.MathLib.sinh;
+import static org.jwildfire.base.mathlib.MathLib.sqrt;
 import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_CUDA;
 import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_JWILDFIRE;
 

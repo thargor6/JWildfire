@@ -16,9 +16,9 @@
 */
 package org.jwildfire.create.tina.render.filter;
 
-import static org.jwildfire.base.MathLib.EPSILON;
-import static org.jwildfire.base.MathLib.M_PI;
-import static org.jwildfire.base.MathLib.sin;
+import static org.jwildfire.base.mathlib.MathLib.EPSILON;
+import static org.jwildfire.base.mathlib.MathLib.M_PI;
+import static org.jwildfire.base.mathlib.MathLib.sin;
 
 public abstract class FilterKernel {
   public abstract double getSpatialSupport();

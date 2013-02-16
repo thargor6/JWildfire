@@ -16,8 +16,8 @@
 */
 package org.jwildfire.create.tina.base;
 
-import static org.jwildfire.base.MathLib.EPSILON;
-import static org.jwildfire.base.MathLib.fabs;
+import static org.jwildfire.base.mathlib.MathLib.EPSILON;
+import static org.jwildfire.base.mathlib.MathLib.fabs;
 
 import java.io.Serializable;
 import java.util.ArrayList;

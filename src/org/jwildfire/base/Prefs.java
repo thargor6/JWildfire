@@ -20,6 +20,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.jwildfire.base.mathlib.BaseMathLibType;
+import org.jwildfire.base.mathlib.MathLib;
 import org.jwildfire.create.tina.random.RandomGeneratorType;
 import org.jwildfire.create.tina.render.CRendererInterface;
 import org.jwildfire.create.tina.render.RendererType;
@@ -39,6 +41,7 @@ public class Prefs extends ManagedObject {
   static final String KEY_GENERAL_PATH_SWF = "sunflow.path.swf";
 
   static final String KEY_GENERAL_DEVELOPMENT_MODE = "general.development_mode";
+  static final String KEY_GENERAL_BASE_MATH_LIB = "general.base_math_lib";
 
   static final String KEY_SUNFLOW_PATH_SCENES = "sunflow.path.scenes";
 
@@ -110,6 +113,9 @@ public class Prefs extends ManagedObject {
   @Property(description = "Development mode", category = PropertyCategory.GENERAL)
   private boolean developmentMode = false;
 
+  @Property(description = "Implementation of basic mathematical functions to use", category = PropertyCategory.GENERAL, editorClass = BaseMathLibTypeEditor.class)
+  private BaseMathLibType baseMathLibType = BaseMathLibType.getDefaultValue();
+
   private final List<QualityProfile> qualityProfiles = new ArrayList<QualityProfile>();
   private final List<ResolutionProfile> resolutionProfiles = new ArrayList<ResolutionProfile>();
   private final List<WindowPrefs> windowPrefs = new ArrayList<WindowPrefs>();
@@ -122,8 +128,15 @@ public class Prefs extends ManagedObject {
     }
   }
 
-  public static class RandomGeneratorTypEditor extends ComboBoxPropertyEditor {
-    public RandomGeneratorTypEditor() {
+  public static class BaseMathLibTypeEditor extends ComboBoxPropertyEditor {
+    public BaseMathLibTypeEditor() {
+      super();
+      setAvailableValues(new BaseMathLibType[] { BaseMathLibType.FAST_MATH, BaseMathLibType.JAVA_MATH });
+    }
+  }
+
+  public static class RandomGeneratorTypeEditor extends ComboBoxPropertyEditor {
+    public RandomGeneratorTypeEditor() {
       super();
       setAvailableValues(new RandomGeneratorType[] { RandomGeneratorType.SIMPLE, RandomGeneratorType.MARSAGLIA, RandomGeneratorType.MERSENNE_TWISTER, RandomGeneratorType.JAVA_INTERNAL });
     }
@@ -151,7 +164,7 @@ public class Prefs extends ManagedObject {
 
   private static int tinaRenderThreads;
 
-  @Property(description = "Random number generator to use", category = PropertyCategory.TINA, editorClass = RandomGeneratorTypEditor.class)
+  @Property(description = "Random number generator to use", category = PropertyCategory.TINA, editorClass = RandomGeneratorTypeEditor.class)
   private RandomGeneratorType tinaRandomNumberGenerator = RandomGeneratorType.getDefaultValue();
 
   @Property(description = "Quality for realtime rendering (please restart app after changing this)", category = PropertyCategory.TINA)
@@ -393,6 +406,7 @@ public class Prefs extends ManagedObject {
     tinaDefaultRenderer = pSrc.tinaDefaultRenderer;
     tinaDefaultBGTransparency = pSrc.tinaDefaultBGTransparency;
     tinaDefaultDEMaxRadius = pSrc.tinaDefaultDEMaxRadius;
+    baseMathLibType = pSrc.baseMathLibType;
 
     resolutionProfiles.clear();
     for (ResolutionProfile profile : pSrc.resolutionProfiles) {
@@ -582,6 +596,15 @@ public class Prefs extends ManagedObject {
 
   public void setTinaDefaultDEMaxRadius(double tinaDefaultDEMaxRadius) {
     this.tinaDefaultDEMaxRadius = tinaDefaultDEMaxRadius;
+  }
+
+  public BaseMathLibType getBaseMathLibType() {
+    return baseMathLibType;
+  }
+
+  public void setBaseMathLibType(BaseMathLibType baseMathLibType) {
+    MathLib.setBaseMathLibType(baseMathLibType);
+    this.baseMathLibType = baseMathLibType;
   }
 
 }

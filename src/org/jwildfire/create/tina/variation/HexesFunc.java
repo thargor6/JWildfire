@@ -23,10 +23,10 @@
 
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.MathLib.cos;
-import static org.jwildfire.base.MathLib.floor;
-import static org.jwildfire.base.MathLib.pow;
-import static org.jwildfire.base.MathLib.sin;
+import static org.jwildfire.base.mathlib.MathLib.cos;
+import static org.jwildfire.base.mathlib.MathLib.floor;
+import static org.jwildfire.base.mathlib.MathLib.pow;
+import static org.jwildfire.base.mathlib.MathLib.sin;
 import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_CUDA;
 import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_JWILDFIRE;
 import static org.jwildfire.create.tina.variation.VoronoiTools.VORONOI_MAXPOINTS;
@@ -35,7 +35,7 @@ import static org.jwildfire.create.tina.variation.VoronoiTools._y_;
 import static org.jwildfire.create.tina.variation.VoronoiTools.closest;
 import static org.jwildfire.create.tina.variation.VoronoiTools.voronoi;
 
-import org.jwildfire.base.MathLib;
+import org.jwildfire.base.mathlib.MathLib;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 

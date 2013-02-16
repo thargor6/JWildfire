@@ -20,9 +20,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import org.jwildfire.base.MathLib;
 import org.jwildfire.base.Prefs;
 import org.jwildfire.base.Tools;
+import org.jwildfire.base.mathlib.MathLib;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.io.Flam3Reader;

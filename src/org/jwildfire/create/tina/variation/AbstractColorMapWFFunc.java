@@ -16,9 +16,9 @@
  */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.MathLib.EPSILON;
-import static org.jwildfire.base.MathLib.fabs;
-import static org.jwildfire.base.MathLib.sqrt;
+import static org.jwildfire.base.mathlib.MathLib.EPSILON;
+import static org.jwildfire.base.mathlib.MathLib.fabs;
+import static org.jwildfire.base.mathlib.MathLib.sqrt;
 
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.GradientCreator;

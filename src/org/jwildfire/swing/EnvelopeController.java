@@ -25,8 +25,8 @@ import javax.swing.JComboBox;
 import javax.swing.JTextField;
 import javax.swing.RootPaneContainer;
 
-import org.jwildfire.base.MathLib;
 import org.jwildfire.base.Tools;
+import org.jwildfire.base.mathlib.MathLib;
 import org.jwildfire.envelope.Envelope;
 import org.jwildfire.envelope.EnvelopePanel;
 import org.jwildfire.envelope.EnvelopeView;

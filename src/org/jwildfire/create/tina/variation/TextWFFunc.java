@@ -16,13 +16,13 @@
  */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.MathLib.M_PI;
-import static org.jwildfire.base.MathLib.cos;
-import static org.jwildfire.base.MathLib.exp;
-import static org.jwildfire.base.MathLib.log;
-import static org.jwildfire.base.MathLib.sin;
-import static org.jwildfire.base.MathLib.sqrt;
 import static org.jwildfire.base.Tools.FTOI;
+import static org.jwildfire.base.mathlib.MathLib.M_PI;
+import static org.jwildfire.base.mathlib.MathLib.cos;
+import static org.jwildfire.base.mathlib.MathLib.exp;
+import static org.jwildfire.base.mathlib.MathLib.log;
+import static org.jwildfire.base.mathlib.MathLib.sin;
+import static org.jwildfire.base.mathlib.MathLib.sqrt;
 import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_JWILDFIRE;
 
 import java.awt.Color;

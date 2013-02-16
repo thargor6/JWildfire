@@ -22,8 +22,8 @@ import java.awt.Rectangle;
 
 import javax.swing.JPanel;
 
-import org.jwildfire.base.MathLib;
 import org.jwildfire.base.Tools;
+import org.jwildfire.base.mathlib.MathLib;
 
 
 public class FormulaPanel extends JPanel {

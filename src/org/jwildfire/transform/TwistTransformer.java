@@ -18,8 +18,8 @@ package org.jwildfire.transform;
 
 import java.awt.Color;
 
-import org.jwildfire.base.MathLib;
 import org.jwildfire.base.Property;
+import org.jwildfire.base.mathlib.MathLib;
 import org.jwildfire.image.WFImage;
 
 import com.l2fprod.common.beans.editor.ComboBoxPropertyEditor;

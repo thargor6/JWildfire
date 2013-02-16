@@ -19,11 +19,11 @@ package org.jwildfire.transform;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 
-import org.jwildfire.base.MathLib;
 import org.jwildfire.base.Property;
 import org.jwildfire.base.PropertyCategory;
 import org.jwildfire.base.PropertyMax;
 import org.jwildfire.base.PropertyMin;
+import org.jwildfire.base.mathlib.MathLib;
 import org.jwildfire.image.Pixel;
 import org.jwildfire.image.SimpleImage;
 import org.jwildfire.image.WFImage;

@@ -16,8 +16,8 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.MathLib.atan2;
-import static org.jwildfire.base.MathLib.sin;
+import static org.jwildfire.base.mathlib.MathLib.atan2;
+import static org.jwildfire.base.mathlib.MathLib.sin;
 import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_CUDA;
 import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_JWILDFIRE;
 

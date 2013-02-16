@@ -28,9 +28,9 @@ import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
 import javax.swing.filechooser.FileFilter;
 
-import org.jwildfire.base.MathLib;
 import org.jwildfire.base.Prefs;
 import org.jwildfire.base.Tools;
+import org.jwildfire.base.mathlib.MathLib;
 import org.jwildfire.create.eden.io.SunflowWriter;
 import org.jwildfire.create.eden.primitive.Point;
 import org.jwildfire.create.eden.primitive.Torus;

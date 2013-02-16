@@ -16,7 +16,7 @@
 */
 package org.jwildfire.image;
 
-import org.jwildfire.base.MathLib;
+import org.jwildfire.base.mathlib.MathLib;
 
 public class SimpleHDRImage implements WFImage {
   private int imageWidth = -1;

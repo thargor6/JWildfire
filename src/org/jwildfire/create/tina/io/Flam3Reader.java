@@ -21,9 +21,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.jwildfire.base.MathLib;
 import org.jwildfire.base.Prefs;
 import org.jwildfire.base.Tools;
+import org.jwildfire.base.mathlib.MathLib;
 import org.jwildfire.create.tina.base.DrawMode;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.Shading;

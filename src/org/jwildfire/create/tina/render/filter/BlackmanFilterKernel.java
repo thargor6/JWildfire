@@ -16,8 +16,8 @@
 */
 package org.jwildfire.create.tina.render.filter;
 
-import static org.jwildfire.base.MathLib.M_PI;
-import static org.jwildfire.base.MathLib.cos;
+import static org.jwildfire.base.mathlib.MathLib.M_PI;
+import static org.jwildfire.base.mathlib.MathLib.cos;
 
 // Filter based on code of the flam3 project: http://flam3.com/index.cgi?&menu=code
 public class BlackmanFilterKernel extends FilterKernel {

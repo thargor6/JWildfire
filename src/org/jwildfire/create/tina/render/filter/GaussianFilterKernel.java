@@ -16,9 +16,9 @@
 */
 package org.jwildfire.create.tina.render.filter;
 
-import static org.jwildfire.base.MathLib.M_PI;
-import static org.jwildfire.base.MathLib.exp;
-import static org.jwildfire.base.MathLib.sqrt;
+import static org.jwildfire.base.mathlib.MathLib.M_PI;
+import static org.jwildfire.base.mathlib.MathLib.exp;
+import static org.jwildfire.base.mathlib.MathLib.sqrt;
 
 // Filter based on code of the flam3 project: http://flam3.com/index.cgi?&menu=code
 public class GaussianFilterKernel extends FilterKernel {

@@ -16,8 +16,8 @@
 */
 package org.jwildfire.create.tina.render;
 
-import org.jwildfire.base.MathLib;
 import org.jwildfire.base.Tools;
+import org.jwildfire.base.mathlib.MathLib;
 import org.jwildfire.create.tina.base.ShadingInfo;
 import org.jwildfire.create.tina.base.XYZPoint;
 import org.jwildfire.create.tina.palette.RenderColor;

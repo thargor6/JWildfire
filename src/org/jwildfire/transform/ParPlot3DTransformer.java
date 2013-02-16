@@ -16,8 +16,8 @@
 */
 package org.jwildfire.transform;
 
-import org.jwildfire.base.MathLib;
 import org.jwildfire.base.Property;
+import org.jwildfire.base.mathlib.MathLib;
 import org.jwildfire.base.mathparser.JEPWrapper;
 import org.jwildfire.image.WFImage;
 import org.nfunk.jep.Node;

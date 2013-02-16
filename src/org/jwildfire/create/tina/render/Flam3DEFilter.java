@@ -18,9 +18,9 @@ package org.jwildfire.create.tina.render;
 
 import static java.lang.Math.ceil;
 import static java.lang.Math.floor;
-import static org.jwildfire.base.MathLib.log;
-import static org.jwildfire.base.MathLib.pow;
-import static org.jwildfire.base.MathLib.sqrt;
+import static org.jwildfire.base.mathlib.MathLib.log;
+import static org.jwildfire.base.mathlib.MathLib.pow;
+import static org.jwildfire.base.mathlib.MathLib.sqrt;
 
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.RasterPoint;

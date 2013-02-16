@@ -19,7 +19,7 @@
 // All credits for this wonderful plugin to him!
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.MathLib.floor;
+import static org.jwildfire.base.mathlib.MathLib.floor;
 
 public class NoiseTools {
   //This is an implementation of "Simplex Noise" and "Perlin Noise" as invented by Ken Perlin,

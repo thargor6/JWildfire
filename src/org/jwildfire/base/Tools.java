@@ -37,11 +37,12 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
+import org.jwildfire.base.mathlib.MathLib;
 import org.jwildfire.image.Pixel;
 
 public class Tools {
   public static final String APP_TITLE = "JWildfire";
-  public static final String APP_VERSION = "0.64 BETA 2 (16.02.2013)";
+  public static final String APP_VERSION = "0.64 (16.02.2013)";
 
   public static final int VPREC = 1024;
   public static final int SPREC = 10;

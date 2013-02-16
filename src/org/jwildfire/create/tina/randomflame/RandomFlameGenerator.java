@@ -16,7 +16,7 @@
 */
 package org.jwildfire.create.tina.randomflame;
 
-import static org.jwildfire.base.MathLib.EPSILON;
+import static org.jwildfire.base.mathlib.MathLib.EPSILON;
 
 import org.jwildfire.base.Prefs;
 import org.jwildfire.create.tina.base.Flame;

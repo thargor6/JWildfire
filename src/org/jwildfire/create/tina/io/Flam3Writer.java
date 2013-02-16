@@ -16,7 +16,7 @@
 */
 package org.jwildfire.create.tina.io;
 
-import static org.jwildfire.base.MathLib.EPSILON;
+import static org.jwildfire.base.mathlib.MathLib.EPSILON;
 
 import java.util.ArrayList;
 import java.util.List;

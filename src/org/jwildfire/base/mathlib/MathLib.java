@@ -14,9 +14,7 @@
   if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
   02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
-package org.jwildfire.base;
-
-import odk.lang.FastMath;
+package org.jwildfire.base.mathlib;
 
 public final class MathLib {
   public final static double SMALL_EPSILON = 1.0e-300;
@@ -29,6 +27,8 @@ public final class MathLib {
   public final static double M_1_PI = 1.0 / M_PI;
   public final static double M_2_PI = 2.0 / M_PI;
   public static final double M_2PI = 2.0 * M_PI;
+
+  private static BaseMathLib baseLib = BaseMathLibType.FAST_MATH.createInstance();
 
   public static final int iabs(int var) {
     if (var >= 0)
@@ -54,15 +54,15 @@ public final class MathLib {
   }
 
   public static final double sin(double a) {
-    return FastMath.sin(a);
+    return baseLib.sin(a);
   }
 
   public static final double cos(double a) {
-    return FastMath.cos(a);
+    return baseLib.cos(a);
   }
 
   public static final double tan(double a) {
-    return FastMath.tan(a);
+    return baseLib.tan(a);
   }
 
   public static final double fmod(double a, double b) {
@@ -74,47 +74,47 @@ public final class MathLib {
   }
 
   public static final double atan2(double y, double x) {
-    return FastMath.atan2(y, x);
+    return baseLib.atan2(y, x);
   }
 
   public static final double exp(double a) {
-    return FastMath.exp(a);
+    return baseLib.exp(a);
   }
 
   public static final double sqrt(double a) {
-    return Math.sqrt(a);
+    return baseLib.sqrt(a);
   }
 
   public static final double pow(double value, double power) {
-    return FastMath.pow(value, power);
+    return baseLib.pow(value, power);
   }
 
   public static final double floor(double value) {
-    return FastMath.floor(value);
+    return baseLib.floor(value);
   }
 
   public static final double round(double value) {
-    return FastMath.round(value);
+    return baseLib.round(value);
   }
 
   public static final double log10(double value) {
-    return Math.log10(value);
+    return baseLib.log10(value);
   }
 
   public static final double log(double value) {
-    return Math.log(value);
+    return baseLib.log(value);
   }
 
   public static final double sinh(double value) {
-    return FastMath.sinh(value);
+    return baseLib.sinh(value);
   }
 
   public static final double cosh(double value) {
-    return FastMath.cosh(value);
+    return baseLib.cosh(value);
   }
 
   public static final double tanh(double value) {
-    return FastMath.tanh(value);
+    return baseLib.tanh(value);
   }
 
   public static final double min(double a, double b) {
@@ -126,15 +126,15 @@ public final class MathLib {
   }
 
   public static final double atan(double value) {
-    return FastMath.atan(value);
+    return baseLib.atan(value);
   }
 
   public static final double acos(double value) {
-    return FastMath.acos(value);
+    return baseLib.acos(value);
   }
 
   public static final double asin(double value) {
-    return FastMath.asin(value);
+    return baseLib.asin(value);
   }
 
   public static final double rint(double value) {
@@ -178,4 +178,7 @@ public final class MathLib {
       return -ans;
   }
 
+  public static void setBaseMathLibType(BaseMathLibType pType) {
+    baseLib = pType.createInstance();
+  }
 }

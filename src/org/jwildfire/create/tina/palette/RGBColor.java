@@ -18,8 +18,8 @@ package org.jwildfire.create.tina.palette;
 
 import java.io.Serializable;
 
-import org.jwildfire.base.MathLib;
 import org.jwildfire.base.Tools;
+import org.jwildfire.base.mathlib.MathLib;
 import org.jwildfire.create.tina.edit.Assignable;
 
 public class RGBColor implements Assignable<RGBColor>, Serializable, Comparable<RGBColor> {

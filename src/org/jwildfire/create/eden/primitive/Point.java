@@ -16,7 +16,7 @@
 */
 package org.jwildfire.create.eden.primitive;
 
-import org.jwildfire.base.MathLib;
+import org.jwildfire.base.mathlib.MathLib;
 
 public class Point {
   private double x;

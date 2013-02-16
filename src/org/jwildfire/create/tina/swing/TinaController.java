@@ -16,7 +16,7 @@
 */
 package org.jwildfire.create.tina.swing;
 
-import static org.jwildfire.base.MathLib.EPSILON;
+import static org.jwildfire.base.mathlib.MathLib.EPSILON;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
@@ -70,11 +70,11 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
-import org.jwildfire.base.MathLib;
 import org.jwildfire.base.Prefs;
 import org.jwildfire.base.QualityProfile;
 import org.jwildfire.base.ResolutionProfile;
 import org.jwildfire.base.Tools;
+import org.jwildfire.base.mathlib.MathLib;
 import org.jwildfire.create.tina.base.DrawMode;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.Shading;
