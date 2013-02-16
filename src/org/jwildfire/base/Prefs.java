@@ -66,6 +66,8 @@ public class Prefs extends ManagedObject {
   static final String KEY_TINA_RENDER_DEFAULT_RENDERER = "tina.render.default_renderer";
   static final String KEY_TINA_RENDER_DEFAULT_BG_TRANSPARENCY = "tina.render.default_bg_transparency";
   static final String KEY_TINA_RENDER_DEFAULT_DE_MAX_RADIUS = "tina.render.default_de_max_radius";
+  static final String KEY_TINA_RENDER_DEFAULT_ANTIALIASING_AMOUNT = "tina.render.default_antialiasing_amount";
+  static final String KEY_TINA_RENDER_DEFAULT_ANTIALIASING_RADIUS = "tina.render.default_antialiasing_radius";
   static final String KEY_TINA_PROFILE_ASSOCIATE_WITH_FLAMES = "tina.profile.associate_with_flames";
 
   static final String KEY_TINA_RANDOM_GENERATOR = "tina.random.generator";
@@ -184,8 +186,15 @@ public class Prefs extends ManagedObject {
 
   @Property(description = "Default background transparency", category = PropertyCategory.TINA)
   private boolean tinaDefaultBGTransparency = true;
+
   @Property(description = "Default DE max radius (set to zero to turn DE off by default)", category = PropertyCategory.TINA)
-  private double tinaDefaultDEMaxRadius = 0.7;
+  private double tinaDefaultDEMaxRadius = 0.0;
+
+  @Property(description = "Default antialiasing amount (set to zero to turn antialiasing off by default)", category = PropertyCategory.TINA)
+  private double tinaDefaultAntialiasingAmount = 0.75;
+
+  @Property(description = "Default antialiasing radius (set to zero to turn antialiasing off by default)", category = PropertyCategory.TINA)
+  private double tinaDefaultAntialiasingRadius = 0.36;
 
   @Property(description = "Quality for preview rendering", category = PropertyCategory.TINA)
   private int tinaRenderPreviewQuality = 100;
@@ -394,6 +403,8 @@ public class Prefs extends ManagedObject {
     plafTheme = pSrc.plafTheme;
     developmentMode = pSrc.developmentMode;
     tinaRandomNumberGenerator = pSrc.tinaRandomNumberGenerator;
+    tinaDefaultAntialiasingAmount = pSrc.tinaDefaultAntialiasingAmount;
+    tinaDefaultAntialiasingRadius = pSrc.tinaDefaultAntialiasingRadius;
 
     tinaRenderMovieFrames = pSrc.tinaRenderMovieFrames;
     tinaRenderPreviewQuality = pSrc.tinaRenderPreviewQuality;
@@ -605,6 +616,22 @@ public class Prefs extends ManagedObject {
   public void setBaseMathLibType(BaseMathLibType baseMathLibType) {
     MathLib.setBaseMathLibType(baseMathLibType);
     this.baseMathLibType = baseMathLibType;
+  }
+
+  public double getTinaDefaultAntialiasingAmount() {
+    return tinaDefaultAntialiasingAmount;
+  }
+
+  public void setTinaDefaultAntialiasingAmount(double tinaDefaultAntialiasingAmount) {
+    this.tinaDefaultAntialiasingAmount = tinaDefaultAntialiasingAmount;
+  }
+
+  public double getTinaDefaultAntialiasingRadius() {
+    return tinaDefaultAntialiasingRadius;
+  }
+
+  public void setTinaDefaultAntialiasingRadius(double tinaDefaultAntialiasingRadius) {
+    this.tinaDefaultAntialiasingRadius = tinaDefaultAntialiasingRadius;
   }
 
 }

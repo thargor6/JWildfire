@@ -2767,6 +2767,8 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     XForm xForm = new XForm();
     xForm.addVariation(1.0, new Linear3DFunc());
     xForm.setWeight(0.5);
+    xForm.setAntialiasAmount(prefs.getTinaDefaultAntialiasingAmount());
+    xForm.setAntialiasRadius(prefs.getTinaDefaultAntialiasingRadius());
     saveUndoPoint();
     currFlame.getXForms().add(xForm);
     gridRefreshing = true;
@@ -2820,6 +2822,8 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
   public void addFinalXForm() {
     XForm xForm = new XForm();
     xForm.addVariation(1.0, new Linear3DFunc());
+    xForm.setAntialiasAmount(prefs.getTinaDefaultAntialiasingAmount());
+    xForm.setAntialiasRadius(prefs.getTinaDefaultAntialiasingRadius());
     saveUndoPoint();
     currFlame.getFinalXForms().add(xForm);
     gridRefreshing = true;
@@ -2960,6 +2964,12 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       renderFlame.setSampleDensity(prefs.getTinaRenderPreviewQuality());
       renderFlame.setDeFilterEnabled(false);
       renderFlame.setSpatialFilterRadius(0.0);
+      for (XForm xForm : renderFlame.getXForms()) {
+        xForm.setAntialiasAmount(0.0);
+      }
+      for (XForm xForm : renderFlame.getFinalXForms()) {
+        xForm.setAntialiasAmount(0.0);
+      }
       FlameRenderer renderer = new FlameRenderer(renderFlame, prefs, false);
       renderFlame.setSampleDensity(pQuality);
       RenderedFlame res = renderer.renderFlame(info);
