@@ -16,9 +16,9 @@
 */
 package org.jwildfire.create.tina.swing;
 
-import static org.jwildfire.base.MathLib.M_PI;
-import static org.jwildfire.base.MathLib.cos;
-import static org.jwildfire.base.MathLib.sin;
+import static org.jwildfire.base.mathlib.MathLib.M_PI;
+import static org.jwildfire.base.mathlib.MathLib.cos;
+import static org.jwildfire.base.mathlib.MathLib.sin;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -26,9 +26,9 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 
-import org.jwildfire.base.MathLib;
 import org.jwildfire.base.Prefs;
 import org.jwildfire.base.Tools;
+import org.jwildfire.base.mathlib.MathLib;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
@@ -543,7 +543,7 @@ public class FlamePanel extends ImagePanel {
                 }
                 else {
                   flame.setCamRoll(flame.getCamRoll() - 12 * dx);
-                  flame.setCamPitch(flame.getCamPitch() + 12 * dy);
+                  //                  flame.setCamPitch(flame.getCamPitch() + 12 * dy);
                 }
                 return true;
               }
