@@ -59,8 +59,8 @@ public final class FlameRenderBlurThread extends FlameRenderThread {
     List<IterationObserver> observers = renderer.getIterationObservers();
 
     double blurKernel[][] = flame.getShadingInfo().createBlurKernel();
-    int blurRadius = (int) (flame.getShadingInfo().getBlurRadius() * (flame.getPixelsPerUnit() / 200.0));
-    System.out.println(blurRadius + " " + flame.getShadingInfo().getBlurRadius());
+    //int blurRadius = (int) (flame.getShadingInfo().getBlurRadius() * (flame.getPixelsPerUnit() / 200.0));
+    int blurRadius = flame.getShadingInfo().getBlurRadius();
 
     double fade = flame.getShadingInfo().getBlurFade();
     if (fade < 0.0) {
