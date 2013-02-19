@@ -73,4 +73,10 @@ public class RotateMotion extends Motion {
     this.centreY = centreY;
   }
 
+  @Override
+  public double computeValue(short[] pFFTData, long pTime) {
+    // TODO Auto-generated method stub
+    return 0;
+  }
+
 }

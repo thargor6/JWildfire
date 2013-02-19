@@ -24,8 +24,8 @@ public class PropertyModel extends AbstractProperty {
   private final List<PlainProperty> properties = new ArrayList<PlainProperty>();
   private final List<PropertyModel> chields = new ArrayList<PropertyModel>();
 
-  public PropertyModel(String pName, Class<?> pType) {
-    super(pName, pType);
+  public PropertyModel(AbstractProperty pParent, String pName, Class<?> pType) {
+    super(pParent, pName, pType);
   }
 
   public List<PlainProperty> getProperties() {

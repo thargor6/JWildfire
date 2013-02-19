@@ -19,8 +19,8 @@ package org.jwildfire.create.tina.dance.model;
 public class PlainProperty extends AbstractProperty {
   private static final long serialVersionUID = 1L;
 
-  public PlainProperty(String pName, Class<?> pType) {
-    super(pName, pType);
+  public PlainProperty(AbstractProperty pParent, String pName, Class<?> pType) {
+    super(pParent, pName, pType);
   }
 
 }

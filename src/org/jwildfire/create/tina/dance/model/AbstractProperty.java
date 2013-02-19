@@ -20,11 +20,12 @@ import java.io.Serializable;
 
 public abstract class AbstractProperty implements Serializable {
   private static final long serialVersionUID = 1L;
-
+  protected final AbstractProperty parent;
   protected final String name;
   protected final Class<?> type;
 
-  public AbstractProperty(String pName, Class<?> pType) {
+  public AbstractProperty(AbstractProperty pParent, String pName, Class<?> pType) {
+    parent = pParent;
     name = pName;
     type = pType;
   }
@@ -35,6 +36,20 @@ public abstract class AbstractProperty implements Serializable {
 
   public Class<?> getType() {
     return type;
+  }
+
+  public int getDepth() {
+    int res = 0;
+    AbstractProperty p = parent;
+    while (p != null) {
+      res++;
+      p = p.getParent();
+    }
+    return res;
+  }
+
+  public AbstractProperty getParent() {
+    return parent;
   }
 
 }

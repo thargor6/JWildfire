@@ -24,6 +24,7 @@ import java.util.List;
 import org.jwildfire.create.tina.animate.AnimAware;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.XForm;
+import org.jwildfire.create.tina.transform.XFormTransformService;
 import org.jwildfire.create.tina.variation.Variation;
 import org.jwildfire.create.tina.variation.VariationFunc;
 
@@ -33,17 +34,57 @@ public class AnimationModelService {
     return pCls == Integer.class || pCls == int.class || pCls == Double.class || pCls == double.class || pCls == Boolean.class || pCls == boolean.class;
   }
 
-  @SuppressWarnings("unchecked")
+  private static interface PropertyVisitor {
+    public boolean accept(Field pField, PlainProperty pProperty);
+
+    public boolean accept(VariationFunc pVarFunc, PlainProperty pProperty);
+
+    public boolean accept(XForm pXForm, String pPropName, PlainProperty pProperty);
+
+    public boolean finishOnAccept();
+  }
+
   public static PropertyModel createModel(Flame pFlame) {
-    PropertyModel res = new PropertyModel("flame", pFlame.getClass());
+    PropertyModel res = new PropertyModel(null, "flame", pFlame.getClass());
+    visitModel(res, pFlame, null);
+    return res;
+  }
+
+  private static class VisitState {
+    private final PropertyVisitor visitor;
+    private boolean accepted;
+
+    public VisitState(PropertyVisitor pVisitor) {
+      visitor = pVisitor;
+    }
+
+    public boolean isCancelSignalled() {
+      return accepted && visitor != null && visitor.finishOnAccept();
+    }
+
+    public void updateState(boolean pAccept) {
+      accepted = pAccept;
+    }
+
+  }
+
+  @SuppressWarnings("unchecked")
+  public static void visitModel(PropertyModel res, Flame pFlame, PropertyVisitor pVisitor) {
+    VisitState state = new VisitState(pVisitor);
     Class<?> cls = pFlame.getClass();
     for (Field field : cls.getDeclaredFields()) {
+      if (state.isCancelSignalled()) {
+        return;
+      }
       field.setAccessible(true);
       if (field.getAnnotation(AnimAware.class) != null) {
         Class<?> fCls = field.getType();
         if (isPrimitiveProperty(fCls)) {
-          PlainProperty property = new PlainProperty(field.getName(), cls);
+          PlainProperty property = new PlainProperty(res, field.getName(), cls);
           res.getProperties().add(property);
+          if (pVisitor != null) {
+            state.updateState(pVisitor.accept(field, property));
+          }
         }
         else if (fCls == List.class) {
           ParameterizedType listType = (ParameterizedType) field.getGenericType();
@@ -60,14 +101,13 @@ public class AnimationModelService {
             if (xForms != null) {
               int idx = 0;
               for (XForm xForm : xForms) {
-                addXFormToModel(res, field.getName().indexOf("final") == 0, idx++, xForm);
+                addXFormToModel(res, field.getName().indexOf("final") == 0, idx++, xForm, pVisitor, state);
               }
             }
           }
         }
       }
     }
-    return res;
   }
 
   public final static String PROPNAME_XFORM = "transform";
@@ -84,22 +124,34 @@ public class AnimationModelService {
   private final static String[] ADD_XFORM_PROPS = { PROPNAME_ORIGIN_X, PROPNAME_ORIGIN_Y, PROPNAME_ANGLE, PROPNAME_ZOOM, PROPNAME_POST_ORIGIN_X, PROPNAME_POST_ORIGIN_Y, PROPNAME_POST_ANGLE, PROPNAME_POST_ZOOM };
 
   @SuppressWarnings("unchecked")
-  private static void addXFormToModel(PropertyModel pNode, boolean pIsFinal, int pIndex, XForm pXForm) {
+  private static void addXFormToModel(PropertyModel pNode, boolean pIsFinal, int pIndex, XForm pXForm, PropertyVisitor pVisitor, VisitState pState) {
     Class<?> cls = pXForm.getClass();
     String fieldname = pIsFinal ? PROPNAME_FINALXFORM : PROPNAME_XFORM;
-    PropertyModel xFormNode = new PropertyModel(fieldname + (pIndex + 1), cls);
+    PropertyModel xFormNode = new PropertyModel(pNode, fieldname + (pIndex + 1), cls);
     pNode.getChields().add(xFormNode);
     for (String propName : ADD_XFORM_PROPS) {
-      PlainProperty property = new PlainProperty(propName, Double.class);
+      if (pState.isCancelSignalled()) {
+        return;
+      }
+      PlainProperty property = new PlainProperty(xFormNode, propName, Double.class);
       xFormNode.getProperties().add(property);
+      if (pVisitor != null) {
+        pState.updateState(pVisitor.accept(pXForm, propName, property));
+      }
     }
     for (Field field : cls.getDeclaredFields()) {
+      if (pState.isCancelSignalled()) {
+        return;
+      }
       field.setAccessible(true);
       if (field.getAnnotation(AnimAware.class) != null) {
         Class<?> fCls = field.getType();
         if (isPrimitiveProperty(fCls)) {
-          PlainProperty property = new PlainProperty(field.getName(), cls);
+          PlainProperty property = new PlainProperty(xFormNode, field.getName(), cls);
           xFormNode.getProperties().add(property);
+          if (pVisitor != null) {
+            pState.updateState(pVisitor.accept(field, property));
+          }
         }
         else if (fCls == List.class) {
           ParameterizedType listType = (ParameterizedType) field.getGenericType();
@@ -115,7 +167,7 @@ public class AnimationModelService {
             }
             if (variations != null) {
               for (Variation variation : variations) {
-                addVariationToModel(xFormNode, variation);
+                addVariationToModel(xFormNode, variation, pVisitor, pState);
               }
             }
           }
@@ -124,17 +176,23 @@ public class AnimationModelService {
     }
   }
 
-  private static void addVariationToModel(PropertyModel pXFormNode, Variation pVariation) {
+  private static void addVariationToModel(PropertyModel pXFormNode, Variation pVariation, PropertyVisitor pVisitor, VisitState pState) {
     Class<?> cls = pVariation.getClass();
-    PropertyModel variationNode = new PropertyModel(pVariation.getFunc().getName(), cls);
+    PropertyModel variationNode = new PropertyModel(pXFormNode, pVariation.getFunc().getName(), cls);
     pXFormNode.getChields().add(variationNode);
     for (Field field : cls.getDeclaredFields()) {
+      if (pState.isCancelSignalled()) {
+        return;
+      }
       field.setAccessible(true);
       if (field.getAnnotation(AnimAware.class) != null) {
         Class<?> fCls = field.getType();
         if (isPrimitiveProperty(fCls)) {
-          PlainProperty property = new PlainProperty(field.getName(), cls);
+          PlainProperty property = new PlainProperty(variationNode, field.getName(), cls);
           variationNode.getProperties().add(property);
+          if (pVisitor != null) {
+            pState.updateState(pVisitor.accept(field, property));
+          }
         }
       }
     }
@@ -143,14 +201,23 @@ public class AnimationModelService {
     Object[] vals = varFunc.getParameterValues();
     if (params != null) {
       for (int i = 0; i < params.length; i++) {
+        if (pState.isCancelSignalled()) {
+          return;
+        }
         Object val = vals[i];
         if (val instanceof Double) {
-          PlainProperty property = new PlainProperty(params[i], Double.class);
+          PlainProperty property = new PlainProperty(variationNode, params[i], Double.class);
           variationNode.getProperties().add(property);
+          if (pVisitor != null) {
+            pState.updateState(pVisitor.accept(varFunc, property));
+          }
         }
         else if (val instanceof Integer) {
-          PlainProperty property = new PlainProperty(params[i], Integer.class);
+          PlainProperty property = new PlainProperty(variationNode, params[i], Integer.class);
           variationNode.getProperties().add(property);
+          if (pVisitor != null) {
+            pState.updateState(pVisitor.accept(varFunc, property));
+          }
         }
       }
     }
@@ -175,4 +242,106 @@ public class AnimationModelService {
     res.add(pProperty);
     return res;
   }
+
+  private static class ModifyPropertyVisitor implements PropertyVisitor {
+    private final List<String> path;
+    private final double value;
+    private boolean hasFound = false;
+
+    public ModifyPropertyVisitor(FlamePropertyPath pPath, double pValue) {
+      path = pPath.getPathComponents();
+      value = pValue;
+    }
+
+    public boolean accept(PlainProperty pProperty) {
+      AbstractProperty currNode = pProperty;
+      hasFound = currNode.getDepth() == path.size();
+      for (int i = path.size() - 1; hasFound && i >= 0; i--) {
+        if (!currNode.getName().equals(path.get(i))) {
+          hasFound = false;
+          break;
+        }
+        currNode = currNode.getParent();
+      }
+      return hasFound;
+    }
+
+    public boolean isHasFound() {
+      return hasFound;
+    }
+
+    @Override
+    public boolean finishOnAccept() {
+      return true;
+    }
+
+    @Override
+    public boolean accept(Field pField, PlainProperty pProperty) {
+      boolean accepted = accept(pProperty);
+      if (accepted) {
+        // TODO
+        System.out.println("SET PROP");
+      }
+      return accepted;
+    }
+
+    @Override
+    public boolean accept(VariationFunc pVarFunc, PlainProperty pProperty) {
+      boolean accepted = accept(pProperty);
+      if (accepted) {
+        // TODO
+        System.out.println("SET VAR");
+      }
+      return accepted;
+    }
+
+    @Override
+    public boolean accept(XForm pXForm, String pPropName, PlainProperty pProperty) {
+      boolean accepted = accept(pProperty);
+      if (accepted) {
+
+        System.out.println(pPropName + " " + value);
+
+        if (pPropName.equals(PROPNAME_ORIGIN_X)) {
+          XFormTransformService.localTranslate(pXForm, value, 0, false);
+        }
+        else if (pPropName.equals(PROPNAME_ORIGIN_Y)) {
+          XFormTransformService.localTranslate(pXForm, 0, value, false);
+        }
+        else if (pPropName.equals(PROPNAME_ANGLE)) {
+          XFormTransformService.rotate(pXForm, value, false);
+        }
+        else if (pPropName.equals(PROPNAME_ZOOM)) {
+          XFormTransformService.scale(pXForm, value, true, true, false);
+        }
+        else if (pPropName.equals(PROPNAME_POST_ORIGIN_X)) {
+          XFormTransformService.localTranslate(pXForm, value, 0, true);
+        }
+        else if (pPropName.equals(PROPNAME_POST_ORIGIN_Y)) {
+          XFormTransformService.localTranslate(pXForm, 0, value, true);
+        }
+        else if (pPropName.equals(PROPNAME_POST_ANGLE)) {
+          XFormTransformService.rotate(pXForm, value, true);
+        }
+        else if (pPropName.equals(PROPNAME_POST_ZOOM)) {
+          XFormTransformService.scale(pXForm, value, true, true, true);
+        }
+        else {
+          throw new RuntimeException("Virtual property <" + pPropName + "> not supported");
+        }
+      }
+      return accepted;
+    }
+
+  }
+
+  public static void setFlameProperty(Flame pFlame, FlamePropertyPath pPath, double pValue) {
+    PropertyModel res = new PropertyModel(null, "flame", pFlame.getClass());
+    ModifyPropertyVisitor visitor = new ModifyPropertyVisitor(pPath, pValue);
+    visitModel(res, pFlame, visitor);
+    if (!visitor.isHasFound()) {
+      throw new RuntimeException("Property <" + pPath.getPath() + "> not found");
+    }
+  }
+
 }

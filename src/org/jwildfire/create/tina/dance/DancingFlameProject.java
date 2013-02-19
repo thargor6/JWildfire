@@ -40,16 +40,11 @@ public class DancingFlameProject implements Serializable {
   public List<Motion> getMotions(Flame pFlame) {
     List<Motion> res = new ArrayList<Motion>();
     for (Motion motion : motions) {
-      boolean hasLink = false;
       for (MotionLink link : motion.getMotionLinks()) {
-        if (link.getProperyPath().getFlame().equals(pFlame)) {
-          hasLink = true;
+        if (link.getProperyPath().getFlame().isEqual(pFlame)) {
+          res.add(motion);
           break;
         }
-      }
-      if (hasLink) {
-        res.add(motion);
-        break;
       }
     }
     return res;

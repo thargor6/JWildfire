@@ -66,4 +66,7 @@ public abstract class Motion extends ManagedObject implements Serializable {
     }
     return null;
   }
+
+  public abstract double computeValue(short pFFTData[], long pTime);
+
 }

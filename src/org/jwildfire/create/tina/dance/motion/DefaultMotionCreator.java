@@ -81,10 +81,6 @@ public class DefaultMotionCreator implements MotionCreator {
     amp14.setAmplitude(0.25);
     amp14.setOffset(1.0);
 
-    FFTMotion amp15 = new FFTMotion();
-    amp15.setFftChannel(6);
-    amp15.setAmplitude(0.25);
-
     pProject.getMotions().add(amp0);
     pProject.getMotions().add(amp1);
     pProject.getMotions().add(amp2);
@@ -98,7 +94,6 @@ public class DefaultMotionCreator implements MotionCreator {
     pProject.getMotions().add(amp11);
     pProject.getMotions().add(amp12);
     pProject.getMotions().add(amp14);
-    pProject.getMotions().add(amp15);
 
     for (Flame flame : pProject.getFlames()) {
       PropertyModel model = AnimationModelService.createModel(flame);
@@ -129,7 +124,6 @@ public class DefaultMotionCreator implements MotionCreator {
 
       if (flame.getFinalXForms().size() > 0) {
         addFinalXFormLink(model, amp14, flame, 0, AnimationModelService.PROPNAME_ZOOM);
-        addFinalXFormLink(model, amp15, flame, 0, AnimationModelService.PROPNAME_ZOOM);
       }
     }
   }

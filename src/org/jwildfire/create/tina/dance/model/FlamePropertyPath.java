@@ -17,6 +17,7 @@
 package org.jwildfire.create.tina.dance.model;
 
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.List;
 
 import org.jwildfire.create.tina.base.Flame;
@@ -51,4 +52,7 @@ public class FlamePropertyPath implements Serializable {
     return path;
   }
 
+  public List<String> getPathComponents() {
+    return Arrays.asList(path.split("\\" + DELIMITER));
+  }
 }
