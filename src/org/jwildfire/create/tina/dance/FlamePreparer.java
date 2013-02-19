@@ -28,14 +28,24 @@ public class FlamePreparer {
 
   public Flame createRenderFlame(Flame pSrc) {
     Flame res = pSrc.makeCopy();
+
+    //    res.setBGTransparency(false);
+    //    res.setGamma(1.5);
+    //    res.setBrightness(3.36);
+    //    res.getPalette().setModRed(90);
+    //    res.getPalette().setModRed(60);
+    //    res.getPalette().setModBlue(-60);
+    //    res.setSampleDensity(2 * prefs.getTinaRenderRealtimeQuality());
+    //    res.setSpatialFilterRadius(0.75);
+
     res.setBGTransparency(false);
-    res.setGamma(1.5);
-    res.setBrightness(3.36);
-    res.getPalette().setModRed(90);
-    res.getPalette().setModRed(60);
-    res.getPalette().setModBlue(-60);
+    res.setGamma(2.5);
+    res.setBrightness(5.0);
+    res.getPalette().setModRed(30);
+    res.getPalette().setModRed(20);
+    res.getPalette().setModBlue(-20);
     res.setSampleDensity(2 * prefs.getTinaRenderRealtimeQuality());
-    res.setSpatialFilterRadius(0.75);
+
     return res;
   }
 

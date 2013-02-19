@@ -21,6 +21,7 @@ import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.animate.AnimAware;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.XForm;
@@ -35,7 +36,7 @@ public class AnimationModelService {
   }
 
   private static interface PropertyVisitor {
-    public boolean accept(Field pField, PlainProperty pProperty);
+    public boolean accept(Object pOwner, Field pField, PlainProperty pProperty);
 
     public boolean accept(VariationFunc pVarFunc, PlainProperty pProperty);
 
@@ -83,7 +84,7 @@ public class AnimationModelService {
           PlainProperty property = new PlainProperty(res, field.getName(), cls);
           res.getProperties().add(property);
           if (pVisitor != null) {
-            state.updateState(pVisitor.accept(field, property));
+            state.updateState(pVisitor.accept(pFlame, field, property));
           }
         }
         else if (fCls == List.class) {
@@ -150,7 +151,7 @@ public class AnimationModelService {
           PlainProperty property = new PlainProperty(xFormNode, field.getName(), cls);
           xFormNode.getProperties().add(property);
           if (pVisitor != null) {
-            pState.updateState(pVisitor.accept(field, property));
+            pState.updateState(pVisitor.accept(pXForm, field, property));
           }
         }
         else if (fCls == List.class) {
@@ -191,7 +192,7 @@ public class AnimationModelService {
           PlainProperty property = new PlainProperty(variationNode, field.getName(), cls);
           variationNode.getProperties().add(property);
           if (pVisitor != null) {
-            pState.updateState(pVisitor.accept(field, property));
+            pState.updateState(pVisitor.accept(pVariation, field, property));
           }
         }
       }
@@ -276,11 +277,45 @@ public class AnimationModelService {
     }
 
     @Override
-    public boolean accept(Field pField, PlainProperty pProperty) {
+    public boolean accept(Object pOwner, Field pField, PlainProperty pProperty) {
       boolean accepted = accept(pProperty);
       if (accepted) {
-        // TODO
-        System.out.println("SET PROP");
+        if (pField.getType() == Double.class || pField.getType() == double.class) {
+          try {
+            pField.setDouble(pOwner, value);
+          }
+          catch (IllegalArgumentException e) {
+            throw new RuntimeException(e);
+          }
+          catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
+          }
+        }
+        else if (pField.getType() == Integer.class || pField.getType() == int.class) {
+          try {
+            pField.setInt(pOwner, Tools.FTOI(value));
+          }
+          catch (IllegalArgumentException e) {
+            throw new RuntimeException(e);
+          }
+          catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
+          }
+        }
+        else if (pField.getType() == Boolean.class || pField.getType() == boolean.class) {
+          try {
+            pField.setBoolean(pOwner, Tools.FTOI(value) != 0);
+          }
+          catch (IllegalArgumentException e) {
+            throw new RuntimeException(e);
+          }
+          catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
+          }
+        }
+        else {
+          throw new RuntimeException("Unsupporded property type <" + pField.getType() + ">");
+        }
       }
       return accepted;
     }
@@ -289,8 +324,7 @@ public class AnimationModelService {
     public boolean accept(VariationFunc pVarFunc, PlainProperty pProperty) {
       boolean accepted = accept(pProperty);
       if (accepted) {
-        // TODO
-        System.out.println("SET VAR");
+        pVarFunc.setParameter(pProperty.getName(), value);
       }
       return accepted;
     }

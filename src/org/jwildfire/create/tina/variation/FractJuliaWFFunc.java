@@ -93,6 +93,7 @@ public class FractJuliaWFFunc extends AbstractFractWFFunc {
   }
 
   public class Julia2Iterator extends Iterator {
+    private static final long serialVersionUID = 1L;
 
     @Override
     protected void nextIteration() {
@@ -108,6 +109,7 @@ public class FractJuliaWFFunc extends AbstractFractWFFunc {
   }
 
   public class Julia3Iterator extends Iterator {
+    private static final long serialVersionUID = 1L;
 
     @Override
     protected void nextIteration() {
@@ -124,6 +126,7 @@ public class FractJuliaWFFunc extends AbstractFractWFFunc {
   }
 
   public class Julia4Iterator extends Iterator {
+    private static final long serialVersionUID = 1L;
 
     @Override
     protected void nextIteration() {
@@ -140,6 +143,7 @@ public class FractJuliaWFFunc extends AbstractFractWFFunc {
   }
 
   public class JuliaNIterator extends Iterator {
+    private static final long serialVersionUID = 1L;
 
     @Override
     protected void nextIteration() {

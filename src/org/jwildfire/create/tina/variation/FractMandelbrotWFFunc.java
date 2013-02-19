@@ -76,6 +76,7 @@ public class FractMandelbrotWFFunc extends AbstractFractWFFunc {
   }
 
   public class Mandelbrot2Iterator extends Iterator {
+    private static final long serialVersionUID = 1L;
 
     @Override
     protected void nextIteration() {
@@ -93,6 +94,7 @@ public class FractMandelbrotWFFunc extends AbstractFractWFFunc {
   }
 
   public class Mandelbrot3Iterator extends Iterator {
+    private static final long serialVersionUID = 1L;
 
     @Override
     protected void nextIteration() {
@@ -109,6 +111,7 @@ public class FractMandelbrotWFFunc extends AbstractFractWFFunc {
   }
 
   public class Mandelbrot4Iterator extends Iterator {
+    private static final long serialVersionUID = 1L;
 
     @Override
     protected void nextIteration() {
@@ -124,6 +127,7 @@ public class FractMandelbrotWFFunc extends AbstractFractWFFunc {
   }
 
   public class MandelbrotNIterator extends Iterator {
+    private static final long serialVersionUID = 1L;
 
     @Override
     protected void nextIteration() {

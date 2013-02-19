@@ -17,6 +17,7 @@
 
 package org.jwildfire.create.tina.variation;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -65,7 +66,8 @@ public abstract class AbstractFractWFFunc extends VariationFunc {
     initParams();
   }
 
-  public abstract class Iterator {
+  public abstract class Iterator implements Serializable {
+    private static final long serialVersionUID = 1L;
     protected double xs, ys;
     public int currIter, maxIter;
     public double startX, startY;

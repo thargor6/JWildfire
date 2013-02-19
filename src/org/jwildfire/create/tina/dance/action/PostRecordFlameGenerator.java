@@ -92,7 +92,7 @@ public class PostRecordFlameGenerator {
           }
           else if (nextAction instanceof FlameChangeAction) {
             Flame nextFlame = ((FlameChangeAction) nextAction).getFlame();
-            flameStack.addFlame(dancingFlame.getFlame(), ((FlameChangeAction) nextAction).getMorphFrameCount(), project.getMotions(nextFlame));
+            flameStack.addFlame(nextFlame, ((FlameChangeAction) nextAction).getMorphFrameCount(), project.getMotions(nextFlame));
             nextAction = recorder.getRecordedActions().get(actionIdx++);
           }
           else {
