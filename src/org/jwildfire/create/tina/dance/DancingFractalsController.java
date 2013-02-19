@@ -48,6 +48,7 @@ import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.audio.JLayerInterface;
 import org.jwildfire.create.tina.audio.RecordedFFT;
 import org.jwildfire.create.tina.base.Flame;
+import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.dance.action.ActionRecorder;
 import org.jwildfire.create.tina.dance.action.PostRecordFlameGenerator;
 import org.jwildfire.create.tina.dance.model.FlamePropertyPath;
@@ -69,6 +70,7 @@ import org.jwildfire.create.tina.swing.FlamePanel;
 import org.jwildfire.create.tina.swing.JWFNumberField;
 import org.jwildfire.create.tina.swing.SoundFileChooser;
 import org.jwildfire.create.tina.swing.TinaController;
+import org.jwildfire.create.tina.variation.Linear3DFunc;
 import org.jwildfire.image.SimpleImage;
 import org.jwildfire.swing.ErrorHandler;
 import org.jwildfire.swing.ImagePanel;
@@ -273,11 +275,9 @@ public class DancingFractalsController {
           flame.setWidth(info.getImageWidth());
           flame.setHeight(info.getImageHeight());
 
-          FlameRenderer renderer = new FlameRenderer(flame, prefs, false);
+          Flame renderFlame = new FlamePreparer(prefs).createRenderFlame(flame);
+          FlameRenderer renderer = new FlameRenderer(renderFlame, prefs, false);
           renderer.setProgressUpdater(null);
-
-          new FlamePreparer(prefs).prepareFlame(flame);
-
           RenderedFlame res = renderer.renderFlame(info);
           SimpleImage img = res.getImage();
           if (pDrawFPS) {
@@ -328,9 +328,9 @@ public class DancingFractalsController {
         flame.setPixelsPerUnit((wScl + hScl) * 0.5 * flame.getPixelsPerUnit());
         flame.setWidth(info.getImageWidth());
         flame.setHeight(info.getImageHeight());
-        FlameRenderer renderer = new FlameRenderer(flame, prefs, false);
+        Flame renderFlame = new FlamePreparer(prefs).createRenderFlame(flame);
+        FlameRenderer renderer = new FlameRenderer(renderFlame, prefs, false);
         renderer.setProgressUpdater(null);
-        new FlamePreparer(prefs).prepareFlame(flame);
         RenderedFlame res = renderer.renderFlame(info);
         imgPanel.setImage(res.getImage());
       }
@@ -365,7 +365,7 @@ public class DancingFractalsController {
 
   public void importFlame(Flame pFlame) {
     if (pFlame != null) {
-      project.getFlames().add(pFlame);
+      project.getFlames().add(validateDancingFlame(pFlame.makeCopy()));
       refreshProjectFlames();
       enableControls();
     }
@@ -375,7 +375,7 @@ public class DancingFractalsController {
     stopRender();
     Flame selFlame = flamesCmb.getSelectedIndex() >= 0 && flamesCmb.getSelectedIndex() < project.getFlames().size() ? project.getFlames().get(flamesCmb.getSelectedIndex()) : null;
     renderThread = new RealtimeAnimRenderThread(this);
-    renderThread.getFlameStack().addFlame(selFlame, 0);
+    renderThread.getFlameStack().addFlame(selFlame, 0, project.getMotions(selFlame));
     actionRecorder = new ActionRecorder(renderThread);
     renderThread.setFFTData(fft);
     renderThread.setMusicPlayer(jLayer);
@@ -407,7 +407,7 @@ public class DancingFractalsController {
         if (chooser.showSaveDialog(flameRootPanel) == JFileChooser.APPROVE_OPTION) {
           File file = chooser.getSelectedFile();
           prefs.setLastOutputFlameFile(file);
-          PostRecordFlameGenerator generator = new PostRecordFlameGenerator(getParentCtrl().getPrefs(), actionRecorder, renderThread, fft);
+          PostRecordFlameGenerator generator = new PostRecordFlameGenerator(getParentCtrl().getPrefs(), project, actionRecorder, renderThread, fft);
           generator.createRecordedFlameFiles(file.getAbsolutePath());
         }
       }
@@ -426,7 +426,7 @@ public class DancingFractalsController {
         RandomFlameGenerator randGen = RandomFlameGeneratorList.getRandomFlameGeneratorInstance((String) randomGenCmb.getSelectedItem(), true);
         int palettePoints = 3 + (int) (Math.random() * 68.0);
         RandomFlameGeneratorSampler sampler = new RandomFlameGeneratorSampler(IMG_WIDTH, IMG_HEIGHT, prefs, randGen, palettePoints);
-        project.getFlames().add(sampler.createSample().getFlame());
+        project.getFlames().add(validateDancingFlame(sampler.createSample().getFlame()));
       }
       refreshProjectFlames();
       enableControls();
@@ -639,7 +639,7 @@ public class DancingFractalsController {
       }
       else {
         for (Flame newFlame : newFlames) {
-          project.getFlames().add(newFlame);
+          project.getFlames().add(validateDancingFlame(newFlame));
         }
         refreshProjectFlames();
         enableControls();
@@ -668,7 +668,7 @@ public class DancingFractalsController {
           prefs.setLastInputFlameFile(file);
           if (newFlames != null && newFlames.size() > 0) {
             for (Flame newFlame : newFlames) {
-              project.getFlames().add(newFlame);
+              project.getFlames().add(validateDancingFlame(newFlame));
             }
           }
         }
@@ -806,7 +806,7 @@ public class DancingFractalsController {
       Flame selFlame = flamesCmb.getSelectedIndex() >= 0 && flamesCmb.getSelectedIndex() < project.getFlames().size() ? project.getFlames().get(flamesCmb.getSelectedIndex()) : null;
       if (selFlame != null && renderThread != null) {
         int morphFrameCount = Integer.parseInt(morphFrameCountIEd.getText());
-        renderThread.getFlameStack().addFlame(selFlame, morphFrameCount);
+        renderThread.getFlameStack().addFlame(selFlame, morphFrameCount, project.getMotions(selFlame));
         if (actionRecorder != null)
           actionRecorder.recordFlameChange(selFlame, morphFrameCount);
       }
@@ -1010,6 +1010,17 @@ public class DancingFractalsController {
   public void unlinkMotionFromAllBtn_clicked() {
     // TODO Auto-generated method stub
 
+  }
+
+  private Flame validateDancingFlame(Flame pFlame) {
+    if (pFlame.getFinalXForms().size() == 0) {
+      XForm xForm = new XForm();
+      xForm.addVariation(1.0, new Linear3DFunc());
+      xForm.setAntialiasAmount(prefs.getTinaDefaultAntialiasingAmount());
+      xForm.setAntialiasRadius(prefs.getTinaDefaultAntialiasingRadius());
+      pFlame.getFinalXForms().add(xForm);
+    }
+    return pFlame;
   }
 
 }

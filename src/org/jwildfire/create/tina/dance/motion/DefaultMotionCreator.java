@@ -31,48 +31,72 @@ public class DefaultMotionCreator implements MotionCreator {
     FFTMotion amp0 = new FFTMotion();
     amp0.setFftChannel(0);
     amp0.setAmplitude(-7.0);
+
     FFTMotion amp1 = new FFTMotion();
     amp1.setFftChannel(1);
+    amp1.setAmplitude(-0.5);
+
     FFTMotion amp2 = new FFTMotion();
     amp2.setFftChannel(2);
-    pProject.getMotions().add(amp0);
-    pProject.getMotions().add(amp1);
-    pProject.getMotions().add(amp2);
+    amp2.setAmplitude(-0.5);
 
     FFTMotion amp3 = new FFTMotion();
     amp3.setFftChannel(3);
+    amp3.setAmplitude(-2.0);
+
     FFTMotion amp4 = new FFTMotion();
     amp4.setFftChannel(4);
+    amp4.setAmplitude(0.25);
+
     FFTMotion amp5 = new FFTMotion();
     amp5.setFftChannel(5);
-    pProject.getMotions().add(amp3);
-    pProject.getMotions().add(amp4);
-    pProject.getMotions().add(amp5);
+    amp5.setAmplitude(-0.25);
 
     FFTMotion amp7 = new FFTMotion();
     amp7.setFftChannel(47);
+    amp7.setAmplitude(5.0);
+
     FFTMotion amp8 = new FFTMotion();
     amp8.setFftChannel(48);
+    amp8.setAmplitude(-0.75);
+
     FFTMotion amp9 = new FFTMotion();
     amp9.setFftChannel(49);
-    pProject.getMotions().add(amp7);
-    pProject.getMotions().add(amp8);
-    pProject.getMotions().add(amp9);
+    amp9.setAmplitude(0.5);
 
     FFTMotion amp10 = new FFTMotion();
     amp10.setFftChannel(50);
+    amp10.setAmplitude(3.0);
+
     FFTMotion amp11 = new FFTMotion();
     amp11.setFftChannel(51);
+    amp11.setAmplitude(0.25);
+
     FFTMotion amp12 = new FFTMotion();
     amp12.setFftChannel(52);
-    pProject.getMotions().add(amp10);
-    pProject.getMotions().add(amp11);
-    pProject.getMotions().add(amp12);
+    amp12.setAmplitude(0.25);
 
     FFTMotion amp14 = new FFTMotion();
     amp14.setFftChannel(2);
+    amp14.setAmplitude(0.25);
+    amp14.setOffset(1.0);
+
     FFTMotion amp15 = new FFTMotion();
     amp15.setFftChannel(6);
+    amp15.setAmplitude(0.25);
+
+    pProject.getMotions().add(amp0);
+    pProject.getMotions().add(amp1);
+    pProject.getMotions().add(amp2);
+    pProject.getMotions().add(amp3);
+    pProject.getMotions().add(amp4);
+    pProject.getMotions().add(amp5);
+    pProject.getMotions().add(amp7);
+    pProject.getMotions().add(amp8);
+    pProject.getMotions().add(amp9);
+    pProject.getMotions().add(amp10);
+    pProject.getMotions().add(amp11);
+    pProject.getMotions().add(amp12);
     pProject.getMotions().add(amp14);
     pProject.getMotions().add(amp15);
 
@@ -81,47 +105,43 @@ public class DefaultMotionCreator implements MotionCreator {
 
       if (flame.getXForms().size() > 0) {
         addXFormLink(model, amp0, flame, 0, AnimationModelService.PROPNAME_ANGLE);
-        //        XFormTransformService.rotate(xForm, -amp0 * 7, false);
-        //        XFormTransformService.localTranslate(xForm, -amp1 * 0.5, amp2 * 0.5);
-
+        addXFormLink(model, amp1, flame, 0, AnimationModelService.PROPNAME_ORIGIN_X);
+        addXFormLink(model, amp2, flame, 0, AnimationModelService.PROPNAME_ORIGIN_Y);
       }
 
       if (flame.getXForms().size() > 1) {
-
-        //        XFormTransformService.rotate(xForm, -amp3 * 2, false);
-        //        XFormTransformService.localTranslate(xForm, amp4 * 0.25, -amp5 * 0.25);
-
+        addXFormLink(model, amp3, flame, 1, AnimationModelService.PROPNAME_ANGLE);
+        addXFormLink(model, amp4, flame, 1, AnimationModelService.PROPNAME_ORIGIN_X);
+        addXFormLink(model, amp5, flame, 1, AnimationModelService.PROPNAME_ORIGIN_Y);
       }
 
       if (flame.getXForms().size() > 2) {
-
-        //        XFormTransformService.rotate(xForm, amp7 * 5, false);
-        //        XFormTransformService.localTranslate(xForm, -amp8 * 0.75, amp9 * 0.5);
-
+        addXFormLink(model, amp7, flame, 2, AnimationModelService.PROPNAME_ANGLE);
+        addXFormLink(model, amp8, flame, 2, AnimationModelService.PROPNAME_ORIGIN_X);
+        addXFormLink(model, amp9, flame, 2, AnimationModelService.PROPNAME_ORIGIN_Y);
       }
 
       if (flame.getXForms().size() > 3) {
-
-        //        XFormTransformService.rotate(xForm, amp10 * 3, false);
-        //        XFormTransformService.localTranslate(xForm, amp11 * 0.5, amp12 * 0.25);
-
+        addXFormLink(model, amp10, flame, 3, AnimationModelService.PROPNAME_ANGLE);
+        addXFormLink(model, amp11, flame, 3, AnimationModelService.PROPNAME_ORIGIN_X);
+        addXFormLink(model, amp12, flame, 3, AnimationModelService.PROPNAME_ORIGIN_Y);
       }
 
       if (flame.getFinalXForms().size() > 0) {
-
-        //        XForm xForm = pFlame.getFinalXForms().get(pFlame.getFinalXForms().size() - 1);
-        //        finalXFormAlpha += amp6;
-        //        if (finalXFormAlpha > 360)
-        //          finalXFormAlpha -= 360;
-        //        XFormTransformService.scale(xForm, 1.0 + (amp2 + amp6) * 0.25, true, true, false);
-
+        addFinalXFormLink(model, amp14, flame, 0, AnimationModelService.PROPNAME_ZOOM);
+        addFinalXFormLink(model, amp15, flame, 0, AnimationModelService.PROPNAME_ZOOM);
       }
-
     }
   }
 
   protected void addXFormLink(PropertyModel pModel, Motion pMotion, Flame pFlame, int pXFormIndex, String pPropname) {
     FlamePropertyPath path = new FlamePropertyPath(pFlame, AnimationModelService.createXFormPropertyPath(pXFormIndex, pPropname));
+    MotionLink link = new MotionLink(path);
+    pMotion.getMotionLinks().add(link);
+  }
+
+  protected void addFinalXFormLink(PropertyModel pModel, Motion pMotion, Flame pFlame, int pXFormIndex, String pPropname) {
+    FlamePropertyPath path = new FlamePropertyPath(pFlame, AnimationModelService.createFinalXFormPropertyPath(pXFormIndex, pPropname));
     MotionLink link = new MotionLink(path);
     pMotion.getMotionLinks().add(link);
   }

@@ -23,20 +23,24 @@ import java.util.List;
 import org.jwildfire.base.Prefs;
 import org.jwildfire.create.tina.audio.RecordedFFT;
 import org.jwildfire.create.tina.base.Flame;
+import org.jwildfire.create.tina.dance.DancingFlame;
+import org.jwildfire.create.tina.dance.DancingFlameProject;
+import org.jwildfire.create.tina.dance.DancingFlameStack;
 import org.jwildfire.create.tina.dance.FlamePreparer;
-import org.jwildfire.create.tina.dance.FlameStack;
 import org.jwildfire.create.tina.dance.RealtimeAnimRenderThread;
 import org.jwildfire.create.tina.dance.motion.DanceFlameTransformer;
 import org.jwildfire.create.tina.io.Flam3Writer;
 
 public class PostRecordFlameGenerator {
+  private final DancingFlameProject project;
   private final RealtimeAnimRenderThread thread;
   private final ActionRecorder recorder;
   private final Prefs prefs;
   private final RecordedFFT fftData;
   private final DanceFlameTransformer transformer;
 
-  public PostRecordFlameGenerator(Prefs pPrefs, ActionRecorder pRecorder, RealtimeAnimRenderThread pThread, RecordedFFT pFFTData) {
+  public PostRecordFlameGenerator(Prefs pPrefs, DancingFlameProject pProject, ActionRecorder pRecorder, RealtimeAnimRenderThread pThread, RecordedFFT pFFTData) {
+    project = pProject;
     prefs = pPrefs;
     recorder = pRecorder;
     thread = pThread;
@@ -50,8 +54,8 @@ public class PostRecordFlameGenerator {
       int actionIdx = 0;
 
       StartAction startAction = (StartAction) recorder.getRecordedActions().get(actionIdx++);
-      FlameStack flameStack = new FlameStack(prefs);
-      flameStack.addFlame(startAction.getFlame(), 0);
+      DancingFlameStack flameStack = new DancingFlameStack(prefs);
+      flameStack.addFlame(startAction.getFlame(), 0, project.getMotions(startAction.getFlame()));
       RecordedAction nextAction = recorder.getRecordedActions().get(actionIdx++);
       long timeRenderStarted = System.currentTimeMillis();
       long nextFrame = (long) (timeRenderStarted + 1000.0 / (double) thread.getFramesPerSecond() + 0.5);
@@ -68,22 +72,27 @@ public class PostRecordFlameGenerator {
         }
         nextFrame = (long) (time + 1000.0 / (double) thread.getFramesPerSecond() + 0.5);
 
-        Flame flame = flameStack.getFlame();
+        DancingFlame dancingFlame = flameStack.getFlame();
 
+        Flame renderFlame;
         if (fftData != null) {
-          short currFFT[] = fftData.getDataByTimeOffset(time - timeRenderStarted);
-          transformer.transformFlame(flame, currFFT);
+          long currTime = time - timeRenderStarted;
+          short currFFT[] = fftData.getDataByTimeOffset(currTime);
+          Flame transforedFlame = transformer.createTransformedFlame(dancingFlame, currFFT, currTime);
+          renderFlame = new FlamePreparer(prefs).createRenderFlame(transforedFlame);
+        }
+        else {
+          renderFlame = new FlamePreparer(prefs).createRenderFlame(dancingFlame.getFlame());
         }
 
-        new FlamePreparer(prefs).prepareFlame(flame);
-
-        flames.add(flame.makeCopy());
+        flames.add(renderFlame);
         if (time >= timeRenderStarted + nextAction.getTime()) {
           if (nextAction instanceof StopAction) {
             break;
           }
           else if (nextAction instanceof FlameChangeAction) {
-            flameStack.addFlame(((FlameChangeAction) nextAction).getFlame(), ((FlameChangeAction) nextAction).getMorphFrameCount());
+            Flame nextFlame = ((FlameChangeAction) nextAction).getFlame();
+            flameStack.addFlame(dancingFlame.getFlame(), ((FlameChangeAction) nextAction).getMorphFrameCount(), project.getMotions(nextFlame));
             nextAction = recorder.getRecordedActions().get(actionIdx++);
           }
           else {

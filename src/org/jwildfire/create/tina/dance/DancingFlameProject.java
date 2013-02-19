@@ -22,6 +22,7 @@ import java.util.List;
 
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.dance.motion.Motion;
+import org.jwildfire.create.tina.dance.motion.MotionLink;
 
 public class DancingFlameProject implements Serializable {
   private static final long serialVersionUID = 1L;
@@ -34,6 +35,24 @@ public class DancingFlameProject implements Serializable {
 
   public List<Motion> getMotions() {
     return motions;
+  }
+
+  public List<Motion> getMotions(Flame pFlame) {
+    List<Motion> res = new ArrayList<Motion>();
+    for (Motion motion : motions) {
+      boolean hasLink = false;
+      for (MotionLink link : motion.getMotionLinks()) {
+        if (link.getProperyPath().getFlame().equals(pFlame)) {
+          hasLink = true;
+          break;
+        }
+      }
+      if (hasLink) {
+        res.add(motion);
+        break;
+      }
+    }
+    return res;
   }
 
 }

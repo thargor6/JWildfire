@@ -28,6 +28,9 @@ public class FFTMotion extends Motion {
   @Property(description = "Amplitude", category = PropertyCategory.GENERAL)
   private double amplitude = 1.0;
 
+  @Property(description = "Offset", category = PropertyCategory.GENERAL)
+  private double offset = 0.0;
+
   public int getFftChannel() {
     return fftChannel;
   }
@@ -42,6 +45,14 @@ public class FFTMotion extends Motion {
 
   public void setAmplitude(double pAmplitude) {
     amplitude = pAmplitude;
+  }
+
+  public double getOffset() {
+    return offset;
+  }
+
+  public void setOffset(double offset) {
+    this.offset = offset;
   }
 
 }

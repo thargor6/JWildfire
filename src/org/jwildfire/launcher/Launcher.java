@@ -224,7 +224,7 @@ public class Launcher {
     launchButton.setBackground(Color.BLACK);
 
     debugCmb = new JCheckBox("Debug");
-    debugCmb.setBounds(16, 20, 59, 18);
+    debugCmb.setBounds(16, 20, 187, 18);
     debugCmb.setToolTipText("Trace the launching process and record messages");
     debugCmb.setForeground(SystemColor.menu);
     debugCmb.setBackground(Color.BLACK);

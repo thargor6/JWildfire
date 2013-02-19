@@ -18,17 +18,20 @@ package org.jwildfire.create.tina.dance.motion;
 
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.XForm;
+import org.jwildfire.create.tina.dance.DancingFlame;
 import org.jwildfire.create.tina.transform.XFormTransformService;
 
 public class DanceFlameTransformer {
   private double finalXFormAlpha = 0.0;
 
-  public void transformFlame(Flame pFlame, short pFFTData[]) {
-    transformXForm1(pFFTData, pFlame);
-    transformXForm2(pFFTData, pFlame);
-    transformXForm3(pFFTData, pFlame);
-    transformXForm4(pFFTData, pFlame);
-    transformXFormF(pFFTData, pFlame);
+  public Flame createTransformedFlame(DancingFlame pFlame, short pFFTData[], long pTime) {
+    Flame res = pFlame.getFlame().makeCopy();
+    transformXForm1(pFFTData, res);
+    transformXForm2(pFFTData, res);
+    transformXForm3(pFFTData, res);
+    transformXForm4(pFFTData, res);
+    transformXFormF(pFFTData, res);
+    return res;
   }
 
   private void transformXForm1(short[] pFFT, Flame pFlame) {

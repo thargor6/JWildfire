@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2013 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -22,34 +22,34 @@ import java.util.List;
 import org.jwildfire.base.Prefs;
 import org.jwildfire.create.tina.animate.FlameMorphService;
 import org.jwildfire.create.tina.base.Flame;
-import org.jwildfire.create.tina.swing.FlameHolder;
+import org.jwildfire.create.tina.dance.motion.Motion;
 
-public class FlameStack implements FlameHolder {
+public class DancingFlameStack {
   private final Prefs prefs;
-  private List<Flame> flames = new ArrayList<Flame>();
+  private List<DancingFlame> flames = new ArrayList<DancingFlame>();
 
-  public FlameStack(Prefs pPrefs) {
+  public DancingFlameStack(Prefs pPrefs) {
     prefs = pPrefs;
   }
 
-  public void addFlame(Flame pFlame, int pMorphFrameCount) {
+  public void addFlame(Flame pFlame, int pMorphFrameCount, List<Motion> pMotions) {
     if (flames.size() == 0 || pMorphFrameCount < 2) {
-      flames.add(pFlame);
+      flames.add(new DancingFlame(pFlame, pMotions));
     }
     else {
-      Flame prevFlame = flames.get(flames.size() - 1);
+      Flame prevFlame = flames.get(flames.size() - 1).getFlame();
       for (int i = 1; i < pMorphFrameCount; i++) {
         Flame flame = FlameMorphService.morphFlames(prefs, prevFlame, pFlame, i, pMorphFrameCount);
-        flames.add(flame);
+        // TODO how to morph motions?
+        flames.add(new DancingFlame(flame, pMotions));
       }
-      flames.add(pFlame);
+      flames.add(new DancingFlame(pFlame, pMotions));
     }
   }
 
-  @Override
-  public Flame getFlame() {
+  public DancingFlame getFlame() {
     if (flames.size() > 0) {
-      Flame res = flames.get(0);
+      DancingFlame res = flames.get(0);
       if (flames.size() > 1) {
         flames.remove(0);
       }

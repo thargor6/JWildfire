@@ -16,27 +16,26 @@
 */
 package org.jwildfire.create.tina.dance;
 
-import org.jwildfire.base.Prefs;
+import java.util.List;
+
 import org.jwildfire.create.tina.base.Flame;
+import org.jwildfire.create.tina.dance.motion.Motion;
 
-public class FlamePreparer {
-  private final Prefs prefs;
+public class DancingFlame {
+  private final Flame flame;
+  private final List<Motion> motions;
 
-  public FlamePreparer(Prefs pPrefs) {
-    prefs = pPrefs;
+  public DancingFlame(Flame pFlame, List<Motion> pMotions) {
+    flame = pFlame;
+    motions = pMotions;
   }
 
-  public Flame createRenderFlame(Flame pSrc) {
-    Flame res = pSrc.makeCopy();
-    res.setBGTransparency(false);
-    res.setGamma(1.5);
-    res.setBrightness(3.36);
-    res.getPalette().setModRed(90);
-    res.getPalette().setModRed(60);
-    res.getPalette().setModBlue(-60);
-    res.setSampleDensity(2 * prefs.getTinaRenderRealtimeQuality());
-    res.setSpatialFilterRadius(0.75);
-    return res;
+  public Flame getFlame() {
+    return flame;
+  }
+
+  public List<Motion> getMotions() {
+    return motions;
   }
 
 }
