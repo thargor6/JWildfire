@@ -42,7 +42,7 @@ import org.jwildfire.image.Pixel;
 
 public class Tools {
   public static final String APP_TITLE = "JWildfire";
-  public static final String APP_VERSION = "0.64 (16.02.2013)";
+  public static final String APP_VERSION = "0.65 BETA (19.02.2013)";
 
   public static final int VPREC = 1024;
   public static final int SPREC = 10;
@@ -57,6 +57,7 @@ public class Tools {
   public static final String FILEEXT_JWFMOVIE = "jwfmovie";
   public static final String FILEEXT_JWFRENDER = "jwfrender";
   public static final String FILEEXT_JWFSCRIPT = "jwfscript";
+  public static final String FILEEXT_JWFDANCE = "jwfdance";
 
   public static final double fmod33(double arg) {
     return (arg - (double) ((int) arg));

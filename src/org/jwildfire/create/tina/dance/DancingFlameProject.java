@@ -20,6 +20,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.jwildfire.create.tina.audio.JLayerInterface;
+import org.jwildfire.create.tina.audio.RecordedFFT;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.dance.motion.Motion;
 import org.jwildfire.create.tina.dance.motion.MotionLink;
@@ -48,6 +50,33 @@ public class DancingFlameProject implements Serializable {
       }
     }
     return res;
+  }
+
+  private RecordedFFT fft;
+  private String soundFilename;
+
+  public void setSoundFilename(JLayerInterface pJLayer, String pFilename) throws Exception {
+    if (pFilename != null && pFilename.length() > 0) {
+      soundFilename = pFilename;
+      fft = pJLayer.recordFFT(soundFilename);
+    }
+    else {
+      soundFilename = null;
+      fft = null;
+    }
+  }
+
+  public RecordedFFT getFFT() {
+    return fft;
+  }
+
+  public String getSoundFilename() {
+    return soundFilename;
+  }
+
+  public void setSoundData(String pFilename, RecordedFFT pFFT) {
+    fft = pFFT;
+    soundFilename = pFilename;
   }
 
 }

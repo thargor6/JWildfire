@@ -46,7 +46,6 @@ import javax.swing.tree.TreePath;
 import org.jwildfire.base.Prefs;
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.audio.JLayerInterface;
-import org.jwildfire.create.tina.audio.RecordedFFT;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.dance.action.ActionRecorder;
@@ -58,6 +57,8 @@ import org.jwildfire.create.tina.dance.motion.MotionCreatorType;
 import org.jwildfire.create.tina.dance.motion.MotionLink;
 import org.jwildfire.create.tina.dance.motion.MotionType;
 import org.jwildfire.create.tina.io.Flam3Reader;
+import org.jwildfire.create.tina.io.JWFDanceReader;
+import org.jwildfire.create.tina.io.JWFDanceWriter;
 import org.jwildfire.create.tina.randomflame.RandomFlameGenerator;
 import org.jwildfire.create.tina.randomflame.RandomFlameGeneratorList;
 import org.jwildfire.create.tina.randomflame.RandomFlameGeneratorSampler;
@@ -67,6 +68,7 @@ import org.jwildfire.create.tina.render.RenderedFlame;
 import org.jwildfire.create.tina.swing.FlameFileChooser;
 import org.jwildfire.create.tina.swing.FlameHolder;
 import org.jwildfire.create.tina.swing.FlamePanel;
+import org.jwildfire.create.tina.swing.JWFDanceFileChooser;
 import org.jwildfire.create.tina.swing.JWFNumberField;
 import org.jwildfire.create.tina.swing.SoundFileChooser;
 import org.jwildfire.create.tina.swing.TinaController;
@@ -125,7 +127,6 @@ public class DancingFractalsController {
   private final JButton unlinkFromAllMotionsBtn;
   private final JTable motionLinksTable;
 
-  JLayerInterface jLayer = new JLayerInterface();
   private FlamePanel flamePanel = null;
   private FlamePanel poolFlamePreviewFlamePanel = null;
   private ImagePanel graph1Panel = null;
@@ -134,11 +135,10 @@ public class DancingFractalsController {
   private RealtimeAnimRenderThread renderThread;
   private ActionRecorder actionRecorder;
 
-  private RecordedFFT fft;
-  private String soundFilename;
   private boolean running = false;
   private final PoolFlameHolder poolFlameHolder;
   private final FlamePropertiesTreeService flamePropertiesTreeService;
+  private JLayerInterface jLayer = new JLayerInterface();
 
   public DancingFractalsController(TinaController pParent, ErrorHandler pErrorHandler, JPanel pRealtimeFlamePnl, JPanel pRealtimeGraph1Pnl,
       JButton pLoadSoundBtn, JButton pAddFromClipboardBtn, JButton pAddFromEditorBtn, JButton pAddFromDiscBtn, JWFNumberField pRandomCountIEd,
@@ -348,12 +348,12 @@ public class DancingFractalsController {
     try {
       if (project.getFlames().size() == 0)
         throw new Exception("No flames to animate");
-      if (soundFilename == null || soundFilename.length() == 0)
+      if (project.getSoundFilename() == null || project.getSoundFilename().length() == 0)
         throw new Exception("No sound file specified");
-      if (fft == null)
+      if (project.getFFT() == null)
         throw new Exception("No FFT data");
       jLayer.stop();
-      jLayer.play(soundFilename);
+      jLayer.play(project.getSoundFilename());
       startRender();
       running = true;
       enableControls();
@@ -377,7 +377,7 @@ public class DancingFractalsController {
     renderThread = new RealtimeAnimRenderThread(this);
     renderThread.getFlameStack().addFlame(selFlame, 0, project.getMotions(selFlame));
     actionRecorder = new ActionRecorder(renderThread);
-    renderThread.setFFTData(fft);
+    renderThread.setFFTData(project.getFFT());
     renderThread.setMusicPlayer(jLayer);
     renderThread.setFFTPanel(getGraph1Panel());
     renderThread.setFramesPerSecond(Integer.parseInt(framesPerSecondIEd.getText()));
@@ -407,7 +407,7 @@ public class DancingFractalsController {
         if (chooser.showSaveDialog(flameRootPanel) == JFileChooser.APPROVE_OPTION) {
           File file = chooser.getSelectedFile();
           prefs.setLastOutputFlameFile(file);
-          PostRecordFlameGenerator generator = new PostRecordFlameGenerator(getParentCtrl().getPrefs(), project, actionRecorder, renderThread, fft);
+          PostRecordFlameGenerator generator = new PostRecordFlameGenerator(getParentCtrl().getPrefs(), project, actionRecorder, renderThread, project.getFFT());
           generator.createRecordedFlameFiles(file.getAbsolutePath());
         }
       }
@@ -450,23 +450,12 @@ public class DancingFractalsController {
       if (chooser.showOpenDialog(flameRootPanel) == JFileChooser.APPROVE_OPTION) {
         File file = chooser.getSelectedFile();
         prefs.setLastInputSoundFile(file);
-        setSoundFilename(file.getAbsolutePath());
+        project.setSoundFilename(jLayer, file.getAbsolutePath());
         enableControls();
       }
     }
     catch (Throwable ex) {
       errorHandler.handleError(ex);
-    }
-  }
-
-  private void setSoundFilename(String pFilename) throws Exception {
-    if (pFilename != null && pFilename.length() > 0) {
-      soundFilename = pFilename;
-      fft = jLayer.recordFFT(soundFilename);
-    }
-    else {
-      soundFilename = null;
-      fft = null;
     }
   }
 
@@ -747,7 +736,7 @@ public class DancingFractalsController {
     framesPerSecondIEd.setEnabled(!running);
     borderSizeSlider.setEnabled(true);
     morphFrameCountIEd.setEnabled(true);
-    startShowButton.setEnabled(!running && project.getFlames().size() > 0 && soundFilename != null && soundFilename.length() > 0 && fft != null);
+    startShowButton.setEnabled(!running && project.getFlames().size() > 0 && project.getSoundFilename() != null && project.getSoundFilename().length() > 0 && project.getFFT() != null);
     stopShowButton.setEnabled(running);
     doRecordCBx.setEnabled(!running);
 
@@ -975,13 +964,48 @@ public class DancingFractalsController {
   }
 
   public void dancingFlamesLoadProjectBtn_clicked() {
-    // TODO Auto-generated method stub
-
+    try {
+      JFileChooser chooser = new JWFDanceFileChooser(prefs);
+      if (prefs.getInputJWFMoviePath() != null) {
+        try {
+          chooser.setCurrentDirectory(new File(prefs.getInputJWFMoviePath()));
+        }
+        catch (Exception ex) {
+          ex.printStackTrace();
+        }
+      }
+      if (chooser.showOpenDialog(poolFlamePreviewPnl) == JFileChooser.APPROVE_OPTION) {
+        File file = chooser.getSelectedFile();
+        project = new JWFDanceReader().readProject(file.getAbsolutePath());
+        refreshProjectFlames();
+        enableControls();
+      }
+    }
+    catch (Throwable ex) {
+      errorHandler.handleError(ex);
+    }
   }
 
   public void dancingFlamesSaveProjectBtn_clicked() {
-    // TODO Auto-generated method stub
-
+    try {
+      JFileChooser chooser = new JWFDanceFileChooser(prefs);
+      if (prefs.getOutputJWFMoviePath() != null) {
+        try {
+          chooser.setCurrentDirectory(new File(prefs.getOutputJWFMoviePath()));
+        }
+        catch (Exception ex) {
+          ex.printStackTrace();
+        }
+      }
+      if (chooser.showSaveDialog(poolFlamePreviewPnl) == JFileChooser.APPROVE_OPTION) {
+        File file = chooser.getSelectedFile();
+        new JWFDanceWriter().writeProject(project, file.getAbsolutePath());
+        prefs.setLastOutputJWFMovieFile(file);
+      }
+    }
+    catch (Throwable ex) {
+      errorHandler.handleError(ex);
+    }
   }
 
   public void linkMotionToAllBtn_clicked() {

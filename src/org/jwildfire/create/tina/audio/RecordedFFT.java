@@ -16,12 +16,15 @@
 */
 package org.jwildfire.create.tina.audio;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 import edu.emory.mathcs.jtransforms.fft.FloatFFT_1D;
 
-public class RecordedFFT {
+public class RecordedFFT implements Serializable {
+  private static final long serialVersionUID = 1L;
+
   private final int recordedIntervalInMilliseconds;
   private final int movingAvgSize;
   private final int inputSamplePerFFTRowCount;
