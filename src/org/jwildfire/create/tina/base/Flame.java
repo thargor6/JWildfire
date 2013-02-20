@@ -125,7 +125,7 @@ public class Flame implements Assignable<Flame>, Serializable {
     newCamDOF = false;
     camDOFArea = 0.5;
     camDOFExponent = 2.0;
-    gammaThreshold = 0.04;
+    gammaThreshold = 0.01;
     pixelsPerUnit = 50;
     whiteLevel = 200;
     name = "";
