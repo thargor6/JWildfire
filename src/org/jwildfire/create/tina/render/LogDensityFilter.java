@@ -28,7 +28,7 @@ public class LogDensityFilter {
   private int rasterWidth, rasterHeight, rasterSize;
   public static final int FILTER_WHITE = (1 << 26);
   public final static double BRIGHTNESS_SCALE = 2.0 * 268.0;
-  private final int PRECALC_LOG_ARRAY_SIZE = 6000;
+  private final int PRECALC_LOG_ARRAY_SIZE = 256;
   private double filter[][];
   private int noiseFilterSize;
   private double precalcLogArray[]; // precalculated log-values
@@ -116,17 +116,17 @@ public class LogDensityFilter {
 
   public void transformPointSimple(LogDensityPoint pFilteredPnt, int pX, int pY) {
     RasterPoint point = getRasterPoint(pX, pY);
-    double ls;
+    double logScale;
     if (point.count < precalcLogArray.length) {
-      ls = precalcLogArray[(int) point.count] / FILTER_WHITE;
+      logScale = precalcLogArray[(int) point.count] / FILTER_WHITE;
     }
     else {
-      ls = (k1 * log10(1.0 + flame.getWhiteLevel() * point.count * k2)) / (flame.getWhiteLevel() * point.count) / FILTER_WHITE;
+      logScale = (k1 * log10(1.0 + flame.getWhiteLevel() * point.count * k2)) / (flame.getWhiteLevel() * point.count) / FILTER_WHITE;
     }
-    pFilteredPnt.red = ls * point.red;
-    pFilteredPnt.green = ls * point.green;
-    pFilteredPnt.blue = ls * point.blue;
-    pFilteredPnt.intensity = ls * point.count * flame.getWhiteLevel();
+    pFilteredPnt.red = logScale * point.red;
+    pFilteredPnt.green = logScale * point.green;
+    pFilteredPnt.blue = logScale * point.blue;
+    pFilteredPnt.intensity = logScale * point.count * flame.getWhiteLevel();
   }
 
   private RasterPoint emptyRasterPoint = new RasterPoint();

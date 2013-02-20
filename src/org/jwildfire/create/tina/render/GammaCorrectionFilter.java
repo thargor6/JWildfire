@@ -187,54 +187,7 @@ public class GammaCorrectionFilter {
   }
 
   public void transformPointSimple(LogDensityPoint logDensityPnt, GammaCorrectedRGBPoint pRGBPoint) {
-    double logScl;
-    int inverseAlphaInt;
-    if (logDensityPnt.intensity > 0.0) {
-      // gamma linearization
-      double alpha = pow(logDensityPnt.intensity, gamma);
-      logScl = vibInt * alpha / logDensityPnt.intensity;
-      int alphaInt = (int) (alpha * 256 + 0.5);
-      if (alphaInt < 0)
-        alphaInt = 0;
-      else if (alphaInt > 255)
-        alphaInt = 255;
-      inverseAlphaInt = 255 - alphaInt;
-      pRGBPoint.alpha = withAlpha ? alphaInt : 255;
-    }
-    else {
-      pRGBPoint.alpha = withAlpha ? 0 : 255;
-      pRGBPoint.red = bgRed;
-      pRGBPoint.green = bgGreen;
-      pRGBPoint.blue = bgBlue;
-      return;
-    }
-
-    int red, green, blue;
-    red = (int) (logScl * logDensityPnt.red + 0.5);
-    green = (int) (logScl * logDensityPnt.green + 0.5);
-    blue = (int) (logScl * logDensityPnt.blue + 0.5);
-
-    red = red + ((inverseAlphaInt * bgRed) >> 8);
-    if (red < 0)
-      red = 0;
-    else if (red > 255)
-      red = 255;
-
-    green = green + ((inverseAlphaInt * bgGreen) >> 8);
-    if (green < 0)
-      green = 0;
-    else if (green > 255)
-      green = 255;
-
-    blue = blue + ((inverseAlphaInt * bgBlue) >> 8);
-    if (blue < 0)
-      blue = 0;
-    else if (blue > 255)
-      blue = 255;
-
-    pRGBPoint.red = red;
-    pRGBPoint.green = green;
-    pRGBPoint.blue = blue;
+    transformPoint(logDensityPnt, pRGBPoint);
   }
 
   public float getBgRedDouble() {
