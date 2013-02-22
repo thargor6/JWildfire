@@ -69,4 +69,9 @@ public abstract class Motion extends ManagedObject implements Serializable {
 
   public abstract double computeValue(short pFFTData[], long pTime);
 
+  protected boolean isActive(long pTime) {
+    long minTime = startTime != null ? (long) (startTime * 1000 + 0.5) : 0;
+    long maxTime = endTime != null ? (long) (endTime * 1000 + 0.5) : Long.MAX_VALUE;
+    return pTime >= minTime && pTime <= maxTime;
+  }
 }
