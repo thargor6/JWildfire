@@ -25,11 +25,11 @@ public enum MotionType {
       return FFTMotion.class;
     }
   },
-  ROTATE {
+  SAWTOOTH {
 
     @Override
     public Class<? extends Motion> getMotionClass() {
-      return RotateMotion.class;
+      return SawToothMotion.class;
     }
 
   };

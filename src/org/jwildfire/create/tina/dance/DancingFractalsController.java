@@ -191,7 +191,7 @@ public class DancingFractalsController {
     motionLinksTable = pMotionLinksTable;
 
     addMotionCmb.addItem(MotionType.FFT);
-    addMotionCmb.addItem(MotionType.ROTATE);
+    addMotionCmb.addItem(MotionType.SAWTOOTH);
     addMotionCmb.setSelectedItem(MotionType.FFT);
     createMotionsCmb.addItem(MotionCreatorType.DEFAULT);
     createMotionsCmb.setSelectedItem(MotionCreatorType.DEFAULT);

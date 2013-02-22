@@ -26,10 +26,12 @@ public class DanceFlameTransformer {
     Flame res = pFlame.getFlame().makeCopy();
     Flame refFlame = pFlame.getFlame().makeCopy();
     for (Motion motion : pFlame.getMotions()) {
-      double value = motion.computeValue(pFFTData, pTime);
-      for (MotionLink link : motion.getMotionLinks()) {
-        if (link.getProperyPath().getFlame().isEqual(refFlame)) {
-          AnimationModelService.setFlameProperty(res, link.getProperyPath(), value);
+      if (motion.isActive(pTime)) {
+        double value = motion.computeValue(pFFTData, pTime);
+        for (MotionLink link : motion.getMotionLinks()) {
+          if (link.getProperyPath().getFlame().isEqual(refFlame)) {
+            AnimationModelService.setFlameProperty(res, link.getProperyPath(), value);
+          }
         }
       }
     }

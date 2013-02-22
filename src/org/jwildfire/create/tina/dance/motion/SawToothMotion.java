@@ -19,34 +19,30 @@ package org.jwildfire.create.tina.dance.motion;
 import org.jwildfire.base.Property;
 import org.jwildfire.base.PropertyCategory;
 
-public class RotateMotion extends Motion {
+public class SawToothMotion extends Motion {
   private static final long serialVersionUID = 1L;
 
-  @Property(description = "Radius", category = PropertyCategory.GENERAL)
-  private double radius = 1.0;
-  @Property(description = "Start angle in degrees", category = PropertyCategory.GENERAL)
-  private double startAngle = 0.0;
+  @Property(description = "Start value", category = PropertyCategory.GENERAL)
+  private double minValue = 0.0;
+  @Property(description = "End value", category = PropertyCategory.GENERAL)
+  private double maxValue = 0.0;
   @Property(description = "Frequency in rpm (revolutions per minute)", category = PropertyCategory.GENERAL)
   private double frequency = 10.0;
-  @Property(description = "Centre of the rotation (x-coordinate)", category = PropertyCategory.GENERAL)
-  private double centreX = 0.0;
-  @Property(description = "Centre of the rotation (y-coordinate)", category = PropertyCategory.GENERAL)
-  private double centreY = 0.0;
 
-  public double getRadius() {
-    return radius;
+  public double getMinValue() {
+    return minValue;
   }
 
-  public void setRadius(double radius) {
-    this.radius = radius;
+  public void setMinValue(double minValue) {
+    this.minValue = minValue;
   }
 
-  public double getStartAngle() {
-    return startAngle;
+  public double getMaxValue() {
+    return maxValue;
   }
 
-  public void setStartAngle(double startAngle) {
-    this.startAngle = startAngle;
+  public void setMaxValue(double maxValue) {
+    this.maxValue = maxValue;
   }
 
   public double getFrequency() {
@@ -57,26 +53,16 @@ public class RotateMotion extends Motion {
     this.frequency = frequency;
   }
 
-  public double getCentreX() {
-    return centreX;
-  }
-
-  public void setCentreX(double centreX) {
-    this.centreX = centreX;
-  }
-
-  public double getCentreY() {
-    return centreY;
-  }
-
-  public void setCentreY(double centreY) {
-    this.centreY = centreY;
-  }
-
   @Override
   public double computeValue(short[] pFFTData, long pTime) {
-    // TODO Auto-generated method stub
-    return 0;
+    double t = pTime / 1000.0;
+    double x = frequency * t / 60.0;
+    double s = x - (int) (x);
+    if (x < 0.0)
+      s += 1.0;
+    double r = minValue + (maxValue - minValue) * s;
+    //    System.out.println(t + " " + x + " " + r);
+    return r;
   }
 
 }

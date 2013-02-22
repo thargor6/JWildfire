@@ -1204,28 +1204,33 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
 
           switch (rendererType) {
             case JAVA: {
-              FlameRenderer renderer;
-              if (imgPanel.getMouseDragOperation() == MouseDragOperation.FOCUS) {
-                renderer = new DrawFocusPointFlameRenderer(flame, prefs, toggleTransparencyButton.isSelected());
+              try {
+                FlameRenderer renderer;
+                if (imgPanel.getMouseDragOperation() == MouseDragOperation.FOCUS) {
+                  renderer = new DrawFocusPointFlameRenderer(flame, prefs, toggleTransparencyButton.isSelected());
+                }
+                else {
+                  renderer = new FlameRenderer(flame, prefs, toggleTransparencyButton.isSelected());
+                }
+                if (pQuickRender) {
+                  renderer.setProgressUpdater(null);
+                  flame.setSampleDensity(prefs.getTinaRenderRealtimeQuality());
+                  flame.setSpatialFilterRadius(0.0);
+                }
+                else {
+                  renderer.setProgressUpdater(mainProgressUpdater);
+                  flame.setSampleDensity(prefs.getTinaRenderPreviewQuality());
+                }
+                renderer.setRenderScale(renderScale);
+                long t0 = System.currentTimeMillis();
+                RenderedFlame res = renderer.renderFlame(info);
+                long t1 = System.currentTimeMillis();
+                imgPanel.setImage(res.getImage());
+                showStatusMessage(flame, "render time: " + Tools.doubleToString((t1 - t0) * 0.001) + "s");
               }
-              else {
-                renderer = new FlameRenderer(flame, prefs, toggleTransparencyButton.isSelected());
+              catch (Throwable ex) {
+                errorHandler.handleError(ex);
               }
-              if (pQuickRender) {
-                renderer.setProgressUpdater(null);
-                flame.setSampleDensity(prefs.getTinaRenderRealtimeQuality());
-                flame.setSpatialFilterRadius(0.0);
-              }
-              else {
-                renderer.setProgressUpdater(mainProgressUpdater);
-                flame.setSampleDensity(prefs.getTinaRenderPreviewQuality());
-              }
-              renderer.setRenderScale(renderScale);
-              long t0 = System.currentTimeMillis();
-              RenderedFlame res = renderer.renderFlame(info);
-              long t1 = System.currentTimeMillis();
-              imgPanel.setImage(res.getImage());
-              showStatusMessage(flame, "render time: " + Tools.doubleToString((t1 - t0) * 0.001) + "s");
             }
               break;
             case C32:
