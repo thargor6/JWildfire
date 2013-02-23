@@ -32,4 +32,8 @@ public enum RasterPointPrecision {
 
   public abstract Class<? extends AbstractRasterPoint> getRasterPointClass();
 
+  public static RasterPointPrecision getDefaultValue() {
+    return SINGLE_PRECISION;
+  }
+
 }

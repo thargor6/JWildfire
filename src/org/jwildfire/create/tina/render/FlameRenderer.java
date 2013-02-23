@@ -36,6 +36,7 @@ import org.jwildfire.base.QualityProfile;
 import org.jwildfire.base.mathlib.MathLib;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.XYZPoint;
+import org.jwildfire.create.tina.base.raster.AbstractRasterPoint;
 import org.jwildfire.create.tina.base.raster.RasterPoint;
 import org.jwildfire.create.tina.palette.RenderColor;
 import org.jwildfire.create.tina.random.AbstractRandomGenerator;
@@ -57,7 +58,7 @@ public class FlameRenderer {
   private int maxBorderWidth;
   LogDensityFilter logDensityFilter;
   GammaCorrectionFilter gammaCorrectionFilter;
-  RasterPoint[][] raster;
+  AbstractRasterPoint[][] raster;
   // init in initView
   private double cosa;
   private double sina;
@@ -144,12 +145,18 @@ public class FlameRenderer {
 
   private void initRaster(int pImageWidth, int pImageHeight) {
     initRasterSizes(pImageWidth, pImageHeight);
-    raster = new RasterPoint[rasterHeight][rasterWidth];
-    for (int i = 0; i < rasterHeight; i++) {
-      for (int j = 0; j < rasterWidth; j++) {
-        raster[i][j] = new RasterPoint();
-      }
+    Class<? extends AbstractRasterPoint> rpClass = prefs.getTinaRasterPointPrecision().getRasterPointClass();
+    AbstractRasterPoint rp;
+    try {
+      rp = rpClass.newInstance();
     }
+    catch (InstantiationException e) {
+      throw new RuntimeException(e);
+    }
+    catch (IllegalAccessException e) {
+      throw new RuntimeException(e);
+    }
+    raster = rp.allocRaster(rasterWidth, rasterHeight);
   }
 
   public void project(XYZPoint pPoint) {
@@ -291,16 +298,13 @@ public class FlameRenderer {
       throw new IllegalArgumentException("renderScale != 1");
     }
     boolean useDEFilter = flame.isDeFilterEnabled() && (flame.getDeFilterMaxRadius() > 0);
-    RasterPoint accumRaster[][] = null;
+    AbstractRasterPoint accumRaster[][] = null;
     Flam3DEFilter deFilter = null;
     if (useDEFilter) {
       try {
-        accumRaster = new RasterPoint[rasterHeight][rasterWidth];
-        for (int i = 0; i < rasterHeight; i++) {
-          for (int j = 0; j < rasterWidth; j++) {
-            accumRaster[i][j] = new RasterPoint();
-          }
-        }
+        Class<? extends AbstractRasterPoint> rpClass = prefs.getTinaRasterPointPrecision().getRasterPointClass();
+        AbstractRasterPoint rp = rpClass.newInstance();
+        accumRaster = rp.allocRaster(rasterWidth, rasterHeight);
       }
       catch (Exception ex) {
         ex.printStackTrace();
@@ -727,7 +731,7 @@ public class FlameRenderer {
     progressUpdater = pProgressUpdater;
   }
 
-  public RasterPoint getRasterPoint(double pX, double pY) {
+  public AbstractRasterPoint getRasterPoint(double pX, double pY) {
     int xIdx = (int) (bws * pX + 0.5);
     int yIdx = (int) (bhs * pY + 0.5);
     if (xIdx >= 0 && xIdx < rasterWidth && yIdx >= 0 && yIdx < rasterHeight) {

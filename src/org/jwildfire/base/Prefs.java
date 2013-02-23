@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2013 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -22,6 +22,7 @@ import java.util.List;
 
 import org.jwildfire.base.mathlib.BaseMathLibType;
 import org.jwildfire.base.mathlib.MathLib;
+import org.jwildfire.create.tina.base.raster.RasterPointPrecision;
 import org.jwildfire.create.tina.random.RandomGeneratorType;
 import org.jwildfire.swing.LookAndFeel;
 
@@ -69,6 +70,7 @@ public class Prefs extends ManagedObject {
 
   static final String KEY_TINA_RANDOM_GENERATOR = "tina.random.generator";
   static final String KEY_TINA_RANDOMBATCH_SIZE = "tina.random_batch.size";
+  static final String KEY_TINA_RASTERPOINT_PRECISION = "tina.rasterpoint.precision";
   static final String KEY_TINA_RANDOMBATCH_BGCOLOR_RED = "tina.random_batch.bg_color.red";
   static final String KEY_TINA_RANDOMBATCH_BGCOLOR_GREEN = "tina.random_batch.bg_color.green";
   static final String KEY_TINA_RANDOMBATCH_BGCOLOR_BLUE = "tina.random_batch.bg_color.blue";
@@ -141,6 +143,13 @@ public class Prefs extends ManagedObject {
     }
   }
 
+  public static class RasterPointPrecisionEditor extends ComboBoxPropertyEditor {
+    public RasterPointPrecisionEditor() {
+      super();
+      setAvailableValues(new RasterPointPrecision[] { RasterPointPrecision.DOUBLE_PRECISION, RasterPointPrecision.SINGLE_PRECISION });
+    }
+  }
+
   @Property(description = "Look and feel (major UI style) - changes are applied only after restarting the main program", category = PropertyCategory.TINA, editorClass = PLAFStyleEditor.class)
   private String plafStyle = LookAndFeel.PLAF_NIMBUS;
   @Property(description = "Look and feel theme (UI sub style) - changes are applied only after restarting the main program", category = PropertyCategory.TINA)
@@ -150,6 +159,9 @@ public class Prefs extends ManagedObject {
   private int tinaRenderMovieFrames = 90;
 
   private static int tinaRenderThreads;
+
+  @Property(description = "Precision of the raster (less precision needs less memory)", category = PropertyCategory.TINA, editorClass = RasterPointPrecisionEditor.class)
+  private RasterPointPrecision tinaRasterPointPrecision = RasterPointPrecision.getDefaultValue();
 
   @Property(description = "Random number generator to use", category = PropertyCategory.TINA, editorClass = RandomGeneratorTypeEditor.class)
   private RandomGeneratorType tinaRandomNumberGenerator = RandomGeneratorType.getDefaultValue();
@@ -398,6 +410,8 @@ public class Prefs extends ManagedObject {
     tinaAssociateProfilesWithFlames = pSrc.tinaAssociateProfilesWithFlames;
     tinaDefaultBGTransparency = pSrc.tinaDefaultBGTransparency;
     tinaDefaultDEMaxRadius = pSrc.tinaDefaultDEMaxRadius;
+    tinaRasterPointPrecision = pSrc.tinaRasterPointPrecision;
+
     baseMathLibType = pSrc.baseMathLibType;
 
     resolutionProfiles.clear();
@@ -605,6 +619,14 @@ public class Prefs extends ManagedObject {
 
   public void setTinaDefaultAntialiasingRadius(double tinaDefaultAntialiasingRadius) {
     this.tinaDefaultAntialiasingRadius = tinaDefaultAntialiasingRadius;
+  }
+
+  public RasterPointPrecision getTinaRasterPointPrecision() {
+    return tinaRasterPointPrecision;
+  }
+
+  public void setTinaRasterPointPrecision(RasterPointPrecision tinaRasterPointPrecision) {
+    this.tinaRasterPointPrecision = tinaRasterPointPrecision;
   }
 
 }

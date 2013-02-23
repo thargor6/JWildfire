@@ -65,4 +65,15 @@ public class RasterPoint implements AbstractRasterPoint, Serializable {
     count = pCount;
   }
 
+  @Override
+  public AbstractRasterPoint[][] allocRaster(int pWidth, int pHeight) {
+    RasterPoint[][] raster = new RasterPoint[pHeight][pWidth];
+    for (int i = 0; i < pHeight; i++) {
+      for (int j = 0; j < pWidth; j++) {
+        raster[i][j] = new RasterPoint();
+      }
+    }
+    return raster;
+  }
+
 }

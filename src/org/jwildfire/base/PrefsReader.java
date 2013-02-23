@@ -23,6 +23,7 @@ import java.util.Collections;
 import java.util.Properties;
 
 import org.jwildfire.base.mathlib.BaseMathLibType;
+import org.jwildfire.create.tina.base.raster.RasterPointPrecision;
 import org.jwildfire.create.tina.random.RandomGeneratorType;
 
 public class PrefsReader {
@@ -72,6 +73,13 @@ public class PrefsReader {
         pPrefs.setTinaRenderMovieFrames(getIntProperty(props, Prefs.KEY_TINA_RENDER_MOVIE_FRAMES, pPrefs.getTinaRenderMovieFrames()));
         pPrefs.setTinaRenderPreviewQuality(getIntProperty(props, Prefs.KEY_TINA_RENDER_PREVIEW_QUALITY, pPrefs.getTinaRenderPreviewQuality()));
         pPrefs.setTinaRenderRealtimeQuality(getIntProperty(props, Prefs.KEY_TINA_RENDER_REALTIME_QUALITY, pPrefs.getTinaRenderRealtimeQuality()));
+        try {
+          RasterPointPrecision rasterPointPrecision = RasterPointPrecision.valueOf(getProperty(props, Prefs.KEY_TINA_RASTERPOINT_PRECISION, RasterPointPrecision.getDefaultValue().toString()));
+          pPrefs.setTinaRasterPointPrecision(rasterPointPrecision);
+        }
+        catch (Exception ex) {
+          ex.printStackTrace();
+        }
         try {
           BaseMathLibType baseMathLibype = BaseMathLibType.valueOf(getProperty(props, Prefs.KEY_GENERAL_BASE_MATH_LIB, BaseMathLibType.getDefaultValue().toString()));
           pPrefs.setBaseMathLibType(baseMathLibype);

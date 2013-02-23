@@ -33,4 +33,6 @@ public interface AbstractRasterPoint {
   public long getCount();
 
   public void setCount(long count);
+
+  public AbstractRasterPoint[][] allocRaster(int pWidth, int pHeight);
 }
