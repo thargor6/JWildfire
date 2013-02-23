@@ -46,8 +46,8 @@ public class CustomWFFunc extends VariationFunc {
   private double g = 0.0;
 
   private String code = "import org.jwildfire.create.tina.base.XForm;\r\n" +
-      "import org.jwildfire.create.tina.base.XYZPoint;\r\n" +
       "import org.jwildfire.create.tina.variation.FlameTransformationContext;\r\n" +
+      "import org.jwildfire.create.tina.base.XYZPoint;\r\n" +
       "import static org.jwildfire.base.mathlib.MathLib.*;\r\n" +
       "\r\n" +
       "  public void init(FlameTransformationContext pContext, XForm pXForm) {\r\n" +
