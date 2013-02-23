@@ -124,6 +124,8 @@ public class Flam3Writer {
     attrList.add(xb.createAttr("brightness", pFlame.getBrightness()));
     attrList.add(xb.createAttr("gamma", pFlame.getGamma()));
     attrList.add(xb.createAttr("gamma_threshold", pFlame.getGammaThreshold()));
+    attrList.add(xb.createAttr("vibrancy", pFlame.getVibrancy()));
+    attrList.add(xb.createAttr("contrast", pFlame.getContrast()));
     attrList.add(xb.createAttr("estimator_enabled", pFlame.isDeFilterEnabled() ? "1" : "0"));
     attrList.add(xb.createAttr("estimator_radius", pFlame.getDeFilterMaxRadius()));
     attrList.add(xb.createAttr("estimator_minimum", pFlame.getDeFilterMinRadius()));

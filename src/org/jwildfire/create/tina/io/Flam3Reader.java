@@ -69,6 +69,8 @@ public class Flam3Reader implements FlameReader {
   private static final String ATTR_BRIGHTNESS = "brightness";
   private static final String ATTR_GAMMA = "gamma";
   private static final String ATTR_GAMMA_THRESHOLD = "gamma_threshold";
+  private static final String ATTR_VIBRANCY = "vibrancy";
+  private static final String ATTR_CONTRAST = "contrast";
   private static final String ATTR_INDEX = "index";
   private static final String ATTR_RGB = "rgb";
   private static final String ATTR_CAM_PITCH = "cam_pitch";
@@ -186,6 +188,12 @@ public class Flam3Reader implements FlameReader {
     }
     if ((hs = atts.get(ATTR_GAMMA_THRESHOLD)) != null) {
       pFlame.setGammaThreshold(Double.parseDouble(hs));
+    }
+    if ((hs = atts.get(ATTR_VIBRANCY)) != null) {
+      pFlame.setVibrancy(Double.parseDouble(hs));
+    }
+    if ((hs = atts.get(ATTR_CONTRAST)) != null) {
+      pFlame.setContrast(Double.parseDouble(hs));
     }
     if ((hs = atts.get(ATTR_CAM_PERSP)) != null) {
       pFlame.setCamPerspective(Double.parseDouble(hs));
