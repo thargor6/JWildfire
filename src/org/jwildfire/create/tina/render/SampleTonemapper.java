@@ -17,7 +17,7 @@
 package org.jwildfire.create.tina.render;
 
 import org.jwildfire.create.tina.base.Flame;
-import org.jwildfire.create.tina.base.RasterPoint;
+import org.jwildfire.create.tina.base.raster.AbstractRasterPoint;
 import org.jwildfire.image.Pixel;
 
 public class SampleTonemapper {
@@ -27,7 +27,7 @@ public class SampleTonemapper {
   private final LogDensityFilter logDensityFilter;
   private final GammaCorrectionFilter gammaCorrectionFilter;
 
-  public SampleTonemapper(Flame pFlame, RasterPoint[][] pRaster, int pRasterWidth, int pRasterHeight, int pImageWidth, int pImageHeight) {
+  public SampleTonemapper(Flame pFlame, AbstractRasterPoint[][] pRaster, int pRasterWidth, int pRasterHeight, int pImageWidth, int pImageHeight) {
     logDensityPnt = new LogDensityPoint();
     toolPixel = new Pixel();
     rbgPoint = new GammaCorrectedRGBPoint();

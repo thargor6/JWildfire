@@ -30,9 +30,9 @@ import org.jwildfire.base.Prefs;
 import org.jwildfire.create.tina.base.Constants;
 import org.jwildfire.create.tina.base.DrawMode;
 import org.jwildfire.create.tina.base.Flame;
-import org.jwildfire.create.tina.base.RasterPoint;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+import org.jwildfire.create.tina.base.raster.AbstractRasterPoint;
 import org.jwildfire.create.tina.palette.RenderColor;
 
 public final class FlameRenderPseudo3DThread extends FlameRenderThread {
@@ -158,7 +158,7 @@ public final class FlameRenderPseudo3DThread extends FlameRenderThread {
       if (yIdx < 0 || yIdx >= renderer.rasterHeight)
         continue;
 
-      RasterPoint rp = renderer.raster[yIdx][xIdx];
+      AbstractRasterPoint rp = renderer.raster[yIdx][xIdx];
       RenderColor color;
       if (pA[0].rgbColor) {
         color = new RenderColor();
@@ -171,10 +171,10 @@ public final class FlameRenderPseudo3DThread extends FlameRenderThread {
       }
       RenderColor shadedColor = shader.calculateColor(qA, color);
 
-      rp.red += shadedColor.red;
-      rp.green += shadedColor.green;
-      rp.blue += shadedColor.blue;
-      rp.count++;
+      rp.setRed(rp.getRed() + shadedColor.red);
+      rp.setGreen(rp.getGreen() + shadedColor.green);
+      rp.setBlue(rp.getBlue() + shadedColor.blue);
+      rp.setCount(rp.getCount() + 1);
       if (observers != null && observers.size() > 0) {
         for (IterationObserver observer : observers) {
           observer.notifyIterationFinished(this, xIdx, yIdx);

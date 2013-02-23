@@ -63,7 +63,6 @@ import org.jwildfire.create.tina.render.FlameRenderer;
 import org.jwildfire.create.tina.render.ProgressUpdater;
 import org.jwildfire.create.tina.render.RenderInfo;
 import org.jwildfire.create.tina.render.RenderedFlame;
-import org.jwildfire.create.tina.render.RendererType;
 import org.jwildfire.image.SimpleImage;
 import org.jwildfire.swing.ErrorHandler;
 import org.jwildfire.swing.ImagePanel;
@@ -97,7 +96,6 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
   private final JLabel swfAnimatorSoundCaptionLbl;
   private final JSlider swfAnimatorFrameSlider;
   private final JPanel swfAnimatorFlamesPanel;
-  private final JComboBox swfAnimatorRendererCmb;
   private final ButtonGroup swfAnimatorFlamesButtonGroup;
   private final JComboBox swfAnimatorOutputCmb;
   private final JButton swfAnimatorMoveUpButton;
@@ -131,7 +129,7 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
       JButton pSWFAnimatorRemoveFlameButton, JButton pSWFAnimatorRemoveAllFlamesButton, JButton pSWFAnimatorMovieFromClipboardButton,
       JButton pSWFAnimatorMovieFromDiskButton, JButton pSWFAnimatorMovieToClipboardButton, JButton pSWFAnimatorMovieToDiskButton,
       JButton pSWFAnimatorFrameToEditorBtn, JButton pSWFAnimatorPlayButton, JTextField pSWFAnimatorFromFrameREd,
-      JTextField pSWFAnimatorToFrameREd, JComboBox pSWFAnimatorRendererCmb) {
+      JTextField pSWFAnimatorToFrameREd) {
     noRefresh = true;
     try {
       parentCtrl = pParentCtrl;
@@ -173,7 +171,6 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
       swfAnimatorPlayButton = pSWFAnimatorPlayButton;
       swfAnimatorFromFrameREd = pSWFAnimatorFromFrameREd;
       swfAnimatorToFrameREd = pSWFAnimatorToFrameREd;
-      swfAnimatorRendererCmb = pSWFAnimatorRendererCmb;
 
       swfAnimatorOutputCmb.addItem(OutputFormat.PNG);
       swfAnimatorOutputCmb.addItem(OutputFormat.SWF);
@@ -532,7 +529,7 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
         updateMovieFields();
         int from = Integer.parseInt(swfAnimatorFromFrameREd.getText());
         int to = Integer.parseInt(swfAnimatorToFrameREd.getText());
-        renderThread = new SWFAnimationRenderThread(this, currMovie, file.getAbsolutePath(), from, to, (RendererType) swfAnimatorRendererCmb.getSelectedItem());
+        renderThread = new SWFAnimationRenderThread(this, currMovie, file.getAbsolutePath(), from, to);
         try {
           enableControls();
           new Thread(renderThread).start();

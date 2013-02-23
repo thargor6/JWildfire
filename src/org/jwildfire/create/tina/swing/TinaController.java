@@ -52,7 +52,6 @@ import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JInternalFrame;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
@@ -99,13 +98,11 @@ import org.jwildfire.create.tina.randomflame.RandomFlameGeneratorList;
 import org.jwildfire.create.tina.randomflame.RandomFlameGeneratorSample;
 import org.jwildfire.create.tina.randomflame.RandomFlameGeneratorSampler;
 import org.jwildfire.create.tina.randomflame.SubFlameRandomFlameGenerator;
-import org.jwildfire.create.tina.render.CRendererInterface;
 import org.jwildfire.create.tina.render.DrawFocusPointFlameRenderer;
 import org.jwildfire.create.tina.render.FlameRenderer;
 import org.jwildfire.create.tina.render.ProgressUpdater;
 import org.jwildfire.create.tina.render.RenderInfo;
 import org.jwildfire.create.tina.render.RenderedFlame;
-import org.jwildfire.create.tina.render.RendererType;
 import org.jwildfire.create.tina.render.filter.FilterKernelType;
 import org.jwildfire.create.tina.script.ScriptRunner;
 import org.jwildfire.create.tina.script.ScriptRunnerEnvironment;
@@ -223,12 +220,10 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
   private final JComboBox resolutionProfileCmb;
   private final JComboBox batchQualityProfileCmb;
   private final JComboBox batchResolutionProfileCmb;
-  private final JComboBox batchRendererCmb;
   private final JComboBox interactiveQualityProfileCmb;
   private final JComboBox interactiveResolutionProfileCmb;
   private final JComboBox swfAnimatorQualityProfileCmb;
   private final JComboBox swfAnimatorResolutionProfileCmb;
-  private final JComboBox rendererCmb;
   // script
   private final JTextArea scriptTextArea;
   // camera, coloring  
@@ -504,10 +499,9 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       JToggleButton pAffineScaleYButton, JPanel pGradientLibraryPanel, JComboBox pGradientLibraryGradientCmb, JTextPane pHelpPane, JTextPane pFAQPane,
       JToggleButton pToggleVariationsButton, JToggleButton pToggleTransparencyButton, JToggleButton pAffinePreserveZButton,
       JComboBox pQualityProfileCmb, JComboBox pResolutionProfileCmb, JComboBox pBatchQualityProfileCmb, JComboBox pBatchResolutionProfileCmb,
-      JComboBox pBatchRendererCmb,
       JComboBox pInteractiveQualityProfileCmb, JComboBox pInteractiveResolutionProfileCmb, JComboBox pSWFAnimatorQualityProfileCmb,
       JComboBox pSWFAnimatorResolutionProfileCmb, JButton pRenderFlameButton, JButton pRenderMainButton, JButton pAppendToMovieButton,
-      JWFNumberField pTransformationWeightREd, JButton pUndoButton, JButton pRedoButton, JComboBox pRendererCmb,
+      JWFNumberField pTransformationWeightREd, JButton pUndoButton, JButton pRedoButton,
       JWFNumberField pXFormAntialiasAmountREd, JSlider pXFormAntialiasAmountSlider, JWFNumberField pXFormAntialiasRadiusREd, JSlider pXFormAntialiasRadiusSlider,
       JButton pXFormAntialiasCopyToAllBtn, JPanel pDancingFlamesFlamePnl, JPanel pDancingFlamesGraph1Pnl, JButton pDancingFlamesLoadSoundBtn, JButton pDancingFlamesAddFromClipboardBtn,
       JButton pDancingFlamesAddFromEditorBtn, JButton pDancingFlamesAddFromDiscBtn, JWFNumberField pDancingFlamesRandomCountIEd, JButton pDancingFlamesGenRandFlamesBtn,
@@ -633,12 +627,10 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     resolutionProfileCmb = pResolutionProfileCmb;
     batchQualityProfileCmb = pBatchQualityProfileCmb;
     batchResolutionProfileCmb = pBatchResolutionProfileCmb;
-    batchRendererCmb = pBatchRendererCmb;
     interactiveQualityProfileCmb = pInteractiveQualityProfileCmb;
     interactiveResolutionProfileCmb = pInteractiveResolutionProfileCmb;
     swfAnimatorQualityProfileCmb = pSWFAnimatorQualityProfileCmb;
     swfAnimatorResolutionProfileCmb = pSWFAnimatorResolutionProfileCmb;
-    rendererCmb = pRendererCmb;
     transformationsTable = pTransformationsTable;
     affineC00REd = pAffineC00REd;
     affineC01REd = pAffineC01REd;
@@ -1197,60 +1189,32 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
           flame.setWidth(info.getImageWidth());
           flame.setHeight(info.getImageHeight());
 
-          RendererType rendererType = (RendererType) rendererCmb.getSelectedItem();
-          if (pQuickRender || rendererType == null) {
-            rendererType = RendererType.JAVA;
+          try {
+            FlameRenderer renderer;
+            if (imgPanel.getMouseDragOperation() == MouseDragOperation.FOCUS) {
+              renderer = new DrawFocusPointFlameRenderer(flame, prefs, toggleTransparencyButton.isSelected());
+            }
+            else {
+              renderer = new FlameRenderer(flame, prefs, toggleTransparencyButton.isSelected());
+            }
+            if (pQuickRender) {
+              renderer.setProgressUpdater(null);
+              flame.setSampleDensity(prefs.getTinaRenderRealtimeQuality());
+              flame.setSpatialFilterRadius(0.0);
+            }
+            else {
+              renderer.setProgressUpdater(mainProgressUpdater);
+              flame.setSampleDensity(prefs.getTinaRenderPreviewQuality());
+            }
+            renderer.setRenderScale(renderScale);
+            long t0 = System.currentTimeMillis();
+            RenderedFlame res = renderer.renderFlame(info);
+            long t1 = System.currentTimeMillis();
+            imgPanel.setImage(res.getImage());
+            showStatusMessage(flame, "render time: " + Tools.doubleToString((t1 - t0) * 0.001) + "s");
           }
-
-          switch (rendererType) {
-            case JAVA: {
-              try {
-                FlameRenderer renderer;
-                if (imgPanel.getMouseDragOperation() == MouseDragOperation.FOCUS) {
-                  renderer = new DrawFocusPointFlameRenderer(flame, prefs, toggleTransparencyButton.isSelected());
-                }
-                else {
-                  renderer = new FlameRenderer(flame, prefs, toggleTransparencyButton.isSelected());
-                }
-                if (pQuickRender) {
-                  renderer.setProgressUpdater(null);
-                  flame.setSampleDensity(prefs.getTinaRenderRealtimeQuality());
-                  flame.setSpatialFilterRadius(0.0);
-                }
-                else {
-                  renderer.setProgressUpdater(mainProgressUpdater);
-                  flame.setSampleDensity(prefs.getTinaRenderPreviewQuality());
-                }
-                renderer.setRenderScale(renderScale);
-                long t0 = System.currentTimeMillis();
-                RenderedFlame res = renderer.renderFlame(info);
-                long t1 = System.currentTimeMillis();
-                imgPanel.setImage(res.getImage());
-                showStatusMessage(flame, "render time: " + Tools.doubleToString((t1 - t0) * 0.001) + "s");
-              }
-              catch (Throwable ex) {
-                errorHandler.handleError(ex);
-              }
-            }
-              break;
-            case C32:
-            case C64: {
-              try {
-                flame.setSampleDensity(prefs.getTinaRenderPreviewQuality());
-                CRendererInterface cudaRenderer = new CRendererInterface(rendererType, toggleTransparencyButton.isSelected());
-                CRendererInterface.checkFlameForCUDA(flame);
-                cudaRenderer.setProgressUpdater(mainProgressUpdater);
-                long t0 = System.currentTimeMillis();
-                RenderedFlame res = cudaRenderer.renderFlame(info, flame, prefs);
-                long t1 = System.currentTimeMillis();
-                showStatusMessage(flame, "render time: " + Tools.doubleToString((t1 - t0) * 0.001) + "s");
-                imgPanel.setImage(res.getImage());
-              }
-              catch (Throwable ex) {
-                errorHandler.handleError(ex);
-              }
-            }
-              break;
+          catch (Throwable ex) {
+            errorHandler.handleError(ex);
           }
         }
         finally {
@@ -4041,18 +4005,6 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     }
   }
 
-  public void checkCUDACompatibility() {
-    try {
-      if (currFlame != null) {
-        CRendererInterface.checkFlameForCUDA(currFlame);
-        JOptionPane.showMessageDialog(centerPanel, "Flame should render fine under JWildfireC(UDA)", "JWildfireC(UDA) compatibility check", JOptionPane.INFORMATION_MESSAGE);
-      }
-    }
-    catch (Throwable ex) {
-      errorHandler.handleError(ex);
-    }
-  }
-
   public void mouseTransformSlowButton_clicked() {
     if (flamePanel != null) {
       flamePanel.setFineMovement(mouseTransformSlowButton.isSelected());
@@ -4218,7 +4170,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       }
     }
     if (activeJobList.size() > 0) {
-      jobRenderThread = new JobRenderThread(this, activeJobList, (ResolutionProfile) batchResolutionProfileCmb.getSelectedItem(), (QualityProfile) batchQualityProfileCmb.getSelectedItem(), (RendererType) batchRendererCmb.getSelectedItem());
+      jobRenderThread = new JobRenderThread(this, activeJobList, (ResolutionProfile) batchResolutionProfileCmb.getSelectedItem(), (QualityProfile) batchQualityProfileCmb.getSelectedItem());
       new Thread(jobRenderThread).start();
     }
     enableJobRenderControls();
@@ -5525,47 +5477,19 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
           double oldSampleDensity = flame.getSampleDensity();
           double oldFilterRadius = flame.getSpatialFilterRadius();
           try {
-            RendererType rendererType = (RendererType) rendererCmb.getSelectedItem();
-            if (rendererType == null) {
-              rendererType = RendererType.JAVA;
-            }
             flame.setSampleDensity(qualProfile.getQuality());
-            switch (rendererType) {
-              case JAVA: {
-                FlameRenderer renderer = new FlameRenderer(flame, prefs, flame.isBGTransparency());
-                renderer.setProgressUpdater(mainProgressUpdater);
-                long t0 = Calendar.getInstance().getTimeInMillis();
-                RenderedFlame res = renderer.renderFlame(info);
-                long t1 = Calendar.getInstance().getTimeInMillis();
-                showStatusMessage(flame, "render time: " + Tools.doubleToString((t1 - t0) * 0.001) + "s");
-                new ImageWriter().saveImage(res.getImage(), file.getAbsolutePath());
-                if (res.getHDRImage() != null) {
-                  new ImageWriter().saveImage(res.getHDRImage(), file.getAbsolutePath() + ".hdr");
-                }
-                if (res.getHDRIntensityMap() != null) {
-                  new ImageWriter().saveImage(res.getHDRIntensityMap(), file.getAbsolutePath() + ".intensity.hdr");
-                }
-              }
-                break;
-              case C32:
-              case C64: {
-                CRendererInterface cudaRenderer = new CRendererInterface(rendererType, flame.isBGTransparency());
-                CRendererInterface.checkFlameForCUDA(flame);
-                cudaRenderer.setProgressUpdater(mainProgressUpdater);
-                if (info.isRenderHDR()) {
-                  String hdrFilename = file.getAbsolutePath() + ".hdr";
-                  cudaRenderer.setHDROutputfilename(hdrFilename);
-                  // do not allocate unnessary memory as the HDR file is completely generated and saved by the external renderer 
-                  info.setRenderHDR(false);
-                  info.setRenderHDRIntensityMap(false);
-                }
-                long t0 = System.currentTimeMillis();
-                RenderedFlame res = cudaRenderer.renderFlame(info, flame, prefs);
-                long t1 = System.currentTimeMillis();
-                showStatusMessage(flame, "render time: " + Tools.doubleToString((t1 - t0) * 0.001) + "s");
-                new ImageWriter().saveImage(res.getImage(), file.getAbsolutePath());
-              }
-                break;
+            FlameRenderer renderer = new FlameRenderer(flame, prefs, flame.isBGTransparency());
+            renderer.setProgressUpdater(mainProgressUpdater);
+            long t0 = Calendar.getInstance().getTimeInMillis();
+            RenderedFlame res = renderer.renderFlame(info);
+            long t1 = Calendar.getInstance().getTimeInMillis();
+            showStatusMessage(flame, "render time: " + Tools.doubleToString((t1 - t0) * 0.001) + "s");
+            new ImageWriter().saveImage(res.getImage(), file.getAbsolutePath());
+            if (res.getHDRImage() != null) {
+              new ImageWriter().saveImage(res.getHDRImage(), file.getAbsolutePath() + ".hdr");
+            }
+            if (res.getHDRIntensityMap() != null) {
+              new ImageWriter().saveImage(res.getHDRIntensityMap(), file.getAbsolutePath() + ".intensity.hdr");
             }
           }
           finally {
@@ -5618,7 +5542,6 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
           final Flame flame = getCurrFlame();
           final File file = chooser.getSelectedFile();
           prefs.setLastOutputImageFile(file);
-          RendererType rendererType = (RendererType) rendererCmb.getSelectedItem();
 
           RenderMainFlameThreadFinishEvent finishEvent = new RenderMainFlameThreadFinishEvent() {
 
@@ -5643,7 +5566,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
             }
 
           };
-          mainRenderThread = new RenderMainFlameThread(prefs, flame, file, qualProfile, resProfile, rendererType, finishEvent, mainProgressUpdater);
+          mainRenderThread = new RenderMainFlameThread(prefs, flame, file, qualProfile, resProfile, finishEvent, mainProgressUpdater);
           enableMainRenderControls();
           new Thread(mainRenderThread).start();
 

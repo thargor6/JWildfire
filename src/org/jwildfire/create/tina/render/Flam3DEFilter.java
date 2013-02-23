@@ -23,7 +23,8 @@ import static org.jwildfire.base.mathlib.MathLib.pow;
 import static org.jwildfire.base.mathlib.MathLib.sqrt;
 
 import org.jwildfire.create.tina.base.Flame;
-import org.jwildfire.create.tina.base.RasterPoint;
+import org.jwildfire.create.tina.base.raster.AbstractRasterPoint;
+import org.jwildfire.create.tina.base.raster.RasterPoint;
 import org.jwildfire.create.tina.render.filter.FilterKernel;
 
 // bases on the DE filter code from flam3: http://flam3.com/index.cgi?&menu=code
@@ -169,20 +170,20 @@ public class Flam3DEFilter {
   }
 
   private double k1, k2;
-  private RasterPoint[][] raster;
-  private RasterPoint[][] accumRaster;
+  private AbstractRasterPoint[][] raster;
+  private AbstractRasterPoint[][] accumRaster;
   private int rasterWidth, rasterHeight;
 
-  private RasterPoint emptyRasterPoint = new RasterPoint();
+  private AbstractRasterPoint emptyRasterPoint = new RasterPoint();
 
-  private RasterPoint getRasterPoint(int pX, int pY) {
+  private AbstractRasterPoint getRasterPoint(int pX, int pY) {
     if (pX < 0 || pX >= rasterWidth || pY < 0 || pY >= rasterHeight)
       return emptyRasterPoint;
     else
       return raster[pY][pX];
   }
 
-  public void setRaster(RasterPoint[][] pAccumRaster, RasterPoint[][] pRaster, int pRasterWidth, int pRasterHeight, int pImageWidth, int pImageHeight) {
+  public void setRaster(AbstractRasterPoint[][] pAccumRaster, AbstractRasterPoint[][] pRaster, int pRasterWidth, int pRasterHeight, int pImageWidth, int pImageHeight) {
     accumRaster = pAccumRaster;
     raster = pRaster;
     rasterWidth = pRasterWidth;
@@ -208,14 +209,14 @@ public class Flam3DEFilter {
     double blue = 0;
     double intensity = 0;
 
-    RasterPoint point = getRasterPoint(pX, pY);
+    AbstractRasterPoint point = getRasterPoint(pX, pY);
 
     /* Don't do anything if there's no hits here */
-    if (point.count == 0 || point.blue == 0)
+    if (point.getCount() == 0 || point.getBlue() == 0)
       return;
 
     /* Count density in ssxss area   */
-    f_select += point.count / 255.0;
+    f_select += point.getCount() / 255.0;
 
     if (scf)
       f_select *= scfact;
@@ -246,10 +247,10 @@ public class Flam3DEFilter {
           continue;
         }
 
-        red = point.red;
-        green = point.green;
-        blue = point.blue;
-        intensity = point.count;
+        red = point.getRed();
+        green = point.getGreen();
+        blue = point.getBlue();
+        intensity = point.getCount();
 
         ls = filter_coefs[f_coef_idx] * (k1 * log(1.0 + intensity * k2)) / intensity;
 
@@ -290,11 +291,11 @@ public class Flam3DEFilter {
 
   private void addToAccum(int i, int ii, int j, int jj, double red, double green, double blue, double intensity) {
     if ((j) + (jj) >= 0 && (j) + (jj) < (rasterHeight) && (i) + (ii) >= 0 && (i) + (ii) < (rasterWidth)) {
-      RasterPoint a = accumRaster[j + jj][i + ii];
-      a.red += red;
-      a.green += green;
-      a.blue += blue;
-      a.count += intensity;
+      AbstractRasterPoint a = accumRaster[j + jj][i + ii];
+      a.setRed(a.getRed() + red);
+      a.setGreen(a.getGreen() + green);
+      a.setBlue(a.getBlue() + blue);
+      a.setCount((long) ((double) a.getCount() + intensity + 0.5));
     }
   }
 }

@@ -24,7 +24,6 @@ import java.util.Properties;
 
 import org.jwildfire.base.mathlib.BaseMathLibType;
 import org.jwildfire.create.tina.random.RandomGeneratorType;
-import org.jwildfire.create.tina.render.RendererType;
 
 public class PrefsReader {
 
@@ -64,15 +63,6 @@ public class PrefsReader {
         pPrefs.setSoundFilePath(getProperty(props, Prefs.KEY_GENERAL_PATH_SOUND_FILES, pPrefs.getSoundFilePath()));
 
         pPrefs.setTinaAssociateProfilesWithFlames(getBooleanProperty(props, Prefs.KEY_TINA_PROFILE_ASSOCIATE_WITH_FLAMES, pPrefs.isTinaAssociateProfilesWithFlames()));
-        {
-          String rendererName = getProperty(props, Prefs.KEY_TINA_RENDER_DEFAULT_RENDERER, pPrefs.getTinaDefaultRenderer().name());
-          try {
-            pPrefs.setTinaDefaultRenderer(RendererType.valueOf(rendererName));
-          }
-          catch (Exception ex) {
-            ex.printStackTrace();
-          }
-        }
         pPrefs.setTinaDefaultBGTransparency(getBooleanProperty(props, Prefs.KEY_TINA_RENDER_DEFAULT_BG_TRANSPARENCY, pPrefs.isTinaDefaultBGTransparency()));
         pPrefs.setTinaDefaultDEMaxRadius(getDoubleProperty(props, Prefs.KEY_TINA_RENDER_DEFAULT_DE_MAX_RADIUS, pPrefs.getTinaDefaultDEMaxRadius()));
         pPrefs.setTinaDefaultAntialiasingAmount(getDoubleProperty(props, Prefs.KEY_TINA_RENDER_DEFAULT_ANTIALIASING_AMOUNT, pPrefs.getTinaDefaultAntialiasingAmount()));

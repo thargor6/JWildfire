@@ -30,9 +30,9 @@ import org.jwildfire.base.Prefs;
 import org.jwildfire.create.tina.base.Constants;
 import org.jwildfire.create.tina.base.DrawMode;
 import org.jwildfire.create.tina.base.Flame;
-import org.jwildfire.create.tina.base.RasterPoint;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+import org.jwildfire.create.tina.base.raster.AbstractRasterPoint;
 import org.jwildfire.create.tina.palette.RenderColor;
 
 public final class FlameRenderBlurThread extends FlameRenderThread {
@@ -170,12 +170,12 @@ public final class FlameRenderBlurThread extends FlameRenderThread {
             for (int l = xIdx - blurRadius, xk = 0; l <= xIdx + blurRadius; l++, xk++) {
               if (l >= 0 && l < rasterWidth) {
                 // y, x
-                RasterPoint rp = renderer.raster[k][l];
+                AbstractRasterPoint rp = renderer.raster[k][l];
                 double scl = blurKernel[yk][xk];
-                rp.red += color.red * scl;
-                rp.green += color.green * scl;
-                rp.blue += color.blue * scl;
-                rp.count++;
+                rp.setRed(rp.getRed() + color.red * scl);
+                rp.setGreen(rp.getGreen() + color.green * scl);
+                rp.setBlue(rp.getBlue() + color.blue * scl);
+                rp.setCount(rp.getCount() + 1);
                 if (observers != null && observers.size() > 0) {
                   for (IterationObserver observer : observers) {
                     observer.notifyIterationFinished(this, k, l);
@@ -187,11 +187,11 @@ public final class FlameRenderBlurThread extends FlameRenderThread {
         }
       }
       else {
-        RasterPoint rp = renderer.raster[yIdx][xIdx];
-        rp.red += color.red;
-        rp.green += color.green;
-        rp.blue += color.blue;
-        rp.count++;
+        AbstractRasterPoint rp = renderer.raster[yIdx][xIdx];
+        rp.setRed(rp.getRed() + color.red);
+        rp.setGreen(rp.getGreen() + color.green);
+        rp.setBlue(rp.getBlue() + color.blue);
+        rp.setCount(rp.getCount() + 1);
         if (observers != null && observers.size() > 0) {
           for (IterationObserver observer : observers) {
             observer.notifyIterationFinished(this, xIdx, yIdx);

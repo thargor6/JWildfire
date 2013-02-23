@@ -80,8 +80,6 @@ import org.jwildfire.create.tina.base.DrawMode;
 import org.jwildfire.create.tina.base.Shading;
 import org.jwildfire.create.tina.dance.DancingFractalsController;
 import org.jwildfire.create.tina.randomflame.RandomFlameGeneratorList;
-import org.jwildfire.create.tina.render.CRendererInterface;
-import org.jwildfire.create.tina.render.RendererType;
 import org.jwildfire.create.tina.render.filter.FilterKernelType;
 import org.jwildfire.create.tina.swing.TinaController.NonlinearControlsRow;
 import org.jwildfire.swing.StandardErrorHandler;
@@ -683,7 +681,6 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaNorthPanel.add(getPanel_19());
       tinaNorthPanel.add(getRenderMainButton());
       tinaNorthPanel.add(getPanel_15());
-      tinaNorthPanel.add(getPanel_16());
 
     }
     return tinaNorthPanel;
@@ -2979,18 +2976,6 @@ public class TinaInternalFrame extends JInternalFrame {
       affinePreserveZButton.setFont(new Font("Dialog", Font.BOLD, 10));
       affinePreserveZButton.setBounds(4, 204, 138, 24);
       tinaAffineTransformationPanel.add(affinePreserveZButton);
-
-      JButton checkCUDACompatiblityBtn = new JButton();
-      checkCUDACompatiblityBtn.setBounds(145, 204, 138, 24);
-      tinaAffineTransformationPanel.add(checkCUDACompatiblityBtn);
-      checkCUDACompatiblityBtn.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-          tinaController.checkCUDACompatibility();
-        }
-      });
-      checkCUDACompatiblityBtn.setText("Check for C(UDA)");
-      checkCUDACompatiblityBtn.setPreferredSize(new Dimension(125, 24));
-      checkCUDACompatiblityBtn.setFont(new Font("Dialog", Font.BOLD, 10));
     }
     return tinaAffineTransformationPanel;
   }
@@ -3943,9 +3928,6 @@ public class TinaInternalFrame extends JInternalFrame {
     nonlinearControlsRows[11] = new NonlinearControlsRow(getNonlinearVar12Cmb(), getNonlinearParams12Cmb(), getNonlinearVar12REd(),
         getNonlinearParams12REd(), getNonlinearParams12LeftButton());
 
-    initRendererCmb(getRendererCmb(), pPrefs);
-    initRendererCmb(getSwfAnimatorRendererCmb(), pPrefs);
-    initRendererCmb(getBatchRendererCmb(), pPrefs);
     initFilterKernelCmb(getTinaFilterKernelCmb());
     initFilterKernelCmb(getTinaDEFilterKernelCmb());
 
@@ -3991,9 +3973,9 @@ public class TinaInternalFrame extends JInternalFrame {
         getShadingBlurFadeSlider(), getShadingBlurFallOffREd(), getShadingBlurFallOffSlider(), getScriptTextArea(),
         getAffineScaleXButton(), getAffineScaleYButton(), getGradientLibraryCenterPanel(), getGradientLibraryGradientCmb(), getHelpPane(),
         getFaqPane(), getToggleVariationsButton(), getToggleTransparencyButton(), getAffinePreserveZButton(), getQualityProfileCmb(), getResolutionProfileCmb(),
-        getBatchQualityProfileCmb(), getBatchResolutionProfileCmb(), getBatchRendererCmb(), getInteractiveQualityProfileCmb(), getInteractiveResolutionProfileCmb(),
+        getBatchQualityProfileCmb(), getBatchResolutionProfileCmb(), getInteractiveQualityProfileCmb(), getInteractiveResolutionProfileCmb(),
         getSwfAnimatorQualityProfileCmb(), getSwfAnimatorResolutionProfileCmb(), getTinaRenderFlameButton(), getRenderMainButton(), getTinaAppendToMovieButton(),
-        getTransformationWeightREd(), getUndoButton(), getRedoButton(), getRendererCmb(),
+        getTransformationWeightREd(), getUndoButton(), getRedoButton(),
         getXFormAntialiasAmountREd(), getXFormAntialiasAmountSlider(), getXFormAntialiasRadiusREd(), getXFormAntialiasRadiusSlider(),
         getXFormAntialiasCopyToAllBtn(), getRealtimeFlamePnl(), getRealtimeGraph1Pnl(), getDancingFlamesLoadSoundBtn(), getDancingFlamesAddFromClipboardBtn(),
         getDancingFlamesAddFromEditorBtn(), getDancingFlamesAddFromDiscBtn(), getDancingFlamesRandomCountIEd(), getDancingFlamesGenRandFlamesBtn(),
@@ -4054,7 +4036,7 @@ public class TinaInternalFrame extends JInternalFrame {
           getSwfAnimatorOutputCmb(), getSwfAnimatorMoveUpButton(), getSwfAnimatorMoveDownButton(), getSwfAnimatorRemoveFlameButton(),
           getSwfAnimatorRemoveAllFlamesButton(), getSwfAnimatorMovieFromClipboardButton(), getSwfAnimatorMovieFromDiscButton(),
           getSwfAnimatorMovieToClipboardButton(), getSwfAnimatorMovieToDiscButton(), getSwfAnimatorFrameToEditorBtn(),
-          getSwfAnimatorPlayButton(), getSwfAnimatorFromFrameREd(), getSwfAnimatorToFrameREd(), getSwfAnimatorRendererCmb()));
+          getSwfAnimatorPlayButton(), getSwfAnimatorFromFrameREd(), getSwfAnimatorToFrameREd()));
       tinaController.getSwfAnimatorCtrl().enableControls();
 
     }
@@ -4131,22 +4113,6 @@ public class TinaInternalFrame extends JInternalFrame {
     pCmb.addItem(FilterKernelType.QUADRATIC);
     pCmb.addItem(FilterKernelType.TRIANGLE);
     pCmb.setSelectedItem(FilterKernelType.GAUSSIAN);
-  }
-
-  private void initRendererCmb(JComboBox pCmb, Prefs pPrefs) {
-    pCmb.removeAllItems();
-    pCmb.addItem(RendererType.JAVA);
-    if (CRendererInterface.isCUDAAvailable()) {
-      pCmb.addItem(RendererType.C32);
-      pCmb.addItem(RendererType.C64);
-    }
-    pCmb.setSelectedIndex(0);
-    try {
-      pCmb.setSelectedItem(pPrefs.getTinaDefaultRenderer());
-    }
-    catch (Exception ex) {
-
-    }
   }
 
   /**
@@ -8414,14 +8380,6 @@ public class TinaInternalFrame extends JInternalFrame {
       panel_2.add(getBatchRenderFilesRemoveAllButton());
       panel_2.add(getPanel_22());
 
-      batchRendererCmb = new JComboBox();
-      panel_2.add(batchRendererCmb);
-      batchRendererCmb.setPreferredSize(new Dimension(159, 24));
-      batchRendererCmb.setMinimumSize(new Dimension(159, 24));
-      batchRendererCmb.setMaximumSize(new Dimension(159, 24));
-      batchRendererCmb.setMaximumRowCount(32);
-      batchRendererCmb.setFont(new Font("Dialog", Font.BOLD, 10));
-
       batchResolutionProfileCmb = new JComboBox();
       batchResolutionProfileCmb.addItemListener(new ItemListener() {
         public void itemStateChanged(ItemEvent e) {
@@ -8568,7 +8526,6 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton redoButton;
   private JButton interactivePauseButton;
   private JButton interactiveResumeButton;
-  private JComboBox rendererCmb;
   private JPanel antialiasPanel;
   private JWFNumberField xFormAntialiasAmountREd;
   private JLabel xFormAntialiasAmountLbl;
@@ -8581,7 +8538,6 @@ public class TinaInternalFrame extends JInternalFrame {
   private JPanel panel_7;
   private JPanel panel_13;
   private JPanel panel_15;
-  private JPanel panel_16;
   private JPanel panel_17;
   private JPanel panel_18;
   private JPanel panel_19;
@@ -8597,8 +8553,6 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton snapShotButton;
   private JButton btnQsave;
   private JLabel label_6;
-  private JComboBox batchRendererCmb;
-  private JComboBox swfAnimatorRendererCmb;
   private JPanel panel_20;
   private JPanel panel_21;
   private JPanel panel_22;
@@ -9951,15 +9905,6 @@ public class TinaInternalFrame extends JInternalFrame {
       swfAnimatorToFrameREd.setFont(new Font("Dialog", Font.PLAIN, 10));
       swfAnimatorToFrameREd.setBounds(967, 38, 56, 22);
       panel_5.add(swfAnimatorToFrameREd);
-
-      swfAnimatorRendererCmb = new JComboBox();
-      swfAnimatorRendererCmb.setPreferredSize(new Dimension(125, 24));
-      swfAnimatorRendererCmb.setMinimumSize(new Dimension(100, 24));
-      swfAnimatorRendererCmb.setMaximumSize(new Dimension(32767, 24));
-      swfAnimatorRendererCmb.setMaximumRowCount(32);
-      swfAnimatorRendererCmb.setFont(new Font("Dialog", Font.BOLD, 10));
-      swfAnimatorRendererCmb.setBounds(237, 62, 125, 24);
-      panel_5.add(swfAnimatorRendererCmb);
     }
     return panel_5;
   }
@@ -10579,10 +10524,6 @@ public class TinaInternalFrame extends JInternalFrame {
     return interactiveResumeButton;
   }
 
-  public JComboBox getRendererCmb() {
-    return rendererCmb;
-  }
-
   private JPanel getAntialiasPanel() {
     if (antialiasPanel == null) {
       antialiasPanel = new JPanel();
@@ -10840,29 +10781,6 @@ public class TinaInternalFrame extends JInternalFrame {
       panel_2.add(getQualityProfileBtn());
     }
     return panel_15;
-  }
-
-  private JPanel getPanel_16() {
-    if (panel_16 == null) {
-      panel_16 = new JPanel();
-      panel_16.setLayout(new BoxLayout(panel_16, BoxLayout.Y_AXIS));
-
-      JLabel lblUseRenderer = new JLabel();
-      lblUseRenderer.setAlignmentX(Component.RIGHT_ALIGNMENT);
-      panel_16.add(lblUseRenderer);
-      lblUseRenderer.setText("  Use renderer:");
-      lblUseRenderer.setPreferredSize(new Dimension(94, 22));
-      lblUseRenderer.setFont(new Font("Dialog", Font.BOLD, 10));
-
-      rendererCmb = new JComboBox();
-      rendererCmb.setMinimumSize(new Dimension(100, 24));
-      rendererCmb.setMaximumSize(new Dimension(32767, 24));
-      panel_16.add(rendererCmb);
-      rendererCmb.setPreferredSize(new Dimension(125, 24));
-      rendererCmb.setMaximumRowCount(32);
-      rendererCmb.setFont(new Font("Dialog", Font.BOLD, 10));
-    }
-    return panel_16;
   }
 
   private JPanel getPanel_17() {
@@ -11176,14 +11094,6 @@ public class TinaInternalFrame extends JInternalFrame {
       label_6.setFont(new Font("Dialog", Font.BOLD, 10));
     }
     return label_6;
-  }
-
-  public JComboBox getBatchRendererCmb() {
-    return batchRendererCmb;
-  }
-
-  public JComboBox getSwfAnimatorRendererCmb() {
-    return swfAnimatorRendererCmb;
   }
 
   private JPanel getPanel_20() {

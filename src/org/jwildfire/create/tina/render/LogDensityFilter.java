@@ -19,12 +19,13 @@ package org.jwildfire.create.tina.render;
 import static org.jwildfire.base.mathlib.MathLib.log10;
 
 import org.jwildfire.create.tina.base.Flame;
-import org.jwildfire.create.tina.base.RasterPoint;
+import org.jwildfire.create.tina.base.raster.AbstractRasterPoint;
+import org.jwildfire.create.tina.base.raster.RasterPoint;
 import org.jwildfire.create.tina.render.filter.FilterKernel;
 
 public class LogDensityFilter {
   private final Flame flame;
-  private RasterPoint[][] raster;
+  private AbstractRasterPoint[][] raster;
   private int rasterWidth, rasterHeight, rasterSize;
   public static final int FILTER_WHITE = (1 << 26);
   public final static double BRIGHTNESS_SCALE = 2.0 * 268.0;
@@ -72,7 +73,7 @@ public class LogDensityFilter {
     return noiseFilterSize;
   }
 
-  public void setRaster(RasterPoint[][] pRaster, int pRasterWidth, int pRasterHeight, int pImageWidth, int pImageHeight) {
+  public void setRaster(AbstractRasterPoint[][] pRaster, int pRasterWidth, int pRasterHeight, int pImageWidth, int pImageHeight) {
     raster = pRaster;
     rasterWidth = pRasterWidth;
     rasterHeight = pRasterHeight;
@@ -93,11 +94,11 @@ public class LogDensityFilter {
       pFilteredPnt.clear();
       for (int i = 0; i < noiseFilterSize; i++) {
         for (int j = 0; j < noiseFilterSize; j++) {
-          RasterPoint point = getRasterPoint(pX + j, pY + i);
-          pFilteredPnt.red += filter[i][j] * point.red;
-          pFilteredPnt.green += filter[i][j] * point.green;
-          pFilteredPnt.blue += filter[i][j] * point.blue;
-          pFilteredPnt.intensity += filter[i][j] * point.count;
+          AbstractRasterPoint point = getRasterPoint(pX + j, pY + i);
+          pFilteredPnt.red += filter[i][j] * point.getRed();
+          pFilteredPnt.green += filter[i][j] * point.getGreen();
+          pFilteredPnt.blue += filter[i][j] * point.getBlue();
+          pFilteredPnt.intensity += filter[i][j] * point.getCount();
         }
       }
       pFilteredPnt.red /= FILTER_WHITE;
@@ -106,32 +107,32 @@ public class LogDensityFilter {
       pFilteredPnt.intensity = flame.getWhiteLevel() * pFilteredPnt.intensity / FILTER_WHITE;
     }
     else {
-      RasterPoint point = getRasterPoint(pX, pY);
-      pFilteredPnt.red = point.red;
-      pFilteredPnt.green = point.green;
-      pFilteredPnt.blue = point.blue;
-      pFilteredPnt.intensity = point.count * flame.getWhiteLevel();
+      AbstractRasterPoint point = getRasterPoint(pX, pY);
+      pFilteredPnt.red = point.getRed();
+      pFilteredPnt.green = point.getGreen();
+      pFilteredPnt.blue = point.getBlue();
+      pFilteredPnt.intensity = point.getCount() * flame.getWhiteLevel();
     }
   }
 
   public void transformPointSimple(LogDensityPoint pFilteredPnt, int pX, int pY) {
-    RasterPoint point = getRasterPoint(pX, pY);
+    AbstractRasterPoint point = getRasterPoint(pX, pY);
     double logScale;
-    if (point.count < precalcLogArray.length) {
-      logScale = precalcLogArray[(int) point.count] / FILTER_WHITE;
+    if (point.getCount() < precalcLogArray.length) {
+      logScale = precalcLogArray[(int) point.getCount()] / FILTER_WHITE;
     }
     else {
-      logScale = (k1 * log10(1.0 + flame.getWhiteLevel() * point.count * k2)) / (flame.getWhiteLevel() * point.count) / FILTER_WHITE;
+      logScale = (k1 * log10(1.0 + flame.getWhiteLevel() * point.getCount() * k2)) / (flame.getWhiteLevel() * point.getCount()) / FILTER_WHITE;
     }
-    pFilteredPnt.red = logScale * point.red;
-    pFilteredPnt.green = logScale * point.green;
-    pFilteredPnt.blue = logScale * point.blue;
-    pFilteredPnt.intensity = logScale * point.count * flame.getWhiteLevel();
+    pFilteredPnt.red = logScale * point.getRed();
+    pFilteredPnt.green = logScale * point.getGreen();
+    pFilteredPnt.blue = logScale * point.getBlue();
+    pFilteredPnt.intensity = logScale * point.getCount() * flame.getWhiteLevel();
   }
 
-  private RasterPoint emptyRasterPoint = new RasterPoint();
+  private AbstractRasterPoint emptyRasterPoint = new RasterPoint();
 
-  private RasterPoint getRasterPoint(int pX, int pY) {
+  private AbstractRasterPoint getRasterPoint(int pX, int pY) {
     if (pX < 0 || pX >= rasterWidth || pY < 0 || pY >= rasterHeight)
       return emptyRasterPoint;
     else
@@ -154,18 +155,18 @@ public class LogDensityFilter {
       pFilteredPnt.clear();
       for (int i = 0; i < noiseFilterSize; i++) {
         for (int j = 0; j < noiseFilterSize; j++) {
-          RasterPoint point = getRasterPoint(pX + j, pY + i);
+          AbstractRasterPoint point = getRasterPoint(pX + j, pY + i);
           double logScale;
-          if (point.count < precalcLogArray.length) {
-            logScale = precalcLogArray[(int) point.count];
+          if (point.getCount() < precalcLogArray.length) {
+            logScale = precalcLogArray[(int) point.getCount()];
           }
           else {
-            logScale = (k1 * log10(1.0 + flame.getWhiteLevel() * point.count * k2)) / (flame.getWhiteLevel() * point.count);
+            logScale = (k1 * log10(1.0 + flame.getWhiteLevel() * point.getCount() * k2)) / (flame.getWhiteLevel() * point.getCount());
           }
-          pFilteredPnt.red += filter[i][j] * logScale * point.red;
-          pFilteredPnt.green += filter[i][j] * logScale * point.green;
-          pFilteredPnt.blue += filter[i][j] * logScale * point.blue;
-          pFilteredPnt.intensity += filter[i][j] * logScale * point.count;
+          pFilteredPnt.red += filter[i][j] * logScale * point.getRed();
+          pFilteredPnt.green += filter[i][j] * logScale * point.getGreen();
+          pFilteredPnt.blue += filter[i][j] * logScale * point.getBlue();
+          pFilteredPnt.intensity += filter[i][j] * logScale * point.getCount();
         }
       }
 
@@ -175,18 +176,18 @@ public class LogDensityFilter {
       pFilteredPnt.intensity = flame.getWhiteLevel() * pFilteredPnt.intensity / FILTER_WHITE;
     }
     else {
-      RasterPoint point = getRasterPoint(pX, pY);
+      AbstractRasterPoint point = getRasterPoint(pX, pY);
       double logScale;
-      if (point.count < precalcLogArray.length) {
-        logScale = precalcLogArray[(int) point.count] / FILTER_WHITE;
+      if (point.getCount() < precalcLogArray.length) {
+        logScale = precalcLogArray[(int) point.getCount()] / FILTER_WHITE;
       }
       else {
-        logScale = (k1 * log10(1.0 + flame.getWhiteLevel() * point.count * k2)) / (flame.getWhiteLevel() * point.count) / FILTER_WHITE;
+        logScale = (k1 * log10(1.0 + flame.getWhiteLevel() * point.getCount() * k2)) / (flame.getWhiteLevel() * point.getCount()) / FILTER_WHITE;
       }
-      pFilteredPnt.red = logScale * point.red;
-      pFilteredPnt.green = logScale * point.green;
-      pFilteredPnt.blue = logScale * point.blue;
-      pFilteredPnt.intensity = logScale * point.count * flame.getWhiteLevel();
+      pFilteredPnt.red = logScale * point.getRed();
+      pFilteredPnt.green = logScale * point.getGreen();
+      pFilteredPnt.blue = logScale * point.getBlue();
+      pFilteredPnt.intensity = logScale * point.getCount() * flame.getWhiteLevel();
     }
   }
 
@@ -195,11 +196,11 @@ public class LogDensityFilter {
       pFilteredPnt.clear();
       for (int i = 0; i < noiseFilterSize; i++) {
         for (int j = 0; j < noiseFilterSize; j++) {
-          RasterPoint point = getRasterPoint(pX + j, pY + i);
-          pFilteredPnt.red += filter[i][j] * point.red;
-          pFilteredPnt.green += filter[i][j] * point.green;
-          pFilteredPnt.blue += filter[i][j] * point.blue;
-          pFilteredPnt.intensity += filter[i][j] * point.count;
+          AbstractRasterPoint point = getRasterPoint(pX + j, pY + i);
+          pFilteredPnt.red += filter[i][j] * point.getRed();
+          pFilteredPnt.green += filter[i][j] * point.getGreen();
+          pFilteredPnt.blue += filter[i][j] * point.getBlue();
+          pFilteredPnt.intensity += filter[i][j] * point.getCount();
         }
       }
       pFilteredPnt.red /= FILTER_WHITE;
@@ -208,11 +209,11 @@ public class LogDensityFilter {
       pFilteredPnt.intensity = flame.getWhiteLevel() * pFilteredPnt.intensity / FILTER_WHITE;
     }
     else {
-      RasterPoint point = getRasterPoint(pX, pY);
-      pFilteredPnt.red = point.red / (double) FILTER_WHITE;
-      pFilteredPnt.green = point.green / (double) FILTER_WHITE;
-      pFilteredPnt.blue = point.blue / (double) FILTER_WHITE;
-      pFilteredPnt.intensity = point.count * flame.getWhiteLevel() / (double) FILTER_WHITE;
+      AbstractRasterPoint point = getRasterPoint(pX, pY);
+      pFilteredPnt.red = point.getRed() / (double) FILTER_WHITE;
+      pFilteredPnt.green = point.getGreen() / (double) FILTER_WHITE;
+      pFilteredPnt.blue = point.getBlue() / (double) FILTER_WHITE;
+      pFilteredPnt.intensity = point.getCount() * flame.getWhiteLevel() / (double) FILTER_WHITE;
 
     }
   }

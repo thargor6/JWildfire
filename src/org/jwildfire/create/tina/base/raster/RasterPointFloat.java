@@ -14,14 +14,55 @@
   if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
   02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
-package org.jwildfire.create.tina.base;
+package org.jwildfire.create.tina.base.raster;
 
 import java.io.Serializable;
 
-@SuppressWarnings("serial")
-public class RasterPoint implements Serializable {
-  public double red;
-  public double green;
-  public double blue;
-  public long count;
+public class RasterPointFloat implements AbstractRasterPoint, Serializable {
+  private static final long serialVersionUID = 1L;
+  private float red;
+  private float green;
+  private float blue;
+  private long count;
+
+  @Override
+  public double getRed() {
+    return red;
+  }
+
+  @Override
+  public void setRed(double pRed) {
+    red = (float) pRed;
+  }
+
+  @Override
+  public double getGreen() {
+    return green;
+  }
+
+  @Override
+  public void setGreen(double pGreen) {
+    green = (float) pGreen;
+  }
+
+  @Override
+  public double getBlue() {
+    return blue;
+  }
+
+  @Override
+  public void setBlue(double pBlue) {
+    blue = (float) pBlue;
+  }
+
+  @Override
+  public long getCount() {
+    return count;
+  }
+
+  @Override
+  public void setCount(long pCount) {
+    count = pCount;
+  }
+
 }

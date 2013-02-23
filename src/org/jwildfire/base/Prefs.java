@@ -23,8 +23,6 @@ import java.util.List;
 import org.jwildfire.base.mathlib.BaseMathLibType;
 import org.jwildfire.base.mathlib.MathLib;
 import org.jwildfire.create.tina.random.RandomGeneratorType;
-import org.jwildfire.create.tina.render.CRendererInterface;
-import org.jwildfire.create.tina.render.RendererType;
 import org.jwildfire.swing.LookAndFeel;
 
 import com.l2fprod.common.beans.editor.ComboBoxPropertyEditor;
@@ -63,7 +61,6 @@ public class Prefs extends ManagedObject {
 
   static final String KEY_TINA_RENDER_REALTIME_QUALITY = "tina.render.realtime.quality";
   static final String KEY_TINA_RENDER_PREVIEW_QUALITY = "tina.render.preview.quality";
-  static final String KEY_TINA_RENDER_DEFAULT_RENDERER = "tina.render.default_renderer";
   static final String KEY_TINA_RENDER_DEFAULT_BG_TRANSPARENCY = "tina.render.default_bg_transparency";
   static final String KEY_TINA_RENDER_DEFAULT_DE_MAX_RADIUS = "tina.render.default_de_max_radius";
   static final String KEY_TINA_RENDER_DEFAULT_ANTIALIASING_AMOUNT = "tina.render.default_antialiasing_amount";
@@ -144,18 +141,6 @@ public class Prefs extends ManagedObject {
     }
   }
 
-  public static class TINARendererEditor extends ComboBoxPropertyEditor {
-    public TINARendererEditor() {
-      super();
-      if (CRendererInterface.isCUDAAvailable()) {
-        setAvailableValues(new RendererType[] { RendererType.JAVA, RendererType.C32, RendererType.C64 });
-      }
-      else {
-        setAvailableValues(new RendererType[] { RendererType.JAVA });
-      }
-    }
-  }
-
   @Property(description = "Look and feel (major UI style) - changes are applied only after restarting the main program", category = PropertyCategory.TINA, editorClass = PLAFStyleEditor.class)
   private String plafStyle = LookAndFeel.PLAF_NIMBUS;
   @Property(description = "Look and feel theme (UI sub style) - changes are applied only after restarting the main program", category = PropertyCategory.TINA)
@@ -180,9 +165,6 @@ public class Prefs extends ManagedObject {
   private int tinaRandomBatchBGColorGreen = 0;
   @Property(description = "Red component of the background color of randomly generated flames", category = PropertyCategory.TINA)
   private int tinaRandomBatchBGColorBlue = 0;
-
-  @Property(description = "Default renderer", category = PropertyCategory.TINA, editorClass = TINARendererEditor.class)
-  private RendererType tinaDefaultRenderer = RendererType.JAVA;
 
   @Property(description = "Default background transparency", category = PropertyCategory.TINA)
   private boolean tinaDefaultBGTransparency = true;
@@ -414,7 +396,6 @@ public class Prefs extends ManagedObject {
     tinaRandomBatchBGColorGreen = pSrc.tinaRandomBatchBGColorGreen;
     tinaRandomBatchBGColorBlue = pSrc.tinaRandomBatchBGColorBlue;
     tinaAssociateProfilesWithFlames = pSrc.tinaAssociateProfilesWithFlames;
-    tinaDefaultRenderer = pSrc.tinaDefaultRenderer;
     tinaDefaultBGTransparency = pSrc.tinaDefaultBGTransparency;
     tinaDefaultDEMaxRadius = pSrc.tinaDefaultDEMaxRadius;
     baseMathLibType = pSrc.baseMathLibType;
@@ -575,14 +556,6 @@ public class Prefs extends ManagedObject {
 
   public void setDevelopmentMode(boolean developmentMode) {
     this.developmentMode = developmentMode;
-  }
-
-  public RendererType getTinaDefaultRenderer() {
-    return tinaDefaultRenderer != null ? tinaDefaultRenderer : RendererType.JAVA;
-  }
-
-  public void setTinaDefaultRenderer(RendererType tinaDefaultRenderer) {
-    this.tinaDefaultRenderer = tinaDefaultRenderer;
   }
 
   public boolean isTinaDefaultBGTransparency() {

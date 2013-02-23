@@ -35,8 +35,8 @@ import org.jwildfire.base.Prefs;
 import org.jwildfire.base.QualityProfile;
 import org.jwildfire.base.mathlib.MathLib;
 import org.jwildfire.create.tina.base.Flame;
-import org.jwildfire.create.tina.base.RasterPoint;
 import org.jwildfire.create.tina.base.XYZPoint;
+import org.jwildfire.create.tina.base.raster.RasterPoint;
 import org.jwildfire.create.tina.palette.RenderColor;
 import org.jwildfire.create.tina.random.AbstractRandomGenerator;
 import org.jwildfire.create.tina.random.RandomGeneratorFactory;
@@ -899,7 +899,7 @@ public class FlameRenderer {
     if (raster != null) {
       for (int i = 0; i < rasterHeight; i++) {
         for (int j = 0; j < rasterWidth; j++) {
-          res += raster[i][j].count;
+          res += raster[i][j].getCount();
         }
       }
     }
