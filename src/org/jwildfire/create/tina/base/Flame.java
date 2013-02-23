@@ -429,18 +429,13 @@ public class Flame implements Assignable<Flame>, Serializable {
         var.getFunc().init(pFlameTransformationContext, xForm, var.getAmount());
       }
     }
-    //
     for (int k = 0; k < n; k++) {
-      double totValue = 0;
       XForm xform = getXForms().get(k);
-      for (int l = 0; l < xform.getNextAppliedXFormTable().length; l++) {
-        xform.getNextAppliedXFormTable()[l] = new XForm();
-      }
+      double totValue = 0;
       for (int i = 0; i < n; i++) {
         tp[i] = getXForms().get(i).getWeight() * getXForms().get(k).getModifiedWeights()[i];
         totValue = totValue + tp[i];
       }
-
       if (totValue > 0) {
         double loopValue = 0;
         for (int i = 0; i < xform.getNextAppliedXFormTable().length; i++) {
@@ -456,7 +451,7 @@ public class Flame implements Assignable<Flame>, Serializable {
         }
       }
       else {
-        for (int i = 0; i < xform.getNextAppliedXFormTable().length - 1; i++) {
+        for (int i = 0; i < xform.getNextAppliedXFormTable().length; i++) {
           xform.getNextAppliedXFormTable()[i] = null;
         }
       }
