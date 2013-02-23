@@ -81,6 +81,7 @@ public class Flam3Reader implements FlameReader {
   private static final String ATTR_CAM_XFOCUS = "cam_xfocus";
   private static final String ATTR_CAM_YFOCUS = "cam_yfocus";
   private static final String ATTR_CAM_ZFOCUS = "cam_zfocus";
+  private static final String ATTR_CAM_ZDIMISH = "cam_zdimish";
   private static final String ATTR_CAM_DOF = "cam_dof";
   private static final String ATTR_CAM_DOF_AREA = "cam_dof_area";
   private static final String ATTR_CAM_DOF_EXPONENT = "cam_dof_exponent";
@@ -212,6 +213,9 @@ public class Flam3Reader implements FlameReader {
     }
     if ((hs = atts.get(ATTR_CAM_ZFOCUS)) != null) {
       pFlame.setFocusZ(Double.parseDouble(hs));
+    }
+    if ((hs = atts.get(ATTR_CAM_ZDIMISH)) != null) {
+      pFlame.setDimishZ(Double.parseDouble(hs));
     }
     if ((hs = atts.get(ATTR_CAM_DOF)) != null) {
       pFlame.setCamDOF(Double.parseDouble(hs));

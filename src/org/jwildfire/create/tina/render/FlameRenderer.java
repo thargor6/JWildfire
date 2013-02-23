@@ -16,8 +16,10 @@
 */
 package org.jwildfire.create.tina.render;
 
+import static org.jwildfire.base.mathlib.MathLib.EPSILON;
 import static org.jwildfire.base.mathlib.MathLib.M_PI;
 import static org.jwildfire.base.mathlib.MathLib.cos;
+import static org.jwildfire.base.mathlib.MathLib.exp;
 import static org.jwildfire.base.mathlib.MathLib.fabs;
 import static org.jwildfire.base.mathlib.MathLib.sin;
 
@@ -36,6 +38,7 @@ import org.jwildfire.base.QualityProfile;
 import org.jwildfire.base.mathlib.MathLib;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.XYZPoint;
+import org.jwildfire.create.tina.base.XYZProjectedPoint;
 import org.jwildfire.create.tina.base.raster.AbstractRasterPoint;
 import org.jwildfire.create.tina.base.raster.RasterPoint;
 import org.jwildfire.create.tina.palette.RenderColor;
@@ -60,12 +63,12 @@ public class FlameRenderer {
   GammaCorrectionFilter gammaCorrectionFilter;
   AbstractRasterPoint[][] raster;
   // init in initView
-  private double cosa;
-  private double sina;
+  protected double cosa;
+  protected double sina;
   double camX0, camX1, camY0, camY1;
   double camW, camH;
-  private double rcX;
-  private double rcY;
+  protected double rcX;
+  protected double rcY;
   double bws;
   double bhs;
   private int renderScale = 1;
@@ -125,8 +128,8 @@ public class FlameRenderer {
     cameraMatrix[0][2] = sin(pitch) * sin(yaw);
     cameraMatrix[1][2] = sin(pitch) * cos(yaw);
     cameraMatrix[2][2] = cos(pitch);
-    doProject3D = fabs(flame.getCamYaw()) > MathLib.EPSILON || fabs(flame.getCamPitch()) > MathLib.EPSILON || fabs(flame.getCamPerspective()) > MathLib.EPSILON || fabs(flame.getCamDOF()) > MathLib.EPSILON;
     useDOF = fabs(flame.getCamDOF()) > MathLib.EPSILON;
+    doProject3D = fabs(flame.getCamYaw()) > EPSILON || fabs(flame.getCamPitch()) > EPSILON || fabs(flame.getCamPerspective()) > EPSILON || useDOF || fabs(flame.getDimishZ()) > EPSILON;
     legacyDOF = !flame.isNewCamDOF();
     camDOF_10 = 0.1 * flame.getCamDOF();
   }
@@ -159,54 +162,72 @@ public class FlameRenderer {
     raster = rp.allocRaster(rasterWidth, rasterHeight);
   }
 
-  public void project(XYZPoint pPoint) {
-    if (!doProject3D) {
-      return;
-    }
-    double z = pPoint.z;
-    double px = cameraMatrix[0][0] * pPoint.x + cameraMatrix[1][0] * pPoint.y /*+ cameraMatrix[2][0] * z*/;
-    double py = cameraMatrix[0][1] * pPoint.x + cameraMatrix[1][1] * pPoint.y + cameraMatrix[2][1] * z;
-    double pz = cameraMatrix[0][2] * pPoint.x + cameraMatrix[1][2] * pPoint.y + cameraMatrix[2][2] * z;
-    double zr = 1.0 - flame.getCamPerspective() * pz;
-    if (useDOF) {
-      if (legacyDOF) {
+  public boolean project(XYZPoint pPoint, XYZProjectedPoint pProjectedPoint) {
+    if (doProject3D) {
+      double z = pPoint.z;
+      double px = cameraMatrix[0][0] * pPoint.x + cameraMatrix[1][0] * pPoint.y /*+ cameraMatrix[2][0] * z*/;
+      double py = cameraMatrix[0][1] * pPoint.x + cameraMatrix[1][1] * pPoint.y + cameraMatrix[2][1] * z;
+      double pz = cameraMatrix[0][2] * pPoint.x + cameraMatrix[1][2] * pPoint.y + cameraMatrix[2][2] * z;
+      double zr = 1.0 - flame.getCamPerspective() * pz;
+      if (flame.getDimishZ() > EPSILON) {
         double zdist = (flame.getCamZ() - pz);
         if (zdist > 0.0) {
-          double dr = randGen.random() * camDOF_10 * zdist;
-          double a = 2.0 * M_PI * randGen.random();
-          double dsina = sin(a);
-          double dcosa = cos(a);
-          pPoint.x = (px + dr * dcosa) / zr;
-          pPoint.y = (py + dr * dsina) / zr;
+          pProjectedPoint.intensity = exp(-zdist * zdist * flame.getDimishZ());
         }
         else {
-          pPoint.x = px / zr;
-          pPoint.y = py / zr;
+          pProjectedPoint.intensity = 1.0;
         }
       }
       else {
-        double xdist = (px - flame.getFocusX());
-        double ydist = (py - flame.getFocusY());
-        double zdist = (pz - flame.getFocusZ());
-        double dist = Math.pow(xdist * xdist + ydist * ydist + zdist * zdist, 1 / flame.getCamDOFExponent()) - flame.getCamDOFArea();
-        if (dist > 0.05) {
-          double dr = randGen.random() * camDOF_10 * dist;
-          double a = 2.0 * M_PI * randGen.random();
-          double dsina = sin(a);
-          double dcosa = cos(a);
-          pPoint.x = (px + dr * dcosa) / zr;
-          pPoint.y = (py + dr * dsina) / zr;
+        pProjectedPoint.intensity = 1.0;
+      }
+      if (useDOF) {
+        if (legacyDOF) {
+          double zdist = (flame.getCamZ() - pz);
+          if (zdist > 0.0) {
+            double dr = randGen.random() * camDOF_10 * zdist;
+            double a = 2.0 * M_PI * randGen.random();
+            double dsina = sin(a);
+            double dcosa = cos(a);
+            pPoint.x = (px + dr * dcosa) / zr;
+            pPoint.y = (py + dr * dsina) / zr;
+          }
+          else {
+            pPoint.x = px / zr;
+            pPoint.y = py / zr;
+          }
         }
         else {
-          pPoint.x = px / zr;
-          pPoint.y = py / zr;
+          double xdist = (px - flame.getFocusX());
+          double ydist = (py - flame.getFocusY());
+          double zdist = (pz - flame.getFocusZ());
+          double dist = Math.pow(xdist * xdist + ydist * ydist + zdist * zdist, 1 / flame.getCamDOFExponent()) - flame.getCamDOFArea();
+          if (dist > 0.05) {
+            double dr = randGen.random() * camDOF_10 * dist;
+            double a = 2.0 * M_PI * randGen.random();
+            double dsina = sin(a);
+            double dcosa = cos(a);
+            pPoint.x = (px + dr * dcosa) / zr;
+            pPoint.y = (py + dr * dsina) / zr;
+          }
+          else {
+            pPoint.x = px / zr;
+            pPoint.y = py / zr;
+          }
         }
       }
+      else {
+        pPoint.x = px / zr;
+        pPoint.y = py / zr;
+      }
     }
-    else {
-      pPoint.x = px / zr;
-      pPoint.y = py / zr;
-    }
+    pProjectedPoint.x = pPoint.x * cosa + pPoint.y * sina + rcX;
+    if ((pProjectedPoint.x < 0) || (pProjectedPoint.x > camW))
+      return false;
+    pProjectedPoint.y = pPoint.y * cosa - pPoint.x * sina + rcY;
+    if ((pProjectedPoint.y < 0) || (pProjectedPoint.y > camH))
+      return false;
+    return true;
   }
 
   public RenderedFlame finishRenderFlame(long pSampleCount) {
@@ -714,8 +735,8 @@ public class FlameRenderer {
 
     cosa = cos(-M_PI * (flame.getCamRoll()) / 180.0);
     sina = sin(-M_PI * (flame.getCamRoll()) / 180.0);
-    rcX = flame.getCentreX() * (1 - getCosa()) - flame.getCentreY() * getSina() - camX0;
-    rcY = flame.getCentreY() * (1 - getCosa()) + flame.getCentreX() * getSina() - camY0;
+    rcX = flame.getCentreX() * (1 - cosa) - flame.getCentreY() * sina - camX0;
+    rcY = flame.getCentreY() * (1 - cosa) + flame.getCentreX() * sina - camY0;
   }
 
   public void createColorMap() {
@@ -953,22 +974,6 @@ public class FlameRenderer {
 
   public double getCamY1() {
     return camY1;
-  }
-
-  public double getRcX() {
-    return rcX;
-  }
-
-  public double getRcY() {
-    return rcY;
-  }
-
-  public double getCosa() {
-    return cosa;
-  }
-
-  public double getSina() {
-    return sina;
   }
 
 }

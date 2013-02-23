@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2013 Andreas Maschke
+  Copyright (C) 1995-2011 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -14,27 +14,14 @@
   if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
   02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
-package org.jwildfire.create.tina.base.raster;
+package org.jwildfire.create.tina.base;
 
-public interface AbstractRasterPoint {
+import java.io.Serializable;
 
-  public double getRed();
+public class XYZProjectedPoint implements Serializable {
+  private static final long serialVersionUID = 1L;
 
-  public void setRed(double red);
+  public double x, y;
+  public double intensity;
 
-  public double getGreen();
-
-  public void setGreen(double green);
-
-  public double getBlue();
-
-  public void setBlue(double blue);
-
-  public long getCount();
-
-  public void setCount(long count);
-
-  public void incCount();
-
-  public AbstractRasterPoint[][] allocRaster(int pWidth, int pHeight);
 }

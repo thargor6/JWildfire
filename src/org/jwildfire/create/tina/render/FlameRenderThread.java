@@ -18,6 +18,7 @@ package org.jwildfire.create.tina.render;
 
 import org.jwildfire.base.Prefs;
 import org.jwildfire.create.tina.base.Flame;
+import org.jwildfire.create.tina.base.XYZProjectedPoint;
 import org.jwildfire.create.tina.random.AbstractRandomGenerator;
 import org.jwildfire.create.tina.random.RandomGeneratorFactory;
 import org.jwildfire.create.tina.variation.FlameTransformationContext;
@@ -33,6 +34,7 @@ public abstract class FlameRenderThread implements Runnable {
   protected FlameRenderThreadState resumeState;
   protected FlameTransformationContext ctx;
   protected AbstractRandomGenerator randGen;
+  protected final XYZProjectedPoint prj = new XYZProjectedPoint();
 
   public FlameRenderThread(Prefs pPrefs, int pThreadId, FlameRenderer pRenderer, Flame pFlame, long pSamples) {
     renderer = pRenderer;

@@ -93,7 +93,6 @@ public final class FlameRenderBlurThread extends FlameRenderThread {
         continue;
 
       List<XForm> finalXForms = flame.getFinalXForms();
-      double px, py;
       int xIdx, yIdx;
 
       if (finalXForms.size() > 0) {
@@ -101,50 +100,38 @@ public final class FlameRenderBlurThread extends FlameRenderThread {
         for (int i = 1; i < finalXForms.size(); i++) {
           finalXForms.get(i).transformPoint(ctx, affineT, varT, q, q);
         }
-        renderer.project(q);
-        px = q.x * renderer.getCosa() + q.y * renderer.getSina() + renderer.getRcX();
-        if ((px < 0) || (px > renderer.camW))
+        if (!renderer.project(q, prj))
           continue;
-        py = q.y * renderer.getCosa() - q.x * renderer.getSina() + renderer.getRcY();
-        if ((py < 0) || (py > renderer.camH))
-          continue;
-
         XForm finalXForm = finalXForms.get(finalXForms.size() - 1);
         if ((finalXForm.getAntialiasAmount() > EPSILON) && (finalXForm.getAntialiasRadius() > EPSILON) && (randGen.random() > 1.0 - finalXForm.getAntialiasAmount())) {
           double dr = exp(finalXForm.getAntialiasRadius() * sqrt(-log(randGen.random()))) - 1.0;
           double da = randGen.random() * 2.0 * M_PI;
-          xIdx = (int) (renderer.bws * px + dr * cos(da) + 0.5);
+          xIdx = (int) (renderer.bws * prj.x + dr * cos(da) + 0.5);
           if (xIdx < 0 || xIdx >= renderer.rasterWidth)
             continue;
-          yIdx = (int) (renderer.bhs * py + dr * sin(da) + 0.5);
+          yIdx = (int) (renderer.bhs * prj.y + dr * sin(da) + 0.5);
           if (yIdx < 0 || yIdx >= renderer.rasterHeight)
             continue;
         }
         else {
-          xIdx = (int) (renderer.bws * px + 0.5);
-          yIdx = (int) (renderer.bhs * py + 0.5);
+          xIdx = (int) (renderer.bws * prj.x + 0.5);
+          yIdx = (int) (renderer.bhs * prj.y + 0.5);
         }
-
       }
       else {
         q.assign(p);
-        renderer.project(q);
-        px = q.x * renderer.getCosa() + q.y * renderer.getSina() + renderer.getRcX();
-        if ((px < 0) || (px > renderer.camW))
-          continue;
-        py = q.y * renderer.getCosa() - q.x * renderer.getSina() + renderer.getRcY();
-        if ((py < 0) || (py > renderer.camH))
+        if (!renderer.project(q, prj))
           continue;
 
         if ((xf.getAntialiasAmount() > EPSILON) && (xf.getAntialiasRadius() > EPSILON) && (randGen.random() > 1.0 - xf.getAntialiasAmount())) {
           double dr = exp(xf.getAntialiasRadius() * sqrt(-log(randGen.random()))) - 1.0;
           double da = randGen.random() * 2.0 * M_PI;
-          xIdx = (int) (renderer.bws * px + dr * cos(da) + 0.5);
-          yIdx = (int) (renderer.bhs * py + dr * sin(da) + 0.5);
+          xIdx = (int) (renderer.bws * prj.x + dr * cos(da) + 0.5);
+          yIdx = (int) (renderer.bhs * prj.y + dr * sin(da) + 0.5);
         }
         else {
-          xIdx = (int) (renderer.bws * px + 0.5);
-          yIdx = (int) (renderer.bhs * py + 0.5);
+          xIdx = (int) (renderer.bws * prj.x + 0.5);
+          yIdx = (int) (renderer.bhs * prj.y + 0.5);
         }
       }
       if (xIdx < 0 || xIdx >= renderer.rasterWidth)
@@ -172,10 +159,10 @@ public final class FlameRenderBlurThread extends FlameRenderThread {
                 // y, x
                 AbstractRasterPoint rp = renderer.raster[k][l];
                 double scl = blurKernel[yk][xk];
-                rp.setRed(rp.getRed() + color.red * scl);
-                rp.setGreen(rp.getGreen() + color.green * scl);
-                rp.setBlue(rp.getBlue() + color.blue * scl);
-                rp.setCount(rp.getCount() + 1);
+                rp.setRed(rp.getRed() + color.red * scl * prj.intensity);
+                rp.setGreen(rp.getGreen() + color.green * scl * prj.intensity);
+                rp.setBlue(rp.getBlue() + color.blue * scl * prj.intensity);
+                rp.incCount();
                 if (observers != null && observers.size() > 0) {
                   for (IterationObserver observer : observers) {
                     observer.notifyIterationFinished(this, k, l);
@@ -188,10 +175,10 @@ public final class FlameRenderBlurThread extends FlameRenderThread {
       }
       else {
         AbstractRasterPoint rp = renderer.raster[yIdx][xIdx];
-        rp.setRed(rp.getRed() + color.red);
-        rp.setGreen(rp.getGreen() + color.green);
-        rp.setBlue(rp.getBlue() + color.blue);
-        rp.setCount(rp.getCount() + 1);
+        rp.setRed(rp.getRed() + color.red * prj.intensity);
+        rp.setGreen(rp.getGreen() + color.green * prj.intensity);
+        rp.setBlue(rp.getBlue() + color.blue * prj.intensity);
+        rp.incCount();
         if (observers != null && observers.size() > 0) {
           for (IterationObserver observer : observers) {
             observer.notifyIterationFinished(this, xIdx, yIdx);

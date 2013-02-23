@@ -247,6 +247,8 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
   private final JSlider focusYSlider;
   private final JWFNumberField focusZREd;
   private final JSlider focusZSlider;
+  private final JWFNumberField dimishZREd;
+  private final JSlider dimishZSlider;
   private final JWFNumberField camZREd;
   private final JSlider camZSlider;
   private final JWFNumberField cameraDOFREd;
@@ -458,7 +460,8 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       JWFNumberField pCameraCentreXREd, JSlider pCameraCentreXSlider, JWFNumberField pCameraCentreYREd,
       JSlider pCameraCentreYSlider, JWFNumberField pCameraZoomREd, JSlider pCameraZoomSlider,
       JCheckBox pNewDOFCBx, JWFNumberField pFocusXREd, JSlider pFocusXSlider, JWFNumberField pFocusYREd, JSlider pFocusYSlider, JWFNumberField pFocusZREd,
-      JSlider pFocusZSlider, JWFNumberField pCameraDOFREd, JSlider pCameraDOFSlider, JWFNumberField pCameraDOFAreaREd, JSlider pCameraDOFAreaSlider,
+      JSlider pFocusZSlider, JWFNumberField pDimishZREd,
+      JSlider pDimishZSlider, JWFNumberField pCameraDOFREd, JSlider pCameraDOFSlider, JWFNumberField pCameraDOFAreaREd, JSlider pCameraDOFAreaSlider,
       JWFNumberField pCameraDOFExponentREd, JSlider pCameraDOFExponentSlider, JWFNumberField pCamZREd, JSlider pCamZSlider,
       JWFNumberField pPixelsPerUnitREd, JSlider pPixelsPerUnitSlider,
       JWFNumberField pBrightnessREd, JSlider pBrightnessSlider, JWFNumberField pContrastREd, JSlider pContrastSlider, JWFNumberField pGammaREd, JSlider pGammaSlider,
@@ -555,6 +558,8 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     focusYSlider = pFocusYSlider;
     focusZREd = pFocusZREd;
     focusZSlider = pFocusZSlider;
+    dimishZREd = pDimishZREd;
+    dimishZSlider = pDimishZSlider;
     cameraDOFREd = pCameraDOFREd;
     cameraDOFSlider = pCameraDOFSlider;
     cameraDOFAreaREd = pCameraDOFAreaREd;
@@ -1420,8 +1425,10 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     cameraDOFAreaSlider.setEnabled(newDOF);
     cameraDOFExponentREd.setEnabled(newDOF);
     cameraDOFExponentSlider.setEnabled(newDOF);
-    camZREd.setEnabled(!newDOF);
-    camZSlider.setEnabled(!newDOF);
+    camZREd.setEnabled(currFlame != null);
+    camZSlider.setEnabled(currFlame != null);
+    dimishZREd.setEnabled(currFlame != null);
+    dimishZSlider.setEnabled(currFlame != null);
   }
 
   private void enableDEFilterUI() {
@@ -3521,6 +3528,8 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       focusZREd.setText(Tools.doubleToString(currFlame.getFocusZ()));
       focusZSlider.setValue(Tools.FTOI(currFlame.getFocusZ() * SLIDER_SCALE_ZPOS));
 
+      dimishZREd.setText(Tools.doubleToString(currFlame.getDimishZ()));
+      dimishZSlider.setValue(Tools.FTOI(currFlame.getDimishZ() * SLIDER_SCALE_ZPOS));
     }
     finally {
       noRefresh = oldNoRefrsh;
@@ -3710,6 +3719,10 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     flameSliderChanged(focusYSlider, focusYREd, "focusY", SLIDER_SCALE_ZPOS);
   }
 
+  public void dimishZSlider_stateChanged(ChangeEvent e) {
+    flameSliderChanged(dimishZSlider, dimishZREd, "dimishZ", SLIDER_SCALE_ZPOS);
+  }
+
   public void camZSlider_stateChanged(ChangeEvent e) {
     flameSliderChanged(camZSlider, camZREd, "camZ", SLIDER_SCALE_ZPOS);
   }
@@ -3736,6 +3749,10 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
 
   public void focusZREd_changed() {
     flameTextFieldChanged(focusZSlider, focusZREd, "focusZ", SLIDER_SCALE_ZPOS);
+  }
+
+  public void dimishZREd_changed() {
+    flameTextFieldChanged(dimishZSlider, dimishZREd, "dimishZ", SLIDER_SCALE_ZPOS);
   }
 
   public void cameraDOFREd_changed() {

@@ -992,7 +992,7 @@ public class TinaInternalFrame extends JInternalFrame {
         }
       });
       dofCamZREd.setValueStep(0.01);
-      dofCamZREd.setText("");
+      dofCamZREd.setToolTipText("Affects both the old DOF-effect and dimish in z-direction");
       dofCamZREd.setSize(new Dimension(100, 24));
       dofCamZREd.setPreferredSize(new Dimension(100, 24));
       dofCamZREd.setLocation(new Point(100, 98));
@@ -1007,7 +1007,7 @@ public class TinaInternalFrame extends JInternalFrame {
       lblFocusx.setPreferredSize(new Dimension(94, 22));
       lblFocusx.setLocation(new Point(4, 98));
       lblFocusx.setFont(new Font("Dialog", Font.BOLD, 10));
-      lblFocusx.setBounds(447, 28, 94, 22);
+      lblFocusx.setBounds(447, 52, 94, 22);
       tinaDOFPanel.add(lblFocusx);
 
       dofFocusXREd = new JWFNumberField();
@@ -1030,7 +1030,7 @@ public class TinaInternalFrame extends JInternalFrame {
       dofFocusXREd.setLocation(new Point(100, 98));
       dofFocusXREd.setHasMinValue(true);
       dofFocusXREd.setFont(new Font("Dialog", Font.PLAIN, 10));
-      dofFocusXREd.setBounds(543, 28, 100, 24);
+      dofFocusXREd.setBounds(543, 52, 100, 24);
       tinaDOFPanel.add(dofFocusXREd);
 
       dofFocusXSlider = new JSlider();
@@ -1053,7 +1053,7 @@ public class TinaInternalFrame extends JInternalFrame {
       dofFocusXSlider.setMinimum(-100);
       dofFocusXSlider.setMaximum(100);
       dofFocusXSlider.setLocation(new Point(202, 98));
-      dofFocusXSlider.setBounds(645, 28, 220, 24);
+      dofFocusXSlider.setBounds(645, 52, 220, 24);
       tinaDOFPanel.add(dofFocusXSlider);
 
       JLabel lblFocusy = new JLabel();
@@ -1062,7 +1062,7 @@ public class TinaInternalFrame extends JInternalFrame {
       lblFocusy.setPreferredSize(new Dimension(94, 22));
       lblFocusy.setLocation(new Point(4, 98));
       lblFocusy.setFont(new Font("Dialog", Font.BOLD, 10));
-      lblFocusy.setBounds(447, 52, 94, 22);
+      lblFocusy.setBounds(447, 76, 94, 22);
       tinaDOFPanel.add(lblFocusy);
 
       dofFocusYREd = new JWFNumberField();
@@ -1085,7 +1085,7 @@ public class TinaInternalFrame extends JInternalFrame {
       dofFocusYREd.setLocation(new Point(100, 98));
       dofFocusYREd.setHasMinValue(true);
       dofFocusYREd.setFont(new Font("Dialog", Font.PLAIN, 10));
-      dofFocusYREd.setBounds(543, 52, 100, 24);
+      dofFocusYREd.setBounds(543, 76, 100, 24);
       tinaDOFPanel.add(dofFocusYREd);
 
       dofFocusYSlider = new JSlider();
@@ -1108,7 +1108,7 @@ public class TinaInternalFrame extends JInternalFrame {
       dofFocusYSlider.setMinimum(-100);
       dofFocusYSlider.setMaximum(100);
       dofFocusYSlider.setLocation(new Point(202, 98));
-      dofFocusYSlider.setBounds(645, 52, 220, 24);
+      dofFocusYSlider.setBounds(645, 76, 220, 24);
       tinaDOFPanel.add(dofFocusYSlider);
 
       JLabel lblFocusz = new JLabel();
@@ -1117,7 +1117,7 @@ public class TinaInternalFrame extends JInternalFrame {
       lblFocusz.setPreferredSize(new Dimension(94, 22));
       lblFocusz.setLocation(new Point(4, 98));
       lblFocusz.setFont(new Font("Dialog", Font.BOLD, 10));
-      lblFocusz.setBounds(447, 76, 94, 22);
+      lblFocusz.setBounds(447, 100, 94, 22);
       tinaDOFPanel.add(lblFocusz);
 
       dofFocusZSlider = new JSlider();
@@ -1140,7 +1140,7 @@ public class TinaInternalFrame extends JInternalFrame {
       dofFocusZSlider.setMinimum(-100);
       dofFocusZSlider.setMaximum(100);
       dofFocusZSlider.setLocation(new Point(202, 98));
-      dofFocusZSlider.setBounds(645, 76, 220, 24);
+      dofFocusZSlider.setBounds(645, 100, 220, 24);
       tinaDOFPanel.add(dofFocusZSlider);
 
       dofFocusZREd = new JWFNumberField();
@@ -1163,8 +1163,63 @@ public class TinaInternalFrame extends JInternalFrame {
       dofFocusZREd.setLocation(new Point(100, 98));
       dofFocusZREd.setHasMinValue(true);
       dofFocusZREd.setFont(new Font("Dialog", Font.PLAIN, 10));
-      dofFocusZREd.setBounds(543, 76, 100, 24);
+      dofFocusZREd.setBounds(543, 100, 100, 24);
       tinaDOFPanel.add(dofFocusZREd);
+
+      JLabel lblDimishz = new JLabel();
+      lblDimishz.setText("DimishZ");
+      lblDimishz.setSize(new Dimension(94, 22));
+      lblDimishz.setPreferredSize(new Dimension(94, 22));
+      lblDimishz.setLocation(new Point(4, 98));
+      lblDimishz.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblDimishz.setBounds(447, 28, 94, 22);
+      tinaDOFPanel.add(lblDimishz);
+
+      camDimishZREd = new JWFNumberField();
+      camDimishZREd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null) {
+            if (!camDimishZREd.isMouseAdjusting() || camDimishZREd.getMouseChangeCount() == 0) {
+              if (!camDimishZSlider.getValueIsAdjusting()) {
+                tinaController.saveUndoPoint();
+              }
+            }
+            tinaController.dimishZREd_changed();
+          }
+        }
+      });
+      camDimishZREd.setToolTipText("Dimish brightness in z-direction to improve \"depth\"-effect, also affected by camera distance");
+      camDimishZREd.setValueStep(0.01);
+      camDimishZREd.setText("");
+      camDimishZREd.setSize(new Dimension(100, 24));
+      camDimishZREd.setPreferredSize(new Dimension(100, 24));
+      camDimishZREd.setLocation(new Point(100, 98));
+      camDimishZREd.setHasMinValue(true);
+      camDimishZREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      camDimishZREd.setBounds(543, 28, 100, 24);
+      tinaDOFPanel.add(camDimishZREd);
+
+      camDimishZSlider = new JSlider();
+      camDimishZSlider.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null) {
+            tinaController.dimishZSlider_stateChanged(e);
+          }
+        }
+      });
+      camDimishZSlider.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mousePressed(MouseEvent e) {
+          tinaController.saveUndoPoint();
+        }
+      });
+      camDimishZSlider.setValue(0);
+      camDimishZSlider.setSize(new Dimension(220, 19));
+      camDimishZSlider.setPreferredSize(new Dimension(220, 19));
+      camDimishZSlider.setMaximum(75);
+      camDimishZSlider.setLocation(new Point(202, 98));
+      camDimishZSlider.setBounds(645, 28, 220, 24);
+      tinaDOFPanel.add(camDimishZSlider);
 
       tinaSouthTabbedPane.addTab("Coloring", null, getTinaColoringPanel(), null);
 
@@ -3936,6 +3991,7 @@ public class TinaInternalFrame extends JInternalFrame {
         getTinaCameraCentreXREd(), getTinaCameraCentreXSlider(), getTinaCameraCentreYREd(),
         getTinaCameraCentreYSlider(), getTinaCameraZoomREd(), getTinaCameraZoomSlider(), getDofNewDOFCBx(),
         getDofFocusXREd(), getDofFocusXSlider(), getDofFocusYREd(), getDofFocusYSlider(), getDofFocusZREd(), getDofFocusZSlider(),
+        getCamDimishZREd(), getCamDimishZSlider(),
         getDofDOFREd(), getDofDOFSlider(), getDofDOFAreaREd(), getDofDOFAreaSlider(), getDofDOFExponentREd(), getDofDOFExponentSlider(),
         getDofCamZREd(), getDofCamZSlider(), getTinaPixelsPerUnitREd(), getTinaPixelsPerUnitSlider(),
         getTinaBrightnessREd(), getTinaBrightnessSlider(), getTinaContrastREd(), getTinaContrastSlider(), getTinaGammaREd(), getTinaGammaSlider(),
@@ -8661,6 +8717,8 @@ public class TinaInternalFrame extends JInternalFrame {
   private JSlider tinaDEFilterCurveSlider;
   private JComboBox tinaDEFilterKernelCmb;
   private JComboBox tinaFilterKernelCmb;
+  private JWFNumberField camDimishZREd;
+  private JSlider camDimishZSlider;
 
   /**
    * This method initializes renderBatchJobsScrollPane	
@@ -12430,5 +12488,13 @@ public class TinaInternalFrame extends JInternalFrame {
 
   public JComboBox getTinaFilterKernelCmb() {
     return tinaFilterKernelCmb;
+  }
+
+  public JWFNumberField getCamDimishZREd() {
+    return camDimishZREd;
+  }
+
+  public JSlider getCamDimishZSlider() {
+    return camDimishZSlider;
   }
 } //  @jve:decl-index=0:visual-constraint="10,10"

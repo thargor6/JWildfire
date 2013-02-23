@@ -76,4 +76,9 @@ public class RasterPointFloat implements AbstractRasterPoint, Serializable {
     return raster;
   }
 
+  @Override
+  public void incCount() {
+    count++;
+  }
+
 }

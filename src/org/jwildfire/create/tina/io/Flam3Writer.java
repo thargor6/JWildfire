@@ -139,6 +139,9 @@ public class Flam3Writer {
     attrList.add(xb.createAttr("cam_xfocus", pFlame.getFocusX()));
     attrList.add(xb.createAttr("cam_yfocus", pFlame.getFocusY()));
     attrList.add(xb.createAttr("cam_zfocus", pFlame.getFocusZ()));
+    if (pFlame.getDimishZ() != 0.0) {
+      attrList.add(xb.createAttr("cam_zdimish", pFlame.getDimishZ()));
+    }
     attrList.add(xb.createAttr("cam_zpos", pFlame.getCamZ()));
     attrList.add(xb.createAttr("cam_dof", pFlame.getCamDOF()));
     attrList.add(xb.createAttr("cam_dof_area", pFlame.getCamDOFArea()));

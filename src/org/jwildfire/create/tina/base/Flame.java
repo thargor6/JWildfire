@@ -59,6 +59,8 @@ public class Flame implements Assignable<Flame>, Serializable {
   @AnimAware
   private double focusZ;
   @AnimAware
+  private double dimishZ;
+  @AnimAware
   private double camDOF;
   @AnimAware
   private double camDOFExponent;
@@ -120,6 +122,7 @@ public class Flame implements Assignable<Flame>, Serializable {
     focusX = 0.0;
     focusY = 0.0;
     focusZ = 0.0;
+    dimishZ = 0.0;
     camDOF = 0.0;
     camZ = 0.0;
     newCamDOF = false;
@@ -504,6 +507,7 @@ public class Flame implements Assignable<Flame>, Serializable {
     focusX = pFlame.focusX;
     focusY = pFlame.focusY;
     focusZ = pFlame.focusZ;
+    dimishZ = pFlame.dimishZ;
     camZ = pFlame.camZ;
     camDOF = pFlame.camDOF;
     newCamDOF = pFlame.newCamDOF;
@@ -552,7 +556,7 @@ public class Flame implements Assignable<Flame>, Serializable {
         (fabs(camPitch - pFlame.camPitch) > EPSILON) || (fabs(camYaw - pFlame.camYaw) > EPSILON) ||
         (fabs(camPerspective - pFlame.camPerspective) > EPSILON) || (fabs(camRoll - pFlame.camRoll) > EPSILON) ||
         (fabs(camZoom - pFlame.camZoom) > EPSILON) || (fabs(focusX - pFlame.focusX) > EPSILON) ||
-        (fabs(focusY - pFlame.focusY) > EPSILON) || (fabs(focusZ - pFlame.focusZ) > EPSILON) ||
+        (fabs(focusY - pFlame.focusY) > EPSILON) || (fabs(focusZ - pFlame.focusZ) > EPSILON) || (fabs(dimishZ - pFlame.dimishZ) > EPSILON) ||
         (fabs(camDOF - pFlame.camDOF) > EPSILON) || (fabs(camDOFArea - pFlame.camDOFArea) > EPSILON) ||
         (fabs(camDOFExponent - pFlame.camDOFExponent) > EPSILON) || (fabs(camZ - pFlame.camZ) > EPSILON) ||
         (newCamDOF != pFlame.newCamDOF) || (fabs(spatialFilterRadius - pFlame.spatialFilterRadius) > EPSILON) ||
@@ -665,5 +669,13 @@ public class Flame implements Assignable<Flame>, Serializable {
 
   public void setDeFilterKernel(FilterKernelType deFilterKernel) {
     this.deFilterKernel = deFilterKernel;
+  }
+
+  public double getDimishZ() {
+    return dimishZ;
+  }
+
+  public void setDimishZ(double dimishZ) {
+    this.dimishZ = dimishZ;
   }
 }
