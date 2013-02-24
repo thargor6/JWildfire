@@ -2999,7 +2999,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       final int idx = i;
       imgPanel.addMouseListener(new java.awt.event.MouseAdapter() {
         public void mouseClicked(java.awt.event.MouseEvent e) {
-          if (e.getClickCount() > 1) {
+          if (e.getClickCount() > 1 || e.getButton() != MouseEvent.BUTTON1) {
             importFromRandomBatch(idx);
           }
         }
@@ -3039,7 +3039,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       final int idx = i;
       imgPanel.addMouseListener(new java.awt.event.MouseAdapter() {
         public void mouseClicked(java.awt.event.MouseEvent e) {
-          if (e.getClickCount() > 1) {
+          if (e.getClickCount() > 1 || e.getButton() != MouseEvent.BUTTON1) {
             importFromRandomBatch(idx);
           }
         }

@@ -5944,7 +5944,7 @@ public class TinaInternalFrame extends JInternalFrame {
       centerCenterPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
       centerDescLabel = new JLabel();
       centerCenterPanel.add(centerDescLabel, BorderLayout.SOUTH);
-      centerDescLabel.setText("  (just double-click on thumbnail to load it into main area)");
+      centerDescLabel.setText("  (just double-click or right-click on thumbnail to load it into main area)");
       centerDescLabel.setHorizontalAlignment(SwingConstants.CENTER);
       centerDescLabel.setFont(new Font("Dialog", Font.BOLD, 10));
     }
