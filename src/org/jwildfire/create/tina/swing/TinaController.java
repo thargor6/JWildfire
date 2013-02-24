@@ -517,7 +517,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       JPanel pDancingFlamesMotionPropertyPnl, JTable pDancingFlamesMotionTable, JComboBox pDancingFlamesAddMotionCmb, JButton pDancingFlamesAddMotionBtn,
       JButton pDancingFlamesDeleteMotionBtn, JButton pDancingFlamesLinkMotionBtn, JButton pDancingFlamesUnlinkMotionBtn,
       JComboBox pDancingFlamesCreateMotionsCmb, JButton pDancingFlamesClearMotionsBtn, JButton pDancingFlamesLoadProjectBtn, JButton pDancingFlamesSaveProjectBtn,
-      JButton pDancingFlamesMotionLinkToAllBtn, JButton pDancingFlamesUnlinkFromAllMotionsBtn, JTable pDancingFlamesMotionLinksTable) {
+      JTable pDancingFlamesMotionLinksTable) {
     tinaFrame = pTinaFrame;
     tinaFrameTitle = tinaFrame.getTitle();
     errorHandler = pErrorHandler;
@@ -535,7 +535,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
         pDancingFlamesMotionPropertyPnl, pDancingFlamesMotionTable, pDancingFlamesAddMotionCmb, pDancingFlamesAddMotionBtn,
         pDancingFlamesDeleteMotionBtn, pDancingFlamesLinkMotionBtn, pDancingFlamesUnlinkMotionBtn,
         pDancingFlamesCreateMotionsCmb, pDancingFlamesClearMotionsBtn, pDancingFlamesLoadProjectBtn, pDancingFlamesSaveProjectBtn,
-        pDancingFlamesMotionLinkToAllBtn, pDancingFlamesUnlinkFromAllMotionsBtn, pDancingFlamesMotionLinksTable);
+        pDancingFlamesMotionLinksTable);
 
     cameraRollREd = pCameraRollREd;
     cameraRollSlider = pCameraRollSlider;

@@ -25,7 +25,7 @@ public class SawToothMotion extends Motion {
   @Property(description = "Start value", category = PropertyCategory.GENERAL)
   private double minValue = 0.0;
   @Property(description = "End value", category = PropertyCategory.GENERAL)
-  private double maxValue = 0.0;
+  private double maxValue = 1.0;
   @Property(description = "Frequency in rpm (revolutions per minute)", category = PropertyCategory.GENERAL)
   private double frequency = 10.0;
 

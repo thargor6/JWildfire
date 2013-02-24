@@ -28,7 +28,6 @@ import org.jwildfire.create.tina.dance.model.AnimationModelService;
 import org.jwildfire.create.tina.dance.model.FlamePropertyPath;
 import org.jwildfire.create.tina.dance.model.PlainProperty;
 import org.jwildfire.create.tina.dance.model.PropertyModel;
-import org.jwildfire.create.tina.dance.motion.Motion;
 
 public class FlamePropertiesTreeService {
 
@@ -96,44 +95,6 @@ public class FlamePropertiesTreeService {
       }
     }
     return null;
-  }
-
-  @SuppressWarnings("unchecked")
-  public int linkMotionToFlame(Motion pMotion, FlamePropertiesTreeNode<Flame> pFlameNode, FlamePropertyPath pSelPath) {
-    //    int added = 0;
-    //    for (int i = 0; i < pFlameNode.getChildCount(); i++) {
-    //      FlamePropertiesTreeNode<AbstractProperty> node = (FlamePropertiesTreeNode<AbstractProperty>) pFlameNode.getChildAt(i);
-    //      List<FlamePropertiesTreeNode<AbstractProperty>> currPath = new ArrayList<FlamePropertiesTreeNode<AbstractProperty>>();
-    //      currPath.add(node);
-    //
-    //      FlamePropertiesTreeNode<AbstractProperty> child = node;
-    //      while (child.getChildCount() > 0) {
-    //        child = (FlamePropertiesTreeNode<AbstractProperty>) child.getChildAt(0);
-    //        currPath.add(child);
-    //      }
-    //
-    //      if (pSelPath.getPropertyPath().size() == currPath.size()) {
-    //        boolean equal = true;
-    //        for (int j = currPath.size() - 1; j >= 0; j--) {
-    //          if (!pSelPath.getPropertyPath().get(j).getName().equals(currPath.get(j).getNodeData().getName())) {
-    //            equal = false;
-    //            break;
-    //          }
-    //        }
-    //        if (equal) {
-    //          FlamePropertyPath newPath = new FlamePropertyPath(pFlameNode.getNodeData());
-    //          for (FlamePropertiesTreeNode<AbstractProperty> currNode : currPath) {
-    //            newPath.getPropertyPath().add(currNode.getNodeData());
-    //          }
-    //          if (!pMotion.hasLink(newPath)) {
-    //            pMotion.getMotionLinks().add(new MotionLink(newPath));
-    //            added++;
-    //          }
-    //        }
-    //      }
-    //    }
-    //    return added;
-    return 0;
   }
 
 }

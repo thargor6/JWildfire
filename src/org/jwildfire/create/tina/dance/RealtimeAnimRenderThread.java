@@ -70,16 +70,20 @@ public class RealtimeAnimRenderThread implements Runnable, FlameHolder {
         nextFrame = (long) (time + 1000.0 / (double) getFramesPerSecond() + 0.5);
         DancingFlame dancingFlame = flameStack.getFlame();
         currFlame = null;
+        short currFFT[];
         if (fftData != null) {
-          short currFFT[] = fftData.getData(musicPlayer.getPosition());
+          currFFT = fftData.getData(musicPlayer.getPosition());
           if (drawFFT && fftPanel != null) {
             SimpleImage img = fftPanel.getImage();
             drawFFT(img, currFFT);
             fftPanel.repaint();
           }
-          if (dancingFlame != null) {
-            currFlame = transformer.createTransformedFlame(dancingFlame, currFFT, time - timeRenderStarted);
-          }
+        }
+        else {
+          currFFT = null;
+        }
+        if (dancingFlame != null) {
+          currFlame = transformer.createTransformedFlame(dancingFlame, currFFT, time - timeRenderStarted);
         }
         fpsMeasureMentFrameCount++;
         long dt = (System.currentTimeMillis() - startFPSMeasurement);
