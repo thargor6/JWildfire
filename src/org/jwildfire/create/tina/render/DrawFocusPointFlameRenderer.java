@@ -35,6 +35,7 @@ public class DrawFocusPointFlameRenderer extends FlameRenderer {
       pPoint.x = px / zr;
       pPoint.y = py / zr;
     }
+    pProjectedPoint.intensity = 1.0;
     pProjectedPoint.x = pPoint.x * cosa + pPoint.y * sina + rcX;
     if ((pProjectedPoint.x < 0) || (pProjectedPoint.x > camW))
       return false;

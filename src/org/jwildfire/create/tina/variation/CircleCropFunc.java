@@ -48,7 +48,7 @@ public class CircleCropFunc extends VariationFunc {
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-    // circlecrop by Xirus02, http://xyrus02.deviantart.com/art/CircleCrop-Plugins-185353309
+    // circlecrop by Xyrus02, http://xyrus02.deviantart.com/art/CircleCrop-Plugins-185353309
     double x0 = x;
     double y0 = y;
     double cr = radius;
@@ -98,7 +98,7 @@ public class CircleCropFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { radius, y, x, scatter_area, zero };
+    return new Object[] { radius, x, y, scatter_area, zero };
   }
 
   @Override
@@ -106,9 +106,9 @@ public class CircleCropFunc extends VariationFunc {
     if (PARAM_RADIUS.equalsIgnoreCase(pName))
       radius = pValue;
     else if (PARAM_X.equalsIgnoreCase(pName))
-      y = pValue;
-    else if (PARAM_Y.equalsIgnoreCase(pName))
       x = pValue;
+    else if (PARAM_Y.equalsIgnoreCase(pName))
+      y = pValue;
     else if (PARAM_SCATTER_AREA.equalsIgnoreCase(pName))
       scatter_area = pValue;
     else if (PARAM_ZERO.equalsIgnoreCase(pName))
