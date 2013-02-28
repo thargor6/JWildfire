@@ -35,7 +35,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 import org.jwildfire.create.tina.base.raster.AbstractRasterPoint;
 import org.jwildfire.create.tina.palette.RenderColor;
 
-public final class FlameRenderFlatThread extends FlameRenderThread {
+public final class FlameRenderExperimental1Thread extends FlameRenderThread {
   private XYZPoint affineT;
   private XYZPoint varT;
   private XYZPoint p;
@@ -44,7 +44,7 @@ public final class FlameRenderFlatThread extends FlameRenderThread {
   private long startIter;
   private long iter;
 
-  public FlameRenderFlatThread(Prefs pPrefs, int pThreadId, FlameRenderer pRenderer, Flame pFlame, long pSamples) {
+  public FlameRenderExperimental1Thread(Prefs pPrefs, int pThreadId, FlameRenderer pRenderer, Flame pFlame, long pSamples) {
     super(pPrefs, pThreadId, pRenderer, pFlame, pSamples);
   }
 
@@ -92,7 +92,20 @@ public final class FlameRenderFlatThread extends FlameRenderThread {
         return;
       }
 
+      XYZPoint p0 = new XYZPoint();
+      p0.assign(p);
       xf.transformPoint(ctx, affineT, varT, p, p);
+
+      q.x = p.x - p0.x;
+      q.y = p.y - p0.y;
+      q.z = p.z - p0.z;
+      double r = 0.25 * Math.sqrt(q.x * q.x + q.y * q.y + q.z * q.z);
+      p.color = r;
+      if (p.color < 0.0)
+        p.color = 0.0;
+      else if (p.color >= 1)
+        p.color = 1;
+
       if (xf.getDrawMode() == DrawMode.HIDDEN)
         continue;
       else if ((xf.getDrawMode() == DrawMode.OPAQUE) && (randGen.random() > xf.getOpacity()))

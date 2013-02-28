@@ -1,3 +1,23 @@
+V0.65 (24.02.2013):
+ - new "dimishZ" property to create more realistic looking pseudo-3D-renders
+ - dropped the concept of the external renders! The only remaining benefit of the external renders was the lower memory consumption, but this problem was ales solved in this release!
+ - added an abstraction level to iteration rasters. There are currently two implementations available: single and double precision. Double precision was the previously used, but single precision need less memory and leeds to te same results in many cases, so its the new default. But you can change this in the preferences
+ - the thumbnails can now be loaded into the main area also by single right click with the mouse (as suggested by Don Town)
+ - new "gdoffs" variaton by Xyrus02 (as also suggested by Don :-))
+ - improved the quality of the realtime preview
+ - first complete working version of the dancing flames module!
+ - its now possible to have a "dancing fractal" without sound (i. e. static motion)
+ - improved the precision in calculating relative weights
+ - start and end time for motions of the dancing flames editor
+ - new "Sawtooth" motion for the dancing flames editor
+ - reduced the default gamma threshold from 0.04 to 0.01 (which should cause gently more brigh results)
+ - load/save projects in the dancing flame module
+ - random flame generator: create sorted gradients sorted by hue at a certain probability
+ - FIXED: vibrancy and contrast where not (re)stored using *flame-files correctly
+ - FIXED: the use of custom_wf variation did cause the editor to stop (because the example code could not be compiled anymore (which was an cause of all those changes to MathLib))
+ - FIXED: some params were not read correctly in the circlecrop family of variations
+ - FIXED: bug regarding blur shading (also already fixed in V0.64 revision 2)
+
 V0.64 (16.02.2013):
  - 37 phantastic new images for the launcher from the community
  - a whole family of random number generators is now available: SIMPLE, MARSAGLIA, MERSENNE_TWISTER, JAVA_INTERNAL (default is MERSENNE_TWISTER, you can change this in the Preferences)

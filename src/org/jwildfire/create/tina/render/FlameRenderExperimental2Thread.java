@@ -35,7 +35,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 import org.jwildfire.create.tina.base.raster.AbstractRasterPoint;
 import org.jwildfire.create.tina.palette.RenderColor;
 
-public final class FlameRenderFlatThread extends FlameRenderThread {
+public final class FlameRenderExperimental2Thread extends FlameRenderThread {
   private XYZPoint affineT;
   private XYZPoint varT;
   private XYZPoint p;
@@ -44,7 +44,7 @@ public final class FlameRenderFlatThread extends FlameRenderThread {
   private long startIter;
   private long iter;
 
-  public FlameRenderFlatThread(Prefs pPrefs, int pThreadId, FlameRenderer pRenderer, Flame pFlame, long pSamples) {
+  public FlameRenderExperimental2Thread(Prefs pPrefs, int pThreadId, FlameRenderer pRenderer, Flame pFlame, long pSamples) {
     super(pPrefs, pThreadId, pRenderer, pFlame, pSamples);
   }
 
@@ -91,7 +91,6 @@ public final class FlameRenderFlatThread extends FlameRenderThread {
       if (xf == null) {
         return;
       }
-
       xf.transformPoint(ctx, affineT, varT, p, p);
       if (xf.getDrawMode() == DrawMode.HIDDEN)
         continue;
@@ -152,11 +151,28 @@ public final class FlameRenderFlatThread extends FlameRenderThread {
         rp.setGreen(rp.getGreen() + color.green * prj.intensity);
         rp.setBlue(rp.getBlue() + color.blue * prj.intensity);
       }
+
+      changeWeights(xIdx, yIdx);
+
       rp.incCount();
       if (observers != null && observers.size() > 0) {
         for (IterationObserver observer : observers) {
           observer.notifyIterationFinished(this, xIdx, yIdx);
         }
+      }
+    }
+  }
+
+  public static long weightCounter = 1;
+
+  public void changeWeights(int xIdx, int yIdx) {
+    if ((weightCounter++) % 100 == 0) {
+      synchronized (flame) {
+        int dim = flame.getXForms().size();
+        int weightX = (int) (dim * xIdx / (double) renderer.rasterWidth);
+        int weightY = (int) (dim * yIdx / (double) renderer.rasterHeight);
+        flame.getXForms().get(weightX).getModifiedWeights()[weightY] *= 0.9;
+        flame.refreshModWeightTables(ctx);
       }
     }
   }

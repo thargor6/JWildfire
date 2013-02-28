@@ -384,6 +384,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
   private final JButton affineFlipHorizontalButton;
   private final JButton affineFlipVerticalButton;
   private final JButton addTransformationButton;
+  private final JButton addLinkedTransformationButton;
   private final JButton duplicateTransformationButton;
   private final JButton deleteTransformationButton;
   private final JButton addFinalTransformationButton;
@@ -479,7 +480,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       JWFNumberField pAffineC01REd, JWFNumberField pAffineC10REd, JWFNumberField pAffineC11REd, JWFNumberField pAffineC20REd, JWFNumberField pAffineC21REd,
       JTextField pAffineRotateAmountREd, JTextField pAffineScaleAmountREd, JTextField pAffineMoveAmountREd, JButton pAffineRotateLeftButton,
       JButton pAffineRotateRightButton, JButton pAffineEnlargeButton, JButton pAffineShrinkButton, JButton pAffineMoveUpButton, JButton pAffineMoveLeftButton,
-      JButton pAffineMoveRightButton, JButton pAffineMoveDownButton, JButton pAddTransformationButton, JButton pDuplicateTransformationButton,
+      JButton pAffineMoveRightButton, JButton pAffineMoveDownButton, JButton pAddTransformationButton, JButton pAddLinkedTransformationButton, JButton pDuplicateTransformationButton,
       JButton pDeleteTransformationButton, JButton pAddFinalTransformationButton, JPanel pRandomBatchPanel, NonlinearControlsRow[] pNonlinearControlsRows,
       JWFNumberField pXFormColorREd, JSlider pXFormColorSlider, JWFNumberField pXFormSymmetryREd, JSlider pXFormSymmetrySlider, JWFNumberField pXFormOpacityREd,
       JSlider pXFormOpacitySlider, JComboBox pXFormDrawModeCmb, JTable pRelWeightsTable, JButton pRelWeightsZeroButton, JButton pRelWeightsOneButton,
@@ -657,6 +658,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     affineFlipHorizontalButton = pAffineFlipHorizontalButton;
     affineFlipVerticalButton = pAffineFlipVerticalButton;
     addTransformationButton = pAddTransformationButton;
+    addLinkedTransformationButton = pAddLinkedTransformationButton;
     duplicateTransformationButton = pDuplicateTransformationButton;
     deleteTransformationButton = pDeleteTransformationButton;
     addFinalTransformationButton = pAddFinalTransformationButton;
@@ -2547,6 +2549,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     affineFlipVerticalButton.setEnabled(enabled);
 
     addTransformationButton.setEnabled(currFlame != null);
+    addLinkedTransformationButton.setEnabled(enabled && currFlame != null && currFlame.getXForms().indexOf(xForm) >= 0);
     duplicateTransformationButton.setEnabled(enabled);
     deleteTransformationButton.setEnabled(enabled);
     addFinalTransformationButton.setEnabled(currFlame != null);
@@ -2737,6 +2740,29 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
         pRow.getNonlinearParamsREd().setText(null);
       }
     }
+  }
+
+  public void addLinkedXForm() {
+    int row = transformationsTable.getSelectedRow();
+    if (row < 0 || row >= currFlame.getXForms().size()) {
+      return;
+    }
+    saveUndoPoint();
+    addXForm();
+    int fromId = row;
+    int toId = currFlame.getXForms().size() - 1;
+    for (int i = 0; i < currFlame.getXForms().size(); i++) {
+      XForm xForm = currFlame.getXForms().get(i);
+      if (i == fromId) {
+        for (int j = 0; j < currFlame.getXForms().size(); j++) {
+          xForm.getModifiedWeights()[j] = (j == toId) ? 1 : 0;
+        }
+      }
+      else {
+        xForm.getModifiedWeights()[toId] = 0;
+      }
+    }
+
   }
 
   public void addXForm() {

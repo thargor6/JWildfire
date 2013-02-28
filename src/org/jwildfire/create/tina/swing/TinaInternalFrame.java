@@ -2759,8 +2759,8 @@ public class TinaInternalFrame extends JInternalFrame {
     if (tinaAddTransformationButton == null) {
       tinaAddTransformationButton = new JButton();
       tinaAddTransformationButton.setText("Add");
-      tinaAddTransformationButton.setPreferredSize(new Dimension(81, 24));
-      tinaAddTransformationButton.setToolTipText("Add new triangle");
+      tinaAddTransformationButton.setPreferredSize(new Dimension(52, 24));
+      tinaAddTransformationButton.setToolTipText("Add new transform");
       tinaAddTransformationButton.setFont(new Font("Dialog", Font.BOLD, 10));
       tinaAddTransformationButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -2847,7 +2847,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaDeleteTransformationButton.setText("Delete");
       tinaDeleteTransformationButton.setFont(new Font("Dialog", Font.BOLD, 10));
       tinaDeleteTransformationButton.setToolTipText("Delete triangle");
-      tinaDeleteTransformationButton.setPreferredSize(new Dimension(81, 24));
+      tinaDeleteTransformationButton.setPreferredSize(new Dimension(86, 24));
       tinaDeleteTransformationButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
           tinaController.deleteXForm();
@@ -2866,7 +2866,7 @@ public class TinaInternalFrame extends JInternalFrame {
     if (tinaDuplicateTransformationButton == null) {
       tinaDuplicateTransformationButton = new JButton();
       tinaDuplicateTransformationButton.setText("Duplicate");
-      tinaDuplicateTransformationButton.setPreferredSize(new Dimension(81, 24));
+      tinaDuplicateTransformationButton.setPreferredSize(new Dimension(86, 24));
       tinaDuplicateTransformationButton.setToolTipText("Duplicate triangle");
       tinaDuplicateTransformationButton.setFont(new Font("Dialog", Font.BOLD, 10));
       tinaDuplicateTransformationButton.addActionListener(new java.awt.event.ActionListener() {
@@ -4009,6 +4009,7 @@ public class TinaInternalFrame extends JInternalFrame {
         getAffineC01REd(), getAffineC10REd(), getAffineC11REd(), getAffineC20REd(), getAffineC21REd(), getAffineRotateAmountREd(), getAffineScaleAmountREd(),
         getAffineMoveAmountREd(), getAffineRotateLeftButton(), getAffineRotateRightButton(), getAffineEnlargeButton(), getAffineShrinkButton(),
         getAffineMoveUpButton(), getAffineMoveLeftButton(), getAffineMoveRightButton(), getAffineMoveDownButton(), getTinaAddTransformationButton(),
+        getTinaAddLinkedTransformationButton(),
         getTinaDuplicateTransformationButton(), getTinaDeleteTransformationButton(), getTinaAddFinalTransformationButton(), getRandomBatchPanel(),
         nonlinearControlsRows, getXFormColorREd(), getXFormColorSlider(), getXFormSymmetryREd(), getXFormSymmetrySlider(), getXFormOpacityREd(),
         getXFormOpacitySlider(), getXFormDrawModeCmb(), getRelWeightsTable(), getRelWeightsZeroButton(), getRelWeightsOneButton(), getRelWeightREd(),
@@ -4059,6 +4060,8 @@ public class TinaInternalFrame extends JInternalFrame {
       getShadingCmb().addItem(Shading.FLAT);
       getShadingCmb().addItem(Shading.PSEUDO3D);
       getShadingCmb().addItem(Shading.BLUR);
+      getShadingCmb().addItem(Shading.EXPERIMENTAL1);
+      getShadingCmb().addItem(Shading.EXPERIMENTAL2);
 
       getShadingLightCmb().removeAllItems();
       getShadingLightCmb().addItem(String.valueOf("1"));
@@ -4181,7 +4184,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaAddFinalTransformationButton = new JButton();
       tinaAddFinalTransformationButton.setActionCommand("Add Final");
       tinaAddFinalTransformationButton.setFont(new Font("Dialog", Font.BOLD, 10));
-      tinaAddFinalTransformationButton.setPreferredSize(new Dimension(81, 24));
+      tinaAddFinalTransformationButton.setPreferredSize(new Dimension(86, 24));
       tinaAddFinalTransformationButton.setToolTipText("Add final transformation");
       tinaAddFinalTransformationButton.setText("Add Final");
       tinaAddFinalTransformationButton.addActionListener(new java.awt.event.ActionListener() {
@@ -4468,13 +4471,24 @@ public class TinaInternalFrame extends JInternalFrame {
   private JPanel getTrnsformationsEastPanel() {
     if (trnsformationsEastPanel == null) {
       FlowLayout flowLayout = new FlowLayout();
+      flowLayout.setVgap(3);
+      flowLayout.setHgap(3);
       flowLayout.setAlignment(FlowLayout.LEFT);
       trnsformationsEastPanel = new JPanel();
       trnsformationsEastPanel.setFont(new Font("Dialog", Font.PLAIN, 10));
       trnsformationsEastPanel.setLayout(flowLayout);
-      trnsformationsEastPanel.setPreferredSize(new Dimension(91, 0));
+      trnsformationsEastPanel.setPreferredSize(new Dimension(96, 0));
       trnsformationsEastPanel.add(getTransformationWeightREd());
-      trnsformationsEastPanel.add(getTinaAddTransformationButton(), null);
+
+      JPanel panel_1 = new JPanel();
+      FlowLayout flowLayout_1 = (FlowLayout) panel_1.getLayout();
+      flowLayout_1.setAlignment(FlowLayout.LEFT);
+      flowLayout_1.setVgap(0);
+      flowLayout_1.setHgap(0);
+      panel_1.setPreferredSize(new Dimension(86, 24));
+      trnsformationsEastPanel.add(panel_1);
+      panel_1.add(getTinaAddTransformationButton());
+      panel_1.add(getTinaAddLinkedTransformationButton());
       trnsformationsEastPanel.add(getTinaDuplicateTransformationButton(), null);
       trnsformationsEastPanel.add(getTinaDeleteTransformationButton(), null);
       trnsformationsEastPanel.add(getTinaAddFinalTransformationButton(), null);
@@ -8717,6 +8731,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JComboBox tinaFilterKernelCmb;
   private JWFNumberField camDimishZREd;
   private JSlider camDimishZSlider;
+  private JButton tinaAddLinkedTransformationButton;
 
   /**
    * This method initializes renderBatchJobsScrollPane	
@@ -10366,7 +10381,7 @@ public class TinaInternalFrame extends JInternalFrame {
       transformationWeightREd.setValueStep(0.05);
       transformationWeightREd.setText("");
       transformationWeightREd.setSize(new Dimension(81, 24));
-      transformationWeightREd.setPreferredSize(new Dimension(81, 24));
+      transformationWeightREd.setPreferredSize(new Dimension(86, 24));
       transformationWeightREd.setLocation(new Point(238, 6));
       transformationWeightREd.setFont(new Font("Dialog", Font.PLAIN, 10));
     }
@@ -12457,5 +12472,21 @@ public class TinaInternalFrame extends JInternalFrame {
 
   public JSlider getCamDimishZSlider() {
     return camDimishZSlider;
+  }
+
+  private JButton getTinaAddLinkedTransformationButton() {
+    if (tinaAddLinkedTransformationButton == null) {
+      tinaAddLinkedTransformationButton = new JButton();
+      tinaAddLinkedTransformationButton.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.addLinkedXForm();
+        }
+      });
+      tinaAddLinkedTransformationButton.setToolTipText("Add new linked transform");
+      tinaAddLinkedTransformationButton.setText("L");
+      tinaAddLinkedTransformationButton.setPreferredSize(new Dimension(34, 24));
+      tinaAddLinkedTransformationButton.setFont(new Font("Dialog", Font.BOLD, 10));
+    }
+    return tinaAddLinkedTransformationButton;
   }
 } //  @jve:decl-index=0:visual-constraint="10,10"

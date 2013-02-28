@@ -251,14 +251,12 @@ public class Flam3Reader implements FlameReader {
     }
     // Shading    
     if ((hs = atts.get(ATTR_SHADING_SHADING)) != null) {
-      if (hs.equalsIgnoreCase(Shading.PSEUDO3D.toString())) {
-        pFlame.getShadingInfo().setShading(Shading.PSEUDO3D);
+      try {
+        pFlame.getShadingInfo().setShading(Shading.valueOf(hs));
       }
-      else if (hs.equalsIgnoreCase(Shading.BLUR.toString())) {
-        pFlame.getShadingInfo().setShading(Shading.BLUR);
-      }
-      else if (hs.equalsIgnoreCase(Shading.FLAT.toString())) {
+      catch (Exception ex) {
         pFlame.getShadingInfo().setShading(Shading.FLAT);
+        ex.printStackTrace();
       }
     }
     if ((hs = atts.get(ATTR_SHADING_AMBIENT)) != null) {

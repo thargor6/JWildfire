@@ -221,6 +221,9 @@ public class FlameRenderer {
         pPoint.y = py / zr;
       }
     }
+    else {
+      pProjectedPoint.intensity = 1.0;
+    }
     pProjectedPoint.x = pPoint.x * cosa + pPoint.y * sina + rcX;
     if ((pProjectedPoint.x < 0) || (pProjectedPoint.x > camW))
       return false;
@@ -637,6 +640,10 @@ public class FlameRenderer {
         return new FlameRenderFlatThread(prefs, pThreadId, this, pFlame, pSamples);
       case BLUR:
         return new FlameRenderBlurThread(prefs, pThreadId, this, pFlame, pSamples);
+      case EXPERIMENTAL1:
+        return new FlameRenderExperimental1Thread(prefs, pThreadId, this, pFlame, pSamples);
+      case EXPERIMENTAL2:
+        return new FlameRenderExperimental2Thread(prefs, pThreadId, this, pFlame, pSamples);
       case PSEUDO3D:
         return new FlameRenderPseudo3DThread(prefs, pThreadId, this, pFlame, pSamples);
       default:
