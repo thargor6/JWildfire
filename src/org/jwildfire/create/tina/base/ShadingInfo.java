@@ -42,6 +42,13 @@ public class ShadingInfo implements Assignable<ShadingInfo>, Serializable {
   private int blurRadius;
   private double blurFade;
   private double blurFallOff;
+  // distanceColor
+  private double distanceColorRadius;
+  private double distanceColorScale;
+  private double distanceColorExponent;
+  private double distanceColorOffsetX;
+  private double distanceColorOffsetY;
+  private double distanceColorOffsetZ;
 
   protected void init() {
     shading = Shading.FLAT;
@@ -78,6 +85,13 @@ public class ShadingInfo implements Assignable<ShadingInfo>, Serializable {
     blurRadius = 2;
     blurFade = 0.95;
     blurFallOff = 2.0;
+    // distance
+    distanceColorRadius = 0.25;
+    distanceColorScale = 1.0;
+    distanceColorExponent = -0.40;
+    distanceColorOffsetX = 0.0;
+    distanceColorOffsetY = 0.0;
+    distanceColorOffsetZ = 0.0;
   }
 
   public Shading getShading() {
@@ -196,9 +210,17 @@ public class ShadingInfo implements Assignable<ShadingInfo>, Serializable {
       lightGreen[i] = pSrc.lightGreen[i];
       lightBlue[i] = pSrc.lightBlue[i];
     }
+
     blurRadius = pSrc.blurRadius;
     blurFade = pSrc.blurFade;
     blurFallOff = pSrc.blurFallOff;
+
+    distanceColorRadius = pSrc.distanceColorRadius;
+    distanceColorScale = pSrc.distanceColorScale;
+    distanceColorExponent = pSrc.distanceColorExponent;
+    distanceColorOffsetX = pSrc.distanceColorOffsetX;
+    distanceColorOffsetY = pSrc.distanceColorOffsetY;
+    distanceColorOffsetZ = pSrc.distanceColorOffsetZ;
   }
 
   public double[][] createBlurKernel() {
@@ -259,7 +281,10 @@ public class ShadingInfo implements Assignable<ShadingInfo>, Serializable {
         ((shading != null && pSrc.shading == null) || (shading == null && pSrc.shading != null) ||
         (shading != null && pSrc.shading != null && !shading.equals(pSrc.shading))) ||
         fabs(blurRadius - pSrc.blurRadius) > EPSILON || fabs(blurFade - pSrc.blurFade) > EPSILON ||
-        fabs(blurFallOff - pSrc.blurFallOff) > EPSILON) {
+        fabs(blurFallOff - pSrc.blurFallOff) > EPSILON ||
+        fabs(distanceColorRadius - pSrc.distanceColorRadius) > EPSILON || fabs(distanceColorScale - pSrc.distanceColorScale) > EPSILON ||
+        fabs(distanceColorExponent - pSrc.distanceColorExponent) > EPSILON || fabs(distanceColorOffsetX - pSrc.distanceColorOffsetX) > EPSILON ||
+        fabs(distanceColorOffsetY - pSrc.distanceColorOffsetY) > EPSILON || fabs(distanceColorOffsetZ - pSrc.distanceColorOffsetZ) > EPSILON) {
       return false;
     }
     for (int i = 0; i < lightPosX.length; i++) {
@@ -270,5 +295,53 @@ public class ShadingInfo implements Assignable<ShadingInfo>, Serializable {
       }
     }
     return true;
+  }
+
+  public double getDistanceColorRadius() {
+    return distanceColorRadius;
+  }
+
+  public void setDistanceColorRadius(double distanceColorRadius) {
+    this.distanceColorRadius = distanceColorRadius;
+  }
+
+  public double getDistanceColorScale() {
+    return distanceColorScale;
+  }
+
+  public void setDistanceColorScale(double distanceColorScale) {
+    this.distanceColorScale = distanceColorScale;
+  }
+
+  public double getDistanceColorExponent() {
+    return distanceColorExponent;
+  }
+
+  public void setDistanceColorExponent(double distanceColorExponent) {
+    this.distanceColorExponent = distanceColorExponent;
+  }
+
+  public double getDistanceColorOffsetX() {
+    return distanceColorOffsetX;
+  }
+
+  public void setDistanceColorOffsetX(double distanceColorOffsetX) {
+    this.distanceColorOffsetX = distanceColorOffsetX;
+  }
+
+  public double getDistanceColorOffsetY() {
+    return distanceColorOffsetY;
+  }
+
+  public void setDistanceColorOffsetY(double distanceColorOffsetY) {
+    this.distanceColorOffsetY = distanceColorOffsetY;
+  }
+
+  public double getDistanceColorOffsetZ() {
+    return distanceColorOffsetZ;
+  }
+
+  public void setDistanceColorOffsetZ(double distanceColorOffsetZ) {
+    this.distanceColorOffsetZ = distanceColorOffsetZ;
   }
 }

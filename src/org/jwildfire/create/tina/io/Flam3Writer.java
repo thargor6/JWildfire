@@ -178,6 +178,14 @@ public class Flam3Writer {
       attrList.add(xb.createAttr("shading_blurFade", shadingInfo.getBlurFade()));
       attrList.add(xb.createAttr("shading_blurFallOff", shadingInfo.getBlurFallOff()));
     }
+    else if (shadingInfo.getShading() == Shading.DISTANCE_COLOR) {
+      attrList.add(xb.createAttr(Flam3Reader.ATTR_SHADING_DISTANCE_COLOR_RADIUS, shadingInfo.getDistanceColorRadius()));
+      attrList.add(xb.createAttr(Flam3Reader.ATTR_SHADING_DISTANCE_COLOR_SCALE, shadingInfo.getDistanceColorScale()));
+      attrList.add(xb.createAttr(Flam3Reader.ATTR_SHADING_DISTANCE_COLOR_EXPONENT, shadingInfo.getDistanceColorExponent()));
+      attrList.add(xb.createAttr(Flam3Reader.ATTR_SHADING_DISTANCE_COLOR_OFFSETX, shadingInfo.getDistanceColorOffsetX()));
+      attrList.add(xb.createAttr(Flam3Reader.ATTR_SHADING_DISTANCE_COLOR_OFFSETY, shadingInfo.getDistanceColorOffsetY()));
+      attrList.add(xb.createAttr(Flam3Reader.ATTR_SHADING_DISTANCE_COLOR_OFFSETZ, shadingInfo.getDistanceColorOffsetZ()));
+    }
     xb.beginElement("flame", attrList);
     // XForm
     for (XForm xForm : pFlame.getXForms()) {

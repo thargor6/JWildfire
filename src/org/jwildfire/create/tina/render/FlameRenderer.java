@@ -640,10 +640,10 @@ public class FlameRenderer {
         return new FlameRenderFlatThread(prefs, pThreadId, this, pFlame, pSamples);
       case BLUR:
         return new FlameRenderBlurThread(prefs, pThreadId, this, pFlame, pSamples);
-      case EXPERIMENTAL1:
-        return new FlameRenderExperimental1Thread(prefs, pThreadId, this, pFlame, pSamples);
-      case EXPERIMENTAL2:
-        return new FlameRenderExperimental2Thread(prefs, pThreadId, this, pFlame, pSamples);
+      case DISTANCE_COLOR:
+        return new FlameRenderDistanceColorThread(prefs, pThreadId, this, pFlame, pSamples);
+      case EXPERIMENTAL:
+        return new FlameRenderExperimentalThread(prefs, pThreadId, this, pFlame, pSamples);
       case PSEUDO3D:
         return new FlameRenderPseudo3DThread(prefs, pThreadId, this, pFlame, pSamples);
       default:

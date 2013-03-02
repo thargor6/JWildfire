@@ -35,7 +35,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 import org.jwildfire.create.tina.base.raster.AbstractRasterPoint;
 import org.jwildfire.create.tina.palette.RenderColor;
 
-public final class FlameRenderExperimental2Thread extends FlameRenderThread {
+public final class FlameRenderExperimentalThread extends FlameRenderThread {
   private XYZPoint affineT;
   private XYZPoint varT;
   private XYZPoint p;
@@ -44,7 +44,7 @@ public final class FlameRenderExperimental2Thread extends FlameRenderThread {
   private long startIter;
   private long iter;
 
-  public FlameRenderExperimental2Thread(Prefs pPrefs, int pThreadId, FlameRenderer pRenderer, Flame pFlame, long pSamples) {
+  public FlameRenderExperimentalThread(Prefs pPrefs, int pThreadId, FlameRenderer pRenderer, Flame pFlame, long pSamples) {
     super(pPrefs, pThreadId, pRenderer, pFlame, pSamples);
   }
 
@@ -152,7 +152,7 @@ public final class FlameRenderExperimental2Thread extends FlameRenderThread {
         rp.setBlue(rp.getBlue() + color.blue * prj.intensity);
       }
 
-      changeWeights(xIdx, yIdx);
+      //      changeWeights(xIdx, yIdx);
 
       rp.incCount();
       if (observers != null && observers.size() > 0) {

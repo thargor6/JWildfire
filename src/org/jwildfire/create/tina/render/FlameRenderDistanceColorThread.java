@@ -21,6 +21,7 @@ import static org.jwildfire.base.mathlib.MathLib.M_PI;
 import static org.jwildfire.base.mathlib.MathLib.cos;
 import static org.jwildfire.base.mathlib.MathLib.exp;
 import static org.jwildfire.base.mathlib.MathLib.log;
+import static org.jwildfire.base.mathlib.MathLib.pow;
 import static org.jwildfire.base.mathlib.MathLib.sin;
 import static org.jwildfire.base.mathlib.MathLib.sqrt;
 
@@ -35,7 +36,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 import org.jwildfire.create.tina.base.raster.AbstractRasterPoint;
 import org.jwildfire.create.tina.palette.RenderColor;
 
-public final class FlameRenderExperimental1Thread extends FlameRenderThread {
+public final class FlameRenderDistanceColorThread extends FlameRenderThread {
   private XYZPoint affineT;
   private XYZPoint varT;
   private XYZPoint p;
@@ -44,8 +45,21 @@ public final class FlameRenderExperimental1Thread extends FlameRenderThread {
   private long startIter;
   private long iter;
 
-  public FlameRenderExperimental1Thread(Prefs pPrefs, int pThreadId, FlameRenderer pRenderer, Flame pFlame, long pSamples) {
+  private double radius;
+  private double scale;
+  private double exponent;
+  private double offsetX;
+  private double offsetY;
+  private double offsetZ;
+
+  public FlameRenderDistanceColorThread(Prefs pPrefs, int pThreadId, FlameRenderer pRenderer, Flame pFlame, long pSamples) {
     super(pPrefs, pThreadId, pRenderer, pFlame, pSamples);
+    radius = flame.getShadingInfo().getDistanceColorRadius();
+    scale = flame.getShadingInfo().getDistanceColorScale();
+    exponent = flame.getShadingInfo().getDistanceColorExponent();
+    offsetX = flame.getShadingInfo().getDistanceColorOffsetX();
+    offsetY = flame.getShadingInfo().getDistanceColorOffsetY();
+    offsetZ = flame.getShadingInfo().getDistanceColorOffsetZ();
   }
 
   @Override
@@ -96,10 +110,11 @@ public final class FlameRenderExperimental1Thread extends FlameRenderThread {
       p0.assign(p);
       xf.transformPoint(ctx, affineT, varT, p, p);
 
-      q.x = p.x - p0.x;
-      q.y = p.y - p0.y;
-      q.z = p.z - p0.z;
-      double r = 0.25 * Math.sqrt(q.x * q.x + q.y * q.y + q.z * q.z);
+      q.x = p.x - p0.x + offsetX;
+      q.y = p.y - p0.y + offsetY;
+      q.z = p.z - p0.z + offsetZ;
+
+      double r = radius * pow(scale * (q.x * q.x + q.y * q.y + q.z * q.z), exponent);
       p.color = r;
       if (p.color < 0.0)
         p.color = 0.0;

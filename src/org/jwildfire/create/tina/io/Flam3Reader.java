@@ -106,6 +106,12 @@ public class Flam3Reader implements FlameReader {
   private static final String ATTR_PRESERVE_Z = "preserve_z";
   private static final String ATTR_RESOLUTION_PROFILE = "resolution_profile";
   private static final String ATTR_QUALITY_PROFILE = "quality_profile";
+  public static final String ATTR_SHADING_DISTANCE_COLOR_RADIUS = "shading_distanceColorRadius";
+  public static final String ATTR_SHADING_DISTANCE_COLOR_SCALE = "shading_distanceColorScale";
+  public static final String ATTR_SHADING_DISTANCE_COLOR_EXPONENT = "shading_distanceColorExponent";
+  public static final String ATTR_SHADING_DISTANCE_COLOR_OFFSETX = "shading_distanceColorOffsetX";
+  public static final String ATTR_SHADING_DISTANCE_COLOR_OFFSETY = "shading_distanceColorOffsetY";
+  public static final String ATTR_SHADING_DISTANCE_COLOR_OFFSETZ = "shading_distanceColorOffsetZ";
 
   private void parseFlameAttributes(Flame pFlame, String pXML) {
     Map<String, String> atts = Tools.parseAttributes(pXML);
@@ -311,6 +317,24 @@ public class Flam3Reader implements FlameReader {
       pFlame.setPreserveZ(hs.length() > 0 && Integer.parseInt(hs) == 1);
     }
 
+    if ((hs = atts.get(ATTR_SHADING_DISTANCE_COLOR_RADIUS)) != null) {
+      pFlame.getShadingInfo().setDistanceColorRadius(Double.parseDouble(hs));
+    }
+    if ((hs = atts.get(ATTR_SHADING_DISTANCE_COLOR_SCALE)) != null) {
+      pFlame.getShadingInfo().setDistanceColorScale(Double.parseDouble(hs));
+    }
+    if ((hs = atts.get(ATTR_SHADING_DISTANCE_COLOR_EXPONENT)) != null) {
+      pFlame.getShadingInfo().setDistanceColorExponent(Double.parseDouble(hs));
+    }
+    if ((hs = atts.get(ATTR_SHADING_DISTANCE_COLOR_OFFSETX)) != null) {
+      pFlame.getShadingInfo().setDistanceColorOffsetX(Double.parseDouble(hs));
+    }
+    if ((hs = atts.get(ATTR_SHADING_DISTANCE_COLOR_OFFSETY)) != null) {
+      pFlame.getShadingInfo().setDistanceColorOffsetY(Double.parseDouble(hs));
+    }
+    if ((hs = atts.get(ATTR_SHADING_DISTANCE_COLOR_OFFSETZ)) != null) {
+      pFlame.getShadingInfo().setDistanceColorOffsetZ(Double.parseDouble(hs));
+    }
   }
 
   private static final String ATTR_WEIGHT = "weight";

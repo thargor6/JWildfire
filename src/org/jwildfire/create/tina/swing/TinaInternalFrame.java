@@ -81,12 +81,11 @@ import org.jwildfire.create.tina.base.Shading;
 import org.jwildfire.create.tina.dance.DancingFractalsController;
 import org.jwildfire.create.tina.randomflame.RandomFlameGeneratorList;
 import org.jwildfire.create.tina.render.filter.FilterKernelType;
-import org.jwildfire.create.tina.swing.TinaController.NonlinearControlsRow;
 import org.jwildfire.swing.StandardErrorHandler;
 
 public class TinaInternalFrame extends JInternalFrame {
   private TinaController tinaController; //  @jve:decl-index=0:
-  private NonlinearControlsRow[] nonlinearControlsRows;//  @jve:decl-index=0:
+  private TinaNonlinearControlsRow[] nonlinearControlsRows;//  @jve:decl-index=0:
   private static final long serialVersionUID = 1L;
   private JPanel jContentPane = null; //  @jve:decl-index=0:visual-constraint="10,10"
 
@@ -1527,6 +1526,341 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaSouthTabbedPane.addTab("Shading", null, getShadingPanel(), null);
       tinaSouthTabbedPane.addTab("Pseudo3D-Shading", null, getPseudo3DShadingPanel(), null);
       tinaSouthTabbedPane.addTab("Blur-Shading", null, getBlurShadingPanel(), null);
+
+      JPanel panel_1 = new JPanel();
+      tinaSouthTabbedPane.addTab("Distance-Color-Shading", null, panel_1, null);
+      panel_1.setLayout(null);
+
+      shadingDistanceColorRadiusSlider = new JSlider();
+      shadingDistanceColorRadiusSlider.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null) {
+            tinaController.shadingDistanceColorRadiusSlider_changed();
+          }
+        }
+      });
+      shadingDistanceColorRadiusSlider.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mousePressed(MouseEvent e) {
+          tinaController.saveUndoPoint();
+        }
+      });
+      shadingDistanceColorRadiusSlider.setValue(0);
+      shadingDistanceColorRadiusSlider.setSize(new Dimension(120, 19));
+      shadingDistanceColorRadiusSlider.setPreferredSize(new Dimension(120, 19));
+      shadingDistanceColorRadiusSlider.setMinimum(0);
+      shadingDistanceColorRadiusSlider.setMaximum(200);
+      shadingDistanceColorRadiusSlider.setLocation(new Point(202, 4));
+      shadingDistanceColorRadiusSlider.setBounds(204, 6, 120, 24);
+      panel_1.add(shadingDistanceColorRadiusSlider);
+
+      shadingDistanceColorRadiusREd = new JWFNumberField();
+      shadingDistanceColorRadiusREd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null) {
+            if (!shadingDistanceColorRadiusREd.isMouseAdjusting() || shadingDistanceColorRadiusREd.getMouseChangeCount() == 0) {
+              if (!shadingDistanceColorRadiusSlider.getValueIsAdjusting()) {
+                tinaController.saveUndoPoint();
+              }
+            }
+            tinaController.shadingDistanceColorRadiusREd_changed();
+          }
+        }
+      });
+      shadingDistanceColorRadiusREd.setValueStep(0.01);
+      shadingDistanceColorRadiusREd.setText("");
+      shadingDistanceColorRadiusREd.setSize(new Dimension(100, 24));
+      shadingDistanceColorRadiusREd.setPreferredSize(new Dimension(100, 24));
+      shadingDistanceColorRadiusREd.setMaxValue(1.0);
+      shadingDistanceColorRadiusREd.setLocation(new Point(100, 4));
+      shadingDistanceColorRadiusREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      shadingDistanceColorRadiusREd.setBounds(102, 6, 100, 24);
+      panel_1.add(shadingDistanceColorRadiusREd);
+
+      JLabel lblRadius = new JLabel();
+      lblRadius.setText("Radius");
+      lblRadius.setSize(new Dimension(94, 22));
+      lblRadius.setPreferredSize(new Dimension(94, 22));
+      lblRadius.setLocation(new Point(4, 4));
+      lblRadius.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblRadius.setBounds(6, 6, 94, 24);
+      panel_1.add(lblRadius);
+
+      shadingDistanceColorScaleREd = new JWFNumberField();
+      shadingDistanceColorScaleREd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null) {
+            if (!shadingDistanceColorScaleREd.isMouseAdjusting() || shadingDistanceColorScaleREd.getMouseChangeCount() == 0) {
+              if (!shadingDistanceColorScaleSlider.getValueIsAdjusting()) {
+                tinaController.saveUndoPoint();
+              }
+            }
+            tinaController.shadingDistanceColorScaleREd_changed();
+          }
+        }
+      });
+      shadingDistanceColorScaleREd.setValueStep(0.01);
+      shadingDistanceColorScaleREd.setText("");
+      shadingDistanceColorScaleREd.setSize(new Dimension(100, 24));
+      shadingDistanceColorScaleREd.setPreferredSize(new Dimension(100, 24));
+      shadingDistanceColorScaleREd.setMaxValue(1.0);
+      shadingDistanceColorScaleREd.setLocation(new Point(100, 4));
+      shadingDistanceColorScaleREd.setHasMinValue(true);
+      shadingDistanceColorScaleREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      shadingDistanceColorScaleREd.setBounds(102, 29, 100, 24);
+      panel_1.add(shadingDistanceColorScaleREd);
+
+      JLabel lblScale = new JLabel();
+      lblScale.setText("Scale");
+      lblScale.setSize(new Dimension(94, 22));
+      lblScale.setPreferredSize(new Dimension(94, 22));
+      lblScale.setLocation(new Point(4, 4));
+      lblScale.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblScale.setBounds(6, 29, 94, 24);
+      panel_1.add(lblScale);
+
+      shadingDistanceColorScaleSlider = new JSlider();
+      shadingDistanceColorScaleSlider.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null) {
+            tinaController.shadingDistanceColorScaleSlider_changed();
+          }
+        }
+      });
+      shadingDistanceColorScaleSlider.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mousePressed(MouseEvent e) {
+          tinaController.saveUndoPoint();
+        }
+      });
+      shadingDistanceColorScaleSlider.setValue(0);
+      shadingDistanceColorScaleSlider.setSize(new Dimension(120, 19));
+      shadingDistanceColorScaleSlider.setPreferredSize(new Dimension(120, 19));
+      shadingDistanceColorScaleSlider.setMinimum(0);
+      shadingDistanceColorScaleSlider.setMaximum(300);
+      shadingDistanceColorScaleSlider.setLocation(new Point(202, 4));
+      shadingDistanceColorScaleSlider.setBounds(204, 29, 120, 24);
+      panel_1.add(shadingDistanceColorScaleSlider);
+
+      shadingDistanceColorExponentREd = new JWFNumberField();
+      shadingDistanceColorExponentREd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null) {
+            if (!shadingDistanceColorExponentREd.isMouseAdjusting() || shadingDistanceColorExponentREd.getMouseChangeCount() == 0) {
+              if (!shadingDistanceColorExponentSlider.getValueIsAdjusting()) {
+                tinaController.saveUndoPoint();
+              }
+            }
+            tinaController.shadingDistanceColorExponentREd_changed();
+          }
+        }
+      });
+      shadingDistanceColorExponentREd.setValueStep(0.01);
+      shadingDistanceColorExponentREd.setText("");
+      shadingDistanceColorExponentREd.setSize(new Dimension(100, 24));
+      shadingDistanceColorExponentREd.setPreferredSize(new Dimension(100, 24));
+      shadingDistanceColorExponentREd.setMaxValue(1.0);
+      shadingDistanceColorExponentREd.setLocation(new Point(100, 4));
+      shadingDistanceColorExponentREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      shadingDistanceColorExponentREd.setBounds(102, 52, 100, 24);
+      panel_1.add(shadingDistanceColorExponentREd);
+
+      JLabel lblExponent_1 = new JLabel();
+      lblExponent_1.setText("Exponent");
+      lblExponent_1.setSize(new Dimension(94, 22));
+      lblExponent_1.setPreferredSize(new Dimension(94, 22));
+      lblExponent_1.setLocation(new Point(4, 4));
+      lblExponent_1.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblExponent_1.setBounds(6, 52, 94, 24);
+      panel_1.add(lblExponent_1);
+
+      shadingDistanceColorExponentSlider = new JSlider();
+      shadingDistanceColorExponentSlider.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null) {
+            tinaController.shadingDistanceColorExponentSlider_changed();
+          }
+        }
+      });
+      shadingDistanceColorExponentSlider.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mousePressed(MouseEvent e) {
+          tinaController.saveUndoPoint();
+        }
+      });
+      shadingDistanceColorExponentSlider.setValue(0);
+      shadingDistanceColorExponentSlider.setSize(new Dimension(120, 19));
+      shadingDistanceColorExponentSlider.setPreferredSize(new Dimension(120, 19));
+      shadingDistanceColorExponentSlider.setMinimum(-300);
+      shadingDistanceColorExponentSlider.setMaximum(300);
+      shadingDistanceColorExponentSlider.setLocation(new Point(202, 4));
+      shadingDistanceColorExponentSlider.setBounds(204, 52, 120, 24);
+      panel_1.add(shadingDistanceColorExponentSlider);
+
+      shadingDistanceColorOffsetXREd = new JWFNumberField();
+      shadingDistanceColorOffsetXREd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null) {
+            if (!shadingDistanceColorOffsetXREd.isMouseAdjusting() || shadingDistanceColorOffsetXREd.getMouseChangeCount() == 0) {
+              if (!shadingDistanceColorOffsetXSlider.getValueIsAdjusting()) {
+                tinaController.saveUndoPoint();
+              }
+            }
+            tinaController.shadingDistanceColorOffsetXREd_changed();
+          }
+        }
+      });
+      shadingDistanceColorOffsetXREd.setValueStep(0.01);
+      shadingDistanceColorOffsetXREd.setText("");
+      shadingDistanceColorOffsetXREd.setSize(new Dimension(100, 24));
+      shadingDistanceColorOffsetXREd.setPreferredSize(new Dimension(100, 24));
+      shadingDistanceColorOffsetXREd.setMaxValue(1.0);
+      shadingDistanceColorOffsetXREd.setLocation(new Point(100, 4));
+      shadingDistanceColorOffsetXREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      shadingDistanceColorOffsetXREd.setBounds(432, 6, 100, 24);
+      panel_1.add(shadingDistanceColorOffsetXREd);
+
+      JLabel lblOffsetx = new JLabel();
+      lblOffsetx.setText("OffsetX");
+      lblOffsetx.setSize(new Dimension(94, 22));
+      lblOffsetx.setPreferredSize(new Dimension(94, 22));
+      lblOffsetx.setLocation(new Point(4, 4));
+      lblOffsetx.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblOffsetx.setBounds(336, 6, 94, 24);
+      panel_1.add(lblOffsetx);
+
+      shadingDistanceColorOffsetXSlider = new JSlider();
+      shadingDistanceColorOffsetXSlider.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null) {
+            tinaController.shadingDistanceColorOffsetXSlider_changed();
+          }
+        }
+      });
+      shadingDistanceColorOffsetXSlider.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mousePressed(MouseEvent e) {
+          tinaController.saveUndoPoint();
+        }
+      });
+      shadingDistanceColorOffsetXSlider.setValue(0);
+      shadingDistanceColorOffsetXSlider.setSize(new Dimension(120, 19));
+      shadingDistanceColorOffsetXSlider.setPreferredSize(new Dimension(120, 19));
+      shadingDistanceColorOffsetXSlider.setMinimum(-100);
+      shadingDistanceColorOffsetXSlider.setMaximum(100);
+      shadingDistanceColorOffsetXSlider.setLocation(new Point(202, 4));
+      shadingDistanceColorOffsetXSlider.setBounds(534, 6, 120, 24);
+      panel_1.add(shadingDistanceColorOffsetXSlider);
+
+      shadingDistanceColorOffsetYREd = new JWFNumberField();
+      shadingDistanceColorOffsetYREd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null) {
+            if (!shadingDistanceColorOffsetYREd.isMouseAdjusting() || shadingDistanceColorOffsetYREd.getMouseChangeCount() == 0) {
+              if (!shadingDistanceColorOffsetYSlider.getValueIsAdjusting()) {
+                tinaController.saveUndoPoint();
+              }
+            }
+            tinaController.shadingDistanceColorOffsetYREd_changed();
+          }
+        }
+      });
+      shadingDistanceColorOffsetYREd.setValueStep(0.01);
+      shadingDistanceColorOffsetYREd.setText("");
+      shadingDistanceColorOffsetYREd.setSize(new Dimension(100, 24));
+      shadingDistanceColorOffsetYREd.setPreferredSize(new Dimension(100, 24));
+      shadingDistanceColorOffsetYREd.setMaxValue(1.0);
+      shadingDistanceColorOffsetYREd.setLocation(new Point(100, 4));
+      shadingDistanceColorOffsetYREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      shadingDistanceColorOffsetYREd.setBounds(432, 29, 100, 24);
+      panel_1.add(shadingDistanceColorOffsetYREd);
+
+      JLabel lblOffsety = new JLabel();
+      lblOffsety.setText("OffsetY");
+      lblOffsety.setSize(new Dimension(94, 22));
+      lblOffsety.setPreferredSize(new Dimension(94, 22));
+      lblOffsety.setLocation(new Point(4, 4));
+      lblOffsety.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblOffsety.setBounds(336, 29, 94, 24);
+      panel_1.add(lblOffsety);
+
+      shadingDistanceColorOffsetYSlider = new JSlider();
+      shadingDistanceColorOffsetYSlider.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null) {
+            tinaController.shadingDistanceColorOffsetYSlider_changed();
+          }
+        }
+      });
+      shadingDistanceColorOffsetYSlider.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mousePressed(MouseEvent e) {
+          tinaController.saveUndoPoint();
+        }
+      });
+      shadingDistanceColorOffsetYSlider.setValue(0);
+      shadingDistanceColorOffsetYSlider.setSize(new Dimension(120, 19));
+      shadingDistanceColorOffsetYSlider.setPreferredSize(new Dimension(120, 19));
+      shadingDistanceColorOffsetYSlider.setMinimum(-100);
+      shadingDistanceColorOffsetYSlider.setMaximum(100);
+      shadingDistanceColorOffsetYSlider.setLocation(new Point(202, 4));
+      shadingDistanceColorOffsetYSlider.setBounds(534, 29, 120, 24);
+      panel_1.add(shadingDistanceColorOffsetYSlider);
+
+      shadingDistanceColorOffsetZREd = new JWFNumberField();
+      shadingDistanceColorOffsetZREd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null) {
+            if (!shadingDistanceColorOffsetZREd.isMouseAdjusting() || shadingDistanceColorOffsetZREd.getMouseChangeCount() == 0) {
+              if (!shadingDistanceColorOffsetZSlider.getValueIsAdjusting()) {
+                tinaController.saveUndoPoint();
+              }
+            }
+            tinaController.shadingDistanceColorOffsetZREd_changed();
+          }
+        }
+      });
+      shadingDistanceColorOffsetZREd.setValueStep(0.01);
+      shadingDistanceColorOffsetZREd.setText("");
+      shadingDistanceColorOffsetZREd.setSize(new Dimension(100, 24));
+      shadingDistanceColorOffsetZREd.setPreferredSize(new Dimension(100, 24));
+      shadingDistanceColorOffsetZREd.setMaxValue(1.0);
+      shadingDistanceColorOffsetZREd.setLocation(new Point(100, 4));
+      shadingDistanceColorOffsetZREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      shadingDistanceColorOffsetZREd.setBounds(432, 52, 100, 24);
+      panel_1.add(shadingDistanceColorOffsetZREd);
+
+      JLabel lblOffsetz = new JLabel();
+      lblOffsetz.setText("OffsetZ");
+      lblOffsetz.setSize(new Dimension(94, 22));
+      lblOffsetz.setPreferredSize(new Dimension(94, 22));
+      lblOffsetz.setLocation(new Point(4, 4));
+      lblOffsetz.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblOffsetz.setBounds(336, 52, 94, 24);
+      panel_1.add(lblOffsetz);
+
+      shadingDistanceColorOffsetZSlider = new JSlider();
+      shadingDistanceColorOffsetZSlider.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null) {
+            tinaController.shadingDistanceColorOffsetZSlider_changed();
+          }
+        }
+      });
+      shadingDistanceColorOffsetZSlider.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mousePressed(MouseEvent e) {
+          tinaController.saveUndoPoint();
+        }
+      });
+      shadingDistanceColorOffsetZSlider.setValue(0);
+      shadingDistanceColorOffsetZSlider.setSize(new Dimension(120, 19));
+      shadingDistanceColorOffsetZSlider.setPreferredSize(new Dimension(120, 19));
+      shadingDistanceColorOffsetZSlider.setMinimum(-100);
+      shadingDistanceColorOffsetZSlider.setMaximum(100);
+      shadingDistanceColorOffsetZSlider.setLocation(new Point(202, 4));
+      shadingDistanceColorOffsetZSlider.setBounds(534, 52, 120, 24);
+      panel_1.add(shadingDistanceColorOffsetZSlider);
     }
     return tinaSouthTabbedPane;
   }
@@ -3957,36 +4291,38 @@ public class TinaInternalFrame extends JInternalFrame {
   }
 
   public TinaController createController(StandardErrorHandler pErrorHandler, Prefs pPrefs) {
-    nonlinearControlsRows = new NonlinearControlsRow[12];
-    nonlinearControlsRows[0] = new NonlinearControlsRow(getNonlinearVar1Cmb(), getNonlinearParams1Cmb(), getNonlinearVar1REd(),
+    nonlinearControlsRows = new TinaNonlinearControlsRow[12];
+    nonlinearControlsRows[0] = new TinaNonlinearControlsRow(getNonlinearVar1Cmb(), getNonlinearParams1Cmb(), getNonlinearVar1REd(),
         getNonlinearParams1REd(), getNonlinearParams1LeftButton());
-    nonlinearControlsRows[1] = new NonlinearControlsRow(getNonlinearVar2Cmb(), getNonlinearParams2Cmb(), getNonlinearVar2REd(),
+    nonlinearControlsRows[1] = new TinaNonlinearControlsRow(getNonlinearVar2Cmb(), getNonlinearParams2Cmb(), getNonlinearVar2REd(),
         getNonlinearParams2REd(), getNonlinearParams2LeftButton());
-    nonlinearControlsRows[2] = new NonlinearControlsRow(getNonlinearVar3Cmb(), getNonlinearParams3Cmb(), getNonlinearVar3REd(),
+    nonlinearControlsRows[2] = new TinaNonlinearControlsRow(getNonlinearVar3Cmb(), getNonlinearParams3Cmb(), getNonlinearVar3REd(),
         getNonlinearParams3REd(), getNonlinearParams3LeftButton());
-    nonlinearControlsRows[3] = new NonlinearControlsRow(getNonlinearVar4Cmb(), getNonlinearParams4Cmb(), getNonlinearVar4REd(),
+    nonlinearControlsRows[3] = new TinaNonlinearControlsRow(getNonlinearVar4Cmb(), getNonlinearParams4Cmb(), getNonlinearVar4REd(),
         getNonlinearParams4REd(), getNonlinearParams4LeftButton());
-    nonlinearControlsRows[4] = new NonlinearControlsRow(getNonlinearVar5Cmb(), getNonlinearParams5Cmb(), getNonlinearVar5REd(),
+    nonlinearControlsRows[4] = new TinaNonlinearControlsRow(getNonlinearVar5Cmb(), getNonlinearParams5Cmb(), getNonlinearVar5REd(),
         getNonlinearParams5REd(), getNonlinearParams5LeftButton());
-    nonlinearControlsRows[5] = new NonlinearControlsRow(getNonlinearVar6Cmb(), getNonlinearParams6Cmb(), getNonlinearVar6REd(),
+    nonlinearControlsRows[5] = new TinaNonlinearControlsRow(getNonlinearVar6Cmb(), getNonlinearParams6Cmb(), getNonlinearVar6REd(),
         getNonlinearParams6REd(), getNonlinearParams6LeftButton());
-    nonlinearControlsRows[6] = new NonlinearControlsRow(getNonlinearVar7Cmb(), getNonlinearParams7Cmb(), getNonlinearVar7REd(),
+    nonlinearControlsRows[6] = new TinaNonlinearControlsRow(getNonlinearVar7Cmb(), getNonlinearParams7Cmb(), getNonlinearVar7REd(),
         getNonlinearParams7REd(), getNonlinearParams7LeftButton());
-    nonlinearControlsRows[7] = new NonlinearControlsRow(getNonlinearVar8Cmb(), getNonlinearParams8Cmb(), getNonlinearVar8REd(),
+    nonlinearControlsRows[7] = new TinaNonlinearControlsRow(getNonlinearVar8Cmb(), getNonlinearParams8Cmb(), getNonlinearVar8REd(),
         getNonlinearParams8REd(), getNonlinearParams8LeftButton());
-    nonlinearControlsRows[8] = new NonlinearControlsRow(getNonlinearVar9Cmb(), getNonlinearParams9Cmb(), getNonlinearVar9REd(),
+    nonlinearControlsRows[8] = new TinaNonlinearControlsRow(getNonlinearVar9Cmb(), getNonlinearParams9Cmb(), getNonlinearVar9REd(),
         getNonlinearParams9REd(), getNonlinearParams9LeftButton());
-    nonlinearControlsRows[9] = new NonlinearControlsRow(getNonlinearVar10Cmb(), getNonlinearParams10Cmb(), getNonlinearVar10REd(),
+    nonlinearControlsRows[9] = new TinaNonlinearControlsRow(getNonlinearVar10Cmb(), getNonlinearParams10Cmb(), getNonlinearVar10REd(),
         getNonlinearParams10REd(), getNonlinearParams10LeftButton());
-    nonlinearControlsRows[10] = new NonlinearControlsRow(getNonlinearVar11Cmb(), getNonlinearParams11Cmb(), getNonlinearVar11REd(),
+    nonlinearControlsRows[10] = new TinaNonlinearControlsRow(getNonlinearVar11Cmb(), getNonlinearParams11Cmb(), getNonlinearVar11REd(),
         getNonlinearParams11REd(), getNonlinearParams11LeftButton());
-    nonlinearControlsRows[11] = new NonlinearControlsRow(getNonlinearVar12Cmb(), getNonlinearParams12Cmb(), getNonlinearVar12REd(),
+    nonlinearControlsRows[11] = new TinaNonlinearControlsRow(getNonlinearVar12Cmb(), getNonlinearParams12Cmb(), getNonlinearVar12REd(),
         getNonlinearParams12REd(), getNonlinearParams12LeftButton());
 
     initFilterKernelCmb(getTinaFilterKernelCmb());
     initFilterKernelCmb(getTinaDEFilterKernelCmb());
 
-    tinaController = new TinaController(this, pErrorHandler, pPrefs, getCenterCenterPanel(), getTinaCameraRollREd(), getTinaCameraRollSlider(), getTinaCameraPitchREd(),
+    TinaControllerParameter params = new TinaControllerParameter();
+
+    params.setParams1(this, pErrorHandler, pPrefs, getCenterCenterPanel(), getTinaCameraRollREd(), getTinaCameraRollSlider(), getTinaCameraPitchREd(),
         getTinaCameraPitchSlider(), getTinaCameraYawREd(), getTinaCameraYawSlider(), getTinaCameraPerspectiveREd(), getTinaCameraPerspectiveSlider(),
         getTinaCameraCentreXREd(), getTinaCameraCentreXSlider(), getTinaCameraCentreYREd(),
         getTinaCameraCentreYSlider(), getTinaCameraZoomREd(), getTinaCameraZoomSlider(), getDofNewDOFCBx(),
@@ -4022,7 +4358,11 @@ public class TinaInternalFrame extends JInternalFrame {
         getShadingPhongREd(), getShadingPhongSlider(), getShadingPhongSizeREd(), getShadingPhongSizeSlider(), getShadingLightCmb(),
         getShadingLightXREd(), getShadingLightXSlider(), getShadingLightYREd(), getShadingLightYSlider(), getShadingLightZREd(),
         getShadingLightZSlider(), getShadingLightRedREd(), getShadingLightRedSlider(), getShadingLightGreenREd(), getShadingLightGreenSlider(),
-        getShadingLightBlueREd(), getShadingLightBlueSlider(), getMouseTransformSlowButton(), getRenderBatchJobsTable(), getBatchPreviewRootPanel(),
+        getShadingLightBlueREd(), getShadingLightBlueSlider(),
+        getShadingDistanceColorRadiusREd(), getShadingDistanceColorRadiusSlider(), getShadingDistanceColorScaleREd(), getShadingDistanceColorScaleSlider(),
+        getShadingDistanceColorExponentREd(), getShadingDistanceColorExponentSlider(), getShadingDistanceColorOffsetXREd(), getShadingDistanceColorOffsetXSlider(),
+        getShadingDistanceColorOffsetYREd(), getShadingDistanceColorOffsetYSlider(), getShadingDistanceColorOffsetZREd(), getShadingDistanceColorOffsetZSlider(),
+        getMouseTransformSlowButton(), getRenderBatchJobsTable(), getBatchPreviewRootPanel(),
         getBatchRenderJobProgressBar(), getBatchRenderTotalProgressBar(), new JobProgressUpdater(this),
         getBatchRenderAddFilesButton(), getBatchRenderFilesMoveDownButton(), getBatchRenderFilesMoveUpButton(),
         getBatchRenderFilesRemoveButton(), getBatchRenderFilesRemoveAllButton(), getBatchRenderStartButton(),
@@ -4042,13 +4382,17 @@ public class TinaInternalFrame extends JInternalFrame {
         getDancingFlamesFlameCmb(), getDancingFlamesDrawTrianglesCBx(),
         getDancingFlamesDrawFFTCBx(), getDancingFlamesDrawFPSCBx(), getDancingFlamesFlamePropertiesTree(),
         getDancingFlamesMotionPropertyPnl(), getDancingFlamesMotionTable(), getDancingFlamesAddMotionCmb(), getDancingFlamesAddMotionBtn(),
-        getDancingFlamesDeleteMotionBtn(), getDancingFlamesLinkMotionBtn(), getDancingFlamesUnlinkMotionBtn(),
+        getDancingFlamesDeleteMotionBtn());
+
+    params.setParams2(getDancingFlamesLinkMotionBtn(), getDancingFlamesUnlinkMotionBtn(),
         getDancingFlamesCreateMotionsCmb(), getDancingFlamesClearMotionsBtn(), getDancingFlamesLoadProjectBtn(), getDancingFlamesSaveProjectBtn(),
         getDancingFlamesMotionLinksTable());
 
+    tinaController = new TinaController(params);
+
     tinaController.refreshing = tinaController.cmbRefreshing = tinaController.gridRefreshing = true;
     try {
-      for (NonlinearControlsRow row : nonlinearControlsRows) {
+      for (TinaNonlinearControlsRow row : nonlinearControlsRows) {
         row.initControls();
       }
       getXFormDrawModeCmb().removeAllItems();
@@ -4060,8 +4404,8 @@ public class TinaInternalFrame extends JInternalFrame {
       getShadingCmb().addItem(Shading.FLAT);
       getShadingCmb().addItem(Shading.PSEUDO3D);
       getShadingCmb().addItem(Shading.BLUR);
-      getShadingCmb().addItem(Shading.EXPERIMENTAL1);
-      getShadingCmb().addItem(Shading.EXPERIMENTAL2);
+      getShadingCmb().addItem(Shading.DISTANCE_COLOR);
+      getShadingCmb().addItem(Shading.EXPERIMENTAL);
 
       getShadingLightCmb().removeAllItems();
       getShadingLightCmb().addItem(String.valueOf("1"));
@@ -8732,6 +9076,18 @@ public class TinaInternalFrame extends JInternalFrame {
   private JWFNumberField camDimishZREd;
   private JSlider camDimishZSlider;
   private JButton tinaAddLinkedTransformationButton;
+  private JWFNumberField shadingDistanceColorRadiusREd;
+  private JSlider shadingDistanceColorRadiusSlider;
+  private JWFNumberField shadingDistanceColorScaleREd;
+  private JSlider shadingDistanceColorScaleSlider;
+  private JWFNumberField shadingDistanceColorExponentREd;
+  private JSlider shadingDistanceColorExponentSlider;
+  private JWFNumberField shadingDistanceColorOffsetXREd;
+  private JWFNumberField shadingDistanceColorOffsetYREd;
+  private JWFNumberField shadingDistanceColorOffsetZREd;
+  private JSlider shadingDistanceColorOffsetXSlider;
+  private JSlider shadingDistanceColorOffsetYSlider;
+  private JSlider shadingDistanceColorOffsetZSlider;
 
   /**
    * This method initializes renderBatchJobsScrollPane	
@@ -12488,5 +12844,53 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaAddLinkedTransformationButton.setFont(new Font("Dialog", Font.BOLD, 10));
     }
     return tinaAddLinkedTransformationButton;
+  }
+
+  public JWFNumberField getShadingDistanceColorRadiusREd() {
+    return shadingDistanceColorRadiusREd;
+  }
+
+  public JSlider getShadingDistanceColorRadiusSlider() {
+    return shadingDistanceColorRadiusSlider;
+  }
+
+  public JWFNumberField getShadingDistanceColorScaleREd() {
+    return shadingDistanceColorScaleREd;
+  }
+
+  public JSlider getShadingDistanceColorScaleSlider() {
+    return shadingDistanceColorScaleSlider;
+  }
+
+  public JWFNumberField getShadingDistanceColorExponentREd() {
+    return shadingDistanceColorExponentREd;
+  }
+
+  public JSlider getShadingDistanceColorExponentSlider() {
+    return shadingDistanceColorExponentSlider;
+  }
+
+  public JWFNumberField getShadingDistanceColorOffsetXREd() {
+    return shadingDistanceColorOffsetXREd;
+  }
+
+  public JWFNumberField getShadingDistanceColorOffsetYREd() {
+    return shadingDistanceColorOffsetYREd;
+  }
+
+  public JWFNumberField getShadingDistanceColorOffsetZREd() {
+    return shadingDistanceColorOffsetZREd;
+  }
+
+  public JSlider getShadingDistanceColorOffsetXSlider() {
+    return shadingDistanceColorOffsetXSlider;
+  }
+
+  public JSlider getShadingDistanceColorOffsetYSlider() {
+    return shadingDistanceColorOffsetYSlider;
+  }
+
+  public JSlider getShadingDistanceColorOffsetZSlider() {
+    return shadingDistanceColorOffsetZSlider;
   }
 } //  @jve:decl-index=0:visual-constraint="10,10"
