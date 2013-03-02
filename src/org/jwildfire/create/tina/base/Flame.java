@@ -101,6 +101,7 @@ public class Flame implements Assignable<Flame>, Serializable {
   private final List<XForm> xForms = new ArrayList<XForm>();
   @AnimAware
   private final List<XForm> finalXForms = new ArrayList<XForm>();
+  @AnimAware
   private ShadingInfo shadingInfo = new ShadingInfo();
   private String lastFilename = null;
 

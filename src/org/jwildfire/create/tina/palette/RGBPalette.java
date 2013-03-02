@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.jwildfire.base.Tools;
+import org.jwildfire.create.tina.animate.AnimAware;
 import org.jwildfire.create.tina.edit.Assignable;
 import org.jwildfire.image.Pixel;
 import org.jwildfire.image.SimpleImage;
@@ -38,17 +39,29 @@ public class RGBPalette implements Assignable<RGBPalette>, Serializable {
   static final RGBColor BLACK = new RGBColor(0, 0, 0);
   private int highestIdx = -1;
   private boolean modified = true;
+  @AnimAware
   private int modRed;
+  @AnimAware
   private int modGreen;
+  @AnimAware
   private int modBlue;
+  @AnimAware
   private int modShift;
+  @AnimAware
   private int modHue;
+  @AnimAware
   private int modContrast;
+  @AnimAware
   private int modGamma;
+  @AnimAware
   private int modBrightness;
+  @AnimAware
   private int modSaturation;
+  @AnimAware
   private int modSwapRGB;
+  @AnimAware
   private int modFrequency = 1;
+  @AnimAware
   private int modBlur;
   private String flam3Number; // imported from flam3, just for display
   private String flam3Name; // imported from flam3, just for display

@@ -21,6 +21,7 @@ import static org.jwildfire.base.mathlib.MathLib.fabs;
 
 import java.io.Serializable;
 
+import org.jwildfire.create.tina.animate.AnimAware;
 import org.jwildfire.create.tina.edit.Assignable;
 
 public class ShadingInfo implements Assignable<ShadingInfo>, Serializable {
@@ -28,9 +29,13 @@ public class ShadingInfo implements Assignable<ShadingInfo>, Serializable {
   // pseudo3D
   private static final int MAXLIGHTS = 4;
   private Shading shading;
+  @AnimAware
   private double ambient;
+  @AnimAware
   private double diffuse;
+  @AnimAware
   private double phong;
+  @AnimAware
   private double phongSize;
   protected double lightPosX[] = new double[MAXLIGHTS];
   protected double lightPosY[] = new double[MAXLIGHTS];
@@ -39,15 +44,24 @@ public class ShadingInfo implements Assignable<ShadingInfo>, Serializable {
   protected int lightGreen[] = new int[MAXLIGHTS];
   protected int lightBlue[] = new int[MAXLIGHTS];
   // blur
+  @AnimAware
   private int blurRadius;
+  @AnimAware
   private double blurFade;
+  @AnimAware
   private double blurFallOff;
   // distanceColor
+  @AnimAware
   private double distanceColorRadius;
+  @AnimAware
   private double distanceColorScale;
+  @AnimAware
   private double distanceColorExponent;
+  @AnimAware
   private double distanceColorOffsetX;
+  @AnimAware
   private double distanceColorOffsetY;
+  @AnimAware
   private double distanceColorOffsetZ;
 
   protected void init() {

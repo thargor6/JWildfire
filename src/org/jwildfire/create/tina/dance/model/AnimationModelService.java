@@ -24,7 +24,9 @@ import java.util.List;
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.animate.AnimAware;
 import org.jwildfire.create.tina.base.Flame;
+import org.jwildfire.create.tina.base.ShadingInfo;
 import org.jwildfire.create.tina.base.XForm;
+import org.jwildfire.create.tina.palette.RGBPalette;
 import org.jwildfire.create.tina.transform.XFormTransformService;
 import org.jwildfire.create.tina.variation.Variation;
 import org.jwildfire.create.tina.variation.VariationFunc;
@@ -87,6 +89,24 @@ public class AnimationModelService {
             state.updateState(pVisitor.accept(pFlame, field, property));
           }
         }
+        else if (fCls == RGBPalette.class) {
+          try {
+            RGBPalette palette = (RGBPalette) field.get(pFlame);
+            addGradientToModel(res, palette, pVisitor, state);
+          }
+          catch (Exception e) {
+            e.printStackTrace();
+          }
+        }
+        else if (fCls == ShadingInfo.class) {
+          try {
+            ShadingInfo shadingInfo = (ShadingInfo) field.get(pFlame);
+            addShadingInfoToModel(res, shadingInfo, pVisitor, state);
+          }
+          catch (Exception e) {
+            e.printStackTrace();
+          }
+        }
         else if (fCls == List.class) {
           ParameterizedType listType = (ParameterizedType) field.getGenericType();
           Class<?> listSubClass = (Class<?>) listType.getActualTypeArguments()[0];
@@ -111,8 +131,56 @@ public class AnimationModelService {
     }
   }
 
+  private static void addShadingInfoToModel(PropertyModel pNode, ShadingInfo pShadingInfo, PropertyVisitor pVisitor, VisitState pState) {
+    Class<?> cls = pShadingInfo.getClass();
+    String fieldname = PROPNAME_SHADING;
+    PropertyModel shadingNode = new PropertyModel(pNode, fieldname, cls);
+    pNode.getChields().add(shadingNode);
+    for (Field field : cls.getDeclaredFields()) {
+      if (pState.isCancelSignalled()) {
+        return;
+      }
+      field.setAccessible(true);
+      if (field.getAnnotation(AnimAware.class) != null) {
+        Class<?> fCls = field.getType();
+        if (isPrimitiveProperty(fCls)) {
+          PlainProperty property = new PlainProperty(shadingNode, field.getName(), cls);
+          shadingNode.getProperties().add(property);
+          if (pVisitor != null) {
+            pState.updateState(pVisitor.accept(pShadingInfo, field, property));
+          }
+        }
+      }
+    }
+  }
+
+  private static void addGradientToModel(PropertyModel pNode, RGBPalette pPalette, PropertyVisitor pVisitor, VisitState pState) {
+    Class<?> cls = pPalette.getClass();
+    String fieldname = PROPNAME_GRADIENT;
+    PropertyModel gradientNode = new PropertyModel(pNode, fieldname, cls);
+    pNode.getChields().add(gradientNode);
+    for (Field field : cls.getDeclaredFields()) {
+      if (pState.isCancelSignalled()) {
+        return;
+      }
+      field.setAccessible(true);
+      if (field.getAnnotation(AnimAware.class) != null) {
+        Class<?> fCls = field.getType();
+        if (isPrimitiveProperty(fCls)) {
+          PlainProperty property = new PlainProperty(gradientNode, field.getName(), cls);
+          gradientNode.getProperties().add(property);
+          if (pVisitor != null) {
+            pState.updateState(pVisitor.accept(pPalette, field, property));
+          }
+        }
+      }
+    }
+  }
+
   public final static String PROPNAME_XFORM = "transform";
   public final static String PROPNAME_FINALXFORM = "finalTransform";
+  public final static String PROPNAME_GRADIENT = "gradient";
+  public final static String PROPNAME_SHADING = "shading";
   public final static String PROPNAME_ORIGIN_X = "originX";
   public final static String PROPNAME_ORIGIN_Y = "originY";
   public final static String PROPNAME_ANGLE = "angle";
