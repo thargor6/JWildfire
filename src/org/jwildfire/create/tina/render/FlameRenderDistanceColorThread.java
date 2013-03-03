@@ -18,6 +18,7 @@ package org.jwildfire.create.tina.render;
 
 import static org.jwildfire.base.mathlib.MathLib.EPSILON;
 import static org.jwildfire.base.mathlib.MathLib.M_PI;
+import static org.jwildfire.base.mathlib.MathLib.atan2;
 import static org.jwildfire.base.mathlib.MathLib.cos;
 import static org.jwildfire.base.mathlib.MathLib.exp;
 import static org.jwildfire.base.mathlib.MathLib.log;
@@ -51,6 +52,9 @@ public final class FlameRenderDistanceColorThread extends FlameRenderThread {
   private double offsetX;
   private double offsetY;
   private double offsetZ;
+  private int style;
+  private int coordinate;
+  private double shift;
 
   public FlameRenderDistanceColorThread(Prefs pPrefs, int pThreadId, FlameRenderer pRenderer, Flame pFlame, long pSamples) {
     super(pPrefs, pThreadId, pRenderer, pFlame, pSamples);
@@ -60,6 +64,9 @@ public final class FlameRenderDistanceColorThread extends FlameRenderThread {
     offsetX = flame.getShadingInfo().getDistanceColorOffsetX();
     offsetY = flame.getShadingInfo().getDistanceColorOffsetY();
     offsetZ = flame.getShadingInfo().getDistanceColorOffsetZ();
+    style = flame.getShadingInfo().getDistanceColorStyle();
+    coordinate = flame.getShadingInfo().getDistanceColorCoordinate();
+    shift = flame.getShadingInfo().getDistanceColorShift();
   }
 
   @Override
@@ -91,6 +98,10 @@ public final class FlameRenderDistanceColorThread extends FlameRenderThread {
 
   @Override
   protected void iterate() {
+    XYZPoint p0 = new XYZPoint();
+    XYZPoint p1 = new XYZPoint();
+    XYZPoint p2 = new XYZPoint();
+    final double DX = 0.01;
     List<IterationObserver> observers = renderer.getIterationObservers();
     for (iter = startIter; !forceAbort && (samples < 0 || iter < samples); iter++) {
       if (iter % 100 == 0) {
@@ -106,20 +117,42 @@ public final class FlameRenderDistanceColorThread extends FlameRenderThread {
         return;
       }
 
-      XYZPoint p0 = new XYZPoint();
-      p0.assign(p);
-      xf.transformPoint(ctx, affineT, varT, p, p);
-
-      q.x = p.x - p0.x + offsetX;
-      q.y = p.y - p0.y + offsetY;
-      q.z = p.z - p0.z + offsetZ;
-
-      double r = radius * pow(scale * (q.x * q.x + q.y * q.y + q.z * q.z), exponent);
-      p.color = r;
-      if (p.color < 0.0)
-        p.color = 0.0;
-      else if (p.color >= 1)
-        p.color = 1;
+      switch (style) {
+        case 0:
+          p0.assign(p);
+          xf.transformPoint(ctx, affineT, varT, p, p);
+          break;
+        case 1:
+          p0.assign(p);
+          p1.assign(p);
+          p0.x -= DX;
+          p0.y -= DX;
+          p0.z -= DX;
+          p1.x += DX;
+          p1.y += DX;
+          p1.z += DX;
+          xf.transformPoint(ctx, affineT, varT, p0, p0);
+          xf.transformPoint(ctx, affineT, varT, p1, p1);
+          xf.transformPoint(ctx, affineT, varT, p, p);
+          break;
+        case 2:
+          p0.assign(p);
+          p1.assign(p);
+          p2.assign(p);
+          p0.x -= DX;
+          p0.y -= DX;
+          p0.z -= DX;
+          p2.x += DX;
+          p2.y += DX;
+          p2.z += DX;
+          xf.transformPoint(ctx, affineT, varT, p0, p0);
+          xf.transformPoint(ctx, affineT, varT, p1, p1);
+          xf.transformPoint(ctx, affineT, varT, p2, p2);
+          xf.transformPoint(ctx, affineT, varT, p, p);
+          break;
+        default:
+          throw new IllegalArgumentException(String.valueOf(style));
+      }
 
       if (xf.getDrawMode() == DrawMode.HIDDEN)
         continue;
@@ -167,6 +200,62 @@ public final class FlameRenderDistanceColorThread extends FlameRenderThread {
       if (yIdx < 0 || yIdx >= renderer.rasterHeight)
         continue;
       AbstractRasterPoint rp = renderer.raster[yIdx][xIdx];
+
+      double cx, cy, cz;
+      switch (style) {
+        case 0:
+          cx = p.x - p0.x + offsetX;
+          cy = p.y - p0.y + offsetY;
+          cz = p.z - p0.z + offsetZ;
+          break;
+        case 1:
+          cx = 0.5 * (p1.x - p0.x) / DX + offsetX;
+          cy = 0.5 * (p1.y - p0.y) / DX + offsetY;
+          cz = 0.5 * (p1.z - p0.z) / DX + offsetZ;
+          break;
+        case 2: {
+          double v1x = 0.5 * (p1.x - p0.x) / DX;
+          double v1y = 0.5 * (p1.y - p0.y) / DX;
+          double v1z = 0.5 * (p1.z - p0.z) / DX;
+          double v2x = 0.5 * (p2.x - p1.x) / DX;
+          double v2y = 0.5 * (p2.y - p1.y) / DX;
+          double v2z = 0.5 * (p2.z - p1.z) / DX;
+          cx = 0.5 * (v2x - v1x) / DX + offsetX;
+          cy = 0.5 * (v2y - v1y) / DX + offsetY;
+          cz = 0.5 * (v2z - v1z) / DX + offsetZ;
+        }
+          break;
+        default:
+          throw new IllegalArgumentException(String.valueOf(style));
+      }
+      double r;
+      switch (coordinate) {
+        case 0 /* r */:
+          r = radius * pow(scale * (cx * cx + cy * cy + cz * cz), exponent);
+          break;
+        case 1 /* x */:
+          r = radius * pow(scale * (cx * cx), exponent);
+          break;
+        case 2 /* y */:
+          r = radius * pow(scale * (cy * cy), exponent);
+          break;
+        case 3 /* z */:
+          r = radius * pow(scale * (cz * cz), exponent);
+          break;
+        case 4 /* rho */:
+          r = radius * pow(scale * (atan2(cy, cx)), exponent);
+          break;
+        case 5 /* phi */:
+          r = radius * pow(scale * (atan2(cz, cy)), exponent);
+          break;
+        default:
+          throw new IllegalArgumentException(String.valueOf(coordinate));
+      }
+      p.color = r + shift;
+      if (p.color < 0.0)
+        p.color = 0.0;
+      else if (p.color >= 1)
+        p.color = 1;
 
       if (p.rgbColor) {
         rp.setRed(rp.getRed() + p.redColor * prj.intensity);

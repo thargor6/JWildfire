@@ -112,6 +112,9 @@ public class Flam3Reader implements FlameReader {
   public static final String ATTR_SHADING_DISTANCE_COLOR_OFFSETX = "shading_distanceColorOffsetX";
   public static final String ATTR_SHADING_DISTANCE_COLOR_OFFSETY = "shading_distanceColorOffsetY";
   public static final String ATTR_SHADING_DISTANCE_COLOR_OFFSETZ = "shading_distanceColorOffsetZ";
+  public static final String ATTR_SHADING_DISTANCE_COLOR_STYLE = "shading_distanceColorStyle";
+  public static final String ATTR_SHADING_DISTANCE_COLOR_COORDINATE = "shading_distanceColorCoordinate";
+  public static final String ATTR_SHADING_DISTANCE_COLOR_SHIFT = "shading_distanceColorShift";
 
   private void parseFlameAttributes(Flame pFlame, String pXML) {
     Map<String, String> atts = Tools.parseAttributes(pXML);
@@ -334,6 +337,15 @@ public class Flam3Reader implements FlameReader {
     }
     if ((hs = atts.get(ATTR_SHADING_DISTANCE_COLOR_OFFSETZ)) != null) {
       pFlame.getShadingInfo().setDistanceColorOffsetZ(Double.parseDouble(hs));
+    }
+    if ((hs = atts.get(ATTR_SHADING_DISTANCE_COLOR_STYLE)) != null) {
+      pFlame.getShadingInfo().setDistanceColorStyle(Integer.parseInt(hs));
+    }
+    if ((hs = atts.get(ATTR_SHADING_DISTANCE_COLOR_COORDINATE)) != null) {
+      pFlame.getShadingInfo().setDistanceColorCoordinate(Integer.parseInt(hs));
+    }
+    if ((hs = atts.get(ATTR_SHADING_DISTANCE_COLOR_SHIFT)) != null) {
+      pFlame.getShadingInfo().setDistanceColorShift(Double.parseDouble(hs));
     }
   }
 

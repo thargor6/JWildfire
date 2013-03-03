@@ -195,6 +195,12 @@ public class TinaControllerParameter {
   public JSlider pShadingDistanceColorOffsetYSlider;
   public JWFNumberField pShadingDistanceColorOffsetZREd;
   public JSlider pShadingDistanceColorOffsetZSlider;
+  public JWFNumberField pShadingDistanceColorStyleREd;
+  public JSlider pShadingDistanceColorStyleSlider;
+  public JWFNumberField pShadingDistanceColorCoordinateREd;
+  public JSlider pShadingDistanceColorCoordinateSlider;
+  public JWFNumberField pShadingDistanceColorShiftREd;
+  public JSlider pShadingDistanceColorShiftSlider;
   public JToggleButton pMouseTransformSlowButton;
   public JTable pRenderBatchJobsTable;
   public JPanel pBatchPreviewRootPanel;
@@ -550,7 +556,9 @@ public class TinaControllerParameter {
     this.pDancingFlamesDeleteMotionBtn = pDancingFlamesDeleteMotionBtn;
   }
 
-  public void setParams2(JButton pDancingFlamesLinkMotionBtn, JButton pDancingFlamesUnlinkMotionBtn, JComboBox pDancingFlamesCreateMotionsCmb, JButton pDancingFlamesClearMotionsBtn, JButton pDancingFlamesLoadProjectBtn, JButton pDancingFlamesSaveProjectBtn, JTable pDancingFlamesMotionLinksTable) {
+  public void setParams2(JButton pDancingFlamesLinkMotionBtn, JButton pDancingFlamesUnlinkMotionBtn, JComboBox pDancingFlamesCreateMotionsCmb, JButton pDancingFlamesClearMotionsBtn, JButton pDancingFlamesLoadProjectBtn, JButton pDancingFlamesSaveProjectBtn, JTable pDancingFlamesMotionLinksTable,
+      JWFNumberField pShadingDistanceColorStyleREd, JSlider pShadingDistanceColorStyleSlider, JWFNumberField pShadingDistanceColorCoordinateREd, JSlider pShadingDistanceColorCoordinateSlider,
+      JWFNumberField pShadingDistanceColorShiftREd, JSlider pShadingDistanceColorShiftSlider) {
     this.pDancingFlamesLinkMotionBtn = pDancingFlamesLinkMotionBtn;
     this.pDancingFlamesUnlinkMotionBtn = pDancingFlamesUnlinkMotionBtn;
     this.pDancingFlamesCreateMotionsCmb = pDancingFlamesCreateMotionsCmb;
@@ -558,6 +566,12 @@ public class TinaControllerParameter {
     this.pDancingFlamesLoadProjectBtn = pDancingFlamesLoadProjectBtn;
     this.pDancingFlamesSaveProjectBtn = pDancingFlamesSaveProjectBtn;
     this.pDancingFlamesMotionLinksTable = pDancingFlamesMotionLinksTable;
+    this.pShadingDistanceColorStyleREd = pShadingDistanceColorStyleREd;
+    this.pShadingDistanceColorStyleSlider = pShadingDistanceColorStyleSlider;
+    this.pShadingDistanceColorCoordinateREd = pShadingDistanceColorCoordinateREd;
+    this.pShadingDistanceColorCoordinateSlider = pShadingDistanceColorCoordinateSlider;
+    this.pShadingDistanceColorShiftREd = pShadingDistanceColorShiftREd;
+    this.pShadingDistanceColorShiftSlider = pShadingDistanceColorShiftSlider;
   }
 
 }

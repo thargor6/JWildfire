@@ -63,6 +63,12 @@ public class ShadingInfo implements Assignable<ShadingInfo>, Serializable {
   private double distanceColorOffsetY;
   @AnimAware
   private double distanceColorOffsetZ;
+  @AnimAware
+  private int distanceColorStyle;
+  @AnimAware
+  private int distanceColorCoordinate;
+  @AnimAware
+  private double distanceColorShift;
 
   protected void init() {
     shading = Shading.FLAT;
@@ -106,6 +112,9 @@ public class ShadingInfo implements Assignable<ShadingInfo>, Serializable {
     distanceColorOffsetX = 0.0;
     distanceColorOffsetY = 0.0;
     distanceColorOffsetZ = 0.0;
+    distanceColorStyle = 0;
+    distanceColorCoordinate = 0;
+    distanceColorShift = 0.0;
   }
 
   public Shading getShading() {
@@ -235,6 +244,9 @@ public class ShadingInfo implements Assignable<ShadingInfo>, Serializable {
     distanceColorOffsetX = pSrc.distanceColorOffsetX;
     distanceColorOffsetY = pSrc.distanceColorOffsetY;
     distanceColorOffsetZ = pSrc.distanceColorOffsetZ;
+    distanceColorStyle = pSrc.distanceColorStyle;
+    distanceColorCoordinate = pSrc.distanceColorCoordinate;
+    distanceColorShift = pSrc.distanceColorShift;
   }
 
   public double[][] createBlurKernel() {
@@ -298,7 +310,9 @@ public class ShadingInfo implements Assignable<ShadingInfo>, Serializable {
         fabs(blurFallOff - pSrc.blurFallOff) > EPSILON ||
         fabs(distanceColorRadius - pSrc.distanceColorRadius) > EPSILON || fabs(distanceColorScale - pSrc.distanceColorScale) > EPSILON ||
         fabs(distanceColorExponent - pSrc.distanceColorExponent) > EPSILON || fabs(distanceColorOffsetX - pSrc.distanceColorOffsetX) > EPSILON ||
-        fabs(distanceColorOffsetY - pSrc.distanceColorOffsetY) > EPSILON || fabs(distanceColorOffsetZ - pSrc.distanceColorOffsetZ) > EPSILON) {
+        fabs(distanceColorOffsetY - pSrc.distanceColorOffsetY) > EPSILON || fabs(distanceColorOffsetZ - pSrc.distanceColorOffsetZ) > EPSILON ||
+        distanceColorStyle != pSrc.distanceColorStyle | distanceColorCoordinate != pSrc.distanceColorCoordinate ||
+        fabs(distanceColorShift - pSrc.distanceColorShift) > EPSILON) {
       return false;
     }
     for (int i = 0; i < lightPosX.length; i++) {
@@ -357,5 +371,29 @@ public class ShadingInfo implements Assignable<ShadingInfo>, Serializable {
 
   public void setDistanceColorOffsetZ(double distanceColorOffsetZ) {
     this.distanceColorOffsetZ = distanceColorOffsetZ;
+  }
+
+  public int getDistanceColorStyle() {
+    return distanceColorStyle;
+  }
+
+  public void setDistanceColorStyle(int distanceColorStyle) {
+    this.distanceColorStyle = distanceColorStyle;
+  }
+
+  public int getDistanceColorCoordinate() {
+    return distanceColorCoordinate;
+  }
+
+  public void setDistanceColorCoordinate(int distanceColorCoordinate) {
+    this.distanceColorCoordinate = distanceColorCoordinate;
+  }
+
+  public double getDistanceColorShift() {
+    return distanceColorShift;
+  }
+
+  public void setDistanceColorShift(double distanceColorShift) {
+    this.distanceColorShift = distanceColorShift;
   }
 }

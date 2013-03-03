@@ -396,6 +396,12 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     data.shadingDistanceColorOffsetYSlider = parameterObject.pShadingDistanceColorOffsetYSlider;
     data.shadingDistanceColorOffsetZREd = parameterObject.pShadingDistanceColorOffsetZREd;
     data.shadingDistanceColorOffsetZSlider = parameterObject.pShadingDistanceColorOffsetZSlider;
+    data.shadingDistanceColorStyleREd = parameterObject.pShadingDistanceColorStyleREd;
+    data.shadingDistanceColorStyleSlider = parameterObject.pShadingDistanceColorStyleSlider;
+    data.shadingDistanceColorCoordinateREd = parameterObject.pShadingDistanceColorCoordinateREd;
+    data.shadingDistanceColorCoordinateSlider = parameterObject.pShadingDistanceColorCoordinateSlider;
+    data.shadingDistanceColorShiftREd = parameterObject.pShadingDistanceColorShiftREd;
+    data.shadingDistanceColorShiftSlider = parameterObject.pShadingDistanceColorShiftSlider;
 
     data.mouseTransformSlowButton = parameterObject.pMouseTransformSlowButton;
 
@@ -1085,6 +1091,12 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       data.shadingDistanceColorOffsetYSlider.setValue(Tools.FTOI(shadingInfo.getDistanceColorOffsetY() * SLIDER_SCALE_AMBIENT));
       data.shadingDistanceColorOffsetZREd.setText(Tools.doubleToString(shadingInfo.getDistanceColorOffsetZ()));
       data.shadingDistanceColorOffsetZSlider.setValue(Tools.FTOI(shadingInfo.getDistanceColorOffsetZ() * SLIDER_SCALE_AMBIENT));
+      data.shadingDistanceColorStyleREd.setText(String.valueOf(shadingInfo.getDistanceColorStyle()));
+      data.shadingDistanceColorStyleSlider.setValue(shadingInfo.getDistanceColorStyle());
+      data.shadingDistanceColorCoordinateREd.setText(String.valueOf(shadingInfo.getDistanceColorCoordinate()));
+      data.shadingDistanceColorCoordinateSlider.setValue(shadingInfo.getDistanceColorCoordinate());
+      data.shadingDistanceColorShiftREd.setText(Tools.doubleToString(shadingInfo.getDistanceColorShift()));
+      data.shadingDistanceColorShiftSlider.setValue(Tools.FTOI(shadingInfo.getDistanceColorShift() * SLIDER_SCALE_AMBIENT));
     }
     else {
       data.shadingDistanceColorRadiusREd.setText("");
@@ -1099,6 +1111,12 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       data.shadingDistanceColorOffsetYSlider.setValue(0);
       data.shadingDistanceColorOffsetZREd.setText("");
       data.shadingDistanceColorOffsetZSlider.setValue(0);
+      data.shadingDistanceColorStyleREd.setText("");
+      data.shadingDistanceColorStyleSlider.setValue(0);
+      data.shadingDistanceColorCoordinateREd.setText("");
+      data.shadingDistanceColorCoordinateSlider.setValue(0);
+      data.shadingDistanceColorShiftREd.setText("");
+      data.shadingDistanceColorShiftSlider.setValue(0);
     }
   }
 
@@ -1191,6 +1209,12 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     data.shadingDistanceColorOffsetYSlider.setEnabled(distanceColorEnabled);
     data.shadingDistanceColorOffsetZREd.setEnabled(distanceColorEnabled);
     data.shadingDistanceColorOffsetZSlider.setEnabled(distanceColorEnabled);
+    data.shadingDistanceColorStyleREd.setEnabled(distanceColorEnabled);
+    data.shadingDistanceColorStyleSlider.setEnabled(distanceColorEnabled);
+    data.shadingDistanceColorCoordinateREd.setEnabled(distanceColorEnabled);
+    data.shadingDistanceColorCoordinateSlider.setEnabled(distanceColorEnabled);
+    data.shadingDistanceColorShiftREd.setEnabled(distanceColorEnabled);
+    data.shadingDistanceColorShiftSlider.setEnabled(distanceColorEnabled);
   }
 
   private void refreshTransformationsTable() {
@@ -4020,6 +4044,30 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
 
   public void shadingDistanceColorRadiusSlider_changed() {
     shadingInfoSliderChanged(data.shadingDistanceColorRadiusSlider, data.shadingDistanceColorRadiusREd, "distanceColorRadius", SLIDER_SCALE_AMBIENT, 0);
+  }
+
+  public void shadingDistanceColorStyleREd_changed() {
+    shadingInfoTextFieldChanged(data.shadingDistanceColorStyleSlider, data.shadingDistanceColorStyleREd, "distanceColorStyle", 1.0, 0);
+  }
+
+  public void shadingDistanceColorStyleSlider_changed() {
+    shadingInfoSliderChanged(data.shadingDistanceColorStyleSlider, data.shadingDistanceColorStyleREd, "distanceColorStyle", 1.0, 0);
+  }
+
+  public void shadingDistanceColorCoordinateREd_changed() {
+    shadingInfoTextFieldChanged(data.shadingDistanceColorCoordinateSlider, data.shadingDistanceColorCoordinateREd, "distanceColorCoordinate", 1.0, 0);
+  }
+
+  public void shadingDistanceColorCoordinateSlider_changed() {
+    shadingInfoSliderChanged(data.shadingDistanceColorCoordinateSlider, data.shadingDistanceColorCoordinateREd, "distanceColorCoordinate", 1.0, 0);
+  }
+
+  public void shadingDistanceColorShiftREd_changed() {
+    shadingInfoTextFieldChanged(data.shadingDistanceColorShiftSlider, data.shadingDistanceColorShiftREd, "distanceColorShift", SLIDER_SCALE_AMBIENT, 0);
+  }
+
+  public void shadingDistanceColorShiftSlider_changed() {
+    shadingInfoSliderChanged(data.shadingDistanceColorShiftSlider, data.shadingDistanceColorShiftREd, "distanceColorShift", SLIDER_SCALE_AMBIENT, 0);
   }
 
   public void shadingDistanceColorExponentREd_changed() {

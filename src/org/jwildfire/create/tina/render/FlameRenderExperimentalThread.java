@@ -21,6 +21,7 @@ import static org.jwildfire.base.mathlib.MathLib.M_PI;
 import static org.jwildfire.base.mathlib.MathLib.cos;
 import static org.jwildfire.base.mathlib.MathLib.exp;
 import static org.jwildfire.base.mathlib.MathLib.log;
+import static org.jwildfire.base.mathlib.MathLib.pow;
 import static org.jwildfire.base.mathlib.MathLib.sin;
 import static org.jwildfire.base.mathlib.MathLib.sqrt;
 
@@ -91,6 +92,21 @@ public final class FlameRenderExperimentalThread extends FlameRenderThread {
       if (xf == null) {
         return;
       }
+
+      final double DX = 0.01;
+      XYZPoint p0 = new XYZPoint();
+      XYZPoint p1 = new XYZPoint();
+      p0.assign(p);
+      p1.assign(p);
+      p0.x -= DX;
+      p0.y -= DX;
+      p0.z -= DX;
+      p1.x += DX;
+      p1.y += DX;
+      p1.z += DX;
+      xf.transformPoint(ctx, affineT, varT, p0, p0);
+      xf.transformPoint(ctx, affineT, varT, p1, p1);
+
       xf.transformPoint(ctx, affineT, varT, p, p);
       if (xf.getDrawMode() == DrawMode.HIDDEN)
         continue;
@@ -139,6 +155,23 @@ public final class FlameRenderExperimentalThread extends FlameRenderThread {
         continue;
       AbstractRasterPoint rp = renderer.raster[yIdx][xIdx];
 
+      double offsetX = 0.0;
+      double offsetY = 0.0;
+      double offsetZ = 0.0;
+      double exponent = -0.5;
+      double radius = 0.25;
+      double scale = 1.0;
+
+      q.x = 0.5 * (p1.x - p0.x) / DX + offsetX;
+      q.y = 0.5 * (p1.y - p0.y) / DX + offsetY;
+      q.z = 0.5 * (p1.z - p0.z) / DX + offsetZ;
+      double r = radius * pow(scale * (q.x * q.x + q.y * q.y + q.z * q.z), exponent);
+      p.color = r;
+      if (p.color < 0.0)
+        p.color = 0.0;
+      else if (p.color >= 1)
+        p.color = 1;
+
       if (p.rgbColor) {
         rp.setRed(rp.getRed() + p.redColor * prj.intensity);
         rp.setGreen(rp.getGreen() + p.greenColor * prj.intensity);
@@ -166,7 +199,7 @@ public final class FlameRenderExperimentalThread extends FlameRenderThread {
   public static long weightCounter = 1;
 
   public void changeWeights(int xIdx, int yIdx) {
-    if ((weightCounter++) % 100 == 0) {
+    if ((weightCounter++) % 10 == 0) {
       synchronized (flame) {
         int dim = flame.getXForms().size();
         int weightX = (int) (dim * xIdx / (double) renderer.rasterWidth);
