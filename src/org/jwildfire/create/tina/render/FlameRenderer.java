@@ -40,7 +40,6 @@ import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.XYZPoint;
 import org.jwildfire.create.tina.base.XYZProjectedPoint;
 import org.jwildfire.create.tina.base.raster.AbstractRasterPoint;
-import org.jwildfire.create.tina.base.raster.RasterPoint;
 import org.jwildfire.create.tina.palette.RenderColor;
 import org.jwildfire.create.tina.random.AbstractRandomGenerator;
 import org.jwildfire.create.tina.random.RandomGeneratorFactory;
@@ -907,7 +906,7 @@ public class FlameRenderer {
         }
         raster = null;
         // read raster
-        raster = (RasterPoint[][]) in.readObject();
+        raster = (AbstractRasterPoint[][]) in.readObject();
         // create threads
         List<FlameRenderThread> threads = startIterate(renderFlames, state, false);
         return new ResumedFlameRender(header, threads);
