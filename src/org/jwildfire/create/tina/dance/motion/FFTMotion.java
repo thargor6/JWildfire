@@ -31,6 +31,10 @@ public class FFTMotion extends Motion {
   @Property(description = "Offset", category = PropertyCategory.GENERAL)
   private double offset = 0.0;
 
+  @Property(description = "Average", category = PropertyCategory.GENERAL)
+  private int avgSize = 5;
+  private double avgBuffer[] = new double[avgSize];
+
   public int getFftChannel() {
     return fftChannel;
   }
@@ -59,7 +63,32 @@ public class FFTMotion extends Motion {
   public double computeValue(short[] pFFTData, long pTime) {
     short val = pFFTData != null ? fftChannel < pFFTData.length ? pFFTData[fftChannel] : 0 : 0;
     double rawValue = 2.0 * val / (double) Short.MAX_VALUE;
-    return offset + amplitude * rawValue;
+    double currValue = offset + amplitude * rawValue;
+    if (avgSize <= 1) {
+      return currValue;
+    }
+    else {
+      if (avgBuffer == null) {
+        avgBuffer = new double[avgSize];
+      }
+      double avgValue = currValue;
+      for (int i = 1; i < avgSize; i++) {
+        avgValue += avgBuffer[i];
+        avgBuffer[i - 1] = avgBuffer[i];
+      }
+      avgBuffer[avgSize - 1] = currValue;
+      avgValue /= (double) avgSize;
+      return (currValue >= 0.0) ? (avgValue > currValue ? avgValue : currValue) : (avgValue < currValue ? avgValue : currValue);
+    }
+  }
+
+  public int getAvgSize() {
+    return avgSize;
+  }
+
+  public void setAvgSize(int pAvgSize) {
+    avgSize = pAvgSize;
+    avgBuffer = new double[pAvgSize];
   }
 
 }
