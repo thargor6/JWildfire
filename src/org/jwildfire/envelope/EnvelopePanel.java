@@ -27,7 +27,6 @@ import javax.swing.JPanel;
 
 import org.jwildfire.base.Tools;
 
-
 public class EnvelopePanel extends JPanel {
   private static final long serialVersionUID = 1L;
   private static final Color BG_COLOR = new Color(0, 0, 0);
@@ -69,14 +68,12 @@ public class EnvelopePanel extends JPanel {
         step = 1.0;
       int div = Tools.FTOI((double) (envelope.getViewXMin() / step));
       double x = (double) div * step;
-      int cnt = 0;
       do {
         double fx = pEnvelopeView.getEnvelopeXScale() * x - pEnvelopeView.getEnvelopeXTrans();
         int dxl = Tools.FTOI(fx);
         if ((dxl >= pEnvelopeView.getEnvelopeLeft()) && (dxl <= pEnvelopeView.getEnvelopeRight())) {
           g.drawLine(dxl, pEnvelopeView.getEnvelopeTop(), dxl, pEnvelopeView.getEnvelopeBottom());
         }
-        cnt++;
         x += step;
       }
       while (x < envelope.getViewXMax());
@@ -99,14 +96,12 @@ public class EnvelopePanel extends JPanel {
       int div = Tools.FTOI((double) (envelope.getViewYMin() / step));
       double y = (double) div * step;
 
-      int cnt = 0;
       do {
         double fy = pEnvelopeView.getEnvelopeYScale() * y - pEnvelopeView.getEnvelopeYTrans();
         int dyl = Tools.FTOI(fy);
         if ((dyl >= pEnvelopeView.getEnvelopeTop()) && (dyl <= pEnvelopeView.getEnvelopeBottom())) {
           g.drawLine(pEnvelopeView.getEnvelopeLeft(), dyl, pEnvelopeView.getEnvelopeRight(), dyl);
         }
-        cnt++;
         y += step;
       }
       while (y < envelope.getViewYMax());

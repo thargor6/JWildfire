@@ -16,9 +16,13 @@
 */
 package org.jwildfire.envelope;
 
+import java.io.Serializable;
+
 import org.jwildfire.base.Tools;
 
-public class Envelope {
+public class Envelope implements Serializable {
+  private static final long serialVersionUID = 1L;
+
   public enum Interpolation {
     SPLINE, BEZIER, LINEAR
   }
@@ -248,5 +252,10 @@ public class Envelope {
 
   public void setSelectedIdx(int pSelectedIdx) {
     selectedIdx = pSelectedIdx;
+  }
+
+  @Override
+  public String toString() {
+    return "Envelope [" + x.length + "]";
   }
 }

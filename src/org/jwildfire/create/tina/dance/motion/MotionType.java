@@ -32,6 +32,12 @@ public enum MotionType {
       return SawToothMotion.class;
     }
 
+  },
+  SPLINE {
+    @Override
+    public Class<? extends Motion> getMotionClass() {
+      return SplineMotion.class;
+    }
   };
 
   public abstract Class<? extends Motion> getMotionClass();

@@ -72,7 +72,16 @@ public class JWFNumberField extends JSpinner {
           @Override
           public void mousePressed(MouseEvent e) {
             xMouseOrigin = e.getX();
-            originValue = (Double) getValue();
+            Object value = getValue();
+            if (value != null && value instanceof Double) {
+              originValue = (Double) value;
+            }
+            else if (value != null && value instanceof Integer) {
+              originValue = (Integer) value;
+            }
+            else {
+              originValue = 0;
+            }
             mouseAdjusting = true;
             mouseChangeCount = 0;
           }

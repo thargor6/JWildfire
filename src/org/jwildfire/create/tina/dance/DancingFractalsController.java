@@ -187,6 +187,7 @@ public class DancingFractalsController {
 
     addMotionCmb.addItem(MotionType.FFT);
     addMotionCmb.addItem(MotionType.SAWTOOTH);
+    addMotionCmb.addItem(MotionType.SPLINE);
     addMotionCmb.setSelectedItem(MotionType.FFT);
     createMotionsCmb.addItem(MotionCreatorType.DEFAULT);
     createMotionsCmb.setSelectedItem(MotionCreatorType.DEFAULT);
