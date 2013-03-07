@@ -83,7 +83,7 @@ public class RealtimeAnimRenderThread implements Runnable, FlameHolder {
           currFFT = null;
         }
         if (dancingFlame != null) {
-          currFlame = transformer.createTransformedFlame(dancingFlame, currFFT, time - timeRenderStarted);
+          currFlame = transformer.createTransformedFlame(dancingFlame, currFFT, time - timeRenderStarted, getFramesPerSecond());
         }
         fpsMeasureMentFrameCount++;
         long dt = (System.currentTimeMillis() - startFPSMeasurement);

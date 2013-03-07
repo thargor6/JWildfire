@@ -60,7 +60,7 @@ public class FFTMotion extends Motion {
   }
 
   @Override
-  public double computeValue(short[] pFFTData, long pTime) {
+  public double computeValue(short[] pFFTData, long pTime, int pFPS) {
     short val = pFFTData != null ? fftChannel < pFFTData.length ? pFFTData[fftChannel] : 0 : 0;
     double rawValue = 2.0 * val / (double) Short.MAX_VALUE;
     double currValue = offset + amplitude * rawValue;

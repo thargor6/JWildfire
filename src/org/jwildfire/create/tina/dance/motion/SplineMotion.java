@@ -24,7 +24,7 @@ public class SplineMotion extends Motion {
   private static final long serialVersionUID = 1L;
 
   @Property(description = "Amplitude", category = PropertyCategory.GENERAL)
-  private Envelope envelope = new Envelope(1.0);
+  private Envelope envelope = new Envelope(0.0, -20, 1020, -10.0, 10.0);
 
   @Property(description = "Amplitude", category = PropertyCategory.GENERAL)
   private double amplitude = 1.0;
@@ -49,8 +49,9 @@ public class SplineMotion extends Motion {
   }
 
   @Override
-  public double computeValue(short[] pFFTData, long pTime) {
-    return 1.0;
+  public double computeValue(short[] pFFTData, long pTime, int pFPS) {
+    int frame = computeFrame(pTime, pFPS);
+    return envelope.evaluate(frame) * amplitude + offset;
   }
 
   public Envelope getEnvelope() {

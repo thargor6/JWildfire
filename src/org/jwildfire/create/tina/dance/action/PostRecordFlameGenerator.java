@@ -78,7 +78,7 @@ public class PostRecordFlameGenerator {
         if (fftData != null) {
           long currTime = time - timeRenderStarted;
           short currFFT[] = fftData.getDataByTimeOffset(currTime);
-          Flame transforedFlame = transformer.createTransformedFlame(dancingFlame, currFFT, currTime);
+          Flame transforedFlame = transformer.createTransformedFlame(dancingFlame, currFFT, currTime, thread.getFramesPerSecond());
           renderFlame = new FlamePreparer(prefs).createRenderFlame(transforedFlame);
         }
         else {

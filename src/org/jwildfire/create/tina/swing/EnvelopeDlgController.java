@@ -145,27 +145,69 @@ public class EnvelopeDlgController {
   }
 
   private void refreshXMinField() {
-    xMinREd.setValue(envelope.getViewXMin());
+    boolean oldNoRefresh = noRefresh;
+    noRefresh = true;
+    try {
+      xMinREd.setValue(envelope.getViewXMin());
+    }
+    finally {
+      noRefresh = oldNoRefresh;
+    }
   }
 
   private void refreshXMaxField() {
-    xMaxREd.setValue(envelope.getViewXMax());
+    boolean oldNoRefresh = noRefresh;
+    noRefresh = true;
+    try {
+      xMaxREd.setValue(envelope.getViewXMax());
+    }
+    finally {
+      noRefresh = oldNoRefresh;
+    }
   }
 
   private void refreshYMinField() {
-    yMinREd.setValue(envelope.getViewYMin());
+    boolean oldNoRefresh = noRefresh;
+    noRefresh = true;
+    try {
+      yMinREd.setValue(envelope.getViewYMin());
+    }
+    finally {
+      noRefresh = oldNoRefresh;
+    }
   }
 
   private void refreshYMaxField() {
-    yMaxREd.setValue(envelope.getViewYMax());
+    boolean oldNoRefresh = noRefresh;
+    noRefresh = true;
+    try {
+      yMaxREd.setValue(envelope.getViewYMax());
+    }
+    finally {
+      noRefresh = oldNoRefresh;
+    }
   }
 
   private void refreshXField() {
-    xREd.setValue(envelope.getSelectedX());
+    boolean oldNoRefresh = noRefresh;
+    noRefresh = true;
+    try {
+      xREd.setValue(envelope.getSelectedX());
+    }
+    finally {
+      noRefresh = oldNoRefresh;
+    }
   }
 
   private void refreshYField() {
-    yREd.setValue(envelope.getSelectedY());
+    boolean oldNoRefresh = noRefresh;
+    noRefresh = true;
+    try {
+      yREd.setValue(envelope.getSelectedY());
+    }
+    finally {
+      noRefresh = oldNoRefresh;
+    }
   }
 
   public void refreshEnvelope() {

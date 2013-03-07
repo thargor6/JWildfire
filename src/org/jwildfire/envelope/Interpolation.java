@@ -58,7 +58,7 @@ public abstract class Interpolation {
       if (xdist > xdistmax)
         xdistmax = xdist;
     }
-    int subdiv = (int) (0.6 * xdistmax + 0.5);
+    int subdiv = (int) (1.6 * xdistmax + 0.5);
     if (subdiv < 3)
       subdiv = 3;
     return (subdiv);

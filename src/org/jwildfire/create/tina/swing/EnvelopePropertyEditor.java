@@ -49,15 +49,7 @@ public class EnvelopePropertyEditor extends AbstractPropertyEditor {
         .createMiniButton());
     button.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
-        selectFont();
-      }
-    });
-    ((JPanel) editor).add(button = ComponentFactory.Helper.getFactory()
-        .createMiniButton());
-    button.setText("X");
-    button.addActionListener(new ActionListener() {
-      public void actionPerformed(ActionEvent e) {
-        selectNull();
+        selectEnvelope();
       }
     });
     ((JPanel) editor).setOpaque(false);
@@ -72,7 +64,7 @@ public class EnvelopePropertyEditor extends AbstractPropertyEditor {
     label.setValue(value);
   }
 
-  protected void selectFont() {
+  protected void selectEnvelope() {
     Envelope editEnvelope = envelope.clone();
     EnvelopeDialog dlg = new EnvelopeDialog(SwingUtilities.getWindowAncestor(editor), editEnvelope);
     dlg.setModal(true);
@@ -83,13 +75,6 @@ public class EnvelopePropertyEditor extends AbstractPropertyEditor {
       envelope = editEnvelope;
       firePropertyChange(oldFont, editEnvelope);
     }
-  }
-
-  protected void selectNull() {
-    Object oldEnvelope = envelope;
-    label.setValue(null);
-    envelope = null;
-    firePropertyChange(oldEnvelope, null);
   }
 
 }

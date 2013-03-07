@@ -66,6 +66,17 @@ public class Envelope implements Serializable {
     y[0] = value;
   }
 
+  public Envelope(double pValue, int pViewXMin, int pViewXMax, double pViewYMin, double pViewYMax) {
+    x = new int[1];
+    x[0] = 1;
+    y = new double[1];
+    y[0] = pValue;
+    viewXMin = pViewXMin;
+    viewXMax = pViewXMax;
+    viewYMin = pViewYMin;
+    viewYMax = pViewYMax;
+  }
+
   public int getViewXMin() {
     return viewXMin;
   }

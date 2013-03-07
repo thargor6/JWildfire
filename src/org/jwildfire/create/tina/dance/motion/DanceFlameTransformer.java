@@ -22,12 +22,12 @@ import org.jwildfire.create.tina.dance.model.AnimationModelService;
 
 public class DanceFlameTransformer {
 
-  public Flame createTransformedFlame(DancingFlame pFlame, short pFFTData[], long pTime) {
+  public Flame createTransformedFlame(DancingFlame pFlame, short pFFTData[], long pTime, int pFPS) {
     Flame res = pFlame.getFlame().makeCopy();
     Flame refFlame = pFlame.getFlame().makeCopy();
     for (Motion motion : pFlame.getMotions()) {
-      if (motion.isActive(pTime)) {
-        double value = motion.computeValue(pFFTData, pTime);
+      if (motion.isActive(pTime, pFPS)) {
+        double value = motion.computeValue(pFFTData, pTime, pFPS);
         for (MotionLink link : motion.getMotionLinks()) {
           if (link.getProperyPath().getFlame().isEqual(refFlame)) {
             AnimationModelService.setFlameProperty(res, link.getProperyPath(), value);

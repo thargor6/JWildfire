@@ -468,8 +468,8 @@ public class DancingFractalsController {
 
   private void refreshMotionTable() {
     final int COL_TYPE = 0;
-    final int COL_START_TIME = 1;
-    final int COL_END_TIME = 2;
+    final int COL_START_FRAME = 1;
+    final int COL_END_FRAME = 2;
     motionTable.setModel(new DefaultTableModel() {
       private static final long serialVersionUID = 1L;
 
@@ -488,10 +488,10 @@ public class DancingFractalsController {
         switch (columnIndex) {
           case COL_TYPE:
             return "Type";
-          case COL_START_TIME:
-            return "Start time";
-          case COL_END_TIME:
-            return "End time";
+          case COL_START_FRAME:
+            return "Start frame";
+          case COL_END_FRAME:
+            return "End frame";
         }
         return null;
       }
@@ -503,10 +503,10 @@ public class DancingFractalsController {
           switch (columnIndex) {
             case COL_TYPE:
               return motion.getClass().getSimpleName();
-            case COL_START_TIME:
-              return (motion.getStartTime() != null) ? Tools.doubleToString(motion.getStartTime()) : "";
-            case COL_END_TIME:
-              return (motion.getEndTime() != null) ? Tools.doubleToString(motion.getEndTime()) : "";
+            case COL_START_FRAME:
+              return (motion.getStartFrame() != null) ? String.valueOf(motion.getStartFrame()) : "";
+            case COL_END_FRAME:
+              return (motion.getEndFrame() != null) ? String.valueOf(motion.getEndFrame()) : "";
           }
         }
         return null;
@@ -520,8 +520,8 @@ public class DancingFractalsController {
     });
     motionTable.getTableHeader().setFont(motionTable.getFont());
     motionTable.getColumnModel().getColumn(COL_TYPE).setWidth(80);
-    motionTable.getColumnModel().getColumn(COL_START_TIME).setPreferredWidth(40);
-    motionTable.getColumnModel().getColumn(COL_END_TIME).setWidth(40);
+    motionTable.getColumnModel().getColumn(COL_START_FRAME).setPreferredWidth(40);
+    motionTable.getColumnModel().getColumn(COL_END_FRAME).setWidth(40);
   }
 
   private void refreshMotionLinksTable() {

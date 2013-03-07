@@ -338,7 +338,6 @@ public class EnvelopeDialog extends JDialog {
       panel_1.setLayout(null);
 
       envelopeXMinREd = new JWFNumberField();
-      envelopeXMinREd.setHasMinValue(true);
       envelopeXMinREd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           ctrl.editFieldChanged();
@@ -382,7 +381,6 @@ public class EnvelopeDialog extends JDialog {
       panel_1.add(envelopeYMinREd);
 
       envelopeXMaxREd = new JWFNumberField();
-      envelopeXMaxREd.setHasMinValue(true);
       envelopeXMaxREd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           ctrl.editFieldChanged();
@@ -437,7 +435,6 @@ public class EnvelopeDialog extends JDialog {
       panel_1.add(envelopeYREd);
 
       envelopeXREd = new JWFNumberField();
-      envelopeXREd.setHasMinValue(true);
       envelopeXREd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           ctrl.editFieldChanged();

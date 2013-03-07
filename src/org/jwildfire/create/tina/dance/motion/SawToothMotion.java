@@ -54,7 +54,7 @@ public class SawToothMotion extends Motion {
   }
 
   @Override
-  public double computeValue(short[] pFFTData, long pTime) {
+  public double computeValue(short[] pFFTData, long pTime, int pFPS) {
     double t = pTime / 1000.0;
     double x = frequency * t / 60.0;
     double s = x - (int) (x);

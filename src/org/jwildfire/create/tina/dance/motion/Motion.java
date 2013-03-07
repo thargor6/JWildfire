@@ -23,32 +23,17 @@ import java.util.List;
 import org.jwildfire.base.ManagedObject;
 import org.jwildfire.base.Property;
 import org.jwildfire.base.PropertyCategory;
+import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.dance.model.FlamePropertyPath;
 
 public abstract class Motion extends ManagedObject implements Serializable {
   private static final long serialVersionUID = 1L;
   private List<MotionLink> motionLinks = new ArrayList<MotionLink>();
 
-  @Property(description = "Start time", category = PropertyCategory.GENERAL)
-  protected Double startTime;
-  @Property(description = "End time", category = PropertyCategory.GENERAL)
-  protected Double endTime;
-
-  public Double getStartTime() {
-    return startTime;
-  }
-
-  public void setStartTime(Double startTime) {
-    this.startTime = startTime;
-  }
-
-  public Double getEndTime() {
-    return endTime;
-  }
-
-  public void setEndTime(Double endTime) {
-    this.endTime = endTime;
-  }
+  @Property(description = "Start frame", category = PropertyCategory.GENERAL)
+  protected Integer startFrame;
+  @Property(description = "End frame", category = PropertyCategory.GENERAL)
+  protected Integer endFrame;
 
   public List<MotionLink> getMotionLinks() {
     return motionLinks;
@@ -67,11 +52,30 @@ public abstract class Motion extends ManagedObject implements Serializable {
     return null;
   }
 
-  public abstract double computeValue(short pFFTData[], long pTime);
+  public abstract double computeValue(short pFFTData[], long pTime, int pFPS);
 
-  protected boolean isActive(long pTime) {
-    long minTime = startTime != null ? (long) (startTime * 1000 + 0.5) : 0;
-    long maxTime = endTime != null ? (long) (endTime * 1000 + 0.5) : Long.MAX_VALUE;
-    return pTime >= minTime && pTime <= maxTime;
+  public static int computeFrame(long pTime, int pFPS) {
+    return Tools.FTOI(pTime / 1000.0 * (double) pFPS + 0.5);
+  }
+
+  protected boolean isActive(long pTime, int pFPS) {
+    int frame = computeFrame(pTime, pFPS);
+    return (startFrame == null || frame >= startFrame) && (endFrame == null || frame <= endFrame);
+  }
+
+  public Integer getStartFrame() {
+    return startFrame;
+  }
+
+  public void setStartFrame(Integer startFrame) {
+    this.startFrame = startFrame;
+  }
+
+  public Integer getEndFrame() {
+    return endFrame;
+  }
+
+  public void setEndFrame(Integer endFrame) {
+    this.endFrame = endFrame;
   }
 }

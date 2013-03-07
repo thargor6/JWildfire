@@ -1166,7 +1166,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaDOFPanel.add(dofFocusZREd);
 
       JLabel lblDimishz = new JLabel();
-      lblDimishz.setText("DimishZ");
+      lblDimishz.setText("DiminishZ");
       lblDimishz.setSize(new Dimension(94, 22));
       lblDimishz.setPreferredSize(new Dimension(94, 22));
       lblDimishz.setLocation(new Point(4, 98));
