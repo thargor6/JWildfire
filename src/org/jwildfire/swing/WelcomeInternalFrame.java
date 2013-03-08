@@ -112,11 +112,12 @@ public class WelcomeInternalFrame extends JInternalFrame {
     communityBtn.setBounds(178, 67, 122, 28);
     southPanel.add(communityBtn);
 
-    JButton youtubeVideosBtn = new JButton("YouTube videos");
+    JButton youtubeVideosBtn = new JButton("Included Variations");
     youtubeVideosBtn.setDefaultCapable(false);
     youtubeVideosBtn.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
-        browse("http://www.andreas-maschke.com/?page_id=1411");
+        //        browse("http://www.andreas-maschke.com/?page_id=1411");
+        browse("http://www.andreas-maschke.de/java/JWildfireVariations.html");
       }
     });
     youtubeVideosBtn.setPreferredSize(new Dimension(128, 24));

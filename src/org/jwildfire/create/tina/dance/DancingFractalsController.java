@@ -738,7 +738,7 @@ public class DancingFractalsController {
     boolean plainPropertySelected = flamePropertiesTreeService.isPlainPropertySelected(flamePropertiesTree);
     {
       boolean linkMotionEnabled = false;
-      if (!running && selMotion != null) {
+      if (!running && selMotion != null && selMotion.getParent() == null) {
         if (plainPropertySelected) {
           FlamePropertyPath selPath = flamePropertiesTreeService.getSelectedPropertyPath(flamePropertiesTree);
           linkMotionEnabled = !selMotion.hasLink(selPath);
@@ -865,6 +865,7 @@ public class DancingFractalsController {
       if (project.getMotions().size() > 0 && motionTable.getSelectedRow() >= 0 && motionTable.getSelectedRow() < project.getMotions().size()) {
         Motion motion = project.getMotions().get(motionTable.getSelectedRow());
 
+        @SuppressWarnings("rawtypes")
         Map<Class, PropertyEditor> editors = new HashMap<Class, PropertyEditor>();
         editors.put(Motion.class, new MotionTypeEditor(project.getMotions()));
 
@@ -879,6 +880,7 @@ public class DancingFractalsController {
               int oldSel = motionTable.getSelectedRow();
               refreshMotionTable();
               motionTable.getSelectionModel().setSelectionInterval(oldSel, oldSel);
+              enableControls();
             }
             finally {
               refreshing = false;
