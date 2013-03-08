@@ -34,6 +34,8 @@ public abstract class Motion extends ManagedObject implements Serializable {
   protected Integer startFrame;
   @Property(description = "End frame", category = PropertyCategory.GENERAL)
   protected Integer endFrame;
+  @Property(description = "Parent motion", category = PropertyCategory.GENERAL)
+  protected Motion parent;
 
   public List<MotionLink> getMotionLinks() {
     return motionLinks;
@@ -60,7 +62,7 @@ public abstract class Motion extends ManagedObject implements Serializable {
 
   protected boolean isActive(long pTime, int pFPS) {
     int frame = computeFrame(pTime, pFPS);
-    return (startFrame == null || frame >= startFrame) && (endFrame == null || frame <= endFrame);
+    return (startFrame == null || frame >= startFrame) && (endFrame == null || frame <= endFrame || endFrame <= 0);
   }
 
   public Integer getStartFrame() {
@@ -78,4 +80,18 @@ public abstract class Motion extends ManagedObject implements Serializable {
   public void setEndFrame(Integer endFrame) {
     this.endFrame = endFrame;
   }
+
+  public Motion getParent() {
+    return parent;
+  }
+
+  public void setParent(Motion parent) {
+    this.parent = parent;
+  }
+
+  @Override
+  public String toString() {
+    return this.getClass().getSimpleName() + " - " + hashCode();
+  }
+
 }

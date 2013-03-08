@@ -44,7 +44,23 @@ public class DancingFlameProject implements Serializable {
     for (Motion motion : motions) {
       for (MotionLink link : motion.getMotionLinks()) {
         if (link.getProperyPath().getFlame().isEqual(pFlame)) {
-          res.add(motion);
+          Motion currMotion = motion;
+          int iter = 0;
+          while (currMotion != null) {
+            res.add(currMotion);
+            Motion refMotion = currMotion;
+            currMotion = null;
+            for (Motion nextMotion : getMotions()) {
+              if (nextMotion.getParent() == refMotion) {
+                currMotion = nextMotion;
+                break;
+              }
+            }
+            iter++;
+            if (iter > 100) {
+              throw new RuntimeException("Probably endless loop detected");
+            }
+          }
           break;
         }
       }

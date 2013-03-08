@@ -25,8 +25,11 @@ import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.beans.PropertyEditor;
 import java.io.File;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -81,6 +84,8 @@ import org.jwildfire.transform.TextTransformer.FontStyle;
 import org.jwildfire.transform.TextTransformer.HAlignment;
 import org.jwildfire.transform.TextTransformer.Mode;
 import org.jwildfire.transform.TextTransformer.VAlignment;
+
+import com.l2fprod.common.beans.editor.ComboBoxPropertyEditor;
 
 public class DancingFractalsController {
   public static final int PAGE_INDEX = 3;
@@ -467,7 +472,7 @@ public class DancingFractalsController {
   }
 
   private void refreshMotionTable() {
-    final int COL_TYPE = 0;
+    final int COL_MOTION = 0;
     final int COL_START_FRAME = 1;
     final int COL_END_FRAME = 2;
     motionTable.setModel(new DefaultTableModel() {
@@ -486,12 +491,12 @@ public class DancingFractalsController {
       @Override
       public String getColumnName(int columnIndex) {
         switch (columnIndex) {
-          case COL_TYPE:
-            return "Type";
+          case COL_MOTION:
+            return "Motion";
           case COL_START_FRAME:
-            return "Start frame";
+            return "Start";
           case COL_END_FRAME:
-            return "End frame";
+            return "End";
         }
         return null;
       }
@@ -501,8 +506,8 @@ public class DancingFractalsController {
         Motion motion = rowIndex < project.getMotions().size() ? project.getMotions().get(rowIndex) : null;
         if (motion != null) {
           switch (columnIndex) {
-            case COL_TYPE:
-              return motion.getClass().getSimpleName();
+            case COL_MOTION:
+              return motion.toString();
             case COL_START_FRAME:
               return (motion.getStartFrame() != null) ? String.valueOf(motion.getStartFrame()) : "";
             case COL_END_FRAME:
@@ -519,9 +524,9 @@ public class DancingFractalsController {
 
     });
     motionTable.getTableHeader().setFont(motionTable.getFont());
-    motionTable.getColumnModel().getColumn(COL_TYPE).setWidth(80);
-    motionTable.getColumnModel().getColumn(COL_START_FRAME).setPreferredWidth(40);
-    motionTable.getColumnModel().getColumn(COL_END_FRAME).setWidth(40);
+    motionTable.getColumnModel().getColumn(COL_MOTION).setWidth(120);
+    motionTable.getColumnModel().getColumn(COL_START_FRAME).setPreferredWidth(10);
+    motionTable.getColumnModel().getColumn(COL_END_FRAME).setWidth(10);
   }
 
   private void refreshMotionLinksTable() {
@@ -840,6 +845,17 @@ public class DancingFractalsController {
     }
   }
 
+  public static class MotionTypeEditor extends ComboBoxPropertyEditor {
+    public MotionTypeEditor(List<Motion> pMotions) {
+      super();
+      Motion[] motions = new Motion[0];
+      if (pMotions != null) {
+        motions = pMotions.toArray(motions);
+      }
+      setAvailableValues(motions);
+    }
+  }
+
   public void motionTableClicked() {
     if (!refreshing) {
       if (motionPropertyPnl != null) {
@@ -848,7 +864,12 @@ public class DancingFractalsController {
       }
       if (project.getMotions().size() > 0 && motionTable.getSelectedRow() >= 0 && motionTable.getSelectedRow() < project.getMotions().size()) {
         Motion motion = project.getMotions().get(motionTable.getSelectedRow());
-        motionPropertyPnl = new PropertyPanel(motion);
+
+        Map<Class, PropertyEditor> editors = new HashMap<Class, PropertyEditor>();
+        editors.put(Motion.class, new MotionTypeEditor(project.getMotions()));
+
+        motionPropertyPnl = new PropertyPanel(motion, editors);
+
         motionPropertyPnl.setDescriptionVisible(false);
 
         PropertyChangeListener listener = new PropertyChangeListener() {

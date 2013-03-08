@@ -12795,7 +12795,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JPanel getDancingFlamesMotionPropertyPnl() {
     if (dancingFlamesMotionPropertyPnl == null) {
       dancingFlamesMotionPropertyPnl = new JPanel();
-      dancingFlamesMotionPropertyPnl.setPreferredSize(new Dimension(240, 10));
+      dancingFlamesMotionPropertyPnl.setPreferredSize(new Dimension(280, 10));
       dancingFlamesMotionPropertyPnl.setLayout(new BorderLayout(0, 0));
     }
     return dancingFlamesMotionPropertyPnl;

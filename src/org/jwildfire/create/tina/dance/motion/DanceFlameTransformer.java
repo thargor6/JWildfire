@@ -26,8 +26,25 @@ public class DanceFlameTransformer {
     Flame res = pFlame.getFlame().makeCopy();
     Flame refFlame = pFlame.getFlame().makeCopy();
     for (Motion motion : pFlame.getMotions()) {
-      if (motion.isActive(pTime, pFPS)) {
-        double value = motion.computeValue(pFFTData, pTime, pFPS);
+      if (motion.getParent() == null && motion.isActive(pTime, pFPS)) {
+        double value = 0.0;
+        int iter = 0;
+        Motion currMotion = motion;
+        while (currMotion != null) {
+          value += currMotion.computeValue(pFFTData, pTime, pFPS);
+          Motion refMotion = currMotion;
+          currMotion = null;
+          for (Motion nextMotion : pFlame.getMotions()) {
+            if (nextMotion.isActive(pTime, pFPS) && nextMotion.getParent() == refMotion) {
+              currMotion = nextMotion;
+              break;
+            }
+          }
+          iter++;
+          if (iter > 100) {
+            throw new RuntimeException("Probably endless loop detected");
+          }
+        }
         for (MotionLink link : motion.getMotionLinks()) {
           if (link.getProperyPath().getFlame().isEqual(refFlame)) {
             AnimationModelService.setFlameProperty(res, link.getProperyPath(), value);

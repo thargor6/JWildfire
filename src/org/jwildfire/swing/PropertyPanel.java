@@ -19,13 +19,15 @@ package org.jwildfire.swing;
 import java.beans.BeanInfo;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.beans.PropertyEditor;
+import java.util.Map;
 
 import org.jwildfire.base.ManagedObject;
 
 import com.l2fprod.common.propertysheet.Property;
+import com.l2fprod.common.propertysheet.PropertyEditorRegistry;
 import com.l2fprod.common.propertysheet.PropertySheet;
 import com.l2fprod.common.propertysheet.PropertySheetPanel;
-
 
 public class PropertyPanel extends PropertySheetPanel {
 
@@ -33,10 +35,19 @@ public class PropertyPanel extends PropertySheetPanel {
   private ManagedObject managedObject;
 
   public PropertyPanel(ManagedObject pManagedObject) {
+    this(pManagedObject, null);
+  }
+
+  public PropertyPanel(ManagedObject pManagedObject, Map<Class, PropertyEditor> pEditors) {
     super();
     try {
       managedObject = pManagedObject;
-
+      if (pEditors != null) {
+        PropertyEditorRegistry registry = (PropertyEditorRegistry) getEditorFactory();
+        for (Class key : pEditors.keySet()) {
+          registry.registerEditor(key, pEditors.get(key));
+        }
+      }
       setMode(PropertySheet.VIEW_AS_CATEGORIES);
       setSortingCategories(true);
       setSortingProperties(true);
