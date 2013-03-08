@@ -258,7 +258,7 @@ public class VariationFuncList {
     registerVariationFunc(PostSpinZFunc.class);
     registerVariationFunc(RoundSpher3DFunc.class);
     registerVariationFunc(Cubic_3DFunc.class);
-    registerVariationFunc(Disc_3DFunc.class);
+    registerVariationFunc(Disc3DFunc.class);
     registerVariationFunc(CubicLattice3DFunc.class);
     registerVariationFunc(Popcorn2_3DFunc.class);
     registerVariationFunc(Hexaplay3DFunc.class);
@@ -314,6 +314,11 @@ public class VariationFuncList {
     registerVariationFunc(Hypertile3D2Func.class);
     registerVariationFunc(Poincare3DFunc.class);
     registerVariationFunc(GDOffsFunc.class);
+    registerVariationFunc(Sinusoidal3DFunc.class);
+    registerVariationFunc(SVFFunc.class);
+    registerVariationFunc(TaurusFunc.class);
+    registerVariationFunc(PreSinusoidal3DFunc.class);
+    registerVariationFunc(PreDisc3DFunc.class);
     //    registerVariationFunc(FractFormulaJuliaWFFunc.class);
     //    registerVariationFunc(FractFormulaMandWFFunc.class);
 

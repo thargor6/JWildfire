@@ -16,37 +16,38 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.EPSILON;
-import static org.jwildfire.base.mathlib.MathLib.M_PI;
-import static org.jwildfire.base.mathlib.MathLib.atan2;
 import static org.jwildfire.base.mathlib.MathLib.cos;
 import static org.jwildfire.base.mathlib.MathLib.sin;
-import static org.jwildfire.base.mathlib.MathLib.sqrt;
-import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_CUDA;
 import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_JWILDFIRE;
 
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
-public class Disc_3DFunc extends VariationFunc {
+public class TaurusFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
 
-  private static final String PARAM_PI = "pi";
-  private static final String[] paramNames = { PARAM_PI };
+  private static final String PARAM_R = "r";
+  private static final String PARAM_N = "n";
+  private static final String PARAM_INV = "inv";
+  private static final String PARAM_SOR = "sor";
+  private static final String[] paramNames = { PARAM_R, PARAM_N, PARAM_INV, PARAM_SOR };
 
-  private double pi = M_PI;
+  private double r = 3.0;
+  private double n = 5.0;
+  private double inv = 1.5;
+  private double sor = 1.0;
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-    /* disc3D by Larry Berlin, http://aporev.deviantart.com/art/3D-Plugins-Collection-One-138514007?q=gallery%3Aaporev%2F8229210&qo=15 */
-    double r = sqrt(pAffineTP.y * pAffineTP.y + pAffineTP.x * pAffineTP.x + EPSILON);
-    double a = this.pi * r;
-    double sr = sin(a);
-    double cr = cos(a);
-    double vv = pAmount * atan2(pAffineTP.x, pAffineTP.y) / (this.pi + EPSILON);
-    pVarTP.x += vv * sr;
-    pVarTP.y += vv * cr;
-    pVarTP.z += vv * (r * cos(pAffineTP.z));
+    /* taurus by gossamer light */
+    double sx = sin(pAffineTP.x);
+    double cx = cos(pAffineTP.x);
+    double sy = sin(pAffineTP.y);
+    double cy = cos(pAffineTP.y);
+    double ir = (inv * r) + ((1.0 - inv) * (r * cos(n * pAffineTP.x)));
+    pVarTP.x += pAmount * (cx * (ir + sy));
+    pVarTP.y += pAmount * (sx * (ir + sy));
+    pVarTP.z += pAmount * (sor * cy) + ((1.0 - sor) * pAffineTP.y);
   }
 
   @Override
@@ -56,31 +57,31 @@ public class Disc_3DFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { pi };
+    return new Object[] { r, n, inv, sor };
   }
 
   @Override
   public void setParameter(String pName, double pValue) {
-    if (PARAM_PI.equalsIgnoreCase(pName))
-      pi = pValue;
+    if (PARAM_R.equalsIgnoreCase(pName))
+      r = pValue;
+    else if (PARAM_N.equalsIgnoreCase(pName))
+      n = pValue;
+    else if (PARAM_INV.equalsIgnoreCase(pName))
+      inv = pValue;
+    else if (PARAM_SOR.equalsIgnoreCase(pName))
+      sor = pValue;
     else
       throw new IllegalArgumentException(pName);
   }
 
   @Override
   public String getName() {
-    return "disc3d";
-  }
-
-  @Override
-  public void init(FlameTransformationContext pContext, XForm pXForm, double pAmount) {
-    if (pi == 0)
-      pi = EPSILON;
+    return "taurus";
   }
 
   @Override
   public int getAvailability() {
-    return AVAILABILITY_JWILDFIRE | AVAILABILITY_CUDA;
+    return AVAILABILITY_JWILDFIRE;
   }
 
 }
