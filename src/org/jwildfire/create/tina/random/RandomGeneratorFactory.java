@@ -27,7 +27,9 @@ public class RandomGeneratorFactory {
     AbstractRandomGenerator res = generatorMap.get(key);
     if (res == null) {
       res = pType.createInstance();
-      generatorMap.put(key, res);
+      if (!pType.equals(RandomGeneratorType.MERSENNE_TWISTER)) {
+        generatorMap.put(key, res);
+      }
     }
     return res;
   }

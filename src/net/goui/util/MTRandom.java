@@ -222,7 +222,7 @@ public class MTRandom extends Random {
    * @param seed The 64 bit value used to initialise the random
    * number generator state. 
    */
-  public final synchronized void setSeed(long seed) {
+  public final void setSeed(long seed) {
     if (compat) {
       setSeed((int)seed);
     } else {
@@ -269,7 +269,7 @@ public class MTRandom extends Random {
    * @throws NullPointerException if the buffer is null.
    * @throws IllegalArgumentException if the buffer has zero length.
    */
-  public final synchronized void setSeed(int[] buf) {
+  public final  void setSeed(int[] buf) {
     int length = buf.length;
     if (length == 0) throw new IllegalArgumentException("Seed buffer may not be empty");
     // ---- Begin Mersenne Twister Algorithm ----
@@ -312,7 +312,7 @@ public class MTRandom extends Random {
    * @return The next value in the pseudo random sequence with the
    * specified number of bits in the lower part of the integer.
    */
-  protected final synchronized int next(int bits) {
+  protected final int next(int bits) {
     // ---- Begin Mersenne Twister Algorithm ----
     int y, kk;
     if (mti >= N) {             // generate N words at one time
