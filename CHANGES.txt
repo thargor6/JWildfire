@@ -1,3 +1,18 @@
+V0.66 (09.03.2013):
+ - new "distance-color"-shading for really refreshingly new looking renders! 
+ - new button for simplified creation of "linked transforms" 
+ - some new variations invented by gossamer light:
+     -pre_disc3d, pre_sinusoidal3d, svf, sinusoidal3d and taurus 
+ - new "spline"-type of motion in the dancing flames module
+ - spline editor allowing three types of interpolation 
+     - spline, bezier and linear
+ - grouping of motions by specifying a parent in the dancing flames module
+ - new parameter avgSize for enabling a smoothing effect to FFTMotions in the dancing flames module
+ - FIXED: a bug regarding resuming the render state (loading failed)
+ - added a "Included Variations" link to the intro window, which points to a list of all variations and their parameters, this list was created and provided by Don Town, thanks!
+ - gradient and shading options can now also accessed in the dancing flames module
+ - improved the performance of the Mersenne Twister random number generator
+
 V0.65 (24.02.2013):
  - new "dimishZ" property to create more realistic looking pseudo-3D-renders
  - dropped the concept of the external renders! The only remaining benefit of the external renders was the lower memory consumption, but this problem was ales solved in this release!

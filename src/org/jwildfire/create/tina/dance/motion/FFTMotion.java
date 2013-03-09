@@ -32,7 +32,7 @@ public class FFTMotion extends Motion {
   private double offset = 0.0;
 
   @Property(description = "Average", category = PropertyCategory.GENERAL)
-  private int avgSize = 5;
+  private int avgSize = 3;
   private double avgBuffer[] = new double[avgSize];
 
   public int getFftChannel() {

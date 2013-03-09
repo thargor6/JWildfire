@@ -3641,7 +3641,7 @@ public class TinaInternalFrame extends JInternalFrame {
     if (tinaPaletteRandomPointsREd == null) {
       tinaPaletteRandomPointsREd = new JTextField();
       tinaPaletteRandomPointsREd.setPreferredSize(new Dimension(55, 22));
-      tinaPaletteRandomPointsREd.setText("7");
+      tinaPaletteRandomPointsREd.setText("11");
       tinaPaletteRandomPointsREd.setFont(new Font("Dialog", Font.PLAIN, 10));
     }
     return tinaPaletteRandomPointsREd;
