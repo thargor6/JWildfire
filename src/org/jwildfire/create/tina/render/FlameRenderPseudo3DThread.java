@@ -71,7 +71,10 @@ public final class FlameRenderPseudo3DThread extends FlameRenderThread {
     shader.init();
 
     for (iter = startIter; !forceAbort && (samples < 0 || iter < samples); iter++) {
-      if (iter % 100 == 0) {
+      if (iter % 10000 == 0) {
+        preFuseIter();
+      }
+      else if (iter % 100 == 0) {
         currSample = iter;
         for (int pIdx = 0; pIdx < pA.length; pIdx++) {
           if (Double.isInfinite(pA[pIdx].x) || Double.isInfinite(pA[pIdx].y) || Double.isInfinite(pA[pIdx].z) || Double.isNaN(pA[pIdx].x) || Double.isNaN(pA[pIdx].y) || Double.isNaN(pA[pIdx].z)) {
@@ -246,6 +249,7 @@ public final class FlameRenderPseudo3DThread extends FlameRenderThread {
       if (xf == null) {
         return;
       }
+      xf.transformPoints(ctx, affineTA, varTA, pA, pA);
     }
   }
 

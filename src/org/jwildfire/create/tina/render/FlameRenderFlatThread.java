@@ -66,6 +66,7 @@ public final class FlameRenderFlatThread extends FlameRenderThread {
       if (xf == null) {
         return;
       }
+      xf.transformPoint(ctx, affineT, varT, p, p);
     }
   }
 
@@ -79,13 +80,16 @@ public final class FlameRenderFlatThread extends FlameRenderThread {
   protected void iterate() {
     List<IterationObserver> observers = renderer.getIterationObservers();
     for (iter = startIter; !forceAbort && (samples < 0 || iter < samples); iter++) {
-      if (iter % 100 == 0) {
+      if (iter % 10000 == 0) {
+        preFuseIter();
+      }
+      else if (iter % 100 == 0) {
         currSample = iter;
         if (Double.isInfinite(p.x) || Double.isInfinite(p.y) || Double.isInfinite(p.z) || Double.isNaN(p.x) || Double.isNaN(p.y) || Double.isNaN(p.z)) {
-          //          System.out.println(Tools.TimeToString(new Date()) + ": recovering...");
           preFuseIter();
         }
       }
+
       int nextXForm = randGen.random(Constants.NEXT_APPLIED_XFORM_TABLE_SIZE);
       xf = xf.getNextAppliedXFormTable()[nextXForm];
       if (xf == null) {

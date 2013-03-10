@@ -36,7 +36,6 @@ public class SplitsFunc extends VariationFunc {
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     /* Splits from apo plugins pack */
-
     if (pAffineTP.x >= 0) {
       pVarTP.x += pAmount * (pAffineTP.x + x);
     }

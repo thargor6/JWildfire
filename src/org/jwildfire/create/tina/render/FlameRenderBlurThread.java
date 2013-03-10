@@ -74,6 +74,9 @@ public final class FlameRenderBlurThread extends FlameRenderThread {
     int rasterHeight = renderer.rasterHeight;
 
     for (iter = startIter; !forceAbort && (samples < 0 || iter < samples); iter++) {
+      if (iter % 10000 == 0) {
+        preFuseIter();
+      }
       if (iter % 100 == 0) {
         currSample = iter;
         if (Double.isInfinite(p.x) || Double.isInfinite(p.y) || Double.isInfinite(p.z) || Double.isNaN(p.x) || Double.isNaN(p.y) || Double.isNaN(p.z)) {
@@ -231,6 +234,7 @@ public final class FlameRenderBlurThread extends FlameRenderThread {
       if (xf == null) {
         return;
       }
+      xf.transformPoint(ctx, affineT, varT, p, p);
     }
   }
 
