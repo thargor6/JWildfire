@@ -411,6 +411,17 @@ public class TinaInteractiveRendererController implements IterationObserver {
   }
 
   private void clearScreen() {
+    try {
+      int scrollX = (image.getImageWidth() - (int) imageRootPanel.getBounds().getWidth()) / 2;
+      if (scrollX > 0)
+        imageScrollPane.getHorizontalScrollBar().setValue(scrollX);
+      int scrollY = (image.getImageHeight() - (int) imageRootPanel.getBounds().getHeight()) / 2;
+      if (scrollY > 0)
+        imageScrollPane.getVerticalScrollBar().setValue(scrollY);
+    }
+    catch (Exception ex) {
+      ex.printStackTrace();
+    }
     image.fillBackground(prefs.getTinaRandomBatchBGColorRed(), prefs.getTinaRandomBatchBGColorGreen(), prefs.getTinaRandomBatchBGColorBlue());
     imageRootPanel.repaint();
   }
