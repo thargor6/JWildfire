@@ -3905,7 +3905,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaPaletteShiftREd = new JWFNumberField();
       tinaPaletteShiftREd.setMinValue(-255.0);
       tinaPaletteShiftREd.setEditable(true);
-      tinaPaletteShiftREd.setValueStep(1.0);
+      tinaPaletteShiftREd.setValueStep(0.05);
       tinaPaletteShiftREd.setOnlyIntegers(true);
       tinaPaletteShiftREd.setMaxValue(255.0);
       tinaPaletteShiftREd.setHasMinValue(true);
@@ -3937,7 +3937,7 @@ public class TinaInternalFrame extends JInternalFrame {
     if (tinaPaletteRedREd == null) {
       tinaPaletteRedREd = new JWFNumberField();
       tinaPaletteRedREd.setMinValue(-255.0);
-      tinaPaletteRedREd.setValueStep(1.0);
+      tinaPaletteRedREd.setValueStep(0.05);
       tinaPaletteRedREd.setOnlyIntegers(true);
       tinaPaletteRedREd.setMaxValue(255.0);
       tinaPaletteRedREd.setHasMinValue(true);
@@ -3970,7 +3970,7 @@ public class TinaInternalFrame extends JInternalFrame {
     if (tinaPaletteGreenREd == null) {
       tinaPaletteGreenREd = new JWFNumberField();
       tinaPaletteGreenREd.setMinValue(-255.0);
-      tinaPaletteGreenREd.setValueStep(1.0);
+      tinaPaletteGreenREd.setValueStep(0.05);
       tinaPaletteGreenREd.setOnlyIntegers(true);
       tinaPaletteGreenREd.setMaxValue(255.0);
       tinaPaletteGreenREd.setHasMinValue(true);
@@ -4002,7 +4002,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JWFNumberField getTinaPaletteBlueREd() {
     if (tinaPaletteBlueREd == null) {
       tinaPaletteBlueREd = new JWFNumberField();
-      tinaPaletteBlueREd.setValueStep(1.0);
+      tinaPaletteBlueREd.setValueStep(0.05);
       tinaPaletteBlueREd.setOnlyIntegers(true);
       tinaPaletteBlueREd.setMinValue(-255.0);
       tinaPaletteBlueREd.setMaxValue(255.0);
@@ -4036,7 +4036,7 @@ public class TinaInternalFrame extends JInternalFrame {
     if (tinaPaletteHueREd == null) {
       tinaPaletteHueREd = new JWFNumberField();
       tinaPaletteHueREd.setOnlyIntegers(true);
-      tinaPaletteHueREd.setValueStep(1.0);
+      tinaPaletteHueREd.setValueStep(0.05);
       tinaPaletteHueREd.setMinValue(-255.0);
       tinaPaletteHueREd.setMaxValue(255.0);
       tinaPaletteHueREd.setHasMinValue(true);
@@ -4068,7 +4068,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JWFNumberField getTinaPaletteSaturationREd() {
     if (tinaPaletteSaturationREd == null) {
       tinaPaletteSaturationREd = new JWFNumberField();
-      tinaPaletteSaturationREd.setValueStep(1.0);
+      tinaPaletteSaturationREd.setValueStep(0.05);
       tinaPaletteSaturationREd.setOnlyIntegers(true);
       tinaPaletteSaturationREd.setMinValue(-255.0);
       tinaPaletteSaturationREd.setMaxValue(255.0);
@@ -4101,7 +4101,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JWFNumberField getTinaPaletteContrastREd() {
     if (tinaPaletteContrastREd == null) {
       tinaPaletteContrastREd = new JWFNumberField();
-      tinaPaletteContrastREd.setValueStep(1.0);
+      tinaPaletteContrastREd.setValueStep(0.05);
       tinaPaletteContrastREd.setOnlyIntegers(true);
       tinaPaletteContrastREd.setHasMinValue(true);
       tinaPaletteContrastREd.setHasMaxValue(true);
@@ -4135,7 +4135,7 @@ public class TinaInternalFrame extends JInternalFrame {
     if (tinaPaletteGammaREd == null) {
       tinaPaletteGammaREd = new JWFNumberField();
       tinaPaletteGammaREd.setOnlyIntegers(true);
-      tinaPaletteGammaREd.setValueStep(1.0);
+      tinaPaletteGammaREd.setValueStep(0.05);
       tinaPaletteGammaREd.setHasMinValue(true);
       tinaPaletteGammaREd.setHasMaxValue(true);
       tinaPaletteGammaREd.setMinValue(-255.0);
@@ -4167,7 +4167,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JWFNumberField getTinaPaletteBrightnessREd() {
     if (tinaPaletteBrightnessREd == null) {
       tinaPaletteBrightnessREd = new JWFNumberField();
-      tinaPaletteBrightnessREd.setValueStep(1.0);
+      tinaPaletteBrightnessREd.setValueStep(0.05);
       tinaPaletteBrightnessREd.setOnlyIntegers(true);
       tinaPaletteBrightnessREd.setMinValue(-255.0);
       tinaPaletteBrightnessREd.setMaxValue(255.0);
@@ -11471,7 +11471,7 @@ public class TinaInternalFrame extends JInternalFrame {
           }
         }
       });
-      tinaPaletteSwapRGBREd.setValueStep(5.0);
+      tinaPaletteSwapRGBREd.setValueStep(0.25);
       tinaPaletteSwapRGBREd.setText("0");
       tinaPaletteSwapRGBREd.setSize(new Dimension(56, 24));
       tinaPaletteSwapRGBREd.setPreferredSize(new Dimension(36, 22));
@@ -11532,7 +11532,7 @@ public class TinaInternalFrame extends JInternalFrame {
           }
         }
       });
-      tinaPaletteFrequencyREd.setValueStep(5.0);
+      tinaPaletteFrequencyREd.setValueStep(0.02);
       tinaPaletteFrequencyREd.setText("0");
       tinaPaletteFrequencyREd.setSize(new Dimension(56, 24));
       tinaPaletteFrequencyREd.setPreferredSize(new Dimension(36, 22));
@@ -11591,7 +11591,7 @@ public class TinaInternalFrame extends JInternalFrame {
           }
         }
       });
-      tinaPaletteBlurREd.setValueStep(5.0);
+      tinaPaletteBlurREd.setValueStep(0.02);
       tinaPaletteBlurREd.setText("0");
       tinaPaletteBlurREd.setSize(new Dimension(56, 24));
       tinaPaletteBlurREd.setPreferredSize(new Dimension(36, 22));
