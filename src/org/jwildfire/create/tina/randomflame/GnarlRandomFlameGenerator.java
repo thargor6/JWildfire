@@ -48,13 +48,25 @@ public class GnarlRandomFlameGenerator extends RandomFlameGenerator {
       scaleY = scaleX;
     }
 
-    double freqX = Math.random() * 2.0 + 2.0;
-    double freqY;
-    if (Math.random() > 0.5) {
-      freqY = freqX;
+    double freqX, freqY;
+
+    if (Math.random() < 0.5) {
+      freqX = Math.random() * 2.0 + 2.0;
+      if (Math.random() > 0.5) {
+        freqY = freqX;
+      }
+      else {
+        freqY = Math.random() * 2.0 + 2.0;
+      }
     }
     else {
-      freqY = Math.random() * 2.0 + 2.0;
+      freqX = -Math.random() * 2.0 + 2.0;
+      if (Math.random() > 0.5) {
+        freqY = freqX;
+      }
+      else {
+        freqY = -Math.random() * 2.0 + 16.0;
+      }
     }
 
     double blurAmount = 0.0025 * Math.random();
