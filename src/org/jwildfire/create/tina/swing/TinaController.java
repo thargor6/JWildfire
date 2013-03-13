@@ -75,6 +75,7 @@ import org.jwildfire.create.tina.batch.Job;
 import org.jwildfire.create.tina.batch.JobRenderThread;
 import org.jwildfire.create.tina.batch.JobRenderThreadController;
 import org.jwildfire.create.tina.dance.DancingFractalsController;
+import org.jwildfire.create.tina.dance.model.AnimationModelService;
 import org.jwildfire.create.tina.edit.UndoManager;
 import org.jwildfire.create.tina.io.Flam3PaletteReader;
 import org.jwildfire.create.tina.io.Flam3Reader;
@@ -5443,6 +5444,15 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     if (flame != null) {
       saveUndoPoint();
       flame.setDeFilterKernel((FilterKernelType) data.deFilterKernelCmb.getSelectedItem());
+    }
+  }
+
+  public void quickMutateButton_clicked() {
+    Flame flame = getCurrFlame();
+    if (flame != null) {
+      saveUndoPoint();
+      AnimationModelService.setRandomFlameProperty(flame, 5.0);
+      transformationTableClicked();
     }
   }
 }
