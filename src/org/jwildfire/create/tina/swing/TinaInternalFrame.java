@@ -23,6 +23,7 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
+import java.awt.GridLayout;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.SystemColor;
@@ -61,6 +62,7 @@ import javax.swing.SwingConstants;
 import javax.swing.WindowConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.EtchedBorder;
+import javax.swing.border.LineBorder;
 import javax.swing.border.MatteBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.ChangeEvent;
@@ -6446,10 +6448,10 @@ public class TinaInternalFrame extends JInternalFrame {
     if (centerWestPanel == null) {
       centerWestPanel = new JPanel();
       centerWestPanel.setPreferredSize(new Dimension(70, 0));
-      centerWestPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+      centerWestPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 3));
       centerWestPanel.add(getTinaAppendToMovieButton());
       centerWestPanel.add(getTinaAppendToDancingFlamesButton());
-      centerWestPanel.add(getTinaWrapIntoSubFlameButton());
+      centerWestPanel.add(getQuickMutationButton());
       centerWestPanel.add(getLabel_5());
       centerWestPanel.add(getUndoButton());
       centerWestPanel.add(getRedoButton());
@@ -9012,6 +9014,7 @@ public class TinaInternalFrame extends JInternalFrame {
       rootTabbedPane.setEnabled(true);
       rootTabbedPane.addTab("Flame Editor", null, getRootPanel(), null);
       rootTabbedPane.addTab("Interactive Renderer", null, getInteractiveRenderPanel(), null);
+      rootTabbedPane.addTab("MutaGen", null, getPanel_16(), null);
       rootTabbedPane.addTab("JWFMovie Maker", null, getTinaSWFAnimatorPanel(), null);
       rootTabbedPane.addTab("Dancing Flames", null, getPanel_36(), null);
       rootTabbedPane.addTab("Batch Flame Renderer", null, getBatchRenderPanel(), null);
@@ -9265,6 +9268,37 @@ public class TinaInternalFrame extends JInternalFrame {
   private JSlider shadingDistanceColorCoordinateSlider;
   private JWFNumberField shadingDistanceColorShiftREd;
   private JSlider shadingDistanceColorShiftSlider;
+  private JButton quickMutationButton;
+  private JPanel panel_16;
+  private JPanel panel_51;
+  private JPanel panel_53;
+  private JPanel mutaGen05Pnl;
+  private JPanel mutaGen01Pnl;
+  private JPanel mutaGen03Pnl;
+  private JPanel mutaGen04Pnl;
+  private JPanel mutaGen06Pnl;
+  private JPanel mutaGen07Pnl;
+  private JPanel mutaGen08Pnl;
+  private JPanel mutaGen09Pnl;
+  private JPanel mutaGen10Pnl;
+  private JPanel mutaGen12Pnl;
+  private JPanel mutaGen13Pnl;
+  private JPanel mutaGen14Pnl;
+  private JPanel mutaGen15Pnl;
+  private JPanel mutaGen16Pnl;
+  private JPanel panel_69;
+  private JPanel mutaGen17Pnl;
+  private JPanel panel_71;
+  private JPanel mutaGen18Pnl;
+  private JPanel mutaGen19Pnl;
+  private JPanel mutaGen20Pnl;
+  private JPanel mutaGen02Pnl;
+  private JPanel mutaGen21Pnl;
+  private JPanel mutaGen22Pnl;
+  private JPanel mutaGen23Pnl;
+  private JPanel mutaGen25Pnl;
+  private JPanel mutaGen24Pnl;
+  private JPanel mutaGen11Pnl;
 
   /**
    * This method initializes renderBatchJobsScrollPane	
@@ -9867,6 +9901,7 @@ public class TinaInternalFrame extends JInternalFrame {
       scriptMobiusDragonButton.setFont(new Font("Dialog", Font.BOLD, 10));
       scriptMobiusDragonButton.setBounds(9, 387, 125, 24);
       scriptPanel.add(scriptMobiusDragonButton);
+      scriptPanel.add(getTinaWrapIntoSubFlameButton());
     }
     return scriptPanel;
   }
@@ -10875,6 +10910,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton getTinaWrapIntoSubFlameButton() {
     if (tinaWrapIntoSubFlameButton == null) {
       tinaWrapIntoSubFlameButton = new JButton();
+      tinaWrapIntoSubFlameButton.setBounds(146, 288, 60, 24);
       tinaWrapIntoSubFlameButton.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
           tinaController.tinaWrapIntoSubFlameButton_clicked();
@@ -11097,7 +11133,7 @@ public class TinaInternalFrame extends JInternalFrame {
     if (label_5 == null) {
       label_5 = new JLabel();
       label_5.setText("");
-      label_5.setPreferredSize(new Dimension(42, 12));
+      label_5.setPreferredSize(new Dimension(42, 8));
       label_5.setFont(new Font("Dialog", Font.BOLD, 10));
     }
     return label_5;
@@ -11694,7 +11730,7 @@ public class TinaInternalFrame extends JInternalFrame {
     if (label_6 == null) {
       label_6 = new JLabel();
       label_6.setText("");
-      label_6.setPreferredSize(new Dimension(42, 12));
+      label_6.setPreferredSize(new Dimension(42, 8));
       label_6.setFont(new Font("Dialog", Font.BOLD, 10));
     }
     return label_6;
@@ -13093,5 +13129,314 @@ public class TinaInternalFrame extends JInternalFrame {
 
   public JSlider getShadingDistanceColorShiftSlider() {
     return shadingDistanceColorShiftSlider;
+  }
+
+  private JButton getQuickMutationButton() {
+    if (quickMutationButton == null) {
+      quickMutationButton = new JButton();
+      quickMutationButton.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.quickMutateButton_clicked();
+        }
+      });
+      quickMutationButton.setToolTipText("Create mutations of the current flame in the MutaGen");
+      quickMutationButton.setText("MutaG");
+      quickMutationButton.setPreferredSize(new Dimension(60, 24));
+      quickMutationButton.setMnemonic(KeyEvent.VK_H);
+      quickMutationButton.setFont(new Font("Dialog", Font.BOLD, 10));
+    }
+    return quickMutationButton;
+  }
+
+  private JPanel getPanel_16() {
+    if (panel_16 == null) {
+      panel_16 = new JPanel();
+      panel_16.setLayout(new BorderLayout(0, 0));
+      panel_16.add(getPanel_51(), BorderLayout.EAST);
+      panel_16.add(getPanel_53(), BorderLayout.CENTER);
+      panel_16.add(getPanel_71(), BorderLayout.SOUTH);
+      panel_16.add(getPanel_69(), BorderLayout.NORTH);
+    }
+    return panel_16;
+  }
+
+  private JPanel getPanel_51() {
+    if (panel_51 == null) {
+      panel_51 = new JPanel();
+      panel_51.setPreferredSize(new Dimension(200, 10));
+    }
+    return panel_51;
+  }
+
+  private JPanel getPanel_53() {
+    if (panel_53 == null) {
+      panel_53 = new JPanel();
+      panel_53.setLayout(new GridLayout(5, 5, 10, 10));
+      panel_53.add(getMutaGen01Pnl());
+      panel_53.add(getMutaGen02Pnl());
+      panel_53.add(getMutaGen03Pnl());
+      panel_53.add(getMutaGen04Pnl());
+      panel_53.add(getMutaGen05Pnl());
+      panel_53.add(getMutaGen06Pnl());
+      panel_53.add(getMutaGen07Pnl());
+      panel_53.add(getMutaGen08Pnl());
+      panel_53.add(getMutaGen09Pnl());
+      panel_53.add(getMutaGen10Pnl());
+      panel_53.add(getMutaGen11Pnl());
+      panel_53.add(getMutaGen12Pnl());
+      panel_53.add(getMutaGen13Pnl());
+      panel_53.add(getMutaGen14Pnl());
+      panel_53.add(getMutaGen15Pnl());
+      panel_53.add(getMutaGen16Pnl());
+      panel_53.add(getMutaGen17Pnl());
+      panel_53.add(getMutaGen18Pnl());
+      panel_53.add(getMutaGen19Pnl());
+      panel_53.add(getMutaGen20Pnl());
+      panel_53.add(getMutaGen21Pnl());
+      panel_53.add(getMutaGen22Pnl());
+      panel_53.add(getMutaGen23Pnl());
+      panel_53.add(getMutaGen24Pnl());
+      panel_53.add(getMutaGen25Pnl());
+    }
+    return panel_53;
+  }
+
+  private JPanel getMutaGen05Pnl() {
+    if (mutaGen05Pnl == null) {
+      mutaGen05Pnl = new JPanel();
+      mutaGen05Pnl.setBorder(new LineBorder(new Color(0, 0, 0)));
+      mutaGen05Pnl.setLayout(new BorderLayout(0, 0));
+    }
+    return mutaGen05Pnl;
+  }
+
+  private JPanel getMutaGen01Pnl() {
+    if (mutaGen01Pnl == null) {
+      mutaGen01Pnl = new JPanel();
+      mutaGen01Pnl.setBorder(new LineBorder(new Color(0, 0, 0)));
+      mutaGen01Pnl.setLayout(new BorderLayout(0, 0));
+    }
+    return mutaGen01Pnl;
+  }
+
+  private JPanel getMutaGen03Pnl() {
+    if (mutaGen03Pnl == null) {
+      mutaGen03Pnl = new JPanel();
+      mutaGen03Pnl.setBorder(new LineBorder(new Color(0, 0, 0)));
+      mutaGen03Pnl.setLayout(new BorderLayout(0, 0));
+    }
+    return mutaGen03Pnl;
+  }
+
+  private JPanel getMutaGen04Pnl() {
+    if (mutaGen04Pnl == null) {
+      mutaGen04Pnl = new JPanel();
+      mutaGen04Pnl.setBorder(new LineBorder(new Color(0, 0, 0)));
+      mutaGen04Pnl.setLayout(new BorderLayout(0, 0));
+    }
+    return mutaGen04Pnl;
+  }
+
+  private JPanel getMutaGen06Pnl() {
+    if (mutaGen06Pnl == null) {
+      mutaGen06Pnl = new JPanel();
+      mutaGen06Pnl.setBorder(new LineBorder(new Color(0, 0, 0)));
+      mutaGen06Pnl.setLayout(new BorderLayout(0, 0));
+    }
+    return mutaGen06Pnl;
+  }
+
+  private JPanel getMutaGen07Pnl() {
+    if (mutaGen07Pnl == null) {
+      mutaGen07Pnl = new JPanel();
+      mutaGen07Pnl.setBorder(new LineBorder(new Color(0, 0, 0)));
+      mutaGen07Pnl.setLayout(new BorderLayout(0, 0));
+    }
+    return mutaGen07Pnl;
+  }
+
+  private JPanel getMutaGen08Pnl() {
+    if (mutaGen08Pnl == null) {
+      mutaGen08Pnl = new JPanel();
+      mutaGen08Pnl.setBorder(new LineBorder(new Color(0, 0, 0)));
+      mutaGen08Pnl.setLayout(new BorderLayout(0, 0));
+    }
+    return mutaGen08Pnl;
+  }
+
+  private JPanel getMutaGen09Pnl() {
+    if (mutaGen09Pnl == null) {
+      mutaGen09Pnl = new JPanel();
+      mutaGen09Pnl.setBorder(new LineBorder(new Color(0, 0, 0)));
+      mutaGen09Pnl.setLayout(new BorderLayout(0, 0));
+    }
+    return mutaGen09Pnl;
+  }
+
+  private JPanel getMutaGen10Pnl() {
+    if (mutaGen10Pnl == null) {
+      mutaGen10Pnl = new JPanel();
+      mutaGen10Pnl.setBorder(new LineBorder(new Color(0, 0, 0)));
+      mutaGen10Pnl.setLayout(new BorderLayout(0, 0));
+    }
+    return mutaGen10Pnl;
+  }
+
+  private JPanel getMutaGen12Pnl() {
+    if (mutaGen12Pnl == null) {
+      mutaGen12Pnl = new JPanel();
+      mutaGen12Pnl.setBorder(new LineBorder(new Color(0, 0, 0)));
+      mutaGen12Pnl.setLayout(new BorderLayout(0, 0));
+    }
+    return mutaGen12Pnl;
+  }
+
+  private JPanel getMutaGen13Pnl() {
+    if (mutaGen13Pnl == null) {
+      mutaGen13Pnl = new JPanel();
+      mutaGen13Pnl.setBorder(new LineBorder(new Color(0, 0, 0)));
+      mutaGen13Pnl.setLayout(new BorderLayout(0, 0));
+    }
+    return mutaGen13Pnl;
+  }
+
+  private JPanel getMutaGen14Pnl() {
+    if (mutaGen14Pnl == null) {
+      mutaGen14Pnl = new JPanel();
+      mutaGen14Pnl.setBorder(new LineBorder(new Color(0, 0, 0)));
+      mutaGen14Pnl.setLayout(new BorderLayout(0, 0));
+    }
+    return mutaGen14Pnl;
+  }
+
+  private JPanel getMutaGen15Pnl() {
+    if (mutaGen15Pnl == null) {
+      mutaGen15Pnl = new JPanel();
+      mutaGen15Pnl.setBorder(new LineBorder(new Color(0, 0, 0)));
+      mutaGen15Pnl.setLayout(new BorderLayout(0, 0));
+    }
+    return mutaGen15Pnl;
+  }
+
+  private JPanel getMutaGen16Pnl() {
+    if (mutaGen16Pnl == null) {
+      mutaGen16Pnl = new JPanel();
+      mutaGen16Pnl.setBorder(new LineBorder(new Color(0, 0, 0)));
+      mutaGen16Pnl.setLayout(new BorderLayout(0, 0));
+    }
+    return mutaGen16Pnl;
+  }
+
+  private JPanel getPanel_69() {
+    if (panel_69 == null) {
+      panel_69 = new JPanel();
+    }
+    return panel_69;
+  }
+
+  private JPanel getMutaGen17Pnl() {
+    if (mutaGen17Pnl == null) {
+      mutaGen17Pnl = new JPanel();
+      mutaGen17Pnl.setBorder(new LineBorder(new Color(0, 0, 0)));
+      mutaGen17Pnl.setLayout(new BorderLayout(0, 0));
+    }
+    return mutaGen17Pnl;
+  }
+
+  private JPanel getPanel_71() {
+    if (panel_71 == null) {
+      panel_71 = new JPanel();
+    }
+    return panel_71;
+  }
+
+  private JPanel getMutaGen18Pnl() {
+    if (mutaGen18Pnl == null) {
+      mutaGen18Pnl = new JPanel();
+      mutaGen18Pnl.setBorder(new LineBorder(new Color(0, 0, 0)));
+      mutaGen18Pnl.setLayout(new BorderLayout(0, 0));
+    }
+    return mutaGen18Pnl;
+  }
+
+  private JPanel getMutaGen19Pnl() {
+    if (mutaGen19Pnl == null) {
+      mutaGen19Pnl = new JPanel();
+      mutaGen19Pnl.setBorder(new LineBorder(new Color(0, 0, 0)));
+      mutaGen19Pnl.setLayout(new BorderLayout(0, 0));
+    }
+    return mutaGen19Pnl;
+  }
+
+  private JPanel getMutaGen20Pnl() {
+    if (mutaGen20Pnl == null) {
+      mutaGen20Pnl = new JPanel();
+      mutaGen20Pnl.setBorder(new LineBorder(new Color(0, 0, 0)));
+      mutaGen20Pnl.setLayout(new BorderLayout(0, 0));
+    }
+    return mutaGen20Pnl;
+  }
+
+  private JPanel getMutaGen02Pnl() {
+    if (mutaGen02Pnl == null) {
+      mutaGen02Pnl = new JPanel();
+      mutaGen02Pnl.setBorder(new LineBorder(new Color(0, 0, 0)));
+      mutaGen02Pnl.setLayout(new BorderLayout(0, 0));
+    }
+    return mutaGen02Pnl;
+  }
+
+  private JPanel getMutaGen21Pnl() {
+    if (mutaGen21Pnl == null) {
+      mutaGen21Pnl = new JPanel();
+      mutaGen21Pnl.setBorder(new LineBorder(new Color(0, 0, 0)));
+      mutaGen21Pnl.setLayout(new BorderLayout(0, 0));
+    }
+    return mutaGen21Pnl;
+  }
+
+  private JPanel getMutaGen22Pnl() {
+    if (mutaGen22Pnl == null) {
+      mutaGen22Pnl = new JPanel();
+      mutaGen22Pnl.setBorder(new LineBorder(new Color(0, 0, 0)));
+      mutaGen22Pnl.setLayout(new BorderLayout(0, 0));
+    }
+    return mutaGen22Pnl;
+  }
+
+  private JPanel getMutaGen23Pnl() {
+    if (mutaGen23Pnl == null) {
+      mutaGen23Pnl = new JPanel();
+      mutaGen23Pnl.setBorder(new LineBorder(new Color(0, 0, 0)));
+      mutaGen23Pnl.setLayout(new BorderLayout(0, 0));
+    }
+    return mutaGen23Pnl;
+  }
+
+  private JPanel getMutaGen25Pnl() {
+    if (mutaGen25Pnl == null) {
+      mutaGen25Pnl = new JPanel();
+      mutaGen25Pnl.setBorder(new LineBorder(new Color(0, 0, 0)));
+      mutaGen25Pnl.setLayout(new BorderLayout(0, 0));
+    }
+    return mutaGen25Pnl;
+  }
+
+  private JPanel getMutaGen24Pnl() {
+    if (mutaGen24Pnl == null) {
+      mutaGen24Pnl = new JPanel();
+      mutaGen24Pnl.setBorder(new LineBorder(new Color(0, 0, 0)));
+      mutaGen24Pnl.setLayout(new BorderLayout(0, 0));
+    }
+    return mutaGen24Pnl;
+  }
+
+  private JPanel getMutaGen11Pnl() {
+    if (mutaGen11Pnl == null) {
+      mutaGen11Pnl = new JPanel();
+      mutaGen11Pnl.setBorder(new LineBorder(new Color(0, 0, 0)));
+      mutaGen11Pnl.setLayout(new BorderLayout(0, 0));
+    }
+    return mutaGen11Pnl;
   }
 } //  @jve:decl-index=0:visual-constraint="10,10"

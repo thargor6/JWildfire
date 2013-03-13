@@ -22,7 +22,7 @@ import java.util.List;
 public class PropertyModel extends AbstractProperty {
   private static final long serialVersionUID = 1L;
   private final List<PlainProperty> properties = new ArrayList<PlainProperty>();
-  private final List<PropertyModel> chields = new ArrayList<PropertyModel>();
+  private final List<PropertyModel> childs = new ArrayList<PropertyModel>();
 
   public PropertyModel(AbstractProperty pParent, String pName, Class<?> pType) {
     super(pParent, pName, pType);
@@ -33,7 +33,15 @@ public class PropertyModel extends AbstractProperty {
   }
 
   public List<PropertyModel> getChields() {
-    return chields;
+    return childs;
+  }
+
+  public int getTotalCount() {
+    int res = properties.size();
+    for (PropertyModel child : childs) {
+      res += child.getTotalCount();
+    }
+    return res;
   }
 
   public String toXML() {

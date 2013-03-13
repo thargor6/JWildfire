@@ -312,10 +312,37 @@ public class AnimationModelService {
     return res;
   }
 
+  private static class ModifyRandomPropertyVisitor extends ModifyPropertyVisitor {
+    private final int propCount;
+    private final int acceptAt;
+    private int propCounter;
+
+    public ModifyRandomPropertyVisitor(Flame pFlame, double pPercent, int pPropCount) {
+      super(new FlamePropertyPath(pFlame, ""), pPercent);
+      propCount = pPropCount;
+      acceptAt = (int) (Math.random() * propCount);
+      mode = ModifyPropMode.PERCENT;
+      value = Math.random() < 0.6 ? pPercent : -pPercent;
+    }
+
+    public boolean accept(PlainProperty pProperty) {
+      boolean res = ++propCounter >= acceptAt;
+      if (res) {
+        System.out.println("ACCEPT " + pProperty.getName());
+      }
+      return res;
+    }
+  }
+
+  private enum ModifyPropMode {
+    ABSOLUTE, PERCENT
+  }
+
   private static class ModifyPropertyVisitor implements PropertyVisitor {
     private final List<String> path;
-    private final double value;
+    protected double value;
     private boolean hasFound = false;
+    protected ModifyPropMode mode = ModifyPropMode.ABSOLUTE;
 
     public ModifyPropertyVisitor(FlamePropertyPath pPath, double pValue) {
       path = pPath.getPathComponents();
@@ -350,7 +377,18 @@ public class AnimationModelService {
       if (accepted) {
         if (pField.getType() == Double.class || pField.getType() == double.class) {
           try {
-            pField.setDouble(pOwner, value);
+            switch (mode) {
+              case ABSOLUTE:
+                pField.setDouble(pOwner, value);
+                break;
+              case PERCENT:
+                Double o = pField.getDouble(pOwner);
+                if (o == null) {
+                  o = 0.0;
+                }
+                o += value * o / 100.0;
+                break;
+            }
           }
           catch (IllegalArgumentException e) {
             throw new RuntimeException(e);
@@ -446,4 +484,9 @@ public class AnimationModelService {
     }
   }
 
+  public static void setRandomFlameProperty(Flame pFlame, double pPercent) {
+    PropertyModel res = createModel(pFlame);
+    ModifyRandomPropertyVisitor visitor = new ModifyRandomPropertyVisitor(pFlame, pPercent, res.getTotalCount());
+    visitModel(res, pFlame, visitor);
+  }
 }
