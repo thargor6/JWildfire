@@ -75,7 +75,7 @@ import org.jwildfire.create.tina.batch.Job;
 import org.jwildfire.create.tina.batch.JobRenderThread;
 import org.jwildfire.create.tina.batch.JobRenderThreadController;
 import org.jwildfire.create.tina.dance.DancingFractalsController;
-import org.jwildfire.create.tina.dance.model.AnimationModelService;
+import org.jwildfire.create.tina.dance.MutaGenController;
 import org.jwildfire.create.tina.edit.UndoManager;
 import org.jwildfire.create.tina.io.Flam3PaletteReader;
 import org.jwildfire.create.tina.io.Flam3Reader;
@@ -134,6 +134,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
   private static final double SLIDER_SCALE_BLUR_FALLOFF = 10.0;
 
   private DancingFractalsController dancingFractalsController;
+  private MutaGenController mutaGenController;
   private TinaInteractiveRendererController interactiveRendererCtrl;
   private TinaSWFAnimatorController swfAnimatorCtrl;
 
@@ -183,6 +184,35 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
         parameterObject.pDancingFlamesCreateMotionsCmb, parameterObject.pDancingFlamesClearMotionsBtn, parameterObject.pDancingFlamesLoadProjectBtn, parameterObject.pDancingFlamesSaveProjectBtn,
         parameterObject.pDancingFlamesMotionLinksTable);
 
+    {
+      JPanel flamePanels[] = new JPanel[25];
+      flamePanels[0] = parameterObject.mutaGen01Pnl;
+      flamePanels[1] = parameterObject.mutaGen02Pnl;
+      flamePanels[2] = parameterObject.mutaGen03Pnl;
+      flamePanels[3] = parameterObject.mutaGen04Pnl;
+      flamePanels[4] = parameterObject.mutaGen05Pnl;
+      flamePanels[5] = parameterObject.mutaGen06Pnl;
+      flamePanels[6] = parameterObject.mutaGen07Pnl;
+      flamePanels[7] = parameterObject.mutaGen08Pnl;
+      flamePanels[8] = parameterObject.mutaGen09Pnl;
+      flamePanels[9] = parameterObject.mutaGen10Pnl;
+      flamePanels[10] = parameterObject.mutaGen11Pnl;
+      flamePanels[11] = parameterObject.mutaGen12Pnl;
+      flamePanels[12] = parameterObject.mutaGen13Pnl;
+      flamePanels[13] = parameterObject.mutaGen14Pnl;
+      flamePanels[14] = parameterObject.mutaGen15Pnl;
+      flamePanels[15] = parameterObject.mutaGen16Pnl;
+      flamePanels[16] = parameterObject.mutaGen17Pnl;
+      flamePanels[17] = parameterObject.mutaGen18Pnl;
+      flamePanels[18] = parameterObject.mutaGen19Pnl;
+      flamePanels[19] = parameterObject.mutaGen20Pnl;
+      flamePanels[20] = parameterObject.mutaGen21Pnl;
+      flamePanels[21] = parameterObject.mutaGen22Pnl;
+      flamePanels[22] = parameterObject.mutaGen23Pnl;
+      flamePanels[23] = parameterObject.mutaGen24Pnl;
+      flamePanels[24] = parameterObject.mutaGen25Pnl;
+      mutaGenController = new MutaGenController(this, parameterObject.pErrorHandler, prefs, flamePanels);
+    }
     data.cameraRollREd = parameterObject.pCameraRollREd;
     data.cameraRollSlider = parameterObject.pCameraRollSlider;
     data.cameraPitchREd = parameterObject.pCameraPitchREd;
@@ -5450,9 +5480,8 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
   public void quickMutateButton_clicked() {
     Flame flame = getCurrFlame();
     if (flame != null) {
-      saveUndoPoint();
-      AnimationModelService.setRandomFlameProperty(flame, 5.0);
-      transformationTableClicked();
+      mutaGenController.importFlame(flame);
+      rootTabbedPane.setSelectedIndex(MutaGenController.PAGE_INDEX);
     }
   }
 }

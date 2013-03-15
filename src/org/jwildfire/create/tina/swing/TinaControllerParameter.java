@@ -287,6 +287,31 @@ public class TinaControllerParameter {
   public JButton pDancingFlamesLoadProjectBtn;
   public JButton pDancingFlamesSaveProjectBtn;
   public JTable pDancingFlamesMotionLinksTable;
+  public JPanel mutaGen01Pnl;
+  public JPanel mutaGen02Pnl;
+  public JPanel mutaGen03Pnl;
+  public JPanel mutaGen04Pnl;
+  public JPanel mutaGen05Pnl;
+  public JPanel mutaGen06Pnl;
+  public JPanel mutaGen07Pnl;
+  public JPanel mutaGen08Pnl;
+  public JPanel mutaGen09Pnl;
+  public JPanel mutaGen10Pnl;
+  public JPanel mutaGen11Pnl;
+  public JPanel mutaGen12Pnl;
+  public JPanel mutaGen13Pnl;
+  public JPanel mutaGen14Pnl;
+  public JPanel mutaGen15Pnl;
+  public JPanel mutaGen16Pnl;
+  public JPanel mutaGen17Pnl;
+  public JPanel mutaGen18Pnl;
+  public JPanel mutaGen19Pnl;
+  public JPanel mutaGen20Pnl;
+  public JPanel mutaGen21Pnl;
+  public JPanel mutaGen22Pnl;
+  public JPanel mutaGen23Pnl;
+  public JPanel mutaGen24Pnl;
+  public JPanel mutaGen25Pnl;
 
   public void setParams1(JInternalFrame pTinaFrame, ErrorHandler pErrorHandler, Prefs pPrefs, JPanel pCenterPanel, JWFNumberField pCameraRollREd, JSlider pCameraRollSlider, JWFNumberField pCameraPitchREd, JSlider pCameraPitchSlider, JWFNumberField pCameraYawREd, JSlider pCameraYawSlider, JWFNumberField pCameraPerspectiveREd, JSlider pCameraPerspectiveSlider, JWFNumberField pCameraCentreXREd, JSlider pCameraCentreXSlider, JWFNumberField pCameraCentreYREd, JSlider pCameraCentreYSlider, JWFNumberField pCameraZoomREd, JSlider pCameraZoomSlider, JCheckBox pNewDOFCBx, JWFNumberField pFocusXREd, JSlider pFocusXSlider, JWFNumberField pFocusYREd, JSlider pFocusYSlider, JWFNumberField pFocusZREd, JSlider pFocusZSlider, JWFNumberField pDimishZREd, JSlider pDimishZSlider,
       JWFNumberField pCameraDOFREd, JSlider pCameraDOFSlider, JWFNumberField pCameraDOFAreaREd, JSlider pCameraDOFAreaSlider, JWFNumberField pCameraDOFExponentREd, JSlider pCameraDOFExponentSlider, JWFNumberField pCamZREd, JSlider pCamZSlider, JWFNumberField pPixelsPerUnitREd, JSlider pPixelsPerUnitSlider, JWFNumberField pBrightnessREd, JSlider pBrightnessSlider, JWFNumberField pContrastREd, JSlider pContrastSlider, JWFNumberField pGammaREd, JSlider pGammaSlider, JWFNumberField pVibrancyREd, JSlider pVibrancySlider, JWFNumberField pFilterRadiusREd, JSlider pFilterRadiusSlider, JComboBox pFilterKernelCmb, JCheckBox pDEFilterEnableCbx, JWFNumberField pDEFilterMaxRadiusREd, JSlider pDEFilterMaxRadiusSlider, JWFNumberField pDEFilterMinRadiusREd, JSlider pDEFilterMinRadiusSlider,
@@ -558,7 +583,10 @@ public class TinaControllerParameter {
 
   public void setParams2(JButton pDancingFlamesLinkMotionBtn, JButton pDancingFlamesUnlinkMotionBtn, JComboBox pDancingFlamesCreateMotionsCmb, JButton pDancingFlamesClearMotionsBtn, JButton pDancingFlamesLoadProjectBtn, JButton pDancingFlamesSaveProjectBtn, JTable pDancingFlamesMotionLinksTable,
       JWFNumberField pShadingDistanceColorStyleREd, JSlider pShadingDistanceColorStyleSlider, JWFNumberField pShadingDistanceColorCoordinateREd, JSlider pShadingDistanceColorCoordinateSlider,
-      JWFNumberField pShadingDistanceColorShiftREd, JSlider pShadingDistanceColorShiftSlider) {
+      JWFNumberField pShadingDistanceColorShiftREd, JSlider pShadingDistanceColorShiftSlider, JPanel pMutaGen01Pnl, JPanel pMutaGen02Pnl, JPanel pMutaGen03Pnl, JPanel pMutaGen04Pnl, JPanel pMutaGen05Pnl,
+      JPanel pMutaGen06Pnl, JPanel pMutaGen07Pnl, JPanel pMutaGen08Pnl, JPanel pMutaGen09Pnl, JPanel pMutaGen10Pnl, JPanel pMutaGen11Pnl, JPanel pMutaGen12Pnl, JPanel pMutaGen13Pnl, JPanel pMutaGen14Pnl,
+      JPanel pMutaGen15Pnl, JPanel pMutaGen16Pnl, JPanel pMutaGen17Pnl, JPanel pMutaGen18Pnl, JPanel pMutaGen19Pnl, JPanel pMutaGen20Pnl, JPanel pMutaGen21Pnl, JPanel pMutaGen22Pnl, JPanel pMutaGen23Pnl,
+      JPanel pMutaGen24Pnl, JPanel pMutaGen25Pnl) {
     this.pDancingFlamesLinkMotionBtn = pDancingFlamesLinkMotionBtn;
     this.pDancingFlamesUnlinkMotionBtn = pDancingFlamesUnlinkMotionBtn;
     this.pDancingFlamesCreateMotionsCmb = pDancingFlamesCreateMotionsCmb;
@@ -572,6 +600,31 @@ public class TinaControllerParameter {
     this.pShadingDistanceColorCoordinateSlider = pShadingDistanceColorCoordinateSlider;
     this.pShadingDistanceColorShiftREd = pShadingDistanceColorShiftREd;
     this.pShadingDistanceColorShiftSlider = pShadingDistanceColorShiftSlider;
+    this.mutaGen01Pnl = pMutaGen01Pnl;
+    this.mutaGen02Pnl = pMutaGen02Pnl;
+    this.mutaGen03Pnl = pMutaGen03Pnl;
+    this.mutaGen04Pnl = pMutaGen04Pnl;
+    this.mutaGen05Pnl = pMutaGen05Pnl;
+    this.mutaGen06Pnl = pMutaGen06Pnl;
+    this.mutaGen07Pnl = pMutaGen07Pnl;
+    this.mutaGen08Pnl = pMutaGen08Pnl;
+    this.mutaGen09Pnl = pMutaGen09Pnl;
+    this.mutaGen10Pnl = pMutaGen10Pnl;
+    this.mutaGen11Pnl = pMutaGen11Pnl;
+    this.mutaGen12Pnl = pMutaGen12Pnl;
+    this.mutaGen13Pnl = pMutaGen13Pnl;
+    this.mutaGen14Pnl = pMutaGen14Pnl;
+    this.mutaGen15Pnl = pMutaGen15Pnl;
+    this.mutaGen16Pnl = pMutaGen16Pnl;
+    this.mutaGen17Pnl = pMutaGen17Pnl;
+    this.mutaGen18Pnl = pMutaGen18Pnl;
+    this.mutaGen19Pnl = pMutaGen19Pnl;
+    this.mutaGen20Pnl = pMutaGen20Pnl;
+    this.mutaGen21Pnl = pMutaGen21Pnl;
+    this.mutaGen22Pnl = pMutaGen22Pnl;
+    this.mutaGen23Pnl = pMutaGen23Pnl;
+    this.mutaGen24Pnl = pMutaGen24Pnl;
+    this.mutaGen25Pnl = pMutaGen25Pnl;
   }
 
 }

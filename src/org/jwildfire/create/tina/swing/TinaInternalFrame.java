@@ -4559,7 +4559,10 @@ public class TinaInternalFrame extends JInternalFrame {
         getDancingFlamesCreateMotionsCmb(), getDancingFlamesClearMotionsBtn(), getDancingFlamesLoadProjectBtn(), getDancingFlamesSaveProjectBtn(),
         getDancingFlamesMotionLinksTable(), getShadingDistanceColorStyleREd(), getShadingDistanceColorStyleSlider(),
         getShadingDistanceColorCoordinateREd(), getShadingDistanceColorCoordinateSlider(), getShadingDistanceColorShiftREd(),
-        getShadingDistanceColorShiftSlider());
+        getShadingDistanceColorShiftSlider(), getMutaGen01Pnl(), getMutaGen02Pnl(), getMutaGen03Pnl(), getMutaGen04Pnl(), getMutaGen05Pnl(),
+        getMutaGen06Pnl(), getMutaGen07Pnl(), getMutaGen08Pnl(), getMutaGen09Pnl(), getMutaGen10Pnl(), getMutaGen11Pnl(), getMutaGen12Pnl(),
+        getMutaGen13Pnl(), getMutaGen14Pnl(), getMutaGen15Pnl(), getMutaGen16Pnl(), getMutaGen17Pnl(), getMutaGen18Pnl(), getMutaGen19Pnl(),
+        getMutaGen20Pnl(), getMutaGen21Pnl(), getMutaGen22Pnl(), getMutaGen23Pnl(), getMutaGen24Pnl(), getMutaGen25Pnl());
 
     tinaController = new TinaController(params);
 

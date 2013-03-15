@@ -88,7 +88,7 @@ import org.jwildfire.transform.TextTransformer.VAlignment;
 import com.l2fprod.common.beans.editor.ComboBoxPropertyEditor;
 
 public class DancingFractalsController {
-  public static final int PAGE_INDEX = 3;
+  public static final int PAGE_INDEX = 4;
   private final ErrorHandler errorHandler;
   private final TinaController parentCtrl;
   private final Prefs prefs;
