@@ -321,28 +321,28 @@ public class AnimationModelService {
       super(new FlamePropertyPath(pFlame, ""), pPercent);
       propCount = pPropCount;
       acceptAt = (int) (Math.random() * propCount);
-      mode = ModifyPropMode.PERCENT;
-      value = Math.random() < 0.6 ? pPercent : -pPercent;
+      mode = ModifyPropMode.ADD;
+      value = pPercent;
     }
 
     public boolean accept(PlainProperty pProperty) {
       boolean res = ++propCounter >= acceptAt;
-      if (res) {
-        System.out.println("ACCEPT " + pProperty.getName());
-      }
+      //      if (res) {
+      //        System.out.println("ACCEPT " + pProperty.getName());
+      //      }
       return res;
     }
   }
 
   private enum ModifyPropMode {
-    ABSOLUTE, PERCENT
+    SET, ADD
   }
 
   private static class ModifyPropertyVisitor implements PropertyVisitor {
     private final List<String> path;
     protected double value;
     private boolean hasFound = false;
-    protected ModifyPropMode mode = ModifyPropMode.ABSOLUTE;
+    protected ModifyPropMode mode = ModifyPropMode.SET;
 
     public ModifyPropertyVisitor(FlamePropertyPath pPath, double pValue) {
       path = pPath.getPathComponents();
@@ -378,15 +378,16 @@ public class AnimationModelService {
         if (pField.getType() == Double.class || pField.getType() == double.class) {
           try {
             switch (mode) {
-              case ABSOLUTE:
+              case SET:
                 pField.setDouble(pOwner, value);
                 break;
-              case PERCENT:
+              case ADD:
                 Double o = pField.getDouble(pOwner);
                 if (o == null) {
                   o = 0.0;
                 }
-                o += value * o / 100.0;
+                o += value;
+                pField.setDouble(pOwner, o);
                 break;
             }
           }
@@ -399,7 +400,20 @@ public class AnimationModelService {
         }
         else if (pField.getType() == Integer.class || pField.getType() == int.class) {
           try {
-            pField.setInt(pOwner, Tools.FTOI(value));
+            switch (mode) {
+              case SET:
+                pField.setInt(pOwner, Tools.FTOI(value));
+                break;
+              case ADD:
+                Integer o = pField.getInt(pOwner);
+                if (o == null) {
+                  o = 0;
+                }
+                o += Tools.FTOI(value);
+                System.out.println(o);
+                pField.setInt(pOwner, o);
+                break;
+            }
           }
           catch (IllegalArgumentException e) {
             throw new RuntimeException(e);
@@ -410,7 +424,11 @@ public class AnimationModelService {
         }
         else if (pField.getType() == Boolean.class || pField.getType() == boolean.class) {
           try {
-            pField.setBoolean(pOwner, Tools.FTOI(value) != 0);
+            switch (mode) {
+              case SET:
+                pField.setBoolean(pOwner, Tools.FTOI(value) != 0);
+                break;
+            }
           }
           catch (IllegalArgumentException e) {
             throw new RuntimeException(e);
@@ -439,9 +457,6 @@ public class AnimationModelService {
     public boolean accept(XForm pXForm, String pPropName, PlainProperty pProperty) {
       boolean accepted = accept(pProperty);
       if (accepted) {
-
-        System.out.println(pPropName + " " + value);
-
         if (pPropName.equals(PROPNAME_ORIGIN_X)) {
           XFormTransformService.localTranslate(pXForm, value, 0, false);
         }
