@@ -316,6 +316,12 @@ public class AnimationModelService {
     private final int propCount;
     private final int acceptAt;
     private int propCounter;
+    private static List<String> blackList;
+
+    static {
+      blackList = new ArrayList<String>();
+      blackList.add("iter");
+    }
 
     public ModifyRandomPropertyVisitor(Flame pFlame, double pPercent, int pPropCount) {
       super(new FlamePropertyPath(pFlame, ""), pPercent);
@@ -327,9 +333,14 @@ public class AnimationModelService {
 
     public boolean accept(PlainProperty pProperty) {
       boolean res = ++propCounter >= acceptAt;
-      //      if (res) {
-      //        System.out.println("ACCEPT " + pProperty.getName());
-      //      }
+      if (res) {
+        if (pProperty.getName().indexOf("mod") == 0 || blackList.indexOf(pProperty.getName()) >= 0) {
+          res = false;
+        }
+      }
+      if (res) {
+        System.out.println("ACCEPT " + pProperty.getName());
+      }
       return res;
     }
   }

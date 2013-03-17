@@ -25,7 +25,7 @@ import org.jwildfire.create.tina.variation.VariationFuncList;
 public class ExperimentalSimpleRandomFlameGenerator extends
     RandomFlameGenerator {
 
-  protected static final String FNCLST_EXPERIMENTAL[] = { "blur3D", "bubble",
+  public static final String FNCLST_EXPERIMENTAL[] = { "blur3D", "bubble",
       "escher", "rays", "epispiral_wf", "curl3D", "diamond",
       "cloverleaf_wf", "disc", "sech", "loonie", "exp", "cosh", "split", "waves2_3D",
       "wedge_sph", "circlize", "heart_wf", "bwraps7", "colorscale_wf", "gdoffs", "taurus",

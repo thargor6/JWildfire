@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2013 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -22,6 +22,7 @@ import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
@@ -75,12 +76,12 @@ import org.jwildfire.create.tina.batch.Job;
 import org.jwildfire.create.tina.batch.JobRenderThread;
 import org.jwildfire.create.tina.batch.JobRenderThreadController;
 import org.jwildfire.create.tina.dance.DancingFractalsController;
-import org.jwildfire.create.tina.dance.MutaGenController;
 import org.jwildfire.create.tina.edit.UndoManager;
 import org.jwildfire.create.tina.io.Flam3PaletteReader;
 import org.jwildfire.create.tina.io.Flam3Reader;
 import org.jwildfire.create.tina.io.Flam3Writer;
 import org.jwildfire.create.tina.io.RGBPaletteReader;
+import org.jwildfire.create.tina.mutagen.MutaGenController;
 import org.jwildfire.create.tina.palette.MedianCutQuantizer;
 import org.jwildfire.create.tina.palette.RGBColor;
 import org.jwildfire.create.tina.palette.RGBPalette;
@@ -116,6 +117,8 @@ import org.jwildfire.swing.MainController;
 import com.l2fprod.common.swing.JFontChooser;
 
 public class TinaController implements FlameHolder, JobRenderThreadController, ScriptRunnerEnvironment, UndoManagerHolder<Flame> {
+  public static final int PAGE_INDEX = 0;
+
   private static final double SLIDER_SCALE_PERSPECTIVE = 100.0;
   private static final double SLIDER_SCALE_CENTRE = 5000.0;
   private static final double SLIDER_SCALE_ZOOM = 1000.0;
@@ -211,7 +214,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       flamePanels[22] = parameterObject.mutaGen23Pnl;
       flamePanels[23] = parameterObject.mutaGen24Pnl;
       flamePanels[24] = parameterObject.mutaGen25Pnl;
-      mutaGenController = new MutaGenController(this, parameterObject.pErrorHandler, prefs, flamePanels,
+      mutaGenController = new MutaGenController(this, parameterObject.pErrorHandler, prefs, parameterObject.pRootTabbedPane, flamePanels,
           parameterObject.mutaGenTree, parameterObject.mutaGenEditFlameBtn, parameterObject.mutaGenLoadFlameFromEditorBtn,
           parameterObject.mutaGenLoadFlameFromClipboardBtn, parameterObject.mutaGenLoadFlameFromFileBtn, parameterObject.mutaGenProgressBar,
           parameterObject.mutaGenAmountREd, parameterObject.mutaGenAmountSlider, parameterObject.mutaGenHorizontalTrendCmb,
@@ -5484,8 +5487,18 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
   public void quickMutateButton_clicked() {
     Flame flame = getCurrFlame();
     if (flame != null) {
-      mutaGenController.importFlame(flame);
       rootTabbedPane.setSelectedIndex(MutaGenController.PAGE_INDEX);
+      rootTabbedPane.getParent().invalidate();
+      try {
+        Graphics g = rootTabbedPane.getParent().getGraphics();
+        if (g != null) {
+          rootTabbedPane.getParent().paint(g);
+        }
+      }
+      catch (Throwable ex) {
+        ex.printStackTrace();
+      }
+      mutaGenController.importFlame(flame);
     }
   }
 }
