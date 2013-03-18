@@ -16,16 +16,75 @@
 */
 package org.jwildfire.create.tina.mutagen;
 
+import static org.jwildfire.base.mathlib.MathLib.EPSILON;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Flame;
-import org.jwildfire.create.tina.dance.model.AnimationModelService;
+import org.jwildfire.create.tina.base.XForm;
+import org.jwildfire.create.tina.variation.VariationFunc;
 
 public class RandomParamMutation implements Mutation {
 
   @Override
   public void execute(Flame pFlame) {
-    AnimationModelService.setRandomFlameProperty(pFlame, 3.0 * (0.75 + 0.25 * Math.random()));
-    AnimationModelService.setRandomFlameProperty(pFlame, 2.0 * (0.75 + 0.25 * Math.random()));
-    AnimationModelService.setRandomFlameProperty(pFlame, 1.0 * (0.75 + 0.25 * Math.random()));
+    setRandomFlameProperty(pFlame, 6.0 * (0.25 + 0.75 * Math.random()));
+    setRandomFlameProperty(pFlame, 5.0 * (0.25 + 0.75 * Math.random()));
+    setRandomFlameProperty(pFlame, 2.0 * (0.25 + 0.75 * Math.random()));
+  }
+
+  private void setRandomFlameProperty(Flame pFlame, double pAmount) {
+    List<VariationFunc> variations = new ArrayList<VariationFunc>();
+
+    for (XForm xForm : pFlame.getXForms()) {
+      addVariations(variations, xForm);
+    }
+    for (XForm xForm : pFlame.getFinalXForms()) {
+      addVariations(variations, xForm);
+    }
+
+    if (variations.size() > 0) {
+      int idx = (int) (Math.random() * variations.size());
+      VariationFunc var = variations.get(idx);
+      int pIdx = (int) (Math.random() * var.getParameterNames().length);
+      Object oldVal = var.getParameterValues()[pIdx];
+      if (oldVal instanceof Integer) {
+        int o = (Integer) oldVal;
+        System.out.print("SETI(" + var.getParameterNames()[pIdx] + ") " + o + "->");
+        int da = Tools.FTOI(pAmount);
+        if (da < 1) {
+          da = 1;
+        }
+        o += Math.random() < 0.5 ? da : -da;
+        System.out.println(o);
+        var.setParameter(var.getParameterNames()[pIdx], o);
+      }
+      else if (oldVal instanceof Double) {
+        double o = (Double) oldVal;
+        System.out.print("SETF(" + var.getParameterNames()[pIdx] + ") " + o + "->");
+        if (o < EPSILON || Math.random() < 0.3) {
+          o += 0.1 * (Math.random() < 0.5 ? pAmount : -pAmount);
+        }
+        else {
+          o += o / 100.0 * (Math.random() < 0.5 ? pAmount : -pAmount);
+        }
+        System.out.println(o);
+        var.setParameter(var.getParameterNames()[pIdx], o);
+      }
+    }
+  }
+
+  private void addVariations(List<VariationFunc> pVariations, XForm pXForm) {
+    if (pXForm.getVariationCount() > 0) {
+      for (int i = 0; i < pXForm.getVariationCount(); i++) {
+        VariationFunc var = pXForm.getVariation(i).getFunc();
+        if (var.getParameterNames() != null && var.getParameterNames().length > 0) {
+          pVariations.add(var);
+        }
+      }
+    }
   }
 
 }

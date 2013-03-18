@@ -17,16 +17,20 @@
 package org.jwildfire.create.tina.mutagen;
 
 import org.jwildfire.create.tina.base.Flame;
+import org.jwildfire.create.tina.base.XForm;
 
-public class ColorMutation implements Mutation {
+public class GradientPositionMutation implements Mutation {
 
   @Override
   public void execute(Flame pFlame) {
-    if (Math.random() < 0.5) {
-      pFlame.getPalette().setModShift(-256 + (int) (512 * Math.random()));
-    }
-    else {
-      pFlame.getPalette().setModHue((int) (256 * Math.random()));
+    for (int i = 0; i < pFlame.getXForms().size(); i++) {
+      XForm xForm = pFlame.getXForms().get(i);
+      if (Math.random() < 0.67) {
+        xForm.setColor(Math.random());
+      }
+      else {
+        xForm.setColorSymmetry(Math.random());
+      }
     }
   }
 

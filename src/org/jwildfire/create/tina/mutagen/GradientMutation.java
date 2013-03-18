@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2013 Andreas Maschke
+  Copyright (C) 1995-2011 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -16,34 +16,18 @@
 */
 package org.jwildfire.create.tina.mutagen;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.jwildfire.create.tina.base.Flame;
 
-public class AllMutation implements Mutation {
-  private static List<MutationType> types;
-
-  static {
-    types = new ArrayList<MutationType>();
-    types.add(MutationType.ADD_TRANSFORM);
-    types.add(MutationType.AFFINE);
-    types.add(MutationType.CHANGE_WEIGHT);
-    types.add(MutationType.GRADIENT);
-    types.add(MutationType.CHANGE_WEIGHT);
-    types.add(MutationType.ADD_TRANSFORM);
-    types.add(MutationType.AFFINE);
-    types.add(MutationType.AFFINE);
-    types.add(MutationType.RANDOM_PARAMETER);
-    types.add(MutationType.GRADIENT_POSITION);
-    types.add(MutationType.RANDOM_FLAME);
-    types.add(MutationType.CHANGE_WEIGHT);
-    types.add(MutationType.RANDOM_PARAMETER);
-  }
+public class GradientMutation implements Mutation {
 
   @Override
   public void execute(Flame pFlame) {
-    Mutation mutation = types.get((int) (types.size() * Math.random())).createMutationInstance();
-    mutation.execute(pFlame);
+    if (Math.random() < 0.5) {
+      pFlame.getPalette().setModShift(-256 + (int) (512 * Math.random()));
+    }
+    else {
+      pFlame.getPalette().setModHue((int) (256 * Math.random()));
+    }
   }
+
 }

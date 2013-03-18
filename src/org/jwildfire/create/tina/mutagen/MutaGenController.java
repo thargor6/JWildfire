@@ -1,25 +1,37 @@
 package org.jwildfire.create.tina.mutagen;
 
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.Toolkit;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.Transferable;
 import java.awt.event.MouseEvent;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
-import javax.swing.JSlider;
 import javax.swing.JTabbedPane;
-import javax.swing.JTree;
+import javax.swing.JTextPane;
 
 import org.jwildfire.base.Prefs;
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Flame;
+import org.jwildfire.create.tina.io.Flam3Reader;
 import org.jwildfire.create.tina.render.FlameRenderer;
 import org.jwildfire.create.tina.render.RenderInfo;
 import org.jwildfire.create.tina.render.RenderedFlame;
+import org.jwildfire.create.tina.swing.FlameFileChooser;
 import org.jwildfire.create.tina.swing.JWFNumberField;
 import org.jwildfire.create.tina.swing.TinaController;
 import org.jwildfire.image.SimpleImage;
@@ -33,22 +45,25 @@ public class MutaGenController {
   private final Prefs prefs;
   private final JTabbedPane rootTabbedPane;
   private final JPanel flamePanels[];
-  private final JTree mutaGenTree;
-  private final JButton editFlameBtn;
   private final JButton loadFlameFromEditorBtn;
   private final JButton loadFlameFromClipboardBtn;
   private final JButton loadFlameFromFileBtn;
   private final JProgressBar progressBar;
   private final JWFNumberField amountREd;
-  private final JSlider amountSlider;
-  private final JComboBox horizontalTrendCmb;
-  private final JComboBox verticalTrendCmb;
+  private final JComboBox horizontalTrend1Cmb;
+  private final JComboBox horizontalTrend2Cmb;
+  private final JComboBox verticalTrend1Cmb;
+  private final JComboBox verticalTrend2Cmb;
+  private final JButton backButton;
+  private final JButton forwardButton;
+  private final JTextPane hintPane;
 
   private ImagePanel imagePanels[][];
   private final int MUTA_ROWS = 5;
   private final int MUTA_COLS = 5;
   private final List<MutationSet> mutationList = new ArrayList<MutationSet>();
-  private MutationSet selectedSet = new MutationSet(MUTA_ROWS, MUTA_COLS, (Flame) null);
+  private int selectedMutationIdx = -1;
+  private boolean noRefresh = false;
 
   private class MutationSet {
     final int rows, cols;
@@ -91,38 +106,64 @@ public class MutaGenController {
 
   }
 
-  public MutaGenController(TinaController pTinaController, ErrorHandler pErrorHandler, Prefs pPrefs, JTabbedPane pRootTabbedPane, JPanel pFlamePanels[], JTree pMutaGenTree,
-      JButton pEditFlameBtn, JButton pLoadFlameFromEditorBtn, JButton pLoadFlameFromClipboardBtn, JButton pLoadFlameFromFileBtn,
-      JProgressBar pProgressBar, JWFNumberField pAmountREd, JSlider pAmountSlider, JComboBox pHorizontalTrendCmb, JComboBox pVerticalTrendCmb) {
+  public MutaGenController(TinaController pTinaController, ErrorHandler pErrorHandler, Prefs pPrefs, JTabbedPane pRootTabbedPane, JPanel pFlamePanels[],
+      JButton pLoadFlameFromEditorBtn, JButton pLoadFlameFromClipboardBtn, JButton pLoadFlameFromFileBtn,
+      JProgressBar pProgressBar, JWFNumberField pAmountREd, JComboBox pHorizontalTrend1Cmb, JComboBox pHorizontalTrend2Cmb,
+      JComboBox pVerticalTrend1Cmb, JComboBox pVerticalTrend2Cmb, JButton pBackButton, JButton pForwardButton, JTextPane pHintPane) {
     tinaController = pTinaController;
     errorHandler = pErrorHandler;
     flamePanels = pFlamePanels;
     prefs = pPrefs;
     rootTabbedPane = pRootTabbedPane;
-    mutaGenTree = pMutaGenTree;
-    editFlameBtn = pEditFlameBtn;
     loadFlameFromEditorBtn = pLoadFlameFromEditorBtn;
     loadFlameFromClipboardBtn = pLoadFlameFromClipboardBtn;
     loadFlameFromFileBtn = pLoadFlameFromFileBtn;
     progressBar = pProgressBar;
     amountREd = pAmountREd;
-    amountSlider = pAmountSlider;
-    horizontalTrendCmb = pHorizontalTrendCmb;
-    refreshTrendCmb(horizontalTrendCmb);
-    verticalTrendCmb = pVerticalTrendCmb;
-    refreshTrendCmb(verticalTrendCmb);
+    horizontalTrend1Cmb = pHorizontalTrend1Cmb;
+    horizontalTrend2Cmb = pHorizontalTrend2Cmb;
+    verticalTrend1Cmb = pVerticalTrend1Cmb;
+    verticalTrend2Cmb = pVerticalTrend2Cmb;
+    backButton = pBackButton;
+    forwardButton = pForwardButton;
+    hintPane = pHintPane;
+
+    refreshTrendCmb(horizontalTrend1Cmb);
+    refreshTrendCmb(horizontalTrend2Cmb);
+    refreshTrendCmb(verticalTrend1Cmb);
+    refreshTrendCmb(verticalTrend2Cmb);
+
+    noRefresh = true;
+    try {
+      amountREd.setValue(1.0);
+    }
+    finally {
+      noRefresh = false;
+    }
+
+    initHintsPane();
   }
 
   private void refreshTrendCmb(JComboBox pCmb) {
-    // TODO
+    pCmb.removeAllItems();
+    pCmb.addItem(MutationType.ALL);
+    pCmb.addItem(MutationType.ADD_TRANSFORM);
+    pCmb.addItem(MutationType.AFFINE);
+    pCmb.addItem(MutationType.CHANGE_WEIGHT);
+    pCmb.addItem(MutationType.GRADIENT);
+    pCmb.addItem(MutationType.GRADIENT_POSITION);
+    pCmb.addItem(MutationType.RANDOM_FLAME);
+    pCmb.addItem(MutationType.RANDOM_PARAMETER);
+    pCmb.setSelectedIndex(0);
   }
 
   public void importFlame(Flame pFlame) {
     Flame baseFlame = pFlame.makeCopy();
     MutationSet set = new MutationSet(MUTA_ROWS, MUTA_COLS, baseFlame);
     mutationList.add(set);
-    selectedSet = set;
+    selectedMutationIdx = mutationList.size() - 1;
     mutate(MUTA_ROWS / 2, MUTA_COLS / 2);
+    enableControls();
   }
 
   private SimpleImage renderFlame(Flame pFlame) {
@@ -139,7 +180,7 @@ public class MutaGenController {
       pFlame.setPixelsPerUnit((wScl + hScl) * 0.5 * pFlame.getPixelsPerUnit());
       pFlame.setWidth(imageWidth);
       pFlame.setHeight(imageHeight);
-      pFlame.setSampleDensity(30.0);
+      pFlame.setSampleDensity(20.0);
       FlameRenderer renderer = new FlameRenderer(pFlame, prefs, false);
       RenderedFlame res = renderer.renderFlame(info);
       img = res.getImage();
@@ -175,9 +216,6 @@ public class MutaGenController {
 
               @Override
               public void mouseClicked(java.awt.event.MouseEvent e) {
-
-                System.out.println(e.getClickCount() + " " + e.getButton());
-
                 if (e.getClickCount() == 2 || e.getButton() == MouseEvent.BUTTON3) {
                   mutate(row, col);
                 }
@@ -185,7 +223,6 @@ public class MutaGenController {
                   export(row, col);
                 }
               }
-
             });
 
             panel.add(imgPanel);
@@ -200,7 +237,9 @@ public class MutaGenController {
   }
 
   protected void export(int pRow, int pCol) {
-    if (selectedSet != null && selectedSet.getFlame(pRow, pCol) != null) {
+    if (selectedMutationIdx >= 0 && selectedMutationIdx < mutationList.size()) {
+      MutationSet selectedSet = mutationList.get(selectedMutationIdx);
+
       Flame baseFlame = selectedSet.getFlame(pRow, pCol);
       tinaController.importFlame(baseFlame);
 
@@ -220,7 +259,8 @@ public class MutaGenController {
   }
 
   protected void mutate(int pRow, int pCol) {
-    if (selectedSet != null && selectedSet.getFlame(pRow, pCol) != null) {
+    if (selectedMutationIdx >= 0 && selectedMutationIdx < mutationList.size()) {
+      MutationSet selectedSet = mutationList.get(selectedMutationIdx);
       final int rows = MUTA_ROWS;
       final int cols = MUTA_COLS;
       Flame baseFlame = selectedSet.getFlame(pRow, pCol);
@@ -228,11 +268,6 @@ public class MutaGenController {
       initProgress(rows, cols);
       int centreX = rows / 2;
       int centreY = cols / 2;
-
-      MutationType horizType1 = MutationType.ALL;
-      MutationType horizType2 = MutationType.ALL;
-      MutationType vertType1 = MutationType.ALL;
-      MutationType vertType2 = MutationType.ALL;
 
       int step = 0;
       for (int i = 0; i < rows; i++) {
@@ -242,7 +277,7 @@ public class MutaGenController {
           if ((i != centreX || j != centreY)) {
             int x = (i - centreX);
             int y = (j - centreY);
-            List<MutationType> mutationTypes = createMutationTypes(x, y, horizType1, horizType2, vertType1, vertType2);
+            List<MutationType> mutationTypes = createMutationTypes(x, y);
             modifyFlame(mFlame, x, y, mutationTypes);
           }
           mutations.add(mFlame);
@@ -265,42 +300,48 @@ public class MutaGenController {
       }
       MutationSet newSet = new MutationSet(rows, cols, baseFlame, mutations);
       mutationList.add(newSet);
-      selectedSet = newSet;
+      selectedMutationIdx = mutationList.size() - 1;
+      enableControls();
     }
   }
 
-  private List<MutationType> createMutationTypes(int pX, int pY, MutationType pHorizType1, MutationType pHorizType2, MutationType pVertType1, MutationType pVertType2) {
+  private List<MutationType> createMutationTypes(int pX, int pY) {
+    MutationType horizType1 = (MutationType) horizontalTrend1Cmb.getSelectedItem();
+    MutationType horizType2 = (MutationType) horizontalTrend2Cmb.getSelectedItem();
+    MutationType vertType1 = (MutationType) verticalTrend1Cmb.getSelectedItem();
+    MutationType vertType2 = (MutationType) verticalTrend2Cmb.getSelectedItem();
+
     List<MutationType> mutations = new ArrayList<MutationType>();
     if (Math.random() < 0.5) {
       if (pX == 1 || pX == -1) {
-        mutations.add(pHorizType1);
+        mutations.add(horizType1);
       }
       if (pY == 1 || pY == -1) {
-        mutations.add(pVertType1);
+        mutations.add(vertType1);
       }
     }
     else {
       if (pY == 1 || pY == -1) {
-        mutations.add(pVertType1);
+        mutations.add(vertType1);
       }
       if (pX == 1 || pX == -1) {
-        mutations.add(pHorizType1);
+        mutations.add(horizType1);
       }
     }
     if (Math.random() > 0.5) {
       if (pX == 2 || pX == -2) {
-        mutations.add(pHorizType2);
+        mutations.add(horizType2);
       }
       if (pY == 2 || pY == -2) {
-        mutations.add(pVertType2);
+        mutations.add(vertType2);
       }
     }
     else {
       if (pY == 2 || pY == -2) {
-        mutations.add(pVertType2);
+        mutations.add(vertType2);
       }
       if (pX == 2 || pX == -2) {
-        mutations.add(pHorizType2);
+        mutations.add(horizType2);
       }
     }
     return mutations;
@@ -341,5 +382,131 @@ public class MutaGenController {
     catch (Throwable ex) {
       ex.printStackTrace();
     }
+  }
+
+  public void loadFlameFromEditorBtn_clicked() {
+    if (tinaController.getCurrFlame() != null) {
+      importFlame(tinaController.getCurrFlame());
+    }
+  }
+
+  public void loadFlameFromClipboardBtn_clicked() {
+    try {
+      Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+      Transferable clipData = clipboard.getContents(clipboard);
+      if (clipData != null) {
+        if (clipData.isDataFlavorSupported(DataFlavor.stringFlavor)) {
+          String xml = (String) (clipData.getTransferData(
+              DataFlavor.stringFlavor));
+          List<Flame> flames = new Flam3Reader(prefs).readFlamesfromXML(xml);
+          Flame flame = flames.get(0);
+          if (flame != null) {
+            importFlame(flame);
+          }
+        }
+      }
+    }
+    catch (Throwable ex) {
+      errorHandler.handleError(ex);
+    }
+  }
+
+  public void loadFlameFromFileBtn_clicked() {
+    try {
+      JFileChooser chooser = new FlameFileChooser(prefs);
+      if (prefs.getInputFlamePath() != null) {
+        try {
+          chooser.setCurrentDirectory(new File(prefs.getInputFlamePath()));
+        }
+        catch (Exception ex) {
+          ex.printStackTrace();
+        }
+      }
+      if (chooser.showOpenDialog(rootTabbedPane) == JFileChooser.APPROVE_OPTION) {
+        File file = chooser.getSelectedFile();
+        List<Flame> flames = new Flam3Reader(prefs).readFlames(file.getAbsolutePath());
+        Flame flame = flames.get(0);
+        prefs.setLastInputFlameFile(file);
+        if (flame != null) {
+          importFlame(flame);
+        }
+      }
+    }
+    catch (Throwable ex) {
+      errorHandler.handleError(ex);
+    }
+  }
+
+  public void backBtn_clicked() {
+    if (selectedMutationIdx > 0 && mutationList.size() > 0) {
+      selectedMutationIdx--;
+      drawSelectedSet();
+    }
+  }
+
+  public void forwardBtn_clicked() {
+    if (selectedMutationIdx >= 0 && selectedMutationIdx < mutationList.size() - 1) {
+      selectedMutationIdx++;
+      drawSelectedSet();
+    }
+  }
+
+  public void drawSelectedSet() {
+    MutationSet selectedSet = mutationList.get(selectedMutationIdx);
+    int rows = selectedSet.getRows();
+    int cols = selectedSet.getCols();
+    initProgress(rows, cols);
+    int step = 0;
+    for (int i = 0; i < rows; i++) {
+      for (int j = 0; j < cols; j++) {
+        Flame mFlame = selectedSet.getFlame(i, j).makeCopy();
+        SimpleImage renderedImg = renderFlame(mFlame);
+        ImagePanel pnl = imagePanels[i][j];
+        pnl.setImage(renderedImg);
+        showProgress(++step);
+        pnl.invalidate();
+        try {
+          Graphics g = pnl.getGraphics();
+          if (g != null) {
+            pnl.paint(g);
+          }
+        }
+        catch (Throwable ex) {
+          ex.printStackTrace();
+        }
+      }
+    }
+    enableControls();
+  }
+
+  private void initHintsPane() {
+    hintPane.setContentType("text/html");
+    try {
+      Font f = new Font(Font.SANS_SERIF, 3, 10);
+      hintPane.setFont(f);
+
+      InputStream is = this.getClass().getResourceAsStream("hints.html");
+      StringBuffer content = new StringBuffer();
+      String lineFeed = System.getProperty("line.separator");
+      String line;
+      Reader r = new InputStreamReader(is, "utf-8");
+      BufferedReader in = new BufferedReader(r);
+      while ((line = in.readLine()) != null) {
+        content.append(line).append(lineFeed);
+      }
+      in.close();
+
+      hintPane.setText(content.toString());
+      hintPane.setSelectionStart(0);
+      hintPane.setSelectionEnd(0);
+    }
+    catch (Exception ex) {
+      ex.printStackTrace();
+    }
+  }
+
+  private void enableControls() {
+    backButton.setEnabled(selectedMutationIdx > 0 && selectedMutationIdx < mutationList.size());
+    forwardButton.setEnabled(selectedMutationIdx >= 0 && selectedMutationIdx < mutationList.size() - 1);
   }
 }

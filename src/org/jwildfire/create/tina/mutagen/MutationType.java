@@ -35,10 +35,16 @@ public enum MutationType {
       return ChangeWeightMutation.class;
     }
   },
-  COLOR {
+  GRADIENT {
     @Override
     protected Class<? extends Mutation> getMutationClass() {
-      return ColorMutation.class;
+      return GradientMutation.class;
+    }
+  },
+  GRADIENT_POSITION {
+    @Override
+    protected Class<? extends Mutation> getMutationClass() {
+      return GradientPositionMutation.class;
     }
   },
   AFFINE {

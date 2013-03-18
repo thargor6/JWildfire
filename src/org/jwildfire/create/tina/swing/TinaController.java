@@ -215,10 +215,10 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       flamePanels[23] = parameterObject.mutaGen24Pnl;
       flamePanels[24] = parameterObject.mutaGen25Pnl;
       mutaGenController = new MutaGenController(this, parameterObject.pErrorHandler, prefs, parameterObject.pRootTabbedPane, flamePanels,
-          parameterObject.mutaGenTree, parameterObject.mutaGenEditFlameBtn, parameterObject.mutaGenLoadFlameFromEditorBtn,
-          parameterObject.mutaGenLoadFlameFromClipboardBtn, parameterObject.mutaGenLoadFlameFromFileBtn, parameterObject.mutaGenProgressBar,
-          parameterObject.mutaGenAmountREd, parameterObject.mutaGenAmountSlider, parameterObject.mutaGenHorizontalTrendCmb,
-          parameterObject.mutaGenVerticalTrendCmb);
+          parameterObject.mutaGenLoadFlameFromEditorBtn, parameterObject.mutaGenLoadFlameFromClipboardBtn, parameterObject.mutaGenLoadFlameFromFileBtn, parameterObject.mutaGenProgressBar,
+          parameterObject.mutaGenAmountREd, parameterObject.mutaGenHorizontalTrend1Cmb, parameterObject.mutaGenHorizontalTrend2Cmb,
+          parameterObject.mutaGenVerticalTrend1Cmb, parameterObject.mutaGenVerticalTrend2Cmb, parameterObject.mutaGenBackBtn, parameterObject.mutaGenForwardBtn,
+          parameterObject.mutaGenHintPane);
     }
     data.cameraRollREd = parameterObject.pCameraRollREd;
     data.cameraRollSlider = parameterObject.pCameraRollSlider;
@@ -5500,5 +5500,9 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       }
       mutaGenController.importFlame(flame);
     }
+  }
+
+  public MutaGenController getMutaGenController() {
+    return mutaGenController;
   }
 }

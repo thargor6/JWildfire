@@ -312,39 +312,6 @@ public class AnimationModelService {
     return res;
   }
 
-  private static class ModifyRandomPropertyVisitor extends ModifyPropertyVisitor {
-    private final int propCount;
-    private final int acceptAt;
-    private int propCounter;
-    private static List<String> blackList;
-
-    static {
-      blackList = new ArrayList<String>();
-      blackList.add("iter");
-    }
-
-    public ModifyRandomPropertyVisitor(Flame pFlame, double pPercent, int pPropCount) {
-      super(new FlamePropertyPath(pFlame, ""), pPercent);
-      propCount = pPropCount;
-      acceptAt = (int) (Math.random() * propCount);
-      mode = ModifyPropMode.ADD;
-      value = pPercent;
-    }
-
-    public boolean accept(PlainProperty pProperty) {
-      boolean res = ++propCounter >= acceptAt;
-      if (res) {
-        if (pProperty.getName().indexOf("mod") == 0 || blackList.indexOf(pProperty.getName()) >= 0) {
-          res = false;
-        }
-      }
-      if (res) {
-        System.out.println("ACCEPT " + pProperty.getName());
-      }
-      return res;
-    }
-  }
-
   private enum ModifyPropMode {
     SET, ADD
   }
@@ -510,9 +477,4 @@ public class AnimationModelService {
     }
   }
 
-  public static void setRandomFlameProperty(Flame pFlame, double pPercent) {
-    PropertyModel res = createModel(pFlame);
-    ModifyRandomPropertyVisitor visitor = new ModifyRandomPropertyVisitor(pFlame, pPercent, res.getTotalCount());
-    visitModel(res, pFlame, visitor);
-  }
 }
