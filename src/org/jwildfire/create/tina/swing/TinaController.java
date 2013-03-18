@@ -5505,4 +5505,14 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
   public MutaGenController getMutaGenController() {
     return mutaGenController;
   }
+
+  public void paletteSortBtn_clicked() {
+    Flame flame = getCurrFlame();
+    if (flame != null) {
+      saveUndoPoint();
+      flame.getPalette().sort();
+      refreshPaletteUI(flame.getPalette());
+      transformationTableClicked();
+    }
+  }
 }

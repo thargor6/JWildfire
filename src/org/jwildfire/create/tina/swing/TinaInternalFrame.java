@@ -11659,6 +11659,21 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaPaletteReverseBtn.setFont(new Font("Dialog", Font.BOLD, 10));
       tinaPaletteReverseBtn.setBounds(104, 119, 88, 24);
       tinaPaletteTransformPanel.add(tinaPaletteReverseBtn);
+
+      JButton tinaPaletteSortBtn = new JButton();
+      tinaPaletteSortBtn.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.paletteSortBtn_clicked();
+        }
+      });
+      tinaPaletteSortBtn.setToolTipText("Sort the colors (by hue and brightness)");
+      tinaPaletteSortBtn.setText("Sort");
+      tinaPaletteSortBtn.setSize(new Dimension(138, 24));
+      tinaPaletteSortBtn.setPreferredSize(new Dimension(136, 24));
+      tinaPaletteSortBtn.setLocation(new Point(4, 181));
+      tinaPaletteSortBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      tinaPaletteSortBtn.setBounds(6, 147, 88, 24);
+      tinaPaletteTransformPanel.add(tinaPaletteSortBtn);
     }
     return tinaPaletteTransformPanel;
   }
