@@ -22,11 +22,15 @@ public class GradientMutation implements Mutation {
 
   @Override
   public void execute(Flame pFlame) {
-    if (Math.random() < 0.5) {
+    double mod = Math.random();
+    if (mod < 0.67) {
       pFlame.getPalette().setModShift(-256 + (int) (512 * Math.random()));
     }
-    else {
+    else if (mod < 0.33) {
       pFlame.getPalette().setModHue((int) (256 * Math.random()));
+    }
+    else {
+      pFlame.getPalette().setModSwapRGB((int) (256 * Math.random()));
     }
   }
 

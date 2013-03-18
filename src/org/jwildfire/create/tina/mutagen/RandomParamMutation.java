@@ -52,25 +52,36 @@ public class RandomParamMutation implements Mutation {
       Object oldVal = var.getParameterValues()[pIdx];
       if (oldVal instanceof Integer) {
         int o = (Integer) oldVal;
-        System.out.print("SETI(" + var.getParameterNames()[pIdx] + ") " + o + "->");
         int da = Tools.FTOI(pAmount);
         if (da < 1) {
           da = 1;
         }
-        o += Math.random() < 0.5 ? da : -da;
-        System.out.println(o);
+        if (o >= 0) {
+          o += da;
+        }
+        else {
+          o -= da;
+        }
         var.setParameter(var.getParameterNames()[pIdx], o);
       }
       else if (oldVal instanceof Double) {
         double o = (Double) oldVal;
-        System.out.print("SETF(" + var.getParameterNames()[pIdx] + ") " + o + "->");
         if (o < EPSILON || Math.random() < 0.3) {
-          o += 0.1 * (Math.random() < 0.5 ? pAmount : -pAmount);
+          if (o >= 0) {
+            o += 0.1 * pAmount;
+          }
+          else {
+            o -= 0.1 * pAmount;
+          }
         }
         else {
-          o += o / 100.0 * (Math.random() < 0.5 ? pAmount : -pAmount);
+          if (o >= 0) {
+            o += o / 100.0 * pAmount;
+          }
+          else {
+            o -= o / 100.0 * pAmount;
+          }
         }
-        System.out.println(o);
         var.setParameter(var.getParameterNames()[pIdx], o);
       }
     }

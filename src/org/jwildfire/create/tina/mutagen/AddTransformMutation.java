@@ -26,29 +26,46 @@ public class AddTransformMutation implements Mutation {
   @Override
   public void execute(Flame pFlame) {
     if (Math.random() < 0.75) {
-      if (Math.random() < 0.7 && pFlame.getXForms().size() > 0) {
+      if (Math.random() < 0.5 && pFlame.getXForms().size() > 0) {
         int idx = (int) Math.random() * pFlame.getXForms().size();
         pFlame.getXForms().remove(idx);
       }
       XForm xForm = new XForm();
       pFlame.getXForms().add(xForm);
       xForm.setWeight(0.1 + Math.random() * 2.0);
-      int idx = ExperimentalSimpleRandomFlameGenerator.FNCLST_EXPERIMENTAL.length;
-      String fName = ExperimentalSimpleRandomFlameGenerator.FNCLST_EXPERIMENTAL[(int) (Math.random() * idx)];
-      xForm.addVariation(0.01 + Math.random(), VariationFuncList.getVariationFuncInstance(fName, true));
+      String fName;
+      if (Math.random() < 0.33) {
+        int idx = ExperimentalSimpleRandomFlameGenerator.FNCLST_EXPERIMENTAL.length;
+        fName = ExperimentalSimpleRandomFlameGenerator.FNCLST_EXPERIMENTAL[(int) (Math.random() * idx)];
+      }
+      else {
+        fName = VariationFuncList.getRandomVariationname();
+      }
+      xForm.addVariation(0.01 + Math.random() * 10.0, VariationFuncList.getVariationFuncInstance(fName, true));
     }
     else {
-      if (Math.random() < 0.7 && pFlame.getFinalXForms().size() > 0) {
+      if (Math.random() < 0.5 && pFlame.getFinalXForms().size() > 0) {
         int idx = (int) Math.random() * pFlame.getFinalXForms().size();
         pFlame.getFinalXForms().remove(idx);
       }
       XForm xForm = new XForm();
       pFlame.getFinalXForms().add(xForm);
       xForm.setWeight(0.1 + Math.random() * 2.0);
-      int idx = ExperimentalSimpleRandomFlameGenerator.FNCLST_EXPERIMENTAL.length;
-      String fName = ExperimentalSimpleRandomFlameGenerator.FNCLST_EXPERIMENTAL[(int) (Math.random() * idx)];
-      xForm.addVariation(0.01 + Math.random(), VariationFuncList.getVariationFuncInstance(fName, true));
+      String fName;
+      if (Math.random() < 0.33) {
+        int idx = ExperimentalSimpleRandomFlameGenerator.FNCLST_EXPERIMENTAL.length;
+        fName = ExperimentalSimpleRandomFlameGenerator.FNCLST_EXPERIMENTAL[(int) (Math.random() * idx)];
+      }
+      else {
+        while (true) {
+          fName = VariationFuncList.getRandomVariationname();
+          if (fName.indexOf("blur") < 0 && fName.indexOf("Blur") < 0 && fName.indexOf("fract_") != 0) {
+            break;
+          }
+        }
+      }
+
+      xForm.addVariation(0.01 + Math.random() * 10.0, VariationFuncList.getVariationFuncInstance(fName, true));
     }
   }
-
 }
