@@ -319,6 +319,7 @@ public class VariationFuncList {
     registerVariationFunc(TaurusFunc.class);
     registerVariationFunc(PreSinusoidal3DFunc.class);
     registerVariationFunc(PreDisc3DFunc.class);
+    registerVariationFunc(SintrangeFunc.class);
     //    registerVariationFunc(FractFormulaJuliaWFFunc.class);
     //    registerVariationFunc(FractFormulaMandWFFunc.class);
 
