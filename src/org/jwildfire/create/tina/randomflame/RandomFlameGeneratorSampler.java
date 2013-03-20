@@ -16,6 +16,8 @@
 */
 package org.jwildfire.create.tina.randomflame;
 
+import static org.jwildfire.base.mathlib.MathLib.fabs;
+
 import org.jwildfire.base.Prefs;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.XForm;
@@ -25,6 +27,8 @@ import org.jwildfire.create.tina.render.FlameRenderer;
 import org.jwildfire.create.tina.render.RenderInfo;
 import org.jwildfire.create.tina.render.RenderedFlame;
 import org.jwildfire.image.Pixel;
+import org.jwildfire.image.SimpleImage;
+import org.jwildfire.transform.PixelizeTransformer;
 
 public class RandomFlameGeneratorSampler {
   private final int imageWidth;
@@ -41,6 +45,33 @@ public class RandomFlameGeneratorSampler {
     prefs = pPrefs;
     randGen = pRandGen;
     paletteSize = pPaletteSize;
+  }
+
+  public static double calculateCoverage(SimpleImage pImg, int bgRed, int bgGreen, int bgBlue) {
+    long maxCoverage = pImg.getImageWidth() * pImg.getImageHeight();
+    long coverage = 0;
+    Pixel pixel = new Pixel();
+    if (bgRed == 0 && bgGreen == 0 && bgBlue == 0) {
+      for (int k = 0; k < pImg.getImageHeight(); k++) {
+        for (int l = 0; l < pImg.getImageWidth(); l++) {
+          pixel.setARGBValue(pImg.getARGBValue(l, k));
+          if (pixel.r > 20 || pixel.g > 20 || pixel.b > 20) {
+            coverage++;
+          }
+        }
+      }
+    }
+    else {
+      for (int k = 0; k < pImg.getImageHeight(); k++) {
+        for (int l = 0; l < pImg.getImageWidth(); l++) {
+          pixel.setARGBValue(pImg.getARGBValue(l, k));
+          if (Math.abs(pixel.r - bgRed) > 20.0 && Math.abs(pixel.g - bgGreen) > 20.0 && Math.abs(pixel.b - bgBlue) > 20.0) {
+            coverage++;
+          }
+        }
+      }
+    }
+    return (double) coverage / (double) maxCoverage;
   }
 
   public RandomFlameGeneratorSample createSample() {
@@ -92,30 +123,7 @@ public class RandomFlameGeneratorSampler {
         return new RandomFlameGeneratorSample(bestFlame, renderedFlame.getImage());
       }
       else {
-        long maxCoverage = info.getImageWidth() * info.getImageHeight();
-        long coverage = 0;
-        Pixel pixel = new Pixel();
-        if (bgRed == 0 && bgGreen == 0 && bgBlue == 0) {
-          for (int k = 0; k < info.getImageHeight(); k++) {
-            for (int l = 0; l < info.getImageWidth(); l++) {
-              pixel.setARGBValue(renderedFlame.getImage().getARGBValue(l, k));
-              if (pixel.r > 20 || pixel.g > 20 || pixel.b > 20) {
-                coverage++;
-              }
-            }
-          }
-        }
-        else {
-          for (int k = 0; k < info.getImageHeight(); k++) {
-            for (int l = 0; l < info.getImageWidth(); l++) {
-              pixel.setARGBValue(renderedFlame.getImage().getARGBValue(l, k));
-              if (Math.abs(pixel.r - bgRed) > 20.0 && Math.abs(pixel.g - bgGreen) > 20.0 && Math.abs(pixel.b - bgBlue) > 20.0) {
-                coverage++;
-              }
-            }
-          }
-        }
-        double fCoverage = (double) coverage / (double) maxCoverage;
+        double fCoverage = calculateCoverage(renderedFlame.getImage(), bgRed, bgGreen, bgBlue);
         if (fCoverage >= MIN_COVERAGE) {
           return new RandomFlameGeneratorSample(flame, renderedFlame.getImage());
         }
@@ -130,4 +138,31 @@ public class RandomFlameGeneratorSampler {
     throw new IllegalStateException();
   }
 
+  public static SimpleImage createSimplifiedRefImage(SimpleImage pImg) {
+    SimpleImage img = pImg.clone();
+    PixelizeTransformer pT = new PixelizeTransformer();
+    pT.setCentre(false);
+    pT.setGridSize(5);
+    pT.transformImage(img);
+    return img;
+  }
+
+  public static double calculateDiffCoverage(SimpleImage pImg, SimpleImage pSimplifiedRefImg) {
+    SimpleImage img = createSimplifiedRefImage(pImg);
+    long maxCoverage = img.getImageWidth() * img.getImageHeight();
+    long coverage = 0;
+    Pixel pixel = new Pixel();
+    Pixel refPixel = new Pixel();
+    for (int k = 0; k < img.getImageHeight(); k++) {
+      for (int l = 0; l < img.getImageWidth(); l++) {
+        pixel.setARGBValue(img.getARGBValue(l, k));
+        refPixel.setARGBValue(pSimplifiedRefImg.getARGBValue(l, k));
+        if (fabs(pixel.r - refPixel.r) > 20 || fabs(pixel.g - refPixel.g) > 20 || fabs(pixel.b - refPixel.b) > 20) {
+          coverage++;
+        }
+      }
+    }
+    //    System.out.println((double) coverage / (double) maxCoverage);
+    return (double) coverage / (double) maxCoverage;
+  }
 }

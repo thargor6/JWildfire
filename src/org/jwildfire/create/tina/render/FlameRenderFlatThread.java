@@ -64,6 +64,7 @@ public final class FlameRenderFlatThread extends FlameRenderThread {
     for (int i = 0; i <= Constants.INITIAL_ITERATIONS; i++) {
       xf = xf.getNextAppliedXFormTable()[randGen.random(Constants.NEXT_APPLIED_XFORM_TABLE_SIZE)];
       if (xf == null) {
+        xf = flame.getXForms().get(0);
         return;
       }
       xf.transformPoint(ctx, affineT, varT, p, p);

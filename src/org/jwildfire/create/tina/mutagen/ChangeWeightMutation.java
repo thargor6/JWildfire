@@ -17,15 +17,21 @@
 package org.jwildfire.create.tina.mutagen;
 
 import org.jwildfire.create.tina.base.Flame;
+import org.jwildfire.create.tina.base.XForm;
 
 public class ChangeWeightMutation implements Mutation {
 
   @Override
   public void execute(Flame pFlame) {
-    int idx = (int) Math.random() * pFlame.getXForms().size();
-    double oldWeight = pFlame.getXForms().get(idx).getWeight();
-    double newWeight = oldWeight + (0.5 - Math.random()) * (1 + 10.0 * Math.random());
-    pFlame.getXForms().get(idx).setWeight(newWeight);
+    for (XForm xForm : pFlame.getXForms()) {
+      int idx = (int) (Math.random() * pFlame.getXForms().size());
+      if (xForm.getModifiedWeights()[idx] > 0) {
+        xForm.getModifiedWeights()[idx] = 0.0;
+      }
+      else {
+        xForm.getModifiedWeights()[idx] += 1.0;
+      }
+    }
   }
 
 }

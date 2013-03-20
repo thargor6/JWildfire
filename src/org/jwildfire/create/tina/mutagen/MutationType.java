@@ -35,12 +35,6 @@ public enum MutationType {
       return ChangeWeightMutation.class;
     }
   },
-  GRADIENT {
-    @Override
-    protected Class<? extends Mutation> getMutationClass() {
-      return GradientMutation.class;
-    }
-  },
   GRADIENT_POSITION {
     @Override
     protected Class<? extends Mutation> getMutationClass() {
@@ -57,6 +51,12 @@ public enum MutationType {
     @Override
     protected Class<? extends Mutation> getMutationClass() {
       return RandomFlameMutation.class;
+    }
+  },
+  RANDOM_GRADIENT {
+    @Override
+    protected Class<? extends Mutation> getMutationClass() {
+      return RandomGradientMutation.class;
     }
   },
   RANDOM_PARAMETER {

@@ -16,6 +16,7 @@
 */
 package org.jwildfire.create.tina.variation;
 
+import static org.jwildfire.base.mathlib.MathLib.EPSILON;
 import static org.jwildfire.base.mathlib.MathLib.atan2;
 import static org.jwildfire.base.mathlib.MathLib.sqr;
 import static org.jwildfire.base.mathlib.MathLib.sqrt;
@@ -41,6 +42,9 @@ public class Loonie_3DFunc extends SimpleVariationFunc {
     }
 
     double r2 = sqr(pAffineTP.x) + sqr(pAffineTP.y) + sqr(efTez); // added the z element
+    if (r2 < EPSILON) {
+      return;
+    }
     if (r2 < sqrvvar) {
       double r = pAmount * sqrt(sqrvvar / r2 - 1.0);
       pVarTP.x += r * pAffineTP.x;

@@ -29,14 +29,20 @@ public class AllMutation implements Mutation {
     types.add(MutationType.ADD_TRANSFORM);
     types.add(MutationType.AFFINE);
     types.add(MutationType.CHANGE_WEIGHT);
-    types.add(MutationType.GRADIENT);
+    types.add(MutationType.RANDOM_GRADIENT);
     types.add(MutationType.RANDOM_PARAMETER);
     types.add(MutationType.AFFINE);
+    types.add(MutationType.ADD_TRANSFORM);
+    types.add(MutationType.AFFINE);
+    types.add(MutationType.CHANGE_WEIGHT);
     types.add(MutationType.CHANGE_WEIGHT);
     types.add(MutationType.ADD_TRANSFORM);
     types.add(MutationType.AFFINE);
     types.add(MutationType.RANDOM_PARAMETER);
     types.add(MutationType.GRADIENT_POSITION);
+    types.add(MutationType.ADD_TRANSFORM);
+    types.add(MutationType.AFFINE);
+    types.add(MutationType.CHANGE_WEIGHT);
     types.add(MutationType.RANDOM_FLAME);
     types.add(MutationType.AFFINE);
     types.add(MutationType.CHANGE_WEIGHT);
@@ -48,4 +54,5 @@ public class AllMutation implements Mutation {
     Mutation mutation = types.get((int) (types.size() * Math.random())).createMutationInstance();
     mutation.execute(pFlame);
   }
+
 }

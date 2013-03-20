@@ -41,15 +41,15 @@ public class ExperimentalSimpleRandomFlameGenerator extends
       "auger", "pre_wave3D_wf", "hexes", "spirograph", "truchet", "epispiral", "waves4_wf",
       "glynnSim2", "tanh", "bipolar", "cot", "horseshoe", "wedge", "unpolar", "pre_boarders2",
       "modulus", "mobius", "bwraps7", "colorscale_wf", "truchet", "collideoscope", "xheart",
-      "kaleidoscope", "glynnSim2", "cross", "tangent3D", "csc", "curve", "boarders2",
+      "kaleidoscope", "glynnSim2", "cross", "tangent3D", "csc", "curve", "boarders2", "text_wf",
       "csch", "bent2", "splits", "whorl", "xtrb", "post_mirror_wf", "mandelbrot", "sphericalN", "waves2_3D",
       "cloverleaf_wf", "cannabiscurve_wf", "tan", "blob3D", "julia3D", "hypertile1", "svf",
       "log", "cos", "oscilloscope", "wedge_julia", "bwraps7", "heart_wf", "linearT3D",
       "hexes", "truchet", "spirograph", "glynnSim3", "pdj", "popcorn", "hypertile2", "waves2_3D",
-      "parabola", "rings2", "spherical3D", "spiral", "rectangles", "foci_3D",
+      "parabola", "rings2", "spherical3D", "spiral", "rectangles", "foci_3D", "sintrange",
       "elliptic", "waves", "swirl", "glynnSim1", "eclipse", "bwraps7", "layered_spiral",
       "heart_wf", "colorscale_wf", "boarders", "secant2", "waffle", "lissajous", "hypertile",
-      "circus", "lazyTravis" };
+      "circus", "lazyTravis", "ovoid3d" };
 
   @Override
   protected Flame createFlame() {

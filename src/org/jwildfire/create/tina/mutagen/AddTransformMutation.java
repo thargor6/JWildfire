@@ -68,4 +68,5 @@ public class AddTransformMutation implements Mutation {
       xForm.addVariation(0.01 + Math.random() * 10.0, VariationFuncList.getVariationFuncInstance(fName, true));
     }
   }
+
 }

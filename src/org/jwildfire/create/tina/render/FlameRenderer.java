@@ -941,6 +941,10 @@ public class FlameRenderer {
     return renderInfo;
   }
 
+  public void signalCancel() {
+    forceAbort = true;
+  }
+
   public void cancel() {
     forceAbort = true;
     if (runningThreads != null) {

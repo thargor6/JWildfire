@@ -23,12 +23,17 @@ public class GradientPositionMutation implements Mutation {
 
   @Override
   public void execute(Flame pFlame) {
-    for (int i = 0; i < pFlame.getXForms().size(); i++) {
-      XForm xForm = pFlame.getXForms().get(i);
-      xForm.setColor(Math.random());
-      if (Math.random() < 0.25) {
-        xForm.setColorSymmetry(Math.random());
+    if (Math.random() < 0.5) {
+      for (int i = 0; i < pFlame.getXForms().size(); i++) {
+        XForm xForm = pFlame.getXForms().get(i);
+        xForm.setColor(Math.random());
+        if (Math.random() < 0.25) {
+          xForm.setColorSymmetry(Math.random());
+        }
       }
+    }
+    else {
+      pFlame.getPalette().setModShift(-256 + (int) (512 * Math.random()));
     }
   }
 
