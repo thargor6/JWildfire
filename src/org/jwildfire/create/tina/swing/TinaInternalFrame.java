@@ -10913,14 +10913,14 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton getTinaWrapIntoSubFlameButton() {
     if (tinaWrapIntoSubFlameButton == null) {
       tinaWrapIntoSubFlameButton = new JButton();
-      tinaWrapIntoSubFlameButton.setBounds(146, 288, 60, 24);
+      tinaWrapIntoSubFlameButton.setBounds(192, 387, 125, 24);
       tinaWrapIntoSubFlameButton.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
           tinaController.tinaWrapIntoSubFlameButton_clicked();
         }
       });
       tinaWrapIntoSubFlameButton.setToolTipText("Wrap into sub flame");
-      tinaWrapIntoSubFlameButton.setText("SF");
+      tinaWrapIntoSubFlameButton.setText("Wrap into subflame");
       tinaWrapIntoSubFlameButton.setPreferredSize(new Dimension(60, 24));
       tinaWrapIntoSubFlameButton.setMnemonic(KeyEvent.VK_S);
       tinaWrapIntoSubFlameButton.setFont(new Font("Dialog", Font.BOLD, 10));

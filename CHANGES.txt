@@ -1,3 +1,21 @@
+V0.67 (20.03.2013):
+ - MutaGen: an amazing new module to interactively create mutations of a certain flame. 
+   There are several mutation types affecting different "genes" (types of flame properties). 
+   Those mutations are applied at two levels: generation A (8 new fractals from the base flame) and generation B (16 new fractals from generation A), 
+   generating total 24 new flames at each mutation step.  
+   You can easily exchange fractals between the main editor and the new module at any time. 
+   Unlike to many other programs of this type, there is a true history, i.e. you can navigate back to earlier generations at any time. 
+   Even if there are so many possible parameter combinations which may lead to singularies and huge computation times, the programm 
+   achieves predictable computation times for each whole generation. This is done by delegating the mutation process to separate threads 
+   and eventually just killing them.
+ - new "sintrange" variaton by Ffey
+ - new "Sort" button on the gradient transform tab (to create a new gradient which is sorted by hue and luminance)
+ - the view is now centered after starting a render in the interactive renderer
+ - decreased the change rate of the edit gradient-related fields (some of the change now by of a factor of 0.05)
+ - moved the "SF" (subflame) button into the script area
+ - improved the Gnarl random flame generator
+ - slightly improved rendering (regarding quality)
+
 V0.66 (09.03.2013):
  - new "distance-color"-shading for really refreshingly new looking renders! 
  - new button for simplified creation of "linked transforms" 
