@@ -3779,6 +3779,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     currFlame = pFlame.makeCopy();
     undoManager.initUndoStack(currFlame);
     setupProfiles(currFlame);
+    randomBatch.add(0, new FlameThumbnail(currFlame, null));
     updateThumbnails();
     refreshUI();
     showStatusMessage(currFlame, "imported into editor");
