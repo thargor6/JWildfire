@@ -313,7 +313,6 @@ public class TinaControllerParameter {
   public JPanel mutaGen24Pnl;
   public JPanel mutaGen25Pnl;
   public JButton mutaGenLoadFlameFromEditorBtn;
-  public JButton mutaGenLoadFlameFromClipboardBtn;
   public JButton mutaGenLoadFlameFromFileBtn;
   public JProgressBar mutaGenProgressBar;
   public JWFNumberField mutaGenAmountREd;
@@ -324,6 +323,8 @@ public class TinaControllerParameter {
   public JButton mutaGenBackBtn;
   public JButton mutaGenForwardBtn;
   public JTextPane mutaGenHintPane;
+  public JButton mutaGenSaveFlameToEditorBtn;
+  public JButton mutaGenSaveFlameToFileBtn;
 
   public void setParams1(JInternalFrame pTinaFrame, ErrorHandler pErrorHandler, Prefs pPrefs, JPanel pCenterPanel, JWFNumberField pCameraRollREd, JSlider pCameraRollSlider, JWFNumberField pCameraPitchREd, JSlider pCameraPitchSlider, JWFNumberField pCameraYawREd, JSlider pCameraYawSlider, JWFNumberField pCameraPerspectiveREd, JSlider pCameraPerspectiveSlider, JWFNumberField pCameraCentreXREd, JSlider pCameraCentreXSlider, JWFNumberField pCameraCentreYREd, JSlider pCameraCentreYSlider, JWFNumberField pCameraZoomREd, JSlider pCameraZoomSlider, JCheckBox pNewDOFCBx, JWFNumberField pFocusXREd, JSlider pFocusXSlider, JWFNumberField pFocusYREd, JSlider pFocusYSlider, JWFNumberField pFocusZREd, JSlider pFocusZSlider, JWFNumberField pDimishZREd, JSlider pDimishZSlider,
       JWFNumberField pCameraDOFREd, JSlider pCameraDOFSlider, JWFNumberField pCameraDOFAreaREd, JSlider pCameraDOFAreaSlider, JWFNumberField pCameraDOFExponentREd, JSlider pCameraDOFExponentSlider, JWFNumberField pCamZREd, JSlider pCamZSlider, JWFNumberField pPixelsPerUnitREd, JSlider pPixelsPerUnitSlider, JWFNumberField pBrightnessREd, JSlider pBrightnessSlider, JWFNumberField pContrastREd, JSlider pContrastSlider, JWFNumberField pGammaREd, JSlider pGammaSlider, JWFNumberField pVibrancyREd, JSlider pVibrancySlider, JWFNumberField pFilterRadiusREd, JSlider pFilterRadiusSlider, JComboBox pFilterKernelCmb, JCheckBox pDEFilterEnableCbx, JWFNumberField pDEFilterMaxRadiusREd, JSlider pDEFilterMaxRadiusSlider, JWFNumberField pDEFilterMinRadiusREd, JSlider pDEFilterMinRadiusSlider,
@@ -598,10 +599,10 @@ public class TinaControllerParameter {
       JWFNumberField pShadingDistanceColorShiftREd, JSlider pShadingDistanceColorShiftSlider, JPanel pMutaGen01Pnl, JPanel pMutaGen02Pnl, JPanel pMutaGen03Pnl, JPanel pMutaGen04Pnl, JPanel pMutaGen05Pnl,
       JPanel pMutaGen06Pnl, JPanel pMutaGen07Pnl, JPanel pMutaGen08Pnl, JPanel pMutaGen09Pnl, JPanel pMutaGen10Pnl, JPanel pMutaGen11Pnl, JPanel pMutaGen12Pnl, JPanel pMutaGen13Pnl, JPanel pMutaGen14Pnl,
       JPanel pMutaGen15Pnl, JPanel pMutaGen16Pnl, JPanel pMutaGen17Pnl, JPanel pMutaGen18Pnl, JPanel pMutaGen19Pnl, JPanel pMutaGen20Pnl, JPanel pMutaGen21Pnl, JPanel pMutaGen22Pnl, JPanel pMutaGen23Pnl,
-      JPanel pMutaGen24Pnl, JPanel pMutaGen25Pnl, JButton pMutaGenLoadFlameFromEditorBtn, JButton pMutaGenLoadFlameFromClipboardBtn,
+      JPanel pMutaGen24Pnl, JPanel pMutaGen25Pnl, JButton pMutaGenLoadFlameFromEditorBtn,
       JButton pMutaGenLoadFlameFromFileBtn, JProgressBar pMutaGenProgressBar, JWFNumberField pMutaGenAmountREd, JComboBox pMutaGenHorizontalTrend1Cmb,
       JComboBox pMutaGenHorizontalTrend2Cmb, JComboBox pMutaGenVerticalTrend1Cmb, JComboBox pMutaGenVerticalTrend2Cmb, JButton pMutaGenBackButtonBtn, JButton pMutaGenForwardButtonBtn,
-      JTextPane pMutaGenHintPane) {
+      JTextPane pMutaGenHintPane, JButton pMutaGenSaveFlameToEditorBtn, JButton pMutaGenSaveFlameToFileBtn) {
     this.pDancingFlamesLinkMotionBtn = pDancingFlamesLinkMotionBtn;
     this.pDancingFlamesUnlinkMotionBtn = pDancingFlamesUnlinkMotionBtn;
     this.pDancingFlamesCreateMotionsCmb = pDancingFlamesCreateMotionsCmb;
@@ -641,7 +642,6 @@ public class TinaControllerParameter {
     this.mutaGen24Pnl = pMutaGen24Pnl;
     this.mutaGen25Pnl = pMutaGen25Pnl;
     this.mutaGenLoadFlameFromEditorBtn = pMutaGenLoadFlameFromEditorBtn;
-    this.mutaGenLoadFlameFromClipboardBtn = pMutaGenLoadFlameFromClipboardBtn;
     this.mutaGenLoadFlameFromFileBtn = pMutaGenLoadFlameFromFileBtn;
     this.mutaGenProgressBar = pMutaGenProgressBar;
     this.mutaGenAmountREd = pMutaGenAmountREd;
@@ -652,6 +652,8 @@ public class TinaControllerParameter {
     this.mutaGenBackBtn = pMutaGenBackButtonBtn;
     this.mutaGenForwardBtn = pMutaGenForwardButtonBtn;
     this.mutaGenHintPane = pMutaGenHintPane;
+    this.mutaGenSaveFlameToEditorBtn = pMutaGenSaveFlameToEditorBtn;
+    this.mutaGenSaveFlameToFileBtn = pMutaGenSaveFlameToFileBtn;
   }
 
 }

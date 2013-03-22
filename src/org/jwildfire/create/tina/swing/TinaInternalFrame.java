@@ -4562,10 +4562,9 @@ public class TinaInternalFrame extends JInternalFrame {
         getMutaGen06Pnl(), getMutaGen07Pnl(), getMutaGen08Pnl(), getMutaGen09Pnl(), getMutaGen10Pnl(), getMutaGen11Pnl(), getMutaGen12Pnl(),
         getMutaGen13Pnl(), getMutaGen14Pnl(), getMutaGen15Pnl(), getMutaGen16Pnl(), getMutaGen17Pnl(), getMutaGen18Pnl(), getMutaGen19Pnl(),
         getMutaGen20Pnl(), getMutaGen21Pnl(), getMutaGen22Pnl(), getMutaGen23Pnl(), getMutaGen24Pnl(), getMutaGen25Pnl(),
-        getMutaGenLoadFlameFromEditorBtn(), getMutaGenLoadFlameFromClipboardBtn(),
-        getMutaGenLoadFlameFromFileBtn(), getMutaGenProgressBar(), getMutaGenAmountREd(), getMutaGenHorizontalTrend1Cmb(),
+        getMutaGenLoadFlameFromEditorBtn(), getMutaGenLoadFlameFromFileBtn(), getMutaGenProgressBar(), getMutaGenAmountREd(), getMutaGenHorizontalTrend1Cmb(),
         getMutaGenHorizontalTrend2Cmb(), getMutaGenVerticalTrend1Cmb(), getMutaGenVerticalTrend2Cmb(), getMutaGenBackBtn(), getMutaGenForwardBtn(),
-        getMutaGenHintPane());
+        getMutaGenHintPane(), getMutaGenSaveFlameToEditorBtn(), getMutaGenSaveFlameToFileBtn());
 
     tinaController = new TinaController(params);
 
@@ -9283,7 +9282,6 @@ public class TinaInternalFrame extends JInternalFrame {
   private JPanel mutaGen11Pnl;
   private JButton mutaGenBackBtn;
   private JButton mutaGenLoadFlameFromEditorBtn;
-  private JButton mutaGenLoadFlameFromClipboardBtn;
   private JProgressBar mutaGenProgressBar;
   private JComboBox mutaGenHorizontalTrend1Cmb;
   private JComboBox mutaGenVerticalTrend1Cmb;
@@ -9302,6 +9300,8 @@ public class TinaInternalFrame extends JInternalFrame {
   private JScrollPane scrollPane_4;
   private JWFNumberField mutaGenAmountREd;
   private JButton mutaGenRefreshBtn;
+  private JButton mutaGenSaveFlameToEditorBtn;
+  private JButton mutaGenSaveFlameToFileBtn;
 
   /**
    * This method initializes renderBatchJobsScrollPane	
@@ -13181,44 +13181,36 @@ public class TinaInternalFrame extends JInternalFrame {
   private JPanel getPanel_51() {
     if (panel_51 == null) {
       panel_51 = new JPanel();
-      panel_51.setPreferredSize(new Dimension(256, 10));
+      panel_51.setPreferredSize(new Dimension(262, 10));
       panel_51.setLayout(new BoxLayout(panel_51, BoxLayout.Y_AXIS));
 
       JPanel panel_1 = new JPanel();
-      panel_1.setPreferredSize(new Dimension(10, 132));
-      panel_1.setMaximumSize(new Dimension(32767, 200));
+      panel_1.setMinimumSize(new Dimension(10, 64));
+      panel_1.setPreferredSize(new Dimension(10, 64));
+      panel_1.setMaximumSize(new Dimension(32767, 64));
       panel_1.setBorder(new TitledBorder(null, "Input flame", TitledBorder.LEADING, TitledBorder.TOP, null, null));
       panel_51.add(panel_1);
 
       mutaGenLoadFlameFromEditorBtn = new JButton();
+      mutaGenLoadFlameFromEditorBtn.setMnemonic(KeyEvent.VK_D);
+      mutaGenLoadFlameFromEditorBtn.setBounds(16, 23, 115, 24);
       mutaGenLoadFlameFromEditorBtn.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
           tinaController.getMutaGenController().loadFlameFromEditorBtn_clicked();
         }
       });
+      panel_1.setLayout(null);
       panel_1.add(mutaGenLoadFlameFromEditorBtn);
       mutaGenLoadFlameFromEditorBtn.setToolTipText("Import the current flame from the Editor");
       mutaGenLoadFlameFromEditorBtn.setText("Add from Editor");
-      mutaGenLoadFlameFromEditorBtn.setPreferredSize(new Dimension(125, 24));
-      mutaGenLoadFlameFromEditorBtn.setMinimumSize(new Dimension(125, 24));
-      mutaGenLoadFlameFromEditorBtn.setMaximumSize(new Dimension(30000, 24));
+      mutaGenLoadFlameFromEditorBtn.setPreferredSize(new Dimension(115, 24));
+      mutaGenLoadFlameFromEditorBtn.setMinimumSize(new Dimension(115, 24));
+      mutaGenLoadFlameFromEditorBtn.setMaximumSize(new Dimension(115, 24));
       mutaGenLoadFlameFromEditorBtn.setFont(new Font("Dialog", Font.BOLD, 10));
 
-      mutaGenLoadFlameFromClipboardBtn = new JButton();
-      mutaGenLoadFlameFromClipboardBtn.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-          tinaController.getMutaGenController().loadFlameFromClipboardBtn_clicked();
-        }
-      });
-      panel_1.add(mutaGenLoadFlameFromClipboardBtn);
-      mutaGenLoadFlameFromClipboardBtn.setToolTipText("Load a flame from clipboard");
-      mutaGenLoadFlameFromClipboardBtn.setText("Add from Clipboard");
-      mutaGenLoadFlameFromClipboardBtn.setPreferredSize(new Dimension(125, 24));
-      mutaGenLoadFlameFromClipboardBtn.setMinimumSize(new Dimension(125, 24));
-      mutaGenLoadFlameFromClipboardBtn.setMaximumSize(new Dimension(30000, 24));
-      mutaGenLoadFlameFromClipboardBtn.setFont(new Font("Dialog", Font.BOLD, 10));
-
       mutaGenLoadFlameFromFileBtn = new JButton();
+      mutaGenLoadFlameFromFileBtn.setMnemonic(KeyEvent.VK_L);
+      mutaGenLoadFlameFromFileBtn.setBounds(135, 23, 115, 24);
       mutaGenLoadFlameFromFileBtn.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
           tinaController.getMutaGenController().loadFlameFromFileBtn_clicked();
@@ -13226,7 +13218,7 @@ public class TinaInternalFrame extends JInternalFrame {
       });
       panel_1.add(mutaGenLoadFlameFromFileBtn);
       mutaGenLoadFlameFromFileBtn.setToolTipText("Load a flame from file");
-      mutaGenLoadFlameFromFileBtn.setText("Add flame from disc");
+      mutaGenLoadFlameFromFileBtn.setText("Load flame");
       mutaGenLoadFlameFromFileBtn.setPreferredSize(new Dimension(125, 24));
       mutaGenLoadFlameFromFileBtn.setMinimumSize(new Dimension(125, 24));
       mutaGenLoadFlameFromFileBtn.setMaximumSize(new Dimension(30000, 24));
@@ -13238,24 +13230,67 @@ public class TinaInternalFrame extends JInternalFrame {
       panel_2.setLayout(new BorderLayout(0, 0));
       panel_2.add(getScrollPane_4(), BorderLayout.CENTER);
 
+      JPanel panel_10 = new JPanel();
+      panel_10.setMinimumSize(new Dimension(10, 64));
+      panel_10.setMaximumSize(new Dimension(32767, 64));
+      panel_10.setBorder(new TitledBorder(null, "Export selected flame", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+      panel_10.setPreferredSize(new Dimension(10, 64));
+      panel_51.add(panel_10);
+      panel_10.setLayout(null);
+
+      mutaGenSaveFlameToEditorBtn = new JButton();
+      mutaGenSaveFlameToEditorBtn.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getMutaGenController().exportFlameBtn_clicked();
+        }
+      });
+      mutaGenSaveFlameToEditorBtn.setToolTipText("Copy the current fractal into the Editor");
+      mutaGenSaveFlameToEditorBtn.setText("To Editor");
+      mutaGenSaveFlameToEditorBtn.setPreferredSize(new Dimension(125, 24));
+      mutaGenSaveFlameToEditorBtn.setMnemonic(KeyEvent.VK_E);
+      mutaGenSaveFlameToEditorBtn.setMinimumSize(new Dimension(100, 24));
+      mutaGenSaveFlameToEditorBtn.setMaximumSize(new Dimension(32000, 24));
+      mutaGenSaveFlameToEditorBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      mutaGenSaveFlameToEditorBtn.setBounds(16, 23, 115, 24);
+      panel_10.add(mutaGenSaveFlameToEditorBtn);
+
+      mutaGenSaveFlameToFileBtn = new JButton();
+      mutaGenSaveFlameToFileBtn.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getMutaGenController().saveFlameBtn_clicked();
+        }
+      });
+      mutaGenSaveFlameToFileBtn.setToolTipText("Save the current fractal");
+      mutaGenSaveFlameToFileBtn.setText("Save Flame");
+      mutaGenSaveFlameToFileBtn.setPreferredSize(new Dimension(125, 24));
+      mutaGenSaveFlameToFileBtn.setMnemonic(KeyEvent.VK_V);
+      mutaGenSaveFlameToFileBtn.setMinimumSize(new Dimension(100, 24));
+      mutaGenSaveFlameToFileBtn.setMaximumSize(new Dimension(32000, 24));
+      mutaGenSaveFlameToFileBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      mutaGenSaveFlameToFileBtn.setBounds(135, 23, 115, 24);
+      panel_10.add(mutaGenSaveFlameToFileBtn);
+
       JPanel panel_3 = new JPanel();
-      panel_3.setMaximumSize(new Dimension(32767, 72));
-      panel_3.setPreferredSize(new Dimension(10, 72));
-      panel_3.setBorder(new TitledBorder(null, "Navigation", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+      panel_3.setMinimumSize(new Dimension(10, 64));
+      panel_3.setMaximumSize(new Dimension(32767, 64));
+      panel_3.setPreferredSize(new Dimension(10, 64));
+      panel_3.setBorder(new TitledBorder(null, "Navigate through generations", TitledBorder.LEADING, TitledBorder.TOP, null, null));
       panel_51.add(panel_3);
 
       mutaGenBackBtn = new JButton();
+      mutaGenBackBtn.setBounds(16, 23, 115, 24);
       mutaGenBackBtn.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
           tinaController.getMutaGenController().backBtn_clicked();
         }
       });
+      panel_3.setLayout(null);
       panel_3.add(mutaGenBackBtn);
       mutaGenBackBtn.setToolTipText("Move one generation back");
       mutaGenBackBtn.setText("Back");
-      mutaGenBackBtn.setPreferredSize(new Dimension(100, 24));
+      mutaGenBackBtn.setPreferredSize(new Dimension(115, 24));
       mutaGenBackBtn.setMnemonic(KeyEvent.VK_B);
-      mutaGenBackBtn.setMinimumSize(new Dimension(100, 24));
+      mutaGenBackBtn.setMinimumSize(new Dimension(115, 24));
       mutaGenBackBtn.setMaximumSize(new Dimension(160, 24));
       mutaGenBackBtn.setFont(new Font("Dialog", Font.BOLD, 10));
       panel_3.add(getMutaGenForwardBtn());
@@ -13290,6 +13325,7 @@ public class TinaInternalFrame extends JInternalFrame {
       panel_8.add(getPanel_56());
       panel_8.add(getPanel_57());
       panel_8.add(getPanel_58());
+
     }
     return panel_51;
   }
@@ -13581,10 +13617,6 @@ public class TinaInternalFrame extends JInternalFrame {
     return mutaGenLoadFlameFromEditorBtn;
   }
 
-  public JButton getMutaGenLoadFlameFromClipboardBtn() {
-    return mutaGenLoadFlameFromClipboardBtn;
-  }
-
   public JProgressBar getMutaGenProgressBar() {
     return mutaGenProgressBar;
   }
@@ -13724,6 +13756,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton getMutaGenForwardBtn() {
     if (mutaGenForwardBtn == null) {
       mutaGenForwardBtn = new JButton();
+      mutaGenForwardBtn.setBounds(135, 23, 115, 24);
       mutaGenForwardBtn.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
           tinaController.getMutaGenController().forwardBtn_clicked();
@@ -13731,7 +13764,7 @@ public class TinaInternalFrame extends JInternalFrame {
       });
       mutaGenForwardBtn.setToolTipText("Move one generation forward");
       mutaGenForwardBtn.setText("Forward");
-      mutaGenForwardBtn.setPreferredSize(new Dimension(100, 24));
+      mutaGenForwardBtn.setPreferredSize(new Dimension(115, 24));
       mutaGenForwardBtn.setMnemonic(KeyEvent.VK_F);
       mutaGenForwardBtn.setMinimumSize(new Dimension(100, 24));
       mutaGenForwardBtn.setMaximumSize(new Dimension(160, 24));
@@ -13790,5 +13823,13 @@ public class TinaInternalFrame extends JInternalFrame {
       mutaGenRefreshBtn.setFont(new Font("Dialog", Font.BOLD, 10));
     }
     return mutaGenRefreshBtn;
+  }
+
+  public JButton getMutaGenSaveFlameToEditorBtn() {
+    return mutaGenSaveFlameToEditorBtn;
+  }
+
+  public JButton getMutaGenSaveFlameToFileBtn() {
+    return mutaGenSaveFlameToFileBtn;
   }
 } //  @jve:decl-index=0:visual-constraint="10,10"

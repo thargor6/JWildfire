@@ -215,10 +215,10 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       flamePanels[23] = parameterObject.mutaGen24Pnl;
       flamePanels[24] = parameterObject.mutaGen25Pnl;
       mutaGenController = new MutaGenController(this, parameterObject.pErrorHandler, prefs, parameterObject.pRootTabbedPane, flamePanels,
-          parameterObject.mutaGenLoadFlameFromEditorBtn, parameterObject.mutaGenLoadFlameFromClipboardBtn, parameterObject.mutaGenLoadFlameFromFileBtn, parameterObject.mutaGenProgressBar,
+          parameterObject.mutaGenLoadFlameFromEditorBtn, parameterObject.mutaGenLoadFlameFromFileBtn, parameterObject.mutaGenProgressBar,
           parameterObject.mutaGenAmountREd, parameterObject.mutaGenHorizontalTrend1Cmb, parameterObject.mutaGenHorizontalTrend2Cmb,
           parameterObject.mutaGenVerticalTrend1Cmb, parameterObject.mutaGenVerticalTrend2Cmb, parameterObject.mutaGenBackBtn, parameterObject.mutaGenForwardBtn,
-          parameterObject.mutaGenHintPane);
+          parameterObject.mutaGenHintPane, parameterObject.mutaGenSaveFlameToEditorBtn, parameterObject.mutaGenSaveFlameToFileBtn);
     }
     data.cameraRollREd = parameterObject.pCameraRollREd;
     data.cameraRollSlider = parameterObject.pCameraRollSlider;
