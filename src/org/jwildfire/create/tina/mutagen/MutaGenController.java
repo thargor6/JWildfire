@@ -155,6 +155,7 @@ public class MutaGenController {
     pCmb.removeAllItems();
     pCmb.addItem(MutationType.ALL);
     pCmb.addItem(MutationType.ADD_TRANSFORM);
+    pCmb.addItem(MutationType.ADD_VARIATION);
     pCmb.addItem(MutationType.AFFINE);
     pCmb.addItem(MutationType.CHANGE_WEIGHT);
     pCmb.addItem(MutationType.GRADIENT_POSITION);
@@ -188,11 +189,11 @@ public class MutaGenController {
     }
   }
 
-  private SimpleImage renderFlame(Flame pFlame, Dimension pImgSize) {
+  private SimpleImage renderFlame(Flame pFlame, Dimension pImgSize, boolean pWithTimeout) {
     int pImageWidth = pImgSize.width, pImageHeight = pImgSize.height;
     SimpleImage img;
     if (pFlame != null && pImageWidth > 16 && pImageHeight > 16) {
-      return img = executeRenderThread(pFlame, pImageWidth, pImageHeight);
+      return img = executeRenderThread(pFlame, pImageWidth, pImageHeight, pWithTimeout);
     }
     else {
       img = new SimpleImage(pImageWidth, pImageHeight);
@@ -248,7 +249,7 @@ public class MutaGenController {
 
   }
 
-  private SimpleImage executeRenderThread(Flame pFlame, int pImageWidth, int pImageHeight) {
+  private SimpleImage executeRenderThread(Flame pFlame, int pImageWidth, int pImageHeight, boolean pWithTimeout) {
     RenderThread thread = new RenderThread(pFlame, pImageWidth, pImageHeight);
     long tMax = 1000;
     long t0 = System.currentTimeMillis();
@@ -261,7 +262,7 @@ public class MutaGenController {
         throw new RuntimeException(ex);
       }
       long t1 = System.currentTimeMillis();
-      if (t1 - t0 > tMax) {
+      if (pWithTimeout && (t1 - t0 > tMax)) {
         thread.forceAbort();
         return null;
       }
@@ -451,109 +452,114 @@ public class MutaGenController {
   }
 
   protected void mutate(int pRow, int pCol) {
-    if (selectedGenerationIdx >= 0 && selectedGenerationIdx < mutationList.size()) {
-      Dimension renderSize = calcImageSize();
-      Dimension probeSize = new Dimension(80, 60);
+    try {
 
-      MutationSet selectedSet = mutationList.get(selectedGenerationIdx);
-      final int rows = MUTA_ROWS;
-      final int cols = MUTA_COLS;
-      Flame baseFlame = selectedSet.getFlame(pRow, pCol);
-      baseFlame = createWeightedFlame(selectedSet.getBaseFlame(), baseFlame);
+      if (selectedGenerationIdx >= 0 && selectedGenerationIdx < mutationList.size()) {
+        Dimension renderSize = calcImageSize();
+        Dimension probeSize = new Dimension(80, 60);
 
-      boolean doMorph = fabs((Double) amountREd.getValue() - 1.0) > EPSILON;
+        MutationSet selectedSet = mutationList.get(selectedGenerationIdx);
+        final int rows = MUTA_ROWS;
+        final int cols = MUTA_COLS;
+        Flame baseFlame = selectedSet.getFlame(pRow, pCol);
+        baseFlame = createWeightedFlame(selectedSet.getBaseFlame(), baseFlame);
 
-      List<Flame> mutations = new ArrayList<Flame>();
-      initProgress(rows, cols);
-      int centreX = rows / 2;
-      int centreY = cols / 2;
+        boolean doMorph = fabs((Double) amountREd.getValue() - 1.0) > EPSILON;
 
-      SimpleImage baseFlameImg = renderFlame(baseFlame.makeCopy(), probeSize);
-      SimpleImage simplifiedBaseFlameImg = RandomFlameGeneratorSampler.createSimplifiedRefImage(baseFlameImg);
+        List<Flame> mutations = new ArrayList<Flame>();
+        initProgress(rows, cols);
+        int centreX = rows / 2;
+        int centreY = cols / 2;
 
-      int step = 0;
-      for (int i = 0; i < rows; i++) {
-        for (int j = 0; j < cols; j++) {
-          // Let centre flame untouched
-          SimpleImage renderedImg = null;
-          if ((i != centreX || j != centreY)) {
-            int x = (i - centreX);
-            int y = (j - centreY);
-            final int MAX_ITER = 10;
-            final double MIN_RENDER_COVERAGE = 0.42;
-            final double MIN_DIFF_COVERAGE = 0.28;
-            final double INVALID_COVERAGE = -1.0;
-            int iter = 0;
-            double bestCoverage = INVALID_COVERAGE;
-            Flame bestMutation = null;
-            while (true) {
-              Flame currMutation = baseFlame.makeCopy();
-              List<MutationType> mutationTypes = createMutationTypes(x, y);
-              modifyFlame(currMutation, x, y, mutationTypes);
-              renderedImg = renderFlame(currMutation.makeCopy(), probeSize);
-              double coverage = renderedImg != null ? RandomFlameGeneratorSampler.calculateCoverage(renderedImg, 0, 0, 0) : INVALID_COVERAGE;
-              if (coverage > MIN_RENDER_COVERAGE) {
-                coverage = RandomFlameGeneratorSampler.calculateDiffCoverage(renderedImg, simplifiedBaseFlameImg);
-              }
-              else {
-                coverage = 0.0;
-              }
-              if (coverage > MIN_DIFF_COVERAGE) {
-                mutations.add(currMutation);
-                if (doMorph) {
-                  Flame morphed = createWeightedFlame(baseFlame, currMutation);
-                  renderedImg = renderFlame(morphed, renderSize);
+        SimpleImage baseFlameImg = renderFlame(baseFlame.makeCopy(), probeSize, true);
+        SimpleImage simplifiedBaseFlameImg = RandomFlameGeneratorSampler.createSimplifiedRefImage(baseFlameImg);
+
+        int step = 0;
+        for (int i = 0; i < rows; i++) {
+          for (int j = 0; j < cols; j++) {
+            // Let centre flame untouched
+            SimpleImage renderedImg = null;
+            if ((i != centreX || j != centreY)) {
+              int x = (i - centreX);
+              int y = (j - centreY);
+              final int MAX_ITER = 10;
+              final double MIN_RENDER_COVERAGE = 0.42;
+              final double MIN_DIFF_COVERAGE = 0.28;
+              final double INVALID_COVERAGE = -1.0;
+              int iter = 0;
+              double bestCoverage = INVALID_COVERAGE;
+              Flame bestMutation = null;
+              while (true) {
+                Flame currMutation = baseFlame.makeCopy();
+                List<MutationType> mutationTypes = createMutationTypes(x, y);
+                modifyFlame(currMutation, x, y, mutationTypes);
+                renderedImg = renderFlame(currMutation.makeCopy(), probeSize, true);
+                double coverage = renderedImg != null ? RandomFlameGeneratorSampler.calculateCoverage(renderedImg, 0, 0, 0) : INVALID_COVERAGE;
+                if (coverage > MIN_RENDER_COVERAGE) {
+                  coverage = RandomFlameGeneratorSampler.calculateDiffCoverage(renderedImg, simplifiedBaseFlameImg);
                 }
-                else {
-                  renderedImg = renderFlame(currMutation, renderSize);
+                if (coverage > MIN_DIFF_COVERAGE) {
+                  mutations.add(currMutation);
+                  if (doMorph) {
+                    Flame morphed = createWeightedFlame(baseFlame, currMutation);
+                    renderedImg = renderFlame(morphed, renderSize, false);
+                  }
+                  else {
+                    renderedImg = renderFlame(currMutation, renderSize, false);
+                  }
+                  break;
                 }
-                break;
-              }
-              else if (coverage > bestCoverage) {
-                bestCoverage = coverage;
-                bestMutation = currMutation;
-              }
-              // Don't count invalid mutations
-              if (renderedImg != null) {
-                iter++;
-              }
-              if (iter >= MAX_ITER) {
-                mutations.add(bestMutation);
-                if (doMorph) {
-                  Flame morphed = createWeightedFlame(baseFlame, bestMutation);
-                  renderedImg = renderFlame(morphed, renderSize);
+                else if (coverage > bestCoverage) {
+                  bestCoverage = coverage;
+                  bestMutation = currMutation;
                 }
-                else {
-                  renderedImg = renderFlame(bestMutation, renderSize);
+                // Don't count invalid mutations
+                if (renderedImg != null) {
+                  iter++;
                 }
-                break;
+                if (iter >= MAX_ITER) {
+                  mutations.add(bestMutation);
+                  if (doMorph) {
+                    Flame morphed = createWeightedFlame(baseFlame, bestMutation);
+                    renderedImg = renderFlame(morphed, renderSize, false);
+                  }
+                  else {
+                    renderedImg = renderFlame(bestMutation, renderSize, false);
+                  }
+                  break;
+                }
               }
             }
-          }
-          else {
-            mutations.add(baseFlame.makeCopy());
-            renderedImg = renderFlame(baseFlame.makeCopy(), renderSize);
-          }
-          ImagePanel pnl = imagePanels[i][j];
-          pnl.setImage(renderedImg);
-          showProgress(++step);
-          pnl.invalidate();
-          try {
-            Graphics g = pnl.getGraphics();
-            if (g != null) {
-              pnl.paint(g);
+            else {
+              mutations.add(baseFlame.makeCopy());
+              renderedImg = renderFlame(baseFlame.makeCopy(), renderSize, false);
+            }
+
+            ImagePanel pnl = imagePanels[i][j];
+            pnl.setImage(renderedImg);
+            showProgress(++step);
+
+            try {
+              pnl.invalidate();
+              Graphics g = pnl.getGraphics();
+              if (g != null) {
+                pnl.paint(g);
+              }
+            }
+            catch (Throwable ex) {
+              ex.printStackTrace();
             }
           }
-          catch (Throwable ex) {
-            ex.printStackTrace();
-          }
-
         }
+        MutationSet newSet = new MutationSet(rows, cols, baseFlame, mutations);
+        mutationList.add(newSet);
+        selectedGenerationIdx = mutationList.size() - 1;
+        enableControls();
       }
-      MutationSet newSet = new MutationSet(rows, cols, baseFlame, mutations);
-      mutationList.add(newSet);
-      selectedGenerationIdx = mutationList.size() - 1;
-      enableControls();
+
+    }
+    catch (Throwable ex) {
+      errorHandler.handleError(ex);
     }
   }
 
@@ -697,7 +703,7 @@ public class MutaGenController {
       for (int j = 0; j < cols; j++) {
         Flame mutation = selectedSet.getFlame(i, j).makeCopy();
         Flame morphed = createWeightedFlame(selectedSet.getBaseFlame(), mutation);
-        SimpleImage renderedImg = renderFlame(morphed, imgSize);
+        SimpleImage renderedImg = renderFlame(morphed, imgSize, false);
         ImagePanel pnl = imagePanels[i][j];
         pnl.setImage(renderedImg);
         showProgress(++step);

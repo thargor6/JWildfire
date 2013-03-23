@@ -29,6 +29,12 @@ public enum MutationType {
       return AddTransformMutation.class;
     }
   },
+  ADD_VARIATION {
+    @Override
+    protected Class<? extends Mutation> getMutationClass() {
+      return AddVariationMutation.class;
+    }
+  },
   CHANGE_WEIGHT {
     @Override
     protected Class<? extends Mutation> getMutationClass() {
