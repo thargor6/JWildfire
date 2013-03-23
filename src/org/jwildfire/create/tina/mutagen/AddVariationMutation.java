@@ -21,18 +21,25 @@ import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.randomflame.ExperimentalSimpleRandomFlameGenerator;
 import org.jwildfire.create.tina.variation.VariationFuncList;
 
-public class AddTransformMutation implements Mutation {
+public class AddVariationMutation implements Mutation {
 
   @Override
   public void execute(Flame pFlame) {
+    XForm xForm;
+    if (Math.random() < 0.75 || pFlame.getFinalXForms().size() == 0) {
+      int idx = (int) (pFlame.getXForms().size() * Math.random());
+      xForm = pFlame.getXForms().get(idx);
+    }
+    else {
+      int idx = (int) (pFlame.getFinalXForms().size() * Math.random());
+      xForm = pFlame.getFinalXForms().get(idx);
+    }
+
     if (Math.random() < 0.75) {
-      if (Math.random() < 0.5 && pFlame.getXForms().size() > 0) {
-        int idx = (int) (Math.random() * pFlame.getXForms().size());
-        pFlame.getXForms().remove(idx);
+      if (Math.random() < 0.67 && xForm.getVariationCount() > 0) {
+        int idx = (int) (Math.random() * xForm.getVariationCount());
+        xForm.removeVariation(xForm.getVariation(idx));
       }
-      XForm xForm = new XForm();
-      pFlame.getXForms().add(xForm);
-      xForm.setWeight(0.1 + Math.random() * 2.0);
       String fName;
       if (Math.random() < 0.33) {
         int idx = ExperimentalSimpleRandomFlameGenerator.FNCLST_EXPERIMENTAL.length;
@@ -41,30 +48,6 @@ public class AddTransformMutation implements Mutation {
       else {
         fName = VariationFuncList.getRandomVariationname();
       }
-      xForm.addVariation(0.01 + Math.random() * 10.0, VariationFuncList.getVariationFuncInstance(fName, true));
-    }
-    else {
-      if (Math.random() < 0.5 && pFlame.getFinalXForms().size() > 0) {
-        int idx = (int) (Math.random() * pFlame.getFinalXForms().size());
-        pFlame.getFinalXForms().remove(idx);
-      }
-      XForm xForm = new XForm();
-      pFlame.getFinalXForms().add(xForm);
-      xForm.setWeight(0.1 + Math.random() * 2.0);
-      String fName;
-      if (Math.random() < 0.33) {
-        int idx = ExperimentalSimpleRandomFlameGenerator.FNCLST_EXPERIMENTAL.length;
-        fName = ExperimentalSimpleRandomFlameGenerator.FNCLST_EXPERIMENTAL[(int) (Math.random() * idx)];
-      }
-      else {
-        while (true) {
-          fName = VariationFuncList.getRandomVariationname();
-          if (fName.indexOf("blur") < 0 && fName.indexOf("Blur") < 0 && fName.indexOf("fract_") != 0) {
-            break;
-          }
-        }
-      }
-
       xForm.addVariation(0.01 + Math.random() * 10.0, VariationFuncList.getVariationFuncInstance(fName, true));
     }
   }

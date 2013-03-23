@@ -17,7 +17,6 @@
 package org.jwildfire.create.tina.variation;
 
 import static org.jwildfire.base.mathlib.MathLib.EPSILON;
-import static org.jwildfire.base.mathlib.MathLib.atan2;
 import static org.jwildfire.base.mathlib.MathLib.sqr;
 import static org.jwildfire.base.mathlib.MathLib.sqrt;
 import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_CUDA;
@@ -35,7 +34,8 @@ public class Loonie_3DFunc extends SimpleVariationFunc {
     double sqrvvar = pAmount * pAmount;
     double efTez = pAffineTP.z;
     double kikr;
-    kikr = atan2(pAffineTP.y, pAffineTP.x);
+    // TODO: check if this solves certain crashes
+    kikr = Math.atan2(pAffineTP.y, pAffineTP.x);
 
     if (efTez == 0.0) {
       efTez = kikr;
