@@ -21,6 +21,7 @@ import static org.jwildfire.base.mathlib.MathLib.EPSILON;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Rectangle;
@@ -47,6 +48,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JInternalFrame;
@@ -2824,6 +2827,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       imgPanel.setLocation(i * IMG_WIDTH + (i + 1) * BORDER_SIZE, BORDER_SIZE);
       randomBatch.get(i).setImgPanel(imgPanel);
       final int idx = i;
+      addRemoveButton(imgPanel, idx);
       imgPanel.addMouseListener(new java.awt.event.MouseAdapter() {
         public void mouseClicked(java.awt.event.MouseEvent e) {
           if (e.getClickCount() > 1 || e.getButton() != MouseEvent.BUTTON1) {
@@ -2864,6 +2868,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       imgPanel.setLocation(i * IMG_WIDTH + (i + 1) * BORDER_SIZE, BORDER_SIZE);
       thumbnail.setImgPanel(imgPanel);
       final int idx = i;
+      addRemoveButton(imgPanel, idx);
       imgPanel.addMouseListener(new java.awt.event.MouseAdapter() {
         public void mouseClicked(java.awt.event.MouseEvent e) {
           if (e.getClickCount() > 1 || e.getButton() != MouseEvent.BUTTON1) {
@@ -2874,6 +2879,38 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       mainProgressUpdater.updateProgress(i + 1);
     }
     updateThumbnails();
+  }
+
+  private void addRemoveButton(ImagePanel pImgPanel, final int pIdx) {
+    final int BTN_WIDTH = 20;
+    final int BTN_HEIGHT = 20;
+    final int BORDER = 0;
+    JButton btn = new JButton();
+    btn.setMinimumSize(new Dimension(BTN_WIDTH, BTN_HEIGHT));
+    btn.setMaximumSize(new Dimension(BTN_WIDTH, BTN_HEIGHT));
+    btn.setPreferredSize(new Dimension(BTN_WIDTH, BTN_HEIGHT));
+    btn.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/removeThumbnail.gif")));
+    btn.addActionListener(new java.awt.event.ActionListener() {
+      public void actionPerformed(java.awt.event.ActionEvent e) {
+        removeThumbnail(pIdx);
+      }
+    });
+
+    pImgPanel.setLayout(new FlowLayout(FlowLayout.RIGHT, BORDER, BORDER));
+    pImgPanel.add(btn);
+    pImgPanel.invalidate();
+  }
+
+  protected void removeThumbnail(int pIdx) {
+    int choice = JOptionPane.showConfirmDialog(
+        flamePanel,
+        "Do you really want to remove this flame\n from the thumbnail ribbon?\n (Please note that this can not be undone)",
+        Tools.APP_TITLE + " Dialog",
+        JOptionPane.YES_NO_OPTION);
+    if (choice == 0) {
+      randomBatch.remove(pIdx);
+      updateThumbnails();
+    }
   }
 
   public void importFromRandomBatch(int pIdx) {
