@@ -27,6 +27,7 @@ import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.Transferable;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import javax.swing.AbstractButton;
@@ -1059,7 +1060,104 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
     }
   }
 
+  public class PlayMovieThread implements Runnable {
+    private boolean finished;
+    private boolean forceAbort;
+    private final RenderMainFlameThreadFinishEvent finishEvent;
+
+    public PlayMovieThread(RenderMainFlameThreadFinishEvent pFinishEvent) {
+      finishEvent = pFinishEvent;
+    }
+
+    @Override
+    public void run() {
+      finished = forceAbort = false;
+      try {
+        long t0 = Calendar.getInstance().getTimeInMillis();
+        for (int i = 1; i < currMovie.getFrameCount(); i++) {
+          if (forceAbort) {
+            break;
+          }
+          swfAnimatorFrameSlider.setValue(i);
+          getFlamePanel().getParent().invalidate();
+          getFlamePanel().getParent().validate();
+        }
+        long t1 = Calendar.getInstance().getTimeInMillis();
+        finished = true;
+        finishEvent.succeeded((t1 - t0) * 0.001);
+      }
+      catch (Throwable ex) {
+        finished = true;
+        finishEvent.failed(ex);
+      }
+    }
+
+    public boolean isFinished() {
+      return finished;
+    }
+
+    public void setForceAbort() {
+      forceAbort = true;
+    }
+
+  }
+
+  private PlayMovieThread playMovieThread = null;
+
+  private void enablePlayMovieControls() {
+    swfAnimatorPlayButton.setText(playMovieThread == null ? "Play" : "Cancel");
+  }
+
   public void playButton_clicked() {
+    if (playMovieThread != null) {
+      playMovieThread.setForceAbort();
+      while (playMovieThread.isFinished()) {
+        try {
+          Thread.sleep(10);
+        }
+        catch (InterruptedException e) {
+          e.printStackTrace();
+        }
+      }
+      playMovieThread = null;
+      enablePlayMovieControls();
+    }
+    else {
+      updateMovieFields();
+      final int oldFrame = swfAnimatorFrameSlider.getValue();
+
+      RenderMainFlameThreadFinishEvent finishEvent = new RenderMainFlameThreadFinishEvent() {
+
+        @Override
+        public void succeeded(double pElapsedTime) {
+          try {
+          }
+          catch (Throwable ex) {
+            errorHandler.handleError(ex);
+          }
+          playMovieThread = null;
+          enablePlayMovieControls();
+          swfAnimatorFrameSlider.setValue(oldFrame);
+          refreshFlameImage();
+        }
+
+        @Override
+        public void failed(Throwable exception) {
+          errorHandler.handleError(exception);
+          playMovieThread = null;
+          enablePlayMovieControls();
+          swfAnimatorFrameSlider.setValue(oldFrame);
+          refreshFlameImage();
+        }
+      };
+
+      playMovieThread = new PlayMovieThread(finishEvent);
+      enablePlayMovieControls();
+      new Thread(playMovieThread).start();
+    }
+  }
+
+  public void playButton_clicked2() {
     try {
       updateMovieFields();
       int oldFrame = swfAnimatorFrameSlider.getValue();
