@@ -234,7 +234,9 @@ public class TinaControllerData {
   public JButton renderFlameButton;
   public JButton renderMainButton;
   public JButton appendToMovieButton;
-  public JToggleButton mouseTransformEditTrianglesButton;
+  public JToggleButton mouseTransformMoveTrianglesButton;
+  public JToggleButton mouseTransformRotateTrianglesButton;
+  public JToggleButton mouseTransformScaleTrianglesButton;
   public JToggleButton mouseTransformEditFocusPointButton;
   public JToggleButton mouseTransformEditPointsButton;
   public JToggleButton mouseTransformEditViewButton;

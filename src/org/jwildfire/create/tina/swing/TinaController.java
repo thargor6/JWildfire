@@ -382,9 +382,12 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
 
     data.transformationWeightREd = parameterObject.pTransformationWeightREd;
 
-    data.mouseTransformEditTrianglesButton = parameterObject.pMouseTransformMoveButton;
-    data.mouseTransformEditFocusPointButton = parameterObject.pMouseTransformScaleButton;
+    data.mouseTransformMoveTrianglesButton = parameterObject.mouseTransformMoveTrianglesButton;
+    data.mouseTransformRotateTrianglesButton = parameterObject.mouseTransformRotateTrianglesButton;
+    data.mouseTransformScaleTrianglesButton = parameterObject.mouseTransformScaleTrianglesButton;
+    data.mouseTransformEditFocusPointButton = parameterObject.pMouseTransformEditFocusPointButton;
     data.mouseTransformEditPointsButton = parameterObject.pMouseTransformShearButton;
+
     data.mouseTransformEditViewButton = parameterObject.pMouseTransformViewButton;
     data.toggleVariationsButton = parameterObject.pToggleVariationsButton;
     data.toggleTransparencyButton = parameterObject.pToggleTransparencyButton;
@@ -2637,10 +2640,12 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
   }
 
   private void forceTriangleMode() {
-    if (flamePanel.getMouseDragOperation() != MouseDragOperation.TRIANGLE) {
-      flamePanel.setMouseDragOperation(MouseDragOperation.TRIANGLE);
+    if (flamePanel.getMouseDragOperation() != MouseDragOperation.MOVE_TRIANGLE && flamePanel.getMouseDragOperation() != MouseDragOperation.ROTATE_TRIANGLE && flamePanel.getMouseDragOperation() != MouseDragOperation.SCALE_TRIANGLE && flamePanel.getMouseDragOperation() != MouseDragOperation.POINTS) {
+      flamePanel.setMouseDragOperation(MouseDragOperation.MOVE_TRIANGLE);
       flamePanel.setDrawTriangles(true);
-      data.mouseTransformEditTrianglesButton.setSelected(true);
+      data.mouseTransformMoveTrianglesButton.setSelected(true);
+      data.mouseTransformRotateTrianglesButton.setSelected(true);
+      data.mouseTransformScaleTrianglesButton.setSelected(true);
       data.mouseTransformEditPointsButton.setSelected(false);
       data.mouseTransformEditViewButton.setSelected(false);
       data.mouseTransformEditFocusPointButton.setSelected(false);
@@ -3389,16 +3394,18 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     }
   }
 
-  public void mouseTransformEditTrianglesButton_clicked() {
+  public void mouseTransformMoveTrianglesButton_clicked() {
     if (!refreshing) {
       refreshing = true;
       try {
+        data.mouseTransformRotateTrianglesButton.setSelected(false);
+        data.mouseTransformScaleTrianglesButton.setSelected(false);
         data.mouseTransformEditFocusPointButton.setSelected(false);
         data.mouseTransformEditPointsButton.setSelected(false);
         data.mouseTransformEditViewButton.setSelected(false);
         if (flamePanel != null) {
-          flamePanel.setMouseDragOperation(data.mouseTransformEditTrianglesButton.isSelected() ? MouseDragOperation.TRIANGLE : MouseDragOperation.NONE);
-          flamePanel.setDrawTriangles(flamePanel.getMouseDragOperation() == MouseDragOperation.TRIANGLE);
+          flamePanel.setMouseDragOperation(data.mouseTransformMoveTrianglesButton.isSelected() ? MouseDragOperation.MOVE_TRIANGLE : MouseDragOperation.NONE);
+          flamePanel.setDrawTriangles(flamePanel.getMouseDragOperation() == MouseDragOperation.MOVE_TRIANGLE);
           refreshFlameImage(false);
         }
       }
@@ -3412,7 +3419,9 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     if (!refreshing) {
       refreshing = true;
       try {
-        data.mouseTransformEditTrianglesButton.setSelected(false);
+        data.mouseTransformRotateTrianglesButton.setSelected(false);
+        data.mouseTransformScaleTrianglesButton.setSelected(false);
+        data.mouseTransformMoveTrianglesButton.setSelected(false);
         data.mouseTransformEditPointsButton.setSelected(false);
         data.mouseTransformEditViewButton.setSelected(false);
         if (flamePanel != null) {
@@ -5009,7 +5018,9 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     if (!refreshing) {
       refreshing = true;
       try {
-        data.mouseTransformEditTrianglesButton.setSelected(false);
+        data.mouseTransformRotateTrianglesButton.setSelected(false);
+        data.mouseTransformScaleTrianglesButton.setSelected(false);
+        data.mouseTransformMoveTrianglesButton.setSelected(false);
         data.mouseTransformEditFocusPointButton.setSelected(false);
         data.mouseTransformEditViewButton.setSelected(false);
         if (flamePanel != null) {
@@ -5028,12 +5039,14 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     if (!refreshing) {
       refreshing = true;
       try {
-        data.mouseTransformEditTrianglesButton.setSelected(false);
+        data.mouseTransformRotateTrianglesButton.setSelected(false);
+        data.mouseTransformScaleTrianglesButton.setSelected(false);
+        data.mouseTransformMoveTrianglesButton.setSelected(false);
         data.mouseTransformEditFocusPointButton.setSelected(false);
         data.mouseTransformEditPointsButton.setSelected(false);
         if (flamePanel != null) {
           flamePanel.setMouseDragOperation(data.mouseTransformEditViewButton.isSelected() ? MouseDragOperation.VIEW : MouseDragOperation.NONE);
-          flamePanel.setDrawTriangles(flamePanel.getMouseDragOperation() == MouseDragOperation.TRIANGLE);
+          flamePanel.setDrawTriangles(flamePanel.getMouseDragOperation() == MouseDragOperation.MOVE_TRIANGLE);
           refreshFlameImage(false);
         }
       }
@@ -5593,6 +5606,48 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
         finally {
           gridRefreshing = false;
         }
+      }
+    }
+  }
+
+  public void mouseTransformRotateTrianglesButton_clicked() {
+    if (!refreshing) {
+      refreshing = true;
+      try {
+        data.mouseTransformMoveTrianglesButton.setSelected(false);
+        data.mouseTransformScaleTrianglesButton.setSelected(false);
+        data.mouseTransformEditFocusPointButton.setSelected(false);
+        data.mouseTransformEditPointsButton.setSelected(false);
+        data.mouseTransformEditViewButton.setSelected(false);
+        if (flamePanel != null) {
+          flamePanel.setMouseDragOperation(data.mouseTransformRotateTrianglesButton.isSelected() ? MouseDragOperation.ROTATE_TRIANGLE : MouseDragOperation.NONE);
+          flamePanel.setDrawTriangles(flamePanel.getMouseDragOperation() == MouseDragOperation.ROTATE_TRIANGLE);
+          refreshFlameImage(false);
+        }
+      }
+      finally {
+        refreshing = false;
+      }
+    }
+  }
+
+  public void mouseTransformScaleTrianglesButton_clicked() {
+    if (!refreshing) {
+      refreshing = true;
+      try {
+        data.mouseTransformRotateTrianglesButton.setSelected(false);
+        data.mouseTransformMoveTrianglesButton.setSelected(false);
+        data.mouseTransformEditFocusPointButton.setSelected(false);
+        data.mouseTransformEditPointsButton.setSelected(false);
+        data.mouseTransformEditViewButton.setSelected(false);
+        if (flamePanel != null) {
+          flamePanel.setMouseDragOperation(data.mouseTransformScaleTrianglesButton.isSelected() ? MouseDragOperation.SCALE_TRIANGLE : MouseDragOperation.NONE);
+          flamePanel.setDrawTriangles(flamePanel.getMouseDragOperation() == MouseDragOperation.SCALE_TRIANGLE);
+          refreshFlameImage(false);
+        }
+      }
+      finally {
+        refreshing = false;
       }
     }
   }

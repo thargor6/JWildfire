@@ -150,8 +150,10 @@ public class TinaControllerParameter {
   public JButton pRelWeightsZeroButton;
   public JButton pRelWeightsOneButton;
   public JWFNumberField pRelWeightREd;
-  public JToggleButton pMouseTransformMoveButton;
-  public JToggleButton pMouseTransformScaleButton;
+  public JToggleButton mouseTransformMoveTrianglesButton;
+  public JToggleButton mouseTransformRotateTrianglesButton;
+  public JToggleButton mouseTransformScaleTrianglesButton;
+  public JToggleButton pMouseTransformEditFocusPointButton;
   public JToggleButton pMouseTransformShearButton;
   public JToggleButton pMouseTransformViewButton;
   public JToggleButton pAffineEditPostTransformButton;
@@ -478,8 +480,8 @@ public class TinaControllerParameter {
     this.pRelWeightsZeroButton = pRelWeightsZeroButton;
     this.pRelWeightsOneButton = pRelWeightsOneButton;
     this.pRelWeightREd = pRelWeightREd;
-    this.pMouseTransformMoveButton = pMouseTransformMoveButton;
-    this.pMouseTransformScaleButton = pMouseTransformScaleButton;
+    this.mouseTransformMoveTrianglesButton = pMouseTransformMoveButton;
+    this.pMouseTransformEditFocusPointButton = pMouseTransformScaleButton;
     this.pMouseTransformShearButton = pMouseTransformShearButton;
     this.pMouseTransformViewButton = pMouseTransformViewButton;
     this.pAffineEditPostTransformButton = pAffineEditPostTransformButton;
@@ -614,7 +616,8 @@ public class TinaControllerParameter {
       JComboBox pMutaGenHorizontalTrend2Cmb, JComboBox pMutaGenVerticalTrend1Cmb, JComboBox pMutaGenVerticalTrend2Cmb, JButton pMutaGenBackButtonBtn, JButton pMutaGenForwardButtonBtn,
       JTextPane pMutaGenHintPane, JButton pMutaGenSaveFlameToEditorBtn, JButton pMutaGenSaveFlameToFileBtn,
       JButton pEditTransformCaptionButton, JButton pEditFlameTileButton, JButton pSnapShotButton, JButton pQSaveButton, JButton pQuickMutationButton,
-      JButton pDancingFlamesButton, JButton pMovieButton, JToggleButton pTransformSlowButton, JToggleButton pTransparencyButton, JToggleButton pDarkTrianglesButton) {
+      JButton pDancingFlamesButton, JButton pMovieButton, JToggleButton pTransformSlowButton, JToggleButton pTransparencyButton, JToggleButton pDarkTrianglesButton,
+      JToggleButton pMouseTransformRotateTrianglesButton, JToggleButton pMouseTransformScaleTrianglesButton) {
     this.pDancingFlamesLinkMotionBtn = pDancingFlamesLinkMotionBtn;
     this.pDancingFlamesUnlinkMotionBtn = pDancingFlamesUnlinkMotionBtn;
     this.pDancingFlamesCreateMotionsCmb = pDancingFlamesCreateMotionsCmb;
@@ -676,6 +679,8 @@ public class TinaControllerParameter {
     this.transformSlowButton = pTransformSlowButton;
     this.transparencyButton = pTransparencyButton;
     this.darkTrianglesButton = pDarkTrianglesButton;
+    this.mouseTransformRotateTrianglesButton = pMouseTransformRotateTrianglesButton;
+    this.mouseTransformScaleTrianglesButton = pMouseTransformScaleTrianglesButton;
   }
 
 }
