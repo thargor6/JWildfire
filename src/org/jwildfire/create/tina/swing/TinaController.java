@@ -50,6 +50,7 @@ import java.util.List;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JInternalFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
@@ -459,6 +460,16 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
 
     data.undoButton = parameterObject.pUndoButton;
     data.redoButton = parameterObject.pRedoButton;
+    data.editTransformCaptionButton = parameterObject.editTransformCaptionButton;
+    data.editFlameTileButton = parameterObject.editFlameTileButton;
+    data.snapShotButton = parameterObject.snapShotButton;
+    data.qSaveButton = parameterObject.qSaveButton;
+    data.quickMutationButton = parameterObject.quickMutationButton;
+    data.dancingFlamesButton = parameterObject.dancingFlamesButton;
+    data.movieButton = parameterObject.movieButton;
+    data.transformSlowButton = parameterObject.transformSlowButton;
+    data.transparencyButton = parameterObject.transparencyButton;
+    data.darkTrianglesButton = parameterObject.darkTrianglesButton;
 
     qsaveFilenameGen = new QuickSaveFilenameGen(prefs);
 
@@ -1016,6 +1027,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
 
       data.affinePreserveZButton.setSelected(currFlame.isPreserveZ());
 
+      enableControls();
       gridRefreshing = true;
       try {
         refreshTransformationsTable();
@@ -1278,7 +1290,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
           case COL_TRANSFORM:
             return "Transform";
           case COL_VARIATIONS:
-            return "Variations";
+            return "Variations/Name";
           case COL_WEIGHT:
             return "Weight";
         }
@@ -1294,14 +1306,19 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
               return rowIndex < currFlame.getXForms().size() ? String.valueOf(rowIndex + 1) : "Final";
             case COL_VARIATIONS:
             {
-              String hs = "";
-              if (xForm.getVariationCount() > 0) {
-                for (int i = 0; i < xForm.getVariationCount() - 1; i++) {
-                  hs += xForm.getVariation(i).getFunc().getName() + ", ";
-                }
-                hs += xForm.getVariation(xForm.getVariationCount() - 1).getFunc().getName();
+              if (xForm.getName() != null && xForm.getName().length() > 0) {
+                return xForm.getName();
               }
-              return hs;
+              else {
+                String hs = "";
+                if (xForm.getVariationCount() > 0) {
+                  for (int i = 0; i < xForm.getVariationCount() - 1; i++) {
+                    hs += xForm.getVariation(i).getFunc().getName() + ", ";
+                  }
+                  hs += xForm.getVariation(xForm.getVariationCount() - 1).getFunc().getName();
+                }
+                return hs;
+              }
             }
             case COL_WEIGHT:
               return rowIndex < currFlame.getXForms().size() ? Tools.doubleToString(xForm.getWeight()) : "";
@@ -2281,6 +2298,18 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
   }
 
   private void enableControls() {
+    boolean enabled = getCurrFlame() != null;
+    data.editTransformCaptionButton.setEnabled(enabled);
+    data.editFlameTileButton.setEnabled(enabled);
+    data.snapShotButton.setEnabled(enabled);
+    data.qSaveButton.setEnabled(enabled);
+    data.quickMutationButton.setEnabled(enabled);
+    data.dancingFlamesButton.setEnabled(enabled);
+    data.movieButton.setEnabled(enabled);
+    data.transformSlowButton.setEnabled(enabled);
+    data.transparencyButton.setEnabled(enabled);
+    data.darkTrianglesButton.setEnabled(enabled);
+    enableUndoControls();
     enableJobRenderControls();
   }
 
@@ -2333,6 +2362,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     data.affineC20REd.setEditable(enabled);
     data.affineC21REd.setEditable(enabled);
     data.affineResetTransformButton.setEnabled(enabled);
+    data.editTransformCaptionButton.setEnabled(enabled);
 
     data.transformationWeightREd.setEnabled(enabled);
 
@@ -5072,39 +5102,45 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     final String UNDO_LABEL = "Undo";
     final String REDO_LABEL = "Redo";
     Flame currFlame = getCurrFlame();
-    int stackSize = undoManager.getUndoStackSize(currFlame);
-    if (stackSize > 0) {
-      int pos = undoManager.getUndoStackPosition(currFlame);
-      data.undoButton.setEnabled(pos > 0 && pos < stackSize);
-      if (undoDebug) {
-        data.undoButton.setText("U " + pos);
+    if (currFlame != null) {
+      int stackSize = undoManager.getUndoStackSize(currFlame);
+      if (stackSize > 0) {
+        int pos = undoManager.getUndoStackPosition(currFlame);
+        data.undoButton.setEnabled(pos > 0 && pos < stackSize);
+        if (undoDebug) {
+          data.undoButton.setText("U " + pos);
+        }
+        else {
+          data.undoButton.setToolTipText(UNDO_LABEL + " " + pos + "/" + stackSize);
+        }
+        data.redoButton.setEnabled(pos >= 0 && pos < stackSize - 1);
+        if (undoDebug) {
+          data.redoButton.setText("R " + stackSize);
+        }
+        else {
+          data.redoButton.setToolTipText(REDO_LABEL + " " + pos + "/" + stackSize);
+        }
       }
       else {
-        data.undoButton.setToolTipText(UNDO_LABEL + " " + pos + "/" + stackSize);
-      }
-      data.redoButton.setEnabled(pos >= 0 && pos < stackSize - 1);
-      if (undoDebug) {
-        data.redoButton.setText("R " + stackSize);
-      }
-      else {
-        data.redoButton.setToolTipText(REDO_LABEL + " " + pos + "/" + stackSize);
+        data.undoButton.setEnabled(false);
+        if (undoDebug) {
+          data.undoButton.setText(UNDO_LABEL);
+        }
+        else {
+          data.undoButton.setToolTipText(UNDO_LABEL);
+        }
+        data.redoButton.setEnabled(false);
+        if (undoDebug) {
+          data.redoButton.setText(REDO_LABEL);
+        }
+        else {
+          data.redoButton.setToolTipText(REDO_LABEL);
+        }
       }
     }
     else {
       data.undoButton.setEnabled(false);
-      if (undoDebug) {
-        data.undoButton.setText(UNDO_LABEL);
-      }
-      else {
-        data.undoButton.setToolTipText(UNDO_LABEL);
-      }
       data.redoButton.setEnabled(false);
-      if (undoDebug) {
-        data.redoButton.setText(REDO_LABEL);
-      }
-      else {
-        data.redoButton.setToolTipText(REDO_LABEL);
-      }
     }
   }
 
@@ -5514,6 +5550,50 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       flame.getPalette().sort();
       refreshPaletteUI(flame.getPalette());
       transformationTableClicked();
+    }
+  }
+
+  public void editFlameTitleBtn_clicked() {
+    Flame flame = getCurrFlame();
+    if (flame != null) {
+      String s = (String) JOptionPane.showInputDialog(
+          rootTabbedPane,
+          "Please enter the new title:\n",
+          Tools.APP_TITLE + " Dialog",
+          JOptionPane.PLAIN_MESSAGE,
+          null,
+          null,
+          flame.getName());
+      if (s != null) {
+        flame.setName(s);
+        showStatusMessage(flame, "Title changed");
+      }
+    }
+  }
+
+  public void editTransformCaptionBtn_clicked() {
+    XForm xForm = getCurrXForm();
+    if (xForm != null) {
+      String s = (String) JOptionPane.showInputDialog(
+          rootTabbedPane,
+          "Please enter a new name:\n",
+          Tools.APP_TITLE + " Dialog",
+          JOptionPane.PLAIN_MESSAGE,
+          null,
+          null,
+          xForm.getName());
+      if (s != null) {
+        xForm.setName(s);
+        int row = data.transformationsTable.getSelectedRow();
+        gridRefreshing = true;
+        try {
+          refreshTransformationsTable();
+          data.transformationsTable.getSelectionModel().setSelectionInterval(row, row);
+        }
+        finally {
+          gridRefreshing = false;
+        }
+      }
     }
   }
 }

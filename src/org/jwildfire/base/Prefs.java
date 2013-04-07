@@ -179,7 +179,7 @@ public class Prefs extends ManagedObject {
   private int tinaRandomBatchBGColorBlue = 0;
 
   @Property(description = "Default background transparency", category = PropertyCategory.TINA)
-  private boolean tinaDefaultBGTransparency = true;
+  private boolean tinaDefaultBGTransparency = false;
 
   @Property(description = "Default DE max radius (set to zero to turn DE off by default)", category = PropertyCategory.TINA)
   private double tinaDefaultDEMaxRadius = 0.0;

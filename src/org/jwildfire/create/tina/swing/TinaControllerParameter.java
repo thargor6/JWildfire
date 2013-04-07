@@ -325,6 +325,16 @@ public class TinaControllerParameter {
   public JTextPane mutaGenHintPane;
   public JButton mutaGenSaveFlameToEditorBtn;
   public JButton mutaGenSaveFlameToFileBtn;
+  public JButton editTransformCaptionButton;
+  public JButton editFlameTileButton;
+  public JButton snapShotButton;
+  public JButton qSaveButton;
+  public JButton quickMutationButton;
+  public JButton dancingFlamesButton;
+  public JButton movieButton;
+  public JToggleButton transformSlowButton;
+  public JToggleButton transparencyButton;
+  public JToggleButton darkTrianglesButton;
 
   public void setParams1(JInternalFrame pTinaFrame, ErrorHandler pErrorHandler, Prefs pPrefs, JPanel pCenterPanel, JWFNumberField pCameraRollREd, JSlider pCameraRollSlider, JWFNumberField pCameraPitchREd, JSlider pCameraPitchSlider, JWFNumberField pCameraYawREd, JSlider pCameraYawSlider, JWFNumberField pCameraPerspectiveREd, JSlider pCameraPerspectiveSlider, JWFNumberField pCameraCentreXREd, JSlider pCameraCentreXSlider, JWFNumberField pCameraCentreYREd, JSlider pCameraCentreYSlider, JWFNumberField pCameraZoomREd, JSlider pCameraZoomSlider, JCheckBox pNewDOFCBx, JWFNumberField pFocusXREd, JSlider pFocusXSlider, JWFNumberField pFocusYREd, JSlider pFocusYSlider, JWFNumberField pFocusZREd, JSlider pFocusZSlider, JWFNumberField pDimishZREd, JSlider pDimishZSlider,
       JWFNumberField pCameraDOFREd, JSlider pCameraDOFSlider, JWFNumberField pCameraDOFAreaREd, JSlider pCameraDOFAreaSlider, JWFNumberField pCameraDOFExponentREd, JSlider pCameraDOFExponentSlider, JWFNumberField pCamZREd, JSlider pCamZSlider, JWFNumberField pPixelsPerUnitREd, JSlider pPixelsPerUnitSlider, JWFNumberField pBrightnessREd, JSlider pBrightnessSlider, JWFNumberField pContrastREd, JSlider pContrastSlider, JWFNumberField pGammaREd, JSlider pGammaSlider, JWFNumberField pVibrancyREd, JSlider pVibrancySlider, JWFNumberField pFilterRadiusREd, JSlider pFilterRadiusSlider, JComboBox pFilterKernelCmb, JCheckBox pDEFilterEnableCbx, JWFNumberField pDEFilterMaxRadiusREd, JSlider pDEFilterMaxRadiusSlider, JWFNumberField pDEFilterMinRadiusREd, JSlider pDEFilterMinRadiusSlider,
@@ -602,7 +612,9 @@ public class TinaControllerParameter {
       JPanel pMutaGen24Pnl, JPanel pMutaGen25Pnl, JButton pMutaGenLoadFlameFromEditorBtn,
       JButton pMutaGenLoadFlameFromFileBtn, JProgressBar pMutaGenProgressBar, JWFNumberField pMutaGenAmountREd, JComboBox pMutaGenHorizontalTrend1Cmb,
       JComboBox pMutaGenHorizontalTrend2Cmb, JComboBox pMutaGenVerticalTrend1Cmb, JComboBox pMutaGenVerticalTrend2Cmb, JButton pMutaGenBackButtonBtn, JButton pMutaGenForwardButtonBtn,
-      JTextPane pMutaGenHintPane, JButton pMutaGenSaveFlameToEditorBtn, JButton pMutaGenSaveFlameToFileBtn) {
+      JTextPane pMutaGenHintPane, JButton pMutaGenSaveFlameToEditorBtn, JButton pMutaGenSaveFlameToFileBtn,
+      JButton pEditTransformCaptionButton, JButton pEditFlameTileButton, JButton pSnapShotButton, JButton pQSaveButton, JButton pQuickMutationButton,
+      JButton pDancingFlamesButton, JButton pMovieButton, JToggleButton pTransformSlowButton, JToggleButton pTransparencyButton, JToggleButton pDarkTrianglesButton) {
     this.pDancingFlamesLinkMotionBtn = pDancingFlamesLinkMotionBtn;
     this.pDancingFlamesUnlinkMotionBtn = pDancingFlamesUnlinkMotionBtn;
     this.pDancingFlamesCreateMotionsCmb = pDancingFlamesCreateMotionsCmb;
@@ -654,6 +666,16 @@ public class TinaControllerParameter {
     this.mutaGenHintPane = pMutaGenHintPane;
     this.mutaGenSaveFlameToEditorBtn = pMutaGenSaveFlameToEditorBtn;
     this.mutaGenSaveFlameToFileBtn = pMutaGenSaveFlameToFileBtn;
+    this.editTransformCaptionButton = pEditTransformCaptionButton;
+    this.editFlameTileButton = pEditFlameTileButton;
+    this.snapShotButton = pSnapShotButton;
+    this.qSaveButton = pQSaveButton;
+    this.quickMutationButton = pQuickMutationButton;
+    this.dancingFlamesButton = pDancingFlamesButton;
+    this.movieButton = pMovieButton;
+    this.transformSlowButton = pTransformSlowButton;
+    this.transparencyButton = pTransparencyButton;
+    this.darkTrianglesButton = pDarkTrianglesButton;
   }
 
 }

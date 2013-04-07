@@ -78,6 +78,7 @@ public final class XForm implements Assignable<XForm>, Serializable {
   private DrawMode drawMode = DrawMode.NORMAL;
   private double antialiasAmount = 0.0;
   private double antialiasRadius = 0.5;
+  private String name = "";
 
   public XForm() {
     coeff00 = 1;
@@ -425,6 +426,7 @@ public final class XForm implements Assignable<XForm>, Serializable {
     drawMode = pXForm.drawMode;
     antialiasAmount = pXForm.antialiasAmount;
     antialiasRadius = pXForm.antialiasRadius;
+    name = pXForm.name;
   }
 
   @Override
@@ -500,6 +502,7 @@ public final class XForm implements Assignable<XForm>, Serializable {
         (fabs(postCoeff21 - pSrc.postCoeff21) > EPSILON) || (fabs(opacity - pSrc.opacity) > EPSILON) ||
         ((drawMode != null && pSrc.drawMode == null) || (drawMode == null && pSrc.drawMode != null) ||
         (drawMode != null && pSrc.drawMode != null && !drawMode.equals(pSrc.drawMode))) ||
+        !name.equals(pSrc.name) ||
         (modifiedWeights.length != pSrc.modifiedWeights.length) || (variations.size() != pSrc.variations.size()) ||
         (fabs(antialiasAmount - pSrc.antialiasAmount) > EPSILON) || (fabs(antialiasRadius - pSrc.antialiasRadius) > EPSILON)) {
       return false;
@@ -531,5 +534,13 @@ public final class XForm implements Assignable<XForm>, Serializable {
 
   public void setAntialiasRadius(double antialiasRadius) {
     this.antialiasRadius = antialiasRadius;
+  }
+
+  public String getName() {
+    return name;
+  }
+
+  public void setName(String name) {
+    this.name = name != null ? name : "";
   }
 }

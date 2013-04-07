@@ -471,7 +471,7 @@ public class MutaGenController {
         int centreX = rows / 2;
         int centreY = cols / 2;
 
-        SimpleImage baseFlameImg = renderFlame(baseFlame.makeCopy(), probeSize, true);
+        SimpleImage baseFlameImg = renderFlame(baseFlame.makeCopy(), probeSize, false);
         SimpleImage simplifiedBaseFlameImg = RandomFlameGeneratorSampler.createSimplifiedRefImage(baseFlameImg);
 
         int step = 0;

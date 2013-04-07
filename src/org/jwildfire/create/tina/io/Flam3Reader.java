@@ -362,6 +362,9 @@ public class Flam3Reader implements FlameReader {
   private void parseXFormAttributes(XForm pXForm, String pXML) {
     Map<String, String> atts = Tools.parseAttributes(pXML);
     String hs;
+    if ((hs = atts.get(ATTR_NAME)) != null) {
+      pXForm.setName(hs);
+    }
     if ((hs = atts.get(ATTR_WEIGHT)) != null) {
       pXForm.setWeight(Double.parseDouble(hs));
     }

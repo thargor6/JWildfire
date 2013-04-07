@@ -3263,7 +3263,7 @@ public class TinaInternalFrame extends JInternalFrame {
     if (tinaAddTransformationButton == null) {
       tinaAddTransformationButton = new JButton();
       tinaAddTransformationButton.setText("Add");
-      tinaAddTransformationButton.setPreferredSize(new Dimension(52, 24));
+      tinaAddTransformationButton.setPreferredSize(new Dimension(56, 24));
       tinaAddTransformationButton.setToolTipText("Add new transform");
       tinaAddTransformationButton.setFont(new Font("Dialog", Font.BOLD, 10));
       tinaAddTransformationButton.addActionListener(new java.awt.event.ActionListener() {
@@ -3351,7 +3351,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaDeleteTransformationButton.setText("Delete");
       tinaDeleteTransformationButton.setFont(new Font("Dialog", Font.BOLD, 10));
       tinaDeleteTransformationButton.setToolTipText("Delete triangle");
-      tinaDeleteTransformationButton.setPreferredSize(new Dimension(86, 24));
+      tinaDeleteTransformationButton.setPreferredSize(new Dimension(90, 24));
       tinaDeleteTransformationButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
           tinaController.deleteXForm();
@@ -3370,7 +3370,7 @@ public class TinaInternalFrame extends JInternalFrame {
     if (tinaDuplicateTransformationButton == null) {
       tinaDuplicateTransformationButton = new JButton();
       tinaDuplicateTransformationButton.setText("Duplicate");
-      tinaDuplicateTransformationButton.setPreferredSize(new Dimension(86, 24));
+      tinaDuplicateTransformationButton.setPreferredSize(new Dimension(90, 24));
       tinaDuplicateTransformationButton.setToolTipText("Duplicate triangle");
       tinaDuplicateTransformationButton.setFont(new Font("Dialog", Font.BOLD, 10));
       tinaDuplicateTransformationButton.addActionListener(new java.awt.event.ActionListener() {
@@ -4564,7 +4564,9 @@ public class TinaInternalFrame extends JInternalFrame {
         getMutaGen20Pnl(), getMutaGen21Pnl(), getMutaGen22Pnl(), getMutaGen23Pnl(), getMutaGen24Pnl(), getMutaGen25Pnl(),
         getMutaGenLoadFlameFromEditorBtn(), getMutaGenLoadFlameFromFileBtn(), getMutaGenProgressBar(), getMutaGenAmountREd(), getMutaGenHorizontalTrend1Cmb(),
         getMutaGenHorizontalTrend2Cmb(), getMutaGenVerticalTrend1Cmb(), getMutaGenVerticalTrend2Cmb(), getMutaGenBackBtn(), getMutaGenForwardBtn(),
-        getMutaGenHintPane(), getMutaGenSaveFlameToEditorBtn(), getMutaGenSaveFlameToFileBtn());
+        getMutaGenHintPane(), getMutaGenSaveFlameToEditorBtn(), getMutaGenSaveFlameToFileBtn(),
+        getEditTransformCaptionBtn(), getEditFlameTitleBtn(), getSnapShotButton(), getBtnQsave(), getQuickMutationButton(), getTinaAppendToDancingFlamesButton(),
+        getTinaAppendToMovieButton(), getMouseTransformSlowButton(), getToggleTransparencyButton(), getDarkTrianglesToggleButton());
 
     tinaController = new TinaController(params);
 
@@ -4682,7 +4684,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaAddFinalTransformationButton = new JButton();
       tinaAddFinalTransformationButton.setActionCommand("Add Final");
       tinaAddFinalTransformationButton.setFont(new Font("Dialog", Font.BOLD, 10));
-      tinaAddFinalTransformationButton.setPreferredSize(new Dimension(86, 24));
+      tinaAddFinalTransformationButton.setPreferredSize(new Dimension(90, 24));
       tinaAddFinalTransformationButton.setToolTipText("Add final transformation");
       tinaAddFinalTransformationButton.setText("Add Final");
       tinaAddFinalTransformationButton.addActionListener(new java.awt.event.ActionListener() {
@@ -4975,15 +4977,35 @@ public class TinaInternalFrame extends JInternalFrame {
       trnsformationsEastPanel = new JPanel();
       trnsformationsEastPanel.setFont(new Font("Dialog", Font.PLAIN, 10));
       trnsformationsEastPanel.setLayout(flowLayout);
-      trnsformationsEastPanel.setPreferredSize(new Dimension(96, 0));
-      trnsformationsEastPanel.add(getTransformationWeightREd());
+      trnsformationsEastPanel.setPreferredSize(new Dimension(100, 0));
+
+      JPanel panel_2 = new JPanel();
+      FlowLayout flowLayout_2 = (FlowLayout) panel_2.getLayout();
+      flowLayout_2.setAlignment(FlowLayout.LEFT);
+      flowLayout_2.setVgap(0);
+      flowLayout_2.setHgap(0);
+      panel_2.setPreferredSize(new Dimension(90, 24));
+      trnsformationsEastPanel.add(panel_2);
+      panel_2.add(getTransformationWeightREd());
+
+      editTransformCaptionBtn = new JButton();
+      panel_2.add(editTransformCaptionBtn);
+      editTransformCaptionBtn.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.editTransformCaptionBtn_clicked();
+        }
+      });
+      editTransformCaptionBtn.setToolTipText("Edit the name of the current transform");
+      editTransformCaptionBtn.setText("T");
+      editTransformCaptionBtn.setPreferredSize(new Dimension(34, 24));
+      editTransformCaptionBtn.setFont(new Font("Dialog", Font.BOLD, 10));
 
       JPanel panel_1 = new JPanel();
       FlowLayout flowLayout_1 = (FlowLayout) panel_1.getLayout();
       flowLayout_1.setAlignment(FlowLayout.LEFT);
       flowLayout_1.setVgap(0);
       flowLayout_1.setHgap(0);
-      panel_1.setPreferredSize(new Dimension(86, 24));
+      panel_1.setPreferredSize(new Dimension(90, 24));
       trnsformationsEastPanel.add(panel_1);
       panel_1.add(getTinaAddTransformationButton());
       panel_1.add(getTinaAddLinkedTransformationButton());
@@ -6429,7 +6451,7 @@ public class TinaInternalFrame extends JInternalFrame {
     if (centerWestPanel == null) {
       centerWestPanel = new JPanel();
       centerWestPanel.setPreferredSize(new Dimension(70, 0));
-      centerWestPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 3));
+      centerWestPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 3, 3));
       centerWestPanel.add(getTinaAppendToMovieButton());
       centerWestPanel.add(getTinaAppendToDancingFlamesButton());
       centerWestPanel.add(getQuickMutationButton());
@@ -6439,6 +6461,8 @@ public class TinaInternalFrame extends JInternalFrame {
       centerWestPanel.add(getLabel_6());
       centerWestPanel.add(getBtnQsave());
       centerWestPanel.add(getSnapShotButton());
+      centerWestPanel.add(getLabel_8());
+      centerWestPanel.add(getEditFlameTitleBtn());
     }
     return centerWestPanel;
   }
@@ -9302,6 +9326,9 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton mutaGenRefreshBtn;
   private JButton mutaGenSaveFlameToEditorBtn;
   private JButton mutaGenSaveFlameToFileBtn;
+  private JButton editFlameTitleBtn;
+  private JLabel label_8;
+  private JButton editTransformCaptionBtn;
 
   /**
    * This method initializes renderBatchJobsScrollPane	
@@ -10953,7 +10980,7 @@ public class TinaInternalFrame extends JInternalFrame {
       transformationWeightREd.setValueStep(0.05);
       transformationWeightREd.setText("");
       transformationWeightREd.setSize(new Dimension(81, 24));
-      transformationWeightREd.setPreferredSize(new Dimension(86, 24));
+      transformationWeightREd.setPreferredSize(new Dimension(56, 24));
       transformationWeightREd.setLocation(new Point(238, 6));
       transformationWeightREd.setFont(new Font("Dialog", Font.PLAIN, 10));
     }
@@ -11136,7 +11163,7 @@ public class TinaInternalFrame extends JInternalFrame {
     if (label_5 == null) {
       label_5 = new JLabel();
       label_5.setText("");
-      label_5.setPreferredSize(new Dimension(42, 8));
+      label_5.setPreferredSize(new Dimension(42, 4));
       label_5.setFont(new Font("Dialog", Font.BOLD, 10));
     }
     return label_5;
@@ -11748,7 +11775,7 @@ public class TinaInternalFrame extends JInternalFrame {
     if (label_6 == null) {
       label_6 = new JLabel();
       label_6.setText("");
-      label_6.setPreferredSize(new Dimension(42, 8));
+      label_6.setPreferredSize(new Dimension(42, 4));
       label_6.setFont(new Font("Dialog", Font.BOLD, 10));
     }
     return label_6;
@@ -13831,5 +13858,36 @@ public class TinaInternalFrame extends JInternalFrame {
 
   public JButton getMutaGenSaveFlameToFileBtn() {
     return mutaGenSaveFlameToFileBtn;
+  }
+
+  private JButton getEditFlameTitleBtn() {
+    if (editFlameTitleBtn == null) {
+      editFlameTitleBtn = new JButton();
+      editFlameTitleBtn.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.editFlameTitleBtn_clicked();
+        }
+      });
+      editFlameTitleBtn.setToolTipText("Change the flame title");
+      editFlameTitleBtn.setText("Title");
+      editFlameTitleBtn.setPreferredSize(new Dimension(60, 24));
+      editFlameTitleBtn.setMnemonic(KeyEvent.VK_T);
+      editFlameTitleBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+    }
+    return editFlameTitleBtn;
+  }
+
+  private JLabel getLabel_8() {
+    if (label_8 == null) {
+      label_8 = new JLabel();
+      label_8.setText("");
+      label_8.setPreferredSize(new Dimension(42, 4));
+      label_8.setFont(new Font("Dialog", Font.BOLD, 10));
+    }
+    return label_8;
+  }
+
+  public JButton getEditTransformCaptionBtn() {
+    return editTransformCaptionBtn;
   }
 } //  @jve:decl-index=0:visual-constraint="10,10"

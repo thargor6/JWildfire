@@ -419,6 +419,9 @@ public class Tools {
       catch (Throwable ex) {
         throw new RuntimeException("Error parsing attribute \"" + name + "\" (" + pXML + ")", ex);
       }
+      if (value != null) {
+        value = value.replaceAll("&quot;", "\"").replaceAll("&lt;", "<").replaceAll("&gt;", ">").replaceAll("&amp;", "&");
+      }
       res.put(name, value);
       p = pe + 2;
     }

@@ -249,5 +249,14 @@ public class TinaControllerData {
   public JTextPane faqPane;
   public JButton undoButton;
   public JButton redoButton;
-
+  public JButton editTransformCaptionButton;
+  public JButton editFlameTileButton;
+  public JButton snapShotButton;
+  public JButton qSaveButton;
+  public JButton quickMutationButton;
+  public JButton dancingFlamesButton;
+  public JButton movieButton;
+  public JToggleButton transformSlowButton;
+  public JToggleButton transparencyButton;
+  public JToggleButton darkTrianglesButton;
 }

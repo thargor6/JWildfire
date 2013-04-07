@@ -78,7 +78,6 @@ public class TinaInteractiveRendererController implements IterationObserver {
   private final JComboBox interactiveQualityProfileCmb;
   private final JButton pauseButton;
   private final JButton resumeButton;
-
   private final JPanel imageRootPanel;
   private JScrollPane imageScrollPane;
   private final JTextArea statsTextArea;

@@ -101,6 +101,9 @@ public class Flam3Writer {
       attrList.add(pXB.createAttr("chaos", hs));
     }
 
+    if (!pXForm.getName().equals("")) {
+      attrList.add(pXB.createAttr("name", pXForm.getName()));
+    }
     return attrList;
   }
 

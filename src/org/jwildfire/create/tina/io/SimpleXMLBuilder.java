@@ -65,7 +65,7 @@ public class SimpleXMLBuilder {
     for (int i = 0; i < attr.length; i++) {
       sb.append(attr[i].getName() + "=\"");
       String value = String.valueOf(attr[i].getValue());
-      sb.append(value.replaceAll("\"", "&quot;"));
+      sb.append(value.replaceAll("\"", "&quot;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll("&", "&amp;"));
       sb.append("\" ");
     }
   }
