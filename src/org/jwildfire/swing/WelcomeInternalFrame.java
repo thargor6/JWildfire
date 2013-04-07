@@ -102,7 +102,7 @@ public class WelcomeInternalFrame extends JInternalFrame {
     communityBtn.setDefaultCapable(false);
     communityBtn.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
-        browse("http://www.facebook.com/groups/jwildfire/");
+        browse("http://www.facebook.com/groups/JWildfireOpenGroup/");
       }
     });
     communityBtn.setPreferredSize(new Dimension(128, 24));
