@@ -44,7 +44,7 @@ public class AllMutation implements Mutation {
     types.add(MutationType.ADD_TRANSFORM);
     types.add(MutationType.AFFINE);
     types.add(MutationType.CHANGE_WEIGHT);
-    types.add(MutationType.RANDOM_FLAME);
+    //    types.add(MutationType.RANDOM_FLAME);
     types.add(MutationType.AFFINE);
     types.add(MutationType.CHANGE_WEIGHT);
     types.add(MutationType.RANDOM_PARAMETER);
