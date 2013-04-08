@@ -34,6 +34,7 @@ import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.net.URI;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -4567,7 +4568,7 @@ public class TinaInternalFrame extends JInternalFrame {
         getMutaGenHintPane(), getMutaGenSaveFlameToEditorBtn(), getMutaGenSaveFlameToFileBtn(),
         getEditTransformCaptionBtn(), getEditFlameTitleBtn(), getSnapShotButton(), getBtnQsave(), getQuickMutationButton(), getTinaAppendToDancingFlamesButton(),
         getTinaAppendToMovieButton(), getMouseTransformSlowButton(), getToggleTransparencyButton(), getDarkTrianglesToggleButton(), getMouseTransformRotateTrianglesButton(),
-        getMouseTransformScaleTrianglesButton());
+        getMouseTransformScaleTrianglesButton(), getScriptTree());
 
     tinaController = new TinaController(params);
 
@@ -5352,6 +5353,30 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearVar1Panel.add(getNonlinearParams1Cmb(), null);
       nonlinearVar1Panel.add(getNonlinearParams1REd(), null);
       nonlinearVar1Panel.add(getNonlinearParams1LeftButton(), null);
+
+      JButton button = new JButton();
+      button.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          if (java.awt.Desktop.isDesktopSupported()) {
+            try {
+              java.awt.Desktop.getDesktop().browse(new URI("http://www.fractalgee.com/JFW_Guide.html"));
+            }
+            catch (Throwable ex) {
+              ex.printStackTrace();
+            }
+          }
+        }
+      });
+      button.setToolTipText("A Visual Guide to J-Wildfire Variations (online resource, may not work on all systems)");
+      button.setText("");
+      button.setSize(new Dimension(22, 22));
+      button.setPreferredSize(new Dimension(22, 22));
+      button.setLocation(new Point(269, 26));
+      button.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/info.gif")));
+      button.setText("");
+      button.setFont(new Font("Dialog", Font.BOLD, 10));
+      button.setBounds(269, 2, 22, 22);
+      nonlinearVar1Panel.add(button);
     }
     return nonlinearVar1Panel;
   }
@@ -9356,6 +9381,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton editTransformCaptionBtn;
   private JToggleButton mouseTransformRotateTrianglesButton;
   private JToggleButton mouseTransformScaleTrianglesButton;
+  private JTree scriptTree;
 
   /**
    * This method initializes renderBatchJobsScrollPane	
@@ -9959,6 +9985,21 @@ public class TinaInternalFrame extends JInternalFrame {
       scriptMobiusDragonButton.setBounds(9, 387, 125, 24);
       scriptPanel.add(scriptMobiusDragonButton);
       scriptPanel.add(getTinaWrapIntoSubFlameButton());
+
+      JPanel panel_1 = new JPanel();
+      panel_1.setBounds(9, 6, 294, 145);
+      scriptPanel.add(panel_1);
+      panel_1.setLayout(new BorderLayout(0, 0));
+
+      JPanel panel_2 = new JPanel();
+      panel_2.setPreferredSize(new Dimension(100, 10));
+      panel_1.add(panel_2, BorderLayout.EAST);
+
+      JScrollPane scrollPane_2 = new JScrollPane();
+      panel_1.add(scrollPane_2, BorderLayout.CENTER);
+
+      scriptTree = new JTree();
+      scrollPane_2.setViewportView(scriptTree);
     }
     return scriptPanel;
   }
@@ -9971,7 +10012,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JScrollPane getScriptScrollPane() {
     if (scriptScrollPane == null) {
       scriptScrollPane = new JScrollPane();
-      scriptScrollPane.setBounds(new Rectangle(9, 13, 308, 263));
+      scriptScrollPane.setBounds(new Rectangle(9, 172, 308, 104));
       scriptScrollPane.setViewportView(getScriptTextArea());
     }
     return scriptScrollPane;
@@ -13924,5 +13965,9 @@ public class TinaInternalFrame extends JInternalFrame {
 
   public JToggleButton getMouseTransformScaleTrianglesButton() {
     return mouseTransformScaleTrianglesButton;
+  }
+
+  public JTree getScriptTree() {
+    return scriptTree;
   }
 } //  @jve:decl-index=0:visual-constraint="10,10"
