@@ -58,7 +58,7 @@ public class FlamePanel extends ImagePanel {
 
   private boolean darkTriangles = false;
   private boolean drawImage = true;
-  private boolean drawTriangles = false;
+  private boolean drawTriangles = true;
   private boolean drawVariations = false;
   private boolean fineMovement = false;
   private XForm selectedXForm = null;
@@ -68,7 +68,7 @@ public class FlamePanel extends ImagePanel {
 
   private double triangleViewXScale, triangleViewYScale;
   private double triangleViewXTrans, triangleViewYTrans;
-  private MouseDragOperation mouseDragOperation = MouseDragOperation.VIEW;
+  private MouseDragOperation mouseDragOperation = MouseDragOperation.MOVE_TRIANGLE;
   private int xBeginDrag, yBeginDrag;
   private boolean editPostTransform = false;
   private double triangleZoom = 1.0;
