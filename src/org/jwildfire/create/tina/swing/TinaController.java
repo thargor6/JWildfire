@@ -227,7 +227,10 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
           parameterObject.mutaGenHintPane, parameterObject.mutaGenSaveFlameToEditorBtn, parameterObject.mutaGenSaveFlameToFileBtn);
     }
 
-    jwfScriptController = new JWFScriptController(prefs, parameterObject.scriptTree);
+    jwfScriptController = new JWFScriptController(prefs, parameterObject.scriptTree,
+        parameterObject.scriptDescriptionTextArea, parameterObject.scriptTextArea, parameterObject.compileScriptButton,
+        parameterObject.rescanScriptsBtn, parameterObject.newScriptBtn, parameterObject.deleteScriptBtn,
+        parameterObject.scriptRenameBtn, parameterObject.scriptRunBtn);
 
     data.cameraRollREd = parameterObject.pCameraRollREd;
     data.cameraRollSlider = parameterObject.pCameraRollSlider;
@@ -482,6 +485,14 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     data.transparencyButton = parameterObject.transparencyButton;
     data.darkTrianglesButton = parameterObject.darkTrianglesButton;
     data.scriptTree = parameterObject.scriptTree;
+    data.scriptDescriptionTextArea = parameterObject.scriptDescriptionTextArea;
+    data.scriptTextArea = parameterObject.scriptTextArea;
+    data.compileScriptButton = parameterObject.compileScriptButton;
+    data.rescanScriptsBtn = parameterObject.rescanScriptsBtn;
+    data.newScriptBtn = parameterObject.newScriptBtn;
+    data.deleteScriptBtn = parameterObject.deleteScriptBtn;
+    data.scriptRenameBtn = parameterObject.scriptRenameBtn;
+    data.scriptRunBtn = parameterObject.scriptRunBtn;
 
     qsaveFilenameGen = new QuickSaveFilenameGen(prefs);
 
@@ -490,12 +501,8 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     initHelpPane();
     initFAQPane();
 
-    data.scriptTextArea = parameterObject.pScriptTextArea;
-
     refreshPaletteColorsTable();
     refreshRenderBatchJobsTable();
-
-    initDefaultScript();
 
     initGradientLibrary();
 
@@ -629,85 +636,6 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     finally {
       cmbRefreshing = oldCmbRefreshing;
     }
-  }
-
-  private void initDefaultScript() {
-    data.scriptTextArea.setText("import org.jwildfire.create.tina.base.Flame;\r\n" +
-        "import org.jwildfire.create.tina.base.XForm;\r\n" +
-        "import org.jwildfire.create.tina.variation.VariationFunc;\r\n" +
-        "import org.jwildfire.create.tina.script.ScriptRunnerEnvironment;\r\n" +
-        "\r\n" +
-        "import org.jwildfire.create.tina.variation.BubbleFunc;\r\n" +
-        "import org.jwildfire.create.tina.variation.HemisphereFunc;\r\n" +
-        "import org.jwildfire.create.tina.variation.Julia3DFunc;\r\n" +
-        "import org.jwildfire.create.tina.variation.LinearFunc;\r\n" +
-        "import org.jwildfire.create.tina.variation.PreBlurFunc;\r\n" +
-        "import org.jwildfire.create.tina.variation.SpirographFunc;\r\n" +
-        "import org.jwildfire.create.tina.variation.SplitsFunc;\r\n" +
-        "import org.jwildfire.create.tina.variation.ZTranslateFunc;\r\n" +
-        "\r\n" +
-        "// Bases on the Soft Julian Script by AsaLegault\r\n" +
-        "//  http://asalegault.deviantart.com/art/Cloud-Julian-Script-84635709\r\n" +
-        "public void run(ScriptRunnerEnvironment pEnv) throws Exception {\r\n" +
-        "  Flame currFlame = pEnv.getCurrFlame();\r\n" +
-        "  if(currFlame==null) {\r\n" +
-        "    throw new Exception(\"Please select a flame at first\");\r\n" +
-        "  }\r\n" +
-        "  // First transform\r\n" +
-        "  {\r\n" +
-        "    VariationFunc varFunc = new Julia3DFunc();\r\n" +
-        "    varFunc.setParameter(\"power\", -2);\r\n" +
-        "    XForm xForm = new XForm();\r\n" +
-        "    xForm.addVariation(1.0, varFunc);\r\n" +
-        "    xForm.setWeight(2.0);\r\n" +
-        "    xForm.setColor(0.0);\r\n" +
-        "    xForm.setColorSymmetry(0.01);\r\n" +
-        "    xForm.setCoeff20(0.3); //o0    \r\n" +
-        "    currFlame.getXForms().add(xForm);\r\n" +
-        "  }\r\n" +
-        "  // Second transform\r\n" +
-        "  {\r\n" +
-        "    XForm xForm = new XForm();\r\n" +
-        "    xForm.addVariation(0.1, new BubbleFunc());\r\n" +
-        "    xForm.addVariation(1.0, new PreBlurFunc());\r\n" +
-        "    VariationFunc varFunc=new SpirographFunc();\r\n" +
-        "    varFunc.setParameter(\"a\", 7.0);\r\n" +
-        "    varFunc.setParameter(\"b\", 5.0);\r\n" +
-        "    varFunc.setParameter(\"d\", 0.0);\r\n" +
-        "    varFunc.setParameter(\"c1\", 5.0);\r\n" +
-        "    varFunc.setParameter(\"c2\", -5.0);\r\n" +
-        "    varFunc.setParameter(\"tmin\", 1.0);\r\n" +
-        "    varFunc.setParameter(\"tmax\", 50.0);\r\n" +
-        "    varFunc.setParameter(\"ymin\", -1.0);\r\n" +
-        "    varFunc.setParameter(\"ymax\", 0.1);\r\n" +
-        "    xForm.addVariation(0.03, varFunc);\r\n" +
-        "    xForm.setWeight(1.0);\r\n" +
-        "    xForm.setColor(0.844);\r\n" +
-        "    currFlame.getXForms().add(xForm);    \r\n" +
-        "  }\r\n" +
-        "  // Third transform\r\n" +
-        "  {\r\n" +
-        "    XForm xForm = new XForm();\r\n" +
-        "    xForm.addVariation(0.18, new HemisphereFunc());\r\n" +
-        "    xForm.addVariation(1.0, new PreBlurFunc());\r\n" +
-        "    xForm.addVariation(-0.025, new ZTranslateFunc());\r\n" +
-        "    xForm.setWeight(0.5);\r\n" +
-        "    xForm.setColor(0.0);\r\n" +
-        "    currFlame.getXForms().add(xForm);    \r\n" +
-        "  }\r\n" +
-        "  //A fourth transform can be very useful when trying\r\n" +
-        "  //to fill in the bubbles....But i'll let you figure\r\n" +
-        "  //that out.//\r\n" +
-        "  // ...\r\n" +
-        "  // Final settings   \r\n" +
-        "  currFlame.setCamRoll(2.0);\r\n" +
-        "  currFlame.setCamPitch(46.0);\r\n" +
-        "  currFlame.setCamYaw(0.0);\r\n" +
-        "  currFlame.setCamPerspective(0.30);\r\n" +
-        "  currFlame.setPixelsPerUnit(96);\r\n" +
-        "  // Refresh the UI\r\n" +
-        "  pEnv.refreshUI();\r\n" +
-        "}\r\n");
   }
 
   private boolean dragging = false;
@@ -4231,6 +4159,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     shadingInfoSliderChanged(data.shadingDistanceColorOffsetZSlider, data.shadingDistanceColorOffsetZREd, "distanceColorOffsetZ", SLIDER_SCALE_AMBIENT, 0);
   }
 
+  // TODO
   private ScriptRunner compileScript() throws Exception {
     return ScriptRunner.compile(data.scriptTextArea.getText());
   }

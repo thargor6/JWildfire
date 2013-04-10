@@ -28,7 +28,6 @@ public class TinaControllerData {
   public JComboBox interactiveResolutionProfileCmb;
   public JComboBox swfAnimatorQualityProfileCmb;
   public JComboBox swfAnimatorResolutionProfileCmb;
-  public JTextArea scriptTextArea;
   public JWFNumberField cameraRollREd;
   public JSlider cameraRollSlider;
   public JWFNumberField cameraPitchREd;
@@ -263,4 +262,13 @@ public class TinaControllerData {
   public JToggleButton transparencyButton;
   public JToggleButton darkTrianglesButton;
   public JTree scriptTree;
+  public JTextArea scriptDescriptionTextArea;
+  public JTextArea scriptTextArea;
+  public JButton compileScriptButton;
+  public JButton rescanScriptsBtn;
+  public JButton newScriptBtn;
+  public JButton deleteScriptBtn;
+  public JButton scriptRenameBtn;
+  public JButton scriptRunBtn;
+
 }

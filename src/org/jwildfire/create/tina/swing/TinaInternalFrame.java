@@ -2116,8 +2116,6 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaCameraPanel.add(tinaPixelsPerUnitLbl, null);
       tinaCameraPanel.add(getTinaPixelsPerUnitREd(), null);
       tinaCameraPanel.add(getTinaPixelsPerUnitSlider(), null);
-      tinaCameraPanel.add(getCompileScriptButton());
-      tinaCameraPanel.add(getScriptScrollPane());
     }
     return tinaCameraPanel;
   }
@@ -4539,7 +4537,7 @@ public class TinaInternalFrame extends JInternalFrame {
         getBatchRenderAddFilesButton(), getBatchRenderFilesMoveDownButton(), getBatchRenderFilesMoveUpButton(),
         getBatchRenderFilesRemoveButton(), getBatchRenderFilesRemoveAllButton(), getBatchRenderStartButton(),
         getRootTabbedPane(), getAffineFlipHorizontalButton(), getAffineFlipVerticalButton(), getDarkTrianglesToggleButton(), getShadingBlurRadiusREd(), getShadingBlurRadiusSlider(), getShadingBlurFadeREd(),
-        getShadingBlurFadeSlider(), getShadingBlurFallOffREd(), getShadingBlurFallOffSlider(), getScriptTextArea(),
+        getShadingBlurFadeSlider(), getShadingBlurFallOffREd(), getShadingBlurFallOffSlider(),
         getAffineScaleXButton(), getAffineScaleYButton(), getGradientLibraryCenterPanel(), getGradientLibraryGradientCmb(), getHelpPane(),
         getFaqPane(), getToggleVariationsButton(), getToggleTransparencyButton(), getAffinePreserveZButton(), getQualityProfileCmb(), getResolutionProfileCmb(),
         getBatchQualityProfileCmb(), getBatchResolutionProfileCmb(), getInteractiveQualityProfileCmb(), getInteractiveResolutionProfileCmb(),
@@ -4569,7 +4567,8 @@ public class TinaInternalFrame extends JInternalFrame {
         getMutaGenHintPane(), getMutaGenSaveFlameToEditorBtn(), getMutaGenSaveFlameToFileBtn(),
         getEditTransformCaptionBtn(), getEditFlameTitleBtn(), getSnapShotButton(), getBtnQsave(), getQuickMutationButton(), getTinaAppendToDancingFlamesButton(),
         getTinaAppendToMovieButton(), getMouseTransformSlowButton(), getToggleTransparencyButton(), getDarkTrianglesToggleButton(), getMouseTransformRotateTrianglesButton(),
-        getMouseTransformScaleTrianglesButton(), getScriptTree());
+        getMouseTransformScaleTrianglesButton(), getScriptTree(), getScriptDescriptionTextArea(), getScriptTextArea(), getCompileScriptButton(), getRescanScriptsBtn(),
+        getNewScriptBtn(), getDeleteScriptBtn(), getScriptRenameBtn(), getScriptRunBtn());
 
     tinaController = new TinaController(params);
 
@@ -9379,6 +9378,16 @@ public class TinaInternalFrame extends JInternalFrame {
   private JToggleButton mouseTransformScaleTrianglesButton;
   private JTree scriptTree;
   private JButton newScriptBtn;
+  private JPanel panel_59;
+  private JTabbedPane tabbedPane;
+  private JPanel panel_60;
+  private JPanel panel_61;
+  private JScrollPane scrollPane_5;
+  private JTextArea scriptDescriptionTextArea;
+  private JButton rescanScriptsBtn;
+  private JButton deleteScriptBtn;
+  private JButton scriptRenameBtn;
+  private JButton scriptRunBtn;
 
   /**
    * This method initializes renderBatchJobsScrollPane	
@@ -9928,45 +9937,46 @@ public class TinaInternalFrame extends JInternalFrame {
   private JPanel getScriptPanel() {
     if (scriptPanel == null) {
       scriptPanel = new JPanel();
-      scriptPanel.setLayout(null);
+      scriptPanel.setLayout(new BorderLayout(0, 0));
 
       JPanel panel_1 = new JPanel();
-      panel_1.setBounds(9, 6, 294, 145);
-      scriptPanel.add(panel_1);
+      panel_1.setMaximumSize(new Dimension(32767, 120));
+      panel_1.setPreferredSize(new Dimension(10, 148));
+      scriptPanel.add(panel_1, BorderLayout.NORTH);
       panel_1.setLayout(new BorderLayout(0, 0));
 
       JPanel panel_2 = new JPanel();
-      panel_2.setPreferredSize(new Dimension(100, 10));
+      panel_2.setPreferredSize(new Dimension(92, 10));
       panel_1.add(panel_2, BorderLayout.EAST);
-      panel_2.setLayout(new BoxLayout(panel_2, BoxLayout.Y_AXIS));
+      panel_2.setLayout(new FlowLayout(FlowLayout.CENTER, 3, 2));
 
-      JButton btnRescan = new JButton();
-      panel_2.add(btnRescan);
-      btnRescan.setToolTipText("Rescan script-folder");
-      btnRescan.setText("Rescan");
-      btnRescan.setPreferredSize(new Dimension(125, 24));
-      btnRescan.setFont(new Font("Dialog", Font.BOLD, 10));
-      btnRescan.setBounds(new Rectangle(9, 280, 125, 24));
+      rescanScriptsBtn = new JButton();
+      panel_2.add(rescanScriptsBtn);
+      rescanScriptsBtn.setToolTipText("Rescan script-folder");
+      rescanScriptsBtn.setText("Rescan");
+      rescanScriptsBtn.setPreferredSize(new Dimension(86, 24));
+      rescanScriptsBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      rescanScriptsBtn.setBounds(new Rectangle(9, 280, 125, 24));
 
       JPanel panel_8 = new JPanel();
-      panel_8.setPreferredSize(new Dimension(10, 8));
+      panel_8.setPreferredSize(new Dimension(16, 4));
       panel_8.setMinimumSize(new Dimension(10, 8));
       panel_8.setMaximumSize(new Dimension(32767, 8));
       panel_2.add(panel_8);
       panel_2.add(getNewScriptBtn());
 
-      JButton deleteScriptBtn = new JButton();
+      deleteScriptBtn = new JButton();
       deleteScriptBtn.setToolTipText("Delete script");
       deleteScriptBtn.setText("Delete");
-      deleteScriptBtn.setPreferredSize(new Dimension(125, 24));
+      deleteScriptBtn.setPreferredSize(new Dimension(86, 24));
       deleteScriptBtn.setFont(new Font("Dialog", Font.BOLD, 10));
       deleteScriptBtn.setBounds(new Rectangle(9, 280, 125, 24));
       panel_2.add(deleteScriptBtn);
 
-      JButton scriptRenameBtn = new JButton();
+      scriptRenameBtn = new JButton();
       scriptRenameBtn.setToolTipText("Rename script");
       scriptRenameBtn.setText("Rename");
-      scriptRenameBtn.setPreferredSize(new Dimension(125, 24));
+      scriptRenameBtn.setPreferredSize(new Dimension(86, 24));
       scriptRenameBtn.setFont(new Font("Dialog", Font.BOLD, 10));
       scriptRenameBtn.setBounds(new Rectangle(9, 280, 125, 24));
       panel_2.add(scriptRenameBtn);
@@ -9974,13 +9984,13 @@ public class TinaInternalFrame extends JInternalFrame {
       JPanel panel_3 = new JPanel();
       panel_3.setMaximumSize(new Dimension(32767, 8));
       panel_3.setMinimumSize(new Dimension(10, 8));
-      panel_3.setPreferredSize(new Dimension(10, 8));
+      panel_3.setPreferredSize(new Dimension(16, 4));
       panel_2.add(panel_3);
 
-      JButton scriptRunBtn = new JButton();
+      scriptRunBtn = new JButton();
       scriptRunBtn.setToolTipText("Run script");
       scriptRunBtn.setText("Run");
-      scriptRunBtn.setPreferredSize(new Dimension(125, 24));
+      scriptRunBtn.setPreferredSize(new Dimension(86, 24));
       scriptRunBtn.setFont(new Font("Dialog", Font.BOLD, 10));
       scriptRunBtn.setBounds(new Rectangle(9, 280, 125, 24));
       panel_2.add(scriptRunBtn);
@@ -9989,7 +9999,16 @@ public class TinaInternalFrame extends JInternalFrame {
       panel_1.add(scrollPane_2, BorderLayout.CENTER);
 
       scriptTree = new JTree();
+      scriptTree.addTreeSelectionListener(new TreeSelectionListener() {
+        public void valueChanged(TreeSelectionEvent e) {
+          if (tinaController != null) {
+            tinaController.getJwfScriptController().scriptPropertiesTree_changed(e);
+          }
+        }
+      });
       scrollPane_2.setViewportView(scriptTree);
+      scriptPanel.add(getPanel_59(), BorderLayout.SOUTH);
+      scriptPanel.add(getTabbedPane(), BorderLayout.CENTER);
     }
     return scriptPanel;
   }
@@ -10002,7 +10021,6 @@ public class TinaInternalFrame extends JInternalFrame {
   private JScrollPane getScriptScrollPane() {
     if (scriptScrollPane == null) {
       scriptScrollPane = new JScrollPane();
-      scriptScrollPane.setBounds(982, 4, 308, 104);
       scriptScrollPane.setViewportView(getScriptTextArea());
     }
     return scriptScrollPane;
@@ -10016,6 +10034,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JTextArea getScriptTextArea() {
     if (scriptTextArea == null) {
       scriptTextArea = new JTextArea();
+      scriptTextArea.setFont(new Font("SansSerif", Font.PLAIN, 10));
       scriptTextArea.setText("");
     }
     return scriptTextArea;
@@ -10029,10 +10048,9 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton getCompileScriptButton() {
     if (compileScriptButton == null) {
       compileScriptButton = new JButton();
-      compileScriptButton.setBounds(942, 27, 125, 24);
       compileScriptButton.setPreferredSize(new Dimension(125, 24));
-      compileScriptButton.setToolTipText("Compile the script");
-      compileScriptButton.setText("Compile");
+      compileScriptButton.setToolTipText("Compile the currently loaded script to check the syntax");
+      compileScriptButton.setText("Syntax check");
       compileScriptButton.setFont(new Font("Dialog", Font.BOLD, 10));
       compileScriptButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -13851,10 +13869,79 @@ public class TinaInternalFrame extends JInternalFrame {
       newScriptBtn = new JButton();
       newScriptBtn.setToolTipText("Create a new script");
       newScriptBtn.setText("New script");
-      newScriptBtn.setPreferredSize(new Dimension(125, 24));
+      newScriptBtn.setPreferredSize(new Dimension(86, 24));
       newScriptBtn.setFont(new Font("Dialog", Font.BOLD, 10));
       newScriptBtn.setBounds(new Rectangle(9, 280, 125, 24));
     }
     return newScriptBtn;
+  }
+
+  private JPanel getPanel_59() {
+    if (panel_59 == null) {
+      panel_59 = new JPanel();
+      panel_59.setPreferredSize(new Dimension(10, 28));
+      panel_59.add(getCompileScriptButton());
+    }
+    return panel_59;
+  }
+
+  private JTabbedPane getTabbedPane() {
+    if (tabbedPane == null) {
+      tabbedPane = new JTabbedPane(JTabbedPane.TOP);
+      tabbedPane.addTab("Description", null, getPanel_60(), null);
+      tabbedPane.addTab("Code", null, getPanel_61(), null);
+    }
+    return tabbedPane;
+  }
+
+  private JPanel getPanel_60() {
+    if (panel_60 == null) {
+      panel_60 = new JPanel();
+      panel_60.setLayout(new BorderLayout(0, 0));
+      panel_60.add(getScrollPane_5(), BorderLayout.CENTER);
+    }
+    return panel_60;
+  }
+
+  private JPanel getPanel_61() {
+    if (panel_61 == null) {
+      panel_61 = new JPanel();
+      panel_61.setLayout(new BorderLayout(0, 0));
+      panel_61.add(getScriptScrollPane(), BorderLayout.CENTER);
+    }
+    return panel_61;
+  }
+
+  private JScrollPane getScrollPane_5() {
+    if (scrollPane_5 == null) {
+      scrollPane_5 = new JScrollPane();
+      scrollPane_5.setViewportView(getScriptDescriptionTextArea());
+    }
+    return scrollPane_5;
+  }
+
+  private JTextArea getScriptDescriptionTextArea() {
+    if (scriptDescriptionTextArea == null) {
+      scriptDescriptionTextArea = new JTextArea();
+      scriptDescriptionTextArea.setFont(new Font("SansSerif", Font.PLAIN, 10));
+      scriptDescriptionTextArea.setText("");
+    }
+    return scriptDescriptionTextArea;
+  }
+
+  public JButton getRescanScriptsBtn() {
+    return rescanScriptsBtn;
+  }
+
+  public JButton getDeleteScriptBtn() {
+    return deleteScriptBtn;
+  }
+
+  public JButton getScriptRenameBtn() {
+    return scriptRenameBtn;
+  }
+
+  public JButton getScriptRunBtn() {
+    return scriptRunBtn;
   }
 } //  @jve:decl-index=0:visual-constraint="10,10"
