@@ -58,6 +58,7 @@ public class Prefs extends ManagedObject {
 
   static final String KEY_TINA_PATH_FLAMES = "tina.path.flames";
   static final String KEY_TINA_PATH_JWFMOVIES = "tina.path.jwfmovies";
+  static final String KEY_TINA_PATH_JWFSCRIPTS = "tina.path.jwfscripts";
   static final String KEY_TINA_RENDER_MOVIE_FRAMES = "tina.render.movie.frames";
 
   static final String KEY_TINA_RENDER_REALTIME_QUALITY = "tina.render.realtime.quality";
@@ -102,6 +103,9 @@ public class Prefs extends ManagedObject {
   private String tinaJWFMoviePath = null;
   private String lastInputJWFMoviePath = null;
   private String lastOutputJWFMoviePath = null;
+
+  @Property(description = "JWFScript file drawer", category = PropertyCategory.TINA)
+  private String tinaJWFScriptPath = null;
 
   @Property(description = "Associate profile information with flame files", category = PropertyCategory.TINA)
   private boolean tinaAssociateProfilesWithFlames = false;
@@ -307,6 +311,14 @@ public class Prefs extends ManagedObject {
     }
   }
 
+  public String getTinaJWFScriptPath() {
+    return tinaJWFScriptPath;
+  }
+
+  public void setTinaJWFScriptPath(String pTinaJWFScriptPath) {
+    tinaJWFScriptPath = pTinaJWFScriptPath;
+  }
+
   public String getInputSunflowScenePath() {
     return lastInputSunflowScenePath != null ? lastInputSunflowScenePath : sunflowScenePath;
   }
@@ -411,7 +423,7 @@ public class Prefs extends ManagedObject {
     tinaDefaultBGTransparency = pSrc.tinaDefaultBGTransparency;
     tinaDefaultDEMaxRadius = pSrc.tinaDefaultDEMaxRadius;
     tinaRasterPointPrecision = pSrc.tinaRasterPointPrecision;
-
+    tinaJWFScriptPath = pSrc.tinaJWFScriptPath;
     baseMathLibType = pSrc.baseMathLibType;
 
     resolutionProfiles.clear();

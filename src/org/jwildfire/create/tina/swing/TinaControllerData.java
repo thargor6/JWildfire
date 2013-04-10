@@ -14,6 +14,7 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
 import javax.swing.JToggleButton;
+import javax.swing.JTree;
 
 import org.jwildfire.create.tina.palette.RGBColor;
 import org.jwildfire.swing.ImagePanel;
@@ -261,4 +262,5 @@ public class TinaControllerData {
   public JToggleButton transformSlowButton;
   public JToggleButton transparencyButton;
   public JToggleButton darkTrianglesButton;
+  public JTree scriptTree;
 }

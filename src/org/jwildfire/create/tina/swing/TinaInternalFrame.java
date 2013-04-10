@@ -565,7 +565,6 @@ public class TinaInternalFrame extends JInternalFrame {
   private JScrollPane scriptScrollPane = null;
   private JTextArea scriptTextArea = null;
   private JButton compileScriptButton = null;
-  private JButton runScriptButton = null;
   private JToggleButton affineScaleXButton = null;
   private JToggleButton affineScaleYButton = null;
   private JButton randomizeColorsButton = null;
@@ -2117,6 +2116,8 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaCameraPanel.add(tinaPixelsPerUnitLbl, null);
       tinaCameraPanel.add(getTinaPixelsPerUnitREd(), null);
       tinaCameraPanel.add(getTinaPixelsPerUnitSlider(), null);
+      tinaCameraPanel.add(getCompileScriptButton());
+      tinaCameraPanel.add(getScriptScrollPane());
     }
     return tinaCameraPanel;
   }
@@ -3286,7 +3287,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaEastTabbedPane = new JTabbedPane();
       tinaEastTabbedPane.setFont(new Font("Dialog", Font.BOLD, 10));
       tinaEastTabbedPane.addTab("Transformations", null, getTinaTransformationsPanel(), null);
-      tinaEastTabbedPane.addTab("Script", null, getScriptPanel(), null);
+      tinaEastTabbedPane.addTab("Scripts", null, getScriptPanel(), null);
     }
     return tinaEastTabbedPane;
   }
@@ -6365,7 +6366,6 @@ public class TinaInternalFrame extends JInternalFrame {
           tinaController.mouseTransformViewButton_clicked();
         }
       });
-      mouseTransformEditViewButton.setSelected(true);
       mouseTransformEditViewButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/editView.gif")));
       mouseTransformEditViewButton.setToolTipText("Enable view editing mode (Left mouse: move, right mouse: rotate, middle/wheel: zoom)");
       mouseTransformEditViewButton.setPreferredSize(new Dimension(42, 24));
@@ -6420,6 +6420,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JToggleButton getMouseTransformMoveTrianglesButton() {
     if (mouseTransformMoveTrianglesButton == null) {
       mouseTransformMoveTrianglesButton = new JToggleButton();
+      mouseTransformMoveTrianglesButton.setSelected(true);
       mouseTransformMoveTrianglesButton.setPreferredSize(new Dimension(42, 24));
       mouseTransformMoveTrianglesButton.setToolTipText("Move triangles using the left mouse button (right mouse: rotate, mouse wheel: scale)");
       mouseTransformMoveTrianglesButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/move.gif")));
@@ -9149,15 +9150,10 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton tinaAppendToMovieButton;
   private JButton swfAnimatorFrameToEditorBtn;
   private JButton swfAnimatorPlayButton;
-  private JButton tinaWrapIntoSubFlameButton;
   private JTextField swfAnimatorFromFrameREd;
   private JTextField swfAnimatorToFrameREd;
   private JWFNumberField transformationWeightREd;
   private JWFNumberField relWeightREd;
-  private JButton scriptLoadButton;
-  private JButton scriptSaveButton;
-  private JButton scriptWrapHeartButton;
-  private JButton btnWrapIntoBubble;
   private JScrollPane scrollPane;
   private JTextPane helpPane;
   private JPanel panel;
@@ -9382,6 +9378,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JToggleButton mouseTransformRotateTrianglesButton;
   private JToggleButton mouseTransformScaleTrianglesButton;
   private JTree scriptTree;
+  private JButton newScriptBtn;
 
   /**
    * This method initializes renderBatchJobsScrollPane	
@@ -9932,59 +9929,6 @@ public class TinaInternalFrame extends JInternalFrame {
     if (scriptPanel == null) {
       scriptPanel = new JPanel();
       scriptPanel.setLayout(null);
-      scriptPanel.add(getScriptScrollPane(), null);
-      scriptPanel.add(getCompileScriptButton(), null);
-      scriptPanel.add(getRunScriptButton(), null);
-
-      JButton scriptEscherFluxButton = new JButton();
-      scriptEscherFluxButton.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-          tinaController.scriptExampleEscherFlux();
-        }
-      });
-      scriptEscherFluxButton.setToolTipText("Example: Textured Escher and Flux");
-      scriptEscherFluxButton.setText("Escher flux");
-      scriptEscherFluxButton.setSize(new Dimension(81, 24));
-      scriptEscherFluxButton.setPreferredSize(new Dimension(81, 24));
-      scriptEscherFluxButton.setLocation(new Point(97, 280));
-      scriptEscherFluxButton.setFont(new Font("Dialog", Font.BOLD, 10));
-      scriptEscherFluxButton.setBounds(9, 338, 125, 24);
-      scriptPanel.add(scriptEscherFluxButton);
-
-      JButton scriptSoftJulianButton = new JButton();
-      scriptSoftJulianButton.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-          tinaController.scriptExampleSoftJulian();
-        }
-      });
-      scriptSoftJulianButton.setToolTipText("Example: Soft Julian");
-      scriptSoftJulianButton.setText("Soft Julian");
-      scriptSoftJulianButton.setSize(new Dimension(81, 24));
-      scriptSoftJulianButton.setPreferredSize(new Dimension(81, 24));
-      scriptSoftJulianButton.setLocation(new Point(97, 280));
-      scriptSoftJulianButton.setFont(new Font("Dialog", Font.BOLD, 10));
-      scriptSoftJulianButton.setBounds(9, 362, 125, 24);
-      scriptPanel.add(scriptSoftJulianButton);
-      scriptPanel.add(getScriptLoadButton());
-      scriptPanel.add(getScriptSaveButton());
-      scriptPanel.add(getScriptWrapHeartButton());
-      scriptPanel.add(getBtnWrapIntoBubble());
-
-      JButton scriptMobiusDragonButton = new JButton();
-      scriptMobiusDragonButton.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-          tinaController.scriptExampleMobiusDragon();
-        }
-      });
-      scriptMobiusDragonButton.setToolTipText("Example: Mobius Dragon");
-      scriptMobiusDragonButton.setText("Mobius Dragon");
-      scriptMobiusDragonButton.setSize(new Dimension(81, 24));
-      scriptMobiusDragonButton.setPreferredSize(new Dimension(81, 24));
-      scriptMobiusDragonButton.setLocation(new Point(97, 280));
-      scriptMobiusDragonButton.setFont(new Font("Dialog", Font.BOLD, 10));
-      scriptMobiusDragonButton.setBounds(9, 387, 125, 24);
-      scriptPanel.add(scriptMobiusDragonButton);
-      scriptPanel.add(getTinaWrapIntoSubFlameButton());
 
       JPanel panel_1 = new JPanel();
       panel_1.setBounds(9, 6, 294, 145);
@@ -9994,6 +9938,52 @@ public class TinaInternalFrame extends JInternalFrame {
       JPanel panel_2 = new JPanel();
       panel_2.setPreferredSize(new Dimension(100, 10));
       panel_1.add(panel_2, BorderLayout.EAST);
+      panel_2.setLayout(new BoxLayout(panel_2, BoxLayout.Y_AXIS));
+
+      JButton btnRescan = new JButton();
+      panel_2.add(btnRescan);
+      btnRescan.setToolTipText("Rescan script-folder");
+      btnRescan.setText("Rescan");
+      btnRescan.setPreferredSize(new Dimension(125, 24));
+      btnRescan.setFont(new Font("Dialog", Font.BOLD, 10));
+      btnRescan.setBounds(new Rectangle(9, 280, 125, 24));
+
+      JPanel panel_8 = new JPanel();
+      panel_8.setPreferredSize(new Dimension(10, 8));
+      panel_8.setMinimumSize(new Dimension(10, 8));
+      panel_8.setMaximumSize(new Dimension(32767, 8));
+      panel_2.add(panel_8);
+      panel_2.add(getNewScriptBtn());
+
+      JButton deleteScriptBtn = new JButton();
+      deleteScriptBtn.setToolTipText("Delete script");
+      deleteScriptBtn.setText("Delete");
+      deleteScriptBtn.setPreferredSize(new Dimension(125, 24));
+      deleteScriptBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      deleteScriptBtn.setBounds(new Rectangle(9, 280, 125, 24));
+      panel_2.add(deleteScriptBtn);
+
+      JButton scriptRenameBtn = new JButton();
+      scriptRenameBtn.setToolTipText("Rename script");
+      scriptRenameBtn.setText("Rename");
+      scriptRenameBtn.setPreferredSize(new Dimension(125, 24));
+      scriptRenameBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      scriptRenameBtn.setBounds(new Rectangle(9, 280, 125, 24));
+      panel_2.add(scriptRenameBtn);
+
+      JPanel panel_3 = new JPanel();
+      panel_3.setMaximumSize(new Dimension(32767, 8));
+      panel_3.setMinimumSize(new Dimension(10, 8));
+      panel_3.setPreferredSize(new Dimension(10, 8));
+      panel_2.add(panel_3);
+
+      JButton scriptRunBtn = new JButton();
+      scriptRunBtn.setToolTipText("Run script");
+      scriptRunBtn.setText("Run");
+      scriptRunBtn.setPreferredSize(new Dimension(125, 24));
+      scriptRunBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      scriptRunBtn.setBounds(new Rectangle(9, 280, 125, 24));
+      panel_2.add(scriptRunBtn);
 
       JScrollPane scrollPane_2 = new JScrollPane();
       panel_1.add(scrollPane_2, BorderLayout.CENTER);
@@ -10012,7 +10002,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JScrollPane getScriptScrollPane() {
     if (scriptScrollPane == null) {
       scriptScrollPane = new JScrollPane();
-      scriptScrollPane.setBounds(new Rectangle(9, 172, 308, 104));
+      scriptScrollPane.setBounds(982, 4, 308, 104);
       scriptScrollPane.setViewportView(getScriptTextArea());
     }
     return scriptScrollPane;
@@ -10039,7 +10029,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton getCompileScriptButton() {
     if (compileScriptButton == null) {
       compileScriptButton = new JButton();
-      compileScriptButton.setBounds(new Rectangle(9, 280, 125, 24));
+      compileScriptButton.setBounds(942, 27, 125, 24);
       compileScriptButton.setPreferredSize(new Dimension(125, 24));
       compileScriptButton.setToolTipText("Compile the script");
       compileScriptButton.setText("Compile");
@@ -10051,29 +10041,6 @@ public class TinaInternalFrame extends JInternalFrame {
       });
     }
     return compileScriptButton;
-  }
-
-  /**
-   * This method initializes runScriptButton	
-   * 	
-   * @return javax.swing.JButton	
-   */
-  private JButton getRunScriptButton() {
-    if (runScriptButton == null) {
-      runScriptButton = new JButton();
-      runScriptButton.setPreferredSize(new Dimension(125, 24));
-      runScriptButton.setToolTipText("Compile and run the script");
-      runScriptButton.setText("Run");
-      runScriptButton.setSize(new Dimension(125, 24));
-      runScriptButton.setLocation(new Point(192, 280));
-      runScriptButton.setFont(new Font("Dialog", Font.BOLD, 10));
-      runScriptButton.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.runScriptButton_clicked();
-        }
-      });
-    }
-    return runScriptButton;
   }
 
   /**
@@ -11005,24 +10972,6 @@ public class TinaInternalFrame extends JInternalFrame {
     return swfAnimatorPlayButton;
   }
 
-  private JButton getTinaWrapIntoSubFlameButton() {
-    if (tinaWrapIntoSubFlameButton == null) {
-      tinaWrapIntoSubFlameButton = new JButton();
-      tinaWrapIntoSubFlameButton.setBounds(192, 387, 125, 24);
-      tinaWrapIntoSubFlameButton.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-          tinaController.tinaWrapIntoSubFlameButton_clicked();
-        }
-      });
-      tinaWrapIntoSubFlameButton.setToolTipText("Wrap into sub flame");
-      tinaWrapIntoSubFlameButton.setText("Wrap into subflame");
-      tinaWrapIntoSubFlameButton.setPreferredSize(new Dimension(60, 24));
-      tinaWrapIntoSubFlameButton.setMnemonic(KeyEvent.VK_S);
-      tinaWrapIntoSubFlameButton.setFont(new Font("Dialog", Font.BOLD, 10));
-    }
-    return tinaWrapIntoSubFlameButton;
-  }
-
   public JTextField getSwfAnimatorToFrameREd() {
     return swfAnimatorToFrameREd;
   }
@@ -11057,80 +11006,6 @@ public class TinaInternalFrame extends JInternalFrame {
 
   public JWFNumberField getRelWeightREd() {
     return relWeightREd;
-  }
-
-  private JButton getScriptLoadButton() {
-    if (scriptLoadButton == null) {
-      scriptLoadButton = new JButton();
-      scriptLoadButton.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-          tinaController.loadScript();
-        }
-      });
-      scriptLoadButton.setToolTipText("Load the script from disc");
-      scriptLoadButton.setText("Load script");
-      scriptLoadButton.setPreferredSize(new Dimension(125, 24));
-      scriptLoadButton.setFont(new Font("Dialog", Font.BOLD, 10));
-      scriptLoadButton.setBounds(new Rectangle(9, 280, 125, 24));
-      scriptLoadButton.setBounds(9, 309, 125, 24);
-    }
-    return scriptLoadButton;
-  }
-
-  private JButton getScriptSaveButton() {
-    if (scriptSaveButton == null) {
-      scriptSaveButton = new JButton();
-      scriptSaveButton.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-          tinaController.saveScript();
-        }
-      });
-      scriptSaveButton.setToolTipText("Save the script to disc");
-      scriptSaveButton.setText("Save script");
-      scriptSaveButton.setPreferredSize(new Dimension(125, 24));
-      scriptSaveButton.setFont(new Font("Dialog", Font.BOLD, 10));
-      scriptSaveButton.setBounds(new Rectangle(9, 280, 125, 24));
-      scriptSaveButton.setBounds(192, 306, 125, 24);
-    }
-    return scriptSaveButton;
-  }
-
-  private JButton getScriptWrapHeartButton() {
-    if (scriptWrapHeartButton == null) {
-      scriptWrapHeartButton = new JButton();
-      scriptWrapHeartButton.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-          tinaController.scriptExampleWrapHeart();
-        }
-      });
-      scriptWrapHeartButton.setToolTipText("Example: Wrap into heart");
-      scriptWrapHeartButton.setText("Wrap into heart");
-      scriptWrapHeartButton.setSize(new Dimension(81, 24));
-      scriptWrapHeartButton.setPreferredSize(new Dimension(81, 24));
-      scriptWrapHeartButton.setLocation(new Point(97, 280));
-      scriptWrapHeartButton.setFont(new Font("Dialog", Font.BOLD, 10));
-      scriptWrapHeartButton.setBounds(192, 338, 125, 24);
-    }
-    return scriptWrapHeartButton;
-  }
-
-  private JButton getBtnWrapIntoBubble() {
-    if (btnWrapIntoBubble == null) {
-      btnWrapIntoBubble = new JButton();
-      btnWrapIntoBubble.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-          tinaController.scriptExampleWrapBubble();
-        }
-      });
-      btnWrapIntoBubble.setToolTipText("Example: Wrap into bubble");
-      btnWrapIntoBubble.setText("Wrap into bubble");
-      btnWrapIntoBubble.setSize(new Dimension(81, 24));
-      btnWrapIntoBubble.setPreferredSize(new Dimension(81, 24));
-      btnWrapIntoBubble.setLocation(new Point(97, 280));
-      btnWrapIntoBubble.setFont(new Font("Dialog", Font.BOLD, 10));
-      btnWrapIntoBubble.setBounds(192, 362, 125, 24);
-    }
-    return btnWrapIntoBubble;
   }
 
   private JScrollPane getScrollPane() {
@@ -13969,5 +13844,17 @@ public class TinaInternalFrame extends JInternalFrame {
 
   public JTree getScriptTree() {
     return scriptTree;
+  }
+
+  private JButton getNewScriptBtn() {
+    if (newScriptBtn == null) {
+      newScriptBtn = new JButton();
+      newScriptBtn.setToolTipText("Create a new script");
+      newScriptBtn.setText("New script");
+      newScriptBtn.setPreferredSize(new Dimension(125, 24));
+      newScriptBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      newScriptBtn.setBounds(new Rectangle(9, 280, 125, 24));
+    }
+    return newScriptBtn;
   }
 } //  @jve:decl-index=0:visual-constraint="10,10"

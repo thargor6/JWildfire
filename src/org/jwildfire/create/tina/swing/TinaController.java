@@ -80,6 +80,7 @@ import org.jwildfire.create.tina.batch.Job;
 import org.jwildfire.create.tina.batch.JobRenderThread;
 import org.jwildfire.create.tina.batch.JobRenderThreadController;
 import org.jwildfire.create.tina.dance.DancingFractalsController;
+import org.jwildfire.create.tina.dance.JWFScriptController;
 import org.jwildfire.create.tina.edit.UndoManager;
 import org.jwildfire.create.tina.io.Flam3PaletteReader;
 import org.jwildfire.create.tina.io.Flam3Reader;
@@ -144,6 +145,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
   private MutaGenController mutaGenController;
   private TinaInteractiveRendererController interactiveRendererCtrl;
   private TinaSWFAnimatorController swfAnimatorCtrl;
+  private JWFScriptController jwfScriptController;
 
   private final JInternalFrame tinaFrame;
   private final String tinaFrameTitle;
@@ -224,6 +226,9 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
           parameterObject.mutaGenVerticalTrend1Cmb, parameterObject.mutaGenVerticalTrend2Cmb, parameterObject.mutaGenBackBtn, parameterObject.mutaGenForwardBtn,
           parameterObject.mutaGenHintPane, parameterObject.mutaGenSaveFlameToEditorBtn, parameterObject.mutaGenSaveFlameToFileBtn);
     }
+
+    jwfScriptController = new JWFScriptController(prefs, parameterObject.scriptTree);
+
     data.cameraRollREd = parameterObject.pCameraRollREd;
     data.cameraRollSlider = parameterObject.pCameraRollSlider;
     data.cameraPitchREd = parameterObject.pCameraPitchREd;
@@ -476,6 +481,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     data.transformSlowButton = parameterObject.transformSlowButton;
     data.transparencyButton = parameterObject.transparencyButton;
     data.darkTrianglesButton = parameterObject.darkTrianglesButton;
+    data.scriptTree = parameterObject.scriptTree;
 
     qsaveFilenameGen = new QuickSaveFilenameGen(prefs);
 
@@ -2647,8 +2653,8 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       flamePanel.setMouseDragOperation(MouseDragOperation.MOVE_TRIANGLE);
       flamePanel.setDrawTriangles(true);
       data.mouseTransformMoveTrianglesButton.setSelected(true);
-      data.mouseTransformRotateTrianglesButton.setSelected(true);
-      data.mouseTransformScaleTrianglesButton.setSelected(true);
+      data.mouseTransformRotateTrianglesButton.setSelected(false);
+      data.mouseTransformScaleTrianglesButton.setSelected(false);
       data.mouseTransformEditPointsButton.setSelected(false);
       data.mouseTransformEditViewButton.setSelected(false);
       data.mouseTransformEditFocusPointButton.setSelected(false);
@@ -2904,7 +2910,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
   protected void removeThumbnail(int pIdx) {
     int choice = JOptionPane.showConfirmDialog(
         flamePanel,
-        "Do you really want to remove this flame\n from the thumbnail ribbon?\n (Please note that this can not be undone)",
+        "Do you really want to remove this flame\n from the thumbnail ribbon?\n (Please note that this cannot be undone)",
         Tools.APP_TITLE + " Dialog",
         JOptionPane.YES_NO_OPTION);
     if (choice == 0) {
@@ -4229,6 +4235,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     return ScriptRunner.compile(data.scriptTextArea.getText());
   }
 
+  // TODO
   public void runScriptButton_clicked() {
     try {
       ScriptRunner script = compileScript();
@@ -4589,6 +4596,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     return rootTabbedPane;
   }
 
+  // TODO
   public void tinaWrapIntoSubFlameButton_clicked() {
     if (currFlame != null) {
       saveUndoPoint();
@@ -4596,458 +4604,6 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       currFlame.assign(newFlame);
       updateThumbnails();
       refreshUI();
-    }
-  }
-
-  public void scriptExampleSoftJulian() {
-    data.scriptTextArea.setText("import org.jwildfire.create.tina.base.Flame;\r\n" +
-        "import org.jwildfire.create.tina.base.XForm;\r\n" +
-        "import org.jwildfire.create.tina.variation.VariationFunc;\r\n" +
-        "import org.jwildfire.create.tina.script.ScriptRunnerEnvironment;\r\n" +
-        "\r\n" +
-        "import org.jwildfire.create.tina.variation.BubbleFunc;\r\n" +
-        "import org.jwildfire.create.tina.variation.HemisphereFunc;\r\n" +
-        "import org.jwildfire.create.tina.variation.Julia3DFunc;\r\n" +
-        "import org.jwildfire.create.tina.variation.LinearFunc;\r\n" +
-        "import org.jwildfire.create.tina.variation.PreBlurFunc;\r\n" +
-        "import org.jwildfire.create.tina.variation.SpirographFunc;\r\n" +
-        "import org.jwildfire.create.tina.variation.SplitsFunc;\r\n" +
-        "import org.jwildfire.create.tina.variation.ZTranslateFunc;\r\n" +
-        "\r\n" +
-        "// Bases on the Soft Julian Script by AsaLegault\r\n" +
-        "//  http://asalegault.deviantart.com/art/Cloud-Julian-Script-84635709\r\n" +
-        "public void run(ScriptRunnerEnvironment pEnv) throws Exception {\r\n" +
-        "  Flame currFlame = pEnv.getCurrFlame();\r\n" +
-        "  if(currFlame==null) {\r\n" +
-        "    throw new Exception(\"Please select a flame at first\");\r\n" +
-        "  }\r\n" +
-        "  // First transform\r\n" +
-        "  {\r\n" +
-        "    VariationFunc varFunc = new Julia3DFunc();\r\n" +
-        "    varFunc.setParameter(\"power\", -2);\r\n" +
-        "    XForm xForm = new XForm();\r\n" +
-        "    xForm.addVariation(1.0, varFunc);\r\n" +
-        "    xForm.setWeight(2.0);\r\n" +
-        "    xForm.setColor(0.0);\r\n" +
-        "    xForm.setColorSymmetry(0.01);\r\n" +
-        "    xForm.setCoeff20(0.3); //o0    \r\n" +
-        "    currFlame.getXForms().add(xForm);\r\n" +
-        "  }\r\n" +
-        "  // Second transform\r\n" +
-        "  {\r\n" +
-        "    XForm xForm = new XForm();\r\n" +
-        "    xForm.addVariation(0.1, new BubbleFunc());\r\n" +
-        "    xForm.addVariation(1.0, new PreBlurFunc());\r\n" +
-        "    VariationFunc varFunc=new SpirographFunc();\r\n" +
-        "    varFunc.setParameter(\"a\", 7.0);\r\n" +
-        "    varFunc.setParameter(\"b\", 5.0);\r\n" +
-        "    varFunc.setParameter(\"d\", 0.0);\r\n" +
-        "    varFunc.setParameter(\"c1\", 5.0);\r\n" +
-        "    varFunc.setParameter(\"c2\", -5.0);\r\n" +
-        "    varFunc.setParameter(\"tmin\", 1.0);\r\n" +
-        "    varFunc.setParameter(\"tmax\", 50.0);\r\n" +
-        "    varFunc.setParameter(\"ymin\", -1.0);\r\n" +
-        "    varFunc.setParameter(\"ymax\", 0.1);\r\n" +
-        "    xForm.addVariation(0.03, varFunc);\r\n" +
-        "    xForm.setWeight(1.0);\r\n" +
-        "    xForm.setColor(0.844);\r\n" +
-        "    currFlame.getXForms().add(xForm);    \r\n" +
-        "  }\r\n" +
-        "  // Third transform\r\n" +
-        "  {\r\n" +
-        "    XForm xForm = new XForm();\r\n" +
-        "    xForm.addVariation(0.18, new HemisphereFunc());\r\n" +
-        "    xForm.addVariation(1.0, new PreBlurFunc());\r\n" +
-        "    xForm.addVariation(-0.025, new ZTranslateFunc());\r\n" +
-        "    xForm.setWeight(0.5);\r\n" +
-        "    xForm.setColor(0.0);\r\n" +
-        "    currFlame.getXForms().add(xForm);    \r\n" +
-        "  }\r\n" +
-        "  //A fourth transform can be very useful when trying\r\n" +
-        "  //to fill in the bubbles....But i'll let you figure\r\n" +
-        "  //that out.//\r\n" +
-        "  // ...\r\n" +
-        "  // Final settings   \r\n" +
-        "  currFlame.setCamRoll(2.0);\r\n" +
-        "  currFlame.setCamPitch(46.0);\r\n" +
-        "  currFlame.setCamYaw(0.0);\r\n" +
-        "  currFlame.setCamPerspective(0.30);\r\n" +
-        "  currFlame.setPixelsPerUnit(96);\r\n" +
-        "  // Refresh the UI\r\n" +
-        "  pEnv.refreshUI();\r\n" +
-        "}\r\n" +
-        "");
-    runScriptButton_clicked();
-  }
-
-  public void scriptExampleWrapHeart() {
-    data.scriptTextArea.setText("import org.jwildfire.create.tina.base.Flame;\r\n" +
-        "import org.jwildfire.create.tina.base.XForm;\r\n" +
-        "import org.jwildfire.create.tina.variation.VariationFunc;\r\n" +
-        "import org.jwildfire.create.tina.script.ScriptRunnerEnvironment;\r\n" +
-        "import org.jwildfire.create.tina.variation.VariationFuncList;\r\n" +
-        "\r\n" +
-        "public void run(ScriptRunnerEnvironment pEnv) throws Exception {\r\n" +
-        "  Flame currFlame = pEnv.getCurrFlame();\r\n" +
-        "  if(currFlame==null) {\r\n" +
-        "    throw new Exception(\"Please select a flame at first\");\r\n" +
-        "  }\r\n" +
-        "  XForm xForm=new XForm(); \r\n" +
-        "  xForm.addVariation(1.0, VariationFuncList.getVariationFuncInstance(\"xheart\", true));  \r\n" +
-        "  currFlame.getFinalXForms().clear();\r\n" +
-        "  currFlame.getFinalXForms().add(xForm);\r\n" +
-        "  // Final settings   \r\n" +
-        "  currFlame.setCamRoll(0.0);\r\n" +
-        "  currFlame.setCamPitch(0.0);\r\n" +
-        "  currFlame.setCamYaw(0.0);\r\n" +
-        "  currFlame.setCamZoom(1.0);\r\n" +
-        "  currFlame.setCentreX(0.0);\r\n" +
-        "  currFlame.setCentreY(0.0);\r\n" +
-        "  currFlame.setPixelsPerUnit(96);\r\n" +
-        "  // Refresh the UI\r\n" +
-        "  pEnv.refreshUI();\r\n" +
-        "}\r\n" +
-        "");
-    runScriptButton_clicked();
-  }
-
-  public void scriptExampleWrapBubble() {
-    data.scriptTextArea.setText("import org.jwildfire.create.tina.base.Flame;\r\n" +
-        "import org.jwildfire.create.tina.base.XForm;\r\n" +
-        "import org.jwildfire.create.tina.variation.VariationFunc;\r\n" +
-        "import org.jwildfire.create.tina.script.ScriptRunnerEnvironment;\r\n" +
-        "import org.jwildfire.create.tina.variation.VariationFuncList;\r\n" +
-        "\r\n" +
-        "public void run(ScriptRunnerEnvironment pEnv) throws Exception {\r\n" +
-        "  Flame currFlame = pEnv.getCurrFlame();\r\n" +
-        "  if(currFlame==null) {\r\n" +
-        "    throw new Exception(\"Please select a flame at first\");\r\n" +
-        "  }\r\n" +
-        "  XForm xForm=new XForm(); \r\n" +
-        "  xForm.addVariation(1.0, VariationFuncList.getVariationFuncInstance(\"bubble\", true));  \r\n" +
-        "  currFlame.getFinalXForms().clear();\r\n" +
-        "  currFlame.getFinalXForms().add(xForm);\r\n" +
-        "  // Final settings   \r\n" +
-        "  currFlame.setCamRoll(11.0);\r\n" +
-        "  currFlame.setCamPitch(26.0);\r\n" +
-        "  currFlame.setCamYaw(39.0);\r\n" +
-        "  currFlame.setCamPerspective(0.16);\r\n" +
-        "  currFlame.setCamZoom(1.0);\r\n" +
-        "  currFlame.setCentreX(0.0);\r\n" +
-        "  currFlame.setCentreY(0.0);\r\n" +
-        "  currFlame.setPixelsPerUnit(96);\r\n" +
-        "  // Refresh the UI\r\n" +
-        "  pEnv.refreshUI();\r\n" +
-        "}\r\n" +
-        "");
-    runScriptButton_clicked();
-  }
-
-  public void scriptExampleMobiusDragon() {
-    data.scriptTextArea.setText("import org.jwildfire.create.tina.base.Flame;\r\n" +
-        "import org.jwildfire.create.tina.base.XForm;\r\n" +
-        "import org.jwildfire.create.tina.variation.VariationFunc;\r\n" +
-        "import org.jwildfire.create.tina.variation.VariationFuncList;\r\n" +
-        "import org.jwildfire.create.tina.script.ScriptRunnerEnvironment;\r\n" +
-        "import org.jwildfire.create.tina.transform.XFormTransformService;\r\n" +
-        "\r\n" +
-        "// Based on the Apophysis script \"Mobius Dragon\" by penny5775\r\n" +
-        "//   http://penny5775.deviantart.com/art/Mobius-Dragon-Script-104021373\r\n" +
-        "public void run(ScriptRunnerEnvironment pEnv) throws Exception {\r\n" +
-        "  XForm xForm1;\r\n" +
-        "  VariationFunc varFunc;\r\n" +
-        "  Flame currFlame = pEnv.getCurrFlame();\r\n" +
-        "  if(currFlame==null) {\r\n" +
-        "    throw new Exception(\"Please select a flame at first\");\r\n" +
-        "  }\r\n" +
-        "  currFlame.getXForms().clear();\r\n" +
-        "  double ranx = (Math.random() / 10.0)*1.2;   \r\n" +
-        "  double rany = (Math.random() / 10.0)*1.2;\r\n" +
-        "\r\n" +
-        "  //T1 mobius\r\n" +
-        "  {\r\n" +
-        "    XForm xForm = new XForm();\r\n" +
-        "    xForm.setWeight(0.5+Math.random()*4.0);\r\n" +
-        "    xForm.setColor(Math.random());\r\n" +
-        "    xForm.setColorSymmetry(0.8);\r\n" +
-        "\r\n" +
-        "    varFunc = VariationFuncList.getVariationFuncInstance(\"mobius\", true);\r\n" +
-        "    varFunc.setParameter(\"re_a\", 1.0);\r\n" +
-        "    varFunc.setParameter(\"im_a\", 0.0);\r\n" +
-        "    varFunc.setParameter(\"re_b\", 0.0);\r\n" +
-        "    varFunc.setParameter(\"im_b\", 0.0);\r\n" +
-        "    varFunc.setParameter(\"re_c\", 0.0);\r\n" +
-        "    varFunc.setParameter(\"im_c\", -1.0);\r\n" +
-        "    varFunc.setParameter(\"re_d\", 1.0);\r\n" +
-        "    varFunc.setParameter(\"im_d\", 0.0);\r\n" +
-        "    xForm.setCoeff20(ranx);\r\n" +
-        "    xForm.setCoeff21(-rany);\r\n" +
-        "    xForm.addVariation(1.0, varFunc);\r\n" +
-        "    currFlame.getXForms().add(xForm);\r\n" +
-        "  }\r\n" +
-        "  // T2 linear\r\n" +
-        "  {\r\n" +
-        "    XForm xForm = new XForm();\r\n" +
-        "    xForm.setWeight(0.5+Math.random()*0.8);\r\n" +
-        "    xForm.setColor(Math.random());\r\n" +
-        "    xForm.setColorSymmetry(0.8);\r\n" +
-        "\r\n" +
-        "    xForm.setPostCoeff00(-1.0);\r\n" +
-        "    xForm.setPostCoeff01(0.0);\r\n" +
-        "    xForm.setPostCoeff10(0.0);\r\n" +
-        "    xForm.setPostCoeff11(-1.0);\r\n" +
-        "    xForm.setCoeff20(ranx);\r\n" +
-        "    xForm.setCoeff21(-rany);\r\n" +
-        "    xForm.addVariation(1.0, VariationFuncList.getVariationFuncInstance(\"linear3D\", true));\r\n" +
-        "    currFlame.getXForms().add(xForm);\r\n" +
-        "  }\r\n" +
-        "  // T3 linear\r\n" +
-        "  {\r\n" +
-        "    XForm xForm = new XForm();\r\n" +
-        "    xForm.setWeight(0.4+Math.random()*0.3);\r\n" +
-        "    xForm.setColor(Math.random());\r\n" +
-        "    xForm.setColorSymmetry(1.0);\r\n" +
-        "\r\n" +
-        "    xForm.setCoeff20(-1.0);\r\n" +
-        "    xForm.addVariation(1.0, VariationFuncList.getVariationFuncInstance(\"linear3D\", true));\r\n" +
-        "    currFlame.getXForms().add(xForm);\r\n" +
-        "  }\r\n" +
-        "  // T4 linear\r\n" +
-        "  {\r\n" +
-        "    XForm xForm = new XForm();\r\n" +
-        "    xForm.setWeight(0.15+Math.random()*0.25);\r\n" +
-        "    xForm.setColor(Math.random());\r\n" +
-        "    xForm.setColorSymmetry(1.0);\r\n" +
-        "\r\n" +
-        "    xForm.setCoeff20(1.0);\r\n" +
-        "    xForm.addVariation(1.0, VariationFuncList.getVariationFuncInstance(\"linear3D\", true));\r\n" +
-        "    currFlame.getXForms().add(xForm);\r\n" +
-        "  }\r\n" +
-        "  // T5 linear moved away on y axis\r\n" +
-        "  {\r\n" +
-        "    XForm xForm = new XForm();\r\n" +
-        "    xForm.setWeight(0.0625);\r\n" +
-        "    xForm.setColor(Math.random());\r\n" +
-        "\r\n" +
-        "    xForm.setCoeff21(-3.0);\r\n" +
-        "    xForm.setPostCoeff20(-ranx);\r\n" +
-        "    xForm.setPostCoeff21(-rany);\r\n" +
-        "    xForm.addVariation(1.0, VariationFuncList.getVariationFuncInstance(\"linear3D\", true));\r\n" +
-        "    currFlame.getXForms().add(xForm);\r\n" +
-        "  }\r\n" +
-        "  // T6 linear line at edge of design\r\n" +
-        "  {\r\n" +
-        "    XForm xForm = new XForm();\r\n" +
-        "    xForm.setWeight(0.0625);\r\n" +
-        "    xForm.setColor(Math.random());\r\n" +
-        "\r\n" +
-        "    xForm.setPostCoeff11(0.001);\r\n" +
-        "    xForm.setPostCoeff20(-ranx);\r\n" +
-        "    xForm.setPostCoeff21(1.0-rany);\r\n" +
-        "    xForm.addVariation(1.0, VariationFuncList.getVariationFuncInstance(\"linear3D\", true));\r\n" +
-        "    currFlame.getXForms().add(xForm);\r\n" +
-        "  }\r\n" +
-        "  // T7 a detail in center of void\r\n" +
-        "  {\r\n" +
-        "    XForm xForm = new XForm();\r\n" +
-        "    xForm.setWeight(0.0625);\r\n" +
-        "    xForm.setColor(Math.random());\r\n" +
-        "\r\n" +
-        "    xForm.setPostCoeff20(0.5-(ranx/2.0));\r\n" +
-        "    xForm.setPostCoeff21(-(rany/2.0));\r\n" +
-        "    xForm.addVariation(Math.random()/10.0+0.1, VariationFuncList.getVariationFuncInstance(VariationFuncList.getRandomVariationname(), true));\r\n" +
-        "    currFlame.getXForms().add(xForm);\r\n" +
-        "  }\r\n" +
-        "\r\n" +
-        "  // final\r\n" +
-        "  currFlame.getFinalXForms().clear();\r\n" +
-        "\r\n" +
-        "  currFlame.setCentreX(0.0);\r\n" +
-        "  currFlame.setCentreY(0.0);\r\n" +
-        "  currFlame.setCamRoll(0.0);\r\n" +
-        "  currFlame.setCamPitch(0.0);\r\n" +
-        "  currFlame.setCamYaw(0.0);\r\n" +
-        "  currFlame.setCamPerspective(0.0);\r\n" +
-        "  currFlame.setPixelsPerUnit(120);\r\n" +
-        "  // Refresh the UI\r\n" +
-        "  pEnv.refreshUI();\r\n" +
-        "}\r\n" +
-        "");
-    runScriptButton_clicked();
-  }
-
-  public void scriptExampleEscherFlux() {
-    data.scriptTextArea.setText("import org.jwildfire.create.tina.base.Flame;\r\n" +
-        "import org.jwildfire.create.tina.base.XForm;\r\n" +
-        "import org.jwildfire.create.tina.variation.VariationFunc;\r\n" +
-        "import org.jwildfire.create.tina.variation.VariationFuncList;\r\n" +
-        "import org.jwildfire.create.tina.script.ScriptRunnerEnvironment;\r\n" +
-        "import org.jwildfire.create.tina.transform.XFormTransformService;\r\n" +
-        "\r\n" +
-        "// Based on the Apophysis script \"BC n BDs Textured Escher Flux\"\r\n" +
-        "//  http://fractal-resources.deviantart.com/art/BC-n-BDs-Textured-Escher-Flux-129501160\r\n" +
-        "public void run(ScriptRunnerEnvironment pEnv) throws Exception {\r\n" +
-        "  XForm xForm1;\r\n" +
-        "  VariationFunc varFunc;\r\n" +
-        "  Flame currFlame = pEnv.getCurrFlame();\r\n" +
-        "  if(currFlame==null) {\r\n" +
-        "    throw new Exception(\"Please select a flame at first\");\r\n" +
-        "  }\r\n" +
-        "  currFlame.getXForms().clear();\r\n" +
-        "\r\n" +
-        "  // First transform\r\n" +
-        "  {\r\n" +
-        "    XForm xForm = xForm1 = new XForm();\r\n" +
-        "    xForm.setWeight(0.5);\r\n" +
-        "    xForm.setColor(Math.random());\r\n" +
-        "    xForm.setColorSymmetry(-(0.8+(Math.random()*0.1)));\r\n" +
-        "\r\n" +
-        "    xForm.setCoeff00(0.266948); // a\r\n" +
-        "    xForm.setCoeff10(0.137096); // b\r\n" +
-        "    xForm.setCoeff20(0.04212);  // e\r\n" +
-        "    xForm.setCoeff01(0.071529); // c \r\n" +
-        "    xForm.setCoeff11(-0.511651); // d \r\n" +
-        "    xForm.setCoeff21(-0.334332); // f \r\n" +
-        "\r\n" +
-        "    xForm.setPostCoeff00(0.5);\r\n" +
-        "    xForm.setPostCoeff10(0);\r\n" +
-        "    xForm.setPostCoeff01(0);\r\n" +
-        "    xForm.setPostCoeff11(0.25);\r\n" +
-        "    xForm.setPostCoeff20(0);\r\n" +
-        "    xForm.setPostCoeff21(0.05);\r\n" +
-        "\r\n" +
-        "    xForm.addVariation((0.1+(Math.random()*0.1)), VariationFuncList.getVariationFuncInstance(\"bubble\", true));\r\n" +
-        "    xForm.addVariation(2.0, VariationFuncList.getVariationFuncInstance(\"pre_blur\", true));\r\n" +
-        "\r\n" +
-        "    varFunc = VariationFuncList.getVariationFuncInstance(\"rectangles\", true);\r\n" +
-        "    varFunc.setParameter(\"x\", (0.1+(Math.random()*0.1)));\r\n" +
-        "    varFunc.setParameter(\"y\", (1.5+(Math.random()*0.5)));\r\n" +
-        "    xForm.addVariation(-(0.2+(Math.random()*0.15)), varFunc);\r\n" +
-        "\r\n" +
-        "    varFunc = VariationFuncList.getVariationFuncInstance(\"hexes\", true);\r\n" +
-        "    varFunc.setParameter(\"cellsize\", ((int)(1+Math.random()*5.0)) *0.1+(Math.random()*0.1));\r\n" +
-        "    varFunc.setParameter(\"power\", 1.0);\r\n" +
-        "    varFunc.setParameter(\"rotate\", 0.0);\r\n" +
-        "    varFunc.setParameter(\"scale\", (0.25+(Math.random()*0.3)));\r\n" +
-        "    xForm.addVariation(-(0.05+(Math.random()*0.05)), varFunc);\r\n" +
-        "\r\n" +
-        "    currFlame.getXForms().add(xForm);\r\n" +
-        "  }\r\n" +
-        "  // 2nd transform\r\n" +
-        "  {\r\n" +
-        "    XForm xForm = new XForm();\r\n" +
-        "    xForm.setWeight(30.0);\r\n" +
-        "    xForm.setColor(Math.random());\r\n" +
-        "    xForm.setColorSymmetry((0.8+(Math.random()*0.1)));\r\n" +
-        "\r\n" +
-        "\r\n" +
-        "    xForm.setCoeff00(1.0); // a\r\n" +
-        "    xForm.setCoeff10((Math.random()*0.1)); // b\r\n" +
-        "    xForm.setCoeff20(0.0);  // e\r\n" +
-        "    xForm.setCoeff01((Math.random()*0.1)); // c \r\n" +
-        "    xForm.setCoeff11(1.0); // d \r\n" +
-        "    xForm.setCoeff21(0.0); // f \r\n" +
-        "    XFormTransformService.rotate(xForm, Math.random() * 360.0, false);\r\n" +
-        "\r\n" +
-        "    xForm.setPostCoeff00((1+(Math.random()*0.1)));\r\n" +
-        "    xForm.setPostCoeff10((Math.random()*0.1));\r\n" +
-        "    xForm.setPostCoeff01(-(0.1+(Math.random()*0.1)));\r\n" +
-        "    xForm.setPostCoeff11((0.9+(Math.random()*0.1)));\r\n" +
-        "    xForm.setPostCoeff20(0);\r\n" +
-        "    xForm.setPostCoeff21(0);\r\n" +
-        "\r\n" +
-        "    xForm.addVariation((0.02+(Math.random()*0.01)), VariationFuncList.getVariationFuncInstance(\"spherical\", true));\r\n" +
-        "    xForm.addVariation((0.02+(Math.random()*0.01)), VariationFuncList.getVariationFuncInstance(\"bubble\", true));\r\n" +
-        "\r\n" +
-        "    varFunc = VariationFuncList.getVariationFuncInstance(\"escher\", true);\r\n" +
-        "    varFunc.setParameter(\"beta\", (0.21+(Math.random()*0.03)));\r\n" +
-        "    xForm.addVariation(1.0, varFunc);\r\n" +
-        "\r\n" +
-        "    varFunc = VariationFuncList.getVariationFuncInstance(\"flux\", true);\r\n" +
-        "    varFunc.setParameter(\"spread\", -(1.5+(Math.random()*0.3)));\r\n" +
-        "    xForm.addVariation(0.05, varFunc);\r\n" +
-        "\r\n" +
-        "    currFlame.getXForms().add(xForm);\r\n" +
-        "  }\r\n" +
-        "\r\n" +
-        "  // 3rd transform\r\n" +
-        "  {\r\n" +
-        "    XForm xForm = xForm1.makeCopy();\r\n" +
-        "    xForm.setPostCoeff20(0.05);\r\n" +
-        "    xForm.setPostCoeff21(-0.25);\r\n" +
-        "    currFlame.getXForms().add(xForm);  \r\n" +
-        "  }\r\n" +
-        "  // final transform\r\n" +
-        "  {\r\n" +
-        "    XForm xForm = new XForm();\r\n" +
-        "    xForm.setCoeff00(1.0); // a\r\n" +
-        "    xForm.setCoeff10(0.0); // b\r\n" +
-        "    xForm.setCoeff20(0.0); // e\r\n" +
-        "    xForm.setCoeff01(0.0); // c \r\n" +
-        "    xForm.setCoeff11(1.0); // d \r\n" +
-        "    xForm.setCoeff21(-0.225); // f \r\n" +
-        "    varFunc = VariationFuncList.getVariationFuncInstance(\"juliascope\", true);\r\n" +
-        "    varFunc.setParameter(\"power\", 2.0);\r\n" +
-        "    varFunc.setParameter(\"dist\", 1.0);\r\n" +
-        "    xForm.addVariation(1.0, varFunc);\r\n" +
-        "    currFlame.getFinalXForms().add(xForm);\r\n" +
-        "  }\r\n" +
-        "  currFlame.setCamRoll(0.0);\r\n" +
-        "  currFlame.setCamPitch(0.0);\r\n" +
-        "  currFlame.setCamYaw(0.0);\r\n" +
-        "  currFlame.setCamPerspective(0.0);\r\n" +
-        "  currFlame.setPixelsPerUnit(50);\r\n" +
-        "  // Refresh the UI\r\n" +
-        "  pEnv.refreshUI();\r\n" +
-        "}\r\n" +
-        "");
-    runScriptButton_clicked();
-  }
-
-  public void loadScript() {
-    try {
-      JFileChooser chooser = new JWFScriptFileChooser(prefs);
-      if (prefs.getInputFlamePath() != null) {
-        try {
-          chooser.setCurrentDirectory(new File(prefs.getInputFlamePath()));
-        }
-        catch (Exception ex) {
-          ex.printStackTrace();
-        }
-      }
-      if (chooser.showOpenDialog(centerPanel) == JFileChooser.APPROVE_OPTION) {
-        File file = chooser.getSelectedFile();
-        String script = Tools.readUTF8Textfile(file.getAbsolutePath());
-        data.scriptTextArea.setText(script);
-      }
-    }
-    catch (Throwable ex) {
-      errorHandler.handleError(ex);
-    }
-  }
-
-  public void saveScript() {
-    try {
-      String script = data.scriptTextArea.getText();
-      if (script != null && script.trim().length() > 0) {
-        JFileChooser chooser = new JWFScriptFileChooser(prefs);
-        if (prefs.getOutputFlamePath() != null) {
-          try {
-            chooser.setCurrentDirectory(new File(prefs.getOutputFlamePath()));
-          }
-          catch (Exception ex) {
-            ex.printStackTrace();
-          }
-        }
-        if (chooser.showSaveDialog(centerPanel) == JFileChooser.APPROVE_OPTION) {
-          File file = chooser.getSelectedFile();
-          Tools.writeUTF8Textfile(file.getAbsolutePath(), script);
-          prefs.setLastOutputFlameFile(file);
-        }
-      }
-    }
-    catch (Throwable ex) {
-      errorHandler.handleError(ex);
     }
   }
 
@@ -5687,5 +5243,9 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
         refreshing = false;
       }
     }
+  }
+
+  public JWFScriptController getJwfScriptController() {
+    return jwfScriptController;
   }
 }
