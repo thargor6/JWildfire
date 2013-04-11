@@ -265,10 +265,13 @@ public class TinaControllerData {
   public JTextArea scriptDescriptionTextArea;
   public JTextArea scriptTextArea;
   public JButton compileScriptButton;
+  public JButton saveScriptBtn;
+  public JButton revertScriptBtn;
   public JButton rescanScriptsBtn;
   public JButton newScriptBtn;
   public JButton deleteScriptBtn;
   public JButton scriptRenameBtn;
+  public JButton scriptDuplicateBtn;
   public JButton scriptRunBtn;
 
 }

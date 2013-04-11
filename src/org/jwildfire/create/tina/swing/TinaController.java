@@ -229,8 +229,8 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
 
     jwfScriptController = new JWFScriptController(prefs, parameterObject.scriptTree,
         parameterObject.scriptDescriptionTextArea, parameterObject.scriptTextArea, parameterObject.compileScriptButton,
-        parameterObject.rescanScriptsBtn, parameterObject.newScriptBtn, parameterObject.deleteScriptBtn,
-        parameterObject.scriptRenameBtn, parameterObject.scriptRunBtn);
+        parameterObject.saveScriptBtn, parameterObject.revertScriptBtn, parameterObject.rescanScriptsBtn, parameterObject.newScriptBtn, parameterObject.deleteScriptBtn,
+        parameterObject.scriptRenameBtn, parameterObject.scriptDuplicateBtn, parameterObject.scriptRunBtn);
 
     data.cameraRollREd = parameterObject.pCameraRollREd;
     data.cameraRollSlider = parameterObject.pCameraRollSlider;
@@ -488,10 +488,13 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     data.scriptDescriptionTextArea = parameterObject.scriptDescriptionTextArea;
     data.scriptTextArea = parameterObject.scriptTextArea;
     data.compileScriptButton = parameterObject.compileScriptButton;
+    data.saveScriptBtn = parameterObject.saveScriptBtn;
+    data.revertScriptBtn = parameterObject.revertScriptBtn;
     data.rescanScriptsBtn = parameterObject.rescanScriptsBtn;
     data.newScriptBtn = parameterObject.newScriptBtn;
     data.deleteScriptBtn = parameterObject.deleteScriptBtn;
     data.scriptRenameBtn = parameterObject.scriptRenameBtn;
+    data.scriptDuplicateBtn = parameterObject.scriptDuplicateBtn;
     data.scriptRunBtn = parameterObject.scriptRunBtn;
 
     qsaveFilenameGen = new QuickSaveFilenameGen(prefs);

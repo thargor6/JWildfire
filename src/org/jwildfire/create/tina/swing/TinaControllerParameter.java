@@ -340,10 +340,13 @@ public class TinaControllerParameter {
   public JTextArea scriptDescriptionTextArea;
   public JTextArea scriptTextArea;
   public JButton compileScriptButton;
+  public JButton saveScriptBtn;
+  public JButton revertScriptBtn;
   public JButton rescanScriptsBtn;
   public JButton newScriptBtn;
   public JButton deleteScriptBtn;
   public JButton scriptRenameBtn;
+  public JButton scriptDuplicateBtn;
   public JButton scriptRunBtn;
 
   public void setParams1(JInternalFrame pTinaFrame, ErrorHandler pErrorHandler, Prefs pPrefs, JPanel pCenterPanel, JWFNumberField pCameraRollREd, JSlider pCameraRollSlider, JWFNumberField pCameraPitchREd, JSlider pCameraPitchSlider, JWFNumberField pCameraYawREd, JSlider pCameraYawSlider, JWFNumberField pCameraPerspectiveREd, JSlider pCameraPerspectiveSlider, JWFNumberField pCameraCentreXREd, JSlider pCameraCentreXSlider, JWFNumberField pCameraCentreYREd, JSlider pCameraCentreYSlider, JWFNumberField pCameraZoomREd, JSlider pCameraZoomSlider, JCheckBox pNewDOFCBx, JWFNumberField pFocusXREd, JSlider pFocusXSlider, JWFNumberField pFocusYREd, JSlider pFocusYSlider, JWFNumberField pFocusZREd, JSlider pFocusZSlider, JWFNumberField pDimishZREd, JSlider pDimishZSlider,
@@ -625,8 +628,8 @@ public class TinaControllerParameter {
       JButton pEditTransformCaptionButton, JButton pEditFlameTileButton, JButton pSnapShotButton, JButton pQSaveButton, JButton pQuickMutationButton,
       JButton pDancingFlamesButton, JButton pMovieButton, JToggleButton pTransformSlowButton, JToggleButton pTransparencyButton, JToggleButton pDarkTrianglesButton,
       JToggleButton pMouseTransformRotateTrianglesButton, JToggleButton pMouseTransformScaleTrianglesButton, JTree pScriptTree,
-      JTextArea pScriptDescriptionTextArea, JTextArea pScriptTextArea, JButton pCompileScriptButton, JButton pRescanScriptsBtn,
-      JButton pNewScriptBtn, JButton pDeleteScriptBtn, JButton pScriptRenameBtn, JButton pScriptRunBtn) {
+      JTextArea pScriptDescriptionTextArea, JTextArea pScriptTextArea, JButton pCompileScriptButton, JButton pSaveScriptBtn, JButton pRevertScriptBtn, JButton pRescanScriptsBtn,
+      JButton pNewScriptBtn, JButton pDeleteScriptBtn, JButton pScriptRenameBtn, JButton pScriptDuplicateBtn, JButton pScriptRunBtn) {
     this.pDancingFlamesLinkMotionBtn = pDancingFlamesLinkMotionBtn;
     this.pDancingFlamesUnlinkMotionBtn = pDancingFlamesUnlinkMotionBtn;
     this.pDancingFlamesCreateMotionsCmb = pDancingFlamesCreateMotionsCmb;
@@ -694,10 +697,13 @@ public class TinaControllerParameter {
     this.scriptDescriptionTextArea = pScriptDescriptionTextArea;
     this.scriptTextArea = pScriptTextArea;
     this.compileScriptButton = pCompileScriptButton;
+    this.saveScriptBtn = pSaveScriptBtn;
+    this.revertScriptBtn = pRevertScriptBtn;
     this.rescanScriptsBtn = pRescanScriptsBtn;
     this.newScriptBtn = pNewScriptBtn;
     this.deleteScriptBtn = pDeleteScriptBtn;
     this.scriptRenameBtn = pScriptRenameBtn;
+    this.scriptDuplicateBtn = pScriptDuplicateBtn;
     this.scriptRunBtn = pScriptRunBtn;
   }
 }
