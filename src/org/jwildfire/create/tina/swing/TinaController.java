@@ -1228,7 +1228,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       public String getColumnName(int columnIndex) {
         switch (columnIndex) {
           case COL_TRANSFORM:
-            return "Transform";
+            return "Transf";
           case COL_VARIATIONS:
             return "Variations/Name";
           case COL_WEIGHT:
@@ -1245,21 +1245,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
             case COL_TRANSFORM:
               return rowIndex < currFlame.getXForms().size() ? String.valueOf(rowIndex + 1) : "Final";
             case COL_VARIATIONS:
-            {
-              if (xForm.getName() != null && xForm.getName().length() > 0) {
-                return xForm.getName();
-              }
-              else {
-                String hs = "";
-                if (xForm.getVariationCount() > 0) {
-                  for (int i = 0; i < xForm.getVariationCount() - 1; i++) {
-                    hs += xForm.getVariation(i).getFunc().getName() + ", ";
-                  }
-                  hs += xForm.getVariation(xForm.getVariationCount() - 1).getFunc().getName();
-                }
-                return hs;
-              }
-            }
+              return getXFormCaption(xForm);
             case COL_WEIGHT:
               return rowIndex < currFlame.getXForms().size() ? Tools.doubleToString(xForm.getWeight()) : "";
           }
@@ -1293,6 +1279,22 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     data.transformationsTable.getColumnModel().getColumn(COL_TRANSFORM).setWidth(20);
     data.transformationsTable.getColumnModel().getColumn(COL_VARIATIONS).setPreferredWidth(120);
     data.transformationsTable.getColumnModel().getColumn(COL_WEIGHT).setWidth(16);
+  }
+
+  protected Object getXFormCaption(XForm pXForm) {
+    if (pXForm.getName() != null && pXForm.getName().length() > 0) {
+      return pXForm.getName();
+    }
+    else {
+      String hs = "";
+      if (pXForm.getVariationCount() > 0) {
+        for (int i = 0; i < pXForm.getVariationCount() - 1; i++) {
+          hs += pXForm.getVariation(i).getFunc().getName() + ", ";
+        }
+        hs += pXForm.getVariation(pXForm.getVariationCount() - 1).getFunc().getName();
+      }
+      return hs;
+    }
   }
 
   class PaletteTableCustomRenderer extends DefaultTableCellRenderer {
@@ -1404,7 +1406,8 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
 
   private void refreshRelWeightsTable() {
     final int COL_TRANSFORM = 0;
-    final int COL_WEIGHT = 1;
+    final int COL_VARIATIONS = 1;
+    final int COL_WEIGHT = 2;
     data.relWeightsTable.setModel(new DefaultTableModel() {
       private static final long serialVersionUID = 1L;
 
@@ -1416,14 +1419,16 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
 
       @Override
       public int getColumnCount() {
-        return 2;
+        return 3;
       }
 
       @Override
       public String getColumnName(int columnIndex) {
         switch (columnIndex) {
           case COL_TRANSFORM:
-            return "Transform";
+            return "Transf";
+          case COL_VARIATIONS:
+            return "Variations/Name";
           case COL_WEIGHT:
             return "Weight";
         }
@@ -1436,6 +1441,10 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
           switch (columnIndex) {
             case COL_TRANSFORM:
               return String.valueOf(rowIndex + 1);
+            case COL_VARIATIONS: {
+              XForm xForm = currFlame.getXForms().get(rowIndex);
+              return getXFormCaption(xForm);
+            }
             case COL_WEIGHT: {
               XForm xForm = getCurrXForm();
               return xForm != null ? Tools.doubleToString(xForm.getModifiedWeights()[rowIndex]) : null;
