@@ -1,0 +1,76 @@
+import org.jwildfire.create.tina.base.Flame;
+import org.jwildfire.create.tina.base.XForm;
+import org.jwildfire.create.tina.variation.VariationFunc;
+import org.jwildfire.create.tina.script.ScriptRunnerEnvironment;
+
+import org.jwildfire.create.tina.variation.BubbleFunc;
+import org.jwildfire.create.tina.variation.HemisphereFunc;
+import org.jwildfire.create.tina.variation.Julia3DFunc;
+import org.jwildfire.create.tina.variation.LinearFunc;
+import org.jwildfire.create.tina.variation.PreBlurFunc;
+import org.jwildfire.create.tina.variation.SpirographFunc;
+import org.jwildfire.create.tina.variation.SplitsFunc;
+import org.jwildfire.create.tina.variation.ZTranslateFunc;
+
+// Bases on the Soft Julian Script by AsaLegault
+//  http://asalegault.deviantart.com/art/Cloud-Julian-Script-84635709
+public void run(ScriptRunnerEnvironment pEnv) throws Exception {
+  Flame currFlame = pEnv.getCurrFlame();
+  if(currFlame==null) {
+    throw new Exception("Please select a flame at first");
+  }
+  // First transform
+  {
+    VariationFunc varFunc = new Julia3DFunc();
+    varFunc.setParameter("power", -2);
+    XForm xForm = new XForm();
+    xForm.addVariation(1.0, varFunc);
+    xForm.setWeight(2.0);
+    xForm.setColor(0.0);
+    xForm.setColorSymmetry(0.01);
+    xForm.setCoeff20(0.3); //o0    
+    currFlame.getXForms().add(xForm);
+  }
+  // Second transform
+  {
+    XForm xForm = new XForm();
+    xForm.addVariation(0.1, new BubbleFunc());
+    xForm.addVariation(1.0, new PreBlurFunc());
+    VariationFunc varFunc=new SpirographFunc();
+    varFunc.setParameter("a", 7.0);
+    varFunc.setParameter("b", 5.0);
+    varFunc.setParameter("d", 0.0);
+    varFunc.setParameter("c1", 5.0);
+    varFunc.setParameter("c2", -5.0);
+    varFunc.setParameter("tmin", 1.0);
+    varFunc.setParameter("tmax", 50.0);
+    varFunc.setParameter("ymin", -1.0);
+    varFunc.setParameter("ymax", 0.1);
+    xForm.addVariation(0.03, varFunc);
+    xForm.setWeight(1.0);
+    xForm.setColor(0.844);
+    currFlame.getXForms().add(xForm);    
+  }
+  // Third transform
+  {
+    XForm xForm = new XForm();
+    xForm.addVariation(0.18, new HemisphereFunc());
+    xForm.addVariation(1.0, new PreBlurFunc());
+    xForm.addVariation(-0.025, new ZTranslateFunc());
+    xForm.setWeight(0.5);
+    xForm.setColor(0.0);
+    currFlame.getXForms().add(xForm);    
+  }
+  //A fourth transform can be very useful when trying
+  //to fill in the bubbles....But i'll let you figure
+  //that out.//
+  // ...
+  // Final settings   
+  currFlame.setCamRoll(2.0);
+  currFlame.setCamPitch(46.0);
+  currFlame.setCamYaw(0.0);
+  currFlame.setCamPerspective(0.30);
+  currFlame.setPixelsPerUnit(96);
+  // Refresh the UI
+  pEnv.refreshUI();
+}

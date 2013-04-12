@@ -1,0 +1,26 @@
+import org.jwildfire.create.tina.base.Flame;
+import org.jwildfire.create.tina.base.XForm;
+import org.jwildfire.create.tina.variation.VariationFunc;
+import org.jwildfire.create.tina.script.ScriptRunnerEnvironment;
+import org.jwildfire.create.tina.variation.VariationFuncList;
+
+public void run(ScriptRunnerEnvironment pEnv) throws Exception {
+  Flame currFlame = pEnv.getCurrFlame();
+  if(currFlame==null) {
+    throw new Exception("Please select a flame at first");
+  }
+  XForm xForm=new XForm(); 
+  xForm.addVariation(1.0, VariationFuncList.getVariationFuncInstance("xheart", true));  
+  currFlame.getFinalXForms().clear();
+  currFlame.getFinalXForms().add(xForm);
+  // Final settings   
+  currFlame.setCamRoll(0.0);
+  currFlame.setCamPitch(0.0);
+  currFlame.setCamYaw(0.0);
+  currFlame.setCamZoom(1.0);
+  currFlame.setCentreX(0.0);
+  currFlame.setCentreY(0.0);
+  currFlame.setPixelsPerUnit(96);
+  // Refresh the UI
+  pEnv.refreshUI();
+}

@@ -53,7 +53,6 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JInternalFrame;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
@@ -96,7 +95,6 @@ import org.jwildfire.create.tina.randomflame.RandomFlameGenerator;
 import org.jwildfire.create.tina.randomflame.RandomFlameGeneratorList;
 import org.jwildfire.create.tina.randomflame.RandomFlameGeneratorSample;
 import org.jwildfire.create.tina.randomflame.RandomFlameGeneratorSampler;
-import org.jwildfire.create.tina.randomflame.SubFlameRandomFlameGenerator;
 import org.jwildfire.create.tina.render.DrawFocusPointFlameRenderer;
 import org.jwildfire.create.tina.render.FlameRenderer;
 import org.jwildfire.create.tina.render.ProgressUpdater;
@@ -121,7 +119,7 @@ import org.jwildfire.swing.MainController;
 
 import com.l2fprod.common.swing.JFontChooser;
 
-public class TinaController implements FlameHolder, JobRenderThreadController, ScriptRunnerEnvironment, UndoManagerHolder<Flame> {
+public class TinaController implements FlameHolder, JobRenderThreadController, ScriptRunnerEnvironment, UndoManagerHolder<Flame>, JWFScriptExecuteController {
   public static final int PAGE_INDEX = 0;
 
   private static final double SLIDER_SCALE_PERSPECTIVE = 100.0;
@@ -227,7 +225,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
           parameterObject.mutaGenHintPane, parameterObject.mutaGenSaveFlameToEditorBtn, parameterObject.mutaGenSaveFlameToFileBtn);
     }
 
-    jwfScriptController = new JWFScriptController(prefs, parameterObject.scriptTree,
+    jwfScriptController = new JWFScriptController(this, parameterObject.pErrorHandler, prefs, parameterObject.scriptTree,
         parameterObject.scriptDescriptionTextArea, parameterObject.scriptTextArea, parameterObject.compileScriptButton,
         parameterObject.saveScriptBtn, parameterObject.revertScriptBtn, parameterObject.rescanScriptsBtn, parameterObject.newScriptBtn, parameterObject.deleteScriptBtn,
         parameterObject.scriptRenameBtn, parameterObject.scriptDuplicateBtn, parameterObject.scriptRunBtn);
@@ -2848,12 +2846,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
   }
 
   protected void removeThumbnail(int pIdx) {
-    int choice = JOptionPane.showConfirmDialog(
-        flamePanel,
-        "Do you really want to remove this flame\n from the thumbnail ribbon?\n (Please note that this cannot be undone)",
-        Tools.APP_TITLE + " Dialog",
-        JOptionPane.YES_NO_OPTION);
-    if (choice == 0) {
+    if (StandardDialogs.confirm(flamePanel, "Do you really want to remove this flame\n from the thumbnail-ribbon?\n (Please note that this cannot be undone)")) {
       randomBatch.remove(pIdx);
       updateThumbnails();
     }
@@ -4171,21 +4164,16 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     shadingInfoSliderChanged(data.shadingDistanceColorOffsetZSlider, data.shadingDistanceColorOffsetZREd, "distanceColorOffsetZ", SLIDER_SCALE_AMBIENT, 0);
   }
 
-  // TODO
-  private ScriptRunner compileScript() throws Exception {
+  @Override
+  public ScriptRunner compileScript() throws Exception {
     return ScriptRunner.compile(data.scriptTextArea.getText());
   }
 
-  // TODO
-  public void runScriptButton_clicked() {
-    try {
-      ScriptRunner script = compileScript();
-      saveUndoPoint();
-      script.run(this);
-    }
-    catch (Throwable ex) {
-      errorHandler.handleError(ex);
-    }
+  @Override
+  public void runScript() throws Exception {
+    ScriptRunner script = compileScript();
+    saveUndoPoint();
+    script.run(this);
   }
 
   public void compileScriptButton_clicked() {
@@ -4541,8 +4529,6 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
   public void tinaWrapIntoSubFlameButton_clicked() {
     if (currFlame != null) {
       saveUndoPoint();
-      Flame newFlame = new SubFlameRandomFlameGenerator().embedFlame(currFlame);
-      currFlame.assign(newFlame);
       updateThumbnails();
       refreshUI();
     }
@@ -5103,14 +5089,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
   public void editFlameTitleBtn_clicked() {
     Flame flame = getCurrFlame();
     if (flame != null) {
-      String s = (String) JOptionPane.showInputDialog(
-          rootTabbedPane,
-          "Please enter the new title:\n",
-          Tools.APP_TITLE + " Dialog",
-          JOptionPane.PLAIN_MESSAGE,
-          null,
-          null,
-          flame.getName());
+      String s = StandardDialogs.promptForText(rootTabbedPane, "Please enter the new title:", flame.getName());
       if (s != null) {
         flame.setName(s);
         showStatusMessage(flame, "Title changed");
@@ -5121,14 +5100,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
   public void editTransformCaptionBtn_clicked() {
     XForm xForm = getCurrXForm();
     if (xForm != null) {
-      String s = (String) JOptionPane.showInputDialog(
-          rootTabbedPane,
-          "Please enter a new name:\n",
-          Tools.APP_TITLE + " Dialog",
-          JOptionPane.PLAIN_MESSAGE,
-          null,
-          null,
-          xForm.getName());
+      String s = StandardDialogs.promptForText(rootTabbedPane, "Please enter a new name:", xForm.getName());
       if (s != null) {
         xForm.setName(s);
         int row = data.transformationsTable.getSelectedRow();

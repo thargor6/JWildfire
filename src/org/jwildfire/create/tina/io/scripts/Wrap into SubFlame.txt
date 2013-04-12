@@ -1,0 +1,3 @@
+Script to wrap any flame into a subflame and create two additional transforms
+
+Created by Andreas Maschke

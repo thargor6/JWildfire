@@ -10058,7 +10058,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JTextArea getScriptTextArea() {
     if (scriptTextArea == null) {
       scriptTextArea = new JTextArea();
-      scriptTextArea.setFont(new Font("SansSerif", Font.PLAIN, 10));
+      scriptTextArea.setFont(new Font("SansSerif", Font.PLAIN, 12));
       scriptTextArea.setText("");
     }
     return scriptTextArea;
@@ -13976,7 +13976,9 @@ public class TinaInternalFrame extends JInternalFrame {
   private JTextArea getScriptDescriptionTextArea() {
     if (scriptDescriptionTextArea == null) {
       scriptDescriptionTextArea = new JTextArea();
-      scriptDescriptionTextArea.setFont(new Font("SansSerif", Font.PLAIN, 10));
+      scriptDescriptionTextArea.setLineWrap(true);
+      scriptDescriptionTextArea.setWrapStyleWord(true);
+      scriptDescriptionTextArea.setFont(new Font("SansSerif", Font.PLAIN, 12));
       scriptDescriptionTextArea.setText("");
     }
     return scriptDescriptionTextArea;

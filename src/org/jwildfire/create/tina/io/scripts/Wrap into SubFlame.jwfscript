@@ -1,0 +1,17 @@
+import org.jwildfire.create.tina.base.Flame;
+import org.jwildfire.create.tina.base.XForm;
+import org.jwildfire.create.tina.variation.VariationFunc;
+import org.jwildfire.create.tina.script.ScriptRunnerEnvironment;
+import org.jwildfire.create.tina.variation.VariationFuncList;
+import org.jwildfire.create.tina.randomflame.SubFlameRandomFlameGenerator;
+
+public void run(ScriptRunnerEnvironment pEnv) throws Exception {
+  Flame currFlame = pEnv.getCurrFlame();
+  if(currFlame==null) {
+    throw new Exception("Please select a flame at first");
+  }
+  Flame newFlame = new SubFlameRandomFlameGenerator().embedFlame(currFlame);
+  currFlame.assign(newFlame);
+  // Refresh the UI
+  pEnv.refreshUI();
+}

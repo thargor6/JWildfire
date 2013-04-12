@@ -22,6 +22,7 @@ import java.io.BufferedWriter;
 import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.Reader;
@@ -47,13 +48,14 @@ public class Tools {
   public static final int VPREC = 1024;
   public static final int SPREC = 10;
   private static final Pixel toolPixel = new Pixel();
+  public static final String FILE_ENCODING = "utf-8";
   public static final String FILEEXT_JFX = "jfx";
   public static final String FILEEXT_PNG = "png";
   public static final String FILEEXT_WAV = "wav";
   public static final String FILEEXT_MP3 = "mp3";
   public static final String FILEEXT_SWF = "swf";
+  public static final String FILEEXT_TXT = "txt";
   public static final String FILEEXT_FLAME = "flame";
-  public static final String FILE_ENCODING = "utf-8";
   public static final String FILEEXT_JWFMOVIE = "jwfmovie";
   public static final String FILEEXT_JWFRENDER = "jwfrender";
   public static final String FILEEXT_JWFSCRIPT = "jwfscript";
@@ -107,6 +109,18 @@ public class Tools {
         pFilename = pFilename + "." + pExt;
     }
     return pFilename;
+  }
+
+  public static String readUTF8Textfile(InputStream pInputStream) throws Exception {
+    StringBuffer content = new StringBuffer();
+    String lineFeed = System.getProperty("line.separator");
+    String line;
+    Reader r = new InputStreamReader(pInputStream, "utf-8");
+    BufferedReader in = new BufferedReader(r);
+    while ((line = in.readLine()) != null)
+      content.append(line).append(lineFeed);
+    in.close();
+    return content.toString();
   }
 
   public static String readUTF8Textfile(String pTextFileName) throws Exception {
