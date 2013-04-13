@@ -1,0 +1,166 @@
+/* Wedge_Sph_Marble_by_MickHogan.jwfscript
+   Written by MickHogan, 01/23/2013  Rev.1
+
+   Based on "Wedge_Sph_Marble" Scripted By BC and BD for Apophysis           
+   
+   Dedicated to the folks @ J-Wildfire Users Group,
+   https://www.facebook.com/groups/jwildfire/517981271556185/?notif_t=like   .
+
+   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser
+   General Public License as published by the Free Software Foundation; either version 2.1 of the
+   License, or (at your option) any later version.
+
+   This software is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
+   even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+   Lesser General Public License for more details.
+
+   You should have received a copy of the GNU Lesser General Public License along with this software;
+   if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+   02110-1301 USA, or see the FSF site: http://www.fsf.org.
+
+    ENJOY !! */
+
+import org.jwildfire.script.ActionList;
+import org.jwildfire.create.tina.base.Flame;
+import org.jwildfire.create.tina.base.XForm;
+import org.jwildfire.base.mathlib.MathLib;
+import java.util.Random;
+import org.jwildfire.create.tina.random.RandomNumberGenerator;
+import org.jwildfire.create.tina.transform.XFormTransformService;
+import org.jwildfire.create.tina.variation.VariationFunc;
+import org.jwildfire.create.tina.variation.VariationFuncList;
+import org.jwildfire.create.tina.script.ScriptRunnerEnvironment;
+
+
+import org.jwildfire.create.tina.variation.PreBlurFunc;
+import org.jwildfire.create.tina.variation.WedgeSphFunc;
+import org.jwildfire.create.tina.variation.BubbleFunc;
+import org.jwildfire.create.tina.variation.Linear3DFunc;
+import org.jwildfire.create.tina.variation.EyefishFunc;
+import org.jwildfire.create.tina.variation.SphericalFunc;
+import org.jwildfire.create.tina.variation.CothFunc;
+import org.jwildfire.create.tina.variation.GlynniaFunc;
+import org.jwildfire.create.tina.variation.JuliaNFunc;
+import org.jwildfire.create.tina.variation.JuliaScopeFunc;
+
+
+    Random rand = new Random();
+    int min, max;
+    VariationFunc varFunc1;
+    VariationFunc varFunc2;
+
+  public void run(ScriptRunnerEnvironment pEnv) throws Exception {
+  XForm xForm1;
+//  VariationFunc varFunc;
+  Flame currFlame = pEnv.getCurrFlame();
+  if(currFlame==null) {
+    throw new Exception("Please select a flame at first");
+  }
+
+ // currFlame.getXForms().clear();
+  currFlame.getFinalXForms().clear();
+
+
+  // First transform (T1)
+  {
+     XForm xForm = new XForm();
+     xForm.addVariation(0.364, new EyefishFunc());
+     xForm.addVariation(-0.732, new BubbleFunc());
+     xForm.addVariation(0.5, new PreBlurFunc());
+
+     int randomRange1 = rand.nextInt(13 - 1 + 1) + 1;    //int randomNum = rand.nextInt(max - min + 1) + min;
+     int randomRange2 = rand.nextInt(21 - 10 + 1) + 10;
+     int randomRange3 = rand.nextInt(90 - 30 + 1) + 30;
+
+     VariationFunc varFunc1 = new WedgeSphFunc();
+     varFunc1.setParameter("angle", randomRange1 * 0.125);
+     varFunc1.setParameter("hole", 0);
+     varFunc1.setParameter("count", randomRange2);
+     varFunc1.setParameter("swirl", randomRange3 * 0.1);
+     xForm.addVariation(0.2 + (Math.random() * 0.1), varFunc1);     
+
+//    org.jwildfire.create.tina.transform.XFormTransformService.localTranslate(xForm, Math.random(), Math.random(), false);
+
+    org.jwildfire.create.tina.transform.XFormTransformService.scale(xForm, 0.75 + (Math.random() * 1.25), false, false, false);
+    org.jwildfire.create.tina.transform.XFormTransformService.rotate(xForm, 360 * Math.random(), false);
+
+    xForm.setWeight(0.5 - (Math.random() * 0.1));
+
+    xForm.setColor(Math.random());
+    xForm.setColorSymmetry(0.0);
+
+      xForm.setCoeff00(1.0);   // a (X1)
+      xForm.setCoeff10(0.0); // b (Y1)
+      xForm.setCoeff20(0.0);  // e (O1)
+      xForm.setCoeff01(0.0);  // c (X2)
+      xForm.setCoeff11(1.0);  // d (Y2)
+      xForm.setCoeff21(0.0); // f (O2)
+
+    currFlame.getXForms().add(xForm);  
+  }
+
+  // Second transform (T2)
+  {
+     VariationFunc varFunc2 = new JuliaNFunc();
+     varFunc2.setParameter("power", 2.0);
+     varFunc2.setParameter("dist", -(1 + (Math.random() * 0.1)));
+
+     XForm xForm = new XForm();
+     xForm.addVariation(0.9 + (Math.random() * 0.1), varFunc2);     
+
+//     org.jwildfire.create.tina.transform.XFormTransformService.localTranslate(xForm, Math.random(), Math.random(), false);
+    org.jwildfire.create.tina.transform.XFormTransformService.scale(xForm, 0.5 + (Math.random() * 0.75), false, false, false);
+    org.jwildfire.create.tina.transform.XFormTransformService.rotate(xForm, 360 * Math.random(), false);
+
+    xForm.setWeight(0.6 + (Math.random() * 0.1));
+    xForm.setColor(0.0);
+    xForm.setColorSymmetry(0.0);
+
+
+    xForm.setCoeff00(1.0);   // a (X1)
+    xForm.setCoeff10(0.0); // b (Y1)
+    xForm.setCoeff20(0.1 + (Math.random() * 0.44));  // e (O1)
+    xForm.setCoeff01(0.0);  // c (X2)
+    xForm.setCoeff11(1.0);  // d (Y2)
+    xForm.setCoeff21(-(0.1 + (Math.random() * 0.44))); // f (O2)
+
+
+    currFlame.getXForms().add(xForm);  
+  }
+
+
+
+  // Final transform (T3)
+  {
+    XForm xForm = new XForm();
+    xForm.addVariation(1.0, new BubbleFunc()); 
+
+    org.jwildfire.create.tina.transform.XFormTransformService.rotate(xForm, 360 * Math.random(), false);
+
+
+      xForm.setCoeff00(1.0);   // a (X1)
+      xForm.setCoeff10(0.0); // b (Y1)
+      xForm.setCoeff20(0.0);  // e (O1)
+      xForm.setCoeff01(0.0);  // c (X2)
+      xForm.setCoeff11(1.0);  // d (Y2)
+      xForm.setCoeff21(0.0); // f (O2)
+
+    currFlame.getFinalXForms().add(xForm);  
+  }
+
+
+  // Final settings   
+  //  currFlame.getFinalXForms().clear();
+
+  currFlame.setCentreX(0.0);
+  currFlame.setCentreY(0.0);
+  currFlame.setCamRoll(0.0);
+  currFlame.setCamPitch(0.0);
+  currFlame.setCamYaw(0.0);
+  currFlame.setCamPerspective(0.0);
+  currFlame.setPixelsPerUnit(250);
+
+  // Refresh the UI
+  pEnv.refreshUI();
+
+}    // END CODE

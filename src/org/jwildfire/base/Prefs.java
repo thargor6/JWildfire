@@ -76,7 +76,7 @@ public class Prefs extends ManagedObject {
   static final String KEY_TINA_RANDOMBATCH_BGCOLOR_GREEN = "tina.random_batch.bg_color.green";
   static final String KEY_TINA_RANDOMBATCH_BGCOLOR_BLUE = "tina.random_batch.bg_color.blue";
 
-  @Property(description = "Script drawer", category = PropertyCategory.GENERAL)
+  @Property(description = "Script drawer for the animation editor", category = PropertyCategory.MISC)
   private String scriptPath = null;
   private String lastInputScriptPath = null;
   private String lastOutputScriptPath = null;
