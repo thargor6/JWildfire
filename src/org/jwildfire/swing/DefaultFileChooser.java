@@ -18,7 +18,6 @@ public abstract class DefaultFileChooser extends JFileChooser {
       f = new File(f.getPath() + "." + getDefaultExtension());
     }
     super.setSelectedFile(f);
-
     if (f.exists() && getDialogType() == SAVE_DIALOG) {
       int result = JOptionPane.showConfirmDialog(this, "The file exists, overwrite?", "Existing file", JOptionPane.YES_NO_CANCEL_OPTION);
       switch (result) {
@@ -36,4 +35,5 @@ public abstract class DefaultFileChooser extends JFileChooser {
   }
 
   protected abstract String getDefaultExtension();
+
 }

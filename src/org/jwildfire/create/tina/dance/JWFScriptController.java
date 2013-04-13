@@ -7,6 +7,7 @@ import java.util.Collections;
 import java.util.List;
 
 import javax.swing.JButton;
+import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTree;
 import javax.swing.event.DocumentEvent;
@@ -28,6 +29,7 @@ public class JWFScriptController {
   private final JWFScriptExecuteController scriptExecuteController;
   private final ErrorHandler errorHandler;
   private final Prefs prefs;
+  private final JPanel rootPanel;
   private final JTree scriptTree;
   private final JTextArea scriptDescriptionTextArea;
   private final JTextArea scriptTextArea;
@@ -45,12 +47,13 @@ public class JWFScriptController {
   private boolean noTextChange = false;
   private DefaultMutableTreeNode userScriptsRootNode;
 
-  public JWFScriptController(JWFScriptExecuteController pScriptExecuteController, ErrorHandler pErrorHandler, Prefs pPrefs, JTree pScriptTree, JTextArea pScriptDescriptionTextArea,
+  public JWFScriptController(JWFScriptExecuteController pScriptExecuteController, ErrorHandler pErrorHandler, Prefs pPrefs, JPanel pRootPanel, JTree pScriptTree, JTextArea pScriptDescriptionTextArea,
       JTextArea pScriptTextArea, JButton pCompileScriptButton, JButton pSaveScriptButton, JButton pRevertScriptButton, JButton pRescanScriptsBtn,
       JButton pNewScriptBtn, JButton pDeleteScriptBtn, JButton pScriptRenameBtn, JButton pScriptDuplicateBtn, JButton pScriptRunBtn) {
     scriptExecuteController = pScriptExecuteController;
     errorHandler = pErrorHandler;
     prefs = pPrefs;
+    rootPanel = pRootPanel;
     scriptTree = pScriptTree;
     scriptDescriptionTextArea = pScriptDescriptionTextArea;
     scriptTextArea = pScriptTextArea;
@@ -524,51 +527,54 @@ public class JWFScriptController {
   }
 
   public void newScriptBtn_clicked() {
-    DefaultMutableTreeNode selNode = getSelNode();
-    if (selNode != null) {
-      String newName = StandardDialogs.promptForText(scriptTextArea, "Please enter aname", "");
-      DefaultMutableTreeNode parent = (DefaultMutableTreeNode) selNode.getParent();
-      String scriptFilename;
-      String descFilename;
-      try {
-        if (selNode instanceof ScriptInternalNode) {
-          String basePath = getBaseScriptPath();
-          scriptFilename = basePath + newName + "." + Tools.FILEEXT_JWFSCRIPT;
-          descFilename = basePath + newName + "." + Tools.FILEEXT_TXT;
-        }
-        else if (selNode instanceof ScriptUserNode) {
-          ScriptUserNode userNode = (ScriptUserNode) selNode;
-          scriptFilename = new File(userNode.getFilename()).getParentFile().getAbsolutePath() + File.separator + newName + "." + Tools.FILEEXT_JWFSCRIPT;
-          descFilename = new File(userNode.getFilename()).getParentFile().getAbsolutePath() + File.separator + newName + "." + Tools.FILEEXT_TXT;
-        }
-        else if (selNode instanceof ScriptFolderNode && ((ScriptFolderNode) selNode).isUserDir()) {
-          ScriptFolderNode folderNode = (ScriptFolderNode) selNode;
-          scriptFilename = folderNode.getDirectory() + File.separator + newName + "." + Tools.FILEEXT_JWFSCRIPT;
-          descFilename = folderNode.getDirectory() + File.separator + newName + "." + Tools.FILEEXT_TXT;
-        }
-        else {
-          throw new Exception("Unknown node type <" + selNode.getClass() + ">");
-        }
+    try {
+      DefaultMutableTreeNode selNode = getSelNode();
+      if (selNode != null) {
+        String newName = StandardDialogs.promptForText(rootPanel, "Please enter a name", "");
+        if (newName != null) {
+          checkScriptName(newName);
+          DefaultMutableTreeNode parent = (DefaultMutableTreeNode) selNode.getParent();
+          String scriptFilename;
+          String descFilename;
+          if (selNode instanceof ScriptInternalNode) {
+            String basePath = getBaseScriptPath();
+            scriptFilename = basePath + newName + "." + Tools.FILEEXT_JWFSCRIPT;
+            descFilename = basePath + newName + "." + Tools.FILEEXT_TXT;
+          }
+          else if (selNode instanceof ScriptUserNode) {
+            ScriptUserNode userNode = (ScriptUserNode) selNode;
+            scriptFilename = new File(userNode.getFilename()).getParentFile().getAbsolutePath() + File.separator + newName + "." + Tools.FILEEXT_JWFSCRIPT;
+            descFilename = new File(userNode.getFilename()).getParentFile().getAbsolutePath() + File.separator + newName + "." + Tools.FILEEXT_TXT;
+          }
+          else if (selNode instanceof ScriptFolderNode && ((ScriptFolderNode) selNode).isUserDir()) {
+            ScriptFolderNode folderNode = (ScriptFolderNode) selNode;
+            scriptFilename = folderNode.getDirectory() + File.separator + newName + "." + Tools.FILEEXT_JWFSCRIPT;
+            descFilename = folderNode.getDirectory() + File.separator + newName + "." + Tools.FILEEXT_TXT;
+          }
+          else {
+            throw new Exception("Unknown node type <" + selNode.getClass() + ">");
+          }
 
-        if (new File(scriptFilename).exists()) {
-          throw new Exception("File <" + scriptFilename + "> already exists");
+          if (new File(scriptFilename).exists()) {
+            throw new Exception("File <" + scriptFilename + "> already exists");
+          }
+          if (new File(descFilename).exists()) {
+            throw new Exception("File <" + descFilename + "> already exists");
+          }
+          Tools.writeUTF8Textfile(scriptFilename, "");
+          Tools.writeUTF8Textfile(descFilename, "");
+          ScriptUserNode node = new ScriptUserNode(newName, scriptFilename);
+          parent.add(node);
+          scriptTree.setSelectionPath(new TreePath(((DefaultTreeModel) scriptTree.getModel()).getPathToRoot(node)));
+          scriptTree.getParent().invalidate();
+          scriptTree.getParent().validate();
+          scriptTree.repaint();
+          scriptTree.updateUI();
         }
-        if (new File(descFilename).exists()) {
-          throw new Exception("File <" + descFilename + "> already exists");
-        }
-        Tools.writeUTF8Textfile(scriptFilename, "");
-        Tools.writeUTF8Textfile(descFilename, "");
-        ScriptUserNode node = new ScriptUserNode(newName, scriptFilename);
-        parent.add(node);
-        scriptTree.setSelectionPath(new TreePath(((DefaultTreeModel) scriptTree.getModel()).getPathToRoot(node)));
-        scriptTree.getParent().invalidate();
-        scriptTree.getParent().validate();
-        scriptTree.repaint();
-        scriptTree.updateUI();
       }
-      catch (Exception ex) {
-        errorHandler.handleError(ex);
-      }
+    }
+    catch (Exception ex) {
+      errorHandler.handleError(ex);
     }
   }
 
@@ -584,12 +590,13 @@ public class JWFScriptController {
   }
 
   public void duplicateScriptBtn_clicked() {
-    DefaultMutableTreeNode selNode = getSelNode();
-    if (selNode != null && selNode instanceof ScriptNode) {
-      ScriptNode scriptNode = (ScriptNode) selNode;
-      String newName = StandardDialogs.promptForText(scriptTextArea, "Please enter a new name", scriptNode.getCaption());
-      if (newName != null && newName.length() > 0) {
-        try {
+    try {
+      DefaultMutableTreeNode selNode = getSelNode();
+      if (selNode != null && selNode instanceof ScriptNode) {
+        ScriptNode scriptNode = (ScriptNode) selNode;
+        String newName = StandardDialogs.promptForText(rootPanel, "Please enter a new name", scriptNode.getCaption());
+        if (newName != null) {
+          checkScriptName(newName);
           String script = scriptNode.getScript();
           String description = scriptNode.getDescription();
           DefaultMutableTreeNode parent;
@@ -626,17 +633,23 @@ public class JWFScriptController {
           scriptTree.repaint();
           scriptTree.updateUI();
         }
-        catch (Exception ex) {
-          errorHandler.handleError(ex);
-        }
       }
+    }
+    catch (Exception ex) {
+      errorHandler.handleError(ex);
+    }
+  }
+
+  private void checkScriptName(String pName) throws Exception {
+    if (pName.length() == 0 || pName.indexOf("/") >= 0 || pName.indexOf("\\") >= 0 || pName.indexOf(".") >= 0) {
+      throw new Exception("<" + pName + "> is not a valid script name");
     }
   }
 
   public void deleteScriptBtn_clicked() {
     DefaultMutableTreeNode selNode = getSelNode();
     if (selNode != null && selNode instanceof ScriptUserNode) {
-      if (StandardDialogs.confirm(scriptTextArea, "Do you really want to permanently delete this script?")) {
+      if (StandardDialogs.confirm(rootPanel, "Do you really want to permanently delete this script?")) {
         ScriptUserNode scriptNode = (ScriptUserNode) selNode;
         scriptNode.deleteScript();
         DefaultTreeModel model = (DefaultTreeModel) scriptTree.getModel();
@@ -647,21 +660,22 @@ public class JWFScriptController {
   }
 
   public void scriptRename_clicked() {
-    DefaultMutableTreeNode selNode = getSelNode();
-    if (selNode != null && selNode instanceof ScriptUserNode) {
-      ScriptUserNode scriptNode = (ScriptUserNode) selNode;
-      String newName = StandardDialogs.promptForText(scriptTextArea, "Please enter a new name", scriptNode.getCaption());
-      if (newName != null && newName.length() > 0) {
-        try {
+    try {
+      DefaultMutableTreeNode selNode = getSelNode();
+      if (selNode != null && selNode instanceof ScriptUserNode) {
+        ScriptUserNode scriptNode = (ScriptUserNode) selNode;
+        String newName = StandardDialogs.promptForText(rootPanel, "Please enter a new name", scriptNode.getCaption());
+        if (newName != null) {
+          checkScriptName(newName);
           scriptNode.rename(newName);
           scriptTree.getParent().invalidate();
           scriptTree.getParent().validate();
           scriptTree.repaint();
         }
-        catch (Exception ex) {
-          errorHandler.handleError(ex);
-        }
       }
+    }
+    catch (Exception ex) {
+      errorHandler.handleError(ex);
     }
   }
 }

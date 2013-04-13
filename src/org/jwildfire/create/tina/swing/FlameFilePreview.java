@@ -18,14 +18,18 @@ package org.jwildfire.create.tina.swing;
 
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.util.List;
 
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFileChooser;
+import javax.swing.JPanel;
 
 import org.jwildfire.base.Prefs;
 import org.jwildfire.create.tina.base.Flame;
@@ -34,19 +38,52 @@ import org.jwildfire.create.tina.render.FlameRenderer;
 import org.jwildfire.create.tina.render.RenderInfo;
 import org.jwildfire.create.tina.render.RenderedFlame;
 
-public class FlameFilePreview extends JComponent implements PropertyChangeListener {
+public class FlameFilePreview extends JPanel implements PropertyChangeListener {
   private static final long serialVersionUID = 1L;
   private final Prefs prefs;
+  private final JFileChooser fileChooser;
 
   private ImageIcon currThumbnail = null;
   private File currFile = null;
 
   public FlameFilePreview(JFileChooser pFileChooser, Prefs pPrefs) {
-    Dimension size = new Dimension(192, 120);
-    setPreferredSize(size);
-    setSize(size);
+    final int BUTTON_WIDTH = 100;
+    final int BUTTON_HEIGHT = 24;
+    fileChooser = pFileChooser;
+    Dimension outerSize = new Dimension(192, 120 + BUTTON_HEIGHT);
+    Dimension innerSize = new Dimension(192, 120);
+    Dimension buttonSize = new Dimension(BUTTON_WIDTH, BUTTON_HEIGHT);
+    setPreferredSize(outerSize);
+    setSize(outerSize);
     pFileChooser.addPropertyChangeListener(this);
     prefs = pPrefs;
+    PreviewPanel previewPnl = new PreviewPanel();
+    previewPnl.setPreferredSize(innerSize);
+    previewPnl.setSize(innerSize);
+    JButton delButton = new JButton();
+    delButton.setPreferredSize(buttonSize);
+    delButton.setLocation(0, 120);
+    delButton.setText("Delete");
+    delButton.addActionListener(new ActionListener() {
+
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        deleteFile();
+      }
+    });
+    add(previewPnl);
+    add(delButton);
+  }
+
+  protected void deleteFile() {
+    if (currFile != null && currFile.exists() && StandardDialogs.confirm(this, "Do you really want to permanently remove this file?")) {
+      currFile.delete();
+      fileChooser.rescanCurrentDirectory();
+      fileChooser.setSelectedFile(null);
+      fileChooser.rescanCurrentDirectory();
+      File selFile = fileChooser.getSelectedFile();
+      propertyChange(new PropertyChangeEvent(this, JFileChooser.SELECTED_FILE_CHANGED_PROPERTY, currFile, selFile));
+    }
   }
 
   public void createThumbnail() {
@@ -108,12 +145,17 @@ public class FlameFilePreview extends JComponent implements PropertyChangeListen
     }
   }
 
-  protected void paintComponent(Graphics g) {
-    if (currThumbnail == null) {
-      createThumbnail();
-    }
-    if (currThumbnail != null) {
-      currThumbnail.paintIcon(this, g, 0, 0);
+  private class PreviewPanel extends JComponent {
+    private static final long serialVersionUID = 1L;
+
+    protected void paintComponent(Graphics g) {
+      if (currThumbnail == null) {
+        createThumbnail();
+      }
+      if (currThumbnail != null) {
+        currThumbnail.paintIcon(this, g, 0, 0);
+      }
     }
   }
+
 }
