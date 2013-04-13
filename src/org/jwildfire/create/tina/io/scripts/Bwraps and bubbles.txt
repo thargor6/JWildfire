@@ -1,0 +1,19 @@
+/* Written by Geoffrey Barnes 04/08/2013 based on a script by MickHogan from, 01/05/2013  Rev.3
+   Based on the Apophysis script "BD's Crackled JuliaN-Rings-2", Written by Bart Doetsch 1/7/09
+   
+   Dedicated to the folks @ J-Wildfire Users Group,
+   https://www.facebook.com/groups/jwildfire/517981271556185/?notif_t=like   .
+
+   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser
+   General Public License as published by the Free Software Foundation; either version 2.1 of the
+   License, or (at your option) any later version.
+
+   This software is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
+   even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+   Lesser General Public License for more details.
+
+   You should have received a copy of the GNU Lesser General Public License along with this software;
+   if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+   02110-1301 USA, or see the FSF site: http://www.fsf.org.
+
+    */
