@@ -65,6 +65,8 @@
       <fileset dir="${src.dir}" includes="org/jwildfire/swing/icons/*.gif"/>
       <fileset dir="${src.dir}" includes="org/jwildfire/swing/welcomescreen/*.png"/>
       <fileset dir="${src.dir}" includes="org/jwildfire/swing/welcomescreen/*.jpg"/>
+      <fileset dir="${src.dir}" includes="org/jwildfire/create/tina/io/scripts/*.jwfscript"/>
+      <fileset dir="${src.dir}" includes="org/jwildfire/create/tina/io/scripts/*.txt"/>
       <fileset dir="${build.dir}" includes="com/"/>
       <fileset dir="${build.dir}" includes="odk/"/>
       <fileset dir="${build.dir}" includes="net/goui/"/>

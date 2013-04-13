@@ -10007,6 +10007,7 @@ public class TinaInternalFrame extends JInternalFrame {
       panel_2.add(panel_3);
 
       scriptRunBtn = new JButton();
+      scriptRunBtn.setMnemonic('u');
       scriptRunBtn.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
           tinaController.getJwfScriptController().scriptRunBtn_clicked();
@@ -10023,6 +10024,7 @@ public class TinaInternalFrame extends JInternalFrame {
       panel_1.add(scrollPane_2, BorderLayout.CENTER);
 
       scriptTree = new JTree();
+      scriptTree.setFont(new Font("SansSerif", Font.PLAIN, 10));
       scriptTree.addTreeSelectionListener(new TreeSelectionListener() {
         public void valueChanged(TreeSelectionEvent e) {
           if (tinaController != null) {
@@ -10058,7 +10060,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JTextArea getScriptTextArea() {
     if (scriptTextArea == null) {
       scriptTextArea = new JTextArea();
-      scriptTextArea.setFont(new Font("SansSerif", Font.PLAIN, 12));
+      scriptTextArea.setFont(new Font("SansSerif", Font.PLAIN, 10));
       scriptTextArea.setText("");
     }
     return scriptTextArea;
@@ -13978,7 +13980,7 @@ public class TinaInternalFrame extends JInternalFrame {
       scriptDescriptionTextArea = new JTextArea();
       scriptDescriptionTextArea.setLineWrap(true);
       scriptDescriptionTextArea.setWrapStyleWord(true);
-      scriptDescriptionTextArea.setFont(new Font("SansSerif", Font.PLAIN, 12));
+      scriptDescriptionTextArea.setFont(new Font("SansSerif", Font.PLAIN, 10));
       scriptDescriptionTextArea.setText("");
     }
     return scriptDescriptionTextArea;

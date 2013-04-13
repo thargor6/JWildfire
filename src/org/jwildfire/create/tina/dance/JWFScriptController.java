@@ -2,6 +2,9 @@ package org.jwildfire.create.tina.dance;
 
 import java.io.File;
 import java.io.InputStream;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JTextArea;
@@ -358,7 +361,13 @@ public class JWFScriptController {
     DefaultMutableTreeNode root = new DefaultMutableTreeNode("Script library", true);
     // Internal flames
     {
-      String[] ressources = { "Escher Flux", "Mobius Dragon", "Soft Julian", "Wrap into Bubble", "Wrap into Heart", "Wrap into SubFlame" };
+      String[] ressources = { "Escher Flux", "Mobius Dragon", "Soft Julian", "Wrap into Bubble", "Wrap into Heart", "Wrap into SubFlame",
+          "HypertilePoincare_Rev2", "Bwraps-bubble-Julian2", "Bwraps and bubbles", "Crackled JuliaN-Rings-2_Rev5", "Oily_Juliascope_Rev1", "Oily_Rev3",
+          "Plastic", "SphericalCross_Rev2", "SuperSusan_Rev1", "TomsSpiralSpiral_Rev3" };
+      List<String> resLst = Arrays.asList(ressources);
+      Collections.sort(resLst);
+      ressources = (String[]) resLst.toArray();
+
       // for the base path inside the jar file
       RGBPaletteReader reader = new Flam3PaletteReader();
       DefaultMutableTreeNode defaultFolderNode = null;
@@ -367,7 +376,9 @@ public class JWFScriptController {
           String resFilename = "scripts/" + ressource + "." + Tools.FILEEXT_JWFSCRIPT;
           InputStream is = reader.getClass().getResourceAsStream(resFilename);
           if (is != null) {
+
             ScriptInternalNode node = new ScriptInternalNode(ressource, resFilename);
+
             if (defaultFolderNode == null) {
               defaultFolderNode = new ScriptFolderNode("Built-in scripts (read-only)", null, false);
               root.add(defaultFolderNode);
