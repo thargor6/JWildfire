@@ -18,6 +18,7 @@ import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.io.Flam3PaletteReader;
 import org.jwildfire.create.tina.io.RGBPaletteReader;
 import org.jwildfire.create.tina.swing.JWFScriptExecuteController;
+import org.jwildfire.create.tina.swing.StandardDialogs;
 import org.jwildfire.swing.ErrorHandler;
 
 public class JWFScriptController {
@@ -39,6 +40,7 @@ public class JWFScriptController {
   private boolean allowEdit = false;
   private boolean editing = false;
   private boolean noTextChange = false;
+  private DefaultMutableTreeNode userScriptsRootNode;
 
   public JWFScriptController(JWFScriptExecuteController pScriptExecuteController, ErrorHandler pErrorHandler, Prefs pPrefs, JTree pScriptTree, JTextArea pScriptDescriptionTextArea,
       JTextArea pScriptTextArea, JButton pCompileScriptButton, JButton pSaveScriptButton, JButton pRevertScriptButton, JButton pRescanScriptsBtn,
@@ -153,16 +155,21 @@ public class JWFScriptController {
     public String getScript() throws Exception;
 
     public String getDescription() throws Exception;
+
+    public String getCaption();
+
   }
 
   private static class ScriptInternalNode extends DefaultMutableTreeNode implements ScriptNode {
     private static final long serialVersionUID = 1L;
     private final String resFilename;
+    private final String caption;
     private String script;
     private String description;
 
     public ScriptInternalNode(String pCaption, String pResFilename) {
       super(pCaption, false);
+      caption = pCaption;
       resFilename = pResFilename;
     }
 
@@ -198,10 +205,16 @@ public class JWFScriptController {
       }
       return description;
     }
+
+    @Override
+    public String getCaption() {
+      return caption;
+    }
   }
 
   private static class ScriptUserNode extends DefaultMutableTreeNode implements ScriptNode {
     private static final long serialVersionUID = 1L;
+    private String caption;
     private final String filename;
     private String script;
     private String description;
@@ -209,6 +222,7 @@ public class JWFScriptController {
     public ScriptUserNode(String pCaption, String pFilename) {
       super(pCaption, false);
       filename = pFilename;
+      caption = pCaption;
     }
 
     @Override
@@ -219,16 +233,16 @@ public class JWFScriptController {
       return script;
     }
 
-    private String getDescFilename() {
-      return filename.substring(0, filename.length() - Tools.FILEEXT_JWFSCRIPT.length()) + Tools.FILEEXT_TXT;
+    private String getDescFilename(String pFilename) {
+      return pFilename.substring(0, pFilename.length() - Tools.FILEEXT_JWFSCRIPT.length()) + Tools.FILEEXT_TXT;
     }
 
     @Override
     public String getDescription() throws Exception {
       if (description == null) {
-        String descFilename = getDescFilename();
+        String descFilename = getDescFilename(filename);
         if (new File(descFilename).exists()) {
-          description = Tools.readUTF8Textfile(filename);
+          description = Tools.readUTF8Textfile(descFilename);
         }
         else {
           description = "";
@@ -247,18 +261,74 @@ public class JWFScriptController {
       if (pDescription == null) {
         pDescription = "";
       }
-      Tools.writeUTF8Textfile(getDescFilename(), pDescription);
+      Tools.writeUTF8Textfile(getDescFilename(filename), pDescription);
       description = pDescription;
+    }
+
+    public void deleteScript() {
+      new File(filename).delete();
+      String descFilename = getDescFilename(filename);
+      File descFile = new File(descFilename);
+      if (descFile.exists()) {
+        descFile.delete();
+      }
+    }
+
+    public void rename(String pNewName) throws Exception {
+      File file = new File(filename);
+      String scriptFilename = file.getParentFile().getAbsolutePath() + File.separator + pNewName + "." + Tools.FILEEXT_JWFSCRIPT;
+      File scriptFile = new File(scriptFilename);
+      if (scriptFile.exists()) {
+        throw new Exception("File <" + scriptFile.getAbsolutePath() + "> already exists");
+      }
+
+      String descFilename = file.getParentFile().getAbsolutePath() + File.separator + pNewName + "." + Tools.FILEEXT_TXT;
+      File descFile = new File(descFilename);
+      if (descFile.exists()) {
+        throw new Exception("File <" + descFile.getAbsolutePath() + "> already exists");
+      }
+
+      getDescription();
+      String oldFilename = filename;
+      Tools.writeUTF8Textfile(scriptFilename, getScript());
+      try {
+        Tools.writeUTF8Textfile(descFilename, getDescription());
+      }
+      catch (Exception ex) {
+        new File(scriptFilename).delete();
+        throw ex;
+      }
+
+      new File(oldFilename).delete();
+      new File(getDescFilename(oldFilename)).delete();
+
+      setCaption(pNewName);
+    }
+
+    private void setCaption(String pNewName) {
+      caption = pNewName;
+      setUserObject(pNewName);
+    }
+
+    @Override
+    public String getCaption() {
+      return caption;
+    }
+
+    public String getFilename() {
+      return filename;
     }
   }
 
   private static class ScriptFolderNode extends DefaultMutableTreeNode {
     private static final long serialVersionUID = 1L;
     private final boolean userDir;
+    private final String directory;
 
-    public ScriptFolderNode(String pCaption, boolean pUserDir) {
+    public ScriptFolderNode(String pCaption, String pDirectory, boolean pUserDir) {
       super(pCaption, true);
       userDir = pUserDir;
+      directory = pDirectory;
     }
 
     @Override
@@ -270,13 +340,17 @@ public class JWFScriptController {
       return userDir;
     }
 
+    public String getDirectory() {
+      return directory;
+    }
+
   }
 
   private static class InvalidScriptFolderNode extends ScriptFolderNode {
     private static final long serialVersionUID = 1L;
 
     public InvalidScriptFolderNode() {
-      super("(script-path is empty, check the Prefs)", false);
+      super("(script-path is empty, check the Prefs)", null, false);
     }
   }
 
@@ -295,7 +369,7 @@ public class JWFScriptController {
           if (is != null) {
             ScriptInternalNode node = new ScriptInternalNode(ressource, resFilename);
             if (defaultFolderNode == null) {
-              defaultFolderNode = new ScriptFolderNode("Built-in scripts (read-only)", false);
+              defaultFolderNode = new ScriptFolderNode("Built-in scripts (read-only)", null, false);
               root.add(defaultFolderNode);
             }
             defaultFolderNode.add(node);
@@ -306,11 +380,12 @@ public class JWFScriptController {
         }
       }
     }
+
     // External flames
     {
-      DefaultMutableTreeNode parentNode = new ScriptFolderNode("Your scripts", true);
-      root.add(parentNode);
       String baseDrawer = prefs.getTinaJWFScriptPath();
+      DefaultMutableTreeNode parentNode = userScriptsRootNode = new ScriptFolderNode("Your scripts", baseDrawer, true);
+      root.add(parentNode);
       if (baseDrawer == null || baseDrawer.equals("") || baseDrawer.equals(".") || baseDrawer.equals("/") || baseDrawer.equals("\\")) {
         parentNode.add(new InvalidScriptFolderNode());
       }
@@ -327,7 +402,7 @@ public class JWFScriptController {
     File[] list = root.listFiles();
     for (File f : list) {
       if (f.isDirectory()) {
-        DefaultMutableTreeNode newParentNode = new ScriptFolderNode(f.getName(), true);
+        DefaultMutableTreeNode newParentNode = new ScriptFolderNode(f.getName(), f.getAbsolutePath(), true);
         pParentNode.add(newParentNode);
         scanUserScripts(f.getAbsolutePath(), newParentNode);
       }
@@ -438,22 +513,144 @@ public class JWFScriptController {
   }
 
   public void newScriptBtn_clicked() {
-    // TODO Auto-generated method stub
+    DefaultMutableTreeNode selNode = getSelNode();
+    if (selNode != null) {
+      String newName = StandardDialogs.promptForText(scriptTextArea, "Please enter aname", "");
+      DefaultMutableTreeNode parent = (DefaultMutableTreeNode) selNode.getParent();
+      String scriptFilename;
+      String descFilename;
+      try {
+        if (selNode instanceof ScriptInternalNode) {
+          String basePath = getBaseScriptPath();
+          scriptFilename = basePath + newName + "." + Tools.FILEEXT_JWFSCRIPT;
+          descFilename = basePath + newName + "." + Tools.FILEEXT_TXT;
+        }
+        else if (selNode instanceof ScriptUserNode) {
+          ScriptUserNode userNode = (ScriptUserNode) selNode;
+          scriptFilename = new File(userNode.getFilename()).getParentFile().getAbsolutePath() + File.separator + newName + "." + Tools.FILEEXT_JWFSCRIPT;
+          descFilename = new File(userNode.getFilename()).getParentFile().getAbsolutePath() + File.separator + newName + "." + Tools.FILEEXT_TXT;
+        }
+        else if (selNode instanceof ScriptFolderNode && ((ScriptFolderNode) selNode).isUserDir()) {
+          ScriptFolderNode folderNode = (ScriptFolderNode) selNode;
+          scriptFilename = folderNode.getDirectory() + File.separator + newName + "." + Tools.FILEEXT_JWFSCRIPT;
+          descFilename = folderNode.getDirectory() + File.separator + newName + "." + Tools.FILEEXT_TXT;
+        }
+        else {
+          throw new Exception("Unknown node type <" + selNode.getClass() + ">");
+        }
 
+        if (new File(scriptFilename).exists()) {
+          throw new Exception("File <" + scriptFilename + "> already exists");
+        }
+        if (new File(descFilename).exists()) {
+          throw new Exception("File <" + descFilename + "> already exists");
+        }
+        Tools.writeUTF8Textfile(scriptFilename, "");
+        Tools.writeUTF8Textfile(descFilename, "");
+        ScriptUserNode node = new ScriptUserNode(newName, scriptFilename);
+        parent.add(node);
+        scriptTree.setSelectionPath(new TreePath(((DefaultTreeModel) scriptTree.getModel()).getPathToRoot(node)));
+        scriptTree.getParent().invalidate();
+        scriptTree.getParent().validate();
+        scriptTree.repaint();
+        scriptTree.updateUI();
+      }
+      catch (Exception ex) {
+        errorHandler.handleError(ex);
+      }
+    }
+  }
+
+  private String getBaseScriptPath() {
+    String basePath = prefs.getTinaJWFScriptPath();
+    if (basePath == null) {
+      basePath = "";
+    }
+    if ((basePath.length() > 0) && (basePath.charAt(basePath.length() - 1) != '/') && (basePath.charAt(basePath.length() - 1) != '\\')) {
+      basePath += File.separator;
+    }
+    return basePath;
   }
 
   public void duplicateScriptBtn_clicked() {
-    // TODO Auto-generated method stub
-
+    DefaultMutableTreeNode selNode = getSelNode();
+    if (selNode != null && selNode instanceof ScriptNode) {
+      ScriptNode scriptNode = (ScriptNode) selNode;
+      String newName = StandardDialogs.promptForText(scriptTextArea, "Please enter a new name", scriptNode.getCaption());
+      if (newName != null && newName.length() > 0) {
+        try {
+          String script = scriptNode.getScript();
+          String description = scriptNode.getDescription();
+          DefaultMutableTreeNode parent;
+          String scriptFilename, descFilename;
+          if (selNode instanceof ScriptInternalNode) {
+            String basePath = getBaseScriptPath();
+            scriptFilename = basePath + newName + "." + Tools.FILEEXT_JWFSCRIPT;
+            descFilename = basePath + newName + "." + Tools.FILEEXT_TXT;
+            parent = this.userScriptsRootNode;
+          }
+          else if (selNode instanceof ScriptUserNode) {
+            ScriptUserNode userNode = (ScriptUserNode) selNode;
+            parent = (DefaultMutableTreeNode) selNode.getParent();
+            scriptFilename = new File(userNode.getFilename()).getParentFile().getAbsolutePath() + File.separator + newName + "." + Tools.FILEEXT_JWFSCRIPT;
+            descFilename = new File(userNode.getFilename()).getParentFile().getAbsolutePath() + File.separator + newName + "." + Tools.FILEEXT_TXT;
+            parent = (DefaultMutableTreeNode) selNode.getParent();
+          }
+          else {
+            throw new Exception("Unknown node type <" + selNode.getClass() + ">");
+          }
+          if (new File(scriptFilename).exists()) {
+            throw new Exception("File <" + scriptFilename + "> already exists");
+          }
+          if (new File(descFilename).exists()) {
+            throw new Exception("File <" + descFilename + "> already exists");
+          }
+          Tools.writeUTF8Textfile(scriptFilename, script);
+          Tools.writeUTF8Textfile(descFilename, description);
+          ScriptUserNode node = new ScriptUserNode(newName, scriptFilename);
+          parent.add(node);
+          scriptTree.setSelectionPath(new TreePath(((DefaultTreeModel) scriptTree.getModel()).getPathToRoot(node)));
+          scriptTree.getParent().invalidate();
+          scriptTree.getParent().validate();
+          scriptTree.repaint();
+          scriptTree.updateUI();
+        }
+        catch (Exception ex) {
+          errorHandler.handleError(ex);
+        }
+      }
+    }
   }
 
   public void deleteScriptBtn_clicked() {
-    // TODO Auto-generated method stub
-
+    DefaultMutableTreeNode selNode = getSelNode();
+    if (selNode != null && selNode instanceof ScriptUserNode) {
+      if (StandardDialogs.confirm(scriptTextArea, "Do you really want to permanently delete this script?")) {
+        ScriptUserNode scriptNode = (ScriptUserNode) selNode;
+        scriptNode.deleteScript();
+        DefaultTreeModel model = (DefaultTreeModel) scriptTree.getModel();
+        model.removeNodeFromParent(selNode);
+        enableControls();
+      }
+    }
   }
 
   public void scriptRename_clicked() {
-    // TODO Auto-generated method stub
-
+    DefaultMutableTreeNode selNode = getSelNode();
+    if (selNode != null && selNode instanceof ScriptUserNode) {
+      ScriptUserNode scriptNode = (ScriptUserNode) selNode;
+      String newName = StandardDialogs.promptForText(scriptTextArea, "Please enter a new name", scriptNode.getCaption());
+      if (newName != null && newName.length() > 0) {
+        try {
+          scriptNode.rename(newName);
+          scriptTree.getParent().invalidate();
+          scriptTree.getParent().validate();
+          scriptTree.repaint();
+        }
+        catch (Exception ex) {
+          errorHandler.handleError(ex);
+        }
+      }
+    }
   }
 }
