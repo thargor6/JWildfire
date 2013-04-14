@@ -365,7 +365,7 @@ public class JWFScriptController {
     // Internal flames
     {
       String[] ressources = { "Escher Flux", "Mobius Dragon", "Soft Julian", "Wrap into Bubble", "Wrap into Heart", "Wrap into SubFlame",
-          "HypertilePoincare_Rev2", "Bwraps-bubble-Julian2", "Bwraps and bubbles", "Crackled JuliaN-Rings-2_Rev5", "Oily_Juliascope_Rev1", "Oily_Rev3",
+          "HypertilePoincare_Rev2", "Bwraps-bubble-Julian2", "Bwraps and bubbles", "Oily_Juliascope_Rev1", "Oily_Rev3",
           "Plastic", "SphericalCross_Rev2", "SuperSusan_Rev1", "TomsSpiralSpiral_Rev3", "Wedge_Sph_Marble" };
       List<String> resLst = Arrays.asList(ressources);
       Collections.sort(resLst);

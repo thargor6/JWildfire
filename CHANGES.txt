@@ -1,3 +1,22 @@
+V0.68 (14.04.2013):
+ - re-implemented the script-tab: scripts are now maintained in a folder-like structure. There are two main folders: "Built-in scripts" (examples) and "Your scripts". The latter points to an arbitrary folder on your harddisc and holds your own scripts. You can easily create and copy scripts either using the new functions in JWildfire or by just copying/creating them manually. Additionally, scripts now always contain of two files: the description (plain text) and the code (Java code)   
+ - added most of the recent scripts from the JWildfire Open Group as examples
+ - new path for scripts in the Preferences editor, moved the old script path (for the animation editor) into a new "Misc" category
+ - added the possibility to delete flame files from within the file dialog
+ - added (again) separate buttons for moving, rotating and scaling of triangles (but using the move button you still have the possibility to rotate with the right mouse button and to scale with the middle mouse button)
+ - triangle editing mode is now the default mode
+ - added a small buttons in the variations tab which points to the visual variation guide created by Georg Carlson
+ - added remove-buttons for flame-thumbnails in the thumbnail ribbon
+ - possibility to cancel the playback (preview rendering) of movies in the movie editor
+ - possibility to edit flame- and transform names (where transform names now also are displayed as well)
+ - unified column layout for main transforms-table and relative-weights-table
+ - added a new ADD_VARIATION mutation style in the MutgaGen module
+ - improved controls for accessing flames in the MutaGen module
+ - new "target" variation by Michael Faber
+ - adding a thumbnail for the flames imported from MutaGen
+ - removed the RANDOM_FLAME-mutation-subtype from the ALL-mutation-type
+ - updated the link to the new JWildfire Open Group in the welcome-screen
+
 V0.67 (20.03.2013):
  - MutaGen: an amazing new module to interactively create mutations of a certain flame. 
    There are several mutation types affecting different "genes" (types of flame properties). 

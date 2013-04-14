@@ -15,6 +15,7 @@ public void run(ScriptRunnerEnvironment pEnv) throws Exception {
     throw new Exception("Please select a flame at first");
   }
   currFlame.getXForms().clear();
+  currFlame.getFinalXForms().clear();
 
   // First transform
   {
