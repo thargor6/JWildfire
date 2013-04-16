@@ -3904,7 +3904,6 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaPaletteShiftREd = new JWFNumberField();
       tinaPaletteShiftREd.setMinValue(-255.0);
       tinaPaletteShiftREd.setEditable(true);
-      tinaPaletteShiftREd.setValueStep(0.05);
       tinaPaletteShiftREd.setOnlyIntegers(true);
       tinaPaletteShiftREd.setMaxValue(255.0);
       tinaPaletteShiftREd.setHasMinValue(true);
@@ -3936,7 +3935,6 @@ public class TinaInternalFrame extends JInternalFrame {
     if (tinaPaletteRedREd == null) {
       tinaPaletteRedREd = new JWFNumberField();
       tinaPaletteRedREd.setMinValue(-255.0);
-      tinaPaletteRedREd.setValueStep(0.05);
       tinaPaletteRedREd.setOnlyIntegers(true);
       tinaPaletteRedREd.setMaxValue(255.0);
       tinaPaletteRedREd.setHasMinValue(true);
@@ -3969,7 +3967,6 @@ public class TinaInternalFrame extends JInternalFrame {
     if (tinaPaletteGreenREd == null) {
       tinaPaletteGreenREd = new JWFNumberField();
       tinaPaletteGreenREd.setMinValue(-255.0);
-      tinaPaletteGreenREd.setValueStep(0.05);
       tinaPaletteGreenREd.setOnlyIntegers(true);
       tinaPaletteGreenREd.setMaxValue(255.0);
       tinaPaletteGreenREd.setHasMinValue(true);
@@ -4001,7 +3998,6 @@ public class TinaInternalFrame extends JInternalFrame {
   private JWFNumberField getTinaPaletteBlueREd() {
     if (tinaPaletteBlueREd == null) {
       tinaPaletteBlueREd = new JWFNumberField();
-      tinaPaletteBlueREd.setValueStep(0.05);
       tinaPaletteBlueREd.setOnlyIntegers(true);
       tinaPaletteBlueREd.setMinValue(-255.0);
       tinaPaletteBlueREd.setMaxValue(255.0);
@@ -4035,7 +4031,6 @@ public class TinaInternalFrame extends JInternalFrame {
     if (tinaPaletteHueREd == null) {
       tinaPaletteHueREd = new JWFNumberField();
       tinaPaletteHueREd.setOnlyIntegers(true);
-      tinaPaletteHueREd.setValueStep(0.05);
       tinaPaletteHueREd.setMinValue(-255.0);
       tinaPaletteHueREd.setMaxValue(255.0);
       tinaPaletteHueREd.setHasMinValue(true);
@@ -4067,7 +4062,6 @@ public class TinaInternalFrame extends JInternalFrame {
   private JWFNumberField getTinaPaletteSaturationREd() {
     if (tinaPaletteSaturationREd == null) {
       tinaPaletteSaturationREd = new JWFNumberField();
-      tinaPaletteSaturationREd.setValueStep(0.05);
       tinaPaletteSaturationREd.setOnlyIntegers(true);
       tinaPaletteSaturationREd.setMinValue(-255.0);
       tinaPaletteSaturationREd.setMaxValue(255.0);
@@ -4100,7 +4094,6 @@ public class TinaInternalFrame extends JInternalFrame {
   private JWFNumberField getTinaPaletteContrastREd() {
     if (tinaPaletteContrastREd == null) {
       tinaPaletteContrastREd = new JWFNumberField();
-      tinaPaletteContrastREd.setValueStep(0.05);
       tinaPaletteContrastREd.setOnlyIntegers(true);
       tinaPaletteContrastREd.setHasMinValue(true);
       tinaPaletteContrastREd.setHasMaxValue(true);
@@ -4134,7 +4127,6 @@ public class TinaInternalFrame extends JInternalFrame {
     if (tinaPaletteGammaREd == null) {
       tinaPaletteGammaREd = new JWFNumberField();
       tinaPaletteGammaREd.setOnlyIntegers(true);
-      tinaPaletteGammaREd.setValueStep(0.05);
       tinaPaletteGammaREd.setHasMinValue(true);
       tinaPaletteGammaREd.setHasMaxValue(true);
       tinaPaletteGammaREd.setMinValue(-255.0);
@@ -4166,7 +4158,6 @@ public class TinaInternalFrame extends JInternalFrame {
   private JWFNumberField getTinaPaletteBrightnessREd() {
     if (tinaPaletteBrightnessREd == null) {
       tinaPaletteBrightnessREd = new JWFNumberField();
-      tinaPaletteBrightnessREd.setValueStep(0.05);
       tinaPaletteBrightnessREd.setOnlyIntegers(true);
       tinaPaletteBrightnessREd.setMinValue(-255.0);
       tinaPaletteBrightnessREd.setMaxValue(255.0);
@@ -4568,7 +4559,8 @@ public class TinaInternalFrame extends JInternalFrame {
         getEditTransformCaptionBtn(), getEditFlameTitleBtn(), getSnapShotButton(), getBtnQsave(), getQuickMutationButton(), getTinaAppendToDancingFlamesButton(),
         getTinaAppendToMovieButton(), getMouseTransformSlowButton(), getToggleTransparencyButton(), getDarkTrianglesToggleButton(), getMouseTransformRotateTrianglesButton(),
         getMouseTransformScaleTrianglesButton(), getScriptTree(), getScriptDescriptionTextArea(), getScriptTextArea(), getCompileScriptButton(), getScriptSaveBtn(), getScriptRevertBtn(), getRescanScriptsBtn(),
-        getNewScriptBtn(), getDeleteScriptBtn(), getScriptRenameBtn(), getDuplicateScriptBtn(), getScriptRunBtn());
+        getNewScriptBtn(), getNewScriptFromFlameBtn(), getDeleteScriptBtn(), getScriptRenameBtn(), getDuplicateScriptBtn(), getScriptRunBtn(),
+        getMouseTransformEditGradientButton());
 
     tinaController = new TinaController(params);
 
@@ -6354,7 +6346,7 @@ public class TinaInternalFrame extends JInternalFrame {
       editSpaceLbl1.setPreferredSize(new Dimension(42, 2));
       triangleOperationsPanel = new JPanel();
       FlowLayout fl_triangleOperationsPanel = new FlowLayout();
-      fl_triangleOperationsPanel.setVgap(3);
+      fl_triangleOperationsPanel.setVgap(1);
       triangleOperationsPanel.setLayout(fl_triangleOperationsPanel);
       triangleOperationsPanel.setPreferredSize(new Dimension(52, 0));
       triangleOperationsPanel.add(getAffineEditPostTransformSmallButton(), null);
@@ -6403,6 +6395,17 @@ public class TinaInternalFrame extends JInternalFrame {
       mouseTransformEditPointsButton.setToolTipText("Enable free triangle editing mode");
       mouseTransformEditPointsButton.setPreferredSize(new Dimension(42, 24));
       triangleOperationsPanel.add(mouseTransformEditPointsButton);
+
+      mouseTransformEditGradientButton = new JToggleButton();
+      mouseTransformEditGradientButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/editGradient.gif")));
+      mouseTransformEditGradientButton.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.mouseTransformEditGradientButton_clicked();
+        }
+      });
+      mouseTransformEditGradientButton.setToolTipText("Edit focus point");
+      mouseTransformEditGradientButton.setPreferredSize(new Dimension(42, 24));
+      triangleOperationsPanel.add(mouseTransformEditGradientButton);
       triangleOperationsPanel.add(getMouseTransformEditFocusPointButton(), null);
       triangleOperationsPanel.add(editSpaceLbl1, null);
       triangleOperationsPanel.add(editSpaceLbl2, null);
@@ -9391,6 +9394,8 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton duplicateScriptBtn;
   private JButton scriptSaveBtn;
   private JButton scriptRevertBtn;
+  private JButton newScriptFromFlameBtn;
+  private JToggleButton mouseTransformEditGradientButton;
 
   /**
    * This method initializes renderBatchJobsScrollPane	
@@ -9944,7 +9949,7 @@ public class TinaInternalFrame extends JInternalFrame {
 
       JPanel panel_1 = new JPanel();
       panel_1.setMaximumSize(new Dimension(32767, 120));
-      panel_1.setPreferredSize(new Dimension(10, 148));
+      panel_1.setPreferredSize(new Dimension(10, 170));
       scriptPanel.add(panel_1, BorderLayout.NORTH);
       panel_1.setLayout(new BorderLayout(0, 0));
 
@@ -9972,6 +9977,7 @@ public class TinaInternalFrame extends JInternalFrame {
       panel_8.setMaximumSize(new Dimension(32767, 8));
       panel_2.add(panel_8);
       panel_2.add(getNewScriptBtn());
+      panel_2.add(getNewScriptFromFlameBtn());
       panel_2.add(getDuplicateScriptBtn());
 
       deleteScriptBtn = new JButton();
@@ -11488,7 +11494,6 @@ public class TinaInternalFrame extends JInternalFrame {
           }
         }
       });
-      tinaPaletteSwapRGBREd.setValueStep(0.25);
       tinaPaletteSwapRGBREd.setText("0");
       tinaPaletteSwapRGBREd.setSize(new Dimension(56, 24));
       tinaPaletteSwapRGBREd.setPreferredSize(new Dimension(36, 22));
@@ -11549,7 +11554,7 @@ public class TinaInternalFrame extends JInternalFrame {
           }
         }
       });
-      tinaPaletteFrequencyREd.setValueStep(0.02);
+      tinaPaletteFrequencyREd.setValueStep(0.05);
       tinaPaletteFrequencyREd.setText("0");
       tinaPaletteFrequencyREd.setSize(new Dimension(56, 24));
       tinaPaletteFrequencyREd.setPreferredSize(new Dimension(36, 22));
@@ -11608,7 +11613,6 @@ public class TinaInternalFrame extends JInternalFrame {
           }
         }
       });
-      tinaPaletteBlurREd.setValueStep(0.02);
       tinaPaletteBlurREd.setText("0");
       tinaPaletteBlurREd.setSize(new Dimension(56, 24));
       tinaPaletteBlurREd.setPreferredSize(new Dimension(36, 22));
@@ -14025,5 +14029,26 @@ public class TinaInternalFrame extends JInternalFrame {
 
   public JButton getScriptRevertBtn() {
     return scriptRevertBtn;
+  }
+
+  private JButton getNewScriptFromFlameBtn() {
+    if (newScriptFromFlameBtn == null) {
+      newScriptFromFlameBtn = new JButton();
+      newScriptFromFlameBtn.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getJwfScriptController().newScriptFromFlameBtn_clicked();
+        }
+      });
+      newScriptFromFlameBtn.setToolTipText("Create a new script by convderting the currently selected flame");
+      newScriptFromFlameBtn.setText("From flame");
+      newScriptFromFlameBtn.setPreferredSize(new Dimension(96, 24));
+      newScriptFromFlameBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      newScriptFromFlameBtn.setBounds(new Rectangle(9, 280, 125, 24));
+    }
+    return newScriptFromFlameBtn;
+  }
+
+  public JToggleButton getMouseTransformEditGradientButton() {
+    return mouseTransformEditGradientButton;
   }
 } //  @jve:decl-index=0:visual-constraint="10,10"
