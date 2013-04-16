@@ -239,6 +239,7 @@ public class TinaControllerData {
   public JToggleButton mouseTransformScaleTrianglesButton;
   public JToggleButton mouseTransformEditFocusPointButton;
   public JToggleButton mouseTransformEditPointsButton;
+  public JToggleButton mouseTransformEditGradientButton;
   public JToggleButton mouseTransformEditViewButton;
   public JToggleButton mouseTransformSlowButton;
   public JButton batchRenderAddFilesButton;
@@ -269,6 +270,7 @@ public class TinaControllerData {
   public JButton revertScriptBtn;
   public JButton rescanScriptsBtn;
   public JButton newScriptBtn;
+  public JButton newScriptFromFlameBtn;
   public JButton deleteScriptBtn;
   public JButton scriptRenameBtn;
   public JButton scriptDuplicateBtn;

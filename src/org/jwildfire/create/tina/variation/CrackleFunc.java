@@ -138,6 +138,13 @@ public class CrackleFunc extends VariationFunc {
     DXo += P[4][_x_];
     DYo += P[4][_y_];
 
+    //    double color = sqrt(DXo * DXo + DYo * DYo);
+    //    pVarTP.color = color;
+    //    if (pVarTP.color < 0)
+    //      pVarTP.color = 0.0;
+    //    else if (pVarTP.color > 1.0)
+    //      pVarTP.color = 1.0;
+
     // Finally add values in
     pVarTP.x += pAmount * DXo;
     pVarTP.y += pAmount * DYo;

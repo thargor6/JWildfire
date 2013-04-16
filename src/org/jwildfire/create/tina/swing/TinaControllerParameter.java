@@ -170,6 +170,7 @@ public class TinaControllerParameter {
   public JToggleButton mouseTransformRotateTrianglesButton;
   public JToggleButton mouseTransformScaleTrianglesButton;
   public JToggleButton pMouseTransformEditFocusPointButton;
+  public JToggleButton mouseTransformEditGradientButton;
   public JToggleButton pMouseTransformShearButton;
   public JToggleButton pMouseTransformViewButton;
   public JToggleButton pAffineEditPostTransformButton;
@@ -360,6 +361,7 @@ public class TinaControllerParameter {
   public JButton revertScriptBtn;
   public JButton rescanScriptsBtn;
   public JButton newScriptBtn;
+  public JButton newScriptFromFlameBtn;
   public JButton deleteScriptBtn;
   public JButton scriptRenameBtn;
   public JButton scriptDuplicateBtn;
@@ -645,7 +647,8 @@ public class TinaControllerParameter {
       JButton pDancingFlamesButton, JButton pMovieButton, JToggleButton pTransformSlowButton, JToggleButton pTransparencyButton, JToggleButton pDarkTrianglesButton,
       JToggleButton pMouseTransformRotateTrianglesButton, JToggleButton pMouseTransformScaleTrianglesButton, JTree pScriptTree,
       JTextArea pScriptDescriptionTextArea, JTextArea pScriptTextArea, JButton pCompileScriptButton, JButton pSaveScriptBtn, JButton pRevertScriptBtn, JButton pRescanScriptsBtn,
-      JButton pNewScriptBtn, JButton pDeleteScriptBtn, JButton pScriptRenameBtn, JButton pScriptDuplicateBtn, JButton pScriptRunBtn) {
+      JButton pNewScriptBtn, JButton pNewScriptFromFlameBtn, JButton pDeleteScriptBtn, JButton pScriptRenameBtn, JButton pScriptDuplicateBtn, JButton pScriptRunBtn,
+      JToggleButton pMouseTransformEditGradientButton) {
     this.pDancingFlamesLinkMotionBtn = pDancingFlamesLinkMotionBtn;
     this.pDancingFlamesUnlinkMotionBtn = pDancingFlamesUnlinkMotionBtn;
     this.pDancingFlamesCreateMotionsCmb = pDancingFlamesCreateMotionsCmb;
@@ -717,9 +720,11 @@ public class TinaControllerParameter {
     this.revertScriptBtn = pRevertScriptBtn;
     this.rescanScriptsBtn = pRescanScriptsBtn;
     this.newScriptBtn = pNewScriptBtn;
+    this.newScriptFromFlameBtn = pNewScriptFromFlameBtn;
     this.deleteScriptBtn = pDeleteScriptBtn;
     this.scriptRenameBtn = pScriptRenameBtn;
     this.scriptDuplicateBtn = pScriptDuplicateBtn;
     this.scriptRunBtn = pScriptRunBtn;
+    this.mouseTransformEditGradientButton = pMouseTransformEditGradientButton;
   }
 }

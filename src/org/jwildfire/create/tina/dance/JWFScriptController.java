@@ -19,14 +19,17 @@ import javax.swing.tree.TreePath;
 
 import org.jwildfire.base.Prefs;
 import org.jwildfire.base.Tools;
+import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.io.Flam3PaletteReader;
 import org.jwildfire.create.tina.io.RGBPaletteReader;
-import org.jwildfire.create.tina.swing.JWFScriptExecuteController;
+import org.jwildfire.create.tina.palette.RGBColor;
+import org.jwildfire.create.tina.palette.RGBPalette;
 import org.jwildfire.create.tina.swing.StandardDialogs;
+import org.jwildfire.create.tina.swing.TinaController;
 import org.jwildfire.swing.ErrorHandler;
 
 public class JWFScriptController {
-  private final JWFScriptExecuteController scriptExecuteController;
+  private final TinaController tinaController;
   private final ErrorHandler errorHandler;
   private final Prefs prefs;
   private final JPanel rootPanel;
@@ -38,6 +41,7 @@ public class JWFScriptController {
   private final JButton revertScriptBtn;
   private final JButton rescanScriptsBtn;
   private final JButton newScriptBtn;
+  private final JButton newScriptFromFlameBtn;
   private final JButton deleteScriptBtn;
   private final JButton scriptRenameBtn;
   private final JButton scriptDuplicateBtn;
@@ -47,10 +51,10 @@ public class JWFScriptController {
   private boolean noTextChange = false;
   private DefaultMutableTreeNode userScriptsRootNode;
 
-  public JWFScriptController(JWFScriptExecuteController pScriptExecuteController, ErrorHandler pErrorHandler, Prefs pPrefs, JPanel pRootPanel, JTree pScriptTree, JTextArea pScriptDescriptionTextArea,
+  public JWFScriptController(TinaController pTinaController, ErrorHandler pErrorHandler, Prefs pPrefs, JPanel pRootPanel, JTree pScriptTree, JTextArea pScriptDescriptionTextArea,
       JTextArea pScriptTextArea, JButton pCompileScriptButton, JButton pSaveScriptButton, JButton pRevertScriptButton, JButton pRescanScriptsBtn,
-      JButton pNewScriptBtn, JButton pDeleteScriptBtn, JButton pScriptRenameBtn, JButton pScriptDuplicateBtn, JButton pScriptRunBtn) {
-    scriptExecuteController = pScriptExecuteController;
+      JButton pNewScriptBtn, JButton pNewScriptFromFlameBtn, JButton pDeleteScriptBtn, JButton pScriptRenameBtn, JButton pScriptDuplicateBtn, JButton pScriptRunBtn) {
+    tinaController = pTinaController;
     errorHandler = pErrorHandler;
     prefs = pPrefs;
     rootPanel = pRootPanel;
@@ -62,6 +66,7 @@ public class JWFScriptController {
     saveScriptBtn = pSaveScriptButton;
     revertScriptBtn = pRevertScriptButton;
     newScriptBtn = pNewScriptBtn;
+    newScriptFromFlameBtn = pNewScriptFromFlameBtn;
     deleteScriptBtn = pDeleteScriptBtn;
     scriptRenameBtn = pScriptRenameBtn;
     scriptDuplicateBtn = pScriptDuplicateBtn;
@@ -133,7 +138,7 @@ public class JWFScriptController {
     return selNode;
   }
 
-  private void enableControls() {
+  public void enableControls() {
     DefaultMutableTreeNode selNode = getSelNode();
     allowEdit = (selNode != null) && (selNode instanceof ScriptUserNode);
     boolean scriptSelected = (selNode != null) && ((selNode instanceof ScriptUserNode) || (selNode instanceof ScriptInternalNode));
@@ -148,6 +153,7 @@ public class JWFScriptController {
     compileScriptButton.setEnabled(scriptSelected);
     rescanScriptsBtn.setEnabled(!editing);
     newScriptBtn.setEnabled(userPathSelected && !editing);
+    newScriptFromFlameBtn.setEnabled(userPathSelected && !editing && tinaController.getCurrFlame() != null);
     deleteScriptBtn.setEnabled(userScriptSelected && !editing);
     scriptRenameBtn.setEnabled(userScriptSelected && !editing);
     scriptDuplicateBtn.setEnabled(scriptSelected && !editing);
@@ -471,7 +477,7 @@ public class JWFScriptController {
 
   public void scriptRunBtn_clicked() {
     try {
-      scriptExecuteController.runScript();
+      tinaController.runScript();
     }
     catch (Throwable ex) {
       errorHandler.handleError(ex);
@@ -480,7 +486,7 @@ public class JWFScriptController {
 
   public void compileScriptButton_clicked() {
     try {
-      scriptExecuteController.compileScript();
+      tinaController.compileScript();
     }
     catch (Throwable ex) {
       errorHandler.handleError(ex);
@@ -526,7 +532,7 @@ public class JWFScriptController {
     }
   }
 
-  public void newScriptBtn_clicked() {
+  public void newScript(String pDescription, String pScript) {
     try {
       DefaultMutableTreeNode selNode = getSelNode();
       if (selNode != null) {
@@ -561,8 +567,14 @@ public class JWFScriptController {
           if (new File(descFilename).exists()) {
             throw new Exception("File <" + descFilename + "> already exists");
           }
-          Tools.writeUTF8Textfile(scriptFilename, "");
-          Tools.writeUTF8Textfile(descFilename, "");
+          if (pScript == null) {
+            pScript = "";
+          }
+          Tools.writeUTF8Textfile(scriptFilename, pScript);
+          if (pDescription == null) {
+            pDescription = "";
+          }
+          Tools.writeUTF8Textfile(descFilename, pDescription);
           ScriptUserNode node = new ScriptUserNode(newName, scriptFilename);
           parent.add(node);
           scriptTree.setSelectionPath(new TreePath(((DefaultTreeModel) scriptTree.getModel()).getPathToRoot(node)));
@@ -576,6 +588,84 @@ public class JWFScriptController {
     catch (Exception ex) {
       errorHandler.handleError(ex);
     }
+  }
+
+  public void newScriptBtn_clicked() {
+    newScript(null, null);
+  }
+
+  public void newScriptFromFlameBtn_clicked() {
+    Flame flame = tinaController.getCurrFlame();
+    if (flame != null) {
+      String desc = "This script was automatically generated by " + Tools.APP_TITLE + " " + Tools.APP_VERSION + " by converting a flame";
+      newScript(desc, convertFlameToScript(flame));
+    }
+  }
+
+  private String convertFlameToScript(Flame pFlame) {
+    StringBuilder sb = new StringBuilder();
+    sb.append("import org.jwildfire.create.tina.base.Flame;\n");
+    sb.append("import org.jwildfire.create.tina.base.XForm;\n");
+    sb.append("import org.jwildfire.create.tina.palette.RGBPalette;\n");
+    sb.append("import org.jwildfire.create.tina.script.ScriptRunnerEnvironment;\n");
+    sb.append("import org.jwildfire.create.tina.transform.XFormTransformService;\n");
+    sb.append("import org.jwildfire.create.tina.variation.VariationFunc;\n");
+    sb.append("import org.jwildfire.create.tina.variation.VariationFuncList;\n");
+    sb.append("\n");
+    sb.append("");
+    sb.append("public void run(ScriptRunnerEnvironment pEnv) throws Exception {\n");
+    sb.append("  // create a new flame\n");
+    sb.append("  Flame flame=new Flame();");
+    sb.append("  // set the flame main attributes\n");
+    sb.append("  flame.setCamRoll(" + Tools.doubleToString(pFlame.getCamRoll()) + ");\n");
+    sb.append("  flame.setCamPitch(" + Tools.doubleToString(pFlame.getCamPitch()) + ");\n");
+    sb.append("  flame.setCamYaw(" + Tools.doubleToString(pFlame.getCamYaw()) + ");\n");
+    sb.append("  flame.setCamPerspective(" + Tools.doubleToString(pFlame.getCamPerspective()) + ");\n");
+    sb.append("  flame.setPixelsPerUnit(" + Tools.doubleToString(pFlame.getPixelsPerUnit()) + ");\n");
+    sb.append("  flame.setCamZoom(" + Tools.doubleToString(pFlame.getCamZoom()) + ");\n");
+
+    sb.append("  // create the gradient\n");
+    for (int i = 0; i < RGBPalette.PALETTE_SIZE; i++) {
+      RGBColor color = pFlame.getPalette().getColor(i);
+      sb.append("  flame.getPalette().setColor(" + i + ", " + color.getRed() + ", " + color.getGreen() + ", " + color.getBlue() + ");\n");
+    }
+
+    if (pFlame.getXForms().size() > 0) {
+      sb.append("  // add transforms\n");
+
+    }
+    if (pFlame.getFinalXForms().size() > 0) {
+      sb.append("  // add final transforms\n");
+    }
+    sb.append("  // Load the flame in the editor and refresh the UI\n");
+    sb.append("  pEnv.setCurrFlame(flame);\n");
+    sb.append("}\n");
+
+    //    {
+    //      XForm xForm = xForm1 = new XForm();
+    //      xForm.setWeight(0.5);
+    //      xForm.setColor(Math.random());
+    //      xForm.setColorSymmetry(-(0.8 + (Math.random() * 0.1)));
+    //
+    //      xForm.setCoeff00(0.266948); // a
+    //      xForm.setCoeff10(0.137096); // b
+    //      xForm.setCoeff20(0.04212); // e
+    //      xForm.setCoeff01(0.071529); // c 
+    //      xForm.setCoeff11(-0.511651); // d 
+    //      xForm.setCoeff21(-0.334332); // f 
+    //
+    //      xForm.setPostCoeff00(0.5);
+    //      xForm.setPostCoeff10(0);
+    //      xForm.setPostCoeff01(0);
+    //      xForm.setPostCoeff11(0.25);
+    //      xForm.setPostCoeff20(0);
+    //      xForm.setPostCoeff21(0.05);
+    //
+    //      xForm.addVariation((0.1 + (Math.random() * 0.1)), VariationFuncList.getVariationFuncInstance("bubble", true));
+    //      xForm.addVariation(2.0, VariationFuncList.getVariationFuncInstance("pre_blur", true));
+    //
+
+    return sb.toString();
   }
 
   private String getBaseScriptPath() {

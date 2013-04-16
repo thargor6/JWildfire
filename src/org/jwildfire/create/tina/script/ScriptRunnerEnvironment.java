@@ -22,5 +22,7 @@ public interface ScriptRunnerEnvironment {
 
   public Flame getCurrFlame();
 
+  public void setCurrFlame(Flame pFlame);
+
   public void refreshUI();
 }

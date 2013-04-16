@@ -60,6 +60,7 @@ public class FlamePanel extends ImagePanel {
   private boolean drawImage = true;
   private boolean drawTriangles = true;
   private boolean drawVariations = false;
+  private boolean drawGradient = false;
   private boolean fineMovement = false;
   private XForm selectedXForm = null;
   private boolean allowScaleX = true;
@@ -886,6 +887,22 @@ public class FlamePanel extends ImagePanel {
 
   public void setFlameHolder(FlameHolder pFlameHolder) {
     flameHolder = pFlameHolder;
+  }
+
+  public void importOptions(FlamePanel pFlamePanel) {
+    if (pFlamePanel != null) {
+      darkTriangles = pFlamePanel.darkTriangles;
+      drawImage = pFlamePanel.drawImage;
+      drawTriangles = pFlamePanel.drawTriangles;
+      drawVariations = pFlamePanel.drawVariations;
+      fineMovement = pFlamePanel.fineMovement;
+      allowScaleX = pFlamePanel.allowScaleX;
+      allowScaleY = pFlamePanel.allowScaleY;
+      showTransparency = pFlamePanel.showTransparency;
+      drawGradient = pFlamePanel.drawGradient;
+      mouseDragOperation = pFlamePanel.mouseDragOperation;
+      editPostTransform = pFlamePanel.editPostTransform;
+    }
   }
 
 }
