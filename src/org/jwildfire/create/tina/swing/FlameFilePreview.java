@@ -46,9 +46,10 @@ public class FlameFilePreview extends JPanel implements PropertyChangeListener {
   private ImageIcon currThumbnail = null;
   private File currFile = null;
 
+  final int BUTTON_WIDTH = 100;
+  final int BUTTON_HEIGHT = 24;
+
   public FlameFilePreview(JFileChooser pFileChooser, Prefs pPrefs) {
-    final int BUTTON_WIDTH = 100;
-    final int BUTTON_HEIGHT = 24;
     fileChooser = pFileChooser;
     Dimension outerSize = new Dimension(192, 120 + BUTTON_HEIGHT);
     Dimension innerSize = new Dimension(192, 120);
@@ -96,7 +97,7 @@ public class FlameFilePreview extends JPanel implements PropertyChangeListener {
         List<Flame> flames = new Flam3Reader(prefs).readFlames(currFile.getAbsolutePath());
         Flame flame = flames.get(0);
         int imgWidth = this.getPreferredSize().width;
-        int imgHeight = this.getPreferredSize().height;
+        int imgHeight = this.getPreferredSize().height - BUTTON_HEIGHT;
 
         double wScl = (double) imgWidth / (double) flame.getWidth();
         double hScl = (double) imgHeight / (double) flame.getHeight();

@@ -6397,6 +6397,7 @@ public class TinaInternalFrame extends JInternalFrame {
       triangleOperationsPanel.add(mouseTransformEditPointsButton);
 
       mouseTransformEditGradientButton = new JToggleButton();
+      mouseTransformEditGradientButton.setVisible(false);
       mouseTransformEditGradientButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/editGradient.gif")));
       mouseTransformEditGradientButton.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
@@ -14034,6 +14035,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton getNewScriptFromFlameBtn() {
     if (newScriptFromFlameBtn == null) {
       newScriptFromFlameBtn = new JButton();
+      newScriptFromFlameBtn.setVisible(false);
       newScriptFromFlameBtn.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
           tinaController.getJwfScriptController().newScriptFromFlameBtn_clicked();

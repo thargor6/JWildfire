@@ -180,16 +180,33 @@ public class FlameRenderer {
       else {
         pProjectedPoint.intensity = 1.0;
       }
+
+      boolean NEWDOF = false;
+
       if (useDOF) {
         if (legacyDOF) {
           double zdist = (flame.getCamZ() - pz);
           if (zdist > 0.0) {
-            double dr = randGen.random() * camDOF_10 * zdist;
-            double a = 2.0 * M_PI * randGen.random();
-            double dsina = sin(a);
-            double dcosa = cos(a);
-            pPoint.x = (px + dr * dcosa) / zr;
-            pPoint.y = (py + dr * dsina) / zr;
+            if (NEWDOF) {
+              double dr = randGen.random() * camDOF_10 * zdist;
+              double a = 2.0 * M_PI * randGen.random();
+              double b = 2.0 * M_PI * randGen.random();
+              double dsina = sin(a);
+              double dcosa = cos(a);
+              double dsinb = sin(b);
+              double dcosb = cos(b);
+              double dz = dr * dcosb;
+              pPoint.x = (px + dr * dsinb * dcosa) / (zr + dz);
+              pPoint.y = (py + dr * dsinb * dsina) / (zr + dz);
+            }
+            else {
+              double dr = randGen.random() * camDOF_10 * zdist;
+              double a = 2.0 * M_PI * randGen.random();
+              double dsina = sin(a);
+              double dcosa = cos(a);
+              pPoint.x = (px + dr * dcosa) / zr;
+              pPoint.y = (py + dr * dsina) / zr;
+            }
           }
           else {
             pPoint.x = px / zr;
@@ -202,12 +219,26 @@ public class FlameRenderer {
           double zdist = (pz - flame.getFocusZ());
           double dist = Math.pow(xdist * xdist + ydist * ydist + zdist * zdist, 1 / flame.getCamDOFExponent()) - flame.getCamDOFArea();
           if (dist > 0.05) {
-            double dr = randGen.random() * camDOF_10 * dist;
-            double a = 2.0 * M_PI * randGen.random();
-            double dsina = sin(a);
-            double dcosa = cos(a);
-            pPoint.x = (px + dr * dcosa) / zr;
-            pPoint.y = (py + dr * dsina) / zr;
+            if (NEWDOF) {
+              double dr = randGen.random() * camDOF_10 * dist;
+              double a = 2.0 * M_PI * randGen.random();
+              double b = 2.0 * M_PI * randGen.random();
+              double dsina = sin(a);
+              double dcosa = cos(a);
+              double dsinb = sin(b);
+              double dcosb = cos(b);
+              double dz = dr * dcosb;
+              pPoint.x = (px + dr * dsinb * dcosa) / (zr + dz);
+              pPoint.y = (py + dr * dsinb * dsina) / (zr + dz);
+            }
+            else {
+              double dr = randGen.random() * camDOF_10 * dist;
+              double a = 2.0 * M_PI * randGen.random();
+              double dsina = sin(a);
+              double dcosa = cos(a);
+              pPoint.x = (px + dr * dcosa) / zr;
+              pPoint.y = (py + dr * dsina) / zr;
+            }
           }
           else {
             pPoint.x = px / zr;

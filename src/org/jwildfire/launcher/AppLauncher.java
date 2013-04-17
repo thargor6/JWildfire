@@ -30,7 +30,7 @@ public class AppLauncher {
     prefs = pPrefs;
   }
 
-  public String getLaunchCmd() throws Exception {
+  public String[] getLaunchCmd() throws Exception {
     String jdkPath = prefs.getJavaPath();
     if (jdkPath == null || jdkPath.length() == 0)
       throw new Exception("No JDK specified");
@@ -40,7 +40,8 @@ public class AppLauncher {
 
     File java = new File(jdkPath + File.separator + "bin" + File.separator + "java");
 
-    String options = "-Xms256m -Xmx" + prefs.getMaxMem() + "m ";
+    String minMemOption = "-Xms256m";
+    String maxMemOption = "-Xmx" + prefs.getMaxMem() + "m";
 
     String classpath = File.separator + "lib" + File.separator + JWFILDFIRE_JAR;
     URL launcherURL = ((URLClassLoader) this.getClass().getClassLoader()).getURLs()[0];
@@ -56,12 +57,13 @@ public class AppLauncher {
       cp = "\"" + cp + "\"";
     }
 
-    String cmd = javaCmd + " " + options + " -cp " + cp + " " + JWILDFIRE_MAIN_CLASS;
+    //String cmd = javaCmd + " " + options + " -cp " + cp + " " + JWILDFIRE_MAIN_CLASS;
 
+    String cmd[] = { javaCmd, minMemOption, maxMemOption, "-cp", cp, JWILDFIRE_MAIN_CLASS };
     return cmd;
   }
 
-  public void launchSync(String pCmd) throws Exception {
+  public void launchSync(String[] pCmd) throws Exception {
     Runtime runtime = Runtime.getRuntime();
     try {
       runtime.exec(pCmd);
@@ -71,7 +73,7 @@ public class AppLauncher {
     }
   }
 
-  public int launchAsync(String pCmd, OutputStream pOS) throws Exception {
+  public int launchAsync(String pCmd[], OutputStream pOS) throws Exception {
     Runtime runtime = Runtime.getRuntime();
 
     Process proc;

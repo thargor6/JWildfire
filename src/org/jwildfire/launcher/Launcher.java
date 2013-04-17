@@ -445,8 +445,8 @@ public class Launcher {
 
   private void launchApp() throws Exception {
     AppLauncher launcher = new AppLauncher(prefs);
-    String launchCmd = launcher.getLaunchCmd();
-    getLogTextArea().setText("Attempting to launch " + Tools.APP_TITLE + " using the command:\n" + launchCmd + "\n");
+    String launchCmd[] = launcher.getLaunchCmd();
+    getLogTextArea().setText("Attempting to launch " + Tools.APP_TITLE + " using the command:\n" + expandCmd(launchCmd) + "\n");
 
     if (getDebugCbx().isSelected()) {
 
@@ -460,6 +460,16 @@ public class Launcher {
     else {
       launcher.launchSync(launchCmd);
     }
+  }
+
+  private String expandCmd(String[] pCmd) {
+    StringBuilder sb = new StringBuilder();
+    for (int i = 0; i < pCmd.length - 1; i++) {
+      sb.append(pCmd[i]);
+      sb.append(" ");
+    }
+    sb.append(pCmd[pCmd.length - 1]);
+    return sb.toString();
   }
 
   private void manualAddRuntime() {
