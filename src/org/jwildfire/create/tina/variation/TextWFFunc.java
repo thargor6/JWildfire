@@ -30,6 +30,7 @@ import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 import org.jwildfire.image.SimpleImage;
@@ -48,11 +49,12 @@ public class TextWFFunc extends VariationFunc {
   private static final String PARAM_OFFSETY = "offset_y";
   private static final String PARAM_FONT_SIZE = "font_size";
   private static final String PARAM_ANTIALIAS = "antialias";
+  private static final String PARAM_BASELINE = "baseline";
 
   private static final String RESSOURCE_TEXT = "text";
   private static final String RESSOURCE_FONT_NAME = "font_name";
 
-  private static final String[] paramNames = { PARAM_FONT_SIZE, PARAM_ANTIALIAS, PARAM_SCALEX, PARAM_SCALEY, PARAM_OFFSETX, PARAM_OFFSETY };
+  private static final String[] paramNames = { PARAM_FONT_SIZE, PARAM_ANTIALIAS, PARAM_SCALEX, PARAM_SCALEY, PARAM_OFFSETX, PARAM_OFFSETY, PARAM_BASELINE };
   private static final String[] ressourceNames = { RESSOURCE_TEXT, RESSOURCE_FONT_NAME };
 
   private int font_size = 320;
@@ -61,6 +63,7 @@ public class TextWFFunc extends VariationFunc {
   private double scale_y = 1.0;
   private double offset_x = 0.0;
   private double offset_y = 0.0;
+  private int baseline = 0;
   private String text = "JWildfire";
   private String font_name = "Arial";
 
@@ -71,7 +74,7 @@ public class TextWFFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { font_size, antialias, scale_x, scale_y, offset_x, offset_y };
+    return new Object[] { font_size, antialias, scale_x, scale_y, offset_x, offset_y, baseline };
   }
 
   @Override
@@ -88,6 +91,8 @@ public class TextWFFunc extends VariationFunc {
       offset_x = pValue;
     else if (PARAM_OFFSETY.equalsIgnoreCase(pName))
       offset_y = pValue;
+    else if (PARAM_BASELINE.equalsIgnoreCase(pName))
+      baseline = Tools.FTOI(pValue);
     else
       throw new IllegalArgumentException(pName);
   }
@@ -117,7 +122,7 @@ public class TextWFFunc extends VariationFunc {
   }
 
   private String makeRessourceKey() {
-    return getName() + "#" + text + "#" + "#" + font_name + "#" + font_size;
+    return getName() + "#" + text + "#" + "#" + font_name + "#" + font_size + "#" + baseline;
   }
 
   @SuppressWarnings("unchecked")
@@ -136,6 +141,7 @@ public class TextWFFunc extends VariationFunc {
         txt.setFontSize(font_size);
         txt.setHAlign(HAlignment.CENTRE);
         txt.setVAlign(VAlignment.CENTRE);
+        txt.setBaseLineOffset(baseline);
 
         Dimension dim = txt.calculateTextSize();
         int imgWidth = (int) (dim.getWidth() + 2 * font_size);

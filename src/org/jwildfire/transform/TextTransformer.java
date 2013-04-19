@@ -88,6 +88,9 @@ public class TextTransformer extends Mesh2DTransformer {
   @Property(description = "Size of the font")
   private int fontSize;
 
+  @Property(description = "Offset to the base-line of the font")
+  private int baseLineOffset = 0;
+
   @Property(description = "Style of the font", editorClass = FontStyleEditor.class, category = PropertyCategory.SECONDARY)
   private FontStyle fontStyle;
 
@@ -143,6 +146,7 @@ public class TextTransformer extends Mesh2DTransformer {
           row.width += 2 * this.outlineWidth;
           row.height += 2 * this.outlineWidth;
         }
+        row.height += baseLineOffset;
         if (row.width > res.maxWidth)
           res.maxWidth = row.width;
         if (row.height > res.maxHeight)
@@ -199,6 +203,7 @@ public class TextTransformer extends Mesh2DTransformer {
           row.top = height - (renderInfo.maxRow + 1 - row.row) * renderInfo.maxHeight;
           break;
       }
+      row.top += baseLineOffset;
     }
 
     // draw the text
@@ -489,5 +494,13 @@ public class TextTransformer extends Mesh2DTransformer {
 
   public void setVAlign(VAlignment vAlign) {
     this.vAlign = vAlign;
+  }
+
+  public int getBaseLineOffset() {
+    return baseLineOffset;
+  }
+
+  public void setBaseLineOffset(int baseLineOffset) {
+    this.baseLineOffset = baseLineOffset;
   }
 }
