@@ -181,7 +181,7 @@ public class FlameRenderer {
         pProjectedPoint.intensity = 1.0;
       }
 
-      boolean NEWDOF = false;
+      boolean NEWDOF = true;
 
       if (useDOF) {
         if (legacyDOF) {

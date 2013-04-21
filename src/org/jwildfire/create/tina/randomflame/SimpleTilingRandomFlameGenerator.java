@@ -25,7 +25,6 @@ public class SimpleTilingRandomFlameGenerator extends RandomFlameGenerator {
 
   @Override
   protected Flame createFlame() {
-    // Bases loosely on the W2R Batch Script by parrotdolphin.deviantart.com */ 
     Flame flame = new Flame();
     flame.setCentreX(0.0);
     flame.setCentreY(0.0);

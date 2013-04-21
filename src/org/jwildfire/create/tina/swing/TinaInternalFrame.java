@@ -992,7 +992,7 @@ public class TinaInternalFrame extends JInternalFrame {
         }
       });
       dofCamZREd.setValueStep(0.01);
-      dofCamZREd.setToolTipText("Affects both the old DOF-effect and dimish in z-direction");
+      dofCamZREd.setToolTipText("Affects both the old DOF-effect and diminish in z-direction");
       dofCamZREd.setSize(new Dimension(100, 24));
       dofCamZREd.setPreferredSize(new Dimension(100, 24));
       dofCamZREd.setLocation(new Point(100, 98));
@@ -1188,7 +1188,7 @@ public class TinaInternalFrame extends JInternalFrame {
           }
         }
       });
-      camDimishZREd.setToolTipText("Dimish brightness in z-direction to improve \"depth\"-effect, also affected by camera distance");
+      camDimishZREd.setToolTipText("Diminish brightness in z-direction to improve \"depth\"-effect, also affected by camera distance");
       camDimishZREd.setValueStep(0.01);
       camDimishZREd.setText("");
       camDimishZREd.setSize(new Dimension(100, 24));
@@ -6397,7 +6397,6 @@ public class TinaInternalFrame extends JInternalFrame {
       triangleOperationsPanel.add(mouseTransformEditPointsButton);
 
       mouseTransformEditGradientButton = new JToggleButton();
-      mouseTransformEditGradientButton.setVisible(false);
       mouseTransformEditGradientButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/editGradient.gif")));
       mouseTransformEditGradientButton.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
@@ -14035,7 +14034,6 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton getNewScriptFromFlameBtn() {
     if (newScriptFromFlameBtn == null) {
       newScriptFromFlameBtn = new JButton();
-      newScriptFromFlameBtn.setVisible(false);
       newScriptFromFlameBtn.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
           tinaController.getJwfScriptController().newScriptFromFlameBtn_clicked();

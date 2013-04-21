@@ -599,7 +599,6 @@ V0.23 (06.12.2011):
  - Fractal flame editor: prefs for movie rendering
  - FIXED: Fractal flame editor: bubble variation was broken
 
-
 V0.22 (03.12.2011):
  - Fractal flame editor: waves2 variation
  - Fractal flame editor: simplified interface, three basic sets of prefs: for preview, normal and high quality rendering

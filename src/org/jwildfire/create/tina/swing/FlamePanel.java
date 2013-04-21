@@ -60,7 +60,6 @@ public class FlamePanel extends ImagePanel {
   private boolean drawImage = true;
   private boolean drawTriangles = true;
   private boolean drawVariations = false;
-  private boolean drawGradient = false;
   private boolean fineMovement = false;
   private XForm selectedXForm = null;
   private boolean allowScaleX = true;
@@ -71,6 +70,7 @@ public class FlamePanel extends ImagePanel {
   private double triangleViewXTrans, triangleViewYTrans;
   private MouseDragOperation mouseDragOperation = MouseDragOperation.MOVE_TRIANGLE;
   private int xBeginDrag, yBeginDrag;
+  private int xMouseClickPosition, yMouseClickPosition;
   private boolean editPostTransform = false;
   private double triangleZoom = 1.0;
 
@@ -82,6 +82,7 @@ public class FlamePanel extends ImagePanel {
 
   private boolean redrawAfterMouseClick;
   private UndoManagerHolder<Flame> undoManagerHolder;
+  private GradientOverlay gradientOverlay = new GradientOverlay(this);
 
   public FlamePanel(SimpleImage pSimpleImage, int pX, int pY, int pWidth, FlameHolder pFlameHolder) {
     super(pSimpleImage, pX, pY, pWidth);
@@ -101,6 +102,9 @@ public class FlamePanel extends ImagePanel {
     }
     if (drawTriangles) {
       paintTriangles((Graphics2D) g);
+    }
+    if (mouseDragOperation == MouseDragOperation.GRADIENT && flameHolder.getFlame() != null) {
+      gradientOverlay.paintGradient((Graphics2D) g, flameHolder.getFlame().getPalette(), this.getImageBounds());
     }
   }
 
@@ -615,6 +619,15 @@ public class FlamePanel extends ImagePanel {
             flame.setFocusY(flame.getFocusY() - rcY * 0.5);
             return true;
           }
+          case GRADIENT: {
+            Flame flame = flameHolder.getFlame();
+            dx = viewDX * 0.25;
+            if (fineMovement) {
+              dx *= 0.25;
+            }
+            gradientOverlay.mouseDragged(dx, xBeginDrag, yBeginDrag, flame);
+            return true;
+          }
         }
       }
     }
@@ -623,8 +636,9 @@ public class FlamePanel extends ImagePanel {
 
   public void mousePressed(int x, int y) {
     if (selectedXForm != null || mouseDragOperation == MouseDragOperation.VIEW) {
-      xBeginDrag = x;
-      yBeginDrag = y;
+      xMouseClickPosition = xBeginDrag = x;
+      yMouseClickPosition = yBeginDrag = y;
+      gradientOverlay.beginDrag(xMouseClickPosition, yMouseClickPosition);
       if (undoManagerHolder != null) {
         undoManagerHolder.saveUndoPoint();
       }
@@ -679,7 +693,7 @@ public class FlamePanel extends ImagePanel {
   public XForm mouseClicked(int x, int y) {
     redrawAfterMouseClick = false;
     // select flame
-    if (mouseDragOperation != MouseDragOperation.POINTS) {
+    if (mouseDragOperation == MouseDragOperation.MOVE_TRIANGLE || mouseDragOperation == MouseDragOperation.ROTATE_TRIANGLE || mouseDragOperation == MouseDragOperation.SCALE_TRIANGLE) {
       Flame flame = flameHolder.getFlame();
       if (flame != null) {
         for (XForm xForm : flame.getXForms()) {
@@ -709,6 +723,12 @@ public class FlamePanel extends ImagePanel {
       Triangle triangle = new Triangle(selectedXForm);
       selectedPoint = selectNearestPoint(triangle, x, y);
       redrawAfterMouseClick = true;
+    }
+    else if (mouseDragOperation == MouseDragOperation.GRADIENT && flameHolder.getFlame() != null) {
+      if (undoManagerHolder != null) {
+        undoManagerHolder.saveUndoPoint();
+      }
+      redrawAfterMouseClick = gradientOverlay.mouseClicked(x, y, flameHolder.getFlame().getPalette());
     }
     return null;
   }
@@ -881,6 +901,14 @@ public class FlamePanel extends ImagePanel {
         flame.setFocusZ(flame.getFocusZ() + dz);
         return true;
       }
+      else if (mouseDragOperation == MouseDragOperation.GRADIENT && flameHolder != null && flameHolder.getFlame() != null) {
+        double dz = -pRotateAmount * 0.1;
+        if (fineMovement) {
+          dz *= 0.1;
+        }
+        gradientOverlay.mouseWheelAction(dz);
+        return true;
+      }
     }
     return false;
   }
@@ -899,7 +927,6 @@ public class FlamePanel extends ImagePanel {
       allowScaleX = pFlamePanel.allowScaleX;
       allowScaleY = pFlamePanel.allowScaleY;
       showTransparency = pFlamePanel.showTransparency;
-      drawGradient = pFlamePanel.drawGradient;
       mouseDragOperation = pFlamePanel.mouseDragOperation;
       editPostTransform = pFlamePanel.editPostTransform;
     }

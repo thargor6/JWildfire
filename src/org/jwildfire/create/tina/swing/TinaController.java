@@ -5183,7 +5183,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
         data.mouseTransformEditFocusPointButton.setSelected(false);
         data.mouseTransformEditViewButton.setSelected(false);
         if (flamePanel != null) {
-          flamePanel.setMouseDragOperation(data.mouseTransformEditFocusPointButton.isSelected() ? MouseDragOperation.GRADIENT : MouseDragOperation.NONE);
+          flamePanel.setMouseDragOperation(data.mouseTransformEditGradientButton.isSelected() ? MouseDragOperation.GRADIENT : MouseDragOperation.NONE);
           flamePanel.setDrawTriangles(false);
           refreshFlameImage(false);
         }
