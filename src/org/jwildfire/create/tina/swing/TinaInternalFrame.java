@@ -616,6 +616,7 @@ public class TinaInternalFrame extends JInternalFrame {
     this.setResizable(true);
     this.setMaximizable(true);
     this.setContentPane(getJContentPane());
+    getGradientEditorFncPnl().setVisible(false);
     //    this.getInputMap().put(KeyStroke.getKeyStroke('z', InputEvent.CTRL_DOWN_MASK), new AbstractAction() {
     //      private static final long serialVersionUID = 1L;
     //
@@ -3890,6 +3891,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaPaletteBalancingPanel.add(getTinaPaletteContrastSlider(), null);
       tinaPaletteBalancingPanel.add(getTinaPaletteGammaSlider(), null);
       tinaPaletteBalancingPanel.add(getTinaPaletteBrightnessSlider(), null);
+      tinaPaletteBalancingPanel.add(getGradientApplyBalancingBtn());
     }
     return tinaPaletteBalancingPanel;
   }
@@ -6354,6 +6356,7 @@ public class TinaInternalFrame extends JInternalFrame {
       mouseTransformEditViewButton = new JToggleButton();
       mouseTransformEditViewButton.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
+          expandGradientEditorFncPnl(false);
           tinaController.mouseTransformViewButton_clicked();
         }
       });
@@ -6366,6 +6369,7 @@ public class TinaInternalFrame extends JInternalFrame {
       mouseTransformEditPointsButton = new JToggleButton();
       mouseTransformEditPointsButton.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
+          expandGradientEditorFncPnl(false);
           tinaController.mouseTransformEditPointsButton_clicked();
         }
       });
@@ -6376,6 +6380,7 @@ public class TinaInternalFrame extends JInternalFrame {
       mouseTransformRotateTrianglesButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/rotate.gif")));
       mouseTransformRotateTrianglesButton.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
+          expandGradientEditorFncPnl(false);
           tinaController.mouseTransformRotateTrianglesButton_clicked();
         }
       });
@@ -6387,6 +6392,7 @@ public class TinaInternalFrame extends JInternalFrame {
       mouseTransformScaleTrianglesButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/scale.gif")));
       mouseTransformScaleTrianglesButton.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
+          expandGradientEditorFncPnl(false);
           tinaController.mouseTransformScaleTrianglesButton_clicked();
         }
       });
@@ -6400,6 +6406,7 @@ public class TinaInternalFrame extends JInternalFrame {
       mouseTransformEditGradientButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/editGradient.gif")));
       mouseTransformEditGradientButton.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
+          expandGradientEditorFncPnl(mouseTransformEditGradientButton.isSelected());
           tinaController.mouseTransformEditGradientButton_clicked();
         }
       });
@@ -6412,6 +6419,14 @@ public class TinaInternalFrame extends JInternalFrame {
       triangleOperationsPanel.add(getTinaRenderFlameButton(), null);
     }
     return triangleOperationsPanel;
+  }
+
+  protected void expandGradientEditorFncPnl(boolean pSelected) {
+    boolean oldVis = getGradientEditorFncPnl().isVisible();
+    getGradientEditorFncPnl().setVisible(pSelected);
+    if (oldVis != pSelected && tinaController != null) {
+      tinaController.resolutionProfileCmb_changed();
+    }
   }
 
   /**
@@ -6428,6 +6443,7 @@ public class TinaInternalFrame extends JInternalFrame {
       mouseTransformMoveTrianglesButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/move.gif")));
       mouseTransformMoveTrianglesButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
+          expandGradientEditorFncPnl(false);
           tinaController.mouseTransformMoveTrianglesButton_clicked();
         }
       });
@@ -6448,6 +6464,7 @@ public class TinaInternalFrame extends JInternalFrame {
       mouseTransformEditFocusPointButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/focusPoint.gif")));
       mouseTransformEditFocusPointButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
+          expandGradientEditorFncPnl(false);
           tinaController.mouseTransformEditFocusPointButton_clicked();
         }
       });
@@ -6532,10 +6549,11 @@ public class TinaInternalFrame extends JInternalFrame {
       centerCenterPanel.setBackground(Color.gray);
       centerCenterPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
       centerDescLabel = new JLabel();
-      centerCenterPanel.add(centerDescLabel, BorderLayout.SOUTH);
+      centerCenterPanel.add(centerDescLabel, BorderLayout.NORTH);
       centerDescLabel.setText("  (just double-click or right-click on thumbnail to load it into main area)");
       centerDescLabel.setHorizontalAlignment(SwingConstants.CENTER);
       centerDescLabel.setFont(new Font("Dialog", Font.BOLD, 10));
+      centerCenterPanel.add(getGradientEditorFncPnl(), BorderLayout.SOUTH);
     }
     return centerCenterPanel;
   }
@@ -9396,6 +9414,15 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton scriptRevertBtn;
   private JButton newScriptFromFlameBtn;
   private JToggleButton mouseTransformEditGradientButton;
+  private JPanel gradientEditorFncPnl;
+  private JButton gradientInvertBtn;
+  private JButton gradientReverseBtn;
+  private JButton gradientSortBtn;
+  private JButton gradientFadeBtn;
+  private JButton gradientSelectAllBtn;
+  private JLabel label_9;
+  private JButton gradientApplyBalancingBtn;
+  private JButton gradientApplyTXBtn;
 
   /**
    * This method initializes renderBatchJobsScrollPane	
@@ -11692,6 +11719,21 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaPaletteSortBtn.setFont(new Font("Dialog", Font.BOLD, 10));
       tinaPaletteSortBtn.setBounds(6, 147, 88, 24);
       tinaPaletteTransformPanel.add(tinaPaletteSortBtn);
+
+      gradientApplyTXBtn = new JButton();
+      gradientApplyTXBtn.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.gradientApplyTXBtn_clicked();
+        }
+      });
+      gradientApplyTXBtn.setToolTipText("Apply all changes from the TX-tab permanently to this gradient and reset all of those options");
+      gradientApplyTXBtn.setText("Apply TX-options");
+      gradientApplyTXBtn.setSize(new Dimension(190, 24));
+      gradientApplyTXBtn.setPreferredSize(new Dimension(190, 24));
+      gradientApplyTXBtn.setLocation(new Point(6, 230));
+      gradientApplyTXBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      gradientApplyTXBtn.setBounds(6, 230, 190, 24);
+      tinaPaletteTransformPanel.add(gradientApplyTXBtn);
     }
     return tinaPaletteTransformPanel;
   }
@@ -14050,5 +14092,141 @@ public class TinaInternalFrame extends JInternalFrame {
 
   public JToggleButton getMouseTransformEditGradientButton() {
     return mouseTransformEditGradientButton;
+  }
+
+  private JPanel getGradientEditorFncPnl() {
+    if (gradientEditorFncPnl == null) {
+      gradientEditorFncPnl = new JPanel();
+      gradientEditorFncPnl.setPreferredSize(new Dimension(80, 32));
+      gradientEditorFncPnl.add(getGradientFadeBtn());
+      gradientEditorFncPnl.add(getGradientInvertBtn());
+      gradientEditorFncPnl.add(getGradientReverseBtn());
+      gradientEditorFncPnl.add(getGradientSortBtn());
+      gradientEditorFncPnl.add(getLabel_9());
+      gradientEditorFncPnl.add(getGradientSelectAllBtn());
+    }
+    return gradientEditorFncPnl;
+  }
+
+  private JButton getGradientInvertBtn() {
+    if (gradientInvertBtn == null) {
+      gradientInvertBtn = new JButton();
+      gradientInvertBtn.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.gradientInvertBtn_clicked();
+        }
+      });
+      gradientInvertBtn.setToolTipText("Turn into negative colors");
+      gradientInvertBtn.setText("Invert");
+      gradientInvertBtn.setSize(new Dimension(138, 24));
+      gradientInvertBtn.setPreferredSize(new Dimension(70, 24));
+      gradientInvertBtn.setLocation(new Point(4, 181));
+      gradientInvertBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+    }
+    return gradientInvertBtn;
+  }
+
+  private JButton getGradientReverseBtn() {
+    if (gradientReverseBtn == null) {
+      gradientReverseBtn = new JButton();
+      gradientReverseBtn.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.gradientReverseBtn_clicked();
+        }
+      });
+      gradientReverseBtn.setToolTipText("Reverse color order at the selected range");
+      gradientReverseBtn.setText("Reverse");
+      gradientReverseBtn.setSize(new Dimension(60, 24));
+      gradientReverseBtn.setPreferredSize(new Dimension(70, 24));
+      gradientReverseBtn.setLocation(new Point(4, 181));
+      gradientReverseBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+    }
+    return gradientReverseBtn;
+  }
+
+  private JButton getGradientSortBtn() {
+    if (gradientSortBtn == null) {
+      gradientSortBtn = new JButton();
+      gradientSortBtn.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.gradientSortBtn_clicked();
+        }
+      });
+      gradientSortBtn.setToolTipText("Sort the colors (by hue and brightness)");
+      gradientSortBtn.setText("Sort");
+      gradientSortBtn.setSize(new Dimension(138, 24));
+      gradientSortBtn.setPreferredSize(new Dimension(70, 24));
+      gradientSortBtn.setLocation(new Point(4, 181));
+      gradientSortBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+    }
+    return gradientSortBtn;
+  }
+
+  private JButton getGradientFadeBtn() {
+    if (gradientFadeBtn == null) {
+      gradientFadeBtn = new JButton();
+      gradientFadeBtn.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.gradientFadeBtn_clicked();
+        }
+      });
+      gradientFadeBtn.setToolTipText("Fade the color to the left into the color to the right");
+      gradientFadeBtn.setText("Fade");
+      gradientFadeBtn.setSize(new Dimension(138, 24));
+      gradientFadeBtn.setPreferredSize(new Dimension(70, 24));
+      gradientFadeBtn.setLocation(new Point(4, 181));
+      gradientFadeBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+    }
+    return gradientFadeBtn;
+  }
+
+  private JButton getGradientSelectAllBtn() {
+    if (gradientSelectAllBtn == null) {
+      gradientSelectAllBtn = new JButton();
+      gradientSelectAllBtn.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.gradientSelectAllBtn_clicked();
+        }
+      });
+      gradientSelectAllBtn.setToolTipText("Select the complete gradient");
+      gradientSelectAllBtn.setText("Sel all");
+      gradientSelectAllBtn.setSize(new Dimension(138, 24));
+      gradientSelectAllBtn.setPreferredSize(new Dimension(70, 24));
+      gradientSelectAllBtn.setLocation(new Point(4, 181));
+      gradientSelectAllBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+    }
+    return gradientSelectAllBtn;
+  }
+
+  private JLabel getLabel_9() {
+    if (label_9 == null) {
+      label_9 = new JLabel();
+      label_9.setText("");
+      label_9.setPreferredSize(new Dimension(8, 4));
+      label_9.setFont(new Font("Dialog", Font.BOLD, 10));
+    }
+    return label_9;
+  }
+
+  private JButton getGradientApplyBalancingBtn() {
+    if (gradientApplyBalancingBtn == null) {
+      gradientApplyBalancingBtn = new JButton();
+      gradientApplyBalancingBtn.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.gradientApplyBalancingBtn_clicked();
+        }
+      });
+      gradientApplyBalancingBtn.setToolTipText("Apply all changes from the Balance-tab permanently to this gradient and reset all of those options");
+      gradientApplyBalancingBtn.setText("Apply balancing-options");
+      gradientApplyBalancingBtn.setSize(new Dimension(190, 24));
+      gradientApplyBalancingBtn.setPreferredSize(new Dimension(190, 24));
+      gradientApplyBalancingBtn.setLocation(new Point(6, 230));
+      gradientApplyBalancingBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+    }
+    return gradientApplyBalancingBtn;
+  }
+
+  public JButton getGradientApplyTXBtn() {
+    return gradientApplyTXBtn;
   }
 } //  @jve:decl-index=0:visual-constraint="10,10"

@@ -932,4 +932,32 @@ public class FlamePanel extends ImagePanel {
     }
   }
 
+  public void gradientFade() {
+    if (flameHolder.getFlame() != null) {
+      gradientOverlay.fadeRange(flameHolder.getFlame().getPalette());
+    }
+  }
+
+  public void gradientInvert() {
+    if (flameHolder.getFlame() != null) {
+      gradientOverlay.invertRange(flameHolder.getFlame().getPalette());
+    }
+  }
+
+  public void gradientReverse() {
+    if (flameHolder.getFlame() != null) {
+      gradientOverlay.reverseRange(flameHolder.getFlame().getPalette());
+    }
+  }
+
+  public void gradientSort() {
+    if (flameHolder.getFlame() != null) {
+      gradientOverlay.sortRange(flameHolder.getFlame().getPalette());
+    }
+  }
+
+  public void gradientSelectAll() {
+    gradientOverlay.selectAll();
+  }
+
 }

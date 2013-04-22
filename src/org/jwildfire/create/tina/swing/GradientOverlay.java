@@ -244,4 +244,25 @@ public class GradientOverlay {
     return false;
   }
 
+  public void fadeRange(RGBPalette pGradient) {
+    pGradient.fadeRange(markerPos[0], markerPos[1]);
+  }
+
+  public void invertRange(RGBPalette pGradient) {
+    pGradient.negativeColors(markerPos[0], markerPos[1]);
+  }
+
+  public void reverseRange(RGBPalette pGradient) {
+    pGradient.reverseColors(markerPos[0], markerPos[1]);
+  }
+
+  public void sortRange(RGBPalette pGradient) {
+    pGradient.sort(markerPos[0], markerPos[1]);
+  }
+
+  public void selectAll() {
+    markerPos[0] = 0;
+    markerPos[1] = GRADIENT_SIZE - 1;
+  }
+
 }

@@ -94,6 +94,11 @@ public class RGBPalette implements Assignable<RGBPalette>, Serializable {
     return res != null ? res : BLACK;
   }
 
+  private RGBColor getRawColor(int pIdx) {
+    RGBColor res = rawColors.get(pIdx);
+    return res != null ? res : BLACK;
+  }
+
   public RenderColor[] createRenderPalette(int pWhiteLevel) {
     transformColors();
     RenderColor res[] = new RenderColor[PALETTE_SIZE];
@@ -435,21 +440,24 @@ public class RGBPalette implements Assignable<RGBPalette>, Serializable {
     return true;
   }
 
-  public void sort() {
+  public void sort(int pStartIdx, int pEndIdx) {
     List<RGBColor> colors = new ArrayList<RGBColor>();
-    for (int i = 0; i < PALETTE_SIZE; i++) {
+    for (int i = pStartIdx; i <= pEndIdx; i++) {
       colors.add(rawColors.get(i));
     }
     Collections.sort(colors);
-    rawColors.clear();
-    for (int i = 0; i < PALETTE_SIZE; i++) {
-      rawColors.put(Integer.valueOf(i), colors.get(i));
+    for (int i = pStartIdx; i <= pEndIdx; i++) {
+      rawColors.put(Integer.valueOf(i), colors.get(i - pStartIdx));
     }
     modified = true;
   }
 
-  public void negativeColors() {
-    for (int i = 0; i < PALETTE_SIZE; i++) {
+  public void sort() {
+    sort(0, PALETTE_SIZE - 1);
+  }
+
+  public void negativeColors(int pStartIdx, int pEndIdx) {
+    for (int i = pStartIdx; i <= pEndIdx; i++) {
       RGBColor color = rawColors.get(Integer.valueOf(i));
       if (color != null) {
         color.setRed(255 - color.getRed());
@@ -460,12 +468,22 @@ public class RGBPalette implements Assignable<RGBPalette>, Serializable {
     modified = true;
   }
 
+  public void negativeColors() {
+    negativeColors(0, PALETTE_SIZE - 1);
+  }
+
   public void reverseColors() {
+    reverseColors(0, PALETTE_SIZE - 1);
+  }
+
+  public void reverseColors(int pStartIdx, int pEndIdx) {
     Map<Integer, RGBColor> newRawColors = new HashMap<Integer, RGBColor>();
-    for (int i = 0; i < PALETTE_SIZE; i++) {
-      RGBColor color = rawColors.get(Integer.valueOf(PALETTE_SIZE - 1 - i));
+    newRawColors.putAll(rawColors);
+    for (int i = pStartIdx; i <= pEndIdx; i++) {
+      RGBColor color = rawColors.get(i);
+      //      System.out.println(pStartIdx + " " + pEndIdx + ": " + i + "->" + Integer.valueOf(pEndIdx - (i - pStartIdx)));
       if (color != null) {
-        newRawColors.put(Integer.valueOf(i), color);
+        newRawColors.put(Integer.valueOf(pEndIdx - (i - pStartIdx)), color);
       }
     }
     rawColors = newRawColors;
@@ -490,4 +508,19 @@ public class RGBPalette implements Assignable<RGBPalette>, Serializable {
     modified = true;
   }
 
+  public void fadeRange(int pStartIdx, int pEndIdx) {
+    if (pStartIdx < pEndIdx + 1) {
+      RGBColor lColor = getRawColor(pStartIdx);
+      RGBColor rColor = getRawColor(pEndIdx);
+      double scl = 1.0 / (pEndIdx - pStartIdx);
+      for (int i = pStartIdx + 1; i < pEndIdx; i++) {
+        double x = scl * (i - pStartIdx);
+        int r = Tools.roundColor((double) lColor.getRed() + ((double) (rColor.getRed() - lColor.getRed())) * x);
+        int g = Tools.roundColor((double) lColor.getGreen() + ((double) (rColor.getGreen() - lColor.getGreen())) * x);
+        int b = Tools.roundColor((double) lColor.getBlue() + ((double) (rColor.getBlue() - lColor.getBlue())) * x);
+        rawColors.put(Integer.valueOf(i), new RGBColor(r, g, b));
+      }
+      modified = true;
+    }
+  }
 }
