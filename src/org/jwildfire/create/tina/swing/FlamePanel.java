@@ -43,9 +43,9 @@ import org.jwildfire.swing.ImagePanel;
 
 public class FlamePanel extends ImagePanel {
   private final static int BORDER = 20;
-  private static final Color XFORM_COLOR = new Color(217, 219, 223);
+  public static final Color XFORM_COLOR = new Color(217, 219, 223);
   private static final Color XFORM_POST_COLOR = new Color(255, 219, 160);
-  private static final Color XFORM_COLOR_DARK = new Color(17, 19, 23);
+  public static final Color XFORM_COLOR_DARK = new Color(17, 19, 23);
   private static final Color XFORM_POST_COLOR_DARK = new Color(55, 19, 60);
   private static final Color BACKGROUND_COLOR = new Color(60, 60, 60);
   private static final Color VARIATION_COLOR = new Color(187, 189, 193);
@@ -56,7 +56,7 @@ public class FlamePanel extends ImagePanel {
   private static final long serialVersionUID = 1L;
   private FlameHolder flameHolder;
 
-  private boolean darkTriangles = false;
+  boolean darkTriangles = false;
   private boolean drawImage = true;
   private boolean drawTriangles = true;
   private boolean drawVariations = false;
@@ -958,6 +958,19 @@ public class FlamePanel extends ImagePanel {
 
   public void gradientSelectAll() {
     gradientOverlay.selectAll();
+  }
+
+  public void gradientMarker_move(int pIdx, int pDeltaPos) {
+    gradientOverlay.gradientMarker_move(pIdx, pDeltaPos);
+  }
+
+  public boolean gradientMarker_selectColor(int pIdx) {
+    if (flameHolder.getFlame() != null) {
+      return gradientOverlay.gradientMarker_selectColor(pIdx, flameHolder.getFlame().getPalette());
+    }
+    else {
+      return false;
+    }
   }
 
 }

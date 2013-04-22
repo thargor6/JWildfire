@@ -6410,7 +6410,7 @@ public class TinaInternalFrame extends JInternalFrame {
           tinaController.mouseTransformEditGradientButton_clicked();
         }
       });
-      mouseTransformEditGradientButton.setToolTipText("Edit focus point");
+      mouseTransformEditGradientButton.setToolTipText("Edit gradient (use cursor-left and -right to control marker 1 and cursor-up and -down to control marker 2, press the 1 or 2 key for color choosers)");
       mouseTransformEditGradientButton.setPreferredSize(new Dimension(42, 24));
       triangleOperationsPanel.add(mouseTransformEditGradientButton);
       triangleOperationsPanel.add(getMouseTransformEditFocusPointButton(), null);

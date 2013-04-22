@@ -23,9 +23,9 @@ import static org.jwildfire.base.mathlib.MathLib.iabs;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
+import java.awt.RenderingHints;
 
 import javax.swing.JColorChooser;
-import javax.swing.JPanel;
 
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.palette.RGBColor;
@@ -35,14 +35,13 @@ import com.l2fprod.common.beans.editor.FilePropertyEditor;
 import com.l2fprod.common.util.ResourceManager;
 
 public class GradientOverlay {
-  private final JPanel parent;
-  private static final Color GRADIENT_BORDER_COLOR = new Color(217, 219, 223);
+  private final FlamePanel parent;
   private static final int GRADIENT_OUTER_BORDER = 10;
   private static final int GRADIENT_HEIGHT = 50;
-  private static final int GRADIENT_MARKER_SIZE = 15;
+  private static final int GRADIENT_MARKER_SIZE = 16;
   private static final int GRADIENT_MARKER_DISTANCE = 5;
   private static final int GRADIENT_SIZE = RGBPalette.PALETTE_SIZE;
-  private int[] markerPos = { 0, 111 };
+  private int[] markerPos = { 0, GRADIENT_SIZE - 1 };
   private int[] markerXMin = new int[markerPos.length];
   private int[] markerXMax = new int[markerPos.length];
 
@@ -58,20 +57,23 @@ public class GradientOverlay {
   private int xMin, xMax, yMin, yMax;
   private int xPos[] = new int[GRADIENT_SIZE + 1];
 
-  public GradientOverlay(JPanel pParent) {
+  public GradientOverlay(FlamePanel pParent) {
     parent = pParent;
   }
 
   private void calculateSizes(int pViewportWidth, int pViewportHeight) {
     yMin = pViewportHeight - GRADIENT_OUTER_BORDER - GRADIENT_HEIGHT + 1 - GRADIENT_MARKER_SIZE - GRADIENT_MARKER_DISTANCE;
-    yMax = pViewportHeight - GRADIENT_OUTER_BORDER - 1 - GRADIENT_MARKER_SIZE - GRADIENT_MARKER_DISTANCE;
+    yMax = pViewportHeight - GRADIENT_OUTER_BORDER - 1 - (GRADIENT_MARKER_SIZE * 3) / 2 - GRADIENT_MARKER_DISTANCE;
 
     xMin = xPos[0] = GRADIENT_OUTER_BORDER + 1;
-    xMax = xPos[GRADIENT_SIZE] = pViewportWidth - 2 * GRADIENT_OUTER_BORDER;
-    double xScl = (double) (pViewportWidth - 2 * GRADIENT_OUTER_BORDER - 2) * gradientZoom / (double) (GRADIENT_SIZE + 1);
+    xMax = xPos[GRADIENT_SIZE] = pViewportWidth - GRADIENT_OUTER_BORDER - 1;
+    double xScl = (double) (pViewportWidth - 2 * GRADIENT_OUTER_BORDER - 1 + 1) * gradientZoom / (double) (GRADIENT_SIZE + 2);
+    //    System.out.println(xPos[0]);
     for (int i = 1; i < GRADIENT_SIZE; i++) {
       xPos[i] = GRADIENT_OUTER_BORDER + 1 + (int) ((i + gradientOff) * xScl + 0.5);
+      //      System.out.println(xPos[i]);
     }
+    //    System.out.println(xPos[GRADIENT_SIZE]);
   }
 
   public void paintGradient(Graphics2D g, RGBPalette pGradient, Rectangle pBounds) {
@@ -91,17 +93,21 @@ public class GradientOverlay {
   }
 
   private void drawMarker(Graphics2D g, RGBPalette pGradient, int pMarkerIdx) {
-    g.setColor(GRADIENT_BORDER_COLOR);
+    g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+    g.setColor(parent.darkTriangles ? FlamePanel.XFORM_COLOR_DARK : FlamePanel.XFORM_COLOR);
     int mPos = markerPos[pMarkerIdx];
     int x = xPos[mPos] + (xPos[mPos + 1] - xPos[mPos]) / 2;
-    if (x > xMin && x < xMax) {
+    if (x >= xMin && x <= xMax) {
       x += 1;
       int size2 = GRADIENT_MARKER_SIZE / 2;
       int yOff = yMax + 1 + size2;
 
-      int xPoints[] = { x - size2, x, x + size2, x + size2, x - size2 };
-      int yPoints[] = { yOff + size2, yOff - size2, yOff + size2, yOff + 3 * size2, yOff + 3 * size2 };
+      int xPoints[] = { x - size2 + 1, x, x + size2 - 1 };
+      int yPoints[] = { yOff + size2, yOff - size2, yOff + size2 };
       g.fillPolygon(xPoints, yPoints, xPoints.length);
+      g.fillOval(x - size2, yOff + size2, 2 * size2, 2 * size2);
+
       markerHandleYMin = yOff - size2;
       markerHandleYMax = yOff + size2;
       markerColorSelYMin = markerHandleYMax;
@@ -112,14 +118,14 @@ public class GradientOverlay {
 
       RGBColor color = pGradient.getColor(mPos);
       g.setColor(new Color(color.getRed(), color.getGreen(), color.getBlue()));
-      g.fillRect(x - size2 + 1, yOff + size2 + 1, size2 * 2 - 2, size2 * 2 - 2);
+      g.fillOval(x - size2 + 2, yOff + size2 + 2, 2 * size2 - 4, 2 * size2 - 4);
     }
 
   }
 
   private void drawGradient(Graphics2D g, RGBPalette pGradient) {
-    g.setColor(GRADIENT_BORDER_COLOR);
-    g.drawRect(xMin - 1, yMin - 1, xMax - xMin + 2, yMax - yMin + 2);
+    g.setColor(parent.darkTriangles ? FlamePanel.XFORM_COLOR_DARK : FlamePanel.XFORM_COLOR);
+    g.drawRect(xMin - 1, yMin - 1, xMax - xMin + 1, yMax - yMin + 2);
     for (int i = 0; i < GRADIENT_SIZE; i++) {
       int cxMin = xPos[i], cxMax = xPos[i + 1] - 1;
       RGBColor color = pGradient.getColor(i);
@@ -227,19 +233,7 @@ public class GradientOverlay {
   public boolean mouseClicked(int x, int y, RGBPalette pGradient) {
     if (y >= markerColorSelYMin && y <= markerColorSelYMax) {
       int marker = getMarkerByPosition(x);
-      if (marker >= 0) {
-        ResourceManager rm = ResourceManager.all(FilePropertyEditor.class);
-        String title = rm.getString("ColorPropertyEditor.title");
-
-        RGBColor color = pGradient.getColor(markerPos[marker]);
-
-        Color selectedColor = JColorChooser.showDialog(parent, title, new Color(color.getRed(), color.getGreen(), color.getBlue()));
-        if (selectedColor != null) {
-
-          pGradient.setColor(markerPos[marker], selectedColor.getRed(), selectedColor.getGreen(), selectedColor.getBlue());
-          return true;
-        }
-      }
+      return gradientMarker_selectColor(marker, pGradient);
     }
     return false;
   }
@@ -263,6 +257,38 @@ public class GradientOverlay {
   public void selectAll() {
     markerPos[0] = 0;
     markerPos[1] = GRADIENT_SIZE - 1;
+  }
+
+  public void gradientMarker_move(int marker, int pDeltaPos) {
+    if (marker >= 0) {
+      int leftLimit = marker == 0 ? 0 : markerPos[marker - 1] + 1;
+      int rightLimit = marker == markerPos.length - 1 ? GRADIENT_SIZE - 1 : markerPos[marker + 1] - 1;
+      int newPos = markerPos[marker] + pDeltaPos;
+      if (newPos < leftLimit) {
+        newPos = leftLimit;
+      }
+      else if (newPos > rightLimit) {
+        newPos = rightLimit;
+      }
+      markerPos[marker] = newPos;
+    }
+  }
+
+  public boolean gradientMarker_selectColor(int marker, RGBPalette pGradient) {
+    if (marker >= 0) {
+      ResourceManager rm = ResourceManager.all(FilePropertyEditor.class);
+      String title = rm.getString("ColorPropertyEditor.title");
+
+      RGBColor color = pGradient.getColor(markerPos[marker]);
+
+      Color selectedColor = JColorChooser.showDialog(parent, title, new Color(color.getRed(), color.getGreen(), color.getBlue()));
+      if (selectedColor != null) {
+
+        pGradient.setColor(markerPos[marker], selectedColor.getRed(), selectedColor.getGreen(), selectedColor.getBlue());
+        return true;
+      }
+    }
+    return false;
   }
 
 }

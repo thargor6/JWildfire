@@ -712,62 +712,94 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
             switch (e.getKeyCode()) {
             // left
               case 37:
-                if (altPressed) {
-                  xForm_rotateLeft();
+                if (flamePanel.getMouseDragOperation() == MouseDragOperation.MOVE_TRIANGLE) {
+                  if (altPressed) {
+                    xForm_rotateLeft();
+                  }
+                  else if (ctrlPressed) {
+                    xForm_moveLeft(0.1);
+                  }
+                  else if (shiftPressed) {
+                    xForm_moveLeft(10.0);
+                  }
+                  else {
+                    xForm_moveLeft(1.0);
+                  }
                 }
-                else if (ctrlPressed) {
-                  xForm_moveLeft(0.1);
-                }
-                else if (shiftPressed) {
-                  xForm_moveLeft(10.0);
-                }
-                else {
-                  xForm_moveLeft(1.0);
+                else if (flamePanel.getMouseDragOperation() == MouseDragOperation.GRADIENT) {
+                  gradientMarker_move(0, -1);
                 }
                 break;
               // right
               case 39:
-                if (altPressed) {
-                  xForm_rotateRight();
+                if (flamePanel.getMouseDragOperation() == MouseDragOperation.MOVE_TRIANGLE) {
+                  if (altPressed) {
+                    xForm_rotateRight();
+                  }
+                  else if (ctrlPressed) {
+                    xForm_moveRight(0.1);
+                  }
+                  else if (shiftPressed) {
+                    xForm_moveRight(10.0);
+                  }
+                  else {
+                    xForm_moveRight(1.0);
+                  }
                 }
-                else if (ctrlPressed) {
-                  xForm_moveRight(0.1);
-                }
-                else if (shiftPressed) {
-                  xForm_moveRight(10.0);
-                }
-                else {
-                  xForm_moveRight(1.0);
+                else if (flamePanel.getMouseDragOperation() == MouseDragOperation.GRADIENT) {
+                  gradientMarker_move(0, 1);
                 }
                 break;
               // up
               case 38:
-                if (altPressed) {
-                  xForm_enlarge();
+                if (flamePanel.getMouseDragOperation() == MouseDragOperation.MOVE_TRIANGLE) {
+                  if (altPressed) {
+                    xForm_enlarge();
+                  }
+                  else if (ctrlPressed) {
+                    xForm_moveUp(0.1);
+                  }
+                  else if (shiftPressed) {
+                    xForm_moveUp(10.0);
+                  }
+                  else {
+                    xForm_moveUp(1.0);
+                  }
                 }
-                else if (ctrlPressed) {
-                  xForm_moveUp(0.1);
-                }
-                else if (shiftPressed) {
-                  xForm_moveUp(10.0);
-                }
-                else {
-                  xForm_moveUp(1.0);
+                else if (flamePanel.getMouseDragOperation() == MouseDragOperation.GRADIENT) {
+                  gradientMarker_move(1, 1);
                 }
                 break;
               // down
               case 40:
-                if (altPressed) {
-                  xForm_shrink();
+                if (flamePanel.getMouseDragOperation() == MouseDragOperation.MOVE_TRIANGLE) {
+                  if (altPressed) {
+                    xForm_shrink();
+                  }
+                  else if (ctrlPressed) {
+                    xForm_moveDown(0.1);
+                  }
+                  else if (shiftPressed) {
+                    xForm_moveDown(10.0);
+                  }
+                  else {
+                    xForm_moveDown(1.0);
+                  }
                 }
-                else if (ctrlPressed) {
-                  xForm_moveDown(0.1);
+                else if (flamePanel.getMouseDragOperation() == MouseDragOperation.GRADIENT) {
+                  gradientMarker_move(1, -1);
                 }
-                else if (shiftPressed) {
-                  xForm_moveDown(10.0);
+                break;
+              // 1
+              case 49:
+                if (flamePanel.getMouseDragOperation() == MouseDragOperation.GRADIENT) {
+                  gradientMarker_selectColor(0);
                 }
-                else {
-                  xForm_moveDown(1.0);
+                break;
+              // 1
+              case 50:
+                if (flamePanel.getMouseDragOperation() == MouseDragOperation.GRADIENT) {
+                  gradientMarker_selectColor(1);
                 }
                 break;
             }
@@ -2692,6 +2724,17 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     if (MathLib.fabs(amount) > MathLib.EPSILON) {
       saveUndoPoint();
       XFormTransformService.globalTranslate(getCurrXForm(), 0, -amount, data.affineEditPostTransformButton.isSelected());
+      transformationTableClicked();
+    }
+  }
+
+  public void gradientMarker_move(int pIdx, int pDeltaPos) {
+    getFlamePanel().gradientMarker_move(pIdx, pDeltaPos);
+    transformationTableClicked();
+  }
+
+  public void gradientMarker_selectColor(int pIdx) {
+    if (getFlamePanel().gradientMarker_selectColor(pIdx)) {
       transformationTableClicked();
     }
   }
