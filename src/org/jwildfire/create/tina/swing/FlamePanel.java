@@ -973,4 +973,11 @@ public class FlamePanel extends ImagePanel {
     }
   }
 
+  public int getGradientFrom() {
+    return gradientOverlay.getFrom();
+  }
+
+  public int getGradientTo() {
+    return gradientOverlay.getTo();
+  }
 }

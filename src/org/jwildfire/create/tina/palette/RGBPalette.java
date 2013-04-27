@@ -69,6 +69,8 @@ public class RGBPalette implements Assignable<RGBPalette>, Serializable {
   private Map<Integer, RGBColor> rawColors = new HashMap<Integer, RGBColor>();
   private Map<Integer, RGBColor> transformedColors = new HashMap<Integer, RGBColor>();
 
+  private GradientSelectionProvider selectionProvider = new DefaultGradientSelectionProvider();
+
   public void addColor(int pRed, int pGreen, int pBlue) {
     RGBColor color = new RGBColor(pRed, pGreen, pBlue);
     if (highestIdx + 1 == PALETTE_SIZE) {
@@ -440,7 +442,7 @@ public class RGBPalette implements Assignable<RGBPalette>, Serializable {
     return true;
   }
 
-  public void sort(int pStartIdx, int pEndIdx) {
+  private void doSort(int pStartIdx, int pEndIdx) {
     List<RGBColor> colors = new ArrayList<RGBColor>();
     for (int i = pStartIdx; i <= pEndIdx; i++) {
       colors.add(rawColors.get(i));
@@ -453,10 +455,10 @@ public class RGBPalette implements Assignable<RGBPalette>, Serializable {
   }
 
   public void sort() {
-    sort(0, PALETTE_SIZE - 1);
+    doSort(selectionProvider.getFrom(), selectionProvider.getTo());
   }
 
-  public void negativeColors(int pStartIdx, int pEndIdx) {
+  private void doNegativeColors(int pStartIdx, int pEndIdx) {
     for (int i = pStartIdx; i <= pEndIdx; i++) {
       RGBColor color = rawColors.get(Integer.valueOf(i));
       if (color != null) {
@@ -469,14 +471,14 @@ public class RGBPalette implements Assignable<RGBPalette>, Serializable {
   }
 
   public void negativeColors() {
-    negativeColors(0, PALETTE_SIZE - 1);
+    doNegativeColors(selectionProvider.getFrom(), selectionProvider.getTo());
   }
 
   public void reverseColors() {
-    reverseColors(0, PALETTE_SIZE - 1);
+    doReverseColors(selectionProvider.getFrom(), selectionProvider.getTo());
   }
 
-  public void reverseColors(int pStartIdx, int pEndIdx) {
+  private void doReverseColors(int pStartIdx, int pEndIdx) {
     Map<Integer, RGBColor> newRawColors = new HashMap<Integer, RGBColor>();
     newRawColors.putAll(rawColors);
     for (int i = pStartIdx; i <= pEndIdx; i++) {
@@ -522,5 +524,10 @@ public class RGBPalette implements Assignable<RGBPalette>, Serializable {
       }
       modified = true;
     }
+  }
+
+  public void setSelectionProvider(GradientSelectionProvider pSelectionProvider) {
+    selectionProvider = pSelectionProvider;
+    modified = true;
   }
 }

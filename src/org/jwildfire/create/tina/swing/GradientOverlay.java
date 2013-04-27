@@ -185,35 +185,46 @@ public class GradientOverlay {
     // drag marker
     else if (dragStartY > markerHandleYMin && dragStartY < markerHandleYMax) {
       if (dragMarkerIdx >= 0) {
-        for (int i = 0; i < GRADIENT_SIZE; i++) {
-          int x = pPosX;
-          if (x >= xPos[i] && x <= xPos[i + 1]) {
-            int newPos = i;
-            int leftLimit = dragMarkerIdx == 0 ? 0 : markerPos[dragMarkerIdx - 1] + 1;
-            int rightLimit = dragMarkerIdx == markerPos.length - 1 ? GRADIENT_SIZE - 1 : markerPos[dragMarkerIdx + 1] - 1;
-            if (newPos < leftLimit) {
-              newPos = leftLimit;
-            }
-            else if (newPos > rightLimit) {
-              newPos = rightLimit;
-            }
-            markerPos[dragMarkerIdx] = newPos;
-            break;
-          }
-        }
+        setMarker(pPosX, dragMarkerIdx);
       }
     }
   }
 
-  private int getMarkerByPosition(int pPosX) {
+  private void setMarker(int pPosX, int pIndex) {
+    for (int i = 0; i < GRADIENT_SIZE; i++) {
+      int x = pPosX;
+      if (x >= xPos[i] && x <= xPos[i + 1]) {
+        int newPos = i;
+        int leftLimit = pIndex == 0 ? 0 : markerPos[pIndex - 1] + 1;
+        int rightLimit = pIndex == markerPos.length - 1 ? GRADIENT_SIZE - 1 : markerPos[pIndex + 1] - 1;
+        if (newPos < leftLimit) {
+          newPos = leftLimit;
+        }
+        else if (newPos > rightLimit) {
+          newPos = rightLimit;
+        }
+        markerPos[pIndex] = newPos;
+        break;
+      }
+    }
+  }
+
+  private int getMarkerByPosition(int pPosX, boolean pExact) {
     int res = -1;
     int minDist = -1;
     for (int i = 0; i < markerPos.length; i++) {
-      int cx = markerXMin[i] + (markerXMax[i] - markerXMin[i]) / 2;
-      int dist = iabs(cx - pPosX);
-      if (minDist < 0 || dist < minDist) {
-        minDist = dist;
-        res = i;
+      if (pExact) {
+        if (pPosX >= markerXMin[i] && pPosX <= markerXMax[i]) {
+          return i;
+        }
+      }
+      else {
+        int cx = markerXMin[i] + (markerXMax[i] - markerXMin[i]) / 2;
+        int dist = iabs(cx - pPosX);
+        if (minDist < 0 || dist < minDist) {
+          minDist = dist;
+          res = i;
+        }
       }
     }
     return res;
@@ -227,13 +238,20 @@ public class GradientOverlay {
   public void beginDrag(int pStartX, int pStartY) {
     dragStartX = pStartX;
     dragStartY = pStartY;
-    dragMarkerIdx = getMarkerByPosition(dragStartX);
+    dragMarkerIdx = getMarkerByPosition(dragStartX, false);
   }
 
   public boolean mouseClicked(int x, int y, RGBPalette pGradient) {
     if (y >= markerColorSelYMin && y <= markerColorSelYMax) {
-      int marker = getMarkerByPosition(x);
-      return gradientMarker_selectColor(marker, pGradient);
+      int marker = getMarkerByPosition(x, true);
+      if (marker >= 0) {
+        return gradientMarker_selectColor(marker, pGradient);
+      }
+    }
+    else if (y >= markerHandleYMin && y <= markerHandleYMax) {
+      int marker = getMarkerByPosition(x, false);
+      setMarker(x, marker);
+      return true;
     }
     return false;
   }
@@ -243,15 +261,15 @@ public class GradientOverlay {
   }
 
   public void invertRange(RGBPalette pGradient) {
-    pGradient.negativeColors(markerPos[0], markerPos[1]);
+    pGradient.negativeColors();
   }
 
   public void reverseRange(RGBPalette pGradient) {
-    pGradient.reverseColors(markerPos[0], markerPos[1]);
+    pGradient.reverseColors();
   }
 
   public void sortRange(RGBPalette pGradient) {
-    pGradient.sort(markerPos[0], markerPos[1]);
+    pGradient.sort();
   }
 
   public void selectAll() {
@@ -289,6 +307,14 @@ public class GradientOverlay {
       }
     }
     return false;
+  }
+
+  public int getFrom() {
+    return markerPos[0];
+  }
+
+  public int getTo() {
+    return markerPos[1];
   }
 
 }

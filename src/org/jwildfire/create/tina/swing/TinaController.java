@@ -86,6 +86,8 @@ import org.jwildfire.create.tina.io.Flam3Reader;
 import org.jwildfire.create.tina.io.Flam3Writer;
 import org.jwildfire.create.tina.io.RGBPaletteReader;
 import org.jwildfire.create.tina.mutagen.MutaGenController;
+import org.jwildfire.create.tina.palette.DefaultGradientSelectionProvider;
+import org.jwildfire.create.tina.palette.GradientSelectionProvider;
 import org.jwildfire.create.tina.palette.MedianCutQuantizer;
 import org.jwildfire.create.tina.palette.RGBColor;
 import org.jwildfire.create.tina.palette.RGBPalette;
@@ -119,7 +121,7 @@ import org.jwildfire.swing.MainController;
 
 import com.l2fprod.common.swing.JFontChooser;
 
-public class TinaController implements FlameHolder, JobRenderThreadController, ScriptRunnerEnvironment, UndoManagerHolder<Flame>, JWFScriptExecuteController {
+public class TinaController implements FlameHolder, JobRenderThreadController, ScriptRunnerEnvironment, UndoManagerHolder<Flame>, JWFScriptExecuteController, GradientSelectionProvider {
   public static final int PAGE_INDEX = 0;
 
   private static final double SLIDER_SCALE_PERSPECTIVE = 100.0;
@@ -165,8 +167,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
 
   private MainController mainController;
   private final JTabbedPane rootTabbedPane;
-  // misc
-  private Flame currFlame;
+  private Flame _currFlame;
   private boolean noRefresh;
   private final ProgressUpdater mainProgressUpdater;
   private final ProgressUpdater jobProgressUpdater;
@@ -865,12 +866,26 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
 
   @Override
   public Flame getCurrFlame() {
-    return currFlame;
+    return _currFlame;
   }
 
   @Override
   public void setCurrFlame(Flame pFlame) {
+    deRegisterFromEditor(_currFlame);
     importFlame(pFlame);
+    registerToEditor(_currFlame);
+  }
+
+  private void deRegisterFromEditor(Flame pFlame) {
+    if (pFlame != null && pFlame.getPalette() != null) {
+      pFlame.getPalette().setSelectionProvider(new DefaultGradientSelectionProvider());
+    }
+  }
+
+  private void registerToEditor(Flame pFlame) {
+    if (pFlame != null && pFlame.getPalette() != null) {
+      pFlame.getPalette().setSelectionProvider(this);
+    }
   }
 
   public void refreshFlameImage(boolean pQuickRender, boolean pMouseDown) {
@@ -950,66 +965,66 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     try {
       refreshVisualCamValues();
 
-      data.cameraPerspectiveREd.setText(Tools.doubleToString(currFlame.getCamPerspective()));
-      data.cameraPerspectiveSlider.setValue(Tools.FTOI(currFlame.getCamPerspective() * SLIDER_SCALE_PERSPECTIVE));
+      data.cameraPerspectiveREd.setText(Tools.doubleToString(getCurrFlame().getCamPerspective()));
+      data.cameraPerspectiveSlider.setValue(Tools.FTOI(getCurrFlame().getCamPerspective() * SLIDER_SCALE_PERSPECTIVE));
 
-      data.cameraZoomREd.setText(Tools.doubleToString(currFlame.getCamZoom()));
-      data.cameraZoomSlider.setValue(Tools.FTOI(currFlame.getCamZoom() * SLIDER_SCALE_ZOOM));
+      data.cameraZoomREd.setText(Tools.doubleToString(getCurrFlame().getCamZoom()));
+      data.cameraZoomSlider.setValue(Tools.FTOI(getCurrFlame().getCamZoom() * SLIDER_SCALE_ZOOM));
 
-      data.cameraDOFREd.setText(Tools.doubleToString(currFlame.getCamDOF()));
-      data.cameraDOFSlider.setValue(Tools.FTOI(currFlame.getCamDOF() * SLIDER_SCALE_DOF));
+      data.cameraDOFREd.setText(Tools.doubleToString(getCurrFlame().getCamDOF()));
+      data.cameraDOFSlider.setValue(Tools.FTOI(getCurrFlame().getCamDOF() * SLIDER_SCALE_DOF));
 
-      data.cameraDOFAreaREd.setText(Tools.doubleToString(currFlame.getCamDOFArea()));
-      data.cameraDOFAreaSlider.setValue(Tools.FTOI(currFlame.getCamDOFArea() * SLIDER_SCALE_DOF_AREA));
+      data.cameraDOFAreaREd.setText(Tools.doubleToString(getCurrFlame().getCamDOFArea()));
+      data.cameraDOFAreaSlider.setValue(Tools.FTOI(getCurrFlame().getCamDOFArea() * SLIDER_SCALE_DOF_AREA));
 
-      data.cameraDOFExponentREd.setText(Tools.doubleToString(currFlame.getCamDOFExponent()));
-      data.cameraDOFExponentSlider.setValue(Tools.FTOI(currFlame.getCamDOFExponent() * SLIDER_SCALE_DOF_EXPONENT));
+      data.cameraDOFExponentREd.setText(Tools.doubleToString(getCurrFlame().getCamDOFExponent()));
+      data.cameraDOFExponentSlider.setValue(Tools.FTOI(getCurrFlame().getCamDOFExponent() * SLIDER_SCALE_DOF_EXPONENT));
 
-      data.camZREd.setText(Tools.doubleToString(currFlame.getCamZ()));
-      data.camZSlider.setValue(Tools.FTOI(currFlame.getCamZ() * SLIDER_SCALE_ZPOS));
+      data.camZREd.setText(Tools.doubleToString(getCurrFlame().getCamZ()));
+      data.camZSlider.setValue(Tools.FTOI(getCurrFlame().getCamZ() * SLIDER_SCALE_ZPOS));
 
-      data.newDOFCBx.setSelected(currFlame.isNewCamDOF());
+      data.newDOFCBx.setSelected(getCurrFlame().isNewCamDOF());
 
-      data.brightnessREd.setText(Tools.doubleToString(currFlame.getBrightness()));
-      data.brightnessSlider.setValue(Tools.FTOI(currFlame.getBrightness() * SLIDER_SCALE_BRIGHTNESS_CONTRAST_VIBRANCY));
+      data.brightnessREd.setText(Tools.doubleToString(getCurrFlame().getBrightness()));
+      data.brightnessSlider.setValue(Tools.FTOI(getCurrFlame().getBrightness() * SLIDER_SCALE_BRIGHTNESS_CONTRAST_VIBRANCY));
 
-      data.contrastREd.setText(Tools.doubleToString(currFlame.getContrast()));
-      data.contrastSlider.setValue(Tools.FTOI(currFlame.getContrast() * SLIDER_SCALE_BRIGHTNESS_CONTRAST_VIBRANCY));
+      data.contrastREd.setText(Tools.doubleToString(getCurrFlame().getContrast()));
+      data.contrastSlider.setValue(Tools.FTOI(getCurrFlame().getContrast() * SLIDER_SCALE_BRIGHTNESS_CONTRAST_VIBRANCY));
 
-      data.vibrancyREd.setText(Tools.doubleToString(currFlame.getVibrancy()));
-      data.vibrancySlider.setValue(Tools.FTOI(currFlame.getVibrancy() * SLIDER_SCALE_BRIGHTNESS_CONTRAST_VIBRANCY));
+      data.vibrancyREd.setText(Tools.doubleToString(getCurrFlame().getVibrancy()));
+      data.vibrancySlider.setValue(Tools.FTOI(getCurrFlame().getVibrancy() * SLIDER_SCALE_BRIGHTNESS_CONTRAST_VIBRANCY));
 
-      data.gammaREd.setText(Tools.doubleToString(currFlame.getGamma()));
-      data.gammaSlider.setValue(Tools.FTOI(currFlame.getGamma() * SLIDER_SCALE_GAMMA));
+      data.gammaREd.setText(Tools.doubleToString(getCurrFlame().getGamma()));
+      data.gammaSlider.setValue(Tools.FTOI(getCurrFlame().getGamma() * SLIDER_SCALE_GAMMA));
 
-      data.filterRadiusREd.setText(Tools.doubleToString(currFlame.getSpatialFilterRadius()));
-      data.filterRadiusSlider.setValue(Tools.FTOI(currFlame.getSpatialFilterRadius() * SLIDER_SCALE_FILTER_RADIUS));
-      data.filterKernelCmb.setSelectedItem(currFlame.getSpatialFilterKernel());
+      data.filterRadiusREd.setText(Tools.doubleToString(getCurrFlame().getSpatialFilterRadius()));
+      data.filterRadiusSlider.setValue(Tools.FTOI(getCurrFlame().getSpatialFilterRadius() * SLIDER_SCALE_FILTER_RADIUS));
+      data.filterKernelCmb.setSelectedItem(getCurrFlame().getSpatialFilterKernel());
 
-      data.deFilterEnableCbx.setSelected(currFlame.isDeFilterEnabled());
-      data.deFilterMaxRadiusREd.setText(Tools.doubleToString(currFlame.getDeFilterMaxRadius()));
-      data.deFilterMaxRadiusSlider.setValue(Tools.FTOI(currFlame.getDeFilterMaxRadius() * SLIDER_SCALE_FILTER_RADIUS));
-      data.deFilterMinRadiusREd.setText(Tools.doubleToString(currFlame.getDeFilterMinRadius()));
-      data.deFilterMinRadiusSlider.setValue(Tools.FTOI(currFlame.getDeFilterMinRadius() * SLIDER_SCALE_FILTER_RADIUS));
-      data.deFilterCurveREd.setText(Tools.doubleToString(currFlame.getDeFilterCurve()));
-      data.deFilterCurveSlider.setValue(Tools.FTOI(currFlame.getDeFilterCurve() * SLIDER_SCALE_FILTER_RADIUS));
-      data.deFilterKernelCmb.setSelectedItem(currFlame.getDeFilterKernel());
+      data.deFilterEnableCbx.setSelected(getCurrFlame().isDeFilterEnabled());
+      data.deFilterMaxRadiusREd.setText(Tools.doubleToString(getCurrFlame().getDeFilterMaxRadius()));
+      data.deFilterMaxRadiusSlider.setValue(Tools.FTOI(getCurrFlame().getDeFilterMaxRadius() * SLIDER_SCALE_FILTER_RADIUS));
+      data.deFilterMinRadiusREd.setText(Tools.doubleToString(getCurrFlame().getDeFilterMinRadius()));
+      data.deFilterMinRadiusSlider.setValue(Tools.FTOI(getCurrFlame().getDeFilterMinRadius() * SLIDER_SCALE_FILTER_RADIUS));
+      data.deFilterCurveREd.setText(Tools.doubleToString(getCurrFlame().getDeFilterCurve()));
+      data.deFilterCurveSlider.setValue(Tools.FTOI(getCurrFlame().getDeFilterCurve() * SLIDER_SCALE_FILTER_RADIUS));
+      data.deFilterKernelCmb.setSelectedItem(getCurrFlame().getDeFilterKernel());
 
-      data.gammaThresholdREd.setText(String.valueOf(currFlame.getGammaThreshold()));
-      data.gammaThresholdSlider.setValue(Tools.FTOI(currFlame.getGammaThreshold() * SLIDER_SCALE_GAMMA_THRESHOLD));
+      data.gammaThresholdREd.setText(String.valueOf(getCurrFlame().getGammaThreshold()));
+      data.gammaThresholdSlider.setValue(Tools.FTOI(getCurrFlame().getGammaThreshold() * SLIDER_SCALE_GAMMA_THRESHOLD));
 
-      data.bgTransparencyCBx.setSelected(currFlame.isBGTransparency());
+      data.bgTransparencyCBx.setSelected(getCurrFlame().isBGTransparency());
 
-      data.bgColorRedREd.setText(String.valueOf(currFlame.getBGColorRed()));
-      data.bgColorRedSlider.setValue(currFlame.getBGColorRed());
+      data.bgColorRedREd.setText(String.valueOf(getCurrFlame().getBGColorRed()));
+      data.bgColorRedSlider.setValue(getCurrFlame().getBGColorRed());
 
-      data.bgColorGreenREd.setText(String.valueOf(currFlame.getBGColorGreen()));
-      data.bgColorGreenSlider.setValue(currFlame.getBGColorGreen());
+      data.bgColorGreenREd.setText(String.valueOf(getCurrFlame().getBGColorGreen()));
+      data.bgColorGreenSlider.setValue(getCurrFlame().getBGColorGreen());
 
-      data.bgColorBlueREd.setText(String.valueOf(currFlame.getBGColorBlue()));
-      data.bgColorBlueSlider.setValue(currFlame.getBGColorBlue());
+      data.bgColorBlueREd.setText(String.valueOf(getCurrFlame().getBGColorBlue()));
+      data.bgColorBlueSlider.setValue(getCurrFlame().getBGColorBlue());
 
-      data.affinePreserveZButton.setSelected(currFlame.isPreserveZ());
+      data.affinePreserveZButton.setSelected(getCurrFlame().isPreserveZ());
 
       enableControls();
       gridRefreshing = true;
@@ -1027,7 +1042,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       enableDOFUI();
       enableDEFilterUI();
       //      refreshFlameImage();
-      refreshPaletteUI(currFlame.getPalette());
+      refreshPaletteUI(getCurrFlame().getPalette());
     }
     finally {
       noRefresh = false;
@@ -1035,7 +1050,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
   }
 
   private void refreshShadingUI() {
-    ShadingInfo shadingInfo = currFlame != null ? currFlame.getShadingInfo() : null;
+    ShadingInfo shadingInfo = getCurrFlame() != null ? getCurrFlame().getShadingInfo() : null;
     boolean pseudo3DEnabled;
     boolean blurEnabled;
     boolean distanceColorEnabled;
@@ -1155,7 +1170,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
   }
 
   private void enableDOFUI() {
-    boolean newDOF = currFlame != null ? currFlame.isNewCamDOF() : false;
+    boolean newDOF = getCurrFlame() != null ? getCurrFlame().isNewCamDOF() : false;
     data.mouseTransformEditFocusPointButton.setEnabled(newDOF);
     data.focusXREd.setEnabled(newDOF);
     data.focusXSlider.setEnabled(newDOF);
@@ -1167,14 +1182,14 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     data.cameraDOFAreaSlider.setEnabled(newDOF);
     data.cameraDOFExponentREd.setEnabled(newDOF);
     data.cameraDOFExponentSlider.setEnabled(newDOF);
-    data.camZREd.setEnabled(currFlame != null);
-    data.camZSlider.setEnabled(currFlame != null);
-    data.dimishZREd.setEnabled(currFlame != null);
-    data.dimishZSlider.setEnabled(currFlame != null);
+    data.camZREd.setEnabled(getCurrFlame() != null);
+    data.camZSlider.setEnabled(getCurrFlame() != null);
+    data.dimishZREd.setEnabled(getCurrFlame() != null);
+    data.dimishZSlider.setEnabled(getCurrFlame() != null);
   }
 
   private void enableDEFilterUI() {
-    boolean deEnabled = currFlame != null ? currFlame.isDeFilterEnabled() : false;
+    boolean deEnabled = getCurrFlame() != null ? getCurrFlame().isDeFilterEnabled() : false;
     data.deFilterMaxRadiusREd.setEnabled(deEnabled);
     data.deFilterMaxRadiusSlider.setEnabled(deEnabled);
     data.deFilterMinRadiusREd.setEnabled(deEnabled);
@@ -1185,7 +1200,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
   }
 
   private void enableShadingUI() {
-    ShadingInfo shadingInfo = currFlame != null ? currFlame.getShadingInfo() : null;
+    ShadingInfo shadingInfo = getCurrFlame() != null ? getCurrFlame().getShadingInfo() : null;
     boolean pseudo3DEnabled;
     boolean blurEnabled;
     boolean distanceColorEnabled;
@@ -1260,7 +1275,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
 
       @Override
       public int getRowCount() {
-        return currFlame != null ? currFlame.getXForms().size() + currFlame.getFinalXForms().size() : 0;
+        return getCurrFlame() != null ? getCurrFlame().getXForms().size() + getCurrFlame().getFinalXForms().size() : 0;
       }
 
       @Override
@@ -1283,15 +1298,15 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
 
       @Override
       public Object getValueAt(int rowIndex, int columnIndex) {
-        if (currFlame != null) {
-          XForm xForm = rowIndex < currFlame.getXForms().size() ? currFlame.getXForms().get(rowIndex) : currFlame.getFinalXForms().get(rowIndex - currFlame.getXForms().size());
+        if (getCurrFlame() != null) {
+          XForm xForm = rowIndex < getCurrFlame().getXForms().size() ? getCurrFlame().getXForms().get(rowIndex) : getCurrFlame().getFinalXForms().get(rowIndex - getCurrFlame().getXForms().size());
           switch (columnIndex) {
             case COL_TRANSFORM:
-              return rowIndex < currFlame.getXForms().size() ? String.valueOf(rowIndex + 1) : "Final";
+              return rowIndex < getCurrFlame().getXForms().size() ? String.valueOf(rowIndex + 1) : "Final";
             case COL_VARIATIONS:
               return getXFormCaption(xForm);
             case COL_WEIGHT:
-              return rowIndex < currFlame.getXForms().size() ? Tools.doubleToString(xForm.getWeight()) : "";
+              return rowIndex < getCurrFlame().getXForms().size() ? Tools.doubleToString(xForm.getWeight()) : "";
           }
         }
         return null;
@@ -1304,8 +1319,8 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
 
       @Override
       public void setValueAt(Object aValue, int row, int column) {
-        if (currFlame != null && column == COL_WEIGHT && row < currFlame.getXForms().size()) {
-          XForm xForm = currFlame.getXForms().get(row);
+        if (getCurrFlame() != null && column == COL_WEIGHT && row < getCurrFlame().getXForms().size()) {
+          XForm xForm = getCurrFlame().getXForms().get(row);
           String valStr = (String) aValue;
           if (valStr == null || valStr.length() == 0) {
             valStr = "0";
@@ -1414,7 +1429,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
 
       @Override
       public void setValueAt(Object aValue, int row, int column) {
-        if (currFlame != null && data.paletteKeyFrames != null && data.paletteKeyFrames.size() > row) {
+        if (getCurrFlame() != null && data.paletteKeyFrames != null && data.paletteKeyFrames.size() > row) {
           String valStr = (String) aValue;
           if (valStr == null || valStr.length() == 0) {
             valStr = "0";
@@ -1433,7 +1448,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
           refreshPaletteColorsTable();
           RGBPalette palette = new RandomRGBPaletteGenerator().generatePalette(data.paletteKeyFrames);
           saveUndoPoint();
-          currFlame.setPalette(palette);
+          getCurrFlame().setPalette(palette);
           refreshPaletteUI(palette);
           refreshFlameImage(false);
         }
@@ -1458,7 +1473,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       @Override
       public int getRowCount() {
         XForm xForm = getCurrXForm();
-        return xForm != null && currFlame.getFinalXForms().indexOf(xForm) < 0 ? currFlame.getXForms().size() : 0;
+        return xForm != null && getCurrFlame().getFinalXForms().indexOf(xForm) < 0 ? getCurrFlame().getXForms().size() : 0;
       }
 
       @Override
@@ -1481,12 +1496,12 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
 
       @Override
       public Object getValueAt(int rowIndex, int columnIndex) {
-        if (currFlame != null) {
+        if (getCurrFlame() != null) {
           switch (columnIndex) {
             case COL_TRANSFORM:
               return String.valueOf(rowIndex + 1);
             case COL_VARIATIONS: {
-              XForm xForm = currFlame.getXForms().get(rowIndex);
+              XForm xForm = getCurrFlame().getXForms().get(rowIndex);
               return getXFormCaption(xForm);
             }
             case COL_WEIGHT: {
@@ -1506,7 +1521,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       @Override
       public void setValueAt(Object aValue, int row, int column) {
         XForm xForm = getCurrXForm();
-        if (currFlame != null && column == COL_WEIGHT && xForm != null) {
+        if (getCurrFlame() != null && column == COL_WEIGHT && xForm != null) {
           String valStr = (String) aValue;
           if (valStr == null || valStr.length() == 0) {
             valStr = "0";
@@ -1554,13 +1569,13 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
   }
 
   private void refreshPaletteImg() {
-    if (currFlame != null) {
+    if (getCurrFlame() != null) {
       ImagePanel panels[] = { getPalettePanel(), getColorChooserPalettePanel() };
       for (ImagePanel imgPanel : panels) {
         int width = imgPanel.getWidth();
         int height = imgPanel.getHeight();
         if (width >= 16 && height >= 4) {
-          SimpleImage img = new RGBPaletteRenderer().renderHorizPalette(currFlame.getPalette(), width, height);
+          SimpleImage img = new RGBPaletteRenderer().renderHorizPalette(getCurrFlame().getPalette(), width, height);
           imgPanel.setImage(img);
         }
         imgPanel.getParent().validate();
@@ -1570,23 +1585,23 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
   }
 
   private void flameSliderChanged(JSlider pSlider, JWFNumberField pTextField, String pProperty, double pSliderScale) {
-    if (noRefresh || currFlame == null)
+    if (noRefresh || getCurrFlame() == null)
       return;
     noRefresh = true;
     try {
       double propValue = pSlider.getValue() / pSliderScale;
       pTextField.setText(Tools.doubleToString(propValue));
-      Class<?> cls = currFlame.getClass();
+      Class<?> cls = getCurrFlame().getClass();
       Field field;
       try {
         field = cls.getDeclaredField(pProperty);
         field.setAccessible(true);
         Class<?> fieldCls = field.getType();
         if (fieldCls == double.class || fieldCls == Double.class) {
-          field.setDouble(currFlame, propValue);
+          field.setDouble(getCurrFlame(), propValue);
         }
         else if (fieldCls == int.class || fieldCls == Integer.class) {
-          field.setInt(currFlame, Tools.FTOI(propValue));
+          field.setInt(getCurrFlame(), Tools.FTOI(propValue));
         }
         else {
           throw new IllegalStateException();
@@ -1603,30 +1618,30 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
   }
 
   private void paletteSliderChanged(JSlider pSlider, JWFNumberField pTextField, String pProperty, double pSliderScale) {
-    if (noRefresh || currFlame == null)
+    if (noRefresh || getCurrFlame() == null)
       return;
     noRefresh = true;
     try {
       double propValue = pSlider.getValue() / pSliderScale;
       pTextField.setText(Tools.doubleToString(propValue));
-      Class<?> cls = currFlame.getPalette().getClass();
+      Class<?> cls = getCurrFlame().getPalette().getClass();
       Field field;
       try {
         field = cls.getDeclaredField(pProperty);
         field.setAccessible(true);
         Class<?> fieldCls = field.getType();
         if (fieldCls == double.class || fieldCls == Double.class) {
-          field.setDouble(currFlame.getPalette(), propValue);
+          field.setDouble(getCurrFlame().getPalette(), propValue);
         }
         else if (fieldCls == int.class || fieldCls == Integer.class) {
-          field.setInt(currFlame.getPalette(), Tools.FTOI(propValue));
+          field.setInt(getCurrFlame().getPalette(), Tools.FTOI(propValue));
         }
         else {
           throw new IllegalStateException();
         }
         field = cls.getDeclaredField("modified");
         field.setAccessible(true);
-        field.setBoolean(currFlame.getPalette(), true);
+        field.setBoolean(getCurrFlame().getPalette(), true);
       }
       catch (Throwable ex) {
         ex.printStackTrace();
@@ -1640,9 +1655,9 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
   }
 
   private void shadingInfoTextFieldChanged(JSlider pSlider, JWFNumberField pTextField, String pProperty, double pSliderScale, int pIdx) {
-    if (noRefresh || currFlame == null)
+    if (noRefresh || getCurrFlame() == null)
       return;
-    ShadingInfo shadingInfo = currFlame.getShadingInfo();
+    ShadingInfo shadingInfo = getCurrFlame().getShadingInfo();
     noRefresh = true;
     try {
       double propValue = Tools.stringToDouble(pTextField.getText());
@@ -1691,9 +1706,9 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
   }
 
   private void shadingInfoSliderChanged(JSlider pSlider, JWFNumberField pTextField, String pProperty, double pSliderScale, int pIdx) {
-    if (noRefresh || currFlame == null)
+    if (noRefresh || getCurrFlame() == null)
       return;
-    ShadingInfo shadingInfo = currFlame.getShadingInfo();
+    ShadingInfo shadingInfo = getCurrFlame().getShadingInfo();
     noRefresh = true;
     try {
       double propValue = pSlider.getValue() / pSliderScale;
@@ -1744,7 +1759,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     if (noRefresh) {
       return;
     }
-    if (currFlame == null) {
+    if (getCurrFlame() == null) {
       return;
     }
     XForm xForm = getCurrXForm();
@@ -1785,7 +1800,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     if (noRefresh) {
       return;
     }
-    if (currFlame == null) {
+    if (getCurrFlame() == null) {
       return;
     }
     noRefresh = true;
@@ -1793,17 +1808,17 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       double propValue = Tools.stringToDouble(pTextField.getText());
       pSlider.setValue(Tools.FTOI(propValue * pSliderScale));
 
-      Class<?> cls = currFlame.getClass();
+      Class<?> cls = getCurrFlame().getClass();
       Field field;
       try {
         field = cls.getDeclaredField(pProperty);
         field.setAccessible(true);
         Class<?> fieldCls = field.getType();
         if (fieldCls == double.class || fieldCls == Double.class) {
-          field.setDouble(currFlame, propValue);
+          field.setDouble(getCurrFlame(), propValue);
         }
         else if (fieldCls == int.class || fieldCls == Integer.class) {
-          field.setInt(currFlame, Tools.FTOI(propValue));
+          field.setInt(getCurrFlame(), Tools.FTOI(propValue));
         }
         else {
           throw new IllegalStateException();
@@ -1820,31 +1835,31 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
   }
 
   private void paletteTextFieldChanged(JSlider pSlider, JWFNumberField pTextField, String pProperty, double pSliderScale) {
-    if (noRefresh || currFlame == null)
+    if (noRefresh || getCurrFlame() == null)
       return;
     noRefresh = true;
     try {
       double propValue = Tools.stringToDouble(pTextField.getText());
       pSlider.setValue(Tools.FTOI(propValue * pSliderScale));
 
-      Class<?> cls = currFlame.getPalette().getClass();
+      Class<?> cls = getCurrFlame().getPalette().getClass();
       Field field;
       try {
         field = cls.getDeclaredField(pProperty);
         field.setAccessible(true);
         Class<?> fieldCls = field.getType();
         if (fieldCls == double.class || fieldCls == Double.class) {
-          field.setDouble(currFlame.getPalette(), propValue);
+          field.setDouble(getCurrFlame().getPalette(), propValue);
         }
         else if (fieldCls == int.class || fieldCls == Integer.class) {
-          field.setInt(currFlame.getPalette(), Tools.FTOI(propValue));
+          field.setInt(getCurrFlame().getPalette(), Tools.FTOI(propValue));
         }
         else {
           throw new IllegalStateException();
         }
         field = cls.getDeclaredField("modified");
         field.setAccessible(true);
-        field.setBoolean(currFlame.getPalette(), true);
+        field.setBoolean(getCurrFlame().getPalette(), true);
       }
       catch (Throwable ex) {
         ex.printStackTrace();
@@ -1948,17 +1963,17 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
         List<Flame> flames = new Flam3Reader(prefs).readFlames(file.getAbsolutePath());
         Flame flame = flames.get(0);
         prefs.setLastInputFlameFile(file);
-        currFlame = flame;
-        currFlame.setLastFilename(file.getName());
-        undoManager.initUndoStack(currFlame);
+        setCurrFlame(flame);
+        getCurrFlame().setLastFilename(file.getName());
+        undoManager.initUndoStack(getCurrFlame());
 
         for (int i = flames.size() - 1; i >= 0; i--) {
           randomBatch.add(0, new FlameThumbnail(flames.get(i), null));
         }
         updateThumbnails();
-        setupProfiles(currFlame);
+        setupProfiles(getCurrFlame());
         refreshUI();
-        showStatusMessage(currFlame, "opened from disc");
+        showStatusMessage(getCurrFlame(), "opened from disc");
       }
     }
     catch (Throwable ex) {
@@ -2095,13 +2110,13 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
   }
 
   public void randomPaletteButton_actionPerformed(ActionEvent e) {
-    if (currFlame != null) {
+    if (getCurrFlame() != null) {
       RandomRGBPaletteGenerator generator = new RandomRGBPaletteGenerator();
       data.paletteKeyFrames = generator.generateKeyFrames(Integer.parseInt(data.paletteRandomPointsREd.getText()));
       refreshPaletteColorsTable();
       RGBPalette palette = new RandomRGBPaletteGenerator().generatePalette(data.paletteKeyFrames);
       saveUndoPoint();
-      currFlame.setPalette(palette);
+      getCurrFlame().setPalette(palette);
       refreshPaletteUI(palette);
       refreshFlameImage(false);
     }
@@ -2125,7 +2140,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       RGBPalette palette = flame.getPalette();
       data.paletteKeyFrames = null;
       saveUndoPoint();
-      currFlame.setPalette(palette);
+      getCurrFlame().setPalette(palette);
       refreshPaletteColorsTable();
       refreshPaletteUI(palette);
       refreshFlameImage(false);
@@ -2206,7 +2221,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
 
   public void saveFlameButton_actionPerformed(ActionEvent e) {
     try {
-      if (currFlame != null) {
+      if (getCurrFlame() != null) {
         JFileChooser chooser = new FlameFileChooser(prefs);
         if (prefs.getOutputFlamePath() != null) {
           try {
@@ -2218,9 +2233,9 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
         }
         if (chooser.showSaveDialog(centerPanel) == JFileChooser.APPROVE_OPTION) {
           File file = chooser.getSelectedFile();
-          new Flam3Writer().writeFlame(currFlame, file.getAbsolutePath());
-          currFlame.setLastFilename(file.getName());
-          showStatusMessage(currFlame, "flame saved to disc");
+          new Flam3Writer().writeFlame(getCurrFlame(), file.getAbsolutePath());
+          getCurrFlame().setLastFilename(file.getName());
+          showStatusMessage(getCurrFlame(), "flame saved to disc");
           prefs.setLastOutputFlameFile(file);
         }
       }
@@ -2232,13 +2247,13 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
 
   public XForm getCurrXForm() {
     XForm xForm = null;
-    if (currFlame != null) {
+    if (getCurrFlame() != null) {
       int row = data.transformationsTable.getSelectedRow();
-      if (row >= 0 && row < currFlame.getXForms().size()) {
-        xForm = currFlame.getXForms().get(row);
+      if (row >= 0 && row < getCurrFlame().getXForms().size()) {
+        xForm = getCurrFlame().getXForms().get(row);
       }
-      else if (row >= currFlame.getXForms().size() && row < (currFlame.getXForms().size() + currFlame.getFinalXForms().size())) {
-        xForm = currFlame.getFinalXForms().get(row - currFlame.getXForms().size());
+      else if (row >= getCurrFlame().getXForms().size() && row < (getCurrFlame().getXForms().size() + getCurrFlame().getFinalXForms().size())) {
+        xForm = getCurrFlame().getFinalXForms().get(row - getCurrFlame().getXForms().size());
       }
     }
     return xForm;
@@ -2337,17 +2352,17 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     data.affineFlipHorizontalButton.setEnabled(enabled);
     data.affineFlipVerticalButton.setEnabled(enabled);
 
-    data.addTransformationButton.setEnabled(currFlame != null);
-    data.addLinkedTransformationButton.setEnabled(enabled && currFlame != null && currFlame.getXForms().indexOf(xForm) >= 0);
+    data.addTransformationButton.setEnabled(getCurrFlame() != null);
+    data.addLinkedTransformationButton.setEnabled(enabled && getCurrFlame() != null && getCurrFlame().getXForms().indexOf(xForm) >= 0);
     data.duplicateTransformationButton.setEnabled(enabled);
     data.deleteTransformationButton.setEnabled(enabled);
-    data.addFinalTransformationButton.setEnabled(currFlame != null);
+    data.addFinalTransformationButton.setEnabled(getCurrFlame() != null);
 
-    data.affineEditPostTransformButton.setEnabled(currFlame != null);
-    data.affineEditPostTransformSmallButton.setEnabled(currFlame != null);
-    data.mouseEditZoomInButton.setEnabled(currFlame != null);
-    data.mouseEditZoomOutButton.setEnabled(currFlame != null);
-    data.toggleVariationsButton.setEnabled(currFlame != null);
+    data.affineEditPostTransformButton.setEnabled(getCurrFlame() != null);
+    data.affineEditPostTransformSmallButton.setEnabled(getCurrFlame() != null);
+    data.mouseEditZoomInButton.setEnabled(getCurrFlame() != null);
+    data.mouseEditZoomOutButton.setEnabled(getCurrFlame() != null);
+    data.toggleVariationsButton.setEnabled(getCurrFlame() != null);
 
     data.affineC00REd.setEditable(enabled);
     data.affineC01REd.setEditable(enabled);
@@ -2534,17 +2549,17 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
 
   public void addLinkedXForm() {
     int row = data.transformationsTable.getSelectedRow();
-    if (row < 0 || row >= currFlame.getXForms().size()) {
+    if (row < 0 || row >= getCurrFlame().getXForms().size()) {
       return;
     }
     saveUndoPoint();
     addXForm();
     int fromId = row;
-    int toId = currFlame.getXForms().size() - 1;
-    for (int i = 0; i < currFlame.getXForms().size(); i++) {
-      XForm xForm = currFlame.getXForms().get(i);
+    int toId = getCurrFlame().getXForms().size() - 1;
+    for (int i = 0; i < getCurrFlame().getXForms().size(); i++) {
+      XForm xForm = getCurrFlame().getXForms().get(i);
       if (i == fromId) {
-        for (int j = 0; j < currFlame.getXForms().size(); j++) {
+        for (int j = 0; j < getCurrFlame().getXForms().size(); j++) {
           xForm.getModifiedWeights()[j] = (j == toId) ? 1 : 0;
         }
       }
@@ -2562,7 +2577,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     xForm.setAntialiasAmount(prefs.getTinaDefaultAntialiasingAmount());
     xForm.setAntialiasRadius(prefs.getTinaDefaultAntialiasingRadius());
     saveUndoPoint();
-    currFlame.getXForms().add(xForm);
+    getCurrFlame().getXForms().add(xForm);
     gridRefreshing = true;
     try {
       refreshTransformationsTable();
@@ -2570,7 +2585,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     finally {
       gridRefreshing = false;
     }
-    int row = currFlame.getXForms().size() - 1;
+    int row = getCurrFlame().getXForms().size() - 1;
     data.transformationsTable.getSelectionModel().setSelectionInterval(row, row);
     refreshFlameImage(false);
   }
@@ -2579,7 +2594,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     XForm xForm = new XForm();
     xForm.assign(getCurrXForm());
     saveUndoPoint();
-    currFlame.getXForms().add(xForm);
+    getCurrFlame().getXForms().add(xForm);
     gridRefreshing = true;
     try {
       refreshTransformationsTable();
@@ -2587,7 +2602,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     finally {
       gridRefreshing = false;
     }
-    int row = currFlame.getXForms().size() - 1;
+    int row = getCurrFlame().getXForms().size() - 1;
     data.transformationsTable.getSelectionModel().setSelectionInterval(row, row);
     refreshFlameImage(false);
   }
@@ -2595,11 +2610,11 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
   public void deleteXForm() {
     int row = data.transformationsTable.getSelectedRow();
     saveUndoPoint();
-    if (row >= currFlame.getXForms().size()) {
-      currFlame.getFinalXForms().remove(row - currFlame.getXForms().size());
+    if (row >= getCurrFlame().getXForms().size()) {
+      getCurrFlame().getFinalXForms().remove(row - getCurrFlame().getXForms().size());
     }
     else {
-      currFlame.getXForms().remove(getCurrXForm());
+      getCurrFlame().getXForms().remove(getCurrXForm());
     }
     gridRefreshing = true;
     try {
@@ -2617,7 +2632,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     xForm.setAntialiasAmount(prefs.getTinaDefaultAntialiasingAmount());
     xForm.setAntialiasRadius(prefs.getTinaDefaultAntialiasingRadius());
     saveUndoPoint();
-    currFlame.getFinalXForms().add(xForm);
+    getCurrFlame().getFinalXForms().add(xForm);
     gridRefreshing = true;
     try {
       refreshTransformationsTable();
@@ -2625,7 +2640,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     finally {
       gridRefreshing = false;
     }
-    int row = currFlame.getXForms().size() + currFlame.getFinalXForms().size() - 1;
+    int row = getCurrFlame().getXForms().size() + getCurrFlame().getFinalXForms().size() - 1;
     data.transformationsTable.getSelectionModel().setSelectionInterval(row, row);
     refreshFlameImage(false);
   }
@@ -2910,16 +2925,16 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
 
   public void importFromRandomBatch(int pIdx) {
     if (pIdx >= 0 && pIdx < randomBatch.size()) {
-      currFlame = randomBatch.get(pIdx).getFlame();
-      undoManager.initUndoStack(currFlame);
+      setCurrFlame(randomBatch.get(pIdx).getFlame());
+      undoManager.initUndoStack(getCurrFlame());
       {
         FlamePanel imgPanel = getFlamePanel();
         Rectangle bounds = imgPanel.getImageBounds();
-        double wScl = (double) bounds.width / (double) currFlame.getWidth();
-        double hScl = (double) bounds.height / (double) currFlame.getHeight();
-        currFlame.setWidth(bounds.width);
-        currFlame.setHeight(bounds.height);
-        currFlame.setPixelsPerUnit((wScl + hScl) * 0.5 * currFlame.getPixelsPerUnit());
+        double wScl = (double) bounds.width / (double) getCurrFlame().getWidth();
+        double hScl = (double) bounds.height / (double) getCurrFlame().getHeight();
+        getCurrFlame().setWidth(bounds.width);
+        getCurrFlame().setHeight(bounds.height);
+        getCurrFlame().setPixelsPerUnit((wScl + hScl) * 0.5 * getCurrFlame().getPixelsPerUnit());
       }
       refreshUI();
       data.transformationsTable.getSelectionModel().setSelectionInterval(0, 0);
@@ -3239,9 +3254,9 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
 
   private void setRelWeight(double pValue) {
     XForm xForm = getCurrXForm();
-    if (xForm != null && currFlame != null && currFlame.getFinalXForms().indexOf(xForm) < 0) {
+    if (xForm != null && getCurrFlame() != null && getCurrFlame().getFinalXForms().indexOf(xForm) < 0) {
       int row = data.relWeightsTable.getSelectedRow();
-      if (row >= 0 && row < currFlame.getXForms().size()) {
+      if (row >= 0 && row < getCurrFlame().getXForms().size()) {
         xForm.getModifiedWeights()[row] = pValue;
         gridRefreshing = true;
         try {
@@ -3272,7 +3287,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
 
   public void transformationWeightREd_changed() {
     XForm xForm = getCurrXForm();
-    if (xForm != null && currFlame != null && currFlame.getFinalXForms().indexOf(xForm) < 0) {
+    if (xForm != null && getCurrFlame() != null && getCurrFlame().getFinalXForms().indexOf(xForm) < 0) {
       xForm.setWeight(Tools.stringToDouble(data.transformationWeightREd.getText()));
       gridRefreshing = true;
       try {
@@ -3302,9 +3317,9 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     }
     RGBPalette palette = new RandomRGBPaletteGenerator().generatePalette(Integer.parseInt(data.paletteRandomPointsREd.getText()));
     flame.setPalette(palette);
-    currFlame = flame;
-    undoManager.initUndoStack(currFlame);
-    randomBatch.add(0, new FlameThumbnail(currFlame, null));
+    setCurrFlame(flame);
+    undoManager.initUndoStack(getCurrFlame());
+    randomBatch.add(0, new FlameThumbnail(getCurrFlame(), null));
     updateThumbnails();
     refreshUI();
   }
@@ -3360,35 +3375,35 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     boolean oldNoRefrsh = noRefresh;
     noRefresh = true;
     try {
-      data.cameraRollREd.setText(Tools.doubleToString(currFlame.getCamRoll()));
-      data.cameraRollSlider.setValue(Tools.FTOI(currFlame.getCamRoll()));
+      data.cameraRollREd.setText(Tools.doubleToString(getCurrFlame().getCamRoll()));
+      data.cameraRollSlider.setValue(Tools.FTOI(getCurrFlame().getCamRoll()));
 
-      data.cameraPitchREd.setText(Tools.doubleToString(currFlame.getCamPitch()));
-      data.cameraPitchSlider.setValue(Tools.FTOI(currFlame.getCamPitch()));
+      data.cameraPitchREd.setText(Tools.doubleToString(getCurrFlame().getCamPitch()));
+      data.cameraPitchSlider.setValue(Tools.FTOI(getCurrFlame().getCamPitch()));
 
-      data.cameraYawREd.setText(Tools.doubleToString(currFlame.getCamYaw()));
-      data.cameraYawSlider.setValue(Tools.FTOI(currFlame.getCamYaw()));
+      data.cameraYawREd.setText(Tools.doubleToString(getCurrFlame().getCamYaw()));
+      data.cameraYawSlider.setValue(Tools.FTOI(getCurrFlame().getCamYaw()));
 
-      data.cameraCentreXREd.setText(Tools.doubleToString(currFlame.getCentreX()));
-      data.cameraCentreXSlider.setValue(Tools.FTOI(currFlame.getCentreX() * SLIDER_SCALE_CENTRE));
+      data.cameraCentreXREd.setText(Tools.doubleToString(getCurrFlame().getCentreX()));
+      data.cameraCentreXSlider.setValue(Tools.FTOI(getCurrFlame().getCentreX() * SLIDER_SCALE_CENTRE));
 
-      data.cameraCentreYREd.setText(Tools.doubleToString(currFlame.getCentreY()));
-      data.cameraCentreYSlider.setValue(Tools.FTOI(currFlame.getCentreY() * SLIDER_SCALE_CENTRE));
+      data.cameraCentreYREd.setText(Tools.doubleToString(getCurrFlame().getCentreY()));
+      data.cameraCentreYSlider.setValue(Tools.FTOI(getCurrFlame().getCentreY() * SLIDER_SCALE_CENTRE));
 
-      data.pixelsPerUnitREd.setText(Tools.doubleToString(currFlame.getPixelsPerUnit()));
-      data.pixelsPerUnitSlider.setValue(Tools.FTOI(currFlame.getPixelsPerUnit()));
+      data.pixelsPerUnitREd.setText(Tools.doubleToString(getCurrFlame().getPixelsPerUnit()));
+      data.pixelsPerUnitSlider.setValue(Tools.FTOI(getCurrFlame().getPixelsPerUnit()));
 
-      data.focusXREd.setText(Tools.doubleToString(currFlame.getFocusX()));
-      data.focusXSlider.setValue(Tools.FTOI(currFlame.getFocusX() * SLIDER_SCALE_ZPOS));
+      data.focusXREd.setText(Tools.doubleToString(getCurrFlame().getFocusX()));
+      data.focusXSlider.setValue(Tools.FTOI(getCurrFlame().getFocusX() * SLIDER_SCALE_ZPOS));
 
-      data.focusYREd.setText(Tools.doubleToString(currFlame.getFocusY()));
-      data.focusYSlider.setValue(Tools.FTOI(currFlame.getFocusY() * SLIDER_SCALE_ZPOS));
+      data.focusYREd.setText(Tools.doubleToString(getCurrFlame().getFocusY()));
+      data.focusYSlider.setValue(Tools.FTOI(getCurrFlame().getFocusY() * SLIDER_SCALE_ZPOS));
 
-      data.focusZREd.setText(Tools.doubleToString(currFlame.getFocusZ()));
-      data.focusZSlider.setValue(Tools.FTOI(currFlame.getFocusZ() * SLIDER_SCALE_ZPOS));
+      data.focusZREd.setText(Tools.doubleToString(getCurrFlame().getFocusZ()));
+      data.focusZSlider.setValue(Tools.FTOI(getCurrFlame().getFocusZ() * SLIDER_SCALE_ZPOS));
 
-      data.dimishZREd.setText(Tools.doubleToString(currFlame.getDimishZ()));
-      data.dimishZSlider.setValue(Tools.FTOI(currFlame.getDimishZ() * SLIDER_SCALE_ZPOS));
+      data.dimishZREd.setText(Tools.doubleToString(getCurrFlame().getDimishZ()));
+      data.dimishZSlider.setValue(Tools.FTOI(getCurrFlame().getDimishZ() * SLIDER_SCALE_ZPOS));
     }
     finally {
       noRefresh = oldNoRefrsh;
@@ -3732,13 +3747,13 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     if (noRefresh) {
       return;
     }
-    if (currFlame == null) {
+    if (getCurrFlame() == null) {
       return;
     }
     noRefresh = true;
     try {
       QualityProfile profile = getQualityProfile();
-      currFlame.setQualityProfile(profile);
+      getCurrFlame().setQualityProfile(profile);
     }
     finally {
       noRefresh = false;
@@ -3749,13 +3764,13 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     if (noRefresh) {
       return;
     }
-    if (currFlame == null) {
+    if (getCurrFlame() == null) {
       return;
     }
     noRefresh = true;
     try {
       ResolutionProfile profile = getResolutionProfile();
-      currFlame.setResolutionProfile(profile);
+      getCurrFlame().setResolutionProfile(profile);
       removeFlamePanel();
       refreshFlameImage(false);
       data.resolutionProfileCmb.requestFocus();
@@ -3769,12 +3784,12 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     if (noRefresh) {
       return;
     }
-    if (currFlame == null) {
+    if (getCurrFlame() == null) {
       return;
     }
     noRefresh = true;
     try {
-      currFlame.getShadingInfo().setShading((Shading) data.shadingCmb.getSelectedItem());
+      getCurrFlame().getShadingInfo().setShading((Shading) data.shadingCmb.getSelectedItem());
       refreshShadingUI();
       enableShadingUI();
       refreshFlameImage(false);
@@ -3831,15 +3846,15 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
               DataFlavor.stringFlavor));
           List<Flame> flames = new Flam3Reader(prefs).readFlamesfromXML(xml);
           Flame flame = flames.get(0);
-          currFlame = flame;
-          undoManager.initUndoStack(currFlame);
+          setCurrFlame(flame);
+          undoManager.initUndoStack(getCurrFlame());
           for (int i = flames.size() - 1; i >= 0; i--) {
             randomBatch.add(0, new FlameThumbnail(flames.get(i), null));
           }
-          setupProfiles(currFlame);
+          setupProfiles(getCurrFlame());
           updateThumbnails();
           refreshUI();
-          showStatusMessage(currFlame, "opened from clipboard");
+          showStatusMessage(getCurrFlame(), "opened from clipboard");
         }
       }
     }
@@ -3849,18 +3864,18 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
   }
 
   public void importFlame(Flame pFlame) {
-    currFlame = pFlame.makeCopy();
-    undoManager.initUndoStack(currFlame);
-    setupProfiles(currFlame);
-    randomBatch.add(0, new FlameThumbnail(currFlame, null));
+    _currFlame = pFlame.makeCopy();
+    undoManager.initUndoStack(_currFlame);
+    setupProfiles(getCurrFlame());
+    randomBatch.add(0, new FlameThumbnail(getCurrFlame(), null));
     updateThumbnails();
     refreshUI();
-    showStatusMessage(currFlame, "imported into editor");
+    showStatusMessage(getCurrFlame(), "imported into editor");
   }
 
   protected Flame exportFlame() {
-    if (currFlame != null) {
-      return currFlame.makeCopy();
+    if (getCurrFlame() != null) {
+      return getCurrFlame().makeCopy();
     }
     else {
       return null;
@@ -3869,18 +3884,18 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
 
   public void saveFlameToClipboard() {
     try {
-      if (currFlame != null) {
+      if (getCurrFlame() != null) {
         Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-        String xml = new Flam3Writer().getFlameXML(currFlame);
+        String xml = new Flam3Writer().getFlameXML(getCurrFlame());
         StringSelection data = new StringSelection(xml);
         clipboard.setContents(data, data);
         //        try {
-        //          System.out.println(new ScriptGenerator(currFlame).generateScript());
+        //          System.out.println(new ScriptGenerator(getCurrFlame()).generateScript());
         //        }
         //        catch (Throwable ex) {
         //          ex.printStackTrace();
         //        }
-        showStatusMessage(currFlame, "flame saved to clipboard");
+        showStatusMessage(getCurrFlame(), "flame saved to clipboard");
       }
     }
     catch (Throwable ex) {
@@ -4376,10 +4391,10 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
 
   public void gradientLibraryGradientChanged() {
     if (!cmbRefreshing) {
-      if (currFlame != null && data.gradientLibraryGradientCmb.getSelectedIndex() >= 0 && data.gradientLibraryGradientCmb.getSelectedIndex() < gradientLibraryList.size()) {
+      if (getCurrFlame() != null && data.gradientLibraryGradientCmb.getSelectedIndex() >= 0 && data.gradientLibraryGradientCmb.getSelectedIndex() < gradientLibraryList.size()) {
         saveUndoPoint();
         RGBPalette palette = gradientLibraryList.get(data.gradientLibraryGradientCmb.getSelectedIndex()).makeCopy();
-        currFlame.setPalette(palette);
+        getCurrFlame().setPalette(palette);
         refreshPaletteUI(palette);
         refreshFlameImage(false);
       }
@@ -4476,9 +4491,9 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     if (gridRefreshing || cmbRefreshing) {
       return;
     }
-    if (currFlame != null) {
+    if (getCurrFlame() != null) {
       saveUndoPoint();
-      currFlame.setPreserveZ(data.affinePreserveZButton.isSelected());
+      getCurrFlame().setPreserveZ(data.affinePreserveZButton.isSelected());
       refreshFlameImage(false);
     }
   }
@@ -4573,8 +4588,8 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
   }
 
   public void appendToMovieButton_actionPerformed(ActionEvent e) {
-    if (currFlame != null) {
-      getSwfAnimatorCtrl().importFlameFromEditor(currFlame.makeCopy());
+    if (getCurrFlame() != null) {
+      getSwfAnimatorCtrl().importFlameFromEditor(getCurrFlame().makeCopy());
       rootTabbedPane.setSelectedIndex(TinaSWFAnimatorController.PAGE_INDEX);
     }
   }
@@ -4628,13 +4643,12 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
   }
 
   public void undoAction() {
-    Flame currFlame = getCurrFlame();
-    if (currFlame != null) {
+    if (getCurrFlame() != null) {
       undoManager.setEnabled(false);
       try {
         int txRow = data.transformationsTable.getSelectedRow();
-        undoManager.saveUndoPoint(currFlame);
-        undoManager.undo(currFlame);
+        undoManager.saveUndoPoint(getCurrFlame());
+        undoManager.undo(getCurrFlame());
         enableUndoControls();
         refreshUI();
         if (txRow >= 0) {
@@ -4648,12 +4662,11 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
   }
 
   public void redoAction() {
-    Flame currFlame = getCurrFlame();
-    if (currFlame != null) {
+    if (getCurrFlame() != null) {
       undoManager.setEnabled(false);
       try {
         int txRow = data.transformationsTable.getSelectedRow();
-        undoManager.redo(currFlame);
+        undoManager.redo(getCurrFlame());
         enableUndoControls();
         refreshUI();
         if (txRow >= 0) {
@@ -4668,9 +4681,8 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
 
   @Override
   public void saveUndoPoint() {
-    Flame currFlame = getCurrFlame();
-    if (currFlame != null) {
-      undoManager.saveUndoPoint(currFlame);
+    if (getCurrFlame() != null) {
+      undoManager.saveUndoPoint(getCurrFlame());
       enableUndoControls();
       data.undoButton.invalidate();
       data.undoButton.validate();
@@ -4685,11 +4697,10 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
   private void enableUndoControls() {
     final String UNDO_LABEL = "Undo";
     final String REDO_LABEL = "Redo";
-    Flame currFlame = getCurrFlame();
-    if (currFlame != null) {
-      int stackSize = undoManager.getUndoStackSize(currFlame);
+    if (getCurrFlame() != null) {
+      int stackSize = undoManager.getUndoStackSize(getCurrFlame());
       if (stackSize > 0) {
-        int pos = undoManager.getUndoStackPosition(currFlame);
+        int pos = undoManager.getUndoStackPosition(getCurrFlame());
         data.undoButton.setEnabled(pos > 0 && pos < stackSize);
         if (undoDebug) {
           data.undoButton.setText("U " + pos);
@@ -4746,7 +4757,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
         RGBPalette palette = new MedianCutQuantizer().createPalette(img);
         data.paletteKeyFrames = null;
         saveUndoPoint();
-        currFlame.setPalette(palette);
+        getCurrFlame().setPalette(palette);
         refreshPaletteColorsTable();
         refreshPaletteUI(palette);
         refreshFlameImage(false);
@@ -4830,10 +4841,10 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
 
   public void quicksaveButton_clicked() {
     try {
-      if (currFlame != null) {
+      if (getCurrFlame() != null) {
         String filename = qsaveFilenameGen.generateNextFilename();
-        new Flam3Writer().writeFlame(currFlame, filename);
-        showStatusMessage(currFlame, "quicksave <" + new File(filename).getName() + "> saved");
+        new Flam3Writer().writeFlame(getCurrFlame(), filename);
+        showStatusMessage(getCurrFlame(), "quicksave <" + new File(filename).getName() + "> saved");
       }
     }
     catch (Throwable ex) {
@@ -4852,8 +4863,8 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
   }
 
   public void flameTransparencyCbx_changed() {
-    if (currFlame != null) {
-      currFlame.setBGTransparency(data.bgTransparencyCBx.isSelected());
+    if (getCurrFlame() != null) {
+      getCurrFlame().setBGTransparency(data.bgTransparencyCBx.isSelected());
       enableDOFUI();
     }
   }
@@ -4947,7 +4958,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
   }
 
   public void renderImageButton_actionPerformed0() {
-    if (currFlame != null) {
+    if (getCurrFlame() != null) {
       try {
         JFileChooser chooser = new ImageFileChooser();
         if (prefs.getOutputImagePath() != null) {
@@ -5027,7 +5038,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       mainRenderThread = null;
       enableMainRenderControls();
     }
-    else if (currFlame != null) {
+    else if (getCurrFlame() != null) {
       try {
         JFileChooser chooser = new ImageFileChooser();
         if (prefs.getOutputImagePath() != null) {
@@ -5238,25 +5249,25 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
   }
 
   public void gradientFadeBtn_clicked() {
-    undoManager.saveUndoPoint(currFlame);
+    undoManager.saveUndoPoint(getCurrFlame());
     getFlamePanel().gradientFade();
     refreshFlameImage(false);
   }
 
   public void gradientInvertBtn_clicked() {
-    undoManager.saveUndoPoint(currFlame);
+    undoManager.saveUndoPoint(getCurrFlame());
     getFlamePanel().gradientInvert();
     refreshFlameImage(false);
   }
 
   public void gradientReverseBtn_clicked() {
-    undoManager.saveUndoPoint(currFlame);
+    undoManager.saveUndoPoint(getCurrFlame());
     getFlamePanel().gradientReverse();
     refreshFlameImage(false);
   }
 
   public void gradientSortBtn_clicked() {
-    undoManager.saveUndoPoint(currFlame);
+    undoManager.saveUndoPoint(getCurrFlame());
     getFlamePanel().gradientSort();
     refreshFlameImage(false);
   }
@@ -5267,14 +5278,37 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
   }
 
   public void gradientApplyBalancingBtn_clicked() {
-    undoManager.saveUndoPoint(currFlame);
+    undoManager.saveUndoPoint(getCurrFlame());
     // TODO
     refreshFlameImage(false);
   }
 
   public void gradientApplyTXBtn_clicked() {
-    undoManager.saveUndoPoint(currFlame);
+    undoManager.saveUndoPoint(getCurrFlame());
     // TODO
     refreshFlameImage(false);
   }
+
+  private final static GradientSelectionProvider dfltGradientSelection = new DefaultGradientSelectionProvider();
+
+  @Override
+  public int getFrom() {
+    if (getFlamePanel().getMouseDragOperation() == MouseDragOperation.GRADIENT) {
+      return getFlamePanel().getGradientFrom();
+    }
+    else {
+      return dfltGradientSelection.getFrom();
+    }
+  }
+
+  @Override
+  public int getTo() {
+    if (getFlamePanel().getMouseDragOperation() == MouseDragOperation.GRADIENT) {
+      return getFlamePanel().getGradientTo();
+    }
+    else {
+      return dfltGradientSelection.getTo();
+    }
+  }
+
 }
