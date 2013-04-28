@@ -96,7 +96,7 @@ public class RGBPalette implements Assignable<RGBPalette>, Serializable {
     return res != null ? res : BLACK;
   }
 
-  private RGBColor getRawColor(int pIdx) {
+  public RGBColor getRawColor(int pIdx) {
     RGBColor res = rawColors.get(pIdx);
     return res != null ? res : BLACK;
   }
@@ -252,6 +252,8 @@ public class RGBPalette implements Assignable<RGBPalette>, Serializable {
   }
 
   private void transformColors() {
+    int startIdx = selectionProvider.getFrom();
+    int endIdx = selectionProvider.getTo();
     if (modified) {
       transformedColors.clear();
       for (int i = 0; i < PALETTE_SIZE; i++) {
@@ -333,7 +335,7 @@ public class RGBPalette implements Assignable<RGBPalette>, Serializable {
         sT.transformImage(img);
       }
       Pixel pixel = new Pixel();
-      for (int i = 0; i < PALETTE_SIZE; i++) {
+      for (int i = startIdx; i <= endIdx; i++) {
         RGBColor color = transformedColors.get(i);
         pixel.setARGBValue(img.getARGBValue(i, 0));
         color.setRed(pixel.r);

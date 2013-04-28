@@ -677,7 +677,7 @@ public class DancingFractalsController {
   public void flameToEditorBtn_clicked() {
     Flame flame = poolFlameHolder.getFlame();
     if (flame != null) {
-      parentCtrl.importFlame(flame);
+      parentCtrl.importFlame(flame, true);
       parentCtrl.getRootTabbedPane().setSelectedIndex(0);
     }
   }

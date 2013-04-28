@@ -79,6 +79,7 @@ import org.jwildfire.create.tina.batch.Job;
 import org.jwildfire.create.tina.batch.JobRenderThread;
 import org.jwildfire.create.tina.batch.JobRenderThreadController;
 import org.jwildfire.create.tina.dance.DancingFractalsController;
+import org.jwildfire.create.tina.dance.GradientController;
 import org.jwildfire.create.tina.dance.JWFScriptController;
 import org.jwildfire.create.tina.edit.UndoManager;
 import org.jwildfire.create.tina.io.Flam3PaletteReader;
@@ -146,6 +147,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
   private TinaInteractiveRendererController interactiveRendererCtrl;
   private TinaSWFAnimatorController swfAnimatorCtrl;
   private JWFScriptController jwfScriptController;
+  private GradientController gradientController;
 
   private final JInternalFrame tinaFrame;
   private final String tinaFrameTitle;
@@ -231,6 +233,8 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
         parameterObject.scriptDescriptionTextArea, parameterObject.scriptTextArea, parameterObject.compileScriptButton,
         parameterObject.saveScriptBtn, parameterObject.revertScriptBtn, parameterObject.rescanScriptsBtn, parameterObject.newScriptBtn, parameterObject.newScriptFromFlameBtn, parameterObject.deleteScriptBtn,
         parameterObject.scriptRenameBtn, parameterObject.scriptDuplicateBtn, parameterObject.scriptRunBtn);
+
+    gradientController = new GradientController(this, parameterObject.pErrorHandler, prefs, parameterObject.pCenterPanel);
 
     data.cameraRollREd = parameterObject.pCameraRollREd;
     data.cameraRollSlider = parameterObject.pCameraRollSlider;
@@ -871,8 +875,12 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
 
   @Override
   public void setCurrFlame(Flame pFlame) {
+    setCurrFlame(pFlame, true);
+  }
+
+  private void setCurrFlame(Flame pFlame, boolean pAddToThumbnails) {
     deRegisterFromEditor(_currFlame);
-    importFlame(pFlame);
+    importFlame(pFlame, false);
     registerToEditor(_currFlame);
   }
 
@@ -2320,6 +2328,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     enableUndoControls();
     enableJobRenderControls();
     getJwfScriptController().enableControls();
+    getGradientController().enableControls();
   }
 
   private void enableJobRenderControls() {
@@ -2925,7 +2934,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
 
   public void importFromRandomBatch(int pIdx) {
     if (pIdx >= 0 && pIdx < randomBatch.size()) {
-      setCurrFlame(randomBatch.get(pIdx).getFlame());
+      setCurrFlame(randomBatch.get(pIdx).getFlame(), false);
       undoManager.initUndoStack(getCurrFlame());
       {
         FlamePanel imgPanel = getFlamePanel();
@@ -3863,14 +3872,23 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     }
   }
 
-  public void importFlame(Flame pFlame) {
-    _currFlame = pFlame.makeCopy();
-    undoManager.initUndoStack(_currFlame);
-    setupProfiles(getCurrFlame());
-    randomBatch.add(0, new FlameThumbnail(getCurrFlame(), null));
-    updateThumbnails();
-    refreshUI();
-    showStatusMessage(getCurrFlame(), "imported into editor");
+  public void importFlame(Flame pFlame, boolean pAddToThumbnails) {
+    if (pAddToThumbnails) {
+      _currFlame = pFlame.makeCopy();
+      undoManager.initUndoStack(_currFlame);
+      setupProfiles(getCurrFlame());
+      randomBatch.add(0, new FlameThumbnail(getCurrFlame(), null));
+      updateThumbnails();
+      refreshUI();
+      showStatusMessage(getCurrFlame(), "imported into editor");
+    }
+    else {
+      _currFlame = pFlame;
+      undoManager.initUndoStack(_currFlame);
+      setupProfiles(getCurrFlame());
+      refreshUI();
+      showStatusMessage(getCurrFlame(), "imported into editor");
+    }
   }
 
   protected Flame exportFlame() {
@@ -4649,6 +4667,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
         int txRow = data.transformationsTable.getSelectedRow();
         undoManager.saveUndoPoint(getCurrFlame());
         undoManager.undo(getCurrFlame());
+        registerToEditor(getCurrFlame());
         enableUndoControls();
         refreshUI();
         if (txRow >= 0) {
@@ -4667,6 +4686,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       try {
         int txRow = data.transformationsTable.getSelectedRow();
         undoManager.redo(getCurrFlame());
+        registerToEditor(getCurrFlame());
         enableUndoControls();
         refreshUI();
         if (txRow >= 0) {
@@ -5226,6 +5246,10 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     return jwfScriptController;
   }
 
+  public GradientController getGradientController() {
+    return gradientController;
+  }
+
   public void mouseTransformEditGradientButton_clicked() {
     if (!refreshing) {
       refreshing = true;
@@ -5309,6 +5333,24 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     else {
       return dfltGradientSelection.getTo();
     }
+  }
+
+  public void gradientCopyRangeBtn_clicked() {
+    undoManager.saveUndoPoint(getCurrFlame());
+    getFlamePanel().gradientCopyRange();
+    refreshFlameImage(false);
+  }
+
+  public void gradientPasteRangeBtn_clicked() {
+    undoManager.saveUndoPoint(getCurrFlame());
+    getFlamePanel().gradientPasteRange();
+    refreshFlameImage(false);
+  }
+
+  public void gradientEraseRangeBtn_clicked() {
+    undoManager.saveUndoPoint(getCurrFlame());
+    getFlamePanel().gradientEraseRange();
+    refreshFlameImage(false);
   }
 
 }

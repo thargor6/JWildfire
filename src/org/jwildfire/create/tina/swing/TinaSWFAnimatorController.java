@@ -423,7 +423,7 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
   }
 
   protected void editPartBtn_clicked(FlameMoviePart pPart) {
-    parentCtrl.importFlame(pPart.getFlame());
+    parentCtrl.importFlame(pPart.getFlame(), true);
     parentCtrl.getRootTabbedPane().setSelectedIndex(0);
   }
 
@@ -1020,7 +1020,7 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
   public void swfAnimatorFrameToEditorBtn_clicked() {
     Flame flame = getCurrFlame();
     if (flame != null) {
-      parentCtrl.importFlame(flame);
+      parentCtrl.importFlame(flame, true);
       parentCtrl.getRootTabbedPane().setSelectedIndex(0);
     }
   }

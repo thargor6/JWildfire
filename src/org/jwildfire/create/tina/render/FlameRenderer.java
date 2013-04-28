@@ -333,7 +333,7 @@ public class FlameRenderer {
       forceAbort = false;
       iterate(0, 1, renderFlames);
       if (!forceAbort) {
-        if (flame.getSampleDensity() <= 10.0) {
+        if (flame.getSampleDensity() <= 10.0 || renderScale > 1) {
           renderImageSimple(img);
         }
         else {

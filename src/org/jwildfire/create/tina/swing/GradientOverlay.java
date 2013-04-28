@@ -170,6 +170,12 @@ public class GradientOverlay {
     if (dragStartY > yMin && dragStartY < yMax) {
       if (fabs(gradientZoom - 1.0) < EPSILON) {
         int modShift = pFlame.getPalette().getModShift() + iDX;
+        while (modShift < -255) {
+          modShift += 256;
+        }
+        while (modShift > 255) {
+          modShift -= 256;
+        }
         pFlame.getPalette().setModShift(modShift);
       }
       else {
@@ -195,8 +201,10 @@ public class GradientOverlay {
       int x = pPosX;
       if (x >= xPos[i] && x <= xPos[i + 1]) {
         int newPos = i;
-        int leftLimit = pIndex == 0 ? 0 : markerPos[pIndex - 1] + 1;
-        int rightLimit = pIndex == markerPos.length - 1 ? GRADIENT_SIZE - 1 : markerPos[pIndex + 1] - 1;
+        //        int leftLimit = pIndex == 0 ? 0 : markerPos[pIndex - 1] + 1;
+        //        int rightLimit = pIndex == markerPos.length - 1 ? GRADIENT_SIZE - 1 : markerPos[pIndex + 1] - 1;
+        int leftLimit = 0;
+        int rightLimit = GRADIENT_SIZE - 1;
         if (newPos < leftLimit) {
           newPos = leftLimit;
         }
@@ -257,7 +265,7 @@ public class GradientOverlay {
   }
 
   public void fadeRange(RGBPalette pGradient) {
-    pGradient.fadeRange(markerPos[0], markerPos[1]);
+    pGradient.fadeRange(getFrom(), getTo());
   }
 
   public void invertRange(RGBPalette pGradient) {
@@ -279,8 +287,10 @@ public class GradientOverlay {
 
   public void gradientMarker_move(int marker, int pDeltaPos) {
     if (marker >= 0) {
-      int leftLimit = marker == 0 ? 0 : markerPos[marker - 1] + 1;
-      int rightLimit = marker == markerPos.length - 1 ? GRADIENT_SIZE - 1 : markerPos[marker + 1] - 1;
+      //      int leftLimit = marker == 0 ? 0 : markerPos[marker - 1] + 1;
+      //      int rightLimit = marker == markerPos.length - 1 ? GRADIENT_SIZE - 1 : markerPos[marker + 1] - 1;
+      int leftLimit = 0;
+      int rightLimit = GRADIENT_SIZE - 1;
       int newPos = markerPos[marker] + pDeltaPos;
       if (newPos < leftLimit) {
         newPos = leftLimit;
@@ -310,11 +320,38 @@ public class GradientOverlay {
   }
 
   public int getFrom() {
-    return markerPos[0];
+    return markerPos[0] <= markerPos[1] ? markerPos[0] : markerPos[1];
   }
 
   public int getTo() {
-    return markerPos[1];
+    return markerPos[0] <= markerPos[1] ? markerPos[1] : markerPos[0];
   }
 
+  private RGBColor[] currClipboard;
+
+  public void copyRange(RGBPalette pGradient) {
+    if (getTo() >= getFrom()) {
+      currClipboard = new RGBColor[getTo() - getFrom() + 1];
+      for (int i = getFrom(); i <= getTo(); i++) {
+        currClipboard[i - getFrom()] = pGradient.getRawColor(i);
+      }
+    }
+  }
+
+  public void pasteRange(RGBPalette pGradient) {
+    if (currClipboard != null && currClipboard.length > 0) {
+      for (int i = getFrom(); (i <= getTo()) && ((i - getFrom()) < currClipboard.length); i++) {
+        RGBColor color = currClipboard[i - getFrom()];
+        pGradient.setColor(i, color.getRed(), color.getGreen(), color.getBlue());
+      }
+    }
+  }
+
+  public void eraseRange(RGBPalette pGradient) {
+    if (getTo() >= getFrom()) {
+      for (int i = getFrom(); i <= getTo(); i++) {
+        pGradient.setColor(i, 0, 0, 0);
+      }
+    }
+  }
 }

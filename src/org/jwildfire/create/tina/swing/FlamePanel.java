@@ -957,7 +957,9 @@ public class FlamePanel extends ImagePanel {
   }
 
   public void gradientSelectAll() {
-    gradientOverlay.selectAll();
+    if (flameHolder.getFlame() != null) {
+      gradientOverlay.selectAll();
+    }
   }
 
   public void gradientMarker_move(int pIdx, int pDeltaPos) {
@@ -979,5 +981,23 @@ public class FlamePanel extends ImagePanel {
 
   public int getGradientTo() {
     return gradientOverlay.getTo();
+  }
+
+  public void gradientCopyRange() {
+    if (flameHolder.getFlame() != null) {
+      gradientOverlay.copyRange(flameHolder.getFlame().getPalette());
+    }
+  }
+
+  public void gradientPasteRange() {
+    if (flameHolder.getFlame() != null) {
+      gradientOverlay.pasteRange(flameHolder.getFlame().getPalette());
+    }
+  }
+
+  public void gradientEraseRange() {
+    if (flameHolder.getFlame() != null) {
+      gradientOverlay.eraseRange(flameHolder.getFlame().getPalette());
+    }
   }
 }

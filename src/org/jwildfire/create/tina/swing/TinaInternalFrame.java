@@ -9420,9 +9420,16 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton gradientSortBtn;
   private JButton gradientFadeBtn;
   private JButton gradientSelectAllBtn;
-  private JLabel label_9;
   private JButton gradientApplyBalancingBtn;
   private JButton gradientApplyTXBtn;
+  private JPanel panel_62;
+  private JPanel panel_63;
+  private JPanel panel_64;
+  private JButton gradientCopyRangeBtn;
+  private JButton gradientPasteRangeBtn;
+  private JPanel panel_65;
+  private JPanel panel_66;
+  private JButton gradientEraseRangeBtn;
 
   /**
    * This method initializes renderBatchJobsScrollPane	
@@ -14097,13 +14104,14 @@ public class TinaInternalFrame extends JInternalFrame {
   private JPanel getGradientEditorFncPnl() {
     if (gradientEditorFncPnl == null) {
       gradientEditorFncPnl = new JPanel();
-      gradientEditorFncPnl.setPreferredSize(new Dimension(80, 32));
-      gradientEditorFncPnl.add(getGradientFadeBtn());
-      gradientEditorFncPnl.add(getGradientInvertBtn());
-      gradientEditorFncPnl.add(getGradientReverseBtn());
-      gradientEditorFncPnl.add(getGradientSortBtn());
-      gradientEditorFncPnl.add(getLabel_9());
-      gradientEditorFncPnl.add(getGradientSelectAllBtn());
+      FlowLayout flowLayout = (FlowLayout) gradientEditorFncPnl.getLayout();
+      flowLayout.setVgap(1);
+      gradientEditorFncPnl.setPreferredSize(new Dimension(80, 54));
+      gradientEditorFncPnl.add(getPanel_62());
+      gradientEditorFncPnl.add(getPanel_63());
+      gradientEditorFncPnl.add(getPanel_65());
+      gradientEditorFncPnl.add(getPanel_64());
+      gradientEditorFncPnl.add(getPanel_66());
     }
     return gradientEditorFncPnl;
   }
@@ -14198,16 +14206,6 @@ public class TinaInternalFrame extends JInternalFrame {
     return gradientSelectAllBtn;
   }
 
-  private JLabel getLabel_9() {
-    if (label_9 == null) {
-      label_9 = new JLabel();
-      label_9.setText("");
-      label_9.setPreferredSize(new Dimension(8, 4));
-      label_9.setFont(new Font("Dialog", Font.BOLD, 10));
-    }
-    return label_9;
-  }
-
   private JButton getGradientApplyBalancingBtn() {
     if (gradientApplyBalancingBtn == null) {
       gradientApplyBalancingBtn = new JButton();
@@ -14228,5 +14226,122 @@ public class TinaInternalFrame extends JInternalFrame {
 
   public JButton getGradientApplyTXBtn() {
     return gradientApplyTXBtn;
+  }
+
+  private JPanel getPanel_62() {
+    if (panel_62 == null) {
+      panel_62 = new JPanel();
+      FlowLayout flowLayout = (FlowLayout) panel_62.getLayout();
+      flowLayout.setVgap(1);
+      flowLayout.setHgap(0);
+      panel_62.setPreferredSize(new Dimension(70, 54));
+      panel_62.add(getGradientFadeBtn());
+      panel_62.add(getGradientSortBtn());
+    }
+    return panel_62;
+  }
+
+  private JPanel getPanel_63() {
+    if (panel_63 == null) {
+      panel_63 = new JPanel();
+      FlowLayout flowLayout = (FlowLayout) panel_63.getLayout();
+      flowLayout.setVgap(1);
+      flowLayout.setHgap(0);
+      panel_63.setPreferredSize(new Dimension(70, 54));
+      panel_63.add(getGradientInvertBtn());
+      panel_63.add(getGradientReverseBtn());
+    }
+    return panel_63;
+  }
+
+  private JPanel getPanel_64() {
+    if (panel_64 == null) {
+      panel_64 = new JPanel();
+      FlowLayout flowLayout = (FlowLayout) panel_64.getLayout();
+      flowLayout.setVgap(1);
+      flowLayout.setHgap(0);
+      panel_64.setPreferredSize(new Dimension(70, 54));
+      panel_64.add(getGradientCopyRangeBtn());
+      panel_64.add(getGradientPasteRangeBtn());
+    }
+    return panel_64;
+  }
+
+  private JButton getGradientCopyRangeBtn() {
+    if (gradientCopyRangeBtn == null) {
+      gradientCopyRangeBtn = new JButton();
+      gradientCopyRangeBtn.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.gradientCopyRangeBtn_clicked();
+        }
+      });
+      gradientCopyRangeBtn.setToolTipText("Copy the content of the selected range");
+      gradientCopyRangeBtn.setText("Copy");
+      gradientCopyRangeBtn.setSize(new Dimension(138, 24));
+      gradientCopyRangeBtn.setPreferredSize(new Dimension(70, 24));
+      gradientCopyRangeBtn.setLocation(new Point(4, 181));
+      gradientCopyRangeBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+    }
+    return gradientCopyRangeBtn;
+  }
+
+  private JButton getGradientPasteRangeBtn() {
+    if (gradientPasteRangeBtn == null) {
+      gradientPasteRangeBtn = new JButton();
+      gradientPasteRangeBtn.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.gradientPasteRangeBtn_clicked();
+        }
+      });
+      gradientPasteRangeBtn.setToolTipText("Paste the previously copied range at the left marker position");
+      gradientPasteRangeBtn.setText("Paste");
+      gradientPasteRangeBtn.setSize(new Dimension(138, 24));
+      gradientPasteRangeBtn.setPreferredSize(new Dimension(70, 24));
+      gradientPasteRangeBtn.setLocation(new Point(4, 181));
+      gradientPasteRangeBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+    }
+    return gradientPasteRangeBtn;
+  }
+
+  private JPanel getPanel_65() {
+    if (panel_65 == null) {
+      panel_65 = new JPanel();
+      FlowLayout flowLayout = (FlowLayout) panel_65.getLayout();
+      flowLayout.setVgap(1);
+      flowLayout.setHgap(0);
+      panel_65.setPreferredSize(new Dimension(70, 54));
+      panel_65.add(getGradientSelectAllBtn());
+    }
+    return panel_65;
+  }
+
+  private JPanel getPanel_66() {
+    if (panel_66 == null) {
+      panel_66 = new JPanel();
+      panel_66.setPreferredSize(new Dimension(70, 54));
+      FlowLayout flowLayout = (FlowLayout) panel_66.getLayout();
+      flowLayout.setVgap(1);
+      flowLayout.setHgap(0);
+      panel_66.add(getGradientEraseRangeBtn());
+    }
+    return panel_66;
+  }
+
+  private JButton getGradientEraseRangeBtn() {
+    if (gradientEraseRangeBtn == null) {
+      gradientEraseRangeBtn = new JButton();
+      gradientEraseRangeBtn.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.gradientEraseRangeBtn_clicked();
+        }
+      });
+      gradientEraseRangeBtn.setToolTipText("Erase the currently selected range (i.e. turn it into black)");
+      gradientEraseRangeBtn.setText("Erase");
+      gradientEraseRangeBtn.setSize(new Dimension(138, 24));
+      gradientEraseRangeBtn.setPreferredSize(new Dimension(70, 24));
+      gradientEraseRangeBtn.setLocation(new Point(4, 181));
+      gradientEraseRangeBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+    }
+    return gradientEraseRangeBtn;
   }
 } //  @jve:decl-index=0:visual-constraint="10,10"

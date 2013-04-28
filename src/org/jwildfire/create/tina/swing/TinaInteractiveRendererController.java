@@ -504,7 +504,7 @@ public class TinaInteractiveRendererController implements IterationObserver {
     try {
       Flame currFlame = getCurrFlame();
       if (currFlame != null) {
-        parentCtrl.importFlame(currFlame);
+        parentCtrl.importFlame(currFlame, true);
       }
     }
     catch (Throwable ex) {

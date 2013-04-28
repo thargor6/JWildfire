@@ -441,7 +441,7 @@ public class MutaGenController {
       Flame flame = selectedSet.getFlame(pRow, pCol);
       Flame morphedFlame = createWeightedFlame(selectedSet.getBaseFlame(), flame);
 
-      tinaController.importFlame(morphedFlame);
+      tinaController.importFlame(morphedFlame, true);
 
       rootTabbedPane.setSelectedIndex(TinaController.PAGE_INDEX);
       rootTabbedPane.getParent().invalidate();
