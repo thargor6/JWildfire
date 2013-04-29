@@ -366,6 +366,7 @@ public class TinaControllerParameter {
   public JButton scriptRenameBtn;
   public JButton scriptDuplicateBtn;
   public JButton scriptRunBtn;
+  public JTree gradientLibTree;
 
   public void setParams1(JInternalFrame pTinaFrame, ErrorHandler pErrorHandler, Prefs pPrefs, JPanel pCenterPanel, JWFNumberField pCameraRollREd, JSlider pCameraRollSlider, JWFNumberField pCameraPitchREd, JSlider pCameraPitchSlider, JWFNumberField pCameraYawREd, JSlider pCameraYawSlider, JWFNumberField pCameraPerspectiveREd, JSlider pCameraPerspectiveSlider, JWFNumberField pCameraCentreXREd, JSlider pCameraCentreXSlider, JWFNumberField pCameraCentreYREd, JSlider pCameraCentreYSlider, JWFNumberField pCameraZoomREd, JSlider pCameraZoomSlider, JCheckBox pNewDOFCBx, JWFNumberField pFocusXREd, JSlider pFocusXSlider, JWFNumberField pFocusYREd, JSlider pFocusYSlider, JWFNumberField pFocusZREd, JSlider pFocusZSlider, JWFNumberField pDimishZREd, JSlider pDimishZSlider,
       JWFNumberField pCameraDOFREd, JSlider pCameraDOFSlider, JWFNumberField pCameraDOFAreaREd, JSlider pCameraDOFAreaSlider, JWFNumberField pCameraDOFExponentREd, JSlider pCameraDOFExponentSlider, JWFNumberField pCamZREd, JSlider pCamZSlider, JWFNumberField pPixelsPerUnitREd, JSlider pPixelsPerUnitSlider, JWFNumberField pBrightnessREd, JSlider pBrightnessSlider, JWFNumberField pContrastREd, JSlider pContrastSlider, JWFNumberField pGammaREd, JSlider pGammaSlider, JWFNumberField pVibrancyREd, JSlider pVibrancySlider, JWFNumberField pFilterRadiusREd, JSlider pFilterRadiusSlider, JComboBox pFilterKernelCmb, JCheckBox pDEFilterEnableCbx, JWFNumberField pDEFilterMaxRadiusREd, JSlider pDEFilterMaxRadiusSlider, JWFNumberField pDEFilterMinRadiusREd, JSlider pDEFilterMinRadiusSlider,
@@ -648,7 +649,7 @@ public class TinaControllerParameter {
       JToggleButton pMouseTransformRotateTrianglesButton, JToggleButton pMouseTransformScaleTrianglesButton, JTree pScriptTree,
       JTextArea pScriptDescriptionTextArea, JTextArea pScriptTextArea, JButton pCompileScriptButton, JButton pSaveScriptBtn, JButton pRevertScriptBtn, JButton pRescanScriptsBtn,
       JButton pNewScriptBtn, JButton pNewScriptFromFlameBtn, JButton pDeleteScriptBtn, JButton pScriptRenameBtn, JButton pScriptDuplicateBtn, JButton pScriptRunBtn,
-      JToggleButton pMouseTransformEditGradientButton) {
+      JToggleButton pMouseTransformEditGradientButton, JTree pGradientLibTree) {
     this.pDancingFlamesLinkMotionBtn = pDancingFlamesLinkMotionBtn;
     this.pDancingFlamesUnlinkMotionBtn = pDancingFlamesUnlinkMotionBtn;
     this.pDancingFlamesCreateMotionsCmb = pDancingFlamesCreateMotionsCmb;
@@ -726,5 +727,6 @@ public class TinaControllerParameter {
     this.scriptDuplicateBtn = pScriptDuplicateBtn;
     this.scriptRunBtn = pScriptRunBtn;
     this.mouseTransformEditGradientButton = pMouseTransformEditGradientButton;
+    this.gradientLibTree = pGradientLibTree;
   }
 }

@@ -20,12 +20,14 @@ import javax.swing.tree.TreePath;
 import org.jwildfire.base.Prefs;
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Flame;
+import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.io.Flam3PaletteReader;
 import org.jwildfire.create.tina.io.RGBPaletteReader;
 import org.jwildfire.create.tina.palette.RGBColor;
 import org.jwildfire.create.tina.palette.RGBPalette;
 import org.jwildfire.create.tina.swing.StandardDialogs;
 import org.jwildfire.create.tina.swing.TinaController;
+import org.jwildfire.create.tina.variation.Variation;
 import org.jwildfire.swing.ErrorHandler;
 
 public class JWFScriptController {
@@ -624,48 +626,89 @@ public class JWFScriptController {
     sb.append("  flame.setPixelsPerUnit(" + Tools.doubleToString(pFlame.getPixelsPerUnit()) + ");\n");
     sb.append("  flame.setCamZoom(" + Tools.doubleToString(pFlame.getCamZoom()) + ");\n");
 
+    if (pFlame.getXForms().size() > 0) {
+      for (int i = 0; i < pFlame.getXForms().size(); i++) {
+        XForm xForm = pFlame.getXForms().get(i);
+        addXForm(sb, xForm, i, false);
+      }
+    }
+    if (pFlame.getFinalXForms().size() > 0) {
+      for (int i = 0; i < pFlame.getFinalXForms().size(); i++) {
+        XForm xForm = pFlame.getFinalXForms().get(i);
+        addXForm(sb, xForm, i, true);
+      }
+    }
+
     sb.append("  // create the gradient\n");
     for (int i = 0; i < RGBPalette.PALETTE_SIZE; i++) {
       RGBColor color = pFlame.getPalette().getColor(i);
       sb.append("  flame.getPalette().setColor(" + i + ", " + color.getRed() + ", " + color.getGreen() + ", " + color.getBlue() + ");\n");
     }
 
-    if (pFlame.getXForms().size() > 0) {
-      sb.append("  // add transforms\n");
-
-    }
-    if (pFlame.getFinalXForms().size() > 0) {
-      sb.append("  // add final transforms\n");
-    }
     sb.append("  // Load the flame in the editor and refresh the UI\n");
     sb.append("  pEnv.setCurrFlame(flame);\n");
     sb.append("}\n");
-
-    //    {
-    //      XForm xForm = xForm1 = new XForm();
-    //      xForm.setWeight(0.5);
-    //      xForm.setColor(Math.random());
-    //      xForm.setColorSymmetry(-(0.8 + (Math.random() * 0.1)));
-    //
-    //      xForm.setCoeff00(0.266948); // a
-    //      xForm.setCoeff10(0.137096); // b
-    //      xForm.setCoeff20(0.04212); // e
-    //      xForm.setCoeff01(0.071529); // c 
-    //      xForm.setCoeff11(-0.511651); // d 
-    //      xForm.setCoeff21(-0.334332); // f 
-    //
-    //      xForm.setPostCoeff00(0.5);
-    //      xForm.setPostCoeff10(0);
-    //      xForm.setPostCoeff01(0);
-    //      xForm.setPostCoeff11(0.25);
-    //      xForm.setPostCoeff20(0);
-    //      xForm.setPostCoeff21(0.05);
-    //
-    //      xForm.addVariation((0.1 + (Math.random() * 0.1)), VariationFuncList.getVariationFuncInstance("bubble", true));
-    //      xForm.addVariation(2.0, VariationFuncList.getVariationFuncInstance("pre_blur", true));
-    //
-
     return sb.toString();
+  }
+
+  private void addXForm(StringBuilder pSB, XForm pXForm, int pIndex, boolean pFinalXForm) {
+    pSB.append("  // " + (pFinalXForm ? "final transform" : "transform") + " " + (pIndex + 1) + "\n");
+    pSB.append("  {\n");
+    pSB.append("    XForm xForm = new XForm();\n");
+    if (pFinalXForm) {
+      pSB.append("    flame.getFinalXForms().add(xForm);\n");
+    }
+    else {
+      pSB.append("    flame.getXForms().add(xForm);\n");
+    }
+    pSB.append("    xForm.setWeight(" + Tools.doubleToString(pXForm.getWeight()) + ");\n");
+    pSB.append("    xForm.setColor(" + Tools.doubleToString(pXForm.getColor()) + ");\n");
+    pSB.append("    xForm.setColorSymmetry(" + Tools.doubleToString(pXForm.getColorSymmetry()) + ");\n");
+    pSB.append("\n");
+    pSB.append("    xForm.setCoeff00(" + Tools.doubleToString(pXForm.getCoeff00()) + "); // a\n");
+    pSB.append("    xForm.setCoeff10(" + Tools.doubleToString(pXForm.getCoeff10()) + "); // b\n");
+    pSB.append("    xForm.setCoeff20(" + Tools.doubleToString(pXForm.getCoeff20()) + "); // e\n");
+    pSB.append("    xForm.setCoeff01(" + Tools.doubleToString(pXForm.getCoeff01()) + "); // c\n");
+    pSB.append("    xForm.setCoeff11(" + Tools.doubleToString(pXForm.getCoeff11()) + "); // d\n");
+    pSB.append("    xForm.setCoeff21(" + Tools.doubleToString(pXForm.getCoeff21()) + "); // f\n");
+    pSB.append("\n");
+    pSB.append("    xForm.setPostCoeff00(" + Tools.doubleToString(pXForm.getPostCoeff00()) + ");\n");
+    pSB.append("    xForm.setPostCoeff10(" + Tools.doubleToString(pXForm.getPostCoeff10()) + ");\n");
+    pSB.append("    xForm.setPostCoeff01(" + Tools.doubleToString(pXForm.getPostCoeff01()) + ");\n");
+    pSB.append("    xForm.setPostCoeff11(" + Tools.doubleToString(pXForm.getPostCoeff11()) + ");\n");
+    pSB.append("    xForm.setPostCoeff20(" + Tools.doubleToString(pXForm.getPostCoeff20()) + ");\n");
+    pSB.append("    xForm.setPostCoeff21(" + Tools.doubleToString(pXForm.getPostCoeff21()) + ");\n");
+    pSB.append("\n");
+    if (pXForm.getVariationCount() > 0) {
+      for (int i = 0; i < pXForm.getVariationCount(); i++) {
+        addVariation(pSB, pXForm.getVariation(i), i);
+      }
+    }
+    //      xForm.addVariation(2.0, VariationFuncList.getVariationFuncInstance("pre_blur", true));
+    pSB.append("  }\n");
+  }
+
+  private void addVariation(StringBuilder pSB, Variation pVariation, int pIndex) {
+    pSB.append("    // variation " + (pIndex + 1) + "\n");
+    if (pVariation.getFunc().getParameterNames().length == 0 && (pVariation.getFunc().getRessourceNames() == null || pVariation.getFunc().getRessourceNames().length == 0)) {
+      pSB.append("    xForm.addVariation(" + Tools.doubleToString(pVariation.getAmount()) + ", VariationFuncList.getVariationFuncInstance(\"" + pVariation.getFunc().getName() + "\", true));\n");
+    }
+    else {
+      pSB.append("    {\n");
+      pSB.append("      VariationFunc varFunc=VariationFuncList.getVariationFuncInstance(\"" + pVariation.getFunc().getName() + "\", true);\n");
+      for (int i = 0; i < pVariation.getFunc().getParameterNames().length; i++) {
+        String pName = pVariation.getFunc().getParameterNames()[i];
+        Object pValue = pVariation.getFunc().getParameterValues()[i];
+        if (pValue instanceof Double) {
+          pSB.append("      varFunc.setParameter(\"" + pName + "\", " + Tools.doubleToString((Double) pValue) + ");\n");
+        }
+        else {
+          pSB.append("      varFunc.setParameter(\"" + pName + "\", " + pValue + ");\n");
+        }
+      }
+      pSB.append("      xForm.addVariation(" + Tools.doubleToString(pVariation.getAmount()) + ", varFunc);\n");
+      pSB.append("    }\n");
+    }
   }
 
   private String getBaseScriptPath() {

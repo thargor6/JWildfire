@@ -275,5 +275,6 @@ public class TinaControllerData {
   public JButton scriptRenameBtn;
   public JButton scriptDuplicateBtn;
   public JButton scriptRunBtn;
+  public JTree gradientLibTree;
 
 }

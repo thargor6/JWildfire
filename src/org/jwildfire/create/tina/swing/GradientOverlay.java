@@ -37,7 +37,7 @@ import com.l2fprod.common.util.ResourceManager;
 public class GradientOverlay {
   private final FlamePanel parent;
   private static final int GRADIENT_OUTER_BORDER = 10;
-  private static final int GRADIENT_HEIGHT = 50;
+  private static final int GRADIENT_HEIGHT = 42;
   private static final int GRADIENT_MARKER_SIZE = 16;
   private static final int GRADIENT_MARKER_DISTANCE = 5;
   private static final int GRADIENT_SIZE = RGBPalette.PALETTE_SIZE;

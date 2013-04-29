@@ -234,7 +234,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
         parameterObject.saveScriptBtn, parameterObject.revertScriptBtn, parameterObject.rescanScriptsBtn, parameterObject.newScriptBtn, parameterObject.newScriptFromFlameBtn, parameterObject.deleteScriptBtn,
         parameterObject.scriptRenameBtn, parameterObject.scriptDuplicateBtn, parameterObject.scriptRunBtn);
 
-    gradientController = new GradientController(this, parameterObject.pErrorHandler, prefs, parameterObject.pCenterPanel);
+    gradientController = new GradientController(this, parameterObject.pErrorHandler, prefs, parameterObject.pCenterPanel, parameterObject.gradientLibTree);
 
     data.cameraRollREd = parameterObject.pCameraRollREd;
     data.cameraRollSlider = parameterObject.pCameraRollSlider;
@@ -502,6 +502,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     data.scriptRenameBtn = parameterObject.scriptRenameBtn;
     data.scriptDuplicateBtn = parameterObject.scriptDuplicateBtn;
     data.scriptRunBtn = parameterObject.scriptRunBtn;
+    data.gradientLibTree = parameterObject.gradientLibTree;
 
     qsaveFilenameGen = new QuickSaveFilenameGen(prefs);
 
@@ -880,7 +881,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
 
   private void setCurrFlame(Flame pFlame, boolean pAddToThumbnails) {
     deRegisterFromEditor(_currFlame);
-    importFlame(pFlame, false);
+    importFlame(pFlame, pAddToThumbnails);
     registerToEditor(_currFlame);
   }
 

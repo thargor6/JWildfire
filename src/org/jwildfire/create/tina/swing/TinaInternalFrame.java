@@ -3317,6 +3317,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaWestTabbedPane = new JTabbedPane();
       tinaWestTabbedPane.setFont(new Font("Dialog", Font.BOLD, 10));
       tinaWestTabbedPane.addTab("Gradient", null, getTinaPalettePanel(), null);
+      tinaWestTabbedPane.addTab("Gradient library", null, getGradientLibraryPanel(), null);
     }
     return tinaWestTabbedPane;
   }
@@ -3770,10 +3771,9 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaPaletteSubTabbedPane.setAutoscrolls(true);
       tinaPaletteSubTabbedPane.setToolTipText("");
       tinaPaletteSubTabbedPane.setFont(new Font("Dialog", Font.BOLD, 10));
-      tinaPaletteSubTabbedPane.addTab("New", null, getTinaPaletteCreatePanel(), "Create or import a gradient");
-      tinaPaletteSubTabbedPane.addTab("Lib", null, getGradientLibraryPanel(), "Gradient library");
-      tinaPaletteSubTabbedPane.addTab("TX", null, getTinaPaletteTransformPanel(), "Transform the gradient");
-      tinaPaletteSubTabbedPane.addTab("Balance", null, getTinaPaletteBalancingPanel(), "Apply common color balancing options to the gradient");
+      tinaPaletteSubTabbedPane.addTab("Create", null, getTinaPaletteCreatePanel(), "Create or import a gradient");
+      tinaPaletteSubTabbedPane.addTab("Transform", null, getTinaPaletteTransformPanel(), "Transform the gradient");
+      tinaPaletteSubTabbedPane.addTab("Balancing", null, getTinaPaletteBalancingPanel(), "Apply common color balancing options to the gradient");
     }
     return tinaPaletteSubTabbedPane;
   }
@@ -4531,7 +4531,7 @@ public class TinaInternalFrame extends JInternalFrame {
         getBatchRenderFilesRemoveButton(), getBatchRenderFilesRemoveAllButton(), getBatchRenderStartButton(),
         getRootTabbedPane(), getAffineFlipHorizontalButton(), getAffineFlipVerticalButton(), getDarkTrianglesToggleButton(), getShadingBlurRadiusREd(), getShadingBlurRadiusSlider(), getShadingBlurFadeREd(),
         getShadingBlurFadeSlider(), getShadingBlurFallOffREd(), getShadingBlurFallOffSlider(),
-        getAffineScaleXButton(), getAffineScaleYButton(), getGradientLibraryCenterPanel(), getGradientLibraryGradientCmb(), getHelpPane(),
+        getAffineScaleXButton(), getAffineScaleYButton(), gradientLibraryThumbnailPnl, getGradientLibraryGradientCmb(), getHelpPane(),
         getFaqPane(), getToggleVariationsButton(), getToggleTransparencyButton(), getAffinePreserveZButton(), getQualityProfileCmb(), getResolutionProfileCmb(),
         getBatchQualityProfileCmb(), getBatchResolutionProfileCmb(), getInteractiveQualityProfileCmb(), getInteractiveResolutionProfileCmb(),
         getSwfAnimatorQualityProfileCmb(), getSwfAnimatorResolutionProfileCmb(), getTinaRenderFlameButton(), getRenderMainButton(), getTinaAppendToMovieButton(),
@@ -4562,7 +4562,7 @@ public class TinaInternalFrame extends JInternalFrame {
         getTinaAppendToMovieButton(), getMouseTransformSlowButton(), getToggleTransparencyButton(), getDarkTrianglesToggleButton(), getMouseTransformRotateTrianglesButton(),
         getMouseTransformScaleTrianglesButton(), getScriptTree(), getScriptDescriptionTextArea(), getScriptTextArea(), getCompileScriptButton(), getScriptSaveBtn(), getScriptRevertBtn(), getRescanScriptsBtn(),
         getNewScriptBtn(), getNewScriptFromFlameBtn(), getDeleteScriptBtn(), getScriptRenameBtn(), getDuplicateScriptBtn(), getScriptRunBtn(),
-        getMouseTransformEditGradientButton());
+        getMouseTransformEditGradientButton(), getGradientLibTree());
 
     tinaController = new TinaController(params);
 
@@ -9430,6 +9430,10 @@ public class TinaInternalFrame extends JInternalFrame {
   private JPanel panel_65;
   private JPanel panel_66;
   private JButton gradientEraseRangeBtn;
+  private JSplitPane splitPane;
+  private JPanel gradientLibraryThumbnailPnl;
+  private JScrollPane scrollPane_6;
+  private JTree gradientLibTree;
 
   /**
    * This method initializes renderBatchJobsScrollPane	
@@ -10239,6 +10243,7 @@ public class TinaInternalFrame extends JInternalFrame {
     if (gradientLibraryCenterPanel == null) {
       gradientLibraryCenterPanel = new JPanel();
       gradientLibraryCenterPanel.setLayout(new BorderLayout());
+      gradientLibraryCenterPanel.add(getSplitPane(), BorderLayout.CENTER);
     }
     return gradientLibraryCenterPanel;
   }
@@ -14343,5 +14348,39 @@ public class TinaInternalFrame extends JInternalFrame {
       gradientEraseRangeBtn.setFont(new Font("Dialog", Font.BOLD, 10));
     }
     return gradientEraseRangeBtn;
+  }
+
+  private JSplitPane getSplitPane() {
+    if (splitPane == null) {
+      splitPane = new JSplitPane();
+      splitPane.setOrientation(JSplitPane.VERTICAL_SPLIT);
+      splitPane.setRightComponent(getGradientLibraryThumbnailPnl());
+      splitPane.setLeftComponent(getScrollPane_6_1());
+      splitPane.setDividerLocation(100);
+    }
+    return splitPane;
+  }
+
+  private JPanel getGradientLibraryThumbnailPnl() {
+    if (gradientLibraryThumbnailPnl == null) {
+      gradientLibraryThumbnailPnl = new JPanel();
+      gradientLibraryThumbnailPnl.setLayout(new BorderLayout(0, 0));
+    }
+    return gradientLibraryThumbnailPnl;
+  }
+
+  private JScrollPane getScrollPane_6_1() {
+    if (scrollPane_6 == null) {
+      scrollPane_6 = new JScrollPane();
+      scrollPane_6.setViewportView(getGradientLibTree());
+    }
+    return scrollPane_6;
+  }
+
+  private JTree getGradientLibTree() {
+    if (gradientLibTree == null) {
+      gradientLibTree = new JTree();
+    }
+    return gradientLibTree;
   }
 } //  @jve:decl-index=0:visual-constraint="10,10"
