@@ -1,5 +1,8 @@
 package org.jwildfire.create.tina.dance;
 
+import static org.jwildfire.base.mathlib.MathLib.EPSILON;
+import static org.jwildfire.base.mathlib.MathLib.fabs;
+
 import java.io.File;
 import java.io.InputStream;
 import java.util.Arrays;
@@ -23,8 +26,6 @@ import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.io.Flam3PaletteReader;
 import org.jwildfire.create.tina.io.RGBPaletteReader;
-import org.jwildfire.create.tina.palette.RGBColor;
-import org.jwildfire.create.tina.palette.RGBPalette;
 import org.jwildfire.create.tina.swing.StandardDialogs;
 import org.jwildfire.create.tina.swing.TinaController;
 import org.jwildfire.create.tina.variation.Variation;
@@ -541,7 +542,13 @@ public class JWFScriptController {
         String newName = StandardDialogs.promptForText(rootPanel, "Please enter a name", "");
         if (newName != null) {
           checkScriptName(newName);
-          DefaultMutableTreeNode parent = (DefaultMutableTreeNode) selNode.getParent();
+          DefaultMutableTreeNode parentForNewNode;
+          if (selNode instanceof ScriptFolderNode) {
+            parentForNewNode = selNode;
+          }
+          else {
+            parentForNewNode = (DefaultMutableTreeNode) selNode.getParent();
+          }
           String scriptFilename;
           String descFilename;
           if (selNode instanceof ScriptInternalNode) {
@@ -578,7 +585,7 @@ public class JWFScriptController {
           }
           Tools.writeUTF8Textfile(descFilename, pDescription);
           ScriptUserNode node = new ScriptUserNode(newName, scriptFilename);
-          parent.add(node);
+          parentForNewNode.add(node);
           scriptTree.setSelectionPath(new TreePath(((DefaultTreeModel) scriptTree.getModel()).getPathToRoot(node)));
           scriptTree.getParent().invalidate();
           scriptTree.getParent().validate();
@@ -613,6 +620,9 @@ public class JWFScriptController {
     sb.append("import org.jwildfire.create.tina.transform.XFormTransformService;\n");
     sb.append("import org.jwildfire.create.tina.variation.VariationFunc;\n");
     sb.append("import org.jwildfire.create.tina.variation.VariationFuncList;\n");
+    sb.append("import org.jwildfire.create.tina.mutagen.RandomGradientMutation;\n");
+    sb.append("import org.jwildfire.create.tina.transform.XFormTransformService;\n");
+
     sb.append("\n");
     sb.append("");
     sb.append("public void run(ScriptRunnerEnvironment pEnv) throws Exception {\n");
@@ -623,6 +633,8 @@ public class JWFScriptController {
     sb.append("  flame.setCamPitch(" + Tools.doubleToString(pFlame.getCamPitch()) + ");\n");
     sb.append("  flame.setCamYaw(" + Tools.doubleToString(pFlame.getCamYaw()) + ");\n");
     sb.append("  flame.setCamPerspective(" + Tools.doubleToString(pFlame.getCamPerspective()) + ");\n");
+    sb.append("  flame.setWidth(" + pFlame.getWidth() + ");\n");
+    sb.append("  flame.setHeight(" + pFlame.getHeight() + ");\n");
     sb.append("  flame.setPixelsPerUnit(" + Tools.doubleToString(pFlame.getPixelsPerUnit()) + ");\n");
     sb.append("  flame.setCamZoom(" + Tools.doubleToString(pFlame.getCamZoom()) + ");\n");
 
@@ -639,12 +651,14 @@ public class JWFScriptController {
       }
     }
 
-    sb.append("  // create the gradient\n");
-    for (int i = 0; i < RGBPalette.PALETTE_SIZE; i++) {
-      RGBColor color = pFlame.getPalette().getColor(i);
-      sb.append("  flame.getPalette().setColor(" + i + ", " + color.getRed() + ", " + color.getGreen() + ", " + color.getBlue() + ");\n");
-    }
+    //    sb.append("  // create the gradient\n");
+    //    for (int i = 0; i < RGBPalette.PALETTE_SIZE; i++) {
+    //      RGBColor color = pFlame.getPalette().getColor(i);
+    //      sb.append("  flame.getPalette().setColor(" + i + ", " + color.getRed() + ", " + color.getGreen() + ", " + color.getBlue() + ");\n");
+    //    }
 
+    sb.append("  // create a random gradient\n");
+    sb.append("  new RandomGradientMutation().execute(flame);\n");
     sb.append("  // Load the flame in the editor and refresh the UI\n");
     sb.append("  pEnv.setCurrFlame(flame);\n");
     sb.append("}\n");
@@ -652,7 +666,7 @@ public class JWFScriptController {
   }
 
   private void addXForm(StringBuilder pSB, XForm pXForm, int pIndex, boolean pFinalXForm) {
-    pSB.append("  // " + (pFinalXForm ? "final transform" : "transform") + " " + (pIndex + 1) + "\n");
+    pSB.append("  // create " + (pFinalXForm ? "final transform" : "transform") + " " + (pIndex + 1) + "\n");
     pSB.append("  {\n");
     pSB.append("    XForm xForm = new XForm();\n");
     if (pFinalXForm) {
@@ -679,12 +693,37 @@ public class JWFScriptController {
     pSB.append("    xForm.setPostCoeff20(" + Tools.doubleToString(pXForm.getPostCoeff20()) + ");\n");
     pSB.append("    xForm.setPostCoeff21(" + Tools.doubleToString(pXForm.getPostCoeff21()) + ");\n");
     pSB.append("\n");
+
+    if (!pFinalXForm) {
+      boolean hasHeader = false;
+      for (int i = 0; i < pXForm.getModifiedWeights().length; i++) {
+        if (fabs(pXForm.getModifiedWeights()[i] - 1.0) > EPSILON) {
+          if (!hasHeader) {
+            pSB.append("    // change relative weights\n");
+            hasHeader = true;
+          }
+          pSB.append("    xForm.getModifiedWeights()[" + i + "] = " + Tools.doubleToString(pXForm.getModifiedWeights()[i]) + ";\n");
+        }
+      }
+      if (hasHeader) {
+        pSB.append("\n");
+      }
+    }
+
     if (pXForm.getVariationCount() > 0) {
       for (int i = 0; i < pXForm.getVariationCount(); i++) {
         addVariation(pSB, pXForm.getVariation(i), i);
       }
     }
-    //      xForm.addVariation(2.0, VariationFuncList.getVariationFuncInstance("pre_blur", true));
+    pSB.append("    // random affine transforms (uncomment to play around)\n");
+    pSB.append("    //   XFormTransformService.scale(xForm, 1.25-Math.random()*0.5, true, true, false);\n");
+    pSB.append("    //   XFormTransformService.rotate(xForm, 360.0*Math.random(), false);\n");
+    pSB.append("    //   XFormTransformService.localTranslate(xForm, 1.0-2.0*Math.random(), 1.0-2.0*Math.random(), false);\n");
+    pSB.append("    // random affine post transforms (uncomment to play around)\n");
+    pSB.append("    //   XFormTransformService.scale(xForm, 1.25-Math.random()*0.5, true, true, true);\n");
+    pSB.append("    //   XFormTransformService.rotate(xForm, 360.0*Math.random(), true);\n");
+    pSB.append("    //   XFormTransformService.localTranslate(xForm, 1.0-2.0*Math.random(), 1.0-2.0*Math.random(), true);\n");
+
     pSB.append("  }\n");
   }
 
