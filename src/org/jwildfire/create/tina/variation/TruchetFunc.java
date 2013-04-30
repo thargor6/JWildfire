@@ -32,7 +32,6 @@ import static org.jwildfire.base.mathlib.MathLib.sqrt;
 import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_CUDA;
 import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_JWILDFIRE;
 
-import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
@@ -46,9 +45,8 @@ public class TruchetFunc extends VariationFunc {
   private static final String PARAM_SIZE = "size";
   private static final String PARAM_SEED = "seed";
 
-  private static final String[] paramNames = { PARAM_EXTENDED, PARAM_EXPONENT, PARAM_ARC_WIDTH, PARAM_ROTATION, PARAM_SIZE, PARAM_SEED };
+  private static final String[] paramNames = { PARAM_EXPONENT, PARAM_ARC_WIDTH, PARAM_ROTATION, PARAM_SIZE, PARAM_SEED };
 
-  private int extended = 0;
   private double exponent = 2.0;
   private double arc_width = 0.5;
   private double rotation = 0.0;
@@ -109,49 +107,23 @@ public class TruchetFunc extends VariationFunc {
       tiletype = 1.0;
     }
     else {
-      if (extended == 0) {
-        double xrand = round(pAffineTP.x);
-        double yrand = round(pAffineTP.y);
-        xrand = xrand * seed2;
-        yrand = yrand * seed2;
-        niter = xrand + yrand + xrand * yrand;
-        randint = (niter + seed) * seed2 / 2.0;
-        randint = fmod((randint * multiplier + offset), modbase);
-      }
-      else {
-        seed = floor(seed);
-        int xrand = (int) round(pAffineTP.x);
-        int yrand = (int) round(pAffineTP.y);
-        niter = fabs(xrand + yrand + xrand * yrand);
-        randint = seed + niter;
-        randiter = 0;
-        while (randiter < niter) {
-          randiter += 1;
-          randint = fmod((randint * multiplier + offset), modbase);
-        }
-      }
+      double xrand = round(pAffineTP.x);
+      double yrand = round(pAffineTP.y);
+      xrand = xrand * seed2;
+      yrand = yrand * seed2;
+      niter = xrand + yrand + xrand * yrand;
+      randint = (niter + seed) * seed2 / 2.0;
+      randint = fmod((randint * multiplier + offset), modbase);
       tiletype = fmod(randint, 2.0);//randint%2;
     }
     //DRAWING THE POINTS
-    if (extended == 0) { //Fast drawmode
-      if (tiletype < 1.0) {
-        r0 = pow((pow(fabs(x), n) + pow(fabs(y), n)), onen);
-        r1 = pow((pow(fabs(x - 1.0), n) + pow(fabs(y - 1.0), n)), onen);
-      }
-      else {
-        r0 = pow((pow(fabs(x - 1.0), n) + pow(fabs(y), n)), onen);
-        r1 = pow((pow(fabs(x), n) + pow(fabs(y - 1.0), n)), onen);
-      }
+    if (tiletype < 1.0) {
+      r0 = pow((pow(fabs(x), n) + pow(fabs(y), n)), onen);
+      r1 = pow((pow(fabs(x - 1.0), n) + pow(fabs(y - 1.0), n)), onen);
     }
     else {
-      if (tiletype == 1.0) { //Slow drawmode 
-        r0 = pow((pow(fabs(x), n) + pow(fabs(y), n)), onen);
-        r1 = pow((pow(fabs(x - 1.0), n) + pow(fabs(y - 1.0), n)), onen);
-      }
-      else {
-        r0 = pow((pow(fabs(x - 1.0), n) + pow(fabs(y), n)), onen);
-        r1 = pow((pow(fabs(x), n) + pow(fabs(y - 1.0), n)), onen);
-      }
+      r0 = pow((pow(fabs(x - 1.0), n) + pow(fabs(y), n)), onen);
+      r1 = pow((pow(fabs(x), n) + pow(fabs(y - 1.0), n)), onen);
     }
 
     r = fabs(r0 - 0.5) / rmax;
@@ -177,14 +149,14 @@ public class TruchetFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { extended, exponent, arc_width, rotation, size, seed };
+    return new Object[] { exponent, arc_width, rotation, size, seed };
   }
 
   @Override
   public void setParameter(String pName, double pValue) {
     if (PARAM_EXTENDED.equalsIgnoreCase(pName))
-      extended = Tools.FTOI(pValue);
-    else if (PARAM_EXPONENT.equalsIgnoreCase(pName))
+      ; //    extended = Tools.FTOI(pValue);
+    if (PARAM_EXPONENT.equalsIgnoreCase(pName))
       exponent = pValue;
     else if (PARAM_ARC_WIDTH.equalsIgnoreCase(pName))
       arc_width = pValue;
@@ -205,12 +177,6 @@ public class TruchetFunc extends VariationFunc {
 
   @Override
   public void init(FlameTransformationContext pContext, XForm pXForm, double pAmount) {
-    if (extended < 0) {
-      extended = 0;
-    }
-    else if (extended > 1) {
-      extended = 1;
-    }
     if (exponent < 0.001) {
       exponent = 0.001;
     }
