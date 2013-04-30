@@ -2927,10 +2927,10 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
   }
 
   protected void removeThumbnail(int pIdx) {
-    if (StandardDialogs.confirm(flamePanel, "Do you really want to remove this flame\n from the thumbnail-ribbon?\n (Please note that this cannot be undone)")) {
-      randomBatch.remove(pIdx);
-      updateThumbnails();
-    }
+    //    if (StandardDialogs.confirm(flamePanel, "Do you really want to remove this flame\n from the thumbnail-ribbon?\n (Please note that this cannot be undone)")) {
+    randomBatch.remove(pIdx);
+    updateThumbnails();
+    //    }
   }
 
   public void importFromRandomBatch(int pIdx) {
