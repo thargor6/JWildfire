@@ -539,7 +539,7 @@ public class JWFScriptController {
     try {
       DefaultMutableTreeNode selNode = getSelNode();
       if (selNode != null) {
-        String newName = StandardDialogs.promptForText(rootPanel, "Please enter a name", "");
+        String newName = StandardDialogs.promptForText(rootPanel, "Please enter a script name", "");
         if (newName != null) {
           checkScriptName(newName);
           DefaultMutableTreeNode parentForNewNode;
