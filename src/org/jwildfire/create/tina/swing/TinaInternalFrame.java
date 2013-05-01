@@ -9434,6 +9434,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JPanel gradientLibraryThumbnailPnl;
   private JScrollPane scrollPane_6;
   private JTree gradientLibTree;
+  private JButton gradientMonochromeRangeBtn;
 
   /**
    * This method initializes renderBatchJobsScrollPane	
@@ -14328,6 +14329,7 @@ public class TinaInternalFrame extends JInternalFrame {
       flowLayout.setVgap(1);
       flowLayout.setHgap(0);
       panel_66.add(getGradientEraseRangeBtn());
+      panel_66.add(getGradientMonochromeRangeBtn());
     }
     return panel_66;
   }
@@ -14382,5 +14384,23 @@ public class TinaInternalFrame extends JInternalFrame {
       gradientLibTree = new JTree();
     }
     return gradientLibTree;
+  }
+
+  private JButton getGradientMonochromeRangeBtn() {
+    if (gradientMonochromeRangeBtn == null) {
+      gradientMonochromeRangeBtn = new JButton();
+      gradientMonochromeRangeBtn.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.gradientMononchromeBtn_clicked();
+        }
+      });
+      gradientMonochromeRangeBtn.setToolTipText("Turn the currently selected range into monochrome (i.e. all colors having the same hue)");
+      gradientMonochromeRangeBtn.setText("Mono");
+      gradientMonochromeRangeBtn.setSize(new Dimension(138, 24));
+      gradientMonochromeRangeBtn.setPreferredSize(new Dimension(70, 24));
+      gradientMonochromeRangeBtn.setLocation(new Point(4, 181));
+      gradientMonochromeRangeBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+    }
+    return gradientMonochromeRangeBtn;
   }
 } //  @jve:decl-index=0:visual-constraint="10,10"

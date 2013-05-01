@@ -1000,4 +1000,10 @@ public class FlamePanel extends ImagePanel {
       gradientOverlay.eraseRange(flameHolder.getFlame().getPalette());
     }
   }
+
+  public void gradientMonochrome() {
+    if (flameHolder.getFlame() != null) {
+      gradientOverlay.monochrome(flameHolder.getFlame().getPalette());
+    }
+  }
 }

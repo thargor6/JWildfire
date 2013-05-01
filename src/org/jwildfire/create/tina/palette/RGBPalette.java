@@ -532,4 +532,33 @@ public class RGBPalette implements Assignable<RGBPalette>, Serializable {
     selectionProvider = pSelectionProvider;
     modified = true;
   }
+
+  public void monochrome(int pStartIdx, int pEndIdx) {
+    if (pStartIdx < pEndIdx + 1) {
+      Pixel rgbPixel = new Pixel();
+      HSLTransformer.HSLPixel hslPixel = new HSLTransformer.HSLPixel();
+      double avgHue = 0.0;
+      int cnt = 0;
+      for (int i = pStartIdx; i <= pEndIdx; i++) {
+        RGBColor color = getRawColor(i);
+        rgbPixel.setRGB(color.getRed(), color.getGreen(), color.getBlue());
+        HSLTransformer.rgb2hsl(rgbPixel, hslPixel);
+        avgHue += hslPixel.hue;
+        cnt++;
+      }
+      avgHue /= (double) cnt;
+      for (int i = pStartIdx; i <= pEndIdx; i++) {
+        RGBColor color = getRawColor(i);
+        rgbPixel.setRGB(color.getRed(), color.getGreen(), color.getBlue());
+        HSLTransformer.rgb2hsl(rgbPixel, hslPixel);
+        hslPixel.hue = avgHue;
+        HSLTransformer.hsl2rgb(hslPixel, rgbPixel);
+        color.setRed(rgbPixel.r);
+        color.setGreen(rgbPixel.g);
+        color.setBlue(rgbPixel.b);
+        rawColors.put(i, color);
+      }
+      modified = true;
+    }
+  }
 }

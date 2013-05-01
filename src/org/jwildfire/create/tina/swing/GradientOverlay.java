@@ -354,4 +354,8 @@ public class GradientOverlay {
       }
     }
   }
+
+  public void monochrome(RGBPalette pGradient) {
+    pGradient.monochrome(getFrom(), getTo());
+  }
 }

@@ -92,7 +92,7 @@ public class HSLTransformer extends Mesh2DTransformer {
     }
   }
 
-  protected static void hsl2rgb(HSLPixel hslPixel, Pixel rgbPixel) {
+  public static void hsl2rgb(HSLPixel hslPixel, Pixel rgbPixel) {
     double luminosity = hslPixel.luminosity;
     double saturation = hslPixel.saturation;
     double hue = hslPixel.hue;
