@@ -3435,7 +3435,6 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
           else {
             centerPanel.getParent().validate();
             centerPanel.repaint();
-            System.out.println("JUST REDRAW");
           }
         }
         if (xForm != null) {
@@ -5364,6 +5363,12 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
   public void gradientMononchromeBtn_clicked() {
     undoManager.saveUndoPoint(getCurrFlame());
     getFlamePanel().gradientMonochrome();
+    refreshFlameImage(false);
+  }
+
+  public void gradientFadeAllBtn_clicked() {
+    undoManager.saveUndoPoint(getCurrFlame());
+    getFlamePanel().gradientFadeAll();
     refreshFlameImage(false);
   }
 

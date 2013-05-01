@@ -358,4 +358,17 @@ public class GradientOverlay {
   public void monochrome(RGBPalette pGradient) {
     pGradient.monochrome(getFrom(), getTo());
   }
+
+  public void fadeAll(RGBPalette pGradient) {
+    int startIdx = getFrom();
+    for (int i = getFrom(); i <= getTo(); i++) {
+      RGBColor color = pGradient.getRawColor(i);
+      if (color.getRed() > 0 || color.getGreen() > 0 || color.getBlue() > 0 || i == getTo()) {
+        if (startIdx < i) {
+          pGradient.fadeRange(startIdx, i);
+          startIdx = i;
+        }
+      }
+    }
+  }
 }

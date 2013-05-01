@@ -9435,6 +9435,8 @@ public class TinaInternalFrame extends JInternalFrame {
   private JScrollPane scrollPane_6;
   private JTree gradientLibTree;
   private JButton gradientMonochromeRangeBtn;
+  private JPanel panel_67;
+  private JButton gradientFadeAllBtn;
 
   /**
    * This method initializes renderBatchJobsScrollPane	
@@ -14118,6 +14120,7 @@ public class TinaInternalFrame extends JInternalFrame {
       gradientEditorFncPnl.add(getPanel_65());
       gradientEditorFncPnl.add(getPanel_64());
       gradientEditorFncPnl.add(getPanel_66());
+      gradientEditorFncPnl.add(getPanel_67());
     }
     return gradientEditorFncPnl;
   }
@@ -14242,7 +14245,7 @@ public class TinaInternalFrame extends JInternalFrame {
       flowLayout.setHgap(0);
       panel_62.setPreferredSize(new Dimension(70, 54));
       panel_62.add(getGradientFadeBtn());
-      panel_62.add(getGradientSortBtn());
+      panel_62.add(getGradientFadeAllBtn());
     }
     return panel_62;
   }
@@ -14329,7 +14332,6 @@ public class TinaInternalFrame extends JInternalFrame {
       flowLayout.setVgap(1);
       flowLayout.setHgap(0);
       panel_66.add(getGradientEraseRangeBtn());
-      panel_66.add(getGradientMonochromeRangeBtn());
     }
     return panel_66;
   }
@@ -14402,5 +14404,36 @@ public class TinaInternalFrame extends JInternalFrame {
       gradientMonochromeRangeBtn.setFont(new Font("Dialog", Font.BOLD, 10));
     }
     return gradientMonochromeRangeBtn;
+  }
+
+  private JPanel getPanel_67() {
+    if (panel_67 == null) {
+      panel_67 = new JPanel();
+      FlowLayout flowLayout = (FlowLayout) panel_67.getLayout();
+      flowLayout.setVgap(1);
+      flowLayout.setHgap(0);
+      panel_67.setPreferredSize(new Dimension(70, 54));
+      panel_67.add(getGradientMonochromeRangeBtn());
+      panel_67.add(getGradientSortBtn());
+    }
+    return panel_67;
+  }
+
+  private JButton getGradientFadeAllBtn() {
+    if (gradientFadeAllBtn == null) {
+      gradientFadeAllBtn = new JButton();
+      gradientFadeAllBtn.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.gradientFadeAllBtn_clicked();
+        }
+      });
+      gradientFadeAllBtn.setToolTipText("Fade all colors which are not exactly black into each other, best option to create to create new gradients");
+      gradientFadeAllBtn.setText("Fade All");
+      gradientFadeAllBtn.setSize(new Dimension(138, 24));
+      gradientFadeAllBtn.setPreferredSize(new Dimension(70, 24));
+      gradientFadeAllBtn.setLocation(new Point(4, 181));
+      gradientFadeAllBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+    }
+    return gradientFadeAllBtn;
   }
 } //  @jve:decl-index=0:visual-constraint="10,10"

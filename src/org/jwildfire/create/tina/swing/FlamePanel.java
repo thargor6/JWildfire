@@ -1017,4 +1017,10 @@ public class FlamePanel extends ImagePanel {
   public boolean isReRender() {
     return reRender;
   }
+
+  public void gradientFadeAll() {
+    if (flameHolder.getFlame() != null) {
+      gradientOverlay.fadeAll(flameHolder.getFlame().getPalette());
+    }
+  }
 }
