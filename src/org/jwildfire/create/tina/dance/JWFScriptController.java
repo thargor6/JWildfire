@@ -142,6 +142,9 @@ public class JWFScriptController {
   }
 
   public void enableControls() {
+    String baseDrawer = prefs.getTinaJWFScriptPath();
+    boolean enableUserScripts = baseDrawer != null && baseDrawer.length() > 0;
+
     DefaultMutableTreeNode selNode = getSelNode();
     allowEdit = (selNode != null) && (selNode instanceof ScriptUserNode);
     boolean scriptSelected = (selNode != null) && ((selNode instanceof ScriptUserNode) || (selNode instanceof ScriptInternalNode));
@@ -155,11 +158,11 @@ public class JWFScriptController {
 
     compileScriptButton.setEnabled(scriptSelected);
     rescanScriptsBtn.setEnabled(!editing);
-    newScriptBtn.setEnabled(userPathSelected && !editing);
-    newScriptFromFlameBtn.setEnabled(userPathSelected && !editing && tinaController.getCurrFlame() != null);
-    deleteScriptBtn.setEnabled(userScriptSelected && !editing);
-    scriptRenameBtn.setEnabled(userScriptSelected && !editing);
-    scriptDuplicateBtn.setEnabled(scriptSelected && !editing);
+    newScriptBtn.setEnabled(enableUserScripts && userPathSelected && !editing);
+    newScriptFromFlameBtn.setEnabled(enableUserScripts && userPathSelected && !editing && tinaController.getCurrFlame() != null);
+    deleteScriptBtn.setEnabled(enableUserScripts && userScriptSelected && !editing);
+    scriptRenameBtn.setEnabled(enableUserScripts && userScriptSelected && !editing);
+    scriptDuplicateBtn.setEnabled(enableUserScripts && scriptSelected && !editing);
     scriptRunBtn.setEnabled(scriptSelected);
     saveScriptBtn.setEnabled(editing);
     revertScriptBtn.setEnabled(editing);
