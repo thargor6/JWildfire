@@ -2761,6 +2761,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
   public void gradientMarker_selectColor(int pIdx) {
     if (getFlamePanel().gradientMarker_selectColor(pIdx)) {
       transformationTableClicked();
+      refreshPaletteImg();
     }
   }
 
@@ -5283,41 +5284,46 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     undoManager.saveUndoPoint(getCurrFlame());
     getFlamePanel().gradientFade();
     refreshFlameImage(false);
+    refreshPaletteImg();
   }
 
   public void gradientInvertBtn_clicked() {
     undoManager.saveUndoPoint(getCurrFlame());
     getFlamePanel().gradientInvert();
     refreshFlameImage(false);
+    refreshPaletteImg();
   }
 
   public void gradientReverseBtn_clicked() {
     undoManager.saveUndoPoint(getCurrFlame());
     getFlamePanel().gradientReverse();
     refreshFlameImage(false);
+    refreshPaletteImg();
   }
 
   public void gradientSortBtn_clicked() {
     undoManager.saveUndoPoint(getCurrFlame());
     getFlamePanel().gradientSort();
     refreshFlameImage(false);
+    refreshPaletteImg();
   }
 
   public void gradientSelectAllBtn_clicked() {
     getFlamePanel().gradientSelectAll();
-    refreshFlameImage(false);
   }
 
   public void gradientApplyBalancingBtn_clicked() {
     undoManager.saveUndoPoint(getCurrFlame());
     // TODO
     refreshFlameImage(false);
+    refreshPaletteImg();
   }
 
   public void gradientApplyTXBtn_clicked() {
     undoManager.saveUndoPoint(getCurrFlame());
     // TODO
     refreshFlameImage(false);
+    refreshPaletteImg();
   }
 
   private final static GradientSelectionProvider dfltGradientSelection = new DefaultGradientSelectionProvider();
@@ -5345,31 +5351,34 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
   public void gradientCopyRangeBtn_clicked() {
     undoManager.saveUndoPoint(getCurrFlame());
     getFlamePanel().gradientCopyRange();
-    refreshFlameImage(false);
   }
 
   public void gradientPasteRangeBtn_clicked() {
     undoManager.saveUndoPoint(getCurrFlame());
     getFlamePanel().gradientPasteRange();
     refreshFlameImage(false);
+    refreshPaletteImg();
   }
 
   public void gradientEraseRangeBtn_clicked() {
     undoManager.saveUndoPoint(getCurrFlame());
     getFlamePanel().gradientEraseRange();
     refreshFlameImage(false);
+    refreshPaletteImg();
   }
 
   public void gradientMononchromeBtn_clicked() {
     undoManager.saveUndoPoint(getCurrFlame());
     getFlamePanel().gradientMonochrome();
     refreshFlameImage(false);
+    refreshPaletteImg();
   }
 
   public void gradientFadeAllBtn_clicked() {
     undoManager.saveUndoPoint(getCurrFlame());
     getFlamePanel().gradientFadeAll();
     refreshFlameImage(false);
+    refreshPaletteImg();
   }
 
 }

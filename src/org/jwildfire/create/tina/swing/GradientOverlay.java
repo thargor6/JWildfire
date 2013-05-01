@@ -68,12 +68,9 @@ public class GradientOverlay {
     xMin = xPos[0] = GRADIENT_OUTER_BORDER + 1;
     xMax = xPos[GRADIENT_SIZE] = pViewportWidth - GRADIENT_OUTER_BORDER - 1;
     double xScl = (double) (pViewportWidth - 2 * GRADIENT_OUTER_BORDER - 1 + 1) * gradientZoom / (double) (GRADIENT_SIZE + 2);
-    //    System.out.println(xPos[0]);
     for (int i = 1; i < GRADIENT_SIZE; i++) {
       xPos[i] = GRADIENT_OUTER_BORDER + 1 + (int) ((i + gradientOff) * xScl + 0.5);
-      //      System.out.println(xPos[i]);
     }
-    //    System.out.println(xPos[GRADIENT_SIZE]);
   }
 
   public void paintGradient(Graphics2D g, RGBPalette pGradient, Rectangle pBounds) {
@@ -166,8 +163,14 @@ public class GradientOverlay {
     else if (iDX > -1 && pDX < 0.0) {
       iDX = -1;
     }
+    // drag marker
+    if (dragStartY > markerHandleYMin && dragStartY < markerHandleYMax) {
+      if (dragMarkerIdx >= 0) {
+        setMarker(pPosX, dragMarkerIdx);
+      }
+    }
     // drag gradient
-    if (dragStartY > yMin && dragStartY < yMax) {
+    else if (dragStartY > yMin && dragStartY < yMax) {
       if (fabs(gradientZoom - 1.0) < EPSILON) {
         int modShift = pFlame.getPalette().getModShift() + iDX;
         while (modShift < -255) {
@@ -186,12 +189,6 @@ public class GradientOverlay {
         else {
 
         }
-      }
-    }
-    // drag marker
-    else if (dragStartY > markerHandleYMin && dragStartY < markerHandleYMax) {
-      if (dragMarkerIdx >= 0) {
-        setMarker(pPosX, dragMarkerIdx);
       }
     }
   }
@@ -360,10 +357,11 @@ public class GradientOverlay {
   }
 
   public void fadeAll(RGBPalette pGradient) {
-    int startIdx = getFrom();
-    for (int i = getFrom(); i <= getTo(); i++) {
+    int startIdx = 0;//getFrom();
+    int endIdx = GRADIENT_SIZE - 1; // getTo();
+    for (int i = startIdx; i <= endIdx; i++) {
       RGBColor color = pGradient.getRawColor(i);
-      if (color.getRed() > 0 || color.getGreen() > 0 || color.getBlue() > 0 || i == getTo()) {
+      if (color.getRed() > 0 || color.getGreen() > 0 || color.getBlue() > 0 || i == endIdx) {
         if (startIdx < i) {
           pGradient.fadeRange(startIdx, i);
           startIdx = i;

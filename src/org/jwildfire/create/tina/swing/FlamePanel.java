@@ -638,7 +638,7 @@ public class FlamePanel extends ImagePanel {
   }
 
   public void mousePressed(int x, int y) {
-    if (selectedXForm != null || mouseDragOperation == MouseDragOperation.VIEW) {
+    if (selectedXForm != null || mouseDragOperation == MouseDragOperation.VIEW || mouseDragOperation == MouseDragOperation.GRADIENT) {
       xMouseClickPosition = xBeginDrag = x;
       yMouseClickPosition = yBeginDrag = y;
       gradientOverlay.beginDrag(xMouseClickPosition, yMouseClickPosition);

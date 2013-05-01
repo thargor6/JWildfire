@@ -9427,8 +9427,6 @@ public class TinaInternalFrame extends JInternalFrame {
   private JPanel panel_64;
   private JButton gradientCopyRangeBtn;
   private JButton gradientPasteRangeBtn;
-  private JPanel panel_65;
-  private JPanel panel_66;
   private JButton gradientEraseRangeBtn;
   private JSplitPane splitPane;
   private JPanel gradientLibraryThumbnailPnl;
@@ -9437,6 +9435,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton gradientMonochromeRangeBtn;
   private JPanel panel_67;
   private JButton gradientFadeAllBtn;
+  private JPanel panel_65;
 
   /**
    * This method initializes renderBatchJobsScrollPane	
@@ -14114,12 +14113,11 @@ public class TinaInternalFrame extends JInternalFrame {
       gradientEditorFncPnl = new JPanel();
       FlowLayout flowLayout = (FlowLayout) gradientEditorFncPnl.getLayout();
       flowLayout.setVgap(1);
-      gradientEditorFncPnl.setPreferredSize(new Dimension(80, 54));
+      gradientEditorFncPnl.setPreferredSize(new Dimension(80, 50));
       gradientEditorFncPnl.add(getPanel_62());
       gradientEditorFncPnl.add(getPanel_63());
-      gradientEditorFncPnl.add(getPanel_65());
       gradientEditorFncPnl.add(getPanel_64());
-      gradientEditorFncPnl.add(getPanel_66());
+      gradientEditorFncPnl.add(getPanel_65());
       gradientEditorFncPnl.add(getPanel_67());
     }
     return gradientEditorFncPnl;
@@ -14241,9 +14239,9 @@ public class TinaInternalFrame extends JInternalFrame {
     if (panel_62 == null) {
       panel_62 = new JPanel();
       FlowLayout flowLayout = (FlowLayout) panel_62.getLayout();
-      flowLayout.setVgap(1);
+      flowLayout.setVgap(0);
       flowLayout.setHgap(0);
-      panel_62.setPreferredSize(new Dimension(70, 54));
+      panel_62.setPreferredSize(new Dimension(70, 50));
       panel_62.add(getGradientFadeBtn());
       panel_62.add(getGradientFadeAllBtn());
     }
@@ -14254,9 +14252,9 @@ public class TinaInternalFrame extends JInternalFrame {
     if (panel_63 == null) {
       panel_63 = new JPanel();
       FlowLayout flowLayout = (FlowLayout) panel_63.getLayout();
-      flowLayout.setVgap(1);
+      flowLayout.setVgap(0);
       flowLayout.setHgap(0);
-      panel_63.setPreferredSize(new Dimension(70, 54));
+      panel_63.setPreferredSize(new Dimension(70, 50));
       panel_63.add(getGradientInvertBtn());
       panel_63.add(getGradientReverseBtn());
     }
@@ -14267,9 +14265,9 @@ public class TinaInternalFrame extends JInternalFrame {
     if (panel_64 == null) {
       panel_64 = new JPanel();
       FlowLayout flowLayout = (FlowLayout) panel_64.getLayout();
-      flowLayout.setVgap(1);
+      flowLayout.setVgap(0);
       flowLayout.setHgap(0);
-      panel_64.setPreferredSize(new Dimension(70, 54));
+      panel_64.setPreferredSize(new Dimension(70, 50));
       panel_64.add(getGradientCopyRangeBtn());
       panel_64.add(getGradientPasteRangeBtn());
     }
@@ -14310,30 +14308,6 @@ public class TinaInternalFrame extends JInternalFrame {
       gradientPasteRangeBtn.setFont(new Font("Dialog", Font.BOLD, 10));
     }
     return gradientPasteRangeBtn;
-  }
-
-  private JPanel getPanel_65() {
-    if (panel_65 == null) {
-      panel_65 = new JPanel();
-      FlowLayout flowLayout = (FlowLayout) panel_65.getLayout();
-      flowLayout.setVgap(1);
-      flowLayout.setHgap(0);
-      panel_65.setPreferredSize(new Dimension(70, 54));
-      panel_65.add(getGradientSelectAllBtn());
-    }
-    return panel_65;
-  }
-
-  private JPanel getPanel_66() {
-    if (panel_66 == null) {
-      panel_66 = new JPanel();
-      panel_66.setPreferredSize(new Dimension(70, 54));
-      FlowLayout flowLayout = (FlowLayout) panel_66.getLayout();
-      flowLayout.setVgap(1);
-      flowLayout.setHgap(0);
-      panel_66.add(getGradientEraseRangeBtn());
-    }
-    return panel_66;
   }
 
   private JButton getGradientEraseRangeBtn() {
@@ -14410,9 +14384,9 @@ public class TinaInternalFrame extends JInternalFrame {
     if (panel_67 == null) {
       panel_67 = new JPanel();
       FlowLayout flowLayout = (FlowLayout) panel_67.getLayout();
-      flowLayout.setVgap(1);
+      flowLayout.setVgap(0);
       flowLayout.setHgap(0);
-      panel_67.setPreferredSize(new Dimension(70, 54));
+      panel_67.setPreferredSize(new Dimension(70, 50));
       panel_67.add(getGradientMonochromeRangeBtn());
       panel_67.add(getGradientSortBtn());
     }
@@ -14435,5 +14409,18 @@ public class TinaInternalFrame extends JInternalFrame {
       gradientFadeAllBtn.setFont(new Font("Dialog", Font.BOLD, 10));
     }
     return gradientFadeAllBtn;
+  }
+
+  private JPanel getPanel_65() {
+    if (panel_65 == null) {
+      panel_65 = new JPanel();
+      FlowLayout flowLayout = (FlowLayout) panel_65.getLayout();
+      flowLayout.setVgap(0);
+      flowLayout.setHgap(0);
+      panel_65.setPreferredSize(new Dimension(70, 50));
+      panel_65.add(getGradientSelectAllBtn());
+      panel_65.add(getGradientEraseRangeBtn());
+    }
+    return panel_65;
   }
 } //  @jve:decl-index=0:visual-constraint="10,10"
