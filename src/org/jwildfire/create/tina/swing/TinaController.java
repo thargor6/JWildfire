@@ -3429,7 +3429,14 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       if (flame != null && flamePanel != null) {
         XForm xForm = flamePanel.mouseClicked(e.getX(), e.getY());
         if (flamePanel.isRedrawAfterMouseClick()) {
-          refreshFlameImage(false);
+          if (flamePanel.isReRender()) {
+            refreshFlameImage(false);
+          }
+          else {
+            centerPanel.getParent().validate();
+            centerPanel.repaint();
+            System.out.println("JUST REDRAW");
+          }
         }
         if (xForm != null) {
           for (int i = 0; i < flame.getXForms().size(); i++) {

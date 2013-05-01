@@ -81,6 +81,7 @@ public class FlamePanel extends ImagePanel {
   private int selectedPoint = 1;
 
   private boolean redrawAfterMouseClick;
+  private boolean reRender;
   private UndoManagerHolder<Flame> undoManagerHolder;
   private GradientOverlay gradientOverlay = new GradientOverlay(this);
 
@@ -396,6 +397,7 @@ public class FlamePanel extends ImagePanel {
   }
 
   public boolean mouseDragged(int pX, int pY, boolean pLeftButton, boolean pRightButton, boolean pMiddleButton) {
+    reRender = true;
     int viewDX = pX - xBeginDrag;
     int viewDY = pY - yBeginDrag;
     if (viewDX != 0 || viewDY != 0) {
@@ -626,6 +628,7 @@ public class FlamePanel extends ImagePanel {
               dx *= 0.25;
             }
             gradientOverlay.mouseDragged(dx, xBeginDrag, yBeginDrag, flame);
+            reRender = false;
             return true;
           }
         }
@@ -702,6 +705,7 @@ public class FlamePanel extends ImagePanel {
             if (mouseDragOperation == MouseDragOperation.POINTS) {
               selectedPoint = selectNearestPoint(triangle, x, y);
               redrawAfterMouseClick = true;
+              reRender = true;
             }
             return xForm;
           }
@@ -712,6 +716,7 @@ public class FlamePanel extends ImagePanel {
             if (mouseDragOperation == MouseDragOperation.POINTS) {
               selectedPoint = selectNearestPoint(triangle, x, y);
               redrawAfterMouseClick = true;
+              reRender = true;
             }
             return xForm;
           }
@@ -723,12 +728,14 @@ public class FlamePanel extends ImagePanel {
       Triangle triangle = new Triangle(selectedXForm);
       selectedPoint = selectNearestPoint(triangle, x, y);
       redrawAfterMouseClick = true;
+      reRender = true;
     }
     else if (mouseDragOperation == MouseDragOperation.GRADIENT && flameHolder.getFlame() != null) {
       if (undoManagerHolder != null) {
         undoManagerHolder.saveUndoPoint();
       }
       redrawAfterMouseClick = gradientOverlay.mouseClicked(x, y, flameHolder.getFlame().getPalette());
+      reRender = false;
     }
     return null;
   }
@@ -1005,5 +1012,9 @@ public class FlamePanel extends ImagePanel {
     if (flameHolder.getFlame() != null) {
       gradientOverlay.monochrome(flameHolder.getFlame().getPalette());
     }
+  }
+
+  public boolean isReRender() {
+    return reRender;
   }
 }
