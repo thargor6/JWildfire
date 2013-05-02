@@ -82,10 +82,8 @@ import org.jwildfire.create.tina.dance.DancingFractalsController;
 import org.jwildfire.create.tina.dance.GradientController;
 import org.jwildfire.create.tina.dance.JWFScriptController;
 import org.jwildfire.create.tina.edit.UndoManager;
-import org.jwildfire.create.tina.io.Flam3PaletteReader;
 import org.jwildfire.create.tina.io.Flam3Reader;
 import org.jwildfire.create.tina.io.Flam3Writer;
-import org.jwildfire.create.tina.io.RGBPaletteReader;
 import org.jwildfire.create.tina.mutagen.MutaGenController;
 import org.jwildfire.create.tina.palette.DefaultGradientSelectionProvider;
 import org.jwildfire.create.tina.palette.GradientSelectionProvider;
@@ -234,7 +232,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
         parameterObject.saveScriptBtn, parameterObject.revertScriptBtn, parameterObject.rescanScriptsBtn, parameterObject.newScriptBtn, parameterObject.newScriptFromFlameBtn, parameterObject.deleteScriptBtn,
         parameterObject.scriptRenameBtn, parameterObject.scriptDuplicateBtn, parameterObject.scriptRunBtn);
 
-    gradientController = new GradientController(this, parameterObject.pErrorHandler, prefs, parameterObject.pCenterPanel, parameterObject.gradientLibTree);
+    gradientController = new GradientController(this, parameterObject.pErrorHandler, prefs, parameterObject.pCenterPanel, parameterObject.gradientLibTree, parameterObject.pGradientLibraryPanel, parameterObject.pGradientLibraryGradientCmb);
 
     data.cameraRollREd = parameterObject.pCameraRollREd;
     data.cameraRollSlider = parameterObject.pCameraRollSlider;
@@ -513,8 +511,6 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
 
     refreshPaletteColorsTable();
     refreshRenderBatchJobsTable();
-
-    initGradientLibrary();
 
     enableControls();
     enableShadingUI();
@@ -1976,7 +1972,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
         getCurrFlame().setLastFilename(file.getName());
         undoManager.initUndoStack(getCurrFlame());
 
-        for (int i = flames.size() - 1; i >= 0; i--) {
+        for (int i = flames.size() - 1; i >= 1; i--) {
           randomBatch.add(0, new FlameThumbnail(flames.get(i), null));
         }
         updateThumbnails();
@@ -3865,7 +3861,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
           Flame flame = flames.get(0);
           setCurrFlame(flame);
           undoManager.initUndoStack(getCurrFlame());
-          for (int i = flames.size() - 1; i >= 0; i--) {
+          for (int i = flames.size() - 1; i >= 1; i--) {
             randomBatch.add(0, new FlameThumbnail(flames.get(i), null));
           }
           setupProfiles(getCurrFlame());
@@ -4336,95 +4332,6 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
 
   public void paletteBlurSlider_stateChanged(ChangeEvent e) {
     paletteSliderChanged(data.paletteBlurSlider, data.paletteBlurREd, "modBlur", 1.0);
-  }
-
-  private List<RGBPalette> gradientLibraryList = new ArrayList<RGBPalette>();
-  private final int GRADIENT_THUMB_HEIGHT = 20;
-  private final int GRADIENT_THUMB_BORDER = 2;
-
-  private void initGradientLibrary() {
-    boolean oldCmbRefreshing = cmbRefreshing;
-    cmbRefreshing = true;
-    try {
-      try {
-        RGBPaletteReader reader = new Flam3PaletteReader();
-        InputStream is = reader.getClass().getResourceAsStream("flam3-palettes.xml");
-        gradientLibraryList.addAll(reader.readPalettes(is));
-      }
-      catch (Exception ex) {
-        ex.printStackTrace();
-      }
-      if (gradientLibraryList.size() == 0) {
-        for (int i = 0; i < 20; i++) {
-          RGBPalette palette = new RandomRGBPaletteGenerator().generatePalette(7);
-          gradientLibraryList.add(palette);
-        }
-      }
-
-      data.gradientLibraryGradientCmb.removeAllItems();
-      List<SimpleImage> thumbnailsList = new ArrayList<SimpleImage>();
-      for (RGBPalette palette : gradientLibraryList) {
-        thumbnailsList.add(new RGBPaletteRenderer().renderHorizPalette(palette, RGBPalette.PALETTE_SIZE, GRADIENT_THUMB_HEIGHT));
-        data.gradientLibraryGradientCmb.addItem(palette);
-      }
-      data.gradientLibraryGradientCmb.setSelectedIndex(-1);
-      updateGradientThumbnails(thumbnailsList);
-    }
-    finally {
-      cmbRefreshing = oldCmbRefreshing;
-    }
-  }
-
-  public void updateGradientThumbnails(List<SimpleImage> pImages) {
-    if (data.gradientLibraryScrollPane != null) {
-      data.gradientLibraryPanel.remove(data.gradientLibraryScrollPane);
-      data.gradientLibraryScrollPane = null;
-    }
-    int panelWidth = data.gradientLibraryPanel.getBounds().width - 2 * GRADIENT_THUMB_BORDER;
-    int panelHeight = (GRADIENT_THUMB_HEIGHT + GRADIENT_THUMB_BORDER) * pImages.size();
-    JPanel gradientsPanel = new JPanel();
-    gradientsPanel.setLayout(null);
-    gradientsPanel.setSize(panelWidth, panelHeight);
-    gradientsPanel.setPreferredSize(new Dimension(panelWidth, panelHeight));
-    for (int i = 0; i < pImages.size(); i++) {
-      SimpleImage img = pImages.get(i);
-      ImagePanel imgPanel = new ImagePanel(img, 0, 0, img.getImageWidth());
-      imgPanel.setImage(img);
-      imgPanel.setLocation(GRADIENT_THUMB_BORDER, i * GRADIENT_THUMB_HEIGHT + (i + 1) * GRADIENT_THUMB_BORDER);
-      final int idx = i;
-      imgPanel.addMouseListener(new java.awt.event.MouseAdapter() {
-        public void mouseClicked(java.awt.event.MouseEvent e) {
-          if (e.getClickCount() > 1 || (e.getClickCount() == 1 && e.getButton() == MouseEvent.BUTTON3)) {
-            importFromGradientLibrary(idx);
-          }
-        }
-      });
-      gradientsPanel.add(imgPanel);
-    }
-    data.gradientLibraryScrollPane = new JScrollPane(gradientsPanel);
-    data.gradientLibraryScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-    data.gradientLibraryScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-
-    data.gradientLibraryPanel.add(data.gradientLibraryScrollPane, BorderLayout.CENTER);
-    data.gradientLibraryPanel.validate();
-  }
-
-  private void importFromGradientLibrary(int idx) {
-    if (idx >= 0 && idx < gradientLibraryList.size()) {
-      data.gradientLibraryGradientCmb.setSelectedItem(gradientLibraryList.get(idx));
-    }
-  }
-
-  public void gradientLibraryGradientChanged() {
-    if (!cmbRefreshing) {
-      if (getCurrFlame() != null && data.gradientLibraryGradientCmb.getSelectedIndex() >= 0 && data.gradientLibraryGradientCmb.getSelectedIndex() < gradientLibraryList.size()) {
-        saveUndoPoint();
-        RGBPalette palette = gradientLibraryList.get(data.gradientLibraryGradientCmb.getSelectedIndex()).makeCopy();
-        getCurrFlame().setPalette(palette);
-        refreshPaletteUI(palette);
-        refreshFlameImage(false);
-      }
-    }
   }
 
   public void affineC01REd_changed() {
@@ -5310,6 +5217,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
 
   public void gradientSelectAllBtn_clicked() {
     getFlamePanel().gradientSelectAll();
+    refreshFlameImage(false);
   }
 
   public void gradientApplyBalancingBtn_clicked() {

@@ -10266,7 +10266,7 @@ public class TinaInternalFrame extends JInternalFrame {
       gradientLibraryGradientCmb.addItemListener(new java.awt.event.ItemListener() {
         public void itemStateChanged(java.awt.event.ItemEvent e) {
           if (tinaController != null) {
-            tinaController.gradientLibraryGradientChanged();
+            tinaController.getGradientController().gradientLibraryGradientChanged();
           }
         }
       });
@@ -14334,7 +14334,7 @@ public class TinaInternalFrame extends JInternalFrame {
       splitPane.setOrientation(JSplitPane.VERTICAL_SPLIT);
       splitPane.setRightComponent(getGradientLibraryThumbnailPnl());
       splitPane.setLeftComponent(getScrollPane_6_1());
-      splitPane.setDividerLocation(100);
+      splitPane.setDividerLocation(142);
     }
     return splitPane;
   }
@@ -14358,6 +14358,11 @@ public class TinaInternalFrame extends JInternalFrame {
   private JTree getGradientLibTree() {
     if (gradientLibTree == null) {
       gradientLibTree = new JTree();
+      gradientLibTree.addTreeSelectionListener(new TreeSelectionListener() {
+        public void valueChanged(TreeSelectionEvent e) {
+          tinaController.getGradientController().gradientTree_changed(e);
+        }
+      });
     }
     return gradientLibTree;
   }

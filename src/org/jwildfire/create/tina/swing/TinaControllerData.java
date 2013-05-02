@@ -208,7 +208,6 @@ public class TinaControllerData {
   public JToggleButton toggleVariationsButton;
   public JToggleButton toggleTransparencyButton;
   public JPanel gradientLibraryPanel;
-  public JScrollPane gradientLibraryScrollPane;
   public JComboBox gradientLibraryGradientCmb;
   public JPanel randomBatchPanel;
   public JScrollPane randomBatchScrollPane;
