@@ -368,7 +368,7 @@ public class JWFScriptController {
     private static final long serialVersionUID = 1L;
 
     public InvalidScriptFolderNode() {
-      super("(script-path is empty, check the Prefs)", null, false);
+      super("(user-script-path is empty, check the Prefs)", null, true);
     }
   }
 
@@ -410,12 +410,12 @@ public class JWFScriptController {
     // External flames
     {
       String baseDrawer = prefs.getTinaJWFScriptPath();
-      DefaultMutableTreeNode parentNode = userScriptsRootNode = new ScriptFolderNode("Your scripts", baseDrawer, true);
-      root.add(parentNode);
       if (baseDrawer == null || baseDrawer.equals("") || baseDrawer.equals(".") || baseDrawer.equals("/") || baseDrawer.equals("\\")) {
-        parentNode.add(new InvalidScriptFolderNode());
+        root.add(new InvalidScriptFolderNode());
       }
       else {
+        DefaultMutableTreeNode parentNode = userScriptsRootNode = new ScriptFolderNode("Your scripts", baseDrawer, true);
+        root.add(parentNode);
         scanUserScripts(baseDrawer, parentNode);
       }
     }
