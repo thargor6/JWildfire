@@ -18,6 +18,7 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 
 import org.jwildfire.base.Prefs;
@@ -57,6 +58,8 @@ public class GradientController {
     gradientLibraryGradientCmb = pGradientLibraryGradientCmb;
     enableControls();
     initGradientsLibrary();
+
+    enableControls();
   }
 
   private abstract static class AbstractGradientNode extends DefaultMutableTreeNode {
@@ -122,6 +125,7 @@ public class GradientController {
 
   private void initGradientsLibrary() {
     DefaultMutableTreeNode root = new DefaultMutableTreeNode("Gradient library", true);
+    GradientInternalNode initialSelNode = null;
     // Internal gradients
     {
       String[] ressources = { "flam3-palettes.xml" };
@@ -145,6 +149,9 @@ public class GradientController {
                 root.add(defaultFolderNode);
               }
               defaultFolderNode.add(node);
+              if (initialSelNode == null) {
+                initialSelNode = node;
+              }
             }
           }
         }
@@ -168,6 +175,18 @@ public class GradientController {
     }
     gradientLibTree.setRootVisible(false);
     gradientLibTree.setModel(new DefaultTreeModel(root));
+    if (initialSelNode != null) {
+      try {
+        TreeNode[] nodes = ((DefaultTreeModel) gradientLibTree.getModel()).getPathToRoot(initialSelNode);
+        TreePath path = new TreePath(nodes);
+        gradientLibTree.setSelectionPath(path);
+        gradientTree_changed(null);
+      }
+      catch (Exception ex) {
+        ex.printStackTrace();
+      }
+    }
+
   }
 
   public void scanUserGradients(String path, GradientUserNode pParentNode) {
@@ -214,7 +233,7 @@ public class GradientController {
       gradientLibraryScrollPane = null;
     }
     gradientLibraryGradientCmb.removeAllItems();
-    int panelWidth = gradientLibraryPanel.getBounds().width - 2 * GRADIENT_THUMB_BORDER;
+    int panelWidth = gradientLibraryPanel.getBounds().width - 2 * GRADIENT_THUMB_BORDER - 7;
     int panelHeight = (GRADIENT_THUMB_HEIGHT + GRADIENT_THUMB_BORDER) * pImages.size();
     JPanel gradientsPanel = new JPanel();
     gradientsPanel.setLayout(null);
@@ -238,7 +257,7 @@ public class GradientController {
     }
     gradientLibraryScrollPane = new JScrollPane(gradientsPanel);
     gradientLibraryScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-    gradientLibraryScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+    gradientLibraryScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 
     gradientLibraryPanel.add(gradientLibraryScrollPane, BorderLayout.CENTER);
     gradientLibraryPanel.validate();
@@ -251,15 +270,15 @@ public class GradientController {
   }
 
   public void gradientLibraryGradientChanged() {
-    // TODO
-    if (!cmbRefreshing) {
-      //      if (getCurrFlame() != null && data.gradientLibraryGradientCmb.getSelectedIndex() >= 0 && data.gradientLibraryGradientCmb.getSelectedIndex() < gradientLibraryList.size()) {
-      //        saveUndoPoint();
-      //        RGBPalette palette = gradientLibraryList.get(data.gradientLibraryGradientCmb.getSelectedIndex()).makeCopy();
-      //        getCurrFlame().setPalette(palette);
-      //        refreshPaletteUI(palette);
-      //        refreshFlameImage(false);
-      //      }
+    AbstractGradientNode selNode;
+    if (!cmbRefreshing && (selNode = getSelGradientNode()) != null) {
+      if (tinaController.getCurrFlame() != null && gradientLibraryGradientCmb.getSelectedIndex() >= 0 && gradientLibraryGradientCmb.getSelectedIndex() < selNode.getGradientLibraryList().size()) {
+        tinaController.saveUndoPoint();
+        RGBPalette palette = selNode.getGradientLibraryList().get(gradientLibraryGradientCmb.getSelectedIndex()).makeCopy();
+        tinaController.getCurrFlame().setPalette(palette);
+        tinaController.refreshPaletteUI(palette);
+        tinaController.refreshFlameImage(false);
+      }
     }
   }
 
@@ -272,6 +291,11 @@ public class GradientController {
       }
     }
     return selNode;
+  }
+
+  private AbstractGradientNode getSelGradientNode() {
+    DefaultMutableTreeNode selNode = getSelNode();
+    return selNode != null && selNode instanceof AbstractGradientNode ? (AbstractGradientNode) selNode : null;
   }
 
   public void gradientTree_changed(TreeSelectionEvent e) {

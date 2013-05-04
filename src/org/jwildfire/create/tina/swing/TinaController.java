@@ -1545,7 +1545,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     data.relWeightsTable.getColumnModel().getColumn(COL_WEIGHT).setWidth(16);
   }
 
-  private void refreshPaletteUI(RGBPalette pPalette) {
+  public void refreshPaletteUI(RGBPalette pPalette) {
     data.paletteRedREd.setText(String.valueOf(pPalette.getModRed()));
     data.paletteRedSlider.setValue(pPalette.getModRed());
     data.paletteGreenREd.setText(String.valueOf(pPalette.getModGreen()));

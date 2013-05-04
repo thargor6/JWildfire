@@ -36,6 +36,9 @@ public class UniversalPaletteReader {
     else if ("map".equalsIgnoreCase(extension)) {
       return new MapPaletteReader().readPalettes(pFilename);
     }
+    else if ("ugr".equalsIgnoreCase(extension)) {
+      return new UgrPaletteReader().readPalettes(pFilename);
+    }
     else {
       return null;
     }

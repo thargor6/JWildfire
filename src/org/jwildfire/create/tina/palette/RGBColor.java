@@ -155,4 +155,9 @@ public class RGBColor implements Assignable<RGBColor>, Serializable, Comparable<
       }
     }
   }
+
+  @Override
+  public String toString() {
+    return "RGBColor [red=" + red + ", green=" + green + ", blue=" + blue + "]";
+  }
 }

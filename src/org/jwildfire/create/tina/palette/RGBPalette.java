@@ -561,4 +561,19 @@ public class RGBPalette implements Assignable<RGBPalette>, Serializable {
       modified = true;
     }
   }
+
+  public void setColors(Map<Integer, RGBColor> pColors) {
+    if (pColors.size() > 0) {
+      int maxIndex = 0;
+      for (Integer idx : pColors.keySet()) {
+        if (idx > maxIndex) {
+          maxIndex = idx;
+        }
+      }
+      for (Integer idx : pColors.keySet()) {
+        int targetIdx = (int) ((double) idx * (double) (PALETTE_SIZE - 1) / (double) maxIndex + 0.5);
+        rawColors.put(targetIdx, pColors.get(idx));
+      }
+    }
+  }
 }
