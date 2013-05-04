@@ -330,6 +330,7 @@ public class VariationFuncList {
     registerVariationFunc(MCarpetFunc.class);
     registerVariationFunc(OctagonFunc.class);
     registerVariationFunc(FourthFunc.class);
+    registerVariationFunc(TwoFaceFunc.class);
   }
 
   private static void registerVariationFunc(
