@@ -32,7 +32,7 @@ public class ExperimentalSimpleRandomFlameGenerator extends
       "mandelbrot", "spirograph", "target", "eclipse", "butterfly3D", "cpow", "pre_subflame_wf",
       "conic", "julia3D", "cell", "stripes", "post_mirror_wf", "flipcircle", "waves2_3D",
       "colorscale_wf", "crackle", "truchet", "cannabiscurve_wf", "cpow", "subflame_wf",
-      "glynnSim3", "flower", "heart", "julia3D", "disc2", "polar2", "farblur", "waves3_wf",
+      "glynnSim3", "flower", "fourth", "heart", "julia3D", "disc2", "polar2", "farblur", "waves3_wf",
       "foci", "scry", "flux", "bwraps7", "splitbrdr", "checks", "colorscale_wf", "falloff2", "sinusoidal3d",
       "cloverleaf_wf", "lazyTravis", "kaleidoscope", "eclipse", "hemisphere", "flipy", "phoenix_julia",
       "popcorn2", "sec", "lazysusan", "sin", "separation", "bi_linear", "hexnix3D", "popcorn2_3D",
