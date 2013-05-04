@@ -28,8 +28,12 @@ public class FractFormulaMandWFFunc extends AbstractFractFormulaWFFunc {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_POWER = "power";
+  private static final String RESSOURCE_FORMULA = "formula";
+
+  private static final String[] ressourceNames = { RESSOURCE_FORMULA };
 
   private int power;
+  private String formula = "((z^n)+c)";
 
   @Override
   public String getName() {
@@ -77,10 +81,11 @@ public class FractFormulaMandWFFunc extends AbstractFractFormulaWFFunc {
   @Override
   public void init(FlameTransformationContext pContext, XForm pXForm, double pAmount) {
     super.init(pContext, pXForm, pAmount);
-    prepare_formula("((z^n)+c)");
+    prepare_formula(formula);
   }
 
   public class FormulaMandIterator extends Iterator {
+    private static final long serialVersionUID = 1L;
 
     @Override
     protected void nextIteration() {
@@ -101,6 +106,34 @@ public class FractFormulaMandWFFunc extends AbstractFractFormulaWFFunc {
   @Override
   protected Iterator getIterator() {
     return iterator;
+  }
+
+  @Override
+  public String[] getRessourceNames() {
+    return ressourceNames;
+  }
+
+  @Override
+  public byte[][] getRessourceValues() {
+    return new byte[][] { (formula != null ? formula.getBytes() : null) };
+  }
+
+  @Override
+  public void setRessource(String pName, byte[] pValue) {
+    if (RESSOURCE_FORMULA.equalsIgnoreCase(pName)) {
+      formula = pValue != null ? new String(pValue) : "";
+    }
+    else
+      throw new IllegalArgumentException(pName);
+  }
+
+  @Override
+  public RessourceType getRessourceType(String pName) {
+    if (RESSOURCE_FORMULA.equalsIgnoreCase(pName)) {
+      return RessourceType.BYTEARRAY;
+    }
+    else
+      throw new IllegalArgumentException(pName);
   }
 
 }

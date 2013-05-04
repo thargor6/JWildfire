@@ -322,8 +322,6 @@ public class VariationFuncList {
     registerVariationFunc(PreDisc3DFunc.class);
     registerVariationFunc(SintrangeFunc.class);
     registerVariationFunc(TargetFunc.class);
-    //    registerVariationFunc(FractFormulaJuliaWFFunc.class);
-    //    registerVariationFunc(FractFormulaMandWFFunc.class);
     registerVariationFunc(Bubble2Func.class);
     registerVariationFunc(BlockYFunc.class);
     registerVariationFunc(SplitBrdrFunc.class);
@@ -331,6 +329,9 @@ public class VariationFuncList {
     registerVariationFunc(OctagonFunc.class);
     registerVariationFunc(FourthFunc.class);
     registerVariationFunc(TwoFaceFunc.class);
+
+    registerVariationFunc(FractFormulaJuliaWFFunc.class);
+    registerVariationFunc(FractFormulaMandWFFunc.class);
   }
 
   private static void registerVariationFunc(
