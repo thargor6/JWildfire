@@ -54,6 +54,7 @@ public class VariationFuncList {
     aliasMap.put(PostMirrorWFFunc.class, "t_post_mirror");
     aliasMap.put(PreWave3DWFFunc.class, "t_pre_wave3D");
     aliasMap.put(RoseWFFunc.class, "t_rose");
+    aliasMap.put(SplitBrdrFunc.class, "SplitBrdr");
 
     //
     registerVariationFunc(LinearFunc.class);
@@ -323,7 +324,11 @@ public class VariationFuncList {
     registerVariationFunc(TargetFunc.class);
     //    registerVariationFunc(FractFormulaJuliaWFFunc.class);
     //    registerVariationFunc(FractFormulaMandWFFunc.class);
-
+    registerVariationFunc(Bubble2Func.class);
+    registerVariationFunc(BlockYFunc.class);
+    registerVariationFunc(SplitBrdrFunc.class);
+    registerVariationFunc(MCarpetFunc.class);
+    registerVariationFunc(OctagonFunc.class);
   }
 
   private static void registerVariationFunc(
