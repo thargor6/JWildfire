@@ -662,8 +662,18 @@ public class JWFScriptController {
 
     sb.append("  // create a random gradient\n");
     sb.append("  new RandomGradientMutation().execute(flame);\n");
-    sb.append("  // Load the flame in the editor and refresh the UI\n");
-    sb.append("  pEnv.setCurrFlame(flame);\n");
+
+    sb.append("  // Either update the currently selected flame (to not need to create a new thumbnail\n");
+    sb.append("  // in the thumbnail ribbon after each run of the script...\n");
+    sb.append("  Flame selFlame = pEnv.getCurrFlame();\n");
+    sb.append("  if(selFlame!=null) {\n");
+    sb.append("    selFlame.assign(flame);\n");
+    sb.append("    pEnv.refreshUI();\n");
+    sb.append("  }\n");
+    sb.append("  // ...or load the flame in the editor and refresh the UI\n");
+    sb.append("  else {\n");
+    sb.append("    pEnv.setCurrFlame(flame);\n");
+    sb.append("  }\n");
     sb.append("}\n");
     return sb.toString();
   }
