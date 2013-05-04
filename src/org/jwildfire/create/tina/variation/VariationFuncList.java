@@ -329,6 +329,7 @@ public class VariationFuncList {
     registerVariationFunc(SplitBrdrFunc.class);
     registerVariationFunc(MCarpetFunc.class);
     registerVariationFunc(OctagonFunc.class);
+    registerVariationFunc(FourthFunc.class);
   }
 
   private static void registerVariationFunc(
