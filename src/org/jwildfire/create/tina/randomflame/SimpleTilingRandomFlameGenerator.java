@@ -39,7 +39,7 @@ public class SimpleTilingRandomFlameGenerator extends RandomFlameGenerator {
       xForm.setWeight(0.4 + Math.random() * 50.0);
 
       String fName = ExperimentalSimpleRandomFlameGenerator.FNCLST_EXPERIMENTAL[(int) (Math.random() * ExperimentalSimpleRandomFlameGenerator.FNCLST_EXPERIMENTAL.length)];
-      xForm.addVariation(1.0, VariationFuncList.getVariationFuncInstance(fName, true));
+      xForm.addVariation(0.75 + 0.5 * Math.random(), VariationFuncList.getVariationFuncInstance(fName, true));
       xForm.setColor(0.89 + Math.random() * 0.06);
     }
     // 2nd XForm
@@ -53,7 +53,7 @@ public class SimpleTilingRandomFlameGenerator extends RandomFlameGenerator {
       xForm.addVariation(1.0, VariationFuncList.getVariationFuncInstance(VariationFuncList.getRandomVariationname(), true));
       xForm.setColorSymmetry(-1);
       xForm.setColor(0.89 + Math.random() * 0.06);
-      XFormTransformService.scale(xForm, 0.5 + Math.random() * 0.5, Math.random() > 0.25, Math.random() < 0.75);
+      XFormTransformService.scale(xForm, 0.75 + Math.random() * 0.25, Math.random() > 0.125, Math.random() < 0.875);
       XFormTransformService.rotate(xForm, -180.0 + Math.random() * 360.0);
     }
     // Tiling
@@ -64,10 +64,10 @@ public class SimpleTilingRandomFlameGenerator extends RandomFlameGenerator {
       xForm.setWeight(0.25 + Math.random() * 0.5);
       xForm.addVariation(1.0, VariationFuncList.getVariationFuncInstance("linear3D", true));
       if (Math.random() > 0.75) {
-        XFormTransformService.scale(xForm, 0.25 + Math.random() * 0.5, Math.random() > 0.25, Math.random() < 0.75);
+        XFormTransformService.scale(xForm, 0.25 + Math.random() * 0.75, Math.random() > 0.25, Math.random() < 0.75);
       }
       else {
-        XFormTransformService.scale(xForm, 0.125 + Math.random() * 0.25, Math.random() > 0.25, Math.random() < 0.25);
+        XFormTransformService.scale(xForm, 0.75 + Math.random() * 0.25, Math.random() > 0.25, Math.random() < 0.25);
       }
       XFormTransformService.rotate(xForm, Math.random() * 360.0);
       XFormTransformService.localTranslate(xForm, -2.0 + Math.random() * 4.0, -2.0 + Math.random() * 4.0);

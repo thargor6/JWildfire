@@ -1,3 +1,24 @@
+V0.69 (04.05.2013):
+ - support for for storing external gradients (in the formats *.ugr and *.map) into an external folder, the contents of those folder (inclusnig subfolders) is integrated into the gradient library 
+ - path for external gradient in the Preferences
+ - create scripts from any existing flame in the script editor, those script either create a nw flame (if no one is selected) or overwrite the the currently selected flame 
+ - new "Sierpinsky"-random-flame-generator
+ - new "Simple tiling" random flame generator (was also improved after ALPHA)
+ - new "twoface" variation
+ - new "fourth" variation by guagapunyaimel
+ - new variations "blocky", "bubble2", "mcarpet", "octagon" and "splitbrdr" by FracFx
+ - improved the Bubble3D random flame generator
+ - moved the gradient library to a slightly larger tab 
+ - new "baseline"-parameter in the "text-wf"-variation to adjust baseline in more difficult font manually
+ - started to create an integrated gradient editor, but its not visible yet
+ - one more imnage for the launcher created by Lorant Buntye
+ - removed the "extended" parameter from the truchet variation because it caused too many crashes
+ - removed the dialog to ask if you really want to remove a thumbnail from the thumnail ribbon
+ - FIXED: add only one thumbnail after invoking the "new form scratch" function
+ - FIXED: allow only the creation of scripts if a user path was specified in the Preferences
+ - FIXED: the script-treeview was something not updated right after inserting a new script
+ - FIXED: updated the launcher to work with newest Java update (Java 7 Update 21)
+
 V0.68 (14.04.2013):
  - re-implemented the script-tab: scripts are now maintained in a folder-like structure. There are two main folders: "Built-in scripts" (examples) and "Your scripts". The latter points to an arbitrary folder on your harddisc and holds your own scripts. You can easily create and copy scripts either using the new functions in JWildfire or by just copying/creating them manually. Additionally, scripts now always contain of two files: the description (plain text) and the code (Java code)   
  - added most of the recent scripts from the JWildfire Open Group as examples
