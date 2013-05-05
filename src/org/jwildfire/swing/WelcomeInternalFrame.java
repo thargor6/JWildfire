@@ -42,7 +42,13 @@ import javax.swing.event.InternalFrameAdapter;
 import javax.swing.event.InternalFrameEvent;
 
 import org.jwildfire.base.Tools;
+import org.jwildfire.create.tina.variation.VariationFuncList;
 import org.jwildfire.image.SimpleImage;
+import org.jwildfire.transform.TextTransformer;
+import org.jwildfire.transform.TextTransformer.FontStyle;
+import org.jwildfire.transform.TextTransformer.HAlignment;
+import org.jwildfire.transform.TextTransformer.Mode;
+import org.jwildfire.transform.TextTransformer.VAlignment;
 
 public class WelcomeInternalFrame extends JInternalFrame {
   private static final long serialVersionUID = 1L;
@@ -224,6 +230,21 @@ public class WelcomeInternalFrame extends JInternalFrame {
     try {
       String imageFilename = imageFilenames[(int) (Math.random() * imageFilenames.length)];
       SimpleImage img = getImage(imageFilename);
+      {
+        TextTransformer txt = new TextTransformer();
+        txt.setText1("Number of currently supported variations: " + VariationFuncList.getNameList().size() + "  ");
+        txt.setText2("  ");
+        txt.setAntialiasing(false);
+        txt.setColor(Color.LIGHT_GRAY);
+        txt.setMode(Mode.NORMAL);
+        txt.setFontStyle(FontStyle.PLAIN);
+        txt.setFontName("Arial");
+        txt.setFontSize(10);
+        txt.setHAlign(HAlignment.RIGHT);
+        txt.setVAlign(VAlignment.BOTTOM);
+        txt.transformImage(img);
+      }
+
       panel_2.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 
       ImagePanel imgPanel = new ImagePanel(img, 0, 0, img.getImageWidth());

@@ -576,4 +576,79 @@ public class RGBPalette implements Assignable<RGBPalette>, Serializable {
       }
     }
   }
+
+  public void applyBalancing() {
+    modified = true;
+    int saveModSwapRGB = modSwapRGB;
+    int saveModFrequency = modFrequency;
+    int saveModBlur = modBlur;
+    try {
+      modSwapRGB = 0;
+      modFrequency = 0;
+      modBlur = 0;
+
+      transformColors();
+      rawColors.clear();
+      rawColors.putAll(transformedColors);
+
+      modRed = 0;
+      modGreen = 0;
+      modBlue = 0;
+      modShift = 0;
+      modHue = 0;
+      modContrast = 0;
+      modGamma = 0;
+      modBrightness = 0;
+      modSaturation = 0;
+      modified = true;
+    }
+    finally {
+      modSwapRGB = saveModSwapRGB;
+      modFrequency = saveModFrequency;
+      modBlur = saveModBlur;
+    }
+  }
+
+  public void applyTX() {
+    int saveModRed = modRed;
+    int saveModGreen = modGreen;
+    int saveModBlue = modBlue;
+    int saveModShift = modShift;
+    int saveModHue = modHue;
+    int saveModContrast = modContrast;
+    int saveModGamma = modGamma;
+    int saveModBrightness = modBrightness;
+    int saveModSaturation = modSaturation;
+    try {
+      modRed = 0;
+      modGreen = 0;
+      modBlue = 0;
+      modShift = 0;
+      modHue = 0;
+      modContrast = 0;
+      modGamma = 0;
+      modBrightness = 0;
+      modSaturation = 0;
+
+      transformColors();
+      rawColors.clear();
+      rawColors.putAll(transformedColors);
+
+      modSwapRGB = 0;
+      modFrequency = 0;
+      modBlur = 0;
+      modified = true;
+    }
+    finally {
+      modRed = saveModRed;
+      modGreen = saveModGreen;
+      modBlue = saveModBlue;
+      modShift = saveModShift;
+      modHue = saveModHue;
+      modContrast = saveModContrast;
+      modGamma = saveModGamma;
+      modBrightness = saveModBrightness;
+      modSaturation = saveModSaturation;
+    }
+  }
 }

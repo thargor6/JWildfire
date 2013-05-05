@@ -5222,14 +5222,16 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
 
   public void gradientApplyBalancingBtn_clicked() {
     undoManager.saveUndoPoint(getCurrFlame());
-    // TODO
+    getFlamePanel().applyBalancing();
+    refreshUI();
     refreshFlameImage(false);
     refreshPaletteImg();
   }
 
   public void gradientApplyTXBtn_clicked() {
     undoManager.saveUndoPoint(getCurrFlame());
-    // TODO
+    getFlamePanel().applyTX();
+    refreshUI();
     refreshFlameImage(false);
     refreshPaletteImg();
   }

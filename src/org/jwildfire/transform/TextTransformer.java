@@ -276,19 +276,19 @@ public class TextTransformer extends Mesh2DTransformer {
 
   private List<TextRow> getRows() {
     List<TextRow> res = new ArrayList<TextRow>();
-    if ((text1 != null) && (text1.trim().length() > 0))
+    if ((text1 != null) && (text1.length() > 0))
       res.add(new TextRow(0, text1));
-    if ((text2 != null) && (text2.trim().length() > 0))
+    if ((text2 != null) && (text2.length() > 0))
       res.add(new TextRow(1, text2));
-    if ((text3 != null) && (text3.trim().length() > 0))
+    if ((text3 != null) && (text3.length() > 0))
       res.add(new TextRow(2, text3));
-    if ((text4 != null) && (text4.trim().length() > 0))
+    if ((text4 != null) && (text4.length() > 0))
       res.add(new TextRow(3, text4));
-    if ((text5 != null) && (text5.trim().length() > 0))
+    if ((text5 != null) && (text5.length() > 0))
       res.add(new TextRow(4, text5));
-    if ((text6 != null) && (text6.trim().length() > 0))
+    if ((text6 != null) && (text6.length() > 0))
       res.add(new TextRow(5, text6));
-    if ((text7 != null) && (text7.trim().length() > 0))
+    if ((text7 != null) && (text7.length() > 0))
       res.add(new TextRow(6, text7));
     return res;
   }

@@ -6403,7 +6403,6 @@ public class TinaInternalFrame extends JInternalFrame {
       triangleOperationsPanel.add(mouseTransformEditPointsButton);
 
       mouseTransformEditGradientButton = new JToggleButton();
-      mouseTransformEditGradientButton.setVisible(false);
       mouseTransformEditGradientButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/editGradient.gif")));
       mouseTransformEditGradientButton.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
@@ -11736,7 +11735,6 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaPaletteTransformPanel.add(tinaPaletteSortBtn);
 
       gradientApplyTXBtn = new JButton();
-      gradientApplyTXBtn.setVisible(false);
       gradientApplyTXBtn.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
           tinaController.gradientApplyTXBtn_clicked();
@@ -14218,7 +14216,6 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton getGradientApplyBalancingBtn() {
     if (gradientApplyBalancingBtn == null) {
       gradientApplyBalancingBtn = new JButton();
-      gradientApplyBalancingBtn.setVisible(false);
       gradientApplyBalancingBtn.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
           tinaController.gradientApplyBalancingBtn_clicked();

@@ -1023,4 +1023,16 @@ public class FlamePanel extends ImagePanel {
       gradientOverlay.fadeAll(flameHolder.getFlame().getPalette());
     }
   }
+
+  public void applyBalancing() {
+    if (flameHolder.getFlame() != null) {
+      flameHolder.getFlame().getPalette().applyBalancing();
+    }
+  }
+
+  public void applyTX() {
+    if (flameHolder.getFlame() != null) {
+      flameHolder.getFlame().getPalette().applyTX();
+    }
+  }
 }
