@@ -3349,8 +3349,14 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       boolean middleButton = (modifiers & InputEvent.BUTTON2_MASK) == InputEvent.BUTTON2_MASK;
       boolean rightButton = (modifiers & InputEvent.BUTTON3_MASK) == InputEvent.BUTTON3_MASK;
       if (flamePanel.mouseDragged(e.getX(), e.getY(), leftButton, rightButton, middleButton)) {
-        refreshXFormUI(getCurrXForm());
-        refreshFlameImage(true);
+        if (flamePanel.isReRender()) {
+          refreshXFormUI(getCurrXForm());
+          refreshFlameImage(true);
+        }
+        else {
+          centerPanel.getParent().validate();
+          centerPanel.repaint();
+        }
       }
     }
   }

@@ -36,10 +36,10 @@ import com.l2fprod.common.util.ResourceManager;
 
 public class GradientOverlay {
   private final FlamePanel parent;
-  private static final int GRADIENT_OUTER_BORDER = 10;
-  private static final int GRADIENT_HEIGHT = 42;
-  private static final int GRADIENT_MARKER_SIZE = 16;
-  private static final int GRADIENT_MARKER_DISTANCE = 5;
+  private static final int GRADIENT_OUTER_BORDER = 20;
+  private static final int GRADIENT_HEIGHT = 56;
+  private static final int GRADIENT_MARKER_SIZE = 24;
+  private static final int GRADIENT_MARKER_DISTANCE = 15;
   private static final int GRADIENT_SIZE = RGBPalette.PALETTE_SIZE;
   private int[] markerPos = { 0, GRADIENT_SIZE - 1 };
   private int[] markerXMin = new int[markerPos.length];
@@ -196,10 +196,8 @@ public class GradientOverlay {
   private void setMarker(int pPosX, int pIndex) {
     for (int i = 0; i < GRADIENT_SIZE; i++) {
       int x = pPosX;
-      if (x >= xPos[i] && x <= xPos[i + 1]) {
+      if ((x >= xPos[i] && x <= xPos[i + 1]) || (i == 0 && x <= xPos[i + 1]) || (i == GRADIENT_SIZE - 1 && x >= xPos[i])) {
         int newPos = i;
-        //        int leftLimit = pIndex == 0 ? 0 : markerPos[pIndex - 1] + 1;
-        //        int rightLimit = pIndex == markerPos.length - 1 ? GRADIENT_SIZE - 1 : markerPos[pIndex + 1] - 1;
         int leftLimit = 0;
         int rightLimit = GRADIENT_SIZE - 1;
         if (newPos < leftLimit) {
