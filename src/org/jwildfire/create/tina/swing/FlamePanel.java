@@ -627,8 +627,7 @@ public class FlamePanel extends ImagePanel {
             if (fineMovement) {
               dx *= 0.25;
             }
-            gradientOverlay.mouseDragged(dx, xBeginDrag, yBeginDrag, flame);
-            reRender = false;
+            reRender = gradientOverlay.mouseDragged(dx, xBeginDrag, yBeginDrag, flame);
             return true;
           }
         }

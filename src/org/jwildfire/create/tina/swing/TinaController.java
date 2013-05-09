@@ -3352,6 +3352,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
         if (flamePanel.isReRender()) {
           refreshXFormUI(getCurrXForm());
           refreshFlameImage(true);
+          refreshPaletteImg();
         }
         else {
           centerPanel.getParent().validate();
@@ -3434,6 +3435,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
         if (flamePanel.isRedrawAfterMouseClick()) {
           if (flamePanel.isReRender()) {
             refreshFlameImage(false);
+            refreshPaletteImg();
           }
           else {
             centerPanel.getParent().validate();

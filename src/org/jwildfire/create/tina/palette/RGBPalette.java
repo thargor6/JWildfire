@@ -723,4 +723,31 @@ public class RGBPalette implements Assignable<RGBPalette>, Serializable {
       modSaturation = saveModSaturation;
     }
   }
+
+  public void shiftColors(int pShift) {
+    if (pShift != 0) {
+      while (pShift < -255) {
+        pShift += 256;
+      }
+      while (pShift > 255) {
+        pShift -= 256;
+      }
+
+      Map<Integer, RGBColor> newColors = new HashMap<Integer, RGBColor>();
+      for (int i = 0; i < PALETTE_SIZE; i++) {
+        RGBColor color = getRawColor(i);
+        int idx = i + pShift;
+        if (idx < 0) {
+          idx += PALETTE_SIZE;
+        }
+        else if (idx >= PALETTE_SIZE) {
+          idx -= PALETTE_SIZE;
+        }
+        newColors.put(idx, new RGBColor(color.getRed(), color.getGreen(), color.getBlue()));
+      }
+      rawColors = null;
+      rawColors = newColors;
+      modified = true;
+    }
+  }
 }

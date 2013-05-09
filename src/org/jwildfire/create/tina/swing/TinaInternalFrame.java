@@ -3317,7 +3317,6 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaWestTabbedPane = new JTabbedPane();
       tinaWestTabbedPane.setFont(new Font("Dialog", Font.BOLD, 10));
       tinaWestTabbedPane.addTab("Gradient", null, getTinaPalettePanel(), null);
-      tinaWestTabbedPane.addTab("Gradient library", null, getGradientLibraryPanel(), null);
     }
     return tinaWestTabbedPane;
   }
@@ -3715,7 +3714,7 @@ public class TinaInternalFrame extends JInternalFrame {
     if (tinaPaletteSubNorthPanel == null) {
       tinaPaletteSubNorthPanel = new JPanel();
       tinaPaletteSubNorthPanel.setLayout(new BorderLayout());
-      tinaPaletteSubNorthPanel.setPreferredSize(new Dimension(0, 42));
+      tinaPaletteSubNorthPanel.setPreferredSize(new Dimension(0, 36));
       tinaPaletteSubNorthPanel.add(getTinaPaletteImgPanel(), BorderLayout.CENTER);
     }
     return tinaPaletteSubNorthPanel;
@@ -3771,9 +3770,10 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaPaletteSubTabbedPane.setAutoscrolls(true);
       tinaPaletteSubTabbedPane.setToolTipText("");
       tinaPaletteSubTabbedPane.setFont(new Font("Dialog", Font.BOLD, 10));
-      tinaPaletteSubTabbedPane.addTab("Create", null, getTinaPaletteCreatePanel(), "Create or import a gradient");
-      tinaPaletteSubTabbedPane.addTab("Transform", null, getTinaPaletteTransformPanel(), "Transform the gradient");
-      tinaPaletteSubTabbedPane.addTab("Balancing", null, getTinaPaletteBalancingPanel(), "Apply common color balancing options to the gradient");
+      tinaPaletteSubTabbedPane.addTab("Library", null, getGradientLibraryPanel(), null);
+      tinaPaletteSubTabbedPane.addTab("New", null, getTinaPaletteCreatePanel(), "Create or import a gradient");
+      tinaPaletteSubTabbedPane.addTab("TX", null, getTinaPaletteTransformPanel(), "Transform the gradient");
+      tinaPaletteSubTabbedPane.addTab("Colors", null, getTinaPaletteBalancingPanel(), "Apply common color balancing options to the gradient");
     }
     return tinaPaletteSubTabbedPane;
   }

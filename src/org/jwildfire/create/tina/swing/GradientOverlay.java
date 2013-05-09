@@ -155,7 +155,8 @@ public class GradientOverlay {
     this.gradientZoom = pGradientZoom;
   }
 
-  public void mouseDragged(double pDX, int pPosX, int pPosY, Flame pFlame) {
+  public boolean mouseDragged(double pDX, int pPosX, int pPosY, Flame pFlame) {
+    boolean reRender = false;
     int iDX = (int) (pDX + 0.5);
     if (iDX < 1 && pDX > 0.0) {
       iDX = 1;
@@ -173,13 +174,8 @@ public class GradientOverlay {
     else if (dragStartY > yMin && dragStartY < yMax) {
       if (fabs(gradientZoom - 1.0) < EPSILON) {
         int modShift = pFlame.getPalette().getModShift() + iDX;
-        while (modShift < -255) {
-          modShift += 256;
-        }
-        while (modShift > 255) {
-          modShift -= 256;
-        }
-        pFlame.getPalette().setModShift(modShift);
+        pFlame.getPalette().shiftColors(modShift);
+        reRender = true;
       }
       else {
         gradientOff += iDX;
@@ -191,6 +187,7 @@ public class GradientOverlay {
         }
       }
     }
+    return reRender;
   }
 
   private void setMarker(int pPosX, int pIndex) {
@@ -282,8 +279,6 @@ public class GradientOverlay {
 
   public void gradientMarker_move(int marker, int pDeltaPos) {
     if (marker >= 0) {
-      //      int leftLimit = marker == 0 ? 0 : markerPos[marker - 1] + 1;
-      //      int rightLimit = marker == markerPos.length - 1 ? GRADIENT_SIZE - 1 : markerPos[marker + 1] - 1;
       int leftLimit = 0;
       int rightLimit = GRADIENT_SIZE - 1;
       int newPos = markerPos[marker] + pDeltaPos;
