@@ -265,6 +265,10 @@ public class GradientController {
 
   private void importFromGradientLibrary(AbstractGradientNode pNode, int idx) {
     if (idx >= 0 && idx < pNode.getGradientLibraryList().size()) {
+      int selIdx = gradientLibraryGradientCmb.getSelectedIndex();
+      if (selIdx == idx) {
+        gradientLibraryGradientCmb.setSelectedIndex(-1);
+      }
       gradientLibraryGradientCmb.setSelectedItem(pNode.getGradientLibraryList().get(idx));
     }
   }
