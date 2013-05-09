@@ -35,7 +35,7 @@ public class UgrPaletteReader {
       return readPalettesFromUgr(gradientUgr);
     }
     catch (Exception ex) {
-      throw new RuntimeException(ex);
+      throw new RuntimeException(pFilename, ex);
     }
   }
 
@@ -64,13 +64,13 @@ public class UgrPaletteReader {
 
   private void parsePalette(RGBPalette pPalette, String pUgr) {
     Map<Integer, RGBColor> colors = new HashMap<Integer, RGBColor>();
-    StringTokenizer tokenizer = new StringTokenizer(pUgr, "\n\r");
-    int p1, p2;
+    StringTokenizer tokenizer = new StringTokenizer(pUgr, " \n\r");
     Pixel pixel = new Pixel();
     while (tokenizer.hasMoreElements()) {
-      String line = tokenizer.nextToken();
-      if (line.indexOf("title=") >= 0) {
-        StringTokenizer lineTokenizer = new StringTokenizer(line, "\"");
+      String token = tokenizer.nextToken();
+      String nextToken;
+      if (token.startsWith("title=")) {
+        StringTokenizer lineTokenizer = new StringTokenizer(token, "\"");
         if (lineTokenizer.hasMoreElements()) {
           lineTokenizer.nextElement();
           if (lineTokenizer.hasMoreElements()) {
@@ -78,17 +78,37 @@ public class UgrPaletteReader {
           }
         }
       }
-      else if ((p1 = line.indexOf("index=")) >= 0 && (p2 = line.indexOf("color=")) >= 0) {
-        int p1e = line.indexOf(" ", p1);
-        if (p1e > p1) {
-          int index = Integer.parseInt(line.substring(p1 + 6, p1e));
-          int colorValue = Integer.parseInt(line.substring(p2 + 6, line.length()));
-          pixel.setARGBValue(colorValue);
-          RGBColor color = new RGBColor(pixel.r, pixel.g, pixel.b);
-          colors.put(index, color);
+      else if (token.startsWith("index=") && tokenizer.hasMoreElements() && (nextToken = tokenizer.nextToken()).startsWith("color=")) {
+        int index = Integer.parseInt(token.substring(6, token.length()));
+        int colorValue = Integer.parseInt(nextToken.substring(6, nextToken.length()));
+        pixel.setARGBValue(colorValue);
+        RGBColor color = new RGBColor(pixel.b, pixel.g, pixel.r);
+        colors.put(index, color);
+      }
+    }
+    boolean doInterpolate = pUgr.contains("numnodes=");
+    boolean doFade = pUgr.contains("smooth=yes");
+    final int maxIdx = 399;
+    if (doInterpolate) {
+      if (colors.get(0) == null) {
+        colors.put(0, new RGBColor(0, 0, 0));
+      }
+      if (colors.get(maxIdx) == null) {
+        colors.put(maxIdx, new RGBColor(0, 0, 0));
+      }
+    }
+    else {
+      RGBColor lastColor = new RGBColor(0, 0, 0);
+      for (int i = 0; i <= maxIdx; i++) {
+        RGBColor color = colors.get(i);
+        if (color == null) {
+          colors.put(i, lastColor);
+        }
+        else {
+          lastColor = color;
         }
       }
     }
-    pPalette.setColors(colors);
+    pPalette.setColors(colors, doInterpolate, doFade);
   }
 }

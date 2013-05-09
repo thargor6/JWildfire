@@ -18,10 +18,13 @@ package org.jwildfire.create.tina.io;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.StringTokenizer;
 
 import org.jwildfire.base.Tools;
+import org.jwildfire.create.tina.palette.RGBColor;
 import org.jwildfire.create.tina.palette.RGBPalette;
 
 public class MapPaletteReader {
@@ -32,7 +35,7 @@ public class MapPaletteReader {
       return readPaletteFromMapData(mapData, pFilename);
     }
     catch (Exception ex) {
-      throw new RuntimeException(ex);
+      throw new RuntimeException(pFilename, ex);
     }
   }
 
@@ -43,22 +46,28 @@ public class MapPaletteReader {
     gradient.setFlam3Name(new File(pFilename).getName());
     StringTokenizer tokenizer = new StringTokenizer(pMapData, "\n\r");
     int idx = 0;
+    Map<Integer, RGBColor> colors = new HashMap<Integer, RGBColor>();
     while (tokenizer.hasMoreElements()) {
       String line = tokenizer.nextToken();
-      StringTokenizer lineTokenizer = new StringTokenizer(line, " ");
-      int r = Integer.parseInt((String) lineTokenizer.nextElement());
-      int g = Integer.parseInt((String) lineTokenizer.nextElement());
-      int b = Integer.parseInt((String) lineTokenizer.nextElement());
+      StringTokenizer lineTokenizer = new StringTokenizer(line, "\t ");
+      int r, g, b;
+      try {
+        r = Integer.parseInt(((String) lineTokenizer.nextElement()).trim());
+        g = Integer.parseInt(((String) lineTokenizer.nextElement()).trim());
+        b = Integer.parseInt(((String) lineTokenizer.nextElement()).trim());
+      }
+      catch (Exception ex) {
+        break;
+      }
       if (r >= 0 && r <= 255 && g >= 0 && g <= 255 && b >= 0 && b <= 255) {
-        if (idx > 255) {
-          throw new RuntimeException("Invalid color index <" + idx + "> in file <" + pFilename + ">");
-        }
-        gradient.setColor(idx++, r, g, b);
+        RGBColor color = new RGBColor(r, g, b);
+        colors.put(idx++, color);
       }
       else {
-        throw new RuntimeException("Invalid color values <" + line + ">");
+        break;
       }
     }
+    gradient.setColors(colors, false, false);
     return res;
   }
 }

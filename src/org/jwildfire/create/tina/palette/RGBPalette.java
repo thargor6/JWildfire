@@ -257,7 +257,7 @@ public class RGBPalette implements Assignable<RGBPalette>, Serializable {
     if (modified) {
       transformedColors.clear();
       for (int i = 0; i < PALETTE_SIZE; i++) {
-        RGBColor color = rawColors.get(i);
+        RGBColor color = getRawColor(i);
         int idx = i + modShift;
         if (idx < 0) {
           idx += PALETTE_SIZE;
@@ -420,7 +420,7 @@ public class RGBPalette implements Assignable<RGBPalette>, Serializable {
       return flam3Name;
     }
     else {
-      return super.toString();
+      return "untitled gradient";
     }
   }
 
@@ -562,18 +562,90 @@ public class RGBPalette implements Assignable<RGBPalette>, Serializable {
     }
   }
 
-  public void setColors(Map<Integer, RGBColor> pColors) {
+  public void setColors(Map<Integer, RGBColor> pColors, boolean pDoInterpolate, boolean pDoFade) {
     if (pColors.size() > 0) {
-      int maxIndex = 0;
+      int maxIdx = -1;
       for (Integer idx : pColors.keySet()) {
-        if (idx > maxIndex) {
-          maxIndex = idx;
+        if (idx > maxIdx) {
+          maxIdx = idx;
         }
       }
-      for (Integer idx : pColors.keySet()) {
-        int targetIdx = (int) ((double) idx * (double) (PALETTE_SIZE - 1) / (double) maxIndex + 0.5);
-        rawColors.put(targetIdx, pColors.get(idx));
+      int srcSize = maxIdx + 1;
+
+      if (pDoInterpolate) {
+        setColorsSmooth(pColors, srcSize, pDoFade);
       }
+      else {
+        setColorsNonInterpolate(pColors, srcSize);
+      }
+    }
+  }
+
+  private void setColorsNonInterpolate(Map<Integer, RGBColor> pColors, int pSrcSize) {
+    int dstSize = PALETTE_SIZE;
+
+    for (int i = 0; i < dstSize; i++) {
+      double coord = (double) (i * (pSrcSize - 1)) / (double) (dstSize - 1);
+      int colorIdx = (int) (coord);
+      RGBColor lColor = pColors.get(colorIdx);
+      if (lColor == null) {
+        lColor = BLACK;
+      }
+      RGBColor rColor = pColors.get(colorIdx + 1);
+      if (rColor == null) {
+        rColor = BLACK;
+      }
+      double x = coord - colorIdx;
+
+      int r = Tools.roundColor((double) lColor.getRed() + ((double) (rColor.getRed() - lColor.getRed())) * x);
+      int g = Tools.roundColor((double) lColor.getGreen() + ((double) (rColor.getGreen() - lColor.getGreen())) * x);
+      int b = Tools.roundColor((double) lColor.getBlue() + ((double) (rColor.getBlue() - lColor.getBlue())) * x);
+      rawColors.put(Integer.valueOf(i), new RGBColor(r, g, b));
+    }
+  }
+
+  private void setColorsSmooth(Map<Integer, RGBColor> pColors, int pSrcSize, boolean pDoFade) {
+    int dstSize = PALETTE_SIZE;
+
+    for (int i = 0; i < dstSize; i++) {
+      double coord = (double) (i * (pSrcSize - 1)) / (double) (dstSize - 1);
+
+      RGBColor lColor = null;
+      int lColorIdx = 0;
+      for (int j = (int) coord; j >= 0; j--) {
+        lColor = pColors.get(j);
+        if (lColor != null) {
+          lColorIdx = j;
+          break;
+        }
+      }
+      if (lColor == null) {
+        lColor = BLACK;
+        lColorIdx = 0;
+      }
+
+      RGBColor rColor = null;
+      int rColorIdx = 0;
+      for (int j = ((int) coord) + 1; j < pSrcSize; j++) {
+        rColor = pColors.get(j);
+        if (rColor != null) {
+          rColorIdx = j;
+          break;
+        }
+      }
+      if (rColor == null) {
+        rColor = BLACK;
+        rColorIdx = pSrcSize - 1;
+      }
+
+      double srcRange = rColorIdx - lColorIdx + 1;
+      double x = pDoFade ? (coord - lColorIdx) / srcRange : 0.0;
+
+      int r = Tools.roundColor((double) lColor.getRed() + ((double) (rColor.getRed() - lColor.getRed())) * x);
+      int g = Tools.roundColor((double) lColor.getGreen() + ((double) (rColor.getGreen() - lColor.getGreen())) * x);
+      int b = Tools.roundColor((double) lColor.getBlue() + ((double) (rColor.getBlue() - lColor.getBlue())) * x);
+      rawColors.put(Integer.valueOf(i), new RGBColor(r, g, b));
+
     }
   }
 

@@ -325,7 +325,7 @@ public class Flame implements Assignable<Flame>, Serializable {
 
   public void setPalette(RGBPalette pPalette) {
     if (pPalette == null || pPalette.getSize() != RGBPalette.PALETTE_SIZE)
-      throw new IllegalArgumentException(pPalette.toString());
+      throw new IllegalArgumentException(pPalette != null ? pPalette.toString() + " " + pPalette.getSize() : "NULL");
     palette = pPalette;
   }
 

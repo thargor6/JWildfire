@@ -30,6 +30,8 @@ import java.io.InputStream;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.swing.JLabel;
+
 import org.jwildfire.image.SimpleHDRImage;
 import org.jwildfire.image.SimpleImage;
 
@@ -38,6 +40,10 @@ public class ImageReader {
 
   public ImageReader(Component pOwner) {
     owner = pOwner;
+  }
+
+  public ImageReader() {
+    owner = new JLabel();
   }
 
   public SimpleImage loadImage(String pFilename) throws Exception {

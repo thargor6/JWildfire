@@ -18,6 +18,7 @@ package org.jwildfire.create.tina.io;
 
 import java.util.List;
 
+import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.palette.RGBPalette;
 
 public class UniversalPaletteReader {
@@ -30,14 +31,17 @@ public class UniversalPaletteReader {
         extension = pFilename.substring(i + 1);
       }
     }
-    if ("xml".equalsIgnoreCase(extension)) {
+    if (Tools.FILEEXT_XML.equalsIgnoreCase(extension)) {
       return new Flam3PaletteReader().readPalettes(pFilename);
     }
-    else if ("map".equalsIgnoreCase(extension)) {
+    else if (Tools.FILEEXT_MAP.equalsIgnoreCase(extension)) {
       return new MapPaletteReader().readPalettes(pFilename);
     }
-    else if ("ugr".equalsIgnoreCase(extension)) {
+    else if (Tools.FILEEXT_UGR.equalsIgnoreCase(extension) || Tools.FILEEXT_GRADIENT.equalsIgnoreCase(extension)) {
       return new UgrPaletteReader().readPalettes(pFilename);
+    }
+    else if (Tools.FILEEXT_PNG.equalsIgnoreCase(extension) || Tools.FILEEXT_JPG.equalsIgnoreCase(extension) || Tools.FILEEXT_JPEG.equalsIgnoreCase(extension)) {
+      return new ImgPaletteReader().readPalettes(pFilename);
     }
     else {
       return null;
