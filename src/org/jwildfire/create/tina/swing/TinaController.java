@@ -881,13 +881,13 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     registerToEditor(_currFlame);
   }
 
-  private void deRegisterFromEditor(Flame pFlame) {
+  protected void deRegisterFromEditor(Flame pFlame) {
     if (pFlame != null && pFlame.getPalette() != null) {
       pFlame.getPalette().setSelectionProvider(new DefaultGradientSelectionProvider());
     }
   }
 
-  private void registerToEditor(Flame pFlame) {
+  public void registerToEditor(Flame pFlame) {
     if (pFlame != null && pFlame.getPalette() != null) {
       pFlame.getPalette().setSelectionProvider(this);
     }
@@ -2826,17 +2826,17 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
 
   private List<FlameThumbnail> randomBatch = new ArrayList<FlameThumbnail>();
 
-  private final int IMG_WIDTH = 80;
-  private final int IMG_HEIGHT = 60;
-  private final int BORDER_SIZE = 10;
+  private final int IMG_WIDTH = 90;
+  private final int IMG_HEIGHT = 68;
+  private final int BORDER_SIZE = 8;
 
   public void updateThumbnails() {
     if (data.randomBatchScrollPane != null) {
       data.randomBatchPanel.remove(data.randomBatchScrollPane);
       data.randomBatchScrollPane = null;
     }
-    int panelWidth = (IMG_WIDTH + BORDER_SIZE) * randomBatch.size();
-    int panelHeight = IMG_HEIGHT + 2 * BORDER_SIZE;
+    int panelWidth = IMG_WIDTH + 2 * BORDER_SIZE;
+    int panelHeight = (IMG_HEIGHT + BORDER_SIZE) * randomBatch.size();
     JPanel batchPanel = new JPanel();
     batchPanel.setLayout(null);
     batchPanel.setSize(panelWidth, panelHeight);
@@ -2846,7 +2846,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       // add it to the main panel
       ImagePanel imgPanel = new ImagePanel(img, 0, 0, img.getImageWidth());
       imgPanel.setImage(img);
-      imgPanel.setLocation(i * IMG_WIDTH + (i + 1) * BORDER_SIZE, BORDER_SIZE);
+      imgPanel.setLocation(BORDER_SIZE, i * IMG_HEIGHT + (i + 1) * BORDER_SIZE);
       randomBatch.get(i).setImgPanel(imgPanel);
       final int idx = i;
       addRemoveButton(imgPanel, idx);
@@ -2860,8 +2860,8 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       batchPanel.add(imgPanel);
     }
     data.randomBatchScrollPane = new JScrollPane(batchPanel);
-    data.randomBatchScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
-    data.randomBatchScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
+    data.randomBatchScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+    data.randomBatchScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 
     data.randomBatchPanel.add(data.randomBatchScrollPane, BorderLayout.CENTER);
     data.randomBatchPanel.validate();

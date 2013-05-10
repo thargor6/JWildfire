@@ -95,7 +95,7 @@ public class TinaInternalFrame extends JInternalFrame {
 
   private JPanel tinaNorthPanel = null;
 
-  private JPanel tinaWestPanel = null;
+  private JPanel randomBatchPanel = null;
 
   private JPanel tinaEastPanel = null;
 
@@ -216,8 +216,6 @@ public class TinaInternalFrame extends JInternalFrame {
   private JTabbedPane tinaEastTabbedPane = null;
 
   private JPanel tinaTransformationsPanel = null;
-
-  private JTabbedPane tinaWestTabbedPane = null;
 
   private JPanel tinaPalettePanel = null;
 
@@ -344,7 +342,6 @@ public class TinaInternalFrame extends JInternalFrame {
   private JTextField affineMoveAmountREd = null;
   private JPanel createRandomPointsPanel = null;
   private JPanel createPaletteTablePanel = null;
-  private JPanel randomBatchPanel = null;
   private JButton randomBatchButton = null;
   private JLabel nonlinearVar1Lbl = null;
   private JComboBox nonlinearVar1Cmb = null;
@@ -654,7 +651,7 @@ public class TinaInternalFrame extends JInternalFrame {
       rootPanel.setLayout(new BorderLayout());
       rootPanel.setFont(new Font("Dialog", Font.PLAIN, 10));
       rootPanel.add(getTinaNorthPanel(), BorderLayout.NORTH);
-      rootPanel.add(getTinaWestPanel(), BorderLayout.WEST);
+      rootPanel.add(getRandomBatchPanel(), BorderLayout.WEST);
       rootPanel.add(getTinaEastPanel(), BorderLayout.EAST);
       rootPanel.add(getTinaSouthPanel(), BorderLayout.SOUTH);
       rootPanel.add(getTinaCenterPanel(), BorderLayout.CENTER);
@@ -692,15 +689,14 @@ public class TinaInternalFrame extends JInternalFrame {
    *  
    * @return javax.swing.JPanel 
    */
-  private JPanel getTinaWestPanel() {
-    if (tinaWestPanel == null) {
-      tinaWestPanel = new JPanel();
-      tinaWestPanel.setLayout(new BorderLayout());
-      tinaWestPanel.setPreferredSize(new Dimension(210, 0));
-      tinaWestPanel.setVisible(true);
-      tinaWestPanel.add(getTinaWestTabbedPane(), BorderLayout.CENTER);
+  private JPanel getRandomBatchPanel() {
+    if (randomBatchPanel == null) {
+      randomBatchPanel = new JPanel();
+      randomBatchPanel.setLayout(new BorderLayout());
+      randomBatchPanel.setPreferredSize(new Dimension(128, 0));
+      randomBatchPanel.setVisible(true);
     }
-    return tinaWestPanel;
+    return randomBatchPanel;
   }
 
   /**
@@ -734,6 +730,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaSouthPanel.setLayout(new BorderLayout());
       tinaSouthPanel.setPreferredSize(new Dimension(0, 152));
       tinaSouthPanel.add(getTinaSouthTabbedPane(), BorderLayout.CENTER);
+      tinaSouthPanel.add(getPanel_66(), BorderLayout.NORTH);
     }
     return tinaSouthPanel;
   }
@@ -749,7 +746,6 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaCenterPanel.setLayout(new BorderLayout());
       tinaCenterPanel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
       tinaCenterPanel.setBackground(SystemColor.controlDkShadow);
-      tinaCenterPanel.add(getRandomBatchPanel(), BorderLayout.SOUTH);
       tinaCenterPanel.add(getTriangleOperationsPanel(), BorderLayout.EAST);
       tinaCenterPanel.add(getCenterNorthPanel(), BorderLayout.NORTH);
       tinaCenterPanel.add(getCenterWestPanel(), BorderLayout.WEST);
@@ -3286,6 +3282,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaEastTabbedPane = new JTabbedPane();
       tinaEastTabbedPane.setFont(new Font("Dialog", Font.BOLD, 10));
       tinaEastTabbedPane.addTab("Transformations", null, getTinaTransformationsPanel(), null);
+      tinaEastTabbedPane.addTab("Gradient", null, getTinaPalettePanel(), null);
       tinaEastTabbedPane.addTab("Scripts", null, getScriptPanel(), null);
     }
     return tinaEastTabbedPane;
@@ -3305,20 +3302,6 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaTransformationsPanel.add(getTransformationsSplitPane(), BorderLayout.CENTER);
     }
     return tinaTransformationsPanel;
-  }
-
-  /**
-   * This method initializes tinaWestTabbedPane 
-   *  
-   * @return javax.swing.JTabbedPane  
-   */
-  private JTabbedPane getTinaWestTabbedPane() {
-    if (tinaWestTabbedPane == null) {
-      tinaWestTabbedPane = new JTabbedPane();
-      tinaWestTabbedPane.setFont(new Font("Dialog", Font.BOLD, 10));
-      tinaWestTabbedPane.addTab("Gradient", null, getTinaPalettePanel(), null);
-    }
-    return tinaWestTabbedPane;
   }
 
   /**
@@ -5190,20 +5173,6 @@ public class TinaInternalFrame extends JInternalFrame {
       createPaletteTablePanel.add(getCreatePaletteScrollPane(), BorderLayout.CENTER);
     }
     return createPaletteTablePanel;
-  }
-
-  /**
-   * This method initializes randomBatchPanel	
-   * 	
-   * @return javax.swing.JPanel	
-   */
-  private JPanel getRandomBatchPanel() {
-    if (randomBatchPanel == null) {
-      randomBatchPanel = new JPanel();
-      randomBatchPanel.setLayout(new BorderLayout());
-      randomBatchPanel.setPreferredSize(new Dimension(0, 100));
-    }
-    return randomBatchPanel;
   }
 
   /**
@@ -9436,6 +9405,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JPanel panel_67;
   private JButton gradientFadeAllBtn;
   private JPanel panel_65;
+  private JPanel panel_66;
 
   /**
    * This method initializes renderBatchJobsScrollPane	
@@ -14429,5 +14399,12 @@ public class TinaInternalFrame extends JInternalFrame {
       panel_65.add(getGradientEraseRangeBtn());
     }
     return panel_65;
+  }
+
+  private JPanel getPanel_66() {
+    if (panel_66 == null) {
+      panel_66 = new JPanel();
+    }
+    return panel_66;
   }
 } //  @jve:decl-index=0:visual-constraint="10,10"

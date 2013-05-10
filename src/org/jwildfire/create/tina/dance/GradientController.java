@@ -280,6 +280,7 @@ public class GradientController {
         tinaController.saveUndoPoint();
         RGBPalette palette = selNode.getGradientLibraryList().get(gradientLibraryGradientCmb.getSelectedIndex()).makeCopy();
         tinaController.getCurrFlame().setPalette(palette);
+        tinaController.registerToEditor(tinaController.getCurrFlame());
         tinaController.refreshPaletteUI(palette);
         tinaController.refreshFlameImage(false);
       }
