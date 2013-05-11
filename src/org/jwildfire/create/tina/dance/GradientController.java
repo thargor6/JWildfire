@@ -1,20 +1,24 @@
 package org.jwildfire.create.tina.dance;
 
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.event.MouseEvent;
+import java.awt.Component;
 import java.io.File;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Vector;
 
-import javax.swing.JComboBox;
+import javax.swing.DefaultListCellRenderer;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTree;
-import javax.swing.ScrollPaneConstants;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
@@ -30,11 +34,10 @@ import org.jwildfire.create.tina.palette.RGBPaletteRenderer;
 import org.jwildfire.create.tina.swing.TinaController;
 import org.jwildfire.image.SimpleImage;
 import org.jwildfire.swing.ErrorHandler;
-import org.jwildfire.swing.ImagePanel;
 
 public class GradientController {
+  private final static int GRADIENT_THUMB_WIDTH = 200;
   private final static int GRADIENT_THUMB_HEIGHT = 20;
-  private final static int GRADIENT_THUMB_BORDER = 2;
 
   private JScrollPane gradientLibraryScrollPane;
 
@@ -44,18 +47,27 @@ public class GradientController {
   private final JPanel rootPanel;
   private final JTree gradientLibTree;
   private final JPanel gradientLibraryPanel;
-  private final JComboBox gradientLibraryGradientCmb;
+  private final JButton rescanBtn;
+  private final JButton newFolderBtn;
+  private final JButton renameFolderBtn;
+  private final JList gradientsList;
+
   private GradientUserNode userGradientsRootNode;
   private boolean cmbRefreshing;
 
-  public GradientController(TinaController pTinaController, ErrorHandler pErrorHandler, Prefs pPrefs, JPanel pRootPanel, JTree pGradientLibTree, JPanel pGradientLibraryPanel, JComboBox pGradientLibraryGradientCmb) {
+  public GradientController(TinaController pTinaController, ErrorHandler pErrorHandler, Prefs pPrefs, JPanel pRootPanel, JTree pGradientLibTree, JPanel pGradientLibraryPanel,
+      JButton pRescanBtn, JButton pNewFolderBtn, JButton pRenameFolderBtn, JList pGradientsList) {
     tinaController = pTinaController;
     errorHandler = pErrorHandler;
     prefs = pPrefs;
     rootPanel = pRootPanel;
     gradientLibTree = pGradientLibTree;
     gradientLibraryPanel = pGradientLibraryPanel;
-    gradientLibraryGradientCmb = pGradientLibraryGradientCmb;
+    rescanBtn = pRescanBtn;
+    newFolderBtn = pNewFolderBtn;
+    renameFolderBtn = pRenameFolderBtn;
+    gradientsList = pGradientsList;
+
     enableControls();
     initGradientsLibrary();
 
@@ -79,7 +91,7 @@ public class GradientController {
       if (thumbnails == null) {
         thumbnails = new ArrayList<SimpleImage>();
         for (RGBPalette palette : gradientLibraryList) {
-          thumbnails.add(new RGBPaletteRenderer().renderHorizPalette(palette, RGBPalette.PALETTE_SIZE, GRADIENT_THUMB_HEIGHT));
+          thumbnails.add(new RGBPaletteRenderer().renderHorizPalette(palette, GRADIENT_THUMB_WIDTH, GRADIENT_THUMB_HEIGHT));
         }
       }
       return thumbnails;
@@ -227,58 +239,69 @@ public class GradientController {
 
   }
 
-  public void updateGradientThumbnails(final AbstractGradientNode pNode, List<SimpleImage> pImages) {
-    if (gradientLibraryScrollPane != null) {
-      gradientLibraryPanel.remove(gradientLibraryScrollPane);
-      gradientLibraryScrollPane = null;
-    }
-    gradientLibraryGradientCmb.removeAllItems();
-    int panelWidth = gradientLibraryPanel.getBounds().width - 2 * GRADIENT_THUMB_BORDER - 7;
-    int panelHeight = (GRADIENT_THUMB_HEIGHT + GRADIENT_THUMB_BORDER) * pImages.size();
-    JPanel gradientsPanel = new JPanel();
-    gradientsPanel.setLayout(null);
-    gradientsPanel.setSize(panelWidth, panelHeight);
-    gradientsPanel.setPreferredSize(new Dimension(panelWidth, panelHeight));
-    for (int i = 0; i < pImages.size(); i++) {
-      SimpleImage img = pImages.get(i);
-      ImagePanel imgPanel = new ImagePanel(img, 0, 0, img.getImageWidth());
-      imgPanel.setImage(img);
-      imgPanel.setLocation(GRADIENT_THUMB_BORDER, i * GRADIENT_THUMB_HEIGHT + (i + 1) * GRADIENT_THUMB_BORDER);
-      final int idx = i;
-      imgPanel.addMouseListener(new java.awt.event.MouseAdapter() {
-        public void mouseClicked(java.awt.event.MouseEvent e) {
-          if (e.getClickCount() > 1 || (e.getClickCount() == 1 && e.getButton() == MouseEvent.BUTTON3)) {
-            importFromGradientLibrary(pNode, idx);
-          }
-        }
-      });
-      gradientsPanel.add(imgPanel);
-      gradientLibraryGradientCmb.addItem(pNode.getGradientLibraryList().get(i));
-    }
-    gradientLibraryScrollPane = new JScrollPane(gradientsPanel);
-    gradientLibraryScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-    gradientLibraryScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+  private class GradientNode {
+    private final String caption;
+    private final SimpleImage image;
 
-    gradientLibraryPanel.add(gradientLibraryScrollPane, BorderLayout.CENTER);
-    gradientLibraryPanel.validate();
+    public GradientNode(String pCaption, SimpleImage pImage) {
+      caption = pCaption;
+      image = pImage;
+    }
+
+    public SimpleImage getImage() {
+      return image;
+    }
+
+    @Override
+    public String toString() {
+      return caption;
+    }
+
   }
 
-  private void importFromGradientLibrary(AbstractGradientNode pNode, int idx) {
-    if (idx >= 0 && idx < pNode.getGradientLibraryList().size()) {
-      int selIdx = gradientLibraryGradientCmb.getSelectedIndex();
-      if (selIdx == idx) {
-        gradientLibraryGradientCmb.setSelectedIndex(-1);
+  private class GradientRenderer extends DefaultListCellRenderer {
+    private static final long serialVersionUID = 1L;
+
+    private Map<GradientNode, ImageIcon> iconCache = new HashMap<GradientNode, ImageIcon>();
+
+    public Component getListCellRendererComponent(JList list,
+        Object value,
+        int index,
+        boolean isSelected,
+        boolean hasFocus) {
+      JLabel label =
+          (JLabel) super.getListCellRendererComponent(list,
+              value,
+              index,
+              isSelected,
+              hasFocus);
+      GradientNode node = (GradientNode) value;
+      ImageIcon icon = iconCache.get(node);
+      if (icon == null) {
+        icon = new ImageIcon(node.getImage().getBufferedImg());
+        iconCache.put(node, icon);
       }
-      gradientLibraryGradientCmb.setSelectedItem(pNode.getGradientLibraryList().get(idx));
+      label.setIcon(icon);
+      return (label);
     }
+  }
+
+  public void updateGradientThumbnails(final AbstractGradientNode pNode, List<SimpleImage> pImages, List<RGBPalette> pGradientList) {
+    Vector<GradientNode> listData = new Vector<GradientNode>();
+    for (int i = 0; i < pImages.size(); i++) {
+      GradientNode node = new GradientNode(pGradientList.get(i).toString(), pImages.get(i));
+      listData.add(node);
+    }
+    gradientsList.setListData(listData);
+    gradientsList.setCellRenderer(new GradientRenderer());
   }
 
   public void gradientLibraryGradientChanged() {
     AbstractGradientNode selNode;
     if (!cmbRefreshing && (selNode = getSelGradientNode()) != null) {
-      if (tinaController.getCurrFlame() != null && gradientLibraryGradientCmb.getSelectedIndex() >= 0 && gradientLibraryGradientCmb.getSelectedIndex() < selNode.getGradientLibraryList().size()) {
+      if (tinaController.getCurrFlame() != null && gradientsList.getSelectedIndex() >= 0 && gradientsList.getSelectedIndex() < selNode.getGradientLibraryList().size()) {
         tinaController.saveUndoPoint();
-        RGBPalette palette = selNode.getGradientLibraryList().get(gradientLibraryGradientCmb.getSelectedIndex()).makeCopy();
+        RGBPalette palette = selNode.getGradientLibraryList().get(gradientsList.getSelectedIndex()).makeCopy();
         tinaController.getCurrFlame().setPalette(palette);
         tinaController.registerToEditor(tinaController.getCurrFlame());
         tinaController.refreshPaletteUI(palette);
@@ -310,10 +333,10 @@ public class GradientController {
       DefaultMutableTreeNode selNode = getSelNode();
       if (selNode != null && selNode instanceof AbstractGradientNode) {
         AbstractGradientNode gradientNode = (AbstractGradientNode) selNode;
-        updateGradientThumbnails(gradientNode, gradientNode.getThumbnails());
+        updateGradientThumbnails(gradientNode, gradientNode.getThumbnails(), gradientNode.getGradientLibraryList());
       }
       else {
-        gradientLibraryGradientCmb.removeAllItems();
+        gradientsList.setListData(new Vector<GradientNode>());
         if (gradientLibraryScrollPane != null) {
           gradientLibraryPanel.remove(gradientLibraryScrollPane);
           gradientLibraryScrollPane = null;

@@ -232,7 +232,9 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
         parameterObject.saveScriptBtn, parameterObject.revertScriptBtn, parameterObject.rescanScriptsBtn, parameterObject.newScriptBtn, parameterObject.newScriptFromFlameBtn, parameterObject.deleteScriptBtn,
         parameterObject.scriptRenameBtn, parameterObject.scriptDuplicateBtn, parameterObject.scriptRunBtn);
 
-    gradientController = new GradientController(this, parameterObject.pErrorHandler, prefs, parameterObject.pCenterPanel, parameterObject.gradientLibTree, parameterObject.pGradientLibraryPanel, parameterObject.pGradientLibraryGradientCmb);
+    gradientController = new GradientController(this, parameterObject.pErrorHandler, prefs, parameterObject.pCenterPanel, parameterObject.gradientLibTree, parameterObject.pGradientLibraryPanel,
+        parameterObject.gradientLibraryRescanBtn, parameterObject.gradientLibraryNewFolderBtn, parameterObject.gradientLibraryRenameFolderBtn,
+        parameterObject.gradientsList);
 
     data.cameraRollREd = parameterObject.pCameraRollREd;
     data.cameraRollSlider = parameterObject.pCameraRollSlider;
@@ -369,7 +371,6 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     data.randomBatchPanel = parameterObject.pRandomBatchPanel;
     data.TinaNonlinearControlsRows = parameterObject.pTinaNonlinearControlsRows;
     data.gradientLibraryPanel = parameterObject.pGradientLibraryPanel;
-    data.gradientLibraryGradientCmb = parameterObject.pGradientLibraryGradientCmb;
     data.renderFlameButton = parameterObject.pRenderFlameButton;
     data.renderMainButton = parameterObject.pRenderMainButton;
     data.appendToMovieButton = parameterObject.pAppendToMovieButton;

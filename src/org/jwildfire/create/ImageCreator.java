@@ -23,7 +23,6 @@ import org.jwildfire.base.ManagedObject;
 import org.jwildfire.base.Preset;
 import org.jwildfire.image.SimpleImage;
 
-
 public abstract class ImageCreator extends ManagedObject {
 
   public SimpleImage createImage(int pWidth, int pHeight) {
@@ -42,9 +41,9 @@ public abstract class ImageCreator extends ManagedObject {
   }
 
   private void showElapsedTime(long t0) {
-    long t1 = Calendar.getInstance().getTimeInMillis();
-    String name = this.getClass().getSimpleName();
-    System.out.println(name + ": " + ((double) (t1 - t0) / 1000.0) + "s");
+    //    long t1 = Calendar.getInstance().getTimeInMillis();
+    //    String name = this.getClass().getSimpleName();
+    //    System.out.println(name + ": " + ((double) (t1 - t0) / 1000.0) + "s");
   }
 
   public void applyPreset(String pPresetName) {
