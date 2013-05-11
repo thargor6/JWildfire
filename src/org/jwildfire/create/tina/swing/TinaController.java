@@ -2869,7 +2869,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
   }
 
   public void createRandomBatch(int pCount, String pGeneratorname) {
-    randomBatch.clear();
+    //    randomBatch.clear();
     int imgCount = prefs.getTinaRandomBatchSize();
     List<SimpleImage> imgList = new ArrayList<SimpleImage>();
     int maxCount = (pCount > 0 ? pCount : imgCount);
