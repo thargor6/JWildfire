@@ -14372,6 +14372,11 @@ public class TinaInternalFrame extends JInternalFrame {
       panel_1.setLayout(null);
 
       gradientLibraryRescanBtn = new JButton();
+      gradientLibraryRescanBtn.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getGradientController().rescanBtn_clicked();
+        }
+      });
       gradientLibraryRescanBtn.setToolTipText("Rescan gradient-folder");
       gradientLibraryRescanBtn.setText("Rescan");
       gradientLibraryRescanBtn.setPreferredSize(new Dimension(96, 24));
@@ -14380,6 +14385,11 @@ public class TinaInternalFrame extends JInternalFrame {
       panel_1.add(gradientLibraryRescanBtn);
 
       gradientLibraryNewFolderBtn = new JButton();
+      gradientLibraryNewFolderBtn.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getGradientController().newFolderBtn_clicked();
+        }
+      });
       gradientLibraryNewFolderBtn.setToolTipText("Create a new gradient folder");
       gradientLibraryNewFolderBtn.setText("New Folder");
       gradientLibraryNewFolderBtn.setPreferredSize(new Dimension(96, 24));
@@ -14402,6 +14412,11 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton getGradientLibraryRenameFolderBtn() {
     if (gradientLibraryRenameFolderBtn == null) {
       gradientLibraryRenameFolderBtn = new JButton();
+      gradientLibraryRenameFolderBtn.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getGradientController().renameFolderBtn_clicked();
+        }
+      });
       gradientLibraryRenameFolderBtn.setToolTipText("Rename the selected folder");
       gradientLibraryRenameFolderBtn.setText("Rename Fld");
       gradientLibraryRenameFolderBtn.setPreferredSize(new Dimension(96, 24));

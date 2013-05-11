@@ -31,6 +31,7 @@ import org.jwildfire.create.tina.io.RGBPaletteReader;
 import org.jwildfire.create.tina.io.UniversalPaletteReader;
 import org.jwildfire.create.tina.palette.RGBPalette;
 import org.jwildfire.create.tina.palette.RGBPaletteRenderer;
+import org.jwildfire.create.tina.swing.StandardDialogs;
 import org.jwildfire.create.tina.swing.TinaController;
 import org.jwildfire.image.SimpleImage;
 import org.jwildfire.swing.ErrorHandler;
@@ -97,6 +98,10 @@ public class GradientController {
       return thumbnails;
     }
 
+    public String getCaption() {
+      return (String) getUserObject();
+    }
+
   }
 
   private static class GradientInternalNode extends AbstractGradientNode {
@@ -115,14 +120,34 @@ public class GradientController {
 
   private static class GradientUserNode extends AbstractGradientNode {
     private static final long serialVersionUID = 1L;
+    private final String path;
 
     @Override
     public boolean isLeaf() {
       return false;
     }
 
-    public GradientUserNode(String pCaption) {
+    public GradientUserNode(String pCaption, String pPath) {
       super(pCaption);
+      path = pPath;
+    }
+
+    public void rename(String pName) {
+      System.out.println(path);
+      File oldFile = new File(path, (String) getUserObject());
+      File newFile = new File(path, pName);
+      if (newFile.exists()) {
+        throw new RuntimeException("Destination file <" + pName + "> already exists ");
+      }
+
+      if (!oldFile.renameTo(newFile)) {
+        throw new RuntimeException("Rename failed");
+      }
+      setUserObject(pName);
+    }
+
+    public String getAbsolutePath() {
+      return new File(path, (String) getUserObject()).getAbsolutePath();
     }
 
   }
@@ -180,7 +205,7 @@ public class GradientController {
         root.add(new InvalidGradientFolderNode());
       }
       else {
-        GradientUserNode parentNode = userGradientsRootNode = new GradientUserNode("Your gradients");
+        GradientUserNode parentNode = userGradientsRootNode = new GradientUserNode("Your gradients", null);
         root.add(parentNode);
         scanUserGradients(baseDrawer, parentNode);
       }
@@ -208,7 +233,7 @@ public class GradientController {
       List<String> filenames = new ArrayList<String>();
       for (File f : list) {
         if (f.isDirectory()) {
-          GradientUserNode newParentNode = new GradientUserNode(f.getName());
+          GradientUserNode newParentNode = new GradientUserNode(f.getName(), f.getParentFile().getAbsolutePath());
           pParentNode.add(newParentNode);
           scanUserGradients(f.getAbsolutePath(), newParentNode);
         }
@@ -235,8 +260,10 @@ public class GradientController {
   }
 
   public void enableControls() {
-    // TODO Auto-generated method stub
-
+    DefaultMutableTreeNode node = getSelNode();
+    boolean userNodeSelected = node != null && node instanceof GradientUserNode;
+    newFolderBtn.setEnabled(userNodeSelected);
+    renameFolderBtn.setEnabled(userNodeSelected && node != userGradientsRootNode);
   }
 
   private class GradientNode {
@@ -347,6 +374,72 @@ public class GradientController {
     }
     finally {
       cmbRefreshing = false;
+    }
+  }
+
+  public void rescanBtn_clicked() {
+    initGradientsLibrary();
+    enableControls();
+  }
+
+  public void newFolderBtn_clicked() {
+    try {
+      DefaultMutableTreeNode selNode = getSelNode();
+      if (selNode != null && selNode instanceof GradientUserNode) {
+        GradientUserNode gradientNode = (GradientUserNode) selNode;
+        String newName = StandardDialogs.promptForText(rootPanel, "Please enter the name of the new sub-folder", "");
+        if (newName != null) {
+          checkFolderName(newName);
+          File newDir;
+          if (gradientNode == userGradientsRootNode) {
+            newDir = new File(new File(prefs.getTinaGradientPath()).getAbsolutePath(), newName);
+          }
+          else {
+            newDir = new File(gradientNode.getAbsolutePath(), newName);
+          }
+
+          if (!newDir.mkdir()) {
+            throw new RuntimeException("The directory <" + newDir.getAbsolutePath() + "> could not be created");
+          }
+          GradientUserNode newNode = new GradientUserNode(newDir.getName(), newDir.getParentFile().getAbsolutePath());
+          selNode.add(newNode);
+
+          gradientLibTree.getParent().invalidate();
+          gradientLibTree.getParent().validate();
+          gradientLibTree.repaint();
+          gradientLibTree.updateUI();
+        }
+      }
+    }
+    catch (Exception ex) {
+      errorHandler.handleError(ex);
+    }
+  }
+
+  public void renameFolderBtn_clicked() {
+    try {
+      DefaultMutableTreeNode selNode = getSelNode();
+      if (selNode != null && selNode instanceof GradientUserNode && selNode != userGradientsRootNode) {
+        GradientUserNode gradientNode = (GradientUserNode) selNode;
+        String newName = StandardDialogs.promptForText(rootPanel, "Please enter a new name", gradientNode.getCaption());
+        if (newName != null) {
+          checkFolderName(newName);
+          gradientNode.rename(newName);
+          gradientLibTree.getParent().invalidate();
+          gradientLibTree.getParent().validate();
+          gradientLibTree.repaint();
+          gradientLibTree.updateUI();
+        }
+      }
+    }
+    catch (Exception ex) {
+      errorHandler.handleError(ex);
+    }
+  }
+
+  private void checkFolderName(String pName) throws Exception {
+    if (pName.length() == 0 || pName.indexOf("/") >= 0 || pName.indexOf("\\") >= 0 || pName.indexOf(".") >= 0) {
+      throw new Exception("<" + pName + "> is not a valid script name");
     }
   }
 
