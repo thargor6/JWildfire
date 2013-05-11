@@ -28,7 +28,7 @@ import java.util.Map;
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.palette.RGBPalette;
 
-public class Flam3PaletteReader implements RGBPaletteReader {
+public class Flam3GradientReader implements RGBPaletteReader {
 
   @Override
   public List<RGBPalette> readPalettes(InputStream pInputStream) {

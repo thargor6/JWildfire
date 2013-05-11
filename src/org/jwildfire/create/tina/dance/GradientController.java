@@ -14,6 +14,7 @@ import java.util.Vector;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
@@ -26,11 +27,14 @@ import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 
 import org.jwildfire.base.Prefs;
-import org.jwildfire.create.tina.io.Flam3PaletteReader;
+import org.jwildfire.create.tina.base.Flame;
+import org.jwildfire.create.tina.io.Flam3GradientReader;
+import org.jwildfire.create.tina.io.MapGradientWriter;
 import org.jwildfire.create.tina.io.RGBPaletteReader;
 import org.jwildfire.create.tina.io.UniversalPaletteReader;
 import org.jwildfire.create.tina.palette.RGBPalette;
 import org.jwildfire.create.tina.palette.RGBPaletteRenderer;
+import org.jwildfire.create.tina.swing.MapFileChooser;
 import org.jwildfire.create.tina.swing.StandardDialogs;
 import org.jwildfire.create.tina.swing.TinaController;
 import org.jwildfire.image.SimpleImage;
@@ -171,7 +175,7 @@ public class GradientController {
       ressources = (String[]) resLst.toArray();
 
       // for the base path inside the jar file
-      RGBPaletteReader reader = new Flam3PaletteReader();
+      RGBPaletteReader reader = new Flam3GradientReader();
       DefaultMutableTreeNode defaultFolderNode = null;
       for (String ressource : ressources) {
         try {
@@ -440,6 +444,32 @@ public class GradientController {
   private void checkFolderName(String pName) throws Exception {
     if (pName.length() == 0 || pName.indexOf("/") >= 0 || pName.indexOf("\\") >= 0 || pName.indexOf(".") >= 0) {
       throw new Exception("<" + pName + "> is not a valid script name");
+    }
+  }
+
+  public void gradientSaveBtn_clicked() {
+    try {
+      Flame flame = tinaController.getCurrFlame();
+      if (flame != null) {
+        JFileChooser chooser = new MapFileChooser(prefs);
+        if (prefs.getTinaGradientPath() != null) {
+          try {
+            chooser.setCurrentDirectory(new File(prefs.getTinaGradientPath()));
+          }
+          catch (Exception ex) {
+            ex.printStackTrace();
+          }
+        }
+        if (chooser.showSaveDialog(rootPanel) == JFileChooser.APPROVE_OPTION) {
+          File file = chooser.getSelectedFile();
+          RGBPalette gradient = flame.getPalette();
+          new MapGradientWriter().writeGradient(gradient, file.getAbsolutePath());
+          tinaController.showStatusMessage(gradient, "gradient saved to disc");
+        }
+      }
+    }
+    catch (Throwable ex) {
+      errorHandler.handleError(ex);
     }
   }
 

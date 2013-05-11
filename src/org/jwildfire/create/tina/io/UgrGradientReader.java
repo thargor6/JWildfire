@@ -27,7 +27,7 @@ import org.jwildfire.create.tina.palette.RGBColor;
 import org.jwildfire.create.tina.palette.RGBPalette;
 import org.jwildfire.image.Pixel;
 
-public class UgrPaletteReader {
+public class UgrGradientReader {
 
   public List<RGBPalette> readPalettes(String pFilename) {
     try {

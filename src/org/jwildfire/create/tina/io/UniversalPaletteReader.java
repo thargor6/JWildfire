@@ -32,13 +32,13 @@ public class UniversalPaletteReader {
       }
     }
     if (Tools.FILEEXT_XML.equalsIgnoreCase(extension)) {
-      return new Flam3PaletteReader().readPalettes(pFilename);
+      return new Flam3GradientReader().readPalettes(pFilename);
     }
     else if (Tools.FILEEXT_MAP.equalsIgnoreCase(extension)) {
-      return new MapPaletteReader().readPalettes(pFilename);
+      return new MapGradientReader().readPalettes(pFilename);
     }
     else if (Tools.FILEEXT_UGR.equalsIgnoreCase(extension) || Tools.FILEEXT_GRADIENT.equalsIgnoreCase(extension)) {
-      return new UgrPaletteReader().readPalettes(pFilename);
+      return new UgrGradientReader().readPalettes(pFilename);
     }
     else if (Tools.FILEEXT_PNG.equalsIgnoreCase(extension) || Tools.FILEEXT_JPG.equalsIgnoreCase(extension) || Tools.FILEEXT_JPEG.equalsIgnoreCase(extension)) {
       return new ImgPaletteReader().readPalettes(pFilename);

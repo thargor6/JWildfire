@@ -9397,6 +9397,8 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton gradientLibraryRenameFolderBtn;
   private JScrollPane scrollPane_7;
   private JList gradientsList;
+  private JPanel panel_70;
+  private JButton gradientSaveBtn;
 
   /**
    * This method initializes renderBatchJobsScrollPane	
@@ -14040,6 +14042,7 @@ public class TinaInternalFrame extends JInternalFrame {
       gradientEditorFncPnl.add(getPanel_64());
       gradientEditorFncPnl.add(getPanel_65());
       gradientEditorFncPnl.add(getPanel_67());
+      gradientEditorFncPnl.add(getPanel_70());
     }
     return gradientEditorFncPnl;
   }
@@ -14445,5 +14448,35 @@ public class TinaInternalFrame extends JInternalFrame {
       });
     }
     return gradientsList;
+  }
+
+  private JPanel getPanel_70() {
+    if (panel_70 == null) {
+      panel_70 = new JPanel();
+      FlowLayout flowLayout = (FlowLayout) panel_70.getLayout();
+      flowLayout.setVgap(0);
+      flowLayout.setHgap(0);
+      panel_70.setPreferredSize(new Dimension(70, 50));
+      panel_70.add(getGradientSaveBtn());
+    }
+    return panel_70;
+  }
+
+  private JButton getGradientSaveBtn() {
+    if (gradientSaveBtn == null) {
+      gradientSaveBtn = new JButton();
+      gradientSaveBtn.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getGradientController().gradientSaveBtn_clicked();
+        }
+      });
+      gradientSaveBtn.setToolTipText("Save the gradient to the library");
+      gradientSaveBtn.setText("Save");
+      gradientSaveBtn.setSize(new Dimension(138, 50));
+      gradientSaveBtn.setPreferredSize(new Dimension(70, 48));
+      gradientSaveBtn.setLocation(new Point(4, 181));
+      gradientSaveBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+    }
+    return gradientSaveBtn;
   }
 } //  @jve:decl-index=0:visual-constraint="10,10"

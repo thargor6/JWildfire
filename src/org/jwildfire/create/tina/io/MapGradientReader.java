@@ -27,7 +27,7 @@ import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.palette.RGBColor;
 import org.jwildfire.create.tina.palette.RGBPalette;
 
-public class MapPaletteReader {
+public class MapGradientReader {
 
   public List<RGBPalette> readPalettes(String pFilename) {
     try {

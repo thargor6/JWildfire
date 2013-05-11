@@ -4753,7 +4753,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     }
   }
 
-  private void showStatusMessage(Flame pFlame, String pStatus) {
+  public void showStatusMessage(Flame pFlame, String pStatus) {
     if (pFlame == null)
       return;
     String prefix;
@@ -4770,7 +4770,19 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       prefix += " ";
     }
     tinaFrame.setTitle(prefix + (pStatus != null && pStatus.length() > 0 ? ": " + pStatus : ""));
-    //    tinaFrame.setTitle(tinaFrameTitle + (pStatus != null && pStatus.length() > 0 ? ": " + pStatus : ""));
+  }
+
+  public void showStatusMessage(RGBPalette pGradient, String pStatus) {
+    if (pGradient == null)
+      return;
+    String prefix;
+    if (pGradient.getFlam3Name() != null && pGradient.getFlam3Name().length() > 0) {
+      prefix = "Gradient \"" + pGradient.getFlam3Name() + "\"";
+    }
+    else {
+      prefix = "Unamed gradient";
+    }
+    tinaFrame.setTitle(prefix + (pStatus != null && pStatus.length() > 0 ? ": " + pStatus : ""));
   }
 
   public void snapshotButton_clicked() {

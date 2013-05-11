@@ -24,7 +24,7 @@ import org.jwildfire.base.Prefs;
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.XForm;
-import org.jwildfire.create.tina.io.Flam3PaletteReader;
+import org.jwildfire.create.tina.io.Flam3GradientReader;
 import org.jwildfire.create.tina.io.RGBPaletteReader;
 import org.jwildfire.create.tina.swing.StandardDialogs;
 import org.jwildfire.create.tina.swing.TinaController;
@@ -195,7 +195,7 @@ public class JWFScriptController {
     public String getScript() throws Exception {
       if (script == null) {
         // for the base path inside the jar file
-        RGBPaletteReader reader = new Flam3PaletteReader();
+        RGBPaletteReader reader = new Flam3GradientReader();
         InputStream is = reader.getClass().getResourceAsStream(resFilename);
         if (is != null) {
           script = Tools.readUTF8Textfile(is);
@@ -211,7 +211,7 @@ public class JWFScriptController {
     public String getDescription() throws Exception {
       if (description == null) {
         // for the base path inside the jar file
-        RGBPaletteReader reader = new Flam3PaletteReader();
+        RGBPaletteReader reader = new Flam3GradientReader();
         String filename = resFilename.substring(0, resFilename.length() - Tools.FILEEXT_JWFSCRIPT.length()) + Tools.FILEEXT_TXT;
         InputStream is = reader.getClass().getResourceAsStream(filename);
         if (is != null) {
@@ -384,7 +384,7 @@ public class JWFScriptController {
       ressources = (String[]) resLst.toArray();
 
       // for the base path inside the jar file
-      RGBPaletteReader reader = new Flam3PaletteReader();
+      RGBPaletteReader reader = new Flam3GradientReader();
       DefaultMutableTreeNode defaultFolderNode = null;
       for (String ressource : ressources) {
         try {
