@@ -1,3 +1,20 @@
+V0.70 (12.05.2013):
+ - finished the first working version of the gradient editor
+ - possibility to save own gradients (in map-format)
+ - possibility to create and rename folders in the gradient library
+ - changed the gradient display into one single list-like view which can be easier controlled using either the mosue or the keyboard
+ - reintroduced the "extended" parameter of the "truchet"variation and added some more range checking
+ - significant layout change: the gradient tab moved to the right (to have more space) and the thumbnail ribbon is now vertical
+ - moved the gradient library back to the "Gradient" and made it the main tab
+ - FIXED: changing/double clicking at a new gradient did not always cause an update to the viewport
+ - addes support for gradients in the *.jpg and *.png file format
+ - added support for more *.ugr variants
+ - improved the performance of the gradient editor and increased the size of the controls
+ - button to apply (finalize) changes (both balancing and TX) to the gradient
+ - new "barycentroid" variation by Xyrus02
+ - new "fract_formula_julia_wf" and "fract_formula_mand_wf" for including "classical" fractals with arbitrary formulas
+ - creating new random batch does not clear the thumbnail ribbon
+
 V0.69 (04.05.2013):
  - support for for storing external gradients (in the formats *.ugr and *.map) into an external folder, the contents of those folder (inclusnig subfolders) is integrated into the gradient library 
  - path for external gradient in the Preferences

@@ -462,7 +462,8 @@ public class GradientController {
         }
         if (chooser.showSaveDialog(rootPanel) == JFileChooser.APPROVE_OPTION) {
           File file = chooser.getSelectedFile();
-          RGBPalette gradient = flame.getPalette();
+          RGBPalette gradient = flame.getPalette().makeCopy();
+          gradient.setFlam3Name(file.getName());
           new MapGradientWriter().writeGradient(gradient, file.getAbsolutePath());
           tinaController.showStatusMessage(gradient, "gradient saved to disc");
         }
