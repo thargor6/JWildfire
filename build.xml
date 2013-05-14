@@ -76,6 +76,7 @@
       <zipfileset src="lib/JTattoo.jar"/>
       <zipfileset src="lib/jl1.0.1.jar"/>
       <zipfileset src="lib/jtransforms-2.4.jar"/>
+      <zipfileset src="lib/svgSalamander.jar"/>
       <manifest>
         <attribute name="Main-Class" value="org.jwildfire.swing.Desktop"/>
       </manifest>			
