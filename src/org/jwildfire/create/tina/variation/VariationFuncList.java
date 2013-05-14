@@ -331,6 +331,7 @@ public class VariationFuncList {
     registerVariationFunc(FractFormulaJuliaWFFunc.class);
     registerVariationFunc(FractFormulaMandWFFunc.class);
     registerVariationFunc(BarycentroidFunc.class);
+    registerVariationFunc(SVGWFFunc.class);
   }
 
   private static void registerVariationFunc(
