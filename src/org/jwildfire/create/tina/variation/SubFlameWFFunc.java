@@ -50,7 +50,12 @@ public class SubFlameWFFunc extends VariationFunc {
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-    if (xf != null) {
+    int iter = 0;
+    final int MAX_ITER = 1000;
+    while (xf != null) {
+      if (++iter > MAX_ITER) {
+        return;
+      }
       xf = xf.getNextAppliedXFormTable()[pContext.random(Constants.NEXT_APPLIED_XFORM_TABLE_SIZE)];
       if (xf == null) {
         return;
@@ -58,9 +63,9 @@ public class SubFlameWFFunc extends VariationFunc {
       //      double parentColor = pAffineTP.color;
       xf.transformPoint(pContext, pAffineTP, pVarTP, p, p);
       if (xf.getDrawMode() == DrawMode.HIDDEN)
-        return;
+        continue;
       else if ((xf.getDrawMode() == DrawMode.OPAQUE) && (pContext.random() > xf.getOpacity()))
-        return;
+        continue;
 
       List<XForm> finalXForms = flame.getFinalXForms();
       if (finalXForms.size() > 0) {
@@ -74,6 +79,7 @@ public class SubFlameWFFunc extends VariationFunc {
       //        pVarTP.color += 1.0;
       //      while (pVarTP.color > 1.0)
       //        pVarTP.color -= 1.0;
+      break;
     }
 
     pVarTP.x += offset_x;
