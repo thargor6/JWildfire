@@ -42,13 +42,7 @@ import javax.swing.event.InternalFrameAdapter;
 import javax.swing.event.InternalFrameEvent;
 
 import org.jwildfire.base.Tools;
-import org.jwildfire.create.tina.variation.VariationFuncList;
 import org.jwildfire.image.SimpleImage;
-import org.jwildfire.transform.TextTransformer;
-import org.jwildfire.transform.TextTransformer.FontStyle;
-import org.jwildfire.transform.TextTransformer.HAlignment;
-import org.jwildfire.transform.TextTransformer.Mode;
-import org.jwildfire.transform.TextTransformer.VAlignment;
 
 public class WelcomeInternalFrame extends JInternalFrame {
   private static final long serialVersionUID = 1L;
@@ -70,10 +64,11 @@ public class WelcomeInternalFrame extends JInternalFrame {
     northPanel.addMouseListener(new MouseAdapter() {
       @Override
       public void mouseClicked(MouseEvent e) {
-        setVisible(false);
+        //        setVisible(false);
+        browse("http://jwildfire.org/");
       }
     });
-    northPanel.setPreferredSize(new Dimension(10, 68));
+    northPanel.setPreferredSize(new Dimension(10, 78));
     getContentPane().add(northPanel, BorderLayout.NORTH);
     northPanel.setLayout(null);
 
@@ -89,7 +84,7 @@ public class WelcomeInternalFrame extends JInternalFrame {
     getContentPane().add(southPanel, BorderLayout.SOUTH);
     southPanel.setLayout(null);
 
-    JButton websiteButton = new JButton("Official Website");
+    JButton websiteButton = new JButton("Main webpage");
     websiteButton.setDefaultCapable(false);
     websiteButton.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
@@ -104,7 +99,8 @@ public class WelcomeInternalFrame extends JInternalFrame {
     websiteButton.setBounds(6, 0, 134, 28);
     southPanel.add(websiteButton);
 
-    JButton communityBtn = new JButton("User community");
+    JButton communityBtn = new JButton("FB community");
+    communityBtn.setToolTipText("JWildfire Open Group at Facebook");
     communityBtn.setDefaultCapable(false);
     communityBtn.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
@@ -133,7 +129,7 @@ public class WelcomeInternalFrame extends JInternalFrame {
     youtubeVideosBtn.setBounds(338, 34, 134, 28);
     southPanel.add(youtubeVideosBtn);
 
-    JButton pdfTutorialsBtn = new JButton("PDF Tutorials");
+    JButton pdfTutorialsBtn = new JButton("Official tutorials");
     pdfTutorialsBtn.setDefaultCapable(false);
     pdfTutorialsBtn.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
@@ -147,7 +143,7 @@ public class WelcomeInternalFrame extends JInternalFrame {
     pdfTutorialsBtn.setBounds(338, 67, 134, 28);
     southPanel.add(pdfTutorialsBtn);
 
-    JButton donationsBtn = new JButton("Donations");
+    JButton donationsBtn = new JButton("Donate");
     donationsBtn.setDefaultCapable(false);
     donationsBtn.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
@@ -161,7 +157,7 @@ public class WelcomeInternalFrame extends JInternalFrame {
     donationsBtn.setBounds(6, 67, 134, 28);
     southPanel.add(donationsBtn);
 
-    JButton updatesBtn = new JButton("Updates");
+    JButton updatesBtn = new JButton("Newest downloads");
     updatesBtn.setDefaultCapable(false);
     updatesBtn.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
@@ -175,7 +171,7 @@ public class WelcomeInternalFrame extends JInternalFrame {
     updatesBtn.setBounds(6, 34, 134, 28);
     southPanel.add(updatesBtn);
 
-    enterBtn = new JButton("Enter");
+    enterBtn = new JButton("Enter software");
     enterBtn.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
         setVisible(false);
@@ -188,11 +184,11 @@ public class WelcomeInternalFrame extends JInternalFrame {
     enterBtn.setBounds(178, 0, 122, 62);
     southPanel.add(enterBtn);
 
-    JButton dravesBtn = new JButton("About \"flames\"");
+    JButton dravesBtn = new JButton("Forum");
     dravesBtn.setDefaultCapable(false);
     dravesBtn.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
-        browse("http://www.flam3.com/flame_draves.pdf");
+        browse("http://jwildfire.org/forum/");
       }
     });
     dravesBtn.setPreferredSize(new Dimension(128, 24));
@@ -212,14 +208,14 @@ public class WelcomeInternalFrame extends JInternalFrame {
     });
     getContentPane().add(panel_2, BorderLayout.CENTER);
     setTitle("Welcome to " + Tools.APP_TITLE + " " + Tools.APP_VERSION);
-    setBounds(320, 140, 490, 490);
+    setBounds(320, 140, 490, 498);
 
     // Load logo
     try {
       SimpleImage img = getImage("logo.png");
       ImagePanel imgPanel = new ImagePanel(img, 0, 0, img.getImageWidth());
       imgPanel.setPreferredSize(new Dimension(img.getImageWidth(), img.getImageHeight()));
-      imgPanel.setLocation(4, 4);
+      imgPanel.setLocation(79, 4);
       northPanel.add(imgPanel);
     }
     catch (Exception ex) {
@@ -230,20 +226,20 @@ public class WelcomeInternalFrame extends JInternalFrame {
     try {
       String imageFilename = imageFilenames[(int) (Math.random() * imageFilenames.length)];
       SimpleImage img = getImage(imageFilename);
-      {
-        TextTransformer txt = new TextTransformer();
-        txt.setText1("Number of currently supported variations: " + VariationFuncList.getNameList().size() + "  ");
-        txt.setText2("  ");
-        txt.setAntialiasing(false);
-        txt.setColor(Color.LIGHT_GRAY);
-        txt.setMode(Mode.NORMAL);
-        txt.setFontStyle(FontStyle.PLAIN);
-        txt.setFontName("Arial");
-        txt.setFontSize(10);
-        txt.setHAlign(HAlignment.RIGHT);
-        txt.setVAlign(VAlignment.BOTTOM);
-        txt.transformImage(img);
-      }
+      //      {
+      //        TextTransformer txt = new TextTransformer();
+      //        txt.setText1("Number of currently supported variations: " + VariationFuncList.getNameList().size() + "  ");
+      //        txt.setText2("  ");
+      //        txt.setAntialiasing(false);
+      //        txt.setColor(Color.LIGHT_GRAY);
+      //        txt.setMode(Mode.NORMAL);
+      //        txt.setFontStyle(FontStyle.PLAIN);
+      //        txt.setFontName("Arial");
+      //        txt.setFontSize(10);
+      //        txt.setHAlign(HAlignment.RIGHT);
+      //        txt.setVAlign(VAlignment.BOTTOM);
+      //        txt.transformImage(img);
+      //      }
 
       panel_2.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 

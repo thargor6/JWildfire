@@ -125,7 +125,7 @@ public class Launcher {
       northPanel.setLayout(null);
       ImagePanel imgPanel = new ImagePanel(img, 0, 0, img.getImageWidth());
       imgPanel.setPreferredSize(new Dimension(img.getImageWidth(), img.getImageHeight()));
-      imgPanel.setLocation(110, 0);
+      imgPanel.setLocation(107, 4);
       getNorthPanel().add(imgPanel);
     }
     catch (Exception ex) {
@@ -133,7 +133,7 @@ public class Launcher {
     }
 
     try {
-      final int IMG_COUNT = 59;
+      final int IMG_COUNT = 58;
       int imageIdx = (int) (Math.random() * IMG_COUNT) + 1;
       String id = String.valueOf(imageIdx);
       while (id.length() < 3) {
@@ -176,7 +176,7 @@ public class Launcher {
     frame.getContentPane().setBackground(Color.BLACK);
     frame.setResizable(false);
     {
-      frame.setBounds(100, 100, 551, 540);
+      frame.setBounds(100, 100, 551, 558);
       Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
       Dimension frameSize = frame.getSize();
       frame.setLocation((screenSize.width - frameSize.width) / 2, (screenSize.height - frameSize.height) / 2);
@@ -186,7 +186,7 @@ public class Launcher {
 
     northPanel = new JPanel();
     northPanel.setBackground(Color.BLACK);
-    northPanel.setPreferredSize(new Dimension(0, 60));
+    northPanel.setPreferredSize(new Dimension(0, 78));
     frame.getContentPane().add(northPanel, BorderLayout.NORTH);
 
     centerPanel = new JPanel();
