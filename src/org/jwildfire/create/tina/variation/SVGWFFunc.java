@@ -25,6 +25,7 @@ import static org.jwildfire.base.mathlib.MathLib.sqrt;
 import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_JWILDFIRE;
 
 import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,11 +33,14 @@ import java.util.List;
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+import org.jwildfire.create.tina.palette.RenderColor;
 import org.jwildfire.image.Pixel;
 import org.jwildfire.image.SimpleImage;
 
 import com.kitfox.svg.SVGDiagram;
+import com.kitfox.svg.SVGRoot;
 import com.kitfox.svg.SVGUniverse;
+import com.kitfox.svg.animation.AnimationElement;
 
 public class SVGWFFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
@@ -45,20 +49,22 @@ public class SVGWFFunc extends VariationFunc {
   private static final String PARAM_SCALEY = "scale_y";
   private static final String PARAM_OFFSETX = "offset_x";
   private static final String PARAM_OFFSETY = "offset_y";
+  private static final String PARAM_RESOLUTION_MULTIPLIER = "resolution_multiplier";
   private static final String PARAM_ANTIALIAS = "antialias";
-  private static final String PARAM_DIRECT_COLOR = "direct_color";
+  private static final String PARAM_TRUE_COLOR = "true_color";
 
   private static final String RESSOURCE_SVG = "svg";
 
-  private static final String[] paramNames = { PARAM_ANTIALIAS, PARAM_SCALEX, PARAM_SCALEY, PARAM_OFFSETX, PARAM_OFFSETY, PARAM_DIRECT_COLOR };
+  private static final String[] paramNames = { PARAM_ANTIALIAS, PARAM_RESOLUTION_MULTIPLIER, PARAM_TRUE_COLOR, PARAM_SCALEX, PARAM_SCALEY, PARAM_OFFSETX, PARAM_OFFSETY };
   private static final String[] ressourceNames = { RESSOURCE_SVG };
 
   private double antialias = 0.5;
+  private double resolution_multiplier = 3.0;
   private double scale_x = 1.0;
   private double scale_y = 1.0;
   private double offset_x = 0.0;
   private double offset_y = 0.0;
-  private int direct_color = 1;
+  private int true_color = 1;
   private String svg = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n" +
       " <!DOCTYPE svg>\r\n" +
       " <svg xmlns=\"http://www.w3.org/2000/svg\"\r\n" +
@@ -74,13 +80,22 @@ public class SVGWFFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { antialias, scale_x, scale_y, offset_x, offset_y, direct_color };
+    return new Object[] { antialias, resolution_multiplier, true_color, scale_x, scale_y, offset_x, offset_y };
   }
 
   @Override
   public void setParameter(String pName, double pValue) {
     if (PARAM_ANTIALIAS.equalsIgnoreCase(pName))
       antialias = pValue;
+    else if (PARAM_RESOLUTION_MULTIPLIER.equalsIgnoreCase(pName)) {
+      resolution_multiplier = pValue;
+      if (resolution_multiplier < 0.1) {
+        resolution_multiplier = 0.1;
+      }
+      else if (resolution_multiplier > 100.0) {
+        resolution_multiplier = 100.0;
+      }
+    }
     else if (PARAM_SCALEX.equalsIgnoreCase(pName))
       scale_x = pValue;
     else if (PARAM_SCALEY.equalsIgnoreCase(pName))
@@ -89,8 +104,8 @@ public class SVGWFFunc extends VariationFunc {
       offset_x = pValue;
     else if (PARAM_OFFSETY.equalsIgnoreCase(pName))
       offset_y = pValue;
-    else if (PARAM_DIRECT_COLOR.equalsIgnoreCase(pName))
-      direct_color = Tools.FTOI(pValue);
+    else if (PARAM_TRUE_COLOR.equalsIgnoreCase(pName))
+      true_color = Tools.FTOI(pValue);
     else
       throw new IllegalArgumentException(pName);
   }
@@ -107,32 +122,14 @@ public class SVGWFFunc extends VariationFunc {
       b = pB;
     }
 
-    public double getX() {
-      return x;
-    }
-
-    public double getY() {
-      return y;
-    }
-
-    public int getR() {
-      return r;
-    }
-
-    public int getG() {
-      return g;
-    }
-
-    public int getB() {
-      return b;
-    }
-
   }
 
   private List<Point> _points;
+  private RenderColor[] renderColors;
 
   @Override
   public void init(FlameTransformationContext pContext, XForm pXForm, double pAmount) {
+    renderColors = pContext.getFlameRenderer().getColorMap();
   }
 
   private String makeRessourceKey() {
@@ -146,15 +143,22 @@ public class SVGWFFunc extends VariationFunc {
       _points = (List<Point>) RessourceManager.getRessource(key);
       if (_points == null) {
         try {
-          int imgWidth = 400;
-          int imgHeight = 400;
+          SVGUniverse svgUniverse = new SVGUniverse();
+          StringReader reader = new StringReader(svg);
+          SVGDiagram diagram = svgUniverse.getDiagram(svgUniverse.loadSVG(reader, "svgImage"));
+
+          int imgWidth = Tools.FTOI(diagram.getWidth() * resolution_multiplier);
+          int imgHeight = Tools.FTOI(diagram.getHeight() * resolution_multiplier);
+
+          SVGRoot root = diagram.getRoot();
+          root.setAttribute("width", AnimationElement.AT_XML, Integer.toString(imgWidth));
+          root.setAttribute("height", AnimationElement.AT_XML, Integer.toString(imgHeight));
+          root.build();
+
           SimpleImage imgMap = new SimpleImage(imgWidth, imgHeight);
 
-          StringReader reader = new StringReader(svg);
-
-          SVGUniverse svgUniverse = new SVGUniverse();
-          SVGDiagram diagram = svgUniverse.getDiagram(svgUniverse.loadSVG(reader, "svgImage"));
           Graphics2D g = imgMap.getBufferedImg().createGraphics();
+          g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
           diagram.render(g);
 
           Pixel pixel = new Pixel();
@@ -218,8 +222,8 @@ public class SVGWFFunc extends VariationFunc {
     final double DFLT_SCALE = 3.0;
     if (points.size() > 1) {
       Point point = points.get(pContext.random(points.size()));
-      double rawX = point.getX();
-      double rawY = point.getY();
+      double rawX = point.x;
+      double rawY = point.y;
       if (antialias > 0.01) {
         double dr = (exp(antialias * sqrt(-log(pContext.random()))) - 1.0) * 0.001;
         double da = pContext.random() * 2.0 * M_PI;
@@ -228,12 +232,13 @@ public class SVGWFFunc extends VariationFunc {
       }
       pVarTP.x += (rawX * scale_x + offset_x) * DFLT_SCALE;
       pVarTP.y += (rawY * scale_y + offset_y) * DFLT_SCALE;
-      if (direct_color == 1) {
+      if (true_color == 1) {
         pVarTP.rgbColor = true;
         pVarTP.redColor = point.r;
         pVarTP.greenColor = point.g;
         pVarTP.blueColor = point.b;
       }
+      pVarTP.color = getColorIdx(point.r, point.g, point.b);
     }
     else {
       pVarTP.x += pContext.random();
@@ -254,4 +259,27 @@ public class SVGWFFunc extends VariationFunc {
   public int getAvailability() {
     return AVAILABILITY_JWILDFIRE;
   }
+
+  private double getColorIdx(double pR, double pG, double pB) {
+    int nearestIdx = 0;
+    RenderColor color = renderColors[0];
+    double dr, dg, db;
+    dr = (color.red - pR);
+    dg = (color.green - pG);
+    db = (color.blue - pB);
+    double nearestDist = sqrt(dr * dr + dg * dg + db * db);
+    for (int i = 1; i < renderColors.length; i++) {
+      color = renderColors[i];
+      dr = (color.red - pR);
+      dg = (color.green - pG);
+      db = (color.blue - pB);
+      double dist = sqrt(dr * dr + dg * dg + db * db);
+      if (dist < nearestDist) {
+        nearestDist = dist;
+        nearestIdx = i;
+      }
+    }
+    return (double) nearestIdx / (double) (renderColors.length - 1);
+  }
+
 }
