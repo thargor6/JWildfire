@@ -19,6 +19,7 @@ package org.jwildfire.create.tina.swing;
 import static org.jwildfire.base.mathlib.MathLib.EPSILON;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -50,6 +51,7 @@ import java.util.List;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JColorChooser;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JInternalFrame;
@@ -118,7 +120,9 @@ import org.jwildfire.swing.ImageFileChooser;
 import org.jwildfire.swing.ImagePanel;
 import org.jwildfire.swing.MainController;
 
+import com.l2fprod.common.beans.editor.FilePropertyEditor;
 import com.l2fprod.common.swing.JFontChooser;
+import com.l2fprod.common.util.ResourceManager;
 
 public class TinaController implements FlameHolder, JobRenderThreadController, ScriptRunnerEnvironment, UndoManagerHolder<Flame>, JWFScriptExecuteController, GradientSelectionProvider {
   public static final int PAGE_INDEX = 0;
@@ -291,12 +295,6 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     data.gammaThresholdREd = parameterObject.pGammaThresholdREd;
     data.gammaThresholdSlider = parameterObject.pGammaThresholdSlider;
     data.bgTransparencyCBx = parameterObject.pBGTransparencyCBx;
-    data.bgColorRedREd = parameterObject.pBGColorRedREd;
-    data.bgColorRedSlider = parameterObject.pBGColorRedSlider;
-    data.bgColorGreenREd = parameterObject.pBGColorGreenREd;
-    data.bgColorGreenSlider = parameterObject.pBGColorGreenSlider;
-    data.bgColorBlueREd = parameterObject.pBGColorBlueREd;
-    data.bgColorBlueSlider = parameterObject.pBGColorBlueSlider;
     data.paletteRandomPointsREd = parameterObject.pPaletteRandomPointsREd;
     data.paletteImgPanel = parameterObject.pPaletteImgPanel;
     data.colorChooserPaletteImgPanel = parameterObject.pColorChooserPaletteImgPanel;
@@ -502,6 +500,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     data.scriptDuplicateBtn = parameterObject.scriptDuplicateBtn;
     data.scriptRunBtn = parameterObject.scriptRunBtn;
     data.gradientLibTree = parameterObject.gradientLibTree;
+    data.backgroundColorIndicatorBtn = parameterObject.backgroundColorIndicatorBtn;
 
     qsaveFilenameGen = new QuickSaveFilenameGen(prefs);
 
@@ -1021,14 +1020,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
 
       data.bgTransparencyCBx.setSelected(getCurrFlame().isBGTransparency());
 
-      data.bgColorRedREd.setText(String.valueOf(getCurrFlame().getBGColorRed()));
-      data.bgColorRedSlider.setValue(getCurrFlame().getBGColorRed());
-
-      data.bgColorGreenREd.setText(String.valueOf(getCurrFlame().getBGColorGreen()));
-      data.bgColorGreenSlider.setValue(getCurrFlame().getBGColorGreen());
-
-      data.bgColorBlueREd.setText(String.valueOf(getCurrFlame().getBGColorBlue()));
-      data.bgColorBlueSlider.setValue(getCurrFlame().getBGColorBlue());
+      refreshBGColorIndicator();
 
       data.affinePreserveZButton.setSelected(getCurrFlame().isPreserveZ());
 
@@ -2031,20 +2023,8 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     flameTextFieldChanged(data.deFilterCurveSlider, data.deFilterCurveREd, "deFilterCurve", SLIDER_SCALE_FILTER_RADIUS);
   }
 
-  public void bgColorGreenSlider_stateChanged(ChangeEvent e) {
-    flameSliderChanged(data.bgColorGreenSlider, data.bgColorGreenREd, "bgColorGreen", 1.0);
-  }
-
   public void gammaREd_changed() {
     flameTextFieldChanged(data.gammaSlider, data.gammaREd, "gamma", SLIDER_SCALE_GAMMA);
-  }
-
-  public void bgColorRedSlider_stateChanged(ChangeEvent e) {
-    flameSliderChanged(data.bgColorRedSlider, data.bgColorRedREd, "bgColorRed", 1.0);
-  }
-
-  public void bgColorBlueSlider_stateChanged(ChangeEvent e) {
-    flameSliderChanged(data.bgColorBlueSlider, data.bgColorBlueREd, "bgColorBlue", 1.0);
   }
 
   public void gammaThresholdREd_changed() {
@@ -2087,20 +2067,8 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     flameSliderChanged(data.pixelsPerUnitSlider, data.pixelsPerUnitREd, "pixelsPerUnit", 1.0);
   }
 
-  public void bgColorGreenREd_changed() {
-    flameTextFieldChanged(data.bgColorGreenSlider, data.bgColorGreenREd, "bgColorGreen", 1.0);
-  }
-
   public void gammaSlider_stateChanged(ChangeEvent e) {
     flameSliderChanged(data.gammaSlider, data.gammaREd, "gamma", SLIDER_SCALE_GAMMA);
-  }
-
-  public void bgColorRedREd_changed() {
-    flameTextFieldChanged(data.bgColorRedSlider, data.bgColorRedREd, "bgColorRed", 1.0);
-  }
-
-  public void bgBGColorBlueREd_changed() {
-    flameTextFieldChanged(data.bgColorBlueSlider, data.bgColorBlueREd, "bgColorBlue", 1.0);
   }
 
   public void pixelsPerUnitREd_changed() {
@@ -5310,6 +5278,29 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     getFlamePanel().gradientFadeAll();
     refreshFlameImage(false);
     refreshPaletteImg();
+  }
+
+  public void backgroundColorBtn_clicked() {
+    if (getCurrFlame() != null) {
+      undoManager.saveUndoPoint(getCurrFlame());
+
+      ResourceManager rm = ResourceManager.all(FilePropertyEditor.class);
+      String title = rm.getString("ColorPropertyEditor.title");
+
+      Color selectedColor = JColorChooser.showDialog(rootTabbedPane, title, new Color(getCurrFlame().getBGColorRed(), getCurrFlame().getBGColorGreen(), getCurrFlame().getBGColorBlue()));
+      if (selectedColor != null) {
+        getCurrFlame().setBGColorRed(selectedColor.getRed());
+        getCurrFlame().setBGColorGreen(selectedColor.getGreen());
+        getCurrFlame().setBGColorBlue(selectedColor.getBlue());
+        refreshFlameImage(false);
+        refreshBGColorIndicator();
+      }
+    }
+  }
+
+  private void refreshBGColorIndicator() {
+    Color color = getCurrFlame() != null ? new Color(getCurrFlame().getBGColorRed(), getCurrFlame().getBGColorGreen(), getCurrFlame().getBGColorBlue()) : Color.BLACK;
+    data.backgroundColorIndicatorBtn.setBackground(color);
   }
 
 }

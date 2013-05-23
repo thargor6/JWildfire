@@ -75,12 +75,6 @@ public class TinaControllerData {
   public JWFNumberField gammaThresholdREd;
   public JSlider gammaThresholdSlider;
   public JCheckBox bgTransparencyCBx;
-  public JWFNumberField bgColorRedREd;
-  public JSlider bgColorRedSlider;
-  public JWFNumberField bgColorGreenREd;
-  public JSlider bgColorGreenSlider;
-  public JWFNumberField bgColorBlueREd;
-  public JSlider bgColorBlueSlider;
   public JCheckBox deFilterEnableCbx;
   public JWFNumberField deFilterMaxRadiusREd;
   public JSlider deFilterMaxRadiusSlider;
@@ -274,5 +268,5 @@ public class TinaControllerData {
   public JButton scriptDuplicateBtn;
   public JButton scriptRunBtn;
   public JTree gradientLibTree;
-
+  public JButton backgroundColorIndicatorBtn;
 }
