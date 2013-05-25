@@ -24,6 +24,7 @@ import org.jwildfire.base.mathlib.BaseMathLibType;
 import org.jwildfire.base.mathlib.MathLib;
 import org.jwildfire.create.tina.base.raster.RasterPointPrecision;
 import org.jwildfire.create.tina.random.RandomGeneratorType;
+import org.jwildfire.create.tina.swing.RandomBatchRefreshType;
 import org.jwildfire.swing.LookAndFeel;
 
 import com.l2fprod.common.beans.editor.ComboBoxPropertyEditor;
@@ -76,6 +77,7 @@ public class Prefs extends ManagedObject {
   static final String KEY_TINA_RANDOMBATCH_BGCOLOR_RED = "tina.random_batch.bg_color.red";
   static final String KEY_TINA_RANDOMBATCH_BGCOLOR_GREEN = "tina.random_batch.bg_color.green";
   static final String KEY_TINA_RANDOMBATCH_BGCOLOR_BLUE = "tina.random_batch.bg_color.blue";
+  static final String KEY_TINA_RANDOMBATCH_REFRESH_TYPE = "tina.random_batch.refresh_type";
 
   @Property(description = "Script drawer for the animation editor", category = PropertyCategory.MISC)
   private String scriptPath = null;
@@ -137,6 +139,13 @@ public class Prefs extends ManagedObject {
     }
   }
 
+  public static class RandomBatchRefreshTypeEditor extends ComboBoxPropertyEditor {
+    public RandomBatchRefreshTypeEditor() {
+      super();
+      setAvailableValues(new RandomBatchRefreshType[] { RandomBatchRefreshType.CLEAR, RandomBatchRefreshType.INSERT, RandomBatchRefreshType.APPEND });
+    }
+  }
+
   public static class BaseMathLibTypeEditor extends ComboBoxPropertyEditor {
     public BaseMathLibTypeEditor() {
       super();
@@ -185,6 +194,8 @@ public class Prefs extends ManagedObject {
   private int tinaRandomBatchBGColorGreen = 0;
   @Property(description = "Red component of the background color of randomly generated flames", category = PropertyCategory.TINA)
   private int tinaRandomBatchBGColorBlue = 0;
+  @Property(description = "How to refresh the thumbnail ribbon after creating a new random batch", category = PropertyCategory.TINA, editorClass = RandomBatchRefreshTypeEditor.class)
+  private RandomBatchRefreshType tinaRandomBatchRefreshType = RandomBatchRefreshType.CLEAR;
 
   @Property(description = "Default background transparency", category = PropertyCategory.TINA)
   private boolean tinaDefaultBGTransparency = false;
@@ -431,6 +442,7 @@ public class Prefs extends ManagedObject {
     tinaRandomBatchBGColorRed = pSrc.tinaRandomBatchBGColorRed;
     tinaRandomBatchBGColorGreen = pSrc.tinaRandomBatchBGColorGreen;
     tinaRandomBatchBGColorBlue = pSrc.tinaRandomBatchBGColorBlue;
+    tinaRandomBatchRefreshType = pSrc.tinaRandomBatchRefreshType;
     tinaAssociateProfilesWithFlames = pSrc.tinaAssociateProfilesWithFlames;
     tinaDefaultBGTransparency = pSrc.tinaDefaultBGTransparency;
     tinaDefaultDEMaxRadius = pSrc.tinaDefaultDEMaxRadius;
@@ -652,6 +664,14 @@ public class Prefs extends ManagedObject {
 
   public void setTinaRasterPointPrecision(RasterPointPrecision tinaRasterPointPrecision) {
     this.tinaRasterPointPrecision = tinaRasterPointPrecision;
+  }
+
+  public RandomBatchRefreshType getTinaRandomBatchRefreshType() {
+    return tinaRandomBatchRefreshType;
+  }
+
+  public void setTinaRandomBatchRefreshType(RandomBatchRefreshType tinaRandomBatchRefreshType) {
+    this.tinaRandomBatchRefreshType = tinaRandomBatchRefreshType;
   }
 
 }

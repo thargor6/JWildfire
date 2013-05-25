@@ -2837,7 +2837,9 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
   }
 
   public void createRandomBatch(int pCount, String pGeneratorname) {
-    //    randomBatch.clear();
+    if (prefs.getTinaRandomBatchRefreshType() == RandomBatchRefreshType.CLEAR) {
+      randomBatch.clear();
+    }
     int imgCount = prefs.getTinaRandomBatchSize();
     List<SimpleImage> imgList = new ArrayList<SimpleImage>();
     int maxCount = (pCount > 0 ? pCount : imgCount);
@@ -2850,23 +2852,14 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       RandomFlameGeneratorSample sample = sampler.createSample();
       FlameThumbnail thumbnail;
       thumbnail = new FlameThumbnail(sample.getFlame(), sample.getImage());
-      randomBatch.add(thumbnail);
-      imgList.add(sample.getImage());
-      // add it to the main panel
-      SimpleImage img = imgList.get(imgList.size() - 1);
-      ImagePanel imgPanel = new ImagePanel(img, 0, 0, img.getImageWidth());
-      imgPanel.setImage(img);
-      imgPanel.setLocation(i * IMG_WIDTH + (i + 1) * BORDER_SIZE, BORDER_SIZE);
-      thumbnail.setImgPanel(imgPanel);
-      final int idx = i;
-      addRemoveButton(imgPanel, idx);
-      imgPanel.addMouseListener(new java.awt.event.MouseAdapter() {
-        public void mouseClicked(java.awt.event.MouseEvent e) {
-          if (e.getClickCount() > 1 || e.getButton() != MouseEvent.BUTTON1) {
-            importFromRandomBatch(idx);
-          }
-        }
-      });
+      if (prefs.getTinaRandomBatchRefreshType() == RandomBatchRefreshType.INSERT) {
+        randomBatch.add(0, thumbnail);
+        imgList.add(0, sample.getImage());
+      }
+      else {
+        randomBatch.add(thumbnail);
+        imgList.add(sample.getImage());
+      }
       mainProgressUpdater.updateProgress(i + 1);
     }
     updateThumbnails();

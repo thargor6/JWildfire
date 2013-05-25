@@ -58,7 +58,7 @@ public class SVGWFFunc extends VariationFunc {
   private static final String[] paramNames = { PARAM_ANTIALIAS, PARAM_RESOLUTION_MULTIPLIER, PARAM_TRUE_COLOR, PARAM_SCALEX, PARAM_SCALEY, PARAM_OFFSETX, PARAM_OFFSETY };
   private static final String[] ressourceNames = { RESSOURCE_SVG };
 
-  private double antialias = 0.5;
+  private double antialias = 0.15;
   private double resolution_multiplier = 3.0;
   private double scale_x = 1.0;
   private double scale_y = 1.0;
@@ -133,7 +133,7 @@ public class SVGWFFunc extends VariationFunc {
   }
 
   private String makeRessourceKey() {
-    return getName() + "#" + svg;
+    return getName() + "#" + svg + "#" + resolution_multiplier;
   }
 
   @SuppressWarnings("unchecked")

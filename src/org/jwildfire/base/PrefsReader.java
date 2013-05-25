@@ -25,6 +25,7 @@ import java.util.Properties;
 import org.jwildfire.base.mathlib.BaseMathLibType;
 import org.jwildfire.create.tina.base.raster.RasterPointPrecision;
 import org.jwildfire.create.tina.random.RandomGeneratorType;
+import org.jwildfire.create.tina.swing.RandomBatchRefreshType;
 
 public class PrefsReader {
 
@@ -83,15 +84,13 @@ public class PrefsReader {
           ex.printStackTrace();
         }
         try {
-          BaseMathLibType baseMathLibype = BaseMathLibType.valueOf(getProperty(props, Prefs.KEY_GENERAL_BASE_MATH_LIB, BaseMathLibType.getDefaultValue().toString()));
-          pPrefs.setBaseMathLibType(baseMathLibype);
+          pPrefs.setBaseMathLibType(BaseMathLibType.valueOf(getProperty(props, Prefs.KEY_GENERAL_BASE_MATH_LIB, BaseMathLibType.getDefaultValue().toString())));
         }
         catch (Exception ex) {
           ex.printStackTrace();
         }
         try {
-          RandomGeneratorType randGenType = RandomGeneratorType.valueOf(getProperty(props, Prefs.KEY_TINA_RANDOM_GENERATOR, RandomGeneratorType.getDefaultValue().toString()));
-          pPrefs.setTinaRandomNumberGenerator(randGenType);
+          pPrefs.setTinaRandomNumberGenerator(RandomGeneratorType.valueOf(getProperty(props, Prefs.KEY_TINA_RANDOM_GENERATOR, RandomGeneratorType.getDefaultValue().toString())));
         }
         catch (Exception ex) {
           ex.printStackTrace();
@@ -100,6 +99,12 @@ public class PrefsReader {
         pPrefs.setTinaRandomBatchBGColorRed(getIntProperty(props, Prefs.KEY_TINA_RANDOMBATCH_BGCOLOR_RED, pPrefs.getTinaRandomBatchBGColorRed()));
         pPrefs.setTinaRandomBatchBGColorGreen(getIntProperty(props, Prefs.KEY_TINA_RANDOMBATCH_BGCOLOR_GREEN, pPrefs.getTinaRandomBatchBGColorGreen()));
         pPrefs.setTinaRandomBatchBGColorBlue(getIntProperty(props, Prefs.KEY_TINA_RANDOMBATCH_BGCOLOR_BLUE, pPrefs.getTinaRandomBatchBGColorBlue()));
+        try {
+          pPrefs.setTinaRandomBatchRefreshType(RandomBatchRefreshType.valueOf(getProperty(props, Prefs.KEY_TINA_RANDOMBATCH_REFRESH_TYPE, RandomBatchRefreshType.getDefaultValue().toString())));
+        }
+        catch (Exception ex) {
+          ex.printStackTrace();
+        }
         // resolution profiles
         {
           int count = getIntProperty(props, Prefs.KEY_TINA_PROFILE_RESOLUTION_COUNT, 0);
