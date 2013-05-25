@@ -54,10 +54,11 @@ public class UgrGradientReader {
         pPalettes = pe + 1;
         paletteUgr = pUgr.substring(ps, pPalettes);
       }
-
-      RGBPalette palette = new RGBPalette();
-      res.add(palette);
-      parsePalette(palette, paletteUgr);
+      if (paletteUgr.contains("title=\"") && paletteUgr.contains("color=") && paletteUgr.contains("index=")) {
+        RGBPalette palette = new RGBPalette();
+        res.add(palette);
+        parsePalette(palette, paletteUgr);
+      }
     }
     return res;
   }
