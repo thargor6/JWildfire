@@ -204,6 +204,26 @@ public class JWFNumberField extends JSpinner {
     return val;
   }
 
+  public Integer getIntValue() {
+    Object value = getValue();
+    if (value instanceof Double) {
+      return Tools.FTOI((Double) value);
+    }
+    else {
+      return (Integer) value;
+    }
+  }
+
+  public Double getDoubleValue() {
+    Object value = getValue();
+    if (value instanceof Integer) {
+      return 1.0 * ((Integer) value);
+    }
+    else {
+      return (Double) value;
+    }
+  }
+
   public boolean isMouseAdjusting() {
     return mouseAdjusting;
   }
