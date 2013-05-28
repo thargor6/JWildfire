@@ -7,13 +7,21 @@ import java.awt.GridBagLayout;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.Window;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.io.File;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JFileChooser;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+
+import org.jwildfire.base.Prefs;
+import org.jwildfire.base.Tools;
+import org.jwildfire.swing.ErrorHandler;
 
 public class RessourceDialog extends JDialog {
 
@@ -27,12 +35,16 @@ public class RessourceDialog extends JDialog {
   private JScrollPane editrScrollPane = null;
   private JTextArea editorTextArea = null;
   private boolean confirmed = false;
+  private final Prefs prefs;
+  private final ErrorHandler errorHandler;
 
   /**
    * @param owner
    */
-  public RessourceDialog(Window owner) {
+  public RessourceDialog(Window owner, Prefs prefs, ErrorHandler errorHandler) {
     super(owner);
+    this.prefs = prefs;
+    this.errorHandler = errorHandler;
     initialize();
     Rectangle rootBounds = owner.getBounds();
     Dimension size = getSize();
@@ -77,8 +89,51 @@ public class RessourceDialog extends JDialog {
       bottomPanel.setPreferredSize(new Dimension(0, 40));
       bottomPanel.add(getOkButton(), null);
       bottomPanel.add(getCancelButton(), null);
+
+      JButton openFileBtn = new JButton();
+      openFileBtn.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          openFile();
+        }
+      });
+      openFileBtn.setText("Open file...");
+      openFileBtn.setSize(new Dimension(125, 24));
+      openFileBtn.setSelected(true);
+      openFileBtn.setPreferredSize(new Dimension(125, 24));
+      openFileBtn.setMnemonic(KeyEvent.VK_F);
+      openFileBtn.setLocation(new Point(327, 8));
+      openFileBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      openFileBtn.setBounds(6, 5, 125, 24);
+      bottomPanel.add(openFileBtn);
     }
     return bottomPanel;
+  }
+
+  protected void openFile() {
+    try {
+      JFileChooser chooser = new JFileChooser();
+      if (prefs.getInputFlamePath() != null) {
+        try {
+          chooser.setCurrentDirectory(new File(prefs.getInputFlamePath()).getParentFile());
+        }
+        catch (Exception ex) {
+          ex.printStackTrace();
+        }
+      }
+      if (chooser.showOpenDialog(centerPanel) == JFileChooser.APPROVE_OPTION) {
+        File file = chooser.getSelectedFile();
+        String content = Tools.readUTF8Textfile(file.getAbsolutePath());
+        if (content == null) {
+          content = "";
+        }
+        editorTextArea.setText(content);
+        editorTextArea.setSelectionStart(0);
+        editorTextArea.setSelectionEnd(0);
+      }
+    }
+    catch (Throwable ex) {
+      errorHandler.handleError(ex);
+    }
   }
 
   /**
@@ -199,5 +254,4 @@ public class RessourceDialog extends JDialog {
   public boolean isConfirmed() {
     return confirmed;
   }
-
 } //  @jve:decl-index=0:visual-constraint="10,10"

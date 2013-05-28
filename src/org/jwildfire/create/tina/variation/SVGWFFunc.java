@@ -65,13 +65,140 @@ public class SVGWFFunc extends VariationFunc {
   private double offset_x = 0.0;
   private double offset_y = 0.0;
   private int true_color = 1;
-  private String svg = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n" +
-      " <!DOCTYPE svg>\r\n" +
-      " <svg xmlns=\"http://www.w3.org/2000/svg\"\r\n" +
-      "      width=\"304\" height=\"290\">\r\n" +
-      "   <path d=\"M2,111 h300 l-242.7,176.3 92.7,-285.3 92.7,285.3 z\" \r\n" +
-      "      style=\"fill:#FB2;stroke:#BBB;stroke-width:15;stroke-linejoin:round\"/>\r\n" +
-      "</svg>";
+  private String svg = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\r\n"
+      +
+      "<!-- Created with Inkscape (http://www.inkscape.org/) -->\r\n"
+      +
+      "\r\n"
+      +
+      "<svg\r\n"
+      +
+      "   xmlns:dc=\"http://purl.org/dc/elements/1.1/\"\r\n"
+      +
+      "   xmlns:cc=\"http://creativecommons.org/ns#\"\r\n"
+      +
+      "   xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\"\r\n"
+      +
+      "   xmlns:svg=\"http://www.w3.org/2000/svg\"\r\n"
+      +
+      "   xmlns=\"http://www.w3.org/2000/svg\"\r\n"
+      +
+      "   xmlns:sodipodi=\"http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd\"\r\n"
+      +
+      "   xmlns:inkscape=\"http://www.inkscape.org/namespaces/inkscape\"\r\n"
+      +
+      "   width=\"744.09448819\"\r\n"
+      +
+      "   height=\"1052.3622047\"\r\n"
+      +
+      "   id=\"svg3073\"\r\n"
+      +
+      "   version=\"1.1\"\r\n"
+      +
+      "   inkscape:version=\"0.48.2 r9819\"\r\n"
+      +
+      "   sodipodi:docname=\"New document 2\">\r\n"
+      +
+      "  <defs\r\n"
+      +
+      "     id=\"defs3075\" />\r\n"
+      +
+      "  <sodipodi:namedview\r\n"
+      +
+      "     id=\"base\"\r\n"
+      +
+      "     pagecolor=\"#ffffff\"\r\n"
+      +
+      "     bordercolor=\"#666666\"\r\n"
+      +
+      "     borderopacity=\"1.0\"\r\n"
+      +
+      "     inkscape:pageopacity=\"0.0\"\r\n"
+      +
+      "     inkscape:pageshadow=\"2\"\r\n"
+      +
+      "     inkscape:zoom=\"0.35\"\r\n"
+      +
+      "     inkscape:cx=\"-67.857143\"\r\n"
+      +
+      "     inkscape:cy=\"520\"\r\n"
+      +
+      "     inkscape:document-units=\"px\"\r\n"
+      +
+      "     inkscape:current-layer=\"layer1\"\r\n"
+      +
+      "     showgrid=\"false\"\r\n"
+      +
+      "     inkscape:window-width=\"1103\"\r\n"
+      +
+      "     inkscape:window-height=\"779\"\r\n"
+      +
+      "     inkscape:window-x=\"50\"\r\n"
+      +
+      "     inkscape:window-y=\"50\"\r\n"
+      +
+      "     inkscape:window-maximized=\"0\" />\r\n"
+      +
+      "  <metadata\r\n"
+      +
+      "     id=\"metadata3078\">\r\n"
+      +
+      "    <rdf:RDF>\r\n"
+      +
+      "      <cc:Work\r\n"
+      +
+      "         rdf:about=\"\">\r\n"
+      +
+      "        <dc:format>image/svg+xml</dc:format>\r\n"
+      +
+      "        <dc:type\r\n"
+      +
+      "           rdf:resource=\"http://purl.org/dc/dcmitype/StillImage\" />\r\n"
+      +
+      "        <dc:title></dc:title>\r\n"
+      +
+      "      </cc:Work>\r\n"
+      +
+      "    </rdf:RDF>\r\n"
+      +
+      "  </metadata>\r\n"
+      +
+      "  <g\r\n"
+      +
+      "     inkscape:label=\"Layer 1\"\r\n"
+      +
+      "     inkscape:groupmode=\"layer\"\r\n"
+      +
+      "     id=\"layer1\">\r\n"
+      +
+      "    <path\r\n"
+      +
+      "       sodipodi:type=\"spiral\"\r\n"
+      +
+      "       style=\"fill:none;stroke:#ca0000;stroke-width:16.5;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none\"\r\n"
+      +
+      "       id=\"path3083\"\r\n"
+      +
+      "       sodipodi:cx=\"151.42857\"\r\n"
+      +
+      "       sodipodi:cy=\"240.93361\"\r\n"
+      +
+      "       sodipodi:expansion=\"1\"\r\n"
+      +
+      "       sodipodi:revolution=\"5\"\r\n"
+      +
+      "       sodipodi:radius=\"189.90868\"\r\n"
+      +
+      "       sodipodi:argument=\"-30.630527\"\r\n"
+      +
+      "       sodipodi:t0=\"0\"\r\n"
+      +
+      "       d=\"m 151.42857,240.93361 c 4.03972,4.03973 -3.45241,7.43852 -6.71429,6.71428 -8.83948,-1.96265 -10.26047,-13.28493 -6.71427,-20.14286 6.34334,-12.26725 22.81557,-13.70434 33.57144,-6.71426 15.78467,10.25822 17.25027,32.4755 6.71424,47.00001 -14.04286,19.35888 -42.18132,20.83969 -60.42857,6.71423 -22.962309,-17.77545 -24.451617,-51.90903 -6.71422,-73.85715 21.48235,-26.58212 61.64905,-28.07656 87.28571,-6.71421 30.21193,25.17479 31.70969,71.39676 6.7142,100.71429 -28.85828,33.84826 -81.14958,35.34827 -114.14286,6.71419 -37.489056,-32.53587 -38.990671,-90.90602 -6.714174,-127.57144 36.209354,-41.13305 100.665074,-42.63584 141.000004,-6.71416 44.77941,39.87987 46.28308,110.42612 6.71415,154.42858 -43.54818,48.42756 -120.18868,49.93192 -167.857146,6.71414 C 12.065671,281.00445 10.560779,198.2668 57.428657,146.93353 108.30875,91.205765 197.14583,89.700442 252.14295,140.21941 c 59.3793,54.54434 60.88497,149.48269 6.7141,208.14286 -58.20772,63.03157 -159.248846,64.53753 -221.571432,6.71409 -66.684436,-61.87039 -68.190635,-169.01554 -6.71408,-235 65.532497,-70.337805 178.782712,-71.844205 248.428572,-6.71407 73.9916,69.19411 75.49818,188.55026 6.71406,261.85715\"\r\n"
+      +
+      "       transform=\"translate(222.85714,262.85715)\" />\r\n" +
+      "  </g>\r\n" +
+      "</svg>\r\n" +
+      "";
 
   @Override
   public String[] getParameterNames() {

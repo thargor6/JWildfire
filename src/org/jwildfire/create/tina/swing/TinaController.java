@@ -3083,7 +3083,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
               }
                 break;
               default: {
-                RessourceDialog dlg = new RessourceDialog(SwingUtilities.getWindowAncestor(centerPanel));
+                RessourceDialog dlg = new RessourceDialog(SwingUtilities.getWindowAncestor(centerPanel), prefs, errorHandler);
                 dlg.setRessourceName(rName);
                 byte val[] = var.getFunc().getRessourceValues()[idx];
                 if (val != null) {
