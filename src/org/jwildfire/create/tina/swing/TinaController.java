@@ -3082,6 +3082,29 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
                 }
               }
                 break;
+              case SVG_FILE: {
+                JFileChooser chooser = new SvgFileChooser(prefs);
+                if (prefs.getTinaSVGPath() != null) {
+                  try {
+                    chooser.setCurrentDirectory(new File(prefs.getTinaSVGPath()));
+                  }
+                  catch (Exception ex) {
+                    ex.printStackTrace();
+                  }
+                }
+                if (chooser.showOpenDialog(centerPanel) == JFileChooser.APPROVE_OPTION) {
+                  try {
+                    File file = chooser.getSelectedFile();
+                    String svg = Tools.readUTF8Textfile(file.getAbsolutePath());
+                    byte[] valByteArray = svg != null ? svg.getBytes() : null;
+                    var.getFunc().setRessource(rName, valByteArray);
+                  }
+                  catch (Exception ex) {
+                    errorHandler.handleError(ex);
+                  }
+                }
+              }
+                break;
               default: {
                 RessourceDialog dlg = new RessourceDialog(SwingUtilities.getWindowAncestor(centerPanel), prefs, errorHandler);
                 dlg.setRessourceName(rName);

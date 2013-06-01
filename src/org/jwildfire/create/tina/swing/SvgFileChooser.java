@@ -16,35 +16,30 @@
 */
 package org.jwildfire.create.tina.swing;
 
-import java.io.File;
+import java.awt.Dimension;
 
 import javax.swing.filechooser.FileFilter;
 
+import org.jwildfire.base.Prefs;
 import org.jwildfire.base.Tools;
+import org.jwildfire.swing.DefaultFileChooser;
 
-public class MapFileFilter extends FileFilter {
+public class SvgFileChooser extends DefaultFileChooser {
 
-  @Override
-  public boolean accept(File pFile) {
-    if (pFile.isDirectory()) {
-      return true;
-    }
-    String extension = getExtension(pFile);
-    return extension != null && extension.equals(Tools.FILEEXT_MAP);
-  }
+  private static final long serialVersionUID = 1L;
 
   @Override
-  public String getDescription() {
-    return "Gradients in map-file-format";
+  protected String getDefaultExtension() {
+    return Tools.FILEEXT_SVG;
   }
 
-  private String getExtension(File pFile) {
-    String name = pFile.getName();
-    int idx = name.lastIndexOf('.');
-    if (idx > 0 && idx < name.length() - 1) {
-      return name.substring(idx + 1).toLowerCase();
-    }
-    return null;
+  public SvgFileChooser(Prefs pPrefs) {
+    setPreferredSize(new Dimension(960, 600));
+    FileFilter filter = new SvgFileFilter();
+    addChoosableFileFilter(filter);
+    setFileFilter(filter);
+    setAcceptAllFileFilterUsed(false);
+    setAccessory(new SvgFilePreview(this));
   }
 
 }

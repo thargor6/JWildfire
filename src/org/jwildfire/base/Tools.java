@@ -61,6 +61,7 @@ public class Tools {
   public static final String FILEEXT_MP3 = "mp3";
   public static final String FILEEXT_PNG = "png";
   public static final String FILEEXT_SWF = "swf";
+  public static final String FILEEXT_SVG = "svg";
   public static final String FILEEXT_TXT = "txt";
   public static final String FILEEXT_UGR = "ugr";
   public static final String FILEEXT_WAV = "wav";

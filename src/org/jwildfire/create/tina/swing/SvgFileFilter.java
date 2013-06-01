@@ -22,7 +22,7 @@ import javax.swing.filechooser.FileFilter;
 
 import org.jwildfire.base.Tools;
 
-public class MapFileFilter extends FileFilter {
+public class SvgFileFilter extends FileFilter {
 
   @Override
   public boolean accept(File pFile) {
@@ -30,12 +30,12 @@ public class MapFileFilter extends FileFilter {
       return true;
     }
     String extension = getExtension(pFile);
-    return extension != null && extension.equals(Tools.FILEEXT_MAP);
+    return extension != null && extension.equals(Tools.FILEEXT_SVG);
   }
 
   @Override
   public String getDescription() {
-    return "Gradients in map-file-format";
+    return "SVG vector graphic";
   }
 
   private String getExtension(File pFile) {
