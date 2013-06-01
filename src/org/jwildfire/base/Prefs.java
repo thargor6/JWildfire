@@ -62,6 +62,7 @@ public class Prefs extends ManagedObject {
   static final String KEY_TINA_PATH_JWFSCRIPTS = "tina.path.jwfscripts";
   static final String KEY_TINA_PATH_GRADIENTS = "tina.path.gradients";
   static final String KEY_TINA_RENDER_MOVIE_FRAMES = "tina.render.movie.frames";
+  static final String KEY_TINA_PATH_SVG = "tina.path.svg";
 
   static final String KEY_TINA_RENDER_REALTIME_QUALITY = "tina.render.realtime.quality";
   static final String KEY_TINA_RENDER_PREVIEW_QUALITY = "tina.render.preview.quality";
@@ -112,6 +113,9 @@ public class Prefs extends ManagedObject {
 
   @Property(description = "Gradient file drawer", category = PropertyCategory.TINA)
   private String tinaGradientPath = null;
+
+  @Property(description = "SVG file drawer", category = PropertyCategory.TINA)
+  private String tinaSVGPath = null;
 
   @Property(description = "Associate profile information with flame files", category = PropertyCategory.TINA)
   private boolean tinaAssociateProfilesWithFlames = false;
@@ -449,6 +453,7 @@ public class Prefs extends ManagedObject {
     tinaRasterPointPrecision = pSrc.tinaRasterPointPrecision;
     tinaJWFScriptPath = pSrc.tinaJWFScriptPath;
     tinaGradientPath = pSrc.tinaGradientPath;
+    tinaSVGPath = pSrc.tinaSVGPath;
     baseMathLibType = pSrc.baseMathLibType;
 
     resolutionProfiles.clear();
@@ -672,6 +677,14 @@ public class Prefs extends ManagedObject {
 
   public void setTinaRandomBatchRefreshType(RandomBatchRefreshType tinaRandomBatchRefreshType) {
     this.tinaRandomBatchRefreshType = tinaRandomBatchRefreshType;
+  }
+
+  public String getTinaSVGPath() {
+    return tinaSVGPath;
+  }
+
+  public void setTinaSVGPath(String tinaSVGPath) {
+    this.tinaSVGPath = tinaSVGPath;
   }
 
 }
