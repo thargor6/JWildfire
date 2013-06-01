@@ -1,3 +1,20 @@
+V0.71 (02.06.2013):
+ - file-dialog with preview for selecting svg-resources for the new svg_wf variation
+ - SVG-path-setting in the Preferences
+ - several optimizations of the svg_wf variation
+ - possibility to import files in the variation-ressource-dialog
+ - turned the plain number fields into the more powerful JWildfire number fields
+ - skipping comments in *.ugr files
+ - new option which controls what happens if you create a new random batch (clear the thumbnail strip, append the new flames at the bottom, or insert them at the top)
+ - the background color can now be chosen using the default color picker
+ - Added some new options to the svg_wf variation
+ - Updated some links on the welcome screen, you can now reach the new forum here, for example
+ - Created a new JWildfire logo and included it in to new launcher and welcome screen
+ - Two new images for the launcher created by Norbert H.
+ - Fractal flames editor: first alpha of a svg_wf variation
+ - Integrated the svgsalamander library (https://svgsalamander.java.net/) for further svg processing
+ - subflames are now also supporting transparency
+
 V0.70 (12.05.2013):
  - finished the first working version of the gradient editor
  - possibility to save own gradients (in map-format)

@@ -115,6 +115,7 @@
   	<copy todir="${dist.dir}/">
        <fileset file="CHANGES.txt" />
        <fileset file="README_LAUNCH.txt" />
+       <fileset file="README_PROBLEMS.txt" />
      </copy>    
     <jar destfile="${dist.name}">
       <fileset dir="${dist.dir}/"/>
