@@ -58,7 +58,7 @@ public class SVGWFFunc extends VariationFunc {
   private static final String[] ressourceNames = { RESSOURCE_SVG };
 
   private double antialias_radius = 0.5;
-  private double resolution_multiplier = 5.0;
+  private double resolution_multiplier = 2.0;
   private double scale_x = 1.0;
   private double scale_y = 1.0;
   private double offset_x = 0.0;
