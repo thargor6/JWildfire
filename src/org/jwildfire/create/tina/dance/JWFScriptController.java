@@ -426,23 +426,25 @@ public class JWFScriptController {
   public void scanUserScripts(String path, DefaultMutableTreeNode pParentNode) {
     File root = new File(path);
     File[] list = root.listFiles();
-    for (File f : list) {
-      if (f.isDirectory()) {
-        DefaultMutableTreeNode newParentNode = new ScriptFolderNode(f.getName(), f.getAbsolutePath(), true);
-        pParentNode.add(newParentNode);
-        scanUserScripts(f.getAbsolutePath(), newParentNode);
-      }
-      else {
-        String filename = f.getAbsolutePath();
-        String lcFilename = filename.toLowerCase();
-        if (lcFilename.length() != filename.length()) {
-          lcFilename = filename;
+    if (list != null) {
+      for (File f : list) {
+        if (f.isDirectory()) {
+          DefaultMutableTreeNode newParentNode = new ScriptFolderNode(f.getName(), f.getAbsolutePath(), true);
+          pParentNode.add(newParentNode);
+          scanUserScripts(f.getAbsolutePath(), newParentNode);
         }
-        int pos = lcFilename.lastIndexOf("." + Tools.FILEEXT_JWFSCRIPT.toLowerCase());
-        if (pos > 0 && pos == filename.length() - Tools.FILEEXT_JWFSCRIPT.length() - 1) {
-          String caption = f.getName().substring(0, f.getName().length() - Tools.FILEEXT_JWFSCRIPT.length() - 1);
-          ScriptUserNode node = new ScriptUserNode(caption, filename);
-          pParentNode.add(node);
+        else {
+          String filename = f.getAbsolutePath();
+          String lcFilename = filename.toLowerCase();
+          if (lcFilename.length() != filename.length()) {
+            lcFilename = filename;
+          }
+          int pos = lcFilename.lastIndexOf("." + Tools.FILEEXT_JWFSCRIPT.toLowerCase());
+          if (pos > 0 && pos == filename.length() - Tools.FILEEXT_JWFSCRIPT.length() - 1) {
+            String caption = f.getName().substring(0, f.getName().length() - Tools.FILEEXT_JWFSCRIPT.length() - 1);
+            ScriptUserNode node = new ScriptUserNode(caption, filename);
+            pParentNode.add(node);
+          }
         }
       }
     }
