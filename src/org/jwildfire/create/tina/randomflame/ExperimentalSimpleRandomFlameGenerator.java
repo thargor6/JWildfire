@@ -26,17 +26,17 @@ public class ExperimentalSimpleRandomFlameGenerator extends
     RandomFlameGenerator {
 
   public static final String FNCLST_EXPERIMENTAL[] = { "blur3D", "bubble",
-      "escher", "rays", "epispiral_wf", "curl3D", "diamond",
+      "escher", "rays", "epispiral_wf", "curl3D", "diamond", "juliaq", "julia3Dq", "post_juliaq", "post_julia3Dq",
       "cloverleaf_wf", "disc", "sech", "loonie", "exp", "cosh", "split", "waves2_3D",
       "wedge_sph", "circlize", "heart_wf", "bwraps7", "colorscale_wf", "gdoffs", "taurus",
       "mandelbrot", "spirograph", "target", "eclipse", "butterfly3D", "cpow", "pre_subflame_wf",
-      "conic", "julia3D", "cell", "stripes", "post_mirror_wf", "flipcircle", "waves2_3D",
+      "conic", "julia3D", "cell", "stripes", "post_mirror_wf", "flipcircle", "waves2_3D", "juliac",
       "colorscale_wf", "crackle", "truchet", "cannabiscurve_wf", "cpow", "subflame_wf",
       "glynnSim3", "flower", "fourth", "heart", "julia3D", "disc2", "polar2", "farblur", "waves3_wf",
       "foci", "scry", "flux", "bwraps7", "splitbrdr", "checks", "colorscale_wf", "falloff2", "sinusoidal3d",
       "cloverleaf_wf", "lazyTravis", "kaleidoscope", "eclipse", "hemisphere", "flipy", "phoenix_julia",
       "popcorn2", "sec", "lazysusan", "sin", "separation", "bi_linear", "hexnix3D", "popcorn2_3D",
-      "post_mirror_wf", "heart_wf", "mcarpet", "mandelbrot", "cannabiscurve_wf", "colormap_wf",
+      "post_mirror_wf", "heart_wf", "mcarpet", "mandelbrot", "cannabiscurve_wf", "colormap_wf", "juliac",
       "rose_wf", "edisc", "blocky", "octagon", "waves2", "twintrian", "coth", "super_shape", "post_colormap_wf", "waves2_3D",
       "auger", "pre_wave3D_wf", "hexes", "barycentroid", "spirograph", "truchet", "epispiral", "waves4_wf",
       "glynnSim2", "tanh", "bipolar", "cot", "horseshoe", "target", "wedge", "unpolar", "pre_boarders2",
@@ -44,10 +44,10 @@ public class ExperimentalSimpleRandomFlameGenerator extends
       "kaleidoscope", "glynnSim2", "twoface", "cross", "tangent3D", "csc", "curve", "boarders2",
       "csch", "bent2", "splits", "whorl", "xtrb", "post_mirror_wf", "mandelbrot", "sphericalN", "waves2_3D",
       "cloverleaf_wf", "cannabiscurve_wf", "tan", "blob3D", "julia3D", "hypertile1", "svf",
-      "log", "cos", "oscilloscope", "wedge_julia", "bwraps7", "heart_wf", "linearT3D",
+      "log", "cos", "oscilloscope", "wedge_julia", "bwraps7", "heart_wf", "linearT3D", "juliac",
       "hexes", "truchet", "spirograph", "glynnSim3", "pdj", "popcorn", "hypertile2", "waves2_3D",
       "parabola", "rings2", "spherical3D", "spiral", "rectangles", "foci_3D", "sintrange",
-      "elliptic", "waves", "swirl", "glynnSim1", "eclipse", "bwraps7", "layered_spiral", "",
+      "elliptic", "waves", "swirl", "glynnSim1", "eclipse", "bwraps7", "layered_spiral",
       "heart_wf", "colorscale_wf", "boarders", "secant2", "waffle", "lissajous", "hypertile",
       "circus", "lazyTravis", "ovoid3d" };
 

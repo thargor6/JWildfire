@@ -334,6 +334,10 @@ public class VariationFuncList {
     registerVariationFunc(BarycentroidFunc.class);
     registerVariationFunc(SVGWFFunc.class);
     registerVariationFunc(JuliaCFunc.class);
+    registerVariationFunc(JuliaQFunc.class);
+    registerVariationFunc(Julia3DQFunc.class);
+    registerVariationFunc(PostJuliaQFunc.class);
+    registerVariationFunc(PostJulia3DQFunc.class);
   }
 
   private static void registerVariationFunc(
@@ -415,7 +419,7 @@ public class VariationFuncList {
       }
     }
     if (pFatal) {
-      throw new IllegalArgumentException(pName);
+      throw new RuntimeException("Variation \"" + pName + "\" could not be found");
     }
     return null;
   }
