@@ -338,6 +338,7 @@ public class VariationFuncList {
     registerVariationFunc(Julia3DQFunc.class);
     registerVariationFunc(PostJuliaQFunc.class);
     registerVariationFunc(PostJulia3DQFunc.class);
+    registerVariationFunc(PostSmartCropFunc.class);
   }
 
   private static void registerVariationFunc(
