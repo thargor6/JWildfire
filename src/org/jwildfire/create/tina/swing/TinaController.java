@@ -87,6 +87,7 @@ import org.jwildfire.create.tina.edit.UndoManager;
 import org.jwildfire.create.tina.io.Flam3Reader;
 import org.jwildfire.create.tina.io.Flam3Writer;
 import org.jwildfire.create.tina.mutagen.MutaGenController;
+import org.jwildfire.create.tina.mutagen.MutationType;
 import org.jwildfire.create.tina.palette.DefaultGradientSelectionProvider;
 import org.jwildfire.create.tina.palette.GradientSelectionProvider;
 import org.jwildfire.create.tina.palette.MedianCutQuantizer;
@@ -171,7 +172,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
 
   private MainController mainController;
   private final JTabbedPane rootTabbedPane;
-  private Flame _currFlame;
+  private Flame _currFlame, _currRandomizeFlame;
   private boolean noRefresh;
   private final ProgressUpdater mainProgressUpdater;
   private final ProgressUpdater jobProgressUpdater;
@@ -405,6 +406,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     data.toggleVariationsButton = parameterObject.pToggleVariationsButton;
     data.toggleTransparencyButton = parameterObject.pToggleTransparencyButton;
     data.toggleDarkTrianglesButton = parameterObject.pToggleDarkTrianglesButton;
+    data.randomizeButton = parameterObject.randomizeButton;
     mainProgressUpdater = parameterObject.pMainProgressUpdater;
     jobProgressUpdater = parameterObject.pJobProgressUpdater;
     data.affineResetTransformButton = parameterObject.pAffineResetTransformButton;
@@ -870,12 +872,19 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     return _currFlame;
   }
 
+  private Flame getCurrRandomizeFlame() {
+    return _currRandomizeFlame;
+  }
+
   @Override
   public void setCurrFlame(Flame pFlame) {
     setCurrFlame(pFlame, true);
   }
 
   private void setCurrFlame(Flame pFlame, boolean pAddToThumbnails) {
+    if (_currFlame == null || !_currFlame.equals(pFlame)) {
+      _currRandomizeFlame = pFlame.makeCopy();
+    }
     deRegisterFromEditor(_currFlame);
     importFlame(pFlame, pAddToThumbnails);
     registerToEditor(_currFlame);
@@ -2291,6 +2300,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     data.transformSlowButton.setEnabled(enabled);
     data.transparencyButton.setEnabled(enabled);
     data.darkTrianglesButton.setEnabled(enabled);
+    data.randomizeButton.setEnabled(enabled);
     enableUndoControls();
     enableJobRenderControls();
     getJwfScriptController().enableControls();
@@ -3870,6 +3880,9 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
   }
 
   public void importFlame(Flame pFlame, boolean pAddToThumbnails) {
+    if (_currFlame == null || !_currFlame.equals(pFlame)) {
+      _currRandomizeFlame = pFlame.makeCopy();
+    }
     if (pAddToThumbnails) {
       _currFlame = pFlame.makeCopy();
       undoManager.initUndoStack(_currFlame);
@@ -5319,4 +5332,80 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     data.backgroundColorIndicatorBtn.setBackground(color);
   }
 
+  private List<MutationType> createRandomMutationTypes() {
+    MutationType allMutationTypes[] = { MutationType.ADD_TRANSFORM, MutationType.ADD_VARIATION, MutationType.CHANGE_WEIGHT, MutationType.GRADIENT_POSITION, MutationType.AFFINE, MutationType.RANDOM_GRADIENT, MutationType.RANDOM_PARAMETER };
+    int[] allCounts = { 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 4, 4, 5, 6, 7, 8, 9 };
+    int count = allCounts[(int) (Math.random() * allCounts.length)];
+    List<MutationType> res = new ArrayList<MutationType>();
+    for (int i = 0; i < count; i++) {
+      res.add(allMutationTypes[(int) (Math.random() * allMutationTypes.length)]);
+    }
+    return res;
+  }
+
+  private SimpleImage renderRandomizedFlame(Flame pFlame, Dimension pImgSize) {
+    int imageWidth = pImgSize.width, imageHeight = pImgSize.height;
+    RenderInfo info = new RenderInfo(imageWidth, imageHeight);
+    double wScl = (double) info.getImageWidth() / (double) pFlame.getWidth();
+    double hScl = (double) info.getImageHeight() / (double) pFlame.getHeight();
+    pFlame.setPixelsPerUnit((wScl + hScl) * 0.5 * pFlame.getPixelsPerUnit());
+    pFlame.setWidth(imageWidth);
+    pFlame.setHeight(imageHeight);
+    pFlame.setSampleDensity(40.0);
+    FlameRenderer renderer = new FlameRenderer(pFlame, prefs, false);
+    RenderedFlame res = renderer.renderFlame(info);
+    return res.getImage();
+  }
+
+  public void randomizeBtn_clicked() {
+    if (getCurrRandomizeFlame() != null) {
+      saveUndoPoint();
+
+      final int MAX_ITER = 10;
+      final double MIN_RENDER_COVERAGE = 0.42;
+      final double MIN_DIFF_COVERAGE = 0.28;
+      final double INVALID_COVERAGE = -1.0;
+      Dimension probeSize = new Dimension(80, 60);
+
+      SimpleImage baseFlameImg = renderRandomizedFlame(getCurrRandomizeFlame().makeCopy(), probeSize);
+      SimpleImage simplifiedBaseFlameImg = RandomFlameGeneratorSampler.createSimplifiedRefImage(baseFlameImg);
+
+      int iter = 0;
+      double bestCoverage = INVALID_COVERAGE;
+      Flame bestMutation = null;
+      while (true) {
+        Flame currMutation = getCurrRandomizeFlame().makeCopy();
+        List<MutationType> mutationTypes = createRandomMutationTypes();
+        for (MutationType mutationType : mutationTypes) {
+          mutationType.createMutationInstance().execute(currMutation);
+        }
+
+        SimpleImage renderedImg = renderRandomizedFlame(currMutation.makeCopy(), probeSize);
+        double coverage = renderedImg != null ? RandomFlameGeneratorSampler.calculateCoverage(renderedImg, 0, 0, 0) : INVALID_COVERAGE;
+        if (coverage > MIN_RENDER_COVERAGE) {
+          coverage = RandomFlameGeneratorSampler.calculateDiffCoverage(renderedImg, simplifiedBaseFlameImg);
+        }
+        if (coverage > MIN_DIFF_COVERAGE) {
+          bestMutation = currMutation;
+          break;
+        }
+        else if (coverage > bestCoverage) {
+          bestCoverage = coverage;
+          bestMutation = currMutation;
+        }
+        // Don't count invalid mutations
+        if (renderedImg != null) {
+          iter++;
+        }
+        if (iter >= MAX_ITER) {
+          break;
+        }
+      }
+
+      if (bestMutation != null) {
+        getCurrFlame().assign(bestMutation);
+      }
+      refreshUI();
+    }
+  }
 }

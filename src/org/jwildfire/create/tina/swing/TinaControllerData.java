@@ -199,6 +199,7 @@ public class TinaControllerData {
   public JButton mouseEditZoomInButton;
   public JButton mouseEditZoomOutButton;
   public JToggleButton toggleDarkTrianglesButton;
+  public JButton randomizeButton;
   public JToggleButton toggleVariationsButton;
   public JToggleButton toggleTransparencyButton;
   public JPanel gradientLibraryPanel;

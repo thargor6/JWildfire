@@ -4338,7 +4338,7 @@ public class TinaInternalFrame extends JInternalFrame {
         getMouseTransformScaleTrianglesButton(), getScriptTree(), getScriptDescriptionTextArea(), getScriptTextArea(), getCompileScriptButton(), getScriptSaveBtn(), getScriptRevertBtn(), getRescanScriptsBtn(),
         getNewScriptBtn(), getNewScriptFromFlameBtn(), getDeleteScriptBtn(), getScriptRenameBtn(), getDuplicateScriptBtn(), getScriptRunBtn(),
         getMouseTransformEditGradientButton(), getGradientLibTree(), getGradientLibraryRescanBtn(), getGradientLibraryNewFolderBtn(), getGradientLibraryRenameFolderBtn(),
-        getGradientsList(), getBackgroundColorIndicatorBtn());
+        getGradientsList(), getBackgroundColorIndicatorBtn(), getRandomizeBtn());
 
     tinaController = new TinaController(params);
 
@@ -6250,6 +6250,21 @@ public class TinaInternalFrame extends JInternalFrame {
       centerNorthPanel.add(getMouseTransformZoomOutButton());
       centerNorthPanel.add(getToggleVariationsButton());
       centerNorthPanel.add(getToggleTransparencyButton());
+
+      randomizeBtn = new JButton();
+      randomizeBtn.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.randomizeBtn_clicked();
+        }
+      });
+      randomizeBtn.setToolTipText("Randomize random parameters of the currently selected flame");
+      randomizeBtn.setText("Rnd");
+      randomizeBtn.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/randomize.gif")));
+      randomizeBtn.setSelected(false);
+      randomizeBtn.setPreferredSize(new Dimension(42, 24));
+      randomizeBtn.setBounds(new Rectangle(434, 4, 72, 24));
+      randomizeBtn.setBounds(507, 4, 72, 24);
+      centerNorthPanel.add(randomizeBtn);
     }
     return centerNorthPanel;
   }
@@ -9208,6 +9223,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JPanel panel_70;
   private JButton gradientSaveBtn;
   private JButton backgroundColorIndicatorBtn;
+  private JButton randomizeBtn;
 
   /**
    * This method initializes renderBatchJobsScrollPane	
@@ -9469,7 +9485,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JToggleButton getDarkTrianglesToggleButton() {
     if (darkTrianglesToggleButton == null) {
       darkTrianglesToggleButton = new JToggleButton();
-      darkTrianglesToggleButton.setBounds(new Rectangle(434, 4, 72, 24));
+      darkTrianglesToggleButton.setBounds(new Rectangle(431, 4, 72, 24));
       darkTrianglesToggleButton.setToolTipText("Toggle dark triangle colors");
       darkTrianglesToggleButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/triangle.gif")));
       darkTrianglesToggleButton.setSelected(false);
@@ -14316,4 +14332,7 @@ public class TinaInternalFrame extends JInternalFrame {
     return backgroundColorIndicatorBtn;
   }
 
+  public JButton getRandomizeBtn() {
+    return randomizeBtn;
+  }
 } //  @jve:decl-index=0:visual-constraint="10,10"

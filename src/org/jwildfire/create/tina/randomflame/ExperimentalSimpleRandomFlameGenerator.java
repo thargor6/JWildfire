@@ -31,7 +31,7 @@ public class ExperimentalSimpleRandomFlameGenerator extends
       "wedge_sph", "circlize", "heart_wf", "bwraps7", "colorscale_wf", "gdoffs", "taurus",
       "mandelbrot", "spirograph", "target", "eclipse", "butterfly3D", "cpow", "pre_subflame_wf",
       "conic", "julia3D", "cell", "stripes", "post_mirror_wf", "flipcircle", "waves2_3D", "juliac",
-      "colorscale_wf", "crackle", "truchet", "cannabiscurve_wf", "cpow", "subflame_wf",
+      "colorscale_wf", "crackle", "truchet", "cannabiscurve_wf", "cpow", "subflame_wf", "post_smartcrop",
       "glynnSim3", "flower", "fourth", "heart", "julia3D", "disc2", "polar2", "farblur", "waves3_wf",
       "foci", "scry", "flux", "bwraps7", "splitbrdr", "checks", "colorscale_wf", "falloff2", "sinusoidal3d",
       "cloverleaf_wf", "lazyTravis", "kaleidoscope", "eclipse", "hemisphere", "flipy", "phoenix_julia",
@@ -49,7 +49,7 @@ public class ExperimentalSimpleRandomFlameGenerator extends
       "parabola", "rings2", "spherical3D", "spiral", "rectangles", "foci_3D", "sintrange",
       "elliptic", "waves", "swirl", "glynnSim1", "eclipse", "bwraps7", "layered_spiral",
       "heart_wf", "colorscale_wf", "boarders", "secant2", "waffle", "lissajous", "hypertile",
-      "circus", "lazyTravis", "ovoid3d" };
+      "circus", "lazyTravis", "ovoid3d", "circleblur", "sineblur", "starblur" };
 
   @Override
   protected Flame createFlame() {
