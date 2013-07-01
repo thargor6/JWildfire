@@ -1,3 +1,13 @@
+V0.72 (01.07.2013):
+ - easy possibility to randomize flames from within the editor
+ - new variations "circleblur", "post_depth", "sineblur" and "starblur" by Zyorg
+ - "post_smartcrop"-variation by Zy0rg
+ - new "juliaq", "julia3Dq", "post_juliaq" and "post_julia3Dq" variations by Zueuk
+ - "juliac"-variation by David Young (Sc0t0ma)
+ - removed the "svg_wf" variation from variations used by certain random flame generators (causing a faster start of the software)
+ - reduced the default quality setting of the "svg_wf" variation
+ - FIXED: an invalid path setting in the Preferences could cause the program failing to start
+
 V0.71 (02.06.2013):
  - file-dialog with preview for selecting svg-resources for the new svg_wf variation
  - SVG-path-setting in the Preferences
