@@ -2771,12 +2771,12 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       renderFlame.setSampleDensity(prefs.getTinaRenderPreviewQuality());
       renderFlame.setDeFilterEnabled(false);
       renderFlame.setSpatialFilterRadius(0.0);
-      for (XForm xForm : renderFlame.getXForms()) {
-        xForm.setAntialiasAmount(0.0);
-      }
-      for (XForm xForm : renderFlame.getFinalXForms()) {
-        xForm.setAntialiasAmount(0.0);
-      }
+      //            for (XForm xForm : renderFlame.getXForms()) {
+      //              xForm.setAntialiasAmount(0.0);
+      //            }
+      //            for (XForm xForm : renderFlame.getFinalXForms()) {
+      //              xForm.setAntialiasAmount(0.0);
+      //            }
       FlameRenderer renderer = new FlameRenderer(renderFlame, prefs, false);
       renderFlame.setSampleDensity(pQuality);
       RenderedFlame res = renderer.renderFlame(info);
@@ -2856,19 +2856,20 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     mainProgressUpdater.initProgress(maxCount);
     RandomFlameGenerator randGen = RandomFlameGeneratorList.getRandomFlameGeneratorInstance(pGeneratorname, true);
     //int palettePoints = Integer.parseInt(paletteRandomPointsREd.getText());
-    int palettePoints = 11 + (int) (Math.random() * 47.0);
-    RandomFlameGeneratorSampler sampler = new RandomFlameGeneratorSampler(IMG_WIDTH, IMG_HEIGHT, prefs, randGen, palettePoints);
+    int palettePoints = 2 + (int) (Math.random() * 17.0);
+    RandomFlameGeneratorSampler sampler = new RandomFlameGeneratorSampler(IMG_WIDTH / 2, IMG_HEIGHT / 2, prefs, randGen, palettePoints);
     for (int i = 0; i < maxCount; i++) {
       RandomFlameGeneratorSample sample = sampler.createSample();
       FlameThumbnail thumbnail;
-      thumbnail = new FlameThumbnail(sample.getFlame(), sample.getImage());
+      thumbnail = new FlameThumbnail(sample.getFlame(), null);
+      SimpleImage img = thumbnail.getPreview(3 * prefs.getTinaRenderPreviewQuality() / 4);
       if (prefs.getTinaRandomBatchRefreshType() == RandomBatchRefreshType.INSERT) {
         randomBatch.add(0, thumbnail);
-        imgList.add(0, sample.getImage());
+        imgList.add(0, img);
       }
       else {
         randomBatch.add(thumbnail);
-        imgList.add(sample.getImage());
+        imgList.add(img);
       }
       mainProgressUpdater.updateProgress(i + 1);
     }

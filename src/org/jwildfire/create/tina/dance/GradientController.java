@@ -74,9 +74,18 @@ public class GradientController {
     gradientsList = pGradientsList;
 
     enableControls();
-    initGradientsLibrary();
+    //    initGradientsLibrary();
+    //    enableControls();
+  }
 
-    enableControls();
+  private boolean _firstActivated = false;
+
+  public void onActivate() {
+    if (!_firstActivated) {
+      initGradientsLibrary();
+      enableControls();
+      _firstActivated = true;
+    }
   }
 
   private abstract static class AbstractGradientNode extends DefaultMutableTreeNode {

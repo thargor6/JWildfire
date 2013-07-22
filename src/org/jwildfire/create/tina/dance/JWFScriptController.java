@@ -113,7 +113,17 @@ public class JWFScriptController {
     });
 
     enableControls();
-    initScriptLibrary();
+    //    initScriptLibrary();
+  }
+
+  private boolean _firstActivated = false;
+
+  public void onActivate() {
+    if (!_firstActivated) {
+      initScriptLibrary();
+      enableControls();
+      _firstActivated = true;
+    }
   }
 
   protected void scriptDescriptionChanged() {
