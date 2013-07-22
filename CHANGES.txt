@@ -1,3 +1,10 @@
+V0.73 (22.07.2013):
+ - changed the interactive renderer into a real progressive renderer, i.e. you have not to specify any quality any more 
+   and the display always reflects the current state of quality
+ - improved the speed of the interactive renderer
+ - improved the speed and the render-quality of the random-batch-creation
+ - improved the startup of the software (gradients and scripts are not initialized until you enter those areas of the editor)
+
 V0.72 (01.07.2013):
  - easy possibility to randomize flames from within the editor
  - new variations "circleblur", "post_depth", "sineblur" and "starblur" by Zyorg
