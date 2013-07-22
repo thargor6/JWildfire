@@ -330,7 +330,6 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     data.resolutionProfileCmb = parameterObject.pResolutionProfileCmb;
     data.batchQualityProfileCmb = parameterObject.pBatchQualityProfileCmb;
     data.batchResolutionProfileCmb = parameterObject.pBatchResolutionProfileCmb;
-    data.interactiveQualityProfileCmb = parameterObject.pInteractiveQualityProfileCmb;
     data.interactiveResolutionProfileCmb = parameterObject.pInteractiveResolutionProfileCmb;
     data.swfAnimatorQualityProfileCmb = parameterObject.pSWFAnimatorQualityProfileCmb;
     data.swfAnimatorResolutionProfileCmb = parameterObject.pSWFAnimatorResolutionProfileCmb;
@@ -529,7 +528,6 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       data.swfAnimatorResolutionProfileCmb.setSelectedIndex(0);
     }
     refreshQualityProfileCmb(data.qualityProfileCmb, null);
-    refreshQualityProfileCmb(data.interactiveQualityProfileCmb, null);
     refreshQualityProfileCmb(data.batchQualityProfileCmb, null);
     refreshQualityProfileCmb(data.swfAnimatorQualityProfileCmb, null);
     if (data.swfAnimatorQualityProfileCmb.getItemCount() > 0) {
@@ -4484,7 +4482,6 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
         prefs.saveToFromFile();
 
         refreshQualityProfileCmb(data.qualityProfileCmb, profile);
-        refreshQualityProfileCmb(data.interactiveQualityProfileCmb, profile);
         refreshQualityProfileCmb(data.swfAnimatorQualityProfileCmb, profile);
         refreshQualityProfileCmb(data.batchQualityProfileCmb, profile);
         qualityProfileCmb_changed();

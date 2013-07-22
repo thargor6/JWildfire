@@ -847,8 +847,8 @@ public class FlameRenderer {
         try {
           // save header
           JWFRenderFileHeader header = new JWFRenderFileHeader(pThreads.size(), flame.getWidth(), flame.getHeight(),
-              pSampleCount, pElapsedMilliseconds, 1, 1, pQualityProfile.getQuality(),
-              pQualityProfile.isWithHDR(), pQualityProfile.isWithHDRIntensityMap());
+              pSampleCount, pElapsedMilliseconds, 1, 1, (int) (flame.getSampleDensity() + 0.5),
+              true, false);
           outputStream.writeObject(header);
           // save flame
           outputStream.writeObject(flame);
