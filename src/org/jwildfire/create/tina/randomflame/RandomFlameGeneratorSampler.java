@@ -95,7 +95,7 @@ public class RandomFlameGeneratorSampler {
 
       flame.setPalette(palette);
       // render it   
-      flame.setSampleDensity(50);
+      flame.setSampleDensity(25);
       RenderedFlame renderedFlame;
       boolean oldDEEnabled = flame.isDeFilterEnabled();
       flame.setDeFilterEnabled(false);

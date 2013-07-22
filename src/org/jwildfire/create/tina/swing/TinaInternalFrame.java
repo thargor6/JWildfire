@@ -3071,6 +3071,24 @@ public class TinaInternalFrame extends JInternalFrame {
   private JTabbedPane getTinaEastTabbedPane() {
     if (tinaEastTabbedPane == null) {
       tinaEastTabbedPane = new JTabbedPane();
+      tinaEastTabbedPane.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null) {
+            switch (tinaEastTabbedPane.getSelectedIndex()) {
+              case 1:
+                if (tinaController.getGradientController() != null) {
+                  tinaController.getGradientController().onActivate();
+                }
+                break;
+              case 2:
+                if (tinaController.getJwfScriptController() != null) {
+                  tinaController.getJwfScriptController().onActivate();
+                }
+                break;
+            }
+          }
+        }
+      });
       tinaEastTabbedPane.setFont(new Font("Dialog", Font.BOLD, 10));
       tinaEastTabbedPane.addTab("Transformations", null, getTinaTransformationsPanel(), null);
       tinaEastTabbedPane.addTab("Gradient", null, getTinaPalettePanel(), null);
@@ -8868,6 +8886,7 @@ public class TinaInternalFrame extends JInternalFrame {
       rootTabbedPane.addTab("Flame Editor", null, getRootPanel(), null);
       rootTabbedPane.addTab("Interactive Renderer", null, getInteractiveRenderPanel(), null);
       rootTabbedPane.addTab("MutaGen", null, getPanel_16(), null);
+      //      rootTabbedPane.addTab("Flame browser", null, getPanel_72(), null);
       rootTabbedPane.addTab("JWFMovie Maker", null, getTinaSWFAnimatorPanel(), null);
       rootTabbedPane.addTab("Dancing Flames", null, getPanel_36(), null);
       rootTabbedPane.addTab("Batch Flame Renderer", null, getBatchRenderPanel(), null);
@@ -9224,6 +9243,16 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton gradientSaveBtn;
   private JButton backgroundColorIndicatorBtn;
   private JButton randomizeBtn;
+  private JPanel panel_72;
+  private JPanel flameBrowserRootTopPanel;
+  private JPanel flameBrowserRootBottomPanel;
+  private JPanel flameBrowserTreePanel;
+  private JPanel flameBrowserDetailPanel;
+  private JPanel flameBrowserImagesPanel;
+  private JScrollPane flameBrowserTreeScrollPane;
+  private JScrollPane flameBrowersImagesScrollPane;
+  private JTree flameBrowserTree;
+  private JButton flameBrowserRefreshBtn;
 
   /**
    * This method initializes renderBatchJobsScrollPane	
@@ -14334,5 +14363,101 @@ public class TinaInternalFrame extends JInternalFrame {
 
   public JButton getRandomizeBtn() {
     return randomizeBtn;
+  }
+
+  private JPanel getPanel_72() {
+    if (panel_72 == null) {
+      panel_72 = new JPanel();
+      panel_72.setVisible(false);
+      panel_72.setLayout(new BorderLayout(0, 0));
+      panel_72.add(getFlameBrowserRootTopPanel(), BorderLayout.NORTH);
+      panel_72.add(getFlameBrowserRootBottomPanel(), BorderLayout.CENTER);
+    }
+    return panel_72;
+  }
+
+  private JPanel getFlameBrowserRootTopPanel() {
+    if (flameBrowserRootTopPanel == null) {
+      flameBrowserRootTopPanel = new JPanel();
+      flameBrowserRootTopPanel.setPreferredSize(new Dimension(10, 60));
+      flameBrowserRootTopPanel.setLayout(null);
+      flameBrowserRootTopPanel.add(getFlameBrowserRefreshBtn());
+    }
+    return flameBrowserRootTopPanel;
+  }
+
+  private JPanel getFlameBrowserRootBottomPanel() {
+    if (flameBrowserRootBottomPanel == null) {
+      flameBrowserRootBottomPanel = new JPanel();
+      flameBrowserRootBottomPanel.setLayout(new BorderLayout(0, 0));
+      flameBrowserRootBottomPanel.add(getFlameBrowserTreePanel(), BorderLayout.WEST);
+      flameBrowserRootBottomPanel.add(getFlameBrowserDetailPanel(), BorderLayout.EAST);
+      flameBrowserRootBottomPanel.add(getFlameBrowserImagesPanel(), BorderLayout.CENTER);
+    }
+    return flameBrowserRootBottomPanel;
+  }
+
+  private JPanel getFlameBrowserTreePanel() {
+    if (flameBrowserTreePanel == null) {
+      flameBrowserTreePanel = new JPanel();
+      flameBrowserTreePanel.setPreferredSize(new Dimension(200, 10));
+      flameBrowserTreePanel.setLayout(new BorderLayout(0, 0));
+      flameBrowserTreePanel.add(getFlameBrowserTreeScrollPane(), BorderLayout.CENTER);
+    }
+    return flameBrowserTreePanel;
+  }
+
+  private JPanel getFlameBrowserDetailPanel() {
+    if (flameBrowserDetailPanel == null) {
+      flameBrowserDetailPanel = new JPanel();
+      flameBrowserDetailPanel.setPreferredSize(new Dimension(120, 10));
+      flameBrowserDetailPanel.setLayout(new BorderLayout(0, 0));
+    }
+    return flameBrowserDetailPanel;
+  }
+
+  private JPanel getFlameBrowserImagesPanel() {
+    if (flameBrowserImagesPanel == null) {
+      flameBrowserImagesPanel = new JPanel();
+      flameBrowserImagesPanel.setLayout(new BorderLayout(0, 0));
+      flameBrowserImagesPanel.add(getFlameBrowersImagesScrollPane(), BorderLayout.CENTER);
+    }
+    return flameBrowserImagesPanel;
+  }
+
+  private JScrollPane getFlameBrowserTreeScrollPane() {
+    if (flameBrowserTreeScrollPane == null) {
+      flameBrowserTreeScrollPane = new JScrollPane();
+      flameBrowserTreeScrollPane.setViewportView(getFlameBrowserTree());
+    }
+    return flameBrowserTreeScrollPane;
+  }
+
+  private JScrollPane getFlameBrowersImagesScrollPane() {
+    if (flameBrowersImagesScrollPane == null) {
+      flameBrowersImagesScrollPane = new JScrollPane();
+    }
+    return flameBrowersImagesScrollPane;
+  }
+
+  private JTree getFlameBrowserTree() {
+    if (flameBrowserTree == null) {
+      flameBrowserTree = new JTree();
+    }
+    return flameBrowserTree;
+  }
+
+  private JButton getFlameBrowserRefreshBtn() {
+    if (flameBrowserRefreshBtn == null) {
+      flameBrowserRefreshBtn = new JButton();
+      flameBrowserRefreshBtn.setBounds(6, 6, 125, 46);
+      flameBrowserRefreshBtn.setText("Refresh");
+      flameBrowserRefreshBtn.setPreferredSize(new Dimension(125, 46));
+      flameBrowserRefreshBtn.setMnemonic(KeyEvent.VK_R);
+      flameBrowserRefreshBtn.setMinimumSize(new Dimension(100, 46));
+      flameBrowserRefreshBtn.setMaximumSize(new Dimension(32000, 46));
+      flameBrowserRefreshBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+    }
+    return flameBrowserRefreshBtn;
   }
 } //  @jve:decl-index=0:visual-constraint="10,10"
