@@ -4326,7 +4326,7 @@ public class TinaInternalFrame extends JInternalFrame {
         getShadingBlurFadeSlider(), getShadingBlurFallOffREd(), getShadingBlurFallOffSlider(),
         getAffineScaleXButton(), getAffineScaleYButton(), gradientLibraryThumbnailPnl, getHelpPane(),
         getFaqPane(), getToggleVariationsButton(), getToggleTransparencyButton(), getAffinePreserveZButton(), getQualityProfileCmb(), getResolutionProfileCmb(),
-        getBatchQualityProfileCmb(), getBatchResolutionProfileCmb(), getInteractiveQualityProfileCmb(), getInteractiveResolutionProfileCmb(),
+        getBatchQualityProfileCmb(), getBatchResolutionProfileCmb(), getInteractiveResolutionProfileCmb(),
         getSwfAnimatorQualityProfileCmb(), getSwfAnimatorResolutionProfileCmb(), getTinaRenderFlameButton(), getRenderMainButton(), getTinaAppendToMovieButton(),
         getTransformationWeightREd(), getUndoButton(), getRedoButton(),
         getXFormAntialiasAmountREd(), getXFormAntialiasAmountSlider(), getXFormAntialiasRadiusREd(), getXFormAntialiasRadiusSlider(),
@@ -4393,8 +4393,7 @@ public class TinaInternalFrame extends JInternalFrame {
           getInteractiveLoadFlameButton(), getInteractiveLoadFlameFromClipboardButton(), getInteractiveNextButton(), getInteractiveStopButton(),
           getInteractiveFlameToClipboardButton(), getInteractiveSaveImageButton(),
           getInteractiveSaveFlameButton(), getInteractiveRandomStyleCmb(), getInteractiveCenterTopPanel(), getInteractiveStatsTextArea(),
-          getInteractiveHalveSizeButton(), getInteractiveResolutionProfileCmb(), getInteractiveQualityProfileCmb(),
-          getInteractivePauseButton(), getInteractiveResumeButton()));
+          getInteractiveHalveSizeButton(), getInteractiveResolutionProfileCmb(), getInteractivePauseButton(), getInteractiveResumeButton()));
       tinaController.getInteractiveRendererCtrl().enableControls();
 
       tinaController.setSwfAnimatorCtrl(new TinaSWFAnimatorController(tinaController, pErrorHandler, pPrefs,
@@ -8928,14 +8927,12 @@ public class TinaInternalFrame extends JInternalFrame {
   private JComboBox batchResolutionProfileCmb;
   private JButton interactiveFlameToEditorButton;
   private JButton interactiveLoadFlameFromMainButton;
-  private JComboBox interactiveQualityProfileCmb;
   private JWFNumberField swfAnimatorFramesPerSecondREd;
   private JPanel panel_5;
   private JButton swfAnimatorLoadFlameFromMainButton;
   private JButton swfAnimatorLoadFlameFromClipboardButton;
   private JButton swfAnimatorLoadFlameButton;
   private JLabel label_1;
-  private JLabel label_2;
   private JToggleButton swfAnimatorHalfSizeButton;
   private JComboBox swfAnimatorResolutionProfileCmb;
   private JLabel label_3;
@@ -10260,7 +10257,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JPanel getInteractiveCenterTopPanel() {
     if (interactiveCenterTopPanel == null) {
       interactiveCenterTopPanel = new JPanel();
-      interactiveCenterTopPanel.setBorder(new TitledBorder(null, "Fast-tonemapped preview", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+      interactiveCenterTopPanel.setBorder(new TitledBorder(null, "Progressive preview", TitledBorder.LEADING, TitledBorder.TOP, null, null));
       interactiveCenterTopPanel.setLayout(new BorderLayout(0, 0));
     }
     return interactiveCenterTopPanel;
@@ -10380,10 +10377,6 @@ public class TinaInternalFrame extends JInternalFrame {
 
   public JButton getInteractiveLoadFlameFromMainButton() {
     return interactiveLoadFlameFromMainButton;
-  }
-
-  public JComboBox getInteractiveQualityProfileCmb() {
-    return interactiveQualityProfileCmb;
   }
 
   public JWFNumberField getSwfAnimatorFramesPerSecondREd() {
@@ -10548,17 +10541,6 @@ public class TinaInternalFrame extends JInternalFrame {
       label_1.setFont(new Font("Dialog", Font.BOLD, 10));
     }
     return label_1;
-  }
-
-  private JLabel getLabel_2() {
-    if (label_2 == null) {
-      label_2 = new JLabel();
-      label_2.setMinimumSize(new Dimension(80, 22));
-      label_2.setText("Quality");
-      label_2.setPreferredSize(new Dimension(80, 22));
-      label_2.setFont(new Font("Dialog", Font.BOLD, 10));
-    }
-    return label_2;
   }
 
   private JToggleButton getSwfAnimatorHalfSizeButton() {
@@ -11764,22 +11746,6 @@ public class TinaInternalFrame extends JInternalFrame {
     if (panel_30 == null) {
       panel_30 = new JPanel();
       panel_30.setLayout(new BoxLayout(panel_30, BoxLayout.X_AXIS));
-      panel_30.add(getLabel_2());
-
-      interactiveQualityProfileCmb = new JComboBox();
-      panel_30.add(interactiveQualityProfileCmb);
-      interactiveQualityProfileCmb.setMinimumSize(new Dimension(100, 24));
-      interactiveQualityProfileCmb.setMaximumSize(new Dimension(32767, 24));
-      interactiveQualityProfileCmb.addItemListener(new ItemListener() {
-        public void itemStateChanged(ItemEvent e) {
-          if (tinaController != null) {
-            tinaController.getInteractiveRendererCtrl().qualityProfile_changed();
-          }
-        }
-      });
-      interactiveQualityProfileCmb.setPreferredSize(new Dimension(125, 24));
-      interactiveQualityProfileCmb.setMaximumRowCount(32);
-      interactiveQualityProfileCmb.setFont(new Font("Dialog", Font.BOLD, 10));
     }
     return panel_30;
   }

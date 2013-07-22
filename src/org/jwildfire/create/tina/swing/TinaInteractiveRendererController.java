@@ -36,7 +36,6 @@ import javax.swing.JToggleButton;
 import javax.swing.ScrollPaneConstants;
 
 import org.jwildfire.base.Prefs;
-import org.jwildfire.base.QualityProfile;
 import org.jwildfire.base.ResolutionProfile;
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Flame;
@@ -75,7 +74,6 @@ public class TinaInteractiveRendererController implements IterationObserver {
   private final JComboBox randomStyleCmb;
   private final JToggleButton halveSizeButton;
   private final JComboBox interactiveResolutionProfileCmb;
-  private final JComboBox interactiveQualityProfileCmb;
   private final JButton pauseButton;
   private final JButton resumeButton;
   private final JPanel imageRootPanel;
@@ -91,8 +89,7 @@ public class TinaInteractiveRendererController implements IterationObserver {
       JButton pLoadFlameButton, JButton pFromClipboardButton, JButton pNextButton,
       JButton pStopButton, JButton pToClipboardButton, JButton pSaveImageButton, JButton pSaveFlameButton,
       JComboBox pRandomStyleCmb, JPanel pImagePanel, JTextArea pStatsTextArea, JToggleButton pHalveSizeButton,
-      JComboBox pInteractiveResolutionProfileCmb, JComboBox pInteractiveQualityProfileCmb,
-      JButton pPauseButton, JButton pResumeButton) {
+      JComboBox pInteractiveResolutionProfileCmb, JButton pPauseButton, JButton pResumeButton) {
     parentCtrl = pParentCtrl;
     prefs = pPrefs;
     errorHandler = pErrorHandler;
@@ -107,7 +104,6 @@ public class TinaInteractiveRendererController implements IterationObserver {
     randomStyleCmb = pRandomStyleCmb;
     halveSizeButton = pHalveSizeButton;
     interactiveResolutionProfileCmb = pInteractiveResolutionProfileCmb;
-    interactiveQualityProfileCmb = pInteractiveQualityProfileCmb;
     imageRootPanel = pImagePanel;
     pauseButton = pPauseButton;
     resumeButton = pResumeButton;
@@ -123,14 +119,6 @@ public class TinaInteractiveRendererController implements IterationObserver {
     ResolutionProfile res = (ResolutionProfile) interactiveResolutionProfileCmb.getSelectedItem();
     if (res == null) {
       res = new ResolutionProfile(false, 800, 600);
-    }
-    return res;
-  }
-
-  private QualityProfile getQualityProfile() {
-    QualityProfile res = (QualityProfile) interactiveQualityProfileCmb.getSelectedItem();
-    if (res == null) {
-      res = new QualityProfile(false, "default", 0, true, false);
     }
     return res;
   }
@@ -225,20 +213,6 @@ public class TinaInteractiveRendererController implements IterationObserver {
           interactiveResolutionProfileCmb.setSelectedItem(profile);
         }
       }
-
-      if (pFlame.getQualityProfile() != null) {
-        QualityProfile profile = null;
-        for (int i = 0; i < interactiveQualityProfileCmb.getItemCount(); i++) {
-          profile = (QualityProfile) interactiveQualityProfileCmb.getItemAt(i);
-          if (pFlame.getQualityProfile().equals(profile.toString()))
-            break;
-          else
-            profile = null;
-        }
-        if (profile != null) {
-          interactiveQualityProfileCmb.setSelectedItem(profile);
-        }
-      }
     }
   }
 
@@ -273,7 +247,6 @@ public class TinaInteractiveRendererController implements IterationObserver {
   public void renderButton_clicked() {
     clearScreen();
     ResolutionProfile resProfile = getResolutionProfile();
-    QualityProfile qualProfile = getQualityProfile();
     int width = resProfile.getWidth();
     int height = resProfile.getHeight();
     if (halveSizeButton.isSelected()) {
@@ -287,9 +260,9 @@ public class TinaInteractiveRendererController implements IterationObserver {
     flame.setPixelsPerUnit((wScl + hScl) * 0.5 * flame.getPixelsPerUnit());
     flame.setWidth(info.getImageWidth());
     flame.setHeight(info.getImageHeight());
-    flame.setSampleDensity(qualProfile.getQuality());
-    info.setRenderHDR(qualProfile.isWithHDR());
-    info.setRenderHDRIntensityMap(qualProfile.isWithHDRIntensityMap());
+    flame.setSampleDensity(10);
+    info.setRenderHDR(true);
+    info.setRenderHDRIntensityMap(false);
     if (flame.getBGColorRed() > 0 || flame.getBGColorGreen() > 0 || flame.getBGColorBlue() > 0) {
       image.fillBackground(flame.getBGColorRed(), flame.getBGColorGreen(), flame.getBGColorBlue());
     }
@@ -370,8 +343,6 @@ public class TinaInteractiveRendererController implements IterationObserver {
   private long renderStartTime = 0;
   private long pausedRenderTime = 0;
 
-  private long responsibility = 1;
-
   private synchronized void incSampleCount() {
     sampleCount++;
   }
@@ -380,9 +351,8 @@ public class TinaInteractiveRendererController implements IterationObserver {
     imageRootPanel.repaint();
   }
 
-  private synchronized void updateStats(FlameRenderThread pEventSource) {
-    double quality = pEventSource.getTonemapper().calcDensity(sampleCount);
-    statsTextArea.setText("Current quality: " + Tools.doubleToString(quality) + "\n" +
+  private synchronized void updateStats(FlameRenderThread pEventSource, double pQuality) {
+    statsTextArea.setText("Current quality: " + Tools.doubleToString(pQuality) + "\n" +
         "samples so far: " + sampleCount + "\n" +
         "render time: " + Tools.doubleToString((System.currentTimeMillis() - renderStartTime + pausedRenderTime) / 1000.0) + "s");
     statsTextArea.validate();
@@ -393,11 +363,13 @@ public class TinaInteractiveRendererController implements IterationObserver {
     incSampleCount();
     if (pX >= 0 && pX < image.getImageWidth() && pY >= 0 && pY < image.getImageHeight()) {
       image.setARGB(pX, pY, pEventSource.getTonemapper().tonemapSample(pX, pY));
-      if (sampleCount % (1000 * responsibility) == 0) {
+      if (sampleCount % 2000 == 0) {
         updateImage();
       }
-      if (sampleCount % (100000 * responsibility) == 0) {
-        updateStats(pEventSource);
+      if (sampleCount % 10000 == 0) {
+        double quality = pEventSource.getTonemapper().calcDensity(sampleCount);
+        updateStats(pEventSource, quality);
+        pEventSource.getTonemapper().setDensity(quality);
       }
     }
   }
@@ -578,25 +550,6 @@ public class TinaInteractiveRendererController implements IterationObserver {
             clearScreen();
           }
         }
-        // setup quality profile
-        {
-          QualityProfile selected = null;
-          for (int i = 0; i < interactiveQualityProfileCmb.getItemCount(); i++) {
-            QualityProfile profile = (QualityProfile) interactiveQualityProfileCmb.getItemAt(i);
-            // do not currenty take oversampling into account
-            if (profile.getQuality() == resumedRender.getHeader().getQuality() && profile.isWithHDR() == resumedRender.getHeader().isWithHDR() &&
-                profile.isWithHDRIntensityMap() == resumedRender.getHeader().isWithHDRIntensityMap()) {
-              selected = profile;
-              // break;
-              // no break, select the profile with the highest overall quality
-            }
-          }
-          if (selected == null) {
-            selected = new QualityProfile(false, "Resumed render", resumedRender.getHeader().getQuality(), resumedRender.getHeader().isWithHDR(), resumedRender.getHeader().isWithHDRIntensityMap());
-            interactiveQualityProfileCmb.addItem(selected);
-          }
-          interactiveQualityProfileCmb.setSelectedItem(selected);
-        }
         //
         renderer = newRenderer;
         setupProfiles(currFlame);
@@ -634,7 +587,7 @@ public class TinaInteractiveRendererController implements IterationObserver {
         if (chooser.showSaveDialog(imageRootPanel) == JFileChooser.APPROVE_OPTION) {
           File file = chooser.getSelectedFile();
           prefs.setLastOutputFlameFile(file);
-          renderer.saveState(file.getAbsolutePath(), threads, sampleCount, System.currentTimeMillis() - renderStartTime + pausedRenderTime, getQualityProfile());
+          renderer.saveState(file.getAbsolutePath(), threads, sampleCount, System.currentTimeMillis() - renderStartTime + pausedRenderTime, null);
         }
       }
       catch (Throwable ex) {
