@@ -424,7 +424,8 @@ public class Flam3Reader implements FlameReader {
       Map<String, String> aliasMap = VariationFuncList.getAliasMap();
 
       for (XMLAttribute attr : atts.getAttributes()) {
-        String name = attr.getName();
+        String rawName = attr.getName();
+        String name = removeIndexFromAttr(rawName);
         String varName = name;
         boolean hasVariation = variationNameList.indexOf(varName) >= 0;
         if (!hasVariation) {
@@ -448,9 +449,10 @@ public class Flam3Reader implements FlameReader {
               for (int i = 0; i < paramNames.length; i++) {
                 String pName = paramNames[i];
                 String pHs;
-                if ((pHs = atts.get(name + "_" + pName)) != null) {
+                if ((pHs = atts.get(rawName + "_" + pName)) != null) {
                   variation.getFunc().setParameter(pName, Double.parseDouble(pHs));
                 }
+                // altNames can only be come from flames which were not created by JWF, so no need to handle index here 
                 else if (paramAltNames != null && ((pHs = atts.get(paramAltNames[i])) != null)) {
                   variation.getFunc().setParameter(pName, Double.parseDouble(pHs));
                 }
@@ -472,6 +474,23 @@ public class Flam3Reader implements FlameReader {
           //
         }
       }
+    }
+  }
+
+  private String removeIndexFromAttr(String pName) {
+    int s = pName.indexOf("#");
+    if (s < 0) {
+      return pName;
+    }
+    int e = pName.indexOf("#", s + 1);
+    if (e < 0) {
+      return pName;
+    }
+    if (e == pName.length() - 1) {
+      return pName.substring(0, s);
+    }
+    else {
+      return pName.substring(0, s) + pName.substring(e + 1, pName.length());
     }
   }
 

@@ -19,7 +19,9 @@ package org.jwildfire.create.tina.io;
 import static org.jwildfire.base.mathlib.MathLib.EPSILON;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.DrawMode;
@@ -53,10 +55,14 @@ public class Flam3Writer {
       attrList.add(pXB.createAttr("antialias_radius", pXForm.getAntialiasRadius()));
     }
 
+    UniqueNamesMaker namesMaker = new UniqueNamesMaker();
     for (int vIdx = 0; vIdx < pXForm.getVariationCount(); vIdx++) {
       Variation v = pXForm.getVariation(vIdx);
       VariationFunc func = v.getFunc();
-      attrList.add(pXB.createAttr(func.getName(), v.getAmount()));
+
+      String fName = namesMaker.makeUnique(func.getName());
+
+      attrList.add(pXB.createAttr(fName, v.getAmount()));
       // params
       {
         String params[] = func.getParameterNames();
@@ -64,10 +70,10 @@ public class Flam3Writer {
           Object vals[] = func.getParameterValues();
           for (int i = 0; i < params.length; i++) {
             if (vals[i] instanceof Integer) {
-              attrList.add(pXB.createAttr((func.getName() + "_" + params[i]), (Integer) vals[i]));
+              attrList.add(pXB.createAttr((fName + "_" + params[i]), (Integer) vals[i]));
             }
             else if (vals[i] instanceof Double) {
-              attrList.add(pXB.createAttr((func.getName() + "_" + params[i]), (Double) vals[i]));
+              attrList.add(pXB.createAttr((fName + "_" + params[i]), (Double) vals[i]));
             }
             else {
               throw new IllegalStateException();
@@ -82,7 +88,7 @@ public class Flam3Writer {
           byte vals[][] = func.getRessourceValues();
           for (int i = 0; i < ressNames.length; i++) {
             String hexStr = vals[i] != null && vals[i].length > 0 ? Tools.byteArrayToHexString(vals[i]) : "";
-            attrList.add(pXB.createAttr((func.getName() + "_" + ressNames[i]), hexStr));
+            attrList.add(pXB.createAttr((fName + "_" + ressNames[i]), hexStr));
           }
         }
       }
@@ -227,5 +233,19 @@ public class Flam3Writer {
     }
     xb.endElement("flame");
     return xb.buildXML();
+  }
+
+  private class UniqueNamesMaker {
+    private final Map<String, String> namesMap = new HashMap<String, String>();
+
+    public String makeUnique(String pName) {
+      int nameCounter = 1;
+      String name = pName;
+      while (namesMap.get(name) != null) {
+        name = pName + "#" + (nameCounter++) + "#";
+      }
+      namesMap.put(name, name);
+      return name;
+    }
   }
 }
