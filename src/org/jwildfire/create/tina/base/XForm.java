@@ -21,7 +21,6 @@ import static org.jwildfire.base.mathlib.MathLib.fabs;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import org.jwildfire.base.mathlib.MathLib;
@@ -31,7 +30,6 @@ import org.jwildfire.create.tina.random.AbstractRandomGenerator.RandGenStatus;
 import org.jwildfire.create.tina.variation.FlameTransformationContext;
 import org.jwildfire.create.tina.variation.Variation;
 import org.jwildfire.create.tina.variation.VariationFunc;
-import org.jwildfire.create.tina.variation.VariationPriorityComparator;
 
 public final class XForm implements Assignable<XForm>, Serializable {
   private static final long serialVersionUID = 1L;
@@ -69,8 +67,6 @@ public final class XForm implements Assignable<XForm>, Serializable {
   private boolean hasCoeffs;
   @AnimAware
   private final List<Variation> variations = new ArrayList<Variation>();
-  private final List<Variation> sortedVariations = new ArrayList<Variation>();
-  private Variation[] sortedVariationsArray = null;
   private final double modifiedWeights[] = new double[Constants.MAX_MOD_WEIGHT_COUNT]; // the same like "xaos" in Apophysis
   @AnimAware
   private double opacity = 0.0;
@@ -174,24 +170,8 @@ public final class XForm implements Assignable<XForm>, Serializable {
     return variations.get(pIdx);
   }
 
-  private void updateSortedVariations() {
-    sortedVariations.clear();
-    sortedVariationsArray = new Variation[variations.size()];
-    if (variations.size() > 0) {
-      sortedVariations.addAll(variations);
-      if (variations.size() > 1) {
-        Collections.sort(sortedVariations, new VariationPriorityComparator());
-      }
-      // for faster access
-      int i = 0;
-      for (Variation var : sortedVariations) {
-        sortedVariationsArray[i++] = var;
-      }
-    }
-  }
-
-  public List<Variation> getSortedVariations() {
-    return sortedVariations;
+  public List<Variation> getVariations() {
+    return variations;
   }
 
   public Variation addVariation(double pAmount, VariationFunc pVariationFunc) {
@@ -199,23 +179,19 @@ public final class XForm implements Assignable<XForm>, Serializable {
     variation.setAmount(pAmount);
     variation.setFunc(pVariationFunc);
     variations.add(variation);
-    updateSortedVariations();
     return variation;
   }
 
   public void addVariation(Variation pVariation) {
     variations.add(pVariation);
-    updateSortedVariations();
   }
 
   public void removeVariation(Variation pVariation) {
     variations.remove(pVariation);
-    updateSortedVariations();
   }
 
   public void clearVariations() {
     variations.clear();
-    updateSortedVariations();
   }
 
   public double getColorSymmetry() {
@@ -301,8 +277,7 @@ public final class XForm implements Assignable<XForm>, Serializable {
     pVarT.greenColor = pAffineT.greenColor;
     pVarT.blueColor = pAffineT.blueColor;
 
-    for (int i = 0; i < sortedVariationsArray.length; i++) {
-      Variation variation = sortedVariationsArray[i];
+    for (Variation variation : variations) {
       variation.transform(pContext, this, pAffineT, pVarT);
       if (variation.getFunc().getPriority() < 0) {
         pAffineT.invalidate();
@@ -344,8 +319,7 @@ public final class XForm implements Assignable<XForm>, Serializable {
         pAffineT[i].z = pSrcPoint[i].z;
         pVarT[i].clear();
         pVarT[i].color = pAffineT[i].color;
-        for (int j = 0; j < sortedVariationsArray.length; j++) {
-          Variation variation = sortedVariationsArray[j];
+        for (Variation variation : variations) {
           variation.transform(pContext, this, pAffineT[i], pVarT[i]);
           if (variation.getFunc().getPriority() < 0) {
             pAffineT[i].invalidate();
@@ -420,7 +394,6 @@ public final class XForm implements Assignable<XForm>, Serializable {
       newVar.assign(var);
       variations.add(newVar);
     }
-    updateSortedVariations();
     System.arraycopy(pXForm.modifiedWeights, 0, modifiedWeights, 0, pXForm.modifiedWeights.length);
     opacity = pXForm.opacity;
     drawMode = pXForm.drawMode;

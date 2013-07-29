@@ -17,12 +17,13 @@
 package org.jwildfire.create.tina.io;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 import org.jwildfire.base.Prefs;
 import org.jwildfire.base.Tools;
+import org.jwildfire.base.Tools.XMLAttribute;
+import org.jwildfire.base.Tools.XMLAttributes;
 import org.jwildfire.base.mathlib.MathLib;
 import org.jwildfire.create.tina.base.DrawMode;
 import org.jwildfire.create.tina.base.Flame;
@@ -117,7 +118,7 @@ public class Flam3Reader implements FlameReader {
   public static final String ATTR_SHADING_DISTANCE_COLOR_SHIFT = "shading_distanceColorShift";
 
   private void parseFlameAttributes(Flame pFlame, String pXML) {
-    Map<String, String> atts = Tools.parseAttributes(pXML);
+    XMLAttributes atts = Tools.parseAttributes(pXML);
     String hs;
     if ((hs = atts.get(ATTR_NAME)) != null) {
       pFlame.setName(hs);
@@ -360,7 +361,7 @@ public class Flam3Reader implements FlameReader {
   private static final String ATTR_ANTIALIAS_RADIUS = "antialias_radius";
 
   private void parseXFormAttributes(XForm pXForm, String pXML) {
-    Map<String, String> atts = Tools.parseAttributes(pXML);
+    XMLAttributes atts = Tools.parseAttributes(pXML);
     String hs;
     if ((hs = atts.get(ATTR_NAME)) != null) {
       pXForm.setName(hs);
@@ -421,9 +422,9 @@ public class Flam3Reader implements FlameReader {
     {
       List<String> variationNameList = VariationFuncList.getNameList();
       Map<String, String> aliasMap = VariationFuncList.getAliasMap();
-      Iterator<String> it = atts.keySet().iterator();
-      while (it.hasNext()) {
-        String name = it.next();
+
+      for (XMLAttribute attr : atts.getAttributes()) {
+        String name = attr.getName();
         String varName = name;
         boolean hasVariation = variationNameList.indexOf(varName) >= 0;
         if (!hasVariation) {
@@ -557,7 +558,7 @@ public class Flam3Reader implements FlameReader {
           {
             int index = 0;
             int r = 0, g = 0, b = 0;
-            Map<String, String> atts = Tools.parseAttributes(hs);
+            XMLAttributes atts = Tools.parseAttributes(hs);
             String attr;
             if ((attr = atts.get(ATTR_INDEX)) != null) {
               index = Integer.parseInt(attr);

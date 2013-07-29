@@ -31,10 +31,9 @@ import static org.jwildfire.create.tina.io.JWFMovieWriter.ATTR_SPATIAL_OVERSAMPL
 import static org.jwildfire.create.tina.io.JWFMovieWriter.TAG_JWF_MOVIE;
 import static org.jwildfire.create.tina.io.JWFMovieWriter.TAG_JWF_MOVIE_PART;
 
-import java.util.Map;
-
 import org.jwildfire.base.Prefs;
 import org.jwildfire.base.Tools;
+import org.jwildfire.base.Tools.XMLAttributes;
 import org.jwildfire.create.tina.animate.FlameMovie;
 import org.jwildfire.create.tina.animate.FlameMoviePart;
 import org.jwildfire.create.tina.animate.GlobalScript;
@@ -121,7 +120,7 @@ public class JWFMovieReader {
   }
 
   private void parseMoviePartAttributes(FlameMoviePart pPart, String pXML) {
-    Map<String, String> atts = Tools.parseAttributes(pXML);
+    XMLAttributes atts = Tools.parseAttributes(pXML);
     String hs;
     if ((hs = atts.get(ATTR_FRAME_COUNT)) != null) {
       pPart.setFrameCount(Integer.parseInt(hs));
@@ -132,7 +131,7 @@ public class JWFMovieReader {
   }
 
   private void parseMovieAttributes(FlameMovie pMovie, String pXML) {
-    Map<String, String> atts = Tools.parseAttributes(pXML);
+    XMLAttributes atts = Tools.parseAttributes(pXML);
     String hs;
     if ((hs = atts.get(ATTR_SOUND_FILENAME)) != null) {
       pMovie.setSoundFilename(hs);

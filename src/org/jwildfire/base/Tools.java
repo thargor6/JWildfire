@@ -32,9 +32,11 @@ import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -423,8 +425,50 @@ public class Tools {
 
   }
 
-  public static Map<String, String> parseAttributes(String pXML) {
-    Map<String, String> res = new HashMap<String, String>();
+  public static class XMLAttributes {
+    private final List<XMLAttribute> attrList = new ArrayList<XMLAttribute>();
+    private final Map<String, XMLAttribute> attrMap = new HashMap<String, XMLAttribute>();
+
+    public void addAttribute(XMLAttribute pAttribute) {
+      attrList.add(pAttribute);
+      attrMap.put(pAttribute.getName(), pAttribute);
+    }
+
+    public XMLAttribute getAttribute(String pKey) {
+      return attrMap.get(pKey);
+    }
+
+    public String get(String pKey) {
+      XMLAttribute attr = getAttribute(pKey);
+      return attr != null ? attr.getValue() : null;
+    }
+
+    public List<XMLAttribute> getAttributes() {
+      return attrList;
+    }
+  }
+
+  public static class XMLAttribute {
+    private final String name;
+    private final String value;
+
+    public XMLAttribute(String pName, String pValue) {
+      name = pName;
+      value = pValue;
+    }
+
+    public String getName() {
+      return name;
+    }
+
+    public String getValue() {
+      return value;
+    }
+
+  }
+
+  public static XMLAttributes parseAttributes(String pXML) {
+    XMLAttributes res = new XMLAttributes();
     int p = 0;
     while (true) {
       int ps = pXML.indexOf("=\"", p + 1);
@@ -443,7 +487,7 @@ public class Tools {
       if (value != null) {
         value = value.replaceAll("&quot;", "\"").replaceAll("&lt;", "<").replaceAll("&gt;", ">").replaceAll("&amp;", "&");
       }
-      res.put(name, value);
+      res.addAttribute(new XMLAttribute(name, value));
       p = pe + 2;
     }
     return res;

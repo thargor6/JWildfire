@@ -278,7 +278,7 @@ public class FlamePanel extends ImagePanel {
     if (selectedXForm != null && selectedXForm.getVariationCount() > 0) {
       try {
         selectedXForm.initTransform();
-        for (Variation var : selectedXForm.getSortedVariations()) {
+        for (Variation var : selectedXForm.getVariations()) {
           var.getFunc().init(getFlameTransformationContext(), selectedXForm, var.getAmount());
         }
 

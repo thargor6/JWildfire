@@ -423,13 +423,13 @@ public class Flame implements Assignable<Flame>, Serializable {
 
     for (XForm xForm : this.getXForms()) {
       xForm.initTransform();
-      for (Variation var : xForm.getSortedVariations()) {
+      for (Variation var : xForm.getVariations()) {
         var.getFunc().init(pFlameTransformationContext, xForm, var.getAmount());
       }
     }
     for (XForm xForm : this.getFinalXForms()) {
       xForm.initTransform();
-      for (Variation var : xForm.getSortedVariations()) {
+      for (Variation var : xForm.getVariations()) {
         var.getFunc().init(pFlameTransformationContext, xForm, var.getAmount());
       }
     }
