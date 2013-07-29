@@ -101,8 +101,9 @@ public class Flam3Writer {
       attrList.add(pXB.createAttr("chaos", hs));
     }
 
-    if (!pXForm.getName().equals("")) {
-      attrList.add(pXB.createAttr("name", pXForm.getName()));
+    String xName = pXForm.getName().replaceAll("\"", "");
+    if (!xName.equals("")) {
+      attrList.add(pXB.createAttr("name", xName));
     }
     return attrList;
   }
@@ -111,8 +112,9 @@ public class Flam3Writer {
     SimpleXMLBuilder xb = new SimpleXMLBuilder();
     // Flame
     List<SimpleXMLBuilder.Attribute<?>> attrList = new ArrayList<SimpleXMLBuilder.Attribute<?>>();
-    if (!pFlame.getName().equals("")) {
-      attrList.add(xb.createAttr("name", pFlame.getName()));
+    String fName = pFlame.getName().replaceAll("\"", "");
+    if (!fName.equals("")) {
+      attrList.add(xb.createAttr("name", fName));
     }
     attrList.add(xb.createAttr("version", Tools.APP_TITLE + " " + Tools.APP_VERSION));
     attrList.add(xb.createAttr("size", pFlame.getWidth() + " " + pFlame.getHeight()));
