@@ -81,6 +81,7 @@ import org.jwildfire.create.tina.batch.Job;
 import org.jwildfire.create.tina.batch.JobRenderThread;
 import org.jwildfire.create.tina.batch.JobRenderThreadController;
 import org.jwildfire.create.tina.dance.DancingFractalsController;
+import org.jwildfire.create.tina.dance.FlameBrowserController;
 import org.jwildfire.create.tina.dance.GradientController;
 import org.jwildfire.create.tina.dance.JWFScriptController;
 import org.jwildfire.create.tina.edit.UndoManager;
@@ -150,6 +151,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
   private TinaInteractiveRendererController interactiveRendererCtrl;
   private TinaSWFAnimatorController swfAnimatorCtrl;
   private JWFScriptController jwfScriptController;
+  private FlameBrowserController flameBrowserController;
   private GradientController gradientController;
 
   private final JInternalFrame tinaFrame;
@@ -236,6 +238,8 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
         parameterObject.scriptDescriptionTextArea, parameterObject.scriptTextArea, parameterObject.compileScriptButton,
         parameterObject.saveScriptBtn, parameterObject.revertScriptBtn, parameterObject.rescanScriptsBtn, parameterObject.newScriptBtn, parameterObject.newScriptFromFlameBtn, parameterObject.deleteScriptBtn,
         parameterObject.scriptRenameBtn, parameterObject.scriptDuplicateBtn, parameterObject.scriptRunBtn);
+
+    flameBrowserController = new FlameBrowserController(this, parameterObject.pErrorHandler, prefs, parameterObject.pCenterPanel, parameterObject.flameBrowserTree, parameterObject.flameBrowersImagesPnl);
 
     gradientController = new GradientController(this, parameterObject.pErrorHandler, prefs, parameterObject.pCenterPanel, parameterObject.gradientLibTree, parameterObject.pGradientLibraryPanel,
         parameterObject.gradientLibraryRescanBtn, parameterObject.gradientLibraryNewFolderBtn, parameterObject.gradientLibraryRenameFolderBtn,
@@ -533,6 +537,8 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     if (data.swfAnimatorQualityProfileCmb.getItemCount() > 0) {
       data.swfAnimatorQualityProfileCmb.setSelectedIndex(0);
     }
+
+    getFlameBrowserController().init();
 
   }
 
@@ -2303,6 +2309,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     enableJobRenderControls();
     getJwfScriptController().enableControls();
     getGradientController().enableControls();
+    getFlameBrowserController().enableControls();
   }
 
   private void enableJobRenderControls() {
@@ -5175,6 +5182,10 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
 
   public JWFScriptController getJwfScriptController() {
     return jwfScriptController;
+  }
+
+  public FlameBrowserController getFlameBrowserController() {
+    return flameBrowserController;
   }
 
   public GradientController getGradientController() {

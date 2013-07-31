@@ -4356,7 +4356,7 @@ public class TinaInternalFrame extends JInternalFrame {
         getMouseTransformScaleTrianglesButton(), getScriptTree(), getScriptDescriptionTextArea(), getScriptTextArea(), getCompileScriptButton(), getScriptSaveBtn(), getScriptRevertBtn(), getRescanScriptsBtn(),
         getNewScriptBtn(), getNewScriptFromFlameBtn(), getDeleteScriptBtn(), getScriptRenameBtn(), getDuplicateScriptBtn(), getScriptRunBtn(),
         getMouseTransformEditGradientButton(), getGradientLibTree(), getGradientLibraryRescanBtn(), getGradientLibraryNewFolderBtn(), getGradientLibraryRenameFolderBtn(),
-        getGradientsList(), getBackgroundColorIndicatorBtn(), getRandomizeBtn());
+        getGradientsList(), getBackgroundColorIndicatorBtn(), getRandomizeBtn(), getFlameBrowserTree(), getFlameBrowserImagesPanel());
 
     tinaController = new TinaController(params);
 
@@ -8885,7 +8885,7 @@ public class TinaInternalFrame extends JInternalFrame {
       rootTabbedPane.addTab("Flame Editor", null, getRootPanel(), null);
       rootTabbedPane.addTab("Interactive Renderer", null, getInteractiveRenderPanel(), null);
       rootTabbedPane.addTab("MutaGen", null, getPanel_16(), null);
-      //      rootTabbedPane.addTab("Flame browser", null, getPanel_72(), null);
+      rootTabbedPane.addTab("Flame browser", null, getPanel_72(), null);
       rootTabbedPane.addTab("JWFMovie Maker", null, getTinaSWFAnimatorPanel(), null);
       rootTabbedPane.addTab("Dancing Flames", null, getPanel_36(), null);
       rootTabbedPane.addTab("Batch Flame Renderer", null, getBatchRenderPanel(), null);
@@ -9247,7 +9247,6 @@ public class TinaInternalFrame extends JInternalFrame {
   private JPanel flameBrowserDetailPanel;
   private JPanel flameBrowserImagesPanel;
   private JScrollPane flameBrowserTreeScrollPane;
-  private JScrollPane flameBrowersImagesScrollPane;
   private JTree flameBrowserTree;
   private JButton flameBrowserRefreshBtn;
 
@@ -14386,7 +14385,6 @@ public class TinaInternalFrame extends JInternalFrame {
     if (flameBrowserImagesPanel == null) {
       flameBrowserImagesPanel = new JPanel();
       flameBrowserImagesPanel.setLayout(new BorderLayout(0, 0));
-      flameBrowserImagesPanel.add(getFlameBrowersImagesScrollPane(), BorderLayout.CENTER);
     }
     return flameBrowserImagesPanel;
   }
@@ -14399,16 +14397,16 @@ public class TinaInternalFrame extends JInternalFrame {
     return flameBrowserTreeScrollPane;
   }
 
-  private JScrollPane getFlameBrowersImagesScrollPane() {
-    if (flameBrowersImagesScrollPane == null) {
-      flameBrowersImagesScrollPane = new JScrollPane();
-    }
-    return flameBrowersImagesScrollPane;
-  }
-
   private JTree getFlameBrowserTree() {
     if (flameBrowserTree == null) {
       flameBrowserTree = new JTree();
+      flameBrowserTree.addTreeSelectionListener(new TreeSelectionListener() {
+        public void valueChanged(TreeSelectionEvent e) {
+          if (tinaController != null) {
+            tinaController.getFlameBrowserController().flamesTree_changed(e);
+          }
+        }
+      });
     }
     return flameBrowserTree;
   }
