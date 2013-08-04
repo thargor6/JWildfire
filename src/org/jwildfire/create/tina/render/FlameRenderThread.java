@@ -43,6 +43,7 @@ public abstract class FlameRenderThread implements Runnable {
     randGen = RandomGeneratorFactory.getInstance(pPrefs.getTinaRandomNumberGenerator(), pThreadId);
     ctx = new FlameTransformationContext(pRenderer, randGen);
     ctx.setPreserveZCoordinate(pFlame.isPreserveZ());
+    ctx.setPreview(renderer.isPreview());
   }
 
   protected abstract void preFuseIter();

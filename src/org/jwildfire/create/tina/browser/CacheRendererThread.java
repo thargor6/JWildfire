@@ -75,7 +75,7 @@ public class CacheRendererThread implements Runnable {
     renderFlame.setHeight(pImgHeight);
     renderFlame.setSampleDensity(prefs.getTinaRenderPreviewQuality() / 3.0);
     renderFlame.setDeFilterEnabled(false);
-    FlameRenderer renderer = new FlameRenderer(renderFlame, prefs, false);
+    FlameRenderer renderer = new FlameRenderer(renderFlame, prefs, false, true);
     RenderedFlame renderRes = renderer.renderFlame(info);
     return renderRes.getImage();
   }

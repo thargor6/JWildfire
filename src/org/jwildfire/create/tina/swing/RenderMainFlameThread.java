@@ -69,7 +69,7 @@ public class RenderMainFlameThread implements Runnable {
       info.setRenderHDRIntensityMap(renderHDRIntensityMap);
       flame.setSampleDensity(qualProfile.getQuality());
       long t0, t1;
-      renderer = new FlameRenderer(flame, prefs, flame.isBGTransparency());
+      renderer = new FlameRenderer(flame, prefs, flame.isBGTransparency(), false);
       renderer.setProgressUpdater(progressUpdater);
       t0 = Calendar.getInstance().getTimeInMillis();
       RenderedFlame res = renderer.renderFlame(info);

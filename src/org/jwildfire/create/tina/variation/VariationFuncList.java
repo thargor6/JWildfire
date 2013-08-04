@@ -402,8 +402,13 @@ public class VariationFuncList {
   }
 
   public static String getRandomVariationname() {
-    int idx = (int) (Math.random() * getNameList().size());
-    return getNameList().get(idx);
+    while (true) {
+      int idx = (int) (Math.random() * getNameList().size());
+      String name = getNameList().get(idx);
+      if (!(name.indexOf("inflate") == 0) && !name.equals("svg_wf") && !(name.indexOf("post_") == 0) && !(name.indexOf("pre_") == 0)) {
+        return name;
+      }
+    }
   }
 
   public static VariationFunc getVariationFuncInstance(String pName) {

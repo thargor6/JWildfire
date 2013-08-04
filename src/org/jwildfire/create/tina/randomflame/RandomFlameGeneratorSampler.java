@@ -106,7 +106,7 @@ public class RandomFlameGeneratorSampler {
         xForm.setAntialiasAmount(0.0);
       }
       try {
-        FlameRenderer renderer = new FlameRenderer(flame, prefs, false);
+        FlameRenderer renderer = new FlameRenderer(flame, prefs, false, true);
         renderedFlame = renderer.renderFlame(info);
       }
       finally {
@@ -119,7 +119,7 @@ public class RandomFlameGeneratorSampler {
         }
       }
       if (j == MAX_IMG_SAMPLES - 1) {
-        renderedFlame = new FlameRenderer(bestFlame, prefs, false).renderFlame(info);
+        renderedFlame = new FlameRenderer(bestFlame, prefs, false, true).renderFlame(info);
         return new RandomFlameGeneratorSample(bestFlame, renderedFlame.getImage());
       }
       else {

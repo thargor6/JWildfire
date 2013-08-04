@@ -77,7 +77,7 @@ public class JWFMovieFilePreview extends JComponent implements PropertyChangeLis
           flame.setWidth(imgWidth);
           flame.setHeight(imgHeight);
 
-          FlameRenderer renderer = new FlameRenderer(flame, prefs, false);
+          FlameRenderer renderer = new FlameRenderer(flame, prefs, false, true);
           renderer.setProgressUpdater(null);
           flame.setSampleDensity(50);
           flame.setSpatialFilterRadius(0.0);

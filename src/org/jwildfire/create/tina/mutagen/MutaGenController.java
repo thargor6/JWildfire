@@ -242,7 +242,7 @@ public class MutaGenController {
         flame.setWidth(imageWidth);
         flame.setHeight(imageHeight);
         flame.setSampleDensity(20.0);
-        renderer = new FlameRenderer(flame, prefs, false);
+        renderer = new FlameRenderer(flame, prefs, false, false);
         RenderedFlame res = renderer.renderFlame(info);
         renderResult = res.getImage();
       }

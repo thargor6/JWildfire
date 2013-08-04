@@ -159,7 +159,7 @@ public class AnimationService {
     flame.setPixelsPerUnit((wScl + hScl) * 0.5 * flame.getPixelsPerUnit());
     flame.setWidth(info.getImageWidth());
     flame.setHeight(info.getImageHeight());
-    FlameRenderer renderer = new FlameRenderer(flame, pPrefs, flame.isBGTransparency());
+    FlameRenderer renderer = new FlameRenderer(flame, pPrefs, flame.isBGTransparency(), false);
     RenderedFlame res = renderer.renderFlame(info);
     return res.getImage();
   }

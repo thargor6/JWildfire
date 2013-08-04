@@ -931,7 +931,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
               renderer = new DrawFocusPointFlameRenderer(flame, prefs, data.toggleTransparencyButton.isSelected());
             }
             else {
-              renderer = new FlameRenderer(flame, prefs, data.toggleTransparencyButton.isSelected());
+              renderer = new FlameRenderer(flame, prefs, data.toggleTransparencyButton.isSelected(), false);
             }
             if (pQuickRender) {
               renderer.setProgressUpdater(null);
@@ -2782,7 +2782,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       //            for (XForm xForm : renderFlame.getFinalXForms()) {
       //              xForm.setAntialiasAmount(0.0);
       //            }
-      FlameRenderer renderer = new FlameRenderer(renderFlame, prefs, false);
+      FlameRenderer renderer = new FlameRenderer(renderFlame, prefs, false, false);
       renderFlame.setSampleDensity(pQuality);
       RenderedFlame res = renderer.renderFlame(info);
       preview = res.getImage();
@@ -4893,7 +4893,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
         flame.setWidth(info.getImageWidth());
         flame.setHeight(info.getImageHeight());
 
-        FlameRenderer renderer = new FlameRenderer(flame, prefs, data.toggleTransparencyButton.isSelected());
+        FlameRenderer renderer = new FlameRenderer(flame, prefs, data.toggleTransparencyButton.isSelected(), false);
         flame.setSampleDensity(prefs.getTinaRenderRealtimeQuality());
         flame.setSpatialFilterRadius(0.0);
         RenderedFlame res = renderer.renderFlame(info);
@@ -4949,7 +4949,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
           double oldFilterRadius = flame.getSpatialFilterRadius();
           try {
             flame.setSampleDensity(qualProfile.getQuality());
-            FlameRenderer renderer = new FlameRenderer(flame, prefs, flame.isBGTransparency());
+            FlameRenderer renderer = new FlameRenderer(flame, prefs, flame.isBGTransparency(), false);
             renderer.setProgressUpdater(mainProgressUpdater);
             long t0 = Calendar.getInstance().getTimeInMillis();
             RenderedFlame res = renderer.renderFlame(info);
@@ -5361,7 +5361,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     pFlame.setWidth(imageWidth);
     pFlame.setHeight(imageHeight);
     pFlame.setSampleDensity(40.0);
-    FlameRenderer renderer = new FlameRenderer(pFlame, prefs, false);
+    FlameRenderer renderer = new FlameRenderer(pFlame, prefs, false, false);
     RenderedFlame res = renderer.renderFlame(info);
     return res.getImage();
   }

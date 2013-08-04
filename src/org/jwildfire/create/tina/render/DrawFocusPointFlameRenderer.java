@@ -10,7 +10,7 @@ import org.jwildfire.create.tina.base.XYZProjectedPoint;
 public class DrawFocusPointFlameRenderer extends FlameRenderer {
 
   public DrawFocusPointFlameRenderer(Flame pFlame, Prefs pPrefs, boolean pWithAlpha) {
-    super(pFlame, pPrefs, pWithAlpha);
+    super(pFlame, pPrefs, pWithAlpha, false);
   }
 
   @Override

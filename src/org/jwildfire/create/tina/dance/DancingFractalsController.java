@@ -277,7 +277,7 @@ public class DancingFractalsController {
           flame.setHeight(info.getImageHeight());
 
           Flame renderFlame = new FlamePreparer(prefs).createRenderFlame(flame);
-          FlameRenderer renderer = new FlameRenderer(renderFlame, prefs, false);
+          FlameRenderer renderer = new FlameRenderer(renderFlame, prefs, false, false);
           renderer.setProgressUpdater(null);
           RenderedFlame res = renderer.renderFlame(info);
           SimpleImage img = res.getImage();
@@ -330,7 +330,7 @@ public class DancingFractalsController {
         flame.setWidth(info.getImageWidth());
         flame.setHeight(info.getImageHeight());
         Flame renderFlame = new FlamePreparer(prefs).createRenderFlame(flame);
-        FlameRenderer renderer = new FlameRenderer(renderFlame, prefs, false);
+        FlameRenderer renderer = new FlameRenderer(renderFlame, prefs, false, false);
         renderer.setProgressUpdater(null);
         RenderedFlame res = renderer.renderFlame(info);
         imgPanel.setImage(res.getImage());

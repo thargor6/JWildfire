@@ -441,11 +441,24 @@ public class SVGWFFunc extends VariationFunc {
 
   private List<Point> _points;
   private RenderColor[] renderColors;
+  private boolean previewMode = false;
 
   @Override
   public void init(FlameTransformationContext pContext, XForm pXForm, double pAmount) {
     renderColors = pContext.getFlameRenderer().getColorMap();
     lastR = lastG = lastB = -1;
+    previewMode = pContext.isPreview();
+    if (previewMode) {
+      resolution_multiplier = 0.25;
+      if (scale_x > 1.0) {
+        scale_x = 1.0;
+      }
+      if (scale_y > 1.0) {
+        scale_y = 1.0;
+      }
+      true_color = 1;
+      pre_antialias = 0;
+    }
   }
 
   private String makeRessourceKey() {

@@ -91,6 +91,7 @@ public class FlameRenderer {
 
   protected final Flame flame;
   private final Prefs prefs;
+  private boolean preview;
 
   private List<IterationObserver> iterationObservers;
   private List<FlameRenderThread> runningThreads;
@@ -106,13 +107,15 @@ public class FlameRenderer {
     iterationObservers.add(pObserver);
   }
 
-  public FlameRenderer(Flame pFlame, Prefs pPrefs, boolean pWithAlpha) {
+  public FlameRenderer(Flame pFlame, Prefs pPrefs, boolean pWithAlpha, boolean pPreview) {
     flame = pFlame;
     prefs = pPrefs;
     withAlpha = pWithAlpha;
+    preview = pPreview;
     randGen = RandomGeneratorFactory.getInstance(prefs.getTinaRandomNumberGenerator());
     flameTransformationContext = new FlameTransformationContext(this, randGen);
     flameTransformationContext.setPreserveZCoordinate(pFlame.isPreserveZ());
+    flameTransformationContext.setPreview(pPreview);
   }
 
   public void init3D() {
@@ -1015,6 +1018,14 @@ public class FlameRenderer {
 
   public double getCamY1() {
     return camY1;
+  }
+
+  public boolean isPreview() {
+    return preview;
+  }
+
+  public void setPreview(boolean pPreview) {
+    preview = pPreview;
   }
 
 }

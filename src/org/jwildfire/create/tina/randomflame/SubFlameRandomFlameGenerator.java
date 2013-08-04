@@ -124,7 +124,7 @@ public class SubFlameRandomFlameGenerator extends RandomFlameGenerator {
       boolean deEnabled = subFlame.isDeFilterEnabled();
       try {
         subFlame.setDeFilterEnabled(false);
-        FlameRenderer renderer = new FlameRenderer(subFlame, prefs, false);
+        FlameRenderer renderer = new FlameRenderer(subFlame, prefs, false, true);
         RenderInfo info = new RenderInfo(IMG_WIDTH, IMG_HEIGHT);
         res = renderer.renderFlame(info);
       }

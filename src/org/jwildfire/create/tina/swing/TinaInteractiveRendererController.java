@@ -266,7 +266,7 @@ public class TinaInteractiveRendererController implements IterationObserver {
     if (flame.getBGColorRed() > 0 || flame.getBGColorGreen() > 0 || flame.getBGColorBlue() > 0) {
       image.fillBackground(flame.getBGColorRed(), flame.getBGColorGreen(), flame.getBGColorBlue());
     }
-    renderer = new FlameRenderer(flame, prefs, flame.isBGTransparency());
+    renderer = new FlameRenderer(flame, prefs, flame.isBGTransparency(), false);
     renderer.registerIterationObserver(this);
     sampleCount = 0;
     renderStartTime = System.currentTimeMillis();
@@ -506,7 +506,7 @@ public class TinaInteractiveRendererController implements IterationObserver {
         cancelRender();
         File file = chooser.getSelectedFile();
         Flame newFlame = new Flame();
-        FlameRenderer newRenderer = new FlameRenderer(newFlame, prefs, newFlame.isBGTransparency());
+        FlameRenderer newRenderer = new FlameRenderer(newFlame, prefs, newFlame.isBGTransparency(), false);
 
         ResumedFlameRender resumedRender = newRenderer.resumeRenderFlame(file.getAbsolutePath());
         threads = resumedRender.getThreads();

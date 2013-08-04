@@ -819,7 +819,7 @@ public class FlamePanel extends ImagePanel {
       catch (Exception ex) {
         ex.printStackTrace();
       }
-      flameRenderer = new FlameRenderer(flame, prefs, showTransparency);
+      flameRenderer = new FlameRenderer(flame, prefs, showTransparency, false);
       flameRenderer.createColorMap();
     }
     return flameRenderer;
@@ -830,6 +830,7 @@ public class FlamePanel extends ImagePanel {
   private FlameTransformationContext getFlameTransformationContext() {
     if (flameTransformationContext == null) {
       flameTransformationContext = new FlameTransformationContext(getFlameRenderer(), RandomGeneratorFactory.getInstance(RandomGeneratorType.getDefaultValue()));
+      flameTransformationContext.setPreview(getFlameRenderer().isPreview());
     }
     return flameTransformationContext;
   }

@@ -73,7 +73,7 @@ public class JobRenderThread implements Runnable {
             double oldFilterRadius = flame.getSpatialFilterRadius();
             try {
               flame.setSampleDensity(qualityProfile.getQuality());
-              FlameRenderer renderer = new FlameRenderer(flame, controller.getPrefs(), flame.isBGTransparency());
+              FlameRenderer renderer = new FlameRenderer(flame, controller.getPrefs(), flame.isBGTransparency(), false);
               renderer.setProgressUpdater(controller.getJobProgressUpdater());
               long t0 = Calendar.getInstance().getTimeInMillis();
               RenderedFlame res = renderer.renderFlame(info);
