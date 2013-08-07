@@ -261,7 +261,7 @@ public class TinaInteractiveRendererController implements IterationObserver {
     flame.setWidth(info.getImageWidth());
     flame.setHeight(info.getImageHeight());
     flame.setSampleDensity(10);
-    info.setRenderHDR(true);
+    info.setRenderHDR(prefs.isTinaSaveHDRInIR());
     info.setRenderHDRIntensityMap(false);
     if (flame.getBGColorRed() > 0 || flame.getBGColorGreen() > 0 || flame.getBGColorBlue() > 0) {
       image.fillBackground(flame.getBGColorRed(), flame.getBGColorGreen(), flame.getBGColorBlue());

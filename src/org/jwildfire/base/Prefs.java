@@ -80,6 +80,9 @@ public class Prefs extends ManagedObject {
   static final String KEY_TINA_RANDOMBATCH_BGCOLOR_BLUE = "tina.random_batch.bg_color.blue";
   static final String KEY_TINA_RANDOMBATCH_REFRESH_TYPE = "tina.random_batch.refresh_type";
 
+  static final String KEY_TINA_SAVING_STORE_HDR_IN_IR = "tina.saving.store_hdr_in_ir";
+  static final String KEY_TINA_SAVING_STORE_FLAMES_WHEN_SAVING_IMAGE = "tina.saving.store_flames_when_saving_image";
+
   @Property(description = "Script drawer for the animation editor", category = PropertyCategory.MISC)
   private String scriptPath = null;
   private String lastInputScriptPath = null;
@@ -119,6 +122,12 @@ public class Prefs extends ManagedObject {
 
   @Property(description = "Associate profile information with flame files", category = PropertyCategory.TINA)
   private boolean tinaAssociateProfilesWithFlames = false;
+
+  @Property(description = "Generate and save HDR images in the interactive renderer", category = PropertyCategory.TINA)
+  private boolean tinaSaveHDRInIR = false;
+
+  @Property(description = "Automatically save a flame-copy when a rendered image is saved", category = PropertyCategory.TINA)
+  private boolean tinaSaveFlamesWhenImageIsSaved = false;
 
   @Property(description = "Sunflow scene file drawer", category = PropertyCategory.SUNFLOW)
   private String sunflowScenePath = null;
@@ -448,6 +457,8 @@ public class Prefs extends ManagedObject {
     tinaRandomBatchBGColorBlue = pSrc.tinaRandomBatchBGColorBlue;
     tinaRandomBatchRefreshType = pSrc.tinaRandomBatchRefreshType;
     tinaAssociateProfilesWithFlames = pSrc.tinaAssociateProfilesWithFlames;
+    tinaSaveFlamesWhenImageIsSaved = pSrc.tinaSaveFlamesWhenImageIsSaved;
+    tinaSaveHDRInIR = pSrc.tinaSaveHDRInIR;
     tinaDefaultBGTransparency = pSrc.tinaDefaultBGTransparency;
     tinaDefaultDEMaxRadius = pSrc.tinaDefaultDEMaxRadius;
     tinaRasterPointPrecision = pSrc.tinaRasterPointPrecision;
@@ -685,6 +696,22 @@ public class Prefs extends ManagedObject {
 
   public void setTinaSVGPath(String tinaSVGPath) {
     this.tinaSVGPath = tinaSVGPath;
+  }
+
+  public boolean isTinaSaveHDRInIR() {
+    return tinaSaveHDRInIR;
+  }
+
+  public void setTinaSaveHDRInIR(boolean tinaSaveHDRInIR) {
+    this.tinaSaveHDRInIR = tinaSaveHDRInIR;
+  }
+
+  public boolean isTinaSaveFlamesWhenImageIsSaved() {
+    return tinaSaveFlamesWhenImageIsSaved;
+  }
+
+  public void setTinaSaveFlamesWhenImageIsSaved(boolean tinaSaveFlamesWhenImageIsSaved) {
+    this.tinaSaveFlamesWhenImageIsSaved = tinaSaveFlamesWhenImageIsSaved;
   }
 
 }
