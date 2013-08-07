@@ -328,6 +328,9 @@ public class TinaInteractiveRendererController implements IterationObserver {
         if (res.getHDRIntensityMap() != null) {
           new ImageWriter().saveImage(res.getHDRIntensityMap(), file.getAbsolutePath() + ".intensity.hdr");
         }
+        if (prefs.isTinaSaveFlamesWhenImageIsSaved()) {
+          new Flam3Writer().writeFlame(getCurrFlame(), file.getParentFile().getAbsolutePath() + File.separator + Tools.trimFileExt(file.getName()) + ".flame");
+        }
       }
     }
     catch (Throwable ex) {

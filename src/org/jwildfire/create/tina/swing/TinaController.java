@@ -46,7 +46,6 @@ import java.io.Reader;
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 import javax.swing.ImageIcon;
@@ -116,7 +115,6 @@ import org.jwildfire.create.tina.variation.VariationFunc;
 import org.jwildfire.create.tina.variation.VariationFuncList;
 import org.jwildfire.image.SimpleImage;
 import org.jwildfire.io.ImageReader;
-import org.jwildfire.io.ImageWriter;
 import org.jwildfire.swing.ErrorHandler;
 import org.jwildfire.swing.ImageFileChooser;
 import org.jwildfire.swing.ImagePanel;
@@ -4913,67 +4911,6 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       batchPreviewFlamePanel = null;
     }
     renderBatchJobsTableClicked();
-  }
-
-  public void renderImageButton_actionPerformed0() {
-    if (getCurrFlame() != null) {
-      try {
-        JFileChooser chooser = new ImageFileChooser();
-        if (prefs.getOutputImagePath() != null) {
-          try {
-            chooser.setCurrentDirectory(new File(prefs.getOutputImagePath()));
-          }
-          catch (Exception ex) {
-            ex.printStackTrace();
-          }
-        }
-        if (chooser.showSaveDialog(centerPanel) == JFileChooser.APPROVE_OPTION) {
-          QualityProfile qualProfile = getQualityProfile();
-          ResolutionProfile resProfile = getResolutionProfile();
-          File file = chooser.getSelectedFile();
-          prefs.setLastOutputImageFile(file);
-          int width = resProfile.getWidth();
-          int height = resProfile.getHeight();
-          RenderInfo info = new RenderInfo(width, height);
-          Flame flame = getCurrFlame();
-          double wScl = (double) info.getImageWidth() / (double) flame.getWidth();
-          double hScl = (double) info.getImageHeight() / (double) flame.getHeight();
-          flame.setPixelsPerUnit((wScl + hScl) * 0.5 * flame.getPixelsPerUnit());
-          flame.setWidth(info.getImageWidth());
-          flame.setHeight(info.getImageHeight());
-          boolean renderHDR = qualProfile.isWithHDR();
-          info.setRenderHDR(renderHDR);
-          boolean renderHDRIntensityMap = qualProfile.isWithHDRIntensityMap();
-          info.setRenderHDRIntensityMap(renderHDRIntensityMap);
-          double oldSampleDensity = flame.getSampleDensity();
-          double oldFilterRadius = flame.getSpatialFilterRadius();
-          try {
-            flame.setSampleDensity(qualProfile.getQuality());
-            FlameRenderer renderer = new FlameRenderer(flame, prefs, flame.isBGTransparency(), false);
-            renderer.setProgressUpdater(mainProgressUpdater);
-            long t0 = Calendar.getInstance().getTimeInMillis();
-            RenderedFlame res = renderer.renderFlame(info);
-            long t1 = Calendar.getInstance().getTimeInMillis();
-            showStatusMessage(flame, "render time: " + Tools.doubleToString((t1 - t0) * 0.001) + "s");
-            new ImageWriter().saveImage(res.getImage(), file.getAbsolutePath());
-            if (res.getHDRImage() != null) {
-              new ImageWriter().saveImage(res.getHDRImage(), file.getAbsolutePath() + ".hdr");
-            }
-            if (res.getHDRIntensityMap() != null) {
-              new ImageWriter().saveImage(res.getHDRIntensityMap(), file.getAbsolutePath() + ".intensity.hdr");
-            }
-          }
-          finally {
-            flame.setSampleDensity(oldSampleDensity);
-            flame.setSpatialFilterRadius(oldFilterRadius);
-          }
-          mainController.loadImage(file.getAbsolutePath(), false);
-        }
-      }
-      catch (Throwable ex) {
-        errorHandler.handleError(ex);
-      }
-    }
   }
 
   private RenderMainFlameThread mainRenderThread = null;

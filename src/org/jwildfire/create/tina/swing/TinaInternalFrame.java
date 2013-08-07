@@ -14414,6 +14414,11 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton getFlameBrowserRefreshBtn() {
     if (flameBrowserRefreshBtn == null) {
       flameBrowserRefreshBtn = new JButton();
+      flameBrowserRefreshBtn.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getFlameBrowserController().refreshBtn_clicked();
+        }
+      });
       flameBrowserRefreshBtn.setBounds(6, 6, 125, 46);
       flameBrowserRefreshBtn.setText("Refresh");
       flameBrowserRefreshBtn.setPreferredSize(new Dimension(125, 46));

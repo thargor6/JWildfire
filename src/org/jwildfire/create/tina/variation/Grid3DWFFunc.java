@@ -22,6 +22,7 @@ import static org.jwildfire.base.mathlib.MathLib.fabs;
 import static org.jwildfire.base.mathlib.MathLib.sin;
 import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_JWILDFIRE;
 
+import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -103,7 +104,7 @@ public class Grid3DWFFunc extends VariationFunc {
         break;
     }
 
-    if (fabs(alpha) > EPSILON || fabs(beta) > EPSILON || fabs(gamma) > EPSILON || fabs(alpha_spread) > EPSILON || fabs(beta_spread) > EPSILON || fabs(gamma_spread) > EPSILON) {
+    if (doRotate) {
       double a = alpha + getAlphaSpread(cxn, cyn, czn);
       double b = beta + getBetaSpread(cxn, cyn, czn);
       double g = gamma + getGammaSpread(cxn, cyn, czn);
@@ -206,48 +207,79 @@ public class Grid3DWFFunc extends VariationFunc {
 
   private double getSizeSpread(int pX, int pY, int pZ) {
     if (size_spread > MathLib.EPSILON) {
-      ConcurrentHashMap<String, Double> map = (ConcurrentHashMap<String, Double>) RessourceManager.getRessource(getSizeSpreadMapKey());
-      double spread = -sizeSpreadRnd.nextDouble() * size_spread + size_spread;
-      Double prevValue = map.putIfAbsent(makeXYZKey(pX, pY, pZ), spread);
-      return prevValue != null ? prevValue.doubleValue() : spread;
+      Map<String, Double> map = (Map<String, Double>) RessourceManager.getRessource(getSizeSpreadMapKey());
+      String key = makeXYZKey(pX, pY, pZ);
+      Double storedValue = map.get(key);
+      if (storedValue == null) {
+        double spread = -sizeSpreadRnd.nextDouble() * size_spread + size_spread;
+        map.put(key, spread);
+        return spread;
+      }
+      else {
+        return storedValue.doubleValue();
+      }
     }
     return 0.0;
   }
 
   private double getAlphaSpread(int pX, int pY, int pZ) {
     if (alpha_spread > MathLib.EPSILON) {
-      ConcurrentHashMap<String, Double> map = (ConcurrentHashMap<String, Double>) RessourceManager.getRessource(getAlphaSpreadMapKey());
-      double spread = -alphaSpreadRnd.nextDouble() * alpha_spread + alpha_spread;
-      Double prevValue = map.putIfAbsent(makeXYZKey(pX, pY, pZ), spread);
-      return prevValue != null ? prevValue.doubleValue() : spread;
+      Map<String, Double> map = (Map<String, Double>) RessourceManager.getRessource(getAlphaSpreadMapKey());
+      String key = makeXYZKey(pX, pY, pZ);
+      Double storedValue = map.get(key);
+      if (storedValue == null) {
+        double spread = -alphaSpreadRnd.nextDouble() * alpha_spread + alpha_spread;
+        map.put(key, spread);
+        return spread;
+      }
+      else {
+        return storedValue.doubleValue();
+      }
     }
     return 0.0;
   }
 
   private double getBetaSpread(int pX, int pY, int pZ) {
     if (beta_spread > MathLib.EPSILON) {
-      ConcurrentHashMap<String, Double> map = (ConcurrentHashMap<String, Double>) RessourceManager.getRessource(getBetaSpreadMapKey());
-      double spread = -betaSpreadRnd.nextDouble() * beta_spread + beta_spread;
-      Double prevValue = map.putIfAbsent(makeXYZKey(pX, pY, pZ), spread);
-      return prevValue != null ? prevValue.doubleValue() : spread;
+      Map<String, Double> map = (Map<String, Double>) RessourceManager.getRessource(getBetaSpreadMapKey());
+      String key = makeXYZKey(pX, pY, pZ);
+      Double storedValue = map.get(key);
+      if (storedValue == null) {
+        double spread = -betaSpreadRnd.nextDouble() * beta_spread + beta_spread;
+        map.put(key, spread);
+        return spread;
+      }
+      else {
+        return storedValue.doubleValue();
+      }
     }
     return 0.0;
   }
 
   private double getGammaSpread(int pX, int pY, int pZ) {
     if (gamma_spread > MathLib.EPSILON) {
-      ConcurrentHashMap<String, Double> map = (ConcurrentHashMap<String, Double>) RessourceManager.getRessource(getGammaSpreadMapKey());
-      double spread = -gammaSpreadRnd.nextDouble() * gamma_spread + gamma_spread;
-      Double prevValue = map.putIfAbsent(makeXYZKey(pX, pY, pZ), spread);
-      return prevValue != null ? prevValue.doubleValue() : spread;
+      Map<String, Double> map = (Map<String, Double>) RessourceManager.getRessource(getGammaSpreadMapKey());
+      String key = makeXYZKey(pX, pY, pZ);
+      Double storedValue = map.get(key);
+      if (storedValue == null) {
+        double spread = -gammaSpreadRnd.nextDouble() * gamma_spread + gamma_spread;
+        map.put(key, spread);
+        return spread;
+      }
+      else {
+        return storedValue.doubleValue();
+      }
     }
     return 0.0;
   }
 
   private Random sizeSpreadRnd, alphaSpreadRnd, betaSpreadRnd, gammaSpreadRnd;
+  private boolean doRotate;
 
   @Override
   public void init(FlameTransformationContext pContext, XForm pXForm, double pAmount) {
+    doRotate = fabs(alpha) > EPSILON || fabs(beta) > EPSILON || fabs(gamma) > EPSILON || fabs(alpha_spread) > EPSILON || fabs(beta_spread) > EPSILON || fabs(gamma_spread) > EPSILON;
+
     if (RessourceManager.getRessource(getSizeSpreadMapKey()) == null)
       RessourceManager.putRessource(getSizeSpreadMapKey(), new ConcurrentHashMap<String, Double>());
     sizeSpreadRnd = new Random();
