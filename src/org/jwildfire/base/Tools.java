@@ -45,7 +45,8 @@ import org.jwildfire.image.Pixel;
 
 public class Tools {
   public static final String APP_TITLE = "JWildfire";
-  public static final String APP_VERSION = "0.73 (22.07.2013)";
+  //  public static final String APP_VERSION = "1.00 (12.08.2013)";
+  public static final String APP_VERSION = "1.00";
 
   public static final int VPREC = 1024;
   public static final int SPREC = 10;
@@ -491,6 +492,14 @@ public class Tools {
       p = pe + 2;
     }
     return res;
+  }
+
+  public static String trimFileExt(String pName) {
+    int p = pName.lastIndexOf(".");
+    if (p > 0 && p < pName.length() - 1) {
+      return pName.substring(0, p);
+    }
+    return pName;
   }
 
 }

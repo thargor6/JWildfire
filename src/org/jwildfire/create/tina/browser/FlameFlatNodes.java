@@ -89,10 +89,10 @@ public class FlameFlatNodes implements Serializable {
     return res;
   }
 
-  public List<FlameFlatNode> getNodes(Date pFileAge) {
+  public List<FlameFlatNode> getDayNodes(Date pDay) {
     List<FlameFlatNode> res = new ArrayList<FlameFlatNode>();
     Calendar cal = GregorianCalendar.getInstance();
-    cal.setTime(pFileAge);
+    cal.setTime(pDay);
     int refYear = cal.get(Calendar.YEAR);
     int refMonth = cal.get(Calendar.MONTH);
     int refDay = cal.get(Calendar.DAY_OF_MONTH);
@@ -107,4 +107,55 @@ public class FlameFlatNodes implements Serializable {
     }
     return res;
   }
+
+  public List<Date> getDistinctMonths() {
+    final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM");
+    List<Date> res = new ArrayList<Date>();
+    Map<String, String> dateStrMap = new HashMap<String, String>();
+    for (FlameFlatNode node : nodes) {
+      String dateStr = sdf.format(node.getFileage());
+      if (dateStrMap.get(dateStr) == null) {
+        dateStrMap.put(dateStr, dateStr);
+        res.add(node.getFileage());
+      }
+    }
+    return res;
+  }
+
+  public List<FlameFlatNode> getMonthNodes(Date pMonth) {
+    List<FlameFlatNode> res = new ArrayList<FlameFlatNode>();
+    Calendar cal = GregorianCalendar.getInstance();
+    cal.setTime(pMonth);
+    int refYear = cal.get(Calendar.YEAR);
+    int refMonth = cal.get(Calendar.MONTH);
+    for (FlameFlatNode node : nodes) {
+      cal.setTime(node.getFileage());
+      int year = cal.get(Calendar.YEAR);
+      int month = cal.get(Calendar.MONTH);
+      if (year == refYear && month == refMonth) {
+        res.add(node);
+      }
+    }
+    return res;
+  }
+
+  public List<Date> getDistinctDays(Date pMonth) {
+    final SimpleDateFormat sdfMonth = new SimpleDateFormat("yyyy-MM");
+    String refMonthStr = sdfMonth.format(pMonth);
+    final SimpleDateFormat sdfDay = new SimpleDateFormat("yyyy-MM-dd");
+    List<Date> res = new ArrayList<Date>();
+    Map<String, String> dateStrMap = new HashMap<String, String>();
+    for (FlameFlatNode node : nodes) {
+      String monthStr = sdfMonth.format(node.getFileage());
+      if (refMonthStr.equals(monthStr)) {
+        String dayStr = sdfDay.format(node.getFileage());
+        if (dateStrMap.get(dayStr) == null) {
+          dateStrMap.put(dayStr, dayStr);
+          res.add(node.getFileage());
+        }
+      }
+    }
+    return res;
+  }
+
 }

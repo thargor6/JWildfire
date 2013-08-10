@@ -1,22 +1,27 @@
 package org.jwildfire.create.tina.browser;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Point;
+import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.swing.AbstractAction;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTree;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
+import javax.swing.border.LineBorder;
 import javax.swing.event.TreeSelectionEvent;
+import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 
@@ -47,8 +52,6 @@ public class FlameBrowserController {
   }
 
   public void enableControls() {
-    String baseDrawer = prefs.getTinaJWFScriptPath();
-    boolean enableUserScripts = baseDrawer != null && baseDrawer.length() > 0;
 
   }
 
@@ -72,17 +75,23 @@ public class FlameBrowserController {
 
   private void addFlatNodesToTree() {
     FlamesTreeNode root = new FlamesTreeNode("Flame library", true, null);
-    List<Date> fileDates = flatFlameNodes.getDistinctFiledates();
-    final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-    for (Date fileDate : fileDates) {
-      List<FlameFlatNode> flameNodes = flatFlameNodes.getNodes(fileDate);
-      FlamesTreeNode folder = new FlamesTreeNode(sdf.format(fileDate) + " (" + flameNodes.size() + ")", true, flameNodes);
-      root.add(folder);
-      for (FlameFlatNode flameNode : flameNodes) {
-        FlamesTreeNode node = new FlamesTreeNode(flameNode.getCaption(), false, flameNodes);
-        folder.add(node);
+    final SimpleDateFormat monthDateFormat = new SimpleDateFormat("yyyy-MM");
+    final SimpleDateFormat dayDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+    List<Date> distinctMonths = flatFlameNodes.getDistinctMonths();
+    for (Date month : distinctMonths) {
+      List<FlameFlatNode> monthNodes = flatFlameNodes.getMonthNodes(month);
+      FlamesTreeNode monthFolder = new FlamesTreeNode(monthDateFormat.format(month) + " (" + monthNodes.size() + ")", true, monthNodes);
+      root.add(monthFolder);
+      List<Date> distinctDays = flatFlameNodes.getDistinctDays(month);
+      for (Date day : distinctDays) {
+        List<FlameFlatNode> dayNodes = flatFlameNodes.getDayNodes(day);
+        FlamesTreeNode dayFolder = new FlamesTreeNode(dayDateFormat.format(day) + " (" + dayNodes.size() + ")", true, dayNodes);
+        monthFolder.add(dayFolder);
+        for (FlameFlatNode flameNode : dayNodes) {
+          FlamesTreeNode leafNode = new FlamesTreeNode(flameNode.getCaption(), true, dayNodes);
+          dayFolder.add(leafNode);
+        }
       }
-
     }
 
     flamesTree.setModel(new DefaultTreeModel(root));
@@ -90,7 +99,7 @@ public class FlameBrowserController {
 
   public void init() {
     flamesTree.setRootVisible(false);
-    refreshFlamesTree();
+    addFlatNodesToTree();
   }
 
   private final FlameFlatNodes flatFlameNodes = new FlameFlatNodes();
@@ -119,13 +128,34 @@ public class FlameBrowserController {
     if (!refreshing) {
       enableControls();
       FlamesTreeNode selNode = getSelNode();
-      clearImages();
-      if (selNode != null) {
-        showImages(selNode.getFlames());
+      if (selNode.isLeaf()) {
+        int idx = 0;
+        DefaultMutableTreeNode node = selNode;
+        while (true) {
+          node = node.getPreviousSibling();
+          if (node == null) {
+            break;
+          }
+          idx++;
+        }
+        selectCell(idx);
       }
-      imagesPnl.validate();
+      else {
+        clearImages();
+        if (selNode != null) {
+          showImages(selNode.getFlames());
+        }
+        imagesPnl.validate();
+      }
     }
   }
+
+  private List<ImagePanel> pnlList = new ArrayList<ImagePanel>();
+  private int selectedPnl = -1;
+  private final Color deselectedCellColor = new Color(160, 160, 160);
+  private final Color selectedCellColor = new Color(200, 0, 0);
+  private final int borderSize = 3;
+  private JPanel imgRootPanel;
 
   private void showImages(List<FlameFlatNode> pFlames) {
     cancelRenderThreads();
@@ -144,14 +174,41 @@ public class FlameBrowserController {
     int pnlWidth = 2 * OUTER_BORDER + (cols - 1) * INNER_BORDER + cols * IMG_WIDTH;
     int pnlHeight = 2 * OUTER_BORDER + (rows - 1) * INNER_BORDER + rows * (IMG_HEIGHT + LABEL_HEIGHT);
 
-    JPanel imgRootPanel = new JPanel();
+    imgRootPanel = new JPanel();
     imgRootPanel.setLayout(null);
     imgRootPanel.setSize(pnlWidth, pnlHeight);
     imgRootPanel.setPreferredSize(new Dimension(pnlWidth, pnlHeight));
+    imgRootPanel.getActionMap().put("selectLeftCellAction", new AbstractAction() {
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        selectLeftCell();
+      }
+    });
+    imgRootPanel.getActionMap().put("selectRightCellAction", new AbstractAction() {
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        selectRightCell();
+      }
+    });
+    imgRootPanel.getActionMap().put("selectTopCellAction", new AbstractAction() {
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        selectUpperCell();
+      }
+    });
+    imgRootPanel.getActionMap().put("selectBottomCellAction", new AbstractAction() {
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        selectLowerCell();
+      }
+    });
 
     int flameIdx = 0;
+    pnlList = new ArrayList<ImagePanel>();
+    selectedPnl = -1;
     int y = OUTER_BORDER;
     List<RenderJobInfo> jobInfoLst = new ArrayList<RenderJobInfo>();
+    pnlList = new ArrayList<ImagePanel>();
     for (int r = 0; r < rows; r++) {
       int x = OUTER_BORDER;
       for (int c = 0; c < cols; c++) {
@@ -171,9 +228,15 @@ public class FlameBrowserController {
           }
           imgPanel.setImage(img);
           imgPanel.setLocation(x, y);
+          imgPanel.setBorder(new LineBorder(deselectedCellColor, borderSize));
+          pnlList.add(imgPanel);
 
           final String flameFilename = node.getFilename();
+          final int pnlIdx = pnlList.size() - 1;
+
           imgPanel.addMouseListener(new java.awt.event.MouseAdapter() {
+
+            @Override
             public void mouseClicked(java.awt.event.MouseEvent e) {
               if (e.getClickCount() > 1 || e.getButton() != MouseEvent.BUTTON1) {
                 List<Flame> flames = new Flam3Reader(prefs).readFlames(flameFilename);
@@ -185,6 +248,12 @@ public class FlameBrowserController {
                 }
               }
             }
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+              selectCell(pnlIdx);
+            }
+
           });
           imgRootPanel.add(imgPanel);
           // label with description 
@@ -206,7 +275,8 @@ public class FlameBrowserController {
       }
       y += IMG_HEIGHT + INNER_BORDER + LABEL_HEIGHT;
     }
-
+    selectedPnl = pnlList.size() > 0 ? 0 : -1;
+    selectCell(selectedPnl);
     imagesScrollPane = new JScrollPane(imgRootPanel);
     imagesScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
     imagesScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
@@ -216,6 +286,37 @@ public class FlameBrowserController {
       startRenderThread(jobInfoLst);
     }
 
+  }
+
+  protected void selectLowerCell() {
+    // TODO Auto-generated method stub
+
+  }
+
+  protected void selectUpperCell() {
+    // TODO Auto-generated method stub
+
+  }
+
+  protected void selectRightCell() {
+    // TODO Auto-generated method stub
+
+  }
+
+  protected void selectLeftCell() {
+    // TODO Auto-generated method stub
+    System.out.println("left");
+  }
+
+  protected void selectCell(int pIndex) {
+    for (int i = 0; i < pnlList.size(); i++) {
+      ImagePanel pnl = pnlList.get(i);
+      boolean sel = (i == pIndex);
+      pnl.setBorder(new LineBorder(sel ? selectedCellColor : deselectedCellColor, borderSize));
+    }
+    imgRootPanel.invalidate();
+    imgRootPanel.validate();
+    selectedPnl = pIndex;
   }
 
   private void startRenderThread(List<RenderJobInfo> jobInfoLst) {
@@ -262,5 +363,9 @@ public class FlameBrowserController {
   }
 
   private final RenderCache renderCache = new RenderCache();
+
+  public void refreshBtn_clicked() {
+    refreshFlamesTree();
+  }
 
 }
