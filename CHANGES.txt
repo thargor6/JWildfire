@@ -1,3 +1,15 @@
+V1.00 (11.08.2013):
+ - new "Flame browser"-module
+ - new option in the Preferences to store a flame automatically if a rendered image is stored (applies to both the Main Editor and the Interactive Renderer, defaults to OFF)
+ - new option in the Preferences to control the generation of HDR-images from within the Interactive Renderer (per default: OFF)
+ - fixed an issue regarding calculation of DoF
+ - new "grid3d_wf" variation inspired by the "dc_cube" variation invented by Xyrus02
+ - faster preview mode for the renderer, especially useful for the svg_wf variation. Any flames containing the "svg_wf" are displayed in the file preview substantly faster
+ - added 7 great artworks for the launcher, created by Stephen Nesbit, thanks Stephen!
+ - added support for saving/loading flames having the same variation multiple times inside of one transform
+ - keep the order of variations while loading/saving flames (rather than sorting them in alphabetical order)
+ - removed a bug regarding saving flame-titles with quotes
+
 V0.73 (22.07.2013):
  - changed the interactive renderer into a real progressive renderer, i.e. you have not to specify any quality any more 
    and the display always reflects the current state of quality
