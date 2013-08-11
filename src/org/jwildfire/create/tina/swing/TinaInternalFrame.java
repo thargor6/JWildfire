@@ -4356,7 +4356,9 @@ public class TinaInternalFrame extends JInternalFrame {
         getMouseTransformScaleTrianglesButton(), getScriptTree(), getScriptDescriptionTextArea(), getScriptTextArea(), getCompileScriptButton(), getScriptSaveBtn(), getScriptRevertBtn(), getRescanScriptsBtn(),
         getNewScriptBtn(), getNewScriptFromFlameBtn(), getDeleteScriptBtn(), getScriptRenameBtn(), getDuplicateScriptBtn(), getScriptRunBtn(),
         getMouseTransformEditGradientButton(), getGradientLibTree(), getGradientLibraryRescanBtn(), getGradientLibraryNewFolderBtn(), getGradientLibraryRenameFolderBtn(),
-        getGradientsList(), getBackgroundColorIndicatorBtn(), getRandomizeBtn(), getFlameBrowserTree(), getFlameBrowserImagesPanel());
+        getGradientsList(), getBackgroundColorIndicatorBtn(), getRandomizeBtn(), getFlameBrowserTree(), getFlameBrowserImagesPanel(),
+        getFlameBrowserRefreshBtn(), getFlameBrowserChangeFolderBtn(), getFlameBrowserToEditorBtn(), getFlameBrowserDeleteBtn(),
+        getFlameBrowserRenameBtn());
 
     tinaController = new TinaController(params);
 
@@ -9249,10 +9251,10 @@ public class TinaInternalFrame extends JInternalFrame {
   private JScrollPane flameBrowserTreeScrollPane;
   private JTree flameBrowserTree;
   private JButton flameBrowserRefreshBtn;
-  private JButton btnEditor;
-  private JButton btnDelete;
-  private JButton btnRename;
-  private JButton btnRefreshFolder;
+  private JButton flameBrowserToEditorBtn;
+  private JButton flameBrowserDeleteBtn;
+  private JButton flameBrowserRenameBtn;
+  private JButton flameBrowserChangeFolderBtn;
 
   /**
    * This method initializes renderBatchJobsScrollPane	
@@ -14352,7 +14354,7 @@ public class TinaInternalFrame extends JInternalFrame {
       flameBrowserRootTopPanel.setPreferredSize(new Dimension(10, 36));
       flameBrowserRootTopPanel.setLayout(new BorderLayout(0, 0));
       flameBrowserRootTopPanel.add(getFlameBrowserRefreshBtn(), BorderLayout.WEST);
-      flameBrowserRootTopPanel.add(getBtnRefreshFolder());
+      flameBrowserRootTopPanel.add(getFlameBrowserChangeFolderBtn());
     }
     return flameBrowserRootTopPanel;
   }
@@ -14383,9 +14385,9 @@ public class TinaInternalFrame extends JInternalFrame {
       flameBrowserDetailPanel = new JPanel();
       flameBrowserDetailPanel.setPreferredSize(new Dimension(120, 10));
       flameBrowserDetailPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
-      flameBrowserDetailPanel.add(getBtnEditor());
-      flameBrowserDetailPanel.add(getBtnDelete());
-      flameBrowserDetailPanel.add(getBtnRename());
+      flameBrowserDetailPanel.add(getFlameBrowserToEditorBtn());
+      flameBrowserDetailPanel.add(getFlameBrowserDeleteBtn());
+      flameBrowserDetailPanel.add(getFlameBrowserRenameBtn());
     }
     return flameBrowserDetailPanel;
   }
@@ -14412,7 +14414,7 @@ public class TinaInternalFrame extends JInternalFrame {
       flameBrowserTree.addTreeSelectionListener(new TreeSelectionListener() {
         public void valueChanged(TreeSelectionEvent e) {
           if (tinaController != null) {
-            tinaController.getFlameBrowserController().flamesTree_changed(e);
+            tinaController.getFlameBrowserController().flamesTree_changed();
           }
         }
       });
@@ -14438,55 +14440,75 @@ public class TinaInternalFrame extends JInternalFrame {
     return flameBrowserRefreshBtn;
   }
 
-  private JButton getBtnEditor() {
-    if (btnEditor == null) {
-      btnEditor = new JButton();
-      btnEditor.setToolTipText("Copy the current fractal into the Editor");
-      btnEditor.setText("To Editor");
-      btnEditor.setPreferredSize(new Dimension(105, 24));
-      btnEditor.setMinimumSize(new Dimension(100, 24));
-      btnEditor.setMaximumSize(new Dimension(32000, 24));
-      btnEditor.setFont(new Font("Dialog", Font.BOLD, 10));
+  private JButton getFlameBrowserToEditorBtn() {
+    if (flameBrowserToEditorBtn == null) {
+      flameBrowserToEditorBtn = new JButton();
+      flameBrowserToEditorBtn.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getFlameBrowserController().toEditorBtn_clicked();
+        }
+      });
+      flameBrowserToEditorBtn.setToolTipText("Copy the current fractal into the Editor");
+      flameBrowserToEditorBtn.setText("To Editor");
+      flameBrowserToEditorBtn.setPreferredSize(new Dimension(105, 24));
+      flameBrowserToEditorBtn.setMinimumSize(new Dimension(100, 24));
+      flameBrowserToEditorBtn.setMaximumSize(new Dimension(32000, 24));
+      flameBrowserToEditorBtn.setFont(new Font("Dialog", Font.BOLD, 10));
     }
-    return btnEditor;
+    return flameBrowserToEditorBtn;
   }
 
-  private JButton getBtnDelete() {
-    if (btnDelete == null) {
-      btnDelete = new JButton();
-      btnDelete.setToolTipText("Delete the currently selected flame");
-      btnDelete.setText("Delete");
-      btnDelete.setPreferredSize(new Dimension(105, 24));
-      btnDelete.setMinimumSize(new Dimension(100, 24));
-      btnDelete.setMaximumSize(new Dimension(32000, 24));
-      btnDelete.setFont(new Font("Dialog", Font.BOLD, 10));
+  private JButton getFlameBrowserDeleteBtn() {
+    if (flameBrowserDeleteBtn == null) {
+      flameBrowserDeleteBtn = new JButton();
+      flameBrowserDeleteBtn.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getFlameBrowserController().deleteBtn_clicked();
+        }
+      });
+      flameBrowserDeleteBtn.setToolTipText("Delete the currently selected flame");
+      flameBrowserDeleteBtn.setText("Delete");
+      flameBrowserDeleteBtn.setPreferredSize(new Dimension(105, 24));
+      flameBrowserDeleteBtn.setMinimumSize(new Dimension(100, 24));
+      flameBrowserDeleteBtn.setMaximumSize(new Dimension(32000, 24));
+      flameBrowserDeleteBtn.setFont(new Font("Dialog", Font.BOLD, 10));
     }
-    return btnDelete;
+    return flameBrowserDeleteBtn;
   }
 
-  private JButton getBtnRename() {
-    if (btnRename == null) {
-      btnRename = new JButton();
-      btnRename.setToolTipText("Rename the currently selected flame");
-      btnRename.setText("Rename");
-      btnRename.setPreferredSize(new Dimension(105, 24));
-      btnRename.setMinimumSize(new Dimension(100, 24));
-      btnRename.setMaximumSize(new Dimension(32000, 24));
-      btnRename.setFont(new Font("Dialog", Font.BOLD, 10));
+  private JButton getFlameBrowserRenameBtn() {
+    if (flameBrowserRenameBtn == null) {
+      flameBrowserRenameBtn = new JButton();
+      flameBrowserRenameBtn.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getFlameBrowserController().renameBtn_clicked();
+        }
+      });
+      flameBrowserRenameBtn.setToolTipText("Rename the currently selected flame");
+      flameBrowserRenameBtn.setText("Rename");
+      flameBrowserRenameBtn.setPreferredSize(new Dimension(105, 24));
+      flameBrowserRenameBtn.setMinimumSize(new Dimension(100, 24));
+      flameBrowserRenameBtn.setMaximumSize(new Dimension(32000, 24));
+      flameBrowserRenameBtn.setFont(new Font("Dialog", Font.BOLD, 10));
     }
-    return btnRename;
+    return flameBrowserRenameBtn;
   }
 
-  private JButton getBtnRefreshFolder() {
-    if (btnRefreshFolder == null) {
-      btnRefreshFolder = new JButton();
-      btnRefreshFolder.setText("Change folder...");
-      btnRefreshFolder.setPreferredSize(new Dimension(125, 46));
-      btnRefreshFolder.setMnemonic(KeyEvent.VK_F);
-      btnRefreshFolder.setMinimumSize(new Dimension(100, 46));
-      btnRefreshFolder.setMaximumSize(new Dimension(32000, 46));
-      btnRefreshFolder.setFont(new Font("Dialog", Font.BOLD, 10));
+  private JButton getFlameBrowserChangeFolderBtn() {
+    if (flameBrowserChangeFolderBtn == null) {
+      flameBrowserChangeFolderBtn = new JButton();
+      flameBrowserChangeFolderBtn.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getFlameBrowserController().changeFolderBtn_clicked();
+        }
+      });
+      flameBrowserChangeFolderBtn.setText("Change folder...");
+      flameBrowserChangeFolderBtn.setPreferredSize(new Dimension(125, 46));
+      flameBrowserChangeFolderBtn.setMnemonic(KeyEvent.VK_F);
+      flameBrowserChangeFolderBtn.setMinimumSize(new Dimension(100, 46));
+      flameBrowserChangeFolderBtn.setMaximumSize(new Dimension(32000, 46));
+      flameBrowserChangeFolderBtn.setFont(new Font("Dialog", Font.BOLD, 10));
     }
-    return btnRefreshFolder;
+    return flameBrowserChangeFolderBtn;
   }
 } //  @jve:decl-index=0:visual-constraint="10,10"

@@ -66,8 +66,7 @@ public class FlameFlatNodes implements Serializable {
           }
           int pos = lcFilename.lastIndexOf("." + Tools.FILEEXT_FLAME.toLowerCase());
           if (pos > 0 && pos == filename.length() - Tools.FILEEXT_FLAME.length() - 1) {
-            String caption = f.getName().substring(0, f.getName().length() - Tools.FILEEXT_FLAME.length() - 1);
-            FlameFlatNode node = new FlameFlatNode(f.getAbsolutePath(), caption, new Date(f.lastModified()));
+            FlameFlatNode node = new FlameFlatNode(f.getAbsolutePath(), new Date(f.lastModified()));
             nodes.add(node);
           }
         }

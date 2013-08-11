@@ -237,7 +237,8 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
         parameterObject.saveScriptBtn, parameterObject.revertScriptBtn, parameterObject.rescanScriptsBtn, parameterObject.newScriptBtn, parameterObject.newScriptFromFlameBtn, parameterObject.deleteScriptBtn,
         parameterObject.scriptRenameBtn, parameterObject.scriptDuplicateBtn, parameterObject.scriptRunBtn);
 
-    flameBrowserController = new FlameBrowserController(this, parameterObject.pErrorHandler, prefs, parameterObject.pCenterPanel, parameterObject.flameBrowserTree, parameterObject.flameBrowersImagesPnl);
+    flameBrowserController = new FlameBrowserController(this, parameterObject.pErrorHandler, prefs, parameterObject.pCenterPanel, parameterObject.flameBrowserTree, parameterObject.flameBrowersImagesPnl,
+        parameterObject.flameBrowserRefreshBtn, parameterObject.flameBrowserChangeFolderBtn, parameterObject.flameBrowserToEditorBtn, parameterObject.flameBrowserDeleteBtn, parameterObject.flameBrowserRenameBtn);
 
     gradientController = new GradientController(this, parameterObject.pErrorHandler, prefs, parameterObject.pCenterPanel, parameterObject.gradientLibTree, parameterObject.pGradientLibraryPanel,
         parameterObject.gradientLibraryRescanBtn, parameterObject.gradientLibraryNewFolderBtn, parameterObject.gradientLibraryRenameFolderBtn,

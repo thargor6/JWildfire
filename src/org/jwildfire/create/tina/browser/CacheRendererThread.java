@@ -66,18 +66,21 @@ public class CacheRendererThread implements Runnable {
 
   private SimpleImage renderFlame(FlameFlatNode pNode, int pImgWidth, int pImgHeight) {
     List<Flame> flames = new Flam3Reader(prefs).readFlames(pNode.getFilename());
-    Flame renderFlame = flames.get(0);
-    RenderInfo info = new RenderInfo(pImgWidth, pImgHeight);
-    double wScl = (double) info.getImageWidth() / (double) renderFlame.getWidth();
-    double hScl = (double) info.getImageHeight() / (double) renderFlame.getHeight();
-    renderFlame.setPixelsPerUnit((wScl + hScl) * 0.5 * renderFlame.getPixelsPerUnit());
-    renderFlame.setWidth(pImgWidth);
-    renderFlame.setHeight(pImgHeight);
-    renderFlame.setSampleDensity(prefs.getTinaRenderPreviewQuality() / 3.0);
-    renderFlame.setDeFilterEnabled(false);
-    FlameRenderer renderer = new FlameRenderer(renderFlame, prefs, false, true);
-    RenderedFlame renderRes = renderer.renderFlame(info);
-    return renderRes.getImage();
+    if (flames.size() > 0) {
+      Flame renderFlame = flames.get(0);
+      RenderInfo info = new RenderInfo(pImgWidth, pImgHeight);
+      double wScl = (double) info.getImageWidth() / (double) renderFlame.getWidth();
+      double hScl = (double) info.getImageHeight() / (double) renderFlame.getHeight();
+      renderFlame.setPixelsPerUnit((wScl + hScl) * 0.5 * renderFlame.getPixelsPerUnit());
+      renderFlame.setWidth(pImgWidth);
+      renderFlame.setHeight(pImgHeight);
+      renderFlame.setSampleDensity(prefs.getTinaRenderPreviewQuality() / 3.0);
+      renderFlame.setDeFilterEnabled(false);
+      FlameRenderer renderer = new FlameRenderer(renderFlame, prefs, false, true);
+      RenderedFlame renderRes = renderer.renderFlame(info);
+      return renderRes.getImage();
+    }
+    return null;
   }
 
 }

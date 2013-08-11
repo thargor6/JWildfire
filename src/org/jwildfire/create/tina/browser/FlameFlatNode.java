@@ -1,17 +1,19 @@
 package org.jwildfire.create.tina.browser;
 
+import java.io.File;
 import java.io.Serializable;
 import java.util.Date;
 
+import org.jwildfire.base.Tools;
+
 public class FlameFlatNode implements Serializable {
   private static final long serialVersionUID = 1L;
-  private final String filename;
-  private final String caption;
+  private String filename;
+  private String caption;
   private final Date fileage;
 
-  public FlameFlatNode(String pFilename, String pCaption, Date pFileage) {
-    filename = pFilename;
-    caption = pCaption;
+  public FlameFlatNode(String pFilename, Date pFileage) {
+    setFilename(pFilename);
     fileage = pFileage;
   }
 
@@ -25,5 +27,11 @@ public class FlameFlatNode implements Serializable {
 
   public Date getFileage() {
     return fileage;
+  }
+
+  public void setFilename(String pFilename) {
+    filename = pFilename;
+    File f = new File(pFilename);
+    caption = f.getName().substring(0, f.getName().length() - Tools.FILEEXT_FLAME.length() - 1);
   }
 }
