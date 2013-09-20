@@ -79,6 +79,7 @@ public final class FlameRenderFlatThread extends FlameRenderThread {
 
   @Override
   protected void iterate() {
+
     List<IterationObserver> observers = renderer.getIterationObservers();
     for (iter = startIter; !forceAbort && (samples < 0 || iter < samples); iter++) {
       if (iter % 10000 == 0) {

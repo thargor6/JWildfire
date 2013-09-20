@@ -344,6 +344,8 @@ public class VariationFuncList {
     registerVariationFunc(StarBlurFunc.class);
     registerVariationFunc(PostDepthFunc.class);
     registerVariationFunc(Grid3DWFFunc.class);
+    registerVariationFunc(DisplacementMapWFFunc.class);
+    registerVariationFunc(PostDisplacementMapWFFunc.class);
   }
 
   private static void registerVariationFunc(

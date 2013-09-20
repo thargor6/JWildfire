@@ -42,7 +42,7 @@ import org.jwildfire.swing.ErrorHandler;
 
 public class GradientController {
   private final static int GRADIENT_THUMB_WIDTH = 200;
-  private final static int GRADIENT_THUMB_HEIGHT = 20;
+  private final static int GRADIENT_THUMB_HEIGHT = 18;
 
   private JScrollPane gradientLibraryScrollPane;
 

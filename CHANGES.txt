@@ -1,3 +1,8 @@
+V1.01 (20.09.2013):
+ - changed the layout and the position of the gradient panel so that it can be reached and used easier
+ - new experimental variations "displacemap_wf" and "post_displacemap_wf" to apply image-based displacement maps to transforms 
+ - some minor bugs fixed
+ 
 V1.00 (11.08.2013):
  - new "Flame browser"-module
  - new option in the Preferences to store a flame automatically if a rendered image is stored (applies to both the Main Editor and the Interactive Renderer, defaults to OFF)

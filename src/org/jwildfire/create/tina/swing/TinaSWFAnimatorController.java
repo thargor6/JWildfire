@@ -70,7 +70,7 @@ import org.jwildfire.swing.ImagePanel;
 import org.jwildfire.swing.SWFFileChooser;
 
 public class TinaSWFAnimatorController implements SWFAnimationRenderThreadController, FlameHolder {
-  public static final int PAGE_INDEX = 3;
+  public static final int PAGE_INDEX = 4;
   private SWFAnimationRenderThread renderThread = null;
   private FlameMovie currMovie;
   private final TinaController parentCtrl;

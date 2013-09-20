@@ -278,11 +278,22 @@ public final class XForm implements Assignable<XForm>, Serializable {
     pVarT.blueColor = pAffineT.blueColor;
 
     for (Variation variation : variations) {
-      variation.transform(pContext, this, pAffineT, pVarT);
       if (variation.getFunc().getPriority() < 0) {
+        variation.transform(pContext, this, pAffineT, pVarT);
         pAffineT.invalidate();
       }
     }
+    for (Variation variation : variations) {
+      if (variation.getFunc().getPriority() == 0) {
+        variation.transform(pContext, this, pAffineT, pVarT);
+      }
+    }
+    for (Variation variation : variations) {
+      if (variation.getFunc().getPriority() > 0) {
+        variation.transform(pContext, this, pAffineT, pVarT);
+      }
+    }
+
     pDstPoint.color = pVarT.color;
     pDstPoint.rgbColor = pVarT.rgbColor;
     pDstPoint.redColor = pVarT.redColor;
@@ -320,9 +331,19 @@ public final class XForm implements Assignable<XForm>, Serializable {
         pVarT[i].clear();
         pVarT[i].color = pAffineT[i].color;
         for (Variation variation : variations) {
-          variation.transform(pContext, this, pAffineT[i], pVarT[i]);
           if (variation.getFunc().getPriority() < 0) {
+            variation.transform(pContext, this, pAffineT[i], pVarT[i]);
             pAffineT[i].invalidate();
+          }
+        }
+        for (Variation variation : variations) {
+          if (variation.getFunc().getPriority() == 0) {
+            variation.transform(pContext, this, pAffineT[i], pVarT[i]);
+          }
+        }
+        for (Variation variation : variations) {
+          if (variation.getFunc().getPriority() > 0) {
+            variation.transform(pContext, this, pAffineT[i], pVarT[i]);
           }
         }
         pDstPoint[i].color = pVarT[i].color;
