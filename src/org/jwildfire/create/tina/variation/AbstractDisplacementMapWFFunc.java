@@ -137,6 +137,7 @@ public abstract class AbstractDisplacementMapWFFunc extends VariationFunc {
           pVarTP.y *= scl;
         }
       }
+        break;
       case MODE_SCISSOR: {
         double amountX = (r - 0.5) * pAmount;
         double amountY = (g - 0.5) * pAmount;
