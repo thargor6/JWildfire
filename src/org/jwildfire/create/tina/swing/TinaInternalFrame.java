@@ -3324,12 +3324,12 @@ public class TinaInternalFrame extends JInternalFrame {
         }
       });
       affinePreserveZButton.setToolTipText("Preserve the Z-coordinate (applies only if 2D- and 3D-variations are mixed)");
-      affinePreserveZButton.setText("Preserve Z-coordinate");
+      affinePreserveZButton.setText("Preserve Z");
       affinePreserveZButton.setSize(new Dimension(138, 24));
       affinePreserveZButton.setPreferredSize(new Dimension(136, 24));
       affinePreserveZButton.setLocation(new Point(4, 181));
       affinePreserveZButton.setFont(new Font("Dialog", Font.BOLD, 10));
-      affinePreserveZButton.setBounds(4, 204, 138, 24);
+      affinePreserveZButton.setBounds(228, 163, 86, 24);
       tinaAffineTransformationPanel.add(affinePreserveZButton);
     }
     return tinaAffineTransformationPanel;
@@ -4824,7 +4824,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JSplitPane getTransformationsSplitPane() {
     if (transformationsSplitPane == null) {
       transformationsSplitPane = new JSplitPane();
-      transformationsSplitPane.setDividerLocation(152);
+      transformationsSplitPane.setDividerLocation(142);
       transformationsSplitPane.setFont(new Font("Dialog", Font.PLAIN, 10));
       transformationsSplitPane.setTopComponent(getTransformationsNorthPanel());
       transformationsSplitPane.setBottomComponent(getTinaTransformationsTabbedPane());
@@ -6377,8 +6377,8 @@ public class TinaInternalFrame extends JInternalFrame {
     if (affineEditPostTransformButton == null) {
       affineEditPostTransformButton = new JToggleButton();
       affineEditPostTransformButton.setPreferredSize(new Dimension(136, 24));
-      affineEditPostTransformButton.setSize(new Dimension(138, 24));
-      affineEditPostTransformButton.setText("Edit Post  Transform");
+      affineEditPostTransformButton.setSize(new Dimension(116, 24));
+      affineEditPostTransformButton.setText("Post  Transform");
       affineEditPostTransformButton.setFont(new Font("Dialog", Font.BOLD, 10));
       affineEditPostTransformButton.setLocation(new Point(6, 163));
       affineEditPostTransformButton.addActionListener(new java.awt.event.ActionListener() {
@@ -6485,8 +6485,8 @@ public class TinaInternalFrame extends JInternalFrame {
       affineResetTransformButton = new JButton();
       affineResetTransformButton.setPreferredSize(new Dimension(136, 24));
       affineResetTransformButton.setText("Reset");
-      affineResetTransformButton.setLocation(new Point(148, 163));
-      affineResetTransformButton.setSize(new Dimension(138, 24));
+      affineResetTransformButton.setLocation(new Point(131, 163));
+      affineResetTransformButton.setSize(new Dimension(86, 24));
       affineResetTransformButton.setToolTipText("Reset triangle to defaults");
       affineResetTransformButton.setFont(new Font("Dialog", Font.BOLD, 10));
       affineResetTransformButton.addActionListener(new java.awt.event.ActionListener() {

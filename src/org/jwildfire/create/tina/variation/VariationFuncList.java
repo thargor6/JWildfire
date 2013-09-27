@@ -346,6 +346,7 @@ public class VariationFuncList {
     registerVariationFunc(Grid3DWFFunc.class);
     registerVariationFunc(DisplacementMapWFFunc.class);
     registerVariationFunc(PostDisplacementMapWFFunc.class);
+    registerVariationFunc(PostRBlurFunc.class);
   }
 
   private static void registerVariationFunc(
