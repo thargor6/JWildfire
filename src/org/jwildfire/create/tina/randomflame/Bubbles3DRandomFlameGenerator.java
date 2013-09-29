@@ -41,21 +41,28 @@ public class Bubbles3DRandomFlameGenerator extends RandomFlameGenerator {
       flame.getXForms().add(xForm);
       xForm.setWeight(1.0 + Math.random() * 100.0);
       if (Math.random() < 0.75) {
-        xForm.addVariation(0.25 + Math.random() * 0.5, VariationFuncList.getVariationFuncInstance("bubble", true));
+        xForm.addVariation(0.05 + Math.random() * 0.5, VariationFuncList.getVariationFuncInstance("bubble", true));
       }
       else {
         VariationFunc varFunc = VariationFuncList.getVariationFuncInstance("bubble2", true);
         varFunc.setParameter("z", -0.5 - Math.random() * 2.0);
         xForm.addVariation(0.25 + Math.random() * 0.5, varFunc);
       }
-      xForm.addVariation(1.5 + 1.5 * Math.random(), VariationFuncList.getVariationFuncInstance("pre_blur", true));
+      xForm.addVariation(0.5 + 1.5 * Math.random(), VariationFuncList.getVariationFuncInstance("pre_blur", true));
       final String[] workingFncList = { "fan2", "blade", "blade3D", "blob", "blob3D", "bwraps7", "cell", "cannabiscurve_wf",
           "cloverleaf_wf", "cos", "cot", "coth", "cross", "csch", "diamond", "disc", "edisc", "epispiral_wf", "fan", "fisheye",
           "eyefish", "flux", "heart", "julia", "julian", "juliascope", "log", "parabola", "power", "epispiral",
           "pre_subflame_wf", "rectangles", "rose_wf", "sech", "separation", "split", "truchet", "wedge", "zcone" };
       final String[] fncList = Math.random() < 0.5 ? workingFncList : ExperimentalSimpleRandomFlameGenerator.FNCLST_EXPERIMENTAL;
 
-      VariationFunc varFunc = VariationFuncList.getVariationFuncInstance(fncList[(int) (fncList.length * Math.random())], true);
+      VariationFunc varFunc;
+      if (Math.random() < 0.5) {
+        varFunc = VariationFuncList.getVariationFuncInstance(VariationFuncList.getRandomVariationname());
+      }
+      else {
+        varFunc = VariationFuncList.getVariationFuncInstance(fncList[(int) (fncList.length * Math.random())], true);
+      }
+
       xForm.addVariation(-0.02 + 0.04 * Math.random(), varFunc);
 
       double shape = Math.random();

@@ -29,6 +29,7 @@ public class BubblesRandomFlameGenerator extends RandomFlameGenerator {
     Flame flame = new Flame();
     flame.setCentreX(0.0);
     flame.setCentreY(0.0);
+    flame.setCamZoom(0.5);
     flame.setPixelsPerUnit(200);
     flame.getFinalXForms().clear();
     flame.getXForms().clear();
@@ -37,7 +38,7 @@ public class BubblesRandomFlameGenerator extends RandomFlameGenerator {
     {
       XForm xForm = new XForm();
       flame.getXForms().add(xForm);
-      xForm.setWeight(12.0 + Math.random() * 40);
+      xForm.setWeight(12.0 + Math.random() * 80.0);
       xForm.addVariation(2 + Math.random() * 4, VariationFuncList.getVariationFuncInstance("spherical", true));
 
       String fName;
@@ -51,7 +52,10 @@ public class BubblesRandomFlameGenerator extends RandomFlameGenerator {
       xForm.setColorSymmetry(0.991 + Math.random() * 0.08);
       XFormTransformService.scale(xForm, 0.5 - Math.random() * 0.5, true, true, false);
       XFormTransformService.rotate(xForm, 180 - Math.random() * 360.0, false);
-      XFormTransformService.localTranslate(xForm, 2 - 4.0 * Math.random(), 2 - 4.0 * Math.random(), false);
+      XFormTransformService.localTranslate(xForm, 3.0 - 6.0 * Math.random(), 3.0 - 6.0 * Math.random(), false);
+      if (Math.random() < 0.33) {
+        XFormTransformService.localTranslate(xForm, 0.75 - 1.5 * Math.random(), 0.75 - 1.5 * Math.random(), true);
+      }
     }
     // 2nd xForm
     {
@@ -91,16 +95,18 @@ public class BubblesRandomFlameGenerator extends RandomFlameGenerator {
       xForm.addVariation(0.5, VariationFuncList.getVariationFuncInstance(fName, true));
       xForm.setColorSymmetry(-0.5);
       XFormTransformService.rotate(xForm, 30.0 - Math.random() * 60.0, false);
-      //      XFormTransformService.localTranslate(xForm, 0.250 - 0.50 * Math.random(), 0.25 - 0.50 * Math.random(), false);
+      if (Math.random() < 0.5) {
+        XFormTransformService.scale(xForm, 0.5 + Math.random() * 1.5, true, true, false);
+      }
     }
-    // 3rd xForm
+    // 4th xForm
     if (Math.random() > 0.5) {
       XForm xForm = new XForm();
       flame.getXForms().add(xForm);
       xForm.setWeight(0.5 + Math.random() * 1.5);
       String fName;
       if (Math.random() > 0.8) {
-        fName = ExperimentalSimpleRandomFlameGenerator.FNCLST_EXPERIMENTAL[(int) (Math.random() * fncCount)];
+        fName = Math.random() > 0.75 ? VariationFuncList.getRandomVariationname() : ExperimentalSimpleRandomFlameGenerator.FNCLST_EXPERIMENTAL[(int) (Math.random() * fncCount)];
       }
       else {
         fName = Math.random() > 0.5 ? "linear3D" : "gaussian_blur";
@@ -108,7 +114,9 @@ public class BubblesRandomFlameGenerator extends RandomFlameGenerator {
       xForm.addVariation(0.5, VariationFuncList.getVariationFuncInstance(fName, true));
       xForm.setColorSymmetry(-0.5);
       XFormTransformService.rotate(xForm, 30.0 - Math.random() * 60.0, false);
-      //      XFormTransformService.localTranslate(xForm, 0.250 - 0.50 * Math.random(), 0.25 - 0.50 * Math.random(), false);
+      if (Math.random() < 0.5) {
+        XFormTransformService.scale(xForm, 0.15 + Math.random() * 1.25, true, true, false);
+      }
     }
     flame.distributeColors();
     return flame;
