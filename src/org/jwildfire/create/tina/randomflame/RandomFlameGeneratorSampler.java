@@ -26,6 +26,7 @@ import org.jwildfire.create.tina.palette.RandomRGBPaletteGenerator;
 import org.jwildfire.create.tina.render.FlameRenderer;
 import org.jwildfire.create.tina.render.RenderInfo;
 import org.jwildfire.create.tina.render.RenderedFlame;
+import org.jwildfire.create.tina.swing.RandomBatchQuality;
 import org.jwildfire.image.Pixel;
 import org.jwildfire.image.SimpleImage;
 import org.jwildfire.transform.PixelizeTransformer;
@@ -36,15 +37,15 @@ public class RandomFlameGeneratorSampler {
   private final Prefs prefs;
   private final int paletteSize;
   private RandomFlameGenerator randGen;
-  final int MAX_IMG_SAMPLES = 10;
-  final double MIN_COVERAGE = 0.33;
+  private final RandomBatchQuality quality;
 
-  public RandomFlameGeneratorSampler(int pImageWidth, int pImageHeight, Prefs pPrefs, RandomFlameGenerator pRandGen, int pPaletteSize) {
+  public RandomFlameGeneratorSampler(int pImageWidth, int pImageHeight, Prefs pPrefs, RandomFlameGenerator pRandGen, int pPaletteSize, RandomBatchQuality pQuality) {
     imageWidth = pImageWidth;
     imageHeight = pImageHeight;
     prefs = pPrefs;
     randGen = pRandGen;
     paletteSize = pPaletteSize;
+    quality = pQuality;
   }
 
   public static double calculateCoverage(SimpleImage pImg, int bgRed, int bgGreen, int bgBlue) {
@@ -81,7 +82,7 @@ public class RandomFlameGeneratorSampler {
     int bgGreen = prefs.getTinaRandomBatchBGColorGreen();
     int bgBlue = prefs.getTinaRandomBatchBGColorBlue();
     double bestCoverage = 0.0;
-    for (int j = 0; j < MAX_IMG_SAMPLES; j++) {
+    for (int j = 0; j < quality.getMaxSamples(); j++) {
       // create flame
       Flame flame = randGen.createFlame(prefs);
       flame.setWidth(imageWidth);
@@ -118,13 +119,13 @@ public class RandomFlameGeneratorSampler {
           xForm.setAntialiasAmount(prefs.getTinaDefaultAntialiasingAmount());
         }
       }
-      if (j == MAX_IMG_SAMPLES - 1) {
+      if (j == quality.getMaxSamples() - 1) {
         renderedFlame = new FlameRenderer(bestFlame, prefs, false, true).renderFlame(info);
         return new RandomFlameGeneratorSample(bestFlame, renderedFlame.getImage());
       }
       else {
         double fCoverage = calculateCoverage(renderedFlame.getImage(), bgRed, bgGreen, bgBlue);
-        if (fCoverage >= MIN_COVERAGE) {
+        if (fCoverage >= quality.getCoverage()) {
           return new RandomFlameGeneratorSample(flame, renderedFlame.getImage());
         }
         else {
