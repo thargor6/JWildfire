@@ -26,12 +26,12 @@ public enum RandomBatchQuality {
   HIGH {
     @Override
     public double getCoverage() {
-      return 0.8;
+      return 0.72;
     }
 
     @Override
     public int getMaxSamples() {
-      return 150;
+      return 250;
     }
   };
 

@@ -39,7 +39,7 @@ public class Bubbles3DRandomFlameGenerator extends RandomFlameGenerator {
     {
       XForm xForm = new XForm();
       flame.getXForms().add(xForm);
-      xForm.setWeight(1.0);
+      xForm.setWeight(1.0 + Math.random() * 100.0);
       if (Math.random() < 0.75) {
         xForm.addVariation(0.25 + Math.random() * 0.5, VariationFuncList.getVariationFuncInstance("bubble", true));
       }
@@ -56,16 +56,28 @@ public class Bubbles3DRandomFlameGenerator extends RandomFlameGenerator {
       final String[] fncList = Math.random() < 0.5 ? workingFncList : ExperimentalSimpleRandomFlameGenerator.FNCLST_EXPERIMENTAL;
 
       VariationFunc varFunc = VariationFuncList.getVariationFuncInstance(fncList[(int) (fncList.length * Math.random())], true);
-      xForm.addVariation(-0.2 + 0.4 * Math.random(), varFunc);
+      xForm.addVariation(-0.02 + 0.04 * Math.random(), varFunc);
 
       double shape = Math.random();
-      if (shape < 0.25) {
-        xForm.addVariation(0.005 + Math.random() * 0.075, VariationFuncList.getVariationFuncInstance("hexes", true));
+      if (shape < 0.125) {
+        xForm.addVariation(0.001 + Math.random() * 0.01, VariationFuncList.getVariationFuncInstance("hexes", true));
+      }
+      else if (shape < 0.25) {
+        xForm.addVariation(0.001 + Math.random() * 0.01, VariationFuncList.getVariationFuncInstance("oscilloscope", true));
       }
       else if (shape < 0.5) {
-        xForm.addVariation(0.005 + Math.random() * 0.075, VariationFuncList.getVariationFuncInstance("oscilloscope", true));
+        xForm.addVariation(0.001 + Math.random() * 0.01, VariationFuncList.getVariationFuncInstance(VariationFuncList.getRandomVariationname(), true));
       }
 
+      if (Math.random() > 0.33) {
+        XFormTransformService.globalTranslate(xForm, -1.0 + 2.0 * Math.random(), -1.0 + 2.0 * Math.random(), true);
+      }
+      if (Math.random() > 0.33) {
+        XFormTransformService.rotate(xForm, -32.0 + Math.random() * 72.0, false);
+      }
+      if (Math.random() > 0.33) {
+        XFormTransformService.scale(xForm, 0.8 + Math.random() * 0.4, true, false);
+      }
       xForm.setColor(0.0);
       xForm.setColorSymmetry(0.0);
     }
@@ -73,31 +85,44 @@ public class Bubbles3DRandomFlameGenerator extends RandomFlameGenerator {
     {
       XForm xForm = new XForm();
       flame.getXForms().add(xForm);
-      xForm.setWeight(1.0);
+      xForm.setWeight(1.0 + Math.random() * 50.0);
       int fncCount = ExperimentalSimpleRandomFlameGenerator.FNCLST_EXPERIMENTAL.length;
       String fncName = Math.random() > 0.5 ? ExperimentalSimpleRandomFlameGenerator.FNCLST_EXPERIMENTAL[(int) (fncCount * Math.random())] : "eyefish";
       xForm.addVariation(-1.5 + 2 * Math.random() * 3.0, VariationFuncList.getVariationFuncInstance(fncName, true));
       xForm.addVariation(1.0 - 3.5 * Math.random(), VariationFuncList.getVariationFuncInstance("hemisphere", true));
       xForm.setColor(0.0);
       xForm.setColorSymmetry(0.0);
+      if (Math.random() > 0.33) {
+        XFormTransformService.globalTranslate(xForm, -3.0 + 62.0 * Math.random(), -3.0 + 6.0 * Math.random(), false);
+      }
+      if (Math.random() > 0.33) {
+        XFormTransformService.rotate(xForm, -32.0 + Math.random() * 72.0, false);
+      }
+      if (Math.random() > 0.33) {
+        XFormTransformService.scale(xForm, 0.8 + Math.random() * 0.4, true, false);
+      }
     }
     // 3rd xForm    
     {
       XForm xForm = new XForm();
       flame.getXForms().add(xForm);
-      xForm.setWeight(1.0);
+      xForm.setWeight(1.0 + Math.random() * 100);
       VariationFunc varFunc = VariationFuncList.getVariationFuncInstance(Math.random() > 0.5 ? "julia3Dz" : "julia3D", true);
-      int idx = Math.random() > 0.5 ? 2 : -7;
+      int idx = Math.random() > 0.5 ? 2 : (int) (-20 + Math.random() * 40);
+      if (idx == 0 || idx == 1) {
+        idx = 2;
+      }
       varFunc.setParameter("power", (double) idx);
       xForm.addVariation(1.0, varFunc);
       xForm.setColor(0.0);
       xForm.setColorSymmetry(0.0);
-      XFormTransformService.globalTranslate(xForm, -1.0 + 2.0 * Math.random(), -1.0 + 2.0 * Math.random(), false);
+      XFormTransformService.globalTranslate(xForm, -1.0 + 2.0 * Math.random(), -3.0 + 6.0 * Math.random(), false);
       XFormTransformService.globalTranslate(xForm, -0.1 + 0.2 * Math.random(), -0.1 + 0.2 * Math.random(), true);
-      XFormTransformService.rotate(xForm, Math.random() * 360.0, false);
+      XFormTransformService.rotate(xForm, -20.0 + Math.random() * 40.0, false);
       XFormTransformService.scale(xForm, 0.8 + Math.random() * 0.4, true, true);
     }
 
+    flame.setPreserveZ(Math.random() > 0.5);
     flame.randomizeColors();
     return flame;
   }
