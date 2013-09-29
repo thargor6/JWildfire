@@ -655,6 +655,22 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaNorthPanel.setPreferredSize(new Dimension(0, 66));
       tinaNorthPanel.setLayout(new BoxLayout(tinaNorthPanel, BoxLayout.X_AXIS));
       tinaNorthPanel.add(getRandomBatchButton());
+
+      JButton randomBatchHighQualityButton = new JButton();
+      randomBatchHighQualityButton.setToolTipText("Create a random bach in higher quality (may be much slower)");
+      randomBatchHighQualityButton.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.createRandomBatch(-1, (String) randomStyleCmb.getSelectedItem(), RandomBatchQuality.HIGH);
+          tinaController.importFromRandomBatch(0);
+        }
+      });
+      randomBatchHighQualityButton.setText("H");
+      randomBatchHighQualityButton.setPreferredSize(new Dimension(20, 46));
+      randomBatchHighQualityButton.setMnemonic(KeyEvent.VK_D);
+      randomBatchHighQualityButton.setMinimumSize(new Dimension(100, 46));
+      randomBatchHighQualityButton.setMaximumSize(new Dimension(32000, 46));
+      randomBatchHighQualityButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      tinaNorthPanel.add(randomBatchHighQualityButton);
       tinaNorthPanel.add(getPanel_7());
       tinaNorthPanel.add(getPanel_17());
       tinaNorthPanel.add(getNewFlameButton());
@@ -4971,15 +4987,16 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton getRandomBatchButton() {
     if (randomBatchButton == null) {
       randomBatchButton = new JButton();
+      randomBatchButton.setToolTipText("Create a batch of random flames");
       randomBatchButton.setMaximumSize(new Dimension(32000, 46));
       randomBatchButton.setMinimumSize(new Dimension(100, 46));
       randomBatchButton.setFont(new Font("Dialog", Font.BOLD, 10));
       randomBatchButton.setMnemonic(KeyEvent.VK_D);
       randomBatchButton.setText("Random flames");
-      randomBatchButton.setPreferredSize(new Dimension(125, 46));
+      randomBatchButton.setPreferredSize(new Dimension(105, 46));
       randomBatchButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.createRandomBatch(-1, (String) randomStyleCmb.getSelectedItem());
+          tinaController.createRandomBatch(-1, (String) randomStyleCmb.getSelectedItem(), RandomBatchQuality.NORMAL);
           tinaController.importFromRandomBatch(0);
         }
       });

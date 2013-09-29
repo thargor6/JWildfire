@@ -163,7 +163,7 @@ public class TinaInteractiveRendererController implements IterationObserver {
 
     RandomFlameGenerator randGen = RandomFlameGeneratorList.getRandomFlameGeneratorInstance((String) randomStyleCmb.getSelectedItem(), true);
     int palettePoints = 3 + (int) (Math.random() * 68.0);
-    RandomFlameGeneratorSampler sampler = new RandomFlameGeneratorSampler(IMG_WIDTH, IMG_HEIGHT, prefs, randGen, palettePoints);
+    RandomFlameGeneratorSampler sampler = new RandomFlameGeneratorSampler(IMG_WIDTH, IMG_HEIGHT, prefs, randGen, palettePoints, RandomBatchQuality.HIGH);
     currFlame = sampler.createSample().getFlame();
   }
 

@@ -72,6 +72,7 @@ import org.jwildfire.create.tina.swing.FlameHolder;
 import org.jwildfire.create.tina.swing.FlamePanel;
 import org.jwildfire.create.tina.swing.JWFDanceFileChooser;
 import org.jwildfire.create.tina.swing.JWFNumberField;
+import org.jwildfire.create.tina.swing.RandomBatchQuality;
 import org.jwildfire.create.tina.swing.SoundFileChooser;
 import org.jwildfire.create.tina.swing.TinaController;
 import org.jwildfire.create.tina.variation.Linear3DFunc;
@@ -424,7 +425,7 @@ public class DancingFractalsController {
 
         RandomFlameGenerator randGen = RandomFlameGeneratorList.getRandomFlameGeneratorInstance((String) randomGenCmb.getSelectedItem(), true);
         int palettePoints = 3 + (int) (Math.random() * 68.0);
-        RandomFlameGeneratorSampler sampler = new RandomFlameGeneratorSampler(IMG_WIDTH, IMG_HEIGHT, prefs, randGen, palettePoints);
+        RandomFlameGeneratorSampler sampler = new RandomFlameGeneratorSampler(IMG_WIDTH, IMG_HEIGHT, prefs, randGen, palettePoints, RandomBatchQuality.NORMAL);
         project.getFlames().add(validateDancingFlame(sampler.createSample().getFlame()));
       }
       refreshProjectFlames();

@@ -2850,7 +2850,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     data.randomBatchPanel.validate();
   }
 
-  public void createRandomBatch(int pCount, String pGeneratorname) {
+  public void createRandomBatch(int pCount, String pGeneratorname, RandomBatchQuality pQuality) {
     if (prefs.getTinaRandomBatchRefreshType() == RandomBatchRefreshType.CLEAR) {
       randomBatch.clear();
     }
@@ -2861,7 +2861,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     RandomFlameGenerator randGen = RandomFlameGeneratorList.getRandomFlameGeneratorInstance(pGeneratorname, true);
     //int palettePoints = Integer.parseInt(paletteRandomPointsREd.getText());
     int palettePoints = 2 + (int) (Math.random() * 17.0);
-    RandomFlameGeneratorSampler sampler = new RandomFlameGeneratorSampler(IMG_WIDTH / 2, IMG_HEIGHT / 2, prefs, randGen, palettePoints);
+    RandomFlameGeneratorSampler sampler = new RandomFlameGeneratorSampler(IMG_WIDTH / 2, IMG_HEIGHT / 2, prefs, randGen, palettePoints, pQuality);
     for (int i = 0; i < maxCount; i++) {
       RandomFlameGeneratorSample sample = sampler.createSample();
       FlameThumbnail thumbnail;

@@ -22,6 +22,7 @@ import org.jwildfire.create.tina.randomflame.AllRandomFlameGenerator;
 import org.jwildfire.create.tina.randomflame.RandomFlameGenerator;
 import org.jwildfire.create.tina.randomflame.RandomFlameGeneratorSample;
 import org.jwildfire.create.tina.randomflame.RandomFlameGeneratorSampler;
+import org.jwildfire.create.tina.swing.RandomBatchQuality;
 
 public class RandomFlameMutation implements Mutation {
 
@@ -31,7 +32,7 @@ public class RandomFlameMutation implements Mutation {
     int palettePoints = 3 + (int) (Math.random() * 68.0);
     int IMG_WIDTH = 80;
     int IMG_HEIGHT = 60;
-    RandomFlameGeneratorSampler sampler = new RandomFlameGeneratorSampler(IMG_WIDTH, IMG_HEIGHT, new Prefs(), randGen, palettePoints);
+    RandomFlameGeneratorSampler sampler = new RandomFlameGeneratorSampler(IMG_WIDTH, IMG_HEIGHT, new Prefs(), randGen, palettePoints, RandomBatchQuality.NORMAL);
     RandomFlameGeneratorSample sample = sampler.createSample();
     pFlame.assign(sample.getFlame());
   }

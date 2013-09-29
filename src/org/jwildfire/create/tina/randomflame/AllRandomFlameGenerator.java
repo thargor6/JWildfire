@@ -39,11 +39,13 @@ public class AllRandomFlameGenerator extends RandomFlameGenerator {
     allGenerators.add(new Spherical3DRandomFlameGenerator());
     allGenerators.add(new ExperimentalGnarlRandomFlameGenerator());
     allGenerators.add(new BubblesRandomFlameGenerator());
+    allGenerators.add(new DuckiesRandomFlameGenerator());
     allGenerators.add(new Spherical3DRandomFlameGenerator());
     allGenerators.add(new BrokatRandomFlameGenerator());
     allGenerators.add(new SubFlameRandomFlameGenerator());
     allGenerators.add(new Bubbles3DRandomFlameGenerator());
     allGenerators.add(new SphericalRandomFlameGenerator());
+    allGenerators.add(new DuckiesRandomFlameGenerator());
     allGenerators.add(new SimpleTilingRandomFlameGenerator());
     allGenerators.add(new MandelbrotRandomFlameGenerator());
     allGenerators.add(new SplitsRandomFlameGenerator());
@@ -56,6 +58,7 @@ public class AllRandomFlameGenerator extends RandomFlameGenerator {
     allGenerators.add(new Spherical3DRandomFlameGenerator());
     allGenerators.add(new SubFlameRandomFlameGenerator());
     allGenerators.add(new JulianDiscRandomFlameGenerator());
+    allGenerators.add(new DuckiesRandomFlameGenerator());
     allGenerators.add(new BrokatRandomFlameGenerator());
     allGenerators.add(new MandelbrotRandomFlameGenerator());
     allGenerators.add(new SimpleTilingRandomFlameGenerator());
@@ -73,6 +76,7 @@ public class AllRandomFlameGenerator extends RandomFlameGenerator {
     simpleGenerators.add(new BrokatRandomFlameGenerator());
     simpleGenerators.add(new GnarlRandomFlameGenerator());
     simpleGenerators.add(new BubblesRandomFlameGenerator());
+    simpleGenerators.add(new DuckiesRandomFlameGenerator());
     simpleGenerators.add(new Spherical3DRandomFlameGenerator());
     simpleGenerators.add(new SierpinskyRandomFlameGenerator());
     simpleGenerators.add(new Flowers3DRandomFlameGenerator());
