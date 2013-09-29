@@ -347,6 +347,7 @@ public class VariationFuncList {
     registerVariationFunc(DisplacementMapWFFunc.class);
     registerVariationFunc(PostDisplacementMapWFFunc.class);
     registerVariationFunc(PostRBlurFunc.class);
+    registerVariationFunc(ShredlinFunc.class);
   }
 
   private static void registerVariationFunc(
