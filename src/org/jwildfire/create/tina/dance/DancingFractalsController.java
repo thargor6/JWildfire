@@ -425,7 +425,8 @@ public class DancingFractalsController {
 
         RandomFlameGenerator randGen = RandomFlameGeneratorList.getRandomFlameGeneratorInstance((String) randomGenCmb.getSelectedItem(), true);
         int palettePoints = 3 + (int) (Math.random() * 68.0);
-        RandomFlameGeneratorSampler sampler = new RandomFlameGeneratorSampler(IMG_WIDTH, IMG_HEIGHT, prefs, randGen, palettePoints, RandomBatchQuality.NORMAL);
+        boolean fadePaletteColors = Math.random() > 0.33;
+        RandomFlameGeneratorSampler sampler = new RandomFlameGeneratorSampler(IMG_WIDTH, IMG_HEIGHT, prefs, randGen, palettePoints, fadePaletteColors, RandomBatchQuality.NORMAL);
         project.getFlames().add(validateDancingFlame(sampler.createSample().getFlame()));
       }
       refreshProjectFlames();

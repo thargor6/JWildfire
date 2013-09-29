@@ -25,7 +25,8 @@ public class RandomGradientMutation implements Mutation {
   @Override
   public void execute(Flame pFlame) {
     int keyFrames = 3 + (int) (Math.random() * 56);
-    RGBPalette palette = new RandomRGBPaletteGenerator().generatePalette(keyFrames);
+    boolean fadePaletteColors = Math.random() > 0.33;
+    RGBPalette palette = new RandomRGBPaletteGenerator().generatePalette(keyFrames, fadePaletteColors);
     if (Math.random() < 0.33) {
       palette.sort();
     }

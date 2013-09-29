@@ -3625,6 +3625,12 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaPaletteRandomPointsLbl.setPreferredSize(new Dimension(80, 22));
       tinaPaletteCreatePanel.add(getTinaPaletteRandomPointsREd());
       tinaPaletteCreatePanel.add(getCreatePaletteScrollPane());
+
+      tinaPaletteFadeColorsCBx = new JCheckBox("Fade colors");
+      tinaPaletteFadeColorsCBx.setSelected(true);
+      tinaPaletteFadeColorsCBx.setToolTipText("Create a gradient were each key-frame-color is faded into the next one");
+      tinaPaletteFadeColorsCBx.setBounds(200, 31, 140, 18);
+      tinaPaletteCreatePanel.add(tinaPaletteFadeColorsCBx);
     }
     return tinaPaletteCreatePanel;
   }
@@ -4383,7 +4389,7 @@ public class TinaInternalFrame extends JInternalFrame {
         getMouseTransformEditGradientButton(), getGradientLibTree(), getGradientLibraryRescanBtn(), getGradientLibraryNewFolderBtn(), getGradientLibraryRenameFolderBtn(),
         getGradientsList(), getBackgroundColorIndicatorBtn(), getRandomizeBtn(), getFlameBrowserTree(), getFlameBrowserImagesPanel(),
         getFlameBrowserRefreshBtn(), getFlameBrowserChangeFolderBtn(), getFlameBrowserToEditorBtn(), getFlameBrowserDeleteBtn(),
-        getFlameBrowserRenameBtn());
+        getFlameBrowserRenameBtn(), getTinaPaletteFadeColorsCBx());
 
     tinaController = new TinaController(params);
 
@@ -9267,6 +9273,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton flameBrowserRenameBtn;
   private JButton flameBrowserChangeFolderBtn;
   private JPanel panel_73;
+  private JCheckBox tinaPaletteFadeColorsCBx;
 
   /**
    * This method initializes renderBatchJobsScrollPane	
@@ -14531,5 +14538,9 @@ public class TinaInternalFrame extends JInternalFrame {
       panel_73.setMinimumSize(new Dimension(10, 20));
     }
     return panel_73;
+  }
+
+  public JCheckBox getTinaPaletteFadeColorsCBx() {
+    return tinaPaletteFadeColorsCBx;
   }
 } //  @jve:decl-index=0:visual-constraint="10,10"

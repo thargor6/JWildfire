@@ -118,7 +118,7 @@ public class SubFlameRandomFlameGenerator extends RandomFlameGenerator {
       // render it   
       subFlame.setSampleDensity(50);
       subFlame.setSpatialFilterRadius(0.0);
-      RGBPalette palette = new RandomRGBPaletteGenerator().generatePalette(11);
+      RGBPalette palette = new RandomRGBPaletteGenerator().generatePalette(11, true);
       subFlame.setPalette(palette);
       RenderedFlame res;
       boolean deEnabled = subFlame.isDeFilterEnabled();

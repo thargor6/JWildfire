@@ -36,15 +36,17 @@ public class RandomFlameGeneratorSampler {
   private final int imageHeight;
   private final Prefs prefs;
   private final int paletteSize;
+  private final boolean fadePaletteColors;
   private RandomFlameGenerator randGen;
   private final RandomBatchQuality quality;
 
-  public RandomFlameGeneratorSampler(int pImageWidth, int pImageHeight, Prefs pPrefs, RandomFlameGenerator pRandGen, int pPaletteSize, RandomBatchQuality pQuality) {
+  public RandomFlameGeneratorSampler(int pImageWidth, int pImageHeight, Prefs pPrefs, RandomFlameGenerator pRandGen, int pPaletteSize, boolean pFadePaletteColors, RandomBatchQuality pQuality) {
     imageWidth = pImageWidth;
     imageHeight = pImageHeight;
     prefs = pPrefs;
     randGen = pRandGen;
     paletteSize = pPaletteSize;
+    fadePaletteColors = pFadePaletteColors;
     quality = pQuality;
   }
 
@@ -89,7 +91,7 @@ public class RandomFlameGeneratorSampler {
       flame.setHeight(imageHeight);
       flame.setPixelsPerUnit(10);
       flame.setSpatialFilterRadius(0.0);
-      RGBPalette palette = new RandomRGBPaletteGenerator().generatePalette(paletteSize);
+      RGBPalette palette = new RandomRGBPaletteGenerator().generatePalette(paletteSize, fadePaletteColors);
       if (Math.random() < 0.5) {
         palette.sort();
       }

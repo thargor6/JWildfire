@@ -97,6 +97,7 @@ public class TinaControllerParameter {
   public JSlider pGammaThresholdSlider;
   public JCheckBox pBGTransparencyCBx;
   public JTextField pPaletteRandomPointsREd;
+  public JCheckBox paletteFadeColorsCBx;
   public JPanel pPaletteImgPanel;
   public JPanel pColorChooserPaletteImgPanel;
   public JWFNumberField pPaletteShiftREd;
@@ -651,7 +652,7 @@ public class TinaControllerParameter {
       JButton pGradientLibraryNewFolderBtn, JButton pGradientLibraryRenameFolderBtn, JList pGradientsList,
       JButton pBackgroundColorIndicatorBtn, JButton pRandomizeButton, JTree pFlameBrowserTree, JPanel pFlameBrowersImagesPnl,
       JButton pFlameBrowserRefreshBtn, JButton pFlameBrowserChangeFolderBtn, JButton pFlameBrowserToEditorBtn,
-      JButton pFlameBrowserDeleteBtn, JButton pFlameBrowserRenameBtn) {
+      JButton pFlameBrowserDeleteBtn, JButton pFlameBrowserRenameBtn, JCheckBox pPaletteFadeColorsCBx) {
     this.pDancingFlamesLinkMotionBtn = pDancingFlamesLinkMotionBtn;
     this.pDancingFlamesUnlinkMotionBtn = pDancingFlamesUnlinkMotionBtn;
     this.pDancingFlamesCreateMotionsCmb = pDancingFlamesCreateMotionsCmb;
@@ -743,5 +744,6 @@ public class TinaControllerParameter {
     this.flameBrowserToEditorBtn = pFlameBrowserToEditorBtn;
     this.flameBrowserDeleteBtn = pFlameBrowserDeleteBtn;
     this.flameBrowserRenameBtn = pFlameBrowserRenameBtn;
+    this.paletteFadeColorsCBx = pPaletteFadeColorsCBx;
   }
 }

@@ -300,6 +300,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     data.gammaThresholdSlider = parameterObject.pGammaThresholdSlider;
     data.bgTransparencyCBx = parameterObject.pBGTransparencyCBx;
     data.paletteRandomPointsREd = parameterObject.pPaletteRandomPointsREd;
+    data.paletteFadeColorsCBx = parameterObject.paletteFadeColorsCBx;
     data.paletteImgPanel = parameterObject.pPaletteImgPanel;
     data.colorChooserPaletteImgPanel = parameterObject.pColorChooserPaletteImgPanel;
     data.paletteShiftREd = parameterObject.pPaletteShiftREd;
@@ -1456,7 +1457,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
               break;
           }
           refreshPaletteColorsTable();
-          RGBPalette palette = new RandomRGBPaletteGenerator().generatePalette(data.paletteKeyFrames);
+          RGBPalette palette = new RandomRGBPaletteGenerator().generatePalette(data.paletteKeyFrames, data.paletteFadeColorsCBx.isSelected());
           saveUndoPoint();
           getCurrFlame().setPalette(palette);
           refreshPaletteUI(palette);
@@ -2100,7 +2101,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       RandomRGBPaletteGenerator generator = new RandomRGBPaletteGenerator();
       data.paletteKeyFrames = generator.generateKeyFrames(Integer.parseInt(data.paletteRandomPointsREd.getText()));
       refreshPaletteColorsTable();
-      RGBPalette palette = new RandomRGBPaletteGenerator().generatePalette(data.paletteKeyFrames);
+      RGBPalette palette = new RandomRGBPaletteGenerator().generatePalette(data.paletteKeyFrames, data.paletteFadeColorsCBx.isSelected());
       saveUndoPoint();
       getCurrFlame().setPalette(palette);
       refreshPaletteUI(palette);
@@ -2861,7 +2862,8 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     RandomFlameGenerator randGen = RandomFlameGeneratorList.getRandomFlameGeneratorInstance(pGeneratorname, true);
     //int palettePoints = Integer.parseInt(paletteRandomPointsREd.getText());
     int palettePoints = 2 + (int) (Math.random() * 17.0);
-    RandomFlameGeneratorSampler sampler = new RandomFlameGeneratorSampler(IMG_WIDTH / 2, IMG_HEIGHT / 2, prefs, randGen, palettePoints, pQuality);
+    boolean fadePaletteColors = Math.random() > 0.33;
+    RandomFlameGeneratorSampler sampler = new RandomFlameGeneratorSampler(IMG_WIDTH / 2, IMG_HEIGHT / 2, prefs, randGen, palettePoints, fadePaletteColors, pQuality);
     for (int i = 0; i < maxCount; i++) {
       RandomFlameGeneratorSample sample = sampler.createSample();
       FlameThumbnail thumbnail;
@@ -3322,7 +3324,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
       flame.setDeFilterEnabled(true);
       flame.setDeFilterMaxRadius(prefs.getTinaDefaultDEMaxRadius());
     }
-    RGBPalette palette = new RandomRGBPaletteGenerator().generatePalette(Integer.parseInt(data.paletteRandomPointsREd.getText()));
+    RGBPalette palette = new RandomRGBPaletteGenerator().generatePalette(Integer.parseInt(data.paletteRandomPointsREd.getText()), data.paletteFadeColorsCBx.isSelected());
     flame.setPalette(palette);
     setCurrFlame(flame);
     undoManager.initUndoStack(getCurrFlame());

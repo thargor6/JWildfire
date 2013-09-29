@@ -90,7 +90,7 @@ public class RandomRGBPaletteGenerator {
     return keyFrames;
   }
 
-  public RGBPalette generatePalette(List<RGBColor> pKeyFrames) {
+  public RGBPalette generatePalette(List<RGBColor> pKeyFrames, boolean pFadeColors) {
     RGBPalette res = new RGBPalette();
     if (pKeyFrames.size() == 1) {
       RGBColor c = pKeyFrames.get(0);
@@ -105,10 +105,18 @@ public class RandomRGBPaletteGenerator {
         int lIdx = (int) x;
         double relX = x - (double) lIdx;
         RGBColor lColor = pKeyFrames.get(lIdx);
-        RGBColor rColor = pKeyFrames.get(lIdx + 1);
-        int r = Tools.roundColor((double) lColor.getRed() + ((double) (rColor.getRed() - lColor.getRed())) * relX);
-        int g = Tools.roundColor((double) lColor.getGreen() + ((double) (rColor.getGreen() - lColor.getGreen())) * relX);
-        int b = Tools.roundColor((double) lColor.getBlue() + ((double) (rColor.getBlue() - lColor.getBlue())) * relX);
+        int r, g, b;
+        if (pFadeColors) {
+          RGBColor rColor = pKeyFrames.get(lIdx + 1);
+          r = Tools.roundColor((double) lColor.getRed() + ((double) (rColor.getRed() - lColor.getRed())) * relX);
+          g = Tools.roundColor((double) lColor.getGreen() + ((double) (rColor.getGreen() - lColor.getGreen())) * relX);
+          b = Tools.roundColor((double) lColor.getBlue() + ((double) (rColor.getBlue() - lColor.getBlue())) * relX);
+        }
+        else {
+          r = lColor.getRed();
+          g = lColor.getGreen();
+          b = lColor.getBlue();
+        }
         res.addColor(r, g, b);
         //      System.out.println(i + ": " + r + " " + g + " " + b);
       }
@@ -116,9 +124,9 @@ public class RandomRGBPaletteGenerator {
     return res;
   }
 
-  public RGBPalette generatePalette(int pKeyFrames) {
+  public RGBPalette generatePalette(int pKeyFrames, boolean pFadeColors) {
     List<RGBColor> keyFrames = generateKeyFrames(pKeyFrames);
-    return generatePalette(keyFrames);
+    return generatePalette(keyFrames, pFadeColors);
   }
 
 }
