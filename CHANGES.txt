@@ -1,3 +1,18 @@
+V1.02 (05.10.2013):
+ - new "Duckies" random flame generator
+ - "post_rblur" variation by Xyrus02
+ - new "shredlin" variation by Zy0rg
+ - option to disable the fading of color-keyframes while generating random gradients
+ - increased the default quality level of the random flame generator (may be slightly slower but creates better results)
+ - added a new button for creating a random batch in high quality (may be very slow in some cases, but can produce real interesting flames)
+ - improved the distribution of chosen sub-random-flame generators
+ - increased the color spread when generating random  flames
+ - improved the color spread of the "Mandelbrot" random flame generator
+ - improved the "Bubbles"-random-flame-generator
+ - improved the "Bubbles3D"-random-flame-generator
+ - sort script- and gradient files alphabetically (especially under Linux)
+ - fixed a bug in the "displacemap_wf" variations regarding the "mode" parameter
+
 V1.01 (20.09.2013):
  - changed the layout and the position of the gradient panel so that it can be reached and used easier
  - new experimental variations "displacemap_wf" and "post_displacemap_wf" to apply image-based displacement maps to transforms 
