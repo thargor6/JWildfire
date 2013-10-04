@@ -97,7 +97,7 @@ public class SubFlameRandomFlameGenerator extends RandomFlameGenerator {
   }
 
   @Override
-  protected Flame createFlame() {
+  protected Flame createFlame(RandomFlameGeneratorState pState) {
     Prefs prefs = new Prefs();
     try {
       prefs.loadFromFile();
@@ -107,7 +107,9 @@ public class SubFlameRandomFlameGenerator extends RandomFlameGenerator {
     }
     Flame subFlame;
     while (true) {
-      subFlame = new AllRandomFlameGenerator().createFlame();
+      RandomFlameGenerator randGen = new AllRandomFlameGenerator();
+      RandomFlameGeneratorState randGenState = randGen.initState();
+      subFlame = randGen.createFlame(randGenState);
       final int IMG_WIDTH = 160;
       final int IMG_HEIGHT = 100;
       final double MIN_COVERAGE = 0.25;
