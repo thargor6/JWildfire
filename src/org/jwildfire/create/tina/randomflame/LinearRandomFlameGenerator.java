@@ -24,7 +24,7 @@ import org.jwildfire.create.tina.variation.Linear3DFunc;
 public class LinearRandomFlameGenerator extends RandomFlameGenerator {
 
   @Override
-  protected Flame createFlame() {
+  protected Flame createFlame(RandomFlameGeneratorState pState) {
     Flame flame = new Flame();
     flame.setCentreX(0.0);
     flame.setCentreY(0.0);

@@ -29,8 +29,8 @@ public class RandomFlameGeneratorList {
     registerRandomFlameGenerator(BrokatRandomFlameGenerator.class);
     registerRandomFlameGenerator(BubblesRandomFlameGenerator.class);
     registerRandomFlameGenerator(Bubbles3DRandomFlameGenerator.class);
-    registerRandomFlameGenerator(DuckiesRandomFlameGenerator.class);
     registerRandomFlameGenerator(ExperimentalBubbles3DRandomFlameGenerator.class);
+    registerRandomFlameGenerator(DuckiesRandomFlameGenerator.class);
     registerRandomFlameGenerator(GnarlRandomFlameGenerator.class);
     registerRandomFlameGenerator(ExperimentalGnarlRandomFlameGenerator.class);
     registerRandomFlameGenerator(Flowers3DRandomFlameGenerator.class);

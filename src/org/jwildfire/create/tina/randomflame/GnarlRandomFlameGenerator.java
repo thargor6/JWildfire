@@ -26,7 +26,7 @@ import org.jwildfire.create.tina.variation.Waves2Func;
 public class GnarlRandomFlameGenerator extends RandomFlameGenerator {
 
   @Override
-  protected Flame createFlame() {
+  protected Flame createFlame(RandomFlameGeneratorState pState) {
     // Bases loosely on the W2R Batch Script by parrotdolphin.deviantart.com */ 
     Flame flame = new Flame();
     flame.setCentreX(0.0);

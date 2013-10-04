@@ -28,26 +28,31 @@ public class AllRandomFlameGenerator extends RandomFlameGenerator {
 
   static {
     allGenerators = new ArrayList<RandomFlameGenerator>();
+    allGenerators.add(new BubblesRandomFlameGenerator());
     allGenerators.add(new LinearRandomFlameGenerator());
     allGenerators.add(new FilledFlowers3DRandomFlameGenerator());
     allGenerators.add(new SimpleRandomFlameGenerator());
     allGenerators.add(new SphericalRandomFlameGenerator());
+    allGenerators.add(new DuckiesRandomFlameGenerator());
     allGenerators.add(new Spherical3DRandomFlameGenerator());
     allGenerators.add(new BrokatRandomFlameGenerator());
     allGenerators.add(new MandelbrotRandomFlameGenerator());
     allGenerators.add(new GnarlRandomFlameGenerator());
     allGenerators.add(new Spherical3DRandomFlameGenerator());
+    allGenerators.add(new BubblesRandomFlameGenerator());
     allGenerators.add(new ExperimentalGnarlRandomFlameGenerator());
     allGenerators.add(new BubblesRandomFlameGenerator());
     allGenerators.add(new DuckiesRandomFlameGenerator());
     allGenerators.add(new Spherical3DRandomFlameGenerator());
     allGenerators.add(new BrokatRandomFlameGenerator());
     allGenerators.add(new SubFlameRandomFlameGenerator());
+    allGenerators.add(new LinearRandomFlameGenerator());
+    allGenerators.add(new DuckiesRandomFlameGenerator());
     allGenerators.add(new Bubbles3DRandomFlameGenerator());
     allGenerators.add(new SphericalRandomFlameGenerator());
     allGenerators.add(new DuckiesRandomFlameGenerator());
     allGenerators.add(new SimpleTilingRandomFlameGenerator());
-    allGenerators.add(new MandelbrotRandomFlameGenerator());
+    allGenerators.add(new DuckiesRandomFlameGenerator());
     allGenerators.add(new SplitsRandomFlameGenerator());
     allGenerators.add(new BubblesRandomFlameGenerator());
     allGenerators.add(new GnarlRandomFlameGenerator());
@@ -57,13 +62,14 @@ public class AllRandomFlameGenerator extends RandomFlameGenerator {
     allGenerators.add(new ExperimentalBubbles3DRandomFlameGenerator());
     allGenerators.add(new Spherical3DRandomFlameGenerator());
     allGenerators.add(new SubFlameRandomFlameGenerator());
+    allGenerators.add(new DuckiesRandomFlameGenerator());
     allGenerators.add(new JulianDiscRandomFlameGenerator());
     allGenerators.add(new DuckiesRandomFlameGenerator());
     allGenerators.add(new BrokatRandomFlameGenerator());
-    allGenerators.add(new MandelbrotRandomFlameGenerator());
     allGenerators.add(new SimpleTilingRandomFlameGenerator());
     allGenerators.add(new FilledFlowers3DRandomFlameGenerator());
     allGenerators.add(new ExperimentalSimpleRandomFlameGenerator());
+    allGenerators.add(new DuckiesRandomFlameGenerator());
     allGenerators.add(new TentacleRandomFlameGenerator());
 
     simpleGenerators = new ArrayList<RandomFlameGenerator>();
@@ -82,12 +88,22 @@ public class AllRandomFlameGenerator extends RandomFlameGenerator {
     simpleGenerators.add(new Flowers3DRandomFlameGenerator());
   }
 
+  private static final String RANDGEN = "RANDGEN";
+
   @Override
-  protected Flame createFlame() {
+  public RandomFlameGeneratorState initState() {
+    RandomFlameGeneratorState state = super.initState();
     List<RandomFlameGenerator> generators = useSimpleGenerators ? simpleGenerators : allGenerators;
     RandomFlameGenerator generator = generators.get((int) (Math.random() * generators.size()));
+    state.getParams().put(RANDGEN, generator);
+    return state;
+  }
 
-    Flame flame = generator.createFlame();
+  @Override
+  protected Flame createFlame(RandomFlameGeneratorState pState) {
+    RandomFlameGenerator generator = (RandomFlameGenerator) pState.getParams().get(RANDGEN);
+    RandomFlameGeneratorState subState = generator.initState();
+    Flame flame = generator.createFlame(subState);
     flame.setName(generator.getName() + " - " + flame.hashCode());
     return flame;
   }

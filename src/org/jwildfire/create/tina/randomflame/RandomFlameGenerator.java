@@ -24,12 +24,16 @@ import org.jwildfire.create.tina.base.XForm;
 
 public abstract class RandomFlameGenerator {
 
-  protected abstract Flame createFlame();
+  protected abstract Flame createFlame(RandomFlameGeneratorState pState);
+
+  public RandomFlameGeneratorState initState() {
+    return new RandomFlameGeneratorState();
+  }
 
   public abstract String getName();
 
-  public Flame createFlame(Prefs pPrefs) {
-    Flame flame = createFlame();
+  public Flame createFlame(Prefs pPrefs, RandomFlameGeneratorState pState) {
+    Flame flame = createFlame(pState);
     if (flame.getName() == null || flame.getName().length() == 0)
       flame.setName(this.getName() + " - " + flame.hashCode());
     flame.setBGTransparency(pPrefs.isTinaDefaultBGTransparency());

@@ -657,7 +657,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaNorthPanel.add(getRandomBatchButton());
 
       JButton randomBatchHighQualityButton = new JButton();
-      randomBatchHighQualityButton.setToolTipText("Create a random bach in higher quality (may be much slower)");
+      randomBatchHighQualityButton.setToolTipText("Create a random batch in higher quality (may be much slower)");
       randomBatchHighQualityButton.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
           tinaController.createRandomBatch(-1, (String) randomStyleCmb.getSelectedItem(), RandomBatchQuality.HIGH);
@@ -665,9 +665,9 @@ public class TinaInternalFrame extends JInternalFrame {
         }
       });
       randomBatchHighQualityButton.setText("H");
-      randomBatchHighQualityButton.setPreferredSize(new Dimension(20, 46));
+      randomBatchHighQualityButton.setPreferredSize(new Dimension(22, 46));
       randomBatchHighQualityButton.setMnemonic(KeyEvent.VK_D);
-      randomBatchHighQualityButton.setMinimumSize(new Dimension(100, 46));
+      randomBatchHighQualityButton.setMinimumSize(new Dimension(22, 46));
       randomBatchHighQualityButton.setMaximumSize(new Dimension(32000, 46));
       randomBatchHighQualityButton.setFont(new Font("Dialog", Font.BOLD, 10));
       tinaNorthPanel.add(randomBatchHighQualityButton);

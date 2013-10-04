@@ -52,7 +52,7 @@ public class ExperimentalSimpleRandomFlameGenerator extends
       "circus", "lazyTravis", "ovoid3d", "circleblur", "sineblur", "starblur" };
 
   @Override
-  protected Flame createFlame() {
+  protected Flame createFlame(RandomFlameGeneratorState pState) {
     Flame flame = new Flame();
     flame.setCentreX(0.0);
     flame.setCentreY(0.0);

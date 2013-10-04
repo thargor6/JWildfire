@@ -83,10 +83,11 @@ public class RandomFlameGeneratorSampler {
     int bgRed = prefs.getTinaRandomBatchBGColorRed();
     int bgGreen = prefs.getTinaRandomBatchBGColorGreen();
     int bgBlue = prefs.getTinaRandomBatchBGColorBlue();
+    RandomFlameGeneratorState randGenState = randGen.initState();
     double bestCoverage = 0.0;
     for (int j = 0; j < quality.getMaxSamples(); j++) {
       // create flame
-      Flame flame = randGen.createFlame(prefs);
+      Flame flame = randGen.createFlame(prefs, randGenState);
       flame.setWidth(imageWidth);
       flame.setHeight(imageHeight);
       flame.setPixelsPerUnit(10);

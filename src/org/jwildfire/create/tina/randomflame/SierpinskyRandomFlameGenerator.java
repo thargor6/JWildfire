@@ -24,7 +24,7 @@ import org.jwildfire.create.tina.variation.VariationFuncList;
 public class SierpinskyRandomFlameGenerator extends RandomFlameGenerator {
 
   @Override
-  protected Flame createFlame() {
+  protected Flame createFlame(RandomFlameGeneratorState pState) {
     Flame flame = new Flame();
     flame.setCentreX(0.0);
     flame.setCamRoll((int) (Math.random() * 8.0) * -45.0);
