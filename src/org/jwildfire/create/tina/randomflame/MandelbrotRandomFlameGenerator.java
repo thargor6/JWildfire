@@ -31,7 +31,7 @@ public class MandelbrotRandomFlameGenerator extends RandomFlameGenerator {
       "spherical", "spiral", "stripes", "unpolar", "waves2", "whorl", "xheart" };
 
   @Override
-  protected Flame createFlame() {
+  protected Flame createFlame(RandomFlameGeneratorState pState) {
     Flame flame = new Flame();
     flame.setCentreX(0.0);
     flame.setCentreY(0.45);
@@ -127,6 +127,7 @@ public class MandelbrotRandomFlameGenerator extends RandomFlameGenerator {
       varFunc = VariationFuncList.getVariationFuncInstance(FNCLST_FINAL[(int) (Math.random() * FNCLST_FINAL.length)], true);
       xForm.addVariation(1.0, varFunc);
     }
+    flame.randomizeColors();
     return flame;
   }
 
