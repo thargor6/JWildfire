@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -242,6 +243,14 @@ public class GradientController {
   public void scanUserGradients(String path, GradientUserNode pParentNode) {
     File root = new File(path);
     File[] list = root.listFiles();
+    Arrays.sort(list, new Comparator<File>() {
+
+      @Override
+      public int compare(File o1, File o2) {
+        return o1.getName().compareTo(o2.getName());
+      }
+
+    });
     if (list != null) {
       List<String> filenames = new ArrayList<String>();
       for (File f : list) {

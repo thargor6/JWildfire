@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.InputStream;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import javax.swing.JButton;
@@ -436,6 +437,15 @@ public class JWFScriptController {
   public void scanUserScripts(String path, DefaultMutableTreeNode pParentNode) {
     File root = new File(path);
     File[] list = root.listFiles();
+    Arrays.sort(list, new Comparator<File>() {
+
+      @Override
+      public int compare(File o1, File o2) {
+        return o1.getName().compareTo(o2.getName());
+      }
+
+    });
+
     if (list != null) {
       for (File f : list) {
         if (f.isDirectory()) {
