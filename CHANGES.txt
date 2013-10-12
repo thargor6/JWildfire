@@ -1,3 +1,7 @@
+V1.03 (13.10.2013):
+ - simplified startup for Mac users, new start-scripts for different plattforms, updated README files
+ - experimental "primitives_wf"-variation (which may play a larger role in the future) 
+
 V1.02 (05.10.2013):
  - new "Duckies" random flame generator
  - "post_rblur" variation by Xyrus02

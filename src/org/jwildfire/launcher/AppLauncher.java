@@ -51,6 +51,10 @@ public class AppLauncher {
     if (javaCmd.indexOf(" ") >= 0) {
       javaCmd = "\"" + javaCmd + "\"";
     }
+    // MacOS
+    if (javaCmd.indexOf("Internet Plug-Ins") > 0) {
+      javaCmd = "java";
+    }
 
     String cp = currentDir.getParentFile().getAbsolutePath() + classpath;
     if (cp.indexOf(" ") >= 0) {

@@ -1,0 +1,1 @@
+java -jar j-wildfire-launcher.jar

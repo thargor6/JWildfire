@@ -1,9 +1,18 @@
 LAUNCHING JWILDFIRE
 -----------------------------------------------------------------------------------
-Please use always the official launcher to start JWildfire.
+Please use always the official launcher to start JWildfire. The launcher can be 
+executed by any Java runtime and can be started with any options.
+The task of the launcher is to launch the main software with controlled options
+and to reserve enough memory.
+  
+- under Windows use the start_windows.bat to start the launcher.
+- under Mac OS use the start_mac.command to start the launcher.
+- under Linux use the start_linux.sh to start the launcher.
 
-Either use start.bat, start.sh or start the j-wildfire-launcher.jar directly.
+If this doesnt work or if you have another operating system not listed here 
+just start/open the j-wildfire-launcher.jar directly.
 
+PLEASE DO NOT START THE j-wildfire.jar DIRECTLY!
 If you start the j-wildfire.jar directly then JWildfire is started with default 
 Java otions. 
 In the most cases you cannot render large images with those settings because not 
@@ -12,7 +21,7 @@ not be used for rendering this way. Additionally, the wrong settings may cause
 slower rendering.
 
 
-HOW IT WORKS
+HOW THE LAUNCHER WORKS
 -----------------------------------------------------------------------------------
 It analyzes certain system settings to locate java runtimes on your system and 
 automatically selects the most recent one. You can override the automatically 
