@@ -37,6 +37,7 @@ import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
+import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.JTree;
@@ -74,6 +75,7 @@ import org.jwildfire.create.tina.swing.JWFDanceFileChooser;
 import org.jwildfire.create.tina.swing.JWFNumberField;
 import org.jwildfire.create.tina.swing.RandomBatchQuality;
 import org.jwildfire.create.tina.swing.SoundFileChooser;
+import org.jwildfire.create.tina.swing.StandardDialogs;
 import org.jwildfire.create.tina.swing.TinaController;
 import org.jwildfire.create.tina.variation.Linear3DFunc;
 import org.jwildfire.image.SimpleImage;
@@ -90,6 +92,7 @@ import com.l2fprod.common.beans.editor.ComboBoxPropertyEditor;
 
 public class DancingFractalsController {
   public static final int PAGE_INDEX = 5;
+  private final JTabbedPane rootTabbedPane;
   private final ErrorHandler errorHandler;
   private final TinaController parentCtrl;
   private final Prefs prefs;
@@ -143,7 +146,7 @@ public class DancingFractalsController {
   private final FlamePropertiesTreeService flamePropertiesTreeService;
   private JLayerInterface jLayer = new JLayerInterface();
 
-  public DancingFractalsController(TinaController pParent, ErrorHandler pErrorHandler, JPanel pRealtimeFlamePnl, JPanel pRealtimeGraph1Pnl,
+  public DancingFractalsController(TinaController pParent, ErrorHandler pErrorHandler, JTabbedPane pRootTabbedPane, JPanel pRealtimeFlamePnl, JPanel pRealtimeGraph1Pnl,
       JButton pLoadSoundBtn, JButton pAddFromClipboardBtn, JButton pAddFromEditorBtn, JButton pAddFromDiscBtn, JWFNumberField pRandomCountIEd,
       JButton pGenRandFlamesBtn, JComboBox pRandomGenCmb, JPanel pPoolFlamePreviewPnl, JSlider pBorderSizeSlider,
       JButton pFlameToEditorBtn, JButton pDeleteFlameBtn, JTextField pFramesPerSecondIEd, JTextField pMorphFrameCountIEd,
@@ -153,6 +156,7 @@ public class DancingFractalsController {
       JButton pLoadProjectBtn, JButton pSaveProjectBtn, JTable pMotionLinksTable) {
     flamePropertiesTreeService = new FlamePropertiesTreeService();
 
+    rootTabbedPane = pRootTabbedPane;
     parentCtrl = pParent;
     errorHandler = pErrorHandler;
     prefs = parentCtrl.getPrefs();
@@ -1019,6 +1023,36 @@ public class DancingFractalsController {
       pFlame.getFinalXForms().add(xForm);
     }
     return pFlame;
+  }
+
+  public void replaceFlameFromEditorBtn_clicked() {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void renameFlameBtn_clicked() {
+    try {
+      Flame flame = poolFlameHolder.getFlame();
+      if (flame != null) {
+        String s = StandardDialogs.promptForText(rootTabbedPane, "Please enter the new title:", flame.getName());
+        if (s != null) {
+          for (Flame tFlame : project.getFlames()) {
+            if (!tFlame.isEqual(flame) && s.equals(tFlame.getName())) {
+              throw new RuntimeException("A different flame with the name \"" + s + "\" alread exists");
+            }
+          }
+          flame.setName(s);
+          refreshProjectFlames();
+          if (project.getFlames().size() == 0) {
+            flamePropertiesTree_changed(null);
+          }
+          enableControls();
+        }
+      }
+    }
+    catch (Exception ex) {
+      errorHandler.handleError(ex);
+    }
   }
 
 }

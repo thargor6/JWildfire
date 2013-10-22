@@ -9274,6 +9274,8 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton flameBrowserChangeFolderBtn;
   private JPanel panel_73;
   private JCheckBox tinaPaletteFadeColorsCBx;
+  private JButton dancingFlamesReplaceFlameFromEditorBtn;
+  private JButton dancingFlamesRenameFlameBtn;
 
   /**
    * This method initializes renderBatchJobsScrollPane	
@@ -12471,19 +12473,6 @@ public class TinaInternalFrame extends JInternalFrame {
       panel_1.setPreferredSize(new Dimension(160, 160));
       panel_44.add(panel_1, BorderLayout.CENTER);
       panel_1.setLayout(new BorderLayout(0, 0));
-      dancingFlamesFlameToEditorBtn = new JButton();
-      dancingFlamesFlameToEditorBtn.setMaximumSize(new Dimension(160, 24));
-      dancingFlamesFlameToEditorBtn.setMinimumSize(new Dimension(100, 24));
-      dancingFlamesFlameToEditorBtn.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-          tinaController.getDancingFractalsController().flameToEditorBtn_clicked();
-        }
-      });
-      dancingFlamesFlameToEditorBtn.setToolTipText("Copy current flame into Editor");
-      dancingFlamesFlameToEditorBtn.setText("Edit");
-      dancingFlamesFlameToEditorBtn.setPreferredSize(new Dimension(115, 24));
-      dancingFlamesFlameToEditorBtn.setMnemonic(KeyEvent.VK_E);
-      dancingFlamesFlameToEditorBtn.setFont(new Font("Dialog", Font.BOLD, 10));
       dancingFlamesDeleteFlameBtn = new JButton();
       dancingFlamesDeleteFlameBtn.setMinimumSize(new Dimension(100, 24));
       dancingFlamesDeleteFlameBtn.setMaximumSize(new Dimension(160, 24));
@@ -12499,9 +12488,28 @@ public class TinaInternalFrame extends JInternalFrame {
       dancingFlamesDeleteFlameBtn.setFont(new Font("Dialog", Font.BOLD, 10));
 
       JPanel panel_2 = new JPanel();
+      FlowLayout flowLayout = (FlowLayout) panel_2.getLayout();
+      flowLayout.setHgap(2);
+      flowLayout.setAlignment(FlowLayout.LEADING);
+      flowLayout.setVgap(2);
       panel_1.add(panel_2, BorderLayout.SOUTH);
-      panel_2.setPreferredSize(new Dimension(135, 34));
+      panel_2.setPreferredSize(new Dimension(135, 58));
+      dancingFlamesFlameToEditorBtn = new JButton();
+      dancingFlamesFlameToEditorBtn.setMaximumSize(new Dimension(160, 24));
+      dancingFlamesFlameToEditorBtn.setMinimumSize(new Dimension(100, 24));
+      dancingFlamesFlameToEditorBtn.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getDancingFractalsController().flameToEditorBtn_clicked();
+        }
+      });
+      dancingFlamesFlameToEditorBtn.setToolTipText("Copy current flame into Editor");
+      dancingFlamesFlameToEditorBtn.setText("To Editor");
+      dancingFlamesFlameToEditorBtn.setPreferredSize(new Dimension(115, 24));
+      dancingFlamesFlameToEditorBtn.setMnemonic(KeyEvent.VK_E);
+      dancingFlamesFlameToEditorBtn.setFont(new Font("Dialog", Font.BOLD, 10));
       panel_2.add(getDancingFlamesFlameToEditorBtn());
+      panel_2.add(getDancingFlamesReplaceFlameFromEditorBtn());
+      panel_2.add(getDancingFlamesRenameFlameBtn());
       panel_2.add(getDancingFlamesDeleteFlameBtn());
 
       dancingFlamesPoolFlamePreviewPnl = new JPanel();
@@ -14542,5 +14550,43 @@ public class TinaInternalFrame extends JInternalFrame {
 
   public JCheckBox getTinaPaletteFadeColorsCBx() {
     return tinaPaletteFadeColorsCBx;
+  }
+
+  private JButton getDancingFlamesReplaceFlameFromEditorBtn() {
+    if (dancingFlamesReplaceFlameFromEditorBtn == null) {
+      dancingFlamesReplaceFlameFromEditorBtn = new JButton();
+      dancingFlamesReplaceFlameFromEditorBtn.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getDancingFractalsController().replaceFlameFromEditorBtn_clicked();
+        }
+      });
+      dancingFlamesReplaceFlameFromEditorBtn.setToolTipText("Replace the current flame with flame from the editor");
+      dancingFlamesReplaceFlameFromEditorBtn.setText("Repl from Editor");
+      dancingFlamesReplaceFlameFromEditorBtn.setPreferredSize(new Dimension(115, 24));
+      dancingFlamesReplaceFlameFromEditorBtn.setMnemonic(KeyEvent.VK_F);
+      dancingFlamesReplaceFlameFromEditorBtn.setMinimumSize(new Dimension(100, 24));
+      dancingFlamesReplaceFlameFromEditorBtn.setMaximumSize(new Dimension(160, 24));
+      dancingFlamesReplaceFlameFromEditorBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+    }
+    return dancingFlamesReplaceFlameFromEditorBtn;
+  }
+
+  private JButton getDancingFlamesRenameFlameBtn() {
+    if (dancingFlamesRenameFlameBtn == null) {
+      dancingFlamesRenameFlameBtn = new JButton();
+      dancingFlamesRenameFlameBtn.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getDancingFractalsController().renameFlameBtn_clicked();
+        }
+      });
+      dancingFlamesRenameFlameBtn.setToolTipText("Rename the current flame");
+      dancingFlamesRenameFlameBtn.setText("Rename");
+      dancingFlamesRenameFlameBtn.setPreferredSize(new Dimension(115, 24));
+      dancingFlamesRenameFlameBtn.setMnemonic(KeyEvent.VK_R);
+      dancingFlamesRenameFlameBtn.setMinimumSize(new Dimension(100, 24));
+      dancingFlamesRenameFlameBtn.setMaximumSize(new Dimension(160, 24));
+      dancingFlamesRenameFlameBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+    }
+    return dancingFlamesRenameFlameBtn;
   }
 } //  @jve:decl-index=0:visual-constraint="10,10"

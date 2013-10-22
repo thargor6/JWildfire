@@ -39,11 +39,14 @@ public class FlamePreparer {
     //    res.setSpatialFilterRadius(0.75);
 
     res.setBGTransparency(false);
-    res.setGamma(2.5);
-    res.setBrightness(5.0);
-    res.getPalette().setModRed(30);
-    res.getPalette().setModRed(20);
-    res.getPalette().setModBlue(-20);
+    //    res.setGamma(res.getGamma() - 0.5);
+    //    res.getPalette().setModSaturation(-24);
+    //    res.setGamma(2.5);
+    //    res.setBrightness(5.0);
+    //    res.getPalette().setModRed(30);
+    //res.getPalette().setModSaturation(-160);
+    //    res.getPalette().setModRed(20);
+    //    res.getPalette().setModBlue(-20);
     res.setSampleDensity(2 * prefs.getTinaRenderRealtimeQuality());
 
     return res;

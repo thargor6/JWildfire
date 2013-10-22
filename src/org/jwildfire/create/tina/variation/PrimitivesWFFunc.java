@@ -87,6 +87,7 @@ public class PrimitivesWFFunc extends VariationFunc {
     }
     pVarTP.x += dx;
     pVarTP.y += dy;
+
     if (pContext.isPreserveZCoordinate()) {
       pVarTP.z += pAmount * pAffineTP.z;
     }
