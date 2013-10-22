@@ -40,9 +40,9 @@ public class RealtimeAnimRenderThread implements Runnable, FlameHolder {
   private boolean drawFFT = true;
   private boolean drawFPS = true;
 
-  public RealtimeAnimRenderThread(DancingFractalsController pController) {
+  public RealtimeAnimRenderThread(DancingFractalsController pController, DancingFlameProject pProject) {
     controller = pController;
-    transformer = new DanceFlameTransformer();
+    transformer = new DanceFlameTransformer(pProject);
     flameStack = new DancingFlameStack(pController.getParentCtrl().getPrefs());
   }
 
@@ -82,8 +82,9 @@ public class RealtimeAnimRenderThread implements Runnable, FlameHolder {
         else {
           currFFT = null;
         }
+        long elapsedTime = time - timeRenderStarted;
         if (dancingFlame != null) {
-          currFlame = transformer.createTransformedFlame(dancingFlame, currFFT, time - timeRenderStarted, getFramesPerSecond());
+          currFlame = transformer.createTransformedFlame(dancingFlame, currFFT, elapsedTime, getFramesPerSecond());
         }
         fpsMeasureMentFrameCount++;
         long dt = (System.currentTimeMillis() - startFPSMeasurement);
@@ -94,7 +95,7 @@ public class RealtimeAnimRenderThread implements Runnable, FlameHolder {
         }
         if (currFlame != null) {
           try {
-            controller.refreshFlameImage(currFlame, drawTriangles, fps, drawFPS);
+            controller.refreshFlameImage(currFlame, drawTriangles, fps, elapsedTime, drawFPS);
           }
           catch (Exception ex) {
             ex.printStackTrace();
