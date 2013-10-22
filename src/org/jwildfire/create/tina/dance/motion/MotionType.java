@@ -33,6 +33,14 @@ public enum MotionType {
     }
 
   },
+  SINE {
+
+    @Override
+    public Class<? extends Motion> getMotionClass() {
+      return SineMotion.class;
+    }
+
+  },
   SPLINE {
     @Override
     public Class<? extends Motion> getMotionClass() {
