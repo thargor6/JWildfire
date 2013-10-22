@@ -4389,7 +4389,7 @@ public class TinaInternalFrame extends JInternalFrame {
         getMouseTransformEditGradientButton(), getGradientLibTree(), getGradientLibraryRescanBtn(), getGradientLibraryNewFolderBtn(), getGradientLibraryRenameFolderBtn(),
         getGradientsList(), getBackgroundColorIndicatorBtn(), getRandomizeBtn(), getFlameBrowserTree(), getFlameBrowserImagesPanel(),
         getFlameBrowserRefreshBtn(), getFlameBrowserChangeFolderBtn(), getFlameBrowserToEditorBtn(), getFlameBrowserDeleteBtn(),
-        getFlameBrowserRenameBtn(), getTinaPaletteFadeColorsCBx());
+        getFlameBrowserRenameBtn(), getTinaPaletteFadeColorsCBx(), getDancingFlamesReplaceFlameFromEditorBtn(), getDancingFlamesRenameFlameBtn());
 
     tinaController = new TinaController(params);
 
@@ -14557,7 +14557,7 @@ public class TinaInternalFrame extends JInternalFrame {
       dancingFlamesReplaceFlameFromEditorBtn = new JButton();
       dancingFlamesReplaceFlameFromEditorBtn.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
-          tinaController.getDancingFractalsController().replaceFlameFromEditorBtn_clicked();
+          tinaController.getDancingFractalsController().replaceFlameFromEditorBtn_clicked(tinaController.getCurrFlame());
         }
       });
       dancingFlamesReplaceFlameFromEditorBtn.setToolTipText("Replace the current flame with flame from the editor");

@@ -132,6 +132,8 @@ public class DancingFractalsController {
   private final JButton loadProjectBtn;
   private final JButton saveProjectBtn;
   private final JTable motionLinksTable;
+  private final JButton replaceFlameFromEditorBtn;
+  private final JButton renameFlameBtn;
 
   private FlamePanel flamePanel = null;
   private FlamePanel poolFlamePreviewFlamePanel = null;
@@ -153,7 +155,7 @@ public class DancingFractalsController {
       JButton pStartShowButton, JButton pStopShowButton, JCheckBox pDoRecordCBx, JComboBox pFlamesCmb, JCheckBox pDrawTrianglesCbx, JCheckBox pDrawFFTCbx, JCheckBox pDrawFPSCbx, JTree pFlamePropertiesTree,
       JPanel pMotionPropertyRootPnl, JTable pMotionTable, JComboBox pAddMotionCmb, JButton pAddMotionBtn, JButton pDeleteMotionBtn,
       JButton pLinkMotionBtn, JButton pUnlinkMotionBtn, JComboBox pCreateMotionsCmb, JButton pClearMotionsBtn,
-      JButton pLoadProjectBtn, JButton pSaveProjectBtn, JTable pMotionLinksTable) {
+      JButton pLoadProjectBtn, JButton pSaveProjectBtn, JTable pMotionLinksTable, JButton pReplaceFlameFromEditorBtn, JButton pRenameFlameBtn) {
     flamePropertiesTreeService = new FlamePropertiesTreeService();
 
     rootTabbedPane = pRootTabbedPane;
@@ -194,6 +196,8 @@ public class DancingFractalsController {
     loadProjectBtn = pLoadProjectBtn;
     saveProjectBtn = pSaveProjectBtn;
     motionLinksTable = pMotionLinksTable;
+    replaceFlameFromEditorBtn = pReplaceFlameFromEditorBtn;
+    renameFlameBtn = pRenameFlameBtn;
 
     addMotionCmb.addItem(MotionType.FFT);
     addMotionCmb.addItem(MotionType.SAWTOOTH);
@@ -727,6 +731,8 @@ public class DancingFractalsController {
     boolean flameSelected = poolFlameHolder.getFlame() != null;
     flameToEditorBtn.setEnabled(flameSelected);
     deleteFlameBtn.setEnabled(flameSelected);
+    renameFlameBtn.setEnabled(flameSelected);
+    replaceFlameFromEditorBtn.setEnabled(flameSelected);
 
     framesPerSecondIEd.setEnabled(!running);
     borderSizeSlider.setEnabled(true);
@@ -1025,15 +1031,36 @@ public class DancingFractalsController {
     return pFlame;
   }
 
-  public void replaceFlameFromEditorBtn_clicked() {
+  public void replaceFlameFromEditorBtn_clicked(Flame pFlame) {
     // TODO Auto-generated method stub
+    if (pFlame != null) {
+      Flame flame = poolFlameHolder.getFlame();
+      if (flame != null) {
+        int idx = flamePropertiesTree.getSelectionRows()[0];
+        // cant remove the flame by object reference because its a clone
+        project.getFlames().set(idx, validateDancingFlame(pFlame.makeCopy()));
+        refreshProjectFlames();
+        if (project.getFlames().size() == 0) {
+          flamePropertiesTree_changed(null);
+        }
+        else {
+          try {
+            flamePropertiesTree.setSelectionRow(idx);
+          }
+          catch (Exception ex) {
 
+          }
+        }
+        enableControls();
+      }
+    }
   }
 
   public void renameFlameBtn_clicked() {
     try {
       Flame flame = poolFlameHolder.getFlame();
       if (flame != null) {
+        int idx = flamePropertiesTree.getSelectionRows()[0];
         String s = StandardDialogs.promptForText(rootTabbedPane, "Please enter the new title:", flame.getName());
         if (s != null) {
           for (Flame tFlame : project.getFlames()) {
@@ -1045,6 +1072,14 @@ public class DancingFractalsController {
           refreshProjectFlames();
           if (project.getFlames().size() == 0) {
             flamePropertiesTree_changed(null);
+          }
+          else {
+            try {
+              flamePropertiesTree.setSelectionRow(idx);
+            }
+            catch (Exception ex) {
+
+            }
           }
           enableControls();
         }

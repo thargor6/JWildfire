@@ -157,9 +157,11 @@ public class Variation implements Assignable<Variation>, Serializable {
           if ((o != null && s == null) || (o == null && s != null) || (o != null && s != null && o.length != s.length)) {
             return false;
           }
-          for (int j = 0; j < o.length; j++) {
-            if (o[j] != s[j]) {
-              return false;
+          if (o != null && s != null) {
+            for (int j = 0; j < o.length; j++) {
+              if (o[j] != s[j]) {
+                return false;
+              }
             }
           }
         }
