@@ -16,16 +16,36 @@
 */
 package org.jwildfire.create.tina.dance.motion;
 
+import java.util.List;
+
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.dance.DancingFlame;
+import org.jwildfire.create.tina.dance.DancingFlameProject;
 import org.jwildfire.create.tina.dance.model.AnimationModelService;
 
 public class DanceFlameTransformer {
+  private final DancingFlameProject project;
+
+  public DanceFlameTransformer(DancingFlameProject pProject) {
+    project = pProject;
+  }
 
   public Flame createTransformedFlame(DancingFlame pFlame, short pFFTData[], long pTime, int pFPS) {
     Flame res = pFlame.getFlame().makeCopy();
-    Flame refFlame = pFlame.getFlame().makeCopy();
-    for (Motion motion : pFlame.getMotions()) {
+    List<Motion> motions = project.getMotions(res);
+    Flame refFlame = res.makeCopy();
+
+    for (FlamePreprocessor preprocessor : project.getPreprocessors()) {
+      if (preprocessor.isActive(pTime, pFPS)) {
+        res = preprocessor.preprocessFlame(project, res).makeCopy();
+        if (preprocessor instanceof FlameMotionPreprocessor) {
+          motions = ((FlameMotionPreprocessor) preprocessor).preprocessMotions(project, motions);
+          refFlame = res.makeCopy();
+        }
+      }
+    }
+
+    for (Motion motion : motions) {
       if (motion.getParent() == null && motion.isActive(pTime, pFPS)) {
         double value = 0.0;
         int iter = 0;
@@ -34,7 +54,7 @@ public class DanceFlameTransformer {
           value += currMotion.computeValue(pFFTData, pTime, pFPS);
           Motion refMotion = currMotion;
           currMotion = null;
-          for (Motion nextMotion : pFlame.getMotions()) {
+          for (Motion nextMotion : motions) {
             if (nextMotion.isActive(pTime, pFPS) && nextMotion.getParent() == refMotion) {
               currMotion = nextMotion;
               break;

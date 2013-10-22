@@ -23,6 +23,7 @@ import java.util.List;
 import org.jwildfire.create.tina.audio.JLayerInterface;
 import org.jwildfire.create.tina.audio.RecordedFFT;
 import org.jwildfire.create.tina.base.Flame;
+import org.jwildfire.create.tina.dance.motion.FlamePreprocessor;
 import org.jwildfire.create.tina.dance.motion.Motion;
 import org.jwildfire.create.tina.dance.motion.MotionLink;
 
@@ -30,6 +31,7 @@ public class DancingFlameProject implements Serializable {
   private static final long serialVersionUID = 1L;
   private List<Flame> flames = new ArrayList<Flame>();
   private List<Motion> motions = new ArrayList<Motion>();
+  private List<FlamePreprocessor> preprocessors = new ArrayList<FlamePreprocessor>();
 
   public List<Flame> getFlames() {
     return flames;
@@ -93,6 +95,10 @@ public class DancingFlameProject implements Serializable {
   public void setSoundData(String pFilename, RecordedFFT pFFT) {
     fft = pFFT;
     soundFilename = pFilename;
+  }
+
+  public List<FlamePreprocessor> getPreprocessors() {
+    return preprocessors;
   }
 
 }

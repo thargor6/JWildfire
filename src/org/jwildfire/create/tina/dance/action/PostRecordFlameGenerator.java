@@ -45,7 +45,7 @@ public class PostRecordFlameGenerator {
     recorder = pRecorder;
     thread = pThread;
     fftData = pFFTData;
-    transformer = new DanceFlameTransformer();
+    transformer = new DanceFlameTransformer(project);
   }
 
   public void createRecordedFlameFiles(String pAbsolutePath) throws Exception {
