@@ -29,6 +29,7 @@ import org.jwildfire.create.tina.dance.model.FlamePropertyPath;
 public abstract class Motion extends ManagedObject implements Serializable {
   private static final long serialVersionUID = 1L;
   private List<MotionLink> motionLinks = new ArrayList<MotionLink>();
+  private String caption;
 
   @Property(description = "Start frame", category = PropertyCategory.GENERAL)
   protected Integer startFrame;
@@ -94,4 +95,15 @@ public abstract class Motion extends ManagedObject implements Serializable {
     return this.getClass().getSimpleName() + " - " + hashCode();
   }
 
+  public void setCaption(String pCaption) {
+    caption = pCaption;
+  }
+
+  public String getCaption() {
+    return caption;
+  }
+
+  public String getDisplayLabel() {
+    return caption == null || caption.trim().length() == 0 ? toString() : caption;
+  }
 }
