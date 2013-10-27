@@ -4390,7 +4390,7 @@ public class TinaInternalFrame extends JInternalFrame {
         getGradientsList(), getBackgroundColorIndicatorBtn(), getRandomizeBtn(), getFlameBrowserTree(), getFlameBrowserImagesPanel(),
         getFlameBrowserRefreshBtn(), getFlameBrowserChangeFolderBtn(), getFlameBrowserToEditorBtn(), getFlameBrowserDeleteBtn(),
         getFlameBrowserRenameBtn(), getTinaPaletteFadeColorsCBx(), getDancingFlamesReplaceFlameFromEditorBtn(), getDancingFlamesRenameFlameBtn(),
-        getDancingFlamesRenameMotionBtn());
+        getDancingFlamesRenameMotionBtn(), getDancingFlamesMutedCBx());
 
     tinaController = new TinaController(params);
 
@@ -9278,6 +9278,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton dancingFlamesReplaceFlameFromEditorBtn;
   private JButton dancingFlamesRenameFlameBtn;
   private JButton dancingFlamesRenameMotionBtn;
+  private JCheckBox dancingFlamesMutedCBx;
 
   /**
    * This method initializes renderBatchJobsScrollPane	
@@ -12063,6 +12064,19 @@ public class TinaInternalFrame extends JInternalFrame {
       panel_54.add(getDancingFlamesDrawTrianglesCBx());
       panel_54.add(getDancingFlamesDrawFFTCBx());
       panel_54.add(getDancingFlamesDrawFPSCBx());
+
+      dancingFlamesMutedCBx = new JCheckBox("Muted");
+      dancingFlamesMutedCBx.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null) {
+            tinaController.getDancingFractalsController().mutedCBx_changed();
+          }
+        }
+      });
+      dancingFlamesMutedCBx.setPreferredSize(new Dimension(110, 18));
+      dancingFlamesMutedCBx.setMinimumSize(new Dimension(140, 18));
+      dancingFlamesMutedCBx.setMaximumSize(new Dimension(160, 18));
+      panel_54.add(dancingFlamesMutedCBx);
     }
     return panel_54;
   }
@@ -14610,5 +14624,9 @@ public class TinaInternalFrame extends JInternalFrame {
 
   public JButton getDancingFlamesRenameMotionBtn() {
     return dancingFlamesRenameMotionBtn;
+  }
+
+  public JCheckBox getDancingFlamesMutedCBx() {
+    return dancingFlamesMutedCBx;
   }
 } //  @jve:decl-index=0:visual-constraint="10,10"

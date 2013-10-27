@@ -118,6 +118,7 @@ public class DancingFractalsController {
   private final JCheckBox drawTrianglesCbx;
   private final JCheckBox drawFFTCbx;
   private final JCheckBox drawFPSCbx;
+  private final JCheckBox mutedCbx;
   private final JTree flamePropertiesTree;
   private final JPanel motionPropertyRootPnl;
   private PropertyPanel motionPropertyPnl = null;
@@ -125,6 +126,7 @@ public class DancingFractalsController {
   private final JComboBox addMotionCmb;
   private final JButton addMotionBtn;
   private final JButton deleteMotionBtn;
+  private final JButton renameMotionBtn;
   private final JButton linkMotionBtn;
   private final JButton unlinkMotionBtn;
   private final JComboBox createMotionsCmb;
@@ -155,7 +157,8 @@ public class DancingFractalsController {
       JButton pStartShowButton, JButton pStopShowButton, JCheckBox pDoRecordCBx, JComboBox pFlamesCmb, JCheckBox pDrawTrianglesCbx, JCheckBox pDrawFFTCbx, JCheckBox pDrawFPSCbx, JTree pFlamePropertiesTree,
       JPanel pMotionPropertyRootPnl, JTable pMotionTable, JComboBox pAddMotionCmb, JButton pAddMotionBtn, JButton pDeleteMotionBtn,
       JButton pLinkMotionBtn, JButton pUnlinkMotionBtn, JComboBox pCreateMotionsCmb, JButton pClearMotionsBtn,
-      JButton pLoadProjectBtn, JButton pSaveProjectBtn, JTable pMotionLinksTable, JButton pReplaceFlameFromEditorBtn, JButton pRenameFlameBtn) {
+      JButton pLoadProjectBtn, JButton pSaveProjectBtn, JTable pMotionLinksTable, JButton pReplaceFlameFromEditorBtn, JButton pRenameFlameBtn,
+      JButton pRenameMotionBtn, JCheckBox pMutedCbx) {
     flamePropertiesTreeService = new FlamePropertiesTreeService();
 
     rootTabbedPane = pRootTabbedPane;
@@ -189,6 +192,7 @@ public class DancingFractalsController {
     addMotionCmb = pAddMotionCmb;
     addMotionBtn = pAddMotionBtn;
     deleteMotionBtn = pDeleteMotionBtn;
+    renameMotionBtn = pRenameMotionBtn;
     linkMotionBtn = pLinkMotionBtn;
     unlinkMotionBtn = pUnlinkMotionBtn;
     createMotionsCmb = pCreateMotionsCmb;
@@ -198,6 +202,7 @@ public class DancingFractalsController {
     motionLinksTable = pMotionLinksTable;
     replaceFlameFromEditorBtn = pReplaceFlameFromEditorBtn;
     renameFlameBtn = pRenameFlameBtn;
+    mutedCbx = pMutedCbx;
 
     addMotionCmb.addItem(MotionType.FFT);
     addMotionCmb.addItem(MotionType.SAWTOOTH);
@@ -266,7 +271,7 @@ public class DancingFractalsController {
     return graph1Panel;
   }
 
-  public void refreshFlameImage(Flame flame, boolean pDrawTriangles, double pFPS, boolean pDrawFPS) {
+  public void refreshFlameImage(Flame flame, boolean pDrawTriangles, double pFPS, long pFrame, boolean pDrawFPS) {
     FlamePanel imgPanel = getFlamePanel();
     if (imgPanel == null)
       return;
@@ -293,7 +298,7 @@ public class DancingFractalsController {
           SimpleImage img = res.getImage();
           if (pDrawFPS) {
             TextTransformer txt = new TextTransformer();
-            txt.setText1("fps: " + Tools.doubleToString(pFPS));
+            txt.setText1("fps: " + Tools.doubleToString(pFPS) + ", time: " + Tools.doubleToString(pFrame / 1000.0) + "s");
             txt.setAntialiasing(false);
             txt.setColor(Color.LIGHT_GRAY);
             txt.setMode(Mode.NORMAL);
@@ -383,7 +388,7 @@ public class DancingFractalsController {
   public void startRender() throws Exception {
     stopRender();
     Flame selFlame = flamesCmb.getSelectedIndex() >= 0 && flamesCmb.getSelectedIndex() < project.getFlames().size() ? project.getFlames().get(flamesCmb.getSelectedIndex()) : null;
-    renderThread = new RealtimeAnimRenderThread(this);
+    renderThread = new RealtimeAnimRenderThread(this, project);
     renderThread.getFlameStack().addFlame(selFlame, 0, project.getMotions(selFlame));
     actionRecorder = new ActionRecorder(renderThread);
     renderThread.setFFTData(project.getFFT());
@@ -518,7 +523,7 @@ public class DancingFractalsController {
         if (motion != null) {
           switch (columnIndex) {
             case COL_MOTION:
-              return motion.toString();
+              return motion.getDisplayLabel();
             case COL_START_FRAME:
               return (motion.getStartFrame() != null) ? String.valueOf(motion.getStartFrame()) : "";
             case COL_END_FRAME:
@@ -748,6 +753,7 @@ public class DancingFractalsController {
     Motion selMotion = getSelectedMotion();
 
     deleteMotionBtn.setEnabled(!running && selMotion != null);
+    renameMotionBtn.setEnabled(deleteMotionBtn.isEnabled());
     boolean plainPropertySelected = flamePropertiesTreeService.isPlainPropertySelected(flamePropertiesTree);
     {
       boolean linkMotionEnabled = false;
@@ -990,6 +996,7 @@ public class DancingFractalsController {
       if (chooser.showOpenDialog(poolFlamePreviewPnl) == JFileChooser.APPROVE_OPTION) {
         File file = chooser.getSelectedFile();
         project = new JWFDanceReader().readProject(file.getAbsolutePath());
+        postProcessProject();
         refreshProjectFlames();
         enableControls();
       }
@@ -1033,13 +1040,22 @@ public class DancingFractalsController {
   }
 
   public void replaceFlameFromEditorBtn_clicked(Flame pFlame) {
-    // TODO Auto-generated method stub
     if (pFlame != null) {
       Flame flame = poolFlameHolder.getFlame();
       if (flame != null) {
         int idx = flamePropertiesTree.getSelectionRows()[0];
         // cant remove the flame by object reference because its a clone
-        project.getFlames().set(idx, validateDancingFlame(pFlame.makeCopy()));
+        Flame newFlame = validateDancingFlame(pFlame.makeCopy());
+        Flame oldFlame = project.getFlames().get(idx);
+        for (Motion motion : project.getMotions()) {
+          for (MotionLink link : motion.getMotionLinks()) {
+            if (link.getProperyPath().getFlame().isEqual(oldFlame)) {
+              link.getProperyPath().setFlame(newFlame);
+            }
+          }
+        }
+
+        project.getFlames().set(idx, newFlame);
         refreshProjectFlames();
         if (project.getFlames().size() == 0) {
           flamePropertiesTree_changed(null);
@@ -1088,6 +1104,38 @@ public class DancingFractalsController {
     }
     catch (Exception ex) {
       errorHandler.handleError(ex);
+    }
+  }
+
+  public void renameMotionBtn_clicked() {
+    int row = motionTable.getSelectedRow();
+    if (row >= 0 && row < project.getMotions().size()) {
+      Motion motion = project.getMotions().get(row);
+      String s = StandardDialogs.promptForText(rootTabbedPane, "Please enter the new title:", motion.getDisplayLabel());
+      if (s != null) {
+        motion.setCaption(s);
+        refreshMotionTable();
+        if (row >= project.getMotions().size()) {
+          row--;
+        }
+        if (row >= 0) {
+          motionTable.getSelectionModel().setSelectionInterval(row, row);
+        }
+        motionTableClicked();
+        enableControls();
+      }
+    }
+  }
+
+  private void postProcessProject() {
+    FractionPrjPostProcessorFactory factory = new FractionPrjPostProcessorFactory();
+    int fps = Integer.parseInt(framesPerSecondIEd.getText());
+    factory.postProcessProject(project, fps);
+  }
+
+  public void mutedCBx_changed() {
+    if (jLayer != null) {
+      jLayer.setMuted(mutedCbx.isSelected());
     }
   }
 

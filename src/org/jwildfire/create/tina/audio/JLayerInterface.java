@@ -25,7 +25,9 @@ import javazoom.jl.player.Player;
 public class JLayerInterface {
   private boolean playing;
   private Player player;
+  private PlayerAudioProcessor processor;
   private JWFAudioDevice audioDevice;
+  private boolean muted;
 
   public void stop() throws Exception {
     if (playing) {
@@ -61,7 +63,8 @@ public class JLayerInterface {
     stop();
     FileInputStream fin = new FileInputStream(pFilename);
     BufferedInputStream bin = new BufferedInputStream(fin);
-    final AudioProcessor processor = new PlayerAudioProcessor();
+    processor = new PlayerAudioProcessor();
+    processor.setMuted(muted);
     audioDevice = new JWFAudioDevice(processor);
     audioDevice.close();
     player = new Player(bin, audioDevice);
@@ -89,4 +92,8 @@ public class JLayerInterface {
     return audioDevice != null ? audioDevice.getFramePosition() : 0;
   }
 
+  public void setMuted(boolean pMuted) {
+    muted = pMuted;
+    processor.setMuted(pMuted);
+  }
 }

@@ -197,7 +197,7 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
         parameterObject.pDancingFlamesDeleteMotionBtn, parameterObject.pDancingFlamesLinkMotionBtn, parameterObject.pDancingFlamesUnlinkMotionBtn,
         parameterObject.pDancingFlamesCreateMotionsCmb, parameterObject.pDancingFlamesClearMotionsBtn, parameterObject.pDancingFlamesLoadProjectBtn, parameterObject.pDancingFlamesSaveProjectBtn,
         parameterObject.pDancingFlamesMotionLinksTable, parameterObject.dancingFlamesReplaceFlameFromEditorBtn, parameterObject.dancingFlamesRenameFlameBtn,
-        parameterObject.dancingFlamesRenameMotionBtn);
+        parameterObject.dancingFlamesRenameMotionBtn, parameterObject.dancingFlamesMutedCBx);
 
     {
       JPanel flamePanels[] = new JPanel[25];

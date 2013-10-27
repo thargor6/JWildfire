@@ -19,11 +19,18 @@ package org.jwildfire.create.tina.audio;
 public class PlayerAudioProcessor implements AudioProcessor {
   private byte[] byteBuf = new byte[4096];
   private JWFAudioDevice audioDevice;
+  private boolean muted = false;
 
   @Override
   public void process(short[] samples, int offs, int len) {
     byte[] b = toByteArray(samples, offs, len);
-    audioDevice.getSource().write(b, 0, len * 2);
+    if (isMuted()) {
+      byte[] blank = new byte[b.length];
+      audioDevice.getSource().write(blank, 0, len * 2);
+    }
+    else {
+      audioDevice.getSource().write(b, 0, len * 2);
+    }
   }
 
   @Override
@@ -53,5 +60,13 @@ public class PlayerAudioProcessor implements AudioProcessor {
   @Override
   public void finish() {
     // no op
+  }
+
+  public boolean isMuted() {
+    return muted;
+  }
+
+  public void setMuted(boolean muted) {
+    this.muted = muted;
   }
 }

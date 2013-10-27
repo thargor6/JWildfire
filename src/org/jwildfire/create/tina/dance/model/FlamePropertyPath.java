@@ -25,7 +25,7 @@ import org.jwildfire.create.tina.base.Flame;
 public class FlamePropertyPath implements Serializable {
   public final static String DELIMITER = ".";
   private static final long serialVersionUID = 1L;
-  private final Flame flame;
+  private Flame flame;
   private final String path;
 
   public FlamePropertyPath(Flame pFlame, List<String> pPath) {
@@ -54,5 +54,9 @@ public class FlamePropertyPath implements Serializable {
 
   public List<String> getPathComponents() {
     return Arrays.asList(path.split("\\" + DELIMITER));
+  }
+
+  public void setFlame(Flame flame) {
+    this.flame = flame;
   }
 }
