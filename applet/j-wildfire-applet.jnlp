@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jnlp spec="1.0+" 
+        codebase="http://www.andreas-maschke.de/java/JWildfireApplet"
+        href="j-wildfire-applet.jnlp">
+    <information>
+        <title>JWildfireApplet</title>
+        <vendor>Jwildfire.org</vendor>
+    </information>
+    <resources>
+        <!-- Application Resources -->
+        <j2se version="1.6+"
+              href="http://java.sun.com/products/autodl/j2se"/>
+        <jar href="j-wildfire-applet.jar" main="true" />
+
+    </resources>
+    <application-desc
+         name="JWildfireApplet"
+         main-class="org.jwildfire.applet.JWildfireApplet">
+     </application-desc>
+     <update check="background"/>
+</jnlp>

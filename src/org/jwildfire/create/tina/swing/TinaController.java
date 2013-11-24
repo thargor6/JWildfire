@@ -2863,8 +2863,8 @@ public class TinaController implements FlameHolder, JobRenderThreadController, S
     RandomFlameGenerator randGen = RandomFlameGeneratorList.getRandomFlameGeneratorInstance(pGeneratorname, true);
     //int palettePoints = Integer.parseInt(paletteRandomPointsREd.getText());
     for (int i = 0; i < maxCount; i++) {
-      int palettePoints = 2 + (int) (Math.random() * 17.0);
-      boolean fadePaletteColors = Math.random() > 0.33;
+      int palettePoints = 7 + (int) (Math.random() * 34.0);
+      boolean fadePaletteColors = Math.random() > 0.25;
       RandomFlameGeneratorSampler sampler = new RandomFlameGeneratorSampler(IMG_WIDTH / 2, IMG_HEIGHT / 2, prefs, randGen, palettePoints, fadePaletteColors, pQuality);
       RandomFlameGeneratorSample sample = sampler.createSample();
       FlameThumbnail thumbnail;

@@ -996,7 +996,6 @@ public class DancingFractalsController {
       if (chooser.showOpenDialog(poolFlamePreviewPnl) == JFileChooser.APPROVE_OPTION) {
         File file = chooser.getSelectedFile();
         project = new JWFDanceReader().readProject(file.getAbsolutePath());
-        postProcessProject();
         refreshProjectFlames();
         enableControls();
       }
@@ -1125,12 +1124,6 @@ public class DancingFractalsController {
         enableControls();
       }
     }
-  }
-
-  private void postProcessProject() {
-    FractionPrjPostProcessorFactory factory = new FractionPrjPostProcessorFactory();
-    int fps = Integer.parseInt(framesPerSecondIEd.getText());
-    factory.postProcessProject(project, fps);
   }
 
   public void mutedCBx_changed() {

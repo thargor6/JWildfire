@@ -29,6 +29,8 @@ import org.jwildfire.create.tina.render.RenderedFlame;
 import org.jwildfire.create.tina.swing.RandomBatchQuality;
 import org.jwildfire.image.Pixel;
 import org.jwildfire.image.SimpleImage;
+import org.jwildfire.transform.ConvolveTransformer;
+import org.jwildfire.transform.ConvolveTransformer.KernelType;
 import org.jwildfire.transform.PixelizeTransformer;
 
 public class RandomFlameGeneratorSampler {
@@ -39,6 +41,7 @@ public class RandomFlameGeneratorSampler {
   private final boolean fadePaletteColors;
   private RandomFlameGenerator randGen;
   private final RandomBatchQuality quality;
+  private static boolean useFilter = true;
 
   public RandomFlameGeneratorSampler(int pImageWidth, int pImageHeight, Prefs pPrefs, RandomFlameGenerator pRandGen, int pPaletteSize, boolean pFadePaletteColors, RandomBatchQuality pQuality) {
     imageWidth = pImageWidth;
@@ -51,13 +54,26 @@ public class RandomFlameGeneratorSampler {
   }
 
   public static double calculateCoverage(SimpleImage pImg, int bgRed, int bgGreen, int bgBlue) {
-    long maxCoverage = pImg.getImageWidth() * pImg.getImageHeight();
+    SimpleImage img;
+    if (useFilter) {
+      SimpleImage filteredImg = new SimpleImage(pImg.getBufferedImg(), pImg.getImageWidth(), pImg.getImageHeight());
+      ConvolveTransformer transformer = new ConvolveTransformer();
+      transformer.initDefaultParams(filteredImg);
+      transformer.setKernelType(KernelType.SOBEL_3X3);
+      transformer.transformImage(filteredImg);
+      img = filteredImg;
+    }
+    else {
+      img = pImg;
+    }
+
+    long maxCoverage = img.getImageWidth() * img.getImageHeight();
     long coverage = 0;
     Pixel pixel = new Pixel();
     if (bgRed == 0 && bgGreen == 0 && bgBlue == 0) {
-      for (int k = 0; k < pImg.getImageHeight(); k++) {
-        for (int l = 0; l < pImg.getImageWidth(); l++) {
-          pixel.setARGBValue(pImg.getARGBValue(l, k));
+      for (int k = 0; k < img.getImageHeight(); k++) {
+        for (int l = 0; l < img.getImageWidth(); l++) {
+          pixel.setARGBValue(img.getARGBValue(l, k));
           if (pixel.r > 20 || pixel.g > 20 || pixel.b > 20) {
             coverage++;
           }
@@ -65,9 +81,9 @@ public class RandomFlameGeneratorSampler {
       }
     }
     else {
-      for (int k = 0; k < pImg.getImageHeight(); k++) {
-        for (int l = 0; l < pImg.getImageWidth(); l++) {
-          pixel.setARGBValue(pImg.getARGBValue(l, k));
+      for (int k = 0; k < img.getImageHeight(); k++) {
+        for (int l = 0; l < img.getImageWidth(); l++) {
+          pixel.setARGBValue(img.getARGBValue(l, k));
           if (Math.abs(pixel.r - bgRed) > 20.0 && Math.abs(pixel.g - bgGreen) > 20.0 && Math.abs(pixel.b - bgBlue) > 20.0) {
             coverage++;
           }
@@ -93,7 +109,7 @@ public class RandomFlameGeneratorSampler {
       flame.setPixelsPerUnit(10);
       flame.setSpatialFilterRadius(0.0);
       RGBPalette palette = new RandomRGBPaletteGenerator().generatePalette(paletteSize, fadePaletteColors);
-      if (Math.random() < 0.5) {
+      if (Math.random() < 0.32) {
         palette.sort();
       }
 

@@ -94,6 +94,7 @@ public class JLayerInterface {
 
   public void setMuted(boolean pMuted) {
     muted = pMuted;
-    processor.setMuted(pMuted);
+    if (processor != null)
+      processor.setMuted(pMuted);
   }
 }

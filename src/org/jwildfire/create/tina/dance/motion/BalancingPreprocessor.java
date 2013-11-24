@@ -33,9 +33,14 @@ public class BalancingPreprocessor extends FlamePreprocessor {
 
   @Override
   public Flame preprocessFlame(DancingFlameProject pProject, Flame pFlame) {
-    pFlame.getPalette().setModRed(red);
-    pFlame.getPalette().setModGreen(green);
-    pFlame.getPalette().setModBlue(blue);
+    //    pFlame.getPalette().setModRed(red);
+    //    pFlame.getPalette().setModGreen(green);
+    //    pFlame.getPalette().setModBlue(blue);
+    //    pFlame.getPalette().setModRed(8);
+    //    pFlame.getPalette().setModGreen(-5);
+    //    pFlame.getPalette().setModBlue(-3);
+    pFlame.setGamma(pFlame.getGamma() - 0.33);
+    pFlame.getPalette().setModSaturation(-28);
     return pFlame;
   }
 
