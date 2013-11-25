@@ -1,3 +1,14 @@
+V1.04 (25.11.2013):
+ - improved quality of the random flame generators (to generate more complex and visually more appealing random flames)
+ - new external applet for easily playing around with random flames, see README_APPLET.txt for details
+ - Dancing flames module: added the possibilty to mute the sound while plaixng the show (makes it possible to hear some other tune in the background while you are concentrating on some motion details)
+ - Dancing flames module: possiblity to rename motions
+ - Dancing flames module: concept of flame-preprocessors (no GUI yet)
+ - Dancing flame module: display of elapsed time
+ - Dancing flames module: new "SINE" type of motion
+ - Dancing flames module: possibility to update a flame (with an changed version from the editor)
+ - Dancing flames module: possibility to rename flames
+
 V1.03 (13.10.2013):
  - simplified startup for Mac users, new start-scripts for different plattforms, updated README files
  - experimental "primitives_wf"-variation (which may play a larger role in the future) 

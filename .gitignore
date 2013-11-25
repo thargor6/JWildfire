@@ -1,9 +1,11 @@
 *.class
 j-wildfire.jar
 j-wildfire-launcher.jar
+j-wildfire-applet.jar
 j-wildfire.zip
 history.txt
 trash
+applet
 *l2fprod*
 *toedter*
 *flagstone*
