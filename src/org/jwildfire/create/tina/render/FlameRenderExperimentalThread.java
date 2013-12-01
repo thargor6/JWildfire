@@ -21,10 +21,10 @@ import static org.jwildfire.base.mathlib.MathLib.M_PI;
 import static org.jwildfire.base.mathlib.MathLib.cos;
 import static org.jwildfire.base.mathlib.MathLib.exp;
 import static org.jwildfire.base.mathlib.MathLib.log;
-import static org.jwildfire.base.mathlib.MathLib.pow;
 import static org.jwildfire.base.mathlib.MathLib.sin;
 import static org.jwildfire.base.mathlib.MathLib.sqrt;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.jwildfire.base.Prefs;
@@ -35,40 +35,75 @@ import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 import org.jwildfire.create.tina.base.raster.AbstractRasterPoint;
 import org.jwildfire.create.tina.palette.RenderColor;
+import org.jwildfire.create.tina.transform.XFormTransformService;
 
 public final class FlameRenderExperimentalThread extends FlameRenderThread {
-  private XYZPoint affineT;
-  private XYZPoint varT;
-  private XYZPoint p;
-  private XYZPoint q;
-  private XForm xf;
   private long startIter;
   private long iter;
 
+  private class RenderState {
+    private XYZPoint affineT;
+    private XYZPoint varT;
+    private XYZPoint p;
+    private XYZPoint q;
+    private XForm xf;
+  }
+
+  private List<RenderState> state = new ArrayList<RenderState>();
+  private int stateIdx = 0;
+
+  private final static int FLAME_COUNT = 20;
+  private List<Flame> flames = new ArrayList<Flame>();
+
   public FlameRenderExperimentalThread(Prefs pPrefs, int pThreadId, FlameRenderer pRenderer, Flame pFlame, long pSamples) {
     super(pPrefs, pThreadId, pRenderer, pFlame, pSamples);
+    createFlames(pFlame);
+  }
+
+  private void createFlames(Flame pFlame) {
+    flames.clear();
+    state.clear();
+    for (int i = 0; i < FLAME_COUNT; i++) {
+      Flame newFlame = flame.makeCopy();
+      newFlame.getLayers().get(0).refreshModWeightTables(ctx);
+      XForm xForm = newFlame.getXForms().get(0);
+      double dx = 0.2 * i;
+      double dy = 0.1 * i;
+      XFormTransformService.globalTranslate(xForm, dx, dy, false);
+      flames.add(newFlame);
+
+      RenderState renderState = new RenderState();
+      state.add(renderState);
+    }
+    stateIdx = 0;
   }
 
   @Override
   protected void preFuseIter() {
-    affineT = new XYZPoint(); // affine part of the transformation
-    varT = new XYZPoint(); // complete transformation
-    p = new XYZPoint();
-    q = new XYZPoint();
-    p.x = 2.0 * randGen.random() - 1.0;
-    p.y = 2.0 * randGen.random() - 1.0;
-    p.z = 0.0;
-    p.color = randGen.random();
+    for (int j = 0; j < flames.size(); j++) {
+      Flame flame = flames.get(j);
+      RenderState renderState = state.get(j);
+      renderState.affineT = new XYZPoint(); // affine part of the transformation
+      renderState.varT = new XYZPoint(); // complete transformation
+      renderState.p = new XYZPoint();
+      renderState.q = new XYZPoint();
+      renderState.p.x = 2.0 * randGen.random() - 1.0;
+      renderState.p.y = 2.0 * randGen.random() - 1.0;
+      renderState.p.z = 0.0;
+      renderState.p.color = randGen.random();
 
-    xf = flame.getXForms().get(0);
-    xf.transformPoint(ctx, affineT, varT, p, p);
-    for (int i = 0; i <= Constants.INITIAL_ITERATIONS; i++) {
-      xf = xf.getNextAppliedXFormTable()[randGen.random(Constants.NEXT_APPLIED_XFORM_TABLE_SIZE)];
-      if (xf == null) {
-        return;
+      renderState.xf = flame.getXForms().get(0);
+      renderState.xf.transformPoint(ctx, renderState.affineT, renderState.varT, renderState.p, renderState.p);
+      for (int i = 0; i <= Constants.INITIAL_ITERATIONS; i++) {
+        renderState.xf = renderState.xf.getNextAppliedXFormTable()[randGen.random(Constants.NEXT_APPLIED_XFORM_TABLE_SIZE)];
+        if (renderState.xf == null) {
+          renderState.xf = flame.getXForms().get(0);
+          break;
+        }
+        renderState.xf.transformPoint(ctx, renderState.affineT, renderState.varT, renderState.p, renderState.p);
       }
-      xf.transformPoint(ctx, affineT, varT, p, p);
     }
+    stateIdx = 0;
   }
 
   @Override
@@ -81,50 +116,43 @@ public final class FlameRenderExperimentalThread extends FlameRenderThread {
   protected void iterate() {
     List<IterationObserver> observers = renderer.getIterationObservers();
     for (iter = startIter; !forceAbort && (samples < 0 || iter < samples); iter++) {
+      stateIdx++;
+      if (stateIdx >= flames.size()) {
+        stateIdx = 0;
+      }
+      Flame flame = flames.get(stateIdx);
+      RenderState renderState = state.get(stateIdx);
+
       if (iter % 10000 == 0) {
         preFuseIter();
       }
       else if (iter % 100 == 0) {
         currSample = iter;
-        if (Double.isInfinite(p.x) || Double.isInfinite(p.y) || Double.isInfinite(p.z) || Double.isNaN(p.x) || Double.isNaN(p.y) || Double.isNaN(p.z)) {
-          //          System.out.println(Tools.TimeToString(new Date()) + ": recovering...");
+        if (Double.isInfinite(renderState.p.x) || Double.isInfinite(renderState.p.y) || Double.isInfinite(renderState.p.z) || Double.isNaN(renderState.p.x) || Double.isNaN(renderState.p.y) || Double.isNaN(renderState.p.z)) {
           preFuseIter();
         }
       }
+
       int nextXForm = randGen.random(Constants.NEXT_APPLIED_XFORM_TABLE_SIZE);
-      xf = xf.getNextAppliedXFormTable()[nextXForm];
-      if (xf == null) {
+      renderState.xf = renderState.xf.getNextAppliedXFormTable()[nextXForm];
+      if (renderState.xf == null) {
         return;
       }
 
-      final double DX = 0.01;
-      XYZPoint p0 = new XYZPoint();
-      XYZPoint p1 = new XYZPoint();
-      p0.assign(p);
-      p1.assign(p);
-      p0.x -= DX;
-      p0.y -= DX;
-      p0.z -= DX;
-      p1.x += DX;
-      p1.y += DX;
-      p1.z += DX;
-      xf.transformPoint(ctx, affineT, varT, p0, p0);
-      xf.transformPoint(ctx, affineT, varT, p1, p1);
-
-      xf.transformPoint(ctx, affineT, varT, p, p);
-      if (xf.getDrawMode() == DrawMode.HIDDEN)
+      renderState.xf.transformPoint(ctx, renderState.affineT, renderState.varT, renderState.p, renderState.p);
+      if (renderState.xf.getDrawMode() == DrawMode.HIDDEN)
         continue;
-      else if ((xf.getDrawMode() == DrawMode.OPAQUE) && (randGen.random() > xf.getOpacity()))
+      else if ((renderState.xf.getDrawMode() == DrawMode.OPAQUE) && (randGen.random() > renderState.xf.getOpacity()))
         continue;
       List<XForm> finalXForms = flame.getFinalXForms();
 
       int xIdx, yIdx;
       if (finalXForms.size() > 0) {
-        finalXForms.get(0).transformPoint(ctx, affineT, varT, p, q);
+        finalXForms.get(0).transformPoint(ctx, renderState.affineT, renderState.varT, renderState.p, renderState.q);
         for (int i = 1; i < finalXForms.size(); i++) {
-          finalXForms.get(i).transformPoint(ctx, affineT, varT, q, q);
+          finalXForms.get(i).transformPoint(ctx, renderState.affineT, renderState.varT, renderState.q, renderState.q);
         }
-        if (!renderer.project(q, prj))
+        if (!renderer.project(renderState.q, prj))
           continue;
         XForm finalXForm = finalXForms.get(finalXForms.size() - 1);
         if ((finalXForm.getAntialiasAmount() > EPSILON) && (finalXForm.getAntialiasRadius() > EPSILON) && (randGen.random() > 1.0 - finalXForm.getAntialiasAmount())) {
@@ -139,11 +167,11 @@ public final class FlameRenderExperimentalThread extends FlameRenderThread {
         }
       }
       else {
-        q.assign(p);
-        if (!renderer.project(q, prj))
+        renderState.q.assign(renderState.p);
+        if (!renderer.project(renderState.q, prj))
           continue;
-        if ((xf.getAntialiasAmount() > EPSILON) && (xf.getAntialiasRadius() > EPSILON) && (randGen.random() > 1.0 - xf.getAntialiasAmount())) {
-          double dr = exp(xf.getAntialiasRadius() * sqrt(-log(randGen.random()))) - 1.0;
+        if ((renderState.xf.getAntialiasAmount() > EPSILON) && (renderState.xf.getAntialiasRadius() > EPSILON) && (randGen.random() > 1.0 - renderState.xf.getAntialiasAmount())) {
+          double dr = exp(renderState.xf.getAntialiasRadius() * sqrt(-log(randGen.random()))) - 1.0;
           double da = randGen.random() * 2.0 * M_PI;
           xIdx = (int) (renderer.bws * prj.x + dr * cos(da) + 0.5);
           yIdx = (int) (renderer.bhs * prj.y + dr * sin(da) + 0.5);
@@ -159,38 +187,18 @@ public final class FlameRenderExperimentalThread extends FlameRenderThread {
         continue;
       AbstractRasterPoint rp = renderer.raster[yIdx][xIdx];
 
-      double offsetX = 0.0;
-      double offsetY = 0.0;
-      double offsetZ = 0.0;
-      double exponent = -0.5;
-      double radius = 0.25;
-      double scale = 1.0;
-
-      q.x = 0.5 * (p1.x - p0.x) / DX + offsetX;
-      q.y = 0.5 * (p1.y - p0.y) / DX + offsetY;
-      q.z = 0.5 * (p1.z - p0.z) / DX + offsetZ;
-      double r = radius * pow(scale * (q.x * q.x + q.y * q.y + q.z * q.z), exponent);
-      p.color = r;
-      if (p.color < 0.0)
-        p.color = 0.0;
-      else if (p.color >= 1)
-        p.color = 1;
-
-      if (p.rgbColor) {
-        rp.setRed(rp.getRed() + p.redColor * prj.intensity);
-        rp.setGreen(rp.getGreen() + p.greenColor * prj.intensity);
-        rp.setBlue(rp.getBlue() + p.blueColor * prj.intensity);
+      if (renderState.p.rgbColor) {
+        rp.setRed(rp.getRed() + renderState.p.redColor * prj.intensity);
+        rp.setGreen(rp.getGreen() + renderState.p.greenColor * prj.intensity);
+        rp.setBlue(rp.getBlue() + renderState.p.blueColor * prj.intensity);
       }
       else {
-        int colorIdx = (int) (p.color * renderer.paletteIdxScl + 0.5);
+        int colorIdx = (int) (renderState.p.color * renderer.paletteIdxScl + 0.5);
         RenderColor color = renderer.colorMap[colorIdx];
         rp.setRed(rp.getRed() + color.red * prj.intensity);
         rp.setGreen(rp.getGreen() + color.green * prj.intensity);
         rp.setBlue(rp.getBlue() + color.blue * prj.intensity);
       }
-
-      //      changeWeights(xIdx, yIdx);
-
       rp.incCount();
       if (observers != null && observers.size() > 0) {
         for (IterationObserver observer : observers) {
@@ -200,42 +208,14 @@ public final class FlameRenderExperimentalThread extends FlameRenderThread {
     }
   }
 
-  public static long weightCounter = 1;
-
-  public void changeWeights(int xIdx, int yIdx) {
-    if ((weightCounter++) % 10 == 0) {
-      synchronized (flame) {
-        int dim = flame.getXForms().size();
-        int weightX = (int) (dim * xIdx / (double) renderer.rasterWidth);
-        int weightY = (int) (dim * yIdx / (double) renderer.rasterHeight);
-        flame.getXForms().get(weightX).getModifiedWeights()[weightY] *= 0.9;
-        flame.refreshModWeightTables(ctx);
-      }
-    }
-  }
-
   @Override
   protected FlameRenderThreadState saveState() {
-    FlameRenderFlatThreadState res = new FlameRenderFlatThreadState();
-    res.currSample = currSample;
-    res.xfIndex = (xf != null) ? flame.getXForms().indexOf(xf) : -1;
-    res.startIter = iter;
-    res.affineT = affineT != null ? affineT.makeCopy() : null;
-    res.varT = varT != null ? varT.makeCopy() : null;
-    res.p = p != null ? p.makeCopy() : null;
-    res.q = q != null ? q.makeCopy() : null;
-    return res;
+    // TODO
+    return null;
   }
 
   @Override
   protected void restoreState(FlameRenderThreadState pState) {
-    FlameRenderFlatThreadState state = (FlameRenderFlatThreadState) pState;
-    currSample = state.currSample;
-    xf = (state.xfIndex >= 0) ? flame.getXForms().get(state.xfIndex) : null;
-    startIter = state.startIter;
-    affineT = state.affineT != null ? state.affineT.makeCopy() : null;
-    varT = state.varT != null ? state.varT.makeCopy() : null;
-    p = state.p != null ? state.p.makeCopy() : null;
-    q = state.q != null ? state.q.makeCopy() : null;
+    // TODO
   }
 }

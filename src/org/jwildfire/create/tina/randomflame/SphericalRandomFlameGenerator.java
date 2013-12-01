@@ -105,7 +105,7 @@ public class SphericalRandomFlameGenerator extends RandomFlameGenerator {
       xForm.setColor(Math.random());
       xForm.setColorSymmetry(0);
     }
-    flame.randomizeColors();
+    flame.getFirstLayer().randomizeColors();
 
     return flame;
   }

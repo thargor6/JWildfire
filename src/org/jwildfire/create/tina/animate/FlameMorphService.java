@@ -47,7 +47,6 @@ public class FlameMorphService {
     else if (fScl >= 1.0 - MathLib.EPSILON) {
       return pFlame2;
     }
-    //    System.out.println("MMMMMMMMM: " + fScl);
     Flame res = pFlame1.makeCopy();
     res.getXForms().clear();
     res.getFinalXForms().clear();

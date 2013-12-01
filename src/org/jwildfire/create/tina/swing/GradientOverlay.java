@@ -27,7 +27,7 @@ import java.awt.RenderingHints;
 
 import javax.swing.JColorChooser;
 
-import org.jwildfire.create.tina.base.Flame;
+import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.palette.RGBColor;
 import org.jwildfire.create.tina.palette.RGBPalette;
 
@@ -155,7 +155,7 @@ public class GradientOverlay {
     this.gradientZoom = pGradientZoom;
   }
 
-  public boolean mouseDragged(double pDX, int pPosX, int pPosY, Flame pFlame) {
+  public boolean mouseDragged(double pDX, int pPosX, int pPosY, Layer pLayer) {
     boolean reRender = false;
     int iDX = (int) (pDX + 0.5);
     if (iDX < 1 && pDX > 0.0) {
@@ -173,8 +173,8 @@ public class GradientOverlay {
     // drag gradient
     else if (dragStartY > yMin && dragStartY < yMax) {
       if (fabs(gradientZoom - 1.0) < EPSILON) {
-        int modShift = pFlame.getPalette().getModShift() + iDX;
-        pFlame.getPalette().shiftColors(modShift);
+        int modShift = pLayer.getPalette().getModShift() + iDX;
+        pLayer.getPalette().shiftColors(modShift);
         reRender = true;
       }
       else {

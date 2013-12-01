@@ -270,4 +270,10 @@ public class TinaControllerData {
   public JButton scriptRunBtn;
   public JTree gradientLibTree;
   public JButton backgroundColorIndicatorBtn;
+  public JWFNumberField layerWeightEd;
+  public JButton layerAddBtn;
+  public JButton layerDuplicateBtn;
+  public JButton layerDeleteBtn;
+  public JTable layersTable;
+  public JToggleButton layerVisibleBtn;
 }

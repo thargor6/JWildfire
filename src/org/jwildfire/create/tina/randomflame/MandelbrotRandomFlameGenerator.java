@@ -127,7 +127,7 @@ public class MandelbrotRandomFlameGenerator extends RandomFlameGenerator {
       varFunc = VariationFuncList.getVariationFuncInstance(FNCLST_FINAL[(int) (Math.random() * FNCLST_FINAL.length)], true);
       xForm.addVariation(1.0, varFunc);
     }
-    flame.randomizeColors();
+    flame.getFirstLayer().randomizeColors();
     return flame;
   }
 

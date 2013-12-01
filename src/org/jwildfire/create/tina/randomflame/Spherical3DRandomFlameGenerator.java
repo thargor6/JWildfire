@@ -157,7 +157,7 @@ public class Spherical3DRandomFlameGenerator extends RandomFlameGenerator {
       xForm2.getModifiedWeights()[3] = 0;
       xForm2.getModifiedWeights()[4] = 0;
     }
-    flame.randomizeColors();
+    flame.getFirstLayer().randomizeColors();
 
     return flame;
   }

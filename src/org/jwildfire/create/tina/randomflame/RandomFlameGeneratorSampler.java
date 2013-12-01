@@ -113,7 +113,7 @@ public class RandomFlameGeneratorSampler {
         palette.sort();
       }
 
-      flame.setPalette(palette);
+      flame.getFirstLayer().setPalette(palette);
       // render it   
       flame.setSampleDensity(25);
       RenderedFlame renderedFlame;

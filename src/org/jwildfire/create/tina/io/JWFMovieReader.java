@@ -111,6 +111,18 @@ public class JWFMovieReader {
           //System.out.println(flameXML);
           hs = hs.substring(0, psFlame);
         }
+        else {
+          psFlame = hs.indexOf("<jwf-flame ");
+          if (psFlame > 0) {
+            int peFlame = hs.indexOf("</jwf-flame>", psFlame + 1);
+            String flameXML = hs.substring(psFlame, peFlame + 8);
+            Flame flame = new Flam3Reader(prefs).readFlamesfromXML(flameXML).get(0);
+            part.setFlame(flame);
+            //System.out.println(flameXML);
+            hs = hs.substring(0, psFlame);
+          }
+        }
+
         parseMoviePartAttributes(part, hs);
         p = pe + 2;
       }

@@ -25,6 +25,7 @@ import org.jwildfire.base.Prefs;
 import org.jwildfire.create.tina.base.Constants;
 import org.jwildfire.create.tina.base.DrawMode;
 import org.jwildfire.create.tina.base.Flame;
+import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 import org.jwildfire.create.tina.io.Flam3Reader;
@@ -135,8 +136,9 @@ public class SubFlameWFFunc extends VariationFunc {
   @Override
   public void init(FlameTransformationContext pContext, XForm pXForm, double pAmount) {
     if (flame != null) {
-      flame.refreshModWeightTables(pContext);
-      xf = flame.getXForms().get(0);
+      Layer layer = flame.getLayers().get(0);
+      layer.refreshModWeightTables(pContext);
+      xf = layer.getXForms().get(0);
       p = new XYZPoint();
       p.x = 2.0 * pContext.random() - 1.0;
       p.y = 2.0 * pContext.random() - 1.0;

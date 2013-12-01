@@ -19,6 +19,7 @@ package org.jwildfire.create.tina.dance.motion;
 import org.jwildfire.base.Property;
 import org.jwildfire.base.PropertyCategory;
 import org.jwildfire.create.tina.base.Flame;
+import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.dance.DancingFlameProject;
 
 public class BalancingPreprocessor extends FlamePreprocessor {
@@ -33,14 +34,11 @@ public class BalancingPreprocessor extends FlamePreprocessor {
 
   @Override
   public Flame preprocessFlame(DancingFlameProject pProject, Flame pFlame) {
-    //    pFlame.getPalette().setModRed(red);
-    //    pFlame.getPalette().setModGreen(green);
-    //    pFlame.getPalette().setModBlue(blue);
-    //    pFlame.getPalette().setModRed(8);
-    //    pFlame.getPalette().setModGreen(-5);
-    //    pFlame.getPalette().setModBlue(-3);
-    pFlame.setGamma(pFlame.getGamma() - 0.33);
-    pFlame.getPalette().setModSaturation(-28);
+    for (Layer layer : pFlame.getLayers()) {
+      layer.getPalette().setModRed(red);
+      layer.getPalette().setModGreen(green);
+      layer.getPalette().setModBlue(blue);
+    }
     return pFlame;
   }
 

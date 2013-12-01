@@ -26,6 +26,7 @@ import java.util.Map;
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.DrawMode;
 import org.jwildfire.create.tina.base.Flame;
+import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.Shading;
 import org.jwildfire.create.tina.base.ShadingInfo;
 import org.jwildfire.create.tina.base.XForm;
@@ -200,38 +201,53 @@ public class Flam3Writer {
       attrList.add(xb.createAttr(Flam3Reader.ATTR_SHADING_DISTANCE_COLOR_COORDINATE, shadingInfo.getDistanceColorCoordinate()));
       attrList.add(xb.createAttr(Flam3Reader.ATTR_SHADING_DISTANCE_COLOR_SHIFT, shadingInfo.getDistanceColorShift()));
     }
-    xb.beginElement("flame", attrList);
-    // XForm
-    for (XForm xForm : pFlame.getXForms()) {
-      xb.emptyElement("xform", createXFormAttrList(xb, pFlame, xForm));
-    }
-    // FinalXForms
-    for (XForm xForm : pFlame.getFinalXForms()) {
-      xb.emptyElement("finalxform", createXFormAttrList(xb, pFlame, xForm));
-    }
-    // Palette
-    {
-      RGBPalette palette = pFlame.getPalette();
-      xb.beginElement("palette",
-          xb.createAttr("count", palette.getSize()),
-          xb.createAttr("format", "RGB"));
-      StringBuilder rgb = new StringBuilder();
-      for (int i = 0; i < palette.getSize(); i++) {
-        String hs;
-        hs = Integer.toHexString(palette.getColor(i).getRed()).toUpperCase();
-        rgb.append(hs.length() > 1 ? hs : "0" + hs);
-        hs = Integer.toHexString(palette.getColor(i).getGreen()).toUpperCase();
-        rgb.append(hs.length() > 1 ? hs : "0" + hs);
-        hs = Integer.toHexString(palette.getColor(i).getBlue()).toUpperCase();
-        rgb.append(hs.length() > 1 ? hs : "0" + hs);
-        if ((i + 1) % 12 == 0) {
-          rgb.append("\n");
+    boolean enhancedFlame = pFlame.getLayers().size() > 1;
+    String flameElement = enhancedFlame ? "jwf-flame" : "flame";
+    xb.beginElement(flameElement, attrList);
+    for (Layer layer : pFlame.getLayers()) {
+      if (enhancedFlame) {
+        List<SimpleXMLBuilder.Attribute<?>> layerAttrList = new ArrayList<SimpleXMLBuilder.Attribute<?>>();
+        layerAttrList.add(xb.createAttr("weight", layer.getWeight()));
+        layerAttrList.add(xb.createAttr("visible", layer.isVisible() ? 1 : 0));
+        xb.beginElement("layer", layerAttrList);
+      }
+
+      // XForm
+      for (XForm xForm : layer.getXForms()) {
+        xb.emptyElement("xform", createXFormAttrList(xb, pFlame, xForm));
+      }
+      // FinalXForms
+      for (XForm xForm : layer.getFinalXForms()) {
+        xb.emptyElement("finalxform", createXFormAttrList(xb, pFlame, xForm));
+      }
+      // Palette
+      {
+        RGBPalette palette = layer.getPalette();
+        xb.beginElement("palette",
+            xb.createAttr("count", palette.getSize()),
+            xb.createAttr("format", "RGB"));
+        StringBuilder rgb = new StringBuilder();
+        for (int i = 0; i < palette.getSize(); i++) {
+          String hs;
+          hs = Integer.toHexString(palette.getColor(i).getRed()).toUpperCase();
+          rgb.append(hs.length() > 1 ? hs : "0" + hs);
+          hs = Integer.toHexString(palette.getColor(i).getGreen()).toUpperCase();
+          rgb.append(hs.length() > 1 ? hs : "0" + hs);
+          hs = Integer.toHexString(palette.getColor(i).getBlue()).toUpperCase();
+          rgb.append(hs.length() > 1 ? hs : "0" + hs);
+          if ((i + 1) % 12 == 0) {
+            rgb.append("\n");
+          }
+        }
+        xb.addContent(rgb.toString());
+        xb.endElement("palette");
+
+        if (enhancedFlame) {
+          xb.endElement("layer");
         }
       }
-      xb.addContent(rgb.toString());
-      xb.endElement("palette");
+      xb.endElement(flameElement);
     }
-    xb.endElement("flame");
     return xb.buildXML();
   }
 

@@ -105,7 +105,7 @@ public class JulianDiscRandomFlameGenerator extends RandomFlameGenerator {
         xForm.addVariation(2.0 + Math.random() * 2.0, VariationFuncList.getVariationFuncInstance(varName, true));
       }
     }
-    flame.randomizeColors();
+    flame.getFirstLayer().randomizeColors();
     return flame;
   }
 

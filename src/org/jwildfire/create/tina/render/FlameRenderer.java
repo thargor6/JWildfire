@@ -37,6 +37,7 @@ import org.jwildfire.base.Prefs;
 import org.jwildfire.base.QualityProfile;
 import org.jwildfire.base.mathlib.MathLib;
 import org.jwildfire.create.tina.base.Flame;
+import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XYZPoint;
 import org.jwildfire.create.tina.base.XYZProjectedPoint;
 import org.jwildfire.create.tina.base.raster.AbstractRasterPoint;
@@ -301,7 +302,9 @@ public class FlameRenderer {
       for (int t = 0; t < prefs.getTinaRenderThreads(); t++) {
         Flame renderFlame = flame.makeCopy();
         renderFlames.add(renderFlame);
-        renderFlame.refreshModWeightTables(flameTransformationContext);
+        for (Layer layer : renderFlame.getLayers()) {
+          layer.refreshModWeightTables(flameTransformationContext);
+        }
       }
       forceAbort = false;
       iterate(0, 1, renderFlames);
@@ -874,7 +877,9 @@ public class FlameRenderer {
     for (int t = 0; t < prefs.getTinaRenderThreads(); t++) {
       Flame renderFlame = flame.makeCopy();
       renderFlames.add(renderFlame);
-      renderFlame.refreshModWeightTables(flameTransformationContext);
+      for (Layer layer : renderFlame.getLayers()) {
+        layer.refreshModWeightTables(flameTransformationContext);
+      }
     }
     return startIterate(renderFlames, null, true);
   }
@@ -906,7 +911,9 @@ public class FlameRenderer {
         for (int t = 0; t < header.numThreads; t++) {
           Flame renderFlame = flame.makeCopy();
           renderFlames.add(renderFlame);
-          renderFlame.refreshModWeightTables(flameTransformationContext);
+          for (Layer layer : renderFlame.getLayers()) {
+            layer.refreshModWeightTables(flameTransformationContext);
+          }
         }
         raster = null;
         // read raster

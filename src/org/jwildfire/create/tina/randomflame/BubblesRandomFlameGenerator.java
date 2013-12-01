@@ -118,7 +118,7 @@ public class BubblesRandomFlameGenerator extends RandomFlameGenerator {
         XFormTransformService.scale(xForm, 0.15 + Math.random() * 1.25, true, true, false);
       }
     }
-    flame.distributeColors();
+    flame.getFirstLayer().distributeColors();
     return flame;
   }
 

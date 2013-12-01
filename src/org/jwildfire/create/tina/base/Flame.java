@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2013 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -29,8 +29,6 @@ import org.jwildfire.create.tina.animate.AnimAware;
 import org.jwildfire.create.tina.edit.Assignable;
 import org.jwildfire.create.tina.palette.RGBPalette;
 import org.jwildfire.create.tina.render.filter.FilterKernelType;
-import org.jwildfire.create.tina.variation.FlameTransformationContext;
-import org.jwildfire.create.tina.variation.Variation;
 
 public class Flame implements Assignable<Flame>, Serializable {
   private static final long serialVersionUID = 1L;
@@ -96,16 +94,15 @@ public class Flame implements Assignable<Flame>, Serializable {
   private String qualityProfile;
   private String name = "";
   @AnimAware
-  private RGBPalette palette = new RGBPalette();
-  @AnimAware
-  private final List<XForm> xForms = new ArrayList<XForm>();
-  @AnimAware
-  private final List<XForm> finalXForms = new ArrayList<XForm>();
+  private final List<Layer> layers = new ArrayList<Layer>();
+
   @AnimAware
   private ShadingInfo shadingInfo = new ShadingInfo();
   private String lastFilename = null;
 
   public Flame() {
+    layers.clear();
+    layers.add(new Layer());
     sampleDensity = 100.0;
     bgTransparency = true;
     bgColorRed = bgColorGreen = bgColorBlue = 0;
@@ -207,14 +204,6 @@ public class Flame implements Assignable<Flame>, Serializable {
     this.sampleDensity = sampleDensity;
   }
 
-  public List<XForm> getXForms() {
-    return xForms;
-  }
-
-  public List<XForm> getFinalXForms() {
-    return finalXForms;
-  }
-
   public double getPixelsPerUnit() {
     return pixelsPerUnit;
   }
@@ -245,10 +234,6 @@ public class Flame implements Assignable<Flame>, Serializable {
 
   public void setVibrancy(double vibrancy) {
     this.vibrancy = vibrancy;
-  }
-
-  public RGBPalette getPalette() {
-    return palette;
   }
 
   public int getWidth() {
@@ -323,12 +308,6 @@ public class Flame implements Assignable<Flame>, Serializable {
     this.bgColorBlue = bgColorBlue;
   }
 
-  public void setPalette(RGBPalette pPalette) {
-    if (pPalette == null || pPalette.getSize() != RGBPalette.PALETTE_SIZE)
-      throw new IllegalArgumentException(pPalette != null ? pPalette.toString() + " " + pPalette.getSize() : "NULL");
-    palette = pPalette;
-  }
-
   @Override
   public Flame makeCopy() {
     Flame res = new Flame();
@@ -398,68 +377,6 @@ public class Flame implements Assignable<Flame>, Serializable {
 
   public void setShadingInfo(ShadingInfo shadingInfo) {
     this.shadingInfo = shadingInfo;
-  }
-
-  public void distributeColors() {
-    int cnt = getXForms().size();
-    if (cnt > 1) {
-      for (int i = 0; i < getXForms().size(); i++) {
-        XForm xForm = getXForms().get(i);
-        xForm.setColor((double) i / (double) (cnt - 1));
-      }
-    }
-  }
-
-  public void randomizeColors() {
-    for (int i = 0; i < getXForms().size(); i++) {
-      XForm xForm = getXForms().get(i);
-      xForm.setColor(Math.random());
-    }
-  }
-
-  public void refreshModWeightTables(FlameTransformationContext pFlameTransformationContext) {
-    double tp[] = new double[Constants.MAX_MOD_WEIGHT_COUNT];
-    int n = getXForms().size();
-
-    for (XForm xForm : this.getXForms()) {
-      xForm.initTransform();
-      for (Variation var : xForm.getVariations()) {
-        var.getFunc().init(pFlameTransformationContext, xForm, var.getAmount());
-      }
-    }
-    for (XForm xForm : this.getFinalXForms()) {
-      xForm.initTransform();
-      for (Variation var : xForm.getVariations()) {
-        var.getFunc().init(pFlameTransformationContext, xForm, var.getAmount());
-      }
-    }
-    for (int k = 0; k < n; k++) {
-      XForm xform = getXForms().get(k);
-      double totValue = 0;
-      for (int i = 0; i < n; i++) {
-        tp[i] = getXForms().get(i).getWeight() * getXForms().get(k).getModifiedWeights()[i];
-        totValue = totValue + tp[i];
-      }
-      if (totValue > 0) {
-        double loopValue = 0;
-        for (int i = 0; i < xform.getNextAppliedXFormTable().length; i++) {
-          double totalProb = 0;
-          int j = -1;
-          do {
-            j++;
-            totalProb = totalProb + tp[j];
-          }
-          while (!((totalProb > loopValue) || (j == n - 1)));
-          xform.getNextAppliedXFormTable()[i] = getXForms().get(j);
-          loopValue = loopValue + totValue / (double) xform.getNextAppliedXFormTable().length;
-        }
-      }
-      else {
-        for (int i = 0; i < xform.getNextAppliedXFormTable().length; i++) {
-          xform.getNextAppliedXFormTable()[i] = null;
-        }
-      }
-    }
   }
 
   public boolean isPreserveZ() {
@@ -537,17 +454,16 @@ public class Flame implements Assignable<Flame>, Serializable {
     resolutionProfile = pFlame.resolutionProfile;
     qualityProfile = pFlame.qualityProfile;
     shadingInfo.assign(pFlame.shadingInfo);
-    palette = pFlame.palette.makeCopy();
     name = pFlame.name;
-    xForms.clear();
-    for (XForm xForm : pFlame.getXForms()) {
-      xForms.add(xForm.makeCopy());
-    }
-    finalXForms.clear();
-    for (XForm xForm : pFlame.getFinalXForms()) {
-      finalXForms.add(xForm.makeCopy());
+    layers.clear();
+    for (Layer layer : pFlame.getLayers()) {
+      layers.add(layer.makeCopy());
     }
     lastFilename = pFlame.lastFilename;
+  }
+
+  public List<Layer> getLayers() {
+    return layers;
   }
 
   @Override
@@ -574,18 +490,12 @@ public class Flame implements Assignable<Flame>, Serializable {
         (resolutionProfile != null && pFlame.resolutionProfile != null && !resolutionProfile.equals(pFlame.resolutionProfile))) ||
         ((qualityProfile != null && pFlame.qualityProfile == null) || (qualityProfile == null && pFlame.qualityProfile != null) ||
         (qualityProfile != null && pFlame.qualityProfile != null && !qualityProfile.equals(pFlame.qualityProfile))) ||
-        !palette.isEqual(pFlame.palette) || !name.equals(pFlame.name) ||
         !shadingInfo.isEqual(pFlame.shadingInfo) ||
-        (xForms.size() != pFlame.xForms.size()) || (finalXForms.size() != pFlame.finalXForms.size())) {
+        !name.equals(pFlame.name)) {
       return false;
     }
-    for (int i = 0; i < xForms.size(); i++) {
-      if (!xForms.get(i).isEqual(pFlame.xForms.get(i))) {
-        return false;
-      }
-    }
-    for (int i = 0; i < finalXForms.size(); i++) {
-      if (!finalXForms.get(i).isEqual(pFlame.finalXForms.get(i))) {
+    for (int i = 0; i < layers.size(); i++) {
+      if (!layers.get(i).isEqual(pFlame.layers.get(i))) {
         return false;
       }
     }
@@ -679,4 +589,58 @@ public class Flame implements Assignable<Flame>, Serializable {
   public void setDimishZ(double dimishZ) {
     this.dimishZ = dimishZ;
   }
+
+  // only because of script-compatiblity
+  // TODO
+  @Deprecated
+  public List<XForm> getFinalXForms() {
+    return layers.get(0).getFinalXForms();
+  }
+
+  // only because of script-compatiblity
+  // TODO
+  @Deprecated
+  public List<XForm> getXForms() {
+    return layers.get(0).getXForms();
+  }
+
+  // only because of script-compatiblity
+  @Deprecated
+  // TODO
+  public RGBPalette getPalette() {
+    return layers.get(0).getPalette();
+  }
+
+  // only because of script-compatiblity
+  @Deprecated
+  public void setPalette(RGBPalette pPalette) {
+    layers.get(0).setPalette(pPalette);
+  }
+
+  public Layer getFirstLayer() {
+    return layers.get(0);
+  }
+
+  public Layer getRandomLayer() {
+    int idx = (int) (Math.random() * layers.size());
+    return layers.get(idx);
+  }
+
+  // only because of script-compatiblity
+  @Deprecated
+  public void randomizeColors() {
+    layers.get(0).randomizeColors();
+  }
+
+  // only because of script-compatiblity
+  @Deprecated
+  public void distributeColors() {
+    layers.get(0).distributeColors();
+  }
+
 }
+
+// TODO
+// copy gradient when "Add" new layer
+// (De)register Palette from Editor
+// MorphService

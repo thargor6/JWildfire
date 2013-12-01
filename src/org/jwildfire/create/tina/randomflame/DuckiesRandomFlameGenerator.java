@@ -100,7 +100,7 @@ public class DuckiesRandomFlameGenerator extends RandomFlameGenerator {
       }
     }
 
-    flame.randomizeColors();
+    flame.getFirstLayer().randomizeColors();
     return flame;
   }
 

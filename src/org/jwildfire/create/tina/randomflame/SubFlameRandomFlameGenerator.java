@@ -39,7 +39,7 @@ public class SubFlameRandomFlameGenerator extends RandomFlameGenerator {
 
     flame.getFinalXForms().clear();
     flame.getXForms().clear();
-    flame.setPalette(pSubFlame.getPalette().makeCopy());
+    flame.getFirstLayer().setPalette(pSubFlame.getFirstLayer().getPalette().makeCopy());
     // 1st xForm
     {
       XForm xForm = new XForm();
@@ -120,8 +120,8 @@ public class SubFlameRandomFlameGenerator extends RandomFlameGenerator {
       // render it   
       subFlame.setSampleDensity(50);
       subFlame.setSpatialFilterRadius(0.0);
-      RGBPalette palette = new RandomRGBPaletteGenerator().generatePalette(11, true);
-      subFlame.setPalette(palette);
+      RGBPalette palette = new RandomRGBPaletteGenerator().generatePalette(21, true);
+      subFlame.getFirstLayer().setPalette(palette);
       RenderedFlame res;
       boolean deEnabled = subFlame.isDeFilterEnabled();
       try {

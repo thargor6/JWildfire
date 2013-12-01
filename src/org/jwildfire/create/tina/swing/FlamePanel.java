@@ -30,6 +30,7 @@ import org.jwildfire.base.Prefs;
 import org.jwildfire.base.Tools;
 import org.jwildfire.base.mathlib.MathLib;
 import org.jwildfire.create.tina.base.Flame;
+import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 import org.jwildfire.create.tina.random.RandomGeneratorFactory;
@@ -55,6 +56,7 @@ public class FlamePanel extends ImagePanel {
 
   private static final long serialVersionUID = 1L;
   private FlameHolder flameHolder;
+  private LayerHolder layerHolder;
 
   boolean darkTriangles = false;
   private boolean drawImage = true;
@@ -85,9 +87,10 @@ public class FlamePanel extends ImagePanel {
   private UndoManagerHolder<Flame> undoManagerHolder;
   private GradientOverlay gradientOverlay = new GradientOverlay(this);
 
-  public FlamePanel(SimpleImage pSimpleImage, int pX, int pY, int pWidth, FlameHolder pFlameHolder) {
+  public FlamePanel(SimpleImage pSimpleImage, int pX, int pY, int pWidth, FlameHolder pFlameHolder, LayerHolder pLayerHolder) {
     super(pSimpleImage, pX, pY, pWidth);
     flameHolder = pFlameHolder;
+    layerHolder = pLayerHolder;
   }
 
   @Override
@@ -104,8 +107,8 @@ public class FlamePanel extends ImagePanel {
     if (drawTriangles) {
       paintTriangles((Graphics2D) g);
     }
-    if (mouseDragOperation == MouseDragOperation.GRADIENT && flameHolder.getFlame() != null) {
-      gradientOverlay.paintGradient((Graphics2D) g, flameHolder.getFlame().getPalette(), this.getImageBounds());
+    if (mouseDragOperation == MouseDragOperation.GRADIENT && flameHolder.getFlame() != null && layerHolder != null) {
+      gradientOverlay.paintGradient((Graphics2D) g, layerHolder.getLayer().getPalette(), this.getImageBounds());
     }
   }
 
@@ -622,12 +625,12 @@ public class FlamePanel extends ImagePanel {
             return true;
           }
           case GRADIENT: {
-            Flame flame = flameHolder.getFlame();
+            Layer layer = layerHolder.getLayer();
             dx = viewDX * 0.25;
             if (fineMovement) {
               dx *= 0.25;
             }
-            reRender = gradientOverlay.mouseDragged(dx, xBeginDrag, yBeginDrag, flame);
+            reRender = gradientOverlay.mouseDragged(dx, xBeginDrag, yBeginDrag, layer);
             return true;
           }
         }
@@ -729,11 +732,11 @@ public class FlamePanel extends ImagePanel {
       redrawAfterMouseClick = true;
       reRender = true;
     }
-    else if (mouseDragOperation == MouseDragOperation.GRADIENT && flameHolder.getFlame() != null) {
+    else if (mouseDragOperation == MouseDragOperation.GRADIENT && flameHolder.getFlame() != null && layerHolder != null && layerHolder.getLayer() != null) {
       if (undoManagerHolder != null) {
         undoManagerHolder.saveUndoPoint();
       }
-      redrawAfterMouseClick = gradientOverlay.mouseClicked(x, y, flameHolder.getFlame().getPalette());
+      redrawAfterMouseClick = gradientOverlay.mouseClicked(x, y, layerHolder.getLayer().getPalette());
       reRender = false;
     }
     return null;
@@ -940,26 +943,26 @@ public class FlamePanel extends ImagePanel {
   }
 
   public void gradientFade() {
-    if (flameHolder.getFlame() != null) {
-      gradientOverlay.fadeRange(flameHolder.getFlame().getPalette());
+    if (layerHolder.getLayer() != null) {
+      gradientOverlay.fadeRange(layerHolder.getLayer().getPalette());
     }
   }
 
   public void gradientInvert() {
-    if (flameHolder.getFlame() != null) {
-      gradientOverlay.invertRange(flameHolder.getFlame().getPalette());
+    if (layerHolder.getLayer() != null) {
+      gradientOverlay.invertRange(layerHolder.getLayer().getPalette());
     }
   }
 
   public void gradientReverse() {
-    if (flameHolder.getFlame() != null) {
-      gradientOverlay.reverseRange(flameHolder.getFlame().getPalette());
+    if (layerHolder.getLayer() != null) {
+      gradientOverlay.reverseRange(layerHolder.getLayer().getPalette());
     }
   }
 
   public void gradientSort() {
-    if (flameHolder.getFlame() != null) {
-      gradientOverlay.sortRange(flameHolder.getFlame().getPalette());
+    if (layerHolder.getLayer() != null) {
+      gradientOverlay.sortRange(layerHolder.getLayer().getPalette());
     }
   }
 
@@ -974,8 +977,8 @@ public class FlamePanel extends ImagePanel {
   }
 
   public boolean gradientMarker_selectColor(int pIdx) {
-    if (flameHolder.getFlame() != null) {
-      return gradientOverlay.gradientMarker_selectColor(pIdx, flameHolder.getFlame().getPalette());
+    if (layerHolder.getLayer() != null) {
+      return gradientOverlay.gradientMarker_selectColor(pIdx, layerHolder.getLayer().getPalette());
     }
     else {
       return false;
@@ -991,26 +994,26 @@ public class FlamePanel extends ImagePanel {
   }
 
   public void gradientCopyRange() {
-    if (flameHolder.getFlame() != null) {
-      gradientOverlay.copyRange(flameHolder.getFlame().getPalette());
+    if (layerHolder.getLayer() != null) {
+      gradientOverlay.copyRange(layerHolder.getLayer().getPalette());
     }
   }
 
   public void gradientPasteRange() {
-    if (flameHolder.getFlame() != null) {
-      gradientOverlay.pasteRange(flameHolder.getFlame().getPalette());
+    if (layerHolder.getLayer() != null) {
+      gradientOverlay.pasteRange(layerHolder.getLayer().getPalette());
     }
   }
 
   public void gradientEraseRange() {
-    if (flameHolder.getFlame() != null) {
-      gradientOverlay.eraseRange(flameHolder.getFlame().getPalette());
+    if (layerHolder.getLayer() != null) {
+      gradientOverlay.eraseRange(layerHolder.getLayer().getPalette());
     }
   }
 
   public void gradientMonochrome() {
-    if (flameHolder.getFlame() != null) {
-      gradientOverlay.monochrome(flameHolder.getFlame().getPalette());
+    if (layerHolder.getLayer() != null) {
+      gradientOverlay.monochrome(layerHolder.getLayer().getPalette());
     }
   }
 
@@ -1019,20 +1022,20 @@ public class FlamePanel extends ImagePanel {
   }
 
   public void gradientFadeAll() {
-    if (flameHolder.getFlame() != null) {
-      gradientOverlay.fadeAll(flameHolder.getFlame().getPalette());
+    if (layerHolder.getLayer() != null) {
+      gradientOverlay.fadeAll(layerHolder.getLayer().getPalette());
     }
   }
 
   public void applyBalancing() {
-    if (flameHolder.getFlame() != null) {
-      flameHolder.getFlame().getPalette().applyBalancing();
+    if (layerHolder.getLayer() != null) {
+      layerHolder.getLayer().getPalette().applyBalancing();
     }
   }
 
   public void applyTX() {
-    if (flameHolder.getFlame() != null) {
-      flameHolder.getFlame().getPalette().applyTX();
+    if (layerHolder.getLayer() != null) {
+      layerHolder.getLayer().getPalette().applyTX();
     }
   }
 }

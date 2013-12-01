@@ -28,7 +28,7 @@ import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 
 import org.jwildfire.base.Prefs;
-import org.jwildfire.create.tina.base.Flame;
+import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.io.Flam3GradientReader;
 import org.jwildfire.create.tina.io.MapGradientWriter;
 import org.jwildfire.create.tina.io.RGBPaletteReader;
@@ -357,8 +357,8 @@ public class GradientController {
       if (tinaController.getCurrFlame() != null && gradientsList.getSelectedIndex() >= 0 && gradientsList.getSelectedIndex() < selNode.getGradientLibraryList().size()) {
         tinaController.saveUndoPoint();
         RGBPalette palette = selNode.getGradientLibraryList().get(gradientsList.getSelectedIndex()).makeCopy();
-        tinaController.getCurrFlame().setPalette(palette);
-        tinaController.registerToEditor(tinaController.getCurrFlame());
+        tinaController.getCurrLayer().setPalette(palette);
+        tinaController.registerToEditor(tinaController.getCurrFlame(), tinaController.getCurrLayer());
         tinaController.refreshPaletteUI(palette);
         tinaController.refreshFlameImage(false);
       }
@@ -473,8 +473,8 @@ public class GradientController {
 
   public void gradientSaveBtn_clicked() {
     try {
-      Flame flame = tinaController.getCurrFlame();
-      if (flame != null) {
+      Layer layer = tinaController.getCurrLayer();
+      if (layer != null) {
         JFileChooser chooser = new MapFileChooser(prefs);
         if (prefs.getTinaGradientPath() != null) {
           try {
@@ -486,7 +486,7 @@ public class GradientController {
         }
         if (chooser.showSaveDialog(rootPanel) == JFileChooser.APPROVE_OPTION) {
           File file = chooser.getSelectedFile();
-          RGBPalette gradient = flame.getPalette().makeCopy();
+          RGBPalette gradient = layer.getPalette().makeCopy();
           gradient.setFlam3Name(file.getName());
           new MapGradientWriter().writeGradient(gradient, file.getAbsolutePath());
           tinaController.showStatusMessage(gradient, "gradient saved to disc");

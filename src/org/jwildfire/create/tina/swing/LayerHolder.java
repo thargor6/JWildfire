@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2013 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -14,23 +14,10 @@
   if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
   02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
-package org.jwildfire.create.tina.mutagen;
+package org.jwildfire.create.tina.swing;
 
-import org.jwildfire.create.tina.base.Flame;
-import org.jwildfire.create.tina.palette.RGBPalette;
-import org.jwildfire.create.tina.palette.RandomRGBPaletteGenerator;
+import org.jwildfire.create.tina.base.Layer;
 
-public class RandomGradientMutation implements Mutation {
-
-  @Override
-  public void execute(Flame pFlame) {
-    int keyFrames = 3 + (int) (Math.random() * 56);
-    boolean fadePaletteColors = Math.random() > 0.33;
-    RGBPalette palette = new RandomRGBPaletteGenerator().generatePalette(keyFrames, fadePaletteColors);
-    if (Math.random() < 0.33) {
-      palette.sort();
-    }
-    pFlame.getRandomLayer().setPalette(palette);
-  }
-
+public interface LayerHolder {
+  public Layer getLayer();
 }

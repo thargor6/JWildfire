@@ -2030,6 +2030,7 @@ public class TinaInternalFrame extends JInternalFrame {
       lblShift.setBounds(663, 52, 94, 24);
       panel_1.add(lblShift);
       tinaSouthTabbedPane.addTab("Gradient", null, getTinaPalettePanel(), null);
+      tinaSouthTabbedPane.addTab("Layers", null, getPanel_74(), null);
 
       tinaSouthTabbedPane.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
@@ -4390,7 +4391,9 @@ public class TinaInternalFrame extends JInternalFrame {
         getGradientsList(), getBackgroundColorIndicatorBtn(), getRandomizeBtn(), getFlameBrowserTree(), getFlameBrowserImagesPanel(),
         getFlameBrowserRefreshBtn(), getFlameBrowserChangeFolderBtn(), getFlameBrowserToEditorBtn(), getFlameBrowserDeleteBtn(),
         getFlameBrowserRenameBtn(), getTinaPaletteFadeColorsCBx(), getDancingFlamesReplaceFlameFromEditorBtn(), getDancingFlamesRenameFlameBtn(),
-        getDancingFlamesRenameMotionBtn(), getDancingFlamesMutedCBx());
+        getDancingFlamesRenameMotionBtn(), getDancingFlamesMutedCBx(),
+        getLayerWeightEd(), getLayerAddBtn(), getLayerDuplicateBtn(), getLayerDeleteBtn(),
+        getLayersTable(), getLayerVisibleBtn());
 
     tinaController = new TinaController(params);
 
@@ -4409,7 +4412,7 @@ public class TinaInternalFrame extends JInternalFrame {
       getShadingCmb().addItem(Shading.PSEUDO3D);
       getShadingCmb().addItem(Shading.BLUR);
       getShadingCmb().addItem(Shading.DISTANCE_COLOR);
-      //      getShadingCmb().addItem(Shading.EXPERIMENTAL);
+      getShadingCmb().addItem(Shading.EXPERIMENTAL);
 
       getShadingLightCmb().removeAllItems();
       getShadingLightCmb().addItem(String.valueOf("1"));
@@ -9039,7 +9042,6 @@ public class TinaInternalFrame extends JInternalFrame {
   private JPanel panel_31;
   private JPanel panel_32;
   private JPanel panel_33;
-  private JPanel panel_34;
   private JPanel panel_35;
   private JToggleButton toggleTransparencyButton;
   private JCheckBox bgTransparencyCBx;
@@ -9279,6 +9281,17 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton dancingFlamesRenameFlameBtn;
   private JButton dancingFlamesRenameMotionBtn;
   private JCheckBox dancingFlamesMutedCBx;
+  private JPanel panel_74;
+  private JPanel panel_75;
+  private JPanel panel_76;
+  private JPanel panel_77;
+  private JScrollPane scrollPane_8;
+  private JTable layersTable;
+  private JWFNumberField layerWeightEd;
+  private JButton layerDeleteBtn;
+  private JToggleButton layerVisibleBtn;
+  private JButton layerAddBtn;
+  private JButton layerDuplicateBtn;
 
   /**
    * This method initializes renderBatchJobsScrollPane	
@@ -14629,4 +14642,174 @@ public class TinaInternalFrame extends JInternalFrame {
   public JCheckBox getDancingFlamesMutedCBx() {
     return dancingFlamesMutedCBx;
   }
+
+  private JPanel getPanel_74() {
+    if (panel_74 == null) {
+      panel_74 = new JPanel();
+      panel_74.setLayout(new BorderLayout(0, 0));
+      panel_74.add(getPanel_75(), BorderLayout.EAST);
+      panel_74.add(getPanel_76(), BorderLayout.WEST);
+      panel_74.add(getPanel_77(), BorderLayout.CENTER);
+    }
+    return panel_74;
+  }
+
+  private JPanel getPanel_75() {
+    if (panel_75 == null) {
+      panel_75 = new JPanel();
+      panel_75.setPreferredSize(new Dimension(340, 10));
+      panel_75.setLayout(null);
+
+      layerAddBtn = new JButton();
+      layerAddBtn.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.addLayerBtn_clicked();
+        }
+      });
+      layerAddBtn.setToolTipText("Add new layer");
+      layerAddBtn.setText("Add");
+      layerAddBtn.setPreferredSize(new Dimension(56, 24));
+      layerAddBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      layerAddBtn.setBounds(6, 81, 90, 24);
+      panel_75.add(layerAddBtn);
+
+      layerWeightEd = new JWFNumberField();
+      layerWeightEd.setValueStep(0.05);
+      layerWeightEd.setText("");
+      layerWeightEd.setSize(new Dimension(81, 24));
+      layerWeightEd.setPreferredSize(new Dimension(56, 24));
+      layerWeightEd.setLocation(new Point(238, 6));
+      layerWeightEd.setHasMinValue(true);
+      layerWeightEd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      layerWeightEd.setBounds(172, 6, 90, 24);
+      layerWeightEd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null) {
+            if (!layerWeightEd.isMouseAdjusting() || layerWeightEd.getMouseChangeCount() == 0) {
+              tinaController.saveUndoPoint();
+            }
+            tinaController.layerWeightREd_changed();
+          }
+        }
+      });
+
+      panel_75.add(layerWeightEd);
+
+      layerDuplicateBtn = new JButton();
+      layerDuplicateBtn.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.duplicateLayerBtn_clicked();
+        }
+      });
+      layerDuplicateBtn.setToolTipText("Duplicate layer");
+      layerDuplicateBtn.setText("Duplicate");
+      layerDuplicateBtn.setPreferredSize(new Dimension(90, 24));
+      layerDuplicateBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      layerDuplicateBtn.setBounds(6, 107, 90, 24);
+      panel_75.add(layerDuplicateBtn);
+
+      layerDeleteBtn = new JButton();
+      layerDeleteBtn.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.deleteLayerBtn_clicked();
+        }
+      });
+      layerDeleteBtn.setToolTipText("Delete layer");
+      layerDeleteBtn.setText("Delete");
+      layerDeleteBtn.setPreferredSize(new Dimension(90, 24));
+      layerDeleteBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      layerDeleteBtn.setBounds(6, 134, 90, 24);
+      panel_75.add(layerDeleteBtn);
+
+      layerVisibleBtn = new JToggleButton();
+      layerVisibleBtn.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.layerVisibilityButton_clicked();
+        }
+      });
+      layerVisibleBtn.setSelected(true);
+      layerVisibleBtn.setToolTipText("Hide/show layer");
+      layerVisibleBtn.setText("Visible");
+      layerVisibleBtn.setSize(new Dimension(138, 24));
+      layerVisibleBtn.setPreferredSize(new Dimension(136, 24));
+      layerVisibleBtn.setLocation(new Point(4, 181));
+      layerVisibleBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      layerVisibleBtn.setBounds(6, 7, 86, 24);
+      panel_75.add(layerVisibleBtn);
+
+      JLabel lblWeight = new JLabel();
+      lblWeight.setText("Weight");
+      lblWeight.setSize(new Dimension(20, 22));
+      lblWeight.setPreferredSize(new Dimension(24, 22));
+      lblWeight.setLocation(new Point(212, 6));
+      lblWeight.setHorizontalAlignment(SwingConstants.RIGHT);
+      lblWeight.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblWeight.setBounds(107, 10, 58, 22);
+      panel_75.add(lblWeight);
+    }
+    return panel_75;
+  }
+
+  private JPanel getPanel_76() {
+    if (panel_76 == null) {
+      panel_76 = new JPanel();
+      panel_76.setPreferredSize(new Dimension(140, 10));
+    }
+    return panel_76;
+  }
+
+  private JPanel getPanel_77() {
+    if (panel_77 == null) {
+      panel_77 = new JPanel();
+      panel_77.setLayout(new BorderLayout(0, 0));
+      panel_77.add(getScrollPane_8(), BorderLayout.CENTER);
+    }
+    return panel_77;
+  }
+
+  private JScrollPane getScrollPane_8() {
+    if (scrollPane_8 == null) {
+      scrollPane_8 = new JScrollPane();
+      scrollPane_8.setViewportView(getLayersTable());
+    }
+    return scrollPane_8;
+  }
+
+  private JTable getLayersTable() {
+    if (layersTable == null) {
+      layersTable = new JTable();
+      layersTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+
+        @Override
+        public void valueChanged(ListSelectionEvent e) {
+          if (!e.getValueIsAdjusting()) {
+            tinaController.layersTableClicked();
+          }
+        }
+
+      });
+    }
+    return layersTable;
+  }
+
+  public JWFNumberField getLayerWeightEd() {
+    return layerWeightEd;
+  }
+
+  public JButton getLayerDeleteBtn() {
+    return layerDeleteBtn;
+  }
+
+  public JToggleButton getLayerVisibleBtn() {
+    return layerVisibleBtn;
+  }
+
+  public JButton getLayerAddBtn() {
+    return layerAddBtn;
+  }
+
+  public JButton getLayerDuplicateBtn() {
+    return layerDuplicateBtn;
+  }
 } //  @jve:decl-index=0:visual-constraint="10,10"
+

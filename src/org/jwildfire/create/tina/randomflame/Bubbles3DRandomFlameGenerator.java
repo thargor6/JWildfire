@@ -130,7 +130,7 @@ public class Bubbles3DRandomFlameGenerator extends RandomFlameGenerator {
     }
 
     flame.setPreserveZ(Math.random() > 0.5);
-    flame.randomizeColors();
+    flame.getLayers().get(0).randomizeColors();
     return flame;
   }
 
