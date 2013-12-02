@@ -25,6 +25,7 @@ import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_CUDA;
 import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_JWILDFIRE;
 
 import org.jwildfire.base.Tools;
+import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
@@ -127,7 +128,7 @@ public class RippleFunc extends VariationFunc {
   private boolean _fixed_dist_calc;
 
   @Override
-  public void init(FlameTransformationContext pContext, XForm pXForm, double pAmount) {
+  public void init(FlameTransformationContext pContext, Layer pLayer, XForm pXForm, double pAmount) {
     // some variables are settled in another range for edit comfort
     // - transform them
     _f = frequency * 5;

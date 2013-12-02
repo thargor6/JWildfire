@@ -27,6 +27,7 @@ import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.jwildfire.base.mathlib.MathLib;
+import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
@@ -277,7 +278,7 @@ public class Grid3DWFFunc extends VariationFunc {
   private boolean doRotate;
 
   @Override
-  public void init(FlameTransformationContext pContext, XForm pXForm, double pAmount) {
+  public void init(FlameTransformationContext pContext, Layer pLayer, XForm pXForm, double pAmount) {
     doRotate = fabs(alpha) > EPSILON || fabs(beta) > EPSILON || fabs(gamma) > EPSILON || fabs(alpha_spread) > EPSILON || fabs(beta_spread) > EPSILON || fabs(gamma_spread) > EPSILON;
 
     if (RessourceManager.getRessource(getSizeSpreadMapKey()) == null)

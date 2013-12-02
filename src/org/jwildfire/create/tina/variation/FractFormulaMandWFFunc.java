@@ -22,6 +22,7 @@ import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_JWILDFIRE;
 import java.util.List;
 
 import org.jwildfire.base.Tools;
+import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 
 public class FractFormulaMandWFFunc extends AbstractFractFormulaWFFunc {
@@ -79,8 +80,8 @@ public class FractFormulaMandWFFunc extends AbstractFractFormulaWFFunc {
   }
 
   @Override
-  public void init(FlameTransformationContext pContext, XForm pXForm, double pAmount) {
-    super.init(pContext, pXForm, pAmount);
+  public void init(FlameTransformationContext pContext, Layer pLayer, XForm pXForm, double pAmount) {
+    super.init(pContext, pLayer, pXForm, pAmount);
     prepare_formula(formula);
   }
 

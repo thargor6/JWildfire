@@ -19,6 +19,7 @@ package org.jwildfire.create.tina.variation;
 import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_CUDA;
 import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_JWILDFIRE;
 
+import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
@@ -78,7 +79,7 @@ public class Curl3DFunc extends VariationFunc {
   private double c2x, c2y, c2z, c2;
 
   @Override
-  public void init(FlameTransformationContext pContext, XForm pXForm, double pAmount) {
+  public void init(FlameTransformationContext pContext, Layer pLayer, XForm pXForm, double pAmount) {
     c2x = 2 * cx;
     c2y = 2 * cy;
     c2z = 2 * cz;

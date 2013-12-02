@@ -31,6 +31,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.jwildfire.base.Tools;
+import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 import org.jwildfire.image.SimpleImage;
@@ -118,7 +119,7 @@ public class TextWFFunc extends VariationFunc {
   private List<Point> _points;
 
   @Override
-  public void init(FlameTransformationContext pContext, XForm pXForm, double pAmount) {
+  public void init(FlameTransformationContext pContext, Layer pLayer, XForm pXForm, double pAmount) {
   }
 
   private String makeRessourceKey() {

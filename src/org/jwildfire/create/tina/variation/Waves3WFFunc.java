@@ -26,6 +26,7 @@ import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_CUDA;
 import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_JWILDFIRE;
 
 import org.jwildfire.base.Tools;
+import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
@@ -111,7 +112,7 @@ public class Waves3WFFunc extends VariationFunc {
   private double _dampingX, _dampingY;
 
   @Override
-  public void init(FlameTransformationContext pContext, XForm pXForm, double pAmount) {
+  public void init(FlameTransformationContext pContext, Layer pLayer, XForm pXForm, double pAmount) {
     _dampingX = fabs(dampX) < EPSILON ? 1.0 : exp(dampX);
     _dampingY = fabs(dampY) < EPSILON ? 1.0 : exp(dampY);
   }

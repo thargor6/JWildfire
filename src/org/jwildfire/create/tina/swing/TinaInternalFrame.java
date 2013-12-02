@@ -4412,7 +4412,6 @@ public class TinaInternalFrame extends JInternalFrame {
       getShadingCmb().addItem(Shading.PSEUDO3D);
       getShadingCmb().addItem(Shading.BLUR);
       getShadingCmb().addItem(Shading.DISTANCE_COLOR);
-      getShadingCmb().addItem(Shading.EXPERIMENTAL);
 
       getShadingLightCmb().removeAllItems();
       getShadingLightCmb().addItem(String.valueOf("1"));

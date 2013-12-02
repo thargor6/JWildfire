@@ -20,6 +20,7 @@ import static org.jwildfire.base.mathlib.MathLib.exp;
 import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_CUDA;
 import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_JWILDFIRE;
 
+import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
@@ -80,7 +81,7 @@ public class CurveFunc extends VariationFunc {
   private double _pc_xlen, _pc_ylen;
 
   @Override
-  public void init(FlameTransformationContext pContext, XForm pXForm, double pAmount) {
+  public void init(FlameTransformationContext pContext, Layer pLayer, XForm pXForm, double pAmount) {
     _pc_xlen = xLength * xLength;
     _pc_ylen = yLength * yLength;
     if (_pc_xlen < 1E-20)

@@ -24,6 +24,7 @@ import static org.jwildfire.base.mathlib.MathLib.sqrt;
 import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_JWILDFIRE;
 
 import org.jwildfire.base.Tools;
+import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
@@ -87,7 +88,7 @@ public class Hypertile3D2Func extends VariationFunc {
   private double pa, qa, cx, c2, c2x, s2x, s2y, s2z;
 
   @Override
-  public void init(FlameTransformationContext pContext, XForm pXForm, double pAmount) {
+  public void init(FlameTransformationContext pContext, Layer pLayer, XForm pXForm, double pAmount) {
     pa = 2 * M_PI / p;
     qa = 2 * M_PI / q;
 

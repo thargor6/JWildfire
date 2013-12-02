@@ -282,7 +282,7 @@ public class FlamePanel extends ImagePanel {
       try {
         selectedXForm.initTransform();
         for (Variation var : selectedXForm.getVariations()) {
-          var.getFunc().init(getFlameTransformationContext(), selectedXForm, var.getAmount());
+          var.getFunc().init(getFlameTransformationContext(), layerHolder != null ? layerHolder.getLayer() : null, selectedXForm, var.getAmount());
         }
 
         // TODO
@@ -823,7 +823,6 @@ public class FlamePanel extends ImagePanel {
         ex.printStackTrace();
       }
       flameRenderer = new FlameRenderer(flame, prefs, showTransparency, false);
-      flameRenderer.createColorMap();
     }
     return flameRenderer;
   }

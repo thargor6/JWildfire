@@ -28,6 +28,7 @@ import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_CUDA;
 import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_JWILDFIRE;
 
 import org.jwildfire.base.Tools;
+import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
@@ -111,7 +112,7 @@ public class CollideoscopeFunc extends VariationFunc {
   private double kn_pi, pi_kn, ka, ka_kn;
 
   @Override
-  public void init(FlameTransformationContext pContext, XForm pXForm, double pAmount) {
+  public void init(FlameTransformationContext pContext, Layer pLayer, XForm pXForm, double pAmount) {
     kn_pi = (double) num * M_1_PI;
     pi_kn = M_PI / (double) num;
     ka = M_PI * a;

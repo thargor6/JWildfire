@@ -23,6 +23,7 @@ import static org.jwildfire.base.mathlib.MathLib.trunc;
 import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_CUDA;
 import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_JWILDFIRE;
 
+import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
@@ -134,7 +135,7 @@ public class Hexaplay3DFunc extends VariationFunc {
   }
 
   @Override
-  public void init(FlameTransformationContext pContext, XForm pXForm, double pAmount) {
+  public void init(FlameTransformationContext pContext, Layer pLayer, XForm pXForm, double pAmount) {
     /*  Set up two major angle systems */
     _rswtch = (int) trunc(pContext.random() * 3.0); //  Chooses 6 or 3 nodes
     double hlift = sin(M_PI / 3.0);

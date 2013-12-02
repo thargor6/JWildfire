@@ -35,6 +35,7 @@ import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_JWILDFIRE;
 import java.io.Serializable;
 
 import org.jwildfire.base.Tools;
+import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
@@ -426,7 +427,7 @@ public class NBlurFunc extends VariationFunc {
   private double _nb_ratioComplement;
 
   @Override
-  public void init(FlameTransformationContext pContext, XForm pXForm, double pAmount) {
+  public void init(FlameTransformationContext pContext, Layer pLayer, XForm pXForm, double pAmount) {
     if (this.numEdges < 3)
       this.numEdges = 3;
 

@@ -28,6 +28,7 @@ import static org.jwildfire.base.mathlib.MathLib.trunc;
 import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_JWILDFIRE;
 
 import org.jwildfire.base.Tools;
+import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
@@ -100,7 +101,7 @@ public class StarBlurFunc extends VariationFunc {
   private double starblur_alpha, starblur_length;
 
   @Override
-  public void init(FlameTransformationContext pContext, XForm pXForm, double pAmount) {
+  public void init(FlameTransformationContext pContext, Layer pLayer, XForm pXForm, double pAmount) {
     starblur_alpha = M_PI / power;
     starblur_length = sqrt(1.0 + sqr(range) - 2.0 * range * cos(starblur_alpha));
     starblur_alpha = asin(sin(starblur_alpha) * range / starblur_length);

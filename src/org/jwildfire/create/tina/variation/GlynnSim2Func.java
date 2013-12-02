@@ -27,6 +27,7 @@ import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_JWILDFIRE;
 
 import java.io.Serializable;
 
+import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
@@ -126,7 +127,7 @@ public class GlynnSim2Func extends VariationFunc {
   private double _phi10, _phi20, _gamma, _delta, _absPow;
 
   @Override
-  public void init(FlameTransformationContext pContext, XForm pXForm, double pAmount) {
+  public void init(FlameTransformationContext pContext, Layer pLayer, XForm pXForm, double pAmount) {
     this._phi10 = M_PI * this.phi1 / 180.0;
     this._phi20 = M_PI * this.phi2 / 180.0;
     this._gamma = this.thickness * (2.0 * this.radius + this.thickness) / (this.radius + this.thickness);

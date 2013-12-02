@@ -35,7 +35,6 @@ import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 import org.jwildfire.create.tina.base.raster.AbstractRasterPoint;
-import org.jwildfire.create.tina.palette.RenderColor;
 
 public final class FlameRenderDistanceColorThread extends FlameRenderThread {
   private XYZPoint affineT;
@@ -267,11 +266,12 @@ public final class FlameRenderDistanceColorThread extends FlameRenderThread {
         rp.setBlue(rp.getBlue() + p.blueColor * prj.intensity);
       }
       else {
-        int colorIdx = (int) (p.color * renderer.paletteIdxScl + 0.5);
-        RenderColor color = renderer.colorMap[colorIdx];
-        rp.setRed(rp.getRed() + color.red * prj.intensity);
-        rp.setGreen(rp.getGreen() + color.green * prj.intensity);
-        rp.setBlue(rp.getBlue() + color.blue * prj.intensity);
+        // TODO
+        ////        int colorIdx = (int) (p.color * renderer.paletteIdxScl + 0.5);
+        ////        RenderColor color = renderer.colorMap[colorIdx];
+        ////        rp.setRed(rp.getRed() + color.red * prj.intensity);
+        ////        rp.setGreen(rp.getGreen() + color.green * prj.intensity);
+        ////        rp.setBlue(rp.getBlue() + color.blue * prj.intensity);
       }
       rp.incCount();
       if (observers != null && observers.size() > 0) {

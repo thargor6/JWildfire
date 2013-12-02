@@ -27,6 +27,7 @@ import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_CUDA;
 import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_JWILDFIRE;
 
 import org.jwildfire.base.Tools;
+import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
@@ -122,7 +123,7 @@ public class ECollideFunc extends VariationFunc {
   private double _eCa, _eCn_pi, _eCa_eCn, _pi_eCn;
 
   @Override
-  public void init(FlameTransformationContext pContext, XForm pXForm, double pAmount) {
+  public void init(FlameTransformationContext pContext, Layer pLayer, XForm pXForm, double pAmount) {
     _eCn_pi = (double) num * M_1_PI;
     _pi_eCn = M_PI / (double) num;
     _eCa = M_PI * a;

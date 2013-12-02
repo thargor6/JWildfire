@@ -26,6 +26,7 @@ import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_CUDA;
 import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_JWILDFIRE;
 
 import org.jwildfire.base.Tools;
+import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
@@ -251,7 +252,7 @@ public class DCPerlinFunc extends VariationFunc {
   private double _notch_bottom, _notch_top;
 
   @Override
-  public void init(FlameTransformationContext pContext, XForm pXForm, double pAmount) {
+  public void init(FlameTransformationContext pContext, Layer pLayer, XForm pXForm, double pAmount) {
     _notch_bottom = select_centre - select_range;
     _notch_bottom = (_notch_bottom > 0.75) ? 0.75 : _notch_bottom;
     _notch_bottom = (_notch_bottom < -2.0) ? -3.0 : _notch_bottom;

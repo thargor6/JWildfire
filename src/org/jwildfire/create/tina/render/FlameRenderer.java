@@ -41,7 +41,6 @@ import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XYZPoint;
 import org.jwildfire.create.tina.base.XYZProjectedPoint;
 import org.jwildfire.create.tina.base.raster.AbstractRasterPoint;
-import org.jwildfire.create.tina.palette.RenderColor;
 import org.jwildfire.create.tina.random.AbstractRandomGenerator;
 import org.jwildfire.create.tina.random.RandomGeneratorFactory;
 import org.jwildfire.create.tina.variation.FlameTransformationContext;
@@ -72,9 +71,6 @@ public class FlameRenderer {
   double bws;
   double bhs;
   private int renderScale = 1;
-  // init in createColorMap
-  RenderColor[] colorMap;
-  double paletteIdxScl;
   private AbstractRandomGenerator randGen;
   // 3D stuff
   protected boolean doProject3D = false;
@@ -296,7 +292,6 @@ public class FlameRenderer {
       }
 
       init3D();
-      createColorMap();
       initView();
       List<Flame> renderFlames = new ArrayList<Flame>();
       for (int t = 0; t < prefs.getTinaRenderThreads(); t++) {
@@ -648,8 +643,6 @@ public class FlameRenderer {
         return new FlameRenderBlurThread(prefs, pThreadId, this, pFlame, pSamples);
       case DISTANCE_COLOR:
         return new FlameRenderDistanceColorThread(prefs, pThreadId, this, pFlame, pSamples);
-      case EXPERIMENTAL:
-        return new FlameRenderExperimentalThread(prefs, pThreadId, this, pFlame, pSamples);
       case PSEUDO3D:
         return new FlameRenderPseudo3DThread(prefs, pThreadId, this, pFlame, pSamples);
       default:
@@ -752,11 +745,6 @@ public class FlameRenderer {
     rcY = flame.getCentreY() * (1 - cosa) + flame.getCentreX() * sina - camY0;
   }
 
-  public void createColorMap() {
-    colorMap = flame.getPalette().createRenderPalette(flame.getWhiteLevel());
-    paletteIdxScl = colorMap.length - 2;
-  }
-
   public void setRandomNumberGenerator(AbstractRandomGenerator random) {
     this.randGen = random;
   }
@@ -778,10 +766,6 @@ public class FlameRenderer {
 
   public void setRenderScale(int pRenderScale) {
     renderScale = pRenderScale;
-  }
-
-  public RenderColor[] getColorMap() {
-    return colorMap;
   }
 
   protected List<IterationObserver> getIterationObservers() {
@@ -871,7 +855,6 @@ public class FlameRenderer {
     renderInfo = pRenderInfo;
     initRaster(pRenderInfo.getImageWidth(), pRenderInfo.getImageHeight());
     init3D();
-    createColorMap();
     initView();
     List<Flame> renderFlames = new ArrayList<Flame>();
     for (int t = 0; t < prefs.getTinaRenderThreads(); t++) {
@@ -905,7 +888,6 @@ public class FlameRenderer {
 
         initRaster(renderInfo.getImageWidth(), renderInfo.getImageHeight());
         init3D();
-        createColorMap();
         initView();
         List<Flame> renderFlames = new ArrayList<Flame>();
         for (int t = 0; t < header.numThreads; t++) {

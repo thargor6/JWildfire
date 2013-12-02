@@ -24,6 +24,7 @@ import static org.jwildfire.base.mathlib.MathLib.max;
 import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_JWILDFIRE;
 
 import org.jwildfire.base.Tools;
+import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
@@ -119,7 +120,7 @@ public class GDOffsFunc extends VariationFunc {
   private int gdog, gdos;
 
   @Override
-  public void init(FlameTransformationContext pContext, XForm pXForm, double pAmount) {
+  public void init(FlameTransformationContext pContext, Layer pLayer, XForm pXForm, double pAmount) {
     gdodx = delta_x * __agdod;
     gdody = delta_y * __agdod;
 

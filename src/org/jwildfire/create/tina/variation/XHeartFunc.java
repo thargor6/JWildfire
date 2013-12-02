@@ -22,6 +22,7 @@ import static org.jwildfire.base.mathlib.MathLib.sin;
 import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_CUDA;
 import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_JWILDFIRE;
 
+import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
@@ -86,7 +87,7 @@ public class XHeartFunc extends VariationFunc {
   }
 
   @Override
-  public void init(FlameTransformationContext pContext, XForm pXForm, double pAmount) {
+  public void init(FlameTransformationContext pContext, Layer pLayer, XForm pXForm, double pAmount) {
     double ang = M_PI_4 + (0.5 * M_PI_4 * angle);
     sina = sin(ang);
     cosa = cos(ang);

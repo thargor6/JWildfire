@@ -36,6 +36,7 @@ import static org.jwildfire.create.tina.variation.VoronoiTools.closest;
 import static org.jwildfire.create.tina.variation.VoronoiTools.voronoi;
 
 import org.jwildfire.base.mathlib.MathLib;
+import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
@@ -242,7 +243,7 @@ public class HexesFunc extends VariationFunc {
   private double rotSin, rotCos;
 
   @Override
-  public void init(FlameTransformationContext pContext, XForm pXForm, double pAmount) {
+  public void init(FlameTransformationContext pContext, Layer pLayer, XForm pXForm, double pAmount) {
     rotSin = sin(rotate * 2.0 * MathLib.M_PI);
     rotCos = cos(rotate * 2.0 * MathLib.M_PI);
   }

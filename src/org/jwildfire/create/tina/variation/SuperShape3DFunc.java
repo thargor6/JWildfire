@@ -25,6 +25,7 @@ import static org.jwildfire.base.mathlib.MathLib.pow;
 import static org.jwildfire.base.mathlib.MathLib.sin;
 import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_JWILDFIRE;
 
+import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
@@ -179,7 +180,7 @@ public class SuperShape3DFunc extends VariationFunc {
   private double rho_pi, phi_pi;
 
   @Override
-  public void init(FlameTransformationContext pContext, XForm pXForm, double pAmount) {
+  public void init(FlameTransformationContext pContext, Layer pLayer, XForm pXForm, double pAmount) {
     n1n_1 = (-1.0 / n1_1);
     n1n_2 = (-1.0 / n1_2);
     an2_1 = pow(fabs(1.0 / a1), n2_1);

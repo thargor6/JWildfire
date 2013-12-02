@@ -159,13 +159,14 @@ public final class FlameRenderPseudo3DThread extends FlameRenderThread {
         color.blue = pA[0].blueColor;
       }
       else {
-        color = renderer.colorMap[(int) (pA[0].color * renderer.paletteIdxScl + 0.5)];
+        // TODO
+        ////        color = renderer.colorMap[(int) (pA[0].color * renderer.paletteIdxScl + 0.5)];
       }
-      RenderColor shadedColor = shader.calculateColor(qA, color);
-
-      rp.setRed(rp.getRed() + shadedColor.red * prj.intensity);
-      rp.setGreen(rp.getGreen() + shadedColor.green * prj.intensity);
-      rp.setBlue(rp.getBlue() + shadedColor.blue * prj.intensity);
+      // TODO
+      ////      RenderColor shadedColor = shader.calculateColor(qA, color);
+      ////      rp.setRed(rp.getRed() + shadedColor.red * prj.intensity);
+      ////      rp.setGreen(rp.getGreen() + shadedColor.green * prj.intensity);
+      ////      rp.setBlue(rp.getBlue() + shadedColor.blue * prj.intensity);
       rp.incCount();
       if (observers != null && observers.size() > 0) {
         for (IterationObserver observer : observers) {

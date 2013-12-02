@@ -30,6 +30,7 @@ import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_CUDA;
 import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_JWILDFIRE;
 
 import org.jwildfire.base.Tools;
+import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
@@ -101,7 +102,7 @@ public class BCollideFunc extends VariationFunc {
   private double _bCa, _bCn_pi, _bCa_bCn, _pi_bCn;
 
   @Override
-  public void init(FlameTransformationContext pContext, XForm pXForm, double pAmount) {
+  public void init(FlameTransformationContext pContext, Layer pLayer, XForm pXForm, double pAmount) {
     _bCn_pi = (double) num * M_1_PI;
     _pi_bCn = M_PI / (double) num;
     _bCa = M_PI * a;

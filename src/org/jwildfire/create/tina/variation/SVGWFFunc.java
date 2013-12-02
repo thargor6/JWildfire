@@ -31,6 +31,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.jwildfire.base.Tools;
+import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 import org.jwildfire.create.tina.palette.RenderColor;
@@ -444,8 +445,10 @@ public class SVGWFFunc extends VariationFunc {
   private boolean previewMode = false;
 
   @Override
-  public void init(FlameTransformationContext pContext, XForm pXForm, double pAmount) {
-    renderColors = pContext.getFlameRenderer().getColorMap();
+  public void init(FlameTransformationContext pContext, Layer pLayer, XForm pXForm, double pAmount) {
+    // renderColors = pContext.getFlameRenderer().getColorMap();
+    // TODO optimize
+    renderColors = pLayer.getPalette().createRenderPalette(pContext.getFlameRenderer().getFlame().getWhiteLevel());
     lastR = lastG = lastB = -1;
     previewMode = pContext.isPreview();
     if (previewMode) {

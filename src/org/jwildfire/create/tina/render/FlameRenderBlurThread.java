@@ -150,8 +150,9 @@ public final class FlameRenderBlurThread extends FlameRenderThread {
         color.blue = p.blueColor;
       }
       else {
-        int colorIdx = (int) (p.color * renderer.paletteIdxScl + 0.5);
-        color = renderer.colorMap[colorIdx];
+        // TODO
+        ////        int colorIdx = (int) (p.color * renderer.paletteIdxScl + 0.5);
+        ////        color = renderer.colorMap[colorIdx];
       }
 
       if (iter < blurMax) {
@@ -162,9 +163,11 @@ public final class FlameRenderBlurThread extends FlameRenderThread {
                 // y, x
                 AbstractRasterPoint rp = renderer.raster[k][l];
                 double scl = blurKernel[yk][xk];
-                rp.setRed(rp.getRed() + color.red * scl * prj.intensity);
-                rp.setGreen(rp.getGreen() + color.green * scl * prj.intensity);
-                rp.setBlue(rp.getBlue() + color.blue * scl * prj.intensity);
+                // TODO
+
+                ////                rp.setRed(rp.getRed() + color.red * scl * prj.intensity);
+                ////                rp.setGreen(rp.getGreen() + color.green * scl * prj.intensity);
+                ////                rp.setBlue(rp.getBlue() + color.blue * scl * prj.intensity);
                 rp.incCount();
                 if (observers != null && observers.size() > 0) {
                   for (IterationObserver observer : observers) {
@@ -178,9 +181,10 @@ public final class FlameRenderBlurThread extends FlameRenderThread {
       }
       else {
         AbstractRasterPoint rp = renderer.raster[yIdx][xIdx];
-        rp.setRed(rp.getRed() + color.red * prj.intensity);
-        rp.setGreen(rp.getGreen() + color.green * prj.intensity);
-        rp.setBlue(rp.getBlue() + color.blue * prj.intensity);
+        // TODO
+        ////        rp.setRed(rp.getRed() + color.red * prj.intensity);
+        ////        rp.setGreen(rp.getGreen() + color.green * prj.intensity);
+        ////        rp.setBlue(rp.getBlue() + color.blue * prj.intensity);
         rp.incCount();
         if (observers != null && observers.size() > 0) {
           for (IterationObserver observer : observers) {

@@ -22,6 +22,7 @@ import static org.jwildfire.base.mathlib.MathLib.sin;
 import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_CUDA;
 import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_JWILDFIRE;
 
+import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
@@ -44,7 +45,7 @@ public class PreSpinZFunc extends SimpleVariationFunc {
   private double _rz_sin, _rz_cos;
 
   @Override
-  public void init(FlameTransformationContext pContext, XForm pXForm, double pAmount) {
+  public void init(FlameTransformationContext pContext, Layer pLayer, XForm pXForm, double pAmount) {
     _rz_sin = sin(pAmount * M_PI_2);
     _rz_cos = cos(pAmount * M_PI_2);
   }

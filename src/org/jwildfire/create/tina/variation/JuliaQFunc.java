@@ -25,6 +25,7 @@ import static org.jwildfire.base.mathlib.MathLib.sqr;
 import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_JWILDFIRE;
 
 import org.jwildfire.base.Tools;
+import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
@@ -91,7 +92,7 @@ public class JuliaQFunc extends VariationFunc {
   private double half_inv_power, inv_power, inv_power_2pi;
 
   @Override
-  public void init(FlameTransformationContext pContext, XForm pXForm, double pAmount) {
+  public void init(FlameTransformationContext pContext, Layer pLayer, XForm pXForm, double pAmount) {
     half_inv_power = 0.5 * divisor / (double) power;
     inv_power = divisor / (double) power;
     inv_power_2pi = M_2PI / (double) power;

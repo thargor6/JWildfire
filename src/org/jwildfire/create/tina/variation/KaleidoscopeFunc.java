@@ -21,6 +21,7 @@ import static org.jwildfire.base.mathlib.MathLib.sin;
 import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_CUDA;
 import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_JWILDFIRE;
 
+import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
@@ -91,7 +92,7 @@ public class KaleidoscopeFunc extends VariationFunc {
   double _q, _w, _e, _r, _t, _i;
 
   @Override
-  public void init(FlameTransformationContext pContext, XForm pXForm, double pAmount) {
+  public void init(FlameTransformationContext pContext, Layer pLayer, XForm pXForm, double pAmount) {
     _q = pull; // pulls apart the 2 sections of the plugin
     _w = rotate; // rotates both halves of the plugin
     _e = line_up;

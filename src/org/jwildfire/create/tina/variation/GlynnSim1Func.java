@@ -28,6 +28,7 @@ import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_JWILDFIRE;
 
 import java.io.Serializable;
 
+import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
@@ -136,7 +137,7 @@ public class GlynnSim1Func extends VariationFunc {
   private Point toolPoint = new Point();
 
   @Override
-  public void init(FlameTransformationContext pContext, XForm pXForm, double pAmount) {
+  public void init(FlameTransformationContext pContext, Layer pLayer, XForm pXForm, double pAmount) {
     double a = M_PI * phi1 / 180.0;
     double sinPhi1 = sin(a);
     double cosPhi1 = cos(a);

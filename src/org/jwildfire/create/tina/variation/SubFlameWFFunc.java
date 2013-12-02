@@ -134,7 +134,7 @@ public class SubFlameWFFunc extends VariationFunc {
   }
 
   @Override
-  public void init(FlameTransformationContext pContext, XForm pXForm, double pAmount) {
+  public void init(FlameTransformationContext pContext, Layer pLayer, XForm pXForm, double pAmount) {
     if (flame != null) {
       Layer layer = flame.getLayers().get(0);
       layer.refreshModWeightTables(pContext);

@@ -23,6 +23,7 @@ import static org.jwildfire.base.mathlib.MathLib.sin;
 
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.GradientCreator;
+import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 import org.jwildfire.create.tina.palette.RenderColor;
@@ -244,9 +245,11 @@ public abstract class AbstractDisplacementMapWFFunc extends VariationFunc {
   private RenderColor[] renderColors;
 
   @Override
-  public void init(FlameTransformationContext pContext, XForm pXForm, double pAmount) {
+  public void init(FlameTransformationContext pContext, Layer pLayer, XForm pXForm, double pAmount) {
     colorMap = null;
-    renderColors = pContext.getFlameRenderer().getColorMap();
+    //    renderColors = pContext.getFlameRenderer().getColorMap();
+    // TODO optimize
+    renderColors = pLayer.getPalette().createRenderPalette(pContext.getFlameRenderer().getFlame().getWhiteLevel());
     if (imageFilename != null && imageFilename.length() > 0) {
       try {
         colorMap = RessourceManager.getImage(imageFilename);

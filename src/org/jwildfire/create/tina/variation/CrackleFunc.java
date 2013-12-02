@@ -39,6 +39,7 @@ import static org.jwildfire.create.tina.variation.VoronoiTools._z_;
 import static org.jwildfire.create.tina.variation.VoronoiTools.closest;
 import static org.jwildfire.create.tina.variation.VoronoiTools.voronoi;
 
+import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
@@ -227,7 +228,7 @@ public class CrackleFunc extends VariationFunc {
   }
 
   @Override
-  public void init(FlameTransformationContext pContext, XForm pXForm, double pAmount) {
+  public void init(FlameTransformationContext pContext, Layer pLayer, XForm pXForm, double pAmount) {
     // Pre-calculate cache of grid centres, to save time later . . .
     for (int x = -CACHE_NUM; x <= CACHE_NUM; x++) {
       for (int y = -CACHE_NUM; y <= CACHE_NUM; y++) {
