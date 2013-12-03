@@ -85,7 +85,7 @@ import org.jwildfire.create.tina.dance.DancingFractalsController;
 import org.jwildfire.create.tina.dance.GradientController;
 import org.jwildfire.create.tina.dance.JWFScriptController;
 import org.jwildfire.create.tina.edit.UndoManager;
-import org.jwildfire.create.tina.io.Flam3Reader;
+import org.jwildfire.create.tina.io.FlameReader;
 import org.jwildfire.create.tina.io.FlameWriter;
 import org.jwildfire.create.tina.mutagen.MutaGenController;
 import org.jwildfire.create.tina.mutagen.MutationType;
@@ -2064,7 +2064,7 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
       }
       if (chooser.showOpenDialog(centerPanel) == JFileChooser.APPROVE_OPTION) {
         File file = chooser.getSelectedFile();
-        List<Flame> flames = new Flam3Reader(prefs).readFlames(file.getAbsolutePath());
+        List<Flame> flames = new FlameReader(prefs).readFlames(file.getAbsolutePath());
         Flame flame = flames.get(0);
         prefs.setLastInputFlameFile(file);
         if (data.layerAppendBtn.isSelected() && getCurrFlame() != null) {
@@ -2226,7 +2226,7 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
     }
     if (chooser.showOpenDialog(centerPanel) == JFileChooser.APPROVE_OPTION) {
       File file = chooser.getSelectedFile();
-      List<Flame> flames = new Flam3Reader(prefs).readFlames(file.getAbsolutePath());
+      List<Flame> flames = new FlameReader(prefs).readFlames(file.getAbsolutePath());
       Flame flame = flames.get(0);
       prefs.setLastInputFlameFile(file);
       RGBPalette palette = flame.getFirstLayer().getPalette();
@@ -3996,7 +3996,7 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
         if (clipData.isDataFlavorSupported(DataFlavor.stringFlavor)) {
           String xml = (String) (clipData.getTransferData(
               DataFlavor.stringFlavor));
-          List<Flame> flames = new Flam3Reader(prefs).readFlamesfromXML(xml);
+          List<Flame> flames = new FlameReader(prefs).readFlamesfromXML(xml);
           Flame flame = flames.get(0);
           setCurrFlame(flame);
           undoManager.initUndoStack(getCurrFlame());
@@ -4969,7 +4969,7 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
         int row = data.renderBatchJobsTable.getSelectedRow();
         if (row >= 0 && row < batchRenderList.size()) {
           Job job = batchRenderList.get(row);
-          List<Flame> flames = new Flam3Reader(prefs).readFlames(job.getFlameFilename());
+          List<Flame> flames = new FlameReader(prefs).readFlames(job.getFlameFilename());
           return flames.size() > 0 ? flames.get(0) : null;
         }
       }

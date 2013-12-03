@@ -59,7 +59,7 @@ import org.jwildfire.create.tina.dance.motion.MotionCreator;
 import org.jwildfire.create.tina.dance.motion.MotionCreatorType;
 import org.jwildfire.create.tina.dance.motion.MotionLink;
 import org.jwildfire.create.tina.dance.motion.MotionType;
-import org.jwildfire.create.tina.io.Flam3Reader;
+import org.jwildfire.create.tina.io.FlameReader;
 import org.jwildfire.create.tina.io.JWFDanceReader;
 import org.jwildfire.create.tina.io.JWFDanceWriter;
 import org.jwildfire.create.tina.randomflame.RandomFlameGenerator;
@@ -625,7 +625,7 @@ public class DancingFractalsController {
         if (clipData.isDataFlavorSupported(DataFlavor.stringFlavor)) {
           String xml = (String) (clipData.getTransferData(
               DataFlavor.stringFlavor));
-          newFlames = new Flam3Reader(prefs).readFlamesfromXML(xml);
+          newFlames = new FlameReader(prefs).readFlamesfromXML(xml);
         }
       }
       if (newFlames == null || newFlames.size() < 1) {
@@ -658,7 +658,7 @@ public class DancingFractalsController {
       chooser.setMultiSelectionEnabled(true);
       if (chooser.showOpenDialog(poolFlamePreviewPnl) == JFileChooser.APPROVE_OPTION) {
         for (File file : chooser.getSelectedFiles()) {
-          List<Flame> newFlames = new Flam3Reader(prefs).readFlames(file.getAbsolutePath());
+          List<Flame> newFlames = new FlameReader(prefs).readFlames(file.getAbsolutePath());
           prefs.setLastInputFlameFile(file);
           if (newFlames != null && newFlames.size() > 0) {
             for (Flame newFlame : newFlames) {

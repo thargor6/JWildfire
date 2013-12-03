@@ -39,7 +39,7 @@ import org.jwildfire.base.Prefs;
 import org.jwildfire.base.ResolutionProfile;
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Flame;
-import org.jwildfire.create.tina.io.Flam3Reader;
+import org.jwildfire.create.tina.io.FlameReader;
 import org.jwildfire.create.tina.io.FlameWriter;
 import org.jwildfire.create.tina.randomflame.RandomFlameGenerator;
 import org.jwildfire.create.tina.randomflame.RandomFlameGeneratorList;
@@ -177,7 +177,7 @@ public class TinaInteractiveRendererController implements IterationObserver {
         if (clipData.isDataFlavorSupported(DataFlavor.stringFlavor)) {
           String xml = (String) (clipData.getTransferData(
               DataFlavor.stringFlavor));
-          List<Flame> flames = new Flam3Reader(prefs).readFlamesfromXML(xml);
+          List<Flame> flames = new FlameReader(prefs).readFlamesfromXML(xml);
           if (flames.size() > 0) {
             newFlame = flames.get(0);
           }
@@ -230,7 +230,7 @@ public class TinaInteractiveRendererController implements IterationObserver {
       }
       if (chooser.showOpenDialog(imageRootPanel) == JFileChooser.APPROVE_OPTION) {
         File file = chooser.getSelectedFile();
-        List<Flame> flames = new Flam3Reader(prefs).readFlames(file.getAbsolutePath());
+        List<Flame> flames = new FlameReader(prefs).readFlames(file.getAbsolutePath());
         Flame newFlame = flames.get(0);
         prefs.setLastInputFlameFile(file);
         currFlame = newFlame;

@@ -49,7 +49,7 @@ import org.jwildfire.base.Prefs;
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.animate.FlameMorphService;
 import org.jwildfire.create.tina.base.Flame;
-import org.jwildfire.create.tina.io.Flam3Reader;
+import org.jwildfire.create.tina.io.FlameReader;
 import org.jwildfire.create.tina.io.FlameWriter;
 import org.jwildfire.create.tina.randomflame.RandomFlameGeneratorSampler;
 import org.jwildfire.create.tina.render.FlameRenderer;
@@ -681,7 +681,7 @@ public class MutaGenController {
       }
       if (chooser.showOpenDialog(rootTabbedPane) == JFileChooser.APPROVE_OPTION) {
         File file = chooser.getSelectedFile();
-        List<Flame> flames = new Flam3Reader(prefs).readFlames(file.getAbsolutePath());
+        List<Flame> flames = new FlameReader(prefs).readFlames(file.getAbsolutePath());
         Flame flame = flames.get(0);
         prefs.setLastInputFlameFile(file);
         if (flame != null) {

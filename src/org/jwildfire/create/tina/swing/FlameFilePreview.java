@@ -33,7 +33,7 @@ import javax.swing.JPanel;
 
 import org.jwildfire.base.Prefs;
 import org.jwildfire.create.tina.base.Flame;
-import org.jwildfire.create.tina.io.Flam3Reader;
+import org.jwildfire.create.tina.io.FlameReader;
 import org.jwildfire.create.tina.render.FlameRenderer;
 import org.jwildfire.create.tina.render.RenderInfo;
 import org.jwildfire.create.tina.render.RenderedFlame;
@@ -94,7 +94,7 @@ public class FlameFilePreview extends JPanel implements PropertyChangeListener {
     }
     try {
       if (currFile.exists()) {
-        List<Flame> flames = new Flam3Reader(prefs).readFlames(currFile.getAbsolutePath());
+        List<Flame> flames = new FlameReader(prefs).readFlames(currFile.getAbsolutePath());
         Flame flame = flames.get(0);
         int imgWidth = this.getPreferredSize().width;
         int imgHeight = this.getPreferredSize().height - BUTTON_HEIGHT;

@@ -6,7 +6,7 @@ import javax.swing.JPanel;
 
 import org.jwildfire.base.Prefs;
 import org.jwildfire.create.tina.base.Flame;
-import org.jwildfire.create.tina.io.Flam3Reader;
+import org.jwildfire.create.tina.io.FlameReader;
 import org.jwildfire.create.tina.render.FlameRenderer;
 import org.jwildfire.create.tina.render.RenderInfo;
 import org.jwildfire.create.tina.render.RenderedFlame;
@@ -65,7 +65,7 @@ public class CacheRendererThread implements Runnable {
   }
 
   private SimpleImage renderFlame(FlameFlatNode pNode, int pImgWidth, int pImgHeight) {
-    List<Flame> flames = new Flam3Reader(prefs).readFlames(pNode.getFilename());
+    List<Flame> flames = new FlameReader(prefs).readFlames(pNode.getFilename());
     if (flames.size() > 0) {
       Flame renderFlame = flames.get(0);
       RenderInfo info = new RenderInfo(pImgWidth, pImgHeight);

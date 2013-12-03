@@ -25,7 +25,7 @@ import org.jwildfire.base.Tools;
 import org.jwildfire.base.mathlib.MathLib;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.XForm;
-import org.jwildfire.create.tina.io.Flam3Reader;
+import org.jwildfire.create.tina.io.FlameReader;
 import org.jwildfire.create.tina.io.FlameWriter;
 import org.jwildfire.create.tina.palette.RGBColor;
 import org.jwildfire.create.tina.palette.RGBPalette;
@@ -249,8 +249,8 @@ public class FlameMorphService {
             String flame1XML = new String((byte[]) ress1[j]);
             String flame2XML = new String((byte[]) ress2[j]);
             try {
-              Flame flame1 = new Flam3Reader(pPrefs).readFlamesfromXML(flame1XML).get(0);
-              Flame flame2 = new Flam3Reader(pPrefs).readFlamesfromXML(flame2XML).get(0);
+              Flame flame1 = new FlameReader(pPrefs).readFlamesfromXML(flame1XML).get(0);
+              Flame flame2 = new FlameReader(pPrefs).readFlamesfromXML(flame2XML).get(0);
               Flame morphedFlame = morphFlames(pPrefs, flame1, flame2, pFrame, pFrames);
               String morphedFlameXML = new FlameWriter().getFlameXML(morphedFlame);
               var.getFunc().setRessource(SubFlameWFFunc.RESSOURCE_FLAME, morphedFlameXML.getBytes());

@@ -57,7 +57,7 @@ import org.jwildfire.create.tina.animate.SWFAnimationRenderThread;
 import org.jwildfire.create.tina.animate.SWFAnimationRenderThreadController;
 import org.jwildfire.create.tina.animate.XFormScript;
 import org.jwildfire.create.tina.base.Flame;
-import org.jwildfire.create.tina.io.Flam3Reader;
+import org.jwildfire.create.tina.io.FlameReader;
 import org.jwildfire.create.tina.io.JWFMovieReader;
 import org.jwildfire.create.tina.io.JWFMovieWriter;
 import org.jwildfire.create.tina.render.FlameRenderer;
@@ -449,7 +449,7 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
         if (clipData.isDataFlavorSupported(DataFlavor.stringFlavor)) {
           String xml = (String) (clipData.getTransferData(
               DataFlavor.stringFlavor));
-          List<Flame> flames = new Flam3Reader(prefs).readFlamesfromXML(xml);
+          List<Flame> flames = new FlameReader(prefs).readFlamesfromXML(xml);
           if (flames.size() > 0) {
             newFlame = flames.get(0);
           }
@@ -481,7 +481,7 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
       }
       if (chooser.showOpenDialog(swfAnimatorPreviewRootPanel) == JFileChooser.APPROVE_OPTION) {
         File file = chooser.getSelectedFile();
-        List<Flame> flames = new Flam3Reader(prefs).readFlames(file.getAbsolutePath());
+        List<Flame> flames = new FlameReader(prefs).readFlames(file.getAbsolutePath());
         Flame newFlame = flames.get(0);
         prefs.setLastInputFlameFile(file);
         addFlame(newFlame);

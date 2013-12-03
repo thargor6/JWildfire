@@ -18,10 +18,33 @@ package org.jwildfire.create.tina.io;
 
 import java.util.List;
 
+import org.jwildfire.base.Prefs;
+import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Flame;
 
+public class FlameReader {
+  private final Prefs prefs;
 
-public interface FlameReader {
+  public FlameReader(Prefs pPrefs) {
+    prefs = pPrefs;
+  }
 
-  public List<Flame> readFlames(String pFilename);
+  public List<Flame> readFlames(String pFilename) {
+    try {
+      String flamesXML = Tools.readUTF8Textfile(pFilename);
+      return readFlamesfromXML(flamesXML);
+    }
+    catch (Exception ex) {
+      throw new RuntimeException(ex);
+    }
+  }
+
+  public List<Flame> readFlamesfromXML(String pXML) {
+    if (pXML.indexOf("<" + JWFFlameReader.ATTR_JWF_FLAME) >= 0) {
+      return new JWFFlameReader(prefs).readFlamesfromXML(pXML);
+    }
+    else {
+      return new Flam3Reader(prefs).readFlamesfromXML(pXML);
+    }
+  }
 }

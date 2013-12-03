@@ -28,7 +28,7 @@ import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
-import org.jwildfire.create.tina.io.Flam3Reader;
+import org.jwildfire.create.tina.io.FlameReader;
 
 public class SubFlameWFFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
@@ -120,7 +120,7 @@ public class SubFlameWFFunc extends VariationFunc {
     xf = null;
     p = null;
     try {
-      List<Flame> flames = new Flam3Reader(new Prefs()).readFlamesfromXML(flameXML);
+      List<Flame> flames = new FlameReader(new Prefs()).readFlamesfromXML(flameXML);
       if (flames.size() > 0) {
         flame = flames.get(0);
       }

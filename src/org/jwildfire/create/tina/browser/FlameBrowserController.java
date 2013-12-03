@@ -28,7 +28,7 @@ import javax.swing.tree.TreePath;
 import org.jwildfire.base.Prefs;
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Flame;
-import org.jwildfire.create.tina.io.Flam3Reader;
+import org.jwildfire.create.tina.io.FlameReader;
 import org.jwildfire.create.tina.swing.StandardDialogs;
 import org.jwildfire.create.tina.swing.TinaController;
 import org.jwildfire.image.SimpleImage;
@@ -450,7 +450,7 @@ public class FlameBrowserController {
   }
 
   private void nodeToEditor(FlameFlatNode pNode) {
-    List<Flame> flames = new Flam3Reader(prefs).readFlames(pNode.getFilename());
+    List<Flame> flames = new FlameReader(prefs).readFlames(pNode.getFilename());
     if (flames.size() > 0) {
       for (Flame flame : flames) {
         tinaController.importFlame(flame, true);

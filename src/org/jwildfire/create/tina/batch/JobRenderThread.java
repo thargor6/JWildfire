@@ -23,7 +23,7 @@ import java.util.List;
 import org.jwildfire.base.QualityProfile;
 import org.jwildfire.base.ResolutionProfile;
 import org.jwildfire.create.tina.base.Flame;
-import org.jwildfire.create.tina.io.Flam3Reader;
+import org.jwildfire.create.tina.io.FlameReader;
 import org.jwildfire.create.tina.render.FlameRenderer;
 import org.jwildfire.create.tina.render.RenderInfo;
 import org.jwildfire.create.tina.render.RenderedFlame;
@@ -62,7 +62,7 @@ public class JobRenderThread implements Runnable {
             RenderInfo info = new RenderInfo(width, height);
             info.setRenderHDR(qualityProfile.isWithHDR());
             info.setRenderHDRIntensityMap(qualityProfile.isWithHDRIntensityMap());
-            List<Flame> flames = new Flam3Reader(controller.getPrefs()).readFlames(job.getFlameFilename());
+            List<Flame> flames = new FlameReader(controller.getPrefs()).readFlames(job.getFlameFilename());
             Flame flame = flames.get(0);
             double wScl = (double) info.getImageWidth() / (double) flame.getWidth();
             double hScl = (double) info.getImageHeight() / (double) flame.getHeight();
