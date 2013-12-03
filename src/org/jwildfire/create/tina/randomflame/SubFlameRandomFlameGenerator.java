@@ -19,7 +19,7 @@ package org.jwildfire.create.tina.randomflame;
 import org.jwildfire.base.Prefs;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.XForm;
-import org.jwildfire.create.tina.io.Flam3Writer;
+import org.jwildfire.create.tina.io.FlameWriter;
 import org.jwildfire.create.tina.palette.RGBPalette;
 import org.jwildfire.create.tina.palette.RandomRGBPaletteGenerator;
 import org.jwildfire.create.tina.render.FlameRenderer;
@@ -48,7 +48,7 @@ public class SubFlameRandomFlameGenerator extends RandomFlameGenerator {
       {
         {
           SubFlameWFFunc var = new SubFlameWFFunc();
-          String flameXML = new Flam3Writer().getFlameXML(pSubFlame);
+          String flameXML = new FlameWriter().getFlameXML(pSubFlame);
           var.setRessource("flame", flameXML.getBytes());
           xForm.addVariation(1, var);
         }

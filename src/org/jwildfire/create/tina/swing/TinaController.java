@@ -86,7 +86,7 @@ import org.jwildfire.create.tina.dance.GradientController;
 import org.jwildfire.create.tina.dance.JWFScriptController;
 import org.jwildfire.create.tina.edit.UndoManager;
 import org.jwildfire.create.tina.io.Flam3Reader;
-import org.jwildfire.create.tina.io.Flam3Writer;
+import org.jwildfire.create.tina.io.FlameWriter;
 import org.jwildfire.create.tina.mutagen.MutaGenController;
 import org.jwildfire.create.tina.mutagen.MutationType;
 import org.jwildfire.create.tina.palette.DefaultGradientSelectionProvider;
@@ -413,6 +413,7 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
     data.layerDeleteBtn = parameterObject.layerDeleteBtn;
     data.layersTable = parameterObject.layersTable;
     data.layerVisibleBtn = parameterObject.layerVisibleBtn;
+    data.layerAppendBtn = parameterObject.layerAppendBtn;
 
     data.mouseTransformEditViewButton = parameterObject.pMouseTransformViewButton;
     data.toggleVariationsButton = parameterObject.pToggleVariationsButton;
@@ -561,6 +562,7 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
     data.layerDeleteBtn.setEnabled(flame != null && layer != null && getCurrFlame().getLayers().size() > 1);
     data.layersTable.setEnabled(flame != null);
     data.layerVisibleBtn.setEnabled(layer != null);
+    data.layerAppendBtn.setEnabled(flame != null);
   }
 
   private void initHelpPane() {
@@ -2065,21 +2067,33 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
         List<Flame> flames = new Flam3Reader(prefs).readFlames(file.getAbsolutePath());
         Flame flame = flames.get(0);
         prefs.setLastInputFlameFile(file);
-        setCurrFlame(flame);
-        getCurrFlame().setLastFilename(file.getName());
-        undoManager.initUndoStack(getCurrFlame());
-
-        for (int i = flames.size() - 1; i >= 1; i--) {
-          randomBatch.add(0, new FlameThumbnail(flames.get(i), null));
+        if (data.layerAppendBtn.isSelected() && getCurrFlame() != null) {
+          appendToFlame(flame);
         }
-        updateThumbnails();
-        setupProfiles(getCurrFlame());
+        else {
+          setCurrFlame(flame);
+          getCurrFlame().setLastFilename(file.getName());
+          undoManager.initUndoStack(getCurrFlame());
+
+          for (int i = flames.size() - 1; i >= 1; i--) {
+            randomBatch.add(0, new FlameThumbnail(flames.get(i), null));
+          }
+          updateThumbnails();
+          setupProfiles(getCurrFlame());
+        }
         refreshUI();
         showStatusMessage(getCurrFlame(), "opened from disc");
       }
     }
     catch (Throwable ex) {
       errorHandler.handleError(ex);
+    }
+  }
+
+  private void appendToFlame(Flame pSrc) {
+    Flame destFlame = getCurrFlame();
+    for (Layer layer : pSrc.getLayers()) {
+      destFlame.getLayers().add(layer);
     }
   }
 
@@ -2311,7 +2325,7 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
         }
         if (chooser.showSaveDialog(centerPanel) == JFileChooser.APPROVE_OPTION) {
           File file = chooser.getSelectedFile();
-          new Flam3Writer().writeFlame(getCurrFlame(), file.getAbsolutePath());
+          new FlameWriter().writeFlame(getCurrFlame(), file.getAbsolutePath());
           getCurrFlame().setLastFilename(file.getName());
           showStatusMessage(getCurrFlame(), "flame saved to disc");
           prefs.setLastOutputFlameFile(file);
@@ -4036,7 +4050,7 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
     try {
       if (getCurrFlame() != null) {
         Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-        String xml = new Flam3Writer().getFlameXML(getCurrFlame());
+        String xml = new FlameWriter().getFlameXML(getCurrFlame());
         StringSelection data = new StringSelection(xml);
         clipboard.setContents(data, data);
         //        try {
@@ -4917,7 +4931,7 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
     try {
       if (getCurrFlame() != null) {
         String filename = qsaveFilenameGen.generateNextFilename();
-        new Flam3Writer().writeFlame(getCurrFlame(), filename);
+        new FlameWriter().writeFlame(getCurrFlame(), filename);
         showStatusMessage(getCurrFlame(), "quicksave <" + new File(filename).getName() + "> saved");
       }
     }

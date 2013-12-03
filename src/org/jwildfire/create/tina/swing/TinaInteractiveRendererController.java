@@ -40,7 +40,7 @@ import org.jwildfire.base.ResolutionProfile;
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.io.Flam3Reader;
-import org.jwildfire.create.tina.io.Flam3Writer;
+import org.jwildfire.create.tina.io.FlameWriter;
 import org.jwildfire.create.tina.randomflame.RandomFlameGenerator;
 import org.jwildfire.create.tina.randomflame.RandomFlameGeneratorList;
 import org.jwildfire.create.tina.randomflame.RandomFlameGeneratorSampler;
@@ -330,7 +330,7 @@ public class TinaInteractiveRendererController implements IterationObserver {
           new ImageWriter().saveImage(res.getHDRIntensityMap(), file.getAbsolutePath() + ".intensity.hdr");
         }
         if (prefs.isTinaSaveFlamesWhenImageIsSaved()) {
-          new Flam3Writer().writeFlame(getCurrFlame(), file.getParentFile().getAbsolutePath() + File.separator + Tools.trimFileExt(file.getName()) + ".flame");
+          new FlameWriter().writeFlame(getCurrFlame(), file.getParentFile().getAbsolutePath() + File.separator + Tools.trimFileExt(file.getName()) + ".flame");
         }
       }
     }
@@ -416,7 +416,7 @@ public class TinaInteractiveRendererController implements IterationObserver {
         }
         if (chooser.showSaveDialog(imageRootPanel) == JFileChooser.APPROVE_OPTION) {
           File file = chooser.getSelectedFile();
-          new Flam3Writer().writeFlame(currFlame, file.getAbsolutePath());
+          new FlameWriter().writeFlame(currFlame, file.getAbsolutePath());
           prefs.setLastOutputFlameFile(file);
         }
       }
@@ -431,7 +431,7 @@ public class TinaInteractiveRendererController implements IterationObserver {
       Flame currFlame = getCurrFlame();
       if (currFlame != null) {
         Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-        String xml = new Flam3Writer().getFlameXML(currFlame);
+        String xml = new FlameWriter().getFlameXML(currFlame);
         StringSelection data = new StringSelection(xml);
         clipboard.setContents(data, data);
       }

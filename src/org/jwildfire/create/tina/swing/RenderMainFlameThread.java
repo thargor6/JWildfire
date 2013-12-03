@@ -24,7 +24,7 @@ import org.jwildfire.base.QualityProfile;
 import org.jwildfire.base.ResolutionProfile;
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Flame;
-import org.jwildfire.create.tina.io.Flam3Writer;
+import org.jwildfire.create.tina.io.FlameWriter;
 import org.jwildfire.create.tina.render.FlameRenderer;
 import org.jwildfire.create.tina.render.ProgressUpdater;
 import org.jwildfire.create.tina.render.RenderInfo;
@@ -88,7 +88,7 @@ public class RenderMainFlameThread implements Runnable {
         new ImageWriter().saveImage(res.getHDRIntensityMap(), outFile.getAbsolutePath() + ".intensity.hdr");
       }
       if (prefs.isTinaSaveFlamesWhenImageIsSaved()) {
-        new Flam3Writer().writeFlame(flame, outFile.getParentFile().getAbsolutePath() + File.separator + Tools.trimFileExt(outFile.getName()) + ".flame");
+        new FlameWriter().writeFlame(flame, outFile.getParentFile().getAbsolutePath() + File.separator + Tools.trimFileExt(outFile.getName()) + ".flame");
       }
       finished = true;
       finishEvent.succeeded((t1 - t0) * 0.001);

@@ -29,7 +29,7 @@ import org.jwildfire.create.tina.dance.DancingFlameStack;
 import org.jwildfire.create.tina.dance.FlamePreparer;
 import org.jwildfire.create.tina.dance.RealtimeAnimRenderThread;
 import org.jwildfire.create.tina.dance.motion.DanceFlameTransformer;
-import org.jwildfire.create.tina.io.Flam3Writer;
+import org.jwildfire.create.tina.io.FlameWriter;
 
 public class PostRecordFlameGenerator {
   private final DancingFlameProject project;
@@ -117,7 +117,7 @@ public class PostRecordFlameGenerator {
           while (hs.length() < 5) {
             hs = "0" + hs;
           }
-          new Flam3Writer().writeFlame(flame, new File(file.getParent(), fn + hs + ".flame").getAbsolutePath());
+          new FlameWriter().writeFlame(flame, new File(file.getParent(), fn + hs + ".flame").getAbsolutePath());
         }
       }
       else {

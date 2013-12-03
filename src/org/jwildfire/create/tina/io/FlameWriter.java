@@ -16,32 +16,22 @@
 */
 package org.jwildfire.create.tina.io;
 
-import java.util.List;
-
+import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Flame;
-import org.jwildfire.create.tina.base.Layer;
-import org.jwildfire.create.tina.base.XForm;
 
-public class Flam3Writer extends AbstractFlameWriter {
+public class FlameWriter {
+
+  public void writeFlame(Flame pFlame, String pFilename) throws Exception {
+    Tools.writeUTF8Textfile(pFilename, getFlameXML(pFlame));
+  }
 
   public String getFlameXML(Flame pFlame) {
-    SimpleXMLBuilder xb = new SimpleXMLBuilder();
-    // Flame
-    List<SimpleXMLBuilder.Attribute<?>> attrList = createFlameAttributes(pFlame, xb);
-
-    xb.beginElement("flame", attrList);
-    Layer layer = pFlame.getFirstLayer();
-    // XForm
-    for (XForm xForm : layer.getXForms()) {
-      xb.emptyElement("xform", createXFormAttrList(xb, pFlame, xForm));
+    if (pFlame.getLayers().size() <= 1) {
+      return new Flam3Writer().getFlameXML(pFlame);
     }
-    // FinalXForms
-    for (XForm xForm : layer.getFinalXForms()) {
-      xb.emptyElement("finalxform", createXFormAttrList(xb, pFlame, xForm));
+    else {
+      return new JWFFlameWriter().getFlameXML(pFlame);
     }
-    addPalette(xb, layer);
-    xb.endElement("flame");
-    return xb.buildXML();
   }
 
 }

@@ -22,7 +22,7 @@ import javax.swing.SwingUtilities;
 import org.jwildfire.base.Prefs;
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Flame;
-import org.jwildfire.create.tina.io.Flam3Writer;
+import org.jwildfire.create.tina.io.FlameWriter;
 import org.jwildfire.create.tina.randomflame.AllRandomFlameGenerator;
 import org.jwildfire.create.tina.randomflame.RandomFlameGenerator;
 import org.jwildfire.create.tina.randomflame.RandomFlameGeneratorSampler;
@@ -119,7 +119,7 @@ public class JWildfireApplet extends JApplet implements IterationObserver {
     Flame currFlame = getCurrFlame();
     if (currFlame != null) {
       Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-      String xml = new Flam3Writer().getFlameXML(currFlame);
+      String xml = new FlameWriter().getFlameXML(currFlame);
       StringSelection data = new StringSelection(xml);
       clipboard.setContents(data, data);
     }

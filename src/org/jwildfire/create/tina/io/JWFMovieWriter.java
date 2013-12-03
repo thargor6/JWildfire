@@ -80,7 +80,7 @@ public class JWFMovieWriter {
     attrList.add(pXB.createAttr(ATTR_FRAME_MORPH_COUNT, pPart.getFrameMorphCount()));
     pXB.beginElement(TAG_JWF_MOVIE_PART, attrList);
     if (pPart.getFlame() != null) {
-      pXB.addContent(new Flam3Writer().getFlameXML(pPart.getFlame()));
+      pXB.addContent(new FlameWriter().getFlameXML(pPart.getFlame()));
     }
     pXB.endElement(TAG_JWF_MOVIE_PART);
   }

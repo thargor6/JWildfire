@@ -4393,7 +4393,7 @@ public class TinaInternalFrame extends JInternalFrame {
         getFlameBrowserRenameBtn(), getTinaPaletteFadeColorsCBx(), getDancingFlamesReplaceFlameFromEditorBtn(), getDancingFlamesRenameFlameBtn(),
         getDancingFlamesRenameMotionBtn(), getDancingFlamesMutedCBx(),
         getLayerWeightEd(), getLayerAddBtn(), getLayerDuplicateBtn(), getLayerDeleteBtn(),
-        getLayersTable(), getLayerVisibleBtn());
+        getLayersTable(), getLayerVisibleBtn(), getLayerAppendBtn());
 
     tinaController = new TinaController(params);
 
@@ -9291,6 +9291,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JToggleButton layerVisibleBtn;
   private JButton layerAddBtn;
   private JButton layerDuplicateBtn;
+  private JToggleButton layerAppendBtn;
 
   /**
    * This method initializes renderBatchJobsScrollPane	
@@ -14745,6 +14746,16 @@ public class TinaInternalFrame extends JInternalFrame {
       lblWeight.setFont(new Font("Dialog", Font.BOLD, 10));
       lblWeight.setBounds(107, 10, 58, 22);
       panel_75.add(lblWeight);
+
+      layerAppendBtn = new JToggleButton();
+      layerAppendBtn.setToolTipText("Append new flames as new layers");
+      layerAppendBtn.setText("Layer append mode");
+      layerAppendBtn.setSize(new Dimension(138, 24));
+      layerAppendBtn.setPreferredSize(new Dimension(136, 24));
+      layerAppendBtn.setLocation(new Point(4, 181));
+      layerAppendBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      layerAppendBtn.setBounds(141, 78, 179, 52);
+      panel_75.add(layerAppendBtn);
     }
     return panel_75;
   }
@@ -14809,6 +14820,10 @@ public class TinaInternalFrame extends JInternalFrame {
 
   public JButton getLayerDuplicateBtn() {
     return layerDuplicateBtn;
+  }
+
+  public JToggleButton getLayerAppendBtn() {
+    return layerAppendBtn;
   }
 } //  @jve:decl-index=0:visual-constraint="10,10"
 
