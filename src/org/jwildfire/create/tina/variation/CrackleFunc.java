@@ -149,9 +149,6 @@ public class CrackleFunc extends VariationFunc {
     // Finally add values in
     pVarTP.x += pAmount * DXo;
     pVarTP.y += pAmount * DYo;
-    if (pContext.isPreserveZCoordinate()) {
-      pVarTP.z += pAmount * pAffineTP.z;
-    }
   }
 
   @Override

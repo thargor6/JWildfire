@@ -349,6 +349,7 @@ public class VariationFuncList {
     registerVariationFunc(PostRBlurFunc.class);
     registerVariationFunc(ShredlinFunc.class);
     registerVariationFunc(PrimitivesWFFunc.class);
+    registerVariationFunc(FlattenFunc.class);
   }
 
   private static void registerVariationFunc(
