@@ -163,9 +163,40 @@ public final class FlameRenderFlatThread extends FlameRenderThread {
 
   public FlameRenderFlatThread(Prefs pPrefs, int pThreadId, FlameRenderer pRenderer, Flame pFlame, long pSamples) {
     super(pPrefs, pThreadId, pRenderer, pFlame, pSamples);
+    // TODO: remove
     iterationState = new ArrayList<IterationState>();
     for (Layer layer : pFlame.getLayers()) {
       iterationState.add(new IterationState(this, renderer, flame, layer, ctx, randGen));
+    }
+    //
+    iterationState = new ArrayList<IterationState>();
+    double weightSum = 0.0;
+    int layerCount = 0;
+    for (Layer layer : pFlame.getLayers()) {
+      if (layer.isVisible() && layer.getWeight() > EPSILON) {
+        weightSum += layer.getWeight();
+        layerCount++;
+      }
+    }
+
+    if (layerCount == 1) {
+      for (Layer layer : pFlame.getLayers()) {
+        if (layer.isVisible() && layer.getWeight() > EPSILON) {
+          iterationState.add(new IterationState(this, renderer, flame, layer, ctx, randGen));
+          break;
+        }
+      }
+    }
+    else if (layerCount > 1) {
+      final int LAYER_STEPS = 1000;
+      for (Layer layer : pFlame.getLayers()) {
+        if (layer.isVisible() && layer.getWeight() > EPSILON) {
+          int cnt = (int) (layer.getWeight() / weightSum * LAYER_STEPS + 0.5);
+          for (int j = 0; j < cnt; j++) {
+            iterationState.add(new IterationState(this, renderer, flame, layer, ctx, randGen));
+          }
+        }
+      }
     }
   }
 
@@ -185,6 +216,9 @@ public final class FlameRenderFlatThread extends FlameRenderThread {
   @Override
   protected void iterate() {
     final int iterInc = iterationState.size();
+    if (iterInc < 1) {
+      return;
+    }
     for (iter = startIter; !forceAbort && (samples < 0 || iter < samples); iter += iterInc) {
       if (iter % 10000 == 0) {
         preFuseIter();

@@ -2068,7 +2068,10 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
         Flame flame = flames.get(0);
         prefs.setLastInputFlameFile(file);
         if (data.layerAppendBtn.isSelected() && getCurrFlame() != null) {
-          appendToFlame(flame);
+          if (appendToFlame(flame)) {
+            refreshUI();
+            showStatusMessage(getCurrFlame(), "opened from disc and added as new layers");
+          }
         }
         else {
           setCurrFlame(flame);
@@ -2080,9 +2083,9 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
           }
           updateThumbnails();
           setupProfiles(getCurrFlame());
+          refreshUI();
+          showStatusMessage(getCurrFlame(), "opened from disc");
         }
-        refreshUI();
-        showStatusMessage(getCurrFlame(), "opened from disc");
       }
     }
     catch (Throwable ex) {
@@ -2090,11 +2093,12 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
     }
   }
 
-  private void appendToFlame(Flame pSrc) {
+  private boolean appendToFlame(Flame pSrc) {
     Flame destFlame = getCurrFlame();
     for (Layer layer : pSrc.getLayers()) {
       destFlame.getLayers().add(layer);
     }
+    return pSrc.getLayers().size() > 0;
   }
 
   public void cameraCentreYSlider_stateChanged(ChangeEvent e) {
@@ -4016,24 +4020,32 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
   }
 
   public void importFlame(Flame pFlame, boolean pAddToThumbnails) {
-    if (_currFlame == null || !_currFlame.equals(pFlame)) {
-      _currRandomizeFlame = pFlame.makeCopy();
-    }
-    if (pAddToThumbnails) {
-      _currFlame = pFlame.makeCopy();
-      undoManager.initUndoStack(_currFlame);
-      setupProfiles(getCurrFlame());
-      randomBatch.add(0, new FlameThumbnail(getCurrFlame(), null));
-      updateThumbnails();
-      refreshUI();
-      showStatusMessage(getCurrFlame(), "imported into editor");
+    if (data.layerAppendBtn.isSelected() && getCurrFlame() != null) {
+      if (appendToFlame(pFlame)) {
+        refreshUI();
+        showStatusMessage(pFlame, "added as new layers");
+      }
     }
     else {
-      _currFlame = pFlame;
-      undoManager.initUndoStack(_currFlame);
-      setupProfiles(getCurrFlame());
-      refreshUI();
-      showStatusMessage(getCurrFlame(), "imported into editor");
+      if (_currFlame == null || !_currFlame.equals(pFlame)) {
+        _currRandomizeFlame = pFlame.makeCopy();
+      }
+      if (pAddToThumbnails) {
+        _currFlame = pFlame.makeCopy();
+        undoManager.initUndoStack(_currFlame);
+        setupProfiles(getCurrFlame());
+        randomBatch.add(0, new FlameThumbnail(getCurrFlame(), null));
+        updateThumbnails();
+        refreshUI();
+        showStatusMessage(getCurrFlame(), "imported into editor");
+      }
+      else {
+        _currFlame = pFlame;
+        undoManager.initUndoStack(_currFlame);
+        setupProfiles(getCurrFlame());
+        refreshUI();
+        showStatusMessage(getCurrFlame(), "imported into editor");
+      }
     }
   }
 
@@ -5562,6 +5574,7 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
     if (!gridRefreshing) {
       saveUndoPoint();
       getCurrLayer().setWeight(Tools.stringToDouble(data.layerWeightEd.getText()));
+      refreshFlameImage(false);
     }
   }
 
@@ -5569,6 +5582,7 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
     if (!gridRefreshing) {
       saveUndoPoint();
       getCurrLayer().setVisible(data.layerVisibleBtn.isSelected());
+      refreshFlameImage(false);
     }
   }
 

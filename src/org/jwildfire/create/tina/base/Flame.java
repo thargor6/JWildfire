@@ -643,6 +643,9 @@ public class Flame implements Assignable<Flame>, Serializable {
 // TODO
 // copy gradient when "Add" new layer
 // (De)register Palette from Editor
+// respect layers button when importing into editor
 // MorphService
 // save/resume state
-// load/save
+// weights
+// visibility
+// select proper (1st( layer)
