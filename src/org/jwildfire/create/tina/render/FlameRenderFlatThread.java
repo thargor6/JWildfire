@@ -46,6 +46,8 @@ public final class FlameRenderFlatThread extends FlameRenderThread {
   private List<IterationState> iterationState;
 
   private static class IterationState extends AbstractIterationState {
+    private static final long serialVersionUID = 1L;
+
     private XYZPoint affineT;
     private XYZPoint varT;
     private XYZPoint p;
@@ -140,17 +142,19 @@ public final class FlameRenderFlatThread extends FlameRenderThread {
         return;
       AbstractRasterPoint rp = renderer.raster[yIdx][xIdx];
 
+      double intensity = prj.intensity * layer.getWeight();
+
       if (p.rgbColor) {
-        rp.setRed(rp.getRed() + p.redColor * prj.intensity);
-        rp.setGreen(rp.getGreen() + p.greenColor * prj.intensity);
-        rp.setBlue(rp.getBlue() + p.blueColor * prj.intensity);
+        rp.setRed(rp.getRed() + p.redColor * intensity);
+        rp.setGreen(rp.getGreen() + p.greenColor * intensity);
+        rp.setBlue(rp.getBlue() + p.blueColor * intensity);
       }
       else {
         int colorIdx = (int) (p.color * paletteIdxScl + 0.5);
         RenderColor color = colorMap[colorIdx];
-        rp.setRed(rp.getRed() + color.red * prj.intensity);
-        rp.setGreen(rp.getGreen() + color.green * prj.intensity);
-        rp.setBlue(rp.getBlue() + color.blue * prj.intensity);
+        rp.setRed(rp.getRed() + color.red * intensity);
+        rp.setGreen(rp.getGreen() + color.green * intensity);
+        rp.setBlue(rp.getBlue() + color.blue * intensity);
       }
       rp.incCount();
       if (observers != null && observers.size() > 0) {
@@ -161,41 +165,16 @@ public final class FlameRenderFlatThread extends FlameRenderThread {
     }
   }
 
+  private boolean isValidLayer(Layer pLayer) {
+    return pLayer.isVisible() && pLayer.getPalette() != null && pLayer.getXForms().size() > 0;
+  }
+
   public FlameRenderFlatThread(Prefs pPrefs, int pThreadId, FlameRenderer pRenderer, Flame pFlame, long pSamples) {
     super(pPrefs, pThreadId, pRenderer, pFlame, pSamples);
-    // TODO: remove
     iterationState = new ArrayList<IterationState>();
     for (Layer layer : pFlame.getLayers()) {
-      iterationState.add(new IterationState(this, renderer, flame, layer, ctx, randGen));
-    }
-    //
-    iterationState = new ArrayList<IterationState>();
-    double weightSum = 0.0;
-    int layerCount = 0;
-    for (Layer layer : pFlame.getLayers()) {
-      if (layer.isVisible() && layer.getWeight() > EPSILON) {
-        weightSum += layer.getWeight();
-        layerCount++;
-      }
-    }
-
-    if (layerCount == 1) {
-      for (Layer layer : pFlame.getLayers()) {
-        if (layer.isVisible() && layer.getWeight() > EPSILON) {
-          iterationState.add(new IterationState(this, renderer, flame, layer, ctx, randGen));
-          break;
-        }
-      }
-    }
-    else if (layerCount > 1) {
-      final int LAYER_STEPS = 1000;
-      for (Layer layer : pFlame.getLayers()) {
-        if (layer.isVisible() && layer.getWeight() > EPSILON) {
-          int cnt = (int) (layer.getWeight() / weightSum * LAYER_STEPS + 0.5);
-          for (int j = 0; j < cnt; j++) {
-            iterationState.add(new IterationState(this, renderer, flame, layer, ctx, randGen));
-          }
-        }
+      if (isValidLayer(layer)) {
+        iterationState.add(new IterationState(this, renderer, flame, layer, ctx, randGen));
       }
     }
   }

@@ -20,7 +20,7 @@ import org.jwildfire.create.tina.variation.VariationFunc;
 
 public class AbstractFlameWriter {
 
-  protected List<SimpleXMLBuilder.Attribute<?>> createXFormAttrList(SimpleXMLBuilder pXB, Flame pFlame, XForm pXForm) {
+  protected List<SimpleXMLBuilder.Attribute<?>> createXFormAttrList(SimpleXMLBuilder pXB, Layer pLayer, XForm pXForm) {
     List<SimpleXMLBuilder.Attribute<?>> attrList = new ArrayList<SimpleXMLBuilder.Attribute<?>>();
     attrList.add(pXB.createAttr("weight", pXForm.getWeight()));
     attrList.add(pXB.createAttr("color", pXForm.getColor()));
@@ -81,10 +81,10 @@ public class AbstractFlameWriter {
     }
     {
       String hs = "";
-      for (int i = 0; i < pFlame.getXForms().size() - 1; i++) {
+      for (int i = 0; i < pLayer.getXForms().size() - 1; i++) {
         hs += pXForm.getModifiedWeights()[i] + " ";
       }
-      hs += pXForm.getModifiedWeights()[pFlame.getXForms().size() - 1];
+      hs += pXForm.getModifiedWeights()[pLayer.getXForms().size() - 1];
       attrList.add(pXB.createAttr("chaos", hs));
     }
 

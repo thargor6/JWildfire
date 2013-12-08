@@ -16,8 +16,8 @@
 */
 package org.jwildfire.create.tina.mutagen;
 
-import org.jwildfire.create.tina.base.Flame;
+import org.jwildfire.create.tina.base.Layer;
 
 public interface Mutation {
-  public void execute(Flame pFlame);
+  public void execute(Layer pLayer);
 }

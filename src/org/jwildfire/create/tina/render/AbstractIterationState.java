@@ -16,6 +16,7 @@
 */
 package org.jwildfire.create.tina.render;
 
+import java.io.Serializable;
 import java.util.List;
 
 import org.jwildfire.create.tina.base.Flame;
@@ -24,7 +25,9 @@ import org.jwildfire.create.tina.palette.RenderColor;
 import org.jwildfire.create.tina.random.AbstractRandomGenerator;
 import org.jwildfire.create.tina.variation.FlameTransformationContext;
 
-public class AbstractIterationState {
+public class AbstractIterationState implements Serializable {
+  private static final long serialVersionUID = 1L;
+
   protected final FlameRenderThread renderThread;
   protected final FlameRenderer renderer;
   protected final Layer layer;

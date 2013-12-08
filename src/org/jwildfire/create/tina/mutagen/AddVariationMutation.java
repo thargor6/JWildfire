@@ -16,7 +16,7 @@
 */
 package org.jwildfire.create.tina.mutagen;
 
-import org.jwildfire.create.tina.base.Flame;
+import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.randomflame.ExperimentalSimpleRandomFlameGenerator;
 import org.jwildfire.create.tina.variation.VariationFuncList;
@@ -24,15 +24,15 @@ import org.jwildfire.create.tina.variation.VariationFuncList;
 public class AddVariationMutation implements Mutation {
 
   @Override
-  public void execute(Flame pFlame) {
+  public void execute(Layer pLayer) {
     XForm xForm;
-    if (Math.random() < 0.75 || pFlame.getFinalXForms().size() == 0) {
-      int idx = (int) (pFlame.getXForms().size() * Math.random());
-      xForm = pFlame.getXForms().get(idx);
+    if (Math.random() < 0.75 || pLayer.getFinalXForms().size() == 0) {
+      int idx = (int) (pLayer.getXForms().size() * Math.random());
+      xForm = pLayer.getXForms().get(idx);
     }
     else {
-      int idx = (int) (pFlame.getFinalXForms().size() * Math.random());
-      xForm = pFlame.getFinalXForms().get(idx);
+      int idx = (int) (pLayer.getFinalXForms().size() * Math.random());
+      xForm = pLayer.getFinalXForms().get(idx);
     }
 
     if (Math.random() < 0.75) {

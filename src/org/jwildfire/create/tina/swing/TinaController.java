@@ -948,7 +948,10 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
     }
   }
 
+  static int rCount = 1;
+
   public void refreshFlameImage(boolean pQuickRender, boolean pMouseDown) {
+    System.out.println("R" + rCount++);
     FlamePanel imgPanel = getFlamePanel();
     Rectangle bounds = imgPanel.getImageBounds();
     int renderScale = pQuickRender && pMouseDown ? 2 : 1;
@@ -1084,11 +1087,14 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
       gridRefreshing = true;
       try {
         refreshLayersTable();
+        int row = data.layersTable.getSelectedRow();
+        if (row < 0 && getCurrFlame() != null && getCurrFlame().getLayers().size() > 0) {
+          data.layersTable.getSelectionModel().setSelectionInterval(0, 0);
+        }
       }
       finally {
         gridRefreshing = false;
       }
-      layersTableClicked();
 
       gridRefreshing = true;
       try {
@@ -1104,7 +1110,6 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
       enableShadingUI();
       enableDOFUI();
       enableDEFilterUI();
-      //      refreshFlameImage();
       refreshPaletteUI(getCurrLayer().getPalette());
     }
     finally {
@@ -3055,8 +3060,6 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
         getCurrFlame().setHeight(bounds.height);
         getCurrFlame().setPixelsPerUnit((wScl + hScl) * 0.5 * getCurrFlame().getPixelsPerUnit());
       }
-      refreshUI();
-      data.transformationsTable.getSelectionModel().setSelectionInterval(0, 0);
     }
   }
 
@@ -4022,7 +4025,6 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
   public void importFlame(Flame pFlame, boolean pAddToThumbnails) {
     if (data.layerAppendBtn.isSelected() && getCurrFlame() != null) {
       if (appendToFlame(pFlame)) {
-        refreshUI();
         showStatusMessage(pFlame, "added as new layers");
       }
     }
@@ -4036,17 +4038,16 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
         setupProfiles(getCurrFlame());
         randomBatch.add(0, new FlameThumbnail(getCurrFlame(), null));
         updateThumbnails();
-        refreshUI();
         showStatusMessage(getCurrFlame(), "imported into editor");
       }
       else {
         _currFlame = pFlame;
         undoManager.initUndoStack(_currFlame);
         setupProfiles(getCurrFlame());
-        refreshUI();
         showStatusMessage(getCurrFlame(), "imported into editor");
       }
     }
+    refreshUI();
   }
 
   protected Flame exportFlame() {
@@ -5467,7 +5468,9 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
         Flame currMutation = getCurrRandomizeFlame().makeCopy();
         List<MutationType> mutationTypes = createRandomMutationTypes();
         for (MutationType mutationType : mutationTypes) {
-          mutationType.createMutationInstance().execute(currMutation);
+          int layerIdx = data.layersTable.getSelectedRow();
+          Layer layer = currMutation.getLayers().get(layerIdx);
+          mutationType.createMutationInstance().execute(layer);
         }
 
         SimpleImage renderedImg = renderRandomizedFlame(currMutation.makeCopy(), probeSize);
@@ -5520,6 +5523,10 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
   public void addLayerBtn_clicked() {
     Flame flame = getCurrFlame();
     Layer layer = new Layer();
+    RandomRGBPaletteGenerator generator = new RandomRGBPaletteGenerator();
+    List<RGBColor> paletteKeyFrames = generator.generateKeyFrames(Integer.parseInt(data.paletteRandomPointsREd.getText()));
+    RGBPalette palette = new RandomRGBPaletteGenerator().generatePalette(paletteKeyFrames, data.paletteFadeColorsCBx.isSelected());
+    layer.setPalette(palette);
     saveUndoPoint();
     flame.getLayers().add(layer);
 

@@ -49,6 +49,7 @@ import org.jwildfire.base.Prefs;
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.animate.FlameMorphService;
 import org.jwildfire.create.tina.base.Flame;
+import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.io.FlameReader;
 import org.jwildfire.create.tina.io.FlameWriter;
 import org.jwildfire.create.tina.randomflame.RandomFlameGeneratorSampler;
@@ -628,7 +629,9 @@ public class MutaGenController {
   private void modifyFlame(Flame pFlame, double pX, int pY, List<MutationType> pMutationTypes) {
     for (MutationType mutationType : pMutationTypes) {
       Mutation mutation = mutationType.createMutationInstance();
-      mutation.execute(pFlame);
+      for (Layer layer : pFlame.getLayers()) {
+        mutation.execute(layer);
+      }
     }
   }
 

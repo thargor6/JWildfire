@@ -263,14 +263,14 @@ public class FlamePanel extends ImagePanel {
   }
 
   private void paintTriangles(Graphics2D g) {
-    if (flameHolder != null) {
-      Flame flame = flameHolder.getFlame();
-      if (flame != null) {
+    if (layerHolder != null) {
+      Layer layer = layerHolder.getLayer();
+      if (layer != null) {
         g.setColor(editPostTransform ? (darkTriangles ? XFORM_POST_COLOR_DARK : XFORM_POST_COLOR) : (darkTriangles ? XFORM_COLOR_DARK : XFORM_COLOR));
-        for (XForm xForm : flame.getXForms()) {
+        for (XForm xForm : layer.getXForms()) {
           drawXForm(g, xForm, false);
         }
-        for (XForm xForm : flame.getFinalXForms()) {
+        for (XForm xForm : layer.getFinalXForms()) {
           drawXForm(g, xForm, true);
         }
       }
@@ -699,9 +699,9 @@ public class FlamePanel extends ImagePanel {
     redrawAfterMouseClick = false;
     // select flame
     if (mouseDragOperation == MouseDragOperation.MOVE_TRIANGLE || mouseDragOperation == MouseDragOperation.ROTATE_TRIANGLE || mouseDragOperation == MouseDragOperation.SCALE_TRIANGLE) {
-      Flame flame = flameHolder.getFlame();
-      if (flame != null) {
-        for (XForm xForm : flame.getXForms()) {
+      Layer layer = layerHolder.getLayer();
+      if (layer != null) {
+        for (XForm xForm : layer.getXForms()) {
           Triangle triangle = new Triangle(xForm);
           if (insideTriange(triangle, x, y)) {
             if (mouseDragOperation == MouseDragOperation.POINTS) {
@@ -712,7 +712,7 @@ public class FlamePanel extends ImagePanel {
             return xForm;
           }
         }
-        for (XForm xForm : flame.getFinalXForms()) {
+        for (XForm xForm : layer.getFinalXForms()) {
           Triangle triangle = new Triangle(xForm);
           if (insideTriange(triangle, x, y)) {
             if (mouseDragOperation == MouseDragOperation.POINTS) {

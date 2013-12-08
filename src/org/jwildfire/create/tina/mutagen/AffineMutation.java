@@ -16,26 +16,26 @@
 */
 package org.jwildfire.create.tina.mutagen;
 
-import org.jwildfire.create.tina.base.Flame;
+import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.transform.XFormTransformService;
 
 public class AffineMutation implements Mutation {
 
   @Override
-  public void execute(Flame pFlame) {
-    apply(pFlame, 0.75);
-    apply(pFlame, 0.2);
-    apply(pFlame, 0.1);
+  public void execute(Layer pLayer) {
+    apply(pLayer, 0.75);
+    apply(pLayer, 0.2);
+    apply(pLayer, 0.1);
   }
 
-  private void apply(Flame pFlame, double pAmount) {
+  private void apply(Layer pLayer, double pAmount) {
     XForm xForm;
-    if (pFlame.getFinalXForms().size() == 0 || Math.random() < 0.5) {
-      xForm = pFlame.getXForms().get((int) (pFlame.getXForms().size() * Math.random()));
+    if (pLayer.getFinalXForms().size() == 0 || Math.random() < 0.5) {
+      xForm = pLayer.getXForms().get((int) (pLayer.getXForms().size() * Math.random()));
     }
     else {
-      xForm = pFlame.getFinalXForms().get((int) (pFlame.getFinalXForms().size() * Math.random()));
+      xForm = pLayer.getFinalXForms().get((int) (pLayer.getFinalXForms().size() * Math.random()));
     }
     if (Math.random() < 0.5) {
       if (Math.random() < 0.75) {

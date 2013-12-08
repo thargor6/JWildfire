@@ -16,21 +16,21 @@
 */
 package org.jwildfire.create.tina.mutagen;
 
-import org.jwildfire.create.tina.base.Flame;
+import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.palette.RGBPalette;
 import org.jwildfire.create.tina.palette.RandomRGBPaletteGenerator;
 
 public class RandomGradientMutation implements Mutation {
 
   @Override
-  public void execute(Flame pFlame) {
+  public void execute(Layer pLayer) {
     int keyFrames = 3 + (int) (Math.random() * 56);
     boolean fadePaletteColors = Math.random() > 0.33;
     RGBPalette palette = new RandomRGBPaletteGenerator().generatePalette(keyFrames, fadePaletteColors);
     if (Math.random() < 0.33) {
       palette.sort();
     }
-    pFlame.getRandomLayer().setPalette(palette);
+    pLayer.setPalette(palette);
   }
 
 }

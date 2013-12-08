@@ -16,7 +16,7 @@
 */
 package org.jwildfire.create.tina.mutagen;
 
-import org.jwildfire.create.tina.base.Flame;
+import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.randomflame.ExperimentalSimpleRandomFlameGenerator;
 import org.jwildfire.create.tina.variation.VariationFuncList;
@@ -24,14 +24,14 @@ import org.jwildfire.create.tina.variation.VariationFuncList;
 public class AddTransformMutation implements Mutation {
 
   @Override
-  public void execute(Flame pFlame) {
+  public void execute(Layer pLayer) {
     if (Math.random() < 0.75) {
-      if (Math.random() < 0.5 && pFlame.getXForms().size() > 0) {
-        int idx = (int) (Math.random() * pFlame.getXForms().size());
-        pFlame.getXForms().remove(idx);
+      if (Math.random() < 0.5 && pLayer.getXForms().size() > 0) {
+        int idx = (int) (Math.random() * pLayer.getXForms().size());
+        pLayer.getXForms().remove(idx);
       }
       XForm xForm = new XForm();
-      pFlame.getXForms().add(xForm);
+      pLayer.getXForms().add(xForm);
       xForm.setWeight(0.1 + Math.random() * 2.0);
       String fName;
       if (Math.random() < 0.33) {
@@ -44,12 +44,12 @@ public class AddTransformMutation implements Mutation {
       xForm.addVariation(0.01 + Math.random() * 10.0, VariationFuncList.getVariationFuncInstance(fName, true));
     }
     else {
-      if (Math.random() < 0.5 && pFlame.getFinalXForms().size() > 0) {
-        int idx = (int) (Math.random() * pFlame.getFinalXForms().size());
-        pFlame.getFinalXForms().remove(idx);
+      if (Math.random() < 0.5 && pLayer.getFinalXForms().size() > 0) {
+        int idx = (int) (Math.random() * pLayer.getFinalXForms().size());
+        pLayer.getFinalXForms().remove(idx);
       }
       XForm xForm = new XForm();
-      pFlame.getFinalXForms().add(xForm);
+      pLayer.getFinalXForms().add(xForm);
       xForm.setWeight(0.1 + Math.random() * 2.0);
       String fName;
       if (Math.random() < 0.33) {

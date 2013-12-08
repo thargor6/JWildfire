@@ -22,26 +22,26 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.jwildfire.base.Tools;
-import org.jwildfire.create.tina.base.Flame;
+import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.variation.VariationFunc;
 
 public class RandomParamMutation implements Mutation {
 
   @Override
-  public void execute(Flame pFlame) {
-    setRandomFlameProperty(pFlame, 6.0 * (0.25 + 0.75 * Math.random()));
-    setRandomFlameProperty(pFlame, 5.0 * (0.25 + 0.75 * Math.random()));
-    setRandomFlameProperty(pFlame, 2.0 * (0.25 + 0.75 * Math.random()));
+  public void execute(Layer pLayer) {
+    setRandomFlameProperty(pLayer, 6.0 * (0.25 + 0.75 * Math.random()));
+    setRandomFlameProperty(pLayer, 5.0 * (0.25 + 0.75 * Math.random()));
+    setRandomFlameProperty(pLayer, 2.0 * (0.25 + 0.75 * Math.random()));
   }
 
-  private void setRandomFlameProperty(Flame pFlame, double pAmount) {
+  private void setRandomFlameProperty(Layer pLayer, double pAmount) {
     List<VariationFunc> variations = new ArrayList<VariationFunc>();
 
-    for (XForm xForm : pFlame.getXForms()) {
+    for (XForm xForm : pLayer.getXForms()) {
       addVariations(variations, xForm);
     }
-    for (XForm xForm : pFlame.getFinalXForms()) {
+    for (XForm xForm : pLayer.getFinalXForms()) {
       addVariations(variations, xForm);
     }
 

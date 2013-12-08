@@ -590,6 +590,10 @@ public class Flame implements Assignable<Flame>, Serializable {
     this.dimishZ = dimishZ;
   }
 
+  public Layer getFirstLayer() {
+    return layers.get(0);
+  }
+
   // only because of script-compatiblity
   // TODO
   @Deprecated
@@ -613,28 +617,19 @@ public class Flame implements Assignable<Flame>, Serializable {
 
   // only because of script-compatiblity
   @Deprecated
-  public void setPalette(RGBPalette pPalette) {
+  public void setPalette666(RGBPalette pPalette) {
     layers.get(0).setPalette(pPalette);
-  }
-
-  public Layer getFirstLayer() {
-    return layers.get(0);
-  }
-
-  public Layer getRandomLayer() {
-    int idx = (int) (Math.random() * layers.size());
-    return layers.get(idx);
   }
 
   // only because of script-compatiblity
   @Deprecated
-  public void randomizeColors() {
+  public void randomizeColors666() {
     layers.get(0).randomizeColors();
   }
 
   // only because of script-compatiblity
   @Deprecated
-  public void distributeColors() {
+  public void distributeColors666() {
     layers.get(0).distributeColors();
   }
 
@@ -646,6 +641,4 @@ public class Flame implements Assignable<Flame>, Serializable {
 // respect layers button when importing into editor
 // MorphService
 // save/resume state
-// weights
-// visibility
 // select proper (1st( layer)
