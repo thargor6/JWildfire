@@ -17,6 +17,7 @@
 package org.jwildfire.create.tina.randomflame;
 
 import org.jwildfire.create.tina.base.Flame;
+import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.transform.XFormTransformService;
 import org.jwildfire.create.tina.variation.VariationFunc;
@@ -32,12 +33,13 @@ public class BrokatRandomFlameGenerator extends RandomFlameGenerator {
     flame.setPixelsPerUnit(200);
     flame.setCamZoom(2.0);
     flame.setCamRoll(-90.0);
-    flame.getFinalXForms().clear();
-    flame.getXForms().clear();
+    Layer layer = flame.getFirstLayer();
+    layer.getFinalXForms().clear();
+    layer.getXForms().clear();
     // 1st xForm
     {
       XForm xForm = new XForm();
-      flame.getXForms().add(xForm);
+      layer.getXForms().add(xForm);
       xForm.setWeight(1.5 + Math.random() * 1.0);
       VariationFunc varFunc = VariationFuncList.getVariationFuncInstance("curl", true);
       varFunc.setParameter("c1", -1.0);
@@ -57,7 +59,7 @@ public class BrokatRandomFlameGenerator extends RandomFlameGenerator {
     // 2nd xForm
     {
       XForm xForm = new XForm();
-      flame.getXForms().add(xForm);
+      layer.getXForms().add(xForm);
       xForm.setWeight(0.05 + Math.random() * 0.35);
       String fncNames[] = { "juliascope", "julia3D", "julia3Dz", "julian" };
       VariationFunc varFunc = VariationFuncList.getVariationFuncInstance(fncNames[(int) (fncNames.length * Math.random())], true);
@@ -74,7 +76,7 @@ public class BrokatRandomFlameGenerator extends RandomFlameGenerator {
     // 3rd xForm
     {
       XForm xForm = new XForm();
-      flame.getXForms().add(xForm);
+      layer.getXForms().add(xForm);
       xForm.setWeight(0.4 + Math.random() * 0.2);
       String fncName;
       if (Math.random() < 0.33) {
@@ -97,7 +99,7 @@ public class BrokatRandomFlameGenerator extends RandomFlameGenerator {
     // 4th xForm
     {
       XForm xForm = new XForm();
-      flame.getXForms().add(xForm);
+      layer.getXForms().add(xForm);
       xForm.setWeight(0.4 + Math.random() * 0.2);
       String fncName = ExperimentalSimpleRandomFlameGenerator.FNCLST_EXPERIMENTAL[(int) (ExperimentalSimpleRandomFlameGenerator.FNCLST_EXPERIMENTAL.length * Math.random())];
       xForm.addVariation(0.01 + Math.random() * 0.04, VariationFuncList.getVariationFuncInstance(fncName, true));

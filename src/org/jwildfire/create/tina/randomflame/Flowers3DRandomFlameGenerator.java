@@ -17,6 +17,7 @@
 package org.jwildfire.create.tina.randomflame;
 
 import org.jwildfire.create.tina.base.Flame;
+import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.transform.XFormTransformService;
 import org.jwildfire.create.tina.variation.VariationFunc;
@@ -27,18 +28,19 @@ public class Flowers3DRandomFlameGenerator extends RandomFlameGenerator {
   @Override
   protected Flame createFlame(RandomFlameGeneratorState pState) {
     Flame flame = new Flame();
+    Layer layer = flame.getFirstLayer();
     flame.setCentreX(0.0);
     flame.setCentreY(0.0);
     flame.setCamPitch(49.0);
     flame.setCamYaw(12.0);
     flame.setPixelsPerUnit(200);
-    flame.getFinalXForms().clear();
-    flame.getXForms().clear();
+    layer.getFinalXForms().clear();
+    layer.getXForms().clear();
     //    int fncCount = ExperimentalSimpleRandomFlameGenerator.FNCLST_EXPERIMENTAL.length;
     // 1st xForm
     {
       XForm xForm = new XForm();
-      flame.getXForms().add(xForm);
+      layer.getXForms().add(xForm);
       xForm.setWeight(0.5 + Math.random());
       xForm.addVariation(0.5, VariationFuncList.getVariationFuncInstance("gaussian_blur", true));
       xForm.setColor(0.0);
@@ -47,7 +49,7 @@ public class Flowers3DRandomFlameGenerator extends RandomFlameGenerator {
     // 2nd xForm
     {
       XForm xForm = new XForm();
-      flame.getXForms().add(xForm);
+      layer.getXForms().add(xForm);
       xForm.setWeight(3.0 + Math.random() * 10.0);
       if (Math.random() < 0.33) {
         xForm.addVariation(1.0, VariationFuncList.getVariationFuncInstance("linear3D", true));
@@ -84,7 +86,7 @@ public class Flowers3DRandomFlameGenerator extends RandomFlameGenerator {
     boolean advStructure = Math.random() > 0.25;
     if (advStructure) {
       XForm xForm = new XForm();
-      flame.getXForms().add(xForm);
+      layer.getXForms().add(xForm);
       xForm.setWeight(0.3 + Math.random() * 0.3);
       VariationFunc varFunc = VariationFuncList.getVariationFuncInstance("blob3D", true);
       varFunc.setParameter("low", 0.1);
@@ -97,7 +99,7 @@ public class Flowers3DRandomFlameGenerator extends RandomFlameGenerator {
     }
     if (advStructure && Math.random() > 0.25) {
       XForm xForm = new XForm();
-      flame.getXForms().add(xForm);
+      layer.getXForms().add(xForm);
       xForm.setWeight(0.1 + Math.random() * 0.3);
       xForm.addVariation(0.5, VariationFuncList.getVariationFuncInstance("blur3D", true));
       xForm.addVariation(15.0, VariationFuncList.getVariationFuncInstance("ztranslate", true));
@@ -107,7 +109,7 @@ public class Flowers3DRandomFlameGenerator extends RandomFlameGenerator {
     // final xForm
     {
       XForm xForm = new XForm();
-      flame.getFinalXForms().add(xForm);
+      layer.getFinalXForms().add(xForm);
       VariationFunc varFunc = VariationFuncList.getVariationFuncInstance("julia3D", true);
       double power = -2.0;
       if (Math.random() < 0.25) {

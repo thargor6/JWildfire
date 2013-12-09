@@ -17,6 +17,7 @@
 package org.jwildfire.create.tina.randomflame;
 
 import org.jwildfire.create.tina.base.Flame;
+import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.transform.XFormTransformService;
 
@@ -25,9 +26,10 @@ public class ExperimentalBubbles3DRandomFlameGenerator extends Bubbles3DRandomFl
   @Override
   protected Flame createFlame(RandomFlameGeneratorState pState) {
     Flame flame = super.createFlame(pState);
+    Layer layer = flame.getFirstLayer();
     // modify last xForm
     {
-      XForm xForm = flame.getXForms().get(flame.getXForms().size() - 1);
+      XForm xForm = layer.getXForms().get(layer.getXForms().size() - 1);
       XFormTransformService.scale(xForm, 0.5 + 5.0 * Math.random(), Math.random() < 0.75, Math.random() < 0.75, false);
       XFormTransformService.rotate(xForm, 180.0 - Math.random() * 360.0, false);
       XFormTransformService.localTranslate(xForm, 4.0 - 8.0 * Math.random(), 4.0 - 8.0 * Math.random(), false);

@@ -97,7 +97,6 @@ public class DefaultMotionCreator implements MotionCreator {
 
     for (Flame flame : pProject.getFlames()) {
       PropertyModel model = AnimationModelService.createModel(flame);
-
       if (flame.getXForms().size() > 0) {
         addXFormLink(model, amp0, flame, 0, AnimationModelService.PROPNAME_ANGLE);
         addXFormLink(model, amp1, flame, 0, AnimationModelService.PROPNAME_ORIGIN_X);

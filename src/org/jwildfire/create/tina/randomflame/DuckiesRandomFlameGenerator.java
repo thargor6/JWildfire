@@ -17,6 +17,7 @@
 package org.jwildfire.create.tina.randomflame;
 
 import org.jwildfire.create.tina.base.Flame;
+import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.transform.XFormTransformService;
 import org.jwildfire.create.tina.variation.VariationFunc;
@@ -27,15 +28,16 @@ public class DuckiesRandomFlameGenerator extends RandomFlameGenerator {
   @Override
   protected Flame createFlame(RandomFlameGeneratorState pState) {
     Flame flame = new Flame();
+    Layer layer = flame.getFirstLayer();
     flame.setCentreX(0.0);
     flame.setCentreY(0.0);
     flame.setPixelsPerUnit(200);
-    flame.getFinalXForms().clear();
-    flame.getXForms().clear();
+    layer.getFinalXForms().clear();
+    layer.getXForms().clear();
     // 1st xForm
     {
       XForm xForm = new XForm();
-      flame.getXForms().add(xForm);
+      layer.getXForms().add(xForm);
       xForm.setWeight(0.5 + Math.random());
       xForm.addVariation(1.5 + Math.random(), VariationFuncList.getVariationFuncInstance(Math.random() < 0.12 ? VariationFuncList.getRandomVariationname() : "spherical", true));
       xForm.setColorSymmetry(-0.5);
@@ -48,7 +50,7 @@ public class DuckiesRandomFlameGenerator extends RandomFlameGenerator {
     // 2nd xForm
     {
       XForm xForm = new XForm();
-      flame.getXForms().add(xForm);
+      layer.getXForms().add(xForm);
       xForm.setWeight(1.0 + Math.random() * 100.0);
 
       VariationFunc varFunc = VariationFuncList.getVariationFuncInstance(Math.random() < 0.8 ? "juliascope" : "julian", true);
@@ -62,12 +64,12 @@ public class DuckiesRandomFlameGenerator extends RandomFlameGenerator {
       XFormTransformService.scale(xForm, 1.1 + Math.random() * 2.0, true, true, false);
     }
 
-    flame.getXForms().get(0).getModifiedWeights()[0] = 0.0;
-    flame.getXForms().get(0).getModifiedWeights()[1] = 1.0;
+    layer.getXForms().get(0).getModifiedWeights()[0] = 0.0;
+    layer.getXForms().get(0).getModifiedWeights()[1] = 1.0;
 
     if (Math.random() > 0.667) {
       XForm xForm = new XForm();
-      flame.getXForms().add(xForm);
+      layer.getXForms().add(xForm);
       xForm.setWeight(1.0 + Math.random() * 100.0);
       VariationFunc varFunc = VariationFuncList.getVariationFuncInstance(VariationFuncList.getRandomVariationname(), true);
       xForm.addVariation(0.25 + 1.25 * Math.random(), varFunc);
@@ -76,13 +78,13 @@ public class DuckiesRandomFlameGenerator extends RandomFlameGenerator {
       XFormTransformService.localTranslate(xForm, -0.125 + Math.random() * 0.25, -0.125 + Math.random() * 0.25, true);
       XFormTransformService.scale(xForm, 0.9 + Math.random() * 0.2, true, true, true);
 
-      flame.getXForms().get(0).getModifiedWeights()[1] = 0.0;
-      flame.getXForms().get(1).getModifiedWeights()[2] = 0.0;
-      flame.getXForms().get(2).getModifiedWeights()[2] = 0.0;
+      layer.getXForms().get(0).getModifiedWeights()[1] = 0.0;
+      layer.getXForms().get(1).getModifiedWeights()[2] = 0.0;
+      layer.getXForms().get(2).getModifiedWeights()[2] = 0.0;
 
       if (Math.random() > 0.667) {
         xForm = new XForm();
-        flame.getXForms().add(xForm);
+        layer.getXForms().add(xForm);
         xForm.setWeight(0.50 + Math.random() * 50.0);
         varFunc = VariationFuncList.getVariationFuncInstance(VariationFuncList.getRandomVariationname(), true);
         xForm.addVariation(0.125 + 0.75 * Math.random(), varFunc);
@@ -91,12 +93,11 @@ public class DuckiesRandomFlameGenerator extends RandomFlameGenerator {
         XFormTransformService.localTranslate(xForm, -0.25 + Math.random() * 0.5, -0.25 + Math.random() * 0.5, true);
         XFormTransformService.scale(xForm, 0.5 + Math.random() * 0.25, true, true, true);
 
-        flame.getXForms().get(0).getModifiedWeights()[2] = 0.0;
-        flame.getXForms().get(2).getModifiedWeights()[2] = 0.0;
-        flame.getXForms().get(1).getModifiedWeights()[3] = 0.0;
-        flame.getXForms().get(2).getModifiedWeights()[3] = 0.0;
-        flame.getXForms().get(3).getModifiedWeights()[3] = 0.0;
-
+        layer.getXForms().get(0).getModifiedWeights()[2] = 0.0;
+        layer.getXForms().get(2).getModifiedWeights()[2] = 0.0;
+        layer.getXForms().get(1).getModifiedWeights()[3] = 0.0;
+        layer.getXForms().get(2).getModifiedWeights()[3] = 0.0;
+        layer.getXForms().get(3).getModifiedWeights()[3] = 0.0;
       }
     }
 

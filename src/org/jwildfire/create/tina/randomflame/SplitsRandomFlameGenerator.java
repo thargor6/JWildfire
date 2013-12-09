@@ -17,6 +17,7 @@
 package org.jwildfire.create.tina.randomflame;
 
 import org.jwildfire.create.tina.base.Flame;
+import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.transform.XFormTransformService;
 import org.jwildfire.create.tina.variation.VariationFunc;
@@ -35,6 +36,7 @@ public class SplitsRandomFlameGenerator extends RandomFlameGenerator {
   @Override
   protected Flame createFlame(RandomFlameGeneratorState pState) {
     Flame flame = new Flame();
+    Layer layer = flame.getFirstLayer();
     flame.setCentreX(0.0);
     flame.setCentreY(0.0);
     flame.setCamPitch(0.0);
@@ -44,14 +46,14 @@ public class SplitsRandomFlameGenerator extends RandomFlameGenerator {
     flame.setGamma(2.7);
     flame.setCamPerspective(0.0);
     flame.setPixelsPerUnit(200);
-    flame.getFinalXForms().clear();
-    flame.getXForms().clear();
+    layer.getFinalXForms().clear();
+    layer.getXForms().clear();
 
     VariationFunc varFunc;
     // 1st xForm
     {
       XForm xForm = new XForm();
-      flame.getXForms().add(xForm);
+      layer.getXForms().add(xForm);
       xForm.setWeight(0.5 + 0.4 * Math.random());
       String fncName = FNCLST_TX1[(int) (FNCLST_TX1.length * Math.random())];
       varFunc = VariationFuncList.getVariationFuncInstance(fncName, true);
@@ -63,7 +65,7 @@ public class SplitsRandomFlameGenerator extends RandomFlameGenerator {
     // 2nd xForm
     {
       XForm xForm = new XForm();
-      flame.getXForms().add(xForm);
+      layer.getXForms().add(xForm);
       xForm.setWeight(0.5);
       varFunc = VariationFuncList.getVariationFuncInstance("splits", true);
       if (Math.random() < 0.25) {
@@ -82,7 +84,7 @@ public class SplitsRandomFlameGenerator extends RandomFlameGenerator {
     // 3th xForm
     {
       XForm xForm = new XForm();
-      flame.getXForms().add(xForm);
+      layer.getXForms().add(xForm);
       xForm.setWeight(0.2 + 0.4 * Math.random());
       String fncName = ExperimentalSimpleRandomFlameGenerator.FNCLST_EXPERIMENTAL[(int) (ExperimentalSimpleRandomFlameGenerator.FNCLST_EXPERIMENTAL.length * Math.random())];
       //String fncName = Math.random() < 0.5 ? "linear" : "cylinder";
@@ -98,7 +100,7 @@ public class SplitsRandomFlameGenerator extends RandomFlameGenerator {
     // 4th xForm
     {
       XForm xForm = new XForm();
-      flame.getXForms().add(xForm);
+      layer.getXForms().add(xForm);
       xForm.setWeight(0.3 + 0.8 * Math.random());
       //String fncName = ExperimentalSimpleRandomFlameGenerator.FNCLST_EXPERIMENTAL[(int) (ExperimentalSimpleRandomFlameGenerator.FNCLST_EXPERIMENTAL.length * Math.random())];
       String fncName = Math.random() < 0.5 ? "noise" : "cylinder";
@@ -111,7 +113,6 @@ public class SplitsRandomFlameGenerator extends RandomFlameGenerator {
       xForm.setColorSymmetry(Math.random() * 0.2);
     }
     //    flame.randomizeColors();
-
     return flame;
   }
 

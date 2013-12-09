@@ -18,6 +18,7 @@ package org.jwildfire.create.tina.randomflame;
 
 import org.jwildfire.base.Prefs;
 import org.jwildfire.create.tina.base.Flame;
+import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.io.FlameWriter;
 import org.jwildfire.create.tina.palette.RGBPalette;
@@ -35,15 +36,16 @@ public class SubFlameRandomFlameGenerator extends RandomFlameGenerator {
 
   public Flame embedFlame(Flame pSubFlame) {
     Flame flame = new Flame();
+    Layer layer = flame.getFirstLayer();
     flame.assign(pSubFlame);
 
-    flame.getFinalXForms().clear();
-    flame.getXForms().clear();
+    layer.getFinalXForms().clear();
+    layer.getXForms().clear();
     flame.getFirstLayer().setPalette(pSubFlame.getFirstLayer().getPalette().makeCopy());
     // 1st xForm
     {
       XForm xForm = new XForm();
-      flame.getXForms().add(xForm);
+      layer.getXForms().add(xForm);
       xForm.setWeight(0.5);
       {
         {
@@ -59,7 +61,7 @@ public class SubFlameRandomFlameGenerator extends RandomFlameGenerator {
     // 2nd xForm
     {
       XForm xForm = new XForm();
-      flame.getXForms().add(xForm);
+      layer.getXForms().add(xForm);
       xForm.setWeight(0.5);
       xForm.setCoeff00(0.17254603006834707);
       xForm.setCoeff01(0.6439505508593787);
@@ -74,7 +76,7 @@ public class SubFlameRandomFlameGenerator extends RandomFlameGenerator {
     // 3rd xForm
     {
       XForm xForm = new XForm();
-      flame.getXForms().add(xForm);
+      layer.getXForms().add(xForm);
       xForm.setWeight(0.5);
       xForm.setCoeff00(0.17254603006834707);
       xForm.setCoeff01(0.6439505508593787);

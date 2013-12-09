@@ -17,6 +17,7 @@
 package org.jwildfire.create.tina.randomflame;
 
 import org.jwildfire.create.tina.base.Flame;
+import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.transform.XFormTransformService;
 import org.jwildfire.create.tina.variation.VariationFuncList;
@@ -26,11 +27,12 @@ public class TentacleRandomFlameGenerator extends RandomFlameGenerator {
   @Override
   protected Flame createFlame(RandomFlameGeneratorState pState) {
     Flame flame = new Flame();
+    Layer layer = flame.getFirstLayer();
     flame.setCentreX(0.0);
     flame.setCentreY(0.0);
     flame.setPixelsPerUnit(200);
-    flame.getFinalXForms().clear();
-    flame.getXForms().clear();
+    layer.getFinalXForms().clear();
+    layer.getXForms().clear();
     int maxXFormsX = (int) (2.0 + Math.random() * 3.0);
     int maxXFormsY = (int) (2.0 + Math.random() * 3.0);
     double xMin = -(double) maxXFormsX * 0.5;
@@ -43,7 +45,7 @@ public class TentacleRandomFlameGenerator extends RandomFlameGenerator {
       for (int x = 0; x < maxXFormsX; x++) {
         XForm xForm = new XForm();
         xForm.setWeight(0.5 + Math.random() * 99.5);
-        flame.getXForms().add(xForm);
+        layer.getXForms().add(xForm);
         XFormTransformService.globalTranslate(xForm, xMin + x, yMin + y, false);
         if (Math.random() < 0.5) {
           XFormTransformService.rotate(xForm, 360.0 * Math.random(), true);

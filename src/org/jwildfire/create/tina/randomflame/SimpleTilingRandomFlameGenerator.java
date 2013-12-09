@@ -17,6 +17,7 @@
 package org.jwildfire.create.tina.randomflame;
 
 import org.jwildfire.create.tina.base.Flame;
+import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.transform.XFormTransformService;
 import org.jwildfire.create.tina.variation.VariationFuncList;
@@ -26,16 +27,17 @@ public class SimpleTilingRandomFlameGenerator extends RandomFlameGenerator {
   @Override
   protected Flame createFlame(RandomFlameGeneratorState pState) {
     Flame flame = new Flame();
+    Layer layer = flame.getFirstLayer();
     flame.setCentreX(0.0);
     flame.setCentreY(0.0);
     flame.setPixelsPerUnit(200);
-    flame.getFinalXForms().clear();
-    flame.getXForms().clear();
+    layer.getFinalXForms().clear();
+    layer.getXForms().clear();
     // init
     // 1st XForm
     {
       XForm xForm = new XForm();
-      flame.getXForms().add(xForm);
+      layer.getXForms().add(xForm);
       xForm.setWeight(0.4 + Math.random() * 50.0);
 
       String fName = ExperimentalSimpleRandomFlameGenerator.FNCLST_EXPERIMENTAL[(int) (Math.random() * ExperimentalSimpleRandomFlameGenerator.FNCLST_EXPERIMENTAL.length)];
@@ -47,7 +49,7 @@ public class SimpleTilingRandomFlameGenerator extends RandomFlameGenerator {
     boolean linkedXForms = Math.random() > 0.5;
     if (twoPrimaryXForms) {
       XForm xForm = new XForm();
-      flame.getXForms().add(xForm);
+      layer.getXForms().add(xForm);
       xForm.setWeight(0.4 + Math.random() * 150.0);
 
       xForm.addVariation(1.0, VariationFuncList.getVariationFuncInstance(VariationFuncList.getRandomVariationname(), true));
@@ -60,7 +62,7 @@ public class SimpleTilingRandomFlameGenerator extends RandomFlameGenerator {
     int nForms = 2 + (int) (Math.random() * 5);
     for (int i = 0; i < nForms; i++) {
       XForm xForm = new XForm();
-      flame.getXForms().add(xForm);
+      layer.getXForms().add(xForm);
       xForm.setWeight(0.25 + Math.random() * 0.5);
       xForm.addVariation(1.0, VariationFuncList.getVariationFuncInstance("linear3D", true));
       if (Math.random() > 0.75) {
@@ -74,15 +76,15 @@ public class SimpleTilingRandomFlameGenerator extends RandomFlameGenerator {
       xForm.setColor(Math.random());
     }
     if (linkedXForms) {
-      for (int i = 0; i < flame.getXForms().size(); i++) {
+      for (int i = 0; i < layer.getXForms().size(); i++) {
         if (i == 0) {
-          for (int j = 0; j < flame.getXForms().size(); j++) {
-            flame.getXForms().get(i).getModifiedWeights()[j] = (j != 1) ? 0 : 1;
+          for (int j = 0; j < layer.getXForms().size(); j++) {
+            layer.getXForms().get(i).getModifiedWeights()[j] = (j != 1) ? 0 : 1;
           }
         }
         else {
-          for (int j = 0; j < flame.getXForms().size(); j++) {
-            flame.getXForms().get(i).getModifiedWeights()[j] = (j != 1) ? 1 : 0;
+          for (int j = 0; j < layer.getXForms().size(); j++) {
+            layer.getXForms().get(i).getModifiedWeights()[j] = (j != 1) ? 1 : 0;
           }
         }
       }

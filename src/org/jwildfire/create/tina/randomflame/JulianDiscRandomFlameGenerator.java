@@ -18,6 +18,7 @@ package org.jwildfire.create.tina.randomflame;
 
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Flame;
+import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.transform.XFormTransformService;
 import org.jwildfire.create.tina.variation.VariationFunc;
@@ -37,6 +38,7 @@ public class JulianDiscRandomFlameGenerator extends RandomFlameGenerator {
   @Override
   protected Flame createFlame(RandomFlameGeneratorState pState) {
     Flame flame = new Flame();
+    Layer layer = flame.getFirstLayer();
     flame.setCentreX(0.0);
     flame.setCentreY(0.0);
     flame.setCamPitch(0.0);
@@ -44,12 +46,12 @@ public class JulianDiscRandomFlameGenerator extends RandomFlameGenerator {
     flame.setCamZoom(1.0);
     flame.setCamPerspective(0.0);
     flame.setPixelsPerUnit(100);
-    flame.getFinalXForms().clear();
-    flame.getXForms().clear();
+    layer.getFinalXForms().clear();
+    layer.getXForms().clear();
     // 1st xForm
     {
       XForm xForm = new XForm();
-      flame.getXForms().add(xForm);
+      layer.getXForms().add(xForm);
       xForm.setWeight(0.5);
       VariationFunc varFunc = VariationFuncList.getVariationFuncInstance("julian", true);
       int power = Tools.FTOI(100.0 - Math.random() * 200.0);
@@ -70,7 +72,7 @@ public class JulianDiscRandomFlameGenerator extends RandomFlameGenerator {
     // 2nd xForm
     {
       XForm xForm = new XForm();
-      flame.getXForms().add(xForm);
+      layer.getXForms().add(xForm);
       xForm.setWeight(2.0 + Math.random() * 24.0);
       xForm.addVariation(1.0, VariationFuncList.getVariationFuncInstance("disc", true));
       if (Math.random() < 0.125) {
@@ -93,7 +95,7 @@ public class JulianDiscRandomFlameGenerator extends RandomFlameGenerator {
     // final
     if (Math.random() < 0.33) {
       XForm xForm = new XForm();
-      flame.getFinalXForms().add(xForm);
+      layer.getFinalXForms().add(xForm);
       if (Math.random() < 0.5) {
         String[] fncList = { "auger", "bent", "bent2", "boarders", "bubble", "butterfly", "bwraps7", "cosine",
             "curve", "cylinder", "diamond", "disc", "eclipse", "edisc", "elliptic", "ex", "exp", "exponential",

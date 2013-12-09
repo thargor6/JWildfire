@@ -182,4 +182,8 @@ public class Layer implements Assignable<Layer>, Serializable {
     this.visible = visible;
   }
 
+  public boolean isRenderable() {
+    return isVisible() && getWeight() > -EPSILON && getXForms().size() > 0;
+  }
+
 }

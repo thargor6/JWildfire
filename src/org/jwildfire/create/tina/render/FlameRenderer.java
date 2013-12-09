@@ -259,7 +259,7 @@ public class FlameRenderer {
     boolean renderHDR = pRenderInfo.isRenderHDR();
     boolean renderHDRIntensityMap = pRenderInfo.isRenderHDRIntensityMap();
 
-    if (flame.getXForms().size() == 0) {
+    if (!flame.isRenderable()) {
       if (renderNormal) {
         if (renderScale > 0) {
           res.getImage().resetImage(res.getImage().getImageWidth() * renderScale, res.getImage().getImageHeight() * renderScale);

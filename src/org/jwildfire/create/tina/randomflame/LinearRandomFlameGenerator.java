@@ -17,6 +17,7 @@
 package org.jwildfire.create.tina.randomflame;
 
 import org.jwildfire.create.tina.base.Flame;
+import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.transform.XFormTransformService;
 import org.jwildfire.create.tina.variation.Linear3DFunc;
@@ -26,11 +27,12 @@ public class LinearRandomFlameGenerator extends RandomFlameGenerator {
   @Override
   protected Flame createFlame(RandomFlameGeneratorState pState) {
     Flame flame = new Flame();
+    Layer layer = flame.getFirstLayer();
     flame.setCentreX(0.0);
     flame.setCentreY(0.0);
     flame.setPixelsPerUnit(200);
-    flame.getFinalXForms().clear();
-    flame.getXForms().clear();
+    layer.getFinalXForms().clear();
+    layer.getXForms().clear();
 
     int maxXForms = (int) (1.0 + Math.random() * 5.0);
     double scl = 1.0;
@@ -41,7 +43,7 @@ public class LinearRandomFlameGenerator extends RandomFlameGenerator {
 
     for (int i = 0; i < maxXForms; i++) {
       XForm xForm = new XForm();
-      flame.getXForms().add(xForm);
+      layer.getXForms().add(xForm);
       if (contRot) {
         r0 += 45.0 * Math.random() - 9.0 * Math.random();
         XFormTransformService.rotate(xForm, r0);

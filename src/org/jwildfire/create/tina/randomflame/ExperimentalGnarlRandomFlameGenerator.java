@@ -17,6 +17,7 @@
 package org.jwildfire.create.tina.randomflame;
 
 import org.jwildfire.create.tina.base.Flame;
+import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.transform.XFormTransformService;
 import org.jwildfire.create.tina.variation.JuliaNFunc;
@@ -29,11 +30,12 @@ public class ExperimentalGnarlRandomFlameGenerator extends RandomFlameGenerator 
   protected Flame createFlame(RandomFlameGeneratorState pState) {
     // Bases loosely on the W2R Batch Script by parrotdolphin.deviantart.com */ 
     Flame flame = new Flame();
+    Layer layer = flame.getFirstLayer();
     flame.setCentreX(0.0);
     flame.setCentreY(0.0);
     flame.setPixelsPerUnit(200);
-    flame.getFinalXForms().clear();
-    flame.getXForms().clear();
+    layer.getFinalXForms().clear();
+    layer.getXForms().clear();
     // init
     double scaleX = Math.random() * 0.04 + 0.04;
     if (Math.random() > 0.75) {
@@ -67,7 +69,7 @@ public class ExperimentalGnarlRandomFlameGenerator extends RandomFlameGenerator 
     // 1st XForm
     {
       XForm xForm = new XForm();
-      flame.getXForms().add(xForm);
+      layer.getXForms().add(xForm);
       xForm.setWeight(wavesWeight);
       double varRnd = Math.random();
       String varName;
@@ -224,7 +226,7 @@ public class ExperimentalGnarlRandomFlameGenerator extends RandomFlameGenerator 
     XForm secondXForm;
     {
       XForm xForm = secondXForm = new XForm();
-      flame.getXForms().add(xForm);
+      layer.getXForms().add(xForm);
       xForm.setWeight(_2ndWeight);
       int f = (int) (Math.random() * 4);
       switch (f) {
@@ -258,7 +260,7 @@ public class ExperimentalGnarlRandomFlameGenerator extends RandomFlameGenerator 
         secondXForm.setWeight(5 + Math.random() * 20.0);
       }
       XForm xForm = new XForm();
-      flame.getXForms().add(xForm);
+      layer.getXForms().add(xForm);
       xForm.setWeight(_3rdWeight);
       xForm.addVariation(1.0, VariationFuncList.getVariationFuncInstance("linear3D", true));
       XFormTransformService.rotate(xForm, 180 - Math.random() * 360.0);

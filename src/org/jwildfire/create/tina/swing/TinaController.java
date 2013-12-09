@@ -1024,6 +1024,21 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
 
   @Override
   public void refreshUI() {
+    gridRefreshing = true;
+    try {
+      refreshLayersTable();
+      int row = data.layersTable.getSelectedRow();
+      if (row < 0 && getCurrFlame() != null && getCurrFlame().getLayers().size() > 0) {
+        data.layersTable.getSelectionModel().setSelectionInterval(0, 0);
+      }
+    }
+    finally {
+      gridRefreshing = false;
+    }
+    refreshLayerUI();
+  }
+
+  public void refreshLayerUI() {
     noRefresh = true;
     try {
       refreshVisualCamValues();
@@ -1082,20 +1097,6 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
 
       data.affinePreserveZButton.setSelected(getCurrFlame().isPreserveZ());
 
-      enableControls();
-
-      gridRefreshing = true;
-      try {
-        refreshLayersTable();
-        int row = data.layersTable.getSelectedRow();
-        if (row < 0 && getCurrFlame() != null && getCurrFlame().getLayers().size() > 0) {
-          data.layersTable.getSelectionModel().setSelectionInterval(0, 0);
-        }
-      }
-      finally {
-        gridRefreshing = false;
-      }
-
       gridRefreshing = true;
       try {
         refreshTransformationsTable();
@@ -1106,10 +1107,13 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
       transformationTableClicked();
 
       data.shadingLightCmb.setSelectedIndex(0);
+
+      enableControls();
       refreshShadingUI();
       enableShadingUI();
       enableDOFUI();
       enableDEFilterUI();
+      enableLayerControls();
       refreshPaletteUI(getCurrLayer().getPalette());
     }
     finally {
@@ -1343,7 +1347,7 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
 
       @Override
       public int getRowCount() {
-        return getCurrFlame() != null ? getCurrFlame().getXForms().size() + getCurrFlame().getFinalXForms().size() : 0;
+        return getCurrLayer() != null ? getCurrLayer().getXForms().size() + getCurrLayer().getFinalXForms().size() : 0;
       }
 
       @Override
@@ -1367,14 +1371,14 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
       @Override
       public Object getValueAt(int rowIndex, int columnIndex) {
         if (getCurrFlame() != null) {
-          XForm xForm = rowIndex < getCurrFlame().getXForms().size() ? getCurrFlame().getXForms().get(rowIndex) : getCurrFlame().getFinalXForms().get(rowIndex - getCurrFlame().getXForms().size());
+          XForm xForm = rowIndex < getCurrLayer().getXForms().size() ? getCurrLayer().getXForms().get(rowIndex) : getCurrLayer().getFinalXForms().get(rowIndex - getCurrLayer().getXForms().size());
           switch (columnIndex) {
             case COL_TRANSFORM:
-              return rowIndex < getCurrFlame().getXForms().size() ? String.valueOf(rowIndex + 1) : "Final";
+              return rowIndex < getCurrLayer().getXForms().size() ? String.valueOf(rowIndex + 1) : "Final";
             case COL_VARIATIONS:
               return getXFormCaption(xForm);
             case COL_WEIGHT:
-              return rowIndex < getCurrFlame().getXForms().size() ? Tools.doubleToString(xForm.getWeight()) : "";
+              return rowIndex < getCurrLayer().getXForms().size() ? Tools.doubleToString(xForm.getWeight()) : "";
           }
         }
         return null;
@@ -1387,8 +1391,8 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
 
       @Override
       public void setValueAt(Object aValue, int row, int column) {
-        if (getCurrFlame() != null && column == COL_WEIGHT && row < getCurrFlame().getXForms().size()) {
-          XForm xForm = getCurrFlame().getXForms().get(row);
+        if (getCurrLayer() != null && column == COL_WEIGHT && row < getCurrLayer().getXForms().size()) {
+          XForm xForm = getCurrLayer().getXForms().get(row);
           String valStr = (String) aValue;
           if (valStr == null || valStr.length() == 0) {
             valStr = "0";
@@ -1582,7 +1586,7 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
       @Override
       public int getRowCount() {
         XForm xForm = getCurrXForm();
-        return xForm != null && getCurrFlame().getFinalXForms().indexOf(xForm) < 0 ? getCurrFlame().getXForms().size() : 0;
+        return xForm != null && getCurrLayer().getFinalXForms().indexOf(xForm) < 0 ? getCurrLayer().getXForms().size() : 0;
       }
 
       @Override
@@ -1610,7 +1614,7 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
             case COL_TRANSFORM:
               return String.valueOf(rowIndex + 1);
             case COL_VARIATIONS: {
-              XForm xForm = getCurrFlame().getXForms().get(rowIndex);
+              XForm xForm = getCurrLayer().getXForms().get(rowIndex);
               return getXFormCaption(xForm);
             }
             case COL_WEIGHT: {
@@ -2348,13 +2352,13 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
 
   public XForm getCurrXForm() {
     XForm xForm = null;
-    if (getCurrFlame() != null) {
+    if (getCurrLayer() != null) {
       int row = data.transformationsTable.getSelectedRow();
-      if (row >= 0 && row < getCurrFlame().getXForms().size()) {
-        xForm = getCurrFlame().getXForms().get(row);
+      if (row >= 0 && row < getCurrLayer().getXForms().size()) {
+        xForm = getCurrLayer().getXForms().get(row);
       }
-      else if (row >= getCurrFlame().getXForms().size() && row < (getCurrFlame().getXForms().size() + getCurrFlame().getFinalXForms().size())) {
-        xForm = getCurrFlame().getFinalXForms().get(row - getCurrFlame().getXForms().size());
+      else if (row >= getCurrLayer().getXForms().size() && row < (getCurrLayer().getXForms().size() + getCurrLayer().getFinalXForms().size())) {
+        xForm = getCurrLayer().getFinalXForms().get(row - getCurrLayer().getXForms().size());
       }
     }
     return xForm;
@@ -2457,7 +2461,7 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
     data.affineFlipVerticalButton.setEnabled(enabled);
 
     data.addTransformationButton.setEnabled(getCurrFlame() != null);
-    data.addLinkedTransformationButton.setEnabled(enabled && getCurrFlame() != null && getCurrFlame().getXForms().indexOf(xForm) >= 0);
+    data.addLinkedTransformationButton.setEnabled(enabled && getCurrLayer() != null && getCurrLayer().getXForms().indexOf(xForm) >= 0);
     data.duplicateTransformationButton.setEnabled(enabled);
     data.deleteTransformationButton.setEnabled(enabled);
     data.addFinalTransformationButton.setEnabled(getCurrFlame() != null);
@@ -2514,7 +2518,7 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
     data.relWeightREd.setEnabled(enabled);
   }
 
-  private void refreshLayersUI(Layer pLayer) {
+  private void refreshLayerControls(Layer pLayer) {
     boolean oldRefreshing = refreshing;
     boolean oldGridRefreshing = gridRefreshing;
     boolean oldCmbRefreshing = cmbRefreshing;
@@ -2677,17 +2681,17 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
 
   public void addLinkedXForm() {
     int row = data.transformationsTable.getSelectedRow();
-    if (row < 0 || row >= getCurrFlame().getXForms().size()) {
+    if (row < 0 || row >= getCurrLayer().getXForms().size()) {
       return;
     }
     saveUndoPoint();
     addXForm();
     int fromId = row;
-    int toId = getCurrFlame().getXForms().size() - 1;
-    for (int i = 0; i < getCurrFlame().getXForms().size(); i++) {
-      XForm xForm = getCurrFlame().getXForms().get(i);
+    int toId = getCurrLayer().getXForms().size() - 1;
+    for (int i = 0; i < getCurrLayer().getXForms().size(); i++) {
+      XForm xForm = getCurrLayer().getXForms().get(i);
       if (i == fromId) {
-        for (int j = 0; j < getCurrFlame().getXForms().size(); j++) {
+        for (int j = 0; j < getCurrLayer().getXForms().size(); j++) {
           xForm.getModifiedWeights()[j] = (j == toId) ? 1 : 0;
         }
       }
@@ -2705,7 +2709,7 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
     xForm.setAntialiasAmount(prefs.getTinaDefaultAntialiasingAmount());
     xForm.setAntialiasRadius(prefs.getTinaDefaultAntialiasingRadius());
     saveUndoPoint();
-    getCurrFlame().getXForms().add(xForm);
+    getCurrLayer().getXForms().add(xForm);
     gridRefreshing = true;
     try {
       refreshTransformationsTable();
@@ -2713,7 +2717,7 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
     finally {
       gridRefreshing = false;
     }
-    int row = getCurrFlame().getXForms().size() - 1;
+    int row = getCurrLayer().getXForms().size() - 1;
     data.transformationsTable.getSelectionModel().setSelectionInterval(row, row);
     refreshFlameImage(false);
   }
@@ -2722,7 +2726,7 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
     XForm xForm = new XForm();
     xForm.assign(getCurrXForm());
     saveUndoPoint();
-    getCurrFlame().getXForms().add(xForm);
+    getCurrLayer().getXForms().add(xForm);
     gridRefreshing = true;
     try {
       refreshTransformationsTable();
@@ -2730,7 +2734,7 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
     finally {
       gridRefreshing = false;
     }
-    int row = getCurrFlame().getXForms().size() - 1;
+    int row = getCurrLayer().getXForms().size() - 1;
     data.transformationsTable.getSelectionModel().setSelectionInterval(row, row);
     refreshFlameImage(false);
   }
@@ -2738,11 +2742,11 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
   public void deleteXForm() {
     int row = data.transformationsTable.getSelectedRow();
     saveUndoPoint();
-    if (row >= getCurrFlame().getXForms().size()) {
-      getCurrFlame().getFinalXForms().remove(row - getCurrFlame().getXForms().size());
+    if (row >= getCurrLayer().getXForms().size()) {
+      getCurrLayer().getFinalXForms().remove(row - getCurrLayer().getXForms().size());
     }
     else {
-      getCurrFlame().getXForms().remove(getCurrXForm());
+      getCurrLayer().getXForms().remove(getCurrXForm());
     }
     gridRefreshing = true;
     try {
@@ -2760,7 +2764,7 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
     xForm.setAntialiasAmount(prefs.getTinaDefaultAntialiasingAmount());
     xForm.setAntialiasRadius(prefs.getTinaDefaultAntialiasingRadius());
     saveUndoPoint();
-    getCurrFlame().getFinalXForms().add(xForm);
+    getCurrLayer().getFinalXForms().add(xForm);
     gridRefreshing = true;
     try {
       refreshTransformationsTable();
@@ -2768,7 +2772,7 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
     finally {
       gridRefreshing = false;
     }
-    int row = getCurrFlame().getXForms().size() + getCurrFlame().getFinalXForms().size() - 1;
+    int row = getCurrLayer().getXForms().size() + getCurrLayer().getFinalXForms().size() - 1;
     data.transformationsTable.getSelectionModel().setSelectionInterval(row, row);
     refreshFlameImage(false);
   }
@@ -3399,9 +3403,9 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
 
   private void setRelWeight(double pValue) {
     XForm xForm = getCurrXForm();
-    if (xForm != null && getCurrFlame() != null && getCurrFlame().getFinalXForms().indexOf(xForm) < 0) {
+    if (xForm != null && getCurrLayer() != null && getCurrLayer().getFinalXForms().indexOf(xForm) < 0) {
       int row = data.relWeightsTable.getSelectedRow();
-      if (row >= 0 && row < getCurrFlame().getXForms().size()) {
+      if (row >= 0 && row < getCurrLayer().getXForms().size()) {
         xForm.getModifiedWeights()[row] = pValue;
         gridRefreshing = true;
         try {
@@ -3432,7 +3436,7 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
 
   public void transformationWeightREd_changed() {
     XForm xForm = getCurrXForm();
-    if (xForm != null && getCurrFlame() != null && getCurrFlame().getFinalXForms().indexOf(xForm) < 0) {
+    if (xForm != null && getCurrLayer() != null && getCurrLayer().getFinalXForms().indexOf(xForm) < 0) {
       xForm.setWeight(Tools.stringToDouble(data.transformationWeightREd.getText()));
       gridRefreshing = true;
       try {
@@ -3509,7 +3513,6 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
   private void flamePanel_mouseReleased(MouseEvent e) {
     if (flamePanel != null) {
       refreshVisualCamValues();
-
     }
   }
 
@@ -3568,6 +3571,7 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
     }
     else if (e.getClickCount() == 1) {
       Flame flame = getCurrFlame();
+      Layer layer = getCurrLayer();
       if (flame != null && flamePanel != null) {
         XForm xForm = flamePanel.mouseClicked(e.getX(), e.getY());
         if (flamePanel.isRedrawAfterMouseClick()) {
@@ -3581,15 +3585,15 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
           }
         }
         if (xForm != null) {
-          for (int i = 0; i < flame.getXForms().size(); i++) {
-            if (xForm == flame.getXForms().get(i)) {
+          for (int i = 0; i < layer.getXForms().size(); i++) {
+            if (xForm == layer.getXForms().get(i)) {
               data.transformationsTable.getSelectionModel().setSelectionInterval(i, i);
               return;
             }
           }
-          for (int i = 0; i < flame.getFinalXForms().size(); i++) {
-            if (xForm == flame.getFinalXForms().get(i)) {
-              int row = flame.getXForms().size() + i;
+          for (int i = 0; i < layer.getFinalXForms().size(); i++) {
+            if (xForm == layer.getFinalXForms().get(i)) {
+              int row = layer.getXForms().size() + i;
               data.transformationsTable.getSelectionModel().setSelectionInterval(row, row);
               return;
             }
@@ -4858,17 +4862,17 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
   }
 
   public void xFormAntialiasCopyToAllBtn_clicked() {
-    Flame flame = getCurrFlame();
+    Layer layer = getCurrLayer();
     XForm xForm = getCurrXForm();
     if (xForm != null) {
       saveUndoPoint();
-      for (XForm xf : flame.getXForms()) {
+      for (XForm xf : layer.getXForms()) {
         if (xf != xForm) {
           xf.setAntialiasAmount(xForm.getAntialiasAmount());
           xf.setAntialiasRadius(xForm.getAntialiasRadius());
         }
       }
-      for (XForm xf : flame.getFinalXForms()) {
+      for (XForm xf : layer.getFinalXForms()) {
         if (xf != xForm) {
           xf.setAntialiasAmount(xForm.getAntialiasAmount());
           xf.setAntialiasRadius(xForm.getAntialiasRadius());
@@ -5509,9 +5513,10 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
       gridRefreshing = cmbRefreshing = true;
       try {
         Layer layer = getCurrLayer();
-        refreshLayersUI(layer);
+        refreshLayerUI();
+        refreshLayerControls(layer);
         enableLayerControls();
-        refreshFlameImage(false);
+        //refreshFlameImage(false);
       }
       finally {
         cmbRefreshing = oldCmbRefreshing;

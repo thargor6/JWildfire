@@ -68,7 +68,8 @@ public class SubFlameWFFunc extends VariationFunc {
       else if ((xf.getDrawMode() == DrawMode.OPAQUE) && (pContext.random() > xf.getOpacity()))
         continue;
 
-      List<XForm> finalXForms = flame.getFinalXForms();
+      Layer layer = flame.getFirstLayer();
+      List<XForm> finalXForms = layer.getFinalXForms();
       if (finalXForms.size() > 0) {
         finalXForms.get(0).transformPoint(pContext, pAffineTP, pVarTP, p, q);
         for (int i = 1; i < finalXForms.size(); i++) {
@@ -136,7 +137,7 @@ public class SubFlameWFFunc extends VariationFunc {
   @Override
   public void init(FlameTransformationContext pContext, Layer pLayer, XForm pXForm, double pAmount) {
     if (flame != null) {
-      Layer layer = flame.getLayers().get(0);
+      Layer layer = flame.getFirstLayer();
       layer.refreshModWeightTables(pContext);
       xf = layer.getXForms().get(0);
       p = new XYZPoint();

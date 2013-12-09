@@ -400,6 +400,9 @@ public class FlamePanel extends ImagePanel {
   }
 
   public boolean mouseDragged(int pX, int pY, boolean pLeftButton, boolean pRightButton, boolean pMiddleButton) {
+    if (selectedXForm == null) {
+      return false;
+    }
     reRender = true;
     int viewDX = pX - xBeginDrag;
     int viewDY = pY - yBeginDrag;

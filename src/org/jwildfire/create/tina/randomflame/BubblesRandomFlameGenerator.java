@@ -17,6 +17,7 @@
 package org.jwildfire.create.tina.randomflame;
 
 import org.jwildfire.create.tina.base.Flame;
+import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.transform.XFormTransformService;
 import org.jwildfire.create.tina.variation.VariationFunc;
@@ -27,17 +28,18 @@ public class BubblesRandomFlameGenerator extends RandomFlameGenerator {
   @Override
   protected Flame createFlame(RandomFlameGeneratorState pState) {
     Flame flame = new Flame();
+    Layer layer = flame.getFirstLayer();
     flame.setCentreX(0.0);
     flame.setCentreY(0.0);
     flame.setCamZoom(0.5);
     flame.setPixelsPerUnit(200);
-    flame.getFinalXForms().clear();
-    flame.getXForms().clear();
+    layer.getFinalXForms().clear();
+    layer.getXForms().clear();
     int fncCount = ExperimentalSimpleRandomFlameGenerator.FNCLST_EXPERIMENTAL.length;
     // 1st xForm
     {
       XForm xForm = new XForm();
-      flame.getXForms().add(xForm);
+      layer.getXForms().add(xForm);
       xForm.setWeight(12.0 + Math.random() * 80.0);
       xForm.addVariation(2 + Math.random() * 4, VariationFuncList.getVariationFuncInstance("spherical", true));
 
@@ -60,7 +62,7 @@ public class BubblesRandomFlameGenerator extends RandomFlameGenerator {
     // 2nd xForm
     {
       XForm xForm = new XForm();
-      flame.getXForms().add(xForm);
+      layer.getXForms().add(xForm);
       xForm.setWeight(0.5 + Math.random() * 0.8);
       if (Math.random() < 0.05) {
         xForm.addVariation(0.01 + Math.random() * 0.4, VariationFuncList.getVariationFuncInstance("bubble", true));
@@ -83,7 +85,7 @@ public class BubblesRandomFlameGenerator extends RandomFlameGenerator {
     // 3rd xForm
     if (Math.random() > 0.25) {
       XForm xForm = new XForm();
-      flame.getXForms().add(xForm);
+      layer.getXForms().add(xForm);
       xForm.setWeight(0.5 + Math.random() * 1.5);
       String fName;
       if (Math.random() > 0.8) {
@@ -102,7 +104,7 @@ public class BubblesRandomFlameGenerator extends RandomFlameGenerator {
     // 4th xForm
     if (Math.random() > 0.5) {
       XForm xForm = new XForm();
-      flame.getXForms().add(xForm);
+      layer.getXForms().add(xForm);
       xForm.setWeight(0.5 + Math.random() * 1.5);
       String fName;
       if (Math.random() > 0.8) {

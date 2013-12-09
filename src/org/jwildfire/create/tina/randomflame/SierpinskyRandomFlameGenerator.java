@@ -17,6 +17,7 @@
 package org.jwildfire.create.tina.randomflame;
 
 import org.jwildfire.create.tina.base.Flame;
+import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.transform.XFormTransformService;
 import org.jwildfire.create.tina.variation.VariationFuncList;
@@ -26,19 +27,20 @@ public class SierpinskyRandomFlameGenerator extends RandomFlameGenerator {
   @Override
   protected Flame createFlame(RandomFlameGeneratorState pState) {
     Flame flame = new Flame();
+    Layer layer = flame.getFirstLayer();
     flame.setCentreX(0.0);
     flame.setCamRoll((int) (Math.random() * 8.0) * -45.0);
     flame.setCentreY(0.0);
     flame.setPixelsPerUnit(200);
-    flame.getFinalXForms().clear();
-    flame.getXForms().clear();
+    layer.getFinalXForms().clear();
+    layer.getXForms().clear();
     flame.setCamZoom(4.56);
     double posx[] = { -0.5, 0.5, 0.5, -0.5 };
     double posy[] = { -0.5, -0.5, 0.5, 0.5 };
 
     for (int i = 0; i < posx.length; i++) {
       XForm xForm = new XForm();
-      flame.getXForms().add(xForm);
+      layer.getXForms().add(xForm);
       xForm.setWeight(0.5);
       xForm.setCoeff20(posx[i]);
       xForm.setCoeff21(posy[i]);

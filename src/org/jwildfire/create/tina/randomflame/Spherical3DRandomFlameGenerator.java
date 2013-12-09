@@ -17,6 +17,7 @@
 package org.jwildfire.create.tina.randomflame;
 
 import org.jwildfire.create.tina.base.Flame;
+import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.transform.XFormTransformService;
 import org.jwildfire.create.tina.variation.VariationFunc;
@@ -27,6 +28,7 @@ public class Spherical3DRandomFlameGenerator extends RandomFlameGenerator {
   @Override
   protected Flame createFlame(RandomFlameGeneratorState pState) {
     Flame flame = new Flame();
+    Layer layer = flame.getFirstLayer();
     flame.setCentreX(0.0);
     flame.setCentreY(-0.20);
     flame.setCamPitch(48.0);
@@ -34,8 +36,8 @@ public class Spherical3DRandomFlameGenerator extends RandomFlameGenerator {
     flame.setCamZoom(3.6);
     flame.setCamPerspective(0.32);
     flame.setPixelsPerUnit(200);
-    flame.getFinalXForms().clear();
-    flame.getXForms().clear();
+    layer.getFinalXForms().clear();
+    layer.getXForms().clear();
     flame.setPreserveZ(Math.random() < 0.5);
 
     boolean invert = Math.random() > 0.5;
@@ -45,7 +47,7 @@ public class Spherical3DRandomFlameGenerator extends RandomFlameGenerator {
     XForm xForm1;
     {
       XForm xForm = xForm1 = new XForm();
-      flame.getXForms().add(xForm);
+      layer.getXForms().add(xForm);
       xForm.setWeight(1.0 + 4.0 * Math.random());
 
       varFunc = VariationFuncList.getVariationFuncInstance("spherical3D_wf", true);
@@ -63,7 +65,7 @@ public class Spherical3DRandomFlameGenerator extends RandomFlameGenerator {
     XForm xForm2;
     {
       XForm xForm = xForm2 = new XForm();
-      flame.getXForms().add(xForm);
+      layer.getXForms().add(xForm);
       xForm.setWeight(0.5 + Math.random() * 4.5);
       varFunc = VariationFuncList.getVariationFuncInstance("spherical3D_wf", true);
       if (invert) {
@@ -83,7 +85,7 @@ public class Spherical3DRandomFlameGenerator extends RandomFlameGenerator {
         "rings", "rose_wf", "secant2", "sinusoidal", "spiral", "spirograph", "splits", "square", "twintrian", "wedge_julia" };
     {
       XForm xForm = new XForm();
-      flame.getXForms().add(xForm);
+      layer.getXForms().add(xForm);
       xForm.setWeight(0.5);
       xForm.addVariation(0.25 + 0.25 * Math.random(), VariationFuncList.getVariationFuncInstance("pre_blur", true));
       xForm.addVariation(0.01 + Math.random() * 0.39, VariationFuncList.getVariationFuncInstance("ztranslate", true));
@@ -97,7 +99,7 @@ public class Spherical3DRandomFlameGenerator extends RandomFlameGenerator {
     // 4th xForm
     {
       XForm xForm = new XForm();
-      flame.getXForms().add(xForm);
+      layer.getXForms().add(xForm);
       xForm.setWeight(0.5);
       xForm.addVariation(0.025 + 0.025 * Math.random(), VariationFuncList.getVariationFuncInstance("pre_blur", true));
       xForm.addVariation(0.01 + Math.random() * 0.39, VariationFuncList.getVariationFuncInstance("ztranslate", true));
@@ -111,7 +113,7 @@ public class Spherical3DRandomFlameGenerator extends RandomFlameGenerator {
     // 5th xForm
     {
       XForm xForm = new XForm();
-      flame.getXForms().add(xForm);
+      layer.getXForms().add(xForm);
       xForm.setWeight(0.1);
       xForm.addVariation(0.005 + Math.random() * 0.005, VariationFuncList.getVariationFuncInstance("gaussian_blur", true));
       xForm.addVariation(0.005 + Math.random() * 0.005, VariationFuncList.getVariationFuncInstance("ztranslate", true));
@@ -122,7 +124,7 @@ public class Spherical3DRandomFlameGenerator extends RandomFlameGenerator {
     // 6th (final) xForm
     if (Math.random() < 0.5) {
       XForm xForm = new XForm();
-      flame.getFinalXForms().add(xForm);
+      layer.getFinalXForms().add(xForm);
       xForm.setWeight(0.1);
       int power;
       int style = (int) (3 * Math.random());

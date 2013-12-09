@@ -633,6 +633,15 @@ public class Flame implements Assignable<Flame>, Serializable {
     layers.get(0).distributeColors();
   }
 
+  public boolean isRenderable() {
+    for (Layer layer : getLayers()) {
+      if (layer.isRenderable()) {
+        return true;
+      }
+    }
+    return false;
+  }
+
 }
 
 // TODO

@@ -17,6 +17,7 @@
 package org.jwildfire.create.tina.randomflame;
 
 import org.jwildfire.create.tina.base.Flame;
+import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.variation.VariationFunc;
 import org.jwildfire.create.tina.variation.VariationFuncList;
@@ -33,6 +34,7 @@ public class MandelbrotRandomFlameGenerator extends RandomFlameGenerator {
   @Override
   protected Flame createFlame(RandomFlameGeneratorState pState) {
     Flame flame = new Flame();
+    Layer layer = flame.getFirstLayer();
     flame.setCentreX(0.0);
     flame.setCentreY(0.45);
     flame.setCamPitch(49.0);
@@ -42,15 +44,15 @@ public class MandelbrotRandomFlameGenerator extends RandomFlameGenerator {
     flame.setGamma(2.0);
     flame.setCamPerspective(0.05 + Math.random() * 0.12);
     flame.setPixelsPerUnit(200);
-    flame.getFinalXForms().clear();
-    flame.getXForms().clear();
+    layer.getFinalXForms().clear();
+    layer.getXForms().clear();
     flame.setPreserveZ(true);
 
     VariationFunc varFunc;
     // 1st xForm
     {
       XForm xForm = new XForm();
-      flame.getXForms().add(xForm);
+      layer.getXForms().add(xForm);
       xForm.setWeight(0.5);
       int varId = (int) (Math.random() * 6.0);
       switch (varId) {
@@ -123,7 +125,7 @@ public class MandelbrotRandomFlameGenerator extends RandomFlameGenerator {
     // final
     if (Math.random() < 0.75) {
       XForm xForm = new XForm();
-      flame.getFinalXForms().add(xForm);
+      layer.getFinalXForms().add(xForm);
       varFunc = VariationFuncList.getVariationFuncInstance(FNCLST_FINAL[(int) (Math.random() * FNCLST_FINAL.length)], true);
       xForm.addVariation(1.0, varFunc);
     }

@@ -20,6 +20,7 @@ import static org.jwildfire.base.mathlib.MathLib.fabs;
 
 import org.jwildfire.base.Prefs;
 import org.jwildfire.create.tina.base.Flame;
+import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.palette.RGBPalette;
 import org.jwildfire.create.tina.palette.RandomRGBPaletteGenerator;
@@ -119,11 +120,13 @@ public class RandomFlameGeneratorSampler {
       RenderedFlame renderedFlame;
       boolean oldDEEnabled = flame.isDeFilterEnabled();
       flame.setDeFilterEnabled(false);
-      for (XForm xForm : flame.getXForms()) {
-        xForm.setAntialiasAmount(0.0);
-      }
-      for (XForm xForm : flame.getFinalXForms()) {
-        xForm.setAntialiasAmount(0.0);
+      for (Layer layer : flame.getLayers()) {
+        for (XForm xForm : layer.getXForms()) {
+          xForm.setAntialiasAmount(0.0);
+        }
+        for (XForm xForm : layer.getFinalXForms()) {
+          xForm.setAntialiasAmount(0.0);
+        }
       }
       try {
         FlameRenderer renderer = new FlameRenderer(flame, prefs, false, true);
@@ -131,11 +134,13 @@ public class RandomFlameGeneratorSampler {
       }
       finally {
         flame.setDeFilterEnabled(oldDEEnabled);
-        for (XForm xForm : flame.getXForms()) {
-          xForm.setAntialiasAmount(prefs.getTinaDefaultAntialiasingAmount());
-        }
-        for (XForm xForm : flame.getFinalXForms()) {
-          xForm.setAntialiasAmount(prefs.getTinaDefaultAntialiasingAmount());
+        for (Layer layer : flame.getLayers()) {
+          for (XForm xForm : layer.getXForms()) {
+            xForm.setAntialiasAmount(prefs.getTinaDefaultAntialiasingAmount());
+          }
+          for (XForm xForm : layer.getFinalXForms()) {
+            xForm.setAntialiasAmount(prefs.getTinaDefaultAntialiasingAmount());
+          }
         }
       }
       if (j == quality.getMaxSamples() - 1) {

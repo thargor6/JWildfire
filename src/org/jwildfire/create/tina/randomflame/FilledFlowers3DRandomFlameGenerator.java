@@ -17,6 +17,7 @@
 package org.jwildfire.create.tina.randomflame;
 
 import org.jwildfire.create.tina.base.Flame;
+import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.transform.XFormTransformService;
 import org.jwildfire.create.tina.variation.VariationFunc;
@@ -27,6 +28,7 @@ public class FilledFlowers3DRandomFlameGenerator extends RandomFlameGenerator {
   @Override
   protected Flame createFlame(RandomFlameGeneratorState pState) {
     Flame flame = new Flame();
+    Layer layer = flame.getFirstLayer();
     flame.setCentreX(0);
     flame.setCentreY(0);
     flame.setCamPitch(37);
@@ -35,12 +37,12 @@ public class FilledFlowers3DRandomFlameGenerator extends RandomFlameGenerator {
     flame.setPixelsPerUnit(200);
     flame.setCamZoom(2.0);
     flame.setCamPerspective(0.32);
-    flame.getFinalXForms().clear();
-    flame.getXForms().clear();
+    layer.getFinalXForms().clear();
+    layer.getXForms().clear();
     // 1st xForm
     {
       XForm xForm = new XForm();
-      flame.getXForms().add(xForm);
+      layer.getXForms().add(xForm);
       xForm.setWeight(0.25 + Math.random() * 0.5);
       {
         xForm.addVariation(0.25 + Math.random() * 0.5, VariationFuncList.getVariationFuncInstance("gaussian_blur", true));
@@ -51,7 +53,7 @@ public class FilledFlowers3DRandomFlameGenerator extends RandomFlameGenerator {
     // 2nd xForm
     {
       XForm xForm = new XForm();
-      flame.getXForms().add(xForm);
+      layer.getXForms().add(xForm);
       xForm.setWeight(1 + Math.random() * 50.0);
 
       XFormTransformService.localTranslate(xForm, 0.3 - 0.6 * Math.random(), 0.3 - 0.6 * Math.random(), false);
@@ -98,7 +100,7 @@ public class FilledFlowers3DRandomFlameGenerator extends RandomFlameGenerator {
       double weight = 0.25 + Math.random() * 0.5;
       for (int i = 0; i < blurCount; i++) {
         XForm xForm = new XForm();
-        flame.getXForms().add(xForm);
+        layer.getXForms().add(xForm);
         xForm.setWeight(weight);
         weight *= 0.75;
         xForm.addVariation(0.25 + Math.random() * 0.5, VariationFuncList.getVariationFuncInstance("gaussian_blur", true));
@@ -115,7 +117,7 @@ public class FilledFlowers3DRandomFlameGenerator extends RandomFlameGenerator {
           "pdj", "perspective", "pie", "pie3D", "polar", "polar2", "power", "pre_subflame_wf", "radial_blur", "scry", "separation", "spiral",
           "spirograph", "split", "tangent", "tangent3D", "twintrian", "unpolar", "wedge_sph", "zblur" };
       XForm xForm = new XForm();
-      flame.getXForms().add(xForm);
+      layer.getXForms().add(xForm);
       xForm.setWeight(0.1 + Math.random() * 1.4);
       XFormTransformService.localTranslate(xForm, 0.3 - 0.6 * Math.random(), 0.3 - 0.6 * Math.random(), true);
       switch ((int) (Math.random() * 3.0)) {
@@ -138,7 +140,7 @@ public class FilledFlowers3DRandomFlameGenerator extends RandomFlameGenerator {
     // final xForm
     {
       XForm xForm = new XForm();
-      flame.getFinalXForms().add(xForm);
+      layer.getFinalXForms().add(xForm);
       {
         VariationFunc varFunc;
         xForm.addVariation(0.05 + Math.random() * 0.2, VariationFuncList.getVariationFuncInstance("zscale", true));

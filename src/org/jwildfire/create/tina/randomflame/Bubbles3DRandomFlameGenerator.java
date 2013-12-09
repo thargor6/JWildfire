@@ -17,6 +17,7 @@
 package org.jwildfire.create.tina.randomflame;
 
 import org.jwildfire.create.tina.base.Flame;
+import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.transform.XFormTransformService;
 import org.jwildfire.create.tina.variation.VariationFunc;
@@ -27,18 +28,19 @@ public class Bubbles3DRandomFlameGenerator extends RandomFlameGenerator {
   @Override
   protected Flame createFlame(RandomFlameGeneratorState pState) {
     Flame flame = new Flame();
+    Layer layer = flame.getFirstLayer();
     flame.setCentreX(0.0);
     flame.setCentreY(0.0);
     flame.setCamPitch(49.0);
     flame.setCamYaw(12.0);
     flame.setCamPerspective(0.12);
     flame.setPixelsPerUnit(200);
-    flame.getFinalXForms().clear();
-    flame.getXForms().clear();
+    layer.getFinalXForms().clear();
+    layer.getXForms().clear();
     // 1st xForm
     {
       XForm xForm = new XForm();
-      flame.getXForms().add(xForm);
+      layer.getXForms().add(xForm);
       xForm.setWeight(1.0 + Math.random() * 100.0);
       if (Math.random() < 0.75) {
         xForm.addVariation(0.05 + Math.random() * 0.5, VariationFuncList.getVariationFuncInstance("bubble", true));
@@ -91,7 +93,7 @@ public class Bubbles3DRandomFlameGenerator extends RandomFlameGenerator {
     // 2nd xForm
     {
       XForm xForm = new XForm();
-      flame.getXForms().add(xForm);
+      layer.getXForms().add(xForm);
       xForm.setWeight(1.0 + Math.random() * 50.0);
       int fncCount = ExperimentalSimpleRandomFlameGenerator.FNCLST_EXPERIMENTAL.length;
       String fncName = Math.random() > 0.5 ? ExperimentalSimpleRandomFlameGenerator.FNCLST_EXPERIMENTAL[(int) (fncCount * Math.random())] : "eyefish";
@@ -112,7 +114,7 @@ public class Bubbles3DRandomFlameGenerator extends RandomFlameGenerator {
     // 3rd xForm    
     {
       XForm xForm = new XForm();
-      flame.getXForms().add(xForm);
+      layer.getXForms().add(xForm);
       xForm.setWeight(1.0 + Math.random() * 100);
       VariationFunc varFunc = VariationFuncList.getVariationFuncInstance(Math.random() > 0.5 ? "julia3Dz" : "julia3D", true);
       int idx = Math.random() > 0.5 ? 2 : (int) (-20 + Math.random() * 40);
