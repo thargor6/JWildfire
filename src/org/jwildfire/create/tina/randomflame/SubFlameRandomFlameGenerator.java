@@ -21,23 +21,17 @@ import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.io.FlameWriter;
-import org.jwildfire.create.tina.palette.RGBPalette;
-import org.jwildfire.create.tina.palette.RandomRGBPaletteGenerator;
-import org.jwildfire.create.tina.render.FlameRenderer;
-import org.jwildfire.create.tina.render.RenderInfo;
-import org.jwildfire.create.tina.render.RenderedFlame;
+import org.jwildfire.create.tina.swing.RandomBatchQuality;
 import org.jwildfire.create.tina.variation.SubFlameWFFunc;
 import org.jwildfire.create.tina.variation.VariationFunc;
 import org.jwildfire.create.tina.variation.VariationFuncList;
-import org.jwildfire.image.Pixel;
-import org.jwildfire.image.SimpleImage;
 
 public class SubFlameRandomFlameGenerator extends RandomFlameGenerator {
 
   public Flame embedFlame(Flame pSubFlame) {
     Flame flame = new Flame();
-    Layer layer = flame.getFirstLayer();
     flame.assign(pSubFlame);
+    Layer layer = flame.getFirstLayer();
 
     layer.getFinalXForms().clear();
     layer.getXForms().clear();
@@ -62,13 +56,13 @@ public class SubFlameRandomFlameGenerator extends RandomFlameGenerator {
     {
       XForm xForm = new XForm();
       layer.getXForms().add(xForm);
-      xForm.setWeight(0.5);
+      xForm.setWeight(0.25 + Math.random() * 0.5);
       xForm.setCoeff00(0.17254603006834707);
       xForm.setCoeff01(0.6439505508593787);
       xForm.setCoeff10(-0.6439505508593787);
       xForm.setCoeff11(0.17254603006834707);
-      xForm.setCoeff20(2 + Math.random() * 2.0);
-      xForm.setCoeff21(-0.25 - Math.random() * 0.25);
+      xForm.setCoeff20(1.5 + Math.random() * 2.5);
+      xForm.setCoeff21(-0.25 - Math.random() * 0.35);
       xForm.addVariation(1, VariationFuncList.getVariationFuncInstance("linear3D", true));
       xForm.setColor(Math.random());
       xForm.setColorSymmetry(-0.62);
@@ -77,7 +71,7 @@ public class SubFlameRandomFlameGenerator extends RandomFlameGenerator {
     {
       XForm xForm = new XForm();
       layer.getXForms().add(xForm);
-      xForm.setWeight(0.5);
+      xForm.setWeight(0.25 + Math.random() * 0.5);
       xForm.setCoeff00(0.17254603006834707);
       xForm.setCoeff01(0.6439505508593787);
       xForm.setCoeff10(-0.6439505508593787);
@@ -87,7 +81,7 @@ public class SubFlameRandomFlameGenerator extends RandomFlameGenerator {
       {
         VariationFunc varFunc;
         varFunc = VariationFuncList.getVariationFuncInstance("curl3D", true);
-        varFunc.setParameter("cx", -0.2);
+        varFunc.setParameter("cx", -0.2 + 0.4 * Math.random());
         varFunc.setParameter("cy", 0);
         varFunc.setParameter("cz", 0);
         xForm.addVariation(1, varFunc);
@@ -107,51 +101,16 @@ public class SubFlameRandomFlameGenerator extends RandomFlameGenerator {
     catch (Exception e) {
       e.printStackTrace();
     }
-    Flame subFlame;
-    while (true) {
-      RandomFlameGenerator randGen = new AllRandomFlameGenerator();
-      RandomFlameGeneratorState randGenState = randGen.initState();
-      subFlame = randGen.createFlame(randGenState);
-      final int IMG_WIDTH = 160;
-      final int IMG_HEIGHT = 100;
-      final double MIN_COVERAGE = 0.25;
 
-      subFlame.setWidth(IMG_WIDTH);
-      subFlame.setHeight(IMG_HEIGHT);
-      //          subFlame.setPixelsPerUnit(10);
-      // render it   
-      subFlame.setSampleDensity(50);
-      subFlame.setSpatialFilterRadius(0.0);
-      RGBPalette palette = new RandomRGBPaletteGenerator().generatePalette(21, true);
-      subFlame.getFirstLayer().setPalette(palette);
-      RenderedFlame res;
-      boolean deEnabled = subFlame.isDeFilterEnabled();
-      try {
-        subFlame.setDeFilterEnabled(false);
-        FlameRenderer renderer = new FlameRenderer(subFlame, prefs, false, true);
-        RenderInfo info = new RenderInfo(IMG_WIDTH, IMG_HEIGHT);
-        res = renderer.renderFlame(info);
-      }
-      finally {
-        subFlame.setDeFilterEnabled(deEnabled);
-      }
-      SimpleImage img = res.getImage();
-      long maxCoverage = img.getImageWidth() * img.getImageHeight();
-      long coverage = 0;
-      Pixel pixel = new Pixel();
-      for (int k = 0; k < img.getImageHeight(); k++) {
-        for (int l = 0; l < img.getImageWidth(); l++) {
-          pixel.setARGBValue(img.getARGBValue(l, k));
-          if (pixel.r > 20 || pixel.g > 20 || pixel.b > 20) {
-            coverage++;
-          }
-        }
-      }
-      double fCoverage = (double) coverage / (double) maxCoverage;
-      if (fCoverage >= MIN_COVERAGE) {
-        break;
-      }
-    }
+    AllRandomFlameGenerator randGen = new AllRandomFlameGenerator();
+    randGen.setUseSimpleGenerators(true);
+    final int IMG_WIDTH = 80;
+    final int IMG_HEIGHT = 60;
+    int palettePoints = 3 + (int) (Math.random() * 68.0);
+    boolean fadePaletteColors = Math.random() > 0.33;
+    RandomFlameGeneratorSampler sampler = new RandomFlameGeneratorSampler(IMG_WIDTH, IMG_HEIGHT, prefs, randGen, palettePoints, fadePaletteColors, RandomBatchQuality.LOW);
+    Flame subFlame = sampler.createSample().getFlame();
+
     Flame flame = embedFlame(subFlame);
     flame.setCentreX(2);
     flame.setCentreY(1);
