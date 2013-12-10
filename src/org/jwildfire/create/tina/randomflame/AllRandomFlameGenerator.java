@@ -37,6 +37,7 @@ public class AllRandomFlameGenerator extends RandomFlameGenerator {
     allGenerators.add(new Spherical3DRandomFlameGenerator());
     allGenerators.add(new BrokatRandomFlameGenerator());
     allGenerators.add(new MandelbrotRandomFlameGenerator());
+    allGenerators.add(new LayerzRandomFlameGenerator());
     allGenerators.add(new GnarlRandomFlameGenerator());
     allGenerators.add(new Spherical3DRandomFlameGenerator());
     allGenerators.add(new BubblesRandomFlameGenerator());
@@ -46,6 +47,7 @@ public class AllRandomFlameGenerator extends RandomFlameGenerator {
     allGenerators.add(new Spherical3DRandomFlameGenerator());
     allGenerators.add(new BrokatRandomFlameGenerator());
     allGenerators.add(new SubFlameRandomFlameGenerator());
+    allGenerators.add(new LayerzRandomFlameGenerator());
     allGenerators.add(new LinearRandomFlameGenerator());
     allGenerators.add(new DuckiesRandomFlameGenerator());
     allGenerators.add(new Bubbles3DRandomFlameGenerator());
@@ -57,6 +59,7 @@ public class AllRandomFlameGenerator extends RandomFlameGenerator {
     allGenerators.add(new BubblesRandomFlameGenerator());
     allGenerators.add(new GnarlRandomFlameGenerator());
     allGenerators.add(new SierpinskyRandomFlameGenerator());
+    allGenerators.add(new LayerzRandomFlameGenerator());
     allGenerators.add(new Flowers3DRandomFlameGenerator());
     allGenerators.add(new FilledFlowers3DRandomFlameGenerator());
     allGenerators.add(new ExperimentalBubbles3DRandomFlameGenerator());
@@ -65,6 +68,7 @@ public class AllRandomFlameGenerator extends RandomFlameGenerator {
     allGenerators.add(new DuckiesRandomFlameGenerator());
     allGenerators.add(new JulianDiscRandomFlameGenerator());
     allGenerators.add(new DuckiesRandomFlameGenerator());
+    allGenerators.add(new LayerzRandomFlameGenerator());
     allGenerators.add(new BrokatRandomFlameGenerator());
     allGenerators.add(new SimpleTilingRandomFlameGenerator());
     allGenerators.add(new FilledFlowers3DRandomFlameGenerator());
@@ -73,19 +77,17 @@ public class AllRandomFlameGenerator extends RandomFlameGenerator {
     allGenerators.add(new TentacleRandomFlameGenerator());
 
     simpleGenerators = new ArrayList<RandomFlameGenerator>();
-    simpleGenerators.add(new LinearRandomFlameGenerator());
-    simpleGenerators.add(new FilledFlowers3DRandomFlameGenerator());
-    simpleGenerators.add(new SimpleTilingRandomFlameGenerator());
-    simpleGenerators.add(new SphericalRandomFlameGenerator());
-    simpleGenerators.add(new SplitsRandomFlameGenerator());
-    simpleGenerators.add(new Spherical3DRandomFlameGenerator());
-    simpleGenerators.add(new BrokatRandomFlameGenerator());
-    simpleGenerators.add(new GnarlRandomFlameGenerator());
-    simpleGenerators.add(new BubblesRandomFlameGenerator());
-    simpleGenerators.add(new DuckiesRandomFlameGenerator());
-    simpleGenerators.add(new Spherical3DRandomFlameGenerator());
-    simpleGenerators.add(new SierpinskyRandomFlameGenerator());
-    simpleGenerators.add(new Flowers3DRandomFlameGenerator());
+    simpleGenerators.addAll(allGenerators);
+    int i = 0;
+    while (i < simpleGenerators.size()) {
+      Class<?> cls = simpleGenerators.get(i).getClass();
+      if (LayerzRandomFlameGenerator.class.equals(cls) || SubFlameRandomFlameGenerator.class.equals(cls)) {
+        simpleGenerators.remove(i);
+      }
+      else {
+        i++;
+      }
+    }
   }
 
   private static final String RANDGEN = "RANDGEN";

@@ -2030,7 +2030,7 @@ public class TinaInternalFrame extends JInternalFrame {
       lblShift.setBounds(663, 52, 94, 24);
       panel_1.add(lblShift);
       tinaSouthTabbedPane.addTab("Gradient", null, getTinaPalettePanel(), null);
-      tinaSouthTabbedPane.addTab("Layers", null, getPanel_74(), null);
+      tinaSouthTabbedPane.addTab("Layerz", null, getPanel_74(), null);
 
       tinaSouthTabbedPane.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
