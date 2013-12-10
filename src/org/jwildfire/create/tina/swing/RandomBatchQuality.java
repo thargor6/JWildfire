@@ -4,7 +4,7 @@ public enum RandomBatchQuality {
   LOW {
     @Override
     public double getCoverage() {
-      return 0.33;
+      return 0.32;
     }
 
     @Override
@@ -15,23 +15,23 @@ public enum RandomBatchQuality {
   NORMAL {
     @Override
     public double getCoverage() {
-      return 0.42;
+      return 0.48;
     }
 
     @Override
     public int getMaxSamples() {
-      return 25;
+      return 32;
     }
   },
   HIGH {
     @Override
     public double getCoverage() {
-      return 0.51;
+      return 0.64;
     }
 
     @Override
     public int getMaxSamples() {
-      return 50;
+      return 64;
     }
   };
 

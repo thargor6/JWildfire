@@ -2579,7 +2579,6 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
         data.xFormAntialiasAmountSlider.setValue(Tools.FTOI(pXForm.getAntialiasAmount() * SLIDER_SCALE_COLOR));
         data.xFormAntialiasRadiusREd.setText(Tools.doubleToString(pXForm.getAntialiasRadius()));
         data.xFormAntialiasRadiusSlider.setValue(Tools.FTOI(pXForm.getAntialiasRadius() * SLIDER_SCALE_COLOR));
-
         data.transformationWeightREd.setText(Tools.doubleToString(pXForm.getWeight()));
       }
       else {
@@ -3436,7 +3435,7 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
 
   public void transformationWeightREd_changed() {
     XForm xForm = getCurrXForm();
-    if (xForm != null && getCurrLayer() != null && getCurrLayer().getFinalXForms().indexOf(xForm) < 0) {
+    if (!gridRefreshing && xForm != null && getCurrLayer() != null && getCurrLayer().getFinalXForms().indexOf(xForm) < 0) {
       xForm.setWeight(Tools.stringToDouble(data.transformationWeightREd.getText()));
       gridRefreshing = true;
       try {
@@ -3565,6 +3564,21 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
     }
   }
 
+  private void afterTriangleSelected(XForm pXForm, int pRow) {
+    boolean lastGridRefreshing = gridRefreshing;
+    gridRefreshing = true;
+    try {
+      flamePanel.setSelectedXForm(pXForm);
+      data.transformationsTable.getSelectionModel().setSelectionInterval(pRow, pRow);
+      refreshXFormUI(pXForm);
+      enableXFormControls(pXForm);
+      refreshFlameImage(false);
+    }
+    finally {
+      gridRefreshing = lastGridRefreshing;
+    }
+  }
+
   private void flamePanel_mouseClicked(MouseEvent e) {
     if (e.getClickCount() == 2) {
       renderFlameButton_actionPerformed(null);
@@ -3574,30 +3588,31 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
       Layer layer = getCurrLayer();
       if (flame != null && flamePanel != null) {
         XForm xForm = flamePanel.mouseClicked(e.getX(), e.getY());
-        if (flamePanel.isRedrawAfterMouseClick()) {
-          if (flamePanel.isReRender()) {
-            refreshFlameImage(false);
-            refreshPaletteImg();
-          }
-          else {
-            centerPanel.getParent().validate();
-            centerPanel.repaint();
-          }
-        }
         if (xForm != null) {
           for (int i = 0; i < layer.getXForms().size(); i++) {
             if (xForm == layer.getXForms().get(i)) {
-              data.transformationsTable.getSelectionModel().setSelectionInterval(i, i);
+              afterTriangleSelected(xForm, i);
               return;
             }
           }
           for (int i = 0; i < layer.getFinalXForms().size(); i++) {
             if (xForm == layer.getFinalXForms().get(i)) {
               int row = layer.getXForms().size() + i;
-              data.transformationsTable.getSelectionModel().setSelectionInterval(row, row);
+              afterTriangleSelected(xForm, row);
               return;
             }
           }
+          if (flamePanel.isRedrawAfterMouseClick()) {
+            if (flamePanel.isReRender()) {
+              refreshFlameImage(false);
+              refreshPaletteImg();
+            }
+            else {
+              centerPanel.getParent().validate();
+              centerPanel.repaint();
+            }
+          }
+
         }
       }
 
@@ -5574,6 +5589,7 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
     gridRefreshing = true;
     try {
       refreshLayersTable();
+      data.layersTable.getSelectionModel().setSelectionInterval(0, 0);
     }
     finally {
       gridRefreshing = false;

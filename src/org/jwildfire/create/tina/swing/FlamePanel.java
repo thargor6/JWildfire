@@ -400,9 +400,6 @@ public class FlamePanel extends ImagePanel {
   }
 
   public boolean mouseDragged(int pX, int pY, boolean pLeftButton, boolean pRightButton, boolean pMiddleButton) {
-    if (selectedXForm == null) {
-      return false;
-    }
     reRender = true;
     int viewDX = pX - xBeginDrag;
     int viewDY = pY - yBeginDrag;
@@ -414,6 +411,9 @@ public class FlamePanel extends ImagePanel {
       if (Math.abs(dx) > MathLib.EPSILON || Math.abs(dy) > MathLib.EPSILON) {
         switch (mouseDragOperation) {
           case MOVE_TRIANGLE: {
+            if (selectedXForm == null) {
+              return false;
+            }
             // Move
             if (pLeftButton && !pRightButton) {
               if (fineMovement) {
@@ -477,6 +477,9 @@ public class FlamePanel extends ImagePanel {
             }
           }
           case ROTATE_TRIANGLE: {
+            if (selectedXForm == null) {
+              return false;
+            }
             if (fineMovement) {
               dx *= 0.1;
             }
@@ -484,6 +487,9 @@ public class FlamePanel extends ImagePanel {
             return true;
           }
           case SCALE_TRIANGLE: {
+            if (selectedXForm == null) {
+              return false;
+            }
             if (fineMovement) {
               dx *= 0.1;
               dy *= 0.1;
@@ -519,6 +525,9 @@ public class FlamePanel extends ImagePanel {
             return true;
           }
           case POINTS: {
+            if (selectedXForm == null) {
+              return false;
+            }
             if (fineMovement) {
               dx *= 0.25;
               dy *= 0.25;
