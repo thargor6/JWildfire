@@ -35,7 +35,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 import org.jwildfire.create.tina.base.raster.AbstractRasterPoint;
 import org.jwildfire.create.tina.palette.RenderColor;
 
-public final class FlameRenderPseudo3DThread extends FlameRenderThread {
+public final class FlameRenderPseudo3DThread extends AbstractRenderThread {
   private XYZPoint[] affineTA;
   private XYZPoint[] varTA;
   private XYZPoint[] pA;
@@ -177,8 +177,8 @@ public final class FlameRenderPseudo3DThread extends FlameRenderThread {
   }
 
   @Override
-  protected FlameRenderThreadState saveState() {
-    FlameRenderPseudo3DThreadState res = new FlameRenderPseudo3DThreadState();
+  protected RenderThreadPersistentState saveState() {
+    Pseudo3DRenderThreadPersistentState res = new Pseudo3DRenderThreadPersistentState();
     res.currSample = currSample;
     res.xfIndex = (xf != null) ? flame.getXForms().indexOf(xf) : -1;
     res.startIter = iter;
@@ -191,8 +191,8 @@ public final class FlameRenderPseudo3DThread extends FlameRenderThread {
   }
 
   @Override
-  protected void restoreState(FlameRenderThreadState pState) {
-    FlameRenderPseudo3DThreadState state = (FlameRenderPseudo3DThreadState) pState;
+  protected void restoreState(RenderThreadPersistentState pState) {
+    Pseudo3DRenderThreadPersistentState state = (Pseudo3DRenderThreadPersistentState) pState;
     currSample = state.currSample;
     xf = (state.xfIndex >= 0) ? flame.getXForms().get(state.xfIndex) : null;
     startIter = state.startIter;
@@ -252,6 +252,12 @@ public final class FlameRenderPseudo3DThread extends FlameRenderThread {
       }
       xf.transformPoints(ctx, affineTA, varTA, pA, pA);
     }
+  }
+
+  @Override
+  protected long getIter() {
+    // TODO Auto-generated method stub
+    return 0;
   }
 
 }

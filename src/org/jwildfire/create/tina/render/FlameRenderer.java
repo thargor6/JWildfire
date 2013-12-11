@@ -91,7 +91,7 @@ public class FlameRenderer {
   private boolean preview;
 
   private List<IterationObserver> iterationObservers;
-  private List<FlameRenderThread> runningThreads;
+  private List<AbstractRenderThread> runningThreads;
   private boolean forceAbort;
 
   public void registerIterationObserver(IterationObserver pObserver) {
@@ -635,12 +635,12 @@ public class FlameRenderer {
     }
   }
 
-  private FlameRenderThread createFlameRenderThread(int pThreadId, Flame pFlame, long pSamples) {
+  private AbstractRenderThread createFlameRenderThread(int pThreadId, Flame pFlame, long pSamples) {
     switch (flame.getShadingInfo().getShading()) {
       case FLAT:
-        return new FlameRenderFlatThread(prefs, pThreadId, this, pFlame, pSamples);
+        return new FlatRenderThread(prefs, pThreadId, this, pFlame, pSamples);
       case BLUR:
-        return new FlameRenderBlurThread(prefs, pThreadId, this, pFlame, pSamples);
+        return new BlurRenderThread(prefs, pThreadId, this, pFlame, pSamples);
       case DISTANCE_COLOR:
         return new FlameRenderDistanceColorThread(prefs, pThreadId, this, pFlame, pSamples);
       case PSEUDO3D:
@@ -661,10 +661,10 @@ public class FlameRenderer {
     }
     long sampleProgressUpdateStep = nSamples / PROGRESS_STEPS;
     long nextProgressUpdate = sampleProgressUpdateStep;
-    runningThreads = new ArrayList<FlameRenderThread>();
+    runningThreads = new ArrayList<AbstractRenderThread>();
     int nThreads = pFlames.size();
     for (int i = 0; i < nThreads; i++) {
-      FlameRenderThread t = createFlameRenderThread(i, pFlames.get(i), nSamples / (long) nThreads);
+      AbstractRenderThread t = createFlameRenderThread(i, pFlames.get(i), nSamples / (long) nThreads);
       runningThreads.add(t);
       new Thread(t).start();
     }
@@ -678,7 +678,7 @@ public class FlameRenderer {
       }
       done = true;
       long currSamples = 0;
-      for (FlameRenderThread t : runningThreads) {
+      for (AbstractRenderThread t : runningThreads) {
         if (!t.isFinished()) {
           done = false;
         }
@@ -694,11 +694,11 @@ public class FlameRenderer {
     }
   }
 
-  private List<FlameRenderThread> startIterate(List<Flame> pFlames, FlameRenderThreadState pState[], boolean pStartThreads) {
-    List<FlameRenderThread> threads = new ArrayList<FlameRenderThread>();
+  private List<AbstractRenderThread> startIterate(List<Flame> pFlames, RenderThreadPersistentState pState[], boolean pStartThreads) {
+    List<AbstractRenderThread> threads = new ArrayList<AbstractRenderThread>();
     int nThreads = pFlames.size();
     for (int i = 0; i < nThreads; i++) {
-      FlameRenderThread t = createFlameRenderThread(i, pFlames.get(i), -1);
+      AbstractRenderThread t = createFlameRenderThread(i, pFlames.get(i), -1);
       if (pState != null) {
         t.setResumeState(pState[i]);
       }
@@ -772,10 +772,10 @@ public class FlameRenderer {
     return iterationObservers;
   }
 
-  private void pauseThreads(List<FlameRenderThread> pThreads) {
+  private void pauseThreads(List<AbstractRenderThread> pThreads) {
     while (true) {
       boolean done = true;
-      for (FlameRenderThread thread : pThreads) {
+      for (AbstractRenderThread thread : pThreads) {
         if (!thread.isFinished()) {
           done = false;
           thread.cancel();
@@ -794,10 +794,10 @@ public class FlameRenderer {
     }
   }
 
-  public void saveState(String pAbsolutePath, List<FlameRenderThread> pThreads, long pSampleCount, long pElapsedMilliseconds, QualityProfile pQualityProfile) {
+  public void saveState(String pAbsolutePath, List<AbstractRenderThread> pThreads, long pSampleCount, long pElapsedMilliseconds, QualityProfile pQualityProfile) {
     pauseThreads(pThreads);
     // store thread state
-    FlameRenderThreadState state[] = new FlameRenderThreadState[pThreads.size()];
+    RenderThreadPersistentState state[] = new RenderThreadPersistentState[pThreads.size()];
     for (int i = 0; i < pThreads.size(); i++) {
       state[i] = pThreads.get(i).saveState();
     }
@@ -843,15 +843,15 @@ public class FlameRenderer {
     }
   }
 
-  private void resumeThreads(List<FlameRenderThread> pThreads, FlameRenderThreadState pState[]) {
+  private void resumeThreads(List<AbstractRenderThread> pThreads, RenderThreadPersistentState pState[]) {
     for (int i = 0; i < pThreads.size(); i++) {
-      FlameRenderThread t = pThreads.get(i);
+      AbstractRenderThread t = pThreads.get(i);
       t.setResumeState(pState[i]);
       new Thread(t).start();
     }
   }
 
-  public List<FlameRenderThread> startRenderFlame(RenderInfo pRenderInfo) {
+  public List<AbstractRenderThread> startRenderFlame(RenderInfo pRenderInfo) {
     renderInfo = pRenderInfo;
     initRaster(pRenderInfo.getImageWidth(), pRenderInfo.getImageHeight());
     init3D();
@@ -881,9 +881,9 @@ public class FlameRenderer {
 
         //        renderInfo.setRenderHDR(true);
         // restore thread state
-        FlameRenderThreadState state[] = new FlameRenderThreadState[header.numThreads];
+        RenderThreadPersistentState state[] = new RenderThreadPersistentState[header.numThreads];
         for (int i = 0; i < header.numThreads; i++) {
-          state[i] = (FlameRenderThreadState) in.readObject();
+          state[i] = (RenderThreadPersistentState) in.readObject();
         }
 
         initRaster(renderInfo.getImageWidth(), renderInfo.getImageHeight());
@@ -901,7 +901,7 @@ public class FlameRenderer {
         // read raster
         raster = (AbstractRasterPoint[][]) in.readObject();
         // create threads
-        List<FlameRenderThread> threads = startIterate(renderFlames, state, false);
+        List<AbstractRenderThread> threads = startIterate(renderFlames, state, false);
         return new ResumedFlameRender(header, threads);
       }
       finally {
@@ -943,7 +943,7 @@ public class FlameRenderer {
     if (runningThreads != null) {
       while (true) {
         boolean done = true;
-        for (FlameRenderThread thread : runningThreads) {
+        for (AbstractRenderThread thread : runningThreads) {
           if (!thread.isFinished()) {
             done = false;
             thread.cancel();

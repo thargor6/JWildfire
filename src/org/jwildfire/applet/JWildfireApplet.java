@@ -26,7 +26,7 @@ import org.jwildfire.create.tina.io.FlameWriter;
 import org.jwildfire.create.tina.randomflame.AllRandomFlameGenerator;
 import org.jwildfire.create.tina.randomflame.RandomFlameGenerator;
 import org.jwildfire.create.tina.randomflame.RandomFlameGeneratorSampler;
-import org.jwildfire.create.tina.render.FlameRenderThread;
+import org.jwildfire.create.tina.render.AbstractRenderThread;
 import org.jwildfire.create.tina.render.FlameRenderer;
 import org.jwildfire.create.tina.render.IterationObserver;
 import org.jwildfire.create.tina.render.RenderInfo;
@@ -61,7 +61,7 @@ public class JWildfireApplet extends JApplet implements IterationObserver {
   }
 
   private State state = State.IDLE;
-  private List<FlameRenderThread> threads;
+  private List<AbstractRenderThread> threads;
   private FlameRenderer renderer;
   private final Prefs prefs = new Prefs();
   private Flame currFlame;
@@ -136,7 +136,7 @@ public class JWildfireApplet extends JApplet implements IterationObserver {
     if (state == State.RENDER) {
       while (true) {
         boolean done = true;
-        for (FlameRenderThread thread : threads) {
+        for (AbstractRenderThread thread : threads) {
           if (!thread.isFinished()) {
             done = false;
             thread.cancel();
@@ -248,7 +248,7 @@ public class JWildfireApplet extends JApplet implements IterationObserver {
   }
 
   @Override
-  public void notifyIterationFinished(FlameRenderThread pEventSource, int pX, int pY) {
+  public void notifyIterationFinished(AbstractRenderThread pEventSource, int pX, int pY) {
     incSampleCount();
     if (pX >= 0 && pX < image.getImageWidth() && pY >= 0 && pY < image.getImageHeight()) {
       image.setARGB(pX, pY, pEventSource.getTonemapper().tonemapSample(pX, pY));
@@ -271,7 +271,7 @@ public class JWildfireApplet extends JApplet implements IterationObserver {
     getImgMainPnl().repaint();
   }
 
-  private synchronized void updateStats(FlameRenderThread pEventSource, double pQuality) {
+  private synchronized void updateStats(AbstractRenderThread pEventSource, double pQuality) {
     //    statsTextArea.setText("Current quality: " + Tools.doubleToString(pQuality) + "\n" +
     //        "samples so far: " + sampleCount + "\n" +
     //        "render time: " + Tools.doubleToString((System.currentTimeMillis() - renderStartTime + pausedRenderTime) / 1000.0) + "s");

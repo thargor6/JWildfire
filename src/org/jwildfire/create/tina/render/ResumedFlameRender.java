@@ -20,9 +20,9 @@ import java.util.List;
 
 public class ResumedFlameRender {
   private final JWFRenderFileHeader header;
-  private final List<FlameRenderThread> threads;
+  private final List<AbstractRenderThread> threads;
 
-  public ResumedFlameRender(JWFRenderFileHeader pHeader, List<FlameRenderThread> pThreads) {
+  public ResumedFlameRender(JWFRenderFileHeader pHeader, List<AbstractRenderThread> pThreads) {
     header = pHeader;
     threads = pThreads;
   }
@@ -31,7 +31,7 @@ public class ResumedFlameRender {
     return header;
   }
 
-  public List<FlameRenderThread> getThreads() {
+  public List<AbstractRenderThread> getThreads() {
     return threads;
   }
 }

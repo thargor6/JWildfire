@@ -17,10 +17,26 @@
 package org.jwildfire.create.tina.render;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
-public abstract class FlameRenderThreadState implements Serializable {
+import org.jwildfire.create.tina.base.XYZPoint;
+
+public final class DefaultRenderThreadPersistentState extends RenderThreadPersistentState {
   private static final long serialVersionUID = 1L;
-  protected long currSample;
-  protected int xfIndex;
-  protected long startIter;
+
+  private List<IterationState> layerState = new ArrayList<IterationState>();
+
+  public static class IterationState implements Serializable {
+    private static final long serialVersionUID = 1L;
+    protected XYZPoint affineT;
+    protected XYZPoint varT;
+    protected XYZPoint p;
+    protected XYZPoint q;
+    protected int xfIndex;
+  }
+
+  public List<IterationState> getLayerState() {
+    return layerState;
+  }
 }

@@ -22,7 +22,7 @@ import org.jwildfire.create.tina.palette.RenderColor;
 import org.jwildfire.create.tina.random.AbstractRandomGenerator;
 import org.jwildfire.create.tina.variation.FlameTransformationContext;
 
-public class RenderFlatIterationState extends AbstractIterationState {
+public class DefaultRenderIterationState extends RenderIterationState {
 
   private static final long serialVersionUID = 1L;
 
@@ -33,8 +33,11 @@ public class RenderFlatIterationState extends AbstractIterationState {
   protected XForm xf;
   protected final XYZProjectedPoint prj = new XYZProjectedPoint();
 
-  public RenderFlatIterationState(FlameRenderThread pRenderThread, FlameRenderer pRenderer, Flame pFlame, Layer pLayer, FlameTransformationContext pCtx, AbstractRandomGenerator pRandGen) {
+  public DefaultRenderIterationState(AbstractRenderThread pRenderThread, FlameRenderer pRenderer, Flame pFlame, Layer pLayer, FlameTransformationContext pCtx, AbstractRandomGenerator pRandGen) {
     super(pRenderThread, pRenderer, pFlame, pLayer, pCtx, pRandGen);
+  }
+
+  public void init() {
   }
 
   public void preFuseIter() {
@@ -118,10 +121,12 @@ public class RenderFlatIterationState extends AbstractIterationState {
       return;
     if (yIdx < 0 || yIdx >= renderer.rasterHeight)
       return;
-    AbstractRasterPoint rp = renderer.raster[yIdx][xIdx];
-
     double intensity = prj.intensity * layer.getWeight();
+    drawPoint(xIdx, yIdx, intensity);
+  }
 
+  protected void drawPoint(int xIdx, int yIdx, double intensity) {
+    AbstractRasterPoint rp = renderer.raster[yIdx][xIdx];
     if (p.rgbColor) {
       rp.setRed(rp.getRed() + p.redColor * intensity);
       rp.setGreen(rp.getGreen() + p.greenColor * intensity);

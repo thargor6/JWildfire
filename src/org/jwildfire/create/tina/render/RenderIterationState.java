@@ -25,11 +25,12 @@ import org.jwildfire.create.tina.palette.RenderColor;
 import org.jwildfire.create.tina.random.AbstractRandomGenerator;
 import org.jwildfire.create.tina.variation.FlameTransformationContext;
 
-public class AbstractIterationState implements Serializable {
+public class RenderIterationState implements Serializable {
   private static final long serialVersionUID = 1L;
 
-  protected final FlameRenderThread renderThread;
+  protected final AbstractRenderThread renderThread;
   protected final FlameRenderer renderer;
+  protected final Flame flame;
   protected final Layer layer;
   protected final FlameTransformationContext ctx;
   protected final AbstractRandomGenerator randGen;
@@ -37,9 +38,10 @@ public class AbstractIterationState implements Serializable {
   protected final RenderColor[] colorMap;
   protected final double paletteIdxScl;
 
-  public AbstractIterationState(FlameRenderThread pRenderThread, FlameRenderer pRenderer, Flame pFlame, Layer pLayer, FlameTransformationContext pCtx, AbstractRandomGenerator pRandGen) {
+  public RenderIterationState(AbstractRenderThread pRenderThread, FlameRenderer pRenderer, Flame pFlame, Layer pLayer, FlameTransformationContext pCtx, AbstractRandomGenerator pRandGen) {
     renderThread = pRenderThread;
     renderer = pRenderer;
+    flame = pFlame;
     layer = pLayer;
     ctx = pCtx;
     randGen = pRandGen;

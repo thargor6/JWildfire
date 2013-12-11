@@ -36,7 +36,7 @@ import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 import org.jwildfire.create.tina.base.raster.AbstractRasterPoint;
 
-public final class FlameRenderDistanceColorThread extends FlameRenderThread {
+public final class FlameRenderDistanceColorThread extends AbstractRenderThread {
   private XYZPoint affineT;
   private XYZPoint varT;
   private XYZPoint p;
@@ -283,7 +283,7 @@ public final class FlameRenderDistanceColorThread extends FlameRenderThread {
   }
 
   @Override
-  protected FlameRenderThreadState saveState() {
+  protected RenderThreadPersistentState saveState() {
     // TODO
     return null;
     /*
@@ -299,7 +299,7 @@ public final class FlameRenderDistanceColorThread extends FlameRenderThread {
   }
 
   @Override
-  protected void restoreState(FlameRenderThreadState pState) {
+  protected void restoreState(RenderThreadPersistentState pState) {
     // TODO
     /*
     FlameRenderFlatThreadState state = (FlameRenderFlatThreadState) pState;
@@ -310,5 +310,11 @@ public final class FlameRenderDistanceColorThread extends FlameRenderThread {
     varT = state.varT != null ? state.varT.makeCopy() : null;
     p = state.p != null ? state.p.makeCopy() : null;
     q = state.q != null ? state.q.makeCopy() : null;*/
+  }
+
+  @Override
+  protected long getIter() {
+    // TODO Auto-generated method stub
+    return 0;
   }
 }

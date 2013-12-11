@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2012 Andreas Maschke
+  Copyright (C) 1995-2013 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -16,12 +16,19 @@
 */
 package org.jwildfire.create.tina.render;
 
-import org.jwildfire.create.tina.base.XYZPoint;
+import org.jwildfire.base.Prefs;
+import org.jwildfire.create.tina.base.Flame;
+import org.jwildfire.create.tina.base.Layer;
 
-public final class FlameRenderBlurThreadState extends FlameRenderThreadState {
-  private static final long serialVersionUID = 1L;
-  protected XYZPoint affineT;
-  protected XYZPoint varT;
-  protected XYZPoint p;
-  protected XYZPoint q;
+public final class FlatRenderThread extends DefaultRenderThread {
+
+  public FlatRenderThread(Prefs pPrefs, int pThreadId, FlameRenderer pRenderer, Flame pFlame, long pSamples) {
+    super(pPrefs, pThreadId, pRenderer, pFlame, pSamples);
+  }
+
+  @Override
+  protected DefaultRenderIterationState createState(Layer layer) {
+    return new DefaultRenderIterationState(this, renderer, flame, layer, ctx, randGen);
+  }
+
 }

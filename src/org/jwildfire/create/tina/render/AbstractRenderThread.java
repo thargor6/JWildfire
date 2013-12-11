@@ -27,7 +27,7 @@ import org.jwildfire.create.tina.random.AbstractRandomGenerator;
 import org.jwildfire.create.tina.random.RandomGeneratorFactory;
 import org.jwildfire.create.tina.variation.FlameTransformationContext;
 
-public abstract class FlameRenderThread implements Runnable {
+public abstract class AbstractRenderThread implements Runnable {
   protected final FlameRenderer renderer;
   protected final Flame flame;
   protected final long samples;
@@ -35,12 +35,12 @@ public abstract class FlameRenderThread implements Runnable {
   protected SampleTonemapper tonemapper;
   protected boolean forceAbort;
   protected boolean finished;
-  protected FlameRenderThreadState resumeState;
+  protected RenderThreadPersistentState resumeState;
   protected FlameTransformationContext ctx;
   protected AbstractRandomGenerator randGen;
   protected final XYZProjectedPoint prj = new XYZProjectedPoint();
 
-  public FlameRenderThread(Prefs pPrefs, int pThreadId, FlameRenderer pRenderer, Flame pFlame, long pSamples) {
+  public AbstractRenderThread(Prefs pPrefs, int pThreadId, FlameRenderer pRenderer, Flame pFlame, long pSamples) {
     renderer = pRenderer;
     flame = pFlame;
     samples = pSamples;
@@ -70,9 +70,9 @@ public abstract class FlameRenderThread implements Runnable {
 
   protected abstract void iterate();
 
-  protected abstract FlameRenderThreadState saveState();
+  protected abstract RenderThreadPersistentState saveState();
 
-  protected abstract void restoreState(FlameRenderThreadState pState);
+  protected abstract void restoreState(RenderThreadPersistentState pState);
 
   @Override
   public void run() {
@@ -118,8 +118,9 @@ public abstract class FlameRenderThread implements Runnable {
     forceAbort = true;
   }
 
-  public void setResumeState(FlameRenderThreadState resumeState) {
+  public void setResumeState(RenderThreadPersistentState resumeState) {
     this.resumeState = resumeState;
   }
 
+  protected abstract long getIter();
 }
