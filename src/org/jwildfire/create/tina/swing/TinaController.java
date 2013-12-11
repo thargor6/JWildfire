@@ -414,6 +414,8 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
     data.layersTable = parameterObject.layersTable;
     data.layerVisibleBtn = parameterObject.layerVisibleBtn;
     data.layerAppendBtn = parameterObject.layerAppendBtn;
+    data.layerHideOthersBtn = parameterObject.layerHideOthersBtn;
+    data.layerShowAllBtn = parameterObject.layerShowAllBtn;
 
     data.mouseTransformEditViewButton = parameterObject.pMouseTransformViewButton;
     data.toggleVariationsButton = parameterObject.pToggleVariationsButton;
@@ -563,6 +565,8 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
     data.layersTable.setEnabled(flame != null);
     data.layerVisibleBtn.setEnabled(layer != null);
     data.layerAppendBtn.setEnabled(flame != null);
+    data.layerHideOthersBtn.setEnabled(layer != null);
+    data.layerShowAllBtn.setEnabled(flame != null);
   }
 
   private void initHelpPane() {
@@ -948,10 +952,10 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
     }
   }
 
-  static int rCount = 1;
+  //  static int rCount = 1;
 
   public void refreshFlameImage(boolean pQuickRender, boolean pMouseDown) {
-    System.out.println("R" + rCount++);
+    //    System.out.println("R" + rCount++);
     FlamePanel imgPanel = getFlamePanel();
     Rectangle bounds = imgPanel.getImageBounds();
     int renderScale = pQuickRender && pMouseDown ? 2 : 1;
@@ -1031,11 +1035,14 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
       if (row < 0 && getCurrFlame() != null && getCurrFlame().getLayers().size() > 0) {
         data.layersTable.getSelectionModel().setSelectionInterval(0, 0);
       }
+
     }
     finally {
       gridRefreshing = false;
     }
     refreshLayerUI();
+
+    refreshLayerControls(getCurrLayer());
   }
 
   public void refreshLayerUI() {
@@ -1414,6 +1421,9 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
 
   private void refreshLayersTable() {
     final int COL_LAYER = 0;
+    final int COL_CAPTION = 1;
+    final int COL_VISIBLE = 2;
+    final int COL_WEIGHT = 3;
     data.layersTable.setModel(new DefaultTableModel() {
       private static final long serialVersionUID = 1L;
 
@@ -1424,7 +1434,7 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
 
       @Override
       public int getColumnCount() {
-        return 1;
+        return 4;
       }
 
       @Override
@@ -1432,6 +1442,12 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
         switch (columnIndex) {
           case COL_LAYER:
             return "Layer";
+          case COL_CAPTION:
+            return "Caption";
+          case COL_VISIBLE:
+            return "Visible";
+          case COL_WEIGHT:
+            return "Weight";
         }
         return null;
       }
@@ -1439,13 +1455,55 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
       @Override
       public Object getValueAt(int rowIndex, int columnIndex) {
         if (getCurrFlame() != null) {
-          // Layer layer = getCurrFlame().getLayers().get(rowIndex);
+          Layer layer = getCurrFlame().getLayers().get(rowIndex);
           switch (columnIndex) {
             case COL_LAYER:
               return "Layer" + String.valueOf(rowIndex + 1);
+            case COL_CAPTION:
+              if (layer != null) {
+                return layer.getName();
+              }
+            case COL_VISIBLE:
+              if (layer != null) {
+                return layer.isVisible() ? "1" : "0";
+              }
+            case COL_WEIGHT:
+              return Tools.doubleToString(layer.getWeight());
           }
         }
         return null;
+      }
+
+      @Override
+      public boolean isCellEditable(int row, int column) {
+        return column == COL_CAPTION || column == COL_VISIBLE || column == COL_WEIGHT;
+      }
+
+      @Override
+      public void setValueAt(Object aValue, int row, int column) {
+        Layer layer = getCurrLayer();
+        if (layer != null) {
+          switch (column) {
+            case COL_CAPTION:
+              saveUndoPoint();
+              layer.setName((String) aValue);
+              break;
+            case COL_VISIBLE:
+              saveUndoPoint();
+              layer.setVisible("1".equals(aValue));
+              data.layerVisibleBtn.setSelected(layer.isVisible());
+              refreshFlameImage(false);
+              break;
+            case COL_WEIGHT:
+              saveUndoPoint();
+              layer.setWeight(Tools.stringToDouble((String) aValue));
+              data.layerWeightEd.setValue(layer.getWeight());
+              // refreshed automatically:
+              // refreshFlameImage(false);
+              break;
+          }
+        }
+        super.setValueAt(aValue, row, column);
       }
 
     });
@@ -5599,9 +5657,19 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
   }
 
   public void layerWeightREd_changed() {
-    if (!gridRefreshing) {
+    if (!gridRefreshing && getCurrLayer() != null) {
       saveUndoPoint();
       getCurrLayer().setWeight(Tools.stringToDouble(data.layerWeightEd.getText()));
+      int row = data.layersTable.getSelectedRow();
+      boolean oldGridRefreshing = gridRefreshing;
+      gridRefreshing = true;
+      try {
+        refreshLayersTable();
+        data.layersTable.getSelectionModel().setSelectionInterval(row, row);
+      }
+      finally {
+        gridRefreshing = oldGridRefreshing;
+      }
       refreshFlameImage(false);
     }
   }
@@ -5610,6 +5678,16 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
     if (!gridRefreshing) {
       saveUndoPoint();
       getCurrLayer().setVisible(data.layerVisibleBtn.isSelected());
+      int row = data.layersTable.getSelectedRow();
+      boolean oldGridRefreshing = gridRefreshing;
+      gridRefreshing = true;
+      try {
+        refreshLayersTable();
+        data.layersTable.getSelectionModel().setSelectionInterval(row, row);
+      }
+      finally {
+        gridRefreshing = oldGridRefreshing;
+      }
       refreshFlameImage(false);
     }
   }
@@ -5617,6 +5695,47 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
   @Override
   public Layer getLayer() {
     return getCurrLayer();
+  }
+
+  public void layerHideAllOthersButton_clicked() {
+    if (!gridRefreshing && getCurrLayer() != null) {
+      saveUndoPoint();
+      int row = data.layersTable.getSelectedRow();
+      for (int i = 0; i < getCurrFlame().getLayers().size(); i++) {
+        Layer layer = getCurrFlame().getLayers().get(i);
+        layer.setVisible(row == i);
+      }
+      boolean oldGridRefreshing = gridRefreshing;
+      gridRefreshing = true;
+      try {
+        refreshLayersTable();
+        data.layersTable.getSelectionModel().setSelectionInterval(row, row);
+      }
+      finally {
+        gridRefreshing = oldGridRefreshing;
+      }
+      refreshFlameImage(false);
+    }
+  }
+
+  public void layerShowAllButton_clicked() {
+    if (!gridRefreshing) {
+      saveUndoPoint();
+      for (Layer layer : getCurrFlame().getLayers()) {
+        layer.setVisible(true);
+      }
+      int row = data.layersTable.getSelectedRow();
+      boolean oldGridRefreshing = gridRefreshing;
+      gridRefreshing = true;
+      try {
+        refreshLayersTable();
+        data.layersTable.getSelectionModel().setSelectionInterval(row, row);
+      }
+      finally {
+        gridRefreshing = oldGridRefreshing;
+      }
+      refreshFlameImage(false);
+    }
   }
 
 }

@@ -494,6 +494,9 @@ public class Flame implements Assignable<Flame>, Serializable {
         !name.equals(pFlame.name)) {
       return false;
     }
+    if (layers.size() != pFlame.layers.size()) {
+      return false;
+    }
     for (int i = 0; i < layers.size(); i++) {
       if (!layers.get(i).isEqual(pFlame.layers.get(i))) {
         return false;

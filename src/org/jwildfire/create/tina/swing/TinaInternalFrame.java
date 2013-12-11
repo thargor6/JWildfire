@@ -4393,7 +4393,7 @@ public class TinaInternalFrame extends JInternalFrame {
         getFlameBrowserRenameBtn(), getTinaPaletteFadeColorsCBx(), getDancingFlamesReplaceFlameFromEditorBtn(), getDancingFlamesRenameFlameBtn(),
         getDancingFlamesRenameMotionBtn(), getDancingFlamesMutedCBx(),
         getLayerWeightEd(), getLayerAddBtn(), getLayerDuplicateBtn(), getLayerDeleteBtn(),
-        getLayersTable(), getLayerVisibleBtn(), getLayerAppendBtn());
+        getLayersTable(), getLayerVisibleBtn(), getLayerAppendBtn(), getLayerHideOthersBtn(), getLayerShowAllBtn());
 
     tinaController = new TinaController(params);
 
@@ -9292,6 +9292,8 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton layerAddBtn;
   private JButton layerDuplicateBtn;
   private JToggleButton layerAppendBtn;
+  private JButton layerShowAllBtn;
+  private JButton layerHideOthersBtn;
 
   /**
    * This method initializes renderBatchJobsScrollPane	
@@ -14754,8 +14756,34 @@ public class TinaInternalFrame extends JInternalFrame {
       layerAppendBtn.setPreferredSize(new Dimension(136, 24));
       layerAppendBtn.setLocation(new Point(4, 181));
       layerAppendBtn.setFont(new Font("Dialog", Font.BOLD, 10));
-      layerAppendBtn.setBounds(141, 78, 179, 52);
+      layerAppendBtn.setBounds(175, 81, 159, 52);
       panel_75.add(layerAppendBtn);
+
+      layerHideOthersBtn = new JButton();
+      layerHideOthersBtn.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.layerHideAllOthersButton_clicked();
+        }
+      });
+      layerHideOthersBtn.setToolTipText("Hide all layers except the currently selected one");
+      layerHideOthersBtn.setText("Hide all others");
+      layerHideOthersBtn.setPreferredSize(new Dimension(56, 24));
+      layerHideOthersBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      layerHideOthersBtn.setBounds(6, 34, 159, 24);
+      panel_75.add(layerHideOthersBtn);
+
+      layerShowAllBtn = new JButton();
+      layerShowAllBtn.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.layerShowAllButton_clicked();
+        }
+      });
+      layerShowAllBtn.setToolTipText("Show all layers");
+      layerShowAllBtn.setText("Show all");
+      layerShowAllBtn.setPreferredSize(new Dimension(56, 24));
+      layerShowAllBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      layerShowAllBtn.setBounds(172, 34, 159, 24);
+      panel_75.add(layerShowAllBtn);
     }
     return panel_75;
   }
@@ -14824,6 +14852,14 @@ public class TinaInternalFrame extends JInternalFrame {
 
   public JToggleButton getLayerAppendBtn() {
     return layerAppendBtn;
+  }
+
+  public JButton getLayerShowAllBtn() {
+    return layerShowAllBtn;
+  }
+
+  public JButton getLayerHideOthersBtn() {
+    return layerHideOthersBtn;
   }
 } //  @jve:decl-index=0:visual-constraint="10,10"
 

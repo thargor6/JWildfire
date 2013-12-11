@@ -30,13 +30,18 @@ public class JWFFlameWriter extends AbstractFlameWriter {
     SimpleXMLBuilder xb = new SimpleXMLBuilder();
     // Flame
     List<SimpleXMLBuilder.Attribute<?>> attrList = createFlameAttributes(pFlame, xb);
-
-    boolean enhancedFlame = pFlame.getLayers().size() > 1;
     xb.beginElement("jwf-flame", attrList);
     for (Layer layer : pFlame.getLayers()) {
       List<SimpleXMLBuilder.Attribute<?>> layerAttrList = new ArrayList<SimpleXMLBuilder.Attribute<?>>();
       layerAttrList.add(xb.createAttr("weight", layer.getWeight()));
       layerAttrList.add(xb.createAttr("visible", layer.isVisible() ? 1 : 0));
+      {
+        String name = layer.getName().replaceAll("\"", "");
+        if (!name.equals("")) {
+          attrList.add(xb.createAttr("name", name));
+        }
+      }
+
       xb.beginElement("layer", layerAttrList);
 
       // XForm

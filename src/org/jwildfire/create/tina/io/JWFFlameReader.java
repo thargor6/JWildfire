@@ -92,5 +92,8 @@ public class JWFFlameReader extends AbstractFlameReader {
     if ((hs = atts.get(ATTR_VISIBLE)) != null) {
       pLayer.setVisible(Integer.parseInt(hs) == 1);
     }
+    if ((hs = atts.get(ATTR_NAME)) != null) {
+      pLayer.setName(hs);
+    }
   }
 }

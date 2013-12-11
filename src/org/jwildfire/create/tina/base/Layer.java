@@ -43,6 +43,8 @@ public class Layer implements Assignable<Layer>, Serializable {
   @AnimAware
   private final List<XForm> finalXForms = new ArrayList<XForm>();
 
+  private String name = "";
+
   public List<XForm> getXForms() {
     return xForms;
   }
@@ -127,6 +129,7 @@ public class Layer implements Assignable<Layer>, Serializable {
   public void assign(Layer pSrc) {
     weight = pSrc.weight;
     visible = pSrc.visible;
+    name = pSrc.name;
     palette = pSrc.palette.makeCopy();
     xForms.clear();
     for (XForm xForm : pSrc.getXForms()) {
@@ -148,6 +151,7 @@ public class Layer implements Assignable<Layer>, Serializable {
   @Override
   public boolean isEqual(Layer pSrc) {
     if ((fabs(weight - pSrc.weight) > EPSILON) ||
+        !name.equals(pSrc.name) ||
         !palette.isEqual(pSrc.palette) || (visible != pSrc.visible) ||
         (xForms.size() != pSrc.xForms.size()) || (finalXForms.size() != pSrc.finalXForms.size())) {
       return false;
@@ -162,7 +166,6 @@ public class Layer implements Assignable<Layer>, Serializable {
         return false;
       }
     }
-
     return true;
   }
 
@@ -186,4 +189,11 @@ public class Layer implements Assignable<Layer>, Serializable {
     return isVisible() && getWeight() > -EPSILON && getXForms().size() > 0;
   }
 
+  public String getName() {
+    return name;
+  }
+
+  public void setName(String name) {
+    this.name = name != null ? name : "";
+  }
 }
