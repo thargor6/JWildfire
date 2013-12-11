@@ -620,19 +620,19 @@ public class Flame implements Assignable<Flame>, Serializable {
 
   // only because of script-compatiblity
   @Deprecated
-  public void setPalette666(RGBPalette pPalette) {
+  public void setPalette(RGBPalette pPalette) {
     layers.get(0).setPalette(pPalette);
   }
 
   // only because of script-compatiblity
   @Deprecated
-  public void randomizeColors666() {
+  public void randomizeColors() {
     layers.get(0).randomizeColors();
   }
 
   // only because of script-compatiblity
   @Deprecated
-  public void distributeColors666() {
+  public void distributeColors() {
     layers.get(0).distributeColors();
   }
 

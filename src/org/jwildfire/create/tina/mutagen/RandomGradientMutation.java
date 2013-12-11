@@ -16,11 +16,18 @@
 */
 package org.jwildfire.create.tina.mutagen;
 
+import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.palette.RGBPalette;
 import org.jwildfire.create.tina.palette.RandomRGBPaletteGenerator;
 
 public class RandomGradientMutation implements Mutation {
+
+  // for Script-compatibility
+  @Deprecated
+  public void execute(Flame pFlame) {
+    execute(pFlame.getFirstLayer());
+  }
 
   @Override
   public void execute(Layer pLayer) {

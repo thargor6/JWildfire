@@ -284,6 +284,9 @@ public final class FlameRenderDistanceColorThread extends FlameRenderThread {
 
   @Override
   protected FlameRenderThreadState saveState() {
+    // TODO
+    return null;
+    /*
     FlameRenderFlatThreadState res = new FlameRenderFlatThreadState();
     res.currSample = currSample;
     res.xfIndex = (xf != null) ? flame.getXForms().indexOf(xf) : -1;
@@ -292,11 +295,13 @@ public final class FlameRenderDistanceColorThread extends FlameRenderThread {
     res.varT = varT != null ? varT.makeCopy() : null;
     res.p = p != null ? p.makeCopy() : null;
     res.q = q != null ? q.makeCopy() : null;
-    return res;
+    return res;*/
   }
 
   @Override
   protected void restoreState(FlameRenderThreadState pState) {
+    // TODO
+    /*
     FlameRenderFlatThreadState state = (FlameRenderFlatThreadState) pState;
     currSample = state.currSample;
     xf = (state.xfIndex >= 0) ? flame.getXForms().get(state.xfIndex) : null;
@@ -304,6 +309,6 @@ public final class FlameRenderDistanceColorThread extends FlameRenderThread {
     affineT = state.affineT != null ? state.affineT.makeCopy() : null;
     varT = state.varT != null ? state.varT.makeCopy() : null;
     p = state.p != null ? state.p.makeCopy() : null;
-    q = state.q != null ? state.q.makeCopy() : null;
+    q = state.q != null ? state.q.makeCopy() : null;*/
   }
 }

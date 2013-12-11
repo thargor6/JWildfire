@@ -16,8 +16,12 @@
 */
 package org.jwildfire.create.tina.render;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.jwildfire.base.Prefs;
 import org.jwildfire.create.tina.base.Flame;
+import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XYZProjectedPoint;
 import org.jwildfire.create.tina.random.AbstractRandomGenerator;
 import org.jwildfire.create.tina.random.RandomGeneratorFactory;
@@ -44,6 +48,20 @@ public abstract class FlameRenderThread implements Runnable {
     ctx = new FlameTransformationContext(pRenderer, randGen);
     ctx.setPreserveZCoordinate(pFlame.isPreserveZ());
     ctx.setPreview(renderer.isPreview());
+  }
+
+  protected boolean isValidLayer(Layer pLayer) {
+    return pLayer.isVisible() && pLayer.getPalette() != null && pLayer.getXForms().size() > 0;
+  }
+
+  protected List<Layer> getValidLayers(Flame pFlame) {
+    List<Layer> res = new ArrayList<Layer>();
+    for (Layer layer : pFlame.getLayers()) {
+      if (isValidLayer(layer)) {
+        res.add(layer);
+      }
+    }
+    return res;
   }
 
   protected abstract void preFuseIter();
