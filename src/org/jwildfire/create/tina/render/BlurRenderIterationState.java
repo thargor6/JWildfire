@@ -15,7 +15,6 @@ public class BlurRenderIterationState extends DefaultRenderIterationState {
   private int rasterWidth, rasterHeight;
   private RenderColor globalRenderColor = new RenderColor();
 
-  // TODO remove samples parameter
   public BlurRenderIterationState(AbstractRenderThread pRenderThread, FlameRenderer pRenderer, Flame pFlame, Layer pLayer, FlameTransformationContext pCtx, AbstractRandomGenerator pRandGen) {
     super(pRenderThread, pRenderer, pFlame, pLayer, pCtx, pRandGen);
   }

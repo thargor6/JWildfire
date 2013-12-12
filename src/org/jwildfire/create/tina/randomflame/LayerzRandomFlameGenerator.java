@@ -48,8 +48,8 @@ public class LayerzRandomFlameGenerator extends RandomFlameGenerator {
     randGen.setUseSimpleGenerators(true);
     final int IMG_WIDTH = 120;
     final int IMG_HEIGHT = 90;
-    int palettePoints = 3 + (int) (Math.random() * 68.0);
-    boolean fadePaletteColors = Math.random() > 0.33;
+    int palettePoints = 3 + (int) (Math.random() * 17.0);
+    boolean fadePaletteColors = Math.random() > 0.125;
     RandomFlameGeneratorSampler sampler = new RandomFlameGeneratorSampler(IMG_WIDTH, IMG_HEIGHT, prefs, randGen, palettePoints, fadePaletteColors, RandomBatchQuality.LOW);
     return sampler.createSample().getFlame();
   }

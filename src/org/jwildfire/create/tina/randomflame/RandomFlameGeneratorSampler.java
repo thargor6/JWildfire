@@ -75,7 +75,7 @@ public class RandomFlameGeneratorSampler {
       for (int k = 0; k < img.getImageHeight(); k++) {
         for (int l = 0; l < img.getImageWidth(); l++) {
           pixel.setARGBValue(img.getARGBValue(l, k));
-          if (pixel.r > 20 || pixel.g > 20 || pixel.b > 20) {
+          if (pixel.r > 29 || pixel.g > 15 || pixel.b > 78) {
             coverage++;
           }
         }
@@ -85,7 +85,7 @@ public class RandomFlameGeneratorSampler {
       for (int k = 0; k < img.getImageHeight(); k++) {
         for (int l = 0; l < img.getImageWidth(); l++) {
           pixel.setARGBValue(img.getARGBValue(l, k));
-          if (Math.abs(pixel.r - bgRed) > 20.0 && Math.abs(pixel.g - bgGreen) > 20.0 && Math.abs(pixel.b - bgBlue) > 20.0) {
+          if (Math.abs(pixel.r - bgRed) > 29.0 && Math.abs(pixel.g - bgGreen) > 15.0 && Math.abs(pixel.b - bgBlue) > 78.0) {
             coverage++;
           }
         }
@@ -110,7 +110,7 @@ public class RandomFlameGeneratorSampler {
       flame.setPixelsPerUnit(10);
       flame.setSpatialFilterRadius(0.0);
       RGBPalette palette = new RandomRGBPaletteGenerator().generatePalette(paletteSize, fadePaletteColors);
-      if (Math.random() < 0.32) {
+      if (Math.random() < 0.21) {
         palette.sort();
       }
 

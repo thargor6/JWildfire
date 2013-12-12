@@ -120,6 +120,11 @@ import org.jwildfire.swing.ErrorHandler;
 import org.jwildfire.swing.ImageFileChooser;
 import org.jwildfire.swing.ImagePanel;
 import org.jwildfire.swing.MainController;
+import org.jwildfire.transform.TextTransformer;
+import org.jwildfire.transform.TextTransformer.FontStyle;
+import org.jwildfire.transform.TextTransformer.HAlignment;
+import org.jwildfire.transform.TextTransformer.Mode;
+import org.jwildfire.transform.TextTransformer.VAlignment;
 
 import com.l2fprod.common.beans.editor.FilePropertyEditor;
 import com.l2fprod.common.swing.JFontChooser;
@@ -995,7 +1000,22 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
             long t0 = System.currentTimeMillis();
             RenderedFlame res = renderer.renderFlame(info);
             long t1 = System.currentTimeMillis();
-            imgPanel.setImage(res.getImage());
+            SimpleImage img = res.getImage();
+            if (data.layerAppendBtn.isSelected()) {
+              TextTransformer txt = new TextTransformer();
+              txt.setText1("layer-append-mode");
+              txt.setText2("active");
+              txt.setAntialiasing(true);
+              txt.setColor(Color.RED);
+              txt.setMode(Mode.NORMAL);
+              txt.setFontStyle(FontStyle.BOLD);
+              txt.setFontName("Arial");
+              txt.setFontSize(36);
+              txt.setHAlign(HAlignment.CENTRE);
+              txt.setVAlign(VAlignment.CENTRE);
+              txt.transformImage(img);
+            }
+            imgPanel.setImage(img);
             showStatusMessage(flame, "render time: " + Tools.doubleToString((t1 - t0) * 0.001) + "s");
           }
           catch (Throwable ex) {
@@ -5736,6 +5756,10 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
       }
       refreshFlameImage(false);
     }
+  }
+
+  public void layerAppendModeBtnClicked() {
+    refreshFlameImage(false);
   }
 
 }

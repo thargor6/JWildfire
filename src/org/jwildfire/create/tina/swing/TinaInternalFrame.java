@@ -14750,6 +14750,11 @@ public class TinaInternalFrame extends JInternalFrame {
       panel_75.add(lblWeight);
 
       layerAppendBtn = new JToggleButton();
+      layerAppendBtn.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.layerAppendModeBtnClicked();
+        }
+      });
       layerAppendBtn.setToolTipText("Append new flames as new layers");
       layerAppendBtn.setText("Layer append mode");
       layerAppendBtn.setSize(new Dimension(138, 24));
