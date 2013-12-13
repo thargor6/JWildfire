@@ -5571,7 +5571,7 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
         }
 
         SimpleImage renderedImg = renderRandomizedFlame(currMutation.makeCopy(), probeSize);
-        double coverage = renderedImg != null ? RandomFlameGeneratorSampler.calculateCoverage(renderedImg, 0, 0, 0) : INVALID_COVERAGE;
+        double coverage = renderedImg != null ? RandomFlameGeneratorSampler.calculateCoverage(renderedImg, 0, 0, 0, true) : INVALID_COVERAGE;
         if (coverage > MIN_RENDER_COVERAGE) {
           coverage = RandomFlameGeneratorSampler.calculateDiffCoverage(renderedImg, simplifiedBaseFlameImg);
         }

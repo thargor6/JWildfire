@@ -97,4 +97,9 @@ public class ExperimentalSimpleRandomFlameGenerator extends
     return "Simple (experimental)";
   }
 
+  @Override
+  public boolean isUseFilter() {
+    return true;
+  }
+
 }

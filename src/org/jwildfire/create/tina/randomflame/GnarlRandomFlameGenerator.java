@@ -130,7 +130,7 @@ public class GnarlRandomFlameGenerator extends RandomFlameGenerator {
           throw new IllegalStateException();
       }
       xForm.setColorSymmetry(symmetry);
-      //      xForm.setColor(0.1 + 0.9 * Math.random());
+      //      xForm.setColor(0.86 + 0.08 * Math.random());
       xForm.setColor(0.9);
       if (Math.random() > 0.5) {
         XFormTransformService.scale(xForm, 0.995, true, true);
@@ -181,7 +181,7 @@ public class GnarlRandomFlameGenerator extends RandomFlameGenerator {
           throw new IllegalStateException();
       }
       XFormTransformService.rotate(xForm, angle);
-      XFormTransformService.localTranslate(xForm, tx, ty);
+      XFormTransformService.localTranslate(xForm, tx * 1.5, ty * 1.5);
     }
     // 2nd XForm
     {
@@ -208,7 +208,7 @@ public class GnarlRandomFlameGenerator extends RandomFlameGenerator {
       xForm.setColorSymmetry(-1);
     }
     // 3rd XForm
-    if (Math.random() > 0.5) {
+    if (Math.random() > 0.75) {
       XForm xForm = new XForm();
       layer.getXForms().add(xForm);
       xForm.setWeight(_3rdWeight);
@@ -223,6 +223,11 @@ public class GnarlRandomFlameGenerator extends RandomFlameGenerator {
   @Override
   public String getName() {
     return "Gnarl";
+  }
+
+  @Override
+  public boolean isUseFilter() {
+    return false;
   }
 
 }

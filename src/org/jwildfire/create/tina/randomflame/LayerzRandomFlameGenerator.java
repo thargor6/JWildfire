@@ -59,4 +59,9 @@ public class LayerzRandomFlameGenerator extends RandomFlameGenerator {
     return "Layerz";
   }
 
+  @Override
+  public boolean isUseFilter() {
+    return false;
+  }
+
 }

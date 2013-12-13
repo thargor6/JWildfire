@@ -162,4 +162,9 @@ public class FilledFlowers3DRandomFlameGenerator extends RandomFlameGenerator {
     return "Flowers3D (filled)";
   }
 
+  @Override
+  public boolean isUseFilter() {
+    return true;
+  }
+
 }

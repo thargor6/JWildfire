@@ -128,4 +128,9 @@ public class Flowers3DRandomFlameGenerator extends RandomFlameGenerator {
     return "Flowers3D (stunning)";
   }
 
+  @Override
+  public boolean isUseFilter() {
+    return true;
+  }
+
 }

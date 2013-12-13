@@ -42,7 +42,6 @@ public class RandomFlameGeneratorSampler {
   private final boolean fadePaletteColors;
   private RandomFlameGenerator randGen;
   private final RandomBatchQuality quality;
-  private static boolean useFilter = true;
 
   public RandomFlameGeneratorSampler(int pImageWidth, int pImageHeight, Prefs pPrefs, RandomFlameGenerator pRandGen, int pPaletteSize, boolean pFadePaletteColors, RandomBatchQuality pQuality) {
     imageWidth = pImageWidth;
@@ -54,7 +53,7 @@ public class RandomFlameGeneratorSampler {
     quality = pQuality;
   }
 
-  public static double calculateCoverage(SimpleImage pImg, int bgRed, int bgGreen, int bgBlue) {
+  public static double calculateCoverage(SimpleImage pImg, int bgRed, int bgGreen, int bgBlue, boolean useFilter) {
     SimpleImage img;
     if (useFilter) {
       SimpleImage filteredImg = new SimpleImage(pImg.getBufferedImg(), pImg.getImageWidth(), pImg.getImageHeight());
@@ -148,7 +147,7 @@ public class RandomFlameGeneratorSampler {
         return new RandomFlameGeneratorSample(bestFlame, renderedFlame.getImage());
       }
       else {
-        double fCoverage = calculateCoverage(renderedFlame.getImage(), bgRed, bgGreen, bgBlue);
+        double fCoverage = calculateCoverage(renderedFlame.getImage(), bgRed, bgGreen, bgBlue, randGen.isUseFilter());
         if (fCoverage >= quality.getCoverage()) {
           return new RandomFlameGeneratorSample(flame, renderedFlame.getImage());
         }

@@ -121,4 +121,9 @@ public class SplitsRandomFlameGenerator extends RandomFlameGenerator {
     return "Splits";
   }
 
+  @Override
+  public boolean isUseFilter() {
+    return true;
+  }
+
 }

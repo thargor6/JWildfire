@@ -94,4 +94,6 @@ public abstract class RandomFlameGenerator {
   //    }
   //  }
 
+  public abstract boolean isUseFilter();
+
 }

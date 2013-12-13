@@ -69,4 +69,9 @@ public class TentacleRandomFlameGenerator extends RandomFlameGenerator {
     return "Tentacle";
   }
 
+  @Override
+  public boolean isUseFilter() {
+    return true;
+  }
+
 }

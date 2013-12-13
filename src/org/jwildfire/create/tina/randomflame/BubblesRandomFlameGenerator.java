@@ -129,4 +129,9 @@ public class BubblesRandomFlameGenerator extends RandomFlameGenerator {
     return "Bubbles";
   }
 
+  @Override
+  public boolean isUseFilter() {
+    return true;
+  }
+
 }

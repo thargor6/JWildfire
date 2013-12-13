@@ -31,7 +31,7 @@ public enum RandomBatchQuality {
 
     @Override
     public int getMaxSamples() {
-      return 64;
+      return 48;
     }
   };
 

@@ -138,4 +138,9 @@ public class MandelbrotRandomFlameGenerator extends RandomFlameGenerator {
     return "Mandelbrot";
   }
 
+  @Override
+  public boolean isUseFilter() {
+    return true;
+  }
+
 }

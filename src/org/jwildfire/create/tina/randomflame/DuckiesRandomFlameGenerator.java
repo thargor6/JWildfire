@@ -110,4 +110,9 @@ public class DuckiesRandomFlameGenerator extends RandomFlameGenerator {
     return "Duckies";
   }
 
+  @Override
+  public boolean isUseFilter() {
+    return true;
+  }
+
 }

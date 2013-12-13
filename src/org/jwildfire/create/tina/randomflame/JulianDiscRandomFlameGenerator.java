@@ -116,4 +116,9 @@ public class JulianDiscRandomFlameGenerator extends RandomFlameGenerator {
     return "JulianDisc";
   }
 
+  @Override
+  public boolean isUseFilter() {
+    return false;
+  }
+
 }

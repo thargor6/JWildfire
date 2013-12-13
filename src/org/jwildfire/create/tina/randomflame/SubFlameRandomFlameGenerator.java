@@ -127,4 +127,9 @@ public class SubFlameRandomFlameGenerator extends RandomFlameGenerator {
     return "SubFlame";
   }
 
+  @Override
+  public boolean isUseFilter() {
+    return false;
+  }
+
 }

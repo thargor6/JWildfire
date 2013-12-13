@@ -122,4 +122,9 @@ public class BrokatRandomFlameGenerator extends RandomFlameGenerator {
     return "Brokat";
   }
 
+  @Override
+  public boolean isUseFilter() {
+    return false;
+  }
+
 }

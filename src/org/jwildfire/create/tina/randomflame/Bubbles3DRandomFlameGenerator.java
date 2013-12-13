@@ -141,4 +141,9 @@ public class Bubbles3DRandomFlameGenerator extends RandomFlameGenerator {
     return "Bubbles3D";
   }
 
+  @Override
+  public boolean isUseFilter() {
+    return true;
+  }
+
 }

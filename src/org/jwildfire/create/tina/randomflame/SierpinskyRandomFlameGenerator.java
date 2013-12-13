@@ -72,4 +72,9 @@ public class SierpinskyRandomFlameGenerator extends RandomFlameGenerator {
     return "Sierpinsky";
   }
 
+  @Override
+  public boolean isUseFilter() {
+    return false;
+  }
+
 }

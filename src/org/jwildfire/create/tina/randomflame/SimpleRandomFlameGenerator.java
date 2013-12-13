@@ -72,4 +72,9 @@ public class SimpleRandomFlameGenerator extends RandomFlameGenerator {
     return "Simple (stunning)";
   }
 
+  @Override
+  public boolean isUseFilter() {
+    return true;
+  }
+
 }

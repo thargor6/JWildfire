@@ -97,4 +97,9 @@ public class SimpleTilingRandomFlameGenerator extends RandomFlameGenerator {
     return "Simple tiling";
   }
 
+  @Override
+  public boolean isUseFilter() {
+    return true;
+  }
+
 }

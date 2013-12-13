@@ -169,4 +169,9 @@ public class Spherical3DRandomFlameGenerator extends RandomFlameGenerator {
     return "Spherical3D";
   }
 
+  @Override
+  public boolean isUseFilter() {
+    return false;
+  }
+
 }

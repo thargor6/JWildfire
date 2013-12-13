@@ -74,4 +74,9 @@ public class LinearRandomFlameGenerator extends RandomFlameGenerator {
     return "Linear only";
   }
 
+  @Override
+  public boolean isUseFilter() {
+    return false;
+  }
+
 }

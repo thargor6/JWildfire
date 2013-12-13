@@ -255,7 +255,7 @@ public class ExperimentalGnarlRandomFlameGenerator extends RandomFlameGenerator 
       xForm.setColorSymmetry(-1);
     }
     // 3rd XForm
-    if (Math.random() > 0.5) {
+    if (Math.random() > 0.75) {
       if (Math.random() > 0.5) {
         secondXForm.setWeight(5 + Math.random() * 20.0);
       }
@@ -273,6 +273,11 @@ public class ExperimentalGnarlRandomFlameGenerator extends RandomFlameGenerator 
   @Override
   public String getName() {
     return "Gnarl (experimental)";
+  }
+
+  @Override
+  public boolean isUseFilter() {
+    return false;
   }
 
 }
