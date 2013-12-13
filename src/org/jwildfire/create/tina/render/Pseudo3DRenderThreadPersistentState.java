@@ -16,13 +16,29 @@
 */
 package org.jwildfire.create.tina.render;
 
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.jwildfire.create.tina.base.XYZPoint;
 
 public final class Pseudo3DRenderThreadPersistentState extends RenderThreadPersistentState {
   private static final long serialVersionUID = 1L;
-  protected XYZPoint[] affineTA;
-  protected XYZPoint[] varTA;
-  protected XYZPoint[] pA;
-  protected XYZPoint[] qA;
-  protected XYZPoint r;
+
+  private List<IterationState> layerState = new ArrayList<IterationState>();
+
+  public static class IterationState implements Serializable {
+    private static final long serialVersionUID = 1L;
+    protected XYZPoint[] affineTA;
+    protected XYZPoint[] varTA;
+    protected XYZPoint[] pA;
+    protected XYZPoint[] qA;
+    protected XYZPoint r;
+    protected int xfIndex;
+  }
+
+  public List<IterationState> getLayerState() {
+    return layerState;
+  }
+
 }

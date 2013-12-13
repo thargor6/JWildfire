@@ -642,9 +642,9 @@ public class FlameRenderer {
       case BLUR:
         return new BlurRenderThread(prefs, pThreadId, this, pFlame, pSamples);
       case DISTANCE_COLOR:
-        return new FlameRenderDistanceColorThread(prefs, pThreadId, this, pFlame, pSamples);
+        return new DistanceColorRenderThread(prefs, pThreadId, this, pFlame, pSamples);
       case PSEUDO3D:
-        return new FlameRenderPseudo3DThread(prefs, pThreadId, this, pFlame, pSamples);
+        return new Pseudo3DRenderThread(prefs, pThreadId, this, pFlame, pSamples);
       default:
         throw new IllegalArgumentException(flame.getShadingInfo().getShading().toString());
     }
