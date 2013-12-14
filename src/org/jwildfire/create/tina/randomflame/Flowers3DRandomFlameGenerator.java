@@ -129,7 +129,7 @@ public class Flowers3DRandomFlameGenerator extends RandomFlameGenerator {
   }
 
   @Override
-  public boolean isUseFilter() {
+  public boolean isUseFilter(RandomFlameGeneratorState pState) {
     return true;
   }
 

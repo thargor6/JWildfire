@@ -73,7 +73,7 @@ public class SierpinskyRandomFlameGenerator extends RandomFlameGenerator {
   }
 
   @Override
-  public boolean isUseFilter() {
+  public boolean isUseFilter(RandomFlameGeneratorState pState) {
     return false;
   }
 

@@ -106,11 +106,16 @@ public class AllRandomFlameGenerator extends RandomFlameGenerator {
 
   @Override
   protected Flame createFlame(RandomFlameGeneratorState pState) {
-    RandomFlameGenerator generator = (RandomFlameGenerator) pState.getParams().get(RANDGEN);
+    RandomFlameGenerator generator = createRandGen(pState);
     RandomFlameGeneratorState subState = generator.initState();
     Flame flame = generator.createFlame(subState);
     flame.setName(generator.getName() + " - " + flame.hashCode());
     return flame;
+  }
+
+  private RandomFlameGenerator createRandGen(RandomFlameGeneratorState pState) {
+    RandomFlameGenerator generator = (RandomFlameGenerator) pState.getParams().get(RANDGEN);
+    return generator;
   }
 
   @Override
@@ -127,9 +132,8 @@ public class AllRandomFlameGenerator extends RandomFlameGenerator {
   }
 
   @Override
-  public boolean isUseFilter() {
-    // TODO Auto-generated method stub
-    return false;
+  public boolean isUseFilter(RandomFlameGeneratorState pState) {
+    return createRandGen(pState).isUseFilter(pState);
   }
 
 }

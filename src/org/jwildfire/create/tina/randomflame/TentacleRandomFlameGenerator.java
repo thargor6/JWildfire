@@ -70,7 +70,7 @@ public class TentacleRandomFlameGenerator extends RandomFlameGenerator {
   }
 
   @Override
-  public boolean isUseFilter() {
+  public boolean isUseFilter(RandomFlameGeneratorState pState) {
     return true;
   }
 

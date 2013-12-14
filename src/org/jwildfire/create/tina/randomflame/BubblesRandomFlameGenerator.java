@@ -130,7 +130,7 @@ public class BubblesRandomFlameGenerator extends RandomFlameGenerator {
   }
 
   @Override
-  public boolean isUseFilter() {
+  public boolean isUseFilter(RandomFlameGeneratorState pState) {
     return true;
   }
 

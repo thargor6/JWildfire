@@ -98,7 +98,7 @@ public class ExperimentalSimpleRandomFlameGenerator extends
   }
 
   @Override
-  public boolean isUseFilter() {
+  public boolean isUseFilter(RandomFlameGeneratorState pState) {
     return true;
   }
 

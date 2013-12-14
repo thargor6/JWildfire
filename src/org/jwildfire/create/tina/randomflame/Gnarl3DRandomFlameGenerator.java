@@ -58,7 +58,7 @@ public class Gnarl3DRandomFlameGenerator extends GnarlRandomFlameGenerator {
   }
 
   @Override
-  public boolean isUseFilter() {
+  public boolean isUseFilter(RandomFlameGeneratorState pState) {
     return true;
   }
 

@@ -72,6 +72,9 @@ public class GnarlRandomFlameGenerator extends RandomFlameGenerator {
     }
 
     double blurAmount = 0.0025 * Math.random();
+    if (Math.random() < 0.33) {
+      blurAmount = 0.0 - blurAmount;
+    }
     double wavesWeight = Math.random() * 20 + 35;
     double _2ndWeight = 0.5;
     double _3rdWeight = 0.5;
@@ -89,46 +92,9 @@ public class GnarlRandomFlameGenerator extends RandomFlameGenerator {
       w2.setParameter("scaley", scaleY);
       xForm.addVariation(1, w2);
 
-      switch ((int) (Math.random() * 11.0)) {
-        case 0:
-          xForm.addVariation(blurAmount, VariationFuncList.getVariationFuncInstance("blur", true));
-          break;
-        case 1:
-          xForm.addVariation(blurAmount, VariationFuncList.getVariationFuncInstance("cos", true));
-          break;
-        case 2:
-          xForm.addVariation(blurAmount, VariationFuncList.getVariationFuncInstance("exp", true));
-          break;
-        case 3:
-          xForm.addVariation(blurAmount, VariationFuncList.getVariationFuncInstance("exponential", true));
-          break;
-        case 4:
-          xForm.addVariation(blurAmount, VariationFuncList.getVariationFuncInstance("lazysusan", true));
-          break;
-        case 5:
-          xForm.addVariation(blurAmount, VariationFuncList.getVariationFuncInstance("ngon", true));
-          break;
-        case 6:
-          xForm.addVariation(blurAmount, VariationFuncList.getVariationFuncInstance("sech", true));
-          break;
-        case 7:
-          xForm.addVariation(blurAmount, VariationFuncList.getVariationFuncInstance("sinh", true));
-          break;
-        case 8:
-          xForm.addVariation(blurAmount, VariationFuncList.getVariationFuncInstance("epispiral_wf", true));
-          break;
-        case 9:
-          xForm.addVariation(blurAmount, VariationFuncList.getVariationFuncInstance("tanh", true));
-          break;
-        case 10:
-          xForm.addVariation(blurAmount, VariationFuncList.getVariationFuncInstance("twintrian", true));
-          break;
-        case 11:
-          xForm.addVariation(blurAmount, VariationFuncList.getVariationFuncInstance("epispiral", true));
-          break;
-        default:
-          throw new IllegalStateException();
-      }
+      String varLst[] = { "blur", "cos", "exp", "exponential", "lazysusan", "ngon", "sech", "sinh", "epispiral_wf", "tanh", "twintrian", "epispiral" };
+      String varName = Math.random() > 0.25 ? varLst[(int) (Math.random() * varLst.length)] : VariationFuncList.getRandomVariationname();
+      xForm.addVariation(blurAmount, VariationFuncList.getVariationFuncInstance(varName, true));
       xForm.setColorSymmetry(symmetry);
       //      xForm.setColor(0.86 + 0.08 * Math.random());
       xForm.setColor(0.9);
@@ -191,11 +157,11 @@ public class GnarlRandomFlameGenerator extends RandomFlameGenerator {
       int f = (int) (Math.random() * 3);
       switch (f) {
         case 0:
-          xForm.addVariation(Math.random() * 0.7 + 0.1, VariationFuncList.getVariationFuncInstance("radial_blur", true));
+          xForm.addVariation(Math.random() * 0.37 + 0.1, VariationFuncList.getVariationFuncInstance("radial_blur", true));
           break;
         case 1:
-          xForm.addVariation(Math.random() * 0.7 + 0.3, VariationFuncList.getVariationFuncInstance("bubble", true));
-          xForm.addVariation(Math.random() * 0.7 + 0.1, VariationFuncList.getVariationFuncInstance("radial_blur", true));
+          xForm.addVariation(Math.random() * 0.37 + 0.3, VariationFuncList.getVariationFuncInstance("bubble", true));
+          xForm.addVariation(Math.random() * 0.37 + 0.1, VariationFuncList.getVariationFuncInstance("radial_blur", true));
           break;
         case 2:
           xForm.addVariation(Math.random() * 0.1, VariationFuncList.getVariationFuncInstance("radial_blur", true));
@@ -226,7 +192,7 @@ public class GnarlRandomFlameGenerator extends RandomFlameGenerator {
   }
 
   @Override
-  public boolean isUseFilter() {
+  public boolean isUseFilter(RandomFlameGeneratorState pState) {
     return false;
   }
 

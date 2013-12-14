@@ -94,6 +94,6 @@ public abstract class RandomFlameGenerator {
   //    }
   //  }
 
-  public abstract boolean isUseFilter();
+  public abstract boolean isUseFilter(RandomFlameGeneratorState pState);
 
 }
