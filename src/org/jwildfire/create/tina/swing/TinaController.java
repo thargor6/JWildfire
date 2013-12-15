@@ -120,6 +120,8 @@ import org.jwildfire.swing.ErrorHandler;
 import org.jwildfire.swing.ImageFileChooser;
 import org.jwildfire.swing.ImagePanel;
 import org.jwildfire.swing.MainController;
+import org.jwildfire.transform.ComposeTransformer;
+import org.jwildfire.transform.RectangleTransformer;
 import org.jwildfire.transform.TextTransformer;
 import org.jwildfire.transform.TextTransformer.FontStyle;
 import org.jwildfire.transform.TextTransformer.HAlignment;
@@ -1001,7 +1003,7 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
             RenderedFlame res = renderer.renderFlame(info);
             long t1 = System.currentTimeMillis();
             SimpleImage img = res.getImage();
-            if (data.layerAppendBtn.isSelected()) {
+            if (data.layerAppendBtn.isSelected() && !pMouseDown) {
               TextTransformer txt = new TextTransformer();
               txt.setText1("layer-append-mode");
               txt.setText2("active");
@@ -1014,6 +1016,56 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
               txt.setHAlign(HAlignment.CENTRE);
               txt.setVAlign(VAlignment.CENTRE);
               txt.transformImage(img);
+            }
+
+            Layer onlyVisibleLayer = null;
+            for (Layer layer : getCurrFlame().getLayers()) {
+              if (layer.isVisible()) {
+                if (onlyVisibleLayer == null) {
+                  onlyVisibleLayer = layer;
+                }
+                else {
+                  onlyVisibleLayer = null;
+                  break;
+                }
+              }
+            }
+            boolean drawSubLayer = flame.getLayers().size() > 1 && getCurrLayer() != null && getCurrLayer() != onlyVisibleLayer;
+
+            if (drawSubLayer) {
+              Flame singleLayerFlame = new Flame();
+              singleLayerFlame.assign(flame);
+              singleLayerFlame.getLayers().clear();
+              singleLayerFlame.getLayers().add(getCurrLayer().makeCopy());
+              singleLayerFlame.getFirstLayer().setVisible(true);
+              singleLayerFlame.getFirstLayer().setWeight(1.0);
+              RenderInfo lInfo = new RenderInfo(width / 4 * renderScale, height / 4 * renderScale);
+
+              double lWScl = (double) lInfo.getImageWidth() / (double) singleLayerFlame.getWidth();
+              double lHScl = (double) lInfo.getImageHeight() / (double) singleLayerFlame.getHeight();
+              singleLayerFlame.setPixelsPerUnit((lWScl + lHScl) * 0.5 * singleLayerFlame.getPixelsPerUnit() * 0.25);
+              singleLayerFlame.setWidth(lInfo.getImageWidth());
+              singleLayerFlame.setHeight(lInfo.getImageHeight());
+              FlameRenderer lRenderer = new FlameRenderer(singleLayerFlame, prefs, false, false);
+              RenderedFlame lRes = lRenderer.renderFlame(lInfo);
+              SimpleImage layerImg = lRes.getImage();
+
+              RectangleTransformer rT = new RectangleTransformer();
+              rT.setColor(new java.awt.Color(200, 200, 200));
+              rT.setLeft(0);
+              rT.setTop(0);
+              rT.setThickness(3);
+              rT.setWidth(lInfo.getImageWidth());
+              rT.setHeight(lInfo.getImageHeight());
+              rT.transformImage(layerImg);
+
+              ComposeTransformer cT = new ComposeTransformer();
+              cT.setHAlign(ComposeTransformer.HAlignment.LEFT);
+              cT.setVAlign(ComposeTransformer.VAlignment.BOTTOM);
+              cT.setTop(10);
+              cT.setLeft(10);
+              cT.setForegroundImage(layerImg);
+              cT.transformImage(img);
             }
             imgPanel.setImage(img);
             showStatusMessage(flame, "render time: " + Tools.doubleToString((t1 - t0) * 0.001) + "s");

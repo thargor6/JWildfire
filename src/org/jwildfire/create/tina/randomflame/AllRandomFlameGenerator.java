@@ -39,7 +39,7 @@ public class AllRandomFlameGenerator extends RandomFlameGenerator {
     allGenerators.add(new MandelbrotRandomFlameGenerator());
     allGenerators.add(new LayerzRandomFlameGenerator());
     allGenerators.add(new GnarlRandomFlameGenerator());
-    allGenerators.add(new Gnarl3DRandomFlameGenerator());
+    allGenerators.add(new Extrude3DRandomFlameGenerator());
     allGenerators.add(new Spherical3DRandomFlameGenerator());
     allGenerators.add(new BubblesRandomFlameGenerator());
     allGenerators.add(new ExperimentalGnarlRandomFlameGenerator());
@@ -52,7 +52,7 @@ public class AllRandomFlameGenerator extends RandomFlameGenerator {
     allGenerators.add(new LinearRandomFlameGenerator());
     allGenerators.add(new DuckiesRandomFlameGenerator());
     allGenerators.add(new GnarlRandomFlameGenerator());
-    allGenerators.add(new Gnarl3DRandomFlameGenerator());
+    allGenerators.add(new Extrude3DRandomFlameGenerator());
     allGenerators.add(new Bubbles3DRandomFlameGenerator());
     allGenerators.add(new SphericalRandomFlameGenerator());
     allGenerators.add(new DuckiesRandomFlameGenerator());

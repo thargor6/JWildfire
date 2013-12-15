@@ -537,4 +537,13 @@ public final class XForm implements Assignable<XForm>, Serializable {
   public void setName(String name) {
     this.name = name != null ? name : "";
   }
+
+  public boolean hasVariation(String pName) {
+    for (Variation var : variations) {
+      if (var.getFunc().getName().equalsIgnoreCase(pName)) {
+        return true;
+      }
+    }
+    return false;
+  }
 }
