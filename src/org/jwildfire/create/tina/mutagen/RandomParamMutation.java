@@ -35,6 +35,13 @@ public class RandomParamMutation implements Mutation {
     setRandomFlameProperty(pLayer, 2.0 * (0.25 + 0.75 * Math.random()));
   }
 
+  private static List<String> BLACKLIST;
+
+  static {
+    BLACKLIST = new ArrayList<String>();
+    BLACKLIST.add("truchet");
+  }
+
   private void setRandomFlameProperty(Layer pLayer, double pAmount) {
     List<VariationFunc> variations = new ArrayList<VariationFunc>();
 
@@ -44,7 +51,7 @@ public class RandomParamMutation implements Mutation {
     for (XForm xForm : pLayer.getFinalXForms()) {
       addVariations(variations, xForm);
     }
-
+    filterVariations(variations);
     if (variations.size() > 0) {
       int idx = (int) (Math.random() * variations.size());
       VariationFunc var = variations.get(idx);
@@ -83,6 +90,18 @@ public class RandomParamMutation implements Mutation {
           }
         }
         var.setParameter(var.getParameterNames()[pIdx], o);
+      }
+    }
+  }
+
+  private void filterVariations(List<VariationFunc> variations) {
+    int idx = 0;
+    while (idx < variations.size()) {
+      if (BLACKLIST.indexOf(variations.get(idx).getName().toLowerCase()) >= 0) {
+        variations.remove(idx);
+      }
+      else {
+        idx++;
       }
     }
   }
