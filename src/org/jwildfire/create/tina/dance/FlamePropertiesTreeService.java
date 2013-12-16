@@ -83,14 +83,13 @@ public class FlamePropertiesTreeService {
       Object[] selection = pFlamePropertiesTree.getSelectionPath().getPath();
       if (selection != null && selection.length > 1) {
         @SuppressWarnings("unchecked")
-        FlamePropertiesTreeNode<Flame> root = (FlamePropertiesTreeNode<Flame>) selection[1]; // skip root node which is only a text node
+        FlamePropertiesTreeNode<Flame> flameNode = (FlamePropertiesTreeNode<Flame>) selection[1]; // skip root node which is only a text node
         List<String> path = new ArrayList<String>();
         for (int i = 2; i < selection.length; i++) {
           FlamePropertiesTreeNode<?> node = (FlamePropertiesTreeNode<?>) selection[i];
           path.add(((AbstractProperty) node.getNodeData()).getName());
         }
-        FlamePropertyPath res = new FlamePropertyPath(root.getNodeData(), path);
-
+        FlamePropertyPath res = new FlamePropertyPath(flameNode.getNodeData(), path);
         return res;
       }
     }

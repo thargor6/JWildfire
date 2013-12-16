@@ -59,4 +59,5 @@ public class FlamePropertyPath implements Serializable {
   public void setFlame(Flame flame) {
     this.flame = flame;
   }
+
 }

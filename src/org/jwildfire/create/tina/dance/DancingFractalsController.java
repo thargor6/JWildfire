@@ -50,6 +50,7 @@ import org.jwildfire.base.Prefs;
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.audio.JLayerInterface;
 import org.jwildfire.create.tina.base.Flame;
+import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.dance.action.ActionRecorder;
 import org.jwildfire.create.tina.dance.action.PostRecordFlameGenerator;
@@ -1029,12 +1030,14 @@ public class DancingFractalsController {
   }
 
   private Flame validateDancingFlame(Flame pFlame) {
-    if (pFlame.getFinalXForms().size() == 0) {
-      XForm xForm = new XForm();
-      xForm.addVariation(1.0, new Linear3DFunc());
-      xForm.setAntialiasAmount(prefs.getTinaDefaultAntialiasingAmount());
-      xForm.setAntialiasRadius(prefs.getTinaDefaultAntialiasingRadius());
-      pFlame.getFinalXForms().add(xForm);
+    for (Layer layer : pFlame.getLayers()) {
+      if (layer.getFinalXForms().size() == 0) {
+        XForm xForm = new XForm();
+        xForm.addVariation(1.0, new Linear3DFunc());
+        xForm.setAntialiasAmount(prefs.getTinaDefaultAntialiasingAmount());
+        xForm.setAntialiasRadius(prefs.getTinaDefaultAntialiasingRadius());
+        layer.getFinalXForms().add(xForm);
+      }
     }
     return pFlame;
   }

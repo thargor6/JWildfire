@@ -24,6 +24,7 @@ import java.util.List;
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.animate.AnimAware;
 import org.jwildfire.create.tina.base.Flame;
+import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.ShadingInfo;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.palette.RGBPalette;
@@ -110,19 +111,19 @@ public class AnimationModelService {
         else if (fCls == List.class) {
           ParameterizedType listType = (ParameterizedType) field.getGenericType();
           Class<?> listSubClass = (Class<?>) listType.getActualTypeArguments()[0];
-          if (listSubClass.isAssignableFrom(XForm.class)) {
-            List<XForm> xForms;
+          if (listSubClass.isAssignableFrom(Layer.class)) {
+            List<Layer> layers;
             try {
-              xForms = (List<XForm>) field.get(pFlame);
+              layers = (List<Layer>) field.get(pFlame);
             }
             catch (Exception e) {
-              xForms = null;
+              layers = null;
               e.printStackTrace();
             }
-            if (xForms != null) {
+            if (layers != null) {
               int idx = 0;
-              for (XForm xForm : xForms) {
-                addXFormToModel(res, field.getName().indexOf("final") == 0, idx++, xForm, pVisitor, state);
+              for (Layer layer : layers) {
+                addLayerToModel(res, idx++, layer, pVisitor, state);
               }
             }
           }
@@ -177,6 +178,7 @@ public class AnimationModelService {
     }
   }
 
+  public final static String PROPNAME_LAYER = "layer";
   public final static String PROPNAME_XFORM = "transform";
   public final static String PROPNAME_FINALXFORM = "finalTransform";
   public final static String PROPNAME_GRADIENT = "gradient";
@@ -245,6 +247,48 @@ public class AnimationModelService {
     }
   }
 
+  private static void addLayerToModel(PropertyModel pNode, int pIndex, Layer pLayer, PropertyVisitor pVisitor, VisitState pState) {
+    Class<?> cls = pLayer.getClass();
+    PropertyModel layerNode = new PropertyModel(pNode, PROPNAME_LAYER + (pIndex + 1), cls);
+    pNode.getChields().add(layerNode);
+    for (Field field : cls.getDeclaredFields()) {
+      if (pState.isCancelSignalled()) {
+        return;
+      }
+      field.setAccessible(true);
+      if (field.getAnnotation(AnimAware.class) != null) {
+        Class<?> fCls = field.getType();
+        if (isPrimitiveProperty(fCls)) {
+          PlainProperty property = new PlainProperty(layerNode, field.getName(), cls);
+          layerNode.getProperties().add(property);
+          if (pVisitor != null) {
+            pState.updateState(pVisitor.accept(pLayer, field, property));
+          }
+        }
+        else if (fCls == List.class) {
+          ParameterizedType listType = (ParameterizedType) field.getGenericType();
+          Class<?> listSubClass = (Class<?>) listType.getActualTypeArguments()[0];
+          if (listSubClass.isAssignableFrom(XForm.class)) {
+            List<XForm> xForms;
+            try {
+              xForms = (List<XForm>) field.get(pLayer);
+            }
+            catch (Exception e) {
+              xForms = null;
+              e.printStackTrace();
+            }
+            if (xForms != null) {
+              int idx = 0;
+              for (XForm xForm : xForms) {
+                addXFormToModel(layerNode, field.getName().indexOf("final") == 0, idx++, xForm, pVisitor, pState);
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
   private static void addVariationToModel(PropertyModel pXFormNode, Variation pVariation, PropertyVisitor pVisitor, VisitState pState) {
     Class<?> cls = pVariation.getClass();
     PropertyModel variationNode = new PropertyModel(pXFormNode, pVariation.getFunc().getName(), cls);
@@ -298,15 +342,17 @@ public class AnimationModelService {
     return res;
   }
 
-  public static List<String> createXFormPropertyPath(int pXFormIndex, String pProperty) {
+  public static List<String> createXFormPropertyPath(int pLayerIdx, int pXFormIndex, String pProperty) {
     List<String> res = new ArrayList<String>();
+    res.add(PROPNAME_LAYER + (pLayerIdx + 1));
     res.add(PROPNAME_XFORM + (pXFormIndex + 1));
     res.add(pProperty);
     return res;
   }
 
-  public static List<String> createFinalXFormPropertyPath(int pXFormIndex, String pProperty) {
+  public static List<String> createFinalXFormPropertyPath(int pLayerIdx, int pXFormIndex, String pProperty) {
     List<String> res = new ArrayList<String>();
+    res.add(PROPNAME_LAYER + (pLayerIdx + 1));
     res.add(PROPNAME_FINALXFORM + (pXFormIndex + 1));
     res.add(pProperty);
     return res;

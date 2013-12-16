@@ -50,12 +50,13 @@ public class FlameBrowserController {
   private final JButton refreshBtn;
   private final JButton changeFolderBtn;
   private final JButton toEditorBtn;
+  private final JButton toBatchRendererBtn;
   private final JButton deleteBtn;
   private final JButton renameBtn;
   private String currRootDrawer;
 
   public FlameBrowserController(TinaController pTinaController, ErrorHandler pErrorHandler, Prefs pPrefs, JPanel pRootPanel, JTree pFlamesTree, JPanel pImagesPnl,
-      JButton pRefreshBtn, JButton pChangeFolderBtn, JButton pToEditorBtn, JButton pDeleteBtn, JButton pRenameBtn) {
+      JButton pRefreshBtn, JButton pChangeFolderBtn, JButton pToEditorBtn, JButton pToBatchRendererBtn, JButton pDeleteBtn, JButton pRenameBtn) {
     tinaController = pTinaController;
     errorHandler = pErrorHandler;
     prefs = pPrefs;
@@ -65,6 +66,7 @@ public class FlameBrowserController {
     refreshBtn = pRefreshBtn;
     changeFolderBtn = pChangeFolderBtn;
     toEditorBtn = pToEditorBtn;
+    toBatchRendererBtn = pToBatchRendererBtn;
     deleteBtn = pDeleteBtn;
     renameBtn = pRenameBtn;
     currRootDrawer = prefs.getTinaFlamePath();
@@ -75,6 +77,7 @@ public class FlameBrowserController {
     refreshBtn.setEnabled(currRootDrawer != null && currRootDrawer.length() > 0);
     FlameFlatNode flame = getSelectedFlame();
     toEditorBtn.setEnabled(flame != null);
+    toBatchRendererBtn.setEnabled(flame != null);
     deleteBtn.setEnabled(flame != null);
     renameBtn.setEnabled(flame != null);
   }
@@ -456,6 +459,19 @@ public class FlameBrowserController {
         tinaController.importFlame(flame, true);
       }
       tinaController.getRootTabbedPane().setSelectedIndex(0);
+    }
+  }
+
+  public void toBatchRendererBtn_clicked() {
+    try {
+      FlameFlatNode node = getSelectedFlame();
+      if (node != null) {
+        String filename = node.getFilename();
+        tinaController.addFlameToBatchRenderer(filename, true);
+      }
+    }
+    catch (Exception ex) {
+      errorHandler.handleError(ex);
     }
   }
 

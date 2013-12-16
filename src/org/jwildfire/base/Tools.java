@@ -422,7 +422,6 @@ public class Tools {
     finally {
       in.close();
     }
-
   }
 
   public static class XMLAttributes {

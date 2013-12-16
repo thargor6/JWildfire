@@ -372,6 +372,7 @@ public class TinaControllerParameter {
   public JButton flameBrowserRefreshBtn;
   public JButton flameBrowserChangeFolderBtn;
   public JButton flameBrowserToEditorBtn;
+  public JButton flameBrowserToBatchEditorBtn;
   public JButton flameBrowserDeleteBtn;
   public JButton flameBrowserRenameBtn;
   public JButton dancingFlamesReplaceFlameFromEditorBtn;
@@ -664,7 +665,7 @@ public class TinaControllerParameter {
       JToggleButton pMouseTransformEditGradientButton, JTree pGradientLibTree, JButton pGradientLibraryRescanBtn,
       JButton pGradientLibraryNewFolderBtn, JButton pGradientLibraryRenameFolderBtn, JList pGradientsList,
       JButton pBackgroundColorIndicatorBtn, JButton pRandomizeButton, JTree pFlameBrowserTree, JPanel pFlameBrowersImagesPnl,
-      JButton pFlameBrowserRefreshBtn, JButton pFlameBrowserChangeFolderBtn, JButton pFlameBrowserToEditorBtn,
+      JButton pFlameBrowserRefreshBtn, JButton pFlameBrowserChangeFolderBtn, JButton pFlameBrowserToEditorBtn, JButton pFlameBrowserToBatchRendererBtn,
       JButton pFlameBrowserDeleteBtn, JButton pFlameBrowserRenameBtn, JCheckBox pPaletteFadeColorsCBx, JButton pDancingFlamesReplaceFlameFromEditorBtn,
       JButton pDancingFlamesRenameFlameBtn, JButton pDancingFlamesRenameMotionBtn, JCheckBox pDancingFlamesMutedCBx,
       JWFNumberField pLayerWeightEd, JButton pLayerAddBtn, JButton pLayerDuplicateBtn, JButton pLayerDeleteBtn,
@@ -759,6 +760,7 @@ public class TinaControllerParameter {
     this.flameBrowserRefreshBtn = pFlameBrowserRefreshBtn;
     this.flameBrowserChangeFolderBtn = pFlameBrowserChangeFolderBtn;
     this.flameBrowserToEditorBtn = pFlameBrowserToEditorBtn;
+    this.flameBrowserToBatchEditorBtn = pFlameBrowserToBatchRendererBtn;
     this.flameBrowserDeleteBtn = pFlameBrowserDeleteBtn;
     this.flameBrowserRenameBtn = pFlameBrowserRenameBtn;
     this.paletteFadeColorsCBx = pPaletteFadeColorsCBx;

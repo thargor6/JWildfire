@@ -4389,7 +4389,7 @@ public class TinaInternalFrame extends JInternalFrame {
         getNewScriptBtn(), getNewScriptFromFlameBtn(), getDeleteScriptBtn(), getScriptRenameBtn(), getDuplicateScriptBtn(), getScriptRunBtn(),
         getMouseTransformEditGradientButton(), getGradientLibTree(), getGradientLibraryRescanBtn(), getGradientLibraryNewFolderBtn(), getGradientLibraryRenameFolderBtn(),
         getGradientsList(), getBackgroundColorIndicatorBtn(), getRandomizeBtn(), getFlameBrowserTree(), getFlameBrowserImagesPanel(),
-        getFlameBrowserRefreshBtn(), getFlameBrowserChangeFolderBtn(), getFlameBrowserToEditorBtn(), getFlameBrowserDeleteBtn(),
+        getFlameBrowserRefreshBtn(), getFlameBrowserChangeFolderBtn(), getFlameBrowserToEditorBtn(), getFlameBrowserToBatchRendererBtn(), getFlameBrowserDeleteBtn(),
         getFlameBrowserRenameBtn(), getTinaPaletteFadeColorsCBx(), getDancingFlamesReplaceFlameFromEditorBtn(), getDancingFlamesRenameFlameBtn(),
         getDancingFlamesRenameMotionBtn(), getDancingFlamesMutedCBx(),
         getLayerWeightEd(), getLayerAddBtn(), getLayerDuplicateBtn(), getLayerDeleteBtn(),
@@ -9294,6 +9294,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JToggleButton layerAppendBtn;
   private JButton layerShowAllBtn;
   private JButton layerHideOthersBtn;
+  private JButton flameBrowserToBatchRendererBtn;
 
   /**
    * This method initializes renderBatchJobsScrollPane	
@@ -14460,6 +14461,7 @@ public class TinaInternalFrame extends JInternalFrame {
       flameBrowserDetailPanel.setPreferredSize(new Dimension(120, 10));
       flameBrowserDetailPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
       flameBrowserDetailPanel.add(getFlameBrowserToEditorBtn());
+      flameBrowserDetailPanel.add(getFlameBrowserToBatchRendererBtn());
       flameBrowserDetailPanel.add(getFlameBrowserDeleteBtn());
       flameBrowserDetailPanel.add(getFlameBrowserRenameBtn());
     }
@@ -14524,7 +14526,7 @@ public class TinaInternalFrame extends JInternalFrame {
       });
       flameBrowserToEditorBtn.setToolTipText("Copy the current fractal into the Editor");
       flameBrowserToEditorBtn.setText("To Editor");
-      flameBrowserToEditorBtn.setPreferredSize(new Dimension(105, 24));
+      flameBrowserToEditorBtn.setPreferredSize(new Dimension(112, 24));
       flameBrowserToEditorBtn.setMinimumSize(new Dimension(100, 24));
       flameBrowserToEditorBtn.setMaximumSize(new Dimension(32000, 24));
       flameBrowserToEditorBtn.setFont(new Font("Dialog", Font.BOLD, 10));
@@ -14542,7 +14544,7 @@ public class TinaInternalFrame extends JInternalFrame {
       });
       flameBrowserDeleteBtn.setToolTipText("Delete the currently selected flame");
       flameBrowserDeleteBtn.setText("Delete");
-      flameBrowserDeleteBtn.setPreferredSize(new Dimension(105, 24));
+      flameBrowserDeleteBtn.setPreferredSize(new Dimension(112, 24));
       flameBrowserDeleteBtn.setMinimumSize(new Dimension(100, 24));
       flameBrowserDeleteBtn.setMaximumSize(new Dimension(32000, 24));
       flameBrowserDeleteBtn.setFont(new Font("Dialog", Font.BOLD, 10));
@@ -14560,7 +14562,7 @@ public class TinaInternalFrame extends JInternalFrame {
       });
       flameBrowserRenameBtn.setToolTipText("Rename the currently selected flame");
       flameBrowserRenameBtn.setText("Rename");
-      flameBrowserRenameBtn.setPreferredSize(new Dimension(105, 24));
+      flameBrowserRenameBtn.setPreferredSize(new Dimension(112, 24));
       flameBrowserRenameBtn.setMinimumSize(new Dimension(100, 24));
       flameBrowserRenameBtn.setMaximumSize(new Dimension(32000, 24));
       flameBrowserRenameBtn.setFont(new Font("Dialog", Font.BOLD, 10));
@@ -14865,6 +14867,24 @@ public class TinaInternalFrame extends JInternalFrame {
 
   public JButton getLayerHideOthersBtn() {
     return layerHideOthersBtn;
+  }
+
+  private JButton getFlameBrowserToBatchRendererBtn() {
+    if (flameBrowserToBatchRendererBtn == null) {
+      flameBrowserToBatchRendererBtn = new JButton();
+      flameBrowserToBatchRendererBtn.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getFlameBrowserController().toBatchRendererBtn_clicked();
+        }
+      });
+      flameBrowserToBatchRendererBtn.setToolTipText("Schedule the current fractal for rendering in the Batch Renderer");
+      flameBrowserToBatchRendererBtn.setText("To Batch Renderer");
+      flameBrowserToBatchRendererBtn.setPreferredSize(new Dimension(112, 24));
+      flameBrowserToBatchRendererBtn.setMinimumSize(new Dimension(100, 24));
+      flameBrowserToBatchRendererBtn.setMaximumSize(new Dimension(32000, 24));
+      flameBrowserToBatchRendererBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+    }
+    return flameBrowserToBatchRendererBtn;
   }
 } //  @jve:decl-index=0:visual-constraint="10,10"
 

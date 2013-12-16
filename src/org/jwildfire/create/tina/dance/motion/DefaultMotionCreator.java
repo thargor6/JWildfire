@@ -17,6 +17,7 @@
 package org.jwildfire.create.tina.dance.motion;
 
 import org.jwildfire.create.tina.base.Flame;
+import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.dance.DancingFlameProject;
 import org.jwildfire.create.tina.dance.model.AnimationModelService;
 import org.jwildfire.create.tina.dance.model.FlamePropertyPath;
@@ -97,44 +98,47 @@ public class DefaultMotionCreator implements MotionCreator {
 
     for (Flame flame : pProject.getFlames()) {
       PropertyModel model = AnimationModelService.createModel(flame);
-      if (flame.getXForms().size() > 0) {
-        addXFormLink(model, amp0, flame, 0, AnimationModelService.PROPNAME_ANGLE);
-        addXFormLink(model, amp1, flame, 0, AnimationModelService.PROPNAME_ORIGIN_X);
-        addXFormLink(model, amp2, flame, 0, AnimationModelService.PROPNAME_ORIGIN_Y);
-      }
+      for (int layerIdx = 0; layerIdx < flame.getLayers().size(); layerIdx++) {
+        Layer layer = flame.getLayers().get(layerIdx);
+        if (layer.getXForms().size() > 0) {
+          addXFormLink(model, amp0, flame, layerIdx, 0, AnimationModelService.PROPNAME_ANGLE);
+          addXFormLink(model, amp1, flame, layerIdx, 0, AnimationModelService.PROPNAME_ORIGIN_X);
+          addXFormLink(model, amp2, flame, layerIdx, 0, AnimationModelService.PROPNAME_ORIGIN_Y);
+        }
 
-      if (flame.getXForms().size() > 1) {
-        addXFormLink(model, amp3, flame, 1, AnimationModelService.PROPNAME_ANGLE);
-        addXFormLink(model, amp4, flame, 1, AnimationModelService.PROPNAME_ORIGIN_X);
-        addXFormLink(model, amp5, flame, 1, AnimationModelService.PROPNAME_ORIGIN_Y);
-      }
+        if (layer.getXForms().size() > 1) {
+          addXFormLink(model, amp3, flame, layerIdx, 1, AnimationModelService.PROPNAME_ANGLE);
+          addXFormLink(model, amp4, flame, layerIdx, 1, AnimationModelService.PROPNAME_ORIGIN_X);
+          addXFormLink(model, amp5, flame, layerIdx, 1, AnimationModelService.PROPNAME_ORIGIN_Y);
+        }
 
-      if (flame.getXForms().size() > 2) {
-        addXFormLink(model, amp7, flame, 2, AnimationModelService.PROPNAME_ANGLE);
-        addXFormLink(model, amp8, flame, 2, AnimationModelService.PROPNAME_ORIGIN_X);
-        addXFormLink(model, amp9, flame, 2, AnimationModelService.PROPNAME_ORIGIN_Y);
-      }
+        if (layer.getXForms().size() > 2) {
+          addXFormLink(model, amp7, flame, layerIdx, 2, AnimationModelService.PROPNAME_ANGLE);
+          addXFormLink(model, amp8, flame, layerIdx, 2, AnimationModelService.PROPNAME_ORIGIN_X);
+          addXFormLink(model, amp9, flame, layerIdx, 2, AnimationModelService.PROPNAME_ORIGIN_Y);
+        }
 
-      if (flame.getXForms().size() > 3) {
-        addXFormLink(model, amp10, flame, 3, AnimationModelService.PROPNAME_ANGLE);
-        addXFormLink(model, amp11, flame, 3, AnimationModelService.PROPNAME_ORIGIN_X);
-        addXFormLink(model, amp12, flame, 3, AnimationModelService.PROPNAME_ORIGIN_Y);
-      }
+        if (layer.getXForms().size() > 3) {
+          addXFormLink(model, amp10, flame, layerIdx, 3, AnimationModelService.PROPNAME_ANGLE);
+          addXFormLink(model, amp11, flame, layerIdx, 3, AnimationModelService.PROPNAME_ORIGIN_X);
+          addXFormLink(model, amp12, flame, layerIdx, 3, AnimationModelService.PROPNAME_ORIGIN_Y);
+        }
 
-      if (flame.getFinalXForms().size() > 0) {
-        addFinalXFormLink(model, amp14, flame, 0, AnimationModelService.PROPNAME_ZOOM);
+        if (layer.getFinalXForms().size() > 0) {
+          addFinalXFormLink(model, amp14, flame, layerIdx, 0, AnimationModelService.PROPNAME_ZOOM);
+        }
       }
     }
   }
 
-  protected void addXFormLink(PropertyModel pModel, Motion pMotion, Flame pFlame, int pXFormIndex, String pPropname) {
-    FlamePropertyPath path = new FlamePropertyPath(pFlame, AnimationModelService.createXFormPropertyPath(pXFormIndex, pPropname));
+  protected void addXFormLink(PropertyModel pModel, Motion pMotion, Flame pFlame, int pLayerIdx, int pXFormIndex, String pPropname) {
+    FlamePropertyPath path = new FlamePropertyPath(pFlame, AnimationModelService.createXFormPropertyPath(pLayerIdx, pXFormIndex, pPropname));
     MotionLink link = new MotionLink(path);
     pMotion.getMotionLinks().add(link);
   }
 
-  protected void addFinalXFormLink(PropertyModel pModel, Motion pMotion, Flame pFlame, int pXFormIndex, String pPropname) {
-    FlamePropertyPath path = new FlamePropertyPath(pFlame, AnimationModelService.createFinalXFormPropertyPath(pXFormIndex, pPropname));
+  protected void addFinalXFormLink(PropertyModel pModel, Motion pMotion, Flame pFlame, int pLayerIdx, int pXFormIndex, String pPropname) {
+    FlamePropertyPath path = new FlamePropertyPath(pFlame, AnimationModelService.createFinalXFormPropertyPath(pLayerIdx, pXFormIndex, pPropname));
     MotionLink link = new MotionLink(path);
     pMotion.getMotionLinks().add(link);
   }

@@ -247,7 +247,7 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
         parameterObject.scriptRenameBtn, parameterObject.scriptDuplicateBtn, parameterObject.scriptRunBtn);
 
     flameBrowserController = new FlameBrowserController(this, parameterObject.pErrorHandler, prefs, parameterObject.pCenterPanel, parameterObject.flameBrowserTree, parameterObject.flameBrowersImagesPnl,
-        parameterObject.flameBrowserRefreshBtn, parameterObject.flameBrowserChangeFolderBtn, parameterObject.flameBrowserToEditorBtn, parameterObject.flameBrowserDeleteBtn, parameterObject.flameBrowserRenameBtn);
+        parameterObject.flameBrowserRefreshBtn, parameterObject.flameBrowserChangeFolderBtn, parameterObject.flameBrowserToEditorBtn, parameterObject.flameBrowserToBatchEditorBtn, parameterObject.flameBrowserDeleteBtn, parameterObject.flameBrowserRenameBtn);
 
     gradientController = new GradientController(this, parameterObject.pErrorHandler, prefs, parameterObject.pCenterPanel, parameterObject.gradientLibTree, parameterObject.pGradientLibraryPanel,
         parameterObject.gradientLibraryRescanBtn, parameterObject.gradientLibraryNewFolderBtn, parameterObject.gradientLibraryRenameFolderBtn,
@@ -1040,10 +1040,9 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
               singleLayerFlame.getFirstLayer().setVisible(true);
               singleLayerFlame.getFirstLayer().setWeight(1.0);
               RenderInfo lInfo = new RenderInfo(width / 4 * renderScale, height / 4 * renderScale);
-
               double lWScl = (double) lInfo.getImageWidth() / (double) singleLayerFlame.getWidth();
               double lHScl = (double) lInfo.getImageHeight() / (double) singleLayerFlame.getHeight();
-              singleLayerFlame.setPixelsPerUnit((lWScl + lHScl) * 0.5 * singleLayerFlame.getPixelsPerUnit() * 0.25);
+              singleLayerFlame.setPixelsPerUnit((lWScl + lHScl) * 0.5 * singleLayerFlame.getPixelsPerUnit() * 0.5);
               singleLayerFlame.setWidth(lInfo.getImageWidth());
               singleLayerFlame.setHeight(lInfo.getImageHeight());
               FlameRenderer lRenderer = new FlameRenderer(singleLayerFlame, prefs, false, false);
@@ -4319,19 +4318,7 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
       chooser.setMultiSelectionEnabled(true);
       if (chooser.showOpenDialog(centerPanel) == JFileChooser.APPROVE_OPTION) {
         for (File file : chooser.getSelectedFiles()) {
-          String filename = file.getPath();
-          boolean hasFile = false;
-          for (Job job : batchRenderList) {
-            if (job.getFlameFilename().equals(filename)) {
-              hasFile = true;
-              break;
-            }
-          }
-          if (!hasFile) {
-            Job job = new Job();
-            job.setFlameFilename(filename);
-            batchRenderList.add(job);
-          }
+          addFlameToBatchRenderer(file.getPath(), false);
         }
       }
       if (jobCount != batchRenderList.size()) {
@@ -4342,6 +4329,24 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
       errorHandler.handleError(ex);
     }
 
+  }
+
+  public void addFlameToBatchRenderer(String filename, boolean refreshTable) {
+    boolean hasFile = false;
+    for (Job job : batchRenderList) {
+      if (job.getFlameFilename().equals(filename)) {
+        hasFile = true;
+        break;
+      }
+    }
+    if (!hasFile) {
+      Job job = new Job();
+      job.setFlameFilename(filename);
+      batchRenderList.add(job);
+      if (refreshTable) {
+        refreshRenderBatchJobsTable();
+      }
+    }
   }
 
   public void batchRenderFilesMoveUpButton_clicked() {
