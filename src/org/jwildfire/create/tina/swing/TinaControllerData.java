@@ -277,6 +277,7 @@ public class TinaControllerData {
   public JTable layersTable;
   public JToggleButton layerVisibleBtn;
   public JToggleButton layerAppendBtn;
+  public JToggleButton layerPreviewBtn;
   public JButton layerHideOthersBtn;
   public JButton layerShowAllBtn;
 }

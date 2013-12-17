@@ -421,6 +421,7 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
     data.layersTable = parameterObject.layersTable;
     data.layerVisibleBtn = parameterObject.layerVisibleBtn;
     data.layerAppendBtn = parameterObject.layerAppendBtn;
+    data.layerPreviewBtn = parameterObject.layerPreviewBtn;
     data.layerHideOthersBtn = parameterObject.layerHideOthersBtn;
     data.layerShowAllBtn = parameterObject.layerShowAllBtn;
 
@@ -572,6 +573,7 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
     data.layersTable.setEnabled(flame != null);
     data.layerVisibleBtn.setEnabled(layer != null);
     data.layerAppendBtn.setEnabled(flame != null);
+    data.layerPreviewBtn.setEnabled(flame != null);
     data.layerHideOthersBtn.setEnabled(layer != null);
     data.layerShowAllBtn.setEnabled(flame != null);
   }
@@ -1018,53 +1020,55 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
               txt.transformImage(img);
             }
 
-            Layer onlyVisibleLayer = null;
-            for (Layer layer : getCurrFlame().getLayers()) {
-              if (layer.isVisible()) {
-                if (onlyVisibleLayer == null) {
-                  onlyVisibleLayer = layer;
-                }
-                else {
-                  onlyVisibleLayer = null;
-                  break;
+            if (data.layerPreviewBtn.isSelected()) {
+              Layer onlyVisibleLayer = null;
+              for (Layer layer : getCurrFlame().getLayers()) {
+                if (layer.isVisible()) {
+                  if (onlyVisibleLayer == null) {
+                    onlyVisibleLayer = layer;
+                  }
+                  else {
+                    onlyVisibleLayer = null;
+                    break;
+                  }
                 }
               }
-            }
-            boolean drawSubLayer = flame.getLayers().size() > 1 && getCurrLayer() != null && getCurrLayer() != onlyVisibleLayer;
+              boolean drawSubLayer = flame.getLayers().size() > 1 && getCurrLayer() != null && getCurrLayer() != onlyVisibleLayer;
 
-            if (drawSubLayer) {
-              Flame singleLayerFlame = new Flame();
-              singleLayerFlame.assign(flame);
-              singleLayerFlame.getLayers().clear();
-              singleLayerFlame.getLayers().add(getCurrLayer().makeCopy());
-              singleLayerFlame.getFirstLayer().setVisible(true);
-              singleLayerFlame.getFirstLayer().setWeight(1.0);
-              RenderInfo lInfo = new RenderInfo(width / 4 * renderScale, height / 4 * renderScale);
-              double lWScl = (double) lInfo.getImageWidth() / (double) singleLayerFlame.getWidth();
-              double lHScl = (double) lInfo.getImageHeight() / (double) singleLayerFlame.getHeight();
-              singleLayerFlame.setPixelsPerUnit((lWScl + lHScl) * 0.5 * singleLayerFlame.getPixelsPerUnit() * 0.5);
-              singleLayerFlame.setWidth(lInfo.getImageWidth());
-              singleLayerFlame.setHeight(lInfo.getImageHeight());
-              FlameRenderer lRenderer = new FlameRenderer(singleLayerFlame, prefs, false, false);
-              RenderedFlame lRes = lRenderer.renderFlame(lInfo);
-              SimpleImage layerImg = lRes.getImage();
+              if (drawSubLayer) {
+                Flame singleLayerFlame = new Flame();
+                singleLayerFlame.assign(flame);
+                singleLayerFlame.getLayers().clear();
+                singleLayerFlame.getLayers().add(getCurrLayer().makeCopy());
+                singleLayerFlame.getFirstLayer().setVisible(true);
+                singleLayerFlame.getFirstLayer().setWeight(1.0);
+                RenderInfo lInfo = new RenderInfo(width / 4 * renderScale, height / 4 * renderScale);
+                double lWScl = (double) lInfo.getImageWidth() / (double) singleLayerFlame.getWidth();
+                double lHScl = (double) lInfo.getImageHeight() / (double) singleLayerFlame.getHeight();
+                singleLayerFlame.setPixelsPerUnit((lWScl + lHScl) * 0.5 * singleLayerFlame.getPixelsPerUnit() * 0.5);
+                singleLayerFlame.setWidth(lInfo.getImageWidth());
+                singleLayerFlame.setHeight(lInfo.getImageHeight());
+                FlameRenderer lRenderer = new FlameRenderer(singleLayerFlame, prefs, false, false);
+                RenderedFlame lRes = lRenderer.renderFlame(lInfo);
+                SimpleImage layerImg = lRes.getImage();
 
-              RectangleTransformer rT = new RectangleTransformer();
-              rT.setColor(new java.awt.Color(200, 200, 200));
-              rT.setLeft(0);
-              rT.setTop(0);
-              rT.setThickness(3);
-              rT.setWidth(lInfo.getImageWidth());
-              rT.setHeight(lInfo.getImageHeight());
-              rT.transformImage(layerImg);
+                RectangleTransformer rT = new RectangleTransformer();
+                rT.setColor(new java.awt.Color(200, 200, 200));
+                rT.setLeft(0);
+                rT.setTop(0);
+                rT.setThickness(3);
+                rT.setWidth(lInfo.getImageWidth());
+                rT.setHeight(lInfo.getImageHeight());
+                rT.transformImage(layerImg);
 
-              ComposeTransformer cT = new ComposeTransformer();
-              cT.setHAlign(ComposeTransformer.HAlignment.LEFT);
-              cT.setVAlign(ComposeTransformer.VAlignment.BOTTOM);
-              cT.setTop(10);
-              cT.setLeft(10);
-              cT.setForegroundImage(layerImg);
-              cT.transformImage(img);
+                ComposeTransformer cT = new ComposeTransformer();
+                cT.setHAlign(ComposeTransformer.HAlignment.LEFT);
+                cT.setVAlign(ComposeTransformer.VAlignment.BOTTOM);
+                cT.setTop(10);
+                cT.setLeft(10);
+                cT.setForegroundImage(layerImg);
+                cT.transformImage(img);
+              }
             }
             imgPanel.setImage(img);
             showStatusMessage(flame, "render time: " + Tools.doubleToString((t1 - t0) * 0.001) + "s");
@@ -5819,4 +5823,7 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
     refreshFlameImage(false);
   }
 
+  public void layerPreviewBtnClicked() {
+    refreshFlameImage(false);
+  }
 }

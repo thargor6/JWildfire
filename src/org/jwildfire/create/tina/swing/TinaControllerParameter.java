@@ -386,6 +386,7 @@ public class TinaControllerParameter {
   public JTable layersTable;
   public JToggleButton layerVisibleBtn;
   public JToggleButton layerAppendBtn;
+  public JToggleButton layerPreviewBtn;
   public JButton layerHideOthersBtn;
   public JButton layerShowAllBtn;
 
@@ -670,7 +671,7 @@ public class TinaControllerParameter {
       JButton pDancingFlamesRenameFlameBtn, JButton pDancingFlamesRenameMotionBtn, JCheckBox pDancingFlamesMutedCBx,
       JWFNumberField pLayerWeightEd, JButton pLayerAddBtn, JButton pLayerDuplicateBtn, JButton pLayerDeleteBtn,
       JTable pLayersTable, JToggleButton pLayerVisibleBtn, JToggleButton pLayerAppendBtn, JButton pLayerHideOthersBtn,
-      JButton pLayerShowAllBtn) {
+      JButton pLayerShowAllBtn, JToggleButton pLayerPreviewBtn) {
     this.pDancingFlamesLinkMotionBtn = pDancingFlamesLinkMotionBtn;
     this.pDancingFlamesUnlinkMotionBtn = pDancingFlamesUnlinkMotionBtn;
     this.pDancingFlamesCreateMotionsCmb = pDancingFlamesCreateMotionsCmb;
@@ -777,5 +778,6 @@ public class TinaControllerParameter {
     this.layerAppendBtn = pLayerAppendBtn;
     this.layerHideOthersBtn = pLayerHideOthersBtn;
     this.layerShowAllBtn = pLayerShowAllBtn;
+    this.layerPreviewBtn = pLayerPreviewBtn;
   }
 }
