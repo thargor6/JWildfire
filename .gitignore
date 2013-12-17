@@ -29,3 +29,7 @@ JWildfireC/*.txt
 JWildfireC/*.bat
 JWildfireC/*.flame
 JWildfireC/src/jwf_FastMath.cpp
+Delphi/JWildfire.cfg
+Delphi/JWildfire.dof
+Delphi/JWildfire.dsk
+Delphi/JWildfire.exe

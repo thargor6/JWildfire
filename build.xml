@@ -149,6 +149,7 @@
        <fileset file="README!!!.txt" />
        <fileset file="README_SUPPORT.txt" />
        <fileset file="README_APPLET.txt" />
+      <fileset file="Delphi/JWildfire.exe" />
      </copy>    
     <jar destfile="${dist.name}">
       <fileset dir="${dist.dir}/"/>
