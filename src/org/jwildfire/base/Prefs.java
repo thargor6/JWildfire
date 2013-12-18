@@ -45,6 +45,7 @@ public class Prefs extends ManagedObject {
 
   static final String KEY_SUNFLOW_PATH_SCENES = "sunflow.path.scenes";
 
+  static final String KEY_TINA_PRESERVE_FREE_CPUS = "tina.preserve_free_cpus";
   static final String KEY_TINA_PROFILE_RESOLUTION_COUNT = "tina.profile.resolution.count";
   static final String KEY_TINA_PROFILE_RESOLUTION_WIDTH = "tina.profile.resolution.width";
   static final String KEY_TINA_PROFILE_RESOLUTION_HEIGHT = "tina.profile.resolution.height";
@@ -100,6 +101,9 @@ public class Prefs extends ManagedObject {
   @Property(description = "SWF file drawer", category = PropertyCategory.GENERAL)
   private String swfPath = null;
   private String lastOutputSWFPath = null;
+
+  @Property(description = "Number of preserved free cpus/cores", category = PropertyCategory.TINA)
+  private int tinaPreserveFreeCPUs = 0;
 
   @Property(description = "Flame file drawer", category = PropertyCategory.TINA)
   private String tinaFlamePath = null;
@@ -447,6 +451,7 @@ public class Prefs extends ManagedObject {
     tinaRandomNumberGenerator = pSrc.tinaRandomNumberGenerator;
     tinaDefaultAntialiasingAmount = pSrc.tinaDefaultAntialiasingAmount;
     tinaDefaultAntialiasingRadius = pSrc.tinaDefaultAntialiasingRadius;
+    tinaPreserveFreeCPUs = pSrc.tinaPreserveFreeCPUs;
 
     tinaRenderMovieFrames = pSrc.tinaRenderMovieFrames;
     tinaRenderPreviewQuality = pSrc.tinaRenderPreviewQuality;
@@ -485,7 +490,8 @@ public class Prefs extends ManagedObject {
   }
 
   public int getTinaRenderThreads() {
-    return tinaRenderThreads;
+    int numThreads = tinaRenderThreads - tinaPreserveFreeCPUs;
+    return numThreads > 1 ? numThreads : 1;
   }
 
   public int getTinaRenderPreviewQuality() {
@@ -712,6 +718,14 @@ public class Prefs extends ManagedObject {
 
   public void setTinaSaveFlamesWhenImageIsSaved(boolean tinaSaveFlamesWhenImageIsSaved) {
     this.tinaSaveFlamesWhenImageIsSaved = tinaSaveFlamesWhenImageIsSaved;
+  }
+
+  public int getTinaPreserveFreeCPUs() {
+    return tinaPreserveFreeCPUs;
+  }
+
+  public void setTinaPreserveFreeCPUs(int tinaPreserveFreeCPUs) {
+    this.tinaPreserveFreeCPUs = tinaPreserveFreeCPUs;
   }
 
 }
