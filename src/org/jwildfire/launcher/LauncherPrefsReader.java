@@ -59,6 +59,9 @@ public class LauncherPrefsReader {
         inputStream.close();
       }
     }
+    else {
+      pPrefs.setJavaPath(null);
+      pPrefs.setMaxMem(1024);
+    }
   }
-
 }

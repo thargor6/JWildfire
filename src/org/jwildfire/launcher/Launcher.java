@@ -51,6 +51,7 @@ import javax.swing.JTextField;
 import javax.swing.UIManager;
 
 import org.jwildfire.base.Tools;
+import org.jwildfire.create.tina.swing.StandardDialogs;
 import org.jwildfire.image.SimpleImage;
 import org.jwildfire.swing.ImagePanel;
 
@@ -60,7 +61,7 @@ public class Launcher {
   private JPanel centerPanel;
   private JButton launchButton;
   private JPanel northPanel;
-  private final LauncherPrefs prefs;
+  private LauncherPrefs prefs;
 
   /**
    * Launch the application.
@@ -271,12 +272,13 @@ public class Launcher {
     lblMemoryToUse.setFont(new Font("Dialog", Font.BOLD, 10));
 
     JButton btnAddJavaRuntime = new JButton("Add Java runtime...");
+    btnAddJavaRuntime.setToolTipText("Manually add the path of a Java runtime which is installed on this system andwas not detected by the launcher");
     btnAddJavaRuntime.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
         manualAddRuntime();
       }
     });
-    btnAddJavaRuntime.setBounds(354, 34, 172, 28);
+    btnAddJavaRuntime.setBounds(276, 34, 172, 28);
     mainPanel.add(btnAddJavaRuntime);
     btnAddJavaRuntime.setPreferredSize(new Dimension(128, 28));
     btnAddJavaRuntime.setForeground(SystemColor.menu);
@@ -340,6 +342,35 @@ public class Launcher {
     imgDisplayPanel.setBounds(20, 86, 500, 270);
     mainPanel.add(imgDisplayPanel);
 
+    JButton btnReset = new JButton("Reset");
+    btnReset.addActionListener(new ActionListener() {
+      public void actionPerformed(ActionEvent e) {
+        resetToDefaultsBtn_clicked();
+      }
+    });
+    btnReset.setToolTipText("Rest all laucher settings to defaults (may be useful after system upgrade)");
+    btnReset.setPreferredSize(new Dimension(128, 28));
+    btnReset.setForeground(SystemColor.menu);
+    btnReset.setBorderPainted(false);
+    btnReset.setBackground(Color.BLACK);
+    btnReset.setBounds(460, 34, 66, 28);
+    mainPanel.add(btnReset);
+
+  }
+
+  protected void resetToDefaultsBtn_clicked() {
+    if (StandardDialogs.confirm(mainPanel, "Do you really want to reset the launcher-settings to default-values?")) {
+      try {
+        LauncherPrefsWriter.deletePrefs();
+        prefs = new LauncherPrefs();
+        prefs.loadFromFile();
+      }
+      catch (Exception ex) {
+        ex.printStackTrace();
+      }
+      scanForJDKs();
+      updateControls();
+    }
   }
 
   private SimpleImage getImage(String pName) throws Exception {

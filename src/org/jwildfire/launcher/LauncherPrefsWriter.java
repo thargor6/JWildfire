@@ -22,6 +22,15 @@ import org.jwildfire.base.Tools;
 
 public class LauncherPrefsWriter {
 
+  public static void deletePrefs() throws Exception {
+    File file = new File(System.getProperty("user.home") + File.separator + LauncherPrefs.PREFS_FILE);
+    if (file.exists()) {
+      if (!file.delete()) {
+        throw new Exception("Could not delete file <" + file.getAbsolutePath() + ">");
+      }
+    }
+  }
+
   public void writePrefs(LauncherPrefs pPrefs) throws Exception {
     StringBuilder sb = new StringBuilder();
     addValue(sb, LauncherPrefs.KEY_JAVA_PATH, pPrefs.getJavaPath());
