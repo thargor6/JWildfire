@@ -28,6 +28,8 @@ import org.jwildfire.create.tina.base.XYZPoint;
 public class PostDCZTranslFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
 
+  public static final String VARNAME = "post_dcztransl";
+
   private static final String PARAM_X0 = "x0";
   private static final String PARAM_X1 = "x1";
   private static final String PARAM_FACTOR = "factor";
@@ -85,7 +87,7 @@ public class PostDCZTranslFunc extends VariationFunc {
 
   @Override
   public String getName() {
-    return "post_dcztransl";
+    return VARNAME;
   }
 
   private double _x0;

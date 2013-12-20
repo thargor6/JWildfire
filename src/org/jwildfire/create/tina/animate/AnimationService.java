@@ -18,6 +18,7 @@ package org.jwildfire.create.tina.animate;
 
 import org.jwildfire.base.Prefs;
 import org.jwildfire.create.tina.base.Flame;
+import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.render.FlameRenderer;
 import org.jwildfire.create.tina.render.RenderInfo;
@@ -73,75 +74,91 @@ public class AnimationService {
     }
     switch (pXFormScript) {
       case ROTATE_FULL: {
-        int idx = 0;
-        for (XForm xForm : flame.getXForms()) {
-          idx++;
-          double angle = 360.0 * pXFormTime;
-          if (idx % 2 == 0) {
-            angle = -angle;
+        for (Layer layer : flame.getLayers()) {
+          int idx = 0;
+          for (XForm xForm : layer.getXForms()) {
+            idx++;
+            double angle = 360.0 * pXFormTime;
+            if (idx % 2 == 0) {
+              angle = -angle;
+            }
+            XFormTransformService.rotate(xForm, angle);
           }
-          XFormTransformService.rotate(xForm, angle);
         }
       }
         break;
       case ROTATE_SLIGHTLY: {
-        int idx = 0;
-        for (XForm xForm : flame.getXForms()) {
-          double maxAngle = (++idx * 3.0) + 90;
-          double angle = maxAngle * pXFormTime;
-          angle = maxAngle * (1.0 - Math.cos(pXFormTime * 2.0 * Math.PI)) * 0.5;
-          if (idx % 2 == 0) {
-            angle = -angle;
+        for (Layer layer : flame.getLayers()) {
+          int idx = 0;
+          for (XForm xForm : layer.getXForms()) {
+            double maxAngle = (++idx * 3.0) + 90;
+            double angle = maxAngle * pXFormTime;
+            angle = maxAngle * (1.0 - Math.cos(pXFormTime * 2.0 * Math.PI)) * 0.5;
+            if (idx % 2 == 0) {
+              angle = -angle;
+            }
+            XFormTransformService.rotate(xForm, angle);
           }
-          XFormTransformService.rotate(xForm, angle);
         }
       }
         break;
       case ROTATE_LAST_XFORM: {
-        if (flame.getXForms().size() > 0) {
-          XForm xForm = flame.getXForms().get(flame.getXForms().size() - 1);
-          double angle = 360.0 * pXFormTime;
-          XFormTransformService.rotate(xForm, angle);
+        for (Layer layer : flame.getLayers()) {
+          if (layer.getXForms().size() > 0) {
+            XForm xForm = layer.getXForms().get(layer.getXForms().size() - 1);
+            double angle = 360.0 * pXFormTime;
+            XFormTransformService.rotate(xForm, angle);
+          }
         }
       }
         break;
       case ROTATE_FIRST_XFORM: {
-        if (flame.getXForms().size() > 0) {
-          XForm xForm = flame.getXForms().get(0);
-          double angle = 360.0 * pXFormTime;
-          XFormTransformService.rotate(xForm, angle);
+        for (Layer layer : flame.getLayers()) {
+          if (layer.getXForms().size() > 0) {
+            XForm xForm = layer.getXForms().get(0);
+            double angle = 360.0 * pXFormTime;
+            XFormTransformService.rotate(xForm, angle);
+          }
         }
       }
         break;
       case ROTATE_2ND_XFORM: {
-        if (flame.getXForms().size() > 1) {
-          XForm xForm = flame.getXForms().get(1);
-          double angle = 360.0 * pXFormTime;
-          XFormTransformService.rotate(xForm, angle);
+        for (Layer layer : flame.getLayers()) {
+          if (layer.getXForms().size() > 1) {
+            XForm xForm = layer.getXForms().get(1);
+            double angle = 360.0 * pXFormTime;
+            XFormTransformService.rotate(xForm, angle);
+          }
         }
       }
         break;
       case ROTATE_3RD_XFORM: {
-        if (flame.getXForms().size() > 2) {
-          XForm xForm = flame.getXForms().get(2);
-          double angle = 360.0 * pXFormTime;
-          XFormTransformService.rotate(xForm, angle);
+        for (Layer layer : flame.getLayers()) {
+          if (layer.getXForms().size() > 2) {
+            XForm xForm = layer.getXForms().get(2);
+            double angle = 360.0 * pXFormTime;
+            XFormTransformService.rotate(xForm, angle);
+          }
         }
       }
         break;
       case ROTATE_4TH_XFORM: {
-        if (flame.getXForms().size() > 3) {
-          XForm xForm = flame.getXForms().get(3);
-          double angle = 360.0 * pXFormTime;
-          XFormTransformService.rotate(xForm, angle);
+        for (Layer layer : flame.getLayers()) {
+          if (layer.getXForms().size() > 3) {
+            XForm xForm = layer.getXForms().get(3);
+            double angle = 360.0 * pXFormTime;
+            XFormTransformService.rotate(xForm, angle);
+          }
         }
       }
         break;
       case ROTATE_5TH_XFORM: {
-        if (flame.getXForms().size() > 4) {
-          XForm xForm = flame.getXForms().get(4);
-          double angle = 360.0 * pXFormTime;
-          XFormTransformService.rotate(xForm, angle);
+        for (Layer layer : flame.getLayers()) {
+          if (layer.getXForms().size() > 4) {
+            XForm xForm = layer.getXForms().get(4);
+            double angle = 360.0 * pXFormTime;
+            XFormTransformService.rotate(xForm, angle);
+          }
         }
       }
         break;

@@ -19,16 +19,17 @@ package org.jwildfire.create.tina.randomflame;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
+import org.jwildfire.create.tina.variation.PostDCZTranslFunc;
 import org.jwildfire.create.tina.variation.VariationFunc;
 import org.jwildfire.create.tina.variation.VariationFuncList;
 
-public class Extrude3DRandomFlameGenerator extends RandomFlameGenerator {
+public abstract class AbstractExtrude3DRandomFlameGenerator extends RandomFlameGenerator {
 
   @Override
   protected Flame createFlame(RandomFlameGeneratorState pState) {
     RandomFlameGenerator randGen = createRandGen(pState);
     Flame flame = randGen.createFlame(pState);
-    flame = postProcessFlame(flame, randGen);
+    flame = preProcessFlame(flame);
 
     flame.setCamRoll(0);
     flame.setCamPitch(25.0 + Math.random() * 30.0);
@@ -45,7 +46,7 @@ public class Extrude3DRandomFlameGenerator extends RandomFlameGenerator {
     XForm xForm = new XForm();
     layer.getFinalXForms().add(xForm);
     xForm.addVariation(0.25 + Math.random() * 0.25, VariationFuncList.getVariationFuncInstance("linear3D", true));
-    VariationFunc post_dcztransl = VariationFuncList.getVariationFuncInstance("post_dcztransl", true);
+    VariationFunc post_dcztransl = VariationFuncList.getVariationFuncInstance(PostDCZTranslFunc.VARNAME, true);
     xForm.addVariation(0.75 + Math.random() * 0.25, post_dcztransl);
     double factor = 0.5 + Math.random() * 2.0;
     if (Math.random() < 0.42) {
@@ -53,12 +54,9 @@ public class Extrude3DRandomFlameGenerator extends RandomFlameGenerator {
     }
     post_dcztransl.setParameter("factor", factor);
 
-    return flame;
-  }
+    flame = postProcessFlame(flame);
 
-  @Override
-  public String getName() {
-    return "Extrude3D";
+    return flame;
   }
 
   @Override
@@ -68,36 +66,12 @@ public class Extrude3DRandomFlameGenerator extends RandomFlameGenerator {
 
   private static final String RANDGEN = "RANDGEN";
 
+  protected abstract RandomFlameGenerator selectRandGen();
+
   @Override
   public RandomFlameGeneratorState initState() {
     RandomFlameGeneratorState state = super.initState();
-    RandomFlameGenerator generator;
-    switch ((int) (Math.random() * 14.0)) {
-      case 12:
-      case 4:
-        generator = new SphericalRandomFlameGenerator();
-        break;
-      case 1:
-      case 3:
-        generator = new BrokatRandomFlameGenerator();
-        break;
-      case 10:
-      case 2:
-        generator = new ExperimentalGnarlRandomFlameGenerator();
-        break;
-      case 11:
-      case 7:
-        generator = new JulianDiscRandomFlameGenerator();
-        break;
-      case 13:
-      case 9:
-        generator = new DuckiesRandomFlameGenerator();
-        break;
-      case 0:
-      default:
-        generator = new GnarlRandomFlameGenerator();
-        break;
-    }
+    RandomFlameGenerator generator = selectRandGen();
     state.getParams().put(RANDGEN, generator);
     return state;
   }
@@ -107,21 +81,7 @@ public class Extrude3DRandomFlameGenerator extends RandomFlameGenerator {
     return generator;
   }
 
-  private Flame postProcessFlame(Flame pFlame, RandomFlameGenerator pGenerator) {
-    if (GnarlRandomFlameGenerator.class.equals(pGenerator.getClass())) {
-      Layer layer = pFlame.getFirstLayer();
-      while (layer.getXForms().size() > 2) {
-        layer.getXForms().remove(layer.getXForms().size() - 1);
-      }
-    }
-    else if (DuckiesRandomFlameGenerator.class.equals(pGenerator.getClass()) || BrokatRandomFlameGenerator.class.equals(pGenerator.getClass())) {
-      Layer layer = pFlame.getFirstLayer();
-      for (XForm xForm : layer.getXForms()) {
-        if (!xForm.hasVariation("flatten")) {
-          xForm.addVariation(1.0, VariationFuncList.getVariationFuncInstance("flatten", true));
-        }
-      }
-    }
-    return pFlame;
-  }
+  protected abstract Flame preProcessFlame(Flame pFlame);
+
+  protected abstract Flame postProcessFlame(Flame pFlame);
 }

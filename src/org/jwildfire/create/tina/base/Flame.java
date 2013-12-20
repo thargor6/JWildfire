@@ -598,14 +598,12 @@ public class Flame implements Assignable<Flame>, Serializable {
   }
 
   // only because of script-compatiblity
-  // TODO
   @Deprecated
   public List<XForm> getFinalXForms() {
     return layers.get(0).getFinalXForms();
   }
 
   // only because of script-compatiblity
-  // TODO
   @Deprecated
   public List<XForm> getXForms() {
     return layers.get(0).getXForms();
