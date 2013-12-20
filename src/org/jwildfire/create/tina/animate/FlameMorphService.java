@@ -24,6 +24,7 @@ import org.jwildfire.base.Prefs;
 import org.jwildfire.base.Tools;
 import org.jwildfire.base.mathlib.MathLib;
 import org.jwildfire.create.tina.base.Flame;
+import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.io.FlameReader;
 import org.jwildfire.create.tina.io.FlameWriter;
@@ -48,67 +49,93 @@ public class FlameMorphService {
       return pFlame2;
     }
     Flame res = pFlame1.makeCopy();
-    res.getXForms().clear();
-    res.getFinalXForms().clear();
-    // morph XForms
-    {
-      int size1 = pFlame1.getXForms().size();
-      int size2 = pFlame2.getXForms().size();
-      int maxSize = size1 > size2 ? size1 : size2;
-      for (int i = 0; i < maxSize; i++) {
-        XForm xForm1 = i < size1 ? pFlame1.getXForms().get(i) : null;
-        if (xForm1 == null) {
-          xForm1 = new XForm();
-          xForm1.addVariation(0.0, VariationFuncList.getVariationFuncInstance("linear3D", true));
-          xForm1.setWeight(0.0);
-        }
+    res.getLayers().clear();
+    int layerSize1 = pFlame1.getLayers().size();
+    int layerSize2 = pFlame2.getLayers().size();
+    int maxLayerSize = layerSize1 > layerSize2 ? layerSize1 : layerSize2;
+    for (int lIdx = 0; lIdx < maxLayerSize; lIdx++) {
+      Layer layer = new Layer();
+      res.getLayers().add(layer);
+      // Morph layers
+      if (lIdx < layerSize1 && lIdx < layerSize2) {
+        Layer layer1 = pFlame1.getLayers().get(lIdx);
+        Layer layer2 = pFlame2.getLayers().get(lIdx);
+        layer.assign(layer1);
+        layer.getXForms().clear();
+        layer.getFinalXForms().clear();
+        layer.setWeight(morphValue(layer1.getWeight(), layer2.getWeight(), fScl));
+        // morph XForms
+        {
+          int size1 = layer1.getXForms().size();
+          int size2 = layer2.getXForms().size();
+          int maxSize = size1 > size2 ? size1 : size2;
+          for (int i = 0; i < maxSize; i++) {
+            XForm xForm1 = i < size1 ? layer1.getXForms().get(i) : null;
+            if (xForm1 == null) {
+              xForm1 = new XForm();
+              xForm1.addVariation(0.0, VariationFuncList.getVariationFuncInstance("linear3D", true));
+              xForm1.setWeight(0.0);
+            }
 
-        XForm xForm2 = i < size2 ? pFlame2.getXForms().get(i) : null;
-        if (xForm2 == null) {
-          xForm2 = new XForm();
-          xForm2.addVariation(0.0, VariationFuncList.getVariationFuncInstance("linear3D", true));
-          xForm2.setWeight(0.0);
-        }
+            XForm xForm2 = i < size2 ? layer2.getXForms().get(i) : null;
+            if (xForm2 == null) {
+              xForm2 = new XForm();
+              xForm2.addVariation(0.0, VariationFuncList.getVariationFuncInstance("linear3D", true));
+              xForm2.setWeight(0.0);
+            }
 
-        XForm morphedXForm = morphXForms(pPrefs, xForm1, xForm2, fScl, pFrame, pFrames);
-        res.getXForms().add(morphedXForm);
+            XForm morphedXForm = morphXForms(pPrefs, xForm1, xForm2, fScl, pFrame, pFrames);
+            layer.getXForms().add(morphedXForm);
+          }
+        }
+        // morph final XForms
+        {
+          int size1 = layer1.getFinalXForms().size();
+          int size2 = layer2.getFinalXForms().size();
+          int maxSize = size1 > size2 ? size1 : size2;
+          for (int i = 0; i < maxSize; i++) {
+            XForm xForm1 = i < size1 ? layer1.getFinalXForms().get(i) : null;
+            if (xForm1 == null) {
+              xForm1 = new XForm();
+              xForm1.addVariation(0.0, VariationFuncList.getVariationFuncInstance("linear3D", true));
+              xForm1.setWeight(0.0);
+            }
+
+            XForm xForm2 = i < size2 ? layer2.getFinalXForms().get(i) : null;
+            if (xForm2 == null) {
+              xForm2 = new XForm();
+              xForm2.addVariation(0.0, VariationFuncList.getVariationFuncInstance("linear3D", true));
+              xForm2.setWeight(0.0);
+            }
+
+            XForm morphedXForm = morphXForms(pPrefs, xForm1, xForm2, fScl, pFrame, pFrames);
+            layer.getFinalXForms().add(morphedXForm);
+          }
+        }
+        // morph colors
+        RGBPalette palette1 = layer1.getPalette();
+        RGBPalette palette2 = layer2.getPalette();
+        for (int i = 0; i < RGBPalette.PALETTE_SIZE; i++) {
+          RGBColor color1 = palette1.getColor(i);
+          RGBColor color2 = palette2.getColor(i);
+          int red = Tools.roundColor(color1.getRed() + (color2.getRed() - color1.getRed()) * fScl);
+          int green = Tools.roundColor(color1.getGreen() + (color2.getGreen() - color1.getGreen()) * fScl);
+          int blue = Tools.roundColor(color1.getBlue() + (color2.getBlue() - color1.getBlue()) * fScl);
+          layer.getPalette().setColor(i, red, green, blue);
+        }
       }
-    }
-    // morph final XForms
-    {
-      int size1 = pFlame1.getFinalXForms().size();
-      int size2 = pFlame2.getFinalXForms().size();
-      int maxSize = size1 > size2 ? size1 : size2;
-      for (int i = 0; i < maxSize; i++) {
-        XForm xForm1 = i < size1 ? pFlame1.getFinalXForms().get(i) : null;
-        if (xForm1 == null) {
-          xForm1 = new XForm();
-          xForm1.addVariation(0.0, VariationFuncList.getVariationFuncInstance("linear3D", true));
-          xForm1.setWeight(0.0);
-        }
-
-        XForm xForm2 = i < size2 ? pFlame2.getFinalXForms().get(i) : null;
-        if (xForm2 == null) {
-          xForm2 = new XForm();
-          xForm2.addVariation(0.0, VariationFuncList.getVariationFuncInstance("linear3D", true));
-          xForm2.setWeight(0.0);
-        }
-
-        XForm morphedXForm = morphXForms(pPrefs, xForm1, xForm2, fScl, pFrame, pFrames);
-        res.getFinalXForms().add(morphedXForm);
+      // fade out layer1 to black
+      else if (lIdx < layerSize1) {
+        Layer layer1 = pFlame1.getLayers().get(lIdx);
+        layer.assign(layer1);
+        layer.setWeight(morphValue(layer1.getWeight(), 0.0, fScl));
       }
-    }
-
-    // morph colors
-    RGBPalette palette1 = pFlame1.getPalette();
-    RGBPalette palette2 = pFlame2.getPalette();
-    for (int i = 0; i < RGBPalette.PALETTE_SIZE; i++) {
-      RGBColor color1 = palette1.getColor(i);
-      RGBColor color2 = palette2.getColor(i);
-      int red = Tools.roundColor(color1.getRed() + (color2.getRed() - color1.getRed()) * fScl);
-      int green = Tools.roundColor(color1.getGreen() + (color2.getGreen() - color1.getGreen()) * fScl);
-      int blue = Tools.roundColor(color1.getBlue() + (color2.getBlue() - color1.getBlue()) * fScl);
-      res.getPalette().setColor(i, red, green, blue);
+      // fade in layer2 from black
+      else if (lIdx < layerSize2) {
+        Layer layer2 = pFlame2.getLayers().get(lIdx);
+        layer.assign(layer2);
+        layer.setWeight(morphValue(0.0, layer2.getWeight(), fScl));
+      }
     }
     // morph camera settings etc.
     res.setCamDOF(morphValue(pFlame1.getCamDOF(), pFlame2.getCamDOF(), fScl));
