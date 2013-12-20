@@ -212,10 +212,10 @@ public class WelcomeInternalFrame extends JInternalFrame {
 
     // Load logo
     try {
-      SimpleImage img = getImage("logo.png");
+      SimpleImage img = getImage(Tools.SPECIAL_VERSION ? "logo_special.png" : "logo.png");
       ImagePanel imgPanel = new ImagePanel(img, 0, 0, img.getImageWidth());
       imgPanel.setPreferredSize(new Dimension(img.getImageWidth(), img.getImageHeight()));
-      imgPanel.setLocation(79, 4);
+      imgPanel.setLocation(Tools.SPECIAL_VERSION ? 0 : 79, 4);
       northPanel.add(imgPanel);
     }
     catch (Exception ex) {

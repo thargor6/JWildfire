@@ -121,11 +121,11 @@ public class Launcher {
     frame.setTitle("Welcome to " + Tools.APP_TITLE + " " + Tools.APP_VERSION);
     // Load logo
     try {
-      SimpleImage img = getImage("logo.png");
+      SimpleImage img = getImage(Tools.SPECIAL_VERSION ? "logo_special.png" : "logo.png");
       northPanel.setLayout(null);
       ImagePanel imgPanel = new ImagePanel(img, 0, 0, img.getImageWidth());
       imgPanel.setPreferredSize(new Dimension(img.getImageWidth(), img.getImageHeight()));
-      imgPanel.setLocation(107, 4);
+      imgPanel.setLocation(Tools.SPECIAL_VERSION ? 7 : 107, 4);
       getNorthPanel().add(imgPanel);
     }
     catch (Exception ex) {
@@ -133,13 +133,25 @@ public class Launcher {
     }
 
     try {
-      final int IMG_COUNT = 66;
-      int imageIdx = (int) (Math.random() * IMG_COUNT) + 1;
-      String id = String.valueOf(imageIdx);
-      while (id.length() < 3) {
-        id = "0" + id;
+      String imageFilename;
+      if (Tools.SPECIAL_VERSION) {
+        final int IMG_COUNT = 3;
+        int imageIdx = (int) (Math.random() * IMG_COUNT) + 1;
+        String id = String.valueOf(imageIdx);
+        while (id.length() < 3) {
+          id = "0" + id;
+        }
+        imageFilename = "special" + id + ".jpg";
       }
-      String imageFilename = "image" + id + ".jpg";
+      else {
+        final int IMG_COUNT = 66;
+        int imageIdx = (int) (Math.random() * IMG_COUNT) + 1;
+        String id = String.valueOf(imageIdx);
+        while (id.length() < 3) {
+          id = "0" + id;
+        }
+        imageFilename = "image" + id + ".jpg";
+      }
       SimpleImage img = getImage(imageFilename);
       imgDisplayPanel.setLayout(null);
       ImagePanel imgPanel = new ImagePanel(img, 0, 0, img.getImageWidth());
