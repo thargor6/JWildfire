@@ -613,7 +613,6 @@ public class Flame implements Assignable<Flame>, Serializable {
 
   // only because of script-compatiblity
   @Deprecated
-  // TODO
   public RGBPalette getPalette() {
     return layers.get(0).getPalette();
   }
@@ -646,11 +645,3 @@ public class Flame implements Assignable<Flame>, Serializable {
   }
 
 }
-
-// TODO
-// copy gradient when "Add" new layer
-// (De)register Palette from Editor
-// respect layers button when importing into editor
-// MorphService
-// save/resume state
-// select proper (1st( layer)
