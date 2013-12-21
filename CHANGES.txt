@@ -1,3 +1,16 @@
+V1.10 (21.12.2013):
+ - support for layerz in all modules. Layerz allow you to combine different flames into one. They are called layerz because flames in JWildfire are not flat and layerz also respect this. 
+ - new "Gnarl3D" and "Brokat3D"-random-flame-generators
+ - simple native laucher (JWildfire.exe) for the launcher for Windows 
+ - improved the speed of the editor for various operations
+ - new "flatten"-variation known from recent Apophysis-releases
+ - new Preferences options "Preserve Free CPU's" where you can specify how many cores/cpus should be left free during renderin. May help to get a smoother behaviour at some systems (or enable to do other things while rendering)
+ - use slightly "brighter" colors in randomly generated flames
+ - improved the "subflame"-random-generator to produce more interesting results
+ - optimized some parameters of random-flame-generation to work much faster now
+ - support for "Blacklisting" of certain variations inside the MutaGen-module (those which may cause "endless" calculations like "truchet")
+ - new option in the launcher to reset launcher-options (and to rescan available JDK's)
+  
 V1.04 (25.11.2013):
  - improved quality of the random flame generators (to generate more complex and visually more appealing random flames)
  - new external applet for easily playing around with random flames, see README_APPLET.txt for details
