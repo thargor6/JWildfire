@@ -8,22 +8,25 @@ uses
 procedure LaunchApp;
 const
   JarName = 'j-wildfire-launcher.jar';
-  JavaCmd = 'java';
 var
   WorkingDir: String;
   JarPath: String;
   JavaOptions: String;
+  Cmd: String;
 begin
   WorkingDir := ExtractFilePath(Application.ExeName);
-  JarPath := WorkingDir+'\'+JarName;
+  JarPath := WorkingDir+JarName;
   if not FileExists(JarPath) then
     raise Exception.Create('JWildfire launcher archive not found (Expected path: <'+JarPath+'>)');
-  JavaOptions := '-jar '+JarPath;
+  if Pos(' ', JarPath) > 1 then
+    Cmd := 'java -jar "'+JarPath+'"'
+  else
+    Cmd := 'java -jar '+JarPath;
   if ShellExecute(Application.Handle,
                  'open',
-                 PChar(JavaCmd),
-                 PChar(JavaOptions), PChar(WorkingDir), SW_SHOWMINNOACTIVE) <= 32 then
-    raise Exception.Create('Error starting the JWildfire launcher (executed command: <'+JavaCmd+' '+JavaOptions+'>)');
+                 PChar('cmd'),
+                 PChar('/C '+Cmd), PChar(WorkingDir), 0) <= 32 then
+    raise Exception.Create('Error starting the JWildfire launcher (executed command: <'+Cmd+'>)');
 end;
 
 
