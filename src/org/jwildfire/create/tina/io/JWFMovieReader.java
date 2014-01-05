@@ -115,7 +115,7 @@ public class JWFMovieReader {
           psFlame = hs.indexOf("<jwf-flame ");
           if (psFlame > 0) {
             int peFlame = hs.indexOf("</jwf-flame>", psFlame + 1);
-            String flameXML = hs.substring(psFlame, peFlame + 8);
+            String flameXML = hs.substring(psFlame, peFlame + 12);
             Flame flame = new FlameReader(prefs).readFlamesfromXML(flameXML).get(0);
             part.setFlame(flame);
             //System.out.println(flameXML);
