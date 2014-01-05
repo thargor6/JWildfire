@@ -350,6 +350,7 @@ public class VariationFuncList {
     registerVariationFunc(ShredlinFunc.class);
     registerVariationFunc(PrimitivesWFFunc.class);
     registerVariationFunc(FlattenFunc.class);
+    registerVariationFunc(BlurZoomFunc.class);
   }
 
   private static void registerVariationFunc(
