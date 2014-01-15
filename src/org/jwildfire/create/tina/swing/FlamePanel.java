@@ -743,6 +743,7 @@ public class FlamePanel extends ImagePanel {
       selectedPoint = selectNearestPoint(triangle, x, y);
       redrawAfterMouseClick = true;
       reRender = true;
+      return selectedXForm;
     }
     else if (mouseDragOperation == MouseDragOperation.GRADIENT && flameHolder.getFlame() != null && layerHolder != null && layerHolder.getLayer() != null) {
       if (undoManagerHolder != null) {
