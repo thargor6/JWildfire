@@ -398,7 +398,6 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
     data.xFormAntialiasAmountSlider = parameterObject.pXFormAntialiasAmountSlider;
     data.xFormAntialiasRadiusREd = parameterObject.pXFormAntialiasRadiusREd;
     data.xFormAntialiasRadiusSlider = parameterObject.pXFormAntialiasRadiusSlider;
-    data.xFormAntialiasCopyToAllBtn = parameterObject.pXFormAntialiasCopyToAllBtn;
 
     data.relWeightsTable = parameterObject.pRelWeightsTable;
     data.relWeightsZeroButton = parameterObject.pRelWeightsZeroButton;
@@ -1174,6 +1173,11 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
       data.gammaThresholdSlider.setValue(Tools.FTOI(getCurrFlame().getGammaThreshold() * SLIDER_SCALE_GAMMA_THRESHOLD));
 
       data.bgTransparencyCBx.setSelected(getCurrFlame().isBGTransparency());
+
+      data.xFormAntialiasAmountREd.setText(Tools.doubleToString(getCurrFlame().getAntialiasAmount()));
+      data.xFormAntialiasAmountSlider.setValue(Tools.FTOI(getCurrFlame().getAntialiasAmount() * SLIDER_SCALE_COLOR));
+      data.xFormAntialiasRadiusREd.setText(Tools.doubleToString(getCurrFlame().getAntialiasRadius()));
+      data.xFormAntialiasRadiusSlider.setValue(Tools.FTOI(getCurrFlame().getAntialiasRadius() * SLIDER_SCALE_COLOR));
 
       refreshBGColorIndicator();
 
@@ -2633,12 +2637,6 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
     data.xFormOpacitySlider.setEnabled(data.xFormOpacityREd.isEnabled());
     data.xFormDrawModeCmb.setEnabled(enabled);
 
-    data.xFormAntialiasAmountREd.setEnabled(enabled);
-    data.xFormAntialiasAmountSlider.setEnabled(enabled);
-    data.xFormAntialiasRadiusREd.setEnabled(enabled);
-    data.xFormAntialiasRadiusSlider.setEnabled(enabled);
-    data.xFormAntialiasCopyToAllBtn.setEnabled(enabled);
-
     data.relWeightsTable.setEnabled(enabled);
     enableRelWeightsControls();
   }
@@ -2708,10 +2706,6 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
         data.xFormOpacitySlider.setValue(Tools.FTOI(pXForm.getOpacity() * SLIDER_SCALE_COLOR));
         data.xFormDrawModeCmb.setSelectedItem(pXForm.getDrawMode());
 
-        data.xFormAntialiasAmountREd.setText(Tools.doubleToString(pXForm.getAntialiasAmount()));
-        data.xFormAntialiasAmountSlider.setValue(Tools.FTOI(pXForm.getAntialiasAmount() * SLIDER_SCALE_COLOR));
-        data.xFormAntialiasRadiusREd.setText(Tools.doubleToString(pXForm.getAntialiasRadius()));
-        data.xFormAntialiasRadiusSlider.setValue(Tools.FTOI(pXForm.getAntialiasRadius() * SLIDER_SCALE_COLOR));
         data.transformationWeightREd.setText(Tools.doubleToString(pXForm.getWeight()));
       }
       else {
@@ -2727,10 +2721,6 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
         data.xFormSymmetrySlider.setValue(0);
         data.xFormOpacityREd.setText(null);
         data.xFormOpacitySlider.setValue(0);
-        data.xFormAntialiasAmountREd.setText(null);
-        data.xFormAntialiasAmountSlider.setValue(0);
-        data.xFormAntialiasRadiusREd.setText(null);
-        data.xFormAntialiasRadiusSlider.setValue(0);
         data.transformationWeightREd.setText(null);
         data.xFormDrawModeCmb.setSelectedIndex(-1);
       }
@@ -2838,8 +2828,6 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
     XForm xForm = new XForm();
     xForm.addVariation(1.0, new Linear3DFunc());
     xForm.setWeight(0.5);
-    xForm.setAntialiasAmount(prefs.getTinaDefaultAntialiasingAmount());
-    xForm.setAntialiasRadius(prefs.getTinaDefaultAntialiasingRadius());
     saveUndoPoint();
     getCurrLayer().getXForms().add(xForm);
     gridRefreshing = true;
@@ -2893,8 +2881,6 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
   public void addFinalXForm() {
     XForm xForm = new XForm();
     xForm.addVariation(1.0, new Linear3DFunc());
-    xForm.setAntialiasAmount(prefs.getTinaDefaultAntialiasingAmount());
-    xForm.setAntialiasRadius(prefs.getTinaDefaultAntialiasingRadius());
     saveUndoPoint();
     getCurrLayer().getFinalXForms().add(xForm);
     gridRefreshing = true;
@@ -3050,12 +3036,6 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
       renderFlame.setSampleDensity(prefs.getTinaRenderPreviewQuality());
       renderFlame.setDeFilterEnabled(false);
       renderFlame.setSpatialFilterRadius(0.0);
-      //            for (XForm xForm : renderFlame.getXForms()) {
-      //              xForm.setAntialiasAmount(0.0);
-      //            }
-      //            for (XForm xForm : renderFlame.getFinalXForms()) {
-      //              xForm.setAntialiasAmount(0.0);
-      //            }
       FlameRenderer renderer = new FlameRenderer(renderFlame, prefs, false, false);
       renderFlame.setSampleDensity(pQuality);
       RenderedFlame res = renderer.renderFlame(info);
@@ -3518,19 +3498,19 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
   }
 
   public void xFormAntialiasAmountSlider_changed() {
-    xFormSliderChanged(data.xFormAntialiasAmountSlider, data.xFormAntialiasAmountREd, "antialiasAmount", SLIDER_SCALE_COLOR);
+    flameSliderChanged(data.xFormAntialiasAmountSlider, data.xFormAntialiasAmountREd, "antialiasAmount", SLIDER_SCALE_COLOR);
   }
 
   public void xFormAntialiasRadiusSlider_changed() {
-    xFormSliderChanged(data.xFormAntialiasRadiusSlider, data.xFormAntialiasRadiusREd, "antialiasRadius", SLIDER_SCALE_COLOR);
+    flameSliderChanged(data.xFormAntialiasRadiusSlider, data.xFormAntialiasRadiusREd, "antialiasRadius", SLIDER_SCALE_COLOR);
   }
 
   public void xFormAntialiasAmountREd_changed() {
-    xFormTextFieldChanged(data.xFormAntialiasAmountSlider, data.xFormAntialiasAmountREd, "antialiasAmount", SLIDER_SCALE_COLOR);
+    flameTextFieldChanged(data.xFormAntialiasAmountSlider, data.xFormAntialiasAmountREd, "antialiasAmount", SLIDER_SCALE_COLOR);
   }
 
   public void xFormAntialiasRadiusREd_changed() {
-    xFormTextFieldChanged(data.xFormAntialiasRadiusSlider, data.xFormAntialiasRadiusREd, "antialiasRadius", SLIDER_SCALE_COLOR);
+    flameTextFieldChanged(data.xFormAntialiasRadiusSlider, data.xFormAntialiasRadiusREd, "antialiasRadius", SLIDER_SCALE_COLOR);
   }
 
   private void setRelWeight(double pValue) {
@@ -3589,6 +3569,9 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
     flame.setHeight(600);
     flame.setPixelsPerUnit(50);
     flame.setBGTransparency(prefs.isTinaDefaultBGTransparency());
+    flame.setAntialiasAmount(prefs.getTinaDefaultAntialiasingAmount());
+    flame.setAntialiasRadius(prefs.getTinaDefaultAntialiasingRadius());
+
     if (prefs.getTinaDefaultDEMaxRadius() < EPSILON) {
       flame.setDeFilterEnabled(false);
     }
@@ -5012,27 +4995,6 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
       catch (Throwable ex) {
         errorHandler.handleError(ex);
       }
-    }
-  }
-
-  public void xFormAntialiasCopyToAllBtn_clicked() {
-    Layer layer = getCurrLayer();
-    XForm xForm = getCurrXForm();
-    if (xForm != null) {
-      saveUndoPoint();
-      for (XForm xf : layer.getXForms()) {
-        if (xf != xForm) {
-          xf.setAntialiasAmount(xForm.getAntialiasAmount());
-          xf.setAntialiasRadius(xForm.getAntialiasRadius());
-        }
-      }
-      for (XForm xf : layer.getFinalXForms()) {
-        if (xf != xForm) {
-          xf.setAntialiasAmount(xForm.getAntialiasAmount());
-          xf.setAntialiasRadius(xForm.getAntialiasRadius());
-        }
-      }
-      transformationTableClicked();
     }
   }
 

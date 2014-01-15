@@ -49,8 +49,8 @@ public class Flam3Reader extends AbstractFlameReader {
         parseFlameAttributes(flame, hs);
       }
       Layer layer = flame.getFirstLayer();
-      readXForms(flameXML, layer);
-      readFinalXForms(flameXML, layer);
+      readXForms(flameXML, flame, layer);
+      readFinalXForms(flameXML, flame, layer);
       readColors(flameXML, layer);
     }
     return res;

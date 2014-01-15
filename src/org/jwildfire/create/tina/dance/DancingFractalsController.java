@@ -1034,8 +1034,6 @@ public class DancingFractalsController {
       if (layer.getFinalXForms().size() == 0) {
         XForm xForm = new XForm();
         xForm.addVariation(1.0, new Linear3DFunc());
-        xForm.setAntialiasAmount(prefs.getTinaDefaultAntialiasingAmount());
-        xForm.setAntialiasRadius(prefs.getTinaDefaultAntialiasingRadius());
         layer.getFinalXForms().add(xForm);
       }
     }

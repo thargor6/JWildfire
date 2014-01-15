@@ -72,8 +72,6 @@ public final class XForm implements Assignable<XForm>, Serializable {
   private double opacity = 0.0;
   private final XForm[] nextAppliedXFormTable = new XForm[Constants.NEXT_APPLIED_XFORM_TABLE_SIZE];
   private DrawMode drawMode = DrawMode.NORMAL;
-  private double antialiasAmount = 0.0;
-  private double antialiasRadius = 0.5;
   private String name = "";
 
   public XForm() {
@@ -418,8 +416,6 @@ public final class XForm implements Assignable<XForm>, Serializable {
     System.arraycopy(pXForm.modifiedWeights, 0, modifiedWeights, 0, pXForm.modifiedWeights.length);
     opacity = pXForm.opacity;
     drawMode = pXForm.drawMode;
-    antialiasAmount = pXForm.antialiasAmount;
-    antialiasRadius = pXForm.antialiasRadius;
     name = pXForm.name;
   }
 
@@ -497,8 +493,7 @@ public final class XForm implements Assignable<XForm>, Serializable {
         ((drawMode != null && pSrc.drawMode == null) || (drawMode == null && pSrc.drawMode != null) ||
         (drawMode != null && pSrc.drawMode != null && !drawMode.equals(pSrc.drawMode))) ||
         !name.equals(pSrc.name) ||
-        (modifiedWeights.length != pSrc.modifiedWeights.length) || (variations.size() != pSrc.variations.size()) ||
-        (fabs(antialiasAmount - pSrc.antialiasAmount) > EPSILON) || (fabs(antialiasRadius - pSrc.antialiasRadius) > EPSILON)) {
+        (modifiedWeights.length != pSrc.modifiedWeights.length) || (variations.size() != pSrc.variations.size())) {
       return false;
     }
     for (int i = 0; i < modifiedWeights.length; i++) {
@@ -514,20 +509,16 @@ public final class XForm implements Assignable<XForm>, Serializable {
     return true;
   }
 
-  public double getAntialiasAmount() {
-    return antialiasAmount;
-  }
-
+  // only because of script-compatiblity
+  @Deprecated
   public void setAntialiasAmount(double antialiasAmount) {
-    this.antialiasAmount = antialiasAmount;
+    // this.antialiasAmount = antialiasAmount;
   }
 
-  public double getAntialiasRadius() {
-    return antialiasRadius;
-  }
-
+  // only because of script-compatiblity
+  @Deprecated
   public void setAntialiasRadius(double antialiasRadius) {
-    this.antialiasRadius = antialiasRadius;
+    // this.antialiasRadius = antialiasRadius;
   }
 
   public String getName() {

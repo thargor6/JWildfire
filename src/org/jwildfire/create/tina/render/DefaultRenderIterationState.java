@@ -90,9 +90,8 @@ public class DefaultRenderIterationState extends RenderIterationState {
       }
       if (!renderer.project(q, prj))
         return;
-      XForm finalXForm = finalXForms.get(finalXForms.size() - 1);
-      if ((finalXForm.getAntialiasAmount() > EPSILON) && (finalXForm.getAntialiasRadius() > EPSILON) && (randGen.random() > 1.0 - finalXForm.getAntialiasAmount())) {
-        double dr = exp(finalXForm.getAntialiasRadius() * sqrt(-log(randGen.random()))) - 1.0;
+      if ((flame.getAntialiasAmount() > EPSILON) && (flame.getAntialiasRadius() > EPSILON) && (randGen.random() > 1.0 - flame.getAntialiasAmount())) {
+        double dr = exp(flame.getAntialiasRadius() * sqrt(-log(randGen.random()))) - 1.0;
         double da = randGen.random() * 2.0 * M_PI;
         xIdx = (int) (renderer.bws * prj.x + dr * cos(da) + 0.5);
         yIdx = (int) (renderer.bhs * prj.y + dr * sin(da) + 0.5);
@@ -106,8 +105,8 @@ public class DefaultRenderIterationState extends RenderIterationState {
       q.assign(p);
       if (!renderer.project(q, prj))
         return;
-      if ((xf.getAntialiasAmount() > EPSILON) && (xf.getAntialiasRadius() > EPSILON) && (randGen.random() > 1.0 - xf.getAntialiasAmount())) {
-        double dr = exp(xf.getAntialiasRadius() * sqrt(-log(randGen.random()))) - 1.0;
+      if ((flame.getAntialiasAmount() > EPSILON) && (flame.getAntialiasRadius() > EPSILON) && (randGen.random() > 1.0 - flame.getAntialiasAmount())) {
+        double dr = exp(flame.getAntialiasRadius() * sqrt(-log(randGen.random()))) - 1.0;
         double da = randGen.random() * 2.0 * M_PI;
         xIdx = (int) (renderer.bws * prj.x + dr * cos(da) + 0.5);
         yIdx = (int) (renderer.bhs * prj.y + dr * sin(da) + 0.5);

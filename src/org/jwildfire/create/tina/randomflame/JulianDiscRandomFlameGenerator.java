@@ -81,19 +81,25 @@ public class JulianDiscRandomFlameGenerator extends RandomFlameGenerator {
       }
       xForm.setColor(0.5 + Math.random() * 0.5);
       xForm.setColorSymmetry(0.6 + Math.random() * 0.33);
-      if (Math.random() < 0.5) {
+      if (Math.random() < 0.33) {
         XFormTransformService.globalTranslate(xForm, -0.0125 + 0.025 * Math.random(), -0.0125 + 0.025 * Math.random(), false);
+      }
+      else if (Math.random() < 0.75) {
+        XFormTransformService.globalTranslate(xForm, -0.125 + 0.25 * Math.random(), -0.125 + 0.25 * Math.random(), false);
       }
       if (Math.random() < 0.15) {
         XFormTransformService.rotate(xForm, 6.0 - Math.random() * 12.0, false);
       }
-      else if (Math.random() < 0.5) {
+      else if (Math.random() < 0.3) {
         XFormTransformService.rotate(xForm, -45.0, false);
+      }
+      else if (Math.random() < 0.75) {
+        XFormTransformService.rotate(xForm, 90.0 - Math.random() * 180.0, false);
       }
       xForm.setColorSymmetry(Math.random());
     }
     // final
-    if (Math.random() < 0.33) {
+    if (Math.random() < 0.15) {
       XForm xForm = new XForm();
       layer.getFinalXForms().add(xForm);
       if (Math.random() < 0.5) {

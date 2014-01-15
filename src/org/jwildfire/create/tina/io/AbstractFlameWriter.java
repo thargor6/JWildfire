@@ -31,10 +31,6 @@ public class AbstractFlameWriter {
       attrList.add(pXB.createAttr("opacity", 0.0));
     }
     attrList.add(pXB.createAttr("symmetry", pXForm.getColorSymmetry()));
-    if (pXForm.getAntialiasAmount() > EPSILON) {
-      attrList.add(pXB.createAttr("antialias_amount", pXForm.getAntialiasAmount()));
-      attrList.add(pXB.createAttr("antialias_radius", pXForm.getAntialiasRadius()));
-    }
 
     UniqueNamesMaker namesMaker = new UniqueNamesMaker();
     for (int vIdx = 0; vIdx < pXForm.getVariationCount(); vIdx++) {
@@ -193,6 +189,11 @@ public class AbstractFlameWriter {
       attrList.add(xb.createAttr(AbstractFlameReader.ATTR_SHADING_DISTANCE_COLOR_COORDINATE, shadingInfo.getDistanceColorCoordinate()));
       attrList.add(xb.createAttr(AbstractFlameReader.ATTR_SHADING_DISTANCE_COLOR_SHIFT, shadingInfo.getDistanceColorShift()));
     }
+    if (pFlame.getAntialiasAmount() > EPSILON) {
+      attrList.add(xb.createAttr("antialias_amount", pFlame.getAntialiasAmount()));
+      attrList.add(xb.createAttr("antialias_radius", pFlame.getAntialiasRadius()));
+    }
+
     return attrList;
   }
 

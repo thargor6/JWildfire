@@ -294,6 +294,13 @@ public class AbstractFlameReader {
       pFlame.setPreserveZ(hs.length() > 0 && Integer.parseInt(hs) == 1);
     }
 
+    if ((hs = atts.get(ATTR_ANTIALIAS_AMOUNT)) != null) {
+      pFlame.setAntialiasAmount(Double.parseDouble(hs));
+    }
+    if ((hs = atts.get(ATTR_ANTIALIAS_RADIUS)) != null) {
+      pFlame.setAntialiasRadius(Double.parseDouble(hs));
+    }
+
     if ((hs = atts.get(ATTR_SHADING_DISTANCE_COLOR_RADIUS)) != null) {
       pFlame.getShadingInfo().setDistanceColorRadius(Double.parseDouble(hs));
     }
@@ -334,7 +341,7 @@ public class AbstractFlameReader {
   public static final String ATTR_ANTIALIAS_RADIUS = "antialias_radius";
   public static final String ATTR_VISIBLE = "visible";
 
-  protected void parseXFormAttributes(XForm pXForm, String pXML) {
+  protected void parseXFormAttributes(Flame pFlame, XForm pXForm, String pXML) {
     XMLAttributes atts = Tools.parseAttributes(pXML);
     String hs;
     if ((hs = atts.get(ATTR_NAME)) != null) {
@@ -346,11 +353,17 @@ public class AbstractFlameReader {
     if ((hs = atts.get(ATTR_COLOR)) != null) {
       pXForm.setColor(Double.parseDouble(hs));
     }
+    // legacy
     if ((hs = atts.get(ATTR_ANTIALIAS_AMOUNT)) != null) {
-      pXForm.setAntialiasAmount(Double.parseDouble(hs));
+      double value = Double.parseDouble(hs);
+      if (value > 0)
+        pFlame.setAntialiasAmount(value);
     }
+    // legacy
     if ((hs = atts.get(ATTR_ANTIALIAS_RADIUS)) != null) {
-      pXForm.setAntialiasRadius(Double.parseDouble(hs));
+      double value = Double.parseDouble(hs);
+      if (value > 0)
+        pFlame.setAntialiasRadius(value);
     }
     if ((hs = atts.get(ATTR_OPACITY)) != null) {
       double opacity = Double.parseDouble(hs);
@@ -527,7 +540,7 @@ public class AbstractFlameReader {
     }
   }
 
-  protected void readFinalXForms(String flameXML, Layer layer) {
+  protected void readFinalXForms(String flameXML, Flame flame, Layer layer) {
     // FinalXForm
     {
       int p = 0;
@@ -541,14 +554,14 @@ public class AbstractFlameReader {
         }
         String hs = flameXML.substring(ps + 7, pe);
         XForm xForm = new XForm();
-        parseXFormAttributes(xForm, hs);
+        parseXFormAttributes(flame, xForm, hs);
         layer.getFinalXForms().add(xForm);
         p = pe + 2;
       }
     }
   }
 
-  protected void readXForms(String flameXML, Layer layer) {
+  protected void readXForms(String flameXML, Flame flame, Layer layer) {
     // XForms
     {
       int p = 0;
@@ -562,7 +575,7 @@ public class AbstractFlameReader {
         }
         String hs = flameXML.substring(ps + 7, pe);
         XForm xForm = new XForm();
-        parseXFormAttributes(xForm, hs);
+        parseXFormAttributes(flame, xForm, hs);
         layer.getXForms().add(xForm);
         p = pe + 2;
       }

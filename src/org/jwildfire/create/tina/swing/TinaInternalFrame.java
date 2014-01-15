@@ -1220,10 +1220,11 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaDOFPanel.add(camDimishZSlider);
 
       tinaSouthTabbedPane.addTab("Coloring", null, getTinaColoringPanel(), null);
+      tinaSouthTabbedPane.addTab("Anti-Aliasing", null, getAntialiasPanel(), null);
 
       JPanel tinaFilteringPanel = new JPanel();
       tinaSouthTabbedPane.addTab("DE/Spatial filter", null, tinaFilteringPanel, null);
-      tinaSouthTabbedPane.setEnabledAt(3, true);
+      tinaSouthTabbedPane.setEnabledAt(4, true);
       tinaFilteringPanel.setLayout(null);
 
       tinaDEFilterEnableCBx = new JCheckBox("Enable DE (density estimation)");
@@ -3247,7 +3248,6 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaTransformationsTabbedPane.addTab("Nonlinear", null, getTinaVariationPanel(), null);
       tinaTransformationsTabbedPane.addTab("Rel. weights", null, getTinaModifiedWeightsPanel(), null);
       tinaTransformationsTabbedPane.addTab("Color", null, getTinaTransformationColorPanel(), null);
-      tinaTransformationsTabbedPane.addTab("Antialias", null, getAntialiasPanel(), null);
     }
     return tinaTransformationsTabbedPane;
   }
@@ -4362,7 +4362,7 @@ public class TinaInternalFrame extends JInternalFrame {
         getSwfAnimatorQualityProfileCmb(), getSwfAnimatorResolutionProfileCmb(), getTinaRenderFlameButton(), getRenderMainButton(), getTinaAppendToMovieButton(),
         getTransformationWeightREd(), getUndoButton(), getRedoButton(),
         getXFormAntialiasAmountREd(), getXFormAntialiasAmountSlider(), getXFormAntialiasRadiusREd(), getXFormAntialiasRadiusSlider(),
-        getXFormAntialiasCopyToAllBtn(), getRealtimeFlamePnl(), getRealtimeGraph1Pnl(), getDancingFlamesLoadSoundBtn(), getDancingFlamesAddFromClipboardBtn(),
+        getRealtimeFlamePnl(), getRealtimeGraph1Pnl(), getDancingFlamesLoadSoundBtn(), getDancingFlamesAddFromClipboardBtn(),
         getDancingFlamesAddFromEditorBtn(), getDancingFlamesAddFromDiscBtn(), getDancingFlamesRandomCountIEd(), getDancingFlamesGenRandFlamesBtn(),
         getDancingFlamesRandomGenCmb(), getDancingFlamesPoolFlamePreviewPnl(), getDancingFlamesBorderSizeSlider(),
         getDancingFlamesFlameToEditorBtn(), getDancingFlamesDeleteFlameBtn(), getDancingFlamesFramesPerSecondIEd(), getDancingFlamesMorphFrameCountIEd(),
@@ -9007,7 +9007,6 @@ public class TinaInternalFrame extends JInternalFrame {
   private JWFNumberField xFormAntialiasRadiusREd;
   private JLabel xFormAntialiasRadiusLbl;
   private JSlider xFormAntialiasRadiusSlider;
-  private JButton xFormAntialiasCopyToAllBtn;
   private JPanel panel_6;
   private JPanel panel_7;
   private JPanel panel_13;
@@ -11053,20 +11052,6 @@ public class TinaInternalFrame extends JInternalFrame {
       antialiasPanel.add(getXFormAntialiasRadiusREd());
       antialiasPanel.add(getXFormAntialiasRadiusLbl());
       antialiasPanel.add(getXFormAntialiasRadiusSlider());
-
-      xFormAntialiasCopyToAllBtn = new JButton();
-      xFormAntialiasCopyToAllBtn.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-          tinaController.xFormAntialiasCopyToAllBtn_clicked();
-        }
-      });
-      xFormAntialiasCopyToAllBtn.setText("Apply to all transforms");
-      xFormAntialiasCopyToAllBtn.setSize(new Dimension(138, 24));
-      xFormAntialiasCopyToAllBtn.setPreferredSize(new Dimension(136, 24));
-      xFormAntialiasCopyToAllBtn.setLocation(new Point(4, 181));
-      xFormAntialiasCopyToAllBtn.setFont(new Font("Dialog", Font.BOLD, 10));
-      xFormAntialiasCopyToAllBtn.setBounds(70, 51, 138, 24);
-      antialiasPanel.add(xFormAntialiasCopyToAllBtn);
     }
     return antialiasPanel;
   }
@@ -11209,10 +11194,6 @@ public class TinaInternalFrame extends JInternalFrame {
       xFormAntialiasRadiusSlider.setBounds(125, 28, 172, 22);
     }
     return xFormAntialiasRadiusSlider;
-  }
-
-  public JButton getXFormAntialiasCopyToAllBtn() {
-    return xFormAntialiasCopyToAllBtn;
   }
 
   private JPanel getPanel_6() {

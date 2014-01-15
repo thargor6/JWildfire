@@ -99,6 +99,8 @@ public class Flame implements Assignable<Flame>, Serializable {
   @AnimAware
   private ShadingInfo shadingInfo = new ShadingInfo();
   private String lastFilename = null;
+  private double antialiasAmount = 0.75;
+  private double antialiasRadius = 0.36;
 
   public Flame() {
     layers.clear();
@@ -460,6 +462,8 @@ public class Flame implements Assignable<Flame>, Serializable {
       layers.add(layer.makeCopy());
     }
     lastFilename = pFlame.lastFilename;
+    antialiasAmount = pFlame.antialiasAmount;
+    antialiasRadius = pFlame.antialiasRadius;
   }
 
   public List<Layer> getLayers() {
@@ -490,8 +494,8 @@ public class Flame implements Assignable<Flame>, Serializable {
         (resolutionProfile != null && pFlame.resolutionProfile != null && !resolutionProfile.equals(pFlame.resolutionProfile))) ||
         ((qualityProfile != null && pFlame.qualityProfile == null) || (qualityProfile == null && pFlame.qualityProfile != null) ||
         (qualityProfile != null && pFlame.qualityProfile != null && !qualityProfile.equals(pFlame.qualityProfile))) ||
-        !shadingInfo.isEqual(pFlame.shadingInfo) ||
-        !name.equals(pFlame.name)) {
+        !shadingInfo.isEqual(pFlame.shadingInfo) || !name.equals(pFlame.name) ||
+        (fabs(antialiasAmount - pFlame.antialiasAmount) > EPSILON) || (fabs(antialiasRadius - pFlame.antialiasRadius) > EPSILON)) {
       return false;
     }
     if (layers.size() != pFlame.layers.size()) {
@@ -640,6 +644,22 @@ public class Flame implements Assignable<Flame>, Serializable {
       }
     }
     return false;
+  }
+
+  public double getAntialiasAmount() {
+    return antialiasAmount;
+  }
+
+  public void setAntialiasAmount(double antialiasAmount) {
+    this.antialiasAmount = antialiasAmount;
+  }
+
+  public double getAntialiasRadius() {
+    return antialiasRadius;
+  }
+
+  public void setAntialiasRadius(double antialiasRadius) {
+    this.antialiasRadius = antialiasRadius;
   }
 
 }

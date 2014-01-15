@@ -20,8 +20,6 @@ import static org.jwildfire.base.mathlib.MathLib.EPSILON;
 
 import org.jwildfire.base.Prefs;
 import org.jwildfire.create.tina.base.Flame;
-import org.jwildfire.create.tina.base.Layer;
-import org.jwildfire.create.tina.base.XForm;
 
 public abstract class RandomFlameGenerator {
 
@@ -48,16 +46,8 @@ public abstract class RandomFlameGenerator {
       flame.setDeFilterEnabled(true);
       flame.setDeFilterMaxRadius(pPrefs.getTinaDefaultDEMaxRadius());
     }
-    for (Layer layer : flame.getLayers()) {
-      for (XForm xForm : layer.getXForms()) {
-        xForm.setAntialiasAmount(pPrefs.getTinaDefaultAntialiasingAmount());
-        xForm.setAntialiasRadius(pPrefs.getTinaDefaultAntialiasingRadius());
-      }
-      for (XForm xForm : layer.getFinalXForms()) {
-        xForm.setAntialiasAmount(pPrefs.getTinaDefaultAntialiasingAmount());
-        xForm.setAntialiasRadius(pPrefs.getTinaDefaultAntialiasingRadius());
-      }
-    }
+    flame.setAntialiasAmount(pPrefs.getTinaDefaultAntialiasingAmount());
+    flame.setAntialiasRadius(pPrefs.getTinaDefaultAntialiasingRadius());
     return flame;
   }
 

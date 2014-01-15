@@ -75,8 +75,8 @@ public class JWFFlameReader extends AbstractFlameReader {
           parseLayerAttributes(layer, hs);
         }
 
-        readXForms(layerXML, layer);
-        readFinalXForms(layerXML, layer);
+        readXForms(layerXML, flame, layer);
+        readFinalXForms(layerXML, flame, layer);
         readColors(layerXML, layer);
       }
     }
