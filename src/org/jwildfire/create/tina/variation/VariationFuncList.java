@@ -56,6 +56,7 @@ public class VariationFuncList {
     aliasMap.put(RoseWFFunc.class, "t_rose");
     aliasMap.put(SplitBrdrFunc.class, "SplitBrdr");
     aliasMap.put(JuliaCFunc.class, "Juliac");
+    aliasMap.put(VoronFunc.class, "Voron");
 
     //
     registerVariationFunc(LinearFunc.class);
@@ -351,6 +352,8 @@ public class VariationFuncList {
     registerVariationFunc(PrimitivesWFFunc.class);
     registerVariationFunc(FlattenFunc.class);
     registerVariationFunc(BlurZoomFunc.class);
+    registerVariationFunc(LazyJessFunc.class);
+    registerVariationFunc(VoronFunc.class);
   }
 
   private static void registerVariationFunc(

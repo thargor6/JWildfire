@@ -27,6 +27,7 @@ public final class MathLib {
   public final static double M_1_PI = 1.0 / M_PI;
   public final static double M_2_PI = 2.0 / M_PI;
   public static final double M_2PI = 2.0 * M_PI;
+  public static final double M_SQRT2 = Math.sqrt(2.0);
 
   private static BaseMathLib baseLib = BaseMathLibType.FAST_MATH.createInstance();
 
