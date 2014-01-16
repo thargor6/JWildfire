@@ -354,6 +354,8 @@ public class VariationFuncList {
     registerVariationFunc(BlurZoomFunc.class);
     registerVariationFunc(LazyJessFunc.class);
     registerVariationFunc(VoronFunc.class);
+    registerVariationFunc(OrthoFunc.class);
+    registerVariationFunc(SynthFunc.class);
   }
 
   private static void registerVariationFunc(

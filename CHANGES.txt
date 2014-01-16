@@ -1,5 +1,7 @@
  - simplified antialiasing to have it on global per-flame-basis (rather than per xform). The "Anti-Aliasing"-tab was moved near the global "Coloring"-tab, accordingly
  - new "blur_zoom" variation
+ - new "lazyjess" variation
+ - new "voron" variation
  - fixed a problem regarding loading containg flames with multiple layerz
  - fixed a problem in the JWildfire.exe regarding paths containing space characters
 
