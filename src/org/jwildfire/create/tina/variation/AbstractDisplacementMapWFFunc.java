@@ -46,10 +46,11 @@ public abstract class AbstractDisplacementMapWFFunc extends VariationFunc {
   private static final String PARAM_TILEX = "tile_x";
   private static final String PARAM_TILEY = "tile_y";
 
+  private static final String RESSOURCE_INLINED_IMAGE = "inlined_image";
   private static final String RESSOURCE_IMAGE_FILENAME = "image_filename";
 
   private static final String[] paramNames = { PARAM_MODE, PARAM_COLOR_MODE, PARAM_BIAS, PARAM_SCALEX, PARAM_SCALEY, PARAM_OFFSETX, PARAM_OFFSETY, PARAM_OFFSETZ, PARAM_TILEX, PARAM_TILEY };
-  private static final String[] ressourceNames = { RESSOURCE_IMAGE_FILENAME };
+  private static final String[] ressourceNames = { RESSOURCE_IMAGE_FILENAME, RESSOURCE_INLINED_IMAGE };
 
   private static final int MODE_ROTATE = 0;
   private static final int MODE_TRANSLATE = 1;
@@ -70,6 +71,8 @@ public abstract class AbstractDisplacementMapWFFunc extends VariationFunc {
   private int tileX = 1;
   private int tileY = 1;
   private String imageFilename = null;
+  private byte[] inlinedImage = null;
+  private int inlinedImageHash = 0;
 
   // derived params
   private int imgWidth, imgHeight;
@@ -250,7 +253,15 @@ public abstract class AbstractDisplacementMapWFFunc extends VariationFunc {
     //    renderColors = pContext.getFlameRenderer().getColorMap();
     // TODO optimize
     renderColors = pLayer.getPalette().createRenderPalette(pContext.getFlameRenderer().getFlame().getWhiteLevel());
-    if (imageFilename != null && imageFilename.length() > 0) {
+    if (inlinedImage != null) {
+      try {
+        colorMap = RessourceManager.getImage(inlinedImageHash, inlinedImage);
+      }
+      catch (Exception e) {
+        e.printStackTrace();
+      }
+    }
+    else if (imageFilename != null && imageFilename.length() > 0) {
       try {
         colorMap = RessourceManager.getImage(imageFilename);
       }
@@ -282,13 +293,18 @@ public abstract class AbstractDisplacementMapWFFunc extends VariationFunc {
 
   @Override
   public byte[][] getRessourceValues() {
-    return new byte[][] { (imageFilename != null ? imageFilename.getBytes() : null) };
+    return new byte[][] { (imageFilename != null ? imageFilename.getBytes() : null), inlinedImage };
   }
 
   @Override
   public void setRessource(String pName, byte[] pValue) {
     if (RESSOURCE_IMAGE_FILENAME.equalsIgnoreCase(pName)) {
       imageFilename = pValue != null ? new String(pValue) : "";
+      colorMap = null;
+    }
+    else if (RESSOURCE_INLINED_IMAGE.equalsIgnoreCase(pName)) {
+      inlinedImage = pValue;
+      inlinedImageHash = RessourceManager.calcHashCode(inlinedImage);
       colorMap = null;
     }
     else
@@ -299,6 +315,9 @@ public abstract class AbstractDisplacementMapWFFunc extends VariationFunc {
   public RessourceType getRessourceType(String pName) {
     if (RESSOURCE_IMAGE_FILENAME.equalsIgnoreCase(pName)) {
       return RessourceType.IMAGE_FILENAME;
+    }
+    else if (RESSOURCE_INLINED_IMAGE.equalsIgnoreCase(pName)) {
+      return RessourceType.IMAGE_FILE;
     }
     else
       throw new IllegalArgumentException(pName);

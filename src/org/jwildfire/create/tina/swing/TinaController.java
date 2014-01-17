@@ -3351,6 +3351,29 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
                 }
               }
                 break;
+
+              case IMAGE_FILE: {
+                JFileChooser chooser = new ImageFileChooser();
+                if (prefs.getInputImagePath() != null) {
+                  try {
+                    chooser.setCurrentDirectory(new File(prefs.getInputImagePath()));
+                  }
+                  catch (Exception ex) {
+                    ex.printStackTrace();
+                  }
+                }
+                if (chooser.showOpenDialog(centerPanel) == JFileChooser.APPROVE_OPTION) {
+                  try {
+                    File file = chooser.getSelectedFile();
+                    byte[] imgData = Tools.readFile(file.getAbsolutePath());
+                    var.getFunc().setRessource(rName, imgData);
+                  }
+                  catch (Exception ex) {
+                    errorHandler.handleError(ex);
+                  }
+                }
+              }
+                break;
               case SVG_FILE: {
                 JFileChooser chooser = new SvgFileChooser(prefs);
                 if (prefs.getTinaSVGPath() != null) {

@@ -426,6 +426,13 @@ public class Tools {
     }
   }
 
+  public static final void writeFile(String pFilename, byte[] pData) throws Exception {
+    FileOutputStream fos = new FileOutputStream(pFilename);
+    fos.write(pData, 0, pData.length);
+    fos.flush();
+    fos.close();
+  }
+
   public static class XMLAttributes {
     private final List<XMLAttribute> attrList = new ArrayList<XMLAttribute>();
     private final Map<String, XMLAttribute> attrMap = new HashMap<String, XMLAttribute>();
