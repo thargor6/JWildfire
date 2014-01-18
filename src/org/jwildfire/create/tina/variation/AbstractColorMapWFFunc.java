@@ -20,6 +20,9 @@ import static org.jwildfire.base.mathlib.MathLib.EPSILON;
 import static org.jwildfire.base.mathlib.MathLib.fabs;
 import static org.jwildfire.base.mathlib.MathLib.sqrt;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.GradientCreator;
 import org.jwildfire.create.tina.base.Layer;
@@ -45,7 +48,7 @@ public abstract class AbstractColorMapWFFunc extends VariationFunc {
   private static final String PARAM_RESETZ = "reset_z";
 
   private static final String RESSOURCE_IMAGE_FILENAME = "image_filename";
-  private static final String RESSOURCE_INLINED_IMAGE = "inlined_image";
+  public static final String RESSOURCE_INLINED_IMAGE = "inlined_image";
 
   private static final String[] paramNames = { PARAM_SCALEX, PARAM_SCALEY, PARAM_SCALEZ, PARAM_OFFSETX, PARAM_OFFSETY, PARAM_OFFSETZ, PARAM_TILEX, PARAM_TILEY, PARAM_RESETZ };
   private static final String[] ressourceNames = { RESSOURCE_IMAGE_FILENAME, RESSOURCE_INLINED_IMAGE };
@@ -167,29 +170,60 @@ public abstract class AbstractColorMapWFFunc extends VariationFunc {
 
   private WFImage colorMap;
   private RenderColor[] renderColors;
+  private Map<RenderColor, Double> colorIdxMap = new HashMap<RenderColor, Double>();
 
   private double getColorIdx(double pR, double pG, double pB) {
-    int nearestIdx = 0;
-    RenderColor color = renderColors[0];
-    double dr, dg, db;
-    dr = (color.red - pR);
-    dg = (color.green - pG);
-    db = (color.blue - pB);
-    double nearestDist = sqrt(dr * dr + dg * dg + db * db);
-    for (int i = 1; i < renderColors.length; i++) {
-      color = renderColors[i];
+    RenderColor pColor = new RenderColor(pR, pG, pB);
+    Double res = colorIdxMap.get(pColor);
+    if (res == null) {
+
+      int nearestIdx = 0;
+      RenderColor color = renderColors[0];
+      double dr, dg, db;
       dr = (color.red - pR);
       dg = (color.green - pG);
       db = (color.blue - pB);
-      double dist = sqrt(dr * dr + dg * dg + db * db);
-      if (dist < nearestDist) {
-        nearestDist = dist;
-        nearestIdx = i;
+      double nearestDist = sqrt(dr * dr + dg * dg + db * db);
+      for (int i = 1; i < renderColors.length; i++) {
+        color = renderColors[i];
+        dr = (color.red - pR);
+        dg = (color.green - pG);
+        db = (color.blue - pB);
+        double dist = sqrt(dr * dr + dg * dg + db * db);
+        if (dist < nearestDist) {
+          nearestDist = dist;
+          nearestIdx = i;
+        }
       }
+      res = (double) nearestIdx / (double) (renderColors.length - 1);
+      colorIdxMap.put(pColor, res);
     }
-    return (double) nearestIdx / (double) (renderColors.length - 1);
+    return res;
   }
 
+  /*
+    private double getColorIdx(double pR, double pG, double pB) {
+      int nearestIdx = 0;
+      RenderColor color = renderColors[0];
+      double dr, dg, db;
+      dr = (color.red - pR);
+      dg = (color.green - pG);
+      db = (color.blue - pB);
+      double nearestDist = sqrt(dr * dr + dg * dg + db * db);
+      for (int i = 1; i < renderColors.length; i++) {
+        color = renderColors[i];
+        dr = (color.red - pR);
+        dg = (color.green - pG);
+        db = (color.blue - pB);
+        double dist = sqrt(dr * dr + dg * dg + db * db);
+        if (dist < nearestDist) {
+          nearestDist = dist;
+          nearestIdx = i;
+        }
+      }
+      return (double) nearestIdx / (double) (renderColors.length - 1);
+    }
+  */
   @Override
   public void init(FlameTransformationContext pContext, Layer pLayer, XForm pXForm, double pAmount) {
     colorMap = null;
@@ -244,11 +278,13 @@ public abstract class AbstractColorMapWFFunc extends VariationFunc {
     if (RESSOURCE_IMAGE_FILENAME.equalsIgnoreCase(pName)) {
       imageFilename = pValue != null ? new String(pValue) : "";
       colorMap = null;
+      colorIdxMap.clear();
     }
     else if (RESSOURCE_INLINED_IMAGE.equalsIgnoreCase(pName)) {
       inlinedImage = pValue;
       inlinedImageHash = RessourceManager.calcHashCode(inlinedImage);
       colorMap = null;
+      colorIdxMap.clear();
     }
     else
       throw new IllegalArgumentException(pName);

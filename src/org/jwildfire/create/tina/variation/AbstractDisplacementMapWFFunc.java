@@ -18,8 +18,11 @@ package org.jwildfire.create.tina.variation;
 
 import static org.jwildfire.base.mathlib.MathLib.M_2PI;
 import static org.jwildfire.base.mathlib.MathLib.cos;
-import static org.jwildfire.base.mathlib.MathLib.fabs;
 import static org.jwildfire.base.mathlib.MathLib.sin;
+import static org.jwildfire.base.mathlib.MathLib.sqrt;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.GradientCreator;
@@ -183,6 +186,38 @@ public abstract class AbstractDisplacementMapWFFunc extends VariationFunc {
     return (0.299 * red + 0.588 * green + 0.113 * blue);
   }
 
+  private Map<RenderColor, Double> colorIdxMap = new HashMap<RenderColor, Double>();
+
+  private double getColorIdx(double pR, double pG, double pB) {
+    RenderColor pColor = new RenderColor(pR, pG, pB);
+    Double res = colorIdxMap.get(pColor);
+    if (res == null) {
+
+      int nearestIdx = 0;
+      RenderColor color = renderColors[0];
+      double dr, dg, db;
+      dr = (color.red - pR);
+      dg = (color.green - pG);
+      db = (color.blue - pB);
+      double nearestDist = sqrt(dr * dr + dg * dg + db * db);
+      for (int i = 1; i < renderColors.length; i++) {
+        color = renderColors[i];
+        dr = (color.red - pR);
+        dg = (color.green - pG);
+        db = (color.blue - pB);
+        double dist = sqrt(dr * dr + dg * dg + db * db);
+        if (dist < nearestDist) {
+          nearestDist = dist;
+          nearestIdx = i;
+        }
+      }
+      res = (double) nearestIdx / (double) (renderColors.length - 1);
+      colorIdxMap.put(pColor, res);
+    }
+    return res;
+  }
+
+  /*
   private double getColorIdx(double pR, double pG, double pB) {
     int nearestIdx = 0;
     RenderColor color = renderColors[0];
@@ -207,6 +242,7 @@ public abstract class AbstractDisplacementMapWFFunc extends VariationFunc {
     return (double) nearestIdx / (double) (renderColors.length - 1);
 
   }
+  */
 
   @Override
   public String[] getParameterNames() {
@@ -301,11 +337,13 @@ public abstract class AbstractDisplacementMapWFFunc extends VariationFunc {
     if (RESSOURCE_IMAGE_FILENAME.equalsIgnoreCase(pName)) {
       imageFilename = pValue != null ? new String(pValue) : "";
       colorMap = null;
+      colorIdxMap.clear();
     }
     else if (RESSOURCE_INLINED_IMAGE.equalsIgnoreCase(pName)) {
       inlinedImage = pValue;
       inlinedImageHash = RessourceManager.calcHashCode(inlinedImage);
       colorMap = null;
+      colorIdxMap.clear();
     }
     else
       throw new IllegalArgumentException(pName);
