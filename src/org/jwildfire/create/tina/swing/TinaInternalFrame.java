@@ -660,8 +660,9 @@ public class TinaInternalFrame extends JInternalFrame {
       randomBatchHighQualityButton.setToolTipText("Create a random batch in higher quality (may be much slower)");
       randomBatchHighQualityButton.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
-          tinaController.createRandomBatch(-1, (String) randomStyleCmb.getSelectedItem(), RandomBatchQuality.HIGH);
-          tinaController.importFromRandomBatch(0);
+          if (tinaController.createRandomBatch(-1, (String) randomStyleCmb.getSelectedItem(), RandomBatchQuality.HIGH)) {
+            tinaController.importFromRandomBatch(0);
+          }
         }
       });
       randomBatchHighQualityButton.setText("H");
@@ -5005,8 +5006,9 @@ public class TinaInternalFrame extends JInternalFrame {
       randomBatchButton.setPreferredSize(new Dimension(105, 46));
       randomBatchButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.createRandomBatch(-1, (String) randomStyleCmb.getSelectedItem(), RandomBatchQuality.NORMAL);
-          tinaController.importFromRandomBatch(0);
+          if (tinaController.createRandomBatch(-1, (String) randomStyleCmb.getSelectedItem(), RandomBatchQuality.NORMAL)) {
+            tinaController.importFromRandomBatch(0);
+          }
         }
       });
     }
@@ -10166,7 +10168,6 @@ public class TinaInternalFrame extends JInternalFrame {
       interactiveNextButton.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
           tinaController.getInteractiveRendererCtrl().nextButton_clicked();
-
         }
       });
       interactiveNextButton.setText("Next");
@@ -13927,6 +13928,7 @@ public class TinaInternalFrame extends JInternalFrame {
     if (gradientEditorFncPnl == null) {
       gradientEditorFncPnl = new JPanel();
       FlowLayout flowLayout = (FlowLayout) gradientEditorFncPnl.getLayout();
+      flowLayout.setHgap(2);
       flowLayout.setVgap(1);
       gradientEditorFncPnl.setPreferredSize(new Dimension(80, 50));
       gradientEditorFncPnl.add(getPanel_62());
@@ -14348,7 +14350,7 @@ public class TinaInternalFrame extends JInternalFrame {
       FlowLayout flowLayout = (FlowLayout) panel_70.getLayout();
       flowLayout.setVgap(0);
       flowLayout.setHgap(0);
-      panel_70.setPreferredSize(new Dimension(70, 50));
+      panel_70.setPreferredSize(new Dimension(60, 50));
       panel_70.add(getGradientSaveBtn());
     }
     return panel_70;
@@ -14364,8 +14366,8 @@ public class TinaInternalFrame extends JInternalFrame {
       });
       gradientSaveBtn.setToolTipText("Save the gradient to the library");
       gradientSaveBtn.setText("Save");
-      gradientSaveBtn.setSize(new Dimension(138, 50));
-      gradientSaveBtn.setPreferredSize(new Dimension(70, 48));
+      gradientSaveBtn.setSize(new Dimension(128, 50));
+      gradientSaveBtn.setPreferredSize(new Dimension(60, 48));
       gradientSaveBtn.setLocation(new Point(4, 181));
       gradientSaveBtn.setFont(new Font("Dialog", Font.BOLD, 10));
     }
