@@ -1,9 +1,20 @@
+V1.20 (18.01.2014):
+ - new "Wikimedia Commons"-random-flame-generator
+ - new "Synth"-random-flame-generator
+ - warning dialog when closing JWildfire
  - simplified antialiasing to have it on global per-flame-basis (rather than per xform). The "Anti-Aliasing"-tab was moved near the global "Coloring"-tab, accordingly
+ - new "synth" variation
+ - new "onion" variation
  - new "blur_zoom" variation
  - new "lazyjess" variation
  - new "voron" variation
+ - new "bubbleT3D" variation
+ - dramatically improved the performance of the "colormap_wf" variations
+ - support for inlining images in flame-parameters (e. g. uses by the colormap_wf variation)
+ - fixed a problem regarding the free-triangle-editing-mode
  - fixed a problem regarding loading containg flames with multiple layerz
  - fixed a problem in the JWildfire.exe regarding paths containing space characters
+ - slightly reduced the size of controls of the gradient-editor
 
 V1.10 (21.12.2013):
  - support for layerz in all modules. Layerz allow you to combine different flames into one. They are called layerz because flames in JWildfire are not flat and layerz also respect this. 
