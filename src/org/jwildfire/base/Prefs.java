@@ -84,6 +84,8 @@ public class Prefs extends ManagedObject {
   static final String KEY_TINA_SAVING_STORE_HDR_IN_IR = "tina.saving.store_hdr_in_ir";
   static final String KEY_TINA_SAVING_STORE_FLAMES_WHEN_SAVING_IMAGE = "tina.saving.store_flames_when_saving_image";
 
+  static final String KEY_TINA_DISABLE_WIKIMEDIA_COMMONS_WARNING = "tina.random_batch.disable_wikimedia_commons_warning";
+
   @Property(description = "Script drawer for the animation editor", category = PropertyCategory.MISC)
   private String scriptPath = null;
   private String lastInputScriptPath = null;
@@ -129,6 +131,9 @@ public class Prefs extends ManagedObject {
 
   @Property(description = "Generate and save HDR images in the interactive renderer", category = PropertyCategory.TINA)
   private boolean tinaSaveHDRInIR = false;
+
+  @Property(description = "Disable the warning about the usage of Wikimedia Commons random-flame-generator", category = PropertyCategory.TINA)
+  private boolean tinaDisableWikimediaCommonsWarning = false;
 
   @Property(description = "Automatically save a flame-copy when a rendered image is saved", category = PropertyCategory.TINA)
   private boolean tinaSaveFlamesWhenImageIsSaved = false;
@@ -452,6 +457,7 @@ public class Prefs extends ManagedObject {
     tinaDefaultAntialiasingAmount = pSrc.tinaDefaultAntialiasingAmount;
     tinaDefaultAntialiasingRadius = pSrc.tinaDefaultAntialiasingRadius;
     tinaPreserveFreeCPUs = pSrc.tinaPreserveFreeCPUs;
+    tinaDisableWikimediaCommonsWarning = pSrc.tinaDisableWikimediaCommonsWarning;
 
     tinaRenderMovieFrames = pSrc.tinaRenderMovieFrames;
     tinaRenderPreviewQuality = pSrc.tinaRenderPreviewQuality;
@@ -726,6 +732,14 @@ public class Prefs extends ManagedObject {
 
   public void setTinaPreserveFreeCPUs(int tinaPreserveFreeCPUs) {
     this.tinaPreserveFreeCPUs = tinaPreserveFreeCPUs;
+  }
+
+  public boolean isTinaDisableWikimediaCommonsWarning() {
+    return tinaDisableWikimediaCommonsWarning;
+  }
+
+  public void setTinaDisableWikimediaCommonsWarning(boolean tinaDisableWikimediaCommonsWarning) {
+    this.tinaDisableWikimediaCommonsWarning = tinaDisableWikimediaCommonsWarning;
   }
 
 }

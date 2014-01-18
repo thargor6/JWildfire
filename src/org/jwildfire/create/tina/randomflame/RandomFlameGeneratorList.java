@@ -51,6 +51,7 @@ public class RandomFlameGeneratorList {
     registerRandomFlameGenerator(SubFlameRandomFlameGenerator.class);
     registerRandomFlameGenerator(SynthRandomFlameGenerator.class);
     registerRandomFlameGenerator(TentacleRandomFlameGenerator.class);
+    registerRandomFlameGenerator(WikimediaCommonsRandomFlameGenerator.class);
   }
 
   private static void registerRandomFlameGenerator(Class<? extends RandomFlameGenerator> pRandomFlameGenerator) {
@@ -80,10 +81,14 @@ public class RandomFlameGeneratorList {
     return getRandomFlameGeneratorInstance(pName, false);
   }
 
-  public static RandomFlameGenerator getRandomFlameGeneratorInstance(String pName, boolean pFatal) {
+  public static Class<? extends RandomFlameGenerator> getGeneratorClassByName(String pName) {
     int idx = getNameList().indexOf(pName);
-    if (idx >= 0) {
-      Class<? extends RandomFlameGenerator> funcCls = items.get(idx);
+    return idx >= 0 ? items.get(idx) : null;
+  }
+
+  public static RandomFlameGenerator getRandomFlameGeneratorInstance(String pName, boolean pFatal) {
+    Class<? extends RandomFlameGenerator> funcCls = getGeneratorClassByName(pName);
+    if (funcCls != null) {
       try {
         RandomFlameGenerator func = funcCls.newInstance();
         return func;

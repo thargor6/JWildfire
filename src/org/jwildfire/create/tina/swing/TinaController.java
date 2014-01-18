@@ -100,6 +100,7 @@ import org.jwildfire.create.tina.randomflame.RandomFlameGenerator;
 import org.jwildfire.create.tina.randomflame.RandomFlameGeneratorList;
 import org.jwildfire.create.tina.randomflame.RandomFlameGeneratorSample;
 import org.jwildfire.create.tina.randomflame.RandomFlameGeneratorSampler;
+import org.jwildfire.create.tina.randomflame.WikimediaCommonsRandomFlameGenerator;
 import org.jwildfire.create.tina.render.DrawFocusPointFlameRenderer;
 import org.jwildfire.create.tina.render.FlameRenderer;
 import org.jwildfire.create.tina.render.ProgressUpdater;
@@ -3105,7 +3106,9 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
     data.randomBatchPanel.validate();
   }
 
-  public void createRandomBatch(int pCount, String pGeneratorname, RandomBatchQuality pQuality) {
+  public boolean createRandomBatch(int pCount, String pGeneratorname, RandomBatchQuality pQuality) {
+    if (!confirmNewRandomBatch(pGeneratorname))
+      return false;
     if (prefs.getTinaRandomBatchRefreshType() == RandomBatchRefreshType.CLEAR) {
       randomBatch.clear();
     }
@@ -3134,6 +3137,26 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
       mainProgressUpdater.updateProgress(i + 1);
     }
     updateThumbnails();
+    return true;
+  }
+
+  private static boolean commonsWarningDisplayed = false;
+
+  private boolean confirmNewRandomBatch(String pGeneratorname) {
+    Class<?> cls = RandomFlameGeneratorList.getGeneratorClassByName(pGeneratorname);
+    if (WikimediaCommonsRandomFlameGenerator.class.equals(cls)) {
+      if (!commonsWarningDisplayed && !prefs.isTinaDisableWikimediaCommonsWarning()) {
+        HTMLInfoDialog dlg = new HTMLInfoDialog(SwingUtilities.getWindowAncestor(centerPanel), "Warning", "WikimediaCommonsRandomFlameGenerator.html");
+        dlg.setModal(true);
+        dlg.setVisible(true);
+        boolean confirmed = dlg.isConfirmed();
+        if (confirmed) {
+          commonsWarningDisplayed = true;
+        }
+        return confirmed;
+      }
+    }
+    return true;
   }
 
   private void addRemoveButton(ImagePanel pImgPanel, final int pIdx) {

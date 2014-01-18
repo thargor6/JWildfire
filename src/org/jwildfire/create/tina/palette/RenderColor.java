@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2014 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -20,4 +20,47 @@ public class RenderColor {
   public double red;
   public double green;
   public double blue;
+
+  public RenderColor() {
+  }
+
+  public RenderColor(double red, double green, double blue) {
+    super();
+    this.red = red;
+    this.green = green;
+    this.blue = blue;
+  }
+
+  @Override
+  public int hashCode() {
+    final int prime = 31;
+    int result = 1;
+    long temp;
+    temp = Double.doubleToLongBits(blue);
+    result = prime * result + (int) (temp ^ (temp >>> 32));
+    temp = Double.doubleToLongBits(green);
+    result = prime * result + (int) (temp ^ (temp >>> 32));
+    temp = Double.doubleToLongBits(red);
+    result = prime * result + (int) (temp ^ (temp >>> 32));
+    return result;
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj)
+      return true;
+    if (obj == null)
+      return false;
+    if (getClass() != obj.getClass())
+      return false;
+    RenderColor other = (RenderColor) obj;
+    if (Double.doubleToLongBits(blue) != Double.doubleToLongBits(other.blue))
+      return false;
+    if (Double.doubleToLongBits(green) != Double.doubleToLongBits(other.green))
+      return false;
+    if (Double.doubleToLongBits(red) != Double.doubleToLongBits(other.red))
+      return false;
+    return true;
+  }
+
 }

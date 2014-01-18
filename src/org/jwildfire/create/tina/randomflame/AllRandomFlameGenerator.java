@@ -53,13 +53,14 @@ public class AllRandomFlameGenerator extends RandomFlameGenerator {
     allGenerators.add(new SubFlameRandomFlameGenerator());
     allGenerators.add(new SynthRandomFlameGenerator());
     allGenerators.add(new TentacleRandomFlameGenerator());
+    // allGenerators.add(new WikimediaCommonsRandomFlameGenerator());
 
     simpleGenerators = new ArrayList<RandomFlameGenerator>();
     simpleGenerators.addAll(allGenerators);
     int i = 0;
     while (i < simpleGenerators.size()) {
       Class<?> cls = simpleGenerators.get(i).getClass();
-      if (LayerzRandomFlameGenerator.class.equals(cls) || SubFlameRandomFlameGenerator.class.equals(cls)) {
+      if (LayerzRandomFlameGenerator.class.equals(cls) || SubFlameRandomFlameGenerator.class.equals(cls) || WikimediaCommonsRandomFlameGenerator.class.equals(cls)) {
         simpleGenerators.remove(i);
       }
       else {

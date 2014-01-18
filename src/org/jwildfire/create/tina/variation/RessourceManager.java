@@ -69,21 +69,32 @@ public class RessourceManager {
     ressourceMap.put(pKey, pRessource);
   }
 
+  private static Map<String, Integer> hashMap = new HashMap<String, Integer>();
+
+  private static String getHashKey(byte[] pImageData) {
+    if (pImageData != null && pImageData.length > 0) {
+      return pImageData.toString() + "_" + pImageData.length + "_" + pImageData[0] + "_" + pImageData[pImageData.length / 2] + "_" + pImageData[pImageData.length - 1];
+    }
+    else {
+      return "0";
+    }
+  }
+
   public static int calcHashCode(byte[] pImageData) {
-    return pImageData != null ? Arrays.hashCode(pImageData) : 0;
+    String key = getHashKey(pImageData);
+    Integer res = hashMap.get(key);
+    if (res == null) {
+      res = pImageData != null ? Arrays.hashCode(pImageData) : 0;
+      hashMap.put(key, res);
+    }
+    return res;
   }
 
   public static WFImage getImage(int pHashCode, byte[] pImageData) throws Exception {
     Integer key = Integer.valueOf(pHashCode);
     WFImage res = imageMapByHash.get(key);
     if (res == null) {
-      String fileExt = "jpg";
-      if (pImageData.length > 6 && new String(pImageData, 0, 6).equals("#?RGBE")) {
-        fileExt = "hdr";
-      }
-      else if (pImageData.length > 5 && new String(pImageData, 1, 3).equals("PNG")) {
-        fileExt = "png";
-      }
+      String fileExt = guessImageExtension(pImageData);
       File f = File.createTempFile("tmp", "." + fileExt);
       f.deleteOnExit();
       Tools.writeFile(f.getAbsolutePath(), pImageData);
@@ -97,5 +108,17 @@ public class RessourceManager {
       imageMapByHash.put(key, res);
     }
     return res;
+  }
+
+  public static String guessImageExtension(byte[] pImageData) {
+    if (pImageData.length > 6 && new String(pImageData, 0, 6).equals("#?RGBE")) {
+      return "hdr";
+    }
+    else if (pImageData.length > 5 && new String(pImageData, 1, 3).equals("PNG")) {
+      return "png";
+    }
+    else {
+      return "jpg";
+    }
   }
 }

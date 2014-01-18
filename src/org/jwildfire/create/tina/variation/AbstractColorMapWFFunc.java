@@ -37,8 +37,8 @@ import org.jwildfire.image.WFImage;
 public abstract class AbstractColorMapWFFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
 
-  private static final String PARAM_SCALEX = "scale_x";
-  private static final String PARAM_SCALEY = "scale_y";
+  public static final String PARAM_SCALEX = "scale_x";
+  public static final String PARAM_SCALEY = "scale_y";
   private static final String PARAM_SCALEZ = "scale_z";
   private static final String PARAM_OFFSETX = "offset_x";
   private static final String PARAM_OFFSETY = "offset_y";
@@ -49,9 +49,11 @@ public abstract class AbstractColorMapWFFunc extends VariationFunc {
 
   private static final String RESSOURCE_IMAGE_FILENAME = "image_filename";
   public static final String RESSOURCE_INLINED_IMAGE = "inlined_image";
+  public static final String RESSOURCE_IMAGE_SRC = "image_src";
+  public static final String RESSOURCE_IMAGE_DESC_SRC = "image_desc_src";
 
   private static final String[] paramNames = { PARAM_SCALEX, PARAM_SCALEY, PARAM_SCALEZ, PARAM_OFFSETX, PARAM_OFFSETY, PARAM_OFFSETZ, PARAM_TILEX, PARAM_TILEY, PARAM_RESETZ };
-  private static final String[] ressourceNames = { RESSOURCE_IMAGE_FILENAME, RESSOURCE_INLINED_IMAGE };
+  private static final String[] ressourceNames = { RESSOURCE_IMAGE_FILENAME, RESSOURCE_INLINED_IMAGE, RESSOURCE_IMAGE_DESC_SRC, RESSOURCE_IMAGE_SRC };
 
   private double scaleX = 1.0;
   private double scaleY = 1.0;
@@ -64,6 +66,8 @@ public abstract class AbstractColorMapWFFunc extends VariationFunc {
   private int resetZ = 1;
   private String imageFilename = null;
   private byte[] inlinedImage = null;
+  private String imageDescSrc = null;
+  private String imageSrc = null;
   private int inlinedImageHash = 0;
 
   // derived params
@@ -227,8 +231,6 @@ public abstract class AbstractColorMapWFFunc extends VariationFunc {
   @Override
   public void init(FlameTransformationContext pContext, Layer pLayer, XForm pXForm, double pAmount) {
     colorMap = null;
-    //    renderColors = pContext.getFlameRenderer().getColorMap();
-    // TODO optimize
     renderColors = pLayer.getPalette().createRenderPalette(pContext.getFlameRenderer().getFlame().getWhiteLevel());
     if (inlinedImage != null) {
       try {
@@ -270,7 +272,7 @@ public abstract class AbstractColorMapWFFunc extends VariationFunc {
 
   @Override
   public byte[][] getRessourceValues() {
-    return new byte[][] { (imageFilename != null ? imageFilename.getBytes() : null), inlinedImage };
+    return new byte[][] { (imageFilename != null ? imageFilename.getBytes() : null), inlinedImage, (imageDescSrc != null ? imageDescSrc.getBytes() : null), (imageSrc != null ? imageSrc.getBytes() : null) };
   }
 
   @Override
@@ -286,6 +288,12 @@ public abstract class AbstractColorMapWFFunc extends VariationFunc {
       colorMap = null;
       colorIdxMap.clear();
     }
+    else if (RESSOURCE_IMAGE_DESC_SRC.equalsIgnoreCase(pName)) {
+      imageDescSrc = pValue != null ? new String(pValue) : "";
+    }
+    else if (RESSOURCE_IMAGE_SRC.equalsIgnoreCase(pName)) {
+      imageSrc = pValue != null ? new String(pValue) : "";
+    }
     else
       throw new IllegalArgumentException(pName);
   }
@@ -297,6 +305,12 @@ public abstract class AbstractColorMapWFFunc extends VariationFunc {
     }
     else if (RESSOURCE_INLINED_IMAGE.equalsIgnoreCase(pName)) {
       return RessourceType.IMAGE_FILE;
+    }
+    else if (RESSOURCE_IMAGE_DESC_SRC.equalsIgnoreCase(pName)) {
+      return RessourceType.HREF;
+    }
+    else if (RESSOURCE_IMAGE_SRC.equalsIgnoreCase(pName)) {
+      return RessourceType.HREF;
     }
     else
       throw new IllegalArgumentException(pName);
