@@ -1524,513 +1524,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaDEFilterKernelCmb.setFont(new Font("Dialog", Font.BOLD, 10));
       tinaDEFilterKernelCmb.setBounds(102, 99, 100, 24);
       tinaFilteringPanel.add(tinaDEFilterKernelCmb);
-      tinaSouthTabbedPane.addTab("Shading", null, getShadingPanel(), null);
-      tinaSouthTabbedPane.addTab("Pseudo3D-Shading", null, getPseudo3DShadingPanel(), null);
-      tinaSouthTabbedPane.addTab("Blur-Shading", null, getBlurShadingPanel(), null);
-
-      JPanel panel_1 = new JPanel();
-      tinaSouthTabbedPane.addTab("Distance-Color-Shading", null, panel_1, null);
-      panel_1.setLayout(null);
-
-      shadingDistanceColorRadiusSlider = new JSlider();
-      shadingDistanceColorRadiusSlider.addChangeListener(new ChangeListener() {
-        public void stateChanged(ChangeEvent e) {
-          if (tinaController != null) {
-            tinaController.shadingDistanceColorRadiusSlider_changed();
-          }
-        }
-      });
-      shadingDistanceColorRadiusSlider.addMouseListener(new MouseAdapter() {
-        @Override
-        public void mousePressed(MouseEvent e) {
-          tinaController.saveUndoPoint();
-        }
-      });
-      shadingDistanceColorRadiusSlider.setValue(0);
-      shadingDistanceColorRadiusSlider.setSize(new Dimension(120, 19));
-      shadingDistanceColorRadiusSlider.setPreferredSize(new Dimension(120, 19));
-      shadingDistanceColorRadiusSlider.setMinimum(0);
-      shadingDistanceColorRadiusSlider.setMaximum(200);
-      shadingDistanceColorRadiusSlider.setLocation(new Point(202, 4));
-      shadingDistanceColorRadiusSlider.setBounds(204, 6, 120, 24);
-      panel_1.add(shadingDistanceColorRadiusSlider);
-
-      shadingDistanceColorRadiusREd = new JWFNumberField();
-      shadingDistanceColorRadiusREd.addChangeListener(new ChangeListener() {
-        public void stateChanged(ChangeEvent e) {
-          if (tinaController != null) {
-            if (!shadingDistanceColorRadiusREd.isMouseAdjusting() || shadingDistanceColorRadiusREd.getMouseChangeCount() == 0) {
-              if (!shadingDistanceColorRadiusSlider.getValueIsAdjusting()) {
-                tinaController.saveUndoPoint();
-              }
-            }
-            tinaController.shadingDistanceColorRadiusREd_changed();
-          }
-        }
-      });
-      shadingDistanceColorRadiusREd.setValueStep(0.01);
-      shadingDistanceColorRadiusREd.setText("");
-      shadingDistanceColorRadiusREd.setSize(new Dimension(100, 24));
-      shadingDistanceColorRadiusREd.setPreferredSize(new Dimension(100, 24));
-      shadingDistanceColorRadiusREd.setMaxValue(1.0);
-      shadingDistanceColorRadiusREd.setLocation(new Point(100, 4));
-      shadingDistanceColorRadiusREd.setFont(new Font("Dialog", Font.PLAIN, 10));
-      shadingDistanceColorRadiusREd.setBounds(102, 6, 100, 24);
-      panel_1.add(shadingDistanceColorRadiusREd);
-
-      JLabel lblRadius = new JLabel();
-      lblRadius.setText("Radius");
-      lblRadius.setSize(new Dimension(94, 22));
-      lblRadius.setPreferredSize(new Dimension(94, 22));
-      lblRadius.setLocation(new Point(4, 4));
-      lblRadius.setFont(new Font("Dialog", Font.BOLD, 10));
-      lblRadius.setBounds(6, 6, 94, 24);
-      panel_1.add(lblRadius);
-
-      shadingDistanceColorScaleREd = new JWFNumberField();
-      shadingDistanceColorScaleREd.addChangeListener(new ChangeListener() {
-        public void stateChanged(ChangeEvent e) {
-          if (tinaController != null) {
-            if (!shadingDistanceColorScaleREd.isMouseAdjusting() || shadingDistanceColorScaleREd.getMouseChangeCount() == 0) {
-              if (!shadingDistanceColorScaleSlider.getValueIsAdjusting()) {
-                tinaController.saveUndoPoint();
-              }
-            }
-            tinaController.shadingDistanceColorScaleREd_changed();
-          }
-        }
-      });
-      shadingDistanceColorScaleREd.setValueStep(0.01);
-      shadingDistanceColorScaleREd.setText("");
-      shadingDistanceColorScaleREd.setSize(new Dimension(100, 24));
-      shadingDistanceColorScaleREd.setPreferredSize(new Dimension(100, 24));
-      shadingDistanceColorScaleREd.setMaxValue(1.0);
-      shadingDistanceColorScaleREd.setLocation(new Point(100, 4));
-      shadingDistanceColorScaleREd.setHasMinValue(true);
-      shadingDistanceColorScaleREd.setFont(new Font("Dialog", Font.PLAIN, 10));
-      shadingDistanceColorScaleREd.setBounds(102, 29, 100, 24);
-      panel_1.add(shadingDistanceColorScaleREd);
-
-      JLabel lblScale = new JLabel();
-      lblScale.setText("Scale");
-      lblScale.setSize(new Dimension(94, 22));
-      lblScale.setPreferredSize(new Dimension(94, 22));
-      lblScale.setLocation(new Point(4, 4));
-      lblScale.setFont(new Font("Dialog", Font.BOLD, 10));
-      lblScale.setBounds(6, 29, 94, 24);
-      panel_1.add(lblScale);
-
-      shadingDistanceColorScaleSlider = new JSlider();
-      shadingDistanceColorScaleSlider.addChangeListener(new ChangeListener() {
-        public void stateChanged(ChangeEvent e) {
-          if (tinaController != null) {
-            tinaController.shadingDistanceColorScaleSlider_changed();
-          }
-        }
-      });
-      shadingDistanceColorScaleSlider.addMouseListener(new MouseAdapter() {
-        @Override
-        public void mousePressed(MouseEvent e) {
-          tinaController.saveUndoPoint();
-        }
-      });
-      shadingDistanceColorScaleSlider.setValue(0);
-      shadingDistanceColorScaleSlider.setSize(new Dimension(120, 19));
-      shadingDistanceColorScaleSlider.setPreferredSize(new Dimension(120, 19));
-      shadingDistanceColorScaleSlider.setMinimum(0);
-      shadingDistanceColorScaleSlider.setMaximum(300);
-      shadingDistanceColorScaleSlider.setLocation(new Point(202, 4));
-      shadingDistanceColorScaleSlider.setBounds(204, 29, 120, 24);
-      panel_1.add(shadingDistanceColorScaleSlider);
-
-      shadingDistanceColorExponentREd = new JWFNumberField();
-      shadingDistanceColorExponentREd.addChangeListener(new ChangeListener() {
-        public void stateChanged(ChangeEvent e) {
-          if (tinaController != null) {
-            if (!shadingDistanceColorExponentREd.isMouseAdjusting() || shadingDistanceColorExponentREd.getMouseChangeCount() == 0) {
-              if (!shadingDistanceColorExponentSlider.getValueIsAdjusting()) {
-                tinaController.saveUndoPoint();
-              }
-            }
-            tinaController.shadingDistanceColorExponentREd_changed();
-          }
-        }
-      });
-      shadingDistanceColorExponentREd.setValueStep(0.01);
-      shadingDistanceColorExponentREd.setText("");
-      shadingDistanceColorExponentREd.setSize(new Dimension(100, 24));
-      shadingDistanceColorExponentREd.setPreferredSize(new Dimension(100, 24));
-      shadingDistanceColorExponentREd.setMaxValue(1.0);
-      shadingDistanceColorExponentREd.setLocation(new Point(100, 4));
-      shadingDistanceColorExponentREd.setFont(new Font("Dialog", Font.PLAIN, 10));
-      shadingDistanceColorExponentREd.setBounds(102, 52, 100, 24);
-      panel_1.add(shadingDistanceColorExponentREd);
-
-      JLabel lblExponent_1 = new JLabel();
-      lblExponent_1.setText("Exponent");
-      lblExponent_1.setSize(new Dimension(94, 22));
-      lblExponent_1.setPreferredSize(new Dimension(94, 22));
-      lblExponent_1.setLocation(new Point(4, 4));
-      lblExponent_1.setFont(new Font("Dialog", Font.BOLD, 10));
-      lblExponent_1.setBounds(6, 52, 94, 24);
-      panel_1.add(lblExponent_1);
-
-      shadingDistanceColorExponentSlider = new JSlider();
-      shadingDistanceColorExponentSlider.addChangeListener(new ChangeListener() {
-        public void stateChanged(ChangeEvent e) {
-          if (tinaController != null) {
-            tinaController.shadingDistanceColorExponentSlider_changed();
-          }
-        }
-      });
-      shadingDistanceColorExponentSlider.addMouseListener(new MouseAdapter() {
-        @Override
-        public void mousePressed(MouseEvent e) {
-          tinaController.saveUndoPoint();
-        }
-      });
-      shadingDistanceColorExponentSlider.setValue(0);
-      shadingDistanceColorExponentSlider.setSize(new Dimension(120, 19));
-      shadingDistanceColorExponentSlider.setPreferredSize(new Dimension(120, 19));
-      shadingDistanceColorExponentSlider.setMinimum(-300);
-      shadingDistanceColorExponentSlider.setMaximum(300);
-      shadingDistanceColorExponentSlider.setLocation(new Point(202, 4));
-      shadingDistanceColorExponentSlider.setBounds(204, 52, 120, 24);
-      panel_1.add(shadingDistanceColorExponentSlider);
-
-      shadingDistanceColorOffsetXREd = new JWFNumberField();
-      shadingDistanceColorOffsetXREd.addChangeListener(new ChangeListener() {
-        public void stateChanged(ChangeEvent e) {
-          if (tinaController != null) {
-            if (!shadingDistanceColorOffsetXREd.isMouseAdjusting() || shadingDistanceColorOffsetXREd.getMouseChangeCount() == 0) {
-              if (!shadingDistanceColorOffsetXSlider.getValueIsAdjusting()) {
-                tinaController.saveUndoPoint();
-              }
-            }
-            tinaController.shadingDistanceColorOffsetXREd_changed();
-          }
-        }
-      });
-      shadingDistanceColorOffsetXREd.setValueStep(0.01);
-      shadingDistanceColorOffsetXREd.setText("");
-      shadingDistanceColorOffsetXREd.setSize(new Dimension(100, 24));
-      shadingDistanceColorOffsetXREd.setPreferredSize(new Dimension(100, 24));
-      shadingDistanceColorOffsetXREd.setMaxValue(1.0);
-      shadingDistanceColorOffsetXREd.setLocation(new Point(100, 4));
-      shadingDistanceColorOffsetXREd.setFont(new Font("Dialog", Font.PLAIN, 10));
-      shadingDistanceColorOffsetXREd.setBounds(432, 6, 100, 24);
-      panel_1.add(shadingDistanceColorOffsetXREd);
-
-      JLabel lblOffsetx = new JLabel();
-      lblOffsetx.setText("OffsetX");
-      lblOffsetx.setSize(new Dimension(94, 22));
-      lblOffsetx.setPreferredSize(new Dimension(94, 22));
-      lblOffsetx.setLocation(new Point(4, 4));
-      lblOffsetx.setFont(new Font("Dialog", Font.BOLD, 10));
-      lblOffsetx.setBounds(336, 6, 94, 24);
-      panel_1.add(lblOffsetx);
-
-      shadingDistanceColorOffsetXSlider = new JSlider();
-      shadingDistanceColorOffsetXSlider.addChangeListener(new ChangeListener() {
-        public void stateChanged(ChangeEvent e) {
-          if (tinaController != null) {
-            tinaController.shadingDistanceColorOffsetXSlider_changed();
-          }
-        }
-      });
-      shadingDistanceColorOffsetXSlider.addMouseListener(new MouseAdapter() {
-        @Override
-        public void mousePressed(MouseEvent e) {
-          tinaController.saveUndoPoint();
-        }
-      });
-      shadingDistanceColorOffsetXSlider.setValue(0);
-      shadingDistanceColorOffsetXSlider.setSize(new Dimension(120, 19));
-      shadingDistanceColorOffsetXSlider.setPreferredSize(new Dimension(120, 19));
-      shadingDistanceColorOffsetXSlider.setMinimum(-100);
-      shadingDistanceColorOffsetXSlider.setMaximum(100);
-      shadingDistanceColorOffsetXSlider.setLocation(new Point(202, 4));
-      shadingDistanceColorOffsetXSlider.setBounds(534, 6, 120, 24);
-      panel_1.add(shadingDistanceColorOffsetXSlider);
-
-      shadingDistanceColorOffsetYREd = new JWFNumberField();
-      shadingDistanceColorOffsetYREd.addChangeListener(new ChangeListener() {
-        public void stateChanged(ChangeEvent e) {
-          if (tinaController != null) {
-            if (!shadingDistanceColorOffsetYREd.isMouseAdjusting() || shadingDistanceColorOffsetYREd.getMouseChangeCount() == 0) {
-              if (!shadingDistanceColorOffsetYSlider.getValueIsAdjusting()) {
-                tinaController.saveUndoPoint();
-              }
-            }
-            tinaController.shadingDistanceColorOffsetYREd_changed();
-          }
-        }
-      });
-      shadingDistanceColorOffsetYREd.setValueStep(0.01);
-      shadingDistanceColorOffsetYREd.setText("");
-      shadingDistanceColorOffsetYREd.setSize(new Dimension(100, 24));
-      shadingDistanceColorOffsetYREd.setPreferredSize(new Dimension(100, 24));
-      shadingDistanceColorOffsetYREd.setMaxValue(1.0);
-      shadingDistanceColorOffsetYREd.setLocation(new Point(100, 4));
-      shadingDistanceColorOffsetYREd.setFont(new Font("Dialog", Font.PLAIN, 10));
-      shadingDistanceColorOffsetYREd.setBounds(432, 29, 100, 24);
-      panel_1.add(shadingDistanceColorOffsetYREd);
-
-      JLabel lblOffsety = new JLabel();
-      lblOffsety.setText("OffsetY");
-      lblOffsety.setSize(new Dimension(94, 22));
-      lblOffsety.setPreferredSize(new Dimension(94, 22));
-      lblOffsety.setLocation(new Point(4, 4));
-      lblOffsety.setFont(new Font("Dialog", Font.BOLD, 10));
-      lblOffsety.setBounds(336, 29, 94, 24);
-      panel_1.add(lblOffsety);
-
-      shadingDistanceColorOffsetYSlider = new JSlider();
-      shadingDistanceColorOffsetYSlider.addChangeListener(new ChangeListener() {
-        public void stateChanged(ChangeEvent e) {
-          if (tinaController != null) {
-            tinaController.shadingDistanceColorOffsetYSlider_changed();
-          }
-        }
-      });
-      shadingDistanceColorOffsetYSlider.addMouseListener(new MouseAdapter() {
-        @Override
-        public void mousePressed(MouseEvent e) {
-          tinaController.saveUndoPoint();
-        }
-      });
-      shadingDistanceColorOffsetYSlider.setValue(0);
-      shadingDistanceColorOffsetYSlider.setSize(new Dimension(120, 19));
-      shadingDistanceColorOffsetYSlider.setPreferredSize(new Dimension(120, 19));
-      shadingDistanceColorOffsetYSlider.setMinimum(-100);
-      shadingDistanceColorOffsetYSlider.setMaximum(100);
-      shadingDistanceColorOffsetYSlider.setLocation(new Point(202, 4));
-      shadingDistanceColorOffsetYSlider.setBounds(534, 29, 120, 24);
-      panel_1.add(shadingDistanceColorOffsetYSlider);
-
-      shadingDistanceColorOffsetZREd = new JWFNumberField();
-      shadingDistanceColorOffsetZREd.addChangeListener(new ChangeListener() {
-        public void stateChanged(ChangeEvent e) {
-          if (tinaController != null) {
-            if (!shadingDistanceColorOffsetZREd.isMouseAdjusting() || shadingDistanceColorOffsetZREd.getMouseChangeCount() == 0) {
-              if (!shadingDistanceColorOffsetZSlider.getValueIsAdjusting()) {
-                tinaController.saveUndoPoint();
-              }
-            }
-            tinaController.shadingDistanceColorOffsetZREd_changed();
-          }
-        }
-      });
-      shadingDistanceColorOffsetZREd.setValueStep(0.01);
-      shadingDistanceColorOffsetZREd.setText("");
-      shadingDistanceColorOffsetZREd.setSize(new Dimension(100, 24));
-      shadingDistanceColorOffsetZREd.setPreferredSize(new Dimension(100, 24));
-      shadingDistanceColorOffsetZREd.setMaxValue(1.0);
-      shadingDistanceColorOffsetZREd.setLocation(new Point(100, 4));
-      shadingDistanceColorOffsetZREd.setFont(new Font("Dialog", Font.PLAIN, 10));
-      shadingDistanceColorOffsetZREd.setBounds(432, 52, 100, 24);
-      panel_1.add(shadingDistanceColorOffsetZREd);
-
-      JLabel lblOffsetz = new JLabel();
-      lblOffsetz.setText("OffsetZ");
-      lblOffsetz.setSize(new Dimension(94, 22));
-      lblOffsetz.setPreferredSize(new Dimension(94, 22));
-      lblOffsetz.setLocation(new Point(4, 4));
-      lblOffsetz.setFont(new Font("Dialog", Font.BOLD, 10));
-      lblOffsetz.setBounds(336, 52, 94, 24);
-      panel_1.add(lblOffsetz);
-
-      shadingDistanceColorOffsetZSlider = new JSlider();
-      shadingDistanceColorOffsetZSlider.addChangeListener(new ChangeListener() {
-        public void stateChanged(ChangeEvent e) {
-          if (tinaController != null) {
-            tinaController.shadingDistanceColorOffsetZSlider_changed();
-          }
-        }
-      });
-      shadingDistanceColorOffsetZSlider.addMouseListener(new MouseAdapter() {
-        @Override
-        public void mousePressed(MouseEvent e) {
-          tinaController.saveUndoPoint();
-        }
-      });
-      shadingDistanceColorOffsetZSlider.setValue(0);
-      shadingDistanceColorOffsetZSlider.setSize(new Dimension(120, 19));
-      shadingDistanceColorOffsetZSlider.setPreferredSize(new Dimension(120, 19));
-      shadingDistanceColorOffsetZSlider.setMinimum(-100);
-      shadingDistanceColorOffsetZSlider.setMaximum(100);
-      shadingDistanceColorOffsetZSlider.setLocation(new Point(202, 4));
-      shadingDistanceColorOffsetZSlider.setBounds(534, 52, 120, 24);
-      panel_1.add(shadingDistanceColorOffsetZSlider);
-
-      shadingDistanceColorStyleREd = new JWFNumberField();
-      shadingDistanceColorStyleREd.addChangeListener(new ChangeListener() {
-        public void stateChanged(ChangeEvent e) {
-          if (tinaController != null) {
-            if (!shadingDistanceColorStyleREd.isMouseAdjusting() || shadingDistanceColorStyleREd.getMouseChangeCount() == 0) {
-              if (!shadingDistanceColorStyleSlider.getValueIsAdjusting()) {
-                tinaController.saveUndoPoint();
-              }
-            }
-            tinaController.shadingDistanceColorStyleREd_changed();
-          }
-        }
-      });
-      shadingDistanceColorStyleREd.setHasMaxValue(true);
-      shadingDistanceColorStyleREd.setHasMinValue(true);
-      shadingDistanceColorStyleREd.setOnlyIntegers(true);
-      shadingDistanceColorStyleREd.setValueStep(0.01);
-      shadingDistanceColorStyleREd.setText("");
-      shadingDistanceColorStyleREd.setSize(new Dimension(100, 24));
-      shadingDistanceColorStyleREd.setPreferredSize(new Dimension(100, 24));
-      shadingDistanceColorStyleREd.setMaxValue(2.0);
-      shadingDistanceColorStyleREd.setLocation(new Point(100, 4));
-      shadingDistanceColorStyleREd.setFont(new Font("Dialog", Font.PLAIN, 10));
-      shadingDistanceColorStyleREd.setBounds(759, 6, 100, 24);
-      panel_1.add(shadingDistanceColorStyleREd);
-
-      shadingDistanceColorStyleSlider = new JSlider();
-      shadingDistanceColorStyleSlider.addChangeListener(new ChangeListener() {
-        public void stateChanged(ChangeEvent e) {
-          if (tinaController != null) {
-            tinaController.shadingDistanceColorStyleSlider_changed();
-          }
-        }
-      });
-      shadingDistanceColorStyleSlider.addMouseListener(new MouseAdapter() {
-        @Override
-        public void mousePressed(MouseEvent e) {
-          tinaController.saveUndoPoint();
-        }
-      });
-      shadingDistanceColorStyleSlider.setValue(0);
-      shadingDistanceColorStyleSlider.setSize(new Dimension(120, 19));
-      shadingDistanceColorStyleSlider.setPreferredSize(new Dimension(120, 19));
-      shadingDistanceColorStyleSlider.setMaximum(2);
-      shadingDistanceColorStyleSlider.setLocation(new Point(202, 4));
-      shadingDistanceColorStyleSlider.setBounds(861, 6, 120, 24);
-      panel_1.add(shadingDistanceColorStyleSlider);
-
-      shadingDistanceColorCoordinateREd = new JWFNumberField();
-      shadingDistanceColorCoordinateREd.addChangeListener(new ChangeListener() {
-        public void stateChanged(ChangeEvent e) {
-          if (tinaController != null) {
-            if (!shadingDistanceColorCoordinateREd.isMouseAdjusting() || shadingDistanceColorCoordinateREd.getMouseChangeCount() == 0) {
-              if (!shadingDistanceColorCoordinateSlider.getValueIsAdjusting()) {
-                tinaController.saveUndoPoint();
-              }
-            }
-            tinaController.shadingDistanceColorCoordinateREd_changed();
-          }
-        }
-      });
-      shadingDistanceColorCoordinateREd.setHasMinValue(true);
-      shadingDistanceColorCoordinateREd.setHasMaxValue(true);
-      shadingDistanceColorCoordinateREd.setOnlyIntegers(true);
-      shadingDistanceColorCoordinateREd.setValueStep(0.01);
-      shadingDistanceColorCoordinateREd.setText("");
-      shadingDistanceColorCoordinateREd.setSize(new Dimension(100, 24));
-      shadingDistanceColorCoordinateREd.setPreferredSize(new Dimension(100, 24));
-      shadingDistanceColorCoordinateREd.setMaxValue(5.0);
-      shadingDistanceColorCoordinateREd.setLocation(new Point(100, 4));
-      shadingDistanceColorCoordinateREd.setFont(new Font("Dialog", Font.PLAIN, 10));
-      shadingDistanceColorCoordinateREd.setBounds(759, 29, 100, 24);
-      panel_1.add(shadingDistanceColorCoordinateREd);
-
-      shadingDistanceColorCoordinateSlider = new JSlider();
-      shadingDistanceColorCoordinateSlider.addChangeListener(new ChangeListener() {
-        public void stateChanged(ChangeEvent e) {
-          if (tinaController != null) {
-            tinaController.shadingDistanceColorCoordinateSlider_changed();
-          }
-        }
-      });
-      shadingDistanceColorCoordinateSlider.addMouseListener(new MouseAdapter() {
-        @Override
-        public void mousePressed(MouseEvent e) {
-          tinaController.saveUndoPoint();
-        }
-      });
-      shadingDistanceColorCoordinateSlider.setValue(0);
-      shadingDistanceColorCoordinateSlider.setSize(new Dimension(120, 19));
-      shadingDistanceColorCoordinateSlider.setPreferredSize(new Dimension(120, 19));
-      shadingDistanceColorCoordinateSlider.setMaximum(5);
-      shadingDistanceColorCoordinateSlider.setLocation(new Point(202, 4));
-      shadingDistanceColorCoordinateSlider.setBounds(861, 29, 120, 24);
-      panel_1.add(shadingDistanceColorCoordinateSlider);
-
-      shadingDistanceColorShiftREd = new JWFNumberField();
-      shadingDistanceColorShiftREd.addChangeListener(new ChangeListener() {
-        public void stateChanged(ChangeEvent e) {
-          if (tinaController != null) {
-            if (!shadingDistanceColorShiftREd.isMouseAdjusting() || shadingDistanceColorShiftREd.getMouseChangeCount() == 0) {
-              if (!shadingDistanceColorShiftSlider.getValueIsAdjusting()) {
-                tinaController.saveUndoPoint();
-              }
-            }
-            tinaController.shadingDistanceColorShiftREd_changed();
-          }
-        }
-      });
-      shadingDistanceColorShiftREd.setValueStep(0.01);
-      shadingDistanceColorShiftREd.setText("");
-      shadingDistanceColorShiftREd.setSize(new Dimension(100, 24));
-      shadingDistanceColorShiftREd.setPreferredSize(new Dimension(100, 24));
-      shadingDistanceColorShiftREd.setMaxValue(1.0);
-      shadingDistanceColorShiftREd.setLocation(new Point(100, 4));
-      shadingDistanceColorShiftREd.setFont(new Font("Dialog", Font.PLAIN, 10));
-      shadingDistanceColorShiftREd.setBounds(759, 52, 100, 24);
-      panel_1.add(shadingDistanceColorShiftREd);
-
-      shadingDistanceColorShiftSlider = new JSlider();
-      shadingDistanceColorShiftSlider.addChangeListener(new ChangeListener() {
-        public void stateChanged(ChangeEvent e) {
-          if (tinaController != null) {
-            tinaController.shadingDistanceColorShiftSlider_changed();
-          }
-        }
-      });
-      shadingDistanceColorShiftSlider.addMouseListener(new MouseAdapter() {
-        @Override
-        public void mousePressed(MouseEvent e) {
-          tinaController.saveUndoPoint();
-        }
-      });
-      shadingDistanceColorShiftSlider.setValue(0);
-      shadingDistanceColorShiftSlider.setSize(new Dimension(120, 19));
-      shadingDistanceColorShiftSlider.setPreferredSize(new Dimension(120, 19));
-      shadingDistanceColorShiftSlider.setMinimum(-100);
-      shadingDistanceColorShiftSlider.setMaximum(100);
-      shadingDistanceColorShiftSlider.setLocation(new Point(202, 4));
-      shadingDistanceColorShiftSlider.setBounds(861, 52, 120, 24);
-      panel_1.add(shadingDistanceColorShiftSlider);
-
-      JLabel lblStyle = new JLabel();
-      lblStyle.setText("Style");
-      lblStyle.setSize(new Dimension(94, 22));
-      lblStyle.setPreferredSize(new Dimension(94, 22));
-      lblStyle.setLocation(new Point(4, 4));
-      lblStyle.setFont(new Font("Dialog", Font.BOLD, 10));
-      lblStyle.setBounds(663, 6, 94, 24);
-      panel_1.add(lblStyle);
-
-      JLabel lblCoordinate = new JLabel();
-      lblCoordinate.setText("Coordinate");
-      lblCoordinate.setSize(new Dimension(94, 22));
-      lblCoordinate.setPreferredSize(new Dimension(94, 22));
-      lblCoordinate.setLocation(new Point(4, 4));
-      lblCoordinate.setFont(new Font("Dialog", Font.BOLD, 10));
-      lblCoordinate.setBounds(663, 29, 94, 24);
-      panel_1.add(lblCoordinate);
-
-      JLabel lblShift = new JLabel();
-      lblShift.setText("Shift");
-      lblShift.setSize(new Dimension(94, 22));
-      lblShift.setPreferredSize(new Dimension(94, 22));
-      lblShift.setLocation(new Point(4, 4));
-      lblShift.setFont(new Font("Dialog", Font.BOLD, 10));
-      lblShift.setBounds(663, 52, 94, 24);
-      panel_1.add(lblShift);
+      tinaSouthTabbedPane.addTab("Special Shading", null, getShadingPanel(), null);
       tinaSouthTabbedPane.addTab("Gradient", null, getTinaPalettePanel(), null);
       tinaSouthTabbedPane.addTab("Layerz", null, getPanel_74(), null);
 
@@ -2038,7 +1532,7 @@ public class TinaInternalFrame extends JInternalFrame {
         public void stateChanged(ChangeEvent e) {
           if (tinaController != null) {
             switch (tinaSouthTabbedPane.getSelectedIndex()) {
-              case 8:
+              case 9:
                 if (tinaController.getGradientController() != null) {
                   tinaController.getGradientController().onActivate();
                 }
@@ -8038,43 +7532,43 @@ public class TinaInternalFrame extends JInternalFrame {
       shadingLightBlueLbl.setPreferredSize(new Dimension(94, 22));
       shadingLightBlueLbl.setText("Blue");
       shadingLightBlueLbl.setSize(new Dimension(94, 22));
-      shadingLightBlueLbl.setLocation(new Point(739, 75));
+      shadingLightBlueLbl.setLocation(new Point(664, 74));
       shadingLightBlueLbl.setFont(new Font("Dialog", Font.BOLD, 10));
       shadingLightGreenLbl = new JLabel();
       shadingLightGreenLbl.setPreferredSize(new Dimension(94, 22));
       shadingLightGreenLbl.setText("Green");
       shadingLightGreenLbl.setSize(new Dimension(94, 22));
-      shadingLightGreenLbl.setLocation(new Point(739, 51));
+      shadingLightGreenLbl.setLocation(new Point(664, 50));
       shadingLightGreenLbl.setFont(new Font("Dialog", Font.BOLD, 10));
       shadingLightRedLbl = new JLabel();
       shadingLightRedLbl.setPreferredSize(new Dimension(94, 22));
       shadingLightRedLbl.setText("Red");
       shadingLightRedLbl.setSize(new Dimension(94, 22));
-      shadingLightRedLbl.setLocation(new Point(739, 27));
+      shadingLightRedLbl.setLocation(new Point(664, 26));
       shadingLightRedLbl.setFont(new Font("Dialog", Font.BOLD, 10));
       shadingLightZLbl = new JLabel();
       shadingLightZLbl.setPreferredSize(new Dimension(94, 22));
       shadingLightZLbl.setText("Z position");
       shadingLightZLbl.setSize(new Dimension(94, 22));
-      shadingLightZLbl.setLocation(new Point(369, 76));
+      shadingLightZLbl.setLocation(new Point(334, 74));
       shadingLightZLbl.setFont(new Font("Dialog", Font.BOLD, 10));
       shadingLightYLbl = new JLabel();
       shadingLightYLbl.setPreferredSize(new Dimension(94, 22));
       shadingLightYLbl.setText("Y position");
       shadingLightYLbl.setSize(new Dimension(94, 22));
-      shadingLightYLbl.setLocation(new Point(369, 52));
+      shadingLightYLbl.setLocation(new Point(334, 50));
       shadingLightYLbl.setFont(new Font("Dialog", Font.BOLD, 10));
       shadingLightXLbl = new JLabel();
       shadingLightXLbl.setPreferredSize(new Dimension(94, 22));
       shadingLightXLbl.setText("X position");
       shadingLightXLbl.setSize(new Dimension(94, 22));
-      shadingLightXLbl.setLocation(new Point(369, 28));
+      shadingLightXLbl.setLocation(new Point(334, 26));
       shadingLightXLbl.setFont(new Font("Dialog", Font.BOLD, 10));
       shadingLightLbl = new JLabel();
       shadingLightLbl.setPreferredSize(new Dimension(94, 22));
       shadingLightLbl.setText("Light source");
       shadingLightLbl.setSize(new Dimension(94, 22));
-      shadingLightLbl.setLocation(new Point(369, 4));
+      shadingLightLbl.setLocation(new Point(334, 2));
       shadingLightLbl.setFont(new Font("Dialog", Font.BOLD, 10));
       shadingPhongSizeLbl = new JLabel();
       shadingPhongSizeLbl.setPreferredSize(new Dimension(94, 22));
@@ -8386,7 +7880,7 @@ public class TinaInternalFrame extends JInternalFrame {
       shadingLightCmb.setPreferredSize(new Dimension(125, 22));
       shadingLightCmb.setSelectedItem("1");
       shadingLightCmb.setSize(new Dimension(125, 22));
-      shadingLightCmb.setLocation(new Point(465, 4));
+      shadingLightCmb.setLocation(new Point(430, 2));
       shadingLightCmb.setFont(new Font("Dialog", Font.BOLD, 10));
       shadingLightCmb.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -8418,7 +7912,7 @@ public class TinaInternalFrame extends JInternalFrame {
       shadingLightXREd.setPreferredSize(new Dimension(100, 24));
       shadingLightXREd.setText("");
       shadingLightXREd.setSize(new Dimension(100, 24));
-      shadingLightXREd.setLocation(new Point(465, 28));
+      shadingLightXREd.setLocation(new Point(430, 26));
       shadingLightXREd.setFont(new Font("Dialog", Font.PLAIN, 10));
     }
     return shadingLightXREd;
@@ -8442,7 +7936,7 @@ public class TinaInternalFrame extends JInternalFrame {
       shadingLightXSlider.setMinimum(-2000);
       shadingLightXSlider.setValue(0);
       shadingLightXSlider.setSize(new Dimension(120, 19));
-      shadingLightXSlider.setLocation(new Point(567, 28));
+      shadingLightXSlider.setLocation(new Point(532, 26));
       shadingLightXSlider.setPreferredSize(new Dimension(120, 19));
       shadingLightXSlider.addChangeListener(new javax.swing.event.ChangeListener() {
         public void stateChanged(javax.swing.event.ChangeEvent e) {
@@ -8474,7 +7968,7 @@ public class TinaInternalFrame extends JInternalFrame {
       shadingLightYREd.setPreferredSize(new Dimension(100, 24));
       shadingLightYREd.setText("");
       shadingLightYREd.setSize(new Dimension(100, 24));
-      shadingLightYREd.setLocation(new Point(465, 52));
+      shadingLightYREd.setLocation(new Point(430, 50));
       shadingLightYREd.setFont(new Font("Dialog", Font.PLAIN, 10));
     }
     return shadingLightYREd;
@@ -8498,7 +7992,7 @@ public class TinaInternalFrame extends JInternalFrame {
       shadingLightYSlider.setMinimum(-2000);
       shadingLightYSlider.setValue(0);
       shadingLightYSlider.setSize(new Dimension(120, 19));
-      shadingLightYSlider.setLocation(new Point(567, 52));
+      shadingLightYSlider.setLocation(new Point(532, 50));
       shadingLightYSlider.setPreferredSize(new Dimension(120, 19));
       shadingLightYSlider.addChangeListener(new javax.swing.event.ChangeListener() {
         public void stateChanged(javax.swing.event.ChangeEvent e) {
@@ -8530,7 +8024,7 @@ public class TinaInternalFrame extends JInternalFrame {
       shadingLightZREd.setPreferredSize(new Dimension(100, 24));
       shadingLightZREd.setText("");
       shadingLightZREd.setSize(new Dimension(100, 24));
-      shadingLightZREd.setLocation(new Point(465, 76));
+      shadingLightZREd.setLocation(new Point(430, 74));
       shadingLightZREd.setFont(new Font("Dialog", Font.PLAIN, 10));
     }
     return shadingLightZREd;
@@ -8554,7 +8048,7 @@ public class TinaInternalFrame extends JInternalFrame {
       shadingLightZSlider.setMinimum(-2000);
       shadingLightZSlider.setValue(0);
       shadingLightZSlider.setSize(new Dimension(120, 19));
-      shadingLightZSlider.setLocation(new Point(567, 76));
+      shadingLightZSlider.setLocation(new Point(532, 74));
       shadingLightZSlider.setPreferredSize(new Dimension(120, 19));
       shadingLightZSlider.addChangeListener(new javax.swing.event.ChangeListener() {
         public void stateChanged(javax.swing.event.ChangeEvent e) {
@@ -8591,7 +8085,7 @@ public class TinaInternalFrame extends JInternalFrame {
       shadingLightRedREd.setPreferredSize(new Dimension(100, 24));
       shadingLightRedREd.setText("");
       shadingLightRedREd.setSize(new Dimension(100, 24));
-      shadingLightRedREd.setLocation(new Point(835, 27));
+      shadingLightRedREd.setLocation(new Point(760, 26));
       shadingLightRedREd.setFont(new Font("Dialog", Font.PLAIN, 10));
     }
     return shadingLightRedREd;
@@ -8614,7 +8108,7 @@ public class TinaInternalFrame extends JInternalFrame {
       shadingLightRedSlider.setMaximum(255);
       shadingLightRedSlider.setMinimum(0);
       shadingLightRedSlider.setValue(0);
-      shadingLightRedSlider.setLocation(new Point(937, 27));
+      shadingLightRedSlider.setLocation(new Point(862, 26));
       shadingLightRedSlider.setSize(new Dimension(120, 19));
       shadingLightRedSlider.setPreferredSize(new Dimension(120, 19));
       shadingLightRedSlider.addChangeListener(new javax.swing.event.ChangeListener() {
@@ -8652,7 +8146,7 @@ public class TinaInternalFrame extends JInternalFrame {
       shadingLightGreenREd.setPreferredSize(new Dimension(100, 24));
       shadingLightGreenREd.setText("");
       shadingLightGreenREd.setSize(new Dimension(100, 24));
-      shadingLightGreenREd.setLocation(new Point(835, 51));
+      shadingLightGreenREd.setLocation(new Point(760, 50));
       shadingLightGreenREd.setFont(new Font("Dialog", Font.PLAIN, 10));
     }
     return shadingLightGreenREd;
@@ -8676,7 +8170,7 @@ public class TinaInternalFrame extends JInternalFrame {
       shadingLightGreenSlider.setMinimum(0);
       shadingLightGreenSlider.setValue(0);
       shadingLightGreenSlider.setSize(new Dimension(120, 19));
-      shadingLightGreenSlider.setLocation(new Point(937, 51));
+      shadingLightGreenSlider.setLocation(new Point(862, 50));
       shadingLightGreenSlider.setPreferredSize(new Dimension(120, 19));
       shadingLightGreenSlider.addChangeListener(new javax.swing.event.ChangeListener() {
         public void stateChanged(javax.swing.event.ChangeEvent e) {
@@ -8712,7 +8206,7 @@ public class TinaInternalFrame extends JInternalFrame {
       shadingLightBlueREd.setPreferredSize(new Dimension(100, 24));
       shadingLightBlueREd.setText("");
       shadingLightBlueREd.setSize(new Dimension(100, 24));
-      shadingLightBlueREd.setLocation(new Point(835, 75));
+      shadingLightBlueREd.setLocation(new Point(760, 74));
       shadingLightBlueREd.setFont(new Font("Dialog", Font.PLAIN, 10));
     }
     return shadingLightBlueREd;
@@ -8736,7 +8230,7 @@ public class TinaInternalFrame extends JInternalFrame {
       shadingLightBlueSlider.setMinimum(0);
       shadingLightBlueSlider.setValue(0);
       shadingLightBlueSlider.setSize(new Dimension(120, 19));
-      shadingLightBlueSlider.setLocation(new Point(937, 75));
+      shadingLightBlueSlider.setLocation(new Point(862, 74));
       shadingLightBlueSlider.setPreferredSize(new Dimension(120, 19));
       shadingLightBlueSlider.addChangeListener(new javax.swing.event.ChangeListener() {
         public void stateChanged(javax.swing.event.ChangeEvent e) {
@@ -9580,16 +9074,528 @@ public class TinaInternalFrame extends JInternalFrame {
    */
   private JPanel getShadingPanel() {
     if (shadingPanel == null) {
+      shadingPanel = new JPanel();
+      shadingPanel.setLayout(new BorderLayout(0, 0));
+
+      JTabbedPane tabbedPane_1 = new JTabbedPane(JTabbedPane.LEFT);
+      shadingPanel.add(tabbedPane_1, BorderLayout.CENTER);
+
+      JPanel panel_2 = new JPanel();
+      tabbedPane_1.addTab("Main", null, panel_2, null);
+      panel_2.setLayout(null);
       shadingLbl = new JLabel();
+      shadingLbl.setBounds(6, 6, 94, 22);
+      panel_2.add(shadingLbl);
       shadingLbl.setPreferredSize(new Dimension(94, 22));
       shadingLbl.setText("Shading");
-      shadingLbl.setSize(new Dimension(94, 22));
-      shadingLbl.setLocation(new Point(4, 4));
       shadingLbl.setFont(new Font("Dialog", Font.BOLD, 10));
-      shadingPanel = new JPanel();
-      shadingPanel.setLayout(null);
-      shadingPanel.add(shadingLbl, null);
-      shadingPanel.add(getShadingCmb(), null);
+      panel_2.add(getShadingCmb());
+      tabbedPane_1.addTab("Pseudo3D-Shading", null, getPseudo3DShadingPanel(), null);
+      tabbedPane_1.addTab("Blur-Shading", null, getBlurShadingPanel(), null);
+
+      JPanel panel_1 = new JPanel();
+      tabbedPane_1.addTab("Distance-Color-Shading", null, panel_1, null);
+      panel_1.setLayout(null);
+
+      shadingDistanceColorRadiusSlider = new JSlider();
+      shadingDistanceColorRadiusSlider.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null) {
+            tinaController.shadingDistanceColorRadiusSlider_changed();
+          }
+        }
+      });
+      shadingDistanceColorRadiusSlider.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mousePressed(MouseEvent e) {
+          tinaController.saveUndoPoint();
+        }
+      });
+      shadingDistanceColorRadiusSlider.setValue(0);
+      shadingDistanceColorRadiusSlider.setSize(new Dimension(120, 19));
+      shadingDistanceColorRadiusSlider.setPreferredSize(new Dimension(120, 19));
+      shadingDistanceColorRadiusSlider.setMinimum(0);
+      shadingDistanceColorRadiusSlider.setMaximum(200);
+      shadingDistanceColorRadiusSlider.setLocation(new Point(202, 4));
+      shadingDistanceColorRadiusSlider.setBounds(204, 6, 120, 24);
+      panel_1.add(shadingDistanceColorRadiusSlider);
+
+      shadingDistanceColorRadiusREd = new JWFNumberField();
+      shadingDistanceColorRadiusREd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null) {
+            if (!shadingDistanceColorRadiusREd.isMouseAdjusting() || shadingDistanceColorRadiusREd.getMouseChangeCount() == 0) {
+              if (!shadingDistanceColorRadiusSlider.getValueIsAdjusting()) {
+                tinaController.saveUndoPoint();
+              }
+            }
+            tinaController.shadingDistanceColorRadiusREd_changed();
+          }
+        }
+      });
+      shadingDistanceColorRadiusREd.setValueStep(0.01);
+      shadingDistanceColorRadiusREd.setText("");
+      shadingDistanceColorRadiusREd.setSize(new Dimension(100, 24));
+      shadingDistanceColorRadiusREd.setPreferredSize(new Dimension(100, 24));
+      shadingDistanceColorRadiusREd.setMaxValue(1.0);
+      shadingDistanceColorRadiusREd.setLocation(new Point(100, 4));
+      shadingDistanceColorRadiusREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      shadingDistanceColorRadiusREd.setBounds(102, 6, 100, 24);
+      panel_1.add(shadingDistanceColorRadiusREd);
+
+      JLabel lblRadius = new JLabel();
+      lblRadius.setText("Radius");
+      lblRadius.setSize(new Dimension(94, 22));
+      lblRadius.setPreferredSize(new Dimension(94, 22));
+      lblRadius.setLocation(new Point(4, 4));
+      lblRadius.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblRadius.setBounds(6, 6, 94, 24);
+      panel_1.add(lblRadius);
+
+      shadingDistanceColorScaleREd = new JWFNumberField();
+      shadingDistanceColorScaleREd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null) {
+            if (!shadingDistanceColorScaleREd.isMouseAdjusting() || shadingDistanceColorScaleREd.getMouseChangeCount() == 0) {
+              if (!shadingDistanceColorScaleSlider.getValueIsAdjusting()) {
+                tinaController.saveUndoPoint();
+              }
+            }
+            tinaController.shadingDistanceColorScaleREd_changed();
+          }
+        }
+      });
+      shadingDistanceColorScaleREd.setValueStep(0.01);
+      shadingDistanceColorScaleREd.setText("");
+      shadingDistanceColorScaleREd.setSize(new Dimension(100, 24));
+      shadingDistanceColorScaleREd.setPreferredSize(new Dimension(100, 24));
+      shadingDistanceColorScaleREd.setMaxValue(1.0);
+      shadingDistanceColorScaleREd.setLocation(new Point(100, 4));
+      shadingDistanceColorScaleREd.setHasMinValue(true);
+      shadingDistanceColorScaleREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      shadingDistanceColorScaleREd.setBounds(102, 29, 100, 24);
+      panel_1.add(shadingDistanceColorScaleREd);
+
+      JLabel lblScale = new JLabel();
+      lblScale.setText("Scale");
+      lblScale.setSize(new Dimension(94, 22));
+      lblScale.setPreferredSize(new Dimension(94, 22));
+      lblScale.setLocation(new Point(4, 4));
+      lblScale.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblScale.setBounds(6, 29, 94, 24);
+      panel_1.add(lblScale);
+
+      shadingDistanceColorScaleSlider = new JSlider();
+      shadingDistanceColorScaleSlider.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null) {
+            tinaController.shadingDistanceColorScaleSlider_changed();
+          }
+        }
+      });
+      shadingDistanceColorScaleSlider.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mousePressed(MouseEvent e) {
+          tinaController.saveUndoPoint();
+        }
+      });
+      shadingDistanceColorScaleSlider.setValue(0);
+      shadingDistanceColorScaleSlider.setSize(new Dimension(120, 19));
+      shadingDistanceColorScaleSlider.setPreferredSize(new Dimension(120, 19));
+      shadingDistanceColorScaleSlider.setMinimum(0);
+      shadingDistanceColorScaleSlider.setMaximum(300);
+      shadingDistanceColorScaleSlider.setLocation(new Point(202, 4));
+      shadingDistanceColorScaleSlider.setBounds(204, 29, 120, 24);
+      panel_1.add(shadingDistanceColorScaleSlider);
+
+      shadingDistanceColorExponentREd = new JWFNumberField();
+      shadingDistanceColorExponentREd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null) {
+            if (!shadingDistanceColorExponentREd.isMouseAdjusting() || shadingDistanceColorExponentREd.getMouseChangeCount() == 0) {
+              if (!shadingDistanceColorExponentSlider.getValueIsAdjusting()) {
+                tinaController.saveUndoPoint();
+              }
+            }
+            tinaController.shadingDistanceColorExponentREd_changed();
+          }
+        }
+      });
+      shadingDistanceColorExponentREd.setValueStep(0.01);
+      shadingDistanceColorExponentREd.setText("");
+      shadingDistanceColorExponentREd.setSize(new Dimension(100, 24));
+      shadingDistanceColorExponentREd.setPreferredSize(new Dimension(100, 24));
+      shadingDistanceColorExponentREd.setMaxValue(1.0);
+      shadingDistanceColorExponentREd.setLocation(new Point(100, 4));
+      shadingDistanceColorExponentREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      shadingDistanceColorExponentREd.setBounds(102, 52, 100, 24);
+      panel_1.add(shadingDistanceColorExponentREd);
+
+      JLabel lblExponent_1 = new JLabel();
+      lblExponent_1.setText("Exponent");
+      lblExponent_1.setSize(new Dimension(94, 22));
+      lblExponent_1.setPreferredSize(new Dimension(94, 22));
+      lblExponent_1.setLocation(new Point(4, 4));
+      lblExponent_1.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblExponent_1.setBounds(6, 52, 94, 24);
+      panel_1.add(lblExponent_1);
+
+      shadingDistanceColorExponentSlider = new JSlider();
+      shadingDistanceColorExponentSlider.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null) {
+            tinaController.shadingDistanceColorExponentSlider_changed();
+          }
+        }
+      });
+      shadingDistanceColorExponentSlider.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mousePressed(MouseEvent e) {
+          tinaController.saveUndoPoint();
+        }
+      });
+      shadingDistanceColorExponentSlider.setValue(0);
+      shadingDistanceColorExponentSlider.setSize(new Dimension(120, 19));
+      shadingDistanceColorExponentSlider.setPreferredSize(new Dimension(120, 19));
+      shadingDistanceColorExponentSlider.setMinimum(-300);
+      shadingDistanceColorExponentSlider.setMaximum(300);
+      shadingDistanceColorExponentSlider.setLocation(new Point(202, 4));
+      shadingDistanceColorExponentSlider.setBounds(204, 52, 120, 24);
+      panel_1.add(shadingDistanceColorExponentSlider);
+
+      shadingDistanceColorOffsetXREd = new JWFNumberField();
+      shadingDistanceColorOffsetXREd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null) {
+            if (!shadingDistanceColorOffsetXREd.isMouseAdjusting() || shadingDistanceColorOffsetXREd.getMouseChangeCount() == 0) {
+              if (!shadingDistanceColorOffsetXSlider.getValueIsAdjusting()) {
+                tinaController.saveUndoPoint();
+              }
+            }
+            tinaController.shadingDistanceColorOffsetXREd_changed();
+          }
+        }
+      });
+      shadingDistanceColorOffsetXREd.setValueStep(0.01);
+      shadingDistanceColorOffsetXREd.setText("");
+      shadingDistanceColorOffsetXREd.setSize(new Dimension(100, 24));
+      shadingDistanceColorOffsetXREd.setPreferredSize(new Dimension(100, 24));
+      shadingDistanceColorOffsetXREd.setMaxValue(1.0);
+      shadingDistanceColorOffsetXREd.setLocation(new Point(100, 4));
+      shadingDistanceColorOffsetXREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      shadingDistanceColorOffsetXREd.setBounds(432, 6, 100, 24);
+      panel_1.add(shadingDistanceColorOffsetXREd);
+
+      JLabel lblOffsetx = new JLabel();
+      lblOffsetx.setText("OffsetX");
+      lblOffsetx.setSize(new Dimension(94, 22));
+      lblOffsetx.setPreferredSize(new Dimension(94, 22));
+      lblOffsetx.setLocation(new Point(4, 4));
+      lblOffsetx.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblOffsetx.setBounds(336, 6, 94, 24);
+      panel_1.add(lblOffsetx);
+
+      shadingDistanceColorOffsetXSlider = new JSlider();
+      shadingDistanceColorOffsetXSlider.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null) {
+            tinaController.shadingDistanceColorOffsetXSlider_changed();
+          }
+        }
+      });
+      shadingDistanceColorOffsetXSlider.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mousePressed(MouseEvent e) {
+          tinaController.saveUndoPoint();
+        }
+      });
+      shadingDistanceColorOffsetXSlider.setValue(0);
+      shadingDistanceColorOffsetXSlider.setSize(new Dimension(120, 19));
+      shadingDistanceColorOffsetXSlider.setPreferredSize(new Dimension(120, 19));
+      shadingDistanceColorOffsetXSlider.setMinimum(-100);
+      shadingDistanceColorOffsetXSlider.setMaximum(100);
+      shadingDistanceColorOffsetXSlider.setLocation(new Point(202, 4));
+      shadingDistanceColorOffsetXSlider.setBounds(534, 6, 120, 24);
+      panel_1.add(shadingDistanceColorOffsetXSlider);
+
+      shadingDistanceColorOffsetYREd = new JWFNumberField();
+      shadingDistanceColorOffsetYREd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null) {
+            if (!shadingDistanceColorOffsetYREd.isMouseAdjusting() || shadingDistanceColorOffsetYREd.getMouseChangeCount() == 0) {
+              if (!shadingDistanceColorOffsetYSlider.getValueIsAdjusting()) {
+                tinaController.saveUndoPoint();
+              }
+            }
+            tinaController.shadingDistanceColorOffsetYREd_changed();
+          }
+        }
+      });
+      shadingDistanceColorOffsetYREd.setValueStep(0.01);
+      shadingDistanceColorOffsetYREd.setText("");
+      shadingDistanceColorOffsetYREd.setSize(new Dimension(100, 24));
+      shadingDistanceColorOffsetYREd.setPreferredSize(new Dimension(100, 24));
+      shadingDistanceColorOffsetYREd.setMaxValue(1.0);
+      shadingDistanceColorOffsetYREd.setLocation(new Point(100, 4));
+      shadingDistanceColorOffsetYREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      shadingDistanceColorOffsetYREd.setBounds(432, 29, 100, 24);
+      panel_1.add(shadingDistanceColorOffsetYREd);
+
+      JLabel lblOffsety = new JLabel();
+      lblOffsety.setText("OffsetY");
+      lblOffsety.setSize(new Dimension(94, 22));
+      lblOffsety.setPreferredSize(new Dimension(94, 22));
+      lblOffsety.setLocation(new Point(4, 4));
+      lblOffsety.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblOffsety.setBounds(336, 29, 94, 24);
+      panel_1.add(lblOffsety);
+
+      shadingDistanceColorOffsetYSlider = new JSlider();
+      shadingDistanceColorOffsetYSlider.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null) {
+            tinaController.shadingDistanceColorOffsetYSlider_changed();
+          }
+        }
+      });
+      shadingDistanceColorOffsetYSlider.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mousePressed(MouseEvent e) {
+          tinaController.saveUndoPoint();
+        }
+      });
+      shadingDistanceColorOffsetYSlider.setValue(0);
+      shadingDistanceColorOffsetYSlider.setSize(new Dimension(120, 19));
+      shadingDistanceColorOffsetYSlider.setPreferredSize(new Dimension(120, 19));
+      shadingDistanceColorOffsetYSlider.setMinimum(-100);
+      shadingDistanceColorOffsetYSlider.setMaximum(100);
+      shadingDistanceColorOffsetYSlider.setLocation(new Point(202, 4));
+      shadingDistanceColorOffsetYSlider.setBounds(534, 29, 120, 24);
+      panel_1.add(shadingDistanceColorOffsetYSlider);
+
+      shadingDistanceColorOffsetZREd = new JWFNumberField();
+      shadingDistanceColorOffsetZREd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null) {
+            if (!shadingDistanceColorOffsetZREd.isMouseAdjusting() || shadingDistanceColorOffsetZREd.getMouseChangeCount() == 0) {
+              if (!shadingDistanceColorOffsetZSlider.getValueIsAdjusting()) {
+                tinaController.saveUndoPoint();
+              }
+            }
+            tinaController.shadingDistanceColorOffsetZREd_changed();
+          }
+        }
+      });
+      shadingDistanceColorOffsetZREd.setValueStep(0.01);
+      shadingDistanceColorOffsetZREd.setText("");
+      shadingDistanceColorOffsetZREd.setSize(new Dimension(100, 24));
+      shadingDistanceColorOffsetZREd.setPreferredSize(new Dimension(100, 24));
+      shadingDistanceColorOffsetZREd.setMaxValue(1.0);
+      shadingDistanceColorOffsetZREd.setLocation(new Point(100, 4));
+      shadingDistanceColorOffsetZREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      shadingDistanceColorOffsetZREd.setBounds(432, 52, 100, 24);
+      panel_1.add(shadingDistanceColorOffsetZREd);
+
+      JLabel lblOffsetz = new JLabel();
+      lblOffsetz.setText("OffsetZ");
+      lblOffsetz.setSize(new Dimension(94, 22));
+      lblOffsetz.setPreferredSize(new Dimension(94, 22));
+      lblOffsetz.setLocation(new Point(4, 4));
+      lblOffsetz.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblOffsetz.setBounds(336, 52, 94, 24);
+      panel_1.add(lblOffsetz);
+
+      shadingDistanceColorOffsetZSlider = new JSlider();
+      shadingDistanceColorOffsetZSlider.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null) {
+            tinaController.shadingDistanceColorOffsetZSlider_changed();
+          }
+        }
+      });
+      shadingDistanceColorOffsetZSlider.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mousePressed(MouseEvent e) {
+          tinaController.saveUndoPoint();
+        }
+      });
+      shadingDistanceColorOffsetZSlider.setValue(0);
+      shadingDistanceColorOffsetZSlider.setSize(new Dimension(120, 19));
+      shadingDistanceColorOffsetZSlider.setPreferredSize(new Dimension(120, 19));
+      shadingDistanceColorOffsetZSlider.setMinimum(-100);
+      shadingDistanceColorOffsetZSlider.setMaximum(100);
+      shadingDistanceColorOffsetZSlider.setLocation(new Point(202, 4));
+      shadingDistanceColorOffsetZSlider.setBounds(534, 52, 120, 24);
+      panel_1.add(shadingDistanceColorOffsetZSlider);
+
+      shadingDistanceColorStyleREd = new JWFNumberField();
+      shadingDistanceColorStyleREd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null) {
+            if (!shadingDistanceColorStyleREd.isMouseAdjusting() || shadingDistanceColorStyleREd.getMouseChangeCount() == 0) {
+              if (!shadingDistanceColorStyleSlider.getValueIsAdjusting()) {
+                tinaController.saveUndoPoint();
+              }
+            }
+            tinaController.shadingDistanceColorStyleREd_changed();
+          }
+        }
+      });
+      shadingDistanceColorStyleREd.setHasMaxValue(true);
+      shadingDistanceColorStyleREd.setHasMinValue(true);
+      shadingDistanceColorStyleREd.setOnlyIntegers(true);
+      shadingDistanceColorStyleREd.setValueStep(0.01);
+      shadingDistanceColorStyleREd.setText("");
+      shadingDistanceColorStyleREd.setSize(new Dimension(100, 24));
+      shadingDistanceColorStyleREd.setPreferredSize(new Dimension(100, 24));
+      shadingDistanceColorStyleREd.setMaxValue(2.0);
+      shadingDistanceColorStyleREd.setLocation(new Point(100, 4));
+      shadingDistanceColorStyleREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      shadingDistanceColorStyleREd.setBounds(759, 6, 100, 24);
+      panel_1.add(shadingDistanceColorStyleREd);
+
+      shadingDistanceColorStyleSlider = new JSlider();
+      shadingDistanceColorStyleSlider.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null) {
+            tinaController.shadingDistanceColorStyleSlider_changed();
+          }
+        }
+      });
+      shadingDistanceColorStyleSlider.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mousePressed(MouseEvent e) {
+          tinaController.saveUndoPoint();
+        }
+      });
+      shadingDistanceColorStyleSlider.setValue(0);
+      shadingDistanceColorStyleSlider.setSize(new Dimension(120, 19));
+      shadingDistanceColorStyleSlider.setPreferredSize(new Dimension(120, 19));
+      shadingDistanceColorStyleSlider.setMaximum(2);
+      shadingDistanceColorStyleSlider.setLocation(new Point(202, 4));
+      shadingDistanceColorStyleSlider.setBounds(861, 6, 120, 24);
+      panel_1.add(shadingDistanceColorStyleSlider);
+
+      shadingDistanceColorCoordinateREd = new JWFNumberField();
+      shadingDistanceColorCoordinateREd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null) {
+            if (!shadingDistanceColorCoordinateREd.isMouseAdjusting() || shadingDistanceColorCoordinateREd.getMouseChangeCount() == 0) {
+              if (!shadingDistanceColorCoordinateSlider.getValueIsAdjusting()) {
+                tinaController.saveUndoPoint();
+              }
+            }
+            tinaController.shadingDistanceColorCoordinateREd_changed();
+          }
+        }
+      });
+      shadingDistanceColorCoordinateREd.setHasMinValue(true);
+      shadingDistanceColorCoordinateREd.setHasMaxValue(true);
+      shadingDistanceColorCoordinateREd.setOnlyIntegers(true);
+      shadingDistanceColorCoordinateREd.setValueStep(0.01);
+      shadingDistanceColorCoordinateREd.setText("");
+      shadingDistanceColorCoordinateREd.setSize(new Dimension(100, 24));
+      shadingDistanceColorCoordinateREd.setPreferredSize(new Dimension(100, 24));
+      shadingDistanceColorCoordinateREd.setMaxValue(5.0);
+      shadingDistanceColorCoordinateREd.setLocation(new Point(100, 4));
+      shadingDistanceColorCoordinateREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      shadingDistanceColorCoordinateREd.setBounds(759, 29, 100, 24);
+      panel_1.add(shadingDistanceColorCoordinateREd);
+
+      shadingDistanceColorCoordinateSlider = new JSlider();
+      shadingDistanceColorCoordinateSlider.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null) {
+            tinaController.shadingDistanceColorCoordinateSlider_changed();
+          }
+        }
+      });
+      shadingDistanceColorCoordinateSlider.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mousePressed(MouseEvent e) {
+          tinaController.saveUndoPoint();
+        }
+      });
+      shadingDistanceColorCoordinateSlider.setValue(0);
+      shadingDistanceColorCoordinateSlider.setSize(new Dimension(120, 19));
+      shadingDistanceColorCoordinateSlider.setPreferredSize(new Dimension(120, 19));
+      shadingDistanceColorCoordinateSlider.setMaximum(5);
+      shadingDistanceColorCoordinateSlider.setLocation(new Point(202, 4));
+      shadingDistanceColorCoordinateSlider.setBounds(861, 29, 120, 24);
+      panel_1.add(shadingDistanceColorCoordinateSlider);
+
+      shadingDistanceColorShiftREd = new JWFNumberField();
+      shadingDistanceColorShiftREd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null) {
+            if (!shadingDistanceColorShiftREd.isMouseAdjusting() || shadingDistanceColorShiftREd.getMouseChangeCount() == 0) {
+              if (!shadingDistanceColorShiftSlider.getValueIsAdjusting()) {
+                tinaController.saveUndoPoint();
+              }
+            }
+            tinaController.shadingDistanceColorShiftREd_changed();
+          }
+        }
+      });
+      shadingDistanceColorShiftREd.setValueStep(0.01);
+      shadingDistanceColorShiftREd.setText("");
+      shadingDistanceColorShiftREd.setSize(new Dimension(100, 24));
+      shadingDistanceColorShiftREd.setPreferredSize(new Dimension(100, 24));
+      shadingDistanceColorShiftREd.setMaxValue(1.0);
+      shadingDistanceColorShiftREd.setLocation(new Point(100, 4));
+      shadingDistanceColorShiftREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      shadingDistanceColorShiftREd.setBounds(759, 52, 100, 24);
+      panel_1.add(shadingDistanceColorShiftREd);
+
+      shadingDistanceColorShiftSlider = new JSlider();
+      shadingDistanceColorShiftSlider.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null) {
+            tinaController.shadingDistanceColorShiftSlider_changed();
+          }
+        }
+      });
+      shadingDistanceColorShiftSlider.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mousePressed(MouseEvent e) {
+          tinaController.saveUndoPoint();
+        }
+      });
+      shadingDistanceColorShiftSlider.setValue(0);
+      shadingDistanceColorShiftSlider.setSize(new Dimension(120, 19));
+      shadingDistanceColorShiftSlider.setPreferredSize(new Dimension(120, 19));
+      shadingDistanceColorShiftSlider.setMinimum(-100);
+      shadingDistanceColorShiftSlider.setMaximum(100);
+      shadingDistanceColorShiftSlider.setLocation(new Point(202, 4));
+      shadingDistanceColorShiftSlider.setBounds(861, 52, 120, 24);
+      panel_1.add(shadingDistanceColorShiftSlider);
+
+      JLabel lblStyle = new JLabel();
+      lblStyle.setText("Style");
+      lblStyle.setSize(new Dimension(94, 22));
+      lblStyle.setPreferredSize(new Dimension(94, 22));
+      lblStyle.setLocation(new Point(4, 4));
+      lblStyle.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblStyle.setBounds(663, 6, 94, 24);
+      panel_1.add(lblStyle);
+
+      JLabel lblCoordinate = new JLabel();
+      lblCoordinate.setText("Coordinate");
+      lblCoordinate.setSize(new Dimension(94, 22));
+      lblCoordinate.setPreferredSize(new Dimension(94, 22));
+      lblCoordinate.setLocation(new Point(4, 4));
+      lblCoordinate.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblCoordinate.setBounds(663, 29, 94, 24);
+      panel_1.add(lblCoordinate);
+
+      JLabel lblShift = new JLabel();
+      lblShift.setText("Shift");
+      lblShift.setSize(new Dimension(94, 22));
+      lblShift.setPreferredSize(new Dimension(94, 22));
+      lblShift.setLocation(new Point(4, 4));
+      lblShift.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblShift.setBounds(663, 52, 94, 24);
+      panel_1.add(lblShift);
     }
     return shadingPanel;
   }
@@ -9602,10 +9608,9 @@ public class TinaInternalFrame extends JInternalFrame {
   private JComboBox getShadingCmb() {
     if (shadingCmb == null) {
       shadingCmb = new JComboBox();
+      shadingCmb.setBounds(102, 6, 220, 22);
       shadingCmb.setPreferredSize(new Dimension(125, 22));
       shadingCmb.setSelectedItem(Shading.FLAT);
-      shadingCmb.setSize(new Dimension(125, 22));
-      shadingCmb.setLocation(new Point(100, 4));
       shadingCmb.setFont(new Font("Dialog", Font.BOLD, 10));
       shadingCmb.addItemListener(new java.awt.event.ItemListener() {
         public void itemStateChanged(java.awt.event.ItemEvent e) {
