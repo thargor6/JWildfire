@@ -1532,7 +1532,7 @@ public class TinaInternalFrame extends JInternalFrame {
         public void stateChanged(ChangeEvent e) {
           if (tinaController != null) {
             switch (tinaSouthTabbedPane.getSelectedIndex()) {
-              case 9:
+              case 6:
                 if (tinaController.getGradientController() != null) {
                   tinaController.getGradientController().onActivate();
                 }
@@ -3078,11 +3078,12 @@ public class TinaInternalFrame extends JInternalFrame {
   private JTabbedPane getTinaPaletteSubTabbedPane() {
     if (tinaPaletteSubTabbedPane == null) {
       tinaPaletteSubTabbedPane = new JTabbedPane();
+      tinaPaletteSubTabbedPane.setTabPlacement(JTabbedPane.LEFT);
       tinaPaletteSubTabbedPane.setAutoscrolls(true);
       tinaPaletteSubTabbedPane.setToolTipText("");
       tinaPaletteSubTabbedPane.setFont(new Font("Dialog", Font.BOLD, 10));
-      tinaPaletteSubTabbedPane.addTab("Create new", null, getTinaPaletteCreatePanel(), "Create or import a gradient");
       tinaPaletteSubTabbedPane.addTab("Gradient Library", null, getGradientLibraryPanel(), null);
+      tinaPaletteSubTabbedPane.addTab("Create new", null, getTinaPaletteCreatePanel(), "Create or import a gradient");
       tinaPaletteSubTabbedPane.addTab("Modify gradient", null, getTinaPaletteTransformPanel(), "Apply general modifications to the gradient");
       tinaPaletteSubTabbedPane.addTab("Balancing", null, getTinaPaletteBalancingPanel(), "Apply common color balancing options to the gradient");
     }
@@ -6184,7 +6185,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JScrollPane getCreatePaletteScrollPane() {
     if (createPaletteScrollPane == null) {
       createPaletteScrollPane = new JScrollPane();
-      createPaletteScrollPane.setBounds(347, 4, 317, 109);
+      createPaletteScrollPane.setBounds(347, 4, 317, 154);
       createPaletteScrollPane.setPreferredSize(new Dimension(453, 399));
       createPaletteScrollPane.setViewportView(getCreatePaletteColorsTable());
     }
