@@ -808,7 +808,7 @@ public class FlameRenderer {
           // save header
           JWFRenderFileHeader header = new JWFRenderFileHeader(pThreads.size(), flame.getWidth(), flame.getHeight(),
               pSampleCount, pElapsedMilliseconds, 1, 1, (int) (flame.getSampleDensity() + 0.5),
-              true, false);
+              true, false, withAlpha);
           outputStream.writeObject(header);
           // save flame
           outputStream.writeObject(flame);
@@ -881,6 +881,7 @@ public class FlameRenderer {
 
         //        renderInfo.setRenderHDR(true);
         // restore thread state
+        withAlpha = header.withTransparency;
         RenderThreadPersistentState state[] = new RenderThreadPersistentState[header.numThreads];
         for (int i = 0; i < header.numThreads; i++) {
           state[i] = (RenderThreadPersistentState) in.readObject();

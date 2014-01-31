@@ -21,7 +21,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class JWFRenderFileHeader implements Serializable {
-  private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 2L;
   protected final int numThreads;
   protected final int width, height;
   protected final long sampleCount;
@@ -31,9 +31,11 @@ public class JWFRenderFileHeader implements Serializable {
   protected final int quality;
   protected final boolean withHDR;
   protected final boolean withHDRIntensityMap;
+  protected final boolean withTransparency;
+
   private final Map<String, Serializable> additionalParams = new HashMap<String, Serializable>();
 
-  public JWFRenderFileHeader(int pNumThreads, int pWidth, int pHeight, long pSampleCount, long pElapsedMilliseconds, int pSpatialOversample, int pColorOversample, int pQuality, boolean pWithHDR, boolean pWithHDRIntensityMap) {
+  public JWFRenderFileHeader(int pNumThreads, int pWidth, int pHeight, long pSampleCount, long pElapsedMilliseconds, int pSpatialOversample, int pColorOversample, int pQuality, boolean pWithHDR, boolean pWithHDRIntensityMap, boolean pWithTransparency) {
     numThreads = pNumThreads;
     width = pWidth;
     height = pHeight;
@@ -44,6 +46,7 @@ public class JWFRenderFileHeader implements Serializable {
     quality = pQuality;
     withHDR = pWithHDR;
     withHDRIntensityMap = pWithHDRIntensityMap;
+    withTransparency = pWithTransparency;
   }
 
   public int getNumThreads() {
@@ -96,5 +99,9 @@ public class JWFRenderFileHeader implements Serializable {
 
   public boolean isWithHDRIntensityMap() {
     return withHDRIntensityMap;
+  }
+
+  public boolean isWithTransparency() {
+    return withTransparency;
   }
 }
