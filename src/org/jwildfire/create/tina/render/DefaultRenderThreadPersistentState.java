@@ -28,7 +28,9 @@ public final class DefaultRenderThreadPersistentState extends RenderThreadPersis
   private List<IterationState> layerState = new ArrayList<IterationState>();
 
   public static class IterationState implements Serializable {
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 2L;
+    protected int flameIdx;
+    protected int layerIdx;
     protected XYZPoint affineT;
     protected XYZPoint varT;
     protected XYZPoint p;

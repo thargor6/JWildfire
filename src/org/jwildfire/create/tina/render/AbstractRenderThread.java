@@ -22,14 +22,13 @@ import java.util.List;
 import org.jwildfire.base.Prefs;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.Layer;
-import org.jwildfire.create.tina.base.XYZProjectedPoint;
 import org.jwildfire.create.tina.random.AbstractRandomGenerator;
 import org.jwildfire.create.tina.random.RandomGeneratorFactory;
 import org.jwildfire.create.tina.variation.FlameTransformationContext;
 
 public abstract class AbstractRenderThread implements Runnable {
   protected final FlameRenderer renderer;
-  protected final Flame flame;
+  protected final List<Flame> flames;
   protected final long samples;
   protected volatile long currSample;
   protected SampleTonemapper tonemapper;
@@ -38,15 +37,14 @@ public abstract class AbstractRenderThread implements Runnable {
   protected RenderThreadPersistentState resumeState;
   protected FlameTransformationContext ctx;
   protected AbstractRandomGenerator randGen;
-  protected final XYZProjectedPoint prj = new XYZProjectedPoint();
 
-  public AbstractRenderThread(Prefs pPrefs, int pThreadId, FlameRenderer pRenderer, Flame pFlame, long pSamples) {
+  public AbstractRenderThread(Prefs pPrefs, int pThreadId, FlameRenderer pRenderer, List<Flame> pFlames, long pSamples) {
     renderer = pRenderer;
-    flame = pFlame;
+    flames = pFlames;
     samples = pSamples;
     randGen = RandomGeneratorFactory.getInstance(pPrefs.getTinaRandomNumberGenerator(), pThreadId);
     ctx = new FlameTransformationContext(pRenderer, randGen);
-    ctx.setPreserveZCoordinate(pFlame.isPreserveZ());
+    ctx.setPreserveZCoordinate(pFlames.get(0).isPreserveZ());
     ctx.setPreview(renderer.isPreview());
   }
 

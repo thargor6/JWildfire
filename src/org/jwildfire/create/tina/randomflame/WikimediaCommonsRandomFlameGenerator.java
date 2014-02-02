@@ -64,7 +64,10 @@ public class WikimediaCommonsRandomFlameGenerator extends RandomFlameGenerator {
 
     FlameGenerator generator = getRandomGenerator();
 
-    RandomFlameGeneratorSampler sampler = new RandomFlameGeneratorSampler(IMG_WIDTH, IMG_HEIGHT, prefs, generator.createRandomFlameGenerator(), 3, false, RandomBatchQuality.LOW);
+    int palettePoints = 3 + (int) (Math.random() * 68.0);
+    boolean fadePaletteColors = Math.random() > 0.33;
+
+    RandomFlameGeneratorSampler sampler = new RandomFlameGeneratorSampler(IMG_WIDTH, IMG_HEIGHT, prefs, generator.createRandomFlameGenerator(), palettePoints, fadePaletteColors, RandomBatchQuality.LOW);
 
     Flame flame = sampler.createSample().getFlame();
 
@@ -137,7 +140,9 @@ public class WikimediaCommonsRandomFlameGenerator extends RandomFlameGenerator {
         imgFunc.setRessource(AbstractColorMapWFFunc.RESSOURCE_INLINED_IMAGE, imgData.getData());
         imgFunc.setRessource(AbstractColorMapWFFunc.RESSOURCE_IMAGE_DESC_SRC, imgData.getPageUrl().getBytes());
         imgFunc.setRessource(AbstractColorMapWFFunc.RESSOURCE_IMAGE_SRC, imgData.getImgUrl().getBytes());
-        pFlame.getFirstLayer().setPalette(imgData.getGradient());
+        if (Math.random() < 0.667) {
+          pFlame.getFirstLayer().setPalette(imgData.getGradient());
+        }
       }
     }
 
@@ -217,14 +222,16 @@ public class WikimediaCommonsRandomFlameGenerator extends RandomFlameGenerator {
     }
 
     public byte[] downloadRessource(String pURL) throws Exception {
+      System.setProperty("http.keepAlive", "false");
+      System.setProperty("java.net.preferIPv4Stack", "true");
       BufferedInputStream in = null;
       ByteArrayOutputStream fout = null;
       try {
         in = new BufferedInputStream(new URL(pURL).openStream());
         fout = new ByteArrayOutputStream();
-        byte data[] = new byte[1024];
+        byte data[] = new byte[4096];
         int count;
-        while ((count = in.read(data, 0, 1024)) != -1) {
+        while ((count = in.read(data, 0, 4096)) != -1) {
           fout.write(data, 0, count);
         }
         return fout.toByteArray();

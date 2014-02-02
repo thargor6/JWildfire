@@ -16,19 +16,21 @@
 */
 package org.jwildfire.create.tina.render;
 
+import java.util.List;
+
 import org.jwildfire.base.Prefs;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.Layer;
 
 public final class BlurRenderThread extends DefaultRenderThread {
 
-  public BlurRenderThread(Prefs pPrefs, int pThreadId, FlameRenderer pRenderer, Flame pFlame, long pSamples) {
-    super(pPrefs, pThreadId, pRenderer, pFlame, pSamples);
+  public BlurRenderThread(Prefs pPrefs, int pThreadId, FlameRenderer pRenderer, List<Flame> pFlames, long pSamples) {
+    super(pPrefs, pThreadId, pRenderer, pFlames, pSamples);
   }
 
   @Override
-  protected DefaultRenderIterationState createState(Layer layer) {
-    return new BlurRenderIterationState(this, renderer, flame, layer, ctx, randGen);
+  protected DefaultRenderIterationState createState(Flame pFlame, Layer pLayer) {
+    return new BlurRenderIterationState(this, renderer, pFlame, pLayer, ctx, randGen);
   }
 
 }

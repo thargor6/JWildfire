@@ -23,12 +23,14 @@ import java.util.List;
 import org.jwildfire.create.tina.base.XYZPoint;
 
 public final class Pseudo3DRenderThreadPersistentState extends RenderThreadPersistentState {
-  private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 2L;
 
   private List<IterationState> layerState = new ArrayList<IterationState>();
 
   public static class IterationState implements Serializable {
     private static final long serialVersionUID = 1L;
+    protected int flameIdx;
+    protected int layerIdx;
     protected XYZPoint[] affineTA;
     protected XYZPoint[] varTA;
     protected XYZPoint[] pA;

@@ -12,17 +12,19 @@ public abstract class DefaultRenderThread extends AbstractRenderThread {
   protected long iter;
   protected List<DefaultRenderIterationState> iterationState;
 
-  public DefaultRenderThread(Prefs pPrefs, int pThreadId, FlameRenderer pRenderer, Flame pFlame, long pSamples) {
-    super(pPrefs, pThreadId, pRenderer, pFlame, pSamples);
+  public DefaultRenderThread(Prefs pPrefs, int pThreadId, FlameRenderer pRenderer, List<Flame> pFlames, long pSamples) {
+    super(pPrefs, pThreadId, pRenderer, pFlames, pSamples);
     iterationState = new ArrayList<DefaultRenderIterationState>();
-    List<Layer> layers = getValidLayers(pFlame);
-    for (Layer layer : layers) {
-      DefaultRenderIterationState state = createState(layer);
-      iterationState.add(state);
+    for (Flame flame : pFlames) {
+      List<Layer> layers = getValidLayers(flame);
+      for (Layer layer : layers) {
+        DefaultRenderIterationState state = createState(flame, layer);
+        iterationState.add(state);
+      }
     }
   }
 
-  protected abstract DefaultRenderIterationState createState(Layer layer);
+  protected abstract DefaultRenderIterationState createState(Flame pFlame, Layer pLayer);
 
   @Override
   protected RenderThreadPersistentState saveState() {
@@ -31,6 +33,9 @@ public abstract class DefaultRenderThread extends AbstractRenderThread {
     res.startIter = iter;
     for (DefaultRenderIterationState state : iterationState) {
       DefaultRenderThreadPersistentState.IterationState persist = new DefaultRenderThreadPersistentState.IterationState();
+      persist.flameIdx = flames.indexOf(state.flame);
+      persist.layerIdx = state.flame.getLayers().indexOf(state.layer);
+      System.out.println(persist.flameIdx + " " + persist.layerIdx);
       persist.xfIndex = (state.xf != null) ? state.layer.getXForms().indexOf(state.xf) : -1;
       persist.affineT = state.affineT != null ? state.affineT.makeCopy() : null;
       persist.varT = state.varT != null ? state.varT.makeCopy() : null;
@@ -47,10 +52,10 @@ public abstract class DefaultRenderThread extends AbstractRenderThread {
     DefaultRenderThreadPersistentState state = (DefaultRenderThreadPersistentState) pState;
     currSample = state.currSample;
     startIter = state.startIter;
-    List<Layer> layers = getValidLayers(flame);
-    int layerIdx = 0;
     for (DefaultRenderThreadPersistentState.IterationState persist : state.getLayerState()) {
-      DefaultRenderIterationState restored = createState(layers.get(layerIdx++));
+      Flame flame = flames.get(persist.flameIdx);
+      Layer layer = flame.getLayers().get(persist.layerIdx);
+      DefaultRenderIterationState restored = createState(flame, layer);
       restored.xf = (persist.xfIndex >= 0) ? restored.layer.getXForms().get(persist.xfIndex) : null;
       restored.affineT = persist.affineT != null ? persist.affineT.makeCopy() : null;
       restored.varT = persist.varT != null ? persist.varT.makeCopy() : null;

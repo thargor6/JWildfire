@@ -25,8 +25,8 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 public final class Pseudo3DRenderThread extends DefaultRenderThread {
 
-  public Pseudo3DRenderThread(Prefs pPrefs, int pThreadId, FlameRenderer pRenderer, Flame pFlame, long pSamples) {
-    super(pPrefs, pThreadId, pRenderer, pFlame, pSamples);
+  public Pseudo3DRenderThread(Prefs pPrefs, int pThreadId, FlameRenderer pRenderer, List<Flame> pFlames, long pSamples) {
+    super(pPrefs, pThreadId, pRenderer, pFlames, pSamples);
   }
 
   @Override
@@ -37,6 +37,8 @@ public final class Pseudo3DRenderThread extends DefaultRenderThread {
     for (DefaultRenderIterationState state : iterationState) {
       Pseudo3DRenderIterationState iState = (Pseudo3DRenderIterationState) state;
       Pseudo3DRenderThreadPersistentState.IterationState persist = new Pseudo3DRenderThreadPersistentState.IterationState();
+      persist.flameIdx = flames.indexOf(state.flame);
+      persist.layerIdx = state.flame.getLayers().indexOf(state.layer);
       persist.xfIndex = (state.xf != null) ? state.layer.getXForms().indexOf(state.xf) : -1;
       persist.r = iState.r != null ? iState.r.makeCopy() : null;
       persist.affineTA = copyXYZPointArray(iState.affineTA);
@@ -54,10 +56,10 @@ public final class Pseudo3DRenderThread extends DefaultRenderThread {
     Pseudo3DRenderThreadPersistentState state = (Pseudo3DRenderThreadPersistentState) pState;
     currSample = state.currSample;
     startIter = state.startIter;
-    List<Layer> layers = getValidLayers(flame);
-    int layerIdx = 0;
     for (Pseudo3DRenderThreadPersistentState.IterationState persist : state.getLayerState()) {
-      Pseudo3DRenderIterationState restored = (Pseudo3DRenderIterationState) createState(layers.get(layerIdx++));
+      Flame flame = flames.get(persist.flameIdx);
+      Layer layer = flame.getLayers().get(persist.layerIdx);
+      Pseudo3DRenderIterationState restored = (Pseudo3DRenderIterationState) createState(flame, layer);
       restored.xf = (persist.xfIndex >= 0) ? restored.layer.getXForms().get(persist.xfIndex) : null;
       restored.r = persist.r != null ? persist.r.makeCopy() : null;
       restored.affineTA = copyXYZPointArray(persist.affineTA);
@@ -82,8 +84,8 @@ public final class Pseudo3DRenderThread extends DefaultRenderThread {
   }
 
   @Override
-  protected DefaultRenderIterationState createState(Layer layer) {
-    return new Pseudo3DRenderIterationState(this, renderer, flame, layer, ctx, randGen);
+  protected DefaultRenderIterationState createState(Flame pFlame, Layer pLayer) {
+    return new Pseudo3DRenderIterationState(this, renderer, pFlame, pLayer, ctx, randGen);
   }
 
 }
