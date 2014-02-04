@@ -1,4 +1,4 @@
-package org.jwildfire.create.tina.dance;
+package org.jwildfire.create.tina;
 
 import static org.jwildfire.base.mathlib.MathLib.EPSILON;
 import static org.jwildfire.base.mathlib.MathLib.fabs;

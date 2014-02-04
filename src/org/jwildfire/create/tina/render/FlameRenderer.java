@@ -38,12 +38,15 @@ import org.jwildfire.base.QualityProfile;
 import org.jwildfire.base.mathlib.MathLib;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.Layer;
+import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 import org.jwildfire.create.tina.base.XYZProjectedPoint;
 import org.jwildfire.create.tina.base.raster.AbstractRasterPoint;
 import org.jwildfire.create.tina.random.AbstractRandomGenerator;
 import org.jwildfire.create.tina.random.RandomGeneratorFactory;
+import org.jwildfire.create.tina.transform.XFormTransformService;
 import org.jwildfire.create.tina.variation.FlameTransformationContext;
+import org.jwildfire.create.tina.variation.VariationFuncList;
 import org.jwildfire.image.SimpleHDRImage;
 import org.jwildfire.image.SimpleImage;
 
@@ -293,13 +296,9 @@ public class FlameRenderer {
 
       init3D();
       initView();
-      List<Flame> renderFlames = new ArrayList<Flame>();
+      List<List<Flame>> renderFlames = new ArrayList<List<Flame>>();
       for (int t = 0; t < prefs.getTinaRenderThreads(); t++) {
-        Flame renderFlame = flame.makeCopy();
-        renderFlames.add(renderFlame);
-        for (Layer layer : renderFlame.getLayers()) {
-          layer.refreshModWeightTables(flameTransformationContext);
-        }
+        renderFlames.add(createRenderFlames(flame));
       }
       forceAbort = false;
       iterate(0, 1, renderFlames);
@@ -635,22 +634,22 @@ public class FlameRenderer {
     }
   }
 
-  private AbstractRenderThread createFlameRenderThread(int pThreadId, Flame pFlame, long pSamples) {
+  private AbstractRenderThread createFlameRenderThread(int pThreadId, List<Flame> pFlames, long pSamples) {
     switch (flame.getShadingInfo().getShading()) {
       case FLAT:
-        return new FlatRenderThread(prefs, pThreadId, this, pFlame, pSamples);
+        return new FlatRenderThread(prefs, pThreadId, this, pFlames, pSamples);
       case BLUR:
-        return new BlurRenderThread(prefs, pThreadId, this, pFlame, pSamples);
+        return new BlurRenderThread(prefs, pThreadId, this, pFlames, pSamples);
       case DISTANCE_COLOR:
-        return new DistanceColorRenderThread(prefs, pThreadId, this, pFlame, pSamples);
+        return new DistanceColorRenderThread(prefs, pThreadId, this, pFlames, pSamples);
       case PSEUDO3D:
-        return new Pseudo3DRenderThread(prefs, pThreadId, this, pFlame, pSamples);
+        return new Pseudo3DRenderThread(prefs, pThreadId, this, pFlames, pSamples);
       default:
         throw new IllegalArgumentException(flame.getShadingInfo().getShading().toString());
     }
   }
 
-  private void iterate(int pPart, int pParts, List<Flame> pFlames) {
+  private void iterate(int pPart, int pParts, List<List<Flame>> pFlames) {
     long nSamples = (long) ((flame.getSampleDensity() * (double) rasterSize + 0.5));
     //    if (flame.getSampleDensity() > 50) {
     //      System.err.println("SAMPLES: " + nSamples);
@@ -694,7 +693,7 @@ public class FlameRenderer {
     }
   }
 
-  private List<AbstractRenderThread> startIterate(List<Flame> pFlames, RenderThreadPersistentState pState[], boolean pStartThreads) {
+  private List<AbstractRenderThread> startIterate(List<List<Flame>> pFlames, RenderThreadPersistentState pState[], boolean pStartThreads) {
     List<AbstractRenderThread> threads = new ArrayList<AbstractRenderThread>();
     int nThreads = pFlames.size();
     for (int i = 0; i < nThreads; i++) {
@@ -851,18 +850,48 @@ public class FlameRenderer {
     }
   }
 
+  private List<Flame> createRenderFlames(Flame pFlame) {
+    List<Flame> res = new ArrayList<Flame>();
+
+    Flame initialFlame = flame.makeCopy();
+    for (Layer layer : initialFlame.getLayers()) {
+      layer.refreshModWeightTables(flameTransformationContext);
+    }
+    res.add(initialFlame);
+
+    // TODO
+    int blurLength = 80;
+    if (blurLength > 0) {
+      for (int p = 1; p < blurLength; p++) {
+        Flame renderFlame = initialFlame.makeCopy();
+        for (Layer layer : renderFlame.getLayers()) {
+          XForm finalXForm = layer.getXForms().size() > 0 ? layer.getXForms().get(0) : null;
+          if (finalXForm == null) {
+            finalXForm = new XForm();
+            finalXForm.addVariation(1.0, VariationFuncList.getVariationFuncInstance("linear3D", true));
+            renderFlame.getFirstLayer().getXForms().add(finalXForm);
+          }
+          XFormTransformService.rotate(finalXForm, p * 0.012, false);
+          XFormTransformService.globalTranslate(finalXForm, p * 0.004, p * 0.004, false);
+          layer.setWeight(1.0 - p * 0.005);
+        }
+        for (Layer layer : renderFlame.getLayers()) {
+          layer.refreshModWeightTables(flameTransformationContext);
+        }
+        res.add(renderFlame);
+      }
+    }
+    return res;
+  }
+
   public List<AbstractRenderThread> startRenderFlame(RenderInfo pRenderInfo) {
     renderInfo = pRenderInfo;
     initRaster(pRenderInfo.getImageWidth(), pRenderInfo.getImageHeight());
     init3D();
     initView();
-    List<Flame> renderFlames = new ArrayList<Flame>();
+    List<List<Flame>> renderFlames = new ArrayList<List<Flame>>();
     for (int t = 0; t < prefs.getTinaRenderThreads(); t++) {
-      Flame renderFlame = flame.makeCopy();
-      renderFlames.add(renderFlame);
-      for (Layer layer : renderFlame.getLayers()) {
-        layer.refreshModWeightTables(flameTransformationContext);
-      }
+      renderFlames.add(createRenderFlames(flame));
     }
     return startIterate(renderFlames, null, true);
   }
@@ -890,13 +919,9 @@ public class FlameRenderer {
         initRaster(renderInfo.getImageWidth(), renderInfo.getImageHeight());
         init3D();
         initView();
-        List<Flame> renderFlames = new ArrayList<Flame>();
+        List<List<Flame>> renderFlames = new ArrayList<List<Flame>>();
         for (int t = 0; t < header.numThreads; t++) {
-          Flame renderFlame = flame.makeCopy();
-          renderFlames.add(renderFlame);
-          for (Layer layer : renderFlame.getLayers()) {
-            layer.refreshModWeightTables(flameTransformationContext);
-          }
+          renderFlames.add(createRenderFlames(flame));
         }
         raster = null;
         // read raster

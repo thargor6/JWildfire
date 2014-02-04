@@ -18,7 +18,7 @@ package org.jwildfire.create.tina.dance.motion;
 
 import java.io.Serializable;
 
-import org.jwildfire.create.tina.dance.model.FlamePropertyPath;
+import org.jwildfire.create.tina.keyframe.model.FlamePropertyPath;
 
 public class MotionLink implements Serializable {
   private static final long serialVersionUID = 1L;

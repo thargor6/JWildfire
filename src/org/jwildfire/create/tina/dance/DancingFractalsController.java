@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2014 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -54,7 +54,6 @@ import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.dance.action.ActionRecorder;
 import org.jwildfire.create.tina.dance.action.PostRecordFlameGenerator;
-import org.jwildfire.create.tina.dance.model.FlamePropertyPath;
 import org.jwildfire.create.tina.dance.motion.Motion;
 import org.jwildfire.create.tina.dance.motion.MotionCreator;
 import org.jwildfire.create.tina.dance.motion.MotionCreatorType;
@@ -63,6 +62,7 @@ import org.jwildfire.create.tina.dance.motion.MotionType;
 import org.jwildfire.create.tina.io.FlameReader;
 import org.jwildfire.create.tina.io.JWFDanceReader;
 import org.jwildfire.create.tina.io.JWFDanceWriter;
+import org.jwildfire.create.tina.keyframe.model.FlamePropertyPath;
 import org.jwildfire.create.tina.randomflame.RandomFlameGenerator;
 import org.jwildfire.create.tina.randomflame.RandomFlameGeneratorList;
 import org.jwildfire.create.tina.randomflame.RandomFlameGeneratorSampler;

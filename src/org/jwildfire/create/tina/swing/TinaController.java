@@ -71,6 +71,9 @@ import org.jwildfire.base.QualityProfile;
 import org.jwildfire.base.ResolutionProfile;
 import org.jwildfire.base.Tools;
 import org.jwildfire.base.mathlib.MathLib;
+import org.jwildfire.create.tina.GradientController;
+import org.jwildfire.create.tina.JWFScriptController;
+import org.jwildfire.create.tina.KeyFramesController;
 import org.jwildfire.create.tina.base.DrawMode;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.Layer;
@@ -82,8 +85,6 @@ import org.jwildfire.create.tina.batch.JobRenderThread;
 import org.jwildfire.create.tina.batch.JobRenderThreadController;
 import org.jwildfire.create.tina.browser.FlameBrowserController;
 import org.jwildfire.create.tina.dance.DancingFractalsController;
-import org.jwildfire.create.tina.dance.GradientController;
-import org.jwildfire.create.tina.dance.JWFScriptController;
 import org.jwildfire.create.tina.edit.UndoManager;
 import org.jwildfire.create.tina.io.FlameReader;
 import org.jwildfire.create.tina.io.FlameWriter;
@@ -160,6 +161,7 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
   private JWFScriptController jwfScriptController;
   private FlameBrowserController flameBrowserController;
   private GradientController gradientController;
+  private KeyFramesController keyFramesController;
 
   private final JInternalFrame tinaFrame;
   private final String tinaFrameTitle;
@@ -253,6 +255,10 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
     gradientController = new GradientController(this, parameterObject.pErrorHandler, prefs, parameterObject.pCenterPanel, parameterObject.gradientLibTree, parameterObject.pGradientLibraryPanel,
         parameterObject.gradientLibraryRescanBtn, parameterObject.gradientLibraryNewFolderBtn, parameterObject.gradientLibraryRenameFolderBtn,
         parameterObject.gradientsList);
+
+    keyFramesController = new KeyFramesController(this, parameterObject.pErrorHandler, prefs, parameterObject.pCenterPanel,
+        parameterObject.keyframesFrameField, parameterObject.keyframesFrameSlider, parameterObject.keyframesFrameCountField,
+        parameterObject.addKeyframeBtn, parameterObject.duplicateKeyframeBtn, parameterObject.deleteKeyframeBtn, parameterObject.keyFramesTable);
 
     data.cameraRollREd = parameterObject.pCameraRollREd;
     data.cameraRollSlider = parameterObject.pCameraRollSlider;
@@ -2563,6 +2569,7 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
     data.randomizeButton.setEnabled(enabled);
     enableUndoControls();
     enableJobRenderControls();
+    getKeyFramesController().enableControls();
     getJwfScriptController().enableControls();
     getGradientController().enableControls();
     getFlameBrowserController().enableControls();
@@ -5438,6 +5445,10 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
 
   public GradientController getGradientController() {
     return gradientController;
+  }
+
+  public KeyFramesController getKeyFramesController() {
+    return keyFramesController;
   }
 
   public void mouseTransformEditGradientButton_clicked() {

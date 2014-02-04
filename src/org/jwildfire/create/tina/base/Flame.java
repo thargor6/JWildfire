@@ -27,6 +27,7 @@ import org.jwildfire.base.QualityProfile;
 import org.jwildfire.base.ResolutionProfile;
 import org.jwildfire.create.tina.animate.AnimAware;
 import org.jwildfire.create.tina.edit.Assignable;
+import org.jwildfire.create.tina.keyframe.KeyFrame;
 import org.jwildfire.create.tina.palette.RGBPalette;
 import org.jwildfire.create.tina.render.filter.FilterKernelType;
 
@@ -95,6 +96,9 @@ public class Flame implements Assignable<Flame>, Serializable {
   private String name = "";
   @AnimAware
   private final List<Layer> layers = new ArrayList<Layer>();
+  @AnimAware
+  private int frame;
+  private final List<KeyFrame> keyFrames = new ArrayList<KeyFrame>();
 
   @AnimAware
   private ShadingInfo shadingInfo = new ShadingInfo();
@@ -457,13 +461,20 @@ public class Flame implements Assignable<Flame>, Serializable {
     qualityProfile = pFlame.qualityProfile;
     shadingInfo.assign(pFlame.shadingInfo);
     name = pFlame.name;
+    lastFilename = pFlame.lastFilename;
+    antialiasAmount = pFlame.antialiasAmount;
+    antialiasRadius = pFlame.antialiasRadius;
+    frame = pFlame.frame;
+
     layers.clear();
     for (Layer layer : pFlame.getLayers()) {
       layers.add(layer.makeCopy());
     }
-    lastFilename = pFlame.lastFilename;
-    antialiasAmount = pFlame.antialiasAmount;
-    antialiasRadius = pFlame.antialiasRadius;
+
+    keyFrames.clear();
+    for (KeyFrame keyFrame : pFlame.getKeyFrames()) {
+      keyFrames.add(keyFrame.makeCopy());
+    }
   }
 
   public List<Layer> getLayers() {
@@ -495,14 +506,18 @@ public class Flame implements Assignable<Flame>, Serializable {
         ((qualityProfile != null && pFlame.qualityProfile == null) || (qualityProfile == null && pFlame.qualityProfile != null) ||
         (qualityProfile != null && pFlame.qualityProfile != null && !qualityProfile.equals(pFlame.qualityProfile))) ||
         !shadingInfo.isEqual(pFlame.shadingInfo) || !name.equals(pFlame.name) ||
-        (fabs(antialiasAmount - pFlame.antialiasAmount) > EPSILON) || (fabs(antialiasRadius - pFlame.antialiasRadius) > EPSILON)) {
-      return false;
-    }
-    if (layers.size() != pFlame.layers.size()) {
+        (fabs(antialiasAmount - pFlame.antialiasAmount) > EPSILON) || (fabs(antialiasRadius - pFlame.antialiasRadius) > EPSILON) ||
+        (layers.size() != pFlame.layers.size()) ||
+        (frame != pFlame.frame) || (keyFrames.size() != pFlame.keyFrames.size())) {
       return false;
     }
     for (int i = 0; i < layers.size(); i++) {
       if (!layers.get(i).isEqual(pFlame.layers.get(i))) {
+        return false;
+      }
+    }
+    for (int i = 0; i < keyFrames.size(); i++) {
+      if (!keyFrames.get(i).isEqual(pFlame.keyFrames.get(i))) {
         return false;
       }
     }
@@ -660,6 +675,18 @@ public class Flame implements Assignable<Flame>, Serializable {
 
   public void setAntialiasRadius(double antialiasRadius) {
     this.antialiasRadius = antialiasRadius;
+  }
+
+  public int getFrame() {
+    return frame;
+  }
+
+  public void setFrame(int frame) {
+    this.frame = frame;
+  }
+
+  public List<KeyFrame> getKeyFrames() {
+    return keyFrames;
   }
 
 }

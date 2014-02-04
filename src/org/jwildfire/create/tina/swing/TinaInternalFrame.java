@@ -1527,6 +1527,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaSouthTabbedPane.addTab("Special Shading", null, getShadingPanel(), null);
       tinaSouthTabbedPane.addTab("Gradient", null, getTinaPalettePanel(), null);
       tinaSouthTabbedPane.addTab("Layerz", null, getPanel_74(), null);
+      tinaSouthTabbedPane.addTab("Keyframes", null, getPanel_34(), null);
 
       tinaSouthTabbedPane.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
@@ -3889,7 +3890,9 @@ public class TinaInternalFrame extends JInternalFrame {
         getFlameBrowserRenameBtn(), getTinaPaletteFadeColorsCBx(), getDancingFlamesReplaceFlameFromEditorBtn(), getDancingFlamesRenameFlameBtn(),
         getDancingFlamesRenameMotionBtn(), getDancingFlamesMutedCBx(),
         getLayerWeightEd(), getLayerAddBtn(), getLayerDuplicateBtn(), getLayerDeleteBtn(),
-        getLayersTable(), getLayerVisibleBtn(), getLayerAppendBtn(), getLayerHideOthersBtn(), getLayerShowAllBtn(), getLayerPreviewBtn());
+        getLayersTable(), getLayerVisibleBtn(), getLayerAppendBtn(), getLayerHideOthersBtn(), getLayerShowAllBtn(), getLayerPreviewBtn(),
+        getKeyframesFrameField(), getKeyframesFrameSlider(), getKeyframesFrameCountField(), getAddKeyframeBtn(), getDuplicateKeyframeBtn(),
+        getDeleteKeyframeBtn(), getKeyFramesTable());
 
     tinaController = new TinaController(params);
 
@@ -4496,7 +4499,6 @@ public class TinaInternalFrame extends JInternalFrame {
       randomBatchButton.setMaximumSize(new Dimension(32000, 46));
       randomBatchButton.setMinimumSize(new Dimension(100, 46));
       randomBatchButton.setFont(new Font("Dialog", Font.BOLD, 10));
-      randomBatchButton.setMnemonic(KeyEvent.VK_D);
       randomBatchButton.setText("Random flames");
       randomBatchButton.setPreferredSize(new Dimension(105, 46));
       randomBatchButton.addActionListener(new java.awt.event.ActionListener() {
@@ -8792,6 +8794,20 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton layerHideOthersBtn;
   private JButton flameBrowserToBatchRendererBtn;
   private JToggleButton layerPreviewBtn;
+  private JPanel panel_34;
+  private JPanel panel_78;
+  private JPanel panel_79;
+  private JPanel panel_80;
+  private JWFNumberField keyframesFrameField;
+  private JWFNumberField keyframesFrameCountField;
+  private JTable keyFramesTable;
+  private JSlider keyframesFrameSlider;
+  private JButton addKeyframeBtn;
+  private JButton deleteKeyframeBtn;
+  private JButton duplicateKeyframeBtn;
+  private JButton prevKeyframeBtn;
+  private JButton nextKeyframeBtn;
+  private JButton updateKeyframeBtn;
 
   /**
    * This method initializes renderBatchJobsScrollPane	
@@ -14894,6 +14910,250 @@ public class TinaInternalFrame extends JInternalFrame {
       layerPreviewBtn.setFont(new Font("Dialog", Font.BOLD, 10));
     }
     return layerPreviewBtn;
+  }
+
+  private JPanel getPanel_34() {
+    if (panel_34 == null) {
+      panel_34 = new JPanel();
+      panel_34.setLayout(new BorderLayout(0, 0));
+      panel_34.add(getPanel_78(), BorderLayout.NORTH);
+
+      JPanel panel_1 = new JPanel();
+      panel_34.add(panel_1, BorderLayout.CENTER);
+      panel_1.setLayout(new BorderLayout(0, 0));
+
+      JPanel panel_2 = new JPanel();
+      panel_2.setPreferredSize(new Dimension(140, 10));
+      panel_1.add(panel_2, BorderLayout.WEST);
+
+      JPanel panel_3 = new JPanel();
+      panel_3.setPreferredSize(new Dimension(400, 10));
+      panel_1.add(panel_3, BorderLayout.EAST);
+      panel_3.setLayout(null);
+
+      addKeyframeBtn = new JButton();
+      addKeyframeBtn.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getKeyFramesController().addKeyFrameBtn_clicked();
+        }
+      });
+      addKeyframeBtn.setToolTipText("Add new keyframe");
+      addKeyframeBtn.setText("Add keyframe");
+      addKeyframeBtn.setPreferredSize(new Dimension(56, 24));
+      addKeyframeBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      addKeyframeBtn.setBounds(6, 6, 116, 24);
+      panel_3.add(addKeyframeBtn);
+
+      duplicateKeyframeBtn = new JButton();
+      duplicateKeyframeBtn.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getKeyFramesController().duplicateKeyFrameBtn_clicked();
+        }
+      });
+      duplicateKeyframeBtn.setToolTipText("Duplicate selected keyframe");
+      duplicateKeyframeBtn.setText("Duplicate");
+      duplicateKeyframeBtn.setPreferredSize(new Dimension(90, 24));
+      duplicateKeyframeBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      duplicateKeyframeBtn.setBounds(6, 71, 116, 24);
+      panel_3.add(duplicateKeyframeBtn);
+
+      deleteKeyframeBtn = new JButton();
+      deleteKeyframeBtn.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getKeyFramesController().deleteKeyFrameBtn_clicked();
+        }
+      });
+      deleteKeyframeBtn.setToolTipText("Delete selected keyframe");
+      deleteKeyframeBtn.setText("Delete");
+      deleteKeyframeBtn.setPreferredSize(new Dimension(90, 24));
+      deleteKeyframeBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      deleteKeyframeBtn.setBounds(6, 98, 116, 24);
+      panel_3.add(deleteKeyframeBtn);
+
+      prevKeyframeBtn = new JButton();
+      prevKeyframeBtn.setToolTipText("Select the previous keyframe");
+      prevKeyframeBtn.setText("Prev keyframe");
+      prevKeyframeBtn.setPreferredSize(new Dimension(56, 24));
+      prevKeyframeBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      prevKeyframeBtn.setBounds(158, 6, 116, 24);
+      panel_3.add(prevKeyframeBtn);
+
+      nextKeyframeBtn = new JButton();
+      nextKeyframeBtn.setToolTipText("Select the next keyframe");
+      nextKeyframeBtn.setText("Next keyframe");
+      nextKeyframeBtn.setPreferredSize(new Dimension(56, 24));
+      nextKeyframeBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      nextKeyframeBtn.setBounds(278, 6, 116, 24);
+      panel_3.add(nextKeyframeBtn);
+
+      updateKeyframeBtn = new JButton();
+      updateKeyframeBtn.setToolTipText("Update the currently selected keyframe");
+      updateKeyframeBtn.setText("Update keyframe");
+      updateKeyframeBtn.setPreferredSize(new Dimension(56, 24));
+      updateKeyframeBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      updateKeyframeBtn.setBounds(158, 42, 236, 24);
+      panel_3.add(updateKeyframeBtn);
+
+      JScrollPane scrollPane_2 = new JScrollPane();
+      panel_1.add(scrollPane_2, BorderLayout.CENTER);
+
+      keyFramesTable = new JTable();
+      scrollPane_2.setViewportView(keyFramesTable);
+    }
+    return panel_34;
+  }
+
+  private JPanel getPanel_78() {
+    if (panel_78 == null) {
+      panel_78 = new JPanel();
+      panel_78.setPreferredSize(new Dimension(10, 36));
+      panel_78.setLayout(new BorderLayout(0, 0));
+      panel_78.add(getPanel_79(), BorderLayout.WEST);
+      panel_78.add(getPanel_80(), BorderLayout.EAST);
+
+      keyframesFrameSlider = new JSlider();
+      keyframesFrameSlider.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null && tinaController.getKeyFramesController() != null) {
+            tinaController.getKeyFramesController().keyFrameChanged();
+          }
+        }
+      });
+
+      keyframesFrameSlider.setPaintTicks(true);
+      panel_78.add(keyframesFrameSlider, BorderLayout.CENTER);
+      keyframesFrameSlider.setValue(0);
+      keyframesFrameSlider.setPreferredSize(new Dimension(220, 19));
+      keyframesFrameSlider.setMinorTickSpacing(5);
+      keyframesFrameSlider.setMinimum(1);
+      keyframesFrameSlider.setMaximum(300);
+      keyframesFrameSlider.setMajorTickSpacing(10);
+    }
+    return panel_78;
+  }
+
+  private JPanel getPanel_79() {
+    if (panel_79 == null) {
+      panel_79 = new JPanel();
+      panel_79.setPreferredSize(new Dimension(128, 10));
+      panel_79.setLayout(null);
+
+      JLabel label = new JLabel();
+      label.setBounds(6, 6, 39, 22);
+      panel_79.add(label);
+      label.setText("Frame");
+      label.setPreferredSize(new Dimension(94, 22));
+      label.setHorizontalAlignment(SwingConstants.RIGHT);
+      label.setFont(new Font("Dialog", Font.BOLD, 10));
+
+      keyframesFrameField = new JWFNumberField();
+      keyframesFrameField.setText("1");
+      keyframesFrameField.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null && tinaController.getKeyFramesController() != null) {
+            try {
+              keyframesFrameSlider.setValue(keyframesFrameField.getIntValue());
+            }
+            catch (Exception ex) {
+              ex.printStackTrace();
+            }
+          }
+        }
+      });
+
+      keyframesFrameField.setBounds(51, 6, 70, 24);
+      panel_79.add(keyframesFrameField);
+      keyframesFrameField.setPreferredSize(new Dimension(56, 22));
+      keyframesFrameField.setOnlyIntegers(true);
+      keyframesFrameField.setMinValue(1.0);
+      keyframesFrameField.setMaxValue(30000.0);
+      keyframesFrameField.setHasMinValue(true);
+      keyframesFrameField.setHasMaxValue(true);
+      keyframesFrameField.setFont(new Font("Dialog", Font.PLAIN, 10));
+    }
+    return panel_79;
+  }
+
+  private JPanel getPanel_80() {
+    if (panel_80 == null) {
+      panel_80 = new JPanel();
+      panel_80.setPreferredSize(new Dimension(180, 10));
+      panel_80.setLayout(null);
+
+      keyframesFrameCountField = new JWFNumberField();
+      keyframesFrameCountField.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null && tinaController.getKeyFramesController() != null) {
+            try {
+              swfAnimatorFrameSlider.setMinimum(keyframesFrameCountField.getIntValue());
+            }
+            catch (Exception ex) {
+              ex.printStackTrace();
+            }
+          }
+        }
+      });
+
+      keyframesFrameCountField.setText("300");
+      keyframesFrameCountField.setPreferredSize(new Dimension(56, 22));
+      keyframesFrameCountField.setOnlyIntegers(true);
+      keyframesFrameCountField.setMinValue(1.0);
+      keyframesFrameCountField.setMaxValue(30000.0);
+      keyframesFrameCountField.setHasMinValue(true);
+      keyframesFrameCountField.setHasMaxValue(true);
+      keyframesFrameCountField.setFont(new Font("Dialog", Font.PLAIN, 10));
+      keyframesFrameCountField.setBounds(92, 4, 70, 24);
+      panel_80.add(keyframesFrameCountField);
+
+      JLabel lblFrameCount = new JLabel();
+      lblFrameCount.setText("Frame count");
+      lblFrameCount.setPreferredSize(new Dimension(94, 22));
+      lblFrameCount.setHorizontalAlignment(SwingConstants.RIGHT);
+      lblFrameCount.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblFrameCount.setBounds(6, 6, 82, 22);
+      panel_80.add(lblFrameCount);
+    }
+    return panel_80;
+  }
+
+  public JWFNumberField getKeyframesFrameField() {
+    return keyframesFrameField;
+  }
+
+  public JWFNumberField getKeyframesFrameCountField() {
+    return keyframesFrameCountField;
+  }
+
+  public JTable getKeyFramesTable() {
+    return keyFramesTable;
+  }
+
+  public JSlider getKeyframesFrameSlider() {
+    return keyframesFrameSlider;
+  }
+
+  public JButton getAddKeyframeBtn() {
+    return addKeyframeBtn;
+  }
+
+  public JButton getDeleteKeyframeBtn() {
+    return deleteKeyframeBtn;
+  }
+
+  public JButton getDuplicateKeyframeBtn() {
+    return duplicateKeyframeBtn;
+  }
+
+  public JButton getPrevKeyframeBtn() {
+    return prevKeyframeBtn;
+  }
+
+  public JButton getNextKeyframeBtn() {
+    return nextKeyframeBtn;
+  }
+
+  public JButton getUpdateKeyframeBtn() {
+    return updateKeyframeBtn;
   }
 } //  @jve:decl-index=0:visual-constraint="10,10"
 

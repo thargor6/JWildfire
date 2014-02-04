@@ -1,4 +1,4 @@
-package org.jwildfire.create.tina.dance;
+package org.jwildfire.create.tina;
 
 import java.awt.Component;
 import java.io.File;

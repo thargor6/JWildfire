@@ -19,9 +19,9 @@ package org.jwildfire.create.tina.dance.motion;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.dance.DancingFlameProject;
-import org.jwildfire.create.tina.dance.model.AnimationModelService;
-import org.jwildfire.create.tina.dance.model.FlamePropertyPath;
-import org.jwildfire.create.tina.dance.model.PropertyModel;
+import org.jwildfire.create.tina.keyframe.model.AnimationModelService;
+import org.jwildfire.create.tina.keyframe.model.FlamePropertyPath;
+import org.jwildfire.create.tina.keyframe.model.PropertyModel;
 
 public class DefaultMotionCreator implements MotionCreator {
 
