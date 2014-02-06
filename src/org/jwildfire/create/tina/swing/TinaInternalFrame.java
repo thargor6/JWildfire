@@ -1527,7 +1527,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaSouthTabbedPane.addTab("Special Shading", null, getShadingPanel(), null);
       tinaSouthTabbedPane.addTab("Gradient", null, getTinaPalettePanel(), null);
       tinaSouthTabbedPane.addTab("Layerz", null, getPanel_74(), null);
-      tinaSouthTabbedPane.addTab("Keyframes", null, getPanel_34(), null);
+      tinaSouthTabbedPane.addTab("Animation", null, getPanel_34(), null);
 
       tinaSouthTabbedPane.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
@@ -3891,8 +3891,7 @@ public class TinaInternalFrame extends JInternalFrame {
         getDancingFlamesRenameMotionBtn(), getDancingFlamesMutedCBx(),
         getLayerWeightEd(), getLayerAddBtn(), getLayerDuplicateBtn(), getLayerDeleteBtn(),
         getLayersTable(), getLayerVisibleBtn(), getLayerAppendBtn(), getLayerHideOthersBtn(), getLayerShowAllBtn(), getLayerPreviewBtn(),
-        getKeyframesFrameField(), getKeyframesFrameSlider(), getKeyframesFrameCountField(), getAddKeyframeBtn(), getDuplicateKeyframeBtn(),
-        getDeleteKeyframeBtn(), getKeyFramesTable());
+        getKeyframesFrameField(), getKeyframesFrameSlider(), getKeyframesFrameCountField());
 
     tinaController = new TinaController(params);
 
@@ -8800,13 +8799,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JPanel panel_80;
   private JWFNumberField keyframesFrameField;
   private JWFNumberField keyframesFrameCountField;
-  private JTable keyFramesTable;
   private JSlider keyframesFrameSlider;
-  private JButton addKeyframeBtn;
-  private JButton deleteKeyframeBtn;
-  private JButton duplicateKeyframeBtn;
-  private JButton prevKeyframeBtn;
-  private JButton nextKeyframeBtn;
 
   /**
    * This method initializes renderBatchJobsScrollPane	
@@ -14919,87 +14912,7 @@ public class TinaInternalFrame extends JInternalFrame {
 
       JPanel panel_1 = new JPanel();
       panel_34.add(panel_1, BorderLayout.CENTER);
-      panel_1.setLayout(new BorderLayout(0, 0));
-
-      JPanel panel_2 = new JPanel();
-      panel_2.setPreferredSize(new Dimension(140, 10));
-      panel_1.add(panel_2, BorderLayout.WEST);
-
-      JPanel panel_3 = new JPanel();
-      panel_3.setPreferredSize(new Dimension(400, 10));
-      panel_1.add(panel_3, BorderLayout.EAST);
-      panel_3.setLayout(null);
-
-      addKeyframeBtn = new JButton();
-      addKeyframeBtn.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-          tinaController.getKeyFramesController().addKeyFrameBtn_clicked();
-        }
-      });
-      addKeyframeBtn.setToolTipText("Add new keyframe");
-      addKeyframeBtn.setText("Add keyframe");
-      addKeyframeBtn.setPreferredSize(new Dimension(56, 24));
-      addKeyframeBtn.setFont(new Font("Dialog", Font.BOLD, 10));
-      addKeyframeBtn.setBounds(6, 6, 116, 24);
-      panel_3.add(addKeyframeBtn);
-
-      duplicateKeyframeBtn = new JButton();
-      duplicateKeyframeBtn.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-          tinaController.getKeyFramesController().duplicateKeyFrameBtn_clicked();
-        }
-      });
-      duplicateKeyframeBtn.setToolTipText("Duplicate selected keyframe");
-      duplicateKeyframeBtn.setText("Duplicate");
-      duplicateKeyframeBtn.setPreferredSize(new Dimension(90, 24));
-      duplicateKeyframeBtn.setFont(new Font("Dialog", Font.BOLD, 10));
-      duplicateKeyframeBtn.setBounds(6, 71, 116, 24);
-      panel_3.add(duplicateKeyframeBtn);
-
-      deleteKeyframeBtn = new JButton();
-      deleteKeyframeBtn.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-          tinaController.getKeyFramesController().deleteKeyFrameBtn_clicked();
-        }
-      });
-      deleteKeyframeBtn.setToolTipText("Delete selected keyframe");
-      deleteKeyframeBtn.setText("Delete");
-      deleteKeyframeBtn.setPreferredSize(new Dimension(90, 24));
-      deleteKeyframeBtn.setFont(new Font("Dialog", Font.BOLD, 10));
-      deleteKeyframeBtn.setBounds(6, 98, 116, 24);
-      panel_3.add(deleteKeyframeBtn);
-
-      prevKeyframeBtn = new JButton();
-      prevKeyframeBtn.setToolTipText("Select the previous keyframe");
-      prevKeyframeBtn.setText("Prev keyframe");
-      prevKeyframeBtn.setPreferredSize(new Dimension(56, 24));
-      prevKeyframeBtn.setFont(new Font("Dialog", Font.BOLD, 10));
-      prevKeyframeBtn.setBounds(158, 6, 116, 24);
-      panel_3.add(prevKeyframeBtn);
-
-      nextKeyframeBtn = new JButton();
-      nextKeyframeBtn.setToolTipText("Select the next keyframe");
-      nextKeyframeBtn.setText("Next keyframe");
-      nextKeyframeBtn.setPreferredSize(new Dimension(56, 24));
-      nextKeyframeBtn.setFont(new Font("Dialog", Font.BOLD, 10));
-      nextKeyframeBtn.setBounds(278, 6, 116, 24);
-      panel_3.add(nextKeyframeBtn);
-
-      JScrollPane scrollPane_2 = new JScrollPane();
-      panel_1.add(scrollPane_2, BorderLayout.CENTER);
-
-      keyFramesTable = new JTable();
-      keyFramesTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
-
-        @Override
-        public void valueChanged(ListSelectionEvent e) {
-          if (!e.getValueIsAdjusting() && tinaController != null && tinaController.getKeyFramesController() != null) {
-            tinaController.getKeyFramesController().keyFramesTableClicked();
-          }
-        }
-
-      });
-      scrollPane_2.setViewportView(keyFramesTable);
+      panel_1.setLayout(null);
     }
     return panel_34;
   }
@@ -15122,32 +15035,8 @@ public class TinaInternalFrame extends JInternalFrame {
     return keyframesFrameCountField;
   }
 
-  public JTable getKeyFramesTable() {
-    return keyFramesTable;
-  }
-
   public JSlider getKeyframesFrameSlider() {
     return keyframesFrameSlider;
-  }
-
-  public JButton getAddKeyframeBtn() {
-    return addKeyframeBtn;
-  }
-
-  public JButton getDeleteKeyframeBtn() {
-    return deleteKeyframeBtn;
-  }
-
-  public JButton getDuplicateKeyframeBtn() {
-    return duplicateKeyframeBtn;
-  }
-
-  public JButton getPrevKeyframeBtn() {
-    return prevKeyframeBtn;
-  }
-
-  public JButton getNextKeyframeBtn() {
-    return nextKeyframeBtn;
   }
 
 } //  @jve:decl-index=0:visual-constraint="10,10"

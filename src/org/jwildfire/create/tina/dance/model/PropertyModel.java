@@ -14,10 +14,11 @@
   if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
   02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
-package org.jwildfire.create.tina.keyframe.model;
+package org.jwildfire.create.tina.dance.model;
 
 import java.util.ArrayList;
 import java.util.List;
+
 
 public class PropertyModel extends AbstractProperty {
   private static final long serialVersionUID = 1L;

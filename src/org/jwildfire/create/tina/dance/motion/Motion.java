@@ -24,7 +24,7 @@ import org.jwildfire.base.ManagedObject;
 import org.jwildfire.base.Property;
 import org.jwildfire.base.PropertyCategory;
 import org.jwildfire.base.Tools;
-import org.jwildfire.create.tina.keyframe.model.FlamePropertyPath;
+import org.jwildfire.create.tina.dance.model.FlamePropertyPath;
 
 public abstract class Motion extends ManagedObject implements Serializable {
   private static final long serialVersionUID = 1L;

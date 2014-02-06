@@ -258,8 +258,7 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
         parameterObject.gradientsList);
 
     keyFramesController = new KeyFramesController(this, parameterObject.pErrorHandler, prefs, parameterObject.pCenterPanel,
-        parameterObject.keyframesFrameField, parameterObject.keyframesFrameSlider, parameterObject.keyframesFrameCountField,
-        parameterObject.addKeyframeBtn, parameterObject.duplicateKeyframeBtn, parameterObject.deleteKeyframeBtn, parameterObject.keyFramesTable);
+        parameterObject.keyframesFrameField, parameterObject.keyframesFrameSlider, parameterObject.keyframesFrameCountField);
 
     data.cameraRollREd = parameterObject.pCameraRollREd;
     data.cameraRollSlider = parameterObject.pCameraRollSlider;

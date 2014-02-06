@@ -23,11 +23,11 @@ import javax.swing.JTree;
 import javax.swing.tree.DefaultTreeModel;
 
 import org.jwildfire.create.tina.base.Flame;
-import org.jwildfire.create.tina.keyframe.model.AbstractProperty;
-import org.jwildfire.create.tina.keyframe.model.AnimationModelService;
-import org.jwildfire.create.tina.keyframe.model.FlamePropertyPath;
-import org.jwildfire.create.tina.keyframe.model.PlainProperty;
-import org.jwildfire.create.tina.keyframe.model.PropertyModel;
+import org.jwildfire.create.tina.dance.model.AbstractProperty;
+import org.jwildfire.create.tina.dance.model.AnimationModelService;
+import org.jwildfire.create.tina.dance.model.FlamePropertyPath;
+import org.jwildfire.create.tina.dance.model.PlainProperty;
+import org.jwildfire.create.tina.dance.model.PropertyModel;
 
 public class FlamePropertiesTreeService {
 

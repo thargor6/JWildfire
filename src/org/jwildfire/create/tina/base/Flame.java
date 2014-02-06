@@ -27,7 +27,6 @@ import org.jwildfire.base.QualityProfile;
 import org.jwildfire.base.ResolutionProfile;
 import org.jwildfire.create.tina.animate.AnimAware;
 import org.jwildfire.create.tina.edit.Assignable;
-import org.jwildfire.create.tina.keyframe.KeyFrame;
 import org.jwildfire.create.tina.palette.RGBPalette;
 import org.jwildfire.create.tina.render.filter.FilterKernelType;
 
@@ -98,7 +97,6 @@ public class Flame implements Assignable<Flame>, Serializable {
   private final List<Layer> layers = new ArrayList<Layer>();
   @AnimAware
   private int frame;
-  private final List<KeyFrame> keyFrames = new ArrayList<KeyFrame>();
 
   @AnimAware
   private ShadingInfo shadingInfo = new ShadingInfo();
@@ -471,10 +469,6 @@ public class Flame implements Assignable<Flame>, Serializable {
       layers.add(layer.makeCopy());
     }
 
-    keyFrames.clear();
-    for (KeyFrame keyFrame : pFlame.getKeyFrames()) {
-      keyFrames.add(keyFrame.makeCopy());
-    }
   }
 
   public List<Layer> getLayers() {
@@ -508,16 +502,11 @@ public class Flame implements Assignable<Flame>, Serializable {
         !shadingInfo.isEqual(pFlame.shadingInfo) || !name.equals(pFlame.name) ||
         (fabs(antialiasAmount - pFlame.antialiasAmount) > EPSILON) || (fabs(antialiasRadius - pFlame.antialiasRadius) > EPSILON) ||
         (layers.size() != pFlame.layers.size()) ||
-        (frame != pFlame.frame) || (keyFrames.size() != pFlame.keyFrames.size())) {
+        (frame != pFlame.frame)) {
       return false;
     }
     for (int i = 0; i < layers.size(); i++) {
       if (!layers.get(i).isEqual(pFlame.layers.get(i))) {
-        return false;
-      }
-    }
-    for (int i = 0; i < keyFrames.size(); i++) {
-      if (!keyFrames.get(i).isEqual(pFlame.keyFrames.get(i))) {
         return false;
       }
     }
@@ -683,10 +672,6 @@ public class Flame implements Assignable<Flame>, Serializable {
 
   public void setFrame(int frame) {
     this.frame = frame;
-  }
-
-  public List<KeyFrame> getKeyFrames() {
-    return keyFrames;
   }
 
 }

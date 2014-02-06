@@ -16,16 +16,23 @@
 */
 package org.jwildfire.create.tina.swing;
 
+import java.awt.BorderLayout;
 import java.awt.Cursor;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 
+import javax.swing.JButton;
+import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
+import javax.swing.event.ChangeListener;
 
 import org.jwildfire.base.Tools;
 
-public class JWFNumberField extends JSpinner {
+public class JWFNumberField extends JPanel {
   private static final double DFLT_STEP = 0.5;
   private static final double DFLT_MOUSE_THRESHOLD = 10;
   private static final long serialVersionUID = 1L;
@@ -41,15 +48,38 @@ public class JWFNumberField extends JSpinner {
   private SpinnerNumberModel spinnerModel;
   private boolean mouseAdjusting = false;
   private int mouseChangeCount = 0;
+  private boolean withMotionCurve = false;
+
+  private JSpinner spinnerField;
+  private JButton motionCurveBtn;
 
   public JWFNumberField() {
+    setLayout(new BorderLayout());
+
+    motionCurveBtn = new JButton();
+    motionCurveBtn.setText("C");
+    motionCurveBtn.setToolTipText("Create/edit a motion curve");
+    configureMotionCurveBtn(withMotionCurve);
+    motionCurveBtn.setFont(new Font("Dialog", Font.BOLD, 8));
+    add(motionCurveBtn, BorderLayout.WEST);
+
+    spinnerField = new JSpinner();
+    add(spinnerField, BorderLayout.CENTER);
     spinnerModel = new SpinnerNumberModel(new Double(0), null, null, new Double(valueStep));
-    setModel(spinnerModel);
+    spinnerField.setModel(spinnerModel);
     setValueStep(DFLT_STEP);
     setMouseThreshold(DFLT_MOUSE_THRESHOLD);
     addEvents();
-    ((JSpinner.DefaultEditor) getEditor()).getTextField().setHorizontalAlignment(JTextField.LEADING);
+    ((JSpinner.DefaultEditor) spinnerField.getEditor()).getTextField().setHorizontalAlignment(JTextField.LEADING);
     setCursor();
+  }
+
+  private void configureMotionCurveBtn(boolean visible) {
+    Dimension size = visible ? new Dimension(22, 24) : new Dimension(0, 0);
+    motionCurveBtn.setPreferredSize(size);
+    motionCurveBtn.setMinimumSize(size);
+    motionCurveBtn.setMaximumSize(size);
+    motionCurveBtn.setVisible(visible);
   }
 
   public double getValueStep() {
@@ -62,11 +92,11 @@ public class JWFNumberField extends JSpinner {
   }
 
   private void setCursor() {
-    ((JSpinner.DefaultEditor) getEditor()).getTextField().setCursor(Cursor.getPredefinedCursor(Cursor.W_RESIZE_CURSOR));
+    ((JSpinner.DefaultEditor) spinnerField.getEditor()).getTextField().setCursor(Cursor.getPredefinedCursor(Cursor.W_RESIZE_CURSOR));
   }
 
   private void addEvents() {
-    ((JSpinner.DefaultEditor) getEditor()).getTextField().addMouseListener(
+    ((JSpinner.DefaultEditor) spinnerField.getEditor()).getTextField().addMouseListener(
         new java.awt.event.MouseAdapter() {
 
           @Override
@@ -93,7 +123,7 @@ public class JWFNumberField extends JSpinner {
 
         });
 
-    ((JSpinner.DefaultEditor) getEditor()).getTextField().addMouseMotionListener(
+    ((JSpinner.DefaultEditor) spinnerField.getEditor()).getTextField().addMouseMotionListener(
         new java.awt.event.MouseMotionAdapter() {
 
           @Override
@@ -108,7 +138,7 @@ public class JWFNumberField extends JSpinner {
               else if (hasMaxValue && value > maxValue) {
                 value = maxValue;
               }
-              setValue(value);
+              spinnerField.setValue(value);
               mouseChangeCount++;
             }
           }
@@ -123,10 +153,10 @@ public class JWFNumberField extends JSpinner {
       if (onlyIntegers) {
         val = Tools.FTOI(val);
       }
-      setValue(val);
+      spinnerField.setValue(val);
     }
     else
-      setValue(0.0);
+      spinnerField.setValue(0.0);
   }
 
   public String getText() {
@@ -195,9 +225,8 @@ public class JWFNumberField extends JSpinner {
     }
   }
 
-  @Override
   public Object getValue() {
-    Object val = super.getValue();
+    Object val = spinnerField.getValue();
     if (val != null && val instanceof Double && onlyIntegers) {
       val = new Double(Tools.FTOI((Double) val));
     }
@@ -230,6 +259,35 @@ public class JWFNumberField extends JSpinner {
 
   public int getMouseChangeCount() {
     return mouseChangeCount;
+
   }
 
+  public void addChangeListener(ChangeListener listener) {
+    spinnerField.addChangeListener(listener);
+  }
+
+  public void setValue(double value) {
+    spinnerField.setValue(value);
+  }
+
+  @Override
+  public void setFont(Font font) {
+    super.setFont(font);
+    if (spinnerField != null) {
+      spinnerField.setFont(font);
+    }
+  }
+
+  public void addActionListener(ActionListener listener) {
+    motionCurveBtn.addActionListener(listener);
+  }
+
+  public boolean isWithMotionCurve() {
+    return withMotionCurve;
+  }
+
+  public void setWithMotionCurve(boolean pWithMotionCurve) {
+    withMotionCurve = pWithMotionCurve;
+    configureMotionCurveBtn(withMotionCurve);
+  }
 }
