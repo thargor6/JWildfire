@@ -16,6 +16,9 @@
 */
 package org.jwildfire.create.tina.keyframe;
 
+import java.util.Collections;
+import java.util.Comparator;
+
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.keyframe.model.AnimationModelService;
 import org.jwildfire.create.tina.keyframe.model.PlainProperty;
@@ -32,7 +35,16 @@ public class KeyFrameService {
       throw new RuntimeException("A keyframe at position <" + pFrame + "> already exists");
     }
     KeyFrame keyFrame = new KeyFrame();
+    keyFrame.setFrame(pFrame);
     pFlame.getKeyFrames().add(keyFrame);
+    Collections.sort(pFlame.getKeyFrames(), new Comparator<KeyFrame>() {
+      @Override
+      public int compare(KeyFrame o1, KeyFrame o2) {
+        Integer frame1 = o1.getFrame();
+        Integer frame2 = o2.getFrame();
+        return frame1.compareTo(frame2);
+      }
+    });
     return keyFrame;
   }
 
@@ -66,3 +78,16 @@ public class KeyFrameService {
   }
 
 }
+/*
+ * User Stories:
+ * 1. Der Benutzer möchte einen KeyFrame anlegen
+ * 2. Der Benutzer möchte einen KeyFrame löschen
+ * 3. Der Benutzer möchte einen KeyFrame kopieren
+ * 4. Der Benutzer möchte zwischen KeyFrames wechseln
+ * 5. Der Benutzer möchte die Parameter an einem KeyFrame editieren 
+ * 6. Der Benutzer möchte die Zwischenzustände sehen
+ * 7. Der Benutzer möchte die Bewegung als Animation in Echtzeit abspielen
+ * 8. Der Benutzer möchte Flames mit KeyFrames speichern
+ * 9. Der Benutzer möchte Flames mit KeyFrames laden
+ * 10. Der Benutzer möchte die KeyFrames im Movie-Editor verwenden können
+ */

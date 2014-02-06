@@ -19,7 +19,6 @@ package org.jwildfire.create.tina.keyframe.model;
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class PropertyModel extends AbstractProperty {
   private static final long serialVersionUID = 1L;
   private final List<PlainProperty> properties = new ArrayList<PlainProperty>();

@@ -26,7 +26,7 @@ public class KeyFrame implements Assignable<KeyFrame>, Serializable {
   private static final long serialVersionUID = 1L;
 
   private int frame;
-  private List<PropertyValue> values = new ArrayList<PropertyValue>();
+  private final List<PropertyValue> values = new ArrayList<PropertyValue>();
 
   @Override
   public void assign(KeyFrame pSrc) {
@@ -64,6 +64,10 @@ public class KeyFrame implements Assignable<KeyFrame>, Serializable {
 
   public void setFrame(int frame) {
     this.frame = frame;
+  }
+
+  public List<PropertyValue> getValues() {
+    return values;
   }
 
 }

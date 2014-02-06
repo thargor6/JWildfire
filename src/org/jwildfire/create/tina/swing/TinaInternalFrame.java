@@ -8807,7 +8807,6 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton duplicateKeyframeBtn;
   private JButton prevKeyframeBtn;
   private JButton nextKeyframeBtn;
-  private JButton updateKeyframeBtn;
 
   /**
    * This method initializes renderBatchJobsScrollPane	
@@ -14986,18 +14985,20 @@ public class TinaInternalFrame extends JInternalFrame {
       nextKeyframeBtn.setBounds(278, 6, 116, 24);
       panel_3.add(nextKeyframeBtn);
 
-      updateKeyframeBtn = new JButton();
-      updateKeyframeBtn.setToolTipText("Update the currently selected keyframe");
-      updateKeyframeBtn.setText("Update keyframe");
-      updateKeyframeBtn.setPreferredSize(new Dimension(56, 24));
-      updateKeyframeBtn.setFont(new Font("Dialog", Font.BOLD, 10));
-      updateKeyframeBtn.setBounds(158, 42, 236, 24);
-      panel_3.add(updateKeyframeBtn);
-
       JScrollPane scrollPane_2 = new JScrollPane();
       panel_1.add(scrollPane_2, BorderLayout.CENTER);
 
       keyFramesTable = new JTable();
+      keyFramesTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+
+        @Override
+        public void valueChanged(ListSelectionEvent e) {
+          if (!e.getValueIsAdjusting() && tinaController != null && tinaController.getKeyFramesController() != null) {
+            tinaController.getKeyFramesController().keyFramesTableClicked();
+          }
+        }
+
+      });
       scrollPane_2.setViewportView(keyFramesTable);
     }
     return panel_34;
@@ -15015,7 +15016,7 @@ public class TinaInternalFrame extends JInternalFrame {
       keyframesFrameSlider.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           if (tinaController != null && tinaController.getKeyFramesController() != null) {
-            tinaController.getKeyFramesController().keyFrameChanged();
+            tinaController.getKeyFramesController().keyFrameSliderChanged();
           }
         }
       });
@@ -15051,11 +15052,8 @@ public class TinaInternalFrame extends JInternalFrame {
       keyframesFrameField.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           if (tinaController != null && tinaController.getKeyFramesController() != null) {
-            try {
-              keyframesFrameSlider.setValue(keyframesFrameField.getIntValue());
-            }
-            catch (Exception ex) {
-              ex.printStackTrace();
+            if (tinaController != null && tinaController.getKeyFramesController() != null) {
+              tinaController.getKeyFramesController().keyFrameFieldChanged();
             }
           }
         }
@@ -15152,8 +15150,5 @@ public class TinaInternalFrame extends JInternalFrame {
     return nextKeyframeBtn;
   }
 
-  public JButton getUpdateKeyframeBtn() {
-    return updateKeyframeBtn;
-  }
 } //  @jve:decl-index=0:visual-constraint="10,10"
 

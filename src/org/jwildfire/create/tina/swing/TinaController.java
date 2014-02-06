@@ -183,7 +183,8 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
 
   private MainController mainController;
   private final JTabbedPane rootTabbedPane;
-  private Flame _currFlame, _currRandomizeFlame;
+  // TODO simplify
+  private Flame _currFlameStack, _currRandomizeFlame;
   private boolean noRefresh;
   private final ProgressUpdater mainProgressUpdater;
   private final ProgressUpdater jobProgressUpdater;
@@ -915,7 +916,12 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
 
   @Override
   public Flame getCurrFlame() {
-    return _currFlame;
+    // TODO
+    return _currFlameStack;
+  }
+
+  public Flame getCurrFlameStack() {
+    return _currFlameStack;
   }
 
   public Layer getCurrLayer() {
@@ -942,17 +948,19 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
   }
 
   private void setCurrFlame(Flame pFlame, boolean pAddToThumbnails) {
-    if (_currFlame == null || !_currFlame.equals(pFlame)) {
+    if (_currFlameStack == null || !_currFlameStack.equals(pFlame)) {
       _currRandomizeFlame = pFlame.makeCopy();
     }
-    if (_currFlame != null) {
-      for (Layer layer : _currFlame.getLayers()) {
-        deRegisterFromEditor(_currFlame, layer);
+    if (_currFlameStack != null) {
+      // TODO 
+      // ALL KEYframes
+      for (Layer layer : _currFlameStack.getLayers()) {
+        deRegisterFromEditor(_currFlameStack, layer);
       }
     }
     importFlame(pFlame, pAddToThumbnails);
     // TODO
-    registerToEditor(_currFlame, _currFlame.getFirstLayer());
+    registerToEditor(_currFlameStack, _currFlameStack.getFirstLayer());
   }
 
   protected void deRegisterFromEditor(Flame pFlame, Layer pLayer) {
@@ -1122,8 +1130,18 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
       gridRefreshing = false;
     }
     refreshLayerUI();
-
     refreshLayerControls(getCurrLayer());
+    refreshKeyFramesUI();
+  }
+
+  public void refreshKeyFramesUI() {
+    noRefresh = true;
+    try {
+      keyFramesController.refreshUI();
+    }
+    finally {
+      noRefresh = false;
+    }
   }
 
   public void refreshLayerUI() {
@@ -1503,6 +1521,10 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
     data.transformationsTable.getColumnModel().getColumn(COL_TRANSFORM).setWidth(20);
     data.transformationsTable.getColumnModel().getColumn(COL_VARIATIONS).setPreferredWidth(120);
     data.transformationsTable.getColumnModel().getColumn(COL_WEIGHT).setWidth(16);
+  }
+
+  public Font getTableFont() {
+    return data.transformationsTable.getFont();
   }
 
   private void refreshLayersTable() {
@@ -2229,7 +2251,7 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
         else {
           setCurrFlame(flame);
           getCurrFlame().setLastFilename(file.getName());
-          undoManager.initUndoStack(getCurrFlame());
+          undoManager.initUndoStack(getCurrFlameStack());
 
           for (int i = flames.size() - 1; i >= 1; i--) {
             randomBatch.add(0, new FlameThumbnail(flames.get(i), null));
@@ -4217,20 +4239,20 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
       }
     }
     else {
-      if (_currFlame == null || !_currFlame.equals(pFlame)) {
+      if (_currFlameStack == null || !_currFlameStack.equals(pFlame)) {
         _currRandomizeFlame = pFlame.makeCopy();
       }
       if (pAddToThumbnails) {
-        _currFlame = pFlame.makeCopy();
-        undoManager.initUndoStack(_currFlame);
+        _currFlameStack = pFlame.makeCopy();
+        undoManager.initUndoStack(_currFlameStack);
         setupProfiles(getCurrFlame());
         randomBatch.add(0, new FlameThumbnail(getCurrFlame(), null));
         updateThumbnails();
         showStatusMessage(getCurrFlame(), "imported into editor");
       }
       else {
-        _currFlame = pFlame;
-        undoManager.initUndoStack(_currFlame);
+        _currFlameStack = pFlame;
+        undoManager.initUndoStack(_currFlameStack);
         setupProfiles(getCurrFlame());
         showStatusMessage(getCurrFlame(), "imported into editor");
       }
@@ -5844,5 +5866,13 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
 
   public void layerPreviewBtnClicked() {
     refreshFlameImage(false);
+  }
+
+  public boolean isNoRefresh() {
+    return noRefresh;
+  }
+
+  public void setNoRefresh(boolean noRefresh) {
+    this.noRefresh = noRefresh;
   }
 }

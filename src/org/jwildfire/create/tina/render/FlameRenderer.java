@@ -860,7 +860,8 @@ public class FlameRenderer {
     res.add(initialFlame);
 
     // TODO
-    int blurLength = 80;
+    int blurLength = -1;
+    //    int blurLength = 80;
     if (blurLength > 0) {
       for (int p = 1; p < blurLength; p++) {
         Flame renderFlame = initialFlame.makeCopy();
