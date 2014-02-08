@@ -732,7 +732,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaSouthPanel.setLayout(new BorderLayout());
       tinaSouthPanel.setPreferredSize(new Dimension(0, 202));
       tinaSouthPanel.add(getTinaSouthTabbedPane(), BorderLayout.CENTER);
-      tinaSouthPanel.add(getPanel_66(), BorderLayout.NORTH);
+      tinaSouthPanel.add(getFrameSliderPanel(), BorderLayout.NORTH);
     }
     return tinaSouthPanel;
   }
@@ -8843,7 +8843,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JPanel panel_67;
   private JButton gradientFadeAllBtn;
   private JPanel panel_65;
-  private JPanel panel_66;
+  private JPanel frameSliderPanel;
   private JPanel panel_68;
   private JButton gradientLibraryRescanBtn;
   private JButton gradientLibraryNewFolderBtn;
@@ -8890,7 +8890,6 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton flameBrowserToBatchRendererBtn;
   private JToggleButton layerPreviewBtn;
   private JPanel panel_34;
-  private JPanel panel_78;
   private JPanel panel_79;
   private JPanel panel_80;
   private JWFNumberField keyframesFrameField;
@@ -14360,11 +14359,33 @@ public class TinaInternalFrame extends JInternalFrame {
     return panel_65;
   }
 
-  private JPanel getPanel_66() {
-    if (panel_66 == null) {
-      panel_66 = new JPanel();
+  private JPanel getFrameSliderPanel() {
+    if (frameSliderPanel == null) {
+      frameSliderPanel = new JPanel();
+      frameSliderPanel.setPreferredSize(new Dimension(10, 28));
+      frameSliderPanel.setLayout(new BorderLayout(0, 0));
+      frameSliderPanel.add(getPanel_79(), BorderLayout.WEST);
+      frameSliderPanel.add(getPanel_80(), BorderLayout.EAST);
+
+      keyframesFrameSlider = new JSlider();
+      frameSliderPanel.add(keyframesFrameSlider, BorderLayout.CENTER);
+      keyframesFrameSlider.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null && tinaController.getAnimationController() != null) {
+            tinaController.getAnimationController().keyFrameSliderChanged();
+          }
+        }
+      });
+
+      keyframesFrameSlider.setPaintTicks(true);
+      keyframesFrameSlider.setValue(0);
+      keyframesFrameSlider.setPreferredSize(new Dimension(220, 19));
+      keyframesFrameSlider.setMinorTickSpacing(5);
+      keyframesFrameSlider.setMinimum(1);
+      keyframesFrameSlider.setMaximum(300);
+      keyframesFrameSlider.setMajorTickSpacing(10);
     }
-    return panel_66;
+    return frameSliderPanel;
   }
 
   private JPanel getPanel_68() {
@@ -14817,7 +14838,7 @@ public class TinaInternalFrame extends JInternalFrame {
       layerDeleteBtn.setText("Delete");
       layerDeleteBtn.setPreferredSize(new Dimension(90, 24));
       layerDeleteBtn.setFont(new Font("Dialog", Font.BOLD, 10));
-      layerDeleteBtn.setBounds(6, 134, 90, 24);
+      layerDeleteBtn.setBounds(112, 81, 90, 24);
       panel_75.add(layerDeleteBtn);
 
       layerVisibleBtn = new JToggleButton();
@@ -15004,14 +15025,11 @@ public class TinaInternalFrame extends JInternalFrame {
   private JPanel getPanel_34() {
     if (panel_34 == null) {
       panel_34 = new JPanel();
-      panel_34.setLayout(new BorderLayout(0, 0));
-      panel_34.add(getPanel_78(), BorderLayout.NORTH);
-
-      JPanel panel_1 = new JPanel();
-      panel_34.add(panel_1, BorderLayout.CENTER);
-      panel_1.setLayout(null);
+      panel_34.setLayout(null);
 
       motionCurveEditModeButton = new JToggleButton();
+      motionCurveEditModeButton.setBounds(6, 6, 136, 42);
+      panel_34.add(motionCurveEditModeButton);
       motionCurveEditModeButton.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
           tinaController.getAnimationController().toggleMotionCurveEditing(motionCurveEditModeButton.isSelected());
@@ -15021,39 +15039,8 @@ public class TinaInternalFrame extends JInternalFrame {
       motionCurveEditModeButton.setText("Motion curve editing");
       motionCurveEditModeButton.setPreferredSize(new Dimension(136, 42));
       motionCurveEditModeButton.setFont(new Font("Dialog", Font.BOLD, 10));
-      motionCurveEditModeButton.setBounds(6, 6, 136, 42);
-      panel_1.add(motionCurveEditModeButton);
     }
     return panel_34;
-  }
-
-  private JPanel getPanel_78() {
-    if (panel_78 == null) {
-      panel_78 = new JPanel();
-      panel_78.setPreferredSize(new Dimension(10, 36));
-      panel_78.setLayout(new BorderLayout(0, 0));
-      panel_78.add(getPanel_79(), BorderLayout.WEST);
-      panel_78.add(getPanel_80(), BorderLayout.EAST);
-
-      keyframesFrameSlider = new JSlider();
-      keyframesFrameSlider.addChangeListener(new ChangeListener() {
-        public void stateChanged(ChangeEvent e) {
-          if (tinaController != null && tinaController.getAnimationController() != null) {
-            tinaController.getAnimationController().keyFrameSliderChanged();
-          }
-        }
-      });
-
-      keyframesFrameSlider.setPaintTicks(true);
-      panel_78.add(keyframesFrameSlider, BorderLayout.CENTER);
-      keyframesFrameSlider.setValue(0);
-      keyframesFrameSlider.setPreferredSize(new Dimension(220, 19));
-      keyframesFrameSlider.setMinorTickSpacing(5);
-      keyframesFrameSlider.setMinimum(1);
-      keyframesFrameSlider.setMaximum(300);
-      keyframesFrameSlider.setMajorTickSpacing(10);
-    }
-    return panel_78;
   }
 
   private JPanel getPanel_79() {
@@ -15063,7 +15050,7 @@ public class TinaInternalFrame extends JInternalFrame {
       panel_79.setLayout(null);
 
       JLabel label = new JLabel();
-      label.setBounds(6, 6, 39, 22);
+      label.setBounds(6, 2, 39, 22);
       panel_79.add(label);
       label.setText("Frame");
       label.setPreferredSize(new Dimension(94, 22));
@@ -15082,7 +15069,7 @@ public class TinaInternalFrame extends JInternalFrame {
         }
       });
 
-      keyframesFrameField.setBounds(51, 6, 70, 24);
+      keyframesFrameField.setBounds(51, 2, 70, 24);
       panel_79.add(keyframesFrameField);
       keyframesFrameField.setPreferredSize(new Dimension(56, 22));
       keyframesFrameField.setOnlyIntegers(true);
@@ -15123,7 +15110,7 @@ public class TinaInternalFrame extends JInternalFrame {
       keyframesFrameCountField.setHasMinValue(true);
       keyframesFrameCountField.setHasMaxValue(true);
       keyframesFrameCountField.setFont(new Font("Dialog", Font.PLAIN, 10));
-      keyframesFrameCountField.setBounds(92, 4, 70, 24);
+      keyframesFrameCountField.setBounds(92, 2, 70, 24);
       panel_80.add(keyframesFrameCountField);
 
       JLabel lblFrameCount = new JLabel();
@@ -15131,7 +15118,7 @@ public class TinaInternalFrame extends JInternalFrame {
       lblFrameCount.setPreferredSize(new Dimension(94, 22));
       lblFrameCount.setHorizontalAlignment(SwingConstants.RIGHT);
       lblFrameCount.setFont(new Font("Dialog", Font.BOLD, 10));
-      lblFrameCount.setBounds(6, 6, 82, 22);
+      lblFrameCount.setBounds(6, 2, 82, 22);
       panel_80.add(lblFrameCount);
     }
     return panel_80;

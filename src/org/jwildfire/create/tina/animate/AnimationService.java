@@ -19,6 +19,7 @@ package org.jwildfire.create.tina.animate;
 import java.lang.reflect.Field;
 
 import org.jwildfire.base.Prefs;
+import org.jwildfire.base.mathlib.MathLib;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.MotionCurve;
@@ -27,6 +28,7 @@ import org.jwildfire.create.tina.render.FlameRenderer;
 import org.jwildfire.create.tina.render.RenderInfo;
 import org.jwildfire.create.tina.render.RenderedFlame;
 import org.jwildfire.create.tina.transform.XFormTransformService;
+import org.jwildfire.envelope.Envelope;
 import org.jwildfire.image.SimpleImage;
 
 public class AnimationService {
@@ -209,12 +211,35 @@ public class AnimationService {
     }
   }
 
+  public static <T> void setPropertyValue(T pDest, String pName, double pValue) {
+    @SuppressWarnings("unchecked")
+    Class<T> cls = (Class<T>) pDest.getClass();
+    Field field;
+    try {
+      field = cls.getDeclaredField(pName);
+      field.setAccessible(true);
+      Class<?> fieldCls = field.getType();
+      if (fieldCls == double.class || fieldCls == Double.class) {
+        field.setDouble(pDest, pValue);
+      }
+      else if (fieldCls == int.class || fieldCls == Integer.class) {
+        field.setInt(pDest, (int) MathLib.round(pValue));
+      }
+      else {
+        throw new IllegalStateException(fieldCls.getName());
+      }
+    }
+    catch (Throwable ex) {
+      throw new RuntimeException(ex);
+    }
+  }
+
   public static <T> MotionCurve getPropertyCurve(T pSource, String pName) {
     @SuppressWarnings("unchecked")
     Class<T> cls = (Class<T>) pSource.getClass();
     Field field;
     try {
-      field = cls.getDeclaredField(pName + "Curve");
+      field = cls.getDeclaredField(pName + CURVE_POSTFIX);
       field.setAccessible(true);
       Class<?> fieldCls = field.getType();
       if (fieldCls == MotionCurve.class) {
@@ -223,6 +248,34 @@ public class AnimationService {
       else {
         throw new IllegalStateException(fieldCls.getName());
       }
+    }
+    catch (Throwable ex) {
+      throw new RuntimeException(ex);
+    }
+  }
+
+  private static final String CURVE_POSTFIX = "Curve";
+
+  public static Flame evalMotionCurves(Flame pFlame, int pFrame) {
+    try {
+      Flame res = pFlame.makeCopy();
+
+      Class<?> cls = pFlame.getClass();
+      for (Field field : cls.getDeclaredFields()) {
+        field.setAccessible(true);
+        if (field.getType() == MotionCurve.class && field.getName().endsWith(CURVE_POSTFIX)) {
+          MotionCurve curve = (MotionCurve) field.get(pFlame);
+          if (curve.isEnabled()) {
+            Envelope envelope = curve.toEnvelope();
+            double value = envelope.evaluate(pFrame);
+            String propName = field.getName().substring(0, field.getName().length() - CURVE_POSTFIX.length());
+            setPropertyValue(res, propName, value);
+            //            System.out.println(propName + " " + value);
+          }
+        }
+      }
+
+      return res;
     }
     catch (Throwable ex) {
       throw new RuntimeException(ex);

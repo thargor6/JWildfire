@@ -49,7 +49,7 @@ public class AnimationController {
     enableControls();
   }
 
-  public int getCurrKeyFrameFrame() {
+  public int getCurrFrame() {
     Integer value = keyframesFrameField.getIntValue();
     return (value != null ? value.intValue() : -1);
   }
@@ -90,7 +90,7 @@ public class AnimationController {
         tinaController.setNoRefresh(true);
         int frame = keyframesFrameField.getIntValue() != null ? keyframesFrameField.getIntValue().intValue() : -1;
         adjustFrameControls(frame);
-        // TODO
+        tinaController.refreshFlameImage(false);
       }
       finally {
         tinaController.setNoRefresh(oldNoRefresh);
@@ -105,7 +105,7 @@ public class AnimationController {
         tinaController.setNoRefresh(true);
         int frame = keyframesFrameSlider.getValue();
         adjustFrameControls(frame);
-        // TODO
+        tinaController.refreshFlameImage(false);
       }
       finally {
         tinaController.setNoRefresh(oldNoRefresh);

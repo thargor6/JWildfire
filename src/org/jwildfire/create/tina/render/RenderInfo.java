@@ -26,6 +26,7 @@ public class RenderInfo implements Assignable<RenderInfo>, Serializable {
   private boolean renderHDRIntensityMap;
   private int imageWidth;
   private int imageHeight;
+  private int frame = -1;
 
   protected RenderInfo() {
 
@@ -90,6 +91,14 @@ public class RenderInfo implements Assignable<RenderInfo>, Serializable {
       return false;
     }
     return true;
+  }
+
+  public int getFrame() {
+    return frame;
+  }
+
+  public void setFrame(int frame) {
+    this.frame = frame;
   }
 
 }

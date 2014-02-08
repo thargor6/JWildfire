@@ -74,11 +74,9 @@ import org.jwildfire.base.mathlib.MathLib;
 import org.jwildfire.create.tina.AnimationController;
 import org.jwildfire.create.tina.GradientController;
 import org.jwildfire.create.tina.JWFScriptController;
-import org.jwildfire.create.tina.animate.AnimationService;
 import org.jwildfire.create.tina.base.DrawMode;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.Layer;
-import org.jwildfire.create.tina.base.MotionCurve;
 import org.jwildfire.create.tina.base.Shading;
 import org.jwildfire.create.tina.base.ShadingInfo;
 import org.jwildfire.create.tina.base.XForm;
@@ -118,7 +116,6 @@ import org.jwildfire.create.tina.variation.RessourceType;
 import org.jwildfire.create.tina.variation.Variation;
 import org.jwildfire.create.tina.variation.VariationFunc;
 import org.jwildfire.create.tina.variation.VariationFuncList;
-import org.jwildfire.envelope.Envelope;
 import org.jwildfire.image.SimpleImage;
 import org.jwildfire.io.ImageReader;
 import org.jwildfire.swing.ErrorHandler;
@@ -183,7 +180,7 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
   boolean refreshing = false;
 
   private final List<Job> batchRenderList = new ArrayList<Job>();
-  private final UndoManager<Flame> undoManager = new UndoManager<Flame>();
+  final UndoManager<Flame> undoManager = new UndoManager<Flame>();
   private final QuickSaveFilenameGen qsaveFilenameGen;
 
   private MainController mainController;
@@ -538,7 +535,7 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
     data.gradientLibTree = parameterObject.gradientLibTree;
     data.backgroundColorIndicatorBtn = parameterObject.backgroundColorIndicatorBtn;
     // end create
-    flameControls = new FlameControlsDeletegate(this, data);
+    flameControls = new FlameControlsDeletegate(this, data, rootTabbedPane);
 
     registerMotionPropertyControls();
 
@@ -993,6 +990,7 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
     int height = bounds.height / renderScale;
     if (width >= 16 && height >= 16) {
       RenderInfo info = new RenderInfo(width, height);
+      info.setFrame(getAnimationController().getCurrFrame());
       Flame flame = getCurrFlame();
       if (flame != null) {
         double oldSpatialFilterRadius = flame.getSpatialFilterRadius();
@@ -2596,18 +2594,13 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
     data.transparencyButton.setEnabled(enabled);
     data.darkTrianglesButton.setEnabled(enabled);
     data.randomizeButton.setEnabled(enabled);
-    enableFlameControls();
+    flameControls.enableControls();
     enableUndoControls();
     enableJobRenderControls();
     getAnimationController().enableControls();
     getJwfScriptController().enableControls();
     getGradientController().enableControls();
     getFlameBrowserController().enableControls();
-  }
-
-  private void enableFlameControls() {
-    enableFlameControl(data.cameraRollREd);
-    // TODO
   }
 
   private void enableJobRenderControls() {
@@ -5889,72 +5882,10 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
     this.noRefresh = noRefresh;
   }
 
-  public void enableFlameControl(JWFNumberField pSender) {
-    Flame flame = getCurrFlame();
-    boolean enabled;
-    if (flame == null) {
-      enabled = false;
-    }
-    else {
-      String propName = pSender.getMotionPropertyName();
-      MotionCurve curve = AnimationService.getPropertyCurve(flame, propName);
-      enabled = !curve.isEnabled();
-    }
-    pSender.setEnabled(enabled);
-    if (pSender.getLinkedMotionControl() != null) {
-      pSender.getLinkedMotionControl().setEnabled(enabled);
-    }
-  }
-
-  public void editFlameMotionCurve(ActionEvent e) {
-    JWFNumberField sender = ((JWFNumberField.JWFNumberFieldButton) e.getSource()).getOwner();
-    editFlameMotionCurve(sender);
-    enableFlameControl(sender);
-  }
-
-  public void editFlameMotionCurve(JWFNumberField pSender) {
-    String propName = pSender.getMotionPropertyName();
-    Flame flame = getCurrFlame();
-
-    MotionCurve curve = AnimationService.getPropertyCurve(flame, propName);
-    Envelope envelope = curve.toEnvelope();
-    if (envelope.getX().length == 0) {
-      double initialValue = AnimationService.getPropertyValue(flame, propName);
-      int[] x = new int[] { 0 };
-      if (initialValue <= envelope.getViewYMin() + 1) {
-        envelope.setViewYMin(initialValue - 1.0);
-      }
-      if (initialValue >= envelope.getViewYMax() - 1) {
-        envelope.setViewYMax(initialValue + 1.0);
-      }
-      double[] y = new double[] { initialValue };
-      envelope.setValues(x, y);
-    }
-
-    EnvelopeDialog dlg = new EnvelopeDialog(SwingUtilities.getWindowAncestor(rootTabbedPane), envelope, true);
-    dlg.setModal(true);
-    dlg.setVisible(true);
-    if (dlg.isConfirmed()) {
-      undoManager.saveUndoPoint(flame);
-      if (dlg.isRemoved()) {
-        curve.setEnabled(false);
-      }
-      else {
-        curve.assignFromEnvelope(envelope);
-        curve.setEnabled(true);
-      }
-    }
-  }
-
   private void registerMotionPropertyControls() {
-    animationController.registerMotionPropertyControls(data.cameraRollREd);
-    animationController.registerMotionPropertyControls(data.cameraPitchREd);
-    animationController.registerMotionPropertyControls(data.cameraYawREd);
-    animationController.registerMotionPropertyControls(data.cameraPerspectiveREd);
-    animationController.registerMotionPropertyControls(data.cameraCentreXREd);
-    animationController.registerMotionPropertyControls(data.cameraCentreYREd);
-    animationController.registerMotionPropertyControls(data.cameraZoomREd);
-    animationController.registerMotionPropertyControls(data.pixelsPerUnitREd);
+    for (JWFNumberField field : flameControls.getMotionControls()) {
+      animationController.registerMotionPropertyControls(field);
+    }
 
     animationController.registerMotionPropertyControls(data.affineC00REd);
     animationController.registerMotionPropertyControls(data.affineC01REd);
@@ -5964,5 +5895,9 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
     animationController.registerMotionPropertyControls(data.affineC21REd);
 
     // TODO
+  }
+
+  public void editFlameMotionCurve(ActionEvent e) {
+    flameControls.editFlameMotionCurve(e);
   }
 }

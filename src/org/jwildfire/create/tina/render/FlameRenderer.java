@@ -36,6 +36,7 @@ import java.util.List;
 import org.jwildfire.base.Prefs;
 import org.jwildfire.base.QualityProfile;
 import org.jwildfire.base.mathlib.MathLib;
+import org.jwildfire.create.tina.animate.AnimationService;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
@@ -298,7 +299,7 @@ public class FlameRenderer {
       initView();
       List<List<Flame>> renderFlames = new ArrayList<List<Flame>>();
       for (int t = 0; t < prefs.getTinaRenderThreads(); t++) {
-        renderFlames.add(createRenderFlames(flame));
+        renderFlames.add(createRenderFlames(flame, pRenderInfo.getFrame()));
       }
       forceAbort = false;
       iterate(0, 1, renderFlames);
@@ -850,17 +851,21 @@ public class FlameRenderer {
     }
   }
 
-  private List<Flame> createRenderFlames(Flame pFlame) {
+  private List<Flame> createRenderFlames(Flame pFlame, int pFrame) {
     List<Flame> res = new ArrayList<Flame>();
 
     Flame initialFlame = flame.makeCopy();
+    if (pFrame >= 0) {
+      initialFlame = AnimationService.evalMotionCurves(initialFlame, pFrame);
+    }
+
     for (Layer layer : initialFlame.getLayers()) {
       layer.refreshModWeightTables(flameTransformationContext);
     }
     res.add(initialFlame);
     // TODO
-    //    int blurLength = -1;
-    int blurLength = 200;
+    int blurLength = -1;
+    //    int blurLength = 200;
     if (blurLength > 0) {
       for (int p = 1; p < blurLength; p++) {
         Flame renderFlame = initialFlame.makeCopy();
@@ -891,7 +896,7 @@ public class FlameRenderer {
     initView();
     List<List<Flame>> renderFlames = new ArrayList<List<Flame>>();
     for (int t = 0; t < prefs.getTinaRenderThreads(); t++) {
-      renderFlames.add(createRenderFlames(flame));
+      renderFlames.add(createRenderFlames(flame, pRenderInfo.getFrame()));
     }
     return startIterate(renderFlames, null, true);
   }
@@ -921,7 +926,7 @@ public class FlameRenderer {
         initView();
         List<List<Flame>> renderFlames = new ArrayList<List<Flame>>();
         for (int t = 0; t < header.numThreads; t++) {
-          renderFlames.add(createRenderFlames(flame));
+          renderFlames.add(createRenderFlames(flame, renderInfo.getFrame()));
         }
         raster = null;
         // read raster
