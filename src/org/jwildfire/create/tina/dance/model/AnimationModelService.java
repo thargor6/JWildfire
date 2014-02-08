@@ -247,6 +247,7 @@ public class AnimationModelService {
     }
   }
 
+  @SuppressWarnings("unchecked")
   private static void addLayerToModel(PropertyModel pNode, int pIndex, Layer pLayer, PropertyVisitor pVisitor, VisitState pState) {
     Class<?> cls = pLayer.getClass();
     PropertyModel layerNode = new PropertyModel(pNode, PROPNAME_LAYER + (pIndex + 1), cls);

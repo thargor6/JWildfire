@@ -16,9 +16,12 @@
 */
 package org.jwildfire.create.tina.animate;
 
+import java.lang.reflect.Field;
+
 import org.jwildfire.base.Prefs;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.Layer;
+import org.jwildfire.create.tina.base.MotionCurve;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.render.FlameRenderer;
 import org.jwildfire.create.tina.render.RenderInfo;
@@ -179,5 +182,50 @@ public class AnimationService {
     FlameRenderer renderer = new FlameRenderer(flame, pPrefs, flame.isBGTransparency(), false);
     RenderedFlame res = renderer.renderFlame(info);
     return res.getImage();
+  }
+
+  public static <T> double getPropertyValue(T pSource, String pName) {
+    @SuppressWarnings("unchecked")
+    Class<T> cls = (Class<T>) pSource.getClass();
+    Field field;
+    try {
+      field = cls.getDeclaredField(pName);
+      field.setAccessible(true);
+      Class<?> fieldCls = field.getType();
+      if (fieldCls == double.class || fieldCls == Double.class) {
+        Double res = field.getDouble(pSource);
+        return res != null ? res.doubleValue() : 0.0;
+      }
+      else if (fieldCls == int.class || fieldCls == Integer.class) {
+        Integer res = field.getInt(pSource);
+        return res != null ? Double.valueOf(res.intValue()) : 0.0;
+      }
+      else {
+        throw new IllegalStateException(fieldCls.getName());
+      }
+    }
+    catch (Throwable ex) {
+      throw new RuntimeException(ex);
+    }
+  }
+
+  public static <T> MotionCurve getPropertyCurve(T pSource, String pName) {
+    @SuppressWarnings("unchecked")
+    Class<T> cls = (Class<T>) pSource.getClass();
+    Field field;
+    try {
+      field = cls.getDeclaredField(pName + "Curve");
+      field.setAccessible(true);
+      Class<?> fieldCls = field.getType();
+      if (fieldCls == MotionCurve.class) {
+        return (MotionCurve) field.get(pSource);
+      }
+      else {
+        throw new IllegalStateException(fieldCls.getName());
+      }
+    }
+    catch (Throwable ex) {
+      throw new RuntimeException(ex);
+    }
   }
 }

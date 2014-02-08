@@ -34,20 +34,27 @@ public class Flame implements Assignable<Flame>, Serializable {
   private static final long serialVersionUID = 1L;
   @AnimAware
   private double centreX;
+  private final MotionCurve centreXCurve = new MotionCurve();
   @AnimAware
   private double centreY;
+  private final MotionCurve centreYCurve = new MotionCurve();
   private int width;
   private int height;
   @AnimAware
   private double camPitch;
+  private final MotionCurve camPitchCurve = new MotionCurve();
   @AnimAware
   private double camYaw;
+  private final MotionCurve camYawCurve = new MotionCurve();
   @AnimAware
   private double camPerspective;
+  private final MotionCurve camPerspectiveCurve = new MotionCurve();
   @AnimAware
   private double camRoll;
+  private final MotionCurve camRollCurve = new MotionCurve();
   @AnimAware
   private double camZoom;
+  private final MotionCurve camZoomCurve = new MotionCurve();
   @AnimAware
   private double camZ;
   @AnimAware
@@ -83,6 +90,7 @@ public class Flame implements Assignable<Flame>, Serializable {
   private double gamma;
   private double gammaThreshold;
   private double pixelsPerUnit;
+  private final MotionCurve pixelsPerUnitCurve = new MotionCurve();
   private int whiteLevel;
   @AnimAware
   private double brightness;
@@ -418,14 +426,21 @@ public class Flame implements Assignable<Flame>, Serializable {
   @Override
   public void assign(Flame pFlame) {
     centreX = pFlame.centreX;
+    centreXCurve.assign(pFlame.centreXCurve);
     centreY = pFlame.centreY;
+    centreYCurve.assign(pFlame.centreYCurve);
     width = pFlame.width;
     height = pFlame.height;
     camPitch = pFlame.camPitch;
+    camPitchCurve.assign(pFlame.camPitchCurve);
     camYaw = pFlame.camYaw;
+    camYawCurve.assign(pFlame.camYawCurve);
     camPerspective = pFlame.camPerspective;
+    camPerspectiveCurve.assign(pFlame.camPerspectiveCurve);
     camRoll = pFlame.camRoll;
+    camRollCurve.assign(pFlame.camRollCurve);
     camZoom = pFlame.camZoom;
+    camZoomCurve.assign(pFlame.camZoomCurve);
     focusX = pFlame.focusX;
     focusY = pFlame.focusY;
     focusZ = pFlame.focusZ;
@@ -450,6 +465,7 @@ public class Flame implements Assignable<Flame>, Serializable {
     gamma = pFlame.gamma;
     gammaThreshold = pFlame.gammaThreshold;
     pixelsPerUnit = pFlame.pixelsPerUnit;
+    pixelsPerUnitCurve.assign(pFlame.pixelsPerUnitCurve);
     whiteLevel = pFlame.whiteLevel;
     brightness = pFlame.brightness;
     contrast = pFlame.contrast;
@@ -477,11 +493,15 @@ public class Flame implements Assignable<Flame>, Serializable {
 
   @Override
   public boolean isEqual(Flame pFlame) {
-    if ((fabs(centreX - pFlame.centreX) > EPSILON) || (fabs(centreY - pFlame.centreY) > EPSILON) ||
+    if ((fabs(centreX - pFlame.centreX) > EPSILON) || !centreXCurve.isEqual(pFlame.centreXCurve) ||
+        (fabs(centreY - pFlame.centreY) > EPSILON) || !centreYCurve.isEqual(pFlame.centreYCurve) ||
         (width != pFlame.width) || (height != pFlame.height) ||
-        (fabs(camPitch - pFlame.camPitch) > EPSILON) || (fabs(camYaw - pFlame.camYaw) > EPSILON) ||
-        (fabs(camPerspective - pFlame.camPerspective) > EPSILON) || (fabs(camRoll - pFlame.camRoll) > EPSILON) ||
-        (fabs(camZoom - pFlame.camZoom) > EPSILON) || (fabs(focusX - pFlame.focusX) > EPSILON) ||
+        (fabs(camPitch - pFlame.camPitch) > EPSILON) || !camPitchCurve.isEqual(pFlame.camPitchCurve) ||
+        (fabs(camYaw - pFlame.camYaw) > EPSILON) || !camYawCurve.isEqual(pFlame.camYawCurve) ||
+        (fabs(camPerspective - pFlame.camPerspective) > EPSILON) || !camPerspectiveCurve.isEqual(pFlame.camPerspectiveCurve) ||
+        (fabs(camRoll - pFlame.camRoll) > EPSILON) || !camRollCurve.isEqual(pFlame.camRollCurve) ||
+        (fabs(camZoom - pFlame.camZoom) > EPSILON) || !camZoomCurve.isEqual(pFlame.camZoomCurve) ||
+        (fabs(focusX - pFlame.focusX) > EPSILON) ||
         (fabs(focusY - pFlame.focusY) > EPSILON) || (fabs(focusZ - pFlame.focusZ) > EPSILON) || (fabs(dimishZ - pFlame.dimishZ) > EPSILON) ||
         (fabs(camDOF - pFlame.camDOF) > EPSILON) || (fabs(camDOFArea - pFlame.camDOFArea) > EPSILON) ||
         (fabs(camDOFExponent - pFlame.camDOFExponent) > EPSILON) || (fabs(camZ - pFlame.camZ) > EPSILON) ||
@@ -492,7 +512,8 @@ public class Flame implements Assignable<Flame>, Serializable {
         (fabs(sampleDensity - pFlame.sampleDensity) > EPSILON) || (bgTransparency != pFlame.bgTransparency) || (bgColorRed != pFlame.bgColorRed) ||
         (bgColorGreen != pFlame.bgColorGreen) || (bgColorBlue != pFlame.bgColorBlue) ||
         (fabs(gamma - pFlame.gamma) > EPSILON) || (fabs(gammaThreshold - pFlame.gammaThreshold) > EPSILON) ||
-        (fabs(pixelsPerUnit - pFlame.pixelsPerUnit) > EPSILON) || (whiteLevel != pFlame.whiteLevel) ||
+        (fabs(pixelsPerUnit - pFlame.pixelsPerUnit) > EPSILON) || !pixelsPerUnitCurve.isEqual(pFlame.pixelsPerUnitCurve) ||
+        (whiteLevel != pFlame.whiteLevel) ||
         (fabs(brightness - pFlame.brightness) > EPSILON) || (fabs(contrast - pFlame.contrast) > EPSILON) ||
         (fabs(vibrancy - pFlame.vibrancy) > EPSILON) || (preserveZ != pFlame.preserveZ) ||
         ((resolutionProfile != null && pFlame.resolutionProfile == null) || (resolutionProfile == null && pFlame.resolutionProfile != null) ||

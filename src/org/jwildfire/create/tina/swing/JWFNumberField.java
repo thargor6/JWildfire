@@ -17,6 +17,7 @@
 package org.jwildfire.create.tina.swing;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -49,17 +50,45 @@ public class JWFNumberField extends JPanel {
   private boolean mouseAdjusting = false;
   private int mouseChangeCount = 0;
   private boolean withMotionCurve = false;
+  private String motionPropertyName = "";
+
+  private String linkedMotionControlName = "";
+  private Component linkedMotionControl = null;
+
+  private String linkedLabelControlName = "";
+  private Component linkedLabelControl = null;
 
   private JSpinner spinnerField;
   private JButton motionCurveBtn;
 
+  public static class JWFNumberFieldButton extends JButton {
+    private static final long serialVersionUID = 1L;
+    private JWFNumberField owner;
+
+    public JWFNumberFieldButton() {
+      super();
+    }
+
+    public JWFNumberFieldButton(JWFNumberField pOwner) {
+      super();
+      owner = pOwner;
+    }
+
+    public JWFNumberField getOwner() {
+      return owner;
+    }
+
+    public void setOwner(JWFNumberField pOwner) {
+      owner = pOwner;
+    }
+  }
+
   public JWFNumberField() {
     setLayout(new BorderLayout());
 
-    motionCurveBtn = new JButton();
-    motionCurveBtn.setText("C");
+    motionCurveBtn = new JWFNumberFieldButton(this);
+    motionCurveBtn.setText("A");
     motionCurveBtn.setToolTipText("Create/edit a motion curve");
-    configureMotionCurveBtn(withMotionCurve);
     motionCurveBtn.setFont(new Font("Dialog", Font.BOLD, 8));
     add(motionCurveBtn, BorderLayout.WEST);
 
@@ -71,7 +100,11 @@ public class JWFNumberField extends JPanel {
     setMouseThreshold(DFLT_MOUSE_THRESHOLD);
     addEvents();
     ((JSpinner.DefaultEditor) spinnerField.getEditor()).getTextField().setHorizontalAlignment(JTextField.LEADING);
+
+    configureMotionCurveBtn(withMotionCurve);
+
     setCursor();
+
   }
 
   private void configureMotionCurveBtn(boolean visible) {
@@ -289,5 +322,63 @@ public class JWFNumberField extends JPanel {
   public void setWithMotionCurve(boolean pWithMotionCurve) {
     withMotionCurve = pWithMotionCurve;
     configureMotionCurveBtn(withMotionCurve);
+  }
+
+  public String getMotionPropertyName() {
+    return motionPropertyName;
+  }
+
+  public void setMotionPropertyName(String pMotionPropertyName) {
+    motionPropertyName = pMotionPropertyName;
+  }
+
+  public String getLinkedMotionControlName() {
+    return linkedMotionControlName;
+  }
+
+  public void setLinkedMotionControlName(String pLinkedMotionControlName) {
+    linkedMotionControlName = pLinkedMotionControlName;
+    linkedMotionControl = null;
+  }
+
+  public Component getLinkedMotionControl() {
+    if (linkedMotionControlName != null && linkedMotionControlName.length() > 0 && linkedMotionControl == null) {
+      for (Component component : getParent().getComponents()) {
+        if (linkedMotionControlName.equals(component.getName())) {
+          linkedMotionControl = component;
+          break;
+        }
+      }
+    }
+    return linkedMotionControl;
+  }
+
+  public String getLinkedLabelControlName() {
+    return linkedLabelControlName;
+  }
+
+  public void setLinkedLabelControlName(String pLinkedLabelControlName) {
+    linkedLabelControlName = pLinkedLabelControlName;
+    linkedLabelControl = null;
+  }
+
+  public Component getLinkedLabelControl() {
+    if (linkedLabelControlName != null && linkedLabelControlName.length() > 0 && linkedLabelControl == null) {
+      for (Component component : getParent().getComponents()) {
+        if (linkedLabelControlName.equals(component.getName())) {
+          linkedLabelControl = component;
+          break;
+        }
+      }
+    }
+    return linkedLabelControl;
+  }
+
+  public void setEnabled(boolean enabled) {
+    spinnerField.setEnabled(enabled);
+  }
+
+  public boolean isEnabled() {
+    return spinnerField.isEnabled();
   }
 }

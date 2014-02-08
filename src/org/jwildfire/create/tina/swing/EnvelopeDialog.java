@@ -36,6 +36,7 @@ public class EnvelopeDialog extends JDialog {
   private JButton okButton = null;
   private JButton cancelButton = null;
   private boolean confirmed = false;
+  private boolean removed = false;
   private JPanel panel;
   private JPanel panel_1;
   private final EnvelopeDlgController ctrl;
@@ -43,7 +44,7 @@ public class EnvelopeDialog extends JDialog {
   /**
    * @param pOwner
    */
-  public EnvelopeDialog(Window pOwner, Envelope pEnvelope) {
+  public EnvelopeDialog(Window pOwner, Envelope pEnvelope, boolean pAllowRemove) {
     super(pOwner);
     initialize();
     envelopeInterpolationCmb.addItem(Envelope.Interpolation.SPLINE);
@@ -52,6 +53,7 @@ public class EnvelopeDialog extends JDialog {
     getEnvelopePanel().setEnvelope(pEnvelope);
     Rectangle rootBounds = pOwner.getBounds();
     Dimension size = getSize();
+    getBtnRemove().setVisible(pAllowRemove);
     ctrl = new EnvelopeDlgController(pEnvelope, getEnvelopeAddPointButton(), getEnvelopeRemovePointButton(), getEnvelopeClearButton(),
         getEnvelopeXMinREd(), getEnvelopeXMaxREd(), getEnvelopeYMinREd(), getEnvelopeYMaxREd(), getEnvelopeXREd(),
         getEnvelopeYREd(), getEnvelopeInterpolationCmb(), getEnvelopeViewAllButton(), getEnvelopeViewLeftButton(),
@@ -83,6 +85,7 @@ public class EnvelopeDialog extends JDialog {
   private JButton envelopeViewUpButton;
   private JButton envelopeViewDownButton;
   private JComboBox envelopeInterpolationCmb;
+  private JButton btnRemove;
 
   public EnvelopePanel getEnvelopePanel() {
     if (envelopePanel == null) {
@@ -131,6 +134,24 @@ public class EnvelopeDialog extends JDialog {
       bottomPanel.setPreferredSize(new Dimension(0, 40));
       bottomPanel.add(getOkButton(), null);
       bottomPanel.add(getCancelButton(), null);
+
+      btnRemove = new JButton();
+      btnRemove.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          confirmed = true;
+          removed = true;
+          setVisible(false);
+        }
+      });
+      btnRemove.setText("Remove");
+      btnRemove.setSize(new Dimension(125, 24));
+      btnRemove.setSelected(true);
+      btnRemove.setPreferredSize(new Dimension(125, 24));
+      btnRemove.setMnemonic(KeyEvent.VK_R);
+      btnRemove.setLocation(new Point(276, 10));
+      btnRemove.setFont(new Font("Dialog", Font.BOLD, 10));
+      btnRemove.setBounds(619, 10, 125, 24);
+      bottomPanel.add(btnRemove);
     }
     return bottomPanel;
   }
@@ -183,6 +204,7 @@ public class EnvelopeDialog extends JDialog {
       okButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
           confirmed = true;
+          removed = false;
           setVisible(false);
         }
       });
@@ -530,5 +552,13 @@ public class EnvelopeDialog extends JDialog {
 
   public JWFNumberField getEnvelopeYREd() {
     return envelopeYREd;
+  }
+
+  public boolean isRemoved() {
+    return removed;
+  }
+
+  public JButton getBtnRemove() {
+    return btnRemove;
   }
 } //  @jve:decl-index=0:visual-constraint="10,10"

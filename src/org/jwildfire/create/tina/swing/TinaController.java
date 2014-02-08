@@ -71,12 +71,14 @@ import org.jwildfire.base.QualityProfile;
 import org.jwildfire.base.ResolutionProfile;
 import org.jwildfire.base.Tools;
 import org.jwildfire.base.mathlib.MathLib;
+import org.jwildfire.create.tina.AnimationController;
 import org.jwildfire.create.tina.GradientController;
 import org.jwildfire.create.tina.JWFScriptController;
-import org.jwildfire.create.tina.KeyFramesController;
+import org.jwildfire.create.tina.animate.AnimationService;
 import org.jwildfire.create.tina.base.DrawMode;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.Layer;
+import org.jwildfire.create.tina.base.MotionCurve;
 import org.jwildfire.create.tina.base.Shading;
 import org.jwildfire.create.tina.base.ShadingInfo;
 import org.jwildfire.create.tina.base.XForm;
@@ -116,6 +118,7 @@ import org.jwildfire.create.tina.variation.RessourceType;
 import org.jwildfire.create.tina.variation.Variation;
 import org.jwildfire.create.tina.variation.VariationFunc;
 import org.jwildfire.create.tina.variation.VariationFuncList;
+import org.jwildfire.envelope.Envelope;
 import org.jwildfire.image.SimpleImage;
 import org.jwildfire.io.ImageReader;
 import org.jwildfire.swing.ErrorHandler;
@@ -161,7 +164,9 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
   private JWFScriptController jwfScriptController;
   private FlameBrowserController flameBrowserController;
   private GradientController gradientController;
-  private KeyFramesController keyFramesController;
+  private AnimationController animationController;
+
+  private FlameControlsDeletegate flameControls;
 
   private final JInternalFrame tinaFrame;
   private final String tinaFrameTitle;
@@ -184,7 +189,7 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
   private MainController mainController;
   private final JTabbedPane rootTabbedPane;
   // TODO simplify
-  private Flame _currFlameStack, _currRandomizeFlame;
+  private Flame _currFlame, _currRandomizeFlame;
   private boolean noRefresh;
   private final ProgressUpdater mainProgressUpdater;
   private final ProgressUpdater jobProgressUpdater;
@@ -257,7 +262,7 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
         parameterObject.gradientLibraryRescanBtn, parameterObject.gradientLibraryNewFolderBtn, parameterObject.gradientLibraryRenameFolderBtn,
         parameterObject.gradientsList);
 
-    keyFramesController = new KeyFramesController(this, parameterObject.pErrorHandler, prefs, parameterObject.pCenterPanel,
+    animationController = new AnimationController(this, parameterObject.pErrorHandler, prefs, parameterObject.pCenterPanel,
         parameterObject.keyframesFrameField, parameterObject.keyframesFrameSlider, parameterObject.keyframesFrameCountField);
 
     data.cameraRollREd = parameterObject.pCameraRollREd;
@@ -532,6 +537,10 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
     data.scriptRunBtn = parameterObject.scriptRunBtn;
     data.gradientLibTree = parameterObject.gradientLibTree;
     data.backgroundColorIndicatorBtn = parameterObject.backgroundColorIndicatorBtn;
+    // end create
+    flameControls = new FlameControlsDeletegate(this, data);
+
+    registerMotionPropertyControls();
 
     qsaveFilenameGen = new QuickSaveFilenameGen(prefs);
 
@@ -915,12 +924,11 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
 
   @Override
   public Flame getCurrFlame() {
-    // TODO
-    return _currFlameStack;
+    return _currFlame;
   }
 
   public Flame getCurrFlameStack() {
-    return _currFlameStack;
+    return _currFlame;
   }
 
   public Layer getCurrLayer() {
@@ -947,19 +955,19 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
   }
 
   private void setCurrFlame(Flame pFlame, boolean pAddToThumbnails) {
-    if (_currFlameStack == null || !_currFlameStack.equals(pFlame)) {
+    if (_currFlame == null || !_currFlame.equals(pFlame)) {
       _currRandomizeFlame = pFlame.makeCopy();
     }
-    if (_currFlameStack != null) {
+    if (_currFlame != null) {
       // TODO 
       // ALL KEYframes
-      for (Layer layer : _currFlameStack.getLayers()) {
-        deRegisterFromEditor(_currFlameStack, layer);
+      for (Layer layer : _currFlame.getLayers()) {
+        deRegisterFromEditor(_currFlame, layer);
       }
     }
     importFlame(pFlame, pAddToThumbnails);
     // TODO
-    registerToEditor(_currFlameStack, _currFlameStack.getFirstLayer());
+    registerToEditor(_currFlame, _currFlame.getFirstLayer());
   }
 
   protected void deRegisterFromEditor(Flame pFlame, Layer pLayer) {
@@ -1136,7 +1144,7 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
   public void refreshKeyFramesUI() {
     noRefresh = true;
     try {
-      keyFramesController.refreshUI();
+      animationController.refreshUI();
     }
     finally {
       noRefresh = false;
@@ -2588,12 +2596,18 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
     data.transparencyButton.setEnabled(enabled);
     data.darkTrianglesButton.setEnabled(enabled);
     data.randomizeButton.setEnabled(enabled);
+    enableFlameControls();
     enableUndoControls();
     enableJobRenderControls();
-    getKeyFramesController().enableControls();
+    getAnimationController().enableControls();
     getJwfScriptController().enableControls();
     getGradientController().enableControls();
     getFlameBrowserController().enableControls();
+  }
+
+  private void enableFlameControls() {
+    enableFlameControl(data.cameraRollREd);
+    // TODO
   }
 
   private void enableJobRenderControls() {
@@ -4238,20 +4252,20 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
       }
     }
     else {
-      if (_currFlameStack == null || !_currFlameStack.equals(pFlame)) {
+      if (_currFlame == null || !_currFlame.equals(pFlame)) {
         _currRandomizeFlame = pFlame.makeCopy();
       }
       if (pAddToThumbnails) {
-        _currFlameStack = pFlame.makeCopy();
-        undoManager.initUndoStack(_currFlameStack);
+        _currFlame = pFlame.makeCopy();
+        undoManager.initUndoStack(_currFlame);
         setupProfiles(getCurrFlame());
         randomBatch.add(0, new FlameThumbnail(getCurrFlame(), null));
         updateThumbnails();
         showStatusMessage(getCurrFlame(), "imported into editor");
       }
       else {
-        _currFlameStack = pFlame;
-        undoManager.initUndoStack(_currFlameStack);
+        _currFlame = pFlame;
+        undoManager.initUndoStack(_currFlame);
         setupProfiles(getCurrFlame());
         showStatusMessage(getCurrFlame(), "imported into editor");
       }
@@ -5468,8 +5482,8 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
     return gradientController;
   }
 
-  public KeyFramesController getKeyFramesController() {
-    return keyFramesController;
+  public AnimationController getAnimationController() {
+    return animationController;
   }
 
   public void mouseTransformEditGradientButton_clicked() {
@@ -5873,5 +5887,82 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
 
   public void setNoRefresh(boolean noRefresh) {
     this.noRefresh = noRefresh;
+  }
+
+  public void enableFlameControl(JWFNumberField pSender) {
+    Flame flame = getCurrFlame();
+    boolean enabled;
+    if (flame == null) {
+      enabled = false;
+    }
+    else {
+      String propName = pSender.getMotionPropertyName();
+      MotionCurve curve = AnimationService.getPropertyCurve(flame, propName);
+      enabled = !curve.isEnabled();
+    }
+    pSender.setEnabled(enabled);
+    if (pSender.getLinkedMotionControl() != null) {
+      pSender.getLinkedMotionControl().setEnabled(enabled);
+    }
+  }
+
+  public void editFlameMotionCurve(ActionEvent e) {
+    JWFNumberField sender = ((JWFNumberField.JWFNumberFieldButton) e.getSource()).getOwner();
+    editFlameMotionCurve(sender);
+    enableFlameControl(sender);
+  }
+
+  public void editFlameMotionCurve(JWFNumberField pSender) {
+    String propName = pSender.getMotionPropertyName();
+    Flame flame = getCurrFlame();
+
+    MotionCurve curve = AnimationService.getPropertyCurve(flame, propName);
+    Envelope envelope = curve.toEnvelope();
+    if (envelope.getX().length == 0) {
+      double initialValue = AnimationService.getPropertyValue(flame, propName);
+      int[] x = new int[] { 0 };
+      if (initialValue <= envelope.getViewYMin() + 1) {
+        envelope.setViewYMin(initialValue - 1.0);
+      }
+      if (initialValue >= envelope.getViewYMax() - 1) {
+        envelope.setViewYMax(initialValue + 1.0);
+      }
+      double[] y = new double[] { initialValue };
+      envelope.setValues(x, y);
+    }
+
+    EnvelopeDialog dlg = new EnvelopeDialog(SwingUtilities.getWindowAncestor(rootTabbedPane), envelope, true);
+    dlg.setModal(true);
+    dlg.setVisible(true);
+    if (dlg.isConfirmed()) {
+      undoManager.saveUndoPoint(flame);
+      if (dlg.isRemoved()) {
+        curve.setEnabled(false);
+      }
+      else {
+        curve.assignFromEnvelope(envelope);
+        curve.setEnabled(true);
+      }
+    }
+  }
+
+  private void registerMotionPropertyControls() {
+    animationController.registerMotionPropertyControls(data.cameraRollREd);
+    animationController.registerMotionPropertyControls(data.cameraPitchREd);
+    animationController.registerMotionPropertyControls(data.cameraYawREd);
+    animationController.registerMotionPropertyControls(data.cameraPerspectiveREd);
+    animationController.registerMotionPropertyControls(data.cameraCentreXREd);
+    animationController.registerMotionPropertyControls(data.cameraCentreYREd);
+    animationController.registerMotionPropertyControls(data.cameraZoomREd);
+    animationController.registerMotionPropertyControls(data.pixelsPerUnitREd);
+
+    animationController.registerMotionPropertyControls(data.affineC00REd);
+    animationController.registerMotionPropertyControls(data.affineC01REd);
+    animationController.registerMotionPropertyControls(data.affineC10REd);
+    animationController.registerMotionPropertyControls(data.affineC11REd);
+    animationController.registerMotionPropertyControls(data.affineC20REd);
+    animationController.registerMotionPropertyControls(data.affineC21REd);
+
+    // TODO
   }
 }

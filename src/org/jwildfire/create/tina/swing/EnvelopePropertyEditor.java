@@ -66,14 +66,14 @@ public class EnvelopePropertyEditor extends AbstractPropertyEditor {
 
   protected void selectEnvelope() {
     Envelope editEnvelope = envelope.clone();
-    EnvelopeDialog dlg = new EnvelopeDialog(SwingUtilities.getWindowAncestor(editor), editEnvelope);
+    EnvelopeDialog dlg = new EnvelopeDialog(SwingUtilities.getWindowAncestor(editor), editEnvelope, false);
     dlg.setModal(true);
     dlg.setVisible(true);
     if (dlg.isConfirmed()) {
-      Envelope oldFont = envelope;
+      Envelope oldEnvelope = envelope;
       label.setValue(editEnvelope);
       envelope = editEnvelope;
-      firePropertyChange(oldFont, editEnvelope);
+      firePropertyChange(oldEnvelope, editEnvelope);
     }
   }
 

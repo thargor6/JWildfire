@@ -772,6 +772,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaDOFPanel.setLayout(null);
 
       dofDOFSlider = new JSlider();
+      dofDOFSlider.setName("dofDOFSlider");
       dofDOFSlider.addMouseListener(new MouseAdapter() {
         @Override
         public void mousePressed(MouseEvent e) {
@@ -795,6 +796,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaDOFPanel.add(dofDOFSlider);
 
       dofDOFREd = new JWFNumberField();
+      dofDOFREd.setLinkedMotionControlName("dofDOFSlider");
       dofDOFREd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           if (tinaController != null) {
@@ -845,6 +847,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaDOFPanel.add(lblArea);
 
       dofDOFAreaSlider = new JSlider();
+      dofDOFAreaSlider.setName("dofDOFAreaSlider");
       dofDOFAreaSlider.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           if (tinaController != null) {
@@ -868,6 +871,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaDOFPanel.add(dofDOFAreaSlider);
 
       dofDOFAreaREd = new JWFNumberField();
+      dofDOFAreaREd.setLinkedMotionControlName("dofDOFAreaSlider");
       dofDOFAreaREd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           if (tinaController != null) {
@@ -900,6 +904,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaDOFPanel.add(lblExponent);
 
       dofDOFExponentSlider = new JSlider();
+      dofDOFExponentSlider.setName("dofDOFExponentSlider");
       dofDOFExponentSlider.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           if (tinaController != null) {
@@ -923,6 +928,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaDOFPanel.add(dofDOFExponentSlider);
 
       dofDOFExponentREd = new JWFNumberField();
+      dofDOFExponentREd.setLinkedMotionControlName("dofDOFExponentSlider");
       dofDOFExponentREd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           if (tinaController != null) {
@@ -955,6 +961,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaDOFPanel.add(lblCameraDistance);
 
       dofCamZSlider = new JSlider();
+      dofCamZSlider.setName("dofCamZSlider");
       dofCamZSlider.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           if (tinaController != null) {
@@ -978,6 +985,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaDOFPanel.add(dofCamZSlider);
 
       dofCamZREd = new JWFNumberField();
+      dofCamZREd.setLinkedMotionControlName("dofCamZSlider");
       dofCamZREd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           if (tinaController != null) {
@@ -1010,6 +1018,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaDOFPanel.add(lblFocusx);
 
       dofFocusXREd = new JWFNumberField();
+      dofFocusXREd.setLinkedMotionControlName("dofFocusXSlider");
       dofFocusXREd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           if (tinaController != null) {
@@ -1033,6 +1042,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaDOFPanel.add(dofFocusXREd);
 
       dofFocusXSlider = new JSlider();
+      dofFocusXSlider.setName("dofFocusXSlider");
       dofFocusXSlider.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           if (tinaController != null) {
@@ -1065,6 +1075,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaDOFPanel.add(lblFocusy);
 
       dofFocusYREd = new JWFNumberField();
+      dofFocusYREd.setLinkedMotionControlName("dofFocusYSlider");
       dofFocusYREd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           if (tinaController != null) {
@@ -1088,6 +1099,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaDOFPanel.add(dofFocusYREd);
 
       dofFocusYSlider = new JSlider();
+      dofFocusYSlider.setName("dofFocusYSlider");
       dofFocusYSlider.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           if (tinaController != null) {
@@ -1120,6 +1132,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaDOFPanel.add(lblFocusz);
 
       dofFocusZSlider = new JSlider();
+      dofFocusZSlider.setName("dofFocusZSlider");
       dofFocusZSlider.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           if (tinaController != null) {
@@ -1143,6 +1156,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaDOFPanel.add(dofFocusZSlider);
 
       dofFocusZREd = new JWFNumberField();
+      dofFocusZREd.setLinkedMotionControlName("dofFocusZSlider");
       dofFocusZREd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           if (tinaController != null) {
@@ -1175,6 +1189,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaDOFPanel.add(lblDimishz);
 
       camDimishZREd = new JWFNumberField();
+      camDimishZREd.setLinkedMotionControlName("camDimishZSlider");
       camDimishZREd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           if (tinaController != null) {
@@ -1199,6 +1214,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaDOFPanel.add(camDimishZREd);
 
       camDimishZSlider = new JSlider();
+      camDimishZSlider.setName("camDimishZSlider");
       camDimishZSlider.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           if (tinaController != null) {
@@ -1554,48 +1570,56 @@ public class TinaInternalFrame extends JInternalFrame {
   private JPanel getTinaCameraPanel() {
     if (tinaCameraPanel == null) {
       tinaPixelsPerUnitLbl = new JLabel();
+      tinaPixelsPerUnitLbl.setName("tinaPixelsPerUnitLbl");
       tinaPixelsPerUnitLbl.setText("Pixels per unit");
       tinaPixelsPerUnitLbl.setFont(new Font("Dialog", Font.BOLD, 10));
       tinaPixelsPerUnitLbl.setLocation(new Point(488, 76));
       tinaPixelsPerUnitLbl.setSize(new Dimension(94, 22));
       tinaPixelsPerUnitLbl.setPreferredSize(new Dimension(94, 22));
       tinaCameraZoomLbl = new JLabel();
+      tinaCameraZoomLbl.setName("tinaCameraZoomLbl");
       tinaCameraZoomLbl.setText("Zoom");
       tinaCameraZoomLbl.setLocation(new Point(488, 52));
       tinaCameraZoomLbl.setSize(new Dimension(94, 22));
       tinaCameraZoomLbl.setFont(new Font("Dialog", Font.BOLD, 10));
       tinaCameraZoomLbl.setPreferredSize(new Dimension(94, 22));
       tinaCameraCentreYLbl = new JLabel();
+      tinaCameraCentreYLbl.setName("tinaCameraCentreYLbl");
       tinaCameraCentreYLbl.setText("CentreY");
       tinaCameraCentreYLbl.setLocation(new Point(488, 28));
       tinaCameraCentreYLbl.setSize(new Dimension(94, 22));
       tinaCameraCentreYLbl.setFont(new Font("Dialog", Font.BOLD, 10));
       tinaCameraCentreYLbl.setPreferredSize(new Dimension(94, 22));
       tinaCameraCentreXLbl = new JLabel();
+      tinaCameraCentreXLbl.setName("tinaCameraCentreXLbl");
       tinaCameraCentreXLbl.setText("CentreX");
       tinaCameraCentreXLbl.setLocation(new Point(488, 4));
       tinaCameraCentreXLbl.setSize(new Dimension(94, 22));
       tinaCameraCentreXLbl.setFont(new Font("Dialog", Font.BOLD, 10));
       tinaCameraCentreXLbl.setPreferredSize(new Dimension(94, 22));
       tinaCameraPerspectiveLbl = new JLabel();
+      tinaCameraPerspectiveLbl.setName("tinaCameraPerspectiveLbl");
       tinaCameraPerspectiveLbl.setText("Perspective");
       tinaCameraPerspectiveLbl.setLocation(new Point(4, 76));
       tinaCameraPerspectiveLbl.setSize(new Dimension(94, 22));
       tinaCameraPerspectiveLbl.setFont(new Font("Dialog", Font.BOLD, 10));
       tinaCameraPerspectiveLbl.setPreferredSize(new Dimension(94, 22));
       tinaCameraYawLbl = new JLabel();
+      tinaCameraYawLbl.setName("tinaCameraYawLbl");
       tinaCameraYawLbl.setText("Yaw");
       tinaCameraYawLbl.setLocation(new Point(4, 52));
       tinaCameraYawLbl.setSize(new Dimension(94, 22));
       tinaCameraYawLbl.setFont(new Font("Dialog", Font.BOLD, 10));
       tinaCameraYawLbl.setPreferredSize(new Dimension(94, 22));
       tinaCameraPitchLbl = new JLabel();
+      tinaCameraPitchLbl.setName("tinaCameraPitchLbl");
       tinaCameraPitchLbl.setText("Pitch");
       tinaCameraPitchLbl.setLocation(new Point(4, 28));
       tinaCameraPitchLbl.setSize(new Dimension(94, 22));
       tinaCameraPitchLbl.setFont(new Font("Dialog", Font.BOLD, 10));
       tinaCameraPitchLbl.setPreferredSize(new Dimension(94, 22));
       tinaCameraRollLbl = new JLabel();
+      tinaCameraRollLbl.setName("tinaCameraRollLbl");
       tinaCameraRollLbl.setText("Roll");
       tinaCameraRollLbl.setLocation(new Point(4, 4));
       tinaCameraRollLbl.setSize(new Dimension(94, 22));
@@ -1719,6 +1743,14 @@ public class TinaInternalFrame extends JInternalFrame {
   private JWFNumberField getTinaCameraRollREd() {
     if (tinaCameraRollREd == null) {
       tinaCameraRollREd = new JWFNumberField();
+      tinaCameraRollREd.setLinkedLabelControlName("tinaCameraRollLbl");
+      tinaCameraRollREd.setLinkedMotionControlName("tinaCameraRollSlider");
+      tinaCameraRollREd.setMotionPropertyName("camRoll");
+      tinaCameraRollREd.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.editFlameMotionCurve(e);
+        }
+      });
       tinaCameraRollREd.setValueStep(1.0);
       tinaCameraRollREd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
@@ -1746,6 +1778,14 @@ public class TinaInternalFrame extends JInternalFrame {
   private JWFNumberField getTinaCameraPitchREd() {
     if (tinaCameraPitchREd == null) {
       tinaCameraPitchREd = new JWFNumberField();
+      tinaCameraPitchREd.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.editFlameMotionCurve(e);
+        }
+      });
+      tinaCameraPitchREd.setMotionPropertyName("camPitch");
+      tinaCameraPitchREd.setLinkedLabelControlName("tinaCameraPitchLbl");
+      tinaCameraPitchREd.setLinkedMotionControlName("tinaCameraPitchSlider");
       tinaCameraPitchREd.setValueStep(1.0);
       tinaCameraPitchREd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
@@ -1774,6 +1814,14 @@ public class TinaInternalFrame extends JInternalFrame {
   private JWFNumberField getTinaCameraYawREd() {
     if (tinaCameraYawREd == null) {
       tinaCameraYawREd = new JWFNumberField();
+      tinaCameraYawREd.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.editFlameMotionCurve(e);
+        }
+      });
+      tinaCameraYawREd.setMotionPropertyName("camYaw");
+      tinaCameraYawREd.setLinkedLabelControlName("tinaCameraYawLbl");
+      tinaCameraYawREd.setLinkedMotionControlName("tinaCameraYawSlider");
       tinaCameraYawREd.setValueStep(1.0);
       tinaCameraYawREd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
@@ -1802,6 +1850,14 @@ public class TinaInternalFrame extends JInternalFrame {
   private JWFNumberField getTinaCameraPerspectiveREd() {
     if (tinaCameraPerspectiveREd == null) {
       tinaCameraPerspectiveREd = new JWFNumberField();
+      tinaCameraPerspectiveREd.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.editFlameMotionCurve(e);
+        }
+      });
+      tinaCameraPerspectiveREd.setMotionPropertyName("camPerspective");
+      tinaCameraPerspectiveREd.setLinkedLabelControlName("tinaCameraPerspectiveLbl");
+      tinaCameraPerspectiveREd.setLinkedMotionControlName("tinaCameraPerspectiveSlider");
       tinaCameraPerspectiveREd.setValueStep(0.01);
       tinaCameraPerspectiveREd.setMaxValue(1.0);
       tinaCameraPerspectiveREd.setHasMinValue(true);
@@ -1833,6 +1889,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JSlider getTinaCameraRollSlider() {
     if (tinaCameraRollSlider == null) {
       tinaCameraRollSlider = new JSlider();
+      tinaCameraRollSlider.setName("tinaCameraRollSlider");
       tinaCameraRollSlider.addMouseListener(new MouseAdapter() {
         @Override
         public void mousePressed(MouseEvent e) {
@@ -1862,6 +1919,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JSlider getTinaCameraPitchSlider() {
     if (tinaCameraPitchSlider == null) {
       tinaCameraPitchSlider = new JSlider();
+      tinaCameraPitchSlider.setName("tinaCameraPitchSlider");
       tinaCameraPitchSlider.addMouseListener(new MouseAdapter() {
         @Override
         public void mousePressed(MouseEvent e) {
@@ -1891,6 +1949,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JSlider getTinaCameraYawSlider() {
     if (tinaCameraYawSlider == null) {
       tinaCameraYawSlider = new JSlider();
+      tinaCameraYawSlider.setName("tinaCameraYawSlider");
       tinaCameraYawSlider.addMouseListener(new MouseAdapter() {
         @Override
         public void mousePressed(MouseEvent e) {
@@ -1920,6 +1979,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JSlider getTinaCameraPerspectiveSlider() {
     if (tinaCameraPerspectiveSlider == null) {
       tinaCameraPerspectiveSlider = new JSlider();
+      tinaCameraPerspectiveSlider.setName("tinaCameraPerspectiveSlider");
       tinaCameraPerspectiveSlider.addMouseListener(new MouseAdapter() {
         @Override
         public void mousePressed(MouseEvent e) {
@@ -2035,6 +2095,14 @@ public class TinaInternalFrame extends JInternalFrame {
   private JWFNumberField getTinaCameraCentreXREd() {
     if (tinaCameraCentreXREd == null) {
       tinaCameraCentreXREd = new JWFNumberField();
+      tinaCameraCentreXREd.setLinkedLabelControlName("tinaCameraCentreXLbl");
+      tinaCameraCentreXREd.setLinkedMotionControlName("tinaCameraCentreXSlider");
+      tinaCameraCentreXREd.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.editFlameMotionCurve(e);
+        }
+      });
+      tinaCameraCentreXREd.setMotionPropertyName("centreX");
       tinaCameraCentreXREd.setMouseThreshold(1.0);
       tinaCameraCentreXREd.setValueStep(0.05);
       tinaCameraCentreXREd.addChangeListener(new ChangeListener() {
@@ -2064,6 +2132,14 @@ public class TinaInternalFrame extends JInternalFrame {
   private JWFNumberField getTinaCameraCentreYREd() {
     if (tinaCameraCentreYREd == null) {
       tinaCameraCentreYREd = new JWFNumberField();
+      tinaCameraCentreYREd.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.editFlameMotionCurve(e);
+        }
+      });
+      tinaCameraCentreYREd.setMotionPropertyName("centreY");
+      tinaCameraCentreYREd.setLinkedLabelControlName("tinaCameraCentreYLbl");
+      tinaCameraCentreYREd.setLinkedMotionControlName("tinaCameraCentreYSlider");
       tinaCameraCentreYREd.setMouseThreshold(1.0);
       tinaCameraCentreYREd.setValueStep(0.05);
       tinaCameraCentreYREd.addChangeListener(new ChangeListener() {
@@ -2093,6 +2169,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JSlider getTinaCameraCentreXSlider() {
     if (tinaCameraCentreXSlider == null) {
       tinaCameraCentreXSlider = new JSlider();
+      tinaCameraCentreXSlider.setName("tinaCameraCentreXSlider");
       tinaCameraCentreXSlider.addMouseListener(new MouseAdapter() {
         @Override
         public void mousePressed(MouseEvent e) {
@@ -2122,6 +2199,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JSlider getTinaCameraCentreYSlider() {
     if (tinaCameraCentreYSlider == null) {
       tinaCameraCentreYSlider = new JSlider();
+      tinaCameraCentreYSlider.setName("tinaCameraCentreYSlider");
       tinaCameraCentreYSlider.addMouseListener(new MouseAdapter() {
         @Override
         public void mousePressed(MouseEvent e) {
@@ -2151,6 +2229,14 @@ public class TinaInternalFrame extends JInternalFrame {
   private JWFNumberField getTinaCameraZoomREd() {
     if (tinaCameraZoomREd == null) {
       tinaCameraZoomREd = new JWFNumberField();
+      tinaCameraZoomREd.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.editFlameMotionCurve(e);
+        }
+      });
+      tinaCameraZoomREd.setMotionPropertyName("camZoom");
+      tinaCameraZoomREd.setLinkedLabelControlName("tinaCameraZoomLbl");
+      tinaCameraZoomREd.setLinkedMotionControlName("tinaCameraZoomSlider");
       tinaCameraZoomREd.setMouseThreshold(1.0);
       tinaCameraZoomREd.setValueStep(0.01);
       tinaCameraZoomREd.addChangeListener(new ChangeListener() {
@@ -2180,6 +2266,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JSlider getTinaCameraZoomSlider() {
     if (tinaCameraZoomSlider == null) {
       tinaCameraZoomSlider = new JSlider();
+      tinaCameraZoomSlider.setName("tinaCameraZoomSlider");
       tinaCameraZoomSlider.addMouseListener(new MouseAdapter() {
         @Override
         public void mousePressed(MouseEvent e) {
@@ -2269,6 +2356,14 @@ public class TinaInternalFrame extends JInternalFrame {
   private JWFNumberField getTinaPixelsPerUnitREd() {
     if (tinaPixelsPerUnitREd == null) {
       tinaPixelsPerUnitREd = new JWFNumberField();
+      tinaPixelsPerUnitREd.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.editFlameMotionCurve(e);
+        }
+      });
+      tinaPixelsPerUnitREd.setMotionPropertyName("pixelsPerUnit");
+      tinaPixelsPerUnitREd.setLinkedLabelControlName("tinaPixelsPerUnitLbl");
+      tinaPixelsPerUnitREd.setLinkedMotionControlName("tinaPixelsPerUnitSlider");
       tinaPixelsPerUnitREd.setMouseThreshold(1.0);
       tinaPixelsPerUnitREd.setValueStep(1.0);
       tinaPixelsPerUnitREd.addChangeListener(new ChangeListener() {
@@ -2298,6 +2393,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JSlider getTinaPixelsPerUnitSlider() {
     if (tinaPixelsPerUnitSlider == null) {
       tinaPixelsPerUnitSlider = new JSlider();
+      tinaPixelsPerUnitSlider.setName("tinaPixelsPerUnitSlider");
       tinaPixelsPerUnitSlider.addMouseListener(new MouseAdapter() {
         @Override
         public void mousePressed(MouseEvent e) {
@@ -8800,6 +8896,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JWFNumberField keyframesFrameField;
   private JWFNumberField keyframesFrameCountField;
   private JSlider keyframesFrameSlider;
+  private JToggleButton motionCurveEditModeButton;
 
   /**
    * This method initializes renderBatchJobsScrollPane	
@@ -14913,6 +15010,19 @@ public class TinaInternalFrame extends JInternalFrame {
       JPanel panel_1 = new JPanel();
       panel_34.add(panel_1, BorderLayout.CENTER);
       panel_1.setLayout(null);
+
+      motionCurveEditModeButton = new JToggleButton();
+      motionCurveEditModeButton.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getAnimationController().toggleMotionCurveEditing(motionCurveEditModeButton.isSelected());
+        }
+      });
+      motionCurveEditModeButton.setToolTipText("Enable new controls to edit flame-properties as motion-curves rather than simple values");
+      motionCurveEditModeButton.setText("Motion curve editing");
+      motionCurveEditModeButton.setPreferredSize(new Dimension(136, 42));
+      motionCurveEditModeButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      motionCurveEditModeButton.setBounds(6, 6, 136, 42);
+      panel_1.add(motionCurveEditModeButton);
     }
     return panel_34;
   }
@@ -14928,8 +15038,8 @@ public class TinaInternalFrame extends JInternalFrame {
       keyframesFrameSlider = new JSlider();
       keyframesFrameSlider.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
-          if (tinaController != null && tinaController.getKeyFramesController() != null) {
-            tinaController.getKeyFramesController().keyFrameSliderChanged();
+          if (tinaController != null && tinaController.getAnimationController() != null) {
+            tinaController.getAnimationController().keyFrameSliderChanged();
           }
         }
       });
@@ -14964,9 +15074,9 @@ public class TinaInternalFrame extends JInternalFrame {
       keyframesFrameField.setText("1");
       keyframesFrameField.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
-          if (tinaController != null && tinaController.getKeyFramesController() != null) {
-            if (tinaController != null && tinaController.getKeyFramesController() != null) {
-              tinaController.getKeyFramesController().keyFrameFieldChanged();
+          if (tinaController != null && tinaController.getAnimationController() != null) {
+            if (tinaController != null && tinaController.getAnimationController() != null) {
+              tinaController.getAnimationController().keyFrameFieldChanged();
             }
           }
         }
@@ -14994,7 +15104,7 @@ public class TinaInternalFrame extends JInternalFrame {
       keyframesFrameCountField = new JWFNumberField();
       keyframesFrameCountField.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
-          if (tinaController != null && tinaController.getKeyFramesController() != null) {
+          if (tinaController != null && tinaController.getAnimationController() != null) {
             try {
               swfAnimatorFrameSlider.setMinimum(keyframesFrameCountField.getIntValue());
             }
@@ -15039,5 +15149,8 @@ public class TinaInternalFrame extends JInternalFrame {
     return keyframesFrameSlider;
   }
 
+  public JToggleButton getMotionCurveEditModeButton() {
+    return motionCurveEditModeButton;
+  }
 } //  @jve:decl-index=0:visual-constraint="10,10"
 

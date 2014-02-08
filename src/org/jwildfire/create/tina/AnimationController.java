@@ -16,6 +16,9 @@
 */
 package org.jwildfire.create.tina;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.swing.JPanel;
 import javax.swing.JSlider;
 
@@ -24,7 +27,7 @@ import org.jwildfire.create.tina.swing.JWFNumberField;
 import org.jwildfire.create.tina.swing.TinaController;
 import org.jwildfire.swing.ErrorHandler;
 
-public class KeyFramesController {
+public class AnimationController {
   private final TinaController tinaController;
   private final ErrorHandler errorHandler;
   private final Prefs prefs;
@@ -32,8 +35,9 @@ public class KeyFramesController {
   private final JWFNumberField keyframesFrameField;
   private final JSlider keyframesFrameSlider;
   private final JWFNumberField keyframesFrameCountField;
+  private final List<JWFNumberField> motionPropertyControls = new ArrayList<JWFNumberField>();
 
-  public KeyFramesController(TinaController pTinaController, ErrorHandler pErrorHandler, Prefs pPrefs, JPanel pRootPanel,
+  public AnimationController(TinaController pTinaController, ErrorHandler pErrorHandler, Prefs pPrefs, JPanel pRootPanel,
       JWFNumberField pKeyframesFrameField, JSlider pKeyframesFrameSlider, JWFNumberField pKeyframesFrameCountField) {
     tinaController = pTinaController;
     errorHandler = pErrorHandler;
@@ -79,16 +83,6 @@ public class KeyFramesController {
     keyframesFrameSlider.setValue(frame);
   }
 
-  public void duplicateKeyFrameBtn_clicked() {
-    // TODO Auto-generated method stub
-
-  }
-
-  public void deleteKeyFrameBtn_clicked() {
-    // TODO Auto-generated method stub
-
-  }
-
   public void keyFrameFieldChanged() {
     if (!tinaController.isNoRefresh()) {
       boolean oldNoRefresh = tinaController.isNoRefresh();
@@ -123,12 +117,16 @@ public class KeyFramesController {
     // TODO
   }
 
-  public void keyFramesTableClicked() {
-    // TODO Auto-generated method stub
-
+  public void registerMotionPropertyControls(JWFNumberField pComponent) {
+    if (!motionPropertyControls.contains(pComponent)) {
+      motionPropertyControls.add(pComponent);
+    }
   }
 
-  public void addKeyFrameBtn_clicked() {
-    // TODO
+  public void toggleMotionCurveEditing(boolean pEnabled) {
+    for (JWFNumberField component : motionPropertyControls) {
+      component.setWithMotionCurve(pEnabled);
+    }
   }
+
 }

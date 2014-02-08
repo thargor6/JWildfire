@@ -858,15 +858,14 @@ public class FlameRenderer {
       layer.refreshModWeightTables(flameTransformationContext);
     }
     res.add(initialFlame);
-
     // TODO
-    int blurLength = -1;
-    //    int blurLength = 80;
+    //    int blurLength = -1;
+    int blurLength = 80;
     if (blurLength > 0) {
       for (int p = 1; p < blurLength; p++) {
         Flame renderFlame = initialFlame.makeCopy();
         for (Layer layer : renderFlame.getLayers()) {
-          XForm finalXForm = layer.getXForms().size() > 0 ? layer.getXForms().get(0) : null;
+          XForm finalXForm = layer.getXForms().size() > 1 ? layer.getXForms().get(1) : null;
           if (finalXForm == null) {
             finalXForm = new XForm();
             finalXForm.addVariation(1.0, VariationFuncList.getVariationFuncInstance("linear3D", true));
@@ -874,11 +873,11 @@ public class FlameRenderer {
           }
           XFormTransformService.rotate(finalXForm, p * 0.012, false);
           XFormTransformService.globalTranslate(finalXForm, p * 0.004, p * 0.004, false);
-          layer.setWeight(1.0 - p * 0.005);
         }
         for (Layer layer : renderFlame.getLayers()) {
           layer.refreshModWeightTables(flameTransformationContext);
         }
+        renderFlame.setBrightness((1.0 - p * 0.05) * renderFlame.getBrightness());
         res.add(renderFlame);
       }
     }

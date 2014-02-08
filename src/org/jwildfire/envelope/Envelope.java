@@ -173,6 +173,8 @@ public class Envelope implements Serializable {
     y = pY;
     if (selectedIdx >= x.length)
       selectedIdx--;
+    if (selectedIdx < 0 && x.length > 0)
+      selectedIdx = 0;
   }
 
   public double evaluate(int pFrame) {
