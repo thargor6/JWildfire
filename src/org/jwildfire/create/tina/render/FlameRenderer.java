@@ -205,7 +205,7 @@ public class FlameRenderer {
           double ydist = (py - flame.getFocusY());
           double zdist = (pz - flame.getFocusZ());
           double dist = Math.pow(xdist * xdist + ydist * ydist + zdist * zdist, 1 / flame.getCamDOFExponent()) - flame.getCamDOFArea();
-          if (dist > 0.05) {
+          if (dist > 0.00001) {
             double dr = randGen.random() * camDOF_10 * dist;
             double a = 2.0 * M_PI * randGen.random();
             double dsina = sin(a);
@@ -860,7 +860,7 @@ public class FlameRenderer {
     res.add(initialFlame);
     // TODO
     //    int blurLength = -1;
-    int blurLength = 80;
+    int blurLength = 200;
     if (blurLength > 0) {
       for (int p = 1; p < blurLength; p++) {
         Flame renderFlame = initialFlame.makeCopy();
