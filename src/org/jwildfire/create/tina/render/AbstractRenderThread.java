@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2012 Andreas Maschke
+  Copyright (C) 1995-2014 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -28,7 +28,7 @@ import org.jwildfire.create.tina.variation.FlameTransformationContext;
 
 public abstract class AbstractRenderThread implements Runnable {
   protected final FlameRenderer renderer;
-  protected final List<Flame> flames;
+  protected final List<RenderPacket> renderPackets;
   protected final long samples;
   protected volatile long currSample;
   protected SampleTonemapper tonemapper;
@@ -38,13 +38,13 @@ public abstract class AbstractRenderThread implements Runnable {
   protected FlameTransformationContext ctx;
   protected AbstractRandomGenerator randGen;
 
-  public AbstractRenderThread(Prefs pPrefs, int pThreadId, FlameRenderer pRenderer, List<Flame> pFlames, long pSamples) {
+  public AbstractRenderThread(Prefs pPrefs, int pThreadId, FlameRenderer pRenderer, List<RenderPacket> pRenderPackets, long pSamples) {
     renderer = pRenderer;
-    flames = pFlames;
+    renderPackets = pRenderPackets;
     samples = pSamples;
     randGen = RandomGeneratorFactory.getInstance(pPrefs.getTinaRandomNumberGenerator(), pThreadId);
     ctx = new FlameTransformationContext(pRenderer, randGen);
-    ctx.setPreserveZCoordinate(pFlames.get(0).isPreserveZ());
+    ctx.setPreserveZCoordinate(pRenderPackets.get(0).getFlame().isPreserveZ());
     ctx.setPreview(renderer.isPreview());
   }
 
@@ -81,7 +81,6 @@ public abstract class AbstractRenderThread implements Runnable {
           initState();
         }
         else {
-          // System.out.println("RESTORE: " + resumeState.startIter + " " + resumeState.xfIndex);
           restoreState(resumeState);
         }
         iterate();

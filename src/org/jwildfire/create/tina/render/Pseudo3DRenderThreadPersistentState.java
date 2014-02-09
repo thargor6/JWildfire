@@ -29,7 +29,7 @@ public final class Pseudo3DRenderThreadPersistentState extends RenderThreadPersi
 
   public static class IterationState implements Serializable {
     private static final long serialVersionUID = 1L;
-    protected int flameIdx;
+    protected int packetIdx;
     protected int layerIdx;
     protected XYZPoint[] affineTA;
     protected XYZPoint[] varTA;

@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.jwildfire.base.Prefs;
-import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.Layer;
 
 public abstract class DefaultRenderThread extends AbstractRenderThread {
@@ -12,19 +11,19 @@ public abstract class DefaultRenderThread extends AbstractRenderThread {
   protected long iter;
   protected List<DefaultRenderIterationState> iterationState;
 
-  public DefaultRenderThread(Prefs pPrefs, int pThreadId, FlameRenderer pRenderer, List<Flame> pFlames, long pSamples) {
-    super(pPrefs, pThreadId, pRenderer, pFlames, pSamples);
+  public DefaultRenderThread(Prefs pPrefs, int pThreadId, FlameRenderer pRenderer, List<RenderPacket> pRenderPackets, long pSamples) {
+    super(pPrefs, pThreadId, pRenderer, pRenderPackets, pSamples);
     iterationState = new ArrayList<DefaultRenderIterationState>();
-    for (Flame flame : pFlames) {
-      List<Layer> layers = getValidLayers(flame);
+    for (RenderPacket packet : pRenderPackets) {
+      List<Layer> layers = getValidLayers(packet.getFlame());
       for (Layer layer : layers) {
-        DefaultRenderIterationState state = createState(flame, layer);
+        DefaultRenderIterationState state = createState(packet, layer);
         iterationState.add(state);
       }
     }
   }
 
-  protected abstract DefaultRenderIterationState createState(Flame pFlame, Layer pLayer);
+  protected abstract DefaultRenderIterationState createState(RenderPacket pRenderPacket, Layer pLayer);
 
   @Override
   protected RenderThreadPersistentState saveState() {
@@ -33,9 +32,8 @@ public abstract class DefaultRenderThread extends AbstractRenderThread {
     res.startIter = iter;
     for (DefaultRenderIterationState state : iterationState) {
       DefaultRenderThreadPersistentState.IterationState persist = new DefaultRenderThreadPersistentState.IterationState();
-      persist.flameIdx = flames.indexOf(state.flame);
+      persist.packetIdx = renderPackets.indexOf(state.flame);
       persist.layerIdx = state.flame.getLayers().indexOf(state.layer);
-      System.out.println(persist.flameIdx + " " + persist.layerIdx);
       persist.xfIndex = (state.xf != null) ? state.layer.getXForms().indexOf(state.xf) : -1;
       persist.affineT = state.affineT != null ? state.affineT.makeCopy() : null;
       persist.varT = state.varT != null ? state.varT.makeCopy() : null;
@@ -53,9 +51,9 @@ public abstract class DefaultRenderThread extends AbstractRenderThread {
     currSample = state.currSample;
     startIter = state.startIter;
     for (DefaultRenderThreadPersistentState.IterationState persist : state.getLayerState()) {
-      Flame flame = flames.get(persist.flameIdx);
-      Layer layer = flame.getLayers().get(persist.layerIdx);
-      DefaultRenderIterationState restored = createState(flame, layer);
+      RenderPacket packet = renderPackets.get(persist.packetIdx);
+      Layer layer = packet.getFlame().getLayers().get(persist.layerIdx);
+      DefaultRenderIterationState restored = createState(packet, layer);
       restored.xf = (persist.xfIndex >= 0) ? restored.layer.getXForms().get(persist.xfIndex) : null;
       restored.affineT = persist.affineT != null ? persist.affineT.makeCopy() : null;
       restored.varT = persist.varT != null ? persist.varT.makeCopy() : null;

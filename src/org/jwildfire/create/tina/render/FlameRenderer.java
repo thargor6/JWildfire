@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2013 Andreas Maschke
+  Copyright (C) 1995-2014 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -16,13 +16,6 @@
 */
 package org.jwildfire.create.tina.render;
 
-import static org.jwildfire.base.mathlib.MathLib.EPSILON;
-import static org.jwildfire.base.mathlib.MathLib.M_PI;
-import static org.jwildfire.base.mathlib.MathLib.cos;
-import static org.jwildfire.base.mathlib.MathLib.exp;
-import static org.jwildfire.base.mathlib.MathLib.fabs;
-import static org.jwildfire.base.mathlib.MathLib.sin;
-
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -35,13 +28,10 @@ import java.util.List;
 
 import org.jwildfire.base.Prefs;
 import org.jwildfire.base.QualityProfile;
-import org.jwildfire.base.mathlib.MathLib;
 import org.jwildfire.create.tina.animate.AnimationService;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
-import org.jwildfire.create.tina.base.XYZPoint;
-import org.jwildfire.create.tina.base.XYZProjectedPoint;
 import org.jwildfire.create.tina.base.raster.AbstractRasterPoint;
 import org.jwildfire.create.tina.random.AbstractRandomGenerator;
 import org.jwildfire.create.tina.random.RandomGeneratorFactory;
@@ -55,35 +45,20 @@ public class FlameRenderer {
   // constants
   private final static int MAX_FILTER_WIDTH = 25;
   // init in initRaster
-  private int imageWidth;
-  private int imageHeight;
+  protected int imageWidth;
+  protected int imageHeight;
   int rasterWidth;
   int rasterHeight;
   private int rasterSize;
-  private int borderWidth;
-  private int maxBorderWidth;
+  protected int borderWidth;
+  protected int maxBorderWidth;
+  private boolean withAlpha;
   LogDensityFilter logDensityFilter;
   GammaCorrectionFilter gammaCorrectionFilter;
   AbstractRasterPoint[][] raster;
   // init in initView
-  protected double cosa;
-  protected double sina;
-  double camX0, camX1, camY0, camY1;
-  double camW, camH;
-  protected double rcX;
-  protected double rcY;
-  double bws;
-  double bhs;
   private int renderScale = 1;
-  private AbstractRandomGenerator randGen;
-  // 3D stuff
-  protected boolean doProject3D = false;
-  // init in init3D()
-  protected double cameraMatrix[][] = new double[3][3];
-  protected double camDOF_10;
-  protected boolean useDOF;
-  protected boolean legacyDOF;
-  private boolean withAlpha;
+  protected AbstractRandomGenerator randGen;
   //
   private ProgressUpdater progressUpdater;
   // 
@@ -119,24 +94,6 @@ public class FlameRenderer {
     flameTransformationContext.setPreview(pPreview);
   }
 
-  public void init3D() {
-    double yaw = -flame.getCamYaw() * M_PI / 180.0;
-    double pitch = flame.getCamPitch() * M_PI / 180.0;
-    cameraMatrix[0][0] = cos(yaw);
-    cameraMatrix[1][0] = -sin(yaw);
-    cameraMatrix[2][0] = 0;
-    cameraMatrix[0][1] = cos(pitch) * sin(yaw);
-    cameraMatrix[1][1] = cos(pitch) * cos(yaw);
-    cameraMatrix[2][1] = -sin(pitch);
-    cameraMatrix[0][2] = sin(pitch) * sin(yaw);
-    cameraMatrix[1][2] = sin(pitch) * cos(yaw);
-    cameraMatrix[2][2] = cos(pitch);
-    useDOF = fabs(flame.getCamDOF()) > MathLib.EPSILON;
-    doProject3D = fabs(flame.getCamYaw()) > EPSILON || fabs(flame.getCamPitch()) > EPSILON || fabs(flame.getCamPerspective()) > EPSILON || useDOF || fabs(flame.getDimishZ()) > EPSILON;
-    legacyDOF = !flame.isNewCamDOF();
-    camDOF_10 = 0.1 * flame.getCamDOF();
-  }
-
   public void initRasterSizes(int pImageWidth, int pImageHeight) {
     imageWidth = pImageWidth;
     imageHeight = pImageHeight;
@@ -163,78 +120,6 @@ public class FlameRenderer {
       throw new RuntimeException(e);
     }
     raster = rp.allocRaster(rasterWidth, rasterHeight);
-  }
-
-  public boolean project(XYZPoint pPoint, XYZProjectedPoint pProjectedPoint) {
-    if (doProject3D) {
-      double z = pPoint.z;
-      double px = cameraMatrix[0][0] * pPoint.x + cameraMatrix[1][0] * pPoint.y /*+ cameraMatrix[2][0] * z*/;
-      double py = cameraMatrix[0][1] * pPoint.x + cameraMatrix[1][1] * pPoint.y + cameraMatrix[2][1] * z;
-      double pz = cameraMatrix[0][2] * pPoint.x + cameraMatrix[1][2] * pPoint.y + cameraMatrix[2][2] * z;
-      double zr = 1.0 - flame.getCamPerspective() * pz;
-      if (flame.getDimishZ() > EPSILON) {
-        double zdist = (flame.getCamZ() - pz);
-        if (zdist > 0.0) {
-          pProjectedPoint.intensity = exp(-zdist * zdist * flame.getDimishZ());
-        }
-        else {
-          pProjectedPoint.intensity = 1.0;
-        }
-      }
-      else {
-        pProjectedPoint.intensity = 1.0;
-      }
-
-      if (useDOF) {
-        if (legacyDOF) {
-          double zdist = (flame.getCamZ() - pz);
-          if (zdist > 0.0) {
-            double dr = randGen.random() * camDOF_10 * zdist;
-            double a = 2.0 * M_PI * randGen.random();
-            double dsina = sin(a);
-            double dcosa = cos(a);
-            pPoint.x = (px + dr * dcosa) / zr;
-            pPoint.y = (py + dr * dsina) / zr;
-          }
-          else {
-            pPoint.x = px / zr;
-            pPoint.y = py / zr;
-          }
-        }
-        else {
-          double xdist = (px - flame.getFocusX());
-          double ydist = (py - flame.getFocusY());
-          double zdist = (pz - flame.getFocusZ());
-          double dist = Math.pow(xdist * xdist + ydist * ydist + zdist * zdist, 1 / flame.getCamDOFExponent()) - flame.getCamDOFArea();
-          if (dist > 0.00001) {
-            double dr = randGen.random() * camDOF_10 * dist;
-            double a = 2.0 * M_PI * randGen.random();
-            double dsina = sin(a);
-            double dcosa = cos(a);
-            pPoint.x = (px + dr * dcosa) / zr;
-            pPoint.y = (py + dr * dsina) / zr;
-          }
-          else {
-            pPoint.x = px / zr;
-            pPoint.y = py / zr;
-          }
-        }
-      }
-      else {
-        pPoint.x = px / zr;
-        pPoint.y = py / zr;
-      }
-    }
-    else {
-      pProjectedPoint.intensity = 1.0;
-    }
-    pProjectedPoint.x = pPoint.x * cosa + pPoint.y * sina + rcX;
-    if ((pProjectedPoint.x < 0) || (pProjectedPoint.x > camW))
-      return false;
-    pProjectedPoint.y = pPoint.y * cosa - pPoint.x * sina + rcY;
-    if ((pProjectedPoint.y < 0) || (pProjectedPoint.y > camH))
-      return false;
-    return true;
   }
 
   public RenderedFlame finishRenderFlame(long pSampleCount) {
@@ -294,12 +179,12 @@ public class FlameRenderer {
       else {
         throw new IllegalStateException();
       }
-
-      init3D();
-      initView();
-      List<List<Flame>> renderFlames = new ArrayList<List<Flame>>();
+      // TODO CHECK
+      //      init3D();
+      //      initView();
+      List<List<RenderPacket>> renderFlames = new ArrayList<List<RenderPacket>>();
       for (int t = 0; t < prefs.getTinaRenderThreads(); t++) {
-        renderFlames.add(createRenderFlames(flame, pRenderInfo.getFrame()));
+        renderFlames.add(createRenderPackets(flame, pRenderInfo.getFrame()));
       }
       forceAbort = false;
       iterate(0, 1, renderFlames);
@@ -635,26 +520,23 @@ public class FlameRenderer {
     }
   }
 
-  private AbstractRenderThread createFlameRenderThread(int pThreadId, List<Flame> pFlames, long pSamples) {
+  private AbstractRenderThread createFlameRenderThread(int pThreadId, List<RenderPacket> pRenderPackets, long pSamples) {
     switch (flame.getShadingInfo().getShading()) {
       case FLAT:
-        return new FlatRenderThread(prefs, pThreadId, this, pFlames, pSamples);
+        return new FlatRenderThread(prefs, pThreadId, this, pRenderPackets, pSamples);
       case BLUR:
-        return new BlurRenderThread(prefs, pThreadId, this, pFlames, pSamples);
+        return new BlurRenderThread(prefs, pThreadId, this, pRenderPackets, pSamples);
       case DISTANCE_COLOR:
-        return new DistanceColorRenderThread(prefs, pThreadId, this, pFlames, pSamples);
+        return new DistanceColorRenderThread(prefs, pThreadId, this, pRenderPackets, pSamples);
       case PSEUDO3D:
-        return new Pseudo3DRenderThread(prefs, pThreadId, this, pFlames, pSamples);
+        return new Pseudo3DRenderThread(prefs, pThreadId, this, pRenderPackets, pSamples);
       default:
         throw new IllegalArgumentException(flame.getShadingInfo().getShading().toString());
     }
   }
 
-  private void iterate(int pPart, int pParts, List<List<Flame>> pFlames) {
+  private void iterate(int pPart, int pParts, List<List<RenderPacket>> pPackets) {
     long nSamples = (long) ((flame.getSampleDensity() * (double) rasterSize + 0.5));
-    //    if (flame.getSampleDensity() > 50) {
-    //      System.err.println("SAMPLES: " + nSamples);
-    //    }
     int PROGRESS_STEPS = 50;
     if (progressUpdater != null && pPart == 0) {
       progressUpdater.initProgress((PROGRESS_STEPS - 1) * pParts);
@@ -662,9 +544,9 @@ public class FlameRenderer {
     long sampleProgressUpdateStep = nSamples / PROGRESS_STEPS;
     long nextProgressUpdate = sampleProgressUpdateStep;
     runningThreads = new ArrayList<AbstractRenderThread>();
-    int nThreads = pFlames.size();
+    int nThreads = pPackets.size();
     for (int i = 0; i < nThreads; i++) {
-      AbstractRenderThread t = createFlameRenderThread(i, pFlames.get(i), nSamples / (long) nThreads);
+      AbstractRenderThread t = createFlameRenderThread(i, pPackets.get(i), nSamples / (long) nThreads);
       runningThreads.add(t);
       new Thread(t).start();
     }
@@ -694,7 +576,7 @@ public class FlameRenderer {
     }
   }
 
-  private List<AbstractRenderThread> startIterate(List<List<Flame>> pFlames, RenderThreadPersistentState pState[], boolean pStartThreads) {
+  private List<AbstractRenderThread> startIterate(List<List<RenderPacket>> pFlames, RenderThreadPersistentState pState[], boolean pStartThreads) {
     List<AbstractRenderThread> threads = new ArrayList<AbstractRenderThread>();
     int nThreads = pFlames.size();
     for (int i = 0; i < nThreads; i++) {
@@ -711,57 +593,12 @@ public class FlameRenderer {
     return threads;
   }
 
-  public void initView() {
-    double pixelsPerUnit = flame.getPixelsPerUnit() * flame.getCamZoom();
-    double corner_x = flame.getCentreX() - (double) imageWidth / pixelsPerUnit / 2.0;
-    double corner_y = flame.getCentreY() - (double) imageHeight / pixelsPerUnit / 2.0;
-    double t0 = borderWidth / pixelsPerUnit;
-    double t1 = borderWidth / pixelsPerUnit;
-    double t2 = (2 * maxBorderWidth - borderWidth) / pixelsPerUnit;
-    double t3 = (2 * maxBorderWidth - borderWidth) / pixelsPerUnit;
-
-    camX0 = corner_x - t0;
-    camY0 = corner_y - t1;
-    camX1 = corner_x + (double) imageWidth / pixelsPerUnit + t2;
-    camY1 = corner_y + (double) imageHeight / pixelsPerUnit + t3;
-
-    camW = camX1 - camX0;
-    double Xsize, Ysize;
-    if (fabs(camW) > 0.01)
-      Xsize = 1.0 / camW;
-    else
-      Xsize = 1.0;
-    camH = camY1 - camY0;
-    if (fabs(camH) > 0.01)
-      Ysize = 1.0 / camH;
-    else
-      Ysize = 1;
-    bws = (rasterWidth - 0.5) * Xsize;
-    bhs = (rasterHeight - 0.5) * Ysize;
-
-    cosa = cos(-M_PI * (flame.getCamRoll()) / 180.0);
-    sina = sin(-M_PI * (flame.getCamRoll()) / 180.0);
-    rcX = flame.getCentreX() * (1 - cosa) - flame.getCentreY() * sina - camX0;
-    rcY = flame.getCentreY() * (1 - cosa) + flame.getCentreX() * sina - camY0;
-  }
-
   public void setRandomNumberGenerator(AbstractRandomGenerator random) {
     this.randGen = random;
   }
 
   public void setProgressUpdater(ProgressUpdater pProgressUpdater) {
     progressUpdater = pProgressUpdater;
-  }
-
-  public AbstractRasterPoint getRasterPoint(double pX, double pY) {
-    int xIdx = (int) (bws * pX + 0.5);
-    int yIdx = (int) (bhs * pY + 0.5);
-    if (xIdx >= 0 && xIdx < rasterWidth && yIdx >= 0 && yIdx < rasterHeight) {
-      return raster[yIdx][xIdx];
-    }
-    else {
-      return null;
-    }
   }
 
   public void setRenderScale(int pRenderScale) {
@@ -851,8 +688,8 @@ public class FlameRenderer {
     }
   }
 
-  private List<Flame> createRenderFlames(Flame pFlame, int pFrame) {
-    List<Flame> res = new ArrayList<Flame>();
+  private List<RenderPacket> createRenderPackets(Flame pFlame, int pFrame) {
+    List<RenderPacket> res = new ArrayList<RenderPacket>();
 
     Flame initialFlame = flame.makeCopy();
     if (pFrame >= 0) {
@@ -862,7 +699,8 @@ public class FlameRenderer {
     for (Layer layer : initialFlame.getLayers()) {
       layer.refreshModWeightTables(flameTransformationContext);
     }
-    res.add(initialFlame);
+    FlameRendererView view = createView(initialFlame);
+    res.add(new RenderPacket(initialFlame, view));
     // TODO
     int blurLength = -1;
     //    int blurLength = 200;
@@ -883,20 +721,26 @@ public class FlameRenderer {
           layer.refreshModWeightTables(flameTransformationContext);
         }
         renderFlame.setBrightness((1.0 - p * 0.05) * renderFlame.getBrightness());
-        res.add(renderFlame);
+        //        res.add(renderFlame);
+        // TODO
       }
     }
     return res;
   }
 
+  protected FlameRendererView createView(Flame initialFlame) {
+    return new FlameRendererView(initialFlame, randGen, borderWidth, maxBorderWidth, imageWidth, imageHeight, rasterWidth, rasterHeight);
+  }
+
   public List<AbstractRenderThread> startRenderFlame(RenderInfo pRenderInfo) {
     renderInfo = pRenderInfo;
     initRaster(pRenderInfo.getImageWidth(), pRenderInfo.getImageHeight());
-    init3D();
-    initView();
-    List<List<Flame>> renderFlames = new ArrayList<List<Flame>>();
+    // TODO CHECK
+    //    init3D();
+    //    initView();
+    List<List<RenderPacket>> renderFlames = new ArrayList<List<RenderPacket>>();
     for (int t = 0; t < prefs.getTinaRenderThreads(); t++) {
-      renderFlames.add(createRenderFlames(flame, pRenderInfo.getFrame()));
+      renderFlames.add(createRenderPackets(flame, pRenderInfo.getFrame()));
     }
     return startIterate(renderFlames, null, true);
   }
@@ -922,11 +766,12 @@ public class FlameRenderer {
         }
 
         initRaster(renderInfo.getImageWidth(), renderInfo.getImageHeight());
-        init3D();
-        initView();
-        List<List<Flame>> renderFlames = new ArrayList<List<Flame>>();
+        // TODO CHECK
+        //        init3D();
+        //        initView();
+        List<List<RenderPacket>> renderFlames = new ArrayList<List<RenderPacket>>();
         for (int t = 0; t < header.numThreads; t++) {
-          renderFlames.add(createRenderFlames(flame, renderInfo.getFrame()));
+          renderFlames.add(createRenderPackets(flame, renderInfo.getFrame()));
         }
         raster = null;
         // read raster
@@ -992,22 +837,6 @@ public class FlameRenderer {
         }
       }
     }
-  }
-
-  public double getCamX0() {
-    return camX0;
-  }
-
-  public double getCamX1() {
-    return camX1;
-  }
-
-  public double getCamY0() {
-    return camY0;
-  }
-
-  public double getCamY1() {
-    return camY1;
   }
 
   public boolean isPreview() {

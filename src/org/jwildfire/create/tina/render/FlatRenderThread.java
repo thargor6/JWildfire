@@ -19,18 +19,17 @@ package org.jwildfire.create.tina.render;
 import java.util.List;
 
 import org.jwildfire.base.Prefs;
-import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.Layer;
 
 public final class FlatRenderThread extends DefaultRenderThread {
 
-  public FlatRenderThread(Prefs pPrefs, int pThreadId, FlameRenderer pRenderer, List<Flame> pFlames, long pSamples) {
-    super(pPrefs, pThreadId, pRenderer, pFlames, pSamples);
+  public FlatRenderThread(Prefs pPrefs, int pThreadId, FlameRenderer pRenderer, List<RenderPacket> pRenderPackets, long pSamples) {
+    super(pPrefs, pThreadId, pRenderer, pRenderPackets, pSamples);
   }
 
   @Override
-  protected DefaultRenderIterationState createState(Flame pFlame, Layer pLayer) {
-    return new DefaultRenderIterationState(this, renderer, pFlame, pLayer, ctx, randGen);
+  protected DefaultRenderIterationState createState(RenderPacket pRenderPacket, Layer pLayer) {
+    return new DefaultRenderIterationState(this, renderer, pRenderPacket, pLayer, ctx, randGen);
   }
 
 }

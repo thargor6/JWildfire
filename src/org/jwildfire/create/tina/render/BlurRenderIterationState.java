@@ -1,6 +1,5 @@
 package org.jwildfire.create.tina.render;
 
-import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.raster.AbstractRasterPoint;
 import org.jwildfire.create.tina.palette.RenderColor;
@@ -15,8 +14,8 @@ public class BlurRenderIterationState extends DefaultRenderIterationState {
   private int rasterWidth, rasterHeight;
   private RenderColor globalRenderColor = new RenderColor();
 
-  public BlurRenderIterationState(AbstractRenderThread pRenderThread, FlameRenderer pRenderer, Flame pFlame, Layer pLayer, FlameTransformationContext pCtx, AbstractRandomGenerator pRandGen) {
-    super(pRenderThread, pRenderer, pFlame, pLayer, pCtx, pRandGen);
+  public BlurRenderIterationState(AbstractRenderThread pRenderThread, FlameRenderer pRenderer, RenderPacket pPacket, Layer pLayer, FlameTransformationContext pCtx, AbstractRandomGenerator pRandGen) {
+    super(pRenderThread, pRenderer, pPacket, pLayer, pCtx, pRandGen);
   }
 
   @Override

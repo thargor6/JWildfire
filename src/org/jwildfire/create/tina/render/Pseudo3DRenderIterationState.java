@@ -28,7 +28,6 @@ import java.util.List;
 
 import org.jwildfire.create.tina.base.Constants;
 import org.jwildfire.create.tina.base.DrawMode;
-import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
@@ -46,8 +45,8 @@ public class Pseudo3DRenderIterationState extends DefaultRenderIterationState {
   protected XYZPoint r;
   Pseudo3DShader shader;
 
-  public Pseudo3DRenderIterationState(AbstractRenderThread pRenderThread, FlameRenderer pRenderer, Flame pFlame, Layer pLayer, FlameTransformationContext pCtx, AbstractRandomGenerator pRandGen) {
-    super(pRenderThread, pRenderer, pFlame, pLayer, pCtx, pRandGen);
+  public Pseudo3DRenderIterationState(AbstractRenderThread pRenderThread, FlameRenderer pRenderer, RenderPacket pPacket, Layer pLayer, FlameTransformationContext pCtx, AbstractRandomGenerator pRandGen) {
+    super(pRenderThread, pRenderer, pPacket, pLayer, pCtx, pRandGen);
   }
 
   @Override
@@ -126,23 +125,22 @@ public class Pseudo3DRenderIterationState extends DefaultRenderIterationState {
         finalXForms.get(i).transformPoints(ctx, affineTA, varTA, qA, qA);
       }
       r.assign(qA[0]);
-      if (!renderer.project(r, prj))
+      if (!view.project(r, prj))
         return;
 
-      XForm finalXForm = finalXForms.get(finalXForms.size() - 1);
       if ((flame.getAntialiasAmount() > EPSILON) && (flame.getAntialiasRadius() > EPSILON) && (randGen.random() > 1.0 - flame.getAntialiasAmount())) {
         double dr = exp(flame.getAntialiasRadius() * sqrt(-log(randGen.random()))) - 1.0;
         double da = randGen.random() * 2.0 * M_PI;
-        xIdx = (int) (renderer.bws * prj.x + dr * cos(da) + 0.5);
+        xIdx = (int) (view.bws * prj.x + dr * cos(da) + 0.5);
         if (xIdx < 0 || xIdx >= renderer.rasterWidth)
           return;
-        yIdx = (int) (renderer.bhs * prj.y + dr * sin(da) + 0.5);
+        yIdx = (int) (view.bhs * prj.y + dr * sin(da) + 0.5);
         if (yIdx < 0 || yIdx >= renderer.rasterHeight)
           return;
       }
       else {
-        xIdx = (int) (renderer.bws * prj.x + 0.5);
-        yIdx = (int) (renderer.bhs * prj.y + 0.5);
+        xIdx = (int) (view.bws * prj.x + 0.5);
+        yIdx = (int) (view.bhs * prj.y + 0.5);
       }
 
     }
@@ -152,18 +150,18 @@ public class Pseudo3DRenderIterationState extends DefaultRenderIterationState {
         qA[pIdx].assign(pA[pIdx]);
       }
       r.assign(qA[0]);
-      if (!renderer.project(r, prj))
+      if (!view.project(r, prj))
         return;
 
       if ((flame.getAntialiasAmount() > EPSILON) && (flame.getAntialiasRadius() > EPSILON) && (randGen.random() > 1.0 - flame.getAntialiasAmount())) {
         double dr = exp(flame.getAntialiasRadius() * sqrt(-log(randGen.random()))) - 1.0;
         double da = randGen.random() * 2.0 * M_PI;
-        xIdx = (int) (renderer.bws * prj.x + dr * cos(da) + 0.5);
-        yIdx = (int) (renderer.bhs * prj.y + dr * sin(da) + 0.5);
+        xIdx = (int) (view.bws * prj.x + dr * cos(da) + 0.5);
+        yIdx = (int) (view.bhs * prj.y + dr * sin(da) + 0.5);
       }
       else {
-        xIdx = (int) (renderer.bws * prj.x + 0.5);
-        yIdx = (int) (renderer.bhs * prj.y + 0.5);
+        xIdx = (int) (view.bws * prj.x + 0.5);
+        yIdx = (int) (view.bhs * prj.y + 0.5);
       }
     }
     if (xIdx < 0 || xIdx >= renderer.rasterWidth)

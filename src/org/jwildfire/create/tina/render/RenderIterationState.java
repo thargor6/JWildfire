@@ -26,10 +26,12 @@ import org.jwildfire.create.tina.random.AbstractRandomGenerator;
 import org.jwildfire.create.tina.variation.FlameTransformationContext;
 
 public class RenderIterationState implements Serializable {
-  private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 2L;
 
   protected final AbstractRenderThread renderThread;
   protected final FlameRenderer renderer;
+  protected final FlameRendererView view;
+  protected final RenderPacket packet;
   protected final Flame flame;
   protected final Layer layer;
   protected final FlameTransformationContext ctx;
@@ -38,15 +40,17 @@ public class RenderIterationState implements Serializable {
   protected final RenderColor[] colorMap;
   protected final double paletteIdxScl;
 
-  public RenderIterationState(AbstractRenderThread pRenderThread, FlameRenderer pRenderer, Flame pFlame, Layer pLayer, FlameTransformationContext pCtx, AbstractRandomGenerator pRandGen) {
+  public RenderIterationState(AbstractRenderThread pRenderThread, FlameRenderer pRenderer, RenderPacket pPacket, Layer pLayer, FlameTransformationContext pCtx, AbstractRandomGenerator pRandGen) {
     renderThread = pRenderThread;
     renderer = pRenderer;
-    flame = pFlame;
+    packet = pPacket;
+    view = pPacket.getView();
+    flame = pPacket.getFlame();
     layer = pLayer;
     ctx = pCtx;
     randGen = pRandGen;
     observers = renderer.getIterationObservers();
-    colorMap = pLayer.getPalette().createRenderPalette(pFlame.getWhiteLevel());
+    colorMap = pLayer.getPalette().createRenderPalette(flame.getWhiteLevel());
     paletteIdxScl = colorMap.length - 2;
   }
 
