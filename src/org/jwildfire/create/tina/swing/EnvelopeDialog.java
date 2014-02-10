@@ -57,7 +57,7 @@ public class EnvelopeDialog extends JDialog {
     ctrl = new EnvelopeDlgController(pEnvelope, getEnvelopeAddPointButton(), getEnvelopeRemovePointButton(), getEnvelopeClearButton(),
         getEnvelopeXMinREd(), getEnvelopeXMaxREd(), getEnvelopeYMinREd(), getEnvelopeYMaxREd(), getEnvelopeXREd(),
         getEnvelopeYREd(), getEnvelopeInterpolationCmb(), getEnvelopeViewAllButton(), getEnvelopeViewLeftButton(),
-        getEnvelopeViewRightButton(), getEnvelopeViewUpButton(), getEnvelopeViewDownButton(), getEnvelopePanel());
+        getEnvelopeViewRightButton(), getEnvelopeViewUpButton(), getEnvelopeViewDownButton(), getEnvelopePanel(), getEnvelopeInterpolationCmb());
     ctrl.setNoRefresh(true);
     try {
       ctrl.refreshEnvelope();
@@ -136,6 +136,7 @@ public class EnvelopeDialog extends JDialog {
       bottomPanel.add(getCancelButton(), null);
 
       btnRemove = new JButton();
+      btnRemove.setToolTipText("Disable the motion curve (does not delete the curve itself)");
       btnRemove.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
           confirmed = true;
@@ -143,7 +144,7 @@ public class EnvelopeDialog extends JDialog {
           setVisible(false);
         }
       });
-      btnRemove.setText("Remove");
+      btnRemove.setText("Disable/Remove");
       btnRemove.setSize(new Dimension(125, 24));
       btnRemove.setSelected(true);
       btnRemove.setPreferredSize(new Dimension(125, 24));

@@ -255,6 +255,84 @@ public class Envelope implements Serializable {
 
   }
 
+  public double evaluate(double pTime) {
+    /* check if x-value is inside the supported range */
+    if (size() == 1)
+      return y[0];
+    int min, max;
+    min = max = x[0];
+    for (int i = 1; i < size(); i++) {
+      if (x[i] < min)
+        min = x[i];
+      else if (x[i] > max)
+        max = x[i];
+    }
+    if (pTime <= min)
+      return y[0];
+    else if (pTime >= max)
+      return y[size() - 1];
+
+    int subdiv = org.jwildfire.envelope.Interpolation.calcSubDivPRV(x, size());
+    org.jwildfire.envelope.Interpolation interpolationX, interpolationY;
+    if (size() > 2) {
+      switch (getInterpolation()) {
+        case SPLINE:
+          interpolationX = new SplineInterpolation();
+          interpolationY = new SplineInterpolation();
+          break;
+        case BEZIER:
+          interpolationX = new BezierInterpolation();
+          interpolationY = new BezierInterpolation();
+          break;
+        default:
+          interpolationX = new LinearInterpolation();
+          interpolationY = new LinearInterpolation();
+          break;
+      }
+    }
+    else {
+      interpolationX = new LinearInterpolation();
+      interpolationY = new LinearInterpolation();
+    }
+    interpolationX.setSrc(x);
+    interpolationX.setSnum(size());
+    interpolationX.setSubdiv(subdiv);
+    interpolationX.interpolate();
+    interpolationY.setSrc(y);
+    interpolationY.setSnum(size());
+    interpolationY.setSubdiv(subdiv);
+    interpolationY.interpolate();
+    if (interpolationX.getDnum() != interpolationY.getDnum())
+      throw new IllegalStateException();
+
+    int indl = -1, indr = -1;
+    int vSNum = interpolationX.getDnum();
+    double vSX[] = interpolationX.getDest();
+    double vSY[] = interpolationY.getDest();
+    for (int i = 0; i < vSNum; i++) {
+      if (vSX[i] <= pTime)
+        indl = i;
+      else {
+        indr = i;
+        break;
+      }
+    }
+    if ((indl >= 0) && (indr >= 0)) {
+      double xdist = vSX[indr] - vSX[indl];
+      if (xdist < 0.001)
+        return vSX[indl];
+      else
+        return vSY[indl] + (pTime - vSX[indl]) / xdist * (vSY[indr] - vSY[indl]);
+    }
+    else if (indl >= 0) {
+      return vSY[indl];
+    }
+    else {
+      return 0.0;
+    }
+
+  }
+
   public boolean isLocked() {
     return locked;
   }

@@ -103,14 +103,17 @@ public class Flame implements Assignable<Flame>, Serializable {
   private String name = "";
   @AnimAware
   private final List<Layer> layers = new ArrayList<Layer>();
-  @AnimAware
-  private int frame;
 
   @AnimAware
   private ShadingInfo shadingInfo = new ShadingInfo();
   private String lastFilename = null;
   private double antialiasAmount = 0.75;
   private double antialiasRadius = 0.36;
+
+  // TODO reset
+  private int motionBlurLength = 30;
+  private double motionBlurTimeStep = 0.25;
+  private double motionBlurDecay = 0.02;
 
   public Flame() {
     layers.clear();
@@ -478,7 +481,10 @@ public class Flame implements Assignable<Flame>, Serializable {
     lastFilename = pFlame.lastFilename;
     antialiasAmount = pFlame.antialiasAmount;
     antialiasRadius = pFlame.antialiasRadius;
-    frame = pFlame.frame;
+
+    motionBlurLength = pFlame.motionBlurLength;
+    motionBlurTimeStep = pFlame.motionBlurTimeStep;
+    motionBlurDecay = pFlame.motionBlurDecay;
 
     layers.clear();
     for (Layer layer : pFlame.getLayers()) {
@@ -522,8 +528,8 @@ public class Flame implements Assignable<Flame>, Serializable {
         (qualityProfile != null && pFlame.qualityProfile != null && !qualityProfile.equals(pFlame.qualityProfile))) ||
         !shadingInfo.isEqual(pFlame.shadingInfo) || !name.equals(pFlame.name) ||
         (fabs(antialiasAmount - pFlame.antialiasAmount) > EPSILON) || (fabs(antialiasRadius - pFlame.antialiasRadius) > EPSILON) ||
-        (layers.size() != pFlame.layers.size()) ||
-        (frame != pFlame.frame)) {
+        (layers.size() != pFlame.layers.size()) || (motionBlurLength != pFlame.motionBlurLength) ||
+        (fabs(motionBlurTimeStep - pFlame.motionBlurTimeStep) > EPSILON) || (fabs(motionBlurDecay - pFlame.motionBlurDecay) > EPSILON)) {
       return false;
     }
     for (int i = 0; i < layers.size(); i++) {
@@ -687,12 +693,32 @@ public class Flame implements Assignable<Flame>, Serializable {
     this.antialiasRadius = antialiasRadius;
   }
 
-  public int getFrame() {
-    return frame;
+  public int getMotionBlurLength() {
+    return motionBlurLength;
   }
 
-  public void setFrame(int frame) {
-    this.frame = frame;
+  public void setMotionBlurLength(int motionBlurLength) {
+    this.motionBlurLength = motionBlurLength;
+  }
+
+  public double getMotionBlurTimeStep() {
+    return motionBlurTimeStep;
+  }
+
+  public void setMotionBlurTimeStep(double motionBlurTimeStep) {
+    this.motionBlurTimeStep = motionBlurTimeStep;
+  }
+
+  public MotionCurve getPixelsPerUnitCurve() {
+    return pixelsPerUnitCurve;
+  }
+
+  public double getMotionBlurDecay() {
+    return motionBlurDecay;
+  }
+
+  public void setMotionBlurDecay(double motionBlurDecay) {
+    this.motionBlurDecay = motionBlurDecay;
   }
 
 }

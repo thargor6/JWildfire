@@ -24,6 +24,7 @@ import java.awt.Font;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
@@ -87,9 +88,11 @@ public class JWFNumberField extends JPanel {
     setLayout(new BorderLayout());
 
     motionCurveBtn = new JWFNumberFieldButton(this);
-    motionCurveBtn.setText("A");
+    motionCurveBtn.setText("");
     motionCurveBtn.setToolTipText("Create/edit a motion curve");
     motionCurveBtn.setFont(new Font("Dialog", Font.BOLD, 8));
+    motionCurveBtn.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/motionCurve.gif")));
+
     add(motionCurveBtn, BorderLayout.WEST);
 
     spinnerField = new JSpinner();

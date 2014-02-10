@@ -50,6 +50,7 @@ public class EnvelopeDlgController {
   private final JWFNumberField yREd;
   private final JComboBox interpolationCmb;
   private final EnvelopePanel envelopePanel;
+  private final JComboBox envelopeInterpolationCmb;
 
   private boolean noRefresh;
   private final Envelope envelope;
@@ -60,7 +61,7 @@ public class EnvelopeDlgController {
       JWFNumberField pXMinREd, JWFNumberField pXMaxREd, JWFNumberField pYMinREd, JWFNumberField pYMaxREd,
       JWFNumberField pXREd, JWFNumberField pYREd, JComboBox pInterpolationCmb, JButton pViewAllButton,
       JButton pViewLeftButton, JButton pViewRightButton, JButton pViewUpButton,
-      JButton pViewDownButton, EnvelopePanel pEnvelopePanel) {
+      JButton pViewDownButton, EnvelopePanel pEnvelopePanel, JComboBox pEnvelopeInterpolationCmb) {
     envelope = pEnvelope;
     addPointButton = pAddPointButton;
     removePointButton = pRemovePointButton;
@@ -78,6 +79,7 @@ public class EnvelopeDlgController {
     viewUpButton = pViewUpButton;
     viewDownButton = pViewDownButton;
     envelopePanel = pEnvelopePanel;
+    envelopeInterpolationCmb = pEnvelopeInterpolationCmb;
     envelopePanel.addMouseListener(new java.awt.event.MouseAdapter() {
 
       @Override
@@ -210,7 +212,19 @@ public class EnvelopeDlgController {
     }
   }
 
+  private void refreshInterpolationField() {
+    boolean oldNoRefresh = noRefresh;
+    noRefresh = true;
+    try {
+      envelopeInterpolationCmb.setSelectedItem(envelope.getInterpolation());
+    }
+    finally {
+      noRefresh = oldNoRefresh;
+    }
+  }
+
   public void refreshEnvelope() {
+    refreshInterpolationField();
     refreshXField();
     refreshXMinField();
     refreshXMaxField();

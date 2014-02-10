@@ -31,13 +31,10 @@ import org.jwildfire.base.QualityProfile;
 import org.jwildfire.create.tina.animate.AnimationService;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.Layer;
-import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.raster.AbstractRasterPoint;
 import org.jwildfire.create.tina.random.AbstractRandomGenerator;
 import org.jwildfire.create.tina.random.RandomGeneratorFactory;
-import org.jwildfire.create.tina.transform.XFormTransformService;
 import org.jwildfire.create.tina.variation.FlameTransformationContext;
-import org.jwildfire.create.tina.variation.VariationFuncList;
 import org.jwildfire.image.SimpleHDRImage;
 import org.jwildfire.image.SimpleImage;
 
@@ -691,7 +688,7 @@ public class FlameRenderer {
   private List<RenderPacket> createRenderPackets(Flame pFlame, int pFrame) {
     List<RenderPacket> res = new ArrayList<RenderPacket>();
 
-    Flame initialFlame = flame.makeCopy();
+    Flame initialFlame = pFlame.makeCopy();
     if (pFrame >= 0) {
       initialFlame = AnimationService.evalMotionCurves(initialFlame, pFrame);
     }
@@ -701,28 +698,22 @@ public class FlameRenderer {
     }
     FlameRendererView view = createView(initialFlame);
     res.add(new RenderPacket(initialFlame, view));
-    // TODO
-    int blurLength = -1;
-    //    int blurLength = 200;
-    if (blurLength > 0) {
-      for (int p = 1; p < blurLength; p++) {
-        Flame renderFlame = initialFlame.makeCopy();
-        for (Layer layer : renderFlame.getLayers()) {
-          XForm finalXForm = layer.getXForms().size() > 1 ? layer.getXForms().get(1) : null;
-          if (finalXForm == null) {
-            finalXForm = new XForm();
-            finalXForm.addVariation(1.0, VariationFuncList.getVariationFuncInstance("linear3D", true));
-            renderFlame.getFirstLayer().getXForms().add(finalXForm);
-          }
-          XFormTransformService.rotate(finalXForm, p * 0.012, false);
-          XFormTransformService.globalTranslate(finalXForm, p * 0.004, p * 0.004, false);
-        }
-        for (Layer layer : renderFlame.getLayers()) {
+
+    if (pFlame.getMotionBlurLength() > 0) {
+      double time = pFrame >= 0 ? pFrame : 0;
+      for (int p = 1; p < pFlame.getMotionBlurLength(); p++) {
+        time += pFlame.getMotionBlurTimeStep();
+        Flame newFlame = AnimationService.evalMotionCurves(pFlame.makeCopy(), time);
+        for (Layer layer : newFlame.getLayers()) {
           layer.refreshModWeightTables(flameTransformationContext);
         }
-        renderFlame.setBrightness((1.0 - p * 0.05) * renderFlame.getBrightness());
-        //        res.add(renderFlame);
-        // TODO
+        double brightnessScl = (1.0 - p * pFlame.getMotionBlurDecay());
+        if (brightnessScl < 0.1) {
+          brightnessScl = 0.1;
+        }
+        newFlame.setBrightness(brightnessScl * newFlame.getBrightness());
+        FlameRendererView newView = createView(newFlame);
+        res.add(new RenderPacket(newFlame, newView));
       }
     }
     return res;

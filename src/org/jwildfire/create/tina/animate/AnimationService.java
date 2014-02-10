@@ -256,7 +256,7 @@ public class AnimationService {
 
   private static final String CURVE_POSTFIX = "Curve";
 
-  public static Flame evalMotionCurves(Flame pFlame, int pFrame) {
+  public static Flame evalMotionCurves(Flame pFlame, double pFrame) {
     try {
       Flame res = pFlame.makeCopy();
 
