@@ -5937,7 +5937,6 @@ public class TinaInternalFrame extends JInternalFrame {
       centerWestPanel.add(getUndoButton());
       centerWestPanel.add(getRedoButton());
       centerWestPanel.add(getLabel_6());
-      centerWestPanel.add(getBtnQsave());
       centerWestPanel.add(getSnapShotButton());
       centerWestPanel.add(getLabel_8());
       centerWestPanel.add(getEditFlameTitleBtn());
@@ -8896,6 +8895,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JWFNumberField keyframesFrameCountField;
   private JSlider keyframesFrameSlider;
   private JToggleButton motionCurveEditModeButton;
+  private JPanel panel_66;
 
   /**
    * This method initializes renderBatchJobsScrollPane	
@@ -11339,7 +11339,7 @@ public class TinaInternalFrame extends JInternalFrame {
       panel_13 = new JPanel();
       panel_13.setLayout(new BoxLayout(panel_13, BoxLayout.Y_AXIS));
       panel_13.add(getSaveFlameToClipboardButton());
-      panel_13.add(getTinaSaveFlameButton());
+      panel_13.add(getPanel_66());
     }
     return panel_13;
   }
@@ -11717,7 +11717,7 @@ public class TinaInternalFrame extends JInternalFrame {
         }
       });
       btnQsave.setToolTipText("Quicksave the current flame");
-      btnQsave.setText("QSv");
+      btnQsave.setText("Q");
       btnQsave.setPreferredSize(new Dimension(60, 24));
       btnQsave.setMnemonic(KeyEvent.VK_Q);
       btnQsave.setFont(new Font("Dialog", Font.BOLD, 10));
@@ -15138,6 +15138,19 @@ public class TinaInternalFrame extends JInternalFrame {
 
   public JToggleButton getMotionCurveEditModeButton() {
     return motionCurveEditModeButton;
+  }
+
+  private JPanel getPanel_66() {
+    if (panel_66 == null) {
+      panel_66 = new JPanel();
+      panel_66.setAlignmentX(Component.LEFT_ALIGNMENT);
+      panel_66.setMaximumSize(new Dimension(200, 24));
+      panel_66.setPreferredSize(new Dimension(125, 24));
+      panel_66.setLayout(new BoxLayout(panel_66, BoxLayout.X_AXIS));
+      panel_66.add(getTinaSaveFlameButton());
+      panel_66.add(getBtnQsave());
+    }
+    return panel_66;
   }
 } //  @jve:decl-index=0:visual-constraint="10,10"
 
