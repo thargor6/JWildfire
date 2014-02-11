@@ -279,4 +279,11 @@ public class TinaControllerData {
   public JToggleButton layerPreviewBtn;
   public JButton layerHideOthersBtn;
   public JButton layerShowAllBtn;
+  public JWFNumberField motionBlurLengthField;
+  public JSlider motionBlurLengthSlider;
+  public JWFNumberField motionBlurTimeStepField;
+  public JSlider motionBlurTimeStepSlider;
+  public JWFNumberField motionBlurDecayField;
+  public JSlider motionBlurDecaySlider;
+
 }

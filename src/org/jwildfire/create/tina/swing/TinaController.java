@@ -137,18 +137,18 @@ import com.l2fprod.common.util.ResourceManager;
 public class TinaController implements FlameHolder, LayerHolder, JobRenderThreadController, ScriptRunnerEnvironment, UndoManagerHolder<Flame>, JWFScriptExecuteController, GradientSelectionProvider {
   public static final int PAGE_INDEX = 0;
 
-  private static final double SLIDER_SCALE_PERSPECTIVE = 100.0;
-  private static final double SLIDER_SCALE_CENTRE = 5000.0;
-  private static final double SLIDER_SCALE_ZOOM = 1000.0;
-  private static final double SLIDER_SCALE_BRIGHTNESS_CONTRAST_VIBRANCY = 100.0;
-  private static final double SLIDER_SCALE_GAMMA = 100.0;
-  private static final double SLIDER_SCALE_FILTER_RADIUS = 100.0;
-  private static final double SLIDER_SCALE_GAMMA_THRESHOLD = 5000.0;
-  private static final double SLIDER_SCALE_COLOR = 100.0;
-  private static final double SLIDER_SCALE_ZPOS = 50.0;
-  private static final double SLIDER_SCALE_DOF = 100.0;
-  private static final double SLIDER_SCALE_DOF_AREA = 100.0;
-  private static final double SLIDER_SCALE_DOF_EXPONENT = 100.0;
+  static final double SLIDER_SCALE_PERSPECTIVE = 100.0;
+  static final double SLIDER_SCALE_CENTRE = 5000.0;
+  static final double SLIDER_SCALE_ZOOM = 1000.0;
+  static final double SLIDER_SCALE_BRIGHTNESS_CONTRAST_VIBRANCY = 100.0;
+  static final double SLIDER_SCALE_GAMMA = 100.0;
+  static final double SLIDER_SCALE_FILTER_RADIUS = 100.0;
+  static final double SLIDER_SCALE_GAMMA_THRESHOLD = 5000.0;
+  static final double SLIDER_SCALE_COLOR = 100.0;
+  static final double SLIDER_SCALE_ZPOS = 50.0;
+  static final double SLIDER_SCALE_DOF = 100.0;
+  static final double SLIDER_SCALE_DOF_AREA = 100.0;
+  static final double SLIDER_SCALE_DOF_EXPONENT = 100.0;
   private static final double SLIDER_SCALE_AMBIENT = 100.0;
   private static final double SLIDER_SCALE_PHONGSIZE = 10.0;
   private static final double SLIDER_SCALE_LIGHTPOS = 100.0;
@@ -432,6 +432,13 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
     data.layerPreviewBtn = parameterObject.layerPreviewBtn;
     data.layerHideOthersBtn = parameterObject.layerHideOthersBtn;
     data.layerShowAllBtn = parameterObject.layerShowAllBtn;
+
+    data.motionBlurLengthField = parameterObject.motionBlurLengthField;
+    data.motionBlurLengthSlider = parameterObject.motionBlurLengthSlider;
+    data.motionBlurTimeStepField = parameterObject.motionBlurTimeStepField;
+    data.motionBlurTimeStepSlider = parameterObject.motionBlurTimeStepSlider;
+    data.motionBlurDecayField = parameterObject.motionBlurDecayField;
+    data.motionBlurDecaySlider = parameterObject.motionBlurDecaySlider;
 
     data.mouseTransformEditViewButton = parameterObject.pMouseTransformViewButton;
     data.toggleVariationsButton = parameterObject.pToggleVariationsButton;
@@ -1868,39 +1875,6 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
     }
   }
 
-  private void flameSliderChanged(JSlider pSlider, JWFNumberField pTextField, String pProperty, double pSliderScale) {
-    if (noRefresh || getCurrFlame() == null)
-      return;
-    noRefresh = true;
-    try {
-      double propValue = pSlider.getValue() / pSliderScale;
-      pTextField.setText(Tools.doubleToString(propValue));
-      Class<?> cls = getCurrFlame().getClass();
-      Field field;
-      try {
-        field = cls.getDeclaredField(pProperty);
-        field.setAccessible(true);
-        Class<?> fieldCls = field.getType();
-        if (fieldCls == double.class || fieldCls == Double.class) {
-          field.setDouble(getCurrFlame(), propValue);
-        }
-        else if (fieldCls == int.class || fieldCls == Integer.class) {
-          field.setInt(getCurrFlame(), Tools.FTOI(propValue));
-        }
-        else {
-          throw new IllegalStateException();
-        }
-      }
-      catch (Throwable ex) {
-        ex.printStackTrace();
-      }
-      refreshFlameImage(false);
-    }
-    finally {
-      noRefresh = false;
-    }
-  }
-
   private void paletteSliderChanged(JSlider pSlider, JWFNumberField pTextField, String pProperty, double pSliderScale) {
     if (noRefresh || getCurrFlame() == null)
       return;
@@ -2080,44 +2054,6 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
     }
   }
 
-  private void flameTextFieldChanged(JSlider pSlider, JWFNumberField pTextField, String pProperty, double pSliderScale) {
-    if (noRefresh) {
-      return;
-    }
-    if (getCurrFlame() == null) {
-      return;
-    }
-    noRefresh = true;
-    try {
-      double propValue = Tools.stringToDouble(pTextField.getText());
-      pSlider.setValue(Tools.FTOI(propValue * pSliderScale));
-
-      Class<?> cls = getCurrFlame().getClass();
-      Field field;
-      try {
-        field = cls.getDeclaredField(pProperty);
-        field.setAccessible(true);
-        Class<?> fieldCls = field.getType();
-        if (fieldCls == double.class || fieldCls == Double.class) {
-          field.setDouble(getCurrFlame(), propValue);
-        }
-        else if (fieldCls == int.class || fieldCls == Integer.class) {
-          field.setInt(getCurrFlame(), Tools.FTOI(propValue));
-        }
-        else {
-          throw new IllegalStateException();
-        }
-      }
-      catch (Throwable ex) {
-        ex.printStackTrace();
-      }
-      refreshFlameImage(false);
-    }
-    finally {
-      noRefresh = false;
-    }
-  }
-
   private void paletteTextFieldChanged(JSlider pSlider, JWFNumberField pTextField, String pProperty, double pSliderScale) {
     if (noRefresh || getCurrFlame() == null)
       return;
@@ -2195,38 +2131,6 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
     }
   }
 
-  public void cameraRollSlider_stateChanged(ChangeEvent e) {
-    flameSliderChanged(data.cameraRollSlider, data.cameraRollREd, "camRoll", 1.0);
-  }
-
-  public void cameraRollREd_changed() {
-    flameTextFieldChanged(data.cameraRollSlider, data.cameraRollREd, "camRoll", 1.0);
-  }
-
-  public void cameraPitchREd_changed() {
-    flameTextFieldChanged(data.cameraPitchSlider, data.cameraPitchREd, "camPitch", 1.0);
-  }
-
-  public void cameraPitchSlider_stateChanged(ChangeEvent e) {
-    flameSliderChanged(data.cameraPitchSlider, data.cameraPitchREd, "camPitch", 1.0);
-  }
-
-  public void cameraYawREd_changed() {
-    flameTextFieldChanged(data.cameraYawSlider, data.cameraYawREd, "camYaw", 1.0);
-  }
-
-  public void cameraPerspectiveREd_changed() {
-    flameTextFieldChanged(data.cameraPerspectiveSlider, data.cameraPerspectiveREd, "camPerspective", SLIDER_SCALE_PERSPECTIVE);
-  }
-
-  public void cameraYawSlider_stateChanged(ChangeEvent e) {
-    flameSliderChanged(data.cameraYawSlider, data.cameraYawREd, "camYaw", 1.0);
-  }
-
-  public void cameraPerspectiveSlider_stateChanged(ChangeEvent e) {
-    flameSliderChanged(data.cameraPerspectiveSlider, data.cameraPerspectiveREd, "camPerspective", SLIDER_SCALE_PERSPECTIVE);
-  }
-
   public void renderFlameButton_actionPerformed(ActionEvent e) {
     refreshFlameImage(false, false);
   }
@@ -2279,110 +2183,6 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
       destFlame.getLayers().add(layer);
     }
     return pSrc.getLayers().size() > 0;
-  }
-
-  public void cameraCentreYSlider_stateChanged(ChangeEvent e) {
-    flameSliderChanged(data.cameraCentreYSlider, data.cameraCentreYREd, "centreY", SLIDER_SCALE_CENTRE);
-  }
-
-  public void cameraCentreYREd_changed() {
-    flameTextFieldChanged(data.cameraCentreYSlider, data.cameraCentreYREd, "centreY", SLIDER_SCALE_CENTRE);
-  }
-
-  public void cameraCentreXSlider_stateChanged(ChangeEvent e) {
-    flameSliderChanged(data.cameraCentreXSlider, data.cameraCentreXREd, "centreX", SLIDER_SCALE_CENTRE);
-  }
-
-  public void cameraZoomSlider_stateChanged(ChangeEvent e) {
-    flameSliderChanged(data.cameraZoomSlider, data.cameraZoomREd, "camZoom", SLIDER_SCALE_ZOOM);
-  }
-
-  public void cameraCentreXREd_changed() {
-    flameTextFieldChanged(data.cameraCentreXSlider, data.cameraCentreXREd, "centreX", SLIDER_SCALE_CENTRE);
-  }
-
-  public void cameraZoomREd_changed() {
-    flameTextFieldChanged(data.cameraZoomSlider, data.cameraZoomREd, "camZoom", SLIDER_SCALE_ZOOM);
-  }
-
-  public void brightnessSlider_stateChanged(ChangeEvent e) {
-    flameSliderChanged(data.brightnessSlider, data.brightnessREd, "brightness", SLIDER_SCALE_BRIGHTNESS_CONTRAST_VIBRANCY);
-  }
-
-  public void filterRadiusREd_changed() {
-    flameTextFieldChanged(data.filterRadiusSlider, data.filterRadiusREd, "spatialFilterRadius", SLIDER_SCALE_FILTER_RADIUS);
-  }
-
-  public void deFilterMaxRadiusREd_changed() {
-    flameTextFieldChanged(data.deFilterMaxRadiusSlider, data.deFilterMaxRadiusREd, "deFilterMaxRadius", SLIDER_SCALE_FILTER_RADIUS);
-  }
-
-  public void deFilterMinRadiusREd_changed() {
-    flameTextFieldChanged(data.deFilterMinRadiusSlider, data.deFilterMinRadiusREd, "deFilterMinRadius", SLIDER_SCALE_FILTER_RADIUS);
-  }
-
-  public void deFilterCurveREd_changed() {
-    flameTextFieldChanged(data.deFilterCurveSlider, data.deFilterCurveREd, "deFilterCurve", SLIDER_SCALE_FILTER_RADIUS);
-  }
-
-  public void gammaREd_changed() {
-    flameTextFieldChanged(data.gammaSlider, data.gammaREd, "gamma", SLIDER_SCALE_GAMMA);
-  }
-
-  public void gammaThresholdREd_changed() {
-    flameTextFieldChanged(data.gammaThresholdSlider, data.gammaThresholdREd, "gammaThreshold", SLIDER_SCALE_GAMMA_THRESHOLD);
-  }
-
-  public void contrastREd_changed() {
-    flameTextFieldChanged(data.contrastSlider, data.contrastREd, "contrast", SLIDER_SCALE_BRIGHTNESS_CONTRAST_VIBRANCY);
-  }
-
-  public void vibrancySlider_stateChanged(ChangeEvent e) {
-    flameSliderChanged(data.vibrancySlider, data.vibrancyREd, "vibrancy", SLIDER_SCALE_BRIGHTNESS_CONTRAST_VIBRANCY);
-  }
-
-  public void filterRadiusSlider_stateChanged(ChangeEvent e) {
-    flameSliderChanged(data.filterRadiusSlider, data.filterRadiusREd, "spatialFilterRadius", SLIDER_SCALE_FILTER_RADIUS);
-  }
-
-  public void deFilterMaxRadiusSlider_stateChanged(ChangeEvent e) {
-    flameSliderChanged(data.deFilterMaxRadiusSlider, data.deFilterMaxRadiusREd, "deFilterMaxRadius", SLIDER_SCALE_FILTER_RADIUS);
-  }
-
-  public void deFilterMinRadiusSlider_stateChanged(ChangeEvent e) {
-    flameSliderChanged(data.deFilterMinRadiusSlider, data.deFilterMinRadiusREd, "deFilterMinRadius", SLIDER_SCALE_FILTER_RADIUS);
-  }
-
-  public void deFilterCurveSlider_stateChanged(ChangeEvent e) {
-    flameSliderChanged(data.deFilterCurveSlider, data.deFilterCurveREd, "deFilterCurve", SLIDER_SCALE_FILTER_RADIUS);
-  }
-
-  public void gammaThresholdSlider_stateChanged(ChangeEvent e) {
-    flameSliderChanged(data.gammaThresholdSlider, data.gammaThresholdREd, "gammaThreshold", SLIDER_SCALE_GAMMA_THRESHOLD);
-  }
-
-  public void vibrancyREd_changed() {
-    flameTextFieldChanged(data.vibrancySlider, data.vibrancyREd, "vibrancy", SLIDER_SCALE_BRIGHTNESS_CONTRAST_VIBRANCY);
-  }
-
-  public void pixelsPerUnitSlider_stateChanged(ChangeEvent e) {
-    flameSliderChanged(data.pixelsPerUnitSlider, data.pixelsPerUnitREd, "pixelsPerUnit", 1.0);
-  }
-
-  public void gammaSlider_stateChanged(ChangeEvent e) {
-    flameSliderChanged(data.gammaSlider, data.gammaREd, "gamma", SLIDER_SCALE_GAMMA);
-  }
-
-  public void pixelsPerUnitREd_changed() {
-    flameTextFieldChanged(data.pixelsPerUnitSlider, data.pixelsPerUnitREd, "pixelsPerUnit", 1.0);
-  }
-
-  public void brightnessREd_changed() {
-    flameTextFieldChanged(data.brightnessSlider, data.brightnessREd, "brightness", SLIDER_SCALE_BRIGHTNESS_CONTRAST_VIBRANCY);
-  }
-
-  public void contrastSlider_stateChanged(ChangeEvent e) {
-    flameSliderChanged(data.contrastSlider, data.contrastREd, "contrast", SLIDER_SCALE_BRIGHTNESS_CONTRAST_VIBRANCY);
   }
 
   public void randomPaletteButton_actionPerformed(ActionEvent e) {
@@ -3578,22 +3378,6 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
     xFormTextFieldChanged(data.xFormColorSlider, data.xFormColorREd, "color", SLIDER_SCALE_COLOR);
   }
 
-  public void xFormAntialiasAmountSlider_changed() {
-    flameSliderChanged(data.xFormAntialiasAmountSlider, data.xFormAntialiasAmountREd, "antialiasAmount", SLIDER_SCALE_COLOR);
-  }
-
-  public void xFormAntialiasRadiusSlider_changed() {
-    flameSliderChanged(data.xFormAntialiasRadiusSlider, data.xFormAntialiasRadiusREd, "antialiasRadius", SLIDER_SCALE_COLOR);
-  }
-
-  public void xFormAntialiasAmountREd_changed() {
-    flameTextFieldChanged(data.xFormAntialiasAmountSlider, data.xFormAntialiasAmountREd, "antialiasAmount", SLIDER_SCALE_COLOR);
-  }
-
-  public void xFormAntialiasRadiusREd_changed() {
-    flameTextFieldChanged(data.xFormAntialiasRadiusSlider, data.xFormAntialiasRadiusREd, "antialiasRadius", SLIDER_SCALE_COLOR);
-  }
-
   private void setRelWeight(double pValue) {
     XForm xForm = getCurrXForm();
     if (xForm != null && getCurrLayer() != null && getCurrLayer().getFinalXForms().indexOf(xForm) < 0) {
@@ -3960,70 +3744,6 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
       flame.setNewCamDOF(data.newDOFCBx.isSelected());
       enableDOFUI();
     }
-  }
-
-  public void focusZSlider_stateChanged(ChangeEvent e) {
-    flameSliderChanged(data.focusZSlider, data.focusZREd, "focusZ", SLIDER_SCALE_ZPOS);
-  }
-
-  public void focusXSlider_stateChanged(ChangeEvent e) {
-    flameSliderChanged(data.focusXSlider, data.focusXREd, "focusX", SLIDER_SCALE_ZPOS);
-  }
-
-  public void focusYSlider_stateChanged(ChangeEvent e) {
-    flameSliderChanged(data.focusYSlider, data.focusYREd, "focusY", SLIDER_SCALE_ZPOS);
-  }
-
-  public void dimishZSlider_stateChanged(ChangeEvent e) {
-    flameSliderChanged(data.dimishZSlider, data.dimishZREd, "dimishZ", SLIDER_SCALE_ZPOS);
-  }
-
-  public void camZSlider_stateChanged(ChangeEvent e) {
-    flameSliderChanged(data.camZSlider, data.camZREd, "camZ", SLIDER_SCALE_ZPOS);
-  }
-
-  public void cameraDOFSlider_stateChanged(ChangeEvent e) {
-    flameSliderChanged(data.cameraDOFSlider, data.cameraDOFREd, "camDOF", SLIDER_SCALE_DOF);
-  }
-
-  public void cameraDOFAreaSlider_stateChanged(ChangeEvent e) {
-    flameSliderChanged(data.cameraDOFAreaSlider, data.cameraDOFAreaREd, "camDOFArea", SLIDER_SCALE_DOF_AREA);
-  }
-
-  public void cameraDOFExponentSlider_stateChanged(ChangeEvent e) {
-    flameSliderChanged(data.cameraDOFExponentSlider, data.cameraDOFExponentREd, "camDOFExponent", SLIDER_SCALE_DOF_EXPONENT);
-  }
-
-  public void focusXREd_changed() {
-    flameTextFieldChanged(data.focusXSlider, data.focusXREd, "focusX", SLIDER_SCALE_ZPOS);
-  }
-
-  public void focusYREd_changed() {
-    flameTextFieldChanged(data.focusYSlider, data.focusYREd, "focusY", SLIDER_SCALE_ZPOS);
-  }
-
-  public void focusZREd_changed() {
-    flameTextFieldChanged(data.focusZSlider, data.focusZREd, "focusZ", SLIDER_SCALE_ZPOS);
-  }
-
-  public void dimishZREd_changed() {
-    flameTextFieldChanged(data.dimishZSlider, data.dimishZREd, "dimishZ", SLIDER_SCALE_ZPOS);
-  }
-
-  public void cameraDOFREd_changed() {
-    flameTextFieldChanged(data.cameraDOFSlider, data.cameraDOFREd, "camDOF", SLIDER_SCALE_DOF);
-  }
-
-  public void camZREd_changed() {
-    flameTextFieldChanged(data.camZSlider, data.camZREd, "camZ", SLIDER_SCALE_ZPOS);
-  }
-
-  public void cameraDOFAreaREd_changed() {
-    flameTextFieldChanged(data.cameraDOFAreaSlider, data.cameraDOFAreaREd, "camDOFArea", SLIDER_SCALE_DOF_AREA);
-  }
-
-  public void cameraDOFExponentREd_changed() {
-    flameTextFieldChanged(data.cameraDOFExponentSlider, data.cameraDOFExponentREd, "camDOFExponent", SLIDER_SCALE_DOF_EXPONENT);
   }
 
   public void shadingAmbientREd_changed() {
@@ -5899,5 +5619,9 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
 
   public void editFlameMotionCurve(ActionEvent e) {
     flameControls.editFlameMotionCurve(e);
+  }
+
+  public FlameControlsDeletegate getFlameControls() {
+    return flameControls;
   }
 }

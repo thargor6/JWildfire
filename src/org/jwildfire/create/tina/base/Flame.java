@@ -111,6 +111,7 @@ public class Flame implements Assignable<Flame>, Serializable {
   private double antialiasRadius = 0.36;
 
   // TODO reset
+  // TODO load/save
   private int motionBlurLength = 30;
   private double motionBlurTimeStep = 0.25;
   private double motionBlurDecay = 0.02;
