@@ -26,6 +26,7 @@ import java.awt.event.MouseEvent;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
@@ -365,7 +366,7 @@ public class JWFNumberField extends JPanel {
     linkedLabelControl = null;
   }
 
-  public Component getLinkedLabelControl() {
+  public JLabel getLinkedLabelControl() {
     if (linkedLabelControlName != null && linkedLabelControlName.length() > 0 && linkedLabelControl == null) {
       for (Component component : getParent().getComponents()) {
         if (linkedLabelControlName.equals(component.getName())) {
@@ -374,7 +375,7 @@ public class JWFNumberField extends JPanel {
         }
       }
     }
-    return linkedLabelControl;
+    return (JLabel) linkedLabelControl;
   }
 
   public void setEnabled(boolean enabled) {

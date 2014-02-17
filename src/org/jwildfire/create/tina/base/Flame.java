@@ -57,20 +57,28 @@ public class Flame implements Assignable<Flame>, Serializable {
   private final MotionCurve camZoomCurve = new MotionCurve();
   @AnimAware
   private double camZ;
+  private final MotionCurve camZCurve = new MotionCurve();
   @AnimAware
   private double focusX;
+  private final MotionCurve focusXCurve = new MotionCurve();
   @AnimAware
   private double focusY;
+  private final MotionCurve focusYCurve = new MotionCurve();
   @AnimAware
   private double focusZ;
+  private final MotionCurve focusZCurve = new MotionCurve();
   @AnimAware
   private double dimishZ;
+  private final MotionCurve dimishZCurve = new MotionCurve();
   @AnimAware
   private double camDOF;
+  private final MotionCurve camDOFCurve = new MotionCurve();
   @AnimAware
   private double camDOFExponent;
+  private final MotionCurve camDOFExponentCurve = new MotionCurve();
   @AnimAware
   private double camDOFArea;
+  private final MotionCurve camDOFAreaCurve = new MotionCurve();
   private boolean newCamDOF;
   private double spatialFilterRadius;
   private FilterKernelType spatialFilterKernel;
@@ -110,11 +118,10 @@ public class Flame implements Assignable<Flame>, Serializable {
   private double antialiasAmount = 0.75;
   private double antialiasRadius = 0.36;
 
-  // TODO reset
   // TODO load/save
-  private int motionBlurLength = 30;
+  private int motionBlurLength = 0;
   private double motionBlurTimeStep = 0.25;
-  private double motionBlurDecay = 0.02;
+  private double motionBlurDecay = 0.1;
 
   public Flame() {
     layers.clear();
@@ -446,14 +453,22 @@ public class Flame implements Assignable<Flame>, Serializable {
     camZoom = pFlame.camZoom;
     camZoomCurve.assign(pFlame.camZoomCurve);
     focusX = pFlame.focusX;
+    focusXCurve.assign(pFlame.focusXCurve);
     focusY = pFlame.focusY;
+    focusYCurve.assign(pFlame.focusYCurve);
     focusZ = pFlame.focusZ;
+    focusZCurve.assign(pFlame.focusZCurve);
     dimishZ = pFlame.dimishZ;
+    dimishZCurve.assign(pFlame.dimishZCurve);
     camZ = pFlame.camZ;
+    camZCurve.assign(pFlame.camZCurve);
     camDOF = pFlame.camDOF;
+    camDOFCurve.assign(pFlame.camDOFCurve);
     newCamDOF = pFlame.newCamDOF;
     camDOFArea = pFlame.camDOFArea;
+    camDOFAreaCurve.assign(pFlame.camDOFAreaCurve);
     camDOFExponent = pFlame.camDOFExponent;
+    camDOFExponentCurve.assign(pFlame.camDOFExponentCurve);
     spatialFilterRadius = pFlame.spatialFilterRadius;
     spatialFilterKernel = pFlame.spatialFilterKernel;
     deFilterEnabled = pFlame.deFilterEnabled;
@@ -508,10 +523,14 @@ public class Flame implements Assignable<Flame>, Serializable {
         (fabs(camPerspective - pFlame.camPerspective) > EPSILON) || !camPerspectiveCurve.isEqual(pFlame.camPerspectiveCurve) ||
         (fabs(camRoll - pFlame.camRoll) > EPSILON) || !camRollCurve.isEqual(pFlame.camRollCurve) ||
         (fabs(camZoom - pFlame.camZoom) > EPSILON) || !camZoomCurve.isEqual(pFlame.camZoomCurve) ||
-        (fabs(focusX - pFlame.focusX) > EPSILON) ||
-        (fabs(focusY - pFlame.focusY) > EPSILON) || (fabs(focusZ - pFlame.focusZ) > EPSILON) || (fabs(dimishZ - pFlame.dimishZ) > EPSILON) ||
-        (fabs(camDOF - pFlame.camDOF) > EPSILON) || (fabs(camDOFArea - pFlame.camDOFArea) > EPSILON) ||
-        (fabs(camDOFExponent - pFlame.camDOFExponent) > EPSILON) || (fabs(camZ - pFlame.camZ) > EPSILON) ||
+        (fabs(focusX - pFlame.focusX) > EPSILON) || !focusXCurve.isEqual(pFlame.focusXCurve) ||
+        (fabs(focusY - pFlame.focusY) > EPSILON) || !focusYCurve.isEqual(pFlame.focusYCurve) ||
+        (fabs(focusZ - pFlame.focusZ) > EPSILON) || !focusZCurve.isEqual(pFlame.focusZCurve) ||
+        (fabs(dimishZ - pFlame.dimishZ) > EPSILON) || !dimishZCurve.isEqual(pFlame.dimishZCurve) ||
+        (fabs(camDOF - pFlame.camDOF) > EPSILON) || !camDOFCurve.isEqual(pFlame.camDOFCurve) ||
+        (fabs(camDOFArea - pFlame.camDOFArea) > EPSILON) || !camDOFAreaCurve.isEqual(pFlame.camDOFAreaCurve) ||
+        (fabs(camDOFExponent - pFlame.camDOFExponent) > EPSILON) || !camDOFExponentCurve.isEqual(pFlame.camDOFExponentCurve) ||
+        (fabs(camZ - pFlame.camZ) > EPSILON) || !camZCurve.isEqual(pFlame.camZCurve) ||
         (newCamDOF != pFlame.newCamDOF) || (fabs(spatialFilterRadius - pFlame.spatialFilterRadius) > EPSILON) ||
         !spatialFilterKernel.equals(pFlame.spatialFilterKernel) || !deFilterKernel.equals(pFlame.deFilterKernel) ||
         (deFilterEnabled != pFlame.deFilterEnabled) || (fabs(deFilterMaxRadius - pFlame.deFilterMaxRadius) > EPSILON) ||

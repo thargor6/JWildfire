@@ -49,6 +49,8 @@ public class Tools {
 
   public static boolean SPECIAL_VERSION = false;
 
+  public static boolean V2_FEATURE_ENABLE = true;
+
   public static final int VPREC = 1024;
   public static final int SPREC = 10;
   private static final Pixel toolPixel = new Pixel();

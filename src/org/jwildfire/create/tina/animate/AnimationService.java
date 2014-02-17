@@ -17,6 +17,8 @@
 package org.jwildfire.create.tina.animate;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.jwildfire.base.Prefs;
 import org.jwildfire.base.mathlib.MathLib;
@@ -259,26 +261,35 @@ public class AnimationService {
   public static Flame evalMotionCurves(Flame pFlame, double pFrame) {
     try {
       Flame res = pFlame.makeCopy();
-
-      Class<?> cls = pFlame.getClass();
-      for (Field field : cls.getDeclaredFields()) {
-        field.setAccessible(true);
-        if (field.getType() == MotionCurve.class && field.getName().endsWith(CURVE_POSTFIX)) {
-          MotionCurve curve = (MotionCurve) field.get(pFlame);
-          if (curve.isEnabled()) {
-            Envelope envelope = curve.toEnvelope();
-            double value = envelope.evaluate(pFrame);
-            String propName = field.getName().substring(0, field.getName().length() - CURVE_POSTFIX.length());
-            setPropertyValue(res, propName, value);
-            //            System.out.println(propName + " " + value);
-          }
-        }
-      }
+      _evalMotionCurves(res, pFrame);
 
       return res;
     }
     catch (Throwable ex) {
       throw new RuntimeException(ex);
+    }
+  }
+
+  private static void _evalMotionCurves(Object pObject, double pFrame) throws IllegalAccessException {
+    Class<?> cls = pObject.getClass();
+    for (Field field : cls.getDeclaredFields()) {
+      field.setAccessible(true);
+      if (field.getType() == MotionCurve.class && field.getName().endsWith(CURVE_POSTFIX)) {
+        MotionCurve curve = (MotionCurve) field.get(pObject);
+        if (curve.isEnabled()) {
+          Envelope envelope = curve.toEnvelope();
+          double value = envelope.evaluate(pFrame);
+          String propName = field.getName().substring(0, field.getName().length() - CURVE_POSTFIX.length());
+          setPropertyValue(pObject, propName, value);
+          //          System.out.println(propName + " " + value);
+        }
+      }
+      else if (field.getType().isAssignableFrom(ArrayList.class)) {
+        List<?> childs = (List<?>) field.get(pObject);
+        for (Object child : childs) {
+          _evalMotionCurves(child, pFrame);
+        }
+      }
     }
   }
 }

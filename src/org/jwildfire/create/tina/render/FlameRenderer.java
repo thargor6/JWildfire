@@ -176,9 +176,6 @@ public class FlameRenderer {
       else {
         throw new IllegalStateException();
       }
-      // TODO CHECK
-      //      init3D();
-      //      initView();
       List<List<RenderPacket>> renderFlames = new ArrayList<List<RenderPacket>>();
       for (int t = 0; t < prefs.getTinaRenderThreads(); t++) {
         renderFlames.add(createRenderPackets(flame, pRenderInfo.getFrame()));
@@ -687,18 +684,16 @@ public class FlameRenderer {
 
   private List<RenderPacket> createRenderPackets(Flame pFlame, int pFrame) {
     List<RenderPacket> res = new ArrayList<RenderPacket>();
+    {
+      double time = pFrame >= 0 ? pFrame : 0;
+      Flame newFlame = AnimationService.evalMotionCurves(pFlame.makeCopy(), time);
 
-    Flame initialFlame = pFlame.makeCopy();
-    if (pFrame >= 0) {
-      initialFlame = AnimationService.evalMotionCurves(initialFlame, pFrame);
+      for (Layer layer : newFlame.getLayers()) {
+        layer.refreshModWeightTables(flameTransformationContext);
+      }
+      FlameRendererView view = createView(newFlame);
+      res.add(new RenderPacket(newFlame, view));
     }
-
-    for (Layer layer : initialFlame.getLayers()) {
-      layer.refreshModWeightTables(flameTransformationContext);
-    }
-    FlameRendererView view = createView(initialFlame);
-    res.add(new RenderPacket(initialFlame, view));
-
     if (pFlame.getMotionBlurLength() > 0) {
       double time = pFrame >= 0 ? pFrame : 0;
       for (int p = 1; p < pFlame.getMotionBlurLength(); p++) {
@@ -706,12 +701,13 @@ public class FlameRenderer {
         Flame newFlame = AnimationService.evalMotionCurves(pFlame.makeCopy(), time);
         for (Layer layer : newFlame.getLayers()) {
           layer.refreshModWeightTables(flameTransformationContext);
+
+          double brightnessScl = (1.0 - p * pFlame.getMotionBlurDecay() * 0.01);
+          if (brightnessScl < 0.01) {
+            brightnessScl = 0.01;
+          }
+          layer.setWeight(brightnessScl * layer.getWeight());
         }
-        double brightnessScl = (1.0 - p * pFlame.getMotionBlurDecay());
-        if (brightnessScl < 0.1) {
-          brightnessScl = 0.1;
-        }
-        newFlame.setBrightness(brightnessScl * newFlame.getBrightness());
         FlameRendererView newView = createView(newFlame);
         res.add(new RenderPacket(newFlame, newView));
       }
@@ -726,9 +722,6 @@ public class FlameRenderer {
   public List<AbstractRenderThread> startRenderFlame(RenderInfo pRenderInfo) {
     renderInfo = pRenderInfo;
     initRaster(pRenderInfo.getImageWidth(), pRenderInfo.getImageHeight());
-    // TODO CHECK
-    //    init3D();
-    //    initView();
     List<List<RenderPacket>> renderFlames = new ArrayList<List<RenderPacket>>();
     for (int t = 0; t < prefs.getTinaRenderThreads(); t++) {
       renderFlames.add(createRenderPackets(flame, pRenderInfo.getFrame()));
@@ -747,19 +740,13 @@ public class FlameRenderer {
         flame.assign(rdFlame);
         // restore renderInfo
         renderInfo = (RenderInfo) in.readObject();
-
-        //        renderInfo.setRenderHDR(true);
         // restore thread state
         withAlpha = header.withTransparency;
         RenderThreadPersistentState state[] = new RenderThreadPersistentState[header.numThreads];
         for (int i = 0; i < header.numThreads; i++) {
           state[i] = (RenderThreadPersistentState) in.readObject();
         }
-
         initRaster(renderInfo.getImageWidth(), renderInfo.getImageHeight());
-        // TODO CHECK
-        //        init3D();
-        //        initView();
         List<List<RenderPacket>> renderFlames = new ArrayList<List<RenderPacket>>();
         for (int t = 0; t < header.numThreads; t++) {
           renderFlames.add(createRenderPackets(flame, renderInfo.getFrame()));

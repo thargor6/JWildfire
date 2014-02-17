@@ -133,4 +133,7 @@ public class MotionCurve implements Serializable, Assignable<MotionCurve> {
     return true;
   }
 
+  public boolean isEmpty() {
+    return x.size() == 0;
+  }
 }

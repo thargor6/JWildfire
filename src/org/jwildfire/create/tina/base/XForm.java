@@ -41,28 +41,40 @@ public final class XForm implements Assignable<XForm>, Serializable {
   private double colorSymmetry;
   @AnimAware
   private double coeff00;
+  private final MotionCurve coeff00Curve = new MotionCurve();
   @AnimAware
   private double coeff01;
+  private final MotionCurve coeff01Curve = new MotionCurve();
   @AnimAware
   private double coeff10;
+  private final MotionCurve coeff10Curve = new MotionCurve();
   @AnimAware
   private double coeff11;
+  private final MotionCurve coeff11Curve = new MotionCurve();
   @AnimAware
   private double coeff20;
+  private final MotionCurve coeff20Curve = new MotionCurve();
   @AnimAware
   private double coeff21;
+  private final MotionCurve coeff21Curve = new MotionCurve();
   @AnimAware
   private double postCoeff00;
+  private final MotionCurve postCoeff00Curve = new MotionCurve();
   @AnimAware
   private double postCoeff01;
+  private final MotionCurve postCoeff01Curve = new MotionCurve();
   @AnimAware
   private double postCoeff10;
+  private final MotionCurve postCoeff10Curve = new MotionCurve();
   @AnimAware
   private double postCoeff11;
+  private final MotionCurve postCoeff11Curve = new MotionCurve();
   @AnimAware
   private double postCoeff20;
+  private final MotionCurve postCoeff20Curve = new MotionCurve();
   @AnimAware
   private double postCoeff21;
+  private final MotionCurve postCoeff21Curve = new MotionCurve();
   private boolean hasPostCoeffs;
   private boolean hasCoeffs;
   @AnimAware
@@ -380,17 +392,29 @@ public final class XForm implements Assignable<XForm>, Serializable {
     color = pXForm.color;
     colorSymmetry = pXForm.colorSymmetry;
     coeff00 = pXForm.coeff00;
+    coeff00Curve.assign(pXForm.coeff00Curve);
     coeff01 = pXForm.coeff01;
+    coeff01Curve.assign(pXForm.coeff01Curve);
     coeff10 = pXForm.coeff10;
+    coeff10Curve.assign(pXForm.coeff10Curve);
     coeff11 = pXForm.coeff11;
+    coeff11Curve.assign(pXForm.coeff11Curve);
     coeff20 = pXForm.coeff20;
+    coeff20Curve.assign(pXForm.coeff20Curve);
     coeff21 = pXForm.coeff21;
+    coeff21Curve.assign(pXForm.coeff21Curve);
     postCoeff00 = pXForm.postCoeff00;
+    postCoeff00Curve.assign(pXForm.postCoeff00Curve);
     postCoeff01 = pXForm.postCoeff01;
+    postCoeff01Curve.assign(pXForm.postCoeff01Curve);
     postCoeff10 = pXForm.postCoeff10;
+    postCoeff10Curve.assign(pXForm.postCoeff10Curve);
     postCoeff11 = pXForm.postCoeff11;
+    postCoeff11Curve.assign(pXForm.postCoeff11Curve);
     postCoeff20 = pXForm.postCoeff20;
+    postCoeff20Curve.assign(pXForm.postCoeff20Curve);
     postCoeff21 = pXForm.postCoeff21;
+    postCoeff21Curve.assign(pXForm.postCoeff21Curve);
     hasPostCoeffs = pXForm.hasPostCoeffs;
     hasCoeffs = pXForm.hasCoeffs;
     variations.clear();
@@ -469,13 +493,20 @@ public final class XForm implements Assignable<XForm>, Serializable {
   @Override
   public boolean isEqual(XForm pSrc) {
     if ((fabs(weight - pSrc.weight) > EPSILON) || (fabs(color - pSrc.color) > EPSILON) ||
-        (fabs(colorSymmetry - pSrc.colorSymmetry) > EPSILON) || (fabs(coeff00 - pSrc.coeff00) > EPSILON) ||
-        (fabs(coeff01 - pSrc.coeff01) > EPSILON) || (fabs(coeff10 - pSrc.coeff10) > EPSILON) ||
-        (fabs(coeff11 - pSrc.coeff11) > EPSILON) || (fabs(coeff20 - pSrc.coeff20) > EPSILON) ||
-        (fabs(coeff21 - pSrc.coeff21) > EPSILON) || (fabs(postCoeff00 - pSrc.postCoeff00) > EPSILON) ||
-        (fabs(postCoeff01 - pSrc.postCoeff01) > EPSILON) || (fabs(postCoeff10 - pSrc.postCoeff10) > EPSILON) ||
-        (fabs(postCoeff11 - pSrc.postCoeff11) > EPSILON) || (fabs(postCoeff20 - pSrc.postCoeff20) > EPSILON) ||
-        (fabs(postCoeff21 - pSrc.postCoeff21) > EPSILON) || (fabs(opacity - pSrc.opacity) > EPSILON) ||
+        (fabs(colorSymmetry - pSrc.colorSymmetry) > EPSILON) ||
+        (fabs(coeff00 - pSrc.coeff00) > EPSILON) || !coeff00Curve.isEqual(pSrc.coeff00Curve) ||
+        (fabs(coeff01 - pSrc.coeff01) > EPSILON) || !coeff01Curve.isEqual(pSrc.coeff01Curve) ||
+        (fabs(coeff10 - pSrc.coeff10) > EPSILON) || !coeff10Curve.isEqual(pSrc.coeff10Curve) ||
+        (fabs(coeff11 - pSrc.coeff11) > EPSILON) || !coeff11Curve.isEqual(pSrc.coeff11Curve) ||
+        (fabs(coeff20 - pSrc.coeff20) > EPSILON) || !coeff20Curve.isEqual(pSrc.coeff20Curve) ||
+        (fabs(coeff21 - pSrc.coeff21) > EPSILON) || !coeff21Curve.isEqual(pSrc.coeff21Curve) ||
+        (fabs(postCoeff00 - pSrc.postCoeff00) > EPSILON) || !postCoeff00Curve.isEqual(pSrc.postCoeff00Curve) ||
+        (fabs(postCoeff01 - pSrc.postCoeff01) > EPSILON) || !postCoeff01Curve.isEqual(pSrc.postCoeff01Curve) ||
+        (fabs(postCoeff10 - pSrc.postCoeff10) > EPSILON) || !postCoeff10Curve.isEqual(pSrc.postCoeff10Curve) ||
+        (fabs(postCoeff11 - pSrc.postCoeff11) > EPSILON) || !postCoeff11Curve.isEqual(pSrc.postCoeff11Curve) ||
+        (fabs(postCoeff20 - pSrc.postCoeff20) > EPSILON) || !postCoeff20Curve.isEqual(pSrc.postCoeff20Curve) ||
+        (fabs(postCoeff21 - pSrc.postCoeff21) > EPSILON) || !postCoeff21Curve.isEqual(pSrc.postCoeff21Curve) ||
+        (fabs(opacity - pSrc.opacity) > EPSILON) ||
         ((drawMode != null && pSrc.drawMode == null) || (drawMode == null && pSrc.drawMode != null) ||
         (drawMode != null && pSrc.drawMode != null && !drawMode.equals(pSrc.drawMode))) ||
         !name.equals(pSrc.name) ||

@@ -162,6 +162,7 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
   private AnimationController animationController;
 
   private FlameControlsDelegate flameControls;
+  private XFormControlsDelegate xFormControls;
 
   private final JInternalFrame tinaFrame;
   private final String tinaFrameTitle;
@@ -541,6 +542,7 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
     data.backgroundColorIndicatorBtn = parameterObject.backgroundColorIndicatorBtn;
     // end create
     flameControls = new FlameControlsDelegate(this, data, rootTabbedPane);
+    xFormControls = new XFormControlsDelegate(this, data, rootTabbedPane);
 
     registerMotionPropertyControls();
 
@@ -555,9 +557,6 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
     refreshRenderBatchJobsTable();
 
     enableControls();
-    flameControls.enableShadingUI();
-    flameControls.enableDOFUI();
-    flameControls.enableDEFilterUI();
 
     enableXFormControls(null);
     enableLayerControls();
@@ -1176,9 +1175,6 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
 
       enableControls();
       flameControls.refreshShadingUI();
-      flameControls.enableShadingUI();
-      flameControls.enableDOFUI();
-      flameControls.enableDEFilterUI();
       enableLayerControls();
       refreshPaletteUI(getCurrLayer().getPalette());
     }
@@ -3404,7 +3400,6 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
     try {
       getCurrFlame().getShadingInfo().setShading((Shading) data.shadingCmb.getSelectedItem());
       flameControls.refreshShadingUI();
-      flameControls.enableShadingUI();
       refreshFlameImage(false);
     }
     finally {
@@ -5002,11 +4997,11 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
     // TODO
   }
 
-  public void editFlameMotionCurve(ActionEvent e) {
-    flameControls.editFlameMotionCurve(e);
-  }
-
   public FlameControlsDelegate getFlameControls() {
     return flameControls;
+  }
+
+  public XFormControlsDelegate getXFormControls() {
+    return xFormControls;
   }
 }

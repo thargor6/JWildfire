@@ -193,7 +193,11 @@ public class AbstractFlameWriter {
       attrList.add(xb.createAttr("antialias_amount", pFlame.getAntialiasAmount()));
       attrList.add(xb.createAttr("antialias_radius", pFlame.getAntialiasRadius()));
     }
-
+    if (Tools.V2_FEATURE_ENABLE) {
+      attrList.add(xb.createAttr(AbstractFlameReader.ATTR_MOTIONBLUR_LENGTH, pFlame.getMotionBlurLength()));
+      attrList.add(xb.createAttr(AbstractFlameReader.ATTR_MOTIONBLUR_TIMESTEP, pFlame.getMotionBlurTimeStep()));
+      attrList.add(xb.createAttr(AbstractFlameReader.ATTR_MOTIONBLUR_DECAY, pFlame.getMotionBlurDecay()));
+    }
     return attrList;
   }
 

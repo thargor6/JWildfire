@@ -85,6 +85,9 @@ public class AbstractFlameReader {
   public static final String ATTR_SHADING_DISTANCE_COLOR_STYLE = "shading_distanceColorStyle";
   public static final String ATTR_SHADING_DISTANCE_COLOR_COORDINATE = "shading_distanceColorCoordinate";
   public static final String ATTR_SHADING_DISTANCE_COLOR_SHIFT = "shading_distanceColorShift";
+  public static final String ATTR_MOTIONBLUR_LENGTH = "motion_blur_length";
+  public static final String ATTR_MOTIONBLUR_TIMESTEP = "motion_blur_timestep";
+  public static final String ATTR_MOTIONBLUR_DECAY = "motion_blur_decay";
 
   protected AbstractFlameReader(Prefs pPrefs) {
     prefs = pPrefs;
@@ -299,6 +302,18 @@ public class AbstractFlameReader {
     }
     if ((hs = atts.get(ATTR_ANTIALIAS_RADIUS)) != null) {
       pFlame.setAntialiasRadius(Double.parseDouble(hs));
+    }
+
+    if (Tools.V2_FEATURE_ENABLE) {
+      if ((hs = atts.get(ATTR_MOTIONBLUR_LENGTH)) != null) {
+        pFlame.setMotionBlurLength(Integer.parseInt(hs));
+      }
+      if ((hs = atts.get(ATTR_MOTIONBLUR_TIMESTEP)) != null) {
+        pFlame.setMotionBlurTimeStep(Double.parseDouble(hs));
+      }
+      if ((hs = atts.get(ATTR_MOTIONBLUR_DECAY)) != null) {
+        pFlame.setMotionBlurDecay(Double.parseDouble(hs));
+      }
     }
 
     if ((hs = atts.get(ATTR_SHADING_DISTANCE_COLOR_RADIUS)) != null) {
