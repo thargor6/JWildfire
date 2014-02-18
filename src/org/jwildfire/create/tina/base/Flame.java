@@ -118,10 +118,9 @@ public class Flame implements Assignable<Flame>, Serializable {
   private double antialiasAmount = 0.75;
   private double antialiasRadius = 0.36;
 
-  // TODO load/save
   private int motionBlurLength = 0;
   private double motionBlurTimeStep = 0.25;
-  private double motionBlurDecay = 0.1;
+  private double motionBlurDecay = 0.03;
 
   public Flame() {
     layers.clear();

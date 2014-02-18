@@ -16,13 +16,17 @@
 */
 package org.jwildfire.create.tina;
 
+import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
+import javax.swing.JToggleButton;
 
 import org.jwildfire.base.Prefs;
+import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.swing.JWFNumberField;
 import org.jwildfire.create.tina.swing.TinaController;
 import org.jwildfire.swing.ErrorHandler;
@@ -32,13 +36,18 @@ public class AnimationController {
   private final ErrorHandler errorHandler;
   private final Prefs prefs;
   private final JPanel rootPanel;
+  private final JToggleButton motionCurveEditModeButton;
   private final JWFNumberField keyframesFrameField;
   private final JSlider keyframesFrameSlider;
   private final JWFNumberField keyframesFrameCountField;
   private final List<JWFNumberField> motionPropertyControls = new ArrayList<JWFNumberField>();
+  private final JPanel frameSliderPanel;
+  private final JLabel keyframesFrameLbl;
+  private final JLabel keyframesFrameCountLbl;
 
   public AnimationController(TinaController pTinaController, ErrorHandler pErrorHandler, Prefs pPrefs, JPanel pRootPanel,
-      JWFNumberField pKeyframesFrameField, JSlider pKeyframesFrameSlider, JWFNumberField pKeyframesFrameCountField) {
+      JWFNumberField pKeyframesFrameField, JSlider pKeyframesFrameSlider, JWFNumberField pKeyframesFrameCountField,
+      JPanel pFrameSliderPanel, JLabel pKeyframesFrameLbl, JLabel pKeyframesFrameCountLbl, JToggleButton pMotionCurveEditModeButton) {
     tinaController = pTinaController;
     errorHandler = pErrorHandler;
     prefs = pPrefs;
@@ -46,6 +55,11 @@ public class AnimationController {
     keyframesFrameField = pKeyframesFrameField;
     keyframesFrameSlider = pKeyframesFrameSlider;
     keyframesFrameCountField = pKeyframesFrameCountField;
+    frameSliderPanel = pFrameSliderPanel;
+    keyframesFrameLbl = pKeyframesFrameLbl;
+    keyframesFrameCountLbl = pKeyframesFrameCountLbl;
+    motionCurveEditModeButton = pMotionCurveEditModeButton;
+    motionCurveEditModeButton.setVisible(Tools.V2_FEATURE_ENABLE);
     enableControls();
   }
 
@@ -55,7 +69,16 @@ public class AnimationController {
   }
 
   public void enableControls() {
-    // TODO
+    boolean enabled = motionCurveEditModeButton.isSelected();
+    for (JWFNumberField component : motionPropertyControls) {
+      component.setWithMotionCurve(enabled);
+    }
+    frameSliderPanel.setPreferredSize(new Dimension(0, (enabled ? 28 : 4)));
+    keyframesFrameField.setVisible(enabled);
+    keyframesFrameSlider.setVisible(enabled);
+    keyframesFrameCountField.setVisible(enabled);
+    keyframesFrameLbl.setVisible(enabled);
+    keyframesFrameCountLbl.setVisible(enabled);
   }
 
   private void adjustFrameControls(int frame) {
@@ -123,10 +146,8 @@ public class AnimationController {
     }
   }
 
-  public void toggleMotionCurveEditing(boolean pEnabled) {
-    for (JWFNumberField component : motionPropertyControls) {
-      component.setWithMotionCurve(pEnabled);
-    }
+  public void toggleMotionCurveEditing() {
+    enableControls();
   }
 
 }

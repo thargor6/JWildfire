@@ -4068,7 +4068,8 @@ public class TinaInternalFrame extends JInternalFrame {
         getLayerWeightEd(), getLayerAddBtn(), getLayerDuplicateBtn(), getLayerDeleteBtn(),
         getLayersTable(), getLayerVisibleBtn(), getLayerAppendBtn(), getLayerHideOthersBtn(), getLayerShowAllBtn(), getLayerPreviewBtn(),
         getKeyframesFrameField(), getKeyframesFrameSlider(), getKeyframesFrameCountField(), getMotionBlurLengthField(), getMotionBlurLengthSlider(),
-        getMotionBlurTimeStepField(), getMotionBlurTimeStepSlider(), getMotionBlurDecayField(), getMotionBlurDecaySlider());
+        getMotionBlurTimeStepField(), getMotionBlurTimeStepSlider(), getMotionBlurDecayField(), getMotionBlurDecaySlider(),
+        getMotionCurveEditModeButton(), getFrameSliderPanel(), getKeyframesFrameLbl(), getKeyframesFrameCountLbl());
 
     tinaController = new TinaController(params);
 
@@ -6062,7 +6063,7 @@ public class TinaInternalFrame extends JInternalFrame {
       centerWestPanel.add(motionCurveEditModeButton);
       motionCurveEditModeButton.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
-          tinaController.getAnimationController().toggleMotionCurveEditing(motionCurveEditModeButton.isSelected());
+          tinaController.getAnimationController().toggleMotionCurveEditing();
         }
       });
       motionCurveEditModeButton.setToolTipText("Enable new controls to edit flame-properties as motion-curves rather than simple values");
@@ -9032,6 +9033,8 @@ public class TinaInternalFrame extends JInternalFrame {
   private JSlider motionBlurTimeStepSlider;
   private JWFNumberField motionBlurDecayField;
   private JSlider motionBlurDecaySlider;
+  private JLabel keyframesFrameLbl;
+  private JLabel keyframesFrameCountLbl;
 
   /**
    * This method initializes renderBatchJobsScrollPane	
@@ -11327,7 +11330,7 @@ public class TinaInternalFrame extends JInternalFrame {
       xFormAntialiasAmountREd.setHasMinValue(true);
       xFormAntialiasAmountREd.setHasMaxValue(true);
       xFormAntialiasAmountREd.setFont(new Font("Dialog", Font.PLAIN, 10));
-      xFormAntialiasAmountREd.setBounds(70, 6, 55, 22);
+      xFormAntialiasAmountREd.setBounds(100, 6, 100, 22);
     }
     return xFormAntialiasAmountREd;
   }
@@ -11340,7 +11343,7 @@ public class TinaInternalFrame extends JInternalFrame {
       xFormAntialiasAmountLbl.setPreferredSize(new Dimension(64, 22));
       xFormAntialiasAmountLbl.setLocation(new Point(4, 4));
       xFormAntialiasAmountLbl.setFont(new Font("Dialog", Font.BOLD, 10));
-      xFormAntialiasAmountLbl.setBounds(6, 6, 64, 22);
+      xFormAntialiasAmountLbl.setBounds(6, 6, 94, 22);
     }
     return xFormAntialiasAmountLbl;
   }
@@ -11362,13 +11365,13 @@ public class TinaInternalFrame extends JInternalFrame {
         }
       });
       xFormAntialiasAmountSlider.setValue(0);
-      xFormAntialiasAmountSlider.setSize(new Dimension(172, 22));
-      xFormAntialiasAmountSlider.setPreferredSize(new Dimension(172, 22));
+      xFormAntialiasAmountSlider.setSize(new Dimension(220, 19));
+      xFormAntialiasAmountSlider.setPreferredSize(new Dimension(220, 19));
       xFormAntialiasAmountSlider.setMinimum(0);
       xFormAntialiasAmountSlider.setMaximum(100);
       xFormAntialiasAmountSlider.setLocation(new Point(123, 4));
       xFormAntialiasAmountSlider.setFont(new Font("Dialog", Font.BOLD, 10));
-      xFormAntialiasAmountSlider.setBounds(125, 6, 172, 22);
+      xFormAntialiasAmountSlider.setBounds(202, 6, 220, 22);
     }
     return xFormAntialiasAmountSlider;
   }
@@ -11397,7 +11400,7 @@ public class TinaInternalFrame extends JInternalFrame {
       xFormAntialiasRadiusREd.setHasMinValue(true);
       xFormAntialiasRadiusREd.setHasMaxValue(true);
       xFormAntialiasRadiusREd.setFont(new Font("Dialog", Font.PLAIN, 10));
-      xFormAntialiasRadiusREd.setBounds(70, 28, 55, 22);
+      xFormAntialiasRadiusREd.setBounds(100, 28, 100, 22);
     }
     return xFormAntialiasRadiusREd;
   }
@@ -11410,7 +11413,7 @@ public class TinaInternalFrame extends JInternalFrame {
       xFormAntialiasRadiusLbl.setPreferredSize(new Dimension(64, 22));
       xFormAntialiasRadiusLbl.setLocation(new Point(4, 4));
       xFormAntialiasRadiusLbl.setFont(new Font("Dialog", Font.BOLD, 10));
-      xFormAntialiasRadiusLbl.setBounds(6, 28, 64, 22);
+      xFormAntialiasRadiusLbl.setBounds(6, 28, 94, 22);
     }
     return xFormAntialiasRadiusLbl;
   }
@@ -11438,7 +11441,7 @@ public class TinaInternalFrame extends JInternalFrame {
       xFormAntialiasRadiusSlider.setMaximum(200);
       xFormAntialiasRadiusSlider.setLocation(new Point(123, 4));
       xFormAntialiasRadiusSlider.setFont(new Font("Dialog", Font.BOLD, 10));
-      xFormAntialiasRadiusSlider.setBounds(125, 28, 172, 22);
+      xFormAntialiasRadiusSlider.setBounds(202, 28, 220, 22);
     }
     return xFormAntialiasRadiusSlider;
   }
@@ -15343,13 +15346,13 @@ public class TinaInternalFrame extends JInternalFrame {
       panel_79.setPreferredSize(new Dimension(128, 10));
       panel_79.setLayout(null);
 
-      JLabel label = new JLabel();
-      label.setBounds(6, 2, 39, 22);
-      panel_79.add(label);
-      label.setText("Frame");
-      label.setPreferredSize(new Dimension(94, 22));
-      label.setHorizontalAlignment(SwingConstants.RIGHT);
-      label.setFont(new Font("Dialog", Font.BOLD, 10));
+      keyframesFrameLbl = new JLabel();
+      keyframesFrameLbl.setBounds(6, 2, 39, 22);
+      panel_79.add(keyframesFrameLbl);
+      keyframesFrameLbl.setText("Frame");
+      keyframesFrameLbl.setPreferredSize(new Dimension(94, 22));
+      keyframesFrameLbl.setHorizontalAlignment(SwingConstants.RIGHT);
+      keyframesFrameLbl.setFont(new Font("Dialog", Font.BOLD, 10));
 
       keyframesFrameField = new JWFNumberField();
       keyframesFrameField.setText("1");
@@ -15407,13 +15410,13 @@ public class TinaInternalFrame extends JInternalFrame {
       keyframesFrameCountField.setBounds(92, 2, 70, 24);
       panel_80.add(keyframesFrameCountField);
 
-      JLabel lblFrameCount = new JLabel();
-      lblFrameCount.setText("Frame count");
-      lblFrameCount.setPreferredSize(new Dimension(94, 22));
-      lblFrameCount.setHorizontalAlignment(SwingConstants.RIGHT);
-      lblFrameCount.setFont(new Font("Dialog", Font.BOLD, 10));
-      lblFrameCount.setBounds(6, 2, 82, 22);
-      panel_80.add(lblFrameCount);
+      keyframesFrameCountLbl = new JLabel();
+      keyframesFrameCountLbl.setText("Frame count");
+      keyframesFrameCountLbl.setPreferredSize(new Dimension(94, 22));
+      keyframesFrameCountLbl.setHorizontalAlignment(SwingConstants.RIGHT);
+      keyframesFrameCountLbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      keyframesFrameCountLbl.setBounds(6, 2, 82, 22);
+      panel_80.add(keyframesFrameCountLbl);
     }
     return panel_80;
   }
@@ -15469,6 +15472,14 @@ public class TinaInternalFrame extends JInternalFrame {
 
   public JSlider getMotionBlurDecaySlider() {
     return motionBlurDecaySlider;
+  }
+
+  public JLabel getKeyframesFrameLbl() {
+    return keyframesFrameLbl;
+  }
+
+  public JLabel getKeyframesFrameCountLbl() {
+    return keyframesFrameCountLbl;
   }
 } //  @jve:decl-index=0:visual-constraint="10,10"
 
