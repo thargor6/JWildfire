@@ -74,7 +74,7 @@ public class FlamePanel extends ImagePanel {
   private int xBeginDrag, yBeginDrag;
   private int xMouseClickPosition, yMouseClickPosition;
   private boolean editPostTransform = false;
-  private double triangleZoom = 1.0;
+  private double triangleZoom = 1.42;
 
   private int renderWidth;
   private int renderHeight;
