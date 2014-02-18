@@ -1737,30 +1737,35 @@ public class TinaInternalFrame extends JInternalFrame {
   private JPanel getTinaColoringPanel() {
     if (tinaColoringPanel == null) {
       tinaGammaThresholdLbl = new JLabel();
+      tinaGammaThresholdLbl.setName("tinaGammaThresholdLbl");
       tinaGammaThresholdLbl.setText("Gamma threshold");
       tinaGammaThresholdLbl.setLocation(new Point(4, 76));
       tinaGammaThresholdLbl.setSize(new Dimension(94, 22));
       tinaGammaThresholdLbl.setFont(new Font("Dialog", Font.BOLD, 10));
       tinaGammaThresholdLbl.setPreferredSize(new Dimension(94, 22));
       tinaVibrancyLbl = new JLabel();
+      tinaVibrancyLbl.setName("tinaVibrancyLbl");
       tinaVibrancyLbl.setText("Vibrancy");
       tinaVibrancyLbl.setLocation(new Point(4, 100));
       tinaVibrancyLbl.setSize(new Dimension(94, 22));
       tinaVibrancyLbl.setFont(new Font("Dialog", Font.BOLD, 10));
       tinaVibrancyLbl.setPreferredSize(new Dimension(94, 22));
       tinaGammaLbl = new JLabel();
+      tinaGammaLbl.setName("tinaGammaLbl");
       tinaGammaLbl.setText("Gamma");
       tinaGammaLbl.setLocation(new Point(4, 52));
       tinaGammaLbl.setSize(new Dimension(94, 22));
       tinaGammaLbl.setFont(new Font("Dialog", Font.BOLD, 10));
       tinaGammaLbl.setPreferredSize(new Dimension(94, 22));
       tinaContrastLbl = new JLabel();
+      tinaContrastLbl.setName("tinaContrastLbl");
       tinaContrastLbl.setText("Contrast");
       tinaContrastLbl.setLocation(new Point(4, 28));
       tinaContrastLbl.setSize(new Dimension(94, 22));
       tinaContrastLbl.setFont(new Font("Dialog", Font.BOLD, 10));
       tinaContrastLbl.setPreferredSize(new Dimension(94, 22));
       tinaBrightnessLbl = new JLabel();
+      tinaBrightnessLbl.setName("tinaBrightnessLbl");
       tinaBrightnessLbl.setText("Brightness");
       tinaBrightnessLbl.setLocation(new Point(4, 4));
       tinaBrightnessLbl.setSize(new Dimension(94, 22));
@@ -2370,6 +2375,8 @@ public class TinaInternalFrame extends JInternalFrame {
   private JWFNumberField getTinaBrightnessREd() {
     if (tinaBrightnessREd == null) {
       tinaBrightnessREd = new JWFNumberField();
+      tinaBrightnessREd.setLinkedMotionControlName("tinaBrightnessSlider");
+      tinaBrightnessREd.setLinkedLabelControlName("tinaBrightnessLbl");
       tinaBrightnessREd.setValueStep(0.05);
       tinaBrightnessREd.setMaxValue(25.0);
       tinaBrightnessREd.setHasMinValue(true);
@@ -2400,6 +2407,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JSlider getTinaBrightnessSlider() {
     if (tinaBrightnessSlider == null) {
       tinaBrightnessSlider = new JSlider();
+      tinaBrightnessSlider.setName("tinaBrightnessSlider");
       tinaBrightnessSlider.addMouseListener(new MouseAdapter() {
         @Override
         public void mousePressed(MouseEvent e) {
@@ -2497,6 +2505,8 @@ public class TinaInternalFrame extends JInternalFrame {
   private JWFNumberField getTinaContrastREd() {
     if (tinaContrastREd == null) {
       tinaContrastREd = new JWFNumberField();
+      tinaContrastREd.setLinkedMotionControlName("tinaContrastSlider");
+      tinaContrastREd.setLinkedLabelControlName("tinaContrastLbl");
       tinaContrastREd.setValueStep(0.05);
       tinaContrastREd.setHasMinValue(true);
       tinaContrastREd.setMaxValue(5.0);
@@ -2529,6 +2539,8 @@ public class TinaInternalFrame extends JInternalFrame {
   private JWFNumberField getTinaGammaREd() {
     if (tinaGammaREd == null) {
       tinaGammaREd = new JWFNumberField();
+      tinaGammaREd.setLinkedMotionControlName("tinaGammaSlider");
+      tinaGammaREd.setLinkedLabelControlName("tinaGammaLbl");
       tinaGammaREd.setHasMinValue(true);
       tinaGammaREd.setMaxValue(10.0);
       tinaGammaREd.setValueStep(0.05);
@@ -2561,6 +2573,8 @@ public class TinaInternalFrame extends JInternalFrame {
   private JWFNumberField getTinaVibrancyREd() {
     if (tinaVibrancyREd == null) {
       tinaVibrancyREd = new JWFNumberField();
+      tinaVibrancyREd.setLinkedMotionControlName("tinaVibrancySlider");
+      tinaVibrancyREd.setLinkedLabelControlName("tinaVibrancyLbl");
       tinaVibrancyREd.setValueStep(0.05);
       tinaVibrancyREd.setHasMinValue(true);
       tinaVibrancyREd.setHasMaxValue(true);
@@ -2594,6 +2608,8 @@ public class TinaInternalFrame extends JInternalFrame {
   private JWFNumberField getTinaGammaThresholdREd() {
     if (tinaGammaThresholdREd == null) {
       tinaGammaThresholdREd = new JWFNumberField();
+      tinaGammaThresholdREd.setLinkedMotionControlName("tinaGammaThresholdSlider");
+      tinaGammaThresholdREd.setLinkedLabelControlName("tinaGammaThresholdLbl");
       tinaGammaThresholdREd.setValueStep(0.005);
       tinaGammaThresholdREd.setMaxValue(1.0);
       tinaGammaThresholdREd.setHasMinValue(true);
@@ -2627,6 +2643,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JSlider getTinaContrastSlider() {
     if (tinaContrastSlider == null) {
       tinaContrastSlider = new JSlider();
+      tinaContrastSlider.setName("tinaContrastSlider");
       tinaContrastSlider.addMouseListener(new MouseAdapter() {
         @Override
         public void mousePressed(MouseEvent e) {
@@ -2657,6 +2674,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JSlider getTinaGammaSlider() {
     if (tinaGammaSlider == null) {
       tinaGammaSlider = new JSlider();
+      tinaGammaSlider.setName("tinaGammaSlider");
       tinaGammaSlider.addMouseListener(new MouseAdapter() {
         @Override
         public void mousePressed(MouseEvent e) {
@@ -2687,6 +2705,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JSlider getTinaVibrancySlider() {
     if (tinaVibrancySlider == null) {
       tinaVibrancySlider = new JSlider();
+      tinaVibrancySlider.setName("tinaVibrancySlider");
       tinaVibrancySlider.addMouseListener(new MouseAdapter() {
         @Override
         public void mousePressed(MouseEvent e) {
@@ -2717,6 +2736,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JSlider getTinaGammaThresholdSlider() {
     if (tinaGammaThresholdSlider == null) {
       tinaGammaThresholdSlider = new JSlider();
+      tinaGammaThresholdSlider.setName("tinaGammaThresholdSlider");
       tinaGammaThresholdSlider.addMouseListener(new MouseAdapter() {
         @Override
         public void mousePressed(MouseEvent e) {
@@ -2929,7 +2949,7 @@ public class TinaInternalFrame extends JInternalFrame {
       affineC21Lbl.setName("affineC21Lbl");
       affineC21Lbl.setHorizontalAlignment(SwingConstants.RIGHT);
       affineC21Lbl.setText("O2");
-      affineC21Lbl.setLocation(new Point(212, 30));
+      affineC21Lbl.setLocation(new Point(216, 30));
       affineC21Lbl.setSize(new Dimension(20, 22));
       affineC21Lbl.setFont(new Font("Dialog", Font.BOLD, 10));
       affineC21Lbl.setPreferredSize(new Dimension(24, 22));
@@ -2937,7 +2957,7 @@ public class TinaInternalFrame extends JInternalFrame {
       affineC20Lbl.setName("affineC20Lbl");
       affineC20Lbl.setHorizontalAlignment(SwingConstants.RIGHT);
       affineC20Lbl.setText("O1");
-      affineC20Lbl.setLocation(new Point(212, 6));
+      affineC20Lbl.setLocation(new Point(216, 6));
       affineC20Lbl.setSize(new Dimension(20, 22));
       affineC20Lbl.setFont(new Font("Dialog", Font.BOLD, 10));
       affineC20Lbl.setPreferredSize(new Dimension(24, 22));
@@ -2945,7 +2965,7 @@ public class TinaInternalFrame extends JInternalFrame {
       affineC11Lbl.setName("affineC11Lbl");
       affineC11Lbl.setHorizontalAlignment(SwingConstants.RIGHT);
       affineC11Lbl.setText("Y2");
-      affineC11Lbl.setLocation(new Point(105, 30));
+      affineC11Lbl.setLocation(new Point(108, 30));
       affineC11Lbl.setSize(new Dimension(20, 22));
       affineC11Lbl.setFont(new Font("Dialog", Font.BOLD, 10));
       affineC11Lbl.setPreferredSize(new Dimension(24, 22));
@@ -2953,7 +2973,7 @@ public class TinaInternalFrame extends JInternalFrame {
       affineC10Lbl.setName("affineC10Lbl");
       affineC10Lbl.setHorizontalAlignment(SwingConstants.RIGHT);
       affineC10Lbl.setText("Y1");
-      affineC10Lbl.setLocation(new Point(104, 6));
+      affineC10Lbl.setLocation(new Point(108, 6));
       affineC10Lbl.setSize(new Dimension(20, 22));
       affineC10Lbl.setFont(new Font("Dialog", Font.BOLD, 10));
       affineC10Lbl.setPreferredSize(new Dimension(24, 22));
@@ -2962,14 +2982,14 @@ public class TinaInternalFrame extends JInternalFrame {
       affineC01Lbl.setHorizontalAlignment(SwingConstants.RIGHT);
       affineC01Lbl.setText("X2");
       affineC01Lbl.setFont(new Font("Dialog", Font.BOLD, 10));
-      affineC01Lbl.setLocation(new Point(6, 30));
+      affineC01Lbl.setLocation(new Point(0, 30));
       affineC01Lbl.setSize(new Dimension(20, 22));
       affineC01Lbl.setPreferredSize(new Dimension(24, 22));
       affineC00Lbl = new JLabel();
       affineC00Lbl.setName("affineC00Lbl");
       affineC00Lbl.setHorizontalAlignment(SwingConstants.RIGHT);
       affineC00Lbl.setText("X1");
-      affineC00Lbl.setLocation(new Point(6, 6));
+      affineC00Lbl.setLocation(new Point(0, 6));
       affineC00Lbl.setSize(new Dimension(20, 22));
       affineC00Lbl.setFont(new Font("Dialog", Font.BOLD, 10));
       affineC00Lbl.setPreferredSize(new Dimension(24, 22));
@@ -3018,7 +3038,7 @@ public class TinaInternalFrame extends JInternalFrame {
       affinePreserveZButton.setPreferredSize(new Dimension(136, 24));
       affinePreserveZButton.setLocation(new Point(4, 181));
       affinePreserveZButton.setFont(new Font("Dialog", Font.BOLD, 10));
-      affinePreserveZButton.setBounds(228, 163, 86, 24);
+      affinePreserveZButton.setBounds(216, 155, 104, 24);
       tinaAffineTransformationPanel.add(affinePreserveZButton);
     }
     return tinaAffineTransformationPanel;
@@ -3224,7 +3244,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaPaletteSubSouthPanel.add(getTinaPaletteShiftSlider());
       tinaPaletteSubSouthPanel.add(getTinaPaletteShiftREd());
       tinaPaletteShiftLbl = new JLabel();
-      tinaPaletteShiftLbl.setBounds(6, 6, 43, 22);
+      tinaPaletteShiftLbl.setBounds(6, 6, 29, 22);
       tinaPaletteSubSouthPanel.add(tinaPaletteShiftLbl);
       tinaPaletteShiftLbl.setText("Shift");
       tinaPaletteShiftLbl.setFont(new Font("Dialog", Font.BOLD, 10));
@@ -3419,7 +3439,7 @@ public class TinaInternalFrame extends JInternalFrame {
           tinaController.paletteShiftREd_changed();
         }
       });
-      tinaPaletteShiftREd.setBounds(50, 5, 56, 24);
+      tinaPaletteShiftREd.setBounds(35, 5, 71, 24);
       tinaPaletteShiftREd.setPreferredSize(new Dimension(56, 24));
       tinaPaletteShiftREd.setText("0");
       tinaPaletteShiftREd.setFont(new Font("Dialog", Font.PLAIN, 10));
@@ -4219,8 +4239,8 @@ public class TinaInternalFrame extends JInternalFrame {
       });
       affineC00REd.setPreferredSize(new Dimension(76, 24));
       affineC00REd.setText("");
-      affineC00REd.setLocation(new Point(32, 6));
-      affineC00REd.setSize(new Dimension(76, 24));
+      affineC00REd.setLocation(new Point(24, 6));
+      affineC00REd.setSize(new Dimension(84, 24));
       affineC00REd.setFont(new Font("Dialog", Font.PLAIN, 10));
     }
     return affineC00REd;
@@ -4248,8 +4268,8 @@ public class TinaInternalFrame extends JInternalFrame {
       });
       affineC01REd.setPreferredSize(new Dimension(76, 24));
       affineC01REd.setText("");
-      affineC01REd.setLocation(new Point(32, 30));
-      affineC01REd.setSize(new Dimension(76, 24));
+      affineC01REd.setLocation(new Point(24, 30));
+      affineC01REd.setSize(new Dimension(84, 24));
       affineC01REd.setFont(new Font("Dialog", Font.PLAIN, 10));
     }
     return affineC01REd;
@@ -4277,8 +4297,8 @@ public class TinaInternalFrame extends JInternalFrame {
       });
       affineC10REd.setPreferredSize(new Dimension(76, 24));
       affineC10REd.setText("");
-      affineC10REd.setLocation(new Point(131, 6));
-      affineC10REd.setSize(new Dimension(76, 24));
+      affineC10REd.setLocation(new Point(132, 6));
+      affineC10REd.setSize(new Dimension(84, 24));
       affineC10REd.setFont(new Font("Dialog", Font.PLAIN, 10));
     }
     return affineC10REd;
@@ -4306,8 +4326,8 @@ public class TinaInternalFrame extends JInternalFrame {
       });
       affineC11REd.setPreferredSize(new Dimension(76, 24));
       affineC11REd.setText("");
-      affineC11REd.setLocation(new Point(131, 30));
-      affineC11REd.setSize(new Dimension(76, 24));
+      affineC11REd.setLocation(new Point(132, 30));
+      affineC11REd.setSize(new Dimension(84, 24));
       affineC11REd.setFont(new Font("Dialog", Font.PLAIN, 10));
     }
     return affineC11REd;
@@ -4335,8 +4355,8 @@ public class TinaInternalFrame extends JInternalFrame {
       });
       affineC20REd.setPreferredSize(new Dimension(76, 24));
       affineC20REd.setText("");
-      affineC20REd.setLocation(new Point(238, 6));
-      affineC20REd.setSize(new Dimension(76, 24));
+      affineC20REd.setLocation(new Point(240, 6));
+      affineC20REd.setSize(new Dimension(84, 24));
       affineC20REd.setFont(new Font("Dialog", Font.PLAIN, 10));
     }
     return affineC20REd;
@@ -4364,8 +4384,8 @@ public class TinaInternalFrame extends JInternalFrame {
       });
       affineC21REd.setPreferredSize(new Dimension(76, 24));
       affineC21REd.setText("");
-      affineC21REd.setLocation(new Point(238, 30));
-      affineC21REd.setSize(new Dimension(76, 24));
+      affineC21REd.setLocation(new Point(240, 30));
+      affineC21REd.setSize(new Dimension(84, 24));
       affineC21REd.setFont(new Font("Dialog", Font.PLAIN, 10));
     }
     return affineC21REd;
@@ -4381,8 +4401,8 @@ public class TinaInternalFrame extends JInternalFrame {
       affineRotateLeftButton = new JButton();
       affineRotateLeftButton.setFont(new Font("Dialog", Font.BOLD, 10));
       affineRotateLeftButton.setPreferredSize(new Dimension(55, 24));
-      affineRotateLeftButton.setSize(new Dimension(55, 24));
-      affineRotateLeftButton.setLocation(new Point(6, 53));
+      affineRotateLeftButton.setSize(new Dimension(70, 24));
+      affineRotateLeftButton.setLocation(new Point(6, 57));
       affineRotateLeftButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/turnLeft.gif")));
       affineRotateLeftButton.setToolTipText("Rotate triangle left");
       affineRotateLeftButton.setText("");
@@ -4406,7 +4426,7 @@ public class TinaInternalFrame extends JInternalFrame {
       affineRotateRightButton.setFont(new Font("Dialog", Font.BOLD, 10));
       affineRotateRightButton.setPreferredSize(new Dimension(55, 24));
       affineRotateRightButton.setLocation(new Point(6, 102));
-      affineRotateRightButton.setSize(new Dimension(55, 24));
+      affineRotateRightButton.setSize(new Dimension(70, 24));
       affineRotateRightButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/turnRight.gif")));
       affineRotateRightButton.setToolTipText("Rotate triangle right");
       affineRotateRightButton.setText("");
@@ -4429,8 +4449,8 @@ public class TinaInternalFrame extends JInternalFrame {
       affineEnlargeButton = new JButton();
       affineEnlargeButton.setFont(new Font("Dialog", Font.BOLD, 8));
       affineEnlargeButton.setPreferredSize(new Dimension(55, 24));
-      affineEnlargeButton.setLocation(new Point(68, 53));
-      affineEnlargeButton.setSize(new Dimension(55, 24));
+      affineEnlargeButton.setLocation(new Point(78, 57));
+      affineEnlargeButton.setSize(new Dimension(70, 24));
       affineEnlargeButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/enlarge.gif")));
       affineEnlargeButton.setToolTipText("Enlarge triangle");
       affineEnlargeButton.setText("");
@@ -4453,8 +4473,8 @@ public class TinaInternalFrame extends JInternalFrame {
       affineShrinkButton = new JButton();
       affineShrinkButton.setFont(new Font("Dialog", Font.BOLD, 8));
       affineShrinkButton.setPreferredSize(new Dimension(55, 24));
-      affineShrinkButton.setLocation(new Point(68, 102));
-      affineShrinkButton.setSize(new Dimension(55, 24));
+      affineShrinkButton.setLocation(new Point(78, 102));
+      affineShrinkButton.setSize(new Dimension(70, 24));
       affineShrinkButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/shrink.gif")));
       affineShrinkButton.setToolTipText("Shrink triangle");
       affineShrinkButton.setText("");
@@ -4477,7 +4497,7 @@ public class TinaInternalFrame extends JInternalFrame {
       affineRotateAmountREd = new JTextField();
       affineRotateAmountREd.setPreferredSize(new Dimension(56, 24));
       affineRotateAmountREd.setText("90");
-      affineRotateAmountREd.setSize(new Dimension(56, 24));
+      affineRotateAmountREd.setSize(new Dimension(70, 24));
       affineRotateAmountREd.setLocation(new Point(6, 80));
       affineRotateAmountREd.setFont(new Font("Dialog", Font.PLAIN, 10));
     }
@@ -4580,8 +4600,8 @@ public class TinaInternalFrame extends JInternalFrame {
       affineScaleAmountREd = new JTextField();
       affineScaleAmountREd.setPreferredSize(new Dimension(56, 24));
       affineScaleAmountREd.setText("105");
-      affineScaleAmountREd.setSize(new Dimension(56, 24));
-      affineScaleAmountREd.setLocation(new Point(68, 80));
+      affineScaleAmountREd.setSize(new Dimension(70, 24));
+      affineScaleAmountREd.setLocation(new Point(78, 80));
       affineScaleAmountREd.setFont(new Font("Dialog", Font.PLAIN, 10));
     }
     return affineScaleAmountREd;
@@ -4597,8 +4617,8 @@ public class TinaInternalFrame extends JInternalFrame {
       affineMoveUpButton = new JButton();
       affineMoveUpButton.setFont(new Font("Dialog", Font.BOLD, 10));
       affineMoveUpButton.setPreferredSize(new Dimension(55, 24));
-      affineMoveUpButton.setLocation(new Point(184, 53));
-      affineMoveUpButton.setSize(new Dimension(55, 24));
+      affineMoveUpButton.setLocation(new Point(202, 57));
+      affineMoveUpButton.setSize(new Dimension(70, 24));
       affineMoveUpButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/moveUp.gif")));
       affineMoveUpButton.setToolTipText("Move triangle up");
       affineMoveUpButton.setText("");
@@ -4621,8 +4641,8 @@ public class TinaInternalFrame extends JInternalFrame {
       affineMoveDownButton = new JButton();
       affineMoveDownButton.setFont(new Font("Dialog", Font.BOLD, 10));
       affineMoveDownButton.setPreferredSize(new Dimension(55, 24));
-      affineMoveDownButton.setLocation(new Point(184, 102));
-      affineMoveDownButton.setSize(new Dimension(55, 24));
+      affineMoveDownButton.setLocation(new Point(202, 102));
+      affineMoveDownButton.setSize(new Dimension(70, 24));
       affineMoveDownButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/moveDown.gif")));
       affineMoveDownButton.setToolTipText("Move triangle down");
       affineMoveDownButton.setText("");
@@ -4645,8 +4665,8 @@ public class TinaInternalFrame extends JInternalFrame {
       affineMoveLeftButton = new JButton();
       affineMoveLeftButton.setText("");
       affineMoveLeftButton.setPreferredSize(new Dimension(55, 24));
-      affineMoveLeftButton.setLocation(new Point(128, 80));
-      affineMoveLeftButton.setSize(new Dimension(55, 24));
+      affineMoveLeftButton.setLocation(new Point(154, 80));
+      affineMoveLeftButton.setSize(new Dimension(50, 24));
       affineMoveLeftButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/moveLeft.gif")));
       affineMoveLeftButton.setToolTipText("Move triangle left");
       affineMoveLeftButton.setFont(new Font("Dialog", Font.BOLD, 10));
@@ -4668,8 +4688,8 @@ public class TinaInternalFrame extends JInternalFrame {
     if (affineMoveRightButton == null) {
       affineMoveRightButton = new JButton();
       affineMoveRightButton.setText("");
-      affineMoveRightButton.setLocation(new Point(240, 80));
-      affineMoveRightButton.setSize(new Dimension(55, 24));
+      affineMoveRightButton.setLocation(new Point(270, 80));
+      affineMoveRightButton.setSize(new Dimension(50, 24));
       affineMoveRightButton.setPreferredSize(new Dimension(55, 24));
       affineMoveRightButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/moveRight.gif")));
       affineMoveRightButton.setToolTipText("Move triangle right");
@@ -4693,8 +4713,8 @@ public class TinaInternalFrame extends JInternalFrame {
       affineMoveAmountREd = new JTextField();
       affineMoveAmountREd.setPreferredSize(new Dimension(56, 24));
       affineMoveAmountREd.setText("0.5");
-      affineMoveAmountREd.setSize(new Dimension(56, 24));
-      affineMoveAmountREd.setLocation(new Point(184, 80));
+      affineMoveAmountREd.setSize(new Dimension(70, 24));
+      affineMoveAmountREd.setLocation(new Point(202, 80));
       affineMoveAmountREd.setFont(new Font("Dialog", Font.PLAIN, 10));
     }
     return affineMoveAmountREd;
@@ -6127,10 +6147,10 @@ public class TinaInternalFrame extends JInternalFrame {
     if (affineEditPostTransformButton == null) {
       affineEditPostTransformButton = new JToggleButton();
       affineEditPostTransformButton.setPreferredSize(new Dimension(136, 24));
-      affineEditPostTransformButton.setSize(new Dimension(116, 24));
-      affineEditPostTransformButton.setText("Post  Transform");
+      affineEditPostTransformButton.setSize(new Dimension(104, 24));
+      affineEditPostTransformButton.setText("Edit Post TF");
       affineEditPostTransformButton.setFont(new Font("Dialog", Font.BOLD, 10));
-      affineEditPostTransformButton.setLocation(new Point(6, 163));
+      affineEditPostTransformButton.setLocation(new Point(0, 155));
       affineEditPostTransformButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
           tinaController.affineEditPostTransformButton_clicked();
@@ -6234,9 +6254,9 @@ public class TinaInternalFrame extends JInternalFrame {
     if (affineResetTransformButton == null) {
       affineResetTransformButton = new JButton();
       affineResetTransformButton.setPreferredSize(new Dimension(136, 24));
-      affineResetTransformButton.setText("Reset");
-      affineResetTransformButton.setLocation(new Point(131, 163));
-      affineResetTransformButton.setSize(new Dimension(86, 24));
+      affineResetTransformButton.setText("Reset TF");
+      affineResetTransformButton.setLocation(new Point(108, 155));
+      affineResetTransformButton.setSize(new Dimension(104, 24));
       affineResetTransformButton.setToolTipText("Reset triangle to defaults");
       affineResetTransformButton.setFont(new Font("Dialog", Font.BOLD, 10));
       affineResetTransformButton.addActionListener(new java.awt.event.ActionListener() {
@@ -9252,8 +9272,8 @@ public class TinaInternalFrame extends JInternalFrame {
       affineFlipHorizontalButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/flipX.gif")));
       affineFlipHorizontalButton.setText("");
       affineFlipHorizontalButton.setToolTipText("Horizontal flip");
-      affineFlipHorizontalButton.setSize(new Dimension(55, 24));
-      affineFlipHorizontalButton.setLocation(new Point(148, 127));
+      affineFlipHorizontalButton.setSize(new Dimension(82, 24));
+      affineFlipHorizontalButton.setLocation(new Point(154, 127));
       affineFlipHorizontalButton.setFont(new Font("Dialog", Font.BOLD, 8));
       affineFlipHorizontalButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -9276,8 +9296,8 @@ public class TinaInternalFrame extends JInternalFrame {
       affineFlipVerticalButton.setToolTipText("Vertical flip");
       affineFlipVerticalButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/flipY.gif")));
       affineFlipVerticalButton.setText("");
-      affineFlipVerticalButton.setSize(new Dimension(55, 24));
-      affineFlipVerticalButton.setLocation(new Point(222, 127));
+      affineFlipVerticalButton.setSize(new Dimension(80, 24));
+      affineFlipVerticalButton.setLocation(new Point(240, 127));
       affineFlipVerticalButton.setFont(new Font("Dialog", Font.BOLD, 8));
       affineFlipVerticalButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -10255,8 +10275,8 @@ public class TinaInternalFrame extends JInternalFrame {
       affineScaleXButton.setToolTipText("Allow scaling in x-direction");
       affineScaleXButton.setMnemonic(KeyEvent.VK_P);
       affineScaleXButton.setText("");
-      affineScaleXButton.setLocation(new Point(68, 127));
-      affineScaleXButton.setSize(new Dimension(26, 36));
+      affineScaleXButton.setLocation(new Point(78, 127));
+      affineScaleXButton.setSize(new Dimension(32, 24));
       affineScaleXButton.setSelected(true);
       affineScaleXButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/allowScaleX.gif")));
       affineScaleXButton.setFont(new Font("Dialog", Font.BOLD, 10));
@@ -10282,8 +10302,8 @@ public class TinaInternalFrame extends JInternalFrame {
       affineScaleYButton.setMnemonic(KeyEvent.VK_P);
       affineScaleYButton.setSelected(true);
       affineScaleYButton.setText("");
-      affineScaleYButton.setSize(new Dimension(26, 36));
-      affineScaleYButton.setLocation(new Point(96, 127));
+      affineScaleYButton.setSize(new Dimension(32, 24));
+      affineScaleYButton.setLocation(new Point(116, 127));
       affineScaleYButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/allowScaleY.gif")));
       affineScaleYButton.setFont(new Font("Dialog", Font.BOLD, 10));
       affineScaleYButton.addChangeListener(new javax.swing.event.ChangeListener() {
