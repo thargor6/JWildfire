@@ -16,13 +16,10 @@
 */
 package org.jwildfire.create.tina.palette;
 
-import java.util.Map;
-
 import org.jwildfire.image.SimpleImage;
 import org.jwildfire.transform.ScaleAspect;
 import org.jwildfire.transform.ScaleTransformer;
 import org.jwildfire.transform.ScaleTransformer.Unit;
-
 
 public class RGBPaletteRenderer {
 
@@ -30,12 +27,12 @@ public class RGBPaletteRenderer {
     return renderHorizPalette(pPalette.getTransformedColors(), pWidth, pHeight);
   }
 
-  public SimpleImage renderHorizPalette(Map<Integer, RGBColor> pColors, int pWidth, int pHeight) {
+  public SimpleImage renderHorizPalette(RGBColor[] pColors, int pWidth, int pHeight) {
     if (pColors == null || pWidth < 1 || pHeight < 1)
       throw new IllegalArgumentException();
     SimpleImage img = new SimpleImage(RGBPalette.PALETTE_SIZE, pHeight);
-    for (int i = 0; i < RGBPalette.PALETTE_SIZE; i++) {
-      RGBColor color = pColors.get(i);
+    for (int i = 0; i < pColors.length; i++) {
+      RGBColor color = pColors[i];
       if (color == null) {
         color = RGBPalette.BLACK;
       }
@@ -56,4 +53,5 @@ public class RGBPaletteRenderer {
     }
     return img;
   }
+
 }

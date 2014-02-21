@@ -92,10 +92,15 @@ public class FlameRenderer {
   }
 
   public void initRasterSizes(int pImageWidth, int pImageHeight) {
+    double time = flame.getFrame() >= 0 ? flame.getFrame() : 0;
+    // TODO: if necessary
+    // two steps: build metamodel + apply
+    Flame newFlame = AnimationService.evalMotionCurves(flame.makeCopy(), time);
+
     imageWidth = pImageWidth;
     imageHeight = pImageHeight;
-    logDensityFilter = new LogDensityFilter(flame);
-    gammaCorrectionFilter = new GammaCorrectionFilter(flame, withAlpha);
+    logDensityFilter = new LogDensityFilter(newFlame);
+    gammaCorrectionFilter = new GammaCorrectionFilter(newFlame, withAlpha);
     maxBorderWidth = (MAX_FILTER_WIDTH - 1) / 2;
     borderWidth = (logDensityFilter.getNoiseFilterSize() - 1) / 2;
     rasterWidth = imageWidth + 2 * maxBorderWidth;
@@ -178,7 +183,7 @@ public class FlameRenderer {
       }
       List<List<RenderPacket>> renderFlames = new ArrayList<List<RenderPacket>>();
       for (int t = 0; t < prefs.getTinaRenderThreads(); t++) {
-        renderFlames.add(createRenderPackets(flame, pRenderInfo.getFrame()));
+        renderFlames.add(createRenderPackets(flame, flame.getFrame()));
       }
       forceAbort = false;
       iterate(0, 1, renderFlames);
@@ -720,11 +725,12 @@ public class FlameRenderer {
   }
 
   public List<AbstractRenderThread> startRenderFlame(RenderInfo pRenderInfo) {
+    // TODO remove frame from renderInfo? (color)
     renderInfo = pRenderInfo;
     initRaster(pRenderInfo.getImageWidth(), pRenderInfo.getImageHeight());
     List<List<RenderPacket>> renderFlames = new ArrayList<List<RenderPacket>>();
     for (int t = 0; t < prefs.getTinaRenderThreads(); t++) {
-      renderFlames.add(createRenderPackets(flame, pRenderInfo.getFrame()));
+      renderFlames.add(createRenderPackets(flame, flame.getFrame()));
     }
     return startIterate(renderFlames, null, true);
   }
@@ -749,7 +755,7 @@ public class FlameRenderer {
         initRaster(renderInfo.getImageWidth(), renderInfo.getImageHeight());
         List<List<RenderPacket>> renderFlames = new ArrayList<List<RenderPacket>>();
         for (int t = 0; t < header.numThreads; t++) {
-          renderFlames.add(createRenderPackets(flame, renderInfo.getFrame()));
+          renderFlames.add(createRenderPackets(flame, flame.getFrame()));
         }
         raster = null;
         // read raster

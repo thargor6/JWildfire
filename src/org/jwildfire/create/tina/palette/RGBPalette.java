@@ -19,6 +19,7 @@ package org.jwildfire.create.tina.palette;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -67,7 +68,8 @@ public class RGBPalette implements Assignable<RGBPalette>, Serializable {
   private String flam3Name; // imported from flam3, just for display
 
   private Map<Integer, RGBColor> rawColors = new HashMap<Integer, RGBColor>();
-  private Map<Integer, RGBColor> transformedColors = new HashMap<Integer, RGBColor>();
+
+  private final RGBColor[] transformedColors = new RGBColor[PALETTE_SIZE];
 
   private GradientSelectionProvider selectionProvider = new DefaultGradientSelectionProvider();
 
@@ -92,7 +94,7 @@ public class RGBPalette implements Assignable<RGBPalette>, Serializable {
 
   public RGBColor getColor(int pIdx) {
     transformColors();
-    RGBColor res = transformedColors.get(pIdx);
+    RGBColor res = transformedColors[pIdx];
     return res != null ? res : BLACK;
   }
 
@@ -106,7 +108,7 @@ public class RGBPalette implements Assignable<RGBPalette>, Serializable {
     RenderColor res[] = new RenderColor[PALETTE_SIZE];
     for (int i = 0; i < res.length; i++) {
       res[i] = new RenderColor();
-      RGBColor color = transformedColors.get(i);
+      RGBColor color = transformedColors[i];
       int r, g, b;
       if (color != null) {
         r = color.getRed();
@@ -117,13 +119,13 @@ public class RGBPalette implements Assignable<RGBPalette>, Serializable {
         RGBColor leftColor = null, rightColor = null;
         int leftIdx = i, rightIdx = i;
         while (leftIdx-- >= 0) {
-          leftColor = transformedColors.get(leftIdx);
+          leftColor = transformedColors[leftIdx];
           if (leftColor != null) {
             break;
           }
         }
         while (rightIdx++ < PALETTE_SIZE) {
-          rightColor = transformedColors.get(rightIdx);
+          rightColor = transformedColors[rightIdx];
           if (rightColor != null) {
             break;
           }
@@ -255,7 +257,9 @@ public class RGBPalette implements Assignable<RGBPalette>, Serializable {
     int startIdx = selectionProvider.getFrom();
     int endIdx = selectionProvider.getTo();
     if (modified) {
-      transformedColors.clear();
+      for (int i = 0; i < transformedColors.length; i++) {
+        transformedColors[i] = null;
+      }
       for (int i = 0; i < PALETTE_SIZE; i++) {
         RGBColor color = getRawColor(i);
         int idx = i + modShift;
@@ -265,29 +269,26 @@ public class RGBPalette implements Assignable<RGBPalette>, Serializable {
         else if (idx >= PALETTE_SIZE) {
           idx -= PALETTE_SIZE;
         }
-        transformedColors.put(idx, new RGBColor(color.getRed(), color.getGreen(), color.getBlue()));
+        transformedColors[idx] = new RGBColor(color.getRed(), color.getGreen(), color.getBlue());
       }
       if (modFrequency > 1) {
-        Map<Integer, RGBColor> newTransformedColors = new HashMap<Integer, RGBColor>();
-        for (int i = 0; i < PALETTE_SIZE; i++) {
-          newTransformedColors.put(Integer.valueOf(i), transformedColors.get(Integer.valueOf(i)));
-        }
+        RGBColor[] newTransformedColors = new RGBColor[PALETTE_SIZE];
+        System.arraycopy(transformedColors, 0, newTransformedColors, 0, PALETTE_SIZE);
         int n = PALETTE_SIZE / modFrequency;
         for (int j = 0; j < modFrequency; j++) {
           for (int i = 0; i < n; i++) {
             int idx = i + j * n;
             if (idx < PALETTE_SIZE) {
-              newTransformedColors.put(idx, transformedColors.get(i * modFrequency));
+              newTransformedColors[idx] = transformedColors[i * modFrequency];
             }
           }
         }
-        transformedColors = newTransformedColors;
+        System.arraycopy(newTransformedColors, 0, transformedColors, 0, PALETTE_SIZE);
+        newTransformedColors = null;
       }
       if (modBlur > 0) {
-        Map<Integer, RGBColor> newTransformedColors = new HashMap<Integer, RGBColor>();
-        for (int i = 0; i < PALETTE_SIZE; i++) {
-          newTransformedColors.put(Integer.valueOf(i), transformedColors.get(Integer.valueOf(i)));
-        }
+        RGBColor[] newTransformedColors = new RGBColor[PALETTE_SIZE];
+        System.arraycopy(transformedColors, 0, newTransformedColors, 0, PALETTE_SIZE);
         for (int i = 0; i < PALETTE_SIZE; i++) {
           int r = 0;
           int g = 0;
@@ -297,7 +298,7 @@ public class RGBPalette implements Assignable<RGBPalette>, Serializable {
             n++;
             int k = (PALETTE_SIZE + j) % PALETTE_SIZE;
             if (k != i) {
-              RGBColor color = transformedColors.get(Integer.valueOf(k));
+              RGBColor color = transformedColors[k];
               r += color.getRed();
               g += color.getGreen();
               b += color.getBlue();
@@ -305,10 +306,11 @@ public class RGBPalette implements Assignable<RGBPalette>, Serializable {
           }
           if (n != 0) {
             RGBColor color = new RGBColor(Tools.limitColor(r / n), Tools.limitColor(g / n), Tools.limitColor(b / n));
-            newTransformedColors.put(Integer.valueOf(i), color);
+            newTransformedColors[i] = color;
           }
         }
-        transformedColors = newTransformedColors;
+        System.arraycopy(newTransformedColors, 0, transformedColors, 0, PALETTE_SIZE);
+        newTransformedColors = null;
       }
       SimpleImage img = new RGBPaletteRenderer().renderHorizPalette(transformedColors, PALETTE_SIZE, 1);
       if (modRed != 0 || modGreen != 0 || modBlue != 0 || modContrast != 0 || modGamma != 0 || modBrightness != 0 || modSaturation != 0) {
@@ -336,18 +338,17 @@ public class RGBPalette implements Assignable<RGBPalette>, Serializable {
       }
       Pixel pixel = new Pixel();
       for (int i = startIdx; i <= endIdx; i++) {
-        RGBColor color = transformedColors.get(i);
+        RGBColor color = transformedColors[i];
         pixel.setARGBValue(img.getARGBValue(i, 0));
         color.setRed(pixel.r);
         color.setGreen(pixel.g);
         color.setBlue(pixel.b);
       }
-
       modified = false;
     }
   }
 
-  public Map<Integer, RGBColor> getTransformedColors() {
+  public RGBColor[] getTransformedColors() {
     transformColors();
     return transformedColors;
   }
@@ -377,17 +378,18 @@ public class RGBPalette implements Assignable<RGBPalette>, Serializable {
     modBlur = pRGBPalette.modBlur;
     flam3Name = pRGBPalette.flam3Name;
     flam3Number = pRGBPalette.flam3Number;
-
+    /*
+        rawColors.clear();
+        for (Integer key : pRGBPalette.rawColors.keySet()) {
+          RGBColor newColor = pRGBPalette.rawColors.get(key).makeCopy();
+          rawColors.put(key, newColor);
+        }
+      */
+    // raw colors may not be modified
     rawColors.clear();
-    for (Integer key : pRGBPalette.rawColors.keySet()) {
-      RGBColor newColor = pRGBPalette.rawColors.get(key).makeCopy();
-      rawColors.put(key, newColor);
-    }
-    transformedColors.clear();
-    for (Integer key : pRGBPalette.transformedColors.keySet()) {
-      RGBColor newColor = pRGBPalette.transformedColors.get(key).makeCopy();
-      transformedColors.put(key, newColor);
-    }
+    rawColors.putAll(pRGBPalette.rawColors);
+
+    System.arraycopy(pRGBPalette.transformedColors, 0, transformedColors, 0, PALETTE_SIZE);
   }
 
   public String getFlam3Number() {
@@ -449,7 +451,14 @@ public class RGBPalette implements Assignable<RGBPalette>, Serializable {
     for (int i = pStartIdx; i <= pEndIdx; i++) {
       colors.add(rawColors.get(i));
     }
-    Collections.sort(colors);
+    Collections.sort(colors, new Comparator<RGBColor>() {
+
+      @Override
+      public int compare(RGBColor o1, RGBColor o2) {
+        return o1.compareToRGBColor(o2);
+      }
+
+    });
     for (int i = pStartIdx; i <= pEndIdx; i++) {
       rawColors.put(Integer.valueOf(i), colors.get(i - pStartIdx));
     }
@@ -661,7 +670,9 @@ public class RGBPalette implements Assignable<RGBPalette>, Serializable {
 
       transformColors();
       rawColors.clear();
-      rawColors.putAll(transformedColors);
+      for (int i = 0; i < transformedColors.length; i++) {
+        rawColors.put(Integer.valueOf(i), transformedColors[i]);
+      }
 
       modRed = 0;
       modGreen = 0;
@@ -704,7 +715,9 @@ public class RGBPalette implements Assignable<RGBPalette>, Serializable {
 
       transformColors();
       rawColors.clear();
-      rawColors.putAll(transformedColors);
+      for (int i = 0; i < transformedColors.length; i++) {
+        rawColors.put(Integer.valueOf(i), transformedColors[i]);
+      }
 
       modSwapRGB = 0;
       modFrequency = 0;

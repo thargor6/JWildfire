@@ -113,6 +113,9 @@ public class AnimationController {
         tinaController.setNoRefresh(true);
         int frame = keyframesFrameField.getIntValue() != null ? keyframesFrameField.getIntValue().intValue() : -1;
         adjustFrameControls(frame);
+        if (tinaController.getCurrFlame() != null) {
+          tinaController.getCurrFlame().setFrame(frame);
+        }
         tinaController.refreshFlameImage(false);
       }
       finally {
@@ -128,6 +131,9 @@ public class AnimationController {
         tinaController.setNoRefresh(true);
         int frame = keyframesFrameSlider.getValue();
         adjustFrameControls(frame);
+        if (tinaController.getCurrFlame() != null) {
+          tinaController.getCurrFlame().setFrame(frame);
+        }
         tinaController.refreshFlameImage(false);
       }
       finally {
@@ -148,6 +154,22 @@ public class AnimationController {
 
   public void toggleMotionCurveEditing() {
     enableControls();
+  }
+
+  public void keyFrameCountFieldChanged() {
+    if (!tinaController.isNoRefresh()) {
+      boolean oldNoRefresh = tinaController.isNoRefresh();
+      try {
+        tinaController.setNoRefresh(true);
+        int frameCount = keyframesFrameCountField.getIntValue();
+        if (tinaController.getCurrFlame() != null) {
+          tinaController.getCurrFlame().setFrameCount(frameCount);
+        }
+      }
+      finally {
+        tinaController.setNoRefresh(oldNoRefresh);
+      }
+    }
   }
 
 }

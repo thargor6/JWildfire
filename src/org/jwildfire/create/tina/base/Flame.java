@@ -96,15 +96,20 @@ public class Flame implements Assignable<Flame>, Serializable {
   @AnimAware
   private int bgColorBlue;
   private double gamma;
+  private final MotionCurve gammaCurve = new MotionCurve();
   private double gammaThreshold;
+  private final MotionCurve gammaThresholdCurve = new MotionCurve();
   private double pixelsPerUnit;
   private final MotionCurve pixelsPerUnitCurve = new MotionCurve();
   private int whiteLevel;
   @AnimAware
   private double brightness;
+  private final MotionCurve brightnessCurve = new MotionCurve();
   private double contrast;
+  private final MotionCurve contrastCurve = new MotionCurve();
   @AnimAware
   private double vibrancy;
+  private final MotionCurve vibrancyCurve = new MotionCurve();
   private boolean preserveZ;
   private String resolutionProfile;
   private String qualityProfile;
@@ -121,6 +126,9 @@ public class Flame implements Assignable<Flame>, Serializable {
   private int motionBlurLength = 0;
   private double motionBlurTimeStep = 0.25;
   private double motionBlurDecay = 0.03;
+
+  private int frame = 1;
+  private int frameCount = 300;
 
   public Flame() {
     layers.clear();
@@ -330,6 +338,8 @@ public class Flame implements Assignable<Flame>, Serializable {
     this.bgColorBlue = bgColorBlue;
   }
 
+  private static long cnt = 0;
+
   @Override
   public Flame makeCopy() {
     Flame res = new Flame();
@@ -481,13 +491,18 @@ public class Flame implements Assignable<Flame>, Serializable {
     bgColorGreen = pFlame.bgColorGreen;
     bgColorBlue = pFlame.bgColorBlue;
     gamma = pFlame.gamma;
+    gammaCurve.assign(pFlame.gammaCurve);
     gammaThreshold = pFlame.gammaThreshold;
+    gammaThresholdCurve.assign(pFlame.gammaThresholdCurve);
     pixelsPerUnit = pFlame.pixelsPerUnit;
     pixelsPerUnitCurve.assign(pFlame.pixelsPerUnitCurve);
     whiteLevel = pFlame.whiteLevel;
     brightness = pFlame.brightness;
+    brightnessCurve.assign(pFlame.brightnessCurve);
     contrast = pFlame.contrast;
+    contrastCurve.assign(pFlame.contrastCurve);
     vibrancy = pFlame.vibrancy;
+    vibrancyCurve.assign(pFlame.vibrancyCurve);
     preserveZ = pFlame.preserveZ;
     resolutionProfile = pFlame.resolutionProfile;
     qualityProfile = pFlame.qualityProfile;
@@ -500,6 +515,9 @@ public class Flame implements Assignable<Flame>, Serializable {
     motionBlurLength = pFlame.motionBlurLength;
     motionBlurTimeStep = pFlame.motionBlurTimeStep;
     motionBlurDecay = pFlame.motionBlurDecay;
+
+    frame = pFlame.frame;
+    frameCount = pFlame.frameCount;
 
     layers.clear();
     for (Layer layer : pFlame.getLayers()) {
@@ -536,11 +554,14 @@ public class Flame implements Assignable<Flame>, Serializable {
         (fabs(deFilterMinRadius - pFlame.deFilterMinRadius) > EPSILON) || (fabs(deFilterCurve - pFlame.deFilterCurve) > EPSILON) ||
         (fabs(sampleDensity - pFlame.sampleDensity) > EPSILON) || (bgTransparency != pFlame.bgTransparency) || (bgColorRed != pFlame.bgColorRed) ||
         (bgColorGreen != pFlame.bgColorGreen) || (bgColorBlue != pFlame.bgColorBlue) ||
-        (fabs(gamma - pFlame.gamma) > EPSILON) || (fabs(gammaThreshold - pFlame.gammaThreshold) > EPSILON) ||
+        (fabs(gamma - pFlame.gamma) > EPSILON) || !gammaCurve.isEqual(pFlame.gammaCurve) ||
+        (fabs(gammaThreshold - pFlame.gammaThreshold) > EPSILON) || !gammaThresholdCurve.isEqual(pFlame.gammaThresholdCurve) ||
         (fabs(pixelsPerUnit - pFlame.pixelsPerUnit) > EPSILON) || !pixelsPerUnitCurve.isEqual(pFlame.pixelsPerUnitCurve) ||
         (whiteLevel != pFlame.whiteLevel) ||
-        (fabs(brightness - pFlame.brightness) > EPSILON) || (fabs(contrast - pFlame.contrast) > EPSILON) ||
-        (fabs(vibrancy - pFlame.vibrancy) > EPSILON) || (preserveZ != pFlame.preserveZ) ||
+        (fabs(brightness - pFlame.brightness) > EPSILON) || !brightnessCurve.isEqual(pFlame.brightnessCurve) ||
+        (fabs(contrast - pFlame.contrast) > EPSILON) || !contrastCurve.isEqual(pFlame.contrastCurve) ||
+        (fabs(vibrancy - pFlame.vibrancy) > EPSILON) || !vibrancyCurve.isEqual(pFlame.vibrancyCurve) ||
+        (preserveZ != pFlame.preserveZ) ||
         ((resolutionProfile != null && pFlame.resolutionProfile == null) || (resolutionProfile == null && pFlame.resolutionProfile != null) ||
         (resolutionProfile != null && pFlame.resolutionProfile != null && !resolutionProfile.equals(pFlame.resolutionProfile))) ||
         ((qualityProfile != null && pFlame.qualityProfile == null) || (qualityProfile == null && pFlame.qualityProfile != null) ||
@@ -548,7 +569,8 @@ public class Flame implements Assignable<Flame>, Serializable {
         !shadingInfo.isEqual(pFlame.shadingInfo) || !name.equals(pFlame.name) ||
         (fabs(antialiasAmount - pFlame.antialiasAmount) > EPSILON) || (fabs(antialiasRadius - pFlame.antialiasRadius) > EPSILON) ||
         (layers.size() != pFlame.layers.size()) || (motionBlurLength != pFlame.motionBlurLength) ||
-        (fabs(motionBlurTimeStep - pFlame.motionBlurTimeStep) > EPSILON) || (fabs(motionBlurDecay - pFlame.motionBlurDecay) > EPSILON)) {
+        (fabs(motionBlurTimeStep - pFlame.motionBlurTimeStep) > EPSILON) || (fabs(motionBlurDecay - pFlame.motionBlurDecay) > EPSILON) ||
+        (frame != pFlame.frame) || (frameCount != pFlame.frameCount)) {
       return false;
     }
     for (int i = 0; i < layers.size(); i++) {
@@ -738,6 +760,22 @@ public class Flame implements Assignable<Flame>, Serializable {
 
   public void setMotionBlurDecay(double motionBlurDecay) {
     this.motionBlurDecay = motionBlurDecay;
+  }
+
+  public int getFrame() {
+    return frame;
+  }
+
+  public void setFrame(int frame) {
+    this.frame = frame;
+  }
+
+  public int getFrameCount() {
+    return frameCount;
+  }
+
+  public void setFrameCount(int frameCount) {
+    this.frameCount = frameCount;
   }
 
 }

@@ -134,6 +134,12 @@ public class FlameControlsDelegate {
     res.add(data.cameraZoomREd);
     res.add(data.pixelsPerUnitREd);
 
+    res.add(data.brightnessREd);
+    res.add(data.contrastREd);
+    res.add(data.vibrancyREd);
+    res.add(data.gammaREd);
+    res.add(data.gammaThresholdREd);
+
     res.add(data.cameraDOFREd);
     res.add(data.cameraDOFAreaREd);
     res.add(data.cameraDOFExponentREd);
@@ -158,6 +164,12 @@ public class FlameControlsDelegate {
     enableFlameControl(data.motionBlurLengthField, false);
     enableFlameControl(data.motionBlurTimeStepField, false);
     enableFlameControl(data.motionBlurDecayField, false);
+
+    enableFlameControl(data.brightnessREd, false);
+    enableFlameControl(data.contrastREd, false);
+    enableFlameControl(data.vibrancyREd, false);
+    enableFlameControl(data.gammaREd, false);
+    enableFlameControl(data.gammaThresholdREd, false);
 
     enableDEFilterUI();
 

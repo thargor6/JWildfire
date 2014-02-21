@@ -20,8 +20,6 @@ import static org.jwildfire.base.mathlib.MathLib.EPSILON;
 import static org.jwildfire.base.mathlib.MathLib.fabs;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.jwildfire.create.tina.edit.Assignable;
 import org.jwildfire.envelope.Envelope;
@@ -38,8 +36,8 @@ public class MotionCurve implements Serializable, Assignable<MotionCurve> {
   private Interpolation interpolation = Interpolation.SPLINE;
   private int selectedIdx = 0;
   private boolean locked;
-  private final List<Integer> x = new ArrayList<Integer>();
-  private final List<Double> y = new ArrayList<Double>();
+  private int[] x = new int[] {};
+  private double[] y = new double[] {};
 
   public void assignFromEnvelope(Envelope pEnvelope) {
     viewXMin = pEnvelope.getViewXMin();
@@ -49,14 +47,11 @@ public class MotionCurve implements Serializable, Assignable<MotionCurve> {
     interpolation = pEnvelope.getInterpolation();
     selectedIdx = pEnvelope.getSelectedIdx();
     locked = pEnvelope.isLocked();
-    x.clear();
-    for (Integer value : pEnvelope.getX()) {
-      x.add(value);
-    }
-    y.clear();
-    for (Double value : pEnvelope.getY()) {
-      y.add(value);
-    }
+    x = new int[pEnvelope.getX().length];
+    System.arraycopy(pEnvelope.getX(), 0, x, 0, x.length);
+
+    y = new double[pEnvelope.getY().length];
+    System.arraycopy(pEnvelope.getY(), 0, y, 0, y.length);
   }
 
   public Envelope toEnvelope() {
@@ -68,14 +63,12 @@ public class MotionCurve implements Serializable, Assignable<MotionCurve> {
     res.setInterpolation(interpolation);
     res.setSelectedIdx(selectedIdx);
     res.setLocked(locked);
-    int[] newX = new int[x.size()];
-    for (int i = 0; i < x.size(); i++) {
-      newX[i] = x.get(i).intValue();
-    }
-    double[] newY = new double[y.size()];
-    for (int i = 0; i < y.size(); i++) {
-      newY[i] = y.get(i).doubleValue();
-    }
+    int[] newX = new int[x.length];
+    System.arraycopy(x, 0, newX, 0, x.length);
+
+    double[] newY = new double[y.length];
+    System.arraycopy(y, 0, newY, 0, y.length);
+
     res.setValues(newX, newY);
     return res;
   }
@@ -98,10 +91,10 @@ public class MotionCurve implements Serializable, Assignable<MotionCurve> {
     interpolation = pSrc.interpolation;
     selectedIdx = pSrc.selectedIdx;
     locked = pSrc.locked;
-    x.clear();
-    x.addAll(pSrc.x);
-    y.clear();
-    y.addAll(pSrc.y);
+    x = new int[pSrc.x.length];
+    System.arraycopy(pSrc.x, 0, x, 0, x.length);
+    y = new double[pSrc.y.length];
+    System.arraycopy(pSrc.y, 0, y, 0, y.length);
   }
 
   @Override
@@ -117,16 +110,16 @@ public class MotionCurve implements Serializable, Assignable<MotionCurve> {
         (fabs(viewXMax - pSrc.viewXMax) > EPSILON) || (fabs(viewYMin - pSrc.viewYMin) > EPSILON) ||
         (fabs(viewYMax - pSrc.viewYMax) > EPSILON) || (interpolation != pSrc.interpolation) ||
         (selectedIdx != pSrc.selectedIdx) || (locked != pSrc.locked) ||
-        (x.size() != pSrc.x.size()) || (y.size() != pSrc.y.size())) {
+        (x.length != pSrc.x.length) || (y.length != pSrc.y.length)) {
       return false;
     }
-    for (int i = 0; i < x.size(); i++) {
-      if (x.get(i).intValue() != pSrc.x.get(i).intValue()) {
+    for (int i = 0; i < x.length; i++) {
+      if (x[i] != pSrc.x[i]) {
         return false;
       }
     }
-    for (int i = 0; i < y.size(); i++) {
-      if (fabs(y.get(i).doubleValue() - pSrc.y.get(i).doubleValue()) > EPSILON) {
+    for (int i = 0; i < y.length; i++) {
+      if (fabs(y[i] - pSrc.y[i]) > EPSILON) {
         return false;
       }
     }
@@ -134,6 +127,6 @@ public class MotionCurve implements Serializable, Assignable<MotionCurve> {
   }
 
   public boolean isEmpty() {
-    return x.size() == 0;
+    return x.length == 0;
   }
 }

@@ -995,7 +995,6 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
     int height = bounds.height / renderScale;
     if (width >= 16 && height >= 16) {
       RenderInfo info = new RenderInfo(width, height);
-      info.setFrame(getAnimationController().getCurrFrame());
       Flame flame = getCurrFlame();
       if (flame != null) {
         double oldSpatialFilterRadius = flame.getSpatialFilterRadius();
@@ -1006,7 +1005,6 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
           flame.setPixelsPerUnit((wScl + hScl) * 0.5 * flame.getPixelsPerUnit());
           flame.setWidth(info.getImageWidth());
           flame.setHeight(info.getImageHeight());
-
           try {
             FlameRenderer renderer;
             if (imgPanel.getMouseDragOperation() == MouseDragOperation.FOCUS) {

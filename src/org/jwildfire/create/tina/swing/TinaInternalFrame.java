@@ -2375,11 +2375,17 @@ public class TinaInternalFrame extends JInternalFrame {
   private JWFNumberField getTinaBrightnessREd() {
     if (tinaBrightnessREd == null) {
       tinaBrightnessREd = new JWFNumberField();
+      tinaBrightnessREd.setMotionPropertyName("brightness");
       tinaBrightnessREd.setLinkedMotionControlName("tinaBrightnessSlider");
       tinaBrightnessREd.setLinkedLabelControlName("tinaBrightnessLbl");
       tinaBrightnessREd.setValueStep(0.05);
       tinaBrightnessREd.setMaxValue(25.0);
       tinaBrightnessREd.setHasMinValue(true);
+      tinaBrightnessREd.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getFlameControls().editFlameMotionCurve(e);
+        }
+      });
       tinaBrightnessREd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           if (!tinaBrightnessREd.isMouseAdjusting() || tinaBrightnessREd.getMouseChangeCount() == 0) {
@@ -2505,11 +2511,17 @@ public class TinaInternalFrame extends JInternalFrame {
   private JWFNumberField getTinaContrastREd() {
     if (tinaContrastREd == null) {
       tinaContrastREd = new JWFNumberField();
+      tinaContrastREd.setMotionPropertyName("contrast");
       tinaContrastREd.setLinkedMotionControlName("tinaContrastSlider");
       tinaContrastREd.setLinkedLabelControlName("tinaContrastLbl");
       tinaContrastREd.setValueStep(0.05);
       tinaContrastREd.setHasMinValue(true);
       tinaContrastREd.setMaxValue(5.0);
+      tinaContrastREd.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getFlameControls().editFlameMotionCurve(e);
+        }
+      });
       tinaContrastREd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           if (tinaController != null) {
@@ -2539,11 +2551,17 @@ public class TinaInternalFrame extends JInternalFrame {
   private JWFNumberField getTinaGammaREd() {
     if (tinaGammaREd == null) {
       tinaGammaREd = new JWFNumberField();
+      tinaGammaREd.setMotionPropertyName("gamma");
       tinaGammaREd.setLinkedMotionControlName("tinaGammaSlider");
       tinaGammaREd.setLinkedLabelControlName("tinaGammaLbl");
       tinaGammaREd.setHasMinValue(true);
       tinaGammaREd.setMaxValue(10.0);
       tinaGammaREd.setValueStep(0.05);
+      tinaGammaREd.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getFlameControls().editFlameMotionCurve(e);
+        }
+      });
       tinaGammaREd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           if (tinaController != null) {
@@ -2573,12 +2591,18 @@ public class TinaInternalFrame extends JInternalFrame {
   private JWFNumberField getTinaVibrancyREd() {
     if (tinaVibrancyREd == null) {
       tinaVibrancyREd = new JWFNumberField();
+      tinaVibrancyREd.setMotionPropertyName("vibrancy");
       tinaVibrancyREd.setLinkedMotionControlName("tinaVibrancySlider");
       tinaVibrancyREd.setLinkedLabelControlName("tinaVibrancyLbl");
       tinaVibrancyREd.setValueStep(0.05);
       tinaVibrancyREd.setHasMinValue(true);
       tinaVibrancyREd.setHasMaxValue(true);
       tinaVibrancyREd.setMaxValue(1.0);
+      tinaVibrancyREd.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getFlameControls().editFlameMotionCurve(e);
+        }
+      });
       tinaVibrancyREd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           if (tinaController != null) {
@@ -2608,12 +2632,18 @@ public class TinaInternalFrame extends JInternalFrame {
   private JWFNumberField getTinaGammaThresholdREd() {
     if (tinaGammaThresholdREd == null) {
       tinaGammaThresholdREd = new JWFNumberField();
+      tinaGammaThresholdREd.setMotionPropertyName("gammaThreshold");
       tinaGammaThresholdREd.setLinkedMotionControlName("tinaGammaThresholdSlider");
       tinaGammaThresholdREd.setLinkedLabelControlName("tinaGammaThresholdLbl");
       tinaGammaThresholdREd.setValueStep(0.005);
       tinaGammaThresholdREd.setMaxValue(1.0);
       tinaGammaThresholdREd.setHasMinValue(true);
       tinaGammaThresholdREd.setHasMaxValue(true);
+      tinaGammaThresholdREd.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getFlameControls().editFlameMotionCurve(e);
+        }
+      });
       tinaGammaThresholdREd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           if (tinaController != null) {
@@ -15410,7 +15440,8 @@ public class TinaInternalFrame extends JInternalFrame {
         public void stateChanged(ChangeEvent e) {
           if (tinaController != null && tinaController.getAnimationController() != null) {
             try {
-              swfAnimatorFrameSlider.setMinimum(keyframesFrameCountField.getIntValue());
+              swfAnimatorFrameSlider.setMaximum(keyframesFrameCountField.getIntValue());
+              tinaController.getAnimationController().keyFrameCountFieldChanged();
             }
             catch (Exception ex) {
               ex.printStackTrace();

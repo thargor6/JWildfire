@@ -260,10 +260,8 @@ public class AnimationService {
 
   public static Flame evalMotionCurves(Flame pFlame, double pFrame) {
     try {
-      Flame res = pFlame.makeCopy();
-      _evalMotionCurves(res, pFrame);
-
-      return res;
+      _evalMotionCurves(pFlame, pFrame);
+      return pFlame;
     }
     catch (Throwable ex) {
       throw new RuntimeException(ex);

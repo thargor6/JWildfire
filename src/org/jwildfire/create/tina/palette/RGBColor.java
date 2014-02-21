@@ -22,7 +22,7 @@ import org.jwildfire.base.Tools;
 import org.jwildfire.base.mathlib.MathLib;
 import org.jwildfire.create.tina.edit.Assignable;
 
-public class RGBColor implements Assignable<RGBColor>, Serializable, Comparable<RGBColor> {
+public class RGBColor implements Assignable<RGBColor>, Serializable /*, Comparable<RGBColor>*/{
   private static final long serialVersionUID = 1L;
   private int red;
   private int green;
@@ -131,8 +131,7 @@ public class RGBColor implements Assignable<RGBColor>, Serializable, Comparable<
     return hsv;
   }
 
-  @Override
-  public int compareTo(RGBColor o) {
+  public int compareToRGBColor(RGBColor o) {
     HSV hsv = toHSV();
     HSV rHSV = o.toHSV();
     int h = Tools.FTOI(3.5 * hsv.h);
