@@ -1,3 +1,16 @@
+V1.21 (23.02.2014):
+ - new "cross"-random-flame-generator
+ - rearranged the sub-tabs on the gradient-tab resulting in little more vertical space for the gradient-library
+ - rearranged all shading-options into one main tab, renamed the main shading-tab into "Special shading"
+ - increased the default soze of the triangles in the editor
+ - moved the Quicksave-button beneath the Save-button
+ - some minor changes to the UI on the affine-tab
+ - several performance optimizations, refactoring
+ - store/restore transparency-setting with render-state
+ - fixed a small bug regarding DoF-distance
+ - improved the "Subflame"-random-flame-generator
+ - many internal changes regarding to the upcoming JWildfire2.0
+
 V1.20 (18.01.2014):
  - new "Wikimedia Commons"-random-flame-generator
  - new "Synth"-random-flame-generator

@@ -778,4 +778,7 @@ public class Flame implements Assignable<Flame>, Serializable {
     this.frameCount = frameCount;
   }
 
+  public boolean hasPreRenderMotionProperty() {
+    return brightnessCurve.isEnabled() || contrastCurve.isEnabled() || gammaCurve.isEnabled() || gammaThresholdCurve.isEnabled() || vibrancyCurve.isEnabled();
+  }
 }

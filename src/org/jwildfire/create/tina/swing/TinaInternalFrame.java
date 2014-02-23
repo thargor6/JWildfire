@@ -1616,7 +1616,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaFilteringPanel.add(tinaDEFilterKernelCmb);
       tinaSouthTabbedPane.addTab("Special Shading", null, getShadingPanel(), null);
       tinaSouthTabbedPane.addTab("Gradient", null, getTinaPalettePanel(), null);
-      tinaSouthTabbedPane.addTab("Motion blur", null, getPanel_34(), null);
+      tinaSouthTabbedPane.addTab("Motion blur", null, getMotionBlurPanel(), null);
       tinaSouthTabbedPane.addTab("Layerz", null, getPanel_74(), null);
 
       tinaSouthTabbedPane.addChangeListener(new ChangeListener() {
@@ -4119,7 +4119,8 @@ public class TinaInternalFrame extends JInternalFrame {
         getLayersTable(), getLayerVisibleBtn(), getLayerAppendBtn(), getLayerHideOthersBtn(), getLayerShowAllBtn(), getLayerPreviewBtn(),
         getKeyframesFrameField(), getKeyframesFrameSlider(), getKeyframesFrameCountField(), getMotionBlurLengthField(), getMotionBlurLengthSlider(),
         getMotionBlurTimeStepField(), getMotionBlurTimeStepSlider(), getMotionBlurDecayField(), getMotionBlurDecaySlider(),
-        getMotionCurveEditModeButton(), getFrameSliderPanel(), getKeyframesFrameLbl(), getKeyframesFrameCountLbl());
+        getMotionCurveEditModeButton(), getFrameSliderPanel(), getKeyframesFrameLbl(), getKeyframesFrameCountLbl(),
+        getMotionBlurPanel());
 
     tinaController = new TinaController(params);
 
@@ -9069,7 +9070,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton layerHideOthersBtn;
   private JButton flameBrowserToBatchRendererBtn;
   private JToggleButton layerPreviewBtn;
-  private JPanel panel_34;
+  private JPanel motionBlurPanel;
   private JPanel panel_79;
   private JPanel panel_80;
   private JWFNumberField keyframesFrameField;
@@ -15211,10 +15212,10 @@ public class TinaInternalFrame extends JInternalFrame {
     return layerPreviewBtn;
   }
 
-  private JPanel getPanel_34() {
-    if (panel_34 == null) {
-      panel_34 = new JPanel();
-      panel_34.setLayout(null);
+  private JPanel getMotionBlurPanel() {
+    if (motionBlurPanel == null) {
+      motionBlurPanel = new JPanel();
+      motionBlurPanel.setLayout(null);
 
       JLabel lblBlurLength = new JLabel();
       lblBlurLength.setText("Blur length");
@@ -15224,7 +15225,7 @@ public class TinaInternalFrame extends JInternalFrame {
       lblBlurLength.setLocation(new Point(4, 4));
       lblBlurLength.setFont(new Font("Dialog", Font.BOLD, 10));
       lblBlurLength.setBounds(6, 6, 94, 22);
-      panel_34.add(lblBlurLength);
+      motionBlurPanel.add(lblBlurLength);
 
       motionBlurLengthField = new JWFNumberField();
       motionBlurLengthField.addChangeListener(new ChangeListener() {
@@ -15249,7 +15250,7 @@ public class TinaInternalFrame extends JInternalFrame {
       motionBlurLengthField.setLocation(new Point(100, 4));
       motionBlurLengthField.setFont(new Font("Dialog", Font.PLAIN, 10));
       motionBlurLengthField.setBounds(102, 6, 100, 24);
-      panel_34.add(motionBlurLengthField);
+      motionBlurPanel.add(motionBlurLengthField);
 
       motionBlurLengthSlider = new JSlider();
       motionBlurLengthSlider.addMouseListener(new MouseAdapter() {
@@ -15271,7 +15272,7 @@ public class TinaInternalFrame extends JInternalFrame {
       motionBlurLengthSlider.setName("motionBlurLengthSlider");
       motionBlurLengthSlider.setLocation(new Point(202, 4));
       motionBlurLengthSlider.setBounds(204, 6, 220, 19);
-      panel_34.add(motionBlurLengthSlider);
+      motionBlurPanel.add(motionBlurLengthSlider);
 
       motionBlurTimeStepSlider = new JSlider();
       motionBlurTimeStepSlider.addMouseListener(new MouseAdapter() {
@@ -15293,7 +15294,7 @@ public class TinaInternalFrame extends JInternalFrame {
       motionBlurTimeStepSlider.setName("motionBlurTimeStepSlider");
       motionBlurTimeStepSlider.setLocation(new Point(202, 28));
       motionBlurTimeStepSlider.setBounds(204, 30, 220, 19);
-      panel_34.add(motionBlurTimeStepSlider);
+      motionBlurPanel.add(motionBlurTimeStepSlider);
 
       motionBlurTimeStepField = new JWFNumberField();
       motionBlurTimeStepField.addChangeListener(new ChangeListener() {
@@ -15318,7 +15319,7 @@ public class TinaInternalFrame extends JInternalFrame {
       motionBlurTimeStepField.setLocation(new Point(100, 28));
       motionBlurTimeStepField.setFont(new Font("Dialog", Font.PLAIN, 10));
       motionBlurTimeStepField.setBounds(102, 30, 100, 24);
-      panel_34.add(motionBlurTimeStepField);
+      motionBlurPanel.add(motionBlurTimeStepField);
 
       JLabel lblTimeStep = new JLabel();
       lblTimeStep.setText("Time step");
@@ -15328,7 +15329,7 @@ public class TinaInternalFrame extends JInternalFrame {
       lblTimeStep.setLocation(new Point(4, 28));
       lblTimeStep.setFont(new Font("Dialog", Font.BOLD, 10));
       lblTimeStep.setBounds(6, 30, 94, 22);
-      panel_34.add(lblTimeStep);
+      motionBlurPanel.add(lblTimeStep);
 
       JLabel lblDecay = new JLabel();
       lblDecay.setText("Decay");
@@ -15338,7 +15339,7 @@ public class TinaInternalFrame extends JInternalFrame {
       lblDecay.setLocation(new Point(4, 52));
       lblDecay.setFont(new Font("Dialog", Font.BOLD, 10));
       lblDecay.setBounds(6, 54, 94, 22);
-      panel_34.add(lblDecay);
+      motionBlurPanel.add(lblDecay);
 
       motionBlurDecayField = new JWFNumberField();
       motionBlurDecayField.addChangeListener(new ChangeListener() {
@@ -15362,7 +15363,7 @@ public class TinaInternalFrame extends JInternalFrame {
       motionBlurDecayField.setLocation(new Point(100, 52));
       motionBlurDecayField.setFont(new Font("Dialog", Font.PLAIN, 10));
       motionBlurDecayField.setBounds(102, 54, 100, 24);
-      panel_34.add(motionBlurDecayField);
+      motionBlurPanel.add(motionBlurDecayField);
 
       motionBlurDecaySlider = new JSlider();
       motionBlurDecaySlider.addMouseListener(new MouseAdapter() {
@@ -15385,9 +15386,9 @@ public class TinaInternalFrame extends JInternalFrame {
       motionBlurDecaySlider.setName("motionBlurDecaySlider");
       motionBlurDecaySlider.setLocation(new Point(202, 52));
       motionBlurDecaySlider.setBounds(204, 54, 220, 19);
-      panel_34.add(motionBlurDecaySlider);
+      motionBlurPanel.add(motionBlurDecaySlider);
     }
-    return panel_34;
+    return motionBlurPanel;
   }
 
   private JPanel getPanel_79() {

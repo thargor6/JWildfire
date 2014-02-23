@@ -101,7 +101,14 @@ public class RandomFlameGeneratorSampler {
     double bestCoverage = 0.0;
     for (int j = 0; j < quality.getMaxSamples(); j++) {
       // create flame
-      Flame flame = randGen.createFlame(prefs, randGenState);
+      Flame flame;
+      try {
+        flame = randGen.createFlame(prefs, randGenState);
+      }
+      catch (Exception ex) {
+        flame = new Flame();
+        ex.printStackTrace();
+      }
       flame.setWidth(imageWidth);
       flame.setHeight(imageHeight);
       flame.setPixelsPerUnit(10);

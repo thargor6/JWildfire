@@ -28,6 +28,7 @@ import java.util.List;
 
 import org.jwildfire.base.Prefs;
 import org.jwildfire.base.QualityProfile;
+import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.animate.AnimationService;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.Layer;
@@ -92,15 +93,19 @@ public class FlameRenderer {
   }
 
   public void initRasterSizes(int pImageWidth, int pImageHeight) {
-    double time = flame.getFrame() >= 0 ? flame.getFrame() : 0;
-    // TODO: if necessary
-    // two steps: build metamodel + apply
-    Flame newFlame = AnimationService.evalMotionCurves(flame.makeCopy(), time);
+    Flame flameForInit;
+    if (flame.hasPreRenderMotionProperty() && Tools.V2_FEATURE_ENABLE) {
+      double time = flame.getFrame() >= 0 ? flame.getFrame() : 0;
+      flameForInit = AnimationService.evalMotionCurves(flame.makeCopy(), time);
+    }
+    else {
+      flameForInit = flame;
+    }
 
     imageWidth = pImageWidth;
     imageHeight = pImageHeight;
-    logDensityFilter = new LogDensityFilter(newFlame);
-    gammaCorrectionFilter = new GammaCorrectionFilter(newFlame, withAlpha);
+    logDensityFilter = new LogDensityFilter(flameForInit);
+    gammaCorrectionFilter = new GammaCorrectionFilter(flameForInit, withAlpha);
     maxBorderWidth = (MAX_FILTER_WIDTH - 1) / 2;
     borderWidth = (logDensityFilter.getNoiseFilterSize() - 1) / 2;
     rasterWidth = imageWidth + 2 * maxBorderWidth;
@@ -699,7 +704,7 @@ public class FlameRenderer {
       FlameRendererView view = createView(newFlame);
       res.add(new RenderPacket(newFlame, view));
     }
-    if (pFlame.getMotionBlurLength() > 0) {
+    if (pFlame.getMotionBlurLength() > 0 && Tools.V2_FEATURE_ENABLE) {
       double time = pFrame >= 0 ? pFrame : 0;
       for (int p = 1; p < pFlame.getMotionBlurLength(); p++) {
         time += pFlame.getMotionBlurTimeStep();

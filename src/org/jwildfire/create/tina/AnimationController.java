@@ -44,10 +44,11 @@ public class AnimationController {
   private final JPanel frameSliderPanel;
   private final JLabel keyframesFrameLbl;
   private final JLabel keyframesFrameCountLbl;
+  private final JPanel motionBlurPanel;
 
   public AnimationController(TinaController pTinaController, ErrorHandler pErrorHandler, Prefs pPrefs, JPanel pRootPanel,
       JWFNumberField pKeyframesFrameField, JSlider pKeyframesFrameSlider, JWFNumberField pKeyframesFrameCountField,
-      JPanel pFrameSliderPanel, JLabel pKeyframesFrameLbl, JLabel pKeyframesFrameCountLbl, JToggleButton pMotionCurveEditModeButton) {
+      JPanel pFrameSliderPanel, JLabel pKeyframesFrameLbl, JLabel pKeyframesFrameCountLbl, JToggleButton pMotionCurveEditModeButton, JPanel pMotionBlurPanel) {
     tinaController = pTinaController;
     errorHandler = pErrorHandler;
     prefs = pPrefs;
@@ -60,6 +61,10 @@ public class AnimationController {
     keyframesFrameCountLbl = pKeyframesFrameCountLbl;
     motionCurveEditModeButton = pMotionCurveEditModeButton;
     motionCurveEditModeButton.setVisible(Tools.V2_FEATURE_ENABLE);
+    motionBlurPanel = pMotionBlurPanel;
+    if (!Tools.V2_FEATURE_ENABLE) {
+      motionBlurPanel.getParent().remove(motionBlurPanel);
+    }
     enableControls();
   }
 
