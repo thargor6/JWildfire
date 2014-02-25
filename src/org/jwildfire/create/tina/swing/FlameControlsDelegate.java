@@ -16,7 +16,6 @@
 */
 package org.jwildfire.create.tina.swing;
 
-import java.awt.event.ActionEvent;
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -26,7 +25,6 @@ import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JSlider;
 import javax.swing.JTabbedPane;
-import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
 
 import org.jwildfire.base.Tools;
@@ -35,17 +33,11 @@ import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.MotionCurve;
 import org.jwildfire.create.tina.base.Shading;
 import org.jwildfire.create.tina.base.ShadingInfo;
-import org.jwildfire.envelope.Envelope;
 
-public class FlameControlsDelegate {
-  private final TinaController owner;
-  private final TinaControllerData data;
-  private final JTabbedPane rootTabbedPane;
+public class FlameControlsDelegate extends AbstractControlsDelegate {
 
   public FlameControlsDelegate(TinaController pOwner, TinaControllerData pData, JTabbedPane pRootTabbedPane) {
-    owner = pOwner;
-    data = pData;
-    rootTabbedPane = pRootTabbedPane;
+    super(pOwner, pData, pRootTabbedPane);
   }
 
   public void enableFlameControl(JCheckBox pSender, boolean pDisabled) {
@@ -56,71 +48,24 @@ public class FlameControlsDelegate {
     pSender.setEnabled(!pDisabled && owner.getCurrFlame() != null);
   }
 
-  public void enableFlameControl(JWFNumberField pSender, boolean pDisabled) {
-    Flame flame = owner.getCurrFlame();
-    boolean enabled = !pDisabled;
-    if (!pDisabled) {
-      if (flame == null) {
-        enabled = false;
-      }
-      else {
-        String propName = pSender.getMotionPropertyName();
-        if (propName != null && propName.length() > 0) {
-          MotionCurve curve = AnimationService.getPropertyCurve(flame, propName);
-          enabled = !curve.isEnabled();
-        }
-        else {
-          enabled = true;
-        }
-      }
-    }
-    pSender.setEnabled(enabled);
-    if (pSender.getLinkedMotionControl() != null) {
-      pSender.getLinkedMotionControl().setEnabled(enabled);
-    }
+  @Override
+  public String getEditingTitle(JWFNumberField sender) {
+    return "flame property \"" + sender.getLinkedLabelControl().getText() + "\"";
   }
 
-  public void editFlameMotionCurve(ActionEvent e) {
-    JWFNumberField sender = ((JWFNumberField.JWFNumberFieldButton) e.getSource()).getOwner();
-    String label = "flame property \"" + sender.getLinkedLabelControl().getText() + "\"";
-    String propName = sender.getMotionPropertyName();
-    editFlameMotionCurve(propName, label);
-    enableFlameControl(sender, false);
+  @Override
+  public MotionCurve getCurveToEdit(String pPropName) {
+    return AnimationService.getPropertyCurve(owner.getCurrFlame(), pPropName);
   }
 
-  private void editFlameMotionCurve(String pPropName, String pLabel) {
-    Flame flame = owner.getCurrFlame();
+  @Override
+  public double getInitialValue(String pPropName) {
+    return AnimationService.getPropertyValue(owner.getCurrFlame(), pPropName);
+  }
 
-    MotionCurve curve = AnimationService.getPropertyCurve(flame, pPropName);
-    Envelope envelope = curve.toEnvelope();
-    if (envelope.getX().length == 0) {
-      double initialValue = AnimationService.getPropertyValue(flame, pPropName);
-      int[] x = new int[] { 0 };
-      if (initialValue <= envelope.getViewYMin() + 1) {
-        envelope.setViewYMin(initialValue - 1.0);
-      }
-      if (initialValue >= envelope.getViewYMax() - 1) {
-        envelope.setViewYMax(initialValue + 1.0);
-      }
-      double[] y = new double[] { initialValue };
-      envelope.setValues(x, y);
-    }
-
-    EnvelopeDialog dlg = new EnvelopeDialog(SwingUtilities.getWindowAncestor(rootTabbedPane), envelope, true);
-    dlg.setTitle("Editing " + pLabel);
-    dlg.setModal(true);
-    dlg.setVisible(true);
-    if (dlg.isConfirmed()) {
-      owner.undoManager.saveUndoPoint(flame);
-      if (dlg.isRemoved()) {
-        curve.setEnabled(false);
-      }
-      else {
-        curve.assignFromEnvelope(envelope);
-        curve.setEnabled(true);
-      }
-      owner.refreshFlameImage(false);
-    }
+  @Override
+  public boolean isEnabled() {
+    return owner.getCurrFlame() != null;
   }
 
   public List<JWFNumberField> getMotionControls() {
@@ -152,24 +97,24 @@ public class FlameControlsDelegate {
   }
 
   public void enableControls() {
-    enableFlameControl(data.cameraRollREd, false);
-    enableFlameControl(data.cameraPitchREd, false);
-    enableFlameControl(data.cameraYawREd, false);
-    enableFlameControl(data.cameraPerspectiveREd, false);
-    enableFlameControl(data.cameraCentreXREd, false);
-    enableFlameControl(data.cameraCentreYREd, false);
-    enableFlameControl(data.cameraZoomREd, false);
-    enableFlameControl(data.pixelsPerUnitREd, false);
+    enableControl(data.cameraRollREd, false);
+    enableControl(data.cameraPitchREd, false);
+    enableControl(data.cameraYawREd, false);
+    enableControl(data.cameraPerspectiveREd, false);
+    enableControl(data.cameraCentreXREd, false);
+    enableControl(data.cameraCentreYREd, false);
+    enableControl(data.cameraZoomREd, false);
+    enableControl(data.pixelsPerUnitREd, false);
 
-    enableFlameControl(data.motionBlurLengthField, false);
-    enableFlameControl(data.motionBlurTimeStepField, false);
-    enableFlameControl(data.motionBlurDecayField, false);
+    enableControl(data.motionBlurLengthField, false);
+    enableControl(data.motionBlurTimeStepField, false);
+    enableControl(data.motionBlurDecayField, false);
 
-    enableFlameControl(data.brightnessREd, false);
-    enableFlameControl(data.contrastREd, false);
-    enableFlameControl(data.vibrancyREd, false);
-    enableFlameControl(data.gammaREd, false);
-    enableFlameControl(data.gammaThresholdREd, false);
+    enableControl(data.brightnessREd, false);
+    enableControl(data.contrastREd, false);
+    enableControl(data.vibrancyREd, false);
+    enableControl(data.gammaREd, false);
+    enableControl(data.gammaThresholdREd, false);
 
     enableDEFilterUI();
 
@@ -501,11 +446,11 @@ public class FlameControlsDelegate {
   public void enableDEFilterUI() {
     boolean deEnabled = getCurrFlame() != null ? getCurrFlame().isDeFilterEnabled() : false;
     enableFlameControl(data.deFilterEnableCbx, false);
-    enableFlameControl(data.deFilterMaxRadiusREd, !deEnabled);
-    enableFlameControl(data.deFilterMinRadiusREd, !deEnabled);
-    enableFlameControl(data.deFilterCurveREd, !deEnabled);
+    enableControl(data.deFilterMaxRadiusREd, !deEnabled);
+    enableControl(data.deFilterMinRadiusREd, !deEnabled);
+    enableControl(data.deFilterCurveREd, !deEnabled);
     enableFlameControl(data.deFilterKernelCmb, !deEnabled);
-    enableFlameControl(data.filterRadiusREd, false);
+    enableControl(data.filterRadiusREd, false);
     enableFlameControl(data.filterKernelCmb, false);
   }
 
@@ -1134,4 +1079,5 @@ public class FlameControlsDelegate {
   public void motionBlurDecaySlider_changed(ChangeEvent e) {
     flameSliderChanged(data.motionBlurDecaySlider, data.motionBlurDecayField, "motionBlurDecay", TinaController.SLIDER_SCALE_ZOOM);
   }
+
 }

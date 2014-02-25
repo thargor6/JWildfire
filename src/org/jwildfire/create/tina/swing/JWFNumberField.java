@@ -386,4 +386,12 @@ public class JWFNumberField extends JPanel {
   public boolean isEnabled() {
     return spinnerField.isEnabled();
   }
+
+  public void enableMotionCurveBtn(boolean enabled) {
+    motionCurveBtn.setEnabled(enabled);
+  }
+
+  public void enableSpinnerField(boolean enabled) {
+    spinnerField.setEnabled(enabled);
+  }
 }

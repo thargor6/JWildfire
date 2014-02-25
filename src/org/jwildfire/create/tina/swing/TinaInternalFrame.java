@@ -319,16 +319,16 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton affineRotateRightButton = null;
   private JButton affineEnlargeButton = null;
   private JButton affineShrinkButton = null;
-  private JTextField affineRotateAmountREd = null;
+  private JWFNumberField affineRotateAmountREd = null;
   private JPanel transformationsNorthPanel = null;
   private JPanel trnsformationsEastPanel = null;
   private JSplitPane transformationsSplitPane = null;
-  private JTextField affineScaleAmountREd = null;
+  private JWFNumberField affineScaleAmountREd = null;
   private JButton affineMoveUpButton = null;
   private JButton affineMoveDownButton = null;
   private JButton affineMoveLeftButton = null;
   private JButton affineMoveRightButton = null;
-  private JTextField affineMoveAmountREd = null;
+  private JWFNumberField affineMoveVertAmountREd = null;
   private JButton randomBatchButton = null;
   private JLabel nonlinearVar1Lbl = null;
   private JComboBox nonlinearVar1Cmb = null;
@@ -801,7 +801,7 @@ public class TinaInternalFrame extends JInternalFrame {
       dofDOFREd.setLinkedMotionControlName("dofDOFSlider");
       dofDOFREd.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
-          tinaController.getFlameControls().editFlameMotionCurve(e);
+          tinaController.getFlameControls().editMotionCurve(e);
         }
       });
       dofDOFREd.addChangeListener(new ChangeListener() {
@@ -887,7 +887,7 @@ public class TinaInternalFrame extends JInternalFrame {
       dofDOFAreaREd.setLinkedMotionControlName("dofDOFAreaSlider");
       dofDOFAreaREd.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
-          tinaController.getFlameControls().editFlameMotionCurve(e);
+          tinaController.getFlameControls().editMotionCurve(e);
         }
       });
       dofDOFAreaREd.addChangeListener(new ChangeListener() {
@@ -952,7 +952,7 @@ public class TinaInternalFrame extends JInternalFrame {
       dofDOFExponentREd.setLinkedMotionControlName("dofDOFExponentSlider");
       dofDOFExponentREd.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
-          tinaController.getFlameControls().editFlameMotionCurve(e);
+          tinaController.getFlameControls().editMotionCurve(e);
         }
       });
       dofDOFExponentREd.addChangeListener(new ChangeListener() {
@@ -1017,7 +1017,7 @@ public class TinaInternalFrame extends JInternalFrame {
       dofCamZREd.setLinkedMotionControlName("dofCamZSlider");
       dofCamZREd.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
-          tinaController.getFlameControls().editFlameMotionCurve(e);
+          tinaController.getFlameControls().editMotionCurve(e);
         }
       });
       dofCamZREd.addChangeListener(new ChangeListener() {
@@ -1058,7 +1058,7 @@ public class TinaInternalFrame extends JInternalFrame {
       dofFocusXREd.setLinkedMotionControlName("dofFocusXSlider");
       dofFocusXREd.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
-          tinaController.getFlameControls().editFlameMotionCurve(e);
+          tinaController.getFlameControls().editMotionCurve(e);
         }
       });
       dofFocusXREd.addChangeListener(new ChangeListener() {
@@ -1123,7 +1123,7 @@ public class TinaInternalFrame extends JInternalFrame {
       dofFocusYREd.setLinkedMotionControlName("dofFocusYSlider");
       dofFocusYREd.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
-          tinaController.getFlameControls().editFlameMotionCurve(e);
+          tinaController.getFlameControls().editMotionCurve(e);
         }
       });
       dofFocusYREd.addChangeListener(new ChangeListener() {
@@ -1212,7 +1212,7 @@ public class TinaInternalFrame extends JInternalFrame {
       dofFocusZREd.setLinkedMotionControlName("dofFocusZSlider");
       dofFocusZREd.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
-          tinaController.getFlameControls().editFlameMotionCurve(e);
+          tinaController.getFlameControls().editMotionCurve(e);
         }
       });
       dofFocusZREd.addChangeListener(new ChangeListener() {
@@ -1253,7 +1253,7 @@ public class TinaInternalFrame extends JInternalFrame {
       camDimishZREd.setLinkedMotionControlName("camDimishZSlider");
       camDimishZREd.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
-          tinaController.getFlameControls().editFlameMotionCurve(e);
+          tinaController.getFlameControls().editMotionCurve(e);
         }
       });
       camDimishZREd.addChangeListener(new ChangeListener() {
@@ -1827,7 +1827,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaCameraRollREd.setMotionPropertyName("camRoll");
       tinaCameraRollREd.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
-          tinaController.getFlameControls().editFlameMotionCurve(e);
+          tinaController.getFlameControls().editMotionCurve(e);
         }
       });
       tinaCameraRollREd.setValueStep(1.0);
@@ -1859,7 +1859,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaCameraPitchREd = new JWFNumberField();
       tinaCameraPitchREd.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
-          tinaController.getFlameControls().editFlameMotionCurve(e);
+          tinaController.getFlameControls().editMotionCurve(e);
         }
       });
       tinaCameraPitchREd.setMotionPropertyName("camPitch");
@@ -1895,7 +1895,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaCameraYawREd = new JWFNumberField();
       tinaCameraYawREd.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
-          tinaController.getFlameControls().editFlameMotionCurve(e);
+          tinaController.getFlameControls().editMotionCurve(e);
         }
       });
       tinaCameraYawREd.setMotionPropertyName("camYaw");
@@ -1931,7 +1931,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaCameraPerspectiveREd = new JWFNumberField();
       tinaCameraPerspectiveREd.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
-          tinaController.getFlameControls().editFlameMotionCurve(e);
+          tinaController.getFlameControls().editMotionCurve(e);
         }
       });
       tinaCameraPerspectiveREd.setMotionPropertyName("camPerspective");
@@ -2178,7 +2178,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaCameraCentreXREd.setLinkedMotionControlName("tinaCameraCentreXSlider");
       tinaCameraCentreXREd.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
-          tinaController.getFlameControls().editFlameMotionCurve(e);
+          tinaController.getFlameControls().editMotionCurve(e);
         }
       });
       tinaCameraCentreXREd.setMotionPropertyName("centreX");
@@ -2213,7 +2213,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaCameraCentreYREd = new JWFNumberField();
       tinaCameraCentreYREd.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
-          tinaController.getFlameControls().editFlameMotionCurve(e);
+          tinaController.getFlameControls().editMotionCurve(e);
         }
       });
       tinaCameraCentreYREd.setMotionPropertyName("centreY");
@@ -2310,7 +2310,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaCameraZoomREd = new JWFNumberField();
       tinaCameraZoomREd.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
-          tinaController.getFlameControls().editFlameMotionCurve(e);
+          tinaController.getFlameControls().editMotionCurve(e);
         }
       });
       tinaCameraZoomREd.setMotionPropertyName("camZoom");
@@ -2383,7 +2383,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaBrightnessREd.setHasMinValue(true);
       tinaBrightnessREd.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
-          tinaController.getFlameControls().editFlameMotionCurve(e);
+          tinaController.getFlameControls().editMotionCurve(e);
         }
       });
       tinaBrightnessREd.addChangeListener(new ChangeListener() {
@@ -2446,7 +2446,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaPixelsPerUnitREd = new JWFNumberField();
       tinaPixelsPerUnitREd.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
-          tinaController.getFlameControls().editFlameMotionCurve(e);
+          tinaController.getFlameControls().editMotionCurve(e);
         }
       });
       tinaPixelsPerUnitREd.setMotionPropertyName("pixelsPerUnit");
@@ -2519,7 +2519,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaContrastREd.setMaxValue(5.0);
       tinaContrastREd.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
-          tinaController.getFlameControls().editFlameMotionCurve(e);
+          tinaController.getFlameControls().editMotionCurve(e);
         }
       });
       tinaContrastREd.addChangeListener(new ChangeListener() {
@@ -2559,7 +2559,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaGammaREd.setValueStep(0.05);
       tinaGammaREd.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
-          tinaController.getFlameControls().editFlameMotionCurve(e);
+          tinaController.getFlameControls().editMotionCurve(e);
         }
       });
       tinaGammaREd.addChangeListener(new ChangeListener() {
@@ -2600,7 +2600,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaVibrancyREd.setMaxValue(1.0);
       tinaVibrancyREd.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
-          tinaController.getFlameControls().editFlameMotionCurve(e);
+          tinaController.getFlameControls().editMotionCurve(e);
         }
       });
       tinaVibrancyREd.addChangeListener(new ChangeListener() {
@@ -2641,7 +2641,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaGammaThresholdREd.setHasMaxValue(true);
       tinaGammaThresholdREd.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
-          tinaController.getFlameControls().editFlameMotionCurve(e);
+          tinaController.getFlameControls().editMotionCurve(e);
         }
       });
       tinaGammaThresholdREd.addChangeListener(new ChangeListener() {
@@ -3048,7 +3048,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaAffineTransformationPanel.add(getAffineMoveDownButton(), null);
       tinaAffineTransformationPanel.add(getAffineMoveLeftButton(), null);
       tinaAffineTransformationPanel.add(getAffineMoveRightButton(), null);
-      tinaAffineTransformationPanel.add(getAffineMoveAmountREd(), null);
+      tinaAffineTransformationPanel.add(getAffineMoveVertAmountREd(), null);
       tinaAffineTransformationPanel.add(getAffineEditPostTransformButton(), null);
       tinaAffineTransformationPanel.add(getAffineResetTransformButton(), null);
       tinaAffineTransformationPanel.add(getAffineFlipHorizontalButton(), null);
@@ -3070,6 +3070,15 @@ public class TinaInternalFrame extends JInternalFrame {
       affinePreserveZButton.setFont(new Font("Dialog", Font.BOLD, 10));
       affinePreserveZButton.setBounds(216, 155, 104, 24);
       tinaAffineTransformationPanel.add(affinePreserveZButton);
+
+      affineMoveHorizAmountREd = new JWFNumberField();
+      affineMoveHorizAmountREd.setText("0.5");
+      affineMoveHorizAmountREd.setSize(new Dimension(70, 24));
+      affineMoveHorizAmountREd.setPreferredSize(new Dimension(56, 24));
+      affineMoveHorizAmountREd.setLocation(new Point(254, 80));
+      affineMoveHorizAmountREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      affineMoveHorizAmountREd.setBounds(172, 80, 70, 24);
+      tinaAffineTransformationPanel.add(affineMoveHorizAmountREd);
     }
     return tinaAffineTransformationPanel;
   }
@@ -4054,7 +4063,7 @@ public class TinaInternalFrame extends JInternalFrame {
         getTinaPaletteFrequencyREd(), getTinaPaletteFrequencySlider(), getTinaPaletteBlurREd(), getTinaPaletteBlurSlider(), getTinaPaletteInvertBtn(), getTinaPaletteReverseBtn(),
         getTinaTransformationsTable(), getAffineC00REd(),
         getAffineC01REd(), getAffineC10REd(), getAffineC11REd(), getAffineC20REd(), getAffineC21REd(), getAffineRotateAmountREd(), getAffineScaleAmountREd(),
-        getAffineMoveAmountREd(), getAffineRotateLeftButton(), getAffineRotateRightButton(), getAffineEnlargeButton(), getAffineShrinkButton(),
+        getAffineMoveHorizAmountREd(), getAffineRotateLeftButton(), getAffineRotateRightButton(), getAffineEnlargeButton(), getAffineShrinkButton(),
         getAffineMoveUpButton(), getAffineMoveLeftButton(), getAffineMoveRightButton(), getAffineMoveDownButton(), getTinaAddTransformationButton(),
         getTinaAddLinkedTransformationButton(),
         getTinaDuplicateTransformationButton(), getTinaDeleteTransformationButton(), getTinaAddFinalTransformationButton(), getRandomBatchPanel(),
@@ -4120,7 +4129,7 @@ public class TinaInternalFrame extends JInternalFrame {
         getKeyframesFrameField(), getKeyframesFrameSlider(), getKeyframesFrameCountField(), getMotionBlurLengthField(), getMotionBlurLengthSlider(),
         getMotionBlurTimeStepField(), getMotionBlurTimeStepSlider(), getMotionBlurDecayField(), getMotionBlurDecaySlider(),
         getMotionCurveEditModeButton(), getFrameSliderPanel(), getKeyframesFrameLbl(), getKeyframesFrameCountLbl(),
-        getMotionBlurPanel());
+        getMotionBlurPanel(), getAffineMoveVertAmountREd());
 
     tinaController = new TinaController(params);
 
@@ -4260,7 +4269,7 @@ public class TinaInternalFrame extends JInternalFrame {
       affineC00REd.setValueStep(0.01);
       affineC00REd.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
-          tinaController.getXFormControls().editXFormMotionCurve(e, getAffineEditPostTransformButton().isSelected() ? "postCoeff00" : "coeff00");
+          tinaController.getXFormControls().editMotionCurve(e, getAffineEditPostTransformButton().isSelected() ? "postCoeff00" : "coeff00");
         }
       });
       affineC00REd.addChangeListener(new ChangeListener() {
@@ -4289,7 +4298,7 @@ public class TinaInternalFrame extends JInternalFrame {
       affineC01REd.setValueStep(0.01);
       affineC01REd.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
-          tinaController.getXFormControls().editXFormMotionCurve(e, getAffineEditPostTransformButton().isSelected() ? "postCoeff01" : "coeff01");
+          tinaController.getXFormControls().editMotionCurve(e, getAffineEditPostTransformButton().isSelected() ? "postCoeff01" : "coeff01");
         }
       });
       affineC01REd.addChangeListener(new ChangeListener() {
@@ -4318,7 +4327,7 @@ public class TinaInternalFrame extends JInternalFrame {
       affineC10REd.setValueStep(0.01);
       affineC10REd.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
-          tinaController.getXFormControls().editXFormMotionCurve(e, getAffineEditPostTransformButton().isSelected() ? "postCoeff10" : "coeff10");
+          tinaController.getXFormControls().editMotionCurve(e, getAffineEditPostTransformButton().isSelected() ? "postCoeff10" : "coeff10");
         }
       });
       affineC10REd.addChangeListener(new ChangeListener() {
@@ -4347,7 +4356,7 @@ public class TinaInternalFrame extends JInternalFrame {
       affineC11REd.setValueStep(0.01);
       affineC11REd.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
-          tinaController.getXFormControls().editXFormMotionCurve(e, getAffineEditPostTransformButton().isSelected() ? "postCoeff11" : "coeff11");
+          tinaController.getXFormControls().editMotionCurve(e, getAffineEditPostTransformButton().isSelected() ? "postCoeff11" : "coeff11");
         }
       });
       affineC11REd.addChangeListener(new ChangeListener() {
@@ -4376,7 +4385,7 @@ public class TinaInternalFrame extends JInternalFrame {
       affineC20REd.setValueStep(0.01);
       affineC20REd.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
-          tinaController.getXFormControls().editXFormMotionCurve(e, getAffineEditPostTransformButton().isSelected() ? "postCoeff20" : "coeff20");
+          tinaController.getXFormControls().editMotionCurve(e, getAffineEditPostTransformButton().isSelected() ? "postCoeff20" : "coeff20");
         }
       });
       affineC20REd.addChangeListener(new ChangeListener() {
@@ -4405,7 +4414,7 @@ public class TinaInternalFrame extends JInternalFrame {
       affineC21REd.setValueStep(0.01);
       affineC21REd.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
-          tinaController.getXFormControls().editXFormMotionCurve(e, getAffineEditPostTransformButton().isSelected() ? "postCoeff21" : "coeff21");
+          tinaController.getXFormControls().editMotionCurve(e, getAffineEditPostTransformButton().isSelected() ? "postCoeff21" : "coeff21");
         }
       });
       affineC21REd.addChangeListener(new ChangeListener() {
@@ -4480,7 +4489,7 @@ public class TinaInternalFrame extends JInternalFrame {
       affineEnlargeButton = new JButton();
       affineEnlargeButton.setFont(new Font("Dialog", Font.BOLD, 8));
       affineEnlargeButton.setPreferredSize(new Dimension(55, 24));
-      affineEnlargeButton.setLocation(new Point(78, 57));
+      affineEnlargeButton.setLocation(new Point(88, 57));
       affineEnlargeButton.setSize(new Dimension(70, 24));
       affineEnlargeButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/enlarge.gif")));
       affineEnlargeButton.setToolTipText("Enlarge triangle");
@@ -4504,7 +4513,7 @@ public class TinaInternalFrame extends JInternalFrame {
       affineShrinkButton = new JButton();
       affineShrinkButton.setFont(new Font("Dialog", Font.BOLD, 8));
       affineShrinkButton.setPreferredSize(new Dimension(55, 24));
-      affineShrinkButton.setLocation(new Point(78, 102));
+      affineShrinkButton.setLocation(new Point(88, 102));
       affineShrinkButton.setSize(new Dimension(70, 24));
       affineShrinkButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/shrink.gif")));
       affineShrinkButton.setToolTipText("Shrink triangle");
@@ -4523,9 +4532,9 @@ public class TinaInternalFrame extends JInternalFrame {
    * 	
    * @return javax.swing.JTextField	
    */
-  private JTextField getAffineRotateAmountREd() {
+  private JWFNumberField getAffineRotateAmountREd() {
     if (affineRotateAmountREd == null) {
-      affineRotateAmountREd = new JTextField();
+      affineRotateAmountREd = new JWFNumberField();
       affineRotateAmountREd.setPreferredSize(new Dimension(56, 24));
       affineRotateAmountREd.setText("90");
       affineRotateAmountREd.setSize(new Dimension(70, 24));
@@ -4626,13 +4635,13 @@ public class TinaInternalFrame extends JInternalFrame {
    * 	
    * @return javax.swing.JTextField	
    */
-  private JTextField getAffineScaleAmountREd() {
+  private JWFNumberField getAffineScaleAmountREd() {
     if (affineScaleAmountREd == null) {
-      affineScaleAmountREd = new JTextField();
+      affineScaleAmountREd = new JWFNumberField();
       affineScaleAmountREd.setPreferredSize(new Dimension(56, 24));
       affineScaleAmountREd.setText("105");
       affineScaleAmountREd.setSize(new Dimension(70, 24));
-      affineScaleAmountREd.setLocation(new Point(78, 80));
+      affineScaleAmountREd.setLocation(new Point(88, 80));
       affineScaleAmountREd.setFont(new Font("Dialog", Font.PLAIN, 10));
     }
     return affineScaleAmountREd;
@@ -4648,7 +4657,7 @@ public class TinaInternalFrame extends JInternalFrame {
       affineMoveUpButton = new JButton();
       affineMoveUpButton.setFont(new Font("Dialog", Font.BOLD, 10));
       affineMoveUpButton.setPreferredSize(new Dimension(55, 24));
-      affineMoveUpButton.setLocation(new Point(202, 57));
+      affineMoveUpButton.setLocation(new Point(254, 57));
       affineMoveUpButton.setSize(new Dimension(70, 24));
       affineMoveUpButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/moveUp.gif")));
       affineMoveUpButton.setToolTipText("Move triangle up");
@@ -4672,7 +4681,7 @@ public class TinaInternalFrame extends JInternalFrame {
       affineMoveDownButton = new JButton();
       affineMoveDownButton.setFont(new Font("Dialog", Font.BOLD, 10));
       affineMoveDownButton.setPreferredSize(new Dimension(55, 24));
-      affineMoveDownButton.setLocation(new Point(202, 102));
+      affineMoveDownButton.setLocation(new Point(254, 102));
       affineMoveDownButton.setSize(new Dimension(70, 24));
       affineMoveDownButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/moveDown.gif")));
       affineMoveDownButton.setToolTipText("Move triangle down");
@@ -4696,8 +4705,8 @@ public class TinaInternalFrame extends JInternalFrame {
       affineMoveLeftButton = new JButton();
       affineMoveLeftButton.setText("");
       affineMoveLeftButton.setPreferredSize(new Dimension(55, 24));
-      affineMoveLeftButton.setLocation(new Point(154, 80));
-      affineMoveLeftButton.setSize(new Dimension(50, 24));
+      affineMoveLeftButton.setLocation(new Point(172, 57));
+      affineMoveLeftButton.setSize(new Dimension(70, 24));
       affineMoveLeftButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/moveLeft.gif")));
       affineMoveLeftButton.setToolTipText("Move triangle left");
       affineMoveLeftButton.setFont(new Font("Dialog", Font.BOLD, 10));
@@ -4719,8 +4728,8 @@ public class TinaInternalFrame extends JInternalFrame {
     if (affineMoveRightButton == null) {
       affineMoveRightButton = new JButton();
       affineMoveRightButton.setText("");
-      affineMoveRightButton.setLocation(new Point(270, 80));
-      affineMoveRightButton.setSize(new Dimension(50, 24));
+      affineMoveRightButton.setLocation(new Point(172, 102));
+      affineMoveRightButton.setSize(new Dimension(70, 24));
       affineMoveRightButton.setPreferredSize(new Dimension(55, 24));
       affineMoveRightButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/moveRight.gif")));
       affineMoveRightButton.setToolTipText("Move triangle right");
@@ -4739,16 +4748,16 @@ public class TinaInternalFrame extends JInternalFrame {
    * 	
    * @return javax.swing.JTextField	
    */
-  private JTextField getAffineMoveAmountREd() {
-    if (affineMoveAmountREd == null) {
-      affineMoveAmountREd = new JTextField();
-      affineMoveAmountREd.setPreferredSize(new Dimension(56, 24));
-      affineMoveAmountREd.setText("0.5");
-      affineMoveAmountREd.setSize(new Dimension(70, 24));
-      affineMoveAmountREd.setLocation(new Point(202, 80));
-      affineMoveAmountREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+  private JWFNumberField getAffineMoveVertAmountREd() {
+    if (affineMoveVertAmountREd == null) {
+      affineMoveVertAmountREd = new JWFNumberField();
+      affineMoveVertAmountREd.setPreferredSize(new Dimension(56, 24));
+      affineMoveVertAmountREd.setText("0.5");
+      affineMoveVertAmountREd.setSize(new Dimension(70, 24));
+      affineMoveVertAmountREd.setLocation(new Point(254, 80));
+      affineMoveVertAmountREd.setFont(new Font("Dialog", Font.PLAIN, 10));
     }
-    return affineMoveAmountREd;
+    return affineMoveVertAmountREd;
   }
 
   /**
@@ -9086,6 +9095,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JSlider motionBlurDecaySlider;
   private JLabel keyframesFrameLbl;
   private JLabel keyframesFrameCountLbl;
+  private JWFNumberField affineMoveHorizAmountREd;
 
   /**
    * This method initializes renderBatchJobsScrollPane	
@@ -9303,8 +9313,8 @@ public class TinaInternalFrame extends JInternalFrame {
       affineFlipHorizontalButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/flipX.gif")));
       affineFlipHorizontalButton.setText("");
       affineFlipHorizontalButton.setToolTipText("Horizontal flip");
-      affineFlipHorizontalButton.setSize(new Dimension(82, 24));
-      affineFlipHorizontalButton.setLocation(new Point(154, 127));
+      affineFlipHorizontalButton.setSize(new Dimension(70, 24));
+      affineFlipHorizontalButton.setLocation(new Point(172, 127));
       affineFlipHorizontalButton.setFont(new Font("Dialog", Font.BOLD, 8));
       affineFlipHorizontalButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -9327,8 +9337,8 @@ public class TinaInternalFrame extends JInternalFrame {
       affineFlipVerticalButton.setToolTipText("Vertical flip");
       affineFlipVerticalButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/flipY.gif")));
       affineFlipVerticalButton.setText("");
-      affineFlipVerticalButton.setSize(new Dimension(80, 24));
-      affineFlipVerticalButton.setLocation(new Point(240, 127));
+      affineFlipVerticalButton.setSize(new Dimension(70, 24));
+      affineFlipVerticalButton.setLocation(new Point(254, 127));
       affineFlipVerticalButton.setFont(new Font("Dialog", Font.BOLD, 8));
       affineFlipVerticalButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -10306,7 +10316,7 @@ public class TinaInternalFrame extends JInternalFrame {
       affineScaleXButton.setToolTipText("Allow scaling in x-direction");
       affineScaleXButton.setMnemonic(KeyEvent.VK_P);
       affineScaleXButton.setText("");
-      affineScaleXButton.setLocation(new Point(78, 127));
+      affineScaleXButton.setLocation(new Point(88, 127));
       affineScaleXButton.setSize(new Dimension(32, 24));
       affineScaleXButton.setSelected(true);
       affineScaleXButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/allowScaleX.gif")));
@@ -10334,7 +10344,7 @@ public class TinaInternalFrame extends JInternalFrame {
       affineScaleYButton.setSelected(true);
       affineScaleYButton.setText("");
       affineScaleYButton.setSize(new Dimension(32, 24));
-      affineScaleYButton.setLocation(new Point(116, 127));
+      affineScaleYButton.setLocation(new Point(126, 127));
       affineScaleYButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/allowScaleY.gif")));
       affineScaleYButton.setFont(new Font("Dialog", Font.BOLD, 10));
       affineScaleYButton.addChangeListener(new javax.swing.event.ChangeListener() {
@@ -15532,6 +15542,10 @@ public class TinaInternalFrame extends JInternalFrame {
 
   public JLabel getKeyframesFrameCountLbl() {
     return keyframesFrameCountLbl;
+  }
+
+  public JWFNumberField getAffineMoveHorizAmountREd() {
+    return affineMoveHorizAmountREd;
   }
 } //  @jve:decl-index=0:visual-constraint="10,10"
 

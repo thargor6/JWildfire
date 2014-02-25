@@ -37,4 +37,4 @@ build/JWildfire.exe
 src/org/jocl/samples
 FasterMath*
 MathTest*
-XFormControlsDelegate*
+AbstractControlsDelegate*

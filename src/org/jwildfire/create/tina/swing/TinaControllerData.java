@@ -174,9 +174,10 @@ public class TinaControllerData {
   public JWFNumberField affineC11REd;
   public JWFNumberField affineC20REd;
   public JWFNumberField affineC21REd;
-  public JTextField affineRotateAmountREd;
-  public JTextField affineScaleAmountREd;
-  public JTextField affineMoveAmountREd;
+  public JWFNumberField affineRotateAmountREd;
+  public JWFNumberField affineScaleAmountREd;
+  public JWFNumberField affineMoveHorizAmountREd;
+  public JWFNumberField affineMoveVertAmountREd;
   public JButton affineRotateLeftButton;
   public JButton affineRotateRightButton;
   public JButton affineEnlargeButton;

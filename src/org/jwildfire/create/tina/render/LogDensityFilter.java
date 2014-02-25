@@ -157,8 +157,9 @@ public class LogDensityFilter {
         for (int j = 0; j < noiseFilterSize; j++) {
           AbstractRasterPoint point = getRasterPoint(pX + j, pY + i);
           double logScale;
-          if (point.getCount() < precalcLogArray.length) {
-            logScale = precalcLogArray[(int) point.getCount()];
+          int pIdx = (int) point.getCount();
+          if (pIdx < precalcLogArray.length) {
+            logScale = precalcLogArray[pIdx];
           }
           else {
             logScale = (k1 * log10(1.0 + flame.getWhiteLevel() * point.getCount() * k2)) / (flame.getWhiteLevel() * point.getCount());

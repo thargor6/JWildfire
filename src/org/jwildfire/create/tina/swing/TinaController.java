@@ -365,7 +365,8 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
     data.affineC21REd = parameterObject.pAffineC21REd;
     data.affineRotateAmountREd = parameterObject.pAffineRotateAmountREd;
     data.affineScaleAmountREd = parameterObject.pAffineScaleAmountREd;
-    data.affineMoveAmountREd = parameterObject.pAffineMoveAmountREd;
+    data.affineMoveHorizAmountREd = parameterObject.affineMoveHorizAmountREd;
+    data.affineMoveVertAmountREd = parameterObject.affineMoveVertAmountREd;
     data.affineRotateLeftButton = parameterObject.pAffineRotateLeftButton;
     data.affineRotateRightButton = parameterObject.pAffineRotateRightButton;
     data.affineEnlargeButton = parameterObject.pAffineEnlargeButton;
@@ -957,6 +958,7 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
     setCurrFlame(pFlame, true);
   }
 
+  // TODO gradient editor doesnt seem to not work anymore 
   private void setCurrFlame(Flame pFlame, boolean pAddToThumbnails) {
     if (_currFlame == null || !_currFlame.equals(pFlame)) {
       _currRandomizeFlame = pFlame.makeCopy();
@@ -2042,7 +2044,8 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
 
     data.affineRotateAmountREd.setEnabled(enabled);
     data.affineScaleAmountREd.setEnabled(enabled);
-    data.affineMoveAmountREd.setEnabled(enabled);
+    data.affineMoveHorizAmountREd.setEnabled(enabled);
+    data.affineMoveVertAmountREd.setEnabled(enabled);
     data.affineRotateLeftButton.setEnabled(enabled);
     data.affineRotateRightButton.setEnabled(enabled);
     data.affineEnlargeButton.setEnabled(enabled);
@@ -2368,7 +2371,7 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
 
   public void xForm_moveRight(double pScale) {
     forceTriangleMode();
-    double amount = Tools.stringToDouble(data.affineMoveAmountREd.getText()) * pScale;
+    double amount = Tools.stringToDouble(data.affineMoveHorizAmountREd.getText()) * pScale;
     if (MathLib.fabs(amount) > MathLib.EPSILON) {
       saveUndoPoint();
       XFormTransformService.globalTranslate(getCurrXForm(), amount, 0, data.affineEditPostTransformButton.isSelected());
@@ -2388,7 +2391,7 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
 
   public void xForm_moveLeft(double pScale) {
     forceTriangleMode();
-    double amount = Tools.stringToDouble(data.affineMoveAmountREd.getText()) * pScale;
+    double amount = Tools.stringToDouble(data.affineMoveHorizAmountREd.getText()) * pScale;
     if (MathLib.fabs(amount) > MathLib.EPSILON) {
       saveUndoPoint();
       XFormTransformService.globalTranslate(getCurrXForm(), -amount, 0, data.affineEditPostTransformButton.isSelected());
@@ -2442,7 +2445,7 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
 
   public void xForm_moveUp(double pScale) {
     forceTriangleMode();
-    double amount = Tools.stringToDouble(data.affineMoveAmountREd.getText()) * pScale;
+    double amount = Tools.stringToDouble(data.affineMoveVertAmountREd.getText()) * pScale;
     if (MathLib.fabs(amount) > MathLib.EPSILON) {
       saveUndoPoint();
       XFormTransformService.globalTranslate(getCurrXForm(), 0, -amount, data.affineEditPostTransformButton.isSelected());
@@ -2464,7 +2467,7 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
 
   public void xForm_moveDown(double pScale) {
     forceTriangleMode();
-    double amount = Tools.stringToDouble(data.affineMoveAmountREd.getText()) * pScale;
+    double amount = Tools.stringToDouble(data.affineMoveVertAmountREd.getText()) * pScale;
     if (MathLib.fabs(amount) > MathLib.EPSILON) {
       saveUndoPoint();
       XFormTransformService.globalTranslate(getCurrXForm(), 0, amount, data.affineEditPostTransformButton.isSelected());
@@ -3399,6 +3402,7 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
     noRefresh = true;
     try {
       getCurrFlame().getShadingInfo().setShading((Shading) data.shadingCmb.getSelectedItem());
+      flameControls.enableShadingUI();
       flameControls.refreshShadingUI();
       refreshFlameImage(false);
     }
@@ -4994,6 +4998,11 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
     animationController.registerMotionPropertyControls(data.affineC20REd);
     animationController.registerMotionPropertyControls(data.affineC21REd);
 
+    animationController.registerMotionPropertyControls(data.affineRotateAmountREd);
+    animationController.registerMotionPropertyControls(data.affineScaleAmountREd);
+    animationController.registerMotionPropertyControls(data.affineMoveHorizAmountREd);
+    animationController.registerMotionPropertyControls(data.affineMoveVertAmountREd);
+
     // TODO
   }
 
@@ -5004,4 +5013,6 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
   public XFormControlsDelegate getXFormControls() {
     return xFormControls;
   }
+
+  // TODO http://portableapps.com/
 }
