@@ -17,7 +17,6 @@
 package org.jwildfire.create.tina.variation;
 
 import org.jwildfire.create.tina.random.AbstractRandomGenerator;
-import org.jwildfire.create.tina.random.AbstractRandomGenerator.RandGenStatus;
 import org.jwildfire.create.tina.render.FlameRenderer;
 
 public class FlameTransformationContext {
@@ -37,10 +36,6 @@ public class FlameTransformationContext {
 
   public int random(int pMax) {
     return randGen.random(pMax);
-  }
-
-  public void setRandGenStatus(RandGenStatus pRandGenStatus) {
-    randGen.setStatus(pRandGenStatus);
   }
 
   public FlameRenderer getFlameRenderer() {

@@ -16,22 +16,10 @@
 */
 package org.jwildfire.create.tina.render;
 
-import static org.jwildfire.base.mathlib.MathLib.EPSILON;
-import static org.jwildfire.base.mathlib.MathLib.M_PI;
 import static org.jwildfire.base.mathlib.MathLib.atan2;
-import static org.jwildfire.base.mathlib.MathLib.cos;
-import static org.jwildfire.base.mathlib.MathLib.exp;
-import static org.jwildfire.base.mathlib.MathLib.log;
 import static org.jwildfire.base.mathlib.MathLib.pow;
-import static org.jwildfire.base.mathlib.MathLib.sin;
-import static org.jwildfire.base.mathlib.MathLib.sqrt;
 
-import java.util.List;
-
-import org.jwildfire.create.tina.base.Constants;
-import org.jwildfire.create.tina.base.DrawMode;
 import org.jwildfire.create.tina.base.Layer;
-import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 import org.jwildfire.create.tina.base.raster.AbstractRasterPoint;
 import org.jwildfire.create.tina.palette.RenderColor;
@@ -40,6 +28,8 @@ import org.jwildfire.create.tina.variation.FlameTransformationContext;
 
 public class DistanceColorRenderIterationState extends DefaultRenderIterationState {
   private static final long serialVersionUID = 1L;
+
+  private static final double DX = 0.01;
 
   protected XYZPoint p0 = new XYZPoint();
   protected XYZPoint p1 = new XYZPoint();
@@ -72,13 +62,8 @@ public class DistanceColorRenderIterationState extends DefaultRenderIterationSta
     shift = flame.getShadingInfo().getDistanceColorShift();
   }
 
-  public void iterateNext() {
-    final double DX = 0.01;
-    int nextXForm = randGen.random(Constants.NEXT_APPLIED_XFORM_TABLE_SIZE);
-    xf = xf.getNextAppliedXFormTable()[nextXForm];
-    if (xf == null) {
-      return;
-    }
+  @Override
+  protected void transformPoint() {
     switch (style) {
       case 0:
         p0.assign(p);
@@ -115,51 +100,10 @@ public class DistanceColorRenderIterationState extends DefaultRenderIterationSta
       default:
         throw new IllegalArgumentException(String.valueOf(style));
     }
+  }
 
-    if (xf.getDrawMode() == DrawMode.HIDDEN)
-      return;
-    else if ((xf.getDrawMode() == DrawMode.OPAQUE) && (randGen.random() > xf.getOpacity()))
-      return;
-    List<XForm> finalXForms = layer.getFinalXForms();
-
-    int xIdx, yIdx;
-    if (finalXForms.size() > 0) {
-      finalXForms.get(0).transformPoint(ctx, affineT, varT, p, q);
-      for (int i = 1; i < finalXForms.size(); i++) {
-        finalXForms.get(i).transformPoint(ctx, affineT, varT, q, q);
-      }
-      if (!view.project(q, prj))
-        return;
-      if ((flame.getAntialiasAmount() > EPSILON) && (flame.getAntialiasRadius() > EPSILON) && (randGen.random() > 1.0 - flame.getAntialiasAmount())) {
-        double dr = exp(flame.getAntialiasRadius() * sqrt(-log(randGen.random()))) - 1.0;
-        double da = randGen.random() * 2.0 * M_PI;
-        xIdx = (int) (view.bws * prj.x + dr * cos(da) + 0.5);
-        yIdx = (int) (view.bhs * prj.y + dr * sin(da) + 0.5);
-      }
-      else {
-        xIdx = (int) (view.bws * prj.x + 0.5);
-        yIdx = (int) (view.bhs * prj.y + 0.5);
-      }
-    }
-    else {
-      q.assign(p);
-      if (!view.project(q, prj))
-        return;
-      if ((flame.getAntialiasAmount() > EPSILON) && (flame.getAntialiasRadius() > EPSILON) && (randGen.random() > 1.0 - flame.getAntialiasAmount())) {
-        double dr = exp(flame.getAntialiasRadius() * sqrt(-log(randGen.random()))) - 1.0;
-        double da = randGen.random() * 2.0 * M_PI;
-        xIdx = (int) (view.bws * prj.x + dr * cos(da) + 0.5);
-        yIdx = (int) (view.bhs * prj.y + dr * sin(da) + 0.5);
-      }
-      else {
-        xIdx = (int) (view.bws * prj.x + 0.5);
-        yIdx = (int) (view.bhs * prj.y + 0.5);
-      }
-    }
-    if (xIdx < 0 || xIdx >= renderer.rasterWidth)
-      return;
-    if (yIdx < 0 || yIdx >= renderer.rasterHeight)
-      return;
+  @Override
+  protected void plotPoint(int xIdx, int yIdx, double intensity) {
     AbstractRasterPoint rp = renderer.raster[yIdx][xIdx];
 
     double cx, cy, cz;

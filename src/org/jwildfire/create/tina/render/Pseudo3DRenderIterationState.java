@@ -16,18 +16,9 @@
 */
 package org.jwildfire.create.tina.render;
 
-import static org.jwildfire.base.mathlib.MathLib.EPSILON;
-import static org.jwildfire.base.mathlib.MathLib.M_PI;
-import static org.jwildfire.base.mathlib.MathLib.cos;
-import static org.jwildfire.base.mathlib.MathLib.exp;
-import static org.jwildfire.base.mathlib.MathLib.log;
-import static org.jwildfire.base.mathlib.MathLib.sin;
-import static org.jwildfire.base.mathlib.MathLib.sqrt;
-
 import java.util.List;
 
 import org.jwildfire.create.tina.base.Constants;
-import org.jwildfire.create.tina.base.DrawMode;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
@@ -42,7 +33,6 @@ public class Pseudo3DRenderIterationState extends DefaultRenderIterationState {
   protected XYZPoint[] varTA;
   protected XYZPoint[] pA;
   protected XYZPoint[] qA;
-  protected XYZPoint r;
   Pseudo3DShader shader;
 
   public Pseudo3DRenderIterationState(AbstractRenderThread pRenderThread, FlameRenderer pRenderer, RenderPacket pPacket, Layer pLayer, FlameTransformationContext pCtx, AbstractRandomGenerator pRandGen) {
@@ -69,7 +59,7 @@ public class Pseudo3DRenderIterationState extends DefaultRenderIterationState {
     for (int i = 0; i < pA.length; i++) {
       pA[i] = new XYZPoint();
     }
-    r = new XYZPoint();
+    q = new XYZPoint();
 
     pA[0].x = 2.0 * randGen.random() - 1.0;
     pA[0].y = 2.0 * randGen.random() - 1.0;
@@ -83,13 +73,13 @@ public class Pseudo3DRenderIterationState extends DefaultRenderIterationState {
     }
 
     xf = layer.getXForms().get(0);
-    xf.transformPoints(ctx, affineTA, varTA, pA, pA);
+    transformPoint();
     for (int i = 0; i <= Constants.INITIAL_ITERATIONS; i++) {
       xf = xf.getNextAppliedXFormTable()[randGen.random(Constants.NEXT_APPLIED_XFORM_TABLE_SIZE)];
       if (xf == null) {
         return;
       }
-      xf.transformPoints(ctx, affineTA, varTA, pA, pA);
+      transformPoint();
     }
   }
 
@@ -103,72 +93,33 @@ public class Pseudo3DRenderIterationState extends DefaultRenderIterationState {
   }
 
   @Override
-  public void iterateNext() {
-    xf = xf.getNextAppliedXFormTable()[randGen.random(Constants.NEXT_APPLIED_XFORM_TABLE_SIZE)];
-    if (xf == null) {
-      return;
+  protected void applyEmptyFinalTransform() {
+    for (int pIdx = 0; pIdx < pA.length; pIdx++) {
+      qA[pIdx] = new XYZPoint();
+      qA[pIdx].assign(pA[pIdx]);
     }
+    q.assign(qA[0]);
+  }
+
+  @Override
+  protected void applyFinalTransforms(List<XForm> finalXForms) {
+    for (int pIdx = 0; pIdx < pA.length; pIdx++) {
+      qA[pIdx] = new XYZPoint();
+    }
+    finalXForms.get(0).transformPoints(ctx, affineTA, varTA, pA, qA);
+    for (int i = 1; i < finalXForms.size(); i++) {
+      finalXForms.get(i).transformPoints(ctx, affineTA, varTA, qA, qA);
+    }
+    q.assign(qA[0]);
+  }
+
+  @Override
+  protected void transformPoint() {
     xf.transformPoints(ctx, affineTA, varTA, pA, pA);
-    if (xf.getDrawMode() == DrawMode.HIDDEN)
-      return;
-    else if ((xf.getDrawMode() == DrawMode.OPAQUE) && (randGen.random() > xf.getOpacity()))
-      return;
+  }
 
-    List<XForm> finalXForms = layer.getFinalXForms();
-    int xIdx, yIdx;
-    if (finalXForms.size() > 0) {
-      for (int pIdx = 0; pIdx < pA.length; pIdx++) {
-        qA[pIdx] = new XYZPoint();
-      }
-      finalXForms.get(0).transformPoints(ctx, affineTA, varTA, pA, qA);
-      for (int i = 1; i < finalXForms.size(); i++) {
-        finalXForms.get(i).transformPoints(ctx, affineTA, varTA, qA, qA);
-      }
-      r.assign(qA[0]);
-      if (!view.project(r, prj))
-        return;
-
-      if ((flame.getAntialiasAmount() > EPSILON) && (flame.getAntialiasRadius() > EPSILON) && (randGen.random() > 1.0 - flame.getAntialiasAmount())) {
-        double dr = exp(flame.getAntialiasRadius() * sqrt(-log(randGen.random()))) - 1.0;
-        double da = randGen.random() * 2.0 * M_PI;
-        xIdx = (int) (view.bws * prj.x + dr * cos(da) + 0.5);
-        if (xIdx < 0 || xIdx >= renderer.rasterWidth)
-          return;
-        yIdx = (int) (view.bhs * prj.y + dr * sin(da) + 0.5);
-        if (yIdx < 0 || yIdx >= renderer.rasterHeight)
-          return;
-      }
-      else {
-        xIdx = (int) (view.bws * prj.x + 0.5);
-        yIdx = (int) (view.bhs * prj.y + 0.5);
-      }
-
-    }
-    else {
-      for (int pIdx = 0; pIdx < pA.length; pIdx++) {
-        qA[pIdx] = new XYZPoint();
-        qA[pIdx].assign(pA[pIdx]);
-      }
-      r.assign(qA[0]);
-      if (!view.project(r, prj))
-        return;
-
-      if ((flame.getAntialiasAmount() > EPSILON) && (flame.getAntialiasRadius() > EPSILON) && (randGen.random() > 1.0 - flame.getAntialiasAmount())) {
-        double dr = exp(flame.getAntialiasRadius() * sqrt(-log(randGen.random()))) - 1.0;
-        double da = randGen.random() * 2.0 * M_PI;
-        xIdx = (int) (view.bws * prj.x + dr * cos(da) + 0.5);
-        yIdx = (int) (view.bhs * prj.y + dr * sin(da) + 0.5);
-      }
-      else {
-        xIdx = (int) (view.bws * prj.x + 0.5);
-        yIdx = (int) (view.bhs * prj.y + 0.5);
-      }
-    }
-    if (xIdx < 0 || xIdx >= renderer.rasterWidth)
-      return;
-    if (yIdx < 0 || yIdx >= renderer.rasterHeight)
-      return;
-
+  @Override
+  protected void plotPoint(int xIdx, int yIdx, double intensity) {
     AbstractRasterPoint rp = renderer.raster[yIdx][xIdx];
     RenderColor color;
     if (pA[0].rgbColor) {

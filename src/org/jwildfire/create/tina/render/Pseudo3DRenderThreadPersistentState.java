@@ -35,7 +35,7 @@ public final class Pseudo3DRenderThreadPersistentState extends RenderThreadPersi
     protected XYZPoint[] varTA;
     protected XYZPoint[] pA;
     protected XYZPoint[] qA;
-    protected XYZPoint r;
+    protected XYZPoint q;
     protected int xfIndex;
   }
 

@@ -39,7 +39,7 @@ public final class Pseudo3DRenderThread extends DefaultRenderThread {
       persist.packetIdx = renderPackets.indexOf(state.packet);
       persist.layerIdx = state.flame.getLayers().indexOf(state.layer);
       persist.xfIndex = (state.xf != null) ? state.layer.getXForms().indexOf(state.xf) : -1;
-      persist.r = iState.r != null ? iState.r.makeCopy() : null;
+      persist.q = iState.q != null ? iState.q.makeCopy() : null;
       persist.affineTA = copyXYZPointArray(iState.affineTA);
       persist.varTA = copyXYZPointArray(iState.varTA);
       persist.pA = copyXYZPointArray(iState.pA);
@@ -60,7 +60,7 @@ public final class Pseudo3DRenderThread extends DefaultRenderThread {
       Layer layer = packet.getFlame().getLayers().get(persist.layerIdx);
       Pseudo3DRenderIterationState restored = (Pseudo3DRenderIterationState) createState(packet, layer);
       restored.xf = (persist.xfIndex >= 0) ? restored.layer.getXForms().get(persist.xfIndex) : null;
-      restored.r = persist.r != null ? persist.r.makeCopy() : null;
+      restored.q = persist.q != null ? persist.q.makeCopy() : null;
       restored.affineTA = copyXYZPointArray(persist.affineTA);
       restored.varTA = copyXYZPointArray(persist.varTA);
       restored.pA = copyXYZPointArray(persist.pA);
