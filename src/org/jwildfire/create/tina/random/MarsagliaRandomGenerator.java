@@ -31,7 +31,7 @@ public class MarsagliaRandomGenerator extends AbstractRandomGenerator {
   }
 
   @Override
-  public double getNext() {
+  public double random() {
     v = 36969 * (v & 65535) + (v >> 16);
     u = 18000 * (u & 65535) + (u >> 16);
     int rnd = (v << 16) + u;

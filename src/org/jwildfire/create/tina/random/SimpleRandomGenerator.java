@@ -30,7 +30,7 @@ public class SimpleRandomGenerator extends AbstractRandomGenerator {
   }
 
   @Override
-  public double getNext() {
+  public double random() {
     a = (a * 1103515245 + 12345) % RAND_MAX123;
     double res = (double) (a * rrmax);
     if (res < 0) {

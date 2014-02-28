@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2013 Andreas Maschke
+  Copyright (C) 1995-2014 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -16,44 +16,14 @@
 */
 package org.jwildfire.create.tina.random;
 
-
 public abstract class AbstractRandomGenerator {
-  private RandGenStatus status = RandGenStatus.DEFAULT;
-  private double buffer[] = new double[40960];
-  private int bufferIdx;
-
-  public double random() {
-    switch (status) {
-      case DEFAULT: {
-        return getNext();
-      }
-      case RECORDING: {
-        double res = getNext();
-        buffer[bufferIdx++] = res;
-        return res;
-      }
-      case REPLAY:
-        return buffer[bufferIdx++];
-      default:
-        throw new IllegalStateException();
-    }
-  }
-
-  public void setStatus(RandGenStatus pRandGenStatus) {
-    bufferIdx = 0;
-    status = pRandGenStatus;
-  }
 
   public int random(int pMax) {
     int res = (int) (random() * pMax);
     return res < pMax ? res : pMax - 1;
   }
 
-  public enum RandGenStatus {
-    DEFAULT, RECORDING, REPLAY
-  }
-
-  public abstract double getNext();
+  public abstract double random();
 
   public abstract void randomize(long pSeed);
 

@@ -27,7 +27,7 @@ public class JavaInternalRandomGenerator extends AbstractRandomGenerator {
   }
 
   @Override
-  public double getNext() {
+  public double random() {
     return random.nextDouble();
   }
 
