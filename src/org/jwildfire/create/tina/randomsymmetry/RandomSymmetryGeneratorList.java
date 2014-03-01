@@ -25,6 +25,7 @@ public class RandomSymmetryGeneratorList {
   private static List<String> nameList = new ArrayList<String>();
 
   public static final RandomSymmetryGenerator NONE = new NoneRandomSymmetryGenerator();
+  public static final RandomSymmetryGenerator SPARSE = new AllSparseRandomSymmetryGenerator();
 
   static {
     registerRandomSymmetryGenerator(NoneRandomSymmetryGenerator.class);

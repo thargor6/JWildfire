@@ -972,21 +972,19 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
     setCurrFlame(pFlame, true);
   }
 
-  // TODO gradient editor doesnt seem to not work anymore 
   private void setCurrFlame(Flame pFlame, boolean pAddToThumbnails) {
     if (_currFlame == null || !_currFlame.equals(pFlame)) {
       _currRandomizeFlame = pFlame.makeCopy();
     }
     if (_currFlame != null) {
-      // TODO 
-      // ALL KEYframes
       for (Layer layer : _currFlame.getLayers()) {
         deRegisterFromEditor(_currFlame, layer);
       }
     }
     importFlame(pFlame, pAddToThumbnails);
-    // TODO
-    registerToEditor(_currFlame, _currFlame.getFirstLayer());
+    for (Layer layer : _currFlame.getLayers()) {
+      registerToEditor(_currFlame, layer);
+    }
   }
 
   protected void deRegisterFromEditor(Flame pFlame, Layer pLayer) {
