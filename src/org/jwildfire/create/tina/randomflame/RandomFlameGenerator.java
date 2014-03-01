@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2014 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -50,39 +50,6 @@ public abstract class RandomFlameGenerator {
     flame.setAntialiasRadius(pPrefs.getTinaDefaultAntialiasingRadius());
     return flame;
   }
-
-  //  protected void addSymmetry(Flame pFlame, boolean pPostTransformation) {
-  //    //    int symmetry = 2 + (int) (2 * Math.random() + 0.5);
-  //    int tCount = pFlame.getXForms().size();
-  //    int symmetry = tCount;
-  //    if (symmetry == 1) {
-  //      return;
-  //    }
-  //    int iMax = pFlame.getXForms().size() - 1;
-  //    if (iMax < 2) {
-  //      iMax = 2;
-  //    }
-  //    for (int i = 0; i < iMax; i++) {
-  //      XForm xForm = pFlame.getXForms().get(i);
-  //      double alpha = 2 * Math.PI / symmetry;
-  //      if (pPostTransformation) {
-  //        xForm.setPostCoeff00(Math.cos(i * alpha));
-  //        xForm.setPostCoeff01(Math.sin(i * alpha));
-  //        xForm.setPostCoeff10(-xForm.getPostCoeff01());
-  //        xForm.setPostCoeff11(xForm.getPostCoeff00());
-  //        xForm.setPostCoeff20(0.0);
-  //        xForm.setPostCoeff21(0.0);
-  //      }
-  //      else {
-  //        xForm.setCoeff00(Math.cos(i * alpha));
-  //        xForm.setCoeff01(Math.sin(i * alpha));
-  //        xForm.setCoeff10(-xForm.getCoeff01());
-  //        xForm.setCoeff11(xForm.getCoeff00());
-  //        xForm.setCoeff20(0.0);
-  //        xForm.setCoeff21(0.0);
-  //      }
-  //    }
-  //  }
 
   public abstract boolean isUseFilter(RandomFlameGeneratorState pState);
 

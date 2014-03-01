@@ -286,5 +286,15 @@ public class TinaControllerData {
   public JSlider motionBlurTimeStepSlider;
   public JWFNumberField motionBlurDecayField;
   public JSlider motionBlurDecaySlider;
-
+  public JComboBox postSymmetryTypeCmb;
+  public JWFNumberField postSymmetryDistanceREd;
+  public JSlider postSymmetryDistanceSlider;
+  public JWFNumberField postSymmetryRotationREd;
+  public JSlider postSymmetryRotationSlider;
+  public JWFNumberField postSymmetryOrderREd;
+  public JSlider postSymmetryOrderSlider;
+  public JWFNumberField postSymmetryCentreXREd;
+  public JSlider postSymmetryCentreXSlider;
+  public JWFNumberField postSymmetryCentreYREd;
+  public JSlider postSymmetryCentreYSlider;
 }

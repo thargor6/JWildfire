@@ -404,6 +404,17 @@ public class TinaControllerParameter {
   public JLabel keyframesFrameLbl;
   public JLabel keyframesFrameCountLbl;
   public JPanel motionBlurPanel;
+  public JComboBox postSymmetryTypeCmb;
+  public JWFNumberField postSymmetryDistanceREd;
+  public JSlider postSymmetryDistanceSlider;
+  public JWFNumberField postSymmetryRotationREd;
+  public JSlider postSymmetryRotationSlider;
+  public JWFNumberField postSymmetryOrderREd;
+  public JSlider postSymmetryOrderSlider;
+  public JWFNumberField postSymmetryCentreXREd;
+  public JSlider postSymmetryCentreXSlider;
+  public JWFNumberField postSymmetryCentreYREd;
+  public JSlider postSymmetryCentreYSlider;
 
   public void setParams1(JInternalFrame pTinaFrame, ErrorHandler pErrorHandler, Prefs pPrefs, JPanel pCenterPanel, JWFNumberField pCameraRollREd, JSlider pCameraRollSlider, JWFNumberField pCameraPitchREd, JSlider pCameraPitchSlider, JWFNumberField pCameraYawREd, JSlider pCameraYawSlider, JWFNumberField pCameraPerspectiveREd, JSlider pCameraPerspectiveSlider, JWFNumberField pCameraCentreXREd, JSlider pCameraCentreXSlider, JWFNumberField pCameraCentreYREd, JSlider pCameraCentreYSlider, JWFNumberField pCameraZoomREd, JSlider pCameraZoomSlider, JCheckBox pNewDOFCBx, JWFNumberField pFocusXREd, JSlider pFocusXSlider, JWFNumberField pFocusYREd, JSlider pFocusYSlider, JWFNumberField pFocusZREd, JSlider pFocusZSlider, JWFNumberField pDimishZREd, JSlider pDimishZSlider,
       JWFNumberField pCameraDOFREd, JSlider pCameraDOFSlider, JWFNumberField pCameraDOFAreaREd, JSlider pCameraDOFAreaSlider, JWFNumberField pCameraDOFExponentREd, JSlider pCameraDOFExponentSlider, JWFNumberField pCamZREd, JSlider pCamZSlider, JWFNumberField pPixelsPerUnitREd, JSlider pPixelsPerUnitSlider, JWFNumberField pBrightnessREd, JSlider pBrightnessSlider, JWFNumberField pContrastREd, JSlider pContrastSlider, JWFNumberField pGammaREd, JSlider pGammaSlider, JWFNumberField pVibrancyREd, JSlider pVibrancySlider, JWFNumberField pFilterRadiusREd, JSlider pFilterRadiusSlider, JComboBox pFilterKernelCmb, JCheckBox pDEFilterEnableCbx, JWFNumberField pDEFilterMaxRadiusREd, JSlider pDEFilterMaxRadiusSlider, JWFNumberField pDEFilterMinRadiusREd, JSlider pDEFilterMinRadiusSlider,
@@ -691,7 +702,10 @@ public class TinaControllerParameter {
       JWFNumberField pMotionBlurLengthField, JSlider pMotionBlurLengthSlider, JWFNumberField pMotionBlurTimeStepField,
       JSlider pMotionBlurTimeStepSlider, JWFNumberField pMotionBlurDecayField, JSlider pMotionBlurDecaySlider,
       JToggleButton pMotionCurveEditModeButton, JPanel pFrameSliderPanel, JLabel pKeyframesFrameLbl, JLabel pKeyframesFrameCountLbl,
-      JPanel pMotionBlurPanel, JWFNumberField pAffineMoveVertAmountREd) {
+      JPanel pMotionBlurPanel, JWFNumberField pAffineMoveVertAmountREd, JComboBox pPostSymmetryTypeCmb, JWFNumberField pPostSymmetryDistanceREd,
+      JSlider pPostSymmetryDistanceSlider, JWFNumberField pPostSymmetryRotationREd, JSlider pPostSymmetryRotationSlider,
+      JWFNumberField pPostSymmetryOrderREd, JSlider pPostSymmetryOrderSlider, JWFNumberField pPostSymmetryCentreXREd,
+      JSlider pPostSymmetryCentreXSlider, JWFNumberField pPostSymmetryCentreYREd, JSlider pPostSymmetryCentreYSlider) {
     this.pDancingFlamesLinkMotionBtn = pDancingFlamesLinkMotionBtn;
     this.pDancingFlamesUnlinkMotionBtn = pDancingFlamesUnlinkMotionBtn;
     this.pDancingFlamesCreateMotionsCmb = pDancingFlamesCreateMotionsCmb;
@@ -814,5 +828,16 @@ public class TinaControllerParameter {
     this.keyframesFrameCountLbl = pKeyframesFrameCountLbl;
     this.motionBlurPanel = pMotionBlurPanel;
     this.affineMoveVertAmountREd = pAffineMoveVertAmountREd;
+    this.postSymmetryTypeCmb = pPostSymmetryTypeCmb;
+    this.postSymmetryDistanceREd = pPostSymmetryDistanceREd;
+    this.postSymmetryDistanceSlider = pPostSymmetryDistanceSlider;
+    this.postSymmetryRotationREd = pPostSymmetryRotationREd;
+    this.postSymmetryRotationSlider = pPostSymmetryRotationSlider;
+    this.postSymmetryOrderREd = pPostSymmetryOrderREd;
+    this.postSymmetryOrderSlider = pPostSymmetryOrderSlider;
+    this.postSymmetryCentreXREd = pPostSymmetryCentreXREd;
+    this.postSymmetryCentreXSlider = pPostSymmetryCentreXSlider;
+    this.postSymmetryCentreYREd = pPostSymmetryCentreYREd;
+    this.postSymmetryCentreYSlider = pPostSymmetryCentreYSlider;
   }
 }

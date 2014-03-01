@@ -21,6 +21,7 @@ import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.io.FlameWriter;
+import org.jwildfire.create.tina.randomsymmetry.RandomSymmetryGeneratorList;
 import org.jwildfire.create.tina.swing.RandomBatchQuality;
 import org.jwildfire.create.tina.variation.SubFlameWFFunc;
 import org.jwildfire.create.tina.variation.VariationFunc;
@@ -108,7 +109,7 @@ public class SubFlameRandomFlameGenerator extends RandomFlameGenerator {
     final int IMG_HEIGHT = 60;
     int palettePoints = 3 + (int) (Math.random() * 68.0);
     boolean fadePaletteColors = Math.random() > 0.33;
-    RandomFlameGeneratorSampler sampler = new RandomFlameGeneratorSampler(IMG_WIDTH, IMG_HEIGHT, prefs, randGen, palettePoints, fadePaletteColors, RandomBatchQuality.LOW);
+    RandomFlameGeneratorSampler sampler = new RandomFlameGeneratorSampler(IMG_WIDTH, IMG_HEIGHT, prefs, randGen, RandomSymmetryGeneratorList.NONE, palettePoints, fadePaletteColors, RandomBatchQuality.LOW);
     Flame subFlame = sampler.createSample().getFlame();
 
     Flame flame = embedFlame(subFlame);

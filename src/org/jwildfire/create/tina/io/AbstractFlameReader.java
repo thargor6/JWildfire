@@ -90,11 +90,11 @@ public class AbstractFlameReader {
   public static final String ATTR_MOTIONBLUR_TIMESTEP = "motion_blur_timestep";
   public static final String ATTR_MOTIONBLUR_DECAY = "motion_blur_decay";
   public static final String ATTR_POST_SYMMETRY_TYPE = "post_symmetry_type";
-  public static final String ATTR_POST_SYMMETRY_POINTCOUNT = "post_symmetry_point_count";
+  public static final String ATTR_POST_SYMMETRY_ORDER = "post_symmetry_order";
   public static final String ATTR_POST_SYMMETRY_CENTREX = "post_symmetry_centre_x";
   public static final String ATTR_POST_SYMMETRY_CENTREY = "post_symmetry_centre_y";
   public static final String ATTR_POST_SYMMETRY_DISTANCE = "post_symmetry_distance";
-  public static final String ATTR_POST_SYMMETRY_ANGLE = "post_symmetry_angle";
+  public static final String ATTR_POST_SYMMETRY_ROTATION = "post_symmetry_rotation";
 
   protected AbstractFlameReader(Prefs pPrefs) {
     prefs = pPrefs;
@@ -359,8 +359,8 @@ public class AbstractFlameReader {
         ex.printStackTrace();
       }
     }
-    if ((hs = atts.get(ATTR_POST_SYMMETRY_POINTCOUNT)) != null) {
-      pFlame.setPostSymmetryPointCount(Integer.parseInt(hs));
+    if ((hs = atts.get(ATTR_POST_SYMMETRY_ORDER)) != null) {
+      pFlame.setPostSymmetryOrder(Integer.parseInt(hs));
     }
     if ((hs = atts.get(ATTR_POST_SYMMETRY_CENTREX)) != null) {
       pFlame.setPostSymmetryCentreX(Double.parseDouble(hs));
@@ -371,8 +371,8 @@ public class AbstractFlameReader {
     if ((hs = atts.get(ATTR_POST_SYMMETRY_DISTANCE)) != null) {
       pFlame.setPostSymmetryDistance(Double.parseDouble(hs));
     }
-    if ((hs = atts.get(ATTR_POST_SYMMETRY_ANGLE)) != null) {
-      pFlame.setPostSymmetryAngle(Double.parseDouble(hs));
+    if ((hs = atts.get(ATTR_POST_SYMMETRY_ROTATION)) != null) {
+      pFlame.setPostSymmetryRotation(Double.parseDouble(hs));
     }
   }
 

@@ -80,9 +80,11 @@ import org.jwildfire.base.Prefs;
 import org.jwildfire.create.tina.animate.GlobalScript;
 import org.jwildfire.create.tina.animate.XFormScript;
 import org.jwildfire.create.tina.base.DrawMode;
+import org.jwildfire.create.tina.base.PostSymmetryType;
 import org.jwildfire.create.tina.base.Shading;
 import org.jwildfire.create.tina.dance.DancingFractalsController;
 import org.jwildfire.create.tina.randomflame.RandomFlameGeneratorList;
+import org.jwildfire.create.tina.randomsymmetry.RandomSymmetryGeneratorList;
 import org.jwildfire.create.tina.render.filter.FilterKernelType;
 import org.jwildfire.swing.StandardErrorHandler;
 
@@ -660,7 +662,7 @@ public class TinaInternalFrame extends JInternalFrame {
       randomBatchHighQualityButton.setToolTipText("Create a random batch in higher quality (may be much slower)");
       randomBatchHighQualityButton.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
-          if (tinaController.createRandomBatch(-1, (String) randomStyleCmb.getSelectedItem(), RandomBatchQuality.HIGH)) {
+          if (tinaController.createRandomBatch(-1, (String) randomStyleCmb.getSelectedItem(), (String) randomSymmetryCmb.getSelectedItem(), RandomBatchQuality.HIGH)) {
             tinaController.importFromRandomBatch(0);
           }
         }
@@ -1078,7 +1080,6 @@ public class TinaInternalFrame extends JInternalFrame {
       dofFocusXREd.setSize(new Dimension(100, 24));
       dofFocusXREd.setPreferredSize(new Dimension(100, 24));
       dofFocusXREd.setLocation(new Point(100, 98));
-      dofFocusXREd.setHasMinValue(true);
       dofFocusXREd.setFont(new Font("Dialog", Font.PLAIN, 10));
       dofFocusXREd.setBounds(543, 52, 100, 24);
       tinaDOFPanel.add(dofFocusXREd);
@@ -1143,7 +1144,6 @@ public class TinaInternalFrame extends JInternalFrame {
       dofFocusYREd.setSize(new Dimension(100, 24));
       dofFocusYREd.setPreferredSize(new Dimension(100, 24));
       dofFocusYREd.setLocation(new Point(100, 98));
-      dofFocusYREd.setHasMinValue(true);
       dofFocusYREd.setFont(new Font("Dialog", Font.PLAIN, 10));
       dofFocusYREd.setBounds(543, 76, 100, 24);
       tinaDOFPanel.add(dofFocusYREd);
@@ -1232,7 +1232,6 @@ public class TinaInternalFrame extends JInternalFrame {
       dofFocusZREd.setSize(new Dimension(100, 24));
       dofFocusZREd.setPreferredSize(new Dimension(100, 24));
       dofFocusZREd.setLocation(new Point(100, 98));
-      dofFocusZREd.setHasMinValue(true);
       dofFocusZREd.setFont(new Font("Dialog", Font.PLAIN, 10));
       dofFocusZREd.setBounds(543, 100, 100, 24);
       tinaDOFPanel.add(dofFocusZREd);
@@ -1315,7 +1314,6 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaDEFilterEnableCBx.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           if (tinaController != null) {
-            tinaController.saveUndoPoint();
             tinaController.deFilterEnableCBx_changed();
           }
         }
@@ -1617,6 +1615,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaSouthTabbedPane.addTab("Special Shading", null, getShadingPanel(), null);
       tinaSouthTabbedPane.addTab("Gradient", null, getTinaPalettePanel(), null);
       tinaSouthTabbedPane.addTab("Motion blur", null, getMotionBlurPanel(), null);
+      tinaSouthTabbedPane.addTab("Post symmetry", null, getPanel_34(), null);
       tinaSouthTabbedPane.addTab("Layerz", null, getPanel_74(), null);
 
       tinaSouthTabbedPane.addChangeListener(new ChangeListener() {
@@ -4040,6 +4039,9 @@ public class TinaInternalFrame extends JInternalFrame {
 
     initFilterKernelCmb(getTinaFilterKernelCmb());
     initFilterKernelCmb(getTinaDEFilterKernelCmb());
+    initPostSymmetryTypeCmb(getPostSymmetryTypeCmb());
+    initRandomGenCmb(getRandomStyleCmb());
+    initRandomSymmetryCmb(getRandomSymmetryCmb());
 
     TinaControllerParameter params = new TinaControllerParameter();
 
@@ -4129,7 +4131,10 @@ public class TinaInternalFrame extends JInternalFrame {
         getKeyframesFrameField(), getKeyframesFrameSlider(), getKeyframesFrameCountField(), getMotionBlurLengthField(), getMotionBlurLengthSlider(),
         getMotionBlurTimeStepField(), getMotionBlurTimeStepSlider(), getMotionBlurDecayField(), getMotionBlurDecaySlider(),
         getMotionCurveEditModeButton(), getFrameSliderPanel(), getKeyframesFrameLbl(), getKeyframesFrameCountLbl(),
-        getMotionBlurPanel(), getAffineMoveVertAmountREd());
+        getMotionBlurPanel(), getAffineMoveVertAmountREd(),
+        getPostSymmetryTypeCmb(), getPostSymmetryDistanceREd(), getPostSymmetryDistanceSlider(), getPostSymmetryRotationREd(), getPostSymmetryRotationSlider(),
+        getPostSymmetryOrderREd(), getPostSymmetryOrderSlider(), getPostSymmetryCentreXREd(), getPostSymmetryCentreXSlider(), getPostSymmetryCentreYREd(),
+        getPostSymmetryCentreYSlider());
 
     tinaController = new TinaController(params);
 
@@ -4214,6 +4219,30 @@ public class TinaInternalFrame extends JInternalFrame {
     pCmb.addItem(GlobalScript.ROTATE_YAW);
     pCmb.addItem(GlobalScript.ROTATE_YAW_NEG);
     pCmb.addItem(GlobalScript.ROTATE_PITCH_YAW);
+  }
+
+  private void initRandomGenCmb(JComboBox pCmb) {
+    pCmb.removeAllItems();
+    for (String name : RandomFlameGeneratorList.getNameList()) {
+      pCmb.addItem(name);
+    }
+    pCmb.setSelectedItem(RandomFlameGeneratorList.DEFAULT_GENERATOR_NAME);
+  }
+
+  private void initRandomSymmetryCmb(JComboBox pCmb) {
+    pCmb.removeAllItems();
+    for (String name : RandomSymmetryGeneratorList.getNameList()) {
+      pCmb.addItem(name);
+    }
+    pCmb.setSelectedItem(RandomSymmetryGeneratorList.DEFAULT_GENERATOR_NAME);
+  }
+
+  private void initPostSymmetryTypeCmb(JComboBox pCmb) {
+    pCmb.removeAllItems();
+    pCmb.addItem(PostSymmetryType.NONE);
+    pCmb.addItem(PostSymmetryType.X_AXIS);
+    pCmb.addItem(PostSymmetryType.Y_AXIS);
+    pCmb.addItem(PostSymmetryType.POINT);
   }
 
   private void initFilterKernelCmb(JComboBox pCmb) {
@@ -4776,7 +4805,7 @@ public class TinaInternalFrame extends JInternalFrame {
       randomBatchButton.setPreferredSize(new Dimension(105, 46));
       randomBatchButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
-          if (tinaController.createRandomBatch(-1, (String) randomStyleCmb.getSelectedItem(), RandomBatchQuality.NORMAL)) {
+          if (tinaController.createRandomBatch(-1, (String) randomStyleCmb.getSelectedItem(), (String) randomSymmetryCmb.getSelectedItem(), RandomBatchQuality.NORMAL)) {
             tinaController.importFromRandomBatch(0);
           }
         }
@@ -6164,16 +6193,12 @@ public class TinaInternalFrame extends JInternalFrame {
   private JComboBox getRandomStyleCmb() {
     if (randomStyleCmb == null) {
       randomStyleCmb = new JComboBox();
+      randomStyleCmb.setToolTipText("Random-flame-generator");
       randomStyleCmb.setMaximumSize(new Dimension(32767, 24));
       randomStyleCmb.setMinimumSize(new Dimension(100, 24));
-      randomStyleCmb.setPreferredSize(new Dimension(125, 24));
+      randomStyleCmb.setPreferredSize(new Dimension(100, 24));
       randomStyleCmb.setFont(new Font("Dialog", Font.BOLD, 10));
       randomStyleCmb.setMaximumRowCount(32);
-      randomStyleCmb.removeAllItems();
-      for (String name : RandomFlameGeneratorList.getNameList()) {
-        randomStyleCmb.addItem(name);
-      }
-      randomStyleCmb.setSelectedItem(RandomFlameGeneratorList.DEFAULT_GENERATOR_NAME);
     }
     return randomStyleCmb;
   }
@@ -9096,6 +9121,22 @@ public class TinaInternalFrame extends JInternalFrame {
   private JLabel keyframesFrameLbl;
   private JLabel keyframesFrameCountLbl;
   private JWFNumberField affineMoveHorizAmountREd;
+  private JPanel panel_34;
+  private JComboBox postSymmetryTypeCmb;
+  private JWFNumberField postSymmetryDistanceREd;
+  private JSlider postSymmetryDistanceSlider;
+  private JWFNumberField postSymmetryRotationREd;
+  private JSlider postSymmetryRotationSlider;
+  private JWFNumberField postSymmetryOrderREd;
+  private JSlider postSymmetryOrderSlider;
+  private JWFNumberField postSymmetryCentreXREd;
+  private JSlider postSymmetryCentreXSlider;
+  private JWFNumberField postSymmetryCentreYREd;
+  private JSlider postSymmetryCentreYSlider;
+  private JPanel panel_78;
+  private JPanel panel_81;
+  private JLabel lblSymmetry;
+  private JComboBox randomSymmetryCmb;
 
   /**
    * This method initializes renderBatchJobsScrollPane	
@@ -11522,14 +11563,8 @@ public class TinaInternalFrame extends JInternalFrame {
     if (panel_7 == null) {
       panel_7 = new JPanel();
       panel_7.setLayout(new BoxLayout(panel_7, BoxLayout.Y_AXIS));
-
-      randomStyleLbl = new JLabel();
-      randomStyleLbl.setAlignmentX(Component.RIGHT_ALIGNMENT);
-      panel_7.add(randomStyleLbl);
-      randomStyleLbl.setPreferredSize(new Dimension(94, 22));
-      randomStyleLbl.setText("  Random generator:");
-      randomStyleLbl.setFont(new Font("Dialog", Font.BOLD, 10));
-      panel_7.add(getRandomStyleCmb());
+      panel_7.add(getPanel_78());
+      panel_7.add(getPanel_81());
     }
     return panel_7;
   }
@@ -15546,6 +15581,439 @@ public class TinaInternalFrame extends JInternalFrame {
 
   public JWFNumberField getAffineMoveHorizAmountREd() {
     return affineMoveHorizAmountREd;
+  }
+
+  private JPanel getPanel_34() {
+    if (panel_34 == null) {
+      panel_34 = new JPanel();
+      panel_34.setLayout(null);
+
+      postSymmetryTypeCmb = new JComboBox();
+      postSymmetryTypeCmb.setSize(new Dimension(125, 22));
+      postSymmetryTypeCmb.setPreferredSize(new Dimension(125, 22));
+      postSymmetryTypeCmb.setLocation(new Point(100, 4));
+      postSymmetryTypeCmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      postSymmetryTypeCmb.setBounds(102, 6, 100, 24);
+      postSymmetryTypeCmb.addItemListener(new ItemListener() {
+        public void itemStateChanged(ItemEvent e) {
+          if (tinaController != null) {
+            tinaController.getFlameControls().postSymmetryeCmb_changed();
+          }
+        }
+      });
+      panel_34.add(postSymmetryTypeCmb);
+
+      JLabel postSymmetryTypeLbl = new JLabel();
+      postSymmetryTypeLbl.setText("Symmetry type");
+      postSymmetryTypeLbl.setSize(new Dimension(94, 22));
+      postSymmetryTypeLbl.setPreferredSize(new Dimension(94, 22));
+      postSymmetryTypeLbl.setLocation(new Point(488, 2));
+      postSymmetryTypeLbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      postSymmetryTypeLbl.setBounds(6, 6, 94, 22);
+      panel_34.add(postSymmetryTypeLbl);
+
+      postSymmetryDistanceREd = new JWFNumberField();
+      postSymmetryDistanceREd.setLinkedLabelControlName("postSymmetryDistanceLbl");
+      postSymmetryDistanceREd.setValueStep(0.05);
+      postSymmetryDistanceREd.setText("");
+      postSymmetryDistanceREd.setSize(new Dimension(100, 24));
+      postSymmetryDistanceREd.setPreferredSize(new Dimension(100, 24));
+      postSymmetryDistanceREd.setLocation(new Point(584, 2));
+      postSymmetryDistanceREd.setLinkedMotionControlName("postSymmetryDistanceSlider");
+      postSymmetryDistanceREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      postSymmetryDistanceREd.setEditable(true);
+      postSymmetryDistanceREd.setBounds(102, 31, 100, 24);
+      postSymmetryDistanceREd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null) {
+            if (!postSymmetryDistanceREd.isMouseAdjusting() || postSymmetryDistanceREd.getMouseChangeCount() == 0) {
+              if (!postSymmetryDistanceSlider.getValueIsAdjusting()) {
+                tinaController.saveUndoPoint();
+              }
+            }
+            tinaController.getFlameControls().postSymmetryDistanceREd_changed();
+          }
+        }
+      });
+      panel_34.add(postSymmetryDistanceREd);
+
+      JLabel postSymmetryDistanceLbl = new JLabel();
+      postSymmetryDistanceLbl.setName("postSymmetryDistanceLbl");
+      postSymmetryDistanceLbl.setText("Distance");
+      postSymmetryDistanceLbl.setSize(new Dimension(94, 22));
+      postSymmetryDistanceLbl.setPreferredSize(new Dimension(94, 22));
+      postSymmetryDistanceLbl.setLocation(new Point(488, 2));
+      postSymmetryDistanceLbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      postSymmetryDistanceLbl.setBounds(6, 31, 94, 22);
+      panel_34.add(postSymmetryDistanceLbl);
+
+      JLabel postSymmetryRotationLbl = new JLabel();
+      postSymmetryRotationLbl.setName("postSymmetryRotationLbl");
+      postSymmetryRotationLbl.setText("Rotation");
+      postSymmetryRotationLbl.setSize(new Dimension(94, 22));
+      postSymmetryRotationLbl.setPreferredSize(new Dimension(94, 22));
+      postSymmetryRotationLbl.setLocation(new Point(488, 2));
+      postSymmetryRotationLbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      postSymmetryRotationLbl.setBounds(6, 56, 94, 22);
+      panel_34.add(postSymmetryRotationLbl);
+
+      postSymmetryRotationREd = new JWFNumberField();
+      postSymmetryRotationREd.setLinkedLabelControlName("postSymmetryRotationLbl");
+      postSymmetryRotationREd.setValueStep(0.05);
+      postSymmetryRotationREd.setText("");
+      postSymmetryRotationREd.setSize(new Dimension(100, 24));
+      postSymmetryRotationREd.setPreferredSize(new Dimension(100, 24));
+      postSymmetryRotationREd.setLocation(new Point(584, 2));
+      postSymmetryRotationREd.setLinkedMotionControlName("postSymmetryRotationSlider");
+      postSymmetryRotationREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      postSymmetryRotationREd.setEditable(true);
+      postSymmetryRotationREd.setBounds(102, 56, 100, 24);
+      postSymmetryRotationREd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null) {
+            if (!postSymmetryRotationREd.isMouseAdjusting() || postSymmetryRotationREd.getMouseChangeCount() == 0) {
+              if (!postSymmetryRotationSlider.getValueIsAdjusting()) {
+                tinaController.saveUndoPoint();
+              }
+            }
+            tinaController.getFlameControls().postSymmetryRotationREd_changed();
+          }
+        }
+      });
+      panel_34.add(postSymmetryRotationREd);
+
+      postSymmetryDistanceSlider = new JSlider();
+      postSymmetryDistanceSlider.setValue(0);
+      postSymmetryDistanceSlider.setSize(new Dimension(220, 19));
+      postSymmetryDistanceSlider.setPreferredSize(new Dimension(220, 19));
+      postSymmetryDistanceSlider.setName("postSymmetryDistanceSlider");
+      postSymmetryDistanceSlider.setMinimum(-25000);
+      postSymmetryDistanceSlider.setMaximum(25000);
+      postSymmetryDistanceSlider.setLocation(new Point(686, 2));
+      postSymmetryDistanceSlider.setFont(new Font("Dialog", Font.BOLD, 10));
+      postSymmetryDistanceSlider.setBounds(204, 31, 220, 24);
+      postSymmetryDistanceSlider.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mousePressed(MouseEvent e) {
+          tinaController.saveUndoPoint();
+        }
+      });
+      postSymmetryDistanceSlider.addChangeListener(new javax.swing.event.ChangeListener() {
+        public void stateChanged(javax.swing.event.ChangeEvent e) {
+          if (tinaController != null) {
+            tinaController.getFlameControls().postSymmetryDistanceSlider_changed(e);
+          }
+        }
+      });
+      panel_34.add(postSymmetryDistanceSlider);
+
+      postSymmetryRotationSlider = new JSlider();
+      postSymmetryRotationSlider.setMaximum(180);
+      postSymmetryRotationSlider.setValue(0);
+      postSymmetryRotationSlider.setSize(new Dimension(220, 19));
+      postSymmetryRotationSlider.setPreferredSize(new Dimension(220, 19));
+      postSymmetryRotationSlider.setName("postSymmetryRotationSlider");
+      postSymmetryRotationSlider.setMinimum(-180);
+      postSymmetryRotationSlider.setLocation(new Point(686, 2));
+      postSymmetryRotationSlider.setFont(new Font("Dialog", Font.BOLD, 10));
+      postSymmetryRotationSlider.setBounds(204, 56, 220, 24);
+      postSymmetryRotationSlider.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mousePressed(MouseEvent e) {
+          tinaController.saveUndoPoint();
+        }
+      });
+      postSymmetryRotationSlider.addChangeListener(new javax.swing.event.ChangeListener() {
+        public void stateChanged(javax.swing.event.ChangeEvent e) {
+          if (tinaController != null) {
+            tinaController.getFlameControls().postSymmetryRotationSlider_changed(e);
+          }
+        }
+      });
+      panel_34.add(postSymmetryRotationSlider);
+
+      postSymmetryOrderREd = new JWFNumberField();
+      postSymmetryOrderREd.setLinkedLabelControlName("postSymmetryOrderLbl");
+      postSymmetryOrderREd.setMinValue(2.0);
+      postSymmetryOrderREd.setOnlyIntegers(true);
+      postSymmetryOrderREd.setValueStep(0.05);
+      postSymmetryOrderREd.setText("");
+      postSymmetryOrderREd.setSize(new Dimension(100, 24));
+      postSymmetryOrderREd.setPreferredSize(new Dimension(100, 24));
+      postSymmetryOrderREd.setMaxValue(24.0);
+      postSymmetryOrderREd.setLocation(new Point(584, 2));
+      postSymmetryOrderREd.setLinkedMotionControlName("postSymmetryOrderSlider");
+      postSymmetryOrderREd.setHasMinValue(true);
+      postSymmetryOrderREd.setHasMaxValue(true);
+      postSymmetryOrderREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      postSymmetryOrderREd.setEditable(true);
+      postSymmetryOrderREd.setBounds(532, 6, 100, 24);
+      postSymmetryOrderREd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null) {
+            if (!postSymmetryOrderREd.isMouseAdjusting() || postSymmetryOrderREd.getMouseChangeCount() == 0) {
+              if (!postSymmetryOrderSlider.getValueIsAdjusting()) {
+                tinaController.saveUndoPoint();
+              }
+            }
+            tinaController.getFlameControls().postSymmetryOrderREd_changed();
+          }
+        }
+      });
+      panel_34.add(postSymmetryOrderREd);
+
+      JLabel postSymmetryOrderLbl = new JLabel();
+      postSymmetryOrderLbl.setName("postSymmetryOrderLbl");
+      postSymmetryOrderLbl.setText("Symmetry order");
+      postSymmetryOrderLbl.setSize(new Dimension(94, 22));
+      postSymmetryOrderLbl.setPreferredSize(new Dimension(94, 22));
+      postSymmetryOrderLbl.setLocation(new Point(488, 2));
+      postSymmetryOrderLbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      postSymmetryOrderLbl.setBounds(436, 6, 94, 22);
+      panel_34.add(postSymmetryOrderLbl);
+
+      JLabel postSymmetryCentreXLbl = new JLabel();
+      postSymmetryCentreXLbl.setName("postSymmetryCentreXLbl");
+      postSymmetryCentreXLbl.setText("Centre X");
+      postSymmetryCentreXLbl.setSize(new Dimension(94, 22));
+      postSymmetryCentreXLbl.setPreferredSize(new Dimension(94, 22));
+      postSymmetryCentreXLbl.setLocation(new Point(488, 2));
+      postSymmetryCentreXLbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      postSymmetryCentreXLbl.setBounds(436, 31, 94, 22);
+      panel_34.add(postSymmetryCentreXLbl);
+
+      postSymmetryCentreXREd = new JWFNumberField();
+      postSymmetryCentreXREd.setLinkedLabelControlName("postSymmetryCentreXLbl");
+      postSymmetryCentreXREd.setValueStep(0.05);
+      postSymmetryCentreXREd.setText("");
+      postSymmetryCentreXREd.setSize(new Dimension(100, 24));
+      postSymmetryCentreXREd.setPreferredSize(new Dimension(100, 24));
+      postSymmetryCentreXREd.setLocation(new Point(584, 2));
+      postSymmetryCentreXREd.setLinkedMotionControlName("postSymmetryCentreXSlider");
+      postSymmetryCentreXREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      postSymmetryCentreXREd.setEditable(true);
+      postSymmetryCentreXREd.setBounds(532, 31, 100, 24);
+      postSymmetryCentreXREd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null) {
+            if (!postSymmetryCentreXREd.isMouseAdjusting() || postSymmetryCentreXREd.getMouseChangeCount() == 0) {
+              if (!postSymmetryCentreXSlider.getValueIsAdjusting()) {
+                tinaController.saveUndoPoint();
+              }
+            }
+            tinaController.getFlameControls().postSymmetryCentreXREd_changed();
+          }
+        }
+      });
+      panel_34.add(postSymmetryCentreXREd);
+
+      postSymmetryOrderSlider = new JSlider();
+      postSymmetryOrderSlider.setValue(0);
+      postSymmetryOrderSlider.setSize(new Dimension(220, 19));
+      postSymmetryOrderSlider.setPreferredSize(new Dimension(220, 19));
+      postSymmetryOrderSlider.setName("postSymmetryOrderSlider");
+      postSymmetryOrderSlider.setMinimum(2);
+      postSymmetryOrderSlider.setMaximum(24);
+      postSymmetryOrderSlider.setLocation(new Point(686, 2));
+      postSymmetryOrderSlider.setFont(new Font("Dialog", Font.BOLD, 10));
+      postSymmetryOrderSlider.setBounds(634, 6, 220, 24);
+      postSymmetryOrderSlider.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mousePressed(MouseEvent e) {
+          tinaController.saveUndoPoint();
+        }
+      });
+      postSymmetryOrderSlider.addChangeListener(new javax.swing.event.ChangeListener() {
+        public void stateChanged(javax.swing.event.ChangeEvent e) {
+          if (tinaController != null) {
+            tinaController.getFlameControls().postSymmetryOrderSlider_changed(e);
+          }
+        }
+      });
+      panel_34.add(postSymmetryOrderSlider);
+
+      postSymmetryCentreXSlider = new JSlider();
+      postSymmetryCentreXSlider.setMaximum(25000);
+      postSymmetryCentreXSlider.setValue(0);
+      postSymmetryCentreXSlider.setSize(new Dimension(220, 19));
+      postSymmetryCentreXSlider.setPreferredSize(new Dimension(220, 19));
+      postSymmetryCentreXSlider.setName("postSymmetryCentreXSlider");
+      postSymmetryCentreXSlider.setMinimum(-25000);
+      postSymmetryCentreXSlider.setLocation(new Point(686, 2));
+      postSymmetryCentreXSlider.setFont(new Font("Dialog", Font.BOLD, 10));
+      postSymmetryCentreXSlider.setBounds(634, 31, 220, 24);
+      postSymmetryCentreXSlider.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mousePressed(MouseEvent e) {
+          tinaController.saveUndoPoint();
+        }
+      });
+      postSymmetryCentreXSlider.addChangeListener(new javax.swing.event.ChangeListener() {
+        public void stateChanged(javax.swing.event.ChangeEvent e) {
+          if (tinaController != null) {
+            tinaController.getFlameControls().postSymmetryCentreXSlider_changed(e);
+          }
+        }
+      });
+      panel_34.add(postSymmetryCentreXSlider);
+
+      JLabel postSymmetryCentreYLbl = new JLabel();
+      postSymmetryCentreYLbl.setName("postSymmetryCentreYLbl");
+      postSymmetryCentreYLbl.setText("Centre Y");
+      postSymmetryCentreYLbl.setSize(new Dimension(94, 22));
+      postSymmetryCentreYLbl.setPreferredSize(new Dimension(94, 22));
+      postSymmetryCentreYLbl.setLocation(new Point(488, 2));
+      postSymmetryCentreYLbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      postSymmetryCentreYLbl.setBounds(436, 56, 94, 22);
+      panel_34.add(postSymmetryCentreYLbl);
+
+      postSymmetryCentreYREd = new JWFNumberField();
+      postSymmetryCentreYREd.setLinkedLabelControlName("postSymmetryCentreYLbl");
+      postSymmetryCentreYREd.setValueStep(0.05);
+      postSymmetryCentreYREd.setText("");
+      postSymmetryCentreYREd.setSize(new Dimension(100, 24));
+      postSymmetryCentreYREd.setPreferredSize(new Dimension(100, 24));
+      postSymmetryCentreYREd.setLocation(new Point(584, 2));
+      postSymmetryCentreYREd.setLinkedMotionControlName("postSymmetryCentreYSlider");
+      postSymmetryCentreYREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      postSymmetryCentreYREd.setEditable(true);
+      postSymmetryCentreYREd.setBounds(532, 56, 100, 24);
+      postSymmetryCentreYREd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null) {
+            if (!postSymmetryCentreYREd.isMouseAdjusting() || postSymmetryCentreYREd.getMouseChangeCount() == 0) {
+              if (!postSymmetryCentreYSlider.getValueIsAdjusting()) {
+                tinaController.saveUndoPoint();
+              }
+            }
+            tinaController.getFlameControls().postSymmetryCentreYREd_changed();
+          }
+        }
+      });
+      panel_34.add(postSymmetryCentreYREd);
+
+      postSymmetryCentreYSlider = new JSlider();
+      postSymmetryCentreYSlider.setValue(0);
+      postSymmetryCentreYSlider.setSize(new Dimension(220, 19));
+      postSymmetryCentreYSlider.setPreferredSize(new Dimension(220, 19));
+      postSymmetryCentreYSlider.setName("postSymmetryCentreYSlider");
+      postSymmetryCentreYSlider.setMinimum(-25000);
+      postSymmetryCentreYSlider.setMaximum(25000);
+      postSymmetryCentreYSlider.setLocation(new Point(686, 2));
+      postSymmetryCentreYSlider.setFont(new Font("Dialog", Font.BOLD, 10));
+      postSymmetryCentreYSlider.setBounds(634, 56, 220, 24);
+      postSymmetryCentreYSlider.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mousePressed(MouseEvent e) {
+          tinaController.saveUndoPoint();
+        }
+      });
+      postSymmetryCentreYSlider.addChangeListener(new javax.swing.event.ChangeListener() {
+        public void stateChanged(javax.swing.event.ChangeEvent e) {
+          if (tinaController != null) {
+            tinaController.getFlameControls().postSymmetryCentreYSlider_changed(e);
+          }
+        }
+      });
+      panel_34.add(postSymmetryCentreYSlider);
+    }
+    return panel_34;
+  }
+
+  public JComboBox getPostSymmetryTypeCmb() {
+    return postSymmetryTypeCmb;
+  }
+
+  public JWFNumberField getPostSymmetryDistanceREd() {
+    return postSymmetryDistanceREd;
+  }
+
+  public JSlider getPostSymmetryDistanceSlider() {
+    return postSymmetryDistanceSlider;
+  }
+
+  public JWFNumberField getPostSymmetryRotationREd() {
+    return postSymmetryRotationREd;
+  }
+
+  public JSlider getPostSymmetryRotationSlider() {
+    return postSymmetryRotationSlider;
+  }
+
+  public JWFNumberField getPostSymmetryOrderREd() {
+    return postSymmetryOrderREd;
+  }
+
+  public JSlider getPostSymmetryOrderSlider() {
+    return postSymmetryOrderSlider;
+  }
+
+  public JWFNumberField getPostSymmetryCentreXREd() {
+    return postSymmetryCentreXREd;
+  }
+
+  public JSlider getPostSymmetryCentreXSlider() {
+    return postSymmetryCentreXSlider;
+  }
+
+  public JWFNumberField getPostSymmetryCentreYREd() {
+    return postSymmetryCentreYREd;
+  }
+
+  public JSlider getPostSymmetryCentreYSlider() {
+    return postSymmetryCentreYSlider;
+  }
+
+  private JPanel getPanel_78() {
+    if (panel_78 == null) {
+      panel_78 = new JPanel();
+      panel_78.setPreferredSize(new Dimension(180, 24));
+      panel_78.setLayout(new BoxLayout(panel_78, BoxLayout.X_AXIS));
+
+      randomStyleLbl = new JLabel();
+      panel_78.add(randomStyleLbl);
+      randomStyleLbl.setAlignmentX(Component.RIGHT_ALIGNMENT);
+      randomStyleLbl.setPreferredSize(new Dimension(80, 22));
+      randomStyleLbl.setText("  Rnd Generator");
+      randomStyleLbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      panel_78.add(getRandomStyleCmb());
+    }
+    return panel_78;
+  }
+
+  private JPanel getPanel_81() {
+    if (panel_81 == null) {
+      panel_81 = new JPanel();
+      panel_81.setPreferredSize(new Dimension(180, 24));
+      panel_81.setLayout(new BoxLayout(panel_81, BoxLayout.X_AXIS));
+      panel_81.add(getLblSymmetry());
+      panel_81.add(getRandomSymmetryCmb());
+    }
+    return panel_81;
+  }
+
+  private JLabel getLblSymmetry() {
+    if (lblSymmetry == null) {
+      lblSymmetry = new JLabel();
+      lblSymmetry.setText("  Rnd Symmetry");
+      lblSymmetry.setPreferredSize(new Dimension(80, 22));
+      lblSymmetry.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblSymmetry.setAlignmentX(1.0f);
+    }
+    return lblSymmetry;
+  }
+
+  private JComboBox getRandomSymmetryCmb() {
+    if (randomSymmetryCmb == null) {
+      randomSymmetryCmb = new JComboBox();
+      randomSymmetryCmb.setToolTipText("Random-Symmetry-Geneator");
+      randomSymmetryCmb.setPreferredSize(new Dimension(100, 24));
+      randomSymmetryCmb.setMinimumSize(new Dimension(100, 24));
+      randomSymmetryCmb.setMaximumSize(new Dimension(32767, 24));
+      randomSymmetryCmb.setMaximumRowCount(32);
+      randomSymmetryCmb.setFont(new Font("Dialog", Font.BOLD, 10));
+    }
+    return randomSymmetryCmb;
   }
 } //  @jve:decl-index=0:visual-constraint="10,10"
 

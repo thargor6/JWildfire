@@ -66,6 +66,7 @@ import org.jwildfire.create.tina.io.JWFDanceWriter;
 import org.jwildfire.create.tina.randomflame.RandomFlameGenerator;
 import org.jwildfire.create.tina.randomflame.RandomFlameGeneratorList;
 import org.jwildfire.create.tina.randomflame.RandomFlameGeneratorSampler;
+import org.jwildfire.create.tina.randomsymmetry.RandomSymmetryGeneratorList;
 import org.jwildfire.create.tina.render.FlameRenderer;
 import org.jwildfire.create.tina.render.RenderInfo;
 import org.jwildfire.create.tina.render.RenderedFlame;
@@ -441,7 +442,7 @@ public class DancingFractalsController {
         RandomFlameGenerator randGen = RandomFlameGeneratorList.getRandomFlameGeneratorInstance((String) randomGenCmb.getSelectedItem(), true);
         int palettePoints = 3 + (int) (Math.random() * 68.0);
         boolean fadePaletteColors = Math.random() > 0.33;
-        RandomFlameGeneratorSampler sampler = new RandomFlameGeneratorSampler(IMG_WIDTH, IMG_HEIGHT, prefs, randGen, palettePoints, fadePaletteColors, RandomBatchQuality.NORMAL);
+        RandomFlameGeneratorSampler sampler = new RandomFlameGeneratorSampler(IMG_WIDTH, IMG_HEIGHT, prefs, randGen, RandomSymmetryGeneratorList.NONE, palettePoints, fadePaletteColors, RandomBatchQuality.NORMAL);
         project.getFlames().add(validateDancingFlame(sampler.createSample().getFlame()));
       }
       refreshProjectFlames();

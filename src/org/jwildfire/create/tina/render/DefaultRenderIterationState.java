@@ -42,17 +42,17 @@ public class DefaultRenderIterationState extends RenderIterationState {
     Flame flame = pPacket.getFlame();
     switch (flame.getPostSymmetryType()) {
       case POINT: {
-        if (flame.getPostSymmetryPointCount() > 1) {
-          int pointCount = flame.getPostSymmetryPointCount() <= 64 ? flame.getPostSymmetryPointCount() : 64;
-          projector = new PointSymmetryProjector(projector, pointCount, flame.getPostSymmetryCentreX(), flame.getPostSymmetryCentreY());
+        if (flame.getPostSymmetryOrder() > 1) {
+          int order = flame.getPostSymmetryOrder() <= 64 ? flame.getPostSymmetryOrder() : 64;
+          projector = new PointSymmetryProjector(projector, order, flame.getPostSymmetryCentreX(), flame.getPostSymmetryCentreY());
         }
         break;
       }
       case X_AXIS:
-        projector = new XAxisSymmetryProjector(projector, flame.getPostSymmetryDistance(), flame.getPostSymmetryCentreX(), flame.getPostSymmetryCentreY(), flame.getPostSymmetryAngle());
+        projector = new XAxisSymmetryProjector(projector, flame.getPostSymmetryDistance(), flame.getPostSymmetryCentreX(), flame.getPostSymmetryCentreY(), flame.getPostSymmetryRotation());
         break;
       case Y_AXIS:
-        projector = new YAxisSymmetryProjector(projector, flame.getPostSymmetryDistance(), flame.getPostSymmetryCentreX(), flame.getPostSymmetryCentreY(), flame.getPostSymmetryAngle());
+        projector = new YAxisSymmetryProjector(projector, flame.getPostSymmetryDistance(), flame.getPostSymmetryCentreX(), flame.getPostSymmetryCentreY(), flame.getPostSymmetryRotation());
         break;
     }
   }
@@ -156,23 +156,23 @@ public class DefaultRenderIterationState extends RenderIterationState {
     protected final double distance;
     protected final double centreX;
     protected final double centreY;
-    protected final double angle;
+    protected final double rotation;
     protected final XYZPoint a;
     protected final XYZPoint b;
     protected final double sina, cosa;
     protected final double halve_dist;
     protected final boolean doRotate;
 
-    public AxisSymmetryProjector(PointProjector pParent, double pDistance, double pCentreX, double pCentreY, double pAngle) {
+    public AxisSymmetryProjector(PointProjector pParent, double pDistance, double pCentreX, double pCentreY, double pRotation) {
       parent = pParent;
       distance = pDistance;
       centreX = pCentreX;
       centreY = pCentreY;
-      angle = pAngle;
+      rotation = pRotation;
       a = new XYZPoint();
       b = new XYZPoint();
 
-      double a = angle * M_2PI / 180.0 / 2.0;
+      double a = rotation * M_2PI / 180.0 / 2.0;
       doRotate = fabs(a) > EPSILON;
 
       sina = sin(a);
@@ -183,8 +183,8 @@ public class DefaultRenderIterationState extends RenderIterationState {
 
   public class XAxisSymmetryProjector extends AxisSymmetryProjector implements PointProjector {
 
-    public XAxisSymmetryProjector(PointProjector pParent, double pDistance, double pCentreX, double pCentreY, double pAngle) {
-      super(pParent, pDistance, pCentreX, pCentreY, pAngle);
+    public XAxisSymmetryProjector(PointProjector pParent, double pDistance, double pCentreX, double pCentreY, double pRotation) {
+      super(pParent, pDistance, pCentreX, pCentreY, pRotation);
     }
 
     @Override
@@ -215,8 +215,8 @@ public class DefaultRenderIterationState extends RenderIterationState {
 
   public class YAxisSymmetryProjector extends AxisSymmetryProjector implements PointProjector {
 
-    public YAxisSymmetryProjector(PointProjector pParent, double pDistance, double pCentreX, double pCentreY, double pAngle) {
-      super(pParent, pDistance, pCentreX, pCentreY, pAngle);
+    public YAxisSymmetryProjector(PointProjector pParent, double pDistance, double pCentreX, double pCentreY, double pRotation) {
+      super(pParent, pDistance, pCentreX, pCentreY, pRotation);
     }
 
     @Override
@@ -248,21 +248,21 @@ public class DefaultRenderIterationState extends RenderIterationState {
   public class PointSymmetryProjector implements PointProjector {
     private final PointProjector parent;
     private final double centreX, centreY;
-    private final int pointCount;
+    private final int order;
     private final double sina[], cosa[];
     private final XYZPoint ps;
 
-    public PointSymmetryProjector(PointProjector pParent, int pPointCount, double pCentreX, double pCentreY) {
+    public PointSymmetryProjector(PointProjector pParent, int pOrder, double pCentreX, double pCentreY) {
       parent = pParent;
-      pointCount = pPointCount >= 1 ? pPointCount : 1;
+      order = pOrder >= 1 ? pOrder : 1;
       centreX = pCentreX;
       centreY = pCentreY;
       ps = new XYZPoint();
-      sina = new double[pointCount];
-      cosa = new double[pointCount];
-      double da = M_2PI / (double) pointCount;
+      sina = new double[order];
+      cosa = new double[order];
+      double da = M_2PI / (double) order;
       double angle = 0.0;
-      for (int i = 0; i < pointCount; i++) {
+      for (int i = 0; i < order; i++) {
         sina[i] = sin(angle);
         cosa[i] = cos(angle);
         angle += da;
@@ -274,7 +274,7 @@ public class DefaultRenderIterationState extends RenderIterationState {
       double dx = q.x - centreX;
       double dy = q.y - centreY;
       parent.projectPoint(q);
-      for (int i = 1; i < pointCount; i++) {
+      for (int i = 0; i < order; i++) {
         ps.assign(q);
         ps.x = centreX + dx * cosa[i] + dy * sina[i];
         ps.y = centreY + dy * cosa[i] - dx * sina[i];

@@ -131,11 +131,11 @@ public class Flame implements Assignable<Flame>, Serializable {
   private int frameCount = 300;
 
   private PostSymmetryType postSymmetryType = PostSymmetryType.NONE;
-  private int postSymmetryPointCount = 3;
+  private int postSymmetryOrder = 3;
   private double postSymmetryCentreX = 0.0;
   private double postSymmetryCentreY = 0.0;
-  private double postSymmetryDistance = 4.0;
-  private double postSymmetryAngle = 30.0;
+  private double postSymmetryDistance = 1.25;
+  private double postSymmetryRotation = 6.0;
 
   public Flame() {
     layers.clear();
@@ -527,11 +527,11 @@ public class Flame implements Assignable<Flame>, Serializable {
     frameCount = pFlame.frameCount;
 
     postSymmetryType = pFlame.postSymmetryType;
-    postSymmetryPointCount = pFlame.postSymmetryPointCount;
+    postSymmetryOrder = pFlame.postSymmetryOrder;
     postSymmetryCentreX = pFlame.postSymmetryCentreX;
     postSymmetryCentreY = pFlame.postSymmetryCentreY;
     postSymmetryDistance = pFlame.postSymmetryDistance;
-    postSymmetryAngle = pFlame.postSymmetryAngle;
+    postSymmetryRotation = pFlame.postSymmetryRotation;
 
     layers.clear();
     for (Layer layer : pFlame.getLayers()) {
@@ -585,7 +585,7 @@ public class Flame implements Assignable<Flame>, Serializable {
         (layers.size() != pFlame.layers.size()) || (motionBlurLength != pFlame.motionBlurLength) ||
         (fabs(motionBlurTimeStep - pFlame.motionBlurTimeStep) > EPSILON) || (fabs(motionBlurDecay - pFlame.motionBlurDecay) > EPSILON) ||
         (frame != pFlame.frame) || (frameCount != pFlame.frameCount) ||
-        (postSymmetryType != pFlame.postSymmetryType) || (postSymmetryPointCount != pFlame.postSymmetryPointCount) ||
+        (postSymmetryType != pFlame.postSymmetryType) || (postSymmetryOrder != pFlame.postSymmetryOrder) ||
         (fabs(postSymmetryCentreX - pFlame.postSymmetryCentreX) > EPSILON) || (fabs(postSymmetryCentreY - pFlame.postSymmetryCentreY) > EPSILON) ||
         (fabs(postSymmetryDistance - pFlame.postSymmetryDistance) > EPSILON) || (fabs(postSymmetryDistance - pFlame.postSymmetryDistance) > EPSILON)) {
       return false;
@@ -807,12 +807,12 @@ public class Flame implements Assignable<Flame>, Serializable {
     this.postSymmetryType = postSymmetryType;
   }
 
-  public int getPostSymmetryPointCount() {
-    return postSymmetryPointCount;
+  public int getPostSymmetryOrder() {
+    return postSymmetryOrder;
   }
 
-  public void setPostSymmetryPointCount(int postSymmetryPointCount) {
-    this.postSymmetryPointCount = postSymmetryPointCount;
+  public void setPostSymmetryOrder(int postSymmetryOrder) {
+    this.postSymmetryOrder = postSymmetryOrder;
   }
 
   public double getPostSymmetryCentreX() {
@@ -839,11 +839,11 @@ public class Flame implements Assignable<Flame>, Serializable {
     this.postSymmetryDistance = postSymmetryDistance;
   }
 
-  public double getPostSymmetryAngle() {
-    return postSymmetryAngle;
+  public double getPostSymmetryRotation() {
+    return postSymmetryRotation;
   }
 
-  public void setPostSymmetryAngle(double postSymmetryAngle) {
-    this.postSymmetryAngle = postSymmetryAngle;
+  public void setPostSymmetryRotation(double postSymmetryRotation) {
+    this.postSymmetryRotation = postSymmetryRotation;
   }
 }

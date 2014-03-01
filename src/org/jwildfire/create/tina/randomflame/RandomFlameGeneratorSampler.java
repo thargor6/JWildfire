@@ -22,6 +22,7 @@ import org.jwildfire.base.Prefs;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.palette.RGBPalette;
 import org.jwildfire.create.tina.palette.RandomRGBPaletteGenerator;
+import org.jwildfire.create.tina.randomsymmetry.RandomSymmetryGenerator;
 import org.jwildfire.create.tina.render.FlameRenderer;
 import org.jwildfire.create.tina.render.RenderInfo;
 import org.jwildfire.create.tina.render.RenderedFlame;
@@ -39,13 +40,16 @@ public class RandomFlameGeneratorSampler {
   private final int paletteSize;
   private final boolean fadePaletteColors;
   private RandomFlameGenerator randGen;
+  private RandomSymmetryGenerator randSymmGen;
+
   private final RandomBatchQuality quality;
 
-  public RandomFlameGeneratorSampler(int pImageWidth, int pImageHeight, Prefs pPrefs, RandomFlameGenerator pRandGen, int pPaletteSize, boolean pFadePaletteColors, RandomBatchQuality pQuality) {
+  public RandomFlameGeneratorSampler(int pImageWidth, int pImageHeight, Prefs pPrefs, RandomFlameGenerator pRandGen, RandomSymmetryGenerator pRandSymmGen, int pPaletteSize, boolean pFadePaletteColors, RandomBatchQuality pQuality) {
     imageWidth = pImageWidth;
     imageHeight = pImageHeight;
     prefs = pPrefs;
     randGen = pRandGen;
+    randSymmGen = pRandSymmGen;
     paletteSize = pPaletteSize;
     fadePaletteColors = pFadePaletteColors;
     quality = pQuality;
@@ -104,6 +108,7 @@ public class RandomFlameGeneratorSampler {
       Flame flame;
       try {
         flame = randGen.createFlame(prefs, randGenState);
+        randSymmGen.addSymmetry(flame);
       }
       catch (Exception ex) {
         flame = new Flame();

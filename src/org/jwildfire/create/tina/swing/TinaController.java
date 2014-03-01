@@ -100,6 +100,8 @@ import org.jwildfire.create.tina.randomflame.RandomFlameGeneratorList;
 import org.jwildfire.create.tina.randomflame.RandomFlameGeneratorSample;
 import org.jwildfire.create.tina.randomflame.RandomFlameGeneratorSampler;
 import org.jwildfire.create.tina.randomflame.WikimediaCommonsRandomFlameGenerator;
+import org.jwildfire.create.tina.randomsymmetry.RandomSymmetryGenerator;
+import org.jwildfire.create.tina.randomsymmetry.RandomSymmetryGeneratorList;
 import org.jwildfire.create.tina.render.DrawFocusPointFlameRenderer;
 import org.jwildfire.create.tina.render.FlameRenderer;
 import org.jwildfire.create.tina.render.ProgressUpdater;
@@ -441,6 +443,18 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
     data.motionBlurTimeStepSlider = parameterObject.motionBlurTimeStepSlider;
     data.motionBlurDecayField = parameterObject.motionBlurDecayField;
     data.motionBlurDecaySlider = parameterObject.motionBlurDecaySlider;
+
+    data.postSymmetryTypeCmb = parameterObject.postSymmetryTypeCmb;
+    data.postSymmetryDistanceREd = parameterObject.postSymmetryDistanceREd;
+    data.postSymmetryDistanceSlider = parameterObject.postSymmetryDistanceSlider;
+    data.postSymmetryRotationREd = parameterObject.postSymmetryRotationREd;
+    data.postSymmetryRotationSlider = parameterObject.postSymmetryRotationSlider;
+    data.postSymmetryOrderREd = parameterObject.postSymmetryOrderREd;
+    data.postSymmetryOrderSlider = parameterObject.postSymmetryOrderSlider;
+    data.postSymmetryCentreXREd = parameterObject.postSymmetryCentreXREd;
+    data.postSymmetryCentreXSlider = parameterObject.postSymmetryCentreXSlider;
+    data.postSymmetryCentreYREd = parameterObject.postSymmetryCentreYREd;
+    data.postSymmetryCentreYSlider = parameterObject.postSymmetryCentreYSlider;
 
     data.mouseTransformEditViewButton = parameterObject.pMouseTransformViewButton;
     data.toggleVariationsButton = parameterObject.pToggleVariationsButton;
@@ -2565,7 +2579,7 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
     data.randomBatchPanel.validate();
   }
 
-  public boolean createRandomBatch(int pCount, String pGeneratorname, RandomBatchQuality pQuality) {
+  public boolean createRandomBatch(int pCount, String pGeneratorname, String pSymmetryGeneratorname, RandomBatchQuality pQuality) {
     if (!confirmNewRandomBatch(pGeneratorname))
       return false;
     if (prefs.getTinaRandomBatchRefreshType() == RandomBatchRefreshType.CLEAR) {
@@ -2576,11 +2590,12 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
     int maxCount = (pCount > 0 ? pCount : imgCount);
     mainProgressUpdater.initProgress(maxCount);
     RandomFlameGenerator randGen = RandomFlameGeneratorList.getRandomFlameGeneratorInstance(pGeneratorname, true);
+    RandomSymmetryGenerator randSymmGen = RandomSymmetryGeneratorList.getRandomSymmetryGeneratorInstance(pSymmetryGeneratorname, true);
     //int palettePoints = Integer.parseInt(paletteRandomPointsREd.getText());
     for (int i = 0; i < maxCount; i++) {
       int palettePoints = 7 + (int) (Math.random() * 34.0);
       boolean fadePaletteColors = Math.random() > 0.25;
-      RandomFlameGeneratorSampler sampler = new RandomFlameGeneratorSampler(IMG_WIDTH / 2, IMG_HEIGHT / 2, prefs, randGen, palettePoints, fadePaletteColors, pQuality);
+      RandomFlameGeneratorSampler sampler = new RandomFlameGeneratorSampler(IMG_WIDTH / 2, IMG_HEIGHT / 2, prefs, randGen, randSymmGen, palettePoints, fadePaletteColors, pQuality);
       RandomFlameGeneratorSample sample = sampler.createSample();
       FlameThumbnail thumbnail;
       thumbnail = new FlameThumbnail(sample.getFlame(), null);
@@ -4437,27 +4452,33 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
   }
 
   public void deFilterEnableCBx_changed() {
-    Flame flame = getCurrFlame();
-    if (flame != null) {
-      saveUndoPoint();
-      flame.setDeFilterEnabled(data.deFilterEnableCbx.isSelected());
-      flameControls.enableDEFilterUI();
+    if (!noRefresh) {
+      Flame flame = getCurrFlame();
+      if (flame != null) {
+        saveUndoPoint();
+        flame.setDeFilterEnabled(data.deFilterEnableCbx.isSelected());
+        flameControls.enableDEFilterUI();
+      }
     }
   }
 
   public void spatialFilterKernelCmb_changed() {
-    Flame flame = getCurrFlame();
-    if (flame != null) {
-      saveUndoPoint();
-      flame.setSpatialFilterKernel((FilterKernelType) data.filterKernelCmb.getSelectedItem());
+    if (!noRefresh) {
+      Flame flame = getCurrFlame();
+      if (flame != null) {
+        saveUndoPoint();
+        flame.setSpatialFilterKernel((FilterKernelType) data.filterKernelCmb.getSelectedItem());
+      }
     }
   }
 
   public void deFilterKernelCmb_changed() {
-    Flame flame = getCurrFlame();
-    if (flame != null) {
-      saveUndoPoint();
-      flame.setDeFilterKernel((FilterKernelType) data.deFilterKernelCmb.getSelectedItem());
+    if (!noRefresh) {
+      Flame flame = getCurrFlame();
+      if (flame != null) {
+        saveUndoPoint();
+        flame.setDeFilterKernel((FilterKernelType) data.deFilterKernelCmb.getSelectedItem());
+      }
     }
   }
 

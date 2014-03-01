@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2014 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class RandomFlameGeneratorList {
-  public static final String DEFAULT_GENERATOR_NAME = "All";
+  public static final String DEFAULT_GENERATOR_NAME = new AllRandomFlameGenerator().getName();
   private static List<Class<? extends RandomFlameGenerator>> items = new ArrayList<Class<? extends RandomFlameGenerator>>();
   private static List<String> nameList = new ArrayList<String>();
 

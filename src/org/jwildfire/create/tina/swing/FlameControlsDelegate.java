@@ -21,8 +21,6 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
 import javax.swing.JSlider;
 import javax.swing.JTabbedPane;
 import javax.swing.event.ChangeEvent;
@@ -31,6 +29,7 @@ import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.animate.AnimationService;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.MotionCurve;
+import org.jwildfire.create.tina.base.PostSymmetryType;
 import org.jwildfire.create.tina.base.Shading;
 import org.jwildfire.create.tina.base.ShadingInfo;
 
@@ -38,14 +37,6 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
 
   public FlameControlsDelegate(TinaController pOwner, TinaControllerData pData, JTabbedPane pRootTabbedPane) {
     super(pOwner, pData, pRootTabbedPane);
-  }
-
-  public void enableFlameControl(JCheckBox pSender, boolean pDisabled) {
-    pSender.setEnabled(!pDisabled && owner.getCurrFlame() != null);
-  }
-
-  public void enableFlameControl(JComboBox pSender, boolean pDisabled) {
-    pSender.setEnabled(!pDisabled && owner.getCurrFlame() != null);
   }
 
   @Override
@@ -117,9 +108,8 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
     enableControl(data.gammaThresholdREd, false);
 
     enableDEFilterUI();
+    enablePostSymmetryUI();
 
-    // TODO
-    data.newDOFCBx.setEnabled(getCurrFlame() != null);
     enableDOFUI();
 
     enableShadingUI();
@@ -426,6 +416,7 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
 
   public void enableDOFUI() {
     boolean newDOF = getCurrFlame() != null ? getCurrFlame().isNewCamDOF() : false;
+    data.newDOFCBx.setEnabled(getCurrFlame() != null);
     data.mouseTransformEditFocusPointButton.setEnabled(newDOF);
     data.focusXREd.setEnabled(newDOF);
     data.focusXSlider.setEnabled(newDOF);
@@ -443,15 +434,27 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
     data.dimishZSlider.setEnabled(getCurrFlame() != null);
   }
 
+  public void enablePostSymmetryUI() {
+    boolean enabled = getCurrFlame() != null;
+    boolean pointSymmEnabled = enabled && PostSymmetryType.POINT.equals(getCurrFlame().getPostSymmetryType());
+    boolean axisSymmEnabled = enabled && (PostSymmetryType.X_AXIS.equals(getCurrFlame().getPostSymmetryType()) || PostSymmetryType.Y_AXIS.equals(getCurrFlame().getPostSymmetryType()));
+    enableControl(data.postSymmetryTypeCmb, false);
+    enableControl(data.postSymmetryDistanceREd, !axisSymmEnabled);
+    enableControl(data.postSymmetryRotationREd, !axisSymmEnabled);
+    enableControl(data.postSymmetryOrderREd, !pointSymmEnabled);
+    enableControl(data.postSymmetryCentreXREd, !axisSymmEnabled && !pointSymmEnabled);
+    enableControl(data.postSymmetryCentreYREd, !axisSymmEnabled && !pointSymmEnabled);
+  }
+
   public void enableDEFilterUI() {
     boolean deEnabled = getCurrFlame() != null ? getCurrFlame().isDeFilterEnabled() : false;
-    enableFlameControl(data.deFilterEnableCbx, false);
+    enableControl(data.deFilterEnableCbx, false);
     enableControl(data.deFilterMaxRadiusREd, !deEnabled);
     enableControl(data.deFilterMinRadiusREd, !deEnabled);
     enableControl(data.deFilterCurveREd, !deEnabled);
-    enableFlameControl(data.deFilterKernelCmb, !deEnabled);
+    enableControl(data.deFilterKernelCmb, !deEnabled);
     enableControl(data.filterRadiusREd, false);
-    enableFlameControl(data.filterKernelCmb, false);
+    enableControl(data.filterKernelCmb, false);
   }
 
   public void enableShadingUI() {
@@ -588,6 +591,18 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
       data.motionBlurDecayField.setText(Tools.doubleToString(getCurrFlame().getMotionBlurDecay()));
       data.motionBlurDecaySlider.setValue(Tools.FTOI(getCurrFlame().getMotionBlurDecay() * TinaController.SLIDER_SCALE_ZOOM));
 
+      data.postSymmetryTypeCmb.setSelectedItem(getCurrFlame().getPostSymmetryType());
+      enablePostSymmetryUI();
+      data.postSymmetryDistanceREd.setText(Tools.doubleToString(getCurrFlame().getPostSymmetryDistance()));
+      data.postSymmetryDistanceSlider.setValue(Tools.FTOI(getCurrFlame().getPostSymmetryDistance() * TinaController.SLIDER_SCALE_CENTRE));
+      data.postSymmetryRotationREd.setText(Tools.doubleToString(getCurrFlame().getPostSymmetryRotation()));
+      data.postSymmetryRotationSlider.setValue(Tools.FTOI(getCurrFlame().getPostSymmetryRotation()));
+      data.postSymmetryOrderREd.setText(String.valueOf(getCurrFlame().getPostSymmetryOrder()));
+      data.postSymmetryOrderSlider.setValue(Tools.FTOI(getCurrFlame().getPostSymmetryOrder()));
+      data.postSymmetryCentreXREd.setText(Tools.doubleToString(getCurrFlame().getPostSymmetryCentreX()));
+      data.postSymmetryCentreXSlider.setValue(Tools.FTOI(getCurrFlame().getPostSymmetryCentreX() * TinaController.SLIDER_SCALE_CENTRE));
+      data.postSymmetryCentreYREd.setText(Tools.doubleToString(getCurrFlame().getPostSymmetryCentreY()));
+      data.postSymmetryCentreYSlider.setValue(Tools.FTOI(getCurrFlame().getPostSymmetryCentreY() * TinaController.SLIDER_SCALE_CENTRE));
     }
     finally {
       setNoRefresh(oldNoRefrsh);
@@ -1080,4 +1095,55 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
     flameSliderChanged(data.motionBlurDecaySlider, data.motionBlurDecayField, "motionBlurDecay", TinaController.SLIDER_SCALE_ZOOM);
   }
 
+  public void postSymmetryeCmb_changed() {
+    if (!isNoRefresh()) {
+      Flame flame = getCurrFlame();
+      if (flame != null) {
+        owner.saveUndoPoint();
+        flame.setPostSymmetryType((PostSymmetryType) data.postSymmetryTypeCmb.getSelectedItem());
+        enablePostSymmetryUI();
+        owner.refreshFlameImage(false);
+      }
+    }
+  }
+
+  public void postSymmetryDistanceREd_changed() {
+    flameTextFieldChanged(data.postSymmetryDistanceSlider, data.postSymmetryDistanceREd, "postSymmetryDistance", TinaController.SLIDER_SCALE_CENTRE);
+  }
+
+  public void postSymmetryDistanceSlider_changed(ChangeEvent e) {
+    flameSliderChanged(data.postSymmetryDistanceSlider, data.postSymmetryDistanceREd, "postSymmetryDistance", TinaController.SLIDER_SCALE_CENTRE);
+  }
+
+  public void postSymmetryRotationREd_changed() {
+    flameTextFieldChanged(data.postSymmetryRotationSlider, data.postSymmetryRotationREd, "postSymmetryRotation", 1.0);
+  }
+
+  public void postSymmetryRotationSlider_changed(ChangeEvent e) {
+    flameSliderChanged(data.postSymmetryRotationSlider, data.postSymmetryRotationREd, "postSymmetryRotation", 1.0);
+  }
+
+  public void postSymmetryCentreXREd_changed() {
+    flameTextFieldChanged(data.postSymmetryCentreXSlider, data.postSymmetryCentreXREd, "postSymmetryCentreX", TinaController.SLIDER_SCALE_CENTRE);
+  }
+
+  public void postSymmetryCentreXSlider_changed(ChangeEvent e) {
+    flameSliderChanged(data.postSymmetryCentreXSlider, data.postSymmetryCentreXREd, "postSymmetryCentreX", TinaController.SLIDER_SCALE_CENTRE);
+  }
+
+  public void postSymmetryCentreYREd_changed() {
+    flameTextFieldChanged(data.postSymmetryCentreYSlider, data.postSymmetryCentreYREd, "postSymmetryCentreY", TinaController.SLIDER_SCALE_CENTRE);
+  }
+
+  public void postSymmetryCentreYSlider_changed(ChangeEvent e) {
+    flameSliderChanged(data.postSymmetryCentreYSlider, data.postSymmetryCentreYREd, "postSymmetryCentreY", TinaController.SLIDER_SCALE_CENTRE);
+  }
+
+  public void postSymmetryOrderREd_changed() {
+    flameTextFieldChanged(data.postSymmetryOrderSlider, data.postSymmetryOrderREd, "postSymmetryOrder", 1.0);
+  }
+
+  public void postSymmetryOrderSlider_changed(ChangeEvent e) {
+    flameSliderChanged(data.postSymmetryOrderSlider, data.postSymmetryOrderREd, "postSymmetryOrder", 1.0);
+  }
 }
