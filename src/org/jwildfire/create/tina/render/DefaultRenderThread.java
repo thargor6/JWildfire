@@ -32,7 +32,7 @@ public abstract class DefaultRenderThread extends AbstractRenderThread {
     res.startIter = iter;
     for (DefaultRenderIterationState state : iterationState) {
       DefaultRenderThreadPersistentState.IterationState persist = new DefaultRenderThreadPersistentState.IterationState();
-      persist.packetIdx = renderPackets.indexOf(state.flame);
+      persist.packetIdx = renderPackets.indexOf(state.packet);
       persist.layerIdx = state.flame.getLayers().indexOf(state.layer);
       persist.xfIndex = (state.xf != null) ? state.layer.getXForms().indexOf(state.xf) : -1;
       persist.affineT = state.affineT != null ? state.affineT.makeCopy() : null;
