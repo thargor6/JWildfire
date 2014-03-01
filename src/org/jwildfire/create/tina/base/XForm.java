@@ -26,7 +26,6 @@ import java.util.List;
 import org.jwildfire.base.mathlib.MathLib;
 import org.jwildfire.create.tina.animate.AnimAware;
 import org.jwildfire.create.tina.edit.Assignable;
-import org.jwildfire.create.tina.random.AbstractRandomGenerator.RandGenStatus;
 import org.jwildfire.create.tina.variation.FlameTransformationContext;
 import org.jwildfire.create.tina.variation.Variation;
 import org.jwildfire.create.tina.variation.VariationFunc;
@@ -309,56 +308,43 @@ public final class XForm implements Assignable<XForm>, Serializable {
   }
 
   public void transformPoints(FlameTransformationContext pContext, XYZPoint[] pAffineT, XYZPoint[] pVarT, XYZPoint[] pSrcPoint, XYZPoint[] pDstPoint) {
-    try {
-      for (int i = 0; i < 3; i++) {
-        switch (i) {
-          case 0:
-            pContext.setRandGenStatus(RandGenStatus.RECORDING);
-            break;
-          default:
-            pContext.setRandGenStatus(RandGenStatus.REPLAY);
-            break;
+    for (int i = 0; i < 3; i++) {
+      pAffineT[i].clear();
+      pAffineT[i].color = pSrcPoint[i].color * c1 + c2;
+      pAffineT[i].x = coeff00 * pSrcPoint[i].x + coeff10 * pSrcPoint[i].y + coeff20;
+      pAffineT[i].y = coeff01 * pSrcPoint[i].x + coeff11 * pSrcPoint[i].y + coeff21;
+      pAffineT[i].z = pSrcPoint[i].z;
+      pVarT[i].clear();
+      pVarT[i].color = pAffineT[i].color;
+      for (Variation variation : variations) {
+        if (variation.getFunc().getPriority() < 0) {
+          variation.transform(pContext, this, pAffineT[i], pVarT[i]);
+          pAffineT[i].invalidate();
         }
-        pAffineT[i].clear();
-        pAffineT[i].color = pSrcPoint[i].color * c1 + c2;
-        pAffineT[i].x = coeff00 * pSrcPoint[i].x + coeff10 * pSrcPoint[i].y + coeff20;
-        pAffineT[i].y = coeff01 * pSrcPoint[i].x + coeff11 * pSrcPoint[i].y + coeff21;
-        pAffineT[i].z = pSrcPoint[i].z;
-        pVarT[i].clear();
-        pVarT[i].color = pAffineT[i].color;
-        for (Variation variation : variations) {
-          if (variation.getFunc().getPriority() < 0) {
-            variation.transform(pContext, this, pAffineT[i], pVarT[i]);
-            pAffineT[i].invalidate();
-          }
-        }
-        for (Variation variation : variations) {
-          if (variation.getFunc().getPriority() == 0) {
-            variation.transform(pContext, this, pAffineT[i], pVarT[i]);
-          }
-        }
-        for (Variation variation : variations) {
-          if (variation.getFunc().getPriority() > 0) {
-            variation.transform(pContext, this, pAffineT[i], pVarT[i]);
-          }
-        }
-        pDstPoint[i].color = pVarT[i].color;
-        if (isHasPostCoeffs()) {
-          double px = postCoeff00 * pVarT[i].x + postCoeff10 * pVarT[i].y + postCoeff20;
-          double py = postCoeff01 * pVarT[i].x + postCoeff11 * pVarT[i].y + postCoeff21;
-          double pz = pVarT[i].z;
-          pVarT[i].x = px;
-          pVarT[i].y = py;
-          pVarT[i].z = pz;
-        }
-
-        pDstPoint[i].x = pVarT[i].x;
-        pDstPoint[i].y = pVarT[i].y;
-        pDstPoint[i].z = pVarT[i].z;
       }
-    }
-    finally {
-      pContext.setRandGenStatus(RandGenStatus.DEFAULT);
+      for (Variation variation : variations) {
+        if (variation.getFunc().getPriority() == 0) {
+          variation.transform(pContext, this, pAffineT[i], pVarT[i]);
+        }
+      }
+      for (Variation variation : variations) {
+        if (variation.getFunc().getPriority() > 0) {
+          variation.transform(pContext, this, pAffineT[i], pVarT[i]);
+        }
+      }
+      pDstPoint[i].color = pVarT[i].color;
+      if (isHasPostCoeffs()) {
+        double px = postCoeff00 * pVarT[i].x + postCoeff10 * pVarT[i].y + postCoeff20;
+        double py = postCoeff01 * pVarT[i].x + postCoeff11 * pVarT[i].y + postCoeff21;
+        double pz = pVarT[i].z;
+        pVarT[i].x = px;
+        pVarT[i].y = py;
+        pVarT[i].z = pz;
+      }
+
+      pDstPoint[i].x = pVarT[i].x;
+      pDstPoint[i].y = pVarT[i].y;
+      pDstPoint[i].z = pVarT[i].z;
     }
   }
 

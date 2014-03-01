@@ -130,6 +130,13 @@ public class Flame implements Assignable<Flame>, Serializable {
   private int frame = 1;
   private int frameCount = 300;
 
+  private PostSymmetryType postSymmetryType = PostSymmetryType.NONE;
+  private int postSymmetryPointCount = 3;
+  private double postSymmetryCentreX = 0.0;
+  private double postSymmetryCentreY = 0.0;
+  private double postSymmetryDistance = 4.0;
+  private double postSymmetryAngle = 30.0;
+
   public Flame() {
     layers.clear();
     layers.add(new Layer());
@@ -519,6 +526,13 @@ public class Flame implements Assignable<Flame>, Serializable {
     frame = pFlame.frame;
     frameCount = pFlame.frameCount;
 
+    postSymmetryType = pFlame.postSymmetryType;
+    postSymmetryPointCount = pFlame.postSymmetryPointCount;
+    postSymmetryCentreX = pFlame.postSymmetryCentreX;
+    postSymmetryCentreY = pFlame.postSymmetryCentreY;
+    postSymmetryDistance = pFlame.postSymmetryDistance;
+    postSymmetryAngle = pFlame.postSymmetryAngle;
+
     layers.clear();
     for (Layer layer : pFlame.getLayers()) {
       layers.add(layer.makeCopy());
@@ -570,7 +584,10 @@ public class Flame implements Assignable<Flame>, Serializable {
         (fabs(antialiasAmount - pFlame.antialiasAmount) > EPSILON) || (fabs(antialiasRadius - pFlame.antialiasRadius) > EPSILON) ||
         (layers.size() != pFlame.layers.size()) || (motionBlurLength != pFlame.motionBlurLength) ||
         (fabs(motionBlurTimeStep - pFlame.motionBlurTimeStep) > EPSILON) || (fabs(motionBlurDecay - pFlame.motionBlurDecay) > EPSILON) ||
-        (frame != pFlame.frame) || (frameCount != pFlame.frameCount)) {
+        (frame != pFlame.frame) || (frameCount != pFlame.frameCount) ||
+        (postSymmetryType != pFlame.postSymmetryType) || (postSymmetryPointCount != pFlame.postSymmetryPointCount) ||
+        (fabs(postSymmetryCentreX - pFlame.postSymmetryCentreX) > EPSILON) || (fabs(postSymmetryCentreY - pFlame.postSymmetryCentreY) > EPSILON) ||
+        (fabs(postSymmetryDistance - pFlame.postSymmetryDistance) > EPSILON) || (fabs(postSymmetryDistance - pFlame.postSymmetryDistance) > EPSILON)) {
       return false;
     }
     for (int i = 0; i < layers.size(); i++) {
@@ -780,5 +797,53 @@ public class Flame implements Assignable<Flame>, Serializable {
 
   public boolean hasPreRenderMotionProperty() {
     return brightnessCurve.isEnabled() || contrastCurve.isEnabled() || gammaCurve.isEnabled() || gammaThresholdCurve.isEnabled() || vibrancyCurve.isEnabled();
+  }
+
+  public PostSymmetryType getPostSymmetryType() {
+    return postSymmetryType;
+  }
+
+  public void setPostSymmetryType(PostSymmetryType postSymmetryType) {
+    this.postSymmetryType = postSymmetryType;
+  }
+
+  public int getPostSymmetryPointCount() {
+    return postSymmetryPointCount;
+  }
+
+  public void setPostSymmetryPointCount(int postSymmetryPointCount) {
+    this.postSymmetryPointCount = postSymmetryPointCount;
+  }
+
+  public double getPostSymmetryCentreX() {
+    return postSymmetryCentreX;
+  }
+
+  public void setPostSymmetryCentreX(double postSymmetryCentreX) {
+    this.postSymmetryCentreX = postSymmetryCentreX;
+  }
+
+  public double getPostSymmetryCentreY() {
+    return postSymmetryCentreY;
+  }
+
+  public void setPostSymmetryCentreY(double postSymmetryCentreY) {
+    this.postSymmetryCentreY = postSymmetryCentreY;
+  }
+
+  public double getPostSymmetryDistance() {
+    return postSymmetryDistance;
+  }
+
+  public void setPostSymmetryDistance(double postSymmetryDistance) {
+    this.postSymmetryDistance = postSymmetryDistance;
+  }
+
+  public double getPostSymmetryAngle() {
+    return postSymmetryAngle;
+  }
+
+  public void setPostSymmetryAngle(double postSymmetryAngle) {
+    this.postSymmetryAngle = postSymmetryAngle;
   }
 }

@@ -198,6 +198,12 @@ public class AbstractFlameWriter {
       attrList.add(xb.createAttr(AbstractFlameReader.ATTR_MOTIONBLUR_TIMESTEP, pFlame.getMotionBlurTimeStep()));
       attrList.add(xb.createAttr(AbstractFlameReader.ATTR_MOTIONBLUR_DECAY, pFlame.getMotionBlurDecay()));
     }
+    attrList.add(xb.createAttr(AbstractFlameReader.ATTR_POST_SYMMETRY_TYPE, pFlame.getPostSymmetryType().toString()));
+    attrList.add(xb.createAttr(AbstractFlameReader.ATTR_POST_SYMMETRY_POINTCOUNT, pFlame.getPostSymmetryPointCount()));
+    attrList.add(xb.createAttr(AbstractFlameReader.ATTR_POST_SYMMETRY_CENTREX, pFlame.getPostSymmetryCentreX()));
+    attrList.add(xb.createAttr(AbstractFlameReader.ATTR_POST_SYMMETRY_CENTREY, pFlame.getPostSymmetryCentreY()));
+    attrList.add(xb.createAttr(AbstractFlameReader.ATTR_POST_SYMMETRY_DISTANCE, pFlame.getPostSymmetryDistance()));
+    attrList.add(xb.createAttr(AbstractFlameReader.ATTR_POST_SYMMETRY_ANGLE, pFlame.getPostSymmetryAngle()));
     return attrList;
   }
 
