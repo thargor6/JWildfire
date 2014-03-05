@@ -24,6 +24,7 @@ import static org.jwildfire.base.mathlib.MathLib.fabs;
 import static org.jwildfire.base.mathlib.MathLib.sin;
 
 import org.jwildfire.base.mathlib.MathLib;
+import org.jwildfire.create.tina.base.Stereo3dEye;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.XYZPoint;
 import org.jwildfire.create.tina.base.XYZProjectedPoint;
@@ -43,6 +44,7 @@ public class FlameRendererView {
   protected double rcY;
   double bws;
   double bhs;
+  protected XYZPoint camPoint = new XYZPoint();
   // 3D stuff
   protected boolean doProject3D = false;
   private final AbstractRandomGenerator randGen;
@@ -52,8 +54,9 @@ public class FlameRendererView {
   private final int imageHeight;
   private final int rasterWidth;
   private final int rasterHeight;
+  protected final Stereo3dEye eye;
 
-  public FlameRendererView(Flame pFlame, AbstractRandomGenerator pRandGen, int pBorderWidth, int pMaxBorderWidth, int pImageWidth, int pImageHeight, int pRasterWidth, int pRasterHeight) {
+  public FlameRendererView(Stereo3dEye pEye, Flame pFlame, AbstractRandomGenerator pRandGen, int pBorderWidth, int pMaxBorderWidth, int pImageWidth, int pImageHeight, int pRasterWidth, int pRasterHeight) {
     flame = pFlame;
     randGen = pRandGen;
     borderWidth = pBorderWidth;
@@ -62,11 +65,12 @@ public class FlameRendererView {
     imageHeight = pImageHeight;
     rasterWidth = pRasterWidth;
     rasterHeight = pRasterHeight;
+    eye = pEye;
     init3D();
     initView();
   }
 
-  private void init3D() {
+  protected void init3D() {
     double yaw = -flame.getCamYaw() * M_PI / 180.0;
     double pitch = flame.getCamPitch() * M_PI / 180.0;
     cameraMatrix[0][0] = cos(yaw);
@@ -120,10 +124,118 @@ public class FlameRendererView {
 
   public boolean project(XYZPoint pPoint, XYZProjectedPoint pProjectedPoint) {
     if (doProject3D) {
+      applyCameraMatrix(pPoint);
+      double zr = 1.0 - flame.getCamPerspective() * camPoint.z;
+      if (flame.getDimishZ() > EPSILON) {
+        double zdist = (flame.getCamZ() - camPoint.z);
+        if (zdist > 0.0) {
+          pProjectedPoint.intensity = exp(-zdist * zdist * flame.getDimishZ());
+        }
+        else {
+          pProjectedPoint.intensity = 1.0;
+        }
+      }
+      else {
+        pProjectedPoint.intensity = 1.0;
+      }
+
+      if (useDOF) {
+        if (legacyDOF) {
+          double zdist = (flame.getCamZ() - camPoint.z);
+          if (zdist > 0.0) {
+            double dr = randGen.random() * camDOF_10 * zdist;
+            double a = 2.0 * M_PI * randGen.random();
+            double dsina = sin(a);
+            double dcosa = cos(a);
+            pPoint.x = (camPoint.x + dr * dcosa) / zr;
+            pPoint.y = (camPoint.y + dr * dsina) / zr;
+          }
+          else {
+            pPoint.x = camPoint.x / zr;
+            pPoint.y = camPoint.y / zr;
+          }
+        }
+        else {
+          double xdist = (camPoint.x - flame.getFocusX());
+          double ydist = (camPoint.y - flame.getFocusY());
+          double zdist = (camPoint.z - flame.getFocusZ());
+          double dist = Math.pow(xdist * xdist + ydist * ydist + zdist * zdist, 1 / flame.getCamDOFExponent()) - flame.getCamDOFArea();
+          if (dist > 0.00001) {
+            double dr = randGen.random() * camDOF_10 * dist;
+            double a = 2.0 * M_PI * randGen.random();
+            double dsina = sin(a);
+            double dcosa = cos(a);
+            pPoint.x = (camPoint.x + dr * dcosa) / zr;
+            pPoint.y = (camPoint.y + dr * dsina) / zr;
+          }
+          else {
+            pPoint.x = camPoint.x / zr;
+            pPoint.y = camPoint.y / zr;
+          }
+        }
+      }
+      else {
+        pPoint.x = camPoint.x / zr;
+        pPoint.y = camPoint.y / zr;
+      }
+    }
+    else {
+      pProjectedPoint.intensity = 1.0;
+    }
+    pProjectedPoint.x = pPoint.x * cosa + pPoint.y * sina + rcX;
+    if ((pProjectedPoint.x < 0) || (pProjectedPoint.x > camW))
+      return false;
+    pProjectedPoint.y = pPoint.y * cosa - pPoint.x * sina + rcY;
+    if ((pProjectedPoint.y < 0) || (pProjectedPoint.y > camH))
+      return false;
+    return true;
+  }
+
+  protected void applyCameraMatrix(XYZPoint pPoint) {
+    camPoint.x = cameraMatrix[0][0] * pPoint.x + cameraMatrix[1][0] * pPoint.y /*+ cameraMatrix[2][0] * pPoint.z*/;
+    camPoint.y = cameraMatrix[0][1] * pPoint.x + cameraMatrix[1][1] * pPoint.y + cameraMatrix[2][1] * pPoint.z;
+    camPoint.z = cameraMatrix[0][2] * pPoint.x + cameraMatrix[1][2] * pPoint.y + cameraMatrix[2][2] * pPoint.z;
+  }
+
+  public boolean project1(XYZPoint pPoint, XYZProjectedPoint pProjectedPoint) {
+    if (doProject3D) {
       double z = pPoint.z;
-      double px = cameraMatrix[0][0] * pPoint.x + cameraMatrix[1][0] * pPoint.y /*+ cameraMatrix[2][0] * z*/;
+      //      double px = cameraMatrix[0][0] * pPoint.x + cameraMatrix[1][0] * pPoint.y /*+ cameraMatrix[2][0] * z*/;
+      //      double py = cameraMatrix[0][1] * pPoint.x + cameraMatrix[1][1] * pPoint.y + cameraMatrix[2][1] * z;
+      //      double pz = cameraMatrix[0][2] * pPoint.x + cameraMatrix[1][2] * pPoint.y + cameraMatrix[2][2] * z;
+
+      double px = cameraMatrix[0][0] * pPoint.x + cameraMatrix[1][0] * pPoint.y + cameraMatrix[2][0] * z;
       double py = cameraMatrix[0][1] * pPoint.x + cameraMatrix[1][1] * pPoint.y + cameraMatrix[2][1] * z;
       double pz = cameraMatrix[0][2] * pPoint.x + cameraMatrix[1][2] * pPoint.y + cameraMatrix[2][2] * z;
+
+      boolean right = true;
+
+      double eyeYaw = 1.0 * M_PI / 180.0;
+      double eyeOff = 0.05;
+      if (!right) {
+        eyeYaw = -eyeYaw;
+        eyeOff = -eyeOff;
+      }
+
+      double anaglyphCameraMatrix[][] = new double[3][3];
+      anaglyphCameraMatrix[0][0] = cos(eyeYaw);
+      anaglyphCameraMatrix[1][0] = -sin(eyeYaw);
+      anaglyphCameraMatrix[2][0] = 0;
+      anaglyphCameraMatrix[0][1] = sin(eyeYaw);
+      anaglyphCameraMatrix[1][1] = cos(eyeYaw);
+      anaglyphCameraMatrix[2][1] = 0;
+      anaglyphCameraMatrix[0][2] = 0;
+      anaglyphCameraMatrix[1][2] = 0;
+      anaglyphCameraMatrix[2][2] = 1;
+
+      double ax = anaglyphCameraMatrix[0][0] * px + anaglyphCameraMatrix[1][0] * py + anaglyphCameraMatrix[2][0] * pz + eyeOff;
+      double ay = anaglyphCameraMatrix[0][1] * px + anaglyphCameraMatrix[1][1] * py + anaglyphCameraMatrix[2][1] * pz;
+      double az = anaglyphCameraMatrix[0][2] * px + anaglyphCameraMatrix[1][2] * py + anaglyphCameraMatrix[2][2] * pz;
+
+      px = ax;
+      py = ay;
+      pz = az;
+
       double zr = 1.0 - flame.getCamPerspective() * pz;
       if (flame.getDimishZ() > EPSILON) {
         double zdist = (flame.getCamZ() - pz);

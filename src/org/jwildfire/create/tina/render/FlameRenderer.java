@@ -30,12 +30,15 @@ import org.jwildfire.base.Prefs;
 import org.jwildfire.base.QualityProfile;
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.animate.AnimationService;
+import org.jwildfire.create.tina.base.Stereo3dEye;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.Layer;
+import org.jwildfire.create.tina.base.Stereo3dColor;
 import org.jwildfire.create.tina.base.raster.AbstractRasterPoint;
 import org.jwildfire.create.tina.random.AbstractRandomGenerator;
 import org.jwildfire.create.tina.random.RandomGeneratorFactory;
 import org.jwildfire.create.tina.variation.FlameTransformationContext;
+import org.jwildfire.image.Pixel;
 import org.jwildfire.image.SimpleHDRImage;
 import org.jwildfire.image.SimpleImage;
 
@@ -70,6 +73,7 @@ public class FlameRenderer {
   private List<IterationObserver> iterationObservers;
   private List<AbstractRenderThread> runningThreads;
   private boolean forceAbort;
+  private Stereo3dEye eye = Stereo3dEye.UNSPECIFIED;
 
   public void registerIterationObserver(IterationObserver pObserver) {
     if (iterationObservers == null) {
@@ -148,6 +152,65 @@ public class FlameRenderer {
   }
 
   public RenderedFlame renderFlame(RenderInfo pRenderInfo) {
+    switch (flame.getStereo3dMode()) {
+      case INTERPOLATED:
+        // TODO
+        return null;
+      case SEPERATE_IMAGES:
+        // TODO
+        return null;
+      case ANAGLYPH: {
+        RenderInfo localRenderInfo = pRenderInfo.makeCopy();
+        localRenderInfo.setRenderHDR(false);
+        localRenderInfo.setRenderHDRIntensityMap(false);
+        eye = Stereo3dEye.LEFT;
+        RenderedFlame leftRender = renderImage(localRenderInfo);
+        eye = Stereo3dEye.RIGHT;
+        RenderedFlame rightRender = renderImage(localRenderInfo);
+
+        Pixel lPixel = new Pixel();
+        Pixel rPixel = new Pixel();
+        Stereo3dColor leftColor = flame.getAnaglyph3dLeftEyeColor();
+        Stereo3dColor rightColor = flame.getAnaglyph3dRightEyeColor();
+        SimpleImage leftImg = leftRender.getImage();
+        SimpleImage rightImg = rightRender.getImage();
+
+        RenderedFlame mergedRender = new RenderedFlame();
+        localRenderInfo.setImageWidth(leftRender.getImage().getImageWidth());
+        localRenderInfo.setImageHeight(leftRender.getImage().getImageHeight());
+        mergedRender.init(localRenderInfo);
+        SimpleImage mergedImg = mergedRender.getImage();
+
+        for (int i = 0; i < mergedImg.getImageHeight(); i++) {
+          for (int j = 0; j < mergedImg.getImageWidth(); j++) {
+            lPixel.setARGBValue(leftImg.getARGBValue(j, i));
+            rPixel.setARGBValue(rightImg.getARGBValue(j, i));
+            int mr = leftColor.calculateRed(lPixel.r, lPixel.g, lPixel.b) + rightColor.calculateRed(rPixel.r, rPixel.g, rPixel.b);
+            if (mr < 0)
+              mr = 0;
+            else if (mr > 255)
+              mr = 255;
+            int mg = leftColor.calculateGreen(lPixel.r, lPixel.g, lPixel.b) + rightColor.calculateGreen(rPixel.r, rPixel.g, rPixel.b);
+            if (mg < 0)
+              mg = 0;
+            else if (mg > 255)
+              mg = 255;
+            int mb = leftColor.calculateBlue(lPixel.r, lPixel.g, lPixel.b) + rightColor.calculateBlue(rPixel.r, rPixel.g, rPixel.b);
+            if (mb < 0)
+              mb = 0;
+            else if (mb > 255)
+              mb = 255;
+            mergedImg.setRGB(j, i, mr, mg, mb);
+          }
+        }
+        return mergedRender;
+      }
+      default:
+        return renderImage(pRenderInfo);
+    }
+  }
+
+  private RenderedFlame renderImage(RenderInfo pRenderInfo) {
     RenderedFlame res = new RenderedFlame();
     res.init(pRenderInfo);
 
@@ -540,7 +603,7 @@ public class FlameRenderer {
   }
 
   private void iterate(int pPart, int pParts, List<List<RenderPacket>> pPackets) {
-    long nSamples = (long) ((flame.getSampleDensity() * (double) rasterSize + 0.5));
+    long nSamples = (long) ((flame.getSampleDensity() * (double) rasterSize / (double) flame.calcPostSymmetrySampleMultiplier() / (double) flame.calcStero3dSampleMultiplier() + 0.5));
     int PROGRESS_STEPS = 50;
     if (progressUpdater != null && pPart == 0) {
       progressUpdater.initProgress((PROGRESS_STEPS - 1) * pParts);
@@ -726,7 +789,15 @@ public class FlameRenderer {
   }
 
   protected FlameRendererView createView(Flame initialFlame) {
-    return new FlameRendererView(initialFlame, randGen, borderWidth, maxBorderWidth, imageWidth, imageHeight, rasterWidth, rasterHeight);
+    if (!Stereo3dEye.UNSPECIFIED.equals(eye)) {
+      switch (initialFlame.getAnaglyph3dMode()) {
+        case INTERPOLATED:
+        case SEPERATE_IMAGES:
+        case ANAGLYPH:
+          return new Stereo3dFlameRendererView(eye, initialFlame, randGen, borderWidth, maxBorderWidth, imageWidth, imageHeight, rasterWidth, rasterHeight);
+      }
+    }
+    return new FlameRendererView(eye, initialFlame, randGen, borderWidth, maxBorderWidth, imageWidth, imageHeight, rasterWidth, rasterHeight);
   }
 
   public List<AbstractRenderThread> startRenderFlame(RenderInfo pRenderInfo) {

@@ -1,3 +1,21 @@
+V1.30 (02.03.2014):
+ - New concept of "post-symmetries". A post symmetry is something like a "final transform after a final transform". 
+ But unlike to a ordinary final transform it can clone samples and modify those clones, making it very efficient to create fractals with certain symmetry.
+ For example, for a mirror-like-symmetry it creates for any input sample one mirrored clone.        
+ You also could achieve this by designing the fractal, but using the post-symmetries makes it much more intuitive and faster to render. 
+ - New concept of "random-symmetry-generators". Those are a parallel concept to random flame generators and can used in combination. 
+  I.E. random-symmetry-generators apply to random-fractal a randomly-chosen-symmetry.
+ - Some initial random-symmetry-generators:
+    - "XAxis"
+    - "YAxis" (not only differing in the axis)
+    - "Point"
+    - "All (sparse)" (applies symmetry only at a certain probability, this is the default)
+ - re-implemented parts of the blur-shading, works different now, but also works in the interactive renderer
+ - new "extrude"-variation by Xyrus02
+ - many internal refactoring/optimization/simplifying of the renderer 
+ - fixed a bug in the gradient editor
+ - fixed a bug regarding the saving/restoring of a render
+
 V1.21 (23.02.2014):
  - new "cross"-random-flame-generator
  - rearranged the sub-tabs on the gradient-tab resulting in little more vertical space for the gradient-library

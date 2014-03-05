@@ -45,4 +45,5 @@ public class RenderedFlame {
       hdrHeightMap = new SimpleHDRImage(pRenderInfo.getImageWidth(), pRenderInfo.getImageHeight());
     }
   }
+
 }

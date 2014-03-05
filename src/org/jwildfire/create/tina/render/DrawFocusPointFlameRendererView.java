@@ -18,6 +18,7 @@ package org.jwildfire.create.tina.render;
 
 import static org.jwildfire.base.mathlib.MathLib.sqrt;
 
+import org.jwildfire.create.tina.base.Stereo3dEye;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.XYZPoint;
 import org.jwildfire.create.tina.base.XYZProjectedPoint;
@@ -26,7 +27,7 @@ import org.jwildfire.create.tina.random.AbstractRandomGenerator;
 public class DrawFocusPointFlameRendererView extends FlameRendererView {
 
   public DrawFocusPointFlameRendererView(Flame pFlame, AbstractRandomGenerator pRandGen, int pBorderWidth, int pMaxBorderWidth, int pImageWidth, int pImageHeight, int pRasterWidth, int pRasterHeight) {
-    super(pFlame, pRandGen, pBorderWidth, pMaxBorderWidth, pImageWidth, pImageHeight, pRasterWidth, pRasterHeight);
+    super(Stereo3dEye.UNSPECIFIED, pFlame, pRandGen, pBorderWidth, pMaxBorderWidth, pImageWidth, pImageHeight, pRasterWidth, pRasterHeight);
   }
 
   @Override

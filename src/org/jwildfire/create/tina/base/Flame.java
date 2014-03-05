@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2013 Andreas Maschke
+  Copyright (C) 1995-2014 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -137,11 +137,12 @@ public class Flame implements Assignable<Flame>, Serializable {
   private double postSymmetryDistance = 1.25;
   private double postSymmetryRotation = 6.0;
 
-  private Anaglyph3DMode anaglyph3dMode = Anaglyph3DMode.NONE;
-  private double anaglyph3dAngle = 2.0;
-  private double anaglyph3dEyeDist = 0.05;
-  private Anaglyph3DColor anaglyph3dLeftEyeColor = Anaglyph3DColor.RED;
-  private Anaglyph3DColor anaglyph3dRightEyeColor = Anaglyph3DColor.CYAN;
+  private Stereo3dMode stereo3dMode = Stereo3dMode.ANAGLYPH;
+  private double stereo3dAngle = 2.0;
+  private double stereo3dEyeDist = 0.05;
+  private Stereo3dColor stereo3dLeftEyeColor = Stereo3dColor.RED;
+  private Stereo3dColor stereo3dRightEyeColor = Stereo3dColor.CYAN;
+  private int stereo3dInterpolatedImageCount = 6;
 
   public Flame() {
     layers.clear();
@@ -537,11 +538,12 @@ public class Flame implements Assignable<Flame>, Serializable {
     postSymmetryDistance = pFlame.postSymmetryDistance;
     postSymmetryRotation = pFlame.postSymmetryRotation;
 
-    anaglyph3dMode = pFlame.anaglyph3dMode;
-    anaglyph3dAngle = pFlame.anaglyph3dAngle;
-    anaglyph3dEyeDist = pFlame.anaglyph3dEyeDist;
-    anaglyph3dLeftEyeColor = pFlame.anaglyph3dLeftEyeColor;
-    anaglyph3dRightEyeColor = pFlame.anaglyph3dRightEyeColor;
+    stereo3dMode = pFlame.stereo3dMode;
+    stereo3dAngle = pFlame.stereo3dAngle;
+    stereo3dEyeDist = pFlame.stereo3dEyeDist;
+    stereo3dLeftEyeColor = pFlame.stereo3dLeftEyeColor;
+    stereo3dRightEyeColor = pFlame.stereo3dRightEyeColor;
+    stereo3dInterpolatedImageCount = pFlame.stereo3dInterpolatedImageCount;
 
     layers.clear();
     for (Layer layer : pFlame.getLayers()) {
@@ -598,9 +600,9 @@ public class Flame implements Assignable<Flame>, Serializable {
         (postSymmetryType != pFlame.postSymmetryType) || (postSymmetryOrder != pFlame.postSymmetryOrder) ||
         (fabs(postSymmetryCentreX - pFlame.postSymmetryCentreX) > EPSILON) || (fabs(postSymmetryCentreY - pFlame.postSymmetryCentreY) > EPSILON) ||
         (fabs(postSymmetryDistance - pFlame.postSymmetryDistance) > EPSILON) || (fabs(postSymmetryDistance - pFlame.postSymmetryDistance) > EPSILON) ||
-        (anaglyph3dMode != pFlame.anaglyph3dMode) || (fabs(anaglyph3dAngle - pFlame.anaglyph3dAngle) > EPSILON) ||
-        (fabs(anaglyph3dEyeDist - pFlame.anaglyph3dEyeDist) > EPSILON) || (anaglyph3dLeftEyeColor != pFlame.anaglyph3dLeftEyeColor) ||
-        (anaglyph3dRightEyeColor != pFlame.anaglyph3dRightEyeColor)) {
+        (stereo3dMode != pFlame.stereo3dMode) || (fabs(stereo3dAngle - pFlame.stereo3dAngle) > EPSILON) ||
+        (fabs(stereo3dEyeDist - pFlame.stereo3dEyeDist) > EPSILON) || (stereo3dLeftEyeColor != pFlame.stereo3dLeftEyeColor) ||
+        (stereo3dRightEyeColor != pFlame.stereo3dRightEyeColor) || (stereo3dInterpolatedImageCount != pFlame.stereo3dInterpolatedImageCount)) {
       return false;
     }
     for (int i = 0; i < layers.size(); i++) {
@@ -860,47 +862,59 @@ public class Flame implements Assignable<Flame>, Serializable {
     this.postSymmetryRotation = postSymmetryRotation;
   }
 
-  public Anaglyph3DMode getAnaglyph3dMode() {
-    return anaglyph3dMode;
+  public Stereo3dMode getAnaglyph3dMode() {
+    return stereo3dMode;
   }
 
-  public void setAnaglyph3dMode(Anaglyph3DMode anaglyph3dMode) {
-    this.anaglyph3dMode = anaglyph3dMode;
+  public void setAnaglyph3dMode(Stereo3dMode anaglyph3dMode) {
+    this.stereo3dMode = anaglyph3dMode;
   }
 
   public double getAnaglyph3dAngle() {
-    return anaglyph3dAngle;
+    return stereo3dAngle;
   }
 
   public void setAnaglyph3dAngle(double anaglyph3dAngle) {
-    this.anaglyph3dAngle = anaglyph3dAngle;
+    this.stereo3dAngle = anaglyph3dAngle;
   }
 
   public double getAnaglyph3dEyeDist() {
-    return anaglyph3dEyeDist;
+    return stereo3dEyeDist;
   }
 
   public void setAnaglyph3dEyeDist(double anaglyph3dEyeDist) {
-    this.anaglyph3dEyeDist = anaglyph3dEyeDist;
+    this.stereo3dEyeDist = anaglyph3dEyeDist;
   }
 
-  public Anaglyph3DColor getAnaglyph3dLeftEyeColor() {
-    return anaglyph3dLeftEyeColor;
+  public Stereo3dColor getAnaglyph3dLeftEyeColor() {
+    return stereo3dLeftEyeColor;
   }
 
-  public void setAnaglyph3dLeftEyeColor(Anaglyph3DColor anaglyph3dLeftEyeColor) {
-    this.anaglyph3dLeftEyeColor = anaglyph3dLeftEyeColor;
+  public void setAnaglyph3dLeftEyeColor(Stereo3dColor anaglyph3dLeftEyeColor) {
+    this.stereo3dLeftEyeColor = anaglyph3dLeftEyeColor;
   }
 
-  public Anaglyph3DColor getAnaglyph3dRightEyeColor() {
-    return anaglyph3dRightEyeColor;
+  public Stereo3dColor getAnaglyph3dRightEyeColor() {
+    return stereo3dRightEyeColor;
   }
 
-  public void setAnaglyph3dRightEyeColor(Anaglyph3DColor anaglyph3dRightEyeColor) {
-    this.anaglyph3dRightEyeColor = anaglyph3dRightEyeColor;
+  public void setAnaglyph3dRightEyeColor(Stereo3dColor anaglyph3dRightEyeColor) {
+    this.stereo3dRightEyeColor = anaglyph3dRightEyeColor;
   }
 
-  public int calcPostSymmetryCloneCount() {
+  public int calcStero3dSampleMultiplier() {
+    switch (getStereo3dMode()) {
+      case ANAGLYPH:
+      case SEPERATE_IMAGES:
+        return 2;
+      case INTERPOLATED:
+        return getStereo3dInterpolatedImageCount();
+      default:
+        return 1;
+    }
+  }
+
+  public int calcPostSymmetrySampleMultiplier() {
     switch (getPostSymmetryType()) {
       case POINT:
         return getPostSymmetryOrder();
@@ -910,5 +924,53 @@ public class Flame implements Assignable<Flame>, Serializable {
       default:
         return 1;
     }
+  }
+
+  public Stereo3dMode getStereo3dMode() {
+    return stereo3dMode;
+  }
+
+  public void setStereo3dMode(Stereo3dMode stereo3dMode) {
+    this.stereo3dMode = stereo3dMode;
+  }
+
+  public double getStereo3dAngle() {
+    return stereo3dAngle;
+  }
+
+  public void setStereo3dAngle(double stereo3dAngle) {
+    this.stereo3dAngle = stereo3dAngle;
+  }
+
+  public double getStereo3dEyeDist() {
+    return stereo3dEyeDist;
+  }
+
+  public void setStereo3dEyeDist(double stereo3dEyeDist) {
+    this.stereo3dEyeDist = stereo3dEyeDist;
+  }
+
+  public Stereo3dColor getStereo3dLeftEyeColor() {
+    return stereo3dLeftEyeColor;
+  }
+
+  public void setStereo3dLeftEyeColor(Stereo3dColor stereo3dLeftEyeColor) {
+    this.stereo3dLeftEyeColor = stereo3dLeftEyeColor;
+  }
+
+  public Stereo3dColor getStereo3dRightEyeColor() {
+    return stereo3dRightEyeColor;
+  }
+
+  public void setStereo3dRightEyeColor(Stereo3dColor stereo3dRightEyeColor) {
+    this.stereo3dRightEyeColor = stereo3dRightEyeColor;
+  }
+
+  public int getStereo3dInterpolatedImageCount() {
+    return stereo3dInterpolatedImageCount;
+  }
+
+  public void setStereo3dInterpolatedImageCount(int stereo3dInterpolatedImageCount) {
+    this.stereo3dInterpolatedImageCount = stereo3dInterpolatedImageCount;
   }
 }
