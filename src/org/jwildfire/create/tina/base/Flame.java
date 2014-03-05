@@ -137,6 +137,12 @@ public class Flame implements Assignable<Flame>, Serializable {
   private double postSymmetryDistance = 1.25;
   private double postSymmetryRotation = 6.0;
 
+  private Anaglyph3DMode anaglyph3dMode = Anaglyph3DMode.NONE;
+  private double anaglyph3dAngle = 2.0;
+  private double anaglyph3dEyeDist = 0.05;
+  private Anaglyph3DColor anaglyph3dLeftEyeColor = Anaglyph3DColor.RED;
+  private Anaglyph3DColor anaglyph3dRightEyeColor = Anaglyph3DColor.CYAN;
+
   public Flame() {
     layers.clear();
     layers.add(new Layer());
@@ -345,8 +351,6 @@ public class Flame implements Assignable<Flame>, Serializable {
     this.bgColorBlue = bgColorBlue;
   }
 
-  private static long cnt = 0;
-
   @Override
   public Flame makeCopy() {
     Flame res = new Flame();
@@ -533,6 +537,12 @@ public class Flame implements Assignable<Flame>, Serializable {
     postSymmetryDistance = pFlame.postSymmetryDistance;
     postSymmetryRotation = pFlame.postSymmetryRotation;
 
+    anaglyph3dMode = pFlame.anaglyph3dMode;
+    anaglyph3dAngle = pFlame.anaglyph3dAngle;
+    anaglyph3dEyeDist = pFlame.anaglyph3dEyeDist;
+    anaglyph3dLeftEyeColor = pFlame.anaglyph3dLeftEyeColor;
+    anaglyph3dRightEyeColor = pFlame.anaglyph3dRightEyeColor;
+
     layers.clear();
     for (Layer layer : pFlame.getLayers()) {
       layers.add(layer.makeCopy());
@@ -587,7 +597,10 @@ public class Flame implements Assignable<Flame>, Serializable {
         (frame != pFlame.frame) || (frameCount != pFlame.frameCount) ||
         (postSymmetryType != pFlame.postSymmetryType) || (postSymmetryOrder != pFlame.postSymmetryOrder) ||
         (fabs(postSymmetryCentreX - pFlame.postSymmetryCentreX) > EPSILON) || (fabs(postSymmetryCentreY - pFlame.postSymmetryCentreY) > EPSILON) ||
-        (fabs(postSymmetryDistance - pFlame.postSymmetryDistance) > EPSILON) || (fabs(postSymmetryDistance - pFlame.postSymmetryDistance) > EPSILON)) {
+        (fabs(postSymmetryDistance - pFlame.postSymmetryDistance) > EPSILON) || (fabs(postSymmetryDistance - pFlame.postSymmetryDistance) > EPSILON) ||
+        (anaglyph3dMode != pFlame.anaglyph3dMode) || (fabs(anaglyph3dAngle - pFlame.anaglyph3dAngle) > EPSILON) ||
+        (fabs(anaglyph3dEyeDist - pFlame.anaglyph3dEyeDist) > EPSILON) || (anaglyph3dLeftEyeColor != pFlame.anaglyph3dLeftEyeColor) ||
+        (anaglyph3dRightEyeColor != pFlame.anaglyph3dRightEyeColor)) {
       return false;
     }
     for (int i = 0; i < layers.size(); i++) {
@@ -845,5 +858,57 @@ public class Flame implements Assignable<Flame>, Serializable {
 
   public void setPostSymmetryRotation(double postSymmetryRotation) {
     this.postSymmetryRotation = postSymmetryRotation;
+  }
+
+  public Anaglyph3DMode getAnaglyph3dMode() {
+    return anaglyph3dMode;
+  }
+
+  public void setAnaglyph3dMode(Anaglyph3DMode anaglyph3dMode) {
+    this.anaglyph3dMode = anaglyph3dMode;
+  }
+
+  public double getAnaglyph3dAngle() {
+    return anaglyph3dAngle;
+  }
+
+  public void setAnaglyph3dAngle(double anaglyph3dAngle) {
+    this.anaglyph3dAngle = anaglyph3dAngle;
+  }
+
+  public double getAnaglyph3dEyeDist() {
+    return anaglyph3dEyeDist;
+  }
+
+  public void setAnaglyph3dEyeDist(double anaglyph3dEyeDist) {
+    this.anaglyph3dEyeDist = anaglyph3dEyeDist;
+  }
+
+  public Anaglyph3DColor getAnaglyph3dLeftEyeColor() {
+    return anaglyph3dLeftEyeColor;
+  }
+
+  public void setAnaglyph3dLeftEyeColor(Anaglyph3DColor anaglyph3dLeftEyeColor) {
+    this.anaglyph3dLeftEyeColor = anaglyph3dLeftEyeColor;
+  }
+
+  public Anaglyph3DColor getAnaglyph3dRightEyeColor() {
+    return anaglyph3dRightEyeColor;
+  }
+
+  public void setAnaglyph3dRightEyeColor(Anaglyph3DColor anaglyph3dRightEyeColor) {
+    this.anaglyph3dRightEyeColor = anaglyph3dRightEyeColor;
+  }
+
+  public int calcPostSymmetryCloneCount() {
+    switch (getPostSymmetryType()) {
+      case POINT:
+        return getPostSymmetryOrder();
+      case X_AXIS:
+      case Y_AXIS:
+        return 2;
+      default:
+        return 1;
+    }
   }
 }
