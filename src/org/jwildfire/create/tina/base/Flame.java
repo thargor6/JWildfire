@@ -137,7 +137,7 @@ public class Flame implements Assignable<Flame>, Serializable {
   private double postSymmetryDistance = 1.25;
   private double postSymmetryRotation = 6.0;
 
-  private Stereo3dMode stereo3dMode = Stereo3dMode.ANAGLYPH;
+  private Stereo3dMode stereo3dMode = Stereo3dMode.NONE;
   private double stereo3dAngle = 2.0;
   private double stereo3dEyeDist = 0.05;
   private Stereo3dColor stereo3dLeftEyeColor = Stereo3dColor.RED;

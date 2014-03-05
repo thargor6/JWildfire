@@ -359,6 +359,8 @@ public class VariationFuncList {
     registerVariationFunc(OnionFunc.class);
     registerVariationFunc(BubbleT3DFunc.class);
     registerVariationFunc(ExtrudeFunc.class);
+    registerVariationFunc(LineFunc.class);
+    registerVariationFunc(Onion2Func.class);
   }
 
   private static void registerVariationFunc(
