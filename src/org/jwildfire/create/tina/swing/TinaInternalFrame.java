@@ -1614,6 +1614,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaFilteringPanel.add(tinaDEFilterKernelCmb);
       tinaSouthTabbedPane.addTab("Special Shading", null, getShadingPanel(), null);
       tinaSouthTabbedPane.addTab("Gradient", null, getTinaPalettePanel(), null);
+      tinaSouthTabbedPane.addTab("Stereo3d rendering", null, getPanel_82(), null);
       tinaSouthTabbedPane.addTab("Motion blur", null, getMotionBlurPanel(), null);
       tinaSouthTabbedPane.addTab("Post symmetry", null, getPanel_34(), null);
       tinaSouthTabbedPane.addTab("Layerz", null, getPanel_74(), null);
@@ -9127,6 +9128,16 @@ public class TinaInternalFrame extends JInternalFrame {
   private JPanel panel_81;
   private JLabel lblSymmetry;
   private JComboBox randomSymmetryCmb;
+  private JPanel panel_82;
+  private JComboBox stereo3dModeCmb;
+  private JWFNumberField stereo3dAngleREd;
+  private JSlider stereo3dAngleSlider;
+  private JWFNumberField stereo3dEyeDistREd;
+  private JSlider stereo3dEyeDistSlider;
+  private JComboBox stereo3dLeftEyeColorCmb;
+  private JComboBox stereo3dRightEyeColorCmb;
+  private JWFNumberField stereo3dInterpolatedImageCountREd;
+  private JSlider stereo3dInterpolatedImageCountSlider;
 
   /**
    * This method initializes renderBatchJobsScrollPane	
@@ -16004,6 +16015,209 @@ public class TinaInternalFrame extends JInternalFrame {
       randomSymmetryCmb.setFont(new Font("Dialog", Font.BOLD, 10));
     }
     return randomSymmetryCmb;
+  }
+
+  private JPanel getPanel_82() {
+    if (panel_82 == null) {
+      panel_82 = new JPanel();
+      panel_82.setLayout(null);
+
+      stereo3dModeCmb = new JComboBox();
+      stereo3dModeCmb.setSize(new Dimension(125, 22));
+      stereo3dModeCmb.setPreferredSize(new Dimension(125, 22));
+      stereo3dModeCmb.setLocation(new Point(100, 4));
+      stereo3dModeCmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      stereo3dModeCmb.setBounds(102, 6, 100, 24);
+      panel_82.add(stereo3dModeCmb);
+
+      JLabel lblStereodMode = new JLabel();
+      lblStereodMode.setText("Stereo3d mode");
+      lblStereodMode.setSize(new Dimension(94, 22));
+      lblStereodMode.setPreferredSize(new Dimension(94, 22));
+      lblStereodMode.setLocation(new Point(488, 2));
+      lblStereodMode.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblStereodMode.setBounds(6, 6, 94, 22);
+      panel_82.add(lblStereodMode);
+
+      JLabel lblAngle = new JLabel();
+      lblAngle.setText("View angle");
+      lblAngle.setSize(new Dimension(94, 22));
+      lblAngle.setPreferredSize(new Dimension(94, 22));
+      lblAngle.setName("postSymmetryDistanceLbl");
+      lblAngle.setLocation(new Point(488, 2));
+      lblAngle.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblAngle.setBounds(6, 31, 94, 22);
+      panel_82.add(lblAngle);
+
+      stereo3dAngleREd = new JWFNumberField();
+      stereo3dAngleREd.setValueStep(0.05);
+      stereo3dAngleREd.setText("");
+      stereo3dAngleREd.setSize(new Dimension(100, 24));
+      stereo3dAngleREd.setPreferredSize(new Dimension(100, 24));
+      stereo3dAngleREd.setLocation(new Point(584, 2));
+      stereo3dAngleREd.setLinkedMotionControlName("postSymmetryDistanceSlider");
+      stereo3dAngleREd.setLinkedLabelControlName("postSymmetryDistanceLbl");
+      stereo3dAngleREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      stereo3dAngleREd.setEditable(true);
+      stereo3dAngleREd.setBounds(102, 31, 100, 24);
+      panel_82.add(stereo3dAngleREd);
+
+      stereo3dAngleSlider = new JSlider();
+      stereo3dAngleSlider.setValue(0);
+      stereo3dAngleSlider.setSize(new Dimension(220, 19));
+      stereo3dAngleSlider.setPreferredSize(new Dimension(220, 19));
+      stereo3dAngleSlider.setName("postSymmetryDistanceSlider");
+      stereo3dAngleSlider.setMinimum(-25000);
+      stereo3dAngleSlider.setMaximum(25000);
+      stereo3dAngleSlider.setLocation(new Point(686, 2));
+      stereo3dAngleSlider.setFont(new Font("Dialog", Font.BOLD, 10));
+      stereo3dAngleSlider.setBounds(204, 31, 220, 24);
+      panel_82.add(stereo3dAngleSlider);
+
+      JLabel lblImageCount = new JLabel();
+      lblImageCount.setToolTipText("Number of generated (total) images per frame");
+      lblImageCount.setText("Image count");
+      lblImageCount.setSize(new Dimension(94, 22));
+      lblImageCount.setPreferredSize(new Dimension(94, 22));
+      lblImageCount.setName("postSymmetryCentreXLbl");
+      lblImageCount.setLocation(new Point(488, 2));
+      lblImageCount.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblImageCount.setBounds(437, 54, 94, 22);
+      panel_82.add(lblImageCount);
+
+      stereo3dInterpolatedImageCountREd = new JWFNumberField();
+      stereo3dInterpolatedImageCountREd.setValueStep(0.05);
+      stereo3dInterpolatedImageCountREd.setText("");
+      stereo3dInterpolatedImageCountREd.setSize(new Dimension(100, 24));
+      stereo3dInterpolatedImageCountREd.setPreferredSize(new Dimension(100, 24));
+      stereo3dInterpolatedImageCountREd.setLocation(new Point(584, 2));
+      stereo3dInterpolatedImageCountREd.setLinkedMotionControlName("postSymmetryCentreXSlider");
+      stereo3dInterpolatedImageCountREd.setLinkedLabelControlName("postSymmetryCentreXLbl");
+      stereo3dInterpolatedImageCountREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      stereo3dInterpolatedImageCountREd.setEditable(true);
+      stereo3dInterpolatedImageCountREd.setBounds(533, 54, 100, 24);
+      panel_82.add(stereo3dInterpolatedImageCountREd);
+
+      stereo3dInterpolatedImageCountSlider = new JSlider();
+      stereo3dInterpolatedImageCountSlider.setValue(0);
+      stereo3dInterpolatedImageCountSlider.setSize(new Dimension(220, 19));
+      stereo3dInterpolatedImageCountSlider.setPreferredSize(new Dimension(220, 19));
+      stereo3dInterpolatedImageCountSlider.setName("postSymmetryCentreXSlider");
+      stereo3dInterpolatedImageCountSlider.setMinimum(-25000);
+      stereo3dInterpolatedImageCountSlider.setMaximum(25000);
+      stereo3dInterpolatedImageCountSlider.setLocation(new Point(686, 2));
+      stereo3dInterpolatedImageCountSlider.setFont(new Font("Dialog", Font.BOLD, 10));
+      stereo3dInterpolatedImageCountSlider.setBounds(635, 54, 220, 24);
+      panel_82.add(stereo3dInterpolatedImageCountSlider);
+
+      JLabel lblExeDistance = new JLabel();
+      lblExeDistance.setText("Eye distance");
+      lblExeDistance.setSize(new Dimension(94, 22));
+      lblExeDistance.setPreferredSize(new Dimension(94, 22));
+      lblExeDistance.setName("postSymmetryDistanceLbl");
+      lblExeDistance.setLocation(new Point(488, 2));
+      lblExeDistance.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblExeDistance.setBounds(6, 56, 94, 22);
+      panel_82.add(lblExeDistance);
+
+      stereo3dEyeDistREd = new JWFNumberField();
+      stereo3dEyeDistREd.setValueStep(0.05);
+      stereo3dEyeDistREd.setText("");
+      stereo3dEyeDistREd.setSize(new Dimension(100, 24));
+      stereo3dEyeDistREd.setPreferredSize(new Dimension(100, 24));
+      stereo3dEyeDistREd.setLocation(new Point(584, 2));
+      stereo3dEyeDistREd.setLinkedMotionControlName("postSymmetryDistanceSlider");
+      stereo3dEyeDistREd.setLinkedLabelControlName("postSymmetryDistanceLbl");
+      stereo3dEyeDistREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      stereo3dEyeDistREd.setEditable(true);
+      stereo3dEyeDistREd.setBounds(102, 56, 100, 24);
+      panel_82.add(stereo3dEyeDistREd);
+
+      stereo3dEyeDistSlider = new JSlider();
+      stereo3dEyeDistSlider.setValue(0);
+      stereo3dEyeDistSlider.setSize(new Dimension(220, 19));
+      stereo3dEyeDistSlider.setPreferredSize(new Dimension(220, 19));
+      stereo3dEyeDistSlider.setName("postSymmetryDistanceSlider");
+      stereo3dEyeDistSlider.setMinimum(-25000);
+      stereo3dEyeDistSlider.setMaximum(25000);
+      stereo3dEyeDistSlider.setLocation(new Point(686, 2));
+      stereo3dEyeDistSlider.setFont(new Font("Dialog", Font.BOLD, 10));
+      stereo3dEyeDistSlider.setBounds(204, 56, 220, 24);
+      panel_82.add(stereo3dEyeDistSlider);
+
+      stereo3dLeftEyeColorCmb = new JComboBox();
+      stereo3dLeftEyeColorCmb.setSize(new Dimension(125, 22));
+      stereo3dLeftEyeColorCmb.setPreferredSize(new Dimension(125, 22));
+      stereo3dLeftEyeColorCmb.setLocation(new Point(100, 4));
+      stereo3dLeftEyeColorCmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      stereo3dLeftEyeColorCmb.setBounds(533, 6, 100, 24);
+      panel_82.add(stereo3dLeftEyeColorCmb);
+
+      JLabel lblLeftEyeColor = new JLabel();
+      lblLeftEyeColor.setToolTipText("Render color for anaglyph rendering (left image)");
+      lblLeftEyeColor.setText("Left eye color");
+      lblLeftEyeColor.setSize(new Dimension(94, 22));
+      lblLeftEyeColor.setPreferredSize(new Dimension(94, 22));
+      lblLeftEyeColor.setLocation(new Point(488, 2));
+      lblLeftEyeColor.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblLeftEyeColor.setBounds(437, 6, 94, 22);
+      panel_82.add(lblLeftEyeColor);
+
+      stereo3dRightEyeColorCmb = new JComboBox();
+      stereo3dRightEyeColorCmb.setSize(new Dimension(125, 22));
+      stereo3dRightEyeColorCmb.setPreferredSize(new Dimension(125, 22));
+      stereo3dRightEyeColorCmb.setLocation(new Point(100, 4));
+      stereo3dRightEyeColorCmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      stereo3dRightEyeColorCmb.setBounds(532, 31, 100, 24);
+      panel_82.add(stereo3dRightEyeColorCmb);
+
+      JLabel lblRightEyeColor = new JLabel();
+      lblRightEyeColor.setToolTipText("Render color for anaglyph rendering (right image)");
+      lblRightEyeColor.setText("Right eye color");
+      lblRightEyeColor.setSize(new Dimension(94, 22));
+      lblRightEyeColor.setPreferredSize(new Dimension(94, 22));
+      lblRightEyeColor.setLocation(new Point(488, 2));
+      lblRightEyeColor.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblRightEyeColor.setBounds(436, 31, 94, 22);
+      panel_82.add(lblRightEyeColor);
+    }
+    return panel_82;
+  }
+
+  public JComboBox getStereo3dModeCmb() {
+    return stereo3dModeCmb;
+  }
+
+  public JWFNumberField getStereo3dAngleREd() {
+    return stereo3dAngleREd;
+  }
+
+  public JSlider getStereo3dAngleSlider() {
+    return stereo3dAngleSlider;
+  }
+
+  public JWFNumberField getStereo3dEyeDistREd() {
+    return stereo3dEyeDistREd;
+  }
+
+  public JSlider getStereo3dEyeDistSlider() {
+    return stereo3dEyeDistSlider;
+  }
+
+  public JComboBox getStereo3dLeftEyeColorCmb() {
+    return stereo3dLeftEyeColorCmb;
+  }
+
+  public JComboBox getStereo3dRightEyeColorCmb() {
+    return stereo3dRightEyeColorCmb;
+  }
+
+  public JWFNumberField getStereo3dInterpolatedImageCountREd() {
+    return stereo3dInterpolatedImageCountREd;
+  }
+
+  public JSlider getStereo3dInterpolatedImageCountSlider() {
+    return stereo3dInterpolatedImageCountSlider;
   }
 } //  @jve:decl-index=0:visual-constraint="10,10"
 

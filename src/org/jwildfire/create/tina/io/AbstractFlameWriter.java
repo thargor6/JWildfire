@@ -13,6 +13,7 @@ import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.Shading;
 import org.jwildfire.create.tina.base.ShadingInfo;
+import org.jwildfire.create.tina.base.Stereo3dMode;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.palette.RGBPalette;
 import org.jwildfire.create.tina.variation.Variation;
@@ -204,6 +205,19 @@ public class AbstractFlameWriter {
     attrList.add(xb.createAttr(AbstractFlameReader.ATTR_POST_SYMMETRY_CENTREY, pFlame.getPostSymmetryCentreY()));
     attrList.add(xb.createAttr(AbstractFlameReader.ATTR_POST_SYMMETRY_DISTANCE, pFlame.getPostSymmetryDistance()));
     attrList.add(xb.createAttr(AbstractFlameReader.ATTR_POST_SYMMETRY_ROTATION, pFlame.getPostSymmetryRotation()));
+
+    if (pFlame.getStereo3dMode() != Stereo3dMode.NONE) {
+      attrList.add(xb.createAttr(AbstractFlameReader.ATTR_STEREO3D_MODE, pFlame.getStereo3dMode().toString()));
+      attrList.add(xb.createAttr(AbstractFlameReader.ATTR_STEREO3D_ANGLE, pFlame.getStereo3dAngle()));
+      attrList.add(xb.createAttr(AbstractFlameReader.ATTR_STEREO3D_EYE_DIST, pFlame.getStereo3dEyeDist()));
+      if (pFlame.getStereo3dMode() == Stereo3dMode.ANAGLYPH) {
+        attrList.add(xb.createAttr(AbstractFlameReader.ATTR_STEREO3D_LEFT_EYE_COLOR, pFlame.getStereo3dLeftEyeColor().toString()));
+        attrList.add(xb.createAttr(AbstractFlameReader.ATTR_STEREO3D_RIGHT_EYE_COLOR, pFlame.getStereo3dRightEyeColor().toString()));
+      }
+      else if (pFlame.getStereo3dMode() == Stereo3dMode.INTERPOLATED) {
+        attrList.add(xb.createAttr(AbstractFlameReader.ATTR_STEREO3D_INTERPOLATED_IMAGE_COUNT, pFlame.getStereo3dInterpolatedImageCount()));
+      }
+    }
     return attrList;
   }
 

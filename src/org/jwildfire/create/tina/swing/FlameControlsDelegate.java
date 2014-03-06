@@ -1147,3 +1147,14 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
     flameSliderChanged(data.postSymmetryOrderSlider, data.postSymmetryOrderREd, "postSymmetryOrder", 1.0);
   }
 }
+
+// TODO
+stereo3dModeCmb
+stereo3dAngleREd
+stereo3dAngleSlider
+stereo3dEyeDistREd
+stereo3dEyeDistSlider
+stereo3dLeftEyeColorCmb
+stereo3dRightEyeColorCmb
+stereo3dInterpolatedImageCountREd
+stereo3dInterpolatedImageCountSlider
