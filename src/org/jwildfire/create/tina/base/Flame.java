@@ -902,7 +902,7 @@ public class Flame implements Assignable<Flame>, Serializable {
     this.stereo3dRightEyeColor = anaglyph3dRightEyeColor;
   }
 
-  public int calcStero3dSampleMultiplier() {
+  public int calcStereo3dSampleMultiplier() {
     switch (getStereo3dMode()) {
       case ANAGLYPH:
       case SEPERATE_IMAGES:

@@ -575,7 +575,7 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
 
     enableControls();
 
-    enableXFormControls(null);
+    xFormControls.enableControls(null);
     enableLayerControls();
 
     refreshResolutionProfileCmb(data.resolutionProfileCmb, null);
@@ -1981,7 +1981,7 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
           flamePanel.setSelectedXForm(xForm);
         }
         refreshXFormUI(xForm);
-        enableXFormControls(xForm);
+        xFormControls.enableControls(xForm);
         refreshFlameImage(false);
       }
       finally {
@@ -2006,8 +2006,7 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
         else {
           data.relWeightREd.setText("");
         }
-        enableRelWeightsControls();
-
+        xFormControls.enableRelWeightsControls();
       }
       finally {
         cmbRefreshing = oldCmbRefreshing;
@@ -2049,76 +2048,6 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
     data.batchRenderStartButton.invalidate();
     data.batchRenderStartButton.validate();
     rootTabbedPane.setEnabled(idle);
-  }
-
-  private void enableXFormControls(XForm xForm) {
-    boolean enabled = xForm != null;
-
-    data.affineRotateAmountREd.setEnabled(enabled);
-    data.affineScaleAmountREd.setEnabled(enabled);
-    data.affineMoveHorizAmountREd.setEnabled(enabled);
-    data.affineMoveVertAmountREd.setEnabled(enabled);
-    data.affineRotateLeftButton.setEnabled(enabled);
-    data.affineRotateRightButton.setEnabled(enabled);
-    data.affineEnlargeButton.setEnabled(enabled);
-    data.affineShrinkButton.setEnabled(enabled);
-    data.affineMoveUpButton.setEnabled(enabled);
-    data.affineMoveLeftButton.setEnabled(enabled);
-    data.affineMoveRightButton.setEnabled(enabled);
-    data.affineMoveDownButton.setEnabled(enabled);
-    data.affineFlipHorizontalButton.setEnabled(enabled);
-    data.affineFlipVerticalButton.setEnabled(enabled);
-
-    data.addTransformationButton.setEnabled(getCurrFlame() != null);
-    data.addLinkedTransformationButton.setEnabled(enabled && getCurrLayer() != null && getCurrLayer().getXForms().indexOf(xForm) >= 0);
-    data.duplicateTransformationButton.setEnabled(enabled);
-    data.deleteTransformationButton.setEnabled(enabled);
-    data.addFinalTransformationButton.setEnabled(getCurrFlame() != null);
-
-    data.affineEditPostTransformButton.setEnabled(getCurrFlame() != null);
-    data.affineEditPostTransformSmallButton.setEnabled(getCurrFlame() != null);
-    data.mouseEditZoomInButton.setEnabled(getCurrFlame() != null);
-    data.mouseEditZoomOutButton.setEnabled(getCurrFlame() != null);
-    data.toggleVariationsButton.setEnabled(getCurrFlame() != null);
-
-    data.affineC00REd.setEditable(enabled);
-    data.affineC01REd.setEditable(enabled);
-    data.affineC10REd.setEditable(enabled);
-    data.affineC11REd.setEditable(enabled);
-    data.affineC20REd.setEditable(enabled);
-    data.affineC21REd.setEditable(enabled);
-    data.affineResetTransformButton.setEnabled(enabled);
-    data.editTransformCaptionButton.setEnabled(enabled);
-
-    data.transformationWeightREd.setEnabled(enabled);
-
-    for (TinaNonlinearControlsRow rows : data.TinaNonlinearControlsRows) {
-      rows.getNonlinearVarCmb().setEnabled(enabled);
-      rows.getNonlinearVarREd().setEnabled(enabled);
-      rows.getNonlinearParamsCmb().setEnabled(enabled);
-      rows.getNonlinearParamsREd().setEnabled(enabled);
-      // refreshing occurs in refreshXFormUI():
-      // rows.getNonlinearParamsLeftButton().setEnabled(enabled);
-      // rows.getNonlinearParamsRightButton().setEnabled(enabled);
-    }
-    data.xFormColorREd.setEnabled(enabled);
-    data.xFormColorSlider.setEnabled(enabled);
-    data.xFormSymmetryREd.setEnabled(enabled);
-    data.xFormSymmetrySlider.setEnabled(enabled);
-    data.xFormOpacityREd.setEnabled(enabled && xForm.getDrawMode() == DrawMode.OPAQUE);
-    data.xFormOpacitySlider.setEnabled(data.xFormOpacityREd.isEnabled());
-    data.xFormDrawModeCmb.setEnabled(enabled);
-
-    data.relWeightsTable.setEnabled(enabled);
-    enableRelWeightsControls();
-  }
-
-  public void enableRelWeightsControls() {
-    int selRow = data.relWeightsTable.getSelectedRow();
-    boolean enabled = data.relWeightsTable.isEnabled() && selRow >= 0 && getCurrXForm() != null;
-    data.relWeightsZeroButton.setEnabled(enabled);
-    data.relWeightsOneButton.setEnabled(enabled);
-    data.relWeightREd.setEnabled(enabled);
   }
 
   private void refreshLayerControls(Layer pLayer) {
@@ -2998,7 +2927,7 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
       if (xForm != null && data.xFormDrawModeCmb.getSelectedItem() != null) {
         xForm.setDrawMode((DrawMode) data.xFormDrawModeCmb.getSelectedItem());
         refreshFlameImage(false);
-        enableXFormControls(xForm);
+        xFormControls.enableControls(xForm);
       }
     }
   }
@@ -3150,7 +3079,7 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
       flamePanel.setSelectedXForm(pXForm);
       data.transformationsTable.getSelectionModel().setSelectionInterval(pRow, pRow);
       refreshXFormUI(pXForm);
-      enableXFormControls(pXForm);
+      xFormControls.enableControls(pXForm);
       refreshFlameImage(false);
     }
     finally {
@@ -3252,11 +3181,13 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
     }
     refreshing = true;
     try {
+      xFormControls.setUpMotionControls();
       forceTriangleMode();
       XForm xForm = getCurrXForm();
       if (flamePanel != null) {
         flamePanel.setEditPostTransform(data.affineEditPostTransformButton.isSelected());
       }
+      xFormControls.enableControls(xForm);
       refreshXFormUI(xForm);
       refreshFlameImage(false);
       data.affineEditPostTransformSmallButton.setSelected(data.affineEditPostTransformButton.isSelected());
@@ -5017,12 +4948,11 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
     animationController.registerMotionPropertyControls(data.affineC20REd);
     animationController.registerMotionPropertyControls(data.affineC21REd);
 
-    animationController.registerMotionPropertyControls(data.affineRotateAmountREd);
-    animationController.registerMotionPropertyControls(data.affineScaleAmountREd);
-    animationController.registerMotionPropertyControls(data.affineMoveHorizAmountREd);
-    animationController.registerMotionPropertyControls(data.affineMoveVertAmountREd);
+    for (TinaNonlinearControlsRow row : data.TinaNonlinearControlsRows) {
+      animationController.registerMotionPropertyControls(row.getNonlinearVarREd());
+      animationController.registerMotionPropertyControls(row.getNonlinearParamsREd());
+    }
 
-    // TODO
   }
 
   public FlameControlsDelegate getFlameControls() {

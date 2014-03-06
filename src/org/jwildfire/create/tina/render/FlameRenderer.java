@@ -603,7 +603,7 @@ public class FlameRenderer {
   }
 
   private void iterate(int pPart, int pParts, List<List<RenderPacket>> pPackets) {
-    long nSamples = (long) ((flame.getSampleDensity() * (double) rasterSize / (double) flame.calcPostSymmetrySampleMultiplier() / (double) flame.calcStero3dSampleMultiplier() + 0.5));
+    long nSamples = (long) ((flame.getSampleDensity() * (double) rasterSize / (double) flame.calcPostSymmetrySampleMultiplier() / (double) flame.calcStereo3dSampleMultiplier() + 0.5));
     int PROGRESS_STEPS = 50;
     if (progressUpdater != null && pPart == 0) {
       progressUpdater.initProgress((PROGRESS_STEPS - 1) * pParts);

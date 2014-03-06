@@ -4289,7 +4289,7 @@ public class TinaInternalFrame extends JInternalFrame {
       affineC00REd.setValueStep(0.01);
       affineC00REd.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
-          tinaController.getXFormControls().editMotionCurve(e, getAffineEditPostTransformButton().isSelected() ? "postCoeff00" : "coeff00");
+          tinaController.getXFormControls().editMotionCurve(e);
         }
       });
       affineC00REd.addChangeListener(new ChangeListener() {
@@ -4318,7 +4318,7 @@ public class TinaInternalFrame extends JInternalFrame {
       affineC01REd.setValueStep(0.01);
       affineC01REd.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
-          tinaController.getXFormControls().editMotionCurve(e, getAffineEditPostTransformButton().isSelected() ? "postCoeff01" : "coeff01");
+          tinaController.getXFormControls().editMotionCurve(e);
         }
       });
       affineC01REd.addChangeListener(new ChangeListener() {
@@ -4347,7 +4347,7 @@ public class TinaInternalFrame extends JInternalFrame {
       affineC10REd.setValueStep(0.01);
       affineC10REd.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
-          tinaController.getXFormControls().editMotionCurve(e, getAffineEditPostTransformButton().isSelected() ? "postCoeff10" : "coeff10");
+          tinaController.getXFormControls().editMotionCurve(e);
         }
       });
       affineC10REd.addChangeListener(new ChangeListener() {
@@ -4376,7 +4376,7 @@ public class TinaInternalFrame extends JInternalFrame {
       affineC11REd.setValueStep(0.01);
       affineC11REd.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
-          tinaController.getXFormControls().editMotionCurve(e, getAffineEditPostTransformButton().isSelected() ? "postCoeff11" : "coeff11");
+          tinaController.getXFormControls().editMotionCurve(e);
         }
       });
       affineC11REd.addChangeListener(new ChangeListener() {
@@ -4405,7 +4405,7 @@ public class TinaInternalFrame extends JInternalFrame {
       affineC20REd.setValueStep(0.01);
       affineC20REd.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
-          tinaController.getXFormControls().editMotionCurve(e, getAffineEditPostTransformButton().isSelected() ? "postCoeff20" : "coeff20");
+          tinaController.getXFormControls().editMotionCurve(e);
         }
       });
       affineC20REd.addChangeListener(new ChangeListener() {
@@ -4434,7 +4434,7 @@ public class TinaInternalFrame extends JInternalFrame {
       affineC21REd.setValueStep(0.01);
       affineC21REd.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
-          tinaController.getXFormControls().editMotionCurve(e, getAffineEditPostTransformButton().isSelected() ? "postCoeff21" : "coeff21");
+          tinaController.getXFormControls().editMotionCurve(e);
         }
       });
       affineC21REd.addChangeListener(new ChangeListener() {
