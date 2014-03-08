@@ -138,8 +138,8 @@ public class Flame implements Assignable<Flame>, Serializable {
   private double postSymmetryRotation = 6.0;
 
   private Stereo3dMode stereo3dMode = Stereo3dMode.NONE;
-  private double stereo3dAngle = 2.0;
-  private double stereo3dEyeDist = 0.05;
+  private double stereo3dAngle = 1.6;
+  private double stereo3dEyeDist = 0.032;
   private Stereo3dColor stereo3dLeftEyeColor = Stereo3dColor.RED;
   private Stereo3dColor stereo3dRightEyeColor = Stereo3dColor.CYAN;
   private int stereo3dInterpolatedImageCount = 6;
@@ -905,9 +905,9 @@ public class Flame implements Assignable<Flame>, Serializable {
   public int calcStereo3dSampleMultiplier() {
     switch (getStereo3dMode()) {
       case ANAGLYPH:
-      case SEPERATE_IMAGES:
+      case IMAGE_PAIR:
         return 2;
-      case INTERPOLATED:
+      case INTERPOLATED_IMAGES:
         return getStereo3dInterpolatedImageCount();
       default:
         return 1;

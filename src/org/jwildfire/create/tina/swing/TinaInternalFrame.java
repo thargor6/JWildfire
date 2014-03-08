@@ -82,6 +82,8 @@ import org.jwildfire.create.tina.animate.XFormScript;
 import org.jwildfire.create.tina.base.DrawMode;
 import org.jwildfire.create.tina.base.PostSymmetryType;
 import org.jwildfire.create.tina.base.Shading;
+import org.jwildfire.create.tina.base.Stereo3dColor;
+import org.jwildfire.create.tina.base.Stereo3dMode;
 import org.jwildfire.create.tina.dance.DancingFractalsController;
 import org.jwildfire.create.tina.randomflame.RandomFlameGeneratorList;
 import org.jwildfire.create.tina.randomsymmetry.RandomSymmetryGeneratorList;
@@ -4034,6 +4036,9 @@ public class TinaInternalFrame extends JInternalFrame {
     initPostSymmetryTypeCmb(getPostSymmetryTypeCmb());
     initRandomGenCmb(getRandomStyleCmb());
     initRandomSymmetryCmb(getRandomSymmetryCmb());
+    initStereo3dModeCmb(getStereo3dModeCmb());
+    initStereo3dColorCmb(getStereo3dLeftEyeColorCmb(), Stereo3dColor.RED);
+    initStereo3dColorCmb(getStereo3dRightEyeColorCmb(), Stereo3dColor.CYAN);
 
     TinaControllerParameter params = new TinaControllerParameter();
 
@@ -4126,7 +4131,9 @@ public class TinaInternalFrame extends JInternalFrame {
         getMotionBlurPanel(), getAffineMoveVertAmountREd(),
         getPostSymmetryTypeCmb(), getPostSymmetryDistanceREd(), getPostSymmetryDistanceSlider(), getPostSymmetryRotationREd(), getPostSymmetryRotationSlider(),
         getPostSymmetryOrderREd(), getPostSymmetryOrderSlider(), getPostSymmetryCentreXREd(), getPostSymmetryCentreXSlider(), getPostSymmetryCentreYREd(),
-        getPostSymmetryCentreYSlider());
+        getPostSymmetryCentreYSlider(), getStereo3dModeCmb(), getStereo3dAngleREd(), getStereo3dAngleSlider(), getStereo3dEyeDistREd(),
+        getStereo3dEyeDistSlider(), getStereo3dLeftEyeColorCmb(), getStereo3dRightEyeColorCmb(), getStereo3dInterpolatedImageCountREd(),
+        getStereo3dInterpolatedImageCountSlider());
 
     tinaController = new TinaController(params);
 
@@ -4152,10 +4159,10 @@ public class TinaInternalFrame extends JInternalFrame {
       getShadingLightCmb().addItem(String.valueOf("3"));
       getShadingLightCmb().addItem(String.valueOf("4"));
 
-      fillGlobalScriptCmb(getSwfAnimatorGlobalScriptCmb());
+      initGlobalScriptCmb(getSwfAnimatorGlobalScriptCmb());
       getSwfAnimatorGlobalScriptCmb().setSelectedItem(GlobalScript.NONE);
 
-      fillXFormScriptCmb(getSwfAnimatorXFormScriptCmb());
+      initXFormScriptCmb(getSwfAnimatorXFormScriptCmb());
       getSwfAnimatorXFormScriptCmb().setSelectedItem(XFormScript.ROTATE_FIRST_XFORM);
 
       tinaController.setInteractiveRendererCtrl(new TinaInteractiveRendererController(tinaController, pErrorHandler, pPrefs,
@@ -4188,7 +4195,7 @@ public class TinaInternalFrame extends JInternalFrame {
     return tinaController;
   }
 
-  private void fillXFormScriptCmb(JComboBox pCmb) {
+  private void initXFormScriptCmb(JComboBox pCmb) {
     pCmb.removeAllItems();
     pCmb.addItem(XFormScript.NONE);
     pCmb.addItem(XFormScript.ROTATE_FULL);
@@ -4201,7 +4208,7 @@ public class TinaInternalFrame extends JInternalFrame {
     pCmb.addItem(XFormScript.ROTATE_LAST_XFORM);
   }
 
-  private void fillGlobalScriptCmb(JComboBox pCmb) {
+  private void initGlobalScriptCmb(JComboBox pCmb) {
     pCmb.removeAllItems();
     pCmb.addItem(GlobalScript.NONE);
     pCmb.addItem(GlobalScript.ROTATE_PITCH);
@@ -4211,6 +4218,20 @@ public class TinaInternalFrame extends JInternalFrame {
     pCmb.addItem(GlobalScript.ROTATE_YAW);
     pCmb.addItem(GlobalScript.ROTATE_YAW_NEG);
     pCmb.addItem(GlobalScript.ROTATE_PITCH_YAW);
+  }
+
+  private void initStereo3dModeCmb(JComboBox pCmb) {
+    pCmb.addItem(Stereo3dMode.NONE);
+    pCmb.addItem(Stereo3dMode.ANAGLYPH);
+    pCmb.addItem(Stereo3dMode.IMAGE_PAIR);
+    pCmb.addItem(Stereo3dMode.INTERPOLATED_IMAGES);
+    pCmb.setSelectedItem(Stereo3dMode.NONE);
+  }
+
+  private void initStereo3dColorCmb(JComboBox pCmb, Stereo3dColor pSelected) {
+    pCmb.addItem(Stereo3dColor.RED);
+    pCmb.addItem(Stereo3dColor.CYAN);
+    pCmb.setSelectedItem(pSelected);
   }
 
   private void initRandomGenCmb(JComboBox pCmb) {
@@ -15598,7 +15619,7 @@ public class TinaInternalFrame extends JInternalFrame {
       postSymmetryTypeCmb.addItemListener(new ItemListener() {
         public void itemStateChanged(ItemEvent e) {
           if (tinaController != null) {
-            tinaController.getFlameControls().postSymmetryeCmb_changed();
+            tinaController.getFlameControls().postSymmetryCmb_changed();
           }
         }
       });
@@ -16028,6 +16049,13 @@ public class TinaInternalFrame extends JInternalFrame {
       stereo3dModeCmb.setLocation(new Point(100, 4));
       stereo3dModeCmb.setFont(new Font("Dialog", Font.BOLD, 10));
       stereo3dModeCmb.setBounds(102, 6, 100, 24);
+      stereo3dModeCmb.addItemListener(new ItemListener() {
+        public void itemStateChanged(ItemEvent e) {
+          if (tinaController != null) {
+            tinaController.getFlameControls().stereo3dModeCmb_changed();
+          }
+        }
+      });
       panel_82.add(stereo3dModeCmb);
 
       JLabel lblStereodMode = new JLabel();
@@ -16043,35 +16071,65 @@ public class TinaInternalFrame extends JInternalFrame {
       lblAngle.setText("View angle");
       lblAngle.setSize(new Dimension(94, 22));
       lblAngle.setPreferredSize(new Dimension(94, 22));
-      lblAngle.setName("postSymmetryDistanceLbl");
+      lblAngle.setName("lblAngle");
       lblAngle.setLocation(new Point(488, 2));
       lblAngle.setFont(new Font("Dialog", Font.BOLD, 10));
       lblAngle.setBounds(6, 31, 94, 22);
       panel_82.add(lblAngle);
 
       stereo3dAngleREd = new JWFNumberField();
+      stereo3dAngleREd.setMouseThreshold(1.0);
+      stereo3dAngleREd.setMaxValue(10000.0);
+      stereo3dAngleREd.setHasMinValue(true);
+      stereo3dAngleREd.setHasMaxValue(true);
       stereo3dAngleREd.setValueStep(0.05);
       stereo3dAngleREd.setText("");
       stereo3dAngleREd.setSize(new Dimension(100, 24));
       stereo3dAngleREd.setPreferredSize(new Dimension(100, 24));
       stereo3dAngleREd.setLocation(new Point(584, 2));
-      stereo3dAngleREd.setLinkedMotionControlName("postSymmetryDistanceSlider");
-      stereo3dAngleREd.setLinkedLabelControlName("postSymmetryDistanceLbl");
+      stereo3dAngleREd.setLinkedMotionControlName("stereo3dAngleSlider");
+      stereo3dAngleREd.setLinkedLabelControlName("lblAngle");
       stereo3dAngleREd.setFont(new Font("Dialog", Font.PLAIN, 10));
       stereo3dAngleREd.setEditable(true);
       stereo3dAngleREd.setBounds(102, 31, 100, 24);
+      stereo3dAngleREd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null) {
+            if (!stereo3dAngleREd.isMouseAdjusting() || stereo3dAngleREd.getMouseChangeCount() == 0) {
+              if (!stereo3dAngleSlider.getValueIsAdjusting()) {
+                tinaController.saveUndoPoint();
+              }
+            }
+            tinaController.getFlameControls().stereo3dAngleREd_changed();
+          }
+        }
+      });
+
       panel_82.add(stereo3dAngleREd);
 
       stereo3dAngleSlider = new JSlider();
       stereo3dAngleSlider.setValue(0);
       stereo3dAngleSlider.setSize(new Dimension(220, 19));
       stereo3dAngleSlider.setPreferredSize(new Dimension(220, 19));
-      stereo3dAngleSlider.setName("postSymmetryDistanceSlider");
-      stereo3dAngleSlider.setMinimum(-25000);
-      stereo3dAngleSlider.setMaximum(25000);
+      stereo3dAngleSlider.setName("stereo3dAngleSlider");
+      stereo3dAngleSlider.setMaximum(30000);
       stereo3dAngleSlider.setLocation(new Point(686, 2));
       stereo3dAngleSlider.setFont(new Font("Dialog", Font.BOLD, 10));
       stereo3dAngleSlider.setBounds(204, 31, 220, 24);
+      stereo3dAngleSlider.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mousePressed(MouseEvent e) {
+          tinaController.saveUndoPoint();
+        }
+      });
+      stereo3dAngleSlider.addChangeListener(new javax.swing.event.ChangeListener() {
+        public void stateChanged(javax.swing.event.ChangeEvent e) {
+          if (tinaController != null) {
+            tinaController.getFlameControls().stereo3dAngleSlider_changed(e);
+          }
+        }
+      });
+
       panel_82.add(stereo3dAngleSlider);
 
       JLabel lblImageCount = new JLabel();
@@ -16079,70 +16137,127 @@ public class TinaInternalFrame extends JInternalFrame {
       lblImageCount.setText("Image count");
       lblImageCount.setSize(new Dimension(94, 22));
       lblImageCount.setPreferredSize(new Dimension(94, 22));
-      lblImageCount.setName("postSymmetryCentreXLbl");
+      lblImageCount.setName("lblImageCount");
       lblImageCount.setLocation(new Point(488, 2));
       lblImageCount.setFont(new Font("Dialog", Font.BOLD, 10));
       lblImageCount.setBounds(437, 54, 94, 22);
       panel_82.add(lblImageCount);
 
       stereo3dInterpolatedImageCountREd = new JWFNumberField();
+      stereo3dInterpolatedImageCountREd.setHasMinValue(true);
+      stereo3dInterpolatedImageCountREd.setHasMaxValue(true);
+      stereo3dInterpolatedImageCountREd.setMaxValue(24.0);
+      stereo3dInterpolatedImageCountREd.setMinValue(3.0);
+      stereo3dInterpolatedImageCountREd.setOnlyIntegers(true);
       stereo3dInterpolatedImageCountREd.setValueStep(0.05);
       stereo3dInterpolatedImageCountREd.setText("");
       stereo3dInterpolatedImageCountREd.setSize(new Dimension(100, 24));
       stereo3dInterpolatedImageCountREd.setPreferredSize(new Dimension(100, 24));
       stereo3dInterpolatedImageCountREd.setLocation(new Point(584, 2));
-      stereo3dInterpolatedImageCountREd.setLinkedMotionControlName("postSymmetryCentreXSlider");
-      stereo3dInterpolatedImageCountREd.setLinkedLabelControlName("postSymmetryCentreXLbl");
+      stereo3dInterpolatedImageCountREd.setLinkedMotionControlName("stereo3dInterpolatedImageCountSlider");
+      stereo3dInterpolatedImageCountREd.setLinkedLabelControlName("lblImageCount");
       stereo3dInterpolatedImageCountREd.setFont(new Font("Dialog", Font.PLAIN, 10));
       stereo3dInterpolatedImageCountREd.setEditable(true);
       stereo3dInterpolatedImageCountREd.setBounds(533, 54, 100, 24);
+      stereo3dInterpolatedImageCountREd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null) {
+            if (!stereo3dInterpolatedImageCountREd.isMouseAdjusting() || stereo3dInterpolatedImageCountREd.getMouseChangeCount() == 0) {
+              if (!stereo3dInterpolatedImageCountSlider.getValueIsAdjusting()) {
+                tinaController.saveUndoPoint();
+              }
+            }
+            tinaController.getFlameControls().stereo3dInterpolatedImageCountREd_changed();
+          }
+        }
+      });
       panel_82.add(stereo3dInterpolatedImageCountREd);
 
       stereo3dInterpolatedImageCountSlider = new JSlider();
       stereo3dInterpolatedImageCountSlider.setValue(0);
       stereo3dInterpolatedImageCountSlider.setSize(new Dimension(220, 19));
       stereo3dInterpolatedImageCountSlider.setPreferredSize(new Dimension(220, 19));
-      stereo3dInterpolatedImageCountSlider.setName("postSymmetryCentreXSlider");
-      stereo3dInterpolatedImageCountSlider.setMinimum(-25000);
-      stereo3dInterpolatedImageCountSlider.setMaximum(25000);
+      stereo3dInterpolatedImageCountSlider.setName("stereo3dInterpolatedImageCountSlider");
+      stereo3dInterpolatedImageCountSlider.setMinimum(3);
+      stereo3dInterpolatedImageCountSlider.setMaximum(24);
       stereo3dInterpolatedImageCountSlider.setLocation(new Point(686, 2));
       stereo3dInterpolatedImageCountSlider.setFont(new Font("Dialog", Font.BOLD, 10));
       stereo3dInterpolatedImageCountSlider.setBounds(635, 54, 220, 24);
+      stereo3dInterpolatedImageCountSlider.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mousePressed(MouseEvent e) {
+          tinaController.saveUndoPoint();
+        }
+      });
+      stereo3dInterpolatedImageCountSlider.addChangeListener(new javax.swing.event.ChangeListener() {
+        public void stateChanged(javax.swing.event.ChangeEvent e) {
+          if (tinaController != null) {
+            tinaController.getFlameControls().stereo3dInterpolatedImageCountSlider_changed(e);
+          }
+        }
+      });
       panel_82.add(stereo3dInterpolatedImageCountSlider);
 
-      JLabel lblExeDistance = new JLabel();
-      lblExeDistance.setText("Eye distance");
-      lblExeDistance.setSize(new Dimension(94, 22));
-      lblExeDistance.setPreferredSize(new Dimension(94, 22));
-      lblExeDistance.setName("postSymmetryDistanceLbl");
-      lblExeDistance.setLocation(new Point(488, 2));
-      lblExeDistance.setFont(new Font("Dialog", Font.BOLD, 10));
-      lblExeDistance.setBounds(6, 56, 94, 22);
-      panel_82.add(lblExeDistance);
+      JLabel lblEyeDistance = new JLabel();
+      lblEyeDistance.setText("Eye distance");
+      lblEyeDistance.setSize(new Dimension(94, 22));
+      lblEyeDistance.setPreferredSize(new Dimension(94, 22));
+      lblEyeDistance.setName("lblEyeDistance");
+      lblEyeDistance.setLocation(new Point(488, 2));
+      lblEyeDistance.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblEyeDistance.setBounds(6, 56, 94, 22);
+      panel_82.add(lblEyeDistance);
 
       stereo3dEyeDistREd = new JWFNumberField();
+      stereo3dEyeDistREd.setMouseThreshold(1.0);
+      stereo3dEyeDistREd.setMaxValue(0.25);
+      stereo3dEyeDistREd.setHasMinValue(true);
       stereo3dEyeDistREd.setValueStep(0.05);
       stereo3dEyeDistREd.setText("");
       stereo3dEyeDistREd.setSize(new Dimension(100, 24));
       stereo3dEyeDistREd.setPreferredSize(new Dimension(100, 24));
       stereo3dEyeDistREd.setLocation(new Point(584, 2));
-      stereo3dEyeDistREd.setLinkedMotionControlName("postSymmetryDistanceSlider");
-      stereo3dEyeDistREd.setLinkedLabelControlName("postSymmetryDistanceLbl");
+      stereo3dEyeDistREd.setLinkedMotionControlName("stereo3dEyeDistSlider");
+      stereo3dEyeDistREd.setLinkedLabelControlName("lblEyeDistance");
       stereo3dEyeDistREd.setFont(new Font("Dialog", Font.PLAIN, 10));
       stereo3dEyeDistREd.setEditable(true);
       stereo3dEyeDistREd.setBounds(102, 56, 100, 24);
+      stereo3dEyeDistREd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null) {
+            if (!stereo3dEyeDistREd.isMouseAdjusting() || stereo3dEyeDistREd.getMouseChangeCount() == 0) {
+              if (!stereo3dEyeDistSlider.getValueIsAdjusting()) {
+                tinaController.saveUndoPoint();
+              }
+            }
+            tinaController.getFlameControls().stereo3dEyeDistREd_changed();
+          }
+        }
+      });
       panel_82.add(stereo3dEyeDistREd);
 
       stereo3dEyeDistSlider = new JSlider();
       stereo3dEyeDistSlider.setValue(0);
       stereo3dEyeDistSlider.setSize(new Dimension(220, 19));
       stereo3dEyeDistSlider.setPreferredSize(new Dimension(220, 19));
-      stereo3dEyeDistSlider.setName("postSymmetryDistanceSlider");
-      stereo3dEyeDistSlider.setMinimum(-25000);
-      stereo3dEyeDistSlider.setMaximum(25000);
+      stereo3dEyeDistSlider.setName("stereo3dEyeDistSlider");
+      stereo3dEyeDistSlider.setMaximum(1000);
       stereo3dEyeDistSlider.setLocation(new Point(686, 2));
       stereo3dEyeDistSlider.setFont(new Font("Dialog", Font.BOLD, 10));
       stereo3dEyeDistSlider.setBounds(204, 56, 220, 24);
+      stereo3dEyeDistSlider.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mousePressed(MouseEvent e) {
+          tinaController.saveUndoPoint();
+        }
+      });
+      stereo3dEyeDistSlider.addChangeListener(new javax.swing.event.ChangeListener() {
+        public void stateChanged(javax.swing.event.ChangeEvent e) {
+          if (tinaController != null) {
+            tinaController.getFlameControls().stereo3dEyeDistSlider_changed(e);
+          }
+        }
+      });
       panel_82.add(stereo3dEyeDistSlider);
 
       stereo3dLeftEyeColorCmb = new JComboBox();
@@ -16151,6 +16266,13 @@ public class TinaInternalFrame extends JInternalFrame {
       stereo3dLeftEyeColorCmb.setLocation(new Point(100, 4));
       stereo3dLeftEyeColorCmb.setFont(new Font("Dialog", Font.BOLD, 10));
       stereo3dLeftEyeColorCmb.setBounds(533, 6, 100, 24);
+      stereo3dLeftEyeColorCmb.addItemListener(new ItemListener() {
+        public void itemStateChanged(ItemEvent e) {
+          if (tinaController != null) {
+            tinaController.getFlameControls().stereo3dLeftEyeColorCmb_changed();
+          }
+        }
+      });
       panel_82.add(stereo3dLeftEyeColorCmb);
 
       JLabel lblLeftEyeColor = new JLabel();
@@ -16169,6 +16291,13 @@ public class TinaInternalFrame extends JInternalFrame {
       stereo3dRightEyeColorCmb.setLocation(new Point(100, 4));
       stereo3dRightEyeColorCmb.setFont(new Font("Dialog", Font.BOLD, 10));
       stereo3dRightEyeColorCmb.setBounds(532, 31, 100, 24);
+      stereo3dRightEyeColorCmb.addItemListener(new ItemListener() {
+        public void itemStateChanged(ItemEvent e) {
+          if (tinaController != null) {
+            tinaController.getFlameControls().stereo3dRightEyeColorCmb_changed();
+          }
+        }
+      });
       panel_82.add(stereo3dRightEyeColorCmb);
 
       JLabel lblRightEyeColor = new JLabel();

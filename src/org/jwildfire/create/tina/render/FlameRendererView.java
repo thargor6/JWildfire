@@ -24,8 +24,8 @@ import static org.jwildfire.base.mathlib.MathLib.fabs;
 import static org.jwildfire.base.mathlib.MathLib.sin;
 
 import org.jwildfire.base.mathlib.MathLib;
-import org.jwildfire.create.tina.base.Stereo3dEye;
 import org.jwildfire.create.tina.base.Flame;
+import org.jwildfire.create.tina.base.Stereo3dEye;
 import org.jwildfire.create.tina.base.XYZPoint;
 import org.jwildfire.create.tina.base.XYZProjectedPoint;
 import org.jwildfire.create.tina.random.AbstractRandomGenerator;
@@ -195,111 +195,6 @@ public class FlameRendererView {
     camPoint.x = cameraMatrix[0][0] * pPoint.x + cameraMatrix[1][0] * pPoint.y /*+ cameraMatrix[2][0] * pPoint.z*/;
     camPoint.y = cameraMatrix[0][1] * pPoint.x + cameraMatrix[1][1] * pPoint.y + cameraMatrix[2][1] * pPoint.z;
     camPoint.z = cameraMatrix[0][2] * pPoint.x + cameraMatrix[1][2] * pPoint.y + cameraMatrix[2][2] * pPoint.z;
-  }
-
-  public boolean project1(XYZPoint pPoint, XYZProjectedPoint pProjectedPoint) {
-    if (doProject3D) {
-      double z = pPoint.z;
-      //      double px = cameraMatrix[0][0] * pPoint.x + cameraMatrix[1][0] * pPoint.y /*+ cameraMatrix[2][0] * z*/;
-      //      double py = cameraMatrix[0][1] * pPoint.x + cameraMatrix[1][1] * pPoint.y + cameraMatrix[2][1] * z;
-      //      double pz = cameraMatrix[0][2] * pPoint.x + cameraMatrix[1][2] * pPoint.y + cameraMatrix[2][2] * z;
-
-      double px = cameraMatrix[0][0] * pPoint.x + cameraMatrix[1][0] * pPoint.y + cameraMatrix[2][0] * z;
-      double py = cameraMatrix[0][1] * pPoint.x + cameraMatrix[1][1] * pPoint.y + cameraMatrix[2][1] * z;
-      double pz = cameraMatrix[0][2] * pPoint.x + cameraMatrix[1][2] * pPoint.y + cameraMatrix[2][2] * z;
-
-      boolean right = true;
-
-      double eyeYaw = 1.0 * M_PI / 180.0;
-      double eyeOff = 0.05;
-      if (!right) {
-        eyeYaw = -eyeYaw;
-        eyeOff = -eyeOff;
-      }
-
-      double anaglyphCameraMatrix[][] = new double[3][3];
-      anaglyphCameraMatrix[0][0] = cos(eyeYaw);
-      anaglyphCameraMatrix[1][0] = -sin(eyeYaw);
-      anaglyphCameraMatrix[2][0] = 0;
-      anaglyphCameraMatrix[0][1] = sin(eyeYaw);
-      anaglyphCameraMatrix[1][1] = cos(eyeYaw);
-      anaglyphCameraMatrix[2][1] = 0;
-      anaglyphCameraMatrix[0][2] = 0;
-      anaglyphCameraMatrix[1][2] = 0;
-      anaglyphCameraMatrix[2][2] = 1;
-
-      double ax = anaglyphCameraMatrix[0][0] * px + anaglyphCameraMatrix[1][0] * py + anaglyphCameraMatrix[2][0] * pz + eyeOff;
-      double ay = anaglyphCameraMatrix[0][1] * px + anaglyphCameraMatrix[1][1] * py + anaglyphCameraMatrix[2][1] * pz;
-      double az = anaglyphCameraMatrix[0][2] * px + anaglyphCameraMatrix[1][2] * py + anaglyphCameraMatrix[2][2] * pz;
-
-      px = ax;
-      py = ay;
-      pz = az;
-
-      double zr = 1.0 - flame.getCamPerspective() * pz;
-      if (flame.getDimishZ() > EPSILON) {
-        double zdist = (flame.getCamZ() - pz);
-        if (zdist > 0.0) {
-          pProjectedPoint.intensity = exp(-zdist * zdist * flame.getDimishZ());
-        }
-        else {
-          pProjectedPoint.intensity = 1.0;
-        }
-      }
-      else {
-        pProjectedPoint.intensity = 1.0;
-      }
-
-      if (useDOF) {
-        if (legacyDOF) {
-          double zdist = (flame.getCamZ() - pz);
-          if (zdist > 0.0) {
-            double dr = randGen.random() * camDOF_10 * zdist;
-            double a = 2.0 * M_PI * randGen.random();
-            double dsina = sin(a);
-            double dcosa = cos(a);
-            pPoint.x = (px + dr * dcosa) / zr;
-            pPoint.y = (py + dr * dsina) / zr;
-          }
-          else {
-            pPoint.x = px / zr;
-            pPoint.y = py / zr;
-          }
-        }
-        else {
-          double xdist = (px - flame.getFocusX());
-          double ydist = (py - flame.getFocusY());
-          double zdist = (pz - flame.getFocusZ());
-          double dist = Math.pow(xdist * xdist + ydist * ydist + zdist * zdist, 1 / flame.getCamDOFExponent()) - flame.getCamDOFArea();
-          if (dist > 0.00001) {
-            double dr = randGen.random() * camDOF_10 * dist;
-            double a = 2.0 * M_PI * randGen.random();
-            double dsina = sin(a);
-            double dcosa = cos(a);
-            pPoint.x = (px + dr * dcosa) / zr;
-            pPoint.y = (py + dr * dsina) / zr;
-          }
-          else {
-            pPoint.x = px / zr;
-            pPoint.y = py / zr;
-          }
-        }
-      }
-      else {
-        pPoint.x = px / zr;
-        pPoint.y = py / zr;
-      }
-    }
-    else {
-      pProjectedPoint.intensity = 1.0;
-    }
-    pProjectedPoint.x = pPoint.x * cosa + pPoint.y * sina + rcX;
-    if ((pProjectedPoint.x < 0) || (pProjectedPoint.x > camW))
-      return false;
-    pProjectedPoint.y = pPoint.y * cosa - pPoint.x * sina + rcY;
-    if ((pProjectedPoint.y < 0) || (pProjectedPoint.y > camH))
-      return false;
-    return true;
   }
 
 }

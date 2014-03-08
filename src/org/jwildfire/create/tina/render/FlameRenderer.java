@@ -153,10 +153,10 @@ public class FlameRenderer {
 
   public RenderedFlame renderFlame(RenderInfo pRenderInfo) {
     switch (flame.getStereo3dMode()) {
-      case INTERPOLATED:
+      case INTERPOLATED_IMAGES:
         // TODO
         return null;
-      case SEPERATE_IMAGES:
+      case IMAGE_PAIR:
         // TODO
         return null;
       case ANAGLYPH: {
@@ -791,8 +791,8 @@ public class FlameRenderer {
   protected FlameRendererView createView(Flame initialFlame) {
     if (!Stereo3dEye.UNSPECIFIED.equals(eye)) {
       switch (initialFlame.getAnaglyph3dMode()) {
-        case INTERPOLATED:
-        case SEPERATE_IMAGES:
+        case INTERPOLATED_IMAGES:
+        case IMAGE_PAIR:
         case ANAGLYPH:
           return new Stereo3dFlameRendererView(eye, initialFlame, randGen, borderWidth, maxBorderWidth, imageWidth, imageHeight, rasterWidth, rasterHeight);
       }

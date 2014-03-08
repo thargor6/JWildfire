@@ -214,7 +214,7 @@ public class AbstractFlameWriter {
         attrList.add(xb.createAttr(AbstractFlameReader.ATTR_STEREO3D_LEFT_EYE_COLOR, pFlame.getStereo3dLeftEyeColor().toString()));
         attrList.add(xb.createAttr(AbstractFlameReader.ATTR_STEREO3D_RIGHT_EYE_COLOR, pFlame.getStereo3dRightEyeColor().toString()));
       }
-      else if (pFlame.getStereo3dMode() == Stereo3dMode.INTERPOLATED) {
+      else if (pFlame.getStereo3dMode() == Stereo3dMode.INTERPOLATED_IMAGES) {
         attrList.add(xb.createAttr(AbstractFlameReader.ATTR_STEREO3D_INTERPOLATED_IMAGE_COUNT, pFlame.getStereo3dInterpolatedImageCount()));
       }
     }

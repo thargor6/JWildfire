@@ -32,6 +32,8 @@ import org.jwildfire.create.tina.base.MotionCurve;
 import org.jwildfire.create.tina.base.PostSymmetryType;
 import org.jwildfire.create.tina.base.Shading;
 import org.jwildfire.create.tina.base.ShadingInfo;
+import org.jwildfire.create.tina.base.Stereo3dColor;
+import org.jwildfire.create.tina.base.Stereo3dMode;
 
 public class FlameControlsDelegate extends AbstractControlsDelegate {
 
@@ -107,12 +109,23 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
     enableControl(data.gammaREd, false);
     enableControl(data.gammaThresholdREd, false);
 
+    enableStereo3dUI();
     enableDEFilterUI();
     enablePostSymmetryUI();
 
     enableDOFUI();
 
     enableShadingUI();
+  }
+
+  private void enableStereo3dUI() {
+    Stereo3dMode stereo3dMode = (Stereo3dMode) data.stereo3dModeCmb.getSelectedItem();
+    enableControl(data.stereo3dModeCmb, false);
+    enableControl(data.stereo3dAngleREd, Stereo3dMode.NONE.equals(stereo3dMode));
+    enableControl(data.stereo3dEyeDistREd, Stereo3dMode.NONE.equals(stereo3dMode));
+    enableControl(data.stereo3dLeftEyeColorCmb, !Stereo3dMode.ANAGLYPH.equals(stereo3dMode));
+    enableControl(data.stereo3dRightEyeColorCmb, !Stereo3dMode.ANAGLYPH.equals(stereo3dMode));
+    enableControl(data.stereo3dInterpolatedImageCountREd, !Stereo3dMode.INTERPOLATED_IMAGES.equals(stereo3dMode));
   }
 
   private Flame getCurrFlame() {
@@ -603,6 +616,17 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
       data.postSymmetryCentreXSlider.setValue(Tools.FTOI(getCurrFlame().getPostSymmetryCentreX() * TinaController.SLIDER_SCALE_CENTRE));
       data.postSymmetryCentreYREd.setText(Tools.doubleToString(getCurrFlame().getPostSymmetryCentreY()));
       data.postSymmetryCentreYSlider.setValue(Tools.FTOI(getCurrFlame().getPostSymmetryCentreY() * TinaController.SLIDER_SCALE_CENTRE));
+
+      data.stereo3dModeCmb.setSelectedItem(getCurrFlame().getStereo3dMode());
+      enableStereo3dUI();
+      data.stereo3dAngleREd.setText(Tools.doubleToString(getCurrFlame().getStereo3dAngle()));
+      data.stereo3dAngleSlider.setValue(Tools.FTOI(getCurrFlame().getStereo3dAngle() * TinaController.SLIDER_SCALE_GAMMA_THRESHOLD));
+      data.stereo3dEyeDistREd.setText(Tools.doubleToString(getCurrFlame().getStereo3dEyeDist()));
+      data.stereo3dEyeDistSlider.setValue(Tools.FTOI(getCurrFlame().getStereo3dEyeDist() * TinaController.SLIDER_SCALE_GAMMA_THRESHOLD));
+      data.stereo3dLeftEyeColorCmb.setSelectedItem(getCurrFlame().getStereo3dLeftEyeColor());
+      data.stereo3dRightEyeColorCmb.setSelectedItem(getCurrFlame().getStereo3dRightEyeColor());
+      data.stereo3dInterpolatedImageCountREd.setText(String.valueOf(getCurrFlame().getStereo3dInterpolatedImageCount()));
+      data.stereo3dInterpolatedImageCountSlider.setValue(Tools.FTOI(getCurrFlame().getStereo3dInterpolatedImageCount()));
     }
     finally {
       setNoRefresh(oldNoRefrsh);
@@ -1095,7 +1119,7 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
     flameSliderChanged(data.motionBlurDecaySlider, data.motionBlurDecayField, "motionBlurDecay", TinaController.SLIDER_SCALE_ZOOM);
   }
 
-  public void postSymmetryeCmb_changed() {
+  public void postSymmetryCmb_changed() {
     if (!isNoRefresh()) {
       Flame flame = getCurrFlame();
       if (flame != null) {
@@ -1146,15 +1170,62 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
   public void postSymmetryOrderSlider_changed(ChangeEvent e) {
     flameSliderChanged(data.postSymmetryOrderSlider, data.postSymmetryOrderREd, "postSymmetryOrder", 1.0);
   }
-}
 
-// TODO
-stereo3dModeCmb
-stereo3dAngleREd
-stereo3dAngleSlider
-stereo3dEyeDistREd
-stereo3dEyeDistSlider
-stereo3dLeftEyeColorCmb
-stereo3dRightEyeColorCmb
-stereo3dInterpolatedImageCountREd
-stereo3dInterpolatedImageCountSlider
+  public void stereo3dModeCmb_changed() {
+    if (!isNoRefresh()) {
+      Flame flame = getCurrFlame();
+      if (flame != null) {
+        owner.saveUndoPoint();
+        flame.setStereo3dMode((Stereo3dMode) data.stereo3dModeCmb.getSelectedItem());
+        enableStereo3dUI();
+        owner.refreshFlameImage(false);
+      }
+    }
+  }
+
+  public void stereo3dLeftEyeColorCmb_changed() {
+    if (!isNoRefresh()) {
+      Flame flame = getCurrFlame();
+      if (flame != null) {
+        owner.saveUndoPoint();
+        flame.setStereo3dLeftEyeColor((Stereo3dColor) data.stereo3dLeftEyeColorCmb.getSelectedItem());
+        owner.refreshFlameImage(false);
+      }
+    }
+  }
+
+  public void stereo3dRightEyeColorCmb_changed() {
+    if (!isNoRefresh()) {
+      Flame flame = getCurrFlame();
+      if (flame != null) {
+        owner.saveUndoPoint();
+        flame.setStereo3dRightEyeColor((Stereo3dColor) data.stereo3dRightEyeColorCmb.getSelectedItem());
+        owner.refreshFlameImage(false);
+      }
+    }
+  }
+
+  public void stereo3dAngleREd_changed() {
+    flameTextFieldChanged(data.stereo3dAngleSlider, data.stereo3dAngleREd, "stereo3dAngle", TinaController.SLIDER_SCALE_GAMMA_THRESHOLD);
+  }
+
+  public void stereo3dAngleSlider_changed(ChangeEvent e) {
+    flameSliderChanged(data.stereo3dAngleSlider, data.stereo3dAngleREd, "stereo3dAngle", TinaController.SLIDER_SCALE_GAMMA_THRESHOLD);
+  }
+
+  public void stereo3dEyeDistREd_changed() {
+    flameTextFieldChanged(data.stereo3dEyeDistSlider, data.stereo3dEyeDistREd, "stereo3dEyeDist", TinaController.SLIDER_SCALE_GAMMA_THRESHOLD);
+  }
+
+  public void stereo3dEyeDistSlider_changed(ChangeEvent e) {
+    flameSliderChanged(data.stereo3dEyeDistSlider, data.stereo3dEyeDistREd, "stereo3dEyeDist", TinaController.SLIDER_SCALE_GAMMA_THRESHOLD);
+  }
+
+  public void stereo3dInterpolatedImageCountREd_changed() {
+    flameTextFieldChanged(data.stereo3dInterpolatedImageCountSlider, data.stereo3dInterpolatedImageCountREd, "stereo3dInterpolatedImageCount", 1.0);
+  }
+
+  public void stereo3dInterpolatedImageCountSlider_changed(ChangeEvent e) {
+    flameSliderChanged(data.stereo3dInterpolatedImageCountSlider, data.stereo3dInterpolatedImageCountREd, "stereo3dInterpolatedImageCount", 1.0);
+  }
+}

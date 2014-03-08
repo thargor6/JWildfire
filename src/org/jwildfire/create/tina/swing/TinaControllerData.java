@@ -297,4 +297,13 @@ public class TinaControllerData {
   public JSlider postSymmetryCentreXSlider;
   public JWFNumberField postSymmetryCentreYREd;
   public JSlider postSymmetryCentreYSlider;
+  public JComboBox stereo3dModeCmb;
+  public JWFNumberField stereo3dAngleREd;
+  public JSlider stereo3dAngleSlider;
+  public JWFNumberField stereo3dEyeDistREd;
+  public JSlider stereo3dEyeDistSlider;
+  public JComboBox stereo3dLeftEyeColorCmb;
+  public JComboBox stereo3dRightEyeColorCmb;
+  public JWFNumberField stereo3dInterpolatedImageCountREd;
+  public JSlider stereo3dInterpolatedImageCountSlider;
 }

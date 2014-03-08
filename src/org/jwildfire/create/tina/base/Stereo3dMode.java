@@ -17,5 +17,5 @@
 package org.jwildfire.create.tina.base;
 
 public enum Stereo3dMode {
-  NONE, ANAGLYPH, SEPERATE_IMAGES, INTERPOLATED
+  NONE, ANAGLYPH, IMAGE_PAIR, INTERPOLATED_IMAGES
 }

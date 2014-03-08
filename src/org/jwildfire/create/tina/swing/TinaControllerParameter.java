@@ -415,6 +415,15 @@ public class TinaControllerParameter {
   public JSlider postSymmetryCentreXSlider;
   public JWFNumberField postSymmetryCentreYREd;
   public JSlider postSymmetryCentreYSlider;
+  public JComboBox stereo3dModeCmb;
+  public JWFNumberField stereo3dAngleREd;
+  public JSlider stereo3dAngleSlider;
+  public JWFNumberField stereo3dEyeDistREd;
+  public JSlider stereo3dEyeDistSlider;
+  public JComboBox stereo3dLeftEyeColorCmb;
+  public JComboBox stereo3dRightEyeColorCmb;
+  public JWFNumberField stereo3dInterpolatedImageCountREd;
+  public JSlider stereo3dInterpolatedImageCountSlider;
 
   public void setParams1(JInternalFrame pTinaFrame, ErrorHandler pErrorHandler, Prefs pPrefs, JPanel pCenterPanel, JWFNumberField pCameraRollREd, JSlider pCameraRollSlider, JWFNumberField pCameraPitchREd, JSlider pCameraPitchSlider, JWFNumberField pCameraYawREd, JSlider pCameraYawSlider, JWFNumberField pCameraPerspectiveREd, JSlider pCameraPerspectiveSlider, JWFNumberField pCameraCentreXREd, JSlider pCameraCentreXSlider, JWFNumberField pCameraCentreYREd, JSlider pCameraCentreYSlider, JWFNumberField pCameraZoomREd, JSlider pCameraZoomSlider, JCheckBox pNewDOFCBx, JWFNumberField pFocusXREd, JSlider pFocusXSlider, JWFNumberField pFocusYREd, JSlider pFocusYSlider, JWFNumberField pFocusZREd, JSlider pFocusZSlider, JWFNumberField pDimishZREd, JSlider pDimishZSlider,
       JWFNumberField pCameraDOFREd, JSlider pCameraDOFSlider, JWFNumberField pCameraDOFAreaREd, JSlider pCameraDOFAreaSlider, JWFNumberField pCameraDOFExponentREd, JSlider pCameraDOFExponentSlider, JWFNumberField pCamZREd, JSlider pCamZSlider, JWFNumberField pPixelsPerUnitREd, JSlider pPixelsPerUnitSlider, JWFNumberField pBrightnessREd, JSlider pBrightnessSlider, JWFNumberField pContrastREd, JSlider pContrastSlider, JWFNumberField pGammaREd, JSlider pGammaSlider, JWFNumberField pVibrancyREd, JSlider pVibrancySlider, JWFNumberField pFilterRadiusREd, JSlider pFilterRadiusSlider, JComboBox pFilterKernelCmb, JCheckBox pDEFilterEnableCbx, JWFNumberField pDEFilterMaxRadiusREd, JSlider pDEFilterMaxRadiusSlider, JWFNumberField pDEFilterMinRadiusREd, JSlider pDEFilterMinRadiusSlider,
@@ -705,7 +714,10 @@ public class TinaControllerParameter {
       JPanel pMotionBlurPanel, JWFNumberField pAffineMoveVertAmountREd, JComboBox pPostSymmetryTypeCmb, JWFNumberField pPostSymmetryDistanceREd,
       JSlider pPostSymmetryDistanceSlider, JWFNumberField pPostSymmetryRotationREd, JSlider pPostSymmetryRotationSlider,
       JWFNumberField pPostSymmetryOrderREd, JSlider pPostSymmetryOrderSlider, JWFNumberField pPostSymmetryCentreXREd,
-      JSlider pPostSymmetryCentreXSlider, JWFNumberField pPostSymmetryCentreYREd, JSlider pPostSymmetryCentreYSlider) {
+      JSlider pPostSymmetryCentreXSlider, JWFNumberField pPostSymmetryCentreYREd, JSlider pPostSymmetryCentreYSlider,
+      JComboBox pStereo3dModeCmb, JWFNumberField pStereo3dAngleREd, JSlider pStereo3dAngleSlider, JWFNumberField pStereo3dEyeDistREd,
+      JSlider pStereo3dEyeDistSlider, JComboBox pStereo3dLeftEyeColorCmb, JComboBox pStereo3dRightEyeColorCmb,
+      JWFNumberField pStereo3dInterpolatedImageCountREd, JSlider pStereo3dInterpolatedImageCountSlider) {
     this.pDancingFlamesLinkMotionBtn = pDancingFlamesLinkMotionBtn;
     this.pDancingFlamesUnlinkMotionBtn = pDancingFlamesUnlinkMotionBtn;
     this.pDancingFlamesCreateMotionsCmb = pDancingFlamesCreateMotionsCmb;
@@ -839,5 +851,14 @@ public class TinaControllerParameter {
     this.postSymmetryCentreXSlider = pPostSymmetryCentreXSlider;
     this.postSymmetryCentreYREd = pPostSymmetryCentreYREd;
     this.postSymmetryCentreYSlider = pPostSymmetryCentreYSlider;
+    this.stereo3dModeCmb = pStereo3dModeCmb;
+    this.stereo3dAngleREd = pStereo3dAngleREd;
+    this.stereo3dAngleSlider = pStereo3dAngleSlider;
+    this.stereo3dEyeDistREd = pStereo3dEyeDistREd;
+    this.stereo3dEyeDistSlider = pStereo3dEyeDistSlider;
+    this.stereo3dLeftEyeColorCmb = pStereo3dLeftEyeColorCmb;
+    this.stereo3dRightEyeColorCmb = pStereo3dRightEyeColorCmb;
+    this.stereo3dInterpolatedImageCountREd = pStereo3dInterpolatedImageCountREd;
+    this.stereo3dInterpolatedImageCountSlider = pStereo3dInterpolatedImageCountSlider;
   }
 }

@@ -456,6 +456,16 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
     data.postSymmetryCentreYREd = parameterObject.postSymmetryCentreYREd;
     data.postSymmetryCentreYSlider = parameterObject.postSymmetryCentreYSlider;
 
+    data.stereo3dModeCmb = parameterObject.stereo3dModeCmb;
+    data.stereo3dAngleREd = parameterObject.stereo3dAngleREd;
+    data.stereo3dAngleSlider = parameterObject.stereo3dAngleSlider;
+    data.stereo3dEyeDistREd = parameterObject.stereo3dEyeDistREd;
+    data.stereo3dEyeDistSlider = parameterObject.stereo3dEyeDistSlider;
+    data.stereo3dLeftEyeColorCmb = parameterObject.stereo3dLeftEyeColorCmb;
+    data.stereo3dRightEyeColorCmb = parameterObject.stereo3dRightEyeColorCmb;
+    data.stereo3dInterpolatedImageCountREd = parameterObject.stereo3dInterpolatedImageCountREd;
+    data.stereo3dInterpolatedImageCountSlider = parameterObject.stereo3dInterpolatedImageCountSlider;
+
     data.mouseTransformEditViewButton = parameterObject.pMouseTransformViewButton;
     data.toggleVariationsButton = parameterObject.pToggleVariationsButton;
     data.toggleTransparencyButton = parameterObject.pToggleTransparencyButton;
