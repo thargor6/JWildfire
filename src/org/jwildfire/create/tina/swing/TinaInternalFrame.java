@@ -4160,10 +4160,26 @@ public class TinaInternalFrame extends JInternalFrame {
       getShadingLightCmb().addItem(String.valueOf("4"));
 
       initGlobalScriptCmb(getSwfAnimatorGlobalScript1Cmb());
-      getSwfAnimatorGlobalScript1Cmb().setSelectedItem(GlobalScript.NONE);
+      getSwfAnimatorGlobalScript1Cmb().setSelectedItem(GlobalScript.ROTATE_PITCH);
+      initGlobalScriptCmb(getSwfAnimatorGlobalScript2Cmb());
+      getSwfAnimatorGlobalScript2Cmb().setSelectedItem(GlobalScript.NONE);
+      initGlobalScriptCmb(getSwfAnimatorGlobalScript3Cmb());
+      getSwfAnimatorGlobalScript3Cmb().setSelectedItem(GlobalScript.NONE);
+      initGlobalScriptCmb(getSwfAnimatorGlobalScript4Cmb());
+      getSwfAnimatorGlobalScript4Cmb().setSelectedItem(GlobalScript.NONE);
+      initGlobalScriptCmb(getSwfAnimatorGlobalScript5Cmb());
+      getSwfAnimatorGlobalScript5Cmb().setSelectedItem(GlobalScript.NONE);
 
       initXFormScriptCmb(getSwfAnimatorXFormScript1Cmb());
       getSwfAnimatorXFormScript1Cmb().setSelectedItem(XFormScript.ROTATE_FIRST_XFORM);
+      initXFormScriptCmb(getSwfAnimatorXFormScript2Cmb());
+      getSwfAnimatorXFormScript2Cmb().setSelectedItem(XFormScript.NONE);
+      initXFormScriptCmb(getSwfAnimatorXFormScript3Cmb());
+      getSwfAnimatorXFormScript3Cmb().setSelectedItem(XFormScript.NONE);
+      initXFormScriptCmb(getSwfAnimatorXFormScript4Cmb());
+      getSwfAnimatorXFormScript4Cmb().setSelectedItem(XFormScript.NONE);
+      initXFormScriptCmb(getSwfAnimatorXFormScript5Cmb());
+      getSwfAnimatorXFormScript5Cmb().setSelectedItem(XFormScript.NONE);
 
       tinaController.setInteractiveRendererCtrl(new TinaInteractiveRendererController(tinaController, pErrorHandler, pPrefs,
           getInteractiveLoadFlameButton(), getInteractiveLoadFlameFromClipboardButton(), getInteractiveNextButton(), getInteractiveStopButton(),
@@ -4173,7 +4189,10 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaController.getInteractiveRendererCtrl().enableControls();
 
       tinaController.setSwfAnimatorCtrl(new TinaSWFAnimatorController(tinaController, pErrorHandler, pPrefs,
-          getSwfAnimatorGlobalScript1Cmb(), getSwfAnimatorXFormScript1Cmb(), getSwfAnimatorFramesREd(), getSwfAnimatorFramesPerSecondREd(),
+          getSwfAnimatorGlobalScript1Cmb(), getSwfAnimatorGlobalScript2Cmb(), getSwfAnimatorGlobalScript3Cmb(),
+          getSwfAnimatorGlobalScript4Cmb(), getSwfAnimatorGlobalScript5Cmb(), getSwfAnimatorXFormScript1Cmb(),
+          getSwfAnimatorXFormScript2Cmb(), getSwfAnimatorXFormScript3Cmb(), getSwfAnimatorXFormScript4Cmb(),
+          getSwfAnimatorXFormScript5Cmb(), getSwfAnimatorFramesREd(), getSwfAnimatorFramesPerSecondREd(),
           getSwfAnimatorGenerateButton(), getSwfAnimatorResolutionProfileCmb(),
           getSwfAnimatorQualityProfileCmb(), getSwfAnimatorLoadFlameFromMainButton(),
           getSwfAnimatorLoadFlameFromClipboardButton(), getSwfAnimatorLoadFlameButton(),
@@ -5924,7 +5943,7 @@ public class TinaInternalFrame extends JInternalFrame {
       lblXformScript.setBounds(12, 153, 94, 22);
       panel_10.add(lblXformScript);
 
-      JComboBox swfAnimatorXFormScript2Cmb = new JComboBox();
+      swfAnimatorXFormScript2Cmb = new JComboBox();
       swfAnimatorXFormScript2Cmb.setPreferredSize(new Dimension(275, 22));
       swfAnimatorXFormScript2Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
       swfAnimatorXFormScript2Cmb.setBounds(116, 153, 275, 22);
@@ -9270,6 +9289,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JComboBox swfAnimatorXFormScript3Cmb;
   private JComboBox swfAnimatorXFormScript4Cmb;
   private JComboBox swfAnimatorXFormScript5Cmb;
+  private JComboBox swfAnimatorXFormScript2Cmb;
 
   /**
    * This method initializes renderBatchJobsScrollPane	
@@ -16486,6 +16506,10 @@ public class TinaInternalFrame extends JInternalFrame {
 
   public JComboBox getSwfAnimatorXFormScript5Cmb() {
     return swfAnimatorXFormScript5Cmb;
+  }
+
+  public JComboBox getSwfAnimatorXFormScript2Cmb() {
+    return swfAnimatorXFormScript2Cmb;
   }
 } //  @jve:decl-index=0:visual-constraint="10,10"
 

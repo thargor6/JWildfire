@@ -25,7 +25,17 @@ import static org.jwildfire.create.tina.io.JWFMovieWriter.ATTR_FRAME_WIDTH;
 import static org.jwildfire.create.tina.io.JWFMovieWriter.ATTR_OUTPUT_FORMAT;
 import static org.jwildfire.create.tina.io.JWFMovieWriter.ATTR_QUALITY;
 import static org.jwildfire.create.tina.io.JWFMovieWriter.ATTR_SCRIPT_GLOBAL;
+import static org.jwildfire.create.tina.io.JWFMovieWriter.ATTR_SCRIPT_GLOBAL1;
+import static org.jwildfire.create.tina.io.JWFMovieWriter.ATTR_SCRIPT_GLOBAL2;
+import static org.jwildfire.create.tina.io.JWFMovieWriter.ATTR_SCRIPT_GLOBAL3;
+import static org.jwildfire.create.tina.io.JWFMovieWriter.ATTR_SCRIPT_GLOBAL4;
+import static org.jwildfire.create.tina.io.JWFMovieWriter.ATTR_SCRIPT_GLOBAL5;
 import static org.jwildfire.create.tina.io.JWFMovieWriter.ATTR_SCRIPT_XFORM;
+import static org.jwildfire.create.tina.io.JWFMovieWriter.ATTR_SCRIPT_XFORM1;
+import static org.jwildfire.create.tina.io.JWFMovieWriter.ATTR_SCRIPT_XFORM2;
+import static org.jwildfire.create.tina.io.JWFMovieWriter.ATTR_SCRIPT_XFORM3;
+import static org.jwildfire.create.tina.io.JWFMovieWriter.ATTR_SCRIPT_XFORM4;
+import static org.jwildfire.create.tina.io.JWFMovieWriter.ATTR_SCRIPT_XFORM5;
 import static org.jwildfire.create.tina.io.JWFMovieWriter.ATTR_SOUND_FILENAME;
 import static org.jwildfire.create.tina.io.JWFMovieWriter.ATTR_SPATIAL_OVERSAMPLING;
 import static org.jwildfire.create.tina.io.JWFMovieWriter.TAG_JWF_MOVIE;
@@ -149,10 +159,40 @@ public class JWFMovieReader {
       pMovie.setSoundFilename(hs);
     }
     if ((hs = atts.get(ATTR_SCRIPT_GLOBAL)) != null) {
-      pMovie.setGlobalScript(GlobalScript.valueOf(hs));
+      pMovie.setGlobalScript1(GlobalScript.valueOf(hs));
+    }
+    if ((hs = atts.get(ATTR_SCRIPT_GLOBAL1)) != null) {
+      pMovie.setGlobalScript1(GlobalScript.valueOf(hs));
+    }
+    if ((hs = atts.get(ATTR_SCRIPT_GLOBAL2)) != null) {
+      pMovie.setGlobalScript2(GlobalScript.valueOf(hs));
+    }
+    if ((hs = atts.get(ATTR_SCRIPT_GLOBAL3)) != null) {
+      pMovie.setGlobalScript3(GlobalScript.valueOf(hs));
+    }
+    if ((hs = atts.get(ATTR_SCRIPT_GLOBAL4)) != null) {
+      pMovie.setGlobalScript4(GlobalScript.valueOf(hs));
+    }
+    if ((hs = atts.get(ATTR_SCRIPT_GLOBAL5)) != null) {
+      pMovie.setGlobalScript5(GlobalScript.valueOf(hs));
     }
     if ((hs = atts.get(ATTR_SCRIPT_XFORM)) != null) {
-      pMovie.setxFormScript(XFormScript.valueOf(hs));
+      pMovie.setxFormScript1(XFormScript.valueOf(hs));
+    }
+    if ((hs = atts.get(ATTR_SCRIPT_XFORM1)) != null) {
+      pMovie.setxFormScript1(XFormScript.valueOf(hs));
+    }
+    if ((hs = atts.get(ATTR_SCRIPT_XFORM2)) != null) {
+      pMovie.setxFormScript2(XFormScript.valueOf(hs));
+    }
+    if ((hs = atts.get(ATTR_SCRIPT_XFORM3)) != null) {
+      pMovie.setxFormScript3(XFormScript.valueOf(hs));
+    }
+    if ((hs = atts.get(ATTR_SCRIPT_XFORM4)) != null) {
+      pMovie.setxFormScript4(XFormScript.valueOf(hs));
+    }
+    if ((hs = atts.get(ATTR_SCRIPT_XFORM5)) != null) {
+      pMovie.setxFormScript5(XFormScript.valueOf(hs));
     }
     if ((hs = atts.get(ATTR_FRAME_WIDTH)) != null) {
       pMovie.setFrameWidth(Integer.parseInt(hs));

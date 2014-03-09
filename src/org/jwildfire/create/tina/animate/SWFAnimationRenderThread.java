@@ -127,7 +127,7 @@ public class SWFAnimationRenderThread implements Runnable {
   private SimpleImage renderImage(int pFrame) throws Exception {
     Flame flame1 = flameMovie.getFlame(pFrame);
     prepareFlame(flame1);
-    return AnimationService.renderFrame(pFrame, flameMovie.getFrameCount(), flame1, flameMovie.getGlobalScript(), MotionSpeed.S1_1, flameMovie.getxFormScript(), MotionSpeed.S1_1, flameMovie.getFrameWidth(), flameMovie.getFrameHeight(), controller.getPrefs());
+    return AnimationService.renderFrame(pFrame, flameMovie.getFrameCount(), flame1, flameMovie.getGlobalScripts(), MotionSpeed.S1_1, flameMovie.getxFormScripts(), MotionSpeed.S1_1, flameMovie.getFrameWidth(), flameMovie.getFrameHeight(), controller.getPrefs());
   }
 
   private void saveFrame(SimpleImage pImage, int pFrame) throws Exception {

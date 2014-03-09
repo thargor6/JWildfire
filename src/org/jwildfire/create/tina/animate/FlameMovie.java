@@ -25,8 +25,16 @@ import org.jwildfire.create.tina.base.Flame;
 public class FlameMovie {
   private final Prefs prefs;
   private String soundFilename;
-  private GlobalScript globalScript;
-  private XFormScript xFormScript;
+  private GlobalScript globalScript1;
+  private GlobalScript globalScript2;
+  private GlobalScript globalScript3;
+  private GlobalScript globalScript4;
+  private GlobalScript globalScript5;
+  private XFormScript xFormScript1;
+  private XFormScript xFormScript2;
+  private XFormScript xFormScript3;
+  private XFormScript xFormScript4;
+  private XFormScript xFormScript5;
   private int colorOversampling;
   private int spatialOversampling;
   private int quality;
@@ -39,22 +47,6 @@ public class FlameMovie {
 
   public FlameMovie(Prefs pPrefs) {
     prefs = pPrefs;
-  }
-
-  public GlobalScript getGlobalScript() {
-    return globalScript;
-  }
-
-  public void setGlobalScript(GlobalScript globalScript) {
-    this.globalScript = globalScript;
-  }
-
-  public XFormScript getxFormScript() {
-    return xFormScript;
-  }
-
-  public void setxFormScript(XFormScript xFormScript) {
-    this.xFormScript = xFormScript;
   }
 
   public String getSoundFilename() {
@@ -163,6 +155,94 @@ public class FlameMovie {
 
   public void setQuality(int quality) {
     this.quality = quality;
+  }
+
+  public GlobalScript getGlobalScript1() {
+    return globalScript1;
+  }
+
+  public void setGlobalScript1(GlobalScript globalScript1) {
+    this.globalScript1 = globalScript1;
+  }
+
+  public GlobalScript getGlobalScript2() {
+    return globalScript2;
+  }
+
+  public void setGlobalScript2(GlobalScript globalScript2) {
+    this.globalScript2 = globalScript2;
+  }
+
+  public GlobalScript getGlobalScript3() {
+    return globalScript3;
+  }
+
+  public void setGlobalScript3(GlobalScript globalScript3) {
+    this.globalScript3 = globalScript3;
+  }
+
+  public GlobalScript getGlobalScript4() {
+    return globalScript4;
+  }
+
+  public void setGlobalScript4(GlobalScript globalScript4) {
+    this.globalScript4 = globalScript4;
+  }
+
+  public GlobalScript getGlobalScript5() {
+    return globalScript5;
+  }
+
+  public void setGlobalScript5(GlobalScript globalScript5) {
+    this.globalScript5 = globalScript5;
+  }
+
+  public XFormScript getxFormScript1() {
+    return xFormScript1;
+  }
+
+  public void setxFormScript1(XFormScript xFormScript1) {
+    this.xFormScript1 = xFormScript1;
+  }
+
+  public XFormScript getxFormScript2() {
+    return xFormScript2;
+  }
+
+  public void setxFormScript2(XFormScript xFormScript2) {
+    this.xFormScript2 = xFormScript2;
+  }
+
+  public XFormScript getxFormScript3() {
+    return xFormScript3;
+  }
+
+  public void setxFormScript3(XFormScript xFormScript3) {
+    this.xFormScript3 = xFormScript3;
+  }
+
+  public XFormScript getxFormScript4() {
+    return xFormScript4;
+  }
+
+  public void setxFormScript4(XFormScript xFormScript4) {
+    this.xFormScript4 = xFormScript4;
+  }
+
+  public XFormScript getxFormScript5() {
+    return xFormScript5;
+  }
+
+  public void setxFormScript5(XFormScript xFormScript5) {
+    this.xFormScript5 = xFormScript5;
+  }
+
+  public GlobalScript[] getGlobalScripts() {
+    return new GlobalScript[] { globalScript1, globalScript2, globalScript3, globalScript4, globalScript5 };
+  }
+
+  public XFormScript[] getxFormScripts() {
+    return new XFormScript[] { xFormScript1, xFormScript2, xFormScript3, xFormScript4, xFormScript5 };
   }
 
 }

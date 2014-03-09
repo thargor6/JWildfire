@@ -905,6 +905,7 @@ public class Flame implements Assignable<Flame>, Serializable {
   public int calcStereo3dSampleMultiplier() {
     switch (getStereo3dMode()) {
       case ANAGLYPH:
+      case SIDE_BY_SIDE:
       case IMAGE_PAIR:
         return 2;
       case INTERPOLATED_IMAGES:

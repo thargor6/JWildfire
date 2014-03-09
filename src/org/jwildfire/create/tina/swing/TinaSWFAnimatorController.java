@@ -76,8 +76,16 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
   private final TinaController parentCtrl;
   private final Prefs prefs;
   private final ErrorHandler errorHandler;
-  private final JComboBox swfAnimatorGlobalScriptCmb;
-  private final JComboBox swfAnimatorXFormScriptCmb;
+  private final JComboBox swfAnimatorGlobalScript1Cmb;
+  private final JComboBox swfAnimatorGlobalScript2Cmb;
+  private final JComboBox swfAnimatorGlobalScript3Cmb;
+  private final JComboBox swfAnimatorGlobalScript4Cmb;
+  private final JComboBox swfAnimatorGlobalScript5Cmb;
+  private final JComboBox swfAnimatorXFormScript1Cmb;
+  private final JComboBox swfAnimatorXFormScript2Cmb;
+  private final JComboBox swfAnimatorXFormScript3Cmb;
+  private final JComboBox swfAnimatorXFormScript4Cmb;
+  private final JComboBox swfAnimatorXFormScript5Cmb;
   private final JWFNumberField swfAnimatorFramesREd;
   private final JWFNumberField swfAnimatorFrameREd;
   private final JWFNumberField swfAnimatorFramesPerSecondREd;
@@ -117,8 +125,11 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
 
   private boolean noRefresh;
 
-  public TinaSWFAnimatorController(TinaController pParentCtrl, ErrorHandler pErrorHandler, Prefs pPrefs, JComboBox pSWFAnimatorGlobalScriptCmb,
-      JComboBox pSWFAnimatorXFormScriptCmb, JWFNumberField pSWFAnimatorFramesREd, JWFNumberField pSWFAnimatorFramesPerSecondREd,
+  public TinaSWFAnimatorController(TinaController pParentCtrl, ErrorHandler pErrorHandler, Prefs pPrefs, JComboBox pSWFAnimatorGlobalScript1Cmb,
+      JComboBox pSWFAnimatorGlobalScript2Cmb, JComboBox pSWFAnimatorGlobalScript3Cmb, JComboBox pSWFAnimatorGlobalScript4Cmb,
+      JComboBox pSWFAnimatorGlobalScript5Cmb, JComboBox pSWFAnimatorXFormScript1Cmb, JComboBox pSWFAnimatorXFormScript2Cmb,
+      JComboBox pSWFAnimatorXFormScript3Cmb, JComboBox pSWFAnimatorXFormScript4Cmb, JComboBox pSWFAnimatorXFormScript5Cmb,
+      JWFNumberField pSWFAnimatorFramesREd, JWFNumberField pSWFAnimatorFramesPerSecondREd,
       JButton pSWFAnimatorGenerateButton, JComboBox pSWFAnimatorResolutionProfileCmb,
       JComboBox pSWFAnimatorQualityProfileCmb, JButton pSWFAnimatorLoadFlameFromMainButton,
       JButton pSWFAnimatorLoadFlameFromClipboardButton, JButton pSWFAnimatorLoadFlameButton,
@@ -137,8 +148,16 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
       prefs = pPrefs;
       currMovie = new FlameMovie(pPrefs);
       errorHandler = pErrorHandler;
-      swfAnimatorGlobalScriptCmb = pSWFAnimatorGlobalScriptCmb;
-      swfAnimatorXFormScriptCmb = pSWFAnimatorXFormScriptCmb;
+      swfAnimatorGlobalScript1Cmb = pSWFAnimatorGlobalScript1Cmb;
+      swfAnimatorGlobalScript2Cmb = pSWFAnimatorGlobalScript2Cmb;
+      swfAnimatorGlobalScript3Cmb = pSWFAnimatorGlobalScript3Cmb;
+      swfAnimatorGlobalScript4Cmb = pSWFAnimatorGlobalScript4Cmb;
+      swfAnimatorGlobalScript5Cmb = pSWFAnimatorGlobalScript5Cmb;
+      swfAnimatorXFormScript1Cmb = pSWFAnimatorXFormScript1Cmb;
+      swfAnimatorXFormScript2Cmb = pSWFAnimatorXFormScript2Cmb;
+      swfAnimatorXFormScript3Cmb = pSWFAnimatorXFormScript3Cmb;
+      swfAnimatorXFormScript4Cmb = pSWFAnimatorXFormScript4Cmb;
+      swfAnimatorXFormScript5Cmb = pSWFAnimatorXFormScript5Cmb;
       swfAnimatorFramesREd = pSWFAnimatorFramesREd;
       swfAnimatorFrameREd = pSWFAnimatorFrameREd;
       swfAnimatorFramesPerSecondREd = pSWFAnimatorFramesPerSecondREd;
@@ -199,8 +218,16 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
 
   protected void enableControls() {
     boolean rendering = renderThread != null;
-    swfAnimatorXFormScriptCmb.setEnabled(!rendering);
-    swfAnimatorXFormScriptCmb.setEnabled(!rendering);
+    swfAnimatorXFormScript1Cmb.setEnabled(!rendering);
+    swfAnimatorXFormScript2Cmb.setEnabled(!rendering);
+    swfAnimatorXFormScript3Cmb.setEnabled(!rendering);
+    swfAnimatorXFormScript4Cmb.setEnabled(!rendering);
+    swfAnimatorXFormScript5Cmb.setEnabled(!rendering);
+    swfAnimatorXFormScript1Cmb.setEnabled(!rendering);
+    swfAnimatorXFormScript2Cmb.setEnabled(!rendering);
+    swfAnimatorXFormScript3Cmb.setEnabled(!rendering);
+    swfAnimatorXFormScript4Cmb.setEnabled(!rendering);
+    swfAnimatorXFormScript5Cmb.setEnabled(!rendering);
     swfAnimatorFrameREd.setEnabled(!rendering);
     swfAnimatorFramesREd.setEnabled(!rendering);
     swfAnimatorFramesREd.setEditable(false);
@@ -510,15 +537,31 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
       frameWidth /= 2;
       frameHeight /= 2;
     }
-    GlobalScript globalScript = (GlobalScript) swfAnimatorGlobalScriptCmb.getSelectedItem();
-    XFormScript xFormScript = (XFormScript) swfAnimatorXFormScriptCmb.getSelectedItem();
+    GlobalScript globalScript1 = (GlobalScript) swfAnimatorGlobalScript1Cmb.getSelectedItem();
+    GlobalScript globalScript2 = (GlobalScript) swfAnimatorGlobalScript2Cmb.getSelectedItem();
+    GlobalScript globalScript3 = (GlobalScript) swfAnimatorGlobalScript3Cmb.getSelectedItem();
+    GlobalScript globalScript4 = (GlobalScript) swfAnimatorGlobalScript4Cmb.getSelectedItem();
+    GlobalScript globalScript5 = (GlobalScript) swfAnimatorGlobalScript5Cmb.getSelectedItem();
+    XFormScript xFormScript1 = (XFormScript) swfAnimatorXFormScript1Cmb.getSelectedItem();
+    XFormScript xFormScript2 = (XFormScript) swfAnimatorXFormScript2Cmb.getSelectedItem();
+    XFormScript xFormScript3 = (XFormScript) swfAnimatorXFormScript3Cmb.getSelectedItem();
+    XFormScript xFormScript4 = (XFormScript) swfAnimatorXFormScript4Cmb.getSelectedItem();
+    XFormScript xFormScript5 = (XFormScript) swfAnimatorXFormScript5Cmb.getSelectedItem();
 
     OutputFormat outputFormat = (OutputFormat) swfAnimatorOutputCmb.getSelectedItem();
     if (outputFormat == null) {
       outputFormat = OutputFormat.SWF;
     }
-    currMovie.setGlobalScript(globalScript);
-    currMovie.setxFormScript(xFormScript);
+    currMovie.setGlobalScript1(globalScript1);
+    currMovie.setGlobalScript2(globalScript2);
+    currMovie.setGlobalScript3(globalScript3);
+    currMovie.setGlobalScript4(globalScript4);
+    currMovie.setGlobalScript5(globalScript5);
+    currMovie.setxFormScript1(xFormScript1);
+    currMovie.setxFormScript2(xFormScript2);
+    currMovie.setxFormScript3(xFormScript3);
+    currMovie.setxFormScript4(xFormScript4);
+    currMovie.setxFormScript5(xFormScript5);
     currMovie.setQuality(qualityProfile.getQuality());
     currMovie.setOutputFormat(outputFormat);
     currMovie.setFrameWidth(frameWidth);
@@ -718,11 +761,22 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
       }
 
       int frameCount = swfAnimatorFramesREd.getIntValue();
-      GlobalScript globalScript = (GlobalScript) swfAnimatorGlobalScriptCmb.getSelectedItem();
-      XFormScript xFormScript = (XFormScript) swfAnimatorXFormScriptCmb.getSelectedItem();
+      GlobalScript globalScript1 = (GlobalScript) swfAnimatorGlobalScript1Cmb.getSelectedItem();
+      GlobalScript globalScript2 = (GlobalScript) swfAnimatorGlobalScript2Cmb.getSelectedItem();
+      GlobalScript globalScript3 = (GlobalScript) swfAnimatorGlobalScript3Cmb.getSelectedItem();
+      GlobalScript globalScript4 = (GlobalScript) swfAnimatorGlobalScript4Cmb.getSelectedItem();
+      GlobalScript globalScript5 = (GlobalScript) swfAnimatorGlobalScript5Cmb.getSelectedItem();
+      GlobalScript globalScripts[] = { globalScript1, globalScript2, globalScript3, globalScript4, globalScript5 };
+      XFormScript xFormScript1 = (XFormScript) swfAnimatorXFormScript1Cmb.getSelectedItem();
+      XFormScript xFormScript2 = (XFormScript) swfAnimatorXFormScript2Cmb.getSelectedItem();
+      XFormScript xFormScript3 = (XFormScript) swfAnimatorXFormScript3Cmb.getSelectedItem();
+      XFormScript xFormScript4 = (XFormScript) swfAnimatorXFormScript4Cmb.getSelectedItem();
+      XFormScript xFormScript5 = (XFormScript) swfAnimatorXFormScript5Cmb.getSelectedItem();
+      XFormScript xFormScripts[] = { xFormScript1, xFormScript2, xFormScript3, xFormScript4, xFormScript5 };
+
       try {
         double time = MotionSpeed.S1_1.calcTime(frame, frameCount, true);
-        return AnimationService.createFlame(flame, globalScript, time, xFormScript, time, prefs);
+        return AnimationService.createFlame(flame, globalScripts, time, xFormScripts, time, prefs);
       }
       catch (Throwable ex) {
         ex.printStackTrace();
@@ -886,8 +940,16 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
     noRefresh = true;
     try {
       swfAnimatorFramesPerSecondREd.setValue(currMovie.getFramesPerSecond());
-      swfAnimatorGlobalScriptCmb.setSelectedItem(currMovie.getGlobalScript());
-      swfAnimatorXFormScriptCmb.setSelectedItem(currMovie.getxFormScript());
+      swfAnimatorGlobalScript1Cmb.setSelectedItem(currMovie.getGlobalScript1());
+      swfAnimatorGlobalScript2Cmb.setSelectedItem(currMovie.getGlobalScript2());
+      swfAnimatorGlobalScript3Cmb.setSelectedItem(currMovie.getGlobalScript3());
+      swfAnimatorGlobalScript4Cmb.setSelectedItem(currMovie.getGlobalScript4());
+      swfAnimatorGlobalScript5Cmb.setSelectedItem(currMovie.getGlobalScript5());
+      swfAnimatorXFormScript1Cmb.setSelectedItem(currMovie.getxFormScript1());
+      swfAnimatorXFormScript2Cmb.setSelectedItem(currMovie.getxFormScript2());
+      swfAnimatorXFormScript3Cmb.setSelectedItem(currMovie.getxFormScript3());
+      swfAnimatorXFormScript4Cmb.setSelectedItem(currMovie.getxFormScript4());
+      swfAnimatorXFormScript5Cmb.setSelectedItem(currMovie.getxFormScript5());
       swfAnimatorOutputCmb.setSelectedItem(currMovie.getOutputFormat());
       {
         ResolutionProfile fittingProfile = null;

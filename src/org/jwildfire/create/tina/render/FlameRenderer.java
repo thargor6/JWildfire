@@ -30,10 +30,10 @@ import org.jwildfire.base.Prefs;
 import org.jwildfire.base.QualityProfile;
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.animate.AnimationService;
-import org.jwildfire.create.tina.base.Stereo3dEye;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.Stereo3dColor;
+import org.jwildfire.create.tina.base.Stereo3dEye;
 import org.jwildfire.create.tina.base.raster.AbstractRasterPoint;
 import org.jwildfire.create.tina.random.AbstractRandomGenerator;
 import org.jwildfire.create.tina.random.RandomGeneratorFactory;
@@ -157,6 +157,9 @@ public class FlameRenderer {
         // TODO
         return null;
       case IMAGE_PAIR:
+        // TODO
+        return null;
+      case SIDE_BY_SIDE:
         // TODO
         return null;
       case ANAGLYPH: {
@@ -793,6 +796,7 @@ public class FlameRenderer {
       switch (initialFlame.getAnaglyph3dMode()) {
         case INTERPOLATED_IMAGES:
         case IMAGE_PAIR:
+        case SIDE_BY_SIDE:
         case ANAGLYPH:
           return new Stereo3dFlameRendererView(eye, initialFlame, randGen, borderWidth, maxBorderWidth, imageWidth, imageHeight, rasterWidth, rasterHeight);
       }

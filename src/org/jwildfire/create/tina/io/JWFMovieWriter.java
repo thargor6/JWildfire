@@ -43,7 +43,17 @@ public class JWFMovieWriter {
   public static final String ATTR_MOVIE_VERSION = "movie_version";
   public static final String ATTR_OUTPUT_FORMAT = "output_format";
   public static final String ATTR_SCRIPT_GLOBAL = "script_global";
+  public static final String ATTR_SCRIPT_GLOBAL1 = "script_global1";
+  public static final String ATTR_SCRIPT_GLOBAL2 = "script_global2";
+  public static final String ATTR_SCRIPT_GLOBAL3 = "script_global3";
+  public static final String ATTR_SCRIPT_GLOBAL4 = "script_global4";
+  public static final String ATTR_SCRIPT_GLOBAL5 = "script_global5";
   public static final String ATTR_SCRIPT_XFORM = "script_xform";
+  public static final String ATTR_SCRIPT_XFORM1 = "script_xform1";
+  public static final String ATTR_SCRIPT_XFORM2 = "script_xform2";
+  public static final String ATTR_SCRIPT_XFORM3 = "script_xform3";
+  public static final String ATTR_SCRIPT_XFORM4 = "script_xform4";
+  public static final String ATTR_SCRIPT_XFORM5 = "script_xform5";
   public static final String ATTR_SOUND_FILENAME = "sound_filename";
   public static final String ATTR_SPATIAL_OVERSAMPLING = "spatial_oversampling";
   public static final String ATTR_QUALITY = "quality";
@@ -57,8 +67,16 @@ public class JWFMovieWriter {
     if (pMovie.getSoundFilename() != null && pMovie.getSoundFilename().length() > 0) {
       attrList.add(xb.createAttr(ATTR_SOUND_FILENAME, pMovie.getSoundFilename()));
     }
-    attrList.add(xb.createAttr(ATTR_SCRIPT_GLOBAL, pMovie.getGlobalScript().toString()));
-    attrList.add(xb.createAttr(ATTR_SCRIPT_XFORM, pMovie.getxFormScript().toString()));
+    attrList.add(xb.createAttr(ATTR_SCRIPT_GLOBAL1, pMovie.getGlobalScript1().toString()));
+    attrList.add(xb.createAttr(ATTR_SCRIPT_GLOBAL2, pMovie.getGlobalScript2().toString()));
+    attrList.add(xb.createAttr(ATTR_SCRIPT_GLOBAL3, pMovie.getGlobalScript3().toString()));
+    attrList.add(xb.createAttr(ATTR_SCRIPT_GLOBAL4, pMovie.getGlobalScript4().toString()));
+    attrList.add(xb.createAttr(ATTR_SCRIPT_GLOBAL5, pMovie.getGlobalScript5().toString()));
+    attrList.add(xb.createAttr(ATTR_SCRIPT_XFORM1, pMovie.getxFormScript1().toString()));
+    attrList.add(xb.createAttr(ATTR_SCRIPT_XFORM2, pMovie.getxFormScript2().toString()));
+    attrList.add(xb.createAttr(ATTR_SCRIPT_XFORM3, pMovie.getxFormScript3().toString()));
+    attrList.add(xb.createAttr(ATTR_SCRIPT_XFORM4, pMovie.getxFormScript4().toString()));
+    attrList.add(xb.createAttr(ATTR_SCRIPT_XFORM5, pMovie.getxFormScript5().toString()));
     attrList.add(xb.createAttr(ATTR_FRAME_WIDTH, pMovie.getFrameWidth()));
     attrList.add(xb.createAttr(ATTR_FRAME_HEIGHT, pMovie.getFrameHeight()));
     attrList.add(xb.createAttr(ATTR_FPS, pMovie.getFramesPerSecond()));
