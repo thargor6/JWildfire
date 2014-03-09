@@ -380,9 +380,9 @@ public class TinaInternalFrame extends JInternalFrame {
   private JWFNumberField swfAnimatorFramesREd = null;
   private JLabel animateFramesLbl = null;
   private JLabel animateGlobalScriptLbl = null;
-  private JComboBox swfAnimatorGlobalScriptCmb = null;
+  private JComboBox swfAnimatorGlobalScript1Cmb = null;
   private JLabel animateXFormScriptLbl = null;
-  private JComboBox swfAnimatorXFormScriptCmb = null;
+  private JComboBox swfAnimatorXFormScript1Cmb = null;
   private JPanel triangleOperationsPanel = null;
   private JToggleButton mouseTransformMoveTrianglesButton = null;
   private JToggleButton mouseTransformEditFocusPointButton = null;
@@ -4159,11 +4159,11 @@ public class TinaInternalFrame extends JInternalFrame {
       getShadingLightCmb().addItem(String.valueOf("3"));
       getShadingLightCmb().addItem(String.valueOf("4"));
 
-      initGlobalScriptCmb(getSwfAnimatorGlobalScriptCmb());
-      getSwfAnimatorGlobalScriptCmb().setSelectedItem(GlobalScript.NONE);
+      initGlobalScriptCmb(getSwfAnimatorGlobalScript1Cmb());
+      getSwfAnimatorGlobalScript1Cmb().setSelectedItem(GlobalScript.NONE);
 
-      initXFormScriptCmb(getSwfAnimatorXFormScriptCmb());
-      getSwfAnimatorXFormScriptCmb().setSelectedItem(XFormScript.ROTATE_FIRST_XFORM);
+      initXFormScriptCmb(getSwfAnimatorXFormScript1Cmb());
+      getSwfAnimatorXFormScript1Cmb().setSelectedItem(XFormScript.ROTATE_FIRST_XFORM);
 
       tinaController.setInteractiveRendererCtrl(new TinaInteractiveRendererController(tinaController, pErrorHandler, pPrefs,
           getInteractiveLoadFlameButton(), getInteractiveLoadFlameFromClipboardButton(), getInteractiveNextButton(), getInteractiveStopButton(),
@@ -4173,7 +4173,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaController.getInteractiveRendererCtrl().enableControls();
 
       tinaController.setSwfAnimatorCtrl(new TinaSWFAnimatorController(tinaController, pErrorHandler, pPrefs,
-          getSwfAnimatorGlobalScriptCmb(), getSwfAnimatorXFormScriptCmb(), getSwfAnimatorFramesREd(), getSwfAnimatorFramesPerSecondREd(),
+          getSwfAnimatorGlobalScript1Cmb(), getSwfAnimatorXFormScript1Cmb(), getSwfAnimatorFramesREd(), getSwfAnimatorFramesPerSecondREd(),
           getSwfAnimatorGenerateButton(), getSwfAnimatorResolutionProfileCmb(),
           getSwfAnimatorQualityProfileCmb(), getSwfAnimatorLoadFlameFromMainButton(),
           getSwfAnimatorLoadFlameFromClipboardButton(), getSwfAnimatorLoadFlameButton(),
@@ -4217,12 +4217,12 @@ public class TinaInternalFrame extends JInternalFrame {
     pCmb.addItem(GlobalScript.ROTATE_ROLL_NEG);
     pCmb.addItem(GlobalScript.ROTATE_YAW);
     pCmb.addItem(GlobalScript.ROTATE_YAW_NEG);
-    pCmb.addItem(GlobalScript.ROTATE_PITCH_YAW);
   }
 
   private void initStereo3dModeCmb(JComboBox pCmb) {
     pCmb.addItem(Stereo3dMode.NONE);
     pCmb.addItem(Stereo3dMode.ANAGLYPH);
+    pCmb.addItem(Stereo3dMode.SIDE_BY_SIDE);
     pCmb.addItem(Stereo3dMode.IMAGE_PAIR);
     pCmb.addItem(Stereo3dMode.INTERPOLATED_IMAGES);
     pCmb.setSelectedItem(Stereo3dMode.NONE);
@@ -5797,24 +5797,24 @@ public class TinaInternalFrame extends JInternalFrame {
       swfAnimatorPreviewRootPanel.setLayout(new BorderLayout(0, 0));
 
       JPanel panel_10 = new JPanel();
-      panel_10.setBorder(new TitledBorder(null, "Script", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+      panel_10.setBorder(new TitledBorder(null, "Script / Sound / Settings", TitledBorder.LEADING, TitledBorder.TOP, null, null));
       panel_10.setPreferredSize(new Dimension(400, 10));
       panel_2.add(panel_10, BorderLayout.EAST);
       panel_10.setLayout(null);
-      panel_10.add(getSwfAnimatorGlobalScriptCmb());
+      panel_10.add(getSwfAnimatorGlobalScript1Cmb());
       animateGlobalScriptLbl = new JLabel();
-      animateGlobalScriptLbl.setBounds(19, 23, 94, 22);
+      animateGlobalScriptLbl.setBounds(12, 21, 94, 22);
       panel_10.add(animateGlobalScriptLbl);
       animateGlobalScriptLbl.setPreferredSize(new Dimension(94, 22));
-      animateGlobalScriptLbl.setText("Global script");
+      animateGlobalScriptLbl.setText("Global script 1");
       animateGlobalScriptLbl.setFont(new Font("Dialog", Font.BOLD, 10));
       animateXFormScriptLbl = new JLabel();
-      animateXFormScriptLbl.setBounds(19, 51, 94, 22);
+      animateXFormScriptLbl.setBounds(12, 132, 94, 22);
       panel_10.add(animateXFormScriptLbl);
       animateXFormScriptLbl.setPreferredSize(new Dimension(94, 22));
-      animateXFormScriptLbl.setText("XForm script");
+      animateXFormScriptLbl.setText("XForm script 1");
       animateXFormScriptLbl.setFont(new Font("Dialog", Font.BOLD, 10));
-      panel_10.add(getSwfAnimatorXFormScriptCmb());
+      panel_10.add(getSwfAnimatorXFormScript1Cmb());
       panel_10.add(getSwfAnimatorFramesREd());
 
       swfAnimatorFramesPerSecondREd = new JWFNumberField();
@@ -5823,13 +5823,13 @@ public class TinaInternalFrame extends JInternalFrame {
       swfAnimatorFramesPerSecondREd.setHasMaxValue(true);
       swfAnimatorFramesPerSecondREd.setHasMinValue(true);
       swfAnimatorFramesPerSecondREd.setEditable(true);
-      swfAnimatorFramesPerSecondREd.setBounds(117, 119, 70, 24);
+      swfAnimatorFramesPerSecondREd.setBounds(321, 280, 70, 24);
       panel_10.add(swfAnimatorFramesPerSecondREd);
       swfAnimatorFramesPerSecondREd.setText("12");
       swfAnimatorFramesPerSecondREd.setPreferredSize(new Dimension(56, 22));
       swfAnimatorFramesPerSecondREd.setFont(new Font("Dialog", Font.PLAIN, 10));
       animateFramesLbl = new JLabel();
-      animateFramesLbl.setBounds(19, 86, 94, 22);
+      animateFramesLbl.setBounds(12, 280, 94, 22);
       panel_10.add(animateFramesLbl);
       animateFramesLbl.setHorizontalAlignment(SwingConstants.LEFT);
       animateFramesLbl.setPreferredSize(new Dimension(94, 22));
@@ -5837,7 +5837,7 @@ public class TinaInternalFrame extends JInternalFrame {
       animateFramesLbl.setFont(new Font("Dialog", Font.BOLD, 10));
 
       JLabel lblFramesPerSecond = new JLabel();
-      lblFramesPerSecond.setBounds(12, 120, 101, 22);
+      lblFramesPerSecond.setBounds(216, 280, 101, 22);
       panel_10.add(lblFramesPerSecond);
       lblFramesPerSecond.setHorizontalAlignment(SwingConstants.LEFT);
       lblFramesPerSecond.setText("Frames per second");
@@ -5846,14 +5846,14 @@ public class TinaInternalFrame extends JInternalFrame {
       panel_10.add(getSwfAnimatorLoadSoundButton());
 
       swfAnimatorSoundCaptionLbl = new JLabel();
-      swfAnimatorSoundCaptionLbl.setBounds(145, 280, 118, 22);
+      swfAnimatorSoundCaptionLbl.setBounds(138, 248, 125, 22);
       panel_10.add(swfAnimatorSoundCaptionLbl);
       swfAnimatorSoundCaptionLbl.setText("(no sound loaded)");
       swfAnimatorSoundCaptionLbl.setPreferredSize(new Dimension(94, 22));
       swfAnimatorSoundCaptionLbl.setFont(new Font("Dialog", Font.BOLD, 10));
 
       swfAnimatorClearSoundButton = new JButton();
-      swfAnimatorClearSoundButton.setBounds(266, 279, 125, 24);
+      swfAnimatorClearSoundButton.setBounds(266, 248, 125, 24);
       panel_10.add(swfAnimatorClearSoundButton);
       swfAnimatorClearSoundButton.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
@@ -5864,6 +5864,110 @@ public class TinaInternalFrame extends JInternalFrame {
       swfAnimatorClearSoundButton.setText("Clear sound");
       swfAnimatorClearSoundButton.setPreferredSize(new Dimension(125, 24));
       swfAnimatorClearSoundButton.setFont(new Font("Dialog", Font.BOLD, 10));
+
+      swfAnimatorGlobalScript2Cmb = new JComboBox();
+      swfAnimatorGlobalScript2Cmb.setPreferredSize(new Dimension(275, 22));
+      swfAnimatorGlobalScript2Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      swfAnimatorGlobalScript2Cmb.setBounds(116, 42, 275, 22);
+      panel_10.add(swfAnimatorGlobalScript2Cmb);
+
+      JLabel lblGlobalScript = new JLabel();
+      lblGlobalScript.setText("Global script 2");
+      lblGlobalScript.setPreferredSize(new Dimension(94, 22));
+      lblGlobalScript.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblGlobalScript.setBounds(12, 42, 94, 22);
+      panel_10.add(lblGlobalScript);
+
+      swfAnimatorGlobalScript3Cmb = new JComboBox();
+      swfAnimatorGlobalScript3Cmb.setPreferredSize(new Dimension(275, 22));
+      swfAnimatorGlobalScript3Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      swfAnimatorGlobalScript3Cmb.setBounds(116, 63, 275, 22);
+      panel_10.add(swfAnimatorGlobalScript3Cmb);
+
+      JLabel lblGlobalScript_1 = new JLabel();
+      lblGlobalScript_1.setText("Global script 3");
+      lblGlobalScript_1.setPreferredSize(new Dimension(94, 22));
+      lblGlobalScript_1.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblGlobalScript_1.setBounds(12, 63, 94, 22);
+      panel_10.add(lblGlobalScript_1);
+
+      swfAnimatorGlobalScript4Cmb = new JComboBox();
+      swfAnimatorGlobalScript4Cmb.setPreferredSize(new Dimension(275, 22));
+      swfAnimatorGlobalScript4Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      swfAnimatorGlobalScript4Cmb.setBounds(116, 84, 275, 22);
+      panel_10.add(swfAnimatorGlobalScript4Cmb);
+
+      JLabel lblGlobalScript_2 = new JLabel();
+      lblGlobalScript_2.setText("Global script 4");
+      lblGlobalScript_2.setPreferredSize(new Dimension(94, 22));
+      lblGlobalScript_2.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblGlobalScript_2.setBounds(12, 84, 94, 22);
+      panel_10.add(lblGlobalScript_2);
+
+      swfAnimatorGlobalScript5Cmb = new JComboBox();
+      swfAnimatorGlobalScript5Cmb.setPreferredSize(new Dimension(275, 22));
+      swfAnimatorGlobalScript5Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      swfAnimatorGlobalScript5Cmb.setBounds(116, 105, 275, 22);
+      panel_10.add(swfAnimatorGlobalScript5Cmb);
+
+      JLabel lblGlobalScript_3 = new JLabel();
+      lblGlobalScript_3.setText("Global script 5");
+      lblGlobalScript_3.setPreferredSize(new Dimension(94, 22));
+      lblGlobalScript_3.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblGlobalScript_3.setBounds(12, 105, 94, 22);
+      panel_10.add(lblGlobalScript_3);
+
+      JLabel lblXformScript = new JLabel();
+      lblXformScript.setText("XForm script 2");
+      lblXformScript.setPreferredSize(new Dimension(94, 22));
+      lblXformScript.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblXformScript.setBounds(12, 153, 94, 22);
+      panel_10.add(lblXformScript);
+
+      JComboBox swfAnimatorXFormScript2Cmb = new JComboBox();
+      swfAnimatorXFormScript2Cmb.setPreferredSize(new Dimension(275, 22));
+      swfAnimatorXFormScript2Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      swfAnimatorXFormScript2Cmb.setBounds(116, 153, 275, 22);
+      panel_10.add(swfAnimatorXFormScript2Cmb);
+
+      JLabel lblXformScript_1 = new JLabel();
+      lblXformScript_1.setText("XForm script 3");
+      lblXformScript_1.setPreferredSize(new Dimension(94, 22));
+      lblXformScript_1.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblXformScript_1.setBounds(12, 174, 94, 22);
+      panel_10.add(lblXformScript_1);
+
+      swfAnimatorXFormScript3Cmb = new JComboBox();
+      swfAnimatorXFormScript3Cmb.setPreferredSize(new Dimension(275, 22));
+      swfAnimatorXFormScript3Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      swfAnimatorXFormScript3Cmb.setBounds(116, 174, 275, 22);
+      panel_10.add(swfAnimatorXFormScript3Cmb);
+
+      JLabel lblXformScript_2 = new JLabel();
+      lblXformScript_2.setText("XForm script 4");
+      lblXformScript_2.setPreferredSize(new Dimension(94, 22));
+      lblXformScript_2.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblXformScript_2.setBounds(12, 195, 94, 22);
+      panel_10.add(lblXformScript_2);
+
+      swfAnimatorXFormScript4Cmb = new JComboBox();
+      swfAnimatorXFormScript4Cmb.setPreferredSize(new Dimension(275, 22));
+      swfAnimatorXFormScript4Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      swfAnimatorXFormScript4Cmb.setBounds(116, 195, 275, 22);
+      panel_10.add(swfAnimatorXFormScript4Cmb);
+
+      JLabel lblXformScript_3 = new JLabel();
+      lblXformScript_3.setText("XForm script 5");
+      lblXformScript_3.setPreferredSize(new Dimension(94, 22));
+      lblXformScript_3.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblXformScript_3.setBounds(12, 216, 94, 22);
+      panel_10.add(lblXformScript_3);
+
+      swfAnimatorXFormScript5Cmb = new JComboBox();
+      swfAnimatorXFormScript5Cmb.setPreferredSize(new Dimension(275, 22));
+      swfAnimatorXFormScript5Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      swfAnimatorXFormScript5Cmb.setBounds(116, 216, 275, 22);
+      panel_10.add(swfAnimatorXFormScript5Cmb);
 
       JPanel panel_11 = new JPanel();
       panel_11.setBorder(null);
@@ -5905,7 +6009,7 @@ public class TinaInternalFrame extends JInternalFrame {
     if (swfAnimatorFramesREd == null) {
       swfAnimatorFramesREd = new JWFNumberField();
       swfAnimatorFramesREd.setOnlyIntegers(true);
-      swfAnimatorFramesREd.setBounds(117, 85, 70, 24);
+      swfAnimatorFramesREd.setBounds(116, 280, 70, 24);
       swfAnimatorFramesREd.setEditable(false);
       swfAnimatorFramesREd.setPreferredSize(new Dimension(56, 22));
       swfAnimatorFramesREd.setText("60");
@@ -5919,14 +6023,14 @@ public class TinaInternalFrame extends JInternalFrame {
    * 	
    * @return javax.swing.JComboBox	
    */
-  private JComboBox getSwfAnimatorGlobalScriptCmb() {
-    if (swfAnimatorGlobalScriptCmb == null) {
-      swfAnimatorGlobalScriptCmb = new JComboBox();
-      swfAnimatorGlobalScriptCmb.setBounds(116, 23, 275, 22);
-      swfAnimatorGlobalScriptCmb.setPreferredSize(new Dimension(275, 22));
-      swfAnimatorGlobalScriptCmb.setFont(new Font("Dialog", Font.BOLD, 10));
+  private JComboBox getSwfAnimatorGlobalScript1Cmb() {
+    if (swfAnimatorGlobalScript1Cmb == null) {
+      swfAnimatorGlobalScript1Cmb = new JComboBox();
+      swfAnimatorGlobalScript1Cmb.setBounds(116, 21, 275, 22);
+      swfAnimatorGlobalScript1Cmb.setPreferredSize(new Dimension(275, 22));
+      swfAnimatorGlobalScript1Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
     }
-    return swfAnimatorGlobalScriptCmb;
+    return swfAnimatorGlobalScript1Cmb;
   }
 
   /**
@@ -5934,14 +6038,14 @@ public class TinaInternalFrame extends JInternalFrame {
    * 	
    * @return javax.swing.JComboBox	
    */
-  private JComboBox getSwfAnimatorXFormScriptCmb() {
-    if (swfAnimatorXFormScriptCmb == null) {
-      swfAnimatorXFormScriptCmb = new JComboBox();
-      swfAnimatorXFormScriptCmb.setBounds(116, 51, 275, 22);
-      swfAnimatorXFormScriptCmb.setPreferredSize(new Dimension(275, 22));
-      swfAnimatorXFormScriptCmb.setFont(new Font("Dialog", Font.BOLD, 10));
+  private JComboBox getSwfAnimatorXFormScript1Cmb() {
+    if (swfAnimatorXFormScript1Cmb == null) {
+      swfAnimatorXFormScript1Cmb = new JComboBox();
+      swfAnimatorXFormScript1Cmb.setBounds(116, 132, 275, 22);
+      swfAnimatorXFormScript1Cmb.setPreferredSize(new Dimension(275, 22));
+      swfAnimatorXFormScript1Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
     }
-    return swfAnimatorXFormScriptCmb;
+    return swfAnimatorXFormScript1Cmb;
   }
 
   /**
@@ -8730,8 +8834,8 @@ public class TinaInternalFrame extends JInternalFrame {
       rootTabbedPane.addTab("Interactive Renderer", null, getInteractiveRenderPanel(), null);
       rootTabbedPane.addTab("MutaGen", null, getPanel_16(), null);
       rootTabbedPane.addTab("Flame browser", null, getPanel_72(), null);
-      rootTabbedPane.addTab("JWFMovie Maker", null, getTinaSWFAnimatorPanel(), null);
-      rootTabbedPane.addTab("Dancing Flames", null, getPanel_36(), null);
+      rootTabbedPane.addTab("Easy Movie Maker", null, getTinaSWFAnimatorPanel(), null);
+      rootTabbedPane.addTab("Dancing Flames Movies", null, getPanel_36(), null);
       rootTabbedPane.addTab("Batch Flame Renderer", null, getBatchRenderPanel(), null);
 
       JPanel helpPanel = new JPanel();
@@ -9159,6 +9263,13 @@ public class TinaInternalFrame extends JInternalFrame {
   private JComboBox stereo3dRightEyeColorCmb;
   private JWFNumberField stereo3dInterpolatedImageCountREd;
   private JSlider stereo3dInterpolatedImageCountSlider;
+  private JComboBox swfAnimatorGlobalScript2Cmb;
+  private JComboBox swfAnimatorGlobalScript3Cmb;
+  private JComboBox swfAnimatorGlobalScript4Cmb;
+  private JComboBox swfAnimatorGlobalScript5Cmb;
+  private JComboBox swfAnimatorXFormScript3Cmb;
+  private JComboBox swfAnimatorXFormScript4Cmb;
+  private JComboBox swfAnimatorXFormScript5Cmb;
 
   /**
    * This method initializes renderBatchJobsScrollPane	
@@ -11033,7 +11144,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton getSwfAnimatorLoadSoundButton() {
     if (swfAnimatorLoadSoundButton == null) {
       swfAnimatorLoadSoundButton = new JButton();
-      swfAnimatorLoadSoundButton.setBounds(19, 279, 125, 24);
+      swfAnimatorLoadSoundButton.setBounds(12, 248, 125, 24);
       swfAnimatorLoadSoundButton.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
           tinaController.getSwfAnimatorCtrl().loadSoundButton_clicked();
@@ -16347,6 +16458,34 @@ public class TinaInternalFrame extends JInternalFrame {
 
   public JSlider getStereo3dInterpolatedImageCountSlider() {
     return stereo3dInterpolatedImageCountSlider;
+  }
+
+  public JComboBox getSwfAnimatorGlobalScript2Cmb() {
+    return swfAnimatorGlobalScript2Cmb;
+  }
+
+  public JComboBox getSwfAnimatorGlobalScript3Cmb() {
+    return swfAnimatorGlobalScript3Cmb;
+  }
+
+  public JComboBox getSwfAnimatorGlobalScript4Cmb() {
+    return swfAnimatorGlobalScript4Cmb;
+  }
+
+  public JComboBox getSwfAnimatorGlobalScript5Cmb() {
+    return swfAnimatorGlobalScript5Cmb;
+  }
+
+  public JComboBox getSwfAnimatorXFormScript3Cmb() {
+    return swfAnimatorXFormScript3Cmb;
+  }
+
+  public JComboBox getSwfAnimatorXFormScript4Cmb() {
+    return swfAnimatorXFormScript4Cmb;
+  }
+
+  public JComboBox getSwfAnimatorXFormScript5Cmb() {
+    return swfAnimatorXFormScript5Cmb;
   }
 } //  @jve:decl-index=0:visual-constraint="10,10"
 
