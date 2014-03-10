@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2014 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -16,11 +16,16 @@
 */
 package org.jwildfire.create.tina.render;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.jwildfire.image.SimpleHDRImage;
 import org.jwildfire.image.SimpleImage;
 
 public class RenderedFlame {
+  private final List<FinalImage> finalImages = new ArrayList<FinalImage>();
   private SimpleImage image;
+  private SimpleImage previewImage;
   private SimpleHDRImage hdrImage;
   private SimpleHDRImage hdrHeightMap;
 
@@ -44,6 +49,18 @@ public class RenderedFlame {
     if (pRenderInfo.isRenderHDRIntensityMap()) {
       hdrHeightMap = new SimpleHDRImage(pRenderInfo.getImageWidth(), pRenderInfo.getImageHeight());
     }
+  }
+
+  public List<FinalImage> getFinalImages() {
+    return finalImages;
+  }
+
+  public SimpleImage getPreviewImage() {
+    return previewImage == null ? image : previewImage;
+  }
+
+  public void setPreviewImage(SimpleImage previewImage) {
+    this.previewImage = previewImage;
   }
 
 }

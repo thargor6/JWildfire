@@ -9,6 +9,7 @@ import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.io.FlameReader;
 import org.jwildfire.create.tina.render.FlameRenderer;
 import org.jwildfire.create.tina.render.RenderInfo;
+import org.jwildfire.create.tina.render.RenderMode;
 import org.jwildfire.create.tina.render.RenderedFlame;
 import org.jwildfire.image.SimpleImage;
 
@@ -68,7 +69,7 @@ public class CacheRendererThread implements Runnable {
     List<Flame> flames = new FlameReader(prefs).readFlames(pNode.getFilename());
     if (flames.size() > 0) {
       Flame renderFlame = flames.get(0);
-      RenderInfo info = new RenderInfo(pImgWidth, pImgHeight);
+      RenderInfo info = new RenderInfo(pImgWidth, pImgHeight, RenderMode.PREVIEW);
       double wScl = (double) info.getImageWidth() / (double) renderFlame.getWidth();
       double hScl = (double) info.getImageHeight() / (double) renderFlame.getHeight();
       renderFlame.setPixelsPerUnit((wScl + hScl) * 0.5 * renderFlame.getPixelsPerUnit());

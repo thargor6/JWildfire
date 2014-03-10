@@ -25,6 +25,7 @@ import org.jwildfire.create.tina.palette.RandomRGBPaletteGenerator;
 import org.jwildfire.create.tina.randomsymmetry.RandomSymmetryGenerator;
 import org.jwildfire.create.tina.render.FlameRenderer;
 import org.jwildfire.create.tina.render.RenderInfo;
+import org.jwildfire.create.tina.render.RenderMode;
 import org.jwildfire.create.tina.render.RenderedFlame;
 import org.jwildfire.create.tina.swing.RandomBatchQuality;
 import org.jwildfire.image.Pixel;
@@ -96,7 +97,7 @@ public class RandomFlameGeneratorSampler {
   }
 
   public RandomFlameGeneratorSample createSample() {
-    RenderInfo info = new RenderInfo(imageWidth, imageHeight);
+    RenderInfo info = new RenderInfo(imageWidth, imageHeight, RenderMode.PREVIEW);
     Flame bestFlame = null;
     int bgRed = prefs.getTinaRandomBatchBGColorRed();
     int bgGreen = prefs.getTinaRandomBatchBGColorGreen();

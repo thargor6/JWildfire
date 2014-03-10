@@ -69,6 +69,7 @@ import org.jwildfire.create.tina.randomflame.RandomFlameGeneratorSampler;
 import org.jwildfire.create.tina.randomsymmetry.RandomSymmetryGeneratorList;
 import org.jwildfire.create.tina.render.FlameRenderer;
 import org.jwildfire.create.tina.render.RenderInfo;
+import org.jwildfire.create.tina.render.RenderMode;
 import org.jwildfire.create.tina.render.RenderedFlame;
 import org.jwildfire.create.tina.swing.FlameFileChooser;
 import org.jwildfire.create.tina.swing.FlameHolder;
@@ -281,7 +282,7 @@ public class DancingFractalsController {
     int width = bounds.width;
     int height = bounds.height;
     if (width >= 16 && height >= 16) {
-      RenderInfo info = new RenderInfo(width, height);
+      RenderInfo info = new RenderInfo(width, height, RenderMode.PREVIEW);
       if (flame != null) {
         double oldSpatialFilterRadius = flame.getSpatialFilterRadius();
         double oldSampleDensity = flame.getSampleDensity();
@@ -338,7 +339,7 @@ public class DancingFractalsController {
     int width = bounds.width;
     int height = bounds.height;
     if (width >= 16 && height >= 16) {
-      RenderInfo info = new RenderInfo(width, height);
+      RenderInfo info = new RenderInfo(width, height, RenderMode.PREVIEW);
       if (flame != null) {
         imgPanel.setDrawTriangles(false);
         double wScl = (double) info.getImageWidth() / (double) flame.getWidth();

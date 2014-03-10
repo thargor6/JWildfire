@@ -28,6 +28,7 @@ import org.jwildfire.create.tina.base.MotionCurve;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.render.FlameRenderer;
 import org.jwildfire.create.tina.render.RenderInfo;
+import org.jwildfire.create.tina.render.RenderMode;
 import org.jwildfire.create.tina.render.RenderedFlame;
 import org.jwildfire.create.tina.transform.XFormTransformService;
 import org.jwildfire.envelope.Envelope;
@@ -177,7 +178,7 @@ public class AnimationService {
     double globalTime = pGlobalSpeed.calcTime(pFrame, pFrames, true);
     double xFormTime = pXFormSpeed.calcTime(pFrame, pFrames, true);
     Flame flame = createFlame(pFlame, pGlobalScripts, globalTime, pXFormScripts, xFormTime, pPrefs);
-    RenderInfo info = new RenderInfo(pWidth, pHeight);
+    RenderInfo info = new RenderInfo(pWidth, pHeight, RenderMode.PRODUCTION);
     double wScl = (double) info.getImageWidth() / (double) flame.getWidth();
     double hScl = (double) info.getImageHeight() / (double) flame.getHeight();
     flame.setPixelsPerUnit((wScl + hScl) * 0.5 * flame.getPixelsPerUnit());

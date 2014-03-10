@@ -217,6 +217,7 @@ public class AbstractFlameWriter {
       else if (pFlame.getStereo3dMode() == Stereo3dMode.INTERPOLATED_IMAGES) {
         attrList.add(xb.createAttr(AbstractFlameReader.ATTR_STEREO3D_INTERPOLATED_IMAGE_COUNT, pFlame.getStereo3dInterpolatedImageCount()));
       }
+      attrList.add(xb.createAttr(AbstractFlameReader.ATTR_STEREO3D_PREVIEW, pFlame.getStereo3dPreview().toString()));
     }
     return attrList;
   }

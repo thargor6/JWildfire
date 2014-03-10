@@ -84,6 +84,7 @@ import org.jwildfire.create.tina.base.PostSymmetryType;
 import org.jwildfire.create.tina.base.Shading;
 import org.jwildfire.create.tina.base.Stereo3dColor;
 import org.jwildfire.create.tina.base.Stereo3dMode;
+import org.jwildfire.create.tina.base.Stereo3dPreview;
 import org.jwildfire.create.tina.dance.DancingFractalsController;
 import org.jwildfire.create.tina.randomflame.RandomFlameGeneratorList;
 import org.jwildfire.create.tina.randomsymmetry.RandomSymmetryGeneratorList;
@@ -4037,6 +4038,7 @@ public class TinaInternalFrame extends JInternalFrame {
     initRandomGenCmb(getRandomStyleCmb());
     initRandomSymmetryCmb(getRandomSymmetryCmb());
     initStereo3dModeCmb(getStereo3dModeCmb());
+    initStereo3dPreviewCmb(getStereo3dPreviewCmb());
     initStereo3dColorCmb(getStereo3dLeftEyeColorCmb(), Stereo3dColor.RED);
     initStereo3dColorCmb(getStereo3dRightEyeColorCmb(), Stereo3dColor.CYAN);
 
@@ -4133,7 +4135,7 @@ public class TinaInternalFrame extends JInternalFrame {
         getPostSymmetryOrderREd(), getPostSymmetryOrderSlider(), getPostSymmetryCentreXREd(), getPostSymmetryCentreXSlider(), getPostSymmetryCentreYREd(),
         getPostSymmetryCentreYSlider(), getStereo3dModeCmb(), getStereo3dAngleREd(), getStereo3dAngleSlider(), getStereo3dEyeDistREd(),
         getStereo3dEyeDistSlider(), getStereo3dLeftEyeColorCmb(), getStereo3dRightEyeColorCmb(), getStereo3dInterpolatedImageCountREd(),
-        getStereo3dInterpolatedImageCountSlider());
+        getStereo3dInterpolatedImageCountSlider(), getStereo3dPreviewCmb());
 
     tinaController = new TinaController(params);
 
@@ -4242,9 +4244,15 @@ public class TinaInternalFrame extends JInternalFrame {
     pCmb.addItem(Stereo3dMode.NONE);
     pCmb.addItem(Stereo3dMode.ANAGLYPH);
     pCmb.addItem(Stereo3dMode.SIDE_BY_SIDE);
-    pCmb.addItem(Stereo3dMode.IMAGE_PAIR);
     pCmb.addItem(Stereo3dMode.INTERPOLATED_IMAGES);
     pCmb.setSelectedItem(Stereo3dMode.NONE);
+  }
+
+  private void initStereo3dPreviewCmb(JComboBox pCmb) {
+    pCmb.addItem(Stereo3dPreview.NONE);
+    pCmb.addItem(Stereo3dPreview.ANAGLYPH);
+    pCmb.addItem(Stereo3dPreview.SIDE_BY_SIDE);
+    pCmb.setSelectedItem(Stereo3dPreview.SIDE_BY_SIDE);
   }
 
   private void initStereo3dColorCmb(JComboBox pCmb, Stereo3dColor pSelected) {
@@ -9290,6 +9298,8 @@ public class TinaInternalFrame extends JInternalFrame {
   private JComboBox swfAnimatorXFormScript4Cmb;
   private JComboBox swfAnimatorXFormScript5Cmb;
   private JComboBox swfAnimatorXFormScript2Cmb;
+  private JComboBox stereo3dPreviewCmb;
+  private JLabel lblPreviewMode;
 
   /**
    * This method initializes renderBatchJobsScrollPane	
@@ -16209,7 +16219,6 @@ public class TinaInternalFrame extends JInternalFrame {
       panel_82.add(lblAngle);
 
       stereo3dAngleREd = new JWFNumberField();
-      stereo3dAngleREd.setMouseThreshold(1.0);
       stereo3dAngleREd.setMaxValue(10000.0);
       stereo3dAngleREd.setHasMinValue(true);
       stereo3dAngleREd.setHasMaxValue(true);
@@ -16264,8 +16273,8 @@ public class TinaInternalFrame extends JInternalFrame {
       panel_82.add(stereo3dAngleSlider);
 
       JLabel lblImageCount = new JLabel();
-      lblImageCount.setToolTipText("Number of generated (total) images per frame");
-      lblImageCount.setText("Image count");
+      lblImageCount.setToolTipText("Number of generated (total) images per side per frame");
+      lblImageCount.setText("Images per eye");
       lblImageCount.setSize(new Dimension(94, 22));
       lblImageCount.setPreferredSize(new Dimension(94, 22));
       lblImageCount.setName("lblImageCount");
@@ -16278,7 +16287,7 @@ public class TinaInternalFrame extends JInternalFrame {
       stereo3dInterpolatedImageCountREd.setHasMinValue(true);
       stereo3dInterpolatedImageCountREd.setHasMaxValue(true);
       stereo3dInterpolatedImageCountREd.setMaxValue(24.0);
-      stereo3dInterpolatedImageCountREd.setMinValue(3.0);
+      stereo3dInterpolatedImageCountREd.setMinValue(2.0);
       stereo3dInterpolatedImageCountREd.setOnlyIntegers(true);
       stereo3dInterpolatedImageCountREd.setValueStep(0.05);
       stereo3dInterpolatedImageCountREd.setText("");
@@ -16309,7 +16318,7 @@ public class TinaInternalFrame extends JInternalFrame {
       stereo3dInterpolatedImageCountSlider.setSize(new Dimension(220, 19));
       stereo3dInterpolatedImageCountSlider.setPreferredSize(new Dimension(220, 19));
       stereo3dInterpolatedImageCountSlider.setName("stereo3dInterpolatedImageCountSlider");
-      stereo3dInterpolatedImageCountSlider.setMinimum(3);
+      stereo3dInterpolatedImageCountSlider.setMinimum(2);
       stereo3dInterpolatedImageCountSlider.setMaximum(24);
       stereo3dInterpolatedImageCountSlider.setLocation(new Point(686, 2));
       stereo3dInterpolatedImageCountSlider.setFont(new Font("Dialog", Font.BOLD, 10));
@@ -16340,7 +16349,6 @@ public class TinaInternalFrame extends JInternalFrame {
       panel_82.add(lblEyeDistance);
 
       stereo3dEyeDistREd = new JWFNumberField();
-      stereo3dEyeDistREd.setMouseThreshold(1.0);
       stereo3dEyeDistREd.setMaxValue(0.25);
       stereo3dEyeDistREd.setHasMinValue(true);
       stereo3dEyeDistREd.setValueStep(0.05);
@@ -16440,6 +16448,8 @@ public class TinaInternalFrame extends JInternalFrame {
       lblRightEyeColor.setFont(new Font("Dialog", Font.BOLD, 10));
       lblRightEyeColor.setBounds(436, 31, 94, 22);
       panel_82.add(lblRightEyeColor);
+      panel_82.add(getStereo3dPreviewCmb());
+      panel_82.add(getLblPreviewMode());
     }
     return panel_82;
   }
@@ -16510,6 +16520,38 @@ public class TinaInternalFrame extends JInternalFrame {
 
   public JComboBox getSwfAnimatorXFormScript2Cmb() {
     return swfAnimatorXFormScript2Cmb;
+  }
+
+  private JComboBox getStereo3dPreviewCmb() {
+    if (stereo3dPreviewCmb == null) {
+      stereo3dPreviewCmb = new JComboBox();
+      stereo3dPreviewCmb.setSize(new Dimension(125, 22));
+      stereo3dPreviewCmb.setPreferredSize(new Dimension(125, 22));
+      stereo3dPreviewCmb.setLocation(new Point(100, 4));
+      stereo3dPreviewCmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      stereo3dPreviewCmb.setBounds(102, 81, 100, 24);
+      stereo3dPreviewCmb.addItemListener(new ItemListener() {
+        public void itemStateChanged(ItemEvent e) {
+          if (tinaController != null) {
+            tinaController.getFlameControls().stereo3dPreviewCmb_changed();
+          }
+        }
+      });
+    }
+    return stereo3dPreviewCmb;
+  }
+
+  private JLabel getLblPreviewMode() {
+    if (lblPreviewMode == null) {
+      lblPreviewMode = new JLabel();
+      lblPreviewMode.setText("Preview mode");
+      lblPreviewMode.setSize(new Dimension(94, 22));
+      lblPreviewMode.setPreferredSize(new Dimension(94, 22));
+      lblPreviewMode.setLocation(new Point(488, 2));
+      lblPreviewMode.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblPreviewMode.setBounds(6, 81, 94, 22);
+    }
+    return lblPreviewMode;
   }
 } //  @jve:decl-index=0:visual-constraint="10,10"
 

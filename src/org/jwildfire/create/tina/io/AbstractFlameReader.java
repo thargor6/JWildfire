@@ -15,6 +15,7 @@ import org.jwildfire.create.tina.base.PostSymmetryType;
 import org.jwildfire.create.tina.base.Shading;
 import org.jwildfire.create.tina.base.Stereo3dColor;
 import org.jwildfire.create.tina.base.Stereo3dMode;
+import org.jwildfire.create.tina.base.Stereo3dPreview;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.render.filter.FilterKernelType;
 import org.jwildfire.create.tina.variation.Variation;
@@ -103,6 +104,7 @@ public class AbstractFlameReader {
   public static final String ATTR_STEREO3D_LEFT_EYE_COLOR = "stereo3d_left_eye_color";
   public static final String ATTR_STEREO3D_RIGHT_EYE_COLOR = "stereo3d_right_eye_color";
   public static final String ATTR_STEREO3D_INTERPOLATED_IMAGE_COUNT = "stereo3d_interpolated_image_count";
+  public static final String ATTR_STEREO3D_PREVIEW = "stereo3d_preview";
 
   protected AbstractFlameReader(Prefs pPrefs) {
     prefs = pPrefs;
@@ -415,6 +417,14 @@ public class AbstractFlameReader {
     }
     if ((hs = atts.get(ATTR_STEREO3D_INTERPOLATED_IMAGE_COUNT)) != null) {
       pFlame.setStereo3dInterpolatedImageCount(Integer.parseInt(hs));
+    }
+    if ((hs = atts.get(ATTR_STEREO3D_PREVIEW)) != null) {
+      try {
+        pFlame.setStereo3dPreview(Stereo3dPreview.valueOf(hs));
+      }
+      catch (Exception ex) {
+        ex.printStackTrace();
+      }
     }
 
   }

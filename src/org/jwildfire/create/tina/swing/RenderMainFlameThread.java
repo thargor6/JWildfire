@@ -28,6 +28,7 @@ import org.jwildfire.create.tina.io.FlameWriter;
 import org.jwildfire.create.tina.render.FlameRenderer;
 import org.jwildfire.create.tina.render.ProgressUpdater;
 import org.jwildfire.create.tina.render.RenderInfo;
+import org.jwildfire.create.tina.render.RenderMode;
 import org.jwildfire.create.tina.render.RenderedFlame;
 import org.jwildfire.io.ImageWriter;
 
@@ -59,7 +60,7 @@ public class RenderMainFlameThread implements Runnable {
     try {
       int width = resProfile.getWidth();
       int height = resProfile.getHeight();
-      RenderInfo info = new RenderInfo(width, height);
+      RenderInfo info = new RenderInfo(width, height, RenderMode.PRODUCTION);
       double wScl = (double) info.getImageWidth() / (double) flame.getWidth();
       double hScl = (double) info.getImageHeight() / (double) flame.getHeight();
       flame.setPixelsPerUnit((wScl + hScl) * 0.5 * flame.getPixelsPerUnit());

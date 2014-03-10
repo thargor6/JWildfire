@@ -34,6 +34,7 @@ import org.jwildfire.create.tina.base.Shading;
 import org.jwildfire.create.tina.base.ShadingInfo;
 import org.jwildfire.create.tina.base.Stereo3dColor;
 import org.jwildfire.create.tina.base.Stereo3dMode;
+import org.jwildfire.create.tina.base.Stereo3dPreview;
 
 public class FlameControlsDelegate extends AbstractControlsDelegate {
 
@@ -126,6 +127,7 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
     enableControl(data.stereo3dLeftEyeColorCmb, !Stereo3dMode.ANAGLYPH.equals(stereo3dMode));
     enableControl(data.stereo3dRightEyeColorCmb, !Stereo3dMode.ANAGLYPH.equals(stereo3dMode));
     enableControl(data.stereo3dInterpolatedImageCountREd, !Stereo3dMode.INTERPOLATED_IMAGES.equals(stereo3dMode));
+    enableControl(data.stereo3dPreviewCmb, Stereo3dMode.NONE.equals(stereo3dMode));
   }
 
   private Flame getCurrFlame() {
@@ -627,6 +629,7 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
       data.stereo3dRightEyeColorCmb.setSelectedItem(getCurrFlame().getStereo3dRightEyeColor());
       data.stereo3dInterpolatedImageCountREd.setText(String.valueOf(getCurrFlame().getStereo3dInterpolatedImageCount()));
       data.stereo3dInterpolatedImageCountSlider.setValue(Tools.FTOI(getCurrFlame().getStereo3dInterpolatedImageCount()));
+      data.stereo3dPreviewCmb.setSelectedItem(getCurrFlame().getStereo3dPreview());
     }
     finally {
       setNoRefresh(oldNoRefrsh);
@@ -1228,4 +1231,17 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
   public void stereo3dInterpolatedImageCountSlider_changed(ChangeEvent e) {
     flameSliderChanged(data.stereo3dInterpolatedImageCountSlider, data.stereo3dInterpolatedImageCountREd, "stereo3dInterpolatedImageCount", 1.0);
   }
+
+  public void stereo3dPreviewCmb_changed() {
+    if (!isNoRefresh()) {
+      Flame flame = getCurrFlame();
+      if (flame != null) {
+        owner.saveUndoPoint();
+        flame.setStereo3dPreview((Stereo3dPreview) data.stereo3dPreviewCmb.getSelectedItem());
+        enableStereo3dUI();
+        owner.refreshFlameImage(false);
+      }
+    }
+  }
+
 }

@@ -49,6 +49,7 @@ import org.jwildfire.create.tina.render.AbstractRenderThread;
 import org.jwildfire.create.tina.render.FlameRenderer;
 import org.jwildfire.create.tina.render.IterationObserver;
 import org.jwildfire.create.tina.render.RenderInfo;
+import org.jwildfire.create.tina.render.RenderMode;
 import org.jwildfire.create.tina.render.RenderedFlame;
 import org.jwildfire.create.tina.render.ResumedFlameRender;
 import org.jwildfire.image.SimpleImage;
@@ -255,7 +256,7 @@ public class TinaInteractiveRendererController implements IterationObserver {
       width /= 2;
       height /= 2;
     }
-    RenderInfo info = new RenderInfo(width, height);
+    RenderInfo info = new RenderInfo(width, height, RenderMode.INTERACTIVE);
     Flame flame = getCurrFlame();
     double wScl = (double) info.getImageWidth() / (double) flame.getWidth();
     double hScl = (double) info.getImageHeight() / (double) flame.getHeight();

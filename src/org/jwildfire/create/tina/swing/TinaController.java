@@ -106,6 +106,7 @@ import org.jwildfire.create.tina.render.DrawFocusPointFlameRenderer;
 import org.jwildfire.create.tina.render.FlameRenderer;
 import org.jwildfire.create.tina.render.ProgressUpdater;
 import org.jwildfire.create.tina.render.RenderInfo;
+import org.jwildfire.create.tina.render.RenderMode;
 import org.jwildfire.create.tina.render.RenderedFlame;
 import org.jwildfire.create.tina.render.filter.FilterKernelType;
 import org.jwildfire.create.tina.script.ScriptRunner;
@@ -465,6 +466,7 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
     data.stereo3dRightEyeColorCmb = parameterObject.stereo3dRightEyeColorCmb;
     data.stereo3dInterpolatedImageCountREd = parameterObject.stereo3dInterpolatedImageCountREd;
     data.stereo3dInterpolatedImageCountSlider = parameterObject.stereo3dInterpolatedImageCountSlider;
+    data.stereo3dPreviewCmb = parameterObject.stereo3dPreviewCmb;
 
     data.mouseTransformEditViewButton = parameterObject.pMouseTransformViewButton;
     data.toggleVariationsButton = parameterObject.pToggleVariationsButton;
@@ -1019,7 +1021,7 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
     int width = bounds.width / renderScale;
     int height = bounds.height / renderScale;
     if (width >= 16 && height >= 16) {
-      RenderInfo info = new RenderInfo(width, height);
+      RenderInfo info = new RenderInfo(width, height, RenderMode.PREVIEW);
       Flame flame = getCurrFlame();
       if (flame != null) {
         double oldSpatialFilterRadius = flame.getSpatialFilterRadius();
@@ -1051,7 +1053,8 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
             long t0 = System.currentTimeMillis();
             RenderedFlame res = renderer.renderFlame(info);
             long t1 = System.currentTimeMillis();
-            SimpleImage img = res.getImage();
+            SimpleImage img = res.getPreviewImage();
+
             if (data.layerAppendBtn.isSelected() && !pMouseDown) {
               TextTransformer txt = new TextTransformer();
               txt.setText1("layer-append-mode");
@@ -1089,7 +1092,7 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
                 singleLayerFlame.getLayers().add(getCurrLayer().makeCopy());
                 singleLayerFlame.getFirstLayer().setVisible(true);
                 singleLayerFlame.getFirstLayer().setWeight(1.0);
-                RenderInfo lInfo = new RenderInfo(width / 4 * renderScale, height / 4 * renderScale);
+                RenderInfo lInfo = new RenderInfo(width / 4 * renderScale, height / 4 * renderScale, RenderMode.PREVIEW);
                 double lWScl = (double) lInfo.getImageWidth() / (double) singleLayerFlame.getWidth();
                 double lHScl = (double) lInfo.getImageHeight() / (double) singleLayerFlame.getHeight();
                 singleLayerFlame.setPixelsPerUnit((lWScl + lHScl) * 0.5 * singleLayerFlame.getPixelsPerUnit() * 0.5);
@@ -2437,7 +2440,7 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
     }
 
     private void generatePreview(int pQuality) {
-      RenderInfo info = new RenderInfo(IMG_WIDTH, IMG_HEIGHT);
+      RenderInfo info = new RenderInfo(IMG_WIDTH, IMG_HEIGHT, RenderMode.PREVIEW);
       Flame renderFlame = flame.makeCopy();
       double wScl = (double) info.getImageWidth() / (double) renderFlame.getWidth();
       double hScl = (double) info.getImageHeight() / (double) renderFlame.getHeight();
@@ -4287,7 +4290,7 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
     int height = bounds.height;
     Flame flame = getBatchRenderPreviewFlameHolder().getFlame();
     if (width >= 16 && height >= 16) {
-      RenderInfo info = new RenderInfo(width, height);
+      RenderInfo info = new RenderInfo(width, height, RenderMode.PREVIEW);
       if (flame != null) {
         double wScl = (double) info.getImageWidth() / (double) flame.getWidth();
         double hScl = (double) info.getImageHeight() / (double) flame.getHeight();
@@ -4705,7 +4708,7 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
 
   private SimpleImage renderRandomizedFlame(Flame pFlame, Dimension pImgSize) {
     int imageWidth = pImgSize.width, imageHeight = pImgSize.height;
-    RenderInfo info = new RenderInfo(imageWidth, imageHeight);
+    RenderInfo info = new RenderInfo(imageWidth, imageHeight, RenderMode.PREVIEW);
     double wScl = (double) info.getImageWidth() / (double) pFlame.getWidth();
     double hScl = (double) info.getImageHeight() / (double) pFlame.getHeight();
     pFlame.setPixelsPerUnit((wScl + hScl) * 0.5 * pFlame.getPixelsPerUnit());

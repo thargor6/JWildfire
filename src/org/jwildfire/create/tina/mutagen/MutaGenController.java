@@ -55,6 +55,7 @@ import org.jwildfire.create.tina.io.FlameWriter;
 import org.jwildfire.create.tina.randomflame.RandomFlameGeneratorSampler;
 import org.jwildfire.create.tina.render.FlameRenderer;
 import org.jwildfire.create.tina.render.RenderInfo;
+import org.jwildfire.create.tina.render.RenderMode;
 import org.jwildfire.create.tina.render.RenderedFlame;
 import org.jwildfire.create.tina.swing.FlameFileChooser;
 import org.jwildfire.create.tina.swing.JWFNumberField;
@@ -236,7 +237,7 @@ public class MutaGenController {
     public void run() {
       done = false;
       try {
-        RenderInfo info = new RenderInfo(imageWidth, imageHeight);
+        RenderInfo info = new RenderInfo(imageWidth, imageHeight, RenderMode.PREVIEW);
         double wScl = (double) info.getImageWidth() / (double) flame.getWidth();
         double hScl = (double) info.getImageHeight() / (double) flame.getHeight();
         flame.setPixelsPerUnit((wScl + hScl) * 0.5 * flame.getPixelsPerUnit());

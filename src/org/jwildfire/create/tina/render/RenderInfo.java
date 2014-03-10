@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2014 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -26,14 +26,16 @@ public class RenderInfo implements Assignable<RenderInfo>, Serializable {
   private boolean renderHDRIntensityMap;
   private int imageWidth;
   private int imageHeight;
+  private RenderMode renderMode = RenderMode.PRODUCTION;
 
   protected RenderInfo() {
 
   }
 
-  public RenderInfo(int pImageWidth, int pImageHeight) {
+  public RenderInfo(int pImageWidth, int pImageHeight, RenderMode pRenderMode) {
     imageWidth = pImageWidth;
     imageHeight = pImageHeight;
+    renderMode = pRenderMode;
   }
 
   public boolean isRenderHDR() {
@@ -90,6 +92,14 @@ public class RenderInfo implements Assignable<RenderInfo>, Serializable {
       return false;
     }
     return true;
+  }
+
+  public RenderMode getRenderMode() {
+    return renderMode;
+  }
+
+  public void setRenderMode(RenderMode renderMode) {
+    this.renderMode = renderMode;
   }
 
 }

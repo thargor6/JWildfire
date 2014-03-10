@@ -31,6 +31,7 @@ import org.jwildfire.create.tina.render.AbstractRenderThread;
 import org.jwildfire.create.tina.render.FlameRenderer;
 import org.jwildfire.create.tina.render.IterationObserver;
 import org.jwildfire.create.tina.render.RenderInfo;
+import org.jwildfire.create.tina.render.RenderMode;
 import org.jwildfire.create.tina.swing.RandomBatchQuality;
 import org.jwildfire.image.SimpleImage;
 import org.jwildfire.swing.ImagePanel;
@@ -173,7 +174,7 @@ public class JWildfireApplet extends JApplet implements IterationObserver {
   public void renderButton_clicked() {
     clearScreen();
     ImgSize size = getImgSize();
-    RenderInfo info = new RenderInfo(size.getWidth(), size.getHeight());
+    RenderInfo info = new RenderInfo(size.getWidth(), size.getHeight(), RenderMode.PREVIEW);
     Flame flame = getCurrFlame();
     double wScl = (double) info.getImageWidth() / (double) flame.getWidth();
     double hScl = (double) info.getImageHeight() / (double) flame.getHeight();

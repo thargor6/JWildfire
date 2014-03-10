@@ -32,6 +32,7 @@ import org.jwildfire.create.tina.io.JWFRenderHeader;
 import org.jwildfire.create.tina.io.JWFRenderHeaderReader;
 import org.jwildfire.create.tina.render.FlameRenderer;
 import org.jwildfire.create.tina.render.RenderInfo;
+import org.jwildfire.create.tina.render.RenderMode;
 import org.jwildfire.create.tina.render.RenderedFlame;
 
 public class JWFRenderFilePreview extends JComponent implements PropertyChangeListener {
@@ -73,7 +74,7 @@ public class JWFRenderFilePreview extends JComponent implements PropertyChangeLi
           flame.setSampleDensity(50);
           flame.setSpatialFilterRadius(0.0);
           flame.setDeFilterEnabled(false);
-          RenderInfo info = new RenderInfo(imgWidth, imgHeight);
+          RenderInfo info = new RenderInfo(imgWidth, imgHeight, RenderMode.PREVIEW);
           RenderedFlame res = renderer.renderFlame(info);
           currThumbnail = new ImageIcon(res.getImage().getBufferedImg());
         }

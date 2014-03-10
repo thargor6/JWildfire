@@ -34,6 +34,7 @@ import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.Stereo3dColor;
 import org.jwildfire.create.tina.base.Stereo3dEye;
+import org.jwildfire.create.tina.base.Stereo3dMode;
 import org.jwildfire.create.tina.base.raster.AbstractRasterPoint;
 import org.jwildfire.create.tina.random.AbstractRandomGenerator;
 import org.jwildfire.create.tina.random.RandomGeneratorFactory;
@@ -41,6 +42,11 @@ import org.jwildfire.create.tina.variation.FlameTransformationContext;
 import org.jwildfire.image.Pixel;
 import org.jwildfire.image.SimpleHDRImage;
 import org.jwildfire.image.SimpleImage;
+import org.jwildfire.transform.ComposeTransformer;
+import org.jwildfire.transform.ComposeTransformer.HAlignment;
+import org.jwildfire.transform.ComposeTransformer.VAlignment;
+import org.jwildfire.transform.ScaleAspect;
+import org.jwildfire.transform.ScaleTransformer;
 
 public class FlameRenderer {
   // constants
@@ -152,75 +158,198 @@ public class FlameRenderer {
   }
 
   public RenderedFlame renderFlame(RenderInfo pRenderInfo) {
-    switch (flame.getStereo3dMode()) {
-      case INTERPOLATED_IMAGES:
-        // TODO
-        return null;
-      case IMAGE_PAIR:
-        // TODO
-        return null;
-      case SIDE_BY_SIDE:
-        // TODO
-        return null;
-      case ANAGLYPH: {
-        RenderInfo localRenderInfo = pRenderInfo.makeCopy();
-        localRenderInfo.setRenderHDR(false);
-        localRenderInfo.setRenderHDRIntensityMap(false);
-        eye = Stereo3dEye.LEFT;
-        RenderedFlame leftRender = renderImage(localRenderInfo);
-        eye = Stereo3dEye.RIGHT;
-        RenderedFlame rightRender = renderImage(localRenderInfo);
-
-        Pixel lPixel = new Pixel();
-        Pixel rPixel = new Pixel();
-        Stereo3dColor leftColor = flame.getAnaglyph3dLeftEyeColor();
-        Stereo3dColor rightColor = flame.getAnaglyph3dRightEyeColor();
-        SimpleImage leftImg = leftRender.getImage();
-        SimpleImage rightImg = rightRender.getImage();
-
-        RenderedFlame mergedRender = new RenderedFlame();
-        localRenderInfo.setImageWidth(leftRender.getImage().getImageWidth());
-        localRenderInfo.setImageHeight(leftRender.getImage().getImageHeight());
-        mergedRender.init(localRenderInfo);
-        SimpleImage mergedImg = mergedRender.getImage();
-
-        for (int i = 0; i < mergedImg.getImageHeight(); i++) {
-          for (int j = 0; j < mergedImg.getImageWidth(); j++) {
-            lPixel.setARGBValue(leftImg.getARGBValue(j, i));
-            rPixel.setARGBValue(rightImg.getARGBValue(j, i));
-            int mr = leftColor.calculateRed(lPixel.r, lPixel.g, lPixel.b) + rightColor.calculateRed(rPixel.r, rPixel.g, rPixel.b);
-            if (mr < 0)
-              mr = 0;
-            else if (mr > 255)
-              mr = 255;
-            int mg = leftColor.calculateGreen(lPixel.r, lPixel.g, lPixel.b) + rightColor.calculateGreen(rPixel.r, rPixel.g, rPixel.b);
-            if (mg < 0)
-              mg = 0;
-            else if (mg > 255)
-              mg = 255;
-            int mb = leftColor.calculateBlue(lPixel.r, lPixel.g, lPixel.b) + rightColor.calculateBlue(rPixel.r, rPixel.g, rPixel.b);
-            if (mb < 0)
-              mb = 0;
-            else if (mb > 255)
-              mb = 255;
-            mergedImg.setRGB(j, i, mr, mg, mb);
-          }
-        }
-        return mergedRender;
-      }
-      default:
-        return renderImage(pRenderInfo);
+    if (!Stereo3dMode.NONE.equals(flame.getStereo3dMode())) {
+      return renderImageStereo3d(pRenderInfo);
+    }
+    else {
+      return renderImageNormal(pRenderInfo);
     }
   }
 
-  private RenderedFlame renderImage(RenderInfo pRenderInfo) {
+  private RenderedFlame renderImageStereo3d(RenderInfo pRenderInfo) {
+    Stereo3dEye storedEye = eye;
+    double storedAngle = flame.getStereo3dAngle();
+    double storedEyeDist = flame.getStereo3dEyeDist();
+    try {
+      switch (pRenderInfo.getRenderMode()) {
+        case PREVIEW:
+          switch (flame.getStereo3dPreview()) {
+            case SIDE_BY_SIDE: {
+              RenderedFlame result = renderStereo3dSideBySide(pRenderInfo);
+              ScaleTransformer scaleTransformer = new ScaleTransformer();
+              scaleTransformer.setAspect(ScaleAspect.IGNORE);
+              scaleTransformer.setScaleWidth(pRenderInfo.getImageWidth() * renderScale);
+              scaleTransformer.setScaleHeight(pRenderInfo.getImageHeight() * renderScale);
+              scaleTransformer.transformImage(result.getImage());
+              return result;
+            }
+            case ANAGLYPH: {
+              return renderStereo3dAnaglyph(pRenderInfo);
+            }
+            case NONE:
+              return renderImageNormal(pRenderInfo);
+            default:
+              throw new IllegalStateException(pRenderInfo.getRenderMode().toString());
+          }
+        case PRODUCTION:
+          switch (flame.getStereo3dMode()) {
+            case ANAGLYPH:
+              return renderStereo3dAnaglyph(pRenderInfo);
+            case INTERPOLATED_IMAGES: {
+              RenderInfo localRenderInfo = pRenderInfo.makeCopy();
+              localRenderInfo.setRenderHDR(false);
+              localRenderInfo.setRenderHDRIntensityMap(false);
+
+              RenderedFlame leftRenders[] = new RenderedFlame[flame.getStereo3dInterpolatedImageCount()];
+              double dAngle = storedAngle / (double) leftRenders.length;
+              double dEyeDist = storedEyeDist / (double) leftRenders.length;
+
+              for (int i = 0; i < leftRenders.length; i++) {
+                eye = Stereo3dEye.LEFT;
+                flame.setStereo3dAngle((i + 1) * dAngle);
+                flame.setStereo3dEyeDist((i + 1) * dEyeDist);
+                leftRenders[i] = renderImageNormal(localRenderInfo);
+              }
+
+              RenderedFlame rightRenders[] = new RenderedFlame[flame.getStereo3dInterpolatedImageCount()];
+              for (int i = 0; i < rightRenders.length; i++) {
+                eye = Stereo3dEye.RIGHT;
+                flame.setStereo3dAngle((i + 1) * dAngle);
+                flame.setStereo3dEyeDist((i + 1) * dEyeDist);
+                rightRenders[i] = renderImageNormal(localRenderInfo);
+              }
+
+              RenderedFlame mergedRender = new RenderedFlame();
+              localRenderInfo.setImageWidth(2 * pRenderInfo.getImageWidth());
+              localRenderInfo.setImageHeight(leftRenders.length * pRenderInfo.getImageHeight());
+              mergedRender.init(localRenderInfo);
+              SimpleImage mergedImg = mergedRender.getImage();
+
+              ComposeTransformer composeTransformer = new ComposeTransformer();
+              composeTransformer.setHAlign(HAlignment.OFF);
+              composeTransformer.setVAlign(VAlignment.OFF);
+
+              int yOff = 0;
+              for (int i = 0; i < leftRenders.length; i++) {
+                composeTransformer.setLeft(0);
+                composeTransformer.setTop(yOff);
+                composeTransformer.setForegroundImage(leftRenders[i].getImage());
+                composeTransformer.transformImage(mergedImg);
+                yOff += pRenderInfo.getImageHeight();
+              }
+
+              yOff = 0;
+              for (int i = 0; i < rightRenders.length; i++) {
+                composeTransformer.setLeft(pRenderInfo.getImageWidth());
+                composeTransformer.setTop(yOff);
+                composeTransformer.setForegroundImage(rightRenders[i].getImage());
+                composeTransformer.transformImage(mergedImg);
+                yOff += pRenderInfo.getImageHeight();
+              }
+
+              return mergedRender;
+            }
+
+            case SIDE_BY_SIDE:
+              return renderStereo3dSideBySide(pRenderInfo);
+            case NONE:
+              return renderImageNormal(pRenderInfo);
+            default:
+              throw new IllegalStateException(flame.getStereo3dMode().toString());
+          }
+        default:
+          throw new IllegalStateException(pRenderInfo.getRenderMode().toString());
+      }
+    }
+    finally {
+      eye = storedEye;
+      flame.setStereo3dAngle(storedAngle);
+      flame.setStereo3dEyeDist(storedEyeDist);
+    }
+  }
+
+  private RenderedFlame renderStereo3dSideBySide(RenderInfo pRenderInfo) {
+    RenderInfo localRenderInfo = pRenderInfo.makeCopy();
+    localRenderInfo.setRenderHDR(false);
+    localRenderInfo.setRenderHDRIntensityMap(false);
+    eye = Stereo3dEye.LEFT;
+    RenderedFlame leftRender = renderImageNormal(localRenderInfo);
+    eye = Stereo3dEye.RIGHT;
+    RenderedFlame rightRender = renderImageNormal(localRenderInfo);
+
+    RenderedFlame mergedRender = new RenderedFlame();
+    localRenderInfo.setImageWidth(2 * leftRender.getImage().getImageWidth());
+    localRenderInfo.setImageHeight(leftRender.getImage().getImageHeight());
+    mergedRender.init(localRenderInfo);
+    SimpleImage mergedImg = mergedRender.getImage();
+
+    ComposeTransformer composeTransformer = new ComposeTransformer();
+    composeTransformer.setHAlign(HAlignment.OFF);
+    composeTransformer.setVAlign(VAlignment.OFF);
+    composeTransformer.setForegroundImage(leftRender.getImage());
+    composeTransformer.transformImage(mergedImg);
+
+    composeTransformer.setForegroundImage(rightRender.getImage());
+    composeTransformer.setLeft(leftRender.getImage().getImageWidth());
+    composeTransformer.transformImage(mergedImg);
+
+    return mergedRender;
+  }
+
+  private RenderedFlame renderStereo3dAnaglyph(RenderInfo pRenderInfo) {
+    RenderInfo localRenderInfo = pRenderInfo.makeCopy();
+    localRenderInfo.setRenderHDR(false);
+    localRenderInfo.setRenderHDRIntensityMap(false);
+    eye = Stereo3dEye.LEFT;
+    RenderedFlame leftRender = renderImageNormal(localRenderInfo);
+    eye = Stereo3dEye.RIGHT;
+    RenderedFlame rightRender = renderImageNormal(localRenderInfo);
+
+    Pixel lPixel = new Pixel();
+    Pixel rPixel = new Pixel();
+    Stereo3dColor leftColor = flame.getAnaglyph3dLeftEyeColor();
+    Stereo3dColor rightColor = flame.getAnaglyph3dRightEyeColor();
+    SimpleImage leftImg = leftRender.getImage();
+    SimpleImage rightImg = rightRender.getImage();
+
+    RenderedFlame mergedRender = new RenderedFlame();
+    localRenderInfo.setImageWidth(leftRender.getImage().getImageWidth());
+    localRenderInfo.setImageHeight(leftRender.getImage().getImageHeight());
+    mergedRender.init(localRenderInfo);
+    SimpleImage mergedImg = mergedRender.getImage();
+
+    for (int i = 0; i < mergedImg.getImageHeight(); i++) {
+      for (int j = 0; j < mergedImg.getImageWidth(); j++) {
+        lPixel.setARGBValue(leftImg.getARGBValue(j, i));
+        rPixel.setARGBValue(rightImg.getARGBValue(j, i));
+        int mr = leftColor.calculateRed(lPixel.r, lPixel.g, lPixel.b) + rightColor.calculateRed(rPixel.r, rPixel.g, rPixel.b);
+        if (mr < 0)
+          mr = 0;
+        else if (mr > 255)
+          mr = 255;
+        int mg = leftColor.calculateGreen(lPixel.r, lPixel.g, lPixel.b) + rightColor.calculateGreen(rPixel.r, rPixel.g, rPixel.b);
+        if (mg < 0)
+          mg = 0;
+        else if (mg > 255)
+          mg = 255;
+        int mb = leftColor.calculateBlue(lPixel.r, lPixel.g, lPixel.b) + rightColor.calculateBlue(rPixel.r, rPixel.g, rPixel.b);
+        if (mb < 0)
+          mb = 0;
+        else if (mb > 255)
+          mb = 255;
+        mergedImg.setRGB(j, i, mr, mg, mb);
+      }
+    }
+    return mergedRender;
+  }
+
+  private RenderedFlame renderImageNormal(RenderInfo pRenderInfo) {
     RenderedFlame res = new RenderedFlame();
     res.init(pRenderInfo);
 
     boolean renderNormal = true;
     boolean renderHDR = pRenderInfo.isRenderHDR();
     boolean renderHDRIntensityMap = pRenderInfo.isRenderHDRIntensityMap();
-
     if (!flame.isRenderable()) {
       if (renderNormal) {
         if (renderScale > 0) {
@@ -795,7 +924,6 @@ public class FlameRenderer {
     if (!Stereo3dEye.UNSPECIFIED.equals(eye)) {
       switch (initialFlame.getAnaglyph3dMode()) {
         case INTERPOLATED_IMAGES:
-        case IMAGE_PAIR:
         case SIDE_BY_SIDE:
         case ANAGLYPH:
           return new Stereo3dFlameRendererView(eye, initialFlame, randGen, borderWidth, maxBorderWidth, imageWidth, imageHeight, rasterWidth, rasterHeight);
@@ -805,7 +933,6 @@ public class FlameRenderer {
   }
 
   public List<AbstractRenderThread> startRenderFlame(RenderInfo pRenderInfo) {
-    // TODO remove frame from renderInfo? (color)
     renderInfo = pRenderInfo;
     initRaster(pRenderInfo.getImageWidth(), pRenderInfo.getImageHeight());
     List<List<RenderPacket>> renderFlames = new ArrayList<List<RenderPacket>>();

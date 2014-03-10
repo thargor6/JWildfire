@@ -142,7 +142,8 @@ public class Flame implements Assignable<Flame>, Serializable {
   private double stereo3dEyeDist = 0.032;
   private Stereo3dColor stereo3dLeftEyeColor = Stereo3dColor.RED;
   private Stereo3dColor stereo3dRightEyeColor = Stereo3dColor.CYAN;
-  private int stereo3dInterpolatedImageCount = 6;
+  private Stereo3dPreview stereo3dPreview = Stereo3dPreview.SIDE_BY_SIDE;
+  private int stereo3dInterpolatedImageCount = 3;
 
   public Flame() {
     layers.clear();
@@ -544,6 +545,7 @@ public class Flame implements Assignable<Flame>, Serializable {
     stereo3dLeftEyeColor = pFlame.stereo3dLeftEyeColor;
     stereo3dRightEyeColor = pFlame.stereo3dRightEyeColor;
     stereo3dInterpolatedImageCount = pFlame.stereo3dInterpolatedImageCount;
+    stereo3dPreview = pFlame.stereo3dPreview;
 
     layers.clear();
     for (Layer layer : pFlame.getLayers()) {
@@ -602,7 +604,8 @@ public class Flame implements Assignable<Flame>, Serializable {
         (fabs(postSymmetryDistance - pFlame.postSymmetryDistance) > EPSILON) || (fabs(postSymmetryDistance - pFlame.postSymmetryDistance) > EPSILON) ||
         (stereo3dMode != pFlame.stereo3dMode) || (fabs(stereo3dAngle - pFlame.stereo3dAngle) > EPSILON) ||
         (fabs(stereo3dEyeDist - pFlame.stereo3dEyeDist) > EPSILON) || (stereo3dLeftEyeColor != pFlame.stereo3dLeftEyeColor) ||
-        (stereo3dRightEyeColor != pFlame.stereo3dRightEyeColor) || (stereo3dInterpolatedImageCount != pFlame.stereo3dInterpolatedImageCount)) {
+        (stereo3dRightEyeColor != pFlame.stereo3dRightEyeColor) || (stereo3dInterpolatedImageCount != pFlame.stereo3dInterpolatedImageCount) ||
+        (stereo3dPreview != pFlame.stereo3dPreview)) {
       return false;
     }
     for (int i = 0; i < layers.size(); i++) {
@@ -906,7 +909,6 @@ public class Flame implements Assignable<Flame>, Serializable {
     switch (getStereo3dMode()) {
       case ANAGLYPH:
       case SIDE_BY_SIDE:
-      case IMAGE_PAIR:
         return 2;
       case INTERPOLATED_IMAGES:
         return getStereo3dInterpolatedImageCount();
@@ -973,5 +975,13 @@ public class Flame implements Assignable<Flame>, Serializable {
 
   public void setStereo3dInterpolatedImageCount(int stereo3dInterpolatedImageCount) {
     this.stereo3dInterpolatedImageCount = stereo3dInterpolatedImageCount;
+  }
+
+  public Stereo3dPreview getStereo3dPreview() {
+    return stereo3dPreview;
+  }
+
+  public void setStereo3dPreview(Stereo3dPreview stereo3dPreview) {
+    this.stereo3dPreview = stereo3dPreview;
   }
 }

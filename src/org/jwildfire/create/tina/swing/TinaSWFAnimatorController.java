@@ -63,6 +63,7 @@ import org.jwildfire.create.tina.io.JWFMovieWriter;
 import org.jwildfire.create.tina.render.FlameRenderer;
 import org.jwildfire.create.tina.render.ProgressUpdater;
 import org.jwildfire.create.tina.render.RenderInfo;
+import org.jwildfire.create.tina.render.RenderMode;
 import org.jwildfire.create.tina.render.RenderedFlame;
 import org.jwildfire.image.SimpleImage;
 import org.jwildfire.swing.ErrorHandler;
@@ -362,7 +363,7 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
     if (imageWidth > 16 && imageHeight > 16 && pPart.getFlame() != null) {
       SimpleImage img;
       {
-        RenderInfo info = new RenderInfo(imageWidth, imageHeight);
+        RenderInfo info = new RenderInfo(imageWidth, imageHeight, RenderMode.PREVIEW);
         Flame flame = pPart.getFlame().makeCopy();
         double wScl = (double) info.getImageWidth() / (double) flame.getWidth();
         double hScl = (double) info.getImageHeight() / (double) flame.getHeight();
@@ -709,7 +710,7 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
       int width = bounds.width;
       int height = bounds.height;
       if (width >= 16 && height >= 16) {
-        RenderInfo info = new RenderInfo(width, height);
+        RenderInfo info = new RenderInfo(width, height, RenderMode.PREVIEW);
         Flame flame = getCurrFlame();
         if (flame != null) {
           double oldSpatialFilterRadius = flame.getSpatialFilterRadius();

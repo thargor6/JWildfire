@@ -14,8 +14,8 @@
   if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
   02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
-package org.jwildfire.create.tina.base;
+package org.jwildfire.create.tina.render;
 
-public enum Stereo3dMode {
-  NONE, ANAGLYPH, SIDE_BY_SIDE, INTERPOLATED_IMAGES
+public enum RenderMode {
+  PREVIEW, INTERACTIVE, PRODUCTION
 }
