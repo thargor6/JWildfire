@@ -124,6 +124,8 @@ public class TruchetFunc extends VariationFunc {
         int xrand = (int) round(pAffineTP.x);
         int yrand = (int) round(pAffineTP.y);
         niter = fabs(xrand + yrand + xrand * yrand);
+        if (niter > 1000)
+          niter = 1000;
         randint = seed + niter;
         randiter = 0;
         while (randiter < niter) {
