@@ -1057,16 +1057,15 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
 
             if (data.layerAppendBtn.isSelected() && !pMouseDown) {
               TextTransformer txt = new TextTransformer();
-              txt.setText1("layer-append-mode");
-              txt.setText2("active");
+              txt.setText1("layer-append-mode active");
               txt.setAntialiasing(true);
               txt.setColor(Color.RED);
               txt.setMode(Mode.NORMAL);
               txt.setFontStyle(FontStyle.BOLD);
               txt.setFontName("Arial");
-              txt.setFontSize(36);
-              txt.setHAlign(HAlignment.CENTRE);
-              txt.setVAlign(VAlignment.CENTRE);
+              txt.setFontSize(16);
+              txt.setHAlign(HAlignment.RIGHT);
+              txt.setVAlign(VAlignment.BOTTOM);
               txt.transformImage(img);
             }
 
