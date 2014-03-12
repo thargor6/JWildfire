@@ -68,6 +68,9 @@ public class FlameRenderer {
   protected AbstractRandomGenerator randGen;
   //
   private ProgressUpdater progressUpdater;
+  private int progressDisplayPhaseCount = 1;
+  private int progressChangePerPhase = 0;
+  private int progressDisplayPhase = 0;
   // 
   private final FlameTransformationContext flameTransformationContext;
   private RenderInfo renderInfo;
@@ -162,7 +165,7 @@ public class FlameRenderer {
       return renderImageStereo3d(pRenderInfo);
     }
     else {
-      return renderImageNormal(pRenderInfo);
+      return renderImageNormal(pRenderInfo, 1, 0);
     }
   }
 
@@ -187,7 +190,7 @@ public class FlameRenderer {
               return renderStereo3dAnaglyph(pRenderInfo);
             }
             case NONE:
-              return renderImageNormal(pRenderInfo);
+              return renderImageNormal(pRenderInfo, 1, 0);
             default:
               throw new IllegalStateException(pRenderInfo.getRenderMode().toString());
           }
@@ -203,12 +206,13 @@ public class FlameRenderer {
               RenderedFlame leftRenders[] = new RenderedFlame[flame.getStereo3dInterpolatedImageCount()];
               double dAngle = storedAngle / (double) leftRenders.length;
               double dEyeDist = storedEyeDist / (double) leftRenders.length;
-
+              int totalImageCount = 2 * leftRenders.length;
+              int totalImageIdx = 0;
               for (int i = 0; i < leftRenders.length; i++) {
                 eye = Stereo3dEye.LEFT;
                 flame.setStereo3dAngle((i + 1) * dAngle);
                 flame.setStereo3dEyeDist((i + 1) * dEyeDist);
-                leftRenders[i] = renderImageNormal(localRenderInfo);
+                leftRenders[i] = renderImageNormal(localRenderInfo, totalImageCount, totalImageIdx++);
               }
 
               RenderedFlame rightRenders[] = new RenderedFlame[flame.getStereo3dInterpolatedImageCount()];
@@ -216,7 +220,7 @@ public class FlameRenderer {
                 eye = Stereo3dEye.RIGHT;
                 flame.setStereo3dAngle((i + 1) * dAngle);
                 flame.setStereo3dEyeDist((i + 1) * dEyeDist);
-                rightRenders[i] = renderImageNormal(localRenderInfo);
+                rightRenders[i] = renderImageNormal(localRenderInfo, totalImageCount, totalImageIdx++);
               }
 
               RenderedFlame mergedRender = new RenderedFlame();
@@ -253,7 +257,7 @@ public class FlameRenderer {
             case SIDE_BY_SIDE:
               return renderStereo3dSideBySide(pRenderInfo);
             case NONE:
-              return renderImageNormal(pRenderInfo);
+              return renderImageNormal(pRenderInfo, 1, 0);
             default:
               throw new IllegalStateException(flame.getStereo3dMode().toString());
           }
@@ -273,9 +277,9 @@ public class FlameRenderer {
     localRenderInfo.setRenderHDR(false);
     localRenderInfo.setRenderHDRIntensityMap(false);
     eye = Stereo3dEye.LEFT;
-    RenderedFlame leftRender = renderImageNormal(localRenderInfo);
+    RenderedFlame leftRender = renderImageNormal(localRenderInfo, 2, 0);
     eye = Stereo3dEye.RIGHT;
-    RenderedFlame rightRender = renderImageNormal(localRenderInfo);
+    RenderedFlame rightRender = renderImageNormal(localRenderInfo, 2, 1);
 
     RenderedFlame mergedRender = new RenderedFlame();
     localRenderInfo.setImageWidth(2 * leftRender.getImage().getImageWidth());
@@ -301,9 +305,9 @@ public class FlameRenderer {
     localRenderInfo.setRenderHDR(false);
     localRenderInfo.setRenderHDRIntensityMap(false);
     eye = Stereo3dEye.LEFT;
-    RenderedFlame leftRender = renderImageNormal(localRenderInfo);
+    RenderedFlame leftRender = renderImageNormal(localRenderInfo, 2, 0);
     eye = Stereo3dEye.RIGHT;
-    RenderedFlame rightRender = renderImageNormal(localRenderInfo);
+    RenderedFlame rightRender = renderImageNormal(localRenderInfo, 2, 1);
 
     Pixel lPixel = new Pixel();
     Pixel rPixel = new Pixel();
@@ -343,9 +347,13 @@ public class FlameRenderer {
     return mergedRender;
   }
 
-  private RenderedFlame renderImageNormal(RenderInfo pRenderInfo) {
+  private RenderedFlame renderImageNormal(RenderInfo pRenderInfo, int pTotalImagePartCount, int pTotalImagePartIdx) {
+    progressDisplayPhaseCount = pTotalImagePartCount;
+    progressDisplayPhase = pTotalImagePartIdx;
     RenderedFlame res = new RenderedFlame();
     res.init(pRenderInfo);
+    if (forceAbort)
+      return res;
 
     boolean renderNormal = true;
     boolean renderHDR = pRenderInfo.isRenderHDR();
@@ -738,7 +746,8 @@ public class FlameRenderer {
     long nSamples = (long) ((flame.getSampleDensity() * (double) rasterSize / (double) flame.calcPostSymmetrySampleMultiplier() / (double) flame.calcStereo3dSampleMultiplier() + 0.5));
     int PROGRESS_STEPS = 50;
     if (progressUpdater != null && pPart == 0) {
-      progressUpdater.initProgress((PROGRESS_STEPS - 1) * pParts);
+      progressChangePerPhase = (PROGRESS_STEPS - 1) * pParts;
+      progressUpdater.initProgress(progressChangePerPhase * progressDisplayPhaseCount);
     }
     long sampleProgressUpdateStep = nSamples / PROGRESS_STEPS;
     long nextProgressUpdate = sampleProgressUpdateStep;
@@ -768,7 +777,7 @@ public class FlameRenderer {
       if (currSamples >= nextProgressUpdate) {
         if (progressUpdater != null) {
           int currProgress = (int) ((currSamples * PROGRESS_STEPS) / nSamples);
-          progressUpdater.updateProgress(currProgress + pPart * PROGRESS_STEPS);
+          progressUpdater.updateProgress(currProgress + pPart * PROGRESS_STEPS + progressChangePerPhase * progressDisplayPhase);
           nextProgressUpdate = (currProgress + 1) * sampleProgressUpdateStep;
         }
       }

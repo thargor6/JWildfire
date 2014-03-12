@@ -81,12 +81,12 @@ public class JobRenderThread implements Runnable {
               long t1 = Calendar.getInstance().getTimeInMillis();
               job.setFinished(true);
               job.setElapsedSeconds(((double) (t1 - t0) / 1000.0));
-              new ImageWriter().saveImage(res.getImage(), job.getImageFilename());
+              new ImageWriter().saveImage(res.getImage(), job.getImageFilename(flame.getStereo3dMode()));
               if (res.getHDRImage() != null) {
-                new ImageWriter().saveImage(res.getHDRImage(), job.getImageFilename() + ".hdr");
+                new ImageWriter().saveImage(res.getHDRImage(), job.getImageFilename(flame.getStereo3dMode()) + ".hdr");
               }
               if (res.getHDRIntensityMap() != null) {
-                new ImageWriter().saveImage(res.getHDRIntensityMap(), job.getImageFilename() + ".intensity.hdr");
+                new ImageWriter().saveImage(res.getHDRIntensityMap(), job.getImageFilename(flame.getStereo3dMode()) + ".intensity.hdr");
               }
               try {
                 {

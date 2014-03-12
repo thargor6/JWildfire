@@ -10,7 +10,6 @@ import org.jwildfire.create.tina.base.XYZPoint;
 import org.jwildfire.create.tina.random.AbstractRandomGenerator;
 
 public class Stereo3dFlameRendererView extends FlameRendererView {
-  private double eyeAngle;
   private XYZPoint eyeOff;
 
   public Stereo3dFlameRendererView(Stereo3dEye pEye, Flame pFlame, AbstractRandomGenerator pRandGen, int pBorderWidth, int pMaxBorderWidth, int pImageWidth, int pImageHeight, int pRasterWidth, int pRasterHeight) {
@@ -25,15 +24,16 @@ public class Stereo3dFlameRendererView extends FlameRendererView {
     double pitch = flame.getCamPitch() * M_PI / 180.0;
     double roll = flame.getCamRoll() * M_PI / 180.0;
 
-    double eyeOff = 0.0;
+    double eyeDist = 0.0;
+    double eyeAngle = 0.0;
     switch (eye) {
       case LEFT:
-        eyeAngle = -flame.getAnaglyph3dAngle() * M_PI / 180.0;
-        eyeOff = -flame.getAnaglyph3dEyeDist();
+        eyeAngle = flame.getAnaglyph3dAngle() * M_PI / 180.0;
+        eyeDist = -flame.getAnaglyph3dEyeDist();
         break;
       case RIGHT:
-        eyeAngle = flame.getAnaglyph3dAngle() * M_PI / 180.0;
-        eyeOff = flame.getAnaglyph3dEyeDist();
+        eyeAngle = -flame.getAnaglyph3dAngle() * M_PI / 180.0;
+        eyeDist = flame.getAnaglyph3dEyeDist();
         break;
     }
     // Matrix without eye-angle
@@ -57,7 +57,7 @@ public class Stereo3dFlameRendererView extends FlameRendererView {
 
     // compute "eye-translation"
     this.eyeOff = new XYZPoint();
-    this.eyeOff.x = eyeOff;
+    this.eyeOff.x = eyeDist;
     super.applyCameraMatrix(this.eyeOff);
 
     // now the full matrix

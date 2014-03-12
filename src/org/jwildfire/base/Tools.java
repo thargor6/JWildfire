@@ -57,8 +57,11 @@ public class Tools {
   public static final String FILE_ENCODING = "utf-8";
   public static final String FILEEXT_FLAME = "flame";
   public static final String FILEEXT_GRADIENT = "gradient";
+  public static final String FILEEXT_GIF = "gif";
+  public static final String FILEEXT_HDR = "hdr";
   public static final String FILEEXT_JFX = "jfx";
   public static final String FILEEXT_JPG = "jpg";
+  public static final String FILEEXT_JPS = "jps";
   public static final String FILEEXT_JPEG = "jpeg";
   public static final String FILEEXT_JWFDANCE = "jwfdance";
   public static final String FILEEXT_JWFMOVIE = "jwfmovie";
@@ -66,6 +69,7 @@ public class Tools {
   public static final String FILEEXT_JWFSCRIPT = "jwfscript";
   public static final String FILEEXT_MP3 = "mp3";
   public static final String FILEEXT_PNG = "png";
+  public static final String FILEEXT_PNS = "pns";
   public static final String FILEEXT_SWF = "swf";
   public static final String FILEEXT_SVG = "svg";
   public static final String FILEEXT_TXT = "txt";

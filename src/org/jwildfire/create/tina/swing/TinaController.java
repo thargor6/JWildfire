@@ -77,6 +77,7 @@ import org.jwildfire.create.tina.base.DrawMode;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.Shading;
+import org.jwildfire.create.tina.base.Stereo3dMode;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.batch.Job;
 import org.jwildfire.create.tina.batch.JobRenderThread;
@@ -1053,7 +1054,7 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
             long t0 = System.currentTimeMillis();
             RenderedFlame res = renderer.renderFlame(info);
             long t1 = System.currentTimeMillis();
-            SimpleImage img = res.getPreviewImage();
+            SimpleImage img = res.getImage();
 
             if (data.layerAppendBtn.isSelected() && !pMouseDown) {
               TextTransformer txt = new TextTransformer();
@@ -2759,7 +2760,7 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
                     oldFilename = new String(val);
                   }
                 }
-                JFileChooser chooser = new ImageFileChooser();
+                JFileChooser chooser = new ImageFileChooser(Tools.FILEEXT_PNG);
                 if (oldFilename != null && oldFilename.length() > 0) {
                   try {
                     chooser.setCurrentDirectory(new File(oldFilename).getAbsoluteFile().getParentFile());
@@ -2789,7 +2790,7 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
                 break;
 
               case IMAGE_FILE: {
-                JFileChooser chooser = new ImageFileChooser();
+                JFileChooser chooser = new ImageFileChooser(Tools.FILEEXT_PNG);
                 if (prefs.getInputImagePath() != null) {
                   try {
                     chooser.setCurrentDirectory(new File(prefs.getInputImagePath()));
@@ -4111,7 +4112,7 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
   }
 
   public void grabPaletteFromImageButton_actionPerformed(ActionEvent e) {
-    JFileChooser chooser = new ImageFileChooser();
+    JFileChooser chooser = new ImageFileChooser(Tools.FILEEXT_PNG);
     if (prefs.getInputImagePath() != null) {
       try {
         chooser.setCurrentDirectory(new File(prefs.getInputImagePath()));
@@ -4341,7 +4342,8 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
     }
     else if (getCurrFlame() != null) {
       try {
-        JFileChooser chooser = new ImageFileChooser();
+        String dfltFileExt = Stereo3dMode.SIDE_BY_SIDE.equals(getCurrFlame().getStereo3dMode()) ? Tools.FILEEXT_PNS : Tools.FILEEXT_PNG;
+        JFileChooser chooser = new ImageFileChooser(dfltFileExt);
         if (prefs.getOutputImagePath() != null) {
           try {
             chooser.setCurrentDirectory(new File(prefs.getOutputImagePath()));

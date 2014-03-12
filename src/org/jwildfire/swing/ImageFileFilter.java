@@ -20,6 +20,8 @@ import java.io.File;
 
 import javax.swing.filechooser.FileFilter;
 
+import org.jwildfire.base.Tools;
+
 public class ImageFileFilter extends FileFilter {
 
   @Override
@@ -28,8 +30,8 @@ public class ImageFileFilter extends FileFilter {
       return true;
     String extension = getExtension(pFile);
     return (extension != null)
-        && (extension.equals("gif") || extension.equals("jpg") || extension.equals("jpeg") || extension
-            .equals("png") || extension.equals("hdr"));
+        && (extension.equals(Tools.FILEEXT_GIF) || extension.equals(Tools.FILEEXT_JPG) || extension.equals(Tools.FILEEXT_JPEG) || extension
+            .equals(Tools.FILEEXT_PNG) || extension.equals(Tools.FILEEXT_HDR) || extension.equals(Tools.FILEEXT_JPS) || extension.equals(Tools.FILEEXT_PNS));
   }
 
   @Override

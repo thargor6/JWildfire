@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2014 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -16,6 +16,9 @@
 */
 package org.jwildfire.create.tina.batch;
 
+import org.jwildfire.base.Tools;
+import org.jwildfire.create.tina.base.Stereo3dMode;
+
 public class Job {
   private String flameFilename;
   private boolean finished;
@@ -29,14 +32,7 @@ public class Job {
 
   public void setFlameFilename(String pFlameFilename) {
     flameFilename = pFlameFilename;
-    imageFilename = pFlameFilename + ".png";
-    int p = pFlameFilename.lastIndexOf(".");
-    if (p > 0) {
-      String ext = pFlameFilename.substring(p, pFlameFilename.length());
-      if (ext.equalsIgnoreCase(".FLAME")) {
-        imageFilename = pFlameFilename.substring(0, p) + ".png";
-      }
-    }
+    imageFilename = null;
   }
 
   public boolean isFinished() {
@@ -47,7 +43,18 @@ public class Job {
     return elapsedSeconds;
   }
 
-  public String getImageFilename() {
+  public String getImageFilename(Stereo3dMode pStereo3dMode) {
+    if (imageFilename == null) {
+      String fileExt = Stereo3dMode.SIDE_BY_SIDE.equals(pStereo3dMode) ? Tools.FILEEXT_PNS : Tools.FILEEXT_PNG;
+      imageFilename = flameFilename + "." + fileExt;
+      int p = flameFilename.lastIndexOf(".");
+      if (p > 0) {
+        String ext = flameFilename.substring(p, flameFilename.length());
+        if (ext.equalsIgnoreCase(".FLAME")) {
+          imageFilename = flameFilename.substring(0, p) + "." + fileExt;
+        }
+      }
+    }
     return imageFilename;
   }
 

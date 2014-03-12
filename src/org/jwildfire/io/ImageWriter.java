@@ -52,13 +52,17 @@ public class ImageWriter {
     String[] p = filename.split("\\.");
     if (p.length == 1)
       saveAsJPEG(pImg, pFilename + ".jpg");
-    else if (p[p.length - 1].equalsIgnoreCase("jpg"))
+    else if (p[p.length - 1].equalsIgnoreCase(Tools.FILEEXT_JPG))
       saveAsJPEG(pImg, pFilename);
-    else if (p[p.length - 1].equalsIgnoreCase("png"))
+    else if (p[p.length - 1].equalsIgnoreCase(Tools.FILEEXT_JPS))
+      saveAsJPEG(pImg, pFilename);
+    else if (p[p.length - 1].equalsIgnoreCase(Tools.FILEEXT_PNG))
       saveAsPNG(pImg, pFilename);
-    else if (p[p.length - 1].equalsIgnoreCase("hdr"))
+    else if (p[p.length - 1].equalsIgnoreCase(Tools.FILEEXT_PNS))
+      saveAsPNG(pImg, pFilename);
+    else if (p[p.length - 1].equalsIgnoreCase(Tools.FILEEXT_HDR))
       saveAsHDR(pImg, pFilename);
-    else if (p[p.length - 1].equalsIgnoreCase("txt"))
+    else if (p[p.length - 1].equalsIgnoreCase(Tools.FILEEXT_TXT))
       savePalette(pImg, pFilename);
     else
       throw new IllegalArgumentException(pFilename);

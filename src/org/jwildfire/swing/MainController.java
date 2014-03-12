@@ -151,7 +151,7 @@ public class MainController {
   }
 
   public Buffer loadImage(boolean pRecordAction) throws Exception {
-    JFileChooser chooser = new ImageFileChooser();
+    JFileChooser chooser = new ImageFileChooser(Tools.FILEEXT_PNG);
     if (prefs.getInputImagePath() != null) {
       try {
         chooser.setCurrentDirectory(new File(prefs.getInputImagePath()));
@@ -295,7 +295,7 @@ public class MainController {
   public void saveImage() throws Exception {
     Buffer buffer = getActiveBuffer();
     if (buffer != null) {
-      JFileChooser chooser = new ImageFileChooser();
+      JFileChooser chooser = new ImageFileChooser(Tools.FILEEXT_PNG);
       if (prefs.getOutputImagePath() != null) {
         try {
           chooser.setCurrentDirectory(new File(prefs.getOutputImagePath()));

@@ -142,7 +142,7 @@ public class Flame implements Assignable<Flame>, Serializable {
   private double stereo3dEyeDist = 0.032;
   private Stereo3dColor stereo3dLeftEyeColor = Stereo3dColor.RED;
   private Stereo3dColor stereo3dRightEyeColor = Stereo3dColor.CYAN;
-  private Stereo3dPreview stereo3dPreview = Stereo3dPreview.SIDE_BY_SIDE;
+  private Stereo3dPreview stereo3dPreview = Stereo3dPreview.ANAGLYPH;
   private int stereo3dInterpolatedImageCount = 3;
 
   public Flame() {

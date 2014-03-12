@@ -20,17 +20,17 @@ import java.awt.Dimension;
 
 import javax.swing.filechooser.FileFilter;
 
-import org.jwildfire.base.Tools;
-
 public class ImageFileChooser extends DefaultFileChooser {
   private static final long serialVersionUID = 1L;
+  private final String defaultExtension;
 
   @Override
   protected String getDefaultExtension() {
-    return Tools.FILEEXT_PNG;
+    return defaultExtension;
   }
 
-  public ImageFileChooser() {
+  public ImageFileChooser(String pDefaultExtension) {
+    defaultExtension = pDefaultExtension;
     setPreferredSize(new Dimension(960, 600));
     FileFilter filter = new ImageFileFilter();
     addChoosableFileFilter(filter);

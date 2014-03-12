@@ -16,16 +16,11 @@
 */
 package org.jwildfire.create.tina.render;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.jwildfire.image.SimpleHDRImage;
 import org.jwildfire.image.SimpleImage;
 
 public class RenderedFlame {
-  private final List<FinalImage> finalImages = new ArrayList<FinalImage>();
   private SimpleImage image;
-  private SimpleImage previewImage;
   private SimpleHDRImage hdrImage;
   private SimpleHDRImage hdrHeightMap;
 
@@ -49,18 +44,6 @@ public class RenderedFlame {
     if (pRenderInfo.isRenderHDRIntensityMap()) {
       hdrHeightMap = new SimpleHDRImage(pRenderInfo.getImageWidth(), pRenderInfo.getImageHeight());
     }
-  }
-
-  public List<FinalImage> getFinalImages() {
-    return finalImages;
-  }
-
-  public SimpleImage getPreviewImage() {
-    return previewImage == null ? image : previewImage;
-  }
-
-  public void setPreviewImage(SimpleImage previewImage) {
-    this.previewImage = previewImage;
   }
 
 }

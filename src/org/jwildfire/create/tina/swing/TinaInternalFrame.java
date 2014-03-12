@@ -16219,6 +16219,7 @@ public class TinaInternalFrame extends JInternalFrame {
       panel_82.add(lblAngle);
 
       stereo3dAngleREd = new JWFNumberField();
+      stereo3dAngleREd.setMinValue(-10000.0);
       stereo3dAngleREd.setMaxValue(10000.0);
       stereo3dAngleREd.setHasMinValue(true);
       stereo3dAngleREd.setHasMaxValue(true);
@@ -16248,6 +16249,7 @@ public class TinaInternalFrame extends JInternalFrame {
       panel_82.add(stereo3dAngleREd);
 
       stereo3dAngleSlider = new JSlider();
+      stereo3dAngleSlider.setMinimum(-30000);
       stereo3dAngleSlider.setValue(0);
       stereo3dAngleSlider.setSize(new Dimension(220, 19));
       stereo3dAngleSlider.setPreferredSize(new Dimension(220, 19));
