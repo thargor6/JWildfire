@@ -4227,6 +4227,8 @@ public class TinaInternalFrame extends JInternalFrame {
     pCmb.addItem(XFormScript.ROTATE_4TH_XFORM);
     pCmb.addItem(XFormScript.ROTATE_5TH_XFORM);
     pCmb.addItem(XFormScript.ROTATE_LAST_XFORM);
+    pCmb.addItem(XFormScript.ROTATE_FINAL_XFORM);
+    pCmb.addItem(XFormScript.ROTATE_FINAL_XFORM_NEG);
   }
 
   private void initGlobalScriptCmb(JComboBox pCmb) {
@@ -5893,6 +5895,7 @@ public class TinaInternalFrame extends JInternalFrame {
       swfAnimatorClearSoundButton.setFont(new Font("Dialog", Font.BOLD, 10));
 
       swfAnimatorGlobalScript2Cmb = new JComboBox();
+      swfAnimatorGlobalScript2Cmb.setMaximumRowCount(16);
       swfAnimatorGlobalScript2Cmb.setPreferredSize(new Dimension(275, 22));
       swfAnimatorGlobalScript2Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
       swfAnimatorGlobalScript2Cmb.setBounds(116, 42, 275, 22);
@@ -5906,6 +5909,7 @@ public class TinaInternalFrame extends JInternalFrame {
       panel_10.add(lblGlobalScript);
 
       swfAnimatorGlobalScript3Cmb = new JComboBox();
+      swfAnimatorGlobalScript3Cmb.setMaximumRowCount(16);
       swfAnimatorGlobalScript3Cmb.setPreferredSize(new Dimension(275, 22));
       swfAnimatorGlobalScript3Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
       swfAnimatorGlobalScript3Cmb.setBounds(116, 63, 275, 22);
@@ -5919,6 +5923,7 @@ public class TinaInternalFrame extends JInternalFrame {
       panel_10.add(lblGlobalScript_1);
 
       swfAnimatorGlobalScript4Cmb = new JComboBox();
+      swfAnimatorGlobalScript4Cmb.setMaximumRowCount(16);
       swfAnimatorGlobalScript4Cmb.setPreferredSize(new Dimension(275, 22));
       swfAnimatorGlobalScript4Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
       swfAnimatorGlobalScript4Cmb.setBounds(116, 84, 275, 22);
@@ -5932,6 +5937,7 @@ public class TinaInternalFrame extends JInternalFrame {
       panel_10.add(lblGlobalScript_2);
 
       swfAnimatorGlobalScript5Cmb = new JComboBox();
+      swfAnimatorGlobalScript5Cmb.setMaximumRowCount(16);
       swfAnimatorGlobalScript5Cmb.setPreferredSize(new Dimension(275, 22));
       swfAnimatorGlobalScript5Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
       swfAnimatorGlobalScript5Cmb.setBounds(116, 105, 275, 22);
@@ -5952,6 +5958,7 @@ public class TinaInternalFrame extends JInternalFrame {
       panel_10.add(lblXformScript);
 
       swfAnimatorXFormScript2Cmb = new JComboBox();
+      swfAnimatorXFormScript2Cmb.setMaximumRowCount(16);
       swfAnimatorXFormScript2Cmb.setPreferredSize(new Dimension(275, 22));
       swfAnimatorXFormScript2Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
       swfAnimatorXFormScript2Cmb.setBounds(116, 153, 275, 22);
@@ -5965,6 +5972,7 @@ public class TinaInternalFrame extends JInternalFrame {
       panel_10.add(lblXformScript_1);
 
       swfAnimatorXFormScript3Cmb = new JComboBox();
+      swfAnimatorXFormScript3Cmb.setMaximumRowCount(16);
       swfAnimatorXFormScript3Cmb.setPreferredSize(new Dimension(275, 22));
       swfAnimatorXFormScript3Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
       swfAnimatorXFormScript3Cmb.setBounds(116, 174, 275, 22);
@@ -5978,6 +5986,7 @@ public class TinaInternalFrame extends JInternalFrame {
       panel_10.add(lblXformScript_2);
 
       swfAnimatorXFormScript4Cmb = new JComboBox();
+      swfAnimatorXFormScript4Cmb.setMaximumRowCount(16);
       swfAnimatorXFormScript4Cmb.setPreferredSize(new Dimension(275, 22));
       swfAnimatorXFormScript4Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
       swfAnimatorXFormScript4Cmb.setBounds(116, 195, 275, 22);
@@ -5991,6 +6000,7 @@ public class TinaInternalFrame extends JInternalFrame {
       panel_10.add(lblXformScript_3);
 
       swfAnimatorXFormScript5Cmb = new JComboBox();
+      swfAnimatorXFormScript5Cmb.setMaximumRowCount(16);
       swfAnimatorXFormScript5Cmb.setPreferredSize(new Dimension(275, 22));
       swfAnimatorXFormScript5Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
       swfAnimatorXFormScript5Cmb.setBounds(116, 216, 275, 22);
@@ -6053,6 +6063,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JComboBox getSwfAnimatorGlobalScript1Cmb() {
     if (swfAnimatorGlobalScript1Cmb == null) {
       swfAnimatorGlobalScript1Cmb = new JComboBox();
+      swfAnimatorGlobalScript1Cmb.setMaximumRowCount(16);
       swfAnimatorGlobalScript1Cmb.setBounds(116, 21, 275, 22);
       swfAnimatorGlobalScript1Cmb.setPreferredSize(new Dimension(275, 22));
       swfAnimatorGlobalScript1Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
@@ -6068,6 +6079,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JComboBox getSwfAnimatorXFormScript1Cmb() {
     if (swfAnimatorXFormScript1Cmb == null) {
       swfAnimatorXFormScript1Cmb = new JComboBox();
+      swfAnimatorXFormScript1Cmb.setMaximumRowCount(16);
       swfAnimatorXFormScript1Cmb.setBounds(116, 132, 275, 22);
       swfAnimatorXFormScript1Cmb.setPreferredSize(new Dimension(275, 22));
       swfAnimatorXFormScript1Cmb.setFont(new Font("Dialog", Font.BOLD, 10));

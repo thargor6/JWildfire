@@ -66,13 +66,6 @@ public class SWFAnimationRenderThread implements Runnable {
         cancelSignalled = false;
         lastError = null;
         controller.getProgressUpdater().initProgress(flameMovie.getFrameCount());
-        // Init SWF
-        switch (flameMovie.getOutputFormat()) {
-          case SWF:
-          case SWF_AND_PNG:
-            initMovie();
-            break;
-        }
         // Create frames
         int startFrame = this.fromFrame;
         if (startFrame < 1)
@@ -90,11 +83,15 @@ public class SWFAnimationRenderThread implements Runnable {
           switch (flameMovie.getOutputFormat()) {
             case SWF: {
               SimpleImage image = renderImage(currFlame);
+              if (i == startFrame)
+                initMovie(image);
               addImageToMovie(image, i);
             }
               break;
             case SWF_AND_PNG: {
               SimpleImage image = renderImage(currFlame);
+              if (i == startFrame)
+                initMovie(image);
               addImageToMovie(image, i);
               saveFrame(image, i);
             }
@@ -228,16 +225,18 @@ public class SWFAnimationRenderThread implements Runnable {
     return factory;
   }
 
-  private void initMovie() throws Exception {
+  private void initMovie(SimpleImage pFirstImage) throws Exception {
     uid = 1;
     movie = new Movie();
-    final int xOrigin = -flameMovie.getFrameWidth() / 2;
-    final int yOrigin = -flameMovie.getFrameHeight() / 2;
+    int movieWidth = pFirstImage.getImageWidth();
+    int movieHeight = pFirstImage.getImageHeight();
+    final int xOrigin = -movieWidth / 2;
+    final int yOrigin = -movieHeight / 2;
     MovieHeader header = new MovieHeader();
     header.setFrameRate((float) flameMovie.getFramesPerSecond());
     final int width = 20;
     final Color color = WebPalette.BLACK.color();
-    final JWFImageFactory factory = createImageFactory(new SimpleImage(flameMovie.getFrameWidth() - 1, flameMovie.getFrameHeight() - 1));
+    final JWFImageFactory factory = createImageFactory(new SimpleImage(movieWidth - 1, movieHeight - 1));
     final ImageTag image = factory.defineImage(uid++);
     ShapeTag shape = new ImageShape().defineShape(uid++, image,
         xOrigin, yOrigin, new LineStyle1(width, color));

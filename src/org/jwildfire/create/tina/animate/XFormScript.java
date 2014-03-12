@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2012 Andreas Maschke
+  Copyright (C) 1995-2014 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -25,5 +25,7 @@ public enum XFormScript {
   ROTATE_2ND_XFORM,
   ROTATE_3RD_XFORM,
   ROTATE_4TH_XFORM,
-  ROTATE_5TH_XFORM
+  ROTATE_5TH_XFORM,
+  ROTATE_FINAL_XFORM,
+  ROTATE_FINAL_XFORM_NEG
 }

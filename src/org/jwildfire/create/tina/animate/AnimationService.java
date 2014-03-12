@@ -31,6 +31,7 @@ import org.jwildfire.create.tina.render.RenderInfo;
 import org.jwildfire.create.tina.render.RenderMode;
 import org.jwildfire.create.tina.render.RenderedFlame;
 import org.jwildfire.create.tina.transform.XFormTransformService;
+import org.jwildfire.create.tina.variation.Linear3DFunc;
 import org.jwildfire.envelope.Envelope;
 import org.jwildfire.image.SimpleImage;
 
@@ -165,6 +166,20 @@ public class AnimationService {
                 double angle = 360.0 * pXFormTime;
                 XFormTransformService.rotate(xForm, angle);
               }
+            }
+          }
+            break;
+          case ROTATE_FINAL_XFORM:
+          case ROTATE_FINAL_XFORM_NEG: {
+            for (Layer layer : flame.getLayers()) {
+              if (layer.getFinalXForms().size() == 0) {
+                XForm xForm = new XForm();
+                xForm.addVariation(1.0, new Linear3DFunc());
+                layer.getFinalXForms().add(xForm);
+              }
+              XForm xForm = layer.getFinalXForms().get(layer.getFinalXForms().size() - 1);
+              double angle = XFormScript.ROTATE_FINAL_XFORM.equals(script) ? 360.0 * pXFormTime : -360.0 * pXFormTime;
+              XFormTransformService.rotate(xForm, angle);
             }
           }
             break;
