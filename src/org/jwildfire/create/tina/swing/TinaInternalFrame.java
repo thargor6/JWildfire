@@ -11132,6 +11132,13 @@ public class TinaInternalFrame extends JInternalFrame {
   private JComboBox getSwfAnimatorResolutionProfileCmb() {
     if (swfAnimatorResolutionProfileCmb == null) {
       swfAnimatorResolutionProfileCmb = new JComboBox();
+      swfAnimatorResolutionProfileCmb.addItemListener(new ItemListener() {
+        public void itemStateChanged(ItemEvent e) {
+          if (tinaController != null) {
+            tinaController.getSwfAnimatorCtrl().resolutionProfileCmb_changed();
+          }
+        }
+      });
       swfAnimatorResolutionProfileCmb.setMinimumSize(new Dimension(33, 24));
       swfAnimatorResolutionProfileCmb.setBounds(88, 37, 125, 24);
       swfAnimatorResolutionProfileCmb.setPreferredSize(new Dimension(125, 24));
