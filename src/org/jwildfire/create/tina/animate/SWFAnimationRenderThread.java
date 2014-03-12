@@ -20,7 +20,9 @@ import java.io.File;
 
 import javax.imageio.ImageIO;
 
+import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Flame;
+import org.jwildfire.create.tina.io.FlameWriter;
 import org.jwildfire.image.SimpleImage;
 import org.jwildfire.io.ImageWriter;
 
@@ -84,18 +86,27 @@ public class SWFAnimationRenderThread implements Runnable {
           if (cancelSignalled) {
             break;
           }
-          SimpleImage image = renderImage(i);
-
+          Flame currFlame = createFlame(i);
           switch (flameMovie.getOutputFormat()) {
-            case SWF:
+            case SWF: {
+              SimpleImage image = renderImage(currFlame);
               addImageToMovie(image, i);
+            }
               break;
-            case SWF_AND_PNG:
+            case SWF_AND_PNG: {
+              SimpleImage image = renderImage(currFlame);
               addImageToMovie(image, i);
               saveFrame(image, i);
+            }
               break;
-            case PNG:
+            case PNG: {
+              SimpleImage image = renderImage(currFlame);
               saveFrame(image, i);
+            }
+              break;
+            case FLAMES: {
+              saveFlame(currFlame, i);
+            }
               break;
           }
           controller.getProgressUpdater().updateProgress(i);
@@ -119,15 +130,17 @@ public class SWFAnimationRenderThread implements Runnable {
   }
 
   private void prepareFlame(Flame pFlame) {
-    pFlame.setSpatialFilterRadius(1.0);
     pFlame.setSampleDensity(flameMovie.getQuality());
-
   }
 
-  private SimpleImage renderImage(int pFrame) throws Exception {
+  private Flame createFlame(int pFrame) throws Exception {
     Flame flame1 = flameMovie.getFlame(pFrame);
     prepareFlame(flame1);
-    return AnimationService.renderFrame(pFrame, flameMovie.getFrameCount(), flame1, flameMovie.getGlobalScripts(), MotionSpeed.S1_1, flameMovie.getxFormScripts(), MotionSpeed.S1_1, flameMovie.getFrameWidth(), flameMovie.getFrameHeight(), controller.getPrefs());
+    return AnimationService.createFrameFlame(pFrame, flameMovie.getFrameCount(), flame1, flameMovie.getGlobalScripts(), MotionSpeed.S1_1, flameMovie.getxFormScripts(), MotionSpeed.S1_1, flameMovie.getFrameWidth(), flameMovie.getFrameHeight(), controller.getPrefs());
+  }
+
+  private SimpleImage renderImage(Flame pFlame) throws Exception {
+    return AnimationService.renderFrame(pFlame, flameMovie.getFrameWidth(), flameMovie.getFrameHeight(), controller.getPrefs());
   }
 
   private void saveFrame(SimpleImage pImage, int pFrame) throws Exception {
@@ -144,13 +157,39 @@ public class SWFAnimationRenderThread implements Runnable {
       }
     }
     String hs = String.valueOf(pFrame);
-    int length = flameMovie.getFrameCount() > 9999 ? 5 : 4;
+    int length = calcFrameNumberLength();
     while (hs.length() < length) {
       hs = "0" + hs;
     }
     filename += hs + ".png";
     ImageIO.setUseCache(false);
     new ImageWriter().saveImage(pImage, filename, true);
+  }
+
+  private void saveFlame(Flame pFlame, int pFrame) throws Exception {
+    String filename = outputFilename;
+    {
+      int pSlash = filename.lastIndexOf("/");
+      int pSlash2 = filename.lastIndexOf("\\");
+      if (pSlash2 > pSlash) {
+        pSlash = pSlash2;
+      }
+      int pDot = filename.lastIndexOf(".");
+      if (pDot > pSlash) {
+        filename = filename.substring(0, pDot);
+      }
+    }
+    String hs = String.valueOf(pFrame);
+    int length = calcFrameNumberLength();
+    while (hs.length() < length) {
+      hs = "0" + hs;
+    }
+    filename += hs + "." + Tools.FILEEXT_FLAME;
+    new FlameWriter().writeFlame(pFlame, filename);
+  }
+
+  private int calcFrameNumberLength() {
+    return Math.max(4, String.valueOf(flameMovie.getFrameCount()).length());
   }
 
   private void addImageToMovie(SimpleImage pImage, int pFrame) throws Exception {

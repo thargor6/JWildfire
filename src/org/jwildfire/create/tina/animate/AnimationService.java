@@ -174,10 +174,7 @@ public class AnimationService {
     return flame;
   }
 
-  public static SimpleImage renderFrame(int pFrame, int pFrames, Flame pFlame, GlobalScript pGlobalScripts[], MotionSpeed pGlobalSpeed, XFormScript[] pXFormScripts, MotionSpeed pXFormSpeed, int pWidth, int pHeight, Prefs pPrefs) throws Exception {
-    double globalTime = pGlobalSpeed.calcTime(pFrame, pFrames, true);
-    double xFormTime = pXFormSpeed.calcTime(pFrame, pFrames, true);
-    Flame flame = createFlame(pFlame, pGlobalScripts, globalTime, pXFormScripts, xFormTime, pPrefs);
+  public static SimpleImage renderFrame(Flame flame, int pWidth, int pHeight, Prefs pPrefs) throws Exception {
     RenderInfo info = new RenderInfo(pWidth, pHeight, RenderMode.PRODUCTION);
     double wScl = (double) info.getImageWidth() / (double) flame.getWidth();
     double hScl = (double) info.getImageHeight() / (double) flame.getHeight();
@@ -187,6 +184,12 @@ public class AnimationService {
     FlameRenderer renderer = new FlameRenderer(flame, pPrefs, flame.isBGTransparency(), false);
     RenderedFlame res = renderer.renderFlame(info);
     return res.getImage();
+  }
+
+  public static Flame createFrameFlame(int pFrame, int pFrames, Flame pFlame, GlobalScript pGlobalScripts[], MotionSpeed pGlobalSpeed, XFormScript[] pXFormScripts, MotionSpeed pXFormSpeed, int pWidth, int pHeight, Prefs pPrefs) throws Exception {
+    double globalTime = pGlobalSpeed.calcTime(pFrame, pFrames, true);
+    double xFormTime = pXFormSpeed.calcTime(pFrame, pFrames, true);
+    return createFlame(pFlame, pGlobalScripts, globalTime, pXFormScripts, xFormTime, pPrefs);
   }
 
   public static <T> double getPropertyValue(T pSource, String pName) {

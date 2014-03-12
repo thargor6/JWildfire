@@ -47,6 +47,7 @@ import javax.swing.event.ChangeListener;
 import org.jwildfire.base.Prefs;
 import org.jwildfire.base.QualityProfile;
 import org.jwildfire.base.ResolutionProfile;
+import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.animate.AnimationService;
 import org.jwildfire.create.tina.animate.FlameMovie;
 import org.jwildfire.create.tina.animate.FlameMoviePart;
@@ -67,6 +68,7 @@ import org.jwildfire.create.tina.render.RenderMode;
 import org.jwildfire.create.tina.render.RenderedFlame;
 import org.jwildfire.image.SimpleImage;
 import org.jwildfire.swing.ErrorHandler;
+import org.jwildfire.swing.ImageFileChooser;
 import org.jwildfire.swing.ImagePanel;
 import org.jwildfire.swing.SWFFileChooser;
 
@@ -193,10 +195,11 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
       swfAnimatorFromFrameREd = pSWFAnimatorFromFrameREd;
       swfAnimatorToFrameREd = pSWFAnimatorToFrameREd;
 
+      swfAnimatorOutputCmb.addItem(OutputFormat.FLAMES);
       swfAnimatorOutputCmb.addItem(OutputFormat.PNG);
       swfAnimatorOutputCmb.addItem(OutputFormat.SWF);
       swfAnimatorOutputCmb.addItem(OutputFormat.SWF_AND_PNG);
-      swfAnimatorOutputCmb.setSelectedItem(OutputFormat.SWF_AND_PNG);
+      swfAnimatorOutputCmb.setSelectedItem(OutputFormat.PNG);
 
       int frameCount = prefs.getTinaRenderMovieFrames();
       swfAnimatorFrameSlider.setValue(1);
@@ -551,7 +554,7 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
 
     OutputFormat outputFormat = (OutputFormat) swfAnimatorOutputCmb.getSelectedItem();
     if (outputFormat == null) {
-      outputFormat = OutputFormat.SWF;
+      outputFormat = OutputFormat.PNG;
     }
     currMovie.setGlobalScript1(globalScript1);
     currMovie.setGlobalScript2(globalScript2);
@@ -572,7 +575,19 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
 
   public void generateButton_clicked() {
     try {
-      JFileChooser chooser = new SWFFileChooser();
+      OutputFormat outputFormat = (OutputFormat) swfAnimatorOutputCmb.getSelectedItem();
+      JFileChooser chooser;
+      switch (outputFormat) {
+        case FLAMES:
+          chooser = new FlameFileChooser(prefs);
+          break;
+        case PNG:
+          chooser = new ImageFileChooser(Tools.FILEEXT_PNG);
+          break;
+        default:
+          chooser = new SWFFileChooser();
+      }
+
       if (prefs.getSwfPath() != null) {
         try {
           chooser.setCurrentDirectory(new File(prefs.getSwfPath()));
