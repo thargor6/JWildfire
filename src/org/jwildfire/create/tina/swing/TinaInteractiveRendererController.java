@@ -39,6 +39,7 @@ import org.jwildfire.base.Prefs;
 import org.jwildfire.base.ResolutionProfile;
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Flame;
+import org.jwildfire.create.tina.base.Stereo3dMode;
 import org.jwildfire.create.tina.io.FlameReader;
 import org.jwildfire.create.tina.io.FlameWriter;
 import org.jwildfire.create.tina.randomflame.RandomFlameGenerator;
@@ -248,35 +249,44 @@ public class TinaInteractiveRendererController implements IterationObserver {
   }
 
   public void renderButton_clicked() {
-    clearScreen();
-    ResolutionProfile resProfile = getResolutionProfile();
-    int width = resProfile.getWidth();
-    int height = resProfile.getHeight();
-    if (halveSizeButton.isSelected()) {
-      width /= 2;
-      height /= 2;
+    try {
+      clearScreen();
+      ResolutionProfile resProfile = getResolutionProfile();
+      int width = resProfile.getWidth();
+      int height = resProfile.getHeight();
+      if (halveSizeButton.isSelected()) {
+        width /= 2;
+        height /= 2;
+      }
+      RenderInfo info = new RenderInfo(width, height, RenderMode.INTERACTIVE);
+      Flame flame = getCurrFlame();
+      if (!Stereo3dMode.NONE.equals(flame.getStereo3dMode())) {
+        throw new Exception("Stereo3d-rendering isn't currently supported in the interactive-renderer. Please use the editor or the batch-renderer to create stereo3d-images");
+      }
+
+      double wScl = (double) info.getImageWidth() / (double) flame.getWidth();
+      double hScl = (double) info.getImageHeight() / (double) flame.getHeight();
+      flame.setPixelsPerUnit((wScl + hScl) * 0.5 * flame.getPixelsPerUnit());
+      flame.setWidth(info.getImageWidth());
+      flame.setHeight(info.getImageHeight());
+      flame.setSampleDensity(10);
+      info.setRenderHDR(prefs.isTinaSaveHDRInIR());
+      info.setRenderHDRIntensityMap(false);
+      if (flame.getBGColorRed() > 0 || flame.getBGColorGreen() > 0 || flame.getBGColorBlue() > 0) {
+        image.fillBackground(flame.getBGColorRed(), flame.getBGColorGreen(), flame.getBGColorBlue());
+      }
+      renderer = new FlameRenderer(flame, prefs, flame.isBGTransparency(), false);
+      renderer.registerIterationObserver(this);
+      sampleCount = 0;
+      renderStartTime = System.currentTimeMillis();
+      pausedRenderTime = 0;
+      threads = renderer.startRenderFlame(info);
+      state = State.RENDER;
+      enableControls();
     }
-    RenderInfo info = new RenderInfo(width, height, RenderMode.INTERACTIVE);
-    Flame flame = getCurrFlame();
-    double wScl = (double) info.getImageWidth() / (double) flame.getWidth();
-    double hScl = (double) info.getImageHeight() / (double) flame.getHeight();
-    flame.setPixelsPerUnit((wScl + hScl) * 0.5 * flame.getPixelsPerUnit());
-    flame.setWidth(info.getImageWidth());
-    flame.setHeight(info.getImageHeight());
-    flame.setSampleDensity(10);
-    info.setRenderHDR(prefs.isTinaSaveHDRInIR());
-    info.setRenderHDRIntensityMap(false);
-    if (flame.getBGColorRed() > 0 || flame.getBGColorGreen() > 0 || flame.getBGColorBlue() > 0) {
-      image.fillBackground(flame.getBGColorRed(), flame.getBGColorGreen(), flame.getBGColorBlue());
+    catch (Throwable ex) {
+      errorHandler.handleError(ex);
     }
-    renderer = new FlameRenderer(flame, prefs, flame.isBGTransparency(), false);
-    renderer.registerIterationObserver(this);
-    sampleCount = 0;
-    renderStartTime = System.currentTimeMillis();
-    pausedRenderTime = 0;
-    threads = renderer.startRenderFlame(info);
-    state = State.RENDER;
-    enableControls();
   }
 
   public void stopButton_clicked() {

@@ -670,6 +670,22 @@ public class JWFScriptController {
     sb.append("  flame.setHeight(" + pFlame.getHeight() + ");\n");
     sb.append("  flame.setPixelsPerUnit(" + Tools.doubleToString(pFlame.getPixelsPerUnit()) + ");\n");
     sb.append("  flame.setCamZoom(" + Tools.doubleToString(pFlame.getCamZoom()) + ");\n");
+    switch (pFlame.getPostSymmetryType()) {
+      case POINT:
+        sb.append("  flame.setPostSymmetryType(org.jwildfire.create.tina.base.PostSymmetryType." + pFlame.getPostSymmetryType().toString() + ");\n");
+        sb.append("  flame.setPostSymmetryOrder(" + pFlame.getPostSymmetryOrder() + ");\n");
+        sb.append("  flame.setPostSymmetryCentreX(" + Tools.doubleToString(pFlame.getPostSymmetryCentreX()) + ");\n");
+        sb.append("  flame.setPostSymmetryCentreY(" + Tools.doubleToString(pFlame.getPostSymmetryCentreY()) + ");\n");
+        break;
+      case X_AXIS:
+      case Y_AXIS:
+        sb.append("  flame.setPostSymmetryType(org.jwildfire.create.tina.base.PostSymmetryType." + pFlame.getPostSymmetryType().toString() + ");\n");
+        sb.append("  flame.setPostSymmetryDistance(" + Tools.doubleToString(pFlame.getPostSymmetryDistance()) + ");\n");
+        sb.append("  flame.setPostSymmetryRotation(" + Tools.doubleToString(pFlame.getPostSymmetryRotation()) + ");\n");
+        sb.append("  flame.setPostSymmetryCentreX(" + Tools.doubleToString(pFlame.getPostSymmetryCentreX()) + ");\n");
+        sb.append("  flame.setPostSymmetryCentreY(" + Tools.doubleToString(pFlame.getPostSymmetryCentreY()) + ");\n");
+        break;
+    }
 
     for (int i = 0; i < pFlame.getLayers().size(); i++) {
       Layer layer = pFlame.getLayers().get(i);
