@@ -25,6 +25,7 @@ import java.util.List;
 
 import org.jwildfire.base.QualityProfile;
 import org.jwildfire.base.ResolutionProfile;
+import org.jwildfire.base.mathlib.MathLib;
 import org.jwildfire.create.tina.animate.AnimAware;
 import org.jwildfire.create.tina.edit.Assignable;
 import org.jwildfire.create.tina.palette.RGBPalette;
@@ -140,6 +141,7 @@ public class Flame implements Assignable<Flame>, Serializable {
   private Stereo3dMode stereo3dMode = Stereo3dMode.NONE;
   private double stereo3dAngle = 1.6;
   private double stereo3dEyeDist = 0.032;
+  private double stereo3dFocalOffset = 0.5;
   private Stereo3dColor stereo3dLeftEyeColor = Stereo3dColor.RED;
   private Stereo3dColor stereo3dRightEyeColor = Stereo3dColor.CYAN;
   private Stereo3dPreview stereo3dPreview = Stereo3dPreview.ANAGLYPH;
@@ -546,6 +548,7 @@ public class Flame implements Assignable<Flame>, Serializable {
     stereo3dRightEyeColor = pFlame.stereo3dRightEyeColor;
     stereo3dInterpolatedImageCount = pFlame.stereo3dInterpolatedImageCount;
     stereo3dPreview = pFlame.stereo3dPreview;
+    stereo3dFocalOffset = pFlame.stereo3dFocalOffset;
 
     layers.clear();
     for (Layer layer : pFlame.getLayers()) {
@@ -605,7 +608,7 @@ public class Flame implements Assignable<Flame>, Serializable {
         (stereo3dMode != pFlame.stereo3dMode) || (fabs(stereo3dAngle - pFlame.stereo3dAngle) > EPSILON) ||
         (fabs(stereo3dEyeDist - pFlame.stereo3dEyeDist) > EPSILON) || (stereo3dLeftEyeColor != pFlame.stereo3dLeftEyeColor) ||
         (stereo3dRightEyeColor != pFlame.stereo3dRightEyeColor) || (stereo3dInterpolatedImageCount != pFlame.stereo3dInterpolatedImageCount) ||
-        (stereo3dPreview != pFlame.stereo3dPreview)) {
+        (stereo3dPreview != pFlame.stereo3dPreview) || (fabs(stereo3dFocalOffset - pFlame.stereo3dFocalOffset) > EPSILON)) {
       return false;
     }
     for (int i = 0; i < layers.size(); i++) {
@@ -983,5 +986,21 @@ public class Flame implements Assignable<Flame>, Serializable {
 
   public void setStereo3dPreview(Stereo3dPreview stereo3dPreview) {
     this.stereo3dPreview = stereo3dPreview;
+  }
+
+  public double getStereo3dFocalOffset() {
+    return stereo3dFocalOffset;
+  }
+
+  public void setStereo3dFocalOffset(double stereo3dFocalOffset) {
+    this.stereo3dFocalOffset = stereo3dFocalOffset;
+  }
+
+  public boolean isDOFActive() {
+    return fabs(getCamDOF()) > MathLib.EPSILON;
+  }
+
+  public boolean is3dProjectionRequired() {
+    return fabs(getCamYaw()) > EPSILON || fabs(getCamPitch()) > EPSILON || fabs(getCamPerspective()) > EPSILON || isDOFActive() || fabs(getDimishZ()) > EPSILON;
   }
 }

@@ -52,7 +52,7 @@ public class RandomFlameGeneratorList {
     registerRandomFlameGenerator(SubFlameRandomFlameGenerator.class);
     registerRandomFlameGenerator(SynthRandomFlameGenerator.class);
     registerRandomFlameGenerator(TentacleRandomFlameGenerator.class);
-    registerRandomFlameGenerator(WikimediaCommonsRandomFlameGenerator.class);
+    //    registerRandomFlameGenerator(WikimediaCommonsRandomFlameGenerator.class);
   }
 
   private static void registerRandomFlameGenerator(Class<? extends RandomFlameGenerator> pRandomFlameGenerator) {

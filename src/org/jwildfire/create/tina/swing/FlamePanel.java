@@ -583,11 +583,17 @@ public class FlamePanel extends ImagePanel {
               Flame flame = flameHolder.getFlame();
               // Move
               if (pLeftButton && !pRightButton) {
-                double cosa = cos(M_PI * (flame.getCamRoll()) / 180.0);
-                double sina = sin(M_PI * (flame.getCamRoll()) / 180.0);
-                double rcX = dx * cosa - dy * sina;
-                double rcY = dy * cosa + dx * sina;
-
+                double rcX, rcY;
+                if (flame.is3dProjectionRequired()) {
+                  rcX = dx;
+                  rcY = dy;
+                }
+                else {
+                  double cosa = cos(M_PI * (flame.getCamRoll()) / 180.0);
+                  double sina = sin(M_PI * (flame.getCamRoll()) / 180.0);
+                  rcX = dx * cosa - dy * sina;
+                  rcY = dy * cosa + dx * sina;
+                }
                 if (fineMovement) {
                   rcX *= 0.1;
                   rcY *= 0.1;

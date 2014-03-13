@@ -124,6 +124,7 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
     enableControl(data.stereo3dModeCmb, false);
     enableControl(data.stereo3dAngleREd, Stereo3dMode.NONE.equals(stereo3dMode));
     enableControl(data.stereo3dEyeDistREd, Stereo3dMode.NONE.equals(stereo3dMode));
+    enableControl(data.stereo3dFocalOffsetREd, Stereo3dMode.NONE.equals(stereo3dMode));
     enableControl(data.stereo3dLeftEyeColorCmb, !Stereo3dMode.ANAGLYPH.equals(stereo3dMode));
     enableControl(data.stereo3dRightEyeColorCmb, !Stereo3dMode.ANAGLYPH.equals(stereo3dMode));
     enableControl(data.stereo3dInterpolatedImageCountREd, !Stereo3dMode.INTERPOLATED_IMAGES.equals(stereo3dMode));
@@ -625,6 +626,8 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
       data.stereo3dAngleSlider.setValue(Tools.FTOI(getCurrFlame().getStereo3dAngle() * TinaController.SLIDER_SCALE_GAMMA_THRESHOLD));
       data.stereo3dEyeDistREd.setText(Tools.doubleToString(getCurrFlame().getStereo3dEyeDist()));
       data.stereo3dEyeDistSlider.setValue(Tools.FTOI(getCurrFlame().getStereo3dEyeDist() * TinaController.SLIDER_SCALE_GAMMA_THRESHOLD));
+      data.stereo3dFocalOffsetREd.setText(Tools.doubleToString(getCurrFlame().getStereo3dFocalOffset()));
+      data.stereo3dFocalOffsetSlider.setValue(Tools.FTOI(getCurrFlame().getStereo3dFocalOffset() * TinaController.SLIDER_SCALE_GAMMA_THRESHOLD));
       data.stereo3dLeftEyeColorCmb.setSelectedItem(getCurrFlame().getStereo3dLeftEyeColor());
       data.stereo3dRightEyeColorCmb.setSelectedItem(getCurrFlame().getStereo3dRightEyeColor());
       data.stereo3dInterpolatedImageCountREd.setText(String.valueOf(getCurrFlame().getStereo3dInterpolatedImageCount()));
@@ -1222,6 +1225,14 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
 
   public void stereo3dEyeDistSlider_changed(ChangeEvent e) {
     flameSliderChanged(data.stereo3dEyeDistSlider, data.stereo3dEyeDistREd, "stereo3dEyeDist", TinaController.SLIDER_SCALE_GAMMA_THRESHOLD);
+  }
+
+  public void stereo3dFocalOffsetREd_changed() {
+    flameTextFieldChanged(data.stereo3dFocalOffsetSlider, data.stereo3dFocalOffsetREd, "stereo3dFocalOffset", TinaController.SLIDER_SCALE_GAMMA_THRESHOLD);
+  }
+
+  public void stereo3dFocalOffsetSlider_changed(ChangeEvent e) {
+    flameSliderChanged(data.stereo3dFocalOffsetSlider, data.stereo3dFocalOffsetREd, "stereo3dFocalOffset", TinaController.SLIDER_SCALE_GAMMA_THRESHOLD);
   }
 
   public void stereo3dInterpolatedImageCountREd_changed() {

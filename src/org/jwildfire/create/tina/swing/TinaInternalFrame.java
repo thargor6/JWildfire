@@ -4135,7 +4135,7 @@ public class TinaInternalFrame extends JInternalFrame {
         getPostSymmetryOrderREd(), getPostSymmetryOrderSlider(), getPostSymmetryCentreXREd(), getPostSymmetryCentreXSlider(), getPostSymmetryCentreYREd(),
         getPostSymmetryCentreYSlider(), getStereo3dModeCmb(), getStereo3dAngleREd(), getStereo3dAngleSlider(), getStereo3dEyeDistREd(),
         getStereo3dEyeDistSlider(), getStereo3dLeftEyeColorCmb(), getStereo3dRightEyeColorCmb(), getStereo3dInterpolatedImageCountREd(),
-        getStereo3dInterpolatedImageCountSlider(), getStereo3dPreviewCmb());
+        getStereo3dInterpolatedImageCountSlider(), getStereo3dPreviewCmb(), getStereo3dFocalOffsetREd(), getStereo3dFocalOffsetSlider());
 
     tinaController = new TinaController(params);
 
@@ -9312,6 +9312,8 @@ public class TinaInternalFrame extends JInternalFrame {
   private JComboBox swfAnimatorXFormScript2Cmb;
   private JComboBox stereo3dPreviewCmb;
   private JLabel lblPreviewMode;
+  private JWFNumberField stereo3dFocalOffsetREd;
+  private JSlider stereo3dFocalOffsetSlider;
 
   /**
    * This method initializes renderBatchJobsScrollPane	
@@ -16301,7 +16303,7 @@ public class TinaInternalFrame extends JInternalFrame {
       lblImageCount.setName("lblImageCount");
       lblImageCount.setLocation(new Point(488, 2));
       lblImageCount.setFont(new Font("Dialog", Font.BOLD, 10));
-      lblImageCount.setBounds(437, 54, 94, 22);
+      lblImageCount.setBounds(437, 81, 94, 22);
       panel_82.add(lblImageCount);
 
       stereo3dInterpolatedImageCountREd = new JWFNumberField();
@@ -16319,7 +16321,7 @@ public class TinaInternalFrame extends JInternalFrame {
       stereo3dInterpolatedImageCountREd.setLinkedLabelControlName("lblImageCount");
       stereo3dInterpolatedImageCountREd.setFont(new Font("Dialog", Font.PLAIN, 10));
       stereo3dInterpolatedImageCountREd.setEditable(true);
-      stereo3dInterpolatedImageCountREd.setBounds(533, 54, 100, 24);
+      stereo3dInterpolatedImageCountREd.setBounds(533, 81, 100, 24);
       stereo3dInterpolatedImageCountREd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           if (tinaController != null) {
@@ -16343,7 +16345,7 @@ public class TinaInternalFrame extends JInternalFrame {
       stereo3dInterpolatedImageCountSlider.setMaximum(24);
       stereo3dInterpolatedImageCountSlider.setLocation(new Point(686, 2));
       stereo3dInterpolatedImageCountSlider.setFont(new Font("Dialog", Font.BOLD, 10));
-      stereo3dInterpolatedImageCountSlider.setBounds(635, 54, 220, 24);
+      stereo3dInterpolatedImageCountSlider.setBounds(635, 81, 220, 24);
       stereo3dInterpolatedImageCountSlider.addMouseListener(new MouseAdapter() {
         @Override
         public void mousePressed(MouseEvent e) {
@@ -16425,7 +16427,7 @@ public class TinaInternalFrame extends JInternalFrame {
       stereo3dLeftEyeColorCmb.setPreferredSize(new Dimension(125, 22));
       stereo3dLeftEyeColorCmb.setLocation(new Point(100, 4));
       stereo3dLeftEyeColorCmb.setFont(new Font("Dialog", Font.BOLD, 10));
-      stereo3dLeftEyeColorCmb.setBounds(533, 6, 100, 24);
+      stereo3dLeftEyeColorCmb.setBounds(533, 31, 100, 24);
       stereo3dLeftEyeColorCmb.addItemListener(new ItemListener() {
         public void itemStateChanged(ItemEvent e) {
           if (tinaController != null) {
@@ -16442,7 +16444,7 @@ public class TinaInternalFrame extends JInternalFrame {
       lblLeftEyeColor.setPreferredSize(new Dimension(94, 22));
       lblLeftEyeColor.setLocation(new Point(488, 2));
       lblLeftEyeColor.setFont(new Font("Dialog", Font.BOLD, 10));
-      lblLeftEyeColor.setBounds(437, 6, 94, 22);
+      lblLeftEyeColor.setBounds(437, 31, 94, 22);
       panel_82.add(lblLeftEyeColor);
 
       stereo3dRightEyeColorCmb = new JComboBox();
@@ -16450,7 +16452,7 @@ public class TinaInternalFrame extends JInternalFrame {
       stereo3dRightEyeColorCmb.setPreferredSize(new Dimension(125, 22));
       stereo3dRightEyeColorCmb.setLocation(new Point(100, 4));
       stereo3dRightEyeColorCmb.setFont(new Font("Dialog", Font.BOLD, 10));
-      stereo3dRightEyeColorCmb.setBounds(532, 31, 100, 24);
+      stereo3dRightEyeColorCmb.setBounds(532, 56, 100, 24);
       stereo3dRightEyeColorCmb.addItemListener(new ItemListener() {
         public void itemStateChanged(ItemEvent e) {
           if (tinaController != null) {
@@ -16467,10 +16469,74 @@ public class TinaInternalFrame extends JInternalFrame {
       lblRightEyeColor.setPreferredSize(new Dimension(94, 22));
       lblRightEyeColor.setLocation(new Point(488, 2));
       lblRightEyeColor.setFont(new Font("Dialog", Font.BOLD, 10));
-      lblRightEyeColor.setBounds(436, 31, 94, 22);
+      lblRightEyeColor.setBounds(436, 56, 94, 22);
       panel_82.add(lblRightEyeColor);
       panel_82.add(getStereo3dPreviewCmb());
       panel_82.add(getLblPreviewMode());
+
+      stereo3dFocalOffsetREd = new JWFNumberField();
+      stereo3dFocalOffsetREd.setValueStep(0.05);
+      stereo3dFocalOffsetREd.setText("");
+      stereo3dFocalOffsetREd.setSize(new Dimension(100, 24));
+      stereo3dFocalOffsetREd.setPreferredSize(new Dimension(100, 24));
+      stereo3dFocalOffsetREd.setMinValue(-10000.0);
+      stereo3dFocalOffsetREd.setMaxValue(10000.0);
+      stereo3dFocalOffsetREd.setLocation(new Point(584, 2));
+      stereo3dFocalOffsetREd.setLinkedMotionControlName("stereo3dFocalOffsetSlider");
+      stereo3dFocalOffsetREd.setLinkedLabelControlName("lblFocalOffset");
+      stereo3dFocalOffsetREd.setHasMinValue(true);
+      stereo3dFocalOffsetREd.setHasMaxValue(true);
+      stereo3dFocalOffsetREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      stereo3dFocalOffsetREd.setEditable(true);
+      stereo3dFocalOffsetREd.setBounds(102, 81, 100, 24);
+      stereo3dFocalOffsetREd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null) {
+            if (!stereo3dFocalOffsetREd.isMouseAdjusting() || stereo3dFocalOffsetREd.getMouseChangeCount() == 0) {
+              if (!stereo3dFocalOffsetSlider.getValueIsAdjusting()) {
+                tinaController.saveUndoPoint();
+              }
+            }
+            tinaController.getFlameControls().stereo3dFocalOffsetREd_changed();
+          }
+        }
+      });
+      panel_82.add(stereo3dFocalOffsetREd);
+
+      JLabel lblFocalOffset = new JLabel();
+      lblFocalOffset.setText("Focal offset");
+      lblFocalOffset.setSize(new Dimension(94, 22));
+      lblFocalOffset.setPreferredSize(new Dimension(94, 22));
+      lblFocalOffset.setName("lblFocalOffset");
+      lblFocalOffset.setLocation(new Point(488, 2));
+      lblFocalOffset.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblFocalOffset.setBounds(6, 81, 94, 22);
+      panel_82.add(lblFocalOffset);
+
+      stereo3dFocalOffsetSlider = new JSlider();
+      stereo3dFocalOffsetSlider.setValue(0);
+      stereo3dFocalOffsetSlider.setSize(new Dimension(220, 19));
+      stereo3dFocalOffsetSlider.setPreferredSize(new Dimension(220, 19));
+      stereo3dFocalOffsetSlider.setName("stereo3dFocalOffsetSlider");
+      stereo3dFocalOffsetSlider.setMinimum(-30000);
+      stereo3dFocalOffsetSlider.setMaximum(30000);
+      stereo3dFocalOffsetSlider.setLocation(new Point(686, 2));
+      stereo3dFocalOffsetSlider.setFont(new Font("Dialog", Font.BOLD, 10));
+      stereo3dFocalOffsetSlider.setBounds(204, 81, 220, 24);
+      stereo3dFocalOffsetSlider.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mousePressed(MouseEvent e) {
+          tinaController.saveUndoPoint();
+        }
+      });
+      stereo3dFocalOffsetSlider.addChangeListener(new javax.swing.event.ChangeListener() {
+        public void stateChanged(javax.swing.event.ChangeEvent e) {
+          if (tinaController != null) {
+            tinaController.getFlameControls().stereo3dFocalOffsetSlider_changed(e);
+          }
+        }
+      });
+      panel_82.add(stereo3dFocalOffsetSlider);
     }
     return panel_82;
   }
@@ -16550,7 +16616,7 @@ public class TinaInternalFrame extends JInternalFrame {
       stereo3dPreviewCmb.setPreferredSize(new Dimension(125, 22));
       stereo3dPreviewCmb.setLocation(new Point(100, 4));
       stereo3dPreviewCmb.setFont(new Font("Dialog", Font.BOLD, 10));
-      stereo3dPreviewCmb.setBounds(102, 81, 100, 24);
+      stereo3dPreviewCmb.setBounds(533, 6, 100, 24);
       stereo3dPreviewCmb.addItemListener(new ItemListener() {
         public void itemStateChanged(ItemEvent e) {
           if (tinaController != null) {
@@ -16570,9 +16636,17 @@ public class TinaInternalFrame extends JInternalFrame {
       lblPreviewMode.setPreferredSize(new Dimension(94, 22));
       lblPreviewMode.setLocation(new Point(488, 2));
       lblPreviewMode.setFont(new Font("Dialog", Font.BOLD, 10));
-      lblPreviewMode.setBounds(6, 81, 94, 22);
+      lblPreviewMode.setBounds(437, 6, 94, 22);
     }
     return lblPreviewMode;
+  }
+
+  public JWFNumberField getStereo3dFocalOffsetREd() {
+    return stereo3dFocalOffsetREd;
+  }
+
+  public JSlider getStereo3dFocalOffsetSlider() {
+    return stereo3dFocalOffsetSlider;
   }
 } //  @jve:decl-index=0:visual-constraint="10,10"
 

@@ -307,4 +307,6 @@ public class TinaControllerData {
   public JWFNumberField stereo3dInterpolatedImageCountREd;
   public JSlider stereo3dInterpolatedImageCountSlider;
   public JComboBox stereo3dPreviewCmb;
+  public JWFNumberField stereo3dFocalOffsetREd;
+  public JSlider stereo3dFocalOffsetSlider;
 }

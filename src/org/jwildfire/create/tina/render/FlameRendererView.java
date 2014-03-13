@@ -23,7 +23,6 @@ import static org.jwildfire.base.mathlib.MathLib.exp;
 import static org.jwildfire.base.mathlib.MathLib.fabs;
 import static org.jwildfire.base.mathlib.MathLib.sin;
 
-import org.jwildfire.base.mathlib.MathLib;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.Stereo3dEye;
 import org.jwildfire.create.tina.base.XYZPoint;
@@ -73,17 +72,27 @@ public class FlameRendererView {
   protected void init3D() {
     double yaw = -flame.getCamYaw() * M_PI / 180.0;
     double pitch = flame.getCamPitch() * M_PI / 180.0;
-    cameraMatrix[0][0] = cos(yaw);
-    cameraMatrix[1][0] = -sin(yaw);
-    cameraMatrix[2][0] = 0;
-    cameraMatrix[0][1] = cos(pitch) * sin(yaw);
-    cameraMatrix[1][1] = cos(pitch) * cos(yaw);
-    cameraMatrix[2][1] = -sin(pitch);
-    cameraMatrix[0][2] = sin(pitch) * sin(yaw);
-    cameraMatrix[1][2] = sin(pitch) * cos(yaw);
+    double roll = flame.getCamRoll() * M_PI / 180.0;
+    cameraMatrix[0][0] = cos(yaw) * cos(roll) - sin(roll) * sin(yaw) * cos(pitch);
+    cameraMatrix[1][0] = -sin(yaw) * cos(roll) - cos(yaw) * cos(pitch) * sin(roll);
+    cameraMatrix[2][0] = sin(roll) * sin(pitch);
+    cameraMatrix[0][1] = cos(yaw) * sin(roll) + cos(roll) * sin(yaw) * cos(pitch);
+    cameraMatrix[1][1] = -sin(yaw) * sin(roll) + cos(yaw) * cos(pitch) * cos(roll);
+    cameraMatrix[2][1] = -cos(roll) * sin(pitch);
+    cameraMatrix[0][2] = sin(yaw) * sin(pitch);
+    cameraMatrix[1][2] = cos(yaw) * sin(pitch);
     cameraMatrix[2][2] = cos(pitch);
-    useDOF = fabs(flame.getCamDOF()) > MathLib.EPSILON;
-    doProject3D = fabs(flame.getCamYaw()) > EPSILON || fabs(flame.getCamPitch()) > EPSILON || fabs(flame.getCamPerspective()) > EPSILON || useDOF || fabs(flame.getDimishZ()) > EPSILON;
+    //    cameraMatrix[0][0] = cos(yaw);
+    //    cameraMatrix[1][0] = -sin(yaw);
+    //    cameraMatrix[2][0] = 0;
+    //    cameraMatrix[0][1] = cos(pitch) * sin(yaw);
+    //    cameraMatrix[1][1] = cos(pitch) * cos(yaw);
+    //    cameraMatrix[2][1] = -sin(pitch);
+    //    cameraMatrix[0][2] = sin(pitch) * sin(yaw);
+    //    cameraMatrix[1][2] = sin(pitch) * cos(yaw);
+    //    cameraMatrix[2][2] = cos(pitch);
+    useDOF = flame.isDOFActive();
+    doProject3D = flame.is3dProjectionRequired();
     legacyDOF = !flame.isNewCamDOF();
     camDOF_10 = 0.1 * flame.getCamDOF();
   }
@@ -116,10 +125,18 @@ public class FlameRendererView {
     bws = (rasterWidth - 0.5) * Xsize;
     bhs = (rasterHeight - 0.5) * Ysize;
 
-    cosa = cos(-M_PI * (flame.getCamRoll()) / 180.0);
-    sina = sin(-M_PI * (flame.getCamRoll()) / 180.0);
-    rcX = flame.getCentreX() * (1 - cosa) - flame.getCentreY() * sina - camX0;
-    rcY = flame.getCentreY() * (1 - cosa) + flame.getCentreX() * sina - camY0;
+    if (!doProject3D) {
+      cosa = cos(-M_PI * (flame.getCamRoll()) / 180.0);
+      sina = sin(-M_PI * (flame.getCamRoll()) / 180.0);
+      rcX = flame.getCentreX() * (1 - cosa) - flame.getCentreY() * sina - camX0;
+      rcY = flame.getCentreY() * (1 - cosa) + flame.getCentreX() * sina - camY0;
+    }
+    else {
+      cosa = 1.0;
+      sina = 0.0;
+      rcX = -camX0;
+      rcY = -camY0;
+    }
   }
 
   public boolean project(XYZPoint pPoint, XYZProjectedPoint pProjectedPoint) {

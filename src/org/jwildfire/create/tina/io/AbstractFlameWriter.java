@@ -210,6 +210,7 @@ public class AbstractFlameWriter {
       attrList.add(xb.createAttr(AbstractFlameReader.ATTR_STEREO3D_MODE, pFlame.getStereo3dMode().toString()));
       attrList.add(xb.createAttr(AbstractFlameReader.ATTR_STEREO3D_ANGLE, pFlame.getStereo3dAngle()));
       attrList.add(xb.createAttr(AbstractFlameReader.ATTR_STEREO3D_EYE_DIST, pFlame.getStereo3dEyeDist()));
+      attrList.add(xb.createAttr(AbstractFlameReader.ATTR_STEREO3D_FOCAL_OFFSET, pFlame.getStereo3dFocalOffset()));
       if (pFlame.getStereo3dMode() == Stereo3dMode.ANAGLYPH) {
         attrList.add(xb.createAttr(AbstractFlameReader.ATTR_STEREO3D_LEFT_EYE_COLOR, pFlame.getStereo3dLeftEyeColor().toString()));
         attrList.add(xb.createAttr(AbstractFlameReader.ATTR_STEREO3D_RIGHT_EYE_COLOR, pFlame.getStereo3dRightEyeColor().toString()));

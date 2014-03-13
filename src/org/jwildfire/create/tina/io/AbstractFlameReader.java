@@ -101,6 +101,7 @@ public class AbstractFlameReader {
   public static final String ATTR_STEREO3D_MODE = "stereo3d_mode";
   public static final String ATTR_STEREO3D_ANGLE = "stereo3d_angle";
   public static final String ATTR_STEREO3D_EYE_DIST = "stereo3d_eye_dist";
+  public static final String ATTR_STEREO3D_FOCAL_OFFSET = "stereo3d_focal_offset";
   public static final String ATTR_STEREO3D_LEFT_EYE_COLOR = "stereo3d_left_eye_color";
   public static final String ATTR_STEREO3D_RIGHT_EYE_COLOR = "stereo3d_right_eye_color";
   public static final String ATTR_STEREO3D_INTERPOLATED_IMAGE_COUNT = "stereo3d_interpolated_image_count";
@@ -398,6 +399,9 @@ public class AbstractFlameReader {
     }
     if ((hs = atts.get(ATTR_STEREO3D_EYE_DIST)) != null) {
       pFlame.setStereo3dEyeDist(Double.parseDouble(hs));
+    }
+    if ((hs = atts.get(ATTR_STEREO3D_FOCAL_OFFSET)) != null) {
+      pFlame.setStereo3dFocalOffset(Double.parseDouble(hs));
     }
     if ((hs = atts.get(ATTR_STEREO3D_LEFT_EYE_COLOR)) != null) {
       try {
