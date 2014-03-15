@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<shortcuts>
+  <skipIfNotSupported/>
+  <programGroup defaultName="JWildfire" location="applications"/>
+  <shortcut os="windows" name="JWildfire" target="$INSTALL_PATH/JWildfire.exe" 
+  commandLine="" workingDirectory="$INSTALL_PATH/" description="Launch JWildfire" 
+  initialState="normal"  programGroup="yes" desktop="yes" applications="yes" 
+  startMenu="yes" startup="no">
+  <createForPack name="Main program files"/>
+ </shortcut>
+</shortcuts>

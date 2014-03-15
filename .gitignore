@@ -15,6 +15,7 @@ gitlog.sh
 .classpath
 bin/*
 build/dist/*
+build/installer/*
 tptpParseError.log
 src/odk/*
 build/j-wildfire/*
@@ -37,4 +38,3 @@ build/JWildfire.exe
 src/org/jocl/samples
 FasterMath*
 MathTest*
-AbstractControlsDelegate*

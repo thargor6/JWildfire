@@ -1,0 +1,89 @@
+<izpack:installation version="5.0"
+                     xmlns:izpack="http://izpack.org/schema/installation"
+                     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                     xsi:schemaLocation="http://izpack.org/schema/installation http://izpack.org/schema/5.0/izpack-installation-5.0.xsd">
+ 
+  <info>
+    <appname>JWildfire</appname>
+    <appversion>1.40</appversion>
+    <appsubpath>JWildfire</appsubpath>
+    <javaversion>1.7</javaversion>
+    <url>http://jwildfire.org/</url>
+    <authors>
+      <author name="Andreas Maschke" email="thargor6@googlemail.com"/>
+    </authors>
+    <uninstaller write="yes" />
+  </info>
+ 
+  <resources>
+    <res id="InfoPanel.info" src="README!!!.txt"/>
+    <res id="shortcutSpec.xml" src="../../jwildfire_izpack_shortcuts.xml"/>
+  </resources>
+ 
+ <natives>
+    <native type="izpack" name="ShellLink.dll"/>
+    <native type="izpack" name="ShellLink_x64.dll"/>
+</natives>
+
+  <locale>
+    <langpack iso3="eng"/>
+    <langpack iso3="fra"/>
+    <langpack iso3="spa"/>
+  </locale>
+ 
+  <guiprefs width="640" height="400" resizable="no">
+    <laf name="nimbus">
+      <os family="windows" />    
+      <os family="unix" />    
+      <os family="mac" />          
+    </laf>
+    <modifier key="headingFontSize" value="2.0"/>
+    <splash>../../src/org/jwildfire/swing/welcomescreen/logo.png</splash>
+    <modifier key="useHeadingPanel" value="yes" />
+  </guiprefs>
+ 
+  <panels>
+    <panel classname="HelloPanel"/>
+    <panel classname="InfoPanel"/>
+    <panel classname="TargetPanel"/>
+    <panel classname="PacksPanel"/>
+    <panel classname="InstallPanel"/>
+    <panel classname="ShortcutPanel"/>
+    <panel classname="FinishPanel"/>
+  </panels>
+ 
+  <packs>
+    <pack name="Main program files" required="yes">
+      <description>The core files needed for the application</description>
+
+      <singlefile src="lib/j-wildfire.jar" target="$INSTALL_PATH/lib/j-wildfire.jar"/>
+      <singlefile src="CHANGES.txt" target="$INSTALL_PATH/CHANGES.txt"/>
+      <singlefile src="j-wildfire-launcher.jar" target="$INSTALL_PATH/j-wildfire-launcher.jar"/>
+      <singlefile src="README_LAUNCH.txt" target="$INSTALL_PATH/README_LAUNCH.txt"/>
+      <singlefile src="README_SUPPORT.txt" target="$INSTALL_PATH/README_SUPPORT.txt"/>
+      <singlefile src="README!!!.txt" target="$INSTALL_PATH/README!!!.txt"/>
+
+      <singlefile src="JWildfire.exe" target="$INSTALL_PATH/JWildfire.exe">
+        <os family="windows" />    
+      </singlefile>
+      <singlefile src="start_windows.bat" target="$INSTALL_PATH/start_windows.bat">
+        <os family="windows" />    
+      </singlefile>
+      <singlefile src="start_linux.sh" target="$INSTALL_PATH/start_linux.sh">
+        <os family="unix" />    
+      </singlefile>
+      <singlefile src="start_mac.command" target="$INSTALL_PATH/start_mac.command">
+        <os family="mac" />    
+      </singlefile>
+
+    </pack>
+    
+    <pack name="JWildfire applet" required="no" preselected="true">
+      <description>An optional program to play around</description>
+      <singlefile src="j-wildfire-applet.jar" target="$INSTALL_PATH/j-wildfire-applet.jar"/>
+      <singlefile src="README_APPLET.txt" target="$INSTALL_PATH/README_APPLET.txt"/>
+    </pack>
+    
+  </packs>
+
+</izpack:installation>
