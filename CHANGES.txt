@@ -1,3 +1,21 @@
+V1.40 (15.03.2014):
+ - comprehensive support for stereo3d-rendering with many options and major improvements/refactoring of the rendering-engine "under the hood" 
+ - the software comes now with an IzPack-based (http://izpack.org/) installer which should work on all platforms 
+ - as Java version 8 will come out soon, the minimum requirements of JWildfire were increased to Java 7, i.e. it is optimized for Java 7 or higher
+ - changed the camera handling: in 3d-flames there is now a real 3d camera, in 2d flames there is a 2d-camera. (In previous releases there was a "mixed" mode of 2D camera roll and 3D pith and yaw, as introduced by the famous "3d hack" invented by Zueuk)
+ - added post-symmetry-support for the script-from-flame-generator
+ - made the "layer-append-mode"-indicator smaller and aligned it to the bottom-right-corner
+ - renamed the "JWFMovie Maker" into "Easy Movie Maker"
+ - new output type FLAMES in Easy movie maker (for just generating flames)
+ - removed the ROTATE_PITCH_YAW script from the movie maker
+ - now there are 5 global and 5 xform scripts in the movie maker which can be combined
+ - new transform-scripts ROTATE_FINAL_XFORM and ROTATE_FINAL_XFORM_NEG for the Easy Movie Maker
+ - change the aspect-ration of the preview when changing the resolution in the Easy Movie Maker
+ - new "onion2" and "line" variations by chronologicaldot
+ - iteration-limit for "truchet"-variation (could otherwise take "endless" time under certain conditions)
+ - fixed a bug regarding the sample-count-calculation when using post-symmetry
+ - removed the JWildfireC sub project (will be replaced by some OpenCL-based stuff later)
+
 V1.30 (02.03.2014):
  - New concept of "post-symmetries". A post symmetry is something like a "final transform after a final transform". 
  But unlike to a ordinary final transform it can clone samples and modify those clones, making it very efficient to create fractals with certain symmetry.
