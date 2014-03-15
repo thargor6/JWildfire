@@ -3,6 +3,8 @@
 <project name="JWildfire" basedir="." default="packageDist">
 
   <property name="dist.dir" location="build/dist" />
+  <property name="izpack.dir" location="F:/DEV" />
+  <property name="installer.dir" location="build/installer" />
 	<property name="build.dir" location="build/classes" />
 	<property name="lib.dir" location="lib" />
 	<property name="src.dir" location="src/" />
@@ -15,6 +17,9 @@
 		<fileset dir="${lib.dir}">
 			<include name="*.jar" />
 		</fileset>
+    <fileset dir="${izpack.dir}/IzPack">
+      <include name="lib/*.jar" />
+    </fileset>		
 		<pathelement path="${build.dir}" />
 	</path>
 
@@ -25,27 +30,12 @@
     <delete dir="${dist.dir}" />
     <mkdir dir="${dist.dir}" />
 	</target>
-<!--
+
 	<target name="compile" depends="init" 
-	        description="Compile main source tree java files">
-		<javac destdir="${build.dir}"
-		       target="1.6"
-		       source="1.6"
-		       debug="true"
-		       deprecation="false"
-           encoding="ISO-8859-1"
-		       optimize="false"
-		       failonerror="true">
-			<src path="${src.dir}" />
-			<classpath refid="build.classpath" />
-		</javac>
-	</target>
--->
-  <target name="compile" depends="init" 
           description="Compile main source tree java files">
     <javac destdir="${build.dir}"
-           target="1.6"
-           source="1.6"
+           target="1.7"
+           source="1.7"
            debug="false"
            deprecation="false"    	
            encoding="ISO-8859-1"
@@ -136,13 +126,7 @@
     <copy todir="${dist.dir}/">
        <fileset dir="build/launcher" includes="start_linux.sh start_windows.bat start_mac.command"/>
      </copy>    
-  	
-  	
-<!--  	
-    <copy todir="${dist.dir}/JWildfireC/">
-       <fileset dir="build/JWildfireC" />
-     </copy>
--->
+  	 	
   	<copy todir="${dist.dir}/">
        <fileset file="CHANGES.txt" />
        <fileset file="README_LAUNCH.txt" />
@@ -156,4 +140,11 @@
     </jar>
   </target>
 
+	 <taskdef name="izpack" classpathref="build.classpath" classname="com.izforge.izpack.ant.IzPackTask" />	
+	
+  <target name="izpack">
+	  <izpack input="jwildfire_izpack.xml"
+	    output="${installer.dir}/jwildfire-installer.jar" installerType="standard" inheritAll="true" basedir="${dist.dir}" izPackDir="${izpack.dir}/IzPack/" />
+  </target>
+	
 </project>
