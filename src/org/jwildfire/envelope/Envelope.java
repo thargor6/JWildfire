@@ -66,6 +66,14 @@ public class Envelope implements Serializable {
     y[0] = value;
   }
 
+  public Envelope(int[] pX, double pY[]) {
+    if (pX == null || pY == null || pX.length != pY.length) {
+      throw new IllegalArgumentException();
+    }
+    x = pX;
+    y = pY;
+  }
+
   public Envelope(double pValue, int pViewXMin, int pViewXMax, double pViewYMin, double pViewYMax) {
     x = new int[1];
     x[0] = 1;

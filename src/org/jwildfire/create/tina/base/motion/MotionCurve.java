@@ -14,7 +14,7 @@
   if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
   02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
-package org.jwildfire.create.tina.base;
+package org.jwildfire.create.tina.base.motion;
 
 import static org.jwildfire.base.mathlib.MathLib.EPSILON;
 import static org.jwildfire.base.mathlib.MathLib.fabs;
@@ -38,6 +38,16 @@ public class MotionCurve implements Serializable, Assignable<MotionCurve> {
   private boolean locked;
   private int[] x = new int[] {};
   private double[] y = new double[] {};
+  private MotionCurve parent;
+  private final MotionValueChangeHandler changeHandler;
+
+  public MotionCurve() {
+    changeHandler = DefaultMotionValueChangeHandler.INSTANCE;
+  }
+
+  public MotionCurve(MotionValueChangeHandler pChangeHandler) {
+    changeHandler = pChangeHandler;
+  }
 
   public void assignFromEnvelope(Envelope pEnvelope) {
     viewXMin = pEnvelope.getViewXMin();
@@ -95,6 +105,7 @@ public class MotionCurve implements Serializable, Assignable<MotionCurve> {
     System.arraycopy(pSrc.x, 0, x, 0, x.length);
     y = new double[pSrc.y.length];
     System.arraycopy(pSrc.y, 0, y, 0, y.length);
+    parent = pSrc.parent;
   }
 
   @Override
@@ -110,7 +121,9 @@ public class MotionCurve implements Serializable, Assignable<MotionCurve> {
         (fabs(viewXMax - pSrc.viewXMax) > EPSILON) || (fabs(viewYMin - pSrc.viewYMin) > EPSILON) ||
         (fabs(viewYMax - pSrc.viewYMax) > EPSILON) || (interpolation != pSrc.interpolation) ||
         (selectedIdx != pSrc.selectedIdx) || (locked != pSrc.locked) ||
-        (x.length != pSrc.x.length) || (y.length != pSrc.y.length)) {
+        (x.length != pSrc.x.length) || (y.length != pSrc.y.length) ||
+        (parent == null && pSrc.parent != null) || (parent != null && pSrc.parent == null) ||
+        (parent != null && pSrc.parent != null && !parent.isEqual(pSrc.parent))) {
       return false;
     }
     for (int i = 0; i < x.length; i++) {
@@ -128,5 +141,17 @@ public class MotionCurve implements Serializable, Assignable<MotionCurve> {
 
   public boolean isEmpty() {
     return x.length == 0;
+  }
+
+  public MotionCurve getParent() {
+    return parent;
+  }
+
+  public void setParent(MotionCurve parent) {
+    this.parent = parent;
+  }
+
+  public MotionValueChangeHandler getChangeHandler() {
+    return changeHandler;
   }
 }

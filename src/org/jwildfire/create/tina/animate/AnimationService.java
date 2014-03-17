@@ -24,8 +24,8 @@ import org.jwildfire.base.Prefs;
 import org.jwildfire.base.mathlib.MathLib;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.Layer;
-import org.jwildfire.create.tina.base.MotionCurve;
 import org.jwildfire.create.tina.base.XForm;
+import org.jwildfire.create.tina.base.motion.MotionCurve;
 import org.jwildfire.create.tina.render.FlameRenderer;
 import org.jwildfire.create.tina.render.RenderInfo;
 import org.jwildfire.create.tina.render.RenderMode;
@@ -33,11 +33,12 @@ import org.jwildfire.create.tina.render.RenderedFlame;
 import org.jwildfire.create.tina.transform.XFormTransformService;
 import org.jwildfire.create.tina.variation.Linear3DFunc;
 import org.jwildfire.envelope.Envelope;
+import org.jwildfire.envelope.Envelope.Interpolation;
 import org.jwildfire.image.SimpleImage;
 
 public class AnimationService {
 
-  public static Flame createFlame(Flame pFlame, GlobalScript pGlobalScripts[], double pGlobalTime, XFormScript pXFormScripts[], double pXFormTime, Prefs pPrefs) {
+  public static Flame createFlame0(Flame pFlame, GlobalScript pGlobalScripts[], double pGlobalTime, XFormScript pXFormScripts[], double pXFormTime, Prefs pPrefs) {
     Flame flame = pFlame.makeCopy();
     double camPitch = flame.getCamPitch();
     double camRoll = flame.getCamRoll();
@@ -201,10 +202,20 @@ public class AnimationService {
     return res.getImage();
   }
 
-  public static Flame createFrameFlame(int pFrame, int pFrames, Flame pFlame, GlobalScript pGlobalScripts[], MotionSpeed pGlobalSpeed, XFormScript[] pXFormScripts, MotionSpeed pXFormSpeed, int pWidth, int pHeight, Prefs pPrefs) throws Exception {
-    double globalTime = pGlobalSpeed.calcTime(pFrame, pFrames, true);
-    double xFormTime = pXFormSpeed.calcTime(pFrame, pFrames, true);
-    return createFlame(pFlame, pGlobalScripts, globalTime, pXFormScripts, xFormTime, pPrefs);
+  public static Flame createFrameFlame(int pFrame, int pFrameCount, Flame pFlame, GlobalScript pGlobalScripts[], MotionSpeed pGlobalSpeed, XFormScript[] pXFormScripts, MotionSpeed pXFormSpeed, int pWidth, int pHeight, Prefs pPrefs) throws Exception {
+    //    double globalTime = pGlobalSpeed.calcTime(pFrame, pFrames, true);
+    //    double xFormTime = pXFormSpeed.calcTime(pFrame, pFrames, true);
+    // TODO
+    //    return createFlame(pFlame, pGlobalScripts, globalTime, pXFormScripts, xFormTime, pPrefs);
+    Flame res = pFlame.makeCopy();
+    for (GlobalScript script : pGlobalScripts) {
+      AnimationService.addMotionCurve(res, script, pFrame, pFrameCount);
+    }
+    for (XFormScript script : pXFormScripts) {
+      AnimationService.addMotionCurve(res, script, pFrame, pFrameCount);
+    }
+    res.setFrame(pFrame);
+    return res;
   }
 
   public static <T> double getPropertyValue(T pSource, String pName) {
@@ -294,10 +305,16 @@ public class AnimationService {
       if (field.getType() == MotionCurve.class && field.getName().endsWith(CURVE_POSTFIX)) {
         MotionCurve curve = (MotionCurve) field.get(pObject);
         if (curve.isEnabled()) {
-          Envelope envelope = curve.toEnvelope();
-          double value = envelope.evaluate(pFrame);
+          MotionCurve currCurve = curve;
+          double value = 0.0;
+          while (currCurve != null) {
+            Envelope envelope = curve.toEnvelope();
+            value += envelope.evaluate(pFrame);
+            currCurve = currCurve.getParent();
+          }
           String propName = field.getName().substring(0, field.getName().length() - CURVE_POSTFIX.length());
-          setPropertyValue(pObject, propName, value);
+          curve.getChangeHandler().processValueChange(pObject, propName, value);
+          //setPropertyValue(pObject, propName, value);
           //          System.out.println(propName + " " + value);
         }
       }
@@ -307,6 +324,158 @@ public class AnimationService {
           _evalMotionCurves(child, pFrame);
         }
       }
+    }
+  }
+
+  public static void addMotionCurve(Flame pFlame, GlobalScript pScript, int pFrame, int pFrameCount) {
+    if (!GlobalScript.NONE.equals(pScript)) {
+      int envX[] = new int[2];
+      double envY[] = new double[2];
+      envX[0] = 0;
+      envY[0] = 0;
+      envX[1] = pFrameCount;
+      envY[1] = 360.0;
+      MotionCurve curve = null;
+      switch (pScript) {
+        case ROTATE_PITCH:
+          curve = pFlame.getCamPitchCurve();
+          break;
+        case ROTATE_PITCH_NEG:
+          curve = pFlame.getCamPitchCurve();
+          envY[1] = -envY[1];
+          break;
+        case ROTATE_ROLL:
+          curve = pFlame.getCamRollCurve();
+          break;
+        case ROTATE_ROLL_NEG:
+          curve = pFlame.getCamRollCurve();
+          envY[1] = -envY[1];
+          break;
+        case ROTATE_YAW:
+          curve = pFlame.getCamYawCurve();
+          break;
+        case ROTATE_YAW_NEG:
+          curve = pFlame.getCamYawCurve();
+          envY[1] = -envY[1];
+          break;
+        default:
+          throw new IllegalArgumentException(pScript.toString());
+      }
+      addEnvelope(pFrameCount, curve, envX, envY);
+    }
+  }
+
+  private static void addEnvelope(int pFrameCount, MotionCurve curve, int[] envX, double[] envY) {
+    Envelope envelope = new Envelope(envX, envY);
+    envelope.setViewXMin(-10);
+    envelope.setViewXMax(10 + pFrameCount);
+    envelope.setViewYMin(-400.0);
+    envelope.setViewYMax(400.0);
+    envelope.setInterpolation(Interpolation.LINEAR);
+    envelope.setSelectedIdx(0);
+
+    if (!curve.isEnabled()) {
+      curve.assignFromEnvelope(envelope);
+      curve.setEnabled(true);
+    }
+    else {
+      MotionCurve newParentCurve = new MotionCurve();
+      newParentCurve.setEnabled(true);
+      newParentCurve.assignFromEnvelope(envelope);
+      while (curve.getParent() != null) {
+        curve = curve.getParent();
+      }
+      curve.setParent(newParentCurve);
+    }
+  }
+
+  public static void addMotionCurve(Flame pFlame, XFormScript pScript, int pFrame, int pFrameCount) {
+    if (!XFormScript.NONE.equals(pScript)) {
+      for (Layer layer : pFlame.getLayers()) {
+        switch (pScript) {
+          case ROTATE_FULL: {
+            int idx = 0;
+            for (XForm xForm : layer.getXForms()) {
+              int envX[] = new int[2];
+              double envY[] = new double[2];
+              envX[0] = 0;
+              envY[0] = 0;
+              envX[1] = pFrameCount;
+              envY[1] = 360.0;
+              MotionCurve curve = xForm.getRotateCurve();
+              idx++;
+              if (idx % 2 == 0) {
+                envY[1] = -envY[1];
+              }
+              addEnvelope(pFrameCount, curve, envX, envY);
+            }
+          }
+            break;
+          case ROTATE_FIRST_XFORM:
+          case ROTATE_2ND_XFORM:
+          case ROTATE_3RD_XFORM:
+          case ROTATE_4TH_XFORM:
+          case ROTATE_5TH_XFORM:
+          case ROTATE_LAST_XFORM:
+          case ROTATE_FINAL_XFORM:
+          case ROTATE_FINAL_XFORM_NEG: {
+            XForm xForm = null;
+            xForm = getXForm(pScript, layer, xForm);
+
+            if (xForm != null) {
+              int envX[] = new int[2];
+              double envY[] = new double[2];
+              envX[0] = 0;
+              envY[0] = 0;
+              envX[1] = pFrameCount;
+              envY[1] = 360.0;
+              if (XFormScript.ROTATE_FINAL_XFORM_NEG.equals(pScript)) {
+                envY[1] = -envY[1];
+              }
+              MotionCurve curve = xForm.getRotateCurve();
+              addEnvelope(pFrameCount, curve, envX, envY);
+            }
+          }
+            break;
+
+          case ROTATE_SLIGHTLY: {
+            // TODO
+            //            double maxAngle = (++idx * 3.0) + 90;
+            //            double angle = maxAngle * pXFormTime;
+            //            angle = maxAngle * (1.0 - Math.cos(pXFormTime * 2.0 * Math.PI)) * 0.5;
+            //            if (idx % 2 == 0) {
+            //              angle = -angle;
+            //            }
+            //            XFormTransformService.rotate(xForm, angle);
+
+          }
+          default:
+            throw new IllegalArgumentException(pScript.toString());
+        }
+        break;
+      }
+    }
+  }
+
+  private static XForm getXForm(XFormScript pScript, Layer layer, XForm xForm) {
+    switch (pScript) {
+      case ROTATE_FIRST_XFORM:
+        return layer.getXForms().size() > 0 ? layer.getXForms().get(0) : null;
+      case ROTATE_2ND_XFORM:
+        return layer.getXForms().size() > 1 ? layer.getXForms().get(1) : null;
+      case ROTATE_3RD_XFORM:
+        return layer.getXForms().size() > 2 ? layer.getXForms().get(2) : null;
+      case ROTATE_4TH_XFORM:
+        return layer.getXForms().size() > 3 ? layer.getXForms().get(3) : null;
+      case ROTATE_5TH_XFORM:
+        return layer.getXForms().size() > 4 ? layer.getXForms().get(4) : null;
+      case ROTATE_LAST_XFORM:
+        return layer.getXForms().size() > 0 ? layer.getXForms().get(layer.getXForms().size() - 1) : null;
+      case ROTATE_FINAL_XFORM:
+      case ROTATE_FINAL_XFORM_NEG:
+        return layer.getFinalXForms().size() > 0 ? layer.getFinalXForms().get(0) : null;
+      default:
+        throw new IllegalArgumentException(pScript.toString());
     }
   }
 

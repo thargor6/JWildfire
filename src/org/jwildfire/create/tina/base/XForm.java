@@ -25,6 +25,11 @@ import java.util.List;
 
 import org.jwildfire.base.mathlib.MathLib;
 import org.jwildfire.create.tina.animate.AnimAware;
+import org.jwildfire.create.tina.base.motion.MotionCurve;
+import org.jwildfire.create.tina.base.motion.PostRotateMotionValueChangeHandler;
+import org.jwildfire.create.tina.base.motion.PostScaleMotionValueChangeHandler;
+import org.jwildfire.create.tina.base.motion.RotateMotionValueChangeHandler;
+import org.jwildfire.create.tina.base.motion.ScaleMotionValueChangeHandler;
 import org.jwildfire.create.tina.edit.Assignable;
 import org.jwildfire.create.tina.variation.FlameTransformationContext;
 import org.jwildfire.create.tina.variation.Variation;
@@ -84,6 +89,11 @@ public final class XForm implements Assignable<XForm>, Serializable {
   private final XForm[] nextAppliedXFormTable = new XForm[Constants.NEXT_APPLIED_XFORM_TABLE_SIZE];
   private DrawMode drawMode = DrawMode.NORMAL;
   private String name = "";
+
+  private final MotionCurve rotateCurve = new MotionCurve(RotateMotionValueChangeHandler.INSTANCE);
+  private final MotionCurve scaleCurve = new MotionCurve(ScaleMotionValueChangeHandler.INSTANCE);
+  private final MotionCurve postRotateCurve = new MotionCurve(PostRotateMotionValueChangeHandler.INSTANCE);
+  private final MotionCurve postScaleCurve = new MotionCurve(PostScaleMotionValueChangeHandler.INSTANCE);
 
   public XForm() {
     coeff00 = 1;
@@ -401,6 +411,10 @@ public final class XForm implements Assignable<XForm>, Serializable {
     postCoeff20Curve.assign(pXForm.postCoeff20Curve);
     postCoeff21 = pXForm.postCoeff21;
     postCoeff21Curve.assign(pXForm.postCoeff21Curve);
+    rotateCurve.assign(pXForm.rotateCurve);
+    scaleCurve.assign(pXForm.scaleCurve);
+    postRotateCurve.assign(pXForm.postRotateCurve);
+    postScaleCurve.assign(pXForm.postScaleCurve);
     hasPostCoeffs = pXForm.hasPostCoeffs;
     hasCoeffs = pXForm.hasCoeffs;
     variations.clear();
@@ -492,6 +506,8 @@ public final class XForm implements Assignable<XForm>, Serializable {
         (fabs(postCoeff11 - pSrc.postCoeff11) > EPSILON) || !postCoeff11Curve.isEqual(pSrc.postCoeff11Curve) ||
         (fabs(postCoeff20 - pSrc.postCoeff20) > EPSILON) || !postCoeff20Curve.isEqual(pSrc.postCoeff20Curve) ||
         (fabs(postCoeff21 - pSrc.postCoeff21) > EPSILON) || !postCoeff21Curve.isEqual(pSrc.postCoeff21Curve) ||
+        !rotateCurve.isEqual(pSrc.rotateCurve) || !scaleCurve.isEqual(pSrc.scaleCurve) ||
+        !postRotateCurve.isEqual(pSrc.postRotateCurve) || !postScaleCurve.isEqual(pSrc.postScaleCurve) ||
         (fabs(opacity - pSrc.opacity) > EPSILON) ||
         ((drawMode != null && pSrc.drawMode == null) || (drawMode == null && pSrc.drawMode != null) ||
         (drawMode != null && pSrc.drawMode != null && !drawMode.equals(pSrc.drawMode))) ||
@@ -539,5 +555,21 @@ public final class XForm implements Assignable<XForm>, Serializable {
       }
     }
     return false;
+  }
+
+  public MotionCurve getRotateCurve() {
+    return rotateCurve;
+  }
+
+  public MotionCurve getScaleCurve() {
+    return scaleCurve;
+  }
+
+  public MotionCurve getPostRotateCurve() {
+    return postRotateCurve;
+  }
+
+  public MotionCurve getPostScaleCurve() {
+    return postScaleCurve;
   }
 }

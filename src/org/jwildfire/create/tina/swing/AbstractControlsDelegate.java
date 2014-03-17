@@ -8,7 +8,7 @@ import javax.swing.JTabbedPane;
 import javax.swing.SwingUtilities;
 
 import org.jwildfire.create.tina.base.Flame;
-import org.jwildfire.create.tina.base.MotionCurve;
+import org.jwildfire.create.tina.base.motion.MotionCurve;
 import org.jwildfire.envelope.Envelope;
 
 public abstract class AbstractControlsDelegate {

@@ -27,6 +27,7 @@ import org.jwildfire.base.QualityProfile;
 import org.jwildfire.base.ResolutionProfile;
 import org.jwildfire.base.mathlib.MathLib;
 import org.jwildfire.create.tina.animate.AnimAware;
+import org.jwildfire.create.tina.base.motion.MotionCurve;
 import org.jwildfire.create.tina.edit.Assignable;
 import org.jwildfire.create.tina.palette.RGBPalette;
 import org.jwildfire.create.tina.render.filter.FilterKernelType;
@@ -1002,5 +1003,17 @@ public class Flame implements Assignable<Flame>, Serializable {
 
   public boolean is3dProjectionRequired() {
     return fabs(getCamYaw()) > EPSILON || fabs(getCamPitch()) > EPSILON || fabs(getCamPerspective()) > EPSILON || isDOFActive() || fabs(getDimishZ()) > EPSILON;
+  }
+
+  public MotionCurve getCamPitchCurve() {
+    return camPitchCurve;
+  }
+
+  public MotionCurve getCamRollCurve() {
+    return camRollCurve;
+  }
+
+  public MotionCurve getCamYawCurve() {
+    return camYawCurve;
   }
 }

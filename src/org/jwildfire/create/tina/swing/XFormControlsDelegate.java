@@ -20,8 +20,8 @@ import javax.swing.JTabbedPane;
 
 import org.jwildfire.create.tina.animate.AnimationService;
 import org.jwildfire.create.tina.base.DrawMode;
-import org.jwildfire.create.tina.base.MotionCurve;
 import org.jwildfire.create.tina.base.XForm;
+import org.jwildfire.create.tina.base.motion.MotionCurve;
 
 public class XFormControlsDelegate extends AbstractControlsDelegate {
 

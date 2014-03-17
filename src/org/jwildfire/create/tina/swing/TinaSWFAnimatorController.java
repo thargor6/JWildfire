@@ -52,7 +52,6 @@ import org.jwildfire.create.tina.animate.AnimationService;
 import org.jwildfire.create.tina.animate.FlameMovie;
 import org.jwildfire.create.tina.animate.FlameMoviePart;
 import org.jwildfire.create.tina.animate.GlobalScript;
-import org.jwildfire.create.tina.animate.MotionSpeed;
 import org.jwildfire.create.tina.animate.OutputFormat;
 import org.jwildfire.create.tina.animate.SWFAnimationRenderThread;
 import org.jwildfire.create.tina.animate.SWFAnimationRenderThreadController;
@@ -767,6 +766,7 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
     Flame flame = currMovie.getFlame(frame);
     if (flame != null) {
       prepareFlame(flame);
+
       boolean oldNoRefresh = noRefresh;
       noRefresh = true;
       try {
@@ -791,8 +791,18 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
       XFormScript xFormScripts[] = { xFormScript1, xFormScript2, xFormScript3, xFormScript4, xFormScript5 };
 
       try {
-        double time = MotionSpeed.S1_1.calcTime(frame, frameCount, true);
-        return AnimationService.createFlame(flame, globalScripts, time, xFormScripts, time, prefs);
+        // TODO
+        //        double time = MotionSpeed.S1_1.calcTime(frame, frameCount, true);
+        //        Flame res = AnimationService.createFlame(flame, globalScripts, time, xFormScripts, time, prefs);
+        Flame res = flame.makeCopy();
+        for (GlobalScript script : globalScripts) {
+          AnimationService.addMotionCurve(res, script, frame, frameCount);
+        }
+        for (XFormScript script : xFormScripts) {
+          AnimationService.addMotionCurve(res, script, frame, frameCount);
+        }
+        res.setFrame(frame);
+        return res;
       }
       catch (Throwable ex) {
         ex.printStackTrace();

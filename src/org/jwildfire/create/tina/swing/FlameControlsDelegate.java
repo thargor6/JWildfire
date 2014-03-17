@@ -28,13 +28,13 @@ import javax.swing.event.ChangeEvent;
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.animate.AnimationService;
 import org.jwildfire.create.tina.base.Flame;
-import org.jwildfire.create.tina.base.MotionCurve;
 import org.jwildfire.create.tina.base.PostSymmetryType;
 import org.jwildfire.create.tina.base.Shading;
 import org.jwildfire.create.tina.base.ShadingInfo;
 import org.jwildfire.create.tina.base.Stereo3dColor;
 import org.jwildfire.create.tina.base.Stereo3dMode;
 import org.jwildfire.create.tina.base.Stereo3dPreview;
+import org.jwildfire.create.tina.base.motion.MotionCurve;
 
 public class FlameControlsDelegate extends AbstractControlsDelegate {
 
