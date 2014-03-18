@@ -25,7 +25,7 @@ public class FlameWriter {
     Tools.writeUTF8Textfile(pFilename, getFlameXML(pFlame));
   }
 
-  public String getFlameXML(Flame pFlame) {
+  public String getFlameXML(Flame pFlame) throws Exception {
     if (pFlame.getLayers().size() <= 1) {
       return new Flam3Writer().getFlameXML(pFlame);
     }

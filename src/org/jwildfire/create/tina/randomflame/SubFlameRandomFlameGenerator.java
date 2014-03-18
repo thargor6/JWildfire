@@ -29,7 +29,7 @@ import org.jwildfire.create.tina.variation.VariationFuncList;
 
 public class SubFlameRandomFlameGenerator extends RandomFlameGenerator {
 
-  public Flame embedFlame(Flame pSubFlame) {
+  public Flame embedFlame(Flame pSubFlame) throws Exception {
     Flame flame = new Flame();
     flame.assign(pSubFlame);
     Layer layer = flame.getFirstLayer();
@@ -112,7 +112,14 @@ public class SubFlameRandomFlameGenerator extends RandomFlameGenerator {
     RandomFlameGeneratorSampler sampler = new RandomFlameGeneratorSampler(IMG_WIDTH, IMG_HEIGHT, prefs, randGen, RandomSymmetryGeneratorList.NONE, palettePoints, fadePaletteColors, RandomBatchQuality.LOW);
     Flame subFlame = sampler.createSample().getFlame();
 
-    Flame flame = embedFlame(subFlame);
+    Flame flame;
+    try {
+      flame = embedFlame(subFlame);
+    }
+    catch (Exception e) {
+      e.printStackTrace();
+      throw new RuntimeException(e);
+    }
     flame.setCentreX(2);
     flame.setCentreY(1);
     flame.setCamPitch(0);

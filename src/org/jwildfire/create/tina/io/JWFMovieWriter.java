@@ -58,7 +58,7 @@ public class JWFMovieWriter {
   public static final String ATTR_SPATIAL_OVERSAMPLING = "spatial_oversampling";
   public static final String ATTR_QUALITY = "quality";
 
-  public String getMovieXML(FlameMovie pMovie) {
+  public String getMovieXML(FlameMovie pMovie) throws Exception {
     SimpleXMLBuilder xb = new SimpleXMLBuilder();
     // Flame
     List<SimpleXMLBuilder.Attribute<?>> attrList = new ArrayList<SimpleXMLBuilder.Attribute<?>>();
@@ -92,7 +92,7 @@ public class JWFMovieWriter {
     return xb.buildXML();
   }
 
-  private void addPart(SimpleXMLBuilder pXB, FlameMoviePart pPart) {
+  private void addPart(SimpleXMLBuilder pXB, FlameMoviePart pPart) throws Exception {
     List<SimpleXMLBuilder.Attribute<?>> attrList = new ArrayList<SimpleXMLBuilder.Attribute<?>>();
     attrList.add(pXB.createAttr(ATTR_FRAME_COUNT, pPart.getFrameCount()));
     attrList.add(pXB.createAttr(ATTR_FRAME_MORPH_COUNT, pPart.getFrameMorphCount()));

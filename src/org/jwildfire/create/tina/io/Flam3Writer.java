@@ -24,7 +24,7 @@ import org.jwildfire.create.tina.base.XForm;
 
 public class Flam3Writer extends AbstractFlameWriter {
 
-  public String getFlameXML(Flame pFlame) {
+  public String getFlameXML(Flame pFlame) throws Exception {
     SimpleXMLBuilder xb = new SimpleXMLBuilder();
     // Flame
     List<SimpleXMLBuilder.Attribute<?>> attrList = createFlameAttributes(pFlame, xb);

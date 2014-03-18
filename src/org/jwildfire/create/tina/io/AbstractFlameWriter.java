@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.jwildfire.base.Tools;
+import org.jwildfire.create.tina.animate.AnimationService;
+import org.jwildfire.create.tina.animate.AnimationService.MotionCurveAttribute;
 import org.jwildfire.create.tina.base.DrawMode;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.Layer;
@@ -15,13 +17,14 @@ import org.jwildfire.create.tina.base.Shading;
 import org.jwildfire.create.tina.base.ShadingInfo;
 import org.jwildfire.create.tina.base.Stereo3dMode;
 import org.jwildfire.create.tina.base.XForm;
+import org.jwildfire.create.tina.base.motion.MotionCurve;
 import org.jwildfire.create.tina.palette.RGBPalette;
 import org.jwildfire.create.tina.variation.Variation;
 import org.jwildfire.create.tina.variation.VariationFunc;
 
 public class AbstractFlameWriter {
 
-  protected List<SimpleXMLBuilder.Attribute<?>> createXFormAttrList(SimpleXMLBuilder pXB, Layer pLayer, XForm pXForm) {
+  protected List<SimpleXMLBuilder.Attribute<?>> createXFormAttrList(SimpleXMLBuilder pXB, Layer pLayer, XForm pXForm) throws Exception {
     List<SimpleXMLBuilder.Attribute<?>> attrList = new ArrayList<SimpleXMLBuilder.Attribute<?>>();
     attrList.add(pXB.createAttr("weight", pXForm.getWeight()));
     attrList.add(pXB.createAttr("color", pXForm.getColor()));
@@ -59,6 +62,9 @@ public class AbstractFlameWriter {
           }
         }
       }
+      // curves
+      // TODO
+      writeMotionCurves(func, pXB, attrList);
       // ressources
       {
         String ressNames[] = func.getRessourceNames();
@@ -89,6 +95,8 @@ public class AbstractFlameWriter {
     if (!xName.equals("")) {
       attrList.add(pXB.createAttr("name", xName));
     }
+
+    writeMotionCurves(pXForm, pXB, attrList);
     return attrList;
   }
 
@@ -106,7 +114,7 @@ public class AbstractFlameWriter {
     }
   }
 
-  protected List<SimpleXMLBuilder.Attribute<?>> createFlameAttributes(Flame pFlame, SimpleXMLBuilder xb) {
+  protected List<SimpleXMLBuilder.Attribute<?>> createFlameAttributes(Flame pFlame, SimpleXMLBuilder xb) throws Exception {
     List<SimpleXMLBuilder.Attribute<?>> attrList = new ArrayList<SimpleXMLBuilder.Attribute<?>>();
     String fName = pFlame.getName().replaceAll("\"", "");
     if (!fName.equals("")) {
@@ -194,7 +202,7 @@ public class AbstractFlameWriter {
       attrList.add(xb.createAttr("antialias_amount", pFlame.getAntialiasAmount()));
       attrList.add(xb.createAttr("antialias_radius", pFlame.getAntialiasRadius()));
     }
-    if (Tools.V2_FEATURE_ENABLE) {
+    if (pFlame.getMotionBlurLength() > 0) {
       attrList.add(xb.createAttr(AbstractFlameReader.ATTR_MOTIONBLUR_LENGTH, pFlame.getMotionBlurLength()));
       attrList.add(xb.createAttr(AbstractFlameReader.ATTR_MOTIONBLUR_TIMESTEP, pFlame.getMotionBlurTimeStep()));
       attrList.add(xb.createAttr(AbstractFlameReader.ATTR_MOTIONBLUR_DECAY, pFlame.getMotionBlurDecay()));
@@ -220,6 +228,11 @@ public class AbstractFlameWriter {
       }
       attrList.add(xb.createAttr(AbstractFlameReader.ATTR_STEREO3D_PREVIEW, pFlame.getStereo3dPreview().toString()));
     }
+
+    attrList.add(xb.createAttr(AbstractFlameReader.ATTR_FRAME, pFlame.getFrame()));
+    attrList.add(xb.createAttr(AbstractFlameReader.ATTR_FRAME_COUNT, pFlame.getFrameCount()));
+
+    writeMotionCurves(pFlame, xb, attrList);
     return attrList;
   }
 
@@ -248,4 +261,25 @@ public class AbstractFlameWriter {
     }
   }
 
+  protected void writeMotionCurves(Object source, SimpleXMLBuilder xb, List<SimpleXMLBuilder.Attribute<?>> attrList) throws Exception {
+    for (MotionCurveAttribute attribute : AnimationService.getAllMotionCurves(source)) {
+      MotionCurve curve = attribute.getMotionCurve();
+      if (!curve.isEmpty()) {
+        String namePrefix = attribute.getName() + "_";
+        attrList.add(xb.createAttr(namePrefix + AbstractFlameReader.CURVE_ATTR_ENABLED, String.valueOf(curve.isEnabled())));
+        attrList.add(xb.createAttr(namePrefix + AbstractFlameReader.CURVE_ATTR_VIEW_XMIN, curve.getViewXMin()));
+        attrList.add(xb.createAttr(namePrefix + AbstractFlameReader.CURVE_ATTR_VIEW_XMAX, curve.getViewXMax()));
+        attrList.add(xb.createAttr(namePrefix + AbstractFlameReader.CURVE_ATTR_VIEW_YMIN, curve.getViewYMin()));
+        attrList.add(xb.createAttr(namePrefix + AbstractFlameReader.CURVE_ATTR_VIEW_YMAX, curve.getViewYMax()));
+        attrList.add(xb.createAttr(namePrefix + AbstractFlameReader.CURVE_ATTR_INTERPOLATION, curve.getInterpolation().toString()));
+        attrList.add(xb.createAttr(namePrefix + AbstractFlameReader.CURVE_ATTR_SELECTED_IDX, curve.getSelectedIdx()));
+        attrList.add(xb.createAttr(namePrefix + AbstractFlameReader.CURVE_ATTR_LOCKED, String.valueOf(curve.isLocked())));
+        attrList.add(xb.createAttr(namePrefix + AbstractFlameReader.CURVE_ATTR_POINT_COUNT, curve.getX().length));
+        for (int i = 0; i < curve.getX().length; i++) {
+          attrList.add(xb.createAttr(namePrefix + AbstractFlameReader.CURVE_ATTR_X + i, curve.getX()[i]));
+          attrList.add(xb.createAttr(namePrefix + AbstractFlameReader.CURVE_ATTR_Y + i, curve.getY()[i]));
+        }
+      }
+    }
+  }
 }

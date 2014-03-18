@@ -26,7 +26,7 @@ import org.jwildfire.create.tina.palette.RGBPalette;
 
 public class JWFFlameWriter extends AbstractFlameWriter {
 
-  public String getFlameXML(Flame pFlame) {
+  public String getFlameXML(Flame pFlame) throws Exception {
     SimpleXMLBuilder xb = new SimpleXMLBuilder();
     // Flame
     List<SimpleXMLBuilder.Attribute<?>> attrList = createFlameAttributes(pFlame, xb);
@@ -41,6 +41,7 @@ public class JWFFlameWriter extends AbstractFlameWriter {
           attrList.add(xb.createAttr("name", name));
         }
       }
+      writeMotionCurves(layer, xb, layerAttrList);
 
       xb.beginElement("layer", layerAttrList);
 

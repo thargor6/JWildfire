@@ -8,6 +8,8 @@ import org.jwildfire.base.Tools;
 import org.jwildfire.base.Tools.XMLAttribute;
 import org.jwildfire.base.Tools.XMLAttributes;
 import org.jwildfire.base.mathlib.MathLib;
+import org.jwildfire.create.tina.animate.AnimationService;
+import org.jwildfire.create.tina.animate.AnimationService.MotionCurveAttribute;
 import org.jwildfire.create.tina.base.DrawMode;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.Layer;
@@ -17,10 +19,12 @@ import org.jwildfire.create.tina.base.Stereo3dColor;
 import org.jwildfire.create.tina.base.Stereo3dMode;
 import org.jwildfire.create.tina.base.Stereo3dPreview;
 import org.jwildfire.create.tina.base.XForm;
+import org.jwildfire.create.tina.base.motion.MotionCurve;
 import org.jwildfire.create.tina.render.filter.FilterKernelType;
 import org.jwildfire.create.tina.variation.Variation;
 import org.jwildfire.create.tina.variation.VariationFunc;
 import org.jwildfire.create.tina.variation.VariationFuncList;
+import org.jwildfire.envelope.Envelope.Interpolation;
 
 public class AbstractFlameReader {
   protected final Prefs prefs;
@@ -106,6 +110,20 @@ public class AbstractFlameReader {
   public static final String ATTR_STEREO3D_RIGHT_EYE_COLOR = "stereo3d_right_eye_color";
   public static final String ATTR_STEREO3D_INTERPOLATED_IMAGE_COUNT = "stereo3d_interpolated_image_count";
   public static final String ATTR_STEREO3D_PREVIEW = "stereo3d_preview";
+  public static final String ATTR_FRAME_COUNT = "frame_count";
+  public static final String ATTR_FRAME = "frame";
+
+  public static final String CURVE_ATTR_ENABLED = "enabled";
+  public static final String CURVE_ATTR_VIEW_XMIN = "view_xmin";
+  public static final String CURVE_ATTR_VIEW_XMAX = "view_xmax";
+  public static final String CURVE_ATTR_VIEW_YMIN = "view_ymin";
+  public static final String CURVE_ATTR_VIEW_YMAX = "view_ymax";
+  public static final String CURVE_ATTR_INTERPOLATION = "interpolation";
+  public static final String CURVE_ATTR_SELECTED_IDX = "selected_idx";
+  public static final String CURVE_ATTR_LOCKED = "locked";
+  public static final String CURVE_ATTR_POINT_COUNT = "point_count";
+  public static final String CURVE_ATTR_X = "x";
+  public static final String CURVE_ATTR_Y = "y";
 
   protected AbstractFlameReader(Prefs pPrefs) {
     prefs = pPrefs;
@@ -322,16 +340,14 @@ public class AbstractFlameReader {
       pFlame.setAntialiasRadius(Double.parseDouble(hs));
     }
 
-    if (Tools.V2_FEATURE_ENABLE) {
-      if ((hs = atts.get(ATTR_MOTIONBLUR_LENGTH)) != null) {
-        pFlame.setMotionBlurLength(Integer.parseInt(hs));
-      }
-      if ((hs = atts.get(ATTR_MOTIONBLUR_TIMESTEP)) != null) {
-        pFlame.setMotionBlurTimeStep(Double.parseDouble(hs));
-      }
-      if ((hs = atts.get(ATTR_MOTIONBLUR_DECAY)) != null) {
-        pFlame.setMotionBlurDecay(Double.parseDouble(hs));
-      }
+    if ((hs = atts.get(ATTR_MOTIONBLUR_LENGTH)) != null) {
+      pFlame.setMotionBlurLength(Integer.parseInt(hs));
+    }
+    if ((hs = atts.get(ATTR_MOTIONBLUR_TIMESTEP)) != null) {
+      pFlame.setMotionBlurTimeStep(Double.parseDouble(hs));
+    }
+    if ((hs = atts.get(ATTR_MOTIONBLUR_DECAY)) != null) {
+      pFlame.setMotionBlurDecay(Double.parseDouble(hs));
     }
 
     if ((hs = atts.get(ATTR_SHADING_DISTANCE_COLOR_RADIUS)) != null) {
@@ -431,6 +447,13 @@ public class AbstractFlameReader {
       }
     }
 
+    if ((hs = atts.get(ATTR_FRAME)) != null) {
+      pFlame.setFrame(Integer.parseInt(hs));
+    }
+    if ((hs = atts.get(ATTR_FRAME_COUNT)) != null) {
+      pFlame.setFrameCount(Integer.parseInt(hs));
+    }
+    readMotionCurves(pFlame, atts);
   }
 
   public static final String ATTR_WEIGHT = "weight";
@@ -508,6 +531,7 @@ public class AbstractFlameReader {
         pXForm.getModifiedWeights()[i] = Double.parseDouble(s[i]);
       }
     }
+    readMotionCurves(pXForm, atts);
     // variations
     {
       List<String> variationNameList = VariationFuncList.getNameList();
@@ -549,6 +573,9 @@ public class AbstractFlameReader {
               }
             }
           }
+          // TODO
+          // curves
+          // readMotionCurves
           // ressources 
           {
             String ressNames[] = variation.getFunc().getRessourceNames();
@@ -685,4 +712,49 @@ public class AbstractFlameReader {
     }
   }
 
+  protected void readMotionCurves(Object source, XMLAttributes atts) {
+    for (MotionCurveAttribute attribute : AnimationService.getAllMotionCurves(source)) {
+      String hs;
+      String namePrefix = attribute.getName() + "_";
+      MotionCurve curve = attribute.getMotionCurve();
+      if ((hs = atts.get(namePrefix + AbstractFlameReader.CURVE_ATTR_ENABLED)) != null) {
+        curve.setEnabled(Boolean.parseBoolean(hs));
+      }
+      if ((hs = atts.get(namePrefix + AbstractFlameReader.CURVE_ATTR_VIEW_XMIN)) != null) {
+        curve.setViewXMin(Integer.parseInt(hs));
+      }
+      if ((hs = atts.get(namePrefix + AbstractFlameReader.CURVE_ATTR_VIEW_XMAX)) != null) {
+        curve.setViewXMax(Integer.parseInt(hs));
+      }
+      if ((hs = atts.get(namePrefix + AbstractFlameReader.CURVE_ATTR_VIEW_YMIN)) != null) {
+        curve.setViewYMin(Double.parseDouble(hs));
+      }
+      if ((hs = atts.get(namePrefix + AbstractFlameReader.CURVE_ATTR_VIEW_YMAX)) != null) {
+        curve.setViewYMax(Double.parseDouble(hs));
+      }
+      if ((hs = atts.get(namePrefix + AbstractFlameReader.CURVE_ATTR_INTERPOLATION)) != null) {
+        curve.setInterpolation(Interpolation.valueOf(hs));
+      }
+      if ((hs = atts.get(namePrefix + AbstractFlameReader.CURVE_ATTR_SELECTED_IDX)) != null) {
+        curve.setSelectedIdx(Integer.parseInt(hs));
+      }
+      if ((hs = atts.get(namePrefix + AbstractFlameReader.CURVE_ATTR_LOCKED)) != null) {
+        curve.setLocked(Boolean.parseBoolean(hs));
+      }
+      if ((hs = atts.get(namePrefix + AbstractFlameReader.CURVE_ATTR_POINT_COUNT)) != null) {
+        int pointCount = Integer.parseInt(hs);
+        int x[] = new int[pointCount];
+        double y[] = new double[pointCount];
+        for (int i = 0; i < pointCount; i++) {
+          if ((hs = atts.get(namePrefix + AbstractFlameReader.CURVE_ATTR_X + i)) != null) {
+            x[i] = Integer.parseInt(hs);
+          }
+          if ((hs = atts.get(namePrefix + AbstractFlameReader.CURVE_ATTR_Y + i)) != null) {
+            y[i] = Double.parseDouble(hs);
+          }
+        }
+        curve.setPoints(x, y);
+      }
+    }
+  }
 }

@@ -101,7 +101,12 @@ public class JWildfireApplet extends JApplet implements IterationObserver {
     JButton button_1 = new JButton();
     button_1.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
-        copyToClipboardBtn_clicked();
+        try {
+          copyToClipboardBtn_clicked();
+        }
+        catch (Exception ex) {
+          ex.printStackTrace();
+        }
       }
     });
     button_1.setToolTipText("Copy the current fractal into the clipboard");
@@ -117,7 +122,7 @@ public class JWildfireApplet extends JApplet implements IterationObserver {
     getContentPane().add(imgMainPnl, BorderLayout.CENTER);
   }
 
-  protected void copyToClipboardBtn_clicked() {
+  protected void copyToClipboardBtn_clicked() throws Exception {
     Flame currFlame = getCurrFlame();
     if (currFlame != null) {
       Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();

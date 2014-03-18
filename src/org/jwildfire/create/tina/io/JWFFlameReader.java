@@ -95,5 +95,6 @@ public class JWFFlameReader extends AbstractFlameReader {
     if ((hs = atts.get(ATTR_NAME)) != null) {
       pLayer.setName(hs);
     }
+    readMotionCurves(pLayer, atts);
   }
 }

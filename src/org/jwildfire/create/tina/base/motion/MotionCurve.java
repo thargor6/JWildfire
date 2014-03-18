@@ -154,4 +154,77 @@ public class MotionCurve implements Serializable, Assignable<MotionCurve> {
   public MotionValueChangeHandler getChangeHandler() {
     return changeHandler;
   }
+
+  public int getViewXMin() {
+    return viewXMin;
+  }
+
+  public void setViewXMin(int viewXMin) {
+    this.viewXMin = viewXMin;
+  }
+
+  public int getViewXMax() {
+    return viewXMax;
+  }
+
+  public void setViewXMax(int viewXMax) {
+    this.viewXMax = viewXMax;
+  }
+
+  public double getViewYMin() {
+    return viewYMin;
+  }
+
+  public void setViewYMin(double viewYMin) {
+    this.viewYMin = viewYMin;
+  }
+
+  public double getViewYMax() {
+    return viewYMax;
+  }
+
+  public void setViewYMax(double viewYMax) {
+    this.viewYMax = viewYMax;
+  }
+
+  public Interpolation getInterpolation() {
+    return interpolation;
+  }
+
+  public void setInterpolation(Interpolation interpolation) {
+    this.interpolation = interpolation;
+  }
+
+  public int getSelectedIdx() {
+    return selectedIdx;
+  }
+
+  public void setSelectedIdx(int selectedIdx) {
+    this.selectedIdx = selectedIdx;
+  }
+
+  public boolean isLocked() {
+    return locked;
+  }
+
+  public void setLocked(boolean locked) {
+    this.locked = locked;
+  }
+
+  public int[] getX() {
+    return x;
+  }
+
+  public void setPoints(int[] x, double[] y) {
+    if (x == null || y == null || x.length != y.length) {
+      throw new IllegalArgumentException();
+    }
+    this.x = x;
+    this.y = y;
+  }
+
+  public double[] getY() {
+    return y;
+  }
+
 }

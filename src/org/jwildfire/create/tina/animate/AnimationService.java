@@ -327,6 +327,42 @@ public class AnimationService {
     }
   }
 
+  public static class MotionCurveAttribute {
+    private final String name;
+    private final MotionCurve motionCurve;
+
+    public MotionCurveAttribute(String pName, MotionCurve pMotionCurve) {
+      name = pName;
+      motionCurve = pMotionCurve;
+    }
+
+    public String getName() {
+      return name;
+    }
+
+    public MotionCurve getMotionCurve() {
+      return motionCurve;
+    }
+  }
+
+  public static List<MotionCurveAttribute> getAllMotionCurves(Object pObject) {
+    try {
+      List<MotionCurveAttribute> res = new ArrayList<MotionCurveAttribute>();
+      Class<?> cls = pObject.getClass();
+      for (Field field : cls.getDeclaredFields()) {
+        field.setAccessible(true);
+        if (field.getType() == MotionCurve.class && field.getName().endsWith(CURVE_POSTFIX)) {
+          MotionCurve curve = (MotionCurve) field.get(pObject);
+          res.add(new MotionCurveAttribute(field.getName(), curve));
+        }
+      }
+      return res;
+    }
+    catch (Exception ex) {
+      throw new RuntimeException(ex);
+    }
+  }
+
   public static void addMotionCurve(Flame pFlame, GlobalScript pScript, int pFrame, int pFrameCount) {
     if (!GlobalScript.NONE.equals(pScript)) {
       int envX[] = new int[2];
