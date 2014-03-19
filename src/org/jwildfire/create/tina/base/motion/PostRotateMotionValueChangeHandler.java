@@ -16,10 +16,13 @@
 */
 package org.jwildfire.create.tina.base.motion;
 
+import java.io.Serializable;
+
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.transform.XFormTransformService;
 
-public class PostRotateMotionValueChangeHandler implements MotionValueChangeHandler {
+public class PostRotateMotionValueChangeHandler implements MotionValueChangeHandler, Serializable {
+  private static final long serialVersionUID = 1L;
 
   private PostRotateMotionValueChangeHandler() {
 

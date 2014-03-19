@@ -16,9 +16,12 @@
 */
 package org.jwildfire.create.tina.base.motion;
 
+import java.io.Serializable;
+
 import org.jwildfire.create.tina.animate.AnimationService;
 
-public class DefaultMotionValueChangeHandler implements MotionValueChangeHandler {
+public class DefaultMotionValueChangeHandler implements MotionValueChangeHandler, Serializable {
+  private static final long serialVersionUID = 1L;
 
   private DefaultMotionValueChangeHandler() {
 

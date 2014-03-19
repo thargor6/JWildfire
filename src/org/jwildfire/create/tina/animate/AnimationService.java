@@ -364,7 +364,7 @@ public class AnimationService {
   }
 
   public static void addMotionCurve(Flame pFlame, GlobalScript pScript, int pFrame, int pFrameCount) {
-    if (!GlobalScript.NONE.equals(pScript)) {
+    if (pScript != null && !GlobalScript.NONE.equals(pScript)) {
       int envX[] = new int[2];
       double envY[] = new double[2];
       envX[0] = 0;
@@ -426,7 +426,7 @@ public class AnimationService {
   }
 
   public static void addMotionCurve(Flame pFlame, XFormScript pScript, int pFrame, int pFrameCount) {
-    if (!XFormScript.NONE.equals(pScript)) {
+    if (pScript != null && !XFormScript.NONE.equals(pScript)) {
       for (Layer layer : pFlame.getLayers()) {
         switch (pScript) {
           case ROTATE_FULL: {
