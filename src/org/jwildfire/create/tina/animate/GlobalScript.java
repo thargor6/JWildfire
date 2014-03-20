@@ -19,9 +19,6 @@ package org.jwildfire.create.tina.animate;
 public enum GlobalScript {
   NONE,
   ROTATE_PITCH,
-  ROTATE_PITCH_NEG,
   ROTATE_ROLL,
-  ROTATE_ROLL_NEG,
-  ROTATE_YAW,
-  ROTATE_YAW_NEG
+  ROTATE_YAW
 }

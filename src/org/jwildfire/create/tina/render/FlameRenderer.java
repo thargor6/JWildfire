@@ -28,7 +28,6 @@ import java.util.List;
 
 import org.jwildfire.base.Prefs;
 import org.jwildfire.base.QualityProfile;
-import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.animate.AnimationService;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.Layer;
@@ -107,7 +106,7 @@ public class FlameRenderer {
 
   public void initRasterSizes(int pImageWidth, int pImageHeight) {
     Flame flameForInit;
-    if (flame.hasPreRenderMotionProperty() && Tools.V2_FEATURE_ENABLE) {
+    if (flame.hasPreRenderMotionProperty()) {
       double time = flame.getFrame() >= 0 ? flame.getFrame() : 0;
       flameForInit = AnimationService.evalMotionCurves(flame.makeCopy(), time);
     }
@@ -908,7 +907,7 @@ public class FlameRenderer {
       FlameRendererView view = createView(newFlame);
       res.add(new RenderPacket(newFlame, view));
     }
-    if (pFlame.getMotionBlurLength() > 0 && Tools.V2_FEATURE_ENABLE) {
+    if (pFlame.getMotionBlurLength() > 0) {
       double time = pFrame >= 0 ? pFrame : 0;
       for (int p = 1; p < pFlame.getMotionBlurLength(); p++) {
         time += pFlame.getMotionBlurTimeStep();
