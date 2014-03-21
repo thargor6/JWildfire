@@ -54,13 +54,13 @@ public class AnimationService {
     return res.getImage();
   }
 
-  public static Flame createFrameFlame(int pFrame, int pFrameCount, Flame pFlame, GlobalScript pGlobalScripts[], XFormScript[] pXFormScripts, int pWidth, int pHeight, Prefs pPrefs) throws Exception {
+  public static Flame createFrameFlame(int pFrame, int pFrameCount, double pFPS, Flame pFlame, GlobalScript pGlobalScripts[], XFormScript[] pXFormScripts, int pWidth, int pHeight, Prefs pPrefs) throws Exception {
     Flame res = pFlame.makeCopy();
     for (GlobalScript script : pGlobalScripts) {
-      AnimationService.addMotionCurve(res, script, pFrame, pFrameCount);
+      AnimationService.addMotionCurve(res, script, pFrame, pFrameCount, pFPS);
     }
     for (XFormScript script : pXFormScripts) {
-      AnimationService.addMotionCurve(res, script, pFrame, pFrameCount);
+      AnimationService.addMotionCurve(res, script, pFrame, pFrameCount, pFPS);
     }
     res.setFrame(pFrame);
     return res;
@@ -223,7 +223,7 @@ public class AnimationService {
     }
   }
 
-  public static void addMotionCurve(Flame pFlame, GlobalScript pScript, int pFrame, int pFrameCount) {
+  public static void addMotionCurve(Flame pFlame, GlobalScript pScript, int pFrame, int pFrameCount, double pFPS) {
     if (pScript != null && pScript.getScriptType() != null && !GlobalScriptType.NONE.equals(pScript.getScriptType()) && fabs(pScript.getAmplitude()) > EPSILON) {
       int envX[] = new int[2];
       double envY[] = new double[2];
@@ -238,6 +238,8 @@ public class AnimationService {
       else {
         amplitude = pScript.getAmplitude();
       }
+      amplitude *= (double) pFrameCount / (DFLT_DURATION * pFPS);
+
       envY[1] = 360.0 * amplitude;
       MotionCurve curve = null;
       switch (pScript.getScriptType()) {
@@ -281,7 +283,9 @@ public class AnimationService {
     }
   }
 
-  public static void addMotionCurve(Flame pFlame, XFormScript pScript, int pFrame, int pFrameCount) {
+  public static double DFLT_DURATION = 6.0;
+
+  public static void addMotionCurve(Flame pFlame, XFormScript pScript, int pFrame, int pFrameCount, double pFPS) {
     if (pScript != null && pScript.getScriptType() != null && !XFormScriptType.NONE.equals(pScript.getScriptType()) && fabs(pScript.getAmplitude()) > EPSILON) {
       double amplitude;
       if (pScript.getAmplitudeCurve().isEnabled()) {
@@ -291,7 +295,7 @@ public class AnimationService {
       else {
         amplitude = pScript.getAmplitude();
       }
-
+      amplitude *= (double) pFrameCount / (DFLT_DURATION * pFPS);
       for (Layer layer : pFlame.getLayers()) {
         switch (pScript.getScriptType()) {
           case ROTATE_FULL: {

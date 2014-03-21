@@ -869,6 +869,7 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
       }
 
       int frameCount = swfAnimatorFramesREd.getIntValue();
+      double fps = swfAnimatorFramesPerSecondREd.getDoubleValue();
       GlobalScript globalScripts[] = {
           getGlobalScriptFromUI(swfAnimatorGlobalScript1Cmb, swfAnimatorGlobalScript1REd),
           getGlobalScriptFromUI(swfAnimatorGlobalScript2Cmb, swfAnimatorGlobalScript2REd),
@@ -887,10 +888,10 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
       try {
         Flame res = flame.makeCopy();
         for (GlobalScript script : globalScripts) {
-          AnimationService.addMotionCurve(res, script, frame, frameCount);
+          AnimationService.addMotionCurve(res, script, frame, frameCount, fps);
         }
         for (XFormScript script : xFormScripts) {
-          AnimationService.addMotionCurve(res, script, frame, frameCount);
+          AnimationService.addMotionCurve(res, script, frame, frameCount, fps);
         }
         res.setFrame(frame);
         return res;
