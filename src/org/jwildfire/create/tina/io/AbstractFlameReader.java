@@ -714,47 +714,51 @@ public class AbstractFlameReader {
 
   protected void readMotionCurves(Object source, XMLAttributes atts) {
     for (MotionCurveAttribute attribute : AnimationService.getAllMotionCurves(source)) {
-      String hs;
-      String namePrefix = attribute.getName() + "_";
       MotionCurve curve = attribute.getMotionCurve();
-      if ((hs = atts.get(namePrefix + AbstractFlameReader.CURVE_ATTR_ENABLED)) != null) {
-        curve.setEnabled(Boolean.parseBoolean(hs));
-      }
-      if ((hs = atts.get(namePrefix + AbstractFlameReader.CURVE_ATTR_VIEW_XMIN)) != null) {
-        curve.setViewXMin(Integer.parseInt(hs));
-      }
-      if ((hs = atts.get(namePrefix + AbstractFlameReader.CURVE_ATTR_VIEW_XMAX)) != null) {
-        curve.setViewXMax(Integer.parseInt(hs));
-      }
-      if ((hs = atts.get(namePrefix + AbstractFlameReader.CURVE_ATTR_VIEW_YMIN)) != null) {
-        curve.setViewYMin(Double.parseDouble(hs));
-      }
-      if ((hs = atts.get(namePrefix + AbstractFlameReader.CURVE_ATTR_VIEW_YMAX)) != null) {
-        curve.setViewYMax(Double.parseDouble(hs));
-      }
-      if ((hs = atts.get(namePrefix + AbstractFlameReader.CURVE_ATTR_INTERPOLATION)) != null) {
-        curve.setInterpolation(Interpolation.valueOf(hs));
-      }
-      if ((hs = atts.get(namePrefix + AbstractFlameReader.CURVE_ATTR_SELECTED_IDX)) != null) {
-        curve.setSelectedIdx(Integer.parseInt(hs));
-      }
-      if ((hs = atts.get(namePrefix + AbstractFlameReader.CURVE_ATTR_LOCKED)) != null) {
-        curve.setLocked(Boolean.parseBoolean(hs));
-      }
-      if ((hs = atts.get(namePrefix + AbstractFlameReader.CURVE_ATTR_POINT_COUNT)) != null) {
-        int pointCount = Integer.parseInt(hs);
-        int x[] = new int[pointCount];
-        double y[] = new double[pointCount];
-        for (int i = 0; i < pointCount; i++) {
-          if ((hs = atts.get(namePrefix + AbstractFlameReader.CURVE_ATTR_X + i)) != null) {
-            x[i] = Integer.parseInt(hs);
-          }
-          if ((hs = atts.get(namePrefix + AbstractFlameReader.CURVE_ATTR_Y + i)) != null) {
-            y[i] = Double.parseDouble(hs);
-          }
+      String namePrefix = attribute.getName() + "_";
+      readMotionCurveAttributes(atts, curve, namePrefix);
+    }
+  }
+
+  public static void readMotionCurveAttributes(XMLAttributes atts, MotionCurve curve, String namePrefix) {
+    String hs;
+    if ((hs = atts.get(namePrefix + AbstractFlameReader.CURVE_ATTR_ENABLED)) != null) {
+      curve.setEnabled(Boolean.parseBoolean(hs));
+    }
+    if ((hs = atts.get(namePrefix + AbstractFlameReader.CURVE_ATTR_VIEW_XMIN)) != null) {
+      curve.setViewXMin(Integer.parseInt(hs));
+    }
+    if ((hs = atts.get(namePrefix + AbstractFlameReader.CURVE_ATTR_VIEW_XMAX)) != null) {
+      curve.setViewXMax(Integer.parseInt(hs));
+    }
+    if ((hs = atts.get(namePrefix + AbstractFlameReader.CURVE_ATTR_VIEW_YMIN)) != null) {
+      curve.setViewYMin(Double.parseDouble(hs));
+    }
+    if ((hs = atts.get(namePrefix + AbstractFlameReader.CURVE_ATTR_VIEW_YMAX)) != null) {
+      curve.setViewYMax(Double.parseDouble(hs));
+    }
+    if ((hs = atts.get(namePrefix + AbstractFlameReader.CURVE_ATTR_INTERPOLATION)) != null) {
+      curve.setInterpolation(Interpolation.valueOf(hs));
+    }
+    if ((hs = atts.get(namePrefix + AbstractFlameReader.CURVE_ATTR_SELECTED_IDX)) != null) {
+      curve.setSelectedIdx(Integer.parseInt(hs));
+    }
+    if ((hs = atts.get(namePrefix + AbstractFlameReader.CURVE_ATTR_LOCKED)) != null) {
+      curve.setLocked(Boolean.parseBoolean(hs));
+    }
+    if ((hs = atts.get(namePrefix + AbstractFlameReader.CURVE_ATTR_POINT_COUNT)) != null) {
+      int pointCount = Integer.parseInt(hs);
+      int x[] = new int[pointCount];
+      double y[] = new double[pointCount];
+      for (int i = 0; i < pointCount; i++) {
+        if ((hs = atts.get(namePrefix + AbstractFlameReader.CURVE_ATTR_X + i)) != null) {
+          x[i] = Integer.parseInt(hs);
         }
-        curve.setPoints(x, y);
+        if ((hs = atts.get(namePrefix + AbstractFlameReader.CURVE_ATTR_Y + i)) != null) {
+          y[i] = Double.parseDouble(hs);
+        }
       }
+      curve.setPoints(x, y);
     }
   }
 }

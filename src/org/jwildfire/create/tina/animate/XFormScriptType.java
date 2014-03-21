@@ -16,28 +16,14 @@
 */
 package org.jwildfire.create.tina.animate;
 
-import java.io.Serializable;
-
-public class XFormScript extends SimpleScript implements Serializable {
-  private static final long serialVersionUID = 1L;
-
-  private XFormScriptType scriptType;
-
-  public XFormScript(XFormScriptType pScriptType, double pAmplitude) {
-    scriptType = pScriptType;
-    setAmplitude(pAmplitude);
-  }
-
-  public XFormScript() {
-
-  }
-
-  public XFormScriptType getScriptType() {
-    return scriptType;
-  }
-
-  public void setScriptType(XFormScriptType pScriptType) {
-    scriptType = pScriptType;
-  }
-
+public enum XFormScriptType {
+  NONE,
+  ROTATE_FULL,
+  ROTATE_LAST_XFORM,
+  ROTATE_FIRST_XFORM,
+  ROTATE_2ND_XFORM,
+  ROTATE_3RD_XFORM,
+  ROTATE_4TH_XFORM,
+  ROTATE_5TH_XFORM,
+  ROTATE_FINAL_XFORM
 }

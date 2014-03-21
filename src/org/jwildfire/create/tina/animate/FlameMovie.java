@@ -25,16 +25,16 @@ import org.jwildfire.create.tina.base.Flame;
 public class FlameMovie {
   private final Prefs prefs;
   private String soundFilename;
-  private GlobalScript globalScript1 = GlobalScript.NONE;
-  private GlobalScript globalScript2 = GlobalScript.NONE;
-  private GlobalScript globalScript3 = GlobalScript.NONE;
-  private GlobalScript globalScript4 = GlobalScript.NONE;
-  private GlobalScript globalScript5 = GlobalScript.NONE;
-  private XFormScript xFormScript1 = XFormScript.NONE;
-  private XFormScript xFormScript2 = XFormScript.NONE;
-  private XFormScript xFormScript3 = XFormScript.NONE;
-  private XFormScript xFormScript4 = XFormScript.NONE;
-  private XFormScript xFormScript5 = XFormScript.NONE;
+  private GlobalScript globalScript1 = new GlobalScript(GlobalScriptType.NONE, 1.0);
+  private GlobalScript globalScript2 = new GlobalScript(GlobalScriptType.NONE, 1.0);
+  private GlobalScript globalScript3 = new GlobalScript(GlobalScriptType.NONE, 1.0);
+  private GlobalScript globalScript4 = new GlobalScript(GlobalScriptType.NONE, 1.0);
+  private GlobalScript globalScript5 = new GlobalScript(GlobalScriptType.NONE, 1.0);
+  private XFormScript xFormScript1 = new XFormScript(XFormScriptType.NONE, 1.0);
+  private XFormScript xFormScript2 = new XFormScript(XFormScriptType.NONE, 1.0);
+  private XFormScript xFormScript3 = new XFormScript(XFormScriptType.NONE, 1.0);
+  private XFormScript xFormScript4 = new XFormScript(XFormScriptType.NONE, 1.0);
+  private XFormScript xFormScript5 = new XFormScript(XFormScriptType.NONE, 1.0);
   private int colorOversampling;
   private int spatialOversampling;
   private int quality;
@@ -162,7 +162,7 @@ public class FlameMovie {
   }
 
   public void setGlobalScript1(GlobalScript globalScript1) {
-    this.globalScript1 = globalScript1 != null ? globalScript1 : GlobalScript.NONE;
+    this.globalScript1 = globalScript1;
   }
 
   public GlobalScript getGlobalScript2() {
@@ -170,7 +170,7 @@ public class FlameMovie {
   }
 
   public void setGlobalScript2(GlobalScript globalScript2) {
-    this.globalScript2 = globalScript2 != null ? globalScript2 : GlobalScript.NONE;
+    this.globalScript2 = globalScript2;
   }
 
   public GlobalScript getGlobalScript3() {
@@ -178,7 +178,7 @@ public class FlameMovie {
   }
 
   public void setGlobalScript3(GlobalScript globalScript3) {
-    this.globalScript3 = globalScript3 != null ? globalScript3 : GlobalScript.NONE;
+    this.globalScript3 = globalScript3;
   }
 
   public GlobalScript getGlobalScript4() {
@@ -186,7 +186,7 @@ public class FlameMovie {
   }
 
   public void setGlobalScript4(GlobalScript globalScript4) {
-    this.globalScript4 = globalScript4 != null ? globalScript4 : GlobalScript.NONE;
+    this.globalScript4 = globalScript4;
   }
 
   public GlobalScript getGlobalScript5() {
@@ -194,7 +194,7 @@ public class FlameMovie {
   }
 
   public void setGlobalScript5(GlobalScript globalScript5) {
-    this.globalScript5 = globalScript5 != null ? globalScript5 : GlobalScript.NONE;
+    this.globalScript5 = globalScript5;
   }
 
   public XFormScript getxFormScript1() {
@@ -202,7 +202,7 @@ public class FlameMovie {
   }
 
   public void setxFormScript1(XFormScript xFormScript1) {
-    this.xFormScript1 = xFormScript1 != null ? xFormScript1 : XFormScript.NONE;
+    this.xFormScript1 = xFormScript1;
   }
 
   public XFormScript getxFormScript2() {
@@ -210,7 +210,7 @@ public class FlameMovie {
   }
 
   public void setxFormScript2(XFormScript xFormScript2) {
-    this.xFormScript2 = xFormScript2 != null ? xFormScript2 : XFormScript.NONE;
+    this.xFormScript2 = xFormScript2;
   }
 
   public XFormScript getxFormScript3() {
@@ -218,7 +218,7 @@ public class FlameMovie {
   }
 
   public void setxFormScript3(XFormScript xFormScript3) {
-    this.xFormScript3 = xFormScript3 != null ? xFormScript3 : XFormScript.NONE;
+    this.xFormScript3 = xFormScript3;
   }
 
   public XFormScript getxFormScript4() {
@@ -226,7 +226,7 @@ public class FlameMovie {
   }
 
   public void setxFormScript4(XFormScript xFormScript4) {
-    this.xFormScript4 = xFormScript4 != null ? xFormScript4 : XFormScript.NONE;
+    this.xFormScript4 = xFormScript4;
   }
 
   public XFormScript getxFormScript5() {
@@ -234,7 +234,7 @@ public class FlameMovie {
   }
 
   public void setxFormScript5(XFormScript xFormScript5) {
-    this.xFormScript5 = xFormScript5 != null ? xFormScript5 : XFormScript.NONE;
+    this.xFormScript5 = xFormScript5;
   }
 
   public GlobalScript[] getGlobalScripts() {

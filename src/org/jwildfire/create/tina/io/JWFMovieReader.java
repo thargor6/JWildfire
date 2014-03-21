@@ -26,16 +26,36 @@ import static org.jwildfire.create.tina.io.JWFMovieWriter.ATTR_OUTPUT_FORMAT;
 import static org.jwildfire.create.tina.io.JWFMovieWriter.ATTR_QUALITY;
 import static org.jwildfire.create.tina.io.JWFMovieWriter.ATTR_SCRIPT_GLOBAL;
 import static org.jwildfire.create.tina.io.JWFMovieWriter.ATTR_SCRIPT_GLOBAL1;
+import static org.jwildfire.create.tina.io.JWFMovieWriter.ATTR_SCRIPT_GLOBAL1_AMPLITUDE;
+import static org.jwildfire.create.tina.io.JWFMovieWriter.ATTR_SCRIPT_GLOBAL1_AMPLITUDE_CURVE;
 import static org.jwildfire.create.tina.io.JWFMovieWriter.ATTR_SCRIPT_GLOBAL2;
+import static org.jwildfire.create.tina.io.JWFMovieWriter.ATTR_SCRIPT_GLOBAL2_AMPLITUDE;
+import static org.jwildfire.create.tina.io.JWFMovieWriter.ATTR_SCRIPT_GLOBAL2_AMPLITUDE_CURVE;
 import static org.jwildfire.create.tina.io.JWFMovieWriter.ATTR_SCRIPT_GLOBAL3;
+import static org.jwildfire.create.tina.io.JWFMovieWriter.ATTR_SCRIPT_GLOBAL3_AMPLITUDE;
+import static org.jwildfire.create.tina.io.JWFMovieWriter.ATTR_SCRIPT_GLOBAL3_AMPLITUDE_CURVE;
 import static org.jwildfire.create.tina.io.JWFMovieWriter.ATTR_SCRIPT_GLOBAL4;
+import static org.jwildfire.create.tina.io.JWFMovieWriter.ATTR_SCRIPT_GLOBAL4_AMPLITUDE;
+import static org.jwildfire.create.tina.io.JWFMovieWriter.ATTR_SCRIPT_GLOBAL4_AMPLITUDE_CURVE;
 import static org.jwildfire.create.tina.io.JWFMovieWriter.ATTR_SCRIPT_GLOBAL5;
+import static org.jwildfire.create.tina.io.JWFMovieWriter.ATTR_SCRIPT_GLOBAL5_AMPLITUDE;
+import static org.jwildfire.create.tina.io.JWFMovieWriter.ATTR_SCRIPT_GLOBAL5_AMPLITUDE_CURVE;
 import static org.jwildfire.create.tina.io.JWFMovieWriter.ATTR_SCRIPT_XFORM;
 import static org.jwildfire.create.tina.io.JWFMovieWriter.ATTR_SCRIPT_XFORM1;
+import static org.jwildfire.create.tina.io.JWFMovieWriter.ATTR_SCRIPT_XFORM1_AMPLITUDE;
+import static org.jwildfire.create.tina.io.JWFMovieWriter.ATTR_SCRIPT_XFORM1_AMPLITUDE_CURVE;
 import static org.jwildfire.create.tina.io.JWFMovieWriter.ATTR_SCRIPT_XFORM2;
+import static org.jwildfire.create.tina.io.JWFMovieWriter.ATTR_SCRIPT_XFORM2_AMPLITUDE;
+import static org.jwildfire.create.tina.io.JWFMovieWriter.ATTR_SCRIPT_XFORM2_AMPLITUDE_CURVE;
 import static org.jwildfire.create.tina.io.JWFMovieWriter.ATTR_SCRIPT_XFORM3;
+import static org.jwildfire.create.tina.io.JWFMovieWriter.ATTR_SCRIPT_XFORM3_AMPLITUDE;
+import static org.jwildfire.create.tina.io.JWFMovieWriter.ATTR_SCRIPT_XFORM3_AMPLITUDE_CURVE;
 import static org.jwildfire.create.tina.io.JWFMovieWriter.ATTR_SCRIPT_XFORM4;
+import static org.jwildfire.create.tina.io.JWFMovieWriter.ATTR_SCRIPT_XFORM4_AMPLITUDE;
+import static org.jwildfire.create.tina.io.JWFMovieWriter.ATTR_SCRIPT_XFORM4_AMPLITUDE_CURVE;
 import static org.jwildfire.create.tina.io.JWFMovieWriter.ATTR_SCRIPT_XFORM5;
+import static org.jwildfire.create.tina.io.JWFMovieWriter.ATTR_SCRIPT_XFORM5_AMPLITUDE;
+import static org.jwildfire.create.tina.io.JWFMovieWriter.ATTR_SCRIPT_XFORM5_AMPLITUDE_CURVE;
 import static org.jwildfire.create.tina.io.JWFMovieWriter.ATTR_SOUND_FILENAME;
 import static org.jwildfire.create.tina.io.JWFMovieWriter.ATTR_SPATIAL_OVERSAMPLING;
 import static org.jwildfire.create.tina.io.JWFMovieWriter.TAG_JWF_MOVIE;
@@ -47,8 +67,10 @@ import org.jwildfire.base.Tools.XMLAttributes;
 import org.jwildfire.create.tina.animate.FlameMovie;
 import org.jwildfire.create.tina.animate.FlameMoviePart;
 import org.jwildfire.create.tina.animate.GlobalScript;
+import org.jwildfire.create.tina.animate.GlobalScriptType;
 import org.jwildfire.create.tina.animate.OutputFormat;
 import org.jwildfire.create.tina.animate.XFormScript;
+import org.jwildfire.create.tina.animate.XFormScriptType;
 import org.jwildfire.create.tina.base.Flame;
 
 public class JWFMovieReader {
@@ -158,42 +180,44 @@ public class JWFMovieReader {
     if ((hs = atts.get(ATTR_SOUND_FILENAME)) != null) {
       pMovie.setSoundFilename(hs);
     }
-    if ((hs = atts.get(ATTR_SCRIPT_GLOBAL)) != null) {
-      pMovie.setGlobalScript1(GlobalScript.valueOf(hs));
+    if ((hs = atts.get(ATTR_SCRIPT_GLOBAL)) != null) { // legacy
+      pMovie.setGlobalScript1(new GlobalScript(GlobalScriptType.valueOf(hs), 1.0));
     }
     if ((hs = atts.get(ATTR_SCRIPT_GLOBAL1)) != null) {
-      pMovie.setGlobalScript1(GlobalScript.valueOf(hs));
+      pMovie.setGlobalScript1(readGlobalScript(ATTR_SCRIPT_GLOBAL1, ATTR_SCRIPT_GLOBAL1_AMPLITUDE, ATTR_SCRIPT_GLOBAL1_AMPLITUDE_CURVE, atts));
     }
     if ((hs = atts.get(ATTR_SCRIPT_GLOBAL2)) != null) {
-      pMovie.setGlobalScript2(GlobalScript.valueOf(hs));
+      pMovie.setGlobalScript2(readGlobalScript(ATTR_SCRIPT_GLOBAL2, ATTR_SCRIPT_GLOBAL2_AMPLITUDE, ATTR_SCRIPT_GLOBAL2_AMPLITUDE_CURVE, atts));
     }
     if ((hs = atts.get(ATTR_SCRIPT_GLOBAL3)) != null) {
-      pMovie.setGlobalScript3(GlobalScript.valueOf(hs));
+      pMovie.setGlobalScript3(readGlobalScript(ATTR_SCRIPT_GLOBAL3, ATTR_SCRIPT_GLOBAL3_AMPLITUDE, ATTR_SCRIPT_GLOBAL3_AMPLITUDE_CURVE, atts));
     }
     if ((hs = atts.get(ATTR_SCRIPT_GLOBAL4)) != null) {
-      pMovie.setGlobalScript4(GlobalScript.valueOf(hs));
+      pMovie.setGlobalScript4(readGlobalScript(ATTR_SCRIPT_GLOBAL4, ATTR_SCRIPT_GLOBAL4_AMPLITUDE, ATTR_SCRIPT_GLOBAL4_AMPLITUDE_CURVE, atts));
     }
     if ((hs = atts.get(ATTR_SCRIPT_GLOBAL5)) != null) {
-      pMovie.setGlobalScript5(GlobalScript.valueOf(hs));
+      pMovie.setGlobalScript5(readGlobalScript(ATTR_SCRIPT_GLOBAL5, ATTR_SCRIPT_GLOBAL5_AMPLITUDE, ATTR_SCRIPT_GLOBAL5_AMPLITUDE_CURVE, atts));
     }
-    if ((hs = atts.get(ATTR_SCRIPT_XFORM)) != null) {
-      pMovie.setxFormScript1(XFormScript.valueOf(hs));
+
+    if ((hs = atts.get(ATTR_SCRIPT_XFORM)) != null) { // legacy
+      pMovie.setxFormScript1(new XFormScript(XFormScriptType.valueOf(hs), 1.0));
     }
     if ((hs = atts.get(ATTR_SCRIPT_XFORM1)) != null) {
-      pMovie.setxFormScript1(XFormScript.valueOf(hs));
+      pMovie.setxFormScript1(readXFormScript(ATTR_SCRIPT_XFORM1, ATTR_SCRIPT_XFORM1_AMPLITUDE, ATTR_SCRIPT_XFORM1_AMPLITUDE_CURVE, atts));
     }
     if ((hs = atts.get(ATTR_SCRIPT_XFORM2)) != null) {
-      pMovie.setxFormScript2(XFormScript.valueOf(hs));
+      pMovie.setxFormScript2(readXFormScript(ATTR_SCRIPT_XFORM2, ATTR_SCRIPT_XFORM2_AMPLITUDE, ATTR_SCRIPT_XFORM2_AMPLITUDE_CURVE, atts));
     }
     if ((hs = atts.get(ATTR_SCRIPT_XFORM3)) != null) {
-      pMovie.setxFormScript3(XFormScript.valueOf(hs));
+      pMovie.setxFormScript3(readXFormScript(ATTR_SCRIPT_XFORM3, ATTR_SCRIPT_XFORM3_AMPLITUDE, ATTR_SCRIPT_XFORM3_AMPLITUDE_CURVE, atts));
     }
     if ((hs = atts.get(ATTR_SCRIPT_XFORM4)) != null) {
-      pMovie.setxFormScript4(XFormScript.valueOf(hs));
+      pMovie.setxFormScript4(readXFormScript(ATTR_SCRIPT_XFORM4, ATTR_SCRIPT_XFORM4_AMPLITUDE, ATTR_SCRIPT_XFORM4_AMPLITUDE_CURVE, atts));
     }
     if ((hs = atts.get(ATTR_SCRIPT_XFORM5)) != null) {
-      pMovie.setxFormScript5(XFormScript.valueOf(hs));
+      pMovie.setxFormScript5(readXFormScript(ATTR_SCRIPT_XFORM5, ATTR_SCRIPT_XFORM5_AMPLITUDE, ATTR_SCRIPT_XFORM5_AMPLITUDE_CURVE, atts));
     }
+
     if ((hs = atts.get(ATTR_FRAME_WIDTH)) != null) {
       pMovie.setFrameWidth(Integer.parseInt(hs));
     }
@@ -215,5 +239,41 @@ public class JWFMovieReader {
     if ((hs = atts.get(ATTR_QUALITY)) != null) {
       pMovie.setQuality(Integer.parseInt(hs));
     }
+  }
+
+  private GlobalScript readGlobalScript(String pAttrScript, String pAttrScriptAmplitude, String pAttrScriptAmplitudeCurve, XMLAttributes pAtts) {
+    GlobalScript script = new GlobalScript();
+    String hs;
+    if ((hs = pAtts.get(pAttrScript)) != null) {
+      try {
+        script.setScriptType(GlobalScriptType.valueOf(hs));
+      }
+      catch (Exception ex) {
+        ex.printStackTrace();
+      }
+    }
+    if ((hs = pAtts.get(pAttrScriptAmplitude)) != null) {
+      script.setAmplitude(Double.parseDouble(hs));
+    }
+    AbstractFlameReader.readMotionCurveAttributes(pAtts, script.getAmplitudeCurve(), pAttrScript + Tools.CURVE_POSTFIX + "_");
+    return script;
+  }
+
+  private XFormScript readXFormScript(String pAttrScript, String pAttrScriptAmplitude, String pAttrScriptAmplitudeCurve, XMLAttributes pAtts) {
+    XFormScript script = new XFormScript();
+    String hs;
+    if ((hs = pAtts.get(pAttrScript)) != null) {
+      try {
+        script.setScriptType(XFormScriptType.valueOf(hs));
+      }
+      catch (Exception ex) {
+        ex.printStackTrace();
+      }
+    }
+    if ((hs = pAtts.get(pAttrScriptAmplitude)) != null) {
+      script.setAmplitude(Double.parseDouble(hs));
+    }
+    AbstractFlameReader.readMotionCurveAttributes(pAtts, script.getAmplitudeCurve(), pAttrScript + Tools.CURVE_POSTFIX + "_");
+    return script;
   }
 }

@@ -15,6 +15,7 @@ public abstract class AbstractControlsDelegate {
   protected final TinaController owner;
   protected final TinaControllerData data;
   protected final JTabbedPane rootTabbedPane;
+  protected final boolean useUndoManager;
 
   public abstract String getEditingTitle(JWFNumberField sender);
 
@@ -24,14 +25,19 @@ public abstract class AbstractControlsDelegate {
 
   public abstract boolean isEnabled();
 
-  public AbstractControlsDelegate(TinaController pOwner, TinaControllerData pData, JTabbedPane pRootTabbedPane) {
+  public AbstractControlsDelegate(TinaController pOwner, TinaControllerData pData, JTabbedPane pRootTabbedPane, boolean pUseUndoManager) {
     owner = pOwner;
     data = pData;
     rootTabbedPane = pRootTabbedPane;
+    useUndoManager = pUseUndoManager;
   }
 
   public void editMotionCurve(ActionEvent e) {
     JWFNumberField sender = ((JWFNumberField.JWFNumberFieldButton) e.getSource()).getOwner();
+    editMotionCurve(sender);
+  }
+
+  public void editMotionCurve(JWFNumberField sender) {
     String propName = sender.getMotionPropertyName();
     editMotionCurve(propName, getEditingTitle(sender));
     enableControl(sender, false);
@@ -59,7 +65,9 @@ public abstract class AbstractControlsDelegate {
     dlg.setVisible(true);
     if (dlg.isConfirmed()) {
       Flame flame = owner.getCurrFlame();
-      owner.undoManager.saveUndoPoint(flame);
+      if (useUndoManager) {
+        owner.undoManager.saveUndoPoint(flame);
+      }
       if (dlg.isRemoved()) {
         curve.setEnabled(false);
       }

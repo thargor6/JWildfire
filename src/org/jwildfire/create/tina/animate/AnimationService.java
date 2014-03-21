@@ -16,6 +16,9 @@
 */
 package org.jwildfire.create.tina.animate;
 
+import static org.jwildfire.base.mathlib.MathLib.EPSILON;
+import static org.jwildfire.base.mathlib.MathLib.fabs;
+
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -23,6 +26,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.jwildfire.base.Prefs;
+import org.jwildfire.base.Tools;
 import org.jwildfire.base.mathlib.MathLib;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.Layer;
@@ -115,7 +119,7 @@ public class AnimationService {
     Class<T> cls = (Class<T>) pSource.getClass();
     Field field;
     try {
-      field = cls.getDeclaredField(pName + CURVE_POSTFIX);
+      field = cls.getDeclaredField(pName + Tools.CURVE_POSTFIX);
       field.setAccessible(true);
       Class<?> fieldCls = field.getType();
       if (fieldCls == MotionCurve.class) {
@@ -129,8 +133,6 @@ public class AnimationService {
       throw new RuntimeException(ex);
     }
   }
-
-  private static final String CURVE_POSTFIX = "Curve";
 
   public static Flame evalMotionCurves(Flame pFlame, double pFrame) {
     try {
@@ -146,7 +148,7 @@ public class AnimationService {
     Class<?> cls = pObject.getClass();
     for (Field field : cls.getDeclaredFields()) {
       field.setAccessible(true);
-      if (field.getType() == MotionCurve.class && field.getName().endsWith(CURVE_POSTFIX)) {
+      if (field.getType() == MotionCurve.class && field.getName().endsWith(Tools.CURVE_POSTFIX)) {
         MotionCurve curve = (MotionCurve) field.get(pObject);
         if (curve.isEnabled()) {
           MotionCurve currCurve = curve;
@@ -156,7 +158,7 @@ public class AnimationService {
             value += envelope.evaluate(pFrame);
             currCurve = currCurve.getParent();
           }
-          String propName = field.getName().substring(0, field.getName().length() - CURVE_POSTFIX.length());
+          String propName = field.getName().substring(0, field.getName().length() - Tools.CURVE_POSTFIX.length());
           curve.getChangeHandler().processValueChange(pObject, propName, value);
           //setPropertyValue(pObject, propName, value);
           //          System.out.println(propName + " " + value);
@@ -199,7 +201,7 @@ public class AnimationService {
       motionCurvePropertyCache.put(cls, res);
       for (Field field : cls.getDeclaredFields()) {
         field.setAccessible(true);
-        if (field.getType() == MotionCurve.class && field.getName().endsWith(CURVE_POSTFIX)) {
+        if (field.getType() == MotionCurve.class && field.getName().endsWith(Tools.CURVE_POSTFIX)) {
           res.add(field);
         }
       }
@@ -222,15 +224,23 @@ public class AnimationService {
   }
 
   public static void addMotionCurve(Flame pFlame, GlobalScript pScript, int pFrame, int pFrameCount) {
-    if (pScript != null && !GlobalScript.NONE.equals(pScript)) {
+    if (pScript != null && pScript.getScriptType() != null && !GlobalScriptType.NONE.equals(pScript.getScriptType()) && fabs(pScript.getAmplitude()) > EPSILON) {
       int envX[] = new int[2];
       double envY[] = new double[2];
       envX[0] = 0;
       envY[0] = 0;
       envX[1] = pFrameCount;
-      envY[1] = 360.0;
+      double amplitude;
+      if (pScript.getAmplitudeCurve().isEnabled()) {
+        Envelope envelope = pScript.getAmplitudeCurve().toEnvelope();
+        amplitude = envelope.evaluate(pFrame);
+      }
+      else {
+        amplitude = pScript.getAmplitude();
+      }
+      envY[1] = 360.0 * amplitude;
       MotionCurve curve = null;
-      switch (pScript) {
+      switch (pScript.getScriptType()) {
         case ROTATE_PITCH:
           curve = pFlame.getCamPitchCurve();
           break;
@@ -272,9 +282,18 @@ public class AnimationService {
   }
 
   public static void addMotionCurve(Flame pFlame, XFormScript pScript, int pFrame, int pFrameCount) {
-    if (pScript != null && !XFormScript.NONE.equals(pScript)) {
+    if (pScript != null && pScript.getScriptType() != null && !XFormScriptType.NONE.equals(pScript.getScriptType()) && fabs(pScript.getAmplitude()) > EPSILON) {
+      double amplitude;
+      if (pScript.getAmplitudeCurve().isEnabled()) {
+        Envelope envelope = pScript.getAmplitudeCurve().toEnvelope();
+        amplitude = envelope.evaluate(pFrame);
+      }
+      else {
+        amplitude = pScript.getAmplitude();
+      }
+
       for (Layer layer : pFlame.getLayers()) {
-        switch (pScript) {
+        switch (pScript.getScriptType()) {
           case ROTATE_FULL: {
             int idx = 0;
             for (XForm xForm : layer.getXForms()) {
@@ -283,7 +302,7 @@ public class AnimationService {
               envX[0] = 0;
               envY[0] = 0;
               envX[1] = pFrameCount;
-              envY[1] = 360.0;
+              envY[1] = 360.0 * amplitude;
               MotionCurve curve = xForm.getRotateCurve();
               idx++;
               if (idx % 2 == 0) {
@@ -301,7 +320,7 @@ public class AnimationService {
           case ROTATE_LAST_XFORM:
           case ROTATE_FINAL_XFORM: {
             XForm xForm = null;
-            xForm = getXForm(pScript, layer, xForm);
+            xForm = getXForm(pScript.getScriptType(), layer, xForm);
 
             if (xForm != null) {
               int envX[] = new int[2];
@@ -309,7 +328,7 @@ public class AnimationService {
               envX[0] = 0;
               envY[0] = 0;
               envX[1] = pFrameCount;
-              envY[1] = 360.0;
+              envY[1] = 360.0 * amplitude;
               MotionCurve curve = xForm.getRotateCurve();
               addEnvelope(pFrameCount, curve, envX, envY);
             }
@@ -323,7 +342,7 @@ public class AnimationService {
     }
   }
 
-  private static XForm getXForm(XFormScript pScript, Layer layer, XForm xForm) {
+  private static XForm getXForm(XFormScriptType pScript, Layer layer, XForm xForm) {
     switch (pScript) {
       case ROTATE_FIRST_XFORM:
         return layer.getXForms().size() > 0 ? layer.getXForms().get(0) : null;

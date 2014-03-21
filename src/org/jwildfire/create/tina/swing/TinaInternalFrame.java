@@ -77,8 +77,8 @@ import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 
 import org.jwildfire.base.Prefs;
-import org.jwildfire.create.tina.animate.GlobalScript;
-import org.jwildfire.create.tina.animate.XFormScript;
+import org.jwildfire.create.tina.animate.GlobalScriptType;
+import org.jwildfire.create.tina.animate.XFormScriptType;
 import org.jwildfire.create.tina.base.DrawMode;
 import org.jwildfire.create.tina.base.PostSymmetryType;
 import org.jwildfire.create.tina.base.Shading;
@@ -4162,26 +4162,26 @@ public class TinaInternalFrame extends JInternalFrame {
       getShadingLightCmb().addItem(String.valueOf("4"));
 
       initGlobalScriptCmb(getSwfAnimatorGlobalScript1Cmb());
-      getSwfAnimatorGlobalScript1Cmb().setSelectedItem(GlobalScript.ROTATE_PITCH);
+      getSwfAnimatorGlobalScript1Cmb().setSelectedItem(GlobalScriptType.ROTATE_PITCH);
       initGlobalScriptCmb(getSwfAnimatorGlobalScript2Cmb());
-      getSwfAnimatorGlobalScript2Cmb().setSelectedItem(GlobalScript.NONE);
+      getSwfAnimatorGlobalScript2Cmb().setSelectedItem(GlobalScriptType.NONE);
       initGlobalScriptCmb(getSwfAnimatorGlobalScript3Cmb());
-      getSwfAnimatorGlobalScript3Cmb().setSelectedItem(GlobalScript.NONE);
+      getSwfAnimatorGlobalScript3Cmb().setSelectedItem(GlobalScriptType.NONE);
       initGlobalScriptCmb(getSwfAnimatorGlobalScript4Cmb());
-      getSwfAnimatorGlobalScript4Cmb().setSelectedItem(GlobalScript.NONE);
+      getSwfAnimatorGlobalScript4Cmb().setSelectedItem(GlobalScriptType.NONE);
       initGlobalScriptCmb(getSwfAnimatorGlobalScript5Cmb());
-      getSwfAnimatorGlobalScript5Cmb().setSelectedItem(GlobalScript.NONE);
+      getSwfAnimatorGlobalScript5Cmb().setSelectedItem(GlobalScriptType.NONE);
 
       initXFormScriptCmb(getSwfAnimatorXFormScript1Cmb());
-      getSwfAnimatorXFormScript1Cmb().setSelectedItem(XFormScript.ROTATE_FIRST_XFORM);
+      getSwfAnimatorXFormScript1Cmb().setSelectedItem(XFormScriptType.ROTATE_FIRST_XFORM);
       initXFormScriptCmb(getSwfAnimatorXFormScript2Cmb());
-      getSwfAnimatorXFormScript2Cmb().setSelectedItem(XFormScript.NONE);
+      getSwfAnimatorXFormScript2Cmb().setSelectedItem(XFormScriptType.NONE);
       initXFormScriptCmb(getSwfAnimatorXFormScript3Cmb());
-      getSwfAnimatorXFormScript3Cmb().setSelectedItem(XFormScript.NONE);
+      getSwfAnimatorXFormScript3Cmb().setSelectedItem(XFormScriptType.NONE);
       initXFormScriptCmb(getSwfAnimatorXFormScript4Cmb());
-      getSwfAnimatorXFormScript4Cmb().setSelectedItem(XFormScript.NONE);
+      getSwfAnimatorXFormScript4Cmb().setSelectedItem(XFormScriptType.NONE);
       initXFormScriptCmb(getSwfAnimatorXFormScript5Cmb());
-      getSwfAnimatorXFormScript5Cmb().setSelectedItem(XFormScript.NONE);
+      getSwfAnimatorXFormScript5Cmb().setSelectedItem(XFormScriptType.NONE);
 
       tinaController.setInteractiveRendererCtrl(new TinaInteractiveRendererController(tinaController, pErrorHandler, pPrefs,
           getInteractiveLoadFlameButton(), getInteractiveLoadFlameFromClipboardButton(), getInteractiveNextButton(), getInteractiveStopButton(),
@@ -4195,7 +4195,7 @@ public class TinaInternalFrame extends JInternalFrame {
           getSwfAnimatorGlobalScript2Cmb(), getSwfAnimatorGlobalScript2REd(),
           getSwfAnimatorGlobalScript3Cmb(), getSwfAnimatorGlobalScript3REd(),
           getSwfAnimatorGlobalScript4Cmb(), getSwfAnimatorGlobalScript4REd(),
-          getSwfAnimatorGlobalScript5Cmb(), getSwfAnimatorGlobalScript4REd(),
+          getSwfAnimatorGlobalScript5Cmb(), getSwfAnimatorGlobalScript5REd(),
           getSwfAnimatorXFormScript1Cmb(), getSwfAnimatorXFormScript1REd(),
           getSwfAnimatorXFormScript2Cmb(), getSwfAnimatorXFormScript2REd(),
           getSwfAnimatorXFormScript3Cmb(), getSwfAnimatorXFormScript3REd(),
@@ -4225,23 +4225,23 @@ public class TinaInternalFrame extends JInternalFrame {
 
   private void initXFormScriptCmb(JComboBox pCmb) {
     pCmb.removeAllItems();
-    pCmb.addItem(XFormScript.NONE);
-    pCmb.addItem(XFormScript.ROTATE_FULL);
-    pCmb.addItem(XFormScript.ROTATE_FIRST_XFORM);
-    pCmb.addItem(XFormScript.ROTATE_2ND_XFORM);
-    pCmb.addItem(XFormScript.ROTATE_3RD_XFORM);
-    pCmb.addItem(XFormScript.ROTATE_4TH_XFORM);
-    pCmb.addItem(XFormScript.ROTATE_5TH_XFORM);
-    pCmb.addItem(XFormScript.ROTATE_LAST_XFORM);
-    pCmb.addItem(XFormScript.ROTATE_FINAL_XFORM);
+    pCmb.addItem(XFormScriptType.NONE);
+    pCmb.addItem(XFormScriptType.ROTATE_FULL);
+    pCmb.addItem(XFormScriptType.ROTATE_FIRST_XFORM);
+    pCmb.addItem(XFormScriptType.ROTATE_2ND_XFORM);
+    pCmb.addItem(XFormScriptType.ROTATE_3RD_XFORM);
+    pCmb.addItem(XFormScriptType.ROTATE_4TH_XFORM);
+    pCmb.addItem(XFormScriptType.ROTATE_5TH_XFORM);
+    pCmb.addItem(XFormScriptType.ROTATE_LAST_XFORM);
+    pCmb.addItem(XFormScriptType.ROTATE_FINAL_XFORM);
   }
 
   private void initGlobalScriptCmb(JComboBox pCmb) {
     pCmb.removeAllItems();
-    pCmb.addItem(GlobalScript.NONE);
-    pCmb.addItem(GlobalScript.ROTATE_PITCH);
-    pCmb.addItem(GlobalScript.ROTATE_ROLL);
-    pCmb.addItem(GlobalScript.ROTATE_YAW);
+    pCmb.addItem(GlobalScriptType.NONE);
+    pCmb.addItem(GlobalScriptType.ROTATE_PITCH);
+    pCmb.addItem(GlobalScriptType.ROTATE_ROLL);
+    pCmb.addItem(GlobalScriptType.ROTATE_YAW);
   }
 
   private void initStereo3dModeCmb(JComboBox pCmb) {
@@ -5834,12 +5834,14 @@ public class TinaInternalFrame extends JInternalFrame {
       panel_10.setLayout(null);
       panel_10.add(getSwfAnimatorGlobalScript1Cmb());
       animateGlobalScriptLbl = new JLabel();
+      animateGlobalScriptLbl.setName("animateGlobalScriptLbl");
       animateGlobalScriptLbl.setBounds(12, 19, 94, 22);
       panel_10.add(animateGlobalScriptLbl);
       animateGlobalScriptLbl.setPreferredSize(new Dimension(94, 22));
       animateGlobalScriptLbl.setText("Global script 1");
       animateGlobalScriptLbl.setFont(new Font("Dialog", Font.BOLD, 10));
       animateXFormScriptLbl = new JLabel();
+      animateXFormScriptLbl.setName("animateXFormScriptLbl");
       animateXFormScriptLbl.setBounds(12, 138, 94, 22);
       panel_10.add(animateXFormScriptLbl);
       animateXFormScriptLbl.setPreferredSize(new Dimension(94, 22));
@@ -5904,6 +5906,7 @@ public class TinaInternalFrame extends JInternalFrame {
       panel_10.add(swfAnimatorGlobalScript2Cmb);
 
       JLabel lblGlobalScript = new JLabel();
+      lblGlobalScript.setName("lblGlobalScript");
       lblGlobalScript.setText("Global script 2");
       lblGlobalScript.setPreferredSize(new Dimension(94, 22));
       lblGlobalScript.setFont(new Font("Dialog", Font.BOLD, 10));
@@ -5918,6 +5921,7 @@ public class TinaInternalFrame extends JInternalFrame {
       panel_10.add(swfAnimatorGlobalScript3Cmb);
 
       JLabel lblGlobalScript_1 = new JLabel();
+      lblGlobalScript_1.setName("lblGlobalScript_1");
       lblGlobalScript_1.setText("Global script 3");
       lblGlobalScript_1.setPreferredSize(new Dimension(94, 22));
       lblGlobalScript_1.setFont(new Font("Dialog", Font.BOLD, 10));
@@ -5932,6 +5936,7 @@ public class TinaInternalFrame extends JInternalFrame {
       panel_10.add(swfAnimatorGlobalScript4Cmb);
 
       JLabel lblGlobalScript_2 = new JLabel();
+      lblGlobalScript_2.setName("lblGlobalScript_2");
       lblGlobalScript_2.setText("Global script 4");
       lblGlobalScript_2.setPreferredSize(new Dimension(94, 22));
       lblGlobalScript_2.setFont(new Font("Dialog", Font.BOLD, 10));
@@ -5946,6 +5951,7 @@ public class TinaInternalFrame extends JInternalFrame {
       panel_10.add(swfAnimatorGlobalScript5Cmb);
 
       JLabel lblGlobalScript_3 = new JLabel();
+      lblGlobalScript_3.setName("lblGlobalScript_3");
       lblGlobalScript_3.setText("Global script 5");
       lblGlobalScript_3.setPreferredSize(new Dimension(94, 22));
       lblGlobalScript_3.setFont(new Font("Dialog", Font.BOLD, 10));
@@ -5953,6 +5959,7 @@ public class TinaInternalFrame extends JInternalFrame {
       panel_10.add(lblGlobalScript_3);
 
       JLabel lblXformScript = new JLabel();
+      lblXformScript.setName("lblXformScript");
       lblXformScript.setText("XForm script 2");
       lblXformScript.setPreferredSize(new Dimension(94, 22));
       lblXformScript.setFont(new Font("Dialog", Font.BOLD, 10));
@@ -5967,6 +5974,7 @@ public class TinaInternalFrame extends JInternalFrame {
       panel_10.add(swfAnimatorXFormScript2Cmb);
 
       JLabel lblXformScript_1 = new JLabel();
+      lblXformScript_1.setName("lblXformScript_1");
       lblXformScript_1.setText("XForm script 3");
       lblXformScript_1.setPreferredSize(new Dimension(94, 22));
       lblXformScript_1.setFont(new Font("Dialog", Font.BOLD, 10));
@@ -5981,6 +5989,7 @@ public class TinaInternalFrame extends JInternalFrame {
       panel_10.add(swfAnimatorXFormScript3Cmb);
 
       JLabel lblXformScript_2 = new JLabel();
+      lblXformScript_2.setName("lblXformScript_2");
       lblXformScript_2.setText("XForm script 4");
       lblXformScript_2.setPreferredSize(new Dimension(94, 22));
       lblXformScript_2.setFont(new Font("Dialog", Font.BOLD, 10));
@@ -5995,6 +6004,7 @@ public class TinaInternalFrame extends JInternalFrame {
       panel_10.add(swfAnimatorXFormScript4Cmb);
 
       JLabel lblXformScript_3 = new JLabel();
+      lblXformScript_3.setName("lblXformScript_3");
       lblXformScript_3.setText("XForm script 5");
       lblXformScript_3.setPreferredSize(new Dimension(94, 22));
       lblXformScript_3.setFont(new Font("Dialog", Font.BOLD, 10));
@@ -6009,133 +6019,183 @@ public class TinaInternalFrame extends JInternalFrame {
       panel_10.add(swfAnimatorXFormScript5Cmb);
 
       swfAnimatorGlobalScript1REd = new JWFNumberField();
+      swfAnimatorGlobalScript1REd.setValue(1.0);
       swfAnimatorGlobalScript1REd.setWithMotionCurve(true);
       swfAnimatorGlobalScript1REd.setValueStep(1.0);
       swfAnimatorGlobalScript1REd.setSize(new Dimension(100, 24));
       swfAnimatorGlobalScript1REd.setPreferredSize(new Dimension(100, 24));
-      swfAnimatorGlobalScript1REd.setMotionPropertyName("camRoll");
+      swfAnimatorGlobalScript1REd.setMotionPropertyName("globalScript1");
       swfAnimatorGlobalScript1REd.setLocation(new Point(100, 4));
-      swfAnimatorGlobalScript1REd.setLinkedMotionControlName("tinaCameraRollSlider");
-      swfAnimatorGlobalScript1REd.setLinkedLabelControlName("tinaCameraRollLbl");
+      swfAnimatorGlobalScript1REd.setLinkedLabelControlName("animateGlobalScriptLbl");
       swfAnimatorGlobalScript1REd.setFont(new Font("Dialog", Font.PLAIN, 10));
       swfAnimatorGlobalScript1REd.setBounds(291, 19, 100, 24);
+      swfAnimatorGlobalScript1REd.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getSwfAnimatorCtrl().editGlobalMotionCurve(getSwfAnimatorGlobalScript1REd());
+        }
+      });
       panel_10.add(swfAnimatorGlobalScript1REd);
 
       swfAnimatorGlobalScript2REd = new JWFNumberField();
+      swfAnimatorGlobalScript2REd.setValue(1.0);
       swfAnimatorGlobalScript2REd.setWithMotionCurve(true);
       swfAnimatorGlobalScript2REd.setValueStep(1.0);
       swfAnimatorGlobalScript2REd.setSize(new Dimension(100, 24));
       swfAnimatorGlobalScript2REd.setPreferredSize(new Dimension(100, 24));
-      swfAnimatorGlobalScript2REd.setMotionPropertyName("camRoll");
+      swfAnimatorGlobalScript2REd.setMotionPropertyName("globalScript2");
       swfAnimatorGlobalScript2REd.setLocation(new Point(100, 4));
-      swfAnimatorGlobalScript2REd.setLinkedMotionControlName("tinaCameraRollSlider");
-      swfAnimatorGlobalScript2REd.setLinkedLabelControlName("tinaCameraRollLbl");
+      swfAnimatorGlobalScript2REd.setLinkedLabelControlName("lblGlobalScript");
       swfAnimatorGlobalScript2REd.setFont(new Font("Dialog", Font.PLAIN, 10));
       swfAnimatorGlobalScript2REd.setBounds(291, 42, 100, 24);
+      swfAnimatorGlobalScript2REd.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getSwfAnimatorCtrl().editGlobalMotionCurve(getSwfAnimatorGlobalScript2REd());
+        }
+      });
       panel_10.add(swfAnimatorGlobalScript2REd);
 
       swfAnimatorGlobalScript3REd = new JWFNumberField();
+      swfAnimatorGlobalScript3REd.setValue(1.0);
       swfAnimatorGlobalScript3REd.setWithMotionCurve(true);
       swfAnimatorGlobalScript3REd.setValueStep(1.0);
       swfAnimatorGlobalScript3REd.setSize(new Dimension(100, 24));
       swfAnimatorGlobalScript3REd.setPreferredSize(new Dimension(100, 24));
-      swfAnimatorGlobalScript3REd.setMotionPropertyName("camRoll");
+      swfAnimatorGlobalScript3REd.setMotionPropertyName("globalScript3");
       swfAnimatorGlobalScript3REd.setLocation(new Point(100, 4));
-      swfAnimatorGlobalScript3REd.setLinkedMotionControlName("tinaCameraRollSlider");
-      swfAnimatorGlobalScript3REd.setLinkedLabelControlName("tinaCameraRollLbl");
+      swfAnimatorGlobalScript3REd.setLinkedLabelControlName("lblGlobalScript_1");
       swfAnimatorGlobalScript3REd.setFont(new Font("Dialog", Font.PLAIN, 10));
       swfAnimatorGlobalScript3REd.setBounds(291, 65, 100, 24);
+      swfAnimatorGlobalScript3REd.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getSwfAnimatorCtrl().editGlobalMotionCurve(getSwfAnimatorGlobalScript3REd());
+        }
+      });
       panel_10.add(swfAnimatorGlobalScript3REd);
 
       swfAnimatorGlobalScript4REd = new JWFNumberField();
+      swfAnimatorGlobalScript4REd.setValue(1.0);
       swfAnimatorGlobalScript4REd.setWithMotionCurve(true);
       swfAnimatorGlobalScript4REd.setValueStep(1.0);
       swfAnimatorGlobalScript4REd.setSize(new Dimension(100, 24));
       swfAnimatorGlobalScript4REd.setPreferredSize(new Dimension(100, 24));
-      swfAnimatorGlobalScript4REd.setMotionPropertyName("camRoll");
+      swfAnimatorGlobalScript4REd.setMotionPropertyName("globalScript4");
       swfAnimatorGlobalScript4REd.setLocation(new Point(100, 4));
-      swfAnimatorGlobalScript4REd.setLinkedMotionControlName("tinaCameraRollSlider");
-      swfAnimatorGlobalScript4REd.setLinkedLabelControlName("tinaCameraRollLbl");
+      swfAnimatorGlobalScript4REd.setLinkedLabelControlName("lblGlobalScript_2");
       swfAnimatorGlobalScript4REd.setFont(new Font("Dialog", Font.PLAIN, 10));
       swfAnimatorGlobalScript4REd.setBounds(291, 88, 100, 24);
+      swfAnimatorGlobalScript4REd.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getSwfAnimatorCtrl().editGlobalMotionCurve(getSwfAnimatorGlobalScript4REd());
+        }
+      });
       panel_10.add(swfAnimatorGlobalScript4REd);
 
-      JWFNumberField swfAnimatorGlobalScript5REd = new JWFNumberField();
+      swfAnimatorGlobalScript5REd = new JWFNumberField();
+      swfAnimatorGlobalScript5REd.setValue(1.0);
       swfAnimatorGlobalScript5REd.setWithMotionCurve(true);
       swfAnimatorGlobalScript5REd.setValueStep(1.0);
       swfAnimatorGlobalScript5REd.setSize(new Dimension(100, 24));
       swfAnimatorGlobalScript5REd.setPreferredSize(new Dimension(100, 24));
-      swfAnimatorGlobalScript5REd.setMotionPropertyName("camRoll");
+      swfAnimatorGlobalScript5REd.setMotionPropertyName("globalScript5");
       swfAnimatorGlobalScript5REd.setLocation(new Point(100, 4));
-      swfAnimatorGlobalScript5REd.setLinkedMotionControlName("tinaCameraRollSlider");
-      swfAnimatorGlobalScript5REd.setLinkedLabelControlName("tinaCameraRollLbl");
+      swfAnimatorGlobalScript5REd.setLinkedLabelControlName("lblGlobalScript_3");
       swfAnimatorGlobalScript5REd.setFont(new Font("Dialog", Font.PLAIN, 10));
       swfAnimatorGlobalScript5REd.setBounds(291, 111, 100, 24);
+      swfAnimatorGlobalScript5REd.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getSwfAnimatorCtrl().editGlobalMotionCurve(getSwfAnimatorGlobalScript5REd());
+        }
+      });
       panel_10.add(swfAnimatorGlobalScript5REd);
 
       swfAnimatorXFormScript1REd = new JWFNumberField();
+      swfAnimatorXFormScript1REd.setValue(1.0);
       swfAnimatorXFormScript1REd.setWithMotionCurve(true);
       swfAnimatorXFormScript1REd.setValueStep(1.0);
       swfAnimatorXFormScript1REd.setSize(new Dimension(100, 24));
       swfAnimatorXFormScript1REd.setPreferredSize(new Dimension(100, 24));
-      swfAnimatorXFormScript1REd.setMotionPropertyName("camRoll");
+      swfAnimatorXFormScript1REd.setMotionPropertyName("xFormScript1");
       swfAnimatorXFormScript1REd.setLocation(new Point(100, 4));
-      swfAnimatorXFormScript1REd.setLinkedMotionControlName("tinaCameraRollSlider");
-      swfAnimatorXFormScript1REd.setLinkedLabelControlName("tinaCameraRollLbl");
+      swfAnimatorXFormScript1REd.setLinkedLabelControlName("animateXFormScriptLbl");
       swfAnimatorXFormScript1REd.setFont(new Font("Dialog", Font.PLAIN, 10));
       swfAnimatorXFormScript1REd.setBounds(291, 138, 100, 24);
+      swfAnimatorXFormScript1REd.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getSwfAnimatorCtrl().editXFormMotionCurve(getSwfAnimatorXFormScript1REd());
+        }
+      });
       panel_10.add(swfAnimatorXFormScript1REd);
 
       swfAnimatorXFormScript2REd = new JWFNumberField();
+      swfAnimatorXFormScript2REd.setValue(1.0);
       swfAnimatorXFormScript2REd.setWithMotionCurve(true);
       swfAnimatorXFormScript2REd.setValueStep(1.0);
       swfAnimatorXFormScript2REd.setSize(new Dimension(100, 24));
       swfAnimatorXFormScript2REd.setPreferredSize(new Dimension(100, 24));
-      swfAnimatorXFormScript2REd.setMotionPropertyName("camRoll");
+      swfAnimatorXFormScript2REd.setMotionPropertyName("xFormScript2");
       swfAnimatorXFormScript2REd.setLocation(new Point(100, 4));
-      swfAnimatorXFormScript2REd.setLinkedMotionControlName("tinaCameraRollSlider");
-      swfAnimatorXFormScript2REd.setLinkedLabelControlName("tinaCameraRollLbl");
+      swfAnimatorXFormScript2REd.setLinkedLabelControlName("lblXformScript");
       swfAnimatorXFormScript2REd.setFont(new Font("Dialog", Font.PLAIN, 10));
       swfAnimatorXFormScript2REd.setBounds(291, 161, 100, 24);
+      swfAnimatorXFormScript2REd.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getSwfAnimatorCtrl().editXFormMotionCurve(getSwfAnimatorXFormScript2REd());
+        }
+      });
       panel_10.add(swfAnimatorXFormScript2REd);
 
       swfAnimatorXFormScript3REd = new JWFNumberField();
+      swfAnimatorXFormScript3REd.setValue(1.0);
       swfAnimatorXFormScript3REd.setWithMotionCurve(true);
       swfAnimatorXFormScript3REd.setValueStep(1.0);
       swfAnimatorXFormScript3REd.setSize(new Dimension(100, 24));
       swfAnimatorXFormScript3REd.setPreferredSize(new Dimension(100, 24));
-      swfAnimatorXFormScript3REd.setMotionPropertyName("camRoll");
+      swfAnimatorXFormScript3REd.setMotionPropertyName("xFormScript3");
       swfAnimatorXFormScript3REd.setLocation(new Point(100, 4));
-      swfAnimatorXFormScript3REd.setLinkedMotionControlName("tinaCameraRollSlider");
-      swfAnimatorXFormScript3REd.setLinkedLabelControlName("tinaCameraRollLbl");
+      swfAnimatorXFormScript3REd.setLinkedLabelControlName("lblXformScript_1");
       swfAnimatorXFormScript3REd.setFont(new Font("Dialog", Font.PLAIN, 10));
       swfAnimatorXFormScript3REd.setBounds(291, 184, 100, 24);
+      swfAnimatorXFormScript3REd.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getSwfAnimatorCtrl().editXFormMotionCurve(getSwfAnimatorXFormScript3REd());
+        }
+      });
       panel_10.add(swfAnimatorXFormScript3REd);
 
       swfAnimatorXFormScript4REd = new JWFNumberField();
+      swfAnimatorXFormScript4REd.setValue(1.0);
       swfAnimatorXFormScript4REd.setWithMotionCurve(true);
       swfAnimatorXFormScript4REd.setValueStep(1.0);
       swfAnimatorXFormScript4REd.setSize(new Dimension(100, 24));
       swfAnimatorXFormScript4REd.setPreferredSize(new Dimension(100, 24));
-      swfAnimatorXFormScript4REd.setMotionPropertyName("camRoll");
+      swfAnimatorXFormScript4REd.setMotionPropertyName("xFormScript4");
       swfAnimatorXFormScript4REd.setLocation(new Point(100, 4));
-      swfAnimatorXFormScript4REd.setLinkedMotionControlName("tinaCameraRollSlider");
-      swfAnimatorXFormScript4REd.setLinkedLabelControlName("tinaCameraRollLbl");
+      swfAnimatorXFormScript4REd.setLinkedLabelControlName("lblXformScript_2");
       swfAnimatorXFormScript4REd.setFont(new Font("Dialog", Font.PLAIN, 10));
       swfAnimatorXFormScript4REd.setBounds(291, 207, 100, 24);
+      swfAnimatorXFormScript4REd.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getSwfAnimatorCtrl().editXFormMotionCurve(getSwfAnimatorXFormScript4REd());
+        }
+      });
       panel_10.add(swfAnimatorXFormScript4REd);
 
       swfAnimatorXFormScript5REd = new JWFNumberField();
+      swfAnimatorXFormScript5REd.setValue(1.0);
       swfAnimatorXFormScript5REd.setWithMotionCurve(true);
       swfAnimatorXFormScript5REd.setValueStep(1.0);
       swfAnimatorXFormScript5REd.setSize(new Dimension(100, 24));
       swfAnimatorXFormScript5REd.setPreferredSize(new Dimension(100, 24));
-      swfAnimatorXFormScript5REd.setMotionPropertyName("camRoll");
+      swfAnimatorXFormScript5REd.setMotionPropertyName("xFormScript5");
       swfAnimatorXFormScript5REd.setLocation(new Point(100, 4));
-      swfAnimatorXFormScript5REd.setLinkedMotionControlName("tinaCameraRollSlider");
-      swfAnimatorXFormScript5REd.setLinkedLabelControlName("tinaCameraRollLbl");
+      swfAnimatorXFormScript5REd.setLinkedLabelControlName("lblXformScript_3");
       swfAnimatorXFormScript5REd.setFont(new Font("Dialog", Font.PLAIN, 10));
       swfAnimatorXFormScript5REd.setBounds(291, 230, 100, 24);
+      swfAnimatorXFormScript5REd.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getSwfAnimatorCtrl().editXFormMotionCurve(getSwfAnimatorXFormScript5REd());
+        }
+      });
       panel_10.add(swfAnimatorXFormScript5REd);
 
       JPanel panel_11 = new JPanel();
@@ -9455,6 +9515,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JWFNumberField swfAnimatorXFormScript3REd;
   private JWFNumberField swfAnimatorXFormScript4REd;
   private JWFNumberField swfAnimatorXFormScript5REd;
+  private JWFNumberField swfAnimatorGlobalScript5REd;
 
   /**
    * This method initializes renderBatchJobsScrollPane	
@@ -16824,6 +16885,10 @@ public class TinaInternalFrame extends JInternalFrame {
 
   public JWFNumberField getSwfAnimatorXFormScript5REd() {
     return swfAnimatorXFormScript5REd;
+  }
+
+  public JWFNumberField getSwfAnimatorGlobalScript5REd() {
+    return swfAnimatorGlobalScript5REd;
   }
 } //  @jve:decl-index=0:visual-constraint="10,10"
 

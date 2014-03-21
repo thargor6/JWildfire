@@ -39,7 +39,7 @@ import org.jwildfire.create.tina.base.motion.MotionCurve;
 public class FlameControlsDelegate extends AbstractControlsDelegate {
 
   public FlameControlsDelegate(TinaController pOwner, TinaControllerData pData, JTabbedPane pRootTabbedPane) {
-    super(pOwner, pData, pRootTabbedPane);
+    super(pOwner, pData, pRootTabbedPane, true);
   }
 
   @Override

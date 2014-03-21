@@ -16,28 +16,22 @@
 */
 package org.jwildfire.create.tina.animate;
 
-import java.io.Serializable;
+import org.jwildfire.create.tina.base.motion.MotionCurve;
 
-public class XFormScript extends SimpleScript implements Serializable {
-  private static final long serialVersionUID = 1L;
+public abstract class SimpleScript {
+  private double amplitude = 1.0;
+  private final MotionCurve amplitudeCurve = new MotionCurve();
 
-  private XFormScriptType scriptType;
-
-  public XFormScript(XFormScriptType pScriptType, double pAmplitude) {
-    scriptType = pScriptType;
-    setAmplitude(pAmplitude);
+  public double getAmplitude() {
+    return amplitude;
   }
 
-  public XFormScript() {
-
+  public void setAmplitude(double pAmplitude) {
+    amplitude = pAmplitude;
   }
 
-  public XFormScriptType getScriptType() {
-    return scriptType;
-  }
-
-  public void setScriptType(XFormScriptType pScriptType) {
-    scriptType = pScriptType;
+  public MotionCurve getAmplitudeCurve() {
+    return amplitudeCurve;
   }
 
 }

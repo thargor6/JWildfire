@@ -26,7 +26,7 @@ import org.jwildfire.create.tina.base.motion.MotionCurve;
 public class XFormControlsDelegate extends AbstractControlsDelegate {
 
   public XFormControlsDelegate(TinaController pOwner, TinaControllerData pData, JTabbedPane pRootTabbedPane) {
-    super(pOwner, pData, pRootTabbedPane);
+    super(pOwner, pData, pRootTabbedPane, true);
     setUpMotionControls();
   }
 
