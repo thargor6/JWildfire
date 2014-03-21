@@ -1382,7 +1382,7 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
 
     @Override
     public String getEditingTitle(JWFNumberField sender) {
-      return "motion script \"" + sender.getLinkedLabelControl().getText() + "\"";
+      return "\"" + sender.getLinkedLabelControl().getText() + "\"";
     }
 
     @Override
