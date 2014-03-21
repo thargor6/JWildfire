@@ -144,14 +144,14 @@ public class EnvelopeDialog extends JDialog {
           setVisible(false);
         }
       });
-      btnRemove.setText("Disable/Remove");
+      btnRemove.setText("Disable motion curve");
       btnRemove.setSize(new Dimension(125, 24));
       btnRemove.setSelected(true);
       btnRemove.setPreferredSize(new Dimension(125, 24));
       btnRemove.setMnemonic(KeyEvent.VK_R);
       btnRemove.setLocation(new Point(276, 10));
       btnRemove.setFont(new Font("Dialog", Font.BOLD, 10));
-      btnRemove.setBounds(619, 10, 125, 24);
+      btnRemove.setBounds(641, 10, 179, 24);
       bottomPanel.add(btnRemove);
     }
     return bottomPanel;
@@ -196,10 +196,10 @@ public class EnvelopeDialog extends JDialog {
     if (okButton == null) {
       okButton = new JButton();
       okButton.setPreferredSize(new Dimension(125, 24));
-      okButton.setText("OK");
+      okButton.setText("Apply motion curve");
       okButton.setMnemonic(KeyEvent.VK_O);
-      okButton.setSize(new Dimension(125, 24));
-      okButton.setLocation(new Point(276, 10));
+      okButton.setSize(new Dimension(179, 24));
+      okButton.setLocation(new Point(118, 10));
       okButton.setSelected(true);
       okButton.setFont(new Font("Dialog", Font.BOLD, 10));
       okButton.addActionListener(new java.awt.event.ActionListener() {
@@ -223,9 +223,9 @@ public class EnvelopeDialog extends JDialog {
       cancelButton = new JButton();
       cancelButton.setPreferredSize(new Dimension(125, 24));
       cancelButton.setMnemonic(KeyEvent.VK_C);
-      cancelButton.setText("Cancel");
-      cancelButton.setSize(new Dimension(125, 24));
-      cancelButton.setLocation(new Point(406, 10));
+      cancelButton.setText("Discard changes");
+      cancelButton.setSize(new Dimension(179, 24));
+      cancelButton.setLocation(new Point(380, 10));
       cancelButton.setFont(new Font("Dialog", Font.BOLD, 10));
       cancelButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -248,32 +248,36 @@ public class EnvelopeDialog extends JDialog {
       panel.setLayout(null);
 
       envelopeAddPointButton = new JButton();
+      envelopeAddPointButton.setFont(new Font("Dialog", Font.PLAIN, 10));
+      envelopeAddPointButton.setToolTipText("Add a point to the curve (click at the area to place it)");
       envelopeAddPointButton.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
           ctrl.addPoint();
         }
       });
-      envelopeAddPointButton.setText("Add Point");
-      envelopeAddPointButton.setSize(new Dimension(141, 26));
-      envelopeAddPointButton.setPreferredSize(new Dimension(141, 26));
+      envelopeAddPointButton.setText("Add point");
+      envelopeAddPointButton.setSize(new Dimension(141, 50));
+      envelopeAddPointButton.setPreferredSize(new Dimension(141, 50));
       envelopeAddPointButton.setLocation(new Point(5, 5));
-      envelopeAddPointButton.setBounds(6, 6, 141, 26);
+      envelopeAddPointButton.setBounds(6, 198, 141, 50);
       panel.add(envelopeAddPointButton);
 
       envelopeRemovePointButton = new JButton();
+      envelopeRemovePointButton.setToolTipText("Remove a point (after clikcing this button, click at a point)");
       envelopeRemovePointButton.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
           ctrl.removePoint();
         }
       });
-      envelopeRemovePointButton.setText("Remove Point");
+      envelopeRemovePointButton.setText("Remove point");
       envelopeRemovePointButton.setSize(new Dimension(141, 26));
       envelopeRemovePointButton.setPreferredSize(new Dimension(141, 26));
       envelopeRemovePointButton.setLocation(new Point(5, 37));
-      envelopeRemovePointButton.setBounds(6, 38, 141, 26);
+      envelopeRemovePointButton.setBounds(6, 6, 141, 26);
       panel.add(envelopeRemovePointButton);
 
       envelopeViewUpButton = new JButton();
+      envelopeViewUpButton.setFont(new Font("Dialog", Font.PLAIN, 10));
       envelopeViewUpButton.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
           ctrl.viewUp();
@@ -283,10 +287,11 @@ public class EnvelopeDialog extends JDialog {
       envelopeViewUpButton.setSize(new Dimension(48, 26));
       envelopeViewUpButton.setPreferredSize(new Dimension(48, 26));
       envelopeViewUpButton.setLocation(new Point(51, 99));
-      envelopeViewUpButton.setBounds(52, 100, 48, 26);
+      envelopeViewUpButton.setBounds(52, 325, 48, 26);
       panel.add(envelopeViewUpButton);
 
       envelopeViewLeftButton = new JButton();
+      envelopeViewLeftButton.setFont(new Font("Dialog", Font.PLAIN, 10));
       envelopeViewLeftButton.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
           ctrl.viewLeft();
@@ -296,10 +301,11 @@ public class EnvelopeDialog extends JDialog {
       envelopeViewLeftButton.setSize(new Dimension(48, 26));
       envelopeViewLeftButton.setPreferredSize(new Dimension(48, 26));
       envelopeViewLeftButton.setLocation(new Point(5, 126));
-      envelopeViewLeftButton.setBounds(6, 127, 48, 26);
+      envelopeViewLeftButton.setBounds(6, 352, 48, 26);
       panel.add(envelopeViewLeftButton);
 
       envelopeViewRightButton = new JButton();
+      envelopeViewRightButton.setFont(new Font("Dialog", Font.PLAIN, 10));
       envelopeViewRightButton.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
           ctrl.viewRight();
@@ -309,10 +315,11 @@ public class EnvelopeDialog extends JDialog {
       envelopeViewRightButton.setSize(new Dimension(48, 26));
       envelopeViewRightButton.setPreferredSize(new Dimension(48, 26));
       envelopeViewRightButton.setLocation(new Point(98, 126));
-      envelopeViewRightButton.setBounds(99, 127, 48, 26);
+      envelopeViewRightButton.setBounds(99, 352, 48, 26);
       panel.add(envelopeViewRightButton);
 
       envelopeViewDownButton = new JButton();
+      envelopeViewDownButton.setFont(new Font("Dialog", Font.PLAIN, 10));
       envelopeViewDownButton.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
           ctrl.viewDown();
@@ -322,10 +329,11 @@ public class EnvelopeDialog extends JDialog {
       envelopeViewDownButton.setSize(new Dimension(48, 26));
       envelopeViewDownButton.setPreferredSize(new Dimension(48, 26));
       envelopeViewDownButton.setLocation(new Point(51, 153));
-      envelopeViewDownButton.setBounds(52, 154, 48, 26);
+      envelopeViewDownButton.setBounds(52, 379, 48, 26);
       panel.add(envelopeViewDownButton);
 
       envelopeViewAllButton = new JButton();
+      envelopeViewAllButton.setFont(new Font("Dialog", Font.PLAIN, 10));
       envelopeViewAllButton.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
           ctrl.viewAll();
@@ -335,7 +343,7 @@ public class EnvelopeDialog extends JDialog {
       envelopeViewAllButton.setSize(new Dimension(141, 24));
       envelopeViewAllButton.setPreferredSize(new Dimension(141, 26));
       envelopeViewAllButton.setLocation(new Point(5, 190));
-      envelopeViewAllButton.setBounds(6, 191, 141, 26);
+      envelopeViewAllButton.setBounds(6, 416, 141, 26);
       panel.add(envelopeViewAllButton);
 
       envelopeClearButton = new JButton();
@@ -344,11 +352,11 @@ public class EnvelopeDialog extends JDialog {
           ctrl.clearEnvelope();
         }
       });
-      envelopeClearButton.setText("Clear");
+      envelopeClearButton.setText("Reset curve");
       envelopeClearButton.setSize(new Dimension(141, 24));
       envelopeClearButton.setPreferredSize(new Dimension(141, 26));
       envelopeClearButton.setLocation(new Point(5, 240));
-      envelopeClearButton.setBounds(6, 241, 141, 26);
+      envelopeClearButton.setBounds(6, 44, 141, 26);
       panel.add(envelopeClearButton);
     }
     return panel;
@@ -361,6 +369,7 @@ public class EnvelopeDialog extends JDialog {
       panel_1.setLayout(null);
 
       envelopeXMinREd = new JWFNumberField();
+      envelopeXMinREd.setFont(new Font("Dialog", Font.PLAIN, 10));
       envelopeXMinREd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           ctrl.editFieldChanged();
@@ -373,6 +382,7 @@ public class EnvelopeDialog extends JDialog {
       panel_1.add(envelopeXMinREd);
 
       JLabel lblFrameRange = new JLabel();
+      lblFrameRange.setFont(new Font("Dialog", Font.BOLD, 10));
       lblFrameRange.setText("Frame range");
       lblFrameRange.setSize(new Dimension(38, 26));
       lblFrameRange.setPreferredSize(new Dimension(38, 26));
@@ -383,6 +393,7 @@ public class EnvelopeDialog extends JDialog {
       panel_1.add(lblFrameRange);
 
       JLabel lblAmplitudeRange = new JLabel();
+      lblAmplitudeRange.setFont(new Font("Dialog", Font.BOLD, 10));
       lblAmplitudeRange.setText("Amplitude range");
       lblAmplitudeRange.setSize(new Dimension(38, 26));
       lblAmplitudeRange.setPreferredSize(new Dimension(38, 26));
@@ -392,6 +403,7 @@ public class EnvelopeDialog extends JDialog {
       panel_1.add(lblAmplitudeRange);
 
       envelopeYMinREd = new JWFNumberField();
+      envelopeYMinREd.setFont(new Font("Dialog", Font.PLAIN, 10));
       envelopeYMinREd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           ctrl.editFieldChanged();
@@ -404,6 +416,7 @@ public class EnvelopeDialog extends JDialog {
       panel_1.add(envelopeYMinREd);
 
       envelopeXMaxREd = new JWFNumberField();
+      envelopeXMaxREd.setFont(new Font("Dialog", Font.PLAIN, 10));
       envelopeXMaxREd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           ctrl.editFieldChanged();
@@ -416,6 +429,7 @@ public class EnvelopeDialog extends JDialog {
       panel_1.add(envelopeXMaxREd);
 
       envelopeYMaxREd = new JWFNumberField();
+      envelopeYMaxREd.setFont(new Font("Dialog", Font.PLAIN, 10));
       envelopeYMaxREd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           ctrl.editFieldChanged();
@@ -428,6 +442,7 @@ public class EnvelopeDialog extends JDialog {
       panel_1.add(envelopeYMaxREd);
 
       JLabel lblFrame = new JLabel();
+      lblFrame.setFont(new Font("Dialog", Font.BOLD, 10));
       lblFrame.setText("Frame");
       lblFrame.setSize(new Dimension(38, 26));
       lblFrame.setPreferredSize(new Dimension(38, 26));
@@ -437,6 +452,7 @@ public class EnvelopeDialog extends JDialog {
       panel_1.add(lblFrame);
 
       JLabel lblAmplitude = new JLabel();
+      lblAmplitude.setFont(new Font("Dialog", Font.BOLD, 10));
       lblAmplitude.setText("Amplitude");
       lblAmplitude.setSize(new Dimension(38, 26));
       lblAmplitude.setPreferredSize(new Dimension(38, 26));
@@ -446,6 +462,7 @@ public class EnvelopeDialog extends JDialog {
       panel_1.add(lblAmplitude);
 
       envelopeYREd = new JWFNumberField();
+      envelopeYREd.setFont(new Font("Dialog", Font.PLAIN, 10));
       envelopeYREd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           ctrl.editFieldChanged();
@@ -458,6 +475,7 @@ public class EnvelopeDialog extends JDialog {
       panel_1.add(envelopeYREd);
 
       envelopeXREd = new JWFNumberField();
+      envelopeXREd.setFont(new Font("Dialog", Font.PLAIN, 10));
       envelopeXREd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           ctrl.editFieldChanged();
@@ -470,6 +488,7 @@ public class EnvelopeDialog extends JDialog {
       panel_1.add(envelopeXREd);
 
       JLabel label_6 = new JLabel();
+      label_6.setFont(new Font("Dialog", Font.BOLD, 10));
       label_6.setText("Interpolation");
       label_6.setSize(new Dimension(81, 26));
       label_6.setPreferredSize(new Dimension(81, 26));
@@ -479,6 +498,7 @@ public class EnvelopeDialog extends JDialog {
       panel_1.add(label_6);
 
       envelopeInterpolationCmb = new JComboBox();
+      envelopeInterpolationCmb.setFont(new Font("Dialog", Font.PLAIN, 10));
       envelopeInterpolationCmb.addItemListener(new ItemListener() {
         public void itemStateChanged(ItemEvent e) {
           if (ctrl != null) {

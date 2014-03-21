@@ -34,7 +34,9 @@ public class EnvelopePanel extends JPanel {
   private static final Color LABEL_COLOR = new Color(174, 179, 186);
   private static final Color ENVELOPE_COLOR = new Color(217, 219, 223);
 
-  private static final String LBL_FONT_NAME = "Arial";
+  //  private static final String LBL_FONT_NAME = "Arial";
+  //  private static final int LBL_FONT_SIZE = 10;
+  private static final String LBL_FONT_NAME = "SansSerif";
   private static final int LBL_FONT_SIZE = 10;
 
   private Envelope envelope;
@@ -57,7 +59,7 @@ public class EnvelopePanel extends JPanel {
 
   private void drawGrid(Graphics g, EnvelopeView pEnvelopeView) {
     g.setColor(GRID_COLOR);
-    int xnum = 20, ynum = 7;
+    int xnum = 20, ynum = 12;
     int fl = 0;
 
     /* lines */

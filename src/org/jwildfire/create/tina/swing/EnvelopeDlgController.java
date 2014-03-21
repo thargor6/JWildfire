@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2013 Andreas Maschke
+  Copyright (C) 1995-2014 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -449,9 +449,10 @@ public class EnvelopeDlgController {
           x = xc - 1.0;
       }
       if (lx <= envelopeView.getEnvelopeLeft()) {
-        int xi = Tools.FTOI(x);
-        if (xi < -9999)
-          xi = -9999;
+        //        int xi = Tools.FTOI(x);
+        int xi = envelope.getViewXMin() - 1;
+        if (xi < -100)
+          xi = -100;
         envelope.setViewXMin(xi);
         envelope.getX()[envelope.getSelectedIdx()] = xi;
         envelope.getY()[envelope.getSelectedIdx()] = y;
@@ -461,9 +462,10 @@ public class EnvelopeDlgController {
         envelopePanel.repaint();
       }
       else if (lx >= envelopeView.getEnvelopeRight()) {
-        int xi = Tools.FTOI(x);
-        if (xi > 9999)
-          xi = 9999;
+        //        int xi = Tools.FTOI(x);
+        int xi = envelope.getViewXMax() + 1;
+        if (xi > 99999)
+          xi = 99999;
         envelope.setViewXMax(xi);
         envelope.getX()[envelope.getSelectedIdx()] = xi;
         envelope.getY()[envelope.getSelectedIdx()] = y;
@@ -474,6 +476,7 @@ public class EnvelopeDlgController {
       }
       else if (ly <= envelopeView.getEnvelopeTop()) {
         int xi = Tools.FTOI(x);
+        y = envelope.getViewYMax() + 1.0;
         if (y > 32000.0)
           y = 32000.0;
         envelope.setViewYMax(y);
@@ -486,6 +489,7 @@ public class EnvelopeDlgController {
       }
       else if (ly >= envelopeView.getEnvelopeBottom()) {
         int xi = Tools.FTOI(x);
+        y = envelope.getViewYMin() - 1.0;
         if (y < -32000.0)
           y = -32000.0;
         envelope.setViewYMin(y);
