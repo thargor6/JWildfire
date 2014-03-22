@@ -185,6 +185,9 @@ public class FlameRenderer {
               scaleTransformer.transformImage(result.getImage());
               return result;
             }
+            case SIDE_BY_SIDE_FULL: {
+              return renderStereo3dSideBySide(pRenderInfo);
+            }
             case ANAGLYPH: {
               return renderStereo3dAnaglyph(pRenderInfo);
             }

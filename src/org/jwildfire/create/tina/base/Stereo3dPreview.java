@@ -17,5 +17,5 @@
 package org.jwildfire.create.tina.base;
 
 public enum Stereo3dPreview {
-  NONE, ANAGLYPH, SIDE_BY_SIDE
+  NONE, ANAGLYPH, SIDE_BY_SIDE, SIDE_BY_SIDE_FULL
 }

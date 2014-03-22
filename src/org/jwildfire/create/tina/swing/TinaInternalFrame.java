@@ -4257,6 +4257,7 @@ public class TinaInternalFrame extends JInternalFrame {
     pCmb.addItem(Stereo3dPreview.NONE);
     pCmb.addItem(Stereo3dPreview.ANAGLYPH);
     pCmb.addItem(Stereo3dPreview.SIDE_BY_SIDE);
+    pCmb.addItem(Stereo3dPreview.SIDE_BY_SIDE_FULL);
     pCmb.setSelectedItem(Stereo3dPreview.SIDE_BY_SIDE);
   }
 
@@ -16457,7 +16458,7 @@ public class TinaInternalFrame extends JInternalFrame {
       stereo3dModeCmb.setPreferredSize(new Dimension(125, 22));
       stereo3dModeCmb.setLocation(new Point(100, 4));
       stereo3dModeCmb.setFont(new Font("Dialog", Font.BOLD, 10));
-      stereo3dModeCmb.setBounds(102, 6, 100, 24);
+      stereo3dModeCmb.setBounds(102, 6, 322, 24);
       stereo3dModeCmb.addItemListener(new ItemListener() {
         public void itemStateChanged(ItemEvent e) {
           if (tinaController != null) {
@@ -16674,7 +16675,7 @@ public class TinaInternalFrame extends JInternalFrame {
       stereo3dLeftEyeColorCmb.setPreferredSize(new Dimension(125, 22));
       stereo3dLeftEyeColorCmb.setLocation(new Point(100, 4));
       stereo3dLeftEyeColorCmb.setFont(new Font("Dialog", Font.BOLD, 10));
-      stereo3dLeftEyeColorCmb.setBounds(533, 31, 100, 24);
+      stereo3dLeftEyeColorCmb.setBounds(533, 31, 322, 24);
       stereo3dLeftEyeColorCmb.addItemListener(new ItemListener() {
         public void itemStateChanged(ItemEvent e) {
           if (tinaController != null) {
@@ -16699,7 +16700,7 @@ public class TinaInternalFrame extends JInternalFrame {
       stereo3dRightEyeColorCmb.setPreferredSize(new Dimension(125, 22));
       stereo3dRightEyeColorCmb.setLocation(new Point(100, 4));
       stereo3dRightEyeColorCmb.setFont(new Font("Dialog", Font.BOLD, 10));
-      stereo3dRightEyeColorCmb.setBounds(532, 56, 100, 24);
+      stereo3dRightEyeColorCmb.setBounds(532, 56, 323, 24);
       stereo3dRightEyeColorCmb.addItemListener(new ItemListener() {
         public void itemStateChanged(ItemEvent e) {
           if (tinaController != null) {
@@ -16876,7 +16877,7 @@ public class TinaInternalFrame extends JInternalFrame {
       stereo3dPreviewCmb.setPreferredSize(new Dimension(125, 22));
       stereo3dPreviewCmb.setLocation(new Point(100, 4));
       stereo3dPreviewCmb.setFont(new Font("Dialog", Font.BOLD, 10));
-      stereo3dPreviewCmb.setBounds(533, 6, 100, 24);
+      stereo3dPreviewCmb.setBounds(533, 6, 322, 24);
       stereo3dPreviewCmb.addItemListener(new ItemListener() {
         public void itemStateChanged(ItemEvent e) {
           if (tinaController != null) {
