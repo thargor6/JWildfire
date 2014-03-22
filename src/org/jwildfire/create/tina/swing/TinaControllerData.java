@@ -309,4 +309,5 @@ public class TinaControllerData {
   public JComboBox stereo3dPreviewCmb;
   public JWFNumberField stereo3dFocalOffsetREd;
   public JSlider stereo3dFocalOffsetSlider;
+  public JCheckBox stereo3dSwapSidesCBx;
 }

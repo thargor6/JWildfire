@@ -227,6 +227,7 @@ public class AbstractFlameWriter {
         attrList.add(xb.createAttr(AbstractFlameReader.ATTR_STEREO3D_INTERPOLATED_IMAGE_COUNT, pFlame.getStereo3dInterpolatedImageCount()));
       }
       attrList.add(xb.createAttr(AbstractFlameReader.ATTR_STEREO3D_PREVIEW, pFlame.getStereo3dPreview().toString()));
+      attrList.add(xb.createAttr(AbstractFlameReader.ATTR_STEREO3D_SWAP_SIDES, pFlame.isStereo3dSwapSides() ? "1" : "0"));
     }
 
     attrList.add(xb.createAttr(AbstractFlameReader.ATTR_FRAME, pFlame.getFrame()));

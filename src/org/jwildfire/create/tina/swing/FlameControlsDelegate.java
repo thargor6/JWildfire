@@ -129,6 +129,7 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
     enableControl(data.stereo3dRightEyeColorCmb, !Stereo3dMode.ANAGLYPH.equals(stereo3dMode));
     enableControl(data.stereo3dInterpolatedImageCountREd, !Stereo3dMode.INTERPOLATED_IMAGES.equals(stereo3dMode));
     enableControl(data.stereo3dPreviewCmb, Stereo3dMode.NONE.equals(stereo3dMode));
+    enableControl(data.stereo3dSwapSidesCBx, Stereo3dMode.NONE.equals(stereo3dMode));
   }
 
   private Flame getCurrFlame() {
@@ -633,6 +634,7 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
       data.stereo3dInterpolatedImageCountREd.setText(String.valueOf(getCurrFlame().getStereo3dInterpolatedImageCount()));
       data.stereo3dInterpolatedImageCountSlider.setValue(Tools.FTOI(getCurrFlame().getStereo3dInterpolatedImageCount()));
       data.stereo3dPreviewCmb.setSelectedItem(getCurrFlame().getStereo3dPreview());
+      data.stereo3dSwapSidesCBx.setSelected(getCurrFlame().isStereo3dSwapSides());
     }
     finally {
       setNoRefresh(oldNoRefrsh);
@@ -1250,6 +1252,18 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
         owner.saveUndoPoint();
         flame.setStereo3dPreview((Stereo3dPreview) data.stereo3dPreviewCmb.getSelectedItem());
         enableStereo3dUI();
+        owner.refreshFlameImage(false);
+      }
+    }
+  }
+
+  public void stereo3dSwapSidesCBx_changed() {
+    Flame flame = getCurrFlame();
+    if (flame != null) {
+      boolean swap = data.stereo3dSwapSidesCBx.isSelected();
+      if (swap != flame.isStereo3dSwapSides()) {
+        owner.saveUndoPoint();
+        flame.setStereo3dSwapSides(swap);
         owner.refreshFlameImage(false);
       }
     }

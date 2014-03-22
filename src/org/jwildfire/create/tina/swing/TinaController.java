@@ -470,6 +470,7 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
     data.stereo3dPreviewCmb = parameterObject.stereo3dPreviewCmb;
     data.stereo3dFocalOffsetREd = parameterObject.stereo3dFocalOffsetREd;
     data.stereo3dFocalOffsetSlider = parameterObject.stereo3dFocalOffsetSlider;
+    data.stereo3dSwapSidesCBx = parameterObject.stereo3dSwapSidesCBx;
 
     data.mouseTransformEditViewButton = parameterObject.pMouseTransformViewButton;
     data.toggleVariationsButton = parameterObject.pToggleVariationsButton;

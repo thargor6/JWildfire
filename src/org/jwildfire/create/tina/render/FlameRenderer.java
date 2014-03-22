@@ -222,6 +222,12 @@ public class FlameRenderer {
                 rightRenders[i] = renderImageNormal(localRenderInfo, totalImageCount, totalImageIdx++);
               }
 
+              if (flame.isStereo3dSwapSides()) {
+                RenderedFlame tmp[] = leftRenders;
+                leftRenders = rightRenders;
+                rightRenders = tmp;
+              }
+
               RenderedFlame mergedRender = new RenderedFlame();
               localRenderInfo.setImageWidth(2 * pRenderInfo.getImageWidth());
               localRenderInfo.setImageHeight(leftRenders.length * pRenderInfo.getImageHeight());
@@ -280,6 +286,12 @@ public class FlameRenderer {
     eye = Stereo3dEye.RIGHT;
     RenderedFlame rightRender = renderImageNormal(localRenderInfo, 2, 1);
 
+    if (flame.isStereo3dSwapSides()) {
+      RenderedFlame tmp = leftRender;
+      leftRender = rightRender;
+      rightRender = tmp;
+    }
+
     RenderedFlame mergedRender = new RenderedFlame();
     localRenderInfo.setImageWidth(2 * leftRender.getImage().getImageWidth());
     localRenderInfo.setImageHeight(leftRender.getImage().getImageHeight());
@@ -307,6 +319,12 @@ public class FlameRenderer {
     RenderedFlame leftRender = renderImageNormal(localRenderInfo, 2, 0);
     eye = Stereo3dEye.RIGHT;
     RenderedFlame rightRender = renderImageNormal(localRenderInfo, 2, 1);
+
+    if (flame.isStereo3dSwapSides()) {
+      RenderedFlame tmp = leftRender;
+      leftRender = rightRender;
+      rightRender = tmp;
+    }
 
     Pixel lPixel = new Pixel();
     Pixel rPixel = new Pixel();

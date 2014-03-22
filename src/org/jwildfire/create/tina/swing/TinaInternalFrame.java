@@ -4135,7 +4135,8 @@ public class TinaInternalFrame extends JInternalFrame {
         getPostSymmetryOrderREd(), getPostSymmetryOrderSlider(), getPostSymmetryCentreXREd(), getPostSymmetryCentreXSlider(), getPostSymmetryCentreYREd(),
         getPostSymmetryCentreYSlider(), getStereo3dModeCmb(), getStereo3dAngleREd(), getStereo3dAngleSlider(), getStereo3dEyeDistREd(),
         getStereo3dEyeDistSlider(), getStereo3dLeftEyeColorCmb(), getStereo3dRightEyeColorCmb(), getStereo3dInterpolatedImageCountREd(),
-        getStereo3dInterpolatedImageCountSlider(), getStereo3dPreviewCmb(), getStereo3dFocalOffsetREd(), getStereo3dFocalOffsetSlider());
+        getStereo3dInterpolatedImageCountSlider(), getStereo3dPreviewCmb(), getStereo3dFocalOffsetREd(), getStereo3dFocalOffsetSlider(),
+        getStereo3dSwapSidesCBx());
 
     tinaController = new TinaController(params);
 
@@ -9550,6 +9551,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JWFNumberField swfAnimatorGlobalScript5REd;
   private JWFNumberField swfAnimatorMotionBlurLengthREd;
   private JWFNumberField swfAnimatorMotionBlurTimeStepREd;
+  private JCheckBox stereo3dSwapSidesCBx;
 
   /**
    * This method initializes renderBatchJobsScrollPane	
@@ -16782,6 +16784,19 @@ public class TinaInternalFrame extends JInternalFrame {
         }
       });
       panel_82.add(stereo3dFocalOffsetSlider);
+
+      stereo3dSwapSidesCBx = new JCheckBox("Swap sides");
+      stereo3dSwapSidesCBx.setToolTipText("Swap left and right images");
+      stereo3dSwapSidesCBx.setBounds(865, 8, 197, 18);
+      stereo3dSwapSidesCBx.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null) {
+            tinaController.getFlameControls().stereo3dSwapSidesCBx_changed();
+          }
+        }
+      });
+
+      panel_82.add(stereo3dSwapSidesCBx);
     }
     return panel_82;
   }
@@ -16940,6 +16955,10 @@ public class TinaInternalFrame extends JInternalFrame {
 
   public JWFNumberField getSwfAnimatorMotionBlurTimeStepREd() {
     return swfAnimatorMotionBlurTimeStepREd;
+  }
+
+  public JCheckBox getStereo3dSwapSidesCBx() {
+    return stereo3dSwapSidesCBx;
   }
 } //  @jve:decl-index=0:visual-constraint="10,10"
 

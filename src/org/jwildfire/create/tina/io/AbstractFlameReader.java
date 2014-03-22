@@ -110,6 +110,7 @@ public class AbstractFlameReader {
   public static final String ATTR_STEREO3D_RIGHT_EYE_COLOR = "stereo3d_right_eye_color";
   public static final String ATTR_STEREO3D_INTERPOLATED_IMAGE_COUNT = "stereo3d_interpolated_image_count";
   public static final String ATTR_STEREO3D_PREVIEW = "stereo3d_preview";
+  public static final String ATTR_STEREO3D_SWAP_SIDES = "stereo3d_swap_sides";
   public static final String ATTR_FRAME_COUNT = "frame_count";
   public static final String ATTR_FRAME = "frame";
 
@@ -445,6 +446,9 @@ public class AbstractFlameReader {
       catch (Exception ex) {
         ex.printStackTrace();
       }
+    }
+    if ((hs = atts.get(ATTR_STEREO3D_SWAP_SIDES)) != null) {
+      pFlame.setStereo3dSwapSides(Integer.parseInt(hs) == 1);
     }
 
     if ((hs = atts.get(ATTR_FRAME)) != null) {

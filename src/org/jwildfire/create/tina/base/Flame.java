@@ -147,6 +147,7 @@ public class Flame implements Assignable<Flame>, Serializable {
   private Stereo3dColor stereo3dRightEyeColor = Stereo3dColor.CYAN;
   private Stereo3dPreview stereo3dPreview = Stereo3dPreview.ANAGLYPH;
   private int stereo3dInterpolatedImageCount = 3;
+  private boolean stereo3dSwapSides = false;
 
   public Flame() {
     layers.clear();
@@ -550,6 +551,7 @@ public class Flame implements Assignable<Flame>, Serializable {
     stereo3dInterpolatedImageCount = pFlame.stereo3dInterpolatedImageCount;
     stereo3dPreview = pFlame.stereo3dPreview;
     stereo3dFocalOffset = pFlame.stereo3dFocalOffset;
+    stereo3dSwapSides = pFlame.stereo3dSwapSides;
 
     layers.clear();
     for (Layer layer : pFlame.getLayers()) {
@@ -609,7 +611,8 @@ public class Flame implements Assignable<Flame>, Serializable {
         (stereo3dMode != pFlame.stereo3dMode) || (fabs(stereo3dAngle - pFlame.stereo3dAngle) > EPSILON) ||
         (fabs(stereo3dEyeDist - pFlame.stereo3dEyeDist) > EPSILON) || (stereo3dLeftEyeColor != pFlame.stereo3dLeftEyeColor) ||
         (stereo3dRightEyeColor != pFlame.stereo3dRightEyeColor) || (stereo3dInterpolatedImageCount != pFlame.stereo3dInterpolatedImageCount) ||
-        (stereo3dPreview != pFlame.stereo3dPreview) || (fabs(stereo3dFocalOffset - pFlame.stereo3dFocalOffset) > EPSILON)) {
+        (stereo3dPreview != pFlame.stereo3dPreview) || (fabs(stereo3dFocalOffset - pFlame.stereo3dFocalOffset) > EPSILON) ||
+        (stereo3dSwapSides != pFlame.stereo3dSwapSides)) {
       return false;
     }
     for (int i = 0; i < layers.size(); i++) {
@@ -1015,5 +1018,13 @@ public class Flame implements Assignable<Flame>, Serializable {
 
   public MotionCurve getCamYawCurve() {
     return camYawCurve;
+  }
+
+  public boolean isStereo3dSwapSides() {
+    return stereo3dSwapSides;
+  }
+
+  public void setStereo3dSwapSides(boolean pStereo3dSwapSides) {
+    stereo3dSwapSides = pStereo3dSwapSides;
   }
 }
