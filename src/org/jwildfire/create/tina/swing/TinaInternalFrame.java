@@ -5757,11 +5757,17 @@ public class TinaInternalFrame extends JInternalFrame {
 
       JPanel panel_12 = new JPanel();
       panel_12.setPreferredSize(new Dimension(10, 26));
-      swfAnimatorPanel_1.add(panel_12, BorderLayout.SOUTH);
-      panel_12.setLayout(null);
+      swfAnimatorPanel_1.add(panel_12, BorderLayout.NORTH);
+      panel_12.setLayout(new BoxLayout(panel_12, BoxLayout.X_AXIS));
+
+      JLabel lblFrame = new JLabel();
+      panel_12.add(lblFrame);
+      lblFrame.setHorizontalAlignment(SwingConstants.RIGHT);
+      lblFrame.setText("Frame");
+      lblFrame.setPreferredSize(new Dimension(48, 22));
+      lblFrame.setFont(new Font("Dialog", Font.BOLD, 10));
 
       swfAnimatorFrameSlider = new JSlider();
-      swfAnimatorFrameSlider.setBounds(114, 5, 185, 19);
       panel_12.add(swfAnimatorFrameSlider);
       swfAnimatorFrameSlider.setMinorTickSpacing(5);
       swfAnimatorFrameSlider.setMinimum(1);
@@ -5795,21 +5801,29 @@ public class TinaInternalFrame extends JInternalFrame {
       swfAnimatorFrameREd.setHasMaxValue(true);
       swfAnimatorFrameREd.setHasMinValue(true);
       swfAnimatorFrameREd.setOnlyIntegers(true);
-      swfAnimatorFrameREd.setBounds(45, 2, 70, 24);
       panel_12.add(swfAnimatorFrameREd);
       swfAnimatorFrameREd.setText("60");
       swfAnimatorFrameREd.setPreferredSize(new Dimension(56, 22));
       swfAnimatorFrameREd.setFont(new Font("Dialog", Font.PLAIN, 10));
 
-      JLabel lblFrame = new JLabel();
-      lblFrame.setBounds(0, 2, 39, 22);
-      panel_12.add(lblFrame);
-      lblFrame.setHorizontalAlignment(SwingConstants.RIGHT);
-      lblFrame.setText("Frame");
-      lblFrame.setPreferredSize(new Dimension(94, 22));
-      lblFrame.setFont(new Font("Dialog", Font.BOLD, 10));
+      JPanel panel_83 = new JPanel();
+      panel_83.setPreferredSize(new Dimension(10, 35));
+      swfAnimatorPanel_1.add(panel_83, BorderLayout.SOUTH);
+      panel_83.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 2));
+
+      swfAnimatorPlayButton = new JButton();
+      panel_83.add(swfAnimatorPlayButton);
+      swfAnimatorPlayButton.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getSwfAnimatorCtrl().playButton_clicked();
+        }
+      });
+      swfAnimatorPlayButton.setText("Play");
+      swfAnimatorPlayButton.setPreferredSize(new Dimension(125, 28));
+      swfAnimatorPlayButton.setFont(new Font("Dialog", Font.BOLD, 10));
 
       swfAnimatorFrameToEditorBtn = new JButton();
+      panel_83.add(swfAnimatorFrameToEditorBtn);
       swfAnimatorFrameToEditorBtn.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
           tinaController.getSwfAnimatorCtrl().swfAnimatorFrameToEditorBtn_clicked();
@@ -5817,18 +5831,16 @@ public class TinaInternalFrame extends JInternalFrame {
       });
       swfAnimatorFrameToEditorBtn.setToolTipText("Copy current flame into Editor");
       swfAnimatorFrameToEditorBtn.setText("E");
-      swfAnimatorFrameToEditorBtn.setPreferredSize(new Dimension(42, 24));
+      swfAnimatorFrameToEditorBtn.setPreferredSize(new Dimension(42, 28));
       swfAnimatorFrameToEditorBtn.setMnemonic(KeyEvent.VK_E);
       swfAnimatorFrameToEditorBtn.setFont(new Font("Dialog", Font.BOLD, 10));
-      swfAnimatorFrameToEditorBtn.setBounds(306, 0, 42, 28);
-      panel_12.add(swfAnimatorFrameToEditorBtn);
 
       swfAnimatorPreviewRootPanel = new JPanel();
       swfAnimatorPanel_1.add(swfAnimatorPreviewRootPanel, BorderLayout.CENTER);
       swfAnimatorPreviewRootPanel.setLayout(new BorderLayout(0, 0));
 
       JPanel panel_10 = new JPanel();
-      panel_10.setBorder(new TitledBorder(null, "Script / Sound / Settings", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+      panel_10.setBorder(new TitledBorder(null, "Motion control", TitledBorder.LEADING, TitledBorder.TOP, null, null));
       panel_10.setPreferredSize(new Dimension(400, 10));
       panel_2.add(panel_10, BorderLayout.EAST);
       panel_10.setLayout(null);
@@ -5856,13 +5868,13 @@ public class TinaInternalFrame extends JInternalFrame {
       swfAnimatorFramesPerSecondREd.setHasMaxValue(true);
       swfAnimatorFramesPerSecondREd.setHasMinValue(true);
       swfAnimatorFramesPerSecondREd.setEditable(true);
-      swfAnimatorFramesPerSecondREd.setBounds(321, 284, 70, 24);
+      swfAnimatorFramesPerSecondREd.setBounds(322, 262, 70, 24);
       panel_10.add(swfAnimatorFramesPerSecondREd);
       swfAnimatorFramesPerSecondREd.setText("12");
       swfAnimatorFramesPerSecondREd.setPreferredSize(new Dimension(56, 22));
       swfAnimatorFramesPerSecondREd.setFont(new Font("Dialog", Font.PLAIN, 10));
       animateFramesLbl = new JLabel();
-      animateFramesLbl.setBounds(12, 284, 94, 22);
+      animateFramesLbl.setBounds(13, 262, 94, 22);
       panel_10.add(animateFramesLbl);
       animateFramesLbl.setHorizontalAlignment(SwingConstants.LEFT);
       animateFramesLbl.setPreferredSize(new Dimension(94, 22));
@@ -5870,33 +5882,12 @@ public class TinaInternalFrame extends JInternalFrame {
       animateFramesLbl.setFont(new Font("Dialog", Font.BOLD, 10));
 
       JLabel lblFramesPerSecond = new JLabel();
-      lblFramesPerSecond.setBounds(216, 284, 101, 22);
+      lblFramesPerSecond.setBounds(217, 262, 101, 22);
       panel_10.add(lblFramesPerSecond);
       lblFramesPerSecond.setHorizontalAlignment(SwingConstants.LEFT);
       lblFramesPerSecond.setText("Frames per second");
       lblFramesPerSecond.setPreferredSize(new Dimension(94, 22));
       lblFramesPerSecond.setFont(new Font("Dialog", Font.BOLD, 10));
-      panel_10.add(getSwfAnimatorLoadSoundButton());
-
-      swfAnimatorSoundCaptionLbl = new JLabel();
-      swfAnimatorSoundCaptionLbl.setBounds(138, 258, 125, 22);
-      panel_10.add(swfAnimatorSoundCaptionLbl);
-      swfAnimatorSoundCaptionLbl.setText("(no sound loaded)");
-      swfAnimatorSoundCaptionLbl.setPreferredSize(new Dimension(94, 22));
-      swfAnimatorSoundCaptionLbl.setFont(new Font("Dialog", Font.BOLD, 10));
-
-      swfAnimatorClearSoundButton = new JButton();
-      swfAnimatorClearSoundButton.setBounds(266, 258, 125, 24);
-      panel_10.add(swfAnimatorClearSoundButton);
-      swfAnimatorClearSoundButton.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-          tinaController.getSwfAnimatorCtrl().clearSoundButton_clicked();
-        }
-      });
-      swfAnimatorClearSoundButton.setToolTipText("");
-      swfAnimatorClearSoundButton.setText("Clear sound");
-      swfAnimatorClearSoundButton.setPreferredSize(new Dimension(125, 24));
-      swfAnimatorClearSoundButton.setFont(new Font("Dialog", Font.BOLD, 10));
 
       swfAnimatorGlobalScript2Cmb = new JComboBox();
       swfAnimatorGlobalScript2Cmb.setMaximumRowCount(16);
@@ -6198,6 +6189,47 @@ public class TinaInternalFrame extends JInternalFrame {
       });
       panel_10.add(swfAnimatorXFormScript5REd);
 
+      swfAnimatorMotionBlurLengthREd = new JWFNumberField();
+      swfAnimatorMotionBlurLengthREd.setValueStep(1.0);
+      swfAnimatorMotionBlurLengthREd.setOnlyIntegers(true);
+      swfAnimatorMotionBlurLengthREd.setText("12");
+      swfAnimatorMotionBlurLengthREd.setPreferredSize(new Dimension(56, 22));
+      swfAnimatorMotionBlurLengthREd.setMaxValue(120.0);
+      swfAnimatorMotionBlurLengthREd.setHasMinValue(true);
+      swfAnimatorMotionBlurLengthREd.setHasMaxValue(true);
+      swfAnimatorMotionBlurLengthREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      swfAnimatorMotionBlurLengthREd.setEditable(true);
+      swfAnimatorMotionBlurLengthREd.setBounds(117, 288, 70, 24);
+      panel_10.add(swfAnimatorMotionBlurLengthREd);
+
+      JLabel lblMotionBlurLength = new JLabel();
+      lblMotionBlurLength.setText("Motion blur length");
+      lblMotionBlurLength.setPreferredSize(new Dimension(94, 22));
+      lblMotionBlurLength.setHorizontalAlignment(SwingConstants.LEFT);
+      lblMotionBlurLength.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblMotionBlurLength.setBounds(12, 288, 101, 22);
+      panel_10.add(lblMotionBlurLength);
+
+      JLabel lblMotionBlurTimestep = new JLabel();
+      lblMotionBlurTimestep.setText("Motion blur timestep");
+      lblMotionBlurTimestep.setPreferredSize(new Dimension(94, 22));
+      lblMotionBlurTimestep.setHorizontalAlignment(SwingConstants.LEFT);
+      lblMotionBlurTimestep.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblMotionBlurTimestep.setBounds(217, 288, 101, 22);
+      panel_10.add(lblMotionBlurTimestep);
+
+      swfAnimatorMotionBlurTimeStepREd = new JWFNumberField();
+      swfAnimatorMotionBlurTimeStepREd.setValueStep(0.1);
+      swfAnimatorMotionBlurTimeStepREd.setText("0.15");
+      swfAnimatorMotionBlurTimeStepREd.setPreferredSize(new Dimension(56, 22));
+      swfAnimatorMotionBlurTimeStepREd.setMaxValue(1.0);
+      swfAnimatorMotionBlurTimeStepREd.setHasMinValue(true);
+      swfAnimatorMotionBlurTimeStepREd.setHasMaxValue(true);
+      swfAnimatorMotionBlurTimeStepREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      swfAnimatorMotionBlurTimeStepREd.setEditable(true);
+      swfAnimatorMotionBlurTimeStepREd.setBounds(322, 288, 70, 24);
+      panel_10.add(swfAnimatorMotionBlurTimeStepREd);
+
       JPanel panel_11 = new JPanel();
       panel_11.setBorder(null);
       panel_11.setPreferredSize(new Dimension(400, 10));
@@ -6238,7 +6270,7 @@ public class TinaInternalFrame extends JInternalFrame {
     if (swfAnimatorFramesREd == null) {
       swfAnimatorFramesREd = new JWFNumberField();
       swfAnimatorFramesREd.setOnlyIntegers(true);
-      swfAnimatorFramesREd.setBounds(116, 284, 70, 24);
+      swfAnimatorFramesREd.setBounds(117, 262, 70, 24);
       swfAnimatorFramesREd.setEditable(false);
       swfAnimatorFramesREd.setPreferredSize(new Dimension(56, 22));
       swfAnimatorFramesREd.setText("60");
@@ -9516,6 +9548,8 @@ public class TinaInternalFrame extends JInternalFrame {
   private JWFNumberField swfAnimatorXFormScript4REd;
   private JWFNumberField swfAnimatorXFormScript5REd;
   private JWFNumberField swfAnimatorGlobalScript5REd;
+  private JWFNumberField swfAnimatorMotionBlurLengthREd;
+  private JWFNumberField swfAnimatorMotionBlurTimeStepREd;
 
   /**
    * This method initializes renderBatchJobsScrollPane	
@@ -11216,18 +11250,6 @@ public class TinaInternalFrame extends JInternalFrame {
       panel_5.add(getSwfAnimatorMovieToClipboardButton());
       panel_5.add(getSwfAnimatorMovieToDiscButton());
 
-      swfAnimatorPlayButton = new JButton();
-      swfAnimatorPlayButton.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-          tinaController.getSwfAnimatorCtrl().playButton_clicked();
-        }
-      });
-      swfAnimatorPlayButton.setText("Play");
-      swfAnimatorPlayButton.setPreferredSize(new Dimension(125, 24));
-      swfAnimatorPlayButton.setFont(new Font("Dialog", Font.BOLD, 10));
-      swfAnimatorPlayButton.setBounds(518, 36, 125, 52);
-      panel_5.add(swfAnimatorPlayButton);
-
       swfAnimatorFromFrameREd = new JWFNumberField();
       swfAnimatorFromFrameREd.setMaxValue(120.0);
       swfAnimatorFromFrameREd.setMinValue(1.0);
@@ -11256,6 +11278,27 @@ public class TinaInternalFrame extends JInternalFrame {
       swfAnimatorToFrameREd.setFont(new Font("Dialog", Font.PLAIN, 10));
       swfAnimatorToFrameREd.setBounds(960, 38, 70, 24);
       panel_5.add(swfAnimatorToFrameREd);
+      panel_5.add(getSwfAnimatorLoadSoundButton());
+
+      swfAnimatorSoundCaptionLbl = new JLabel();
+      swfAnimatorSoundCaptionLbl.setBounds(534, 36, 125, 22);
+      panel_5.add(swfAnimatorSoundCaptionLbl);
+      swfAnimatorSoundCaptionLbl.setText("(no sound loaded)");
+      swfAnimatorSoundCaptionLbl.setPreferredSize(new Dimension(94, 22));
+      swfAnimatorSoundCaptionLbl.setFont(new Font("Dialog", Font.BOLD, 10));
+
+      swfAnimatorClearSoundButton = new JButton();
+      swfAnimatorClearSoundButton.setBounds(534, 62, 125, 24);
+      panel_5.add(swfAnimatorClearSoundButton);
+      swfAnimatorClearSoundButton.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getSwfAnimatorCtrl().clearSoundButton_clicked();
+        }
+      });
+      swfAnimatorClearSoundButton.setToolTipText("");
+      swfAnimatorClearSoundButton.setText("Clear sound");
+      swfAnimatorClearSoundButton.setPreferredSize(new Dimension(125, 24));
+      swfAnimatorClearSoundButton.setFont(new Font("Dialog", Font.BOLD, 10));
     }
     return panel_5;
   }
@@ -11397,7 +11440,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton getSwfAnimatorLoadSoundButton() {
     if (swfAnimatorLoadSoundButton == null) {
       swfAnimatorLoadSoundButton = new JButton();
-      swfAnimatorLoadSoundButton.setBounds(12, 258, 125, 24);
+      swfAnimatorLoadSoundButton.setBounds(534, 11, 125, 24);
       swfAnimatorLoadSoundButton.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
           tinaController.getSwfAnimatorCtrl().loadSoundButton_clicked();
@@ -16889,6 +16932,14 @@ public class TinaInternalFrame extends JInternalFrame {
 
   public JWFNumberField getSwfAnimatorGlobalScript5REd() {
     return swfAnimatorGlobalScript5REd;
+  }
+
+  public JWFNumberField getSwfAnimatorMotionBlurLengthREd() {
+    return swfAnimatorMotionBlurLengthREd;
+  }
+
+  public JWFNumberField getSwfAnimatorMotionBlurTimeStepREd() {
+    return swfAnimatorMotionBlurTimeStepREd;
   }
 } //  @jve:decl-index=0:visual-constraint="10,10"
 

@@ -22,6 +22,8 @@ import static org.jwildfire.create.tina.io.JWFMovieWriter.ATTR_FRAME_COUNT;
 import static org.jwildfire.create.tina.io.JWFMovieWriter.ATTR_FRAME_HEIGHT;
 import static org.jwildfire.create.tina.io.JWFMovieWriter.ATTR_FRAME_MORPH_COUNT;
 import static org.jwildfire.create.tina.io.JWFMovieWriter.ATTR_FRAME_WIDTH;
+import static org.jwildfire.create.tina.io.JWFMovieWriter.ATTR_MOTIONBLUR_LENGTH;
+import static org.jwildfire.create.tina.io.JWFMovieWriter.ATTR_MOTIONBLUR_TIMESTEP;
 import static org.jwildfire.create.tina.io.JWFMovieWriter.ATTR_OUTPUT_FORMAT;
 import static org.jwildfire.create.tina.io.JWFMovieWriter.ATTR_QUALITY;
 import static org.jwildfire.create.tina.io.JWFMovieWriter.ATTR_SCRIPT_GLOBAL;
@@ -238,6 +240,12 @@ public class JWFMovieReader {
     }
     if ((hs = atts.get(ATTR_QUALITY)) != null) {
       pMovie.setQuality(Integer.parseInt(hs));
+    }
+    if ((hs = atts.get(ATTR_MOTIONBLUR_LENGTH)) != null) {
+      pMovie.setMotionBlurLength(Integer.parseInt(hs));
+    }
+    if ((hs = atts.get(ATTR_MOTIONBLUR_TIMESTEP)) != null) {
+      pMovie.setMotionBlurTimeStep(Double.parseDouble(hs));
     }
   }
 

@@ -80,6 +80,8 @@ public class JWFMovieWriter {
   public static final String ATTR_SOUND_FILENAME = "sound_filename";
   public static final String ATTR_SPATIAL_OVERSAMPLING = "spatial_oversampling";
   public static final String ATTR_QUALITY = "quality";
+  public static final String ATTR_MOTIONBLUR_LENGTH = "motion_blur_length";
+  public static final String ATTR_MOTIONBLUR_TIMESTEP = "motion_blur_timestep";
 
   public String getMovieXML(FlameMovie pMovie) throws Exception {
     SimpleXMLBuilder xb = new SimpleXMLBuilder();
@@ -110,6 +112,10 @@ public class JWFMovieWriter {
     attrList.add(xb.createAttr(ATTR_COLOR_OVERSAMPLING, pMovie.getColorOversampling()));
     attrList.add(xb.createAttr(ATTR_SPATIAL_OVERSAMPLING, pMovie.getSpatialOversampling()));
     attrList.add(xb.createAttr(ATTR_QUALITY, pMovie.getQuality()));
+
+    attrList.add(xb.createAttr(AbstractFlameReader.ATTR_MOTIONBLUR_LENGTH, pMovie.getMotionBlurLength()));
+    attrList.add(xb.createAttr(AbstractFlameReader.ATTR_MOTIONBLUR_TIMESTEP, pMovie.getMotionBlurTimeStep()));
+
     xb.beginElement(TAG_JWF_MOVIE, attrList);
     for (FlameMoviePart part : pMovie.getParts()) {
       addPart(xb, part);

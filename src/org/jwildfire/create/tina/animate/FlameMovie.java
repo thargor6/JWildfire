@@ -44,6 +44,8 @@ public class FlameMovie {
   private int frameWidth;
   private int frameHeight;
   private double framesPerSecond;
+  private int motionBlurLength = 12;
+  private double motionBlurTimeStep = 0.15;
 
   public FlameMovie(Prefs pPrefs) {
     prefs = pPrefs;
@@ -243,6 +245,22 @@ public class FlameMovie {
 
   public XFormScript[] getxFormScripts() {
     return new XFormScript[] { xFormScript1, xFormScript2, xFormScript3, xFormScript4, xFormScript5 };
+  }
+
+  public int getMotionBlurLength() {
+    return motionBlurLength;
+  }
+
+  public void setMotionBlurLength(int motionBlurLength) {
+    this.motionBlurLength = motionBlurLength;
+  }
+
+  public double getMotionBlurTimeStep() {
+    return motionBlurTimeStep;
+  }
+
+  public void setMotionBlurTimeStep(double motionBlurTimeStep) {
+    this.motionBlurTimeStep = motionBlurTimeStep;
   }
 
 }
