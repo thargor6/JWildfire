@@ -17,6 +17,9 @@
 package org.jwildfire.envelope;
 
 import java.io.Serializable;
+import java.util.Arrays;
+import java.util.Map;
+import java.util.WeakHashMap;
 
 import org.jwildfire.base.Tools;
 
@@ -185,6 +188,119 @@ public class Envelope implements Serializable {
       selectedIdx = 0;
   }
 
+  private static final Map<InterpolatedPointsKey, InterpolatedPoints> interpolatedPointCache = new WeakHashMap<InterpolatedPointsKey, InterpolatedPoints>();
+
+  private static InterpolatedPoints getInterpolatedPoints(int pX[], double pY[], Interpolation pInterpolation) {
+    InterpolatedPointsKey key = new InterpolatedPointsKey(pX, pY, pInterpolation);
+    InterpolatedPoints res = interpolatedPointCache.get(key);
+    if (res == null) {
+      res = new InterpolatedPoints(pX, pY, pInterpolation);
+      interpolatedPointCache.put(key, res);
+    }
+    return res;
+  }
+
+  private static class InterpolatedPointsKey {
+    private final int x[];
+    private final double y[];
+    private final Interpolation interpolation;
+
+    public InterpolatedPointsKey(int pX[], double pY[], Interpolation pInterpolation) {
+      x = pX;
+      y = pY;
+      interpolation = pInterpolation;
+    }
+
+    @Override
+    public int hashCode() {
+      final int prime = 31;
+      int result = 1;
+      result = prime * result + ((interpolation == null) ? 0 : interpolation.hashCode());
+      result = prime * result + Arrays.hashCode(x);
+      result = prime * result + Arrays.hashCode(y);
+      return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+      if (this == obj)
+        return true;
+      if (obj == null)
+        return false;
+      if (getClass() != obj.getClass())
+        return false;
+      InterpolatedPointsKey other = (InterpolatedPointsKey) obj;
+      if (interpolation != other.interpolation)
+        return false;
+      if (!Arrays.equals(x, other.x))
+        return false;
+      if (!Arrays.equals(y, other.y))
+        return false;
+      return true;
+    }
+
+  }
+
+  private static class InterpolatedPoints {
+
+    private final double vSX[];
+    private final double vSY[];
+    private final int vSNum;
+
+    public InterpolatedPoints(int pX[], double pY[], Interpolation pInterpolation) {
+      int size = pX.length;
+      int subdiv = org.jwildfire.envelope.Interpolation.calcSubDivPRV(pX, size);
+      org.jwildfire.envelope.Interpolation interpolationX, interpolationY;
+      if (size > 2) {
+        switch (pInterpolation) {
+          case SPLINE:
+            interpolationX = new SplineInterpolation();
+            interpolationY = new SplineInterpolation();
+            break;
+          case BEZIER:
+            interpolationX = new BezierInterpolation();
+            interpolationY = new BezierInterpolation();
+            break;
+          default:
+            interpolationX = new LinearInterpolation();
+            interpolationY = new LinearInterpolation();
+            break;
+        }
+      }
+      else {
+        interpolationX = new LinearInterpolation();
+        interpolationY = new LinearInterpolation();
+      }
+      interpolationX.setSrc(pX);
+      interpolationX.setSnum(size);
+      interpolationX.setSubdiv(subdiv);
+      interpolationX.interpolate();
+      interpolationY.setSrc(pY);
+      interpolationY.setSnum(size);
+      interpolationY.setSubdiv(subdiv);
+      interpolationY.interpolate();
+      if (interpolationX.getDnum() != interpolationY.getDnum())
+        throw new IllegalStateException();
+
+      vSNum = interpolationX.getDnum();
+
+      vSX = interpolationX.getDest();
+      vSY = interpolationY.getDest();
+    }
+
+    public double[] getvSX() {
+      return vSX;
+    }
+
+    public double[] getvSY() {
+      return vSY;
+    }
+
+    public int getvSNum() {
+      return vSNum;
+    }
+  }
+
   public double evaluate(int pFrame) {
     /* check if x-value is inside the supported range */
     if (size() == 1)
@@ -202,43 +318,12 @@ public class Envelope implements Serializable {
     else if (pFrame >= max)
       return y[size() - 1];
 
-    int subdiv = org.jwildfire.envelope.Interpolation.calcSubDivPRV(x, size());
-    org.jwildfire.envelope.Interpolation interpolationX, interpolationY;
-    if (size() > 2) {
-      switch (getInterpolation()) {
-        case SPLINE:
-          interpolationX = new SplineInterpolation();
-          interpolationY = new SplineInterpolation();
-          break;
-        case BEZIER:
-          interpolationX = new BezierInterpolation();
-          interpolationY = new BezierInterpolation();
-          break;
-        default:
-          interpolationX = new LinearInterpolation();
-          interpolationY = new LinearInterpolation();
-          break;
-      }
-    }
-    else {
-      interpolationX = new LinearInterpolation();
-      interpolationY = new LinearInterpolation();
-    }
-    interpolationX.setSrc(x);
-    interpolationX.setSnum(size());
-    interpolationX.setSubdiv(subdiv);
-    interpolationX.interpolate();
-    interpolationY.setSrc(y);
-    interpolationY.setSnum(size());
-    interpolationY.setSubdiv(subdiv);
-    interpolationY.interpolate();
-    if (interpolationX.getDnum() != interpolationY.getDnum())
-      throw new IllegalStateException();
-
     int indl = -1, indr = -1;
-    int vSNum = interpolationX.getDnum();
-    double vSX[] = interpolationX.getDest();
-    double vSY[] = interpolationY.getDest();
+    InterpolatedPoints iPoints = getInterpolatedPoints(x, y, interpolation);
+    int vSNum = iPoints.getvSNum();
+    double vSX[] = iPoints.getvSX();
+    double vSY[] = iPoints.getvSY();
+
     for (int i = 0; i < vSNum; i++) {
       if (Tools.FTOI(vSX[i]) <= pFrame)
         indl = i;
@@ -280,43 +365,12 @@ public class Envelope implements Serializable {
     else if (pTime >= max)
       return y[size() - 1];
 
-    int subdiv = org.jwildfire.envelope.Interpolation.calcSubDivPRV(x, size());
-    org.jwildfire.envelope.Interpolation interpolationX, interpolationY;
-    if (size() > 2) {
-      switch (getInterpolation()) {
-        case SPLINE:
-          interpolationX = new SplineInterpolation();
-          interpolationY = new SplineInterpolation();
-          break;
-        case BEZIER:
-          interpolationX = new BezierInterpolation();
-          interpolationY = new BezierInterpolation();
-          break;
-        default:
-          interpolationX = new LinearInterpolation();
-          interpolationY = new LinearInterpolation();
-          break;
-      }
-    }
-    else {
-      interpolationX = new LinearInterpolation();
-      interpolationY = new LinearInterpolation();
-    }
-    interpolationX.setSrc(x);
-    interpolationX.setSnum(size());
-    interpolationX.setSubdiv(subdiv);
-    interpolationX.interpolate();
-    interpolationY.setSrc(y);
-    interpolationY.setSnum(size());
-    interpolationY.setSubdiv(subdiv);
-    interpolationY.interpolate();
-    if (interpolationX.getDnum() != interpolationY.getDnum())
-      throw new IllegalStateException();
-
     int indl = -1, indr = -1;
-    int vSNum = interpolationX.getDnum();
-    double vSX[] = interpolationX.getDest();
-    double vSY[] = interpolationY.getDest();
+    InterpolatedPoints iPoints = getInterpolatedPoints(x, y, interpolation);
+    int vSNum = iPoints.getvSNum();
+    double vSX[] = iPoints.getvSX();
+    double vSY[] = iPoints.getvSY();
+
     for (int i = 0; i < vSNum; i++) {
       if (vSX[i] <= pTime)
         indl = i;
