@@ -4214,7 +4214,7 @@ public class TinaInternalFrame extends JInternalFrame {
           getSwfAnimatorRemoveAllFlamesButton(), getSwfAnimatorMovieFromClipboardButton(), getSwfAnimatorMovieFromDiscButton(),
           getSwfAnimatorMovieToClipboardButton(), getSwfAnimatorMovieToDiscButton(), getSwfAnimatorFrameToEditorBtn(),
           getSwfAnimatorPlayButton(), getSwfAnimatorFromFrameREd(), getSwfAnimatorToFrameREd(), getSwfAnimatorMotionBlurLengthREd(),
-          getSwfAnimatorMotionBlurTimeStepREd()));
+          getSwfAnimatorMotionBlurTimeStepREd(), getRandomMoviePanel()));
       tinaController.getSwfAnimatorCtrl().enableControls();
 
     }
@@ -9704,6 +9704,8 @@ public class TinaInternalFrame extends JInternalFrame {
   private JWFNumberField swfAnimatorMotionBlurLengthREd;
   private JWFNumberField swfAnimatorMotionBlurTimeStepREd;
   private JCheckBox stereo3dSwapSidesCBx;
+  private JPanel panel_12;
+  private JPanel randomMoviePanel;
 
   /**
    * This method initializes renderBatchJobsScrollPane	
@@ -11357,7 +11359,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JPanel getPanel_5() {
     if (panel_5 == null) {
       panel_5 = new JPanel();
-      panel_5.setBorder(new TitledBorder(null, "Movie", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+      panel_5.setBorder(new TitledBorder(null, "Current movie", TitledBorder.LEADING, TitledBorder.TOP, null, null));
       panel_5.setPreferredSize(new Dimension(10, 100));
       panel_5.setLayout(null);
 
@@ -11645,8 +11647,13 @@ public class TinaInternalFrame extends JInternalFrame {
   private JPanel getPanel_4() {
     if (panel_4 == null) {
       panel_4 = new JPanel();
-      panel_4.setBorder(new TitledBorder(null, "(reserved area)", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-      panel_4.setLayout(null);
+      panel_4.setBorder(new TitledBorder(null, "Movies", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+      panel_4.setLayout(new BorderLayout(0, 0));
+      panel_4.add(getPanel_12(), BorderLayout.NORTH);
+
+      randomMoviePanel = new JPanel();
+      panel_4.add(randomMoviePanel, BorderLayout.CENTER);
+      randomMoviePanel.setLayout(new BorderLayout(0, 0));
     }
     return panel_4;
   }
@@ -17108,6 +17115,47 @@ public class TinaInternalFrame extends JInternalFrame {
 
   public JCheckBox getStereo3dSwapSidesCBx() {
     return stereo3dSwapSidesCBx;
+  }
+
+  private JPanel getPanel_12() {
+    if (panel_12 == null) {
+      panel_12 = new JPanel();
+      panel_12.setPreferredSize(new Dimension(10, 50));
+      panel_12.setLayout(null);
+
+      JLabel label = new JLabel();
+      label.setText("  Rnd Generator");
+      label.setPreferredSize(new Dimension(80, 22));
+      label.setFont(new Font("Dialog", Font.BOLD, 10));
+      label.setAlignmentX(1.0f);
+      label.setBounds(124, 5, 80, 14);
+      panel_12.add(label);
+
+      JComboBox comboBox = new JComboBox();
+      comboBox.setToolTipText("Random-flame-generator");
+      comboBox.setPreferredSize(new Dimension(100, 24));
+      comboBox.setMinimumSize(new Dimension(100, 24));
+      comboBox.setMaximumSize(new Dimension(32767, 24));
+      comboBox.setMaximumRowCount(32);
+      comboBox.setFont(new Font("Dialog", Font.BOLD, 10));
+      comboBox.setBounds(134, 22, 232, 24);
+      panel_12.add(comboBox);
+
+      JButton btnRandomMovies = new JButton();
+      btnRandomMovies.setToolTipText("Create a batch of random movies");
+      btnRandomMovies.setText("Random movies");
+      btnRandomMovies.setPreferredSize(new Dimension(105, 46));
+      btnRandomMovies.setMinimumSize(new Dimension(100, 46));
+      btnRandomMovies.setMaximumSize(new Dimension(32000, 46));
+      btnRandomMovies.setFont(new Font("Dialog", Font.BOLD, 10));
+      btnRandomMovies.setBounds(6, 1, 119, 46);
+      panel_12.add(btnRandomMovies);
+    }
+    return panel_12;
+  }
+
+  public JPanel getRandomMoviePanel() {
+    return randomMoviePanel;
   }
 } //  @jve:decl-index=0:visual-constraint="10,10"
 

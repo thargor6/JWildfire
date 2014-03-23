@@ -18,6 +18,7 @@ package org.jwildfire.create.tina.swing;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Rectangle;
 import java.awt.Toolkit;
@@ -25,6 +26,7 @@ import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.Transferable;
+import java.awt.event.MouseEvent;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -34,6 +36,7 @@ import java.util.Map;
 
 import javax.swing.AbstractButton;
 import javax.swing.ButtonGroup;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
@@ -41,9 +44,11 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
 import javax.swing.JSlider;
 import javax.swing.JTabbedPane;
 import javax.swing.JToggleButton;
+import javax.swing.ScrollPaneConstants;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -76,6 +81,7 @@ import org.jwildfire.swing.ErrorHandler;
 import org.jwildfire.swing.ImageFileChooser;
 import org.jwildfire.swing.ImagePanel;
 import org.jwildfire.swing.SWFFileChooser;
+import org.jwildfire.transform.ComposeTransformer;
 
 public class TinaSWFAnimatorController implements SWFAnimationRenderThreadController, FlameHolder {
   public static final int PAGE_INDEX = 4;
@@ -164,6 +170,8 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
   private final MotionControlsDelegate motionControlsDelegate;
   private final List<JPanel> flamePartPanelList = new ArrayList<JPanel>();
   private final List<JRadioButton> flamePartRadioButtonList = new ArrayList<JRadioButton>();
+  private final JPanel randomBatchPanel;
+  private JScrollPane randomBatchScrollPane;
 
   private boolean noRefresh;
 
@@ -212,13 +220,14 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
       JButton pSWFAnimatorMovieFromDiskButton, JButton pSWFAnimatorMovieToClipboardButton, JButton pSWFAnimatorMovieToDiskButton,
       JButton pSWFAnimatorFrameToEditorBtn, JButton pSWFAnimatorPlayButton, JWFNumberField pSWFAnimatorFromFrameREd,
       JWFNumberField pSWFAnimatorToFrameREd, JWFNumberField pSwfAnimatorMotionBlurLengthREd,
-      JWFNumberField pSwfAnimatorMotionBlurTimeStepREd) {
+      JWFNumberField pSwfAnimatorMotionBlurTimeStepREd, JPanel pRandomMoviePanel) {
     noRefresh = true;
     try {
       parentCtrl = pParentCtrl;
       prefs = pPrefs;
       currMovie = new FlameMovie(pPrefs);
       errorHandler = pErrorHandler;
+      randomBatchPanel = pRandomMoviePanel;
       swfAnimatorGlobalScript1Cmb = pSWFAnimatorGlobalScript1Cmb;
       swfAnimatorGlobalScript1REd = pSWFAnimatorGlobalScript1REd;
       swfAnimatorGlobalScript2Cmb = pSWFAnimatorGlobalScript2Cmb;
@@ -307,6 +316,10 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
       swfAnimatorMotionBlurLengthREd.setValue(32);
       swfAnimatorMotionBlurTimeStepREd.setValue(0.01);
       motionControlsDelegate = new MotionControlsDelegate(parentCtrl, null, parentCtrl.getRootTabbedPane());
+
+      randomBatch.add(0, new MovieThumbnail(currMovie, null));
+      updateThumbnails();
+
       enableControls();
     }
     finally {
@@ -399,6 +412,23 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
     currMovie.addPart(part);
     refreshFrameCount();
     refreshFlameImage();
+    clearCurrentPreview();
+    updateThumbnails();
+  }
+
+  private void clearCurrentPreview() {
+    for (int i = 0; i < randomBatch.size(); i++) {
+      FlameMovie bMovie = randomBatch.get(i).getMovie();
+      if (bMovie == currMovie) {
+        randomBatch.get(i).preview = null;
+        ImagePanel pnl = randomBatch.get(i).getImgPanel();
+        if (pnl != null) {
+          pnl.replaceImage(randomBatch.get(i).getPreview(prefs.getTinaRenderPreviewQuality() / 2));
+          pnl.repaint();
+        }
+        break;
+      }
+    }
   }
 
   private void refreshFrameCount() {
@@ -1043,6 +1073,8 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
       swfAnimatorFlamesPanel.add(panel);
     }
     swfAnimatorFlamesPanel.getParent().validate();
+    clearCurrentPreview();
+    updateThumbnails();
   }
 
   public void flameMoveDownButton_clicked() {
@@ -1066,6 +1098,8 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
     swfAnimatorFlamesPanel.getParent().validate();
     refreshFlameImage();
     enableControls();
+    clearCurrentPreview();
+    updateThumbnails();
   }
 
   public void movieFromClipboardButton_clicked() {
@@ -1078,7 +1112,9 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
               DataFlavor.stringFlavor));
           FlameMovie movie = new JWFMovieReader(prefs).readMovieFromXML(xml);
           if (movie != null) {
+            randomBatch.add(0, new MovieThumbnail(movie, null));
             currMovie = movie;
+            updateThumbnails();
           }
           refreshUI();
         }
@@ -1212,7 +1248,9 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
         File file = chooser.getSelectedFile();
         FlameMovie movie = new JWFMovieReader(prefs).readMovie(file.getAbsolutePath());
         if (movie != null) {
+          randomBatch.add(0, new MovieThumbnail(movie, null));
           currMovie = movie;
+          updateThumbnails();
         }
         refreshUI();
       }
@@ -1304,6 +1342,8 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
 
       refreshFrameCount();
       enableControls();
+      clearCurrentPreview();
+      updateThumbnails();
     }
   }
 
@@ -1446,4 +1486,161 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
     refreshFlameImage();
   }
 
+  private class MovieThumbnail {
+    private FlameMovie movie;
+    private SimpleImage preview;
+    private ImagePanel imgPanel;
+
+    public MovieThumbnail(FlameMovie pMovie, SimpleImage pPreview) {
+      movie = pMovie;
+      preview = pPreview;
+    }
+
+    private void generatePreview(int pQuality) {
+      preview = new SimpleImage(IMG_WIDTH * IMG_COUNT, IMG_HEIGHT);
+      for (int i = 0; i < IMG_COUNT; i++) {
+
+        RenderInfo info = new RenderInfo(IMG_WIDTH, IMG_HEIGHT, RenderMode.PREVIEW);
+        Flame renderFlame;
+        if (movie.getParts().size() > 0) {
+          int frame = (int) ((double) movie.getFrameCount() / ((double) IMG_COUNT + 1) * i + 0.5);
+          System.out.println(frame);
+          renderFlame = movie.getFlame(frame);
+        }
+        else {
+          renderFlame = new Flame();
+        }
+
+        double wScl = (double) info.getImageWidth() / (double) renderFlame.getWidth();
+        double hScl = (double) info.getImageHeight() / (double) renderFlame.getHeight();
+        renderFlame.setPixelsPerUnit((wScl + hScl) * 0.5 * renderFlame.getPixelsPerUnit());
+        renderFlame.setWidth(IMG_WIDTH);
+        renderFlame.setHeight(IMG_HEIGHT);
+        renderFlame.setDeFilterEnabled(false);
+        renderFlame.setSpatialFilterRadius(0.0);
+        FlameRenderer renderer = new FlameRenderer(renderFlame, prefs, false, false);
+        renderFlame.setSampleDensity(pQuality / IMG_COUNT);
+        RenderedFlame res = renderer.renderFlame(info);
+        SimpleImage foreground = res.getImage();
+        ComposeTransformer composeT = new ComposeTransformer();
+        composeT.setHAlign(ComposeTransformer.HAlignment.OFF);
+        composeT.setVAlign(ComposeTransformer.VAlignment.OFF);
+        composeT.setTop(0);
+        composeT.setLeft(i * IMG_WIDTH);
+        composeT.setForegroundImage(foreground);
+        composeT.transformImage(preview);
+      }
+    }
+
+    public SimpleImage getPreview(int pQuality) {
+      if (preview == null) {
+        generatePreview(pQuality);
+      }
+      return preview;
+    }
+
+    public FlameMovie getMovie() {
+      return movie;
+    }
+
+    public ImagePanel getImgPanel() {
+      return imgPanel;
+    }
+
+    public void setImgPanel(ImagePanel imgPanel) {
+      this.imgPanel = imgPanel;
+    }
+  }
+
+  private List<MovieThumbnail> randomBatch = new ArrayList<MovieThumbnail>();
+
+  private final int IMG_WIDTH = 80;
+  private final int IMG_COUNT = 4;
+  private final int IMG_HEIGHT = 60;
+  private final int BORDER_SIZE = 8;
+
+  public void updateThumbnails() {
+    if (randomBatchScrollPane != null) {
+      randomBatchPanel.remove(randomBatchScrollPane);
+      randomBatchScrollPane = null;
+    }
+    int panelWidth = IMG_WIDTH * IMG_COUNT + 2 * BORDER_SIZE;
+    int panelHeight = (IMG_HEIGHT + BORDER_SIZE) * randomBatch.size();
+    JPanel batchPanel = new JPanel();
+    batchPanel.setLayout(null);
+    batchPanel.setSize(panelWidth, panelHeight);
+    batchPanel.setPreferredSize(new Dimension(panelWidth, panelHeight));
+    for (int i = 0; i < randomBatch.size(); i++) {
+      SimpleImage img = randomBatch.get(i).getPreview(3 * prefs.getTinaRenderPreviewQuality() / 4);
+      // add it to the main panel
+      ImagePanel imgPanel = new ImagePanel(img, 0, 0, img.getImageWidth());
+      imgPanel.setImage(img);
+      imgPanel.setLocation(BORDER_SIZE, i * IMG_HEIGHT + (i + 1) * BORDER_SIZE);
+      randomBatch.get(i).setImgPanel(imgPanel);
+      final int idx = i;
+      addRemoveButton(imgPanel, idx);
+      imgPanel.addMouseListener(new java.awt.event.MouseAdapter() {
+        public void mouseClicked(java.awt.event.MouseEvent e) {
+          if (e.getClickCount() > 1 || e.getButton() != MouseEvent.BUTTON1) {
+            importFromRandomBatch(idx);
+          }
+        }
+      });
+      batchPanel.add(imgPanel);
+    }
+    randomBatchScrollPane = new JScrollPane(batchPanel);
+    randomBatchScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+    randomBatchScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+
+    randomBatchPanel.add(randomBatchScrollPane, BorderLayout.CENTER);
+    randomBatchPanel.validate();
+  }
+
+  private void addRemoveButton(ImagePanel pImgPanel, final int pIdx) {
+    final int BTN_WIDTH = 20;
+    final int BTN_HEIGHT = 20;
+    final int BORDER = 0;
+    JButton btn = new JButton();
+    btn.setMinimumSize(new Dimension(BTN_WIDTH, BTN_HEIGHT));
+    btn.setMaximumSize(new Dimension(BTN_WIDTH, BTN_HEIGHT));
+    btn.setPreferredSize(new Dimension(BTN_WIDTH, BTN_HEIGHT));
+    btn.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/removeThumbnail.gif")));
+    btn.addActionListener(new java.awt.event.ActionListener() {
+      public void actionPerformed(java.awt.event.ActionEvent e) {
+        removeThumbnail(pIdx);
+      }
+    });
+
+    pImgPanel.setLayout(new FlowLayout(FlowLayout.RIGHT, BORDER, BORDER));
+    pImgPanel.add(btn);
+    pImgPanel.invalidate();
+  }
+
+  protected void removeThumbnail(int pIdx) {
+    try {
+      int currMovieIdx = -1;
+      for (int i = 0; i < randomBatch.size(); i++) {
+        FlameMovie bMovie = randomBatch.get(i).getMovie();
+        if (bMovie == currMovie) {
+          currMovieIdx = i;
+          break;
+        }
+      }
+      if (pIdx == currMovieIdx) {
+        throw new Exception("Sorry, the currently selected movie can't be deleted from the movie-ribbon");
+      }
+      randomBatch.remove(pIdx);
+      updateThumbnails();
+    }
+    catch (Exception ex) {
+      errorHandler.handleError(ex);
+    }
+  }
+
+  public void importFromRandomBatch(int pIdx) {
+    if (pIdx >= 0 && pIdx < randomBatch.size()) {
+      currMovie = randomBatch.get(pIdx).getMovie();
+      refreshUI();
+    }
+  }
 }
