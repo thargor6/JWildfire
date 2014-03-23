@@ -225,24 +225,59 @@ public class AnimationService {
     }
   }
 
-  public static void addMotionCurve(Flame pFlame, GlobalScript pScript, int pFrame, int pFrameCount, double pFPS) {
-    if (pScript != null && pScript.getScriptType() != null && !GlobalScriptType.NONE.equals(pScript.getScriptType()) && fabs(pScript.getAmplitude()) > EPSILON) {
-      int envX[] = new int[2];
-      double envY[] = new double[2];
-      envX[0] = 0;
-      envY[0] = 0;
-      envX[1] = pFrameCount;
-      double amplitude;
+  public static class EnvelopePoints {
+    private int envX[];
+    private double envY[];
+
+    public EnvelopePoints(SimpleScript pScript, int pFrameCount, double pFPS, double pAmplitude) {
       if (pScript.getAmplitudeCurve().isEnabled()) {
-        Envelope envelope = pScript.getAmplitudeCurve().toEnvelope();
-        amplitude = envelope.evaluate(pFrame);
+        int[] srcX = pScript.getAmplitudeCurve().getX();
+        double[] srcY = pScript.getAmplitudeCurve().getY();
+        if (srcX.length > 1) {
+          envX = new int[srcX.length + 1];
+          envY = new double[srcY.length + 1];
+          for (int i = 0; i < srcX.length; i++) {
+            envX[i] = srcX[i];
+            envY[i] = pAmplitude * (double) pFrameCount / (DFLT_DURATION * pFPS) * srcY[i];
+          }
+          envX[envX.length - 1] = 2 * envX[envX.length - 2];
+          envY[envY.length - 1] = 2.0 * envY[envY.length - 2];
+        }
+        else {
+          envX = new int[3];
+          envY = new double[3];
+          envX[0] = 0;
+          envY[0] = 0;
+          envX[1] = pFrameCount;
+          envY[1] = pAmplitude * (double) pFrameCount / (DFLT_DURATION * pFPS) * srcY[0];
+          envX[2] = 2 * envX[1];
+          envY[2] = 2.0 * envY[1];
+        }
       }
       else {
-        amplitude = pScript.getAmplitude();
+        envX = new int[3];
+        envY = new double[3];
+        envX[0] = 0;
+        envY[0] = 0;
+        envX[1] = pFrameCount;
+        envY[1] = pAmplitude * (double) pFrameCount / (DFLT_DURATION * pFPS) * pScript.getAmplitude();
+        envX[2] = 2 * envX[1];
+        envY[2] = 2.0 * envY[1];
       }
-      amplitude *= (double) pFrameCount / (DFLT_DURATION * pFPS);
+    }
 
-      envY[1] = 360.0 * amplitude;
+    public int[] getEnvX() {
+      return envX;
+    }
+
+    public double[] getEnvY() {
+      return envY;
+    }
+  }
+
+  public static void addMotionCurve(Flame pFlame, GlobalScript pScript, int pFrame, int pFrameCount, double pFPS) {
+    if (pScript != null && pScript.getScriptType() != null && !GlobalScriptType.NONE.equals(pScript.getScriptType()) && fabs(pScript.getAmplitude()) > EPSILON) {
+      EnvelopePoints points = new EnvelopePoints(pScript, pFrameCount, pFPS, 360.0);
       MotionCurve curve = null;
       switch (pScript.getScriptType()) {
         case ROTATE_PITCH:
@@ -257,7 +292,7 @@ public class AnimationService {
         default:
           throw new IllegalArgumentException(pScript.toString());
       }
-      addEnvelope(pFrameCount, curve, envX, envY);
+      addEnvelope(pFrameCount, curve, points.getEnvX(), points.getEnvY());
     }
   }
 
@@ -265,9 +300,9 @@ public class AnimationService {
     Envelope envelope = new Envelope(envX, envY);
     envelope.setViewXMin(-10);
     envelope.setViewXMax(10 + pFrameCount);
-    envelope.setViewYMin(-400.0);
-    envelope.setViewYMax(400.0);
-    envelope.setInterpolation(Interpolation.LINEAR);
+    envelope.setViewYMin(-10000.0);
+    envelope.setViewYMax(10000.0);
+    envelope.setInterpolation(Interpolation.SPLINE);
     envelope.setSelectedIdx(0);
 
     if (!curve.isEnabled()) {
@@ -289,32 +324,14 @@ public class AnimationService {
 
   public static void addMotionCurve(Flame pFlame, XFormScript pScript, int pFrame, int pFrameCount, double pFPS) {
     if (pScript != null && pScript.getScriptType() != null && !XFormScriptType.NONE.equals(pScript.getScriptType()) && fabs(pScript.getAmplitude()) > EPSILON) {
-      double amplitude;
-      if (pScript.getAmplitudeCurve().isEnabled()) {
-        Envelope envelope = pScript.getAmplitudeCurve().toEnvelope();
-        amplitude = envelope.evaluate(pFrame);
-      }
-      else {
-        amplitude = pScript.getAmplitude();
-      }
-      amplitude *= (double) pFrameCount / (DFLT_DURATION * pFPS);
       for (Layer layer : pFlame.getLayers()) {
         switch (pScript.getScriptType()) {
           case ROTATE_FULL: {
             int idx = 0;
             for (XForm xForm : layer.getXForms()) {
-              int envX[] = new int[2];
-              double envY[] = new double[2];
-              envX[0] = 0;
-              envY[0] = 0;
-              envX[1] = pFrameCount;
-              envY[1] = 360.0 * amplitude;
               MotionCurve curve = xForm.getRotateCurve();
-              idx++;
-              if (idx % 2 == 0) {
-                envY[1] = -envY[1];
-              }
-              addEnvelope(pFrameCount, curve, envX, envY);
+              EnvelopePoints points = new EnvelopePoints(pScript, pFrameCount, pFPS, idx++ % 2 == 0 ? 360.0 : -360.0);
+              addEnvelope(pFrameCount, curve, points.getEnvX(), points.getEnvY());
             }
           }
             break;
@@ -329,14 +346,9 @@ public class AnimationService {
             xForm = getXForm(pScript.getScriptType(), layer, xForm);
 
             if (xForm != null) {
-              int envX[] = new int[2];
-              double envY[] = new double[2];
-              envX[0] = 0;
-              envY[0] = 0;
-              envX[1] = pFrameCount;
-              envY[1] = 360.0 * amplitude;
+              EnvelopePoints points = new EnvelopePoints(pScript, pFrameCount, pFPS, 360.0);
               MotionCurve curve = xForm.getRotateCurve();
-              addEnvelope(pFrameCount, curve, envX, envY);
+              addEnvelope(pFrameCount, curve, points.getEnvX(), points.getEnvY());
             }
           }
             break;

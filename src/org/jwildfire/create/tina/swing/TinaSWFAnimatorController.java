@@ -158,7 +158,10 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
   private final JButton swfAnimatorPlayButton;
   private final JWFNumberField swfAnimatorFromFrameREd;
   private final JWFNumberField swfAnimatorToFrameREd;
+  private final JWFNumberField swfAnimatorMotionBlurLengthREd;
+  private final JWFNumberField swfAnimatorMotionBlurTimeStepREd;
   private FlamePanel flamePanel;
+  private final MotionControlsDelegate motionControlsDelegate;
   private final List<JPanel> flamePartPanelList = new ArrayList<JPanel>();
   private final List<JRadioButton> flamePartRadioButtonList = new ArrayList<JRadioButton>();
 
@@ -208,7 +211,8 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
       JButton pSWFAnimatorRemoveFlameButton, JButton pSWFAnimatorRemoveAllFlamesButton, JButton pSWFAnimatorMovieFromClipboardButton,
       JButton pSWFAnimatorMovieFromDiskButton, JButton pSWFAnimatorMovieToClipboardButton, JButton pSWFAnimatorMovieToDiskButton,
       JButton pSWFAnimatorFrameToEditorBtn, JButton pSWFAnimatorPlayButton, JWFNumberField pSWFAnimatorFromFrameREd,
-      JWFNumberField pSWFAnimatorToFrameREd) {
+      JWFNumberField pSWFAnimatorToFrameREd, JWFNumberField pSwfAnimatorMotionBlurLengthREd,
+      JWFNumberField pSwfAnimatorMotionBlurTimeStepREd) {
     noRefresh = true;
     try {
       parentCtrl = pParentCtrl;
@@ -280,6 +284,8 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
       swfAnimatorPlayButton = pSWFAnimatorPlayButton;
       swfAnimatorFromFrameREd = pSWFAnimatorFromFrameREd;
       swfAnimatorToFrameREd = pSWFAnimatorToFrameREd;
+      swfAnimatorMotionBlurLengthREd = pSwfAnimatorMotionBlurLengthREd;
+      swfAnimatorMotionBlurTimeStepREd = pSwfAnimatorMotionBlurTimeStepREd;
 
       swfAnimatorOutputCmb.addItem(OutputFormat.FLAMES);
       swfAnimatorOutputCmb.addItem(OutputFormat.PNG);
@@ -298,7 +304,9 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
       swfAnimatorFromFrameREd.setMaxValue(frameCount);
       swfAnimatorToFrameREd.setValue(frameCount);
       swfAnimatorToFrameREd.setMaxValue(frameCount);
-
+      swfAnimatorMotionBlurLengthREd.setValue(32);
+      swfAnimatorMotionBlurTimeStepREd.setValue(0.01);
+      motionControlsDelegate = new MotionControlsDelegate(parentCtrl, null, parentCtrl.getRootTabbedPane());
       enableControls();
     }
     finally {
@@ -308,21 +316,33 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
 
   protected void enableControls() {
     boolean rendering = renderThread != null;
+    swfAnimatorGlobalScript1Cmb.setEnabled(!rendering);
+    swfAnimatorGlobalScript2Cmb.setEnabled(!rendering);
+    swfAnimatorGlobalScript3Cmb.setEnabled(!rendering);
+    swfAnimatorGlobalScript4Cmb.setEnabled(!rendering);
+    swfAnimatorGlobalScript5Cmb.setEnabled(!rendering);
+    motionControlsDelegate.enableControl(swfAnimatorGlobalScript1REd, rendering);
+    motionControlsDelegate.enableControl(swfAnimatorGlobalScript2REd, rendering);
+    motionControlsDelegate.enableControl(swfAnimatorGlobalScript3REd, rendering);
+    motionControlsDelegate.enableControl(swfAnimatorGlobalScript4REd, rendering);
+    motionControlsDelegate.enableControl(swfAnimatorGlobalScript5REd, rendering);
     swfAnimatorXFormScript1Cmb.setEnabled(!rendering);
     swfAnimatorXFormScript2Cmb.setEnabled(!rendering);
     swfAnimatorXFormScript3Cmb.setEnabled(!rendering);
     swfAnimatorXFormScript4Cmb.setEnabled(!rendering);
     swfAnimatorXFormScript5Cmb.setEnabled(!rendering);
-    swfAnimatorXFormScript1Cmb.setEnabled(!rendering);
-    swfAnimatorXFormScript2Cmb.setEnabled(!rendering);
-    swfAnimatorXFormScript3Cmb.setEnabled(!rendering);
-    swfAnimatorXFormScript4Cmb.setEnabled(!rendering);
-    swfAnimatorXFormScript5Cmb.setEnabled(!rendering);
+    motionControlsDelegate.enableControl(swfAnimatorXFormScript1REd, rendering);
+    motionControlsDelegate.enableControl(swfAnimatorXFormScript2REd, rendering);
+    motionControlsDelegate.enableControl(swfAnimatorXFormScript3REd, rendering);
+    motionControlsDelegate.enableControl(swfAnimatorXFormScript4REd, rendering);
+    motionControlsDelegate.enableControl(swfAnimatorXFormScript5REd, rendering);
     swfAnimatorFrameREd.setEnabled(!rendering);
     swfAnimatorFramesREd.setEnabled(!rendering);
     swfAnimatorFramesREd.setEditable(false);
     swfAnimatorFromFrameREd.setEnabled(!rendering);
     swfAnimatorToFrameREd.setEnabled(!rendering);
+    swfAnimatorMotionBlurLengthREd.setEnabled(!rendering);
+    swfAnimatorMotionBlurTimeStepREd.setEnabled(!rendering);
     swfAnimatorFramesPerSecondREd.setEnabled(!rendering);
     swfAnimatorGenerateButton.setEnabled(!rendering && currMovie.getFrameCount() > 0);
     swfAnimatorGenerateButton.setVisible(!rendering);
@@ -662,6 +682,8 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
     currMovie.setFrameWidth(frameWidth);
     currMovie.setFrameHeight(frameHeight);
     currMovie.setFramesPerSecond(framesPerSecond);
+    currMovie.setMotionBlurLength(swfAnimatorMotionBlurLengthREd.getIntValue());
+    currMovie.setMotionBlurTimeStep(swfAnimatorMotionBlurTimeStepREd.getDoubleValue());
   }
 
   public void generateButton_clicked() {
@@ -871,9 +893,8 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
       int frameCount = swfAnimatorFramesREd.getIntValue();
       double fps = swfAnimatorFramesPerSecondREd.getDoubleValue();
 
-      // TODO
-      int motionBlurLength = 12;
-      double motionBlurTimeStep = 0.1;
+      int motionBlurLength = swfAnimatorMotionBlurLengthREd.getIntValue();
+      double motionBlurTimeStep = swfAnimatorMotionBlurTimeStepREd.getDoubleValue();
 
       GlobalScript globalScripts[] = {
           getGlobalScriptFromUI(swfAnimatorGlobalScript1Cmb, swfAnimatorGlobalScript1REd),
@@ -1147,17 +1168,19 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
       swfAnimatorFromFrameREd.setMaxValue(frameCount);
       swfAnimatorToFrameREd.setValue(frameCount);
       swfAnimatorToFrameREd.setMaxValue(frameCount);
+      swfAnimatorMotionBlurLengthREd.setValue(currMovie.getMotionBlurLength());
+      swfAnimatorMotionBlurTimeStepREd.setValue(currMovie.getMotionBlurTimeStep());
 
       for (FlameMoviePart part : currMovie.getParts()) {
         addFlameToFlamePanel(part);
       }
 
-      refreshFlameImage();
       enableControls();
     }
     finally {
       noRefresh = false;
     }
+    refreshFlameImage();
   }
 
   private void setXFormScriptToUI(XFormScript pScript, JComboBox pCmb, JWFNumberField pAmountField) {
@@ -1410,12 +1433,16 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
   }
 
   public void editGlobalMotionCurve(JWFNumberField pSender) {
-    new MotionControlsDelegate(parentCtrl, null, parentCtrl.getRootTabbedPane()).editMotionCurve(pSender);
+    motionControlsDelegate.editMotionCurve(pSender);
     refreshFlameImage();
   }
 
   public void editXFormMotionCurve(JWFNumberField pSender) {
-    new MotionControlsDelegate(parentCtrl, null, parentCtrl.getRootTabbedPane()).editMotionCurve(pSender);
+    motionControlsDelegate.editMotionCurve(pSender);
+    refreshFlameImage();
+  }
+
+  public void moviePropertyChanged() {
     refreshFlameImage();
   }
 

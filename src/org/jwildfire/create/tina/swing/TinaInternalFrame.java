@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2014 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -4213,7 +4213,8 @@ public class TinaInternalFrame extends JInternalFrame {
           getSwfAnimatorOutputCmb(), getSwfAnimatorMoveUpButton(), getSwfAnimatorMoveDownButton(), getSwfAnimatorRemoveFlameButton(),
           getSwfAnimatorRemoveAllFlamesButton(), getSwfAnimatorMovieFromClipboardButton(), getSwfAnimatorMovieFromDiscButton(),
           getSwfAnimatorMovieToClipboardButton(), getSwfAnimatorMovieToDiscButton(), getSwfAnimatorFrameToEditorBtn(),
-          getSwfAnimatorPlayButton(), getSwfAnimatorFromFrameREd(), getSwfAnimatorToFrameREd()));
+          getSwfAnimatorPlayButton(), getSwfAnimatorFromFrameREd(), getSwfAnimatorToFrameREd(), getSwfAnimatorMotionBlurLengthREd(),
+          getSwfAnimatorMotionBlurTimeStepREd()));
       tinaController.getSwfAnimatorCtrl().enableControls();
 
     }
@@ -5757,20 +5758,13 @@ public class TinaInternalFrame extends JInternalFrame {
       panel_2.add(swfAnimatorPanel_1, BorderLayout.CENTER);
       swfAnimatorPanel_1.setLayout(new BorderLayout(0, 0));
 
-      JPanel panel_12 = new JPanel();
-      panel_12.setPreferredSize(new Dimension(10, 26));
-      swfAnimatorPanel_1.add(panel_12, BorderLayout.NORTH);
-      panel_12.setLayout(new BoxLayout(panel_12, BoxLayout.X_AXIS));
-
-      JLabel lblFrame = new JLabel();
-      panel_12.add(lblFrame);
-      lblFrame.setHorizontalAlignment(SwingConstants.RIGHT);
-      lblFrame.setText("Frame");
-      lblFrame.setPreferredSize(new Dimension(48, 22));
-      lblFrame.setFont(new Font("Dialog", Font.BOLD, 10));
+      JPanel panel_83 = new JPanel();
+      panel_83.setPreferredSize(new Dimension(10, 50));
+      swfAnimatorPanel_1.add(panel_83, BorderLayout.SOUTH);
+      panel_83.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 2));
 
       swfAnimatorFrameSlider = new JSlider();
-      panel_12.add(swfAnimatorFrameSlider);
+      panel_83.add(swfAnimatorFrameSlider);
       swfAnimatorFrameSlider.setMinorTickSpacing(5);
       swfAnimatorFrameSlider.setMinimum(1);
       swfAnimatorFrameSlider.setMajorTickSpacing(10);
@@ -5782,36 +5776,8 @@ public class TinaInternalFrame extends JInternalFrame {
         }
       });
       swfAnimatorFrameSlider.setValue(0);
-      swfAnimatorFrameSlider.setPreferredSize(new Dimension(220, 19));
+      swfAnimatorFrameSlider.setPreferredSize(new Dimension(340, 19));
       swfAnimatorFrameSlider.setMaximum(60);
-
-      swfAnimatorFrameREd = new JWFNumberField();
-      swfAnimatorFrameREd.addChangeListener(new ChangeListener() {
-        public void stateChanged(ChangeEvent e) {
-          if (tinaController != null && tinaController.getSwfAnimatorCtrl() != null) {
-            try {
-              swfAnimatorFrameSlider.setValue(swfAnimatorFrameREd.getIntValue());
-            }
-            catch (Exception ex) {
-              ex.printStackTrace();
-            }
-          }
-        }
-      });
-      swfAnimatorFrameREd.setMaxValue(120.0);
-      swfAnimatorFrameREd.setMinValue(1.0);
-      swfAnimatorFrameREd.setHasMaxValue(true);
-      swfAnimatorFrameREd.setHasMinValue(true);
-      swfAnimatorFrameREd.setOnlyIntegers(true);
-      panel_12.add(swfAnimatorFrameREd);
-      swfAnimatorFrameREd.setText("60");
-      swfAnimatorFrameREd.setPreferredSize(new Dimension(56, 22));
-      swfAnimatorFrameREd.setFont(new Font("Dialog", Font.PLAIN, 10));
-
-      JPanel panel_83 = new JPanel();
-      panel_83.setPreferredSize(new Dimension(10, 35));
-      swfAnimatorPanel_1.add(panel_83, BorderLayout.SOUTH);
-      panel_83.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 2));
 
       swfAnimatorPlayButton = new JButton();
       panel_83.add(swfAnimatorPlayButton);
@@ -5836,6 +5802,36 @@ public class TinaInternalFrame extends JInternalFrame {
       swfAnimatorFrameToEditorBtn.setPreferredSize(new Dimension(42, 28));
       swfAnimatorFrameToEditorBtn.setMnemonic(KeyEvent.VK_E);
       swfAnimatorFrameToEditorBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+
+      JLabel lblFrame = new JLabel();
+      panel_83.add(lblFrame);
+      lblFrame.setHorizontalAlignment(SwingConstants.RIGHT);
+      lblFrame.setText("Frame");
+      lblFrame.setPreferredSize(new Dimension(48, 22));
+      lblFrame.setFont(new Font("Dialog", Font.BOLD, 10));
+
+      swfAnimatorFrameREd = new JWFNumberField();
+      panel_83.add(swfAnimatorFrameREd);
+      swfAnimatorFrameREd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null && tinaController.getSwfAnimatorCtrl() != null) {
+            try {
+              swfAnimatorFrameSlider.setValue(swfAnimatorFrameREd.getIntValue());
+            }
+            catch (Exception ex) {
+              ex.printStackTrace();
+            }
+          }
+        }
+      });
+      swfAnimatorFrameREd.setMaxValue(120.0);
+      swfAnimatorFrameREd.setMinValue(1.0);
+      swfAnimatorFrameREd.setHasMaxValue(true);
+      swfAnimatorFrameREd.setHasMinValue(true);
+      swfAnimatorFrameREd.setOnlyIntegers(true);
+      swfAnimatorFrameREd.setText("60");
+      swfAnimatorFrameREd.setPreferredSize(new Dimension(56, 22));
+      swfAnimatorFrameREd.setFont(new Font("Dialog", Font.PLAIN, 10));
 
       swfAnimatorPreviewRootPanel = new JPanel();
       swfAnimatorPanel_1.add(swfAnimatorPreviewRootPanel, BorderLayout.CENTER);
@@ -5896,6 +5892,13 @@ public class TinaInternalFrame extends JInternalFrame {
       swfAnimatorGlobalScript2Cmb.setPreferredSize(new Dimension(275, 22));
       swfAnimatorGlobalScript2Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
       swfAnimatorGlobalScript2Cmb.setBounds(116, 42, 175, 24);
+      swfAnimatorGlobalScript2Cmb.addItemListener(new ItemListener() {
+        public void itemStateChanged(ItemEvent e) {
+          if (tinaController != null && tinaController.getSwfAnimatorCtrl() != null) {
+            tinaController.getSwfAnimatorCtrl().moviePropertyChanged();
+          }
+        }
+      });
       panel_10.add(swfAnimatorGlobalScript2Cmb);
 
       JLabel lblGlobalScript = new JLabel();
@@ -5911,6 +5914,13 @@ public class TinaInternalFrame extends JInternalFrame {
       swfAnimatorGlobalScript3Cmb.setPreferredSize(new Dimension(275, 22));
       swfAnimatorGlobalScript3Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
       swfAnimatorGlobalScript3Cmb.setBounds(116, 65, 175, 24);
+      swfAnimatorGlobalScript3Cmb.addItemListener(new ItemListener() {
+        public void itemStateChanged(ItemEvent e) {
+          if (tinaController != null && tinaController.getSwfAnimatorCtrl() != null) {
+            tinaController.getSwfAnimatorCtrl().moviePropertyChanged();
+          }
+        }
+      });
       panel_10.add(swfAnimatorGlobalScript3Cmb);
 
       JLabel lblGlobalScript_1 = new JLabel();
@@ -5926,6 +5936,13 @@ public class TinaInternalFrame extends JInternalFrame {
       swfAnimatorGlobalScript4Cmb.setPreferredSize(new Dimension(275, 22));
       swfAnimatorGlobalScript4Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
       swfAnimatorGlobalScript4Cmb.setBounds(116, 88, 175, 24);
+      swfAnimatorGlobalScript4Cmb.addItemListener(new ItemListener() {
+        public void itemStateChanged(ItemEvent e) {
+          if (tinaController != null && tinaController.getSwfAnimatorCtrl() != null) {
+            tinaController.getSwfAnimatorCtrl().moviePropertyChanged();
+          }
+        }
+      });
       panel_10.add(swfAnimatorGlobalScript4Cmb);
 
       JLabel lblGlobalScript_2 = new JLabel();
@@ -5941,6 +5958,13 @@ public class TinaInternalFrame extends JInternalFrame {
       swfAnimatorGlobalScript5Cmb.setPreferredSize(new Dimension(275, 22));
       swfAnimatorGlobalScript5Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
       swfAnimatorGlobalScript5Cmb.setBounds(116, 111, 175, 24);
+      swfAnimatorGlobalScript5Cmb.addItemListener(new ItemListener() {
+        public void itemStateChanged(ItemEvent e) {
+          if (tinaController != null && tinaController.getSwfAnimatorCtrl() != null) {
+            tinaController.getSwfAnimatorCtrl().moviePropertyChanged();
+          }
+        }
+      });
       panel_10.add(swfAnimatorGlobalScript5Cmb);
 
       JLabel lblGlobalScript_3 = new JLabel();
@@ -5964,6 +5988,13 @@ public class TinaInternalFrame extends JInternalFrame {
       swfAnimatorXFormScript2Cmb.setPreferredSize(new Dimension(275, 22));
       swfAnimatorXFormScript2Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
       swfAnimatorXFormScript2Cmb.setBounds(116, 161, 175, 24);
+      swfAnimatorXFormScript2Cmb.addItemListener(new ItemListener() {
+        public void itemStateChanged(ItemEvent e) {
+          if (tinaController != null && tinaController.getSwfAnimatorCtrl() != null) {
+            tinaController.getSwfAnimatorCtrl().moviePropertyChanged();
+          }
+        }
+      });
       panel_10.add(swfAnimatorXFormScript2Cmb);
 
       JLabel lblXformScript_1 = new JLabel();
@@ -5979,6 +6010,13 @@ public class TinaInternalFrame extends JInternalFrame {
       swfAnimatorXFormScript3Cmb.setPreferredSize(new Dimension(275, 22));
       swfAnimatorXFormScript3Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
       swfAnimatorXFormScript3Cmb.setBounds(116, 184, 175, 24);
+      swfAnimatorXFormScript3Cmb.addItemListener(new ItemListener() {
+        public void itemStateChanged(ItemEvent e) {
+          if (tinaController != null && tinaController.getSwfAnimatorCtrl() != null) {
+            tinaController.getSwfAnimatorCtrl().moviePropertyChanged();
+          }
+        }
+      });
       panel_10.add(swfAnimatorXFormScript3Cmb);
 
       JLabel lblXformScript_2 = new JLabel();
@@ -5994,6 +6032,13 @@ public class TinaInternalFrame extends JInternalFrame {
       swfAnimatorXFormScript4Cmb.setPreferredSize(new Dimension(275, 22));
       swfAnimatorXFormScript4Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
       swfAnimatorXFormScript4Cmb.setBounds(116, 207, 175, 24);
+      swfAnimatorXFormScript4Cmb.addItemListener(new ItemListener() {
+        public void itemStateChanged(ItemEvent e) {
+          if (tinaController != null && tinaController.getSwfAnimatorCtrl() != null) {
+            tinaController.getSwfAnimatorCtrl().moviePropertyChanged();
+          }
+        }
+      });
       panel_10.add(swfAnimatorXFormScript4Cmb);
 
       JLabel lblXformScript_3 = new JLabel();
@@ -6009,6 +6054,13 @@ public class TinaInternalFrame extends JInternalFrame {
       swfAnimatorXFormScript5Cmb.setPreferredSize(new Dimension(275, 22));
       swfAnimatorXFormScript5Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
       swfAnimatorXFormScript5Cmb.setBounds(116, 230, 175, 24);
+      swfAnimatorXFormScript5Cmb.addItemListener(new ItemListener() {
+        public void itemStateChanged(ItemEvent e) {
+          if (tinaController != null && tinaController.getSwfAnimatorCtrl() != null) {
+            tinaController.getSwfAnimatorCtrl().moviePropertyChanged();
+          }
+        }
+      });
       panel_10.add(swfAnimatorXFormScript5Cmb);
 
       swfAnimatorGlobalScript1REd = new JWFNumberField();
@@ -6027,6 +6079,14 @@ public class TinaInternalFrame extends JInternalFrame {
           tinaController.getSwfAnimatorCtrl().editGlobalMotionCurve(getSwfAnimatorGlobalScript1REd());
         }
       });
+      swfAnimatorGlobalScript1REd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null && tinaController.getSwfAnimatorCtrl() != null) {
+            tinaController.getSwfAnimatorCtrl().moviePropertyChanged();
+          }
+        }
+      });
+
       panel_10.add(swfAnimatorGlobalScript1REd);
 
       swfAnimatorGlobalScript2REd = new JWFNumberField();
@@ -6043,6 +6103,13 @@ public class TinaInternalFrame extends JInternalFrame {
       swfAnimatorGlobalScript2REd.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
           tinaController.getSwfAnimatorCtrl().editGlobalMotionCurve(getSwfAnimatorGlobalScript2REd());
+        }
+      });
+      swfAnimatorGlobalScript2REd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null && tinaController.getSwfAnimatorCtrl() != null) {
+            tinaController.getSwfAnimatorCtrl().moviePropertyChanged();
+          }
         }
       });
       panel_10.add(swfAnimatorGlobalScript2REd);
@@ -6063,6 +6130,13 @@ public class TinaInternalFrame extends JInternalFrame {
           tinaController.getSwfAnimatorCtrl().editGlobalMotionCurve(getSwfAnimatorGlobalScript3REd());
         }
       });
+      swfAnimatorGlobalScript3REd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null && tinaController.getSwfAnimatorCtrl() != null) {
+            tinaController.getSwfAnimatorCtrl().moviePropertyChanged();
+          }
+        }
+      });
       panel_10.add(swfAnimatorGlobalScript3REd);
 
       swfAnimatorGlobalScript4REd = new JWFNumberField();
@@ -6079,6 +6153,13 @@ public class TinaInternalFrame extends JInternalFrame {
       swfAnimatorGlobalScript4REd.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
           tinaController.getSwfAnimatorCtrl().editGlobalMotionCurve(getSwfAnimatorGlobalScript4REd());
+        }
+      });
+      swfAnimatorGlobalScript4REd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null && tinaController.getSwfAnimatorCtrl() != null) {
+            tinaController.getSwfAnimatorCtrl().moviePropertyChanged();
+          }
         }
       });
       panel_10.add(swfAnimatorGlobalScript4REd);
@@ -6099,6 +6180,13 @@ public class TinaInternalFrame extends JInternalFrame {
           tinaController.getSwfAnimatorCtrl().editGlobalMotionCurve(getSwfAnimatorGlobalScript5REd());
         }
       });
+      swfAnimatorGlobalScript5REd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null && tinaController.getSwfAnimatorCtrl() != null) {
+            tinaController.getSwfAnimatorCtrl().moviePropertyChanged();
+          }
+        }
+      });
       panel_10.add(swfAnimatorGlobalScript5REd);
 
       swfAnimatorXFormScript1REd = new JWFNumberField();
@@ -6115,6 +6203,13 @@ public class TinaInternalFrame extends JInternalFrame {
       swfAnimatorXFormScript1REd.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
           tinaController.getSwfAnimatorCtrl().editXFormMotionCurve(getSwfAnimatorXFormScript1REd());
+        }
+      });
+      swfAnimatorXFormScript1REd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null && tinaController.getSwfAnimatorCtrl() != null) {
+            tinaController.getSwfAnimatorCtrl().moviePropertyChanged();
+          }
         }
       });
       panel_10.add(swfAnimatorXFormScript1REd);
@@ -6135,6 +6230,13 @@ public class TinaInternalFrame extends JInternalFrame {
           tinaController.getSwfAnimatorCtrl().editXFormMotionCurve(getSwfAnimatorXFormScript2REd());
         }
       });
+      swfAnimatorXFormScript2REd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null && tinaController.getSwfAnimatorCtrl() != null) {
+            tinaController.getSwfAnimatorCtrl().moviePropertyChanged();
+          }
+        }
+      });
       panel_10.add(swfAnimatorXFormScript2REd);
 
       swfAnimatorXFormScript3REd = new JWFNumberField();
@@ -6151,6 +6253,13 @@ public class TinaInternalFrame extends JInternalFrame {
       swfAnimatorXFormScript3REd.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
           tinaController.getSwfAnimatorCtrl().editXFormMotionCurve(getSwfAnimatorXFormScript3REd());
+        }
+      });
+      swfAnimatorXFormScript3REd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null && tinaController.getSwfAnimatorCtrl() != null) {
+            tinaController.getSwfAnimatorCtrl().moviePropertyChanged();
+          }
         }
       });
       panel_10.add(swfAnimatorXFormScript3REd);
@@ -6171,6 +6280,13 @@ public class TinaInternalFrame extends JInternalFrame {
           tinaController.getSwfAnimatorCtrl().editXFormMotionCurve(getSwfAnimatorXFormScript4REd());
         }
       });
+      swfAnimatorXFormScript4REd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null && tinaController.getSwfAnimatorCtrl() != null) {
+            tinaController.getSwfAnimatorCtrl().moviePropertyChanged();
+          }
+        }
+      });
       panel_10.add(swfAnimatorXFormScript4REd);
 
       swfAnimatorXFormScript5REd = new JWFNumberField();
@@ -6189,6 +6305,13 @@ public class TinaInternalFrame extends JInternalFrame {
           tinaController.getSwfAnimatorCtrl().editXFormMotionCurve(getSwfAnimatorXFormScript5REd());
         }
       });
+      swfAnimatorXFormScript5REd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null && tinaController.getSwfAnimatorCtrl() != null) {
+            tinaController.getSwfAnimatorCtrl().moviePropertyChanged();
+          }
+        }
+      });
       panel_10.add(swfAnimatorXFormScript5REd);
 
       swfAnimatorMotionBlurLengthREd = new JWFNumberField();
@@ -6202,6 +6325,13 @@ public class TinaInternalFrame extends JInternalFrame {
       swfAnimatorMotionBlurLengthREd.setFont(new Font("Dialog", Font.PLAIN, 10));
       swfAnimatorMotionBlurLengthREd.setEditable(true);
       swfAnimatorMotionBlurLengthREd.setBounds(117, 288, 70, 24);
+      swfAnimatorMotionBlurLengthREd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null && tinaController.getSwfAnimatorCtrl() != null) {
+            tinaController.getSwfAnimatorCtrl().moviePropertyChanged();
+          }
+        }
+      });
       panel_10.add(swfAnimatorMotionBlurLengthREd);
 
       JLabel lblMotionBlurLength = new JLabel();
@@ -6230,6 +6360,13 @@ public class TinaInternalFrame extends JInternalFrame {
       swfAnimatorMotionBlurTimeStepREd.setFont(new Font("Dialog", Font.PLAIN, 10));
       swfAnimatorMotionBlurTimeStepREd.setEditable(true);
       swfAnimatorMotionBlurTimeStepREd.setBounds(322, 288, 70, 24);
+      swfAnimatorMotionBlurTimeStepREd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null && tinaController.getSwfAnimatorCtrl() != null) {
+            tinaController.getSwfAnimatorCtrl().moviePropertyChanged();
+          }
+        }
+      });
       panel_10.add(swfAnimatorMotionBlurTimeStepREd);
 
       JPanel panel_11 = new JPanel();
@@ -6293,6 +6430,13 @@ public class TinaInternalFrame extends JInternalFrame {
       swfAnimatorGlobalScript1Cmb.setBounds(116, 19, 175, 24);
       swfAnimatorGlobalScript1Cmb.setPreferredSize(new Dimension(275, 22));
       swfAnimatorGlobalScript1Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      swfAnimatorGlobalScript1Cmb.addItemListener(new ItemListener() {
+        public void itemStateChanged(ItemEvent e) {
+          if (tinaController != null && tinaController.getSwfAnimatorCtrl() != null) {
+            tinaController.getSwfAnimatorCtrl().moviePropertyChanged();
+          }
+        }
+      });
     }
     return swfAnimatorGlobalScript1Cmb;
   }
@@ -6309,6 +6453,13 @@ public class TinaInternalFrame extends JInternalFrame {
       swfAnimatorXFormScript1Cmb.setBounds(116, 138, 175, 24);
       swfAnimatorXFormScript1Cmb.setPreferredSize(new Dimension(275, 22));
       swfAnimatorXFormScript1Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      swfAnimatorXFormScript1Cmb.addItemListener(new ItemListener() {
+        public void itemStateChanged(ItemEvent e) {
+          if (tinaController != null && tinaController.getSwfAnimatorCtrl() != null) {
+            tinaController.getSwfAnimatorCtrl().moviePropertyChanged();
+          }
+        }
+      });
     }
     return swfAnimatorXFormScript1Cmb;
   }
@@ -15723,7 +15874,6 @@ public class TinaInternalFrame extends JInternalFrame {
       motionBlurLengthField.setValueStep(1.0);
       motionBlurLengthField.setSize(new Dimension(100, 24));
       motionBlurLengthField.setPreferredSize(new Dimension(100, 24));
-      motionBlurLengthField.setMotionPropertyName("camRoll");
       motionBlurLengthField.setLocation(new Point(100, 4));
       motionBlurLengthField.setFont(new Font("Dialog", Font.PLAIN, 10));
       motionBlurLengthField.setBounds(102, 6, 100, 24);
@@ -15792,7 +15942,6 @@ public class TinaInternalFrame extends JInternalFrame {
       motionBlurTimeStepField.setText("");
       motionBlurTimeStepField.setSize(new Dimension(100, 24));
       motionBlurTimeStepField.setPreferredSize(new Dimension(100, 24));
-      motionBlurTimeStepField.setMotionPropertyName("camPitch");
       motionBlurTimeStepField.setLocation(new Point(100, 28));
       motionBlurTimeStepField.setFont(new Font("Dialog", Font.PLAIN, 10));
       motionBlurTimeStepField.setBounds(102, 30, 100, 24);
@@ -15836,7 +15985,6 @@ public class TinaInternalFrame extends JInternalFrame {
       motionBlurDecayField.setText("");
       motionBlurDecayField.setSize(new Dimension(100, 24));
       motionBlurDecayField.setPreferredSize(new Dimension(100, 24));
-      motionBlurDecayField.setMotionPropertyName("camYaw");
       motionBlurDecayField.setLocation(new Point(100, 52));
       motionBlurDecayField.setFont(new Font("Dialog", Font.PLAIN, 10));
       motionBlurDecayField.setBounds(102, 54, 100, 24);
