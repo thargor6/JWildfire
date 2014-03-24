@@ -361,6 +361,7 @@ public class VariationFuncList {
     registerVariationFunc(ExtrudeFunc.class);
     registerVariationFunc(LineFunc.class);
     registerVariationFunc(Onion2Func.class);
+    registerVariationFunc(DCCrackleWFFunc.class);
   }
 
   private static void registerVariationFunc(

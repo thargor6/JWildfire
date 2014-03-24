@@ -121,4 +121,19 @@ public abstract class VariationFunc implements Serializable {
       return pValue;
     }
   }
+
+  public Object[] joinArrays(Object[] array1, Object[] array2) {
+    Object[] joinedArray = new Object[array1.length + array2.length];
+    System.arraycopy(array1, 0, joinedArray, 0, array1.length);
+    System.arraycopy(array2, 0, joinedArray, array1.length, array2.length);
+    return joinedArray;
+  }
+
+  public String[] joinArrays(String[] array1, String[] array2) {
+    String[] joinedArray = new String[array1.length + array2.length];
+    System.arraycopy(array1, 0, joinedArray, 0, array1.length);
+    System.arraycopy(array2, 0, joinedArray, array1.length, array2.length);
+    return joinedArray;
+  }
+
 }

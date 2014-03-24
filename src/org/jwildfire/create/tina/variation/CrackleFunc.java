@@ -52,7 +52,7 @@ public class CrackleFunc extends VariationFunc {
   private static final String PARAM_SCALE = "scale";
   private static final String PARAM_Z = "z";
 
-  private static final String[] paramNames = { PARAM_CELLSIZE, PARAM_POWER, PARAM_DISTORT, PARAM_SCALE, PARAM_Z };
+  protected static final String[] paramNames = { PARAM_CELLSIZE, PARAM_POWER, PARAM_DISTORT, PARAM_SCALE, PARAM_Z };
 
   private double cellsize = 1.0;
   private double power = 0.2;
@@ -138,15 +138,11 @@ public class CrackleFunc extends VariationFunc {
     // Add cell centre co-ordinates back in
     DXo += P[4][_x_];
     DYo += P[4][_y_];
-
-    //    double color = sqrt(DXo * DXo + DYo * DYo);
-    //    pVarTP.color = color;
-    //    if (pVarTP.color < 0)
-    //      pVarTP.color = 0.0;
-    //    else if (pVarTP.color > 1.0)
-    //      pVarTP.color = 1.0;
-
     // Finally add values in
+    applyCellCalculation(pVarTP, pAmount, DXo, DYo, L);
+  }
+
+  protected void applyCellCalculation(XYZPoint pVarTP, double pAmount, double DXo, double DYo, double L) {
     pVarTP.x += pAmount * DXo;
     pVarTP.y += pAmount * DYo;
   }
