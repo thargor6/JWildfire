@@ -145,7 +145,7 @@ public class Launcher {
         imageFilename = "special" + id + ".jpg";
       }
       else {
-        final int IMG_COUNT = 66;
+        final int IMG_COUNT = 71;
         int imageIdx = (int) (Math.random() * IMG_COUNT) + 1;
         String id = String.valueOf(imageIdx);
         while (id.length() < 3) {
