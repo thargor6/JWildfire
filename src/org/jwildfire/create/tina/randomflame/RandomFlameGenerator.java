@@ -23,7 +23,7 @@ import org.jwildfire.create.tina.base.Flame;
 
 public abstract class RandomFlameGenerator {
 
-  protected abstract Flame createFlame(RandomFlameGeneratorState pState);
+  protected abstract Flame prepareFlame(RandomFlameGeneratorState pState);
 
   public RandomFlameGeneratorState initState() {
     return new RandomFlameGeneratorState();
@@ -32,7 +32,7 @@ public abstract class RandomFlameGenerator {
   public abstract String getName();
 
   public Flame createFlame(Prefs pPrefs, RandomFlameGeneratorState pState) {
-    Flame flame = createFlame(pState);
+    Flame flame = prepareFlame(pState);
     if (flame.getName() == null || flame.getName().length() == 0)
       flame.setName(this.getName() + " - " + flame.hashCode());
     flame.setBGTransparency(pPrefs.isTinaDefaultBGTransparency());

@@ -25,7 +25,7 @@ import org.jwildfire.create.tina.variation.VariationFuncList;
 public class SimpleTilingRandomFlameGenerator extends RandomFlameGenerator {
 
   @Override
-  protected Flame createFlame(RandomFlameGeneratorState pState) {
+  protected Flame prepareFlame(RandomFlameGeneratorState pState) {
     Flame flame = new Flame();
     Layer layer = flame.getFirstLayer();
     flame.setCentreX(0.0);

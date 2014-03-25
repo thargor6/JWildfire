@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2013 Andreas Maschke
+  Copyright (C) 1995-2014 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -71,6 +71,8 @@ import org.jwildfire.create.tina.base.motion.MotionCurve;
 import org.jwildfire.create.tina.io.FlameReader;
 import org.jwildfire.create.tina.io.JWFMovieReader;
 import org.jwildfire.create.tina.io.JWFMovieWriter;
+import org.jwildfire.create.tina.randommovie.RandomMovieGenerator;
+import org.jwildfire.create.tina.randommovie.RandomMovieGeneratorList;
 import org.jwildfire.create.tina.render.FlameRenderer;
 import org.jwildfire.create.tina.render.ProgressUpdater;
 import org.jwildfire.create.tina.render.RenderInfo;
@@ -1504,8 +1506,8 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
         Flame renderFlame;
         if (movie.getParts().size() > 0) {
           int frame = (int) ((double) movie.getFrameCount() / ((double) IMG_COUNT + 1) * i + 0.5);
-          System.out.println(frame);
-          renderFlame = movie.getFlame(frame);
+          Flame morphedFlame = movie.getFlame(frame);
+          renderFlame = movie.createAnimatedFlame(morphedFlame, frame);
         }
         else {
           renderFlame = new Flame();
@@ -1554,9 +1556,9 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
 
   private List<MovieThumbnail> randomBatch = new ArrayList<MovieThumbnail>();
 
-  private final int IMG_WIDTH = 80;
-  private final int IMG_COUNT = 4;
-  private final int IMG_HEIGHT = 60;
+  private final int IMG_WIDTH = 66;
+  private final int IMG_COUNT = 5;
+  private final int IMG_HEIGHT = 50;
   private final int BORDER_SIZE = 8;
 
   public void updateThumbnails() {
@@ -1642,5 +1644,32 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
       currMovie = randomBatch.get(pIdx).getMovie();
       refreshUI();
     }
+  }
+
+  public boolean createRandomBatch(int pCount, String pGeneratorname) {
+    if (prefs.getTinaRandomBatchRefreshType() == RandomBatchRefreshType.CLEAR) {
+      randomBatch.clear();
+    }
+    int imgCount = prefs.getTinaRandomMovieBatchSize();
+    List<SimpleImage> imgList = new ArrayList<SimpleImage>();
+    int maxCount = (pCount > 0 ? pCount : imgCount);
+    //    mainProgressUpdater.initProgress(maxCount);
+    RandomMovieGenerator randGen = RandomMovieGeneratorList.getRandomMovieGeneratorInstance(pGeneratorname, true);
+    for (int i = 0; i < maxCount; i++) {
+      MovieThumbnail thumbnail;
+      thumbnail = new MovieThumbnail(randGen.createMovie(prefs), null);
+      SimpleImage img = thumbnail.getPreview(3 * prefs.getTinaRenderPreviewQuality() / 4);
+      if (prefs.getTinaRandomBatchRefreshType() == RandomBatchRefreshType.INSERT) {
+        randomBatch.add(0, thumbnail);
+        imgList.add(0, img);
+      }
+      else {
+        randomBatch.add(thumbnail);
+        imgList.add(img);
+      }
+      //      mainProgressUpdater.updateProgress(i + 1);
+    }
+    updateThumbnails();
+    return true;
   }
 }

@@ -179,7 +179,7 @@ public class RandomFlameGeneratorSampler {
       for (int l = 0; l < img.getImageWidth(); l++) {
         pixel.setARGBValue(img.getARGBValue(l, k));
         refPixel.setARGBValue(pSimplifiedRefImg.getARGBValue(l, k));
-        if (fabs(pixel.r - refPixel.r) > 20 || fabs(pixel.g - refPixel.g) > 20 || fabs(pixel.b - refPixel.b) > 20) {
+        if (fabs(pixel.r - refPixel.r) > 29.0 || fabs(pixel.g - refPixel.g) > 15.0 || fabs(pixel.b - refPixel.b) > 78.0) {
           coverage++;
         }
       }

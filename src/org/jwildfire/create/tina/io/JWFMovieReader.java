@@ -16,7 +16,6 @@
 */
 package org.jwildfire.create.tina.io;
 
-import static org.jwildfire.create.tina.io.JWFMovieWriter.ATTR_COLOR_OVERSAMPLING;
 import static org.jwildfire.create.tina.io.JWFMovieWriter.ATTR_FPS;
 import static org.jwildfire.create.tina.io.JWFMovieWriter.ATTR_FRAME_COUNT;
 import static org.jwildfire.create.tina.io.JWFMovieWriter.ATTR_FRAME_HEIGHT;
@@ -24,6 +23,7 @@ import static org.jwildfire.create.tina.io.JWFMovieWriter.ATTR_FRAME_MORPH_COUNT
 import static org.jwildfire.create.tina.io.JWFMovieWriter.ATTR_FRAME_WIDTH;
 import static org.jwildfire.create.tina.io.JWFMovieWriter.ATTR_MOTIONBLUR_LENGTH;
 import static org.jwildfire.create.tina.io.JWFMovieWriter.ATTR_MOTIONBLUR_TIMESTEP;
+import static org.jwildfire.create.tina.io.JWFMovieWriter.ATTR_NAME;
 import static org.jwildfire.create.tina.io.JWFMovieWriter.ATTR_OUTPUT_FORMAT;
 import static org.jwildfire.create.tina.io.JWFMovieWriter.ATTR_QUALITY;
 import static org.jwildfire.create.tina.io.JWFMovieWriter.ATTR_SCRIPT_GLOBAL;
@@ -59,7 +59,6 @@ import static org.jwildfire.create.tina.io.JWFMovieWriter.ATTR_SCRIPT_XFORM5;
 import static org.jwildfire.create.tina.io.JWFMovieWriter.ATTR_SCRIPT_XFORM5_AMPLITUDE;
 import static org.jwildfire.create.tina.io.JWFMovieWriter.ATTR_SCRIPT_XFORM5_AMPLITUDE_CURVE;
 import static org.jwildfire.create.tina.io.JWFMovieWriter.ATTR_SOUND_FILENAME;
-import static org.jwildfire.create.tina.io.JWFMovieWriter.ATTR_SPATIAL_OVERSAMPLING;
 import static org.jwildfire.create.tina.io.JWFMovieWriter.TAG_JWF_MOVIE;
 import static org.jwildfire.create.tina.io.JWFMovieWriter.TAG_JWF_MOVIE_PART;
 
@@ -179,6 +178,9 @@ public class JWFMovieReader {
   private void parseMovieAttributes(FlameMovie pMovie, String pXML) {
     XMLAttributes atts = Tools.parseAttributes(pXML);
     String hs;
+    if ((hs = atts.get(ATTR_NAME)) != null) {
+      pMovie.setName(hs);
+    }
     if ((hs = atts.get(ATTR_SOUND_FILENAME)) != null) {
       pMovie.setSoundFilename(hs);
     }
@@ -231,12 +233,6 @@ public class JWFMovieReader {
     }
     if ((hs = atts.get(ATTR_OUTPUT_FORMAT)) != null) {
       pMovie.setOutputFormat(OutputFormat.valueOf(hs));
-    }
-    if ((hs = atts.get(ATTR_COLOR_OVERSAMPLING)) != null) {
-      pMovie.setColorOversampling(Integer.parseInt(hs));
-    }
-    if ((hs = atts.get(ATTR_SPATIAL_OVERSAMPLING)) != null) {
-      pMovie.setSpatialOversampling(Integer.parseInt(hs));
     }
     if ((hs = atts.get(ATTR_QUALITY)) != null) {
       pMovie.setQuality(Integer.parseInt(hs));

@@ -87,6 +87,7 @@ import org.jwildfire.create.tina.base.Stereo3dMode;
 import org.jwildfire.create.tina.base.Stereo3dPreview;
 import org.jwildfire.create.tina.dance.DancingFractalsController;
 import org.jwildfire.create.tina.randomflame.RandomFlameGeneratorList;
+import org.jwildfire.create.tina.randommovie.RandomMovieGeneratorList;
 import org.jwildfire.create.tina.randomsymmetry.RandomSymmetryGeneratorList;
 import org.jwildfire.create.tina.render.filter.FilterKernelType;
 import org.jwildfire.swing.StandardErrorHandler;
@@ -4037,6 +4038,7 @@ public class TinaInternalFrame extends JInternalFrame {
     initPostSymmetryTypeCmb(getPostSymmetryTypeCmb());
     initRandomGenCmb(getRandomStyleCmb());
     initRandomSymmetryCmb(getRandomSymmetryCmb());
+    initRandomMovieGenCmb(getSwfAnimatorRandGenCmb());
     initStereo3dModeCmb(getStereo3dModeCmb());
     initStereo3dPreviewCmb(getStereo3dPreviewCmb());
     initStereo3dColorCmb(getStereo3dLeftEyeColorCmb(), Stereo3dColor.RED);
@@ -4274,6 +4276,14 @@ public class TinaInternalFrame extends JInternalFrame {
       pCmb.addItem(name);
     }
     pCmb.setSelectedItem(RandomFlameGeneratorList.DEFAULT_GENERATOR_NAME);
+  }
+
+  private void initRandomMovieGenCmb(JComboBox pCmb) {
+    pCmb.removeAllItems();
+    for (String name : RandomMovieGeneratorList.getNameList()) {
+      pCmb.addItem(name);
+    }
+    pCmb.setSelectedItem(RandomMovieGeneratorList.DEFAULT_GENERATOR_NAME);
   }
 
   private void initRandomSymmetryCmb(JComboBox pCmb) {
@@ -9706,6 +9716,8 @@ public class TinaInternalFrame extends JInternalFrame {
   private JCheckBox stereo3dSwapSidesCBx;
   private JPanel panel_12;
   private JPanel randomMoviePanel;
+  private JButton swfAnimatorGenRandomBatchBtn;
+  private JComboBox swfAnimatorRandGenCmb;
 
   /**
    * This method initializes renderBatchJobsScrollPane	
@@ -17131,31 +17143,47 @@ public class TinaInternalFrame extends JInternalFrame {
       label.setBounds(124, 5, 80, 14);
       panel_12.add(label);
 
-      JComboBox comboBox = new JComboBox();
-      comboBox.setToolTipText("Random-flame-generator");
-      comboBox.setPreferredSize(new Dimension(100, 24));
-      comboBox.setMinimumSize(new Dimension(100, 24));
-      comboBox.setMaximumSize(new Dimension(32767, 24));
-      comboBox.setMaximumRowCount(32);
-      comboBox.setFont(new Font("Dialog", Font.BOLD, 10));
-      comboBox.setBounds(134, 22, 232, 24);
-      panel_12.add(comboBox);
+      swfAnimatorRandGenCmb = new JComboBox();
+      swfAnimatorRandGenCmb.setToolTipText("Random-flame-generator");
+      swfAnimatorRandGenCmb.setPreferredSize(new Dimension(100, 24));
+      swfAnimatorRandGenCmb.setMinimumSize(new Dimension(100, 24));
+      swfAnimatorRandGenCmb.setMaximumSize(new Dimension(32767, 24));
+      swfAnimatorRandGenCmb.setMaximumRowCount(32);
+      swfAnimatorRandGenCmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      swfAnimatorRandGenCmb.setBounds(134, 22, 232, 24);
+      panel_12.add(swfAnimatorRandGenCmb);
 
-      JButton btnRandomMovies = new JButton();
-      btnRandomMovies.setToolTipText("Create a batch of random movies");
-      btnRandomMovies.setText("Random movies");
-      btnRandomMovies.setPreferredSize(new Dimension(105, 46));
-      btnRandomMovies.setMinimumSize(new Dimension(100, 46));
-      btnRandomMovies.setMaximumSize(new Dimension(32000, 46));
-      btnRandomMovies.setFont(new Font("Dialog", Font.BOLD, 10));
-      btnRandomMovies.setBounds(6, 1, 119, 46);
-      panel_12.add(btnRandomMovies);
+      swfAnimatorGenRandomBatchBtn = new JButton();
+      swfAnimatorGenRandomBatchBtn.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          if (tinaController.getSwfAnimatorCtrl().createRandomBatch(-1, (String) swfAnimatorRandGenCmb.getSelectedItem())) {
+            tinaController.getSwfAnimatorCtrl().importFromRandomBatch(0);
+          }
+
+        }
+      });
+      swfAnimatorGenRandomBatchBtn.setToolTipText("Create a batch of random movies");
+      swfAnimatorGenRandomBatchBtn.setText("Random movies");
+      swfAnimatorGenRandomBatchBtn.setPreferredSize(new Dimension(105, 46));
+      swfAnimatorGenRandomBatchBtn.setMinimumSize(new Dimension(100, 46));
+      swfAnimatorGenRandomBatchBtn.setMaximumSize(new Dimension(32000, 46));
+      swfAnimatorGenRandomBatchBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      swfAnimatorGenRandomBatchBtn.setBounds(6, 1, 119, 46);
+      panel_12.add(swfAnimatorGenRandomBatchBtn);
     }
     return panel_12;
   }
 
   public JPanel getRandomMoviePanel() {
     return randomMoviePanel;
+  }
+
+  public JButton getSwfAnimatorGenRandomBatchBtn() {
+    return swfAnimatorGenRandomBatchBtn;
+  }
+
+  public JComboBox getSwfAnimatorRandGenCmb() {
+    return swfAnimatorRandGenCmb;
   }
 } //  @jve:decl-index=0:visual-constraint="10,10"
 

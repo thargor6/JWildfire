@@ -36,6 +36,7 @@ public class JWFMovieWriter {
   public static final String TAG_JWF_MOVIE = "jwf-movie";
   public static final String TAG_JWF_MOVIE_PART = "jwf-movie-part";
 
+  public static final String ATTR_NAME = "name";
   public static final String ATTR_APPLICATION = "application";
   public static final String ATTR_COLOR_OVERSAMPLING = "color_oversampling";
   public static final String ATTR_FPS = "fps";
@@ -105,12 +106,14 @@ public class JWFMovieWriter {
     addXFormScript(pMovie.getxFormScript4(), ATTR_SCRIPT_XFORM4, ATTR_SCRIPT_XFORM4_AMPLITUDE, ATTR_SCRIPT_XFORM4_AMPLITUDE_CURVE, attrList, xb);
     addXFormScript(pMovie.getxFormScript5(), ATTR_SCRIPT_XFORM5, ATTR_SCRIPT_XFORM5_AMPLITUDE, ATTR_SCRIPT_XFORM5_AMPLITUDE_CURVE, attrList, xb);
 
+    String xName = pMovie.getName().replaceAll("\"", "");
+    if (!xName.equals("")) {
+      attrList.add(xb.createAttr(ATTR_NAME, xName));
+    }
     attrList.add(xb.createAttr(ATTR_FRAME_WIDTH, pMovie.getFrameWidth()));
     attrList.add(xb.createAttr(ATTR_FRAME_HEIGHT, pMovie.getFrameHeight()));
     attrList.add(xb.createAttr(ATTR_FPS, pMovie.getFramesPerSecond()));
     attrList.add(xb.createAttr(ATTR_OUTPUT_FORMAT, pMovie.getOutputFormat().toString()));
-    attrList.add(xb.createAttr(ATTR_COLOR_OVERSAMPLING, pMovie.getColorOversampling()));
-    attrList.add(xb.createAttr(ATTR_SPATIAL_OVERSAMPLING, pMovie.getSpatialOversampling()));
     attrList.add(xb.createAttr(ATTR_QUALITY, pMovie.getQuality()));
 
     attrList.add(xb.createAttr(AbstractFlameReader.ATTR_MOTIONBLUR_LENGTH, pMovie.getMotionBlurLength()));

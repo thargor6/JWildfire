@@ -32,6 +32,11 @@ public class RenderInfo implements Assignable<RenderInfo>, Serializable {
 
   }
 
+  // Legacy constructor, still used by scripts
+  public RenderInfo(int pImageWidth, int pImageHeight) {
+    this(pImageWidth, pImageHeight, RenderMode.PRODUCTION);
+  }
+
   public RenderInfo(int pImageWidth, int pImageHeight, RenderMode pRenderMode) {
     imageWidth = pImageWidth;
     imageHeight = pImageHeight;

@@ -75,6 +75,7 @@ public class Prefs extends ManagedObject {
 
   static final String KEY_TINA_RANDOM_GENERATOR = "tina.random.generator";
   static final String KEY_TINA_RANDOMBATCH_SIZE = "tina.random_batch.size";
+  static final String KEY_TINA_RANDOMMOVIEBATCH_SIZE = "tina.random_movie_batch.size";
   static final String KEY_TINA_RASTERPOINT_PRECISION = "tina.rasterpoint.precision";
   static final String KEY_TINA_RANDOMBATCH_BGCOLOR_RED = "tina.random_batch.bg_color.red";
   static final String KEY_TINA_RANDOMBATCH_BGCOLOR_GREEN = "tina.random_batch.bg_color.green";
@@ -210,6 +211,8 @@ public class Prefs extends ManagedObject {
 
   @Property(description = "Number of generated flames by invoking the \"Random flames\" function", category = PropertyCategory.TINA)
   private int tinaRandomBatchSize = 24;
+  @Property(description = "Number of generated movies by invoking the \"Random movies\" function", category = PropertyCategory.TINA)
+  private int tinaRandomMovieBatchSize = 12;
   @Property(description = "Red component of the background color of randomly generated flames", category = PropertyCategory.TINA)
   private int tinaRandomBatchBGColorRed = 0;
   @Property(description = "Red component of the background color of randomly generated flames", category = PropertyCategory.TINA)
@@ -463,6 +466,7 @@ public class Prefs extends ManagedObject {
     tinaRenderPreviewQuality = pSrc.tinaRenderPreviewQuality;
     tinaRenderRealtimeQuality = pSrc.tinaRenderRealtimeQuality;
     tinaRandomBatchSize = pSrc.tinaRandomBatchSize;
+    tinaRandomMovieBatchSize = pSrc.tinaRandomMovieBatchSize;
     tinaRandomBatchBGColorRed = pSrc.tinaRandomBatchBGColorRed;
     tinaRandomBatchBGColorGreen = pSrc.tinaRandomBatchBGColorGreen;
     tinaRandomBatchBGColorBlue = pSrc.tinaRandomBatchBGColorBlue;
@@ -740,6 +744,14 @@ public class Prefs extends ManagedObject {
 
   public void setTinaDisableWikimediaCommonsWarning(boolean tinaDisableWikimediaCommonsWarning) {
     this.tinaDisableWikimediaCommonsWarning = tinaDisableWikimediaCommonsWarning;
+  }
+
+  public int getTinaRandomMovieBatchSize() {
+    return tinaRandomMovieBatchSize;
+  }
+
+  public void setTinaRandomMovieBatchSize(int pTinaRandomMovieBatchSize) {
+    tinaRandomMovieBatchSize = pTinaRandomMovieBatchSize;
   }
 
 }

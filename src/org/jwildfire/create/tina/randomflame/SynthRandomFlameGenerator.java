@@ -27,7 +27,7 @@ import org.jwildfire.create.tina.variation.VariationFuncList;
 public class SynthRandomFlameGenerator extends RandomFlameGenerator {
 
   @Override
-  protected Flame createFlame(RandomFlameGeneratorState pState) {
+  protected Flame prepareFlame(RandomFlameGeneratorState pState) {
     // Bases loosely on the SynthRandomBatch Script by slobo777, http://slobo777.deviantart.com/art/Synth-V2-128594088 */ 
     Flame flame = new Flame();
     Layer layer = flame.getFirstLayer();
@@ -166,9 +166,8 @@ public class SynthRandomFlameGenerator extends RandomFlameGenerator {
 
     // Second "inner" transform is smaller with a little noise
     // added to remove annoying lines at the centre
-    XForm xForm2;
     {
-      XForm xForm = xForm2 = xForm1.makeCopy();
+      XForm xForm = xForm1.makeCopy();
       layer.getXForms().add(xForm);
       xForm.setWeight(1.0);
       xForm.setColor(centre_color);

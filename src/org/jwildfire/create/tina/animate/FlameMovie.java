@@ -35,17 +35,16 @@ public class FlameMovie {
   private XFormScript xFormScript3 = new XFormScript(XFormScriptType.NONE, 1.0);
   private XFormScript xFormScript4 = new XFormScript(XFormScriptType.NONE, 1.0);
   private XFormScript xFormScript5 = new XFormScript(XFormScriptType.NONE, 1.0);
-  private int colorOversampling;
-  private int spatialOversampling;
-  private int quality;
+  private int quality = 100;
   private OutputFormat outputFormat;
   private final List<Motion> motions = new ArrayList<Motion>();
   private final List<FlameMoviePart> parts = new ArrayList<FlameMoviePart>();
-  private int frameWidth;
-  private int frameHeight;
-  private double framesPerSecond;
+  private int frameWidth = 640;
+  private int frameHeight = 480;
+  private double framesPerSecond = 12.0;
   private int motionBlurLength = 12;
-  private double motionBlurTimeStep = 0.15;
+  private double motionBlurTimeStep = 0.015;
+  private String name = "";
 
   public FlameMovie(Prefs pPrefs) {
     prefs = pPrefs;
@@ -99,6 +98,12 @@ public class FlameMovie {
     return null;
   }
 
+  public Flame createAnimatedFlame(Flame pFlame, int pFrame) {
+    Flame res = AnimationService.createFrameFlame(pFrame, getFrameCount(), getFramesPerSecond(), pFlame, getGlobalScripts(), getxFormScripts(), getMotionBlurLength(), getMotionBlurTimeStep(), getFrameWidth(), getFrameHeight(), prefs);
+    res.setFrame(pFrame);
+    return res;
+  }
+
   public int getFrameWidth() {
     return frameWidth;
   }
@@ -133,22 +138,6 @@ public class FlameMovie {
 
   public List<FlameMoviePart> getParts() {
     return parts;
-  }
-
-  public int getColorOversampling() {
-    return colorOversampling;
-  }
-
-  public void setColorOversampling(int colorOversampling) {
-    this.colorOversampling = colorOversampling;
-  }
-
-  public int getSpatialOversampling() {
-    return spatialOversampling;
-  }
-
-  public void setSpatialOversampling(int spatialOversampling) {
-    this.spatialOversampling = spatialOversampling;
   }
 
   public int getQuality() {
@@ -263,4 +252,11 @@ public class FlameMovie {
     this.motionBlurTimeStep = motionBlurTimeStep;
   }
 
+  public String getName() {
+    return name;
+  }
+
+  public void setName(String name) {
+    this.name = name != null ? name : "";
+  }
 }

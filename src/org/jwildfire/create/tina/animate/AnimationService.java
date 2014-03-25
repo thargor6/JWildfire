@@ -54,7 +54,7 @@ public class AnimationService {
     return res.getImage();
   }
 
-  public static Flame createFrameFlame(int pFrame, int pFrameCount, double pFPS, Flame pFlame, GlobalScript pGlobalScripts[], XFormScript[] pXFormScripts, int pMotionBlurLength, double pMotionBlurTimeStep, int pWidth, int pHeight, Prefs pPrefs) throws Exception {
+  public static Flame createFrameFlame(int pFrame, int pFrameCount, double pFPS, Flame pFlame, GlobalScript pGlobalScripts[], XFormScript[] pXFormScripts, int pMotionBlurLength, double pMotionBlurTimeStep, int pWidth, int pHeight, Prefs pPrefs) {
     Flame res = pFlame.makeCopy();
     for (GlobalScript script : pGlobalScripts) {
       AnimationService.addMotionCurve(res, script, pFrame, pFrameCount, pFPS);

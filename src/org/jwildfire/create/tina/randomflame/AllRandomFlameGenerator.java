@@ -82,10 +82,10 @@ public class AllRandomFlameGenerator extends RandomFlameGenerator {
   }
 
   @Override
-  protected Flame createFlame(RandomFlameGeneratorState pState) {
+  protected Flame prepareFlame(RandomFlameGeneratorState pState) {
     RandomFlameGenerator generator = createRandGen(pState);
     RandomFlameGeneratorState subState = generator.initState();
-    Flame flame = generator.createFlame(subState);
+    Flame flame = generator.prepareFlame(subState);
     flame.setName(generator.getName() + " - " + flame.hashCode());
     return flame;
   }

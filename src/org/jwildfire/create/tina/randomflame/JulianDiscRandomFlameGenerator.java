@@ -36,7 +36,7 @@ public class JulianDiscRandomFlameGenerator extends RandomFlameGenerator {
   }
 
   @Override
-  protected Flame createFlame(RandomFlameGeneratorState pState) {
+  protected Flame prepareFlame(RandomFlameGeneratorState pState) {
     Flame flame = new Flame();
     Layer layer = flame.getFirstLayer();
     flame.setCentreX(0.0);
