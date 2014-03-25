@@ -48,7 +48,7 @@ public class HexesFunc extends VariationFunc {
   private static final String PARAM_ROTATE = "rotate";
   private static final String PARAM_SCALE = "scale";
 
-  private static final String[] paramNames = { PARAM_CELLSIZE, PARAM_POWER, PARAM_ROTATE, PARAM_SCALE };
+  protected static final String[] paramNames = { PARAM_CELLSIZE, PARAM_POWER, PARAM_ROTATE, PARAM_SCALE };
 
   private double cellsize = 1.0;
   private double power = 1.0;
@@ -203,9 +203,12 @@ public class HexesFunc extends VariationFunc {
     Vy += P[0][_y_];
 
     // Finally add values in
+    applyCellCalculation(pVarTP, pAmount, L, Vx, Vy);
+  }
+
+  protected void applyCellCalculation(XYZPoint pVarTP, double pAmount, double L, double Vx, double Vy) {
     pVarTP.x += pAmount * Vx;
     pVarTP.y += pAmount * Vy;
-
   }
 
   @Override
