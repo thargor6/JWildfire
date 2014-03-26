@@ -248,7 +248,7 @@ public class EnvelopeDialog extends JDialog {
       panel.setLayout(null);
 
       envelopeAddPointButton = new JButton();
-      envelopeAddPointButton.setFont(new Font("Dialog", Font.PLAIN, 10));
+      envelopeAddPointButton.setFont(new Font("Dialog", Font.BOLD, 10));
       envelopeAddPointButton.setToolTipText("Add a point to the curve (click at the area to place it)");
       envelopeAddPointButton.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
@@ -263,6 +263,7 @@ public class EnvelopeDialog extends JDialog {
       panel.add(envelopeAddPointButton);
 
       envelopeRemovePointButton = new JButton();
+      envelopeRemovePointButton.setFont(new Font("Dialog", Font.BOLD, 10));
       envelopeRemovePointButton.setToolTipText("Remove a point (after clikcing this button, click at a point)");
       envelopeRemovePointButton.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
@@ -277,7 +278,7 @@ public class EnvelopeDialog extends JDialog {
       panel.add(envelopeRemovePointButton);
 
       envelopeViewUpButton = new JButton();
-      envelopeViewUpButton.setFont(new Font("Dialog", Font.PLAIN, 10));
+      envelopeViewUpButton.setFont(new Font("Dialog", Font.BOLD, 10));
       envelopeViewUpButton.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
           ctrl.viewUp();
@@ -291,7 +292,7 @@ public class EnvelopeDialog extends JDialog {
       panel.add(envelopeViewUpButton);
 
       envelopeViewLeftButton = new JButton();
-      envelopeViewLeftButton.setFont(new Font("Dialog", Font.PLAIN, 10));
+      envelopeViewLeftButton.setFont(new Font("Dialog", Font.BOLD, 10));
       envelopeViewLeftButton.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
           ctrl.viewLeft();
@@ -305,7 +306,7 @@ public class EnvelopeDialog extends JDialog {
       panel.add(envelopeViewLeftButton);
 
       envelopeViewRightButton = new JButton();
-      envelopeViewRightButton.setFont(new Font("Dialog", Font.PLAIN, 10));
+      envelopeViewRightButton.setFont(new Font("Dialog", Font.BOLD, 10));
       envelopeViewRightButton.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
           ctrl.viewRight();
@@ -319,7 +320,7 @@ public class EnvelopeDialog extends JDialog {
       panel.add(envelopeViewRightButton);
 
       envelopeViewDownButton = new JButton();
-      envelopeViewDownButton.setFont(new Font("Dialog", Font.PLAIN, 10));
+      envelopeViewDownButton.setFont(new Font("Dialog", Font.BOLD, 10));
       envelopeViewDownButton.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
           ctrl.viewDown();
@@ -333,7 +334,7 @@ public class EnvelopeDialog extends JDialog {
       panel.add(envelopeViewDownButton);
 
       envelopeViewAllButton = new JButton();
-      envelopeViewAllButton.setFont(new Font("Dialog", Font.PLAIN, 10));
+      envelopeViewAllButton.setFont(new Font("Dialog", Font.BOLD, 10));
       envelopeViewAllButton.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
           ctrl.viewAll();
@@ -347,6 +348,7 @@ public class EnvelopeDialog extends JDialog {
       panel.add(envelopeViewAllButton);
 
       envelopeClearButton = new JButton();
+      envelopeClearButton.setFont(new Font("Dialog", Font.BOLD, 10));
       envelopeClearButton.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
           ctrl.clearEnvelope();

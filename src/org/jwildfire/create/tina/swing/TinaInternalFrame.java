@@ -5771,10 +5771,11 @@ public class TinaInternalFrame extends JInternalFrame {
       JPanel panel_83 = new JPanel();
       panel_83.setPreferredSize(new Dimension(10, 50));
       swfAnimatorPanel_1.add(panel_83, BorderLayout.SOUTH);
-      panel_83.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 2));
+      panel_83.setLayout(new BorderLayout(0, 0));
 
       swfAnimatorFrameSlider = new JSlider();
-      panel_83.add(swfAnimatorFrameSlider);
+      swfAnimatorFrameSlider.setBorder(new EmptyBorder(0, 4, 0, 4));
+      panel_83.add(swfAnimatorFrameSlider, BorderLayout.NORTH);
       swfAnimatorFrameSlider.setMinorTickSpacing(5);
       swfAnimatorFrameSlider.setMinimum(1);
       swfAnimatorFrameSlider.setMajorTickSpacing(10);
@@ -5788,60 +5789,7 @@ public class TinaInternalFrame extends JInternalFrame {
       swfAnimatorFrameSlider.setValue(0);
       swfAnimatorFrameSlider.setPreferredSize(new Dimension(340, 19));
       swfAnimatorFrameSlider.setMaximum(60);
-
-      swfAnimatorPlayButton = new JButton();
-      panel_83.add(swfAnimatorPlayButton);
-      swfAnimatorPlayButton.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-          tinaController.getSwfAnimatorCtrl().playButton_clicked();
-        }
-      });
-      swfAnimatorPlayButton.setText("Play");
-      swfAnimatorPlayButton.setPreferredSize(new Dimension(125, 28));
-      swfAnimatorPlayButton.setFont(new Font("Dialog", Font.BOLD, 10));
-
-      swfAnimatorFrameToEditorBtn = new JButton();
-      panel_83.add(swfAnimatorFrameToEditorBtn);
-      swfAnimatorFrameToEditorBtn.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-          tinaController.getSwfAnimatorCtrl().swfAnimatorFrameToEditorBtn_clicked();
-        }
-      });
-      swfAnimatorFrameToEditorBtn.setToolTipText("Copy current flame into Editor");
-      swfAnimatorFrameToEditorBtn.setText("E");
-      swfAnimatorFrameToEditorBtn.setPreferredSize(new Dimension(42, 28));
-      swfAnimatorFrameToEditorBtn.setMnemonic(KeyEvent.VK_E);
-      swfAnimatorFrameToEditorBtn.setFont(new Font("Dialog", Font.BOLD, 10));
-
-      JLabel lblFrame = new JLabel();
-      panel_83.add(lblFrame);
-      lblFrame.setHorizontalAlignment(SwingConstants.RIGHT);
-      lblFrame.setText("Frame");
-      lblFrame.setPreferredSize(new Dimension(48, 22));
-      lblFrame.setFont(new Font("Dialog", Font.BOLD, 10));
-
-      swfAnimatorFrameREd = new JWFNumberField();
-      panel_83.add(swfAnimatorFrameREd);
-      swfAnimatorFrameREd.addChangeListener(new ChangeListener() {
-        public void stateChanged(ChangeEvent e) {
-          if (tinaController != null && tinaController.getSwfAnimatorCtrl() != null) {
-            try {
-              swfAnimatorFrameSlider.setValue(swfAnimatorFrameREd.getIntValue());
-            }
-            catch (Exception ex) {
-              ex.printStackTrace();
-            }
-          }
-        }
-      });
-      swfAnimatorFrameREd.setMaxValue(120.0);
-      swfAnimatorFrameREd.setMinValue(1.0);
-      swfAnimatorFrameREd.setHasMaxValue(true);
-      swfAnimatorFrameREd.setHasMinValue(true);
-      swfAnimatorFrameREd.setOnlyIntegers(true);
-      swfAnimatorFrameREd.setText("60");
-      swfAnimatorFrameREd.setPreferredSize(new Dimension(56, 22));
-      swfAnimatorFrameREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      panel_83.add(getPanel_84(), BorderLayout.CENTER);
 
       swfAnimatorPreviewRootPanel = new JPanel();
       swfAnimatorPanel_1.add(swfAnimatorPreviewRootPanel, BorderLayout.CENTER);
@@ -6397,7 +6345,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton getSwfAnimatorGenerateButton() {
     if (swfAnimatorGenerateButton == null) {
       swfAnimatorGenerateButton = new JButton();
-      swfAnimatorGenerateButton.setBounds(1039, 12, 125, 52);
+      swfAnimatorGenerateButton.setBounds(899, 13, 125, 52);
       swfAnimatorGenerateButton.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
           tinaController.getSwfAnimatorCtrl().generateButton_clicked();
@@ -9718,6 +9666,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JPanel randomMoviePanel;
   private JButton swfAnimatorGenRandomBatchBtn;
   private JComboBox swfAnimatorRandGenCmb;
+  private JPanel panel_84;
 
   /**
    * This method initializes renderBatchJobsScrollPane	
@@ -11376,7 +11325,7 @@ public class TinaInternalFrame extends JInternalFrame {
       panel_5.setLayout(null);
 
       swfAnimatorProgressBar = new JProgressBar();
-      swfAnimatorProgressBar.setBounds(830, 68, 331, 21);
+      swfAnimatorProgressBar.setBounds(690, 69, 331, 21);
       panel_5.add(swfAnimatorProgressBar);
       swfAnimatorProgressBar.setValue(0);
       swfAnimatorProgressBar.setStringPainted(true);
@@ -11384,7 +11333,7 @@ public class TinaInternalFrame extends JInternalFrame {
       panel_5.add(getSwfAnimatorGenerateButton());
 
       swfAnimatorCancelButton = new JButton();
-      swfAnimatorCancelButton.setBounds(1039, 12, 125, 52);
+      swfAnimatorCancelButton.setBounds(899, 13, 125, 52);
       panel_5.add(swfAnimatorCancelButton);
       swfAnimatorCancelButton.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
@@ -11399,14 +11348,14 @@ public class TinaInternalFrame extends JInternalFrame {
       swfAnimatorOutputCmb.setPreferredSize(new Dimension(125, 22));
       swfAnimatorOutputCmb.setMaximumRowCount(32);
       swfAnimatorOutputCmb.setFont(new Font("Dialog", Font.BOLD, 10));
-      swfAnimatorOutputCmb.setBounds(887, 12, 146, 22);
+      swfAnimatorOutputCmb.setBounds(747, 13, 146, 22);
       panel_5.add(swfAnimatorOutputCmb);
 
       JLabel lblOutput = new JLabel();
       lblOutput.setText("Output");
       lblOutput.setPreferredSize(new Dimension(94, 22));
       lblOutput.setFont(new Font("Dialog", Font.BOLD, 10));
-      lblOutput.setBounds(834, 11, 56, 22);
+      lblOutput.setBounds(694, 12, 56, 22);
       panel_5.add(lblOutput);
       panel_5.add(getSwfAnimatorHalfSizeButton());
       panel_5.add(getLabel_3());
@@ -11426,14 +11375,14 @@ public class TinaInternalFrame extends JInternalFrame {
       swfAnimatorFromFrameREd.setOnlyIntegers(true);
       swfAnimatorFromFrameREd.setPreferredSize(new Dimension(56, 22));
       swfAnimatorFromFrameREd.setFont(new Font("Dialog", Font.PLAIN, 10));
-      swfAnimatorFromFrameREd.setBounds(887, 38, 70, 24);
+      swfAnimatorFromFrameREd.setBounds(747, 39, 70, 24);
       panel_5.add(swfAnimatorFromFrameREd);
 
       JLabel lblRange = new JLabel();
       lblRange.setText("Range");
       lblRange.setPreferredSize(new Dimension(94, 22));
       lblRange.setFont(new Font("Dialog", Font.BOLD, 10));
-      lblRange.setBounds(834, 38, 56, 22);
+      lblRange.setBounds(694, 39, 56, 22);
       panel_5.add(lblRange);
 
       swfAnimatorToFrameREd = new JWFNumberField();
@@ -11444,7 +11393,7 @@ public class TinaInternalFrame extends JInternalFrame {
       swfAnimatorToFrameREd.setOnlyIntegers(true);
       swfAnimatorToFrameREd.setPreferredSize(new Dimension(56, 22));
       swfAnimatorToFrameREd.setFont(new Font("Dialog", Font.PLAIN, 10));
-      swfAnimatorToFrameREd.setBounds(960, 38, 70, 24);
+      swfAnimatorToFrameREd.setBounds(820, 39, 70, 24);
       panel_5.add(swfAnimatorToFrameREd);
       panel_5.add(getSwfAnimatorLoadSoundButton());
 
@@ -17184,6 +17133,71 @@ public class TinaInternalFrame extends JInternalFrame {
 
   public JComboBox getSwfAnimatorRandGenCmb() {
     return swfAnimatorRandGenCmb;
+  }
+
+  private JPanel getPanel_84() {
+    if (panel_84 == null) {
+      panel_84 = new JPanel();
+      FlowLayout flowLayout = (FlowLayout) panel_84.getLayout();
+      flowLayout.setVgap(2);
+      flowLayout.setHgap(4);
+      panel_84.setBorder(null);
+
+      swfAnimatorPlayButton = new JButton();
+      panel_84.add(swfAnimatorPlayButton);
+      swfAnimatorPlayButton.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getSwfAnimatorCtrl().playButton_clicked();
+        }
+      });
+      swfAnimatorPlayButton.setText("Play");
+      swfAnimatorPlayButton.setPreferredSize(new Dimension(105, 28));
+      swfAnimatorPlayButton.setFont(new Font("Dialog", Font.BOLD, 10));
+
+      swfAnimatorFrameToEditorBtn = new JButton();
+      panel_84.add(swfAnimatorFrameToEditorBtn);
+      swfAnimatorFrameToEditorBtn.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getSwfAnimatorCtrl().swfAnimatorFrameToEditorBtn_clicked();
+        }
+      });
+      swfAnimatorFrameToEditorBtn.setToolTipText("Copy current flame into Editor");
+      swfAnimatorFrameToEditorBtn.setText("E");
+      swfAnimatorFrameToEditorBtn.setPreferredSize(new Dimension(42, 28));
+      swfAnimatorFrameToEditorBtn.setMnemonic(KeyEvent.VK_E);
+      swfAnimatorFrameToEditorBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+
+      JLabel lblFrame = new JLabel();
+      panel_84.add(lblFrame);
+      lblFrame.setHorizontalAlignment(SwingConstants.RIGHT);
+      lblFrame.setText("Frame");
+      lblFrame.setPreferredSize(new Dimension(48, 22));
+      lblFrame.setFont(new Font("Dialog", Font.BOLD, 10));
+
+      swfAnimatorFrameREd = new JWFNumberField();
+      panel_84.add(swfAnimatorFrameREd);
+      swfAnimatorFrameREd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null && tinaController.getSwfAnimatorCtrl() != null) {
+            try {
+              swfAnimatorFrameSlider.setValue(swfAnimatorFrameREd.getIntValue());
+            }
+            catch (Exception ex) {
+              ex.printStackTrace();
+            }
+          }
+        }
+      });
+      swfAnimatorFrameREd.setMaxValue(120.0);
+      swfAnimatorFrameREd.setMinValue(1.0);
+      swfAnimatorFrameREd.setHasMaxValue(true);
+      swfAnimatorFrameREd.setHasMinValue(true);
+      swfAnimatorFrameREd.setOnlyIntegers(true);
+      swfAnimatorFrameREd.setText("60");
+      swfAnimatorFrameREd.setPreferredSize(new Dimension(56, 22));
+      swfAnimatorFrameREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+    }
+    return panel_84;
   }
 } //  @jve:decl-index=0:visual-constraint="10,10"
 

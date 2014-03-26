@@ -884,7 +884,7 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
 
             FlameRenderer renderer = new FlameRenderer(flame, prefs, false, false);
             renderer.setProgressUpdater(null);
-            flame.setSampleDensity(prefs.getTinaRenderRealtimeQuality());
+            flame.setSampleDensity(1.0);
             flame.setSpatialFilterRadius(0.0);
             RenderedFlame res = renderer.renderFlame(info);
             imgPanel.setImage(res.getImage());
@@ -1653,7 +1653,7 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
     int imgCount = prefs.getTinaRandomMovieBatchSize();
     List<SimpleImage> imgList = new ArrayList<SimpleImage>();
     int maxCount = (pCount > 0 ? pCount : imgCount);
-    //    mainProgressUpdater.initProgress(maxCount);
+    renderProgressUpdater.initProgress(maxCount);
     RandomMovieGenerator randGen = RandomMovieGeneratorList.getRandomMovieGeneratorInstance(pGeneratorname, true);
     for (int i = 0; i < maxCount; i++) {
       MovieThumbnail thumbnail;
@@ -1667,7 +1667,8 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
         randomBatch.add(thumbnail);
         imgList.add(img);
       }
-      //      mainProgressUpdater.updateProgress(i + 1);
+      renderProgressUpdater.updateProgress(i + 1);
+
     }
     updateThumbnails();
     return true;
