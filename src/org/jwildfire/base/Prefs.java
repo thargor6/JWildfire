@@ -38,7 +38,6 @@ public class Prefs extends ManagedObject {
   static final String KEY_GENERAL_PATH_IMAGES = "general.path.images";
   static final String KEY_GENERAL_PATH_SCRIPTS = "general.path.scripts";
   static final String KEY_GENERAL_PATH_SOUND_FILES = "sunflow.path.sound_files";
-  static final String KEY_GENERAL_PATH_SWF = "sunflow.path.swf";
 
   static final String KEY_GENERAL_DEVELOPMENT_MODE = "general.development_mode";
   static final String KEY_GENERAL_BASE_MATH_LIB = "general.base_math_lib";
@@ -63,6 +62,8 @@ public class Prefs extends ManagedObject {
   static final String KEY_TINA_PATH_JWFSCRIPTS = "tina.path.jwfscripts";
   static final String KEY_TINA_PATH_GRADIENTS = "tina.path.gradients";
   static final String KEY_TINA_RENDER_MOVIE_FRAMES = "tina.render.movie.frames";
+  static final String KEY_TINA_PATH_MOVIEFLAMES = "tina.path.movie.flames";
+
   static final String KEY_TINA_PATH_SVG = "tina.path.svg";
 
   static final String KEY_TINA_RENDER_REALTIME_QUALITY = "tina.render.realtime.quality";
@@ -101,9 +102,9 @@ public class Prefs extends ManagedObject {
   private String soundFilePath = null;
   private String lastInputSoundFilePath = null;
 
-  @Property(description = "SWF file drawer", category = PropertyCategory.GENERAL)
-  private String swfPath = null;
-  private String lastOutputSWFPath = null;
+  @Property(description = "Movie flames drawer", category = PropertyCategory.GENERAL)
+  private String movieFlamesPath = null;
+  private String lastOutputMovieFlamesPath = null;
 
   @Property(description = "Number of preserved free cpus/cores", category = PropertyCategory.TINA)
   private int tinaPreserveFreeCPUs = 0;
@@ -249,8 +250,8 @@ public class Prefs extends ManagedObject {
     return lastOutputScriptPath != null ? lastOutputScriptPath : scriptPath;
   }
 
-  public String getOutputSWFPath() {
-    return lastOutputSWFPath != null ? lastOutputSWFPath : swfPath;
+  public String getOutputMovieFlamesPath() {
+    return lastOutputMovieFlamesPath != null ? lastOutputMovieFlamesPath : movieFlamesPath;
   }
 
   public void setScriptPath(String pScriptPath) {
@@ -286,10 +287,10 @@ public class Prefs extends ManagedObject {
     }
   }
 
-  public void setLastOutputSwfFile(File pFile) {
-    lastOutputSWFPath = pFile.getParent();
-    if (swfPath == null || swfPath.length() == 0) {
-      swfPath = lastOutputSWFPath;
+  public void setLastOutputMovieFlamesFile(File pFile) {
+    lastOutputMovieFlamesPath = pFile.getParent();
+    if (movieFlamesPath == null || movieFlamesPath.length() == 0) {
+      movieFlamesPath = lastOutputMovieFlamesPath;
     }
   }
 
@@ -451,8 +452,8 @@ public class Prefs extends ManagedObject {
     lastOutputSunflowScenePath = pSrc.lastOutputSunflowScenePath;
     soundFilePath = pSrc.soundFilePath;
     lastInputSoundFilePath = pSrc.lastInputSoundFilePath;
-    swfPath = pSrc.swfPath;
-    lastOutputSWFPath = pSrc.lastOutputSWFPath;
+    movieFlamesPath = pSrc.movieFlamesPath;
+    lastOutputMovieFlamesPath = pSrc.lastOutputMovieFlamesPath;
     plafStyle = pSrc.plafStyle;
     plafTheme = pSrc.plafTheme;
     developmentMode = pSrc.developmentMode;
@@ -599,12 +600,12 @@ public class Prefs extends ManagedObject {
     this.soundFilePath = soundFilePath;
   }
 
-  public String getSwfPath() {
-    return swfPath;
+  public String getMovieFlamesPath() {
+    return movieFlamesPath;
   }
 
-  public void setSwfPath(String swfPath) {
-    this.swfPath = swfPath;
+  public void setMovieFlamesPath(String movieFlamesPath) {
+    this.movieFlamesPath = movieFlamesPath;
   }
 
   public boolean isTinaAssociateProfilesWithFlames() {

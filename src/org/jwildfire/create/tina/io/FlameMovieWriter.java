@@ -26,7 +26,7 @@ import org.jwildfire.create.tina.animate.GlobalScript;
 import org.jwildfire.create.tina.animate.XFormScript;
 import org.jwildfire.create.tina.io.SimpleXMLBuilder.Attribute;
 
-public class JWFMovieWriter {
+public class FlameMovieWriter {
   public void writeFlame(FlameMovie pMovie, String pFilename) throws Exception {
     Tools.writeUTF8Textfile(pFilename, getMovieXML(pMovie));
   }
@@ -45,15 +45,10 @@ public class JWFMovieWriter {
   public static final String ATTR_FRAME_MORPH_COUNT = "frame_morph_count";
   public static final String ATTR_FRAME_WIDTH = "frame_width";
   public static final String ATTR_MOVIE_VERSION = "movie_version";
-  public static final String ATTR_OUTPUT_FORMAT = "output_format";
   public static final String ATTR_SCRIPT_GLOBAL = "script_global";
   public static final String ATTR_SCRIPT_XFORM = "script_xform";
   public static final String AMPLITUDE_POSTFIX = "_amplitude";
   public static final String AMPLITUDE_CURVE_POSTFIX = "_amplitudeCurve";
-
-  public static final String ATTR_SOUND_FILENAME = "sound_filename";
-  public static final String ATTR_SPATIAL_OVERSAMPLING = "spatial_oversampling";
-  public static final String ATTR_QUALITY = "quality";
   public static final String ATTR_MOTIONBLUR_LENGTH = "motion_blur_length";
   public static final String ATTR_MOTIONBLUR_TIMESTEP = "motion_blur_timestep";
 
@@ -63,9 +58,6 @@ public class JWFMovieWriter {
     List<SimpleXMLBuilder.Attribute<?>> attrList = new ArrayList<SimpleXMLBuilder.Attribute<?>>();
     attrList.add(xb.createAttr(ATTR_APPLICATION, Tools.APP_TITLE + " " + Tools.APP_VERSION));
     attrList.add(xb.createAttr(ATTR_MOVIE_VERSION, MOVIE_VERSION));
-    if (pMovie.getSoundFilename() != null && pMovie.getSoundFilename().length() > 0) {
-      attrList.add(xb.createAttr(ATTR_SOUND_FILENAME, pMovie.getSoundFilename()));
-    }
 
     for (int i = 0; i < pMovie.getGlobalScripts().length; i++) {
       String idxStr = String.valueOf(i + 1);
@@ -84,8 +76,6 @@ public class JWFMovieWriter {
     attrList.add(xb.createAttr(ATTR_FRAME_WIDTH, pMovie.getFrameWidth()));
     attrList.add(xb.createAttr(ATTR_FRAME_HEIGHT, pMovie.getFrameHeight()));
     attrList.add(xb.createAttr(ATTR_FPS, pMovie.getFramesPerSecond()));
-    attrList.add(xb.createAttr(ATTR_OUTPUT_FORMAT, pMovie.getOutputFormat().toString()));
-    attrList.add(xb.createAttr(ATTR_QUALITY, pMovie.getQuality()));
 
     attrList.add(xb.createAttr(AbstractFlameReader.ATTR_MOTIONBLUR_LENGTH, pMovie.getMotionBlurLength()));
     attrList.add(xb.createAttr(AbstractFlameReader.ATTR_MOTIONBLUR_TIMESTEP, pMovie.getMotionBlurTimeStep()));

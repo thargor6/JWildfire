@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2012 Andreas Maschke
+  Copyright (C) 1995-2014 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -26,11 +26,8 @@ public class FlameMovie {
   public static final int SCRIPT_COUNT = 12;
 
   private final Prefs prefs;
-  private String soundFilename;
   private final GlobalScript globalScripts[] = initGlobalScripts();
   private final XFormScript xFormScripts[] = initXFormScripts();
-  private int quality = 100;
-  private OutputFormat outputFormat;
   private final List<Motion> motions = new ArrayList<Motion>();
   private final List<FlameMoviePart> parts = new ArrayList<FlameMoviePart>();
   private int frameWidth = 640;
@@ -58,14 +55,6 @@ public class FlameMovie {
       res[i] = new GlobalScript(GlobalScriptType.NONE, 1.0);
     }
     return res;
-  }
-
-  public String getSoundFilename() {
-    return soundFilename;
-  }
-
-  public void setSoundFilename(String soundFilename) {
-    this.soundFilename = soundFilename;
   }
 
   public List<Motion> getMotions() {
@@ -138,24 +127,8 @@ public class FlameMovie {
     this.framesPerSecond = framesPerSecond;
   }
 
-  public OutputFormat getOutputFormat() {
-    return outputFormat;
-  }
-
-  public void setOutputFormat(OutputFormat outputFormat) {
-    this.outputFormat = outputFormat;
-  }
-
   public List<FlameMoviePart> getParts() {
     return parts;
-  }
-
-  public int getQuality() {
-    return quality;
-  }
-
-  public void setQuality(int quality) {
-    this.quality = quality;
   }
 
   public int getMotionBlurLength() {

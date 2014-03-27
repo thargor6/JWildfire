@@ -234,24 +234,22 @@ public class AnimationService {
         int[] srcX = pScript.getAmplitudeCurve().getX();
         double[] srcY = pScript.getAmplitudeCurve().getY();
         if (srcX.length > 1) {
-          envX = new int[srcX.length + 1];
-          envY = new double[srcY.length + 1];
+          envX = new int[srcX.length + 2];
+          envY = new double[srcY.length + 2];
           for (int i = 0; i < srcX.length; i++) {
-            envX[i] = srcX[i];
-            envY[i] = pAmplitude * (double) pFrameCount / (DFLT_DURATION * pFPS) * srcY[i];
+            envX[i + 1] = srcX[i];
+            envY[i + 1] = (double) pFrameCount / (DFLT_DURATION * pFPS) * srcY[i];
           }
           envX[envX.length - 1] = 2 * envX[envX.length - 2];
           envY[envY.length - 1] = 2.0 * envY[envY.length - 2];
+          envX[0] = -envX[envX.length - 2];
+          envY[0] = -envY[envY.length - 2];
         }
         else {
-          envX = new int[3];
-          envY = new double[3];
-          envX[1] = pFrameCount;
-          envY[1] = pAmplitude * (double) pFrameCount / (DFLT_DURATION * pFPS) * srcY[0];
-          envX[2] = 2 * envX[1];
-          envY[2] = 2.0 * envY[1];
-          envX[0] = -envX[1];
-          envY[0] = -envY[1];
+          envX = new int[1];
+          envY = new double[1];
+          envX[0] = -10;
+          envY[0] = (double) pFrameCount / (DFLT_DURATION * pFPS) * srcY[0];
         }
       }
       else {

@@ -25,7 +25,6 @@ public class TinaControllerData {
   public JComboBox batchQualityProfileCmb;
   public JComboBox batchResolutionProfileCmb;
   public JComboBox interactiveResolutionProfileCmb;
-  public JComboBox swfAnimatorQualityProfileCmb;
   public JComboBox swfAnimatorResolutionProfileCmb;
   public JWFNumberField cameraRollREd;
   public JSlider cameraRollSlider;

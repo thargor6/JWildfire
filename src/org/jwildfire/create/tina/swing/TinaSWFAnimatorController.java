@@ -47,21 +47,17 @@ import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JSlider;
 import javax.swing.JTabbedPane;
-import javax.swing.JToggleButton;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import org.jwildfire.base.Prefs;
-import org.jwildfire.base.QualityProfile;
 import org.jwildfire.base.ResolutionProfile;
-import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.animate.AnimationService;
 import org.jwildfire.create.tina.animate.FlameMovie;
 import org.jwildfire.create.tina.animate.FlameMoviePart;
 import org.jwildfire.create.tina.animate.GlobalScript;
 import org.jwildfire.create.tina.animate.GlobalScriptType;
-import org.jwildfire.create.tina.animate.OutputFormat;
 import org.jwildfire.create.tina.animate.SWFAnimationRenderThread;
 import org.jwildfire.create.tina.animate.SWFAnimationRenderThreadController;
 import org.jwildfire.create.tina.animate.XFormScript;
@@ -69,8 +65,8 @@ import org.jwildfire.create.tina.animate.XFormScriptType;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.motion.MotionCurve;
 import org.jwildfire.create.tina.io.FlameReader;
-import org.jwildfire.create.tina.io.JWFMovieReader;
-import org.jwildfire.create.tina.io.JWFMovieWriter;
+import org.jwildfire.create.tina.io.FlameMovieReader;
+import org.jwildfire.create.tina.io.FlameMovieWriter;
 import org.jwildfire.create.tina.randommovie.RandomMovieGenerator;
 import org.jwildfire.create.tina.randommovie.RandomMovieGeneratorList;
 import org.jwildfire.create.tina.render.FlameRenderer;
@@ -80,9 +76,7 @@ import org.jwildfire.create.tina.render.RenderMode;
 import org.jwildfire.create.tina.render.RenderedFlame;
 import org.jwildfire.image.SimpleImage;
 import org.jwildfire.swing.ErrorHandler;
-import org.jwildfire.swing.ImageFileChooser;
 import org.jwildfire.swing.ImagePanel;
-import org.jwildfire.swing.SWFFileChooser;
 import org.jwildfire.transform.ComposeTransformer;
 
 public class TinaSWFAnimatorController implements SWFAnimationRenderThreadController, FlameHolder {
@@ -101,22 +95,16 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
   private final JWFNumberField swfAnimatorFramesPerSecondREd;
   private final JButton swfAnimatorGenerateButton;
   private final JComboBox swfAnimatorResolutionProfileCmb;
-  private final JComboBox swfAnimatorQualityProfileCmb;
   private final JButton swfAnimatorLoadFlameFromMainButton;
   private final JButton swfAnimatorLoadFlameFromClipboardButton;
   private final JButton swfAnimatorLoadFlameButton;
-  private final JToggleButton swfAnimatorHalveSizeButton;
   private final JProgressBar swfAnimatorProgressBar;
   private final JButton swfAnimatorCancelButton;
-  private final JButton swfAnimatorLoadSoundButton;
-  private final JButton swfAnimatorClearSoundButton;
   private final ProgressUpdater renderProgressUpdater;
   private final JPanel swfAnimatorPreviewRootPanel;
-  private final JLabel swfAnimatorSoundCaptionLbl;
   private final JSlider swfAnimatorFrameSlider;
   private final JPanel swfAnimatorFlamesPanel;
   private final ButtonGroup swfAnimatorFlamesButtonGroup;
-  private final JComboBox swfAnimatorOutputCmb;
   private final JButton swfAnimatorMoveUpButton;
   private final JButton swfAnimatorMoveDownButton;
   private final JButton swfAnimatorRemoveFlameButton;
@@ -127,8 +115,6 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
   private final JButton swfAnimatorMovieToDiskButton;
   private final JButton swfAnimatorFrameToEditorBtn;
   private final JButton swfAnimatorPlayButton;
-  private final JWFNumberField swfAnimatorFromFrameREd;
-  private final JWFNumberField swfAnimatorToFrameREd;
   private final JWFNumberField swfAnimatorMotionBlurLengthREd;
   private final JWFNumberField swfAnimatorMotionBlurTimeStepREd;
   private FlamePanel flamePanel;
@@ -166,17 +152,16 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
       JComboBox[] pSWFAnimatorXFormScriptCmbArray, JWFNumberField[] pSWFAnimatorXFormScriptREdArray,
       JWFNumberField pSWFAnimatorFramesREd, JWFNumberField pSWFAnimatorFramesPerSecondREd,
       JButton pSWFAnimatorGenerateButton, JComboBox pSWFAnimatorResolutionProfileCmb,
-      JComboBox pSWFAnimatorQualityProfileCmb, JButton pSWFAnimatorLoadFlameFromMainButton,
+      JButton pSWFAnimatorLoadFlameFromMainButton,
       JButton pSWFAnimatorLoadFlameFromClipboardButton, JButton pSWFAnimatorLoadFlameButton,
-      JToggleButton pSWFAnimatorHalveSizeButton, JProgressBar pSWFAnimatorProgressBar, JButton pSWFAnimatorCancelButton,
-      JButton pSWFAnimatorLoadSoundButton, JButton pSWFAnimatorClearSoundButton, ProgressUpdater pRenderProgressUpdater,
-      JPanel pSWFAnimatorPreviewRootPanel, JLabel pSWFAnimatorSoundCaptionLbl, JSlider pSWFAnimatorFrameSlider,
+      JProgressBar pSWFAnimatorProgressBar, JButton pSWFAnimatorCancelButton,
+      ProgressUpdater pRenderProgressUpdater,
+      JPanel pSWFAnimatorPreviewRootPanel, JSlider pSWFAnimatorFrameSlider,
       JWFNumberField pSWFAnimatorFrameREd, JPanel pSWFAnimatorFlamesPanel, ButtonGroup pSWFAnimatorFlamesButtonGroup,
-      JComboBox pSWFAnimatorOutputCmb, JButton pSWFAnimatorMoveUpButton, JButton pSWFAnimatorMoveDownButton,
+      JButton pSWFAnimatorMoveUpButton, JButton pSWFAnimatorMoveDownButton,
       JButton pSWFAnimatorRemoveFlameButton, JButton pSWFAnimatorRemoveAllFlamesButton, JButton pSWFAnimatorMovieFromClipboardButton,
       JButton pSWFAnimatorMovieFromDiskButton, JButton pSWFAnimatorMovieToClipboardButton, JButton pSWFAnimatorMovieToDiskButton,
-      JButton pSWFAnimatorFrameToEditorBtn, JButton pSWFAnimatorPlayButton, JWFNumberField pSWFAnimatorFromFrameREd,
-      JWFNumberField pSWFAnimatorToFrameREd, JWFNumberField pSwfAnimatorMotionBlurLengthREd,
+      JButton pSWFAnimatorFrameToEditorBtn, JButton pSWFAnimatorPlayButton, JWFNumberField pSwfAnimatorMotionBlurLengthREd,
       JWFNumberField pSwfAnimatorMotionBlurTimeStepREd, JPanel pRandomMoviePanel) {
     noRefresh = true;
     try {
@@ -205,22 +190,16 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
       swfAnimatorFramesPerSecondREd = pSWFAnimatorFramesPerSecondREd;
       swfAnimatorGenerateButton = pSWFAnimatorGenerateButton;
       swfAnimatorResolutionProfileCmb = pSWFAnimatorResolutionProfileCmb;
-      swfAnimatorQualityProfileCmb = pSWFAnimatorQualityProfileCmb;
       swfAnimatorLoadFlameFromMainButton = pSWFAnimatorLoadFlameFromMainButton;
       swfAnimatorLoadFlameFromClipboardButton = pSWFAnimatorLoadFlameFromClipboardButton;
       swfAnimatorLoadFlameButton = pSWFAnimatorLoadFlameButton;
-      swfAnimatorHalveSizeButton = pSWFAnimatorHalveSizeButton;
       swfAnimatorProgressBar = pSWFAnimatorProgressBar;
       swfAnimatorCancelButton = pSWFAnimatorCancelButton;
-      swfAnimatorLoadSoundButton = pSWFAnimatorLoadSoundButton;
-      swfAnimatorClearSoundButton = pSWFAnimatorClearSoundButton;
       renderProgressUpdater = pRenderProgressUpdater;
       swfAnimatorPreviewRootPanel = pSWFAnimatorPreviewRootPanel;
-      swfAnimatorSoundCaptionLbl = pSWFAnimatorSoundCaptionLbl;
       swfAnimatorFrameSlider = pSWFAnimatorFrameSlider;
       swfAnimatorFlamesPanel = pSWFAnimatorFlamesPanel;
       swfAnimatorFlamesButtonGroup = pSWFAnimatorFlamesButtonGroup;
-      swfAnimatorOutputCmb = pSWFAnimatorOutputCmb;
       swfAnimatorMoveUpButton = pSWFAnimatorMoveUpButton;
       swfAnimatorMoveDownButton = pSWFAnimatorMoveDownButton;
       swfAnimatorRemoveFlameButton = pSWFAnimatorRemoveFlameButton;
@@ -231,16 +210,8 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
       swfAnimatorMovieToDiskButton = pSWFAnimatorMovieToDiskButton;
       swfAnimatorFrameToEditorBtn = pSWFAnimatorFrameToEditorBtn;
       swfAnimatorPlayButton = pSWFAnimatorPlayButton;
-      swfAnimatorFromFrameREd = pSWFAnimatorFromFrameREd;
-      swfAnimatorToFrameREd = pSWFAnimatorToFrameREd;
       swfAnimatorMotionBlurLengthREd = pSwfAnimatorMotionBlurLengthREd;
       swfAnimatorMotionBlurTimeStepREd = pSwfAnimatorMotionBlurTimeStepREd;
-
-      swfAnimatorOutputCmb.addItem(OutputFormat.FLAMES);
-      swfAnimatorOutputCmb.addItem(OutputFormat.PNG);
-      swfAnimatorOutputCmb.addItem(OutputFormat.SWF);
-      swfAnimatorOutputCmb.addItem(OutputFormat.SWF_AND_PNG);
-      swfAnimatorOutputCmb.setSelectedItem(OutputFormat.PNG);
 
       int frameCount = prefs.getTinaRenderMovieFrames();
       swfAnimatorFrameSlider.setValue(1);
@@ -249,10 +220,6 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
       swfAnimatorFramesREd.setValue(frameCount);
       swfAnimatorFrameREd.setMaxValue(frameCount);
       swfAnimatorFrameREd.setValue(1);
-      swfAnimatorFromFrameREd.setValue(1);
-      swfAnimatorFromFrameREd.setMaxValue(frameCount);
-      swfAnimatorToFrameREd.setValue(frameCount);
-      swfAnimatorToFrameREd.setMaxValue(frameCount);
       swfAnimatorMotionBlurLengthREd.setValue(32);
       swfAnimatorMotionBlurTimeStepREd.setValue(0.01);
       motionControlsDelegate = new MotionControlsDelegate(parentCtrl, null, parentCtrl.getRootTabbedPane());
@@ -280,8 +247,6 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
     swfAnimatorFrameREd.setEnabled(!rendering);
     swfAnimatorFramesREd.setEnabled(!rendering);
     swfAnimatorFramesREd.setEditable(false);
-    swfAnimatorFromFrameREd.setEnabled(!rendering);
-    swfAnimatorToFrameREd.setEnabled(!rendering);
     swfAnimatorMotionBlurLengthREd.setEnabled(!rendering);
     swfAnimatorMotionBlurTimeStepREd.setEnabled(!rendering);
     swfAnimatorFramesPerSecondREd.setEnabled(!rendering);
@@ -289,21 +254,11 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
     swfAnimatorGenerateButton.setVisible(!rendering);
     swfAnimatorPlayButton.setEnabled(swfAnimatorGenerateButton.isEnabled());
     swfAnimatorResolutionProfileCmb.setEnabled(!rendering);
-    swfAnimatorQualityProfileCmb.setEnabled(!rendering);
     swfAnimatorLoadFlameFromMainButton.setEnabled(!rendering);
     swfAnimatorLoadFlameFromClipboardButton.setEnabled(!rendering);
     swfAnimatorLoadFlameButton.setEnabled(!rendering);
-    swfAnimatorHalveSizeButton.setEnabled(!rendering);
     swfAnimatorCancelButton.setEnabled(rendering && !renderThread.isCancelSignalled());
     swfAnimatorCancelButton.setVisible(rendering);
-    swfAnimatorLoadSoundButton.setEnabled(!rendering);
-    swfAnimatorClearSoundButton.setEnabled(!rendering && currMovie.getSoundFilename() != null);
-    if (currMovie.getSoundFilename() == null) {
-      swfAnimatorSoundCaptionLbl.setText("(no sound file loaded)");
-    }
-    else {
-      swfAnimatorSoundCaptionLbl.setText(new File(currMovie.getSoundFilename()).getName());
-    }
     int selected = getSelectedFlameRadioButtonIndex();
     int flameCount = getFlameCount();
     swfAnimatorMoveUpButton.setEnabled(!rendering && selected > 0);
@@ -372,23 +327,9 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
       catch (Exception ex) {
         oldFrameCount = frameCount;
       }
-      if (frameCount != oldFrameCount) {
-        swfAnimatorToFrameREd.setValue(frameCount);
-      }
-      try {
-        int from = swfAnimatorFromFrameREd.getIntValue();
-        if (from > frameCount) {
-          swfAnimatorFromFrameREd.setValue(frameCount);
-        }
-      }
-      catch (Exception ex) {
-
-      }
 
       swfAnimatorFramesREd.setValue(frameCount);
       swfAnimatorFrameREd.setMaxValue(frameCount);
-      swfAnimatorFromFrameREd.setMaxValue(frameCount);
-      swfAnimatorToFrameREd.setMaxValue(frameCount);
       if (value > frameCount) {
         swfAnimatorFrameSlider.setValue(frameCount);
         swfAnimatorFrameREd.setValue(frameCount);
@@ -612,18 +553,9 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
   private void updateMovieFields() {
     double framesPerSecond = swfAnimatorFramesPerSecondREd.getDoubleValue();
     ResolutionProfile resProfile = getResolutionProfile();
-    QualityProfile qualityProfile = getQualityProfile();
     int frameWidth = resProfile.getWidth();
     int frameHeight = resProfile.getHeight();
-    if (swfAnimatorHalveSizeButton.isSelected()) {
-      frameWidth /= 2;
-      frameHeight /= 2;
-    }
 
-    OutputFormat outputFormat = (OutputFormat) swfAnimatorOutputCmb.getSelectedItem();
-    if (outputFormat == null) {
-      outputFormat = OutputFormat.PNG;
-    }
     for (int i = 0; i < globalScripts.size(); i++) {
       ScriptContainer container = globalScripts.get(i);
       currMovie.getGlobalScripts()[i] = getGlobalScriptFromUI(container.getScriptCmb(), container.getScriptREd());
@@ -633,8 +565,6 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
       currMovie.getxFormScripts()[i] = getXFormScriptFromUI(container.getScriptCmb(), container.getScriptREd());
     }
 
-    currMovie.setQuality(qualityProfile.getQuality());
-    currMovie.setOutputFormat(outputFormat);
     currMovie.setFrameWidth(frameWidth);
     currMovie.setFrameHeight(frameHeight);
     currMovie.setFramesPerSecond(framesPerSecond);
@@ -644,22 +574,11 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
 
   public void generateButton_clicked() {
     try {
-      OutputFormat outputFormat = (OutputFormat) swfAnimatorOutputCmb.getSelectedItem();
-      JFileChooser chooser;
-      switch (outputFormat) {
-        case FLAMES:
-          chooser = new FlameFileChooser(prefs);
-          break;
-        case PNG:
-          chooser = new ImageFileChooser(Tools.FILEEXT_PNG);
-          break;
-        default:
-          chooser = new SWFFileChooser();
-      }
+      JFileChooser chooser = new FlameFileChooser(prefs);
 
-      if (prefs.getSwfPath() != null) {
+      if (prefs.getMovieFlamesPath() != null) {
         try {
-          chooser.setCurrentDirectory(new File(prefs.getSwfPath()));
+          chooser.setCurrentDirectory(new File(prefs.getMovieFlamesPath()));
         }
         catch (Exception ex) {
           ex.printStackTrace();
@@ -667,11 +586,9 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
       }
       if (chooser.showSaveDialog(swfAnimatorPreviewRootPanel) == JFileChooser.APPROVE_OPTION) {
         File file = chooser.getSelectedFile();
-        prefs.setLastOutputSwfFile(file);
+        prefs.setLastOutputMovieFlamesFile(file);
         updateMovieFields();
-        int from = swfAnimatorFromFrameREd.getIntValue();
-        int to = swfAnimatorToFrameREd.getIntValue();
-        renderThread = new SWFAnimationRenderThread(this, currMovie, file.getAbsolutePath(), from, to);
+        renderThread = new SWFAnimationRenderThread(this, currMovie, file.getAbsolutePath());
         try {
           enableControls();
           new Thread(renderThread).start();
@@ -686,34 +603,6 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
       errorHandler.handleError(ex);
       enableControls();
     }
-  }
-
-  public void loadSoundButton_clicked() {
-    try {
-      JFileChooser chooser = new SoundFileChooser(prefs);
-      if (prefs.getInputFlamePath() != null) {
-        try {
-          chooser.setCurrentDirectory(new File(prefs.getInputSoundFilePath()));
-        }
-        catch (Exception ex) {
-          ex.printStackTrace();
-        }
-      }
-      if (chooser.showOpenDialog(swfAnimatorPreviewRootPanel) == JFileChooser.APPROVE_OPTION) {
-        File file = chooser.getSelectedFile();
-        prefs.setLastInputSoundFile(file);
-        currMovie.setSoundFilename(file.getAbsolutePath());
-        enableControls();
-      }
-    }
-    catch (Throwable ex) {
-      errorHandler.handleError(ex);
-    }
-  }
-
-  public void clearSoundButton_clicked() {
-    currMovie.setSoundFilename(null);
-    enableControls();
   }
 
   @Override
@@ -739,14 +628,6 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
     ResolutionProfile res = (ResolutionProfile) swfAnimatorResolutionProfileCmb.getSelectedItem();
     if (res == null) {
       res = new ResolutionProfile(false, 800, 600);
-    }
-    return res;
-  }
-
-  private QualityProfile getQualityProfile() {
-    QualityProfile res = (QualityProfile) swfAnimatorQualityProfileCmb.getSelectedItem();
-    if (res == null) {
-      res = new QualityProfile(false, "default", 200, true, false);
     }
     return res;
   }
@@ -1031,7 +912,7 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
         if (clipData.isDataFlavorSupported(DataFlavor.stringFlavor)) {
           String xml = (String) (clipData.getTransferData(
               DataFlavor.stringFlavor));
-          FlameMovie movie = new JWFMovieReader(prefs).readMovieFromXML(xml);
+          FlameMovie movie = new FlameMovieReader(prefs).readMovieFromXML(xml);
           if (movie != null) {
             randomBatch.add(0, new MovieThumbnail(movie, null));
             currMovie = movie;
@@ -1058,7 +939,6 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
         ScriptContainer container = xFormScripts.get(i);
         setXFormScriptToUI(currMovie.getxFormScripts()[i], container.getScriptCmb(), container.getScriptREd());
       }
-      swfAnimatorOutputCmb.setSelectedItem(currMovie.getOutputFormat());
       {
         ResolutionProfile fittingProfile = null;
         ResolutionProfile doubleProfile = null;
@@ -1074,32 +954,9 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
         }
         if (fittingProfile != null) {
           swfAnimatorResolutionProfileCmb.setSelectedItem(fittingProfile);
-          swfAnimatorHalveSizeButton.setSelected(false);
         }
         else if (doubleProfile != null) {
           swfAnimatorResolutionProfileCmb.setSelectedItem(doubleProfile);
-          swfAnimatorHalveSizeButton.setSelected(true);
-        }
-      }
-      {
-        QualityProfile fittingProfile = null;
-        QualityProfile nearestProfile = null;
-        int qualityIndex = QualityProfile.calculateQualityIndex(currMovie.getQuality());
-        for (int i = 0; i < swfAnimatorQualityProfileCmb.getItemCount(); i++) {
-          QualityProfile profile = (QualityProfile) swfAnimatorQualityProfileCmb.getItemAt(i);
-          if (profile.getQuality() == currMovie.getQuality()) {
-            fittingProfile = profile;
-            break;
-          }
-          else if (nearestProfile == null || (Math.abs(profile.getQualityIndex() - qualityIndex) < Math.abs(nearestProfile.getQualityIndex() - qualityIndex))) {
-            nearestProfile = profile;
-          }
-        }
-        if (fittingProfile != null) {
-          swfAnimatorQualityProfileCmb.setSelectedItem(fittingProfile);
-        }
-        else if (nearestProfile != null) {
-          swfAnimatorQualityProfileCmb.setSelectedItem(nearestProfile);
         }
       }
 
@@ -1119,10 +976,6 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
       swfAnimatorFramesREd.setValue(frameCount);
       swfAnimatorFrameREd.setValue(1);
       swfAnimatorFrameREd.setMaxValue(frameCount);
-      swfAnimatorFromFrameREd.setValue(1);
-      swfAnimatorFromFrameREd.setMaxValue(frameCount);
-      swfAnimatorToFrameREd.setValue(frameCount);
-      swfAnimatorToFrameREd.setMaxValue(frameCount);
       swfAnimatorMotionBlurLengthREd.setValue(currMovie.getMotionBlurLength());
       swfAnimatorMotionBlurTimeStepREd.setValue(currMovie.getMotionBlurTimeStep());
 
@@ -1165,7 +1018,7 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
       }
       if (chooser.showOpenDialog(swfAnimatorFlamesPanel) == JFileChooser.APPROVE_OPTION) {
         File file = chooser.getSelectedFile();
-        FlameMovie movie = new JWFMovieReader(prefs).readMovie(file.getAbsolutePath());
+        FlameMovie movie = new FlameMovieReader(prefs).readMovie(file.getAbsolutePath());
         if (movie != null) {
           randomBatch.add(0, new MovieThumbnail(movie, null));
           currMovie = movie;
@@ -1183,7 +1036,7 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
     try {
       updateMovieFields();
       Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-      String xml = new JWFMovieWriter().getMovieXML(currMovie);
+      String xml = new FlameMovieWriter().getMovieXML(currMovie);
       StringSelection data = new StringSelection(xml);
       clipboard.setContents(data, data);
     }
@@ -1207,7 +1060,7 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
       }
       if (chooser.showSaveDialog(swfAnimatorFlamesPanel) == JFileChooser.APPROVE_OPTION) {
         File file = chooser.getSelectedFile();
-        new JWFMovieWriter().writeFlame(currMovie, file.getAbsolutePath());
+        new FlameMovieWriter().writeFlame(currMovie, file.getAbsolutePath());
         prefs.setLastOutputJWFMovieFile(file);
       }
     }

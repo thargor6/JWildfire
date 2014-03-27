@@ -30,7 +30,7 @@ import org.jwildfire.base.Prefs;
 import org.jwildfire.create.tina.animate.FlameMovie;
 import org.jwildfire.create.tina.animate.FlameMoviePart;
 import org.jwildfire.create.tina.base.Flame;
-import org.jwildfire.create.tina.io.JWFMovieReader;
+import org.jwildfire.create.tina.io.FlameMovieReader;
 import org.jwildfire.create.tina.render.FlameRenderer;
 import org.jwildfire.create.tina.render.RenderInfo;
 import org.jwildfire.create.tina.render.RenderMode;
@@ -58,7 +58,7 @@ public class JWFMovieFilePreview extends JComponent implements PropertyChangeLis
     }
     try {
       if (currFile.exists()) {
-        FlameMovie movie = new JWFMovieReader(prefs).readMovie(currFile.getAbsolutePath());
+        FlameMovie movie = new FlameMovieReader(prefs).readMovie(currFile.getAbsolutePath());
         Flame flame = null;
         if (movie != null) {
           for (FlameMoviePart part : movie.getParts()) {

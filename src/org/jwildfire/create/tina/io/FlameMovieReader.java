@@ -16,23 +16,20 @@
 */
 package org.jwildfire.create.tina.io;
 
-import static org.jwildfire.create.tina.io.JWFMovieWriter.AMPLITUDE_CURVE_POSTFIX;
-import static org.jwildfire.create.tina.io.JWFMovieWriter.AMPLITUDE_POSTFIX;
-import static org.jwildfire.create.tina.io.JWFMovieWriter.ATTR_FPS;
-import static org.jwildfire.create.tina.io.JWFMovieWriter.ATTR_FRAME_COUNT;
-import static org.jwildfire.create.tina.io.JWFMovieWriter.ATTR_FRAME_HEIGHT;
-import static org.jwildfire.create.tina.io.JWFMovieWriter.ATTR_FRAME_MORPH_COUNT;
-import static org.jwildfire.create.tina.io.JWFMovieWriter.ATTR_FRAME_WIDTH;
-import static org.jwildfire.create.tina.io.JWFMovieWriter.ATTR_MOTIONBLUR_LENGTH;
-import static org.jwildfire.create.tina.io.JWFMovieWriter.ATTR_MOTIONBLUR_TIMESTEP;
-import static org.jwildfire.create.tina.io.JWFMovieWriter.ATTR_NAME;
-import static org.jwildfire.create.tina.io.JWFMovieWriter.ATTR_OUTPUT_FORMAT;
-import static org.jwildfire.create.tina.io.JWFMovieWriter.ATTR_QUALITY;
-import static org.jwildfire.create.tina.io.JWFMovieWriter.ATTR_SCRIPT_GLOBAL;
-import static org.jwildfire.create.tina.io.JWFMovieWriter.ATTR_SCRIPT_XFORM;
-import static org.jwildfire.create.tina.io.JWFMovieWriter.ATTR_SOUND_FILENAME;
-import static org.jwildfire.create.tina.io.JWFMovieWriter.TAG_JWF_MOVIE;
-import static org.jwildfire.create.tina.io.JWFMovieWriter.TAG_JWF_MOVIE_PART;
+import static org.jwildfire.create.tina.io.FlameMovieWriter.AMPLITUDE_CURVE_POSTFIX;
+import static org.jwildfire.create.tina.io.FlameMovieWriter.AMPLITUDE_POSTFIX;
+import static org.jwildfire.create.tina.io.FlameMovieWriter.ATTR_FPS;
+import static org.jwildfire.create.tina.io.FlameMovieWriter.ATTR_FRAME_COUNT;
+import static org.jwildfire.create.tina.io.FlameMovieWriter.ATTR_FRAME_HEIGHT;
+import static org.jwildfire.create.tina.io.FlameMovieWriter.ATTR_FRAME_MORPH_COUNT;
+import static org.jwildfire.create.tina.io.FlameMovieWriter.ATTR_FRAME_WIDTH;
+import static org.jwildfire.create.tina.io.FlameMovieWriter.ATTR_MOTIONBLUR_LENGTH;
+import static org.jwildfire.create.tina.io.FlameMovieWriter.ATTR_MOTIONBLUR_TIMESTEP;
+import static org.jwildfire.create.tina.io.FlameMovieWriter.ATTR_NAME;
+import static org.jwildfire.create.tina.io.FlameMovieWriter.ATTR_SCRIPT_GLOBAL;
+import static org.jwildfire.create.tina.io.FlameMovieWriter.ATTR_SCRIPT_XFORM;
+import static org.jwildfire.create.tina.io.FlameMovieWriter.TAG_JWF_MOVIE;
+import static org.jwildfire.create.tina.io.FlameMovieWriter.TAG_JWF_MOVIE_PART;
 
 import org.jwildfire.base.Prefs;
 import org.jwildfire.base.Tools;
@@ -41,15 +38,14 @@ import org.jwildfire.create.tina.animate.FlameMovie;
 import org.jwildfire.create.tina.animate.FlameMoviePart;
 import org.jwildfire.create.tina.animate.GlobalScript;
 import org.jwildfire.create.tina.animate.GlobalScriptType;
-import org.jwildfire.create.tina.animate.OutputFormat;
 import org.jwildfire.create.tina.animate.XFormScript;
 import org.jwildfire.create.tina.animate.XFormScriptType;
 import org.jwildfire.create.tina.base.Flame;
 
-public class JWFMovieReader {
+public class FlameMovieReader {
   private final Prefs prefs;
 
-  public JWFMovieReader(Prefs pPrefs) {
+  public FlameMovieReader(Prefs pPrefs) {
     prefs = pPrefs;
   }
 
@@ -153,9 +149,6 @@ public class JWFMovieReader {
     if ((hs = atts.get(ATTR_NAME)) != null) {
       pMovie.setName(hs);
     }
-    if ((hs = atts.get(ATTR_SOUND_FILENAME)) != null) {
-      pMovie.setSoundFilename(hs);
-    }
     if ((hs = atts.get(ATTR_SCRIPT_GLOBAL)) != null) { // legacy
       pMovie.getGlobalScripts()[0] = new GlobalScript(GlobalScriptType.valueOf(hs), 1.0);
     }
@@ -184,12 +177,6 @@ public class JWFMovieReader {
     }
     if ((hs = atts.get(ATTR_FPS)) != null) {
       pMovie.setFramesPerSecond(Double.parseDouble(hs));
-    }
-    if ((hs = atts.get(ATTR_OUTPUT_FORMAT)) != null) {
-      pMovie.setOutputFormat(OutputFormat.valueOf(hs));
-    }
-    if ((hs = atts.get(ATTR_QUALITY)) != null) {
-      pMovie.setQuality(Integer.parseInt(hs));
     }
     if ((hs = atts.get(ATTR_MOTIONBLUR_LENGTH)) != null) {
       pMovie.setMotionBlurLength(Integer.parseInt(hs));
