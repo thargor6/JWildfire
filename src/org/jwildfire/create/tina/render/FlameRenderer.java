@@ -935,8 +935,7 @@ public class FlameRenderer {
         Flame newFlame = AnimationService.evalMotionCurves(pFlame.makeCopy(), time);
         for (Layer layer : newFlame.getLayers()) {
           layer.refreshModWeightTables(flameTransformationContext);
-
-          double brightnessScl = (1.0 - p * pFlame.getMotionBlurDecay() * 0.01);
+          double brightnessScl = (1.0 - p * p * pFlame.getMotionBlurDecay() * 0.07 / pFlame.getMotionBlurLength());
           if (brightnessScl < 0.01) {
             brightnessScl = 0.01;
           }

@@ -16,6 +16,8 @@
 */
 package org.jwildfire.create.tina.io;
 
+import static org.jwildfire.create.tina.io.JWFMovieWriter.AMPLITUDE_CURVE_POSTFIX;
+import static org.jwildfire.create.tina.io.JWFMovieWriter.AMPLITUDE_POSTFIX;
 import static org.jwildfire.create.tina.io.JWFMovieWriter.ATTR_FPS;
 import static org.jwildfire.create.tina.io.JWFMovieWriter.ATTR_FRAME_COUNT;
 import static org.jwildfire.create.tina.io.JWFMovieWriter.ATTR_FRAME_HEIGHT;
@@ -27,37 +29,7 @@ import static org.jwildfire.create.tina.io.JWFMovieWriter.ATTR_NAME;
 import static org.jwildfire.create.tina.io.JWFMovieWriter.ATTR_OUTPUT_FORMAT;
 import static org.jwildfire.create.tina.io.JWFMovieWriter.ATTR_QUALITY;
 import static org.jwildfire.create.tina.io.JWFMovieWriter.ATTR_SCRIPT_GLOBAL;
-import static org.jwildfire.create.tina.io.JWFMovieWriter.ATTR_SCRIPT_GLOBAL1;
-import static org.jwildfire.create.tina.io.JWFMovieWriter.ATTR_SCRIPT_GLOBAL1_AMPLITUDE;
-import static org.jwildfire.create.tina.io.JWFMovieWriter.ATTR_SCRIPT_GLOBAL1_AMPLITUDE_CURVE;
-import static org.jwildfire.create.tina.io.JWFMovieWriter.ATTR_SCRIPT_GLOBAL2;
-import static org.jwildfire.create.tina.io.JWFMovieWriter.ATTR_SCRIPT_GLOBAL2_AMPLITUDE;
-import static org.jwildfire.create.tina.io.JWFMovieWriter.ATTR_SCRIPT_GLOBAL2_AMPLITUDE_CURVE;
-import static org.jwildfire.create.tina.io.JWFMovieWriter.ATTR_SCRIPT_GLOBAL3;
-import static org.jwildfire.create.tina.io.JWFMovieWriter.ATTR_SCRIPT_GLOBAL3_AMPLITUDE;
-import static org.jwildfire.create.tina.io.JWFMovieWriter.ATTR_SCRIPT_GLOBAL3_AMPLITUDE_CURVE;
-import static org.jwildfire.create.tina.io.JWFMovieWriter.ATTR_SCRIPT_GLOBAL4;
-import static org.jwildfire.create.tina.io.JWFMovieWriter.ATTR_SCRIPT_GLOBAL4_AMPLITUDE;
-import static org.jwildfire.create.tina.io.JWFMovieWriter.ATTR_SCRIPT_GLOBAL4_AMPLITUDE_CURVE;
-import static org.jwildfire.create.tina.io.JWFMovieWriter.ATTR_SCRIPT_GLOBAL5;
-import static org.jwildfire.create.tina.io.JWFMovieWriter.ATTR_SCRIPT_GLOBAL5_AMPLITUDE;
-import static org.jwildfire.create.tina.io.JWFMovieWriter.ATTR_SCRIPT_GLOBAL5_AMPLITUDE_CURVE;
 import static org.jwildfire.create.tina.io.JWFMovieWriter.ATTR_SCRIPT_XFORM;
-import static org.jwildfire.create.tina.io.JWFMovieWriter.ATTR_SCRIPT_XFORM1;
-import static org.jwildfire.create.tina.io.JWFMovieWriter.ATTR_SCRIPT_XFORM1_AMPLITUDE;
-import static org.jwildfire.create.tina.io.JWFMovieWriter.ATTR_SCRIPT_XFORM1_AMPLITUDE_CURVE;
-import static org.jwildfire.create.tina.io.JWFMovieWriter.ATTR_SCRIPT_XFORM2;
-import static org.jwildfire.create.tina.io.JWFMovieWriter.ATTR_SCRIPT_XFORM2_AMPLITUDE;
-import static org.jwildfire.create.tina.io.JWFMovieWriter.ATTR_SCRIPT_XFORM2_AMPLITUDE_CURVE;
-import static org.jwildfire.create.tina.io.JWFMovieWriter.ATTR_SCRIPT_XFORM3;
-import static org.jwildfire.create.tina.io.JWFMovieWriter.ATTR_SCRIPT_XFORM3_AMPLITUDE;
-import static org.jwildfire.create.tina.io.JWFMovieWriter.ATTR_SCRIPT_XFORM3_AMPLITUDE_CURVE;
-import static org.jwildfire.create.tina.io.JWFMovieWriter.ATTR_SCRIPT_XFORM4;
-import static org.jwildfire.create.tina.io.JWFMovieWriter.ATTR_SCRIPT_XFORM4_AMPLITUDE;
-import static org.jwildfire.create.tina.io.JWFMovieWriter.ATTR_SCRIPT_XFORM4_AMPLITUDE_CURVE;
-import static org.jwildfire.create.tina.io.JWFMovieWriter.ATTR_SCRIPT_XFORM5;
-import static org.jwildfire.create.tina.io.JWFMovieWriter.ATTR_SCRIPT_XFORM5_AMPLITUDE;
-import static org.jwildfire.create.tina.io.JWFMovieWriter.ATTR_SCRIPT_XFORM5_AMPLITUDE_CURVE;
 import static org.jwildfire.create.tina.io.JWFMovieWriter.ATTR_SOUND_FILENAME;
 import static org.jwildfire.create.tina.io.JWFMovieWriter.TAG_JWF_MOVIE;
 import static org.jwildfire.create.tina.io.JWFMovieWriter.TAG_JWF_MOVIE_PART;
@@ -185,41 +157,23 @@ public class JWFMovieReader {
       pMovie.setSoundFilename(hs);
     }
     if ((hs = atts.get(ATTR_SCRIPT_GLOBAL)) != null) { // legacy
-      pMovie.setGlobalScript1(new GlobalScript(GlobalScriptType.valueOf(hs), 1.0));
+      pMovie.getGlobalScripts()[0] = new GlobalScript(GlobalScriptType.valueOf(hs), 1.0);
     }
-    if ((hs = atts.get(ATTR_SCRIPT_GLOBAL1)) != null) {
-      pMovie.setGlobalScript1(readGlobalScript(ATTR_SCRIPT_GLOBAL1, ATTR_SCRIPT_GLOBAL1_AMPLITUDE, ATTR_SCRIPT_GLOBAL1_AMPLITUDE_CURVE, atts));
-    }
-    if ((hs = atts.get(ATTR_SCRIPT_GLOBAL2)) != null) {
-      pMovie.setGlobalScript2(readGlobalScript(ATTR_SCRIPT_GLOBAL2, ATTR_SCRIPT_GLOBAL2_AMPLITUDE, ATTR_SCRIPT_GLOBAL2_AMPLITUDE_CURVE, atts));
-    }
-    if ((hs = atts.get(ATTR_SCRIPT_GLOBAL3)) != null) {
-      pMovie.setGlobalScript3(readGlobalScript(ATTR_SCRIPT_GLOBAL3, ATTR_SCRIPT_GLOBAL3_AMPLITUDE, ATTR_SCRIPT_GLOBAL3_AMPLITUDE_CURVE, atts));
-    }
-    if ((hs = atts.get(ATTR_SCRIPT_GLOBAL4)) != null) {
-      pMovie.setGlobalScript4(readGlobalScript(ATTR_SCRIPT_GLOBAL4, ATTR_SCRIPT_GLOBAL4_AMPLITUDE, ATTR_SCRIPT_GLOBAL4_AMPLITUDE_CURVE, atts));
-    }
-    if ((hs = atts.get(ATTR_SCRIPT_GLOBAL5)) != null) {
-      pMovie.setGlobalScript5(readGlobalScript(ATTR_SCRIPT_GLOBAL5, ATTR_SCRIPT_GLOBAL5_AMPLITUDE, ATTR_SCRIPT_GLOBAL5_AMPLITUDE_CURVE, atts));
+    for (int i = 0; i < FlameMovie.SCRIPT_COUNT; i++) {
+      String idxStr = String.valueOf(i + 1);
+      if ((hs = atts.get(ATTR_SCRIPT_GLOBAL + idxStr)) != null) {
+        pMovie.getGlobalScripts()[i] = readGlobalScript(ATTR_SCRIPT_GLOBAL + idxStr, ATTR_SCRIPT_GLOBAL + idxStr + AMPLITUDE_POSTFIX, ATTR_SCRIPT_GLOBAL + idxStr + AMPLITUDE_CURVE_POSTFIX, atts);
+      }
     }
 
     if ((hs = atts.get(ATTR_SCRIPT_XFORM)) != null) { // legacy
-      pMovie.setxFormScript1(new XFormScript(XFormScriptType.valueOf(hs), 1.0));
+      pMovie.getxFormScripts()[0] = new XFormScript(XFormScriptType.valueOf(hs), 1.0);
     }
-    if ((hs = atts.get(ATTR_SCRIPT_XFORM1)) != null) {
-      pMovie.setxFormScript1(readXFormScript(ATTR_SCRIPT_XFORM1, ATTR_SCRIPT_XFORM1_AMPLITUDE, ATTR_SCRIPT_XFORM1_AMPLITUDE_CURVE, atts));
-    }
-    if ((hs = atts.get(ATTR_SCRIPT_XFORM2)) != null) {
-      pMovie.setxFormScript2(readXFormScript(ATTR_SCRIPT_XFORM2, ATTR_SCRIPT_XFORM2_AMPLITUDE, ATTR_SCRIPT_XFORM2_AMPLITUDE_CURVE, atts));
-    }
-    if ((hs = atts.get(ATTR_SCRIPT_XFORM3)) != null) {
-      pMovie.setxFormScript3(readXFormScript(ATTR_SCRIPT_XFORM3, ATTR_SCRIPT_XFORM3_AMPLITUDE, ATTR_SCRIPT_XFORM3_AMPLITUDE_CURVE, atts));
-    }
-    if ((hs = atts.get(ATTR_SCRIPT_XFORM4)) != null) {
-      pMovie.setxFormScript4(readXFormScript(ATTR_SCRIPT_XFORM4, ATTR_SCRIPT_XFORM4_AMPLITUDE, ATTR_SCRIPT_XFORM4_AMPLITUDE_CURVE, atts));
-    }
-    if ((hs = atts.get(ATTR_SCRIPT_XFORM5)) != null) {
-      pMovie.setxFormScript5(readXFormScript(ATTR_SCRIPT_XFORM5, ATTR_SCRIPT_XFORM5_AMPLITUDE, ATTR_SCRIPT_XFORM5_AMPLITUDE_CURVE, atts));
+    for (int i = 0; i < FlameMovie.SCRIPT_COUNT; i++) {
+      String idxStr = String.valueOf(i + 1);
+      if ((hs = atts.get(ATTR_SCRIPT_XFORM + idxStr)) != null) {
+        pMovie.getxFormScripts()[i] = readXFormScript(ATTR_SCRIPT_XFORM + idxStr, ATTR_SCRIPT_XFORM + idxStr + AMPLITUDE_POSTFIX, ATTR_SCRIPT_XFORM + idxStr + AMPLITUDE_CURVE_POSTFIX, atts);
+      }
     }
 
     if ((hs = atts.get(ATTR_FRAME_WIDTH)) != null) {

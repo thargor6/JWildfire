@@ -93,45 +93,8 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
   private final Prefs prefs;
   private final ErrorHandler errorHandler;
 
-  private final JComboBox swfAnimatorGlobalScript1Cmb;
-  private final JWFNumberField swfAnimatorGlobalScript1REd;
-  private final MotionCurve swfAnimatorGlobalScript1Curve = new MotionCurve();
-
-  private final JComboBox swfAnimatorGlobalScript2Cmb;
-  private final JWFNumberField swfAnimatorGlobalScript2REd;
-  private final MotionCurve swfAnimatorGlobalScript2Curve = new MotionCurve();
-
-  private final JComboBox swfAnimatorGlobalScript3Cmb;
-  private final JWFNumberField swfAnimatorGlobalScript3REd;
-  private final MotionCurve swfAnimatorGlobalScript3Curve = new MotionCurve();
-
-  private final JComboBox swfAnimatorGlobalScript4Cmb;
-  private final JWFNumberField swfAnimatorGlobalScript4REd;
-  private final MotionCurve swfAnimatorGlobalScript4Curve = new MotionCurve();
-
-  private final JComboBox swfAnimatorGlobalScript5Cmb;
-  private final JWFNumberField swfAnimatorGlobalScript5REd;
-  private final MotionCurve swfAnimatorGlobalScript5Curve = new MotionCurve();
-
-  private final JComboBox swfAnimatorXFormScript1Cmb;
-  private final JWFNumberField swfAnimatorXFormScript1REd;
-  private final MotionCurve swfAnimatorXFormScript1Curve = new MotionCurve();
-
-  private final JComboBox swfAnimatorXFormScript2Cmb;
-  private final JWFNumberField swfAnimatorXFormScript2REd;
-  private final MotionCurve swfAnimatorXFormScript2Curve = new MotionCurve();
-
-  private final JComboBox swfAnimatorXFormScript3Cmb;
-  private final JWFNumberField swfAnimatorXFormScript3REd;
-  private final MotionCurve swfAnimatorXFormScript3Curve = new MotionCurve();
-
-  private final JComboBox swfAnimatorXFormScript4Cmb;
-  private final JWFNumberField swfAnimatorXFormScript4REd;
-  private final MotionCurve swfAnimatorXFormScript4Curve = new MotionCurve();
-
-  private final JComboBox swfAnimatorXFormScript5Cmb;
-  private final JWFNumberField swfAnimatorXFormScript5REd;
-  private final MotionCurve swfAnimatorXFormScript5Curve = new MotionCurve();
+  private final List<ScriptContainer> globalScripts;
+  private final List<ScriptContainer> xFormScripts;
 
   private final JWFNumberField swfAnimatorFramesREd;
   private final JWFNumberField swfAnimatorFrameREd;
@@ -199,16 +162,8 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
   private Map<String, MotionCurveEditInfo> curves = new HashMap<String, MotionCurveEditInfo>();
 
   public TinaSWFAnimatorController(TinaController pParentCtrl, ErrorHandler pErrorHandler, Prefs pPrefs,
-      JComboBox pSWFAnimatorGlobalScript1Cmb, JWFNumberField pSWFAnimatorGlobalScript1REd,
-      JComboBox pSWFAnimatorGlobalScript2Cmb, JWFNumberField pSWFAnimatorGlobalScript2REd,
-      JComboBox pSWFAnimatorGlobalScript3Cmb, JWFNumberField pSWFAnimatorGlobalScript3REd,
-      JComboBox pSWFAnimatorGlobalScript4Cmb, JWFNumberField pSWFAnimatorGlobalScript4REd,
-      JComboBox pSWFAnimatorGlobalScript5Cmb, JWFNumberField pSWFAnimatorGlobalScript5REd,
-      JComboBox pSWFAnimatorXFormScript1Cmb, JWFNumberField pSWFAnimatorXFormScript1REd,
-      JComboBox pSWFAnimatorXFormScript2Cmb, JWFNumberField pSWFAnimatorXFormScript2REd,
-      JComboBox pSWFAnimatorXFormScript3Cmb, JWFNumberField pSWFAnimatorXFormScript3REd,
-      JComboBox pSWFAnimatorXFormScript4Cmb, JWFNumberField pSWFAnimatorXFormScript4REd,
-      JComboBox pSWFAnimatorXFormScript5Cmb, JWFNumberField pSWFAnimatorXFormScript5REd,
+      JComboBox[] pSWFAnimatorGlobalScriptCmbArray, JWFNumberField[] pSWFAnimatorGlobalScriptREdArray,
+      JComboBox[] pSWFAnimatorXFormScriptCmbArray, JWFNumberField[] pSWFAnimatorXFormScriptREdArray,
       JWFNumberField pSWFAnimatorFramesREd, JWFNumberField pSWFAnimatorFramesPerSecondREd,
       JButton pSWFAnimatorGenerateButton, JComboBox pSWFAnimatorResolutionProfileCmb,
       JComboBox pSWFAnimatorQualityProfileCmb, JButton pSWFAnimatorLoadFlameFromMainButton,
@@ -230,37 +185,20 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
       currMovie = new FlameMovie(pPrefs);
       errorHandler = pErrorHandler;
       randomBatchPanel = pRandomMoviePanel;
-      swfAnimatorGlobalScript1Cmb = pSWFAnimatorGlobalScript1Cmb;
-      swfAnimatorGlobalScript1REd = pSWFAnimatorGlobalScript1REd;
-      swfAnimatorGlobalScript2Cmb = pSWFAnimatorGlobalScript2Cmb;
-      swfAnimatorGlobalScript2REd = pSWFAnimatorGlobalScript2REd;
-      swfAnimatorGlobalScript3Cmb = pSWFAnimatorGlobalScript3Cmb;
-      swfAnimatorGlobalScript3REd = pSWFAnimatorGlobalScript3REd;
-      swfAnimatorGlobalScript4Cmb = pSWFAnimatorGlobalScript4Cmb;
-      swfAnimatorGlobalScript4REd = pSWFAnimatorGlobalScript4REd;
-      swfAnimatorGlobalScript5Cmb = pSWFAnimatorGlobalScript5Cmb;
-      swfAnimatorGlobalScript5REd = pSWFAnimatorGlobalScript5REd;
-      swfAnimatorXFormScript1Cmb = pSWFAnimatorXFormScript1Cmb;
-      swfAnimatorXFormScript1REd = pSWFAnimatorXFormScript1REd;
-      swfAnimatorXFormScript2Cmb = pSWFAnimatorXFormScript2Cmb;
-      swfAnimatorXFormScript2REd = pSWFAnimatorXFormScript2REd;
-      swfAnimatorXFormScript3Cmb = pSWFAnimatorXFormScript3Cmb;
-      swfAnimatorXFormScript3REd = pSWFAnimatorXFormScript3REd;
-      swfAnimatorXFormScript4Cmb = pSWFAnimatorXFormScript4Cmb;
-      swfAnimatorXFormScript4REd = pSWFAnimatorXFormScript4REd;
-      swfAnimatorXFormScript5Cmb = pSWFAnimatorXFormScript5Cmb;
-      swfAnimatorXFormScript5REd = pSWFAnimatorXFormScript5REd;
-      curves.put("globalScript1", new MotionCurveEditInfo(swfAnimatorGlobalScript1Curve, swfAnimatorXFormScript1REd));
-      curves.put("globalScript2", new MotionCurveEditInfo(swfAnimatorGlobalScript2Curve, swfAnimatorXFormScript2REd));
-      curves.put("globalScript3", new MotionCurveEditInfo(swfAnimatorGlobalScript3Curve, swfAnimatorXFormScript3REd));
-      curves.put("globalScript4", new MotionCurveEditInfo(swfAnimatorGlobalScript4Curve, swfAnimatorXFormScript4REd));
-      curves.put("globalScript5", new MotionCurveEditInfo(swfAnimatorGlobalScript5Curve, swfAnimatorXFormScript5REd));
 
-      curves.put("xFormScript1", new MotionCurveEditInfo(swfAnimatorXFormScript1Curve, swfAnimatorXFormScript1REd));
-      curves.put("xFormScript2", new MotionCurveEditInfo(swfAnimatorXFormScript2Curve, swfAnimatorXFormScript2REd));
-      curves.put("xFormScript3", new MotionCurveEditInfo(swfAnimatorXFormScript3Curve, swfAnimatorXFormScript3REd));
-      curves.put("xFormScript4", new MotionCurveEditInfo(swfAnimatorXFormScript4Curve, swfAnimatorXFormScript4REd));
-      curves.put("xFormScript5", new MotionCurveEditInfo(swfAnimatorXFormScript5Curve, swfAnimatorXFormScript5REd));
+      globalScripts = new ArrayList<ScriptContainer>();
+      for (int i = 0; i < pSWFAnimatorGlobalScriptCmbArray.length; i++) {
+        ScriptContainer container = new ScriptContainer(pSWFAnimatorGlobalScriptCmbArray[i], pSWFAnimatorGlobalScriptREdArray[i]);
+        globalScripts.add(container);
+        curves.put("globalScript" + (i + 1), new MotionCurveEditInfo(container.getMotionCurve(), container.getScriptREd()));
+      }
+
+      xFormScripts = new ArrayList<ScriptContainer>();
+      for (int i = 0; i < pSWFAnimatorXFormScriptCmbArray.length; i++) {
+        ScriptContainer container = new ScriptContainer(pSWFAnimatorXFormScriptCmbArray[i], pSWFAnimatorXFormScriptREdArray[i]);
+        xFormScripts.add(container);
+        curves.put("xFormScript" + (i + 1), new MotionCurveEditInfo(container.getMotionCurve(), container.getScriptREd()));
+      }
 
       swfAnimatorFramesREd = pSWFAnimatorFramesREd;
       swfAnimatorFrameREd = pSWFAnimatorFrameREd;
@@ -331,26 +269,14 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
 
   protected void enableControls() {
     boolean rendering = renderThread != null;
-    swfAnimatorGlobalScript1Cmb.setEnabled(!rendering);
-    swfAnimatorGlobalScript2Cmb.setEnabled(!rendering);
-    swfAnimatorGlobalScript3Cmb.setEnabled(!rendering);
-    swfAnimatorGlobalScript4Cmb.setEnabled(!rendering);
-    swfAnimatorGlobalScript5Cmb.setEnabled(!rendering);
-    motionControlsDelegate.enableControl(swfAnimatorGlobalScript1REd, rendering);
-    motionControlsDelegate.enableControl(swfAnimatorGlobalScript2REd, rendering);
-    motionControlsDelegate.enableControl(swfAnimatorGlobalScript3REd, rendering);
-    motionControlsDelegate.enableControl(swfAnimatorGlobalScript4REd, rendering);
-    motionControlsDelegate.enableControl(swfAnimatorGlobalScript5REd, rendering);
-    swfAnimatorXFormScript1Cmb.setEnabled(!rendering);
-    swfAnimatorXFormScript2Cmb.setEnabled(!rendering);
-    swfAnimatorXFormScript3Cmb.setEnabled(!rendering);
-    swfAnimatorXFormScript4Cmb.setEnabled(!rendering);
-    swfAnimatorXFormScript5Cmb.setEnabled(!rendering);
-    motionControlsDelegate.enableControl(swfAnimatorXFormScript1REd, rendering);
-    motionControlsDelegate.enableControl(swfAnimatorXFormScript2REd, rendering);
-    motionControlsDelegate.enableControl(swfAnimatorXFormScript3REd, rendering);
-    motionControlsDelegate.enableControl(swfAnimatorXFormScript4REd, rendering);
-    motionControlsDelegate.enableControl(swfAnimatorXFormScript5REd, rendering);
+    for (ScriptContainer container : globalScripts) {
+      container.getScriptCmb().setEnabled(!rendering);
+      motionControlsDelegate.enableControl(container.getScriptREd(), rendering);
+    }
+    for (ScriptContainer container : xFormScripts) {
+      container.getScriptCmb().setEnabled(!rendering);
+      motionControlsDelegate.enableControl(container.getScriptREd(), rendering);
+    }
     swfAnimatorFrameREd.setEnabled(!rendering);
     swfAnimatorFramesREd.setEnabled(!rendering);
     swfAnimatorFramesREd.setEditable(false);
@@ -698,16 +624,14 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
     if (outputFormat == null) {
       outputFormat = OutputFormat.PNG;
     }
-    currMovie.setGlobalScript1(getGlobalScriptFromUI(swfAnimatorGlobalScript1Cmb, swfAnimatorGlobalScript1REd));
-    currMovie.setGlobalScript2(getGlobalScriptFromUI(swfAnimatorGlobalScript2Cmb, swfAnimatorGlobalScript2REd));
-    currMovie.setGlobalScript3(getGlobalScriptFromUI(swfAnimatorGlobalScript3Cmb, swfAnimatorGlobalScript3REd));
-    currMovie.setGlobalScript4(getGlobalScriptFromUI(swfAnimatorGlobalScript4Cmb, swfAnimatorGlobalScript4REd));
-    currMovie.setGlobalScript5(getGlobalScriptFromUI(swfAnimatorGlobalScript5Cmb, swfAnimatorGlobalScript5REd));
-    currMovie.setxFormScript1(getXFormScriptFromUI(swfAnimatorXFormScript1Cmb, swfAnimatorXFormScript1REd));
-    currMovie.setxFormScript2(getXFormScriptFromUI(swfAnimatorXFormScript2Cmb, swfAnimatorXFormScript2REd));
-    currMovie.setxFormScript3(getXFormScriptFromUI(swfAnimatorXFormScript3Cmb, swfAnimatorXFormScript3REd));
-    currMovie.setxFormScript4(getXFormScriptFromUI(swfAnimatorXFormScript4Cmb, swfAnimatorXFormScript4REd));
-    currMovie.setxFormScript5(getXFormScriptFromUI(swfAnimatorXFormScript5Cmb, swfAnimatorXFormScript5REd));
+    for (int i = 0; i < globalScripts.size(); i++) {
+      ScriptContainer container = globalScripts.get(i);
+      currMovie.getGlobalScripts()[i] = getGlobalScriptFromUI(container.getScriptCmb(), container.getScriptREd());
+    }
+    for (int i = 0; i < xFormScripts.size(); i++) {
+      ScriptContainer container = xFormScripts.get(i);
+      currMovie.getxFormScripts()[i] = getXFormScriptFromUI(container.getScriptCmb(), container.getScriptREd());
+    }
 
     currMovie.setQuality(qualityProfile.getQuality());
     currMovie.setOutputFormat(outputFormat);
@@ -928,27 +852,22 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
       int motionBlurLength = swfAnimatorMotionBlurLengthREd.getIntValue();
       double motionBlurTimeStep = swfAnimatorMotionBlurTimeStepREd.getDoubleValue();
 
-      GlobalScript globalScripts[] = {
-          getGlobalScriptFromUI(swfAnimatorGlobalScript1Cmb, swfAnimatorGlobalScript1REd),
-          getGlobalScriptFromUI(swfAnimatorGlobalScript2Cmb, swfAnimatorGlobalScript2REd),
-          getGlobalScriptFromUI(swfAnimatorGlobalScript3Cmb, swfAnimatorGlobalScript3REd),
-          getGlobalScriptFromUI(swfAnimatorGlobalScript4Cmb, swfAnimatorGlobalScript4REd),
-          getGlobalScriptFromUI(swfAnimatorGlobalScript5Cmb, swfAnimatorGlobalScript5REd)
-      };
-      XFormScript xFormScripts[] = {
-          getXFormScriptFromUI(swfAnimatorXFormScript1Cmb, swfAnimatorXFormScript1REd),
-          getXFormScriptFromUI(swfAnimatorXFormScript2Cmb, swfAnimatorXFormScript2REd),
-          getXFormScriptFromUI(swfAnimatorXFormScript3Cmb, swfAnimatorXFormScript3REd),
-          getXFormScriptFromUI(swfAnimatorXFormScript4Cmb, swfAnimatorXFormScript4REd),
-          getXFormScriptFromUI(swfAnimatorXFormScript5Cmb, swfAnimatorXFormScript5REd)
-      };
+      List<GlobalScript> editedGlobalScripts = new ArrayList<GlobalScript>();
+      for (ScriptContainer container : globalScripts) {
+        editedGlobalScripts.add(getGlobalScriptFromUI(container.getScriptCmb(), container.getScriptREd()));
+      }
+
+      List<XFormScript> editedXFormScripts = new ArrayList<XFormScript>();
+      for (ScriptContainer container : xFormScripts) {
+        editedXFormScripts.add(getXFormScriptFromUI(container.getScriptCmb(), container.getScriptREd()));
+      }
 
       try {
         Flame res = flame.makeCopy();
-        for (GlobalScript script : globalScripts) {
+        for (GlobalScript script : editedGlobalScripts) {
           AnimationService.addMotionCurve(res, script, frame, frameCount, fps);
         }
-        for (XFormScript script : xFormScripts) {
+        for (XFormScript script : editedXFormScripts) {
           AnimationService.addMotionCurve(res, script, frame, frameCount, fps);
         }
         res.setFrame(frame);
@@ -1131,16 +1050,14 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
     noRefresh = true;
     try {
       swfAnimatorFramesPerSecondREd.setValue(currMovie.getFramesPerSecond());
-      setGlobalScriptToUI(currMovie.getGlobalScript1(), swfAnimatorGlobalScript1Cmb, swfAnimatorGlobalScript1REd);
-      setGlobalScriptToUI(currMovie.getGlobalScript2(), swfAnimatorGlobalScript2Cmb, swfAnimatorGlobalScript2REd);
-      setGlobalScriptToUI(currMovie.getGlobalScript3(), swfAnimatorGlobalScript3Cmb, swfAnimatorGlobalScript3REd);
-      setGlobalScriptToUI(currMovie.getGlobalScript4(), swfAnimatorGlobalScript4Cmb, swfAnimatorGlobalScript4REd);
-      setGlobalScriptToUI(currMovie.getGlobalScript5(), swfAnimatorGlobalScript5Cmb, swfAnimatorGlobalScript5REd);
-      setXFormScriptToUI(currMovie.getxFormScript1(), swfAnimatorXFormScript1Cmb, swfAnimatorXFormScript1REd);
-      setXFormScriptToUI(currMovie.getxFormScript2(), swfAnimatorXFormScript2Cmb, swfAnimatorXFormScript2REd);
-      setXFormScriptToUI(currMovie.getxFormScript3(), swfAnimatorXFormScript3Cmb, swfAnimatorXFormScript3REd);
-      setXFormScriptToUI(currMovie.getxFormScript4(), swfAnimatorXFormScript4Cmb, swfAnimatorXFormScript4REd);
-      setXFormScriptToUI(currMovie.getxFormScript5(), swfAnimatorXFormScript5Cmb, swfAnimatorXFormScript5REd);
+      for (int i = 0; i < globalScripts.size(); i++) {
+        ScriptContainer container = globalScripts.get(i);
+        setGlobalScriptToUI(currMovie.getGlobalScripts()[i], container.getScriptCmb(), container.getScriptREd());
+      }
+      for (int i = 0; i < xFormScripts.size(); i++) {
+        ScriptContainer container = xFormScripts.get(i);
+        setXFormScriptToUI(currMovie.getxFormScripts()[i], container.getScriptCmb(), container.getScriptREd());
+      }
       swfAnimatorOutputCmb.setSelectedItem(currMovie.getOutputFormat());
       {
         ResolutionProfile fittingProfile = null;
@@ -1672,5 +1589,30 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
     }
     updateThumbnails();
     return true;
+  }
+
+  public class ScriptContainer {
+    private final JComboBox scriptCmb;
+    private final JWFNumberField scriptREd;
+    private final MotionCurve motionCurve;
+
+    public ScriptContainer(JComboBox pScriptCmb, JWFNumberField pSscriptREd) {
+      scriptCmb = pScriptCmb;
+      scriptREd = pSscriptREd;
+      motionCurve = new MotionCurve();
+    }
+
+    public JComboBox getScriptCmb() {
+      return scriptCmb;
+    }
+
+    public JWFNumberField getScriptREd() {
+      return scriptREd;
+    }
+
+    public MotionCurve getMotionCurve() {
+      return motionCurve;
+    }
+
   }
 }

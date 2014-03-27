@@ -23,7 +23,9 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.awt.Insets;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.SystemColor;
@@ -4193,17 +4195,30 @@ public class TinaInternalFrame extends JInternalFrame {
           getInteractiveHalveSizeButton(), getInteractiveResolutionProfileCmb(), getInteractivePauseButton(), getInteractiveResumeButton()));
       tinaController.getInteractiveRendererCtrl().enableControls();
 
+      JComboBox[] globalScriptCmbArray = {
+          getSwfAnimatorGlobalScript1Cmb(), getSwfAnimatorGlobalScript2Cmb(), getSwfAnimatorGlobalScript3Cmb(),
+          getSwfAnimatorGlobalScript4Cmb(), getSwfAnimatorGlobalScript5Cmb(), getSwfAnimatorGlobalScript6Cmb(),
+          getSwfAnimatorGlobalScript7Cmb(), getSwfAnimatorGlobalScript8Cmb(), getSwfAnimatorGlobalScript9Cmb(),
+          getSwfAnimatorGlobalScript10Cmb(), getSwfAnimatorGlobalScript11Cmb(), getSwfAnimatorGlobalScript12Cmb() };
+      JWFNumberField[] globalScriptREdArray = {
+          getSwfAnimatorGlobalScript1REd(), getSwfAnimatorGlobalScript2REd(), getSwfAnimatorGlobalScript3REd(),
+          getSwfAnimatorGlobalScript4REd(), getSwfAnimatorGlobalScript5REd(), getSwfAnimatorGlobalScript6REd(),
+          getSwfAnimatorGlobalScript7REd(), getSwfAnimatorGlobalScript8REd(), getSwfAnimatorGlobalScript9REd(),
+          getSwfAnimatorGlobalScript10REd(), getSwfAnimatorGlobalScript11REd(), getSwfAnimatorGlobalScript12REd() };
+      JComboBox[] xFormScriptCmbArray = {
+          getSwfAnimatorXFormScript1Cmb(), getSwfAnimatorXFormScript2Cmb(), getSwfAnimatorXFormScript3Cmb(),
+          getSwfAnimatorXFormScript4Cmb(), getSwfAnimatorXFormScript5Cmb(), getSwfAnimatorXFormScript6Cmb(),
+          getSwfAnimatorXFormScript7Cmb(), getSwfAnimatorXFormScript8Cmb(), getSwfAnimatorXFormScript9Cmb(),
+          getSwfAnimatorXFormScript10Cmb(), getSwfAnimatorXFormScript11Cmb(), getSwfAnimatorXFormScript12Cmb() };
+      JWFNumberField[] xFormScriptREdArray = {
+          getSwfAnimatorXFormScript1REd(), getSwfAnimatorXFormScript2REd(), getSwfAnimatorXFormScript3REd(),
+          getSwfAnimatorXFormScript4REd(), getSwfAnimatorXFormScript5REd(), getSwfAnimatorXFormScript6REd(),
+          getSwfAnimatorXFormScript7REd(), getSwfAnimatorXFormScript8REd(), getSwfAnimatorXFormScript9REd(),
+          getSwfAnimatorXFormScript10REd(), getSwfAnimatorXFormScript11REd(), getSwfAnimatorXFormScript12REd() };
+
       tinaController.setSwfAnimatorCtrl(new TinaSWFAnimatorController(tinaController, pErrorHandler, pPrefs,
-          getSwfAnimatorGlobalScript1Cmb(), getSwfAnimatorGlobalScript1REd(),
-          getSwfAnimatorGlobalScript2Cmb(), getSwfAnimatorGlobalScript2REd(),
-          getSwfAnimatorGlobalScript3Cmb(), getSwfAnimatorGlobalScript3REd(),
-          getSwfAnimatorGlobalScript4Cmb(), getSwfAnimatorGlobalScript4REd(),
-          getSwfAnimatorGlobalScript5Cmb(), getSwfAnimatorGlobalScript5REd(),
-          getSwfAnimatorXFormScript1Cmb(), getSwfAnimatorXFormScript1REd(),
-          getSwfAnimatorXFormScript2Cmb(), getSwfAnimatorXFormScript2REd(),
-          getSwfAnimatorXFormScript3Cmb(), getSwfAnimatorXFormScript3REd(),
-          getSwfAnimatorXFormScript4Cmb(), getSwfAnimatorXFormScript4REd(),
-          getSwfAnimatorXFormScript5Cmb(), getSwfAnimatorXFormScript5REd(),
+          globalScriptCmbArray, globalScriptREdArray,
+          xFormScriptCmbArray, xFormScriptREdArray,
           getSwfAnimatorFramesREd(), getSwfAnimatorFramesPerSecondREd(),
           getSwfAnimatorGenerateButton(), getSwfAnimatorResolutionProfileCmb(),
           getSwfAnimatorQualityProfileCmb(), getSwfAnimatorLoadFlameFromMainButton(),
@@ -5799,340 +5814,457 @@ public class TinaInternalFrame extends JInternalFrame {
       panel_10.setBorder(new TitledBorder(null, "Motion control", TitledBorder.LEADING, TitledBorder.TOP, null, null));
       panel_10.setPreferredSize(new Dimension(400, 10));
       panel_2.add(panel_10, BorderLayout.EAST);
-      panel_10.setLayout(null);
-      panel_10.add(getSwfAnimatorGlobalScript1Cmb());
+      panel_10.setLayout(new BoxLayout(panel_10, BoxLayout.Y_AXIS));
+
+      JScrollPane scrollPane_2 = new JScrollPane();
+      scrollPane_2.setBorder(new TitledBorder(null, "Global scripts", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+      scrollPane_2.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+      panel_10.add(scrollPane_2);
+
+      JPanel panel_85 = new JPanel();
+      panel_85.setPreferredSize(new Dimension(315, 280));
+      scrollPane_2.setViewportView(panel_85);
+      panel_85.setLayout(null);
+      panel_85.add(getSwfAnimatorGlobalScript1Cmb());
       animateGlobalScriptLbl = new JLabel();
+      animateGlobalScriptLbl.setBounds(0, 0, 21, 22);
+      panel_85.add(animateGlobalScriptLbl);
       animateGlobalScriptLbl.setName("animateGlobalScriptLbl");
-      animateGlobalScriptLbl.setBounds(12, 19, 94, 22);
-      panel_10.add(animateGlobalScriptLbl);
       animateGlobalScriptLbl.setPreferredSize(new Dimension(94, 22));
-      animateGlobalScriptLbl.setText("Global script 1");
+      animateGlobalScriptLbl.setText("01");
       animateGlobalScriptLbl.setFont(new Font("Dialog", Font.BOLD, 10));
-      animateXFormScriptLbl = new JLabel();
-      animateXFormScriptLbl.setName("animateXFormScriptLbl");
-      animateXFormScriptLbl.setBounds(12, 138, 94, 22);
-      panel_10.add(animateXFormScriptLbl);
-      animateXFormScriptLbl.setPreferredSize(new Dimension(94, 22));
-      animateXFormScriptLbl.setText("XForm script 1");
-      animateXFormScriptLbl.setFont(new Font("Dialog", Font.BOLD, 10));
-      panel_10.add(getSwfAnimatorXFormScript1Cmb());
-      panel_10.add(getSwfAnimatorFramesREd());
-
-      swfAnimatorFramesPerSecondREd = new JWFNumberField();
-      swfAnimatorFramesPerSecondREd.setMaxValue(120.0);
-      swfAnimatorFramesPerSecondREd.setMinValue(1.0);
-      swfAnimatorFramesPerSecondREd.setHasMaxValue(true);
-      swfAnimatorFramesPerSecondREd.setHasMinValue(true);
-      swfAnimatorFramesPerSecondREd.setEditable(true);
-      swfAnimatorFramesPerSecondREd.setBounds(322, 262, 70, 24);
-      panel_10.add(swfAnimatorFramesPerSecondREd);
-      swfAnimatorFramesPerSecondREd.setText("12");
-      swfAnimatorFramesPerSecondREd.setPreferredSize(new Dimension(56, 22));
-      swfAnimatorFramesPerSecondREd.setFont(new Font("Dialog", Font.PLAIN, 10));
-      animateFramesLbl = new JLabel();
-      animateFramesLbl.setBounds(13, 262, 94, 22);
-      panel_10.add(animateFramesLbl);
-      animateFramesLbl.setHorizontalAlignment(SwingConstants.LEFT);
-      animateFramesLbl.setPreferredSize(new Dimension(94, 22));
-      animateFramesLbl.setText("Total frame count");
-      animateFramesLbl.setFont(new Font("Dialog", Font.BOLD, 10));
-
-      JLabel lblFramesPerSecond = new JLabel();
-      lblFramesPerSecond.setBounds(217, 262, 101, 22);
-      panel_10.add(lblFramesPerSecond);
-      lblFramesPerSecond.setHorizontalAlignment(SwingConstants.LEFT);
-      lblFramesPerSecond.setText("Frames per second");
-      lblFramesPerSecond.setPreferredSize(new Dimension(94, 22));
-      lblFramesPerSecond.setFont(new Font("Dialog", Font.BOLD, 10));
-
-      swfAnimatorGlobalScript2Cmb = new JComboBox();
-      swfAnimatorGlobalScript2Cmb.setMaximumRowCount(16);
-      swfAnimatorGlobalScript2Cmb.setPreferredSize(new Dimension(275, 22));
-      swfAnimatorGlobalScript2Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
-      swfAnimatorGlobalScript2Cmb.setBounds(116, 42, 175, 24);
-      swfAnimatorGlobalScript2Cmb.addItemListener(new ItemListener() {
-        public void itemStateChanged(ItemEvent e) {
-          if (tinaController != null && tinaController.getSwfAnimatorCtrl() != null) {
-            tinaController.getSwfAnimatorCtrl().moviePropertyChanged();
-          }
-        }
-      });
-      panel_10.add(swfAnimatorGlobalScript2Cmb);
-
-      JLabel lblGlobalScript = new JLabel();
-      lblGlobalScript.setName("lblGlobalScript");
-      lblGlobalScript.setText("Global script 2");
-      lblGlobalScript.setPreferredSize(new Dimension(94, 22));
-      lblGlobalScript.setFont(new Font("Dialog", Font.BOLD, 10));
-      lblGlobalScript.setBounds(12, 42, 94, 22);
-      panel_10.add(lblGlobalScript);
-
-      swfAnimatorGlobalScript3Cmb = new JComboBox();
-      swfAnimatorGlobalScript3Cmb.setMaximumRowCount(16);
-      swfAnimatorGlobalScript3Cmb.setPreferredSize(new Dimension(275, 22));
-      swfAnimatorGlobalScript3Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
-      swfAnimatorGlobalScript3Cmb.setBounds(116, 65, 175, 24);
-      swfAnimatorGlobalScript3Cmb.addItemListener(new ItemListener() {
-        public void itemStateChanged(ItemEvent e) {
-          if (tinaController != null && tinaController.getSwfAnimatorCtrl() != null) {
-            tinaController.getSwfAnimatorCtrl().moviePropertyChanged();
-          }
-        }
-      });
-      panel_10.add(swfAnimatorGlobalScript3Cmb);
-
-      JLabel lblGlobalScript_1 = new JLabel();
-      lblGlobalScript_1.setName("lblGlobalScript_1");
-      lblGlobalScript_1.setText("Global script 3");
-      lblGlobalScript_1.setPreferredSize(new Dimension(94, 22));
-      lblGlobalScript_1.setFont(new Font("Dialog", Font.BOLD, 10));
-      lblGlobalScript_1.setBounds(12, 65, 94, 22);
-      panel_10.add(lblGlobalScript_1);
-
-      swfAnimatorGlobalScript4Cmb = new JComboBox();
-      swfAnimatorGlobalScript4Cmb.setMaximumRowCount(16);
-      swfAnimatorGlobalScript4Cmb.setPreferredSize(new Dimension(275, 22));
-      swfAnimatorGlobalScript4Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
-      swfAnimatorGlobalScript4Cmb.setBounds(116, 88, 175, 24);
-      swfAnimatorGlobalScript4Cmb.addItemListener(new ItemListener() {
-        public void itemStateChanged(ItemEvent e) {
-          if (tinaController != null && tinaController.getSwfAnimatorCtrl() != null) {
-            tinaController.getSwfAnimatorCtrl().moviePropertyChanged();
-          }
-        }
-      });
-      panel_10.add(swfAnimatorGlobalScript4Cmb);
-
-      JLabel lblGlobalScript_2 = new JLabel();
-      lblGlobalScript_2.setName("lblGlobalScript_2");
-      lblGlobalScript_2.setText("Global script 4");
-      lblGlobalScript_2.setPreferredSize(new Dimension(94, 22));
-      lblGlobalScript_2.setFont(new Font("Dialog", Font.BOLD, 10));
-      lblGlobalScript_2.setBounds(12, 88, 94, 22);
-      panel_10.add(lblGlobalScript_2);
-
-      swfAnimatorGlobalScript5Cmb = new JComboBox();
-      swfAnimatorGlobalScript5Cmb.setMaximumRowCount(16);
-      swfAnimatorGlobalScript5Cmb.setPreferredSize(new Dimension(275, 22));
-      swfAnimatorGlobalScript5Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
-      swfAnimatorGlobalScript5Cmb.setBounds(116, 111, 175, 24);
-      swfAnimatorGlobalScript5Cmb.addItemListener(new ItemListener() {
-        public void itemStateChanged(ItemEvent e) {
-          if (tinaController != null && tinaController.getSwfAnimatorCtrl() != null) {
-            tinaController.getSwfAnimatorCtrl().moviePropertyChanged();
-          }
-        }
-      });
-      panel_10.add(swfAnimatorGlobalScript5Cmb);
-
-      JLabel lblGlobalScript_3 = new JLabel();
-      lblGlobalScript_3.setName("lblGlobalScript_3");
-      lblGlobalScript_3.setText("Global script 5");
-      lblGlobalScript_3.setPreferredSize(new Dimension(94, 22));
-      lblGlobalScript_3.setFont(new Font("Dialog", Font.BOLD, 10));
-      lblGlobalScript_3.setBounds(12, 111, 94, 22);
-      panel_10.add(lblGlobalScript_3);
-
-      JLabel lblXformScript = new JLabel();
-      lblXformScript.setName("lblXformScript");
-      lblXformScript.setText("XForm script 2");
-      lblXformScript.setPreferredSize(new Dimension(94, 22));
-      lblXformScript.setFont(new Font("Dialog", Font.BOLD, 10));
-      lblXformScript.setBounds(12, 161, 94, 22);
-      panel_10.add(lblXformScript);
-
-      swfAnimatorXFormScript2Cmb = new JComboBox();
-      swfAnimatorXFormScript2Cmb.setMaximumRowCount(16);
-      swfAnimatorXFormScript2Cmb.setPreferredSize(new Dimension(275, 22));
-      swfAnimatorXFormScript2Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
-      swfAnimatorXFormScript2Cmb.setBounds(116, 161, 175, 24);
-      swfAnimatorXFormScript2Cmb.addItemListener(new ItemListener() {
-        public void itemStateChanged(ItemEvent e) {
-          if (tinaController != null && tinaController.getSwfAnimatorCtrl() != null) {
-            tinaController.getSwfAnimatorCtrl().moviePropertyChanged();
-          }
-        }
-      });
-      panel_10.add(swfAnimatorXFormScript2Cmb);
-
-      JLabel lblXformScript_1 = new JLabel();
-      lblXformScript_1.setName("lblXformScript_1");
-      lblXformScript_1.setText("XForm script 3");
-      lblXformScript_1.setPreferredSize(new Dimension(94, 22));
-      lblXformScript_1.setFont(new Font("Dialog", Font.BOLD, 10));
-      lblXformScript_1.setBounds(12, 184, 94, 22);
-      panel_10.add(lblXformScript_1);
-
-      swfAnimatorXFormScript3Cmb = new JComboBox();
-      swfAnimatorXFormScript3Cmb.setMaximumRowCount(16);
-      swfAnimatorXFormScript3Cmb.setPreferredSize(new Dimension(275, 22));
-      swfAnimatorXFormScript3Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
-      swfAnimatorXFormScript3Cmb.setBounds(116, 184, 175, 24);
-      swfAnimatorXFormScript3Cmb.addItemListener(new ItemListener() {
-        public void itemStateChanged(ItemEvent e) {
-          if (tinaController != null && tinaController.getSwfAnimatorCtrl() != null) {
-            tinaController.getSwfAnimatorCtrl().moviePropertyChanged();
-          }
-        }
-      });
-      panel_10.add(swfAnimatorXFormScript3Cmb);
-
-      JLabel lblXformScript_2 = new JLabel();
-      lblXformScript_2.setName("lblXformScript_2");
-      lblXformScript_2.setText("XForm script 4");
-      lblXformScript_2.setPreferredSize(new Dimension(94, 22));
-      lblXformScript_2.setFont(new Font("Dialog", Font.BOLD, 10));
-      lblXformScript_2.setBounds(12, 207, 94, 22);
-      panel_10.add(lblXformScript_2);
-
-      swfAnimatorXFormScript4Cmb = new JComboBox();
-      swfAnimatorXFormScript4Cmb.setMaximumRowCount(16);
-      swfAnimatorXFormScript4Cmb.setPreferredSize(new Dimension(275, 22));
-      swfAnimatorXFormScript4Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
-      swfAnimatorXFormScript4Cmb.setBounds(116, 207, 175, 24);
-      swfAnimatorXFormScript4Cmb.addItemListener(new ItemListener() {
-        public void itemStateChanged(ItemEvent e) {
-          if (tinaController != null && tinaController.getSwfAnimatorCtrl() != null) {
-            tinaController.getSwfAnimatorCtrl().moviePropertyChanged();
-          }
-        }
-      });
-      panel_10.add(swfAnimatorXFormScript4Cmb);
-
-      JLabel lblXformScript_3 = new JLabel();
-      lblXformScript_3.setName("lblXformScript_3");
-      lblXformScript_3.setText("XForm script 5");
-      lblXformScript_3.setPreferredSize(new Dimension(94, 22));
-      lblXformScript_3.setFont(new Font("Dialog", Font.BOLD, 10));
-      lblXformScript_3.setBounds(12, 230, 94, 22);
-      panel_10.add(lblXformScript_3);
-
-      swfAnimatorXFormScript5Cmb = new JComboBox();
-      swfAnimatorXFormScript5Cmb.setMaximumRowCount(16);
-      swfAnimatorXFormScript5Cmb.setPreferredSize(new Dimension(275, 22));
-      swfAnimatorXFormScript5Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
-      swfAnimatorXFormScript5Cmb.setBounds(116, 230, 175, 24);
-      swfAnimatorXFormScript5Cmb.addItemListener(new ItemListener() {
-        public void itemStateChanged(ItemEvent e) {
-          if (tinaController != null && tinaController.getSwfAnimatorCtrl() != null) {
-            tinaController.getSwfAnimatorCtrl().moviePropertyChanged();
-          }
-        }
-      });
-      panel_10.add(swfAnimatorXFormScript5Cmb);
 
       swfAnimatorGlobalScript1REd = new JWFNumberField();
+      swfAnimatorGlobalScript1REd.setBounds(213, 0, 100, 24);
+      panel_85.add(swfAnimatorGlobalScript1REd);
       swfAnimatorGlobalScript1REd.setValue(1.0);
       swfAnimatorGlobalScript1REd.setWithMotionCurve(true);
       swfAnimatorGlobalScript1REd.setValueStep(1.0);
-      swfAnimatorGlobalScript1REd.setSize(new Dimension(100, 24));
       swfAnimatorGlobalScript1REd.setPreferredSize(new Dimension(100, 24));
       swfAnimatorGlobalScript1REd.setMotionPropertyName("globalScript1");
-      swfAnimatorGlobalScript1REd.setLocation(new Point(100, 4));
       swfAnimatorGlobalScript1REd.setLinkedLabelControlName("animateGlobalScriptLbl");
       swfAnimatorGlobalScript1REd.setFont(new Font("Dialog", Font.PLAIN, 10));
-      swfAnimatorGlobalScript1REd.setBounds(291, 19, 100, 24);
-      swfAnimatorGlobalScript1REd.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-          tinaController.getSwfAnimatorCtrl().editGlobalMotionCurve(getSwfAnimatorGlobalScript1REd());
-        }
-      });
-      swfAnimatorGlobalScript1REd.addChangeListener(new ChangeListener() {
-        public void stateChanged(ChangeEvent e) {
-          if (tinaController != null && tinaController.getSwfAnimatorCtrl() != null) {
-            tinaController.getSwfAnimatorCtrl().moviePropertyChanged();
-          }
-        }
-      });
 
-      panel_10.add(swfAnimatorGlobalScript1REd);
+      JLabel lblGlobalScript = new JLabel();
+      lblGlobalScript.setBounds(0, 23, 21, 22);
+      panel_85.add(lblGlobalScript);
+      lblGlobalScript.setName("lblGlobalScript");
+      lblGlobalScript.setText("02");
+      lblGlobalScript.setPreferredSize(new Dimension(94, 22));
+      lblGlobalScript.setFont(new Font("Dialog", Font.BOLD, 10));
+
+      swfAnimatorGlobalScript2Cmb = new JComboBox();
+      swfAnimatorGlobalScript2Cmb.setBounds(22, 23, 186, 24);
+      panel_85.add(swfAnimatorGlobalScript2Cmb);
+      swfAnimatorGlobalScript2Cmb.setMaximumRowCount(16);
+      swfAnimatorGlobalScript2Cmb.setPreferredSize(new Dimension(275, 22));
+      swfAnimatorGlobalScript2Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
 
       swfAnimatorGlobalScript2REd = new JWFNumberField();
+      swfAnimatorGlobalScript2REd.setBounds(213, 23, 100, 24);
+      panel_85.add(swfAnimatorGlobalScript2REd);
       swfAnimatorGlobalScript2REd.setValue(1.0);
       swfAnimatorGlobalScript2REd.setWithMotionCurve(true);
       swfAnimatorGlobalScript2REd.setValueStep(1.0);
-      swfAnimatorGlobalScript2REd.setSize(new Dimension(100, 24));
       swfAnimatorGlobalScript2REd.setPreferredSize(new Dimension(100, 24));
       swfAnimatorGlobalScript2REd.setMotionPropertyName("globalScript2");
-      swfAnimatorGlobalScript2REd.setLocation(new Point(100, 4));
       swfAnimatorGlobalScript2REd.setLinkedLabelControlName("lblGlobalScript");
       swfAnimatorGlobalScript2REd.setFont(new Font("Dialog", Font.PLAIN, 10));
-      swfAnimatorGlobalScript2REd.setBounds(291, 42, 100, 24);
-      swfAnimatorGlobalScript2REd.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-          tinaController.getSwfAnimatorCtrl().editGlobalMotionCurve(getSwfAnimatorGlobalScript2REd());
-        }
-      });
-      swfAnimatorGlobalScript2REd.addChangeListener(new ChangeListener() {
-        public void stateChanged(ChangeEvent e) {
-          if (tinaController != null && tinaController.getSwfAnimatorCtrl() != null) {
-            tinaController.getSwfAnimatorCtrl().moviePropertyChanged();
-          }
-        }
-      });
-      panel_10.add(swfAnimatorGlobalScript2REd);
+
+      JLabel lblGlobalScript_1 = new JLabel();
+      lblGlobalScript_1.setBounds(0, 46, 21, 22);
+      panel_85.add(lblGlobalScript_1);
+      lblGlobalScript_1.setName("lblGlobalScript_1");
+      lblGlobalScript_1.setText("03");
+      lblGlobalScript_1.setPreferredSize(new Dimension(94, 22));
+      lblGlobalScript_1.setFont(new Font("Dialog", Font.BOLD, 10));
+
+      swfAnimatorGlobalScript3Cmb = new JComboBox();
+      swfAnimatorGlobalScript3Cmb.setBounds(22, 46, 186, 24);
+      panel_85.add(swfAnimatorGlobalScript3Cmb);
+      swfAnimatorGlobalScript3Cmb.setMaximumRowCount(16);
+      swfAnimatorGlobalScript3Cmb.setPreferredSize(new Dimension(275, 22));
+      swfAnimatorGlobalScript3Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
 
       swfAnimatorGlobalScript3REd = new JWFNumberField();
+      swfAnimatorGlobalScript3REd.setBounds(213, 46, 100, 24);
+      panel_85.add(swfAnimatorGlobalScript3REd);
       swfAnimatorGlobalScript3REd.setValue(1.0);
       swfAnimatorGlobalScript3REd.setWithMotionCurve(true);
       swfAnimatorGlobalScript3REd.setValueStep(1.0);
-      swfAnimatorGlobalScript3REd.setSize(new Dimension(100, 24));
       swfAnimatorGlobalScript3REd.setPreferredSize(new Dimension(100, 24));
       swfAnimatorGlobalScript3REd.setMotionPropertyName("globalScript3");
-      swfAnimatorGlobalScript3REd.setLocation(new Point(100, 4));
       swfAnimatorGlobalScript3REd.setLinkedLabelControlName("lblGlobalScript_1");
       swfAnimatorGlobalScript3REd.setFont(new Font("Dialog", Font.PLAIN, 10));
-      swfAnimatorGlobalScript3REd.setBounds(291, 65, 100, 24);
-      swfAnimatorGlobalScript3REd.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-          tinaController.getSwfAnimatorCtrl().editGlobalMotionCurve(getSwfAnimatorGlobalScript3REd());
-        }
-      });
-      swfAnimatorGlobalScript3REd.addChangeListener(new ChangeListener() {
-        public void stateChanged(ChangeEvent e) {
-          if (tinaController != null && tinaController.getSwfAnimatorCtrl() != null) {
-            tinaController.getSwfAnimatorCtrl().moviePropertyChanged();
-          }
-        }
-      });
-      panel_10.add(swfAnimatorGlobalScript3REd);
+
+      JLabel lblGlobalScript_2 = new JLabel();
+      lblGlobalScript_2.setBounds(0, 69, 21, 22);
+      panel_85.add(lblGlobalScript_2);
+      lblGlobalScript_2.setName("lblGlobalScript_2");
+      lblGlobalScript_2.setText("04");
+      lblGlobalScript_2.setPreferredSize(new Dimension(94, 22));
+      lblGlobalScript_2.setFont(new Font("Dialog", Font.BOLD, 10));
+
+      swfAnimatorGlobalScript4Cmb = new JComboBox();
+      swfAnimatorGlobalScript4Cmb.setBounds(22, 69, 186, 24);
+      panel_85.add(swfAnimatorGlobalScript4Cmb);
+      swfAnimatorGlobalScript4Cmb.setMaximumRowCount(16);
+      swfAnimatorGlobalScript4Cmb.setPreferredSize(new Dimension(275, 22));
+      swfAnimatorGlobalScript4Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
 
       swfAnimatorGlobalScript4REd = new JWFNumberField();
+      swfAnimatorGlobalScript4REd.setBounds(213, 69, 100, 24);
+      panel_85.add(swfAnimatorGlobalScript4REd);
       swfAnimatorGlobalScript4REd.setValue(1.0);
       swfAnimatorGlobalScript4REd.setWithMotionCurve(true);
       swfAnimatorGlobalScript4REd.setValueStep(1.0);
-      swfAnimatorGlobalScript4REd.setSize(new Dimension(100, 24));
       swfAnimatorGlobalScript4REd.setPreferredSize(new Dimension(100, 24));
       swfAnimatorGlobalScript4REd.setMotionPropertyName("globalScript4");
-      swfAnimatorGlobalScript4REd.setLocation(new Point(100, 4));
       swfAnimatorGlobalScript4REd.setLinkedLabelControlName("lblGlobalScript_2");
       swfAnimatorGlobalScript4REd.setFont(new Font("Dialog", Font.PLAIN, 10));
-      swfAnimatorGlobalScript4REd.setBounds(291, 88, 100, 24);
-      swfAnimatorGlobalScript4REd.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-          tinaController.getSwfAnimatorCtrl().editGlobalMotionCurve(getSwfAnimatorGlobalScript4REd());
+
+      JLabel lblGlobalScript_3 = new JLabel();
+      lblGlobalScript_3.setBounds(0, 92, 21, 22);
+      panel_85.add(lblGlobalScript_3);
+      lblGlobalScript_3.setName("lblGlobalScript_3");
+      lblGlobalScript_3.setText("05");
+      lblGlobalScript_3.setPreferredSize(new Dimension(94, 22));
+      lblGlobalScript_3.setFont(new Font("Dialog", Font.BOLD, 10));
+
+      swfAnimatorGlobalScript5Cmb = new JComboBox();
+      swfAnimatorGlobalScript5Cmb.setBounds(22, 92, 186, 24);
+      panel_85.add(swfAnimatorGlobalScript5Cmb);
+      swfAnimatorGlobalScript5Cmb.setMaximumRowCount(16);
+      swfAnimatorGlobalScript5Cmb.setPreferredSize(new Dimension(275, 22));
+      swfAnimatorGlobalScript5Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
+
+      swfAnimatorGlobalScript5REd = new JWFNumberField();
+      swfAnimatorGlobalScript5REd.setBounds(213, 92, 100, 24);
+      panel_85.add(swfAnimatorGlobalScript5REd);
+      swfAnimatorGlobalScript5REd.setValue(1.0);
+      swfAnimatorGlobalScript5REd.setWithMotionCurve(true);
+      swfAnimatorGlobalScript5REd.setValueStep(1.0);
+      swfAnimatorGlobalScript5REd.setPreferredSize(new Dimension(100, 24));
+      swfAnimatorGlobalScript5REd.setMotionPropertyName("globalScript5");
+      swfAnimatorGlobalScript5REd.setLinkedLabelControlName("lblGlobalScript_3");
+      swfAnimatorGlobalScript5REd.setFont(new Font("Dialog", Font.PLAIN, 10));
+
+      lblGlobalScript_4 = new JLabel();
+      lblGlobalScript_4.setText("06");
+      lblGlobalScript_4.setPreferredSize(new Dimension(94, 22));
+      lblGlobalScript_4.setName("lblGlobalScript_4");
+      lblGlobalScript_4.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblGlobalScript_4.setBounds(0, 115, 21, 22);
+      panel_85.add(lblGlobalScript_4);
+
+      swfAnimatorGlobalScript6Cmb = new JComboBox();
+      swfAnimatorGlobalScript6Cmb.setPreferredSize(new Dimension(275, 22));
+      swfAnimatorGlobalScript6Cmb.setMaximumRowCount(16);
+      swfAnimatorGlobalScript6Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      swfAnimatorGlobalScript6Cmb.setBounds(22, 115, 186, 24);
+      swfAnimatorGlobalScript6Cmb.addItemListener(new ItemListener() {
+        public void itemStateChanged(ItemEvent e) {
+          if (tinaController != null && tinaController.getSwfAnimatorCtrl() != null) {
+            tinaController.getSwfAnimatorCtrl().moviePropertyChanged();
+          }
         }
       });
-      swfAnimatorGlobalScript4REd.addChangeListener(new ChangeListener() {
+      panel_85.add(swfAnimatorGlobalScript6Cmb);
+
+      swfAnimatorGlobalScript6REd = new JWFNumberField();
+      swfAnimatorGlobalScript6REd.setWithMotionCurve(true);
+      swfAnimatorGlobalScript6REd.setValueStep(1.0);
+      swfAnimatorGlobalScript6REd.setValue(1.0);
+      swfAnimatorGlobalScript6REd.setPreferredSize(new Dimension(100, 24));
+      swfAnimatorGlobalScript6REd.setMotionPropertyName("globalScript6");
+      swfAnimatorGlobalScript6REd.setLinkedLabelControlName("lblGlobalScript_4");
+      swfAnimatorGlobalScript6REd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      swfAnimatorGlobalScript6REd.setBounds(213, 115, 100, 24);
+      swfAnimatorGlobalScript6REd.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getSwfAnimatorCtrl().editGlobalMotionCurve(getSwfAnimatorGlobalScript6REd());
+        }
+      });
+      swfAnimatorGlobalScript6REd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           if (tinaController != null && tinaController.getSwfAnimatorCtrl() != null) {
             tinaController.getSwfAnimatorCtrl().moviePropertyChanged();
           }
         }
       });
-      panel_10.add(swfAnimatorGlobalScript4REd);
+      panel_85.add(swfAnimatorGlobalScript6REd);
 
-      swfAnimatorGlobalScript5REd = new JWFNumberField();
-      swfAnimatorGlobalScript5REd.setValue(1.0);
-      swfAnimatorGlobalScript5REd.setWithMotionCurve(true);
-      swfAnimatorGlobalScript5REd.setValueStep(1.0);
-      swfAnimatorGlobalScript5REd.setSize(new Dimension(100, 24));
-      swfAnimatorGlobalScript5REd.setPreferredSize(new Dimension(100, 24));
-      swfAnimatorGlobalScript5REd.setMotionPropertyName("globalScript5");
-      swfAnimatorGlobalScript5REd.setLocation(new Point(100, 4));
-      swfAnimatorGlobalScript5REd.setLinkedLabelControlName("lblGlobalScript_3");
-      swfAnimatorGlobalScript5REd.setFont(new Font("Dialog", Font.PLAIN, 10));
-      swfAnimatorGlobalScript5REd.setBounds(291, 111, 100, 24);
+      swfAnimatorGlobalScript7Cmb = new JComboBox();
+      swfAnimatorGlobalScript7Cmb.setPreferredSize(new Dimension(275, 22));
+      swfAnimatorGlobalScript7Cmb.setMaximumRowCount(16);
+      swfAnimatorGlobalScript7Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      swfAnimatorGlobalScript7Cmb.setBounds(22, 138, 186, 24);
+      swfAnimatorGlobalScript7Cmb.addItemListener(new ItemListener() {
+        public void itemStateChanged(ItemEvent e) {
+          if (tinaController != null && tinaController.getSwfAnimatorCtrl() != null) {
+            tinaController.getSwfAnimatorCtrl().moviePropertyChanged();
+          }
+        }
+      });
+      panel_85.add(swfAnimatorGlobalScript7Cmb);
+
+      lblGlobalScript_5 = new JLabel();
+      lblGlobalScript_5.setText("07");
+      lblGlobalScript_5.setPreferredSize(new Dimension(94, 22));
+      lblGlobalScript_5.setName("lblGlobalScript_5");
+      lblGlobalScript_5.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblGlobalScript_5.setBounds(0, 138, 21, 22);
+      panel_85.add(lblGlobalScript_5);
+
+      swfAnimatorGlobalScript7REd = new JWFNumberField();
+      swfAnimatorGlobalScript7REd.setWithMotionCurve(true);
+      swfAnimatorGlobalScript7REd.setValueStep(1.0);
+      swfAnimatorGlobalScript7REd.setValue(1.0);
+      swfAnimatorGlobalScript7REd.setPreferredSize(new Dimension(100, 24));
+      swfAnimatorGlobalScript7REd.setMotionPropertyName("globalScript7");
+      swfAnimatorGlobalScript7REd.setLinkedLabelControlName("lblGlobalScript_5");
+      swfAnimatorGlobalScript7REd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      swfAnimatorGlobalScript7REd.setBounds(213, 138, 100, 24);
+      swfAnimatorGlobalScript7REd.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getSwfAnimatorCtrl().editGlobalMotionCurve(getSwfAnimatorGlobalScript7REd());
+        }
+      });
+      swfAnimatorGlobalScript7REd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null && tinaController.getSwfAnimatorCtrl() != null) {
+            tinaController.getSwfAnimatorCtrl().moviePropertyChanged();
+          }
+        }
+      });
+      panel_85.add(swfAnimatorGlobalScript7REd);
+
+      lblGlobalScript_6 = new JLabel();
+      lblGlobalScript_6.setText("08");
+      lblGlobalScript_6.setPreferredSize(new Dimension(94, 22));
+      lblGlobalScript_6.setName("lblGlobalScript_6");
+      lblGlobalScript_6.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblGlobalScript_6.setBounds(0, 161, 21, 22);
+      panel_85.add(lblGlobalScript_6);
+
+      swfAnimatorGlobalScript8Cmb = new JComboBox();
+      swfAnimatorGlobalScript8Cmb.setPreferredSize(new Dimension(275, 22));
+      swfAnimatorGlobalScript8Cmb.setMaximumRowCount(16);
+      swfAnimatorGlobalScript8Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      swfAnimatorGlobalScript8Cmb.setBounds(22, 161, 186, 24);
+      swfAnimatorGlobalScript8Cmb.addItemListener(new ItemListener() {
+        public void itemStateChanged(ItemEvent e) {
+          if (tinaController != null && tinaController.getSwfAnimatorCtrl() != null) {
+            tinaController.getSwfAnimatorCtrl().moviePropertyChanged();
+          }
+        }
+      });
+      panel_85.add(swfAnimatorGlobalScript8Cmb);
+
+      swfAnimatorGlobalScript8REd = new JWFNumberField();
+      swfAnimatorGlobalScript8REd.setWithMotionCurve(true);
+      swfAnimatorGlobalScript8REd.setValueStep(1.0);
+      swfAnimatorGlobalScript8REd.setValue(1.0);
+      swfAnimatorGlobalScript8REd.setPreferredSize(new Dimension(100, 24));
+      swfAnimatorGlobalScript8REd.setMotionPropertyName("globalScript8");
+      swfAnimatorGlobalScript8REd.setLinkedLabelControlName("lblGlobalScript_6");
+      swfAnimatorGlobalScript8REd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      swfAnimatorGlobalScript8REd.setBounds(213, 161, 100, 24);
+      swfAnimatorGlobalScript8REd.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getSwfAnimatorCtrl().editGlobalMotionCurve(getSwfAnimatorGlobalScript8REd());
+        }
+      });
+      swfAnimatorGlobalScript8REd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null && tinaController.getSwfAnimatorCtrl() != null) {
+            tinaController.getSwfAnimatorCtrl().moviePropertyChanged();
+          }
+        }
+      });
+      panel_85.add(swfAnimatorGlobalScript8REd);
+
+      lblGlobalScript_7 = new JLabel();
+      lblGlobalScript_7.setText("09");
+      lblGlobalScript_7.setPreferredSize(new Dimension(94, 22));
+      lblGlobalScript_7.setName("lblGlobalScript_7");
+      lblGlobalScript_7.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblGlobalScript_7.setBounds(0, 184, 21, 22);
+      panel_85.add(lblGlobalScript_7);
+
+      swfAnimatorGlobalScript9Cmb = new JComboBox();
+      swfAnimatorGlobalScript9Cmb.setPreferredSize(new Dimension(275, 22));
+      swfAnimatorGlobalScript9Cmb.setMaximumRowCount(16);
+      swfAnimatorGlobalScript9Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      swfAnimatorGlobalScript9Cmb.setBounds(22, 184, 186, 24);
+      swfAnimatorGlobalScript9Cmb.addItemListener(new ItemListener() {
+        public void itemStateChanged(ItemEvent e) {
+          if (tinaController != null && tinaController.getSwfAnimatorCtrl() != null) {
+            tinaController.getSwfAnimatorCtrl().moviePropertyChanged();
+          }
+        }
+      });
+      panel_85.add(swfAnimatorGlobalScript9Cmb);
+
+      swfAnimatorGlobalScript9REd = new JWFNumberField();
+      swfAnimatorGlobalScript9REd.setWithMotionCurve(true);
+      swfAnimatorGlobalScript9REd.setValueStep(1.0);
+      swfAnimatorGlobalScript9REd.setValue(1.0);
+      swfAnimatorGlobalScript9REd.setPreferredSize(new Dimension(100, 24));
+      swfAnimatorGlobalScript9REd.setMotionPropertyName("globalScript9");
+      swfAnimatorGlobalScript9REd.setLinkedLabelControlName("lblGlobalScript_7");
+      swfAnimatorGlobalScript9REd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      swfAnimatorGlobalScript9REd.setBounds(213, 184, 100, 24);
+      swfAnimatorGlobalScript9REd.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getSwfAnimatorCtrl().editGlobalMotionCurve(getSwfAnimatorGlobalScript9REd());
+        }
+      });
+      swfAnimatorGlobalScript9REd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null && tinaController.getSwfAnimatorCtrl() != null) {
+            tinaController.getSwfAnimatorCtrl().moviePropertyChanged();
+          }
+        }
+      });
+      panel_85.add(swfAnimatorGlobalScript9REd);
+
+      lblGlobalScript_8 = new JLabel();
+      lblGlobalScript_8.setText("10");
+      lblGlobalScript_8.setPreferredSize(new Dimension(94, 22));
+      lblGlobalScript_8.setName("lblGlobalScript_8");
+      lblGlobalScript_8.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblGlobalScript_8.setBounds(0, 207, 21, 22);
+      panel_85.add(lblGlobalScript_8);
+
+      swfAnimatorGlobalScript10Cmb = new JComboBox();
+      swfAnimatorGlobalScript10Cmb.setPreferredSize(new Dimension(275, 22));
+      swfAnimatorGlobalScript10Cmb.setMaximumRowCount(16);
+      swfAnimatorGlobalScript10Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      swfAnimatorGlobalScript10Cmb.setBounds(22, 207, 186, 24);
+      swfAnimatorGlobalScript10Cmb.addItemListener(new ItemListener() {
+        public void itemStateChanged(ItemEvent e) {
+          if (tinaController != null && tinaController.getSwfAnimatorCtrl() != null) {
+            tinaController.getSwfAnimatorCtrl().moviePropertyChanged();
+          }
+        }
+      });
+      panel_85.add(swfAnimatorGlobalScript10Cmb);
+
+      swfAnimatorGlobalScript10REd = new JWFNumberField();
+      swfAnimatorGlobalScript10REd.setWithMotionCurve(true);
+      swfAnimatorGlobalScript10REd.setValueStep(1.0);
+      swfAnimatorGlobalScript10REd.setValue(1.0);
+      swfAnimatorGlobalScript10REd.setPreferredSize(new Dimension(100, 24));
+      swfAnimatorGlobalScript10REd.setMotionPropertyName("globalScript10");
+      swfAnimatorGlobalScript10REd.setLinkedLabelControlName("lblGlobalScript_8");
+      swfAnimatorGlobalScript10REd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      swfAnimatorGlobalScript10REd.setBounds(213, 207, 100, 24);
+      swfAnimatorGlobalScript10REd.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getSwfAnimatorCtrl().editGlobalMotionCurve(getSwfAnimatorGlobalScript10REd());
+        }
+      });
+      swfAnimatorGlobalScript10REd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null && tinaController.getSwfAnimatorCtrl() != null) {
+            tinaController.getSwfAnimatorCtrl().moviePropertyChanged();
+          }
+        }
+      });
+      panel_85.add(swfAnimatorGlobalScript10REd);
+
+      JLabel lblGlobalScript_9 = new JLabel();
+      lblGlobalScript_9.setText("11");
+      lblGlobalScript_9.setPreferredSize(new Dimension(94, 22));
+      lblGlobalScript_9.setName("lblGlobalScript_9");
+      lblGlobalScript_9.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblGlobalScript_9.setBounds(0, 230, 21, 22);
+      panel_85.add(lblGlobalScript_9);
+
+      swfAnimatorGlobalScript11Cmb = new JComboBox();
+      swfAnimatorGlobalScript11Cmb.setPreferredSize(new Dimension(275, 22));
+      swfAnimatorGlobalScript11Cmb.setMaximumRowCount(16);
+      swfAnimatorGlobalScript11Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      swfAnimatorGlobalScript11Cmb.setBounds(22, 230, 186, 24);
+      swfAnimatorGlobalScript11Cmb.addItemListener(new ItemListener() {
+        public void itemStateChanged(ItemEvent e) {
+          if (tinaController != null && tinaController.getSwfAnimatorCtrl() != null) {
+            tinaController.getSwfAnimatorCtrl().moviePropertyChanged();
+          }
+        }
+      });
+      panel_85.add(swfAnimatorGlobalScript11Cmb);
+
+      swfAnimatorGlobalScript11REd = new JWFNumberField();
+      swfAnimatorGlobalScript11REd.setWithMotionCurve(true);
+      swfAnimatorGlobalScript11REd.setValueStep(1.0);
+      swfAnimatorGlobalScript11REd.setValue(1.0);
+      swfAnimatorGlobalScript11REd.setPreferredSize(new Dimension(100, 24));
+      swfAnimatorGlobalScript11REd.setMotionPropertyName("globalScript11");
+      swfAnimatorGlobalScript11REd.setLinkedLabelControlName("lblGlobalScript_9");
+      swfAnimatorGlobalScript11REd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      swfAnimatorGlobalScript11REd.setBounds(213, 230, 100, 24);
+      swfAnimatorGlobalScript11REd.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getSwfAnimatorCtrl().editGlobalMotionCurve(getSwfAnimatorGlobalScript11REd());
+        }
+      });
+      swfAnimatorGlobalScript11REd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null && tinaController.getSwfAnimatorCtrl() != null) {
+            tinaController.getSwfAnimatorCtrl().moviePropertyChanged();
+          }
+        }
+      });
+      panel_85.add(swfAnimatorGlobalScript11REd);
+
+      JLabel lblGlobalScript_10 = new JLabel();
+      lblGlobalScript_10.setText("12");
+      lblGlobalScript_10.setPreferredSize(new Dimension(94, 22));
+      lblGlobalScript_10.setName("lblGlobalScript_10");
+      lblGlobalScript_10.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblGlobalScript_10.setBounds(0, 253, 21, 22);
+      panel_85.add(lblGlobalScript_10);
+
+      swfAnimatorGlobalScript12Cmb = new JComboBox();
+      swfAnimatorGlobalScript12Cmb.setPreferredSize(new Dimension(275, 22));
+      swfAnimatorGlobalScript12Cmb.setMaximumRowCount(16);
+      swfAnimatorGlobalScript12Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      swfAnimatorGlobalScript12Cmb.setBounds(22, 253, 186, 24);
+      swfAnimatorGlobalScript12Cmb.addItemListener(new ItemListener() {
+        public void itemStateChanged(ItemEvent e) {
+          if (tinaController != null && tinaController.getSwfAnimatorCtrl() != null) {
+            tinaController.getSwfAnimatorCtrl().moviePropertyChanged();
+          }
+        }
+      });
+      panel_85.add(swfAnimatorGlobalScript12Cmb);
+
+      swfAnimatorGlobalScript12REd = new JWFNumberField();
+      swfAnimatorGlobalScript12REd.setWithMotionCurve(true);
+      swfAnimatorGlobalScript12REd.setValueStep(1.0);
+      swfAnimatorGlobalScript12REd.setValue(1.0);
+      swfAnimatorGlobalScript12REd.setPreferredSize(new Dimension(100, 24));
+      swfAnimatorGlobalScript12REd.setMotionPropertyName("globalScript12");
+      swfAnimatorGlobalScript12REd.setLinkedLabelControlName("lblGlobalScript_10");
+      swfAnimatorGlobalScript12REd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      swfAnimatorGlobalScript12REd.setBounds(213, 253, 100, 24);
+      swfAnimatorGlobalScript12REd.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getSwfAnimatorCtrl().editGlobalMotionCurve(getSwfAnimatorGlobalScript12REd());
+        }
+      });
+      swfAnimatorGlobalScript12REd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null && tinaController.getSwfAnimatorCtrl() != null) {
+            tinaController.getSwfAnimatorCtrl().moviePropertyChanged();
+          }
+        }
+      });
+      panel_85.add(swfAnimatorGlobalScript12REd);
+      panel_10.add(getScrollPane_9());
+      panel_10.add(getPanel_87());
       swfAnimatorGlobalScript5REd.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
           tinaController.getSwfAnimatorCtrl().editGlobalMotionCurve(getSwfAnimatorGlobalScript5REd());
@@ -6145,187 +6277,82 @@ public class TinaInternalFrame extends JInternalFrame {
           }
         }
       });
-      panel_10.add(swfAnimatorGlobalScript5REd);
-
-      swfAnimatorXFormScript1REd = new JWFNumberField();
-      swfAnimatorXFormScript1REd.setValue(1.0);
-      swfAnimatorXFormScript1REd.setWithMotionCurve(true);
-      swfAnimatorXFormScript1REd.setValueStep(1.0);
-      swfAnimatorXFormScript1REd.setSize(new Dimension(100, 24));
-      swfAnimatorXFormScript1REd.setPreferredSize(new Dimension(100, 24));
-      swfAnimatorXFormScript1REd.setMotionPropertyName("xFormScript1");
-      swfAnimatorXFormScript1REd.setLocation(new Point(100, 4));
-      swfAnimatorXFormScript1REd.setLinkedLabelControlName("animateXFormScriptLbl");
-      swfAnimatorXFormScript1REd.setFont(new Font("Dialog", Font.PLAIN, 10));
-      swfAnimatorXFormScript1REd.setBounds(291, 138, 100, 24);
-      swfAnimatorXFormScript1REd.addActionListener(new ActionListener() {
+      swfAnimatorGlobalScript5Cmb.addItemListener(new ItemListener() {
+        public void itemStateChanged(ItemEvent e) {
+          if (tinaController != null && tinaController.getSwfAnimatorCtrl() != null) {
+            tinaController.getSwfAnimatorCtrl().moviePropertyChanged();
+          }
+        }
+      });
+      swfAnimatorGlobalScript4REd.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
-          tinaController.getSwfAnimatorCtrl().editXFormMotionCurve(getSwfAnimatorXFormScript1REd());
+          tinaController.getSwfAnimatorCtrl().editGlobalMotionCurve(getSwfAnimatorGlobalScript4REd());
         }
       });
-      swfAnimatorXFormScript1REd.addChangeListener(new ChangeListener() {
+      swfAnimatorGlobalScript4REd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           if (tinaController != null && tinaController.getSwfAnimatorCtrl() != null) {
             tinaController.getSwfAnimatorCtrl().moviePropertyChanged();
           }
         }
       });
-      panel_10.add(swfAnimatorXFormScript1REd);
-
-      swfAnimatorXFormScript2REd = new JWFNumberField();
-      swfAnimatorXFormScript2REd.setValue(1.0);
-      swfAnimatorXFormScript2REd.setWithMotionCurve(true);
-      swfAnimatorXFormScript2REd.setValueStep(1.0);
-      swfAnimatorXFormScript2REd.setSize(new Dimension(100, 24));
-      swfAnimatorXFormScript2REd.setPreferredSize(new Dimension(100, 24));
-      swfAnimatorXFormScript2REd.setMotionPropertyName("xFormScript2");
-      swfAnimatorXFormScript2REd.setLocation(new Point(100, 4));
-      swfAnimatorXFormScript2REd.setLinkedLabelControlName("lblXformScript");
-      swfAnimatorXFormScript2REd.setFont(new Font("Dialog", Font.PLAIN, 10));
-      swfAnimatorXFormScript2REd.setBounds(291, 161, 100, 24);
-      swfAnimatorXFormScript2REd.addActionListener(new ActionListener() {
+      swfAnimatorGlobalScript4Cmb.addItemListener(new ItemListener() {
+        public void itemStateChanged(ItemEvent e) {
+          if (tinaController != null && tinaController.getSwfAnimatorCtrl() != null) {
+            tinaController.getSwfAnimatorCtrl().moviePropertyChanged();
+          }
+        }
+      });
+      swfAnimatorGlobalScript3REd.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
-          tinaController.getSwfAnimatorCtrl().editXFormMotionCurve(getSwfAnimatorXFormScript2REd());
+          tinaController.getSwfAnimatorCtrl().editGlobalMotionCurve(getSwfAnimatorGlobalScript3REd());
         }
       });
-      swfAnimatorXFormScript2REd.addChangeListener(new ChangeListener() {
+      swfAnimatorGlobalScript3REd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           if (tinaController != null && tinaController.getSwfAnimatorCtrl() != null) {
             tinaController.getSwfAnimatorCtrl().moviePropertyChanged();
           }
         }
       });
-      panel_10.add(swfAnimatorXFormScript2REd);
-
-      swfAnimatorXFormScript3REd = new JWFNumberField();
-      swfAnimatorXFormScript3REd.setValue(1.0);
-      swfAnimatorXFormScript3REd.setWithMotionCurve(true);
-      swfAnimatorXFormScript3REd.setValueStep(1.0);
-      swfAnimatorXFormScript3REd.setSize(new Dimension(100, 24));
-      swfAnimatorXFormScript3REd.setPreferredSize(new Dimension(100, 24));
-      swfAnimatorXFormScript3REd.setMotionPropertyName("xFormScript3");
-      swfAnimatorXFormScript3REd.setLocation(new Point(100, 4));
-      swfAnimatorXFormScript3REd.setLinkedLabelControlName("lblXformScript_1");
-      swfAnimatorXFormScript3REd.setFont(new Font("Dialog", Font.PLAIN, 10));
-      swfAnimatorXFormScript3REd.setBounds(291, 184, 100, 24);
-      swfAnimatorXFormScript3REd.addActionListener(new ActionListener() {
+      swfAnimatorGlobalScript3Cmb.addItemListener(new ItemListener() {
+        public void itemStateChanged(ItemEvent e) {
+          if (tinaController != null && tinaController.getSwfAnimatorCtrl() != null) {
+            tinaController.getSwfAnimatorCtrl().moviePropertyChanged();
+          }
+        }
+      });
+      swfAnimatorGlobalScript2REd.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
-          tinaController.getSwfAnimatorCtrl().editXFormMotionCurve(getSwfAnimatorXFormScript3REd());
+          tinaController.getSwfAnimatorCtrl().editGlobalMotionCurve(getSwfAnimatorGlobalScript2REd());
         }
       });
-      swfAnimatorXFormScript3REd.addChangeListener(new ChangeListener() {
+      swfAnimatorGlobalScript2REd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           if (tinaController != null && tinaController.getSwfAnimatorCtrl() != null) {
             tinaController.getSwfAnimatorCtrl().moviePropertyChanged();
           }
         }
       });
-      panel_10.add(swfAnimatorXFormScript3REd);
-
-      swfAnimatorXFormScript4REd = new JWFNumberField();
-      swfAnimatorXFormScript4REd.setValue(1.0);
-      swfAnimatorXFormScript4REd.setWithMotionCurve(true);
-      swfAnimatorXFormScript4REd.setValueStep(1.0);
-      swfAnimatorXFormScript4REd.setSize(new Dimension(100, 24));
-      swfAnimatorXFormScript4REd.setPreferredSize(new Dimension(100, 24));
-      swfAnimatorXFormScript4REd.setMotionPropertyName("xFormScript4");
-      swfAnimatorXFormScript4REd.setLocation(new Point(100, 4));
-      swfAnimatorXFormScript4REd.setLinkedLabelControlName("lblXformScript_2");
-      swfAnimatorXFormScript4REd.setFont(new Font("Dialog", Font.PLAIN, 10));
-      swfAnimatorXFormScript4REd.setBounds(291, 207, 100, 24);
-      swfAnimatorXFormScript4REd.addActionListener(new ActionListener() {
+      swfAnimatorGlobalScript2Cmb.addItemListener(new ItemListener() {
+        public void itemStateChanged(ItemEvent e) {
+          if (tinaController != null && tinaController.getSwfAnimatorCtrl() != null) {
+            tinaController.getSwfAnimatorCtrl().moviePropertyChanged();
+          }
+        }
+      });
+      swfAnimatorGlobalScript1REd.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
-          tinaController.getSwfAnimatorCtrl().editXFormMotionCurve(getSwfAnimatorXFormScript4REd());
+          tinaController.getSwfAnimatorCtrl().editGlobalMotionCurve(getSwfAnimatorGlobalScript1REd());
         }
       });
-      swfAnimatorXFormScript4REd.addChangeListener(new ChangeListener() {
+      swfAnimatorGlobalScript1REd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           if (tinaController != null && tinaController.getSwfAnimatorCtrl() != null) {
             tinaController.getSwfAnimatorCtrl().moviePropertyChanged();
           }
         }
       });
-      panel_10.add(swfAnimatorXFormScript4REd);
-
-      swfAnimatorXFormScript5REd = new JWFNumberField();
-      swfAnimatorXFormScript5REd.setValue(1.0);
-      swfAnimatorXFormScript5REd.setWithMotionCurve(true);
-      swfAnimatorXFormScript5REd.setValueStep(1.0);
-      swfAnimatorXFormScript5REd.setSize(new Dimension(100, 24));
-      swfAnimatorXFormScript5REd.setPreferredSize(new Dimension(100, 24));
-      swfAnimatorXFormScript5REd.setMotionPropertyName("xFormScript5");
-      swfAnimatorXFormScript5REd.setLocation(new Point(100, 4));
-      swfAnimatorXFormScript5REd.setLinkedLabelControlName("lblXformScript_3");
-      swfAnimatorXFormScript5REd.setFont(new Font("Dialog", Font.PLAIN, 10));
-      swfAnimatorXFormScript5REd.setBounds(291, 230, 100, 24);
-      swfAnimatorXFormScript5REd.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-          tinaController.getSwfAnimatorCtrl().editXFormMotionCurve(getSwfAnimatorXFormScript5REd());
-        }
-      });
-      swfAnimatorXFormScript5REd.addChangeListener(new ChangeListener() {
-        public void stateChanged(ChangeEvent e) {
-          if (tinaController != null && tinaController.getSwfAnimatorCtrl() != null) {
-            tinaController.getSwfAnimatorCtrl().moviePropertyChanged();
-          }
-        }
-      });
-      panel_10.add(swfAnimatorXFormScript5REd);
-
-      swfAnimatorMotionBlurLengthREd = new JWFNumberField();
-      swfAnimatorMotionBlurLengthREd.setValueStep(1.0);
-      swfAnimatorMotionBlurLengthREd.setOnlyIntegers(true);
-      swfAnimatorMotionBlurLengthREd.setText("12");
-      swfAnimatorMotionBlurLengthREd.setPreferredSize(new Dimension(56, 22));
-      swfAnimatorMotionBlurLengthREd.setMaxValue(120.0);
-      swfAnimatorMotionBlurLengthREd.setHasMinValue(true);
-      swfAnimatorMotionBlurLengthREd.setHasMaxValue(true);
-      swfAnimatorMotionBlurLengthREd.setFont(new Font("Dialog", Font.PLAIN, 10));
-      swfAnimatorMotionBlurLengthREd.setEditable(true);
-      swfAnimatorMotionBlurLengthREd.setBounds(117, 288, 70, 24);
-      swfAnimatorMotionBlurLengthREd.addChangeListener(new ChangeListener() {
-        public void stateChanged(ChangeEvent e) {
-          if (tinaController != null && tinaController.getSwfAnimatorCtrl() != null) {
-            tinaController.getSwfAnimatorCtrl().moviePropertyChanged();
-          }
-        }
-      });
-      panel_10.add(swfAnimatorMotionBlurLengthREd);
-
-      JLabel lblMotionBlurLength = new JLabel();
-      lblMotionBlurLength.setText("Motion blur length");
-      lblMotionBlurLength.setPreferredSize(new Dimension(94, 22));
-      lblMotionBlurLength.setHorizontalAlignment(SwingConstants.LEFT);
-      lblMotionBlurLength.setFont(new Font("Dialog", Font.BOLD, 10));
-      lblMotionBlurLength.setBounds(12, 288, 101, 22);
-      panel_10.add(lblMotionBlurLength);
-
-      JLabel lblMotionBlurTimestep = new JLabel();
-      lblMotionBlurTimestep.setText("Motion blur timestep");
-      lblMotionBlurTimestep.setPreferredSize(new Dimension(94, 22));
-      lblMotionBlurTimestep.setHorizontalAlignment(SwingConstants.LEFT);
-      lblMotionBlurTimestep.setFont(new Font("Dialog", Font.BOLD, 10));
-      lblMotionBlurTimestep.setBounds(217, 288, 101, 22);
-      panel_10.add(lblMotionBlurTimestep);
-
-      swfAnimatorMotionBlurTimeStepREd = new JWFNumberField();
-      swfAnimatorMotionBlurTimeStepREd.setValueStep(0.1);
-      swfAnimatorMotionBlurTimeStepREd.setText("0.15");
-      swfAnimatorMotionBlurTimeStepREd.setPreferredSize(new Dimension(56, 22));
-      swfAnimatorMotionBlurTimeStepREd.setMaxValue(1.0);
-      swfAnimatorMotionBlurTimeStepREd.setHasMinValue(true);
-      swfAnimatorMotionBlurTimeStepREd.setHasMaxValue(true);
-      swfAnimatorMotionBlurTimeStepREd.setFont(new Font("Dialog", Font.PLAIN, 10));
-      swfAnimatorMotionBlurTimeStepREd.setEditable(true);
-      swfAnimatorMotionBlurTimeStepREd.setBounds(322, 288, 70, 24);
-      swfAnimatorMotionBlurTimeStepREd.addChangeListener(new ChangeListener() {
-        public void stateChanged(ChangeEvent e) {
-          if (tinaController != null && tinaController.getSwfAnimatorCtrl() != null) {
-            tinaController.getSwfAnimatorCtrl().moviePropertyChanged();
-          }
-        }
-      });
-      panel_10.add(swfAnimatorMotionBlurTimeStepREd);
 
       JPanel panel_11 = new JPanel();
       panel_11.setBorder(null);
@@ -6367,7 +6394,6 @@ public class TinaInternalFrame extends JInternalFrame {
     if (swfAnimatorFramesREd == null) {
       swfAnimatorFramesREd = new JWFNumberField();
       swfAnimatorFramesREd.setOnlyIntegers(true);
-      swfAnimatorFramesREd.setBounds(117, 262, 70, 24);
       swfAnimatorFramesREd.setEditable(false);
       swfAnimatorFramesREd.setPreferredSize(new Dimension(56, 22));
       swfAnimatorFramesREd.setText("60");
@@ -6384,8 +6410,8 @@ public class TinaInternalFrame extends JInternalFrame {
   private JComboBox getSwfAnimatorGlobalScript1Cmb() {
     if (swfAnimatorGlobalScript1Cmb == null) {
       swfAnimatorGlobalScript1Cmb = new JComboBox();
+      swfAnimatorGlobalScript1Cmb.setBounds(22, 0, 186, 24);
       swfAnimatorGlobalScript1Cmb.setMaximumRowCount(16);
-      swfAnimatorGlobalScript1Cmb.setBounds(116, 19, 175, 24);
       swfAnimatorGlobalScript1Cmb.setPreferredSize(new Dimension(275, 22));
       swfAnimatorGlobalScript1Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
       swfAnimatorGlobalScript1Cmb.addItemListener(new ItemListener() {
@@ -6407,8 +6433,8 @@ public class TinaInternalFrame extends JInternalFrame {
   private JComboBox getSwfAnimatorXFormScript1Cmb() {
     if (swfAnimatorXFormScript1Cmb == null) {
       swfAnimatorXFormScript1Cmb = new JComboBox();
+      swfAnimatorXFormScript1Cmb.setBounds(22, 0, 186, 24);
       swfAnimatorXFormScript1Cmb.setMaximumRowCount(16);
-      swfAnimatorXFormScript1Cmb.setBounds(116, 138, 175, 24);
       swfAnimatorXFormScript1Cmb.setPreferredSize(new Dimension(275, 22));
       swfAnimatorXFormScript1Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
       swfAnimatorXFormScript1Cmb.addItemListener(new ItemListener() {
@@ -9667,6 +9693,42 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton swfAnimatorGenRandomBatchBtn;
   private JComboBox swfAnimatorRandGenCmb;
   private JPanel panel_84;
+  private JScrollPane scrollPane_9;
+  private JPanel panel_86;
+  private JPanel panel_87;
+  private JComboBox swfAnimatorXFormScript6Cmb;
+  private JComboBox swfAnimatorXFormScript7Cmb;
+  private JComboBox swfAnimatorXFormScript8Cmb;
+  private JComboBox swfAnimatorXFormScript9Cmb;
+  private JComboBox swfAnimatorXFormScript10Cmb;
+  private JComboBox swfAnimatorXFormScript11Cmb;
+  private JComboBox swfAnimatorXFormScript12Cmb;
+  private JWFNumberField swfAnimatorXFormScript6REd;
+  private JWFNumberField swfAnimatorXFormScript7REd;
+  private JWFNumberField swfAnimatorXFormScript8REd;
+  private JWFNumberField swfAnimatorXFormScript9REd;
+  private JWFNumberField swfAnimatorXFormScript10REd;
+  private JWFNumberField swfAnimatorXFormScript11REd;
+  private JWFNumberField swfAnimatorXFormScript12REd;
+  private JLabel lblGlobalScript_4;
+  private JLabel lblGlobalScript_5;
+  private JLabel lblGlobalScript_6;
+  private JLabel lblGlobalScript_7;
+  private JLabel lblGlobalScript_8;
+  private JComboBox swfAnimatorGlobalScript6Cmb;
+  private JComboBox swfAnimatorGlobalScript7Cmb;
+  private JComboBox swfAnimatorGlobalScript8Cmb;
+  private JComboBox swfAnimatorGlobalScript9Cmb;
+  private JComboBox swfAnimatorGlobalScript10Cmb;
+  private JComboBox swfAnimatorGlobalScript11Cmb;
+  private JComboBox swfAnimatorGlobalScript12Cmb;
+  private JWFNumberField swfAnimatorGlobalScript6REd;
+  private JWFNumberField swfAnimatorGlobalScript7REd;
+  private JWFNumberField swfAnimatorGlobalScript8REd;
+  private JWFNumberField swfAnimatorGlobalScript9REd;
+  private JWFNumberField swfAnimatorGlobalScript10REd;
+  private JWFNumberField swfAnimatorGlobalScript11REd;
+  private JWFNumberField swfAnimatorGlobalScript12REd;
 
   /**
    * This method initializes renderBatchJobsScrollPane	
@@ -17198,6 +17260,810 @@ public class TinaInternalFrame extends JInternalFrame {
       swfAnimatorFrameREd.setFont(new Font("Dialog", Font.PLAIN, 10));
     }
     return panel_84;
+  }
+
+  private JScrollPane getScrollPane_9() {
+    if (scrollPane_9 == null) {
+      scrollPane_9 = new JScrollPane();
+      scrollPane_9.setBorder(new TitledBorder(null, "XForm scripts", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+      scrollPane_9.setViewportView(getPanel_86());
+    }
+    return scrollPane_9;
+  }
+
+  private JPanel getPanel_86() {
+    if (panel_86 == null) {
+      panel_86 = new JPanel();
+      panel_86.setPreferredSize(new Dimension(315, 280));
+      panel_86.setLayout(null);
+      animateXFormScriptLbl = new JLabel();
+      animateXFormScriptLbl.setBounds(0, 0, 21, 22);
+      panel_86.add(animateXFormScriptLbl);
+      animateXFormScriptLbl.setName("animateXFormScriptLbl");
+      animateXFormScriptLbl.setPreferredSize(new Dimension(94, 22));
+      animateXFormScriptLbl.setText("01");
+      animateXFormScriptLbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      panel_86.add(getSwfAnimatorXFormScript1Cmb());
+
+      swfAnimatorXFormScript1REd = new JWFNumberField();
+      swfAnimatorXFormScript1REd.setBounds(213, 0, 100, 24);
+      panel_86.add(swfAnimatorXFormScript1REd);
+      swfAnimatorXFormScript1REd.setValue(1.0);
+      swfAnimatorXFormScript1REd.setWithMotionCurve(true);
+      swfAnimatorXFormScript1REd.setValueStep(1.0);
+      swfAnimatorXFormScript1REd.setPreferredSize(new Dimension(100, 24));
+      swfAnimatorXFormScript1REd.setMotionPropertyName("xFormScript1");
+      swfAnimatorXFormScript1REd.setLinkedLabelControlName("animateXFormScriptLbl");
+      swfAnimatorXFormScript1REd.setFont(new Font("Dialog", Font.PLAIN, 10));
+
+      JLabel lblXformScript = new JLabel();
+      lblXformScript.setBounds(0, 23, 21, 22);
+      panel_86.add(lblXformScript);
+      lblXformScript.setName("lblXformScript");
+      lblXformScript.setText("02");
+      lblXformScript.setPreferredSize(new Dimension(94, 22));
+      lblXformScript.setFont(new Font("Dialog", Font.BOLD, 10));
+
+      swfAnimatorXFormScript2Cmb = new JComboBox();
+      swfAnimatorXFormScript2Cmb.setBounds(22, 23, 186, 24);
+      panel_86.add(swfAnimatorXFormScript2Cmb);
+      swfAnimatorXFormScript2Cmb.setMaximumRowCount(16);
+      swfAnimatorXFormScript2Cmb.setPreferredSize(new Dimension(275, 22));
+      swfAnimatorXFormScript2Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
+
+      swfAnimatorXFormScript2REd = new JWFNumberField();
+      swfAnimatorXFormScript2REd.setBounds(213, 23, 100, 24);
+      panel_86.add(swfAnimatorXFormScript2REd);
+      swfAnimatorXFormScript2REd.setValue(1.0);
+      swfAnimatorXFormScript2REd.setWithMotionCurve(true);
+      swfAnimatorXFormScript2REd.setValueStep(1.0);
+      swfAnimatorXFormScript2REd.setPreferredSize(new Dimension(100, 24));
+      swfAnimatorXFormScript2REd.setMotionPropertyName("xFormScript2");
+      swfAnimatorXFormScript2REd.setLinkedLabelControlName("lblXformScript");
+      swfAnimatorXFormScript2REd.setFont(new Font("Dialog", Font.PLAIN, 10));
+
+      JLabel lblXformScript_1 = new JLabel();
+      lblXformScript_1.setBounds(0, 46, 21, 22);
+      panel_86.add(lblXformScript_1);
+      lblXformScript_1.setName("lblXformScript_1");
+      lblXformScript_1.setText("03");
+      lblXformScript_1.setPreferredSize(new Dimension(94, 22));
+      lblXformScript_1.setFont(new Font("Dialog", Font.BOLD, 10));
+
+      swfAnimatorXFormScript3Cmb = new JComboBox();
+      swfAnimatorXFormScript3Cmb.setBounds(22, 46, 186, 24);
+      panel_86.add(swfAnimatorXFormScript3Cmb);
+      swfAnimatorXFormScript3Cmb.setMaximumRowCount(16);
+      swfAnimatorXFormScript3Cmb.setPreferredSize(new Dimension(275, 22));
+      swfAnimatorXFormScript3Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
+
+      swfAnimatorXFormScript3REd = new JWFNumberField();
+      swfAnimatorXFormScript3REd.setBounds(213, 46, 100, 24);
+      panel_86.add(swfAnimatorXFormScript3REd);
+      swfAnimatorXFormScript3REd.setValue(1.0);
+      swfAnimatorXFormScript3REd.setWithMotionCurve(true);
+      swfAnimatorXFormScript3REd.setValueStep(1.0);
+      swfAnimatorXFormScript3REd.setPreferredSize(new Dimension(100, 24));
+      swfAnimatorXFormScript3REd.setMotionPropertyName("xFormScript3");
+      swfAnimatorXFormScript3REd.setLinkedLabelControlName("lblXformScript_1");
+      swfAnimatorXFormScript3REd.setFont(new Font("Dialog", Font.PLAIN, 10));
+
+      swfAnimatorXFormScript4Cmb = new JComboBox();
+      swfAnimatorXFormScript4Cmb.setBounds(22, 69, 186, 24);
+      panel_86.add(swfAnimatorXFormScript4Cmb);
+      swfAnimatorXFormScript4Cmb.setMaximumRowCount(16);
+      swfAnimatorXFormScript4Cmb.setPreferredSize(new Dimension(275, 22));
+      swfAnimatorXFormScript4Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
+
+      JLabel lblXformScript_2 = new JLabel();
+      lblXformScript_2.setBounds(0, 69, 21, 22);
+      panel_86.add(lblXformScript_2);
+      lblXformScript_2.setName("lblXformScript_2");
+      lblXformScript_2.setText("04");
+      lblXformScript_2.setPreferredSize(new Dimension(94, 22));
+      lblXformScript_2.setFont(new Font("Dialog", Font.BOLD, 10));
+
+      JLabel lblXformScript_3 = new JLabel();
+      lblXformScript_3.setBounds(0, 92, 21, 22);
+      panel_86.add(lblXformScript_3);
+      lblXformScript_3.setName("lblXformScript_3");
+      lblXformScript_3.setText("05");
+      lblXformScript_3.setPreferredSize(new Dimension(94, 22));
+      lblXformScript_3.setFont(new Font("Dialog", Font.BOLD, 10));
+
+      swfAnimatorXFormScript5Cmb = new JComboBox();
+      swfAnimatorXFormScript5Cmb.setBounds(22, 92, 186, 24);
+      panel_86.add(swfAnimatorXFormScript5Cmb);
+      swfAnimatorXFormScript5Cmb.setMaximumRowCount(16);
+      swfAnimatorXFormScript5Cmb.setPreferredSize(new Dimension(275, 22));
+      swfAnimatorXFormScript5Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
+
+      swfAnimatorXFormScript5REd = new JWFNumberField();
+      swfAnimatorXFormScript5REd.setBounds(213, 92, 100, 24);
+      panel_86.add(swfAnimatorXFormScript5REd);
+      swfAnimatorXFormScript5REd.setValue(1.0);
+      swfAnimatorXFormScript5REd.setWithMotionCurve(true);
+      swfAnimatorXFormScript5REd.setValueStep(1.0);
+      swfAnimatorXFormScript5REd.setPreferredSize(new Dimension(100, 24));
+      swfAnimatorXFormScript5REd.setMotionPropertyName("xFormScript5");
+      swfAnimatorXFormScript5REd.setLinkedLabelControlName("lblXformScript_3");
+      swfAnimatorXFormScript5REd.setFont(new Font("Dialog", Font.PLAIN, 10));
+
+      swfAnimatorXFormScript4REd = new JWFNumberField();
+      swfAnimatorXFormScript4REd.setBounds(213, 69, 100, 24);
+      panel_86.add(swfAnimatorXFormScript4REd);
+      swfAnimatorXFormScript4REd.setValue(1.0);
+      swfAnimatorXFormScript4REd.setWithMotionCurve(true);
+      swfAnimatorXFormScript4REd.setValueStep(1.0);
+      swfAnimatorXFormScript4REd.setPreferredSize(new Dimension(100, 24));
+      swfAnimatorXFormScript4REd.setMotionPropertyName("xFormScript4");
+      swfAnimatorXFormScript4REd.setLinkedLabelControlName("lblXformScript_2");
+      swfAnimatorXFormScript4REd.setFont(new Font("Dialog", Font.PLAIN, 10));
+
+      JLabel lblXformScript_4 = new JLabel();
+      lblXformScript_4.setText("06");
+      lblXformScript_4.setPreferredSize(new Dimension(94, 22));
+      lblXformScript_4.setName("lblXformScript_4");
+      lblXformScript_4.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblXformScript_4.setBounds(0, 115, 21, 22);
+      panel_86.add(lblXformScript_4);
+
+      swfAnimatorXFormScript6Cmb = new JComboBox();
+      swfAnimatorXFormScript6Cmb.addItemListener(new ItemListener() {
+        public void itemStateChanged(ItemEvent e) {
+          if (tinaController != null && tinaController.getSwfAnimatorCtrl() != null) {
+            tinaController.getSwfAnimatorCtrl().moviePropertyChanged();
+          }
+        }
+      });
+      swfAnimatorXFormScript6Cmb.setPreferredSize(new Dimension(275, 22));
+      swfAnimatorXFormScript6Cmb.setMaximumRowCount(16);
+      swfAnimatorXFormScript6Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      swfAnimatorXFormScript6Cmb.setBounds(22, 115, 186, 24);
+      panel_86.add(swfAnimatorXFormScript6Cmb);
+
+      swfAnimatorXFormScript6REd = new JWFNumberField();
+      swfAnimatorXFormScript6REd.setWithMotionCurve(true);
+      swfAnimatorXFormScript6REd.setValueStep(1.0);
+      swfAnimatorXFormScript6REd.setValue(1.0);
+      swfAnimatorXFormScript6REd.setPreferredSize(new Dimension(100, 24));
+      swfAnimatorXFormScript6REd.setMotionPropertyName("xFormScript6");
+      swfAnimatorXFormScript6REd.setLinkedLabelControlName("lblXformScript_4");
+      swfAnimatorXFormScript6REd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      swfAnimatorXFormScript6REd.setBounds(213, 115, 100, 24);
+      swfAnimatorXFormScript6REd.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getSwfAnimatorCtrl().editXFormMotionCurve(getSwfAnimatorXFormScript6REd());
+        }
+      });
+      swfAnimatorXFormScript6REd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null && tinaController.getSwfAnimatorCtrl() != null) {
+            tinaController.getSwfAnimatorCtrl().moviePropertyChanged();
+          }
+        }
+      });
+
+      panel_86.add(swfAnimatorXFormScript6REd);
+
+      JLabel lblXformScript_5 = new JLabel();
+      lblXformScript_5.setText("07");
+      lblXformScript_5.setPreferredSize(new Dimension(94, 22));
+      lblXformScript_5.setName("lblXformScript_5");
+      lblXformScript_5.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblXformScript_5.setBounds(0, 138, 21, 22);
+      panel_86.add(lblXformScript_5);
+
+      swfAnimatorXFormScript7Cmb = new JComboBox();
+      swfAnimatorXFormScript7Cmb.addItemListener(new ItemListener() {
+        public void itemStateChanged(ItemEvent e) {
+          if (tinaController != null && tinaController.getSwfAnimatorCtrl() != null) {
+            tinaController.getSwfAnimatorCtrl().moviePropertyChanged();
+          }
+        }
+      });
+      swfAnimatorXFormScript7Cmb.setPreferredSize(new Dimension(275, 22));
+      swfAnimatorXFormScript7Cmb.setMaximumRowCount(16);
+      swfAnimatorXFormScript7Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      swfAnimatorXFormScript7Cmb.setBounds(22, 138, 186, 24);
+      panel_86.add(swfAnimatorXFormScript7Cmb);
+
+      swfAnimatorXFormScript7REd = new JWFNumberField();
+      swfAnimatorXFormScript7REd.setWithMotionCurve(true);
+      swfAnimatorXFormScript7REd.setValueStep(1.0);
+      swfAnimatorXFormScript7REd.setValue(1.0);
+      swfAnimatorXFormScript7REd.setPreferredSize(new Dimension(100, 24));
+      swfAnimatorXFormScript7REd.setMotionPropertyName("xFormScript7");
+      swfAnimatorXFormScript7REd.setLinkedLabelControlName("lblXformScript_5");
+      swfAnimatorXFormScript7REd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      swfAnimatorXFormScript7REd.setBounds(213, 138, 100, 24);
+      swfAnimatorXFormScript7REd.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getSwfAnimatorCtrl().editXFormMotionCurve(getSwfAnimatorXFormScript7REd());
+        }
+      });
+      swfAnimatorXFormScript7REd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null && tinaController.getSwfAnimatorCtrl() != null) {
+            tinaController.getSwfAnimatorCtrl().moviePropertyChanged();
+          }
+        }
+      });
+
+      panel_86.add(swfAnimatorXFormScript7REd);
+
+      JLabel lblXformScript_6 = new JLabel();
+      lblXformScript_6.setText("08");
+      lblXformScript_6.setPreferredSize(new Dimension(94, 22));
+      lblXformScript_6.setName("lblXformScript_6");
+      lblXformScript_6.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblXformScript_6.setBounds(0, 161, 21, 22);
+      panel_86.add(lblXformScript_6);
+
+      swfAnimatorXFormScript8Cmb = new JComboBox();
+      swfAnimatorXFormScript8Cmb.addItemListener(new ItemListener() {
+        public void itemStateChanged(ItemEvent e) {
+          if (tinaController != null && tinaController.getSwfAnimatorCtrl() != null) {
+            tinaController.getSwfAnimatorCtrl().moviePropertyChanged();
+          }
+        }
+      });
+      swfAnimatorXFormScript8Cmb.setPreferredSize(new Dimension(275, 22));
+      swfAnimatorXFormScript8Cmb.setMaximumRowCount(16);
+      swfAnimatorXFormScript8Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      swfAnimatorXFormScript8Cmb.setBounds(22, 161, 186, 24);
+      panel_86.add(swfAnimatorXFormScript8Cmb);
+
+      swfAnimatorXFormScript8REd = new JWFNumberField();
+      swfAnimatorXFormScript8REd.setWithMotionCurve(true);
+      swfAnimatorXFormScript8REd.setValueStep(1.0);
+      swfAnimatorXFormScript8REd.setValue(1.0);
+      swfAnimatorXFormScript8REd.setPreferredSize(new Dimension(100, 24));
+      swfAnimatorXFormScript8REd.setMotionPropertyName("xFormScript8");
+      swfAnimatorXFormScript8REd.setLinkedLabelControlName("lblXformScript_6");
+      swfAnimatorXFormScript8REd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      swfAnimatorXFormScript8REd.setBounds(213, 161, 100, 24);
+      swfAnimatorXFormScript8REd.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getSwfAnimatorCtrl().editXFormMotionCurve(getSwfAnimatorXFormScript8REd());
+        }
+      });
+      swfAnimatorXFormScript8REd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null && tinaController.getSwfAnimatorCtrl() != null) {
+            tinaController.getSwfAnimatorCtrl().moviePropertyChanged();
+          }
+        }
+      });
+      panel_86.add(swfAnimatorXFormScript8REd);
+
+      JLabel lblXformScript_7 = new JLabel();
+      lblXformScript_7.setText("09");
+      lblXformScript_7.setPreferredSize(new Dimension(94, 22));
+      lblXformScript_7.setName("lblXformScript_7");
+      lblXformScript_7.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblXformScript_7.setBounds(0, 184, 21, 22);
+      panel_86.add(lblXformScript_7);
+
+      swfAnimatorXFormScript9Cmb = new JComboBox();
+      swfAnimatorXFormScript9Cmb.addItemListener(new ItemListener() {
+        public void itemStateChanged(ItemEvent e) {
+          if (tinaController != null && tinaController.getSwfAnimatorCtrl() != null) {
+            tinaController.getSwfAnimatorCtrl().moviePropertyChanged();
+          }
+        }
+      });
+      swfAnimatorXFormScript9Cmb.setPreferredSize(new Dimension(275, 22));
+      swfAnimatorXFormScript9Cmb.setMaximumRowCount(16);
+      swfAnimatorXFormScript9Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      swfAnimatorXFormScript9Cmb.setBounds(22, 184, 186, 24);
+      panel_86.add(swfAnimatorXFormScript9Cmb);
+
+      swfAnimatorXFormScript9REd = new JWFNumberField();
+      swfAnimatorXFormScript9REd.setWithMotionCurve(true);
+      swfAnimatorXFormScript9REd.setValueStep(1.0);
+      swfAnimatorXFormScript9REd.setValue(1.0);
+      swfAnimatorXFormScript9REd.setPreferredSize(new Dimension(100, 24));
+      swfAnimatorXFormScript9REd.setMotionPropertyName("xFormScript9");
+      swfAnimatorXFormScript9REd.setLinkedLabelControlName("lblXformScript_7");
+      swfAnimatorXFormScript9REd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      swfAnimatorXFormScript9REd.setBounds(213, 184, 100, 24);
+      swfAnimatorXFormScript9REd.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getSwfAnimatorCtrl().editXFormMotionCurve(getSwfAnimatorXFormScript9REd());
+        }
+      });
+      swfAnimatorXFormScript9REd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null && tinaController.getSwfAnimatorCtrl() != null) {
+            tinaController.getSwfAnimatorCtrl().moviePropertyChanged();
+          }
+        }
+      });
+      panel_86.add(swfAnimatorXFormScript9REd);
+
+      JLabel lblXformScript_8 = new JLabel();
+      lblXformScript_8.setText("10");
+      lblXformScript_8.setPreferredSize(new Dimension(94, 22));
+      lblXformScript_8.setName("lblXformScript_8");
+      lblXformScript_8.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblXformScript_8.setBounds(0, 207, 21, 22);
+      panel_86.add(lblXformScript_8);
+
+      swfAnimatorXFormScript10Cmb = new JComboBox();
+      swfAnimatorXFormScript10Cmb.addItemListener(new ItemListener() {
+        public void itemStateChanged(ItemEvent e) {
+          if (tinaController != null && tinaController.getSwfAnimatorCtrl() != null) {
+            tinaController.getSwfAnimatorCtrl().moviePropertyChanged();
+          }
+        }
+      });
+      swfAnimatorXFormScript10Cmb.setPreferredSize(new Dimension(275, 22));
+      swfAnimatorXFormScript10Cmb.setMaximumRowCount(16);
+      swfAnimatorXFormScript10Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      swfAnimatorXFormScript10Cmb.setBounds(22, 207, 186, 24);
+      panel_86.add(swfAnimatorXFormScript10Cmb);
+
+      swfAnimatorXFormScript10REd = new JWFNumberField();
+      swfAnimatorXFormScript10REd.setWithMotionCurve(true);
+      swfAnimatorXFormScript10REd.setValueStep(1.0);
+      swfAnimatorXFormScript10REd.setValue(1.0);
+      swfAnimatorXFormScript10REd.setPreferredSize(new Dimension(100, 24));
+      swfAnimatorXFormScript10REd.setMotionPropertyName("xFormScript10");
+      swfAnimatorXFormScript10REd.setLinkedLabelControlName("lblXformScript_8");
+      swfAnimatorXFormScript10REd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      swfAnimatorXFormScript10REd.setBounds(213, 207, 100, 24);
+      swfAnimatorXFormScript10REd.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getSwfAnimatorCtrl().editXFormMotionCurve(getSwfAnimatorXFormScript10REd());
+        }
+      });
+      swfAnimatorXFormScript10REd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null && tinaController.getSwfAnimatorCtrl() != null) {
+            tinaController.getSwfAnimatorCtrl().moviePropertyChanged();
+          }
+        }
+      });
+      panel_86.add(swfAnimatorXFormScript10REd);
+
+      JLabel lblXformScript_9 = new JLabel();
+      lblXformScript_9.setText("11");
+      lblXformScript_9.setPreferredSize(new Dimension(94, 22));
+      lblXformScript_9.setName("lblXformScript_9");
+      lblXformScript_9.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblXformScript_9.setBounds(0, 230, 21, 22);
+      panel_86.add(lblXformScript_9);
+
+      swfAnimatorXFormScript11Cmb = new JComboBox();
+      swfAnimatorXFormScript11Cmb.addItemListener(new ItemListener() {
+        public void itemStateChanged(ItemEvent e) {
+          if (tinaController != null && tinaController.getSwfAnimatorCtrl() != null) {
+            tinaController.getSwfAnimatorCtrl().moviePropertyChanged();
+          }
+        }
+      });
+      swfAnimatorXFormScript11Cmb.setPreferredSize(new Dimension(275, 22));
+      swfAnimatorXFormScript11Cmb.setMaximumRowCount(16);
+      swfAnimatorXFormScript11Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      swfAnimatorXFormScript11Cmb.setBounds(22, 230, 186, 24);
+      panel_86.add(swfAnimatorXFormScript11Cmb);
+
+      swfAnimatorXFormScript11REd = new JWFNumberField();
+      swfAnimatorXFormScript11REd.setWithMotionCurve(true);
+      swfAnimatorXFormScript11REd.setValueStep(1.0);
+      swfAnimatorXFormScript11REd.setValue(1.0);
+      swfAnimatorXFormScript11REd.setPreferredSize(new Dimension(100, 24));
+      swfAnimatorXFormScript11REd.setMotionPropertyName("xFormScript11");
+      swfAnimatorXFormScript11REd.setLinkedLabelControlName("lblXformScript_9");
+      swfAnimatorXFormScript11REd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      swfAnimatorXFormScript11REd.setBounds(213, 230, 100, 24);
+      swfAnimatorXFormScript11REd.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getSwfAnimatorCtrl().editXFormMotionCurve(getSwfAnimatorXFormScript11REd());
+        }
+      });
+      swfAnimatorXFormScript11REd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null && tinaController.getSwfAnimatorCtrl() != null) {
+            tinaController.getSwfAnimatorCtrl().moviePropertyChanged();
+          }
+        }
+      });
+      panel_86.add(swfAnimatorXFormScript11REd);
+
+      JLabel lblXformScript_10 = new JLabel();
+      lblXformScript_10.setText("12");
+      lblXformScript_10.setPreferredSize(new Dimension(94, 22));
+      lblXformScript_10.setName("lblXformScript_10");
+      lblXformScript_10.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblXformScript_10.setBounds(0, 253, 21, 22);
+      panel_86.add(lblXformScript_10);
+
+      swfAnimatorXFormScript12Cmb = new JComboBox();
+      swfAnimatorXFormScript12Cmb.addItemListener(new ItemListener() {
+        public void itemStateChanged(ItemEvent e) {
+          if (tinaController != null && tinaController.getSwfAnimatorCtrl() != null) {
+            tinaController.getSwfAnimatorCtrl().moviePropertyChanged();
+          }
+        }
+      });
+      swfAnimatorXFormScript12Cmb.setPreferredSize(new Dimension(275, 22));
+      swfAnimatorXFormScript12Cmb.setMaximumRowCount(16);
+      swfAnimatorXFormScript12Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      swfAnimatorXFormScript12Cmb.setBounds(22, 253, 186, 24);
+      panel_86.add(swfAnimatorXFormScript12Cmb);
+
+      swfAnimatorXFormScript12REd = new JWFNumberField();
+      swfAnimatorXFormScript12REd.setWithMotionCurve(true);
+      swfAnimatorXFormScript12REd.setValueStep(1.0);
+      swfAnimatorXFormScript12REd.setValue(1.0);
+      swfAnimatorXFormScript12REd.setPreferredSize(new Dimension(100, 24));
+      swfAnimatorXFormScript12REd.setMotionPropertyName("xFormScript12");
+      swfAnimatorXFormScript12REd.setLinkedLabelControlName("lblXformScript_10");
+      swfAnimatorXFormScript12REd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      swfAnimatorXFormScript12REd.setBounds(213, 253, 100, 24);
+      swfAnimatorXFormScript12REd.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getSwfAnimatorCtrl().editXFormMotionCurve(getSwfAnimatorXFormScript12REd());
+        }
+      });
+      swfAnimatorXFormScript12REd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null && tinaController.getSwfAnimatorCtrl() != null) {
+            tinaController.getSwfAnimatorCtrl().moviePropertyChanged();
+          }
+        }
+      });
+      panel_86.add(swfAnimatorXFormScript12REd);
+      swfAnimatorXFormScript4REd.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getSwfAnimatorCtrl().editXFormMotionCurve(getSwfAnimatorXFormScript4REd());
+        }
+      });
+      swfAnimatorXFormScript4REd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null && tinaController.getSwfAnimatorCtrl() != null) {
+            tinaController.getSwfAnimatorCtrl().moviePropertyChanged();
+          }
+        }
+      });
+      swfAnimatorXFormScript5REd.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getSwfAnimatorCtrl().editXFormMotionCurve(getSwfAnimatorXFormScript5REd());
+        }
+      });
+      swfAnimatorXFormScript5REd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null && tinaController.getSwfAnimatorCtrl() != null) {
+            tinaController.getSwfAnimatorCtrl().moviePropertyChanged();
+          }
+        }
+      });
+      swfAnimatorXFormScript5Cmb.addItemListener(new ItemListener() {
+        public void itemStateChanged(ItemEvent e) {
+          if (tinaController != null && tinaController.getSwfAnimatorCtrl() != null) {
+            tinaController.getSwfAnimatorCtrl().moviePropertyChanged();
+          }
+        }
+      });
+      swfAnimatorXFormScript4Cmb.addItemListener(new ItemListener() {
+        public void itemStateChanged(ItemEvent e) {
+          if (tinaController != null && tinaController.getSwfAnimatorCtrl() != null) {
+            tinaController.getSwfAnimatorCtrl().moviePropertyChanged();
+          }
+        }
+      });
+      swfAnimatorXFormScript3REd.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getSwfAnimatorCtrl().editXFormMotionCurve(getSwfAnimatorXFormScript3REd());
+        }
+      });
+      swfAnimatorXFormScript3REd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null && tinaController.getSwfAnimatorCtrl() != null) {
+            tinaController.getSwfAnimatorCtrl().moviePropertyChanged();
+          }
+        }
+      });
+      swfAnimatorXFormScript3Cmb.addItemListener(new ItemListener() {
+        public void itemStateChanged(ItemEvent e) {
+          if (tinaController != null && tinaController.getSwfAnimatorCtrl() != null) {
+            tinaController.getSwfAnimatorCtrl().moviePropertyChanged();
+          }
+        }
+      });
+      swfAnimatorXFormScript2REd.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getSwfAnimatorCtrl().editXFormMotionCurve(getSwfAnimatorXFormScript2REd());
+        }
+      });
+      swfAnimatorXFormScript2REd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null && tinaController.getSwfAnimatorCtrl() != null) {
+            tinaController.getSwfAnimatorCtrl().moviePropertyChanged();
+          }
+        }
+      });
+      swfAnimatorXFormScript2Cmb.addItemListener(new ItemListener() {
+        public void itemStateChanged(ItemEvent e) {
+          if (tinaController != null && tinaController.getSwfAnimatorCtrl() != null) {
+            tinaController.getSwfAnimatorCtrl().moviePropertyChanged();
+          }
+        }
+      });
+      swfAnimatorXFormScript1REd.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getSwfAnimatorCtrl().editXFormMotionCurve(getSwfAnimatorXFormScript1REd());
+        }
+      });
+      swfAnimatorXFormScript1REd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null && tinaController.getSwfAnimatorCtrl() != null) {
+            tinaController.getSwfAnimatorCtrl().moviePropertyChanged();
+          }
+        }
+      });
+    }
+    return panel_86;
+  }
+
+  private JPanel getPanel_87() {
+    if (panel_87 == null) {
+      panel_87 = new JPanel();
+      panel_87.setMaximumSize(new Dimension(32767, 120));
+      panel_87.setBorder(new TitledBorder(null, "Movie options", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+      GridBagLayout gbl_panel_87 = new GridBagLayout();
+      gbl_panel_87.columnWidths = new int[] { 0, 0, 0, 0 };
+      gbl_panel_87.rowHeights = new int[] { 0, 0 };
+      gbl_panel_87.columnWeights = new double[] { 0.0, 0.0, 0.0, 0.0 };
+      gbl_panel_87.rowWeights = new double[] { 0.0, 0.0 };
+      panel_87.setLayout(gbl_panel_87);
+      animateFramesLbl = new JLabel();
+      GridBagConstraints gbc_animateFramesLbl = new GridBagConstraints();
+      gbc_animateFramesLbl.fill = GridBagConstraints.HORIZONTAL;
+      gbc_animateFramesLbl.insets = new Insets(0, 0, 5, 5);
+      gbc_animateFramesLbl.gridx = 0;
+      gbc_animateFramesLbl.gridy = 0;
+      panel_87.add(animateFramesLbl, gbc_animateFramesLbl);
+      animateFramesLbl.setHorizontalAlignment(SwingConstants.LEFT);
+      animateFramesLbl.setPreferredSize(new Dimension(94, 22));
+      animateFramesLbl.setText("Total frame count");
+      animateFramesLbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      GridBagConstraints gbc_swfAnimatorFramesREd = new GridBagConstraints();
+      gbc_swfAnimatorFramesREd.insets = new Insets(0, 0, 5, 5);
+      gbc_swfAnimatorFramesREd.gridx = 1;
+      gbc_swfAnimatorFramesREd.gridy = 0;
+      panel_87.add(getSwfAnimatorFramesREd(), gbc_swfAnimatorFramesREd);
+
+      JLabel lblFramesPerSecond = new JLabel();
+      GridBagConstraints gbc_lblFramesPerSecond = new GridBagConstraints();
+      gbc_lblFramesPerSecond.fill = GridBagConstraints.HORIZONTAL;
+      gbc_lblFramesPerSecond.insets = new Insets(0, 0, 5, 5);
+      gbc_lblFramesPerSecond.gridx = 2;
+      gbc_lblFramesPerSecond.gridy = 0;
+      panel_87.add(lblFramesPerSecond, gbc_lblFramesPerSecond);
+      lblFramesPerSecond.setHorizontalAlignment(SwingConstants.LEFT);
+      lblFramesPerSecond.setText("Frames per second");
+      lblFramesPerSecond.setPreferredSize(new Dimension(110, 22));
+      lblFramesPerSecond.setFont(new Font("Dialog", Font.BOLD, 10));
+
+      swfAnimatorFramesPerSecondREd = new JWFNumberField();
+      GridBagConstraints gbc_swfAnimatorFramesPerSecondREd = new GridBagConstraints();
+      gbc_swfAnimatorFramesPerSecondREd.insets = new Insets(0, 0, 5, 0);
+      gbc_swfAnimatorFramesPerSecondREd.gridx = 3;
+      gbc_swfAnimatorFramesPerSecondREd.gridy = 0;
+      panel_87.add(swfAnimatorFramesPerSecondREd, gbc_swfAnimatorFramesPerSecondREd);
+      swfAnimatorFramesPerSecondREd.setMaxValue(120.0);
+      swfAnimatorFramesPerSecondREd.setMinValue(1.0);
+      swfAnimatorFramesPerSecondREd.setHasMaxValue(true);
+      swfAnimatorFramesPerSecondREd.setHasMinValue(true);
+      swfAnimatorFramesPerSecondREd.setEditable(true);
+      swfAnimatorFramesPerSecondREd.setText("12");
+      swfAnimatorFramesPerSecondREd.setPreferredSize(new Dimension(56, 22));
+      swfAnimatorFramesPerSecondREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+
+      JLabel lblMotionBlurLength = new JLabel();
+      GridBagConstraints gbc_lblMotionBlurLength = new GridBagConstraints();
+      gbc_lblMotionBlurLength.fill = GridBagConstraints.HORIZONTAL;
+      gbc_lblMotionBlurLength.insets = new Insets(0, 0, 0, 5);
+      gbc_lblMotionBlurLength.gridx = 0;
+      gbc_lblMotionBlurLength.gridy = 1;
+      panel_87.add(lblMotionBlurLength, gbc_lblMotionBlurLength);
+      lblMotionBlurLength.setText("Motion blur length");
+      lblMotionBlurLength.setPreferredSize(new Dimension(94, 22));
+      lblMotionBlurLength.setHorizontalAlignment(SwingConstants.LEFT);
+      lblMotionBlurLength.setFont(new Font("Dialog", Font.BOLD, 10));
+
+      swfAnimatorMotionBlurLengthREd = new JWFNumberField();
+      GridBagConstraints gbc_swfAnimatorMotionBlurLengthREd = new GridBagConstraints();
+      gbc_swfAnimatorMotionBlurLengthREd.insets = new Insets(0, 0, 0, 5);
+      gbc_swfAnimatorMotionBlurLengthREd.gridx = 1;
+      gbc_swfAnimatorMotionBlurLengthREd.gridy = 1;
+      panel_87.add(swfAnimatorMotionBlurLengthREd, gbc_swfAnimatorMotionBlurLengthREd);
+      swfAnimatorMotionBlurLengthREd.setValueStep(1.0);
+      swfAnimatorMotionBlurLengthREd.setOnlyIntegers(true);
+      swfAnimatorMotionBlurLengthREd.setText("12");
+      swfAnimatorMotionBlurLengthREd.setPreferredSize(new Dimension(56, 22));
+      swfAnimatorMotionBlurLengthREd.setMaxValue(120.0);
+      swfAnimatorMotionBlurLengthREd.setHasMinValue(true);
+      swfAnimatorMotionBlurLengthREd.setHasMaxValue(true);
+      swfAnimatorMotionBlurLengthREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      swfAnimatorMotionBlurLengthREd.setEditable(true);
+
+      JLabel lblMotionBlurTimestep = new JLabel();
+      GridBagConstraints gbc_lblMotionBlurTimestep = new GridBagConstraints();
+      gbc_lblMotionBlurTimestep.fill = GridBagConstraints.HORIZONTAL;
+      gbc_lblMotionBlurTimestep.insets = new Insets(0, 0, 0, 5);
+      gbc_lblMotionBlurTimestep.gridx = 2;
+      gbc_lblMotionBlurTimestep.gridy = 1;
+      panel_87.add(lblMotionBlurTimestep, gbc_lblMotionBlurTimestep);
+      lblMotionBlurTimestep.setText("Motion blur timestep");
+      lblMotionBlurTimestep.setPreferredSize(new Dimension(110, 22));
+      lblMotionBlurTimestep.setHorizontalAlignment(SwingConstants.LEFT);
+      lblMotionBlurTimestep.setFont(new Font("Dialog", Font.BOLD, 10));
+
+      swfAnimatorMotionBlurTimeStepREd = new JWFNumberField();
+      GridBagConstraints gbc_swfAnimatorMotionBlurTimeStepREd = new GridBagConstraints();
+      gbc_swfAnimatorMotionBlurTimeStepREd.gridx = 3;
+      gbc_swfAnimatorMotionBlurTimeStepREd.gridy = 1;
+      panel_87.add(swfAnimatorMotionBlurTimeStepREd, gbc_swfAnimatorMotionBlurTimeStepREd);
+      swfAnimatorMotionBlurTimeStepREd.setValueStep(0.1);
+      swfAnimatorMotionBlurTimeStepREd.setText("0.15");
+      swfAnimatorMotionBlurTimeStepREd.setPreferredSize(new Dimension(56, 22));
+      swfAnimatorMotionBlurTimeStepREd.setMaxValue(1.0);
+      swfAnimatorMotionBlurTimeStepREd.setHasMinValue(true);
+      swfAnimatorMotionBlurTimeStepREd.setHasMaxValue(true);
+      swfAnimatorMotionBlurTimeStepREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      swfAnimatorMotionBlurTimeStepREd.setEditable(true);
+      swfAnimatorMotionBlurTimeStepREd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null && tinaController.getSwfAnimatorCtrl() != null) {
+            tinaController.getSwfAnimatorCtrl().moviePropertyChanged();
+          }
+        }
+      });
+      swfAnimatorMotionBlurLengthREd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null && tinaController.getSwfAnimatorCtrl() != null) {
+            tinaController.getSwfAnimatorCtrl().moviePropertyChanged();
+          }
+        }
+      });
+    }
+    return panel_87;
+  }
+
+  public JComboBox getSwfAnimatorXFormScript6Cmb() {
+    return swfAnimatorXFormScript6Cmb;
+  }
+
+  public JComboBox getSwfAnimatorXFormScript7Cmb() {
+    return swfAnimatorXFormScript7Cmb;
+  }
+
+  public JComboBox getSwfAnimatorXFormScript8Cmb() {
+    return swfAnimatorXFormScript8Cmb;
+  }
+
+  public JComboBox getSwfAnimatorXFormScript9Cmb() {
+    return swfAnimatorXFormScript9Cmb;
+  }
+
+  public JComboBox getSwfAnimatorXFormScript10Cmb() {
+    return swfAnimatorXFormScript10Cmb;
+  }
+
+  public JComboBox getSwfAnimatorXFormScript11Cmb() {
+    return swfAnimatorXFormScript11Cmb;
+  }
+
+  public JComboBox getSwfAnimatorXFormScript12Cmb() {
+    return swfAnimatorXFormScript12Cmb;
+  }
+
+  public JWFNumberField getSwfAnimatorXFormScript6REd() {
+    return swfAnimatorXFormScript6REd;
+  }
+
+  public JWFNumberField getSwfAnimatorXFormScript7REd() {
+    return swfAnimatorXFormScript7REd;
+  }
+
+  public JWFNumberField getSwfAnimatorXFormScript8REd() {
+    return swfAnimatorXFormScript8REd;
+  }
+
+  public JWFNumberField getSwfAnimatorXFormScript9REd() {
+    return swfAnimatorXFormScript9REd;
+  }
+
+  public JWFNumberField getSwfAnimatorXFormScript10REd() {
+    return swfAnimatorXFormScript10REd;
+  }
+
+  public JWFNumberField getSwfAnimatorXFormScript11REd() {
+    return swfAnimatorXFormScript11REd;
+  }
+
+  public JWFNumberField getSwfAnimatorXFormScript12REd() {
+    return swfAnimatorXFormScript12REd;
+  }
+
+  public JLabel getLblGlobalScript_4() {
+    return lblGlobalScript_4;
+  }
+
+  public JLabel getLblGlobalScript_5() {
+    return lblGlobalScript_5;
+  }
+
+  public JLabel getLblGlobalScript_6() {
+    return lblGlobalScript_6;
+  }
+
+  public JLabel getLblGlobalScript_7() {
+    return lblGlobalScript_7;
+  }
+
+  public JLabel getLblGlobalScript_8() {
+    return lblGlobalScript_8;
+  }
+
+  public JComboBox getSwfAnimatorGlobalScript6Cmb() {
+    return swfAnimatorGlobalScript6Cmb;
+  }
+
+  public JComboBox getSwfAnimatorGlobalScript7Cmb() {
+    return swfAnimatorGlobalScript7Cmb;
+  }
+
+  public JComboBox getSwfAnimatorGlobalScript8Cmb() {
+    return swfAnimatorGlobalScript8Cmb;
+  }
+
+  public JComboBox getSwfAnimatorGlobalScript9Cmb() {
+    return swfAnimatorGlobalScript9Cmb;
+  }
+
+  public JComboBox getSwfAnimatorGlobalScript10Cmb() {
+    return swfAnimatorGlobalScript10Cmb;
+  }
+
+  public JComboBox getSwfAnimatorGlobalScript11Cmb() {
+    return swfAnimatorGlobalScript11Cmb;
+  }
+
+  public JComboBox getSwfAnimatorGlobalScript12Cmb() {
+    return swfAnimatorGlobalScript12Cmb;
+  }
+
+  public JWFNumberField getSwfAnimatorGlobalScript6REd() {
+    return swfAnimatorGlobalScript6REd;
+  }
+
+  public JWFNumberField getSwfAnimatorGlobalScript7REd() {
+    return swfAnimatorGlobalScript7REd;
+  }
+
+  public JWFNumberField getSwfAnimatorGlobalScript8REd() {
+    return swfAnimatorGlobalScript8REd;
+  }
+
+  public JWFNumberField getSwfAnimatorGlobalScript9REd() {
+    return swfAnimatorGlobalScript9REd;
+  }
+
+  public JWFNumberField getSwfAnimatorGlobalScript10REd() {
+    return swfAnimatorGlobalScript10REd;
+  }
+
+  public JWFNumberField getSwfAnimatorGlobalScript11REd() {
+    return swfAnimatorGlobalScript11REd;
+  }
+
+  public JWFNumberField getSwfAnimatorGlobalScript12REd() {
+    return swfAnimatorGlobalScript12REd;
   }
 } //  @jve:decl-index=0:visual-constraint="10,10"
 

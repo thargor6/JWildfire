@@ -246,23 +246,23 @@ public class AnimationService {
         else {
           envX = new int[3];
           envY = new double[3];
-          envX[0] = 0;
-          envY[0] = 0;
           envX[1] = pFrameCount;
           envY[1] = pAmplitude * (double) pFrameCount / (DFLT_DURATION * pFPS) * srcY[0];
           envX[2] = 2 * envX[1];
           envY[2] = 2.0 * envY[1];
+          envX[0] = -envX[1];
+          envY[0] = -envY[1];
         }
       }
       else {
         envX = new int[3];
         envY = new double[3];
-        envX[0] = 0;
-        envY[0] = 0;
         envX[1] = pFrameCount;
         envY[1] = pAmplitude * (double) pFrameCount / (DFLT_DURATION * pFPS) * pScript.getAmplitude();
         envX[2] = 2 * envX[1];
         envY[2] = 2.0 * envY[1];
+        envX[0] = -envX[1];
+        envY[0] = -envY[1];
       }
     }
 

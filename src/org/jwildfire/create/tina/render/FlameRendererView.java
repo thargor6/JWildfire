@@ -142,7 +142,7 @@ public class FlameRendererView {
   public boolean project(XYZPoint pPoint, XYZProjectedPoint pProjectedPoint) {
     if (doProject3D) {
       applyCameraMatrix(pPoint);
-      double zr = 1.0 - flame.getCamPerspective() * camPoint.z;
+      double zr = 1.0 - flame.getCamPerspective() * camPoint.z;// + flame.getMotionBlurDecay();
       if (flame.getDimishZ() > EPSILON) {
         double zdist = (flame.getCamZ() - camPoint.z);
         if (zdist > 0.0) {

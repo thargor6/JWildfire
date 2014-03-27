@@ -38,13 +38,13 @@ public class TransformingDuckiesRandomMovieGenerator extends RandomMovieGenerato
     part.setFrameMorphCount(0);
     movie.addPart(part);
     {
-      double amplitude = -1.5 * Math.random() * 3.0;
-      movie.setGlobalScript1(new GlobalScript(GlobalScriptType.ROTATE_ROLL, amplitude));
+      double amplitude = -1.25 * Math.random() * 2.5;
+      movie.getGlobalScripts()[0] = new GlobalScript(GlobalScriptType.ROTATE_ROLL, amplitude);
     }
 
     {
       double amplitude = -0.5 * Math.random() * 1.0;
-      movie.setxFormScript1(new XFormScript(XFormScriptType.ROTATE_2ND_XFORM, amplitude));
+      movie.getxFormScripts()[0] = new XFormScript(XFormScriptType.ROTATE_2ND_XFORM, amplitude);
     }
 
     return movie;
