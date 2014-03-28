@@ -64,9 +64,9 @@ import org.jwildfire.create.tina.animate.XFormScript;
 import org.jwildfire.create.tina.animate.XFormScriptType;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.motion.MotionCurve;
-import org.jwildfire.create.tina.io.FlameReader;
 import org.jwildfire.create.tina.io.FlameMovieReader;
 import org.jwildfire.create.tina.io.FlameMovieWriter;
+import org.jwildfire.create.tina.io.FlameReader;
 import org.jwildfire.create.tina.randommovie.RandomMovieGenerator;
 import org.jwildfire.create.tina.randommovie.RandomMovieGeneratorList;
 import org.jwildfire.create.tina.render.FlameRenderer;
@@ -294,7 +294,7 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
     addFlameToFlamePanel(part);
     currMovie.addPart(part);
     refreshFrameCount();
-    refreshFlameImage();
+    previewFlameImage();
     clearCurrentPreview();
     updateThumbnails();
   }
@@ -333,7 +333,7 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
       if (value > frameCount) {
         swfAnimatorFrameSlider.setValue(frameCount);
         swfAnimatorFrameREd.setValue(frameCount);
-        refreshFlameImage();
+        previewFlameImage();
       }
     }
     finally {
@@ -668,7 +668,7 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
     return getCurrFlame();
   }
 
-  public void refreshFlameImage() {
+  public void refreshFlameImage(boolean pQuickRender) {
     if (!noRefresh) {
       FlamePanel imgPanel = getFlamePanel();
       Rectangle bounds = imgPanel.getImageBounds();
@@ -688,9 +688,15 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
             flame.setHeight(info.getImageHeight());
 
             FlameRenderer renderer = new FlameRenderer(flame, prefs, false, false);
-            renderer.setProgressUpdater(null);
-            flame.setSampleDensity(1.0);
-            flame.setSpatialFilterRadius(0.0);
+            if (pQuickRender) {
+              renderer.setProgressUpdater(null);
+              flame.setSampleDensity(1.0);
+              flame.setSpatialFilterRadius(0.0);
+            }
+            else {
+              renderer.setProgressUpdater(renderProgressUpdater);
+              flame.setSampleDensity(prefs.getTinaRenderPreviewQuality());
+            }
             RenderedFlame res = renderer.renderFlame(info);
             imgPanel.setImage(res.getImage());
           }
@@ -774,7 +780,7 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
     ResolutionProfile profile = getResolutionProfile();
     currFlame.setResolutionProfile(profile);
     removeFlamePanel();
-    refreshFlameImage();
+    previewFlameImage();
   }
 
   public void swfAnimatorFrameREd_changed() {
@@ -898,7 +904,7 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
     flamePartPanelList.clear();
     flamePartRadioButtonList.clear();
     swfAnimatorFlamesPanel.getParent().validate();
-    refreshFlameImage();
+    previewFlameImage();
     enableControls();
     clearCurrentPreview();
     updateThumbnails();
@@ -988,7 +994,7 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
     finally {
       noRefresh = false;
     }
-    refreshFlameImage();
+    previewFlameImage();
   }
 
   private void setXFormScriptToUI(XFormScript pScript, JComboBox pCmb, JWFNumberField pAmountField) {
@@ -1197,7 +1203,7 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
           playMovieThread = null;
           enablePlayMovieControls();
           swfAnimatorFrameSlider.setValue(oldFrame);
-          refreshFlameImage();
+          previewFlameImage();
         }
 
         @Override
@@ -1206,7 +1212,7 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
           playMovieThread = null;
           enablePlayMovieControls();
           swfAnimatorFrameSlider.setValue(oldFrame);
-          refreshFlameImage();
+          previewFlameImage();
         }
       };
 
@@ -1246,16 +1252,16 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
 
   public void editGlobalMotionCurve(JWFNumberField pSender) {
     motionControlsDelegate.editMotionCurve(pSender);
-    refreshFlameImage();
+    previewFlameImage();
   }
 
   public void editXFormMotionCurve(JWFNumberField pSender) {
     motionControlsDelegate.editMotionCurve(pSender);
-    refreshFlameImage();
+    previewFlameImage();
   }
 
   public void moviePropertyChanged() {
-    refreshFlameImage();
+    previewFlameImage();
   }
 
   private class MovieThumbnail {
@@ -1468,4 +1474,13 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
     }
 
   }
+
+  public void renderFlameImage() {
+    refreshFlameImage(false);
+  }
+
+  public void previewFlameImage() {
+    refreshFlameImage(true);
+  }
+
 }

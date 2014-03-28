@@ -5783,34 +5783,35 @@ public class TinaInternalFrame extends JInternalFrame {
       swfAnimatorPanel_1.setLayout(new BorderLayout(0, 0));
 
       JPanel panel_83 = new JPanel();
-      panel_83.setPreferredSize(new Dimension(10, 50));
+      panel_83.setPreferredSize(new Dimension(10, 70));
       swfAnimatorPanel_1.add(panel_83, BorderLayout.SOUTH);
       panel_83.setLayout(new BorderLayout(0, 0));
 
       swfAnimatorFrameSlider = new JSlider();
       swfAnimatorFrameSlider.setBorder(new EmptyBorder(0, 4, 0, 4));
-      panel_83.add(swfAnimatorFrameSlider, BorderLayout.NORTH);
+      panel_83.add(swfAnimatorFrameSlider, BorderLayout.CENTER);
       swfAnimatorFrameSlider.setMinorTickSpacing(5);
       swfAnimatorFrameSlider.setMinimum(1);
       swfAnimatorFrameSlider.setMajorTickSpacing(10);
       swfAnimatorFrameSlider.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           if (tinaController != null && tinaController.getSwfAnimatorCtrl() != null) {
-            tinaController.getSwfAnimatorCtrl().refreshFlameImage();
+            tinaController.getSwfAnimatorCtrl().previewFlameImage();
           }
         }
       });
       swfAnimatorFrameSlider.setValue(0);
       swfAnimatorFrameSlider.setPreferredSize(new Dimension(340, 19));
       swfAnimatorFrameSlider.setMaximum(60);
-      panel_83.add(getPanel_84(), BorderLayout.CENTER);
+      panel_83.add(getPanel_84(), BorderLayout.SOUTH);
+      panel_83.add(getPanel_12(), BorderLayout.NORTH);
 
       swfAnimatorPreviewRootPanel = new JPanel();
       swfAnimatorPanel_1.add(swfAnimatorPreviewRootPanel, BorderLayout.CENTER);
       swfAnimatorPreviewRootPanel.setLayout(new BorderLayout(0, 0));
 
       JPanel panel_10 = new JPanel();
-      panel_10.setBorder(new TitledBorder(null, "Motion control", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+      panel_10.setBorder(null);
       panel_10.setPreferredSize(new Dimension(400, 10));
       panel_2.add(panel_10, BorderLayout.EAST);
       panel_10.setLayout(new BoxLayout(panel_10, BoxLayout.Y_AXIS));
@@ -9678,7 +9679,6 @@ public class TinaInternalFrame extends JInternalFrame {
   private JWFNumberField swfAnimatorMotionBlurLengthREd;
   private JWFNumberField swfAnimatorMotionBlurTimeStepREd;
   private JCheckBox stereo3dSwapSidesCBx;
-  private JPanel panel_12;
   private JPanel randomMoviePanel;
   private JButton swfAnimatorGenRandomBatchBtn;
   private JComboBox swfAnimatorRandGenCmb;
@@ -9719,6 +9719,8 @@ public class TinaInternalFrame extends JInternalFrame {
   private JWFNumberField swfAnimatorGlobalScript10REd;
   private JWFNumberField swfAnimatorGlobalScript11REd;
   private JWFNumberField swfAnimatorGlobalScript12REd;
+  private JButton btnRender;
+  private JPanel panel_12;
 
   /**
    * This method initializes renderBatchJobsScrollPane	
@@ -11569,7 +11571,6 @@ public class TinaInternalFrame extends JInternalFrame {
       panel_4 = new JPanel();
       panel_4.setBorder(new TitledBorder(null, "Movies", TitledBorder.LEADING, TitledBorder.TOP, null, null));
       panel_4.setLayout(new BorderLayout(0, 0));
-      panel_4.add(getPanel_12(), BorderLayout.NORTH);
 
       randomMoviePanel = new JPanel();
       panel_4.add(randomMoviePanel, BorderLayout.CENTER);
@@ -17025,15 +17026,6 @@ public class TinaInternalFrame extends JInternalFrame {
     return stereo3dSwapSidesCBx;
   }
 
-  private JPanel getPanel_12() {
-    if (panel_12 == null) {
-      panel_12 = new JPanel();
-      panel_12.setPreferredSize(new Dimension(10, 50));
-      panel_12.setLayout(null);
-    }
-    return panel_12;
-  }
-
   public JPanel getRandomMoviePanel() {
     return randomMoviePanel;
   }
@@ -17062,7 +17054,7 @@ public class TinaInternalFrame extends JInternalFrame {
         }
       });
       swfAnimatorPlayButton.setText("Play");
-      swfAnimatorPlayButton.setPreferredSize(new Dimension(105, 28));
+      swfAnimatorPlayButton.setPreferredSize(new Dimension(82, 28));
       swfAnimatorPlayButton.setFont(new Font("Dialog", Font.BOLD, 10));
 
       swfAnimatorFrameToEditorBtn = new JButton();
@@ -17077,36 +17069,7 @@ public class TinaInternalFrame extends JInternalFrame {
       swfAnimatorFrameToEditorBtn.setPreferredSize(new Dimension(42, 28));
       swfAnimatorFrameToEditorBtn.setMnemonic(KeyEvent.VK_E);
       swfAnimatorFrameToEditorBtn.setFont(new Font("Dialog", Font.BOLD, 10));
-
-      JLabel lblFrame = new JLabel();
-      panel_84.add(lblFrame);
-      lblFrame.setHorizontalAlignment(SwingConstants.RIGHT);
-      lblFrame.setText("Frame");
-      lblFrame.setPreferredSize(new Dimension(48, 22));
-      lblFrame.setFont(new Font("Dialog", Font.BOLD, 10));
-
-      swfAnimatorFrameREd = new JWFNumberField();
-      panel_84.add(swfAnimatorFrameREd);
-      swfAnimatorFrameREd.addChangeListener(new ChangeListener() {
-        public void stateChanged(ChangeEvent e) {
-          if (tinaController != null && tinaController.getSwfAnimatorCtrl() != null) {
-            try {
-              swfAnimatorFrameSlider.setValue(swfAnimatorFrameREd.getIntValue());
-            }
-            catch (Exception ex) {
-              ex.printStackTrace();
-            }
-          }
-        }
-      });
-      swfAnimatorFrameREd.setMaxValue(120.0);
-      swfAnimatorFrameREd.setMinValue(1.0);
-      swfAnimatorFrameREd.setHasMaxValue(true);
-      swfAnimatorFrameREd.setHasMinValue(true);
-      swfAnimatorFrameREd.setOnlyIntegers(true);
-      swfAnimatorFrameREd.setText("60");
-      swfAnimatorFrameREd.setPreferredSize(new Dimension(56, 22));
-      swfAnimatorFrameREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      panel_84.add(getBtnRender());
     }
     return panel_84;
   }
@@ -17661,7 +17624,7 @@ public class TinaInternalFrame extends JInternalFrame {
     if (panel_87 == null) {
       panel_87 = new JPanel();
       panel_87.setMaximumSize(new Dimension(32767, 120));
-      panel_87.setBorder(new TitledBorder(null, "Movie options", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+      panel_87.setBorder(new TitledBorder(null, "Speed / Motion blur", TitledBorder.LEADING, TitledBorder.TOP, null, null));
       GridBagLayout gbl_panel_87 = new GridBagLayout();
       gbl_panel_87.columnWidths = new int[] { 0, 0, 0, 0 };
       gbl_panel_87.rowHeights = new int[] { 0, 0 };
@@ -17913,6 +17876,63 @@ public class TinaInternalFrame extends JInternalFrame {
 
   public JWFNumberField getSwfAnimatorGlobalScript12REd() {
     return swfAnimatorGlobalScript12REd;
+  }
+
+  private JButton getBtnRender() {
+    if (btnRender == null) {
+      btnRender = new JButton();
+      btnRender.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getSwfAnimatorCtrl().renderFlameImage();
+        }
+      });
+      btnRender.setToolTipText("Render the current frame in higher qualiry");
+      btnRender.setText("Render");
+      btnRender.setPreferredSize(new Dimension(82, 28));
+      btnRender.setMnemonic(KeyEvent.VK_R);
+      btnRender.setFont(new Font("Dialog", Font.BOLD, 10));
+    }
+    return btnRender;
+  }
+
+  private JPanel getPanel_12() {
+    if (panel_12 == null) {
+      panel_12 = new JPanel();
+      FlowLayout flowLayout = (FlowLayout) panel_12.getLayout();
+      flowLayout.setVgap(1);
+      panel_12.setPreferredSize(new Dimension(10, 24));
+
+      JLabel lblFrame = new JLabel();
+      panel_12.add(lblFrame);
+      lblFrame.setHorizontalAlignment(SwingConstants.RIGHT);
+      lblFrame.setText("Frame");
+      lblFrame.setPreferredSize(new Dimension(38, 22));
+      lblFrame.setFont(new Font("Dialog", Font.BOLD, 10));
+
+      swfAnimatorFrameREd = new JWFNumberField();
+      panel_12.add(swfAnimatorFrameREd);
+      swfAnimatorFrameREd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null && tinaController.getSwfAnimatorCtrl() != null) {
+            try {
+              swfAnimatorFrameSlider.setValue(swfAnimatorFrameREd.getIntValue());
+            }
+            catch (Exception ex) {
+              ex.printStackTrace();
+            }
+          }
+        }
+      });
+      swfAnimatorFrameREd.setMaxValue(120.0);
+      swfAnimatorFrameREd.setMinValue(1.0);
+      swfAnimatorFrameREd.setHasMaxValue(true);
+      swfAnimatorFrameREd.setHasMinValue(true);
+      swfAnimatorFrameREd.setOnlyIntegers(true);
+      swfAnimatorFrameREd.setText("60");
+      swfAnimatorFrameREd.setPreferredSize(new Dimension(56, 22));
+      swfAnimatorFrameREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+    }
+    return panel_12;
   }
 } //  @jve:decl-index=0:visual-constraint="10,10"
 
