@@ -42,9 +42,6 @@ public class ChecksFunc extends VariationFunc {
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     // Fixed checks plugin by Keeps and Xyrus02, http://xyrus02.deviantart.com/art/Checks-The-fixed-version-138967784?q=favby%3Aapophysis-plugins%2F39181234&qo=3
-    double x = pAffineTP.x * _cs;
-    double y = pAffineTP.y * _cs;
-
     int isXY = (int) Math.rint(pAffineTP.x * _cs) + (int) Math.rint(pAffineTP.y * _cs);
 
     // -X- This is just for code readability,
@@ -58,8 +55,8 @@ public class ChecksFunc extends VariationFunc {
       dy = _ncy;
     }
     else {
-      dx = x;
-      dy = y + rny;
+      dx = this.x;
+      dy = this.y + rny;
     }
 
     pVarTP.x += pAmount * (pAffineTP.x + dx);
