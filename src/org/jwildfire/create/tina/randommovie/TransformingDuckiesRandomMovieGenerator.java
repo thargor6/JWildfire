@@ -41,6 +41,14 @@ public class TransformingDuckiesRandomMovieGenerator extends RandomMovieGenerato
       double amplitude = -1.25 * Math.random() * 2.5;
       movie.getGlobalScripts()[0] = new GlobalScript(GlobalScriptType.ROTATE_ROLL, amplitude);
     }
+    {
+      double amplitude = Math.random() * 2.0 + 0.2;
+      movie.getGlobalScripts()[1] = new GlobalScript(GlobalScriptType.MOVE_CAM_X, amplitude);
+    }
+    if (Math.random() < 0.5) {
+      double amplitude = Math.random() * 0.25;
+      movie.getGlobalScripts()[2] = new GlobalScript(GlobalScriptType.MOVE_CAM_Z, amplitude);
+    }
 
     {
       double amplitude = -0.5 * Math.random() * 1.0;

@@ -17,6 +17,7 @@
 package org.jwildfire.create.tina.swing;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
@@ -368,19 +369,7 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
     panel.setLocation(0, 0);
 
     if (imageWidth > 16 && imageHeight > 16 && pPart.getFlame() != null) {
-      SimpleImage img;
-      {
-        RenderInfo info = new RenderInfo(imageWidth, imageHeight, RenderMode.PREVIEW);
-        Flame flame = pPart.getFlame().makeCopy();
-        double wScl = (double) info.getImageWidth() / (double) flame.getWidth();
-        double hScl = (double) info.getImageHeight() / (double) flame.getHeight();
-        flame.setPixelsPerUnit((wScl + hScl) * 0.5 * flame.getPixelsPerUnit());
-        flame.setWidth(imageWidth);
-        flame.setHeight(imageHeight);
-        FlameRenderer renderer = new FlameRenderer(flame, prefs, false, false);
-        RenderedFlame res = renderer.renderFlame(info);
-        img = res.getImage();
-      }
+      SimpleImage img = createPartPreview(pPart, imageWidth, imageHeight);
       ImagePanel imgPanel = new ImagePanel(img, 0, 0, img.getImageWidth());
       imgPanel.setImage(img);
       imgPanel.setLocation(BORDER_SIZE, BORDER_SIZE);
@@ -424,9 +413,10 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
       panel.add(framesMorphField);
     }
     yOff += FIELD_HEIGHT;
+    int btnOff = BORDER_SIZE;
     {
       JButton editButton = new JButton("E");
-      editButton.setBounds(BORDER_SIZE, yOff, BUTTON_WIDTH, FIELD_HEIGHT);
+      editButton.setBounds(btnOff, yOff, BUTTON_WIDTH, FIELD_HEIGHT);
       editButton.setFont(new Font("Dialog", Font.BOLD, 10));
       editButton.setToolTipText("Edit flame");
       editButton.addActionListener(new java.awt.event.ActionListener() {
@@ -435,10 +425,24 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
         }
       });
       panel.add(editButton);
+      btnOff += BUTTON_WIDTH + 1;
+    }
+    {
+      JButton replaceButton = new JButton("R");
+      replaceButton.setBounds(btnOff, yOff, BUTTON_WIDTH, FIELD_HEIGHT);
+      replaceButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      replaceButton.setToolTipText("Replace flame with flame from editor");
+      replaceButton.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent e) {
+          replacePartBtn_clicked(pPart);
+        }
+      });
+      panel.add(replaceButton);
+      btnOff += BUTTON_WIDTH + 1;
     }
     {
       JButton delButton = new JButton("D");
-      delButton.setBounds(BORDER_SIZE + BUTTON_WIDTH + 1, yOff, BUTTON_WIDTH, FIELD_HEIGHT);
+      delButton.setBounds(btnOff, yOff, BUTTON_WIDTH, FIELD_HEIGHT);
       delButton.setFont(new Font("Dialog", Font.BOLD, 10));
       delButton.setToolTipText("Remove flame from movie");
       delButton.addActionListener(new java.awt.event.ActionListener() {
@@ -447,12 +451,13 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
         }
       });
       panel.add(delButton);
+      btnOff += BUTTON_WIDTH + 1;
     }
 
     JRadioButton selectButton;
     {
       selectButton = new JRadioButton("");
-      selectButton.setBounds(BORDER_SIZE + 2 * BUTTON_WIDTH + 2, yOff, FIELD_WIDTH + 1, FIELD_HEIGHT);
+      selectButton.setBounds(btnOff, yOff, FIELD_WIDTH + 1, FIELD_HEIGHT);
       selectButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
           enableControls();
@@ -470,9 +475,50 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
     swfAnimatorFlamesPanel.getParent().validate();
   }
 
+  private SimpleImage createPartPreview(final FlameMoviePart pPart, int imageWidth, int imageHeight) {
+    RenderInfo info = new RenderInfo(imageWidth, imageHeight, RenderMode.PREVIEW);
+    Flame flame = pPart.getFlame().makeCopy();
+    double wScl = (double) info.getImageWidth() / (double) flame.getWidth();
+    double hScl = (double) info.getImageHeight() / (double) flame.getHeight();
+    flame.setPixelsPerUnit((wScl + hScl) * 0.5 * flame.getPixelsPerUnit());
+    flame.setWidth(imageWidth);
+    flame.setHeight(imageHeight);
+    FlameRenderer renderer = new FlameRenderer(flame, prefs, false, false);
+    RenderedFlame res = renderer.renderFlame(info);
+    return res.getImage();
+  }
+
   protected void editPartBtn_clicked(FlameMoviePart pPart) {
     parentCtrl.importFlame(pPart.getFlame(), true);
     parentCtrl.getRootTabbedPane().setSelectedIndex(0);
+  }
+
+  protected void replacePartBtn_clicked(FlameMoviePart pPart) {
+    Flame flame = parentCtrl.getCurrFlame();
+    if (flame != null) {
+      pPart.setFlame(flame);
+      int idx = currMovie.getParts().indexOf(pPart);
+      if (idx >= 0) {
+        JPanel pnl = flamePartPanelList.get(idx);
+        for (Component cmp : pnl.getComponents()) {
+          if (cmp instanceof ImagePanel) {
+            ImagePanel imgPnl = (ImagePanel) cmp;
+            int width = imgPnl.getBounds().width;
+            int height = imgPnl.getBounds().height;
+            SimpleImage img = createPartPreview(pPart, width, height);
+            imgPnl.setImage(img, imgPnl.getBounds().x, imgPnl.getBounds().y, width);
+            imgPnl.invalidate();
+            imgPnl.validate();
+            pnl.getParent().repaint();
+            break;
+          }
+        }
+      }
+
+      previewFlameImage();
+      clearCurrentPreview();
+      updateThumbnails();
+    }
   }
 
   public void loadFlameFromClipboardButton_clicked() {
@@ -1271,7 +1317,7 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
     }
 
     private void generatePreview(int pQuality) {
-      preview = new SimpleImage(IMG_WIDTH * IMG_COUNT, IMG_HEIGHT);
+      preview = new SimpleImage(IMG_WIDTH * IMG_COUNT, IMG_HEIGHT - 1);
       for (int i = 0; i < IMG_COUNT; i++) {
 
         RenderInfo info = new RenderInfo(IMG_WIDTH, IMG_HEIGHT, RenderMode.PREVIEW);
@@ -1414,6 +1460,7 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
   public void importFromRandomBatch(int pIdx) {
     if (pIdx >= 0 && pIdx < randomBatch.size()) {
       currMovie = randomBatch.get(pIdx).getMovie();
+
       refreshControls();
       previewFlameImage();
     }
@@ -1481,6 +1528,9 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
   }
 
   public void moviePropertyChanged() {
+    if (noRefresh) {
+      return;
+    }
     updateMovieFields();
     previewFlameImage();
     clearCurrentPreview();

@@ -112,7 +112,7 @@ public class Desktop extends JApplet {
       TinaInternalFrame tinaFrame = (TinaInternalFrame) getTinaInternalFrame();
       tinaController = tinaFrame.createController(errorHandler, prefs);
       try {
-        tinaController.createRandomBatch(3, RandomFlameGeneratorList.DEFAULT_GENERATOR_NAME, RandomSymmetryGeneratorList.DEFAULT_GENERATOR_NAME, RandomBatchQuality.LOW);
+        tinaController.createRandomBatch(2, RandomFlameGeneratorList.DEFAULT_GENERATOR_NAME, RandomSymmetryGeneratorList.DEFAULT_GENERATOR_NAME, RandomBatchQuality.LOW);
       }
       catch (Exception ex) {
         ex.printStackTrace();

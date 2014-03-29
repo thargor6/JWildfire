@@ -52,7 +52,16 @@ public class RotatingMandelbrotRandomMovieGenerator extends RandomMovieGenerator
 
     {
       double amplitude = -0.125 * Math.random() * 0.25;
-      movie.getGlobalScripts()[2] = new GlobalScript(GlobalScriptType.ROTATE_ROLL, amplitude);
+      movie.getGlobalScripts()[2] = new GlobalScript(GlobalScriptType.ROTATE_PITCH, amplitude);
+    }
+
+    {
+      double amplitude = 0.2 + Math.random() * 0.6;
+      movie.getGlobalScripts()[2] = new GlobalScript(GlobalScriptType.MOVE_CAM_Z, amplitude);
+    }
+    {
+      double amplitude = 0.2 + Math.random() * 1.4;
+      movie.getGlobalScripts()[2] = new GlobalScript(GlobalScriptType.MOVE_CAM_Y, amplitude);
     }
 
     return movie;

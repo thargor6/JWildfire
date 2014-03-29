@@ -5972,12 +5972,12 @@ public class TinaInternalFrame extends JInternalFrame {
       swfAnimatorPanel_1.setLayout(new BorderLayout(0, 0));
 
       JPanel panel_83 = new JPanel();
-      panel_83.setPreferredSize(new Dimension(10, 70));
+      panel_83.setPreferredSize(new Dimension(10, 74));
       swfAnimatorPanel_1.add(panel_83, BorderLayout.SOUTH);
       panel_83.setLayout(new BorderLayout(0, 0));
 
       swfAnimatorFrameSlider = new JSlider();
-      swfAnimatorFrameSlider.setBorder(new EmptyBorder(0, 4, 0, 4));
+      swfAnimatorFrameSlider.setBorder(new EmptyBorder(0, 4, 4, 0));
       panel_83.add(swfAnimatorFrameSlider, BorderLayout.CENTER);
       swfAnimatorFrameSlider.setMinorTickSpacing(5);
       swfAnimatorFrameSlider.setMinimum(1);
@@ -6028,7 +6028,7 @@ public class TinaInternalFrame extends JInternalFrame {
       panel_85.add(swfAnimatorGlobalScript1REd);
       swfAnimatorGlobalScript1REd.setValue(1.0);
       swfAnimatorGlobalScript1REd.setWithMotionCurve(true);
-      swfAnimatorGlobalScript1REd.setValueStep(1.0);
+      swfAnimatorGlobalScript1REd.setValueStep(0.1);
       swfAnimatorGlobalScript1REd.setPreferredSize(new Dimension(100, 24));
       swfAnimatorGlobalScript1REd.setMotionPropertyName("globalScript1");
       swfAnimatorGlobalScript1REd.setLinkedLabelControlName("animateGlobalScriptLbl");
@@ -6054,7 +6054,7 @@ public class TinaInternalFrame extends JInternalFrame {
       panel_85.add(swfAnimatorGlobalScript2REd);
       swfAnimatorGlobalScript2REd.setValue(1.0);
       swfAnimatorGlobalScript2REd.setWithMotionCurve(true);
-      swfAnimatorGlobalScript2REd.setValueStep(1.0);
+      swfAnimatorGlobalScript2REd.setValueStep(0.1);
       swfAnimatorGlobalScript2REd.setPreferredSize(new Dimension(100, 24));
       swfAnimatorGlobalScript2REd.setMotionPropertyName("globalScript2");
       swfAnimatorGlobalScript2REd.setLinkedLabelControlName("lblGlobalScript");
@@ -6080,7 +6080,7 @@ public class TinaInternalFrame extends JInternalFrame {
       panel_85.add(swfAnimatorGlobalScript3REd);
       swfAnimatorGlobalScript3REd.setValue(1.0);
       swfAnimatorGlobalScript3REd.setWithMotionCurve(true);
-      swfAnimatorGlobalScript3REd.setValueStep(1.0);
+      swfAnimatorGlobalScript3REd.setValueStep(0.1);
       swfAnimatorGlobalScript3REd.setPreferredSize(new Dimension(100, 24));
       swfAnimatorGlobalScript3REd.setMotionPropertyName("globalScript3");
       swfAnimatorGlobalScript3REd.setLinkedLabelControlName("lblGlobalScript_1");
@@ -6106,7 +6106,7 @@ public class TinaInternalFrame extends JInternalFrame {
       panel_85.add(swfAnimatorGlobalScript4REd);
       swfAnimatorGlobalScript4REd.setValue(1.0);
       swfAnimatorGlobalScript4REd.setWithMotionCurve(true);
-      swfAnimatorGlobalScript4REd.setValueStep(1.0);
+      swfAnimatorGlobalScript4REd.setValueStep(0.1);
       swfAnimatorGlobalScript4REd.setPreferredSize(new Dimension(100, 24));
       swfAnimatorGlobalScript4REd.setMotionPropertyName("globalScript4");
       swfAnimatorGlobalScript4REd.setLinkedLabelControlName("lblGlobalScript_2");
@@ -6132,7 +6132,7 @@ public class TinaInternalFrame extends JInternalFrame {
       panel_85.add(swfAnimatorGlobalScript5REd);
       swfAnimatorGlobalScript5REd.setValue(1.0);
       swfAnimatorGlobalScript5REd.setWithMotionCurve(true);
-      swfAnimatorGlobalScript5REd.setValueStep(1.0);
+      swfAnimatorGlobalScript5REd.setValueStep(0.1);
       swfAnimatorGlobalScript5REd.setPreferredSize(new Dimension(100, 24));
       swfAnimatorGlobalScript5REd.setMotionPropertyName("globalScript5");
       swfAnimatorGlobalScript5REd.setLinkedLabelControlName("lblGlobalScript_3");
@@ -6162,7 +6162,7 @@ public class TinaInternalFrame extends JInternalFrame {
 
       swfAnimatorGlobalScript6REd = new JWFNumberField();
       swfAnimatorGlobalScript6REd.setWithMotionCurve(true);
-      swfAnimatorGlobalScript6REd.setValueStep(1.0);
+      swfAnimatorGlobalScript6REd.setValueStep(0.1);
       swfAnimatorGlobalScript6REd.setValue(1.0);
       swfAnimatorGlobalScript6REd.setPreferredSize(new Dimension(100, 24));
       swfAnimatorGlobalScript6REd.setMotionPropertyName("globalScript6");
@@ -6207,7 +6207,7 @@ public class TinaInternalFrame extends JInternalFrame {
 
       swfAnimatorGlobalScript7REd = new JWFNumberField();
       swfAnimatorGlobalScript7REd.setWithMotionCurve(true);
-      swfAnimatorGlobalScript7REd.setValueStep(1.0);
+      swfAnimatorGlobalScript7REd.setValueStep(0.1);
       swfAnimatorGlobalScript7REd.setValue(1.0);
       swfAnimatorGlobalScript7REd.setPreferredSize(new Dimension(100, 24));
       swfAnimatorGlobalScript7REd.setMotionPropertyName("globalScript7");
@@ -6252,7 +6252,7 @@ public class TinaInternalFrame extends JInternalFrame {
 
       swfAnimatorGlobalScript8REd = new JWFNumberField();
       swfAnimatorGlobalScript8REd.setWithMotionCurve(true);
-      swfAnimatorGlobalScript8REd.setValueStep(1.0);
+      swfAnimatorGlobalScript8REd.setValueStep(0.1);
       swfAnimatorGlobalScript8REd.setValue(1.0);
       swfAnimatorGlobalScript8REd.setPreferredSize(new Dimension(100, 24));
       swfAnimatorGlobalScript8REd.setMotionPropertyName("globalScript8");
@@ -6342,7 +6342,7 @@ public class TinaInternalFrame extends JInternalFrame {
 
       swfAnimatorGlobalScript10REd = new JWFNumberField();
       swfAnimatorGlobalScript10REd.setWithMotionCurve(true);
-      swfAnimatorGlobalScript10REd.setValueStep(1.0);
+      swfAnimatorGlobalScript10REd.setValueStep(0.1);
       swfAnimatorGlobalScript10REd.setValue(1.0);
       swfAnimatorGlobalScript10REd.setPreferredSize(new Dimension(100, 24));
       swfAnimatorGlobalScript10REd.setMotionPropertyName("globalScript10");
@@ -6387,7 +6387,7 @@ public class TinaInternalFrame extends JInternalFrame {
 
       swfAnimatorGlobalScript11REd = new JWFNumberField();
       swfAnimatorGlobalScript11REd.setWithMotionCurve(true);
-      swfAnimatorGlobalScript11REd.setValueStep(1.0);
+      swfAnimatorGlobalScript11REd.setValueStep(0.1);
       swfAnimatorGlobalScript11REd.setValue(1.0);
       swfAnimatorGlobalScript11REd.setPreferredSize(new Dimension(100, 24));
       swfAnimatorGlobalScript11REd.setMotionPropertyName("globalScript11");
@@ -6432,7 +6432,7 @@ public class TinaInternalFrame extends JInternalFrame {
 
       swfAnimatorGlobalScript12REd = new JWFNumberField();
       swfAnimatorGlobalScript12REd.setWithMotionCurve(true);
-      swfAnimatorGlobalScript12REd.setValueStep(1.0);
+      swfAnimatorGlobalScript12REd.setValueStep(0.1);
       swfAnimatorGlobalScript12REd.setValue(1.0);
       swfAnimatorGlobalScript12REd.setPreferredSize(new Dimension(100, 24));
       swfAnimatorGlobalScript12REd.setMotionPropertyName("globalScript12");
@@ -17297,7 +17297,7 @@ public class TinaInternalFrame extends JInternalFrame {
       panel_86.add(swfAnimatorXFormScript1REd);
       swfAnimatorXFormScript1REd.setValue(1.0);
       swfAnimatorXFormScript1REd.setWithMotionCurve(true);
-      swfAnimatorXFormScript1REd.setValueStep(1.0);
+      swfAnimatorXFormScript1REd.setValueStep(0.1);
       swfAnimatorXFormScript1REd.setPreferredSize(new Dimension(100, 24));
       swfAnimatorXFormScript1REd.setMotionPropertyName("xFormScript1");
       swfAnimatorXFormScript1REd.setLinkedLabelControlName("animateXFormScriptLbl");
@@ -17323,7 +17323,7 @@ public class TinaInternalFrame extends JInternalFrame {
       panel_86.add(swfAnimatorXFormScript2REd);
       swfAnimatorXFormScript2REd.setValue(1.0);
       swfAnimatorXFormScript2REd.setWithMotionCurve(true);
-      swfAnimatorXFormScript2REd.setValueStep(1.0);
+      swfAnimatorXFormScript2REd.setValueStep(0.1);
       swfAnimatorXFormScript2REd.setPreferredSize(new Dimension(100, 24));
       swfAnimatorXFormScript2REd.setMotionPropertyName("xFormScript2");
       swfAnimatorXFormScript2REd.setLinkedLabelControlName("lblXformScript");
@@ -17349,7 +17349,7 @@ public class TinaInternalFrame extends JInternalFrame {
       panel_86.add(swfAnimatorXFormScript3REd);
       swfAnimatorXFormScript3REd.setValue(1.0);
       swfAnimatorXFormScript3REd.setWithMotionCurve(true);
-      swfAnimatorXFormScript3REd.setValueStep(1.0);
+      swfAnimatorXFormScript3REd.setValueStep(0.1);
       swfAnimatorXFormScript3REd.setPreferredSize(new Dimension(100, 24));
       swfAnimatorXFormScript3REd.setMotionPropertyName("xFormScript3");
       swfAnimatorXFormScript3REd.setLinkedLabelControlName("lblXformScript_1");
@@ -17390,7 +17390,7 @@ public class TinaInternalFrame extends JInternalFrame {
       panel_86.add(swfAnimatorXFormScript5REd);
       swfAnimatorXFormScript5REd.setValue(1.0);
       swfAnimatorXFormScript5REd.setWithMotionCurve(true);
-      swfAnimatorXFormScript5REd.setValueStep(1.0);
+      swfAnimatorXFormScript5REd.setValueStep(0.1);
       swfAnimatorXFormScript5REd.setPreferredSize(new Dimension(100, 24));
       swfAnimatorXFormScript5REd.setMotionPropertyName("xFormScript5");
       swfAnimatorXFormScript5REd.setLinkedLabelControlName("lblXformScript_3");
@@ -17401,7 +17401,7 @@ public class TinaInternalFrame extends JInternalFrame {
       panel_86.add(swfAnimatorXFormScript4REd);
       swfAnimatorXFormScript4REd.setValue(1.0);
       swfAnimatorXFormScript4REd.setWithMotionCurve(true);
-      swfAnimatorXFormScript4REd.setValueStep(1.0);
+      swfAnimatorXFormScript4REd.setValueStep(0.1);
       swfAnimatorXFormScript4REd.setPreferredSize(new Dimension(100, 24));
       swfAnimatorXFormScript4REd.setMotionPropertyName("xFormScript4");
       swfAnimatorXFormScript4REd.setLinkedLabelControlName("lblXformScript_2");
@@ -17431,7 +17431,7 @@ public class TinaInternalFrame extends JInternalFrame {
 
       swfAnimatorXFormScript6REd = new JWFNumberField();
       swfAnimatorXFormScript6REd.setWithMotionCurve(true);
-      swfAnimatorXFormScript6REd.setValueStep(1.0);
+      swfAnimatorXFormScript6REd.setValueStep(0.1);
       swfAnimatorXFormScript6REd.setValue(1.0);
       swfAnimatorXFormScript6REd.setPreferredSize(new Dimension(100, 24));
       swfAnimatorXFormScript6REd.setMotionPropertyName("xFormScript6");
@@ -17477,7 +17477,7 @@ public class TinaInternalFrame extends JInternalFrame {
 
       swfAnimatorXFormScript7REd = new JWFNumberField();
       swfAnimatorXFormScript7REd.setWithMotionCurve(true);
-      swfAnimatorXFormScript7REd.setValueStep(1.0);
+      swfAnimatorXFormScript7REd.setValueStep(0.1);
       swfAnimatorXFormScript7REd.setValue(1.0);
       swfAnimatorXFormScript7REd.setPreferredSize(new Dimension(100, 24));
       swfAnimatorXFormScript7REd.setMotionPropertyName("xFormScript7");
@@ -17523,7 +17523,7 @@ public class TinaInternalFrame extends JInternalFrame {
 
       swfAnimatorXFormScript8REd = new JWFNumberField();
       swfAnimatorXFormScript8REd.setWithMotionCurve(true);
-      swfAnimatorXFormScript8REd.setValueStep(1.0);
+      swfAnimatorXFormScript8REd.setValueStep(0.1);
       swfAnimatorXFormScript8REd.setValue(1.0);
       swfAnimatorXFormScript8REd.setPreferredSize(new Dimension(100, 24));
       swfAnimatorXFormScript8REd.setMotionPropertyName("xFormScript8");
@@ -17568,7 +17568,7 @@ public class TinaInternalFrame extends JInternalFrame {
 
       swfAnimatorXFormScript9REd = new JWFNumberField();
       swfAnimatorXFormScript9REd.setWithMotionCurve(true);
-      swfAnimatorXFormScript9REd.setValueStep(1.0);
+      swfAnimatorXFormScript9REd.setValueStep(0.1);
       swfAnimatorXFormScript9REd.setValue(1.0);
       swfAnimatorXFormScript9REd.setPreferredSize(new Dimension(100, 24));
       swfAnimatorXFormScript9REd.setMotionPropertyName("xFormScript9");
@@ -17613,7 +17613,7 @@ public class TinaInternalFrame extends JInternalFrame {
 
       swfAnimatorXFormScript10REd = new JWFNumberField();
       swfAnimatorXFormScript10REd.setWithMotionCurve(true);
-      swfAnimatorXFormScript10REd.setValueStep(1.0);
+      swfAnimatorXFormScript10REd.setValueStep(0.1);
       swfAnimatorXFormScript10REd.setValue(1.0);
       swfAnimatorXFormScript10REd.setPreferredSize(new Dimension(100, 24));
       swfAnimatorXFormScript10REd.setMotionPropertyName("xFormScript10");
@@ -17658,7 +17658,7 @@ public class TinaInternalFrame extends JInternalFrame {
 
       swfAnimatorXFormScript11REd = new JWFNumberField();
       swfAnimatorXFormScript11REd.setWithMotionCurve(true);
-      swfAnimatorXFormScript11REd.setValueStep(1.0);
+      swfAnimatorXFormScript11REd.setValueStep(0.1);
       swfAnimatorXFormScript11REd.setValue(1.0);
       swfAnimatorXFormScript11REd.setPreferredSize(new Dimension(100, 24));
       swfAnimatorXFormScript11REd.setMotionPropertyName("xFormScript11");
@@ -17703,7 +17703,7 @@ public class TinaInternalFrame extends JInternalFrame {
 
       swfAnimatorXFormScript12REd = new JWFNumberField();
       swfAnimatorXFormScript12REd.setWithMotionCurve(true);
-      swfAnimatorXFormScript12REd.setValueStep(1.0);
+      swfAnimatorXFormScript12REd.setValueStep(0.1);
       swfAnimatorXFormScript12REd.setValue(1.0);
       swfAnimatorXFormScript12REd.setPreferredSize(new Dimension(100, 24));
       swfAnimatorXFormScript12REd.setMotionPropertyName("xFormScript12");
