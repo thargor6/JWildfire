@@ -227,7 +227,6 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
       randomBatch.add(0, new MovieThumbnail(currMovie, null));
       updateThumbnails();
 
-      enableControls();
     }
     finally {
       noRefresh = false;
@@ -924,7 +923,8 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
             currMovie = movie;
             updateThumbnails();
           }
-          refreshUI();
+          refreshControls();
+          previewFlameImage();
         }
       }
     }
@@ -933,7 +933,7 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
     }
   }
 
-  private void refreshUI() {
+  protected void refreshControls() {
     noRefresh = true;
     try {
       swfAnimatorFramesPerSecondREd.setValue(currMovie.getFramesPerSecond());
@@ -994,7 +994,6 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
     finally {
       noRefresh = false;
     }
-    previewFlameImage();
   }
 
   private void setXFormScriptToUI(XFormScript pScript, JComboBox pCmb, JWFNumberField pAmountField) {
@@ -1030,7 +1029,8 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
           currMovie = movie;
           updateThumbnails();
         }
-        refreshUI();
+        refreshControls();
+        previewFlameImage();
       }
     }
     catch (Throwable ex) {
@@ -1260,10 +1260,6 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
     previewFlameImage();
   }
 
-  public void moviePropertyChanged() {
-    previewFlameImage();
-  }
-
   private class MovieThumbnail {
     private FlameMovie movie;
     private SimpleImage preview;
@@ -1418,7 +1414,8 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
   public void importFromRandomBatch(int pIdx) {
     if (pIdx >= 0 && pIdx < randomBatch.size()) {
       currMovie = randomBatch.get(pIdx).getMovie();
-      refreshUI();
+      refreshControls();
+      previewFlameImage();
     }
   }
 
@@ -1481,6 +1478,13 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
 
   public void previewFlameImage() {
     refreshFlameImage(true);
+  }
+
+  public void moviePropertyChanged() {
+    updateMovieFields();
+    previewFlameImage();
+    clearCurrentPreview();
+    updateThumbnails();
   }
 
 }

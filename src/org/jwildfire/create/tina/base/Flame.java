@@ -40,6 +40,7 @@ public class Flame implements Assignable<Flame>, Serializable {
   @AnimAware
   private double centreY;
   private final MotionCurve centreYCurve = new MotionCurve();
+
   private int width;
   private int height;
   @AnimAware
@@ -57,6 +58,15 @@ public class Flame implements Assignable<Flame>, Serializable {
   @AnimAware
   private double camZoom;
   private final MotionCurve camZoomCurve = new MotionCurve();
+  @AnimAware
+  private double camPosX;
+  private final MotionCurve camPosXCurve = new MotionCurve();
+  @AnimAware
+  private double camPosY;
+  private final MotionCurve camPosYCurve = new MotionCurve();
+  @AnimAware
+  private double camPosZ;
+  private final MotionCurve camPosZCurve = new MotionCurve();
   @AnimAware
   private double camZ;
   private final MotionCurve camZCurve = new MotionCurve();
@@ -171,6 +181,9 @@ public class Flame implements Assignable<Flame>, Serializable {
     focusZ = 0.0;
     dimishZ = 0.0;
     camDOF = 0.0;
+    camPosX = 0.0;
+    camPosY = 0.0;
+    camPosZ = 0.0;
     camZ = 0.0;
     newCamDOF = false;
     camDOFArea = 0.5;
@@ -486,6 +499,12 @@ public class Flame implements Assignable<Flame>, Serializable {
     focusZCurve.assign(pFlame.focusZCurve);
     dimishZ = pFlame.dimishZ;
     dimishZCurve.assign(pFlame.dimishZCurve);
+    camPosX = pFlame.camPosX;
+    camPosXCurve.assign(pFlame.camPosXCurve);
+    camPosY = pFlame.camPosY;
+    camPosYCurve.assign(pFlame.camPosYCurve);
+    camPosZ = pFlame.camPosZ;
+    camPosZCurve.assign(pFlame.camPosZCurve);
     camZ = pFlame.camZ;
     camZCurve.assign(pFlame.camZCurve);
     camDOF = pFlame.camDOF;
@@ -581,6 +600,9 @@ public class Flame implements Assignable<Flame>, Serializable {
         (fabs(camDOF - pFlame.camDOF) > EPSILON) || !camDOFCurve.isEqual(pFlame.camDOFCurve) ||
         (fabs(camDOFArea - pFlame.camDOFArea) > EPSILON) || !camDOFAreaCurve.isEqual(pFlame.camDOFAreaCurve) ||
         (fabs(camDOFExponent - pFlame.camDOFExponent) > EPSILON) || !camDOFExponentCurve.isEqual(pFlame.camDOFExponentCurve) ||
+        (fabs(camPosX - pFlame.camPosX) > EPSILON) || !camPosXCurve.isEqual(pFlame.camPosXCurve) ||
+        (fabs(camPosY - pFlame.camPosY) > EPSILON) || !camPosYCurve.isEqual(pFlame.camPosYCurve) ||
+        (fabs(camPosZ - pFlame.camPosZ) > EPSILON) || !camPosZCurve.isEqual(pFlame.camPosZCurve) ||
         (fabs(camZ - pFlame.camZ) > EPSILON) || !camZCurve.isEqual(pFlame.camZCurve) ||
         (newCamDOF != pFlame.newCamDOF) || (fabs(spatialFilterRadius - pFlame.spatialFilterRadius) > EPSILON) ||
         !spatialFilterKernel.equals(pFlame.spatialFilterKernel) || !deFilterKernel.equals(pFlame.deFilterKernel) ||
@@ -1005,7 +1027,8 @@ public class Flame implements Assignable<Flame>, Serializable {
   }
 
   public boolean is3dProjectionRequired() {
-    return fabs(getCamYaw()) > EPSILON || fabs(getCamPitch()) > EPSILON || fabs(getCamPerspective()) > EPSILON || isDOFActive() || fabs(getDimishZ()) > EPSILON;
+    return fabs(getCamYaw()) > EPSILON || fabs(getCamPitch()) > EPSILON || fabs(getCamPerspective()) > EPSILON || isDOFActive() ||
+        fabs(getDimishZ()) > EPSILON || fabs(getCamPosX()) > EPSILON || fabs(getCamPosY()) > EPSILON || fabs(getCamPosZ()) > EPSILON;
   }
 
   public MotionCurve getCamPitchCurve() {
@@ -1027,4 +1050,49 @@ public class Flame implements Assignable<Flame>, Serializable {
   public void setStereo3dSwapSides(boolean pStereo3dSwapSides) {
     stereo3dSwapSides = pStereo3dSwapSides;
   }
+
+  public MotionCurve getCentreXCurve() {
+    return centreXCurve;
+  }
+
+  public MotionCurve getCentreYCurve() {
+    return centreYCurve;
+  }
+
+  public double getCamPosX() {
+    return camPosX;
+  }
+
+  public void setCamPosX(double camPosX) {
+    this.camPosX = camPosX;
+  }
+
+  public double getCamPosY() {
+    return camPosY;
+  }
+
+  public void setCamPosY(double camPosY) {
+    this.camPosY = camPosY;
+  }
+
+  public double getCamPosZ() {
+    return camPosZ;
+  }
+
+  public void setCamPosZ(double camPosZ) {
+    this.camPosZ = camPosZ;
+  }
+
+  public MotionCurve getCamPosXCurve() {
+    return camPosXCurve;
+  }
+
+  public MotionCurve getCamPosYCurve() {
+    return camPosYCurve;
+  }
+
+  public MotionCurve getCamPosZCurve() {
+    return camPosZCurve;
+  }
+
 }

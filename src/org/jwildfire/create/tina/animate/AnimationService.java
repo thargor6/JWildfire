@@ -240,10 +240,21 @@ public class AnimationService {
             envX[i + 1] = srcX[i];
             envY[i + 1] = (double) pFrameCount / (DFLT_DURATION * pFPS) * srcY[i];
           }
-          envX[envX.length - 1] = 2 * envX[envX.length - 2];
-          envY[envY.length - 1] = 2.0 * envY[envY.length - 2];
-          envX[0] = -envX[envX.length - 2];
-          envY[0] = -envY[envY.length - 2];
+          final int DX = 50;
+          double DY;
+
+          DY = (envY[envY.length - 2] - envY[envY.length - 3]) / (double) (envX[envX.length - 2] - envX[envX.length - 3]) * DX;
+          if (Double.isInfinite(DY) || Double.isNaN(DY))
+            DY = 0.0;
+          envX[envX.length - 1] = envX[envX.length - 2] + DX;
+          envY[envY.length - 1] = envY[envY.length - 2] + DY;
+
+          DY = (envY[2] - envY[1]) / (double) (envX[2] - envX[1]) * DX;
+          if (Double.isInfinite(DY) || Double.isNaN(DY))
+            DY = 0.0;
+
+          envX[0] = envX[1] - DX;
+          envY[0] = envY[1] - DY;
         }
         else {
           envX = new int[1];
@@ -253,14 +264,23 @@ public class AnimationService {
         }
       }
       else {
-        envX = new int[3];
-        envY = new double[3];
-        envX[1] = pFrameCount;
-        envY[1] = pAmplitude * (double) pFrameCount / (DFLT_DURATION * pFPS) * pScript.getAmplitude();
-        envX[2] = 2 * envX[1];
-        envY[2] = 2.0 * envY[1];
-        envX[0] = -envX[1];
-        envY[0] = -envY[1];
+        double amp = pAmplitude * (double) pFrameCount / (DFLT_DURATION * pFPS) * pScript.getAmplitude();
+        if (fabs(amp) < EPSILON) {
+          envX = new int[1];
+          envY = new double[1];
+          envX[0] = 0;
+          envY[0] = amp;
+        }
+        else {
+          envX = new int[2];
+          envY = new double[2];
+          final int DX = 10;
+          final double DY = amp / (double) pFrameCount * (double) DX;
+          envX[0] = -DX;
+          envY[0] = -DY;
+          envX[1] = pFrameCount + DX;
+          envY[1] = amp + DY;
+        }
       }
     }
 
@@ -286,6 +306,15 @@ public class AnimationService {
           break;
         case ROTATE_YAW:
           curve = pFlame.getCamYawCurve();
+          break;
+        case MOVE_X:
+          curve = pFlame.getCamPosXCurve();
+          break;
+        case MOVE_Y:
+          curve = pFlame.getCamPosYCurve();
+          break;
+        case MOVE_Z:
+          curve = pFlame.getCamPosZCurve();
           break;
         default:
           throw new IllegalArgumentException(pScript.toString());

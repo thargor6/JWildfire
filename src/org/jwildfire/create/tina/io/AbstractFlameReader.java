@@ -55,6 +55,9 @@ public class AbstractFlameReader {
   public static final String ATTR_CAM_YAW = "cam_yaw";
   public static final String ATTR_CAM_PERSP = "cam_persp";
   public static final String ATTR_CAM_PERSPECTIVE = "cam_perspective"; // old version
+  public static final String ATTR_CAM_POS_X = "cam_pos_x";
+  public static final String ATTR_CAM_POS_Y = "cam_pos_y";
+  public static final String ATTR_CAM_POS_Z = "cam_pos_z";
   public static final String ATTR_CAM_ZPOS = "cam_zpos";
   public static final String ATTR_CAM_XFOCUS = "cam_xfocus";
   public static final String ATTR_CAM_YFOCUS = "cam_yfocus";
@@ -227,6 +230,15 @@ public class AbstractFlameReader {
     }
     if ((hs = atts.get(ATTR_CAM_ZPOS)) != null) {
       pFlame.setCamZ(Double.parseDouble(hs));
+    }
+    if ((hs = atts.get(ATTR_CAM_POS_X)) != null) {
+      pFlame.setCamPosX(Double.parseDouble(hs));
+    }
+    if ((hs = atts.get(ATTR_CAM_POS_Y)) != null) {
+      pFlame.setCamPosY(Double.parseDouble(hs));
+    }
+    if ((hs = atts.get(ATTR_CAM_POS_Z)) != null) {
+      pFlame.setCamPosZ(Double.parseDouble(hs));
     }
     if ((hs = atts.get(ATTR_CAM_XFOCUS)) != null) {
       pFlame.setFocusX(Double.parseDouble(hs));

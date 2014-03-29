@@ -281,6 +281,13 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
     data.cameraCentreYSlider = parameterObject.pCameraCentreYSlider;
     data.cameraZoomREd = parameterObject.pCameraZoomREd;
     data.cameraZoomSlider = parameterObject.pCameraZoomSlider;
+    data.camPosXREd = parameterObject.camPosXREd;
+    data.camPosXSlider = parameterObject.camPosXSlider;
+    data.camPosYREd = parameterObject.camPosYREd;
+    data.camPosYSlider = parameterObject.camPosYSlider;
+    data.camPosZREd = parameterObject.camPosZREd;
+    data.camPosZSlider = parameterObject.camPosZSlider;
+
     data.newDOFCBx = parameterObject.pNewDOFCBx;
     data.focusXREd = parameterObject.pFocusXREd;
     data.focusXSlider = parameterObject.pFocusXSlider;

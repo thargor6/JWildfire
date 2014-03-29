@@ -72,6 +72,9 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
     res.add(data.cameraCentreYREd);
     res.add(data.cameraZoomREd);
     res.add(data.pixelsPerUnitREd);
+    res.add(data.camPosXREd);
+    res.add(data.camPosYREd);
+    res.add(data.camPosZREd);
 
     res.add(data.brightnessREd);
     res.add(data.contrastREd);
@@ -99,6 +102,9 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
     enableControl(data.cameraCentreYREd, false);
     enableControl(data.cameraZoomREd, false);
     enableControl(data.pixelsPerUnitREd, false);
+    enableControl(data.camPosXREd, false);
+    enableControl(data.camPosYREd, false);
+    enableControl(data.camPosZREd, false);
 
     enableControl(data.motionBlurLengthField, false);
     enableControl(data.motionBlurTimeStepField, false);
@@ -545,6 +551,15 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
     boolean oldNoRefrsh = isNoRefresh();
     setNoRefresh(true);
     try {
+
+      data.camPosXREd.setText(Tools.doubleToString(getCurrFlame().getCamPosX()));
+      data.camPosXSlider.setValue(Tools.FTOI(getCurrFlame().getCamPosX() * TinaController.SLIDER_SCALE_CENTRE));
+
+      data.camPosYREd.setText(Tools.doubleToString(getCurrFlame().getCamPosY()));
+      data.camPosYSlider.setValue(Tools.FTOI(getCurrFlame().getCamPosY() * TinaController.SLIDER_SCALE_CENTRE));
+
+      data.camPosZREd.setText(Tools.doubleToString(getCurrFlame().getCamPosZ()));
+      data.camPosZSlider.setValue(Tools.FTOI(getCurrFlame().getCamPosZ() * TinaController.SLIDER_SCALE_CENTRE));
 
       data.cameraPerspectiveREd.setText(Tools.doubleToString(getCurrFlame().getCamPerspective()));
       data.cameraPerspectiveSlider.setValue(Tools.FTOI(getCurrFlame().getCamPerspective() * TinaController.SLIDER_SCALE_PERSPECTIVE));
@@ -1267,6 +1282,30 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
         owner.refreshFlameImage(false);
       }
     }
+  }
+
+  public void camPosXSlider_stateChanged(ChangeEvent e) {
+    flameSliderChanged(data.camPosXSlider, data.camPosXREd, "camPosX", TinaController.SLIDER_SCALE_CENTRE);
+  }
+
+  public void camPosYSlider_stateChanged(ChangeEvent e) {
+    flameSliderChanged(data.camPosYSlider, data.camPosYREd, "camPosY", TinaController.SLIDER_SCALE_CENTRE);
+  }
+
+  public void camPosZSlider_stateChanged(ChangeEvent e) {
+    flameSliderChanged(data.camPosZSlider, data.camPosZREd, "camPosZ", TinaController.SLIDER_SCALE_CENTRE);
+  }
+
+  public void camPosXREd_changed() {
+    flameTextFieldChanged(data.camPosXSlider, data.camPosXREd, "camPosX", TinaController.SLIDER_SCALE_CENTRE);
+  }
+
+  public void camPosYREd_changed() {
+    flameTextFieldChanged(data.camPosYSlider, data.camPosYREd, "camPosY", TinaController.SLIDER_SCALE_CENTRE);
+  }
+
+  public void camPosZREd_changed() {
+    flameTextFieldChanged(data.camPosZSlider, data.camPosZREd, "camPosZ", TinaController.SLIDER_SCALE_CENTRE);
   }
 
 }

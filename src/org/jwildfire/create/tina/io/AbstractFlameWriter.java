@@ -1,6 +1,9 @@
 package org.jwildfire.create.tina.io;
 
 import static org.jwildfire.base.mathlib.MathLib.EPSILON;
+import static org.jwildfire.create.tina.io.AbstractFlameReader.ATTR_CAM_POS_X;
+import static org.jwildfire.create.tina.io.AbstractFlameReader.ATTR_CAM_POS_Y;
+import static org.jwildfire.create.tina.io.AbstractFlameReader.ATTR_CAM_POS_Z;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -151,6 +154,9 @@ public class AbstractFlameWriter {
     if (pFlame.getDimishZ() != 0.0) {
       attrList.add(xb.createAttr("cam_zdimish", pFlame.getDimishZ()));
     }
+    attrList.add(xb.createAttr(ATTR_CAM_POS_X, pFlame.getCamPosX()));
+    attrList.add(xb.createAttr(ATTR_CAM_POS_Y, pFlame.getCamPosY()));
+    attrList.add(xb.createAttr(ATTR_CAM_POS_Z, pFlame.getCamPosZ()));
     attrList.add(xb.createAttr("cam_zpos", pFlame.getCamZ()));
     attrList.add(xb.createAttr("cam_dof", pFlame.getCamDOF()));
     attrList.add(xb.createAttr("cam_dof_area", pFlame.getCamDOFArea()));

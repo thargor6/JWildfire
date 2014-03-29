@@ -1651,58 +1651,58 @@ public class TinaInternalFrame extends JInternalFrame {
     if (tinaCameraPanel == null) {
       tinaPixelsPerUnitLbl = new JLabel();
       tinaPixelsPerUnitLbl.setName("tinaPixelsPerUnitLbl");
-      tinaPixelsPerUnitLbl.setText("Pixels per unit");
+      tinaPixelsPerUnitLbl.setText("Pixs per unit");
       tinaPixelsPerUnitLbl.setFont(new Font("Dialog", Font.BOLD, 10));
-      tinaPixelsPerUnitLbl.setLocation(new Point(488, 76));
-      tinaPixelsPerUnitLbl.setSize(new Dimension(94, 22));
+      tinaPixelsPerUnitLbl.setLocation(new Point(390, 78));
+      tinaPixelsPerUnitLbl.setSize(new Dimension(68, 22));
       tinaPixelsPerUnitLbl.setPreferredSize(new Dimension(94, 22));
       tinaCameraZoomLbl = new JLabel();
       tinaCameraZoomLbl.setName("tinaCameraZoomLbl");
       tinaCameraZoomLbl.setText("Zoom");
-      tinaCameraZoomLbl.setLocation(new Point(488, 52));
-      tinaCameraZoomLbl.setSize(new Dimension(94, 22));
+      tinaCameraZoomLbl.setLocation(new Point(390, 52));
+      tinaCameraZoomLbl.setSize(new Dimension(68, 22));
       tinaCameraZoomLbl.setFont(new Font("Dialog", Font.BOLD, 10));
       tinaCameraZoomLbl.setPreferredSize(new Dimension(94, 22));
       tinaCameraCentreYLbl = new JLabel();
       tinaCameraCentreYLbl.setName("tinaCameraCentreYLbl");
       tinaCameraCentreYLbl.setText("CentreY");
-      tinaCameraCentreYLbl.setLocation(new Point(488, 28));
-      tinaCameraCentreYLbl.setSize(new Dimension(94, 22));
+      tinaCameraCentreYLbl.setLocation(new Point(390, 28));
+      tinaCameraCentreYLbl.setSize(new Dimension(68, 22));
       tinaCameraCentreYLbl.setFont(new Font("Dialog", Font.BOLD, 10));
       tinaCameraCentreYLbl.setPreferredSize(new Dimension(94, 22));
       tinaCameraCentreXLbl = new JLabel();
       tinaCameraCentreXLbl.setName("tinaCameraCentreXLbl");
       tinaCameraCentreXLbl.setText("CentreX");
-      tinaCameraCentreXLbl.setLocation(new Point(488, 4));
-      tinaCameraCentreXLbl.setSize(new Dimension(94, 22));
+      tinaCameraCentreXLbl.setLocation(new Point(390, 6));
+      tinaCameraCentreXLbl.setSize(new Dimension(68, 22));
       tinaCameraCentreXLbl.setFont(new Font("Dialog", Font.BOLD, 10));
       tinaCameraCentreXLbl.setPreferredSize(new Dimension(94, 22));
       tinaCameraPerspectiveLbl = new JLabel();
       tinaCameraPerspectiveLbl.setName("tinaCameraPerspectiveLbl");
       tinaCameraPerspectiveLbl.setText("Perspective");
       tinaCameraPerspectiveLbl.setLocation(new Point(4, 76));
-      tinaCameraPerspectiveLbl.setSize(new Dimension(94, 22));
+      tinaCameraPerspectiveLbl.setSize(new Dimension(68, 22));
       tinaCameraPerspectiveLbl.setFont(new Font("Dialog", Font.BOLD, 10));
       tinaCameraPerspectiveLbl.setPreferredSize(new Dimension(94, 22));
       tinaCameraYawLbl = new JLabel();
       tinaCameraYawLbl.setName("tinaCameraYawLbl");
       tinaCameraYawLbl.setText("Yaw");
       tinaCameraYawLbl.setLocation(new Point(4, 52));
-      tinaCameraYawLbl.setSize(new Dimension(94, 22));
+      tinaCameraYawLbl.setSize(new Dimension(68, 22));
       tinaCameraYawLbl.setFont(new Font("Dialog", Font.BOLD, 10));
       tinaCameraYawLbl.setPreferredSize(new Dimension(94, 22));
       tinaCameraPitchLbl = new JLabel();
       tinaCameraPitchLbl.setName("tinaCameraPitchLbl");
       tinaCameraPitchLbl.setText("Pitch");
       tinaCameraPitchLbl.setLocation(new Point(4, 28));
-      tinaCameraPitchLbl.setSize(new Dimension(94, 22));
+      tinaCameraPitchLbl.setSize(new Dimension(68, 22));
       tinaCameraPitchLbl.setFont(new Font("Dialog", Font.BOLD, 10));
       tinaCameraPitchLbl.setPreferredSize(new Dimension(94, 22));
       tinaCameraRollLbl = new JLabel();
       tinaCameraRollLbl.setName("tinaCameraRollLbl");
       tinaCameraRollLbl.setText("Roll");
       tinaCameraRollLbl.setLocation(new Point(4, 4));
-      tinaCameraRollLbl.setSize(new Dimension(94, 22));
+      tinaCameraRollLbl.setSize(new Dimension(68, 22));
       tinaCameraRollLbl.setFont(new Font("Dialog", Font.BOLD, 10));
       tinaCameraRollLbl.setPreferredSize(new Dimension(94, 22));
       tinaCameraPanel = new JPanel();
@@ -1731,6 +1731,191 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaCameraPanel.add(tinaPixelsPerUnitLbl, null);
       tinaCameraPanel.add(getTinaPixelsPerUnitREd(), null);
       tinaCameraPanel.add(getTinaPixelsPerUnitSlider(), null);
+
+      tinaCameraCamPosXREd = new JWFNumberField();
+      tinaCameraCamPosXREd.setValueStep(0.05);
+      tinaCameraCamPosXREd.setText("");
+      tinaCameraCamPosXREd.setSize(new Dimension(100, 24));
+      tinaCameraCamPosXREd.setPreferredSize(new Dimension(100, 24));
+      tinaCameraCamPosXREd.setMouseThreshold(1.0);
+      tinaCameraCamPosXREd.setMotionPropertyName("centreX");
+      tinaCameraCamPosXREd.setLocation(new Point(456, 4));
+      tinaCameraCamPosXREd.setLinkedMotionControlName("tinaCameraCamPosXSlider");
+      tinaCameraCamPosXREd.setLinkedLabelControlName("tinaCameraCamPosXLbl");
+      tinaCameraCamPosXREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      tinaCameraCamPosXREd.setBounds(840, 4, 100, 24);
+      tinaCameraCamPosXREd.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getFlameControls().editMotionCurve(e);
+        }
+      });
+      tinaCameraCamPosXREd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (!tinaCameraCamPosXREd.isMouseAdjusting() || tinaCameraCamPosXREd.getMouseChangeCount() == 0) {
+            if (!tinaCameraCamPosXSlider.getValueIsAdjusting()) {
+              tinaController.saveUndoPoint();
+            }
+          }
+          tinaController.getFlameControls().camPosXREd_changed();
+        }
+      });
+      tinaCameraPanel.add(tinaCameraCamPosXREd);
+
+      JLabel tinaCameraCamPosXLbl = new JLabel();
+      tinaCameraCamPosXLbl.setToolTipText("");
+      tinaCameraCamPosXLbl.setText("CamPosX");
+      tinaCameraCamPosXLbl.setSize(new Dimension(68, 22));
+      tinaCameraCamPosXLbl.setPreferredSize(new Dimension(94, 22));
+      tinaCameraCamPosXLbl.setName("tinaCameraCamPosXLbl");
+      tinaCameraCamPosXLbl.setLocation(new Point(390, 6));
+      tinaCameraCamPosXLbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      tinaCameraCamPosXLbl.setBounds(774, 4, 68, 22);
+      tinaCameraPanel.add(tinaCameraCamPosXLbl);
+
+      tinaCameraCamPosXSlider = new JSlider();
+      tinaCameraCamPosXSlider.setValue(0);
+      tinaCameraCamPosXSlider.setSize(new Dimension(205, 19));
+      tinaCameraCamPosXSlider.setPreferredSize(new Dimension(220, 19));
+      tinaCameraCamPosXSlider.setName("tinaCameraCamPosXSlider");
+      tinaCameraCamPosXSlider.setMinimum(-25000);
+      tinaCameraCamPosXSlider.setMaximum(25000);
+      tinaCameraCamPosXSlider.setLocation(new Point(558, 4));
+      tinaCameraCamPosXSlider.setBounds(942, 4, 205, 19);
+      tinaCameraCamPosXSlider.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mousePressed(MouseEvent e) {
+          tinaController.saveUndoPoint();
+        }
+      });
+      tinaCameraCamPosXSlider.addChangeListener(new javax.swing.event.ChangeListener() {
+        public void stateChanged(javax.swing.event.ChangeEvent e) {
+          tinaController.getFlameControls().camPosXSlider_stateChanged(e);
+        }
+      });
+
+      tinaCameraPanel.add(tinaCameraCamPosXSlider);
+
+      JLabel tinaCameraCamPosYLbl = new JLabel();
+      tinaCameraCamPosYLbl.setText("CamPosY");
+      tinaCameraCamPosYLbl.setSize(new Dimension(68, 22));
+      tinaCameraCamPosYLbl.setPreferredSize(new Dimension(94, 22));
+      tinaCameraCamPosYLbl.setName("tinaCameraCamPosYLbl");
+      tinaCameraCamPosYLbl.setLocation(new Point(390, 6));
+      tinaCameraCamPosYLbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      tinaCameraCamPosYLbl.setBounds(774, 28, 68, 22);
+      tinaCameraPanel.add(tinaCameraCamPosYLbl);
+
+      tinaCameraCamPosYREd = new JWFNumberField();
+      tinaCameraCamPosYREd.setValueStep(0.05);
+      tinaCameraCamPosYREd.setText("");
+      tinaCameraCamPosYREd.setSize(new Dimension(100, 24));
+      tinaCameraCamPosYREd.setPreferredSize(new Dimension(100, 24));
+      tinaCameraCamPosYREd.setMouseThreshold(1.0);
+      tinaCameraCamPosYREd.setMotionPropertyName("centreX");
+      tinaCameraCamPosYREd.setLocation(new Point(456, 4));
+      tinaCameraCamPosYREd.setLinkedMotionControlName("tinaCameraCamPosYSlider");
+      tinaCameraCamPosYREd.setLinkedLabelControlName("tinaCameraCamPosYLbl");
+      tinaCameraCamPosYREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      tinaCameraCamPosYREd.setBounds(840, 28, 100, 24);
+      tinaCameraCamPosYREd.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getFlameControls().editMotionCurve(e);
+        }
+      });
+      tinaCameraCamPosYREd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (!tinaCameraCamPosYREd.isMouseAdjusting() || tinaCameraCamPosYREd.getMouseChangeCount() == 0) {
+            if (!tinaCameraCamPosYSlider.getValueIsAdjusting()) {
+              tinaController.saveUndoPoint();
+            }
+          }
+          tinaController.getFlameControls().camPosYREd_changed();
+        }
+      });
+      tinaCameraPanel.add(tinaCameraCamPosYREd);
+
+      tinaCameraCamPosYSlider = new JSlider();
+      tinaCameraCamPosYSlider.setValue(0);
+      tinaCameraCamPosYSlider.setSize(new Dimension(205, 19));
+      tinaCameraCamPosYSlider.setPreferredSize(new Dimension(220, 19));
+      tinaCameraCamPosYSlider.setName("tinaCameraCamPosYSlider");
+      tinaCameraCamPosYSlider.setMinimum(-25000);
+      tinaCameraCamPosYSlider.setMaximum(25000);
+      tinaCameraCamPosYSlider.setLocation(new Point(558, 4));
+      tinaCameraCamPosYSlider.setBounds(942, 28, 205, 19);
+      tinaCameraCamPosYSlider.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mousePressed(MouseEvent e) {
+          tinaController.saveUndoPoint();
+        }
+      });
+      tinaCameraCamPosYSlider.addChangeListener(new javax.swing.event.ChangeListener() {
+        public void stateChanged(javax.swing.event.ChangeEvent e) {
+          tinaController.getFlameControls().camPosYSlider_stateChanged(e);
+        }
+      });
+      tinaCameraPanel.add(tinaCameraCamPosYSlider);
+
+      JLabel tinaCameraCamPosZLbl = new JLabel();
+      tinaCameraCamPosZLbl.setText("CamPosZ");
+      tinaCameraCamPosZLbl.setSize(new Dimension(68, 22));
+      tinaCameraCamPosZLbl.setPreferredSize(new Dimension(94, 22));
+      tinaCameraCamPosZLbl.setName("tinaCameraCamPosZLbl");
+      tinaCameraCamPosZLbl.setLocation(new Point(390, 6));
+      tinaCameraCamPosZLbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      tinaCameraCamPosZLbl.setBounds(775, 52, 68, 22);
+      tinaCameraPanel.add(tinaCameraCamPosZLbl);
+
+      tinaCameraCamPosZREd = new JWFNumberField();
+      tinaCameraCamPosZREd.setValueStep(0.05);
+      tinaCameraCamPosZREd.setText("");
+      tinaCameraCamPosZREd.setSize(new Dimension(100, 24));
+      tinaCameraCamPosZREd.setPreferredSize(new Dimension(100, 24));
+      tinaCameraCamPosZREd.setMouseThreshold(1.0);
+      tinaCameraCamPosZREd.setMotionPropertyName("centreX");
+      tinaCameraCamPosZREd.setLocation(new Point(456, 4));
+      tinaCameraCamPosZREd.setLinkedMotionControlName("tinaCameraCamPosZSlider");
+      tinaCameraCamPosZREd.setLinkedLabelControlName("tinaCameraCamPosZLbl");
+      tinaCameraCamPosZREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      tinaCameraCamPosZREd.setBounds(841, 52, 100, 24);
+      tinaCameraCamPosZREd.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getFlameControls().editMotionCurve(e);
+        }
+      });
+      tinaCameraCamPosZREd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (!tinaCameraCamPosZREd.isMouseAdjusting() || tinaCameraCamPosZREd.getMouseChangeCount() == 0) {
+            if (!tinaCameraCamPosZSlider.getValueIsAdjusting()) {
+              tinaController.saveUndoPoint();
+            }
+          }
+          tinaController.getFlameControls().camPosZREd_changed();
+        }
+      });
+      tinaCameraPanel.add(tinaCameraCamPosZREd);
+
+      tinaCameraCamPosZSlider = new JSlider();
+      tinaCameraCamPosZSlider.setValue(0);
+      tinaCameraCamPosZSlider.setSize(new Dimension(205, 19));
+      tinaCameraCamPosZSlider.setPreferredSize(new Dimension(220, 19));
+      tinaCameraCamPosZSlider.setName("tinaCameraCamPosZSlider");
+      tinaCameraCamPosZSlider.setMinimum(-25000);
+      tinaCameraCamPosZSlider.setMaximum(25000);
+      tinaCameraCamPosZSlider.setLocation(new Point(558, 4));
+      tinaCameraCamPosZSlider.setBounds(943, 52, 205, 19);
+      tinaCameraCamPosZSlider.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mousePressed(MouseEvent e) {
+          tinaController.saveUndoPoint();
+        }
+      });
+      tinaCameraCamPosZSlider.addChangeListener(new javax.swing.event.ChangeListener() {
+        public void stateChanged(javax.swing.event.ChangeEvent e) {
+          tinaController.getFlameControls().camPosZSlider_stateChanged(e);
+        }
+      });
+      tinaCameraPanel.add(tinaCameraCamPosZSlider);
     }
     return tinaCameraPanel;
   }
@@ -1848,7 +2033,7 @@ public class TinaInternalFrame extends JInternalFrame {
         }
       });
       tinaCameraRollREd.setPreferredSize(new Dimension(100, 24));
-      tinaCameraRollREd.setLocation(new Point(100, 4));
+      tinaCameraRollREd.setLocation(new Point(71, 4));
       tinaCameraRollREd.setSize(new Dimension(100, 24));
       tinaCameraRollREd.setFont(new Font("Dialog", Font.PLAIN, 10));
     }
@@ -1884,7 +2069,7 @@ public class TinaInternalFrame extends JInternalFrame {
       });
       tinaCameraPitchREd.setPreferredSize(new Dimension(100, 24));
       tinaCameraPitchREd.setText("");
-      tinaCameraPitchREd.setLocation(new Point(100, 28));
+      tinaCameraPitchREd.setLocation(new Point(71, 28));
       tinaCameraPitchREd.setSize(new Dimension(100, 24));
       tinaCameraPitchREd.setFont(new Font("Dialog", Font.PLAIN, 10));
     }
@@ -1920,7 +2105,7 @@ public class TinaInternalFrame extends JInternalFrame {
       });
       tinaCameraYawREd.setPreferredSize(new Dimension(100, 24));
       tinaCameraYawREd.setText("");
-      tinaCameraYawREd.setLocation(new Point(100, 52));
+      tinaCameraYawREd.setLocation(new Point(71, 52));
       tinaCameraYawREd.setSize(new Dimension(100, 24));
       tinaCameraYawREd.setFont(new Font("Dialog", Font.PLAIN, 10));
     }
@@ -1959,7 +2144,7 @@ public class TinaInternalFrame extends JInternalFrame {
       });
       tinaCameraPerspectiveREd.setPreferredSize(new Dimension(100, 24));
       tinaCameraPerspectiveREd.setText("");
-      tinaCameraPerspectiveREd.setLocation(new Point(100, 76));
+      tinaCameraPerspectiveREd.setLocation(new Point(71, 76));
       tinaCameraPerspectiveREd.setSize(new Dimension(100, 24));
       tinaCameraPerspectiveREd.setFont(new Font("Dialog", Font.PLAIN, 10));
     }
@@ -1982,8 +2167,8 @@ public class TinaInternalFrame extends JInternalFrame {
         }
       });
       tinaCameraRollSlider.setMaximum(180);
-      tinaCameraRollSlider.setLocation(new Point(202, 4));
-      tinaCameraRollSlider.setSize(new Dimension(220, 19));
+      tinaCameraRollSlider.setLocation(new Point(173, 4));
+      tinaCameraRollSlider.setSize(new Dimension(205, 19));
       tinaCameraRollSlider.setPreferredSize(new Dimension(220, 19));
       tinaCameraRollSlider.setValue(0);
       tinaCameraRollSlider.setMinimum(-180);
@@ -2013,8 +2198,8 @@ public class TinaInternalFrame extends JInternalFrame {
       });
       tinaCameraPitchSlider.setMaximum(180);
       tinaCameraPitchSlider.setPreferredSize(new Dimension(220, 19));
-      tinaCameraPitchSlider.setLocation(new Point(202, 28));
-      tinaCameraPitchSlider.setSize(new Dimension(220, 19));
+      tinaCameraPitchSlider.setLocation(new Point(173, 28));
+      tinaCameraPitchSlider.setSize(new Dimension(205, 19));
       tinaCameraPitchSlider.setValue(0);
       tinaCameraPitchSlider.setMinimum(-180);
       tinaCameraPitchSlider.addChangeListener(new javax.swing.event.ChangeListener() {
@@ -2043,8 +2228,8 @@ public class TinaInternalFrame extends JInternalFrame {
       });
       tinaCameraYawSlider.setMaximum(180);
       tinaCameraYawSlider.setPreferredSize(new Dimension(220, 19));
-      tinaCameraYawSlider.setLocation(new Point(202, 52));
-      tinaCameraYawSlider.setSize(new Dimension(220, 19));
+      tinaCameraYawSlider.setLocation(new Point(173, 52));
+      tinaCameraYawSlider.setSize(new Dimension(205, 19));
       tinaCameraYawSlider.setValue(0);
       tinaCameraYawSlider.setMinimum(-180);
       tinaCameraYawSlider.addChangeListener(new javax.swing.event.ChangeListener() {
@@ -2072,9 +2257,9 @@ public class TinaInternalFrame extends JInternalFrame {
         }
       });
       tinaCameraPerspectiveSlider.setPreferredSize(new Dimension(220, 19));
-      tinaCameraPerspectiveSlider.setSize(new Dimension(220, 19));
+      tinaCameraPerspectiveSlider.setSize(new Dimension(205, 19));
       tinaCameraPerspectiveSlider.setValue(0);
-      tinaCameraPerspectiveSlider.setLocation(new Point(202, 76));
+      tinaCameraPerspectiveSlider.setLocation(new Point(173, 76));
       tinaCameraPerspectiveSlider.addChangeListener(new javax.swing.event.ChangeListener() {
         public void stateChanged(javax.swing.event.ChangeEvent e) {
           tinaController.getFlameControls().cameraPerspectiveSlider_stateChanged(e);
@@ -2202,7 +2387,7 @@ public class TinaInternalFrame extends JInternalFrame {
       });
       tinaCameraCentreXREd.setPreferredSize(new Dimension(100, 24));
       tinaCameraCentreXREd.setText("");
-      tinaCameraCentreXREd.setLocation(new Point(584, 4));
+      tinaCameraCentreXREd.setLocation(new Point(456, 4));
       tinaCameraCentreXREd.setSize(new Dimension(100, 24));
       tinaCameraCentreXREd.setFont(new Font("Dialog", Font.PLAIN, 10));
     }
@@ -2239,7 +2424,7 @@ public class TinaInternalFrame extends JInternalFrame {
       });
       tinaCameraCentreYREd.setPreferredSize(new Dimension(100, 24));
       tinaCameraCentreYREd.setText("");
-      tinaCameraCentreYREd.setLocation(new Point(584, 28));
+      tinaCameraCentreYREd.setLocation(new Point(456, 28));
       tinaCameraCentreYREd.setSize(new Dimension(100, 24));
       tinaCameraCentreYREd.setFont(new Font("Dialog", Font.PLAIN, 10));
     }
@@ -2262,8 +2447,8 @@ public class TinaInternalFrame extends JInternalFrame {
         }
       });
       tinaCameraCentreXSlider.setMinimum(-25000);
-      tinaCameraCentreXSlider.setLocation(new Point(686, 4));
-      tinaCameraCentreXSlider.setSize(new Dimension(220, 19));
+      tinaCameraCentreXSlider.setLocation(new Point(558, 4));
+      tinaCameraCentreXSlider.setSize(new Dimension(205, 19));
       tinaCameraCentreXSlider.setPreferredSize(new Dimension(220, 19));
       tinaCameraCentreXSlider.setValue(0);
       tinaCameraCentreXSlider.setMaximum(25000);
@@ -2292,8 +2477,8 @@ public class TinaInternalFrame extends JInternalFrame {
         }
       });
       tinaCameraCentreYSlider.setMinimum(-25000);
-      tinaCameraCentreYSlider.setLocation(new Point(686, 28));
-      tinaCameraCentreYSlider.setSize(new Dimension(220, 19));
+      tinaCameraCentreYSlider.setLocation(new Point(558, 28));
+      tinaCameraCentreYSlider.setSize(new Dimension(205, 19));
       tinaCameraCentreYSlider.setPreferredSize(new Dimension(220, 19));
       tinaCameraCentreYSlider.setValue(0);
       tinaCameraCentreYSlider.setMaximum(25000);
@@ -2336,7 +2521,7 @@ public class TinaInternalFrame extends JInternalFrame {
       });
       tinaCameraZoomREd.setPreferredSize(new Dimension(100, 24));
       tinaCameraZoomREd.setText("");
-      tinaCameraZoomREd.setLocation(new Point(584, 52));
+      tinaCameraZoomREd.setLocation(new Point(456, 52));
       tinaCameraZoomREd.setSize(new Dimension(100, 24));
       tinaCameraZoomREd.setFont(new Font("Dialog", Font.PLAIN, 10));
     }
@@ -2359,8 +2544,8 @@ public class TinaInternalFrame extends JInternalFrame {
         }
       });
       tinaCameraZoomSlider.setMinimum(100);
-      tinaCameraZoomSlider.setLocation(new Point(686, 52));
-      tinaCameraZoomSlider.setSize(new Dimension(220, 19));
+      tinaCameraZoomSlider.setLocation(new Point(558, 52));
+      tinaCameraZoomSlider.setSize(new Dimension(205, 19));
       tinaCameraZoomSlider.setPreferredSize(new Dimension(220, 19));
       tinaCameraZoomSlider.setValue(0);
       tinaCameraZoomSlider.setMaximum(10000);
@@ -2472,7 +2657,7 @@ public class TinaInternalFrame extends JInternalFrame {
       });
       tinaPixelsPerUnitREd.setPreferredSize(new Dimension(100, 24));
       tinaPixelsPerUnitREd.setText("");
-      tinaPixelsPerUnitREd.setLocation(new Point(584, 76));
+      tinaPixelsPerUnitREd.setLocation(new Point(456, 76));
       tinaPixelsPerUnitREd.setSize(new Dimension(100, 24));
       tinaPixelsPerUnitREd.setFont(new Font("Dialog", Font.PLAIN, 10));
     }
@@ -2497,8 +2682,8 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaPixelsPerUnitSlider.setMaximum(1000);
       tinaPixelsPerUnitSlider.setMinimum(0);
       tinaPixelsPerUnitSlider.setValue(0);
-      tinaPixelsPerUnitSlider.setSize(new Dimension(220, 19));
-      tinaPixelsPerUnitSlider.setLocation(new Point(686, 76));
+      tinaPixelsPerUnitSlider.setSize(new Dimension(205, 19));
+      tinaPixelsPerUnitSlider.setLocation(new Point(558, 76));
       tinaPixelsPerUnitSlider.setPreferredSize(new Dimension(220, 19));
       tinaPixelsPerUnitSlider.addChangeListener(new javax.swing.event.ChangeListener() {
         public void stateChanged(javax.swing.event.ChangeEvent e) {
@@ -4140,7 +4325,8 @@ public class TinaInternalFrame extends JInternalFrame {
         getPostSymmetryCentreYSlider(), getStereo3dModeCmb(), getStereo3dAngleREd(), getStereo3dAngleSlider(), getStereo3dEyeDistREd(),
         getStereo3dEyeDistSlider(), getStereo3dLeftEyeColorCmb(), getStereo3dRightEyeColorCmb(), getStereo3dInterpolatedImageCountREd(),
         getStereo3dInterpolatedImageCountSlider(), getStereo3dPreviewCmb(), getStereo3dFocalOffsetREd(), getStereo3dFocalOffsetSlider(),
-        getStereo3dSwapSidesCBx());
+        getStereo3dSwapSidesCBx(), getTinaCameraCamPosXREd(), getTinaCameraCamPosXSlider(), getTinaCameraCamPosYREd(), getTinaCameraCamPosYSlider(),
+        getTinaCameraCamPosZREd(), getTinaCameraCamPosZSlider());
 
     tinaController = new TinaController(params);
 
@@ -9721,6 +9907,12 @@ public class TinaInternalFrame extends JInternalFrame {
   private JWFNumberField swfAnimatorGlobalScript12REd;
   private JButton btnRender;
   private JPanel panel_12;
+  private JWFNumberField tinaCameraCamPosXREd;
+  private JWFNumberField tinaCameraCamPosYREd;
+  private JWFNumberField tinaCameraCamPosZREd;
+  private JSlider tinaCameraCamPosXSlider;
+  private JSlider tinaCameraCamPosYSlider;
+  private JSlider tinaCameraCamPosZSlider;
 
   /**
    * This method initializes renderBatchJobsScrollPane	
@@ -17933,6 +18125,30 @@ public class TinaInternalFrame extends JInternalFrame {
       swfAnimatorFrameREd.setFont(new Font("Dialog", Font.PLAIN, 10));
     }
     return panel_12;
+  }
+
+  public JWFNumberField getTinaCameraCamPosXREd() {
+    return tinaCameraCamPosXREd;
+  }
+
+  public JWFNumberField getTinaCameraCamPosYREd() {
+    return tinaCameraCamPosYREd;
+  }
+
+  public JWFNumberField getTinaCameraCamPosZREd() {
+    return tinaCameraCamPosZREd;
+  }
+
+  public JSlider getTinaCameraCamPosXSlider() {
+    return tinaCameraCamPosXSlider;
+  }
+
+  public JSlider getTinaCameraCamPosYSlider() {
+    return tinaCameraCamPosYSlider;
+  }
+
+  public JSlider getTinaCameraCamPosZSlider() {
+    return tinaCameraCamPosZSlider;
   }
 } //  @jve:decl-index=0:visual-constraint="10,10"
 
