@@ -26,6 +26,7 @@ public class RandomMovieGeneratorList {
 
   static {
     registerRandomMovieGenerator(AllRandomMovieGenerator.class);
+    registerRandomMovieGenerator(TransformingBubblesRandomMovieGenerator.class);
     registerRandomMovieGenerator(TransformingDuckiesRandomMovieGenerator.class);
     registerRandomMovieGenerator(RotatingMandelbrotRandomMovieGenerator.class);
   }

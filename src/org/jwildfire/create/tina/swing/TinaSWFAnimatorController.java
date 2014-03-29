@@ -27,6 +27,8 @@ import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.Transferable;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.util.ArrayList;
@@ -55,6 +57,7 @@ import javax.swing.event.ChangeListener;
 import org.jwildfire.base.Prefs;
 import org.jwildfire.base.ResolutionProfile;
 import org.jwildfire.create.tina.animate.AnimationService;
+import org.jwildfire.create.tina.animate.FlameMorphType;
 import org.jwildfire.create.tina.animate.FlameMovie;
 import org.jwildfire.create.tina.animate.FlameMoviePart;
 import org.jwildfire.create.tina.animate.GlobalScript;
@@ -343,8 +346,8 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
 
   private void addFlameToFlamePanel(final FlameMoviePart pPart) {
     final int PANEL_HEIGHT = 240;
-    final int LABEL_WIDTH = 100;
-    final int FIELD_WIDTH = 62;
+    final int LABEL_WIDTH = 96;
+    final int FIELD_WIDTH = 66;
     final int FIELD_HEIGHT = 24;
     final int LABEL_HEIGHT = 24;
     final int BUTTON_WIDTH = 48;
@@ -385,6 +388,7 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
       framesField.setOnlyIntegers(true);
       framesField.setValue(pPart.getFrameCount());
       framesField.setHasMinValue(true);
+      framesField.setFont(new Font("Dialog", Font.PLAIN, 10));
       framesField.setMinValue(1.0);
       framesField.setBounds(xOff + BORDER_SIZE + LABEL_WIDTH, yOff, FIELD_WIDTH, FIELD_HEIGHT);
       framesField.addChangeListener(new ChangeListener() {
@@ -403,6 +407,7 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
       framesMorphField.setOnlyIntegers(true);
       framesMorphField.setHasMinValue(true);
       framesMorphField.setMinValue(0.0);
+      framesMorphField.setFont(new Font("Dialog", Font.PLAIN, 10));
       framesMorphField.setValue(pPart.getFrameMorphCount());
       framesMorphField.setBounds(xOff + BORDER_SIZE + LABEL_WIDTH, yOff, FIELD_WIDTH, FIELD_HEIGHT);
       framesMorphField.addChangeListener(new ChangeListener() {
@@ -412,6 +417,35 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
       });
       panel.add(framesMorphField);
     }
+
+    yOff += FIELD_HEIGHT;
+    {
+      JLabel morphTypeLbl = new JLabel("Morph type");
+      morphTypeLbl.setBounds(xOff + BORDER_SIZE, yOff, LABEL_WIDTH, LABEL_HEIGHT);
+      panel.add(morphTypeLbl);
+      final JComboBox morphTypeCmb = new JComboBox();
+      morphTypeCmb.addItemListener(new ItemListener() {
+        public void itemStateChanged(ItemEvent e) {
+          morpthTypeChanged(morphTypeCmb, pPart);
+        }
+      });
+      morphTypeCmb.setSize(new Dimension(125, 22));
+      morphTypeCmb.setFont(new Font("Dialog", Font.PLAIN, 10));
+      boolean oldNoRefresh = noRefresh;
+      try {
+        noRefresh = true;
+        morphTypeCmb.addItem(FlameMorphType.FADE);
+        morphTypeCmb.addItem(FlameMorphType.MORPH);
+      }
+      finally {
+        noRefresh = oldNoRefresh;
+      }
+
+      morphTypeCmb.setSelectedItem(pPart.getFlameMorphType());
+      morphTypeCmb.setBounds(xOff + BORDER_SIZE + LABEL_WIDTH, yOff, FIELD_WIDTH, FIELD_HEIGHT);
+      panel.add(morphTypeCmb);
+    }
+
     yOff += FIELD_HEIGHT;
     int btnOff = BORDER_SIZE;
     {
@@ -458,6 +492,7 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
     {
       selectButton = new JRadioButton("");
       selectButton.setBounds(btnOff, yOff, FIELD_WIDTH + 1, FIELD_HEIGHT);
+      selectButton.setFont(new Font("Dialog", Font.PLAIN, 10));
       selectButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
           enableControls();
@@ -880,6 +915,21 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
         pMorphFramesField.setValue(framesMorphCount);
       }
       pPart.setFrameMorphCount(framesMorphCount);
+    }
+    catch (Throwable ex) {
+      errorHandler.handleError(ex);
+    }
+  }
+
+  private void morpthTypeChanged(JComboBox pMorphTypeCmb, FlameMoviePart pPart) {
+    if (noRefresh) {
+      return;
+    }
+    try {
+      pPart.setFlameMorphType((FlameMorphType) pMorphTypeCmb.getSelectedItem());
+      previewFlameImage();
+      clearCurrentPreview();
+      updateThumbnails();
     }
     catch (Throwable ex) {
       errorHandler.handleError(ex);

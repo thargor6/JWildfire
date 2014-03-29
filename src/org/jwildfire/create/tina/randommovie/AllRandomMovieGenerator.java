@@ -29,6 +29,7 @@ public class AllRandomMovieGenerator extends RandomMovieGenerator {
     generators = new ArrayList<RandomMovieGenerator>();
     generators.add(new RotatingMandelbrotRandomMovieGenerator());
     generators.add(new TransformingDuckiesRandomMovieGenerator());
+    generators.add(new TransformingBubblesRandomMovieGenerator());
   }
 
   @Override

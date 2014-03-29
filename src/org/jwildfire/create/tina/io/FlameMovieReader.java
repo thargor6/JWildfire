@@ -23,6 +23,7 @@ import static org.jwildfire.create.tina.io.FlameMovieWriter.ATTR_FRAME_COUNT;
 import static org.jwildfire.create.tina.io.FlameMovieWriter.ATTR_FRAME_HEIGHT;
 import static org.jwildfire.create.tina.io.FlameMovieWriter.ATTR_FRAME_MORPH_COUNT;
 import static org.jwildfire.create.tina.io.FlameMovieWriter.ATTR_FRAME_WIDTH;
+import static org.jwildfire.create.tina.io.FlameMovieWriter.ATTR_MORPTH_TYPE;
 import static org.jwildfire.create.tina.io.FlameMovieWriter.ATTR_MOTIONBLUR_LENGTH;
 import static org.jwildfire.create.tina.io.FlameMovieWriter.ATTR_MOTIONBLUR_TIMESTEP;
 import static org.jwildfire.create.tina.io.FlameMovieWriter.ATTR_NAME;
@@ -34,6 +35,7 @@ import static org.jwildfire.create.tina.io.FlameMovieWriter.TAG_JWF_MOVIE_PART;
 import org.jwildfire.base.Prefs;
 import org.jwildfire.base.Tools;
 import org.jwildfire.base.Tools.XMLAttributes;
+import org.jwildfire.create.tina.animate.FlameMorphType;
 import org.jwildfire.create.tina.animate.FlameMovie;
 import org.jwildfire.create.tina.animate.FlameMoviePart;
 import org.jwildfire.create.tina.animate.GlobalScript;
@@ -137,6 +139,14 @@ public class FlameMovieReader {
     String hs;
     if ((hs = atts.get(ATTR_FRAME_COUNT)) != null) {
       pPart.setFrameCount(Integer.parseInt(hs));
+    }
+    if ((hs = atts.get(ATTR_MORPTH_TYPE)) != null) {
+      try {
+        pPart.setFlameMorphType(FlameMorphType.valueOf(hs));
+      }
+      catch (Exception ex) {
+        ex.printStackTrace();
+      }
     }
     if ((hs = atts.get(ATTR_FRAME_MORPH_COUNT)) != null) {
       pPart.setFrameMorphCount(Integer.parseInt(hs));

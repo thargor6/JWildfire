@@ -22,6 +22,7 @@ public class FlameMoviePart {
   private Flame flame;
   private int frameCount;
   private int frameMorphCount;
+  private FlameMorphType flameMorphType = FlameMorphType.FADE;
 
   public Flame getFlame() {
     return flame;
@@ -45,6 +46,14 @@ public class FlameMoviePart {
 
   public void setFrameMorphCount(int pFrameMorphCount) {
     frameMorphCount = pFrameMorphCount;
+  }
+
+  public FlameMorphType getFlameMorphType() {
+    return flameMorphType;
+  }
+
+  public void setFlameMorphType(FlameMorphType pFlameMorphType) {
+    flameMorphType = pFlameMorphType;
   }
 
 }

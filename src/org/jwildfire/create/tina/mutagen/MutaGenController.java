@@ -48,6 +48,7 @@ import javax.swing.border.LineBorder;
 import org.jwildfire.base.Prefs;
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.animate.FlameMorphService;
+import org.jwildfire.create.tina.animate.FlameMorphType;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.io.FlameReader;
@@ -203,7 +204,7 @@ public class MutaGenController {
     else {
       int morphFrames = 1000;
       int morphFrame = Tools.FTOI(morphFrames * amount);
-      return FlameMorphService.morphFlames(prefs, pBaseFlame.makeCopy(), pFlame.makeCopy(), morphFrame, morphFrames);
+      return FlameMorphService.morphFlames(prefs, FlameMorphType.MORPH, pBaseFlame.makeCopy(), pFlame.makeCopy(), morphFrame, morphFrames);
     }
   }
 

@@ -21,6 +21,7 @@ import java.util.List;
 
 import org.jwildfire.base.Prefs;
 import org.jwildfire.create.tina.animate.FlameMorphService;
+import org.jwildfire.create.tina.animate.FlameMorphType;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.dance.motion.Motion;
 
@@ -39,7 +40,7 @@ public class DancingFlameStack {
     else {
       Flame prevFlame = flames.get(flames.size() - 1).getFlame();
       for (int i = 1; i < pMorphFrameCount; i++) {
-        Flame flame = FlameMorphService.morphFlames(prefs, prevFlame, pFlame, i, pMorphFrameCount);
+        Flame flame = FlameMorphService.morphFlames(prefs, FlameMorphType.MORPH, prevFlame, pFlame, i, pMorphFrameCount);
         // TODO how to morph motions?
         flames.add(new DancingFlame(flame, pMotions));
       }

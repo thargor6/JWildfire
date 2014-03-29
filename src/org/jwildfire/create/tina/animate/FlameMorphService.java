@@ -37,8 +37,42 @@ import org.jwildfire.create.tina.variation.Variation;
 import org.jwildfire.create.tina.variation.VariationFuncList;
 
 public class FlameMorphService {
+  public static Flame morphFlames(Prefs pPrefs, FlameMorphType pFlameMorphType, Flame pFlame1, Flame pFlame2, int pFrame, int pFrames) {
+    switch (pFlameMorphType) {
+      case FADE:
+        return morphFlames_fade(pPrefs, pFlame1, pFlame2, pFrame, pFrames);
+      case MORPH:
+        return morphFlames_morph(pPrefs, pFlame1, pFlame2, pFrame, pFrames);
+      default:
+        throw new IllegalArgumentException(pFlameMorphType.toString());
+    }
+  }
 
-  public static Flame morphFlames(Prefs pPrefs, Flame pFlame1, Flame pFlame2, int pFrame, int pFrames) {
+  private static Flame morphFlames_fade(Prefs pPrefs, Flame pFlame1, Flame pFlame2, int pFrame, int pFrames) {
+    if (pFrame < 1 || pFrames < 2)
+      return pFlame1;
+    double fScl = (double) (pFrame - 1) / (pFrames - 1);
+    if (fScl <= MathLib.EPSILON) {
+      return pFlame1;
+    }
+    else if (fScl >= 1.0 - MathLib.EPSILON) {
+      return pFlame2;
+    }
+    // fade out layerz of the source flame 
+    Flame res = pFlame1.makeCopy();
+    for (Layer layer : res.getLayers()) {
+      layer.setWeight(layer.getWeight() * (1.0 - fScl));
+    }
+    // add and fade in layerz of the dest flame
+    for (Layer layer : pFlame2.getLayers()) {
+      Layer copy = layer.makeCopy();
+      copy.setWeight(copy.getWeight() * fScl);
+      res.getLayers().add(copy);
+    }
+    return res;
+  }
+
+  private static Flame morphFlames_morph(Prefs pPrefs, Flame pFlame1, Flame pFlame2, int pFrame, int pFrames) {
     if (pFrame < 1 || pFrames < 2)
       return pFlame1;
     double fScl = (double) (pFrame - 1) / (pFrames - 1);
@@ -278,7 +312,7 @@ public class FlameMorphService {
             try {
               Flame flame1 = new FlameReader(pPrefs).readFlamesfromXML(flame1XML).get(0);
               Flame flame2 = new FlameReader(pPrefs).readFlamesfromXML(flame2XML).get(0);
-              Flame morphedFlame = morphFlames(pPrefs, flame1, flame2, pFrame, pFrames);
+              Flame morphedFlame = morphFlames(pPrefs, FlameMorphType.MORPH, flame1, flame2, pFrame, pFrames);
               String morphedFlameXML = new FlameWriter().getFlameXML(morphedFlame);
               var.getFunc().setRessource(SubFlameWFFunc.RESSOURCE_FLAME, morphedFlameXML.getBytes());
             }
