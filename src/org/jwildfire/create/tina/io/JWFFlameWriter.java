@@ -38,7 +38,7 @@ public class JWFFlameWriter extends AbstractFlameWriter {
       {
         String name = layer.getName().replaceAll("\"", "");
         if (!name.equals("")) {
-          attrList.add(xb.createAttr("name", name));
+          layerAttrList.add(xb.createAttr("name", name));
         }
       }
       writeMotionCurves(layer, xb, layerAttrList);

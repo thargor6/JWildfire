@@ -4,6 +4,7 @@ import static org.jwildfire.base.mathlib.MathLib.EPSILON;
 import static org.jwildfire.create.tina.io.AbstractFlameReader.ATTR_CAM_POS_X;
 import static org.jwildfire.create.tina.io.AbstractFlameReader.ATTR_CAM_POS_Y;
 import static org.jwildfire.create.tina.io.AbstractFlameReader.ATTR_CAM_POS_Z;
+import static org.jwildfire.create.tina.io.AbstractFlameReader.ATTR_LAYER_NAME;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -123,6 +124,14 @@ public class AbstractFlameWriter {
     if (!fName.equals("")) {
       attrList.add(xb.createAttr("name", fName));
     }
+
+    if (pFlame.getLayers().size() == 1) {
+      String name = pFlame.getFirstLayer().getName().replaceAll("\"", "");
+      if (!name.equals("")) {
+        attrList.add(xb.createAttr(ATTR_LAYER_NAME, name));
+      }
+    }
+
     attrList.add(xb.createAttr("version", Tools.APP_TITLE + " " + Tools.APP_VERSION));
     attrList.add(xb.createAttr("size", pFlame.getWidth() + " " + pFlame.getHeight()));
     attrList.add(xb.createAttr("center", pFlame.getCentreX() + " " + pFlame.getCentreY()));

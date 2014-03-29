@@ -225,11 +225,15 @@ public class AnimationService {
     }
   }
 
+  public static enum EnvelopePointsShape {
+    RAMP, SINE
+  }
+
   public static class EnvelopePoints {
     private int envX[];
     private double envY[];
 
-    public EnvelopePoints(SimpleScript pScript, int pFrameCount, double pFPS, double pAmplitude) {
+    public EnvelopePoints(SimpleScript pScript, int pFrameCount, double pFPS, EnvelopePointsShape pDefaultShape, double pAmplitude) {
       if (pScript.getAmplitudeCurve().isEnabled()) {
         int[] srcX = pScript.getAmplitudeCurve().getX();
         double[] srcY = pScript.getAmplitudeCurve().getY();
@@ -264,22 +268,59 @@ public class AnimationService {
         }
       }
       else {
-        double amp = pAmplitude * (double) pFrameCount / (DFLT_DURATION * pFPS) * pScript.getAmplitude();
-        if (fabs(amp) < EPSILON) {
+        if (fabs(pScript.getAmplitude()) < EPSILON || fabs(pFPS) < EPSILON) {
           envX = new int[1];
           envY = new double[1];
           envX[0] = 0;
-          envY[0] = amp;
+          envY[0] = 0.0;
         }
         else {
-          envX = new int[2];
-          envY = new double[2];
-          final int DX = 10;
-          final double DY = amp / (double) pFrameCount * (double) DX;
-          envX[0] = -DX;
-          envY[0] = -DY;
-          envX[1] = pFrameCount + DX;
-          envY[1] = amp + DY;
+          switch (pDefaultShape) {
+            case RAMP: {
+              double amp = pAmplitude * (double) pFrameCount / (DFLT_DURATION * pFPS) * pScript.getAmplitude();
+              envX = new int[2];
+              envY = new double[2];
+              final int DX = 10;
+              final double DY = amp / (double) pFrameCount * (double) DX;
+              envX[0] = -DX;
+              envY[0] = -DY;
+              envX[1] = pFrameCount + DX;
+              envY[1] = amp + DY;
+            }
+              break;
+            case SINE: {
+              int phase = Tools.FTOI(DFLT_DURATION * pFPS / 2.0);
+              int start = -phase;
+              int cnt = 1;
+              while (start <= pFrameCount + phase) {
+                start += phase;
+                cnt++;
+              }
+              envX = new int[cnt];
+              envY = new double[cnt];
+
+              start = -phase;
+              int state = 1;
+              for (int i = 0; i < cnt; i++) {
+                envX[i] = start;
+                switch (state++ % 4) {
+                  case 1:
+                    envY[i] = -pScript.getAmplitude();
+                    break;
+                  case 3:
+                    envY[i] = pScript.getAmplitude();
+                    break;
+                  default:
+                    envY[i] = 0.0;
+                    break;
+                }
+                start += phase;
+              }
+            }
+              break;
+            default:
+              throw new IllegalArgumentException(pDefaultShape.toString());
+          }
         }
       }
     }
@@ -295,26 +336,32 @@ public class AnimationService {
 
   public static void addMotionCurve(Flame pFlame, GlobalScript pScript, int pFrame, int pFrameCount, double pFPS) {
     if (pScript != null && pScript.getScriptType() != null && !GlobalScriptType.NONE.equals(pScript.getScriptType()) && fabs(pScript.getAmplitude()) > EPSILON) {
-      EnvelopePoints points = new EnvelopePoints(pScript, pFrameCount, pFPS, 360.0);
+      EnvelopePoints points;
       MotionCurve curve = null;
       switch (pScript.getScriptType()) {
         case ROTATE_PITCH:
           curve = pFlame.getCamPitchCurve();
+          points = new EnvelopePoints(pScript, pFrameCount, pFPS, EnvelopePointsShape.RAMP, 360.0);
           break;
         case ROTATE_ROLL:
           curve = pFlame.getCamRollCurve();
+          points = new EnvelopePoints(pScript, pFrameCount, pFPS, EnvelopePointsShape.RAMP, 360.0);
           break;
         case ROTATE_YAW:
           curve = pFlame.getCamYawCurve();
+          points = new EnvelopePoints(pScript, pFrameCount, pFPS, EnvelopePointsShape.RAMP, 360.0);
           break;
-        case MOVE_X:
+        case MOVE_CAM_X:
           curve = pFlame.getCamPosXCurve();
+          points = new EnvelopePoints(pScript, pFrameCount, pFPS, EnvelopePointsShape.SINE, 1.0);
           break;
-        case MOVE_Y:
+        case MOVE_CAM_Y:
           curve = pFlame.getCamPosYCurve();
+          points = new EnvelopePoints(pScript, pFrameCount, pFPS, EnvelopePointsShape.SINE, 1.0);
           break;
-        case MOVE_Z:
+        case MOVE_CAM_Z:
           curve = pFlame.getCamPosZCurve();
+          points = new EnvelopePoints(pScript, pFrameCount, pFPS, EnvelopePointsShape.SINE, 1.0);
           break;
         default:
           throw new IllegalArgumentException(pScript.toString());
@@ -357,7 +404,7 @@ public class AnimationService {
             int idx = 0;
             for (XForm xForm : layer.getXForms()) {
               MotionCurve curve = xForm.getRotateCurve();
-              EnvelopePoints points = new EnvelopePoints(pScript, pFrameCount, pFPS, idx++ % 2 == 0 ? 360.0 : -360.0);
+              EnvelopePoints points = new EnvelopePoints(pScript, pFrameCount, pFPS, EnvelopePointsShape.RAMP, idx++ % 2 == 0 ? 360.0 : -360.0);
               addEnvelope(pFrameCount, curve, points.getEnvX(), points.getEnvY());
             }
           }
@@ -373,7 +420,7 @@ public class AnimationService {
             xForm = getXForm(pScript.getScriptType(), layer, xForm);
 
             if (xForm != null) {
-              EnvelopePoints points = new EnvelopePoints(pScript, pFrameCount, pFPS, 360.0);
+              EnvelopePoints points = new EnvelopePoints(pScript, pFrameCount, pFPS, EnvelopePointsShape.RAMP, 360.0);
               MotionCurve curve = xForm.getRotateCurve();
               addEnvelope(pFrameCount, curve, points.getEnvX(), points.getEnvY());
             }

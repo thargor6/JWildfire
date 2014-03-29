@@ -1738,7 +1738,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaCameraCamPosXREd.setSize(new Dimension(100, 24));
       tinaCameraCamPosXREd.setPreferredSize(new Dimension(100, 24));
       tinaCameraCamPosXREd.setMouseThreshold(1.0);
-      tinaCameraCamPosXREd.setMotionPropertyName("centreX");
+      tinaCameraCamPosXREd.setMotionPropertyName("camPosX");
       tinaCameraCamPosXREd.setLocation(new Point(456, 4));
       tinaCameraCamPosXREd.setLinkedMotionControlName("tinaCameraCamPosXSlider");
       tinaCameraCamPosXREd.setLinkedLabelControlName("tinaCameraCamPosXLbl");
@@ -1811,7 +1811,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaCameraCamPosYREd.setSize(new Dimension(100, 24));
       tinaCameraCamPosYREd.setPreferredSize(new Dimension(100, 24));
       tinaCameraCamPosYREd.setMouseThreshold(1.0);
-      tinaCameraCamPosYREd.setMotionPropertyName("centreX");
+      tinaCameraCamPosYREd.setMotionPropertyName("camPosY");
       tinaCameraCamPosYREd.setLocation(new Point(456, 4));
       tinaCameraCamPosYREd.setLinkedMotionControlName("tinaCameraCamPosYSlider");
       tinaCameraCamPosYREd.setLinkedLabelControlName("tinaCameraCamPosYLbl");
@@ -1872,7 +1872,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaCameraCamPosZREd.setSize(new Dimension(100, 24));
       tinaCameraCamPosZREd.setPreferredSize(new Dimension(100, 24));
       tinaCameraCamPosZREd.setMouseThreshold(1.0);
-      tinaCameraCamPosZREd.setMotionPropertyName("centreX");
+      tinaCameraCamPosZREd.setMotionPropertyName("camPosZ");
       tinaCameraCamPosZREd.setLocation(new Point(456, 4));
       tinaCameraCamPosZREd.setLinkedMotionControlName("tinaCameraCamPosZSlider");
       tinaCameraCamPosZREd.setLinkedLabelControlName("tinaCameraCamPosZLbl");
@@ -4446,6 +4446,9 @@ public class TinaInternalFrame extends JInternalFrame {
     pCmb.addItem(GlobalScriptType.ROTATE_PITCH);
     pCmb.addItem(GlobalScriptType.ROTATE_ROLL);
     pCmb.addItem(GlobalScriptType.ROTATE_YAW);
+    pCmb.addItem(GlobalScriptType.MOVE_CAM_X);
+    pCmb.addItem(GlobalScriptType.MOVE_CAM_Y);
+    pCmb.addItem(GlobalScriptType.MOVE_CAM_Z);
   }
 
   private void initStereo3dModeCmb(JComboBox pCmb) {
