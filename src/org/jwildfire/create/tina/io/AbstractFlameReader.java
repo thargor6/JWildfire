@@ -30,6 +30,7 @@ public class AbstractFlameReader {
   protected final Prefs prefs;
 
   public static final String ATTR_NAME = "name";
+  public static final String ATTR_LAYER_NAME = "layer_name";
   public static final String ATTR_SIZE = "size";
   public static final String ATTR_CENTER = "center";
   public static final String ATTR_SCALE = "scale";
@@ -138,6 +139,9 @@ public class AbstractFlameReader {
     String hs;
     if ((hs = atts.get(ATTR_NAME)) != null) {
       pFlame.setName(hs);
+    }
+    if ((hs = atts.get(ATTR_LAYER_NAME)) != null && pFlame.getLayers().size() == 1) {
+      pFlame.getFirstLayer().setName(hs);
     }
     if ((hs = atts.get(ATTR_SIZE)) != null) {
       String s[] = hs.split(" ");
