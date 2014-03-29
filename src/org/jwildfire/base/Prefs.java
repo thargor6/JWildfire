@@ -208,7 +208,7 @@ public class Prefs extends ManagedObject {
   private RandomGeneratorType tinaRandomNumberGenerator = RandomGeneratorType.getDefaultValue();
 
   @Property(description = "Quality for realtime rendering (please restart app after changing this)", category = PropertyCategory.TINA)
-  private int tinaRenderRealtimeQuality = 1;
+  private double tinaRenderRealtimeQuality = 1.0;
 
   @Property(description = "Number of generated flames by invoking the \"Random flames\" function", category = PropertyCategory.TINA)
   private int tinaRandomBatchSize = 24;
@@ -521,11 +521,11 @@ public class Prefs extends ManagedObject {
     this.tinaRenderMovieFrames = tinaRenderMovieFrames;
   }
 
-  public int getTinaRenderRealtimeQuality() {
+  public double getTinaRenderRealtimeQuality() {
     return tinaRenderRealtimeQuality;
   }
 
-  public void setTinaRenderRealtimeQuality(int tinaRenderRealtimeQuality) {
+  public void setTinaRenderRealtimeQuality(double tinaRenderRealtimeQuality) {
     this.tinaRenderRealtimeQuality = tinaRenderRealtimeQuality;
   }
 

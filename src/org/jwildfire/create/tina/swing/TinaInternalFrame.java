@@ -4353,26 +4353,30 @@ public class TinaInternalFrame extends JInternalFrame {
       getShadingLightCmb().addItem(String.valueOf("4"));
 
       initGlobalScriptCmb(getSwfAnimatorGlobalScript1Cmb());
-      getSwfAnimatorGlobalScript1Cmb().setSelectedItem(GlobalScriptType.ROTATE_PITCH);
       initGlobalScriptCmb(getSwfAnimatorGlobalScript2Cmb());
-      getSwfAnimatorGlobalScript2Cmb().setSelectedItem(GlobalScriptType.NONE);
       initGlobalScriptCmb(getSwfAnimatorGlobalScript3Cmb());
-      getSwfAnimatorGlobalScript3Cmb().setSelectedItem(GlobalScriptType.NONE);
       initGlobalScriptCmb(getSwfAnimatorGlobalScript4Cmb());
-      getSwfAnimatorGlobalScript4Cmb().setSelectedItem(GlobalScriptType.NONE);
       initGlobalScriptCmb(getSwfAnimatorGlobalScript5Cmb());
-      getSwfAnimatorGlobalScript5Cmb().setSelectedItem(GlobalScriptType.NONE);
+      initGlobalScriptCmb(getSwfAnimatorGlobalScript6Cmb());
+      initGlobalScriptCmb(getSwfAnimatorGlobalScript7Cmb());
+      initGlobalScriptCmb(getSwfAnimatorGlobalScript8Cmb());
+      initGlobalScriptCmb(getSwfAnimatorGlobalScript9Cmb());
+      initGlobalScriptCmb(getSwfAnimatorGlobalScript10Cmb());
+      initGlobalScriptCmb(getSwfAnimatorGlobalScript11Cmb());
+      initGlobalScriptCmb(getSwfAnimatorGlobalScript12Cmb());
 
       initXFormScriptCmb(getSwfAnimatorXFormScript1Cmb());
-      getSwfAnimatorXFormScript1Cmb().setSelectedItem(XFormScriptType.ROTATE_FIRST_XFORM);
       initXFormScriptCmb(getSwfAnimatorXFormScript2Cmb());
-      getSwfAnimatorXFormScript2Cmb().setSelectedItem(XFormScriptType.NONE);
       initXFormScriptCmb(getSwfAnimatorXFormScript3Cmb());
-      getSwfAnimatorXFormScript3Cmb().setSelectedItem(XFormScriptType.NONE);
       initXFormScriptCmb(getSwfAnimatorXFormScript4Cmb());
-      getSwfAnimatorXFormScript4Cmb().setSelectedItem(XFormScriptType.NONE);
       initXFormScriptCmb(getSwfAnimatorXFormScript5Cmb());
-      getSwfAnimatorXFormScript5Cmb().setSelectedItem(XFormScriptType.NONE);
+      initXFormScriptCmb(getSwfAnimatorXFormScript6Cmb());
+      initXFormScriptCmb(getSwfAnimatorXFormScript7Cmb());
+      initXFormScriptCmb(getSwfAnimatorXFormScript8Cmb());
+      initXFormScriptCmb(getSwfAnimatorXFormScript9Cmb());
+      initXFormScriptCmb(getSwfAnimatorXFormScript10Cmb());
+      initXFormScriptCmb(getSwfAnimatorXFormScript11Cmb());
+      initXFormScriptCmb(getSwfAnimatorXFormScript12Cmb());
 
       tinaController.setInteractiveRendererCtrl(new TinaInteractiveRendererController(tinaController, pErrorHandler, pPrefs,
           getInteractiveLoadFlameButton(), getInteractiveLoadFlameFromClipboardButton(), getInteractiveNextButton(), getInteractiveStopButton(),
@@ -4438,6 +4442,7 @@ public class TinaInternalFrame extends JInternalFrame {
     pCmb.addItem(XFormScriptType.ROTATE_5TH_XFORM);
     pCmb.addItem(XFormScriptType.ROTATE_LAST_XFORM);
     pCmb.addItem(XFormScriptType.ROTATE_FINAL_XFORM);
+    pCmb.setSelectedItem(XFormScriptType.NONE);
   }
 
   private void initGlobalScriptCmb(JComboBox pCmb) {
@@ -4449,6 +4454,7 @@ public class TinaInternalFrame extends JInternalFrame {
     pCmb.addItem(GlobalScriptType.MOVE_CAM_X);
     pCmb.addItem(GlobalScriptType.MOVE_CAM_Y);
     pCmb.addItem(GlobalScriptType.MOVE_CAM_Z);
+    pCmb.setSelectedItem(GlobalScriptType.NONE);
   }
 
   private void initStereo3dModeCmb(JComboBox pCmb) {

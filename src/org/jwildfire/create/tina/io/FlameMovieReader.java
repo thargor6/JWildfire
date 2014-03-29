@@ -23,7 +23,7 @@ import static org.jwildfire.create.tina.io.FlameMovieWriter.ATTR_FRAME_COUNT;
 import static org.jwildfire.create.tina.io.FlameMovieWriter.ATTR_FRAME_HEIGHT;
 import static org.jwildfire.create.tina.io.FlameMovieWriter.ATTR_FRAME_MORPH_COUNT;
 import static org.jwildfire.create.tina.io.FlameMovieWriter.ATTR_FRAME_WIDTH;
-import static org.jwildfire.create.tina.io.FlameMovieWriter.ATTR_MORPTH_TYPE;
+import static org.jwildfire.create.tina.io.FlameMovieWriter.ATTR_MORPH_TYPE;
 import static org.jwildfire.create.tina.io.FlameMovieWriter.ATTR_MOTIONBLUR_LENGTH;
 import static org.jwildfire.create.tina.io.FlameMovieWriter.ATTR_MOTIONBLUR_TIMESTEP;
 import static org.jwildfire.create.tina.io.FlameMovieWriter.ATTR_NAME;
@@ -140,7 +140,7 @@ public class FlameMovieReader {
     if ((hs = atts.get(ATTR_FRAME_COUNT)) != null) {
       pPart.setFrameCount(Integer.parseInt(hs));
     }
-    if ((hs = atts.get(ATTR_MORPTH_TYPE)) != null) {
+    if ((hs = atts.get(ATTR_MORPH_TYPE)) != null) {
       try {
         pPart.setFlameMorphType(FlameMorphType.valueOf(hs));
       }

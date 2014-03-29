@@ -60,6 +60,7 @@ public class FlameMorphService {
     }
     // fade out layerz of the source flame 
     Flame res = pFlame1.makeCopy();
+    morphFlameValues(pFlame1, pFlame2, fScl, res);
     for (Layer layer : res.getLayers()) {
       layer.setWeight(layer.getWeight() * (1.0 - fScl));
     }
@@ -172,6 +173,11 @@ public class FlameMorphService {
       }
     }
     // morph camera settings etc.
+    morphFlameValues(pFlame1, pFlame2, fScl, res);
+    return res;
+  }
+
+  private static void morphFlameValues(Flame pFlame1, Flame pFlame2, double fScl, Flame res) {
     res.setCamDOF(morphValue(pFlame1.getCamDOF(), pFlame2.getCamDOF(), fScl));
     res.setCamPerspective(morphValue(pFlame1.getCamPerspective(), pFlame2.getCamPerspective(), fScl));
     res.setCamPitch(morphValue(pFlame1.getCamPitch(), pFlame2.getCamPitch(), fScl));
@@ -195,8 +201,6 @@ public class FlameMorphService {
     res.setSpatialFilterRadius(morphValue(pFlame1.getSpatialFilterRadius(), pFlame2.getSpatialFilterRadius(), fScl));
     res.setVibrancy(morphValue(pFlame1.getVibrancy(), pFlame2.getVibrancy(), fScl));
     res.setWhiteLevel(morphValue(pFlame1.getWhiteLevel(), pFlame2.getWhiteLevel(), fScl));
-
-    return res;
   }
 
   private static XForm morphXForms(Prefs pPrefs, XForm pXForm1, XForm pXForm2, double pFScl, int pFrame, int pFrames) {

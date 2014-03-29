@@ -40,7 +40,7 @@ public class FlameMovieWriter {
   public static final String ATTR_APPLICATION = "application";
   public static final String ATTR_COLOR_OVERSAMPLING = "color_oversampling";
   public static final String ATTR_FPS = "fps";
-  public static final String ATTR_MORPTH_TYPE = "morph_type";
+  public static final String ATTR_MORPH_TYPE = "morph_type";
   public static final String ATTR_FRAME_COUNT = "frame_count";
   public static final String ATTR_FRAME_HEIGHT = "frame_height";
   public static final String ATTR_FRAME_MORPH_COUNT = "frame_morph_count";
@@ -112,7 +112,7 @@ public class FlameMovieWriter {
   private void addPart(SimpleXMLBuilder pXB, FlameMoviePart pPart) throws Exception {
     List<SimpleXMLBuilder.Attribute<?>> attrList = new ArrayList<SimpleXMLBuilder.Attribute<?>>();
     attrList.add(pXB.createAttr(ATTR_FRAME_COUNT, pPart.getFrameCount()));
-    attrList.add(pXB.createAttr(ATTR_MORPTH_TYPE, pPart.getFlameMorphType().toString()));
+    attrList.add(pXB.createAttr(ATTR_MORPH_TYPE, pPart.getFlameMorphType().toString()));
     attrList.add(pXB.createAttr(ATTR_FRAME_MORPH_COUNT, pPart.getFrameMorphCount()));
     pXB.beginElement(TAG_JWF_MOVIE_PART, attrList);
     if (pPart.getFlame() != null) {
