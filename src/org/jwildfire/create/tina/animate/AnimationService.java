@@ -156,7 +156,7 @@ public class AnimationService {
           MotionCurve currCurve = curve;
           double value = 0.0;
           while (currCurve != null) {
-            Envelope envelope = curve.toEnvelope();
+            Envelope envelope = currCurve.toEnvelope();
             value += envelope.evaluate(pFrame);
             currCurve = currCurve.getParent();
           }

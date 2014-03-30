@@ -301,5 +301,10 @@ public class AbstractFlameWriter {
       attrList.add(xb.createAttr(namePrefix + AbstractFlameReader.CURVE_ATTR_X + i, curve.getX()[i]));
       attrList.add(xb.createAttr(namePrefix + AbstractFlameReader.CURVE_ATTR_Y + i, curve.getY()[i]));
     }
+    if (curve.getParent() != null) {
+      String parentName = "parent" + curve.getParent().hashCode() + "Curve";
+      attrList.add(xb.createAttr(namePrefix + AbstractFlameReader.CURVE_ATTR_PARENT_CURVE, parentName));
+      addMotionCurveAttributes(xb, attrList, parentName + "_", curve.getParent());
+    }
   }
 }

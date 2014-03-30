@@ -123,6 +123,7 @@ public class AbstractFlameReader {
   public static final String CURVE_ATTR_VIEW_XMAX = "view_xmax";
   public static final String CURVE_ATTR_VIEW_YMIN = "view_ymin";
   public static final String CURVE_ATTR_VIEW_YMAX = "view_ymax";
+  public static final String CURVE_ATTR_PARENT_CURVE = "parent_curve";
   public static final String CURVE_ATTR_INTERPOLATION = "interpolation";
   public static final String CURVE_ATTR_SELECTED_IDX = "selected_idx";
   public static final String CURVE_ATTR_LOCKED = "locked";
@@ -779,6 +780,12 @@ public class AbstractFlameReader {
         }
       }
       curve.setPoints(x, y);
+    }
+    if ((hs = atts.get(namePrefix + AbstractFlameReader.CURVE_ATTR_PARENT_CURVE)) != null) {
+      String parentNamePrefix = hs + "_";
+      MotionCurve parent = new MotionCurve();
+      curve.setParent(parent);
+      readMotionCurveAttributes(atts, parent, parentNamePrefix);
     }
   }
 }

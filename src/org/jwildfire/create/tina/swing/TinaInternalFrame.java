@@ -4422,6 +4422,7 @@ public class TinaInternalFrame extends JInternalFrame {
           getSwfAnimatorPlayButton(), getSwfAnimatorMotionBlurLengthREd(),
           getSwfAnimatorMotionBlurTimeStepREd(), getRandomMoviePanel()));
       tinaController.getSwfAnimatorCtrl().enableControls();
+      tinaController.getSwfAnimatorCtrl().refreshControls();
 
     }
     finally {

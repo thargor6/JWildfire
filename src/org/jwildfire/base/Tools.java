@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2012 Andreas Maschke
+  Copyright (C) 1995-2014 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -45,7 +45,7 @@ import org.jwildfire.image.Pixel;
 
 public class Tools {
   public static final String APP_TITLE = "JWildfire";
-  public static final String APP_VERSION = "1.48 (23.03.2014)";
+  public static final String APP_VERSION = "1.50 (30.03.2014)";
 
   public static boolean SPECIAL_VERSION = false;
 
@@ -515,10 +515,5 @@ public class Tools {
     }
     return pName;
   }
-
-  /*
-   * TODO
-   * - how to save flames with parented motion curves?
-   */
 
 }

@@ -172,6 +172,7 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
       parentCtrl = pParentCtrl;
       prefs = pPrefs;
       currMovie = new FlameMovie(pPrefs);
+      currMovie.getGlobalScripts()[0] = new GlobalScript(GlobalScriptType.ROTATE_PITCH, 1.0);
       errorHandler = pErrorHandler;
       randomBatchPanel = pRandomMoviePanel;
 
@@ -630,7 +631,7 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
     return res;
   }
 
-  private void updateMovieFields() {
+  protected void updateMovieFields() {
     double framesPerSecond = swfAnimatorFramesPerSecondREd.getDoubleValue();
     ResolutionProfile resProfile = getResolutionProfile();
     int frameWidth = resProfile.getWidth();
