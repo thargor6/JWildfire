@@ -1,3 +1,37 @@
+V1.50 (30.03.2014):
+ - there were really lots of changes in the Easy Movie Maker:
+     - new concept of random-movie-generators (which create both random flames and random motion)
+     - new random-movie-generators:
+         - "Rotating Mandelbrots"
+         - "Transforming Duckies"
+         - "Transforming Bubbles"
+     - motion blur, which is enabled by default and can even be used to render interesting/"dynamic" still images    
+     - new concept of "morph-types", the old behaviour is now called MORPH, and there is now a new morph type called FADE which uses layerz to fade one flame into another
+     - added the possibility to replace a movie-part with the current flame in the editor
+     - some new simple scripts
+     - render button for instantly creating a preview-render in high quality
+     - support for upto 12 of global- and xform-scripts
+     - movie ribbon with movie-preview, allows to switch between different movies at any time (same concept as for flames in the amin editor)
+     - realtime-preview of animation-scripts in the Easy Movie Maker (you may even change scripts while showing the preview)
+     - dramatically increased the speed of evaluating motion curves
+     - motions in the Easy Movie Maker now respect the FPS setting (rather than calculating the speed by the total number of frames)
+     - removed *_NEG animation-scripts, refactoring of the Easy Movie Maker
+ - additional camera-controls (x-, y- and z-position), this makes it possible to create really "different" images!  
+ - new "dc_hexes_wf" variation, which is derived from the well-known "hexes"-variation, but uses Voronoi-distance to apply additional color-information 
+ - new "dc_crackle_wf variation, which is derived from the well-known "crackle"-variation, but uses Voronoi-distance to apply additional color-information   
+ - new SIDE_BY_SIDE_FULL-preview-mode for stereo3d images (uses larger preview area)
+ - new option to easily swap sides in stereo3d-rendering
+ - 5 new "What does this button do?"-tutorials from Naomi Richmond
+ - 5 new images from Craig Bak for the launcher
+ - improved the layout of the ancient motion-curve-editing-dialog
+ - completely removed SWF-related capabilities from JWildfire, completely removed all rendering-capabilities from the Easy Movie Maker
+ - support for saving flames with multiple motion-curves for the same flame-property
+ - realtime-quality is now a floating-point-value. So you have more level of control on very old/slow machines
+ - caption of layerz is now stored/restored correctly
+ - bugfix in the checks variation, can actually produce nice patterns now
+ - fixed a problem regarding the re-saving of movies from older version
+ - stepped back to Java 6 because of problems with Java 7 on the Mac platform 
+ 
 V1.40 (15.03.2014):
  - comprehensive support for stereo3d-rendering with many options and major improvements/refactoring of the rendering-engine "under the hood" 
  - the software comes now with an IzPack-based (http://izpack.org/) installer which should work on all platforms 

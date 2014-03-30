@@ -6591,7 +6591,7 @@ public class TinaInternalFrame extends JInternalFrame {
       swfAnimatorFramesREd = new JWFNumberField();
       swfAnimatorFramesREd.setOnlyIntegers(true);
       swfAnimatorFramesREd.setEditable(false);
-      swfAnimatorFramesREd.setPreferredSize(new Dimension(56, 22));
+      swfAnimatorFramesREd.setPreferredSize(new Dimension(64, 24));
       swfAnimatorFramesREd.setText("60");
       swfAnimatorFramesREd.setFont(new Font("Dialog", Font.PLAIN, 10));
     }
@@ -17874,7 +17874,7 @@ public class TinaInternalFrame extends JInternalFrame {
       swfAnimatorFramesPerSecondREd.setHasMinValue(true);
       swfAnimatorFramesPerSecondREd.setEditable(true);
       swfAnimatorFramesPerSecondREd.setText("12");
-      swfAnimatorFramesPerSecondREd.setPreferredSize(new Dimension(56, 22));
+      swfAnimatorFramesPerSecondREd.setPreferredSize(new Dimension(64, 24));
       swfAnimatorFramesPerSecondREd.setFont(new Font("Dialog", Font.PLAIN, 10));
 
       JLabel lblMotionBlurLength = new JLabel();
@@ -17890,6 +17890,7 @@ public class TinaInternalFrame extends JInternalFrame {
       lblMotionBlurLength.setFont(new Font("Dialog", Font.BOLD, 10));
 
       swfAnimatorMotionBlurLengthREd = new JWFNumberField();
+      swfAnimatorMotionBlurLengthREd.setMinimumSize(new Dimension(40, 28));
       GridBagConstraints gbc_swfAnimatorMotionBlurLengthREd = new GridBagConstraints();
       gbc_swfAnimatorMotionBlurLengthREd.insets = new Insets(0, 0, 0, 5);
       gbc_swfAnimatorMotionBlurLengthREd.gridx = 1;
@@ -17898,7 +17899,7 @@ public class TinaInternalFrame extends JInternalFrame {
       swfAnimatorMotionBlurLengthREd.setValueStep(1.0);
       swfAnimatorMotionBlurLengthREd.setOnlyIntegers(true);
       swfAnimatorMotionBlurLengthREd.setText("12");
-      swfAnimatorMotionBlurLengthREd.setPreferredSize(new Dimension(56, 22));
+      swfAnimatorMotionBlurLengthREd.setPreferredSize(new Dimension(64, 24));
       swfAnimatorMotionBlurLengthREd.setMaxValue(120.0);
       swfAnimatorMotionBlurLengthREd.setHasMinValue(true);
       swfAnimatorMotionBlurLengthREd.setHasMaxValue(true);
@@ -17924,7 +17925,7 @@ public class TinaInternalFrame extends JInternalFrame {
       panel_87.add(swfAnimatorMotionBlurTimeStepREd, gbc_swfAnimatorMotionBlurTimeStepREd);
       swfAnimatorMotionBlurTimeStepREd.setValueStep(0.1);
       swfAnimatorMotionBlurTimeStepREd.setText("0.15");
-      swfAnimatorMotionBlurTimeStepREd.setPreferredSize(new Dimension(56, 22));
+      swfAnimatorMotionBlurTimeStepREd.setPreferredSize(new Dimension(64, 24));
       swfAnimatorMotionBlurTimeStepREd.setMaxValue(1.0);
       swfAnimatorMotionBlurTimeStepREd.setHasMinValue(true);
       swfAnimatorMotionBlurTimeStepREd.setHasMaxValue(true);

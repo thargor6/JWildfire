@@ -5,9 +5,9 @@
  
   <info>
     <appname>JWildfire</appname>
-    <appversion>1.40</appversion>
+    <appversion>1.50</appversion>
     <appsubpath>JWildfire</appsubpath>
-    <javaversion>1.7</javaversion>
+    <javaversion>1.6</javaversion>
     <url>http://jwildfire.org/</url>
     <authors>
       <author name="Andreas Maschke" email="thargor6@googlemail.com"/>
