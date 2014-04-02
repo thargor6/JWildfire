@@ -76,6 +76,7 @@ public class Desktop extends JApplet {
   private JMenuItem exitMenuItem = null;
   private JMenuItem welcomeMenuItem = null;
   private JMenuItem systemInfoMenuItem = null;
+  private JCheckBoxMenuItem lookAndFeelMenuItem = null;
   private JMenuItem saveMenuItem = null;
   private JDesktopPane mainDesktopPane = null;
   private JMenu windowMenu = null;
@@ -103,11 +104,12 @@ public class Desktop extends JApplet {
       mainDesktopPane.add(getPreferencesInternalFrame(), null);
       mainDesktopPane.add(getWelcomeInternalFrame(), null);
       mainDesktopPane.add(getSystemInfoInternalFrame(), null);
+      errorHandler = new StandardErrorHandler(mainDesktopPane, getShowErrorDlg(), getShowErrorDlgMessageTextArea(),
+          getShowErrorDlgStacktraceTextArea());
+      mainDesktopPane.add(getLookAndFeelInternalFrame(mainDesktopPane, errorHandler, prefs), null);
       if (!welcomeInternalFrame.isVisible()) {
         welcomeInternalFrame.setVisible(true);
       }
-      errorHandler = new StandardErrorHandler(mainDesktopPane, getShowErrorDlg(), getShowErrorDlgMessageTextArea(),
-          getShowErrorDlgStacktraceTextArea());
 
       TinaInternalFrame tinaFrame = (TinaInternalFrame) getTinaInternalFrame();
       tinaController = tinaFrame.createController(errorHandler, prefs);
@@ -214,6 +216,7 @@ public class Desktop extends JApplet {
       windowMenu.add(getTinaMenuItem());
       windowMenu.add(getEDENMenuItem());
       windowMenu.add(getPreferencesMenuItem());
+      windowMenu.add(getLookAndFeelMenuItem());
     }
     return windowMenu;
   }
@@ -265,7 +268,7 @@ public class Desktop extends JApplet {
   private JCheckBoxMenuItem getEDENMenuItem() {
     if (edenMenuItem == null) {
       edenMenuItem = new JCheckBoxMenuItem();
-      edenMenuItem.setText("Structure Syntesizer");
+      edenMenuItem.setText("Structure Synthesizer");
       edenMenuItem.setEnabled(true);
       edenMenuItem.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -1439,7 +1442,8 @@ public class Desktop extends JApplet {
 
     SwingUtilities.invokeLater(new Runnable() {
       public void run() {
-        LookAndFeel.setLookAndFeel();
+
+        setUserLookAndFeel();
         Desktop application = new Desktop();
         application.getJFrame().setVisible(true);
         application.initApp();
@@ -1450,7 +1454,38 @@ public class Desktop extends JApplet {
           ex.printStackTrace();
         }
       }
+
     });
+  }
+
+  public static void setUserLookAndFeel() {
+    try {
+      Prefs prefs = new Prefs();
+      prefs.loadFromFile();
+      if (prefs.getLookAndFeelType() != null) {
+        prefs.getLookAndFeelType().changeTo();
+        if (prefs.getLookAndFeelTheme() != null && prefs.getLookAndFeelTheme().length() > 0)
+          prefs.getLookAndFeelType().changeTheme(prefs.getLookAndFeelTheme());
+        return;
+      }
+    }
+    catch (Throwable ex) {
+      ex.printStackTrace();
+    }
+    try {
+      LookAndFeelType.NIMBUS.changeTo();
+      return;
+    }
+    catch (Throwable ex) {
+      ex.printStackTrace();
+    }
+    try {
+      LookAndFeelType.SYSTEM.changeTo();
+      return;
+    }
+    catch (Throwable ex) {
+      ex.printStackTrace();
+    }
   }
 
   /**
@@ -1562,15 +1597,6 @@ public class Desktop extends JApplet {
       exitMenuItem.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
           closeApp();
-          //          try {
-          //            if (prefs != null) {
-          //              prefs.saveToFromFile();
-          //            }
-          //          }
-          //          catch (Exception ex) {
-          //            System.out.println(ex);
-          //          }
-          //          System.exit(0);
         }
       });
     }
@@ -1609,7 +1635,6 @@ public class Desktop extends JApplet {
             systemInfoInternalFrame.setVisible(true);
           }
           try {
-
             systemInfoInternalFrame.setSelected(true);
           }
           catch (PropertyVetoException ex) {
@@ -1619,6 +1644,31 @@ public class Desktop extends JApplet {
       });
     }
     return systemInfoMenuItem;
+  }
+
+  private JCheckBoxMenuItem getLookAndFeelMenuItem() {
+    if (lookAndFeelMenuItem == null) {
+      lookAndFeelMenuItem = new JCheckBoxMenuItem();
+      lookAndFeelMenuItem.setText("UI Theme (Look and Feel)");
+      lookAndFeelMenuItem.setVisible(true);
+      lookAndFeelMenuItem.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent e) {
+          if (lookAndFeelMenuItem.isSelected()) {
+            lookAndFeelInternalFrame.setVisible(true);
+            try {
+              lookAndFeelInternalFrame.setSelected(true);
+            }
+            catch (PropertyVetoException ex) {
+              ex.printStackTrace();
+            }
+          }
+          else {
+            lookAndFeelInternalFrame.setVisible(false);
+          }
+        }
+      });
+    }
+    return lookAndFeelMenuItem;
   }
 
   /**
@@ -1648,7 +1698,7 @@ public class Desktop extends JApplet {
 
   @Override
   public void start() {
-    LookAndFeel.setLookAndFeel();
+    setUserLookAndFeel();
     appletApplication = new Desktop();
     appletApplication.getJFrame().setVisible(true);
     appletApplication.initApp();
@@ -1921,6 +1971,7 @@ public class Desktop extends JApplet {
   private JInternalFrame edenInternalFrame = null;
   private JInternalFrame welcomeInternalFrame = null;
   private JInternalFrame systemInfoInternalFrame = null;
+  private JInternalFrame lookAndFeelInternalFrame = null;
 
   void enableControls() {
     edenMenuItem.setSelected(edenInternalFrame.isVisible());
@@ -1928,6 +1979,7 @@ public class Desktop extends JApplet {
     operatorsMenuItem.setSelected(operatorsInternalFrame.isVisible());
     scriptMenuItem.setSelected(scriptInternalFrame.isVisible());
     preferencesMenuItem.setSelected(preferencesInternalFrame.isVisible());
+    lookAndFeelMenuItem.setSelected(lookAndFeelInternalFrame.isVisible());
     formulaExplorerMenuItem.setSelected(formulaExplorerInternalFrame
         .isVisible());
     closeAllMenuItem.setEnabled(mainController.getBufferList().size() > 0);
@@ -2032,6 +2084,22 @@ public class Desktop extends JApplet {
       systemInfoInternalFrame = new SystemInfoInternalFrame();
     }
     return systemInfoInternalFrame;
+  }
+
+  private JInternalFrame getLookAndFeelInternalFrame(JDesktopPane pRootPane, ErrorHandler pErrorHandler, Prefs pPrefs) {
+    if (lookAndFeelInternalFrame == null) {
+      lookAndFeelInternalFrame = new LookAndFeelInternalFrame(this, pRootPane, pErrorHandler, pPrefs);
+      lookAndFeelInternalFrame.addInternalFrameListener(new javax.swing.event.InternalFrameAdapter() {
+        public void internalFrameDeactivated(javax.swing.event.InternalFrameEvent e) {
+          enableControls();
+        }
+
+        public void internalFrameClosed(javax.swing.event.InternalFrameEvent e) {
+          enableControls();
+        }
+      });
+    }
+    return lookAndFeelInternalFrame;
   }
 
   private void closeApp() {

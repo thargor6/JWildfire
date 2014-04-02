@@ -24,8 +24,10 @@ public class PrefsWriter {
     StringBuilder sb = new StringBuilder();
     addValue(sb, Prefs.KEY_GENERAL_DEVELOPMENT_MODE, pPrefs.isDevelopmentMode());
     addValue(sb, Prefs.KEY_GENERAL_BASE_MATH_LIB, pPrefs.getBaseMathLibType().toString());
-    addValue(sb, Prefs.KEY_GENERAL_PLAF_STYLE, pPrefs.getPlafStyle());
-    addValue(sb, Prefs.KEY_GENERAL_PLAF_THEME, pPrefs.getPlafTheme());
+    if (pPrefs.getLookAndFeelType() != null) {
+      addValue(sb, Prefs.KEY_GENERAL_LOOK_AND_FEEL, pPrefs.getLookAndFeelType().toString());
+      addValue(sb, Prefs.KEY_GENERAL_LOOK_AND_FEEL_THEME, pPrefs.getLookAndFeelTheme());
+    }
     addValue(sb, Prefs.KEY_GENERAL_PATH_IMAGES, pPrefs.getImagePath());
     addValue(sb, Prefs.KEY_GENERAL_PATH_SCRIPTS, pPrefs.getScriptPath());
     addValue(sb, Prefs.KEY_TINA_PATH_MOVIEFLAMES, pPrefs.getMovieFlamesPath());

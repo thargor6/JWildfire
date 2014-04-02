@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2013 Andreas Maschke
+  Copyright (C) 1995-2014 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -25,7 +25,7 @@ import org.jwildfire.base.mathlib.MathLib;
 import org.jwildfire.create.tina.base.raster.RasterPointPrecision;
 import org.jwildfire.create.tina.random.RandomGeneratorType;
 import org.jwildfire.create.tina.swing.RandomBatchRefreshType;
-import org.jwildfire.swing.LookAndFeel;
+import org.jwildfire.swing.LookAndFeelType;
 
 import com.l2fprod.common.beans.editor.ComboBoxPropertyEditor;
 
@@ -33,8 +33,8 @@ public class Prefs extends ManagedObject {
   // DON'T forget to update the assign() method after adding new properties!!!
   static final String PREFS_FILE = "j-wildfire.properties";
 
-  static final String KEY_GENERAL_PLAF_STYLE = "general.plaf.style2";
-  static final String KEY_GENERAL_PLAF_THEME = "general.plaf.theme";
+  static final String KEY_GENERAL_LOOK_AND_FEEL = "general.look_and_feel";
+  static final String KEY_GENERAL_LOOK_AND_FEEL_THEME = "general.look_and_feel.theme";
   static final String KEY_GENERAL_PATH_IMAGES = "general.path.images";
   static final String KEY_GENERAL_PATH_SCRIPTS = "general.path.scripts";
   static final String KEY_GENERAL_PATH_SOUND_FILES = "sunflow.path.sound_files";
@@ -155,14 +155,6 @@ public class Prefs extends ManagedObject {
   private final List<ResolutionProfile> resolutionProfiles = new ArrayList<ResolutionProfile>();
   private final List<WindowPrefs> windowPrefs = new ArrayList<WindowPrefs>();
 
-  public static class PLAFStyleEditor extends ComboBoxPropertyEditor {
-    public PLAFStyleEditor() {
-      super();
-      setAvailableValues(new String[] { LookAndFeel.PLAF_AERO, LookAndFeel.PLAF_ALUMINIUM, LookAndFeel.PLAF_BERNSTEIN, LookAndFeel.PLAF_FAST, LookAndFeel.PLAF_GRAPHITE, LookAndFeel.PLAF_HIFI, LookAndFeel.PLAF_MCWIN, LookAndFeel.PLAF_MINT,
-          LookAndFeel.PLAF_NIMBUS, LookAndFeel.PLAF_NOIRE, LookAndFeel.PLAF_LUNA, LookAndFeel.PLAF_SMART, LookAndFeel.PLAF_MAC });
-    }
-  }
-
   public static class RandomBatchRefreshTypeEditor extends ComboBoxPropertyEditor {
     public RandomBatchRefreshTypeEditor() {
       super();
@@ -191,10 +183,8 @@ public class Prefs extends ManagedObject {
     }
   }
 
-  @Property(description = "Look and feel (major UI style) - changes are applied only after restarting the main program", category = PropertyCategory.TINA, editorClass = PLAFStyleEditor.class)
-  private String plafStyle = LookAndFeel.PLAF_NIMBUS;
-  @Property(description = "Look and feel theme (UI sub style) - changes are applied only after restarting the main program", category = PropertyCategory.TINA)
-  private String plafTheme = LookAndFeel.THEME_DEFAULT;
+  private LookAndFeelType lookAndFeelType = LookAndFeelType.NIMBUS;
+  private String lookAndFeelTheme = "";
 
   @Property(description = "Default number of frames for a movie", category = PropertyCategory.TINA)
   private int tinaRenderMovieFrames = 90;
@@ -454,8 +444,8 @@ public class Prefs extends ManagedObject {
     lastInputSoundFilePath = pSrc.lastInputSoundFilePath;
     movieFlamesPath = pSrc.movieFlamesPath;
     lastOutputMovieFlamesPath = pSrc.lastOutputMovieFlamesPath;
-    plafStyle = pSrc.plafStyle;
-    plafTheme = pSrc.plafTheme;
+    lookAndFeelType = pSrc.lookAndFeelType;
+    lookAndFeelTheme = pSrc.lookAndFeelTheme;
     developmentMode = pSrc.developmentMode;
     tinaRandomNumberGenerator = pSrc.tinaRandomNumberGenerator;
     tinaDefaultAntialiasingAmount = pSrc.tinaDefaultAntialiasingAmount;
@@ -559,22 +549,6 @@ public class Prefs extends ManagedObject {
 
   public void setTinaRandomBatchBGColorBlue(int tinaRandomBatchBGColorBlue) {
     this.tinaRandomBatchBGColorBlue = tinaRandomBatchBGColorBlue;
-  }
-
-  public String getPlafStyle() {
-    return plafStyle;
-  }
-
-  public void setPlafStyle(String plafStyle) {
-    this.plafStyle = plafStyle;
-  }
-
-  public String getPlafTheme() {
-    return plafTheme;
-  }
-
-  public void setPlafTheme(String plafTheme) {
-    this.plafTheme = plafTheme;
   }
 
   static {
@@ -753,6 +727,22 @@ public class Prefs extends ManagedObject {
 
   public void setTinaRandomMovieBatchSize(int pTinaRandomMovieBatchSize) {
     tinaRandomMovieBatchSize = pTinaRandomMovieBatchSize;
+  }
+
+  public LookAndFeelType getLookAndFeelType() {
+    return lookAndFeelType;
+  }
+
+  public void setLookAndFeelType(LookAndFeelType pLookAndFeelType) {
+    lookAndFeelType = pLookAndFeelType;
+  }
+
+  public String getLookAndFeelTheme() {
+    return lookAndFeelTheme;
+  }
+
+  public void setLookAndFeelTheme(String pLookAndFeelTheme) {
+    lookAndFeelTheme = pLookAndFeelTheme;
   }
 
 }

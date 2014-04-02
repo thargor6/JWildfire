@@ -26,6 +26,7 @@ import org.jwildfire.base.mathlib.BaseMathLibType;
 import org.jwildfire.create.tina.base.raster.RasterPointPrecision;
 import org.jwildfire.create.tina.random.RandomGeneratorType;
 import org.jwildfire.create.tina.swing.RandomBatchRefreshType;
+import org.jwildfire.swing.LookAndFeelType;
 
 public class PrefsReader {
 
@@ -57,8 +58,18 @@ public class PrefsReader {
         Properties props = new Properties();
         props.load(inputStream);
         pPrefs.setDevelopmentMode(getBooleanProperty(props, Prefs.KEY_GENERAL_DEVELOPMENT_MODE, pPrefs.isDevelopmentMode()));
-        pPrefs.setPlafStyle(getProperty(props, Prefs.KEY_GENERAL_PLAF_STYLE, pPrefs.getPlafStyle()));
-        pPrefs.setPlafTheme(getProperty(props, Prefs.KEY_GENERAL_PLAF_THEME, pPrefs.getPlafTheme()));
+        {
+          String lookAndFeel = getProperty(props, Prefs.KEY_GENERAL_LOOK_AND_FEEL, "");
+          if (lookAndFeel.length() > 0) {
+            try {
+              pPrefs.setLookAndFeelType(LookAndFeelType.valueOf(lookAndFeel));
+              pPrefs.setLookAndFeelTheme(getProperty(props, Prefs.KEY_GENERAL_LOOK_AND_FEEL_THEME, pPrefs.getLookAndFeelTheme()));
+            }
+            catch (Exception ex) {
+              ex.printStackTrace();
+            }
+          }
+        }
         pPrefs.setImagePath(getProperty(props, Prefs.KEY_GENERAL_PATH_IMAGES, pPrefs.getImagePath()));
         pPrefs.setScriptPath(getProperty(props, Prefs.KEY_GENERAL_PATH_SCRIPTS, pPrefs.getScriptPath()));
         pPrefs.setMovieFlamesPath(getProperty(props, Prefs.KEY_TINA_PATH_MOVIEFLAMES, pPrefs.getMovieFlamesPath()));
