@@ -64,7 +64,7 @@
       <zipfileset src="lib/jep-2.4.1.jar"/>
       <zipfileset src="lib/sunflow.jar"/>
       <zipfileset src="lib/janino.jar"/>
-      <zipfileset src="lib/JTattoo.jar"/>
+      <zipfileset src="lib/JTattoo-1.6.10.jar"/>
       <zipfileset src="lib/jl1.0.1.jar"/>
       <zipfileset src="lib/jtransforms-2.4.jar"/>
       <zipfileset src="lib/svgSalamander-tiny.jar"/>
