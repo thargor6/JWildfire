@@ -65,22 +65,6 @@ public enum LookAndFeelType {
       // empty      
     }
   },
-  PLAF_MOTIF("Motif") {
-    @Override
-    public void changeTo() throws Exception {
-      UIManager.setLookAndFeel("com.sun.java.swing.plaf.motif.MotifLookAndFeel");
-    }
-
-    @Override
-    public List<String> getSubThemes() {
-      return Collections.emptyList();
-    }
-
-    @Override
-    public void changeTheme(String pTheme) throws Exception {
-      // empty      
-    }
-  },
   SYSTEM("System") {
     @Override
     public void changeTo() throws Exception {
