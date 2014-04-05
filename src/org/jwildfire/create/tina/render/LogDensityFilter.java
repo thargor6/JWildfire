@@ -27,12 +27,11 @@ public class LogDensityFilter {
   private final Flame flame;
   private AbstractRasterPoint[][] raster;
   private int rasterWidth, rasterHeight, rasterSize;
-  public static final int FILTER_WHITE = (1 << 26);
-  public final static double BRIGHTNESS_SCALE = 2.0 * 268.0;
-  private final int PRECALC_LOG_ARRAY_SIZE = 256;
+  private final int PRECALC_LOG_ARRAY_SIZE = 512;
+  private final double HDR_SCALE = 0.0001;
   private double filter[][];
   private int noiseFilterSize;
-  private double precalcLogArray[]; // precalculated log-values
+  private double precalcLogArray[];
   private double k1, k2;
   private final FilterKernel filterKernel;
 
@@ -78,14 +77,14 @@ public class LogDensityFilter {
     rasterWidth = pRasterWidth;
     rasterHeight = pRasterHeight;
     rasterSize = rasterWidth * rasterHeight;
-    k1 = (flame.getContrast() * BRIGHTNESS_SCALE * flame.getBrightness() * FILTER_WHITE) / 256.0;
+    k1 = flame.getContrast() * 2.0 * flame.getBrightness();
     double pixelsPerUnit = flame.getPixelsPerUnit() * flame.getCamZoom();
     double area = ((double) pImageWidth * (double) pImageHeight) / (pixelsPerUnit * pixelsPerUnit);
-    k2 = 1.0 / (flame.getContrast() * area * (double) flame.getWhiteLevel() * flame.getSampleDensity());
+    k2 = 1.0 / (flame.getContrast() * area * flame.getSampleDensity());
 
     precalcLogArray = new double[PRECALC_LOG_ARRAY_SIZE + 1];
     for (int i = 1; i <= PRECALC_LOG_ARRAY_SIZE; i++) {
-      precalcLogArray[i] = (k1 * log10(1 + flame.getWhiteLevel() * i * k2)) / (flame.getWhiteLevel() * i);
+      precalcLogArray[i] = (k1 * log10(1 + i * k2)) / (flame.getWhiteLevel() * i);
     }
   }
 
@@ -101,17 +100,14 @@ public class LogDensityFilter {
           pFilteredPnt.intensity += filter[i][j] * point.getCount();
         }
       }
-      pFilteredPnt.red /= FILTER_WHITE;
-      pFilteredPnt.green /= FILTER_WHITE;
-      pFilteredPnt.blue /= FILTER_WHITE;
-      pFilteredPnt.intensity = flame.getWhiteLevel() * pFilteredPnt.intensity / FILTER_WHITE;
+      pFilteredPnt.intensity = flame.getWhiteLevel() * pFilteredPnt.intensity * HDR_SCALE;
     }
     else {
       AbstractRasterPoint point = getRasterPoint(pX, pY);
       pFilteredPnt.red = point.getRed();
       pFilteredPnt.green = point.getGreen();
       pFilteredPnt.blue = point.getBlue();
-      pFilteredPnt.intensity = point.getCount() * flame.getWhiteLevel();
+      pFilteredPnt.intensity = point.getCount() * flame.getWhiteLevel() * HDR_SCALE;
     }
   }
 
@@ -119,10 +115,10 @@ public class LogDensityFilter {
     AbstractRasterPoint point = getRasterPoint(pX, pY);
     double logScale;
     if (point.getCount() < precalcLogArray.length) {
-      logScale = precalcLogArray[(int) point.getCount()] / FILTER_WHITE;
+      logScale = precalcLogArray[(int) point.getCount()];
     }
     else {
-      logScale = (k1 * log10(1.0 + flame.getWhiteLevel() * point.getCount() * k2)) / (flame.getWhiteLevel() * point.getCount()) / FILTER_WHITE;
+      logScale = (k1 * log10(1.0 + point.getCount() * k2)) / (flame.getWhiteLevel() * point.getCount());
     }
     pFilteredPnt.red = logScale * point.getRed();
     pFilteredPnt.green = logScale * point.getGreen();
@@ -162,7 +158,7 @@ public class LogDensityFilter {
             logScale = precalcLogArray[pIdx];
           }
           else {
-            logScale = (k1 * log10(1.0 + flame.getWhiteLevel() * point.getCount() * k2)) / (flame.getWhiteLevel() * point.getCount());
+            logScale = (k1 * log10(1.0 + point.getCount() * k2)) / (flame.getWhiteLevel() * point.getCount());
           }
           pFilteredPnt.red += filter[i][j] * logScale * point.getRed();
           pFilteredPnt.green += filter[i][j] * logScale * point.getGreen();
@@ -170,20 +166,16 @@ public class LogDensityFilter {
           pFilteredPnt.intensity += filter[i][j] * logScale * point.getCount();
         }
       }
-
-      pFilteredPnt.red /= FILTER_WHITE;
-      pFilteredPnt.green /= FILTER_WHITE;
-      pFilteredPnt.blue /= FILTER_WHITE;
-      pFilteredPnt.intensity = flame.getWhiteLevel() * pFilteredPnt.intensity / FILTER_WHITE;
+      pFilteredPnt.intensity = flame.getWhiteLevel() * pFilteredPnt.intensity;
     }
     else {
       AbstractRasterPoint point = getRasterPoint(pX, pY);
       double logScale;
       if (point.getCount() < precalcLogArray.length) {
-        logScale = precalcLogArray[(int) point.getCount()] / FILTER_WHITE;
+        logScale = precalcLogArray[(int) point.getCount()];
       }
       else {
-        logScale = (k1 * log10(1.0 + flame.getWhiteLevel() * point.getCount() * k2)) / (flame.getWhiteLevel() * point.getCount()) / FILTER_WHITE;
+        logScale = (k1 * log10(1.0 + point.getCount() * k2)) / (flame.getWhiteLevel() * point.getCount());
       }
       pFilteredPnt.red = logScale * point.getRed();
       pFilteredPnt.green = logScale * point.getGreen();
@@ -192,30 +184,4 @@ public class LogDensityFilter {
     }
   }
 
-  public void transformPointPastDE(LogDensityPoint pFilteredPnt, int pX, int pY) {
-    if (noiseFilterSize > 1) {
-      pFilteredPnt.clear();
-      for (int i = 0; i < noiseFilterSize; i++) {
-        for (int j = 0; j < noiseFilterSize; j++) {
-          AbstractRasterPoint point = getRasterPoint(pX + j, pY + i);
-          pFilteredPnt.red += filter[i][j] * point.getRed();
-          pFilteredPnt.green += filter[i][j] * point.getGreen();
-          pFilteredPnt.blue += filter[i][j] * point.getBlue();
-          pFilteredPnt.intensity += filter[i][j] * point.getCount();
-        }
-      }
-      pFilteredPnt.red /= FILTER_WHITE;
-      pFilteredPnt.green /= FILTER_WHITE;
-      pFilteredPnt.blue /= FILTER_WHITE;
-      pFilteredPnt.intensity = flame.getWhiteLevel() * pFilteredPnt.intensity / FILTER_WHITE;
-    }
-    else {
-      AbstractRasterPoint point = getRasterPoint(pX, pY);
-      pFilteredPnt.red = point.getRed() / (double) FILTER_WHITE;
-      pFilteredPnt.green = point.getGreen() / (double) FILTER_WHITE;
-      pFilteredPnt.blue = point.getBlue() / (double) FILTER_WHITE;
-      pFilteredPnt.intensity = point.getCount() * flame.getWhiteLevel() / (double) FILTER_WHITE;
-
-    }
-  }
 }
