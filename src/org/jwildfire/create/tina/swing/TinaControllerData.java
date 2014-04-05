@@ -79,14 +79,6 @@ public class TinaControllerData {
   public JWFNumberField gammaThresholdREd;
   public JSlider gammaThresholdSlider;
   public JCheckBox bgTransparencyCBx;
-  public JCheckBox deFilterEnableCbx;
-  public JWFNumberField deFilterMaxRadiusREd;
-  public JSlider deFilterMaxRadiusSlider;
-  public JWFNumberField deFilterMinRadiusREd;
-  public JSlider deFilterMinRadiusSlider;
-  public JWFNumberField deFilterCurveREd;
-  public JSlider deFilterCurveSlider;
-  public JComboBox deFilterKernelCmb;
   public JComboBox shadingCmb;
   public JWFNumberField shadingAmbientREd;
   public JSlider shadingAmbientSlider;

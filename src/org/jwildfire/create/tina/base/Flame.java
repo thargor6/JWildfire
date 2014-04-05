@@ -94,11 +94,6 @@ public class Flame implements Assignable<Flame>, Serializable {
   private boolean newCamDOF;
   private double spatialFilterRadius;
   private FilterKernelType spatialFilterKernel;
-  private boolean deFilterEnabled;
-  private double deFilterMaxRadius;
-  private double deFilterMinRadius;
-  private double deFilterCurve;
-  private FilterKernelType deFilterKernel;
   private double sampleDensity;
   private boolean bgTransparency;
   @AnimAware
@@ -190,15 +185,10 @@ public class Flame implements Assignable<Flame>, Serializable {
     camDOFExponent = 2.0;
     gammaThreshold = 0.01;
     pixelsPerUnit = 50;
-    whiteLevel = 200;
+    whiteLevel = 150;
     name = "";
     spatialFilterRadius = 0.0;
     spatialFilterKernel = FilterKernelType.GAUSSIAN;
-    deFilterEnabled = false;
-    deFilterMaxRadius = 0.7;
-    deFilterMinRadius = 0.0;
-    deFilterCurve = 0.36;
-    deFilterKernel = FilterKernelType.GAUSSIAN;
     shadingInfo.init();
   }
 
@@ -279,7 +269,8 @@ public class Flame implements Assignable<Flame>, Serializable {
   }
 
   public void setWhiteLevel(int whiteLevel) {
-    this.whiteLevel = whiteLevel;
+    // TODO
+    //    this.whiteLevel = whiteLevel;
   }
 
   public double getContrast() {
@@ -516,11 +507,6 @@ public class Flame implements Assignable<Flame>, Serializable {
     camDOFExponentCurve.assign(pFlame.camDOFExponentCurve);
     spatialFilterRadius = pFlame.spatialFilterRadius;
     spatialFilterKernel = pFlame.spatialFilterKernel;
-    deFilterEnabled = pFlame.deFilterEnabled;
-    deFilterMaxRadius = pFlame.deFilterMaxRadius;
-    deFilterMinRadius = pFlame.deFilterMinRadius;
-    deFilterCurve = pFlame.deFilterCurve;
-    deFilterKernel = pFlame.deFilterKernel;
     sampleDensity = pFlame.sampleDensity;
     bgTransparency = pFlame.bgTransparency;
     bgColorRed = pFlame.bgColorRed;
@@ -605,9 +591,7 @@ public class Flame implements Assignable<Flame>, Serializable {
         (fabs(camPosZ - pFlame.camPosZ) > EPSILON) || !camPosZCurve.isEqual(pFlame.camPosZCurve) ||
         (fabs(camZ - pFlame.camZ) > EPSILON) || !camZCurve.isEqual(pFlame.camZCurve) ||
         (newCamDOF != pFlame.newCamDOF) || (fabs(spatialFilterRadius - pFlame.spatialFilterRadius) > EPSILON) ||
-        !spatialFilterKernel.equals(pFlame.spatialFilterKernel) || !deFilterKernel.equals(pFlame.deFilterKernel) ||
-        (deFilterEnabled != pFlame.deFilterEnabled) || (fabs(deFilterMaxRadius - pFlame.deFilterMaxRadius) > EPSILON) ||
-        (fabs(deFilterMinRadius - pFlame.deFilterMinRadius) > EPSILON) || (fabs(deFilterCurve - pFlame.deFilterCurve) > EPSILON) ||
+        !spatialFilterKernel.equals(pFlame.spatialFilterKernel) ||
         (fabs(sampleDensity - pFlame.sampleDensity) > EPSILON) || (bgTransparency != pFlame.bgTransparency) || (bgColorRed != pFlame.bgColorRed) ||
         (bgColorGreen != pFlame.bgColorGreen) || (bgColorBlue != pFlame.bgColorBlue) ||
         (fabs(gamma - pFlame.gamma) > EPSILON) || !gammaCurve.isEqual(pFlame.gammaCurve) ||
@@ -677,52 +661,12 @@ public class Flame implements Assignable<Flame>, Serializable {
     this.newCamDOF = newCamDOF;
   }
 
-  public boolean isDeFilterEnabled() {
-    return deFilterEnabled;
-  }
-
-  public void setDeFilterEnabled(boolean deFilterEnabled) {
-    this.deFilterEnabled = deFilterEnabled;
-  }
-
-  public double getDeFilterMaxRadius() {
-    return deFilterMaxRadius;
-  }
-
-  public void setDeFilterMaxRadius(double deFilterMaxRadius) {
-    this.deFilterMaxRadius = deFilterMaxRadius;
-  }
-
-  public double getDeFilterMinRadius() {
-    return deFilterMinRadius;
-  }
-
-  public void setDeFilterMinRadius(double deFilterMinRadius) {
-    this.deFilterMinRadius = deFilterMinRadius;
-  }
-
-  public double getDeFilterCurve() {
-    return deFilterCurve;
-  }
-
-  public void setDeFilterCurve(double deFilterCurve) {
-    this.deFilterCurve = deFilterCurve;
-  }
-
   public FilterKernelType getSpatialFilterKernel() {
     return spatialFilterKernel;
   }
 
   public void setSpatialFilterKernel(FilterKernelType spatialFilterKernel) {
     this.spatialFilterKernel = spatialFilterKernel;
-  }
-
-  public FilterKernelType getDeFilterKernel() {
-    return deFilterKernel;
-  }
-
-  public void setDeFilterKernel(FilterKernelType deFilterKernel) {
-    this.deFilterKernel = deFilterKernel;
   }
 
   public double getDimishZ() {

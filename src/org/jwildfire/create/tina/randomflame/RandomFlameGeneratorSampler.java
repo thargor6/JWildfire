@@ -128,8 +128,6 @@ public class RandomFlameGeneratorSampler {
       // render it   
       flame.setSampleDensity(25);
       RenderedFlame renderedFlame;
-      boolean oldDEEnabled = flame.isDeFilterEnabled();
-      flame.setDeFilterEnabled(false);
       flame.setAntialiasAmount(0.0);
 
       try {
@@ -137,7 +135,6 @@ public class RandomFlameGeneratorSampler {
         renderedFlame = renderer.renderFlame(info);
       }
       finally {
-        flame.setDeFilterEnabled(oldDEEnabled);
         flame.setAntialiasAmount(prefs.getTinaDefaultAntialiasingAmount());
       }
       if (j == quality.getMaxSamples() - 1) {

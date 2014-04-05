@@ -86,14 +86,6 @@ public class TinaControllerParameter {
   public JWFNumberField pFilterRadiusREd;
   public JSlider pFilterRadiusSlider;
   public JComboBox pFilterKernelCmb;
-  public JCheckBox pDEFilterEnableCbx;
-  public JWFNumberField pDEFilterMaxRadiusREd;
-  public JSlider pDEFilterMaxRadiusSlider;
-  public JWFNumberField pDEFilterMinRadiusREd;
-  public JSlider pDEFilterMinRadiusSlider;
-  public JWFNumberField pDEFilterCurveREd;
-  public JSlider pDEFilterCurveSlider;
-  public JComboBox pDEFilterKernelCmb;
   public JWFNumberField pGammaThresholdREd;
   public JSlider pGammaThresholdSlider;
   public JCheckBox pBGTransparencyCBx;
@@ -435,8 +427,8 @@ public class TinaControllerParameter {
   public JSlider camPosZSlider;
 
   public void setParams1(JInternalFrame pTinaFrame, ErrorHandler pErrorHandler, Prefs pPrefs, JPanel pCenterPanel, JWFNumberField pCameraRollREd, JSlider pCameraRollSlider, JWFNumberField pCameraPitchREd, JSlider pCameraPitchSlider, JWFNumberField pCameraYawREd, JSlider pCameraYawSlider, JWFNumberField pCameraPerspectiveREd, JSlider pCameraPerspectiveSlider, JWFNumberField pCameraCentreXREd, JSlider pCameraCentreXSlider, JWFNumberField pCameraCentreYREd, JSlider pCameraCentreYSlider, JWFNumberField pCameraZoomREd, JSlider pCameraZoomSlider, JCheckBox pNewDOFCBx, JWFNumberField pFocusXREd, JSlider pFocusXSlider, JWFNumberField pFocusYREd, JSlider pFocusYSlider, JWFNumberField pFocusZREd, JSlider pFocusZSlider, JWFNumberField pDimishZREd, JSlider pDimishZSlider,
-      JWFNumberField pCameraDOFREd, JSlider pCameraDOFSlider, JWFNumberField pCameraDOFAreaREd, JSlider pCameraDOFAreaSlider, JWFNumberField pCameraDOFExponentREd, JSlider pCameraDOFExponentSlider, JWFNumberField pCamZREd, JSlider pCamZSlider, JWFNumberField pPixelsPerUnitREd, JSlider pPixelsPerUnitSlider, JWFNumberField pBrightnessREd, JSlider pBrightnessSlider, JWFNumberField pContrastREd, JSlider pContrastSlider, JWFNumberField pGammaREd, JSlider pGammaSlider, JWFNumberField pVibrancyREd, JSlider pVibrancySlider, JWFNumberField pFilterRadiusREd, JSlider pFilterRadiusSlider, JComboBox pFilterKernelCmb, JCheckBox pDEFilterEnableCbx, JWFNumberField pDEFilterMaxRadiusREd, JSlider pDEFilterMaxRadiusSlider, JWFNumberField pDEFilterMinRadiusREd, JSlider pDEFilterMinRadiusSlider,
-      JWFNumberField pDEFilterCurveREd, JSlider pDEFilterCurveSlider, JComboBox pDEFilterKernelCmb, JWFNumberField pGammaThresholdREd, JSlider pGammaThresholdSlider, JCheckBox pBGTransparencyCBx, JTextField pPaletteRandomPointsREd, JPanel pPaletteImgPanel, JPanel pColorChooserPaletteImgPanel, JWFNumberField pPaletteShiftREd, JSlider pPaletteShiftSlider, JWFNumberField pPaletteRedREd, JSlider pPaletteRedSlider, JWFNumberField pPaletteGreenREd, JSlider pPaletteGreenSlider, JWFNumberField pPaletteBlueREd, JSlider pPaletteBlueSlider, JWFNumberField pPaletteHueREd, JSlider pPaletteHueSlider,
+      JWFNumberField pCameraDOFREd, JSlider pCameraDOFSlider, JWFNumberField pCameraDOFAreaREd, JSlider pCameraDOFAreaSlider, JWFNumberField pCameraDOFExponentREd, JSlider pCameraDOFExponentSlider, JWFNumberField pCamZREd, JSlider pCamZSlider, JWFNumberField pPixelsPerUnitREd, JSlider pPixelsPerUnitSlider, JWFNumberField pBrightnessREd, JSlider pBrightnessSlider, JWFNumberField pContrastREd, JSlider pContrastSlider, JWFNumberField pGammaREd, JSlider pGammaSlider, JWFNumberField pVibrancyREd, JSlider pVibrancySlider, JWFNumberField pFilterRadiusREd, JSlider pFilterRadiusSlider, JComboBox pFilterKernelCmb,
+      JWFNumberField pGammaThresholdREd, JSlider pGammaThresholdSlider, JCheckBox pBGTransparencyCBx, JTextField pPaletteRandomPointsREd, JPanel pPaletteImgPanel, JPanel pColorChooserPaletteImgPanel, JWFNumberField pPaletteShiftREd, JSlider pPaletteShiftSlider, JWFNumberField pPaletteRedREd, JSlider pPaletteRedSlider, JWFNumberField pPaletteGreenREd, JSlider pPaletteGreenSlider, JWFNumberField pPaletteBlueREd, JSlider pPaletteBlueSlider, JWFNumberField pPaletteHueREd, JSlider pPaletteHueSlider,
       JWFNumberField pPaletteSaturationREd, JSlider pPaletteSaturationSlider, JWFNumberField pPaletteContrastREd, JSlider pPaletteContrastSlider, JWFNumberField pPaletteGammaREd, JSlider pPaletteGammaSlider, JWFNumberField pPaletteBrightnessREd, JSlider pPaletteBrightnessSlider, JWFNumberField pPaletteSwapRGBREd, JSlider pPaletteSwapRGBSlider, JWFNumberField pPaletteFrequencyREd, JSlider pPaletteFrequencySlider, JWFNumberField pPaletteBlurREd, JSlider pPaletteBlurSlider, JButton pPaletteInvertBtn, JButton pPaletteReverseBtn, JTable pTransformationsTable, JWFNumberField pAffineC00REd, JWFNumberField pAffineC01REd, JWFNumberField pAffineC10REd, JWFNumberField pAffineC11REd, JWFNumberField pAffineC20REd, JWFNumberField pAffineC21REd, JWFNumberField pAffineRotateAmountREd,
       JWFNumberField pAffineScaleAmountREd, JWFNumberField pAffineMoveHorizAmountREd, JButton pAffineRotateLeftButton, JButton pAffineRotateRightButton, JButton pAffineEnlargeButton, JButton pAffineShrinkButton, JButton pAffineMoveUpButton, JButton pAffineMoveLeftButton, JButton pAffineMoveRightButton, JButton pAffineMoveDownButton, JButton pAddTransformationButton, JButton pAddLinkedTransformationButton, JButton pDuplicateTransformationButton, JButton pDeleteTransformationButton, JButton pAddFinalTransformationButton, JPanel pRandomBatchPanel, TinaNonlinearControlsRow[] pTinaNonlinearControlsRows, JWFNumberField pXFormColorREd, JSlider pXFormColorSlider, JWFNumberField pXFormSymmetryREd, JSlider pXFormSymmetrySlider, JWFNumberField pXFormOpacityREd,
       JSlider pXFormOpacitySlider,
@@ -495,14 +487,6 @@ public class TinaControllerParameter {
     this.pFilterRadiusREd = pFilterRadiusREd;
     this.pFilterRadiusSlider = pFilterRadiusSlider;
     this.pFilterKernelCmb = pFilterKernelCmb;
-    this.pDEFilterEnableCbx = pDEFilterEnableCbx;
-    this.pDEFilterMaxRadiusREd = pDEFilterMaxRadiusREd;
-    this.pDEFilterMaxRadiusSlider = pDEFilterMaxRadiusSlider;
-    this.pDEFilterMinRadiusREd = pDEFilterMinRadiusREd;
-    this.pDEFilterMinRadiusSlider = pDEFilterMinRadiusSlider;
-    this.pDEFilterCurveREd = pDEFilterCurveREd;
-    this.pDEFilterCurveSlider = pDEFilterCurveSlider;
-    this.pDEFilterKernelCmb = pDEFilterKernelCmb;
     this.pGammaThresholdREd = pGammaThresholdREd;
     this.pGammaThresholdSlider = pGammaThresholdSlider;
     this.pBGTransparencyCBx = pBGTransparencyCBx;

@@ -271,18 +271,6 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
     flameSliderChanged(data.filterRadiusSlider, data.filterRadiusREd, "spatialFilterRadius", TinaController.SLIDER_SCALE_FILTER_RADIUS);
   }
 
-  public void deFilterMaxRadiusSlider_stateChanged(ChangeEvent e) {
-    flameSliderChanged(data.deFilterMaxRadiusSlider, data.deFilterMaxRadiusREd, "deFilterMaxRadius", TinaController.SLIDER_SCALE_FILTER_RADIUS);
-  }
-
-  public void deFilterMinRadiusSlider_stateChanged(ChangeEvent e) {
-    flameSliderChanged(data.deFilterMinRadiusSlider, data.deFilterMinRadiusREd, "deFilterMinRadius", TinaController.SLIDER_SCALE_FILTER_RADIUS);
-  }
-
-  public void deFilterCurveSlider_stateChanged(ChangeEvent e) {
-    flameSliderChanged(data.deFilterCurveSlider, data.deFilterCurveREd, "deFilterCurve", TinaController.SLIDER_SCALE_FILTER_RADIUS);
-  }
-
   public void gammaThresholdSlider_stateChanged(ChangeEvent e) {
     flameSliderChanged(data.gammaThresholdSlider, data.gammaThresholdREd, "gammaThreshold", TinaController.SLIDER_SCALE_GAMMA_THRESHOLD);
   }
@@ -347,18 +335,6 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
 
   public void filterRadiusREd_changed() {
     flameTextFieldChanged(data.filterRadiusSlider, data.filterRadiusREd, "spatialFilterRadius", TinaController.SLIDER_SCALE_FILTER_RADIUS);
-  }
-
-  public void deFilterMaxRadiusREd_changed() {
-    flameTextFieldChanged(data.deFilterMaxRadiusSlider, data.deFilterMaxRadiusREd, "deFilterMaxRadius", TinaController.SLIDER_SCALE_FILTER_RADIUS);
-  }
-
-  public void deFilterMinRadiusREd_changed() {
-    flameTextFieldChanged(data.deFilterMinRadiusSlider, data.deFilterMinRadiusREd, "deFilterMinRadius", TinaController.SLIDER_SCALE_FILTER_RADIUS);
-  }
-
-  public void deFilterCurveREd_changed() {
-    flameTextFieldChanged(data.deFilterCurveSlider, data.deFilterCurveREd, "deFilterCurve", TinaController.SLIDER_SCALE_FILTER_RADIUS);
   }
 
   public void gammaREd_changed() {
@@ -470,12 +446,6 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
   }
 
   public void enableDEFilterUI() {
-    boolean deEnabled = getCurrFlame() != null ? getCurrFlame().isDeFilterEnabled() : false;
-    enableControl(data.deFilterEnableCbx, false);
-    enableControl(data.deFilterMaxRadiusREd, !deEnabled);
-    enableControl(data.deFilterMinRadiusREd, !deEnabled);
-    enableControl(data.deFilterCurveREd, !deEnabled);
-    enableControl(data.deFilterKernelCmb, !deEnabled);
     enableControl(data.filterRadiusREd, false);
     enableControl(data.filterKernelCmb, false);
   }
@@ -596,15 +566,6 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
       data.filterRadiusREd.setText(Tools.doubleToString(getCurrFlame().getSpatialFilterRadius()));
       data.filterRadiusSlider.setValue(Tools.FTOI(getCurrFlame().getSpatialFilterRadius() * TinaController.SLIDER_SCALE_FILTER_RADIUS));
       data.filterKernelCmb.setSelectedItem(getCurrFlame().getSpatialFilterKernel());
-
-      data.deFilterEnableCbx.setSelected(getCurrFlame().isDeFilterEnabled());
-      data.deFilterMaxRadiusREd.setText(Tools.doubleToString(getCurrFlame().getDeFilterMaxRadius()));
-      data.deFilterMaxRadiusSlider.setValue(Tools.FTOI(getCurrFlame().getDeFilterMaxRadius() * TinaController.SLIDER_SCALE_FILTER_RADIUS));
-      data.deFilterMinRadiusREd.setText(Tools.doubleToString(getCurrFlame().getDeFilterMinRadius()));
-      data.deFilterMinRadiusSlider.setValue(Tools.FTOI(getCurrFlame().getDeFilterMinRadius() * TinaController.SLIDER_SCALE_FILTER_RADIUS));
-      data.deFilterCurveREd.setText(Tools.doubleToString(getCurrFlame().getDeFilterCurve()));
-      data.deFilterCurveSlider.setValue(Tools.FTOI(getCurrFlame().getDeFilterCurve() * TinaController.SLIDER_SCALE_FILTER_RADIUS));
-      data.deFilterKernelCmb.setSelectedItem(getCurrFlame().getDeFilterKernel());
 
       data.gammaThresholdREd.setText(String.valueOf(getCurrFlame().getGammaThreshold()));
       data.gammaThresholdSlider.setValue(Tools.FTOI(getCurrFlame().getGammaThreshold() * TinaController.SLIDER_SCALE_GAMMA_THRESHOLD));

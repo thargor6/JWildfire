@@ -1387,7 +1387,6 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
         renderFlame.setPixelsPerUnit((wScl + hScl) * 0.5 * renderFlame.getPixelsPerUnit());
         renderFlame.setWidth(IMG_WIDTH);
         renderFlame.setHeight(IMG_HEIGHT);
-        renderFlame.setDeFilterEnabled(false);
         renderFlame.setSpatialFilterRadius(0.0);
         FlameRenderer renderer = new FlameRenderer(renderFlame, prefs, false, false);
         renderFlame.setSampleDensity(pQuality / IMG_COUNT);

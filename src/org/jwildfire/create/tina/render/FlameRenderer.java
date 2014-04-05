@@ -434,45 +434,6 @@ public class FlameRenderer {
     if (renderScale > 1) {
       throw new IllegalArgumentException("renderScale != 1");
     }
-    boolean useDEFilter = flame.isDeFilterEnabled() && (flame.getDeFilterMaxRadius() > 0);
-    AbstractRasterPoint accumRaster[][] = null;
-    Flam3DEFilter deFilter = null;
-    if (useDEFilter) {
-      try {
-        Class<? extends AbstractRasterPoint> rpClass = prefs.getTinaRasterPointPrecision().getRasterPointClass();
-        AbstractRasterPoint rp = rpClass.newInstance();
-        accumRaster = rp.allocRaster(rasterWidth, rasterHeight);
-      }
-      catch (Exception ex) {
-        ex.printStackTrace();
-        useDEFilter = false;
-      }
-      deFilter = new Flam3DEFilter(flame);
-    }
-
-    if (useDEFilter) {
-      if (pImage != null) {
-        deFilter.setRaster(accumRaster, raster, rasterWidth, rasterHeight, pImage.getImageWidth(), pImage.getImageHeight());
-      }
-      else if (pHDRImage != null) {
-        deFilter.setRaster(accumRaster, raster, rasterWidth, rasterHeight, pHDRImage.getImageWidth(), pHDRImage.getImageHeight());
-      }
-      else if (pHDRIntensityMap != null) {
-        deFilter.setRaster(accumRaster, raster, rasterWidth, rasterHeight, pHDRIntensityMap.getImageWidth(), pHDRIntensityMap.getImageHeight());
-      }
-      else {
-        throw new IllegalStateException();
-      }
-
-      for (int i = 0; i < pImage.getImageHeight(); i++) {
-        for (int j = 0; j < pImage.getImageWidth(); j++) {
-          deFilter.transformPoint(j, i);
-        }
-      }
-      raster = null;
-      raster = accumRaster;
-    }
-
     LogDensityPoint logDensityPnt = new LogDensityPoint();
     if (pImage != null) {
       logDensityFilter.setRaster(raster, rasterWidth, rasterHeight, pImage.getImageWidth(), pImage.getImageHeight());
@@ -491,12 +452,7 @@ public class FlameRenderer {
       GammaCorrectedRGBPoint rbgPoint = new GammaCorrectedRGBPoint();
       for (int i = 0; i < pImage.getImageHeight(); i++) {
         for (int j = 0; j < pImage.getImageWidth(); j++) {
-          if (useDEFilter) {
-            logDensityFilter.transformPointPastDE(logDensityPnt, j, i);
-          }
-          else {
-            logDensityFilter.transformPoint(logDensityPnt, j, i);
-          }
+          logDensityFilter.transformPoint(logDensityPnt, j, i);
           gammaCorrectionFilter.transformPoint(logDensityPnt, rbgPoint);
           pImage.setARGB(j, i, rbgPoint.alpha, rbgPoint.red, rbgPoint.green, rbgPoint.blue);
         }

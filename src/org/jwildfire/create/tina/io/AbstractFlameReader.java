@@ -37,11 +37,6 @@ public class AbstractFlameReader {
   public static final String ATTR_ROTATE = "rotate";
   public static final String ATTR_FILTER = "filter";
   public static final String ATTR_FILTER_KERNEL = "filter_kernel";
-  public static final String ATTR_DE_FILTER_ENABLED = "estimator_enabled";
-  public static final String ATTR_DE_FILTER_MAX_RADIUS = "estimator_radius";
-  public static final String ATTR_DE_FILTER_MIN_RADIUS = "estimator_minimum";
-  public static final String ATTR_DE_FILTER_CURVE = "estimator_curve";
-  public static final String ATTR_DE_FILTER_KERNEL = "estimator_kernel";
   public static final String ATTR_QUALITY = "quality";
   public static final String ATTR_BACKGROUND = "background";
   public static final String ATTR_BG_TRANSPARENCY = "bg_transparency";
@@ -168,30 +163,6 @@ public class AbstractFlameReader {
       try {
         FilterKernelType kernel = FilterKernelType.valueOf(hs);
         pFlame.setSpatialFilterKernel(kernel);
-      }
-      catch (Exception ex) {
-        ex.printStackTrace();
-      }
-    }
-    // Disable DE filter and check if it is set explicitely on. There are lots of Apo flames out there
-    // which are carrying DE settings, but they were never used and may look terrible (e. g. DE max radius 9.0) 
-    pFlame.setDeFilterEnabled(false);
-    if ((hs = atts.get(ATTR_DE_FILTER_ENABLED)) != null) {
-      pFlame.setDeFilterEnabled(Integer.parseInt(hs) == 1);
-    }
-    if ((hs = atts.get(ATTR_DE_FILTER_MAX_RADIUS)) != null) {
-      pFlame.setDeFilterMaxRadius(Double.parseDouble(hs));
-    }
-    if ((hs = atts.get(ATTR_DE_FILTER_MIN_RADIUS)) != null) {
-      pFlame.setDeFilterMinRadius(Double.parseDouble(hs));
-    }
-    if ((hs = atts.get(ATTR_DE_FILTER_CURVE)) != null) {
-      pFlame.setDeFilterCurve(Double.parseDouble(hs));
-    }
-    if ((hs = atts.get(ATTR_DE_FILTER_KERNEL)) != null) {
-      try {
-        FilterKernelType kernel = FilterKernelType.valueOf(hs);
-        pFlame.setDeFilterKernel(kernel);
       }
       catch (Exception ex) {
         ex.printStackTrace();

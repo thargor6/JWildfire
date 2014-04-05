@@ -16,8 +16,6 @@
 */
 package org.jwildfire.create.tina.swing;
 
-import static org.jwildfire.base.mathlib.MathLib.EPSILON;
-
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
@@ -318,14 +316,6 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
     data.filterRadiusREd = parameterObject.pFilterRadiusREd;
     data.filterRadiusSlider = parameterObject.pFilterRadiusSlider;
     data.filterKernelCmb = parameterObject.pFilterKernelCmb;
-    data.deFilterEnableCbx = parameterObject.pDEFilterEnableCbx;
-    data.deFilterMaxRadiusREd = parameterObject.pDEFilterMaxRadiusREd;
-    data.deFilterMaxRadiusSlider = parameterObject.pDEFilterMaxRadiusSlider;
-    data.deFilterMinRadiusREd = parameterObject.pDEFilterMinRadiusREd;
-    data.deFilterMinRadiusSlider = parameterObject.pDEFilterMinRadiusSlider;
-    data.deFilterCurveREd = parameterObject.pDEFilterCurveREd;
-    data.deFilterKernelCmb = parameterObject.pDEFilterKernelCmb;
-    data.deFilterCurveSlider = parameterObject.pDEFilterCurveSlider;
     data.gammaThresholdREd = parameterObject.pGammaThresholdREd;
     data.gammaThresholdSlider = parameterObject.pGammaThresholdSlider;
     data.bgTransparencyCBx = parameterObject.pBGTransparencyCBx;
@@ -2450,7 +2440,6 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
       renderFlame.setWidth(IMG_WIDTH);
       renderFlame.setHeight(IMG_HEIGHT);
       renderFlame.setSampleDensity(prefs.getTinaRenderPreviewQuality());
-      renderFlame.setDeFilterEnabled(false);
       renderFlame.setSpatialFilterRadius(0.0);
       FlameRenderer renderer = new FlameRenderer(renderFlame, prefs, false, false);
       renderFlame.setSampleDensity(pQuality);
@@ -3017,14 +3006,6 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
     flame.setBGTransparency(prefs.isTinaDefaultBGTransparency());
     flame.setAntialiasAmount(prefs.getTinaDefaultAntialiasingAmount());
     flame.setAntialiasRadius(prefs.getTinaDefaultAntialiasingRadius());
-
-    if (prefs.getTinaDefaultDEMaxRadius() < EPSILON) {
-      flame.setDeFilterEnabled(false);
-    }
-    else {
-      flame.setDeFilterEnabled(true);
-      flame.setDeFilterMaxRadius(prefs.getTinaDefaultDEMaxRadius());
-    }
     RGBPalette palette = new RandomRGBPaletteGenerator().generatePalette(Integer.parseInt(data.paletteRandomPointsREd.getText()), data.paletteFadeColorsCBx.isSelected());
     flame.getFirstLayer().setPalette(palette);
     setCurrFlame(flame);
@@ -4395,33 +4376,12 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
     }
   }
 
-  public void deFilterEnableCBx_changed() {
-    if (!noRefresh) {
-      Flame flame = getCurrFlame();
-      if (flame != null) {
-        saveUndoPoint();
-        flame.setDeFilterEnabled(data.deFilterEnableCbx.isSelected());
-        flameControls.enableDEFilterUI();
-      }
-    }
-  }
-
   public void spatialFilterKernelCmb_changed() {
     if (!noRefresh) {
       Flame flame = getCurrFlame();
       if (flame != null) {
         saveUndoPoint();
         flame.setSpatialFilterKernel((FilterKernelType) data.filterKernelCmb.getSelectedItem());
-      }
-    }
-  }
-
-  public void deFilterKernelCmb_changed() {
-    if (!noRefresh) {
-      Flame flame = getCurrFlame();
-      if (flame != null) {
-        saveUndoPoint();
-        flame.setDeFilterKernel((FilterKernelType) data.deFilterKernelCmb.getSelectedItem());
       }
     }
   }
