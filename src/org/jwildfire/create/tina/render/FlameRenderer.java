@@ -461,52 +461,11 @@ public class FlameRenderer {
 
     if (pHDRImage != null) {
       GammaCorrectedHDRPoint rbgPoint = new GammaCorrectedHDRPoint();
-      boolean hasBGColor = flame.getBGColorRed() > 0 || flame.getBGColorGreen() > 0 || flame.getBGColorBlue() > 0;
-      boolean setBG = false;
-      if (hasBGColor) {
-        boolean bgMap[][] = new boolean[pHDRImage.getImageHeight()][pHDRImage.getImageWidth()];
-        double minLum = Double.MAX_VALUE, maxLum = 0.0;
-        for (int i = 0; i < pHDRImage.getImageHeight(); i++) {
-          for (int j = 0; j < pHDRImage.getImageWidth(); j++) {
-            logDensityFilter.transformPointHDR(logDensityPnt, j, i);
-            gammaCorrectionFilter.transformPointHDR(logDensityPnt, rbgPoint);
-            if (rbgPoint.red < 0.0) {
-              bgMap[i][j] = true;
-              setBG = true;
-            }
-            else {
-              pHDRImage.setRGB(j, i, rbgPoint.red, rbgPoint.green, rbgPoint.blue);
-              double lum = (rbgPoint.red * 0.299 + rbgPoint.green * 0.588 + rbgPoint.blue * 0.113);
-              if (lum > maxLum) {
-                maxLum = lum;
-              }
-              else if (lum < minLum) {
-                minLum = lum;
-              }
-            }
-          }
-        }
-        if (setBG) {
-          float weight = (float) (0.25 * (maxLum + 3 * minLum));
-          float bgRed = (float) (gammaCorrectionFilter.getBgRedDouble() * weight);
-          float bgGreen = (float) (gammaCorrectionFilter.getBgGreenDouble() * weight);
-          float bgBlue = (float) (gammaCorrectionFilter.getBgBlueDouble() * weight);
-          for (int i = 0; i < pHDRImage.getImageHeight(); i++) {
-            for (int j = 0; j < pHDRImage.getImageWidth(); j++) {
-              if (bgMap[i][j]) {
-                pHDRImage.setRGB(j, i, bgRed, bgGreen, bgBlue);
-              }
-            }
-          }
-        }
-      }
-      else {
-        for (int i = 0; i < pHDRImage.getImageHeight(); i++) {
-          for (int j = 0; j < pHDRImage.getImageWidth(); j++) {
-            logDensityFilter.transformPointHDR(logDensityPnt, j, i);
-            gammaCorrectionFilter.transformPointHDR(logDensityPnt, rbgPoint);
-            pHDRImage.setRGB(j, i, rbgPoint.red, rbgPoint.green, rbgPoint.blue);
-          }
+      for (int i = 0; i < pHDRImage.getImageHeight(); i++) {
+        for (int j = 0; j < pHDRImage.getImageWidth(); j++) {
+          logDensityFilter.transformPointHDR(logDensityPnt, j, i);
+          gammaCorrectionFilter.transformPointHDR(logDensityPnt, rbgPoint);
+          pHDRImage.setRGB(j, i, rbgPoint.red, rbgPoint.green, rbgPoint.blue);
         }
       }
     }
