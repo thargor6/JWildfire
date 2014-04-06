@@ -1,0 +1,3 @@
+size: 16x16 pixels
+bg: 255 255 255 (transparent)
+fg: 69 15 225 (antialiasing)

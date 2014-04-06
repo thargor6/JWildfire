@@ -2016,7 +2016,7 @@ public class TinaInternalFrame extends JInternalFrame {
     if (tinaRenderFlameButton == null) {
       tinaRenderFlameButton = new JButton();
       tinaRenderFlameButton.setIconTextGap(0);
-      tinaRenderFlameButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/image.png")));
+      tinaRenderFlameButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/system-run-3.png")));
       tinaRenderFlameButton.setMnemonic(KeyEvent.VK_R);
       tinaRenderFlameButton.setFont(new Font("Dialog", Font.BOLD, 9));
       tinaRenderFlameButton.setToolTipText("Render image");
@@ -9145,7 +9145,7 @@ public class TinaInternalFrame extends JInternalFrame {
       rootTabbedPane.setFont(new Font("Dialog", Font.BOLD, 10));
       rootTabbedPane.setEnabled(true);
       rootTabbedPane.addTab("Flame Editor ", new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/brick.png")), getRootPanel(), null);
-      rootTabbedPane.addTab("Interactive Renderer ", new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/image.png")), getInteractiveRenderPanel(), null);
+      rootTabbedPane.addTab("Interactive Renderer ", new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/system-run-3.png")), getInteractiveRenderPanel(), null);
       rootTabbedPane.addTab("MutaGen ", new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/sitemap.png")), getPanel_16(), null);
       rootTabbedPane.addTab("Flame browser ", new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/application-view-tile.png")), getPanel_72(), null);
       rootTabbedPane.addTab("Easy Movie Maker ", new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/film.png")), getTinaSWFAnimatorPanel(), null);
@@ -17876,7 +17876,7 @@ public class TinaInternalFrame extends JInternalFrame {
       btnRender.setPreferredSize(new Dimension(82, 28));
       btnRender.setMnemonic(KeyEvent.VK_R);
       btnRender.setFont(new Font("Dialog", Font.BOLD, 9));
-      btnRender.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/image.png")));
+      btnRender.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/system-run-3.png")));
     }
     return btnRender;
   }
