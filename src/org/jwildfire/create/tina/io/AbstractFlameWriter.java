@@ -1,3 +1,19 @@
+/*
+  JWildfire - an image and animation processor written in Java 
+  Copyright (C) 1995-2014 Andreas Maschke
+
+  This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
+  General Public License as published by the Free Software Foundation; either version 2.1 of the 
+  License, or (at your option) any later version.
+ 
+  This software is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without 
+  even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU 
+  Lesser General Public License for more details.
+
+  You should have received a copy of the GNU Lesser General Public License along with this software; 
+  if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+  02110-1301 USA, or see the FSF site: http://www.fsf.org.
+*/
 package org.jwildfire.create.tina.io;
 
 import static org.jwildfire.base.mathlib.MathLib.EPSILON;
@@ -5,6 +21,7 @@ import static org.jwildfire.create.tina.io.AbstractFlameReader.ATTR_CAM_POS_X;
 import static org.jwildfire.create.tina.io.AbstractFlameReader.ATTR_CAM_POS_Y;
 import static org.jwildfire.create.tina.io.AbstractFlameReader.ATTR_CAM_POS_Z;
 import static org.jwildfire.create.tina.io.AbstractFlameReader.ATTR_LAYER_NAME;
+import static org.jwildfire.create.tina.io.AbstractFlameReader.ATTR_SATURATION;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -143,6 +160,7 @@ public class AbstractFlameWriter {
     attrList.add(xb.createAttr("background", (double) pFlame.getBGColorRed() / 255.0 + " " + (double) pFlame.getBGColorGreen() / 255.0 + " " + (double) pFlame.getBGColorBlue() / 255.0));
     attrList.add(xb.createAttr("bg_transparency", pFlame.isBGTransparency() ? "1" : "0"));
     attrList.add(xb.createAttr("brightness", pFlame.getBrightness()));
+    attrList.add(xb.createAttr(ATTR_SATURATION, pFlame.getSaturation()));
     attrList.add(xb.createAttr("gamma", pFlame.getGamma()));
     attrList.add(xb.createAttr("gamma_threshold", pFlame.getGammaThreshold()));
     attrList.add(xb.createAttr("vibrancy", pFlame.getVibrancy()));

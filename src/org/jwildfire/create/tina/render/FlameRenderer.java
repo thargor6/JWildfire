@@ -504,7 +504,7 @@ public class FlameRenderer {
       for (int i = startRow; i < endRow; i++) {
         for (int j = 0; j < img.getImageWidth(); j++) {
           logDensityFilter.transformPointSimple(logDensityPnt, j, i);
-          gammaCorrectionFilter.transformPointSimple(logDensityPnt, rbgPoint);
+          gammaCorrectionFilter.transformPoint(logDensityPnt, rbgPoint);
           int x = j * renderScale;
           int y = i * renderScale;
 
@@ -545,7 +545,7 @@ public class FlameRenderer {
       for (int i = startRow; i < endRow; i++) {
         for (int j = 0; j < img.getImageWidth(); j++) {
           logDensityFilter.transformPointSimple(logDensityPnt, j, i);
-          gammaCorrectionFilter.transformPointSimple(logDensityPnt, rbgPoint);
+          gammaCorrectionFilter.transformPoint(logDensityPnt, rbgPoint);
           img.setARGB(j, i, rbgPoint.alpha, rbgPoint.red, rbgPoint.green, rbgPoint.blue);
         }
       }
@@ -571,7 +571,7 @@ public class FlameRenderer {
         for (int i = 0; i < pImage.getImageHeight(); i++) {
           for (int j = 0; j < pImage.getImageWidth(); j++) {
             logDensityFilter.transformPointSimple(logDensityPnt, j, i);
-            gammaCorrectionFilter.transformPointSimple(logDensityPnt, rbgPoint);
+            gammaCorrectionFilter.transformPoint(logDensityPnt, rbgPoint);
             int x = j * renderScale;
             int y = i * renderScale;
 
@@ -621,7 +621,7 @@ public class FlameRenderer {
         for (int i = 0; i < pImage.getImageHeight(); i++) {
           for (int j = 0; j < pImage.getImageWidth(); j++) {
             logDensityFilter.transformPointSimple(logDensityPnt, j, i);
-            gammaCorrectionFilter.transformPointSimple(logDensityPnt, rbgPoint);
+            gammaCorrectionFilter.transformPoint(logDensityPnt, rbgPoint);
             pImage.setARGB(j, i, rbgPoint.alpha, rbgPoint.red, rbgPoint.green, rbgPoint.blue);
           }
         }

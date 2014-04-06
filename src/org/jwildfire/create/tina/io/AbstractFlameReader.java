@@ -41,6 +41,7 @@ public class AbstractFlameReader {
   public static final String ATTR_BACKGROUND = "background";
   public static final String ATTR_BG_TRANSPARENCY = "bg_transparency";
   public static final String ATTR_BRIGHTNESS = "brightness";
+  public static final String ATTR_SATURATION = "saturation";
   public static final String ATTR_GAMMA = "gamma";
   public static final String ATTR_GAMMA_THRESHOLD = "gamma_threshold";
   public static final String ATTR_VIBRANCY = "vibrancy";
@@ -179,6 +180,9 @@ public class AbstractFlameReader {
     }
     if ((hs = atts.get(ATTR_BRIGHTNESS)) != null) {
       pFlame.setBrightness(Double.parseDouble(hs));
+    }
+    if ((hs = atts.get(ATTR_SATURATION)) != null) {
+      pFlame.setSaturation(Double.parseDouble(hs));
     }
     if ((hs = atts.get(ATTR_BG_TRANSPARENCY)) != null) {
       pFlame.setBGTransparency(Integer.parseInt(hs) == 1);

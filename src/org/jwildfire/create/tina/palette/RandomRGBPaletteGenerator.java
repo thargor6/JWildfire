@@ -20,55 +20,59 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.jwildfire.base.Tools;
+import org.jwildfire.image.Pixel;
+import org.jwildfire.transform.HSLTransformer;
+import org.jwildfire.transform.HSLTransformer.HSLPixel;
 
 public class RandomRGBPaletteGenerator {
-  /*
-    public List<RGBColor> generateKeyFrames(int pKeyFrames) {
-      if (pKeyFrames < 0 || pKeyFrames > RGBPalette.PALETTE_SIZE)
-        throw new IllegalArgumentException(String.valueOf(pKeyFrames));
-      List<RGBColor> keyFrames = new ArrayList<RGBColor>();
-      boolean gray = Math.random() < 0.06;
-      for (int i = 0; i < pKeyFrames; i++) {
-        int r = Tools.roundColor(256.0 * Math.random());
-        int g = Tools.roundColor(256.0 * Math.random());
-        int b = Tools.roundColor(256.0 * Math.random());
-        if (Math.random() < 0.25) {
-          double rnd = Math.random();
-          if (rnd < 0.33) {
-            b = g;
-          }
-          else if (rnd < 0.67) {
-            g = r;
-          }
-          else {
-            r = b;
-          }
-        }
-        if (gray) {
-          b = g = r;
-        }
-        if (Math.random() < 0.25) {
-          r /= 2;
-          g /= 2;
-          b /= 2;
-        }
 
-        RGBColor col = new RGBColor(r, g, b);
-        keyFrames.add(col);
-        if (Math.random() < 0.1) {
-          int skip = 1 + (int) (Math.random() * pKeyFrames * 0.11);
-          int j = 0;
-          while (j++ < skip && (++i < pKeyFrames)) {
-            keyFrames.add(col);
-          }
-        }
-      }
-      return keyFrames;
-    }
-  */
   public List<RGBColor> generateKeyFrames(int pKeyFrames) {
     if (pKeyFrames < 0 || pKeyFrames > RGBPalette.PALETTE_SIZE)
       throw new IllegalArgumentException(String.valueOf(pKeyFrames));
+    if (Math.random() < 0.25) {
+      return generateKeyFrames_random(pKeyFrames);
+    }
+    else if (Math.random() < 0.75) {
+      return generateKeyFrames_hsl(pKeyFrames);
+    }
+    else {
+      return generateKeyFrames_hsl_monochrome(pKeyFrames);
+    }
+  }
+
+  public List<RGBColor> generateKeyFrames_hsl(int pKeyFrames) {
+    HSLPixel hslPixel = new HSLPixel();
+    Pixel rgbPixel = new Pixel();
+    List<RGBColor> keyFrames = new ArrayList<RGBColor>();
+
+    hslPixel.saturation = Math.random() * 0.1 + 0.8999;
+    for (int i = 0; i < pKeyFrames; i++) {
+      hslPixel.luminosity = Math.random() * 0.90;
+      hslPixel.hue = Math.random() * Math.random();
+      HSLTransformer.hsl2rgb(hslPixel, rgbPixel);
+      RGBColor col = new RGBColor(rgbPixel.r, rgbPixel.g, rgbPixel.b);
+      keyFrames.add(col);
+    }
+    return keyFrames;
+  }
+
+  public List<RGBColor> generateKeyFrames_hsl_monochrome(int pKeyFrames) {
+    HSLPixel hslPixel = new HSLPixel();
+    Pixel rgbPixel = new Pixel();
+    List<RGBColor> keyFrames = new ArrayList<RGBColor>();
+
+    hslPixel.saturation = Math.random() * 0.3 + 0.6999;
+    hslPixel.hue = Math.random() * Math.random();
+    for (int i = 0; i < pKeyFrames; i++) {
+      hslPixel.luminosity = Math.random() * 0.99;
+      HSLTransformer.hsl2rgb(hslPixel, rgbPixel);
+      RGBColor col = new RGBColor(rgbPixel.r, rgbPixel.g, rgbPixel.b);
+      keyFrames.add(col);
+    }
+    return keyFrames;
+  }
+
+  public List<RGBColor> generateKeyFrames_random(int pKeyFrames) {
     List<RGBColor> keyFrames = new ArrayList<RGBColor>();
     int lastR = 0, lastG = 0, lastB = 0;
     int r, g, b;

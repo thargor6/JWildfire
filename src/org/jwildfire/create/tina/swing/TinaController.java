@@ -313,6 +313,8 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
     data.gammaSlider = parameterObject.pGammaSlider;
     data.vibrancyREd = parameterObject.pVibrancyREd;
     data.vibrancySlider = parameterObject.pVibrancySlider;
+    data.saturationREd = parameterObject.saturationREd;
+    data.saturationSlider = parameterObject.saturationSlider;
     data.filterRadiusREd = parameterObject.pFilterRadiusREd;
     data.filterRadiusSlider = parameterObject.pFilterRadiusSlider;
     data.filterKernelCmb = parameterObject.pFilterKernelCmb;
@@ -2522,10 +2524,9 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
     mainProgressUpdater.initProgress(maxCount);
     RandomFlameGenerator randGen = RandomFlameGeneratorList.getRandomFlameGeneratorInstance(pGeneratorname, true);
     RandomSymmetryGenerator randSymmGen = RandomSymmetryGeneratorList.getRandomSymmetryGeneratorInstance(pSymmetryGeneratorname, true);
-    //int palettePoints = Integer.parseInt(paletteRandomPointsREd.getText());
     for (int i = 0; i < maxCount; i++) {
-      int palettePoints = 7 + (int) (Math.random() * 34.0);
-      boolean fadePaletteColors = Math.random() > 0.25;
+      int palettePoints = 7 + (int) (Math.random() * 24.0);
+      boolean fadePaletteColors = Math.random() > 0.06;
       RandomFlameGeneratorSampler sampler = new RandomFlameGeneratorSampler(IMG_WIDTH / 2, IMG_HEIGHT / 2, prefs, randGen, randSymmGen, palettePoints, fadePaletteColors, pQuality);
       RandomFlameGeneratorSample sample = sampler.createSample();
       FlameThumbnail thumbnail;

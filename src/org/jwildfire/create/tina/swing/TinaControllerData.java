@@ -73,6 +73,8 @@ public class TinaControllerData {
   public JSlider gammaSlider;
   public JWFNumberField vibrancyREd;
   public JSlider vibrancySlider;
+  public JWFNumberField saturationREd;
+  public JSlider saturationSlider;
   public JWFNumberField filterRadiusREd;
   public JSlider filterRadiusSlider;
   public JComboBox filterKernelCmb;

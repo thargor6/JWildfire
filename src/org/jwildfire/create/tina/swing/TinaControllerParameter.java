@@ -83,6 +83,8 @@ public class TinaControllerParameter {
   public JSlider pGammaSlider;
   public JWFNumberField pVibrancyREd;
   public JSlider pVibrancySlider;
+  public JWFNumberField saturationREd;
+  public JSlider saturationSlider;
   public JWFNumberField pFilterRadiusREd;
   public JSlider pFilterRadiusSlider;
   public JComboBox pFilterKernelCmb;
@@ -712,7 +714,7 @@ public class TinaControllerParameter {
       JWFNumberField pStereo3dInterpolatedImageCountREd, JSlider pStereo3dInterpolatedImageCountSlider, JComboBox pStereo3dPreviewCmb,
       JWFNumberField pStereo3dFocalOffsetREd, JSlider pStereo3dFocalOffsetSlider, JCheckBox pStereo3dSwapSidesCBx,
       JWFNumberField pCamPosXREd, JSlider pCamPosXSlider, JWFNumberField pCamPosYREd, JSlider pCamPosYSlider,
-      JWFNumberField pCamPosZREd, JSlider pCamPosZSlider) {
+      JWFNumberField pCamPosZREd, JSlider pCamPosZSlider, JWFNumberField pSaturationREd, JSlider pSaturationSlider) {
     this.pDancingFlamesLinkMotionBtn = pDancingFlamesLinkMotionBtn;
     this.pDancingFlamesUnlinkMotionBtn = pDancingFlamesUnlinkMotionBtn;
     this.pDancingFlamesCreateMotionsCmb = pDancingFlamesCreateMotionsCmb;
@@ -865,5 +867,7 @@ public class TinaControllerParameter {
     this.camPosYSlider = pCamPosYSlider;
     this.camPosZREd = pCamPosZREd;
     this.camPosZSlider = pCamPosZSlider;
+    this.saturationREd = pSaturationREd;
+    this.saturationSlider = pSaturationSlider;
   }
 }

@@ -79,6 +79,7 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
     res.add(data.brightnessREd);
     res.add(data.contrastREd);
     res.add(data.vibrancyREd);
+    res.add(data.saturationREd);
     res.add(data.gammaREd);
     res.add(data.gammaThresholdREd);
 
@@ -113,6 +114,7 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
     enableControl(data.brightnessREd, false);
     enableControl(data.contrastREd, false);
     enableControl(data.vibrancyREd, false);
+    enableControl(data.saturationREd, false);
     enableControl(data.gammaREd, false);
     enableControl(data.gammaThresholdREd, false);
 
@@ -267,6 +269,10 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
     flameSliderChanged(data.vibrancySlider, data.vibrancyREd, "vibrancy", TinaController.SLIDER_SCALE_BRIGHTNESS_CONTRAST_VIBRANCY);
   }
 
+  public void saturationSlider_stateChanged(ChangeEvent e) {
+    flameSliderChanged(data.saturationSlider, data.saturationREd, "saturation", TinaController.SLIDER_SCALE_BRIGHTNESS_CONTRAST_VIBRANCY);
+  }
+
   public void filterRadiusSlider_stateChanged(ChangeEvent e) {
     flameSliderChanged(data.filterRadiusSlider, data.filterRadiusREd, "spatialFilterRadius", TinaController.SLIDER_SCALE_FILTER_RADIUS);
   }
@@ -277,6 +283,10 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
 
   public void vibrancyREd_changed() {
     flameTextFieldChanged(data.vibrancySlider, data.vibrancyREd, "vibrancy", TinaController.SLIDER_SCALE_BRIGHTNESS_CONTRAST_VIBRANCY);
+  }
+
+  public void saturationREd_changed() {
+    flameTextFieldChanged(data.saturationSlider, data.saturationREd, "saturation", TinaController.SLIDER_SCALE_BRIGHTNESS_CONTRAST_VIBRANCY);
   }
 
   public void pixelsPerUnitSlider_stateChanged(ChangeEvent e) {
@@ -553,6 +563,9 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
 
       data.brightnessREd.setText(Tools.doubleToString(getCurrFlame().getBrightness()));
       data.brightnessSlider.setValue(Tools.FTOI(getCurrFlame().getBrightness() * TinaController.SLIDER_SCALE_BRIGHTNESS_CONTRAST_VIBRANCY));
+
+      data.saturationREd.setText(Tools.doubleToString(getCurrFlame().getSaturation()));
+      data.saturationSlider.setValue(Tools.FTOI(getCurrFlame().getSaturation() * TinaController.SLIDER_SCALE_BRIGHTNESS_CONTRAST_VIBRANCY));
 
       data.contrastREd.setText(Tools.doubleToString(getCurrFlame().getContrast()));
       data.contrastSlider.setValue(Tools.FTOI(getCurrFlame().getContrast() * TinaController.SLIDER_SCALE_BRIGHTNESS_CONTRAST_VIBRANCY));

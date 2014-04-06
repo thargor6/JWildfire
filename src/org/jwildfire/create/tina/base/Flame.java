@@ -115,6 +115,9 @@ public class Flame implements Assignable<Flame>, Serializable {
   private double contrast;
   private final MotionCurve contrastCurve = new MotionCurve();
   @AnimAware
+  private double saturation;
+  private final MotionCurve saturationCurve = new MotionCurve();
+  @AnimAware
   private double vibrancy;
   private final MotionCurve vibrancyCurve = new MotionCurve();
   private boolean preserveZ;
@@ -160,10 +163,10 @@ public class Flame implements Assignable<Flame>, Serializable {
     sampleDensity = 100.0;
     bgTransparency = true;
     bgColorRed = bgColorGreen = bgColorBlue = 0;
-    brightness = 4;
+    brightness = 4.0;
     contrast = 1;
     vibrancy = 1;
-    gamma = 4;
+    gamma = 4.0;
     centreX = 0.0;
     centreY = 0.0;
     camRoll = 0.0;
@@ -185,7 +188,8 @@ public class Flame implements Assignable<Flame>, Serializable {
     camDOFExponent = 2.0;
     gammaThreshold = 0.01;
     pixelsPerUnit = 50;
-    whiteLevel = 150;
+    whiteLevel = 240;
+    saturation = 1.0;
     name = "";
     spatialFilterRadius = 0.0;
     spatialFilterKernel = FilterKernelType.GAUSSIAN;
@@ -269,8 +273,7 @@ public class Flame implements Assignable<Flame>, Serializable {
   }
 
   public void setWhiteLevel(int whiteLevel) {
-    // TODO
-    //    this.whiteLevel = whiteLevel;
+    this.whiteLevel = whiteLevel;
   }
 
   public double getContrast() {
@@ -521,6 +524,8 @@ public class Flame implements Assignable<Flame>, Serializable {
     whiteLevel = pFlame.whiteLevel;
     brightness = pFlame.brightness;
     brightnessCurve.assign(pFlame.brightnessCurve);
+    saturation = pFlame.saturation;
+    saturationCurve.assign(pFlame.saturationCurve);
     contrast = pFlame.contrast;
     contrastCurve.assign(pFlame.contrastCurve);
     vibrancy = pFlame.vibrancy;
@@ -599,6 +604,7 @@ public class Flame implements Assignable<Flame>, Serializable {
         (fabs(pixelsPerUnit - pFlame.pixelsPerUnit) > EPSILON) || !pixelsPerUnitCurve.isEqual(pFlame.pixelsPerUnitCurve) ||
         (whiteLevel != pFlame.whiteLevel) ||
         (fabs(brightness - pFlame.brightness) > EPSILON) || !brightnessCurve.isEqual(pFlame.brightnessCurve) ||
+        (fabs(saturation - pFlame.saturation) > EPSILON) || !saturationCurve.isEqual(pFlame.saturationCurve) ||
         (fabs(contrast - pFlame.contrast) > EPSILON) || !contrastCurve.isEqual(pFlame.contrastCurve) ||
         (fabs(vibrancy - pFlame.vibrancy) > EPSILON) || !vibrancyCurve.isEqual(pFlame.vibrancyCurve) ||
         (preserveZ != pFlame.preserveZ) ||
@@ -787,7 +793,7 @@ public class Flame implements Assignable<Flame>, Serializable {
   }
 
   public boolean hasPreRenderMotionProperty() {
-    return brightnessCurve.isEnabled() || contrastCurve.isEnabled() || gammaCurve.isEnabled() || gammaThresholdCurve.isEnabled() || vibrancyCurve.isEnabled();
+    return brightnessCurve.isEnabled() || contrastCurve.isEnabled() || gammaCurve.isEnabled() || gammaThresholdCurve.isEnabled() || vibrancyCurve.isEnabled() || saturationCurve.isEnabled();
   }
 
   public PostSymmetryType getPostSymmetryType() {
@@ -1037,6 +1043,14 @@ public class Flame implements Assignable<Flame>, Serializable {
 
   public MotionCurve getCamPosZCurve() {
     return camPosZCurve;
+  }
+
+  public double getSaturation() {
+    return saturation;
+  }
+
+  public void setSaturation(double pSaturation) {
+    saturation = pSaturation;
   }
 
 }

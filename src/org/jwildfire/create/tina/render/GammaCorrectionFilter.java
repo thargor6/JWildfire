@@ -18,9 +18,12 @@ package org.jwildfire.create.tina.render;
 
 import static org.jwildfire.base.mathlib.MathLib.pow;
 
+import org.jwildfire.base.Tools;
+import org.jwildfire.base.mathlib.MathLib;
 import org.jwildfire.create.tina.base.Flame;
 
 public class GammaCorrectionFilter {
+  private final HSLRGBConverter hslrgbConverter = new HSLRGBConverter();
   private final Flame flame;
   private int vibInt;
   private int inverseVibInt;
@@ -30,6 +33,7 @@ public class GammaCorrectionFilter {
   private double sclGamma;
   private int bgRed, bgGreen, bgBlue;
   private boolean withAlpha;
+  private double modSaturation;
 
   public GammaCorrectionFilter(Flame pFlame, boolean pWithAlpha) {
     flame = pFlame;
@@ -65,6 +69,10 @@ public class GammaCorrectionFilter {
     bgRed = flame.getBGColorRed();
     bgGreen = flame.getBGColorGreen();
     bgBlue = flame.getBGColorBlue();
+
+    modSaturation = flame.getSaturation() - 1.0;
+    if (modSaturation < -1.0)
+      modSaturation = -1.0;
   }
 
   public void transformPoint(LogDensityPoint logDensityPnt, GammaCorrectedRGBPoint pRGBPoint) {
@@ -87,49 +95,63 @@ public class GammaCorrectionFilter {
         alphaInt = 255;
       inverseAlphaInt = 255 - alphaInt;
       pRGBPoint.alpha = withAlpha ? alphaInt : 255;
+
+      int red, green, blue;
+      if (inverseVibInt > 0) {
+        red = (int) (logScl * logDensityPnt.red + inverseVibInt * pow(logDensityPnt.red, gamma) + 0.5);
+        green = (int) (logScl * logDensityPnt.green + inverseVibInt * pow(logDensityPnt.green, gamma) + 0.5);
+        blue = (int) (logScl * logDensityPnt.blue + inverseVibInt * pow(logDensityPnt.blue, gamma) + 0.5);
+      }
+      else {
+        red = (int) (logScl * logDensityPnt.red + 0.5);
+        green = (int) (logScl * logDensityPnt.green + 0.5);
+        blue = (int) (logScl * logDensityPnt.blue + 0.5);
+      }
+
+      red = red + ((inverseAlphaInt * bgRed) >> 8);
+      if (red < 0)
+        red = 0;
+      else if (red > 255)
+        red = 255;
+
+      green = green + ((inverseAlphaInt * bgGreen) >> 8);
+      if (green < 0)
+        green = 0;
+      else if (green > 255)
+        green = 255;
+
+      blue = blue + ((inverseAlphaInt * bgBlue) >> 8);
+      if (blue < 0)
+        blue = 0;
+      else if (blue > 255)
+        blue = 255;
+
+      pRGBPoint.red = red;
+      pRGBPoint.green = green;
+      pRGBPoint.blue = blue;
+
     }
     else {
       pRGBPoint.red = bgRed;
       pRGBPoint.green = bgGreen;
       pRGBPoint.blue = bgBlue;
       pRGBPoint.alpha = withAlpha ? 0 : 255;
-      return;
     }
 
-    int red, green, blue;
-    if (inverseVibInt > 0) {
-      red = (int) (logScl * logDensityPnt.red + inverseVibInt * pow(logDensityPnt.red, gamma) + 0.5);
-      green = (int) (logScl * logDensityPnt.green + inverseVibInt * pow(logDensityPnt.green, gamma) + 0.5);
-      blue = (int) (logScl * logDensityPnt.blue + inverseVibInt * pow(logDensityPnt.blue, gamma) + 0.5);
+    if (modSaturation != 0) {
+      applyModSaturation(pRGBPoint, modSaturation);
     }
-    else {
-      red = (int) (logScl * logDensityPnt.red + 0.5);
-      green = (int) (logScl * logDensityPnt.green + 0.5);
-      blue = (int) (logScl * logDensityPnt.blue + 0.5);
-    }
-
-    red = red + ((inverseAlphaInt * bgRed) >> 8);
-    if (red < 0)
-      red = 0;
-    else if (red > 255)
-      red = 255;
-
-    green = green + ((inverseAlphaInt * bgGreen) >> 8);
-    if (green < 0)
-      green = 0;
-    else if (green > 255)
-      green = 255;
-
-    blue = blue + ((inverseAlphaInt * bgBlue) >> 8);
-    if (blue < 0)
-      blue = 0;
-    else if (blue > 255)
-      blue = 255;
-
-    pRGBPoint.red = red;
-    pRGBPoint.green = green;
-    pRGBPoint.blue = blue;
   }
+
+  private void applyModSaturation(GammaCorrectedRGBPoint pRGBPoint, double currModSaturation) {
+    hslrgbConverter.fromRgb(pRGBPoint.red / COLORSCL, pRGBPoint.green / COLORSCL, pRGBPoint.blue / COLORSCL);
+    hslrgbConverter.fromHsl(hslrgbConverter.getHue(), hslrgbConverter.getSaturation() + currModSaturation, hslrgbConverter.getLuminosity());
+    pRGBPoint.red = Tools.roundColor(hslrgbConverter.getRed() * COLORSCL);
+    pRGBPoint.green = Tools.roundColor(hslrgbConverter.getGreen() * COLORSCL);
+    pRGBPoint.blue = Tools.roundColor(hslrgbConverter.getBlue() * COLORSCL);
+  }
+
+  private static final double COLORSCL = 255.0;
 
   public void transformPointHDR(LogDensityPoint logDensityPnt, GammaCorrectedHDRPoint pHDRPoint) {
     double logScl;
@@ -148,32 +170,153 @@ public class GammaCorrectionFilter {
         alpha = 0;
       else if (alpha > 1.0)
         alpha = 1.0;
+
+      double red, green, blue;
+      if (inverseVibDouble > 0.0) {
+        red = logScl * logDensityPnt.red + inverseVibDouble * pow(logDensityPnt.red, gamma);
+        green = logScl * logDensityPnt.green + inverseVibDouble * pow(logDensityPnt.green, gamma);
+        blue = logScl * logDensityPnt.blue + inverseVibDouble * pow(logDensityPnt.blue, gamma);
+      }
+      else {
+        red = logScl * logDensityPnt.red;
+        green = logScl * logDensityPnt.green;
+        blue = logScl * logDensityPnt.blue;
+      }
+      pHDRPoint.red = (float) red;
+      pHDRPoint.green = (float) green;
+      pHDRPoint.blue = (float) blue;
     }
     else {
       pHDRPoint.red = (float) -1.0;
       pHDRPoint.green = (float) -1.0;
       pHDRPoint.blue = (float) -1.0;
-      return;
     }
-
-    double red, green, blue;
-    if (inverseVibDouble > 0.0) {
-      red = logScl * logDensityPnt.red + inverseVibDouble * pow(logDensityPnt.red, gamma);
-      green = logScl * logDensityPnt.green + inverseVibDouble * pow(logDensityPnt.green, gamma);
-      blue = logScl * logDensityPnt.blue + inverseVibDouble * pow(logDensityPnt.blue, gamma);
-    }
-    else {
-      red = logScl * logDensityPnt.red;
-      green = logScl * logDensityPnt.green;
-      blue = logScl * logDensityPnt.blue;
-    }
-    pHDRPoint.red = (float) red;
-    pHDRPoint.green = (float) green;
-    pHDRPoint.blue = (float) blue;
   }
 
-  public void transformPointSimple(LogDensityPoint logDensityPnt, GammaCorrectedRGBPoint pRGBPoint) {
-    transformPoint(logDensityPnt, pRGBPoint);
+  public static class HSLRGBConverter {
+    private double red, green, blue;
+    private double hue, saturation, luminosity;
+
+    public void fromHsl(double pHue, double pSaturation, double pLuminosity) {
+      hue = limitVal(pHue, 0.0, 1.0);
+      saturation = limitVal(pSaturation, 0.0, 1.0);
+      luminosity = limitVal(pLuminosity, 0.0, 1.0);
+      double v = (luminosity <= 0.5) ? (luminosity * (1.0 + saturation))
+          : (luminosity + saturation - luminosity * saturation);
+      if (v <= 0) {
+        red = 0.0;
+        green = 0.0;
+        blue = 0.0;
+        return;
+      }
+      hue *= 6.0;
+      if (hue < 0.0)
+        hue = 0.0;
+      else if (hue > 6.0)
+        hue = 6.0;
+      double y = luminosity + luminosity - v;
+      double x = y + (v - y) * (hue - (int) hue);
+      double z = v - (v - y) * (hue - (int) hue);
+
+      switch ((int) hue) {
+        case 0:
+          red = v;
+          green = x;
+          blue = y;
+          break;
+        case 1:
+          red = z;
+          green = v;
+          blue = y;
+          break;
+        case 2:
+          red = y;
+          green = v;
+          blue = x;
+          break;
+        case 3:
+          red = y;
+          green = z;
+          blue = v;
+          break;
+        case 4:
+          red = x;
+          green = y;
+          blue = v;
+          break;
+        case 5:
+          red = v;
+          green = y;
+          blue = z;
+          break;
+        default:
+          red = v;
+          green = x;
+          blue = y;
+          //          red = v;
+          //          green = y;
+          //          blue = z;
+      }
+    }
+
+    public void fromRgb(double pRed, double pGreen, double pBlue) {
+      hue = 1.0;
+      saturation = 0.0;
+      red = limitVal(pRed, 0.0, 1.0);
+      green = limitVal(pGreen, 0.0, 1.0);
+      blue = limitVal(pBlue, 0.0, 1.0);
+      double max = Math.max(red, Math.max(green, blue));
+      double min = Math.min(red, Math.min(green, blue));
+      luminosity = (min + max) / 2.0;
+      if (Math.abs(luminosity) <= MathLib.EPSILON)
+        return;
+      saturation = max - min;
+
+      if (Math.abs(saturation) <= MathLib.EPSILON)
+        return;
+
+      saturation /= ((luminosity) <= 0.5) ? (min + max) : (2.0 - max - min);
+      if (Math.abs(red - max) < MathLib.EPSILON) {
+        hue = ((green == min) ? 5.0 + (max - blue) / (max - min) : 1.0 - (max - green) / (max - min));
+      }
+      else {
+        if (Math.abs(green - max) < MathLib.EPSILON) {
+          hue = ((blue == min) ? 1.0 + (max - red) / (max - min) : 3.0 - (max - blue) / (max - min));
+        }
+        else {
+          hue = ((red == min) ? 3.0 + (max - green) / (max - min) : 5.0 - (max - red) / (max - min));
+        }
+      }
+      hue /= 6.0;
+    }
+
+    private double limitVal(double pValue, double pMin, double pMax) {
+      return pValue < pMin ? pMin : pValue > pMax ? pMax : pValue;
+    }
+
+    public double getRed() {
+      return red;
+    }
+
+    public double getGreen() {
+      return green;
+    }
+
+    public double getBlue() {
+      return blue;
+    }
+
+    public double getHue() {
+      return hue;
+    }
+
+    public double getSaturation() {
+      return saturation;
+    }
+
+    public double getLuminosity() {
+      return luminosity;
+    }
   }
 
 }
