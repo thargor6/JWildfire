@@ -1710,7 +1710,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaSaturationREd.setText("");
       tinaSaturationREd.setSize(new Dimension(100, 24));
       tinaSaturationREd.setPreferredSize(new Dimension(100, 24));
-      tinaSaturationREd.setMotionPropertyName("vibrancy");
+      tinaSaturationREd.setMotionPropertyName("saturation");
       tinaSaturationREd.setMaxValue(2.0);
       tinaSaturationREd.setLocation(new Point(100, 100));
       tinaSaturationREd.setLinkedMotionControlName("tinaSaturationSlider");

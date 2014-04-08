@@ -735,7 +735,7 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
       int height = centerPanel.getHeight();
       SimpleImage img = new SimpleImage(width, height);
       img.fillBackground(0, 0, 0);
-      flamePanel = new FlamePanel(img, 0, 0, centerPanel.getWidth(), this, this);
+      flamePanel = new FlamePanel(prefs, img, 0, 0, centerPanel.getWidth(), this, this);
       flamePanel.importOptions(prevFlamePanel);
       prevFlamePanel = null;
       flamePanel.setUndoManagerHolder(this);
@@ -1204,10 +1204,35 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
     }
   }
 
+  public class TransformationsTableCellRenderer extends DefaultTableCellRenderer {
+    private static final long serialVersionUID = 1L;
+
+    public Component getTableCellRendererComponent(JTable table,
+        Object value,
+        boolean isSelected,
+        boolean hasFocus,
+        int row,
+        int column) {
+      Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+      if (row >= 0 && column == 0) {
+        int colorIdx = ((row + 1) % FlamePanel.XFORM_COLORS.length) - 1;
+        c.setForeground(FlamePanel.XFORM_COLORS[colorIdx]);
+      }
+      else {
+        c.setForeground(Color.BLACK);
+      }
+      return c;
+    }
+  }
+
   private void refreshTransformationsTable() {
     final int COL_TRANSFORM = 0;
     final int COL_VARIATIONS = 1;
     final int COL_WEIGHT = 2;
+    if (prefs.isTinaEditorWithColoredTransforms()) {
+      data.transformationsTable.setDefaultRenderer(Object.class, new TransformationsTableCellRenderer());
+    }
+
     data.transformationsTable.setModel(new DefaultTableModel() {
       private static final long serialVersionUID = 1L;
 
@@ -1240,7 +1265,7 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
           XForm xForm = rowIndex < getCurrLayer().getXForms().size() ? getCurrLayer().getXForms().get(rowIndex) : getCurrLayer().getFinalXForms().get(rowIndex - getCurrLayer().getXForms().size());
           switch (columnIndex) {
             case COL_TRANSFORM:
-              return rowIndex < getCurrLayer().getXForms().size() ? String.valueOf(rowIndex + 1) : "Final";
+              return rowIndex < getCurrLayer().getXForms().size() ? "Transf" + String.valueOf(rowIndex + 1) : "Final" + String.valueOf(rowIndex - getCurrLayer().getXForms().size() + 1);
             case COL_VARIATIONS:
               return getXFormCaption(xForm);
             case COL_WEIGHT:
@@ -4254,7 +4279,7 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
       int height = data.batchPreviewRootPanel.getHeight();
       SimpleImage img = new SimpleImage(width, height);
       img.fillBackground(0, 0, 0);
-      batchPreviewFlamePanel = new FlamePanel(img, 0, 0, data.batchPreviewRootPanel.getWidth(), getBatchRenderPreviewFlameHolder(), null);
+      batchPreviewFlamePanel = new FlamePanel(prefs, img, 0, 0, data.batchPreviewRootPanel.getWidth(), getBatchRenderPreviewFlameHolder(), null);
       ResolutionProfile resProfile = getBatchRenderResolutionProfile();
       batchPreviewFlamePanel.setRenderWidth(resProfile.getWidth());
       batchPreviewFlamePanel.setRenderHeight(resProfile.getHeight());

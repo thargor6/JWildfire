@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2012 Andreas Maschke
+  Copyright (C) 1995-2014 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -25,6 +25,10 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
+import java.awt.RenderingHints;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.jwildfire.base.Prefs;
 import org.jwildfire.base.Tools;
@@ -41,6 +45,7 @@ import org.jwildfire.create.tina.variation.FlameTransformationContext;
 import org.jwildfire.create.tina.variation.Variation;
 import org.jwildfire.image.SimpleImage;
 import org.jwildfire.swing.ImagePanel;
+import org.jwildfire.transform.BalancingTransformer;
 
 public class FlamePanel extends ImagePanel {
   private final static int BORDER = 20;
@@ -50,23 +55,40 @@ public class FlamePanel extends ImagePanel {
   private static final Color XFORM_POST_COLOR_DARK = new Color(55, 19, 60);
   private static final Color BACKGROUND_COLOR = new Color(60, 60, 60);
   private static final Color VARIATION_COLOR = new Color(187, 189, 193);
+  private static final Color SHADOW_COLOR = new Color(32, 32, 32);
 
-  private static BasicStroke SELECTED_LINE = new BasicStroke(1.6f);
+  private static BasicStroke SELECTED_LINE_NEW = new BasicStroke(2.0f);
+  private static BasicStroke NORMAL_CIRCLE_LINE = new BasicStroke(1.0f);
+  private static BasicStroke SELECTED_CIRCLE_LINE = new BasicStroke(2.0f);
   private static BasicStroke NORMAL_LINE = new BasicStroke(1.0f);
+  private static BasicStroke NORMAL_LINE_NEW = new BasicStroke(2.0f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[] { 10, 4 }, 0);
+
+  // Apophysis-compatible colors
+  public static final Color[] XFORM_COLORS = new Color[] {
+      new Color(255, 0, 0), new Color(204, 204, 0), new Color(0, 204, 0),
+      new Color(0, 204, 204), new Color(64, 64, 255), new Color(204, 0, 204),
+      new Color(204, 128, 0), new Color(128, 0, 79), new Color(128, 128, 34),
+      new Color(96, 128, 96), new Color(80, 128, 128), new Color(79, 79, 128),
+      new Color(128, 80, 128), new Color(128, 96, 34) };
+
+  private static final int SHADOW_DIST = 1;
 
   private static final long serialVersionUID = 1L;
   private FlameHolder flameHolder;
   private LayerHolder layerHolder;
 
   boolean darkTriangles = false;
-  private boolean drawImage = true;
-  private boolean drawTriangles = true;
-  private boolean drawVariations = false;
+  private boolean withImage = true;
+  private boolean dimImage = false;
+  private boolean withShadow = true;
+  private boolean withTriangles = true;
+  private boolean withVariations = false;
+  private boolean withShowTransparency = false;
+  private boolean withGrid = true;
   private boolean fineMovement = false;
   private XForm selectedXForm = null;
   private boolean allowScaleX = true;
   private boolean allowScaleY = true;
-  private boolean showTransparency = false;
 
   private double triangleViewXScale, triangleViewYScale;
   private double triangleViewXTrans, triangleViewYTrans;
@@ -74,7 +96,7 @@ public class FlamePanel extends ImagePanel {
   private int xBeginDrag, yBeginDrag;
   private int xMouseClickPosition, yMouseClickPosition;
   private boolean editPostTransform = false;
-  private double triangleZoom = 1.42;
+  private double triangleZoom = 1.21;
 
   private int renderWidth;
   private int renderHeight;
@@ -86,26 +108,36 @@ public class FlamePanel extends ImagePanel {
   private boolean reRender;
   private UndoManagerHolder<Flame> undoManagerHolder;
   private GradientOverlay gradientOverlay = new GradientOverlay(this);
+  private final Prefs prefs;
 
-  public FlamePanel(SimpleImage pSimpleImage, int pX, int pY, int pWidth, FlameHolder pFlameHolder, LayerHolder pLayerHolder) {
+  public FlamePanel(Prefs pPrefs, SimpleImage pSimpleImage, int pX, int pY, int pWidth, FlameHolder pFlameHolder, LayerHolder pLayerHolder) {
     super(pSimpleImage, pX, pY, pWidth);
+    prefs = pPrefs;
     flameHolder = pFlameHolder;
     layerHolder = pLayerHolder;
   }
 
   @Override
   public void paintComponent(Graphics g) {
+    Graphics2D g2d = (Graphics2D) g;
+    if (prefs.isTinaEditorWithAntialiasing()) {
+      g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+      g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+    }
     super.paintComponent(g);
     fillBackground(g);
-    initTriangleView();
-    if (drawImage) {
+    initTriangleView(g2d);
+    if (withImage) {
       drawImage(g);
     }
-    if (drawVariations) {
-      paintVariations((Graphics2D) g);
+    if (withVariations) {
+      drawXForms(g2d);
     }
-    if (drawTriangles) {
-      paintTriangles((Graphics2D) g);
+    if (withGrid) {
+      drawGrid(g2d);
+    }
+    if (withTriangles) {
+      drawTriangles(g2d);
     }
     if (mouseDragOperation == MouseDragOperation.GRADIENT && flameHolder.getFlame() != null && layerHolder != null) {
       gradientOverlay.paintGradient((Graphics2D) g, layerHolder.getLayer().getPalette(), this.getImageBounds());
@@ -114,7 +146,7 @@ public class FlamePanel extends ImagePanel {
 
   private void fillBackground(Graphics g) {
     Rectangle bounds = this.getBounds();
-    if (showTransparency) {
+    if (withShowTransparency) {
       SimpleImage bgImg = getTransparencyImg(bounds.width, bounds.height);
       g.drawImage(bgImg.getBufferedImg(), 0, 0, bounds.width, bounds.height, this);
     }
@@ -233,7 +265,9 @@ public class FlamePanel extends ImagePanel {
 
   private boolean initViewFlag = false;
 
-  private void initTriangleView() {
+  private int viewAreaLeft, viewAreaRight, viewAreaTop, viewAreaBottom;
+
+  private void initTriangleView(Graphics2D g) {
     if (initViewFlag) {
       return;
     }
@@ -249,35 +283,81 @@ public class FlamePanel extends ImagePanel {
     int width = bounds.width;
     int height = bounds.height;
 
-    int areaLeft = BORDER;
-    // unused:
-    //      int areaRight = width - 1 - BORDER;
-    //      int areaTop = BORDER;
-    int areaBottom = height - 1 - BORDER;
+    viewAreaLeft = BORDER;
+    viewAreaRight = width - 1 - BORDER;
+    viewAreaTop = BORDER;
+    viewAreaBottom = height - 1 - BORDER;
 
     triangleViewXScale = (double) (width - 2 * BORDER) / (viewXMax - viewXMin);
     triangleViewYScale = (double) (height - 2 * BORDER) / (viewYMin - viewYMax);
-    triangleViewXTrans = viewXMin * triangleViewXScale - areaLeft;
-    triangleViewYTrans = viewYMin * triangleViewYScale - areaBottom;
+    triangleViewXTrans = viewXMin * triangleViewXScale - viewAreaLeft;
+    triangleViewYTrans = viewYMin * triangleViewYScale - viewAreaBottom;
     triangleViewXScale /= renderAspect;
   }
 
-  private void paintTriangles(Graphics2D g) {
+  private List<Double> computeTicks(double pMin, double pMax, int pMaxCount) {
+    List<Double> ticks = new ArrayList<Double>();
+    double tickStep = (pMax - pMin) / (pMaxCount - 1);
+
+    System.out.println(tickStep);
+
+    BigDecimal bd = new BigDecimal(tickStep);
+    BigDecimal rounded = bd.setScale(2, BigDecimal.ROUND_HALF_EVEN);
+    System.out.println(rounded.doubleValue());
+    return ticks;
+  }
+
+  private void drawGrid(Graphics2D g) {
+
+    g.setColor(XFORM_POST_COLOR);
+
+    double xmin = triangleViewToX(viewAreaLeft);
+    double xmax = triangleViewToX(viewAreaRight);
+
+    double ymin = triangleViewToY(viewAreaBottom);
+    double ymax = triangleViewToY(viewAreaTop);
+
+    System.out.println(xmin + " " + xmax + " " + ymin + " " + ymax);
+    List<Double> xticks = computeTicks(xmin, xmax, 20);
+
+  }
+
+  private void drawTriangles(Graphics2D g) {
     if (layerHolder != null) {
       Layer layer = layerHolder.getLayer();
       if (layer != null) {
-        g.setColor(editPostTransform ? (darkTriangles ? XFORM_POST_COLOR_DARK : XFORM_POST_COLOR) : (darkTriangles ? XFORM_COLOR_DARK : XFORM_COLOR));
-        for (XForm xForm : layer.getXForms()) {
-          drawXForm(g, xForm, false);
+        if (!withShadow) {
+          g.setColor(editPostTransform ? (darkTriangles ? XFORM_POST_COLOR_DARK : XFORM_POST_COLOR) : (darkTriangles ? XFORM_COLOR_DARK : XFORM_COLOR));
         }
-        for (XForm xForm : layer.getFinalXForms()) {
-          drawXForm(g, xForm, true);
+        for (int i = 0; i < layer.getXForms().size(); i++) {
+          XForm xForm = layer.getXForms().get(i);
+          if (withShadow) {
+            g.setColor(SHADOW_COLOR);
+            drawXForm(g, xForm, i, layer.getXForms().size(), false, true);
+            g.setColor(editPostTransform ? (darkTriangles ? XFORM_POST_COLOR_DARK : XFORM_POST_COLOR) : (darkTriangles ? XFORM_COLOR_DARK : XFORM_COLOR));
+            drawXForm(g, xForm, i, layer.getXForms().size(), false, false);
+          }
+          else {
+            drawXForm(g, xForm, i, layer.getXForms().size(), false, false);
+          }
+        }
+        for (int i = 0; i < layer.getFinalXForms().size(); i++) {
+          XForm xForm = layer.getFinalXForms().get(i);
+          if (withShadow) {
+            g.setColor(SHADOW_COLOR);
+            drawXForm(g, xForm, i, layer.getXForms().size(), true, true);
+            g.setColor(editPostTransform ? (darkTriangles ? XFORM_POST_COLOR_DARK : XFORM_POST_COLOR) : (darkTriangles ? XFORM_COLOR_DARK : XFORM_COLOR));
+            drawXForm(g, xForm, i, layer.getXForms().size(), true, false);
+          }
+          else {
+            drawXForm(g, xForm, i, layer.getXForms().size(), true, false);
+          }
         }
       }
     }
   }
 
-  private void paintVariations(Graphics2D g) {
+  private void drawXForms(Graphics2D g) {
     if (selectedXForm != null && selectedXForm.getVariationCount() > 0) {
       try {
         selectedXForm.initTransform();
@@ -341,24 +421,36 @@ public class FlamePanel extends ImagePanel {
     }
   }
 
-  private void drawXForm(Graphics2D g, XForm pXForm, boolean pIsFinal) {
+  private void drawXForm(Graphics2D g, XForm pXForm, int pIndex, int pXFormCount, boolean pIsFinal, boolean pShadow) {
+    if (!pShadow && prefs.isTinaEditorWithColoredTransforms()) {
+      int row = pIsFinal ? pXFormCount + pIndex : pIndex;
+      int colorIdx = ((row + 1) % FlamePanel.XFORM_COLORS.length) - 1;
+      g.setColor(XFORM_COLORS[colorIdx]);
+    }
+
     Triangle triangle = new Triangle(pXForm);
-    boolean isSelected = (selectedXForm != null && selectedXForm == pXForm);
-    g.setStroke(isSelected ? SELECTED_LINE : NORMAL_LINE);
-    g.drawPolygon(triangle.viewX, triangle.viewY, 3);
-    if (isSelected) {
-      g.setStroke(NORMAL_LINE);
-      // selected point
-      {
-        int radius = 10;
-        g.fillOval(triangle.viewX[selectedPoint] - radius / 2, triangle.viewY[selectedPoint] - radius / 2, radius, radius);
+    if (pShadow) {
+      for (int i = 0; i < triangle.viewX.length; i++) {
+        triangle.viewX[i] += SHADOW_DIST;
+        triangle.viewY[i] += SHADOW_DIST;
       }
-      // axes
-      {
-        int offset = 16;
-        int cx = (triangle.viewX[0] + triangle.viewX[1] + triangle.viewX[2]) / 3;
-        int cy = (triangle.viewY[0] + triangle.viewY[1] + triangle.viewY[2]) / 3;
-        final String label = "xoy";
+    }
+    boolean isSelected = (selectedXForm != null && selectedXForm == pXForm);
+    g.setStroke(isSelected ? SELECTED_LINE_NEW : NORMAL_LINE_NEW);
+    g.drawPolygon(triangle.viewX, triangle.viewY, 3);
+
+    // selected point
+    if (isSelected && mouseDragOperation == MouseDragOperation.POINTS) {
+      int radius = 10;
+      g.fillOval(triangle.viewX[selectedPoint] - radius / 2, triangle.viewY[selectedPoint] - radius / 2, radius, radius);
+    }
+    // axes
+    {
+      int offset = 16;
+      int cx = (triangle.viewX[0] + triangle.viewX[1] + triangle.viewX[2]) / 3;
+      int cy = (triangle.viewY[0] + triangle.viewY[1] + triangle.viewY[2]) / 3;
+      final String label = "XOY";
+      if (isSelected) {
         for (int i = 0; i < triangle.viewX.length; i++) {
           double dx = triangle.viewX[i] - cx;
           double dy = triangle.viewY[i] - cy;
@@ -367,6 +459,13 @@ public class FlamePanel extends ImagePanel {
           dy /= dr;
           g.drawString(String.valueOf(label.charAt(i)), triangle.viewX[i] + (int) (offset * dx), triangle.viewY[i] + (int) (offset * dy));
         }
+      }
+      {
+        g.setStroke(isSelected ? SELECTED_CIRCLE_LINE : NORMAL_CIRCLE_LINE);
+        int radius = 24;
+        g.drawOval(cx - radius / 2, cy - radius / 2, radius, radius);
+        String lbl = pIsFinal ? "F" + String.valueOf(pIndex + 1) : "T" + String.valueOf(pIndex + 1);
+        g.drawString(lbl, cx - 6, cy + 6);
       }
     }
   }
@@ -388,11 +487,11 @@ public class FlamePanel extends ImagePanel {
   }
 
   public void setDrawImage(boolean drawImage) {
-    this.drawImage = drawImage;
+    this.withImage = drawImage;
   }
 
   public void setDrawTriangles(boolean drawTriangles) {
-    this.drawTriangles = drawTriangles;
+    this.withTriangles = drawTriangles;
   }
 
   public void setSelectedXForm(XForm selectedXForm) {
@@ -823,7 +922,7 @@ public class FlamePanel extends ImagePanel {
   }
 
   public void setDrawVariations(boolean drawVariations) {
-    this.drawVariations = drawVariations;
+    this.withVariations = drawVariations;
   }
 
   private FlameRenderer flameRenderer = null;
@@ -834,14 +933,7 @@ public class FlamePanel extends ImagePanel {
       if (flame == null) {
         throw new IllegalStateException();
       }
-      Prefs prefs = new Prefs();
-      try {
-        prefs.loadFromFile();
-      }
-      catch (Exception ex) {
-        ex.printStackTrace();
-      }
-      flameRenderer = new FlameRenderer(flame, prefs, showTransparency, false);
+      flameRenderer = new FlameRenderer(flame, prefs, withShowTransparency, false);
     }
     return flameRenderer;
   }
@@ -869,7 +961,7 @@ public class FlamePanel extends ImagePanel {
   }
 
   public void setShowTransparency(boolean pShowTransparency) {
-    showTransparency = pShowTransparency;
+    withShowTransparency = pShowTransparency;
   }
 
   public boolean mouseWheelMoved(int pRotateAmount) {
@@ -948,13 +1040,15 @@ public class FlamePanel extends ImagePanel {
   public void importOptions(FlamePanel pFlamePanel) {
     if (pFlamePanel != null) {
       darkTriangles = pFlamePanel.darkTriangles;
-      drawImage = pFlamePanel.drawImage;
-      drawTriangles = pFlamePanel.drawTriangles;
-      drawVariations = pFlamePanel.drawVariations;
+      withImage = pFlamePanel.withImage;
+      dimImage = pFlamePanel.dimImage;
+      withTriangles = pFlamePanel.withTriangles;
+      withVariations = pFlamePanel.withVariations;
+      withGrid = pFlamePanel.withGrid;
       fineMovement = pFlamePanel.fineMovement;
       allowScaleX = pFlamePanel.allowScaleX;
       allowScaleY = pFlamePanel.allowScaleY;
-      showTransparency = pFlamePanel.showTransparency;
+      withShowTransparency = pFlamePanel.withShowTransparency;
       mouseDragOperation = pFlamePanel.mouseDragOperation;
       editPostTransform = pFlamePanel.editPostTransform;
     }
@@ -1055,5 +1149,17 @@ public class FlamePanel extends ImagePanel {
     if (layerHolder.getLayer() != null) {
       layerHolder.getLayer().getPalette().applyTX();
     }
+  }
+
+  @Override
+  protected SimpleImage preProcessImage(SimpleImage pSimpleImage) {
+    SimpleImage img = super.preProcessImage(pSimpleImage);
+    if (dimImage) {
+      BalancingTransformer bT = new BalancingTransformer();
+      bT.setGamma(-255);
+      bT.setBrightness(-32);
+      bT.transformImage(img);
+    }
+    return img;
   }
 }

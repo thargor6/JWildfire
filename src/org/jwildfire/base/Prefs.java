@@ -139,6 +139,13 @@ public class Prefs extends ManagedObject {
   @Property(description = "Automatically save a flame-copy when a rendered image is saved", category = PropertyCategory.TINA)
   private boolean tinaSaveFlamesWhenImageIsSaved = false;
 
+  // TODO
+  @Property(description = "Used a colored display for affine transforms", category = PropertyCategory.TINA)
+  private boolean tinaEditorWithColoredTransforms = true;
+  // TODO
+  @Property(description = "Turn on antialiasing for drawing lines and triangle-symbols in the editor", category = PropertyCategory.TINA)
+  private boolean tinaEditorWithAntialiasing = true;
+
   @Property(description = "Sunflow scene file drawer", category = PropertyCategory.SUNFLOW)
   private String sunflowScenePath = null;
   private String lastInputSunflowScenePath = null;
@@ -448,6 +455,8 @@ public class Prefs extends ManagedObject {
     tinaDefaultAntialiasingRadius = pSrc.tinaDefaultAntialiasingRadius;
     tinaPreserveFreeCPUs = pSrc.tinaPreserveFreeCPUs;
     tinaDisableWikimediaCommonsWarning = pSrc.tinaDisableWikimediaCommonsWarning;
+    tinaEditorWithColoredTransforms = pSrc.tinaEditorWithColoredTransforms;
+    tinaEditorWithAntialiasing = pSrc.tinaEditorWithAntialiasing;
 
     tinaRenderMovieFrames = pSrc.tinaRenderMovieFrames;
     tinaRenderPreviewQuality = pSrc.tinaRenderPreviewQuality;
@@ -730,6 +739,22 @@ public class Prefs extends ManagedObject {
 
   public void setLookAndFeelTheme(String pLookAndFeelTheme) {
     lookAndFeelTheme = pLookAndFeelTheme;
+  }
+
+  public boolean isTinaEditorWithColoredTransforms() {
+    return tinaEditorWithColoredTransforms;
+  }
+
+  public void setTinaEditorWithColoredTransforms(boolean pTinaEditorWithColoredTransforms) {
+    tinaEditorWithColoredTransforms = pTinaEditorWithColoredTransforms;
+  }
+
+  public boolean isTinaEditorWithAntialiasing() {
+    return tinaEditorWithAntialiasing;
+  }
+
+  public void setTinaEditorWithAntialiasing(boolean pTinaEditorWithAntialiasing) {
+    tinaEditorWithAntialiasing = pTinaEditorWithAntialiasing;
   }
 
 }

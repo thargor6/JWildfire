@@ -232,7 +232,7 @@ public class DancingFractalsController {
         return null;
       SimpleImage img = new SimpleImage(width, height);
       img.fillBackground(0, 0, 0);
-      flamePanel = new FlamePanel(img, 0, 0, flameRootPanel.getWidth() - borderWidth, null, null);
+      flamePanel = new FlamePanel(prefs, img, 0, 0, flameRootPanel.getWidth() - borderWidth, null, null);
       flamePanel.setRenderWidth(640);
       flamePanel.setRenderHeight(480);
       flameRootPanel.add(flamePanel, BorderLayout.CENTER);
@@ -249,7 +249,7 @@ public class DancingFractalsController {
       int height = poolFlamePreviewPnl.getHeight();
       SimpleImage img = new SimpleImage(width, height);
       img.fillBackground(0, 0, 0);
-      poolFlamePreviewFlamePanel = new FlamePanel(img, 0, 0, poolFlamePreviewPnl.getWidth(), poolFlameHolder, null);
+      poolFlamePreviewFlamePanel = new FlamePanel(prefs, img, 0, 0, poolFlamePreviewPnl.getWidth(), poolFlameHolder, null);
       poolFlamePreviewFlamePanel.setRenderWidth(640);
       poolFlamePreviewFlamePanel.setRenderHeight(480);
       poolFlamePreviewFlamePanel.setDrawTriangles(false);
