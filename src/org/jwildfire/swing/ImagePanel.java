@@ -43,11 +43,17 @@ public class ImagePanel extends JPanel {
   }
 
   public void setImage(SimpleImage pSimpleImage) {
-    setImage(pSimpleImage, 0, 0, pSimpleImage.getImageWidth());
+    SimpleImage img = preProcessImage(pSimpleImage);
+    setImage(img, 0, 0, img.getImageWidth());
+  }
+
+  protected SimpleImage preProcessImage(SimpleImage pSimpleImage) {
+    return pSimpleImage;
   }
 
   public void replaceImage(SimpleImage pSimpleImage) {
-    simpleImage.setBufferedImage(pSimpleImage.getBufferedImg(), simpleImage.getImageWidth(), simpleImage.getImageHeight());
+    SimpleImage img = preProcessImage(pSimpleImage);
+    simpleImage.setBufferedImage(img.getBufferedImg(), simpleImage.getImageWidth(), simpleImage.getImageHeight());
   }
 
   public void setImage(SimpleImage pSimpleImage, int pX, int pY, int pWidth) {

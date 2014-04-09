@@ -16,8 +16,10 @@
 */
 package org.jwildfire.create.tina.swing;
 
+import static org.jwildfire.base.mathlib.MathLib.EPSILON;
 import static org.jwildfire.base.mathlib.MathLib.M_PI;
 import static org.jwildfire.base.mathlib.MathLib.cos;
+import static org.jwildfire.base.mathlib.MathLib.fabs;
 import static org.jwildfire.base.mathlib.MathLib.sin;
 
 import java.awt.BasicStroke;
@@ -27,8 +29,6 @@ import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.jwildfire.base.Prefs;
 import org.jwildfire.base.Tools;
@@ -60,8 +60,10 @@ public class FlamePanel extends ImagePanel {
   private static BasicStroke SELECTED_LINE_NEW = new BasicStroke(2.0f);
   private static BasicStroke NORMAL_CIRCLE_LINE = new BasicStroke(1.0f);
   private static BasicStroke SELECTED_CIRCLE_LINE = new BasicStroke(2.0f);
-  private static BasicStroke NORMAL_LINE = new BasicStroke(1.0f);
+  private static BasicStroke NORMAL_LINE = new BasicStroke(2.0f);
   private static BasicStroke NORMAL_LINE_NEW = new BasicStroke(2.0f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[] { 10, 4 }, 0);
+  private static final Color XFORM_GRID_COLOR = new Color(140, 140, 120);
+  private static final Color XFORM_GRID_COLOR_ZERO = new Color(255, 255, 160);
 
   // Apophysis-compatible colors
   public static final Color[] XFORM_COLORS = new Color[] {
@@ -274,10 +276,10 @@ public class FlamePanel extends ImagePanel {
     else {
       initViewFlag = true;
     }
-    double viewXMin = -2.5;
-    double viewXMax = 1.75;
-    double viewYMin = -1.75;
-    double viewYMax = 2.5;
+    double viewXMin = -2.0;
+    double viewXMax = 2.0;
+    double viewYMin = -1.5;
+    double viewYMax = 1.5;
 
     Rectangle bounds = this.getImageBounds();
     int width = bounds.width;
@@ -295,31 +297,100 @@ public class FlamePanel extends ImagePanel {
     triangleViewXScale /= renderAspect;
   }
 
-  private List<Double> computeTicks(double pMin, double pMax, int pMaxCount) {
-    List<Double> ticks = new ArrayList<Double>();
-    double tickStep = (pMax - pMin) / (pMaxCount - 1);
+  private static class TickSpec {
+    private final double tmin;
+    private final double tmax;
+    private final double tstep;
 
-    System.out.println(tickStep);
+    public TickSpec(double pMin, double pMax, int pMaxCount) {
+      double rawTickStep = (pMax - pMin) / (pMaxCount - 1);
+      BigDecimal bd = new BigDecimal(rawTickStep);
+      BigDecimal rounded = bd.setScale(1, BigDecimal.ROUND_HALF_EVEN);
+      //      tstep = rounded.doubleValue();
+      tstep = 0.5;
 
-    BigDecimal bd = new BigDecimal(tickStep);
-    BigDecimal rounded = bd.setScale(2, BigDecimal.ROUND_HALF_EVEN);
-    System.out.println(rounded.doubleValue());
-    return ticks;
+      if (pMin < 0) {
+        int n = (int) fabs(pMin / tstep);
+        tmin = -n * tstep;
+      }
+      else if (pMin > 0) {
+        int n = (int) (pMin / tstep);
+        tmin = n * tstep;
+      }
+      else {
+        tmin = tstep;
+      }
+
+      if (pMax < 0) {
+        int n = (int) fabs(pMax / tstep) + 1;
+        tmax = -n * tstep;
+      }
+      else if (pMax > 0) {
+        int n = (int) (pMax / tstep) + 1;
+        tmax = n * tstep;
+      }
+      else {
+        tmax = tstep;
+      }
+    }
+
+    public double getTmin() {
+      return tmin;
+    }
+
+    public double getTmax() {
+      return tmax;
+    }
+
+    public double getTstep() {
+      return tstep;
+    }
+
   }
 
   private void drawGrid(Graphics2D g) {
-
-    g.setColor(XFORM_POST_COLOR);
-
     double xmin = triangleViewToX(viewAreaLeft);
     double xmax = triangleViewToX(viewAreaRight);
 
     double ymin = triangleViewToY(viewAreaBottom);
     double ymax = triangleViewToY(viewAreaTop);
 
-    System.out.println(xmin + " " + xmax + " " + ymin + " " + ymax);
-    List<Double> xticks = computeTicks(xmin, xmax, 20);
+    int desiredTickCount = 16;
 
+    TickSpec xTicks = new TickSpec(xmin, xmax, desiredTickCount);
+    TickSpec yTicks = new TickSpec(ymin, ymax, (int) Math.round(desiredTickCount / renderAspect));
+
+    Rectangle bounds = this.getImageBounds();
+
+    System.out.println(xmin + " " + xmax + " " + ymin + " " + ymax);
+    {
+      double x = xTicks.getTmin();
+      while (x + EPSILON <= xTicks.getTmax()) {
+        int vx = triangleXToView(x);
+        if (fabs(x) < EPSILON) {
+          g.setColor(XFORM_GRID_COLOR_ZERO);
+        }
+        else {
+          g.setColor(XFORM_GRID_COLOR);
+        }
+        g.drawLine(vx, bounds.y, vx, bounds.y + bounds.height - 1);
+        x += xTicks.getTstep();
+      }
+    }
+    {
+      double y = yTicks.getTmin();
+      while (y + EPSILON <= yTicks.getTmax()) {
+        int vy = triangleYToView(y);
+        if (fabs(y) < EPSILON) {
+          g.setColor(XFORM_GRID_COLOR_ZERO);
+        }
+        else {
+          g.setColor(XFORM_GRID_COLOR);
+        }
+        g.drawLine(bounds.x, vy, bounds.x + bounds.width - 1, vy);
+        y += yTicks.getTstep();
+      }
+    }
   }
 
   private void drawTriangles(Graphics2D g) {
@@ -329,28 +400,39 @@ public class FlamePanel extends ImagePanel {
         if (!withShadow) {
           g.setColor(editPostTransform ? (darkTriangles ? XFORM_POST_COLOR_DARK : XFORM_POST_COLOR) : (darkTriangles ? XFORM_COLOR_DARK : XFORM_COLOR));
         }
-        for (int i = 0; i < layer.getXForms().size(); i++) {
-          XForm xForm = layer.getXForms().get(i);
-          if (withShadow) {
-            g.setColor(SHADOW_COLOR);
-            drawXForm(g, xForm, i, layer.getXForms().size(), false, true);
-            g.setColor(editPostTransform ? (darkTriangles ? XFORM_POST_COLOR_DARK : XFORM_POST_COLOR) : (darkTriangles ? XFORM_COLOR_DARK : XFORM_COLOR));
-            drawXForm(g, xForm, i, layer.getXForms().size(), false, false);
+
+        // draw the selected one at last
+        for (int pass = 0; pass < 2; pass++) {
+          for (int i = 0; i < layer.getXForms().size(); i++) {
+            XForm xForm = layer.getXForms().get(i);
+            if ((pass == 0 && (selectedXForm == null || xForm != selectedXForm)) || (pass == 1 && xForm == selectedXForm)) {
+              boolean isSelected = xForm == selectedXForm;
+              if (withShadow) {
+                g.setColor(SHADOW_COLOR);
+                drawXForm(g, xForm, i, layer.getXForms().size(), false, true, isSelected);
+                drawXForm(g, xForm, i, layer.getXForms().size(), false, false, isSelected);
+              }
+              else {
+                drawXForm(g, xForm, i, layer.getXForms().size(), false, false, isSelected);
+              }
+            }
           }
-          else {
-            drawXForm(g, xForm, i, layer.getXForms().size(), false, false);
+          for (int i = 0; i < layer.getFinalXForms().size(); i++) {
+            XForm xForm = layer.getFinalXForms().get(i);
+            if ((pass == 0 && (selectedXForm == null || xForm != selectedXForm)) || (pass == 1 && xForm == selectedXForm)) {
+              boolean isSelected = xForm == selectedXForm;
+              if (withShadow) {
+                g.setColor(SHADOW_COLOR);
+                drawXForm(g, xForm, i, layer.getXForms().size(), true, true, isSelected);
+                drawXForm(g, xForm, i, layer.getXForms().size(), true, false, isSelected);
+              }
+              else {
+                drawXForm(g, xForm, i, layer.getXForms().size(), true, false, isSelected);
+              }
+            }
           }
-        }
-        for (int i = 0; i < layer.getFinalXForms().size(); i++) {
-          XForm xForm = layer.getFinalXForms().get(i);
-          if (withShadow) {
-            g.setColor(SHADOW_COLOR);
-            drawXForm(g, xForm, i, layer.getXForms().size(), true, true);
-            g.setColor(editPostTransform ? (darkTriangles ? XFORM_POST_COLOR_DARK : XFORM_POST_COLOR) : (darkTriangles ? XFORM_COLOR_DARK : XFORM_COLOR));
-            drawXForm(g, xForm, i, layer.getXForms().size(), true, false);
-          }
-          else {
-            drawXForm(g, xForm, i, layer.getXForms().size(), true, false);
+          if (selectedXForm == null) {
+            break;
           }
         }
       }
@@ -421,7 +503,7 @@ public class FlamePanel extends ImagePanel {
     }
   }
 
-  private void drawXForm(Graphics2D g, XForm pXForm, int pIndex, int pXFormCount, boolean pIsFinal, boolean pShadow) {
+  private void drawXForm(Graphics2D g, XForm pXForm, int pIndex, int pXFormCount, boolean pIsFinal, boolean pShadow, boolean pIsSelected) {
     if (!pShadow && prefs.isTinaEditorWithColoredTransforms()) {
       int row = pIsFinal ? pXFormCount + pIndex : pIndex;
       int colorIdx = ((row + 1) % FlamePanel.XFORM_COLORS.length) - 1;
@@ -435,12 +517,11 @@ public class FlamePanel extends ImagePanel {
         triangle.viewY[i] += SHADOW_DIST;
       }
     }
-    boolean isSelected = (selectedXForm != null && selectedXForm == pXForm);
-    g.setStroke(isSelected ? SELECTED_LINE_NEW : NORMAL_LINE_NEW);
+    g.setStroke(pIsSelected ? SELECTED_LINE_NEW : NORMAL_LINE_NEW);
     g.drawPolygon(triangle.viewX, triangle.viewY, 3);
 
     // selected point
-    if (isSelected && mouseDragOperation == MouseDragOperation.POINTS) {
+    if (pIsSelected && mouseDragOperation == MouseDragOperation.POINTS) {
       int radius = 10;
       g.fillOval(triangle.viewX[selectedPoint] - radius / 2, triangle.viewY[selectedPoint] - radius / 2, radius, radius);
     }
@@ -450,7 +531,7 @@ public class FlamePanel extends ImagePanel {
       int cx = (triangle.viewX[0] + triangle.viewX[1] + triangle.viewX[2]) / 3;
       int cy = (triangle.viewY[0] + triangle.viewY[1] + triangle.viewY[2]) / 3;
       final String label = "XOY";
-      if (isSelected) {
+      if (pIsSelected) {
         for (int i = 0; i < triangle.viewX.length; i++) {
           double dx = triangle.viewX[i] - cx;
           double dy = triangle.viewY[i] - cy;
@@ -461,7 +542,7 @@ public class FlamePanel extends ImagePanel {
         }
       }
       {
-        g.setStroke(isSelected ? SELECTED_CIRCLE_LINE : NORMAL_CIRCLE_LINE);
+        g.setStroke(pIsSelected ? SELECTED_CIRCLE_LINE : NORMAL_CIRCLE_LINE);
         int radius = 24;
         g.drawOval(cx - radius / 2, cy - radius / 2, radius, radius);
         String lbl = pIsFinal ? "F" + String.valueOf(pIndex + 1) : "T" + String.valueOf(pIndex + 1);
