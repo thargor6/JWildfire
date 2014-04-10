@@ -81,7 +81,7 @@ public class FlamePanel extends ImagePanel {
 
   boolean darkTriangles = false;
   private boolean withImage = true;
-  private boolean dimImage = false;
+  private int imageBrightness = 100;
   private boolean withShadow = true;
   private boolean withTriangles = true;
   private boolean withVariations = false;
@@ -111,6 +111,11 @@ public class FlamePanel extends ImagePanel {
   private UndoManagerHolder<Flame> undoManagerHolder;
   private GradientOverlay gradientOverlay = new GradientOverlay(this);
   private final Prefs prefs;
+
+  private double viewXMin = -2.0;
+  private double viewXMax = 2.0;
+  private double viewYMin = -1.5;
+  private double viewYMax = 1.5;
 
   public FlamePanel(Prefs pPrefs, SimpleImage pSimpleImage, int pX, int pY, int pWidth, FlameHolder pFlameHolder, LayerHolder pLayerHolder) {
     super(pSimpleImage, pX, pY, pWidth);
@@ -276,10 +281,6 @@ public class FlamePanel extends ImagePanel {
     else {
       initViewFlag = true;
     }
-    double viewXMin = -2.0;
-    double viewXMax = 2.0;
-    double viewYMin = -1.5;
-    double viewYMax = 1.5;
 
     Rectangle bounds = this.getImageBounds();
     int width = bounds.width;
@@ -590,6 +591,30 @@ public class FlamePanel extends ImagePanel {
       yBeginDrag = pY;
       if (Math.abs(dx) > MathLib.EPSILON || Math.abs(dy) > MathLib.EPSILON) {
         switch (mouseDragOperation) {
+          case TRIANGLE_VIEW: {
+            dx *= 0.3;
+            dy *= 0.3;
+            if (fineMovement) {
+              dx *= 0.25;
+              dy *= 0.25;
+            }
+            if (pRightButton || pMiddleButton) {
+              // zoom 
+              viewXMin -= dx;
+              viewXMax += dx;
+              viewYMin -= dx;
+              viewYMax += dx;
+            }
+            else {
+              // move
+              viewXMin -= dx;
+              viewXMax -= dx;
+              viewYMin -= dy;
+              viewYMax -= dy;
+            }
+            initViewFlag = false;
+            return true;
+          }
           case MOVE_TRIANGLE: {
             if (selectedXForm == null) {
               return false;
@@ -838,7 +863,7 @@ public class FlamePanel extends ImagePanel {
   }
 
   public void mousePressed(int x, int y) {
-    if (selectedXForm != null || mouseDragOperation == MouseDragOperation.VIEW || mouseDragOperation == MouseDragOperation.GRADIENT) {
+    if (selectedXForm != null || mouseDragOperation == MouseDragOperation.VIEW || mouseDragOperation == MouseDragOperation.GRADIENT || mouseDragOperation == MouseDragOperation.FOCUS || mouseDragOperation == MouseDragOperation.TRIANGLE_VIEW) {
       xMouseClickPosition = xBeginDrag = x;
       yMouseClickPosition = yBeginDrag = y;
       gradientOverlay.beginDrag(xMouseClickPosition, yMouseClickPosition);
@@ -1122,7 +1147,7 @@ public class FlamePanel extends ImagePanel {
     if (pFlamePanel != null) {
       darkTriangles = pFlamePanel.darkTriangles;
       withImage = pFlamePanel.withImage;
-      dimImage = pFlamePanel.dimImage;
+      imageBrightness = pFlamePanel.imageBrightness;
       withTriangles = pFlamePanel.withTriangles;
       withVariations = pFlamePanel.withVariations;
       withGrid = pFlamePanel.withGrid;
@@ -1235,12 +1260,28 @@ public class FlamePanel extends ImagePanel {
   @Override
   protected SimpleImage preProcessImage(SimpleImage pSimpleImage) {
     SimpleImage img = super.preProcessImage(pSimpleImage);
-    if (dimImage) {
+    if (imageBrightness < 100 && imageBrightness >= 0) {
       BalancingTransformer bT = new BalancingTransformer();
-      bT.setGamma(-255);
-      bT.setBrightness(-32);
+      bT.setGamma(-2 * (100 - imageBrightness));
+      bT.setBrightness(-(100 - imageBrightness));
       bT.transformImage(img);
     }
     return img;
+  }
+
+  public boolean isWithGrid() {
+    return withGrid;
+  }
+
+  public void setWithGrid(boolean pWithGrid) {
+    withGrid = pWithGrid;
+  }
+
+  public int getImageBrightness() {
+    return imageBrightness;
+  }
+
+  public void setImageBrightness(int pImageBrightness) {
+    imageBrightness = pImageBrightness;
   }
 }
