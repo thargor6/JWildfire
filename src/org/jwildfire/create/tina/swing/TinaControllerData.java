@@ -196,9 +196,6 @@ public class TinaControllerData {
   public JToggleButton affineEditPostTransformButton;
   public JToggleButton affineEditPostTransformSmallButton;
   public JToggleButton affinePreserveZButton;
-  public JButton mouseEditZoomInButton;
-  public JButton mouseEditZoomOutButton;
-  public JToggleButton toggleDarkTrianglesButton;
   public JButton randomizeButton;
   public JToggleButton toggleVariationsButton;
   public JToggleButton toggleTransparencyButton;
@@ -232,6 +229,7 @@ public class TinaControllerData {
   public JToggleButton mouseTransformEditFocusPointButton;
   public JToggleButton mouseTransformEditPointsButton;
   public JToggleButton mouseTransformEditGradientButton;
+  public JToggleButton mouseTransformEditTriangleViewButton;
   public JToggleButton mouseTransformEditViewButton;
   public JToggleButton mouseTransformSlowButton;
   public JButton batchRenderAddFilesButton;
@@ -253,7 +251,6 @@ public class TinaControllerData {
   public JButton movieButton;
   public JToggleButton transformSlowButton;
   public JToggleButton transparencyButton;
-  public JToggleButton darkTrianglesButton;
   public JTree scriptTree;
   public JTextArea scriptDescriptionTextArea;
   public JTextArea scriptTextArea;
@@ -309,4 +306,6 @@ public class TinaControllerData {
   public JWFNumberField stereo3dFocalOffsetREd;
   public JSlider stereo3dFocalOffsetSlider;
   public JCheckBox stereo3dSwapSidesCBx;
+  public JToggleButton toggleDrawGridButton;
+  public JSlider editorFractalBrightnessSlider;
 }

@@ -389,8 +389,6 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
     data.affinePreserveZButton = parameterObject.pAffinePreserveZButton;
     data.affineScaleXButton = parameterObject.pAffineScaleXButton;
     data.affineScaleYButton = parameterObject.pAffineScaleYButton;
-    data.mouseEditZoomInButton = parameterObject.pMouseEditZoomInButton;
-    data.mouseEditZoomOutButton = parameterObject.pMouseEditZoomOutButton;
 
     data.randomBatchPanel = parameterObject.pRandomBatchPanel;
     data.TinaNonlinearControlsRows = parameterObject.pTinaNonlinearControlsRows;
@@ -425,6 +423,7 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
     data.mouseTransformEditFocusPointButton = parameterObject.pMouseTransformEditFocusPointButton;
     data.mouseTransformEditPointsButton = parameterObject.pMouseTransformShearButton;
     data.mouseTransformEditGradientButton = parameterObject.mouseTransformEditGradientButton;
+    data.mouseTransformEditTriangleViewButton = parameterObject.mouseTransformEditTriangleViewButton;
 
     data.layerWeightEd = parameterObject.layerWeightEd;
     data.layerAddBtn = parameterObject.layerAddBtn;
@@ -473,7 +472,6 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
     data.mouseTransformEditViewButton = parameterObject.pMouseTransformViewButton;
     data.toggleVariationsButton = parameterObject.pToggleVariationsButton;
     data.toggleTransparencyButton = parameterObject.pToggleTransparencyButton;
-    data.toggleDarkTrianglesButton = parameterObject.pToggleDarkTrianglesButton;
     data.randomizeButton = parameterObject.randomizeButton;
     mainProgressUpdater = parameterObject.pMainProgressUpdater;
     jobProgressUpdater = parameterObject.pJobProgressUpdater;
@@ -555,7 +553,6 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
     data.movieButton = parameterObject.movieButton;
     data.transformSlowButton = parameterObject.transformSlowButton;
     data.transparencyButton = parameterObject.transparencyButton;
-    data.darkTrianglesButton = parameterObject.darkTrianglesButton;
     data.scriptTree = parameterObject.scriptTree;
     data.scriptDescriptionTextArea = parameterObject.scriptDescriptionTextArea;
     data.scriptTextArea = parameterObject.scriptTextArea;
@@ -571,6 +568,9 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
     data.scriptRunBtn = parameterObject.scriptRunBtn;
     data.gradientLibTree = parameterObject.gradientLibTree;
     data.backgroundColorIndicatorBtn = parameterObject.backgroundColorIndicatorBtn;
+    data.toggleDrawGridButton = parameterObject.toggleDrawGridButton;
+    data.editorFractalBrightnessSlider = parameterObject.editorFractalBrightnessSlider;
+
     // end create
     flameControls = new FlameControlsDelegate(this, data, rootTabbedPane);
     xFormControls = new XFormControlsDelegate(this, data, rootTabbedPane);
@@ -2058,7 +2058,6 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
     data.movieButton.setEnabled(enabled);
     data.transformSlowButton.setEnabled(enabled);
     data.transparencyButton.setEnabled(enabled);
-    data.darkTrianglesButton.setEnabled(enabled);
     data.randomizeButton.setEnabled(enabled);
     flameControls.enableControls();
     enableUndoControls();
@@ -2339,6 +2338,7 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
       data.mouseTransformEditGradientButton.setSelected(false);
       data.mouseTransformEditViewButton.setSelected(false);
       data.mouseTransformEditFocusPointButton.setSelected(false);
+      data.mouseTransformEditTriangleViewButton.setSelected(false);
     }
   }
 
@@ -3159,6 +3159,7 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
         data.mouseTransformEditPointsButton.setSelected(false);
         data.mouseTransformEditGradientButton.setSelected(false);
         data.mouseTransformEditViewButton.setSelected(false);
+        data.mouseTransformEditTriangleViewButton.setSelected(false);
         if (flamePanel != null) {
           flamePanel.setMouseDragOperation(data.mouseTransformMoveTrianglesButton.isSelected() ? MouseDragOperation.MOVE_TRIANGLE : MouseDragOperation.NONE);
           flamePanel.setDrawTriangles(flamePanel.getMouseDragOperation() == MouseDragOperation.MOVE_TRIANGLE);
@@ -3181,6 +3182,7 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
         data.mouseTransformEditPointsButton.setSelected(false);
         data.mouseTransformEditGradientButton.setSelected(false);
         data.mouseTransformEditViewButton.setSelected(false);
+        data.mouseTransformEditTriangleViewButton.setSelected(false);
         if (flamePanel != null) {
           flamePanel.setMouseDragOperation(data.mouseTransformEditFocusPointButton.isSelected() ? MouseDragOperation.FOCUS : MouseDragOperation.NONE);
           flamePanel.setDrawTriangles(false);
@@ -3228,20 +3230,6 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
       refreshing = false;
     }
     affineEditPostTransformButton_clicked();
-  }
-
-  public void mouseTransformZoomInButton_clicked() {
-    if (flamePanel != null) {
-      flamePanel.zoomIn();
-      refreshFlameImage(false);
-    }
-  }
-
-  public void mouseTransformZoomOutButton_clicked() {
-    if (flamePanel != null) {
-      flamePanel.zoomOut();
-      refreshFlameImage(false);
-    }
   }
 
   public void affineC21REd_changed() {
@@ -3696,16 +3684,6 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
     return data.renderBatchJobsTable;
   }
 
-  public void toggleDarkTriangles() {
-    if (refreshing) {
-      return;
-    }
-    if (flamePanel != null) {
-      flamePanel.setDarkTriangles(data.toggleDarkTrianglesButton.isSelected());
-      refreshFlameImage(false);
-    }
-  }
-
   @Override
   public ScriptRunner compileScript() throws Exception {
     return ScriptRunner.compile(data.scriptTextArea.getText());
@@ -3986,6 +3964,7 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
         data.mouseTransformEditFocusPointButton.setSelected(false);
         data.mouseTransformEditGradientButton.setSelected(false);
         data.mouseTransformEditViewButton.setSelected(false);
+        data.mouseTransformEditTriangleViewButton.setSelected(false);
         if (flamePanel != null) {
           flamePanel.setMouseDragOperation(data.mouseTransformEditPointsButton.isSelected() ? MouseDragOperation.POINTS : MouseDragOperation.NONE);
           flamePanel.setDrawTriangles(flamePanel.getMouseDragOperation() == MouseDragOperation.POINTS);
@@ -4008,6 +3987,7 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
         data.mouseTransformEditFocusPointButton.setSelected(false);
         data.mouseTransformEditPointsButton.setSelected(false);
         data.mouseTransformEditGradientButton.setSelected(false);
+        data.mouseTransformEditTriangleViewButton.setSelected(false);
         if (flamePanel != null) {
           flamePanel.setMouseDragOperation(data.mouseTransformEditViewButton.isSelected() ? MouseDragOperation.VIEW : MouseDragOperation.NONE);
           flamePanel.setDrawTriangles(flamePanel.getMouseDragOperation() == MouseDragOperation.MOVE_TRIANGLE);
@@ -4484,6 +4464,7 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
         data.mouseTransformEditPointsButton.setSelected(false);
         data.mouseTransformEditGradientButton.setSelected(false);
         data.mouseTransformEditViewButton.setSelected(false);
+        data.mouseTransformEditTriangleViewButton.setSelected(false);
         if (flamePanel != null) {
           flamePanel.setMouseDragOperation(data.mouseTransformRotateTrianglesButton.isSelected() ? MouseDragOperation.ROTATE_TRIANGLE : MouseDragOperation.NONE);
           flamePanel.setDrawTriangles(flamePanel.getMouseDragOperation() == MouseDragOperation.ROTATE_TRIANGLE);
@@ -4506,6 +4487,7 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
         data.mouseTransformEditPointsButton.setSelected(false);
         data.mouseTransformEditGradientButton.setSelected(false);
         data.mouseTransformEditViewButton.setSelected(false);
+        data.mouseTransformEditTriangleViewButton.setSelected(false);
         if (flamePanel != null) {
           flamePanel.setMouseDragOperation(data.mouseTransformScaleTrianglesButton.isSelected() ? MouseDragOperation.SCALE_TRIANGLE : MouseDragOperation.NONE);
           flamePanel.setDrawTriangles(flamePanel.getMouseDragOperation() == MouseDragOperation.SCALE_TRIANGLE);
@@ -4544,6 +4526,7 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
         data.mouseTransformEditPointsButton.setSelected(false);
         data.mouseTransformEditFocusPointButton.setSelected(false);
         data.mouseTransformEditViewButton.setSelected(false);
+        data.mouseTransformEditTriangleViewButton.setSelected(false);
         if (flamePanel != null) {
           flamePanel.setMouseDragOperation(data.mouseTransformEditGradientButton.isSelected() ? MouseDragOperation.GRADIENT : MouseDragOperation.NONE);
           flamePanel.setDrawTriangles(false);
@@ -4964,5 +4947,48 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
     return xFormControls;
   }
 
-  // TODO http://portableapps.com/
+  public void toggleDrawGridButton_clicked() {
+    if (refreshing) {
+      return;
+    }
+    if (flamePanel != null) {
+      flamePanel.setWithGrid(data.toggleDrawGridButton.isSelected());
+      refreshFlameImage(false);
+    }
+  }
+
+  public void editorFractalBrightnessSliderChanged() {
+    if (refreshing) {
+      return;
+    }
+    if (flamePanel != null) {
+      flamePanel.setImageBrightness(data.editorFractalBrightnessSlider.getValue());
+      refreshFlameImage(false);
+    }
+
+  }
+
+  public void mouseTransformTriangleViewButton_clicked() {
+    if (!refreshing) {
+      refreshing = true;
+      try {
+        data.mouseTransformMoveTrianglesButton.setSelected(false);
+        data.mouseTransformRotateTrianglesButton.setSelected(false);
+        data.mouseTransformScaleTrianglesButton.setSelected(false);
+        data.mouseTransformEditFocusPointButton.setSelected(false);
+        data.mouseTransformEditPointsButton.setSelected(false);
+        data.mouseTransformEditGradientButton.setSelected(false);
+        data.mouseTransformEditViewButton.setSelected(false);
+        if (flamePanel != null) {
+          flamePanel.setMouseDragOperation(data.mouseTransformEditTriangleViewButton.isSelected() ? MouseDragOperation.TRIANGLE_VIEW : MouseDragOperation.NONE);
+          flamePanel.setDrawTriangles(flamePanel.getMouseDragOperation() == MouseDragOperation.TRIANGLE_VIEW);
+          refreshFlameImage(false);
+        }
+      }
+      finally {
+        refreshing = false;
+      }
+    }
+  }
+
 }
