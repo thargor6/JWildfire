@@ -86,7 +86,7 @@ public class FlamePanel extends ImagePanel {
   private boolean withTriangles = true;
   private boolean withVariations = false;
   private boolean withShowTransparency = false;
-  private boolean withGrid = true;
+  private boolean withGrid = false;
   private boolean fineMovement = false;
   private XForm selectedXForm = null;
   private boolean allowScaleX = true;
@@ -592,8 +592,8 @@ public class FlamePanel extends ImagePanel {
       if (Math.abs(dx) > MathLib.EPSILON || Math.abs(dy) > MathLib.EPSILON) {
         switch (mouseDragOperation) {
           case TRIANGLE_VIEW: {
-            dx *= 0.3;
-            dy *= 0.3;
+            dx *= 0.75;
+            dy *= 0.75;
             if (fineMovement) {
               dx *= 0.25;
               dy *= 0.25;
@@ -1079,6 +1079,18 @@ public class FlamePanel extends ImagePanel {
           dx *= 0.1;
         }
         flame.setPixelsPerUnit(flame.getPixelsPerUnit() - dx);
+        return true;
+      }
+      if (mouseDragOperation == MouseDragOperation.TRIANGLE_VIEW && flameHolder != null && flameHolder.getFlame() != null) {
+        double dx = pRotateAmount * 0.3;
+        if (fineMovement) {
+          dx *= 0.1;
+        }
+        viewXMin -= dx;
+        viewXMax += dx;
+        viewYMin -= dx;
+        viewYMax += dx;
+        initViewFlag = false;
         return true;
       }
       else if (mouseDragOperation == MouseDragOperation.MOVE_TRIANGLE && selectedXForm != null) {

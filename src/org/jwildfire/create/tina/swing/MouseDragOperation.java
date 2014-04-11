@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2012 Andreas Maschke
+  Copyright (C) 1995-2014 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -17,5 +17,5 @@
 package org.jwildfire.create.tina.swing;
 
 public enum MouseDragOperation {
-  VIEW, MOVE_TRIANGLE, ROTATE_TRIANGLE, SCALE_TRIANGLE, POINTS, FOCUS, NONE, GRADIENT
+  VIEW, MOVE_TRIANGLE, ROTATE_TRIANGLE, SCALE_TRIANGLE, POINTS, FOCUS, NONE, GRADIENT, TRIANGLE_VIEW
 }

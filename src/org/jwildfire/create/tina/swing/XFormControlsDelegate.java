@@ -86,8 +86,6 @@ public class XFormControlsDelegate extends AbstractControlsDelegate {
 
     data.affineEditPostTransformButton.setEnabled(owner.getCurrFlame() != null);
     data.affineEditPostTransformSmallButton.setEnabled(owner.getCurrFlame() != null);
-    data.mouseEditZoomInButton.setEnabled(owner.getCurrFlame() != null);
-    data.mouseEditZoomOutButton.setEnabled(owner.getCurrFlame() != null);
     data.toggleVariationsButton.setEnabled(owner.getCurrFlame() != null);
 
     enableControl(data.affineC00REd, !enabled);
