@@ -363,6 +363,7 @@ public class VariationFuncList {
     registerVariationFunc(Onion2Func.class);
     registerVariationFunc(DCCrackleWFFunc.class);
     registerVariationFunc(DCHexesWFFunc.class);
+    registerVariationFunc(MurlFunc.class);
   }
 
   private static void registerVariationFunc(
