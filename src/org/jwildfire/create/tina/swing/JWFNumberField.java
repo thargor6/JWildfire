@@ -93,7 +93,8 @@ public class JWFNumberField extends JPanel {
     motionCurveBtn.setToolTipText("Create/edit a motion curve");
     motionCurveBtn.setFont(new Font("Dialog", Font.BOLD, 8));
     //    motionCurveBtn.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/motionCurve.gif")));
-    motionCurveBtn.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/insert-chart-line.png")));
+    //    motionCurveBtn.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/insert-chart-line.png")));
+    motionCurveBtn.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/curve-money2.png")));
 
     add(motionCurveBtn, BorderLayout.WEST);
 

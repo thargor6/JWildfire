@@ -92,7 +92,7 @@ public class GradientOverlay {
   private void drawMarker(Graphics2D g, RGBPalette pGradient, int pMarkerIdx) {
     g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-    g.setColor(parent.darkTriangles ? FlamePanel.XFORM_COLOR_DARK : FlamePanel.XFORM_COLOR);
+    g.setColor(FlamePanel.XFORM_COLOR);
     int mPos = markerPos[pMarkerIdx];
     int x = xPos[mPos] + (xPos[mPos + 1] - xPos[mPos]) / 2;
     if (x >= xMin && x <= xMax) {
@@ -121,7 +121,7 @@ public class GradientOverlay {
   }
 
   private void drawGradient(Graphics2D g, RGBPalette pGradient) {
-    g.setColor(parent.darkTriangles ? FlamePanel.XFORM_COLOR_DARK : FlamePanel.XFORM_COLOR);
+    g.setColor(FlamePanel.XFORM_COLOR);
     g.drawRect(xMin - 1, yMin - 1, xMax - xMin + 1, yMax - yMin + 2);
     for (int i = 0; i < GRADIENT_SIZE; i++) {
       int cxMin = xPos[i], cxMax = xPos[i + 1] - 1;

@@ -28,7 +28,6 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
-import java.math.BigDecimal;
 
 import org.jwildfire.base.Prefs;
 import org.jwildfire.base.Tools;
@@ -51,16 +50,16 @@ public class FlamePanel extends ImagePanel {
   private final static int BORDER = 20;
   public static final Color XFORM_COLOR = new Color(217, 219, 223);
   private static final Color XFORM_POST_COLOR = new Color(255, 219, 160);
-  public static final Color XFORM_COLOR_DARK = new Color(17, 19, 23);
-  private static final Color XFORM_POST_COLOR_DARK = new Color(55, 19, 60);
   private static final Color BACKGROUND_COLOR = new Color(60, 60, 60);
-  private static final Color VARIATION_COLOR = new Color(187, 189, 193);
+  private static final Color VARIATION_COLOR = new Color(245, 205, 16);
   private static final Color SHADOW_COLOR = new Color(32, 32, 32);
 
   private static BasicStroke SELECTED_LINE_NEW = new BasicStroke(2.0f);
   private static BasicStroke NORMAL_CIRCLE_LINE = new BasicStroke(1.0f);
   private static BasicStroke SELECTED_CIRCLE_LINE = new BasicStroke(2.0f);
-  private static BasicStroke NORMAL_LINE = new BasicStroke(2.0f);
+
+  private static BasicStroke GRID_LINE = new BasicStroke(1.0f);
+  private static BasicStroke GRID_LINE_ZERO = new BasicStroke(1.6f);
   private static BasicStroke NORMAL_LINE_NEW = new BasicStroke(2.0f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[] { 10, 4 }, 0);
   private static final Color XFORM_GRID_COLOR = new Color(140, 140, 120);
   private static final Color XFORM_GRID_COLOR_ZERO = new Color(255, 255, 160);
@@ -79,7 +78,6 @@ public class FlamePanel extends ImagePanel {
   private FlameHolder flameHolder;
   private LayerHolder layerHolder;
 
-  boolean darkTriangles = false;
   private boolean withImage = true;
   private int imageBrightness = 100;
   private boolean withShadow = true;
@@ -293,29 +291,38 @@ public class FlamePanel extends ImagePanel {
 
     triangleViewXScale = (double) (width - 2 * BORDER) / (viewXMax - viewXMin);
     triangleViewYScale = (double) (height - 2 * BORDER) / (viewYMin - viewYMax);
+
+    if (fabs(triangleViewXScale) < fabs(triangleViewYScale)) {
+      triangleViewYScale = -triangleViewXScale;
+    }
+    else {
+      triangleViewXScale = -triangleViewYScale;
+    }
+
     triangleViewXTrans = viewXMin * triangleViewXScale - viewAreaLeft;
     triangleViewYTrans = viewYMin * triangleViewYScale - viewAreaBottom;
-    triangleViewXScale /= renderAspect;
   }
 
-  private static class TickSpec {
+  private class TickSpec {
     private final double tmin;
     private final double tmax;
     private final double tstep;
 
     public TickSpec(double pMin, double pMax, int pMaxCount) {
-      double rawTickStep = (pMax - pMin) / (pMaxCount - 1);
-      BigDecimal bd = new BigDecimal(rawTickStep);
-      BigDecimal rounded = bd.setScale(1, BigDecimal.ROUND_HALF_EVEN);
+      //      double rawTickStep = (pMax - pMin) / (pMaxCount - 1);
+      //      BigDecimal bd = new BigDecimal(rawTickStep);
+      //      BigDecimal rounded = bd.setScale(1, BigDecimal.ROUND_HALF_EVEN);
       //      tstep = rounded.doubleValue();
-      tstep = 0.5;
+
+      // for now we use fixed tickstep, so that the user always knows which distance holds for two lines, at whatever zoom-level
+      tstep = prefs.getTinaEditorGridSize() > EPSILON ? prefs.getTinaEditorGridSize() : 0.5;
 
       if (pMin < 0) {
-        int n = (int) fabs(pMin / tstep);
+        int n = (int) Math.round(fabs(pMin / tstep));
         tmin = -n * tstep;
       }
       else if (pMin > 0) {
-        int n = (int) (pMin / tstep);
+        int n = (int) Math.round(pMin / tstep);
         tmin = n * tstep;
       }
       else {
@@ -323,11 +330,11 @@ public class FlamePanel extends ImagePanel {
       }
 
       if (pMax < 0) {
-        int n = (int) fabs(pMax / tstep) + 1;
+        int n = (int) Math.round(fabs(pMax / tstep)) + 1;
         tmax = -n * tstep;
       }
       else if (pMax > 0) {
-        int n = (int) (pMax / tstep) + 1;
+        int n = (int) Math.round((pMax / tstep)) + 1;
         tmax = n * tstep;
       }
       else {
@@ -363,15 +370,16 @@ public class FlamePanel extends ImagePanel {
 
     Rectangle bounds = this.getImageBounds();
 
-    System.out.println(xmin + " " + xmax + " " + ymin + " " + ymax);
     {
       double x = xTicks.getTmin();
       while (x + EPSILON <= xTicks.getTmax()) {
         int vx = triangleXToView(x);
         if (fabs(x) < EPSILON) {
+          g.setStroke(GRID_LINE_ZERO);
           g.setColor(XFORM_GRID_COLOR_ZERO);
         }
         else {
+          g.setStroke(GRID_LINE);
           g.setColor(XFORM_GRID_COLOR);
         }
         g.drawLine(vx, bounds.y, vx, bounds.y + bounds.height - 1);
@@ -399,7 +407,7 @@ public class FlamePanel extends ImagePanel {
       Layer layer = layerHolder.getLayer();
       if (layer != null) {
         if (!withShadow) {
-          g.setColor(editPostTransform ? (darkTriangles ? XFORM_POST_COLOR_DARK : XFORM_POST_COLOR) : (darkTriangles ? XFORM_COLOR_DARK : XFORM_COLOR));
+          g.setColor(editPostTransform ? XFORM_POST_COLOR : XFORM_COLOR);
         }
 
         // draw the selected one at last
@@ -482,7 +490,7 @@ public class FlamePanel extends ImagePanel {
         }
 
         g.setColor(VARIATION_COLOR);
-        g.setStroke(NORMAL_LINE);
+        g.setStroke(GRID_LINE);
 
         for (int y = 0; y < ySteps - 1; y++) {
           for (int x = 0; x < xSteps - 1; x++) {
@@ -505,10 +513,15 @@ public class FlamePanel extends ImagePanel {
   }
 
   private void drawXForm(Graphics2D g, XForm pXForm, int pIndex, int pXFormCount, boolean pIsFinal, boolean pShadow, boolean pIsSelected) {
-    if (!pShadow && prefs.isTinaEditorWithColoredTransforms()) {
-      int row = pIsFinal ? pXFormCount + pIndex : pIndex;
-      int colorIdx = ((row + 1) % FlamePanel.XFORM_COLORS.length) - 1;
-      g.setColor(XFORM_COLORS[colorIdx]);
+    if (!pShadow) {
+      if (prefs.isTinaEditorWithColoredTransforms()) {
+        int row = pIsFinal ? pXFormCount + pIndex : pIndex;
+        int colorIdx = ((row + 1) % FlamePanel.XFORM_COLORS.length) - 1;
+        g.setColor(XFORM_COLORS[colorIdx]);
+      }
+      else {
+        g.setColor(pIsFinal ? XFORM_POST_COLOR : XFORM_COLOR);
+      }
     }
 
     Triangle triangle = new Triangle(pXForm);
@@ -542,7 +555,7 @@ public class FlamePanel extends ImagePanel {
           g.drawString(String.valueOf(label.charAt(i)), triangle.viewX[i] + (int) (offset * dx), triangle.viewY[i] + (int) (offset * dy));
         }
       }
-      {
+      if (prefs.isTinaEditorShowTransformNumbers()) {
         g.setStroke(pIsSelected ? SELECTED_CIRCLE_LINE : NORMAL_CIRCLE_LINE);
         int radius = 24;
         g.drawOval(cx - radius / 2, cy - radius / 2, radius, radius);
@@ -1011,10 +1024,6 @@ public class FlamePanel extends ImagePanel {
     fineMovement = pFineMovement;
   }
 
-  public void setDarkTriangles(boolean darkTriangles) {
-    this.darkTriangles = darkTriangles;
-  }
-
   public void setAllowScaleX(boolean allowScaleX) {
     this.allowScaleX = allowScaleX;
   }
@@ -1157,7 +1166,6 @@ public class FlamePanel extends ImagePanel {
 
   public void importOptions(FlamePanel pFlamePanel) {
     if (pFlamePanel != null) {
-      darkTriangles = pFlamePanel.darkTriangles;
       withImage = pFlamePanel.withImage;
       imageBrightness = pFlamePanel.imageBrightness;
       withTriangles = pFlamePanel.withTriangles;

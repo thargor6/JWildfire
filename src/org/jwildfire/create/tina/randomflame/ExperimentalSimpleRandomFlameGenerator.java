@@ -38,7 +38,7 @@ public class ExperimentalSimpleRandomFlameGenerator extends
       "cloverleaf_wf", "lazyTravis", "kaleidoscope", "eclipse", "hemisphere", "flipy", "phoenix_julia",
       "popcorn2", "sec", "lazysusan", "sin", "separation", "bi_linear", "hexnix3D", "popcorn2_3D",
       "post_mirror_wf", "heart_wf", "mcarpet", "mandelbrot", "cannabiscurve_wf", "colormap_wf", "juliac",
-      "rose_wf", "edisc", "blocky", "octagon", "waves2", "twintrian", "coth", "super_shape", "post_colormap_wf", "waves2_3D",
+      "rose_wf", "edisc", "blocky", "octagon", "murl", "waves2", "twintrian", "coth", "super_shape", "post_colormap_wf", "waves2_3D",
       "auger", "pre_wave3D_wf", "hexes", "dc_hexes_wf", "barycentroid", "spirograph", "truchet", "epispiral", "waves4_wf",
       "glynnSim2", "tanh", "bipolar", "cot", "horseshoe", "target", "wedge", "unpolar", "pre_boarders2",
       "modulus", "mobius", "bubble2", "bwraps7", "colorscale_wf", "truchet", "collideoscope", "xheart",
