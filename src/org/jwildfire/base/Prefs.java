@@ -139,12 +139,18 @@ public class Prefs extends ManagedObject {
   @Property(description = "Automatically save a flame-copy when a rendered image is saved", category = PropertyCategory.TINA)
   private boolean tinaSaveFlamesWhenImageIsSaved = false;
 
-  // TODO
+  // TODO load/save
   @Property(description = "Used a colored display for affine transforms", category = PropertyCategory.TINA)
   private boolean tinaEditorWithColoredTransforms = true;
-  // TODO
+  // TODO load/save
   @Property(description = "Turn on antialiasing for drawing lines and triangle-symbols in the editor", category = PropertyCategory.TINA)
   private boolean tinaEditorWithAntialiasing = true;
+  // TODO load/save
+  @Property(description = "Display transform-numbers inside of the triangle-symbols in the editor", category = PropertyCategory.TINA)
+  private boolean tinaEditorShowTransformNumbers = true;
+  // TODO load/save
+  @Property(description = "Grid size (distance between two grid-lines) in the editor", category = PropertyCategory.TINA)
+  private double tinaEditorGridSize = 0.5;
 
   @Property(description = "Sunflow scene file drawer", category = PropertyCategory.SUNFLOW)
   private String sunflowScenePath = null;
@@ -457,6 +463,8 @@ public class Prefs extends ManagedObject {
     tinaDisableWikimediaCommonsWarning = pSrc.tinaDisableWikimediaCommonsWarning;
     tinaEditorWithColoredTransforms = pSrc.tinaEditorWithColoredTransforms;
     tinaEditorWithAntialiasing = pSrc.tinaEditorWithAntialiasing;
+    tinaEditorGridSize = pSrc.tinaEditorGridSize;
+    tinaEditorShowTransformNumbers = pSrc.tinaEditorShowTransformNumbers;
 
     tinaRenderMovieFrames = pSrc.tinaRenderMovieFrames;
     tinaRenderPreviewQuality = pSrc.tinaRenderPreviewQuality;
@@ -755,6 +763,22 @@ public class Prefs extends ManagedObject {
 
   public void setTinaEditorWithAntialiasing(boolean pTinaEditorWithAntialiasing) {
     tinaEditorWithAntialiasing = pTinaEditorWithAntialiasing;
+  }
+
+  public double getTinaEditorGridSize() {
+    return tinaEditorGridSize;
+  }
+
+  public void setTinaEditorGridSize(double pTinaEditorGridSize) {
+    tinaEditorGridSize = pTinaEditorGridSize;
+  }
+
+  public boolean isTinaEditorShowTransformNumbers() {
+    return tinaEditorShowTransformNumbers;
+  }
+
+  public void setTinaEditorShowTransformNumbers(boolean pTinaEditorShowTransformNumbers) {
+    tinaEditorShowTransformNumbers = pTinaEditorShowTransformNumbers;
   }
 
 }

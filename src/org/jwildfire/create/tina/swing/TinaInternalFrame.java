@@ -89,6 +89,7 @@ import org.jwildfire.create.tina.base.Stereo3dMode;
 import org.jwildfire.create.tina.base.Stereo3dPreview;
 import org.jwildfire.create.tina.dance.DancingFractalsController;
 import org.jwildfire.create.tina.randomflame.RandomFlameGeneratorList;
+import org.jwildfire.create.tina.randomgradient.RandomGradientGeneratorList;
 import org.jwildfire.create.tina.randommovie.RandomMovieGeneratorList;
 import org.jwildfire.create.tina.randomsymmetry.RandomSymmetryGeneratorList;
 import org.jwildfire.create.tina.render.filter.FilterKernelType;
@@ -680,7 +681,6 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaNorthPanel.add(getPanel_7());
       tinaNorthPanel.add(getPanel_17());
       tinaNorthPanel.add(getNewFlameButton());
-      tinaNorthPanel.add(getPanel_18());
       tinaNorthPanel.add(getPanel_6());
       tinaNorthPanel.add(getPanel_13());
       tinaNorthPanel.add(getPanel_19());
@@ -1312,7 +1312,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaSouthTabbedPane.addTab("Gradient ", new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/applications-graphics-2.png")), getTinaPalettePanel(), null);
       tinaSouthTabbedPane.addTab("Stereo3d rendering ", new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/layer-novisible.png")), getPanel_82(), null);
       tinaSouthTabbedPane.addTab("Post symmetry", null, getPanel_34(), null);
-      tinaSouthTabbedPane.addTab("Layerz ", new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/layers.png")), getPanel_74(), null);
+      tinaSouthTabbedPane.addTab("Layerz ", new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/emblem-photos.png")), getPanel_74(), null);
 
       tinaSouthTabbedPane.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
@@ -1703,7 +1703,7 @@ public class TinaInternalFrame extends JInternalFrame {
 
       tinaSaturationREd = new JWFNumberField();
       tinaSaturationREd.setHasMaxValue(true);
-      tinaSaturationREd.setValueStep(0.05);
+      tinaSaturationREd.setValueStep(0.01);
       tinaSaturationREd.setText("");
       tinaSaturationREd.setSize(new Dimension(100, 24));
       tinaSaturationREd.setPreferredSize(new Dimension(100, 24));
@@ -2080,7 +2080,7 @@ public class TinaInternalFrame extends JInternalFrame {
     if (tinaRenderFlameButton == null) {
       tinaRenderFlameButton = new JButton();
       tinaRenderFlameButton.setIconTextGap(0);
-      tinaRenderFlameButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/thumbnail.png")));
+      tinaRenderFlameButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/emblem-default.png")));
       tinaRenderFlameButton.setMnemonic(KeyEvent.VK_R);
       tinaRenderFlameButton.setFont(new Font("Dialog", Font.BOLD, 9));
       tinaRenderFlameButton.setToolTipText("Render image");
@@ -3125,7 +3125,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JTextField getTinaPaletteRandomPointsREd() {
     if (tinaPaletteRandomPointsREd == null) {
       tinaPaletteRandomPointsREd = new JTextField();
-      tinaPaletteRandomPointsREd.setBounds(285, 5, 55, 22);
+      tinaPaletteRandomPointsREd.setBounds(259, 29, 80, 22);
       tinaPaletteRandomPointsREd.setPreferredSize(new Dimension(55, 22));
       tinaPaletteRandomPointsREd.setText("11");
       tinaPaletteRandomPointsREd.setFont(new Font("Dialog", Font.PLAIN, 10));
@@ -3291,19 +3291,37 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaGrabPaletteFromImageButton.setFont(new Font("Dialog", Font.BOLD, 10));
       tinaPaletteCreatePanel.add(tinaGrabPaletteFromImageButton);
       tinaPaletteRandomPointsLbl = new JLabel();
-      tinaPaletteRandomPointsLbl.setBounds(200, 5, 80, 22);
+      tinaPaletteRandomPointsLbl.setBounds(163, 34, 100, 14);
       tinaPaletteCreatePanel.add(tinaPaletteRandomPointsLbl);
       tinaPaletteRandomPointsLbl.setText("Random points");
       tinaPaletteRandomPointsLbl.setFont(new Font("Dialog", Font.BOLD, 10));
-      tinaPaletteRandomPointsLbl.setPreferredSize(new Dimension(80, 22));
+      tinaPaletteRandomPointsLbl.setPreferredSize(new Dimension(100, 22));
       tinaPaletteCreatePanel.add(getTinaPaletteRandomPointsREd());
       tinaPaletteCreatePanel.add(getCreatePaletteScrollPane());
 
       tinaPaletteFadeColorsCBx = new JCheckBox("Fade colors");
       tinaPaletteFadeColorsCBx.setSelected(true);
       tinaPaletteFadeColorsCBx.setToolTipText("Create a gradient were each key-frame-color is faded into the next one");
-      tinaPaletteFadeColorsCBx.setBounds(200, 31, 140, 18);
+      tinaPaletteFadeColorsCBx.setBounds(199, 56, 140, 18);
       tinaPaletteCreatePanel.add(tinaPaletteFadeColorsCBx);
+
+      JLabel lblGradientGenerator = new JLabel();
+      lblGradientGenerator.setText("Gradient generator");
+      lblGradientGenerator.setPreferredSize(new Dimension(100, 22));
+      lblGradientGenerator.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblGradientGenerator.setAlignmentX(1.0f);
+      lblGradientGenerator.setBounds(163, 8, 100, 14);
+      tinaPaletteCreatePanel.add(lblGradientGenerator);
+
+      tinaPaletteRandomGeneratorCmb = new JComboBox();
+      tinaPaletteRandomGeneratorCmb.setToolTipText("Random-Symmetry-Geneator");
+      tinaPaletteRandomGeneratorCmb.setPreferredSize(new Dimension(50, 24));
+      tinaPaletteRandomGeneratorCmb.setMinimumSize(new Dimension(100, 24));
+      tinaPaletteRandomGeneratorCmb.setMaximumSize(new Dimension(32767, 24));
+      tinaPaletteRandomGeneratorCmb.setMaximumRowCount(32);
+      tinaPaletteRandomGeneratorCmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      tinaPaletteRandomGeneratorCmb.setBounds(259, 3, 80, 24);
+      tinaPaletteCreatePanel.add(tinaPaletteRandomGeneratorCmb);
     }
     return tinaPaletteCreatePanel;
   }
@@ -3987,6 +4005,8 @@ public class TinaInternalFrame extends JInternalFrame {
     initStereo3dPreviewCmb(getStereo3dPreviewCmb());
     initStereo3dColorCmb(getStereo3dLeftEyeColorCmb(), Stereo3dColor.RED);
     initStereo3dColorCmb(getStereo3dRightEyeColorCmb(), Stereo3dColor.CYAN);
+    initRandomGradientCmb(getRandomGradientCmb());
+    initRandomGradientCmb(getTinaPaletteRandomGeneratorCmb());
 
     TinaControllerParameter params = new TinaControllerParameter();
 
@@ -4257,6 +4277,14 @@ public class TinaInternalFrame extends JInternalFrame {
       pCmb.addItem(name);
     }
     pCmb.setSelectedItem(RandomSymmetryGeneratorList.DEFAULT_GENERATOR_NAME);
+  }
+
+  private void initRandomGradientCmb(JComboBox pCmb) {
+    pCmb.removeAllItems();
+    for (String name : RandomGradientGeneratorList.getNameList()) {
+      pCmb.addItem(name);
+    }
+    pCmb.setSelectedItem(RandomGradientGeneratorList.DEFAULT_GENERATOR_NAME);
   }
 
   private void initPostSymmetryTypeCmb(JComboBox pCmb) {
@@ -6713,8 +6741,8 @@ public class TinaInternalFrame extends JInternalFrame {
       randomStyleCmb = new JComboBox();
       randomStyleCmb.setToolTipText("Random-flame-generator");
       randomStyleCmb.setMaximumSize(new Dimension(32767, 24));
-      randomStyleCmb.setMinimumSize(new Dimension(100, 24));
-      randomStyleCmb.setPreferredSize(new Dimension(100, 24));
+      randomStyleCmb.setMinimumSize(new Dimension(110, 24));
+      randomStyleCmb.setPreferredSize(new Dimension(110, 24));
       randomStyleCmb.setFont(new Font("Dialog", Font.BOLD, 10));
       randomStyleCmb.setMaximumRowCount(32);
     }
@@ -9186,7 +9214,7 @@ public class TinaInternalFrame extends JInternalFrame {
       rootTabbedPane.setFont(new Font("Dialog", Font.BOLD, 10));
       rootTabbedPane.setEnabled(true);
       rootTabbedPane.addTab("Flame Editor ", new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/brick.png")), getRootPanel(), null);
-      rootTabbedPane.addTab("Interactive Renderer ", new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/thumbnail.png")), getInteractiveRenderPanel(), null);
+      rootTabbedPane.addTab("Interactive Renderer ", new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/emblem-default.png")), getInteractiveRenderPanel(), null);
       rootTabbedPane.addTab("MutaGen ", new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/sitemap.png")), getPanel_16(), null);
       rootTabbedPane.addTab("Flame browser ", new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/application-view-tile.png")), getPanel_72(), null);
       rootTabbedPane.addTab("Easy Movie Maker ", new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/film.png")), getTinaSWFAnimatorPanel(), null);
@@ -9284,7 +9312,6 @@ public class TinaInternalFrame extends JInternalFrame {
   private JPanel panel_13;
   private JPanel panel_15;
   private JPanel panel_17;
-  private JPanel panel_18;
   private JPanel panel_19;
   private JPanel tinaPaletteTransformPanel;
   private JWFNumberField tinaPaletteSwapRGBREd;
@@ -9679,6 +9706,8 @@ public class TinaInternalFrame extends JInternalFrame {
   private JSlider editorFractalBrightnessSlider;
   private JToggleButton toggleDrawGridButton;
   private JToggleButton mouseTransformEditTriangleViewButton;
+  private JComboBox randomGradientCmb;
+  private JComboBox tinaPaletteRandomGeneratorCmb;
 
   /**
    * This method initializes renderBatchJobsScrollPane	
@@ -12092,6 +12121,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JPanel getPanel_7() {
     if (panel_7 == null) {
       panel_7 = new JPanel();
+      panel_7.setPreferredSize(new Dimension(200, 10));
       panel_7.setLayout(new BoxLayout(panel_7, BoxLayout.Y_AXIS));
       panel_7.add(getPanel_78());
       panel_7.add(getPanel_81());
@@ -12162,20 +12192,15 @@ public class TinaInternalFrame extends JInternalFrame {
   private JPanel getPanel_17() {
     if (panel_17 == null) {
       panel_17 = new JPanel();
+      panel_17.setPreferredSize(new Dimension(4, 10));
     }
     return panel_17;
-  }
-
-  private JPanel getPanel_18() {
-    if (panel_18 == null) {
-      panel_18 = new JPanel();
-    }
-    return panel_18;
   }
 
   private JPanel getPanel_19() {
     if (panel_19 == null) {
       panel_19 = new JPanel();
+      panel_19.setPreferredSize(new Dimension(6, 10));
     }
     return panel_19;
   }
@@ -16465,14 +16490,14 @@ public class TinaInternalFrame extends JInternalFrame {
   private JPanel getPanel_78() {
     if (panel_78 == null) {
       panel_78 = new JPanel();
-      panel_78.setPreferredSize(new Dimension(180, 24));
+      panel_78.setPreferredSize(new Dimension(190, 24));
       panel_78.setLayout(new BoxLayout(panel_78, BoxLayout.X_AXIS));
 
       randomStyleLbl = new JLabel();
       panel_78.add(randomStyleLbl);
       randomStyleLbl.setAlignmentX(Component.RIGHT_ALIGNMENT);
-      randomStyleLbl.setPreferredSize(new Dimension(80, 22));
-      randomStyleLbl.setText("  Rnd Generator");
+      randomStyleLbl.setPreferredSize(new Dimension(100, 22));
+      randomStyleLbl.setText("  Random Generator");
       randomStyleLbl.setFont(new Font("Dialog", Font.BOLD, 10));
       panel_78.add(getRandomStyleCmb());
     }
@@ -16486,6 +16511,15 @@ public class TinaInternalFrame extends JInternalFrame {
       panel_81.setLayout(new BoxLayout(panel_81, BoxLayout.X_AXIS));
       panel_81.add(getLblSymmetry());
       panel_81.add(getRandomSymmetryCmb());
+
+      randomGradientCmb = new JComboBox();
+      randomGradientCmb.setToolTipText("Random-Symmetry-Geneator");
+      randomGradientCmb.setPreferredSize(new Dimension(50, 24));
+      randomGradientCmb.setMinimumSize(new Dimension(100, 24));
+      randomGradientCmb.setMaximumSize(new Dimension(32767, 24));
+      randomGradientCmb.setMaximumRowCount(32);
+      randomGradientCmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      panel_81.add(randomGradientCmb);
     }
     return panel_81;
   }
@@ -16493,8 +16527,8 @@ public class TinaInternalFrame extends JInternalFrame {
   private JLabel getLblSymmetry() {
     if (lblSymmetry == null) {
       lblSymmetry = new JLabel();
-      lblSymmetry.setText("  Rnd Symmetry");
-      lblSymmetry.setPreferredSize(new Dimension(80, 22));
+      lblSymmetry.setText("  Symmetry/Gradient");
+      lblSymmetry.setPreferredSize(new Dimension(100, 22));
       lblSymmetry.setFont(new Font("Dialog", Font.BOLD, 10));
       lblSymmetry.setAlignmentX(1.0f);
     }
@@ -16505,7 +16539,7 @@ public class TinaInternalFrame extends JInternalFrame {
     if (randomSymmetryCmb == null) {
       randomSymmetryCmb = new JComboBox();
       randomSymmetryCmb.setToolTipText("Random-Symmetry-Geneator");
-      randomSymmetryCmb.setPreferredSize(new Dimension(100, 24));
+      randomSymmetryCmb.setPreferredSize(new Dimension(50, 24));
       randomSymmetryCmb.setMinimumSize(new Dimension(100, 24));
       randomSymmetryCmb.setMaximumSize(new Dimension(32767, 24));
       randomSymmetryCmb.setMaximumRowCount(32);
@@ -17897,7 +17931,7 @@ public class TinaInternalFrame extends JInternalFrame {
       btnRender.setPreferredSize(new Dimension(82, 28));
       btnRender.setMnemonic(KeyEvent.VK_R);
       btnRender.setFont(new Font("Dialog", Font.BOLD, 9));
-      btnRender.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/thumbnail.png")));
+      btnRender.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/emblem-default.png")));
     }
     return btnRender;
   }
@@ -17984,6 +18018,14 @@ public class TinaInternalFrame extends JInternalFrame {
 
   public JToggleButton getMouseTransformEditTriangleViewButton() {
     return mouseTransformEditTriangleViewButton;
+  }
+
+  public JComboBox getRandomGradientCmb() {
+    return randomGradientCmb;
+  }
+
+  public JComboBox getTinaPaletteRandomGeneratorCmb() {
+    return tinaPaletteRandomGeneratorCmb;
   }
 } //  @jve:decl-index=0:visual-constraint="10,10"
 
