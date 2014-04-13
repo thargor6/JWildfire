@@ -364,6 +364,7 @@ public class VariationFuncList {
     registerVariationFunc(DCCrackleWFFunc.class);
     registerVariationFunc(DCHexesWFFunc.class);
     registerVariationFunc(MurlFunc.class);
+    registerVariationFunc(Murl2Func.class);
   }
 
   private static void registerVariationFunc(
