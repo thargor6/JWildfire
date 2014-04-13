@@ -666,7 +666,7 @@ public class TinaInternalFrame extends JInternalFrame {
       randomBatchHighQualityButton.setToolTipText("Create a random batch in higher quality (may be much slower)");
       randomBatchHighQualityButton.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
-          if (tinaController.createRandomBatch(-1, (String) randomStyleCmb.getSelectedItem(), (String) randomSymmetryCmb.getSelectedItem(), RandomBatchQuality.HIGH)) {
+          if (tinaController.createRandomBatch(-1, (String) randomStyleCmb.getSelectedItem(), (String) randomSymmetryCmb.getSelectedItem(), (String) randomGradientCmb.getSelectedItem(), RandomBatchQuality.HIGH)) {
             tinaController.importFromRandomBatch(0);
           }
         }
@@ -679,11 +679,9 @@ public class TinaInternalFrame extends JInternalFrame {
       randomBatchHighQualityButton.setFont(new Font("Dialog", Font.BOLD, 10));
       tinaNorthPanel.add(randomBatchHighQualityButton);
       tinaNorthPanel.add(getPanel_7());
-      tinaNorthPanel.add(getPanel_17());
       tinaNorthPanel.add(getNewFlameButton());
       tinaNorthPanel.add(getPanel_6());
       tinaNorthPanel.add(getPanel_13());
-      tinaNorthPanel.add(getPanel_19());
       tinaNorthPanel.add(getRenderMainButton());
       tinaNorthPanel.add(getPanel_15());
 
@@ -4101,7 +4099,7 @@ public class TinaInternalFrame extends JInternalFrame {
         getStereo3dInterpolatedImageCountSlider(), getStereo3dPreviewCmb(), getStereo3dFocalOffsetREd(), getStereo3dFocalOffsetSlider(),
         getStereo3dSwapSidesCBx(), getTinaCameraCamPosXREd(), getTinaCameraCamPosXSlider(), getTinaCameraCamPosYREd(), getTinaCameraCamPosYSlider(),
         getTinaCameraCamPosZREd(), getTinaCameraCamPosZSlider(), getTinaSaturationREd(), getTinaSaturationSlider(), getToggleDrawGridButton(),
-        getEditorFractalBrightnessSlider(), getMouseTransformEditTriangleViewButton());
+        getEditorFractalBrightnessSlider(), getMouseTransformEditTriangleViewButton(), getTinaPaletteRandomGeneratorCmb());
 
     tinaController = new TinaController(params);
 
@@ -4864,7 +4862,7 @@ public class TinaInternalFrame extends JInternalFrame {
       randomBatchButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/roll.png")));
       randomBatchButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
-          if (tinaController.createRandomBatch(-1, (String) randomStyleCmb.getSelectedItem(), (String) randomSymmetryCmb.getSelectedItem(), RandomBatchQuality.NORMAL)) {
+          if (tinaController.createRandomBatch(-1, (String) randomStyleCmb.getSelectedItem(), (String) randomSymmetryCmb.getSelectedItem(), (String) randomGradientCmb.getSelectedItem(), RandomBatchQuality.NORMAL)) {
             tinaController.importFromRandomBatch(0);
           }
         }
@@ -9311,8 +9309,6 @@ public class TinaInternalFrame extends JInternalFrame {
   private JPanel panel_7;
   private JPanel panel_13;
   private JPanel panel_15;
-  private JPanel panel_17;
-  private JPanel panel_19;
   private JPanel tinaPaletteTransformPanel;
   private JWFNumberField tinaPaletteSwapRGBREd;
   private JSlider tinaPaletteSwapRGBSlider;
@@ -12121,6 +12117,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JPanel getPanel_7() {
     if (panel_7 == null) {
       panel_7 = new JPanel();
+      panel_7.setBorder(new EmptyBorder(0, 0, 0, 8));
       panel_7.setPreferredSize(new Dimension(200, 10));
       panel_7.setLayout(new BoxLayout(panel_7, BoxLayout.Y_AXIS));
       panel_7.add(getPanel_78());
@@ -12132,6 +12129,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JPanel getPanel_13() {
     if (panel_13 == null) {
       panel_13 = new JPanel();
+      panel_13.setBorder(new EmptyBorder(0, 0, 0, 8));
       panel_13.setLayout(new BoxLayout(panel_13, BoxLayout.Y_AXIS));
       panel_13.add(getSaveFlameToClipboardButton());
       panel_13.add(getPanel_66());
@@ -12187,22 +12185,6 @@ public class TinaInternalFrame extends JInternalFrame {
       panel_2.add(getQualityProfileBtn());
     }
     return panel_15;
-  }
-
-  private JPanel getPanel_17() {
-    if (panel_17 == null) {
-      panel_17 = new JPanel();
-      panel_17.setPreferredSize(new Dimension(4, 10));
-    }
-    return panel_17;
-  }
-
-  private JPanel getPanel_19() {
-    if (panel_19 == null) {
-      panel_19 = new JPanel();
-      panel_19.setPreferredSize(new Dimension(6, 10));
-    }
-    return panel_19;
   }
 
   private JPanel getTinaPaletteTransformPanel() {

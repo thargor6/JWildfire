@@ -21,6 +21,7 @@ import org.jwildfire.create.tina.animate.FlameMovie;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.randomflame.RandomFlameGenerator;
 import org.jwildfire.create.tina.randomflame.RandomFlameGeneratorSampler;
+import org.jwildfire.create.tina.randomgradient.RandomGradientGeneratorList;
 import org.jwildfire.create.tina.randomsymmetry.RandomSymmetryGeneratorList;
 import org.jwildfire.create.tina.swing.RandomBatchQuality;
 
@@ -42,7 +43,7 @@ public abstract class RandomMovieGenerator {
     final int IMG_HEIGHT = 60;
     int palettePoints = 3 + (int) (Math.random() * 68.0);
     boolean fadePaletteColors = Math.random() > 0.33;
-    RandomFlameGeneratorSampler sampler = new RandomFlameGeneratorSampler(IMG_WIDTH, IMG_HEIGHT, pPrefs, pRandGen, RandomSymmetryGeneratorList.NONE, palettePoints, fadePaletteColors, RandomBatchQuality.NORMAL);
+    RandomFlameGeneratorSampler sampler = new RandomFlameGeneratorSampler(IMG_WIDTH, IMG_HEIGHT, pPrefs, pRandGen, RandomSymmetryGeneratorList.NONE, RandomGradientGeneratorList.DEFAULT, palettePoints, fadePaletteColors, RandomBatchQuality.NORMAL);
     return sampler.createSample().getFlame();
   }
 }

@@ -19,7 +19,9 @@ package org.jwildfire.create.tina.randomflame;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.jwildfire.base.Prefs;
 import org.jwildfire.create.tina.base.Flame;
+import org.jwildfire.create.tina.randomgradient.RandomGradientGenerator;
 
 public class AllRandomFlameGenerator extends RandomFlameGenerator {
   private static List<RandomFlameGenerator> allGenerators;
@@ -73,8 +75,8 @@ public class AllRandomFlameGenerator extends RandomFlameGenerator {
   private static final String RANDGEN = "RANDGEN";
 
   @Override
-  public RandomFlameGeneratorState initState() {
-    RandomFlameGeneratorState state = super.initState();
+  public RandomFlameGeneratorState initState(Prefs pPrefs, RandomGradientGenerator pRandomGradientGenerator) {
+    RandomFlameGeneratorState state = super.initState(pPrefs, pRandomGradientGenerator);
     List<RandomFlameGenerator> generators = useSimpleGenerators ? simpleGenerators : allGenerators;
     RandomFlameGenerator generator = generators.get((int) (Math.random() * generators.size()));
     state.getParams().put(RANDGEN, generator);
@@ -84,7 +86,7 @@ public class AllRandomFlameGenerator extends RandomFlameGenerator {
   @Override
   protected Flame prepareFlame(RandomFlameGeneratorState pState) {
     RandomFlameGenerator generator = createRandGen(pState);
-    RandomFlameGeneratorState subState = generator.initState();
+    RandomFlameGeneratorState subState = generator.initState(pState.getPrefs(), pState.getGradientGenerator());
     Flame flame = generator.prepareFlame(subState);
     flame.setName(generator.getName() + " - " + flame.hashCode());
     return flame;

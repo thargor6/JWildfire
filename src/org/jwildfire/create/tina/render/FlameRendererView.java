@@ -82,15 +82,6 @@ public class FlameRendererView {
     cameraMatrix[0][2] = sin(yaw) * sin(pitch);
     cameraMatrix[1][2] = cos(yaw) * sin(pitch);
     cameraMatrix[2][2] = cos(pitch);
-    //    cameraMatrix[0][0] = cos(yaw);
-    //    cameraMatrix[1][0] = -sin(yaw);
-    //    cameraMatrix[2][0] = 0;
-    //    cameraMatrix[0][1] = cos(pitch) * sin(yaw);
-    //    cameraMatrix[1][1] = cos(pitch) * cos(yaw);
-    //    cameraMatrix[2][1] = -sin(pitch);
-    //    cameraMatrix[0][2] = sin(pitch) * sin(yaw);
-    //    cameraMatrix[1][2] = sin(pitch) * cos(yaw);
-    //    cameraMatrix[2][2] = cos(pitch);
     useDOF = flame.isDOFActive();
     doProject3D = flame.is3dProjectionRequired();
     legacyDOF = !flame.isNewCamDOF();

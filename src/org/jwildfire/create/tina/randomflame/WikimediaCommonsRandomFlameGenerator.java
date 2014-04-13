@@ -32,6 +32,7 @@ import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.palette.MedianCutQuantizer;
 import org.jwildfire.create.tina.palette.RGBPalette;
+import org.jwildfire.create.tina.randomgradient.RandomGradientGeneratorList;
 import org.jwildfire.create.tina.randomsymmetry.RandomSymmetryGeneratorList;
 import org.jwildfire.create.tina.swing.RandomBatchQuality;
 import org.jwildfire.create.tina.variation.AbstractColorMapWFFunc;
@@ -68,7 +69,7 @@ public class WikimediaCommonsRandomFlameGenerator extends RandomFlameGenerator {
     int palettePoints = 3 + (int) (Math.random() * 68.0);
     boolean fadePaletteColors = Math.random() > 0.33;
 
-    RandomFlameGeneratorSampler sampler = new RandomFlameGeneratorSampler(IMG_WIDTH, IMG_HEIGHT, prefs, generator.createRandomFlameGenerator(), RandomSymmetryGeneratorList.NONE, palettePoints, fadePaletteColors, RandomBatchQuality.LOW);
+    RandomFlameGeneratorSampler sampler = new RandomFlameGeneratorSampler(IMG_WIDTH, IMG_HEIGHT, prefs, generator.createRandomFlameGenerator(), RandomSymmetryGeneratorList.NONE, RandomGradientGeneratorList.DEFAULT, palettePoints, fadePaletteColors, RandomBatchQuality.LOW);
 
     Flame flame = sampler.createSample().getFlame();
 

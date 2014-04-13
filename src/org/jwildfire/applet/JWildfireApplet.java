@@ -26,6 +26,7 @@ import org.jwildfire.create.tina.io.FlameWriter;
 import org.jwildfire.create.tina.randomflame.AllRandomFlameGenerator;
 import org.jwildfire.create.tina.randomflame.RandomFlameGenerator;
 import org.jwildfire.create.tina.randomflame.RandomFlameGeneratorSampler;
+import org.jwildfire.create.tina.randomgradient.RandomGradientGeneratorList;
 import org.jwildfire.create.tina.randomsymmetry.RandomSymmetryGeneratorList;
 import org.jwildfire.create.tina.render.AbstractRenderThread;
 import org.jwildfire.create.tina.render.FlameRenderer;
@@ -167,12 +168,10 @@ public class JWildfireApplet extends JApplet implements IterationObserver {
   public void genRandomFlame(RandomBatchQuality pQuality) {
     final int IMG_WIDTH = 80;
     final int IMG_HEIGHT = 60;
-
-    //RandomFlameGenerator randGen = RandomFlameGeneratorList.getRandomFlameGeneratorInstance((String) randomStyleCmb.getSelectedItem(), true);
     RandomFlameGenerator randGen = new AllRandomFlameGenerator();
     int palettePoints = 3 + (int) (Math.random() * 21.0);
     boolean fadePaletteColors = Math.random() > 0.09;
-    RandomFlameGeneratorSampler sampler = new RandomFlameGeneratorSampler(IMG_WIDTH, IMG_HEIGHT, prefs, randGen, RandomSymmetryGeneratorList.SPARSE, palettePoints, fadePaletteColors, pQuality);
+    RandomFlameGeneratorSampler sampler = new RandomFlameGeneratorSampler(IMG_WIDTH, IMG_HEIGHT, prefs, randGen, RandomSymmetryGeneratorList.SPARSE, RandomGradientGeneratorList.DEFAULT, palettePoints, fadePaletteColors, pQuality);
     currFlame = sampler.createSample().getFlame();
   }
 

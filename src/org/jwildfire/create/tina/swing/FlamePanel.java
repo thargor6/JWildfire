@@ -848,10 +848,12 @@ public class FlamePanel extends ImagePanel {
           }
           case FOCUS: {
             Flame flame = flameHolder.getFlame();
-            double cosa = cos(M_PI * (flame.getCamRoll()) / 180.0);
-            double sina = sin(M_PI * (flame.getCamRoll()) / 180.0);
-            double rcX = dx * cosa - dy * sina;
-            double rcY = dy * cosa + dx * sina;
+            //            double cosa = cos(M_PI * (flame.getCamRoll()) / 180.0);
+            //            double sina = sin(M_PI * (flame.getCamRoll()) / 180.0);
+            //            double rcX = dx * cosa - dy * sina;
+            //            double rcY = dy * cosa + dx * sina;
+            double rcX = dx;
+            double rcY = dy;
             if (fineMovement) {
               rcX *= 0.1;
               rcY *= 0.1;

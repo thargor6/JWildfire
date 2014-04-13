@@ -128,6 +128,7 @@ public class TinaControllerData {
   public JWFNumberField shadingDistanceColorShiftREd;
   public JSlider shadingDistanceColorShiftSlider;
   public JTextField paletteRandomPointsREd;
+  public JComboBox paletteRandomGeneratorCmb;
   public JCheckBox paletteFadeColorsCBx;
   public JPanel paletteImgPanel;
   public JPanel colorChooserPaletteImgPanel;

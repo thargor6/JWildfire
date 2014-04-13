@@ -20,15 +20,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class RandomGradientGeneratorList {
-  public static final String DEFAULT_GENERATOR_NAME = new AllRandomGradientGenerator().getName();
   private static List<Class<? extends RandomGradientGenerator>> items = new ArrayList<Class<? extends RandomGradientGenerator>>();
   private static List<String> nameList = new ArrayList<String>();
+
+  public static final RandomGradientGenerator DEFAULT = new AllRandomGradientGenerator();
+  public static final String DEFAULT_GENERATOR_NAME = DEFAULT.getName();
 
   static {
     registerRandomGradientGenerator(AllRandomGradientGenerator.class);
     registerRandomGradientGenerator(StrongHueRandomGradientGenerator.class);
     registerRandomGradientGenerator(MonochromeRandomGradientGenerator.class);
     registerRandomGradientGenerator(SmoothRandomGradientGenerator.class);
+    registerRandomGradientGenerator(TwoColorsRandomGradientGenerator.class);
   }
 
   private static void registerRandomGradientGenerator(Class<? extends RandomGradientGenerator> pRandomMovieGenerator) {

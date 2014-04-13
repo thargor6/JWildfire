@@ -28,7 +28,7 @@ public abstract class RandomGradientGenerator {
 
   public abstract List<RGBColor> generateKeyFrames(int pKeyFrameCount);
 
-  public final RGBPalette generatePalette(List<RGBColor> pKeyFrames, boolean pFadeColors) {
+  public static final RGBPalette generatePalette(List<RGBColor> pKeyFrames, boolean pFadeColors) {
     RGBPalette res = new RGBPalette();
     if (pKeyFrames.size() == 1) {
       RGBColor c = pKeyFrames.get(0);

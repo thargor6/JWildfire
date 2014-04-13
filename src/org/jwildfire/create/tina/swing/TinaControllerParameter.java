@@ -92,6 +92,7 @@ public class TinaControllerParameter {
   public JSlider pGammaThresholdSlider;
   public JCheckBox pBGTransparencyCBx;
   public JTextField pPaletteRandomPointsREd;
+  public JComboBox paletteRandomGeneratorCmb;
   public JCheckBox paletteFadeColorsCBx;
   public JPanel pPaletteImgPanel;
   public JPanel pColorChooserPaletteImgPanel;
@@ -710,7 +711,8 @@ public class TinaControllerParameter {
       JWFNumberField pStereo3dFocalOffsetREd, JSlider pStereo3dFocalOffsetSlider, JCheckBox pStereo3dSwapSidesCBx,
       JWFNumberField pCamPosXREd, JSlider pCamPosXSlider, JWFNumberField pCamPosYREd, JSlider pCamPosYSlider,
       JWFNumberField pCamPosZREd, JSlider pCamPosZSlider, JWFNumberField pSaturationREd, JSlider pSaturationSlider,
-      JToggleButton pToggleDrawGridButton, JSlider pEditorFractalBrightnessSlider, JToggleButton pMouseTransformEditTriangleViewButton) {
+      JToggleButton pToggleDrawGridButton, JSlider pEditorFractalBrightnessSlider, JToggleButton pMouseTransformEditTriangleViewButton,
+      JComboBox pPaletteRandomGeneratorCmb) {
     this.pDancingFlamesLinkMotionBtn = pDancingFlamesLinkMotionBtn;
     this.pDancingFlamesUnlinkMotionBtn = pDancingFlamesUnlinkMotionBtn;
     this.pDancingFlamesCreateMotionsCmb = pDancingFlamesCreateMotionsCmb;
@@ -867,5 +869,6 @@ public class TinaControllerParameter {
     this.toggleDrawGridButton = pToggleDrawGridButton;
     this.editorFractalBrightnessSlider = pEditorFractalBrightnessSlider;
     this.mouseTransformEditTriangleViewButton = pMouseTransformEditTriangleViewButton;
+    this.paletteRandomGeneratorCmb = pPaletteRandomGeneratorCmb;
   }
 }

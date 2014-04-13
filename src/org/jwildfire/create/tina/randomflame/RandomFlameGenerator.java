@@ -18,13 +18,14 @@ package org.jwildfire.create.tina.randomflame;
 
 import org.jwildfire.base.Prefs;
 import org.jwildfire.create.tina.base.Flame;
+import org.jwildfire.create.tina.randomgradient.RandomGradientGenerator;
 
 public abstract class RandomFlameGenerator {
 
   protected abstract Flame prepareFlame(RandomFlameGeneratorState pState);
 
-  public RandomFlameGeneratorState initState() {
-    return new RandomFlameGeneratorState();
+  public RandomFlameGeneratorState initState(Prefs pPrefs, RandomGradientGenerator pRandomGradientGenerator) {
+    return new RandomFlameGeneratorState(pPrefs, pRandomGradientGenerator);
   }
 
   public abstract String getName();

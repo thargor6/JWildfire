@@ -19,11 +19,30 @@ package org.jwildfire.create.tina.randomflame;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.jwildfire.base.Prefs;
+import org.jwildfire.create.tina.randomgradient.RandomGradientGenerator;
+
 public class RandomFlameGeneratorState {
   private final Map<String, Object> params = new HashMap<String, Object>();
 
+  private final Prefs prefs;
+  private final RandomGradientGenerator gradientGenerator;
+
+  public RandomFlameGeneratorState(Prefs pPrefs, RandomGradientGenerator pGradientGenerator) {
+    prefs = pPrefs;
+    gradientGenerator = pGradientGenerator;
+  }
+
   public Map<String, Object> getParams() {
     return params;
+  }
+
+  public Prefs getPrefs() {
+    return prefs;
+  }
+
+  public RandomGradientGenerator getGradientGenerator() {
+    return gradientGenerator;
   }
 
 }

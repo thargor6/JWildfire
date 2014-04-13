@@ -60,6 +60,7 @@ import org.jwildfire.base.Tools;
 import org.jwildfire.base.WindowPrefs;
 import org.jwildfire.create.eden.swing.EDENInternalFrame;
 import org.jwildfire.create.tina.randomflame.RandomFlameGeneratorList;
+import org.jwildfire.create.tina.randomgradient.RandomGradientGeneratorList;
 import org.jwildfire.create.tina.randomsymmetry.RandomSymmetryGeneratorList;
 import org.jwildfire.create.tina.swing.RandomBatchQuality;
 import org.jwildfire.create.tina.swing.TinaController;
@@ -114,7 +115,7 @@ public class Desktop extends JApplet {
       TinaInternalFrame tinaFrame = (TinaInternalFrame) getTinaInternalFrame();
       tinaController = tinaFrame.createController(errorHandler, prefs);
       try {
-        tinaController.createRandomBatch(2, RandomFlameGeneratorList.DEFAULT_GENERATOR_NAME, RandomSymmetryGeneratorList.DEFAULT_GENERATOR_NAME, RandomBatchQuality.LOW);
+        tinaController.createRandomBatch(2, RandomFlameGeneratorList.DEFAULT_GENERATOR_NAME, RandomSymmetryGeneratorList.DEFAULT_GENERATOR_NAME, RandomGradientGeneratorList.DEFAULT_GENERATOR_NAME, RandomBatchQuality.LOW);
       }
       catch (Exception ex) {
         ex.printStackTrace();

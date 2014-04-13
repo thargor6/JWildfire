@@ -16,9 +16,11 @@
 */
 package org.jwildfire.create.tina.randomflame;
 
+import org.jwildfire.base.Prefs;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
+import org.jwildfire.create.tina.randomgradient.RandomGradientGenerator;
 import org.jwildfire.create.tina.variation.PostDCZTranslFunc;
 import org.jwildfire.create.tina.variation.VariationFunc;
 import org.jwildfire.create.tina.variation.VariationFuncList;
@@ -69,8 +71,8 @@ public abstract class AbstractExtrude3DRandomFlameGenerator extends RandomFlameG
   protected abstract RandomFlameGenerator selectRandGen();
 
   @Override
-  public RandomFlameGeneratorState initState() {
-    RandomFlameGeneratorState state = super.initState();
+  public RandomFlameGeneratorState initState(Prefs pPrefs, RandomGradientGenerator pRandomGradientGenerator) {
+    RandomFlameGeneratorState state = super.initState(pPrefs, pRandomGradientGenerator);
     RandomFlameGenerator generator = selectRandGen();
     state.getParams().put(RANDGEN, generator);
     return state;

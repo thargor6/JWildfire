@@ -93,12 +93,13 @@ import org.jwildfire.create.tina.palette.MedianCutQuantizer;
 import org.jwildfire.create.tina.palette.RGBColor;
 import org.jwildfire.create.tina.palette.RGBPalette;
 import org.jwildfire.create.tina.palette.RGBPaletteRenderer;
-import org.jwildfire.create.tina.palette.RandomRGBPaletteGenerator;
 import org.jwildfire.create.tina.randomflame.RandomFlameGenerator;
 import org.jwildfire.create.tina.randomflame.RandomFlameGeneratorList;
 import org.jwildfire.create.tina.randomflame.RandomFlameGeneratorSample;
 import org.jwildfire.create.tina.randomflame.RandomFlameGeneratorSampler;
 import org.jwildfire.create.tina.randomflame.WikimediaCommonsRandomFlameGenerator;
+import org.jwildfire.create.tina.randomgradient.RandomGradientGenerator;
+import org.jwildfire.create.tina.randomgradient.RandomGradientGeneratorList;
 import org.jwildfire.create.tina.randomsymmetry.RandomSymmetryGenerator;
 import org.jwildfire.create.tina.randomsymmetry.RandomSymmetryGeneratorList;
 import org.jwildfire.create.tina.render.DrawFocusPointFlameRenderer;
@@ -322,6 +323,7 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
     data.gammaThresholdSlider = parameterObject.pGammaThresholdSlider;
     data.bgTransparencyCBx = parameterObject.pBGTransparencyCBx;
     data.paletteRandomPointsREd = parameterObject.pPaletteRandomPointsREd;
+    data.paletteRandomGeneratorCmb = parameterObject.paletteRandomGeneratorCmb;
     data.paletteFadeColorsCBx = parameterObject.paletteFadeColorsCBx;
     data.paletteImgPanel = parameterObject.pPaletteImgPanel;
     data.colorChooserPaletteImgPanel = parameterObject.pColorChooserPaletteImgPanel;
@@ -1505,7 +1507,7 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
               break;
           }
           refreshPaletteColorsTable();
-          RGBPalette palette = new RandomRGBPaletteGenerator().generatePalette(data.paletteKeyFrames, data.paletteFadeColorsCBx.isSelected());
+          RGBPalette palette = RandomGradientGenerator.generatePalette(data.paletteKeyFrames, data.paletteFadeColorsCBx.isSelected());
           saveUndoPoint();
           getCurrLayer().setPalette(palette);
           refreshPaletteUI(palette);
@@ -1854,10 +1856,10 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
 
   public void randomPaletteButton_actionPerformed(ActionEvent e) {
     if (getCurrFlame() != null) {
-      RandomRGBPaletteGenerator generator = new RandomRGBPaletteGenerator();
-      data.paletteKeyFrames = generator.generateKeyFrames(Integer.parseInt(data.paletteRandomPointsREd.getText()));
+      RandomGradientGenerator gradientGen = RandomGradientGeneratorList.getRandomGradientGeneratorInstance((String) data.paletteRandomGeneratorCmb.getSelectedItem());
+      data.paletteKeyFrames = gradientGen.generateKeyFrames(Integer.parseInt(data.paletteRandomPointsREd.getText()));
       refreshPaletteColorsTable();
-      RGBPalette palette = new RandomRGBPaletteGenerator().generatePalette(data.paletteKeyFrames, data.paletteFadeColorsCBx.isSelected());
+      RGBPalette palette = RandomGradientGenerator.generatePalette(data.paletteKeyFrames, data.paletteFadeColorsCBx.isSelected());
       saveUndoPoint();
       getCurrLayer().setPalette(palette);
       refreshPaletteUI(palette);
@@ -2537,7 +2539,7 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
     data.randomBatchPanel.validate();
   }
 
-  public boolean createRandomBatch(int pCount, String pGeneratorname, String pSymmetryGeneratorname, RandomBatchQuality pQuality) {
+  public boolean createRandomBatch(int pCount, String pGeneratorname, String pSymmetryGeneratorname, String pGradientGeneratorname, RandomBatchQuality pQuality) {
     if (!confirmNewRandomBatch(pGeneratorname))
       return false;
     if (prefs.getTinaRandomBatchRefreshType() == RandomBatchRefreshType.CLEAR) {
@@ -2549,10 +2551,11 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
     mainProgressUpdater.initProgress(maxCount);
     RandomFlameGenerator randGen = RandomFlameGeneratorList.getRandomFlameGeneratorInstance(pGeneratorname, true);
     RandomSymmetryGenerator randSymmGen = RandomSymmetryGeneratorList.getRandomSymmetryGeneratorInstance(pSymmetryGeneratorname, true);
+    RandomGradientGenerator randGradientGen = RandomGradientGeneratorList.getRandomGradientGeneratorInstance(pGradientGeneratorname, true);
     for (int i = 0; i < maxCount; i++) {
       int palettePoints = 7 + (int) (Math.random() * 24.0);
       boolean fadePaletteColors = Math.random() > 0.06;
-      RandomFlameGeneratorSampler sampler = new RandomFlameGeneratorSampler(IMG_WIDTH / 2, IMG_HEIGHT / 2, prefs, randGen, randSymmGen, palettePoints, fadePaletteColors, pQuality);
+      RandomFlameGeneratorSampler sampler = new RandomFlameGeneratorSampler(IMG_WIDTH / 2, IMG_HEIGHT / 2, prefs, randGen, randSymmGen, randGradientGen, palettePoints, fadePaletteColors, pQuality);
       RandomFlameGeneratorSample sample = sampler.createSample();
       FlameThumbnail thumbnail;
       thumbnail = new FlameThumbnail(sample.getFlame(), null);
@@ -3032,13 +3035,11 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
     flame.setBGTransparency(prefs.isTinaDefaultBGTransparency());
     flame.setAntialiasAmount(prefs.getTinaDefaultAntialiasingAmount());
     flame.setAntialiasRadius(prefs.getTinaDefaultAntialiasingRadius());
-    RGBPalette palette = new RandomRGBPaletteGenerator().generatePalette(Integer.parseInt(data.paletteRandomPointsREd.getText()), data.paletteFadeColorsCBx.isSelected());
+    RandomGradientGenerator gradientGen = RandomGradientGeneratorList.getRandomGradientGeneratorInstance((String) data.paletteRandomGeneratorCmb.getSelectedItem());
+    RGBPalette palette = gradientGen.generatePalette(Integer.parseInt(data.paletteRandomPointsREd.getText()), data.paletteFadeColorsCBx.isSelected());
     flame.getFirstLayer().setPalette(palette);
     setCurrFlame(flame);
     undoManager.initUndoStack(getCurrFlame());
-    //    randomBatch.add(0, new FlameThumbnail(getCurrFlame(), null));
-    //    updateThumbnails();
-    //    refreshUI();
   }
 
   public void renderModeCmb_changed() {
@@ -4767,9 +4768,7 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
   public void addLayerBtn_clicked() {
     Flame flame = getCurrFlame();
     Layer layer = new Layer();
-    RandomRGBPaletteGenerator generator = new RandomRGBPaletteGenerator();
-    List<RGBColor> paletteKeyFrames = generator.generateKeyFrames(Integer.parseInt(data.paletteRandomPointsREd.getText()));
-    RGBPalette palette = new RandomRGBPaletteGenerator().generatePalette(paletteKeyFrames, data.paletteFadeColorsCBx.isSelected());
+    RGBPalette palette = RandomGradientGeneratorList.getRandomGradientGeneratorInstance((String) data.paletteRandomGeneratorCmb.getSelectedItem()).generatePalette(Integer.parseInt(data.paletteRandomPointsREd.getText()), data.paletteFadeColorsCBx.isSelected());
     layer.setPalette(palette);
     saveUndoPoint();
     flame.getLayers().add(layer);

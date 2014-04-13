@@ -29,6 +29,7 @@ public class AllRandomGradientGenerator extends RandomGradientGenerator {
     generators.add(new StrongHueRandomGradientGenerator());
     generators.add(new MonochromeRandomGradientGenerator());
     generators.add(new SmoothRandomGradientGenerator());
+    generators.add(new TwoColorsRandomGradientGenerator());
   }
 
   private RandomGradientGenerator createRandGen() {

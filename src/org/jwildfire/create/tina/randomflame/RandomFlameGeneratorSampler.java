@@ -21,7 +21,7 @@ import static org.jwildfire.base.mathlib.MathLib.fabs;
 import org.jwildfire.base.Prefs;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.palette.RGBPalette;
-import org.jwildfire.create.tina.palette.RandomRGBPaletteGenerator;
+import org.jwildfire.create.tina.randomgradient.RandomGradientGenerator;
 import org.jwildfire.create.tina.randomsymmetry.RandomSymmetryGenerator;
 import org.jwildfire.create.tina.render.FlameRenderer;
 import org.jwildfire.create.tina.render.RenderInfo;
@@ -42,15 +42,17 @@ public class RandomFlameGeneratorSampler {
   private final boolean fadePaletteColors;
   private RandomFlameGenerator randGen;
   private RandomSymmetryGenerator randSymmGen;
+  private RandomGradientGenerator randGradientGen;
 
   private final RandomBatchQuality quality;
 
-  public RandomFlameGeneratorSampler(int pImageWidth, int pImageHeight, Prefs pPrefs, RandomFlameGenerator pRandGen, RandomSymmetryGenerator pRandSymmGen, int pPaletteSize, boolean pFadePaletteColors, RandomBatchQuality pQuality) {
+  public RandomFlameGeneratorSampler(int pImageWidth, int pImageHeight, Prefs pPrefs, RandomFlameGenerator pRandGen, RandomSymmetryGenerator pRandSymmGen, RandomGradientGenerator pRandGradientGen, int pPaletteSize, boolean pFadePaletteColors, RandomBatchQuality pQuality) {
     imageWidth = pImageWidth;
     imageHeight = pImageHeight;
     prefs = pPrefs;
     randGen = pRandGen;
     randSymmGen = pRandSymmGen;
+    randGradientGen = pRandGradientGen;
     paletteSize = pPaletteSize;
     fadePaletteColors = pFadePaletteColors;
     quality = pQuality;
@@ -102,7 +104,7 @@ public class RandomFlameGeneratorSampler {
     int bgRed = prefs.getTinaRandomBatchBGColorRed();
     int bgGreen = prefs.getTinaRandomBatchBGColorGreen();
     int bgBlue = prefs.getTinaRandomBatchBGColorBlue();
-    RandomFlameGeneratorState randGenState = randGen.initState();
+    RandomFlameGeneratorState randGenState = randGen.initState(prefs, randGradientGen);
     double bestCoverage = 0.0;
     for (int j = 0; j < quality.getMaxSamples(); j++) {
       // create flame
@@ -119,10 +121,7 @@ public class RandomFlameGeneratorSampler {
       flame.setHeight(imageHeight);
       flame.setPixelsPerUnit(10);
       flame.setSpatialFilterRadius(0.0);
-      RGBPalette palette = new RandomRGBPaletteGenerator().generatePalette(paletteSize, fadePaletteColors);
-      if (Math.random() < 0.21) {
-        palette.sort();
-      }
+      RGBPalette palette = randGradientGen.generatePalette(paletteSize, fadePaletteColors);
 
       flame.getFirstLayer().setPalette(palette);
       // render it   
