@@ -2031,6 +2031,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton getTinaLoadFlameButton() {
     if (tinaLoadFlameButton == null) {
       tinaLoadFlameButton = new JButton();
+      tinaLoadFlameButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/document-open-5.png")));
       tinaLoadFlameButton.setMinimumSize(new Dimension(100, 24));
       tinaLoadFlameButton.setMaximumSize(new Dimension(32000, 24));
       tinaLoadFlameButton.setText("Load Flame...");
@@ -2054,7 +2055,7 @@ public class TinaInternalFrame extends JInternalFrame {
     if (tinaSaveFlameButton == null) {
       tinaSaveFlameButton = new JButton();
       tinaSaveFlameButton.setIconTextGap(2);
-      tinaSaveFlameButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/document-save-5.png")));
+      tinaSaveFlameButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/document-export-3.png")));
       tinaSaveFlameButton.setMinimumSize(new Dimension(100, 24));
       tinaSaveFlameButton.setMaximumSize(new Dimension(32000, 24));
       tinaSaveFlameButton.setText("Save...");
@@ -2078,7 +2079,7 @@ public class TinaInternalFrame extends JInternalFrame {
     if (tinaRenderFlameButton == null) {
       tinaRenderFlameButton = new JButton();
       tinaRenderFlameButton.setIconTextGap(0);
-      tinaRenderFlameButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/emblem-default.png")));
+      tinaRenderFlameButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/fraqtive.png")));
       tinaRenderFlameButton.setMnemonic(KeyEvent.VK_R);
       tinaRenderFlameButton.setFont(new Font("Dialog", Font.BOLD, 9));
       tinaRenderFlameButton.setToolTipText("Render image");
@@ -4099,7 +4100,7 @@ public class TinaInternalFrame extends JInternalFrame {
         getStereo3dInterpolatedImageCountSlider(), getStereo3dPreviewCmb(), getStereo3dFocalOffsetREd(), getStereo3dFocalOffsetSlider(),
         getStereo3dSwapSidesCBx(), getTinaCameraCamPosXREd(), getTinaCameraCamPosXSlider(), getTinaCameraCamPosYREd(), getTinaCameraCamPosYSlider(),
         getTinaCameraCamPosZREd(), getTinaCameraCamPosZSlider(), getTinaSaturationREd(), getTinaSaturationSlider(), getToggleDrawGridButton(),
-        getEditorFractalBrightnessSlider(), getMouseTransformEditTriangleViewButton(), getTinaPaletteRandomGeneratorCmb());
+        getEditorFractalBrightnessSlider(), getMouseTransformEditTriangleViewButton(), getTinaPaletteRandomGeneratorCmb(), getToggleTriangleWithColorsButton());
 
     tinaController = new TinaController(params);
 
@@ -4196,7 +4197,7 @@ public class TinaInternalFrame extends JInternalFrame {
           getSwfAnimatorMotionBlurTimeStepREd(), getRandomMoviePanel()));
       tinaController.getSwfAnimatorCtrl().enableControls();
       tinaController.getSwfAnimatorCtrl().refreshControls();
-
+      getToggleTriangleWithColorsButton().setSelected(pPrefs.isTinaEditorWithColoredTransforms());
     }
     finally {
       tinaController.refreshing = tinaController.cmbRefreshing = tinaController.gridRefreshing = false;
@@ -6647,6 +6648,20 @@ public class TinaInternalFrame extends JInternalFrame {
       });
       mouseTransformEditGradientButton.setToolTipText("Edit gradient (use cursor-left and -right to control marker 1 and cursor-up and -down to control marker 2, press the 1 or 2 key for color choosers)");
       mouseTransformEditGradientButton.setPreferredSize(new Dimension(72, 24));
+
+      toggleTriangleWithColorsButton = new JToggleButton();
+      toggleTriangleWithColorsButton.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.toggleTriangleWithColorsButton_clicked();
+        }
+      });
+      toggleTriangleWithColorsButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/atomic.png")));
+      toggleTriangleWithColorsButton.setToolTipText("Toggle monochrome/colored controls");
+      toggleTriangleWithColorsButton.setPreferredSize(new Dimension(42, 24));
+      toggleTriangleWithColorsButton.setMnemonic(KeyEvent.VK_P);
+      toggleTriangleWithColorsButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      toggleTriangleWithColorsButton.setBounds(552, 4, 42, 24);
+      centerNorthPanel.add(toggleTriangleWithColorsButton);
     }
     return centerNorthPanel;
   }
@@ -6703,7 +6718,7 @@ public class TinaInternalFrame extends JInternalFrame {
       motionCurveEditModeButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/motionEditingMode.gif")));
       motionCurveEditModeButton.setPreferredSize(new Dimension(72, 42));
       motionCurveEditModeButton.setFont(new Font("Dialog", Font.BOLD, 10));
-      motionCurveEditModeButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/applications-multimedia.png")));
+      motionCurveEditModeButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/video-x-generic-2.png")));
     }
     return centerWestPanel;
   }
@@ -6778,7 +6793,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JToggleButton getAffineEditPostTransformSmallButton() {
     if (affineEditPostTransformSmallButton == null) {
       affineEditPostTransformSmallButton = new JToggleButton();
-      affineEditPostTransformSmallButton.setBounds(552, 4, 42, 24);
+      affineEditPostTransformSmallButton.setBounds(594, 4, 42, 24);
       affineEditPostTransformSmallButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/edit_triangle_post.png")));
       affineEditPostTransformSmallButton.setFont(new Font("Dialog", Font.BOLD, 10));
       affineEditPostTransformSmallButton.setToolTipText("Toggle post transform mode");
@@ -9102,7 +9117,6 @@ public class TinaInternalFrame extends JInternalFrame {
       saveFlameToClipboardButton.setPreferredSize(new Dimension(125, 24));
       saveFlameToClipboardButton.setText("To Clipboard");
       saveFlameToClipboardButton.setFont(new Font("Dialog", Font.BOLD, 10));
-      saveFlameToClipboardButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/document-save-5.png")));
       saveFlameToClipboardButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
           tinaController.saveFlameToClipboard();
@@ -9211,12 +9225,12 @@ public class TinaInternalFrame extends JInternalFrame {
       rootTabbedPane = new JTabbedPane();
       rootTabbedPane.setFont(new Font("Dialog", Font.BOLD, 10));
       rootTabbedPane.setEnabled(true);
-      rootTabbedPane.addTab("Flame Editor ", new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/brick.png")), getRootPanel(), null);
-      rootTabbedPane.addTab("Interactive Renderer ", new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/emblem-default.png")), getInteractiveRenderPanel(), null);
-      rootTabbedPane.addTab("MutaGen ", new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/sitemap.png")), getPanel_16(), null);
+      rootTabbedPane.addTab("Flame Editor ", new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/brick2.png")), getRootPanel(), null);
+      rootTabbedPane.addTab("Interactive Renderer ", new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/fraqtive.png")), getInteractiveRenderPanel(), null);
+      rootTabbedPane.addTab("MutaGen ", new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/kdissert.png")), getPanel_16(), null);
       rootTabbedPane.addTab("Flame browser ", new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/application-view-tile.png")), getPanel_72(), null);
-      rootTabbedPane.addTab("Easy Movie Maker ", new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/film.png")), getTinaSWFAnimatorPanel(), null);
-      rootTabbedPane.addTab("Dancing Flames Movies ", new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/x-media-podcast.png")), getPanel_36(), null);
+      rootTabbedPane.addTab("Easy Movie Maker ", new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/applications-multimedia.png")), getTinaSWFAnimatorPanel(), null);
+      rootTabbedPane.addTab("Dancing Flames Movies ", new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/kipina.png")), getPanel_36(), null);
       rootTabbedPane.addTab("Batch Flame Renderer ", new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/images.png")), getBatchRenderPanel(), null);
 
       JPanel helpPanel = new JPanel();
@@ -9704,6 +9718,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JToggleButton mouseTransformEditTriangleViewButton;
   private JComboBox randomGradientCmb;
   private JComboBox tinaPaletteRandomGeneratorCmb;
+  private JToggleButton toggleTriangleWithColorsButton;
 
   /**
    * This method initializes renderBatchJobsScrollPane	
@@ -11678,7 +11693,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton getTinaAppendToMovieButton() {
     if (tinaAppendToMovieButton == null) {
       tinaAppendToMovieButton = new JButton();
-      tinaAppendToMovieButton.setIconTextGap(0);
+      tinaAppendToMovieButton.setIconTextGap(2);
       tinaAppendToMovieButton.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
           tinaController.appendToMovieButton_actionPerformed(e);
@@ -11689,7 +11704,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaAppendToMovieButton.setPreferredSize(new Dimension(72, 24));
       tinaAppendToMovieButton.setMnemonic(KeyEvent.VK_M);
       tinaAppendToMovieButton.setFont(new Font("Dialog", Font.BOLD, 9));
-      tinaAppendToMovieButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/film.png")));
+      tinaAppendToMovieButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/applications-multimedia.png")));
     }
     return tinaAppendToMovieButton;
   }
@@ -12827,7 +12842,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaAppendToDancingFlamesButton.setPreferredSize(new Dimension(72, 24));
       tinaAppendToDancingFlamesButton.setMnemonic(KeyEvent.VK_D);
       tinaAppendToDancingFlamesButton.setFont(new Font("Dialog", Font.BOLD, 9));
-      tinaAppendToDancingFlamesButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/x-media-podcast.png")));
+      tinaAppendToDancingFlamesButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/kipina.png")));
     }
     return tinaAppendToDancingFlamesButton;
   }
@@ -13904,7 +13919,7 @@ public class TinaInternalFrame extends JInternalFrame {
       quickMutationButton.setPreferredSize(new Dimension(72, 24));
       quickMutationButton.setMnemonic(KeyEvent.VK_H);
       quickMutationButton.setFont(new Font("Dialog", Font.BOLD, 9));
-      quickMutationButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/sitemap.png")));
+      quickMutationButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/kdissert.png")));
     }
     return quickMutationButton;
   }
@@ -17065,7 +17080,7 @@ public class TinaInternalFrame extends JInternalFrame {
       panel_84.setBorder(null);
 
       swfAnimatorPlayButton = new JButton();
-      swfAnimatorPlayButton.setIconTextGap(0);
+      swfAnimatorPlayButton.setIconTextGap(2);
       panel_84.add(swfAnimatorPlayButton);
       swfAnimatorPlayButton.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
@@ -17075,7 +17090,7 @@ public class TinaInternalFrame extends JInternalFrame {
       swfAnimatorPlayButton.setText("Play");
       swfAnimatorPlayButton.setPreferredSize(new Dimension(82, 28));
       swfAnimatorPlayButton.setFont(new Font("Dialog", Font.BOLD, 9));
-      swfAnimatorPlayButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/film.png")));
+      swfAnimatorPlayButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/applications-multimedia.png")));
 
       swfAnimatorFrameToEditorBtn = new JButton();
       panel_84.add(swfAnimatorFrameToEditorBtn);
@@ -17902,7 +17917,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton getBtnRender() {
     if (btnRender == null) {
       btnRender = new JButton();
-      btnRender.setIconTextGap(0);
+      btnRender.setIconTextGap(2);
       btnRender.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
           tinaController.getSwfAnimatorCtrl().renderFlameImage();
@@ -17913,7 +17928,7 @@ public class TinaInternalFrame extends JInternalFrame {
       btnRender.setPreferredSize(new Dimension(82, 28));
       btnRender.setMnemonic(KeyEvent.VK_R);
       btnRender.setFont(new Font("Dialog", Font.BOLD, 9));
-      btnRender.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/emblem-default.png")));
+      btnRender.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/fraqtive.png")));
     }
     return btnRender;
   }
@@ -18008,6 +18023,10 @@ public class TinaInternalFrame extends JInternalFrame {
 
   public JComboBox getTinaPaletteRandomGeneratorCmb() {
     return tinaPaletteRandomGeneratorCmb;
+  }
+
+  public JToggleButton getToggleTriangleWithColorsButton() {
+    return toggleTriangleWithColorsButton;
   }
 } //  @jve:decl-index=0:visual-constraint="10,10"
 

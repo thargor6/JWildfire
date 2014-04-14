@@ -23,7 +23,7 @@ public class RandomGradientGeneratorList {
   private static List<Class<? extends RandomGradientGenerator>> items = new ArrayList<Class<? extends RandomGradientGenerator>>();
   private static List<String> nameList = new ArrayList<String>();
 
-  public static final RandomGradientGenerator DEFAULT = new AllRandomGradientGenerator();
+  public static final RandomGradientGenerator DEFAULT = new StrongHueRandomGradientGenerator();
   public static final String DEFAULT_GENERATOR_NAME = DEFAULT.getName();
 
   static {
