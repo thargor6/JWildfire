@@ -632,7 +632,9 @@ public class MutaGenController {
     for (MutationType mutationType : pMutationTypes) {
       Mutation mutation = mutationType.createMutationInstance();
       for (Layer layer : pFlame.getLayers()) {
-        mutation.execute(layer);
+        if (layer.isRenderable()) {
+          mutation.execute(layer);
+        }
       }
     }
   }
