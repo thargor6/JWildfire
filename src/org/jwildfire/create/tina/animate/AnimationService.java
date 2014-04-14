@@ -409,6 +409,15 @@ public class AnimationService {
             }
           }
             break;
+          case ROTATE_POST_FULL: {
+            int idx = 0;
+            for (XForm xForm : layer.getXForms()) {
+              MotionCurve curve = xForm.getPostRotateCurve();
+              EnvelopePoints points = new EnvelopePoints(pScript, pFrameCount, pFPS, EnvelopePointsShape.RAMP, idx++ % 2 == 0 ? 360.0 : -360.0);
+              addEnvelope(pFrameCount, curve, points.getEnvX(), points.getEnvY());
+            }
+          }
+            break;
           case ROTATE_FIRST_XFORM:
           case ROTATE_2ND_XFORM:
           case ROTATE_3RD_XFORM:
@@ -426,6 +435,23 @@ public class AnimationService {
             }
           }
             break;
+          case ROTATE_POST_FIRST_XFORM:
+          case ROTATE_POST_2ND_XFORM:
+          case ROTATE_POST_3RD_XFORM:
+          case ROTATE_POST_4TH_XFORM:
+          case ROTATE_POST_5TH_XFORM:
+          case ROTATE_POST_LAST_XFORM:
+          case ROTATE_POST_FINAL_XFORM: {
+            XForm xForm = null;
+            xForm = getXForm(pScript.getScriptType(), layer, xForm);
+
+            if (xForm != null) {
+              EnvelopePoints points = new EnvelopePoints(pScript, pFrameCount, pFPS, EnvelopePointsShape.RAMP, 360.0);
+              MotionCurve curve = xForm.getPostRotateCurve();
+              addEnvelope(pFrameCount, curve, points.getEnvX(), points.getEnvY());
+            }
+          }
+            break;
           default:
             throw new IllegalArgumentException(pScript.toString());
         }
@@ -437,18 +463,25 @@ public class AnimationService {
   private static XForm getXForm(XFormScriptType pScript, Layer layer, XForm xForm) {
     switch (pScript) {
       case ROTATE_FIRST_XFORM:
+      case ROTATE_POST_FIRST_XFORM:
         return layer.getXForms().size() > 0 ? layer.getXForms().get(0) : null;
       case ROTATE_2ND_XFORM:
+      case ROTATE_POST_2ND_XFORM:
         return layer.getXForms().size() > 1 ? layer.getXForms().get(1) : null;
       case ROTATE_3RD_XFORM:
+      case ROTATE_POST_3RD_XFORM:
         return layer.getXForms().size() > 2 ? layer.getXForms().get(2) : null;
       case ROTATE_4TH_XFORM:
+      case ROTATE_POST_4TH_XFORM:
         return layer.getXForms().size() > 3 ? layer.getXForms().get(3) : null;
       case ROTATE_5TH_XFORM:
+      case ROTATE_POST_5TH_XFORM:
         return layer.getXForms().size() > 4 ? layer.getXForms().get(4) : null;
       case ROTATE_LAST_XFORM:
+      case ROTATE_POST_LAST_XFORM:
         return layer.getXForms().size() > 0 ? layer.getXForms().get(layer.getXForms().size() - 1) : null;
       case ROTATE_FINAL_XFORM:
+      case ROTATE_POST_FINAL_XFORM:
         return layer.getFinalXForms().size() > 0 ? layer.getFinalXForms().get(0) : null;
       default:
         throw new IllegalArgumentException(pScript.toString());

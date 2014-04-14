@@ -2908,9 +2908,9 @@ public class TinaInternalFrame extends JInternalFrame {
     if (tinaTransformationsTabbedPane == null) {
       tinaTransformationsTabbedPane = new JTabbedPane();
       tinaTransformationsTabbedPane.setFont(new Font("Dialog", Font.BOLD, 10));
-      tinaTransformationsTabbedPane.addTab("Affine", null, getTinaAffineTransformationPanel(), null);
-      tinaTransformationsTabbedPane.addTab("Nonlinear", null, getTinaVariationPanel(), null);
-      tinaTransformationsTabbedPane.addTab("Rel. weights", null, getTinaModifiedWeightsPanel(), null);
+      tinaTransformationsTabbedPane.addTab("Affine transf", null, getTinaAffineTransformationPanel(), null);
+      tinaTransformationsTabbedPane.addTab("Nonlinear transf", null, getTinaVariationPanel(), null);
+      tinaTransformationsTabbedPane.addTab("Xaos", null, getTinaModifiedWeightsPanel(), null);
       tinaTransformationsTabbedPane.addTab("Color", null, getTinaTransformationColorPanel(), null);
     }
     return tinaTransformationsTabbedPane;
@@ -4217,6 +4217,14 @@ public class TinaInternalFrame extends JInternalFrame {
     pCmb.addItem(XFormScriptType.ROTATE_5TH_XFORM);
     pCmb.addItem(XFormScriptType.ROTATE_LAST_XFORM);
     pCmb.addItem(XFormScriptType.ROTATE_FINAL_XFORM);
+    pCmb.addItem(XFormScriptType.ROTATE_POST_FULL);
+    pCmb.addItem(XFormScriptType.ROTATE_POST_FIRST_XFORM);
+    pCmb.addItem(XFormScriptType.ROTATE_POST_2ND_XFORM);
+    pCmb.addItem(XFormScriptType.ROTATE_POST_3RD_XFORM);
+    pCmb.addItem(XFormScriptType.ROTATE_POST_4TH_XFORM);
+    pCmb.addItem(XFormScriptType.ROTATE_POST_5TH_XFORM);
+    pCmb.addItem(XFormScriptType.ROTATE_POST_LAST_XFORM);
+    pCmb.addItem(XFormScriptType.ROTATE_POST_FINAL_XFORM);
     pCmb.setSelectedItem(XFormScriptType.NONE);
   }
 
@@ -5008,7 +5016,7 @@ public class TinaInternalFrame extends JInternalFrame {
       button.setSize(new Dimension(22, 22));
       button.setPreferredSize(new Dimension(22, 22));
       button.setLocation(new Point(269, 26));
-      button.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/info.gif")));
+      button.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/dialog-information-4-modified.png")));
       button.setText("");
       button.setFont(new Font("Dialog", Font.BOLD, 10));
       button.setBounds(269, 2, 22, 22);
@@ -5026,7 +5034,7 @@ public class TinaInternalFrame extends JInternalFrame {
     if (nonlinearParams1LeftButton == null) {
       nonlinearParams1LeftButton = new JButton();
       nonlinearParams1LeftButton.setPreferredSize(new Dimension(22, 22));
-      nonlinearParams1LeftButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/details.gif")));
+      nonlinearParams1LeftButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/applications-system.png")));
       nonlinearParams1LeftButton.setText("");
       nonlinearParams1LeftButton.setSize(new Dimension(22, 22));
       nonlinearParams1LeftButton.setLocation(new Point(269, 26));
@@ -5184,7 +5192,7 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearParams2LeftButton.setLocation(new Point(269, 26));
       nonlinearParams2LeftButton.setFont(new Font("Dialog", Font.BOLD, 10));
       nonlinearParams2LeftButton.setPreferredSize(new Dimension(22, 22));
-      nonlinearParams2LeftButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/details.gif")));
+      nonlinearParams2LeftButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/applications-system.png")));
       nonlinearParams2LeftButton.setText("");
       nonlinearParams2LeftButton.setSize(new Dimension(22, 22));
       nonlinearParams2LeftButton.addActionListener(new java.awt.event.ActionListener() {
@@ -5341,7 +5349,7 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearParams3LeftButton.setLocation(new Point(269, 26));
       nonlinearParams3LeftButton.setFont(new Font("Dialog", Font.BOLD, 10));
       nonlinearParams3LeftButton.setPreferredSize(new Dimension(22, 22));
-      nonlinearParams3LeftButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/details.gif")));
+      nonlinearParams3LeftButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/applications-system.png")));
       nonlinearParams3LeftButton.setText("");
       nonlinearParams3LeftButton.setSize(new Dimension(22, 22));
       nonlinearParams3LeftButton.addActionListener(new java.awt.event.ActionListener() {
@@ -6987,7 +6995,7 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearParams4LeftButton.setLocation(new Point(269, 26));
       nonlinearParams4LeftButton.setFont(new Font("Dialog", Font.BOLD, 10));
       nonlinearParams4LeftButton.setPreferredSize(new Dimension(22, 22));
-      nonlinearParams4LeftButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/details.gif")));
+      nonlinearParams4LeftButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/applications-system.png")));
       nonlinearParams4LeftButton.setText("");
       nonlinearParams4LeftButton.setSize(new Dimension(22, 22));
       nonlinearParams4LeftButton.addActionListener(new java.awt.event.ActionListener() {
@@ -7219,7 +7227,7 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearParams5LeftButton.setLocation(new Point(269, 26));
       nonlinearParams5LeftButton.setFont(new Font("Dialog", Font.BOLD, 10));
       nonlinearParams5LeftButton.setPreferredSize(new Dimension(22, 22));
-      nonlinearParams5LeftButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/details.gif")));
+      nonlinearParams5LeftButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/applications-system.png")));
       nonlinearParams5LeftButton.setText("");
       nonlinearParams5LeftButton.setSize(new Dimension(22, 22));
       nonlinearParams5LeftButton.addActionListener(new java.awt.event.ActionListener() {
@@ -7375,7 +7383,7 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearParams6LeftButton.setLocation(new Point(269, 26));
       nonlinearParams6LeftButton.setFont(new Font("Dialog", Font.BOLD, 10));
       nonlinearParams6LeftButton.setPreferredSize(new Dimension(22, 22));
-      nonlinearParams6LeftButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/details.gif")));
+      nonlinearParams6LeftButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/applications-system.png")));
       nonlinearParams6LeftButton.setText("");
       nonlinearParams6LeftButton.setSize(new Dimension(22, 22));
       nonlinearParams6LeftButton.addActionListener(new java.awt.event.ActionListener() {
@@ -7531,7 +7539,7 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearParams7LeftButton.setLocation(new Point(269, 26));
       nonlinearParams7LeftButton.setFont(new Font("Dialog", Font.BOLD, 10));
       nonlinearParams7LeftButton.setPreferredSize(new Dimension(22, 22));
-      nonlinearParams7LeftButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/details.gif")));
+      nonlinearParams7LeftButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/applications-system.png")));
       nonlinearParams7LeftButton.setText("");
       nonlinearParams7LeftButton.setSize(new Dimension(22, 22));
       nonlinearParams7LeftButton.addActionListener(new java.awt.event.ActionListener() {
@@ -7687,7 +7695,7 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearParams8LeftButton.setLocation(new Point(269, 26));
       nonlinearParams8LeftButton.setFont(new Font("Dialog", Font.BOLD, 10));
       nonlinearParams8LeftButton.setPreferredSize(new Dimension(22, 22));
-      nonlinearParams8LeftButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/details.gif")));
+      nonlinearParams8LeftButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/applications-system.png")));
       nonlinearParams8LeftButton.setText("");
       nonlinearParams8LeftButton.setSize(new Dimension(22, 22));
       nonlinearParams8LeftButton.addActionListener(new java.awt.event.ActionListener() {
@@ -7843,7 +7851,7 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearParams9LeftButton.setLocation(new Point(269, 26));
       nonlinearParams9LeftButton.setFont(new Font("Dialog", Font.BOLD, 10));
       nonlinearParams9LeftButton.setPreferredSize(new Dimension(22, 22));
-      nonlinearParams9LeftButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/details.gif")));
+      nonlinearParams9LeftButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/applications-system.png")));
       nonlinearParams9LeftButton.setText("");
       nonlinearParams9LeftButton.setSize(new Dimension(22, 22));
       nonlinearParams9LeftButton.addActionListener(new java.awt.event.ActionListener() {
@@ -7999,7 +8007,7 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearParams10LeftButton.setLocation(new Point(269, 26));
       nonlinearParams10LeftButton.setFont(new Font("Dialog", Font.BOLD, 10));
       nonlinearParams10LeftButton.setPreferredSize(new Dimension(22, 22));
-      nonlinearParams10LeftButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/details.gif")));
+      nonlinearParams10LeftButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/applications-system.png")));
       nonlinearParams10LeftButton.setText("");
       nonlinearParams10LeftButton.setSize(new Dimension(22, 22));
       nonlinearParams10LeftButton.addActionListener(new java.awt.event.ActionListener() {
@@ -8155,7 +8163,7 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearParams11LeftButton.setLocation(new Point(269, 26));
       nonlinearParams11LeftButton.setFont(new Font("Dialog", Font.BOLD, 10));
       nonlinearParams11LeftButton.setPreferredSize(new Dimension(22, 22));
-      nonlinearParams11LeftButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/details.gif")));
+      nonlinearParams11LeftButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/applications-system.png")));
       nonlinearParams11LeftButton.setText("");
       nonlinearParams11LeftButton.setSize(new Dimension(22, 22));
       nonlinearParams11LeftButton.addActionListener(new java.awt.event.ActionListener() {
@@ -8311,7 +8319,7 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearParams12LeftButton.setLocation(new Point(269, 26));
       nonlinearParams12LeftButton.setFont(new Font("Dialog", Font.BOLD, 10));
       nonlinearParams12LeftButton.setPreferredSize(new Dimension(22, 22));
-      nonlinearParams12LeftButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/details.gif")));
+      nonlinearParams12LeftButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/applications-system.png")));
       nonlinearParams12LeftButton.setText("");
       nonlinearParams12LeftButton.setSize(new Dimension(22, 22));
       nonlinearParams12LeftButton.addActionListener(new java.awt.event.ActionListener() {
