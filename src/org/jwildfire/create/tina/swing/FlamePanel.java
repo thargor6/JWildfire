@@ -85,6 +85,7 @@ public class FlamePanel extends ImagePanel {
   private boolean withVariations = false;
   private boolean withShowTransparency = false;
   private boolean withGrid = false;
+  private boolean withColoredTransforms = false;
   private boolean fineMovement = false;
   private XForm selectedXForm = null;
   private boolean allowScaleX = true;
@@ -514,7 +515,7 @@ public class FlamePanel extends ImagePanel {
 
   private void drawXForm(Graphics2D g, XForm pXForm, int pIndex, int pXFormCount, boolean pIsFinal, boolean pShadow, boolean pIsSelected) {
     if (!pShadow) {
-      if (prefs.isTinaEditorWithColoredTransforms()) {
+      if (isWithColoredTransforms()) {
         int row = pIsFinal ? pXFormCount + pIndex : pIndex;
         int colorIdx = ((row + 1) % FlamePanel.XFORM_COLORS.length) - 1;
         g.setColor(XFORM_COLORS[colorIdx]);
@@ -535,7 +536,7 @@ public class FlamePanel extends ImagePanel {
     g.drawPolygon(triangle.viewX, triangle.viewY, 3);
 
     // selected point
-    if (pIsSelected && mouseDragOperation == MouseDragOperation.POINTS) {
+    if (pIsSelected && (mouseDragOperation == MouseDragOperation.POINTS)) {
       int radius = 10;
       g.fillOval(triangle.viewX[selectedPoint] - radius / 2, triangle.viewY[selectedPoint] - radius / 2, radius, radius);
     }
@@ -557,10 +558,10 @@ public class FlamePanel extends ImagePanel {
       }
       if (prefs.isTinaEditorShowTransformNumbers()) {
         g.setStroke(pIsSelected ? SELECTED_CIRCLE_LINE : NORMAL_CIRCLE_LINE);
-        int radius = 24;
+        int radius = editPostTransform ? 28 : 24;
         g.drawOval(cx - radius / 2, cy - radius / 2, radius, radius);
-        String lbl = pIsFinal ? "F" + String.valueOf(pIndex + 1) : "T" + String.valueOf(pIndex + 1);
-        g.drawString(lbl, cx - 6, cy + 6);
+        String lbl = pIsFinal ? (editPostTransform ? "PF" : "F") + String.valueOf(pIndex + 1) : (editPostTransform ? "PT" : "T") + String.valueOf(pIndex + 1);
+        g.drawString(lbl, cx - (editPostTransform ? 12 : 6), cy + 6);
       }
     }
   }
@@ -1177,6 +1178,7 @@ public class FlamePanel extends ImagePanel {
       allowScaleX = pFlamePanel.allowScaleX;
       allowScaleY = pFlamePanel.allowScaleY;
       withShowTransparency = pFlamePanel.withShowTransparency;
+      withColoredTransforms = pFlamePanel.withColoredTransforms;
       mouseDragOperation = pFlamePanel.mouseDragOperation;
       editPostTransform = pFlamePanel.editPostTransform;
     }
@@ -1305,5 +1307,13 @@ public class FlamePanel extends ImagePanel {
 
   public void setImageBrightness(int pImageBrightness) {
     imageBrightness = pImageBrightness;
+  }
+
+  public boolean isWithColoredTransforms() {
+    return withColoredTransforms;
+  }
+
+  public void setWithColoredTransforms(boolean pWithColoredTransforms) {
+    withColoredTransforms = pWithColoredTransforms;
   }
 }

@@ -529,6 +529,7 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
     data.shadingDistanceColorShiftSlider = parameterObject.pShadingDistanceColorShiftSlider;
 
     data.mouseTransformSlowButton = parameterObject.pMouseTransformSlowButton;
+    data.toggleTriangleWithColorsButton = parameterObject.toggleTriangleWithColorsButton;
 
     data.renderBatchJobsTable = parameterObject.pRenderBatchJobsTable;
     data.batchPreviewRootPanel = parameterObject.pBatchPreviewRootPanel;
@@ -738,6 +739,7 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
       SimpleImage img = new SimpleImage(width, height);
       img.fillBackground(0, 0, 0);
       flamePanel = new FlamePanel(prefs, img, 0, 0, centerPanel.getWidth(), this, this);
+      flamePanel.setWithColoredTransforms(prefs.isTinaEditorWithColoredTransforms());
       flamePanel.importOptions(prevFlamePanel);
       prevFlamePanel = null;
       flamePanel.setUndoManagerHolder(this);
@@ -4987,6 +4989,22 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
       finally {
         refreshing = false;
       }
+    }
+  }
+
+  public void toggleTriangleWithColorsButton_clicked() {
+    if (refreshing) {
+      return;
+    }
+    refreshing = true;
+    try {
+      if (flamePanel != null) {
+        flamePanel.setWithColoredTransforms(data.toggleTriangleWithColorsButton.isSelected());
+      }
+      refreshFlameImage(false);
+    }
+    finally {
+      refreshing = false;
     }
   }
 

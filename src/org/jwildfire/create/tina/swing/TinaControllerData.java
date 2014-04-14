@@ -233,6 +233,7 @@ public class TinaControllerData {
   public JToggleButton mouseTransformEditTriangleViewButton;
   public JToggleButton mouseTransformEditViewButton;
   public JToggleButton mouseTransformSlowButton;
+  public JToggleButton toggleTriangleWithColorsButton;
   public JButton batchRenderAddFilesButton;
   public JButton batchRenderFilesMoveDownButton;
   public JButton batchRenderFilesMoveUpButton;
