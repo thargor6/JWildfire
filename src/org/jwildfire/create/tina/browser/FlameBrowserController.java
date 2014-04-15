@@ -393,7 +393,7 @@ public class FlameBrowserController {
     JFileChooser chooser = new JFileChooser();
     chooser = new JFileChooser();
     chooser.setCurrentDirectory(new java.io.File("."));
-    chooser.setDialogTitle("Specify flame-directory");
+    chooser.setDialogTitle("Specify flame-directory to scan");
     chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
     chooser.setAcceptAllFileFilterUsed(false);
     if (chooser.showOpenDialog(rootPanel) == JFileChooser.APPROVE_OPTION) {
