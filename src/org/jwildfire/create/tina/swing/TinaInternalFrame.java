@@ -4100,7 +4100,8 @@ public class TinaInternalFrame extends JInternalFrame {
         getStereo3dInterpolatedImageCountSlider(), getStereo3dPreviewCmb(), getStereo3dFocalOffsetREd(), getStereo3dFocalOffsetSlider(),
         getStereo3dSwapSidesCBx(), getTinaCameraCamPosXREd(), getTinaCameraCamPosXSlider(), getTinaCameraCamPosYREd(), getTinaCameraCamPosYSlider(),
         getTinaCameraCamPosZREd(), getTinaCameraCamPosZSlider(), getTinaSaturationREd(), getTinaSaturationSlider(), getToggleDrawGridButton(),
-        getEditorFractalBrightnessSlider(), getMouseTransformEditTriangleViewButton(), getTinaPaletteRandomGeneratorCmb(), getToggleTriangleWithColorsButton());
+        getEditorFractalBrightnessSlider(), getMouseTransformEditTriangleViewButton(), getTinaPaletteRandomGeneratorCmb(), getToggleTriangleWithColorsButton(),
+        getFlameBrowserCopyToBtn(), getFlameBrowserMoveToBtn());
 
     tinaController = new TinaController(params);
 
@@ -9727,6 +9728,8 @@ public class TinaInternalFrame extends JInternalFrame {
   private JComboBox randomGradientCmb;
   private JComboBox tinaPaletteRandomGeneratorCmb;
   private JToggleButton toggleTriangleWithColorsButton;
+  private JButton flameBrowserCopyToBtn;
+  private JButton flameBrowserMoveToBtn;
 
   /**
    * This method initializes renderBatchJobsScrollPane	
@@ -15346,6 +15349,8 @@ public class TinaInternalFrame extends JInternalFrame {
       flameBrowserDetailPanel.add(getFlameBrowserToBatchRendererBtn());
       flameBrowserDetailPanel.add(getFlameBrowserDeleteBtn());
       flameBrowserDetailPanel.add(getFlameBrowserRenameBtn());
+      flameBrowserDetailPanel.add(getFlameBrowserCopyToBtn());
+      flameBrowserDetailPanel.add(getFlameBrowserMoveToBtn());
     }
     return flameBrowserDetailPanel;
   }
@@ -15443,7 +15448,7 @@ public class TinaInternalFrame extends JInternalFrame {
         }
       });
       flameBrowserRenameBtn.setToolTipText("Rename the currently selected flame");
-      flameBrowserRenameBtn.setText("Rename");
+      flameBrowserRenameBtn.setText("Rename...");
       flameBrowserRenameBtn.setPreferredSize(new Dimension(112, 24));
       flameBrowserRenameBtn.setMinimumSize(new Dimension(100, 24));
       flameBrowserRenameBtn.setMaximumSize(new Dimension(32000, 24));
@@ -18035,6 +18040,42 @@ public class TinaInternalFrame extends JInternalFrame {
 
   public JToggleButton getToggleTriangleWithColorsButton() {
     return toggleTriangleWithColorsButton;
+  }
+
+  private JButton getFlameBrowserCopyToBtn() {
+    if (flameBrowserCopyToBtn == null) {
+      flameBrowserCopyToBtn = new JButton();
+      flameBrowserCopyToBtn.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getFlameBrowserController().copyToBtnClicked();
+        }
+      });
+      flameBrowserCopyToBtn.setToolTipText("Copy the currently selected flame into another directory");
+      flameBrowserCopyToBtn.setText("Copy to...");
+      flameBrowserCopyToBtn.setPreferredSize(new Dimension(112, 24));
+      flameBrowserCopyToBtn.setMinimumSize(new Dimension(100, 24));
+      flameBrowserCopyToBtn.setMaximumSize(new Dimension(32000, 24));
+      flameBrowserCopyToBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+    }
+    return flameBrowserCopyToBtn;
+  }
+
+  private JButton getFlameBrowserMoveToBtn() {
+    if (flameBrowserMoveToBtn == null) {
+      flameBrowserMoveToBtn = new JButton();
+      flameBrowserMoveToBtn.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getFlameBrowserController().moveToBtnClicked();
+        }
+      });
+      flameBrowserMoveToBtn.setToolTipText("Move the currently selected flame to another directory");
+      flameBrowserMoveToBtn.setText("Move to...");
+      flameBrowserMoveToBtn.setPreferredSize(new Dimension(112, 24));
+      flameBrowserMoveToBtn.setMinimumSize(new Dimension(100, 24));
+      flameBrowserMoveToBtn.setMaximumSize(new Dimension(32000, 24));
+      flameBrowserMoveToBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+    }
+    return flameBrowserMoveToBtn;
   }
 } //  @jve:decl-index=0:visual-constraint="10,10"
 

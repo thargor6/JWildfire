@@ -7,6 +7,8 @@ import java.awt.Font;
 import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -53,10 +55,14 @@ public class FlameBrowserController {
   private final JButton toBatchRendererBtn;
   private final JButton deleteBtn;
   private final JButton renameBtn;
+  private final JButton copyToBtn;
+  private final JButton moveToBtn;
   private String currRootDrawer;
+  private File lastCopyToDrawer = null;
 
   public FlameBrowserController(TinaController pTinaController, ErrorHandler pErrorHandler, Prefs pPrefs, JPanel pRootPanel, JTree pFlamesTree, JPanel pImagesPnl,
-      JButton pRefreshBtn, JButton pChangeFolderBtn, JButton pToEditorBtn, JButton pToBatchRendererBtn, JButton pDeleteBtn, JButton pRenameBtn) {
+      JButton pRefreshBtn, JButton pChangeFolderBtn, JButton pToEditorBtn, JButton pToBatchRendererBtn, JButton pDeleteBtn, JButton pRenameBtn,
+      JButton pCopyToBtn, JButton pMoveToBtn) {
     tinaController = pTinaController;
     errorHandler = pErrorHandler;
     prefs = pPrefs;
@@ -69,6 +75,8 @@ public class FlameBrowserController {
     toBatchRendererBtn = pToBatchRendererBtn;
     deleteBtn = pDeleteBtn;
     renameBtn = pRenameBtn;
+    copyToBtn = pCopyToBtn;
+    moveToBtn = pMoveToBtn;
     currRootDrawer = prefs.getTinaFlamePath();
     enableControls();
   }
@@ -76,10 +84,13 @@ public class FlameBrowserController {
   public void enableControls() {
     refreshBtn.setEnabled(currRootDrawer != null && currRootDrawer.length() > 0);
     FlameFlatNode flame = getSelectedFlame();
-    toEditorBtn.setEnabled(flame != null);
-    toBatchRendererBtn.setEnabled(flame != null);
-    deleteBtn.setEnabled(flame != null);
-    renameBtn.setEnabled(flame != null);
+    boolean hasFlame = flame != null && !flame.isRemoved();
+    toEditorBtn.setEnabled(hasFlame);
+    toBatchRendererBtn.setEnabled(hasFlame);
+    deleteBtn.setEnabled(hasFlame);
+    renameBtn.setEnabled(hasFlame);
+    copyToBtn.setEnabled(hasFlame);
+    moveToBtn.setEnabled(hasFlame);
   }
 
   private FlameFlatNode getSelectedFlame() {
@@ -386,9 +397,68 @@ public class FlameBrowserController {
     chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
     chooser.setAcceptAllFileFilterUsed(false);
     if (chooser.showOpenDialog(rootPanel) == JFileChooser.APPROVE_OPTION) {
-      currRootDrawer = chooser.getCurrentDirectory().getAbsolutePath();
+      currRootDrawer = chooser.getSelectedFile().getAbsolutePath();
       enableControls();
       refreshBtn_clicked();
+    }
+  }
+
+  public void copyToBtnClicked() {
+    transferFlameToFolder(false);
+  }
+
+  public void moveToBtnClicked() {
+    transferFlameToFolder(true);
+  }
+
+  private void transferFlameToFolder(boolean bMove) {
+    FlameFlatNode node = getSelectedFlame();
+    if (node != null) {
+      try {
+        JFileChooser chooser = new JFileChooser();
+        chooser = new JFileChooser();
+        chooser.setCurrentDirectory(new java.io.File("."));
+        chooser.setDialogTitle("Specify destination-directory");
+        chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+        chooser.setAcceptAllFileFilterUsed(false);
+        File srcFile = new File(node.getFilename());
+
+        File preselected = lastCopyToDrawer != null ? new File(lastCopyToDrawer, srcFile.getName()) : new File(srcFile.getName());
+        chooser.setSelectedFile(preselected);
+        if (chooser.showOpenDialog(rootPanel) == JFileChooser.APPROVE_OPTION) {
+          lastCopyToDrawer = chooser.getSelectedFile().getParentFile();
+          File dstFile = chooser.getSelectedFile();
+          if (bMove) {
+            Files.move(srcFile.toPath(), dstFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+            node.setRemoved(true);
+          }
+          else {
+            Files.copy(srcFile.toPath(), dstFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+          }
+
+          ImagePanel pnl = pnlList.get(selectedPnl);
+          SimpleImage img = pnl.getImage();
+          TextTransformer txt = new TextTransformer();
+          txt.setText1(bMove ? "(moved)" : "(copied)");
+          txt.setAntialiasing(true);
+          txt.setColor(bMove ? Color.RED : Color.GRAY);
+          txt.setMode(Mode.NORMAL);
+          txt.setFontStyle(FontStyle.BOLD);
+          txt.setFontName("Arial");
+          txt.setFontSize(24);
+          txt.setHAlign(HAlignment.CENTRE);
+          txt.setVAlign(VAlignment.CENTRE);
+          txt.transformImage(img);
+
+          pnl.invalidate();
+          pnl.repaint();
+
+          enableControls();
+        }
+      }
+      catch (Exception ex) {
+        errorHandler.handleError(ex);
+      }
     }
   }
 
@@ -401,6 +471,7 @@ public class FlameBrowserController {
           if (!file.delete()) {
             throw new Exception("Could not delete file");
           }
+          node.setRemoved(false);
           ImagePanel pnl = pnlList.get(selectedPnl);
           SimpleImage img = pnl.getImage();
 

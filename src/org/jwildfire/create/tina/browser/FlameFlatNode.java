@@ -11,6 +11,7 @@ public class FlameFlatNode implements Serializable {
   private String filename;
   private String caption;
   private final Date fileage;
+  private boolean removed;
 
   public FlameFlatNode(String pFilename, Date pFileage) {
     setFilename(pFilename);
@@ -33,5 +34,13 @@ public class FlameFlatNode implements Serializable {
     filename = pFilename;
     File f = new File(pFilename);
     caption = f.getName().substring(0, f.getName().length() - Tools.FILEEXT_FLAME.length() - 1);
+  }
+
+  public boolean isRemoved() {
+    return removed;
+  }
+
+  public void setRemoved(boolean pRemoved) {
+    removed = pRemoved;
   }
 }

@@ -367,6 +367,8 @@ public class TinaControllerParameter {
   public JButton flameBrowserToBatchEditorBtn;
   public JButton flameBrowserDeleteBtn;
   public JButton flameBrowserRenameBtn;
+  public JButton flameBrowserCopyToBtn;
+  public JButton flameBrowserMoveToBtn;
   public JButton dancingFlamesReplaceFlameFromEditorBtn;
   public JButton dancingFlamesRenameFlameBtn;
   public JButton dancingFlamesRenameMotionBtn;
@@ -713,7 +715,8 @@ public class TinaControllerParameter {
       JWFNumberField pCamPosXREd, JSlider pCamPosXSlider, JWFNumberField pCamPosYREd, JSlider pCamPosYSlider,
       JWFNumberField pCamPosZREd, JSlider pCamPosZSlider, JWFNumberField pSaturationREd, JSlider pSaturationSlider,
       JToggleButton pToggleDrawGridButton, JSlider pEditorFractalBrightnessSlider, JToggleButton pMouseTransformEditTriangleViewButton,
-      JComboBox pPaletteRandomGeneratorCmb, JToggleButton pToggleTriangleWithColorsButton) {
+      JComboBox pPaletteRandomGeneratorCmb, JToggleButton pToggleTriangleWithColorsButton, JButton pFlameBrowserCopyToBtn,
+      JButton pFlameBrowserMoveToBtn) {
     this.pDancingFlamesLinkMotionBtn = pDancingFlamesLinkMotionBtn;
     this.pDancingFlamesUnlinkMotionBtn = pDancingFlamesUnlinkMotionBtn;
     this.pDancingFlamesCreateMotionsCmb = pDancingFlamesCreateMotionsCmb;
@@ -872,5 +875,7 @@ public class TinaControllerParameter {
     this.mouseTransformEditTriangleViewButton = pMouseTransformEditTriangleViewButton;
     this.paletteRandomGeneratorCmb = pPaletteRandomGeneratorCmb;
     this.toggleTriangleWithColorsButton = pToggleTriangleWithColorsButton;
+    this.flameBrowserCopyToBtn = pFlameBrowserCopyToBtn;
+    this.flameBrowserMoveToBtn = pFlameBrowserMoveToBtn;
   }
 }
