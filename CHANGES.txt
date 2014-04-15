@@ -1,3 +1,44 @@
+V1.60 (16.04.2014):
+ - introducing a new concept of random-gradient-generators (orthogonal to random-flame- and random-symmetry-generators)
+ - new "Strong hue"-random-gradient-generator
+ - new "Smooth"-random-gradient-generator
+ - new "Monochrome"-random-gradient-generator
+
+ - new "saturation"-setting under "Coloring" (which affects the saturation of the final image. A saturation of 1.0 is the default value. Lower values decrease saturation, i. E. the fractals appears more "gray", higher values add more levels of "color" )
+
+ - new "color map"-random-flame-generator, using randomly chosen images from your image-collection as color-map (you must specify the base-path in the prefs, but please BEWARE that this path is scanned recursively, so please check if you have any "forbidden" images there). This generator is NOT included in the "All"-random-flame-generator, so it must be selected explicitely
+
+ - new "Move to"/"Copy to"-functions in the flame browser
+ - some additional "post_*"-scripts for the Easy Movie Maker
+
+ - controls in the editor have now a shadow the increase the contrast with the background (can be changed in the prefs, see tinaEditorControlsWithShadows)
+ - controls in the editor may now we drawn in much more nice way with antialising (can be changed in the prefs, see tinaEditorControlsWithAntialiasing)
+ - ability to draw a grid in the editor, the grid size is fixed to 0.5, but may be changed in the prefs, see tinaEditorGridSize
+ - transforms in the editor may now be dran with the transform-number displayed, this can be changed in the prefs, see tinaEditorControlsWithNumbers
+ - transforms in the editor may now be dran in color (same colors as in Apophysis for your convenience), this can be changed in the prefs, see tinaEditorControlsWithColor
+ - new option (slider) to fade out the background-fractal in the editor
+ - new button to quickly toggle between monochrome/colored controls ("triangles")
+ - removed the "triangle-zoom-in/out" and "dark-triangles" buttons
+
+ - new "murl2"-variation, initially invented by Zueuk, contributed by Nic Anderson
+ - new "murl"-variation, initially invented by Zueuk, contributed by Nic Anderson
+ 
+ - included the free "Open Icon Library" to provide icons with a more professional look
+ - replaced all icons by icons of the new library or created some new on my own which should fit better  
+ 
+ - updated JTattoo-library to 1.60.10
+ - removed the UI-Theme-stuff from the Preferences-window and create a new window were you can select and preview UI-Themes
+ - support for UI-Sub-Themes
+ - new window for chosing the UI-theme (Menu "Windows->UI Theme (Look and Feel)") and display changes immediately, i. e. the setting was removed from the prefs  
+ - removed the ancient "Motif"-UI-theme (not because it is ancient, but it does not work well with JWildfire)
+ - simplified the LogDensityFilter (only internal changes)
+ - removed the upper-range-limitation of the "gamma threshold"-parameter
+ - removed background-coloring from hdr-rendering (did not work in all cases), i. e. hdr-images have always a black background color
+ - removed the density-estimation-stuff as it not really needed anymore and complicated things
+ - fixed a bug in the Flame-browser regarding changing the input-folder
+ - fixed a bug when sending flames with empty layerz to the MutaGen (now empty layerz are ignored by MutaGen)
+ - fixed a bug regarding editing the focus point (should now behave much smoother)
+
 V1.50 (30.03.2014):
  - there were really lots of changes in the Easy Movie Maker:
      - new concept of random-movie-generators (which create both random flames and random motion)
