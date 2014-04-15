@@ -4198,7 +4198,7 @@ public class TinaInternalFrame extends JInternalFrame {
           getSwfAnimatorMotionBlurTimeStepREd(), getRandomMoviePanel()));
       tinaController.getSwfAnimatorCtrl().enableControls();
       tinaController.getSwfAnimatorCtrl().refreshControls();
-      getToggleTriangleWithColorsButton().setSelected(pPrefs.isTinaEditorWithColoredTransforms());
+      getToggleTriangleWithColorsButton().setSelected(pPrefs.isTinaEditorControlsWithColor());
     }
     finally {
       tinaController.refreshing = tinaController.cmbRefreshing = tinaController.gridRefreshing = false;

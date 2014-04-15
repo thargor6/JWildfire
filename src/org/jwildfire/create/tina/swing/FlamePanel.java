@@ -80,7 +80,6 @@ public class FlamePanel extends ImagePanel {
 
   private boolean withImage = true;
   private int imageBrightness = 100;
-  private boolean withShadow = true;
   private boolean withTriangles = true;
   private boolean withVariations = false;
   private boolean withShowTransparency = false;
@@ -126,7 +125,7 @@ public class FlamePanel extends ImagePanel {
   @Override
   public void paintComponent(Graphics g) {
     Graphics2D g2d = (Graphics2D) g;
-    if (prefs.isTinaEditorWithAntialiasing()) {
+    if (prefs.isTinaEditorControlsWithAntialiasing()) {
       g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
       g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
     }
@@ -407,7 +406,7 @@ public class FlamePanel extends ImagePanel {
     if (layerHolder != null) {
       Layer layer = layerHolder.getLayer();
       if (layer != null) {
-        if (!withShadow) {
+        if (!prefs.isTinaEditorControlsWithShadows()) {
           g.setColor(editPostTransform ? XFORM_POST_COLOR : XFORM_COLOR);
         }
 
@@ -417,7 +416,7 @@ public class FlamePanel extends ImagePanel {
             XForm xForm = layer.getXForms().get(i);
             if ((pass == 0 && (selectedXForm == null || xForm != selectedXForm)) || (pass == 1 && xForm == selectedXForm)) {
               boolean isSelected = xForm == selectedXForm;
-              if (withShadow) {
+              if (prefs.isTinaEditorControlsWithShadows()) {
                 g.setColor(SHADOW_COLOR);
                 drawXForm(g, xForm, i, layer.getXForms().size(), false, true, isSelected);
                 drawXForm(g, xForm, i, layer.getXForms().size(), false, false, isSelected);
@@ -431,7 +430,7 @@ public class FlamePanel extends ImagePanel {
             XForm xForm = layer.getFinalXForms().get(i);
             if ((pass == 0 && (selectedXForm == null || xForm != selectedXForm)) || (pass == 1 && xForm == selectedXForm)) {
               boolean isSelected = xForm == selectedXForm;
-              if (withShadow) {
+              if (prefs.isTinaEditorControlsWithShadows()) {
                 g.setColor(SHADOW_COLOR);
                 drawXForm(g, xForm, i, layer.getXForms().size(), true, true, isSelected);
                 drawXForm(g, xForm, i, layer.getXForms().size(), true, false, isSelected);
@@ -556,7 +555,7 @@ public class FlamePanel extends ImagePanel {
           g.drawString(String.valueOf(label.charAt(i)), triangle.viewX[i] + (int) (offset * dx), triangle.viewY[i] + (int) (offset * dy));
         }
       }
-      if (prefs.isTinaEditorShowTransformNumbers()) {
+      if (prefs.isTinaEditorControlsWithNumbers()) {
         g.setStroke(pIsSelected ? SELECTED_CIRCLE_LINE : NORMAL_CIRCLE_LINE);
         int radius = editPostTransform ? 28 : 24;
         g.drawOval(cx - radius / 2, cy - radius / 2, radius, radius);

@@ -82,10 +82,17 @@ public class Prefs extends ManagedObject {
   static final String KEY_TINA_RANDOMBATCH_BGCOLOR_BLUE = "tina.random_batch.bg_color.blue";
   static final String KEY_TINA_RANDOMBATCH_REFRESH_TYPE = "tina.random_batch.refresh_type";
 
+  static final String KEY_TINA_EDITOR_CONTROLS_WITH_COLOR = "tina.editor.controls.with_color";
+  static final String KEY_TINA_EDITOR_CONTROLS_WITH_ANTIALIASING = "tina.editor.controls.with_antialising";
+  static final String KEY_TINA_EDITOR_CONTROLS_WITH_SHADOWS = "tina.editor.controls.with_shadows";
+  static final String KEY_TINA_EDITOR_CONTROLS_WITH_NUMBERS = "tina.editor.controls.with_numbers";
+  static final String KEY_TINA_EDITOR_GRID_SIZE = "tina.editor.grid_size";
+
   static final String KEY_TINA_SAVING_STORE_HDR_IN_IR = "tina.saving.store_hdr_in_ir";
   static final String KEY_TINA_SAVING_STORE_FLAMES_WHEN_SAVING_IMAGE = "tina.saving.store_flames_when_saving_image";
 
   static final String KEY_TINA_DISABLE_WIKIMEDIA_COMMONS_WARNING = "tina.random_batch.disable_wikimedia_commons_warning";
+  static final String KEY_TINA_COLORMAP_RANDGEN_IMAGE_PATH = "tina.random_batch.random_gen.colormap.image_path";
 
   @Property(description = "Script drawer for the animation editor", category = PropertyCategory.MISC)
   private String scriptPath = null;
@@ -139,16 +146,18 @@ public class Prefs extends ManagedObject {
   @Property(description = "Automatically save a flame-copy when a rendered image is saved", category = PropertyCategory.TINA)
   private boolean tinaSaveFlamesWhenImageIsSaved = false;
 
-  // TODO load/save
   @Property(description = "Used a colored display for affine transforms", category = PropertyCategory.TINA)
-  private boolean tinaEditorWithColoredTransforms = true;
-  // TODO load/save
+  private boolean tinaEditorControlsWithColor = true;
+
   @Property(description = "Turn on antialiasing for drawing lines and triangle-symbols in the editor", category = PropertyCategory.TINA)
-  private boolean tinaEditorWithAntialiasing = true;
-  // TODO load/save
+  private boolean tinaEditorControlsWithAntialiasing = true;
+
   @Property(description = "Display transform-numbers inside of the triangle-symbols in the editor", category = PropertyCategory.TINA)
-  private boolean tinaEditorShowTransformNumbers = true;
-  // TODO load/save
+  private boolean tinaEditorControlsWithNumbers = true;
+
+  @Property(description = "Add small shadows to the controls, to increase contrast with background, in the editor", category = PropertyCategory.TINA)
+  private boolean tinaEditorControlsWithShadows = true;
+
   @Property(description = "Grid size (distance between two grid-lines) in the editor", category = PropertyCategory.TINA)
   private double tinaEditorGridSize = 0.5;
 
@@ -156,6 +165,9 @@ public class Prefs extends ManagedObject {
   private String sunflowScenePath = null;
   private String lastInputSunflowScenePath = null;
   private String lastOutputSunflowScenePath = null;
+
+  @Property(description = "Image-input-path for the \"Color map\"-random-flame-generator (is scanned recursively, so BEWARE)", category = PropertyCategory.TINA)
+  private String tinaRandGenColorMapImagePath = null;
 
   @Property(description = "Development mode", category = PropertyCategory.GENERAL)
   private boolean developmentMode = false;
@@ -461,10 +473,12 @@ public class Prefs extends ManagedObject {
     tinaDefaultAntialiasingRadius = pSrc.tinaDefaultAntialiasingRadius;
     tinaPreserveFreeCPUs = pSrc.tinaPreserveFreeCPUs;
     tinaDisableWikimediaCommonsWarning = pSrc.tinaDisableWikimediaCommonsWarning;
-    tinaEditorWithColoredTransforms = pSrc.tinaEditorWithColoredTransforms;
-    tinaEditorWithAntialiasing = pSrc.tinaEditorWithAntialiasing;
+    tinaEditorControlsWithColor = pSrc.tinaEditorControlsWithColor;
+    tinaEditorControlsWithAntialiasing = pSrc.tinaEditorControlsWithAntialiasing;
+    tinaEditorControlsWithShadows = pSrc.tinaEditorControlsWithShadows;
+    tinaEditorControlsWithNumbers = pSrc.tinaEditorControlsWithNumbers;
     tinaEditorGridSize = pSrc.tinaEditorGridSize;
-    tinaEditorShowTransformNumbers = pSrc.tinaEditorShowTransformNumbers;
+    tinaRandGenColorMapImagePath = pSrc.tinaRandGenColorMapImagePath;
 
     tinaRenderMovieFrames = pSrc.tinaRenderMovieFrames;
     tinaRenderPreviewQuality = pSrc.tinaRenderPreviewQuality;
@@ -749,22 +763,6 @@ public class Prefs extends ManagedObject {
     lookAndFeelTheme = pLookAndFeelTheme;
   }
 
-  public boolean isTinaEditorWithColoredTransforms() {
-    return tinaEditorWithColoredTransforms;
-  }
-
-  public void setTinaEditorWithColoredTransforms(boolean pTinaEditorWithColoredTransforms) {
-    tinaEditorWithColoredTransforms = pTinaEditorWithColoredTransforms;
-  }
-
-  public boolean isTinaEditorWithAntialiasing() {
-    return tinaEditorWithAntialiasing;
-  }
-
-  public void setTinaEditorWithAntialiasing(boolean pTinaEditorWithAntialiasing) {
-    tinaEditorWithAntialiasing = pTinaEditorWithAntialiasing;
-  }
-
   public double getTinaEditorGridSize() {
     return tinaEditorGridSize;
   }
@@ -773,12 +771,44 @@ public class Prefs extends ManagedObject {
     tinaEditorGridSize = pTinaEditorGridSize;
   }
 
-  public boolean isTinaEditorShowTransformNumbers() {
-    return tinaEditorShowTransformNumbers;
+  public boolean isTinaEditorControlsWithShadows() {
+    return tinaEditorControlsWithShadows;
   }
 
-  public void setTinaEditorShowTransformNumbers(boolean pTinaEditorShowTransformNumbers) {
-    tinaEditorShowTransformNumbers = pTinaEditorShowTransformNumbers;
+  public void setTinaEditorControlsWithShadows(boolean pTinaEditorControlsWithShadows) {
+    tinaEditorControlsWithShadows = pTinaEditorControlsWithShadows;
+  }
+
+  public boolean isTinaEditorControlsWithColor() {
+    return tinaEditorControlsWithColor;
+  }
+
+  public void setTinaEditorControlsWithColor(boolean pTinaEditorControlsWithColor) {
+    tinaEditorControlsWithColor = pTinaEditorControlsWithColor;
+  }
+
+  public boolean isTinaEditorControlsWithAntialiasing() {
+    return tinaEditorControlsWithAntialiasing;
+  }
+
+  public void setTinaEditorControlsWithAntialiasing(boolean pTinaEditorControlsWithAntialiasing) {
+    tinaEditorControlsWithAntialiasing = pTinaEditorControlsWithAntialiasing;
+  }
+
+  public boolean isTinaEditorControlsWithNumbers() {
+    return tinaEditorControlsWithNumbers;
+  }
+
+  public void setTinaEditorControlsWithNumbers(boolean pTinaEditorControlsWithNumbers) {
+    tinaEditorControlsWithNumbers = pTinaEditorControlsWithNumbers;
+  }
+
+  public String getTinaRandGenColorMapImagePath() {
+    return tinaRandGenColorMapImagePath;
+  }
+
+  public void setTinaRandGenColorMapImagePath(String pTinaRandGenColorMapImagePath) {
+    tinaRandGenColorMapImagePath = pTinaRandGenColorMapImagePath;
   }
 
 }

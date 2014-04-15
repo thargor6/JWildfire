@@ -56,6 +56,7 @@ public class AllRandomFlameGenerator extends RandomFlameGenerator {
     allGenerators.add(new SubFlameRandomFlameGenerator());
     allGenerators.add(new SynthRandomFlameGenerator());
     allGenerators.add(new TentacleRandomFlameGenerator());
+    //    allGenerators.add(new ColorMapRandomFlameGenerator());
     // allGenerators.add(new WikimediaCommonsRandomFlameGenerator());
 
     simpleGenerators = new ArrayList<RandomFlameGenerator>();
@@ -63,7 +64,7 @@ public class AllRandomFlameGenerator extends RandomFlameGenerator {
     int i = 0;
     while (i < simpleGenerators.size()) {
       Class<?> cls = simpleGenerators.get(i).getClass();
-      if (LayerzRandomFlameGenerator.class.equals(cls) || SubFlameRandomFlameGenerator.class.equals(cls) || WikimediaCommonsRandomFlameGenerator.class.equals(cls)) {
+      if (LayerzRandomFlameGenerator.class.equals(cls) || SubFlameRandomFlameGenerator.class.equals(cls) || WikimediaCommonsRandomFlameGenerator.class.equals(cls) || ColorMapRandomFlameGenerator.class.equals(cls)) {
         simpleGenerators.remove(i);
       }
       else {

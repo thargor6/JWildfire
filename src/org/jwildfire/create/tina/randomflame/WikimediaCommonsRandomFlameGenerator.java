@@ -86,13 +86,25 @@ public class WikimediaCommonsRandomFlameGenerator extends RandomFlameGenerator {
     return false;
   }
 
-  private static List<FlameGenerator> generators;
+  private List<FlameGenerator> generators = makeGeneratorList();
 
   private FlameGenerator getRandomGenerator() {
     return generators.get((int) (Math.random() * generators.size()));
   }
 
-  private static class ImageData {
+  private List<FlameGenerator> makeGeneratorList() {
+    List<FlameGenerator> res = new ArrayList<FlameGenerator>();
+    res.add(new BubblesFlameGenerator());
+    res.add(new DuckiesFlameGenerator());
+    res.add(new GnarlFlameGenerator());
+    res.add(new SimpleTilingFlameGenerator());
+    res.add(new SphericalFlameGenerator());
+    res.add(new SplitsFlameGenerator());
+    res.add(new SynthFlameGenerator());
+    return res;
+  }
+
+  static class ImageData {
     private final String imgUrl;
     private final String pageUrl;
     private final byte[] data;
@@ -122,7 +134,85 @@ public class WikimediaCommonsRandomFlameGenerator extends RandomFlameGenerator {
     }
   }
 
-  private static abstract class FlameGenerator {
+  protected ImageData obtainImage() {
+    try {
+      String url = "http://commons.wikimedia.org/wiki/Special:Random/File";
+      int minSize = 16;
+      int maxSize = 16000;
+      byte[] htmlData = downloadRessource(url);
+      String html = new String(htmlData);
+      String imgUrl = getImgUrl(html);
+      String pageUrl = getPageUrl(html);
+      if (imgUrl != null && pageUrl != null && isValidImgUrl(imgUrl)) {
+        byte[] imgData = downloadRessource(imgUrl);
+        String fileExt = RessourceManager.guessImageExtension(imgData);
+        File f = File.createTempFile("tmp", "." + fileExt);
+        f.deleteOnExit();
+        Tools.writeFile(f.getAbsolutePath(), imgData);
+        WFImage img = new ImageReader(new JLabel()).loadImage(f.getAbsolutePath());
+        if (img.getImageWidth() >= minSize && img.getImageWidth() <= maxSize && img.getImageHeight() >= minSize && img.getImageHeight() <= maxSize) {
+          int hashcode = RessourceManager.calcHashCode(imgData);
+          SimpleImage wfImg = (SimpleImage) RessourceManager.getImage(hashcode, imgData);
+          RGBPalette gradient = new MedianCutQuantizer().createPalette(wfImg);
+          return new ImageData(pageUrl, imgUrl, imgData, gradient);
+        }
+      }
+    }
+    catch (Exception ex) {
+      ex.printStackTrace();
+    }
+    return null;
+  }
+
+  private String getImgUrl(String html) {
+    String prefix = "href=\"";
+    int startPos = html.indexOf(prefix + "//upload.wikimedia.org/");
+    int endPos = html.indexOf("\"", startPos + prefix.length() + 1);
+    if (startPos > 0 && endPos > startPos) {
+      return "http:" + html.substring(startPos + prefix.length(), endPos);
+    }
+    return null;
+  }
+
+  private String getPageUrl(String html) {
+    String prefix = "<link rel=\"canonical\" href=\"";
+    int startPos = html.indexOf(prefix);
+    int endPos = html.indexOf("\"", startPos + prefix.length() + 1);
+    if (startPos > 0 && endPos > startPos) {
+      return html.substring(startPos + prefix.length(), endPos);
+    }
+    return null;
+  }
+
+  private boolean isValidImgUrl(String imgUrl) {
+    String lowerImgUrl = imgUrl.toLowerCase();
+    return lowerImgUrl.endsWith(".jpg") || lowerImgUrl.endsWith(".png") || lowerImgUrl.endsWith(".jpeg");
+  }
+
+  public byte[] downloadRessource(String pURL) throws Exception {
+    System.setProperty("http.keepAlive", "false");
+    System.setProperty("java.net.preferIPv4Stack", "true");
+    BufferedInputStream in = null;
+    ByteArrayOutputStream fout = null;
+    try {
+      in = new BufferedInputStream(new URL(pURL).openStream());
+      fout = new ByteArrayOutputStream();
+      byte data[] = new byte[4096];
+      int count;
+      while ((count = in.read(data, 0, 4096)) != -1) {
+        fout.write(data, 0, count);
+      }
+      return fout.toByteArray();
+    }
+    finally {
+      if (in != null)
+        in.close();
+      if (fout != null)
+        fout.close();
+    }
+  }
+
+  private abstract class FlameGenerator {
     public abstract RandomFlameGenerator createRandomFlameGenerator();
 
     public abstract Flame postProcessFlame(Flame pFlame);
@@ -138,10 +228,16 @@ public class WikimediaCommonsRandomFlameGenerator extends RandomFlameGenerator {
         if (Math.random() < 0.5) {
           pXForm.setWeight(2.0 * pXForm.getWeight());
         }
-        imgFunc.setRessource(AbstractColorMapWFFunc.RESSOURCE_IMAGE_DESC_SRC, imgData.getPageUrl().getBytes());
+        if (imgData.getPageUrl() != null) {
+          imgFunc.setRessource(AbstractColorMapWFFunc.RESSOURCE_IMAGE_DESC_SRC, imgData.getPageUrl().getBytes());
+        }
         imgFunc.setRessource(AbstractColorMapWFFunc.RESSOURCE_INLINED_IMAGE, imgData.getData());
-        imgFunc.setRessource(AbstractColorMapWFFunc.RESSOURCE_IMAGE_DESC_SRC, imgData.getPageUrl().getBytes());
-        imgFunc.setRessource(AbstractColorMapWFFunc.RESSOURCE_IMAGE_SRC, imgData.getImgUrl().getBytes());
+        if (imgData.getPageUrl() != null) {
+          imgFunc.setRessource(AbstractColorMapWFFunc.RESSOURCE_IMAGE_DESC_SRC, imgData.getPageUrl().getBytes());
+        }
+        if (imgData.getImgUrl() != null) {
+          imgFunc.setRessource(AbstractColorMapWFFunc.RESSOURCE_IMAGE_SRC, imgData.getImgUrl().getBytes());
+        }
         if (Math.random() < 0.667) {
           pFlame.getFirstLayer().setPalette(imgData.getGradient());
         }
@@ -154,7 +250,7 @@ public class WikimediaCommonsRandomFlameGenerator extends RandomFlameGenerator {
         int iter = 0;
         int maxIter = images.size() == 0 ? 16 : 1;
         while (imgData == null && iter++ < maxIter) {
-          imgData = downloadImage();
+          imgData = obtainImage();
           if (imgData != null) {
             if (images.size() >= MAX_IMAGES) {
               images.set((int) (Math.random() * images.size()), imgData);
@@ -168,91 +264,13 @@ public class WikimediaCommonsRandomFlameGenerator extends RandomFlameGenerator {
       return images.size() > 0 ? images.get((int) (Math.random() * images.size())) : null;
     }
 
-    private String getImgUrl(String html) {
-      String prefix = "href=\"";
-      int startPos = html.indexOf(prefix + "//upload.wikimedia.org/");
-      int endPos = html.indexOf("\"", startPos + prefix.length() + 1);
-      if (startPos > 0 && endPos > startPos) {
-        return "http:" + html.substring(startPos + prefix.length(), endPos);
-      }
-      return null;
-    }
-
-    private String getPageUrl(String html) {
-      String prefix = "<link rel=\"canonical\" href=\"";
-      int startPos = html.indexOf(prefix);
-      int endPos = html.indexOf("\"", startPos + prefix.length() + 1);
-      if (startPos > 0 && endPos > startPos) {
-        return html.substring(startPos + prefix.length(), endPos);
-      }
-      return null;
-    }
-
-    private ImageData downloadImage() {
-      try {
-        String url = "http://commons.wikimedia.org/wiki/Special:Random/File";
-        int minSize = 16;
-        int maxSize = 16000;
-        byte[] htmlData = downloadRessource(url);
-        String html = new String(htmlData);
-        String imgUrl = getImgUrl(html);
-        String pageUrl = getPageUrl(html);
-        if (imgUrl != null && pageUrl != null && isValidImgUrl(imgUrl)) {
-          byte[] imgData = downloadRessource(imgUrl);
-          String fileExt = RessourceManager.guessImageExtension(imgData);
-          File f = File.createTempFile("tmp", "." + fileExt);
-          f.deleteOnExit();
-          Tools.writeFile(f.getAbsolutePath(), imgData);
-          WFImage img = new ImageReader(new JLabel()).loadImage(f.getAbsolutePath());
-          if (img.getImageWidth() >= minSize && img.getImageWidth() <= maxSize && img.getImageHeight() >= minSize && img.getImageHeight() <= maxSize) {
-            int hashcode = RessourceManager.calcHashCode(imgData);
-            SimpleImage wfImg = (SimpleImage) RessourceManager.getImage(hashcode, imgData);
-            RGBPalette gradient = new MedianCutQuantizer().createPalette(wfImg);
-            return new ImageData(pageUrl, imgUrl, imgData, gradient);
-          }
-        }
-      }
-      catch (Exception ex) {
-        ex.printStackTrace();
-      }
-      return null;
-    }
-
-    private boolean isValidImgUrl(String imgUrl) {
-      String lowerImgUrl = imgUrl.toLowerCase();
-      return lowerImgUrl.endsWith(".jpg") || lowerImgUrl.endsWith(".png") || lowerImgUrl.endsWith(".jpeg");
-    }
-
-    public byte[] downloadRessource(String pURL) throws Exception {
-      System.setProperty("http.keepAlive", "false");
-      System.setProperty("java.net.preferIPv4Stack", "true");
-      BufferedInputStream in = null;
-      ByteArrayOutputStream fout = null;
-      try {
-        in = new BufferedInputStream(new URL(pURL).openStream());
-        fout = new ByteArrayOutputStream();
-        byte data[] = new byte[4096];
-        int count;
-        while ((count = in.read(data, 0, 4096)) != -1) {
-          fout.write(data, 0, count);
-        }
-        return fout.toByteArray();
-      }
-      finally {
-        if (in != null)
-          in.close();
-        if (fout != null)
-          fout.close();
-      }
-    }
-
-    private static List<ImageData> images = new ArrayList<ImageData>();
+    private List<ImageData> images = new ArrayList<ImageData>();
 
     private static final int MAX_IMAGES = 20;
 
   }
 
-  private static class BubblesFlameGenerator extends FlameGenerator {
+  private class BubblesFlameGenerator extends FlameGenerator {
 
     @Override
     public RandomFlameGenerator createRandomFlameGenerator() {
@@ -269,7 +287,7 @@ public class WikimediaCommonsRandomFlameGenerator extends RandomFlameGenerator {
     }
   }
 
-  private static class DuckiesFlameGenerator extends FlameGenerator {
+  private class DuckiesFlameGenerator extends FlameGenerator {
 
     @Override
     public RandomFlameGenerator createRandomFlameGenerator() {
@@ -286,7 +304,7 @@ public class WikimediaCommonsRandomFlameGenerator extends RandomFlameGenerator {
     }
   }
 
-  private static class SplitsFlameGenerator extends FlameGenerator {
+  private class SplitsFlameGenerator extends FlameGenerator {
 
     @Override
     public RandomFlameGenerator createRandomFlameGenerator() {
@@ -303,7 +321,7 @@ public class WikimediaCommonsRandomFlameGenerator extends RandomFlameGenerator {
     }
   }
 
-  private static class SphericalFlameGenerator extends FlameGenerator {
+  private class SphericalFlameGenerator extends FlameGenerator {
 
     @Override
     public RandomFlameGenerator createRandomFlameGenerator() {
@@ -320,7 +338,7 @@ public class WikimediaCommonsRandomFlameGenerator extends RandomFlameGenerator {
     }
   }
 
-  private static class GnarlFlameGenerator extends FlameGenerator {
+  private class GnarlFlameGenerator extends FlameGenerator {
 
     @Override
     public RandomFlameGenerator createRandomFlameGenerator() {
@@ -337,7 +355,7 @@ public class WikimediaCommonsRandomFlameGenerator extends RandomFlameGenerator {
     }
   }
 
-  private static class SynthFlameGenerator extends FlameGenerator {
+  private class SynthFlameGenerator extends FlameGenerator {
 
     @Override
     public RandomFlameGenerator createRandomFlameGenerator() {
@@ -354,7 +372,7 @@ public class WikimediaCommonsRandomFlameGenerator extends RandomFlameGenerator {
     }
   }
 
-  private static class SimpleTilingFlameGenerator extends FlameGenerator {
+  private class SimpleTilingFlameGenerator extends FlameGenerator {
 
     @Override
     public RandomFlameGenerator createRandomFlameGenerator() {
@@ -371,14 +389,4 @@ public class WikimediaCommonsRandomFlameGenerator extends RandomFlameGenerator {
     }
   }
 
-  static {
-    generators = new ArrayList<FlameGenerator>();
-    generators.add(new BubblesFlameGenerator());
-    generators.add(new DuckiesFlameGenerator());
-    generators.add(new GnarlFlameGenerator());
-    generators.add(new SimpleTilingFlameGenerator());
-    generators.add(new SphericalFlameGenerator());
-    generators.add(new SplitsFlameGenerator());
-    generators.add(new SynthFlameGenerator());
-  }
 }

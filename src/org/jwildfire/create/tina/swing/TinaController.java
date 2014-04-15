@@ -740,7 +740,7 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
       SimpleImage img = new SimpleImage(width, height);
       img.fillBackground(0, 0, 0);
       flamePanel = new FlamePanel(prefs, img, 0, 0, centerPanel.getWidth(), this, this);
-      flamePanel.setWithColoredTransforms(prefs.isTinaEditorWithColoredTransforms());
+      flamePanel.setWithColoredTransforms(prefs.isTinaEditorControlsWithColor());
       flamePanel.importOptions(prevFlamePanel);
       prevFlamePanel = null;
       flamePanel.setUndoManagerHolder(this);
@@ -1234,7 +1234,7 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
     final int COL_TRANSFORM = 0;
     final int COL_VARIATIONS = 1;
     final int COL_WEIGHT = 2;
-    if (prefs.isTinaEditorWithColoredTransforms()) {
+    if (prefs.isTinaEditorControlsWithColor()) {
       data.transformationsTable.setDefaultRenderer(Object.class, new TransformationsTableCellRenderer());
     }
 
