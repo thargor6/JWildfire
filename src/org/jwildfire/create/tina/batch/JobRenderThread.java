@@ -17,6 +17,7 @@
 package org.jwildfire.create.tina.batch;
 
 import java.awt.Graphics;
+import java.io.File;
 import java.util.Calendar;
 import java.util.List;
 
@@ -36,6 +37,7 @@ public class JobRenderThread implements Runnable {
   private final QualityProfile qualityProfile;
   private final ResolutionProfile resolutionProfile;
   private boolean cancelSignalled;
+  private boolean doOverwriteExisting = false;
 
   public JobRenderThread(JobRenderThreadController pController, List<Job> pActiveJobList, ResolutionProfile pResolutionProfile, QualityProfile pQualityProfile) {
     controller = pController;
@@ -65,6 +67,7 @@ public class JobRenderThread implements Runnable {
             info.setRenderHDRIntensityMap(qualityProfile.isWithHDRIntensityMap());
             List<Flame> flames = new FlameReader(controller.getPrefs()).readFlames(job.getFlameFilename());
             Flame flame = flames.get(0);
+            String primaryFilename = job.getImageFilename(flame.getStereo3dMode());
             double wScl = (double) info.getImageWidth() / (double) flame.getWidth();
             double hScl = (double) info.getImageHeight() / (double) flame.getHeight();
             flame.setPixelsPerUnit((wScl + hScl) * 0.5 * flame.getPixelsPerUnit());
@@ -73,21 +76,27 @@ public class JobRenderThread implements Runnable {
             double oldSampleDensity = flame.getSampleDensity();
             double oldFilterRadius = flame.getSpatialFilterRadius();
             try {
-              flame.setSampleDensity(qualityProfile.getQuality());
-              FlameRenderer renderer = new FlameRenderer(flame, controller.getPrefs(), flame.isBGTransparency(), false);
-              renderer.setProgressUpdater(controller.getJobProgressUpdater());
-              long t0 = Calendar.getInstance().getTimeInMillis();
-              RenderedFlame res = renderer.renderFlame(info);
-              long t1 = Calendar.getInstance().getTimeInMillis();
+              if (!doOverwriteExisting && new File(primaryFilename).exists()) {
+                controller.getJobProgressUpdater().initProgress(1);
+                controller.getJobProgressUpdater().updateProgress(1);
+              }
+              else {
+                flame.setSampleDensity(qualityProfile.getQuality());
+                FlameRenderer renderer = new FlameRenderer(flame, controller.getPrefs(), flame.isBGTransparency(), false);
+                renderer.setProgressUpdater(controller.getJobProgressUpdater());
+                long t0 = Calendar.getInstance().getTimeInMillis();
+                RenderedFlame res = renderer.renderFlame(info);
+                long t1 = Calendar.getInstance().getTimeInMillis();
+                job.setElapsedSeconds(((double) (t1 - t0) / 1000.0));
+                new ImageWriter().saveImage(res.getImage(), primaryFilename);
+                if (res.getHDRImage() != null) {
+                  new ImageWriter().saveImage(res.getHDRImage(), job.getImageFilename(flame.getStereo3dMode()) + ".hdr");
+                }
+                if (res.getHDRIntensityMap() != null) {
+                  new ImageWriter().saveImage(res.getHDRIntensityMap(), job.getImageFilename(flame.getStereo3dMode()) + ".intensity.hdr");
+                }
+              }
               job.setFinished(true);
-              job.setElapsedSeconds(((double) (t1 - t0) / 1000.0));
-              new ImageWriter().saveImage(res.getImage(), job.getImageFilename(flame.getStereo3dMode()));
-              if (res.getHDRImage() != null) {
-                new ImageWriter().saveImage(res.getHDRImage(), job.getImageFilename(flame.getStereo3dMode()) + ".hdr");
-              }
-              if (res.getHDRIntensityMap() != null) {
-                new ImageWriter().saveImage(res.getHDRIntensityMap(), job.getImageFilename(flame.getStereo3dMode()) + ".intensity.hdr");
-              }
               try {
                 {
                   controller.refreshRenderBatchJobsTable();
