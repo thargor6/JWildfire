@@ -22,8 +22,6 @@ import static org.jwildfire.base.mathlib.MathLib.atan2;
 import static org.jwildfire.base.mathlib.MathLib.cos;
 import static org.jwildfire.base.mathlib.MathLib.sin;
 import static org.jwildfire.base.mathlib.MathLib.sqrt;
-import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_CUDA;
-import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_JWILDFIRE;
 
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
@@ -77,11 +75,6 @@ public class Disc3DFunc extends VariationFunc {
   public void init(FlameTransformationContext pContext, Layer pLayer, XForm pXForm, double pAmount) {
     if (pi == 0)
       pi = EPSILON;
-  }
-
-  @Override
-  public int getAvailability() {
-    return AVAILABILITY_JWILDFIRE | AVAILABILITY_CUDA;
   }
 
 }

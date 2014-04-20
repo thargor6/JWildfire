@@ -20,7 +20,6 @@ import static org.jwildfire.base.mathlib.MathLib.atan2;
 import static org.jwildfire.base.mathlib.MathLib.cos;
 import static org.jwildfire.base.mathlib.MathLib.sin;
 import static org.jwildfire.base.mathlib.MathLib.sqrt;
-import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_JWILDFIRE;
 
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
@@ -76,11 +75,6 @@ public class CircusFunc extends VariationFunc {
   @Override
   public String getName() {
     return "circus";
-  }
-
-  @Override
-  public int getAvailability() {
-    return AVAILABILITY_JWILDFIRE;
   }
 
   private double scale_1;

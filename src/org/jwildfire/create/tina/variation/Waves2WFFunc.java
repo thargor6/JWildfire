@@ -22,8 +22,6 @@ import static org.jwildfire.base.mathlib.MathLib.cos;
 import static org.jwildfire.base.mathlib.MathLib.exp;
 import static org.jwildfire.base.mathlib.MathLib.fabs;
 import static org.jwildfire.base.mathlib.MathLib.sin;
-import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_CUDA;
-import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_JWILDFIRE;
 
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Layer;
@@ -115,11 +113,6 @@ public class Waves2WFFunc extends VariationFunc {
   public void init(FlameTransformationContext pContext, Layer pLayer, XForm pXForm, double pAmount) {
     _dampingX = fabs(dampX) < EPSILON ? 1.0 : exp(dampX);
     _dampingY = fabs(dampY) < EPSILON ? 1.0 : exp(dampY);
-  }
-
-  @Override
-  public int getAvailability() {
-    return AVAILABILITY_JWILDFIRE | AVAILABILITY_CUDA;
   }
 
 }

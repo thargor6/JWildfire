@@ -20,8 +20,6 @@ import static org.jwildfire.base.mathlib.MathLib.atan2;
 import static org.jwildfire.base.mathlib.MathLib.cos;
 import static org.jwildfire.base.mathlib.MathLib.sin;
 import static org.jwildfire.base.mathlib.MathLib.sqrt;
-import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_CUDA;
-import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_JWILDFIRE;
 
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
@@ -78,11 +76,6 @@ public class BlobFunc extends VariationFunc {
   @Override
   public String getName() {
     return "blob";
-  }
-
-  @Override
-  public int getAvailability() {
-    return AVAILABILITY_JWILDFIRE | AVAILABILITY_CUDA;
   }
 
 }

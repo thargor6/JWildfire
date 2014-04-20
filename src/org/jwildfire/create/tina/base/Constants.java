@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2014 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -20,8 +20,4 @@ public class Constants {
   public final static int MAX_MOD_WEIGHT_COUNT = 100;
   public final static int NEXT_APPLIED_XFORM_TABLE_SIZE = 1024;
   public final static int INITIAL_ITERATIONS = 42;
-
-  public final static int AVAILABILITY_JWILDFIRE = 0;
-  public final static int AVAILABILITY_CUDA = 1;
-
 }

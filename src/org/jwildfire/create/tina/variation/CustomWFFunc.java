@@ -16,8 +16,6 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_JWILDFIRE;
-
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
@@ -182,11 +180,6 @@ public class CustomWFFunc extends VariationFunc {
       System.out.println("##############################################################");
       throw new RuntimeException(ex);
     }
-  }
-
-  @Override
-  public int getAvailability() {
-    return AVAILABILITY_JWILDFIRE;
   }
 
 }

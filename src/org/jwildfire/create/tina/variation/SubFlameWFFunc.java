@@ -16,9 +16,6 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_CUDA;
-import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_JWILDFIRE;
-
 import java.util.List;
 
 import org.jwildfire.base.Prefs;
@@ -198,8 +195,4 @@ public class SubFlameWFFunc extends VariationFunc {
       throw new IllegalArgumentException(pName);
   }
 
-  @Override
-  public int getAvailability() {
-    return AVAILABILITY_JWILDFIRE | AVAILABILITY_CUDA;
-  }
 }

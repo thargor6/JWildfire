@@ -24,7 +24,6 @@ import static org.jwildfire.base.mathlib.MathLib.pow;
 import static org.jwildfire.base.mathlib.MathLib.sin;
 import static org.jwildfire.base.mathlib.MathLib.sqr;
 import static org.jwildfire.base.mathlib.MathLib.sqrt;
-import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_JWILDFIRE;
 
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Layer;
@@ -85,11 +84,6 @@ public class PostJulia3DQFunc extends VariationFunc {
   private int genRandomPower() {
     int res = (int) (Math.random() * 5.0 + 2.5);
     return Math.random() < 0.5 ? res : -res;
-  }
-
-  @Override
-  public int getAvailability() {
-    return AVAILABILITY_JWILDFIRE;
   }
 
   private double inv_power, abs_inv_power, half_inv_power, inv_power_2pi;

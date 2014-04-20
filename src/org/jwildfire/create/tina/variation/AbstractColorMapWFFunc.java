@@ -46,13 +46,16 @@ public abstract class AbstractColorMapWFFunc extends VariationFunc {
   private static final String PARAM_TILEX = "tile_x";
   private static final String PARAM_TILEY = "tile_y";
   private static final String PARAM_RESETZ = "reset_z";
+  private static final String PARAM_IS_SEQUENCE = "is_sequence";
+  private static final String PARAM_SEQUENCE_START = "sequence_start";
+  private static final String PARAM_SEQUENCE_DIGITS = "sequence_digits";
 
   private static final String RESSOURCE_IMAGE_FILENAME = "image_filename";
   public static final String RESSOURCE_INLINED_IMAGE = "inlined_image";
   public static final String RESSOURCE_IMAGE_SRC = "image_src";
   public static final String RESSOURCE_IMAGE_DESC_SRC = "image_desc_src";
 
-  private static final String[] paramNames = { PARAM_SCALEX, PARAM_SCALEY, PARAM_SCALEZ, PARAM_OFFSETX, PARAM_OFFSETY, PARAM_OFFSETZ, PARAM_TILEX, PARAM_TILEY, PARAM_RESETZ };
+  private static final String[] paramNames = { PARAM_SCALEX, PARAM_SCALEY, PARAM_SCALEZ, PARAM_OFFSETX, PARAM_OFFSETY, PARAM_OFFSETZ, PARAM_TILEX, PARAM_TILEY, PARAM_RESETZ, PARAM_IS_SEQUENCE, PARAM_SEQUENCE_START, PARAM_SEQUENCE_DIGITS };
   private static final String[] ressourceNames = { RESSOURCE_IMAGE_FILENAME, RESSOURCE_INLINED_IMAGE, RESSOURCE_IMAGE_DESC_SRC, RESSOURCE_IMAGE_SRC };
 
   private double scaleX = 1.0;
@@ -69,6 +72,9 @@ public abstract class AbstractColorMapWFFunc extends VariationFunc {
   private String imageDescSrc = null;
   private String imageSrc = null;
   private int inlinedImageHash = 0;
+  private int is_sequence = 0;
+  private int sequence_start = 1;
+  private int sequence_digits = 4;
 
   // derived params
   private int imgWidth, imgHeight;
@@ -145,7 +151,7 @@ public abstract class AbstractColorMapWFFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { scaleX, scaleY, scaleZ, offsetX, offsetY, offsetZ, tileX, tileY, resetZ };
+    return new Object[] { scaleX, scaleY, scaleZ, offsetX, offsetY, offsetZ, tileX, tileY, resetZ, is_sequence, sequence_start, sequence_digits };
   }
 
   @Override
@@ -168,6 +174,18 @@ public abstract class AbstractColorMapWFFunc extends VariationFunc {
       tileY = Tools.FTOI(pValue);
     else if (PARAM_RESETZ.equalsIgnoreCase(pName))
       resetZ = Tools.FTOI(pValue);
+    else if (PARAM_IS_SEQUENCE.equalsIgnoreCase(pName)) {
+      is_sequence = Tools.FTOI(pValue);
+      clearCurrColorMap();
+    }
+    else if (PARAM_SEQUENCE_START.equalsIgnoreCase(pName)) {
+      sequence_start = Tools.FTOI(pValue);
+      clearCurrColorMap();
+    }
+    else if (PARAM_SEQUENCE_DIGITS.equalsIgnoreCase(pName)) {
+      sequence_digits = Tools.FTOI(pValue);
+      clearCurrColorMap();
+    }
     else
       throw new IllegalArgumentException(pName);
   }
@@ -242,7 +260,7 @@ public abstract class AbstractColorMapWFFunc extends VariationFunc {
     }
     else if (imageFilename != null && imageFilename.length() > 0) {
       try {
-        colorMap = RessourceManager.getImage(imageFilename);
+        colorMap = RessourceManager.getImage(getCurrImageFilename(pContext));
       }
       catch (Exception e) {
         e.printStackTrace();
@@ -253,6 +271,29 @@ public abstract class AbstractColorMapWFFunc extends VariationFunc {
     }
     imgWidth = colorMap.getImageWidth();
     imgHeight = colorMap.getImageHeight();
+  }
+
+  private String getCurrImageFilename(FlameTransformationContext pContext) {
+    if (is_sequence > 0) {
+      int frame = pContext.getFrame() - 1 + sequence_start;
+      String baseFilename;
+      String fileExt;
+      int p = imageFilename.lastIndexOf(".");
+      if (p < 0 || p <= sequence_digits || p == imageFilename.length() - 1)
+        return imageFilename;
+      baseFilename = imageFilename.substring(0, p - sequence_digits);
+      fileExt = imageFilename.substring(p, imageFilename.length());
+
+      String number = String.valueOf(frame);
+      while (number.length() < sequence_digits) {
+        number = "0" + number;
+      }
+      return baseFilename + number + fileExt;
+
+    }
+    else {
+      return imageFilename;
+    }
   }
 
   private static SimpleImage dfltImage = null;
@@ -279,14 +320,12 @@ public abstract class AbstractColorMapWFFunc extends VariationFunc {
   public void setRessource(String pName, byte[] pValue) {
     if (RESSOURCE_IMAGE_FILENAME.equalsIgnoreCase(pName)) {
       imageFilename = pValue != null ? new String(pValue) : "";
-      colorMap = null;
-      colorIdxMap.clear();
+      clearCurrColorMap();
     }
     else if (RESSOURCE_INLINED_IMAGE.equalsIgnoreCase(pName)) {
       inlinedImage = pValue;
       inlinedImageHash = RessourceManager.calcHashCode(inlinedImage);
-      colorMap = null;
-      colorIdxMap.clear();
+      clearCurrColorMap();
     }
     else if (RESSOURCE_IMAGE_DESC_SRC.equalsIgnoreCase(pName)) {
       imageDescSrc = pValue != null ? new String(pValue) : "";
@@ -296,6 +335,11 @@ public abstract class AbstractColorMapWFFunc extends VariationFunc {
     }
     else
       throw new IllegalArgumentException(pName);
+  }
+
+  private void clearCurrColorMap() {
+    colorMap = null;
+    colorIdxMap.clear();
   }
 
   @Override

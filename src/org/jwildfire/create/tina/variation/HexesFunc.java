@@ -27,8 +27,6 @@ import static org.jwildfire.base.mathlib.MathLib.cos;
 import static org.jwildfire.base.mathlib.MathLib.floor;
 import static org.jwildfire.base.mathlib.MathLib.pow;
 import static org.jwildfire.base.mathlib.MathLib.sin;
-import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_CUDA;
-import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_JWILDFIRE;
 import static org.jwildfire.create.tina.variation.VoronoiTools.VORONOI_MAXPOINTS;
 import static org.jwildfire.create.tina.variation.VoronoiTools._x_;
 import static org.jwildfire.create.tina.variation.VoronoiTools._y_;
@@ -246,11 +244,6 @@ public class HexesFunc extends VariationFunc {
   public void init(FlameTransformationContext pContext, Layer pLayer, XForm pXForm, double pAmount) {
     rotSin = sin(rotate * 2.0 * MathLib.M_PI);
     rotCos = cos(rotate * 2.0 * MathLib.M_PI);
-  }
-
-  @Override
-  public int getAvailability() {
-    return AVAILABILITY_JWILDFIRE | AVAILABILITY_CUDA;
   }
 
 }

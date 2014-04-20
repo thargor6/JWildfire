@@ -27,7 +27,6 @@ import static org.jwildfire.base.mathlib.MathLib.iabs;
 import static org.jwildfire.base.mathlib.MathLib.pow;
 import static org.jwildfire.base.mathlib.MathLib.sin;
 import static org.jwildfire.base.mathlib.MathLib.sqr;
-import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_JWILDFIRE;
 
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Layer;
@@ -275,11 +274,6 @@ public class BubbleT3DFunc extends VariationFunc {
   @Override
   public String getName() {
     return "bubbleT3D";
-  }
-
-  @Override
-  public int getAvailability() {
-    return AVAILABILITY_JWILDFIRE;
   }
 
   private static final int TRUE = 1;

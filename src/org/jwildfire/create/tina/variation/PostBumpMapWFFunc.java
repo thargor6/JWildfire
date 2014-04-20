@@ -16,8 +16,6 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_JWILDFIRE;
-
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
@@ -194,8 +192,4 @@ public class PostBumpMapWFFunc extends VariationFunc {
       throw new IllegalArgumentException(pName);
   }
 
-  @Override
-  public int getAvailability() {
-    return AVAILABILITY_JWILDFIRE;
-  }
 }

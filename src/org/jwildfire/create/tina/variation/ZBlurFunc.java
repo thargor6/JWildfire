@@ -16,9 +16,6 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_CUDA;
-import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_JWILDFIRE;
-
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
@@ -50,8 +47,4 @@ public class ZBlurFunc extends SimpleVariationFunc {
     gauss_N = 0;
   }
 
-  @Override
-  public int getAvailability() {
-    return AVAILABILITY_JWILDFIRE | AVAILABILITY_CUDA;
-  }
 }

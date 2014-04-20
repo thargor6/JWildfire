@@ -16,8 +16,6 @@
  */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_JWILDFIRE;
-
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
@@ -34,8 +32,4 @@ public class DisplacementMapWFFunc extends AbstractDisplacementMapWFFunc {
     transform(pContext, pXForm, pAffineTP, pVarTP, pAmount, pAffineTP.x, pAffineTP.y);
   }
 
-  @Override
-  public int getAvailability() {
-    return AVAILABILITY_JWILDFIRE;
-  }
 }

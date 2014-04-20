@@ -24,7 +24,6 @@ import static org.jwildfire.base.mathlib.MathLib.exp;
 import static org.jwildfire.base.mathlib.MathLib.fmod;
 import static org.jwildfire.base.mathlib.MathLib.log;
 import static org.jwildfire.base.mathlib.MathLib.sin;
-import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_JWILDFIRE;
 
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
@@ -91,11 +90,6 @@ public class JuliaCFunc extends VariationFunc {
   private double genRandomPower() {
     double res = (int) (Math.random() * 5.0 + 2.5) + 0.5;
     return Math.random() < 0.5 ? res : -res;
-  }
-
-  @Override
-  public int getAvailability() {
-    return AVAILABILITY_JWILDFIRE;
   }
 
   @Override

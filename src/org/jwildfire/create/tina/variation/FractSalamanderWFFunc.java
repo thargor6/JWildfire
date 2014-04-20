@@ -17,9 +17,6 @@
 
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_CUDA;
-import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_JWILDFIRE;
-
 import java.util.List;
 
 public class FractSalamanderWFFunc extends AbstractFractWFFunc {
@@ -34,11 +31,6 @@ public class FractSalamanderWFFunc extends AbstractFractWFFunc {
   @Override
   public String getName() {
     return "fract_salamander_wf";
-  }
-
-  @Override
-  public int getAvailability() {
-    return AVAILABILITY_JWILDFIRE | AVAILABILITY_CUDA;
   }
 
   @Override

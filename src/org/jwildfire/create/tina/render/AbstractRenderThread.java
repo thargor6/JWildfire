@@ -43,7 +43,7 @@ public abstract class AbstractRenderThread implements Runnable {
     renderPackets = pRenderPackets;
     samples = pSamples;
     randGen = RandomGeneratorFactory.getInstance(pPrefs.getTinaRandomNumberGenerator(), pThreadId);
-    ctx = new FlameTransformationContext(pRenderer, randGen);
+    ctx = new FlameTransformationContext(pRenderer, randGen, pRenderPackets.get(0).getFlame().getFrame());
     ctx.setPreserveZCoordinate(pRenderPackets.get(0).getFlame().isPreserveZ());
     ctx.setPreview(renderer.isPreview());
   }

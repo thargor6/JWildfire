@@ -19,9 +19,6 @@
 //  Jed Kelsey, 20 June 2007
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_CUDA;
-import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_JWILDFIRE;
-
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
@@ -205,8 +202,4 @@ public class MandelbrotFunc extends VariationFunc {
     _x0 = _y0 = 0.0;
   }
 
-  @Override
-  public int getAvailability() {
-    return AVAILABILITY_JWILDFIRE | AVAILABILITY_CUDA;
-  }
 }

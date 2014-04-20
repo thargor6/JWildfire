@@ -22,7 +22,6 @@ import static org.jwildfire.base.mathlib.MathLib.exp;
 import static org.jwildfire.base.mathlib.MathLib.log;
 import static org.jwildfire.base.mathlib.MathLib.sin;
 import static org.jwildfire.base.mathlib.MathLib.sqrt;
-import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_JWILDFIRE;
 
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
@@ -618,11 +617,6 @@ public class SVGWFFunc extends VariationFunc {
   @Override
   public String getName() {
     return "svg_wf";
-  }
-
-  @Override
-  public int getAvailability() {
-    return AVAILABILITY_JWILDFIRE;
   }
 
   private double lastR, lastG, lastB;

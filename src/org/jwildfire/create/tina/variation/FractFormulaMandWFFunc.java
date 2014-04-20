@@ -17,8 +17,6 @@
 
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_JWILDFIRE;
-
 import java.util.List;
 
 import org.jwildfire.base.Tools;
@@ -39,11 +37,6 @@ public class FractFormulaMandWFFunc extends AbstractFractFormulaWFFunc {
   @Override
   public String getName() {
     return "fract_formula_mand_wf";
-  }
-
-  @Override
-  public int getAvailability() {
-    return AVAILABILITY_JWILDFIRE;
   }
 
   @Override

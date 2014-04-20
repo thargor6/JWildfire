@@ -18,8 +18,6 @@ package org.jwildfire.create.tina.variation;
 
 import static org.jwildfire.base.mathlib.MathLib.max;
 import static org.jwildfire.base.mathlib.MathLib.min;
-import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_CUDA;
-import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_JWILDFIRE;
 
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Layer;
@@ -118,8 +116,4 @@ public class CropFunc extends VariationFunc {
     h = (ymax - ymin) * 0.5 * scatter_area;
   }
 
-  @Override
-  public int getAvailability() {
-    return AVAILABILITY_JWILDFIRE | AVAILABILITY_CUDA;
-  }
 }

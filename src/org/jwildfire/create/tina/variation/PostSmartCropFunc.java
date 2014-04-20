@@ -25,7 +25,6 @@ import static org.jwildfire.base.mathlib.MathLib.fabs;
 import static org.jwildfire.base.mathlib.MathLib.log;
 import static org.jwildfire.base.mathlib.MathLib.sin;
 import static org.jwildfire.base.mathlib.MathLib.sqrt;
-import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_JWILDFIRE;
 
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Layer;
@@ -239,11 +238,6 @@ public class PostSmartCropFunc extends VariationFunc {
       post_scrop_roundcoeff = roundstr / sin(post_scrop_alpha / 2.0) / post_scrop_workpower * 2.0;
     }
     post_scrop_x = post_scrop_y = post_scrop_z = post_scrop_c = 0.0;
-  }
-
-  @Override
-  public int getAvailability() {
-    return AVAILABILITY_JWILDFIRE;
   }
 
   @Override

@@ -1059,7 +1059,7 @@ public class FlamePanel extends ImagePanel {
 
   private FlameTransformationContext getFlameTransformationContext() {
     if (flameTransformationContext == null) {
-      flameTransformationContext = new FlameTransformationContext(getFlameRenderer(), RandomGeneratorFactory.getInstance(RandomGeneratorType.getDefaultValue()));
+      flameTransformationContext = new FlameTransformationContext(getFlameRenderer(), RandomGeneratorFactory.getInstance(RandomGeneratorType.getDefaultValue()), 1);
       flameTransformationContext.setPreview(getFlameRenderer().isPreview());
     }
     return flameTransformationContext;

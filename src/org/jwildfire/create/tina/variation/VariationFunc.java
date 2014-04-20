@@ -16,8 +16,6 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_JWILDFIRE;
-
 import java.io.Serializable;
 
 import org.jwildfire.create.tina.base.Layer;
@@ -33,10 +31,6 @@ public abstract class VariationFunc implements Serializable {
 
   public int getPriority() {
     return 0;
-  }
-
-  public int getAvailability() {
-    return AVAILABILITY_JWILDFIRE;
   }
 
   public abstract void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount);

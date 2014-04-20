@@ -21,7 +21,6 @@ import static org.jwildfire.base.mathlib.MathLib.cos;
 import static org.jwildfire.base.mathlib.MathLib.fabs;
 import static org.jwildfire.base.mathlib.MathLib.fmod;
 import static org.jwildfire.base.mathlib.MathLib.max;
-import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_JWILDFIRE;
 
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Layer;
@@ -152,8 +151,4 @@ public class GDOffsFunc extends VariationFunc {
     return (c * (b - a) + a);
   }
 
-  @Override
-  public int getAvailability() {
-    return AVAILABILITY_JWILDFIRE;
-  }
 }

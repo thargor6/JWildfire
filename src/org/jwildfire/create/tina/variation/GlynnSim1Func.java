@@ -23,8 +23,6 @@ import static org.jwildfire.base.mathlib.MathLib.pow;
 import static org.jwildfire.base.mathlib.MathLib.sin;
 import static org.jwildfire.base.mathlib.MathLib.sqr;
 import static org.jwildfire.base.mathlib.MathLib.sqrt;
-import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_CUDA;
-import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_JWILDFIRE;
 
 import java.io.Serializable;
 
@@ -144,11 +142,6 @@ public class GlynnSim1Func extends VariationFunc {
     this._x1 = this.radius * cosPhi1;
     this._y1 = this.radius * sinPhi1;
     this._absPow = fabs(this.pow);
-  }
-
-  @Override
-  public int getAvailability() {
-    return AVAILABILITY_JWILDFIRE | AVAILABILITY_CUDA;
   }
 
 }

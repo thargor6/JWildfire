@@ -20,7 +20,6 @@ import static org.jwildfire.base.mathlib.MathLib.EPSILON;
 import static org.jwildfire.base.mathlib.MathLib.cos;
 import static org.jwildfire.base.mathlib.MathLib.fabs;
 import static org.jwildfire.base.mathlib.MathLib.sin;
-import static org.jwildfire.create.tina.base.Constants.AVAILABILITY_JWILDFIRE;
 
 import java.util.Map;
 import java.util.Random;
@@ -179,11 +178,6 @@ public class Grid3DWFFunc extends VariationFunc {
   @Override
   public String getName() {
     return "grid3d_wf";
-  }
-
-  @Override
-  public int getAvailability() {
-    return AVAILABILITY_JWILDFIRE;
   }
 
   private String getSizeSpreadMapKey() {

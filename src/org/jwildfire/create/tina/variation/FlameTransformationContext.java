@@ -22,12 +22,14 @@ import org.jwildfire.create.tina.render.FlameRenderer;
 public class FlameTransformationContext {
   private final AbstractRandomGenerator randGen;
   private final FlameRenderer flameRenderer;
+  private final int frame;
   private boolean preserveZCoordinate;
   private boolean preview;
 
-  public FlameTransformationContext(FlameRenderer pFlameRenderer, AbstractRandomGenerator pRandGen) {
+  public FlameTransformationContext(FlameRenderer pFlameRenderer, AbstractRandomGenerator pRandGen, int pFrame) {
     randGen = pRandGen;
     flameRenderer = pFlameRenderer;
+    frame = pFrame;
   }
 
   public double random() {
@@ -60,6 +62,10 @@ public class FlameTransformationContext {
 
   public void setPreview(boolean pPreview) {
     preview = pPreview;
+  }
+
+  public int getFrame() {
+    return frame;
   }
 
 }
