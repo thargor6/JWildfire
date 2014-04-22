@@ -388,6 +388,8 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
     data.deleteTransformationButton = parameterObject.pDeleteTransformationButton;
     data.addFinalTransformationButton = parameterObject.pAddFinalTransformationButton;
     data.affineEditPostTransformButton = parameterObject.pAffineEditPostTransformButton;
+    data.affineRotateEditMotionCurveBtn = parameterObject.affineRotateEditMotionCurveBtn;
+    data.affineScaleEditMotionCurveBtn = parameterObject.affineScaleEditMotionCurveBtn;
     data.affineEditPostTransformSmallButton = parameterObject.pAffineEditPostTransformSmallButton;
     data.affinePreserveZButton = parameterObject.pAffinePreserveZButton;
     data.affineScaleXButton = parameterObject.pAffineScaleXButton;
@@ -4933,6 +4935,8 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
     animationController.registerMotionPropertyControls(data.affineC11REd);
     animationController.registerMotionPropertyControls(data.affineC20REd);
     animationController.registerMotionPropertyControls(data.affineC21REd);
+    animationController.registerMotionPropertyControls(new MotionCurveButtonPair(data.affineRotateLeftButton, data.affineRotateEditMotionCurveBtn));
+    animationController.registerMotionPropertyControls(new MotionCurveButtonPair(data.affineEnlargeButton, data.affineScaleEditMotionCurveBtn));
 
     for (TinaNonlinearControlsRow row : data.TinaNonlinearControlsRows) {
       animationController.registerMotionPropertyControls(row.getNonlinearVarREd());
@@ -5007,6 +5011,16 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
     finally {
       refreshing = false;
     }
+  }
+
+  public void nonlinearVarEditMotionCurve(int pIdx) {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void nonlinearParamsEditMotionCurve(int pIdx) {
+    // TODO Auto-generated method stub
+
   }
 
 }

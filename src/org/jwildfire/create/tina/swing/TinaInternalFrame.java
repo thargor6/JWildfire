@@ -3016,8 +3016,25 @@ public class TinaInternalFrame extends JInternalFrame {
       affinePreserveZButton.setPreferredSize(new Dimension(136, 24));
       affinePreserveZButton.setLocation(new Point(4, 181));
       affinePreserveZButton.setFont(new Font("Dialog", Font.BOLD, 10));
-      affinePreserveZButton.setBounds(216, 155, 104, 24);
+      affinePreserveZButton.setBounds(218, 155, 104, 24);
       tinaAffineTransformationPanel.add(affinePreserveZButton);
+
+      affineRotateEditMotionCurveBtn = new JButton();
+      affineRotateEditMotionCurveBtn.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getXFormControls().editRotateMotionCurve(e);
+        }
+      });
+      affineRotateEditMotionCurveBtn.setToolTipText("Create/edit a motion curve");
+      affineRotateEditMotionCurveBtn.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/curve-money2.png")));
+      affineRotateEditMotionCurveBtn.setText("");
+      affineRotateEditMotionCurveBtn.setSize(new Dimension(70, 24));
+      affineRotateEditMotionCurveBtn.setPreferredSize(new Dimension(55, 24));
+      affineRotateEditMotionCurveBtn.setLocation(new Point(0, 57));
+      affineRotateEditMotionCurveBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      affineRotateEditMotionCurveBtn.setBounds(0, 57, 22, 24);
+      tinaAffineTransformationPanel.add(affineRotateEditMotionCurveBtn);
+      tinaAffineTransformationPanel.add(getAffineScaleEditMotionCurveBtn());
     }
     return tinaAffineTransformationPanel;
   }
@@ -4101,7 +4118,7 @@ public class TinaInternalFrame extends JInternalFrame {
         getStereo3dSwapSidesCBx(), getTinaCameraCamPosXREd(), getTinaCameraCamPosXSlider(), getTinaCameraCamPosYREd(), getTinaCameraCamPosYSlider(),
         getTinaCameraCamPosZREd(), getTinaCameraCamPosZSlider(), getTinaSaturationREd(), getTinaSaturationSlider(), getToggleDrawGridButton(),
         getEditorFractalBrightnessSlider(), getMouseTransformEditTriangleViewButton(), getTinaPaletteRandomGeneratorCmb(), getToggleTriangleWithColorsButton(),
-        getFlameBrowserCopyToBtn(), getFlameBrowserMoveToBtn());
+        getFlameBrowserCopyToBtn(), getFlameBrowserMoveToBtn(), getAffineRotateEditMotionCurveBtn(), getAffineScaleEditMotionCurveBtn());
 
     tinaController = new TinaController(params);
 
@@ -4529,7 +4546,7 @@ public class TinaInternalFrame extends JInternalFrame {
       affineRotateLeftButton.setFont(new Font("Dialog", Font.BOLD, 10));
       affineRotateLeftButton.setPreferredSize(new Dimension(55, 24));
       affineRotateLeftButton.setSize(new Dimension(70, 24));
-      affineRotateLeftButton.setLocation(new Point(6, 57));
+      affineRotateLeftButton.setLocation(new Point(0, 57));
       //      affineRotateLeftButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/turnLeft.gif")));
       affineRotateLeftButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/object-rotate-left-3.png")));
       affineRotateLeftButton.setToolTipText("Rotate triangle left");
@@ -4553,7 +4570,7 @@ public class TinaInternalFrame extends JInternalFrame {
       affineRotateRightButton = new JButton();
       affineRotateRightButton.setFont(new Font("Dialog", Font.BOLD, 10));
       affineRotateRightButton.setPreferredSize(new Dimension(55, 24));
-      affineRotateRightButton.setLocation(new Point(6, 102));
+      affineRotateRightButton.setLocation(new Point(0, 102));
       affineRotateRightButton.setSize(new Dimension(70, 24));
       //      affineRotateRightButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/turnRight.gif")));
       affineRotateRightButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/object-rotate-right-3.png")));
@@ -4578,9 +4595,8 @@ public class TinaInternalFrame extends JInternalFrame {
       affineEnlargeButton = new JButton();
       affineEnlargeButton.setFont(new Font("Dialog", Font.BOLD, 8));
       affineEnlargeButton.setPreferredSize(new Dimension(55, 24));
-      affineEnlargeButton.setLocation(new Point(88, 57));
+      affineEnlargeButton.setLocation(new Point(92, 57));
       affineEnlargeButton.setSize(new Dimension(70, 24));
-      //      affineEnlargeButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/enlarge.gif")));
       affineEnlargeButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/arrow-out.png")));
       affineEnlargeButton.setToolTipText("Enlarge triangle");
       affineEnlargeButton.setText("");
@@ -4603,7 +4619,7 @@ public class TinaInternalFrame extends JInternalFrame {
       affineShrinkButton = new JButton();
       affineShrinkButton.setFont(new Font("Dialog", Font.BOLD, 8));
       affineShrinkButton.setPreferredSize(new Dimension(55, 24));
-      affineShrinkButton.setLocation(new Point(88, 102));
+      affineShrinkButton.setLocation(new Point(92, 102));
       affineShrinkButton.setSize(new Dimension(70, 24));
       //      affineShrinkButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/shrink.gif")));
       affineShrinkButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/arrow-in.png")));
@@ -4629,7 +4645,7 @@ public class TinaInternalFrame extends JInternalFrame {
       affineRotateAmountREd.setPreferredSize(new Dimension(56, 24));
       affineRotateAmountREd.setText("90");
       affineRotateAmountREd.setSize(new Dimension(70, 24));
-      affineRotateAmountREd.setLocation(new Point(6, 80));
+      affineRotateAmountREd.setLocation(new Point(0, 80));
       affineRotateAmountREd.setFont(new Font("Dialog", Font.PLAIN, 10));
     }
     return affineRotateAmountREd;
@@ -4732,7 +4748,7 @@ public class TinaInternalFrame extends JInternalFrame {
       affineScaleAmountREd.setPreferredSize(new Dimension(56, 24));
       affineScaleAmountREd.setText("105");
       affineScaleAmountREd.setSize(new Dimension(70, 24));
-      affineScaleAmountREd.setLocation(new Point(88, 80));
+      affineScaleAmountREd.setLocation(new Point(92, 80));
       affineScaleAmountREd.setFont(new Font("Dialog", Font.PLAIN, 10));
     }
     return affineScaleAmountREd;
@@ -4748,7 +4764,7 @@ public class TinaInternalFrame extends JInternalFrame {
       affineMoveUpButton = new JButton();
       affineMoveUpButton.setFont(new Font("Dialog", Font.BOLD, 10));
       affineMoveUpButton.setPreferredSize(new Dimension(55, 24));
-      affineMoveUpButton.setLocation(new Point(213, 57));
+      affineMoveUpButton.setLocation(new Point(215, 57));
       affineMoveUpButton.setSize(new Dimension(70, 24));
       //      affineMoveUpButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/moveUp.gif")));
       affineMoveUpButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/arrow-up.png")));
@@ -4773,7 +4789,7 @@ public class TinaInternalFrame extends JInternalFrame {
       affineMoveDownButton = new JButton();
       affineMoveDownButton.setFont(new Font("Dialog", Font.BOLD, 10));
       affineMoveDownButton.setPreferredSize(new Dimension(55, 24));
-      affineMoveDownButton.setLocation(new Point(213, 102));
+      affineMoveDownButton.setLocation(new Point(215, 102));
       affineMoveDownButton.setSize(new Dimension(70, 24));
       //      affineMoveDownButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/moveDown.gif")));
       affineMoveDownButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/arrow-down.png")));
@@ -4798,7 +4814,7 @@ public class TinaInternalFrame extends JInternalFrame {
       affineMoveLeftButton = new JButton();
       affineMoveLeftButton.setText("");
       affineMoveLeftButton.setPreferredSize(new Dimension(55, 24));
-      affineMoveLeftButton.setLocation(new Point(172, 80));
+      affineMoveLeftButton.setLocation(new Point(176, 80));
       affineMoveLeftButton.setSize(new Dimension(42, 24));
       //      affineMoveLeftButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/moveLeft.gif")));
       affineMoveLeftButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/arrow-left.png")));
@@ -4849,7 +4865,7 @@ public class TinaInternalFrame extends JInternalFrame {
       affineMoveVertAmountREd.setPreferredSize(new Dimension(56, 24));
       affineMoveVertAmountREd.setText("0.5");
       affineMoveVertAmountREd.setSize(new Dimension(70, 24));
-      affineMoveVertAmountREd.setLocation(new Point(213, 80));
+      affineMoveVertAmountREd.setLocation(new Point(215, 80));
       affineMoveVertAmountREd.setFont(new Font("Dialog", Font.PLAIN, 10));
     }
     return affineMoveVertAmountREd;
@@ -4911,6 +4927,11 @@ public class TinaInternalFrame extends JInternalFrame {
   private JWFNumberField getNonlinearVar1REd() {
     if (nonlinearVar1REd == null) {
       nonlinearVar1REd = new JWFNumberField();
+      nonlinearVar1REd.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.nonlinearVarEditMotionCurve(0);
+        }
+      });
       nonlinearVar1REd.setValueStep(0.01);
       nonlinearVar1REd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
@@ -4960,6 +4981,11 @@ public class TinaInternalFrame extends JInternalFrame {
   private JWFNumberField getNonlinearParams1REd() {
     if (nonlinearParams1REd == null) {
       nonlinearParams1REd = new JWFNumberField();
+      nonlinearParams1REd.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.nonlinearParamsEditMotionCurve(0);
+        }
+      });
       nonlinearParams1REd.setValueStep(0.05);
       nonlinearParams1REd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
@@ -5113,6 +5139,11 @@ public class TinaInternalFrame extends JInternalFrame {
   private JWFNumberField getNonlinearVar2REd() {
     if (nonlinearVar2REd == null) {
       nonlinearVar2REd = new JWFNumberField();
+      nonlinearVar2REd.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.nonlinearVarEditMotionCurve(1);
+        }
+      });
       nonlinearVar2REd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           if (tinaController != null) {
@@ -5162,6 +5193,11 @@ public class TinaInternalFrame extends JInternalFrame {
   private JWFNumberField getNonlinearParams2REd() {
     if (nonlinearParams2REd == null) {
       nonlinearParams2REd = new JWFNumberField();
+      nonlinearParams2REd.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.nonlinearParamsEditMotionCurve(1);
+        }
+      });
       nonlinearParams2REd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           if (tinaController != null) {
@@ -5270,6 +5306,11 @@ public class TinaInternalFrame extends JInternalFrame {
   private JWFNumberField getNonlinearVar3REd() {
     if (nonlinearVar3REd == null) {
       nonlinearVar3REd = new JWFNumberField();
+      nonlinearVar3REd.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.nonlinearVarEditMotionCurve(2);
+        }
+      });
       nonlinearVar3REd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           if (tinaController != null) {
@@ -5319,6 +5360,11 @@ public class TinaInternalFrame extends JInternalFrame {
   private JWFNumberField getNonlinearParams3REd() {
     if (nonlinearParams3REd == null) {
       nonlinearParams3REd = new JWFNumberField();
+      nonlinearParams3REd.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.nonlinearParamsEditMotionCurve(2);
+        }
+      });
       nonlinearParams3REd.setValueStep(0.05);
       nonlinearParams3REd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
@@ -6839,7 +6885,7 @@ public class TinaInternalFrame extends JInternalFrame {
       affineResetTransformButton = new JButton();
       affineResetTransformButton.setPreferredSize(new Dimension(136, 24));
       affineResetTransformButton.setText("Reset TF");
-      affineResetTransformButton.setLocation(new Point(108, 155));
+      affineResetTransformButton.setLocation(new Point(109, 155));
       affineResetTransformButton.setSize(new Dimension(104, 24));
       affineResetTransformButton.setToolTipText("Reset triangle to defaults");
       affineResetTransformButton.setFont(new Font("Dialog", Font.BOLD, 10));
@@ -6916,6 +6962,11 @@ public class TinaInternalFrame extends JInternalFrame {
   private JWFNumberField getNonlinearVar4REd() {
     if (nonlinearVar4REd == null) {
       nonlinearVar4REd = new JWFNumberField();
+      nonlinearVar4REd.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.nonlinearVarEditMotionCurve(3);
+        }
+      });
       nonlinearVar4REd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           if (tinaController != null) {
@@ -6965,6 +7016,11 @@ public class TinaInternalFrame extends JInternalFrame {
   private JWFNumberField getNonlinearParams4REd() {
     if (nonlinearParams4REd == null) {
       nonlinearParams4REd = new JWFNumberField();
+      nonlinearParams4REd.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.nonlinearParamsEditMotionCurve(3);
+        }
+      });
       nonlinearParams4REd.setValueStep(0.05);
       nonlinearParams4REd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
@@ -7148,6 +7204,11 @@ public class TinaInternalFrame extends JInternalFrame {
   private JWFNumberField getNonlinearVar5REd() {
     if (nonlinearVar5REd == null) {
       nonlinearVar5REd = new JWFNumberField();
+      nonlinearVar5REd.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.nonlinearVarEditMotionCurve(4);
+        }
+      });
       nonlinearVar5REd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           if (tinaController != null) {
@@ -7197,6 +7258,11 @@ public class TinaInternalFrame extends JInternalFrame {
   private JWFNumberField getNonlinearParams5REd() {
     if (nonlinearParams5REd == null) {
       nonlinearParams5REd = new JWFNumberField();
+      nonlinearParams5REd.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.nonlinearParamsEditMotionCurve(4);
+        }
+      });
       nonlinearParams5REd.setValueStep(0.05);
       nonlinearParams5REd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
@@ -7304,6 +7370,11 @@ public class TinaInternalFrame extends JInternalFrame {
   private JWFNumberField getNonlinearVar6REd() {
     if (nonlinearVar6REd == null) {
       nonlinearVar6REd = new JWFNumberField();
+      nonlinearVar6REd.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.nonlinearVarEditMotionCurve(5);
+        }
+      });
       nonlinearVar6REd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           if (tinaController != null) {
@@ -7353,6 +7424,11 @@ public class TinaInternalFrame extends JInternalFrame {
   private JWFNumberField getNonlinearParams6REd() {
     if (nonlinearParams6REd == null) {
       nonlinearParams6REd = new JWFNumberField();
+      nonlinearParams6REd.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.nonlinearParamsEditMotionCurve(5);
+        }
+      });
       nonlinearParams6REd.setValueStep(0.05);
       nonlinearParams6REd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
@@ -7460,6 +7536,11 @@ public class TinaInternalFrame extends JInternalFrame {
   private JWFNumberField getNonlinearVar7REd() {
     if (nonlinearVar7REd == null) {
       nonlinearVar7REd = new JWFNumberField();
+      nonlinearVar7REd.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.nonlinearVarEditMotionCurve(6);
+        }
+      });
       nonlinearVar7REd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           if (tinaController != null) {
@@ -7509,6 +7590,11 @@ public class TinaInternalFrame extends JInternalFrame {
   private JWFNumberField getNonlinearParams7REd() {
     if (nonlinearParams7REd == null) {
       nonlinearParams7REd = new JWFNumberField();
+      nonlinearParams7REd.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.nonlinearParamsEditMotionCurve(6);
+        }
+      });
       nonlinearParams7REd.setValueStep(0.05);
       nonlinearParams7REd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
@@ -7616,6 +7702,11 @@ public class TinaInternalFrame extends JInternalFrame {
   private JWFNumberField getNonlinearVar8REd() {
     if (nonlinearVar8REd == null) {
       nonlinearVar8REd = new JWFNumberField();
+      nonlinearVar8REd.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.nonlinearVarEditMotionCurve(7);
+        }
+      });
       nonlinearVar8REd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           if (tinaController != null) {
@@ -7665,6 +7756,11 @@ public class TinaInternalFrame extends JInternalFrame {
   private JWFNumberField getNonlinearParams8REd() {
     if (nonlinearParams8REd == null) {
       nonlinearParams8REd = new JWFNumberField();
+      nonlinearParams8REd.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.nonlinearParamsEditMotionCurve(7);
+        }
+      });
       nonlinearParams8REd.setValueStep(0.05);
       nonlinearParams8REd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
@@ -7772,6 +7868,11 @@ public class TinaInternalFrame extends JInternalFrame {
   private JWFNumberField getNonlinearVar9REd() {
     if (nonlinearVar9REd == null) {
       nonlinearVar9REd = new JWFNumberField();
+      nonlinearVar9REd.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.nonlinearVarEditMotionCurve(8);
+        }
+      });
       nonlinearVar9REd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           if (tinaController != null) {
@@ -7821,6 +7922,11 @@ public class TinaInternalFrame extends JInternalFrame {
   private JWFNumberField getNonlinearParams9REd() {
     if (nonlinearParams9REd == null) {
       nonlinearParams9REd = new JWFNumberField();
+      nonlinearParams9REd.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.nonlinearParamsEditMotionCurve(8);
+        }
+      });
       nonlinearParams9REd.setValueStep(0.05);
       nonlinearParams9REd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
@@ -7928,6 +8034,11 @@ public class TinaInternalFrame extends JInternalFrame {
   private JWFNumberField getNonlinearVar10REd() {
     if (nonlinearVar10REd == null) {
       nonlinearVar10REd = new JWFNumberField();
+      nonlinearVar10REd.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.nonlinearVarEditMotionCurve(9);
+        }
+      });
       nonlinearVar10REd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           if (tinaController != null) {
@@ -7977,6 +8088,11 @@ public class TinaInternalFrame extends JInternalFrame {
   private JWFNumberField getNonlinearParams10REd() {
     if (nonlinearParams10REd == null) {
       nonlinearParams10REd = new JWFNumberField();
+      nonlinearParams10REd.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.nonlinearParamsEditMotionCurve(9);
+        }
+      });
       nonlinearParams10REd.setValueStep(0.05);
       nonlinearParams10REd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
@@ -8084,6 +8200,11 @@ public class TinaInternalFrame extends JInternalFrame {
   private JWFNumberField getNonlinearVar11REd() {
     if (nonlinearVar11REd == null) {
       nonlinearVar11REd = new JWFNumberField();
+      nonlinearVar11REd.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.nonlinearVarEditMotionCurve(10);
+        }
+      });
       nonlinearVar11REd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           if (tinaController != null) {
@@ -8133,6 +8254,11 @@ public class TinaInternalFrame extends JInternalFrame {
   private JWFNumberField getNonlinearParams11REd() {
     if (nonlinearParams11REd == null) {
       nonlinearParams11REd = new JWFNumberField();
+      nonlinearParams11REd.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.nonlinearParamsEditMotionCurve(10);
+        }
+      });
       nonlinearParams11REd.setValueStep(0.05);
       nonlinearParams11REd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
@@ -8240,6 +8366,11 @@ public class TinaInternalFrame extends JInternalFrame {
   private JWFNumberField getNonlinearVar12REd() {
     if (nonlinearVar12REd == null) {
       nonlinearVar12REd = new JWFNumberField();
+      nonlinearVar12REd.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.nonlinearVarEditMotionCurve(11);
+        }
+      });
       nonlinearVar12REd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           if (tinaController != null) {
@@ -8289,6 +8420,11 @@ public class TinaInternalFrame extends JInternalFrame {
   private JWFNumberField getNonlinearParams12REd() {
     if (nonlinearParams12REd == null) {
       nonlinearParams12REd = new JWFNumberField();
+      nonlinearParams12REd.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.nonlinearParamsEditMotionCurve(11);
+        }
+      });
       nonlinearParams12REd.setValueStep(0.05);
       nonlinearParams12REd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
@@ -9730,6 +9866,8 @@ public class TinaInternalFrame extends JInternalFrame {
   private JToggleButton toggleTriangleWithColorsButton;
   private JButton flameBrowserCopyToBtn;
   private JButton flameBrowserMoveToBtn;
+  private JButton affineScaleEditMotionCurveBtn;
+  private JButton affineRotateEditMotionCurveBtn;
 
   /**
    * This method initializes renderBatchJobsScrollPane	
@@ -9949,7 +10087,7 @@ public class TinaInternalFrame extends JInternalFrame {
       affineFlipHorizontalButton.setText("");
       affineFlipHorizontalButton.setToolTipText("Horizontal flip");
       affineFlipHorizontalButton.setSize(new Dimension(70, 24));
-      affineFlipHorizontalButton.setLocation(new Point(172, 127));
+      affineFlipHorizontalButton.setLocation(new Point(176, 127));
       affineFlipHorizontalButton.setFont(new Font("Dialog", Font.BOLD, 8));
       affineFlipHorizontalButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -10929,7 +11067,7 @@ public class TinaInternalFrame extends JInternalFrame {
       affineScaleXButton.setToolTipText("Allow scaling in x-direction");
       affineScaleXButton.setMnemonic(KeyEvent.VK_P);
       affineScaleXButton.setText("");
-      affineScaleXButton.setLocation(new Point(88, 127));
+      affineScaleXButton.setLocation(new Point(92, 127));
       affineScaleXButton.setSize(new Dimension(32, 24));
       affineScaleXButton.setSelected(true);
       //      affineScaleXButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/allowScaleX.gif")));
@@ -10958,7 +11096,7 @@ public class TinaInternalFrame extends JInternalFrame {
       affineScaleYButton.setSelected(true);
       affineScaleYButton.setText("");
       affineScaleYButton.setSize(new Dimension(32, 24));
-      affineScaleYButton.setLocation(new Point(126, 127));
+      affineScaleYButton.setLocation(new Point(130, 127));
       //      affineScaleYButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/allowScaleY.gif")));
       affineScaleYButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/object-flip-vertical.png")));
       affineScaleYButton.setFont(new Font("Dialog", Font.BOLD, 10));
@@ -18076,6 +18214,30 @@ public class TinaInternalFrame extends JInternalFrame {
       flameBrowserMoveToBtn.setFont(new Font("Dialog", Font.BOLD, 10));
     }
     return flameBrowserMoveToBtn;
+  }
+
+  private JButton getAffineScaleEditMotionCurveBtn() {
+    if (affineScaleEditMotionCurveBtn == null) {
+      affineScaleEditMotionCurveBtn = new JButton();
+      affineScaleEditMotionCurveBtn.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getXFormControls().editScaleMotionCurve(e);
+        }
+      });
+      affineScaleEditMotionCurveBtn.setToolTipText("Create/edit a motion curve");
+      affineScaleEditMotionCurveBtn.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/curve-money2.png")));
+      affineScaleEditMotionCurveBtn.setText("");
+      affineScaleEditMotionCurveBtn.setSize(new Dimension(70, 24));
+      affineScaleEditMotionCurveBtn.setPreferredSize(new Dimension(55, 24));
+      affineScaleEditMotionCurveBtn.setLocation(new Point(0, 57));
+      affineScaleEditMotionCurveBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      affineScaleEditMotionCurveBtn.setBounds(92, 57, 22, 24);
+    }
+    return affineScaleEditMotionCurveBtn;
+  }
+
+  public JButton getAffineRotateEditMotionCurveBtn() {
+    return affineRotateEditMotionCurveBtn;
   }
 } //  @jve:decl-index=0:visual-constraint="10,10"
 

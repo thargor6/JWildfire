@@ -35,7 +35,7 @@ import javax.swing.event.ChangeListener;
 
 import org.jwildfire.base.Tools;
 
-public class JWFNumberField extends JPanel {
+public class JWFNumberField extends JPanel implements MotionCurveEditor {
   private static final double DFLT_STEP = 0.5;
   private static final double DFLT_MOUSE_THRESHOLD = 10;
   private static final long serialVersionUID = 1L;
@@ -92,8 +92,6 @@ public class JWFNumberField extends JPanel {
     motionCurveBtn.setText("");
     motionCurveBtn.setToolTipText("Create/edit a motion curve");
     motionCurveBtn.setFont(new Font("Dialog", Font.BOLD, 8));
-    //    motionCurveBtn.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/motionCurve.gif")));
-    //    motionCurveBtn.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/insert-chart-line.png")));
     motionCurveBtn.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/curve-money2.png")));
 
     add(motionCurveBtn, BorderLayout.WEST);
@@ -321,10 +319,12 @@ public class JWFNumberField extends JPanel {
     motionCurveBtn.addActionListener(listener);
   }
 
+  @Override
   public boolean isWithMotionCurve() {
     return withMotionCurve;
   }
 
+  @Override
   public void setWithMotionCurve(boolean pWithMotionCurve) {
     withMotionCurve = pWithMotionCurve;
     configureMotionCurveBtn(withMotionCurve);

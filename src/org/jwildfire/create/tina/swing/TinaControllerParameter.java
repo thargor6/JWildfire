@@ -169,6 +169,8 @@ public class TinaControllerParameter {
   public JToggleButton pAffineEditPostTransformButton;
   public JToggleButton pAffineEditPostTransformSmallButton;
   public JToggleButton mouseTransformEditTriangleViewButton;
+  public JButton affineRotateEditMotionCurveBtn;
+  public JButton affineScaleEditMotionCurveBtn;
   public ProgressUpdater pMainProgressUpdater;
   public JButton pAffineResetTransformButton;
   public JTable pCreatePaletteColorsTable;
@@ -716,7 +718,7 @@ public class TinaControllerParameter {
       JWFNumberField pCamPosZREd, JSlider pCamPosZSlider, JWFNumberField pSaturationREd, JSlider pSaturationSlider,
       JToggleButton pToggleDrawGridButton, JSlider pEditorFractalBrightnessSlider, JToggleButton pMouseTransformEditTriangleViewButton,
       JComboBox pPaletteRandomGeneratorCmb, JToggleButton pToggleTriangleWithColorsButton, JButton pFlameBrowserCopyToBtn,
-      JButton pFlameBrowserMoveToBtn) {
+      JButton pFlameBrowserMoveToBtn, JButton pAffineRotateEditMotionCurveBtn, JButton pAffineScaleEditMotionCurveBtn) {
     this.pDancingFlamesLinkMotionBtn = pDancingFlamesLinkMotionBtn;
     this.pDancingFlamesUnlinkMotionBtn = pDancingFlamesUnlinkMotionBtn;
     this.pDancingFlamesCreateMotionsCmb = pDancingFlamesCreateMotionsCmb;
@@ -877,5 +879,7 @@ public class TinaControllerParameter {
     this.toggleTriangleWithColorsButton = pToggleTriangleWithColorsButton;
     this.flameBrowserCopyToBtn = pFlameBrowserCopyToBtn;
     this.flameBrowserMoveToBtn = pFlameBrowserMoveToBtn;
+    this.affineRotateEditMotionCurveBtn = pAffineRotateEditMotionCurveBtn;
+    this.affineScaleEditMotionCurveBtn = pAffineScaleEditMotionCurveBtn;
   }
 }

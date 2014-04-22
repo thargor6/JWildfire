@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2014 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -16,6 +16,8 @@
 */
 package org.jwildfire.create.tina.swing;
 
+import java.awt.event.ActionEvent;
+
 import javax.swing.JTabbedPane;
 
 import org.jwildfire.create.tina.animate.AnimationService;
@@ -30,9 +32,13 @@ public class XFormControlsDelegate extends AbstractControlsDelegate {
     setUpMotionControls();
   }
 
+  private String formatPropertyName(String pName) {
+    return "xform property \"" + pName + "\"";
+  }
+
   @Override
   public String getEditingTitle(JWFNumberField sender) {
-    return "xform property \"" + sender.getLinkedLabelControl().getText() + "\"";
+    return formatPropertyName(sender.getLinkedLabelControl().getText());
   }
 
   @Override
@@ -51,7 +57,7 @@ public class XFormControlsDelegate extends AbstractControlsDelegate {
   }
 
   public void setUpMotionControls() {
-    boolean postTransform = data.affineEditPostTransformButton.isSelected();
+    boolean postTransform = isPostTransform();
     data.affineC00REd.setMotionPropertyName(postTransform ? "postCoeff00" : "coeff00");
     data.affineC01REd.setMotionPropertyName(postTransform ? "postCoeff01" : "coeff01");
     data.affineC10REd.setMotionPropertyName(postTransform ? "postCoeff10" : "coeff10");
@@ -94,6 +100,9 @@ public class XFormControlsDelegate extends AbstractControlsDelegate {
     enableControl(data.affineC11REd, !enabled);
     enableControl(data.affineC20REd, !enabled);
     enableControl(data.affineC21REd, !enabled);
+    enableControl(data.affineRotateLeftButton, data.affineRotateEditMotionCurveBtn, getRotateMotionCurveProperty(), !enabled);
+    enableControl(data.affineEnlargeButton, data.affineScaleEditMotionCurveBtn, getRotateMotionCurveProperty(), !enabled);
+
     data.affineResetTransformButton.setEnabled(enabled);
     data.editTransformCaptionButton.setEnabled(enabled);
 
@@ -126,6 +135,30 @@ public class XFormControlsDelegate extends AbstractControlsDelegate {
     data.relWeightsZeroButton.setEnabled(enabled);
     data.relWeightsOneButton.setEnabled(enabled);
     data.relWeightREd.setEnabled(enabled);
+  }
+
+  private boolean isPostTransform() {
+    return data.affineEditPostTransformButton.isSelected();
+  }
+
+  private String getRotateMotionCurveProperty() {
+    return isPostTransform() ? "postRotate" : "rotate";
+  }
+
+  public void editRotateMotionCurve(ActionEvent e) {
+    String propertyName = getRotateMotionCurveProperty();
+    editMotionCurve(propertyName, formatPropertyName(propertyName));
+    enableControl(data.affineRotateLeftButton, data.affineRotateEditMotionCurveBtn, propertyName, false);
+  }
+
+  private String getScaleMotionCurveProperty() {
+    return isPostTransform() ? "postScale" : "scale";
+  }
+
+  public void editScaleMotionCurve(ActionEvent e) {
+    String propertyName = getScaleMotionCurveProperty();
+    editMotionCurve(propertyName, formatPropertyName(propertyName));
+    enableControl(data.affineRotateLeftButton, data.affineScaleEditMotionCurveBtn, propertyName, false);
   }
 
 }

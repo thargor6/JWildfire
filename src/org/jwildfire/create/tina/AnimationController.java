@@ -28,6 +28,7 @@ import javax.swing.JToggleButton;
 import org.jwildfire.base.Prefs;
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.swing.JWFNumberField;
+import org.jwildfire.create.tina.swing.MotionCurveEditor;
 import org.jwildfire.create.tina.swing.TinaController;
 import org.jwildfire.swing.ErrorHandler;
 
@@ -40,7 +41,7 @@ public class AnimationController {
   private final JWFNumberField keyframesFrameField;
   private final JSlider keyframesFrameSlider;
   private final JWFNumberField keyframesFrameCountField;
-  private final List<JWFNumberField> motionPropertyControls = new ArrayList<JWFNumberField>();
+  private final List<MotionCurveEditor> motionPropertyControls = new ArrayList<MotionCurveEditor>();
   private final JPanel frameSliderPanel;
   private final JLabel keyframesFrameLbl;
   private final JLabel keyframesFrameCountLbl;
@@ -75,7 +76,7 @@ public class AnimationController {
 
   public void enableControls() {
     boolean enabled = motionCurveEditModeButton.isSelected();
-    for (JWFNumberField component : motionPropertyControls) {
+    for (MotionCurveEditor component : motionPropertyControls) {
       component.setWithMotionCurve(enabled);
     }
     frameSliderPanel.setPreferredSize(new Dimension(0, (enabled ? 28 : 4)));
@@ -151,7 +152,7 @@ public class AnimationController {
     // TODO
   }
 
-  public void registerMotionPropertyControls(JWFNumberField pComponent) {
+  public void registerMotionPropertyControls(MotionCurveEditor pComponent) {
     if (!motionPropertyControls.contains(pComponent)) {
       motionPropertyControls.add(pComponent);
     }

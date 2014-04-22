@@ -2,6 +2,7 @@ package org.jwildfire.create.tina.swing;
 
 import java.awt.event.ActionEvent;
 
+import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JTabbedPane;
@@ -43,11 +44,17 @@ public abstract class AbstractControlsDelegate {
     enableControl(sender, false);
   }
 
-  private void editMotionCurve(String pPropName, String pLabel) {
+  protected void editMotionCurve(String pPropName, String pLabel) {
     MotionCurve curve = getCurveToEdit(pPropName);
     Envelope envelope = curve.toEnvelope();
     if (envelope.getX().length == 0) {
-      double initialValue = getInitialValue(pPropName);
+      double initialValue;
+      try {
+        initialValue = getInitialValue(pPropName);
+      }
+      catch (Exception ex) {
+        initialValue = 0.0;
+      }
       int[] x = new int[] { 0 };
       if (initialValue <= envelope.getViewYMin() + 1) {
         envelope.setViewYMin(initialValue - 1.0);
@@ -77,6 +84,26 @@ public abstract class AbstractControlsDelegate {
       }
       owner.refreshFlameImage(false);
     }
+  }
+
+  public void enableControl(JButton pMainButton, JButton pCurveBtn, String pPropertyName, boolean pDisabled) {
+    boolean controlEnabled = false;
+    boolean curveBtnEnabled = false;
+    boolean mainButtonEnabled = false;
+    if (!pDisabled && isEnabled()) {
+      controlEnabled = true;
+      if (pPropertyName != null && pPropertyName.length() > 0) {
+        MotionCurve curve = getCurveToEdit(pPropertyName);
+        curveBtnEnabled = true;
+        mainButtonEnabled = !curve.isEnabled();
+      }
+      else {
+        curveBtnEnabled = false;
+        mainButtonEnabled = true;
+      }
+    }
+    pMainButton.setEnabled(controlEnabled && mainButtonEnabled);
+    pCurveBtn.setEnabled(controlEnabled && curveBtnEnabled);
   }
 
   public void enableControl(JWFNumberField pSender, boolean pDisabled) {

@@ -194,6 +194,8 @@ public class TinaControllerData {
   public JButton deleteTransformationButton;
   public JButton addFinalTransformationButton;
   public JWFNumberField transformationWeightREd;
+  public JButton affineRotateEditMotionCurveBtn;
+  public JButton affineScaleEditMotionCurveBtn;
   public JToggleButton affineEditPostTransformButton;
   public JToggleButton affineEditPostTransformSmallButton;
   public JToggleButton affinePreserveZButton;
