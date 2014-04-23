@@ -20,8 +20,8 @@ import static org.jwildfire.base.mathlib.MathLib.EPSILON;
 import static org.jwildfire.base.mathlib.MathLib.fabs;
 import static org.jwildfire.base.mathlib.MathLib.sqrt;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.WeakHashMap;
 
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.GradientCreator;
@@ -192,7 +192,7 @@ public abstract class AbstractColorMapWFFunc extends VariationFunc {
 
   private WFImage colorMap;
   private RenderColor[] renderColors;
-  private Map<RenderColor, Double> colorIdxMap = new HashMap<RenderColor, Double>();
+  private Map<RenderColor, Double> colorIdxMap = new WeakHashMap<RenderColor, Double>();
 
   private double getColorIdx(double pR, double pG, double pB) {
     RenderColor pColor = new RenderColor(pR, pG, pB);

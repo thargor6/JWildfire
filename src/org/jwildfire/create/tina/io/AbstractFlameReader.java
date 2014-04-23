@@ -570,6 +570,7 @@ public class AbstractFlameReader {
             }
           }
           // TODO
+          readMotionCurves(variation, atts);
           // curves
           // readMotionCurves
           // ressources 

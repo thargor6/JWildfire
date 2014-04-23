@@ -4122,6 +4122,12 @@ public class TinaInternalFrame extends JInternalFrame {
 
     tinaController = new TinaController(params);
 
+    VariationControlsDelegate[] variationControlsDelegates = new VariationControlsDelegate[12];
+    for (int i = 0; i < variationControlsDelegates.length; i++) {
+      variationControlsDelegates[i] = new VariationControlsDelegate(tinaController, tinaController.getData(), getRootTabbedPane(), i);
+    }
+    tinaController.setVariationControlsDelegates(variationControlsDelegates);
+
     tinaController.refreshing = tinaController.cmbRefreshing = tinaController.gridRefreshing = true;
     try {
       for (TinaNonlinearControlsRow row : nonlinearControlsRows) {

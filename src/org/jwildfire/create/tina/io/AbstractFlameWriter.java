@@ -84,8 +84,9 @@ public class AbstractFlameWriter {
         }
       }
       // curves
+      writeMotionCurves(v, pXB, attrList);
       // TODO
-      writeMotionCurves(func, pXB, attrList);
+      // writeMotionCurves(func, pXB, attrList);
       // ressources
       {
         String ressNames[] = func.getRessourceNames();

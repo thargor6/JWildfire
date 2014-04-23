@@ -24,12 +24,14 @@ import java.io.Serializable;
 import org.jwildfire.create.tina.animate.AnimAware;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+import org.jwildfire.create.tina.base.motion.MotionCurve;
 import org.jwildfire.create.tina.edit.Assignable;
 
 public class Variation implements Assignable<Variation>, Serializable {
   private static final long serialVersionUID = 1L;
   @AnimAware
   private double amount;
+  private final MotionCurve amountCurve = new MotionCurve();
   @AnimAware
   private VariationFunc func;
 
@@ -70,6 +72,7 @@ public class Variation implements Assignable<Variation>, Serializable {
   @Override
   public void assign(Variation var) {
     amount = var.amount;
+    amountCurve.assign(var.amountCurve);
     func = VariationFuncList.getVariationFuncInstance(var.func.getName());
 
     // params
@@ -112,7 +115,7 @@ public class Variation implements Assignable<Variation>, Serializable {
 
   @Override
   public boolean isEqual(Variation pSrc) {
-    if (fabs(amount - pSrc.amount) > EPSILON ||
+    if (fabs(amount - pSrc.amount) > EPSILON || !amountCurve.isEqual(pSrc.amountCurve) ||
         ((func != null && pSrc.func == null) || (func == null && pSrc.func != null) ||
         (func != null && pSrc.func != null && !func.getName().equals(pSrc.func.getName())))) {
       return false;

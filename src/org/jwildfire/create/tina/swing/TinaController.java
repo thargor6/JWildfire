@@ -193,6 +193,7 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
   private final ProgressUpdater mainProgressUpdater;
   private final ProgressUpdater jobProgressUpdater;
   private TinaControllerData data = new TinaControllerData();
+  private VariationControlsDelegate[] variationControlsDelegates;
 
   public TinaController(TinaControllerParameter parameterObject) {
     tinaFrame = parameterObject.pTinaFrame;
@@ -397,6 +398,7 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
 
     data.randomBatchPanel = parameterObject.pRandomBatchPanel;
     data.TinaNonlinearControlsRows = parameterObject.pTinaNonlinearControlsRows;
+    data.variationControlsDelegates = parameterObject.variationControlsDelegates;
     data.gradientLibraryPanel = parameterObject.pGradientLibraryPanel;
     data.renderFlameButton = parameterObject.pRenderFlameButton;
     data.renderMainButton = parameterObject.pRenderMainButton;
@@ -5014,18 +5016,10 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
   }
 
   public void nonlinearVarEditMotionCurve(int pIdx) {
-    // TODO
     XForm xForm = getCurrXForm();
     if (xForm != null) {
       if (pIdx < xForm.getVariationCount()) {
-        Variation var = xForm.getVariation(pIdx);
-
-        String varStr = data.TinaNonlinearControlsRows[pIdx].getNonlinearVarREd().getText();
-        if (varStr == null || varStr.length() == 0) {
-          varStr = "0";
-        }
-        var.setAmount(Tools.stringToDouble(varStr));
-
+        variationControlsDelegates[pIdx].editMotionCurve("amount", "variation amount");
         refreshFlameImage(false);
       }
     }
@@ -5033,7 +5027,16 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
 
   public void nonlinearParamsEditMotionCurve(int pIdx) {
     // TODO Auto-generated method stub
+    //    Variation var = xForm.getVariation(pIdx);
 
+  }
+
+  protected TinaControllerData getData() {
+    return data;
+  }
+
+  public void setVariationControlsDelegates(VariationControlsDelegate[] pVariationControlsDelegates) {
+    variationControlsDelegates = pVariationControlsDelegates;
   }
 
 }

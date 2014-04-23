@@ -206,6 +206,7 @@ public class TinaControllerData {
   public JPanel randomBatchPanel;
   public JScrollPane randomBatchScrollPane;
   public TinaNonlinearControlsRow[] TinaNonlinearControlsRows;
+  public VariationControlsDelegate[] variationControlsDelegates;
   public JWFNumberField xFormColorREd;
   public JSlider xFormColorSlider;
   public JWFNumberField xFormSymmetryREd;

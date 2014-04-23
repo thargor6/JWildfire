@@ -63,7 +63,7 @@ public class EnvelopePanel extends JPanel {
       g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
       g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BICUBIC);
     }
-
+    super.paintComponent(g);
     EnvelopeView envelopeView = new EnvelopeView(this);
     g.setColor(BG_COLOR);
     g.fillRect(0, 0, envelopeView.getWidth(), envelopeView.getHeight());

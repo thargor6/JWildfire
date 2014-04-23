@@ -148,6 +148,7 @@ public class TinaControllerParameter {
   public JButton pAddFinalTransformationButton;
   public JPanel pRandomBatchPanel;
   public TinaNonlinearControlsRow[] pTinaNonlinearControlsRows;
+  public VariationControlsDelegate[] variationControlsDelegates;
   public JWFNumberField pXFormColorREd;
   public JSlider pXFormColorSlider;
   public JWFNumberField pXFormSymmetryREd;
