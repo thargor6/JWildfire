@@ -1222,7 +1222,7 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
         int column) {
       Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
       if (row >= 0 && column == 0) {
-        int colorIdx = ((row + 1) % FlamePanel.XFORM_COLORS.length) - 1;
+        int colorIdx = row % FlamePanel.XFORM_COLORS.length;
         c.setForeground(FlamePanel.XFORM_COLORS[colorIdx]);
       }
       else {
@@ -5014,8 +5014,21 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
   }
 
   public void nonlinearVarEditMotionCurve(int pIdx) {
-    // TODO Auto-generated method stub
+    // TODO
+    XForm xForm = getCurrXForm();
+    if (xForm != null) {
+      if (pIdx < xForm.getVariationCount()) {
+        Variation var = xForm.getVariation(pIdx);
 
+        String varStr = data.TinaNonlinearControlsRows[pIdx].getNonlinearVarREd().getText();
+        if (varStr == null || varStr.length() == 0) {
+          varStr = "0";
+        }
+        var.setAmount(Tools.stringToDouble(varStr));
+
+        refreshFlameImage(false);
+      }
+    }
   }
 
   public void nonlinearParamsEditMotionCurve(int pIdx) {

@@ -516,7 +516,7 @@ public class FlamePanel extends ImagePanel {
     if (!pShadow) {
       if (isWithColoredTransforms()) {
         int row = pIsFinal ? pXFormCount + pIndex : pIndex;
-        int colorIdx = ((row + 1) % FlamePanel.XFORM_COLORS.length) - 1;
+        int colorIdx = row % FlamePanel.XFORM_COLORS.length;
         g.setColor(XFORM_COLORS[colorIdx]);
       }
       else {
