@@ -101,7 +101,7 @@ public class EnvelopeDialog extends JDialog {
    * @return void
    */
   private void initialize() {
-    this.setSize(907, 600);
+    this.setSize(1200, 600);
     this.setContentPane(getJContentPane());
     getCenterPanel().add((Component) getEnvelopePanel(), BorderLayout.CENTER);
   }

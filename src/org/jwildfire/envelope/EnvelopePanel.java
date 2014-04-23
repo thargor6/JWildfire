@@ -20,11 +20,14 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.awt.font.FontRenderContext;
 import java.awt.geom.Rectangle2D;
 
 import javax.swing.JPanel;
 
+import org.jwildfire.base.Prefs;
 import org.jwildfire.base.Tools;
 
 public class EnvelopePanel extends JPanel {
@@ -40,13 +43,27 @@ public class EnvelopePanel extends JPanel {
   private static final int LBL_FONT_SIZE = 10;
 
   private Envelope envelope;
+  private final Prefs prefs;
 
   public EnvelopePanel() {
     super();
+    prefs = new Prefs();
+    try {
+      prefs.loadFromFile();
+    }
+    catch (Exception ex) {
+      ex.printStackTrace();
+    }
   }
 
   @Override
   public void paintComponent(Graphics g) {
+    Graphics2D g2d = (Graphics2D) g;
+    if (prefs.isTinaEditorControlsWithAntialiasing()) {
+      g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+      g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BICUBIC);
+    }
+
     EnvelopeView envelopeView = new EnvelopeView(this);
     g.setColor(BG_COLOR);
     g.fillRect(0, 0, envelopeView.getWidth(), envelopeView.getHeight());

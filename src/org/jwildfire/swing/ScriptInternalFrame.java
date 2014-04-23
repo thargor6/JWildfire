@@ -1343,33 +1343,33 @@ public class ScriptInternalFrame extends JInternalFrame {
       syncActionButton.setActionCommand("Sync Params");
       syncActionButton.setMnemonic(KeyEvent.VK_A);
       syncActionButton
-                .addActionListener(new java.awt.event.ActionListener() {
-                  public void actionPerformed(java.awt.event.ActionEvent e) {
-                    try {
-                      mainController.syncActionAction();
-                      if (mainController.getTransformer() != null) {
-                        operatorsFrame.getTransformersList().setSelectedValue(
-                            mainController.getTransformer()
-                                .getName(), true);
-                        operatorsFrame.switchTransformerPropertiesPanel();
-                      }
-                      if (mainController.getCreator() != null) {
-                        operatorsFrame.getCreatorsList().setSelectedValue(
-                            mainController.getCreator()
-                                .getName(), true);
-                        operatorsFrame.switchCreatorPropertiesPanel();
-                      }
-                      if (mainController.getLoader() != null) {
-                        operatorsFrame.getLoadersList().setSelectedValue(mainController
-                            .getLoader().getName(), true);
-                        operatorsFrame.switchLoaderPropertiesPanel();
-                      }
-                    }
-                    catch (Throwable ex) {
-                      mainController.handleError(ex);
-                    }
-                  }
-                });
+          .addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent e) {
+              try {
+                mainController.syncActionAction();
+                if (mainController.getTransformer() != null) {
+                  operatorsFrame.getTransformersList().setSelectedValue(
+                      mainController.getTransformer()
+                          .getName(), true);
+                  operatorsFrame.switchTransformerPropertiesPanel();
+                }
+                if (mainController.getCreator() != null) {
+                  operatorsFrame.getCreatorsList().setSelectedValue(
+                      mainController.getCreator()
+                          .getName(), true);
+                  operatorsFrame.switchCreatorPropertiesPanel();
+                }
+                if (mainController.getLoader() != null) {
+                  operatorsFrame.getLoadersList().setSelectedValue(mainController
+                      .getLoader().getName(), true);
+                  operatorsFrame.switchLoaderPropertiesPanel();
+                }
+              }
+              catch (Throwable ex) {
+                mainController.handleError(ex);
+              }
+            }
+          });
     }
     return syncActionButton;
   }
@@ -1386,12 +1386,12 @@ public class ScriptInternalFrame extends JInternalFrame {
       renderScriptButton.setMnemonic(KeyEvent.VK_P);
       renderScriptButton.setText("Render Script");
       renderScriptButton
-                .addActionListener(new java.awt.event.ActionListener() {
-                  public void actionPerformed(java.awt.event.ActionEvent e) {
-                    renderController.showRenderDialog(1, Tools
-                        .stringToInt(scriptFramesREd.getText()));
-                  }
-                });
+          .addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent e) {
+              renderController.showRenderDialog(1, Tools
+                  .stringToInt(scriptFramesREd.getText()));
+            }
+          });
     }
     return renderScriptButton;
   }
