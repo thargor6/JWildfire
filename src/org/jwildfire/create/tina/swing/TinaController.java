@@ -77,6 +77,7 @@ import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.Shading;
 import org.jwildfire.create.tina.base.Stereo3dMode;
 import org.jwildfire.create.tina.base.XForm;
+import org.jwildfire.create.tina.base.motion.MotionCurve;
 import org.jwildfire.create.tina.batch.Job;
 import org.jwildfire.create.tina.batch.JobRenderThread;
 import org.jwildfire.create.tina.batch.JobRenderThreadController;
@@ -5019,16 +5020,43 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
     XForm xForm = getCurrXForm();
     if (xForm != null) {
       if (pIdx < xForm.getVariationCount()) {
-        variationControlsDelegates[pIdx].editMotionCurve("amount", "variation amount");
+        String propertyName = "amount";
+        saveUndoPoint();
+        variationControlsDelegates[pIdx].editMotionCurve(propertyName, "variation amount");
+        variationControlsDelegates[pIdx].enableControl(data.TinaNonlinearControlsRows[pIdx].getNonlinearVarREd(), propertyName, false);
         refreshFlameImage(false);
       }
     }
   }
 
   public void nonlinearParamsEditMotionCurve(int pIdx) {
-    // TODO Auto-generated method stub
-    //    Variation var = xForm.getVariation(pIdx);
-
+    String propertyname = (String) data.TinaNonlinearControlsRows[pIdx].getNonlinearParamsCmb().getSelectedItem();
+    XForm xForm = getCurrXForm();
+    if (xForm != null && propertyname != null && propertyname.length() > 0) {
+      if (pIdx < xForm.getVariationCount()) {
+        Variation var = xForm.getVariation(pIdx);
+        if (var.getFunc().getParameterIndex(propertyname) >= 0) {
+          double initialValue;
+          try {
+            String valStr = data.TinaNonlinearControlsRows[pIdx].getNonlinearParamsREd().getText();
+            if (valStr == null || valStr.length() == 0) {
+              valStr = "0";
+            }
+            initialValue = Double.parseDouble(valStr);
+          }
+          catch (Exception ex) {
+            initialValue = 0.0;
+          }
+          MotionCurve curve = var.getMotionCurve(propertyname);
+          if (curve == null) {
+            curve = var.createMotionCurve(propertyname);
+          }
+          variationControlsDelegates[pIdx].editMotionCurve(curve, initialValue, propertyname, "variation property \"" + propertyname + "\"");
+          variationControlsDelegates[pIdx].enableControl(data.TinaNonlinearControlsRows[pIdx].getNonlinearParamsREd(), curve, false);
+          refreshFlameImage(false);
+        }
+      }
+    }
   }
 
   protected TinaControllerData getData() {

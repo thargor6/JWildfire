@@ -36,6 +36,8 @@ import org.jwildfire.create.tina.render.FlameRenderer;
 import org.jwildfire.create.tina.render.RenderInfo;
 import org.jwildfire.create.tina.render.RenderMode;
 import org.jwildfire.create.tina.render.RenderedFlame;
+import org.jwildfire.create.tina.variation.Variation;
+import org.jwildfire.create.tina.variation.VariationFunc;
 import org.jwildfire.envelope.Envelope;
 import org.jwildfire.envelope.Envelope.Interpolation;
 import org.jwildfire.image.SimpleImage;
@@ -153,13 +155,7 @@ public class AnimationService {
       if (field.getType() == MotionCurve.class && field.getName().endsWith(Tools.CURVE_POSTFIX)) {
         MotionCurve curve = (MotionCurve) field.get(pObject);
         if (curve.isEnabled()) {
-          MotionCurve currCurve = curve;
-          double value = 0.0;
-          while (currCurve != null) {
-            Envelope envelope = currCurve.toEnvelope();
-            value += envelope.evaluate(pFrame);
-            currCurve = currCurve.getParent();
-          }
+          double value = evalCurve(pFrame, curve);
           String propName = field.getName().substring(0, field.getName().length() - Tools.CURVE_POSTFIX.length());
           curve.getChangeHandler().processValueChange(pObject, propName, value);
           //setPropertyValue(pObject, propName, value);
@@ -173,6 +169,33 @@ public class AnimationService {
         }
       }
     }
+    if (pObject instanceof Variation) {
+      Variation var = (Variation) pObject;
+      VariationFunc func = var.getFunc();
+      for (String name : func.getParameterNames()) {
+        MotionCurve curve = var.getMotionCurve(name);
+        if (curve != null) {
+          double value = evalCurve(pFrame, curve);
+          try {
+            func.setParameter(name, value);
+          }
+          catch (Exception ex) {
+            ex.printStackTrace();
+          }
+        }
+      }
+    }
+  }
+
+  private static double evalCurve(double pFrame, MotionCurve curve) {
+    MotionCurve currCurve = curve;
+    double value = 0.0;
+    while (currCurve != null) {
+      Envelope envelope = currCurve.toEnvelope();
+      value += envelope.evaluate(pFrame);
+      currCurve = currCurve.getParent();
+    }
+    return value;
   }
 
   public static class MotionCurveAttribute {

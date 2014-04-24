@@ -58,4 +58,5 @@ public class VariationControlsDelegate extends AbstractControlsDelegate {
   public boolean isEnabled() {
     return owner.getCurrXForm() != null && variationIndex < owner.getCurrXForm().getVariationCount();
   }
+
 }

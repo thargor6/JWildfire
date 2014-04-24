@@ -80,13 +80,15 @@ public class AbstractFlameWriter {
             else {
               throw new IllegalStateException();
             }
+            MotionCurve curve = v.getMotionCurve(params[i]);
+            if (curve != null) {
+              writeMotionCurve(pXB, attrList, fName + "_" + params[i], curve);
+            }
           }
         }
       }
       // curves
       writeMotionCurves(v, pXB, attrList);
-      // TODO
-      // writeMotionCurves(func, pXB, attrList);
       // ressources
       {
         String ressNames[] = func.getRessourceNames();
@@ -294,10 +296,14 @@ public class AbstractFlameWriter {
   protected void writeMotionCurves(Object source, SimpleXMLBuilder xb, List<SimpleXMLBuilder.Attribute<?>> attrList) throws Exception {
     for (MotionCurveAttribute attribute : AnimationService.getAllMotionCurves(source)) {
       MotionCurve curve = attribute.getMotionCurve();
-      if (!curve.isEmpty()) {
-        String namePrefix = attribute.getName() + "_";
-        addMotionCurveAttributes(xb, attrList, namePrefix, curve);
-      }
+      writeMotionCurve(xb, attrList, attribute.getName(), curve);
+    }
+  }
+
+  private void writeMotionCurve(SimpleXMLBuilder xb, List<SimpleXMLBuilder.Attribute<?>> attrList, String pPropertyname, MotionCurve curve) {
+    if (!curve.isEmpty()) {
+      String namePrefix = pPropertyname + "_";
+      addMotionCurveAttributes(xb, attrList, namePrefix, curve);
     }
   }
 

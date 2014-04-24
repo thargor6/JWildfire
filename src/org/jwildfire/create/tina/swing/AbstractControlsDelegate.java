@@ -44,25 +44,17 @@ public abstract class AbstractControlsDelegate {
     enableControl(sender, false);
   }
 
-  protected void editMotionCurve(String pPropName, String pLabel) {
-    MotionCurve curve = getCurveToEdit(pPropName);
-    Envelope envelope = curve.toEnvelope();
+  protected void editMotionCurve(MotionCurve pCurve, double pInitialValue, String pPropName, String pLabel) {
+    Envelope envelope = pCurve.toEnvelope();
     if (envelope.getX().length == 0) {
-      double initialValue;
-      try {
-        initialValue = getInitialValue(pPropName);
-      }
-      catch (Exception ex) {
-        initialValue = 0.0;
-      }
       int[] x = new int[] { 0 };
-      if (initialValue <= envelope.getViewYMin() + 1) {
-        envelope.setViewYMin(initialValue - 1.0);
+      if (pInitialValue <= envelope.getViewYMin() + 1) {
+        envelope.setViewYMin(pInitialValue - 1.0);
       }
-      if (initialValue >= envelope.getViewYMax() - 1) {
-        envelope.setViewYMax(initialValue + 1.0);
+      if (pInitialValue >= envelope.getViewYMax() - 1) {
+        envelope.setViewYMax(pInitialValue + 1.0);
       }
-      double[] y = new double[] { initialValue };
+      double[] y = new double[] { pInitialValue };
       envelope.setValues(x, y);
     }
 
@@ -76,14 +68,26 @@ public abstract class AbstractControlsDelegate {
         owner.undoManager.saveUndoPoint(flame);
       }
       if (dlg.isRemoved()) {
-        curve.setEnabled(false);
+        pCurve.setEnabled(false);
       }
       else {
-        curve.assignFromEnvelope(envelope);
-        curve.setEnabled(true);
+        pCurve.assignFromEnvelope(envelope);
+        pCurve.setEnabled(true);
       }
       owner.refreshFlameImage(false);
     }
+  }
+
+  protected void editMotionCurve(String pPropName, String pLabel) {
+    MotionCurve curve = getCurveToEdit(pPropName);
+    double initialValue;
+    try {
+      initialValue = getInitialValue(pPropName);
+    }
+    catch (Exception ex) {
+      initialValue = 0.0;
+    }
+    editMotionCurve(curve, initialValue, pPropName, pLabel);
   }
 
   public void enableControl(JButton pMainButton, JButton pCurveBtn, String pPropertyName, boolean pDisabled) {
@@ -106,15 +110,14 @@ public abstract class AbstractControlsDelegate {
     pCurveBtn.setEnabled(controlEnabled && curveBtnEnabled);
   }
 
-  public void enableControl(JWFNumberField pSender, boolean pDisabled) {
+  public void enableControl(JWFNumberField pSender, String pPropertyName, boolean pDisabled) {
     boolean controlEnabled = false;
     boolean curveBtnEnabled = false;
     boolean spinnerEnabled = false;
     if (!pDisabled && isEnabled()) {
       controlEnabled = true;
-      String propName = pSender.getMotionPropertyName();
-      if (propName != null && propName.length() > 0) {
-        MotionCurve curve = getCurveToEdit(propName);
+      if (pPropertyName != null && pPropertyName.length() > 0) {
+        MotionCurve curve = getCurveToEdit(pPropertyName);
         curveBtnEnabled = true;
         spinnerEnabled = !curve.isEnabled();
       }
@@ -129,6 +132,33 @@ public abstract class AbstractControlsDelegate {
     if (pSender.getLinkedMotionControl() != null) {
       pSender.getLinkedMotionControl().setEnabled(controlEnabled && spinnerEnabled);
     }
+  }
+
+  public void enableControl(JWFNumberField pSender, MotionCurve pCurve, boolean pDisabled) {
+    boolean controlEnabled = false;
+    boolean curveBtnEnabled = false;
+    boolean spinnerEnabled = false;
+    if (!pDisabled && isEnabled()) {
+      controlEnabled = true;
+      if (pCurve != null) {
+        curveBtnEnabled = true;
+        spinnerEnabled = !pCurve.isEnabled();
+      }
+      else {
+        curveBtnEnabled = false;
+        spinnerEnabled = true;
+      }
+    }
+    pSender.setEnabled(controlEnabled);
+    pSender.enableMotionCurveBtn(controlEnabled && curveBtnEnabled);
+    pSender.enableSpinnerField(controlEnabled && spinnerEnabled);
+    if (pSender.getLinkedMotionControl() != null) {
+      pSender.getLinkedMotionControl().setEnabled(controlEnabled && spinnerEnabled);
+    }
+  }
+
+  public void enableControl(JWFNumberField pSender, boolean pDisabled) {
+    enableControl(pSender, pSender.getMotionPropertyName(), pDisabled);
   }
 
   public void enableControl(JCheckBox pSender, boolean pDisabled) {

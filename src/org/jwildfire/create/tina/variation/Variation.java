@@ -20,6 +20,8 @@ import static org.jwildfire.base.mathlib.MathLib.EPSILON;
 import static org.jwildfire.base.mathlib.MathLib.fabs;
 
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.jwildfire.create.tina.animate.AnimAware;
 import org.jwildfire.create.tina.base.XForm;
@@ -34,6 +36,8 @@ public class Variation implements Assignable<Variation>, Serializable {
   private final MotionCurve amountCurve = new MotionCurve();
   @AnimAware
   private VariationFunc func;
+
+  private final Map<String, MotionCurve> motionCurves = new HashMap<String, MotionCurve>();
 
   public Variation() {
 
@@ -74,6 +78,14 @@ public class Variation implements Assignable<Variation>, Serializable {
     amount = var.amount;
     amountCurve.assign(var.amountCurve);
     func = VariationFuncList.getVariationFuncInstance(var.func.getName());
+
+    // motionCurves
+    motionCurves.clear();
+    for (String name : var.motionCurves.keySet()) {
+      MotionCurve copy = new MotionCurve();
+      copy.assign(var.motionCurves.get(name));
+      motionCurves.put(name, copy);
+    }
 
     // params
     {
@@ -119,6 +131,23 @@ public class Variation implements Assignable<Variation>, Serializable {
         ((func != null && pSrc.func == null) || (func == null && pSrc.func != null) ||
         (func != null && pSrc.func != null && !func.getName().equals(pSrc.func.getName())))) {
       return false;
+    }
+    // curves
+    {
+      if (motionCurves.keySet().size() != pSrc.motionCurves.keySet().size())
+        return false;
+      for (String name : motionCurves.keySet()) {
+        if (!pSrc.motionCurves.containsKey(name))
+          return false;
+      }
+      for (String name : pSrc.motionCurves.keySet()) {
+        if (!motionCurves.containsKey(name))
+          return false;
+      }
+      for (String name : motionCurves.keySet()) {
+        if (!motionCurves.get(name).isEqual(pSrc.motionCurves.get(name)))
+          return false;
+      }
     }
     // param values
     {
@@ -171,5 +200,18 @@ public class Variation implements Assignable<Variation>, Serializable {
       }
     }
     return true;
+  }
+
+  public MotionCurve getMotionCurve(String pName) {
+    return motionCurves.get(pName);
+  }
+
+  public MotionCurve createMotionCurve(String pName) {
+    if (getMotionCurve(pName) != null) {
+      throw new RuntimeException("Motion curve <" + pName + "> already exists");
+    }
+    MotionCurve curve = new MotionCurve();
+    motionCurves.put(pName, curve);
+    return curve;
   }
 }

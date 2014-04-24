@@ -566,13 +566,22 @@ public class AbstractFlameReader {
                 else if (paramAltNames != null && ((pHs = atts.get(paramAltNames[i])) != null)) {
                   variation.getFunc().setParameter(pName, Double.parseDouble(pHs));
                 }
+                // curve
+                {
+                  String namePrefix = rawName + "_" + pName + "_";
+                  if (atts.get(namePrefix + AbstractFlameReader.CURVE_ATTR_POINT_COUNT) != null) {
+                    MotionCurve curve = variation.getMotionCurve(pName);
+                    if (curve == null) {
+                      curve = variation.createMotionCurve(pName);
+                    }
+                    readMotionCurveAttributes(atts, curve, namePrefix);
+                  }
+                }
               }
             }
           }
-          // TODO
-          readMotionCurves(variation, atts);
           // curves
-          // readMotionCurves
+          readMotionCurves(variation, atts);
           // ressources 
           {
             String ressNames[] = variation.getFunc().getRessourceNames();
