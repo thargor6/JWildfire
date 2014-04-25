@@ -3492,7 +3492,7 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
           case COL_FINISHED:
             return "Finished";
           case COL_ELAPSED:
-            return "Elapsed time (ms)";
+            return "Elapsed time (seconds)";
           case COL_LAST_ERROR:
             return "Last error";
         }

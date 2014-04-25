@@ -190,6 +190,10 @@ public class AbstractFlameReader {
     else {
       pFlame.setBGTransparency(prefs.isTinaDefaultBGTransparency());
     }
+    if (Tools.NO_TRANSPARENCY) {
+      pFlame.setBGTransparency(false);
+    }
+
     if ((hs = atts.get(ATTR_GAMMA)) != null) {
       pFlame.setGamma(Double.parseDouble(hs));
     }

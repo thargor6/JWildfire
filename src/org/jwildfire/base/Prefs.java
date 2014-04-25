@@ -811,6 +811,21 @@ public class Prefs extends ManagedObject {
     tinaRandGenColorMapImagePath = pTinaRandGenColorMapImagePath;
   }
 
+  private static Prefs prefs;
+
+  public static Prefs getPrefs() {
+    if (prefs == null) {
+      prefs = new Prefs();
+      try {
+        prefs.loadFromFile();
+      }
+      catch (Exception ex) {
+        ex.printStackTrace();
+      }
+    }
+    return prefs;
+  }
+
 }
 
 /*

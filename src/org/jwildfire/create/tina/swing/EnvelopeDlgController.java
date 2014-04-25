@@ -18,6 +18,8 @@ package org.jwildfire.create.tina.swing;
 
 import java.awt.Cursor;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -51,6 +53,8 @@ public class EnvelopeDlgController {
   private final JComboBox interpolationCmb;
   private final EnvelopePanel envelopePanel;
   private final JComboBox envelopeInterpolationCmb;
+  private final List<EnvelopeChangeListener> valueChangeListeners = new ArrayList<EnvelopeChangeListener>();
+  private final List<EnvelopeChangeListener> selectionChangeListeners = new ArrayList<EnvelopeChangeListener>();
 
   private boolean noRefresh;
   private final Envelope envelope;
@@ -359,6 +363,7 @@ public class EnvelopeDlgController {
         }
       }
       envelope.select(sel);
+      notifySelectionChange(envelope.getSelectedIdx(), envelope.getSelectedX(), envelope.getSelectedY());
       refreshXField();
       refreshYField();
       envelopePanel.repaint();
@@ -421,6 +426,8 @@ public class EnvelopeDlgController {
       }
       envelope.setValues(xVals, yVals);
       envelope.select(pred + 1);
+      notifySelectionChange(envelope.getSelectedIdx(), envelope.getSelectedX(), envelope.getSelectedY());
+
       refreshEnvelope();
       enableControls();
     }
@@ -456,6 +463,7 @@ public class EnvelopeDlgController {
         envelope.setViewXMin(xi);
         envelope.getX()[envelope.getSelectedIdx()] = xi;
         envelope.getY()[envelope.getSelectedIdx()] = y;
+        notifyValueChange(envelope.getSelectedIdx(), xi, y);
         refreshXMinField();
         refreshXField();
         refreshYField();
@@ -469,6 +477,7 @@ public class EnvelopeDlgController {
         envelope.setViewXMax(xi);
         envelope.getX()[envelope.getSelectedIdx()] = xi;
         envelope.getY()[envelope.getSelectedIdx()] = y;
+        notifyValueChange(envelope.getSelectedIdx(), xi, y);
         refreshXMaxField();
         refreshXField();
         refreshYField();
@@ -482,6 +491,7 @@ public class EnvelopeDlgController {
         envelope.setViewYMax(y);
         envelope.getX()[envelope.getSelectedIdx()] = xi;
         envelope.getY()[envelope.getSelectedIdx()] = y;
+        notifyValueChange(envelope.getSelectedIdx(), xi, y);
         refreshYMaxField();
         refreshXField();
         refreshYField();
@@ -495,6 +505,7 @@ public class EnvelopeDlgController {
         envelope.setViewYMin(y);
         envelope.getX()[envelope.getSelectedIdx()] = xi;
         envelope.getY()[envelope.getSelectedIdx()] = y;
+        notifyValueChange(envelope.getSelectedIdx(), xi, y);
         refreshYMinField();
         refreshXField();
         refreshYField();
@@ -504,10 +515,23 @@ public class EnvelopeDlgController {
         int xi = Tools.FTOI(x);
         envelope.getX()[envelope.getSelectedIdx()] = xi;
         envelope.getY()[envelope.getSelectedIdx()] = y;
+        notifyValueChange(envelope.getSelectedIdx(), xi, y);
         refreshXField();
         refreshYField();
         envelopePanel.repaint();
       }
+    }
+  }
+
+  private void notifyValueChange(int pSelectedPoint, int pX, double pY) {
+    for (EnvelopeChangeListener listener : valueChangeListeners) {
+      listener.notify(pSelectedPoint, pX, pY);
+    }
+  }
+
+  private void notifySelectionChange(int pSelectedPoint, int pX, double pY) {
+    for (EnvelopeChangeListener listener : selectionChangeListeners) {
+      listener.notify(pSelectedPoint, pX, pY);
     }
   }
 
@@ -606,4 +630,15 @@ public class EnvelopeDlgController {
     noRefresh = pNoRefresh;
   }
 
+  public void registerValueChangeListener(EnvelopeChangeListener pEnvelopeValueChangeListener) {
+    if (!valueChangeListeners.contains(pEnvelopeValueChangeListener)) {
+      valueChangeListeners.add(pEnvelopeValueChangeListener);
+    }
+  }
+
+  public void registerSelectionChangeListener(EnvelopeChangeListener pEnvelopeSelectionChangeListener) {
+    if (!selectionChangeListeners.contains(pEnvelopeSelectionChangeListener)) {
+      selectionChangeListeners.add(pEnvelopeSelectionChangeListener);
+    }
+  }
 }

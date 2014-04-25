@@ -4433,6 +4433,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JWFNumberField getAffineC10REd() {
     if (affineC10REd == null) {
       affineC10REd = new JWFNumberField();
+      affineC10REd.setLinkedLabelControlName("affineC10Lbl");
       affineC10REd.setName("affineC10Lbl");
       affineC10REd.setValueStep(0.01);
       affineC10REd.addActionListener(new ActionListener() {

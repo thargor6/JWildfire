@@ -24,10 +24,18 @@ import javax.swing.SwingConstants;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import org.jwildfire.base.Prefs;
+import org.jwildfire.create.tina.base.Flame;
+import org.jwildfire.create.tina.base.motion.MotionCurve;
+import org.jwildfire.create.tina.render.FlameRenderer;
+import org.jwildfire.create.tina.render.RenderInfo;
+import org.jwildfire.create.tina.render.RenderMode;
+import org.jwildfire.create.tina.render.RenderedFlame;
 import org.jwildfire.envelope.Envelope;
 import org.jwildfire.envelope.EnvelopePanel;
+import org.jwildfire.image.SimpleImage;
 
-public class EnvelopeDialog extends JDialog {
+public class EnvelopeDialog extends JDialog implements FlameHolder {
   private static final long serialVersionUID = 1L;
   private JPanel jContentPane = null;
   private JPanel bottomPanel = null;
@@ -41,9 +49,10 @@ public class EnvelopeDialog extends JDialog {
   private JPanel panel_1;
   private final EnvelopeDlgController ctrl;
 
-  /**
-   * @param pOwner
-   */
+  private Flame flameToPreview;
+  private MotionCurve curveToPreview;
+  private int frameToPreview;
+
   public EnvelopeDialog(Window pOwner, Envelope pEnvelope, boolean pAllowRemove) {
     super(pOwner);
     initialize();
@@ -59,6 +68,17 @@ public class EnvelopeDialog extends JDialog {
         getEnvelopeYREd(), getEnvelopeInterpolationCmb(), getEnvelopeViewAllButton(), getEnvelopeViewLeftButton(),
         getEnvelopeViewRightButton(), getEnvelopeViewUpButton(), getEnvelopeViewDownButton(), getEnvelopePanel(), getEnvelopeInterpolationCmb());
     ctrl.setNoRefresh(true);
+
+    EnvelopeChangeListener changeListener = new EnvelopeChangeListener() {
+
+      @Override
+      public void notify(int pSelectedPoint, int pX, double pY) {
+        notifyChange(pSelectedPoint, pX, pY);
+      }
+
+    };
+    ctrl.registerSelectionChangeListener(changeListener);
+    ctrl.registerValueChangeListener(changeListener);
     try {
       ctrl.refreshEnvelope();
       ctrl.enableControls();
@@ -86,6 +106,7 @@ public class EnvelopeDialog extends JDialog {
   private JButton envelopeViewDownButton;
   private JComboBox envelopeInterpolationCmb;
   private JButton btnRemove;
+  private JPanel previewRootPanel;
 
   public EnvelopePanel getEnvelopePanel() {
     if (envelopePanel == null) {
@@ -360,6 +381,11 @@ public class EnvelopeDialog extends JDialog {
       envelopeClearButton.setLocation(new Point(5, 240));
       envelopeClearButton.setBounds(6, 44, 141, 26);
       panel.add(envelopeClearButton);
+
+      previewRootPanel = new JPanel();
+      previewRootPanel.setBounds(6, 82, 140, 111);
+      panel.add(previewRootPanel);
+      previewRootPanel.setLayout(new BorderLayout(0, 0));
     }
     return panel;
   }
@@ -584,4 +610,87 @@ public class EnvelopeDialog extends JDialog {
   public JButton getBtnRemove() {
     return btnRemove;
   }
+
+  public JPanel getPreviewRootPanel() {
+    return previewRootPanel;
+  }
+
+  private FlamePanel flamePanel;
+
+  private FlamePanel getFlamePanel() {
+    if (flamePanel == null) {
+      int width = getPreviewRootPanel().getWidth();
+      int height = getPreviewRootPanel().getHeight();
+      SimpleImage img = new SimpleImage(width, height);
+      img.fillBackground(0, 0, 0);
+      flamePanel = new FlamePanel(Prefs.getPrefs(), img, 0, 0, getPreviewRootPanel().getWidth(), this, null);
+      flamePanel.setRenderWidth(800);
+      flamePanel.setRenderHeight(600);
+      flamePanel.setFocusable(true);
+      getPreviewRootPanel().add(flamePanel, BorderLayout.CENTER);
+      getPreviewRootPanel().getParent().validate();
+      getPreviewRootPanel().repaint();
+      flamePanel.requestFocusInWindow();
+    }
+    return flamePanel;
+  }
+
+  public void refreshFlameImage() {
+    FlamePanel imgPanel = getFlamePanel();
+    Rectangle bounds = imgPanel.getImageBounds();
+    int width = bounds.width;
+    int height = bounds.height;
+    if (width >= 16 && height >= 16) {
+      RenderInfo info = new RenderInfo(width, height, RenderMode.PREVIEW);
+      Flame flame = getFlame();
+      if (flame != null) {
+        double oldSpatialFilterRadius = flame.getSpatialFilterRadius();
+        double oldSampleDensity = flame.getSampleDensity();
+        try {
+          double wScl = (double) info.getImageWidth() / (double) flame.getWidth();
+          double hScl = (double) info.getImageHeight() / (double) flame.getHeight();
+          flame.setPixelsPerUnit((wScl + hScl) * 0.5 * flame.getPixelsPerUnit());
+          flame.setWidth(info.getImageWidth());
+          flame.setHeight(info.getImageHeight());
+
+          FlameRenderer renderer = new FlameRenderer(flame, Prefs.getPrefs(), false, false);
+          renderer.setProgressUpdater(null);
+          flame.setSampleDensity(1.0);
+          flame.setSpatialFilterRadius(0.0);
+          RenderedFlame res = renderer.renderFlame(info);
+          imgPanel.setImage(res.getImage());
+        }
+        finally {
+          flame.setSpatialFilterRadius(oldSpatialFilterRadius);
+          flame.setSampleDensity(oldSampleDensity);
+        }
+      }
+    }
+    else {
+      imgPanel.setImage(new SimpleImage(width, height));
+    }
+    getPreviewRootPanel().repaint();
+  }
+
+  @Override
+  public Flame getFlame() {
+    if (flameToPreview != null) {
+      Flame res = flameToPreview.makeCopy();
+      res.setFrame(frameToPreview);
+      return res;
+    }
+    return null;
+  }
+
+  public void setFlameToPreview(Flame pFlameToPreview, MotionCurve pCurveToPreview) {
+    flameToPreview = pFlameToPreview;
+    frameToPreview = pFlameToPreview.getFrame();
+    curveToPreview = pCurveToPreview;
+  }
+
+  protected void notifyChange(int pSelectedPoint, int pX, double pY) {
+    frameToPreview = pX;
+    refreshFlameImage();
+  }
+
 } //  @jve:decl-index=0:visual-constraint="10,10"
