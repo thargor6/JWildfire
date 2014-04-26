@@ -14,6 +14,10 @@ import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.StringTokenizer;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -32,6 +36,7 @@ import org.jwildfire.create.tina.render.RenderInfo;
 import org.jwildfire.create.tina.render.RenderMode;
 import org.jwildfire.create.tina.render.RenderedFlame;
 import org.jwildfire.envelope.Envelope;
+import org.jwildfire.envelope.Envelope.Interpolation;
 import org.jwildfire.envelope.EnvelopePanel;
 import org.jwildfire.image.SimpleImage;
 
@@ -51,7 +56,9 @@ public class EnvelopeDialog extends JDialog implements FlameHolder {
 
   private Flame flameToPreview;
   private MotionCurve curveToPreview;
+  private String curveToPreviewPropertyPath;
   private int frameToPreview;
+  private double curveValueToPreview;
 
   public EnvelopeDialog(Window pOwner, Envelope pEnvelope, boolean pAllowRemove) {
     super(pOwner);
@@ -677,6 +684,12 @@ public class EnvelopeDialog extends JDialog implements FlameHolder {
     if (flameToPreview != null) {
       Flame res = flameToPreview.makeCopy();
       res.setFrame(frameToPreview);
+      if (curveToPreviewPropertyPath != null) {
+        MotionCurve curve = getMotionCurve(res, curveToPreviewPropertyPath);
+        curve.setPoints(new int[] { frameToPreview }, new double[] { curveValueToPreview });
+        curve.setInterpolation(Interpolation.LINEAR);
+        curve.setEnabled(true);
+      }
       return res;
     }
     return null;
@@ -686,11 +699,136 @@ public class EnvelopeDialog extends JDialog implements FlameHolder {
     flameToPreview = pFlameToPreview;
     frameToPreview = pFlameToPreview.getFrame();
     curveToPreview = pCurveToPreview;
+    curveValueToPreview = 0.0;
+    curveToPreviewPropertyPath = getPropertyPath(flameToPreview, curveToPreview);
+    //    System.out.println(curveToPreviewPropertyPath);
+
+    //    MotionCurve curve = getMotionCurve(flameToPreview, curveToPreviewPropertyPath);
+    //    System.out.println(curve);
   }
 
   protected void notifyChange(int pSelectedPoint, int pX, double pY) {
     frameToPreview = pX;
+    curveValueToPreview = pY;
     refreshFlameImage();
   }
 
-} //  @jve:decl-index=0:visual-constraint="10,10"
+  private String getPropertyPath(Object pObject, Object pProperty) {
+    String path = findProperty(pObject, pProperty, null);
+    return path;
+  }
+
+  private final String PATH_SEPARATOR = "#";
+
+  // TODO sets
+  private String findProperty(Object pObject, Object pProperty, String pPath) {
+    Class<?> cls = pObject.getClass();
+    for (Field field : cls.getDeclaredFields()) {
+      field.setAccessible(true);
+      Object fieldValue;
+      try {
+        fieldValue = field.get(pObject);
+      }
+      catch (Exception ex) {
+        fieldValue = null;
+      }
+      //      System.out.println(field.getName() + "=" + fieldValue);
+      if (fieldValue != null) {
+        if (fieldValue == pProperty) {
+          String pathExt = field.getName();
+          return pPath == null ? pathExt : pPath + PATH_SEPARATOR + pathExt;
+        }
+        if (fieldValue instanceof List) {
+          List<?> list = (List<?>) fieldValue;
+          for (int i = 0; i < list.size(); i++) {
+            String pathExt = field.getName() + "[" + i + "]";
+            String subPath = pPath == null ? pathExt : pPath + PATH_SEPARATOR + pathExt;
+            String subResult = findProperty(list.get(i), pProperty, subPath);
+            if (subResult != null) {
+              return subResult;
+            }
+          }
+        }
+      }
+    }
+    return null;
+  }
+
+  // layers[0]#xForms[1]#rotateCurve
+  private MotionCurve getMotionCurve(Flame pFlame, String pPropertyPath) {
+    if (pFlame != null && pPropertyPath != null) {
+      List<String> path = new ArrayList<String>();
+      StringTokenizer tokenizer = new StringTokenizer(pPropertyPath, PATH_SEPARATOR);
+      while (tokenizer.hasMoreElements()) {
+        path.add((String) tokenizer.nextElement());
+      }
+      return findMotionCurve(pFlame, path, 0);
+    }
+    return null;
+  }
+
+  // TODO sets
+  private MotionCurve findMotionCurve(Object pObject, List<String> pPath, int pPathIndex) {
+    if (pPath.size() > 0) {
+      Class<?> cls = pObject.getClass();
+      if (pPathIndex == pPath.size() - 1) {
+        for (Field field : cls.getDeclaredFields()) {
+          field.setAccessible(true);
+          Object fieldValue;
+          try {
+            fieldValue = field.get(pObject);
+          }
+          catch (Exception ex) {
+            fieldValue = null;
+          }
+          if (fieldValue != null && field.getName().equals(pPath.get(pPath.size() - 1)) && fieldValue instanceof MotionCurve) {
+            return (MotionCurve) fieldValue;
+          }
+        }
+      }
+      else {
+        String pathName;
+        String index;
+        {
+          String fullPathName = pPath.get(pPathIndex);
+          int p1 = fullPathName.lastIndexOf("[");
+          int p2 = fullPathName.indexOf("]", p1 + 1);
+          if (p1 > 0 && p2 > p1) {
+            pathName = fullPathName.substring(0, p1);
+            index = fullPathName.substring(p1 + 1, p2);
+          }
+          else {
+            pathName = fullPathName;
+            index = "";
+          }
+        }
+        for (Field field : cls.getDeclaredFields()) {
+          field.setAccessible(true);
+          Object fieldValue;
+          try {
+            fieldValue = field.get(pObject);
+          }
+          catch (Exception ex) {
+            fieldValue = null;
+          }
+          if (fieldValue != null) {
+            if (fieldValue instanceof List && field.getName().equals(pathName) && index.length() > 0) {
+              List<?> list = (List<?>) fieldValue;
+              MotionCurve subResult = findMotionCurve(list.get(Integer.parseInt(index)), pPath, pPathIndex + 1);
+              if (subResult != null) {
+                return subResult;
+              }
+            }
+            else if (field.getName().equals(pathName)) {
+              MotionCurve subResult = findMotionCurve(fieldValue, pPath, pPathIndex + 1);
+              if (subResult != null) {
+                return subResult;
+              }
+            }
+          }
+        }
+      }
+    }
+    return null;
+  }
+}
