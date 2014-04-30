@@ -41,12 +41,13 @@ public class SimpleTilingRandomFlameGenerator extends RandomFlameGenerator {
       xForm.setWeight(0.4 + Math.random() * 50.0);
 
       String fName = ExperimentalSimpleRandomFlameGenerator.FNCLST_EXPERIMENTAL[(int) (Math.random() * ExperimentalSimpleRandomFlameGenerator.FNCLST_EXPERIMENTAL.length)];
-      xForm.addVariation(0.75 + 0.5 * Math.random(), VariationFuncList.getVariationFuncInstance(fName, true));
-      xForm.setColor(0.89 + Math.random() * 0.06);
+      xForm.addVariation(0.01 + 0.4 * Math.random(), VariationFuncList.getVariationFuncInstance(fName, true));
+      xForm.addVariation(0.12 + 0.3 * Math.random(), VariationFuncList.getVariationFuncInstance("linear3D", true));
+      xForm.setColor(0.87 + Math.random() * 0.1);
     }
     // 2nd XForm
     boolean twoPrimaryXForms = Math.random() > 0.33;
-    boolean linkedXForms = Math.random() > 0.5;
+    boolean linkedXForms = Math.random() < 0.25;
     if (twoPrimaryXForms) {
       XForm xForm = new XForm();
       layer.getXForms().add(xForm);
@@ -85,6 +86,28 @@ public class SimpleTilingRandomFlameGenerator extends RandomFlameGenerator {
         else {
           for (int j = 0; j < layer.getXForms().size(); j++) {
             layer.getXForms().get(i).getModifiedWeights()[j] = (j != 1) ? 1 : 0;
+          }
+        }
+      }
+    }
+    else {
+      for (int i = 0; i < layer.getXForms().size(); i++) {
+        if (i == 0) {
+          double wg = Math.random() * 12.0;
+          if (Math.random() < 0.25) {
+            wg = 0.0;
+          }
+          for (int j = 0; j < layer.getXForms().size(); j++) {
+            layer.getXForms().get(i).getModifiedWeights()[j] = (j != 1) ? wg : 1;
+          }
+        }
+        else {
+          double wg = Math.random() * 12.0;
+          if (Math.random() < 0.25) {
+            wg = 0.0;
+          }
+          for (int j = 0; j < layer.getXForms().size(); j++) {
+            layer.getXForms().get(i).getModifiedWeights()[j] = (j != 1) ? 1 : wg;
           }
         }
       }
