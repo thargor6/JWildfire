@@ -350,7 +350,9 @@ public class Envelope implements Serializable {
 
   public double evaluate(double pTime) {
     /* check if x-value is inside the supported range */
-    if (size() == 1)
+    if (size() == 0)
+      return 0.0;
+    else if (size() == 1)
       return y[0];
     int min, max;
     min = max = x[0];

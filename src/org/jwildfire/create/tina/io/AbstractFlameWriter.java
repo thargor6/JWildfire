@@ -88,7 +88,7 @@ public class AbstractFlameWriter {
         }
       }
       // curves
-      writeMotionCurves(v, pXB, attrList);
+      writeMotionCurves(v, pXB, attrList, fName + "_");
       // ressources
       {
         String ressNames[] = func.getRessourceNames();
@@ -120,7 +120,7 @@ public class AbstractFlameWriter {
       attrList.add(pXB.createAttr("name", xName));
     }
 
-    writeMotionCurves(pXForm, pXB, attrList);
+    writeMotionCurves(pXForm, pXB, attrList, null);
     return attrList;
   }
 
@@ -264,7 +264,7 @@ public class AbstractFlameWriter {
     attrList.add(xb.createAttr(AbstractFlameReader.ATTR_FRAME, pFlame.getFrame()));
     attrList.add(xb.createAttr(AbstractFlameReader.ATTR_FRAME_COUNT, pFlame.getFrameCount()));
 
-    writeMotionCurves(pFlame, xb, attrList);
+    writeMotionCurves(pFlame, xb, attrList, null);
     return attrList;
   }
 
@@ -293,10 +293,11 @@ public class AbstractFlameWriter {
     }
   }
 
-  protected void writeMotionCurves(Object source, SimpleXMLBuilder xb, List<SimpleXMLBuilder.Attribute<?>> attrList) throws Exception {
+  protected void writeMotionCurves(Object source, SimpleXMLBuilder xb, List<SimpleXMLBuilder.Attribute<?>> attrList, String pNamePrefix) throws Exception {
     for (MotionCurveAttribute attribute : AnimationService.getAllMotionCurves(source)) {
       MotionCurve curve = attribute.getMotionCurve();
-      writeMotionCurve(xb, attrList, attribute.getName(), curve);
+      String name = pNamePrefix == null ? attribute.getName() : pNamePrefix + attribute.getName();
+      writeMotionCurve(xb, attrList, name, curve);
     }
   }
 

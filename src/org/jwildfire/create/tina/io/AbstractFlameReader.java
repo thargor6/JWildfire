@@ -453,7 +453,7 @@ public class AbstractFlameReader {
     if ((hs = atts.get(ATTR_FRAME_COUNT)) != null) {
       pFlame.setFrameCount(Integer.parseInt(hs));
     }
-    readMotionCurves(pFlame, atts);
+    readMotionCurves(pFlame, atts, null);
   }
 
   public static final String ATTR_WEIGHT = "weight";
@@ -531,7 +531,7 @@ public class AbstractFlameReader {
         pXForm.getModifiedWeights()[i] = Double.parseDouble(s[i]);
       }
     }
-    readMotionCurves(pXForm, atts);
+    readMotionCurves(pXForm, atts, null);
     // variations
     {
       List<String> variationNameList = VariationFuncList.getNameList();
@@ -585,7 +585,7 @@ public class AbstractFlameReader {
             }
           }
           // curves
-          readMotionCurves(variation, atts);
+          readMotionCurves(variation, atts, rawName + "_");
           // ressources 
           {
             String ressNames[] = variation.getFunc().getRessourceNames();
@@ -722,10 +722,10 @@ public class AbstractFlameReader {
     }
   }
 
-  protected void readMotionCurves(Object source, XMLAttributes atts) {
+  protected void readMotionCurves(Object source, XMLAttributes atts, String pNamePrefix) {
     for (MotionCurveAttribute attribute : AnimationService.getAllMotionCurves(source)) {
       MotionCurve curve = attribute.getMotionCurve();
-      String namePrefix = attribute.getName() + "_";
+      String namePrefix = pNamePrefix == null ? attribute.getName() + "_" : pNamePrefix + attribute.getName() + "_";
       readMotionCurveAttributes(atts, curve, namePrefix);
     }
   }

@@ -11,12 +11,16 @@ import java.awt.Rectangle;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.StringTokenizer;
 
 import javax.swing.JButton;
@@ -25,6 +29,8 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.TitledBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -62,14 +68,161 @@ public class EnvelopeDialog extends JDialog implements FlameHolder {
 
   public EnvelopeDialog(Window pOwner, Envelope pEnvelope, boolean pAllowRemove) {
     super(pOwner);
+    addComponentListener(new ComponentAdapter() {
+      @Override
+      public void componentShown(ComponentEvent e) {
+        try {
+          refreshFlameImage();
+        }
+        catch (Exception ex) {
+          ex.printStackTrace();
+        }
+      }
+    });
     initialize();
-    envelopeInterpolationCmb.addItem(Envelope.Interpolation.SPLINE);
-    envelopeInterpolationCmb.addItem(Envelope.Interpolation.BEZIER);
-    envelopeInterpolationCmb.addItem(Envelope.Interpolation.LINEAR);
     getEnvelopePanel().setEnvelope(pEnvelope);
     Rectangle rootBounds = pOwner.getBounds();
     Dimension size = getSize();
     getBtnRemove().setVisible(pAllowRemove);
+
+    JLabel lblFrameRange = new JLabel();
+    lblFrameRange.setBounds(0, 6, 87, 26);
+    panel_3.add(lblFrameRange);
+    lblFrameRange.setFont(new Font("Dialog", Font.BOLD, 10));
+    lblFrameRange.setText("Frame range");
+    lblFrameRange.setPreferredSize(new Dimension(38, 26));
+    lblFrameRange.setHorizontalAlignment(SwingConstants.RIGHT);
+    lblFrameRange.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
+
+    JLabel lblAmplitudeRange = new JLabel();
+    lblAmplitudeRange.setBounds(0, 34, 87, 26);
+    panel_3.add(lblAmplitudeRange);
+    lblAmplitudeRange.setFont(new Font("Dialog", Font.BOLD, 10));
+    lblAmplitudeRange.setText("Amplitude range");
+    lblAmplitudeRange.setPreferredSize(new Dimension(38, 26));
+    lblAmplitudeRange.setHorizontalAlignment(SwingConstants.RIGHT);
+
+    envelopeYMinREd = new JWFNumberField();
+    envelopeYMinREd.setBounds(99, 33, 80, 26);
+    panel_3.add(envelopeYMinREd);
+    envelopeYMinREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+    envelopeYMinREd.addChangeListener(new ChangeListener() {
+      public void stateChanged(ChangeEvent e) {
+        ctrl.editFieldChanged();
+      }
+    });
+    envelopeYMinREd.setPreferredSize(new Dimension(80, 26));
+
+    envelopeXMaxREd = new JWFNumberField();
+    envelopeXMaxREd.setBounds(181, 7, 80, 26);
+    panel_3.add(envelopeXMaxREd);
+    envelopeXMaxREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+    envelopeXMaxREd.addChangeListener(new ChangeListener() {
+      public void stateChanged(ChangeEvent e) {
+        ctrl.editFieldChanged();
+      }
+    });
+    envelopeXMaxREd.setPreferredSize(new Dimension(80, 26));
+
+    envelopeYMaxREd = new JWFNumberField();
+    envelopeYMaxREd.setBounds(181, 34, 80, 26);
+    panel_3.add(envelopeYMaxREd);
+    envelopeYMaxREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+    envelopeYMaxREd.addChangeListener(new ChangeListener() {
+      public void stateChanged(ChangeEvent e) {
+        ctrl.editFieldChanged();
+      }
+    });
+    envelopeYMaxREd.setPreferredSize(new Dimension(80, 26));
+
+    envelopeInterpolationCmb = new JComboBox();
+    envelopeInterpolationCmb.setBounds(99, 64, 165, 26);
+    panel_3.add(envelopeInterpolationCmb);
+    envelopeInterpolationCmb.setFont(new Font("Dialog", Font.PLAIN, 10));
+    envelopeInterpolationCmb.addItem(Envelope.Interpolation.SPLINE);
+    envelopeInterpolationCmb.addItem(Envelope.Interpolation.BEZIER);
+    envelopeInterpolationCmb.addItem(Envelope.Interpolation.LINEAR);
+
+    envelopeInterpolationCmb.addItemListener(new ItemListener() {
+      public void itemStateChanged(ItemEvent e) {
+        if (ctrl != null) {
+          ctrl.interpolationCmbChanged();
+        }
+      }
+    });
+    envelopeInterpolationCmb.setPreferredSize(new Dimension(141, 26));
+
+    JLabel label_6 = new JLabel();
+    label_6.setBounds(0, 66, 87, 26);
+    panel_3.add(label_6);
+    label_6.setFont(new Font("Dialog", Font.BOLD, 10));
+    label_6.setText("Interpolation");
+    label_6.setPreferredSize(new Dimension(81, 26));
+    label_6.setHorizontalAlignment(SwingConstants.RIGHT);
+
+    JLabel lblFrame = new JLabel();
+    lblFrame.setBounds(0, 102, 87, 26);
+    panel_3.add(lblFrame);
+    lblFrame.setFont(new Font("Dialog", Font.BOLD, 10));
+    lblFrame.setText("Frame");
+    lblFrame.setPreferredSize(new Dimension(38, 26));
+    lblFrame.setHorizontalAlignment(SwingConstants.RIGHT);
+
+    envelopeXREd = new JWFNumberField();
+    envelopeXREd.setBounds(99, 102, 80, 26);
+    panel_3.add(envelopeXREd);
+    envelopeXREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+    envelopeXREd.addChangeListener(new ChangeListener() {
+      public void stateChanged(ChangeEvent e) {
+        ctrl.editFieldChanged();
+      }
+    });
+    envelopeXREd.setPreferredSize(new Dimension(80, 26));
+
+    JLabel lblAmplitude = new JLabel();
+    lblAmplitude.setBounds(0, 128, 87, 26);
+    panel_3.add(lblAmplitude);
+    lblAmplitude.setFont(new Font("Dialog", Font.BOLD, 10));
+    lblAmplitude.setText("Amplitude");
+    lblAmplitude.setPreferredSize(new Dimension(38, 26));
+    lblAmplitude.setHorizontalAlignment(SwingConstants.RIGHT);
+
+    envelopeRemovePointButton = new JButton();
+    envelopeRemovePointButton.setBounds(6, 89, 141, 26);
+    panel_4.add(envelopeRemovePointButton);
+    envelopeRemovePointButton.setFont(new Font("Dialog", Font.BOLD, 10));
+    envelopeRemovePointButton.setToolTipText("Remove a point (after clikcing this button, click at a point)");
+    envelopeRemovePointButton.addActionListener(new ActionListener() {
+      public void actionPerformed(ActionEvent e) {
+        ctrl.removePoint();
+      }
+    });
+    envelopeRemovePointButton.setText("Remove point");
+    envelopeRemovePointButton.setPreferredSize(new Dimension(141, 26));
+
+    envelopeYREd = new JWFNumberField();
+    envelopeYREd.setBounds(99, 128, 80, 26);
+    panel_3.add(envelopeYREd);
+    envelopeYREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+    envelopeYREd.addChangeListener(new ChangeListener() {
+      public void stateChanged(ChangeEvent e) {
+        ctrl.editFieldChanged();
+      }
+    });
+    envelopeYREd.setPreferredSize(new Dimension(80, 26));
+
+    envelopeClearButton = new JButton();
+    envelopeClearButton.setBounds(353, 6, 141, 26);
+    panel_4.add(envelopeClearButton);
+    envelopeClearButton.setFont(new Font("Dialog", Font.BOLD, 10));
+    envelopeClearButton.addActionListener(new ActionListener() {
+      public void actionPerformed(ActionEvent e) {
+        ctrl.clearEnvelope();
+      }
+    });
+    envelopeClearButton.setText("Reset curve");
+    envelopeClearButton.setPreferredSize(new Dimension(141, 26));
+
     ctrl = new EnvelopeDlgController(pEnvelope, getEnvelopeAddPointButton(), getEnvelopeRemovePointButton(), getEnvelopeClearButton(),
         getEnvelopeXMinREd(), getEnvelopeXMaxREd(), getEnvelopeYMinREd(), getEnvelopeYMaxREd(), getEnvelopeXREd(),
         getEnvelopeYREd(), getEnvelopeInterpolationCmb(), getEnvelopeViewAllButton(), getEnvelopeViewLeftButton(),
@@ -179,7 +332,7 @@ public class EnvelopeDialog extends JDialog implements FlameHolder {
       btnRemove.setMnemonic(KeyEvent.VK_R);
       btnRemove.setLocation(new Point(276, 10));
       btnRemove.setFont(new Font("Dialog", Font.BOLD, 10));
-      btnRemove.setBounds(641, 10, 179, 24);
+      btnRemove.setBounds(679, 10, 179, 24);
       bottomPanel.add(btnRemove);
     }
     return bottomPanel;
@@ -227,7 +380,7 @@ public class EnvelopeDialog extends JDialog implements FlameHolder {
       okButton.setText("Apply motion curve");
       okButton.setMnemonic(KeyEvent.VK_O);
       okButton.setSize(new Dimension(179, 24));
-      okButton.setLocation(new Point(118, 10));
+      okButton.setLocation(new Point(105, 10));
       okButton.setSelected(true);
       okButton.setFont(new Font("Dialog", Font.BOLD, 10));
       okButton.addActionListener(new java.awt.event.ActionListener() {
@@ -253,7 +406,7 @@ public class EnvelopeDialog extends JDialog implements FlameHolder {
       cancelButton.setMnemonic(KeyEvent.VK_C);
       cancelButton.setText("Discard changes");
       cancelButton.setSize(new Dimension(179, 24));
-      cancelButton.setLocation(new Point(380, 10));
+      cancelButton.setLocation(new Point(393, 10));
       cancelButton.setFont(new Font("Dialog", Font.BOLD, 10));
       cancelButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -275,36 +428,6 @@ public class EnvelopeDialog extends JDialog implements FlameHolder {
       panel.setPreferredSize(new Dimension(152, 10));
       panel.setLayout(null);
 
-      envelopeAddPointButton = new JButton();
-      envelopeAddPointButton.setFont(new Font("Dialog", Font.BOLD, 10));
-      envelopeAddPointButton.setToolTipText("Add a point to the curve (click at the area to place it)");
-      envelopeAddPointButton.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-          ctrl.addPoint();
-        }
-      });
-      envelopeAddPointButton.setText("Add point");
-      envelopeAddPointButton.setSize(new Dimension(141, 50));
-      envelopeAddPointButton.setPreferredSize(new Dimension(141, 50));
-      envelopeAddPointButton.setLocation(new Point(5, 5));
-      envelopeAddPointButton.setBounds(6, 198, 141, 50);
-      panel.add(envelopeAddPointButton);
-
-      envelopeRemovePointButton = new JButton();
-      envelopeRemovePointButton.setFont(new Font("Dialog", Font.BOLD, 10));
-      envelopeRemovePointButton.setToolTipText("Remove a point (after clikcing this button, click at a point)");
-      envelopeRemovePointButton.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-          ctrl.removePoint();
-        }
-      });
-      envelopeRemovePointButton.setText("Remove point");
-      envelopeRemovePointButton.setSize(new Dimension(141, 26));
-      envelopeRemovePointButton.setPreferredSize(new Dimension(141, 26));
-      envelopeRemovePointButton.setLocation(new Point(5, 37));
-      envelopeRemovePointButton.setBounds(6, 6, 141, 26);
-      panel.add(envelopeRemovePointButton);
-
       envelopeViewUpButton = new JButton();
       envelopeViewUpButton.setFont(new Font("Dialog", Font.BOLD, 10));
       envelopeViewUpButton.addActionListener(new ActionListener() {
@@ -316,7 +439,7 @@ public class EnvelopeDialog extends JDialog implements FlameHolder {
       envelopeViewUpButton.setSize(new Dimension(48, 26));
       envelopeViewUpButton.setPreferredSize(new Dimension(48, 26));
       envelopeViewUpButton.setLocation(new Point(51, 99));
-      envelopeViewUpButton.setBounds(52, 325, 48, 26);
+      envelopeViewUpButton.setBounds(52, 85, 48, 26);
       panel.add(envelopeViewUpButton);
 
       envelopeViewLeftButton = new JButton();
@@ -330,7 +453,7 @@ public class EnvelopeDialog extends JDialog implements FlameHolder {
       envelopeViewLeftButton.setSize(new Dimension(48, 26));
       envelopeViewLeftButton.setPreferredSize(new Dimension(48, 26));
       envelopeViewLeftButton.setLocation(new Point(5, 126));
-      envelopeViewLeftButton.setBounds(6, 352, 48, 26);
+      envelopeViewLeftButton.setBounds(6, 112, 48, 26);
       panel.add(envelopeViewLeftButton);
 
       envelopeViewRightButton = new JButton();
@@ -344,7 +467,7 @@ public class EnvelopeDialog extends JDialog implements FlameHolder {
       envelopeViewRightButton.setSize(new Dimension(48, 26));
       envelopeViewRightButton.setPreferredSize(new Dimension(48, 26));
       envelopeViewRightButton.setLocation(new Point(98, 126));
-      envelopeViewRightButton.setBounds(99, 352, 48, 26);
+      envelopeViewRightButton.setBounds(99, 112, 48, 26);
       panel.add(envelopeViewRightButton);
 
       envelopeViewDownButton = new JButton();
@@ -358,7 +481,7 @@ public class EnvelopeDialog extends JDialog implements FlameHolder {
       envelopeViewDownButton.setSize(new Dimension(48, 26));
       envelopeViewDownButton.setPreferredSize(new Dimension(48, 26));
       envelopeViewDownButton.setLocation(new Point(51, 153));
-      envelopeViewDownButton.setBounds(52, 379, 48, 26);
+      envelopeViewDownButton.setBounds(52, 139, 48, 26);
       panel.add(envelopeViewDownButton);
 
       envelopeViewAllButton = new JButton();
@@ -372,27 +495,8 @@ public class EnvelopeDialog extends JDialog implements FlameHolder {
       envelopeViewAllButton.setSize(new Dimension(141, 24));
       envelopeViewAllButton.setPreferredSize(new Dimension(141, 26));
       envelopeViewAllButton.setLocation(new Point(5, 190));
-      envelopeViewAllButton.setBounds(6, 416, 141, 26);
+      envelopeViewAllButton.setBounds(6, 176, 141, 26);
       panel.add(envelopeViewAllButton);
-
-      envelopeClearButton = new JButton();
-      envelopeClearButton.setFont(new Font("Dialog", Font.BOLD, 10));
-      envelopeClearButton.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-          ctrl.clearEnvelope();
-        }
-      });
-      envelopeClearButton.setText("Reset curve");
-      envelopeClearButton.setSize(new Dimension(141, 24));
-      envelopeClearButton.setPreferredSize(new Dimension(141, 26));
-      envelopeClearButton.setLocation(new Point(5, 240));
-      envelopeClearButton.setBounds(6, 44, 141, 26);
-      panel.add(envelopeClearButton);
-
-      previewRootPanel = new JPanel();
-      previewRootPanel.setBounds(6, 82, 140, 111);
-      panel.add(previewRootPanel);
-      previewRootPanel.setLayout(new BorderLayout(0, 0));
     }
     return panel;
   }
@@ -400,152 +504,56 @@ public class EnvelopeDialog extends JDialog implements FlameHolder {
   private JPanel getPanel_1() {
     if (panel_1 == null) {
       panel_1 = new JPanel();
-      panel_1.setPreferredSize(new Dimension(10, 70));
-      panel_1.setLayout(null);
+      panel_1.setPreferredSize(new Dimension(10, 200));
+      panel_1.setLayout(new BorderLayout(0, 0));
+
+      JPanel panel_2 = new JPanel();
+      panel_2.setBorder(new TitledBorder(null, "Preview", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+      panel_1.add(panel_2);
+      panel_2.setLayout(new BorderLayout(0, 0));
+
+      previewRootPanel = new JPanel();
+      panel_2.add(previewRootPanel);
+      previewRootPanel.setBorder(new EmptyBorder(0, 0, 0, 0));
+      previewRootPanel.setLayout(new BorderLayout(0, 0));
+
+      panel_3 = new JPanel();
+      panel_3.setPreferredSize(new Dimension(300, 180));
+      panel_3.setSize(new Dimension(300, 180));
+      panel_3.setMinimumSize(new Dimension(300, 180));
+      panel_1.add(panel_3, BorderLayout.WEST);
+      panel_3.setLayout(null);
 
       envelopeXMinREd = new JWFNumberField();
+      envelopeXMinREd.setBounds(99, 6, 80, 26);
+      panel_3.add(envelopeXMinREd);
       envelopeXMinREd.setFont(new Font("Dialog", Font.PLAIN, 10));
       envelopeXMinREd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           ctrl.editFieldChanged();
         }
       });
-      envelopeXMinREd.setSize(new Dimension(80, 26));
       envelopeXMinREd.setPreferredSize(new Dimension(80, 26));
-      envelopeXMinREd.setLocation(new Point(45, 5));
-      envelopeXMinREd.setBounds(119, 6, 80, 26);
-      panel_1.add(envelopeXMinREd);
 
-      JLabel lblFrameRange = new JLabel();
-      lblFrameRange.setFont(new Font("Dialog", Font.BOLD, 10));
-      lblFrameRange.setText("Frame range");
-      lblFrameRange.setSize(new Dimension(38, 26));
-      lblFrameRange.setPreferredSize(new Dimension(38, 26));
-      lblFrameRange.setLocation(new Point(5, 5));
-      lblFrameRange.setHorizontalAlignment(SwingConstants.RIGHT);
-      lblFrameRange.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
-      lblFrameRange.setBounds(6, 7, 114, 26);
-      panel_1.add(lblFrameRange);
+      panel_4 = new JPanel();
+      panel_4.setSize(new Dimension(500, 180));
+      panel_4.setPreferredSize(new Dimension(500, 180));
+      panel_4.setMinimumSize(new Dimension(200, 180));
+      panel_1.add(panel_4, BorderLayout.EAST);
+      panel_4.setLayout(null);
 
-      JLabel lblAmplitudeRange = new JLabel();
-      lblAmplitudeRange.setFont(new Font("Dialog", Font.BOLD, 10));
-      lblAmplitudeRange.setText("Amplitude range");
-      lblAmplitudeRange.setSize(new Dimension(38, 26));
-      lblAmplitudeRange.setPreferredSize(new Dimension(38, 26));
-      lblAmplitudeRange.setLocation(new Point(5, 34));
-      lblAmplitudeRange.setHorizontalAlignment(SwingConstants.RIGHT);
-      lblAmplitudeRange.setBounds(6, 35, 114, 26);
-      panel_1.add(lblAmplitudeRange);
-
-      envelopeYMinREd = new JWFNumberField();
-      envelopeYMinREd.setFont(new Font("Dialog", Font.PLAIN, 10));
-      envelopeYMinREd.addChangeListener(new ChangeListener() {
-        public void stateChanged(ChangeEvent e) {
-          ctrl.editFieldChanged();
+      envelopeAddPointButton = new JButton();
+      envelopeAddPointButton.setBounds(6, 6, 141, 50);
+      panel_4.add(envelopeAddPointButton);
+      envelopeAddPointButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      envelopeAddPointButton.setToolTipText("Add a point to the curve (click at the area to place it)");
+      envelopeAddPointButton.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          ctrl.addPoint();
         }
       });
-      envelopeYMinREd.setSize(new Dimension(80, 26));
-      envelopeYMinREd.setPreferredSize(new Dimension(80, 26));
-      envelopeYMinREd.setLocation(new Point(45, 34));
-      envelopeYMinREd.setBounds(119, 35, 80, 26);
-      panel_1.add(envelopeYMinREd);
-
-      envelopeXMaxREd = new JWFNumberField();
-      envelopeXMaxREd.setFont(new Font("Dialog", Font.PLAIN, 10));
-      envelopeXMaxREd.addChangeListener(new ChangeListener() {
-        public void stateChanged(ChangeEvent e) {
-          ctrl.editFieldChanged();
-        }
-      });
-      envelopeXMaxREd.setSize(new Dimension(80, 26));
-      envelopeXMaxREd.setPreferredSize(new Dimension(80, 26));
-      envelopeXMaxREd.setLocation(new Point(168, 5));
-      envelopeXMaxREd.setBounds(201, 7, 80, 26);
-      panel_1.add(envelopeXMaxREd);
-
-      envelopeYMaxREd = new JWFNumberField();
-      envelopeYMaxREd.setFont(new Font("Dialog", Font.PLAIN, 10));
-      envelopeYMaxREd.addChangeListener(new ChangeListener() {
-        public void stateChanged(ChangeEvent e) {
-          ctrl.editFieldChanged();
-        }
-      });
-      envelopeYMaxREd.setSize(new Dimension(80, 26));
-      envelopeYMaxREd.setPreferredSize(new Dimension(80, 26));
-      envelopeYMaxREd.setLocation(new Point(168, 34));
-      envelopeYMaxREd.setBounds(201, 36, 80, 26);
-      panel_1.add(envelopeYMaxREd);
-
-      JLabel lblFrame = new JLabel();
-      lblFrame.setFont(new Font("Dialog", Font.BOLD, 10));
-      lblFrame.setText("Frame");
-      lblFrame.setSize(new Dimension(38, 26));
-      lblFrame.setPreferredSize(new Dimension(38, 26));
-      lblFrame.setLocation(new Point(277, 5));
-      lblFrame.setHorizontalAlignment(SwingConstants.RIGHT);
-      lblFrame.setBounds(346, 7, 87, 26);
-      panel_1.add(lblFrame);
-
-      JLabel lblAmplitude = new JLabel();
-      lblAmplitude.setFont(new Font("Dialog", Font.BOLD, 10));
-      lblAmplitude.setText("Amplitude");
-      lblAmplitude.setSize(new Dimension(38, 26));
-      lblAmplitude.setPreferredSize(new Dimension(38, 26));
-      lblAmplitude.setLocation(new Point(277, 34));
-      lblAmplitude.setHorizontalAlignment(SwingConstants.RIGHT);
-      lblAmplitude.setBounds(346, 34, 87, 26);
-      panel_1.add(lblAmplitude);
-
-      envelopeYREd = new JWFNumberField();
-      envelopeYREd.setFont(new Font("Dialog", Font.PLAIN, 10));
-      envelopeYREd.addChangeListener(new ChangeListener() {
-        public void stateChanged(ChangeEvent e) {
-          ctrl.editFieldChanged();
-        }
-      });
-      envelopeYREd.setSize(new Dimension(80, 26));
-      envelopeYREd.setPreferredSize(new Dimension(80, 26));
-      envelopeYREd.setLocation(new Point(317, 34));
-      envelopeYREd.setBounds(435, 34, 80, 26);
-      panel_1.add(envelopeYREd);
-
-      envelopeXREd = new JWFNumberField();
-      envelopeXREd.setFont(new Font("Dialog", Font.PLAIN, 10));
-      envelopeXREd.addChangeListener(new ChangeListener() {
-        public void stateChanged(ChangeEvent e) {
-          ctrl.editFieldChanged();
-        }
-      });
-      envelopeXREd.setSize(new Dimension(80, 26));
-      envelopeXREd.setPreferredSize(new Dimension(80, 26));
-      envelopeXREd.setLocation(new Point(317, 5));
-      envelopeXREd.setBounds(435, 5, 80, 26);
-      panel_1.add(envelopeXREd);
-
-      JLabel label_6 = new JLabel();
-      label_6.setFont(new Font("Dialog", Font.BOLD, 10));
-      label_6.setText("Interpolation");
-      label_6.setSize(new Dimension(81, 26));
-      label_6.setPreferredSize(new Dimension(81, 26));
-      label_6.setLocation(new Point(416, 5));
-      label_6.setHorizontalAlignment(SwingConstants.RIGHT);
-      label_6.setBounds(515, 5, 81, 26);
-      panel_1.add(label_6);
-
-      envelopeInterpolationCmb = new JComboBox();
-      envelopeInterpolationCmb.setFont(new Font("Dialog", Font.PLAIN, 10));
-      envelopeInterpolationCmb.addItemListener(new ItemListener() {
-        public void itemStateChanged(ItemEvent e) {
-          if (ctrl != null) {
-            ctrl.interpolationCmbChanged();
-          }
-        }
-      });
-      envelopeInterpolationCmb.setSize(new Dimension(141, 26));
-      envelopeInterpolationCmb.setPreferredSize(new Dimension(141, 26));
-      envelopeInterpolationCmb.setLocation(new Point(499, 5));
-      envelopeInterpolationCmb.setBounds(598, 5, 141, 26);
-      panel_1.add(envelopeInterpolationCmb);
+      envelopeAddPointButton.setText("Add point");
+      envelopeAddPointButton.setPreferredSize(new Dimension(141, 50));
     }
     return panel_1;
   }
@@ -662,7 +670,7 @@ public class EnvelopeDialog extends JDialog implements FlameHolder {
 
           FlameRenderer renderer = new FlameRenderer(flame, Prefs.getPrefs(), false, false);
           renderer.setProgressUpdater(null);
-          flame.setSampleDensity(1.0);
+          flame.setSampleDensity(Prefs.getPrefs().getTinaRenderRealtimeQuality() * 3.0);
           flame.setSpatialFilterRadius(0.0);
           RenderedFlame res = renderer.renderFlame(info);
           imgPanel.setImage(res.getImage());
@@ -686,9 +694,11 @@ public class EnvelopeDialog extends JDialog implements FlameHolder {
       res.setFrame(frameToPreview);
       if (curveToPreviewPropertyPath != null) {
         MotionCurve curve = getMotionCurve(res, curveToPreviewPropertyPath);
-        curve.setPoints(new int[] { frameToPreview }, new double[] { curveValueToPreview });
-        curve.setInterpolation(Interpolation.LINEAR);
-        curve.setEnabled(true);
+        if (curve != null) {
+          curve.setPoints(new int[] { frameToPreview }, new double[] { curveValueToPreview });
+          curve.setInterpolation(Interpolation.LINEAR);
+          curve.setEnabled(true);
+        }
       }
       return res;
     }
@@ -702,7 +712,6 @@ public class EnvelopeDialog extends JDialog implements FlameHolder {
     curveValueToPreview = 0.0;
     curveToPreviewPropertyPath = getPropertyPath(flameToPreview, curveToPreview);
     //    System.out.println(curveToPreviewPropertyPath);
-
     //    MotionCurve curve = getMotionCurve(flameToPreview, curveToPreviewPropertyPath);
     //    System.out.println(curve);
   }
@@ -719,9 +728,13 @@ public class EnvelopeDialog extends JDialog implements FlameHolder {
   }
 
   private final String PATH_SEPARATOR = "#";
+  private JPanel panel_3;
+  private JPanel panel_4;
 
-  // TODO sets
   private String findProperty(Object pObject, Object pProperty, String pPath) {
+    if (pObject == pProperty) {
+      return pPath;
+    }
     Class<?> cls = pObject.getClass();
     for (Field field : cls.getDeclaredFields()) {
       field.setAccessible(true);
@@ -732,7 +745,6 @@ public class EnvelopeDialog extends JDialog implements FlameHolder {
       catch (Exception ex) {
         fieldValue = null;
       }
-      //      System.out.println(field.getName() + "=" + fieldValue);
       if (fieldValue != null) {
         if (fieldValue == pProperty) {
           String pathExt = field.getName();
@@ -744,6 +756,18 @@ public class EnvelopeDialog extends JDialog implements FlameHolder {
             String pathExt = field.getName() + "[" + i + "]";
             String subPath = pPath == null ? pathExt : pPath + PATH_SEPARATOR + pathExt;
             String subResult = findProperty(list.get(i), pProperty, subPath);
+            if (subResult != null) {
+              return subResult;
+            }
+          }
+        }
+        else if (fieldValue instanceof Map) {
+          Map<?, ?> map = (Map<?, ?>) fieldValue;
+          Set<?> keySet = map.keySet();
+          for (Object key : keySet) {
+            String pathExt = field.getName() + "[" + key.toString() + "]";
+            String subPath = pPath == null ? pathExt : pPath + PATH_SEPARATOR + pathExt;
+            String subResult = findProperty(map.get(key), pProperty, subPath);
             if (subResult != null) {
               return subResult;
             }
@@ -767,8 +791,22 @@ public class EnvelopeDialog extends JDialog implements FlameHolder {
     return null;
   }
 
-  // TODO sets
   private MotionCurve findMotionCurve(Object pObject, List<String> pPath, int pPathIndex) {
+    String pathName;
+    String index;
+    {
+      String fullPathName = pPath.get(pPathIndex);
+      int p1 = fullPathName.lastIndexOf("[");
+      int p2 = fullPathName.indexOf("]", p1 + 1);
+      if (p1 > 0 && p2 > p1) {
+        pathName = fullPathName.substring(0, p1);
+        index = fullPathName.substring(p1 + 1, p2);
+      }
+      else {
+        pathName = fullPathName;
+        index = "";
+      }
+    }
     if (pPath.size() > 0) {
       Class<?> cls = pObject.getClass();
       if (pPathIndex == pPath.size() - 1) {
@@ -781,27 +819,21 @@ public class EnvelopeDialog extends JDialog implements FlameHolder {
           catch (Exception ex) {
             fieldValue = null;
           }
-          if (fieldValue != null && field.getName().equals(pPath.get(pPath.size() - 1)) && fieldValue instanceof MotionCurve) {
-            return (MotionCurve) fieldValue;
+          if (fieldValue != null && field.getName().equals(pathName)) {
+            if (fieldValue instanceof MotionCurve) {
+              return (MotionCurve) fieldValue;
+            }
+            else if (fieldValue instanceof Map) {
+              Map<?, ?> map = (Map<?, ?>) fieldValue;
+              Object curve = map.get(index);
+              if (curve != null && curve instanceof MotionCurve) {
+                return (MotionCurve) curve;
+              }
+            }
           }
         }
       }
       else {
-        String pathName;
-        String index;
-        {
-          String fullPathName = pPath.get(pPathIndex);
-          int p1 = fullPathName.lastIndexOf("[");
-          int p2 = fullPathName.indexOf("]", p1 + 1);
-          if (p1 > 0 && p2 > p1) {
-            pathName = fullPathName.substring(0, p1);
-            index = fullPathName.substring(p1 + 1, p2);
-          }
-          else {
-            pathName = fullPathName;
-            index = "";
-          }
-        }
         for (Field field : cls.getDeclaredFields()) {
           field.setAccessible(true);
           Object fieldValue;
@@ -815,6 +847,13 @@ public class EnvelopeDialog extends JDialog implements FlameHolder {
             if (fieldValue instanceof List && field.getName().equals(pathName) && index.length() > 0) {
               List<?> list = (List<?>) fieldValue;
               MotionCurve subResult = findMotionCurve(list.get(Integer.parseInt(index)), pPath, pPathIndex + 1);
+              if (subResult != null) {
+                return subResult;
+              }
+            }
+            else if (fieldValue instanceof Map && field.getName().equals(pathName) && index.length() > 0) {
+              Map<?, ?> map = (Map<?, ?>) fieldValue;
+              MotionCurve subResult = findMotionCurve(map.get(index), pPath, pPathIndex + 1);
               if (subResult != null) {
                 return subResult;
               }
