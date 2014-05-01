@@ -1,3 +1,14 @@
+V1.61 (01.05.2014):
+ - FIXED: a UI-bug regarding the use of dark themes (font color was too dark)
+ - FIXED: a bug regarding the calculation of the color-index in the editor (UI was not refreshed properly)
+ - new "falloff3", "post_falloff3", "pre_falloff3"-variations by Xyrus02
+ - new "pre_curl"-variation by Xyrus02
+ - improved the "Simple tiling"-random-flame-generator
+ - the "colormap_wf"_variations allow now the use of images-sequences (i. e. animations) as input
+ - anti-aliasing in the motion-Curve-Editor
+ - some additions to the motion-curve-editing
+ - changed the default behaviour of the batch-renderer in a way that it does not renders flames where an corresponding image-file is already in place. Maybe adding some option to control this in the future...
+
 V1.60 (16.04.2014):
  - introducing a new concept of random-gradient-generators (orthogonal to random-flame- and random-symmetry-generators)
  - new "Strong hue"-random-gradient-generator

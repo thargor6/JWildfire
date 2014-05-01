@@ -45,12 +45,12 @@ import org.jwildfire.image.Pixel;
 
 public class Tools {
   public static final String APP_TITLE = "JWildfire";
-  public static final String APP_VERSION = "1.60 (25.04.2014)";
+  public static final String APP_VERSION = "1.61 (01.05.2014)";
 
   public static boolean SPECIAL_VERSION = false;
 
-  public static final boolean V2_FEATURE_ENABLE = true;
-  public static final boolean NO_TRANSPARENCY = true;
+  public static final boolean V2_FEATURE_ENABLE = false;
+  public static final boolean NO_TRANSPARENCY = false;
 
   public static final int VPREC = 1024;
   public static final int SPREC = 10;
