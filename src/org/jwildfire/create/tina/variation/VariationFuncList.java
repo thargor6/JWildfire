@@ -365,6 +365,10 @@ public class VariationFuncList {
     registerVariationFunc(DCHexesWFFunc.class);
     registerVariationFunc(MurlFunc.class);
     registerVariationFunc(Murl2Func.class);
+    registerVariationFunc(PreCurlFunc.class);
+    registerVariationFunc(Falloff3Func.class);
+    registerVariationFunc(PreFalloff3Func.class);
+    registerVariationFunc(PostFalloff3Func.class);
   }
 
   private static void registerVariationFunc(

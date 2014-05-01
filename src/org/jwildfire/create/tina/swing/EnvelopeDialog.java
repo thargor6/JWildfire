@@ -35,6 +35,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import org.jwildfire.base.Prefs;
+import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.motion.MotionCurve;
 import org.jwildfire.create.tina.render.FlameRenderer;
@@ -652,6 +653,9 @@ public class EnvelopeDialog extends JDialog implements FlameHolder {
 
   public void refreshFlameImage() {
     FlamePanel imgPanel = getFlamePanel();
+    if (!Tools.V2_FEATURE_ENABLE) {
+      imgPanel.getParent().getParent().setVisible(false);
+    }
     Rectangle bounds = imgPanel.getImageBounds();
     int width = bounds.width;
     int height = bounds.height;
