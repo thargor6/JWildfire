@@ -124,6 +124,11 @@ public class Onion2Func extends VariationFunc {
         z = exp(cos(meetingPt) - r) / tan(meetingPt)
             + sin(meetingPt)
             - 1 / tan(meetingPt);
+
+        if (z > top_crop && top_crop > 0) { /* FIX ADDED. top_crop could start at -1 for cropping below middle. */
+          z = top_crop;
+          r = 0;
+        }
       }
       else {
         z = top_crop;
@@ -134,7 +139,6 @@ public class Onion2Func extends VariationFunc {
       r = cos(t);
       z = sin(t);
     }
-
     // Expand radius of onion
     r *= circle_a * pAmount;
     z *= circle_b * pAmount;
