@@ -3127,7 +3127,7 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
       Layer layer = getCurrLayer();
       if (flame != null && flamePanel != null) {
         XForm xForm = flamePanel.mouseClicked(e.getX(), e.getY());
-        if (xForm != null) {
+        if (xForm != null || flamePanel.getMouseDragOperation() == MouseDragOperation.GRADIENT) {
           for (int i = 0; i < layer.getXForms().size(); i++) {
             if (xForm == layer.getXForms().get(i)) {
               afterTriangleSelected(xForm, i);
@@ -3147,7 +3147,10 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
               refreshPaletteImg();
             }
             else {
+              centerPanel.getParent().invalidate();
               centerPanel.getParent().validate();
+              centerPanel.invalidate();
+              centerPanel.validate();
               centerPanel.repaint();
             }
           }

@@ -25,7 +25,6 @@ public abstract class RecordingAudioProcessor implements AudioProcessor {
   private int currOffset = 0;
 
   protected void setBufferSize(int pBufferSize) {
-    System.out.println("BUFF: " + pBufferSize);
     if (bufferSize != pBufferSize) {
       buffer = new short[pBufferSize];
       bufferSize = pBufferSize;
