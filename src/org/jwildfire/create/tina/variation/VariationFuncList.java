@@ -370,6 +370,7 @@ public class VariationFuncList {
     registerVariationFunc(PreFalloff3Func.class);
     registerVariationFunc(PostFalloff3Func.class);
     registerVariationFunc(DLAWFFunc.class);
+    registerVariationFunc(JuliaN3DXFunc.class);
   }
 
   private static void registerVariationFunc(
