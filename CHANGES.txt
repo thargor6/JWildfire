@@ -1,3 +1,10 @@
+V1.62 (26.05.2014):
+ - link to the video-tutorials in the Welcome-screen
+ - new "julian3Dx"-variation by Xyrus02
+ - new "dla_wf"-variation ("dla" = "diffusion-limited aggregation" in this case)
+ - fixed a problem regarding refresh in the gradient editor
+ - slight fix to the "onion2"-variation
+
 V1.61 (01.05.2014):
  - FIXED: a UI-bug regarding the use of dark themes (font color was too dark)
  - FIXED: a bug regarding the calculation of the color-index in the editor (UI was not refreshed properly)

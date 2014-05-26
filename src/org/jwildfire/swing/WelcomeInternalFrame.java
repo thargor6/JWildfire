@@ -129,17 +129,17 @@ public class WelcomeInternalFrame extends JInternalFrame {
     youtubeVideosBtn.setBounds(338, 34, 134, 28);
     southPanel.add(youtubeVideosBtn);
 
-    JButton pdfTutorialsBtn = new JButton("Official tutorials");
+    JButton pdfTutorialsBtn = new JButton("Video tutorials");
     pdfTutorialsBtn.setDefaultCapable(false);
     pdfTutorialsBtn.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
-        browse("http://www.andreas-maschke.com/?page_id=899");
+        browse("http://www.andreas-maschke.com/?page_id=875");
       }
     });
     pdfTutorialsBtn.setPreferredSize(new Dimension(128, 24));
     pdfTutorialsBtn.setForeground(SystemColor.menu);
     pdfTutorialsBtn.setBorderPainted(false);
-    pdfTutorialsBtn.setBackground(Color.BLACK);
+    pdfTutorialsBtn.setBackground(new Color(51, 0, 0));
     pdfTutorialsBtn.setBounds(338, 67, 134, 28);
     southPanel.add(pdfTutorialsBtn);
 

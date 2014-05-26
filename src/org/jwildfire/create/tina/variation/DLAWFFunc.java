@@ -38,7 +38,7 @@ public class DLAWFFunc extends VariationFunc {
   private static final String[] paramNames = { PARAM_BUFFER_SIZE, PARAM_MAX_ITER, PARAM_SEED, PARAM_SCALE };
 
   private int buffer_size = 800;
-  private int max_iter = 16000;
+  private int max_iter = 6000;
   private int seed = 666;
   private double scale = 10.0;
 

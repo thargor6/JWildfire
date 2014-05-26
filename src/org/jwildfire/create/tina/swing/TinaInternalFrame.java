@@ -5423,7 +5423,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JWFNumberField getXFormColorREd() {
     if (xFormColorREd == null) {
       xFormColorREd = new JWFNumberField();
-      xFormColorREd.setValueStep(0.05);
+      xFormColorREd.setValueStep(0.01);
       xFormColorREd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           if (tinaController != null) {
@@ -5486,7 +5486,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JWFNumberField getXFormSymmetryREd() {
     if (xFormSymmetryREd == null) {
       xFormSymmetryREd = new JWFNumberField();
-      xFormSymmetryREd.setValueStep(0.05);
+      xFormSymmetryREd.setValueStep(0.01);
       xFormSymmetryREd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           if (tinaController != null) {
