@@ -551,7 +551,7 @@ public class AbstractFlameReader {
         }
         if (hasVariation) {
           VariationFunc varFunc = VariationFuncList.getVariationFuncInstance(varName);
-          Variation variation = pXForm.addVariation(Double.parseDouble(atts.get(name)), varFunc);
+          Variation variation = pXForm.addVariation(Double.parseDouble(atts.get(rawName)), varFunc);
           // params
           {
             String paramNames[] = variation.getFunc().getParameterNames();
