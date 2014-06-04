@@ -2684,6 +2684,8 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
         //        TinaNonlinearControlsRows[pIdx].getNonlinearParamsLeftButton().setEnabled(enabled);
         //        TinaNonlinearControlsRows[pIdx].getNonlinearParamsRightButton().setEnabled(enabled);
         refreshFlameImage(false);
+        data.transformationsTable.invalidate();
+        data.transformationsTable.repaint();
       }
     }
     finally {
