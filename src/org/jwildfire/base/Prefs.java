@@ -25,7 +25,7 @@ import org.jwildfire.base.mathlib.MathLib;
 import org.jwildfire.create.tina.base.raster.RasterPointPrecision;
 import org.jwildfire.create.tina.random.RandomGeneratorType;
 import org.jwildfire.create.tina.swing.RandomBatchRefreshType;
-import org.jwildfire.create.tina.swing.flamepanel.FlamePanelControlShape;
+import org.jwildfire.create.tina.swing.flamepanel.FlamePanelControlStyle;
 import org.jwildfire.swing.LookAndFeelType;
 
 import com.l2fprod.common.beans.editor.ComboBoxPropertyEditor;
@@ -161,7 +161,7 @@ public class Prefs extends ManagedObject {
   private boolean tinaEditorControlsWithShadows = true;
 
   @Property(description = "Style of the controls (\"triangles\") in the editor", category = PropertyCategory.TINA, editorClass = FlamePanelTriangleStyleEditor.class)
-  private FlamePanelControlShape tinaEditorControlsStyle = FlamePanelControlShape.TRIANGLE;
+  private FlamePanelControlStyle tinaEditorControlsStyle = FlamePanelControlStyle.TRIANGLE;
 
   @Property(description = "Grid size (distance between two grid-lines) in the editor", category = PropertyCategory.TINA)
   private double tinaEditorGridSize = 0.5;
@@ -201,7 +201,7 @@ public class Prefs extends ManagedObject {
   public static class FlamePanelTriangleStyleEditor extends ComboBoxPropertyEditor {
     public FlamePanelTriangleStyleEditor() {
       super();
-      setAvailableValues(new FlamePanelControlShape[] { FlamePanelControlShape.TRIANGLE, FlamePanelControlShape.AXIS, FlamePanelControlShape.CROSSHAIR, FlamePanelControlShape.RECTANGLE, FlamePanelControlShape.HIDDEN });
+      setAvailableValues(new FlamePanelControlStyle[] { FlamePanelControlStyle.AXIS, FlamePanelControlStyle.CROSSHAIR, FlamePanelControlStyle.RECTANGLE, FlamePanelControlStyle.TRIANGLE, FlamePanelControlStyle.HIDDEN });
     }
   }
 
@@ -839,11 +839,11 @@ public class Prefs extends ManagedObject {
     return prefs;
   }
 
-  public FlamePanelControlShape getTinaEditorControlsStyle() {
+  public FlamePanelControlStyle getTinaEditorControlsStyle() {
     return tinaEditorControlsStyle;
   }
 
-  public void setTinaEditorControlsStyle(FlamePanelControlShape pTinaEditorControlsStyle) {
+  public void setTinaEditorControlsStyle(FlamePanelControlStyle pTinaEditorControlsStyle) {
     tinaEditorControlsStyle = pTinaEditorControlsStyle;
   }
 

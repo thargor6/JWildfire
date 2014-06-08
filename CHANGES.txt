@@ -1,3 +1,14 @@
+V1.63 (09.06.2014):
+ - more room and more accuracy for the color-shift-slider
+ - massive refactoring of the flame-planel regarding to be able to use arbitrary styles to render/display control-points
+ - "Triangles" were replaced a more general metaphor called "controls" which come with a style. There are a couple of styles: Axis, Crosshair, Triangle, Rectangle, Hidden
+ - Interactive Renderer: moved the stop to the left
+ - new "waves2b"-variation by dark-beam
+ - the gnarl-random-generators make also use of the "waves2b"-variation
+ - integrated the CERN Colt library for more sophisticated mathematical functions
+ - FIXED a problem regarding the refreshing of variation-names inside the transformations-table
+ - FIXED a bug regarding the loading of flames which have the same variation multiple times inside one transform
+
 V1.62 (26.05.2014):
  - link to the video-tutorials in the Welcome-screen
  - new "julian3Dx"-variation by Xyrus02

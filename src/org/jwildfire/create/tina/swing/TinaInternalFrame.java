@@ -3180,7 +3180,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton getDistributeColorsButton() {
     if (distributeColorsButton == null) {
       distributeColorsButton = new JButton();
-      distributeColorsButton.setBounds(174, 40, 148, 24);
+      distributeColorsButton.setBounds(174, 58, 148, 24);
       distributeColorsButton.setText("Distribute colors");
       distributeColorsButton.setFont(new Font("Dialog", Font.BOLD, 10));
       distributeColorsButton.setPreferredSize(new Dimension(190, 24));
@@ -3240,7 +3240,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaPaletteSubSouthPanel.add(getTinaPaletteShiftSlider());
       tinaPaletteSubSouthPanel.add(getTinaPaletteShiftREd());
       tinaPaletteShiftLbl = new JLabel();
-      tinaPaletteShiftLbl.setBounds(6, 6, 29, 22);
+      tinaPaletteShiftLbl.setBounds(116, 7, 29, 22);
       tinaPaletteSubSouthPanel.add(tinaPaletteShiftLbl);
       tinaPaletteShiftLbl.setText("Shift");
       tinaPaletteShiftLbl.setFont(new Font("Dialog", Font.BOLD, 10));
@@ -3437,6 +3437,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JWFNumberField getTinaPaletteShiftREd() {
     if (tinaPaletteShiftREd == null) {
       tinaPaletteShiftREd = new JWFNumberField();
+      tinaPaletteShiftREd.setMouseThreshold(0.1);
       tinaPaletteShiftREd.setMinValue(-255.0);
       tinaPaletteShiftREd.setEditable(true);
       tinaPaletteShiftREd.setOnlyIntegers(true);
@@ -3453,7 +3454,7 @@ public class TinaInternalFrame extends JInternalFrame {
           tinaController.paletteShiftREd_changed();
         }
       });
-      tinaPaletteShiftREd.setBounds(35, 5, 71, 24);
+      tinaPaletteShiftREd.setBounds(145, 6, 71, 24);
       tinaPaletteShiftREd.setPreferredSize(new Dimension(56, 24));
       tinaPaletteShiftREd.setText("0");
       tinaPaletteShiftREd.setFont(new Font("Dialog", Font.PLAIN, 10));
@@ -3731,9 +3732,9 @@ public class TinaInternalFrame extends JInternalFrame {
           tinaController.saveUndoPoint();
         }
       });
-      tinaPaletteShiftSlider.setBounds(106, 6, 216, 22);
-      tinaPaletteShiftSlider.setMaximum(255);
-      tinaPaletteShiftSlider.setMinimum(-255);
+      tinaPaletteShiftSlider.setBounds(6, 32, 316, 22);
+      tinaPaletteShiftSlider.setMaximum(25500);
+      tinaPaletteShiftSlider.setMinimum(-25500);
       tinaPaletteShiftSlider.setValue(0);
       tinaPaletteShiftSlider.setFont(new Font("Dialog", Font.BOLD, 10));
       tinaPaletteShiftSlider.setPreferredSize(new Dimension(86, 22));
@@ -11156,7 +11157,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton getRandomizeColorsButton() {
     if (randomizeColorsButton == null) {
       randomizeColorsButton = new JButton();
-      randomizeColorsButton.setBounds(6, 40, 148, 24);
+      randomizeColorsButton.setBounds(6, 58, 148, 24);
       randomizeColorsButton.setFont(new Font("Dialog", Font.BOLD, 10));
       randomizeColorsButton.setText("Randomize colors");
       randomizeColorsButton.setPreferredSize(new Dimension(190, 24));

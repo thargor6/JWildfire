@@ -1966,7 +1966,7 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
   }
 
   public void paletteShiftREd_changed() {
-    paletteTextFieldChanged(data.paletteShiftSlider, data.paletteShiftREd, "modShift", 1.0);
+    paletteTextFieldChanged(data.paletteShiftSlider, data.paletteShiftREd, "modShift", 100.0);
   }
 
   public void paletteHueSlider_stateChanged(ChangeEvent e) {
@@ -1974,7 +1974,7 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
   }
 
   public void paletteShiftSlider_stateChanged(ChangeEvent e) {
-    paletteSliderChanged(data.paletteShiftSlider, data.paletteShiftREd, "modShift", 1.0);
+    paletteSliderChanged(data.paletteShiftSlider, data.paletteShiftREd, "modShift", 100.0);
   }
 
   public void saveFlameButton_actionPerformed(ActionEvent e) {
