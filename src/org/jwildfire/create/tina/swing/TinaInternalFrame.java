@@ -4270,8 +4270,8 @@ public class TinaInternalFrame extends JInternalFrame {
   private void initTriangleStyleCmb(JComboBox pCmb, Prefs pPrefs) {
     pCmb.addItem(FlamePanelControlShape.TRIANGLE);
     pCmb.addItem(FlamePanelControlShape.AXIS);
-    pCmb.addItem(FlamePanelControlShape.CROSS);
-    pCmb.addItem(FlamePanelControlShape.RECT);
+    pCmb.addItem(FlamePanelControlShape.CROSSHAIR);
+    pCmb.addItem(FlamePanelControlShape.RECTANGLE);
     pCmb.addItem(FlamePanelControlShape.HIDDEN);
     pCmb.setSelectedItem(pPrefs.getTinaEditorControlsStyle());
   }
@@ -6734,7 +6734,7 @@ public class TinaInternalFrame extends JInternalFrame {
       toggleTriangleWithColorsButton.setPreferredSize(new Dimension(42, 24));
       toggleTriangleWithColorsButton.setMnemonic(KeyEvent.VK_P);
       toggleTriangleWithColorsButton.setFont(new Font("Dialog", Font.BOLD, 10));
-      toggleTriangleWithColorsButton.setBounds(586, 4, 42, 24);
+      toggleTriangleWithColorsButton.setBounds(596, 4, 42, 24);
       centerNorthPanel.add(toggleTriangleWithColorsButton);
 
       triangleStyleCmb = new JComboBox();
@@ -6743,7 +6743,7 @@ public class TinaInternalFrame extends JInternalFrame {
       triangleStyleCmb.setMaximumSize(new Dimension(32767, 24));
       triangleStyleCmb.setMaximumRowCount(32);
       triangleStyleCmb.setFont(new Font("Dialog", Font.BOLD, 10));
-      triangleStyleCmb.setBounds(528, 4, 58, 24);
+      triangleStyleCmb.setBounds(528, 4, 68, 24);
       triangleStyleCmb.addItemListener(new ItemListener() {
         public void itemStateChanged(ItemEvent e) {
           if (tinaController != null) {
@@ -6884,7 +6884,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JToggleButton getAffineEditPostTransformSmallButton() {
     if (affineEditPostTransformSmallButton == null) {
       affineEditPostTransformSmallButton = new JToggleButton();
-      affineEditPostTransformSmallButton.setBounds(628, 4, 42, 24);
+      affineEditPostTransformSmallButton.setBounds(638, 4, 42, 24);
       affineEditPostTransformSmallButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/edit_triangle_post.png")));
       affineEditPostTransformSmallButton.setFont(new Font("Dialog", Font.BOLD, 10));
       affineEditPostTransformSmallButton.setToolTipText("Toggle post transform mode");
@@ -9905,6 +9905,8 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton affineScaleEditMotionCurveBtn;
   private JButton affineRotateEditMotionCurveBtn;
   private JComboBox triangleStyleCmb;
+  private JPanel panel_17;
+  private JPanel panel_18;
 
   /**
    * This method initializes renderBatchJobsScrollPane	
@@ -11203,26 +11205,11 @@ public class TinaInternalFrame extends JInternalFrame {
       interactiveNorthPanel.setSize(new Dimension(0, 42));
       interactiveNorthPanel.setLayout(new BoxLayout(interactiveNorthPanel, BoxLayout.X_AXIS));
       interactiveNorthPanel.add(getPanel_27());
-
-      interactiveResumeButton = new JButton();
-      interactiveNorthPanel.add(interactiveResumeButton);
-      interactiveResumeButton.setMinimumSize(new Dimension(100, 24));
-      interactiveResumeButton.setMaximumSize(new Dimension(150, 24));
-      interactiveResumeButton.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-          tinaController.getInteractiveRendererCtrl().resumeBtn_clicked();
-        }
-      });
-      interactiveResumeButton.setToolTipText("Resume a previously saved render");
-      interactiveResumeButton.setText("Resume render");
-      interactiveResumeButton.setPreferredSize(new Dimension(125, 24));
-      interactiveResumeButton.setMnemonic(KeyEvent.VK_T);
-      interactiveResumeButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      interactiveNorthPanel.add(getPanel_17());
       interactiveNorthPanel.add(getPanel_28());
       interactiveNorthPanel.add(getPanel_32());
       interactiveNorthPanel.add(getPanel_33());
       interactiveNorthPanel.add(getPanel_35());
-      interactiveNorthPanel.add(getInteractiveStopButton());
       for (String name : RandomFlameGeneratorList.getNameList()) {
         interactiveRandomStyleCmb.addItem(name);
       }
@@ -18279,6 +18266,41 @@ public class TinaInternalFrame extends JInternalFrame {
 
   public JComboBox getTriangleStyleCmb() {
     return triangleStyleCmb;
+  }
+
+  private JPanel getPanel_17() {
+    if (panel_17 == null) {
+      panel_17 = new JPanel();
+      panel_17.setMinimumSize(new Dimension(110, 10));
+      panel_17.setMaximumSize(new Dimension(150, 32767));
+      panel_17.setLayout(new BoxLayout(panel_17, BoxLayout.Y_AXIS));
+
+      interactiveResumeButton = new JButton();
+      panel_17.add(interactiveResumeButton);
+      interactiveResumeButton.setMinimumSize(new Dimension(100, 24));
+      interactiveResumeButton.setMaximumSize(new Dimension(150, 24));
+      interactiveResumeButton.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getInteractiveRendererCtrl().resumeBtn_clicked();
+        }
+      });
+      interactiveResumeButton.setToolTipText("Resume a previously saved render");
+      interactiveResumeButton.setText("Resume render");
+      interactiveResumeButton.setPreferredSize(new Dimension(125, 24));
+      interactiveResumeButton.setMnemonic(KeyEvent.VK_T);
+      interactiveResumeButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      panel_17.add(getPanel_18());
+      panel_17.add(getInteractiveStopButton());
+    }
+    return panel_17;
+  }
+
+  private JPanel getPanel_18() {
+    if (panel_18 == null) {
+      panel_18 = new JPanel();
+      panel_18.setMaximumSize(new Dimension(32767, 24));
+    }
+    return panel_18;
   }
 } //  @jve:decl-index=0:visual-constraint="10,10"
 
