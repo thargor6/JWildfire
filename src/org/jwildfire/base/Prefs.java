@@ -201,7 +201,7 @@ public class Prefs extends ManagedObject {
   public static class FlamePanelTriangleStyleEditor extends ComboBoxPropertyEditor {
     public FlamePanelTriangleStyleEditor() {
       super();
-      setAvailableValues(new FlamePanelControlShape[] { FlamePanelControlShape.TRIANGLE, FlamePanelControlShape.AXIS, FlamePanelControlShape.CROSS, FlamePanelControlShape.RECT, FlamePanelControlShape.HIDDEN });
+      setAvailableValues(new FlamePanelControlShape[] { FlamePanelControlShape.TRIANGLE, FlamePanelControlShape.AXIS, FlamePanelControlShape.CROSSHAIR, FlamePanelControlShape.RECTANGLE, FlamePanelControlShape.HIDDEN });
     }
   }
 

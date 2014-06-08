@@ -35,14 +35,14 @@ public class TriangleControlShape extends AbstractControlShape {
   public TriangleControlShape(FlamePanelConfig pConfig, XForm pXForm, double pScale) {
     super(pConfig, pXForm);
     // x
-    x[0] = 1.0 * pScale;
+    x[0] = 1.0;
     y[0] = 0.0;
     // 0
     x[1] = 0.0;
     y[1] = 0.0;
     // y
     x[2] = 0.0;
-    y[2] = 1.0 * pScale;
+    y[2] = 1.0;
 
     // transform the points (affine transform)
     for (int i = 0; i < x.length; i++) {
@@ -50,8 +50,8 @@ public class TriangleControlShape extends AbstractControlShape {
       // use the same layout as Apophysis
       double tx = affineTransformedX(x[i], y[i]);
       double ty = affineTransformedY(x[i], y[i]);
-      viewX[i] = triangleXToView(tx);
-      viewY[i] = triangleYToView(ty);
+      viewX[i] = triangleXToView(tx, pScale);
+      viewY[i] = triangleYToView(ty, pScale);
     }
   }
 

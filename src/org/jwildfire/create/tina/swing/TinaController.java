@@ -113,7 +113,8 @@ import org.jwildfire.create.tina.render.filter.FilterKernelType;
 import org.jwildfire.create.tina.script.ScriptRunner;
 import org.jwildfire.create.tina.script.ScriptRunnerEnvironment;
 import org.jwildfire.create.tina.swing.flamepanel.FlamePanel;
-import org.jwildfire.create.tina.swing.flamepanel.FlamePanelControlShape;
+import org.jwildfire.create.tina.swing.flamepanel.FlamePanelConfig;
+import org.jwildfire.create.tina.swing.flamepanel.FlamePanelControlStyle;
 import org.jwildfire.create.tina.transform.XFormTransformService;
 import org.jwildfire.create.tina.variation.Linear3DFunc;
 import org.jwildfire.create.tina.variation.RessourceType;
@@ -1229,8 +1230,8 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
         int column) {
       Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
       if (row >= 0 && column == 0) {
-        int colorIdx = row % FlamePanel.XFORM_COLORS.length;
-        c.setForeground(FlamePanel.XFORM_COLORS[colorIdx]);
+        int colorIdx = row % FlamePanelConfig.XFORM_COLORS.length;
+        c.setForeground(FlamePanelConfig.XFORM_COLORS[colorIdx]);
       }
       else {
         c.setForeground(table.getForeground());
@@ -4970,7 +4971,7 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
       return;
     }
     if (flamePanel != null) {
-      FlamePanelControlShape style = (FlamePanelControlShape) data.triangleStyleCmb.getSelectedItem();
+      FlamePanelControlStyle style = (FlamePanelControlStyle) data.triangleStyleCmb.getSelectedItem();
       flamePanel.setFlamePanelTriangleMode(style);
       refreshFlameImage(false);
     }

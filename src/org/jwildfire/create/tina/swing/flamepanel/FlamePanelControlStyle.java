@@ -18,37 +18,37 @@ package org.jwildfire.create.tina.swing.flamepanel;
 
 import org.jwildfire.base.Prefs;
 
-public enum FlamePanelControlShape {
+public enum FlamePanelControlStyle {
   TRIANGLE {
     @Override
-    public AbstractControlHandler createHandlerInstance(Prefs pPrefs, FlamePanelConfig pConfig) {
+    public AbstractControlHandler<?> createHandlerInstance(Prefs pPrefs, FlamePanelConfig pConfig) {
       return new TriangleControlHandler(pPrefs, pConfig);
     }
   },
   AXIS {
     @Override
-    public AbstractControlHandler createHandlerInstance(Prefs pPrefs, FlamePanelConfig pConfig) {
+    public AbstractControlHandler<?> createHandlerInstance(Prefs pPrefs, FlamePanelConfig pConfig) {
       return new AxisControlHandler(pPrefs, pConfig);
     }
   },
-  CROSS {
+  CROSSHAIR {
     @Override
-    public AbstractControlHandler createHandlerInstance(Prefs pPrefs, FlamePanelConfig pConfig) {
-      return new CrossControlHandler(pPrefs, pConfig);
+    public AbstractControlHandler<?> createHandlerInstance(Prefs pPrefs, FlamePanelConfig pConfig) {
+      return new CrosshairControlHandler(pPrefs, pConfig);
     }
   },
-  RECT {
+  RECTANGLE {
     @Override
-    public AbstractControlHandler createHandlerInstance(Prefs pPrefs, FlamePanelConfig pConfig) {
+    public AbstractControlHandler<?> createHandlerInstance(Prefs pPrefs, FlamePanelConfig pConfig) {
       return new RectangleControlHandler(pPrefs, pConfig);
     }
   },
   HIDDEN {
     @Override
-    public AbstractControlHandler createHandlerInstance(Prefs pPrefs, FlamePanelConfig pConfig) {
+    public AbstractControlHandler<?> createHandlerInstance(Prefs pPrefs, FlamePanelConfig pConfig) {
       return new HiddenControlHandler(pPrefs, pConfig);
     }
   };
 
-  public abstract AbstractControlHandler createHandlerInstance(Prefs pPrefs, FlamePanelConfig pConfig);
+  public abstract AbstractControlHandler<?> createHandlerInstance(Prefs pPrefs, FlamePanelConfig pConfig);
 }

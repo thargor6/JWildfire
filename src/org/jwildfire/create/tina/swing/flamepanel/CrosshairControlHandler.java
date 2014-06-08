@@ -22,9 +22,9 @@ import org.jwildfire.base.Prefs;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.swing.MouseDragOperation;
 
-public class CrossControlHandler extends AbstractControlHandler {
+public class CrosshairControlHandler extends AbstractControlHandler<TriangleControlShape> {
 
-  public CrossControlHandler(Prefs pPrefs, FlamePanelConfig pConfig) {
+  public CrosshairControlHandler(Prefs pPrefs, FlamePanelConfig pConfig) {
     super(pPrefs, pConfig);
   }
 
@@ -33,7 +33,7 @@ public class CrossControlHandler extends AbstractControlHandler {
     if (!pShadow) {
       if (config.isWithColoredTransforms()) {
         int row = pIsFinal ? pXFormCount + pIndex : pIndex;
-        int colorIdx = row % FlamePanel.XFORM_COLORS.length;
+        int colorIdx = row % FlamePanelConfig.XFORM_COLORS.length;
         g.setColor(XFORM_COLORS[colorIdx]);
       }
       else {
@@ -41,7 +41,7 @@ public class CrossControlHandler extends AbstractControlHandler {
       }
     }
 
-    TriangleControlShape triangle = new TriangleControlShape(config, pXForm, TRIANGLE_SCALE_CROSS);
+    TriangleControlShape triangle = convertXFormToShape(pXForm);
     if (pShadow) {
       for (int i = 0; i < triangle.viewX.length; i++) {
         triangle.viewX[i] += SHADOW_DIST;
@@ -65,26 +65,22 @@ public class CrossControlHandler extends AbstractControlHandler {
       g.drawLine(triangle.viewX[1], triangle.viewY[1], triangle.viewX[1] + dx, triangle.viewY[1] + dy);
       g.drawLine(triangle.viewX[1], triangle.viewY[1], triangle.viewX[1] - dx, triangle.viewY[1] - dy);
     }
-    // axes
-    {
-      if (prefs.isTinaEditorControlsWithNumbers()) {
-        int cx = (triangle.viewX[0] + triangle.viewX[1] + triangle.viewX[2]) / 3;
-        int cy = (triangle.viewY[0] + triangle.viewY[1] + triangle.viewY[2]) / 3;
-        g.setStroke(pIsSelected ? SELECTED_CIRCLE_LINE : NORMAL_CIRCLE_LINE);
-        int radius = config.isEditPostTransform() ? 28 : 24;
-        g.drawOval(cx - radius / 2, cy - radius / 2, radius, radius);
-        String lbl = pIsFinal ? (config.isEditPostTransform() ? "PF" : "F") + String.valueOf(pIndex + 1) : (config.isEditPostTransform() ? "PT" : "T") + String.valueOf(pIndex + 1);
-        g.drawString(lbl, cx - (config.isEditPostTransform() ? 12 : 6), cy + 6);
-      }
-    }
   }
 
   private final static double TRIANGLE_SCALE_CROSS = 0.1;
 
-  // TODO
   @Override
   public boolean isInsideXForm(XForm pXForm, int pX, int pY) {
-    TriangleControlShape triangle = new TriangleControlShape(config, pXForm);
-    return insideTriange(triangle, pX, pY);
+    return insideTriange(convertXFormToShape(pXForm), pX, pY);
+  }
+
+  @Override
+  public TriangleControlShape convertXFormToShape(XForm pXForm) {
+    return new TriangleControlShape(config, pXForm, TRIANGLE_SCALE_CROSS);
+  }
+
+  @Override
+  public int selectNearestPoint(XForm pXForm, int pViewX, int pViewY) {
+    return selectNearestPointFromTriangle(convertXFormToShape(pXForm), pViewX, pViewY);
   }
 }

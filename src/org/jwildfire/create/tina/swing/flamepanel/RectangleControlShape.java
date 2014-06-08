@@ -48,8 +48,8 @@ public class RectangleControlShape extends AbstractControlShape {
       // use the same layout as Apophysis
       double tx = affineTransformedX(x[i], y[i]);
       double ty = affineTransformedY(x[i], y[i]);
-      viewX[i] = triangleXToView(tx);
-      viewY[i] = triangleYToView(ty);
+      viewX[i] = triangleXToView(tx, 1.0);
+      viewY[i] = triangleYToView(ty, 1.0);
     }
   }
 

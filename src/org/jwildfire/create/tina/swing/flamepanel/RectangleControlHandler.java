@@ -23,7 +23,7 @@ import org.jwildfire.base.mathlib.MathLib;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.swing.MouseDragOperation;
 
-public class RectangleControlHandler extends AbstractControlHandler {
+public class RectangleControlHandler extends AbstractControlHandler<RectangleControlShape> {
 
   public RectangleControlHandler(Prefs pPrefs, FlamePanelConfig pConfig) {
     super(pPrefs, pConfig);
@@ -34,7 +34,7 @@ public class RectangleControlHandler extends AbstractControlHandler {
     if (!pShadow) {
       if (config.isWithColoredTransforms()) {
         int row = pIsFinal ? pXFormCount + pIndex : pIndex;
-        int colorIdx = row % FlamePanel.XFORM_COLORS.length;
+        int colorIdx = row % FlamePanelConfig.XFORM_COLORS.length;
         g.setColor(XFORM_COLORS[colorIdx]);
       }
       else {
@@ -42,7 +42,7 @@ public class RectangleControlHandler extends AbstractControlHandler {
       }
     }
 
-    RectangleControlShape rect = new RectangleControlShape(config, pXForm);
+    RectangleControlShape rect = convertXFormToShape(pXForm);
     if (pShadow) {
       for (int i = 0; i < rect.viewX.length; i++) {
         rect.viewX[i] += SHADOW_DIST;
@@ -85,13 +85,23 @@ public class RectangleControlHandler extends AbstractControlHandler {
 
   @Override
   public boolean isInsideXForm(XForm pXForm, int pX, int pY) {
-    RectangleControlShape rectangle = new RectangleControlShape(config, pXForm);
+    RectangleControlShape rectangle = convertXFormToShape(pXForm);
     for (TriangleControlShape triangle : rectangle.getTriangles()) {
       if (insideTriange(triangle, pX, pY)) {
         return true;
       }
     }
     return false;
+  }
+
+  @Override
+  public RectangleControlShape convertXFormToShape(XForm pXForm) {
+    return new RectangleControlShape(config, pXForm);
+  }
+
+  @Override
+  public int selectNearestPoint(XForm pXForm, int pViewX, int pViewY) {
+    return selectNearestPointFromTriangle(convertXFormToShape(pXForm).getTriangles().get(0), pViewX, pViewY);
   }
 
 }

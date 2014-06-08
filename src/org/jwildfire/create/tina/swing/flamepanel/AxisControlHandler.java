@@ -23,7 +23,7 @@ import org.jwildfire.base.Prefs;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.swing.MouseDragOperation;
 
-public class AxisControlHandler extends AbstractControlHandler {
+public class AxisControlHandler extends AbstractControlHandler<TriangleControlShape> {
 
   public AxisControlHandler(Prefs pPrefs, FlamePanelConfig pConfig) {
     super(pPrefs, pConfig);
@@ -34,7 +34,7 @@ public class AxisControlHandler extends AbstractControlHandler {
     if (!pShadow) {
       if (config.isWithColoredTransforms()) {
         int row = pIsFinal ? pXFormCount + pIndex : pIndex;
-        int colorIdx = row % FlamePanel.XFORM_COLORS.length;
+        int colorIdx = row % FlamePanelConfig.XFORM_COLORS.length;
         g.setColor(XFORM_COLORS[colorIdx]);
       }
       else {
@@ -42,7 +42,7 @@ public class AxisControlHandler extends AbstractControlHandler {
       }
     }
 
-    TriangleControlShape triangle = new TriangleControlShape(config, pXForm, TRIANGLE_SCALE_AXIS);
+    TriangleControlShape triangle = convertXFormToShape(pXForm);
     if (pShadow) {
       for (int i = 0; i < triangle.viewX.length; i++) {
         triangle.viewX[i] += SHADOW_DIST;
@@ -96,10 +96,19 @@ public class AxisControlHandler extends AbstractControlHandler {
     g2.draw(new Line2D.Double(pToX, pToY, x, y));
   }
 
-  // TODO
   @Override
   public boolean isInsideXForm(XForm pXForm, int pX, int pY) {
-    TriangleControlShape triangle = new TriangleControlShape(config, pXForm);
-    return insideTriange(triangle, pX, pY);
+    return insideTriange(convertXFormToShape(pXForm), pX, pY);
   }
+
+  @Override
+  public TriangleControlShape convertXFormToShape(XForm pXForm) {
+    return new TriangleControlShape(config, pXForm, TRIANGLE_SCALE_AXIS);
+  }
+
+  @Override
+  public int selectNearestPoint(XForm pXForm, int pViewX, int pViewY) {
+    return selectNearestPointFromTriangle(convertXFormToShape(pXForm), pViewX, pViewY);
+  }
+
 }

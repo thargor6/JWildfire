@@ -16,6 +16,8 @@
 */
 package org.jwildfire.create.tina.swing.flamepanel;
 
+import java.awt.Color;
+
 import org.jwildfire.create.tina.swing.MouseDragOperation;
 
 public class FlamePanelConfig {
@@ -26,6 +28,16 @@ public class FlamePanelConfig {
   private double triangleZoom = 1.21;
   private MouseDragOperation mouseDragOperation = MouseDragOperation.MOVE_TRIANGLE;
   private int selectedPoint = 1;
+
+  // Apophysis-compatible colors
+  public static final Color[] XFORM_COLORS = new Color[] {
+      new Color(255, 0, 0), new Color(204, 204, 0), new Color(0, 204, 0),
+      new Color(0, 204, 204), new Color(64, 64, 255), new Color(204, 0, 204),
+      new Color(204, 128, 0), new Color(128, 0, 79), new Color(128, 128, 34),
+      new Color(96, 128, 96), new Color(80, 128, 128), new Color(79, 79, 128),
+      new Color(128, 80, 128), new Color(128, 96, 34) };
+
+  public static final Color XFORM_COLOR = new Color(217, 219, 223);
 
   public boolean isEditPostTransform() {
     return editPostTransform;

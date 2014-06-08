@@ -93,7 +93,7 @@ import org.jwildfire.create.tina.randomgradient.RandomGradientGeneratorList;
 import org.jwildfire.create.tina.randommovie.RandomMovieGeneratorList;
 import org.jwildfire.create.tina.randomsymmetry.RandomSymmetryGeneratorList;
 import org.jwildfire.create.tina.render.filter.FilterKernelType;
-import org.jwildfire.create.tina.swing.flamepanel.FlamePanelControlShape;
+import org.jwildfire.create.tina.swing.flamepanel.FlamePanelControlStyle;
 import org.jwildfire.swing.StandardErrorHandler;
 
 public class TinaInternalFrame extends JInternalFrame {
@@ -4268,11 +4268,11 @@ public class TinaInternalFrame extends JInternalFrame {
   }
 
   private void initTriangleStyleCmb(JComboBox pCmb, Prefs pPrefs) {
-    pCmb.addItem(FlamePanelControlShape.TRIANGLE);
-    pCmb.addItem(FlamePanelControlShape.AXIS);
-    pCmb.addItem(FlamePanelControlShape.CROSSHAIR);
-    pCmb.addItem(FlamePanelControlShape.RECTANGLE);
-    pCmb.addItem(FlamePanelControlShape.HIDDEN);
+    pCmb.addItem(FlamePanelControlStyle.AXIS);
+    pCmb.addItem(FlamePanelControlStyle.CROSSHAIR);
+    pCmb.addItem(FlamePanelControlStyle.RECTANGLE);
+    pCmb.addItem(FlamePanelControlStyle.TRIANGLE);
+    pCmb.addItem(FlamePanelControlStyle.HIDDEN);
     pCmb.setSelectedItem(pPrefs.getTinaEditorControlsStyle());
   }
 

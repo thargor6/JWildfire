@@ -55,8 +55,6 @@ import org.jwildfire.transform.BalancingTransformer;
 
 public class FlamePanel extends ImagePanel {
   private final static int BORDER = 20;
-  // TODO
-  public static final Color XFORM_COLOR = new Color(217, 219, 223);
   private static final Color XFORM_POST_COLOR = new Color(255, 219, 160);
   private static final Color BACKGROUND_COLOR = new Color(60, 60, 60);
   private static final Color VARIATION_COLOR = new Color(245, 205, 16);
@@ -67,20 +65,11 @@ public class FlamePanel extends ImagePanel {
   private static final Color XFORM_GRID_COLOR = new Color(140, 140, 120);
   private static final Color XFORM_GRID_COLOR_ZERO = new Color(255, 255, 160);
 
-  // TODO
-  // Apophysis-compatible colors
-  public static final Color[] XFORM_COLORS = new Color[] {
-      new Color(255, 0, 0), new Color(204, 204, 0), new Color(0, 204, 0),
-      new Color(0, 204, 204), new Color(64, 64, 255), new Color(204, 0, 204),
-      new Color(204, 128, 0), new Color(128, 0, 79), new Color(128, 128, 34),
-      new Color(96, 128, 96), new Color(80, 128, 128), new Color(79, 79, 128),
-      new Color(128, 80, 128), new Color(128, 96, 34) };
-
   private static final long serialVersionUID = 1L;
   private FlameHolder flameHolder;
   private LayerHolder layerHolder;
 
-  private FlamePanelControlShape flamePanelTriangleMode = FlamePanelControlShape.TRIANGLE;
+  private FlamePanelControlStyle flamePanelTriangleMode = FlamePanelControlStyle.TRIANGLE;
   private boolean withImage = true;
   private int imageBrightness = 100;
   private boolean withTriangles = true;
@@ -337,7 +326,7 @@ public class FlamePanel extends ImagePanel {
       Layer layer = layerHolder.getLayer();
       if (layer != null) {
         if (!prefs.isTinaEditorControlsWithShadows()) {
-          g.setColor(config.isEditPostTransform() ? XFORM_POST_COLOR : XFORM_COLOR);
+          g.setColor(config.isEditPostTransform() ? XFORM_POST_COLOR : FlamePanelConfig.XFORM_COLOR);
         }
 
         // draw the selected one at last
@@ -441,10 +430,10 @@ public class FlamePanel extends ImagePanel {
     }
   }
 
-  private Map<FlamePanelControlShape, AbstractControlHandler> controlHandlerMap = new HashMap<FlamePanelControlShape, AbstractControlHandler>();
+  private Map<FlamePanelControlStyle, AbstractControlHandler<?>> controlHandlerMap = new HashMap<FlamePanelControlStyle, AbstractControlHandler<?>>();
 
-  private AbstractControlHandler getHandler(FlamePanelControlShape pShape) {
-    AbstractControlHandler res = controlHandlerMap.get(pShape);
+  private AbstractControlHandler<?> getHandler(FlamePanelControlStyle pShape) {
+    AbstractControlHandler<?> res = controlHandlerMap.get(pShape);
     if (res == null) {
       res = pShape.createHandlerInstance(prefs, config);
       controlHandlerMap.put(pShape, res);
@@ -779,20 +768,6 @@ public class FlamePanel extends ImagePanel {
     }
   }
 
-  private int selectNearestPoint(TriangleControlShape pTriangle, int viewX, int viewY) {
-    double dx, dy;
-    dx = pTriangle.viewX[0] - viewX;
-    dy = pTriangle.viewY[0] - viewY;
-    double dr0 = MathLib.sqrt(dx * dx + dy * dy);
-    dx = pTriangle.viewX[1] - viewX;
-    dy = pTriangle.viewY[1] - viewY;
-    double dr1 = MathLib.sqrt(dx * dx + dy * dy);
-    dx = pTriangle.viewX[2] - viewX;
-    dy = pTriangle.viewY[2] - viewY;
-    double dr2 = MathLib.sqrt(dx * dx + dy * dy);
-    return dr0 < dr1 ? (dr0 < dr2 ? 0 : 2) : (dr1 < dr2 ? 1 : 2);
-  }
-
   public XForm mouseClicked(int x, int y) {
     redrawAfterMouseClick = false;
     // select flame
@@ -802,9 +777,7 @@ public class FlamePanel extends ImagePanel {
         for (XForm xForm : layer.getXForms()) {
           if (getHandler(flamePanelTriangleMode).isInsideXForm(xForm, x, y)) {
             if (config.getMouseDragOperation() == MouseDragOperation.POINTS) {
-              TriangleControlShape triangle = new TriangleControlShape(config, xForm);
-              // TODO
-              config.setSelectedPoint(selectNearestPoint(triangle, x, y));
+              config.setSelectedPoint(getHandler(flamePanelTriangleMode).selectNearestPoint(xForm, x, y));
               redrawAfterMouseClick = true;
               reRender = true;
             }
@@ -814,9 +787,7 @@ public class FlamePanel extends ImagePanel {
         for (XForm xForm : layer.getFinalXForms()) {
           if (getHandler(flamePanelTriangleMode).isInsideXForm(xForm, x, y)) {
             if (config.getMouseDragOperation() == MouseDragOperation.POINTS) {
-              TriangleControlShape triangle = new TriangleControlShape(config, xForm);
-              // TODO
-              config.setSelectedPoint(selectNearestPoint(triangle, x, y));
+              config.setSelectedPoint(getHandler(flamePanelTriangleMode).selectNearestPoint(xForm, x, y));
               redrawAfterMouseClick = true;
               reRender = true;
             }
@@ -827,8 +798,7 @@ public class FlamePanel extends ImagePanel {
     }
     // select nearest point
     else if (config.getMouseDragOperation() == MouseDragOperation.POINTS && selectedXForm != null) {
-      TriangleControlShape triangle = new TriangleControlShape(config, selectedXForm);
-      config.setSelectedPoint(selectNearestPoint(triangle, x, y));
+      config.setSelectedPoint(getHandler(flamePanelTriangleMode).selectNearestPoint(selectedXForm, x, y));
       redrawAfterMouseClick = true;
       reRender = true;
       return selectedXForm;
@@ -1146,7 +1116,7 @@ public class FlamePanel extends ImagePanel {
     imageBrightness = pImageBrightness;
   }
 
-  public void setFlamePanelTriangleMode(FlamePanelControlShape pFlamePanelTriangleMode) {
+  public void setFlamePanelTriangleMode(FlamePanelControlStyle pFlamePanelTriangleMode) {
     flamePanelTriangleMode = pFlamePanelTriangleMode;
   }
 

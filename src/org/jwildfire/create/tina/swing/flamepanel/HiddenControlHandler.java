@@ -21,7 +21,7 @@ import java.awt.Graphics2D;
 import org.jwildfire.base.Prefs;
 import org.jwildfire.create.tina.base.XForm;
 
-public class HiddenControlHandler extends AbstractControlHandler {
+public class HiddenControlHandler extends AbstractControlHandler<TriangleControlShape> {
 
   public HiddenControlHandler(Prefs pPrefs, FlamePanelConfig pConfig) {
     super(pPrefs, pConfig);
@@ -37,4 +37,13 @@ public class HiddenControlHandler extends AbstractControlHandler {
     return false;
   }
 
+  @Override
+  public TriangleControlShape convertXFormToShape(XForm pXForm) {
+    return new TriangleControlShape(config, pXForm);
+  }
+
+  @Override
+  public int selectNearestPoint(XForm pXForm, int pViewX, int pViewY) {
+    return 1;
+  }
 }

@@ -64,12 +64,11 @@ public abstract class AbstractControlShape {
     return (-pX * getC01()) + pY * getC11() + (-getC21());
   }
 
-  protected int triangleXToView(double pX) {
-    return Tools.FTOI(config.getTriangleViewXScale() * config.getTriangleZoom() * pX - config.getTriangleViewXTrans());
+  protected int triangleXToView(double pX, double pScale) {
+    return Tools.FTOI(config.getTriangleViewXScale() * config.getTriangleZoom() * pScale * pX - config.getTriangleViewXTrans());
   }
 
-  protected int triangleYToView(double pY) {
-    return Tools.FTOI(config.getTriangleViewYScale() * config.getTriangleZoom() * pY - config.getTriangleViewYTrans());
+  protected int triangleYToView(double pY, double pScale) {
+    return Tools.FTOI(config.getTriangleViewYScale() * config.getTriangleZoom() * pScale * pY - config.getTriangleViewYTrans());
   }
-
 }

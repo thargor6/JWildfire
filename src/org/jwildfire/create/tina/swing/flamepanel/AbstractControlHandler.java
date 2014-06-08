@@ -21,9 +21,10 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 
 import org.jwildfire.base.Prefs;
+import org.jwildfire.base.mathlib.MathLib;
 import org.jwildfire.create.tina.base.XForm;
 
-public abstract class AbstractControlHandler {
+public abstract class AbstractControlHandler<T extends AbstractControlShape> {
   protected final Prefs prefs;
   protected final FlamePanelConfig config;
 
@@ -55,6 +56,10 @@ public abstract class AbstractControlHandler {
 
   public abstract boolean isInsideXForm(XForm pXForm, int pX, int pY);
 
+  public abstract T convertXFormToShape(XForm pXForm);
+
+  public abstract int selectNearestPoint(XForm pXForm, int pViewX, int pViewY);
+
   // Algorithm from http://www.blackpawn.com/texts/pointinpoly/default.html
   protected boolean insideTriange(TriangleControlShape pTriangle, int pViewX, int pViewY) {
     // Compute vectors
@@ -85,4 +90,19 @@ public abstract class AbstractControlHandler {
     // Check if point is in triangle
     return (u >= 0) && (v >= 0) && (u + v < 1);
   }
+
+  protected int selectNearestPointFromTriangle(TriangleControlShape pTriangle, int viewX, int viewY) {
+    double dx, dy;
+    dx = pTriangle.viewX[0] - viewX;
+    dy = pTriangle.viewY[0] - viewY;
+    double dr0 = MathLib.sqrt(dx * dx + dy * dy);
+    dx = pTriangle.viewX[1] - viewX;
+    dy = pTriangle.viewY[1] - viewY;
+    double dr1 = MathLib.sqrt(dx * dx + dy * dy);
+    dx = pTriangle.viewX[2] - viewX;
+    dy = pTriangle.viewY[2] - viewY;
+    double dr2 = MathLib.sqrt(dx * dx + dy * dy);
+    return dr0 < dr1 ? (dr0 < dr2 ? 0 : 2) : (dr1 < dr2 ? 1 : 2);
+  }
+
 }
