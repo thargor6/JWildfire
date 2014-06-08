@@ -72,35 +72,50 @@ public class ExperimentalGnarlRandomFlameGenerator extends RandomFlameGenerator 
       layer.getXForms().add(xForm);
       xForm.setWeight(wavesWeight);
       double varRnd = Math.random();
-      String varName;
-      if (varRnd < 0.6) {
-        varName = "waves2_wf";
-      }
-      else if (varRnd < 0.8) {
-        varName = "waves3_wf";
+      VariationFunc w2;
+      if (Math.random() > 0.67) {
+        String varName;
+        if (varRnd < 0.6) {
+          varName = "waves2_wf";
+        }
+        else if (varRnd < 0.8) {
+          varName = "waves3_wf";
+        }
+        else {
+          varName = "waves4_wf";
+        }
+        w2 = VariationFuncList.getVariationFuncInstance(varName, true);
+        if (Math.random() < 0.25) {
+          w2.setParameter("use_cos_x", 1);
+        }
+        else {
+          w2.setParameter("use_cos_x", 0);
+        }
+        if (Math.random() < 0.25) {
+          w2.setParameter("use_cos_y", 1);
+        }
+        else {
+          w2.setParameter("use_cos_y", 0);
+        }
+        if (Math.random() < 0.25) {
+          w2.setParameter("dampx", -(0.01 + Math.random() * 0.39));
+        }
+        if (Math.random() < 0.25) {
+          w2.setParameter("dampy", -(0.01 + Math.random() * 0.39));
+        }
       }
       else {
-        varName = "waves4_wf";
+        w2 = VariationFuncList.getVariationFuncInstance("waves2b", true);
+        double pwx = 0.1 - 0.2 * Math.random();
+        double pwy = Math.random() < 0.5 ? pwx : 0.1 - 0.2 * Math.random();
+        w2.setParameter("pwx", pwx);
+        w2.setParameter("pwy", pwy);
+        double scaleinfx = 1.0 - 2.0 * Math.random();
+        double scaleinfy = Math.random() < 0.5 ? scaleinfx : 1.0 - 2.0 * Math.random();
+        w2.setParameter("scaleinfx", scaleinfx);
+        w2.setParameter("scaleinfy", scaleinfy);
       }
-      VariationFunc w2 = VariationFuncList.getVariationFuncInstance(varName, true);
-      if (Math.random() < 0.25) {
-        w2.setParameter("use_cos_x", 1);
-      }
-      else {
-        w2.setParameter("use_cos_x", 0);
-      }
-      if (Math.random() < 0.25) {
-        w2.setParameter("use_cos_y", 1);
-      }
-      else {
-        w2.setParameter("use_cos_y", 0);
-      }
-      if (Math.random() < 0.25) {
-        w2.setParameter("dampx", -(0.01 + Math.random() * 0.39));
-      }
-      if (Math.random() < 0.25) {
-        w2.setParameter("dampy", -(0.01 + Math.random() * 0.39));
-      }
+
       w2.setParameter("freqx", freqX);
       w2.setParameter("scalex", scaleX);
       w2.setParameter("freqy", freqY);

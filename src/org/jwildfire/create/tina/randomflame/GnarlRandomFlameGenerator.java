@@ -21,8 +21,8 @@ import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.transform.XFormTransformService;
 import org.jwildfire.create.tina.variation.JuliaNFunc;
+import org.jwildfire.create.tina.variation.VariationFunc;
 import org.jwildfire.create.tina.variation.VariationFuncList;
-import org.jwildfire.create.tina.variation.Waves2Func;
 
 public class GnarlRandomFlameGenerator extends RandomFlameGenerator {
 
@@ -85,7 +85,21 @@ public class GnarlRandomFlameGenerator extends RandomFlameGenerator {
       XForm xForm = new XForm();
       layer.getXForms().add(xForm);
       xForm.setWeight(wavesWeight);
-      Waves2Func w2 = (Waves2Func) VariationFuncList.getVariationFuncInstance("waves2", true);
+      VariationFunc w2;
+      if (Math.random() > 0.6) {
+        w2 = VariationFuncList.getVariationFuncInstance("waves2", true);
+      }
+      else {
+        w2 = VariationFuncList.getVariationFuncInstance("waves2b", true);
+        double pwx = 0.1 - 0.2 * Math.random();
+        double pwy = Math.random() < 0.5 ? pwx : 0.1 - 0.2 * Math.random();
+        w2.setParameter("pwx", pwx);
+        w2.setParameter("pwy", pwy);
+        double scaleinfx = 1.0 - 2.0 * Math.random();
+        double scaleinfy = Math.random() < 0.5 ? scaleinfx : 1.0 - 2.0 * Math.random();
+        w2.setParameter("scaleinfx", scaleinfx);
+        w2.setParameter("scaleinfy", scaleinfy);
+      }
       w2.setParameter("freqx", freqX);
       w2.setParameter("scalex", scaleX);
       w2.setParameter("freqy", freqY);
