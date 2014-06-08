@@ -69,6 +69,7 @@
       <zipfileset src="lib/jl1.0.1.jar"/>
       <zipfileset src="lib/jtransforms-2.4.jar"/>
       <zipfileset src="lib/svgSalamander-tiny.jar"/>
+      <zipfileset src="lib/colt-1.2.0.jar"/>
       <manifest>
         <attribute name="Main-Class" value="org.jwildfire.swing.Desktop"/>
       </manifest>			
