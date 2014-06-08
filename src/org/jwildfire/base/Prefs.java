@@ -25,6 +25,7 @@ import org.jwildfire.base.mathlib.MathLib;
 import org.jwildfire.create.tina.base.raster.RasterPointPrecision;
 import org.jwildfire.create.tina.random.RandomGeneratorType;
 import org.jwildfire.create.tina.swing.RandomBatchRefreshType;
+import org.jwildfire.create.tina.swing.flamepanel.FlamePanelControlShape;
 import org.jwildfire.swing.LookAndFeelType;
 
 import com.l2fprod.common.beans.editor.ComboBoxPropertyEditor;
@@ -86,6 +87,7 @@ public class Prefs extends ManagedObject {
   static final String KEY_TINA_EDITOR_CONTROLS_WITH_ANTIALIASING = "tina.editor.controls.with_antialising";
   static final String KEY_TINA_EDITOR_CONTROLS_WITH_SHADOWS = "tina.editor.controls.with_shadows";
   static final String KEY_TINA_EDITOR_CONTROLS_WITH_NUMBERS = "tina.editor.controls.with_numbers";
+  static final String KEY_TINA_EDITOR_CONTROLS_STYLE = "tina.editor.controls.style";
   static final String KEY_TINA_EDITOR_GRID_SIZE = "tina.editor.grid_size";
 
   static final String KEY_TINA_SAVING_STORE_HDR_IN_IR = "tina.saving.store_hdr_in_ir";
@@ -158,6 +160,9 @@ public class Prefs extends ManagedObject {
   @Property(description = "Add small shadows to the controls, to increase contrast with background, in the editor", category = PropertyCategory.TINA)
   private boolean tinaEditorControlsWithShadows = true;
 
+  @Property(description = "Style of the controls (\"triangles\") in the editor", category = PropertyCategory.TINA, editorClass = FlamePanelTriangleStyleEditor.class)
+  private FlamePanelControlShape tinaEditorControlsStyle = FlamePanelControlShape.TRIANGLE;
+
   @Property(description = "Grid size (distance between two grid-lines) in the editor", category = PropertyCategory.TINA)
   private double tinaEditorGridSize = 0.5;
 
@@ -190,6 +195,13 @@ public class Prefs extends ManagedObject {
     public BaseMathLibTypeEditor() {
       super();
       setAvailableValues(new BaseMathLibType[] { BaseMathLibType.FAST_MATH, BaseMathLibType.JAVA_MATH });
+    }
+  }
+
+  public static class FlamePanelTriangleStyleEditor extends ComboBoxPropertyEditor {
+    public FlamePanelTriangleStyleEditor() {
+      super();
+      setAvailableValues(new FlamePanelControlShape[] { FlamePanelControlShape.TRIANGLE, FlamePanelControlShape.AXIS, FlamePanelControlShape.CROSS, FlamePanelControlShape.RECT, FlamePanelControlShape.HIDDEN });
     }
   }
 
@@ -476,6 +488,7 @@ public class Prefs extends ManagedObject {
     tinaEditorControlsWithColor = pSrc.tinaEditorControlsWithColor;
     tinaEditorControlsWithAntialiasing = pSrc.tinaEditorControlsWithAntialiasing;
     tinaEditorControlsWithShadows = pSrc.tinaEditorControlsWithShadows;
+    tinaEditorControlsStyle = pSrc.tinaEditorControlsStyle;
     tinaEditorControlsWithNumbers = pSrc.tinaEditorControlsWithNumbers;
     tinaEditorGridSize = pSrc.tinaEditorGridSize;
     tinaRandGenColorMapImagePath = pSrc.tinaRandGenColorMapImagePath;
@@ -824,6 +837,14 @@ public class Prefs extends ManagedObject {
       }
     }
     return prefs;
+  }
+
+  public FlamePanelControlShape getTinaEditorControlsStyle() {
+    return tinaEditorControlsStyle;
+  }
+
+  public void setTinaEditorControlsStyle(FlamePanelControlShape pTinaEditorControlsStyle) {
+    tinaEditorControlsStyle = pTinaEditorControlsStyle;
   }
 
 }

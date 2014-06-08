@@ -30,6 +30,7 @@ import javax.swing.JColorChooser;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.palette.RGBColor;
 import org.jwildfire.create.tina.palette.RGBPalette;
+import org.jwildfire.create.tina.swing.flamepanel.FlamePanel;
 
 import com.l2fprod.common.beans.editor.FilePropertyEditor;
 import com.l2fprod.common.util.ResourceManager;

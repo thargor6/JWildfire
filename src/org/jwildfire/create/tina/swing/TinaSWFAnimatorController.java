@@ -78,6 +78,7 @@ import org.jwildfire.create.tina.render.ProgressUpdater;
 import org.jwildfire.create.tina.render.RenderInfo;
 import org.jwildfire.create.tina.render.RenderMode;
 import org.jwildfire.create.tina.render.RenderedFlame;
+import org.jwildfire.create.tina.swing.flamepanel.FlamePanel;
 import org.jwildfire.image.SimpleImage;
 import org.jwildfire.swing.ErrorHandler;
 import org.jwildfire.swing.ImagePanel;

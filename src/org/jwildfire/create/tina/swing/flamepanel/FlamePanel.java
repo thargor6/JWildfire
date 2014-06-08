@@ -14,7 +14,7 @@
   if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
   02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
-package org.jwildfire.create.tina.swing;
+package org.jwildfire.create.tina.swing.flamepanel;
 
 import static org.jwildfire.base.mathlib.MathLib.EPSILON;
 import static org.jwildfire.base.mathlib.MathLib.M_PI;
@@ -28,6 +28,8 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.jwildfire.base.Prefs;
 import org.jwildfire.base.Tools;
@@ -39,6 +41,11 @@ import org.jwildfire.create.tina.base.XYZPoint;
 import org.jwildfire.create.tina.random.RandomGeneratorFactory;
 import org.jwildfire.create.tina.random.RandomGeneratorType;
 import org.jwildfire.create.tina.render.FlameRenderer;
+import org.jwildfire.create.tina.swing.FlameHolder;
+import org.jwildfire.create.tina.swing.GradientOverlay;
+import org.jwildfire.create.tina.swing.LayerHolder;
+import org.jwildfire.create.tina.swing.MouseDragOperation;
+import org.jwildfire.create.tina.swing.UndoManagerHolder;
 import org.jwildfire.create.tina.transform.XFormTransformService;
 import org.jwildfire.create.tina.variation.FlameTransformationContext;
 import org.jwildfire.create.tina.variation.Variation;
@@ -48,22 +55,19 @@ import org.jwildfire.transform.BalancingTransformer;
 
 public class FlamePanel extends ImagePanel {
   private final static int BORDER = 20;
+  // TODO
   public static final Color XFORM_COLOR = new Color(217, 219, 223);
   private static final Color XFORM_POST_COLOR = new Color(255, 219, 160);
   private static final Color BACKGROUND_COLOR = new Color(60, 60, 60);
   private static final Color VARIATION_COLOR = new Color(245, 205, 16);
   private static final Color SHADOW_COLOR = new Color(32, 32, 32);
 
-  private static BasicStroke SELECTED_LINE_NEW = new BasicStroke(2.0f);
-  private static BasicStroke NORMAL_CIRCLE_LINE = new BasicStroke(1.0f);
-  private static BasicStroke SELECTED_CIRCLE_LINE = new BasicStroke(2.0f);
-
   private static BasicStroke GRID_LINE = new BasicStroke(1.0f);
   private static BasicStroke GRID_LINE_ZERO = new BasicStroke(1.6f);
-  private static BasicStroke NORMAL_LINE_NEW = new BasicStroke(2.0f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[] { 10, 4 }, 0);
   private static final Color XFORM_GRID_COLOR = new Color(140, 140, 120);
   private static final Color XFORM_GRID_COLOR_ZERO = new Color(255, 255, 160);
 
+  // TODO
   // Apophysis-compatible colors
   public static final Color[] XFORM_COLORS = new Color[] {
       new Color(255, 0, 0), new Color(204, 204, 0), new Color(0, 204, 0),
@@ -72,37 +76,28 @@ public class FlamePanel extends ImagePanel {
       new Color(96, 128, 96), new Color(80, 128, 128), new Color(79, 79, 128),
       new Color(128, 80, 128), new Color(128, 96, 34) };
 
-  private static final int SHADOW_DIST = 1;
-
   private static final long serialVersionUID = 1L;
   private FlameHolder flameHolder;
   private LayerHolder layerHolder;
 
+  private FlamePanelControlShape flamePanelTriangleMode = FlamePanelControlShape.TRIANGLE;
   private boolean withImage = true;
   private int imageBrightness = 100;
   private boolean withTriangles = true;
   private boolean withVariations = false;
   private boolean withShowTransparency = false;
   private boolean withGrid = false;
-  private boolean withColoredTransforms = false;
   private boolean fineMovement = false;
   private XForm selectedXForm = null;
   private boolean allowScaleX = true;
   private boolean allowScaleY = true;
 
-  private double triangleViewXScale, triangleViewYScale;
-  private double triangleViewXTrans, triangleViewYTrans;
-  private MouseDragOperation mouseDragOperation = MouseDragOperation.MOVE_TRIANGLE;
   private int xBeginDrag, yBeginDrag;
   private int xMouseClickPosition, yMouseClickPosition;
-  private boolean editPostTransform = false;
-  private double triangleZoom = 1.21;
 
   private int renderWidth;
   private int renderHeight;
   private double renderAspect = 1.0;
-
-  private int selectedPoint = 1;
 
   private boolean redrawAfterMouseClick;
   private boolean reRender;
@@ -114,6 +109,8 @@ public class FlamePanel extends ImagePanel {
   private double viewXMax = 2.0;
   private double viewYMin = -1.5;
   private double viewYMax = 1.5;
+
+  private final FlamePanelConfig config = new FlamePanelConfig();
 
   public FlamePanel(Prefs pPrefs, SimpleImage pSimpleImage, int pX, int pY, int pWidth, FlameHolder pFlameHolder, LayerHolder pLayerHolder) {
     super(pSimpleImage, pX, pY, pWidth);
@@ -144,7 +141,7 @@ public class FlamePanel extends ImagePanel {
     if (withTriangles) {
       drawTriangles(g2d);
     }
-    if (mouseDragOperation == MouseDragOperation.GRADIENT && flameHolder.getFlame() != null && layerHolder != null) {
+    if (config.getMouseDragOperation() == MouseDragOperation.GRADIENT && flameHolder.getFlame() != null && layerHolder != null) {
       gradientOverlay.paintGradient((Graphics2D) g, layerHolder.getLayer().getPalette(), this.getImageBounds());
     }
   }
@@ -185,73 +182,6 @@ public class FlamePanel extends ImagePanel {
     return _transpBGImg;
   }
 
-  private class Triangle {
-    private final XForm xForm;
-    double x[] = new double[3];
-    double y[] = new double[3];
-    int viewX[] = new int[3];
-    int viewY[] = new int[3];
-
-    public Triangle(XForm pXForm) {
-      xForm = pXForm;
-      // x
-      x[0] = 1.0;
-      y[0] = 0.0;
-      // 0
-      x[1] = 0.0;
-      y[1] = 0.0;
-      // y
-      x[2] = 0.0;
-      y[2] = 1.0;
-
-      // transform the points (affine transform)
-      for (int i = 0; i < x.length; i++) {
-        //          
-        // use the same layout as Apophysis
-        double tx = affineTransformedX(x[i], y[i]);
-        double ty = affineTransformedY(x[i], y[i]);
-        viewX[i] = triangleXToView(tx);
-        viewY[i] = triangleYToView(ty);
-      }
-    }
-
-    public double getC00() {
-      return editPostTransform ? xForm.getPostCoeff00() : xForm.getCoeff00();
-    }
-
-    public double getC01() {
-      return editPostTransform ? xForm.getPostCoeff01() : xForm.getCoeff01();
-    }
-
-    public double getC10() {
-      return editPostTransform ? xForm.getPostCoeff10() : xForm.getCoeff10();
-    }
-
-    public double getC11() {
-      return editPostTransform ? xForm.getPostCoeff11() : xForm.getCoeff11();
-    }
-
-    public double getC20() {
-      return editPostTransform ? xForm.getPostCoeff20() : xForm.getCoeff20();
-    }
-
-    public double getC21() {
-      return editPostTransform ? xForm.getPostCoeff21() : xForm.getCoeff21();
-    }
-
-    public double affineTransformedX(double pX, double pY) {
-      //      return pX * xForm.getCoeff00() + pY * xForm.getCoeff10() + xForm.getCoeff20();
-      // use the same layout as Apophysis
-      return pX * getC00() + (-pY * getC10()) + getC20();
-    }
-
-    public double affineTransformedY(double pX, double pY) {
-      //      return pX * xForm.getCoeff01() + pY * xForm.getCoeff11() + xForm.getCoeff21();
-      // use the same layout as Apophysis
-      return (-pX * getC01()) + pY * getC11() + (-getC21());
-    }
-  }
-
   public Rectangle getImageBounds() {
     Rectangle bounds = this.getBounds();
     double aspect = (double) bounds.width / (double) bounds.height;
@@ -289,18 +219,18 @@ public class FlamePanel extends ImagePanel {
     viewAreaTop = BORDER;
     viewAreaBottom = height - 1 - BORDER;
 
-    triangleViewXScale = (double) (width - 2 * BORDER) / (viewXMax - viewXMin);
-    triangleViewYScale = (double) (height - 2 * BORDER) / (viewYMin - viewYMax);
+    config.setTriangleViewXScale((double) (width - 2 * BORDER) / (viewXMax - viewXMin));
+    config.setTriangleViewYScale((double) (height - 2 * BORDER) / (viewYMin - viewYMax));
 
-    if (fabs(triangleViewXScale) < fabs(triangleViewYScale)) {
-      triangleViewYScale = -triangleViewXScale;
+    if (fabs(config.getTriangleViewXScale()) < fabs(config.getTriangleViewYScale())) {
+      config.setTriangleViewYScale(-config.getTriangleViewXScale());
     }
     else {
-      triangleViewXScale = -triangleViewYScale;
+      config.setTriangleViewXScale(-config.getTriangleViewYScale());
     }
 
-    triangleViewXTrans = viewXMin * triangleViewXScale - viewAreaLeft;
-    triangleViewYTrans = viewYMin * triangleViewYScale - viewAreaBottom;
+    config.setTriangleViewXTrans(viewXMin * config.getTriangleViewXScale() - viewAreaLeft);
+    config.setTriangleViewYTrans(viewYMin * config.getTriangleViewYScale() - viewAreaBottom);
   }
 
   private class TickSpec {
@@ -407,7 +337,7 @@ public class FlamePanel extends ImagePanel {
       Layer layer = layerHolder.getLayer();
       if (layer != null) {
         if (!prefs.isTinaEditorControlsWithShadows()) {
-          g.setColor(editPostTransform ? XFORM_POST_COLOR : XFORM_COLOR);
+          g.setColor(config.isEditPostTransform() ? XFORM_POST_COLOR : XFORM_COLOR);
         }
 
         // draw the selected one at last
@@ -456,7 +386,6 @@ public class FlamePanel extends ImagePanel {
           var.getFunc().init(getFlameTransformationContext(), layerHolder != null ? layerHolder.getLayer() : null, selectedXForm, var.getAmount());
         }
 
-        // TODO
         double xMin = -1.0;
         double xMax = 1.0;
         int xSteps = 32;
@@ -512,73 +441,35 @@ public class FlamePanel extends ImagePanel {
     }
   }
 
+  private Map<FlamePanelControlShape, AbstractControlHandler> controlHandlerMap = new HashMap<FlamePanelControlShape, AbstractControlHandler>();
+
+  private AbstractControlHandler getHandler(FlamePanelControlShape pShape) {
+    AbstractControlHandler res = controlHandlerMap.get(pShape);
+    if (res == null) {
+      res = pShape.createHandlerInstance(prefs, config);
+      controlHandlerMap.put(pShape, res);
+    }
+    return res;
+  }
+
   private void drawXForm(Graphics2D g, XForm pXForm, int pIndex, int pXFormCount, boolean pIsFinal, boolean pShadow, boolean pIsSelected) {
-    if (!pShadow) {
-      if (isWithColoredTransforms()) {
-        int row = pIsFinal ? pXFormCount + pIndex : pIndex;
-        int colorIdx = row % FlamePanel.XFORM_COLORS.length;
-        g.setColor(XFORM_COLORS[colorIdx]);
-      }
-      else {
-        g.setColor(pIsFinal ? XFORM_POST_COLOR : XFORM_COLOR);
-      }
-    }
-
-    Triangle triangle = new Triangle(pXForm);
-    if (pShadow) {
-      for (int i = 0; i < triangle.viewX.length; i++) {
-        triangle.viewX[i] += SHADOW_DIST;
-        triangle.viewY[i] += SHADOW_DIST;
-      }
-    }
-    g.setStroke(pIsSelected ? SELECTED_LINE_NEW : NORMAL_LINE_NEW);
-    g.drawPolygon(triangle.viewX, triangle.viewY, 3);
-
-    // selected point
-    if (pIsSelected && (mouseDragOperation == MouseDragOperation.POINTS)) {
-      int radius = 10;
-      g.fillOval(triangle.viewX[selectedPoint] - radius / 2, triangle.viewY[selectedPoint] - radius / 2, radius, radius);
-    }
-    // axes
-    {
-      int offset = 16;
-      int cx = (triangle.viewX[0] + triangle.viewX[1] + triangle.viewX[2]) / 3;
-      int cy = (triangle.viewY[0] + triangle.viewY[1] + triangle.viewY[2]) / 3;
-      final String label = "XOY";
-      if (pIsSelected) {
-        for (int i = 0; i < triangle.viewX.length; i++) {
-          double dx = triangle.viewX[i] - cx;
-          double dy = triangle.viewY[i] - cy;
-          double dr = MathLib.sqrt(dx * dx + dy * dy) + MathLib.EPSILON;
-          dx /= dr;
-          dy /= dr;
-          g.drawString(String.valueOf(label.charAt(i)), triangle.viewX[i] + (int) (offset * dx), triangle.viewY[i] + (int) (offset * dy));
-        }
-      }
-      if (prefs.isTinaEditorControlsWithNumbers()) {
-        g.setStroke(pIsSelected ? SELECTED_CIRCLE_LINE : NORMAL_CIRCLE_LINE);
-        int radius = editPostTransform ? 28 : 24;
-        g.drawOval(cx - radius / 2, cy - radius / 2, radius, radius);
-        String lbl = pIsFinal ? (editPostTransform ? "PF" : "F") + String.valueOf(pIndex + 1) : (editPostTransform ? "PT" : "T") + String.valueOf(pIndex + 1);
-        g.drawString(lbl, cx - (editPostTransform ? 12 : 6), cy + 6);
-      }
-    }
+    getHandler(flamePanelTriangleMode).drawXForm(g, pXForm, pIndex, pXFormCount, pIsFinal, pShadow, pIsSelected);
   }
 
   private int triangleXToView(double pX) {
-    return Tools.FTOI(triangleViewXScale * triangleZoom * pX - triangleViewXTrans);
+    return Tools.FTOI(config.getTriangleViewXScale() * config.getTriangleZoom() * pX - config.getTriangleViewXTrans());
   }
 
   private int triangleYToView(double pY) {
-    return Tools.FTOI(triangleViewYScale * triangleZoom * pY - triangleViewYTrans);
+    return Tools.FTOI(config.getTriangleViewYScale() * config.getTriangleZoom() * pY - config.getTriangleViewYTrans());
   }
 
   private double triangleViewToX(int viewX) {
-    return ((double) viewX + triangleViewXTrans) / (triangleViewXScale * triangleZoom);
+    return ((double) viewX + config.getTriangleViewXTrans()) / (config.getTriangleViewXScale() * config.getTriangleZoom());
   }
 
   private double triangleViewToY(int viewY) {
-    return ((double) viewY + triangleViewYTrans) / (triangleViewYScale * triangleZoom);
+    return ((double) viewY + config.getTriangleViewYTrans()) / (config.getTriangleViewYScale() * config.getTriangleZoom());
   }
 
   public void setDrawImage(boolean drawImage) {
@@ -603,7 +494,7 @@ public class FlamePanel extends ImagePanel {
       xBeginDrag = pX;
       yBeginDrag = pY;
       if (Math.abs(dx) > MathLib.EPSILON || Math.abs(dy) > MathLib.EPSILON) {
-        switch (mouseDragOperation) {
+        switch (config.getMouseDragOperation()) {
           case TRIANGLE_VIEW: {
             dx *= 0.75;
             dy *= 0.75;
@@ -639,7 +530,7 @@ public class FlamePanel extends ImagePanel {
                 dy *= 0.25;
               }
               // move
-              if (editPostTransform) {
+              if (config.isEditPostTransform()) {
                 selectedXForm.setPostCoeff20(selectedXForm.getPostCoeff20() + dx);
                 selectedXForm.setPostCoeff21(selectedXForm.getPostCoeff21() - dy);
               }
@@ -654,7 +545,7 @@ public class FlamePanel extends ImagePanel {
               if (fineMovement) {
                 dx *= 0.1;
               }
-              XFormTransformService.rotate(selectedXForm, dx * 30, editPostTransform);
+              XFormTransformService.rotate(selectedXForm, dx * 30, config.isEditPostTransform());
               return true;
             }
             // zoom
@@ -663,7 +554,7 @@ public class FlamePanel extends ImagePanel {
                 dx *= 0.1;
                 dy *= 0.1;
               }
-              Triangle triangle = new Triangle(selectedXForm);
+              TriangleControlShape triangle = new TriangleControlShape(config, selectedXForm);
               double v1x = triangle.x[0] - triangle.x[1];
               double v1y = triangle.y[0] - triangle.y[1];
               double v2x = v1x + dx;
@@ -671,7 +562,7 @@ public class FlamePanel extends ImagePanel {
               double dr1 = Math.sqrt(v1x * v1x + v1y * v1y);
               double dr2 = Math.sqrt(v2x * v2x + v2y * v2y);
               double scale = dr2 / dr1;
-              if (editPostTransform) {
+              if (config.isEditPostTransform()) {
                 if (allowScaleX) {
                   selectedXForm.setPostCoeff00(selectedXForm.getPostCoeff00() * scale);
                   selectedXForm.setPostCoeff01(selectedXForm.getPostCoeff01() * scale);
@@ -701,7 +592,7 @@ public class FlamePanel extends ImagePanel {
             if (fineMovement) {
               dx *= 0.1;
             }
-            XFormTransformService.rotate(selectedXForm, dx * 30, editPostTransform);
+            XFormTransformService.rotate(selectedXForm, dx * 30, config.isEditPostTransform());
             return true;
           }
           case SCALE_TRIANGLE: {
@@ -712,7 +603,7 @@ public class FlamePanel extends ImagePanel {
               dx *= 0.1;
               dy *= 0.1;
             }
-            Triangle triangle = new Triangle(selectedXForm);
+            TriangleControlShape triangle = new TriangleControlShape(config, selectedXForm);
             double v1x = triangle.x[0] - triangle.x[1];
             double v1y = triangle.y[0] - triangle.y[1];
             double v2x = v1x + dx;
@@ -720,7 +611,7 @@ public class FlamePanel extends ImagePanel {
             double dr1 = Math.sqrt(v1x * v1x + v1y * v1y);
             double dr2 = Math.sqrt(v2x * v2x + v2y * v2y);
             double scale = dr2 / dr1;
-            if (editPostTransform) {
+            if (config.isEditPostTransform()) {
               if (allowScaleX) {
                 selectedXForm.setPostCoeff00(selectedXForm.getPostCoeff00() * scale);
                 selectedXForm.setPostCoeff01(selectedXForm.getPostCoeff01() * scale);
@@ -750,9 +641,9 @@ public class FlamePanel extends ImagePanel {
               dx *= 0.25;
               dy *= 0.25;
             }
-            switch (selectedPoint) {
+            switch (config.getSelectedPoint()) {
               case 0:
-                if (editPostTransform) {
+                if (config.isEditPostTransform()) {
                   selectedXForm.setPostCoeff00(selectedXForm.getPostCoeff00() + dx);
                   selectedXForm.setPostCoeff01(selectedXForm.getPostCoeff01() - dy);
                 }
@@ -762,7 +653,7 @@ public class FlamePanel extends ImagePanel {
                 }
                 break;
               case 1:
-                if (editPostTransform) {
+                if (config.isEditPostTransform()) {
                   selectedXForm.setPostCoeff20(selectedXForm.getPostCoeff20() + dx);
                   selectedXForm.setPostCoeff21(selectedXForm.getPostCoeff21() - dy);
 
@@ -784,7 +675,7 @@ public class FlamePanel extends ImagePanel {
                 }
                 break;
               case 2:
-                if (editPostTransform) {
+                if (config.isEditPostTransform()) {
                   selectedXForm.setPostCoeff10(selectedXForm.getPostCoeff10() - dx);
                   selectedXForm.setPostCoeff11(selectedXForm.getPostCoeff11() + dy);
                 }
@@ -878,7 +769,7 @@ public class FlamePanel extends ImagePanel {
   }
 
   public void mousePressed(int x, int y) {
-    if (selectedXForm != null || mouseDragOperation == MouseDragOperation.VIEW || mouseDragOperation == MouseDragOperation.GRADIENT || mouseDragOperation == MouseDragOperation.FOCUS || mouseDragOperation == MouseDragOperation.TRIANGLE_VIEW) {
+    if (selectedXForm != null || config.getMouseDragOperation() == MouseDragOperation.VIEW || config.getMouseDragOperation() == MouseDragOperation.GRADIENT || config.getMouseDragOperation() == MouseDragOperation.FOCUS || config.getMouseDragOperation() == MouseDragOperation.TRIANGLE_VIEW) {
       xMouseClickPosition = xBeginDrag = x;
       yMouseClickPosition = yBeginDrag = y;
       gradientOverlay.beginDrag(xMouseClickPosition, yMouseClickPosition);
@@ -888,38 +779,7 @@ public class FlamePanel extends ImagePanel {
     }
   }
 
-  // Algorithm from http://www.blackpawn.com/texts/pointinpoly/default.html
-  private boolean insideTriange(Triangle pTriangle, int viewX, int viewY) {
-    // Compute vectors
-    //    v0 = C - A
-    //    v1 = B - A
-    //    v2 = P - A
-    // A: pTriangle,view[0]
-    // B: pTriangle,view[1]
-    // C: pTriangle,view[2]
-    double v0x = pTriangle.viewX[2] - pTriangle.viewX[0];
-    double v0y = pTriangle.viewY[2] - pTriangle.viewY[0];
-    double v1x = pTriangle.viewX[1] - pTriangle.viewX[0];
-    double v1y = pTriangle.viewY[1] - pTriangle.viewY[0];
-    double v2x = viewX - pTriangle.viewX[0];
-    double v2y = viewY - pTriangle.viewY[0];
-    // Compute dot products
-    double dot00 = v0x * v0x + v0y * v0y;
-    double dot01 = v0x * v1x + v0y * v1y;
-    double dot02 = v0x * v2x + v0y * v2y;
-    double dot11 = v1x * v1x + v1y * v1y;
-    double dot12 = v1x * v2x + v1y * v2y;
-
-    // Compute barycentric coordinates
-    double invDenom = 1 / (dot00 * dot11 - dot01 * dot01);
-    double u = (dot11 * dot02 - dot01 * dot12) * invDenom;
-    double v = (dot00 * dot12 - dot01 * dot02) * invDenom;
-
-    // Check if point is in triangle
-    return (u >= 0) && (v >= 0) && (u + v < 1);
-  }
-
-  private int selectNearestPoint(Triangle pTriangle, int viewX, int viewY) {
+  private int selectNearestPoint(TriangleControlShape pTriangle, int viewX, int viewY) {
     double dx, dy;
     dx = pTriangle.viewX[0] - viewX;
     dy = pTriangle.viewY[0] - viewY;
@@ -936,14 +796,15 @@ public class FlamePanel extends ImagePanel {
   public XForm mouseClicked(int x, int y) {
     redrawAfterMouseClick = false;
     // select flame
-    if (mouseDragOperation == MouseDragOperation.MOVE_TRIANGLE || mouseDragOperation == MouseDragOperation.ROTATE_TRIANGLE || mouseDragOperation == MouseDragOperation.SCALE_TRIANGLE) {
+    if (config.getMouseDragOperation() == MouseDragOperation.MOVE_TRIANGLE || config.getMouseDragOperation() == MouseDragOperation.ROTATE_TRIANGLE || config.getMouseDragOperation() == MouseDragOperation.SCALE_TRIANGLE) {
       Layer layer = layerHolder.getLayer();
       if (layer != null) {
         for (XForm xForm : layer.getXForms()) {
-          Triangle triangle = new Triangle(xForm);
-          if (insideTriange(triangle, x, y)) {
-            if (mouseDragOperation == MouseDragOperation.POINTS) {
-              selectedPoint = selectNearestPoint(triangle, x, y);
+          if (getHandler(flamePanelTriangleMode).isInsideXForm(xForm, x, y)) {
+            if (config.getMouseDragOperation() == MouseDragOperation.POINTS) {
+              TriangleControlShape triangle = new TriangleControlShape(config, xForm);
+              // TODO
+              config.setSelectedPoint(selectNearestPoint(triangle, x, y));
               redrawAfterMouseClick = true;
               reRender = true;
             }
@@ -951,10 +812,11 @@ public class FlamePanel extends ImagePanel {
           }
         }
         for (XForm xForm : layer.getFinalXForms()) {
-          Triangle triangle = new Triangle(xForm);
-          if (insideTriange(triangle, x, y)) {
-            if (mouseDragOperation == MouseDragOperation.POINTS) {
-              selectedPoint = selectNearestPoint(triangle, x, y);
+          if (getHandler(flamePanelTriangleMode).isInsideXForm(xForm, x, y)) {
+            if (config.getMouseDragOperation() == MouseDragOperation.POINTS) {
+              TriangleControlShape triangle = new TriangleControlShape(config, xForm);
+              // TODO
+              config.setSelectedPoint(selectNearestPoint(triangle, x, y));
               redrawAfterMouseClick = true;
               reRender = true;
             }
@@ -964,14 +826,14 @@ public class FlamePanel extends ImagePanel {
       }
     }
     // select nearest point
-    else if (mouseDragOperation == MouseDragOperation.POINTS && selectedXForm != null) {
-      Triangle triangle = new Triangle(selectedXForm);
-      selectedPoint = selectNearestPoint(triangle, x, y);
+    else if (config.getMouseDragOperation() == MouseDragOperation.POINTS && selectedXForm != null) {
+      TriangleControlShape triangle = new TriangleControlShape(config, selectedXForm);
+      config.setSelectedPoint(selectNearestPoint(triangle, x, y));
       redrawAfterMouseClick = true;
       reRender = true;
       return selectedXForm;
     }
-    else if (mouseDragOperation == MouseDragOperation.GRADIENT && flameHolder.getFlame() != null && layerHolder != null && layerHolder.getLayer() != null) {
+    else if (config.getMouseDragOperation() == MouseDragOperation.GRADIENT && flameHolder.getFlame() != null && layerHolder != null && layerHolder.getLayer() != null) {
       if (undoManagerHolder != null) {
         undoManagerHolder.saveUndoPoint();
       }
@@ -981,29 +843,8 @@ public class FlamePanel extends ImagePanel {
     return null;
   }
 
-  public void setMouseDragOperation(MouseDragOperation mouseDragOperation) {
-    this.mouseDragOperation = mouseDragOperation;
-    selectedPoint = 1;
-  }
-
   public void setEditPostTransform(boolean pEditPostTransform) {
-    editPostTransform = pEditPostTransform;
-  }
-
-  public void zoomOut() {
-    if (triangleZoom > 0.2) {
-      triangleZoom -= 0.1;
-    }
-    else if (triangleZoom > 0.05) {
-      triangleZoom -= 0.01;
-    }
-    else {
-      triangleZoom -= 0.001;
-    }
-  }
-
-  public void zoomIn() {
-    triangleZoom += 0.1;
+    config.setEditPostTransform(pEditPostTransform);
   }
 
   public void setRenderWidth(int pRenderWidth) {
@@ -1065,10 +906,6 @@ public class FlamePanel extends ImagePanel {
     return flameTransformationContext;
   }
 
-  public MouseDragOperation getMouseDragOperation() {
-    return mouseDragOperation;
-  }
-
   public boolean isRedrawAfterMouseClick() {
     return redrawAfterMouseClick;
   }
@@ -1083,7 +920,7 @@ public class FlamePanel extends ImagePanel {
 
   public boolean mouseWheelMoved(int pRotateAmount) {
     if (pRotateAmount != 0) {
-      if (mouseDragOperation == MouseDragOperation.VIEW && flameHolder != null && flameHolder.getFlame() != null) {
+      if (config.getMouseDragOperation() == MouseDragOperation.VIEW && flameHolder != null && flameHolder.getFlame() != null) {
         Flame flame = flameHolder.getFlame();
         double dx = pRotateAmount * 3.0;
         if (fineMovement) {
@@ -1092,7 +929,7 @@ public class FlamePanel extends ImagePanel {
         flame.setPixelsPerUnit(flame.getPixelsPerUnit() - dx);
         return true;
       }
-      if (mouseDragOperation == MouseDragOperation.TRIANGLE_VIEW && flameHolder != null && flameHolder.getFlame() != null) {
+      if (config.getMouseDragOperation() == MouseDragOperation.TRIANGLE_VIEW && flameHolder != null && flameHolder.getFlame() != null) {
         double dx = pRotateAmount * 0.3;
         if (fineMovement) {
           dx *= 0.1;
@@ -1104,14 +941,14 @@ public class FlamePanel extends ImagePanel {
         initViewFlag = false;
         return true;
       }
-      else if (mouseDragOperation == MouseDragOperation.MOVE_TRIANGLE && selectedXForm != null) {
+      else if (config.getMouseDragOperation() == MouseDragOperation.MOVE_TRIANGLE && selectedXForm != null) {
         double dx = -pRotateAmount * 0.1;
         double dy = dx;
         if (fineMovement) {
           dx *= 0.1;
           dy *= 0.1;
         }
-        Triangle triangle = new Triangle(selectedXForm);
+        TriangleControlShape triangle = new TriangleControlShape(config, selectedXForm);
         double v1x = triangle.x[0] - triangle.x[1];
         double v1y = triangle.y[0] - triangle.y[1];
         double v2x = v1x + dx;
@@ -1119,7 +956,7 @@ public class FlamePanel extends ImagePanel {
         double dr1 = Math.sqrt(v1x * v1x + v1y * v1y);
         double dr2 = Math.sqrt(v2x * v2x + v2y * v2y);
         double scale = dr2 / dr1;
-        if (editPostTransform) {
+        if (config.isEditPostTransform()) {
           if (allowScaleX) {
             selectedXForm.setPostCoeff00(selectedXForm.getPostCoeff00() * scale);
             selectedXForm.setPostCoeff01(selectedXForm.getPostCoeff01() * scale);
@@ -1141,7 +978,7 @@ public class FlamePanel extends ImagePanel {
         }
         return true;
       }
-      else if (mouseDragOperation == MouseDragOperation.FOCUS && flameHolder != null && flameHolder.getFlame() != null) {
+      else if (config.getMouseDragOperation() == MouseDragOperation.FOCUS && flameHolder != null && flameHolder.getFlame() != null) {
         double dz = -pRotateAmount * 0.1;
         if (fineMovement) {
           dz *= 0.1;
@@ -1150,7 +987,7 @@ public class FlamePanel extends ImagePanel {
         flame.setFocusZ(flame.getFocusZ() + dz);
         return true;
       }
-      else if (mouseDragOperation == MouseDragOperation.GRADIENT && flameHolder != null && flameHolder.getFlame() != null) {
+      else if (config.getMouseDragOperation() == MouseDragOperation.GRADIENT && flameHolder != null && flameHolder.getFlame() != null) {
         double dz = -pRotateAmount * 0.1;
         if (fineMovement) {
           dz *= 0.1;
@@ -1171,15 +1008,16 @@ public class FlamePanel extends ImagePanel {
       withImage = pFlamePanel.withImage;
       imageBrightness = pFlamePanel.imageBrightness;
       withTriangles = pFlamePanel.withTriangles;
+      flamePanelTriangleMode = pFlamePanel.flamePanelTriangleMode;
       withVariations = pFlamePanel.withVariations;
       withGrid = pFlamePanel.withGrid;
       fineMovement = pFlamePanel.fineMovement;
       allowScaleX = pFlamePanel.allowScaleX;
       allowScaleY = pFlamePanel.allowScaleY;
       withShowTransparency = pFlamePanel.withShowTransparency;
-      withColoredTransforms = pFlamePanel.withColoredTransforms;
-      mouseDragOperation = pFlamePanel.mouseDragOperation;
-      editPostTransform = pFlamePanel.editPostTransform;
+      config.setWithColoredTransforms(pFlamePanel.config.isWithColoredTransforms());
+      config.setMouseDragOperation(pFlamePanel.config.getMouseDragOperation());
+      config.setEditPostTransform(pFlamePanel.config.isEditPostTransform());
     }
   }
 
@@ -1308,11 +1146,12 @@ public class FlamePanel extends ImagePanel {
     imageBrightness = pImageBrightness;
   }
 
-  public boolean isWithColoredTransforms() {
-    return withColoredTransforms;
+  public void setFlamePanelTriangleMode(FlamePanelControlShape pFlamePanelTriangleMode) {
+    flamePanelTriangleMode = pFlamePanelTriangleMode;
   }
 
-  public void setWithColoredTransforms(boolean pWithColoredTransforms) {
-    withColoredTransforms = pWithColoredTransforms;
+  public FlamePanelConfig getConfig() {
+    return config;
   }
+
 }

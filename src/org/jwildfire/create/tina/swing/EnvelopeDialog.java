@@ -42,6 +42,7 @@ import org.jwildfire.create.tina.render.FlameRenderer;
 import org.jwildfire.create.tina.render.RenderInfo;
 import org.jwildfire.create.tina.render.RenderMode;
 import org.jwildfire.create.tina.render.RenderedFlame;
+import org.jwildfire.create.tina.swing.flamepanel.FlamePanel;
 import org.jwildfire.envelope.Envelope;
 import org.jwildfire.envelope.Envelope.Interpolation;
 import org.jwildfire.envelope.EnvelopePanel;

@@ -313,4 +313,5 @@ public class TinaControllerData {
   public JCheckBox stereo3dSwapSidesCBx;
   public JToggleButton toggleDrawGridButton;
   public JSlider editorFractalBrightnessSlider;
+  public JComboBox triangleStyleCmb;
 }

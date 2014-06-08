@@ -112,6 +112,8 @@ import org.jwildfire.create.tina.render.RenderedFlame;
 import org.jwildfire.create.tina.render.filter.FilterKernelType;
 import org.jwildfire.create.tina.script.ScriptRunner;
 import org.jwildfire.create.tina.script.ScriptRunnerEnvironment;
+import org.jwildfire.create.tina.swing.flamepanel.FlamePanel;
+import org.jwildfire.create.tina.swing.flamepanel.FlamePanelControlShape;
 import org.jwildfire.create.tina.transform.XFormTransformService;
 import org.jwildfire.create.tina.variation.Linear3DFunc;
 import org.jwildfire.create.tina.variation.RessourceType;
@@ -578,6 +580,7 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
     data.gradientLibTree = parameterObject.gradientLibTree;
     data.backgroundColorIndicatorBtn = parameterObject.backgroundColorIndicatorBtn;
     data.toggleDrawGridButton = parameterObject.toggleDrawGridButton;
+    data.triangleStyleCmb = parameterObject.triangleStyleCmb;
     data.editorFractalBrightnessSlider = parameterObject.editorFractalBrightnessSlider;
 
     // end create
@@ -745,7 +748,8 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
       SimpleImage img = new SimpleImage(width, height);
       img.fillBackground(0, 0, 0);
       flamePanel = new FlamePanel(prefs, img, 0, 0, centerPanel.getWidth(), this, this);
-      flamePanel.setWithColoredTransforms(prefs.isTinaEditorControlsWithColor());
+      flamePanel.getConfig().setWithColoredTransforms(prefs.isTinaEditorControlsWithColor());
+      flamePanel.setFlamePanelTriangleMode(prefs.getTinaEditorControlsStyle());
       flamePanel.importOptions(prevFlamePanel);
       prevFlamePanel = null;
       flamePanel.setUndoManagerHolder(this);
@@ -806,7 +810,7 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
             switch (e.getKeyCode()) {
             // left
               case 37:
-                if (flamePanel.getMouseDragOperation() == MouseDragOperation.MOVE_TRIANGLE) {
+                if (flamePanel.getConfig().getMouseDragOperation() == MouseDragOperation.MOVE_TRIANGLE) {
                   if (altPressed) {
                     xForm_rotateLeft();
                   }
@@ -820,13 +824,13 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
                     xForm_moveLeft(1.0);
                   }
                 }
-                else if (flamePanel.getMouseDragOperation() == MouseDragOperation.GRADIENT) {
+                else if (flamePanel.getConfig().getMouseDragOperation() == MouseDragOperation.GRADIENT) {
                   gradientMarker_move(0, -1);
                 }
                 break;
               // right
               case 39:
-                if (flamePanel.getMouseDragOperation() == MouseDragOperation.MOVE_TRIANGLE) {
+                if (flamePanel.getConfig().getMouseDragOperation() == MouseDragOperation.MOVE_TRIANGLE) {
                   if (altPressed) {
                     xForm_rotateRight();
                   }
@@ -840,13 +844,13 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
                     xForm_moveRight(1.0);
                   }
                 }
-                else if (flamePanel.getMouseDragOperation() == MouseDragOperation.GRADIENT) {
+                else if (flamePanel.getConfig().getMouseDragOperation() == MouseDragOperation.GRADIENT) {
                   gradientMarker_move(0, 1);
                 }
                 break;
               // up
               case 38:
-                if (flamePanel.getMouseDragOperation() == MouseDragOperation.MOVE_TRIANGLE) {
+                if (flamePanel.getConfig().getMouseDragOperation() == MouseDragOperation.MOVE_TRIANGLE) {
                   if (altPressed) {
                     xForm_enlarge();
                   }
@@ -860,13 +864,13 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
                     xForm_moveUp(1.0);
                   }
                 }
-                else if (flamePanel.getMouseDragOperation() == MouseDragOperation.GRADIENT) {
+                else if (flamePanel.getConfig().getMouseDragOperation() == MouseDragOperation.GRADIENT) {
                   gradientMarker_move(1, 1);
                 }
                 break;
               // down
               case 40:
-                if (flamePanel.getMouseDragOperation() == MouseDragOperation.MOVE_TRIANGLE) {
+                if (flamePanel.getConfig().getMouseDragOperation() == MouseDragOperation.MOVE_TRIANGLE) {
                   if (altPressed) {
                     xForm_shrink();
                   }
@@ -880,19 +884,19 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
                     xForm_moveDown(1.0);
                   }
                 }
-                else if (flamePanel.getMouseDragOperation() == MouseDragOperation.GRADIENT) {
+                else if (flamePanel.getConfig().getMouseDragOperation() == MouseDragOperation.GRADIENT) {
                   gradientMarker_move(1, -1);
                 }
                 break;
               // 1
               case 49:
-                if (flamePanel.getMouseDragOperation() == MouseDragOperation.GRADIENT) {
+                if (flamePanel.getConfig().getMouseDragOperation() == MouseDragOperation.GRADIENT) {
                   gradientMarker_selectColor(0);
                 }
                 break;
               // 1
               case 50:
-                if (flamePanel.getMouseDragOperation() == MouseDragOperation.GRADIENT) {
+                if (flamePanel.getConfig().getMouseDragOperation() == MouseDragOperation.GRADIENT) {
                   gradientMarker_selectColor(1);
                 }
                 break;
@@ -1039,7 +1043,7 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
           flame.setHeight(info.getImageHeight());
           try {
             FlameRenderer renderer;
-            if (imgPanel.getMouseDragOperation() == MouseDragOperation.FOCUS) {
+            if (imgPanel.getConfig().getMouseDragOperation() == MouseDragOperation.FOCUS) {
               renderer = new DrawFocusPointFlameRenderer(flame, prefs, data.toggleTransparencyButton.isSelected());
             }
             else {
@@ -2338,8 +2342,8 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
   }
 
   private void forceTriangleMode() {
-    if (flamePanel.getMouseDragOperation() != MouseDragOperation.MOVE_TRIANGLE && flamePanel.getMouseDragOperation() != MouseDragOperation.ROTATE_TRIANGLE && flamePanel.getMouseDragOperation() != MouseDragOperation.SCALE_TRIANGLE && flamePanel.getMouseDragOperation() != MouseDragOperation.POINTS) {
-      flamePanel.setMouseDragOperation(MouseDragOperation.MOVE_TRIANGLE);
+    if (flamePanel.getConfig().getMouseDragOperation() != MouseDragOperation.MOVE_TRIANGLE && flamePanel.getConfig().getMouseDragOperation() != MouseDragOperation.ROTATE_TRIANGLE && flamePanel.getConfig().getMouseDragOperation() != MouseDragOperation.SCALE_TRIANGLE && flamePanel.getConfig().getMouseDragOperation() != MouseDragOperation.POINTS) {
+      flamePanel.getConfig().setMouseDragOperation(MouseDragOperation.MOVE_TRIANGLE);
       flamePanel.setDrawTriangles(true);
       data.mouseTransformMoveTrianglesButton.setSelected(true);
       data.mouseTransformRotateTrianglesButton.setSelected(false);
@@ -3129,7 +3133,7 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
       Layer layer = getCurrLayer();
       if (flame != null && flamePanel != null) {
         XForm xForm = flamePanel.mouseClicked(e.getX(), e.getY());
-        if (xForm != null || flamePanel.getMouseDragOperation() == MouseDragOperation.GRADIENT) {
+        if (xForm != null || flamePanel.getConfig().getMouseDragOperation() == MouseDragOperation.GRADIENT) {
           for (int i = 0; i < layer.getXForms().size(); i++) {
             if (xForm == layer.getXForms().get(i)) {
               afterTriangleSelected(xForm, i);
@@ -3175,8 +3179,8 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
         data.mouseTransformEditViewButton.setSelected(false);
         data.mouseTransformEditTriangleViewButton.setSelected(false);
         if (flamePanel != null) {
-          flamePanel.setMouseDragOperation(data.mouseTransformMoveTrianglesButton.isSelected() ? MouseDragOperation.MOVE_TRIANGLE : MouseDragOperation.NONE);
-          flamePanel.setDrawTriangles(flamePanel.getMouseDragOperation() == MouseDragOperation.MOVE_TRIANGLE);
+          flamePanel.getConfig().setMouseDragOperation(data.mouseTransformMoveTrianglesButton.isSelected() ? MouseDragOperation.MOVE_TRIANGLE : MouseDragOperation.NONE);
+          flamePanel.setDrawTriangles(flamePanel.getConfig().getMouseDragOperation() == MouseDragOperation.MOVE_TRIANGLE);
           refreshFlameImage(false);
         }
       }
@@ -3198,7 +3202,7 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
         data.mouseTransformEditViewButton.setSelected(false);
         data.mouseTransformEditTriangleViewButton.setSelected(false);
         if (flamePanel != null) {
-          flamePanel.setMouseDragOperation(data.mouseTransformEditFocusPointButton.isSelected() ? MouseDragOperation.FOCUS : MouseDragOperation.NONE);
+          flamePanel.getConfig().setMouseDragOperation(data.mouseTransformEditFocusPointButton.isSelected() ? MouseDragOperation.FOCUS : MouseDragOperation.NONE);
           flamePanel.setDrawTriangles(false);
           refreshFlameImage(false);
         }
@@ -3980,8 +3984,8 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
         data.mouseTransformEditViewButton.setSelected(false);
         data.mouseTransformEditTriangleViewButton.setSelected(false);
         if (flamePanel != null) {
-          flamePanel.setMouseDragOperation(data.mouseTransformEditPointsButton.isSelected() ? MouseDragOperation.POINTS : MouseDragOperation.NONE);
-          flamePanel.setDrawTriangles(flamePanel.getMouseDragOperation() == MouseDragOperation.POINTS);
+          flamePanel.getConfig().setMouseDragOperation(data.mouseTransformEditPointsButton.isSelected() ? MouseDragOperation.POINTS : MouseDragOperation.NONE);
+          flamePanel.setDrawTriangles(flamePanel.getConfig().getMouseDragOperation() == MouseDragOperation.POINTS);
           refreshFlameImage(false);
         }
       }
@@ -4003,8 +4007,8 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
         data.mouseTransformEditGradientButton.setSelected(false);
         data.mouseTransformEditTriangleViewButton.setSelected(false);
         if (flamePanel != null) {
-          flamePanel.setMouseDragOperation(data.mouseTransformEditViewButton.isSelected() ? MouseDragOperation.VIEW : MouseDragOperation.NONE);
-          flamePanel.setDrawTriangles(flamePanel.getMouseDragOperation() == MouseDragOperation.MOVE_TRIANGLE);
+          flamePanel.getConfig().setMouseDragOperation(data.mouseTransformEditViewButton.isSelected() ? MouseDragOperation.VIEW : MouseDragOperation.NONE);
+          flamePanel.setDrawTriangles(flamePanel.getConfig().getMouseDragOperation() == MouseDragOperation.MOVE_TRIANGLE);
           refreshFlameImage(false);
         }
       }
@@ -4480,8 +4484,8 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
         data.mouseTransformEditViewButton.setSelected(false);
         data.mouseTransformEditTriangleViewButton.setSelected(false);
         if (flamePanel != null) {
-          flamePanel.setMouseDragOperation(data.mouseTransformRotateTrianglesButton.isSelected() ? MouseDragOperation.ROTATE_TRIANGLE : MouseDragOperation.NONE);
-          flamePanel.setDrawTriangles(flamePanel.getMouseDragOperation() == MouseDragOperation.ROTATE_TRIANGLE);
+          flamePanel.getConfig().setMouseDragOperation(data.mouseTransformRotateTrianglesButton.isSelected() ? MouseDragOperation.ROTATE_TRIANGLE : MouseDragOperation.NONE);
+          flamePanel.setDrawTriangles(flamePanel.getConfig().getMouseDragOperation() == MouseDragOperation.ROTATE_TRIANGLE);
           refreshFlameImage(false);
         }
       }
@@ -4503,8 +4507,8 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
         data.mouseTransformEditViewButton.setSelected(false);
         data.mouseTransformEditTriangleViewButton.setSelected(false);
         if (flamePanel != null) {
-          flamePanel.setMouseDragOperation(data.mouseTransformScaleTrianglesButton.isSelected() ? MouseDragOperation.SCALE_TRIANGLE : MouseDragOperation.NONE);
-          flamePanel.setDrawTriangles(flamePanel.getMouseDragOperation() == MouseDragOperation.SCALE_TRIANGLE);
+          flamePanel.getConfig().setMouseDragOperation(data.mouseTransformScaleTrianglesButton.isSelected() ? MouseDragOperation.SCALE_TRIANGLE : MouseDragOperation.NONE);
+          flamePanel.setDrawTriangles(flamePanel.getConfig().getMouseDragOperation() == MouseDragOperation.SCALE_TRIANGLE);
           refreshFlameImage(false);
         }
       }
@@ -4542,7 +4546,7 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
         data.mouseTransformEditViewButton.setSelected(false);
         data.mouseTransformEditTriangleViewButton.setSelected(false);
         if (flamePanel != null) {
-          flamePanel.setMouseDragOperation(data.mouseTransformEditGradientButton.isSelected() ? MouseDragOperation.GRADIENT : MouseDragOperation.NONE);
+          flamePanel.getConfig().setMouseDragOperation(data.mouseTransformEditGradientButton.isSelected() ? MouseDragOperation.GRADIENT : MouseDragOperation.NONE);
           flamePanel.setDrawTriangles(false);
           refreshFlameImage(false);
         }
@@ -4606,7 +4610,7 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
 
   @Override
   public int getFrom() {
-    if (getFlamePanel().getMouseDragOperation() == MouseDragOperation.GRADIENT) {
+    if (getFlamePanel().getConfig().getMouseDragOperation() == MouseDragOperation.GRADIENT) {
       return getFlamePanel().getGradientFrom();
     }
     else {
@@ -4616,7 +4620,7 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
 
   @Override
   public int getTo() {
-    if (getFlamePanel().getMouseDragOperation() == MouseDragOperation.GRADIENT) {
+    if (getFlamePanel().getConfig().getMouseDragOperation() == MouseDragOperation.GRADIENT) {
       return getFlamePanel().getGradientTo();
     }
     else {
@@ -4961,6 +4965,17 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
     return xFormControls;
   }
 
+  public void triangleStyleCmb_changed() {
+    if (refreshing) {
+      return;
+    }
+    if (flamePanel != null) {
+      FlamePanelControlShape style = (FlamePanelControlShape) data.triangleStyleCmb.getSelectedItem();
+      flamePanel.setFlamePanelTriangleMode(style);
+      refreshFlameImage(false);
+    }
+  }
+
   public void toggleDrawGridButton_clicked() {
     if (refreshing) {
       return;
@@ -4994,8 +5009,8 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
         data.mouseTransformEditGradientButton.setSelected(false);
         data.mouseTransformEditViewButton.setSelected(false);
         if (flamePanel != null) {
-          flamePanel.setMouseDragOperation(data.mouseTransformEditTriangleViewButton.isSelected() ? MouseDragOperation.TRIANGLE_VIEW : MouseDragOperation.NONE);
-          flamePanel.setDrawTriangles(flamePanel.getMouseDragOperation() == MouseDragOperation.TRIANGLE_VIEW);
+          flamePanel.getConfig().setMouseDragOperation(data.mouseTransformEditTriangleViewButton.isSelected() ? MouseDragOperation.TRIANGLE_VIEW : MouseDragOperation.NONE);
+          flamePanel.setDrawTriangles(flamePanel.getConfig().getMouseDragOperation() == MouseDragOperation.TRIANGLE_VIEW);
           refreshFlameImage(false);
         }
       }
@@ -5012,7 +5027,7 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
     refreshing = true;
     try {
       if (flamePanel != null) {
-        flamePanel.setWithColoredTransforms(data.toggleTriangleWithColorsButton.isSelected());
+        flamePanel.getConfig().setWithColoredTransforms(data.toggleTriangleWithColorsButton.isSelected());
       }
       refreshFlameImage(false);
     }

@@ -49,7 +49,7 @@ public class Tools {
 
   public static boolean SPECIAL_VERSION = false;
 
-  public static final boolean V2_FEATURE_ENABLE = false;
+  public static final boolean V2_FEATURE_ENABLE = true;
   public static final boolean NO_TRANSPARENCY = false;
 
   public static final int VPREC = 1024;

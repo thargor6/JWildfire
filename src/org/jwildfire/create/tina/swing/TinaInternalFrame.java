@@ -93,6 +93,7 @@ import org.jwildfire.create.tina.randomgradient.RandomGradientGeneratorList;
 import org.jwildfire.create.tina.randommovie.RandomMovieGeneratorList;
 import org.jwildfire.create.tina.randomsymmetry.RandomSymmetryGeneratorList;
 import org.jwildfire.create.tina.render.filter.FilterKernelType;
+import org.jwildfire.create.tina.swing.flamepanel.FlamePanelControlShape;
 import org.jwildfire.swing.StandardErrorHandler;
 
 public class TinaInternalFrame extends JInternalFrame {
@@ -4118,7 +4119,8 @@ public class TinaInternalFrame extends JInternalFrame {
         getStereo3dSwapSidesCBx(), getTinaCameraCamPosXREd(), getTinaCameraCamPosXSlider(), getTinaCameraCamPosYREd(), getTinaCameraCamPosYSlider(),
         getTinaCameraCamPosZREd(), getTinaCameraCamPosZSlider(), getTinaSaturationREd(), getTinaSaturationSlider(), getToggleDrawGridButton(),
         getEditorFractalBrightnessSlider(), getMouseTransformEditTriangleViewButton(), getTinaPaletteRandomGeneratorCmb(), getToggleTriangleWithColorsButton(),
-        getFlameBrowserCopyToBtn(), getFlameBrowserMoveToBtn(), getAffineRotateEditMotionCurveBtn(), getAffineScaleEditMotionCurveBtn());
+        getFlameBrowserCopyToBtn(), getFlameBrowserMoveToBtn(), getAffineRotateEditMotionCurveBtn(), getAffineScaleEditMotionCurveBtn(),
+        getTriangleStyleCmb());
 
     tinaController = new TinaController(params);
 
@@ -4150,6 +4152,7 @@ public class TinaInternalFrame extends JInternalFrame {
       getShadingLightCmb().addItem(String.valueOf("3"));
       getShadingLightCmb().addItem(String.valueOf("4"));
 
+      initTriangleStyleCmb(getTriangleStyleCmb(), pPrefs);
       initGlobalScriptCmb(getSwfAnimatorGlobalScript1Cmb());
       initGlobalScriptCmb(getSwfAnimatorGlobalScript2Cmb());
       initGlobalScriptCmb(getSwfAnimatorGlobalScript3Cmb());
@@ -4262,6 +4265,15 @@ public class TinaInternalFrame extends JInternalFrame {
     pCmb.addItem(GlobalScriptType.MOVE_CAM_Y);
     pCmb.addItem(GlobalScriptType.MOVE_CAM_Z);
     pCmb.setSelectedItem(GlobalScriptType.NONE);
+  }
+
+  private void initTriangleStyleCmb(JComboBox pCmb, Prefs pPrefs) {
+    pCmb.addItem(FlamePanelControlShape.TRIANGLE);
+    pCmb.addItem(FlamePanelControlShape.AXIS);
+    pCmb.addItem(FlamePanelControlShape.CROSS);
+    pCmb.addItem(FlamePanelControlShape.RECT);
+    pCmb.addItem(FlamePanelControlShape.HIDDEN);
+    pCmb.setSelectedItem(pPrefs.getTinaEditorControlsStyle());
   }
 
   private void initStereo3dModeCmb(JComboBox pCmb) {
@@ -6689,7 +6701,7 @@ public class TinaInternalFrame extends JInternalFrame {
       toggleDrawGridButton.setSelected(false);
       toggleDrawGridButton.setPreferredSize(new Dimension(42, 24));
       toggleDrawGridButton.setLocation(new Point(4, 4));
-      toggleDrawGridButton.setBounds(510, 4, 42, 24);
+      toggleDrawGridButton.setBounds(486, 4, 42, 24);
       toggleDrawGridButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/grid.png")));
       centerNorthPanel.add(toggleDrawGridButton);
       centerNorthPanel.add(getAffineEditPostTransformSmallButton());
@@ -6722,8 +6734,25 @@ public class TinaInternalFrame extends JInternalFrame {
       toggleTriangleWithColorsButton.setPreferredSize(new Dimension(42, 24));
       toggleTriangleWithColorsButton.setMnemonic(KeyEvent.VK_P);
       toggleTriangleWithColorsButton.setFont(new Font("Dialog", Font.BOLD, 10));
-      toggleTriangleWithColorsButton.setBounds(552, 4, 42, 24);
+      toggleTriangleWithColorsButton.setBounds(586, 4, 42, 24);
       centerNorthPanel.add(toggleTriangleWithColorsButton);
+
+      triangleStyleCmb = new JComboBox();
+      triangleStyleCmb.setPreferredSize(new Dimension(125, 24));
+      triangleStyleCmb.setMinimumSize(new Dimension(100, 24));
+      triangleStyleCmb.setMaximumSize(new Dimension(32767, 24));
+      triangleStyleCmb.setMaximumRowCount(32);
+      triangleStyleCmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      triangleStyleCmb.setBounds(528, 4, 58, 24);
+      triangleStyleCmb.addItemListener(new ItemListener() {
+        public void itemStateChanged(ItemEvent e) {
+          if (tinaController != null) {
+            tinaController.triangleStyleCmb_changed();
+          }
+        }
+      });
+
+      centerNorthPanel.add(triangleStyleCmb);
     }
     return centerNorthPanel;
   }
@@ -6855,7 +6884,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JToggleButton getAffineEditPostTransformSmallButton() {
     if (affineEditPostTransformSmallButton == null) {
       affineEditPostTransformSmallButton = new JToggleButton();
-      affineEditPostTransformSmallButton.setBounds(594, 4, 42, 24);
+      affineEditPostTransformSmallButton.setBounds(628, 4, 42, 24);
       affineEditPostTransformSmallButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/edit_triangle_post.png")));
       affineEditPostTransformSmallButton.setFont(new Font("Dialog", Font.BOLD, 10));
       affineEditPostTransformSmallButton.setToolTipText("Toggle post transform mode");
@@ -6874,7 +6903,7 @@ public class TinaInternalFrame extends JInternalFrame {
     if (renderProgressBar == null) {
       renderProgressBar = new JProgressBar();
       renderProgressBar.setValue(0);
-      renderProgressBar.setSize(new Dimension(204, 14));
+      renderProgressBar.setSize(new Dimension(184, 14));
       renderProgressBar.setLocation(new Point(232, 9));
       renderProgressBar.setPreferredSize(new Dimension(179, 14));
       renderProgressBar.setStringPainted(true);
@@ -9290,8 +9319,8 @@ public class TinaInternalFrame extends JInternalFrame {
       mouseTransformSlowButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/click.png")));
       mouseTransformSlowButton.setSelected(false);
       mouseTransformSlowButton.setText("Fine");
-      mouseTransformSlowButton.setSize(new Dimension(72, 24));
-      mouseTransformSlowButton.setLocation(new Point(437, 4));
+      mouseTransformSlowButton.setSize(new Dimension(68, 24));
+      mouseTransformSlowButton.setLocation(new Point(417, 4));
       mouseTransformSlowButton.setToolTipText("Toggle fine triangle adjustment mode");
       mouseTransformSlowButton.setPreferredSize(new Dimension(42, 24));
       mouseTransformSlowButton.addActionListener(new java.awt.event.ActionListener() {
@@ -9875,6 +9904,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton flameBrowserMoveToBtn;
   private JButton affineScaleEditMotionCurveBtn;
   private JButton affineRotateEditMotionCurveBtn;
+  private JComboBox triangleStyleCmb;
 
   /**
    * This method initializes renderBatchJobsScrollPane	
@@ -18245,6 +18275,10 @@ public class TinaInternalFrame extends JInternalFrame {
 
   public JButton getAffineRotateEditMotionCurveBtn() {
     return affineRotateEditMotionCurveBtn;
+  }
+
+  public JComboBox getTriangleStyleCmb() {
+    return triangleStyleCmb;
   }
 } //  @jve:decl-index=0:visual-constraint="10,10"
 
