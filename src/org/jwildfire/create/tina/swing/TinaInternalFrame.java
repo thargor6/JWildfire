@@ -2848,9 +2848,9 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton getTinaDuplicateTransformationButton() {
     if (tinaDuplicateTransformationButton == null) {
       tinaDuplicateTransformationButton = new JButton();
-      tinaDuplicateTransformationButton.setText("Duplicate");
-      tinaDuplicateTransformationButton.setPreferredSize(new Dimension(90, 24));
-      tinaDuplicateTransformationButton.setToolTipText("Duplicate triangle");
+      tinaDuplicateTransformationButton.setText("Dupl");
+      tinaDuplicateTransformationButton.setPreferredSize(new Dimension(56, 24));
+      tinaDuplicateTransformationButton.setToolTipText("Duplicate transform");
       tinaDuplicateTransformationButton.setFont(new Font("Dialog", Font.BOLD, 10));
       tinaDuplicateTransformationButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -4712,18 +4712,6 @@ public class TinaInternalFrame extends JInternalFrame {
       trnsformationsEastPanel.add(panel_2);
       panel_2.add(getTransformationWeightREd());
 
-      editTransformCaptionBtn = new JButton();
-      panel_2.add(editTransformCaptionBtn);
-      editTransformCaptionBtn.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-          tinaController.editTransformCaptionBtn_clicked();
-        }
-      });
-      editTransformCaptionBtn.setToolTipText("Edit the name of the current transform");
-      editTransformCaptionBtn.setText("T");
-      editTransformCaptionBtn.setPreferredSize(new Dimension(34, 24));
-      editTransformCaptionBtn.setFont(new Font("Dialog", Font.BOLD, 10));
-
       JPanel panel_1 = new JPanel();
       FlowLayout flowLayout_1 = (FlowLayout) panel_1.getLayout();
       flowLayout_1.setAlignment(FlowLayout.LEFT);
@@ -4733,7 +4721,7 @@ public class TinaInternalFrame extends JInternalFrame {
       trnsformationsEastPanel.add(panel_1);
       panel_1.add(getTinaAddTransformationButton());
       panel_1.add(getTinaAddLinkedTransformationButton());
-      trnsformationsEastPanel.add(getTinaDuplicateTransformationButton(), null);
+      trnsformationsEastPanel.add(getPanel_19());
       trnsformationsEastPanel.add(getTinaDeleteTransformationButton(), null);
       trnsformationsEastPanel.add(getTinaAddFinalTransformationButton(), null);
     }
@@ -9908,6 +9896,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JComboBox triangleStyleCmb;
   private JPanel panel_17;
   private JPanel panel_18;
+  private JPanel panel_19;
 
   /**
    * This method initializes renderBatchJobsScrollPane	
@@ -11908,7 +11897,7 @@ public class TinaInternalFrame extends JInternalFrame {
       transformationWeightREd.setValueStep(0.05);
       transformationWeightREd.setText("");
       transformationWeightREd.setSize(new Dimension(81, 24));
-      transformationWeightREd.setPreferredSize(new Dimension(56, 24));
+      transformationWeightREd.setPreferredSize(new Dimension(90, 24));
       transformationWeightREd.setLocation(new Point(238, 6));
       transformationWeightREd.setFont(new Font("Dialog", Font.PLAIN, 10));
     }
@@ -18302,6 +18291,32 @@ public class TinaInternalFrame extends JInternalFrame {
       panel_18.setMaximumSize(new Dimension(32767, 24));
     }
     return panel_18;
+  }
+
+  private JPanel getPanel_19() {
+    if (panel_19 == null) {
+      panel_19 = new JPanel();
+      panel_19.setBorder(new EmptyBorder(0, 0, 0, 0));
+      panel_19.setPreferredSize(new Dimension(90, 24));
+      FlowLayout flowLayout = (FlowLayout) panel_19.getLayout();
+      flowLayout.setVgap(0);
+      flowLayout.setHgap(0);
+      flowLayout.setAlignment(FlowLayout.LEFT);
+      panel_19.add(getTinaDuplicateTransformationButton());
+
+      editTransformCaptionBtn = new JButton();
+      panel_19.add(editTransformCaptionBtn);
+      editTransformCaptionBtn.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.editTransformCaptionBtn_clicked();
+        }
+      });
+      editTransformCaptionBtn.setToolTipText("Edit the name of the current transform");
+      editTransformCaptionBtn.setText("T");
+      editTransformCaptionBtn.setPreferredSize(new Dimension(34, 24));
+      editTransformCaptionBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+    }
+    return panel_19;
   }
 } //  @jve:decl-index=0:visual-constraint="10,10"
 

@@ -275,20 +275,14 @@ public class Tools {
   }
 
   private static NumberFormat dFmtNormal;
-  private static NumberFormat dFmtSmall;
   private static NumberFormat dFmtMicro;
   public static boolean USE_TEXTURES = true;
 
   static {
     dFmtNormal = DecimalFormat.getInstance(Locale.US);
     dFmtNormal.setGroupingUsed(false);
-    dFmtNormal.setMaximumFractionDigits(2);
+    dFmtNormal.setMaximumFractionDigits(8);
     dFmtNormal.setMinimumIntegerDigits(1);
-
-    dFmtSmall = DecimalFormat.getInstance(Locale.US);
-    dFmtSmall.setGroupingUsed(false);
-    dFmtSmall.setMaximumFractionDigits(8);
-    dFmtSmall.setMinimumIntegerDigits(1);
 
     dFmtMicro = DecimalFormat.getInstance(Locale.US);
     dFmtMicro.setGroupingUsed(false);
@@ -297,7 +291,7 @@ public class Tools {
   }
 
   public static String doubleToString(double pValue) {
-    NumberFormat fmt = Math.abs(pValue) > 1.0 ? dFmtNormal : Math.abs(pValue) > 0.01 ? dFmtSmall : dFmtMicro;
+    NumberFormat fmt = Math.abs(pValue) > 0.000001 ? dFmtNormal : dFmtMicro;
     return fmt.format(pValue);
   }
 
