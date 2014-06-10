@@ -26,10 +26,12 @@ import java.awt.event.MouseEvent;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
+import javax.swing.SpinnerModel;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.event.ChangeListener;
 
@@ -95,11 +97,21 @@ public class JWFNumberField extends JPanel implements MotionCurveEditor {
     motionCurveBtn.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/curve-money2.png")));
 
     add(motionCurveBtn, BorderLayout.WEST);
-
-    spinnerField = new JSpinner();
-    add(spinnerField, BorderLayout.CENTER);
+    /*
+        spinnerField = new JSpinner();
+        add(spinnerField, BorderLayout.CENTER);
+        spinnerModel = new SpinnerNumberModel(new Double(0), null, null, new Double(valueStep));
+        spinnerField.setModel(spinnerModel);
+      */
     spinnerModel = new SpinnerNumberModel(new Double(0), null, null, new Double(valueStep));
-    spinnerField.setModel(spinnerModel);
+    spinnerField = new JSpinner(spinnerModel) {
+      @Override
+      protected JComponent createEditor(SpinnerModel model) {
+        return new NumberEditor(this, "0.#######");
+      }
+    };
+    add(spinnerField, BorderLayout.CENTER);
+
     setValueStep(DFLT_STEP);
     setMouseThreshold(DFLT_MOUSE_THRESHOLD);
     addEvents();

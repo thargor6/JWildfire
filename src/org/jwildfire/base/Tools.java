@@ -287,12 +287,12 @@ public class Tools {
 
     dFmtSmall = DecimalFormat.getInstance(Locale.US);
     dFmtSmall.setGroupingUsed(false);
-    dFmtSmall.setMaximumFractionDigits(5);
+    dFmtSmall.setMaximumFractionDigits(8);
     dFmtSmall.setMinimumIntegerDigits(1);
 
     dFmtMicro = DecimalFormat.getInstance(Locale.US);
     dFmtMicro.setGroupingUsed(false);
-    dFmtMicro.setMaximumFractionDigits(8);
+    dFmtMicro.setMaximumFractionDigits(16);
     dFmtMicro.setMinimumIntegerDigits(1);
   }
 
