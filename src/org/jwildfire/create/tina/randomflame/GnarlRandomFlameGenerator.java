@@ -75,7 +75,7 @@ public class GnarlRandomFlameGenerator extends RandomFlameGenerator {
     if (Math.random() < 0.33) {
       blurAmount = 0.0 - blurAmount;
     }
-    double wavesWeight = Math.random() * 20 + 35;
+    double wavesWeight = Math.random() * 15 + 135;
     double _2ndWeight = 0.5;
     double _3rdWeight = 0.5;
     double symmetry = 0.7 + Math.random() * 0.3;
@@ -85,32 +85,13 @@ public class GnarlRandomFlameGenerator extends RandomFlameGenerator {
       XForm xForm = new XForm();
       layer.getXForms().add(xForm);
       xForm.setWeight(wavesWeight);
-      VariationFunc w2;
-      if (Math.random() > 0.6) {
-        w2 = VariationFuncList.getVariationFuncInstance("waves2", true);
-      }
-      else {
-        w2 = VariationFuncList.getVariationFuncInstance("waves2b", true);
-        double pwx = 0.1 - 0.2 * Math.random();
-        double pwy = Math.random() < 0.5 ? pwx : 0.1 - 0.2 * Math.random();
-        w2.setParameter("pwx", pwx);
-        w2.setParameter("pwy", pwy);
-        double scaleinfx = 1.0 - 2.0 * Math.random();
-        double scaleinfy = Math.random() < 0.5 ? scaleinfx : 1.0 - 2.0 * Math.random();
-        w2.setParameter("scaleinfx", scaleinfx);
-        w2.setParameter("scaleinfy", scaleinfy);
-      }
-      w2.setParameter("freqx", freqX);
-      w2.setParameter("scalex", scaleX);
-      w2.setParameter("freqy", freqY);
-      w2.setParameter("scaley", scaleY);
-      xForm.addVariation(1, w2);
+      VariationFunc w2 = Math.random() > 0.89 ? createWaves2Variation(scaleX, scaleY, freqX, freqY) : createWaves2BVariation(scaleX, scaleY, freqX, freqY);
+      xForm.addVariation(1 + Math.random() * 0.001, w2);
 
       String varLst[] = { "blur", "cos", "exp", "exponential", "lazysusan", "ngon", "sech", "sinh", "epispiral_wf", "tanh", "twintrian", "epispiral" };
       String varName = Math.random() > 0.25 ? varLst[(int) (Math.random() * varLst.length)] : VariationFuncList.getRandomVariationname();
       xForm.addVariation(blurAmount, VariationFuncList.getVariationFuncInstance(varName, true));
       xForm.setColorSymmetry(symmetry);
-      //      xForm.setColor(0.86 + 0.08 * Math.random());
       xForm.setColor(0.9);
       if (Math.random() > 0.5) {
         XFormTransformService.scale(xForm, 0.995, true, true);
@@ -200,6 +181,61 @@ public class GnarlRandomFlameGenerator extends RandomFlameGenerator {
     return flame;
   }
 
+  public static VariationFunc createWaves2BVariation(double scaleX, double scaleY, double freqX, double freqY) {
+    VariationFunc w2;
+    w2 = VariationFuncList.getVariationFuncInstance("waves2b", true);
+    double pwx = 3 * Math.random();
+    if (pwx < 1) {
+      pwx = 1; // typical setting
+    }
+    else if (pwx < 2) {
+      pwx = ((pwx - 1.5) > 0 ? -1.0 : +1.0) * (0.5 + 2.0 * Math.random()); // advanced
+    }
+    else {
+      pwx = ((pwx - 2.5) > 0 ? -1.0 : +1.0) * 1e-6 * (0.9 - Math.random() * 0.2); // geeky functions
+    }
+    double pwy = 3 * Math.random();
+    if (pwy < 1.5) {
+      pwy = 1; // typical setting
+    }
+    else if (pwy < 2.25) {
+      pwy = ((pwy - 1.5) > 0 ? -1.0 : +1.0) * (0.5 + 2.0 * Math.random()); // advanced
+    }
+    else {
+      pwy = ((pwy - 2.5) > 0 ? -1.0 : +1.0) * 1e-6; // geeky functions
+    }
+    w2.setParameter("pwx", pwx);
+    w2.setParameter("pwy", pwy);
+    double scaleinfx = Math.random() < 0.5 ? scaleX : 0.5 - Math.random();
+    double scaleinfy = Math.random() < 0.5 ? scaleY : 0.5 - Math.random();
+    w2.setParameter("scaleinfx", scaleinfx);
+    w2.setParameter("scaleinfy", scaleinfy);
+    if (Math.random() > 0.75) {
+      double unity = Math.random() * 10;
+      unity = unity < 5.0 ? unity - 1.0 : unity + 5.0;
+      w2.setParameter("unity", unity);
+    }
+    if (Math.random() < 0.33) {
+      double jacok = 0.375 - Math.random() * 0.75;
+      w2.setParameter("jacok", jacok);
+    }
+    w2.setParameter("freqx", freqX);
+    w2.setParameter("scalex", scaleX);
+    w2.setParameter("freqy", freqY);
+    w2.setParameter("scaley", scaleY);
+    return w2;
+  }
+
+  public static VariationFunc createWaves2Variation(double scaleX, double scaleY, double freqX, double freqY) {
+    VariationFunc w2;
+    w2 = VariationFuncList.getVariationFuncInstance("waves2", true);
+    w2.setParameter("freqx", freqX);
+    w2.setParameter("scalex", scaleX);
+    w2.setParameter("freqy", freqY);
+    w2.setParameter("scaley", scaleY);
+    return w2;
+  }
+
   @Override
   public String getName() {
     return "Gnarl";
@@ -207,7 +243,7 @@ public class GnarlRandomFlameGenerator extends RandomFlameGenerator {
 
   @Override
   public boolean isUseFilter(RandomFlameGeneratorState pState) {
-    return false;
+    return Math.random() > 0.75;
   }
 
 }
