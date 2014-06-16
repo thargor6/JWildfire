@@ -373,6 +373,8 @@ public class VariationFuncList {
     registerVariationFunc(JuliaN3DXFunc.class);
     registerVariationFunc(Waves2BFunc.class);
     registerVariationFunc(BWRandsFunc.class);
+    registerVariationFunc(Loonie2Func.class);
+    registerVariationFunc(Loonie3Func.class);
   }
 
   private static void registerVariationFunc(

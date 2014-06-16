@@ -104,12 +104,12 @@ public class BWRandsFunc extends VariationFunc {
     yy = bytexim(yy, xx);
     xx = tt;
     double Ssz = ((double) xx) / 65535.0; // to get a range not 0-1 for circles size edit here
-    Ssz = Math.max(rmin, Ssz);
+    Ssz = rmin + Ssz * (1.0 - rmin);
     double Aan = rrot * M_2PI * ((double) yy) / 65535.0; // to get a range not 0-2pi for rotations size edit here
     tt = byteprimes(xx, yy);
     // yy = byteprimes (yy,xx);
     xx = tt;
-    double LoonieChance = ((double) xx) / 65535.0 - loonie; // 0.5 for a chance 50% !
+    double LoonieChance = loonie - ((double) xx) / 65535.0; // 0.5 for a chance 50% !
     // PolarChance = ((double) yy) / 65535.0 - 0.9;
     // if more random values are needed remix again :D
 
