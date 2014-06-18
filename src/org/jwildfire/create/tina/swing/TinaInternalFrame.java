@@ -1425,7 +1425,6 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaCameraCamPosXREd.setText("");
       tinaCameraCamPosXREd.setSize(new Dimension(100, 24));
       tinaCameraCamPosXREd.setPreferredSize(new Dimension(100, 24));
-      tinaCameraCamPosXREd.setMouseThreshold(1.0);
       tinaCameraCamPosXREd.setMotionPropertyName("camPosX");
       tinaCameraCamPosXREd.setLocation(new Point(456, 4));
       tinaCameraCamPosXREd.setLinkedMotionControlName("tinaCameraCamPosXSlider");
@@ -1498,7 +1497,6 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaCameraCamPosYREd.setText("");
       tinaCameraCamPosYREd.setSize(new Dimension(100, 24));
       tinaCameraCamPosYREd.setPreferredSize(new Dimension(100, 24));
-      tinaCameraCamPosYREd.setMouseThreshold(1.0);
       tinaCameraCamPosYREd.setMotionPropertyName("camPosY");
       tinaCameraCamPosYREd.setLocation(new Point(456, 4));
       tinaCameraCamPosYREd.setLinkedMotionControlName("tinaCameraCamPosYSlider");
@@ -1559,7 +1557,6 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaCameraCamPosZREd.setText("");
       tinaCameraCamPosZREd.setSize(new Dimension(100, 24));
       tinaCameraCamPosZREd.setPreferredSize(new Dimension(100, 24));
-      tinaCameraCamPosZREd.setMouseThreshold(1.0);
       tinaCameraCamPosZREd.setMotionPropertyName("camPosZ");
       tinaCameraCamPosZREd.setLocation(new Point(456, 4));
       tinaCameraCamPosZREd.setLinkedMotionControlName("tinaCameraCamPosZSlider");
@@ -2132,7 +2129,6 @@ public class TinaInternalFrame extends JInternalFrame {
         }
       });
       tinaCameraCentreXREd.setMotionPropertyName("centreX");
-      tinaCameraCentreXREd.setMouseThreshold(1.0);
       tinaCameraCentreXREd.setValueStep(0.05);
       tinaCameraCentreXREd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
@@ -2169,7 +2165,6 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaCameraCentreYREd.setMotionPropertyName("centreY");
       tinaCameraCentreYREd.setLinkedLabelControlName("tinaCameraCentreYLbl");
       tinaCameraCentreYREd.setLinkedMotionControlName("tinaCameraCentreYSlider");
-      tinaCameraCentreYREd.setMouseThreshold(1.0);
       tinaCameraCentreYREd.setValueStep(0.05);
       tinaCameraCentreYREd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
@@ -2266,7 +2261,6 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaCameraZoomREd.setMotionPropertyName("camZoom");
       tinaCameraZoomREd.setLinkedLabelControlName("tinaCameraZoomLbl");
       tinaCameraZoomREd.setLinkedMotionControlName("tinaCameraZoomSlider");
-      tinaCameraZoomREd.setMouseThreshold(1.0);
       tinaCameraZoomREd.setValueStep(0.01);
       tinaCameraZoomREd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
@@ -2402,7 +2396,6 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaPixelsPerUnitREd.setMotionPropertyName("pixelsPerUnit");
       tinaPixelsPerUnitREd.setLinkedLabelControlName("tinaPixelsPerUnitLbl");
       tinaPixelsPerUnitREd.setLinkedMotionControlName("tinaPixelsPerUnitSlider");
-      tinaPixelsPerUnitREd.setMouseThreshold(1.0);
       tinaPixelsPerUnitREd.setValueStep(1.0);
       tinaPixelsPerUnitREd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
@@ -3102,7 +3095,7 @@ public class TinaInternalFrame extends JInternalFrame {
       xFormOpacityLbl.setFont(new Font("Dialog", Font.BOLD, 10));
       xFormSymmetryLbl = new JLabel();
       xFormSymmetryLbl.setPreferredSize(new Dimension(64, 22));
-      xFormSymmetryLbl.setText("Symmetry");
+      xFormSymmetryLbl.setText("Color speed");
       xFormSymmetryLbl.setSize(new Dimension(64, 22));
       xFormSymmetryLbl.setLocation(new Point(6, 47));
       xFormSymmetryLbl.setFont(new Font("Dialog", Font.BOLD, 10));
@@ -3437,7 +3430,6 @@ public class TinaInternalFrame extends JInternalFrame {
   private JWFNumberField getTinaPaletteShiftREd() {
     if (tinaPaletteShiftREd == null) {
       tinaPaletteShiftREd = new JWFNumberField();
-      tinaPaletteShiftREd.setMouseThreshold(0.1);
       tinaPaletteShiftREd.setMinValue(-255.0);
       tinaPaletteShiftREd.setEditable(true);
       tinaPaletteShiftREd.setOnlyIntegers(true);
@@ -9402,6 +9394,7 @@ public class TinaInternalFrame extends JInternalFrame {
       rootTabbedPane.addTab("Easy Movie Maker ", new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/applications-multimedia.png")), getTinaSWFAnimatorPanel(), null);
       rootTabbedPane.addTab("Dancing Flames Movies ", new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/kipina.png")), getPanel_36(), null);
       rootTabbedPane.addTab("Batch Flame Renderer ", new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/images.png")), getBatchRenderPanel(), null);
+      rootTabbedPane.addTab("FFmpeg Video Encoder", new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/emblem-videos.png")), getPanel_88(), null);
 
       JPanel helpPanel = new JPanel();
       rootTabbedPane.addTab("Help/About ", new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/dialog-information-3.png")), helpPanel, null);
@@ -9897,6 +9890,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JPanel panel_17;
   private JPanel panel_18;
   private JPanel panel_19;
+  private JPanel panel_88;
 
   /**
    * This method initializes renderBatchJobsScrollPane	
@@ -18317,6 +18311,14 @@ public class TinaInternalFrame extends JInternalFrame {
       editTransformCaptionBtn.setFont(new Font("Dialog", Font.BOLD, 10));
     }
     return panel_19;
+  }
+
+  private JPanel getPanel_88() {
+    if (panel_88 == null) {
+      panel_88 = new JPanel();
+      panel_88.setLayout(new BorderLayout(0, 0));
+    }
+    return panel_88;
   }
 } //  @jve:decl-index=0:visual-constraint="10,10"
 
