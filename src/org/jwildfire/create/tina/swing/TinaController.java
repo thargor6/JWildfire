@@ -3472,6 +3472,7 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
   public void mouseTransformSlowButton_clicked() {
     if (flamePanel != null) {
       flamePanel.setFineMovement(data.mouseTransformSlowButton.isSelected());
+      EditingPrecision.setCurrent(data.mouseTransformSlowButton.isSelected() ? EditingPrecision.FINE : EditingPrecision.NORMAL);
     }
   }
 

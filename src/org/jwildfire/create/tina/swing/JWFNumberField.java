@@ -39,9 +39,9 @@ import org.jwildfire.base.Tools;
 
 public class JWFNumberField extends JPanel implements MotionCurveEditor {
   private static final double DFLT_STEP = 0.5;
-  private static final double DFLT_MOUSE_THRESHOLD = 10;
+  private static final double DFLT_MOUSE_SPEED = 0.40;
   private static final long serialVersionUID = 1L;
-  private double mouseThreshold;
+  private double mouseSpeed;
   private double valueStep;
   private boolean hasMinValue = false;
   private boolean hasMaxValue = false;
@@ -113,7 +113,7 @@ public class JWFNumberField extends JPanel implements MotionCurveEditor {
     add(spinnerField, BorderLayout.CENTER);
 
     setValueStep(DFLT_STEP);
-    setMouseThreshold(DFLT_MOUSE_THRESHOLD);
+    setMouseSpeed(DFLT_MOUSE_SPEED);
     addEvents();
     ((JSpinner.DefaultEditor) spinnerField.getEditor()).getTextField().setHorizontalAlignment(JTextField.LEADING);
 
@@ -180,7 +180,7 @@ public class JWFNumberField extends JPanel implements MotionCurveEditor {
             double MINMOVE = 3;
             double dx = xMouseOrigin - e.getX();
             if (mouseChangeCount > 0 || dx > MINMOVE || dx < -MINMOVE) {
-              double value = (originValue) - dx * valueStep;
+              double value = (originValue) - dx * valueStep * mouseSpeed * EditingPrecision.getCurrent().getMultiplier();
               if (hasMinValue && value < minValue) {
                 value = minValue;
               }
@@ -210,14 +210,6 @@ public class JWFNumberField extends JPanel implements MotionCurveEditor {
 
   public String getText() {
     return Tools.doubleToString((Double) getValue());
-  }
-
-  public double getMouseThreshold() {
-    return mouseThreshold;
-  }
-
-  public void setMouseThreshold(double mouseThreshold) {
-    this.mouseThreshold = mouseThreshold;
   }
 
   public boolean isHasMinValue() {
@@ -407,5 +399,13 @@ public class JWFNumberField extends JPanel implements MotionCurveEditor {
 
   public void enableSpinnerField(boolean enabled) {
     spinnerField.setEnabled(enabled);
+  }
+
+  public double getMouseSpeed() {
+    return mouseSpeed;
+  }
+
+  public void setMouseSpeed(double pMouseSpeed) {
+    mouseSpeed = pMouseSpeed;
   }
 }

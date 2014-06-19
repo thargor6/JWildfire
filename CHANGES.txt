@@ -1,3 +1,13 @@
+V1.64 (20.06.2014):
+ - improved the precision of the the numberic fields (7 digits after the decimal point are guaranteed in the most cases), which is especially great for gnarls. Thanks for dark-beam for pointing at this old bug! :-)
+ - improved the smoothness of modifying parameters by dragging the mouse by about factor 2.5
+ - the "Fine"-adjustment is now also taken into account when modifying parameters by dragging the mouse. If the "Fine"-button is enabled all changes have a increased smoothness (precision) by factor 10.      
+ - new experimental and super-cool "bwrands"-variation by dark-beam
+ - new "loonie2" and "loonie3"-variation by dark-beam
+ - new "Rays"-random-flame-generator which uses some of the new featurs to create really cool random flames
+ - new "jac_cn", "jac_dn" and "jac_sn"-variations invented by dark-beam
+ - increased the size of the weight-field (of a transform)
+
 V1.63 (09.06.2014):
  - more room and more accuracy for the color-shift-slider
  - massive refactoring of the flame-planel regarding to be able to use arbitrary styles to render/display control-points

@@ -79,6 +79,7 @@ import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 
 import org.jwildfire.base.Prefs;
+import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.animate.GlobalScriptType;
 import org.jwildfire.create.tina.animate.XFormScriptType;
 import org.jwildfire.create.tina.base.DrawMode;
@@ -9394,8 +9395,9 @@ public class TinaInternalFrame extends JInternalFrame {
       rootTabbedPane.addTab("Easy Movie Maker ", new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/applications-multimedia.png")), getTinaSWFAnimatorPanel(), null);
       rootTabbedPane.addTab("Dancing Flames Movies ", new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/kipina.png")), getPanel_36(), null);
       rootTabbedPane.addTab("Batch Flame Renderer ", new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/images.png")), getBatchRenderPanel(), null);
-      rootTabbedPane.addTab("FFmpeg Video Encoder", new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/emblem-videos.png")), getPanel_88(), null);
-
+      if (Tools.V2_FEATURE_ENABLE) {
+        rootTabbedPane.addTab("FFmpeg Video Encoder", new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/emblem-videos.png")), getPanel_88(), null);
+      }
       JPanel helpPanel = new JPanel();
       rootTabbedPane.addTab("Help/About ", new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/dialog-information-3.png")), helpPanel, null);
       helpPanel.setLayout(new BorderLayout(0, 0));
