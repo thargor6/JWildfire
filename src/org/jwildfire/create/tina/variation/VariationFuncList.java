@@ -375,6 +375,9 @@ public class VariationFuncList {
     registerVariationFunc(BWRandsFunc.class);
     registerVariationFunc(Loonie2Func.class);
     registerVariationFunc(Loonie3Func.class);
+    registerVariationFunc(JacCnFunc.class);
+    registerVariationFunc(JacDnFunc.class);
+    registerVariationFunc(JacSnFunc.class);
   }
 
   private static void registerVariationFunc(

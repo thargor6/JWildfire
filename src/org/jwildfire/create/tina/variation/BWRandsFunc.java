@@ -17,11 +17,15 @@
 package org.jwildfire.create.tina.variation;
 
 import static org.jwildfire.base.mathlib.MathLib.M_2PI;
+import static org.jwildfire.base.mathlib.MathLib.M_PI;
 import static org.jwildfire.base.mathlib.MathLib.SMALL_EPSILON;
+import static org.jwildfire.base.mathlib.MathLib.atan2;
 import static org.jwildfire.base.mathlib.MathLib.cos;
 import static org.jwildfire.base.mathlib.MathLib.fabs;
 import static org.jwildfire.base.mathlib.MathLib.floor;
+import static org.jwildfire.base.mathlib.MathLib.iabs;
 import static org.jwildfire.base.mathlib.MathLib.sin;
+import static org.jwildfire.base.mathlib.MathLib.sqr;
 import static org.jwildfire.base.mathlib.MathLib.sqrt;
 
 import org.jwildfire.base.Tools;
@@ -40,23 +44,30 @@ public class BWRandsFunc extends VariationFunc {
   private static final String PARAM_SEED = "seed";
   private static final String PARAM_RROT = "rrot";
   private static final String PARAM_RMIN = "rmin";
-  private static final String PARAM_LOONIE = "loonie";
+  private static final String PARAM_LOONIE_CHANCE = "loonie_chance";
+  private static final String PARAM_PETALS_CHANCE = "petals_chance";
+  private static final String PARAM_MIN_PETALS = "minpetals";
+  private static final String PARAM_MAX_PETALS = "maxpetals";
 
-  private static final String[] paramNames = { PARAM_CELLSIZE, PARAM_SPACE, PARAM_GAIN, PARAM_INNER_TWIST, PARAM_OUTER_TWIST, PARAM_SEED, PARAM_RROT, PARAM_RMIN, PARAM_LOONIE };
+  private static final String[] paramNames = { PARAM_CELLSIZE, PARAM_SPACE, PARAM_GAIN, PARAM_INNER_TWIST, PARAM_OUTER_TWIST, PARAM_SEED, PARAM_RROT, PARAM_RMIN, PARAM_LOONIE_CHANCE, PARAM_PETALS_CHANCE, PARAM_MIN_PETALS, PARAM_MAX_PETALS };
 
   private double cellsize = 1.0;
   private double space = 0.0;
-  private double gain = 2.0;
+  private double gain = 1.25;
   private double inner_twist = 0.0;
   private double outer_twist = 0.0;
   private int seed = 3210;
   private double rrot = 1.0;
   private double rmin = 0.25;
-  private double loonie = 0.50;
+  private double loonie_chance = 0.50;
+  private double petals_chance = 0.50;
+  private int minpetals = 3;
+  private int maxpetals = 20;
   // precalculated
   private double _g2;
   private double _r2;
   private double _rfactor;
+  private int _petx, _pety;
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
@@ -65,6 +76,7 @@ public class BWRandsFunc extends VariationFunc {
     double Cx, Cy; // C is "cell centre" vector
     double Lx, Ly; // L is "local" bubble vector
     double r, theta, s, c;
+    double Vv2, flwr;
 
     Vx = pAffineTP.x;
     Vy = pAffineTP.y;
@@ -107,16 +119,28 @@ public class BWRandsFunc extends VariationFunc {
     Ssz = rmin + Ssz * (1.0 - rmin);
     double Aan = rrot * M_2PI * ((double) yy) / 65535.0; // to get a range not 0-2pi for rotations size edit here
     tt = byteprimes(xx, yy);
-    // yy = byteprimes (yy,xx);
+    yy = byteprimes(yy, xx);
     xx = tt;
-    double LoonieChance = loonie - ((double) xx) / 65535.0; // 0.5 for a chance 50% !
-    // PolarChance = ((double) yy) / 65535.0 - 0.9;
+    double LoonieChance = -((double) xx) / 65535.0 + loonie_chance; // 0.5 for a chance 50% !
+    double PetalsChance = 0.0;
+    if (LoonieChance < 0)
+      PetalsChance = LoonieChance + petals_chance;
+    // user choice but don't upset modulus...
+    double NPetals;
+    if (_pety == 0)
+      NPetals = (double) _petx; // ... when min = max
+    else
+      NPetals = (double) (_petx + (yy >> 3) % (1 + _pety)); // yy last byte is not enough random. But yy >> 3 is good
+
+    if (LoonieChance <= PetalsChance)
+      LoonieChance = -1.0; // the bigger probability must win.
+
     // if more random values are needed remix again :D
 
     Lx = Vx - Cx;
     Ly = Vy - Cy;
 
-    double Vv2 = Ssz * _r2;
+    Vv2 = Ssz * _r2;
 
     if ((Lx * Lx + Ly * Ly) > Vv2) {
       // Linear if outside the bubble
@@ -128,13 +152,40 @@ public class BWRandsFunc extends VariationFunc {
       return;
     }
 
-    if (LoonieChance >= 0.0) {
+    if (LoonieChance > 0.0) {
       // We're in the loonie!
       // r = Vv2 / (Lx * Lx + Ly * Ly) - MAX(MIN(VAR(bwrands_gain),1.0),0.0); LOOKING BAD!!!
       r = Vv2 / (Lx * Lx + Ly * Ly) - 1.0;
       r = sqrt(r);
       Lx *= r;
       Ly *= r;
+      Vv2 = 1.0; // recycled var
+    }
+    else if (PetalsChance > 0.0)
+    {
+      // We're in the petals!
+      flwr = NPetals / M_2PI * (M_PI + atan2(Ly, Lx));
+      flwr = flwr - (int) (flwr);
+      flwr = fabs(flwr - 0.5) * 2.0;
+      r = sqrt(Lx * Lx + Ly * Ly);
+
+      // We need a little chaos game to fill the empty space outside the flower.
+      PetalsChance = pContext.random();
+
+      if (PetalsChance < flwr)
+      {
+        // petals
+        Lx *= (1.0 - r) * flwr;
+        Ly *= (1.0 - r) * flwr;
+      }
+      else
+      {
+        r += 1e-5; // no fp error
+        // filling the rest of the circle
+        Lx *= (sqrt(Vv2) - r * (1.0 - flwr)) / r;
+        Ly *= (sqrt(Vv2) - r * (1.0 - flwr)) / r;
+      }
+
       Vv2 = 1.0; // recycled var
     }
     else
@@ -173,7 +224,7 @@ public class BWRandsFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { cellsize, space, gain, inner_twist, outer_twist, seed, rrot, rmin, loonie };
+    return new Object[] { cellsize, space, gain, inner_twist, outer_twist, seed, rrot, rmin, loonie_chance, petals_chance, minpetals, maxpetals };
   }
 
   @Override
@@ -194,8 +245,14 @@ public class BWRandsFunc extends VariationFunc {
       rrot = limitVal(pValue, 0, 1.0);
     else if (PARAM_RMIN.equalsIgnoreCase(pName))
       rmin = limitVal(pValue, 0, 1.0);
-    else if (PARAM_LOONIE.equalsIgnoreCase(pName))
-      loonie = limitVal(pValue, 0, 1.0);
+    else if (PARAM_LOONIE_CHANCE.equalsIgnoreCase(pName))
+      loonie_chance = limitVal(pValue, 0, 1.0);
+    else if (PARAM_PETALS_CHANCE.equalsIgnoreCase(pName))
+      petals_chance = limitVal(pValue, 0, 1.0);
+    else if (PARAM_MIN_PETALS.equalsIgnoreCase(pName))
+      minpetals = limitIntVal(Tools.FTOI(pValue), 1, 1000);
+    else if (PARAM_MAX_PETALS.equalsIgnoreCase(pName))
+      maxpetals = limitIntVal(Tools.FTOI(pValue), 1, 1000);
     else
       throw new IllegalArgumentException(pName);
   }
@@ -210,7 +267,7 @@ public class BWRandsFunc extends VariationFunc {
     double radius = 0.5 * (cellsize / (1.0 + space * space));
 
     // g2 is multiplier for radius
-    _g2 = gain * gain + 1.0e-6;
+    _g2 = sqr(gain) / radius + 1.0e-6;
 
     // Start max_bubble as maximum x or y value before applying bubble
     double max_bubble = _g2 * radius;
@@ -219,13 +276,18 @@ public class BWRandsFunc extends VariationFunc {
       // Values greater than 2.0 "recurve" round the back of the bubble
       max_bubble = 1.0;
     }
-    else {
+    else
+    {
       // Expand smaller bubble to fill the space
       max_bubble *= 1.0 / ((max_bubble * max_bubble) / 4.0 + 1.0);
     }
 
     _r2 = radius * radius;
     _rfactor = radius / max_bubble;
+
+    _petx = Math.min(minpetals, maxpetals);
+    _pety = iabs(maxpetals - minpetals);
+    // if (VAR(pety) >= EPS) VAR(pety) += 1;
   }
 
   private int bytemix(int a, int b) {
@@ -240,23 +302,8 @@ public class BWRandsFunc extends VariationFunc {
     return ((a << 8) ^ (b >> 8)) & 0xFFFF;
   }
 
-  private int bytezhf(int a, int b) { // variation...
-    return ((a << 6) ^ (b >> 6)) & 0xFFFF;
-  }
-
   private int byteprimes(int a, int b) { // variation...
     return ((a * 857 - 4) & 0xFF00 ^ (-b * 977 + 8) & 0x00FF);
   }
 
-  private int bytehey(int a, int b) { // *unused* advanced variation...
-    int a0 = a & 0x000F;
-    //int a1 = (a & 0x00F0) >>4;
-    int a2 = (a & 0x0F00) >> 8;
-    //int a3 = (a & 0xF000) >>12;
-    //int b0 = b & 0x000F;
-    int b1 = (b & 0x00F0) >> 4;
-    //int b2 = (b & 0x0F00) >>8;
-    int b3 = (b & 0xF000) >> 12;
-    return ((a0 << 12) ^ (b1 << 8) ^ (a2 << 4) ^ (b3)) & 0xFFFF;
-  }
 }

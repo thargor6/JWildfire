@@ -30,10 +30,11 @@ public class RaysRandomFlameGenerator extends RandomFlameGenerator {
   protected Flame prepareFlame(RandomFlameGeneratorState pState) {
     Flame flame = new Flame();
     Layer layer = flame.getFirstLayer();
-    flame.setCamRoll(30.0 - Math.random() * 60.0);
-    flame.setGamma(1.4 + Math.random() * 1.2);
+    flame.setCamRoll(Math.random() * 360.0);
+    flame.setCamZoom(1.0 + Math.random() * 0.75);
+    flame.setGamma(1.2 + Math.random() * 0.8);
     flame.setGammaThreshold(Math.random() * 0.15);
-    flame.setBrightness(3.0 + Math.random() * 3.0);
+    flame.setBrightness(2.5 + Math.random() * 1.5);
 
     flame.setCamPitch(0);
     flame.setCamYaw(0);
@@ -229,7 +230,27 @@ public class RaysRandomFlameGenerator extends RandomFlameGenerator {
 
       xForm.addVariation(1, VariationFuncList.getVariationFuncInstance("linear", true));
     }
-
+    // final transform
+    if (Math.random() > 0.33) {
+      XForm xForm = new XForm();
+      layer.getFinalXForms().add(xForm);
+      String finals[] = { "falloff2", "bwrands", "bwraps7", "cosine", "falloff3", "bwrands", "bwrands", "falloff2" };
+      VariationFunc var = VariationFuncList.getVariationFuncInstance(finals[(int) (Math.random() * finals.length)], true);
+      if (var.getName().equals("bwrands")) {
+        var.setParameter("seed", (int) (Math.random() * Short.MAX_VALUE));
+        var.setParameter("minpetals", (int) (3 + Math.random() * 3));
+        var.setParameter("maxpetals", (int) (6 + Math.random() * 12));
+      }
+      if (var.getName().equals("bwrands") || var.getName().equals("bwraps7")) {
+        var.setParameter("cellsize", 1.0 - Math.random() * 0.9);
+        var.setParameter("space", Math.random() * 0.2);
+        if (Math.random() > 0.5) {
+          var.setParameter("inner_twist", 0.2 - Math.random() * 0.4);
+          var.setParameter("outer_twist", 2.0 - Math.random() * 4.0);
+        }
+      }
+      xForm.addVariation(1, var);
+    }
     return flame;
   }
 
