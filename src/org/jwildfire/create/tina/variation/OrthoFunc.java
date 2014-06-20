@@ -38,7 +38,7 @@ public class OrthoFunc extends VariationFunc {
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-    /* ortho, by ? */
+    /* ortho by Michael Faber,  http://michaelfaber.deviantart.com/art/The-Lost-Variations-258913970 */
 
     double r, a, ta;
     double xo;
