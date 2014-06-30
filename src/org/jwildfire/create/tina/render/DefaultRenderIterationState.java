@@ -69,6 +69,9 @@ public class DefaultRenderIterationState extends RenderIterationState {
     p.y = 2.0 * randGen.random() - 1.0;
     p.z = 0.0;
     p.color = randGen.random();
+    p.modGamma = 0.0;
+    p.modContrast = 0.0;
+    p.modSaturation = 0.0;
 
     xf = layer.getXForms().get(0);
     transformPoint();
@@ -125,26 +128,70 @@ public class DefaultRenderIterationState extends RenderIterationState {
     xf.transformPoint(ctx, affineT, varT, p, p);
   }
 
+  protected double plotRed, plotGreen, plotBlue;
+
   protected void plotPoint(int xIdx, int yIdx, double intensity) {
     AbstractRasterPoint rp = renderer.raster[yIdx][xIdx];
     if (p.rgbColor) {
-      rp.setRed(rp.getRed() + p.redColor * intensity);
-      rp.setGreen(rp.getGreen() + p.greenColor * intensity);
-      rp.setBlue(rp.getBlue() + p.blueColor * intensity);
+      plotRed = p.redColor;
+      plotGreen = p.greenColor;
+      plotBlue = p.blueColor;
     }
     else {
       int colorIdx = (int) (p.color * paletteIdxScl + 0.5);
       RenderColor color = colorMap[colorIdx];
-      rp.setRed(rp.getRed() + color.red * intensity);
-      rp.setGreen(rp.getGreen() + color.green * intensity);
-      rp.setBlue(rp.getBlue() + color.blue * intensity);
+      plotRed = color.red;
+      plotGreen = color.green;
+      plotBlue = color.blue;
     }
+    transformPlotColor(p);
+    rp.setRed(rp.getRed() + plotRed * intensity);
+    rp.setGreen(rp.getGreen() + plotGreen * intensity);
+    rp.setBlue(rp.getBlue() + plotBlue * intensity);
+
     rp.incCount();
     if (observers != null && observers.size() > 0) {
       for (IterationObserver observer : observers) {
         observer.notifyIterationFinished(renderThread, xIdx, yIdx);
       }
     }
+  }
+
+  protected void transformPlotColor(XYZPoint p2) {
+    if (fabs(p.modGamma) > EPSILON) {
+      double gamma = 4.2 / (4.2 - p.modGamma);
+      double alpha = plotRed * 0.299 + plotGreen * 0.588 + plotBlue * 0.113;
+      if (alpha > EPSILON) {
+        double modAlpha = Math.pow(alpha, gamma);
+        plotRed *= modAlpha / alpha;
+        plotGreen *= modAlpha / alpha;
+        plotBlue *= modAlpha / alpha;
+      }
+    }
+    if (fabs(p.modContrast) > EPSILON) {
+      double gamma = 1.2 / (1.2 - p.modContrast * 0.5);
+      plotRed = (plotRed - 127.5) * gamma + 127.5;
+      plotGreen = (plotGreen - 127.5) * gamma + 127.5;
+      plotBlue = (plotBlue - 127.5) * gamma + 127.5;
+    }
+    if (fabs(p.modSaturation) > EPSILON) {
+      double avg = plotRed * 0.299 + plotGreen * 0.588 + plotBlue * 0.113;
+      plotRed += (plotRed - avg) * p.modSaturation;
+      plotGreen += (plotGreen - avg) * p.modSaturation;
+      plotBlue += (plotBlue - avg) * p.modSaturation;
+    }
+    if (plotRed < 0)
+      plotRed = 0;
+    else if (plotRed > 255)
+      plotRed = 255.0;
+    if (plotGreen < 0)
+      plotGreen = 0;
+    else if (plotGreen > 255)
+      plotGreen = 255.0;
+    if (plotBlue < 0)
+      plotBlue = 0;
+    else if (plotBlue > 255)
+      plotBlue = 255.0;
   }
 
   public interface PointProjector {

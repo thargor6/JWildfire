@@ -121,16 +121,23 @@ public class Pseudo3DRenderIterationState extends DefaultRenderIterationState {
   @Override
   protected void plotPoint(int xIdx, int yIdx, double intensity) {
     AbstractRasterPoint rp = renderer.raster[yIdx][xIdx];
-    RenderColor color;
     if (pA[0].rgbColor) {
-      color = new RenderColor();
-      color.red = pA[0].redColor;
-      color.green = pA[0].greenColor;
-      color.blue = pA[0].blueColor;
+      plotRed = pA[0].redColor;
+      plotGreen = pA[0].greenColor;
+      plotBlue = pA[0].blueColor;
     }
     else {
-      color = colorMap[(int) (pA[0].color * paletteIdxScl + 0.5)];
+      RenderColor color = colorMap[(int) (pA[0].color * paletteIdxScl + 0.5)];
+      plotRed = color.red;
+      plotGreen = color.green;
+      plotBlue = color.blue;
     }
+    transformPlotColor(pA[0]);
+    RenderColor color = new RenderColor();
+    color.red = plotRed;
+    color.green = plotGreen;
+    color.blue = plotBlue;
+
     RenderColor shadedColor = shader.calculateColor(qA, color);
     rp.setRed(rp.getRed() + shadedColor.red * prj.intensity);
     rp.setGreen(rp.getGreen() + shadedColor.green * prj.intensity);

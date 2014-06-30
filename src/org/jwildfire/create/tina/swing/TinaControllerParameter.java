@@ -153,6 +153,18 @@ public class TinaControllerParameter {
   public JSlider pXFormColorSlider;
   public JWFNumberField pXFormSymmetryREd;
   public JSlider pXFormSymmetrySlider;
+  public JWFNumberField pXFormModGammaREd;
+  public JSlider pXFormModGammaSlider;
+  public JWFNumberField pXFormModGammaSpeedREd;
+  public JSlider pXFormModGammaSpeedSlider;
+  public JWFNumberField pXFormModContrastREd;
+  public JSlider pXFormModContrastSlider;
+  public JWFNumberField pXFormModContrastSpeedREd;
+  public JSlider pXFormModContrastSpeedSlider;
+  public JWFNumberField pXFormModSaturationREd;
+  public JSlider pXFormModSaturationSlider;
+  public JWFNumberField pXFormModSaturationSpeedREd;
+  public JSlider pXFormModSaturationSpeedSlider;
   public JWFNumberField pXFormOpacityREd;
   public JSlider pXFormOpacitySlider;
   public JComboBox pXFormDrawModeCmb;
@@ -721,7 +733,10 @@ public class TinaControllerParameter {
       JToggleButton pToggleDrawGridButton, JSlider pEditorFractalBrightnessSlider, JToggleButton pMouseTransformEditTriangleViewButton,
       JComboBox pPaletteRandomGeneratorCmb, JToggleButton pToggleTriangleWithColorsButton, JButton pFlameBrowserCopyToBtn,
       JButton pFlameBrowserMoveToBtn, JButton pAffineRotateEditMotionCurveBtn, JButton pAffineScaleEditMotionCurveBtn,
-      JComboBox pTriangleStyleCmb) {
+      JComboBox pTriangleStyleCmb, JWFNumberField pXFormModGammaREd, JSlider pXFormModGammaSlider, JWFNumberField pXFormModGammaSpeedREd,
+      JSlider pXFormModGammaSpeedSlider, JWFNumberField pXFormModContrastREd, JSlider pXFormModContrastSlider, JWFNumberField pXFormModContrastSpeedREd,
+      JSlider pXFormModContrastSpeedSlider, JWFNumberField pXFormModSaturationREd, JSlider pXFormModSaturationSlider, JWFNumberField pXFormModSaturationSpeedREd,
+      JSlider pXFormModSaturationSpeedSlider) {
     this.pDancingFlamesLinkMotionBtn = pDancingFlamesLinkMotionBtn;
     this.pDancingFlamesUnlinkMotionBtn = pDancingFlamesUnlinkMotionBtn;
     this.pDancingFlamesCreateMotionsCmb = pDancingFlamesCreateMotionsCmb;
@@ -885,5 +900,17 @@ public class TinaControllerParameter {
     this.affineRotateEditMotionCurveBtn = pAffineRotateEditMotionCurveBtn;
     this.affineScaleEditMotionCurveBtn = pAffineScaleEditMotionCurveBtn;
     this.triangleStyleCmb = pTriangleStyleCmb;
+    this.pXFormModGammaREd = pXFormModGammaREd;
+    this.pXFormModGammaSlider = pXFormModGammaSlider;
+    this.pXFormModGammaSpeedREd = pXFormModGammaSpeedREd;
+    this.pXFormModGammaSpeedSlider = pXFormModGammaSpeedSlider;
+    this.pXFormModContrastREd = pXFormModContrastREd;
+    this.pXFormModContrastSlider = pXFormModContrastSlider;
+    this.pXFormModContrastSpeedREd = pXFormModContrastSpeedREd;
+    this.pXFormModContrastSpeedSlider = pXFormModContrastSpeedSlider;
+    this.pXFormModSaturationREd = pXFormModSaturationREd;
+    this.pXFormModSaturationSlider = pXFormModSaturationSlider;
+    this.pXFormModSaturationSpeedREd = pXFormModSaturationSpeedREd;
+    this.pXFormModSaturationSpeedSlider = pXFormModSaturationSpeedSlider;
   }
 }

@@ -211,6 +211,18 @@ public class TinaControllerData {
   public JSlider xFormColorSlider;
   public JWFNumberField xFormSymmetryREd;
   public JSlider xFormSymmetrySlider;
+  public JWFNumberField xFormModGammaREd;
+  public JSlider xFormModGammaSlider;
+  public JWFNumberField xFormModGammaSpeedREd;
+  public JSlider xFormModGammaSpeedSlider;
+  public JWFNumberField xFormModContrastREd;
+  public JSlider xFormModContrastSlider;
+  public JWFNumberField xFormModContrastSpeedREd;
+  public JSlider xFormModContrastSpeedSlider;
+  public JWFNumberField xFormModSaturationREd;
+  public JSlider xFormModSaturationSlider;
+  public JWFNumberField xFormModSaturationSpeedREd;
+  public JSlider xFormModSaturationSpeedSlider;
   public JWFNumberField xFormOpacityREd;
   public JSlider xFormOpacitySlider;
   public JComboBox xFormDrawModeCmb;

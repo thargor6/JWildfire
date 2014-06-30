@@ -44,6 +44,19 @@ public final class XForm implements Assignable<XForm>, Serializable {
   @AnimAware
   private double colorSymmetry;
   @AnimAware
+  private double modGamma;
+  @AnimAware
+  private double modGammaSpeed;
+  @AnimAware
+  private double modContrast;
+  @AnimAware
+  private double modContrastSpeed;
+  @AnimAware
+  private double modSaturation;
+  @AnimAware
+  private double modSaturationSpeed;
+
+  @AnimAware
   private double coeff00;
   private final MotionCurve coeff00Curve = new MotionCurve();
   @AnimAware
@@ -103,6 +116,7 @@ public final class XForm implements Assignable<XForm>, Serializable {
     for (int i = 0; i < modifiedWeights.length; i++) {
       modifiedWeights[i] = 1.0;
     }
+    resetModColorEffects();
   }
 
   public double getWeight() {
@@ -228,6 +242,9 @@ public final class XForm implements Assignable<XForm>, Serializable {
   }
 
   private double c1, c2;
+  private double modGamma1, modGamma2;
+  private double modContrast1, modContrast2;
+  private double modSaturation1, modSaturation2;
 
   public void initTransform() {
     // precalculate those variables to simplify the expression: 
@@ -236,6 +253,16 @@ public final class XForm implements Assignable<XForm>, Serializable {
     //   pDstPoint.color = pSrcPoint.color * c1 + c2;
     c1 = (1 + colorSymmetry) * 0.5;
     c2 = color * (1 - colorSymmetry) * 0.5;
+
+    modGamma1 = (1 + modGammaSpeed) * 0.5;
+    modGamma2 = modGamma * (1 - modGammaSpeed) * 0.5;
+
+    modContrast1 = (1 + modContrastSpeed) * 0.5;
+    modContrast2 = modContrast * (1 - modContrastSpeed) * 0.5;
+
+    modSaturation1 = (1 + modSaturationSpeed) * 0.5;
+    modSaturation2 = modSaturation * (1 - modSaturationSpeed) * 0.5;
+
     updateHasCoeffs();
     updateHasPostCoeffs();
   }
@@ -261,6 +288,9 @@ public final class XForm implements Assignable<XForm>, Serializable {
   public void transformPoint(FlameTransformationContext pContext, XYZPoint pAffineT, XYZPoint pVarT, XYZPoint pSrcPoint, XYZPoint pDstPoint) {
     pAffineT.clear();
     pAffineT.color = pSrcPoint.color * c1 + c2;
+    pAffineT.modGamma = pSrcPoint.modGamma * modGamma1 + modGamma2;
+    pAffineT.modContrast = pSrcPoint.modContrast * modContrast1 + modContrast2;
+    pAffineT.modSaturation = pSrcPoint.modSaturation * modSaturation1 + modSaturation2;
 
     if (isHasCoeffs()) {
       pAffineT.x = coeff00 * pSrcPoint.x + coeff10 * pSrcPoint.y + coeff20;
@@ -274,9 +304,12 @@ public final class XForm implements Assignable<XForm>, Serializable {
     //pVarT.clear();
 
     pVarT.invalidate();
-    pVarT.x = pVarT.y = pVarT.z = pVarT.color = 0.0;
+    pVarT.x = pVarT.y = pVarT.z = pVarT.color = pVarT.modGamma = pVarT.modContrast = pVarT.modSaturation = 0.0;
 
     pVarT.color = pAffineT.color;
+    pVarT.modGamma = pAffineT.modGamma;
+    pVarT.modContrast = pAffineT.modContrast;
+    pVarT.modSaturation = pAffineT.modSaturation;
     pVarT.rgbColor = pAffineT.rgbColor;
     pVarT.redColor = pAffineT.redColor;
     pVarT.greenColor = pAffineT.greenColor;
@@ -300,6 +333,9 @@ public final class XForm implements Assignable<XForm>, Serializable {
     }
 
     pDstPoint.color = pVarT.color;
+    pDstPoint.modGamma = pVarT.modGamma;
+    pDstPoint.modContrast = pVarT.modContrast;
+    pDstPoint.modSaturation = pVarT.modSaturation;
     pDstPoint.rgbColor = pVarT.rgbColor;
     pDstPoint.redColor = pVarT.redColor;
     pDstPoint.greenColor = pVarT.greenColor;
@@ -321,11 +357,17 @@ public final class XForm implements Assignable<XForm>, Serializable {
     for (int i = 0; i < 3; i++) {
       pAffineT[i].clear();
       pAffineT[i].color = pSrcPoint[i].color * c1 + c2;
+      pAffineT[i].modGamma = pSrcPoint[i].modGamma * modGamma1 + modGamma2;
+      pAffineT[i].modContrast = pSrcPoint[i].modContrast * modContrast1 + modContrast2;
+      pAffineT[i].modSaturation = pSrcPoint[i].modSaturation * modSaturation1 + modSaturation2;
       pAffineT[i].x = coeff00 * pSrcPoint[i].x + coeff10 * pSrcPoint[i].y + coeff20;
       pAffineT[i].y = coeff01 * pSrcPoint[i].x + coeff11 * pSrcPoint[i].y + coeff21;
       pAffineT[i].z = pSrcPoint[i].z;
       pVarT[i].clear();
       pVarT[i].color = pAffineT[i].color;
+      pVarT[i].modGamma = pAffineT[i].modGamma;
+      pVarT[i].modContrast = pAffineT[i].modContrast;
+      pVarT[i].modSaturation = pAffineT[i].modSaturation;
       for (Variation variation : variations) {
         if (variation.getFunc().getPriority() < 0) {
           variation.transform(pContext, this, pAffineT[i], pVarT[i]);
@@ -343,6 +385,9 @@ public final class XForm implements Assignable<XForm>, Serializable {
         }
       }
       pDstPoint[i].color = pVarT[i].color;
+      pDstPoint[i].modGamma = pVarT[i].modGamma;
+      pDstPoint[i].modContrast = pVarT[i].modContrast;
+      pDstPoint[i].modSaturation = pVarT[i].modSaturation;
       if (isHasPostCoeffs()) {
         double px = postCoeff00 * pVarT[i].x + postCoeff10 * pVarT[i].y + postCoeff20;
         double py = postCoeff01 * pVarT[i].x + postCoeff11 * pVarT[i].y + postCoeff21;
@@ -387,6 +432,12 @@ public final class XForm implements Assignable<XForm>, Serializable {
     weight = pXForm.weight;
     color = pXForm.color;
     colorSymmetry = pXForm.colorSymmetry;
+    modGamma = pXForm.modGamma;
+    modGammaSpeed = pXForm.modGammaSpeed;
+    modContrast = pXForm.modContrast;
+    modContrastSpeed = pXForm.modContrastSpeed;
+    modSaturation = pXForm.modSaturation;
+    modSaturationSpeed = pXForm.modSaturationSpeed;
     coeff00 = pXForm.coeff00;
     coeff00Curve.assign(pXForm.coeff00Curve);
     coeff01 = pXForm.coeff01;
@@ -492,8 +543,11 @@ public final class XForm implements Assignable<XForm>, Serializable {
 
   @Override
   public boolean isEqual(XForm pSrc) {
-    if ((fabs(weight - pSrc.weight) > EPSILON) || (fabs(color - pSrc.color) > EPSILON) ||
-        (fabs(colorSymmetry - pSrc.colorSymmetry) > EPSILON) ||
+    if ((fabs(weight - pSrc.weight) > EPSILON) ||
+        (fabs(color - pSrc.color) > EPSILON) || (fabs(colorSymmetry - pSrc.colorSymmetry) > EPSILON) ||
+        (fabs(modGamma - pSrc.modGamma) > EPSILON) || (fabs(modGammaSpeed - pSrc.modGammaSpeed) > EPSILON) ||
+        (fabs(modContrast - pSrc.modContrast) > EPSILON) || (fabs(modContrastSpeed - pSrc.modContrastSpeed) > EPSILON) ||
+        (fabs(modSaturation - pSrc.modSaturation) > EPSILON) || (fabs(modSaturationSpeed - pSrc.modSaturationSpeed) > EPSILON) ||
         (fabs(coeff00 - pSrc.coeff00) > EPSILON) || !coeff00Curve.isEqual(pSrc.coeff00Curve) ||
         (fabs(coeff01 - pSrc.coeff01) > EPSILON) || !coeff01Curve.isEqual(pSrc.coeff01Curve) ||
         (fabs(coeff10 - pSrc.coeff10) > EPSILON) || !coeff10Curve.isEqual(pSrc.coeff10Curve) ||
@@ -571,5 +625,71 @@ public final class XForm implements Assignable<XForm>, Serializable {
 
   public MotionCurve getPostScaleCurve() {
     return postScaleCurve;
+  }
+
+  public double getModGamma() {
+    return modGamma;
+  }
+
+  public void setModGamma(double modGamma) {
+    this.modGamma = modGamma;
+  }
+
+  public double getModGammaSpeed() {
+    return modGammaSpeed;
+  }
+
+  public void setModGammaSpeed(double modGammaSpeed) {
+    this.modGammaSpeed = modGammaSpeed;
+  }
+
+  public double getModContrast() {
+    return modContrast;
+  }
+
+  public void setModContrast(double modContrast) {
+    this.modContrast = modContrast;
+  }
+
+  public double getModContrastSpeed() {
+    return modContrastSpeed;
+  }
+
+  public void setModContrastSpeed(double modContrastSpeed) {
+    this.modContrastSpeed = modContrastSpeed;
+  }
+
+  public double getModSaturation() {
+    return modSaturation;
+  }
+
+  public void setModSaturation(double modSaturation) {
+    this.modSaturation = modSaturation;
+  }
+
+  public double getModSaturationSpeed() {
+    return modSaturationSpeed;
+  }
+
+  public void setModSaturationSpeed(double modSaturationSpeed) {
+    this.modSaturationSpeed = modSaturationSpeed;
+  }
+
+  public void randomizeModColorEffects() {
+    modGamma = 1.0 - 2.0 * Math.random();
+    modGammaSpeed = Math.random() < 0.33 ? 1.0 - 2.0 * Math.random() : 0;
+    modContrast = 1.0 - 2.0 * Math.random();
+    modContrastSpeed = Math.random() < 0.33 ? 1.0 - 2.0 * Math.random() : 0;
+    modSaturation = 1.0 - 2.0 * Math.random();
+    modSaturationSpeed = Math.random() < 0.33 ? 1.0 - 2.0 * Math.random() : 0;
+  }
+
+  public void resetModColorEffects() {
+    modGamma = 0.0;
+    modGammaSpeed = 0.0;
+    modContrast = 0.0;
+    modContrastSpeed = 0.0;
+    modSaturation = 0.0;
+    modSaturationSpeed = 0.0;
   }
 }

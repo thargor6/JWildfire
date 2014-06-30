@@ -12,7 +12,6 @@ public class BlurRenderIterationState extends DefaultRenderIterationState {
   private double blurFade;
   private double blurKernel[][];
   private int rasterWidth, rasterHeight;
-  private RenderColor globalRenderColor = new RenderColor();
 
   public BlurRenderIterationState(AbstractRenderThread pRenderThread, FlameRenderer pRenderer, RenderPacket pPacket, Layer pLayer, FlameTransformationContext pCtx, AbstractRandomGenerator pRandGen) {
     super(pRenderThread, pRenderer, pPacket, pLayer, pCtx, pRandGen);
@@ -36,17 +35,19 @@ public class BlurRenderIterationState extends DefaultRenderIterationState {
 
   @Override
   protected void plotPoint(int xIdx, int yIdx, double intensity) {
-    RenderColor color;
     if (p.rgbColor) {
-      color = globalRenderColor;
-      color.red = p.redColor;
-      color.green = p.greenColor;
-      color.blue = p.blueColor;
+      plotRed = p.redColor;
+      plotGreen = p.greenColor;
+      plotBlue = p.blueColor;
     }
     else {
       int colorIdx = (int) (p.color * paletteIdxScl + 0.5);
-      color = colorMap[colorIdx];
+      RenderColor color = colorMap[colorIdx];
+      plotRed = color.red;
+      plotGreen = color.green;
+      plotBlue = color.blue;
     }
+    transformPlotColor(p);
 
     if (ctx.random() > blurFade) {
       for (int k = yIdx - blurRadius, yk = 0; k <= yIdx + blurRadius; k++, yk++) {
@@ -56,9 +57,9 @@ public class BlurRenderIterationState extends DefaultRenderIterationState {
               // y, x
               AbstractRasterPoint rp = renderer.raster[k][l];
               double scl = blurKernel[yk][xk];
-              rp.setRed(rp.getRed() + color.red * scl * prj.intensity);
-              rp.setGreen(rp.getGreen() + color.green * scl * prj.intensity);
-              rp.setBlue(rp.getBlue() + color.blue * scl * prj.intensity);
+              rp.setRed(rp.getRed() + plotRed * scl * prj.intensity);
+              rp.setGreen(rp.getGreen() + plotGreen * scl * prj.intensity);
+              rp.setBlue(rp.getBlue() + plotBlue * scl * prj.intensity);
               rp.incCount();
               if (observers != null && observers.size() > 0) {
                 for (IterationObserver observer : observers) {
@@ -72,9 +73,9 @@ public class BlurRenderIterationState extends DefaultRenderIterationState {
     }
     else {
       AbstractRasterPoint rp = renderer.raster[yIdx][xIdx];
-      rp.setRed(rp.getRed() + color.red * prj.intensity);
-      rp.setGreen(rp.getGreen() + color.green * prj.intensity);
-      rp.setBlue(rp.getBlue() + color.blue * prj.intensity);
+      rp.setRed(rp.getRed() + plotRed * prj.intensity);
+      rp.setGreen(rp.getGreen() + plotGreen * prj.intensity);
+      rp.setBlue(rp.getBlue() + plotBlue * prj.intensity);
       rp.incCount();
       if (observers != null && observers.size() > 0) {
         for (IterationObserver observer : observers) {

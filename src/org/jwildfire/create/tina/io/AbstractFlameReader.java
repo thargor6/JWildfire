@@ -463,6 +463,12 @@ public class AbstractFlameReader {
   public static final String ATTR_POST = "post";
   public static final String ATTR_CHAOS = "chaos";
   public static final String ATTR_SYMMETRY = "symmetry";
+  public static final String ATTR_MOD_GAMMA = "mod_gamma";
+  public static final String ATTR_MOD_GAMMA_SPEED = "mod_gamma_speed";
+  public static final String ATTR_MOD_CONTRAST = "mod_contrast";
+  public static final String ATTR_MOD_CONTRAST_SPEED = "mod_contrast_speed";
+  public static final String ATTR_MOD_SATURATION = "mod_saturation";
+  public static final String ATTR_MOD_SATURATION_SPEED = "mod_saturation_speed";
   public static final String ATTR_ANTIALIAS_AMOUNT = "antialias_amount";
   public static final String ATTR_ANTIALIAS_RADIUS = "antialias_radius";
   public static final String ATTR_VISIBLE = "visible";
@@ -478,6 +484,24 @@ public class AbstractFlameReader {
     }
     if ((hs = atts.get(ATTR_COLOR)) != null) {
       pXForm.setColor(Double.parseDouble(hs));
+    }
+    if ((hs = atts.get(ATTR_MOD_GAMMA)) != null) {
+      pXForm.setModGamma(Double.parseDouble(hs));
+    }
+    if ((hs = atts.get(ATTR_MOD_GAMMA_SPEED)) != null) {
+      pXForm.setModGammaSpeed(Double.parseDouble(hs));
+    }
+    if ((hs = atts.get(ATTR_MOD_CONTRAST)) != null) {
+      pXForm.setModContrast(Double.parseDouble(hs));
+    }
+    if ((hs = atts.get(ATTR_MOD_CONTRAST_SPEED)) != null) {
+      pXForm.setModContrastSpeed(Double.parseDouble(hs));
+    }
+    if ((hs = atts.get(ATTR_MOD_SATURATION)) != null) {
+      pXForm.setModSaturation(Double.parseDouble(hs));
+    }
+    if ((hs = atts.get(ATTR_MOD_SATURATION_SPEED)) != null) {
+      pXForm.setModSaturationSpeed(Double.parseDouble(hs));
     }
     // legacy
     if ((hs = atts.get(ATTR_ANTIALIAS_AMOUNT)) != null) {

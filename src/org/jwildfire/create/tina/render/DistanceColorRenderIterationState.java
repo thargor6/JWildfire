@@ -156,24 +156,30 @@ public class DistanceColorRenderIterationState extends DefaultRenderIterationSta
       default:
         throw new IllegalArgumentException(String.valueOf(coordinate));
     }
-    p.color = r + shift;
-    if (p.color < 0.0)
-      p.color = 0.0;
-    else if (p.color >= 1)
-      p.color = 1;
-
     if (p.rgbColor) {
-      rp.setRed(rp.getRed() + p.redColor * prj.intensity);
-      rp.setGreen(rp.getGreen() + p.greenColor * prj.intensity);
-      rp.setBlue(rp.getBlue() + p.blueColor * prj.intensity);
+      plotRed = p.redColor;
+      plotGreen = p.greenColor;
+      plotBlue = p.blueColor;
     }
     else {
+      p.color = r + shift;
+      if (p.color < 0.0)
+        p.color = 0.0;
+      else if (p.color >= 1)
+        p.color = 1;
+
       int colorIdx = (int) (p.color * paletteIdxScl + 0.5);
       RenderColor color = colorMap[colorIdx];
-      rp.setRed(rp.getRed() + color.red * prj.intensity);
-      rp.setGreen(rp.getGreen() + color.green * prj.intensity);
-      rp.setBlue(rp.getBlue() + color.blue * prj.intensity);
+      plotRed = color.red;
+      plotGreen = color.green;
+      plotBlue = color.blue;
     }
+    transformPlotColor(p);
+
+    rp.setRed(rp.getRed() + plotRed * prj.intensity);
+    rp.setGreen(rp.getGreen() + plotGreen * prj.intensity);
+    rp.setBlue(rp.getBlue() + plotBlue * prj.intensity);
+
     rp.incCount();
     if (observers != null && observers.size() > 0) {
       for (IterationObserver observer : observers) {
@@ -181,5 +187,4 @@ public class DistanceColorRenderIterationState extends DefaultRenderIterationSta
       }
     }
   }
-
 }

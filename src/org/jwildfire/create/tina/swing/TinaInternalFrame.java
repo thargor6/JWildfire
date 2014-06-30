@@ -2904,9 +2904,399 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaTransformationsTabbedPane = new JTabbedPane();
       tinaTransformationsTabbedPane.setFont(new Font("Dialog", Font.BOLD, 10));
       tinaTransformationsTabbedPane.addTab("Affine transf", null, getTinaAffineTransformationPanel(), null);
-      tinaTransformationsTabbedPane.addTab("Nonlinear transf", null, getTinaVariationPanel(), null);
+      tinaTransformationsTabbedPane.addTab("Nonlinear", null, getTinaVariationPanel(), null);
       tinaTransformationsTabbedPane.addTab("Xaos", null, getTinaModifiedWeightsPanel(), null);
       tinaTransformationsTabbedPane.addTab("Color", null, getTinaTransformationColorPanel(), null);
+
+      JPanel panel_1 = new JPanel();
+      tinaTransformationsTabbedPane.addTab("Gamma", null, panel_1, null);
+      panel_1.setLayout(null);
+
+      xFormModGammaSlider = new JSlider();
+      xFormModGammaSlider.setValue(0);
+      xFormModGammaSlider.setSize(new Dimension(172, 22));
+      xFormModGammaSlider.setPreferredSize(new Dimension(172, 22));
+      xFormModGammaSlider.setMinimum(-100);
+      xFormModGammaSlider.setMaximum(100);
+      xFormModGammaSlider.setLocation(new Point(125, 21));
+      xFormModGammaSlider.setFont(new Font("Dialog", Font.BOLD, 10));
+      xFormModGammaSlider.setBounds(125, 6, 195, 22);
+      xFormModGammaSlider.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mousePressed(MouseEvent e) {
+          tinaController.saveUndoPoint();
+        }
+      });
+      xFormModGammaSlider.addChangeListener(new javax.swing.event.ChangeListener() {
+        public void stateChanged(javax.swing.event.ChangeEvent e) {
+          tinaController.xFormModGammaSlider_changed();
+        }
+      });
+      panel_1.add(xFormModGammaSlider);
+
+      xFormModGammaREd = new JWFNumberField();
+      xFormModGammaREd.setValueStep(0.01);
+      xFormModGammaREd.setText("");
+      xFormModGammaREd.setSize(new Dimension(55, 22));
+      xFormModGammaREd.setPreferredSize(new Dimension(55, 22));
+      xFormModGammaREd.setMinValue(-1.0);
+      xFormModGammaREd.setMaxValue(1.0);
+      xFormModGammaREd.setLocation(new Point(70, 21));
+      xFormModGammaREd.setHasMinValue(true);
+      xFormModGammaREd.setHasMaxValue(true);
+      xFormModGammaREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      xFormModGammaREd.setBounds(70, 6, 55, 22);
+      xFormModGammaREd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null) {
+            if (!xFormModGammaREd.isMouseAdjusting() || xFormModGammaREd.getMouseChangeCount() == 0) {
+              if (!xFormModGammaSlider.getValueIsAdjusting()) {
+                tinaController.saveUndoPoint();
+              }
+            }
+            tinaController.xFormModGammaREd_changed();
+          }
+        }
+      });
+
+      panel_1.add(xFormModGammaREd);
+
+      JLabel label = new JLabel();
+      label.setToolTipText("Local change of gamma");
+      label.setText("Gamma");
+      label.setSize(new Dimension(64, 22));
+      label.setPreferredSize(new Dimension(64, 22));
+      label.setLocation(new Point(6, 21));
+      label.setFont(new Font("Dialog", Font.BOLD, 10));
+      label.setBounds(6, 6, 64, 22);
+      panel_1.add(label);
+
+      JLabel label_2 = new JLabel();
+      label_2.setToolTipText("Blending of local gamma change");
+      label_2.setText("Gamma Spd");
+      label_2.setSize(new Dimension(64, 22));
+      label_2.setPreferredSize(new Dimension(64, 22));
+      label_2.setLocation(new Point(6, 47));
+      label_2.setFont(new Font("Dialog", Font.BOLD, 10));
+      label_2.setBounds(6, 32, 64, 22);
+      panel_1.add(label_2);
+
+      xFormModGammaSpeedSlider = new JSlider();
+      xFormModGammaSpeedSlider.setValue(0);
+      xFormModGammaSpeedSlider.setSize(new Dimension(172, 22));
+      xFormModGammaSpeedSlider.setPreferredSize(new Dimension(172, 22));
+      xFormModGammaSpeedSlider.setMinimum(-100);
+      xFormModGammaSpeedSlider.setMaximum(100);
+      xFormModGammaSpeedSlider.setLocation(new Point(125, 47));
+      xFormModGammaSpeedSlider.setFont(new Font("Dialog", Font.BOLD, 10));
+      xFormModGammaSpeedSlider.setBounds(125, 32, 195, 22);
+      xFormModGammaSpeedSlider.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mousePressed(MouseEvent e) {
+          tinaController.saveUndoPoint();
+        }
+      });
+      xFormModGammaSpeedSlider.addChangeListener(new javax.swing.event.ChangeListener() {
+        public void stateChanged(javax.swing.event.ChangeEvent e) {
+          tinaController.xFormModGammaSpeedSlider_changed();
+        }
+      });
+      panel_1.add(xFormModGammaSpeedSlider);
+
+      xFormModGammaSpeedREd = new JWFNumberField();
+      xFormModGammaSpeedREd.setValueStep(0.01);
+      xFormModGammaSpeedREd.setText("");
+      xFormModGammaSpeedREd.setSize(new Dimension(55, 22));
+      xFormModGammaSpeedREd.setPreferredSize(new Dimension(55, 22));
+      xFormModGammaSpeedREd.setMinValue(-1.0);
+      xFormModGammaSpeedREd.setMaxValue(1.0);
+      xFormModGammaSpeedREd.setLocation(new Point(70, 47));
+      xFormModGammaSpeedREd.setHasMinValue(true);
+      xFormModGammaSpeedREd.setHasMaxValue(true);
+      xFormModGammaSpeedREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      xFormModGammaSpeedREd.setBounds(70, 32, 55, 22);
+      xFormModGammaSpeedREd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null) {
+            if (!xFormModGammaSpeedREd.isMouseAdjusting() || xFormModGammaSpeedREd.getMouseChangeCount() == 0) {
+              if (!xFormModGammaSpeedSlider.getValueIsAdjusting()) {
+                tinaController.saveUndoPoint();
+              }
+            }
+            tinaController.xFormModGammaSpeedREd_changed();
+          }
+        }
+      });
+      panel_1.add(xFormModGammaSpeedREd);
+
+      JLabel lblContrast = new JLabel();
+      lblContrast.setToolTipText("Local contrast change (increase/decrease)");
+      lblContrast.setText("Contrast");
+      lblContrast.setSize(new Dimension(64, 22));
+      lblContrast.setPreferredSize(new Dimension(64, 22));
+      lblContrast.setLocation(new Point(6, 21));
+      lblContrast.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblContrast.setBounds(6, 61, 64, 22);
+      panel_1.add(lblContrast);
+
+      xFormModContrastREd = new JWFNumberField();
+      xFormModContrastREd.setValueStep(0.01);
+      xFormModContrastREd.setText("");
+      xFormModContrastREd.setSize(new Dimension(55, 22));
+      xFormModContrastREd.setPreferredSize(new Dimension(55, 22));
+      xFormModContrastREd.setMinValue(-1.0);
+      xFormModContrastREd.setMaxValue(1.0);
+      xFormModContrastREd.setLocation(new Point(70, 21));
+      xFormModContrastREd.setHasMinValue(true);
+      xFormModContrastREd.setHasMaxValue(true);
+      xFormModContrastREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      xFormModContrastREd.setBounds(70, 61, 55, 22);
+      xFormModContrastREd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null) {
+            if (!xFormModContrastREd.isMouseAdjusting() || xFormModContrastREd.getMouseChangeCount() == 0) {
+              if (!xFormModContrastSlider.getValueIsAdjusting()) {
+                tinaController.saveUndoPoint();
+              }
+            }
+            tinaController.xFormModContrastREd_changed();
+          }
+        }
+      });
+
+      panel_1.add(xFormModContrastREd);
+
+      xFormModContrastSlider = new JSlider();
+      xFormModContrastSlider.setValue(0);
+      xFormModContrastSlider.setSize(new Dimension(172, 22));
+      xFormModContrastSlider.setPreferredSize(new Dimension(172, 22));
+      xFormModContrastSlider.setMinimum(-100);
+      xFormModContrastSlider.setMaximum(100);
+      xFormModContrastSlider.setLocation(new Point(125, 21));
+      xFormModContrastSlider.setFont(new Font("Dialog", Font.BOLD, 10));
+      xFormModContrastSlider.setBounds(125, 61, 195, 22);
+      xFormModContrastSlider.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mousePressed(MouseEvent e) {
+          tinaController.saveUndoPoint();
+        }
+      });
+      xFormModContrastSlider.addChangeListener(new javax.swing.event.ChangeListener() {
+        public void stateChanged(javax.swing.event.ChangeEvent e) {
+          tinaController.xFormModContrastSlider_changed();
+        }
+      });
+
+      panel_1.add(xFormModContrastSlider);
+
+      JLabel lblContrstSpd = new JLabel();
+      lblContrstSpd.setToolTipText("Blending of local contrast change");
+      lblContrstSpd.setText("Contrst Spd");
+      lblContrstSpd.setSize(new Dimension(64, 22));
+      lblContrstSpd.setPreferredSize(new Dimension(64, 22));
+      lblContrstSpd.setLocation(new Point(6, 47));
+      lblContrstSpd.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblContrstSpd.setBounds(6, 87, 64, 22);
+      panel_1.add(lblContrstSpd);
+
+      xFormModContrastSpeedREd = new JWFNumberField();
+      xFormModContrastSpeedREd.setValueStep(0.01);
+      xFormModContrastSpeedREd.setText("");
+      xFormModContrastSpeedREd.setSize(new Dimension(55, 22));
+      xFormModContrastSpeedREd.setPreferredSize(new Dimension(55, 22));
+      xFormModContrastSpeedREd.setMinValue(-1.0);
+      xFormModContrastSpeedREd.setMaxValue(1.0);
+      xFormModContrastSpeedREd.setLocation(new Point(70, 47));
+      xFormModContrastSpeedREd.setHasMinValue(true);
+      xFormModContrastSpeedREd.setHasMaxValue(true);
+      xFormModContrastSpeedREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      xFormModContrastSpeedREd.setBounds(70, 87, 55, 22);
+      xFormModContrastSpeedREd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null) {
+            if (!xFormModContrastSpeedREd.isMouseAdjusting() || xFormModContrastSpeedREd.getMouseChangeCount() == 0) {
+              if (!xFormModContrastSpeedSlider.getValueIsAdjusting()) {
+                tinaController.saveUndoPoint();
+              }
+            }
+            tinaController.xFormModContrastSpeedREd_changed();
+          }
+        }
+      });
+      panel_1.add(xFormModContrastSpeedREd);
+
+      xFormModContrastSpeedSlider = new JSlider();
+      xFormModContrastSpeedSlider.setValue(0);
+      xFormModContrastSpeedSlider.setSize(new Dimension(172, 22));
+      xFormModContrastSpeedSlider.setPreferredSize(new Dimension(172, 22));
+      xFormModContrastSpeedSlider.setMinimum(-100);
+      xFormModContrastSpeedSlider.setMaximum(100);
+      xFormModContrastSpeedSlider.setLocation(new Point(125, 47));
+      xFormModContrastSpeedSlider.setFont(new Font("Dialog", Font.BOLD, 10));
+      xFormModContrastSpeedSlider.setBounds(125, 87, 195, 22);
+      xFormModContrastSpeedSlider.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mousePressed(MouseEvent e) {
+          tinaController.saveUndoPoint();
+        }
+      });
+      xFormModContrastSpeedSlider.addChangeListener(new javax.swing.event.ChangeListener() {
+        public void stateChanged(javax.swing.event.ChangeEvent e) {
+          tinaController.xFormModContrastSpeedSlider_changed();
+        }
+      });
+
+      panel_1.add(xFormModContrastSpeedSlider);
+
+      JLabel lblSaturation = new JLabel();
+      lblSaturation.setToolTipText("Local modification of color saturation");
+      lblSaturation.setText("Saturation");
+      lblSaturation.setSize(new Dimension(64, 22));
+      lblSaturation.setPreferredSize(new Dimension(64, 22));
+      lblSaturation.setLocation(new Point(6, 21));
+      lblSaturation.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblSaturation.setBounds(6, 117, 64, 22);
+      panel_1.add(lblSaturation);
+
+      xFormModSaturationREd = new JWFNumberField();
+      xFormModSaturationREd.setValueStep(0.01);
+      xFormModSaturationREd.setText("");
+      xFormModSaturationREd.setSize(new Dimension(55, 22));
+      xFormModSaturationREd.setPreferredSize(new Dimension(55, 22));
+      xFormModSaturationREd.setMinValue(-1.0);
+      xFormModSaturationREd.setMaxValue(1.0);
+      xFormModSaturationREd.setLocation(new Point(70, 21));
+      xFormModSaturationREd.setHasMinValue(true);
+      xFormModSaturationREd.setHasMaxValue(true);
+      xFormModSaturationREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      xFormModSaturationREd.setBounds(70, 117, 55, 22);
+      xFormModSaturationREd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null) {
+            if (!xFormModSaturationREd.isMouseAdjusting() || xFormModSaturationREd.getMouseChangeCount() == 0) {
+              if (!xFormModSaturationSlider.getValueIsAdjusting()) {
+                tinaController.saveUndoPoint();
+              }
+            }
+            tinaController.xFormModSaturationREd_changed();
+          }
+        }
+      });
+      panel_1.add(xFormModSaturationREd);
+
+      xFormModSaturationSlider = new JSlider();
+      xFormModSaturationSlider.setValue(0);
+      xFormModSaturationSlider.setSize(new Dimension(172, 22));
+      xFormModSaturationSlider.setPreferredSize(new Dimension(172, 22));
+      xFormModSaturationSlider.setMinimum(-100);
+      xFormModSaturationSlider.setMaximum(100);
+      xFormModSaturationSlider.setLocation(new Point(125, 21));
+      xFormModSaturationSlider.setFont(new Font("Dialog", Font.BOLD, 10));
+      xFormModSaturationSlider.setBounds(125, 117, 195, 22);
+      xFormModSaturationSlider.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mousePressed(MouseEvent e) {
+          tinaController.saveUndoPoint();
+        }
+      });
+      xFormModSaturationSlider.addChangeListener(new javax.swing.event.ChangeListener() {
+        public void stateChanged(javax.swing.event.ChangeEvent e) {
+          tinaController.xFormModSaturationSlider_changed();
+        }
+      });
+
+      panel_1.add(xFormModSaturationSlider);
+
+      JLabel lblSaturatSpd = new JLabel();
+      lblSaturatSpd.setToolTipText("Blending of local saturation change");
+      lblSaturatSpd.setText("Saturat Spd");
+      lblSaturatSpd.setSize(new Dimension(64, 22));
+      lblSaturatSpd.setPreferredSize(new Dimension(64, 22));
+      lblSaturatSpd.setLocation(new Point(6, 47));
+      lblSaturatSpd.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblSaturatSpd.setBounds(6, 143, 64, 22);
+      panel_1.add(lblSaturatSpd);
+
+      xFormModSaturationSpeedREd = new JWFNumberField();
+      xFormModSaturationSpeedREd.setValueStep(0.01);
+      xFormModSaturationSpeedREd.setText("");
+      xFormModSaturationSpeedREd.setSize(new Dimension(55, 22));
+      xFormModSaturationSpeedREd.setPreferredSize(new Dimension(55, 22));
+      xFormModSaturationSpeedREd.setMinValue(-1.0);
+      xFormModSaturationSpeedREd.setMaxValue(1.0);
+      xFormModSaturationSpeedREd.setLocation(new Point(70, 47));
+      xFormModSaturationSpeedREd.setHasMinValue(true);
+      xFormModSaturationSpeedREd.setHasMaxValue(true);
+      xFormModSaturationSpeedREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      xFormModSaturationSpeedREd.setBounds(70, 143, 55, 22);
+      xFormModSaturationSpeedREd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null) {
+            if (!xFormModSaturationSpeedREd.isMouseAdjusting() || xFormModSaturationSpeedREd.getMouseChangeCount() == 0) {
+              if (!xFormModSaturationSpeedSlider.getValueIsAdjusting()) {
+                tinaController.saveUndoPoint();
+              }
+            }
+            tinaController.xFormModSaturationSpeedREd_changed();
+          }
+        }
+      });
+      panel_1.add(xFormModSaturationSpeedREd);
+
+      xFormModSaturationSpeedSlider = new JSlider();
+      xFormModSaturationSpeedSlider.setValue(0);
+      xFormModSaturationSpeedSlider.setSize(new Dimension(172, 22));
+      xFormModSaturationSpeedSlider.setPreferredSize(new Dimension(172, 22));
+      xFormModSaturationSpeedSlider.setMinimum(-100);
+      xFormModSaturationSpeedSlider.setMaximum(100);
+      xFormModSaturationSpeedSlider.setLocation(new Point(125, 47));
+      xFormModSaturationSpeedSlider.setFont(new Font("Dialog", Font.BOLD, 10));
+      xFormModSaturationSpeedSlider.setBounds(125, 143, 195, 22);
+      xFormModSaturationSpeedSlider.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mousePressed(MouseEvent e) {
+          tinaController.saveUndoPoint();
+        }
+      });
+      xFormModSaturationSpeedSlider.addChangeListener(new javax.swing.event.ChangeListener() {
+        public void stateChanged(javax.swing.event.ChangeEvent e) {
+          tinaController.xFormModSaturationSpeedSlider_changed();
+        }
+      });
+
+      panel_1.add(xFormModSaturationSpeedSlider);
+
+      xFormModGammaRandomizeBtn = new JButton();
+      xFormModGammaRandomizeBtn.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.xFormModGammaRandomizeBtn_Clicked(getXFormModGammaWholeFractalCBx().isSelected());
+        }
+      });
+      xFormModGammaRandomizeBtn.setToolTipText("Randomize local color-changing effects, either of the whole fractal or the selected transform");
+      xFormModGammaRandomizeBtn.setText("Randomize");
+      xFormModGammaRandomizeBtn.setPreferredSize(new Dimension(104, 24));
+      xFormModGammaRandomizeBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      xFormModGammaRandomizeBtn.setBounds(4, 172, 104, 24);
+      panel_1.add(xFormModGammaRandomizeBtn);
+
+      xFormModGammaResetBtn = new JButton();
+      xFormModGammaResetBtn.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.xFormModGammaResetBtn_Clicked(getXFormModGammaWholeFractalCBx().isSelected());
+        }
+      });
+      xFormModGammaResetBtn.setToolTipText("Reset local color-changing effects, either of the whole fractal or the selected transform");
+      xFormModGammaResetBtn.setText("Reset");
+      xFormModGammaResetBtn.setPreferredSize(new Dimension(190, 24));
+      xFormModGammaResetBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      xFormModGammaResetBtn.setBounds(111, 172, 104, 24);
+      panel_1.add(xFormModGammaResetBtn);
+
+      xFormModGammaWholeFractalCBx = new JCheckBox("Whole fractal");
+      xFormModGammaWholeFractalCBx.setSelected(true);
+      xFormModGammaWholeFractalCBx.setToolTipText("Check if Randomize/Reset should apply to the whole fractal rather than only to the selected transform");
+      xFormModGammaWholeFractalCBx.setBounds(218, 175, 104, 18);
+      panel_1.add(xFormModGammaWholeFractalCBx);
     }
     return tinaTransformationsTabbedPane;
   }
@@ -4114,7 +4504,9 @@ public class TinaInternalFrame extends JInternalFrame {
         getTinaCameraCamPosZREd(), getTinaCameraCamPosZSlider(), getTinaSaturationREd(), getTinaSaturationSlider(), getToggleDrawGridButton(),
         getEditorFractalBrightnessSlider(), getMouseTransformEditTriangleViewButton(), getTinaPaletteRandomGeneratorCmb(), getToggleTriangleWithColorsButton(),
         getFlameBrowserCopyToBtn(), getFlameBrowserMoveToBtn(), getAffineRotateEditMotionCurveBtn(), getAffineScaleEditMotionCurveBtn(),
-        getTriangleStyleCmb());
+        getTriangleStyleCmb(), getXFormModGammaREd(), getXFormModGammaSlider(), getXFormModGammaSpeedREd(), getXFormModGammaSpeedSlider(),
+        getXFormModContrastREd(), getXFormModContrastSlider(), getXFormModContrastSpeedREd(), getXFormModContrastSpeedSlider(),
+        getXFormModSaturationREd(), getXFormModSaturationSlider(), getXFormModSaturationSpeedREd(), getXFormModSaturationSpeedSlider());
 
     tinaController = new TinaController(params);
 
@@ -5450,19 +5842,19 @@ public class TinaInternalFrame extends JInternalFrame {
   private JSlider getXFormColorSlider() {
     if (xFormColorSlider == null) {
       xFormColorSlider = new JSlider();
+      xFormColorSlider.setPreferredSize(new Dimension(172, 22));
+      xFormColorSlider.setMaximum(100);
+      xFormColorSlider.setMinimum(0);
+      xFormColorSlider.setValue(0);
+      xFormColorSlider.setSize(new Dimension(195, 22));
+      xFormColorSlider.setLocation(new Point(125, 21));
+      xFormColorSlider.setFont(new Font("Dialog", Font.BOLD, 10));
       xFormColorSlider.addMouseListener(new MouseAdapter() {
         @Override
         public void mousePressed(MouseEvent e) {
           tinaController.saveUndoPoint();
         }
       });
-      xFormColorSlider.setPreferredSize(new Dimension(172, 22));
-      xFormColorSlider.setMaximum(100);
-      xFormColorSlider.setMinimum(0);
-      xFormColorSlider.setValue(0);
-      xFormColorSlider.setSize(new Dimension(172, 22));
-      xFormColorSlider.setLocation(new Point(125, 21));
-      xFormColorSlider.setFont(new Font("Dialog", Font.BOLD, 10));
       xFormColorSlider.addChangeListener(new javax.swing.event.ChangeListener() {
         public void stateChanged(javax.swing.event.ChangeEvent e) {
           tinaController.xFormColorSlider_changed();
@@ -5514,19 +5906,19 @@ public class TinaInternalFrame extends JInternalFrame {
   private JSlider getXFormSymmetrySlider() {
     if (xFormSymmetrySlider == null) {
       xFormSymmetrySlider = new JSlider();
+      xFormSymmetrySlider.setPreferredSize(new Dimension(172, 22));
+      xFormSymmetrySlider.setMaximum(100);
+      xFormSymmetrySlider.setMinimum(-100);
+      xFormSymmetrySlider.setValue(0);
+      xFormSymmetrySlider.setLocation(new Point(125, 47));
+      xFormSymmetrySlider.setSize(new Dimension(195, 22));
+      xFormSymmetrySlider.setFont(new Font("Dialog", Font.BOLD, 10));
       xFormSymmetrySlider.addMouseListener(new MouseAdapter() {
         @Override
         public void mousePressed(MouseEvent e) {
           tinaController.saveUndoPoint();
         }
       });
-      xFormSymmetrySlider.setPreferredSize(new Dimension(172, 22));
-      xFormSymmetrySlider.setMaximum(100);
-      xFormSymmetrySlider.setMinimum(-100);
-      xFormSymmetrySlider.setValue(0);
-      xFormSymmetrySlider.setLocation(new Point(125, 47));
-      xFormSymmetrySlider.setSize(new Dimension(172, 22));
-      xFormSymmetrySlider.setFont(new Font("Dialog", Font.BOLD, 10));
       xFormSymmetrySlider.addChangeListener(new javax.swing.event.ChangeListener() {
         public void stateChanged(javax.swing.event.ChangeEvent e) {
           tinaController.xFormSymmetrySlider_changed();
@@ -5587,7 +5979,7 @@ public class TinaInternalFrame extends JInternalFrame {
       xFormOpacitySlider.setMaximum(100);
       xFormOpacitySlider.setMinimum(0);
       xFormOpacitySlider.setValue(0);
-      xFormOpacitySlider.setSize(new Dimension(172, 22));
+      xFormOpacitySlider.setSize(new Dimension(195, 22));
       xFormOpacitySlider.setLocation(new Point(125, 73));
       xFormOpacitySlider.setFont(new Font("Dialog", Font.BOLD, 10));
       xFormOpacitySlider.addChangeListener(new javax.swing.event.ChangeListener() {
@@ -9893,6 +10285,21 @@ public class TinaInternalFrame extends JInternalFrame {
   private JPanel panel_18;
   private JPanel panel_19;
   private JPanel panel_88;
+  private JWFNumberField xFormModGammaREd;
+  private JWFNumberField xFormModGammaSpeedREd;
+  private JWFNumberField xFormModContrastREd;
+  private JWFNumberField xFormModContrastSpeedREd;
+  private JWFNumberField xFormModSaturationREd;
+  private JWFNumberField xFormModSaturationSpeedREd;
+  private JSlider xFormModGammaSlider;
+  private JSlider xFormModGammaSpeedSlider;
+  private JSlider xFormModContrastSlider;
+  private JSlider xFormModContrastSpeedSlider;
+  private JSlider xFormModSaturationSlider;
+  private JSlider xFormModSaturationSpeedSlider;
+  private JCheckBox xFormModGammaWholeFractalCBx;
+  private JButton xFormModGammaResetBtn;
+  private JButton xFormModGammaRandomizeBtn;
 
   /**
    * This method initializes renderBatchJobsScrollPane	
@@ -18321,6 +18728,66 @@ public class TinaInternalFrame extends JInternalFrame {
       panel_88.setLayout(new BorderLayout(0, 0));
     }
     return panel_88;
+  }
+
+  public JWFNumberField getXFormModGammaREd() {
+    return xFormModGammaREd;
+  }
+
+  public JSlider getXFormModGammaSlider() {
+    return xFormModGammaSlider;
+  }
+
+  public JWFNumberField getXFormModGammaSpeedREd() {
+    return xFormModGammaSpeedREd;
+  }
+
+  public JSlider getXFormModGammaSpeedSlider() {
+    return xFormModGammaSpeedSlider;
+  }
+
+  public JWFNumberField getXFormModContrastREd() {
+    return xFormModContrastREd;
+  }
+
+  public JWFNumberField getXFormModContrastSpeedREd() {
+    return xFormModContrastSpeedREd;
+  }
+
+  public JWFNumberField getXFormModSaturationREd() {
+    return xFormModSaturationREd;
+  }
+
+  public JWFNumberField getXFormModSaturationSpeedREd() {
+    return xFormModSaturationSpeedREd;
+  }
+
+  public JSlider getXFormModContrastSlider() {
+    return xFormModContrastSlider;
+  }
+
+  public JSlider getXFormModContrastSpeedSlider() {
+    return xFormModContrastSpeedSlider;
+  }
+
+  public JSlider getXFormModSaturationSlider() {
+    return xFormModSaturationSlider;
+  }
+
+  public JSlider getXFormModSaturationSpeedSlider() {
+    return xFormModSaturationSpeedSlider;
+  }
+
+  public JCheckBox getXFormModGammaWholeFractalCBx() {
+    return xFormModGammaWholeFractalCBx;
+  }
+
+  public JButton getXFormModGammaResetBtn() {
+    return xFormModGammaResetBtn;
+  }
+
+  public JButton getXFormModGammaRandomizeBtn() {
+    return xFormModGammaRandomizeBtn;
   }
 } //  @jve:decl-index=0:visual-constraint="10,10"
 

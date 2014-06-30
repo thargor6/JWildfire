@@ -32,6 +32,9 @@ public final class XYZPoint implements Serializable, Assignable<XYZPoint> {
   public double y;
   public double z;
   public double color;
+  public double modGamma;
+  public double modContrast;
+  public double modSaturation;
   // custom RGB colors
   public boolean rgbColor = false;
   public double redColor;
@@ -58,6 +61,9 @@ public final class XYZPoint implements Serializable, Assignable<XYZPoint> {
     y = p.y;
     z = p.z;
     color = p.color;
+    modGamma = p.modGamma;
+    modContrast = p.modContrast;
+    modSaturation = p.modSaturation;
     sumsq = p.sumsq;
     validSumsq = p.validSumsq;
     sqrt = p.sqrt;
@@ -90,7 +96,7 @@ public final class XYZPoint implements Serializable, Assignable<XYZPoint> {
   public void clear() {
     rgbColor = false;
     redColor = greenColor = blueColor = 0.0;
-    x = y = z = color = 0.0;
+    x = y = z = color = modGamma = modContrast = modSaturation = 0.0;
     sumsq = sqrt = atan = atanYX = sinA = cosA = 0.0;
     validSumsq = validSqrt = validAtan = validAtanYX = validSinA = validCosA = false;
   }
@@ -147,6 +153,9 @@ public final class XYZPoint implements Serializable, Assignable<XYZPoint> {
   public boolean isEqual(XYZPoint pSrc) {
     if (fabs(x - pSrc.x) > EPSILON || fabs(y - pSrc.y) > EPSILON ||
         fabs(z - pSrc.z) > EPSILON || fabs(color - pSrc.color) > EPSILON ||
+        fabs(modGamma - pSrc.modGamma) > EPSILON ||
+        fabs(modContrast - pSrc.modContrast) > EPSILON ||
+        fabs(modSaturation - pSrc.modSaturation) > EPSILON ||
         rgbColor != pSrc.rgbColor || fabs(redColor - pSrc.redColor) > EPSILON ||
         fabs(greenColor - pSrc.greenColor) > EPSILON || fabs(blueColor - pSrc.blueColor) > EPSILON) {
       return false;

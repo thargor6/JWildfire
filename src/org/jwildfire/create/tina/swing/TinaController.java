@@ -412,6 +412,21 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
     data.xFormColorSlider = parameterObject.pXFormColorSlider;
     data.xFormSymmetryREd = parameterObject.pXFormSymmetryREd;
     data.xFormSymmetrySlider = parameterObject.pXFormSymmetrySlider;
+    data.xFormModGammaREd = parameterObject.pXFormModGammaREd;
+    data.xFormModGammaSlider = parameterObject.pXFormModGammaSlider;
+    data.xFormModGammaSpeedREd = parameterObject.pXFormModGammaSpeedREd;
+    data.xFormModGammaSpeedSlider = parameterObject.pXFormModGammaSpeedSlider;
+
+    data.xFormModContrastREd = parameterObject.pXFormModContrastREd;
+    data.xFormModContrastSlider = parameterObject.pXFormModContrastSlider;
+    data.xFormModContrastSpeedREd = parameterObject.pXFormModContrastSpeedREd;
+    data.xFormModContrastSpeedSlider = parameterObject.pXFormModContrastSpeedSlider;
+
+    data.xFormModSaturationREd = parameterObject.pXFormModSaturationREd;
+    data.xFormModSaturationSlider = parameterObject.pXFormModSaturationSlider;
+    data.xFormModSaturationSpeedREd = parameterObject.pXFormModSaturationSpeedREd;
+    data.xFormModSaturationSpeedSlider = parameterObject.pXFormModSaturationSpeedSlider;
+
     data.xFormOpacityREd = parameterObject.pXFormOpacityREd;
     data.xFormOpacitySlider = parameterObject.pXFormOpacitySlider;
     data.xFormDrawModeCmb = parameterObject.pXFormDrawModeCmb;
@@ -2003,18 +2018,25 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
     }
   }
 
+  enum XFormType {
+    NORMAL, FINAL, BOTH
+  }
+
   public XForm getCurrXForm() {
-    XForm xForm = null;
+    return getCurrXForm(XFormType.BOTH);
+  }
+
+  public XForm getCurrXForm(XFormType pXFormType) {
     if (getCurrLayer() != null) {
       int row = data.transformationsTable.getSelectedRow();
-      if (row >= 0 && row < getCurrLayer().getXForms().size()) {
-        xForm = getCurrLayer().getXForms().get(row);
+      if (row >= 0 && row < getCurrLayer().getXForms().size() && (pXFormType == XFormType.BOTH || pXFormType == XFormType.NORMAL)) {
+        return getCurrLayer().getXForms().get(row);
       }
-      else if (row >= getCurrLayer().getXForms().size() && row < (getCurrLayer().getXForms().size() + getCurrLayer().getFinalXForms().size())) {
-        xForm = getCurrLayer().getFinalXForms().get(row - getCurrLayer().getXForms().size());
+      if (row >= getCurrLayer().getXForms().size() && row < (getCurrLayer().getXForms().size() + getCurrLayer().getFinalXForms().size()) && (pXFormType == XFormType.BOTH || pXFormType == XFormType.FINAL)) {
+        return getCurrLayer().getFinalXForms().get(row - getCurrLayer().getXForms().size());
       }
     }
-    return xForm;
+    return null;
   }
 
   public void transformationTableClicked() {
@@ -2149,6 +2171,22 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
         data.xFormColorSlider.setValue(Tools.FTOI(pXForm.getColor() * SLIDER_SCALE_COLOR));
         data.xFormSymmetryREd.setText(Tools.doubleToString(pXForm.getColorSymmetry()));
         data.xFormSymmetrySlider.setValue(Tools.FTOI(pXForm.getColorSymmetry() * SLIDER_SCALE_COLOR));
+
+        data.xFormModGammaREd.setText(Tools.doubleToString(pXForm.getModGamma()));
+        data.xFormModGammaSlider.setValue(Tools.FTOI(pXForm.getModGamma() * SLIDER_SCALE_COLOR));
+        data.xFormModGammaSpeedREd.setText(Tools.doubleToString(pXForm.getModGammaSpeed()));
+        data.xFormModGammaSpeedSlider.setValue(Tools.FTOI(pXForm.getModGammaSpeed() * SLIDER_SCALE_COLOR));
+
+        data.xFormModContrastREd.setText(Tools.doubleToString(pXForm.getModContrast()));
+        data.xFormModContrastSlider.setValue(Tools.FTOI(pXForm.getModContrast() * SLIDER_SCALE_COLOR));
+        data.xFormModContrastSpeedREd.setText(Tools.doubleToString(pXForm.getModContrastSpeed()));
+        data.xFormModContrastSpeedSlider.setValue(Tools.FTOI(pXForm.getModContrastSpeed() * SLIDER_SCALE_COLOR));
+
+        data.xFormModSaturationREd.setText(Tools.doubleToString(pXForm.getModSaturation()));
+        data.xFormModSaturationSlider.setValue(Tools.FTOI(pXForm.getModSaturation() * SLIDER_SCALE_COLOR));
+        data.xFormModSaturationSpeedREd.setText(Tools.doubleToString(pXForm.getModSaturationSpeed()));
+        data.xFormModSaturationSpeedSlider.setValue(Tools.FTOI(pXForm.getModSaturationSpeed() * SLIDER_SCALE_COLOR));
+
         data.xFormOpacityREd.setText(Tools.doubleToString(pXForm.getOpacity()));
         data.xFormOpacitySlider.setValue(Tools.FTOI(pXForm.getOpacity() * SLIDER_SCALE_COLOR));
         data.xFormDrawModeCmb.setSelectedItem(pXForm.getDrawMode());
@@ -2166,6 +2204,18 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
         data.xFormColorSlider.setValue(0);
         data.xFormSymmetryREd.setText(null);
         data.xFormSymmetrySlider.setValue(0);
+        data.xFormModGammaREd.setText(null);
+        data.xFormModGammaSlider.setValue(0);
+        data.xFormModGammaSpeedREd.setText(null);
+        data.xFormModGammaSpeedSlider.setValue(0);
+        data.xFormModContrastREd.setText(null);
+        data.xFormModContrastSlider.setValue(0);
+        data.xFormModContrastSpeedREd.setText(null);
+        data.xFormModContrastSpeedSlider.setValue(0);
+        data.xFormModSaturationREd.setText(null);
+        data.xFormModSaturationSlider.setValue(0);
+        data.xFormModSaturationSpeedREd.setText(null);
+        data.xFormModSaturationSpeedSlider.setValue(0);
         data.xFormOpacityREd.setText(null);
         data.xFormOpacitySlider.setValue(0);
         data.transformationWeightREd.setText(null);
@@ -2990,6 +3040,54 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
 
   public void xFormColorREd_changed() {
     xFormTextFieldChanged(data.xFormColorSlider, data.xFormColorREd, "color", SLIDER_SCALE_COLOR);
+  }
+
+  public void xFormModGammaREd_changed() {
+    xFormTextFieldChanged(data.xFormModGammaSlider, data.xFormModGammaREd, "modGamma", SLIDER_SCALE_COLOR);
+  }
+
+  public void xFormModGammaSlider_changed() {
+    xFormSliderChanged(data.xFormModGammaSlider, data.xFormModGammaREd, "modGamma", SLIDER_SCALE_COLOR);
+  }
+
+  public void xFormModGammaSpeedREd_changed() {
+    xFormTextFieldChanged(data.xFormModGammaSpeedSlider, data.xFormModGammaSpeedREd, "modGammaSpeed", SLIDER_SCALE_COLOR);
+  }
+
+  public void xFormModGammaSpeedSlider_changed() {
+    xFormSliderChanged(data.xFormModGammaSpeedSlider, data.xFormModGammaSpeedREd, "modGammaSpeed", SLIDER_SCALE_COLOR);
+  }
+
+  public void xFormModContrastREd_changed() {
+    xFormTextFieldChanged(data.xFormModContrastSlider, data.xFormModContrastREd, "modContrast", SLIDER_SCALE_COLOR);
+  }
+
+  public void xFormModContrastSlider_changed() {
+    xFormSliderChanged(data.xFormModContrastSlider, data.xFormModContrastREd, "modContrast", SLIDER_SCALE_COLOR);
+  }
+
+  public void xFormModContrastSpeedREd_changed() {
+    xFormTextFieldChanged(data.xFormModContrastSpeedSlider, data.xFormModContrastSpeedREd, "modContrastSpeed", SLIDER_SCALE_COLOR);
+  }
+
+  public void xFormModContrastSpeedSlider_changed() {
+    xFormSliderChanged(data.xFormModContrastSpeedSlider, data.xFormModContrastSpeedREd, "modContrastSpeed", SLIDER_SCALE_COLOR);
+  }
+
+  public void xFormModSaturationREd_changed() {
+    xFormTextFieldChanged(data.xFormModSaturationSlider, data.xFormModSaturationREd, "modSaturation", SLIDER_SCALE_COLOR);
+  }
+
+  public void xFormModSaturationSlider_changed() {
+    xFormSliderChanged(data.xFormModSaturationSlider, data.xFormModSaturationREd, "modSaturation", SLIDER_SCALE_COLOR);
+  }
+
+  public void xFormModSaturationSpeedREd_changed() {
+    xFormTextFieldChanged(data.xFormModSaturationSpeedSlider, data.xFormModSaturationSpeedREd, "modSaturationSpeed", SLIDER_SCALE_COLOR);
+  }
+
+  public void xFormModSaturationSpeedSlider_changed() {
+    xFormSliderChanged(data.xFormModSaturationSpeedSlider, data.xFormModSaturationSpeedREd, "modSaturationSpeed", SLIDER_SCALE_COLOR);
   }
 
   private void setRelWeight(double pValue) {
@@ -5087,6 +5185,56 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
 
   public void setVariationControlsDelegates(VariationControlsDelegate[] pVariationControlsDelegates) {
     variationControlsDelegates = pVariationControlsDelegates;
+  }
+
+  public void xFormModGammaRandomizeBtn_Clicked(boolean pWholeFractal) {
+    if (pWholeFractal) {
+      Flame flame = getCurrFlame();
+      if (flame != null) {
+        saveUndoPoint();
+        for (Layer layer : flame.getLayers()) {
+          for (XForm xForm : layer.getXForms()) {
+            xForm.randomizeModColorEffects();
+          }
+        }
+        refreshXFormUI(getCurrXForm(XFormType.BOTH));
+        refreshFlameImage(false);
+      }
+    }
+    else {
+      XForm xForm = getCurrXForm(XFormType.NORMAL);
+      if (xForm != null) {
+        saveUndoPoint();
+        xForm.randomizeModColorEffects();
+        refreshXFormUI(xForm);
+        refreshFlameImage(false);
+      }
+    }
+  }
+
+  public void xFormModGammaResetBtn_Clicked(boolean pWholeFractal) {
+    if (pWholeFractal) {
+      Flame flame = getCurrFlame();
+      if (flame != null) {
+        saveUndoPoint();
+        for (Layer layer : flame.getLayers()) {
+          for (XForm xForm : layer.getXForms()) {
+            xForm.resetModColorEffects();
+          }
+        }
+        refreshXFormUI(getCurrXForm(XFormType.BOTH));
+        refreshFlameImage(false);
+      }
+    }
+    else {
+      XForm xForm = getCurrXForm(XFormType.NORMAL);
+      if (xForm != null) {
+        saveUndoPoint();
+        xForm.resetModColorEffects();
+        refreshXFormUI(xForm);
+        refreshFlameImage(false);
+      }
+    }
   }
 
 }
