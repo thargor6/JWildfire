@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2014 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -34,6 +34,7 @@ public class LogDensityFilter {
   private double precalcLogArray[];
   private double k1, k2;
   private final FilterKernel filterKernel;
+  private double motionBlurScl;
 
   public LogDensityFilter(Flame pFlame) {
     flame = pFlame;
@@ -41,6 +42,7 @@ public class LogDensityFilter {
     noiseFilterSize = filterKernel.getFilterSize(pFlame.getSpatialFilterRadius());
     filter = new double[noiseFilterSize][noiseFilterSize];
     initFilter(pFlame.getSpatialFilterRadius(), noiseFilterSize, filter);
+    motionBlurScl = flame.getMotionBlurLength() <= 0 ? 1.0 : 1.0 / (flame.getMotionBlurLength() + 1.0);
   }
 
   private void initFilter(double pFilterRadius, int pFilterSize, double[][] pFilter) {
@@ -84,7 +86,8 @@ public class LogDensityFilter {
 
     precalcLogArray = new double[PRECALC_LOG_ARRAY_SIZE + 1];
     for (int i = 1; i <= PRECALC_LOG_ARRAY_SIZE; i++) {
-      precalcLogArray[i] = (k1 * log10(1 + i * k2)) / (flame.getWhiteLevel() * i);
+      double x = i * motionBlurScl;
+      precalcLogArray[i] = (k1 * log10(1 + x * k2)) / (flame.getWhiteLevel() * x);
     }
   }
 
@@ -97,7 +100,7 @@ public class LogDensityFilter {
           pFilteredPnt.red += filter[i][j] * point.getRed();
           pFilteredPnt.green += filter[i][j] * point.getGreen();
           pFilteredPnt.blue += filter[i][j] * point.getBlue();
-          pFilteredPnt.intensity += filter[i][j] * point.getCount();
+          pFilteredPnt.intensity += filter[i][j] * point.getCount() * motionBlurScl;
         }
       }
       pFilteredPnt.intensity = flame.getWhiteLevel() * pFilteredPnt.intensity * HDR_SCALE;
@@ -107,7 +110,7 @@ public class LogDensityFilter {
       pFilteredPnt.red = point.getRed();
       pFilteredPnt.green = point.getGreen();
       pFilteredPnt.blue = point.getBlue();
-      pFilteredPnt.intensity = point.getCount() * flame.getWhiteLevel() * HDR_SCALE;
+      pFilteredPnt.intensity = point.getCount() * motionBlurScl * flame.getWhiteLevel() * HDR_SCALE;
     }
   }
 
@@ -118,7 +121,7 @@ public class LogDensityFilter {
       logScale = precalcLogArray[(int) point.getCount()];
     }
     else {
-      logScale = (k1 * log10(1.0 + point.getCount() * k2)) / (flame.getWhiteLevel() * point.getCount());
+      logScale = (k1 * log10(1.0 + point.getCount() * motionBlurScl * k2)) / (flame.getWhiteLevel() * point.getCount() * motionBlurScl);
     }
     pFilteredPnt.red = logScale * point.getRed();
     pFilteredPnt.green = logScale * point.getGreen();
@@ -158,15 +161,14 @@ public class LogDensityFilter {
             logScale = precalcLogArray[pIdx];
           }
           else {
-            logScale = (k1 * log10(1.0 + point.getCount() * k2)) / (flame.getWhiteLevel() * point.getCount());
+            logScale = (k1 * log10(1.0 + point.getCount() * motionBlurScl * k2)) / (flame.getWhiteLevel() * point.getCount() * motionBlurScl);
           }
           pFilteredPnt.red += filter[i][j] * logScale * point.getRed();
           pFilteredPnt.green += filter[i][j] * logScale * point.getGreen();
           pFilteredPnt.blue += filter[i][j] * logScale * point.getBlue();
-          pFilteredPnt.intensity += filter[i][j] * logScale * point.getCount();
+          pFilteredPnt.intensity += filter[i][j] * logScale * point.getCount() * flame.getWhiteLevel();
         }
       }
-      pFilteredPnt.intensity = flame.getWhiteLevel() * pFilteredPnt.intensity;
     }
     else {
       AbstractRasterPoint point = getRasterPoint(pX, pY);
@@ -175,7 +177,7 @@ public class LogDensityFilter {
         logScale = precalcLogArray[(int) point.getCount()];
       }
       else {
-        logScale = (k1 * log10(1.0 + point.getCount() * k2)) / (flame.getWhiteLevel() * point.getCount());
+        logScale = (k1 * log10(1.0 + point.getCount() * motionBlurScl * k2)) / (flame.getWhiteLevel() * point.getCount() * motionBlurScl);
       }
       pFilteredPnt.red = logScale * point.getRed();
       pFilteredPnt.green = logScale * point.getGreen();

@@ -295,7 +295,7 @@ public class ExperimentalGnarlRandomFlameGenerator extends RandomFlameGenerator 
 
   @Override
   public boolean isUseFilter(RandomFlameGeneratorState pState) {
-    return Math.random() > 0.75;
+    return false;
   }
 
 }

@@ -845,7 +845,7 @@ public class FlameRenderer {
     }
     if (pFlame.getMotionBlurLength() > 0) {
       double time = pFrame >= 0 ? pFrame : 0;
-      for (int p = 1; p < pFlame.getMotionBlurLength(); p++) {
+      for (int p = 1; p <= pFlame.getMotionBlurLength(); p++) {
         time -= pFlame.getMotionBlurTimeStep();
         Flame newFlame = AnimationService.evalMotionCurves(pFlame.makeCopy(), time);
         for (Layer layer : newFlame.getLayers()) {
@@ -860,6 +860,7 @@ public class FlameRenderer {
         res.add(new RenderPacket(newFlame, newView));
       }
     }
+
     return res;
   }
 

@@ -63,7 +63,7 @@ public abstract class AbstractExtrude3DRandomFlameGenerator extends RandomFlameG
 
   @Override
   public boolean isUseFilter(RandomFlameGeneratorState pState) {
-    return true;
+    return false;
   }
 
   private static final String RANDGEN = "RANDGEN";
