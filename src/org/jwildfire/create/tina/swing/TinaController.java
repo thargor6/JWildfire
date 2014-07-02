@@ -2792,7 +2792,7 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
       if (xForm != null && selected != null && selected.length() > 0) {
         saveUndoPoint();
         if (pIdx < xForm.getVariationCount()) {
-          Variation var = xForm.getVariation(pIdx);
+          final Variation var = xForm.getVariation(pIdx);
           int idx;
           if ((idx = var.getFunc().getParameterIndex(selected)) >= 0) {
             String valStr = data.TinaNonlinearControlsRows[pIdx].getNonlinearParamsREd().getText();
@@ -2817,7 +2817,7 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
             data.TinaNonlinearControlsRows[pIdx].getNonlinearParamsREd().setText(Tools.doubleToString(val));
           }
           else if ((idx = var.getFunc().getRessourceIndex(selected)) >= 0) {
-            String rName = var.getFunc().getRessourceNames()[idx];
+            final String rName = var.getFunc().getRessourceNames()[idx];
             RessourceType resType = var.getFunc().getRessourceType(rName);
             switch (resType) {
               case FONT_NAME: {
@@ -2920,14 +2920,24 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
               }
                 break;
               default: {
-                RessourceDialog dlg = new RessourceDialog(SwingUtilities.getWindowAncestor(centerPanel), prefs, errorHandler);
+                final RessourceDialog dlg = new RessourceDialog(SwingUtilities.getWindowAncestor(centerPanel), prefs, errorHandler);
                 dlg.setRessourceName(rName);
                 byte val[] = var.getFunc().getRessourceValues()[idx];
                 if (val != null) {
                   dlg.setRessourceValue(new String(val));
                 }
+                dlg.addValidation(new RessourceValidation() {
+                  @Override
+                  public void validate() {
+                    String valStr = dlg.getRessourceValue();
+                    byte[] valByteArray = valStr != null ? valStr.getBytes() : null;
+                    var.getFunc().setRessource(rName, valByteArray);
+                  }
+                });
+
                 dlg.setModal(true);
                 dlg.setVisible(true);
+
                 if (dlg.isConfirmed()) {
                   try {
                     String valStr = dlg.getRessourceValue();

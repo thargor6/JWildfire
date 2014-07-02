@@ -1,3 +1,19 @@
+/*
+  JWildfire - an image and animation processor written in Java 
+  Copyright (C) 1995-2014 Andreas Maschke
+
+  This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
+  General Public License as published by the Free Software Foundation; either version 2.1 of the 
+  License, or (at your option) any later version.
+ 
+  This software is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without 
+  even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU 
+  Lesser General Public License for more details.
+
+  You should have received a copy of the GNU Lesser General Public License along with this software; 
+  if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+  02110-1301 USA, or see the FSF site: http://www.fsf.org.
+*/
 package org.jwildfire.create.tina.swing;
 
 import java.awt.BorderLayout;
@@ -11,6 +27,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -37,6 +55,7 @@ public class RessourceDialog extends JDialog {
   private boolean confirmed = false;
   private final Prefs prefs;
   private final ErrorHandler errorHandler;
+  private final List<RessourceValidation> validations = new ArrayList<RessourceValidation>();
 
   /**
    * @param owner
@@ -182,8 +201,16 @@ public class RessourceDialog extends JDialog {
       okButton.setFont(new Font("Dialog", Font.BOLD, 10));
       okButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
-          confirmed = true;
-          setVisible(false);
+          try {
+            for (RessourceValidation validation : validations) {
+              validation.validate();
+            }
+            confirmed = true;
+            setVisible(false);
+          }
+          catch (Throwable ex) {
+            errorHandler.handleError(ex);
+          }
         }
       });
     }
@@ -253,5 +280,11 @@ public class RessourceDialog extends JDialog {
 
   public boolean isConfirmed() {
     return confirmed;
+  }
+
+  public void addValidation(RessourceValidation pValidation) {
+    if (pValidation != null && !validations.contains(pValidation)) {
+      validations.add(pValidation);
+    }
   }
 } //  @jve:decl-index=0:visual-constraint="10,10"
