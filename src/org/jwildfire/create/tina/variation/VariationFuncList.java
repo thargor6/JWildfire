@@ -378,6 +378,8 @@ public class VariationFuncList {
     registerVariationFunc(JacCnFunc.class);
     registerVariationFunc(JacDnFunc.class);
     registerVariationFunc(JacSnFunc.class);
+    registerVariationFunc(TanCosFunc.class);
+    registerVariationFunc(RippledFunc.class);
   }
 
   private static void registerVariationFunc(
