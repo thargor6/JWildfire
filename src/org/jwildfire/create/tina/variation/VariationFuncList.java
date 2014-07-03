@@ -386,6 +386,9 @@ public class VariationFuncList {
     registerVariationFunc(Rays1Func.class);
     registerVariationFunc(Rays2Func.class);
     registerVariationFunc(Rays3Func.class);
+    registerVariationFunc(PetalFunc.class);
+    registerVariationFunc(EnnepersFunc.class);
+    registerVariationFunc(SquirrelFunc.class);
   }
 
   private static void registerVariationFunc(

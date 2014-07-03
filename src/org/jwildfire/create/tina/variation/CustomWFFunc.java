@@ -69,13 +69,6 @@ public class CustomWFFunc extends VariationFunc {
       "    //     pVarTP.color = 0.75;\r\n" +
       "    //   }\r\n" +
       "    // ----------------------------------\r\n" +
-      "    // \"bubble\" variation\r\n" +
-      "    //   double r = ((pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y) / 4.0 + 1.0);\r\n" +
-      "    //   double t = pAmount / r;\r\n" +
-      "    //   pVarTP.x += t * pAffineTP.x;\r\n" +
-      "    //   pVarTP.y += t * pAffineTP.y;\r\n" +
-      "    //   pVarTP.z += pAmount * (2.0 / r - 1.0);\r\n" +
-      "    // ----------------------------------\r\n" +
       "    // \"rose_wf\" variation\r\n" +
       "    //   final double amp=0.5;\r\n" +
       "    //   final double waves=4;\r\n" +
@@ -88,6 +81,13 @@ public class CustomWFFunc extends VariationFunc {
       "    //   double ny = cos(a0) * r;\r\n" +
       "    //   pVarTP.x += pAmount * nx;\r\n" +
       "    //   pVarTP.y += pAmount * ny;\r\n" +
+      "    // ----------------------------------\r\n" +
+      "    // \"bubble\" variation\r\n" +
+      "       double r = ((pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y) / 4.0 + 1.0);\r\n" +
+      "       double t = pAmount / r;\r\n" +
+      "       pVarTP.x += t * pAffineTP.x;\r\n" +
+      "       pVarTP.y += t * pAffineTP.y;\r\n" +
+      "       pVarTP.z += pAmount * (2.0 / r - 1.0);\r\n" +
       "    // ----------------------------------\r\n" +
       "    // ...\r\n" +
       "  }\r\n" +
