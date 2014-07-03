@@ -380,6 +380,12 @@ public class VariationFuncList {
     registerVariationFunc(JacSnFunc.class);
     registerVariationFunc(TanCosFunc.class);
     registerVariationFunc(RippledFunc.class);
+    registerVariationFunc(FunnelFunc.class);
+    registerVariationFunc(RoundSpherFunc.class);
+    registerVariationFunc(SpiralwingFunc.class);
+    registerVariationFunc(Rays1Func.class);
+    registerVariationFunc(Rays2Func.class);
+    registerVariationFunc(Rays3Func.class);
   }
 
   private static void registerVariationFunc(
