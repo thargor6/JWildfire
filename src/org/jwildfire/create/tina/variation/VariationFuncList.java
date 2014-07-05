@@ -396,6 +396,7 @@ public class VariationFuncList {
     registerVariationFunc(SphereNjaFunc.class);
     registerVariationFunc(Oscilloscope2Func.class);
     registerVariationFunc(Scry2Func.class);
+    registerVariationFunc(ScramblyFunc.class);
   }
 
   private static void registerVariationFunc(
