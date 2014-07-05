@@ -180,18 +180,6 @@ public class DefaultRenderIterationState extends RenderIterationState {
       plotGreen += (plotGreen - avg) * p.modSaturation;
       plotBlue += (plotBlue - avg) * p.modSaturation;
     }
-    if (plotRed < 0)
-      plotRed = 0;
-    else if (plotRed > 255)
-      plotRed = 255.0;
-    if (plotGreen < 0)
-      plotGreen = 0;
-    else if (plotGreen > 255)
-      plotGreen = 255.0;
-    if (plotBlue < 0)
-      plotBlue = 0;
-    else if (plotBlue > 255)
-      plotBlue = 255.0;
   }
 
   public interface PointProjector {

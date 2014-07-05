@@ -2939,8 +2939,8 @@ public class TinaInternalFrame extends JInternalFrame {
       xFormModGammaREd.setText("");
       xFormModGammaREd.setSize(new Dimension(55, 22));
       xFormModGammaREd.setPreferredSize(new Dimension(55, 22));
-      xFormModGammaREd.setMinValue(-1.0);
-      xFormModGammaREd.setMaxValue(1.0);
+      xFormModGammaREd.setMinValue(-3.0);
+      xFormModGammaREd.setMaxValue(3.0);
       xFormModGammaREd.setLocation(new Point(70, 21));
       xFormModGammaREd.setHasMinValue(true);
       xFormModGammaREd.setHasMaxValue(true);
@@ -3044,8 +3044,8 @@ public class TinaInternalFrame extends JInternalFrame {
       xFormModContrastREd.setText("");
       xFormModContrastREd.setSize(new Dimension(55, 22));
       xFormModContrastREd.setPreferredSize(new Dimension(55, 22));
-      xFormModContrastREd.setMinValue(-1.0);
-      xFormModContrastREd.setMaxValue(1.0);
+      xFormModContrastREd.setMinValue(-2.0);
+      xFormModContrastREd.setMaxValue(2.0);
       xFormModContrastREd.setLocation(new Point(70, 21));
       xFormModContrastREd.setHasMinValue(true);
       xFormModContrastREd.setHasMaxValue(true);
@@ -3163,8 +3163,8 @@ public class TinaInternalFrame extends JInternalFrame {
       xFormModSaturationREd.setText("");
       xFormModSaturationREd.setSize(new Dimension(55, 22));
       xFormModSaturationREd.setPreferredSize(new Dimension(55, 22));
-      xFormModSaturationREd.setMinValue(-1.0);
-      xFormModSaturationREd.setMaxValue(1.0);
+      xFormModSaturationREd.setMinValue(-2.0);
+      xFormModSaturationREd.setMaxValue(2.0);
       xFormModSaturationREd.setLocation(new Point(70, 21));
       xFormModSaturationREd.setHasMinValue(true);
       xFormModSaturationREd.setHasMaxValue(true);

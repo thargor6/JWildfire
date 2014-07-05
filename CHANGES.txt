@@ -1,3 +1,18 @@
+V1.70 (06.07.2014):
+ - new tab for local modification of gamma, contrast and saturation on a transform-basis. 
+   Those work similiar to the color values ("color" and "color-speed"), but they control changes in applied color values, 
+   rather than specifying color values themselfs. This is a true new addition to the Flame Fractal Algorithm itself, 
+   and makes it much more easy to create flame fractals with more depth, without the need of endless fiddling with the gradient :-)     
+ - new buttoms for randomization and reset of local color effects   
+ - new mutation-type "Local gamma" allowing local-gamma-modifications in the MutaGen-module
+ - new "oscilloscope2" and "scry2"-variations by dark-beam
+ - new "circlize2", "squarize" and "squish" - variations by Michael Faber
+ - new "splits3D"-variation by TyrantWave
+ - new "sphere_nja"-variation by Nic Anderson
+ - new "tancos", "rippled", "funnel", "roundspher", "spiralwing", "rays1", "rays2" and "rays3", "ennepers", "petal" and "squirrel"-variations by Raykoid666
+ - improved "cross"-random-flame-generator, also uses the new "rays"-variations 
+ - made the "custom_wf"-variation more robust against compile/syntax errors
+ 
 V1.64 (20.06.2014):
  - improved the precision of the the numberic fields (7 digits after the decimal point are guaranteed in the most cases), which is especially great for gnarls. Thanks for dark-beam for pointing at this old bug! :-)
  - improved the smoothness of modifying parameters by dragging the mouse by about factor 2.5
