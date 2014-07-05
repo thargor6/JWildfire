@@ -393,6 +393,7 @@ public class VariationFuncList {
     registerVariationFunc(SquarizeFunc.class);
     registerVariationFunc(SquishFunc.class);
     registerVariationFunc(Circlize2Func.class);
+    registerVariationFunc(SphereNjaFunc.class);
   }
 
   private static void registerVariationFunc(
