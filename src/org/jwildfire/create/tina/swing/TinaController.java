@@ -4795,8 +4795,8 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
   }
 
   private List<MutationType> createRandomMutationTypes() {
-    MutationType allMutationTypes[] = { MutationType.ADD_TRANSFORM, MutationType.ADD_VARIATION, MutationType.CHANGE_WEIGHT, MutationType.GRADIENT_POSITION, MutationType.AFFINE, MutationType.RANDOM_GRADIENT, MutationType.RANDOM_PARAMETER };
-    int[] allCounts = { 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 4, 4, 5, 6, 7, 8, 9 };
+    MutationType allMutationTypes[] = { MutationType.LOCAL_GAMMA, MutationType.ADD_TRANSFORM, MutationType.ADD_VARIATION, MutationType.CHANGE_WEIGHT, MutationType.GRADIENT_POSITION, MutationType.AFFINE, MutationType.RANDOM_GRADIENT, MutationType.RANDOM_PARAMETER };
+    int[] allCounts = { 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 4, 4, 5, 6, 7, 8, 9 };
     int count = allCounts[(int) (Math.random() * allCounts.length)];
     List<MutationType> res = new ArrayList<MutationType>();
     for (int i = 0; i < count; i++) {

@@ -47,6 +47,12 @@ public enum MutationType {
       return GradientPositionMutation.class;
     }
   },
+  LOCAL_GAMMA {
+    @Override
+    protected Class<? extends Mutation> getMutationClass() {
+      return LocalGammaMutation.class;
+    }
+  },
   AFFINE {
     @Override
     protected Class<? extends Mutation> getMutationClass() {
