@@ -16,27 +16,53 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.EPSILON;
-import static org.jwildfire.base.mathlib.MathLib.cos;
-import static org.jwildfire.base.mathlib.MathLib.sin;
+import static org.jwildfire.base.mathlib.MathLib.M_1_PI;
+import static org.jwildfire.base.mathlib.MathLib.M_2PI;
+import static org.jwildfire.base.mathlib.MathLib.atan2;
 import static org.jwildfire.base.mathlib.MathLib.sqr;
+import static org.jwildfire.base.mathlib.MathLib.sqrt;
 
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
-public class SpiralwingFunc extends SimpleVariationFunc {
+public class SquarizeFunc extends SimpleVariationFunc {
   private static final long serialVersionUID = 1L;
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-    // spiralwing by Raykoid666, http://raykoid666.deviantart.com/art/re-pack-1-new-plugins-100092186 
-    double c1 = sqr(pAffineTP.x);
-    double c2 = sqr(pAffineTP.y);
-    double d = pAmount / (c1 + c2 + EPSILON);
-    c2 = sin(c2); // speedup
+    // squarize by MichaelFaber - The angle pack: http://michaelfaber.deviantart.com/art/The-Angle-Pack-277718538
 
-    pVarTP.x += d * cos(c1) * c2;
-    pVarTP.y += d * sin(c1) * c2;
+    double s = sqrt(sqr(pAffineTP.x) + sqr(pAffineTP.y));
+    double a = atan2(pAffineTP.y, pAffineTP.x);
+    if (a < 0.0)
+      a += M_2PI;
+    double p = 4.0 * s * a * M_1_PI;
+
+    if (p <= 1.0 * s)
+    {
+      pVarTP.x += pAmount * s;
+      pVarTP.y += pAmount * p;
+    }
+    else if (p <= 3.0 * s)
+    {
+      pVarTP.x += pAmount * (2.0 * s - p);
+      pVarTP.y += pAmount * (s);
+    }
+    else if (p <= 5.0 * s)
+    {
+      pVarTP.x -= pAmount * (s);
+      pVarTP.y += pAmount * (4.0 * s - p);
+    }
+    else if (p <= 7.0 * s)
+    {
+      pVarTP.x -= pAmount * (6.0 * s - p);
+      pVarTP.y -= pAmount * (s);
+    }
+    else
+    {
+      pVarTP.x += pAmount * (s);
+      pVarTP.y -= pAmount * (8.0 * s - p);
+    }
 
     if (pContext.isPreserveZCoordinate()) {
       pVarTP.z += pAmount * pAffineTP.z;
@@ -45,7 +71,7 @@ public class SpiralwingFunc extends SimpleVariationFunc {
 
   @Override
   public String getName() {
-    return "spiralwing";
+    return "squarize";
   }
 
 }
