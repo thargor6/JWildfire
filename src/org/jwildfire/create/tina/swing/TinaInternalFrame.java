@@ -79,7 +79,6 @@ import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 
 import org.jwildfire.base.Prefs;
-import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.animate.GlobalScriptType;
 import org.jwildfire.create.tina.animate.XFormScriptType;
 import org.jwildfire.create.tina.base.DrawMode;
@@ -9787,9 +9786,8 @@ public class TinaInternalFrame extends JInternalFrame {
       rootTabbedPane.addTab("Easy Movie Maker ", new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/applications-multimedia.png")), getTinaSWFAnimatorPanel(), null);
       rootTabbedPane.addTab("Dancing Flames Movies ", new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/kipina.png")), getPanel_36(), null);
       rootTabbedPane.addTab("Batch Flame Renderer ", new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/images.png")), getBatchRenderPanel(), null);
-      if (Tools.V2_FEATURE_ENABLE) {
-        rootTabbedPane.addTab("FFmpeg Video Encoder", new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/emblem-videos.png")), getPanel_88(), null);
-      }
+      rootTabbedPane.addTab("3DMesh Generation", new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/sports-soccer.png")), getPanel_88(), null);
+      // "FFmpeg Video Encoder" "emblem-videos.png"
       JPanel helpPanel = new JPanel();
       rootTabbedPane.addTab("Help/About ", new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/dialog-information-3.png")), helpPanel, null);
       helpPanel.setLayout(new BorderLayout(0, 0));
@@ -10300,6 +10298,10 @@ public class TinaInternalFrame extends JInternalFrame {
   private JCheckBox xFormModGammaWholeFractalCBx;
   private JButton xFormModGammaResetBtn;
   private JButton xFormModGammaRandomizeBtn;
+  private JPanel panel_89;
+  private JPanel panel_90;
+  private JPanel panel_91;
+  private JPanel panel_92;
 
   /**
    * This method initializes renderBatchJobsScrollPane	
@@ -18726,6 +18728,31 @@ public class TinaInternalFrame extends JInternalFrame {
     if (panel_88 == null) {
       panel_88 = new JPanel();
       panel_88.setLayout(new BorderLayout(0, 0));
+      panel_88.add(getPanel_89(), BorderLayout.NORTH);
+
+      JPanel panel_1 = new JPanel();
+      panel_1.setPreferredSize(new Dimension(10, 200));
+      panel_88.add(panel_1, BorderLayout.SOUTH);
+      panel_1.setLayout(new GridLayout(0, 2, 0, 0));
+      panel_1.add(getPanel_91());
+      panel_1.add(getPanel_92());
+
+      JPanel panel_2 = new JPanel();
+      panel_88.add(panel_2, BorderLayout.CENTER);
+      panel_2.setLayout(new GridLayout(0, 3, 0, 0));
+
+      JPanel panel_3 = new JPanel();
+      panel_3.setBorder(new TitledBorder(null, "Top view", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+      panel_2.add(panel_3);
+      panel_3.setLayout(null);
+
+      JPanel panel_8 = new JPanel();
+      panel_8.setBorder(new TitledBorder(null, "Front view", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+      panel_2.add(panel_8);
+
+      JPanel panel_9 = new JPanel();
+      panel_9.setBorder(new TitledBorder(null, "Perspective view", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+      panel_2.add(panel_9);
     }
     return panel_88;
   }
@@ -18788,6 +18815,211 @@ public class TinaInternalFrame extends JInternalFrame {
 
   public JButton getXFormModGammaRandomizeBtn() {
     return xFormModGammaRandomizeBtn;
+  }
+
+  private JPanel getPanel_89() {
+    if (panel_89 == null) {
+      panel_89 = new JPanel();
+      panel_89.setPreferredSize(new Dimension(10, 112));
+      panel_89.setLayout(new BorderLayout(0, 0));
+      panel_89.add(getPanel_90(), BorderLayout.WEST);
+
+      JPanel panel_1 = new JPanel();
+      panel_1.setBorder(new TitledBorder(null, "Slice generation", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+      panel_89.add(panel_1, BorderLayout.CENTER);
+      panel_1.setLayout(new BorderLayout(0, 0));
+
+      JPanel panel_2 = new JPanel();
+      panel_2.setPreferredSize(new Dimension(10, 24));
+      panel_1.add(panel_2, BorderLayout.SOUTH);
+      panel_2.setLayout(new BorderLayout(0, 0));
+
+      JProgressBar progressBar = new JProgressBar();
+      progressBar.setValue(0);
+      progressBar.setStringPainted(true);
+      progressBar.setPreferredSize(new Dimension(568, 21));
+      panel_2.add(progressBar, BorderLayout.CENTER);
+
+      JPanel panel_3 = new JPanel();
+      panel_3.setPreferredSize(new Dimension(460, 10));
+      panel_1.add(panel_3, BorderLayout.WEST);
+      panel_3.setLayout(null);
+
+      JLabel lblRenderWidth = new JLabel();
+      lblRenderWidth.setText("Render width");
+      lblRenderWidth.setSize(new Dimension(68, 22));
+      lblRenderWidth.setPreferredSize(new Dimension(94, 22));
+      lblRenderWidth.setName("");
+      lblRenderWidth.setLocation(new Point(4, 76));
+      lblRenderWidth.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblRenderWidth.setBounds(6, 2, 79, 22);
+      panel_3.add(lblRenderWidth);
+
+      JWFNumberField numberField = new JWFNumberField();
+      numberField.setValueStep(0.01);
+      numberField.setText("");
+      numberField.setSize(new Dimension(100, 24));
+      numberField.setPreferredSize(new Dimension(100, 24));
+      numberField.setMotionPropertyName("camPerspective");
+      numberField.setMaxValue(1.0);
+      numberField.setLocation(new Point(71, 76));
+      numberField.setLinkedMotionControlName("tinaCameraPerspectiveSlider");
+      numberField.setLinkedLabelControlName("tinaCameraPerspectiveLbl");
+      numberField.setHasMinValue(true);
+      numberField.setHasMaxValue(true);
+      numberField.setFont(new Font("Dialog", Font.PLAIN, 10));
+      numberField.setBounds(82, 0, 100, 24);
+      panel_3.add(numberField);
+
+      JLabel lblRenderHeight = new JLabel();
+      lblRenderHeight.setText("Render height");
+      lblRenderHeight.setSize(new Dimension(68, 22));
+      lblRenderHeight.setPreferredSize(new Dimension(94, 22));
+      lblRenderHeight.setName("");
+      lblRenderHeight.setLocation(new Point(4, 76));
+      lblRenderHeight.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblRenderHeight.setBounds(6, 26, 79, 22);
+      panel_3.add(lblRenderHeight);
+
+      JWFNumberField numberField_1 = new JWFNumberField();
+      numberField_1.setValueStep(0.01);
+      numberField_1.setText("");
+      numberField_1.setSize(new Dimension(100, 24));
+      numberField_1.setPreferredSize(new Dimension(100, 24));
+      numberField_1.setMotionPropertyName("camPerspective");
+      numberField_1.setMaxValue(1.0);
+      numberField_1.setLocation(new Point(71, 76));
+      numberField_1.setLinkedMotionControlName("tinaCameraPerspectiveSlider");
+      numberField_1.setLinkedLabelControlName("tinaCameraPerspectiveLbl");
+      numberField_1.setHasMinValue(true);
+      numberField_1.setHasMaxValue(true);
+      numberField_1.setFont(new Font("Dialog", Font.PLAIN, 10));
+      numberField_1.setBounds(82, 24, 100, 24);
+      panel_3.add(numberField_1);
+
+      JWFNumberField numberField_2 = new JWFNumberField();
+      numberField_2.setValueStep(0.01);
+      numberField_2.setText("");
+      numberField_2.setSize(new Dimension(100, 24));
+      numberField_2.setPreferredSize(new Dimension(100, 24));
+      numberField_2.setMotionPropertyName("camPerspective");
+      numberField_2.setMaxValue(1.0);
+      numberField_2.setLocation(new Point(71, 76));
+      numberField_2.setLinkedMotionControlName("tinaCameraPerspectiveSlider");
+      numberField_2.setLinkedLabelControlName("tinaCameraPerspectiveLbl");
+      numberField_2.setHasMinValue(true);
+      numberField_2.setHasMaxValue(true);
+      numberField_2.setFont(new Font("Dialog", Font.PLAIN, 10));
+      numberField_2.setBounds(355, 0, 100, 24);
+      panel_3.add(numberField_2);
+
+      JLabel lblNumberOfSlices = new JLabel();
+      lblNumberOfSlices.setText("Total number of slices");
+      lblNumberOfSlices.setSize(new Dimension(68, 22));
+      lblNumberOfSlices.setPreferredSize(new Dimension(94, 22));
+      lblNumberOfSlices.setName("");
+      lblNumberOfSlices.setLocation(new Point(4, 76));
+      lblNumberOfSlices.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblNumberOfSlices.setBounds(205, 2, 157, 22);
+      panel_3.add(lblNumberOfSlices);
+
+      JLabel lblSlicesPerPass = new JLabel();
+      lblSlicesPerPass.setText("Slices per pass (for speedup)");
+      lblSlicesPerPass.setSize(new Dimension(68, 22));
+      lblSlicesPerPass.setPreferredSize(new Dimension(94, 22));
+      lblSlicesPerPass.setName("");
+      lblSlicesPerPass.setLocation(new Point(4, 76));
+      lblSlicesPerPass.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblSlicesPerPass.setBounds(205, 26, 157, 22);
+      panel_3.add(lblSlicesPerPass);
+
+      JWFNumberField numberField_3 = new JWFNumberField();
+      numberField_3.setValueStep(0.01);
+      numberField_3.setText("");
+      numberField_3.setSize(new Dimension(100, 24));
+      numberField_3.setPreferredSize(new Dimension(100, 24));
+      numberField_3.setMotionPropertyName("camPerspective");
+      numberField_3.setMaxValue(1.0);
+      numberField_3.setLocation(new Point(71, 76));
+      numberField_3.setLinkedMotionControlName("tinaCameraPerspectiveSlider");
+      numberField_3.setLinkedLabelControlName("tinaCameraPerspectiveLbl");
+      numberField_3.setHasMinValue(true);
+      numberField_3.setHasMaxValue(true);
+      numberField_3.setFont(new Font("Dialog", Font.PLAIN, 10));
+      numberField_3.setBounds(355, 24, 100, 24);
+      panel_3.add(numberField_3);
+
+      JPanel panel_8 = new JPanel();
+      panel_8.setPreferredSize(new Dimension(126, 10));
+      panel_1.add(panel_8, BorderLayout.EAST);
+      panel_8.setLayout(null);
+
+      JButton btnGenerateSlices = new JButton();
+      btnGenerateSlices.setText("Generate slices");
+      btnGenerateSlices.setPreferredSize(new Dimension(125, 24));
+      btnGenerateSlices.setFont(new Font("Dialog", Font.BOLD, 10));
+      btnGenerateSlices.setBounds(0, 0, 125, 52);
+      panel_8.add(btnGenerateSlices);
+    }
+    return panel_89;
+  }
+
+  private JPanel getPanel_90() {
+    if (panel_90 == null) {
+      panel_90 = new JPanel();
+      panel_90.setBorder(new TitledBorder(null, "Input flame", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+      panel_90.setPreferredSize(new Dimension(176, 10));
+      panel_90.setLayout(null);
+
+      JButton button = new JButton();
+      button.setBounds(18, 22, 138, 24);
+      panel_90.add(button);
+      button.setToolTipText("Load flame from Editor and render");
+      button.setText("From Editor");
+      button.setPreferredSize(new Dimension(125, 24));
+      button.setMinimumSize(new Dimension(100, 24));
+      button.setMaximumSize(new Dimension(32000, 24));
+      button.setFont(new Font("Dialog", Font.BOLD, 10));
+
+      JButton button_1 = new JButton();
+      button_1.setBounds(18, 46, 138, 24);
+      panel_90.add(button_1);
+      button_1.setToolTipText("Load flame from clipboard and render");
+      button_1.setText("From Clipboard");
+      button_1.setPreferredSize(new Dimension(125, 24));
+      button_1.setMinimumSize(new Dimension(100, 24));
+      button_1.setMaximumSize(new Dimension(32000, 24));
+      button_1.setFont(new Font("Dialog", Font.BOLD, 10));
+
+      JButton button_2 = new JButton();
+      button_2.setBounds(18, 70, 138, 24);
+      panel_90.add(button_2);
+      button_2.setToolTipText("Load flame from file and render");
+      button_2.setText("Load Flame");
+      button_2.setPreferredSize(new Dimension(125, 24));
+      button_2.setMinimumSize(new Dimension(100, 24));
+      button_2.setMaximumSize(new Dimension(32000, 24));
+      button_2.setFont(new Font("Dialog", Font.BOLD, 10));
+    }
+    return panel_90;
+  }
+
+  private JPanel getPanel_91() {
+    if (panel_91 == null) {
+      panel_91 = new JPanel();
+      panel_91.setBorder(new TitledBorder(null, "Fractal position", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+      panel_91.setLayout(null);
+    }
+    return panel_91;
+  }
+
+  private JPanel getPanel_92() {
+    if (panel_92 == null) {
+      panel_92 = new JPanel();
+      panel_92.setBorder(new TitledBorder(null, "Slice position", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+      panel_92.setLayout(null);
+    }
+    return panel_92;
   }
 } //  @jve:decl-index=0:visual-constraint="10,10"
 
