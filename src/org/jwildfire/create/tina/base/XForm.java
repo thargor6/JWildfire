@@ -310,6 +310,7 @@ public final class XForm implements Assignable<XForm>, Serializable {
     pVarT.modGamma = pAffineT.modGamma;
     pVarT.modContrast = pAffineT.modContrast;
     pVarT.modSaturation = pAffineT.modSaturation;
+    pVarT.dontPlot = pAffineT.dontPlot;
     pVarT.rgbColor = pAffineT.rgbColor;
     pVarT.redColor = pAffineT.redColor;
     pVarT.greenColor = pAffineT.greenColor;
@@ -336,6 +337,7 @@ public final class XForm implements Assignable<XForm>, Serializable {
     pDstPoint.modGamma = pVarT.modGamma;
     pDstPoint.modContrast = pVarT.modContrast;
     pDstPoint.modSaturation = pVarT.modSaturation;
+    pDstPoint.dontPlot = pVarT.dontPlot;
     pDstPoint.rgbColor = pVarT.rgbColor;
     pDstPoint.redColor = pVarT.redColor;
     pDstPoint.greenColor = pVarT.greenColor;
@@ -360,6 +362,7 @@ public final class XForm implements Assignable<XForm>, Serializable {
       pAffineT[i].modGamma = pSrcPoint[i].modGamma * modGamma1 + modGamma2;
       pAffineT[i].modContrast = pSrcPoint[i].modContrast * modContrast1 + modContrast2;
       pAffineT[i].modSaturation = pSrcPoint[i].modSaturation * modSaturation1 + modSaturation2;
+      pAffineT[i].dontPlot = pSrcPoint[i].dontPlot;
       pAffineT[i].x = coeff00 * pSrcPoint[i].x + coeff10 * pSrcPoint[i].y + coeff20;
       pAffineT[i].y = coeff01 * pSrcPoint[i].x + coeff11 * pSrcPoint[i].y + coeff21;
       pAffineT[i].z = pSrcPoint[i].z;
@@ -368,6 +371,7 @@ public final class XForm implements Assignable<XForm>, Serializable {
       pVarT[i].modGamma = pAffineT[i].modGamma;
       pVarT[i].modContrast = pAffineT[i].modContrast;
       pVarT[i].modSaturation = pAffineT[i].modSaturation;
+      pVarT[i].dontPlot = pAffineT[i].dontPlot;
       for (Variation variation : variations) {
         if (variation.getFunc().getPriority() < 0) {
           variation.transform(pContext, this, pAffineT[i], pVarT[i]);

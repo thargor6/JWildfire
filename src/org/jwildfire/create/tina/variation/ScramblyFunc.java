@@ -101,7 +101,7 @@ public class ScramblyFunc extends VariationFunc {
     else if (PARAM_BYROWS.equalsIgnoreCase(pName))
       byrows = Tools.FTOI(pValue);
     else if (PARAM_CELLSIZE.equalsIgnoreCase(pName))
-      cellsize = limitVal(pValue, 1.0e-20, 1.0);
+      cellsize = limitVal(pValue, 1.0e-20, 1.0e20);
     else
       throw new IllegalArgumentException(pName);
   }

@@ -11,8 +11,8 @@ public abstract class DefaultRenderThread extends AbstractRenderThread {
   protected long iter;
   protected List<DefaultRenderIterationState> iterationState;
 
-  public DefaultRenderThread(Prefs pPrefs, int pThreadId, FlameRenderer pRenderer, List<RenderPacket> pRenderPackets, long pSamples) {
-    super(pPrefs, pThreadId, pRenderer, pRenderPackets, pSamples);
+  public DefaultRenderThread(Prefs pPrefs, int pThreadId, FlameRenderer pRenderer, List<RenderPacket> pRenderPackets, long pSamples, List<RenderSlice> pSlices) {
+    super(pPrefs, pThreadId, pRenderer, pRenderPackets, pSamples, pSlices);
     iterationState = new ArrayList<DefaultRenderIterationState>();
     for (RenderPacket packet : pRenderPackets) {
       List<Layer> layers = getValidLayers(packet.getFlame());
@@ -98,6 +98,32 @@ public abstract class DefaultRenderThread extends AbstractRenderThread {
       }
       for (DefaultRenderIterationState state : iterationState) {
         state.iterateNext();
+      }
+    }
+  }
+
+  @Override
+  protected void iterateSlices(List<RenderSlice> pSlices) {
+    final int iterInc = iterationState.size();
+    if (iterInc < 1) {
+      return;
+    }
+    for (DefaultRenderIterationState state : iterationState) {
+      state.init();
+    }
+
+    for (iter = startIter; !forceAbort && (samples < 0 || iter < samples); iter += iterInc) {
+      if (iter % 10000 == 0) {
+        preFuseIter();
+      }
+      else if (iter % 100 == 0) {
+        currSample = iter;
+        for (DefaultRenderIterationState state : iterationState) {
+          state.validateState();
+        }
+      }
+      for (DefaultRenderIterationState state : iterationState) {
+        state.iterateNext(pSlices);
       }
     }
   }

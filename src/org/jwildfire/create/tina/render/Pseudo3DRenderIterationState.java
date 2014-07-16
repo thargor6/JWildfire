@@ -120,7 +120,7 @@ public class Pseudo3DRenderIterationState extends DefaultRenderIterationState {
 
   @Override
   protected void plotPoint(int xIdx, int yIdx, double intensity) {
-    AbstractRasterPoint rp = renderer.raster[yIdx][xIdx];
+    AbstractRasterPoint rp = raster[yIdx][xIdx];
     if (pA[0].rgbColor) {
       plotRed = pA[0].redColor;
       plotGreen = pA[0].greenColor;

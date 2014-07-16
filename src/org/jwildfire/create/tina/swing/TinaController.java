@@ -86,6 +86,7 @@ import org.jwildfire.create.tina.dance.DancingFractalsController;
 import org.jwildfire.create.tina.edit.UndoManager;
 import org.jwildfire.create.tina.io.FlameReader;
 import org.jwildfire.create.tina.io.FlameWriter;
+import org.jwildfire.create.tina.meshgen.MeshGenController;
 import org.jwildfire.create.tina.mutagen.MutaGenController;
 import org.jwildfire.create.tina.mutagen.MutationType;
 import org.jwildfire.create.tina.palette.DefaultGradientSelectionProvider;
@@ -109,6 +110,7 @@ import org.jwildfire.create.tina.render.ProgressUpdater;
 import org.jwildfire.create.tina.render.RenderInfo;
 import org.jwildfire.create.tina.render.RenderMode;
 import org.jwildfire.create.tina.render.RenderedFlame;
+import org.jwildfire.create.tina.render.SliceRenderInfo;
 import org.jwildfire.create.tina.render.filter.FilterKernelType;
 import org.jwildfire.create.tina.script.ScriptRunner;
 import org.jwildfire.create.tina.script.ScriptRunnerEnvironment;
@@ -123,6 +125,7 @@ import org.jwildfire.create.tina.variation.VariationFunc;
 import org.jwildfire.create.tina.variation.VariationFuncList;
 import org.jwildfire.image.SimpleImage;
 import org.jwildfire.io.ImageReader;
+import org.jwildfire.io.ImageWriter;
 import org.jwildfire.swing.ErrorHandler;
 import org.jwildfire.swing.ImageFileChooser;
 import org.jwildfire.swing.ImagePanel;
@@ -161,6 +164,7 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
 
   private DancingFractalsController dancingFractalsController;
   private MutaGenController mutaGenController;
+  private MeshGenController meshGenController;
   private TinaInteractiveRendererController interactiveRendererCtrl;
   private TinaSWFAnimatorController swfAnimatorCtrl;
   private JWFScriptController jwfScriptController;
@@ -253,6 +257,22 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
           parameterObject.mutaGenVerticalTrend1Cmb, parameterObject.mutaGenVerticalTrend2Cmb, parameterObject.mutaGenBackBtn, parameterObject.mutaGenForwardBtn,
           parameterObject.mutaGenHintPane, parameterObject.mutaGenSaveFlameToEditorBtn, parameterObject.mutaGenSaveFlameToFileBtn);
     }
+
+    meshGenController = new MeshGenController(this, parameterObject.pErrorHandler, prefs, parameterObject.pRootTabbedPane,
+        parameterObject.meshGenFromEditorBtn, parameterObject.meshGenFromClipboardBtn, parameterObject.meshGenLoadFlameBtn,
+        parameterObject.meshGenSliceCountREd, parameterObject.meshGenSlicesPerRenderREd, parameterObject.meshGenRenderWidthREd,
+        parameterObject.meshGenRenderHeightREd, parameterObject.meshGenRenderQualityREd, parameterObject.meshGenProgressbar,
+        parameterObject.meshGenGenerateBtn, parameterObject.meshGenTopViewRootPnl, parameterObject.meshGenFrontViewRootPnl,
+        parameterObject.meshGenPerspectiveViewRootPnl, parameterObject.meshGenHintPane, parameterObject.meshGenCentreXREd,
+        parameterObject.meshGenCentreXSlider, parameterObject.meshGenCentreYREd, parameterObject.meshGenCentreYSlider,
+        parameterObject.meshGenZoomREd, parameterObject.meshGenZoomSlider, parameterObject.meshGenZMinREd,
+        parameterObject.meshGenZMinSlider, parameterObject.meshGenZMaxREd, parameterObject.meshGenZMaxSlider,
+        parameterObject.meshGenTopViewShowSliceBtn, parameterObject.meshGenTopViewRenderBtn,
+        parameterObject.meshGenFrontViewShowSliceBtn, parameterObject.meshGenFrontViewRenderBtn,
+        parameterObject.meshGenPerspectiveViewShowSliceBtn, parameterObject.meshGenPerspectiveViewRenderBtn,
+        parameterObject.meshGenTopViewSlicePositionREd, parameterObject.meshGenTopViewSlicePositionSlider,
+        parameterObject.meshGenFrontViewSlicePositionREd, parameterObject.meshGenFrontViewSlicePositionSlider,
+        parameterObject.meshGenPerspectiveViewSlicePositionREd, parameterObject.meshGenPerspectiveViewSlicePositionSlider);
 
     jwfScriptController = new JWFScriptController(this, parameterObject.pErrorHandler, prefs, parameterObject.pCenterPanel, parameterObject.scriptTree,
         parameterObject.scriptDescriptionTextArea, parameterObject.scriptTextArea, parameterObject.compileScriptButton,
@@ -2103,6 +2123,7 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
     getJwfScriptController().enableControls();
     getGradientController().enableControls();
     getFlameBrowserController().enableControls();
+    getMeshGenController().enableControls();
   }
 
   private void enableJobRenderControls() {
@@ -3547,7 +3568,7 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
     refreshUI();
   }
 
-  protected Flame exportFlame() {
+  public Flame exportFlame() {
     if (getCurrFlame() != null) {
       return getCurrFlame().makeCopy();
     }
@@ -4475,32 +4496,66 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
           final File file = chooser.getSelectedFile();
           prefs.setLastOutputImageFile(file);
 
-          RenderMainFlameThreadFinishEvent finishEvent = new RenderMainFlameThreadFinishEvent() {
+          // TODO
+          // NEW
+          resProfile = new ResolutionProfile();
+          resProfile.setWidth(800);
+          resProfile.setHeight(800);
+          FlameRenderer renderer = new FlameRenderer(flame, prefs, flame.isBGTransparency(), false);
 
-            @Override
-            public void succeeded(double pElapsedTime) {
-              try {
-                showStatusMessage(flame, "render time: " + Tools.doubleToString(pElapsedTime) + "s");
-                mainController.loadImage(file.getAbsolutePath(), false);
-              }
-              catch (Throwable ex) {
-                errorHandler.handleError(ex);
-              }
-              mainRenderThread = null;
-              enableMainRenderControls();
+          int width = resProfile.getWidth();
+          int height = resProfile.getHeight();
+          RenderInfo info = new RenderInfo(width, height, RenderMode.PRODUCTION);
+          double wScl = (double) info.getImageWidth() / (double) flame.getWidth();
+          double hScl = (double) info.getImageHeight() / (double) flame.getHeight();
+          flame.setPixelsPerUnit((wScl + hScl) * 0.5 * flame.getPixelsPerUnit());
+          flame.setWidth(info.getImageWidth());
+          flame.setHeight(info.getImageHeight());
+          flame.setSampleDensity(qualProfile.getQuality());
+
+          renderer.setProgressUpdater(mainProgressUpdater);
+          SliceRenderInfo renderInfo = new SliceRenderInfo(resProfile.getWidth(), resProfile.getHeight(), RenderMode.PRODUCTION, 360, -0.1, 1.9, 50);
+
+          List<RenderedFlame> renderedFlames = renderer.renderSlices(renderInfo);
+
+          int fileIdx = 1;
+          for (RenderedFlame renderedFlame : renderedFlames) {
+            String filename = String.valueOf(fileIdx++);
+            while (filename.length() < 3) {
+              filename = "0" + filename;
             }
+            filename = "C:\\TMP\\wf\\test\\test" + filename + ".png";
+            new ImageWriter().saveImage(renderedFlame.getImage(), filename);
+          }
+          // NEW
 
-            @Override
-            public void failed(Throwable exception) {
-              errorHandler.handleError(exception);
-              mainRenderThread = null;
-              enableMainRenderControls();
-            }
-
-          };
-          mainRenderThread = new RenderMainFlameThread(prefs, flame, file, qualProfile, resProfile, finishEvent, mainProgressUpdater);
-          enableMainRenderControls();
-          new Thread(mainRenderThread).start();
+          // TODO          
+          //          RenderMainFlameThreadFinishEvent finishEvent = new RenderMainFlameThreadFinishEvent() {
+          //
+          //            @Override
+          //            public void succeeded(double pElapsedTime) {
+          //              try {
+          //                showStatusMessage(flame, "render time: " + Tools.doubleToString(pElapsedTime) + "s");
+          //                mainController.loadImage(file.getAbsolutePath(), false);
+          //              }
+          //              catch (Throwable ex) {
+          //                errorHandler.handleError(ex);
+          //              }
+          //              mainRenderThread = null;
+          //              enableMainRenderControls();
+          //            }
+          //
+          //            @Override
+          //            public void failed(Throwable exception) {
+          //              errorHandler.handleError(exception);
+          //              mainRenderThread = null;
+          //              enableMainRenderControls();
+          //            }
+          //
+          //          };
+          //          mainRenderThread = new RenderMainFlameThread(prefs, flame, file, qualProfile, resProfile, finishEvent, mainProgressUpdater);
+          //          enableMainRenderControls();
+          //          new Thread(mainRenderThread).start();
 
         }
       }
@@ -4540,6 +4595,10 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
 
   public MutaGenController getMutaGenController() {
     return mutaGenController;
+  }
+
+  public MeshGenController getMeshGenController() {
+    return meshGenController;
   }
 
   public void paletteSortBtn_clicked() {

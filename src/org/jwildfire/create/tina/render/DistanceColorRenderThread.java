@@ -23,8 +23,8 @@ import org.jwildfire.create.tina.base.Layer;
 
 public final class DistanceColorRenderThread extends DefaultRenderThread {
 
-  public DistanceColorRenderThread(Prefs pPrefs, int pThreadId, FlameRenderer pRenderer, List<RenderPacket> pRenderPackets, long pSamples) {
-    super(pPrefs, pThreadId, pRenderer, pRenderPackets, pSamples);
+  public DistanceColorRenderThread(Prefs pPrefs, int pThreadId, FlameRenderer pRenderer, List<RenderPacket> pRenderPackets, long pSamples, List<RenderSlice> pSlices) {
+    super(pPrefs, pThreadId, pRenderer, pRenderPackets, pSamples, pSlices);
   }
 
   @Override

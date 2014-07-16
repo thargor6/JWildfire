@@ -104,7 +104,7 @@ public class DistanceColorRenderIterationState extends DefaultRenderIterationSta
 
   @Override
   protected void plotPoint(int xIdx, int yIdx, double intensity) {
-    AbstractRasterPoint rp = renderer.raster[yIdx][xIdx];
+    AbstractRasterPoint rp = raster[yIdx][xIdx];
 
     double cx, cy, cz;
     switch (style) {

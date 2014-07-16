@@ -16,6 +16,8 @@
 */
 package org.jwildfire.create.tina.render;
 
+import static org.jwildfire.base.mathlib.MathLib.EPSILON;
+import static org.jwildfire.base.mathlib.MathLib.fabs;
 import static org.jwildfire.base.mathlib.MathLib.log10;
 
 import org.jwildfire.create.tina.base.Flame;
@@ -117,11 +119,20 @@ public class LogDensityFilter {
   public void transformPointSimple(LogDensityPoint pFilteredPnt, int pX, int pY) {
     AbstractRasterPoint point = getRasterPoint(pX, pY);
     double logScale;
-    if (point.getCount() < precalcLogArray.length) {
-      logScale = precalcLogArray[(int) point.getCount()];
+    long cnt = point.getCount();
+    double contrib = cnt > 0 ? point.getContribution() / cnt + 1.0 : 1.0;
+    contrib = 1.0;
+    if (fabs(contrib - 1.0) < EPSILON) {
+      if (point.getCount() < precalcLogArray.length) {
+        logScale = precalcLogArray[(int) point.getCount()];
+      }
+      else {
+        logScale = (k1 * log10(1.0 + point.getCount() * motionBlurScl * k2)) / (flame.getWhiteLevel() * point.getCount() * motionBlurScl);
+      }
     }
     else {
-      logScale = (k1 * log10(1.0 + point.getCount() * motionBlurScl * k2)) / (flame.getWhiteLevel() * point.getCount() * motionBlurScl);
+      //      System.out.println(contrib);
+      logScale = (k1 * log10(1.0 + point.getCount() * contrib * motionBlurScl * k2)) / (flame.getWhiteLevel() * point.getCount() * motionBlurScl);
     }
     pFilteredPnt.red = logScale * point.getRed();
     pFilteredPnt.green = logScale * point.getGreen();
@@ -173,11 +184,21 @@ public class LogDensityFilter {
     else {
       AbstractRasterPoint point = getRasterPoint(pX, pY);
       double logScale;
-      if (point.getCount() < precalcLogArray.length) {
-        logScale = precalcLogArray[(int) point.getCount()];
+      long cnt = point.getCount();
+      double contrib = cnt > 0 ? point.getContribution() / cnt + 1.0 : 1.0;
+      contrib = 1.0;
+
+      if (fabs(contrib - 1.0) < EPSILON) {
+        if (point.getCount() < precalcLogArray.length) {
+          logScale = precalcLogArray[(int) point.getCount()];
+        }
+        else {
+          logScale = (k1 * log10(1.0 + point.getCount() * motionBlurScl * k2)) / (flame.getWhiteLevel() * point.getCount() * motionBlurScl);
+        }
       }
       else {
-        logScale = (k1 * log10(1.0 + point.getCount() * motionBlurScl * k2)) / (flame.getWhiteLevel() * point.getCount() * motionBlurScl);
+        //        System.out.println(contrib);
+        logScale = (k1 * log10(1.0 + point.getCount() * contrib * motionBlurScl * k2)) / (flame.getWhiteLevel() * point.getCount() * motionBlurScl);
       }
       pFilteredPnt.red = logScale * point.getRed();
       pFilteredPnt.green = logScale * point.getGreen();

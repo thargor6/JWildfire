@@ -105,12 +105,69 @@ public class DefaultRenderIterationState extends RenderIterationState {
     List<XForm> finalXForms = layer.getFinalXForms();
     if (finalXForms.size() > 0) {
       applyFinalTransforms(finalXForms);
-      projector.projectPoint(q);
+      if (!q.dontPlot) {
+        projector.projectPoint(q);
+      }
     }
     else {
       applyEmptyFinalTransform();
-      projector.projectPoint(q);
+      if (!q.dontPlot) {
+        projector.projectPoint(q);
+      }
     }
+  }
+
+  public void iterateNext(List<RenderSlice> pSlices) {
+    int nextXForm = randGen.random(Constants.NEXT_APPLIED_XFORM_TABLE_SIZE);
+    xf = xf.getNextAppliedXFormTable()[nextXForm];
+    if (xf == null) {
+      return;
+    }
+    transformPoint();
+    if (xf.getDrawMode() == DrawMode.HIDDEN)
+      return;
+    else if ((xf.getDrawMode() == DrawMode.OPAQUE) && (randGen.random() > xf.getOpacity()))
+      return;
+    List<XForm> finalXForms = layer.getFinalXForms();
+    if (finalXForms.size() > 0) {
+      applyFinalTransforms(finalXForms);
+      if (!q.dontPlot) {
+        if (setupSliceRaster(q, pSlices)) {
+          projector.projectPoint(q);
+        }
+      }
+    }
+    else {
+      applyEmptyFinalTransform();
+      if (!q.dontPlot) {
+        if (setupSliceRaster(q, pSlices)) {
+          projector.projectPoint(q);
+        }
+      }
+    }
+  }
+
+  private boolean setupSliceRaster(XYZPoint pPoint, List<RenderSlice> pSlices) {
+    int sliceIdx = getSliceIndex(pPoint, pSlices);
+    if (sliceIdx >= 0) {
+      raster = pSlices.get(sliceIdx).getRaster();
+      return true;
+    }
+    else {
+      raster = null;
+      return false;
+    }
+  }
+
+  private int getSliceIndex(XYZPoint pPoint, List<RenderSlice> pSlices) {
+    double value = pPoint.z;
+    for (int i = 0; i < pSlices.size(); i++) {
+      RenderSlice slice = pSlices.get(i);
+      if (value >= slice.getZmin() && value < slice.getZmax()) {
+        return i;
+      }
+    }
+    return -1;
   }
 
   protected void applyEmptyFinalTransform() {
@@ -128,14 +185,19 @@ public class DefaultRenderIterationState extends RenderIterationState {
     xf.transformPoint(ctx, affineT, varT, p, p);
   }
 
-  protected double plotRed, plotGreen, plotBlue;
+  protected double plotRed, plotGreen, plotBlue, plotContribution;
 
   protected void plotPoint(int xIdx, int yIdx, double intensity) {
-    AbstractRasterPoint rp = renderer.raster[yIdx][xIdx];
+    AbstractRasterPoint rp = raster[yIdx][xIdx];
     if (p.rgbColor) {
       plotRed = p.redColor;
       plotGreen = p.greenColor;
       plotBlue = p.blueColor;
+    }
+    else if (q.rgbColor) {
+      plotRed = q.redColor;
+      plotGreen = q.greenColor;
+      plotBlue = q.blueColor;
     }
     else {
       int colorIdx = (int) (p.color * paletteIdxScl + 0.5);
@@ -148,6 +210,7 @@ public class DefaultRenderIterationState extends RenderIterationState {
     rp.setRed(rp.getRed() + plotRed * intensity);
     rp.setGreen(rp.getGreen() + plotGreen * intensity);
     rp.setBlue(rp.getBlue() + plotBlue * intensity);
+    rp.setContribution(rp.getContribution() + plotContribution);
 
     rp.incCount();
     if (observers != null && observers.size() > 0) {
@@ -157,7 +220,7 @@ public class DefaultRenderIterationState extends RenderIterationState {
     }
   }
 
-  protected void transformPlotColor(XYZPoint p2) {
+  protected void transformPlotColor(XYZPoint p) {
     if (fabs(p.modGamma) > EPSILON) {
       double gamma = 4.2 / (4.2 - p.modGamma);
       double alpha = plotRed * 0.299 + plotGreen * 0.588 + plotBlue * 0.113;
@@ -179,6 +242,14 @@ public class DefaultRenderIterationState extends RenderIterationState {
       plotRed += (plotRed - avg) * p.modSaturation;
       plotGreen += (plotGreen - avg) * p.modSaturation;
       plotBlue += (plotBlue - avg) * p.modSaturation;
+      //      plotContribution = p.modSaturation;
+      //      if (plotContribution < -1.0) {
+      //        plotContribution = -1.0 + Math.exp(plotContribution);
+      //      }
+      //    }
+      //    else {
+      //      plotContribution = 0.0;
+      //    }
     }
   }
 

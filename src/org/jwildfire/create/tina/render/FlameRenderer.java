@@ -61,7 +61,7 @@ public class FlameRenderer {
   private boolean withAlpha;
   LogDensityFilter logDensityFilter;
   GammaCorrectionFilter gammaCorrectionFilter;
-  AbstractRasterPoint[][] raster;
+  private AbstractRasterPoint[][] raster;
   // init in initView
   private int renderScale = 1;
   protected AbstractRandomGenerator randGen;
@@ -127,6 +127,10 @@ public class FlameRenderer {
 
   private void initRaster(int pImageWidth, int pImageHeight) {
     initRasterSizes(pImageWidth, pImageHeight);
+    raster = allocRaster();
+  }
+
+  private AbstractRasterPoint[][] allocRaster() {
     Class<? extends AbstractRasterPoint> rpClass = prefs.getTinaRasterPointPrecision().getRasterPointClass();
     AbstractRasterPoint rp;
     try {
@@ -138,7 +142,7 @@ public class FlameRenderer {
     catch (IllegalAccessException e) {
       throw new RuntimeException(e);
     }
-    raster = rp.allocRaster(rasterWidth, rasterHeight);
+    return rp.allocRaster(rasterWidth, rasterHeight);
   }
 
   public RenderedFlame finishRenderFlame(long pSampleCount) {
@@ -414,7 +418,7 @@ public class FlameRenderer {
         renderFlames.add(createRenderPackets(flame, flame.getFrame()));
       }
       forceAbort = false;
-      iterate(0, 1, renderFlames);
+      iterate(0, 1, renderFlames, null);
       if (!forceAbort) {
         if (flame.getSampleDensity() <= 10.0 || renderScale > 1) {
           renderImageSimple(img);
@@ -662,22 +666,22 @@ public class FlameRenderer {
     }
   }
 
-  private AbstractRenderThread createFlameRenderThread(int pThreadId, List<RenderPacket> pRenderPackets, long pSamples) {
+  private AbstractRenderThread createFlameRenderThread(int pThreadId, List<RenderPacket> pRenderPackets, long pSamples, List<RenderSlice> pSlices) {
     switch (flame.getShadingInfo().getShading()) {
       case FLAT:
-        return new FlatRenderThread(prefs, pThreadId, this, pRenderPackets, pSamples);
+        return new FlatRenderThread(prefs, pThreadId, this, pRenderPackets, pSamples, pSlices);
       case BLUR:
-        return new BlurRenderThread(prefs, pThreadId, this, pRenderPackets, pSamples);
+        return new BlurRenderThread(prefs, pThreadId, this, pRenderPackets, pSamples, pSlices);
       case DISTANCE_COLOR:
-        return new DistanceColorRenderThread(prefs, pThreadId, this, pRenderPackets, pSamples);
+        return new DistanceColorRenderThread(prefs, pThreadId, this, pRenderPackets, pSamples, pSlices);
       case PSEUDO3D:
-        return new Pseudo3DRenderThread(prefs, pThreadId, this, pRenderPackets, pSamples);
+        return new Pseudo3DRenderThread(prefs, pThreadId, this, pRenderPackets, pSamples, pSlices);
       default:
         throw new IllegalArgumentException(flame.getShadingInfo().getShading().toString());
     }
   }
 
-  private void iterate(int pPart, int pParts, List<List<RenderPacket>> pPackets) {
+  private void iterate(int pPart, int pParts, List<List<RenderPacket>> pPackets, List<RenderSlice> pSlices) {
     long nSamples = (long) ((flame.getSampleDensity() * (double) rasterSize / (double) flame.calcPostSymmetrySampleMultiplier() / (double) flame.calcStereo3dSampleMultiplier() + 0.5));
     int PROGRESS_STEPS = 50;
     if (progressUpdater != null && pPart == 0) {
@@ -689,7 +693,7 @@ public class FlameRenderer {
     runningThreads = new ArrayList<AbstractRenderThread>();
     int nThreads = pPackets.size();
     for (int i = 0; i < nThreads; i++) {
-      AbstractRenderThread t = createFlameRenderThread(i, pPackets.get(i), nSamples / (long) nThreads);
+      AbstractRenderThread t = createFlameRenderThread(i, pPackets.get(i), nSamples / (long) nThreads, pSlices);
       runningThreads.add(t);
       new Thread(t).start();
     }
@@ -723,7 +727,7 @@ public class FlameRenderer {
     List<AbstractRenderThread> threads = new ArrayList<AbstractRenderThread>();
     int nThreads = pFlames.size();
     for (int i = 0; i < nThreads; i++) {
-      AbstractRenderThread t = createFlameRenderThread(i, pFlames.get(i), -1);
+      AbstractRenderThread t = createFlameRenderThread(i, pFlames.get(i), -1, null);
       if (pState != null) {
         t.setResumeState(pState[i]);
       }
@@ -980,6 +984,79 @@ public class FlameRenderer {
 
   public void setPreview(boolean pPreview) {
     preview = pPreview;
+  }
+
+  public List<RenderedFlame> renderSlices(SliceRenderInfo pSliceRenderInfo) {
+    if (!flame.isRenderable())
+      throw new RuntimeException("Slices can to be created from empty flames");
+
+    List<RenderedFlame> res = new ArrayList<RenderedFlame>();
+
+    int passes = pSliceRenderInfo.getSlices() / pSliceRenderInfo.getSlicesPerRender();
+    if (pSliceRenderInfo.getSlices() % pSliceRenderInfo.getSlicesPerRender() != 0)
+      passes++;
+
+    progressDisplayPhaseCount = passes;
+    double zmin = pSliceRenderInfo.getZmin() < pSliceRenderInfo.getZmax() ? pSliceRenderInfo.getZmin() : pSliceRenderInfo.getZmax();
+    double zmax = pSliceRenderInfo.getZmin() < pSliceRenderInfo.getZmax() ? pSliceRenderInfo.getZmax() : pSliceRenderInfo.getZmin();
+    double thickness = (zmax - zmin) / (double) pSliceRenderInfo.getSlices();
+    double currZ = zmax;
+    int currSlice = 0;
+    for (int pass = 0; pass < passes; pass++) {
+      progressDisplayPhase = pass;
+      Flame currFlame = flame.makeCopy();
+      prepareFlameForSliceRendering(currFlame);
+
+      initRasterSizes(pSliceRenderInfo.getImageWidth(), pSliceRenderInfo.getImageHeight());
+      List<RenderSlice> slices = new ArrayList<RenderSlice>();
+      for (int i = 0; i < pSliceRenderInfo.getSlicesPerRender() && currSlice < pSliceRenderInfo.getSlices(); i++) {
+        RenderSlice slice = new RenderSlice(allocRaster(), currZ - thickness, currZ);
+        slices.add(slice);
+        currZ -= thickness;
+        currSlice++;
+      }
+
+      List<List<RenderPacket>> renderFlames = new ArrayList<List<RenderPacket>>();
+      for (int t = 0; t < prefs.getTinaRenderThreads(); t++) {
+        renderFlames.add(createRenderPackets(flame, flame.getFrame()));
+      }
+      iterate(0, 1, renderFlames, slices);
+
+      if (!forceAbort) {
+        LogDensityPoint logDensityPnt = new LogDensityPoint();
+        while (slices.size() > 0) {
+          RenderSlice slice = slices.get(0);
+          RenderedFlame renderedFlame = new RenderedFlame();
+          res.add(renderedFlame);
+          renderedFlame.init(pSliceRenderInfo.createRenderInfo());
+          SimpleImage img = renderedFlame.getImage();
+          logDensityFilter.setRaster(slice.getRaster(), rasterWidth, rasterHeight, img.getImageWidth(), img.getImageHeight());
+          GammaCorrectedRGBPoint rbgPoint = new GammaCorrectedRGBPoint();
+          for (int i = 0; i < img.getImageHeight(); i++) {
+            for (int j = 0; j < img.getImageWidth(); j++) {
+              logDensityFilter.transformPoint(logDensityPnt, j, i);
+              gammaCorrectionFilter.transformPoint(logDensityPnt, rbgPoint);
+              img.setARGB(j, i, rbgPoint.alpha, rbgPoint.red, rbgPoint.green, rbgPoint.blue);
+            }
+          }
+          slice = null;
+          slices.remove(0);
+        }
+      }
+    }
+
+    return res;
+  }
+
+  private void prepareFlameForSliceRendering(Flame pFlame) {
+    pFlame.setStereo3dMode(Stereo3dMode.NONE);
+    pFlame.setDimishZ(0.0);
+    pFlame.setCamDOF(0.0);
+    pFlame.setCamPerspective(0.0);
+  }
+
+  protected AbstractRasterPoint[][] getRaster() {
+    return raster;
   }
 
 }

@@ -21,6 +21,7 @@ import java.util.List;
 
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.Layer;
+import org.jwildfire.create.tina.base.raster.AbstractRasterPoint;
 import org.jwildfire.create.tina.palette.RenderColor;
 import org.jwildfire.create.tina.random.AbstractRandomGenerator;
 import org.jwildfire.create.tina.variation.FlameTransformationContext;
@@ -34,6 +35,7 @@ public class RenderIterationState implements Serializable {
   protected final RenderPacket packet;
   protected final Flame flame;
   protected final Layer layer;
+  protected AbstractRasterPoint[][] raster;
   protected final FlameTransformationContext ctx;
   protected final AbstractRandomGenerator randGen;
   protected final List<IterationObserver> observers;
@@ -52,6 +54,7 @@ public class RenderIterationState implements Serializable {
     observers = renderer.getIterationObservers();
     colorMap = pLayer.getPalette().createRenderPalette(flame.getWhiteLevel());
     paletteIdxScl = colorMap.length - 2;
+    raster = pRenderer.getRaster();
   }
 
 }

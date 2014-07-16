@@ -447,6 +447,43 @@ public class TinaControllerParameter {
   public JToggleButton toggleTriangleWithColorsButton;
   public JComboBox triangleStyleCmb;
 
+  public JButton meshGenFromEditorBtn;
+  public JButton meshGenFromClipboardBtn;
+  public JButton meshGenLoadFlameBtn;
+  public JWFNumberField meshGenSliceCountREd;
+  public JWFNumberField meshGenSlicesPerRenderREd;
+  public JWFNumberField meshGenRenderWidthREd;
+  public JWFNumberField meshGenRenderHeightREd;
+  public JWFNumberField meshGenRenderQualityREd;
+  public JProgressBar meshGenProgressbar;
+  public JButton meshGenGenerateBtn;
+  public JPanel meshGenTopViewRootPnl;
+  public JPanel meshGenFrontViewRootPnl;
+  public JPanel meshGenPerspectiveViewRootPnl;
+  public JTextPane meshGenHintPane;
+  public JWFNumberField meshGenCentreXREd;
+  public JSlider meshGenCentreXSlider;
+  public JWFNumberField meshGenCentreYREd;
+  public JSlider meshGenCentreYSlider;
+  public JWFNumberField meshGenZoomREd;
+  public JSlider meshGenZoomSlider;
+  public JWFNumberField meshGenZMinREd;
+  public JSlider meshGenZMinSlider;
+  public JWFNumberField meshGenZMaxREd;
+  public JSlider meshGenZMaxSlider;
+  public JToggleButton meshGenTopViewShowSliceBtn;
+  public JButton meshGenTopViewRenderBtn;
+  public JToggleButton meshGenFrontViewShowSliceBtn;
+  public JButton meshGenFrontViewRenderBtn;
+  public JToggleButton meshGenPerspectiveViewShowSliceBtn;
+  public JButton meshGenPerspectiveViewRenderBtn;
+  public JWFNumberField meshGenTopViewSlicePositionREd;
+  public JSlider meshGenTopViewSlicePositionSlider;
+  public JWFNumberField meshGenFrontViewSlicePositionREd;
+  public JSlider meshGenFrontViewSlicePositionSlider;
+  public JWFNumberField meshGenPerspectiveViewSlicePositionREd;
+  public JSlider meshGenPerspectiveViewSlicePositionSlider;
+
   public void setParams1(JInternalFrame pTinaFrame, ErrorHandler pErrorHandler, Prefs pPrefs, JPanel pCenterPanel, JWFNumberField pCameraRollREd, JSlider pCameraRollSlider, JWFNumberField pCameraPitchREd, JSlider pCameraPitchSlider, JWFNumberField pCameraYawREd, JSlider pCameraYawSlider, JWFNumberField pCameraPerspectiveREd, JSlider pCameraPerspectiveSlider, JWFNumberField pCameraCentreXREd, JSlider pCameraCentreXSlider, JWFNumberField pCameraCentreYREd, JSlider pCameraCentreYSlider, JWFNumberField pCameraZoomREd, JSlider pCameraZoomSlider, JCheckBox pNewDOFCBx, JWFNumberField pFocusXREd, JSlider pFocusXSlider, JWFNumberField pFocusYREd, JSlider pFocusYSlider, JWFNumberField pFocusZREd, JSlider pFocusZSlider, JWFNumberField pDimishZREd, JSlider pDimishZSlider,
       JWFNumberField pCameraDOFREd, JSlider pCameraDOFSlider, JWFNumberField pCameraDOFAreaREd, JSlider pCameraDOFAreaSlider, JWFNumberField pCameraDOFExponentREd, JSlider pCameraDOFExponentSlider, JWFNumberField pCamZREd, JSlider pCamZSlider, JWFNumberField pPixelsPerUnitREd, JSlider pPixelsPerUnitSlider, JWFNumberField pBrightnessREd, JSlider pBrightnessSlider, JWFNumberField pContrastREd, JSlider pContrastSlider, JWFNumberField pGammaREd, JSlider pGammaSlider, JWFNumberField pVibrancyREd, JSlider pVibrancySlider, JWFNumberField pFilterRadiusREd, JSlider pFilterRadiusSlider, JComboBox pFilterKernelCmb,
       JWFNumberField pGammaThresholdREd, JSlider pGammaThresholdSlider, JCheckBox pBGTransparencyCBx, JTextField pPaletteRandomPointsREd, JPanel pPaletteImgPanel, JPanel pColorChooserPaletteImgPanel, JWFNumberField pPaletteShiftREd, JSlider pPaletteShiftSlider, JWFNumberField pPaletteRedREd, JSlider pPaletteRedSlider, JWFNumberField pPaletteGreenREd, JSlider pPaletteGreenSlider, JWFNumberField pPaletteBlueREd, JSlider pPaletteBlueSlider, JWFNumberField pPaletteHueREd, JSlider pPaletteHueSlider,
@@ -912,5 +949,54 @@ public class TinaControllerParameter {
     this.pXFormModSaturationSlider = pXFormModSaturationSlider;
     this.pXFormModSaturationSpeedREd = pXFormModSaturationSpeedREd;
     this.pXFormModSaturationSpeedSlider = pXFormModSaturationSpeedSlider;
+  }
+
+  public void setParams3(JButton pMeshGenFromEditorBtn, JButton pMeshGenFromClipboardBtn, JButton pMeshGenLoadFlameBtn,
+      JWFNumberField pMeshGenSliceCountREd, JWFNumberField pMeshGenSlicesPerRenderREd, JWFNumberField pMeshGenRenderWidthREd,
+      JWFNumberField pMeshGenRenderHeightREd, JWFNumberField pMeshGenRenderQualityREd, JProgressBar pMeshGenProgressbar,
+      JButton pMeshGenGenerateBtn, JPanel pMeshGenTopViewRootPnl, JPanel pMeshGenFrontViewRootPnl, JPanel pMeshGenPerspectiveViewRootPnl,
+      JTextPane pMeshGenHintPane, JWFNumberField pMeshGenCentreXREd, JSlider pMeshGenCentreXSlider, JWFNumberField pMeshGenCentreYREd,
+      JSlider pMeshGenCentreYSlider, JWFNumberField pMeshGenZoomREd, JSlider pMeshGenZoomSlider, JWFNumberField pMeshGenZMinREd,
+      JSlider pMeshGenZMinSlider, JWFNumberField pMeshGenZMaxREd, JSlider pMeshGenZMaxSlider, JToggleButton pMeshGenTopViewShowSliceBtn,
+      JButton pMeshGenTopViewRenderBtn, JToggleButton pMeshGenFrontViewShowSliceBtn, JButton pMeshGenFrontViewRenderBtn,
+      JToggleButton pMeshGenPerspectiveViewShowSliceBtn, JButton pMeshGenPerspectiveViewRenderBtn, JWFNumberField pMeshGenTopViewSlicePositionREd,
+      JSlider pMeshGenTopViewSlicePositionSlider, JWFNumberField pMeshGenFrontViewSlicePositionREd, JSlider pMeshGenFrontViewSlicePositionSlider,
+      JWFNumberField pMeshGenPerspectiveViewSlicePositionREd, JSlider pMeshGenPerspectiveViewSlicePositionSlider) {
+    meshGenFromEditorBtn = pMeshGenFromEditorBtn;
+    meshGenFromClipboardBtn = pMeshGenFromClipboardBtn;
+    meshGenLoadFlameBtn = pMeshGenLoadFlameBtn;
+    meshGenSliceCountREd = pMeshGenSliceCountREd;
+    meshGenSlicesPerRenderREd = pMeshGenSlicesPerRenderREd;
+    meshGenRenderWidthREd = pMeshGenRenderWidthREd;
+    meshGenRenderHeightREd = pMeshGenRenderHeightREd;
+    meshGenRenderQualityREd = pMeshGenRenderQualityREd;
+    meshGenProgressbar = pMeshGenProgressbar;
+    meshGenGenerateBtn = pMeshGenGenerateBtn;
+    meshGenTopViewRootPnl = pMeshGenTopViewRootPnl;
+    meshGenFrontViewRootPnl = pMeshGenFrontViewRootPnl;
+    meshGenPerspectiveViewRootPnl = pMeshGenPerspectiveViewRootPnl;
+    meshGenHintPane = pMeshGenHintPane;
+    meshGenCentreXREd = pMeshGenCentreXREd;
+    meshGenCentreXSlider = pMeshGenCentreXSlider;
+    meshGenCentreYREd = pMeshGenCentreYREd;
+    meshGenCentreYSlider = pMeshGenCentreYSlider;
+    meshGenZoomREd = pMeshGenZoomREd;
+    meshGenZoomSlider = pMeshGenZoomSlider;
+    meshGenZMinREd = pMeshGenZMinREd;
+    meshGenZMinSlider = pMeshGenZMinSlider;
+    meshGenZMaxREd = pMeshGenZMaxREd;
+    meshGenZMaxSlider = pMeshGenZMaxSlider;
+    meshGenTopViewShowSliceBtn = pMeshGenTopViewShowSliceBtn;
+    meshGenTopViewRenderBtn = pMeshGenTopViewRenderBtn;
+    meshGenFrontViewRenderBtn = pMeshGenFrontViewRenderBtn;
+    meshGenFrontViewShowSliceBtn = pMeshGenFrontViewShowSliceBtn;
+    meshGenPerspectiveViewRenderBtn = pMeshGenPerspectiveViewRenderBtn;
+    meshGenPerspectiveViewShowSliceBtn = pMeshGenPerspectiveViewShowSliceBtn;
+    meshGenTopViewSlicePositionREd = pMeshGenTopViewSlicePositionREd;
+    meshGenTopViewSlicePositionSlider = pMeshGenTopViewSlicePositionSlider;
+    meshGenFrontViewSlicePositionREd = pMeshGenFrontViewSlicePositionREd;
+    meshGenFrontViewSlicePositionSlider = pMeshGenFrontViewSlicePositionSlider;
+    meshGenPerspectiveViewSlicePositionREd = pMeshGenPerspectiveViewSlicePositionREd;
+    meshGenPerspectiveViewSlicePositionSlider = pMeshGenPerspectiveViewSlicePositionSlider;
   }
 }

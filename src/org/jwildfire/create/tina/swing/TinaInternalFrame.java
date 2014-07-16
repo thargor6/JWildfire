@@ -4507,6 +4507,16 @@ public class TinaInternalFrame extends JInternalFrame {
         getXFormModContrastREd(), getXFormModContrastSlider(), getXFormModContrastSpeedREd(), getXFormModContrastSpeedSlider(),
         getXFormModSaturationREd(), getXFormModSaturationSlider(), getXFormModSaturationSpeedREd(), getXFormModSaturationSpeedSlider());
 
+    params.setParams3(getMeshGenFromEditorBtn(), getMeshGenFromClipboardBtn(), getMeshGenLoadFlameBtn(), getMeshGenSliceCountREd(),
+        getMeshGenSlicesPerRenderREd(), getMeshGenRenderWidthREd(), getMeshGenRenderHeightREd(), getMeshGenRenderQualityREd(),
+        getMeshGenProgressbar(), getMeshGenGenerateBtn(), getMeshGenTopViewRootPnl(), getMeshGenFrontViewRootPnl(), getMeshGenPerspectiveViewRootPnl(),
+        getMeshGenHintPane(), getMeshGenCentreXREd(), getMeshGenCentreXSlider(), getMeshGenCentreYREd(), getMeshGenCentreYSlider(),
+        getMeshGenZoomREd(), getMeshGenZoomSlider(), getMeshGenZMinREd(), getMeshGenZMinSlider(), getMeshGenZMaxREd(), getMeshGenZMaxSlider(),
+        getMeshGenTopViewShowSliceBtn(), getMeshGenTopViewRenderBtn(), getMeshGenFrontViewShowSliceBtn(), getMeshGenFrontViewRenderBtn(),
+        getMeshGenPerspectiveViewShowSliceBtn(), getMeshGenPerspectiveViewRenderBtn(), getMeshGenTopViewSlicePositionREd(),
+        getMeshGenTopViewSlicePositionSlider(), getMeshGenFrontViewSlicePositionREd(), getMeshGenFrontViewSlicePositionSlider(),
+        getMeshGenPerspectiveViewSlicePositionREd(), getMeshGenPerspectiveViewSlicePositionSlider());
+
     tinaController = new TinaController(params);
 
     VariationControlsDelegate[] variationControlsDelegates = new VariationControlsDelegate[12];
@@ -10302,6 +10312,47 @@ public class TinaInternalFrame extends JInternalFrame {
   private JPanel panel_90;
   private JPanel panel_91;
   private JPanel panel_92;
+  private JPanel meshGenTopViewRootPnl;
+  private JPanel meshGenFrontViewRootPnl;
+  private JPanel meshGenPerspectiveViewRootPnl;
+  private JButton meshGenFromEditorBtn;
+  private JButton meshGenFromClipboardBtn;
+  private JButton meshGenLoadFlameBtn;
+  private JWFNumberField meshGenSliceCountREd;
+  private JWFNumberField meshGenSlicesPerRenderREd;
+  private JWFNumberField meshGenRenderWidthREd;
+  private JWFNumberField meshGenRenderHeightREd;
+  private JWFNumberField meshGenRenderQualityREd;
+  private JProgressBar meshGenProgressbar;
+  private JButton meshGenGenerateBtn;
+  private JScrollPane scrollPane_10;
+  private JTextPane meshGenHintPane;
+  private JWFNumberField meshGenCentreXREd;
+  private JWFNumberField meshGenCentreYREd;
+  private JWFNumberField meshGenZoomREd;
+  private JSlider meshGenCentreXSlider;
+  private JSlider meshGenCentreYSlider;
+  private JSlider meshGenZoomSlider;
+  private JWFNumberField meshGenZMinREd;
+  private JWFNumberField meshGenZMaxREd;
+  private JSlider meshGenZMinSlider;
+  private JSlider meshGenZMaxSlider;
+  private JPanel panel_93;
+  private JPanel panel_94;
+  private JPanel panel_95;
+  private JPanel panel_96;
+  private JButton meshGenTopViewRenderBtn;
+  private JButton meshGenFrontViewRenderBtn;
+  private JToggleButton meshGenTopViewShowSliceBtn;
+  private JToggleButton meshGenFrontViewShowSliceBtn;
+  private JToggleButton meshGenPerspectiveViewShowSliceBtn;
+  private JWFNumberField meshGenTopViewSlicePositionREd;
+  private JSlider meshGenTopViewSlicePositionSlider;
+  private JSlider meshGenFrontViewSlicePositionSlider;
+  private JSlider meshGenPerspectiveViewSlicePositionSlider;
+  private JWFNumberField meshGenFrontViewSlicePositionREd;
+  private JWFNumberField meshGenPerspectiveViewSlicePositionREd;
+  private JButton meshGenPerspectiveViewRenderBtn;
 
   /**
    * This method initializes renderBatchJobsScrollPane	
@@ -18731,7 +18782,7 @@ public class TinaInternalFrame extends JInternalFrame {
       panel_88.add(getPanel_89(), BorderLayout.NORTH);
 
       JPanel panel_1 = new JPanel();
-      panel_1.setPreferredSize(new Dimension(10, 200));
+      panel_1.setPreferredSize(new Dimension(10, 260));
       panel_88.add(panel_1, BorderLayout.SOUTH);
       panel_1.setLayout(new GridLayout(0, 2, 0, 0));
       panel_1.add(getPanel_91());
@@ -18744,15 +18795,98 @@ public class TinaInternalFrame extends JInternalFrame {
       JPanel panel_3 = new JPanel();
       panel_3.setBorder(new TitledBorder(null, "Top view", TitledBorder.LEADING, TitledBorder.TOP, null, null));
       panel_2.add(panel_3);
-      panel_3.setLayout(null);
+      panel_3.setLayout(new BorderLayout(0, 0));
+      panel_3.add(getMeshGenTopViewRootPnl(), BorderLayout.CENTER);
+      panel_3.add(getPanel_93(), BorderLayout.SOUTH);
+      panel_3.add(getPanel_96(), BorderLayout.EAST);
 
       JPanel panel_8 = new JPanel();
       panel_8.setBorder(new TitledBorder(null, "Front view", TitledBorder.LEADING, TitledBorder.TOP, null, null));
       panel_2.add(panel_8);
+      panel_8.setLayout(new BorderLayout(0, 0));
+      panel_8.add(getMeshGenFrontViewRootPnl(), BorderLayout.CENTER);
+      panel_8.add(getPanel_94(), BorderLayout.SOUTH);
+
+      JPanel panel_10 = new JPanel();
+      panel_10.setLayout(null);
+      panel_10.setPreferredSize(new Dimension(52, 10));
+      panel_8.add(panel_10, BorderLayout.EAST);
+
+      meshGenFrontViewRenderBtn = new JButton();
+      meshGenFrontViewRenderBtn.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getMeshGenController().frontViewRenderButtonClicked();
+        }
+      });
+      meshGenFrontViewRenderBtn.setToolTipText("Render image");
+      meshGenFrontViewRenderBtn.setPreferredSize(new Dimension(42, 24));
+      meshGenFrontViewRenderBtn.setMnemonic(KeyEvent.VK_R);
+      meshGenFrontViewRenderBtn.setIconTextGap(0);
+      meshGenFrontViewRenderBtn.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/fraqtive.png")));
+      meshGenFrontViewRenderBtn.setFont(new Font("Dialog", Font.BOLD, 9));
+      meshGenFrontViewRenderBtn.setBounds(6, 213, 42, 24);
+      panel_10.add(meshGenFrontViewRenderBtn);
+
+      meshGenFrontViewShowSliceBtn = new JToggleButton();
+      meshGenFrontViewShowSliceBtn.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          if (tinaController != null && tinaController.getMeshGenController() != null) {
+            tinaController.getMeshGenController().frontViewShowSliceButtonClicked();
+          }
+        }
+      });
+      meshGenFrontViewShowSliceBtn.setToolTipText("Toggle between showing a slice at the selected position or showing the complete object");
+      meshGenFrontViewShowSliceBtn.setIconTextGap(0);
+      meshGenFrontViewShowSliceBtn.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/edit-cut-red.png")));
+      meshGenFrontViewShowSliceBtn.setPreferredSize(new Dimension(42, 24));
+      meshGenFrontViewShowSliceBtn.setMnemonic(KeyEvent.VK_P);
+      meshGenFrontViewShowSliceBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      meshGenFrontViewShowSliceBtn.setBounds(6, 103, 42, 24);
+      panel_10.add(meshGenFrontViewShowSliceBtn);
 
       JPanel panel_9 = new JPanel();
       panel_9.setBorder(new TitledBorder(null, "Perspective view", TitledBorder.LEADING, TitledBorder.TOP, null, null));
       panel_2.add(panel_9);
+      panel_9.setLayout(new BorderLayout(0, 0));
+      panel_9.add(getMeshGenPerspectiveViewRootPnl(), BorderLayout.CENTER);
+      panel_9.add(getPanel_95(), BorderLayout.SOUTH);
+
+      JPanel panel_11 = new JPanel();
+      panel_11.setLayout(null);
+      panel_11.setPreferredSize(new Dimension(52, 10));
+      panel_9.add(panel_11, BorderLayout.EAST);
+
+      meshGenPerspectiveViewRenderBtn = new JButton();
+      meshGenPerspectiveViewRenderBtn.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getMeshGenController().perspectiveViewRenderButtonClicked();
+        }
+      });
+      meshGenPerspectiveViewRenderBtn.setToolTipText("Render image");
+      meshGenPerspectiveViewRenderBtn.setPreferredSize(new Dimension(42, 24));
+      meshGenPerspectiveViewRenderBtn.setMnemonic(KeyEvent.VK_R);
+      meshGenPerspectiveViewRenderBtn.setIconTextGap(0);
+      meshGenPerspectiveViewRenderBtn.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/fraqtive.png")));
+      meshGenPerspectiveViewRenderBtn.setFont(new Font("Dialog", Font.BOLD, 9));
+      meshGenPerspectiveViewRenderBtn.setBounds(6, 213, 42, 24);
+      panel_11.add(meshGenPerspectiveViewRenderBtn);
+
+      meshGenPerspectiveViewShowSliceBtn = new JToggleButton();
+      meshGenPerspectiveViewShowSliceBtn.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          if (tinaController != null && tinaController.getMeshGenController() != null) {
+            tinaController.getMeshGenController().perspectiveViewShowSliceButtonClicked();
+          }
+        }
+      });
+      meshGenPerspectiveViewShowSliceBtn.setToolTipText("Toggle between showing a slice at the selected position or showing the complete object");
+      meshGenPerspectiveViewShowSliceBtn.setIconTextGap(0);
+      meshGenPerspectiveViewShowSliceBtn.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/edit-cut-red.png")));
+      meshGenPerspectiveViewShowSliceBtn.setPreferredSize(new Dimension(42, 24));
+      meshGenPerspectiveViewShowSliceBtn.setMnemonic(KeyEvent.VK_P);
+      meshGenPerspectiveViewShowSliceBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      meshGenPerspectiveViewShowSliceBtn.setBounds(6, 103, 42, 24);
+      panel_11.add(meshGenPerspectiveViewShowSliceBtn);
     }
     return panel_88;
   }
@@ -18834,14 +18968,14 @@ public class TinaInternalFrame extends JInternalFrame {
       panel_1.add(panel_2, BorderLayout.SOUTH);
       panel_2.setLayout(new BorderLayout(0, 0));
 
-      JProgressBar progressBar = new JProgressBar();
-      progressBar.setValue(0);
-      progressBar.setStringPainted(true);
-      progressBar.setPreferredSize(new Dimension(568, 21));
-      panel_2.add(progressBar, BorderLayout.CENTER);
+      meshGenProgressbar = new JProgressBar();
+      meshGenProgressbar.setValue(0);
+      meshGenProgressbar.setStringPainted(true);
+      meshGenProgressbar.setPreferredSize(new Dimension(568, 21));
+      panel_2.add(meshGenProgressbar, BorderLayout.CENTER);
 
       JPanel panel_3 = new JPanel();
-      panel_3.setPreferredSize(new Dimension(460, 10));
+      panel_3.setPreferredSize(new Dimension(610, 10));
       panel_1.add(panel_3, BorderLayout.WEST);
       panel_3.setLayout(null);
 
@@ -18852,24 +18986,30 @@ public class TinaInternalFrame extends JInternalFrame {
       lblRenderWidth.setName("");
       lblRenderWidth.setLocation(new Point(4, 76));
       lblRenderWidth.setFont(new Font("Dialog", Font.BOLD, 10));
-      lblRenderWidth.setBounds(6, 2, 79, 22);
+      lblRenderWidth.setBounds(254, 2, 79, 22);
       panel_3.add(lblRenderWidth);
 
-      JWFNumberField numberField = new JWFNumberField();
-      numberField.setValueStep(0.01);
-      numberField.setText("");
-      numberField.setSize(new Dimension(100, 24));
-      numberField.setPreferredSize(new Dimension(100, 24));
-      numberField.setMotionPropertyName("camPerspective");
-      numberField.setMaxValue(1.0);
-      numberField.setLocation(new Point(71, 76));
-      numberField.setLinkedMotionControlName("tinaCameraPerspectiveSlider");
-      numberField.setLinkedLabelControlName("tinaCameraPerspectiveLbl");
-      numberField.setHasMinValue(true);
-      numberField.setHasMaxValue(true);
-      numberField.setFont(new Font("Dialog", Font.PLAIN, 10));
-      numberField.setBounds(82, 0, 100, 24);
-      panel_3.add(numberField);
+      meshGenRenderWidthREd = new JWFNumberField();
+      meshGenRenderWidthREd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null && tinaController.getMeshGenController() != null) {
+            tinaController.getMeshGenController().renderWidth_changed();
+          }
+        }
+      });
+      meshGenRenderWidthREd.setMinValue(16.0);
+      meshGenRenderWidthREd.setOnlyIntegers(true);
+      meshGenRenderWidthREd.setValueStep(1.0);
+      meshGenRenderWidthREd.setText("");
+      meshGenRenderWidthREd.setSize(new Dimension(100, 24));
+      meshGenRenderWidthREd.setPreferredSize(new Dimension(100, 24));
+      meshGenRenderWidthREd.setMaxValue(4096.0);
+      meshGenRenderWidthREd.setLocation(new Point(71, 76));
+      meshGenRenderWidthREd.setHasMinValue(true);
+      meshGenRenderWidthREd.setHasMaxValue(true);
+      meshGenRenderWidthREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      meshGenRenderWidthREd.setBounds(330, 0, 100, 24);
+      panel_3.add(meshGenRenderWidthREd);
 
       JLabel lblRenderHeight = new JLabel();
       lblRenderHeight.setText("Render height");
@@ -18878,49 +19018,61 @@ public class TinaInternalFrame extends JInternalFrame {
       lblRenderHeight.setName("");
       lblRenderHeight.setLocation(new Point(4, 76));
       lblRenderHeight.setFont(new Font("Dialog", Font.BOLD, 10));
-      lblRenderHeight.setBounds(6, 26, 79, 22);
+      lblRenderHeight.setBounds(254, 26, 79, 22);
       panel_3.add(lblRenderHeight);
 
-      JWFNumberField numberField_1 = new JWFNumberField();
-      numberField_1.setValueStep(0.01);
-      numberField_1.setText("");
-      numberField_1.setSize(new Dimension(100, 24));
-      numberField_1.setPreferredSize(new Dimension(100, 24));
-      numberField_1.setMotionPropertyName("camPerspective");
-      numberField_1.setMaxValue(1.0);
-      numberField_1.setLocation(new Point(71, 76));
-      numberField_1.setLinkedMotionControlName("tinaCameraPerspectiveSlider");
-      numberField_1.setLinkedLabelControlName("tinaCameraPerspectiveLbl");
-      numberField_1.setHasMinValue(true);
-      numberField_1.setHasMaxValue(true);
-      numberField_1.setFont(new Font("Dialog", Font.PLAIN, 10));
-      numberField_1.setBounds(82, 24, 100, 24);
-      panel_3.add(numberField_1);
+      meshGenRenderHeightREd = new JWFNumberField();
+      meshGenRenderHeightREd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null && tinaController.getMeshGenController() != null) {
+            tinaController.getMeshGenController().renderHeight_changed();
+          }
+        }
+      });
+      meshGenRenderHeightREd.setMinValue(16.0);
+      meshGenRenderHeightREd.setOnlyIntegers(true);
+      meshGenRenderHeightREd.setValueStep(1.0);
+      meshGenRenderHeightREd.setText("");
+      meshGenRenderHeightREd.setSize(new Dimension(100, 24));
+      meshGenRenderHeightREd.setPreferredSize(new Dimension(100, 24));
+      meshGenRenderHeightREd.setMaxValue(4096.0);
+      meshGenRenderHeightREd.setLocation(new Point(71, 76));
+      meshGenRenderHeightREd.setHasMinValue(true);
+      meshGenRenderHeightREd.setHasMaxValue(true);
+      meshGenRenderHeightREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      meshGenRenderHeightREd.setBounds(330, 24, 100, 24);
+      panel_3.add(meshGenRenderHeightREd);
 
-      JWFNumberField numberField_2 = new JWFNumberField();
-      numberField_2.setValueStep(0.01);
-      numberField_2.setText("");
-      numberField_2.setSize(new Dimension(100, 24));
-      numberField_2.setPreferredSize(new Dimension(100, 24));
-      numberField_2.setMotionPropertyName("camPerspective");
-      numberField_2.setMaxValue(1.0);
-      numberField_2.setLocation(new Point(71, 76));
-      numberField_2.setLinkedMotionControlName("tinaCameraPerspectiveSlider");
-      numberField_2.setLinkedLabelControlName("tinaCameraPerspectiveLbl");
-      numberField_2.setHasMinValue(true);
-      numberField_2.setHasMaxValue(true);
-      numberField_2.setFont(new Font("Dialog", Font.PLAIN, 10));
-      numberField_2.setBounds(355, 0, 100, 24);
-      panel_3.add(numberField_2);
+      meshGenSliceCountREd = new JWFNumberField();
+      meshGenSliceCountREd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null && tinaController.getMeshGenController() != null) {
+            tinaController.getMeshGenController().sliceCount_changed();
+          }
+        }
+      });
+      meshGenSliceCountREd.setHasMaxValue(true);
+      meshGenSliceCountREd.setMinValue(2.0);
+      meshGenSliceCountREd.setOnlyIntegers(true);
+      meshGenSliceCountREd.setValueStep(1.0);
+      meshGenSliceCountREd.setText("");
+      meshGenSliceCountREd.setSize(new Dimension(100, 24));
+      meshGenSliceCountREd.setPreferredSize(new Dimension(100, 24));
+      meshGenSliceCountREd.setMaxValue(4096.0);
+      meshGenSliceCountREd.setLocation(new Point(71, 76));
+      meshGenSliceCountREd.setHasMinValue(true);
+      meshGenSliceCountREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      meshGenSliceCountREd.setBounds(150, 0, 100, 24);
+      panel_3.add(meshGenSliceCountREd);
 
       JLabel lblNumberOfSlices = new JLabel();
       lblNumberOfSlices.setText("Total number of slices");
       lblNumberOfSlices.setSize(new Dimension(68, 22));
       lblNumberOfSlices.setPreferredSize(new Dimension(94, 22));
       lblNumberOfSlices.setName("");
-      lblNumberOfSlices.setLocation(new Point(4, 76));
+      lblNumberOfSlices.setLocation(new Point(6, 76));
       lblNumberOfSlices.setFont(new Font("Dialog", Font.BOLD, 10));
-      lblNumberOfSlices.setBounds(205, 2, 157, 22);
+      lblNumberOfSlices.setBounds(2, 2, 151, 22);
       panel_3.add(lblNumberOfSlices);
 
       JLabel lblSlicesPerPass = new JLabel();
@@ -18930,36 +19082,65 @@ public class TinaInternalFrame extends JInternalFrame {
       lblSlicesPerPass.setName("");
       lblSlicesPerPass.setLocation(new Point(4, 76));
       lblSlicesPerPass.setFont(new Font("Dialog", Font.BOLD, 10));
-      lblSlicesPerPass.setBounds(205, 26, 157, 22);
+      lblSlicesPerPass.setBounds(2, 26, 151, 22);
       panel_3.add(lblSlicesPerPass);
 
-      JWFNumberField numberField_3 = new JWFNumberField();
-      numberField_3.setValueStep(0.01);
-      numberField_3.setText("");
-      numberField_3.setSize(new Dimension(100, 24));
-      numberField_3.setPreferredSize(new Dimension(100, 24));
-      numberField_3.setMotionPropertyName("camPerspective");
-      numberField_3.setMaxValue(1.0);
-      numberField_3.setLocation(new Point(71, 76));
-      numberField_3.setLinkedMotionControlName("tinaCameraPerspectiveSlider");
-      numberField_3.setLinkedLabelControlName("tinaCameraPerspectiveLbl");
-      numberField_3.setHasMinValue(true);
-      numberField_3.setHasMaxValue(true);
-      numberField_3.setFont(new Font("Dialog", Font.PLAIN, 10));
-      numberField_3.setBounds(355, 24, 100, 24);
-      panel_3.add(numberField_3);
+      meshGenSlicesPerRenderREd = new JWFNumberField();
+      meshGenSlicesPerRenderREd.setMinValue(1.0);
+      meshGenSlicesPerRenderREd.setOnlyIntegers(true);
+      meshGenSlicesPerRenderREd.setValueStep(1.0);
+      meshGenSlicesPerRenderREd.setText("");
+      meshGenSlicesPerRenderREd.setSize(new Dimension(100, 24));
+      meshGenSlicesPerRenderREd.setPreferredSize(new Dimension(100, 24));
+      meshGenSlicesPerRenderREd.setMaxValue(1.0);
+      meshGenSlicesPerRenderREd.setLocation(new Point(71, 76));
+      meshGenSlicesPerRenderREd.setHasMinValue(true);
+      meshGenSlicesPerRenderREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      meshGenSlicesPerRenderREd.setBounds(150, 24, 100, 24);
+      panel_3.add(meshGenSlicesPerRenderREd);
+
+      meshGenRenderQualityREd = new JWFNumberField();
+      meshGenRenderQualityREd.setMinValue(100.0);
+      meshGenRenderQualityREd.setOnlyIntegers(true);
+      meshGenRenderQualityREd.setValueStep(1.0);
+      meshGenRenderQualityREd.setText("");
+      meshGenRenderQualityREd.setSize(new Dimension(100, 24));
+      meshGenRenderQualityREd.setPreferredSize(new Dimension(100, 24));
+      meshGenRenderQualityREd.setMaxValue(5000.0);
+      meshGenRenderQualityREd.setLocation(new Point(71, 76));
+      meshGenRenderQualityREd.setHasMinValue(true);
+      meshGenRenderQualityREd.setHasMaxValue(true);
+      meshGenRenderQualityREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      meshGenRenderQualityREd.setBounds(510, 2, 100, 24);
+      panel_3.add(meshGenRenderQualityREd);
+
+      JLabel lblRenderQuality = new JLabel();
+      lblRenderQuality.setText("Render quality");
+      lblRenderQuality.setSize(new Dimension(68, 22));
+      lblRenderQuality.setPreferredSize(new Dimension(94, 22));
+      lblRenderQuality.setName("");
+      lblRenderQuality.setLocation(new Point(4, 76));
+      lblRenderQuality.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblRenderQuality.setBounds(434, 4, 79, 22);
+      panel_3.add(lblRenderQuality);
 
       JPanel panel_8 = new JPanel();
-      panel_8.setPreferredSize(new Dimension(126, 10));
+      panel_8.setPreferredSize(new Dimension(132, 10));
       panel_1.add(panel_8, BorderLayout.EAST);
       panel_8.setLayout(null);
 
-      JButton btnGenerateSlices = new JButton();
-      btnGenerateSlices.setText("Generate slices");
-      btnGenerateSlices.setPreferredSize(new Dimension(125, 24));
-      btnGenerateSlices.setFont(new Font("Dialog", Font.BOLD, 10));
-      btnGenerateSlices.setBounds(0, 0, 125, 52);
-      panel_8.add(btnGenerateSlices);
+      meshGenGenerateBtn = new JButton();
+      meshGenGenerateBtn.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getMeshGenController().generateButton_clicked();
+        }
+      });
+      meshGenGenerateBtn.setText("Render slices");
+      meshGenGenerateBtn.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/sports-soccer.png")));
+      meshGenGenerateBtn.setPreferredSize(new Dimension(132, 24));
+      meshGenGenerateBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      meshGenGenerateBtn.setBounds(0, 0, 125, 52);
+      panel_8.add(meshGenGenerateBtn);
     }
     return panel_89;
   }
@@ -18971,35 +19152,50 @@ public class TinaInternalFrame extends JInternalFrame {
       panel_90.setPreferredSize(new Dimension(176, 10));
       panel_90.setLayout(null);
 
-      JButton button = new JButton();
-      button.setBounds(18, 22, 138, 24);
-      panel_90.add(button);
-      button.setToolTipText("Load flame from Editor and render");
-      button.setText("From Editor");
-      button.setPreferredSize(new Dimension(125, 24));
-      button.setMinimumSize(new Dimension(100, 24));
-      button.setMaximumSize(new Dimension(32000, 24));
-      button.setFont(new Font("Dialog", Font.BOLD, 10));
+      meshGenFromEditorBtn = new JButton();
+      meshGenFromEditorBtn.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getMeshGenController().fromEditorButton_clicked();
+        }
+      });
+      meshGenFromEditorBtn.setBounds(18, 22, 138, 24);
+      panel_90.add(meshGenFromEditorBtn);
+      meshGenFromEditorBtn.setToolTipText("Load flame from Editor and render");
+      meshGenFromEditorBtn.setText("From Editor");
+      meshGenFromEditorBtn.setPreferredSize(new Dimension(125, 24));
+      meshGenFromEditorBtn.setMinimumSize(new Dimension(100, 24));
+      meshGenFromEditorBtn.setMaximumSize(new Dimension(32000, 24));
+      meshGenFromEditorBtn.setFont(new Font("Dialog", Font.BOLD, 10));
 
-      JButton button_1 = new JButton();
-      button_1.setBounds(18, 46, 138, 24);
-      panel_90.add(button_1);
-      button_1.setToolTipText("Load flame from clipboard and render");
-      button_1.setText("From Clipboard");
-      button_1.setPreferredSize(new Dimension(125, 24));
-      button_1.setMinimumSize(new Dimension(100, 24));
-      button_1.setMaximumSize(new Dimension(32000, 24));
-      button_1.setFont(new Font("Dialog", Font.BOLD, 10));
+      meshGenFromClipboardBtn = new JButton();
+      meshGenFromClipboardBtn.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getMeshGenController().fromClipboardButton_clicked();
+        }
+      });
+      meshGenFromClipboardBtn.setBounds(18, 46, 138, 24);
+      panel_90.add(meshGenFromClipboardBtn);
+      meshGenFromClipboardBtn.setToolTipText("Load flame from clipboard and render");
+      meshGenFromClipboardBtn.setText("From Clipboard");
+      meshGenFromClipboardBtn.setPreferredSize(new Dimension(125, 24));
+      meshGenFromClipboardBtn.setMinimumSize(new Dimension(100, 24));
+      meshGenFromClipboardBtn.setMaximumSize(new Dimension(32000, 24));
+      meshGenFromClipboardBtn.setFont(new Font("Dialog", Font.BOLD, 10));
 
-      JButton button_2 = new JButton();
-      button_2.setBounds(18, 70, 138, 24);
-      panel_90.add(button_2);
-      button_2.setToolTipText("Load flame from file and render");
-      button_2.setText("Load Flame");
-      button_2.setPreferredSize(new Dimension(125, 24));
-      button_2.setMinimumSize(new Dimension(100, 24));
-      button_2.setMaximumSize(new Dimension(32000, 24));
-      button_2.setFont(new Font("Dialog", Font.BOLD, 10));
+      meshGenLoadFlameBtn = new JButton();
+      meshGenLoadFlameBtn.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getMeshGenController().loadFlameButton_clicked();
+        }
+      });
+      meshGenLoadFlameBtn.setBounds(18, 70, 138, 24);
+      panel_90.add(meshGenLoadFlameBtn);
+      meshGenLoadFlameBtn.setToolTipText("Load flame from file and render");
+      meshGenLoadFlameBtn.setText("Load Flame");
+      meshGenLoadFlameBtn.setPreferredSize(new Dimension(125, 24));
+      meshGenLoadFlameBtn.setMinimumSize(new Dimension(100, 24));
+      meshGenLoadFlameBtn.setMaximumSize(new Dimension(32000, 24));
+      meshGenLoadFlameBtn.setFont(new Font("Dialog", Font.BOLD, 10));
     }
     return panel_90;
   }
@@ -19007,8 +19203,228 @@ public class TinaInternalFrame extends JInternalFrame {
   private JPanel getPanel_91() {
     if (panel_91 == null) {
       panel_91 = new JPanel();
-      panel_91.setBorder(new TitledBorder(null, "Fractal position", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-      panel_91.setLayout(null);
+      panel_91.setBorder(null);
+      panel_91.setLayout(new BorderLayout(0, 0));
+
+      JPanel panel_1 = new JPanel();
+      panel_1.setBorder(new TitledBorder(null, "Fractal position", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+      panel_1.setPreferredSize(new Dimension(10, 120));
+      panel_91.add(panel_1, BorderLayout.NORTH);
+      panel_1.setLayout(null);
+
+      JLabel label_2 = new JLabel();
+      label_2.setText("CentreY");
+      label_2.setSize(new Dimension(68, 22));
+      label_2.setPreferredSize(new Dimension(94, 22));
+      label_2.setLocation(new Point(390, 28));
+      label_2.setFont(new Font("Dialog", Font.BOLD, 10));
+      label_2.setBounds(16, 49, 68, 22);
+      panel_1.add(label_2);
+
+      meshGenCentreYREd = new JWFNumberField();
+      meshGenCentreYREd.setValueStep(0.05);
+      meshGenCentreYREd.setText("");
+      meshGenCentreYREd.setSize(new Dimension(100, 24));
+      meshGenCentreYREd.setPreferredSize(new Dimension(100, 24));
+      meshGenCentreYREd.setLocation(new Point(456, 28));
+      meshGenCentreYREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      meshGenCentreYREd.setBounds(82, 49, 100, 24);
+      meshGenCentreYREd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null && tinaController.getMeshGenController() != null) {
+            tinaController.getMeshGenController().centreYREd_changed();
+          }
+        }
+      });
+      panel_1.add(meshGenCentreYREd);
+
+      meshGenCentreYSlider = new JSlider();
+      meshGenCentreYSlider.setValue(0);
+      meshGenCentreYSlider.setSize(new Dimension(205, 19));
+      meshGenCentreYSlider.setPreferredSize(new Dimension(220, 19));
+      meshGenCentreYSlider.setMinimum(-25000);
+      meshGenCentreYSlider.setMaximum(25000);
+      meshGenCentreYSlider.setLocation(new Point(558, 28));
+      meshGenCentreYSlider.setBounds(184, 49, 205, 19);
+      meshGenCentreYSlider.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null && tinaController.getMeshGenController() != null) {
+            tinaController.getMeshGenController().centreYSlider_changed();
+          }
+        }
+      });
+      panel_1.add(meshGenCentreYSlider);
+
+      JLabel label_4 = new JLabel();
+      label_4.setText("Zoom");
+      label_4.setSize(new Dimension(68, 22));
+      label_4.setPreferredSize(new Dimension(94, 22));
+      label_4.setLocation(new Point(390, 52));
+      label_4.setFont(new Font("Dialog", Font.BOLD, 10));
+      label_4.setBounds(16, 73, 68, 22);
+      panel_1.add(label_4);
+
+      meshGenZoomREd = new JWFNumberField();
+      meshGenZoomREd.setValueStep(0.01);
+      meshGenZoomREd.setText("");
+      meshGenZoomREd.setSize(new Dimension(100, 24));
+      meshGenZoomREd.setPreferredSize(new Dimension(100, 24));
+      meshGenZoomREd.setLocation(new Point(456, 52));
+      meshGenZoomREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      meshGenZoomREd.setBounds(82, 73, 100, 24);
+      meshGenZoomREd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null && tinaController.getMeshGenController() != null) {
+            tinaController.getMeshGenController().zoomREd_changed();
+          }
+        }
+      });
+      panel_1.add(meshGenZoomREd);
+
+      meshGenZoomSlider = new JSlider();
+      meshGenZoomSlider.setValue(0);
+      meshGenZoomSlider.setSize(new Dimension(205, 19));
+      meshGenZoomSlider.setPreferredSize(new Dimension(220, 19));
+      meshGenZoomSlider.setMinimum(100);
+      meshGenZoomSlider.setMaximum(10000);
+      meshGenZoomSlider.setLocation(new Point(558, 52));
+      meshGenZoomSlider.setBounds(184, 73, 205, 19);
+      meshGenZoomSlider.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null && tinaController.getMeshGenController() != null) {
+            tinaController.getMeshGenController().zoomSlider_changed();
+          }
+        }
+      });
+      panel_1.add(meshGenZoomSlider);
+
+      JLabel lblSlice = new JLabel();
+      lblSlice.setBounds(16, 25, 68, 22);
+      panel_1.add(lblSlice);
+      lblSlice.setText("CentreX");
+      lblSlice.setPreferredSize(new Dimension(94, 22));
+      lblSlice.setFont(new Font("Dialog", Font.BOLD, 10));
+
+      meshGenCentreXREd = new JWFNumberField();
+      meshGenCentreXREd.setBounds(82, 23, 100, 24);
+      panel_1.add(meshGenCentreXREd);
+      meshGenCentreXREd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null && tinaController.getMeshGenController() != null) {
+            tinaController.getMeshGenController().centreXREd_changed();
+          }
+        }
+      });
+      meshGenCentreXREd.setValueStep(0.05);
+      meshGenCentreXREd.setText("");
+      meshGenCentreXREd.setPreferredSize(new Dimension(100, 24));
+      meshGenCentreXREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+
+      meshGenCentreXSlider = new JSlider();
+      meshGenCentreXSlider.setBounds(184, 25, 205, 19);
+      panel_1.add(meshGenCentreXSlider);
+      meshGenCentreXSlider.setValue(0);
+      meshGenCentreXSlider.setPreferredSize(new Dimension(220, 19));
+      meshGenCentreXSlider.setMinimum(-25000);
+      meshGenCentreXSlider.setMaximum(25000);
+      meshGenCentreXSlider.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null && tinaController.getMeshGenController() != null) {
+            tinaController.getMeshGenController().centreXSlider_changed();
+          }
+        }
+      });
+
+      JPanel panel_2 = new JPanel();
+      panel_2.setBorder(new TitledBorder(null, "Slice cutting range", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+      panel_91.add(panel_2, BorderLayout.CENTER);
+      panel_2.setLayout(null);
+
+      JLabel lblStartz = new JLabel();
+      lblStartz.setText("MinZ");
+      lblStartz.setSize(new Dimension(68, 22));
+      lblStartz.setPreferredSize(new Dimension(94, 22));
+      lblStartz.setLocation(new Point(390, 6));
+      lblStartz.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblStartz.setBounds(17, 47, 68, 22);
+      panel_2.add(lblStartz);
+
+      meshGenZMinREd = new JWFNumberField();
+      meshGenZMinREd.setValueStep(0.05);
+      meshGenZMinREd.setText("");
+      meshGenZMinREd.setSize(new Dimension(100, 24));
+      meshGenZMinREd.setPreferredSize(new Dimension(100, 24));
+      meshGenZMinREd.setLocation(new Point(456, 4));
+      meshGenZMinREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      meshGenZMinREd.setBounds(83, 45, 100, 24);
+      meshGenZMinREd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null && tinaController.getMeshGenController() != null) {
+            tinaController.getMeshGenController().zminREd_changed();
+          }
+        }
+      });
+      panel_2.add(meshGenZMinREd);
+
+      meshGenZMinSlider = new JSlider();
+      meshGenZMinSlider.setValue(0);
+      meshGenZMinSlider.setSize(new Dimension(205, 19));
+      meshGenZMinSlider.setPreferredSize(new Dimension(220, 19));
+      meshGenZMinSlider.setMinimum(-25000);
+      meshGenZMinSlider.setMaximum(25000);
+      meshGenZMinSlider.setLocation(new Point(558, 4));
+      meshGenZMinSlider.setBounds(185, 45, 205, 19);
+      meshGenZMinSlider.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null && tinaController.getMeshGenController() != null) {
+            tinaController.getMeshGenController().zminSlider_changed();
+          }
+        }
+      });
+      panel_2.add(meshGenZMinSlider);
+
+      JLabel lblEndz = new JLabel();
+      lblEndz.setText("MaxZ");
+      lblEndz.setSize(new Dimension(68, 22));
+      lblEndz.setPreferredSize(new Dimension(94, 22));
+      lblEndz.setLocation(new Point(390, 28));
+      lblEndz.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblEndz.setBounds(17, 69, 68, 22);
+      panel_2.add(lblEndz);
+
+      meshGenZMaxREd = new JWFNumberField();
+      meshGenZMaxREd.setValueStep(0.05);
+      meshGenZMaxREd.setText("");
+      meshGenZMaxREd.setSize(new Dimension(100, 24));
+      meshGenZMaxREd.setPreferredSize(new Dimension(100, 24));
+      meshGenZMaxREd.setLocation(new Point(456, 28));
+      meshGenZMaxREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      meshGenZMaxREd.setBounds(83, 69, 100, 24);
+      meshGenZMaxREd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null && tinaController.getMeshGenController() != null) {
+            tinaController.getMeshGenController().zmaxREd_changed();
+          }
+        }
+      });
+      panel_2.add(meshGenZMaxREd);
+
+      meshGenZMaxSlider = new JSlider();
+      meshGenZMaxSlider.setValue(0);
+      meshGenZMaxSlider.setSize(new Dimension(205, 19));
+      meshGenZMaxSlider.setPreferredSize(new Dimension(220, 19));
+      meshGenZMaxSlider.setMinimum(-25000);
+      meshGenZMaxSlider.setMaximum(25000);
+      meshGenZMaxSlider.setLocation(new Point(558, 28));
+      meshGenZMaxSlider.setBounds(185, 69, 205, 19);
+      meshGenZMaxSlider.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null && tinaController.getMeshGenController() != null) {
+            tinaController.getMeshGenController().zmaxSlider_changed();
+          }
+        }
+      });
+      panel_2.add(meshGenZMaxSlider);
     }
     return panel_91;
   }
@@ -19016,10 +19432,377 @@ public class TinaInternalFrame extends JInternalFrame {
   private JPanel getPanel_92() {
     if (panel_92 == null) {
       panel_92 = new JPanel();
-      panel_92.setBorder(new TitledBorder(null, "Slice position", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-      panel_92.setLayout(null);
+      panel_92.setBorder(new TitledBorder(null, "Hints", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+      panel_92.setLayout(new BorderLayout(0, 0));
+      panel_92.add(getScrollPane_10(), BorderLayout.CENTER);
     }
     return panel_92;
+  }
+
+  private JPanel getMeshGenTopViewRootPnl() {
+    if (meshGenTopViewRootPnl == null) {
+      meshGenTopViewRootPnl = new JPanel();
+      meshGenTopViewRootPnl.setLayout(new BorderLayout(0, 0));
+    }
+    return meshGenTopViewRootPnl;
+  }
+
+  private JPanel getMeshGenFrontViewRootPnl() {
+    if (meshGenFrontViewRootPnl == null) {
+      meshGenFrontViewRootPnl = new JPanel();
+      meshGenFrontViewRootPnl.setLayout(new BorderLayout(0, 0));
+    }
+    return meshGenFrontViewRootPnl;
+  }
+
+  private JPanel getMeshGenPerspectiveViewRootPnl() {
+    if (meshGenPerspectiveViewRootPnl == null) {
+      meshGenPerspectiveViewRootPnl = new JPanel();
+      meshGenPerspectiveViewRootPnl.setLayout(new BorderLayout(0, 0));
+    }
+    return meshGenPerspectiveViewRootPnl;
+  }
+
+  public JButton getMeshGenFromEditorBtn() {
+    return meshGenFromEditorBtn;
+  }
+
+  public JButton getMeshGenFromClipboardBtn() {
+    return meshGenFromClipboardBtn;
+  }
+
+  public JButton getMeshGenLoadFlameBtn() {
+    return meshGenLoadFlameBtn;
+  }
+
+  public JWFNumberField getMeshGenSliceCountREd() {
+    return meshGenSliceCountREd;
+  }
+
+  public JWFNumberField getMeshGenSlicesPerRenderREd() {
+    return meshGenSlicesPerRenderREd;
+  }
+
+  public JWFNumberField getMeshGenRenderWidthREd() {
+    return meshGenRenderWidthREd;
+  }
+
+  public JWFNumberField getMeshGenRenderHeightREd() {
+    return meshGenRenderHeightREd;
+  }
+
+  public JWFNumberField getMeshGenRenderQualityREd() {
+    return meshGenRenderQualityREd;
+  }
+
+  public JProgressBar getMeshGenProgressbar() {
+    return meshGenProgressbar;
+  }
+
+  public JButton getMeshGenGenerateBtn() {
+    return meshGenGenerateBtn;
+  }
+
+  private JScrollPane getScrollPane_10() {
+    if (scrollPane_10 == null) {
+      scrollPane_10 = new JScrollPane();
+      scrollPane_10.setViewportView(getMeshGenHintPane());
+    }
+    return scrollPane_10;
+  }
+
+  private JTextPane getMeshGenHintPane() {
+    if (meshGenHintPane == null) {
+      meshGenHintPane = new JTextPane();
+      meshGenHintPane.setFont(new Font("SansSerif", Font.PLAIN, 14));
+      meshGenHintPane.setEditable(false);
+    }
+    return meshGenHintPane;
+  }
+
+  public JWFNumberField getMeshGenCentreXREd() {
+    return meshGenCentreXREd;
+  }
+
+  public JWFNumberField getMeshGenCentreYREd() {
+    return meshGenCentreYREd;
+  }
+
+  public JWFNumberField getMeshGenZoomREd() {
+    return meshGenZoomREd;
+  }
+
+  public JSlider getMeshGenCentreXSlider() {
+    return meshGenCentreXSlider;
+  }
+
+  public JSlider getMeshGenCentreYSlider() {
+    return meshGenCentreYSlider;
+  }
+
+  public JSlider getMeshGenZoomSlider() {
+    return meshGenZoomSlider;
+  }
+
+  public JWFNumberField getMeshGenZMinREd() {
+    return meshGenZMinREd;
+  }
+
+  public JWFNumberField getMeshGenZMaxREd() {
+    return meshGenZMaxREd;
+  }
+
+  public JSlider getMeshGenZMinSlider() {
+    return meshGenZMinSlider;
+  }
+
+  public JSlider getMeshGenZMaxSlider() {
+    return meshGenZMaxSlider;
+  }
+
+  private JPanel getPanel_93() {
+    if (panel_93 == null) {
+      panel_93 = new JPanel();
+      panel_93.setPreferredSize(new Dimension(10, 32));
+      panel_93.setMinimumSize(new Dimension(10, 32));
+      panel_93.setSize(new Dimension(0, 32));
+      panel_93.setLayout(null);
+
+      meshGenTopViewSlicePositionREd = new JWFNumberField();
+      meshGenTopViewSlicePositionREd.setMaxValue(1.0);
+      meshGenTopViewSlicePositionREd.setMouseSpeed(0.1);
+      meshGenTopViewSlicePositionREd.setHasMinValue(true);
+      meshGenTopViewSlicePositionREd.setHasMaxValue(true);
+      meshGenTopViewSlicePositionREd.setValueStep(0.05);
+      meshGenTopViewSlicePositionREd.setText("");
+      meshGenTopViewSlicePositionREd.setPreferredSize(new Dimension(100, 24));
+      meshGenTopViewSlicePositionREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      meshGenTopViewSlicePositionREd.setBounds(72, 6, 100, 24);
+      meshGenTopViewSlicePositionREd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null && tinaController.getMeshGenController() != null) {
+            tinaController.getMeshGenController().topViewSlicePositionREd_changed();
+          }
+        }
+      });
+      panel_93.add(meshGenTopViewSlicePositionREd);
+
+      JLabel label = new JLabel();
+      label.setText("Slice position");
+      label.setPreferredSize(new Dimension(94, 22));
+      label.setFont(new Font("Dialog", Font.BOLD, 10));
+      label.setBounds(0, 8, 68, 22);
+      panel_93.add(label);
+
+      meshGenTopViewSlicePositionSlider = new JSlider();
+      meshGenTopViewSlicePositionSlider.setValue(0);
+      meshGenTopViewSlicePositionSlider.setPreferredSize(new Dimension(220, 19));
+      meshGenTopViewSlicePositionSlider.setMinimum(-25000);
+      meshGenTopViewSlicePositionSlider.setMaximum(25000);
+      meshGenTopViewSlicePositionSlider.setBounds(174, 8, 192, 19);
+      meshGenTopViewSlicePositionSlider.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null && tinaController.getMeshGenController() != null) {
+            tinaController.getMeshGenController().topViewSlicePositionSlider_changed();
+          }
+        }
+      });
+      panel_93.add(meshGenTopViewSlicePositionSlider);
+    }
+    return panel_93;
+  }
+
+  private JPanel getPanel_94() {
+    if (panel_94 == null) {
+      panel_94 = new JPanel();
+      panel_94.setLayout(null);
+      panel_94.setSize(new Dimension(0, 32));
+      panel_94.setPreferredSize(new Dimension(10, 32));
+      panel_94.setMinimumSize(new Dimension(10, 32));
+
+      JLabel label = new JLabel();
+      label.setText("Slice position");
+      label.setPreferredSize(new Dimension(94, 22));
+      label.setFont(new Font("Dialog", Font.BOLD, 10));
+      label.setBounds(0, 8, 68, 22);
+      panel_94.add(label);
+
+      meshGenFrontViewSlicePositionREd = new JWFNumberField();
+      meshGenFrontViewSlicePositionREd.setMaxValue(1.0);
+      meshGenFrontViewSlicePositionREd.setMouseSpeed(0.1);
+      meshGenFrontViewSlicePositionREd.setHasMinValue(true);
+      meshGenFrontViewSlicePositionREd.setHasMaxValue(true);
+      meshGenFrontViewSlicePositionREd.setValueStep(0.05);
+      meshGenFrontViewSlicePositionREd.setText("");
+      meshGenFrontViewSlicePositionREd.setPreferredSize(new Dimension(100, 24));
+      meshGenFrontViewSlicePositionREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      meshGenFrontViewSlicePositionREd.setBounds(72, 6, 100, 24);
+      meshGenFrontViewSlicePositionREd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null && tinaController.getMeshGenController() != null) {
+            tinaController.getMeshGenController().frontViewSlicePositionREd_changed();
+          }
+        }
+      });
+      panel_94.add(meshGenFrontViewSlicePositionREd);
+
+      meshGenFrontViewSlicePositionSlider = new JSlider();
+      meshGenFrontViewSlicePositionSlider.setValue(0);
+      meshGenFrontViewSlicePositionSlider.setPreferredSize(new Dimension(220, 19));
+      meshGenFrontViewSlicePositionSlider.setMinimum(-25000);
+      meshGenFrontViewSlicePositionSlider.setMaximum(25000);
+      meshGenFrontViewSlicePositionSlider.setBounds(174, 8, 192, 19);
+      meshGenFrontViewSlicePositionSlider.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null && tinaController.getMeshGenController() != null) {
+            tinaController.getMeshGenController().frontViewSlicePositionSlider_changed();
+          }
+        }
+      });
+      panel_94.add(meshGenFrontViewSlicePositionSlider);
+    }
+    return panel_94;
+  }
+
+  private JPanel getPanel_95() {
+    if (panel_95 == null) {
+      panel_95 = new JPanel();
+      panel_95.setLayout(null);
+      panel_95.setSize(new Dimension(0, 32));
+      panel_95.setPreferredSize(new Dimension(10, 32));
+      panel_95.setMinimumSize(new Dimension(10, 32));
+
+      JLabel label = new JLabel();
+      label.setText("Slice position");
+      label.setPreferredSize(new Dimension(94, 22));
+      label.setFont(new Font("Dialog", Font.BOLD, 10));
+      label.setBounds(0, 8, 68, 22);
+      panel_95.add(label);
+
+      meshGenPerspectiveViewSlicePositionREd = new JWFNumberField();
+      meshGenPerspectiveViewSlicePositionREd.setMouseSpeed(0.1);
+      meshGenPerspectiveViewSlicePositionREd.setMaxValue(1.0);
+      meshGenPerspectiveViewSlicePositionREd.setHasMinValue(true);
+      meshGenPerspectiveViewSlicePositionREd.setHasMaxValue(true);
+      meshGenPerspectiveViewSlicePositionREd.setValueStep(0.05);
+      meshGenPerspectiveViewSlicePositionREd.setText("");
+      meshGenPerspectiveViewSlicePositionREd.setPreferredSize(new Dimension(100, 24));
+      meshGenPerspectiveViewSlicePositionREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      meshGenPerspectiveViewSlicePositionREd.setBounds(72, 6, 100, 24);
+      meshGenPerspectiveViewSlicePositionREd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null && tinaController.getMeshGenController() != null) {
+            tinaController.getMeshGenController().perspectiveViewSlicePositionREd_changed();
+          }
+        }
+      });
+      panel_95.add(meshGenPerspectiveViewSlicePositionREd);
+
+      meshGenPerspectiveViewSlicePositionSlider = new JSlider();
+      meshGenPerspectiveViewSlicePositionSlider.setValue(0);
+      meshGenPerspectiveViewSlicePositionSlider.setPreferredSize(new Dimension(220, 19));
+      meshGenPerspectiveViewSlicePositionSlider.setMinimum(-25000);
+      meshGenPerspectiveViewSlicePositionSlider.setMaximum(25000);
+      meshGenPerspectiveViewSlicePositionSlider.setBounds(174, 8, 192, 19);
+      meshGenPerspectiveViewSlicePositionSlider.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null && tinaController.getMeshGenController() != null) {
+            tinaController.getMeshGenController().perspectiveViewSlicePositionSlider_changed();
+          }
+        }
+      });
+      panel_95.add(meshGenPerspectiveViewSlicePositionSlider);
+    }
+    return panel_95;
+  }
+
+  private JPanel getPanel_96() {
+    if (panel_96 == null) {
+      panel_96 = new JPanel();
+      panel_96.setPreferredSize(new Dimension(52, 10));
+      panel_96.setLayout(null);
+
+      meshGenTopViewRenderBtn = new JButton();
+      meshGenTopViewRenderBtn.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getMeshGenController().topViewRenderButtonClicked();
+        }
+      });
+      meshGenTopViewRenderBtn.setToolTipText("Render image");
+      meshGenTopViewRenderBtn.setPreferredSize(new Dimension(42, 24));
+      meshGenTopViewRenderBtn.setMnemonic(KeyEvent.VK_R);
+      meshGenTopViewRenderBtn.setIconTextGap(0);
+      meshGenTopViewRenderBtn.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/fraqtive.png")));
+      meshGenTopViewRenderBtn.setFont(new Font("Dialog", Font.BOLD, 9));
+      meshGenTopViewRenderBtn.setBounds(6, 219, 42, 24);
+      panel_96.add(meshGenTopViewRenderBtn);
+
+      meshGenTopViewShowSliceBtn = new JToggleButton();
+      meshGenTopViewShowSliceBtn.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          if (tinaController != null && tinaController.getMeshGenController() != null) {
+            tinaController.getMeshGenController().topViewShowSliceButtonClicked();
+          }
+        }
+      });
+      meshGenTopViewShowSliceBtn.setToolTipText("Toggle between showing a slice at the selected position or showing the complete object");
+      meshGenTopViewShowSliceBtn.setIconTextGap(0);
+      meshGenTopViewShowSliceBtn.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/edit-cut-red.png")));
+      meshGenTopViewShowSliceBtn.setPreferredSize(new Dimension(42, 24));
+      meshGenTopViewShowSliceBtn.setMnemonic(KeyEvent.VK_P);
+      meshGenTopViewShowSliceBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      meshGenTopViewShowSliceBtn.setBounds(6, 103, 42, 24);
+      panel_96.add(meshGenTopViewShowSliceBtn);
+    }
+    return panel_96;
+  }
+
+  public JButton getMeshGenTopViewRenderBtn() {
+    return meshGenTopViewRenderBtn;
+  }
+
+  public JButton getMeshGenFrontViewRenderBtn() {
+    return meshGenFrontViewRenderBtn;
+  }
+
+  public JToggleButton getMeshGenTopViewShowSliceBtn() {
+    return meshGenTopViewShowSliceBtn;
+  }
+
+  public JToggleButton getMeshGenFrontViewShowSliceBtn() {
+    return meshGenFrontViewShowSliceBtn;
+  }
+
+  public JToggleButton getMeshGenPerspectiveViewShowSliceBtn() {
+    return meshGenPerspectiveViewShowSliceBtn;
+  }
+
+  public JWFNumberField getMeshGenTopViewSlicePositionREd() {
+    return meshGenTopViewSlicePositionREd;
+  }
+
+  public JSlider getMeshGenTopViewSlicePositionSlider() {
+    return meshGenTopViewSlicePositionSlider;
+  }
+
+  public JSlider getMeshGenFrontViewSlicePositionSlider() {
+    return meshGenFrontViewSlicePositionSlider;
+  }
+
+  public JSlider getMeshGenPerspectiveViewSlicePositionSlider() {
+    return meshGenPerspectiveViewSlicePositionSlider;
+  }
+
+  public JWFNumberField getMeshGenFrontViewSlicePositionREd() {
+    return meshGenFrontViewSlicePositionREd;
+  }
+
+  public JWFNumberField getMeshGenPerspectiveViewSlicePositionREd() {
+    return meshGenPerspectiveViewSlicePositionREd;
+  }
+
+  public JButton getMeshGenPerspectiveViewRenderBtn() {
+    return meshGenPerspectiveViewRenderBtn;
   }
 } //  @jve:decl-index=0:visual-constraint="10,10"
 

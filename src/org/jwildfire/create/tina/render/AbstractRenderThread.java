@@ -29,6 +29,7 @@ import org.jwildfire.create.tina.variation.FlameTransformationContext;
 public abstract class AbstractRenderThread implements Runnable {
   protected final FlameRenderer renderer;
   protected final List<RenderPacket> renderPackets;
+  protected final List<RenderSlice> slices;
   protected final long samples;
   protected volatile long currSample;
   protected SampleTonemapper tonemapper;
@@ -38,11 +39,12 @@ public abstract class AbstractRenderThread implements Runnable {
   protected FlameTransformationContext ctx;
   protected AbstractRandomGenerator randGen;
 
-  public AbstractRenderThread(Prefs pPrefs, int pThreadId, FlameRenderer pRenderer, List<RenderPacket> pRenderPackets, long pSamples) {
+  public AbstractRenderThread(Prefs pPrefs, int pThreadId, FlameRenderer pRenderer, List<RenderPacket> pRenderPackets, long pSamples, List<RenderSlice> pSlices) {
     renderer = pRenderer;
     renderPackets = pRenderPackets;
     samples = pSamples;
     randGen = RandomGeneratorFactory.getInstance(pPrefs.getTinaRandomNumberGenerator(), pThreadId);
+    slices = pSlices;
     ctx = new FlameTransformationContext(pRenderer, randGen, pRenderPackets.get(0).getFlame().getFrame());
     ctx.setPreserveZCoordinate(pRenderPackets.get(0).getFlame().isPreserveZ());
     ctx.setPreview(renderer.isPreview());
@@ -68,6 +70,8 @@ public abstract class AbstractRenderThread implements Runnable {
 
   protected abstract void iterate();
 
+  protected abstract void iterateSlices(List<RenderSlice> pSlices);
+
   protected abstract RenderThreadPersistentState saveState();
 
   protected abstract void restoreState(RenderThreadPersistentState pState);
@@ -83,7 +87,12 @@ public abstract class AbstractRenderThread implements Runnable {
         else {
           restoreState(resumeState);
         }
-        iterate();
+        if (slices == null) {
+          iterate();
+        }
+        else {
+          iterateSlices(slices);
+        }
       }
       catch (Throwable ex) {
         ex.printStackTrace();
