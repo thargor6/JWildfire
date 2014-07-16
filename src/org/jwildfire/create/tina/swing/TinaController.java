@@ -110,7 +110,6 @@ import org.jwildfire.create.tina.render.ProgressUpdater;
 import org.jwildfire.create.tina.render.RenderInfo;
 import org.jwildfire.create.tina.render.RenderMode;
 import org.jwildfire.create.tina.render.RenderedFlame;
-import org.jwildfire.create.tina.render.SliceRenderInfo;
 import org.jwildfire.create.tina.render.filter.FilterKernelType;
 import org.jwildfire.create.tina.script.ScriptRunner;
 import org.jwildfire.create.tina.script.ScriptRunnerEnvironment;
@@ -125,7 +124,6 @@ import org.jwildfire.create.tina.variation.VariationFunc;
 import org.jwildfire.create.tina.variation.VariationFuncList;
 import org.jwildfire.image.SimpleImage;
 import org.jwildfire.io.ImageReader;
-import org.jwildfire.io.ImageWriter;
 import org.jwildfire.swing.ErrorHandler;
 import org.jwildfire.swing.ImageFileChooser;
 import org.jwildfire.swing.ImagePanel;
@@ -4495,68 +4493,32 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
           final Flame flame = getCurrFlame();
           final File file = chooser.getSelectedFile();
           prefs.setLastOutputImageFile(file);
+          RenderMainFlameThreadFinishEvent finishEvent = new RenderMainFlameThreadFinishEvent() {
 
-          // TODO
-          // NEW
-          resProfile = new ResolutionProfile();
-          resProfile.setWidth(800);
-          resProfile.setHeight(800);
-          FlameRenderer renderer = new FlameRenderer(flame, prefs, flame.isBGTransparency(), false);
-
-          int width = resProfile.getWidth();
-          int height = resProfile.getHeight();
-          RenderInfo info = new RenderInfo(width, height, RenderMode.PRODUCTION);
-          double wScl = (double) info.getImageWidth() / (double) flame.getWidth();
-          double hScl = (double) info.getImageHeight() / (double) flame.getHeight();
-          flame.setPixelsPerUnit((wScl + hScl) * 0.5 * flame.getPixelsPerUnit());
-          flame.setWidth(info.getImageWidth());
-          flame.setHeight(info.getImageHeight());
-          flame.setSampleDensity(qualProfile.getQuality());
-
-          renderer.setProgressUpdater(mainProgressUpdater);
-          SliceRenderInfo renderInfo = new SliceRenderInfo(resProfile.getWidth(), resProfile.getHeight(), RenderMode.PRODUCTION, 360, -0.1, 1.9, 50);
-
-          List<RenderedFlame> renderedFlames = renderer.renderSlices(renderInfo);
-
-          int fileIdx = 1;
-          for (RenderedFlame renderedFlame : renderedFlames) {
-            String filename = String.valueOf(fileIdx++);
-            while (filename.length() < 3) {
-              filename = "0" + filename;
+            @Override
+            public void succeeded(double pElapsedTime) {
+              try {
+                showStatusMessage(flame, "render time: " + Tools.doubleToString(pElapsedTime) + "s");
+                mainController.loadImage(file.getAbsolutePath(), false);
+              }
+              catch (Throwable ex) {
+                errorHandler.handleError(ex);
+              }
+              mainRenderThread = null;
+              enableMainRenderControls();
             }
-            filename = "C:\\TMP\\wf\\test\\test" + filename + ".png";
-            new ImageWriter().saveImage(renderedFlame.getImage(), filename);
-          }
-          // NEW
 
-          // TODO          
-          //          RenderMainFlameThreadFinishEvent finishEvent = new RenderMainFlameThreadFinishEvent() {
-          //
-          //            @Override
-          //            public void succeeded(double pElapsedTime) {
-          //              try {
-          //                showStatusMessage(flame, "render time: " + Tools.doubleToString(pElapsedTime) + "s");
-          //                mainController.loadImage(file.getAbsolutePath(), false);
-          //              }
-          //              catch (Throwable ex) {
-          //                errorHandler.handleError(ex);
-          //              }
-          //              mainRenderThread = null;
-          //              enableMainRenderControls();
-          //            }
-          //
-          //            @Override
-          //            public void failed(Throwable exception) {
-          //              errorHandler.handleError(exception);
-          //              mainRenderThread = null;
-          //              enableMainRenderControls();
-          //            }
-          //
-          //          };
-          //          mainRenderThread = new RenderMainFlameThread(prefs, flame, file, qualProfile, resProfile, finishEvent, mainProgressUpdater);
-          //          enableMainRenderControls();
-          //          new Thread(mainRenderThread).start();
+            @Override
+            public void failed(Throwable exception) {
+              errorHandler.handleError(exception);
+              mainRenderThread = null;
+              enableMainRenderControls();
+            }
 
+          };
+          mainRenderThread = new RenderMainFlameThread(prefs, flame, file, qualProfile, resProfile, finishEvent, mainProgressUpdater);
+          enableMainRenderControls();
+          new Thread(mainRenderThread).start();
         }
       }
       catch (Throwable ex) {

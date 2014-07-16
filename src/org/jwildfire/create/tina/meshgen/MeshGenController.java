@@ -48,6 +48,7 @@ import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.Stereo3dMode;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.io.FlameReader;
+import org.jwildfire.create.tina.palette.RGBPalette;
 import org.jwildfire.create.tina.render.FlameRenderer;
 import org.jwildfire.create.tina.render.ProgressUpdater;
 import org.jwildfire.create.tina.render.RenderInfo;
@@ -619,7 +620,6 @@ public class MeshGenController {
       refreshing = true;
       try {
         setZMinValue(zminREd.getDoubleValue());
-        validateSlicePositions();
       }
       finally {
         refreshing = false;
@@ -633,7 +633,6 @@ public class MeshGenController {
       refreshing = true;
       try {
         setZMinValue((double) zminSlider.getValue() / (double) ZOOM_SCALE);
-        validateSlicePositions();
       }
       finally {
         refreshing = false;
@@ -647,7 +646,6 @@ public class MeshGenController {
       refreshing = true;
       try {
         setZMaxValue(zmaxREd.getDoubleValue());
-        validateSlicePositions();
       }
       finally {
         refreshing = false;
@@ -661,36 +659,11 @@ public class MeshGenController {
       refreshing = true;
       try {
         setZMaxValue((double) zmaxSlider.getValue() / (double) ZOOM_SCALE);
-        validateSlicePositions();
       }
       finally {
         refreshing = false;
       }
       refreshAllPreviews(true);
-    }
-  }
-
-  private void validateSlicePositions() {
-    double zmin = zminREd.getDoubleValue();
-    double zmax = zmaxREd.getDoubleValue();
-    limitSlicePosition(frontViewSlicePositionREd, frontViewSlicePositionSlider, zmin, zmax);
-    limitSlicePosition(topViewSlicePositionREd, topViewSlicePositionSlider, zmin, zmax);
-    limitSlicePosition(perspectiveViewSlicePositionREd, perspectiveViewSlicePositionSlider, zmin, zmax);
-  }
-
-  private void limitSlicePosition(JWFNumberField pREd, JSlider pSlider, double pMin, double pMax) {
-    pREd.setMinValue(pMin);
-    pREd.setMaxValue(pMax);
-    pSlider.setMinimum(Tools.FTOI(pMin * Z_SCALE));
-    pSlider.setMaximum(Tools.FTOI(pMax * Z_SCALE));
-    double value = pREd.getDoubleValue();
-    if (value < pMin) {
-      pREd.setValue(pMin);
-      pSlider.setValue(Tools.FTOI(pMin * Z_SCALE));
-    }
-    else if (value > pMax) {
-      pREd.setValue(pMax);
-      pSlider.setValue(Tools.FTOI(pMax * Z_SCALE));
     }
   }
 
@@ -882,8 +855,17 @@ public class MeshGenController {
             }
 
           };
+          Flame flame = currBaseFlame.makeCopy();
+          RGBPalette gradient = new RGBPalette();
+          for (int i = 0; i < RGBPalette.PALETTE_SIZE; i++) {
+            gradient.setColor(i, 235, 235, 235);
+          }
+          flame.getFirstLayer().setPalette(gradient);
+          flame.setAntialiasAmount(1.0);
+          flame.setAntialiasRadius(0.50);
+
           mainRenderThread = new MeshGenGenerateThread(
-              prefs, currBaseFlame, file, finishEvent, progressUpdater, renderWidthREd.getIntValue(), renderHeightREd.getIntValue(),
+              prefs, flame, file, finishEvent, progressUpdater, renderWidthREd.getIntValue(), renderHeightREd.getIntValue(),
               sliceCountREd.getIntValue(), slicesPerRenderREd.getIntValue(), renderQualityREd.getIntValue(),
               zminREd.getDoubleValue(), zmaxREd.getDoubleValue());
 

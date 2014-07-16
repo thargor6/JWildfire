@@ -41,6 +41,7 @@ import org.jwildfire.create.tina.variation.FlameTransformationContext;
 import org.jwildfire.image.Pixel;
 import org.jwildfire.image.SimpleHDRImage;
 import org.jwildfire.image.SimpleImage;
+import org.jwildfire.io.ImageWriter;
 import org.jwildfire.transform.ComposeTransformer;
 import org.jwildfire.transform.ComposeTransformer.HAlignment;
 import org.jwildfire.transform.ComposeTransformer.VAlignment;
@@ -986,11 +987,11 @@ public class FlameRenderer {
     preview = pPreview;
   }
 
-  public List<RenderedFlame> renderSlices(SliceRenderInfo pSliceRenderInfo) {
+  public void renderSlices(SliceRenderInfo pSliceRenderInfo, String pFilenamePattern) {
     if (!flame.isRenderable())
       throw new RuntimeException("Slices can to be created from empty flames");
 
-    List<RenderedFlame> res = new ArrayList<RenderedFlame>();
+    int fileIdx = 1;
 
     int passes = pSliceRenderInfo.getSlices() / pSliceRenderInfo.getSlicesPerRender();
     if (pSliceRenderInfo.getSlices() % pSliceRenderInfo.getSlicesPerRender() != 0)
@@ -1003,6 +1004,9 @@ public class FlameRenderer {
     double currZ = zmax;
     int currSlice = 0;
     for (int pass = 0; pass < passes; pass++) {
+      if (forceAbort) {
+        break;
+      }
       progressDisplayPhase = pass;
       Flame currFlame = flame.makeCopy();
       prepareFlameForSliceRendering(currFlame);
@@ -1025,9 +1029,11 @@ public class FlameRenderer {
       if (!forceAbort) {
         LogDensityPoint logDensityPnt = new LogDensityPoint();
         while (slices.size() > 0) {
+          if (forceAbort) {
+            break;
+          }
           RenderSlice slice = slices.get(0);
           RenderedFlame renderedFlame = new RenderedFlame();
-          res.add(renderedFlame);
           renderedFlame.init(pSliceRenderInfo.createRenderInfo());
           SimpleImage img = renderedFlame.getImage();
           logDensityFilter.setRaster(slice.getRaster(), rasterWidth, rasterHeight, img.getImageWidth(), img.getImageHeight());
@@ -1039,13 +1045,19 @@ public class FlameRenderer {
               img.setARGB(j, i, rbgPoint.alpha, rbgPoint.red, rbgPoint.green, rbgPoint.blue);
             }
           }
+          String filename = String.format(pFilenamePattern, fileIdx++);
+          try {
+            new ImageWriter().saveImage(renderedFlame.getImage(), filename);
+          }
+          catch (Exception ex) {
+            throw new RuntimeException(ex);
+          }
+
           slice = null;
           slices.remove(0);
         }
       }
     }
-
-    return res;
   }
 
   private void prepareFlameForSliceRendering(Flame pFlame) {

@@ -18,7 +18,6 @@ package org.jwildfire.create.tina.meshgen;
 
 import java.io.File;
 import java.util.Calendar;
-import java.util.List;
 
 import org.jwildfire.base.Prefs;
 import org.jwildfire.base.Tools;
@@ -27,9 +26,7 @@ import org.jwildfire.create.tina.render.FlameRenderer;
 import org.jwildfire.create.tina.render.ProgressUpdater;
 import org.jwildfire.create.tina.render.RenderInfo;
 import org.jwildfire.create.tina.render.RenderMode;
-import org.jwildfire.create.tina.render.RenderedFlame;
 import org.jwildfire.create.tina.render.SliceRenderInfo;
-import org.jwildfire.io.ImageWriter;
 
 public class MeshGenGenerateThread implements Runnable {
   private final Prefs prefs;
@@ -38,7 +35,6 @@ public class MeshGenGenerateThread implements Runnable {
   private final MeshGenGenerateThreadFinishEvent finishEvent;
   private final ProgressUpdater progressUpdater;
   private boolean finished;
-  private boolean forceAbort;
   private int renderWidth, renderHeight;
   private int slicesCount, slicesPerRender;
   private int quality;
@@ -63,14 +59,14 @@ public class MeshGenGenerateThread implements Runnable {
 
   @Override
   public void run() {
-    finished = forceAbort = false;
+    finished = false;
     try {
       long t0, t1;
       renderer = new FlameRenderer(flame, prefs, flame.isBGTransparency(), false);
       renderer.setProgressUpdater(progressUpdater);
       t0 = Calendar.getInstance().getTimeInMillis();
 
-      FlameRenderer renderer = new FlameRenderer(flame, prefs, flame.isBGTransparency(), false);
+      renderer = new FlameRenderer(flame, prefs, flame.isBGTransparency(), false);
 
       int width = renderWidth;
       int height = renderHeight;
@@ -85,15 +81,7 @@ public class MeshGenGenerateThread implements Runnable {
       renderer.setProgressUpdater(progressUpdater);
       SliceRenderInfo renderInfo = new SliceRenderInfo(renderWidth, renderHeight, RenderMode.PRODUCTION, slicesCount, zmin, zmax, slicesPerRender);
 
-      List<RenderedFlame> renderedFlames = renderer.renderSlices(renderInfo);
-
-      String filenamePattern = createFilenamePattern();
-
-      int fileIdx = 1;
-      for (RenderedFlame renderedFlame : renderedFlames) {
-        String filename = String.format(filenamePattern, fileIdx++);
-        new ImageWriter().saveImage(renderedFlame.getImage(), filename);
-      }
+      renderer.renderSlices(renderInfo, createFilenamePattern());
 
       t1 = Calendar.getInstance().getTimeInMillis();
 
@@ -127,7 +115,6 @@ public class MeshGenGenerateThread implements Runnable {
   }
 
   public void setForceAbort() {
-    forceAbort = true;
     if (renderer != null) {
       renderer.cancel();
     }

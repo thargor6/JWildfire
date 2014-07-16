@@ -30,6 +30,10 @@ public interface AbstractRasterPoint {
 
   public void setBlue(double blue);
 
+  public double getContribution();
+
+  public void setContribution(double contribution);
+
   public long getCount();
 
   public void setCount(long count);
