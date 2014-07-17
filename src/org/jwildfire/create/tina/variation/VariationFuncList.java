@@ -397,7 +397,7 @@ public class VariationFuncList {
     registerVariationFunc(Oscilloscope2Func.class);
     registerVariationFunc(Scry2Func.class);
     registerVariationFunc(ScramblyFunc.class);
-    registerVariationFunc(SliceWFFunc.class);
+    registerVariationFunc(InternalSliceRangeIndicatorWFFunc.class);
   }
 
   private static void registerVariationFunc(
