@@ -265,12 +265,7 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
         parameterObject.meshGenCentreXSlider, parameterObject.meshGenCentreYREd, parameterObject.meshGenCentreYSlider,
         parameterObject.meshGenZoomREd, parameterObject.meshGenZoomSlider, parameterObject.meshGenZMinREd,
         parameterObject.meshGenZMinSlider, parameterObject.meshGenZMaxREd, parameterObject.meshGenZMaxSlider,
-        parameterObject.meshGenTopViewShowSliceBtn, parameterObject.meshGenTopViewRenderBtn,
-        parameterObject.meshGenFrontViewShowSliceBtn, parameterObject.meshGenFrontViewRenderBtn,
-        parameterObject.meshGenPerspectiveViewShowSliceBtn, parameterObject.meshGenPerspectiveViewRenderBtn,
-        parameterObject.meshGenTopViewSlicePositionREd, parameterObject.meshGenTopViewSlicePositionSlider,
-        parameterObject.meshGenFrontViewSlicePositionREd, parameterObject.meshGenFrontViewSlicePositionSlider,
-        parameterObject.meshGenPerspectiveViewSlicePositionREd, parameterObject.meshGenPerspectiveViewSlicePositionSlider);
+        parameterObject.meshGenTopViewRenderBtn, parameterObject.meshGenFrontViewRenderBtn, parameterObject.meshGenPerspectiveViewRenderBtn);
 
     jwfScriptController = new JWFScriptController(this, parameterObject.pErrorHandler, prefs, parameterObject.pCenterPanel, parameterObject.scriptTree,
         parameterObject.scriptDescriptionTextArea, parameterObject.scriptTextArea, parameterObject.compileScriptButton,

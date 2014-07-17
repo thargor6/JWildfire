@@ -37,7 +37,6 @@ public final class XYZPoint implements Serializable, Assignable<XYZPoint> {
   public double modSaturation;
   // custom RGB colors
   public boolean rgbColor = false;
-  public boolean dontPlot = false;
   public double redColor;
   public double greenColor;
   public double blueColor;
@@ -65,7 +64,6 @@ public final class XYZPoint implements Serializable, Assignable<XYZPoint> {
     modGamma = p.modGamma;
     modContrast = p.modContrast;
     modSaturation = p.modSaturation;
-    dontPlot = p.dontPlot;
     sumsq = p.sumsq;
     validSumsq = p.validSumsq;
     sqrt = p.sqrt;
@@ -101,7 +99,6 @@ public final class XYZPoint implements Serializable, Assignable<XYZPoint> {
     x = y = z = color = modGamma = modContrast = modSaturation = 0.0;
     sumsq = sqrt = atan = atanYX = sinA = cosA = 0.0;
     validSumsq = validSqrt = validAtan = validAtanYX = validSinA = validCosA = false;
-    dontPlot = false;
   }
 
   public double getPrecalcSumsq() {
@@ -159,7 +156,6 @@ public final class XYZPoint implements Serializable, Assignable<XYZPoint> {
         fabs(modGamma - pSrc.modGamma) > EPSILON ||
         fabs(modContrast - pSrc.modContrast) > EPSILON ||
         fabs(modSaturation - pSrc.modSaturation) > EPSILON ||
-        dontPlot != pSrc.dontPlot ||
         rgbColor != pSrc.rgbColor || fabs(redColor - pSrc.redColor) > EPSILON ||
         fabs(greenColor - pSrc.greenColor) > EPSILON || fabs(blueColor - pSrc.blueColor) > EPSILON) {
       return false;

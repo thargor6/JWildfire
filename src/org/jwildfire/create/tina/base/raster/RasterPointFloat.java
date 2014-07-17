@@ -82,14 +82,4 @@ public class RasterPointFloat implements AbstractRasterPoint, Serializable {
     count++;
   }
 
-  @Override
-  public double getContribution() {
-    return contribution;
-  }
-
-  @Override
-  public void setContribution(double pContribution) {
-    contribution = (float) pContribution;
-  }
-
 }

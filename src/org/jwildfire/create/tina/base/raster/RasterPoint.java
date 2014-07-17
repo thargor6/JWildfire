@@ -81,14 +81,4 @@ public class RasterPoint implements AbstractRasterPoint, Serializable {
     count++;
   }
 
-  @Override
-  public double getContribution() {
-    return 1.0;
-  }
-
-  @Override
-  public void setContribution(double contribution) {
-    // empty    
-  }
-
 }

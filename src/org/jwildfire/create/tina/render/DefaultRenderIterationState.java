@@ -105,15 +105,11 @@ public class DefaultRenderIterationState extends RenderIterationState {
     List<XForm> finalXForms = layer.getFinalXForms();
     if (finalXForms.size() > 0) {
       applyFinalTransforms(finalXForms);
-      if (!q.dontPlot) {
-        projector.projectPoint(q);
-      }
+      projector.projectPoint(q);
     }
     else {
       applyEmptyFinalTransform();
-      if (!q.dontPlot) {
-        projector.projectPoint(q);
-      }
+      projector.projectPoint(q);
     }
   }
 
@@ -131,18 +127,14 @@ public class DefaultRenderIterationState extends RenderIterationState {
     List<XForm> finalXForms = layer.getFinalXForms();
     if (finalXForms.size() > 0) {
       applyFinalTransforms(finalXForms);
-      if (!q.dontPlot) {
-        if (setupSliceRaster(q, pSlices)) {
-          projector.projectPoint(q);
-        }
+      if (setupSliceRaster(q, pSlices)) {
+        projector.projectPoint(q);
       }
     }
     else {
       applyEmptyFinalTransform();
-      if (!q.dontPlot) {
-        if (setupSliceRaster(q, pSlices)) {
-          projector.projectPoint(q);
-        }
+      if (setupSliceRaster(q, pSlices)) {
+        projector.projectPoint(q);
       }
     }
   }
@@ -210,7 +202,6 @@ public class DefaultRenderIterationState extends RenderIterationState {
     rp.setRed(rp.getRed() + plotRed * intensity);
     rp.setGreen(rp.getGreen() + plotGreen * intensity);
     rp.setBlue(rp.getBlue() + plotBlue * intensity);
-    rp.setContribution(rp.getContribution() + plotContribution);
 
     rp.incCount();
     if (observers != null && observers.size() > 0) {
@@ -242,14 +233,6 @@ public class DefaultRenderIterationState extends RenderIterationState {
       plotRed += (plotRed - avg) * p.modSaturation;
       plotGreen += (plotGreen - avg) * p.modSaturation;
       plotBlue += (plotBlue - avg) * p.modSaturation;
-      //      plotContribution = p.modSaturation;
-      //      if (plotContribution < -1.0) {
-      //        plotContribution = -1.0 + Math.exp(plotContribution);
-      //      }
-      //    }
-      //    else {
-      //      plotContribution = 0.0;
-      //    }
     }
   }
 

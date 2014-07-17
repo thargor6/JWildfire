@@ -989,7 +989,7 @@ public class FlameRenderer {
 
   public void renderSlices(SliceRenderInfo pSliceRenderInfo, String pFilenamePattern) {
     if (!flame.isRenderable())
-      throw new RuntimeException("Slices can to be created from empty flames");
+      throw new RuntimeException("Slices can not be created of empty flames");
 
     int fileIdx = 1;
 
@@ -1001,12 +1001,14 @@ public class FlameRenderer {
     double zmin = pSliceRenderInfo.getZmin() < pSliceRenderInfo.getZmax() ? pSliceRenderInfo.getZmin() : pSliceRenderInfo.getZmax();
     double zmax = pSliceRenderInfo.getZmin() < pSliceRenderInfo.getZmax() ? pSliceRenderInfo.getZmax() : pSliceRenderInfo.getZmin();
     double thickness = (zmax - zmin) / (double) pSliceRenderInfo.getSlices();
+
     double currZ = zmax;
     int currSlice = 0;
     for (int pass = 0; pass < passes; pass++) {
       if (forceAbort) {
         break;
       }
+      System.gc();
       progressDisplayPhase = pass;
       Flame currFlame = flame.makeCopy();
       prepareFlameForSliceRendering(currFlame);

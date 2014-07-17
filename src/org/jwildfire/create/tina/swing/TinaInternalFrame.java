@@ -4512,10 +4512,7 @@ public class TinaInternalFrame extends JInternalFrame {
         getMeshGenProgressbar(), getMeshGenGenerateBtn(), getMeshGenTopViewRootPnl(), getMeshGenFrontViewRootPnl(), getMeshGenPerspectiveViewRootPnl(),
         getMeshGenHintPane(), getMeshGenCentreXREd(), getMeshGenCentreXSlider(), getMeshGenCentreYREd(), getMeshGenCentreYSlider(),
         getMeshGenZoomREd(), getMeshGenZoomSlider(), getMeshGenZMinREd(), getMeshGenZMinSlider(), getMeshGenZMaxREd(), getMeshGenZMaxSlider(),
-        getMeshGenTopViewShowSliceBtn(), getMeshGenTopViewRenderBtn(), getMeshGenFrontViewShowSliceBtn(), getMeshGenFrontViewRenderBtn(),
-        getMeshGenPerspectiveViewShowSliceBtn(), getMeshGenPerspectiveViewRenderBtn(), getMeshGenTopViewSlicePositionREd(),
-        getMeshGenTopViewSlicePositionSlider(), getMeshGenFrontViewSlicePositionREd(), getMeshGenFrontViewSlicePositionSlider(),
-        getMeshGenPerspectiveViewSlicePositionREd(), getMeshGenPerspectiveViewSlicePositionSlider());
+        getMeshGenTopViewRenderBtn(), getMeshGenFrontViewRenderBtn(), getMeshGenPerspectiveViewRenderBtn());
 
     tinaController = new TinaController(params);
 
@@ -10337,21 +10334,9 @@ public class TinaInternalFrame extends JInternalFrame {
   private JWFNumberField meshGenZMaxREd;
   private JSlider meshGenZMinSlider;
   private JSlider meshGenZMaxSlider;
-  private JPanel panel_93;
-  private JPanel panel_94;
-  private JPanel panel_95;
   private JPanel panel_96;
   private JButton meshGenTopViewRenderBtn;
   private JButton meshGenFrontViewRenderBtn;
-  private JToggleButton meshGenTopViewShowSliceBtn;
-  private JToggleButton meshGenFrontViewShowSliceBtn;
-  private JToggleButton meshGenPerspectiveViewShowSliceBtn;
-  private JWFNumberField meshGenTopViewSlicePositionREd;
-  private JSlider meshGenTopViewSlicePositionSlider;
-  private JSlider meshGenFrontViewSlicePositionSlider;
-  private JSlider meshGenPerspectiveViewSlicePositionSlider;
-  private JWFNumberField meshGenFrontViewSlicePositionREd;
-  private JWFNumberField meshGenPerspectiveViewSlicePositionREd;
   private JButton meshGenPerspectiveViewRenderBtn;
 
   /**
@@ -18797,7 +18782,6 @@ public class TinaInternalFrame extends JInternalFrame {
       panel_2.add(panel_3);
       panel_3.setLayout(new BorderLayout(0, 0));
       panel_3.add(getMeshGenTopViewRootPnl(), BorderLayout.CENTER);
-      panel_3.add(getPanel_93(), BorderLayout.SOUTH);
       panel_3.add(getPanel_96(), BorderLayout.EAST);
 
       JPanel panel_8 = new JPanel();
@@ -18805,7 +18789,6 @@ public class TinaInternalFrame extends JInternalFrame {
       panel_2.add(panel_8);
       panel_8.setLayout(new BorderLayout(0, 0));
       panel_8.add(getMeshGenFrontViewRootPnl(), BorderLayout.CENTER);
-      panel_8.add(getPanel_94(), BorderLayout.SOUTH);
 
       JPanel panel_10 = new JPanel();
       panel_10.setLayout(null);
@@ -18824,32 +18807,14 @@ public class TinaInternalFrame extends JInternalFrame {
       meshGenFrontViewRenderBtn.setIconTextGap(0);
       meshGenFrontViewRenderBtn.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/fraqtive.png")));
       meshGenFrontViewRenderBtn.setFont(new Font("Dialog", Font.BOLD, 9));
-      meshGenFrontViewRenderBtn.setBounds(6, 213, 42, 24);
+      meshGenFrontViewRenderBtn.setBounds(6, 245, 42, 24);
       panel_10.add(meshGenFrontViewRenderBtn);
-
-      meshGenFrontViewShowSliceBtn = new JToggleButton();
-      meshGenFrontViewShowSliceBtn.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-          if (tinaController != null && tinaController.getMeshGenController() != null) {
-            tinaController.getMeshGenController().frontViewShowSliceButtonClicked();
-          }
-        }
-      });
-      meshGenFrontViewShowSliceBtn.setToolTipText("Toggle between showing a slice at the selected position or showing the complete object");
-      meshGenFrontViewShowSliceBtn.setIconTextGap(0);
-      meshGenFrontViewShowSliceBtn.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/edit-cut-red.png")));
-      meshGenFrontViewShowSliceBtn.setPreferredSize(new Dimension(42, 24));
-      meshGenFrontViewShowSliceBtn.setMnemonic(KeyEvent.VK_P);
-      meshGenFrontViewShowSliceBtn.setFont(new Font("Dialog", Font.BOLD, 10));
-      meshGenFrontViewShowSliceBtn.setBounds(6, 103, 42, 24);
-      panel_10.add(meshGenFrontViewShowSliceBtn);
 
       JPanel panel_9 = new JPanel();
       panel_9.setBorder(new TitledBorder(null, "Perspective view", TitledBorder.LEADING, TitledBorder.TOP, null, null));
       panel_2.add(panel_9);
       panel_9.setLayout(new BorderLayout(0, 0));
       panel_9.add(getMeshGenPerspectiveViewRootPnl(), BorderLayout.CENTER);
-      panel_9.add(getPanel_95(), BorderLayout.SOUTH);
 
       JPanel panel_11 = new JPanel();
       panel_11.setLayout(null);
@@ -18868,25 +18833,8 @@ public class TinaInternalFrame extends JInternalFrame {
       meshGenPerspectiveViewRenderBtn.setIconTextGap(0);
       meshGenPerspectiveViewRenderBtn.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/fraqtive.png")));
       meshGenPerspectiveViewRenderBtn.setFont(new Font("Dialog", Font.BOLD, 9));
-      meshGenPerspectiveViewRenderBtn.setBounds(6, 213, 42, 24);
+      meshGenPerspectiveViewRenderBtn.setBounds(6, 245, 42, 24);
       panel_11.add(meshGenPerspectiveViewRenderBtn);
-
-      meshGenPerspectiveViewShowSliceBtn = new JToggleButton();
-      meshGenPerspectiveViewShowSliceBtn.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-          if (tinaController != null && tinaController.getMeshGenController() != null) {
-            tinaController.getMeshGenController().perspectiveViewShowSliceButtonClicked();
-          }
-        }
-      });
-      meshGenPerspectiveViewShowSliceBtn.setToolTipText("Toggle between showing a slice at the selected position or showing the complete object");
-      meshGenPerspectiveViewShowSliceBtn.setIconTextGap(0);
-      meshGenPerspectiveViewShowSliceBtn.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/edit-cut-red.png")));
-      meshGenPerspectiveViewShowSliceBtn.setPreferredSize(new Dimension(42, 24));
-      meshGenPerspectiveViewShowSliceBtn.setMnemonic(KeyEvent.VK_P);
-      meshGenPerspectiveViewShowSliceBtn.setFont(new Font("Dialog", Font.BOLD, 10));
-      meshGenPerspectiveViewShowSliceBtn.setBounds(6, 103, 42, 24);
-      panel_11.add(meshGenPerspectiveViewShowSliceBtn);
     }
     return panel_88;
   }
@@ -19341,7 +19289,7 @@ public class TinaInternalFrame extends JInternalFrame {
       panel_2.setLayout(null);
 
       JLabel lblStartz = new JLabel();
-      lblStartz.setText("MinZ");
+      lblStartz.setText("Position 1");
       lblStartz.setSize(new Dimension(68, 22));
       lblStartz.setPreferredSize(new Dimension(94, 22));
       lblStartz.setLocation(new Point(390, 6));
@@ -19350,6 +19298,7 @@ public class TinaInternalFrame extends JInternalFrame {
       panel_2.add(lblStartz);
 
       meshGenZMinREd = new JWFNumberField();
+      meshGenZMinREd.setMouseSpeed(0.01);
       meshGenZMinREd.setValueStep(0.05);
       meshGenZMinREd.setText("");
       meshGenZMinREd.setSize(new Dimension(100, 24));
@@ -19384,7 +19333,7 @@ public class TinaInternalFrame extends JInternalFrame {
       panel_2.add(meshGenZMinSlider);
 
       JLabel lblEndz = new JLabel();
-      lblEndz.setText("MaxZ");
+      lblEndz.setText("Position 2");
       lblEndz.setSize(new Dimension(68, 22));
       lblEndz.setPreferredSize(new Dimension(94, 22));
       lblEndz.setLocation(new Point(390, 28));
@@ -19560,162 +19509,6 @@ public class TinaInternalFrame extends JInternalFrame {
     return meshGenZMaxSlider;
   }
 
-  private JPanel getPanel_93() {
-    if (panel_93 == null) {
-      panel_93 = new JPanel();
-      panel_93.setPreferredSize(new Dimension(10, 32));
-      panel_93.setMinimumSize(new Dimension(10, 32));
-      panel_93.setSize(new Dimension(0, 32));
-      panel_93.setLayout(null);
-
-      meshGenTopViewSlicePositionREd = new JWFNumberField();
-      meshGenTopViewSlicePositionREd.setMaxValue(1.0);
-      meshGenTopViewSlicePositionREd.setMouseSpeed(0.1);
-      meshGenTopViewSlicePositionREd.setHasMinValue(true);
-      meshGenTopViewSlicePositionREd.setHasMaxValue(true);
-      meshGenTopViewSlicePositionREd.setValueStep(0.05);
-      meshGenTopViewSlicePositionREd.setText("");
-      meshGenTopViewSlicePositionREd.setPreferredSize(new Dimension(100, 24));
-      meshGenTopViewSlicePositionREd.setFont(new Font("Dialog", Font.PLAIN, 10));
-      meshGenTopViewSlicePositionREd.setBounds(72, 6, 100, 24);
-      meshGenTopViewSlicePositionREd.addChangeListener(new ChangeListener() {
-        public void stateChanged(ChangeEvent e) {
-          if (tinaController != null && tinaController.getMeshGenController() != null) {
-            tinaController.getMeshGenController().topViewSlicePositionREd_changed();
-          }
-        }
-      });
-      panel_93.add(meshGenTopViewSlicePositionREd);
-
-      JLabel label = new JLabel();
-      label.setText("Slice position");
-      label.setPreferredSize(new Dimension(94, 22));
-      label.setFont(new Font("Dialog", Font.BOLD, 10));
-      label.setBounds(0, 8, 68, 22);
-      panel_93.add(label);
-
-      meshGenTopViewSlicePositionSlider = new JSlider();
-      meshGenTopViewSlicePositionSlider.setValue(0);
-      meshGenTopViewSlicePositionSlider.setPreferredSize(new Dimension(220, 19));
-      meshGenTopViewSlicePositionSlider.setMinimum(-25000);
-      meshGenTopViewSlicePositionSlider.setMaximum(25000);
-      meshGenTopViewSlicePositionSlider.setBounds(174, 8, 192, 19);
-      meshGenTopViewSlicePositionSlider.addChangeListener(new ChangeListener() {
-        public void stateChanged(ChangeEvent e) {
-          if (tinaController != null && tinaController.getMeshGenController() != null) {
-            tinaController.getMeshGenController().topViewSlicePositionSlider_changed();
-          }
-        }
-      });
-      panel_93.add(meshGenTopViewSlicePositionSlider);
-    }
-    return panel_93;
-  }
-
-  private JPanel getPanel_94() {
-    if (panel_94 == null) {
-      panel_94 = new JPanel();
-      panel_94.setLayout(null);
-      panel_94.setSize(new Dimension(0, 32));
-      panel_94.setPreferredSize(new Dimension(10, 32));
-      panel_94.setMinimumSize(new Dimension(10, 32));
-
-      JLabel label = new JLabel();
-      label.setText("Slice position");
-      label.setPreferredSize(new Dimension(94, 22));
-      label.setFont(new Font("Dialog", Font.BOLD, 10));
-      label.setBounds(0, 8, 68, 22);
-      panel_94.add(label);
-
-      meshGenFrontViewSlicePositionREd = new JWFNumberField();
-      meshGenFrontViewSlicePositionREd.setMaxValue(1.0);
-      meshGenFrontViewSlicePositionREd.setMouseSpeed(0.1);
-      meshGenFrontViewSlicePositionREd.setHasMinValue(true);
-      meshGenFrontViewSlicePositionREd.setHasMaxValue(true);
-      meshGenFrontViewSlicePositionREd.setValueStep(0.05);
-      meshGenFrontViewSlicePositionREd.setText("");
-      meshGenFrontViewSlicePositionREd.setPreferredSize(new Dimension(100, 24));
-      meshGenFrontViewSlicePositionREd.setFont(new Font("Dialog", Font.PLAIN, 10));
-      meshGenFrontViewSlicePositionREd.setBounds(72, 6, 100, 24);
-      meshGenFrontViewSlicePositionREd.addChangeListener(new ChangeListener() {
-        public void stateChanged(ChangeEvent e) {
-          if (tinaController != null && tinaController.getMeshGenController() != null) {
-            tinaController.getMeshGenController().frontViewSlicePositionREd_changed();
-          }
-        }
-      });
-      panel_94.add(meshGenFrontViewSlicePositionREd);
-
-      meshGenFrontViewSlicePositionSlider = new JSlider();
-      meshGenFrontViewSlicePositionSlider.setValue(0);
-      meshGenFrontViewSlicePositionSlider.setPreferredSize(new Dimension(220, 19));
-      meshGenFrontViewSlicePositionSlider.setMinimum(-25000);
-      meshGenFrontViewSlicePositionSlider.setMaximum(25000);
-      meshGenFrontViewSlicePositionSlider.setBounds(174, 8, 192, 19);
-      meshGenFrontViewSlicePositionSlider.addChangeListener(new ChangeListener() {
-        public void stateChanged(ChangeEvent e) {
-          if (tinaController != null && tinaController.getMeshGenController() != null) {
-            tinaController.getMeshGenController().frontViewSlicePositionSlider_changed();
-          }
-        }
-      });
-      panel_94.add(meshGenFrontViewSlicePositionSlider);
-    }
-    return panel_94;
-  }
-
-  private JPanel getPanel_95() {
-    if (panel_95 == null) {
-      panel_95 = new JPanel();
-      panel_95.setLayout(null);
-      panel_95.setSize(new Dimension(0, 32));
-      panel_95.setPreferredSize(new Dimension(10, 32));
-      panel_95.setMinimumSize(new Dimension(10, 32));
-
-      JLabel label = new JLabel();
-      label.setText("Slice position");
-      label.setPreferredSize(new Dimension(94, 22));
-      label.setFont(new Font("Dialog", Font.BOLD, 10));
-      label.setBounds(0, 8, 68, 22);
-      panel_95.add(label);
-
-      meshGenPerspectiveViewSlicePositionREd = new JWFNumberField();
-      meshGenPerspectiveViewSlicePositionREd.setMouseSpeed(0.1);
-      meshGenPerspectiveViewSlicePositionREd.setMaxValue(1.0);
-      meshGenPerspectiveViewSlicePositionREd.setHasMinValue(true);
-      meshGenPerspectiveViewSlicePositionREd.setHasMaxValue(true);
-      meshGenPerspectiveViewSlicePositionREd.setValueStep(0.05);
-      meshGenPerspectiveViewSlicePositionREd.setText("");
-      meshGenPerspectiveViewSlicePositionREd.setPreferredSize(new Dimension(100, 24));
-      meshGenPerspectiveViewSlicePositionREd.setFont(new Font("Dialog", Font.PLAIN, 10));
-      meshGenPerspectiveViewSlicePositionREd.setBounds(72, 6, 100, 24);
-      meshGenPerspectiveViewSlicePositionREd.addChangeListener(new ChangeListener() {
-        public void stateChanged(ChangeEvent e) {
-          if (tinaController != null && tinaController.getMeshGenController() != null) {
-            tinaController.getMeshGenController().perspectiveViewSlicePositionREd_changed();
-          }
-        }
-      });
-      panel_95.add(meshGenPerspectiveViewSlicePositionREd);
-
-      meshGenPerspectiveViewSlicePositionSlider = new JSlider();
-      meshGenPerspectiveViewSlicePositionSlider.setValue(0);
-      meshGenPerspectiveViewSlicePositionSlider.setPreferredSize(new Dimension(220, 19));
-      meshGenPerspectiveViewSlicePositionSlider.setMinimum(-25000);
-      meshGenPerspectiveViewSlicePositionSlider.setMaximum(25000);
-      meshGenPerspectiveViewSlicePositionSlider.setBounds(174, 8, 192, 19);
-      meshGenPerspectiveViewSlicePositionSlider.addChangeListener(new ChangeListener() {
-        public void stateChanged(ChangeEvent e) {
-          if (tinaController != null && tinaController.getMeshGenController() != null) {
-            tinaController.getMeshGenController().perspectiveViewSlicePositionSlider_changed();
-          }
-        }
-      });
-      panel_95.add(meshGenPerspectiveViewSlicePositionSlider);
-    }
-    return panel_95;
-  }
-
   private JPanel getPanel_96() {
     if (panel_96 == null) {
       panel_96 = new JPanel();
@@ -19734,25 +19527,8 @@ public class TinaInternalFrame extends JInternalFrame {
       meshGenTopViewRenderBtn.setIconTextGap(0);
       meshGenTopViewRenderBtn.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/fraqtive.png")));
       meshGenTopViewRenderBtn.setFont(new Font("Dialog", Font.BOLD, 9));
-      meshGenTopViewRenderBtn.setBounds(6, 219, 42, 24);
+      meshGenTopViewRenderBtn.setBounds(6, 245, 42, 24);
       panel_96.add(meshGenTopViewRenderBtn);
-
-      meshGenTopViewShowSliceBtn = new JToggleButton();
-      meshGenTopViewShowSliceBtn.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-          if (tinaController != null && tinaController.getMeshGenController() != null) {
-            tinaController.getMeshGenController().topViewShowSliceButtonClicked();
-          }
-        }
-      });
-      meshGenTopViewShowSliceBtn.setToolTipText("Toggle between showing a slice at the selected position or showing the complete object");
-      meshGenTopViewShowSliceBtn.setIconTextGap(0);
-      meshGenTopViewShowSliceBtn.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/edit-cut-red.png")));
-      meshGenTopViewShowSliceBtn.setPreferredSize(new Dimension(42, 24));
-      meshGenTopViewShowSliceBtn.setMnemonic(KeyEvent.VK_P);
-      meshGenTopViewShowSliceBtn.setFont(new Font("Dialog", Font.BOLD, 10));
-      meshGenTopViewShowSliceBtn.setBounds(6, 103, 42, 24);
-      panel_96.add(meshGenTopViewShowSliceBtn);
     }
     return panel_96;
   }
@@ -19763,42 +19539,6 @@ public class TinaInternalFrame extends JInternalFrame {
 
   public JButton getMeshGenFrontViewRenderBtn() {
     return meshGenFrontViewRenderBtn;
-  }
-
-  public JToggleButton getMeshGenTopViewShowSliceBtn() {
-    return meshGenTopViewShowSliceBtn;
-  }
-
-  public JToggleButton getMeshGenFrontViewShowSliceBtn() {
-    return meshGenFrontViewShowSliceBtn;
-  }
-
-  public JToggleButton getMeshGenPerspectiveViewShowSliceBtn() {
-    return meshGenPerspectiveViewShowSliceBtn;
-  }
-
-  public JWFNumberField getMeshGenTopViewSlicePositionREd() {
-    return meshGenTopViewSlicePositionREd;
-  }
-
-  public JSlider getMeshGenTopViewSlicePositionSlider() {
-    return meshGenTopViewSlicePositionSlider;
-  }
-
-  public JSlider getMeshGenFrontViewSlicePositionSlider() {
-    return meshGenFrontViewSlicePositionSlider;
-  }
-
-  public JSlider getMeshGenPerspectiveViewSlicePositionSlider() {
-    return meshGenPerspectiveViewSlicePositionSlider;
-  }
-
-  public JWFNumberField getMeshGenFrontViewSlicePositionREd() {
-    return meshGenFrontViewSlicePositionREd;
-  }
-
-  public JWFNumberField getMeshGenPerspectiveViewSlicePositionREd() {
-    return meshGenPerspectiveViewSlicePositionREd;
   }
 
   public JButton getMeshGenPerspectiveViewRenderBtn() {
