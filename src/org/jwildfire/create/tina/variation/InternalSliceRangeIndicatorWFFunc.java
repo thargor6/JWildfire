@@ -53,17 +53,40 @@ public class InternalSliceRangeIndicatorWFFunc extends VariationFunc {
     boolean inside_1 = value >= _min_1 && value <= _max_1;
     if (inside_1) {
       pVarTP.rgbColor = true;
-      pVarTP.redColor = dc_red_1;
-      pVarTP.greenColor = dc_green_1;
-      pVarTP.blueColor = dc_blue_1;
+      pVarTP.redColor = dc_red_1 * 4;
+      pVarTP.greenColor = dc_green_1 * 4;
+      pVarTP.blueColor = dc_blue_1 * 4;
+      return;
     }
     boolean inside_2 = value >= _min_2 && value <= _max_2;
     if (inside_2) {
       pVarTP.rgbColor = true;
+      pVarTP.redColor = dc_red_2 * 4;
+      pVarTP.greenColor = dc_green_2 * 4;
+      pVarTP.blueColor = dc_blue_2 * 4;
+      return;
+    }
+    if (pContext.random() > 0.75) {
+      pVarTP.z = _min_1;
+      pVarTP.x = 1.0 - 2.0 * pContext.random();
+      pVarTP.y = 1.0 - 2.0 * pContext.random();
+      pVarTP.rgbColor = true;
+      pVarTP.redColor = dc_red_1;
+      pVarTP.greenColor = dc_green_1;
+      pVarTP.blueColor = dc_blue_1;
+      return;
+    }
+    if (pContext.random() > 0.75) {
+      pVarTP.z = _min_2;
+      pVarTP.x = 1.0 - 2.0 * pContext.random();
+      pVarTP.y = 1.0 - 2.0 * pContext.random();
+      pVarTP.rgbColor = true;
       pVarTP.redColor = dc_red_2;
       pVarTP.greenColor = dc_green_2;
       pVarTP.blueColor = dc_blue_2;
+      return;
     }
+
   }
 
   @Override
