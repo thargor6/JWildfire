@@ -4512,7 +4512,8 @@ public class TinaInternalFrame extends JInternalFrame {
         getMeshGenProgressbar(), getMeshGenGenerateBtn(), getMeshGenTopViewRootPnl(), getMeshGenFrontViewRootPnl(), getMeshGenPerspectiveViewRootPnl(),
         getMeshGenHintPane(), getMeshGenCentreXREd(), getMeshGenCentreXSlider(), getMeshGenCentreYREd(), getMeshGenCentreYSlider(),
         getMeshGenZoomREd(), getMeshGenZoomSlider(), getMeshGenZMinREd(), getMeshGenZMinSlider(), getMeshGenZMaxREd(), getMeshGenZMaxSlider(),
-        getMeshGenTopViewRenderBtn(), getMeshGenFrontViewRenderBtn(), getMeshGenPerspectiveViewRenderBtn());
+        getMeshGenTopViewRenderBtn(), getMeshGenFrontViewRenderBtn(), getMeshGenPerspectiveViewRenderBtn(), getMeshGenTopViewToEditorBtn(),
+        getFlameBrowserToMeshGenBtn(), getMeshGenThicknessREd());
 
     tinaController = new TinaController(params);
 
@@ -10338,6 +10339,16 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton meshGenTopViewRenderBtn;
   private JButton meshGenFrontViewRenderBtn;
   private JButton meshGenPerspectiveViewRenderBtn;
+  private JButton meshGenTopViewToEditorBtn;
+  private JButton flameBrowserToMeshGenBtn;
+  private JWFNumberField meshGenThicknessREd;
+  private JPanel panel_93;
+  private JPanel panel_94;
+  private JTabbedPane tabbedPane_2;
+  private JPanel panel_95;
+  private JPanel panel_97;
+  private JPanel panel_98;
+  private JPanel panel_99;
 
   /**
    * This method initializes renderBatchJobsScrollPane	
@@ -15940,6 +15951,7 @@ public class TinaInternalFrame extends JInternalFrame {
       flameBrowserDetailPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
       flameBrowserDetailPanel.add(getFlameBrowserToEditorBtn());
       flameBrowserDetailPanel.add(getFlameBrowserToBatchRendererBtn());
+      flameBrowserDetailPanel.add(getFlameBrowserToMeshGenBtn());
       flameBrowserDetailPanel.add(getFlameBrowserDeleteBtn());
       flameBrowserDetailPanel.add(getFlameBrowserRenameBtn());
       flameBrowserDetailPanel.add(getFlameBrowserCopyToBtn());
@@ -18764,29 +18776,29 @@ public class TinaInternalFrame extends JInternalFrame {
     if (panel_88 == null) {
       panel_88 = new JPanel();
       panel_88.setLayout(new BorderLayout(0, 0));
-      panel_88.add(getPanel_89(), BorderLayout.NORTH);
+      panel_88.add(getTabbedPane_2(), BorderLayout.CENTER);
 
-      JPanel panel_1 = new JPanel();
-      panel_1.setPreferredSize(new Dimension(10, 260));
-      panel_88.add(panel_1, BorderLayout.SOUTH);
-      panel_1.setLayout(new GridLayout(0, 2, 0, 0));
-      panel_1.add(getPanel_91());
-      panel_1.add(getPanel_92());
+      panel_93 = new JPanel();
+      panel_93.setPreferredSize(new Dimension(10, 260));
+      panel_95.add(panel_93, BorderLayout.SOUTH);
+      panel_93.setLayout(new BorderLayout(0, 0));
+      panel_93.add(getPanel_91(), BorderLayout.NORTH);
+      panel_93.add(getPanel_92());
 
-      JPanel panel_2 = new JPanel();
-      panel_88.add(panel_2, BorderLayout.CENTER);
-      panel_2.setLayout(new GridLayout(0, 3, 0, 0));
+      panel_94 = new JPanel();
+      panel_95.add(panel_94, BorderLayout.CENTER);
+      panel_94.setLayout(new GridLayout(0, 3, 0, 0));
 
       JPanel panel_3 = new JPanel();
       panel_3.setBorder(new TitledBorder(null, "Top view", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-      panel_2.add(panel_3);
+      panel_94.add(panel_3);
       panel_3.setLayout(new BorderLayout(0, 0));
       panel_3.add(getMeshGenTopViewRootPnl(), BorderLayout.CENTER);
       panel_3.add(getPanel_96(), BorderLayout.EAST);
 
       JPanel panel_8 = new JPanel();
       panel_8.setBorder(new TitledBorder(null, "Front view", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-      panel_2.add(panel_8);
+      panel_94.add(panel_8);
       panel_8.setLayout(new BorderLayout(0, 0));
       panel_8.add(getMeshGenFrontViewRootPnl(), BorderLayout.CENTER);
 
@@ -18807,12 +18819,12 @@ public class TinaInternalFrame extends JInternalFrame {
       meshGenFrontViewRenderBtn.setIconTextGap(0);
       meshGenFrontViewRenderBtn.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/fraqtive.png")));
       meshGenFrontViewRenderBtn.setFont(new Font("Dialog", Font.BOLD, 9));
-      meshGenFrontViewRenderBtn.setBounds(6, 245, 42, 24);
+      meshGenFrontViewRenderBtn.setBounds(6, 99, 42, 24);
       panel_10.add(meshGenFrontViewRenderBtn);
 
       JPanel panel_9 = new JPanel();
       panel_9.setBorder(new TitledBorder(null, "Perspective view", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-      panel_2.add(panel_9);
+      panel_94.add(panel_9);
       panel_9.setLayout(new BorderLayout(0, 0));
       panel_9.add(getMeshGenPerspectiveViewRootPnl(), BorderLayout.CENTER);
 
@@ -18833,7 +18845,7 @@ public class TinaInternalFrame extends JInternalFrame {
       meshGenPerspectiveViewRenderBtn.setIconTextGap(0);
       meshGenPerspectiveViewRenderBtn.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/fraqtive.png")));
       meshGenPerspectiveViewRenderBtn.setFont(new Font("Dialog", Font.BOLD, 9));
-      meshGenPerspectiveViewRenderBtn.setBounds(6, 245, 42, 24);
+      meshGenPerspectiveViewRenderBtn.setBounds(6, 99, 42, 24);
       panel_11.add(meshGenPerspectiveViewRenderBtn);
     }
     return panel_88;
@@ -18912,7 +18924,7 @@ public class TinaInternalFrame extends JInternalFrame {
       panel_1.setLayout(new BorderLayout(0, 0));
 
       JPanel panel_2 = new JPanel();
-      panel_2.setPreferredSize(new Dimension(10, 24));
+      panel_2.setPreferredSize(new Dimension(10, 20));
       panel_1.add(panel_2, BorderLayout.SOUTH);
       panel_2.setLayout(new BorderLayout(0, 0));
 
@@ -19072,10 +19084,34 @@ public class TinaInternalFrame extends JInternalFrame {
       lblRenderQuality.setBounds(434, 4, 79, 22);
       panel_3.add(lblRenderQuality);
 
+      meshGenThicknessREd = new JWFNumberField();
+      meshGenThicknessREd.setToolTipText("Thickness of the model generated. ");
+      meshGenThicknessREd.setMinValue(0.1);
+      meshGenThicknessREd.setMaxValue(10.0);
+      meshGenThicknessREd.setHasMinValue(true);
+      meshGenThicknessREd.setHasMaxValue(true);
+      meshGenThicknessREd.setValueStep(0.05);
+      meshGenThicknessREd.setText("");
+      meshGenThicknessREd.setSize(new Dimension(100, 24));
+      meshGenThicknessREd.setPreferredSize(new Dimension(100, 24));
+      meshGenThicknessREd.setMouseSpeed(0.01);
+      meshGenThicknessREd.setLocation(new Point(456, 28));
+      meshGenThicknessREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      meshGenThicknessREd.setBounds(510, 24, 100, 24);
+      panel_3.add(meshGenThicknessREd);
+
+      JLabel lblThickness = new JLabel();
+      lblThickness.setText("Thickness");
+      lblThickness.setSize(new Dimension(68, 22));
+      lblThickness.setPreferredSize(new Dimension(94, 22));
+      lblThickness.setLocation(new Point(390, 28));
+      lblThickness.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblThickness.setBounds(434, 24, 79, 22);
+      panel_3.add(lblThickness);
+
       JPanel panel_8 = new JPanel();
       panel_8.setPreferredSize(new Dimension(132, 10));
       panel_1.add(panel_8, BorderLayout.EAST);
-      panel_8.setLayout(null);
 
       meshGenGenerateBtn = new JButton();
       meshGenGenerateBtn.addActionListener(new ActionListener() {
@@ -19083,11 +19119,11 @@ public class TinaInternalFrame extends JInternalFrame {
           tinaController.getMeshGenController().generateButton_clicked();
         }
       });
+      panel_8.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
       meshGenGenerateBtn.setText("Render slices");
       meshGenGenerateBtn.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/sports-soccer.png")));
-      meshGenGenerateBtn.setPreferredSize(new Dimension(132, 24));
+      meshGenGenerateBtn.setPreferredSize(new Dimension(132, 46));
       meshGenGenerateBtn.setFont(new Font("Dialog", Font.BOLD, 10));
-      meshGenGenerateBtn.setBounds(0, 0, 125, 52);
       panel_8.add(meshGenGenerateBtn);
     }
     return panel_89;
@@ -19151,13 +19187,13 @@ public class TinaInternalFrame extends JInternalFrame {
   private JPanel getPanel_91() {
     if (panel_91 == null) {
       panel_91 = new JPanel();
+      panel_91.setPreferredSize(new Dimension(10, 110));
       panel_91.setBorder(null);
-      panel_91.setLayout(new BorderLayout(0, 0));
+      panel_91.setLayout(new GridLayout(0, 2, 0, 0));
 
       JPanel panel_1 = new JPanel();
       panel_1.setBorder(new TitledBorder(null, "Fractal position", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-      panel_1.setPreferredSize(new Dimension(10, 120));
-      panel_91.add(panel_1, BorderLayout.NORTH);
+      panel_91.add(panel_1);
       panel_1.setLayout(null);
 
       JLabel label_2 = new JLabel();
@@ -19166,7 +19202,7 @@ public class TinaInternalFrame extends JInternalFrame {
       label_2.setPreferredSize(new Dimension(94, 22));
       label_2.setLocation(new Point(390, 28));
       label_2.setFont(new Font("Dialog", Font.BOLD, 10));
-      label_2.setBounds(16, 49, 68, 22);
+      label_2.setBounds(16, 46, 68, 22);
       panel_1.add(label_2);
 
       meshGenCentreYREd = new JWFNumberField();
@@ -19176,7 +19212,7 @@ public class TinaInternalFrame extends JInternalFrame {
       meshGenCentreYREd.setPreferredSize(new Dimension(100, 24));
       meshGenCentreYREd.setLocation(new Point(456, 28));
       meshGenCentreYREd.setFont(new Font("Dialog", Font.PLAIN, 10));
-      meshGenCentreYREd.setBounds(82, 49, 100, 24);
+      meshGenCentreYREd.setBounds(82, 46, 100, 24);
       meshGenCentreYREd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           if (tinaController != null && tinaController.getMeshGenController() != null) {
@@ -19193,7 +19229,7 @@ public class TinaInternalFrame extends JInternalFrame {
       meshGenCentreYSlider.setMinimum(-25000);
       meshGenCentreYSlider.setMaximum(25000);
       meshGenCentreYSlider.setLocation(new Point(558, 28));
-      meshGenCentreYSlider.setBounds(184, 49, 205, 19);
+      meshGenCentreYSlider.setBounds(184, 46, 308, 19);
       meshGenCentreYSlider.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           if (tinaController != null && tinaController.getMeshGenController() != null) {
@@ -19209,7 +19245,7 @@ public class TinaInternalFrame extends JInternalFrame {
       label_4.setPreferredSize(new Dimension(94, 22));
       label_4.setLocation(new Point(390, 52));
       label_4.setFont(new Font("Dialog", Font.BOLD, 10));
-      label_4.setBounds(16, 73, 68, 22);
+      label_4.setBounds(16, 70, 68, 22);
       panel_1.add(label_4);
 
       meshGenZoomREd = new JWFNumberField();
@@ -19219,7 +19255,7 @@ public class TinaInternalFrame extends JInternalFrame {
       meshGenZoomREd.setPreferredSize(new Dimension(100, 24));
       meshGenZoomREd.setLocation(new Point(456, 52));
       meshGenZoomREd.setFont(new Font("Dialog", Font.PLAIN, 10));
-      meshGenZoomREd.setBounds(82, 73, 100, 24);
+      meshGenZoomREd.setBounds(82, 70, 100, 24);
       meshGenZoomREd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           if (tinaController != null && tinaController.getMeshGenController() != null) {
@@ -19236,7 +19272,7 @@ public class TinaInternalFrame extends JInternalFrame {
       meshGenZoomSlider.setMinimum(100);
       meshGenZoomSlider.setMaximum(10000);
       meshGenZoomSlider.setLocation(new Point(558, 52));
-      meshGenZoomSlider.setBounds(184, 73, 205, 19);
+      meshGenZoomSlider.setBounds(184, 70, 308, 19);
       meshGenZoomSlider.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           if (tinaController != null && tinaController.getMeshGenController() != null) {
@@ -19247,14 +19283,14 @@ public class TinaInternalFrame extends JInternalFrame {
       panel_1.add(meshGenZoomSlider);
 
       JLabel lblSlice = new JLabel();
-      lblSlice.setBounds(16, 25, 68, 22);
+      lblSlice.setBounds(16, 22, 68, 22);
       panel_1.add(lblSlice);
       lblSlice.setText("CentreX");
       lblSlice.setPreferredSize(new Dimension(94, 22));
       lblSlice.setFont(new Font("Dialog", Font.BOLD, 10));
 
       meshGenCentreXREd = new JWFNumberField();
-      meshGenCentreXREd.setBounds(82, 23, 100, 24);
+      meshGenCentreXREd.setBounds(82, 20, 100, 24);
       panel_1.add(meshGenCentreXREd);
       meshGenCentreXREd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
@@ -19269,7 +19305,7 @@ public class TinaInternalFrame extends JInternalFrame {
       meshGenCentreXREd.setFont(new Font("Dialog", Font.PLAIN, 10));
 
       meshGenCentreXSlider = new JSlider();
-      meshGenCentreXSlider.setBounds(184, 25, 205, 19);
+      meshGenCentreXSlider.setBounds(184, 22, 308, 19);
       panel_1.add(meshGenCentreXSlider);
       meshGenCentreXSlider.setValue(0);
       meshGenCentreXSlider.setPreferredSize(new Dimension(220, 19));
@@ -19285,7 +19321,7 @@ public class TinaInternalFrame extends JInternalFrame {
 
       JPanel panel_2 = new JPanel();
       panel_2.setBorder(new TitledBorder(null, "Slice cutting range", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-      panel_91.add(panel_2, BorderLayout.CENTER);
+      panel_91.add(panel_2);
       panel_2.setLayout(null);
 
       JLabel lblStartz = new JLabel();
@@ -19294,7 +19330,7 @@ public class TinaInternalFrame extends JInternalFrame {
       lblStartz.setPreferredSize(new Dimension(94, 22));
       lblStartz.setLocation(new Point(390, 6));
       lblStartz.setFont(new Font("Dialog", Font.BOLD, 10));
-      lblStartz.setBounds(17, 47, 68, 22);
+      lblStartz.setBounds(16, 32, 68, 22);
       panel_2.add(lblStartz);
 
       meshGenZMinREd = new JWFNumberField();
@@ -19305,7 +19341,7 @@ public class TinaInternalFrame extends JInternalFrame {
       meshGenZMinREd.setPreferredSize(new Dimension(100, 24));
       meshGenZMinREd.setLocation(new Point(456, 4));
       meshGenZMinREd.setFont(new Font("Dialog", Font.PLAIN, 10));
-      meshGenZMinREd.setBounds(83, 45, 100, 24);
+      meshGenZMinREd.setBounds(82, 30, 100, 24);
       meshGenZMinREd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           if (tinaController != null && tinaController.getMeshGenController() != null) {
@@ -19322,7 +19358,7 @@ public class TinaInternalFrame extends JInternalFrame {
       meshGenZMinSlider.setMinimum(-25000);
       meshGenZMinSlider.setMaximum(25000);
       meshGenZMinSlider.setLocation(new Point(558, 4));
-      meshGenZMinSlider.setBounds(185, 45, 205, 19);
+      meshGenZMinSlider.setBounds(184, 30, 308, 19);
       meshGenZMinSlider.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           if (tinaController != null && tinaController.getMeshGenController() != null) {
@@ -19338,17 +19374,18 @@ public class TinaInternalFrame extends JInternalFrame {
       lblEndz.setPreferredSize(new Dimension(94, 22));
       lblEndz.setLocation(new Point(390, 28));
       lblEndz.setFont(new Font("Dialog", Font.BOLD, 10));
-      lblEndz.setBounds(17, 69, 68, 22);
+      lblEndz.setBounds(16, 54, 68, 22);
       panel_2.add(lblEndz);
 
       meshGenZMaxREd = new JWFNumberField();
+      meshGenZMaxREd.setMouseSpeed(0.01);
       meshGenZMaxREd.setValueStep(0.05);
       meshGenZMaxREd.setText("");
       meshGenZMaxREd.setSize(new Dimension(100, 24));
       meshGenZMaxREd.setPreferredSize(new Dimension(100, 24));
       meshGenZMaxREd.setLocation(new Point(456, 28));
       meshGenZMaxREd.setFont(new Font("Dialog", Font.PLAIN, 10));
-      meshGenZMaxREd.setBounds(83, 69, 100, 24);
+      meshGenZMaxREd.setBounds(82, 54, 100, 24);
       meshGenZMaxREd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           if (tinaController != null && tinaController.getMeshGenController() != null) {
@@ -19365,7 +19402,7 @@ public class TinaInternalFrame extends JInternalFrame {
       meshGenZMaxSlider.setMinimum(-25000);
       meshGenZMaxSlider.setMaximum(25000);
       meshGenZMaxSlider.setLocation(new Point(558, 28));
-      meshGenZMaxSlider.setBounds(185, 69, 205, 19);
+      meshGenZMaxSlider.setBounds(184, 54, 308, 19);
       meshGenZMaxSlider.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           if (tinaController != null && tinaController.getMeshGenController() != null) {
@@ -19527,8 +19564,23 @@ public class TinaInternalFrame extends JInternalFrame {
       meshGenTopViewRenderBtn.setIconTextGap(0);
       meshGenTopViewRenderBtn.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/fraqtive.png")));
       meshGenTopViewRenderBtn.setFont(new Font("Dialog", Font.BOLD, 9));
-      meshGenTopViewRenderBtn.setBounds(6, 245, 42, 24);
+      meshGenTopViewRenderBtn.setBounds(6, 99, 42, 24);
       panel_96.add(meshGenTopViewRenderBtn);
+
+      meshGenTopViewToEditorBtn = new JButton();
+      meshGenTopViewToEditorBtn.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getMeshGenController().topViewFlameToEditorBtn_clicked();
+        }
+      });
+      meshGenTopViewToEditorBtn.setToolTipText("Render image");
+      meshGenTopViewToEditorBtn.setPreferredSize(new Dimension(42, 24));
+      meshGenTopViewToEditorBtn.setMnemonic(KeyEvent.VK_R);
+      meshGenTopViewToEditorBtn.setIconTextGap(0);
+      meshGenTopViewToEditorBtn.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/brick2.png")));
+      meshGenTopViewToEditorBtn.setFont(new Font("Dialog", Font.BOLD, 9));
+      meshGenTopViewToEditorBtn.setBounds(6, 6, 42, 24);
+      panel_96.add(meshGenTopViewToEditorBtn);
     }
     return panel_96;
   }
@@ -19543,6 +19595,120 @@ public class TinaInternalFrame extends JInternalFrame {
 
   public JButton getMeshGenPerspectiveViewRenderBtn() {
     return meshGenPerspectiveViewRenderBtn;
+  }
+
+  public JButton getMeshGenTopViewToEditorBtn() {
+    return meshGenTopViewToEditorBtn;
+  }
+
+  private JButton getFlameBrowserToMeshGenBtn() {
+    if (flameBrowserToMeshGenBtn == null) {
+      flameBrowserToMeshGenBtn = new JButton();
+      flameBrowserToMeshGenBtn.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getFlameBrowserController().toMeshGenBtn_clicked();
+        }
+      });
+      flameBrowserToMeshGenBtn.setToolTipText("Import this flame into the 3DMesh Generator module");
+      flameBrowserToMeshGenBtn.setText("To Mesh Gen");
+      flameBrowserToMeshGenBtn.setPreferredSize(new Dimension(112, 24));
+      flameBrowserToMeshGenBtn.setMinimumSize(new Dimension(100, 24));
+      flameBrowserToMeshGenBtn.setMaximumSize(new Dimension(32000, 24));
+      flameBrowserToMeshGenBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+    }
+    return flameBrowserToMeshGenBtn;
+  }
+
+  public JWFNumberField getMeshGenThicknessREd() {
+    return meshGenThicknessREd;
+  }
+
+  public JPanel getPanel_1() {
+    return panel_93;
+  }
+
+  public JPanel getPanel_2() {
+    return panel_94;
+  }
+
+  private JTabbedPane getTabbedPane_2() {
+    if (tabbedPane_2 == null) {
+      tabbedPane_2 = new JTabbedPane(JTabbedPane.TOP);
+      tabbedPane_2.addTab("Slice rendering", null, getPanel_95(), null);
+      tabbedPane_2.addTab("Mesh generation", null, getPanel_97(), null);
+    }
+    return tabbedPane_2;
+  }
+
+  private JPanel getPanel_95() {
+    if (panel_95 == null) {
+      panel_95 = new JPanel();
+      panel_95.setLayout(new BorderLayout(0, 0));
+      panel_95.add(getPanel_89(), BorderLayout.NORTH);
+    }
+    return panel_95;
+  }
+
+  private JPanel getPanel_97() {
+    if (panel_97 == null) {
+      panel_97 = new JPanel();
+      panel_97.setLayout(new BorderLayout(0, 0));
+      panel_97.add(getPanel_98(), BorderLayout.NORTH);
+    }
+    return panel_97;
+  }
+
+  private JPanel getPanel_98() {
+    if (panel_98 == null) {
+      panel_98 = new JPanel();
+      panel_98.setPreferredSize(new Dimension(10, 200));
+      panel_98.setLayout(new BorderLayout(0, 0));
+      panel_98.add(getPanel_99(), BorderLayout.WEST);
+
+      JPanel panel_1 = new JPanel();
+      panel_1.setBorder(new TitledBorder(null, "Mesh generation", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+      panel_98.add(panel_1, BorderLayout.CENTER);
+      panel_1.setLayout(new BorderLayout(0, 0));
+
+      JPanel panel_2 = new JPanel();
+      panel_2.setPreferredSize(new Dimension(10, 140));
+      panel_1.add(panel_2, BorderLayout.NORTH);
+      panel_2.setLayout(new BorderLayout(0, 0));
+
+      JPanel panel_3 = new JPanel();
+      panel_3.setPreferredSize(new Dimension(400, 10));
+      panel_2.add(panel_3, BorderLayout.WEST);
+      panel_3.setLayout(null);
+
+      JPanel panel_8 = new JPanel();
+      panel_8.setPreferredSize(new Dimension(132, 10));
+      panel_2.add(panel_8, BorderLayout.EAST);
+
+      JButton button = new JButton();
+      button.setText("Render slices");
+      button.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/sports-soccer.png")));
+      button.setIconTextGap(0);
+      button.setPreferredSize(new Dimension(132, 46));
+      button.setFont(new Font("Dialog", Font.BOLD, 10));
+      panel_8.add(button);
+
+      JProgressBar progressBar = new JProgressBar();
+      progressBar.setValue(0);
+      progressBar.setStringPainted(true);
+      progressBar.setPreferredSize(new Dimension(568, 21));
+      panel_1.add(progressBar, BorderLayout.SOUTH);
+    }
+    return panel_98;
+  }
+
+  private JPanel getPanel_99() {
+    if (panel_99 == null) {
+      panel_99 = new JPanel();
+      panel_99.setBorder(new TitledBorder(null, "Input slices", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+      panel_99.setPreferredSize(new Dimension(200, 10));
+      panel_99.setLayout(null);
+    }
+    return panel_99;
   }
 } //  @jve:decl-index=0:visual-constraint="10,10"
 
