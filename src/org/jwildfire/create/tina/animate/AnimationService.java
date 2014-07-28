@@ -174,7 +174,7 @@ public class AnimationService {
       VariationFunc func = var.getFunc();
       for (String name : func.getParameterNames()) {
         MotionCurve curve = var.getMotionCurve(name);
-        if (curve != null) {
+        if (curve != null && curve.isEnabled()) {
           double value = evalCurve(pFrame, curve);
           try {
             func.setParameter(name, value);
@@ -182,6 +182,45 @@ public class AnimationService {
           catch (Exception ex) {
             ex.printStackTrace();
           }
+        }
+      }
+    }
+  }
+
+  public static Flame disableMotionCurves(Flame pFlame) {
+    try {
+      _disableMotionCurves(pFlame);
+      return pFlame;
+    }
+    catch (Throwable ex) {
+      throw new RuntimeException(ex);
+    }
+  }
+
+  private static void _disableMotionCurves(Object pObject) throws IllegalAccessException {
+    Class<?> cls = pObject.getClass();
+    for (Field field : cls.getDeclaredFields()) {
+      field.setAccessible(true);
+      if (field.getType() == MotionCurve.class && field.getName().endsWith(Tools.CURVE_POSTFIX)) {
+        MotionCurve curve = (MotionCurve) field.get(pObject);
+        if (curve.isEnabled()) {
+          curve.setEnabled(false);
+        }
+      }
+      else if (field.getType().isAssignableFrom(ArrayList.class)) {
+        List<?> childs = (List<?>) field.get(pObject);
+        for (Object child : childs) {
+          _disableMotionCurves(child);
+        }
+      }
+    }
+    if (pObject instanceof Variation) {
+      Variation var = (Variation) pObject;
+      VariationFunc func = var.getFunc();
+      for (String name : func.getParameterNames()) {
+        MotionCurve curve = var.getMotionCurve(name);
+        if (curve != null && curve.isEnabled()) {
+          curve.setEnabled(false);
         }
       }
     }

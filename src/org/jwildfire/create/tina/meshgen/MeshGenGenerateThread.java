@@ -29,6 +29,8 @@ import org.jwildfire.create.tina.render.RenderMode;
 import org.jwildfire.create.tina.render.SliceRenderInfo;
 
 public class MeshGenGenerateThread implements Runnable {
+  public static final double DFLT_ANTIALIAS_RADIUS = 0.36;
+  public static final double DFLT_ANTIALIAS_AMOUNT = 0.75;
   private final Prefs prefs;
   private final Flame flame;
   private final File outFile;
@@ -77,6 +79,9 @@ public class MeshGenGenerateThread implements Runnable {
       flame.setWidth(info.getImageWidth());
       flame.setHeight(info.getImageHeight());
       flame.setSampleDensity(quality);
+
+      flame.setAntialiasRadius(DFLT_ANTIALIAS_RADIUS);
+      flame.setAntialiasAmount(DFLT_ANTIALIAS_AMOUNT);
 
       renderer.setProgressUpdater(progressUpdater);
       SliceRenderInfo renderInfo = new SliceRenderInfo(renderWidth, renderHeight, RenderMode.PRODUCTION, slicesCount, zmin, zmax, slicesPerRender);

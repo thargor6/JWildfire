@@ -53,6 +53,7 @@ public class FlameBrowserController {
   private final JButton changeFolderBtn;
   private final JButton toEditorBtn;
   private final JButton toBatchRendererBtn;
+  private final JButton toMeshGenBtn;
   private final JButton deleteBtn;
   private final JButton renameBtn;
   private final JButton copyToBtn;
@@ -62,7 +63,7 @@ public class FlameBrowserController {
 
   public FlameBrowserController(TinaController pTinaController, ErrorHandler pErrorHandler, Prefs pPrefs, JPanel pRootPanel, JTree pFlamesTree, JPanel pImagesPnl,
       JButton pRefreshBtn, JButton pChangeFolderBtn, JButton pToEditorBtn, JButton pToBatchRendererBtn, JButton pDeleteBtn, JButton pRenameBtn,
-      JButton pCopyToBtn, JButton pMoveToBtn) {
+      JButton pCopyToBtn, JButton pMoveToBtn, JButton pToMeshGenBtn) {
     tinaController = pTinaController;
     errorHandler = pErrorHandler;
     prefs = pPrefs;
@@ -77,6 +78,7 @@ public class FlameBrowserController {
     renameBtn = pRenameBtn;
     copyToBtn = pCopyToBtn;
     moveToBtn = pMoveToBtn;
+    toMeshGenBtn = pToMeshGenBtn;
     currRootDrawer = prefs.getTinaFlamePath();
     enableControls();
   }
@@ -87,6 +89,7 @@ public class FlameBrowserController {
     boolean hasFlame = flame != null && !flame.isRemoved();
     toEditorBtn.setEnabled(hasFlame);
     toBatchRendererBtn.setEnabled(hasFlame);
+    toMeshGenBtn.setEnabled(hasFlame);
     deleteBtn.setEnabled(hasFlame);
     renameBtn.setEnabled(hasFlame);
     copyToBtn.setEnabled(hasFlame);
@@ -529,7 +532,7 @@ public class FlameBrowserController {
       for (Flame flame : flames) {
         tinaController.importFlame(flame, true);
       }
-      tinaController.getRootTabbedPane().setSelectedIndex(0);
+      tinaController.getRootTabbedPane().setSelectedIndex(Tools.TINA_EDITOR_TAB_IDX);
     }
   }
 
@@ -546,4 +549,19 @@ public class FlameBrowserController {
     }
   }
 
+  public void toMeshGenBtn_clicked() {
+    try {
+      FlameFlatNode node = getSelectedFlame();
+      if (node != null) {
+        List<Flame> flames = new FlameReader(prefs).readFlames(node.getFilename());
+        if (flames.size() > 0) {
+          tinaController.getMeshGenController().importFlame(flames.get(0));
+          tinaController.getRootTabbedPane().setSelectedIndex(Tools.TINA_MESHGEN_TAB_IDX);
+        }
+      }
+    }
+    catch (Exception ex) {
+      errorHandler.handleError(ex);
+    }
+  }
 }

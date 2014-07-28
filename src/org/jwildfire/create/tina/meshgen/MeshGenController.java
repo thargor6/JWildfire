@@ -43,7 +43,9 @@ import javax.swing.JTextPane;
 import org.jwildfire.base.Prefs;
 import org.jwildfire.base.Tools;
 import org.jwildfire.base.mathlib.MathLib;
+import org.jwildfire.create.tina.animate.AnimationService;
 import org.jwildfire.create.tina.base.Flame;
+import org.jwildfire.create.tina.base.Shading;
 import org.jwildfire.create.tina.base.Stereo3dMode;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.io.FlameReader;
@@ -65,13 +67,14 @@ import org.jwildfire.swing.ErrorHandler;
 import org.jwildfire.swing.ImageFileChooser;
 
 public class MeshGenController {
-  private static final double Z_SCALE = 20000.0;
+  private static final double Z_SCALE = 10000.0;
   private static final double CENTRE_SCALE = 5000.0;
   private static final double ZOOM_SCALE = 1000.0;
   private final TinaController tinaController;
   private final ErrorHandler errorHandler;
   private final Prefs prefs;
   private final JTabbedPane rootTabbedPane;
+  private Flame currStrippedOrigFlame;
   private Flame currBaseFlame;
   private boolean refreshing;
 
@@ -103,6 +106,7 @@ public class MeshGenController {
   private final JButton topViewRenderBtn;
   private final JButton frontViewRenderBtn;
   private final JButton perspectiveViewRenderBtn;
+  private final JButton topViewToEditorBtn;
 
   public MeshGenController(TinaController pTinaController, ErrorHandler pErrorHandler, Prefs pPrefs, JTabbedPane pRootTabbedPane,
       JButton pFromEditorBtn, JButton pFromClipboardBtn, JButton pLoadFlameBtn, JWFNumberField pSliceCountREd,
@@ -111,7 +115,8 @@ public class MeshGenController {
       JPanel pFrontViewRootPnl, JPanel pPerspectiveViewRootPnl, JTextPane pHintPane, JWFNumberField pCentreXREd,
       JSlider pCentreXSlider, JWFNumberField pCentreYREd, JSlider pCentreYSlider, JWFNumberField pZoomREd,
       JSlider pZoomSlider, JWFNumberField pZMinREd, JSlider pZMinSlider, JWFNumberField pZMaxREd,
-      JSlider pZMaxSlider, JButton pTopViewRenderBtn, JButton pFrontViewRenderBtn, JButton pPerspectiveViewRenderBtn) {
+      JSlider pZMaxSlider, JButton pTopViewRenderBtn, JButton pFrontViewRenderBtn, JButton pPerspectiveViewRenderBtn,
+      JButton pTopViewToEditorBtn) {
     tinaController = pTinaController;
     errorHandler = pErrorHandler;
     prefs = pPrefs;
@@ -145,6 +150,7 @@ public class MeshGenController {
     topViewRenderBtn = pTopViewRenderBtn;
     frontViewRenderBtn = pFrontViewRenderBtn;
     perspectiveViewRenderBtn = pPerspectiveViewRenderBtn;
+    topViewToEditorBtn = pTopViewToEditorBtn;
 
     initHintsPane();
     setDefaults();
@@ -283,7 +289,15 @@ public class MeshGenController {
       return null;
     }
 
-    protected void addSliceVariation(Flame pFlame) {
+    protected void setGradient(Flame pFlame) {
+      RGBPalette gradient = new RGBPalette();
+      for (int i = 0; i < RGBPalette.PALETTE_SIZE; i++) {
+        gradient.setColor(i, 160, 160, 160);
+      }
+      pFlame.getFirstLayer().setPalette(gradient);
+    }
+
+    protected void addSliceVariation(Flame pFlame, boolean pWithRandomFill) {
       InternalSliceRangeIndicatorWFFunc sliceVar = new InternalSliceRangeIndicatorWFFunc();
       if (pFlame.getFirstLayer().getFinalXForms().size() == 0) {
         XForm xform = new XForm();
@@ -294,15 +308,16 @@ public class MeshGenController {
       else {
         pFlame.getFirstLayer().getFinalXForms().get(pFlame.getFirstLayer().getFinalXForms().size() - 1).addVariation(1.0, sliceVar);
       }
-      sliceVar.setParameter("thickness", 3.0 * (zmaxREd.getDoubleValue() - zminREd.getDoubleValue()) / sliceCountREd.getDoubleValue());
+      sliceVar.setParameter("thickness", (zmaxREd.getDoubleValue() - zminREd.getDoubleValue()) / sliceCountREd.getDoubleValue());
       sliceVar.setParameter("position_1", zminREd.getDoubleValue());
       sliceVar.setParameter("dc_red_1", 2450);
       sliceVar.setParameter("dc_green_1", 250);
-      sliceVar.setParameter("dc_blue_1", 120);
+      sliceVar.setParameter("dc_blue_1", 42);
       sliceVar.setParameter("position_2", zmaxREd.getDoubleValue());
-      sliceVar.setParameter("dc_red_2", 2450);
-      sliceVar.setParameter("dc_green_2", 60);
-      sliceVar.setParameter("dc_blue_2", 42);
+      sliceVar.setParameter("dc_red_2", 60);
+      sliceVar.setParameter("dc_green_2", 2450);
+      sliceVar.setParameter("dc_blue_2", 2450);
+      sliceVar.setParameter("random_fill", pWithRandomFill ? 1 : 0);
     }
   }
 
@@ -311,7 +326,8 @@ public class MeshGenController {
     @Override
     protected Flame createPreviewFlame(Flame pBaseFlame) {
       Flame res = pBaseFlame.makeCopy();
-      addSliceVariation(res);
+      setGradient(res);
+      addSliceVariation(res, false);
       return res;
     }
 
@@ -322,7 +338,8 @@ public class MeshGenController {
     @Override
     protected Flame createPreviewFlame(Flame pBaseFlame) {
       Flame res = pBaseFlame.makeCopy();
-      addSliceVariation(res);
+      addSliceVariation(res, true);
+      setGradient(res);
       res.setCamPitch(90.0);
       return res;
     }
@@ -334,10 +351,11 @@ public class MeshGenController {
     @Override
     protected Flame createPreviewFlame(Flame pBaseFlame) {
       Flame res = pBaseFlame.makeCopy();
+      setGradient(res);
       res.setCamPitch(60.0);
       res.setCamYaw(30.0);
       res.setCamPerspective(0.20);
-      addSliceVariation(res);
+      addSliceVariation(res, false);
       return res;
     }
   };
@@ -411,11 +429,12 @@ public class MeshGenController {
     }
   }
 
-  private void importFlame(Flame pNewFlame) {
+  public void importFlame(Flame pNewFlame) {
     if (pNewFlame.getLayers().size() > 1) {
       throw new RuntimeException("Only flames with one layer are supported. But you could create a mesh of each layer separately and then use all those objects in your 3d-package");
     }
-    currBaseFlame = createBaseFlame(pNewFlame);
+    currStrippedOrigFlame = stripFlame(pNewFlame);
+    currBaseFlame = createBaseFlame(currStrippedOrigFlame);
     refreshing = true;
     try {
       setCentreXValue(currBaseFlame.getCentreX());
@@ -431,8 +450,9 @@ public class MeshGenController {
     refreshAllPreviews(true);
   }
 
-  protected Flame createBaseFlame(Flame pFlame) {
+  protected Flame stripFlame(Flame pFlame) {
     Flame res = pFlame.makeCopy();
+    res = AnimationService.disableMotionCurves(res);
     res.setCamDOF(0.0);
     res.setDimishZ(0.0);
     res.setCamPerspective(0.0);
@@ -448,17 +468,23 @@ public class MeshGenController {
     res.setBGColorGreen(0);
     res.setBGColorBlue(0);
     res.setBGTransparency(false);
+    res.getShadingInfo().setShading(Shading.FLAT);
+    res.setGamma(3.0);
+    // hack to force 3d-projection mode to be on
+    res.setCamZ(MathLib.EPSILON * 10);
+    return res;
+  }
+
+  protected Flame createBaseFlame(Flame pFlame) {
+    Flame res = pFlame.makeCopy();
 
     RGBPalette gradient = new RGBPalette();
     for (int i = 0; i < RGBPalette.PALETTE_SIZE; i++) {
       gradient.setColor(i, 225, 225, 225);
     }
     res.getFirstLayer().setPalette(gradient);
-    res.setAntialiasAmount(0.75);
-    res.setAntialiasRadius(0.36);
-
-    // hack to force 3d-projection mode to be on
-    res.setCamZ(MathLib.EPSILON * 10);
+    res.setAntialiasAmount(MeshGenGenerateThread.DFLT_ANTIALIAS_AMOUNT);
+    res.setAntialiasRadius(MeshGenGenerateThread.DFLT_ANTIALIAS_RADIUS);
     return res;
   }
 
@@ -661,6 +687,7 @@ public class MeshGenController {
     topViewRenderBtn.setEnabled(currBaseFlame != null);
     frontViewRenderBtn.setEnabled(currBaseFlame != null);
     perspectiveViewRenderBtn.setEnabled(currBaseFlame != null);
+    topViewToEditorBtn.setEnabled(currBaseFlame != null);
   }
 
   private MeshGenGenerateThread mainRenderThread = null;
@@ -724,8 +751,8 @@ public class MeshGenController {
 
           mainRenderThread = new MeshGenGenerateThread(
               prefs, flame, file, finishEvent, progressUpdater, renderWidthREd.getIntValue(), renderHeightREd.getIntValue(),
-              sliceCountREd.getIntValue(), slicesPerRenderREd.getIntValue(), renderQualityREd.getIntValue(),
-              zminREd.getDoubleValue(), zmaxREd.getDoubleValue());
+              sliceCountREd.getIntValue(), slicesPerRenderREd.getIntValue(), renderQualityREd.getIntValue(), zminREd.getDoubleValue(),
+              zmaxREd.getDoubleValue());
 
           enableMainRenderControls();
           new Thread(mainRenderThread).start();
@@ -739,6 +766,16 @@ public class MeshGenController {
 
   public void sliceCount_changed() {
     refreshAllPreviews(true);
+  }
+
+  public void topViewFlameToEditorBtn_clicked() {
+    if (currStrippedOrigFlame != null) {
+      currStrippedOrigFlame.setCentreX(centreXREd.getDoubleValue());
+      currStrippedOrigFlame.setCentreY(centreYREd.getDoubleValue());
+      currStrippedOrigFlame.setCamZoom(zoomREd.getDoubleValue());
+      tinaController.importFlame(currStrippedOrigFlame, true);
+      tinaController.getRootTabbedPane().setSelectedIndex(0);
+    }
   }
 
 }

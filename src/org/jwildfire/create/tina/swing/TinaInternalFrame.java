@@ -4513,7 +4513,7 @@ public class TinaInternalFrame extends JInternalFrame {
         getMeshGenHintPane(), getMeshGenCentreXREd(), getMeshGenCentreXSlider(), getMeshGenCentreYREd(), getMeshGenCentreYSlider(),
         getMeshGenZoomREd(), getMeshGenZoomSlider(), getMeshGenZMinREd(), getMeshGenZMinSlider(), getMeshGenZMaxREd(), getMeshGenZMaxSlider(),
         getMeshGenTopViewRenderBtn(), getMeshGenFrontViewRenderBtn(), getMeshGenPerspectiveViewRenderBtn(), getMeshGenTopViewToEditorBtn(),
-        getFlameBrowserToMeshGenBtn(), getMeshGenThicknessREd());
+        getFlameBrowserToMeshGenBtn());
 
     tinaController = new TinaController(params);
 
@@ -10341,7 +10341,6 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton meshGenPerspectiveViewRenderBtn;
   private JButton meshGenTopViewToEditorBtn;
   private JButton flameBrowserToMeshGenBtn;
-  private JWFNumberField meshGenThicknessREd;
   private JPanel panel_93;
   private JPanel panel_94;
   private JTabbedPane tabbedPane_2;
@@ -19084,31 +19083,6 @@ public class TinaInternalFrame extends JInternalFrame {
       lblRenderQuality.setBounds(434, 4, 79, 22);
       panel_3.add(lblRenderQuality);
 
-      meshGenThicknessREd = new JWFNumberField();
-      meshGenThicknessREd.setToolTipText("Thickness of the model generated. ");
-      meshGenThicknessREd.setMinValue(0.1);
-      meshGenThicknessREd.setMaxValue(10.0);
-      meshGenThicknessREd.setHasMinValue(true);
-      meshGenThicknessREd.setHasMaxValue(true);
-      meshGenThicknessREd.setValueStep(0.05);
-      meshGenThicknessREd.setText("");
-      meshGenThicknessREd.setSize(new Dimension(100, 24));
-      meshGenThicknessREd.setPreferredSize(new Dimension(100, 24));
-      meshGenThicknessREd.setMouseSpeed(0.01);
-      meshGenThicknessREd.setLocation(new Point(456, 28));
-      meshGenThicknessREd.setFont(new Font("Dialog", Font.PLAIN, 10));
-      meshGenThicknessREd.setBounds(510, 24, 100, 24);
-      panel_3.add(meshGenThicknessREd);
-
-      JLabel lblThickness = new JLabel();
-      lblThickness.setText("Thickness");
-      lblThickness.setSize(new Dimension(68, 22));
-      lblThickness.setPreferredSize(new Dimension(94, 22));
-      lblThickness.setLocation(new Point(390, 28));
-      lblThickness.setFont(new Font("Dialog", Font.BOLD, 10));
-      lblThickness.setBounds(434, 24, 79, 22);
-      panel_3.add(lblThickness);
-
       JPanel panel_8 = new JPanel();
       panel_8.setPreferredSize(new Dimension(132, 10));
       panel_1.add(panel_8, BorderLayout.EAST);
@@ -19619,10 +19593,6 @@ public class TinaInternalFrame extends JInternalFrame {
     return flameBrowserToMeshGenBtn;
   }
 
-  public JWFNumberField getMeshGenThicknessREd() {
-    return meshGenThicknessREd;
-  }
-
   public JPanel getPanel_1() {
     return panel_93;
   }
@@ -19687,7 +19657,6 @@ public class TinaInternalFrame extends JInternalFrame {
       JButton button = new JButton();
       button.setText("Render slices");
       button.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/sports-soccer.png")));
-      button.setIconTextGap(0);
       button.setPreferredSize(new Dimension(132, 46));
       button.setFont(new Font("Dialog", Font.BOLD, 10));
       panel_8.add(button);

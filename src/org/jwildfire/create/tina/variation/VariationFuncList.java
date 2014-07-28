@@ -25,7 +25,8 @@ import java.util.Map;
 public class VariationFuncList {
   public static final String DEFAULT_VARIATION = "linear3D";
   private static List<Class<? extends VariationFunc>> items = new ArrayList<Class<? extends VariationFunc>>();
-  private static List<String> nameList = null;
+  private static List<String> unfilteredNameList = null;
+  private static List<String> filteredNameList = null;
   private static Map<Class<? extends VariationFunc>, String> aliasMap = new HashMap<Class<? extends VariationFunc>, String>();
   private static Map<String, String> resolvedAliasMap = null;
 
@@ -403,7 +404,7 @@ public class VariationFuncList {
   private static void registerVariationFunc(
       Class<? extends VariationFunc> pVariationFunc) {
     items.add(pVariationFunc);
-    nameList = null;
+    unfilteredNameList = null;
   }
 
   private static String getVariationName(
@@ -430,17 +431,32 @@ public class VariationFuncList {
     return null;
   }
 
-  public static List<String> getNameList() {
-    if (nameList == null) {
-      nameList = new ArrayList<String>();
-      for (Class<? extends VariationFunc> funcCls : items) {
-        String vName = getVariationName(funcCls, false);
-        if (vName != null) {
-          nameList.add(vName);
+  private static void refreshNameList() {
+    unfilteredNameList = new ArrayList<String>();
+    filteredNameList = new ArrayList<String>();
+    for (Class<? extends VariationFunc> funcCls : items) {
+      String vName = getVariationName(funcCls, false);
+      if (vName != null) {
+        unfilteredNameList.add(vName);
+        if (!vName.startsWith("_")) {
+          filteredNameList.add(vName);
         }
       }
     }
-    return nameList;
+  }
+
+  public static List<String> getNameList() {
+    if (filteredNameList == null) {
+      refreshNameList();
+    }
+    return filteredNameList;
+  }
+
+  private static List<String> getUnfilteredNameList() {
+    if (unfilteredNameList == null) {
+      refreshNameList();
+    }
+    return unfilteredNameList;
   }
 
   public static Map<String, String> getAliasMap() {
@@ -472,7 +488,7 @@ public class VariationFuncList {
 
   public static VariationFunc getVariationFuncInstance(String pName,
       boolean pFatal) {
-    int idx = getNameList().indexOf(pName);
+    int idx = getUnfilteredNameList().indexOf(pName);
     if (idx >= 0) {
       Class<? extends VariationFunc> funcCls = items.get(idx);
       try {
