@@ -193,7 +193,6 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
 
   private MainController mainController;
   private final JTabbedPane rootTabbedPane;
-  // TODO simplify
   private Flame _currFlame, _currRandomizeFlame;
   private boolean noRefresh;
   private final ProgressUpdater mainProgressUpdater;
@@ -265,7 +264,11 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
         parameterObject.meshGenCentreXSlider, parameterObject.meshGenCentreYREd, parameterObject.meshGenCentreYSlider,
         parameterObject.meshGenZoomREd, parameterObject.meshGenZoomSlider, parameterObject.meshGenZMinREd,
         parameterObject.meshGenZMinSlider, parameterObject.meshGenZMaxREd, parameterObject.meshGenZMaxSlider,
-        parameterObject.meshGenTopViewRenderBtn, parameterObject.meshGenFrontViewRenderBtn, parameterObject.meshGenPerspectiveViewRenderBtn);
+        parameterObject.meshGenTopViewRenderBtn, parameterObject.meshGenFrontViewRenderBtn, parameterObject.meshGenPerspectiveViewRenderBtn,
+        parameterObject.meshGenTopViewToEditorBtn, parameterObject.meshGenLoadSequenceBtn, parameterObject.meshGenSequenceWidthREd,
+        parameterObject.meshGenSequenceHeightREd, parameterObject.meshGenSequenceSlicesREd, parameterObject.meshGenSequenceDownSampleREd,
+        parameterObject.meshGenSequenceFilterRadiusREd, parameterObject.meshGenGenerateMeshProgressbar, parameterObject.meshGenGenerateMeshBtn,
+        parameterObject.meshGenSequenceFromRendererBtn);
 
     jwfScriptController = new JWFScriptController(this, parameterObject.pErrorHandler, prefs, parameterObject.pCenterPanel, parameterObject.scriptTree,
         parameterObject.scriptDescriptionTextArea, parameterObject.scriptTextArea, parameterObject.compileScriptButton,
@@ -274,7 +277,7 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
 
     flameBrowserController = new FlameBrowserController(this, parameterObject.pErrorHandler, prefs, parameterObject.pCenterPanel, parameterObject.flameBrowserTree, parameterObject.flameBrowersImagesPnl,
         parameterObject.flameBrowserRefreshBtn, parameterObject.flameBrowserChangeFolderBtn, parameterObject.flameBrowserToEditorBtn, parameterObject.flameBrowserToBatchEditorBtn, parameterObject.flameBrowserDeleteBtn,
-        parameterObject.flameBrowserRenameBtn, parameterObject.flameBrowserCopyToBtn, parameterObject.flameBrowserMoveToBtn);
+        parameterObject.flameBrowserRenameBtn, parameterObject.flameBrowserCopyToBtn, parameterObject.flameBrowserMoveToBtn, parameterObject.flameBrowserToMeshGenBtn);
 
     gradientController = new GradientController(this, parameterObject.pErrorHandler, prefs, parameterObject.pCenterPanel, parameterObject.gradientLibTree, parameterObject.pGradientLibraryPanel,
         parameterObject.gradientLibraryRescanBtn, parameterObject.gradientLibraryNewFolderBtn, parameterObject.gradientLibraryRenameFolderBtn,

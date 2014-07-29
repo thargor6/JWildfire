@@ -150,6 +150,8 @@ public class JWFNumberField extends JPanel implements MotionCurveEditor {
 
           @Override
           public void mousePressed(MouseEvent e) {
+            if (!isEnabled())
+              return;
             xMouseOrigin = e.getX();
             Object value = getValue();
             if (value != null && value instanceof Double) {
@@ -177,6 +179,8 @@ public class JWFNumberField extends JPanel implements MotionCurveEditor {
 
           @Override
           public void mouseDragged(MouseEvent e) {
+            if (!isEnabled())
+              return;
             double MINMOVE = 3;
             double dx = xMouseOrigin - e.getX();
             if (mouseChangeCount > 0 || dx > MINMOVE || dx < -MINMOVE) {

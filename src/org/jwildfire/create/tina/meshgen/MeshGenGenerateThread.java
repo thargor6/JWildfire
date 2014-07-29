@@ -16,11 +16,9 @@
 */
 package org.jwildfire.create.tina.meshgen;
 
-import java.io.File;
 import java.util.Calendar;
 
 import org.jwildfire.base.Prefs;
-import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.render.FlameRenderer;
 import org.jwildfire.create.tina.render.ProgressUpdater;
@@ -33,7 +31,7 @@ public class MeshGenGenerateThread implements Runnable {
   public static final double DFLT_ANTIALIAS_AMOUNT = 0.75;
   private final Prefs prefs;
   private final Flame flame;
-  private final File outFile;
+  private final String outFilePattern;
   private final MeshGenGenerateThreadFinishEvent finishEvent;
   private final ProgressUpdater progressUpdater;
   private boolean finished;
@@ -43,11 +41,11 @@ public class MeshGenGenerateThread implements Runnable {
   private double zmin, zmax;
   private FlameRenderer renderer;
 
-  public MeshGenGenerateThread(Prefs pPrefs, Flame pFlame, File pOutFile, MeshGenGenerateThreadFinishEvent pFinishEvent, ProgressUpdater pProgressUpdater, int pRenderWidth, int pRenderHeight, int pSlicesCount, int pSlicesPerRender, int pQuality,
+  public MeshGenGenerateThread(Prefs pPrefs, Flame pFlame, String pOutFilePattern, MeshGenGenerateThreadFinishEvent pFinishEvent, ProgressUpdater pProgressUpdater, int pRenderWidth, int pRenderHeight, int pSlicesCount, int pSlicesPerRender, int pQuality,
       double pZMin, double pZMax) {
     prefs = pPrefs;
     flame = pFlame.makeCopy();
-    outFile = pOutFile;
+    outFilePattern = pOutFilePattern;
     finishEvent = pFinishEvent;
     renderWidth = pRenderWidth;
     renderHeight = pRenderHeight;
@@ -86,7 +84,7 @@ public class MeshGenGenerateThread implements Runnable {
       renderer.setProgressUpdater(progressUpdater);
       SliceRenderInfo renderInfo = new SliceRenderInfo(renderWidth, renderHeight, RenderMode.PRODUCTION, slicesCount, zmin, zmax, slicesPerRender);
 
-      renderer.renderSlices(renderInfo, createFilenamePattern());
+      renderer.renderSlices(renderInfo, outFilePattern);
 
       t1 = Calendar.getInstance().getTimeInMillis();
 
@@ -97,22 +95,6 @@ public class MeshGenGenerateThread implements Runnable {
       finished = true;
       finishEvent.failed(ex);
     }
-  }
-
-  private String createFilenamePattern() {
-    String res = outFile.getName();
-    int p = res.lastIndexOf(".");
-    if (p >= 0) {
-      String ext = res.substring(p + 1, res.length());
-      if (Tools.FILEEXT_PNG.equalsIgnoreCase(ext)) {
-        res = res.substring(0, p);
-      }
-    }
-    if (outFile.getParentFile() != null) {
-      res = new File(outFile.getParentFile(), res).getAbsolutePath();
-    }
-    res += "%04d." + Tools.FILEEXT_PNG;
-    return res;
   }
 
   public boolean isFinished() {

@@ -4513,7 +4513,9 @@ public class TinaInternalFrame extends JInternalFrame {
         getMeshGenHintPane(), getMeshGenCentreXREd(), getMeshGenCentreXSlider(), getMeshGenCentreYREd(), getMeshGenCentreYSlider(),
         getMeshGenZoomREd(), getMeshGenZoomSlider(), getMeshGenZMinREd(), getMeshGenZMinSlider(), getMeshGenZMaxREd(), getMeshGenZMaxSlider(),
         getMeshGenTopViewRenderBtn(), getMeshGenFrontViewRenderBtn(), getMeshGenPerspectiveViewRenderBtn(), getMeshGenTopViewToEditorBtn(),
-        getFlameBrowserToMeshGenBtn());
+        getFlameBrowserToMeshGenBtn(), getMeshGenLoadSequenceBtn(), getMeshGenSequenceWidthREd(), getMeshGenSequenceHeightREd(),
+        getMeshGenSequenceSlicesREd(), getMeshGenSequenceDownSampleREd(), getMeshGenSequenceFilterRadiusREd(), getMeshGenGenerateMeshProgressbar(),
+        getMeshGenGenerateMeshBtn(), getMeshGenSequenceFromRendererBtn());
 
     tinaController = new TinaController(params);
 
@@ -10348,6 +10350,15 @@ public class TinaInternalFrame extends JInternalFrame {
   private JPanel panel_97;
   private JPanel panel_98;
   private JPanel panel_99;
+  private JButton meshGenLoadSequenceBtn;
+  private JWFNumberField meshGenSequenceWidthREd;
+  private JWFNumberField meshGenSequenceHeightREd;
+  private JWFNumberField meshGenSequenceSlicesREd;
+  private JWFNumberField meshGenSequenceDownSampleREd;
+  private JWFNumberField meshGenSequenceFilterRadiusREd;
+  private JProgressBar meshGenGenerateMeshProgressbar;
+  private JButton meshGenGenerateMeshBtn;
+  private JButton meshGenSequenceFromRendererBtn;
 
   /**
    * This method initializes renderBatchJobsScrollPane	
@@ -19631,7 +19642,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JPanel getPanel_98() {
     if (panel_98 == null) {
       panel_98 = new JPanel();
-      panel_98.setPreferredSize(new Dimension(10, 200));
+      panel_98.setPreferredSize(new Dimension(10, 116));
       panel_98.setLayout(new BorderLayout(0, 0));
       panel_98.add(getPanel_99(), BorderLayout.WEST);
 
@@ -19641,7 +19652,7 @@ public class TinaInternalFrame extends JInternalFrame {
       panel_1.setLayout(new BorderLayout(0, 0));
 
       JPanel panel_2 = new JPanel();
-      panel_2.setPreferredSize(new Dimension(10, 140));
+      panel_2.setPreferredSize(new Dimension(10, 56));
       panel_1.add(panel_2, BorderLayout.NORTH);
       panel_2.setLayout(new BorderLayout(0, 0));
 
@@ -19650,22 +19661,76 @@ public class TinaInternalFrame extends JInternalFrame {
       panel_2.add(panel_3, BorderLayout.WEST);
       panel_3.setLayout(null);
 
+      JLabel lblImageDownsample = new JLabel();
+      lblImageDownsample.setText("Image downsample");
+      lblImageDownsample.setSize(new Dimension(68, 22));
+      lblImageDownsample.setPreferredSize(new Dimension(94, 22));
+      lblImageDownsample.setName("");
+      lblImageDownsample.setLocation(new Point(6, 76));
+      lblImageDownsample.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblImageDownsample.setBounds(6, 8, 108, 22);
+      panel_3.add(lblImageDownsample);
+
+      meshGenSequenceDownSampleREd = new JWFNumberField();
+      meshGenSequenceDownSampleREd.setValueStep(1.0);
+      meshGenSequenceDownSampleREd.setText("");
+      meshGenSequenceDownSampleREd.setSize(new Dimension(100, 24));
+      meshGenSequenceDownSampleREd.setPreferredSize(new Dimension(100, 24));
+      meshGenSequenceDownSampleREd.setOnlyIntegers(true);
+      meshGenSequenceDownSampleREd.setMinValue(1.0);
+      meshGenSequenceDownSampleREd.setMaxValue(12.0);
+      meshGenSequenceDownSampleREd.setLocation(new Point(71, 76));
+      meshGenSequenceDownSampleREd.setHasMinValue(true);
+      meshGenSequenceDownSampleREd.setHasMaxValue(true);
+      meshGenSequenceDownSampleREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      meshGenSequenceDownSampleREd.setBounds(113, 6, 100, 24);
+      panel_3.add(meshGenSequenceDownSampleREd);
+
+      JLabel lblSpatialFilterRadius_1 = new JLabel();
+      lblSpatialFilterRadius_1.setText("Spatial filter radius");
+      lblSpatialFilterRadius_1.setSize(new Dimension(68, 22));
+      lblSpatialFilterRadius_1.setPreferredSize(new Dimension(94, 22));
+      lblSpatialFilterRadius_1.setName("");
+      lblSpatialFilterRadius_1.setLocation(new Point(4, 76));
+      lblSpatialFilterRadius_1.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblSpatialFilterRadius_1.setBounds(6, 32, 108, 22);
+      panel_3.add(lblSpatialFilterRadius_1);
+
+      meshGenSequenceFilterRadiusREd = new JWFNumberField();
+      meshGenSequenceFilterRadiusREd.setHasMaxValue(true);
+      meshGenSequenceFilterRadiusREd.setValueStep(0.1);
+      meshGenSequenceFilterRadiusREd.setText("");
+      meshGenSequenceFilterRadiusREd.setSize(new Dimension(100, 24));
+      meshGenSequenceFilterRadiusREd.setPreferredSize(new Dimension(100, 24));
+      meshGenSequenceFilterRadiusREd.setMaxValue(2.0);
+      meshGenSequenceFilterRadiusREd.setLocation(new Point(71, 76));
+      meshGenSequenceFilterRadiusREd.setHasMinValue(true);
+      meshGenSequenceFilterRadiusREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      meshGenSequenceFilterRadiusREd.setBounds(113, 30, 100, 24);
+      panel_3.add(meshGenSequenceFilterRadiusREd);
+
       JPanel panel_8 = new JPanel();
+      FlowLayout flowLayout = (FlowLayout) panel_8.getLayout();
       panel_8.setPreferredSize(new Dimension(132, 10));
       panel_2.add(panel_8, BorderLayout.EAST);
 
-      JButton button = new JButton();
-      button.setText("Render slices");
-      button.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/sports-soccer.png")));
-      button.setPreferredSize(new Dimension(132, 46));
-      button.setFont(new Font("Dialog", Font.BOLD, 10));
-      panel_8.add(button);
+      meshGenGenerateMeshBtn = new JButton();
+      meshGenGenerateMeshBtn.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getMeshGenController().generateMeshButton_clicked();
+        }
+      });
+      meshGenGenerateMeshBtn.setText("Create Mesh");
+      meshGenGenerateMeshBtn.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/sports-soccer.png")));
+      meshGenGenerateMeshBtn.setPreferredSize(new Dimension(132, 46));
+      meshGenGenerateMeshBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      panel_8.add(meshGenGenerateMeshBtn);
 
-      JProgressBar progressBar = new JProgressBar();
-      progressBar.setValue(0);
-      progressBar.setStringPainted(true);
-      progressBar.setPreferredSize(new Dimension(568, 21));
-      panel_1.add(progressBar, BorderLayout.SOUTH);
+      meshGenGenerateMeshProgressbar = new JProgressBar();
+      meshGenGenerateMeshProgressbar.setValue(0);
+      meshGenGenerateMeshProgressbar.setStringPainted(true);
+      meshGenGenerateMeshProgressbar.setPreferredSize(new Dimension(568, 21));
+      panel_1.add(meshGenGenerateMeshProgressbar, BorderLayout.SOUTH);
     }
     return panel_98;
   }
@@ -19674,10 +19739,145 @@ public class TinaInternalFrame extends JInternalFrame {
     if (panel_99 == null) {
       panel_99 = new JPanel();
       panel_99.setBorder(new TitledBorder(null, "Input slices", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-      panel_99.setPreferredSize(new Dimension(200, 10));
+      panel_99.setPreferredSize(new Dimension(400, 10));
       panel_99.setLayout(null);
+
+      meshGenLoadSequenceBtn = new JButton();
+      meshGenLoadSequenceBtn.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getMeshGenController().loadSequenceButton_clicked();
+        }
+      });
+      meshGenLoadSequenceBtn.setToolTipText("Load a previously rendered image sequence from harddisk");
+      meshGenLoadSequenceBtn.setText("Load sequence");
+      meshGenLoadSequenceBtn.setPreferredSize(new Dimension(125, 24));
+      meshGenLoadSequenceBtn.setMinimumSize(new Dimension(100, 24));
+      meshGenLoadSequenceBtn.setMaximumSize(new Dimension(32000, 24));
+      meshGenLoadSequenceBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      meshGenLoadSequenceBtn.setBounds(18, 72, 176, 24);
+      panel_99.add(meshGenLoadSequenceBtn);
+
+      meshGenSequenceWidthREd = new JWFNumberField();
+      meshGenSequenceWidthREd.setValueStep(1.0);
+      meshGenSequenceWidthREd.setText("");
+      meshGenSequenceWidthREd.setSize(new Dimension(100, 24));
+      meshGenSequenceWidthREd.setPreferredSize(new Dimension(100, 24));
+      meshGenSequenceWidthREd.setOnlyIntegers(true);
+      meshGenSequenceWidthREd.setMinValue(16.0);
+      meshGenSequenceWidthREd.setMaxValue(4096.0);
+      meshGenSequenceWidthREd.setLocation(new Point(71, 76));
+      meshGenSequenceWidthREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      meshGenSequenceWidthREd.setBounds(282, 23, 100, 24);
+      panel_99.add(meshGenSequenceWidthREd);
+
+      JLabel lblWidth = new JLabel();
+      lblWidth.setText("Width");
+      lblWidth.setSize(new Dimension(68, 22));
+      lblWidth.setPreferredSize(new Dimension(94, 22));
+      lblWidth.setName("");
+      lblWidth.setLocation(new Point(4, 76));
+      lblWidth.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblWidth.setBounds(206, 25, 79, 22);
+      panel_99.add(lblWidth);
+
+      JLabel lblHeight = new JLabel();
+      lblHeight.setText("Height");
+      lblHeight.setSize(new Dimension(68, 22));
+      lblHeight.setPreferredSize(new Dimension(94, 22));
+      lblHeight.setName("");
+      lblHeight.setLocation(new Point(4, 76));
+      lblHeight.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblHeight.setBounds(206, 48, 79, 22);
+      panel_99.add(lblHeight);
+
+      meshGenSequenceHeightREd = new JWFNumberField();
+      meshGenSequenceHeightREd.setValueStep(1.0);
+      meshGenSequenceHeightREd.setText("");
+      meshGenSequenceHeightREd.setSize(new Dimension(100, 24));
+      meshGenSequenceHeightREd.setPreferredSize(new Dimension(100, 24));
+      meshGenSequenceHeightREd.setOnlyIntegers(true);
+      meshGenSequenceHeightREd.setMinValue(16.0);
+      meshGenSequenceHeightREd.setMaxValue(4096.0);
+      meshGenSequenceHeightREd.setLocation(new Point(71, 76));
+      meshGenSequenceHeightREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      meshGenSequenceHeightREd.setBounds(282, 46, 100, 24);
+      panel_99.add(meshGenSequenceHeightREd);
+
+      JLabel lblSlices = new JLabel();
+      lblSlices.setText("Slices");
+      lblSlices.setSize(new Dimension(68, 22));
+      lblSlices.setPreferredSize(new Dimension(94, 22));
+      lblSlices.setName("");
+      lblSlices.setLocation(new Point(4, 76));
+      lblSlices.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblSlices.setBounds(206, 73, 79, 22);
+      panel_99.add(lblSlices);
+
+      meshGenSequenceSlicesREd = new JWFNumberField();
+      meshGenSequenceSlicesREd.setValueStep(1.0);
+      meshGenSequenceSlicesREd.setText("");
+      meshGenSequenceSlicesREd.setSize(new Dimension(100, 24));
+      meshGenSequenceSlicesREd.setPreferredSize(new Dimension(100, 24));
+      meshGenSequenceSlicesREd.setOnlyIntegers(true);
+      meshGenSequenceSlicesREd.setMinValue(16.0);
+      meshGenSequenceSlicesREd.setMaxValue(4096.0);
+      meshGenSequenceSlicesREd.setLocation(new Point(71, 76));
+      meshGenSequenceSlicesREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      meshGenSequenceSlicesREd.setBounds(282, 71, 100, 24);
+      panel_99.add(meshGenSequenceSlicesREd);
+
+      meshGenSequenceFromRendererBtn = new JButton();
+      meshGenSequenceFromRendererBtn.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getMeshGenController().importSequenceFromRendererButton_clicked();
+        }
+      });
+      meshGenSequenceFromRendererBtn.setToolTipText("Load the previously rendered image sequence");
+      meshGenSequenceFromRendererBtn.setText("From renderer");
+      meshGenSequenceFromRendererBtn.setPreferredSize(new Dimension(125, 24));
+      meshGenSequenceFromRendererBtn.setMinimumSize(new Dimension(100, 24));
+      meshGenSequenceFromRendererBtn.setMaximumSize(new Dimension(32000, 24));
+      meshGenSequenceFromRendererBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      meshGenSequenceFromRendererBtn.setBounds(18, 23, 176, 24);
+      panel_99.add(meshGenSequenceFromRendererBtn);
     }
     return panel_99;
+  }
+
+  public JButton getMeshGenLoadSequenceBtn() {
+    return meshGenLoadSequenceBtn;
+  }
+
+  public JWFNumberField getMeshGenSequenceWidthREd() {
+    return meshGenSequenceWidthREd;
+  }
+
+  public JWFNumberField getMeshGenSequenceHeightREd() {
+    return meshGenSequenceHeightREd;
+  }
+
+  public JWFNumberField getMeshGenSequenceSlicesREd() {
+    return meshGenSequenceSlicesREd;
+  }
+
+  public JWFNumberField getMeshGenSequenceDownSampleREd() {
+    return meshGenSequenceDownSampleREd;
+  }
+
+  public JWFNumberField getMeshGenSequenceFilterRadiusREd() {
+    return meshGenSequenceFilterRadiusREd;
+  }
+
+  public JProgressBar getMeshGenGenerateMeshProgressbar() {
+    return meshGenGenerateMeshProgressbar;
+  }
+
+  public JButton getMeshGenGenerateMeshBtn() {
+    return meshGenGenerateMeshBtn;
+  }
+
+  public JButton getMeshGenSequenceFromRendererBtn() {
+    return meshGenSequenceFromRendererBtn;
   }
 } //  @jve:decl-index=0:visual-constraint="10,10"
 
