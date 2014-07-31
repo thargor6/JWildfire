@@ -121,14 +121,9 @@
     <copy todir="${dist.dir}/">
        <fileset file="${applet.jar.name}"/>
      </copy>
-  	
     <copy todir="${dist.dir}/">
        <fileset dir="build/launcher" includes="start_linux.sh start_windows.bat start_mac.command"/>
      </copy>
-  	<chmod perm="ugo+rx">
-      <fileset dir="${dist.dir}" includes="start_linux.sh start_windows.bat start_mac.command"/>
-  	</chmod>
-  	 	
   	<copy todir="${dist.dir}/">
        <fileset file="CHANGES.txt" />
        <fileset file="README_LAUNCH.txt" />
@@ -137,9 +132,10 @@
        <fileset file="README_APPLET.txt" />
       <fileset file="Delphi/JWildfire.exe" />
      </copy>    
-    <jar destfile="${dist.name}">
-      <fileset dir="${dist.dir}/"/>
-    </jar>
+    <zip destfile="${dist.name}">
+      <zipfileset dir="${dist.dir}/"/>
+      <zipfileset filemode="755" dir="${dist.dir}/" includes="start_*" />
+    </zip>
   </target>
 
 	 <taskdef name="izpack" classpathref="build.classpath" classname="com.izforge.izpack.ant.IzPackTask" />	
