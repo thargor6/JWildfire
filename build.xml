@@ -120,14 +120,14 @@
      </copy>    
     <copy todir="${dist.dir}/">
        <fileset file="${applet.jar.name}"/>
-     </copy>    
-  	<chmod perm="ugo+rx">
-      <fileset dir="build/launcher" includes="start_linux.sh start_windows.bat start_mac.command"/>
-  	</chmod>
+     </copy>
   	
     <copy todir="${dist.dir}/">
        <fileset dir="build/launcher" includes="start_linux.sh start_windows.bat start_mac.command"/>
-     </copy>    
+     </copy>
+  	<chmod perm="ugo+rx">
+      <fileset dir="${dist.dir}" includes="start_linux.sh start_windows.bat start_mac.command"/>
+  	</chmod>
   	 	
   	<copy todir="${dist.dir}/">
        <fileset file="CHANGES.txt" />
