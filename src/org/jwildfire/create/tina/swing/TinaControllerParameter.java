@@ -485,6 +485,20 @@ public class TinaControllerParameter {
   public JProgressBar meshGenGenerateMeshProgressbar;
   public JButton meshGenGenerateMeshBtn;
   public JButton meshGenSequenceFromRendererBtn;
+  public JWFNumberField meshGenSequenceThresholdREd;
+  public JLabel meshGenSequenceLbl;
+  public JPanel meshGenPreviewRootPanel;
+  public JCheckBox meshGenAutoPreviewCBx;
+  public JButton meshGenPreviewImportLastGeneratedMeshBtn;
+  public JButton meshGenPreviewImportFromFileBtn;
+  public JButton meshGenClearPreviewBtn;
+  public JWFNumberField meshGenPreviewPositionXREd;
+  public JWFNumberField meshGenPreviewPositionYREd;
+  public JWFNumberField meshGenPreviewSizeREd;
+  public JWFNumberField meshGenPreviewScaleZREd;
+  public JWFNumberField meshGenPreviewRotateAlphaREd;
+  public JWFNumberField meshGenPreviewRotateBetaREd;
+  public JWFNumberField meshGenPreviewDetailReductionREd;
 
   public void setParams1(JInternalFrame pTinaFrame, ErrorHandler pErrorHandler, Prefs pPrefs, JPanel pCenterPanel, JWFNumberField pCameraRollREd, JSlider pCameraRollSlider, JWFNumberField pCameraPitchREd, JSlider pCameraPitchSlider, JWFNumberField pCameraYawREd, JSlider pCameraYawSlider, JWFNumberField pCameraPerspectiveREd, JSlider pCameraPerspectiveSlider, JWFNumberField pCameraCentreXREd, JSlider pCameraCentreXSlider, JWFNumberField pCameraCentreYREd, JSlider pCameraCentreYSlider, JWFNumberField pCameraZoomREd, JSlider pCameraZoomSlider, JCheckBox pNewDOFCBx, JWFNumberField pFocusXREd, JSlider pFocusXSlider, JWFNumberField pFocusYREd, JSlider pFocusYSlider, JWFNumberField pFocusZREd, JSlider pFocusZSlider, JWFNumberField pDimishZREd, JSlider pDimishZSlider,
       JWFNumberField pCameraDOFREd, JSlider pCameraDOFSlider, JWFNumberField pCameraDOFAreaREd, JSlider pCameraDOFAreaSlider, JWFNumberField pCameraDOFExponentREd, JSlider pCameraDOFExponentSlider, JWFNumberField pCamZREd, JSlider pCamZSlider, JWFNumberField pPixelsPerUnitREd, JSlider pPixelsPerUnitSlider, JWFNumberField pBrightnessREd, JSlider pBrightnessSlider, JWFNumberField pContrastREd, JSlider pContrastSlider, JWFNumberField pGammaREd, JSlider pGammaSlider, JWFNumberField pVibrancyREd, JSlider pVibrancySlider, JWFNumberField pFilterRadiusREd, JSlider pFilterRadiusSlider, JComboBox pFilterKernelCmb,
@@ -963,7 +977,12 @@ public class TinaControllerParameter {
       JButton pMeshGenFrontViewRenderBtn, JButton pMeshGenPerspectiveViewRenderBtn, JButton pMeshGenTopViewToEditorBtn,
       JButton pFlameBrowserToMeshGenBtn, JButton pMeshGenLoadSequenceBtn, JWFNumberField pMeshGenSequenceWidthREd, JWFNumberField pMeshGenSequenceHeightREd,
       JWFNumberField pMeshGenSequenceSlicesREd, JWFNumberField pMeshGenSequenceDownSampleREd, JWFNumberField pMeshGenSequenceFilterRadiusREd,
-      JProgressBar pMeshGenGenerateMeshProgressbar, JButton pMeshGenGenerateMeshBtn, JButton pMeshGenSequenceFromRendererBtn) {
+      JProgressBar pMeshGenGenerateMeshProgressbar, JButton pMeshGenGenerateMeshBtn, JButton pMeshGenSequenceFromRendererBtn,
+      JWFNumberField pMeshGenSequenceThresholdREd, JLabel pMeshGenSequenceLbl, JPanel pMeshGenPreviewRootPanel, JCheckBox pMeshGenAutoPreviewCBx,
+      JButton pMeshGenPreviewImportLastGeneratedMeshBtn, JButton pMeshGenPreviewImportFromFileBtn, JButton pMeshGenClearPreviewBtn,
+      JWFNumberField pMeshGenPreviewPositionXREd, JWFNumberField pMeshGenPreviewPositionYREd,
+      JWFNumberField pMeshGenPreviewSizeREd, JWFNumberField pMeshGenPreviewScaleZREd, JWFNumberField pMeshGenPreviewRotateAlphaREd,
+      JWFNumberField pMeshGenPreviewRotateBetaREd, JWFNumberField pMeshGenPreviewDetailReductionREd) {
     meshGenFromEditorBtn = pMeshGenFromEditorBtn;
     meshGenFromClipboardBtn = pMeshGenFromClipboardBtn;
     meshGenLoadFlameBtn = pMeshGenLoadFlameBtn;
@@ -1002,5 +1021,19 @@ public class TinaControllerParameter {
     meshGenGenerateMeshProgressbar = pMeshGenGenerateMeshProgressbar;
     meshGenGenerateMeshBtn = pMeshGenGenerateMeshBtn;
     meshGenSequenceFromRendererBtn = pMeshGenSequenceFromRendererBtn;
+    meshGenSequenceThresholdREd = pMeshGenSequenceThresholdREd;
+    meshGenSequenceLbl = pMeshGenSequenceLbl;
+    meshGenPreviewRootPanel = pMeshGenPreviewRootPanel;
+    meshGenAutoPreviewCBx = pMeshGenAutoPreviewCBx;
+    meshGenPreviewImportLastGeneratedMeshBtn = pMeshGenPreviewImportLastGeneratedMeshBtn;
+    meshGenPreviewImportFromFileBtn = pMeshGenPreviewImportFromFileBtn;
+    meshGenClearPreviewBtn = pMeshGenClearPreviewBtn;
+    meshGenPreviewPositionXREd = pMeshGenPreviewPositionXREd;
+    meshGenPreviewPositionYREd = pMeshGenPreviewPositionYREd;
+    meshGenPreviewSizeREd = pMeshGenPreviewSizeREd;
+    meshGenPreviewScaleZREd = pMeshGenPreviewScaleZREd;
+    meshGenPreviewRotateAlphaREd = pMeshGenPreviewRotateAlphaREd;
+    meshGenPreviewRotateBetaREd = pMeshGenPreviewRotateBetaREd;
+    meshGenPreviewDetailReductionREd = pMeshGenPreviewDetailReductionREd;
   }
 }

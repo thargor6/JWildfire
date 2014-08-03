@@ -58,6 +58,7 @@ public class Prefs extends ManagedObject {
   static final String KEY_TINA_PROFILE_QUALITY_CAPTION = "tina.profile.quality2.caption";
   static final String KEY_TINA_PROFILE_QUALITY_DEFAULT_PROFILE = "tina.profile.quality2.default_profile";
 
+  static final String KEY_TINA_PATH_MESHES = "tina.path.meshes";
   static final String KEY_TINA_PATH_FLAMES = "tina.path.flames";
   static final String KEY_TINA_PATH_JWFMOVIES = "tina.path.jwfmovies";
   static final String KEY_TINA_PATH_JWFSCRIPTS = "tina.path.jwfscripts";
@@ -121,6 +122,10 @@ public class Prefs extends ManagedObject {
   private String tinaFlamePath = null;
   private String lastInputFlamePath = null;
   private String lastOutputFlamePath = null;
+
+  @Property(description = "Mesh file drawer", category = PropertyCategory.TINA)
+  private String tinaMeshPath = null;
+  private String lastMeshPath = null;
 
   @Property(description = "JWFMovie file drawer", category = PropertyCategory.TINA)
   private String tinaJWFMoviePath = null;
@@ -342,6 +347,13 @@ public class Prefs extends ManagedObject {
     }
   }
 
+  public void setLastMeshFile(File pFile) {
+    lastMeshPath = pFile.getParent();
+    if (tinaMeshPath == null || tinaMeshPath.length() == 0) {
+      tinaMeshPath = lastMeshPath;
+    }
+  }
+
   public String getOutputFlamePath() {
     return lastOutputFlamePath != null ? lastOutputFlamePath : tinaFlamePath;
   }
@@ -467,6 +479,8 @@ public class Prefs extends ManagedObject {
     tinaFlamePath = pSrc.tinaFlamePath;
     lastInputFlamePath = pSrc.lastInputFlamePath;
     lastOutputFlamePath = pSrc.lastOutputFlamePath;
+    tinaMeshPath = pSrc.tinaMeshPath;
+    lastMeshPath = pSrc.lastMeshPath;
     tinaJWFMoviePath = pSrc.tinaJWFMoviePath;
     lastInputJWFMoviePath = pSrc.lastInputJWFMoviePath;
     lastOutputJWFMoviePath = pSrc.lastOutputJWFMoviePath;
@@ -845,6 +859,14 @@ public class Prefs extends ManagedObject {
 
   public void setTinaEditorControlsStyle(FlamePanelControlStyle pTinaEditorControlsStyle) {
     tinaEditorControlsStyle = pTinaEditorControlsStyle;
+  }
+
+  public String getTinaMeshPath() {
+    return tinaMeshPath;
+  }
+
+  public void setTinaMeshPath(String pTinaMeshPath) {
+    tinaMeshPath = pTinaMeshPath;
   }
 
 }

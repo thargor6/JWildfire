@@ -247,7 +247,7 @@ public class Phong3DRenderer extends Mesh3DRenderer {
     }
     else {
       for (int i = pMin; i < pMax; i++) {
-        System.out.println(i + "/" + pMax);
+        //        System.out.println(i + "/" + pMax);
         int pcurr = 0;
         for (int bs = 0; bs < f3Count; bs++) {
           int pp1 = p31[bs];

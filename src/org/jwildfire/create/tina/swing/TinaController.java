@@ -268,7 +268,12 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
         parameterObject.meshGenTopViewToEditorBtn, parameterObject.meshGenLoadSequenceBtn, parameterObject.meshGenSequenceWidthREd,
         parameterObject.meshGenSequenceHeightREd, parameterObject.meshGenSequenceSlicesREd, parameterObject.meshGenSequenceDownSampleREd,
         parameterObject.meshGenSequenceFilterRadiusREd, parameterObject.meshGenGenerateMeshProgressbar, parameterObject.meshGenGenerateMeshBtn,
-        parameterObject.meshGenSequenceFromRendererBtn);
+        parameterObject.meshGenSequenceFromRendererBtn, parameterObject.meshGenSequenceThresholdREd, parameterObject.meshGenSequenceLbl,
+        parameterObject.meshGenPreviewRootPanel, parameterObject.meshGenAutoPreviewCBx, parameterObject.meshGenPreviewImportLastGeneratedMeshBtn,
+        parameterObject.meshGenPreviewImportFromFileBtn, parameterObject.meshGenClearPreviewBtn, parameterObject.meshGenPreviewPositionXREd,
+        parameterObject.meshGenPreviewPositionYREd, parameterObject.meshGenPreviewSizeREd,
+        parameterObject.meshGenPreviewScaleZREd, parameterObject.meshGenPreviewRotateAlphaREd, parameterObject.meshGenPreviewRotateBetaREd,
+        parameterObject.meshGenPreviewDetailReductionREd);
 
     jwfScriptController = new JWFScriptController(this, parameterObject.pErrorHandler, prefs, parameterObject.pCenterPanel, parameterObject.scriptTree,
         parameterObject.scriptDescriptionTextArea, parameterObject.scriptTextArea, parameterObject.compileScriptButton,
@@ -4291,6 +4296,10 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
       refreshPaletteUI(layer.getPalette());
       transformationTableClicked();
     }
+  }
+
+  public void showStatusMessage(String pStatus) {
+    tinaFrame.setTitle((pStatus != null && pStatus.length() > 0 ? ": " + pStatus : ""));
   }
 
   public void showStatusMessage(Flame pFlame, String pStatus) {

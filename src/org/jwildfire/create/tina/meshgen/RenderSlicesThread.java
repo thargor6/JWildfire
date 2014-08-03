@@ -26,7 +26,7 @@ import org.jwildfire.create.tina.render.RenderInfo;
 import org.jwildfire.create.tina.render.RenderMode;
 import org.jwildfire.create.tina.render.SliceRenderInfo;
 
-public class MeshGenGenerateThread implements Runnable {
+public class RenderSlicesThread implements Runnable {
   public static final double DFLT_ANTIALIAS_RADIUS = 0.36;
   public static final double DFLT_ANTIALIAS_AMOUNT = 0.75;
   private final Prefs prefs;
@@ -41,7 +41,7 @@ public class MeshGenGenerateThread implements Runnable {
   private double zmin, zmax;
   private FlameRenderer renderer;
 
-  public MeshGenGenerateThread(Prefs pPrefs, Flame pFlame, String pOutFilePattern, MeshGenGenerateThreadFinishEvent pFinishEvent, ProgressUpdater pProgressUpdater, int pRenderWidth, int pRenderHeight, int pSlicesCount, int pSlicesPerRender, int pQuality,
+  public RenderSlicesThread(Prefs pPrefs, Flame pFlame, String pOutFilePattern, MeshGenGenerateThreadFinishEvent pFinishEvent, ProgressUpdater pProgressUpdater, int pRenderWidth, int pRenderHeight, int pSlicesCount, int pSlicesPerRender, int pQuality,
       double pZMin, double pZMax) {
     prefs = pPrefs;
     flame = pFlame.makeCopy();
