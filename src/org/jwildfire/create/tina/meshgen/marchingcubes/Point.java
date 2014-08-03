@@ -29,6 +29,10 @@ public class Point {
     z = pSrc.z;
   }
 
+  public Point(float pX, float pY, float pZ) {
+    set(pX, pY, pZ);
+  }
+
   public void set(float pX, float pY, float pZ) {
     x = pX;
     y = pY;

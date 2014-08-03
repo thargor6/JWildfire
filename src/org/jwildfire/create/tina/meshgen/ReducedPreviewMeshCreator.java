@@ -38,22 +38,32 @@ public class ReducedPreviewMeshCreator {
     List<Face> allFaces = new ArrayList<Face>(pMesh.getFaces());
     List<Point> allPoints = pMesh.getPoints();
     long t0 = System.currentTimeMillis();
+    Set<Integer> indexSet = new HashSet<Integer>();
 
-    while (faces.size() < pFaceCount) {
-      int idx = (int) (Math.random() * allFaces.size());
-      Face face = new Face(allFaces.get(idx));
-      allFaces.remove(idx);
-      Point p1 = new Point(allPoints.get(face.a));
-      Point p2 = new Point(allPoints.get(face.b));
-      Point p3 = new Point(allPoints.get(face.c));
-      face.a = points.size();
-      face.b = points.size() + 1;
-      face.c = points.size() + 2;
+    for (int i = 0; i < pFaceCount; i++) {
 
-      points.add(p1);
-      points.add(p2);
-      points.add(p3);
-      faces.add(face);
+      int fIdx = -1;
+      for (int j = 0; j < 7; j++) {
+        int idx = (int) (Math.random() * allFaces.size());
+        if (!indexSet.contains(idx)) {
+          fIdx = idx;
+          break;
+        }
+      }
+      if (fIdx >= 0) {
+        Face face = new Face(allFaces.get(fIdx));
+        Point p1 = new Point(allPoints.get(face.a));
+        Point p2 = new Point(allPoints.get(face.b));
+        Point p3 = new Point(allPoints.get(face.c));
+        face.a = points.size();
+        face.b = points.size() + 1;
+        face.c = points.size() + 2;
+
+        points.add(p1);
+        points.add(p2);
+        points.add(p3);
+        faces.add(face);
+      }
     }
     long t1 = System.currentTimeMillis();
     System.out.println("REDUCE MESH: " + (t1 - t0) / 1000.0 + "s");

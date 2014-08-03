@@ -4519,7 +4519,7 @@ public class TinaInternalFrame extends JInternalFrame {
         getMeshGenPreviewRootPanel(), getMeshGenAutoPreviewCBx(), getMeshGenPreviewImportLastGeneratedMeshBtn(), getMeshGenPreviewImportFromFileBtn(),
         getMeshGenClearPreviewBtn(), getMeshGenPreviewPositionXREd(), getMeshGenPreviewPositionYREd(), getMeshGenPreviewSizeREd(),
         getMeshGenPreviewScaleZREd(), getMeshGenPreviewRotateAlphaREd(), getMeshGenPreviewRotateBetaREd(),
-        getMeshGenPreviewDetailReductionREd());
+        getMeshGenPreviewPointsREd(), getMeshGenPreviewPolygonsREd(), getMeshGenRefreshPreviewBtn());
 
     tinaController = new TinaController(params);
 
@@ -10378,8 +10378,10 @@ public class TinaInternalFrame extends JInternalFrame {
   private JWFNumberField meshGenPreviewScaleZREd;
   private JWFNumberField meshGenPreviewRotateAlphaREd;
   private JWFNumberField meshGenPreviewRotateBetaREd;
-  private JWFNumberField meshGenPreviewDetailReductionREd;
+  private JWFNumberField meshGenPreviewPointsREd;
   private JPanel panel_102;
+  private JWFNumberField meshGenPreviewPolygonsREd;
+  private JButton meshGenRefreshPreviewBtn;
 
   /**
    * This method initializes renderBatchJobsScrollPane	
@@ -19833,7 +19835,7 @@ public class TinaInternalFrame extends JInternalFrame {
       lblHeight.setName("");
       lblHeight.setLocation(new Point(4, 76));
       lblHeight.setFont(new Font("Dialog", Font.BOLD, 10));
-      lblHeight.setBounds(206, 48, 79, 22);
+      lblHeight.setBounds(206, 49, 79, 22);
       panel_99.add(lblHeight);
 
       meshGenSequenceHeightREd = new JWFNumberField();
@@ -19846,7 +19848,7 @@ public class TinaInternalFrame extends JInternalFrame {
       meshGenSequenceHeightREd.setMaxValue(4096.0);
       meshGenSequenceHeightREd.setLocation(new Point(71, 76));
       meshGenSequenceHeightREd.setFont(new Font("Dialog", Font.PLAIN, 10));
-      meshGenSequenceHeightREd.setBounds(282, 46, 100, 24);
+      meshGenSequenceHeightREd.setBounds(282, 47, 100, 24);
       panel_99.add(meshGenSequenceHeightREd);
 
       JLabel lblSlices = new JLabel();
@@ -19856,7 +19858,7 @@ public class TinaInternalFrame extends JInternalFrame {
       lblSlices.setName("");
       lblSlices.setLocation(new Point(4, 76));
       lblSlices.setFont(new Font("Dialog", Font.BOLD, 10));
-      lblSlices.setBounds(206, 73, 79, 22);
+      lblSlices.setBounds(206, 74, 79, 22);
       panel_99.add(lblSlices);
 
       meshGenSequenceSlicesREd = new JWFNumberField();
@@ -19869,7 +19871,7 @@ public class TinaInternalFrame extends JInternalFrame {
       meshGenSequenceSlicesREd.setMaxValue(4096.0);
       meshGenSequenceSlicesREd.setLocation(new Point(71, 76));
       meshGenSequenceSlicesREd.setFont(new Font("Dialog", Font.PLAIN, 10));
-      meshGenSequenceSlicesREd.setBounds(282, 71, 100, 24);
+      meshGenSequenceSlicesREd.setBounds(282, 72, 100, 24);
       panel_99.add(meshGenSequenceSlicesREd);
 
       meshGenSequenceFromRendererBtn = new JButton();
@@ -20132,6 +20134,21 @@ public class TinaInternalFrame extends JInternalFrame {
         }
       });
       panel_101.add(meshGenPreviewRotateBetaREd);
+
+      meshGenRefreshPreviewBtn = new JButton();
+      meshGenRefreshPreviewBtn.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getMeshGenController().refreshPreviewButton_clicked();
+        }
+      });
+      meshGenRefreshPreviewBtn.setToolTipText("");
+      meshGenRefreshPreviewBtn.setText("Refresh Preview");
+      meshGenRefreshPreviewBtn.setPreferredSize(new Dimension(125, 24));
+      meshGenRefreshPreviewBtn.setMinimumSize(new Dimension(100, 24));
+      meshGenRefreshPreviewBtn.setMaximumSize(new Dimension(32000, 24));
+      meshGenRefreshPreviewBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      meshGenRefreshPreviewBtn.setBounds(6, 220, 176, 24);
+      panel_101.add(meshGenRefreshPreviewBtn);
     }
     return panel_101;
   }
@@ -20184,8 +20201,8 @@ public class TinaInternalFrame extends JInternalFrame {
     return meshGenPreviewRotateBetaREd;
   }
 
-  public JWFNumberField getMeshGenPreviewDetailReductionREd() {
-    return meshGenPreviewDetailReductionREd;
+  public JWFNumberField getMeshGenPreviewPointsREd() {
+    return meshGenPreviewPointsREd;
   }
 
   private JPanel getPanel_102() {
@@ -20201,6 +20218,11 @@ public class TinaInternalFrame extends JInternalFrame {
       meshGenAutoPreviewCBx.setToolTipText("Display preview after creating mesh (may be slow on slow machines)");
 
       meshGenPreviewImportLastGeneratedMeshBtn = new JButton();
+      meshGenPreviewImportLastGeneratedMeshBtn.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getMeshGenController().importLastGeneratedMeshIntoPreviewBtn_clicked();
+        }
+      });
       meshGenPreviewImportLastGeneratedMeshBtn.setBounds(6, 53, 176, 24);
       panel_102.add(meshGenPreviewImportLastGeneratedMeshBtn);
       meshGenPreviewImportLastGeneratedMeshBtn.setToolTipText("Display the previously created mesh");
@@ -20211,6 +20233,11 @@ public class TinaInternalFrame extends JInternalFrame {
       meshGenPreviewImportLastGeneratedMeshBtn.setFont(new Font("Dialog", Font.BOLD, 10));
 
       meshGenPreviewImportFromFileBtn = new JButton();
+      meshGenPreviewImportFromFileBtn.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getMeshGenController().loadPreviewMeshBtn_clicked();
+        }
+      });
       meshGenPreviewImportFromFileBtn.setBounds(6, 78, 176, 24);
       panel_102.add(meshGenPreviewImportFromFileBtn);
       meshGenPreviewImportFromFileBtn.setToolTipText("Load and display a mesh from disc");
@@ -20221,6 +20248,11 @@ public class TinaInternalFrame extends JInternalFrame {
       meshGenPreviewImportFromFileBtn.setFont(new Font("Dialog", Font.BOLD, 10));
 
       meshGenClearPreviewBtn = new JButton();
+      meshGenClearPreviewBtn.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getMeshGenController().clearPreviewButton_clicked();
+        }
+      });
       meshGenClearPreviewBtn.setBounds(6, 120, 176, 24);
       panel_102.add(meshGenClearPreviewBtn);
       meshGenClearPreviewBtn.setToolTipText("Remove the currently displayed mesh from memory");
@@ -20233,26 +20265,56 @@ public class TinaInternalFrame extends JInternalFrame {
       JLabel lblModelReduction = new JLabel();
       lblModelReduction.setBounds(4, 194, 78, 22);
       panel_102.add(lblModelReduction);
-      lblModelReduction.setToolTipText("Reduce detaiuls for faster preview-rendering");
-      lblModelReduction.setText("Detail reduction");
+      lblModelReduction.setToolTipText("");
+      lblModelReduction.setText("Points");
       lblModelReduction.setPreferredSize(new Dimension(94, 22));
       lblModelReduction.setName("");
       lblModelReduction.setFont(new Font("Dialog", Font.BOLD, 10));
 
-      meshGenPreviewDetailReductionREd = new JWFNumberField();
-      meshGenPreviewDetailReductionREd.setBounds(82, 194, 100, 24);
-      panel_102.add(meshGenPreviewDetailReductionREd);
-      meshGenPreviewDetailReductionREd.setValueStep(1.0);
-      meshGenPreviewDetailReductionREd.setText("");
-      meshGenPreviewDetailReductionREd.setPreferredSize(new Dimension(100, 24));
-      meshGenPreviewDetailReductionREd.setOnlyIntegers(true);
-      meshGenPreviewDetailReductionREd.setMinValue(1.0);
-      meshGenPreviewDetailReductionREd.setMaxValue(12.0);
-      meshGenPreviewDetailReductionREd.setHasMinValue(true);
-      meshGenPreviewDetailReductionREd.setHasMaxValue(true);
-      meshGenPreviewDetailReductionREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      meshGenPreviewPointsREd = new JWFNumberField();
+      meshGenPreviewPointsREd.setBounds(82, 194, 100, 24);
+      panel_102.add(meshGenPreviewPointsREd);
+      meshGenPreviewPointsREd.setValueStep(1.0);
+      meshGenPreviewPointsREd.setText("");
+      meshGenPreviewPointsREd.setPreferredSize(new Dimension(100, 24));
+      meshGenPreviewPointsREd.setOnlyIntegers(true);
+      meshGenPreviewPointsREd.setMinValue(1.0);
+      meshGenPreviewPointsREd.setMaxValue(12.0);
+      meshGenPreviewPointsREd.setHasMinValue(true);
+      meshGenPreviewPointsREd.setHasMaxValue(true);
+      meshGenPreviewPointsREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+
+      meshGenPreviewPolygonsREd = new JWFNumberField();
+      meshGenPreviewPolygonsREd.setValueStep(1.0);
+      meshGenPreviewPolygonsREd.setText("");
+      meshGenPreviewPolygonsREd.setPreferredSize(new Dimension(100, 24));
+      meshGenPreviewPolygonsREd.setOnlyIntegers(true);
+      meshGenPreviewPolygonsREd.setMinValue(1.0);
+      meshGenPreviewPolygonsREd.setMaxValue(12.0);
+      meshGenPreviewPolygonsREd.setHasMinValue(true);
+      meshGenPreviewPolygonsREd.setHasMaxValue(true);
+      meshGenPreviewPolygonsREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      meshGenPreviewPolygonsREd.setBounds(82, 216, 100, 24);
+      panel_102.add(meshGenPreviewPolygonsREd);
+
+      JLabel lblPolygons = new JLabel();
+      lblPolygons.setToolTipText("");
+      lblPolygons.setText("Polygons");
+      lblPolygons.setPreferredSize(new Dimension(94, 22));
+      lblPolygons.setName("");
+      lblPolygons.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblPolygons.setBounds(4, 216, 78, 22);
+      panel_102.add(lblPolygons);
     }
     return panel_102;
+  }
+
+  public JWFNumberField getMeshGenPreviewPolygonsREd() {
+    return meshGenPreviewPolygonsREd;
+  }
+
+  public JButton getMeshGenRefreshPreviewBtn() {
+    return meshGenRefreshPreviewBtn;
   }
 } //  @jve:decl-index=0:visual-constraint="10,10"
 

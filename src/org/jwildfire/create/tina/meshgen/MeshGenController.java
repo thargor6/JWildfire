@@ -137,7 +137,9 @@ public class MeshGenController {
   private final JWFNumberField previewScaleZREd;
   private final JWFNumberField previewRotateAlphaREd;
   private final JWFNumberField previewRotateBetaREd;
-  private final JWFNumberField previewDetailReductionREd;
+  private final JWFNumberField previewPointsREd;
+  private final JWFNumberField previewPolygonsREd;
+  private final JButton previewRefreshBtn;
 
   private String currSequencePattern;
   private ImagePanel previewPanel;
@@ -157,7 +159,8 @@ public class MeshGenController {
       JButton pPreviewImportLastGeneratedMeshBtn, JButton pPreviewImportFromFileBtn, JButton pClearPreviewBtn,
       JWFNumberField pPreviewPositionXREd, JWFNumberField pPreviewPositionYREd,
       JWFNumberField pPreviewSizeREd, JWFNumberField pPreviewScaleZREd, JWFNumberField pPreviewRotateAlphaREd,
-      JWFNumberField pPreviewRotateBetaREd, JWFNumberField pPreviewDetailReductionREd) {
+      JWFNumberField pPreviewRotateBetaREd, JWFNumberField pPreviewPointsREd, JWFNumberField pPreviewPolygonsREd,
+      JButton pRefreshPreviewBtn) {
     tinaController = pTinaController;
     errorHandler = pErrorHandler;
     prefs = pPrefs;
@@ -215,12 +218,16 @@ public class MeshGenController {
     previewScaleZREd = pPreviewScaleZREd;
     previewRotateAlphaREd = pPreviewRotateAlphaREd;
     previewRotateBetaREd = pPreviewRotateBetaREd;
-    previewDetailReductionREd = pPreviewDetailReductionREd;
+    previewPointsREd = pPreviewPointsREd;
+    previewPolygonsREd = pPreviewPolygonsREd;
+    previewRefreshBtn = pRefreshPreviewBtn;
 
     initHintsPane();
     sequenceWidthREd.setEditable(false);
     sequenceHeightREd.setEditable(false);
     sequenceSlicesREd.setEditable(false);
+    previewPointsREd.setEditable(false);
+    previewPolygonsREd.setEditable(false);
     setDefaults();
   }
 
@@ -797,6 +804,7 @@ public class MeshGenController {
     previewScaleZREd.setEnabled(hashMesh);
     previewRotateAlphaREd.setEnabled(hashMesh);
     previewRotateBetaREd.setEnabled(hashMesh);
+    previewRefreshBtn.setEnabled(hashMesh);
   }
 
   private RenderSlicesThread renderSlicesThread = null;
@@ -991,6 +999,7 @@ public class MeshGenController {
               lastGeneratedMeshFilename = outFile.getAbsolutePath();
               if (autoPreviewCBx.isEnabled()) {
                 currPreviewMesh = new MeshPair(generateMeshThread.getMesh());
+                refreshPreviewMeshInfo();
               }
               generateMeshThread = null;
               System.gc();
@@ -1060,6 +1069,9 @@ public class MeshGenController {
   }
 
   private SimpleImage renderPreviewImage(int pWidth, int pHeight, boolean pFastPreview) {
+    if (currPreviewMesh == null) {
+      return new SimpleImage(pWidth, pHeight);
+    }
     Mesh mesh = pFastPreview ? currPreviewMesh.getReducedMesh() : currPreviewMesh.getMesh();
     return MeshPreviewRenderer.renderMesh(mesh, pWidth, pHeight,
         previewPositionXREd.getDoubleValue(), previewPositionYREd.getDoubleValue(),
@@ -1089,6 +1101,67 @@ public class MeshGenController {
 
   public void previewScaleZ_changed(boolean pMouseAdjusting) {
     refreshPreview(pMouseAdjusting);
+  }
+
+  public void loadPreviewMeshBtn_clicked() {
+    try {
+      JFileChooser chooser = new MeshFileChooser(prefs);
+      if (prefs.getTinaMeshPath() != null) {
+        try {
+          chooser.setCurrentDirectory(new File(prefs.getTinaMeshPath()));
+        }
+        catch (Exception ex) {
+          ex.printStackTrace();
+        }
+      }
+      if (chooser.showOpenDialog(rootTabbedPane) == JFileChooser.APPROVE_OPTION) {
+        File file = chooser.getSelectedFile();
+        importPreviewMesh(file.getAbsolutePath());
+      }
+    }
+    catch (Throwable ex) {
+      errorHandler.handleError(ex);
+    }
+  }
+
+  private void importPreviewMesh(String pFilename) {
+    Mesh mesh = SimpleWavefrontObjLoader.readMesh(pFilename);
+    currPreviewMesh = new MeshPair(mesh);
+    refreshPreviewMeshInfo();
+    enableControls();
+    refreshPreview(false);
+  }
+
+  public void importLastGeneratedMeshIntoPreviewBtn_clicked() {
+    try {
+      importPreviewMesh(lastGeneratedMeshFilename);
+    }
+    catch (Throwable ex) {
+      errorHandler.handleError(ex);
+    }
+  }
+
+  public void clearPreviewButton_clicked() {
+    currPreviewMesh = null;
+    refreshPreviewMeshInfo();
+    System.gc();
+    refreshPreview(false);
+    enableControls();
+  }
+
+  private void refreshPreviewMeshInfo() {
+    if (currPreviewMesh == null) {
+      previewPointsREd.setValue(0);
+      previewPolygonsREd.setValue(0);
+    }
+    else {
+      previewPointsREd.setValue(currPreviewMesh.getMesh().getPoints().size());
+      previewPolygonsREd.setValue(currPreviewMesh.getMesh().getFaces().size());
+    }
+  }
+
+  public void refreshPreviewButton_clicked() {
+    refreshPreview(false);
   }
 
 }

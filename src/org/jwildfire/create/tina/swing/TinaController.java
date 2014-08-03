@@ -273,7 +273,7 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
         parameterObject.meshGenPreviewImportFromFileBtn, parameterObject.meshGenClearPreviewBtn, parameterObject.meshGenPreviewPositionXREd,
         parameterObject.meshGenPreviewPositionYREd, parameterObject.meshGenPreviewSizeREd,
         parameterObject.meshGenPreviewScaleZREd, parameterObject.meshGenPreviewRotateAlphaREd, parameterObject.meshGenPreviewRotateBetaREd,
-        parameterObject.meshGenPreviewDetailReductionREd);
+        parameterObject.meshGenPreviewPointsREd, parameterObject.meshGenPreviewPolygonsREd, parameterObject.meshGenRefreshPreviewBtn);
 
     jwfScriptController = new JWFScriptController(this, parameterObject.pErrorHandler, prefs, parameterObject.pCenterPanel, parameterObject.scriptTree,
         parameterObject.scriptDescriptionTextArea, parameterObject.scriptTextArea, parameterObject.compileScriptButton,
