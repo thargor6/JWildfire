@@ -401,6 +401,7 @@ public class VariationFuncList {
     registerVariationFunc(InternalSliceRangeIndicatorWFFunc.class);
     registerVariationFunc(ZTwisterFunc.class);
     registerVariationFunc(AsteriaFunc.class);
+    registerVariationFunc(LogDbFunc.class);
   }
 
   private static void registerVariationFunc(
