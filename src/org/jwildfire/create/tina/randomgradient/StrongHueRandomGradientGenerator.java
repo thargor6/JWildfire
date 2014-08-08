@@ -40,7 +40,19 @@ public class StrongHueRandomGradientGenerator extends RandomGradientGenerator {
     hslPixel.saturation = Math.random() * 0.1 + 0.8999;
     for (int i = 0; i < pKeyFrameCount; i++) {
       hslPixel.luminosity = Math.random() * 0.90;
-      hslPixel.hue = Math.random() * Math.random();
+
+      double rnd = Math.random() + Math.random() + Math.random() + Math.random() + Math.random();
+      if (rnd > 4.0)
+        hslPixel.hue = 0.8 + (rnd - 4.0) / 7.0;
+      else if (rnd > 3.0)
+        hslPixel.hue = 0.2 + (rnd - 3.0) / 7.0;
+      else if (rnd > 2.0)
+        hslPixel.hue = 0.0 + (rnd - 2.0) / 7.0;
+      else if (rnd > 1.0)
+        hslPixel.hue = 0.6 + (rnd - 1.0) / 7.0;
+      else
+        hslPixel.hue = 0.4 + rnd / 7.0;
+
       HSLTransformer.hsl2rgb(hslPixel, rgbPixel);
       RGBColor col = new RGBColor(rgbPixel.r, rgbPixel.g, rgbPixel.b);
       keyFrames.add(col);
