@@ -172,18 +172,18 @@ public class BWRandsFunc extends VariationFunc {
       // We need a little chaos game to fill the empty space outside the flower.
       PetalsChance = pContext.random();
 
-      if (PetalsChance < flwr)
+      if (PetalsChance < .5 * (flwr + .5))
       {
         // petals
-        Lx *= (1.0 - r) * flwr;
-        Ly *= (1.0 - r) * flwr;
+        Lx *= (1.0 - r) * (flwr * 1.1); // 1.1 remove the ugly border
+        Ly *= (1.0 - r) * (flwr * 1.1); // 1.1 remove the ugly border
       }
       else
       {
-        r += 1e-5; // no fp error
+        Vv2 = sqrt(Vv2); // dist to circle border
         // filling the rest of the circle
-        Lx *= (sqrt(Vv2) - r * (1.0 - flwr)) / r;
-        Ly *= (sqrt(Vv2) - r * (1.0 - flwr)) / r;
+        Lx *= (Vv2 - r * (1.0 - flwr)) / (r + SMALL_EPSILON);
+        Ly *= (Vv2 - r * (1.0 - flwr)) / (r + SMALL_EPSILON);
       }
 
       Vv2 = 1.0; // recycled var
