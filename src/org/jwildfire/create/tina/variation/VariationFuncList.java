@@ -399,6 +399,7 @@ public class VariationFuncList {
     registerVariationFunc(Scry2Func.class);
     registerVariationFunc(ScramblyFunc.class);
     registerVariationFunc(InternalSliceRangeIndicatorWFFunc.class);
+    registerVariationFunc(ZTwisterFunc.class);
   }
 
   private static void registerVariationFunc(
