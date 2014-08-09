@@ -2979,7 +2979,15 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
                   public void validate() {
                     String valStr = dlg.getRessourceValue();
                     byte[] valByteArray = valStr != null ? valStr.getBytes() : null;
-                    var.getFunc().setRessource(rName, valByteArray);
+                    byte[] oldValue = var.getFunc().getRessource(rName);
+                    try {
+                      var.getFunc().setRessource(rName, valByteArray);
+                      var.getFunc().validate();
+                    }
+                    catch (Throwable ex) {
+                      var.getFunc().setRessource(rName, oldValue);
+                      throw new RuntimeException(ex);
+                    }
                   }
                 });
 

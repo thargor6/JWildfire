@@ -96,7 +96,9 @@ public class CustomWFFunc extends VariationFunc {
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-    customFuncRunner.transform(pContext, pXForm, pAffineTP, pVarTP, pAmount);
+    if (customFuncRunner != null) {
+      customFuncRunner.transform(pContext, pXForm, pAffineTP, pVarTP, pAmount);
+    }
   }
 
   @Override
@@ -143,8 +145,6 @@ public class CustomWFFunc extends VariationFunc {
   public void setRessource(String pName, byte[] pValue) {
     if (RESSOURCE_CODE.equalsIgnoreCase(pName)) {
       code = pValue != null ? new String(pValue) : "";
-      // For validation
-      compile();
     }
     else
       throw new IllegalArgumentException(pName);
@@ -160,14 +160,16 @@ public class CustomWFFunc extends VariationFunc {
     if (customFuncRunner == null) {
       compile();
     }
-    customFuncRunner.setA(a);
-    customFuncRunner.setB(b);
-    customFuncRunner.setC(c);
-    customFuncRunner.setD(d);
-    customFuncRunner.setE(e);
-    customFuncRunner.setF(f);
-    customFuncRunner.setG(g);
-    customFuncRunner.init(pContext, pXForm);
+    if (customFuncRunner != null) {
+      customFuncRunner.setA(a);
+      customFuncRunner.setB(b);
+      customFuncRunner.setC(c);
+      customFuncRunner.setD(d);
+      customFuncRunner.setE(e);
+      customFuncRunner.setF(f);
+      customFuncRunner.setG(g);
+      customFuncRunner.init(pContext, pXForm);
+    }
   }
 
   private void compile() {
@@ -176,8 +178,21 @@ public class CustomWFFunc extends VariationFunc {
     }
     catch (Throwable ex) {
       System.out.println("##############################################################");
+      System.out.println(ex.getMessage());
+      System.out.println("##############################################################");
       System.out.println(code);
       System.out.println("##############################################################");
+    }
+  }
+
+  @Override
+  public void validate() {
+    try {
+      if (code != null) {
+        CustomWFFuncRunner.compile(code);
+      }
+    }
+    catch (Throwable ex) {
       throw new RuntimeException(ex);
     }
   }

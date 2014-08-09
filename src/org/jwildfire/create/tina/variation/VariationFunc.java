@@ -59,6 +59,11 @@ public abstract class VariationFunc implements Serializable {
   public void setRessource(String pName, byte[] pValue) {
   }
 
+  public byte[] getRessource(String pName) {
+    int idx = getRessourceIndex(pName);
+    return idx >= 0 && idx < getRessourceValues().length ? getRessourceValues()[idx] : null;
+  }
+
   public Object getParameter(String pName) {
     int idx = getParameterIndex(pName);
     return idx >= 0 ? getParameterValues()[idx] : null;
@@ -128,6 +133,10 @@ public abstract class VariationFunc implements Serializable {
     System.arraycopy(array1, 0, joinedArray, 0, array1.length);
     System.arraycopy(array2, 0, joinedArray, array1.length, array2.length);
     return joinedArray;
+  }
+
+  public void validate() {
+
   }
 
 }
