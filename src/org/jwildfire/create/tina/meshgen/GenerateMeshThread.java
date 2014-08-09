@@ -38,6 +38,7 @@ public class GenerateMeshThread implements Runnable {
   private final int threshold;
   private final double spatialFilterRadius;
   private final int imageDownSample;
+  private final boolean withNormals;
   private final MeshGenGenerateThreadFinishEvent finishEvent;
   private final ProgressUpdater progressUpdater;
   private boolean finished;
@@ -46,7 +47,7 @@ public class GenerateMeshThread implements Runnable {
   private Mesh mesh;
 
   public GenerateMeshThread(String pOutFilename, MeshGenGenerateThreadFinishEvent pFinishEvent, ProgressUpdater pProgressUpdater,
-      String pInputSequencePattern, int pInputSequenceSize, int pThreshold, double pSpatialFilterRadius, int pImageDownSample) {
+      String pInputSequencePattern, int pInputSequenceSize, int pThreshold, double pSpatialFilterRadius, int pImageDownSample, boolean pWithNormals) {
     outFilename = pOutFilename;
     finishEvent = pFinishEvent;
     progressUpdater = pProgressUpdater;
@@ -55,6 +56,7 @@ public class GenerateMeshThread implements Runnable {
     threshold = pThreshold;
     spatialFilterRadius = pSpatialFilterRadius;
     imageDownSample = pImageDownSample;
+    withNormals = pWithNormals;
   }
 
   @Override
@@ -92,12 +94,12 @@ public class GenerateMeshThread implements Runnable {
   private Mesh createMesh() throws Exception {
     ImageStackSampler sampler = new ImageStackSampler(inputSequencePattern, inputSequenceSize, spatialFilterRadius, imageDownSample);
 
-    List<Point> faces = createFaces(sampler, threshold);
+    RawFaces rawFaces = createFaces(sampler, threshold);
     if (forceAbort) {
       return null;
     }
 
-    Mesh mesh = FacesMerger.generateMesh(faces);
+    Mesh mesh = FacesMerger.generateMesh(rawFaces);
     if (forceAbort) {
       return null;
     }
@@ -113,7 +115,7 @@ public class GenerateMeshThread implements Runnable {
   /**
    * Create a list of faces from the specified image data and the given isovalue.
    */
-  public List<Point> createFaces(ImageStackSampler pSampler, int pSeekValue) {
+  public RawFaces createFaces(ImageStackSampler pSampler, int pSeekValue) {
     int threadCount = Prefs.getPrefs().getTinaRenderThreads();
     Set<Integer> totalProgress = new HashSet<Integer>();
     threads.clear();
@@ -128,6 +130,7 @@ public class GenerateMeshThread implements Runnable {
       GenerateFacesThread thread = new GenerateFacesThread(pSampler, pSeekValue);
       threads.add(thread);
       thread.setZmin(zmin);
+      thread.setWithNormals(withNormals);
       thread.setProgressUpdater(progressUpdater, totalProgress);
       int zmax = zmin + zPerThread - 1;
       if (zmax >= pSampler.getStackZSize()) {
@@ -161,10 +164,21 @@ public class GenerateMeshThread implements Runnable {
 
     // Merge result
     List<Point> faces = new ArrayList<Point>();
-    for (GenerateFacesThread thread : threads) {
-      faces.addAll(thread.getFaces());
+    List<Point> normals;
+    if (withNormals) {
+      normals = new ArrayList<Point>();
+      for (GenerateFacesThread thread : threads) {
+        faces.addAll(thread.getFaces());
+        normals.addAll(thread.getNormals());
+      }
     }
-    return faces;
+    else {
+      normals = null;
+      for (GenerateFacesThread thread : threads) {
+        faces.addAll(thread.getFaces());
+      }
+    }
+    return new RawFaces(faces, normals);
   }
 
   public boolean isFinished() {

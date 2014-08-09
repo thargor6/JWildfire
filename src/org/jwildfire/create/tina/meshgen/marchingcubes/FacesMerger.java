@@ -23,20 +23,56 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.jwildfire.create.tina.meshgen.RawFaces;
+
 public class FacesMerger {
 
   private static final float DLFT_OBJSIZE = 10.0f;
 
-  public static Mesh generateMesh(List<Point> pFaces) {
+  private static class AvgNormal extends Point {
+    public int count;
+
+    public AvgNormal(Point pPoint) {
+      x = pPoint.x;
+      y = pPoint.y;
+      z = pPoint.z;
+      count = 1;
+    }
+
+    public void addPoint(Point pPoint) {
+      x += pPoint.x;
+      y += pPoint.y;
+      z += pPoint.z;
+      count++;
+    }
+
+    public float getAvgX() {
+      return count > 0 ? x / (float) count : 0.0f;
+    }
+
+    public float getAvgY() {
+      return count > 0 ? y / (float) count : 0.0f;
+    }
+
+    public float getAvgZ() {
+      return count > 0 ? z / (float) count : 0.0f;
+    }
+
+  }
+
+  public static Mesh generateMesh(RawFaces pRawFaces) {
+    List<Point> vertices = pRawFaces.getVertices();
+    List<Point> faceNormals = pRawFaces.getNormals();
+
     Map<Point, Integer> index = new HashMap<Point, Integer>();
     List<Point> points = new ArrayList<Point>();
 
-    Point first = pFaces.size() > 0 ? pFaces.get(0) : new Point();
+    Point first = vertices.size() > 0 ? vertices.get(0) : new Point();
     float xmin = first.x, xmax = first.x;
     float ymin = first.y, ymax = first.y;
     float zmin = first.z, zmax = first.z;
 
-    for (Point point : pFaces) {
+    for (Point point : vertices) {
       if (index.get(point) == null) {
         index.put(point, points.size());
         points.add(point);
@@ -58,15 +94,24 @@ public class FacesMerger {
       }
     }
 
-    Set<Face> faces = new HashSet<Face>();
-    for (int i = 0; i < pFaces.size(); i += 3) {
-      int a = index.get(pFaces.get(i));
-      int b = index.get(pFaces.get(i + 1));
-      int c = index.get(pFaces.get(i + 2));
+    Set<Face> facesSet = new HashSet<Face>();
+    List<Face> faces = new ArrayList<Face>();
+    Map<Integer, AvgNormal> normalMap = new HashMap<Integer, AvgNormal>();
+    for (int i = 0; i < vertices.size(); i += 3) {
+      int a = index.get(vertices.get(i));
+      int b = index.get(vertices.get(i + 1));
+      int c = index.get(vertices.get(i + 2));
       if (a != b && b != c && a != c) {
         Face face = new Face(a, c, b);
-        if (!faces.contains(face)) {
+        if (!facesSet.contains(face)) {
+          facesSet.add(face);
           faces.add(face);
+          if (faceNormals != null) {
+            Point faceNormal = faceNormals.get(i / 3);
+            addFaceNormalToNormalMap(normalMap, a, faceNormal);
+            addFaceNormalToNormalMap(normalMap, b, faceNormal);
+            addFaceNormalToNormalMap(normalMap, c, faceNormal);
+          }
         }
       }
     }
@@ -80,12 +125,44 @@ public class FacesMerger {
     float dy = -ymin - (ymax - ymin) / 2.0f;
     float dz = -zmin - (zmax - zmin) / 2.0f;
     float scale = DLFT_OBJSIZE / size;
-    for (Point point : points) {
-      point.x = (point.x + dx) * scale;
-      point.y = (point.y + dy) * scale;
-      point.z = (point.z + dz) * scale;
+
+    if (faceNormals != null) {
+      List<Point> vertexNormals = new ArrayList<Point>();
+      for (int i = 0; i < points.size(); i++) {
+        Point point = points.get(i);
+        AvgNormal avgNormal = normalMap.get(i);
+        if (avgNormal != null) {
+          vertexNormals.add(new Point(avgNormal.getAvgX(), avgNormal.getAvgY(), avgNormal.getAvgZ()));
+        }
+        else {
+          vertexNormals.add(new Point());
+        }
+        point.x = (point.x + dx) * scale;
+        point.y = (point.y + dy) * scale;
+        point.z = (point.z + dz) * scale;
+      }
+      return new Mesh(points, vertexNormals, faces);
+    }
+    else {
+      for (Point point : points) {
+        point.x = (point.x + dx) * scale;
+        point.y = (point.y + dy) * scale;
+        point.z = (point.z + dz) * scale;
+      }
+      return new Mesh(points, faces);
     }
 
-    return new Mesh(points, faces);
+  }
+
+  private static void addFaceNormalToNormalMap(Map<Integer, AvgNormal> pNormalMap, int pPointIndex, Point pFaceNormal) {
+    Integer key = Integer.valueOf(pPointIndex);
+    AvgNormal avg = pNormalMap.get(key);
+    if (avg == null) {
+      avg = new AvgNormal(pFaceNormal);
+      pNormalMap.put(key, avg);
+    }
+    else {
+      avg.addPoint(pFaceNormal);
+    }
   }
 }

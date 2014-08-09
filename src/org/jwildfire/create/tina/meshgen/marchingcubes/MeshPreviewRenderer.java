@@ -35,7 +35,7 @@ public class MeshPreviewRenderer {
     mesh3d.setImageWidth(pWidth);
     mesh3d.setImageHeight(pHeight);
 
-    int pCount = pMesh.getPoints().size();
+    int pCount = pMesh.getVertices().size();
     mesh3d.setPCount(pCount);
     double[] x = new double[pCount];
     double[] y = new double[pCount];
@@ -51,7 +51,7 @@ public class MeshPreviewRenderer {
     double zmax = pMesh.getPMax().z;
     double size = (xmax - xmin + ymax - ymin + zmax - zmin) / 3.0;
 
-    for (Point point : pMesh.getPoints()) {
+    for (Point point : pMesh.getVertices()) {
       double currX = (point.x - xmin) / size * pWidth - cx;
       double currY = (point.y - ymin) / size * pHeight - cy;
       double currZ = pScaleZ * (point.z - zmin) / size * pHeight;

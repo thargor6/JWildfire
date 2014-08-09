@@ -22,16 +22,21 @@
  */
 package org.jwildfire.create.tina.meshgen.marchingcubes;
 
+import static org.jwildfire.base.mathlib.MathLib.sqrt;
+
 import java.util.List;
 
 public class FacesCalculator {
 
-  public static void getFaces(Cube pCube, List<Point> list, ImageStackSampler pSampler, int pSeekValue) {
+  public static void getFaces(Cube pCube, List<Point> pVertices, List<Point> pNormals, ImageStackSampler pSampler, int pSeekValue) {
     int cn = caseNumber(pCube, pSampler, pSeekValue);
     boolean directTable = !(isAmbigous(cn));
     // address in the table
     int offset = directTable ? cn * 15 : (255 - cn) * 15;
     InvalidatablePoint[] edges = pCube.getEdges();
+
+    Point v1 = new Point();
+    Point v2 = new Point();
 
     for (int index = 0; index < 5; index++) {
       // if there's a triangle
@@ -45,13 +50,48 @@ public class FacesCalculator {
 
         }
         else {
-          list.add(new Point(edge1));
-          list.add(new Point(edge2));
-          list.add(new Point(edge3));
+          pVertices.add(new Point(edge1));
+          pVertices.add(new Point(edge2));
+          pVertices.add(new Point(edge3));
+          if (pNormals != null) {
+            Point normal = new Point();
+            v1.x = edge2.x - edge1.x;
+            v1.y = edge2.y - edge1.y;
+            v1.z = edge2.z - edge1.z;
+
+            v2.x = edge3.x - edge1.x;
+            v2.y = edge3.y - edge1.y;
+            v2.z = edge3.z - edge1.z;
+
+            if (directTable) {
+              crossProduct(v1, v2, normal);
+            }
+            else {
+              crossProduct(v2, v1, normal);
+            }
+            normalize(normal);
+            pNormals.add(normal);
+          }
+
         }
       }
       offset += 3;
     }
+  }
+
+  private static void normalize(Point pPoint) {
+    double r = sqrt(pPoint.x * pPoint.x + pPoint.y * pPoint.y + pPoint.z * pPoint.z);
+    if (r != 0) {
+      pPoint.x /= r;
+      pPoint.y /= r;
+      pPoint.z /= r;
+    }
+  }
+
+  private static void crossProduct(Point pA, Point pB, Point pTarget) {
+    pTarget.x = pA.y * pB.z - pA.z * pB.y;
+    pTarget.y = pA.z * pB.x - pA.x * pB.z;
+    pTarget.z = pA.x * pB.y - pA.y * pB.x;
   }
 
   /**

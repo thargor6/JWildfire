@@ -33,10 +33,10 @@ public class ReducedPreviewMeshCreator {
     }
 
     List<Point> points = new ArrayList<Point>();
-    Set<Face> faces = new HashSet<Face>();
+    List<Face> faces = new ArrayList<Face>();
 
     List<Face> allFaces = new ArrayList<Face>(pMesh.getFaces());
-    List<Point> allPoints = pMesh.getPoints();
+    List<Point> allPoints = pMesh.getVertices();
     long t0 = System.currentTimeMillis();
     Set<Integer> indexSet = new HashSet<Integer>();
 

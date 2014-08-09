@@ -17,9 +17,7 @@
 package org.jwildfire.create.tina.meshgen;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.StringTokenizer;
 
 import org.jwildfire.base.Tools;
@@ -34,8 +32,9 @@ public class SimpleWavefrontObjLoader {
       long t0 = System.currentTimeMillis();
       String file = Tools.readUTF8Textfile(pFilename);
 
-      List<Point> points = new ArrayList<Point>();
-      Set<Face> faces = new HashSet<Face>();
+      List<Point> vertices = new ArrayList<Point>();
+      List<Point> vertexNormals = new ArrayList<Point>();
+      List<Face> faces = new ArrayList<Face>();
 
       StringTokenizer fileTokenizer = new StringTokenizer(file, "\n\r");
       while (fileTokenizer.hasMoreElements()) {
@@ -50,7 +49,14 @@ public class SimpleWavefrontObjLoader {
               String y = lineTokenizer.nextToken();
               String z = lineTokenizer.nextToken();
               Point point = new Point(Float.parseFloat(x), Float.parseFloat(y), Float.parseFloat(z));
-              points.add(point);
+              vertices.add(point);
+            }
+            else if ("vn".equals(key)) {
+              String x = lineTokenizer.nextToken();
+              String y = lineTokenizer.nextToken();
+              String z = lineTokenizer.nextToken();
+              Point point = new Point(Float.parseFloat(x), Float.parseFloat(y), Float.parseFloat(z));
+              vertexNormals.add(point);
             }
             else if ("f".equals(key)) {
               List<String> pointIdxList = new ArrayList<String>();
@@ -58,8 +64,10 @@ public class SimpleWavefrontObjLoader {
                 pointIdxList.add(lineTokenizer.nextToken());
               }
               if (pointIdxList.size() == 3) {
-                Face face = new Face(Integer.parseInt(pointIdxList.get(0)) - 1, Integer.parseInt(pointIdxList.get(1)) - 1,
-                    Integer.parseInt(pointIdxList.get(2)) - 1);
+                String a = stripTextureIndex(pointIdxList.get(0));
+                String b = stripTextureIndex(pointIdxList.get(1));
+                String c = stripTextureIndex(pointIdxList.get(2));
+                Face face = new Face(Integer.parseInt(a) - 1, Integer.parseInt(b) - 1, Integer.parseInt(c) - 1);
                 faces.add(face);
               }
             }
@@ -72,14 +80,20 @@ public class SimpleWavefrontObjLoader {
 
       long t1 = System.currentTimeMillis();
       System.out.println("LOAD MESH: " + (t1 - t0) / 1000.0 + "s");
-      System.out.println("  POINTS: " + points.size());
+      System.out.println("  VERTICES: " + vertices.size());
+      System.out.println("  NORMALS: " + vertexNormals.size());
       System.out.println("  FACES: " + faces.size());
 
-      return new Mesh(points, faces);
+      return new Mesh(vertices, vertexNormals.size() == vertices.size() && vertexNormals.size() > 0 ? vertexNormals : null, faces);
     }
     catch (Exception ex) {
       throw new RuntimeException(ex);
     }
 
+  }
+
+  private static String stripTextureIndex(String pFaceIndex) {
+    int p = pFaceIndex.indexOf("/");
+    return p > 0 ? pFaceIndex.substring(0, p) : pFaceIndex;
   }
 }

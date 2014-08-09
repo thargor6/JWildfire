@@ -26,7 +26,6 @@ import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
-import javax.swing.filechooser.FileFilter;
 
 import org.jwildfire.base.Prefs;
 import org.jwildfire.base.Tools;
@@ -35,6 +34,7 @@ import org.jwildfire.create.eden.io.SunflowWriter;
 import org.jwildfire.create.eden.primitive.Point;
 import org.jwildfire.create.eden.primitive.Torus;
 import org.jwildfire.create.eden.scene.Scene;
+import org.jwildfire.create.tina.swing.SunflowSceneFileChooser;
 import org.jwildfire.swing.ErrorHandler;
 import org.jwildfire.swing.MainController;
 import org.sunflow.SunflowAPI;
@@ -122,35 +122,8 @@ public class EDENController implements UserInterface {
     return new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss").format(new Date());
   }
 
-  public class SceneFileFilter extends FileFilter {
-
-    @Override
-    public boolean accept(File pFile) {
-      if (pFile.isDirectory())
-        return true;
-      String extension = getExtension(pFile);
-      return (extension != null) && (extension.equals("sc") || extension.equals("java"));
-    }
-
-    @Override
-    public String getDescription() {
-      return "Sunflow scene";
-    }
-
-    private String getExtension(File pFile) {
-      String name = pFile.getName();
-      int idx = name.lastIndexOf('.');
-      if (idx > 0 && idx < name.length() - 1) {
-        return name.substring(idx + 1).toLowerCase();
-      }
-      return null;
-    }
-
-  }
-
   private JFileChooser getSceneJFileChooser() {
-    JFileChooser fileChooser = new JFileChooser();
-    fileChooser.addChoosableFileFilter(new SceneFileFilter());
+    JFileChooser fileChooser = new SunflowSceneFileChooser(Prefs.getPrefs());
     fileChooser.setAcceptAllFileFilterUsed(false);
     return fileChooser;
   }

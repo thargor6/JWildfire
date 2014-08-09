@@ -53,6 +53,8 @@ import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.io.FlameReader;
 import org.jwildfire.create.tina.meshgen.marchingcubes.Mesh;
 import org.jwildfire.create.tina.meshgen.marchingcubes.MeshPreviewRenderer;
+import org.jwildfire.create.tina.meshgen.sunflow.ExampleScenes;
+import org.jwildfire.create.tina.meshgen.sunflow.SceneBuilder;
 import org.jwildfire.create.tina.palette.RGBPalette;
 import org.jwildfire.create.tina.render.FlameRenderer;
 import org.jwildfire.create.tina.render.ProgressUpdater;
@@ -63,6 +65,7 @@ import org.jwildfire.create.tina.swing.FlameFileChooser;
 import org.jwildfire.create.tina.swing.FlameHolder;
 import org.jwildfire.create.tina.swing.JWFNumberField;
 import org.jwildfire.create.tina.swing.MeshFileChooser;
+import org.jwildfire.create.tina.swing.SunflowSceneFileChooser;
 import org.jwildfire.create.tina.swing.TinaController;
 import org.jwildfire.create.tina.swing.flamepanel.FlamePanel;
 import org.jwildfire.create.tina.variation.InternalSliceRangeIndicatorWFFunc;
@@ -140,6 +143,7 @@ public class MeshGenController {
   private final JWFNumberField previewPointsREd;
   private final JWFNumberField previewPolygonsREd;
   private final JButton previewRefreshBtn;
+  private final JButton previewSunflowExportBtn;
 
   private String currSequencePattern;
   private ImagePanel previewPanel;
@@ -160,7 +164,7 @@ public class MeshGenController {
       JWFNumberField pPreviewPositionXREd, JWFNumberField pPreviewPositionYREd,
       JWFNumberField pPreviewSizeREd, JWFNumberField pPreviewScaleZREd, JWFNumberField pPreviewRotateAlphaREd,
       JWFNumberField pPreviewRotateBetaREd, JWFNumberField pPreviewPointsREd, JWFNumberField pPreviewPolygonsREd,
-      JButton pRefreshPreviewBtn) {
+      JButton pRefreshPreviewBtn, JButton pPreviewSunflowExportBtn) {
     tinaController = pTinaController;
     errorHandler = pErrorHandler;
     prefs = pPrefs;
@@ -221,6 +225,7 @@ public class MeshGenController {
     previewPointsREd = pPreviewPointsREd;
     previewPolygonsREd = pPreviewPolygonsREd;
     previewRefreshBtn = pRefreshPreviewBtn;
+    previewSunflowExportBtn = pPreviewSunflowExportBtn;
 
     initHintsPane();
     sequenceWidthREd.setEditable(false);
@@ -797,6 +802,7 @@ public class MeshGenController {
 
     boolean hashMesh = currPreviewMesh != null;
     previewImportLastGeneratedMeshBtn.setEnabled(lastGeneratedMeshFilename != null);
+    previewImportFromFileBtn.setEnabled(!isRendering);
     clearPreviewBtn.setEnabled(hashMesh);
     previewPositionXREd.setEnabled(hashMesh);
     previewPositionYREd.setEnabled(hashMesh);
@@ -805,6 +811,7 @@ public class MeshGenController {
     previewRotateAlphaREd.setEnabled(hashMesh);
     previewRotateBetaREd.setEnabled(hashMesh);
     previewRefreshBtn.setEnabled(hashMesh);
+    previewSunflowExportBtn.setEnabled(hashMesh);
   }
 
   private RenderSlicesThread renderSlicesThread = null;
@@ -1019,7 +1026,8 @@ public class MeshGenController {
           };
 
           generateMeshThread = new GenerateMeshThread(outFile.getAbsolutePath(), finishEvent, generateMeshProgressUpdater,
-              getCurrSequencePattern(), sequenceSlicesREd.getIntValue(), sequenceThresholdREd.getIntValue(), sequenceFilterRadiusREd.getDoubleValue(), sequenceDownSampleREd.getIntValue());
+              getCurrSequencePattern(), sequenceSlicesREd.getIntValue(), sequenceThresholdREd.getIntValue(), sequenceFilterRadiusREd.getDoubleValue(),
+              sequenceDownSampleREd.getIntValue(), true);
 
           enableControls();
           new Thread(generateMeshThread).start();
@@ -1155,7 +1163,7 @@ public class MeshGenController {
       previewPolygonsREd.setValue(0);
     }
     else {
-      previewPointsREd.setValue(currPreviewMesh.getMesh().getPoints().size());
+      previewPointsREd.setValue(currPreviewMesh.getMesh().getVertices().size());
       previewPolygonsREd.setValue(currPreviewMesh.getMesh().getFaces().size());
     }
   }
@@ -1164,10 +1172,42 @@ public class MeshGenController {
     refreshPreview(false);
   }
 
-}
+  public void previewSunflowExportButton_clicked() {
+    try {
+      JFileChooser chooser = new SunflowSceneFileChooser(prefs);
+      if (prefs.getSunflowScenePath() != null) {
+        try {
+          chooser.setCurrentDirectory(new File(prefs.getSunflowScenePath()));
+        }
+        catch (Exception ex) {
+          ex.printStackTrace();
+        }
+      }
+      if (chooser.showSaveDialog(rootTabbedPane) == JFileChooser.APPROVE_OPTION) {
+        File file = chooser.getSelectedFile();
+        exportMeshToSunflow(currPreviewMesh.getMesh(), file.getAbsolutePath());
+      }
+    }
+    catch (Throwable ex) {
+      errorHandler.handleError(ex);
+    }
+  }
 
-//meshGenPreviewImportLastGeneratedMeshBtn
-//meshGenPreviewImportFromFileBtn
-//meshGenClearPreviewBtn
-//
-//meshGenPreviewDetailReductionREd
+  private void exportMeshToSunflow(Mesh pMesh, String pFilename) {
+    try {
+      long t0 = System.currentTimeMillis();
+      SceneBuilder scene = ExampleScenes.getExampleScene1();
+      scene.addMesh()
+          .withMesh(pMesh)
+          .withName("generated mesh")
+          .withShader(ExampleScenes.SHADER_SHINY);
+      Tools.writeUTF8Textfile(pFilename, scene.getProduct());
+      long t1 = System.currentTimeMillis();
+      double elapsedTime = (t1 - t0) / 1000.0;
+      tinaController.showStatusMessage(currBaseFlame, "Scene \"" + new File(pFilename).getName() + "\" exported, elapsed time: " + Tools.doubleToString(elapsedTime) + "s");
+    }
+    catch (Exception ex) {
+      errorHandler.handleError(ex);
+    }
+  }
+}

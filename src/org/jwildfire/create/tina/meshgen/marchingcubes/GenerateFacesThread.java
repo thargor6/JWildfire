@@ -26,9 +26,11 @@ public class GenerateFacesThread implements Runnable {
   private int zmin, zmax;
   private boolean done;
   private List<Point> faces = new ArrayList<Point>();
+  private List<Point> normals = new ArrayList<Point>();
   private final ImageStackSampler sampler;
   private final int threshold;
   private boolean forceAbort;
+  private boolean withNormals;
   private ProgressUpdater progressUpdater;
   private Set<Integer> progressOfAllThreads;
 
@@ -37,12 +39,12 @@ public class GenerateFacesThread implements Runnable {
     threshold = pThreshold;
   }
 
-  public void setZmin(int zmin) {
-    this.zmin = zmin;
+  public void setZmin(int pZmin) {
+    zmin = pZmin;
   }
 
-  public void setZmax(int zmax) {
-    this.zmax = zmax;
+  public void setZmax(int pZmax) {
+    zmax = pZmax;
   }
 
   @Override
@@ -52,12 +54,11 @@ public class GenerateFacesThread implements Runnable {
       forceAbort = false;
       Cube cube = new Cube();
       for (int z = zmin; z <= zmax + 1; z += 1) {
-        System.out.println("slice " + z);
         for (int x = -1; x < sampler.getStackXSize() + 1; x += 1) {
           for (int y = -1; y < sampler.getStackYSize() + 1; y += 1) {
             cube.initCube(x, y, z);
             EdgesCalculator.computeEdges(cube, sampler, threshold);
-            FacesCalculator.getFaces(cube, faces, sampler, threshold);
+            FacesCalculator.getFaces(cube, faces, withNormals ? normals : null, sampler, threshold);
           }
           if (forceAbort) {
             break;
@@ -92,6 +93,14 @@ public class GenerateFacesThread implements Runnable {
 
   public void setForceAbort() {
     forceAbort = true;
+  }
+
+  public void setWithNormals(boolean pWithNormals) {
+    withNormals = pWithNormals;
+  }
+
+  public List<Point> getNormals() {
+    return normals;
   }
 
 }
