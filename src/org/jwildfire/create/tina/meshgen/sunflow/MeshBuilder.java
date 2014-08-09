@@ -44,8 +44,8 @@ public class MeshBuilder implements PartBuilder {
     if (!name.isEmpty())
       pTarget.append("  name " + name.toSceneStringPart() + "\n");
 
-    pTarget.append("  points " + mesh.getPoints().size() + "\n");
-    for (Point point : mesh.getPoints()) {
+    pTarget.append("  points " + mesh.getVertices().size() + "\n");
+    for (Point point : mesh.getVertices()) {
       pTarget.append("    " + point.x + " " + point.y + " " + point.z + "\n");
     }
 
@@ -54,7 +54,15 @@ public class MeshBuilder implements PartBuilder {
       pTarget.append("    " + face.a + " " + face.b + " " + face.c + "\n");
     }
 
-    pTarget.append("  normals none\n");
+    if (mesh.getVertexNormals() != null && mesh.getVertexNormals().size() == mesh.getVertices().size()) {
+      pTarget.append("  normals vertex\n");
+      for (Point point : mesh.getVertexNormals()) {
+        pTarget.append("    " + point.x + " " + point.y + " " + point.z + "\n");
+      }
+    }
+    else {
+      pTarget.append("  normals none\n");
+    }
     pTarget.append("  uvs none\n");
 
     pTarget.append("}\n");
