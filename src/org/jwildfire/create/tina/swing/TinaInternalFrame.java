@@ -4519,7 +4519,8 @@ public class TinaInternalFrame extends JInternalFrame {
         getMeshGenPreviewRootPanel(), getMeshGenAutoPreviewCBx(), getMeshGenPreviewImportLastGeneratedMeshBtn(), getMeshGenPreviewImportFromFileBtn(),
         getMeshGenClearPreviewBtn(), getMeshGenPreviewPositionXREd(), getMeshGenPreviewPositionYREd(), getMeshGenPreviewSizeREd(),
         getMeshGenPreviewScaleZREd(), getMeshGenPreviewRotateAlphaREd(), getMeshGenPreviewRotateBetaREd(),
-        getMeshGenPreviewPointsREd(), getMeshGenPreviewPolygonsREd(), getMeshGenRefreshPreviewBtn());
+        getMeshGenPreviewPointsREd(), getMeshGenPreviewPolygonsREd(), getMeshGenRefreshPreviewBtn(), getApophysisHintsPane(),
+        getMeshGenPreviewSunflowExportBtn());
 
     tinaController = new TinaController(params);
 
@@ -9800,13 +9801,22 @@ public class TinaInternalFrame extends JInternalFrame {
       rootTabbedPane.addTab("Easy Movie Maker ", new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/applications-multimedia.png")), getTinaSWFAnimatorPanel(), null);
       rootTabbedPane.addTab("Dancing Flames Movies ", new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/kipina.png")), getPanel_36(), null);
       rootTabbedPane.addTab("Batch Flame Renderer ", new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/images.png")), getBatchRenderPanel(), null);
-      rootTabbedPane.addTab("3DMesh Generation", new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/sports-soccer.png")), getPanel_88(), null);
+      rootTabbedPane.addTab("3DMesh Generation ", new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/sports-soccer.png")), getPanel_88(), null);
       // "FFmpeg Video Encoder" "emblem-videos.png"
       JPanel helpPanel = new JPanel();
-      rootTabbedPane.addTab("Help/About ", new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/dialog-information-3.png")), helpPanel, null);
+      rootTabbedPane.addTab("Hints, Help and About ", new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/dialog-information-3.png")), helpPanel, null);
       helpPanel.setLayout(new BorderLayout(0, 0));
-      helpPanel.add(getScrollPane(), BorderLayout.CENTER);
-      rootTabbedPane.addTab("FAQ ", new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/dialog-information-2.png")), getPanel(), null);
+
+      JTabbedPane tabbedPane_1 = new JTabbedPane(JTabbedPane.TOP);
+      helpPanel.add(tabbedPane_1);
+
+      JPanel panel_1 = new JPanel();
+      tabbedPane_1.addTab("About JWildfire ", new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/dialog-information-3.png")), panel_1, null);
+      panel_1.setLayout(new BorderLayout(0, 0));
+      panel_1.add(getScrollPane(), BorderLayout.CENTER);
+      tabbedPane_1.addTab("Tips for Apophysis users ", new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/dialog-information-2.png")), getPanel_103(), null);
+      tabbedPane_1.addTab("3DMesh Generation tips ", new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/sports-soccer.png")), getPanel_105(), null);
+      tabbedPane_1.addTab("FAQ ", new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/dialog-information-2.png")), getPanel_104(), null);
     }
     return rootTabbedPane;
   }
@@ -10315,7 +10325,6 @@ public class TinaInternalFrame extends JInternalFrame {
   private JPanel panel_89;
   private JPanel panel_90;
   private JPanel panel_91;
-  private JPanel panel_92;
   private JPanel meshGenTopViewRootPnl;
   private JPanel meshGenFrontViewRootPnl;
   private JPanel meshGenPerspectiveViewRootPnl;
@@ -10382,6 +10391,12 @@ public class TinaInternalFrame extends JInternalFrame {
   private JPanel panel_102;
   private JWFNumberField meshGenPreviewPolygonsREd;
   private JButton meshGenRefreshPreviewBtn;
+  private JPanel panel_103;
+  private JPanel panel_104;
+  private JPanel panel_105;
+  private JButton meshGenPreviewSunflowExportBtn;
+  private JScrollPane scrollPane_11;
+  private JTextPane apophysisHintsPane;
 
   /**
    * This method initializes renderBatchJobsScrollPane	
@@ -12397,7 +12412,6 @@ public class TinaInternalFrame extends JInternalFrame {
     if (scrollPane == null) {
       scrollPane = new JScrollPane();
       scrollPane.setPreferredSize(new Dimension(6, 400));
-      scrollPane.setSize(new Dimension(0, 400));
       scrollPane.setViewportView(getHelpPane());
     }
     return scrollPane;
@@ -12422,15 +12436,6 @@ public class TinaInternalFrame extends JInternalFrame {
       helpPane.setEditable(false);
     }
     return helpPane;
-  }
-
-  private JPanel getPanel() {
-    if (panel == null) {
-      panel = new JPanel();
-      panel.setLayout(new BorderLayout(0, 0));
-      panel.add(getScrollPane_1(), BorderLayout.CENTER);
-    }
-    return panel;
   }
 
   private JScrollPane getScrollPane_1() {
@@ -18816,7 +18821,6 @@ public class TinaInternalFrame extends JInternalFrame {
       panel_95.add(panel_93, BorderLayout.SOUTH);
       panel_93.setLayout(new BorderLayout(0, 0));
       panel_93.add(getPanel_91(), BorderLayout.NORTH);
-      panel_93.add(getPanel_92());
 
       panel_94 = new JPanel();
       panel_95.add(panel_94, BorderLayout.CENTER);
@@ -19421,16 +19425,6 @@ public class TinaInternalFrame extends JInternalFrame {
       panel_2.add(meshGenZMaxSlider);
     }
     return panel_91;
-  }
-
-  private JPanel getPanel_92() {
-    if (panel_92 == null) {
-      panel_92 = new JPanel();
-      panel_92.setBorder(new TitledBorder(null, "Hints", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-      panel_92.setLayout(new BorderLayout(0, 0));
-      panel_92.add(getScrollPane_10(), BorderLayout.CENTER);
-    }
-    return panel_92;
   }
 
   private JPanel getMeshGenTopViewRootPnl() {
@@ -20149,6 +20143,21 @@ public class TinaInternalFrame extends JInternalFrame {
       meshGenRefreshPreviewBtn.setFont(new Font("Dialog", Font.BOLD, 10));
       meshGenRefreshPreviewBtn.setBounds(6, 220, 176, 24);
       panel_101.add(meshGenRefreshPreviewBtn);
+
+      meshGenPreviewSunflowExportBtn = new JButton();
+      meshGenPreviewSunflowExportBtn.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getMeshGenController().previewSunflowExportButton_clicked();
+        }
+      });
+      meshGenPreviewSunflowExportBtn.setToolTipText("Create a file which can be processed by the integrated sunflow renderer");
+      meshGenPreviewSunflowExportBtn.setText("Export to sunflow renderer");
+      meshGenPreviewSunflowExportBtn.setPreferredSize(new Dimension(125, 24));
+      meshGenPreviewSunflowExportBtn.setMinimumSize(new Dimension(100, 24));
+      meshGenPreviewSunflowExportBtn.setMaximumSize(new Dimension(32000, 24));
+      meshGenPreviewSunflowExportBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      meshGenPreviewSunflowExportBtn.setBounds(6, 276, 176, 24);
+      panel_101.add(meshGenPreviewSunflowExportBtn);
     }
     return panel_101;
   }
@@ -20315,6 +20324,54 @@ public class TinaInternalFrame extends JInternalFrame {
 
   public JButton getMeshGenRefreshPreviewBtn() {
     return meshGenRefreshPreviewBtn;
+  }
+
+  private JPanel getPanel_103() {
+    if (panel_103 == null) {
+      panel_103 = new JPanel();
+      panel_103.setLayout(new BorderLayout(0, 0));
+      panel_103.add(getScrollPane_11(), BorderLayout.CENTER);
+    }
+    return panel_103;
+  }
+
+  private JPanel getPanel_104() {
+    if (panel_104 == null) {
+      panel_104 = new JPanel();
+      panel_104.setLayout(new BorderLayout(0, 0));
+      panel_104.add(getScrollPane_1(), BorderLayout.CENTER);
+    }
+    return panel_104;
+  }
+
+  private JPanel getPanel_105() {
+    if (panel_105 == null) {
+      panel_105 = new JPanel();
+      panel_105.setLayout(new BorderLayout(0, 0));
+      panel_105.add(getScrollPane_10(), BorderLayout.CENTER);
+    }
+    return panel_105;
+  }
+
+  public JButton getMeshGenPreviewSunflowExportBtn() {
+    return meshGenPreviewSunflowExportBtn;
+  }
+
+  private JScrollPane getScrollPane_11() {
+    if (scrollPane_11 == null) {
+      scrollPane_11 = new JScrollPane();
+      scrollPane_11.setViewportView(getApophysisHintsPane());
+    }
+    return scrollPane_11;
+  }
+
+  private JTextPane getApophysisHintsPane() {
+    if (apophysisHintsPane == null) {
+      apophysisHintsPane = new JTextPane();
+      apophysisHintsPane.setFont(new Font("SansSerif", Font.PLAIN, 14));
+      apophysisHintsPane.setEditable(false);
+    }
+    return apophysisHintsPane;
   }
 } //  @jve:decl-index=0:visual-constraint="10,10"
 

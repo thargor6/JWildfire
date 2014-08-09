@@ -273,7 +273,8 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
         parameterObject.meshGenPreviewImportFromFileBtn, parameterObject.meshGenClearPreviewBtn, parameterObject.meshGenPreviewPositionXREd,
         parameterObject.meshGenPreviewPositionYREd, parameterObject.meshGenPreviewSizeREd,
         parameterObject.meshGenPreviewScaleZREd, parameterObject.meshGenPreviewRotateAlphaREd, parameterObject.meshGenPreviewRotateBetaREd,
-        parameterObject.meshGenPreviewPointsREd, parameterObject.meshGenPreviewPolygonsREd, parameterObject.meshGenRefreshPreviewBtn);
+        parameterObject.meshGenPreviewPointsREd, parameterObject.meshGenPreviewPolygonsREd, parameterObject.meshGenRefreshPreviewBtn,
+        parameterObject.meshGenPreviewSunflowExportBtn);
 
     jwfScriptController = new JWFScriptController(this, parameterObject.pErrorHandler, prefs, parameterObject.pCenterPanel, parameterObject.scriptTree,
         parameterObject.scriptDescriptionTextArea, parameterObject.scriptTextArea, parameterObject.compileScriptButton,
@@ -588,6 +589,7 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
     data.batchRenderStartButton = parameterObject.pBatchRenderStartButton;
     rootTabbedPane = parameterObject.pRootTabbedPane;
     data.helpPane = parameterObject.pHelpPane;
+    data.apophysisHintsPane = parameterObject.apophysisHintsPane;
     data.faqPane = parameterObject.pFAQPane;
 
     data.undoButton = parameterObject.pUndoButton;
@@ -631,6 +633,7 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
     enableUndoControls();
 
     initHelpPane();
+    initApophysisHintsPane();
     initFAQPane();
 
     refreshPaletteColorsTable();
@@ -665,6 +668,29 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
     data.layerPreviewBtn.setEnabled(flame != null);
     data.layerHideOthersBtn.setEnabled(layer != null);
     data.layerShowAllBtn.setEnabled(flame != null);
+  }
+
+  private void initApophysisHintsPane() {
+    data.apophysisHintsPane.setContentType("text/html");
+    try {
+      InputStream is = this.getClass().getResourceAsStream("ApophysisHints.html");
+      StringBuffer content = new StringBuffer();
+      String lineFeed = System.getProperty("line.separator");
+      String line;
+      Reader r = new InputStreamReader(is, "utf-8");
+      BufferedReader in = new BufferedReader(r);
+      while ((line = in.readLine()) != null) {
+        content.append(line).append(lineFeed);
+      }
+      in.close();
+
+      data.apophysisHintsPane.setText(content.toString());
+      data.apophysisHintsPane.setSelectionStart(0);
+      data.apophysisHintsPane.setSelectionEnd(0);
+    }
+    catch (Exception ex) {
+      ex.printStackTrace();
+    }
   }
 
   private void initHelpPane() {

@@ -1,0 +1,120 @@
+<html>
+<body>
+<h1>1 Welcome!</h1>
+<p>This sub-module will enable you to create 3d-models you can use in any available 
+  3d-package to create real 3d-images with refraction-effects, shadows and whatever 
+  you want. You could even create solid objects to put onto your (real! :-)) desk 
+  using a 3d-printing-service! But, beware, this can be like "living on a edge". 
+  It can happen that you put much effort into a particular scene, and finally 
+  you will end with nothing. On the other side you could achieve outstanding results, 
+  which you could not get with any other technology. </p>
+<p>You may copy this text and paste it into an editor like Wordpad for easier 
+  reading (&lt;Strg+A&gt; to select all, &lt;Strg+C&gt; to copy it, and then use 
+  &quot;Paste&quot; in your editor). </p>
+<h1>2 How does it work?</h1>
+The basic idea is the one of a CT scan. You scan an object slice by slice to obtain a model of the whole. 
+The make it work, the object (i. e. the fractal) must to be a (pseudo-)3d-fractal. A "slice" is just a 2D-render of this object at a certain "scan-position" (z-coordinate).
+So, there are five steps involved:
+<ul>
+<li>Design the fractal
+<li>Render the slices ("perform the CT scan")
+<li>Create a model from those slices
+<li>clean-up, smooth, refine, ... the model
+<li>render the model in any 3d-software
+</ul>
+
+<h1>3 What do we need?</h1>
+You will need a lot of passion, some decent computer hardware and a few software packages for various tasks. But you do not need any expensive commercial software, 
+anything can be done using fine free software. All of this will be explained in the following sections in detail.
+
+<h2>3.1 "Solid" flame fractals</h2>
+What helps the most is the ability to create "solid" (i. e. not too noisy) flame-fractals, in 3d. But there are many tutorials around which help you. 
+Good candidates to start are the so-called "3D Bubbles", "3D Julian Bubbles" or "Xenophilia".
+
+<h2>3.2 The JWildfire volumetric renderer</h2>
+The JWildfire volumetric renderer is a specialized version of the default renderer and is capable to render a number of images (=slices) in parallel, 
+in order to save time. It is also multi-threaded and can use the whole power of your machine. 
+The parallel computation comes at the cost of higher memory consumption. You can adjust how many slices you want to generate in one step. 
+Imagine that all slices would fit into memory, then you could generate all slices in the same time you would just render one regular image :-) 
+   
+<h2>3.3 The JWildfire Mesh-generator</h2>
+The built-in mesh-generator uses the marching-cubes algorithm to create a mesh from the previously rendered slices. The mesh-generator is also multi-threaded and this way comes with very decent speed. 
+Please note, that it is absolutely intended that slice-rendering and mesh-generation are two distinct steps. This is because you could create different meshes 
+from the same set of slices by chosing different options like threshold, but generating the slices is rather expensive.
+ 
+<h2>3.4 The free MeshLab-software</h2>
+The free MeshLab-software is used to clean-up, smooth, reduce, ... your model. 
+You can download it from <a href="http://meshlab.sourceforge.net/" target="_blank">http://meshlab.sourceforge.net/</a> 
+
+<h2>3.5 Any 3D-package</h2>
+Use any 3D-Renderer you want, to finally render the model created in *.obj-format. If you have no idea, where to start: both Blender ( <a href="http://www.blender.org/" target="_blank">http://www.blender.org/</a> )
+and Bryce ( <a href="http://www.daz3d.com/software/bryce" target="_top">http://www.daz3d.com/software/bryce</a>) are excellent choices, the latter is not really free, but the 20$ are it really worth, if you can get used to the interface ;-). 
+
+<h1>4 Let's create the first model!</h1>
+<h2>4.1 Inside JWildfire</h2>
+<ul>
+<li>Load a previously designed "solid" flame-fractal, if you have no idea were to start, just try the example from the Appendix of this document (you may freely use and alter this for aynthing you want) 
+<li>Select the right "top-view"-position using the "CentreX", "CentreY" and "Zoom"-sliders. This the size of each "scan"
+<li>Select slicing area (range of the "scan") using the "Position 1" and "Position 2" sliders. To help you with this those positions are visualized inside the fractal-preview 
+<li>Select the volumetric-resolution, quality and memory-consumption
+<ul>
+<li>"Render width" and "Render height" specifies the resolutiuon of each slice
+<li>"Total number of slices" specifies the number of slices and together with the slicing range ("Position 1" and "Postion 2") the cutting range
+<li>"Slices per pass" is a major speed-up option. It allows to generate any number of slices in parallel, at nearly no CPU-cost, but, ... each slice must fit into memory.
+So, the higher this value, the faster the render, but the more memory is needed.
+<li>"Render quality" is the quality for generating slices. If you have a noisy fractal, you may need higher values. As a general rule of thumb use a quality level in the range equal or down to the half of the slice size.
+<li>Wait until the rendering process is finished (should only take a about some minutes) and enter the "Mesh generation"-tab
+<li>Chose your recently created slices by hitting the "From renderer"-button. If you later come back after shutting down JWildfire you can also select them from the folder you saved them to by using the "Load sequence" button
+<li>Choose an appropriate image-downsampling value. Image-downsampling reduces the resolution of the model (i. e. reduces both size and detail-level) and makes it more smooth. You will chose values in the range of 1 ... 3 in the most cases
+<li>Choose an appropriate filter radius for smoothing the model. Beware that this filtering can slow down the mesh-generation a lot, while it has only a rather local impact. Values in the range of 0 ... 0.5 are useful
+<li>Choose an appropriate brightness-threshold. This is the most important setting and affects at which brightness level algorithm starts to "see" the model. 
+The default value of 0 means that every detail of a slice which is not exactly black will find its way into the model. 
+Maybe it will later be filtered out by the spatial filter, but still it has a little influence. If you increase the threshold only brighter portions of the slices will be
+"seen" by the mesh-generator. So increasing this threshold especially helps to filter out dark background noise. But beyond this, you can get some really interesting effect
+ by just playing with this setting around.            
+<li>Click the "Generate"-button and choose a filename for your Mesh. Currently, the meshes are saved in Wavefront *.obj-format, because it is very easy to create files in this format, 
+and it can be read by almost any 3d-package around. Maybe later I will add more formats.
+<li>Note that you can cancel both slice-rendering and mesh-generation
+<li>If you have enabled the "Auto preview"-checkbox, JWildfire will automaticall render a preview-image after creating the mesh. This may take some seconds if you create a really huge mesh.
+<li>You can manipulate the preview by altering zoom, position and rotation. If the mesh is too large to be displayed quick, JWildfire automatically creares a reduced model 
+which is displayed while you modify the view. To view the complete model again, press the "Refresh Preview"-button    
+</ul>    
+</ul>
+
+<h2>4.3 Inside MeshLab</h2>
+<ul>
+<li>start the MeshLab-software
+<ul>
+<li> for example "meshlab.exe" in the installation drawer "MeshLab" on Windows
+</ul>
+<li>open the generated mesh
+<ul>
+<li>choose the menu item "File"->"Import Mesh"
+</ul> 
+<li>turn the orientation of faces into the right direction
+<ul>
+<li>choose the menu item "Filters"->"Normals, Curvature and Orientation"->"Invert Faces Orientation"
+<li>in the next window click "Apply" and the "Close"
+</ul>
+<li>eventually smooth the mesh
+<ul>
+<li>for example "Filters"->"Smoothing, Fairing and Deformation"->"Taubin Smooth"
+</ul>
+<li>eventually recreate the mesh with lower polygon count
+<ul>
+<li>for example "Filters->"Remeshing, Simplification and Reconstruction"->"Quadric Edge Collapse Decimation" (enter any desired "Target number of faces" value)
+</ul>
+<li>there are endless options to play around :-)
+<li>finally, save the altered mesh "File"->"Export Mesh As..."
+</ul>
+<h2>4.4 Have fun to use the model in your 3d-package</h2>
+
+<h1>Appendix: A simple example flame to start</h1>
+Just select the following text (starting with &quot;&lt;flame &quot;, ending with 
+&quot;&lt;/flame&gt;&quot;) with your mouse and press &lt;Ctrl+C&gt; to copy it 
+into the clipboard, then press the &quot;From-clipboard&quot;-button inside JWildfire 
+to load this flame. 
+<pre>&lt;flame name=&quot;JWildfire&quot; version=&quot;JWildfire 1.80 ALPHA (18.07.2014)&quot; size=&quot;732 412&quot; center=&quot;0.07597973873633698 -0.22993868301786188&quot; scale=&quot;128.47323641882377&quot; rotate=&quot;0.0&quot; filter=&quot;1.2&quot; filter_kernel=&quot;GAUSSIAN&quot; quality=&quot;100.0&quot; background=&quot;0.0 0.0 0.0&quot; bg_transparency=&quot;0&quot; brightness=&quot;4.0&quot; saturation=&quot;1.0&quot; gamma=&quot;4.0&quot; gamma_threshold=&quot;0.04&quot; vibrancy=&quot;1.0&quot; contrast=&quot;1.0&quot; temporal_samples=&quot;1.0&quot; cam_zoom=&quot;1.0&quot; cam_pitch=&quot;0.9983283321407566&quot; cam_yaw=&quot;-1.1588986233242349&quot; cam_persp=&quot;0.0&quot; cam_xfocus=&quot;0.0&quot; cam_yfocus=&quot;0.0&quot; cam_zfocus=&quot;0.0&quot; cam_pos_x=&quot;0.0&quot; cam_pos_y=&quot;0.0&quot; cam_pos_z=&quot;0.0&quot; cam_zpos=&quot;0.0&quot; cam_dof=&quot;0.0&quot; cam_dof_area=&quot;0.5&quot; cam_dof_exponent=&quot;2.0&quot; resolution_profile=&quot;800x600&quot; shading_shading=&quot;FLAT&quot; antialias_amount=&quot;0.75&quot; antialias_radius=&quot;0.36&quot; post_symmetry_type=&quot;NONE&quot; post_symmetry_order=&quot;3&quot; post_symmetry_centre_x=&quot;0.0&quot; post_symmetry_centre_y=&quot;0.0&quot; post_symmetry_distance=&quot;1.25&quot; post_symmetry_rotation=&quot;6.0&quot; frame=&quot;1&quot; frame_count=&quot;300&quot; &gt;<br>  &lt;xform weight=&quot;0.5&quot; color=&quot;0.0&quot; mod_gamma=&quot;0.0&quot; mod_gamma_speed=&quot;0.0&quot; mod_contrast=&quot;0.0&quot; mod_contrast_speed=&quot;0.0&quot; mod_saturation=&quot;0.0&quot; mod_saturation_speed=&quot;0.0&quot; symmetry=&quot;0.0&quot; pre_blur=&quot;1.0&quot; bubble=&quot;1.0&quot; oscilloscope=&quot;0.2&quot; oscilloscope_separation=&quot;1.0&quot; oscilloscope_frequency=&quot;3.141592653589793&quot; oscilloscope_amplitude=&quot;1.0&quot; oscilloscope_damping=&quot;0.0&quot; coefs=&quot;1.0 0.0 0.0 1.0 0.0 0.0&quot; chaos=&quot;1.0&quot; /&gt;<br>  &lt;palette count=&quot;256&quot; format=&quot;RGB&quot; &gt;<br>E65B95E15992DC588FD6568BD15588CC5385C75182C2507FBD4E7BB74D78B24B75AD4972<br>A8486EA3466B9D45689843659342628E405E893E5B843D587E3B55793A5274384E6F364B<br>6A35486533455F32425A303E552E3B502D384B2B35452A3140282E3B262B362528312325<br>2C222126201E211E1B1C1D18171B15121A110C180E0B170E0F1813141A19191B1E1E1C23<br>231D29281E2E2C1F3431203936213F3B224440234945244F4925544E265A53285F582964<br>5D2A6A622B6F662C756B2D7A702E80752F857A308A7E319083329588339B8D34A09236A5<br>9737AB9B38B0A039B6A53ABBAA3BC0AF3CC6B43DCBB83ED1BD3FD6C240DCC741E1CC42E6<br>D144ECD545F1D446F0CF48ECCA4AE7C64BE3C14DDEBC4FDAB850D5B352D1AE54CDA955C8<br>A557C4A059BF9B5ABB975CB6925EB28D5FAE8861A98463A57F65A07A669C766897716A93<br>6C6B8F686D8A636F865E708159727D5574785075744B777047796B427A673D7C62387E5E<br>3480592F81552A835126854C2186481C8843178A3F138B3A0E8D360E8A380F873A0F843C<br>0F823E107F3F107C41107943117645117347127049126E4B126B4D13684F136551136252<br>145F54145C56145A5815575A15545C15515E164E60164B62164864174665174367174069<br>183D6B183A6D19376F1934711932731A2F751A2C771A29781B267A1B237C1B207E1C1D80<br>1C1B821C18841D15861E13872115862516862817852B18852F1984321A84351C83391D83<br>3C1E823F1F824320814621814923804D248050257F53267F57277E5A287E5D2A7D612B7D<br>642C7C672D7B6B2E7B6E307A71317A7532797833797B34787F3578823777853877893976<br>8C3A768F3B75933C75963E74993F749D4073A04173A34272A74372AA4571A94670A6466F<br>A3476EA0486D9D496C9A4A6B974A6A944B69914C678E4D668B4E65884F64854F63825062<br>7F51617C526079535F76535E73545C70555B6D565A6957596658586358576059565D5A55<br>5A5B54575C53545D51515D504E5E4F4B5F4E48604D45614C42614B3F624A3C6349396448<br>3665463366453066442D6743&lt;/palette&gt;<br>&lt;/flame&gt;
+</pre>
+</body>
+</html>
