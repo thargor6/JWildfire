@@ -45,12 +45,11 @@ import org.jwildfire.image.Pixel;
 
 public class Tools {
   public static final String APP_TITLE = "JWildfire";
-  public static final String APP_VERSION = "1.80 ALPHA (18.07.2014)";
+  public static final String APP_VERSION = "1.80 (10.08.2014)";
 
   public static boolean SPECIAL_VERSION = false;
 
   public static final boolean V2_FEATURE_ENABLE = false;
-  public static final boolean NO_TRANSPARENCY = true;
 
   public static final int VPREC = 1024;
   public static final int SPREC = 10;
@@ -60,6 +59,7 @@ public class Tools {
   public static final String FILEEXT_GRADIENT = "gradient";
   public static final String FILEEXT_GIF = "gif";
   public static final String FILEEXT_HDR = "hdr";
+  public static final String FILEEXT_JAVA = "java";
   public static final String FILEEXT_JFX = "jfx";
   public static final String FILEEXT_JPG = "jpg";
   public static final String FILEEXT_JPS = "jps";
@@ -69,8 +69,10 @@ public class Tools {
   public static final String FILEEXT_JWFRENDER = "jwfrender";
   public static final String FILEEXT_JWFSCRIPT = "jwfscript";
   public static final String FILEEXT_MP3 = "mp3";
+  public static final String FILEEXT_OBJ = "obj";
   public static final String FILEEXT_PNG = "png";
   public static final String FILEEXT_PNS = "pns";
+  public static final String FILEEXT_SUNFLOW_SCENE = "sc";
   public static final String FILEEXT_SVG = "svg";
   public static final String FILEEXT_TXT = "txt";
   public static final String FILEEXT_UGR = "ugr";
@@ -79,6 +81,9 @@ public class Tools {
   public static final String FILEEXT_MAP = "map";
 
   public static final String CURVE_POSTFIX = "Curve";
+
+  public static final int TINA_EDITOR_TAB_IDX = 0;
+  public static final int TINA_MESHGEN_TAB_IDX = 7;
 
   public static final double fmod33(double arg) {
     return (arg - (double) ((int) arg));

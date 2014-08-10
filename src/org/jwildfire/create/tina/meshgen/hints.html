@@ -4,10 +4,8 @@
 <p>This sub-module will enable you to create 3d-models you can use in any available 
   3d-package to create real 3d-images with refraction-effects, shadows and whatever 
   you want. You could even create solid objects to put onto your (real! :-)) desk 
-  using a 3d-printing-service! But, beware, this can be like "living on a edge". 
-  It can happen that you put much effort into a particular scene, and finally 
-  you will end with nothing. On the other side you could achieve outstanding results, 
-  which you could not get with any other technology. </p>
+  using a 3d-printing-service! </p>
+<p>But, you will need a lot of patience and a modern computer with at least 8 GB of RAM, otherwise it may also work, but will probably not be much fun. </p>  
 <p>You may copy this text and paste it into an editor like Wordpad for easier 
   reading (&lt;Strg+A&gt; to select all, &lt;Strg+C&gt; to copy it, and then use 
   &quot;Paste&quot; in your editor). </p>
@@ -48,7 +46,7 @@ You can download it from <a href="http://meshlab.sourceforge.net/" target="_blan
 
 <h2>3.5 Any 3D-package</h2>
 Use any 3D-Renderer you want, to finally render the model created in *.obj-format. If you have no idea, where to start: both Blender ( <a href="http://www.blender.org/" target="_blank">http://www.blender.org/</a> )
-and Bryce ( <a href="http://www.daz3d.com/software/bryce" target="_top">http://www.daz3d.com/software/bryce</a>) are excellent choices, the latter is not really free, but the 20$ are it really worth, if you can get used to the interface ;-). 
+and Bryce ( <a href="http://www.daz3d.com/software/bryce" target="_top">http://www.daz3d.com/software/bryce</a>) are excellent choices, the latter is not exactly free, but cost only about 20$. 
 
 <h1>4 Let's create the first model!</h1>
 <h2>4.1 Inside JWildfire</h2>
@@ -66,7 +64,7 @@ So, the higher this value, the faster the render, but the more memory is needed.
 <li>Wait until the rendering process is finished (should only take a about some minutes) and enter the "Mesh generation"-tab
 <li>Chose your recently created slices by hitting the "From renderer"-button. If you later come back after shutting down JWildfire you can also select them from the folder you saved them to by using the "Load sequence" button
 <li>Choose an appropriate image-downsampling value. Image-downsampling reduces the resolution of the model (i. e. reduces both size and detail-level) and makes it more smooth. You will chose values in the range of 1 ... 3 in the most cases
-<li>Choose an appropriate filter radius for smoothing the model. Beware that this filtering can slow down the mesh-generation a lot, while it has only a rather local impact. Values in the range of 0 ... 0.5 are useful
+<li>Choose an appropriate filter radius for smoothing the model. Beware that this filtering can slow down the mesh-generation a lot, while it has only a rather local impact. Typical values are in the range of 0 ... 0.4
 <li>Choose an appropriate brightness-threshold. This is the most important setting and affects at which brightness level algorithm starts to "see" the model. 
 The default value of 0 means that every detail of a slice which is not exactly black will find its way into the model. 
 Maybe it will later be filtered out by the spatial filter, but still it has a little influence. If you increase the threshold only brighter portions of the slices will be

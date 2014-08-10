@@ -1,3 +1,24 @@
+V1.80 (10.08.2014):
+ - new module to generate meshes from 3d-flame-fractals! The module consists of three parts: 
+     - a volumetric renderer
+     - a mesh generator which uses the marching-cubes-algorithm to generate a mesh from a stack of rendered images
+     - a previewer which can either create a quick-preview by some internal renderer or a high quality-preview by using the integrated sunflow-renderer 
+   In comparison to some other solutions the module has the following strengths: 
+     - it works multi-threaded and has decent speed
+     - it creates not only vertices, but also vertex normals
+     - it is able to process really huge meshes, if you have enough memory
+     - the mesh-generator supports additional smoothing and can process any image-stack in the formats supported by JWildfire. So probably you could also convert Mandelbulb3D Voxelstack by using this modeule (I have not tried it, so any feedback is welcome) 
+     - it is extensible and open source   
+ - restructured the Help/About-section, updated some informations, added an Aphophysis-users-hints-page
+ - improved the "Strong hue"-random-color-generator to produce more interesting results
+ - black-border-fix for the "bwrands"-variation by dark-beam
+ - new "log_db"-variation by dark-beam
+ - new "asteria"-variation by dark-beam
+ - new "ztwister"-variation by dark-beam
+ - made the "custom_wf"-variations more robust to errors. If an error occurs during regular calculation (e.g. after loading a flame with errors in the java-code) the variation does nothing. If you edit the code, you cant save it until you fixed the error
+ - improved start-script for Macs by Matthew Townsend
+ - new fluent-API to create sunflow-scenes (only interesting for developers)
+
 V1.70 (06.07.2014):
  - new tab for local modification of gamma, contrast and saturation on a transform-basis. 
    Those work similiar to the color values ("color" and "color-speed"), but they control changes in applied color values, 

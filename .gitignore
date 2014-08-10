@@ -36,5 +36,6 @@ Delphi/JWildfire.dsk
 Delphi/JWildfire.exe
 build/JWildfire.exe
 src/org/jocl/samples
+src/org/sunflow
 FasterMath*
 MathTest*

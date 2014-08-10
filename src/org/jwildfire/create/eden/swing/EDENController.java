@@ -241,6 +241,7 @@ public class EDENController implements UserInterface {
     if (status == Status.RENDERING) {
       return;
     }
+
     buildScene();
     renderCancelled = false;
     new Thread() {
@@ -251,9 +252,9 @@ public class EDENController implements UserInterface {
           enableControls();
           clearConsole();
           api.parameter("sampler", pSampler == Sampler.BUCKET ? "bucket" : "ipr");
+          api.parameter("accel", "kdtree");
           api.options(SunflowAPI.DEFAULT_OPTIONS);
           api.render(SunflowAPI.DEFAULT_OPTIONS, imagePanel);
-
         }
         finally {
           if (!renderCancelled) {

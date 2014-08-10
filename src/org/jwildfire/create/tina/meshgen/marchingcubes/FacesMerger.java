@@ -72,6 +72,9 @@ public class FacesMerger {
     float ymin = first.y, ymax = first.y;
     float zmin = first.z, zmax = first.z;
 
+    long t0, t1;
+
+    t0 = System.currentTimeMillis();
     for (Point point : vertices) {
       if (index.get(point) == null) {
         index.put(point, points.size());
@@ -93,7 +96,10 @@ public class FacesMerger {
           zmax = point.z;
       }
     }
+    t1 = System.currentTimeMillis();
+    System.out.println("CREATE UNIQUE POINTS: " + (t1 - t0) / 1000.0 + "s");
 
+    t0 = System.currentTimeMillis();
     Set<Face> facesSet = new HashSet<Face>();
     List<Face> faces = new ArrayList<Face>();
     Map<Integer, AvgNormal> normalMap = new HashMap<Integer, AvgNormal>();
@@ -115,7 +121,10 @@ public class FacesMerger {
         }
       }
     }
+    t1 = System.currentTimeMillis();
+    System.out.println("CREATE FACES: " + (t1 - t0) / 1000.0 + "s");
 
+    t0 = System.currentTimeMillis();
     float xsize = xmax - xmin;
     float ysize = ymax - ymin;
     float zsize = zmax - zmin;
@@ -141,6 +150,8 @@ public class FacesMerger {
         point.y = (point.y + dy) * scale;
         point.z = (point.z + dz) * scale;
       }
+      t1 = System.currentTimeMillis();
+      System.out.println("SCALING POINTS: " + (t1 - t0) / 1000.0 + "s");
       return new Mesh(points, vertexNormals, faces);
     }
     else {
@@ -149,6 +160,8 @@ public class FacesMerger {
         point.y = (point.y + dy) * scale;
         point.z = (point.z + dz) * scale;
       }
+      t1 = System.currentTimeMillis();
+      System.out.println("SCALING POINTS: " + (t1 - t0) / 1000.0 + "s");
       return new Mesh(points, faces);
     }
 
