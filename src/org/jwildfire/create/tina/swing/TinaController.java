@@ -1033,6 +1033,7 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
     return _currFlame;
   }
 
+  @Override
   public Layer getCurrLayer() {
     Flame flame = getCurrFlame();
     if (flame != null) {
