@@ -11,8 +11,8 @@ public abstract class DefaultRenderThread extends AbstractRenderThread {
   protected long iter;
   protected List<DefaultRenderIterationState> iterationState;
 
-  public DefaultRenderThread(Prefs pPrefs, int pThreadId, FlameRenderer pRenderer, List<RenderPacket> pRenderPackets, long pSamples, List<RenderSlice> pSlices) {
-    super(pPrefs, pThreadId, pRenderer, pRenderPackets, pSamples, pSlices);
+  public DefaultRenderThread(Prefs pPrefs, int pThreadId, FlameRenderer pRenderer, List<RenderPacket> pRenderPackets, long pSamples, List<RenderSlice> pSlices, double pSliceThicknessMod) {
+    super(pPrefs, pThreadId, pRenderer, pRenderPackets, pSamples, pSlices, pSliceThicknessMod);
     iterationState = new ArrayList<DefaultRenderIterationState>();
     for (RenderPacket packet : pRenderPackets) {
       List<Layer> layers = getValidLayers(packet.getFlame());
@@ -103,7 +103,7 @@ public abstract class DefaultRenderThread extends AbstractRenderThread {
   }
 
   @Override
-  protected void iterateSlices(List<RenderSlice> pSlices) {
+  protected void iterateSlices(List<RenderSlice> pSlices, double pSliceThicknessMod) {
     final int iterInc = iterationState.size();
     if (iterInc < 1) {
       return;
@@ -123,7 +123,7 @@ public abstract class DefaultRenderThread extends AbstractRenderThread {
         }
       }
       for (DefaultRenderIterationState state : iterationState) {
-        state.iterateNext(pSlices);
+        state.iterateNext(pSlices, pSliceThicknessMod);
       }
     }
   }

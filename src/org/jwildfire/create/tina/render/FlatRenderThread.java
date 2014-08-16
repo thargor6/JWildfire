@@ -23,8 +23,8 @@ import org.jwildfire.create.tina.base.Layer;
 
 public final class FlatRenderThread extends DefaultRenderThread {
 
-  public FlatRenderThread(Prefs pPrefs, int pThreadId, FlameRenderer pRenderer, List<RenderPacket> pRenderPackets, long pSamples, List<RenderSlice> pSlices) {
-    super(pPrefs, pThreadId, pRenderer, pRenderPackets, pSamples, pSlices);
+  public FlatRenderThread(Prefs pPrefs, int pThreadId, FlameRenderer pRenderer, List<RenderPacket> pRenderPackets, long pSamples, List<RenderSlice> pSlices, double pSliceThicknessMod) {
+    super(pPrefs, pThreadId, pRenderer, pRenderPackets, pSamples, pSlices, pSliceThicknessMod);
   }
 
   @Override

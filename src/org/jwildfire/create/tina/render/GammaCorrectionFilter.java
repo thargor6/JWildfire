@@ -35,6 +35,14 @@ public class GammaCorrectionFilter {
   private boolean withAlpha;
   private double modSaturation;
 
+  public static class ColorF {
+    public double r, g, b;
+  }
+
+  public static class ColorI {
+    public int r, g, b;
+  }
+
   public GammaCorrectionFilter(Flame pFlame, boolean pWithAlpha) {
     flame = pFlame;
     withAlpha = pWithAlpha;
@@ -96,40 +104,12 @@ public class GammaCorrectionFilter {
       inverseAlphaInt = 255 - alphaInt;
       pRGBPoint.alpha = withAlpha ? alphaInt : 255;
 
-      int red, green, blue;
-      if (inverseVibInt > 0) {
-        red = (int) (logScl * logDensityPnt.red + inverseVibInt * pow(logDensityPnt.red, gamma) + 0.5);
-        green = (int) (logScl * logDensityPnt.green + inverseVibInt * pow(logDensityPnt.green, gamma) + 0.5);
-        blue = (int) (logScl * logDensityPnt.blue + inverseVibInt * pow(logDensityPnt.blue, gamma) + 0.5);
-      }
-      else {
-        red = (int) (logScl * logDensityPnt.red + 0.5);
-        green = (int) (logScl * logDensityPnt.green + 0.5);
-        blue = (int) (logScl * logDensityPnt.blue + 0.5);
-      }
+      ColorF transfColor = applyLogScale(logDensityPnt, logScl);
+      ColorI finalColor = addBackground(transfColor, inverseAlphaInt);
 
-      red = red + ((inverseAlphaInt * bgRed) >> 8);
-      if (red < 0)
-        red = 0;
-      else if (red > 255)
-        red = 255;
-
-      green = green + ((inverseAlphaInt * bgGreen) >> 8);
-      if (green < 0)
-        green = 0;
-      else if (green > 255)
-        green = 255;
-
-      blue = blue + ((inverseAlphaInt * bgBlue) >> 8);
-      if (blue < 0)
-        blue = 0;
-      else if (blue > 255)
-        blue = 255;
-
-      pRGBPoint.red = red;
-      pRGBPoint.green = green;
-      pRGBPoint.blue = blue;
-
+      pRGBPoint.red = finalColor.r;
+      pRGBPoint.green = finalColor.g;
+      pRGBPoint.blue = finalColor.b;
     }
     else {
       pRGBPoint.red = bgRed;
@@ -141,6 +121,63 @@ public class GammaCorrectionFilter {
     if (modSaturation != 0) {
       applyModSaturation(pRGBPoint, modSaturation);
     }
+  }
+
+  private ColorI addBackground(ColorF pTransfColor, int pInverseAlphaInt) {
+    ColorI res = new ColorI();
+
+    res.r = (int) (pTransfColor.r + 0.5) + ((pInverseAlphaInt * bgRed) >> 8);
+    if (res.r < 0)
+      res.r = 0;
+    else if (res.r > 255)
+      res.r = 255;
+
+    res.g = (int) (pTransfColor.g + 0.5) + ((pInverseAlphaInt * bgGreen) >> 8);
+    if (res.g < 0)
+      res.g = 0;
+    else if (res.g > 255)
+      res.g = 255;
+
+    res.b = (int) (pTransfColor.b + 0.5) + ((pInverseAlphaInt * bgBlue) >> 8);
+    if (res.b < 0)
+      res.b = 0;
+    else if (res.b > 255)
+      res.b = 255;
+    return res;
+  }
+
+  private ColorF applyLogScale(LogDensityPoint pLogDensityPnt, double pLogScl) {
+    ColorF res = new ColorF();
+    double rawRed, rawGreen, rawBlue;
+    if (inverseVibInt > 0) {
+      rawRed = pLogScl * pLogDensityPnt.red + inverseVibInt * pow(pLogDensityPnt.red, gamma);
+      rawGreen = pLogScl * pLogDensityPnt.green + inverseVibInt * pow(pLogDensityPnt.green, gamma);
+      rawBlue = pLogScl * pLogDensityPnt.blue + inverseVibInt * pow(pLogDensityPnt.blue, gamma);
+    }
+    else {
+      rawRed = pLogScl * pLogDensityPnt.red;
+      rawGreen = pLogScl * pLogDensityPnt.green;
+      rawBlue = pLogScl * pLogDensityPnt.blue;
+    }
+    res.r = colorRedFunc(rawRed, rawGreen, rawBlue);
+    res.g = colorGreenFunc(rawRed, rawGreen, rawBlue);
+    res.b = colorBlueFunc(rawRed, rawGreen, rawBlue);
+    return res;
+  }
+
+  private double colorRedFunc(double pRed, double pGreen, double pBlue) {
+    // TODO Auto-generated method stub
+    return pRed;
+  }
+
+  private double colorGreenFunc(double pRed, double pGreen, double pBlue) {
+    // TODO Auto-generated method stub
+    return pGreen;
+  }
+
+  private double colorBlueFunc(double pRed, double pGreen, double pBlue) {
+    // TODO Auto-generated method stub
+    return pBlue;
   }
 
   private void applyModSaturation(GammaCorrectedRGBPoint pRGBPoint, double currModSaturation) {

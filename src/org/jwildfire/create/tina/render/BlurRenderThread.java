@@ -23,8 +23,8 @@ import org.jwildfire.create.tina.base.Layer;
 
 public final class BlurRenderThread extends DefaultRenderThread {
 
-  public BlurRenderThread(Prefs pPrefs, int pThreadId, FlameRenderer pRenderer, List<RenderPacket> pRenderPackets, long pSamples, List<RenderSlice> pSlices) {
-    super(pPrefs, pThreadId, pRenderer, pRenderPackets, pSamples, pSlices);
+  public BlurRenderThread(Prefs pPrefs, int pThreadId, FlameRenderer pRenderer, List<RenderPacket> pRenderPackets, long pSamples, List<RenderSlice> pSlices, double pSliceThicknessMod) {
+    super(pPrefs, pThreadId, pRenderer, pRenderPackets, pSamples, pSlices, pSliceThicknessMod);
   }
 
   @Override

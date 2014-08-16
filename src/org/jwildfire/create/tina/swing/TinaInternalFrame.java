@@ -563,31 +563,11 @@ public class TinaInternalFrame extends JInternalFrame {
   private JPanel gradientLibraryPanel = null;
   private JPanel gradientLibraryCenterPanel = null;
 
-  /**
-   * This is the xxx default constructor
-   */
   public TinaInternalFrame() {
     super();
     initialize();
-    // Looks only good for the Welcome screen
-    //    setColors(this);
   }
 
-  /*
-    private void setColors(Container pContainer) {
-      pContainer.setBackground(new Color(0, 0, 0));
-      pContainer.setForeground(new Color(192, 192, 192));
-      for (Component comp : pContainer.getComponents()) {
-        if (comp instanceof Container) {
-          setColors((Container) comp);
-        }
-        else {
-          comp.setBackground(new Color(0, 0, 0));
-          comp.setForeground(new Color(192, 192, 192));
-        }
-      }
-    }
-  */
   /**
    * This method initializes this
    * 
@@ -1312,6 +1292,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaSouthTabbedPane.addTab("Post symmetry", null, getPanel_34(), null);
       tinaSouthTabbedPane.addTab("Motion blur", null, getMotionBlurPanel(), null);
       tinaSouthTabbedPane.addTab("Layerz ", new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/emblem-photos.png")), getPanel_74(), null);
+      tinaSouthTabbedPane.addTab("Channel mixer", null, getPanel_92(), null);
 
       tinaSouthTabbedPane.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
@@ -4520,7 +4501,7 @@ public class TinaInternalFrame extends JInternalFrame {
         getMeshGenClearPreviewBtn(), getMeshGenPreviewPositionXREd(), getMeshGenPreviewPositionYREd(), getMeshGenPreviewSizeREd(),
         getMeshGenPreviewScaleZREd(), getMeshGenPreviewRotateAlphaREd(), getMeshGenPreviewRotateBetaREd(),
         getMeshGenPreviewPointsREd(), getMeshGenPreviewPolygonsREd(), getMeshGenRefreshPreviewBtn(), getApophysisHintsPane(),
-        getMeshGenPreviewSunflowExportBtn());
+        getMeshGenPreviewSunflowExportBtn(), getMeshGenDetailThicknessREd(), getMeshGenSliceThicknessREd());
 
     tinaController = new TinaController(params);
 
@@ -10397,6 +10378,9 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton meshGenPreviewSunflowExportBtn;
   private JScrollPane scrollPane_11;
   private JTextPane apophysisHintsPane;
+  private JPanel panel_92;
+  private JWFNumberField meshGenDetailThicknessREd;
+  private JWFNumberField meshGenSliceThicknessREd;
 
   /**
    * This method initializes renderBatchJobsScrollPane	
@@ -18972,7 +18956,7 @@ public class TinaInternalFrame extends JInternalFrame {
       panel_2.add(meshGenProgressbar, BorderLayout.CENTER);
 
       JPanel panel_3 = new JPanel();
-      panel_3.setPreferredSize(new Dimension(610, 10));
+      panel_3.setPreferredSize(new Dimension(810, 10));
       panel_1.add(panel_3, BorderLayout.WEST);
       panel_3.setLayout(null);
 
@@ -19120,6 +19104,57 @@ public class TinaInternalFrame extends JInternalFrame {
       lblRenderQuality.setFont(new Font("Dialog", Font.BOLD, 10));
       lblRenderQuality.setBounds(434, 4, 79, 22);
       panel_3.add(lblRenderQuality);
+
+      meshGenDetailThicknessREd = new JWFNumberField();
+      meshGenDetailThicknessREd.setValueStep(1.0);
+      meshGenDetailThicknessREd.setText("");
+      meshGenDetailThicknessREd.setSize(new Dimension(100, 24));
+      meshGenDetailThicknessREd.setPreferredSize(new Dimension(100, 24));
+      meshGenDetailThicknessREd.setOnlyIntegers(true);
+      meshGenDetailThicknessREd.setMaxValue(20.0);
+      meshGenDetailThicknessREd.setLocation(new Point(71, 76));
+      meshGenDetailThicknessREd.setHasMinValue(true);
+      meshGenDetailThicknessREd.setHasMaxValue(true);
+      meshGenDetailThicknessREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      meshGenDetailThicknessREd.setBounds(704, 2, 100, 24);
+      panel_3.add(meshGenDetailThicknessREd);
+
+      JLabel lblTickness = new JLabel();
+      lblTickness.setToolTipText("Thickness modifier of the rendered details");
+      lblTickness.setText("Detail thickness");
+      lblTickness.setSize(new Dimension(68, 22));
+      lblTickness.setPreferredSize(new Dimension(94, 22));
+      lblTickness.setName("");
+      lblTickness.setLocation(new Point(4, 76));
+      lblTickness.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblTickness.setBounds(613, 4, 94, 22);
+      panel_3.add(lblTickness);
+
+      meshGenSliceThicknessREd = new JWFNumberField();
+      meshGenSliceThicknessREd.setMinValue(1.0);
+      meshGenSliceThicknessREd.setValueStep(1.0);
+      meshGenSliceThicknessREd.setText("");
+      meshGenSliceThicknessREd.setSize(new Dimension(100, 24));
+      meshGenSliceThicknessREd.setPreferredSize(new Dimension(100, 24));
+      meshGenSliceThicknessREd.setOnlyIntegers(true);
+      meshGenSliceThicknessREd.setMaxValue(200.0);
+      meshGenSliceThicknessREd.setLocation(new Point(71, 76));
+      meshGenSliceThicknessREd.setHasMinValue(true);
+      meshGenSliceThicknessREd.setHasMaxValue(true);
+      meshGenSliceThicknessREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      meshGenSliceThicknessREd.setBounds(704, 26, 100, 24);
+      panel_3.add(meshGenSliceThicknessREd);
+
+      JLabel lblSliceThickness = new JLabel();
+      lblSliceThickness.setToolTipText("Thickness modifier of the generated slices");
+      lblSliceThickness.setText("Slice thickness");
+      lblSliceThickness.setSize(new Dimension(68, 22));
+      lblSliceThickness.setPreferredSize(new Dimension(94, 22));
+      lblSliceThickness.setName("");
+      lblSliceThickness.setLocation(new Point(4, 76));
+      lblSliceThickness.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblSliceThickness.setBounds(613, 28, 94, 22);
+      panel_3.add(lblSliceThickness);
 
       JPanel panel_8 = new JPanel();
       panel_8.setPreferredSize(new Dimension(132, 10));
@@ -20372,6 +20407,22 @@ public class TinaInternalFrame extends JInternalFrame {
       apophysisHintsPane.setEditable(false);
     }
     return apophysisHintsPane;
+  }
+
+  private JPanel getPanel_92() {
+    if (panel_92 == null) {
+      panel_92 = new JPanel();
+      panel_92.setLayout(new BorderLayout(0, 0));
+    }
+    return panel_92;
+  }
+
+  public JWFNumberField getMeshGenDetailThicknessREd() {
+    return meshGenDetailThicknessREd;
+  }
+
+  public JWFNumberField getMeshGenSliceThicknessREd() {
+    return meshGenSliceThicknessREd;
   }
 } //  @jve:decl-index=0:visual-constraint="10,10"
 

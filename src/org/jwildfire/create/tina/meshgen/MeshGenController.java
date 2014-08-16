@@ -144,6 +144,8 @@ public class MeshGenController {
   private final JWFNumberField previewPolygonsREd;
   private final JButton previewRefreshBtn;
   private final JButton previewSunflowExportBtn;
+  private final JWFNumberField detailThicknessREd;
+  private final JWFNumberField sliceThicknessREd;
 
   private String currSequencePattern;
   private ImagePanel previewPanel;
@@ -164,7 +166,7 @@ public class MeshGenController {
       JWFNumberField pPreviewPositionXREd, JWFNumberField pPreviewPositionYREd,
       JWFNumberField pPreviewSizeREd, JWFNumberField pPreviewScaleZREd, JWFNumberField pPreviewRotateAlphaREd,
       JWFNumberField pPreviewRotateBetaREd, JWFNumberField pPreviewPointsREd, JWFNumberField pPreviewPolygonsREd,
-      JButton pRefreshPreviewBtn, JButton pPreviewSunflowExportBtn) {
+      JButton pRefreshPreviewBtn, JButton pPreviewSunflowExportBtn, JWFNumberField pDetailThicknessREd, JWFNumberField pSliceThicknessREd) {
     tinaController = pTinaController;
     errorHandler = pErrorHandler;
     prefs = pPrefs;
@@ -226,6 +228,8 @@ public class MeshGenController {
     previewPolygonsREd = pPreviewPolygonsREd;
     previewRefreshBtn = pRefreshPreviewBtn;
     previewSunflowExportBtn = pPreviewSunflowExportBtn;
+    detailThicknessREd = pDetailThicknessREd;
+    sliceThicknessREd = pSliceThicknessREd;
 
     initHintsPane();
     sequenceWidthREd.setEditable(false);
@@ -244,6 +248,8 @@ public class MeshGenController {
       renderWidthREd.setValue(512);
       renderHeightREd.setValue(512);
       renderQualityREd.setValue(300);
+      detailThicknessREd.setValue(1.0);
+      sliceThicknessREd.setValue(1.0);
 
       sequenceDownSampleREd.setValue(2.0);
       sequenceFilterRadiusREd.setValue(0.25);
@@ -793,6 +799,8 @@ public class MeshGenController {
     renderWidthREd.setEnabled(!isRendering);
     renderHeightREd.setEnabled(!isRendering);
     renderQualityREd.setEnabled(!isRendering);
+    detailThicknessREd.setEnabled(!isRendering);
+    sliceThicknessREd.setEnabled(!isRendering);
 
     sequenceFromRendererBtn.setEnabled(lastRenderedSequenceOutFilePattern != null && !isRendering);
     loadSequenceBtn.setEnabled(!isRendering);
@@ -879,7 +887,7 @@ public class MeshGenController {
           renderSlicesThread = new RenderSlicesThread(
               prefs, flame, outfilenamePattern, finishEvent, renderSequenceProgressUpdater, renderWidthREd.getIntValue(), renderHeightREd.getIntValue(),
               sliceCountREd.getIntValue(), slicesPerRenderREd.getIntValue(), renderQualityREd.getIntValue(), zminREd.getDoubleValue(),
-              zmaxREd.getDoubleValue());
+              zmaxREd.getDoubleValue(), detailThicknessREd.getDoubleValue(), sliceThicknessREd.getDoubleValue());
 
           lastRenderedSequenceOutFilePattern = outfilenamePattern;
           enableControls();

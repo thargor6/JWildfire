@@ -24,8 +24,8 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 public final class Pseudo3DRenderThread extends DefaultRenderThread {
 
-  public Pseudo3DRenderThread(Prefs pPrefs, int pThreadId, FlameRenderer pRenderer, List<RenderPacket> pRenderPackets, long pSamples, List<RenderSlice> pSlices) {
-    super(pPrefs, pThreadId, pRenderer, pRenderPackets, pSamples, pSlices);
+  public Pseudo3DRenderThread(Prefs pPrefs, int pThreadId, FlameRenderer pRenderer, List<RenderPacket> pRenderPackets, long pSamples, List<RenderSlice> pSlices, double pSliceThicknessMod) {
+    super(pPrefs, pThreadId, pRenderer, pRenderPackets, pSamples, pSlices, pSliceThicknessMod);
   }
 
   @Override

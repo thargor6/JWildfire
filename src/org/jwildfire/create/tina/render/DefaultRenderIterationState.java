@@ -10,6 +10,7 @@ import static org.jwildfire.base.mathlib.MathLib.log;
 import static org.jwildfire.base.mathlib.MathLib.sin;
 import static org.jwildfire.base.mathlib.MathLib.sqrt;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.jwildfire.create.tina.base.Constants;
@@ -113,7 +114,7 @@ public class DefaultRenderIterationState extends RenderIterationState {
     }
   }
 
-  public void iterateNext(List<RenderSlice> pSlices) {
+  public void iterateNext(List<RenderSlice> pSlices, double pSliceThicknessMod) {
     int nextXForm = randGen.random(Constants.NEXT_APPLIED_XFORM_TABLE_SIZE);
     xf = xf.getNextAppliedXFormTable()[nextXForm];
     if (xf == null) {
@@ -125,22 +126,45 @@ public class DefaultRenderIterationState extends RenderIterationState {
     else if ((xf.getDrawMode() == DrawMode.OPAQUE) && (randGen.random() > xf.getOpacity()))
       return;
     List<XForm> finalXForms = layer.getFinalXForms();
-    if (finalXForms.size() > 0) {
-      applyFinalTransforms(finalXForms);
-      if (setupSliceRaster(q, pSlices)) {
-        projector.projectPoint(q);
+
+    if (fabs(pSliceThicknessMod - 1.0) > EPSILON) {
+      if (finalXForms.size() > 0) {
+        applyFinalTransforms(finalXForms);
+        List<AbstractRasterPoint[][]> sliceRasters = collectSliceRasters(q, pSlices);
+        for (AbstractRasterPoint[][] sliceRaster : sliceRasters) {
+          raster = sliceRaster;
+          projector.projectPoint(q);
+        }
+      }
+      else {
+        applyEmptyFinalTransform();
+        List<AbstractRasterPoint[][]> sliceRasters = collectSliceRasters(q, pSlices);
+        for (AbstractRasterPoint[][] sliceRaster : sliceRasters) {
+          raster = sliceRaster;
+          projector.projectPoint(q);
+        }
       }
     }
     else {
-      applyEmptyFinalTransform();
-      if (setupSliceRaster(q, pSlices)) {
-        projector.projectPoint(q);
+      if (finalXForms.size() > 0) {
+        applyFinalTransforms(finalXForms);
+        if (setupSliceRaster(q, pSlices)) {
+          projector.projectPoint(q);
+        }
+      }
+      else {
+        applyEmptyFinalTransform();
+        if (setupSliceRaster(q, pSlices)) {
+          projector.projectPoint(q);
+        }
       }
     }
   }
 
+  static int maxC = 1;
+
   private boolean setupSliceRaster(XYZPoint pPoint, List<RenderSlice> pSlices) {
-    int sliceIdx = getSliceIndex(pPoint, pSlices);
+    int sliceIdx = getSliceIndex(pPoint, pSlices, 0);
     if (sliceIdx >= 0) {
       raster = pSlices.get(sliceIdx).getRaster();
       return true;
@@ -151,9 +175,28 @@ public class DefaultRenderIterationState extends RenderIterationState {
     }
   }
 
-  private int getSliceIndex(XYZPoint pPoint, List<RenderSlice> pSlices) {
+  private List<AbstractRasterPoint[][]> collectSliceRasters(XYZPoint pPoint, List<RenderSlice> pSlices) {
+    List<AbstractRasterPoint[][]> res = new ArrayList<AbstractRasterPoint[][]>();
+    int sliceIdx = -1;
+    while (true) {
+      sliceIdx = getSliceIndex(pPoint, pSlices, sliceIdx + 1);
+      if (sliceIdx >= 0) {
+        res.add(pSlices.get(sliceIdx).getRaster());
+      }
+      else {
+        break;
+      }
+    }
+    if (res.size() > maxC) {
+      maxC = res.size();
+      System.out.println("MAX: " + maxC);
+    }
+    return res;
+  }
+
+  private int getSliceIndex(XYZPoint pPoint, List<RenderSlice> pSlices, int pStartIndex) {
     double value = pPoint.z;
-    for (int i = 0; i < pSlices.size(); i++) {
+    for (int i = pStartIndex; i < pSlices.size(); i++) {
       RenderSlice slice = pSlices.get(i);
       if (value >= slice.getZmin() && value < slice.getZmax()) {
         return i;
