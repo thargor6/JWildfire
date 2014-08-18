@@ -359,7 +359,7 @@ public class Envelope implements Serializable {
         high = mid - 1;
       }
       else {
-        indl = indr = mid; // exact match
+        return vSY[mid];
       }
     }
 
@@ -372,6 +372,9 @@ public class Envelope implements Serializable {
     }
     else if (indl >= 0) {
       return vSY[indl];
+    }
+    else if (indr >= 0) {
+      return vSY[indr];
     }
     else {
       return 0.0;
@@ -408,7 +411,7 @@ public class Envelope implements Serializable {
         high = mid - 1;
       }
       else {
-        indl = indr = mid; // exact match
+        return vSY[mid];
       }
     }
 
@@ -421,6 +424,9 @@ public class Envelope implements Serializable {
     }
     else if (indl >= 0) {
       return vSY[indl];
+    }
+    else if (indr >= 0) {
+      return vSY[indr];
     }
     else {
       return 0.0;

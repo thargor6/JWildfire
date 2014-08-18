@@ -172,6 +172,7 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
 
   private FlameControlsDelegate flameControls;
   private XFormControlsDelegate xFormControls;
+  private ChannelMixerControlsDelegate channelMixerControls;
 
   private final JInternalFrame tinaFrame;
   private final String tinaFrameTitle;
@@ -274,7 +275,7 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
         parameterObject.meshGenPreviewPositionYREd, parameterObject.meshGenPreviewSizeREd,
         parameterObject.meshGenPreviewScaleZREd, parameterObject.meshGenPreviewRotateAlphaREd, parameterObject.meshGenPreviewRotateBetaREd,
         parameterObject.meshGenPreviewPointsREd, parameterObject.meshGenPreviewPolygonsREd, parameterObject.meshGenRefreshPreviewBtn,
-        parameterObject.meshGenPreviewSunflowExportBtn, parameterObject.meshGenDetailThicknessREd, parameterObject.meshGenSliceThicknessREd);
+        parameterObject.meshGenPreviewSunflowExportBtn, parameterObject.meshGenSliceThicknessREd);
 
     jwfScriptController = new JWFScriptController(this, parameterObject.pErrorHandler, prefs, parameterObject.pCenterPanel, parameterObject.scriptTree,
         parameterObject.scriptDescriptionTextArea, parameterObject.scriptTextArea, parameterObject.compileScriptButton,
@@ -621,10 +622,22 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
     data.toggleDrawGridButton = parameterObject.toggleDrawGridButton;
     data.triangleStyleCmb = parameterObject.triangleStyleCmb;
     data.editorFractalBrightnessSlider = parameterObject.editorFractalBrightnessSlider;
+    data.channelMixerResetBtn = parameterObject.channelMixerResetBtn;
+    data.channelMixerModeCmb = parameterObject.channelMixerModeCmb;
+    data.channelMixerRRRootPanel = parameterObject.channelMixerRRRootPanel;
+    data.channelMixerRGRootPanel = parameterObject.channelMixerRGRootPanel;
+    data.channelMixerRBRootPanel = parameterObject.channelMixerRBRootPanel;
+    data.channelMixerGRRootPanel = parameterObject.channelMixerGRRootPanel;
+    data.channelMixerGGRootPanel = parameterObject.channelMixerGGRootPanel;
+    data.channelMixerGBRootPanel = parameterObject.channelMixerGBRootPanel;
+    data.channelMixerBRRootPanel = parameterObject.channelMixerBRRootPanel;
+    data.channelMixerBGRootPanel = parameterObject.channelMixerBGRootPanel;
+    data.channelMixerBBRootPanel = parameterObject.channelMixerBBRootPanel;
 
     // end create
     flameControls = new FlameControlsDelegate(this, data, rootTabbedPane);
     xFormControls = new XFormControlsDelegate(this, data, rootTabbedPane);
+    channelMixerControls = new ChannelMixerControlsDelegate(this, data, rootTabbedPane, true);
 
     registerMotionPropertyControls();
 
@@ -652,7 +665,6 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
     refreshQualityProfileCmb(data.batchQualityProfileCmb, null);
 
     getFlameBrowserController().init();
-
   }
 
   private void enableLayerControls() {
@@ -1275,6 +1287,7 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
       enableControls();
       flameControls.refreshShadingUI();
       enableLayerControls();
+      channelMixerControls.refreshValues();
       refreshPaletteUI(getCurrLayer().getPalette());
     }
     finally {
@@ -2145,6 +2158,7 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
     data.transparencyButton.setEnabled(enabled);
     data.randomizeButton.setEnabled(enabled);
     flameControls.enableControls();
+    channelMixerControls.enableControls();
     enableUndoControls();
     enableJobRenderControls();
     getAnimationController().enableControls();
@@ -5136,6 +5150,10 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
 
   public XFormControlsDelegate getXFormControls() {
     return xFormControls;
+  }
+
+  public ChannelMixerControlsDelegate getChannelMixerControls() {
+    return channelMixerControls;
   }
 
   public void triangleStyleCmb_changed() {

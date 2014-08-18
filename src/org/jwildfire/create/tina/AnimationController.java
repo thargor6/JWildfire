@@ -61,9 +61,9 @@ public class AnimationController {
     keyframesFrameLbl = pKeyframesFrameLbl;
     keyframesFrameCountLbl = pKeyframesFrameCountLbl;
     motionCurveEditModeButton = pMotionCurveEditModeButton;
-    motionCurveEditModeButton.setVisible(Tools.V2_FEATURE_ENABLE);
+    motionCurveEditModeButton.setVisible(Tools.V1_9_FEATURE_ENABLE);
     motionBlurPanel = pMotionBlurPanel;
-    if (!Tools.V2_FEATURE_ENABLE) {
+    if (!Tools.V1_9_FEATURE_ENABLE) {
       motionBlurPanel.getParent().remove(motionBlurPanel);
     }
     enableControls();

@@ -202,6 +202,7 @@ public class Grid3DWFFunc extends VariationFunc {
 
   private double getSizeSpread(int pX, int pY, int pZ) {
     if (size_spread > MathLib.EPSILON) {
+      @SuppressWarnings("unchecked")
       Map<String, Double> map = (Map<String, Double>) RessourceManager.getRessource(getSizeSpreadMapKey());
       String key = makeXYZKey(pX, pY, pZ);
       Double storedValue = map.get(key);
@@ -219,6 +220,7 @@ public class Grid3DWFFunc extends VariationFunc {
 
   private double getAlphaSpread(int pX, int pY, int pZ) {
     if (alpha_spread > MathLib.EPSILON) {
+      @SuppressWarnings("unchecked")
       Map<String, Double> map = (Map<String, Double>) RessourceManager.getRessource(getAlphaSpreadMapKey());
       String key = makeXYZKey(pX, pY, pZ);
       Double storedValue = map.get(key);
@@ -236,6 +238,7 @@ public class Grid3DWFFunc extends VariationFunc {
 
   private double getBetaSpread(int pX, int pY, int pZ) {
     if (beta_spread > MathLib.EPSILON) {
+      @SuppressWarnings("unchecked")
       Map<String, Double> map = (Map<String, Double>) RessourceManager.getRessource(getBetaSpreadMapKey());
       String key = makeXYZKey(pX, pY, pZ);
       Double storedValue = map.get(key);
@@ -253,6 +256,7 @@ public class Grid3DWFFunc extends VariationFunc {
 
   private double getGammaSpread(int pX, int pY, int pZ) {
     if (gamma_spread > MathLib.EPSILON) {
+      @SuppressWarnings("unchecked")
       Map<String, Double> map = (Map<String, Double>) RessourceManager.getRessource(getGammaSpreadMapKey());
       String key = makeXYZKey(pX, pY, pZ);
       Double storedValue = map.get(key);

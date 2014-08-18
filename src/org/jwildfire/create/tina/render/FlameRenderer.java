@@ -401,7 +401,6 @@ public class FlameRenderer {
       SimpleImage img = renderNormal ? res.getImage() : null;
       SimpleHDRImage hdrImg = renderHDR ? res.getHDRImage() : null;
       SimpleHDRImage hdrIntensityMapImg = renderHDRIntensityMap ? res.getHDRIntensityMap() : null;
-
       if (renderNormal) {
         initRaster(img.getImageWidth(), img.getImageHeight());
       }

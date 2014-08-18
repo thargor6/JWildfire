@@ -30,7 +30,9 @@ import org.jwildfire.create.tina.animate.AnimAware;
 import org.jwildfire.create.tina.base.motion.MotionCurve;
 import org.jwildfire.create.tina.edit.Assignable;
 import org.jwildfire.create.tina.palette.RGBPalette;
+import org.jwildfire.create.tina.render.ChannelMixerMode;
 import org.jwildfire.create.tina.render.filter.FilterKernelType;
+import org.jwildfire.create.tina.swing.ChannelMixerCurves;
 
 public class Flame implements Assignable<Flame>, Serializable {
   private static final long serialVersionUID = 1L;
@@ -157,6 +159,17 @@ public class Flame implements Assignable<Flame>, Serializable {
   private int stereo3dInterpolatedImageCount = 3;
   private boolean stereo3dSwapSides = false;
 
+  private ChannelMixerMode channelMixerMode;
+  private final MotionCurve mixerRRCurve = new MotionCurve();
+  private final MotionCurve mixerRGCurve = new MotionCurve();
+  private final MotionCurve mixerRBCurve = new MotionCurve();
+  private final MotionCurve mixerGRCurve = new MotionCurve();
+  private final MotionCurve mixerGGCurve = new MotionCurve();
+  private final MotionCurve mixerGBCurve = new MotionCurve();
+  private final MotionCurve mixerBRCurve = new MotionCurve();
+  private final MotionCurve mixerBGCurve = new MotionCurve();
+  private final MotionCurve mixerBBCurve = new MotionCurve();
+
   public Flame() {
     layers.clear();
     layers.add(new Layer());
@@ -194,6 +207,21 @@ public class Flame implements Assignable<Flame>, Serializable {
     spatialFilterRadius = 0.0;
     spatialFilterKernel = FilterKernelType.GAUSSIAN;
     shadingInfo.init();
+
+    channelMixerMode = ChannelMixerMode.OFF;
+    resetMixerCurves();
+  }
+
+  public void resetMixerCurves() {
+    ChannelMixerCurves.DEFAULT.makeCurve(mixerRRCurve);
+    ChannelMixerCurves.ZERO.makeCurve(mixerRGCurve);
+    ChannelMixerCurves.ZERO.makeCurve(mixerRBCurve);
+    ChannelMixerCurves.ZERO.makeCurve(mixerGRCurve);
+    ChannelMixerCurves.DEFAULT.makeCurve(mixerGGCurve);
+    ChannelMixerCurves.ZERO.makeCurve(mixerGBCurve);
+    ChannelMixerCurves.ZERO.makeCurve(mixerBRCurve);
+    ChannelMixerCurves.ZERO.makeCurve(mixerBGCurve);
+    ChannelMixerCurves.DEFAULT.makeCurve(mixerBBCurve);
   }
 
   public double getCentreX() {
@@ -563,6 +591,17 @@ public class Flame implements Assignable<Flame>, Serializable {
     stereo3dFocalOffset = pFlame.stereo3dFocalOffset;
     stereo3dSwapSides = pFlame.stereo3dSwapSides;
 
+    channelMixerMode = pFlame.channelMixerMode;
+    mixerRRCurve.assign(pFlame.mixerRRCurve);
+    mixerRGCurve.assign(pFlame.mixerRGCurve);
+    mixerRBCurve.assign(pFlame.mixerRBCurve);
+    mixerGRCurve.assign(pFlame.mixerGRCurve);
+    mixerGGCurve.assign(pFlame.mixerGGCurve);
+    mixerGBCurve.assign(pFlame.mixerGBCurve);
+    mixerBRCurve.assign(pFlame.mixerBRCurve);
+    mixerBGCurve.assign(pFlame.mixerBGCurve);
+    mixerBBCurve.assign(pFlame.mixerBBCurve);
+
     layers.clear();
     for (Layer layer : pFlame.getLayers()) {
       layers.add(layer.makeCopy());
@@ -624,7 +663,11 @@ public class Flame implements Assignable<Flame>, Serializable {
         (fabs(stereo3dEyeDist - pFlame.stereo3dEyeDist) > EPSILON) || (stereo3dLeftEyeColor != pFlame.stereo3dLeftEyeColor) ||
         (stereo3dRightEyeColor != pFlame.stereo3dRightEyeColor) || (stereo3dInterpolatedImageCount != pFlame.stereo3dInterpolatedImageCount) ||
         (stereo3dPreview != pFlame.stereo3dPreview) || (fabs(stereo3dFocalOffset - pFlame.stereo3dFocalOffset) > EPSILON) ||
-        (stereo3dSwapSides != pFlame.stereo3dSwapSides)) {
+        (stereo3dSwapSides != pFlame.stereo3dSwapSides) ||
+        (channelMixerMode != pFlame.channelMixerMode) || !mixerRRCurve.isEqual(pFlame.mixerRRCurve) || !mixerRGCurve.isEqual(pFlame.mixerRGCurve) ||
+        !mixerRBCurve.isEqual(pFlame.mixerRBCurve) || !mixerGRCurve.isEqual(pFlame.mixerGRCurve) || !mixerGGCurve.isEqual(pFlame.mixerGGCurve) ||
+        !mixerGBCurve.isEqual(pFlame.mixerGBCurve) || !mixerBRCurve.isEqual(pFlame.mixerBRCurve) || !mixerBGCurve.isEqual(pFlame.mixerBGCurve) ||
+        !mixerBBCurve.isEqual(pFlame.mixerBBCurve)) {
       return false;
     }
     for (int i = 0; i < layers.size(); i++) {
@@ -848,40 +891,40 @@ public class Flame implements Assignable<Flame>, Serializable {
     return stereo3dMode;
   }
 
-  public void setAnaglyph3dMode(Stereo3dMode anaglyph3dMode) {
-    this.stereo3dMode = anaglyph3dMode;
+  public void setAnaglyph3dMode(Stereo3dMode pAnaglyph3dMode) {
+    stereo3dMode = pAnaglyph3dMode;
   }
 
   public double getAnaglyph3dAngle() {
     return stereo3dAngle;
   }
 
-  public void setAnaglyph3dAngle(double anaglyph3dAngle) {
-    this.stereo3dAngle = anaglyph3dAngle;
+  public void setAnaglyph3dAngle(double pAnaglyph3dAngle) {
+    stereo3dAngle = pAnaglyph3dAngle;
   }
 
   public double getAnaglyph3dEyeDist() {
     return stereo3dEyeDist;
   }
 
-  public void setAnaglyph3dEyeDist(double anaglyph3dEyeDist) {
-    this.stereo3dEyeDist = anaglyph3dEyeDist;
+  public void setAnaglyph3dEyeDist(double pAnaglyph3dEyeDist) {
+    stereo3dEyeDist = pAnaglyph3dEyeDist;
   }
 
   public Stereo3dColor getAnaglyph3dLeftEyeColor() {
     return stereo3dLeftEyeColor;
   }
 
-  public void setAnaglyph3dLeftEyeColor(Stereo3dColor anaglyph3dLeftEyeColor) {
-    this.stereo3dLeftEyeColor = anaglyph3dLeftEyeColor;
+  public void setAnaglyph3dLeftEyeColor(Stereo3dColor pAnaglyph3dLeftEyeColor) {
+    stereo3dLeftEyeColor = pAnaglyph3dLeftEyeColor;
   }
 
   public Stereo3dColor getAnaglyph3dRightEyeColor() {
     return stereo3dRightEyeColor;
   }
 
-  public void setAnaglyph3dRightEyeColor(Stereo3dColor anaglyph3dRightEyeColor) {
-    this.stereo3dRightEyeColor = anaglyph3dRightEyeColor;
+  public void setAnaglyph3dRightEyeColor(Stereo3dColor pAnaglyph3dRightEyeColor) {
+    stereo3dRightEyeColor = pAnaglyph3dRightEyeColor;
   }
 
   public int calcStereo3dSampleMultiplier() {
@@ -920,56 +963,56 @@ public class Flame implements Assignable<Flame>, Serializable {
     return stereo3dAngle;
   }
 
-  public void setStereo3dAngle(double stereo3dAngle) {
-    this.stereo3dAngle = stereo3dAngle;
+  public void setStereo3dAngle(double pStereo3dAngle) {
+    stereo3dAngle = pStereo3dAngle;
   }
 
   public double getStereo3dEyeDist() {
     return stereo3dEyeDist;
   }
 
-  public void setStereo3dEyeDist(double stereo3dEyeDist) {
-    this.stereo3dEyeDist = stereo3dEyeDist;
+  public void setStereo3dEyeDist(double pStereo3dEyeDist) {
+    stereo3dEyeDist = pStereo3dEyeDist;
   }
 
   public Stereo3dColor getStereo3dLeftEyeColor() {
     return stereo3dLeftEyeColor;
   }
 
-  public void setStereo3dLeftEyeColor(Stereo3dColor stereo3dLeftEyeColor) {
-    this.stereo3dLeftEyeColor = stereo3dLeftEyeColor;
+  public void setStereo3dLeftEyeColor(Stereo3dColor pStereo3dLeftEyeColor) {
+    stereo3dLeftEyeColor = pStereo3dLeftEyeColor;
   }
 
   public Stereo3dColor getStereo3dRightEyeColor() {
     return stereo3dRightEyeColor;
   }
 
-  public void setStereo3dRightEyeColor(Stereo3dColor stereo3dRightEyeColor) {
-    this.stereo3dRightEyeColor = stereo3dRightEyeColor;
+  public void setStereo3dRightEyeColor(Stereo3dColor pStereo3dRightEyeColor) {
+    stereo3dRightEyeColor = pStereo3dRightEyeColor;
   }
 
   public int getStereo3dInterpolatedImageCount() {
     return stereo3dInterpolatedImageCount;
   }
 
-  public void setStereo3dInterpolatedImageCount(int stereo3dInterpolatedImageCount) {
-    this.stereo3dInterpolatedImageCount = stereo3dInterpolatedImageCount;
+  public void setStereo3dInterpolatedImageCount(int pStereo3dInterpolatedImageCount) {
+    stereo3dInterpolatedImageCount = pStereo3dInterpolatedImageCount;
   }
 
   public Stereo3dPreview getStereo3dPreview() {
     return stereo3dPreview;
   }
 
-  public void setStereo3dPreview(Stereo3dPreview stereo3dPreview) {
-    this.stereo3dPreview = stereo3dPreview;
+  public void setStereo3dPreview(Stereo3dPreview pStereo3dPreview) {
+    stereo3dPreview = pStereo3dPreview;
   }
 
   public double getStereo3dFocalOffset() {
     return stereo3dFocalOffset;
   }
 
-  public void setStereo3dFocalOffset(double stereo3dFocalOffset) {
-    this.stereo3dFocalOffset = stereo3dFocalOffset;
+  public void setStereo3dFocalOffset(double pStereo3dFocalOffset) {
+    stereo3dFocalOffset = pStereo3dFocalOffset;
   }
 
   public boolean isDOFActive() {
@@ -1051,6 +1094,50 @@ public class Flame implements Assignable<Flame>, Serializable {
 
   public void setSaturation(double pSaturation) {
     saturation = pSaturation;
+  }
+
+  public ChannelMixerMode getChannelMixerMode() {
+    return channelMixerMode;
+  }
+
+  public void setChannelMixerMode(ChannelMixerMode pChannelMixerMode) {
+    channelMixerMode = pChannelMixerMode;
+  }
+
+  public MotionCurve getMixerRRCurve() {
+    return mixerRRCurve;
+  }
+
+  public MotionCurve getMixerRGCurve() {
+    return mixerRGCurve;
+  }
+
+  public MotionCurve getMixerRBCurve() {
+    return mixerRBCurve;
+  }
+
+  public MotionCurve getMixerGRCurve() {
+    return mixerGRCurve;
+  }
+
+  public MotionCurve getMixerGGCurve() {
+    return mixerGGCurve;
+  }
+
+  public MotionCurve getMixerGBCurve() {
+    return mixerGBCurve;
+  }
+
+  public MotionCurve getMixerBRCurve() {
+    return mixerBRCurve;
+  }
+
+  public MotionCurve getMixerBGCurve() {
+    return mixerBGCurve;
+  }
+
+  public MotionCurve getMixerBBCurve() {
+    return mixerBBCurve;
   }
 
 }

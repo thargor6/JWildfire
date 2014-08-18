@@ -327,4 +327,16 @@ public class TinaControllerData {
   public JToggleButton toggleDrawGridButton;
   public JSlider editorFractalBrightnessSlider;
   public JComboBox triangleStyleCmb;
+  public JButton channelMixerResetBtn;
+  public JComboBox channelMixerModeCmb;
+  public JPanel channelMixerRRRootPanel;
+  public JPanel channelMixerRGRootPanel;
+  public JPanel channelMixerRBRootPanel;
+  public JPanel channelMixerGRRootPanel;
+  public JPanel channelMixerGGRootPanel;
+  public JPanel channelMixerGBRootPanel;
+  public JPanel channelMixerBRRootPanel;
+  public JPanel channelMixerBGRootPanel;
+  public JPanel channelMixerBBRootPanel;
+
 }

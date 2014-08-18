@@ -44,6 +44,8 @@ public class EnvelopePanel extends JPanel {
 
   private Envelope envelope;
   private final Prefs prefs;
+  private boolean drawGrid = true;
+  private boolean drawTicks = true;
 
   public EnvelopePanel() {
     super();
@@ -68,7 +70,9 @@ public class EnvelopePanel extends JPanel {
     g.setColor(BG_COLOR);
     g.fillRect(0, 0, envelopeView.getWidth(), envelopeView.getHeight());
     if (envelope != null) {
-      drawGrid(g, envelopeView);
+      if (drawGrid) {
+        drawGrid(g, envelopeView);
+      }
       drawLines(g, envelopeView);
       drawPoints(g, envelopeView);
     }
@@ -126,76 +130,78 @@ public class EnvelopePanel extends JPanel {
       while (y < envelope.getViewYMax());
     }
     /* tick-labels */
-    g.setColor(LABEL_COLOR);
-    Font font = new Font(LBL_FONT_NAME, Font.PLAIN, LBL_FONT_SIZE);
-    g.setFont(font);
-    FontMetrics fm = g.getFontMetrics();
-    int yFontOffset = fm.getMaxAscent();
-    FontRenderContext frc = fm.getFontRenderContext();
-    {
-      double dx = envelope.getViewXMax() - envelope.getViewXMin();
-      double step = Tools.FTOI(dx / (double) xnum);
-      if (step < 1.0)
-        step = 1.0;
-      int div = Tools.FTOI((double) (envelope.getViewXMin() / step));
-      double x = (double) div * step;
-      int cnt = 0;
-      do {
-        double fx = pEnvelopeView.getEnvelopeXScale() * x - pEnvelopeView.getEnvelopeXTrans();
-        int dxl = Tools.FTOI(fx);
-        cnt++;
-        if (cnt % 2 == 0) {
-          String hs = String.valueOf(Tools.FTOI(x));
-          Rectangle2D rect = font.getStringBounds(hs, frc);
-          int tw = (int) (rect.getWidth() + 0.5);
-          int leftEdge = dxl - tw / 2;
-          if ((leftEdge >= pEnvelopeView.getEnvelopeLeft())
-              && ((leftEdge + tw) <= pEnvelopeView.getEnvelopeRight()))
-          {
-            int topEdge = pEnvelopeView.getEnvelopeBottom() - yFontOffset;
-            g.drawString(hs, leftEdge, topEdge);
+    if (drawTicks) {
+      g.setColor(LABEL_COLOR);
+      Font font = new Font(LBL_FONT_NAME, Font.PLAIN, LBL_FONT_SIZE);
+      g.setFont(font);
+      FontMetrics fm = g.getFontMetrics();
+      int yFontOffset = fm.getMaxAscent();
+      FontRenderContext frc = fm.getFontRenderContext();
+      {
+        double dx = envelope.getViewXMax() - envelope.getViewXMin();
+        double step = Tools.FTOI(dx / (double) xnum);
+        if (step < 1.0)
+          step = 1.0;
+        int div = Tools.FTOI((double) (envelope.getViewXMin() / step));
+        double x = (double) div * step;
+        int cnt = 0;
+        do {
+          double fx = pEnvelopeView.getEnvelopeXScale() * x - pEnvelopeView.getEnvelopeXTrans();
+          int dxl = Tools.FTOI(fx);
+          cnt++;
+          if (cnt % 2 == 0) {
+            String hs = String.valueOf(Tools.FTOI(x));
+            Rectangle2D rect = font.getStringBounds(hs, frc);
+            int tw = (int) (rect.getWidth() + 0.5);
+            int leftEdge = dxl - tw / 2;
+            if ((leftEdge >= pEnvelopeView.getEnvelopeLeft())
+                && ((leftEdge + tw) <= pEnvelopeView.getEnvelopeRight()))
+            {
+              int topEdge = pEnvelopeView.getEnvelopeBottom() - yFontOffset;
+              g.drawString(hs, leftEdge, topEdge);
+            }
+          }
+          x += step;
+        }
+        while (x < envelope.getViewXMax());
+      }
+      {
+        double dx = envelope.getViewYMax() - envelope.getViewYMin();
+        double step = Tools.FTOI(dx / (double) ynum);
+        if (step < 1.0) {
+          step = dx / (double) ynum;
+          if (step >= 0.5) {
+            step = 0.5;
+            fl = 1;
+          }
+          else {
+            step = 0.25;
+            fl = 2;
           }
         }
-        x += step;
-      }
-      while (x < envelope.getViewXMax());
-    }
-    {
-      double dx = envelope.getViewYMax() - envelope.getViewYMin();
-      double step = Tools.FTOI(dx / (double) ynum);
-      if (step < 1.0) {
-        step = dx / (double) ynum;
-        if (step >= 0.5) {
-          step = 0.5;
-          fl = 1;
-        }
-        else {
-          step = 0.25;
-          fl = 2;
-        }
-      }
-      int div = Tools.FTOI((double) (envelope.getViewYMin() / step));
-      double x = (double) div * step;
-      int cnt = 0;
-      do {
-        double fx = pEnvelopeView.getEnvelopeYScale() * x - pEnvelopeView.getEnvelopeYTrans();
-        int dxl = Tools.FTOI(fx);
-        cnt++;
-        if (cnt % 2 == 0) {
-          String hs;
-          if (fl == 0)
-            hs = String.valueOf(Tools.FTOI(x));
-          else
-            hs = String.valueOf(x);
-          int topEdge = dxl - (yFontOffset / 2) - 1;
-          if (topEdge >= pEnvelopeView.getEnvelopeTop()) {
-            int leftEdge = pEnvelopeView.getEnvelopeLeft() + 3;
-            g.drawString(hs, leftEdge, topEdge);
+        int div = Tools.FTOI((double) (envelope.getViewYMin() / step));
+        double x = (double) div * step;
+        int cnt = 0;
+        do {
+          double fx = pEnvelopeView.getEnvelopeYScale() * x - pEnvelopeView.getEnvelopeYTrans();
+          int dxl = Tools.FTOI(fx);
+          cnt++;
+          if (cnt % 2 == 0) {
+            String hs;
+            if (fl == 0)
+              hs = String.valueOf(Tools.FTOI(x));
+            else
+              hs = String.valueOf(x);
+            int topEdge = dxl - (yFontOffset / 2) - 1;
+            if (topEdge >= pEnvelopeView.getEnvelopeTop()) {
+              int leftEdge = pEnvelopeView.getEnvelopeLeft() + 3;
+              g.drawString(hs, leftEdge, topEdge);
+            }
           }
+          x += step;
         }
-        x += step;
+        while (x < envelope.getViewYMax());
       }
-      while (x < envelope.getViewYMax());
     }
   }
 
@@ -315,12 +321,20 @@ public class EnvelopePanel extends JPanel {
     }
   }
 
-  public void setEnvelope(Envelope envelope) {
-    this.envelope = envelope;
+  public void setEnvelope(Envelope pEnvelope) {
+    envelope = pEnvelope;
   }
 
   protected Envelope getEnvelope() {
     return envelope;
+  }
+
+  public void setDrawGrid(boolean pDrawGrid) {
+    drawGrid = pDrawGrid;
+  }
+
+  public void setDrawTicks(boolean pDrawTicks) {
+    drawTicks = pDrawTicks;
   }
 
 }

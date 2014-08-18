@@ -25,6 +25,7 @@ import org.jwildfire.create.tina.base.Flame;
 public class GammaCorrectionFilter {
   private final HSLRGBConverter hslrgbConverter = new HSLRGBConverter();
   private final Flame flame;
+  //  private final ColorFunc colorFunc;
   private int vibInt;
   private int inverseVibInt;
   private double vibDouble;
@@ -45,6 +46,7 @@ public class GammaCorrectionFilter {
 
   public GammaCorrectionFilter(Flame pFlame, boolean pWithAlpha) {
     flame = pFlame;
+    //    colorFunc = pFlame.getChannelMixerMode().getColorFunc(pFlame);
     withAlpha = pWithAlpha;
     initFilter();
   }
@@ -159,25 +161,13 @@ public class GammaCorrectionFilter {
       rawGreen = pLogScl * pLogDensityPnt.green;
       rawBlue = pLogScl * pLogDensityPnt.blue;
     }
-    res.r = colorRedFunc(rawRed, rawGreen, rawBlue);
-    res.g = colorGreenFunc(rawRed, rawGreen, rawBlue);
-    res.b = colorBlueFunc(rawRed, rawGreen, rawBlue);
+    //    res.r = colorFunc.mapRGBToR(rawRed, rawGreen, rawBlue);
+    //    res.g = colorFunc.mapRGBToG(rawRed, rawGreen, rawBlue);
+    //    res.b = colorFunc.mapRGBToB(rawRed, rawGreen, rawBlue);
+    res.r = rawRed;
+    res.g = rawGreen;
+    res.b = rawBlue;
     return res;
-  }
-
-  private double colorRedFunc(double pRed, double pGreen, double pBlue) {
-    // TODO Auto-generated method stub
-    return pRed;
-  }
-
-  private double colorGreenFunc(double pRed, double pGreen, double pBlue) {
-    // TODO Auto-generated method stub
-    return pGreen;
-  }
-
-  private double colorBlueFunc(double pRed, double pGreen, double pBlue) {
-    // TODO Auto-generated method stub
-    return pBlue;
   }
 
   private void applyModSaturation(GammaCorrectedRGBPoint pRGBPoint, double currModSaturation) {

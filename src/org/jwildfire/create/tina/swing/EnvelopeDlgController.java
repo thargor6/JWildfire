@@ -57,9 +57,13 @@ public class EnvelopeDlgController {
   private final List<EnvelopeChangeListener> selectionChangeListeners = new ArrayList<EnvelopeChangeListener>();
 
   private boolean noRefresh;
-  private final Envelope envelope;
+  private Envelope envelope;
 
   private MouseClickWaitMode mouseClickWaitMode = MouseClickWaitMode.NONE;
+
+  public EnvelopeDlgController(EnvelopePanel pEnvelopePanel) {
+    this(null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, pEnvelopePanel, null);
+  }
 
   public EnvelopeDlgController(Envelope pEnvelope, JButton pAddPointButton, JButton pRemovePointButton, JButton pClearButton,
       JWFNumberField pXMinREd, JWFNumberField pXMaxREd, JWFNumberField pYMinREd, JWFNumberField pYMaxREd,
@@ -133,97 +137,141 @@ public class EnvelopeDlgController {
   public void enableControls() {
     boolean hasEnvelope = (envelope != null);
     boolean editable = hasEnvelope && !envelope.isLocked();
-    interpolationCmb.setEnabled(editable);
-    xMinREd.setEnabled(hasEnvelope);
-    xMaxREd.setEnabled(hasEnvelope);
-    yMinREd.setEnabled(hasEnvelope);
-    yMaxREd.setEnabled(hasEnvelope);
-    xREd.setEnabled(editable);
-    yREd.setEnabled(editable);
-    addPointButton.setEnabled(editable);
-    removePointButton.setEnabled(editable && (envelope.size() > 1));
-    clearButton.setEnabled(editable);
-    viewAllButton.setEnabled(hasEnvelope);
-    viewLeftButton.setEnabled(hasEnvelope);
-    viewRightButton.setEnabled(hasEnvelope);
-    viewUpButton.setEnabled(hasEnvelope);
-    viewDownButton.setEnabled(hasEnvelope);
+    if (interpolationCmb != null) {
+      interpolationCmb.setEnabled(editable);
+    }
+    if (xMinREd != null) {
+      xMinREd.setEnabled(hasEnvelope);
+    }
+    if (xMaxREd != null) {
+      xMaxREd.setEnabled(hasEnvelope);
+    }
+    if (yMinREd != null) {
+      yMinREd.setEnabled(hasEnvelope);
+    }
+    if (yMaxREd != null) {
+      yMaxREd.setEnabled(hasEnvelope);
+    }
+    if (xREd != null) {
+      xREd.setEnabled(editable);
+    }
+    if (yREd != null) {
+      yREd.setEnabled(editable);
+    }
+    if (addPointButton != null) {
+      addPointButton.setEnabled(editable);
+    }
+    if (removePointButton != null) {
+      removePointButton.setEnabled(editable && (envelope.size() > 1));
+    }
+    if (clearButton != null) {
+      clearButton.setEnabled(editable);
+    }
+    if (viewAllButton != null) {
+      viewAllButton.setEnabled(hasEnvelope);
+    }
+    if (viewLeftButton != null) {
+      viewLeftButton.setEnabled(hasEnvelope);
+    }
+    if (viewRightButton != null) {
+      viewRightButton.setEnabled(hasEnvelope);
+    }
+    if (viewUpButton != null) {
+      viewUpButton.setEnabled(hasEnvelope);
+    }
+    if (viewDownButton != null) {
+      viewDownButton.setEnabled(hasEnvelope);
+    }
   }
 
   private void refreshXMinField() {
-    boolean oldNoRefresh = noRefresh;
-    noRefresh = true;
-    try {
-      xMinREd.setValue(envelope.getViewXMin());
-    }
-    finally {
-      noRefresh = oldNoRefresh;
+    if (xMinREd != null) {
+      boolean oldNoRefresh = noRefresh;
+      noRefresh = true;
+      try {
+        xMinREd.setValue(envelope.getViewXMin());
+      }
+      finally {
+        noRefresh = oldNoRefresh;
+      }
     }
   }
 
   private void refreshXMaxField() {
-    boolean oldNoRefresh = noRefresh;
-    noRefresh = true;
-    try {
-      xMaxREd.setValue(envelope.getViewXMax());
-    }
-    finally {
-      noRefresh = oldNoRefresh;
+    if (xMaxREd != null) {
+      boolean oldNoRefresh = noRefresh;
+      noRefresh = true;
+      try {
+        xMaxREd.setValue(envelope.getViewXMax());
+      }
+      finally {
+        noRefresh = oldNoRefresh;
+      }
     }
   }
 
   private void refreshYMinField() {
-    boolean oldNoRefresh = noRefresh;
-    noRefresh = true;
-    try {
-      yMinREd.setValue(envelope.getViewYMin());
-    }
-    finally {
-      noRefresh = oldNoRefresh;
+    if (yMinREd != null) {
+      boolean oldNoRefresh = noRefresh;
+      noRefresh = true;
+      try {
+        yMinREd.setValue(envelope.getViewYMin());
+      }
+      finally {
+        noRefresh = oldNoRefresh;
+      }
     }
   }
 
   private void refreshYMaxField() {
-    boolean oldNoRefresh = noRefresh;
-    noRefresh = true;
-    try {
-      yMaxREd.setValue(envelope.getViewYMax());
-    }
-    finally {
-      noRefresh = oldNoRefresh;
+    if (yMaxREd != null) {
+      boolean oldNoRefresh = noRefresh;
+      noRefresh = true;
+      try {
+        yMaxREd.setValue(envelope.getViewYMax());
+      }
+      finally {
+        noRefresh = oldNoRefresh;
+      }
     }
   }
 
   private void refreshXField() {
-    boolean oldNoRefresh = noRefresh;
-    noRefresh = true;
-    try {
-      xREd.setValue(envelope.getSelectedX());
-    }
-    finally {
-      noRefresh = oldNoRefresh;
+    if (xREd != null) {
+      boolean oldNoRefresh = noRefresh;
+      noRefresh = true;
+      try {
+        xREd.setValue(envelope.getSelectedX());
+      }
+      finally {
+        noRefresh = oldNoRefresh;
+      }
     }
   }
 
   private void refreshYField() {
-    boolean oldNoRefresh = noRefresh;
-    noRefresh = true;
-    try {
-      yREd.setValue(envelope.getSelectedY());
-    }
-    finally {
-      noRefresh = oldNoRefresh;
+    if (yREd != null) {
+      boolean oldNoRefresh = noRefresh;
+      noRefresh = true;
+      try {
+        yREd.setValue(envelope.getSelectedY());
+      }
+      finally {
+        noRefresh = oldNoRefresh;
+      }
     }
   }
 
   private void refreshInterpolationField() {
-    boolean oldNoRefresh = noRefresh;
-    noRefresh = true;
-    try {
-      envelopeInterpolationCmb.setSelectedItem(envelope.getInterpolation());
-    }
-    finally {
-      noRefresh = oldNoRefresh;
+    if (envelopeInterpolationCmb != null) {
+      boolean oldNoRefresh = noRefresh;
+      noRefresh = true;
+      try {
+        envelopeInterpolationCmb.setSelectedItem(envelope.getInterpolation());
+      }
+      finally {
+        noRefresh = oldNoRefresh;
+      }
     }
   }
 
@@ -640,5 +688,9 @@ public class EnvelopeDlgController {
     if (!selectionChangeListeners.contains(pEnvelopeSelectionChangeListener)) {
       selectionChangeListeners.add(pEnvelopeSelectionChangeListener);
     }
+  }
+
+  public void setEnvelope(Envelope pEnvelope) {
+    envelope = pEnvelope;
   }
 }

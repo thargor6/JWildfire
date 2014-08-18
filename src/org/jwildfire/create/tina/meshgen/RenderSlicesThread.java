@@ -39,11 +39,11 @@ public class RenderSlicesThread implements Runnable {
   private int slicesCount, slicesPerRender;
   private int quality;
   private double zmin, zmax;
-  private final double detailThicknessMod, sliceThicknessMod;
+  private final double sliceThicknessMod;
   private FlameRenderer renderer;
 
   public RenderSlicesThread(Prefs pPrefs, Flame pFlame, String pOutFilePattern, MeshGenGenerateThreadFinishEvent pFinishEvent, ProgressUpdater pProgressUpdater, int pRenderWidth, int pRenderHeight, int pSlicesCount, int pSlicesPerRender, int pQuality,
-      double pZMin, double pZMax, double pDetailThicknessMod, double pSliceThicknessMod) {
+      double pZMin, double pZMax, double pSliceThicknessMod) {
     prefs = pPrefs;
     flame = pFlame.makeCopy();
     outFilePattern = pOutFilePattern;
@@ -56,7 +56,6 @@ public class RenderSlicesThread implements Runnable {
     progressUpdater = pProgressUpdater;
     zmin = pZMin;
     zmax = pZMax;
-    detailThicknessMod = pDetailThicknessMod;
     sliceThicknessMod = pSliceThicknessMod;
   }
 
@@ -81,7 +80,7 @@ public class RenderSlicesThread implements Runnable {
       flame.setHeight(info.getImageHeight());
       flame.setSampleDensity(quality);
 
-      flame.setAntialiasRadius(DFLT_ANTIALIAS_RADIUS * detailThicknessMod);
+      flame.setAntialiasRadius(DFLT_ANTIALIAS_RADIUS);
       flame.setAntialiasAmount(DFLT_ANTIALIAS_AMOUNT);
 
       renderer.setProgressUpdater(progressUpdater);
