@@ -21,8 +21,6 @@ import java.util.Arrays;
 import java.util.Map;
 import java.util.WeakHashMap;
 
-import org.jwildfire.base.Tools;
-
 public class Envelope implements Serializable {
   private static final long serialVersionUID = 1L;
 
@@ -37,6 +35,7 @@ public class Envelope implements Serializable {
   private Interpolation interpolation = Interpolation.SPLINE;
   private int selectedIdx = 0;
   private int x[];
+  private int xmin, xmax;
   private double y[];
   private boolean locked;
 
@@ -54,12 +53,15 @@ public class Envelope implements Serializable {
       res.x[i] = x[i];
       res.y[i] = y[i];
     }
+    res.xmin = xmin;
+    res.xmax = xmax;
     return res;
   }
 
   public Envelope() {
     x = new int[0];
     y = new double[0];
+    updateMinMax();
   }
 
   public Envelope(double value) {
@@ -67,6 +69,7 @@ public class Envelope implements Serializable {
     x[0] = 1;
     y = new double[1];
     y[0] = value;
+    updateMinMax();
   }
 
   public Envelope(int[] pX, double pY[]) {
@@ -75,6 +78,7 @@ public class Envelope implements Serializable {
     }
     x = pX;
     y = pY;
+    updateMinMax();
   }
 
   public Envelope(double pValue, int pViewXMin, int pViewXMax, double pViewYMin, double pViewYMax) {
@@ -86,6 +90,7 @@ public class Envelope implements Serializable {
     viewXMax = pViewXMax;
     viewYMin = pViewYMin;
     viewYMax = pViewYMax;
+    updateMinMax();
   }
 
   public int getViewXMin() {
@@ -134,6 +139,7 @@ public class Envelope implements Serializable {
 
   public void setSelectedX(int pX) {
     x[selectedIdx] = pX;
+    updateMinMax();
   }
 
   public void setSelectedY(double pY) {
@@ -163,6 +169,7 @@ public class Envelope implements Serializable {
     selectedIdx = 0;
     x = new int[1];
     y = new double[1];
+    updateMinMax();
   }
 
   public int[] getX() {
@@ -186,6 +193,7 @@ public class Envelope implements Serializable {
       selectedIdx--;
     if (selectedIdx < 0 && x.length > 0)
       selectedIdx = 0;
+    updateMinMax();
   }
 
   private static final Map<InterpolatedPointsKey, InterpolatedPoints> interpolatedPointCache = new WeakHashMap<InterpolatedPointsKey, InterpolatedPoints>();
@@ -204,15 +212,21 @@ public class Envelope implements Serializable {
     private final int x[];
     private final double y[];
     private final Interpolation interpolation;
+    private final int hashCode;
 
     public InterpolatedPointsKey(int pX[], double pY[], Interpolation pInterpolation) {
       x = pX;
       y = pY;
       interpolation = pInterpolation;
+      hashCode = calcHashCode();
     }
 
     @Override
     public int hashCode() {
+      return hashCode;
+    }
+
+    private int calcHashCode() {
       final int prime = 31;
       int result = 1;
       result = prime * result + ((interpolation == null) ? 0 : interpolation.hashCode());
@@ -301,37 +315,54 @@ public class Envelope implements Serializable {
     }
   }
 
-  public double evaluate(int pFrame) {
-    /* check if x-value is inside the supported range */
-    if (size() == 1)
-      return y[0];
-    int min, max;
-    min = max = x[0];
-    for (int i = 1; i < size(); i++) {
-      if (x[i] < min)
-        min = x[i];
-      else if (x[i] > max)
-        max = x[i];
+  private void updateMinMax() {
+    if (x.length > 0) {
+      xmin = xmax = x[0];
+      for (int i = 1; i < size(); i++) {
+        if (x[i] < xmin)
+          xmin = x[i];
+        else if (x[i] > xmax)
+          xmax = x[i];
+      }
     }
-    if (pFrame <= min)
+    else {
+      xmin = xmax = 0;
+    }
+  }
+
+  public double evaluate(int pFrame) {
+    if (size() == 0)
+      return 0.0;
+    else if (size() == 1)
       return y[0];
-    else if (pFrame >= max)
+    else if (pFrame <= xmin)
+      return y[0];
+    else if (pFrame >= xmax)
       return y[size() - 1];
 
     int indl = -1, indr = -1;
     InterpolatedPoints iPoints = getInterpolatedPoints(x, y, interpolation);
-    int vSNum = iPoints.getvSNum();
     double vSX[] = iPoints.getvSX();
     double vSY[] = iPoints.getvSY();
 
-    for (int i = 0; i < vSNum; i++) {
-      if (Tools.FTOI(vSX[i]) <= pFrame)
-        indl = i;
+    int low = 0;
+    int high = vSX.length - 1;
+    while (low <= high) {
+      int mid = (low + high) >>> 1;
+      double midVal = vSX[mid];
+      if (midVal < pFrame) {
+        low = mid + 1;
+        indl = mid;
+      }
+      else if (midVal > pFrame) {
+        indr = mid;
+        high = mid - 1;
+      }
       else {
-        indr = i;
-        break;
+        indl = indr = mid; // exact match
       }
     }
+
     if ((indl >= 0) && (indr >= 0)) {
       double xdist = vSX[indr] - vSX[indl];
       if (xdist < 0.001)
@@ -349,41 +380,41 @@ public class Envelope implements Serializable {
   }
 
   public double evaluate(double pTime) {
-    /* check if x-value is inside the supported range */
     if (size() == 0)
       return 0.0;
     else if (size() == 1)
       return y[0];
-    int min, max;
-    min = max = x[0];
-    for (int i = 1; i < size(); i++) {
-      if (x[i] < min)
-        min = x[i];
-      else if (x[i] > max)
-        max = x[i];
-    }
-    if (pTime <= min)
+    else if (pTime <= xmin)
       return y[0];
-    else if (pTime >= max)
+    else if (pTime >= xmax)
       return y[size() - 1];
 
     int indl = -1, indr = -1;
     InterpolatedPoints iPoints = getInterpolatedPoints(x, y, interpolation);
-    int vSNum = iPoints.getvSNum();
     double vSX[] = iPoints.getvSX();
     double vSY[] = iPoints.getvSY();
 
-    for (int i = 0; i < vSNum; i++) {
-      if (vSX[i] <= pTime)
-        indl = i;
+    int low = 0;
+    int high = vSX.length - 1;
+    while (low <= high) {
+      int mid = (low + high) >>> 1;
+      double midVal = vSX[mid];
+      if (midVal < pTime) {
+        low = mid + 1;
+        indl = mid;
+      }
+      else if (midVal > pTime) {
+        indr = mid;
+        high = mid - 1;
+      }
       else {
-        indr = i;
-        break;
+        indl = indr = mid; // exact match
       }
     }
+
     if ((indl >= 0) && (indr >= 0)) {
       double xdist = vSX[indr] - vSX[indl];
-      if (xdist < 0.001)
+      if (xdist < 0.00000001)
         return vSX[indl];
       else
         return vSY[indl] + (pTime - vSX[indl]) / xdist * (vSY[indr] - vSY[indl]);
